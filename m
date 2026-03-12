@@ -1,86 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2616E387347;
-	Thu, 12 Mar 2026 20:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D0338655E;
+	Thu, 12 Mar 2026 20:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.17
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773348822; cv=fail; b=UK/SK9fR5MhxUtX3nNW4wlUAUv34zGF+emgb9IrLnJ27DetGkaFIE8U1Bzm0yKWV7kp1tzBY6Cv1jGwDYrAB0+r8yQ51OfPvvi3238yl+s4bBRM7o2W9ktKEaMVRSVdYxBKOHhIpb0HV1pQZC+yEL6WiRuNz0/JJlOqdcFFPW1A=
+	t=1773349148; cv=fail; b=rDJuc+/kvWgng5LhKbN3s2vUrbnouGz2L6iGqzVqHMT7ZH10lgW2TbFIcwzoaqALitpwdFO36N6uU99pb9P836AX6Y4nJPQNBkHJQCZzG6xJ6gOCAIVaI2O9z58GMp+kiOz8QvmGZr59221iD6Wh5uMHtXjrjqHOIhZ3FrBRmSw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773348822; c=relaxed/simple;
-	bh=G8Xvd/aGuRRhAHyqZWkb+0QzoWCAERz8SM0DDU5pBwU=;
+	s=arc-20240116; t=1773349148; c=relaxed/simple;
+	bh=eG3WX/K3orMlUYJxvHtp8VTSatul9nsBELn36RD1EFM=;
 	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=I1+dhP44wXDbC2Oh6/a9NupVtFjK87+QDYrKqRRlH/wdF9zNC0VmLGZxWiN+Bdb1q5QMHHXvPYusD05JrBGcvHWBzxXwpE+C2Joi9tuPCgBrxH7y2EXdJCtu+cb2eGpwFxcfC7hC1d4Gfx6iez1porr9ntrCXOGsRu1wGP8CE6k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iHpIGEgd; arc=fail smtp.client-ip=192.198.163.8
+	 Content-Type:MIME-Version; b=fF4s945xHxRjiYh+MPTTmwXwiC2byA6ucCRpSPSPQCTu5EGF1DIEI9gOJIS8eHIyZCDtv4d8HE8mLpoIUeYV1GiPHPlGGXBg3Uqj5Yu+WPFKKiJ7/2ti30AMc0iWh5Rop7av0CZj7B+aRGgq/GZnSfdoH3zFrKJsF/NX7egC+3Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+ZB3a56; arc=fail smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iHpIGEgd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+ZB3a56"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773348819; x=1804884819;
+  t=1773349148; x=1804885148;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=G8Xvd/aGuRRhAHyqZWkb+0QzoWCAERz8SM0DDU5pBwU=;
-  b=iHpIGEgdpcUD7WQzS8VHUni9XRLCxcoVPsuqKRTPmIlLCpQyZ0AOkfAU
-   ZIG+L4GCDnsF5rmdnCcvaATE9lFfMRvpByjEi+f+/dfhGUnHms1tqMIQd
-   ZY7Px1iHvMwRg1qU66xsqH5oqDjUz5AQmbZv5d3v6f3SBFuvw2iFCdJVp
-   76QiQcz9EQvlYypX47ZN4LEt7k2f5bozrJVbqzIs4nzqssSITEJm1aHol
-   Gvm0nXMk/ENpqswZX/VzXPvcMMF8YXFH43aJbvsbhE6gtGaXHvUKyBmi0
-   pujFiuYU55qFPgub7WMcRkQZksAlpwuDiknx8kXwfTeTaE26QKW2Dga9d
-   Q==;
-X-CSE-ConnectionGUID: KFL5R/o7TqCTWlrb5Bbi+w==
-X-CSE-MsgGUID: N/TBMmeKQ0qFBQKEvdFCEw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="92029872"
+  bh=eG3WX/K3orMlUYJxvHtp8VTSatul9nsBELn36RD1EFM=;
+  b=Y+ZB3a56fDiiEdK8OEFlqcdrdNHthSa7Iac4iQCqhHNpEtRrvskHzQil
+   MJjOND92evH2S9gn+ZgSja5S1nPqx1GJlku4Ohtb+qeLC8jQdWPFsyT21
+   +eREhiVA3N+LRO8xmKpU+8uEeeQA+etfmASW1h4ta0Xn4sQSqTNRLCAeL
+   COvfY6hUha9kmAUhp77fa0+lH+zPWhure5uUtEfiGLNMjUKMg2mfBcNce
+   h3IAIYRqkD9AbGDPk2vxWj16djHIIpUBGX8W6m+J0AfYbiij4fmdG5r1/
+   TaISQ+PPpzpLVNIfc5p/0iTsdZqMI7YW0bf/sHNQSJpJEV/kcRzod8zIY
+   A==;
+X-CSE-ConnectionGUID: u8vl5CXeQ3COZo2S4tNPeQ==
+X-CSE-MsgGUID: hcvniJaRSHSXvTQryZAx/g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="74371464"
 X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
-   d="scan'208";a="92029872"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2026 13:53:38 -0700
-X-CSE-ConnectionGUID: Da/f0Od7TBGSoI60YPFnqQ==
-X-CSE-MsgGUID: J8aVaGeWQo+0iETnuSFYBw==
+   d="scan'208";a="74371464"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2026 13:59:07 -0700
+X-CSE-ConnectionGUID: iOPxTgMpQbKThrxKu4i2PQ==
+X-CSE-MsgGUID: /tI3sSdNQQSGDuLi309Kmw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
-   d="scan'208";a="251463288"
+   d="scan'208";a="258860950"
 Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2026 13:53:37 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2026 13:59:06 -0700
+Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
  fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 12 Mar 2026 13:53:37 -0700
+ 15.2.2562.37; Thu, 12 Mar 2026 13:59:05 -0700
 Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Thu, 12 Mar 2026 13:53:37 -0700
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.37)
- by edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ 15.2.2562.37 via Frontend Transport; Thu, 12 Mar 2026 13:59:05 -0700
+Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.71) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 12 Mar 2026 13:53:36 -0700
+ 15.2.2562.37; Thu, 12 Mar 2026 13:59:05 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Rglw8css728U6L7H9kr2NYsja7evXIcb8PnpkecxWUPRnwGNisaSRCQQ/tiSalqYGGvU9D2g3BhduYiO/SCGr2B9nCkwEFnRwk4mfK1yKgvP/EzBBRFPCcBdmQaOt2DzGWmafXEM8meGE8OPrr58ivY1jkzRZWd/3T2skOrvLvlFta3ECRR1vn+YA1o4LQTV2JkjIykjSOb43ghsyZjgfM2PoA2EzIXfKDa4EC7tLaU3jmPPOKjq9I5cxJzMyPDOex3sun0su9S2ILANjp6k9wlpz6Y2K9ZzgzG1JGcfldAHFM51I3jaPgkEEdsaMNRvMkTVfesj4VNs9IguzHyDPg==
+ b=KUqT4PrrrIUt/7Sl9y91jTm5UDquEnmwgcKSdFPVWhHn8KAcSNHEzMowi5qrNQBYGDQtDAmbXaiBxKRBN1wipfwoj7wscb9hIZh72pWCFMwr8lHaPTUa09fdzYsqZWYtULfpTjMfHdRyaQbTOOd4JTgwlW+O94stKKiFLcE0ZvI3bCzhtXZxzrqk9FzTG25KZwCzxdx44/WB46KgZc2MUmlao0O9w+LD37TKbJMacEdo3bp3NItNZ6r5mMhLl+2CYN071XH6uvZ2mim5o9GVoySqYHr1ThGdh/eyyt3MzXzzqCJC4XKQb5/iEWvFeoSzctUTnuW+4gJGzgmD0DHCvg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t6XpXMWWIJC59WUfiQSSk4695Kg4bso/yGQ382ZqrlM=;
- b=I9S4/FEujTEG6RSiPc2ypTQthmUU4bTbizWCHKyFGZqrZJMQQCSNcZ8hHlK8p7Lea2YdHoIVGtXQ3Zd4palqFlLu/mcjioF3P6umVERdoJc/oM9S/E+K6Cw1WkFFR+PGoJqY2xIQ3mdle07gtg9+DnlEzsIhxXolvsnhOLFkTuL9a62O4MmtZPD+WmJkKg+MLtb7woxUkguP2v2PMolG4KGbFY4uS6E9p2V/9MDLg52IDcd7qjOf9+kimuD7peT3z4N+VRURDWQNBBYG7wvLoeqXK7UtFVUucFg7W1P8wTPbx/Ls2Kw02NCRl5E0lVmH4nB1LKbhMXsy2L0m5VrC1w==
+ bh=CEihQXJLkdUxWj5UGd8EfQuV7b1bb7WA7LDz18h4OYY=;
+ b=S/PWWsIcBCbawutyQmYL+uXS8CCR2n+eBbQF5CuBB/PWHjrio5aA6CKeftYU1wWmcX4ZDuudSDu+WacHwGT5MAUUZtDlkGj0pFe4EudkmEVwtoGNrxUOqD49UPPAQmt6qivRxVu5gtfoizth6LWVlAY14C9WahFKStmqA3/pSeTYi3DvaXkVPzFp/ll/TOArDUmdoErHGTutS/Ktr0EljGuxxPZHZYCN4JTnMyCcDKgJOxIUZLCYL/5A9JgiY/tNBxU9urCbY2dxv2vovkGhRI18gSh3WjTTA+pR4ua6ug/BBNBNjbypy2lDa6fOX/GaTmbRZ5hYqRTD1v3w2HF0Gw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by IA4PR11MB9179.namprd11.prod.outlook.com (2603:10b6:208:560::21) with
+ by SJ2PR11MB7474.namprd11.prod.outlook.com (2603:10b6:a03:4ca::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.4; Thu, 12 Mar
- 2026 20:53:35 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.6; Thu, 12 Mar
+ 2026 20:58:57 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::bfe:4ce1:556:4a9d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::bfe:4ce1:556:4a9d%5]) with mapi id 15.20.9723.004; Thu, 12 Mar 2026
- 20:53:34 +0000
-Message-ID: <33a9c54d-565b-4de9-b525-1390bfd50593@intel.com>
-Date: Thu, 12 Mar 2026 13:53:06 -0700
+ 20:58:57 +0000
+Message-ID: <47afaa8b-f903-4937-aa10-b2bba2388674@intel.com>
+Date: Thu, 12 Mar 2026 13:57:27 -0700
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC patch 1/9] selftests/resctrl: Move CPU affinity and resctrl
- FS setup to child process
+Subject: Re: [RFC patch 3/9] selftests/resctrl: Use dynamic linked list for
+ iMC counters config
 To: Yifan Wu <wuyifan50@huawei.com>, <tony.luck@intel.com>,
 	<Dave.Martin@arm.com>, <james.morse@arm.com>, <babu.moger@amd.com>,
 	<shuah@kernel.org>, <tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>,
@@ -91,14 +91,14 @@ CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
 	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
 	<wangzhou1@hisilicon.com>
 References: <20260304040334.765860-1-wuyifan50@huawei.com>
- <20260304040334.765860-2-wuyifan50@huawei.com>
+ <20260304040334.765860-4-wuyifan50@huawei.com>
 From: Reinette Chatre <reinette.chatre@intel.com>
 Content-Language: en-US
-In-Reply-To: <20260304040334.765860-2-wuyifan50@huawei.com>
+In-Reply-To: <20260304040334.765860-4-wuyifan50@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR03CA0070.namprd03.prod.outlook.com
- (2603:10b6:303:b6::15) To SJ2PR11MB7573.namprd11.prod.outlook.com
+X-ClientProxiedBy: MW4PR03CA0085.namprd03.prod.outlook.com
+ (2603:10b6:303:b6::30) To SJ2PR11MB7573.namprd11.prod.outlook.com
  (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -107,207 +107,87 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|IA4PR11MB9179:EE_
-X-MS-Office365-Filtering-Correlation-Id: 66637cf6-7fe2-4a5f-c239-08de80796d50
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SJ2PR11MB7474:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27828f75-f72f-4df5-f8c9-08de807a2d8a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024|921020|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info: UASpax1o9eaKqkx67z1mZ9WV7bGboZOcRlU90llIw18pba3N0oJia702P4yM8xAbMXEBZYqmTbBUkst9SmDhuT1WtZIvm/ignnAGjTN5vFh2d7vi82RCQcxLybOgxAn9B4zJ9W/8tJW6+Gc8cYuJkOwQg79+oIXyewZhHKE3uvHdspw+wkP0TZe68SbqkB/VmYp7ns1fUTlPNobmrcfF+rTZq8QvAJ2fzbSw53hmSbpr0Bumm5t0J4j7K3/u2mlgwEdIZ8W8VHiAOT2bKtK9/nkP9R4XHq5lXy1v79qu9/eyjQuCBBXbfCkLzxEWvUWgICEuaCXMi78qO4EVIdNTEziTLSGwjjHDIuChfbF3IfUccfpdwmHd+A7zpAgt53H2/7K+ivOp4zKsvs1kQFqunk/5L7XQMtKXCu/eIN6EuJO79YrzitoLVbkBX3H5Q1xoQPnSQXb6yaN4JBYx+J/C2NfEXkR9YZwJzURKs/8CgbNCMPWJnA8SFl5XNfNiS2lyzR9PjrIZWge+3HZ63MKJLbFxR8q0j3jNq1ccXwjsRlYUFG7n9Wgsr+ZqvDQWvWtuj/0kh+lZZVfSAkpU2W6CRnCtrnetQnz7047u0hWCX3+MbCxWH0J2unYzjikz7duUpPWyYW9Psgi8NO20AB608zsohNjyFMrTTe7yBmIuoaeSh5erycuwOevS2MUbNYj4kNt5RuY0MBm82beTxP8LVswf2HmUmliGgjRO2XEk1gyR5nL1gx3Hk56XTCxipRpHE9TTbZdf2KDSueCNXFMHFAgC7ATEqj1Ox1d/QqzIC9c=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(921020)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|56012099003|18002099003|921020;
+X-Microsoft-Antispam-Message-Info: O+GBUXNNB8tPDCFs9as5WT7wHq4BJWV9+hOHzGFH6ZHzmJuN7F+XzSK5SxtqeiHsjdd1HH2rv4YzBUWgTITmKzrSGlmNbXuNFFJ8lMSzqmnrJthppgwOY/Nh6vjd0nZRigE/JYXAB376m6JDI8Bmzm+3V1ZzgzaMuKrloD1ppPKgjYIefr1xAw20JTCNQ2WUM0kMKin+yrUr91FvpV91tmFiX+nQ+oR20r/9n/PeP5yeYfQJEhrvqNp3XT0woQ/O2sRTZv6w7rFwTy0YrbrawbQVe2+bdpJFXgqNyIDZXHKCT4zd1Z28DGBxnPRL2FbY1u/nSlrQB0tpP7Ns9/3fC4P9PoY1frK0peHvFRHPdCYe8UyWpFA+gJhLPbKHAwozYUrq8p1CckIHAEMRBVAq5bCFr6+jnszmkuqwC/yGwHWFsnRYpQ0ZArm/Bw0u9p1/ZMnl6UaocXrU7G56Zztib0Sz0S3o+v2FdY2aVhQ/mllp4LNJbnrDB2D5n+sQyGO7e5565aL4Z0QhvdiLHlgvZcm+ZqUP2uYGhtqHI3xVqloSMYwfQ52h9b4ZmgeD5HeJqgV8yjg87Lv6IuHhH6GQmW22xK3A7+U34YMjTJj50TDfQDxAi/6+a1BsOaSODNVYSBORf4/qTdd+yK8Bmxgqd8+rlCblgjQQ9ieBWrMdlSdpm04ZkSyoHMACmAOjafal89YthybE+UQF+R6qYlcBitIGxFT8hh/hajPOQrxLYGVdL/HqzVpLxEuGbree6aPRso0p/XveOup5/rkxiYYcgRAZ/HasgsrYfkV3Xbq1OTw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(56012099003)(18002099003)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MkRuN216QWltMVdmN01aMTlhUzhJVHg1WlZ0RzNXRUNuWGJzSnFVTkVDalZu?=
- =?utf-8?B?dUpjRHpCTTlSMzR5SGdjaTdFQndqbmVkWTg1ZCtNOHp1blpHQlNQL0drUXdx?=
- =?utf-8?B?WEp2ZzZWS0s3aWhpWmNEcUJpS09KaHh6aEQ2TXB6V3pOUmkzTzVqVzBpay90?=
- =?utf-8?B?Q1ZqaHBhVnVzc0ZneTBNZlFId2s2WnlXakQzWkVYTW5UQU5yTG5abTkvV1Y3?=
- =?utf-8?B?WkMwUHg4Qk8wc0hlejluVi9DVlJKVGFRNnU5L0xQMlRIekc1VHo1a1FkZXBo?=
- =?utf-8?B?OE9wSGZRRCtmVXJvd0dJUTBMbFV5MVBBcENRZEhaNksxci9ibm93YlRybzBD?=
- =?utf-8?B?anBPRDdtTTZ1RlJSYTJtZXY1dXBhUk81dmJUMzF6SWZ4Q2dCdXNoTE5nK3Nm?=
- =?utf-8?B?Yi9NN0hwZm9UY3pEa0RPNUtrVzZLRVM3QUZxU3VZUHY3U2dCdjdTVDNTb05J?=
- =?utf-8?B?SGo5ZnhlTUpqQWcwTkZMcWZ2NzBFMGxzdXFUNVY5VHp1ejVPVkVkUTRBRGw4?=
- =?utf-8?B?YmtIRjlVQWhGTW5Tc2VaQjdjTjdCQ2NyTjg5SG8vN25kUEEzQXY0RmJIajZ2?=
- =?utf-8?B?cm9FbFZKdzdGQVc5NytQY0liOCtrK0NXN2NrcWxVRnd2VTZnQlBYeEVMWmJQ?=
- =?utf-8?B?cDc3SVJSaG9HY1c1SmljWUFmd2hJN0NESGZoUWcvV2hUUnpLN2tJRDNxaXhC?=
- =?utf-8?B?VkdSQURHbFlkQ3E1Sm5mSVBYMHpqNjVITlRtWkVqenZTaVVrZTg1cE1wa0ZD?=
- =?utf-8?B?OTljOG5Yckk5VURac2dhbndhSDBSMlgveEFRRFVaS1R1WFk5dHZsdGxXNGt4?=
- =?utf-8?B?WWJKQlNTQVN2clN6TldTcmpQM2JjOXdQUm0rNHpYVUlNOVdxS1VqbWo2RlBJ?=
- =?utf-8?B?R1h1SEFrVkVuN2lCNkdXUGN2cnBtZGliRXNacDBTdG1ReUdCVXo4QTQ3akJ2?=
- =?utf-8?B?dlBpWXVsUC9xUFNKVnIyaVVQcGdWM1g3TzQvbkJTcUFrWkJlMldYR0NzTlNY?=
- =?utf-8?B?UjZNdHp6cUtTcHQ2Y3piWHdIeFJmM3VuMWY0eHhFNzJVQ0xiV1BGcHRJaXhN?=
- =?utf-8?B?MWJZQkRNREUyZDlhbWUwNHpCOG9XUWVkaExJVVMrek5NNVBidW1SWGh4N21r?=
- =?utf-8?B?V0QzV1MwemZ0L0pUVFlTSTI0ZDlDZ0FCa1hkNmpyOVk1UEVPWFpaK1YxSkNI?=
- =?utf-8?B?dzFEWm5nVWRqZkw4VU16QmpleUZ2VTh2RUk2aTg1VnZ1Y3lRNU1UczJ0Qm5q?=
- =?utf-8?B?RkFmanRRNU1JcTNLOGNWNlluYlpEa25MQ2xhcnVuU3VJV05LODNMbkpRTG5H?=
- =?utf-8?B?MWt2d1hobjJHZ3BRbW5QN2FmeTF1QlZEaXE4c1lVM0NzdFFOTnJ5ZGd6MTMw?=
- =?utf-8?B?M2VwZlpBSkJyZDJXdjF3RUZLM3RHK3krczFkWlJja3pCY0VNRGxmSjVMcTJv?=
- =?utf-8?B?andnWWV4NkFuYVh1M0d2dDlnTjJvSVIwK3lSM3AwQXdCN1gvdk1KQytDSExW?=
- =?utf-8?B?eTRnUVJEN1Vyc2FBYis0bFljY2tYMjJjeTBSaXlxZkV5djJycHBvTUtkYlFy?=
- =?utf-8?B?Z1c4S2R1Z3FYOC9ka0ovM3B3UzlQenpoYnZpMktBYmRzQmlKQ3FBY3BMTlFT?=
- =?utf-8?B?a1VtMnE4c1Rwek9RVHdQb1RKQ1JBV3d5QmZ3QmJJUGxPZThvOFVFbGc5RnpS?=
- =?utf-8?B?Yld5ak5XOWs5NCtqakZNVVdBZHRaa0w5em5BbjN6MkNQakxYRmFPK0Z3elky?=
- =?utf-8?B?cmN2VGhmTjFqL0UvdXV3ay83MDA3b09MdmVnQ3NPNElJTk5xT2JXWkp5dDEr?=
- =?utf-8?B?anBuTEFwNS85OGR2U05YMkFpUDREOHRERGFhbHpaNnpoNVN5UytIQWx1eEUy?=
- =?utf-8?B?UzVNa2taeGRaSmovekM1akNPRldqUGNHMkUwZjczTjlZcXY5b3lkRmpPM1BR?=
- =?utf-8?B?VEtwRkpIMVVISTA1dVVka2x1RUYwNm5VVTBPZ2UwbUZxNEczbEJFRDlzK1k4?=
- =?utf-8?B?R0NtWnZaQUdXNGRJeW9FTHlUMkNQWEVYZnBMRi9DQmtqYzFYdFBUbnd0K1RP?=
- =?utf-8?B?dllEclFZRlJmWHM1akl1eWVNYnZZa2xIejVXSEZlWERScjBkb3l6Szh1RG5U?=
- =?utf-8?B?dkNhVWF5QWkyWUU5QXIvTE0vOXFLa1FuQUF4dWhsU0wweVlzRlkrZ1g3Tlo2?=
- =?utf-8?B?WEx0bmovMGs5YkZvM3czZ1QvYThJMkhEZExNQkNvNUpzTXV4U2Jqb0FsVlNp?=
- =?utf-8?B?SEFFTWd2aHhnakFNeTNzSVdmSFlKUFY5MUZZd2tCUExlZCtFMkZYUlVaV2ZG?=
- =?utf-8?B?LzhXbHdXVFZwbGJKYVRJSmkxU0VPT01PemZGU2ZzZWdDdTZyTnkwcFFRMnlm?=
- =?utf-8?Q?KKiKvIZt75/cmi+c=3D?=
-X-Exchange-RoutingPolicyChecked: BIbNeoDYiMGJM7Y9w47aHsWEjHc6a3xBs++Aga0ZAVQz7SQ7VST0OB3W0DEZqYgvi01NZF+f2hrPeZKNhPzNkzUlRJXTSBYzgmH25ymL1tB2TYStJQd4/qPRlSOL1kZbCg9gmYHcXXpoyNpR1NJJC+IRNKaKR+8iHd2r/tcjBgeg/dMrqyIb8jivlWiWc9lO0SMfiHJgQE5Liyv0KN+VtKOndWmsrb3HXZ6+iCG4+unTsSiQfQZVpE8I81ke7Xria7wsDgHMYfmQxsz5U/NA5GsNYFzlCrHbaW/S7o71k7bqIaiFDRKKcic3p6jjJIudr3TW2YXxscWg5uQLI0Zr2A==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66637cf6-7fe2-4a5f-c239-08de80796d50
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WitMR1hocXhNamR6MFJvL3Z0UVdwMnVPNnBYQ09MazZoSXpERm5mTERwYmNX?=
+ =?utf-8?B?ZEp2RDlIeXQwK3JBMjFqdXZjb09nUS9ZZEU1dGk5QURqRjZoVWRXbHVZMEo3?=
+ =?utf-8?B?MFRDbWpiWHc3Uk9vN21DSzNmYmJDTFFBMWxvamN4Qy9mMlhNRzVWWWl4a2xX?=
+ =?utf-8?B?YXN0RGNtcHc4N2NHWFppSlN3MmV3Wm44MzVNKy8wenZpSTkxL0ExMDg0ajhj?=
+ =?utf-8?B?KzJVRzVWYkpGalNYZmpmWUZDVGlpSWdwcjF5SUJubldPSGJkSUoxQTIrZDgw?=
+ =?utf-8?B?L1ZqZ1ZXSUtSNmJjVWJpT0JMZ3J2Rk02VXdoZ0RZTTgrelhydkQ0RiszU3lC?=
+ =?utf-8?B?djJhYW1IMWh0MFQ2U0RBc09pV3hqN1RBdUtzRlFUS3RFNUs5bHBubWcwY1ll?=
+ =?utf-8?B?RG1pSGdlVG12NFhxVVF6TFF1Z29mRzZFNkVnQUdadUpTMDlXNk9oUGJiVk9w?=
+ =?utf-8?B?K2ltT05jMXIxR0UzRisyY0thQ3ZhNUlCU3haV1ZrNmdTSXNYWjFmQm5DaG5Z?=
+ =?utf-8?B?K3N3VmdnVDIzSUJWNEQvOU1vNEZFSDZvWXIyYk1yVEl1OEtJMkw5QWJVb1lR?=
+ =?utf-8?B?dmFqdm9Zb0dySVdKMUVjOXpHTk9vK3lWdWFSQ1ZYRlZnSHNCNmhUeDdQUnQ4?=
+ =?utf-8?B?UVRNMGV2dExXb0dFazhKOXorU3Z3MkZleDRCSUxlSHFFZFF2NU5NWUFLdmJv?=
+ =?utf-8?B?Q1pVdHV1dE1ITVpFV3kzWUIyTGFENWdUOE0zY2p6UVhHd3dZWDBRWTk0OVZ0?=
+ =?utf-8?B?bFdwK3UweFU0ZktGYWdZT1c2T0k5QUM2VUtQb255TUs4RFZkSTVWSlZ3aFo1?=
+ =?utf-8?B?anBrbjZOMTZpSk9INkU5RkIvdnJ0TjB1QWdOQ0R0bWFacnJsc0RCUC9lUVBL?=
+ =?utf-8?B?djBWN2JWQTNKQ2diQW0zc3YrNlI0UVNCQ0lCY2x0MnhnS015NXJFRW82Q3BT?=
+ =?utf-8?B?NkZnRFFaWlpWNEFCbG5YVlZESG1TR1A1d2VYRDJ2eU9ISG5MYUJPakNnSnU1?=
+ =?utf-8?B?Nk5ibTRpdjA4a25OaDNTQlBpL0pMNWxGRDhJYWxoK2xSdDFvVkc1VHpkV24v?=
+ =?utf-8?B?c296a3FKVW53cDNBUlBSK21sZTVQdEI3b2VMT3BDcWFEVWJHVUUybm93enBa?=
+ =?utf-8?B?TlpzcnlpcEZHS2NFY0w4clQwNm5hRHdFK1JpQVhnUk0rVVkwcW1UbmNoSkFB?=
+ =?utf-8?B?dUlNenhkU0E4d0Y1a09kRFpkT0E2d1BzNG9SMkZUZ1l2YzloNmp4UGY1akwv?=
+ =?utf-8?B?dk1tY205cmxZOUlUZkc2U09GRUtPbnZBSmpjZnVQVnpQTS91OXd2eGtkaDYr?=
+ =?utf-8?B?aWJRZzBIYURZWEpSN0s0Wm50MERZSUYrUW9ML2YwblZIa2RYdUFwRjROeE5U?=
+ =?utf-8?B?ZDdELzFzSzRpdExUSFAxakQyQVhhNVZTSFFwUGU3N0Z4VW41cTJGdytydm93?=
+ =?utf-8?B?MG5YVEtOWVZEcEtlM0s4U0hPeGhWenh5UWgvTldHdlBNb3VkT0Y2djVFVS9W?=
+ =?utf-8?B?b3RZRUNFRjAxd2QvVmNFaE05blhCWmE5YjNDOFc0ajh3dk40R3FtZXlHUm8x?=
+ =?utf-8?B?QU5aTFNRNm9QZDlvWklJTFFEeTl2MnQwZEpudWJTc1B1bGprZU1IcUtvSXMv?=
+ =?utf-8?B?aVRhd1JmZzl0WllLN0ovVXhtQWthWkhxTWYxeU9yZ21YRGFqT1F0SGVtdnMx?=
+ =?utf-8?B?Znpvb3N1aUt5WHJvZFpPcnhFZ0dPSXlZeDA5ME9zZ3diUXRmZmU4MDJveWhC?=
+ =?utf-8?B?UjUraUQyRjd2UXF1YTZYRlRyaW9zWDhIUnJXSCt1VnZIVWZiMFN2TlVQb3k4?=
+ =?utf-8?B?NWlpRjM1ck01aVN6Q1NwVXZvZ0RhbDJNZ3UxUjBacEhrVkY2OElMYSsreEh5?=
+ =?utf-8?B?MmZ5ejJzVkZJcUpCTHlvdG5RNHhqVDcrRVVOdVFNWk9SaG5Edy9qdElLT2pm?=
+ =?utf-8?B?TTk1V2dQbGxLTUVOWmdMcE9LWENJeWZQMllIdWJwNFVZRnhKYUsvQ28rTzY0?=
+ =?utf-8?B?a3JYdVVwbEZhdWxqeDBhSTNkSlF4cWozTUxRT1lSc2xoS1M0MHBhVEdEVnp3?=
+ =?utf-8?B?SDdOdDdRN1VheDhFMGJhSkkrRWJEUnJOUGJDQjNmMEg3a3l1aFNqZDN3OGgr?=
+ =?utf-8?B?UHB1NjJZUWxPTWFva0hiK29aSXN3SSs3WjJPaDArYXpER2dLRWFzL01KRGFq?=
+ =?utf-8?B?OTV5NElER1VQMWpoS2ZrNmpEUFRxd0dCQmp3dHVzUlI0Y2I4OUFrVG9oL3NK?=
+ =?utf-8?B?RDYwMDFla1Bxc0JnZnQzaEFLeUx2RUIweTZFT29rVFp2dTVEczhyUE82ZXpZ?=
+ =?utf-8?B?RjkzLy8wSXVPOUxmc0hnYnM3UDNpdHdqc2x3aFloSlBld3FDRDRuYVVoSVF5?=
+ =?utf-8?Q?+7C5hrrs6oX7Raj4=3D?=
+X-Exchange-RoutingPolicyChecked: G15rVGxsj5xt7PiZKTz1cAVtUje40fkburaQUlThJ/D7QoR9nqHfA94JxIFASCrtypX2NWRQYg1MDr+XlZ7hEYAmK/8Ig+VsmonCEBXtc71Uma0VC3lj9UhM+65bH8dOyLBf4Sx/ws8ux8Fl/efi/qa11uetfN+E6QcUyzAV1RxVXCS1tofgnWnEtLKL7zCYUDBS6Ofl5ltmQyQR771G+EaHY4DZpccxU6FRqpgtuznMvWeM7SkAeCkmAzIDc/pxg9p9gySVSKQDXngrwmQlWLyqUNOA3bA/Iwz2GzWcreDn+MQ5aTmA5lu3LtVhzkP766eSAjvm2KFyDdoF1cZOeQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27828f75-f72f-4df5-f8c9-08de807a2d8a
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2026 20:53:34.8372
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2026 20:58:57.5267
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2J1Mk5UnCCsb/DdQ1+tT1PAZvge2yVrcn2D9/iZbftJfBzKehl0zlSywb6AbQdUoqwL69KlA7cHEGXZevZGxcyNI8NQ3YEjyUrznMz+ctTw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR11MB9179
+X-MS-Exchange-CrossTenant-UserPrincipalName: qQwFguun6ZkpTN5/cvJcdcQKGpSkEnXHJsRXLeyqUglYKOL+Xecxi2cxxwRrlMAWq0LVkbz5PJ3B9TH9hTg2PBTPFqxkHKShWA996IqPwDc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7474
 X-OriginatorOrg: intel.com
 
 Hi Yifan,
 
 On 3/3/26 8:03 PM, Yifan Wu wrote:
-> Currently, the resctrl_val() function sets CPU affinity and writes
-> the parent process's PID into the control and monitoring groups in the
-> resctrl file system before forking the benchmark child process. This
-> causes several issues:
+> Currently, a fixed-size array is used to store the configurations for
+> all discovered iMC counters, which has several issues:
 > 
-> 1. Writing the parent process's PID into the resctrl control group
-> unnecessarily affects the behavior of the parent process, while the
-> control group should only apply to the benchmark child process.
+> 1. Fixed Overhead: The array is allocated a fixed size, even if the
+> platform has fewer iMCs.
 > 
-> 2. Writing the parent process's PID into the resctrl monitoring group
-> introduces the parent process's activity into the bandwidth measurement,
-> affecting the accuracy of the monitoring, which should only monitor the
-> benchmark child process.
-> 
-> 3. Since only the child process is monitored, the CPU affinity should
-> also be set only on the child process to ensure that the PMU (Performance
-> Monitoring Unit) can count memory bandwidth from the benchmark process.
+> 2. Out-of-Bounds Access: On platforms with more iMC counters than
+> MAX_IMCS, the num_of_imcs() function can return a larger number, leading
+> to an array index out-of-bounds access.
 
-A child process inherits its parent's CPU affinity mask, no?
-
-> 
-> 4. When the parent and child processes are scheduled on the same CPU,
-> the parent process's activity may interfere with the monitoring of
-> the child process. This is particularly problematic in some ARM MPAM
-
-Which tests are encountering issues? For MBM and MBA I do not think this
-matters since the tests just compare perf and resctrl numbers and perf
-will already contain all bandwidth associated with the PMU so isolation here
-may require to potentially take all traffic off a socket.
-CMT tests may see some impact since it compares cache occupancy to the
-size of the buffer being read. I do have a pending series that aims to
-address some issues with the CMT test:
+Please note there are some fixes in progress that include addressing this:
 https://lore.kernel.org/linux-patches/cover.1772582958.git.reinette.chatre@intel.com/
 
-> implementations, where memory bandwidth monitoring real-time values. When
-> the child process is preempted off the CPU, this results in inaccurate
-> monitoring.
+Having this managed as a list sounds good to me. Could you please build
+on top of the pending fixes? Also, please write your changelogs in imperative tone
+to make it clear what this patch does versus what it builds on and also please follow
+kernel coding style.
 
-This motivation is not clear to me. Could you please elaborate how inaccurate
-this monitoring gets? The child process may be preempted but it should not be
-moved from the CPU in its affinity mask.
-
-> 
-> This commit moves the CPU affinity and resctrl FS setup to the child
-> process after fork(), ensuring these settings only affect the benchmark
-> process, thereby maintaining measurement accuracy and making the
-> implementation more portable across platforms.
-> 
-> Signed-off-by: Yifan Wu <wuyifan50@huawei.com>
-> ---
->  tools/testing/selftests/resctrl/resctrl_val.c | 68 +++++++++++--------
->  1 file changed, 39 insertions(+), 29 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-> index 7c08e936572d..85ac96c7cb8f 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_val.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-> @@ -545,7 +545,6 @@ int resctrl_val(const struct resctrl_test *test,
->  	cpu_set_t old_affinity;
->  	int domain_id;
->  	int ret = 0;
-> -	pid_t ppid;
->  
->  	if (strcmp(param->filename, "") == 0)
->  		sprintf(param->filename, "stdio");
-> @@ -556,22 +555,10 @@ int resctrl_val(const struct resctrl_test *test,
->  		return ret;
->  	}
->  
-> -	ppid = getpid();
-> -
-> -	/* Taskset test to specified CPU. */
-> -	ret = taskset_benchmark(ppid, uparams->cpu, &old_affinity);
-> -	if (ret)
-> -		return ret;
-> -
-> -	/* Write test to specified control & monitoring group in resctrl FS. */
-> -	ret = write_bm_pid_to_resctrl(ppid, param->ctrlgrp, param->mongrp);
-> -	if (ret)
-> -		goto reset_affinity;
-> -
->  	if (param->init) {
->  		ret = param->init(param, domain_id);
-
-write_bm_pid_to_resctrl() does more than just write the task ID to the tasks file,
-it also creates the resource groups in its parameters. By moving it after the
-param->init() callback it prevents any test specific initialization from
-being done in the test's resource groups.
-
-
->  		if (ret)
-> -			goto reset_affinity;
-> +			return ret;
->  	}
->  
->  	/*
-> @@ -586,10 +573,8 @@ int resctrl_val(const struct resctrl_test *test,
->  	if (param->fill_buf) {
->  		buf = alloc_buffer(param->fill_buf->buf_size,
->  				   param->fill_buf->memflush);
-
-This is the buffer on which the workload will operate and by having
-different CPU affinity between parent and child the buffer may be created in a
-separate domain. 
-
-Consider for example if I apply just this patch on a test system and try out the
-MBM test it now fails:
-1..1
-# Starting MBM test ...
-# Mounting resctrl to "/sys/fs/resctrl"
-# Benchmark PID: 6127
-# Writing benchmark parameters to resctrl FS
-# Write schema "MB:0=100" to resctrl FS
-# Checking for pass/fail
-# Fail: Check MBM diff within 15%
-# avg_diff_per: 100%
-# Span (MB): 1280
-# avg_bw_imc: 50
-# avg_bw_resc: 0
-not ok 1 MBM: test
-
-What happened here is that the buffer was created by the parent in one domain but
-the child's affinity was set to another domain. The test assumes that it can
-count local memory and all of those counts are zero for resctrl since the memory
-is not local. Similarly low numbers from perf for same reason.
-
-> -		if (!buf) {
-> -			ret = -ENOMEM;
-> -			goto reset_affinity;
-> -		}
-> +		if (!buf)
-> +			return -ENOMEM;
->  	}
->  
-
-While isolating just the workload to its own resource group may be reasonable it is
-not clear to me what problem this patch aims to solve. 
-
-Reinette 
+Reinette
 
