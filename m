@@ -1,195 +1,148 @@
-Received: from mail-oo1-f74.google.com (mail-oo1-f74.google.com [209.85.161.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6DC21D00A
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 22:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43183B0AE3
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 22:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773355174; cv=none; b=Rr1qW6emk8dz6fLEgcc8PsIra5+YjIlGn8IFPiQ57Y6FZyZOquzeBmsdw8hx8Ozm0745m/E0IflwMVoeCDfft/buMxNKt4euJHe9oiys78hetqNbTwtwlrbHLkmJPK80poWZfQk5HD+V5ILotAWDR5CHmeE29AmKPfLU1cFIeUc=
+	t=1773355324; cv=none; b=SsVELi/3TakAD6LBouZN8qX+f4hVRy62lFw8K7/n6zYeRPE+J05C9No4CuMuCVcYWaAj9Ru0gyhSjDwECdqkRk2xKJAFmVPO0Z0xRDz1KBqHLLmiqcZR5itiOa8xBFiFRc9ICcmX7z1aQAM5GvDCTB91vR5Oy7th16U1sjTbj2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773355174; c=relaxed/simple;
-	bh=uK5x8e36cBtKTp4Zgmsqull9lgG1uXg1oR7aeNNQMMc=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=OtqFFKUdYOyriFQIEmmiz9FXdLArXWBnPEdJs5r4CR5mTAJAKu/iWtL1M9JT4b0qcYIfH0j868G6dgA+JFvp75lHbIgd3/57a1hgFSyzWP5PRyhkUSX1cPhepcAhsEn5hvslVJXVaxX9ZmKF9nlzfsIW+IdyhCOgDDcmHBjd9kA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=khjj+2te; arc=none smtp.client-ip=209.85.161.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+	s=arc-20240116; t=1773355324; c=relaxed/simple;
+	bh=HHV+jtL/hjU1db8zdC4zMLkvl9PbzMDoy2kQU0Dx+tM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nB5GwRgD9h0/eSUnu9x3pZv6OgJM3R1A45TEiv/EGSHssE9IpoE3RG/rAJTLuRf7TTWOdeVWxZEhhCbqAD1GfUS7U9nWne333eO5p19I9LDnsbMYmOYU8tmWLYyGd6Kbp8wfYGRKeMEVzZPPHWZRv5Zm6mkt8c0b+9I9x80dzTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdT6dHHc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="khjj+2te"
-Received: by mail-oo1-f74.google.com with SMTP id 006d021491bc7-67baf164912so14480868eaf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 15:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773355172; x=1773959972; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ze4zxD1+bgXLnmCcgE7F5EkAVz6+P8Y6KbhF09qoxxs=;
-        b=khjj+2teFVRJeyIcgihIdgsSXT6jvcJlQkB7m8BASj51BmZTbJtUkEwGdi6zhIyfct
-         iGn+Qp7zCjP+1ntl/MS1s4j0dmI2TSVT1eTEpSDYTkBTl5dr3kaA0Kt1/yPk3EwKQjh8
-         W6ryQLk+T6Jt6c9geONbGrRqhymU4TUwU6puhJ0GJRSKiyKO67r64aWLvFjAb4p/R9Vv
-         s4BJUENGeulbFvy1PND0tc1jOF07Yuqezk/OAFgSG8nLWFOffnvqpI4k9KNfdr5pKoVB
-         Xn9Yr9PnAvYLJuKPKjqysMxfI5OgLxw3EeslegLuAcP9x9iHX0Yq1+QcfH6SB+BZguRG
-         u0sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773355172; x=1773959972;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ze4zxD1+bgXLnmCcgE7F5EkAVz6+P8Y6KbhF09qoxxs=;
-        b=m9UZnr6ndJZV25CJw18jw9koD8lrqy1IG6pe8UzkNZ9miQ3v+hrbG8n8lFnauAtu+r
-         vMO8KRls4eRZ1gmE3uoz0+au4erxIJ0PL+A7oGQPgIycp5n2oeDJ3PHj9jbVZRlnRpit
-         XFcxv6iq6T6x+45nsedrr8AqW/Hu2nfoNilzZKmGOtOR/8Rhvs/EDuhIPtQswSgQ7JIe
-         ORgYEgwm/QbcBsjzVZPHp073bkUfzSIdwAj7vM8cplYycb4AE3VvsXbKgIxeQkPx1mcn
-         R0oe+RhgPRC66/x2Q4CEbvuaw/skCRFJPEBLSDObL8oB8frwl3DSB8O8FWOwD5G0pqUy
-         VFqA==
-X-Forwarded-Encrypted: i=1; AJvYcCXSZ0UFbWTTOGclVjX1IC81K0qWRMIZOXhuP4w4UaCwomivtWTdq8C/Pw2CTX4AXRSEUDD4RFu77GOfaN6dN0c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7Pi/t/EQ3z/NUh/RFd8sRiMlfNIZF5u7aSuBUGycAd9wUfBW5
-	8sjtAXv7+O8Jo9VcVBbD1OSwyErLEH9jshynB6KaCgIsMyhQk9dDghm140TWtZk0jVxtsTuoeJD
-	g1Q7K+uCEcjUCHpvKP0cr5cjsrg==
-X-Received: from iobdo19.prod.google.com ([2002:a05:6602:4613:b0:95a:608d:8cf8])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6820:210b:b0:674:911:98fa with SMTP id 006d021491bc7-67bdaa85b4dmr742343eaf.64.1773355171523;
- Thu, 12 Mar 2026 15:39:31 -0700 (PDT)
-Date: Thu, 12 Mar 2026 22:39:30 +0000
-In-Reply-To: <68a93eb5-24df-4b73-bd1e-798dc32b7e86@linaro.org> (message from
- James Clark on Wed, 11 Mar 2026 12:01:26 +0000)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdT6dHHc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60355C2BC87
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 22:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773355324;
+	bh=HHV+jtL/hjU1db8zdC4zMLkvl9PbzMDoy2kQU0Dx+tM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=mdT6dHHcAt6V/CpqpRZaVALOF95EOcrXXZ784JAFN/5vX8mb8wbvdAj2GsxZ6cb0F
+	 0BXeyXrEGp74j9yFwVVyz56cXYOQKCdRNuvWoODPBUdBJFFBgJ54LMDcgtGIAW5OEP
+	 ZUv2Xuoah7em2JMErw7xsVJrtH5YFiQ2+9vFhtLrnlfjPKizcwBJCYVAQhVH8sa6Wr
+	 v1RTI9b1UFbAJdkynr9U4lvc/CMujwmDzDDomsR9GzSV/TZPnFAyfL13nC9f5nWnQD
+	 7Dpu476sZjNOlQkt7Hk3KqMwX7zC+M1qJ6zbGPxb9ccdLsJ8x13Qyv9jf+yrC4Q/4r
+	 r2Xr5Bhn7ySeQ==
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-65c4152313fso2140902a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 15:42:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXzbkPNWaNaV+kLSGMHv70FkowQU+AnIZ9iQWv8VCt6Qb/9lpbTSeWD67q2EMk20xZa67Kfxj7er6dkA+v0wYE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZRmK21ZKam8qdR1UFJ7oJnzIeGEPLmzMrYJaMpVK+CIQd5C2/
+	Lm/LyBHW0GN0wsuzxAksAuo5n+fkzQ3pPf6BqMTSQQ3TmVptyRpvuv4h802TmgpYZ4ZR/jwW1M2
+	I6oA+U60rXvRIYNct+VO1Jpf7/QA/PmQ=
+X-Received: by 2002:a17:907:94d3:b0:b94:1771:5296 with SMTP id
+ a640c23a62f3a-b97651433b9mr58650466b.23.1773355323156; Thu, 12 Mar 2026
+ 15:42:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsntbjgsoeot.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v6 11/19] KVM: arm64: Context swap Partitioned PMU guest registers
-From: Colton Lewis <coltonlewis@google.com>
-To: James Clark <james.clark@linaro.org>
-Cc: kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, 
-	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+References: <20260312040627.55257-1-liwang@redhat.com> <20260312040627.55257-2-liwang@redhat.com>
+In-Reply-To: <20260312040627.55257-2-liwang@redhat.com>
+From: Yosry Ahmed <yosry@kernel.org>
+Date: Thu, 12 Mar 2026 15:41:51 -0700
+X-Gmail-Original-Message-ID: <CAO9r8zMzR_buk+fqJ_r6pgtdV6H=m__BDZJ3TMrVhUotghf4+w@mail.gmail.com>
+X-Gm-Features: AaiRm50EiwfxZTHpWfQGcASFk7zY7F3P-3cUk_qRomA1oNgqKm5k_mkkpcGbFG8
+Message-ID: <CAO9r8zMzR_buk+fqJ_r6pgtdV6H=m__BDZJ3TMrVhUotghf4+w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] selftests/cgroup: avoid OOM in test_swapin_nozswap
+To: Li Wang <liwang@redhat.com>
+Cc: mkoutny@suse.com, yosryahmed@google.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Muchun Song <muchun.song@linux.dev>, Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-James Clark <james.clark@linaro.org> writes:
+On Wed, Mar 11, 2026 at 9:06=E2=80=AFPM Li Wang <liwang@redhat.com> wrote:
+>
+> test_swapin_nozswap can hit OOM before reaching its assertions on some
+> setups. The test currently sets memory.max=3D8M and then allocates/reads
+> 32M with memory.zswap.max=3D0, which may over-constrain reclaim and kill
+> the workload process.
+>
+> Raise memory.max to 24M so the workload can make forward progress, and
+> lower the swap_peak expectation from 24M to 8M to keep the check robust
+> across environments.
+>
+> The test intent is unchanged: verify that swapping happens while zswap
+> remains unused when memory.zswap.max=3D0.
+>
+> =3D=3D=3D Error Logs =3D=3D=3D
+>
+>   # ./test_zswap
+>   TAP version 13
+>   1..7
+>   ok 1 test_zswap_usage
+>   not ok 2 test_swapin_nozswap
+>   ...
+>
+>   # dmesg
+>   [271641.879153] test_zswap invoked oom-killer: gfp_mask=3D0xcc0(GFP_KER=
+NEL), order=3D0, oom_score_adj=3D0
+>   [271641.879168] CPU: 1 UID: 0 PID: 177372 Comm: test_zswap Kdump: loade=
+d Not tainted 6.12.0-211.el10.ppc64le #1 VOLUNTARY
+>   [271641.879171] Hardware name: IBM,9009-41A POWER9 (architected) 0x4e02=
+02 0xf000005 of:IBM,FW940.02 (UL940_041) hv:phyp pSeries
+>   [271641.879173] Call Trace:
+>   [271641.879174] [c00000037540f730] [c00000000127ec44] dump_stack_lvl+0x=
+88/0xc4 (unreliable)
+>   [271641.879184] [c00000037540f760] [c0000000005cc594] dump_header+0x5c/=
+0x1e4
+>   [271641.879188] [c00000037540f7e0] [c0000000005cb464] oom_kill_process+=
+0x324/0x3b0
+>   [271641.879192] [c00000037540f860] [c0000000005cbe48] out_of_memory+0x1=
+18/0x420
+>   [271641.879196] [c00000037540f8f0] [c00000000070d8ec] mem_cgroup_out_of=
+_memory+0x18c/0x1b0
+>   [271641.879200] [c00000037540f990] [c000000000713888] try_charge_memcg+=
+0x598/0x890
+>   [271641.879204] [c00000037540fa70] [c000000000713dbc] charge_memcg+0x5c=
+/0x110
+>   [271641.879207] [c00000037540faa0] [c0000000007159f8] __mem_cgroup_char=
+ge+0x48/0x120
+>   [271641.879211] [c00000037540fae0] [c000000000641914] alloc_anon_folio+=
+0x2b4/0x5a0
+>   [271641.879215] [c00000037540fb60] [c000000000641d58] do_anonymous_page=
++0x158/0x6b0
+>   [271641.879218] [c00000037540fbd0] [c000000000642f8c] __handle_mm_fault=
++0x4bc/0x910
+>   [271641.879221] [c00000037540fcf0] [c000000000643500] handle_mm_fault+0=
+x120/0x3c0
+>   [271641.879224] [c00000037540fd40] [c00000000014bba0] ___do_page_fault+=
+0x1c0/0x980
+>   [271641.879228] [c00000037540fdf0] [c00000000014c44c] hash__do_page_fau=
+lt+0x2c/0xc0
+>   [271641.879232] [c00000037540fe20] [c0000000001565d8] do_hash_fault+0x1=
+28/0x1d0
+>   [271641.879236] [c00000037540fe50] [c000000000008be0] data_access_commo=
+n_virt+0x210/0x220
+>   [271641.879548] Tasks state (memory values in pages):
+>   ...
+>   [271641.879550] [  pid  ]   uid  tgid total_vm      rss rss_anon rss_fi=
+le rss_shmem pgtables_bytes swapents oom_score_adj name
+>   [271641.879555] [ 177372]     0 177372      571        0        0      =
+  0         0    51200       96             0 test_zswap
+>   [271641.879562] oom-kill:constraint=3DCONSTRAINT_MEMCG,nodemask=3D(null=
+),cpuset=3D/,mems_allowed=3D0,oom_memcg=3D/no_zswap_test,task_memcg=3D/no_z=
+swap_test,task=3Dtest_zswap,pid=3D177372,uid=3D0
+>   [271641.879578] Memory cgroup out of memory: Killed process 177372 (tes=
+t_zswap) total-vm:36544kB, anon-rss:0kB, file-rss:0kB, shmem-rss:0kB, UID:0=
+ pgtables:50kB oom_score_adj:0
+>
+> Signed-off-by: Li Wang <liwang@redhat.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Michal Koutn=C3=BD <mkoutny@suse.com>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Nhat Pham <nphamcs@gmail.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Shakeel Butt <shakeel.butt@linux.dev>
+> Cc: Yosry Ahmed <yosryahmed@google.com>
 
-> On 09/02/2026 10:14 pm, Colton Lewis wrote:
->> Save and restore newly untrapped registers that can be directly
->> accessed by the guest when the PMU is partitioned.
-
->> * PMEVCNTRn_EL0
->> * PMCCNTR_EL0
->> * PMSELR_EL0
->> * PMCR_EL0
->> * PMCNTEN_EL0
->> * PMINTEN_EL1
-
->> If we know we are not partitioned (that is, using the emulated vPMU),
->> then return immediately. A later patch will make this lazy so the
->> context swaps don't happen unless the guest has accessed the PMU.
-
->> PMEVTYPER is handled in a following patch since we must apply the KVM
->> event filter before writing values to hardware.
-
->> PMOVS guest counters are cleared to avoid the possibility of
->> generating spurious interrupts when PMINTEN is written. This is fine
->> because the virtual register for PMOVS is always the canonical value.
-
->> Signed-off-by: Colton Lewis <coltonlewis@google.com>
->> ---
->>    arch/arm64/kvm/arm.c        |   2 +
->>    arch/arm64/kvm/pmu-direct.c | 123 ++++++++++++++++++++++++++++++++++++
->>    include/kvm/arm_pmu.h       |   4 ++
->>    3 files changed, 129 insertions(+)
-
->> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->> index 620a465248d1b..adbe79264c032 100644
->> --- a/arch/arm64/kvm/arm.c
->> +++ b/arch/arm64/kvm/arm.c
->> @@ -635,6 +635,7 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int  
->> cpu)
->>    		kvm_vcpu_load_vhe(vcpu);
->>    	kvm_arch_vcpu_load_fp(vcpu);
->>    	kvm_vcpu_pmu_restore_guest(vcpu);
->> +	kvm_pmu_load(vcpu);
->>    	if (kvm_arm_is_pvtime_enabled(&vcpu->arch))
->>    		kvm_make_request(KVM_REQ_RECORD_STEAL, vcpu);
-
->> @@ -676,6 +677,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
->>    	kvm_timer_vcpu_put(vcpu);
->>    	kvm_vgic_put(vcpu);
->>    	kvm_vcpu_pmu_restore_host(vcpu);
->> +	kvm_pmu_put(vcpu);
->>    	if (vcpu_has_nv(vcpu))
->>    		kvm_vcpu_put_hw_mmu(vcpu);
->>    	kvm_arm_vmid_clear_active();
->> diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
->> index f2e6b1eea8bd6..b07b521543478 100644
->> --- a/arch/arm64/kvm/pmu-direct.c
->> +++ b/arch/arm64/kvm/pmu-direct.c
->> @@ -9,6 +9,7 @@
->>    #include <linux/perf/arm_pmuv3.h>
-
->>    #include <asm/arm_pmuv3.h>
->> +#include <asm/kvm_emulate.h>
-
->>    /**
->>     * has_host_pmu_partition_support() - Determine if partitioning is  
->> possible
->> @@ -163,3 +164,125 @@ u8 kvm_pmu_hpmn(struct kvm_vcpu *vcpu)
-
->>    	return *host_data_ptr(nr_event_counters);
->>    }
->> +
->> +/**
->> + * kvm_pmu_load() - Load untrapped PMU registers
->> + * @vcpu: Pointer to struct kvm_vcpu
->> + *
->> + * Load all untrapped PMU registers from the VCPU into the PCPU. Mask
->> + * to only bits belonging to guest-reserved counters and leave
->> + * host-reserved counters alone in bitmask registers.
->> + */
->> +void kvm_pmu_load(struct kvm_vcpu *vcpu)
->> +{
->> +	struct arm_pmu *pmu;
->> +	unsigned long guest_counters;
->> +	u64 mask;
->> +	u8 i;
->> +	u64 val;
->> +
->> +	/*
->> +	 * If we aren't guest-owned then we know the guest isn't using
->> +	 * the PMU anyway, so no need to bother with the swap.
->> +	 */
->> +	if (!kvm_vcpu_pmu_is_partitioned(vcpu))
->> +		return;
->> +
->> +	preempt_disable();
->> +
->> +	pmu = vcpu->kvm->arch.arm_pmu;
->> +	guest_counters = kvm_pmu_guest_counter_mask(pmu);
->> +
->> +	for_each_set_bit(i, &guest_counters, ARMPMU_MAX_HWEVENTS) {
->> +		val = __vcpu_sys_reg(vcpu, PMEVCNTR0_EL0 + i);
->> +
->> +		write_sysreg(i, pmselr_el0);
->> +		write_sysreg(val, pmxevcntr_el0);
-
-> This needs to have a special case for ARMV8_PMU_CYCLE_IDX because you
-> can't use pmxevcntr_el0 to read or write PMCCNTR_EL0:
-
-> D24.5.22:
-
->     SEL 0b11111      Select the cycle counter, PMCCNTR_EL0:
-
->                      MRS and MSR of PMXEVCNTR_EL0 are CONSTRAINED
->                      UNPREDICTABLE.
-
-> There are 3 separate instances of the same thing in the patches. I was
-> getting undefined instruction errors on my Radxa O6 board until they
-> were all fixed.
-
-Looks like it. I had a special case on a previous iteration but someone
-suggested I could get rid of it by iterating the mask.
-
-I missed that the cycle counter was CONSTRAINED UNPREDICTABLE.
+Acked-by: Yosry Ahmed <yosry@kernel.org>
