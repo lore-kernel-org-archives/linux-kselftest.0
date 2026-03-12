@@ -1,142 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3809738C432
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 04:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B611DDC28;
+	Thu, 12 Mar 2026 04:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773288443; cv=none; b=ewjQzMyzNV2BzHRjZIW41S0eDxpm7yyoejdMTMFEAnSGDGwvIAlIDqquoqlSFkFqF1tujPpWmUNfhOvUfqruudKSXj4XZCgytilZhRwI/mz/tGWbfVtvkzHmoZkAukQNlH3nzjq8xA1XiiQ9Om4OSpUhUvPg5PMaKbAp9sRoRDI=
+	t=1773291178; cv=none; b=ngfk9ZHJuaZf+hrsMHuWDJiiwYsSoiXOkU6hQj6E/ryo0h2Ofr7d1XheEoxVs7F7YPf1q66mTv1wxwwlZXYfm990cizUWWVULs0ArTC3BX/fx01cqKZP4MxgBRqBheKExvxLd7FKy/25/Jm074EK/8yeeGUDJt5DG2OoGBhAQ28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773288443; c=relaxed/simple;
-	bh=okwAN/3hKhbpMJrAaKocoqevrXwNBUBi4xXnX9ndC3k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pq40heFOAi8a4cDp6YnaM/bz5LPlScvsRofFq0IcBoIDkTudGuzfonanbTlBWFFHMRbaPaXEL+x1nIIwUUj0v1ruOsGQUm2ASagiiRmLO/44wDE5rouP9zcfySWnbCDRjOvenNfrY8QwZOvoFv32Fa7keVh60qKmTaiof0T1lpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hgF6Osol; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773291178; c=relaxed/simple;
+	bh=SBD/dmp8BPTvxKp8T1wibLDp6tEJo9cqmyfGT+xkaUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BcQPLMlH5HqK6q4P9vBG0Igqf7lwxm3lbcINAD86pnImr25hfJnWyISdoT3piApwYTXXx+h4LX0glZkkBe4pl26m9MAOd99TR+btVLzzbAiS7sC/lXIkAmqosoYyFMpTvFm0TKsEEfuh2bulchhd1bFcJ0PxjlmFWveWbaezjIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nxc/IBnY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hgF6Osol"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773288441;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tCoh+2kLa4JaG6/3rXINwsFM1J8xAMKja4n+Ebyevk4=;
-	b=hgF6Osolxb7dWrUAiF4TQjHe7PDAzS2iloXcE2Btc8zhXgGKT3t/5+ufmrj2UW96oDydsC
-	H+QfrzDLOywS4lK65+PL+ZZly7Aa/y4UXJXl0q+Rule5d45muCnbN76t7jznbwDpzEX3TM
-	OrjnBnVqeJ9HyQJwxsaaZitPe7bFbf0=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-161-pLXfbgt0NHKSRcTxT34plw-1; Thu,
- 12 Mar 2026 00:07:17 -0400
-X-MC-Unique: pLXfbgt0NHKSRcTxT34plw-1
-X-Mimecast-MFC-AGG-ID: pLXfbgt0NHKSRcTxT34plw_1773288435
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6C9BA1956089;
-	Thu, 12 Mar 2026 04:07:15 +0000 (UTC)
-Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.57])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1C70C19560A6;
-	Thu, 12 Mar 2026 04:07:09 +0000 (UTC)
-From: Li Wang <liwang@redhat.com>
-To: mkoutny@suse.com,
-	yosryahmed@google.com
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Tejun Heo <tj@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>
-Subject: [PATCH v2 7/7] selftest/cgroup: fix zswap attempt_writeback() on 64K pagesize system
-Date: Thu, 12 Mar 2026 12:06:27 +0800
-Message-ID: <20260312040627.55257-7-liwang@redhat.com>
-In-Reply-To: <20260312040627.55257-1-liwang@redhat.com>
-References: <20260312040627.55257-1-liwang@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nxc/IBnY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3ACEC4CEF7;
+	Thu, 12 Mar 2026 04:52:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773291177;
+	bh=SBD/dmp8BPTvxKp8T1wibLDp6tEJo9cqmyfGT+xkaUA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Nxc/IBnYSqS9cJj76LagMrz4AAvFI+8Rvna64PzDTc+p4ItB2T8PR41+A9P8QGDxk
+	 LVHp79ZLrM/iqVQdu39fbJ12Gomz79dN30DTU0bLdbq/U5vNWGPAF7BZoO1IvPuQNU
+	 e/18KXBm5HuhTfPq+syLDSqdGC+2hqCEHbAinfrU2525ZM1A5Znwab4/WtM11aBMb9
+	 ckuGyyOiOOci4oTmFbCZFSBf4Huwk6nCGgvjfHTIqvKk80rnrD3rLmcL1eZ4HR1E0z
+	 M4Ojkn7xUOEMUJ/cKswsMH7tqt9mSEgAfNeome3npIrAiU/rn0nsEP/Zr4U6+yWiTw
+	 5k4IRF58plDag==
+Date: Thu, 12 Mar 2026 04:52:54 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+	Linus Walleij <linusw@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 1/6] gpio: Access `gpio_bus_type` in
+ gpiochip_setup_dev()
+Message-ID: <abJGpo7t5KCvyGE1@google.com>
+References: <20260223061726.82161-1-tzungbi@kernel.org>
+ <20260223061726.82161-2-tzungbi@kernel.org>
+ <CAMuHMdU0Xb=Moca5LUex+VxyHQa2-uYJgYf4hzHiSEjDCQQT=Q@mail.gmail.com>
+ <CAMRc=McmrJLWGoXjKaqGuCWpLZU4mmcrgs9ESAaL8kG=_R89cw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=McmrJLWGoXjKaqGuCWpLZU4mmcrgs9ESAaL8kG=_R89cw@mail.gmail.com>
 
-In attempt_writeback(), a memsize of 4M only covers 64 pages on 64K
-page size systems. When memory.reclaim is called, the kernel prefers
-reclaiming clean file pages (binary, libc, linker, etc.) over swapping
-anonymous pages. With only 64 pages of anonymous memory, the reclaim
-target can be largely or entirely satisfied by dropping file pages,
-resulting in very few or zero anonymous pages being pushed into zswap.
+On Wed, Mar 11, 2026 at 07:36:51AM -0700, Bartosz Golaszewski wrote:
+> On Wed, 11 Mar 2026 12:44:31 +0100, Geert Uytterhoeven
+> <geert@linux-m68k.org> said:
+> > Hi Tzung-Bi,
+> >
+> > On Mon, 23 Feb 2026 at 07:17, Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+> >> To make the intent clear, access `gpio_bus_type` only when it's ready in
+> >> gpiochip_setup_dev().
+> >>
+> >> Reviewed-by: Linus Walleij <linusw@kernel.org>
+> >> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> >
+> > Thanks for your patch, which is now commit cc11f4ef666fbca0 ("gpio:
+> > Access `gpio_bus_type` in gpiochip_setup_dev()") in gpio/gpio/for-next.
+> >
+> >> --- a/drivers/gpio/gpiolib.c
+> >> +++ b/drivers/gpio/gpiolib.c
+> >> @@ -901,6 +901,8 @@ static int gpiochip_setup_dev(struct gpio_device *gdev)
+> >>         struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
+> >>         int ret;
+> >>
+> >> +       gdev->dev.bus = &gpio_bus_type;
+> >> +
+> >>         /*
+> >>          * If fwnode doesn't belong to another device, it's safe to clear its
+> >>          * initialized flag.
+> >> @@ -1082,7 +1084,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+> >>          * then make sure they get free():ed there.
+> >>          */
+> >>         gdev->dev.type = &gpio_dev_type;
+> >> -       gdev->dev.bus = &gpio_bus_type;
+> >>         gdev->dev.parent = gc->parent;
+> >>         device_set_node(&gdev->dev, gpiochip_choose_fwnode(gc));
+> >>
+> >
+> > Postponing this assignment does have an impact on early
+> > messages. E.g. on RBTX4927:
+> >
+> >     -gpio gpiochip0: Static allocation of GPIO base is deprecated, use
+> > dynamic allocation.
+> >     + gpiochip0: Static allocation of GPIO base is deprecated, use
+> > dynamic allocation.
+> >
+> > Or with CONFIG_DEBUG_GPIO=y, e.g. on BeagleBone black:
+> >
+> >     -gpio gpiochip0: (gpio-0-31): created GPIO range 0->7 ==>
+> > 44e10800.pinmux PIN 0->7
+> >     -gpio gpiochip0: (gpio-0-31): created GPIO range 8->11 ==>
+> > 44e10800.pinmux PIN 90->93
+> >     -gpio gpiochip0: (gpio-0-31): created GPIO range 12->27 ==>
+> > 44e10800.pinmux PIN 12->27
+> >     -gpio gpiochip0: (gpio-0-31): created GPIO range 28->31 ==>
+> > 44e10800.pinmux PIN 30->33
+> >     + gpiochip0: (gpio-0-31): created GPIO range 0->7 ==>
+> > 44e10800.pinmux PIN 0->7
+> >     + gpiochip0: (gpio-0-31): created GPIO range 8->11 ==>
+> > 44e10800.pinmux PIN 90->93
+> >     + gpiochip0: (gpio-0-31): created GPIO range 12->27 ==>
+> > 44e10800.pinmux PIN 12->27
+> >     + gpiochip0: (gpio-0-31): created GPIO range 28->31 ==>
+> > 44e10800.pinmux PIN 30->33
+> >      [...]
+> >
+> > Note the spaces at the beginning of the printed lines.
+> > Reverting the commit re-adds the "gpio" prefix.
 
-This causes zswap_usage to be extremely small or zero, making
-zswap_usage/2 insufficient to create meaningful writeback pressure.
-The test then fails because no writeback is triggered.
+Thanks for catching this.
 
-On 4K page size systems this is not an issue because 4M covers 1024
-pages, and file pages are a small fraction of the reclaim target.
+> >
+> 
+> As per the comment in gpiochip_add_data_with_key(): we may end up with
+> a functional chip before gpiochip_setup_dev() is called and so before we
+> assign the bus type.
+> 
+> dev_printk() helpers only read the name field of the bus type so it should
+> be safe, I don't see anyone else accessing it before we register it.
+> 
+> I think it makes sense to revert this commit. Tzung-Bi: what do you think?
 
-Fix this by always allocating 1024 pages regardless of page size.
-This ensures enough anonymous pages to reliably populate zswap and
-trigger writeback, while keeping the original 4M allocation on 4K
-page size systems.
-
-=== Error Log ===
-  # uname -rm
-  6.12.0-211.el10.ppc64le ppc64le
-
-  # getconf PAGESIZE
-  65536
-
-  # ./test_zswap
-  TAP version 13
-  1..7
-  ok 1 test_zswap_usage
-  ok 2 test_swapin_nozswap
-  ok 3 test_zswapin
-  not ok 4 test_zswap_writeback_enabled
-  ...
-
-Signed-off-by: Li Wang <liwang@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Michal Koutný <mkoutny@suse.com>
-Cc: Muchun Song <muchun.song@linux.dev>
-Cc: Nhat Pham <nphamcs@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Yosry Ahmed <yosryahmed@google.com>
----
-
-Notes:
-    v1 --> v2:
-        * use pagesize * 1024 which clearly shows the page numbers
-
- tools/testing/selftests/cgroup/test_zswap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 4eb88930b45f..acfa0045d2ab 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -264,7 +264,7 @@ static int test_zswapin(const char *root)
-  */
- static int attempt_writeback(const char *cgroup, void *arg)
- {
--	size_t memsize = MB(4);
-+	size_t memsize = pagesize * 1024;
- 	char buf[pagesize];
- 	long zswap_usage;
- 	bool wb_enabled = *(bool *) arg;
--- 
-2.53.0
-
+That makes sense.  I agree, let's revert it.
