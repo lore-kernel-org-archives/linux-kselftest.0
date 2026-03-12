@@ -1,66 +1,137 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B092033A9CF;
-	Thu, 12 Mar 2026 07:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0063AF658;
+	Thu, 12 Mar 2026 07:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773300552; cv=none; b=KH7Jj3rTADnTfxlCOQV6QkjhEzZ5/gt1MMk0mjsIR/mtsEA/E/KsybPjEk1DPWyQZ53H2Wmpa6H0yKiZV0OUTvDQ5gUw2Fw55Lm15MYbo9EFO7ipJm1hDtCQu35sGjxNRypenx3IirmgemTEWssi5GhKcBa1/E/MPNeK8mY8V/Y=
+	t=1773301796; cv=none; b=AfHz55wOLpuvcEEpUi9C0nE4wnYhgi0Av1P3bewX/xCWvJyenol4G3+EGCaeV3Gxm2aG1tkrE8CwFBkbFDMbXsCx76nESyUiQpJRrQmm07BjnrJ9ZbjR0csHL91ye9ebLlVxFrdSlQZx5nmLqyUCmtmwGutzg2g+EeNUl2LhD/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773300552; c=relaxed/simple;
-	bh=4a0pdum7sasJCaJZ6hqj9jfKJML1zEHVTAoqYbFaN8o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZtFmkJT0SfmM4YUO0NpVoMX3o7nBNb0/eGMm1JpYcg6BD3KvenUMBvfRzGVzgZrR9EFabdV9PKprr/5eISST9G+Ax0K8KmlVIImmIty2i7dlkZtWgk6dv3hhHKWm+9KsK0ng3RqZxdBaRg5v3EDMAVsjxYUAQl2qOfDdOmICsR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cUqhqtOq; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eTWsZlrB; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1773301796; c=relaxed/simple;
+	bh=qc6nhP5c2KbUKz7TVprgeRZu7pcKDVuliPuq3MEFpFk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RlJvRa/iL4DbfjyqBkpQLgYww5EsYNRZFwGyIyaywv3kccRMglYFebHrdVVGLLbmuHAavywHGjqp1npIk4vuPYoWshXT2vUo0Yl7RYfPn6vs8flE6X0Q31dAhu5wOijaI7EUYeHdIqtrZG4F5azxFdfpmd+vi6MLwHspyvTVN7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ax/gNMry; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cUqhqtOq";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eTWsZlrB"
-Date: Thu, 12 Mar 2026 08:29:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1773300550;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BVo8kbjQxHUNCgmwlRjOaVnI0pcrBIrkFOYP96jYa2A=;
-	b=cUqhqtOqXlQbQEkQF4JwyxuPpGFsxHsR37kFmci48L1PlX0XMms3yJB+uxiBEkoUR5gcRW
-	zNCB+/NW8L6qG4zIDwJQvCo2oMNFYlJSo9EDYLEFIQ8QEtWgemVXxewAMo7YGfO2Uw7sbe
-	fGVPGVtQNZn6aDxWvqQ9BfRip8jwoWoUWP1ZqLpL/pCC0Xin7cm7z2hMDX87+tj47w1j0Q
-	X03sAvnlQldkoiVzg6G/dTntJMtt+xXKd9IOIrUDz6huh0ph65WCmNE9+tgsSeP35MR6Cj
-	8jVMssM87fI+nUVOqcmSv+BUyJKvcHlEGLDj2QqKMlUFn4nl4NKJxdeoSe60xQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1773300550;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BVo8kbjQxHUNCgmwlRjOaVnI0pcrBIrkFOYP96jYa2A=;
-	b=eTWsZlrBxVSDmg476RtGNsKAGbbqNSkGcsxQ3U99vItFKQb0x1cUj6g8/5VZbCh25xnxl+
-	TCiwqWbvh0ctlUCA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Davidlohr Bueso <dave@stgolabs.net>
-Cc: tglx@kernel.org, peterz@infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/futex: Bump up libnuma version check
-Message-ID: <20260312072908.kYFklx_F@linutronix.de>
-References: <20260306182215.2088991-1-dave@stgolabs.net>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ax/gNMry"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id A48BBC4159A;
+	Thu, 12 Mar 2026 07:50:11 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D2AC65FDEB;
+	Thu, 12 Mar 2026 07:49:49 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BE4DD103685B6;
+	Thu, 12 Mar 2026 08:49:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1773301788; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=oT1XxdAl50AWEmjTvDhxYXZzFl6EH2KJUz4HxFpnESQ=;
+	b=Ax/gNMry1zn+jSGCJbygPm1MqxQ4xxoTT66fSRTc5nLHZg0smRQfQsCBxzFAgGLzAa5lfd
+	Af4Hzw3beOAKGJa2JoN1tyRRgpFbt2P1DrjSQJLrLuFisE3KcRi9NuOajpxaUhtjQbuHEK
+	kR3cJQ7kSGJyJSKLk1FFFNgbzO9Llxvoc0l+zkG8/VZWxfJJLvshOLgAEPhd0YVzYaaAc3
+	wf1CqHn90p9oxKToETmVmvknFNcnGt4nnaLz9lclipHxPR9jfhGQ3zeSz9iFLtb5+nxz2S
+	99oywt/IIeSV4UXD45vO3Bd0BvPnK1F/DNbgdI8WLyq0hFw/oXtfNgrByjMj/Q==
+Message-ID: <ebab1d3e-8967-444b-be54-437e4dfe3c7e@bootlin.com>
+Date: Thu, 12 Mar 2026 08:49:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260306182215.2088991-1-dave@stgolabs.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
+ definitions
+To: Oleksij Rempel <o.rempel@pengutronix.de>, Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, netdev@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>,
+ Eric Dumazet <edumazet@google.com>,
+ Naveen Mamindlapalli <naveenm@marvell.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Danielle Ratson <danieller@nvidia.com>,
+ Hariprasad Kelam <hkelam@marvell.com>, Ido Schimmel <idosch@nvidia.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, Leon Romanovsky
+ <leon@kernel.org>, Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>,
+ Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Saeed Mahameed <saeedm@nvidia.com>,
+ Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+ Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+References: <20260310104743.907818-1-bjorn@kernel.org>
+ <20260310104743.907818-3-bjorn@kernel.org>
+ <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
+ <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch>
+ <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
+ <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch>
+ <20260311195052.1202174f@kernel.org> <abJJY8whzSOB8O-X@pengutronix.de>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <abJJY8whzSOB8O-X@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 2026-03-06 10:22:15 [-0800], Davidlohr Bueso wrote:
-> numa_set_mempolicy_home_node() was introduced in libnuma 2.0.18, not
-> 2.0.16, via:
-> 	https://github.com/numactl/numactl/commit/8f2ffc89654c
+
+
+On 12/03/2026 06:04, Oleksij Rempel wrote:
+> On Wed, Mar 11, 2026 at 07:50:52PM -0700, Jakub Kicinski wrote:
+>> On Wed, 11 Mar 2026 20:26:39 +0100 Andrew Lunn wrote:
+>>>> For that we have what we need with phy_link_topology, as each PHY has
+>>>> its index, we should be good to go in that regard hopefully :)  
+>>>
+>>> So depth would be local to a component? We could have two PHY
+>>> components, each with a different index, and depth = 0?
+>>>
+>>> I _think_ Jakub's depth was more at a global level? But then it would
+>>> need to be passed down as we do the enumeration.
+>>
+>> Oh, sorry, I responded without reading the whole discussion :)
+>> No, I imagined the depth would be within a single component, 
+>> so under control of a single driver (instance). The ordering
+>> between components should be defined by PHY topology etc so
+>> it's outside of the loopback config.
 > 
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+> As for me, it is problematic to help the user to understand the datapath
+> depth on a switch. For example:
+> 
+> CPU -- xMII --- MAC1 [loop] --- fabric --- MAC2 [loop] --- xMII -- PHY
+>                                     \----- MACx [loop] ---
+> 
+> ... each port has two xMII loop configurations: towards the xMII or towards
+> the fabric. From a driver perspective, a loop towards the xMII is
+> "remote." However, from a system perspective, a "remote" loop on MAC1 is
+> a local loop at depth=0, whereas a "local" loop on MAC2 is a local loop
+> at depth=1.
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+What's important is to specify clearly in the documentation from which
+end do we start, where representing the topology. From your scenario
+here, each block is already well represented and exposed, and if we use
+local depth definitions we should be fine ?
 
-Sebastian
+> 
+> Other example would be where we have a chain of components which are
+> attached on the system in a unexpected direction, where the MDI
+> interface is pointing towards the main CPU, so the remote loopbacks
+> became to local loop.
+
+I have a few of these types of setup on my desk, where 3 PHY devices are
+daisy-chained, we don't support that for now. If we one day add support
+for standalone PHYs acting as media converters, I expect we'll be able
+to tell which end is pointing where, and let it up to the user to figure
+out what "remote" and "local" means in that case.
+
+> 
+> One more issue is the test data generator location. The data generator
+> is not always the CPU. We have HW generators located in components like
+> PHYs or we may use external source (remote loopback).
+
+There were discussions about PRBS, I think the same idea of "pinpointing
+which block we want to use" can be applied for both loopback and
+generation ?
+
+Maxime
+
