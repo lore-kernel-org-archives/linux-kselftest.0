@@ -1,114 +1,269 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f74.google.com (mail-oa1-f74.google.com [209.85.160.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0903CCA1A;
-	Thu, 12 Mar 2026 22:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC1A30EF6C
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 22:13:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773353128; cv=none; b=f0N1j/WkaQut1dzCuNsGUkDlbDfMCwzaLBBJfpMRrYY3vaKmV4Z9TWh69GqQTMyMKrDIlKc9DCVu4G+RgRHl2srk6Rw7bsCAU+fu19xXLukKyh7WVQY4Okwtqw/ij5EgdvEDn4deCBdg0phxlcN6xExgcfdOaAaEXnGEVvqpgrQ=
+	t=1773353624; cv=none; b=LOq8MlTaXDoXr6JOXQ9AXGglb6faB8LsmeA6U9ii/XhV4D1vJFsP/cpzIkvcLQSJK/rT0NsjuAR5Z14uGNegziVn0kQCVYpo9+KCXDpVEb472xamuOvjxTsn40+/flMISrrK0f9Nc1yWgfqRG6jj3SNcm2GuJaiI3Jh4z+ZS+9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773353128; c=relaxed/simple;
-	bh=kJpOMXmeVrgv0HG/rFG8bTekmGeeG6gm/5I211m0F2s=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=L++lXP7RrXEhsB6q4Wf8iltPFqOCBWfDWicgznXn1iNX3iN5Z/ZzGT9tfeE09qYUlZS3qFkJE+hpXN+0jPfUhc5DIGeCfRLb0K8yUVeCcngpMeSLgzTm40AchSiGcDL8jhUnDjJ7gX+49ZDhRZ787e3z/fCFWY/6WeyOy/4FBIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ZsTJnAFO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773353624; c=relaxed/simple;
+	bh=NnNqngGYzOf/+4ZNbTSqtLeCtlFOkgKZlcgLwZ5WeeU=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=H7vQrFH1TU04f9iiAdBvUcU45QS2N7ds/nRcisdJAgp20Z3Q0szM2UM54gIHzlGRcqr6Z9vceiZn71SS7mWNX68wUI98UldBgQ4Qn7N4qqCcSLy/T6PxtYeIztiyEAhpV5UpToV6tDBQzQOn+s1C54pS0m7GKHOCI2IrIaaz/LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xeXAC41k; arc=none smtp.client-ip=209.85.160.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ZsTJnAFO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E28C4CEF7;
-	Thu, 12 Mar 2026 22:05:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1773353128;
-	bh=kJpOMXmeVrgv0HG/rFG8bTekmGeeG6gm/5I211m0F2s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZsTJnAFOvr36+k42PB7o8XC4L8ru8l4Pwk5EqtRL49hE3Afi6x8ed3VLafByWN8ek
-	 b1Uh8rOn14iieth4yKSCmtemSITG3j5PoDpI762Vf2n+jiVAHL7MrnoQArrm5MWVyX
-	 ao/3KIJbyb4xf/LbczAsiBmxmjquDbsgMM7uMdDs=
-Date: Thu, 12 Mar 2026 15:05:26 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Sayali Patil <sayalip@linux.ibm.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Ritesh
- Harjani <ritesh.list@gmail.com>, David Hildenbrand <david@kernel.org>, Zi
- Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, Oscar Salvador
- <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain
- <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 00/13] selftests/mm: fix failures and robustness
- improvements
-Message-Id: <20260312150526.3662b2717b9a91776a2e43f5@linux-foundation.org>
-In-Reply-To: <cover.1773305677.git.sayalip@linux.ibm.com>
-References: <cover.1773305677.git.sayalip@linux.ibm.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xeXAC41k"
+Received: by mail-oa1-f74.google.com with SMTP id 586e51a60fabf-4171fdb5a67so11138828fac.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 15:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773353622; x=1773958422; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OmFUz1YB2HW5cy4NJX5lfbdXHnPjDlIYv+BsMbwLiSY=;
+        b=xeXAC41kTRASOdybQO4Hw79XRdELu8myC9Lb08bgbkDxvP2Je7csQUCyjY49uZavJt
+         KGFKCgSXJiXFZCy8KOsL0vLl1NrrqZKDNB/3e7Dv7M+vJaAuNVt06hQBPjKZDJT/Wukg
+         6dUqSHsfM08XA8M4qb0CWt8Mw0cW3xNDG660vaUALRa8e/YRQemcwDcvnQ7pZOZQ+rIb
+         8xVDGyPHiMEqsvZ9ni3AHU0646GwEqKU/f5mx2bf/YHOOKW/un3EnPICWE0WOGpjziX6
+         3UYlVAH15MO7RK0PFIIQfPC9A5sbussVGLPZ5mbsdEggIT0ERtD4WKd29KhEOkhrgMjN
+         7JLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773353622; x=1773958422;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmFUz1YB2HW5cy4NJX5lfbdXHnPjDlIYv+BsMbwLiSY=;
+        b=kvef4GnX4SPRUY5IAOA9PDjlCzuaGZsPZxcPCcaefIbvoveZIM33xOB9MwIXil++XI
+         R0wVy3XxJBrb4jU/qWHDpCJqJG/ck09mhyZR8RCSEx7LURsR40gYBR790WAehOVWYZrH
+         SVxgxNGAM4tsT0mXPhU57ibF8Jq8c5Ok/czzc2f4Sn7g+usko7ufQ+JdY4JhwWeLJ2/N
+         ZMIpFca49AQzzMtDOxd776lUZUEo+n+h6LcVRN2V6komXMJG0Xlw2laQCkVz4YWHCPJl
+         A8OZVPpomAYCyt7TRlypzNZjVewBrpjZ8qH5BDtnxEn+CyiglTw62bwInchm87PgVLp7
+         Ev6A==
+X-Forwarded-Encrypted: i=1; AJvYcCUUONrNIRHm79iqvnAUAu6UHMiT9QgARkWsQPTOtZYpbDKXqCOCU7W6S27TqPCoSD4b7tdwh2i0DcNw8xc6s5w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtrWfkI5229kaZsGV7sTQOL43J37J0MW3BKIWQhZWiFAL3CNXs
+	6Lxoi/pfB8c+ORrcgKpwQRv4qRM35T6alzSMpdwrFs+4PbzjV4YDZJYPGpn3mpvYQe/u5DMZ0Lw
+	bytr5lx7WN5KKzNrMyfKFaL3Ibg==
+X-Received: from oacsd12.prod.google.com ([2002:a05:6871:5e8c:b0:417:8286:3260])
+ (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6871:d211:b0:409:bd2b:91a3 with SMTP id 586e51a60fabf-417b939f2d9mr605460fac.32.1773353621508;
+ Thu, 12 Mar 2026 15:13:41 -0700 (PDT)
+Date: Thu, 12 Mar 2026 22:13:40 +0000
+In-Reply-To: <819fa670-f6f6-4251-a528-6d8264451b9f@linaro.org> (message from
+ James Clark on Thu, 5 Mar 2026 10:16:34 +0000)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Message-ID: <gsntms0cofvv.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH v6 16/19] KVM: arm64: Add vCPU device attr to partition
+ the PMU
+From: Colton Lewis <coltonlewis@google.com>
+To: James Clark <james.clark@linaro.org>
+Cc: alexandru.elisei@arm.com, pbonzini@redhat.com, corbet@lwn.net, 
+	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
+	maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
+	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On Thu, 12 Mar 2026 17:55:27 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
+Thanks James for the review.
 
-> Hi all,
-> 
-> Powerpc systems with a 64K base page size exposed several issues while
-> running mm selftests. Some tests assume specific hugetlb configurations,
-> use incorrect interfaces, or fail instead of skipping when the required
-> kernel features are not available.
-> 
-> This series fixes these issues and improves test robustness.
+James Clark <james.clark@linaro.org> writes:
 
-Thanks, I updated mm.git's mm-new branch to this version.
+> On 09/02/2026 10:14 pm, Colton Lewis wrote:
+>> Add a new PMU device attr to enable the partitioned PMU for a given
+>> VM. This capability can be set when the PMU is initially configured
+>> before the vCPU starts running and is allowed where PMUv3 and VHE are
+>> supported and the host driver was configured with
+>> arm_pmuv3.reserved_host_counters.
 
-> ---
-> v1->v2
->   - For "selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap":
->     update FLAGS definition to MAP_HUGETLB | MAP_SHARED | MAP_POPULATE and
->     used it for mmap() calls as suggested during review.
+>> The enabled capability is tracked by the new flag
+>> KVM_ARCH_FLAG_PARTITIONED_PMU_ENABLED.
 
-That was a really small change (below).  It's better to wait a while
-(half to one week) before resending an entire series.  So as to
-hopefully accumulate more changes.
+> Typo, should be: KVM_ARCH_FLAG_PARTITION_PMU_ENABLED. Or maybe the
+> #define should be fixed.
+
+Stale commit message. I will fix.
 
 
+> I couldn't see if this was discussed before, but what's the reason to
+> not use the guest partition by default and make this flag control
+> reverting back to use the non passed through PMU?
 
---- a/tools/testing/selftests/mm/hugepage-mremap.c~b
-+++ a/tools/testing/selftests/mm/hugepage-mremap.c
-@@ -31,7 +31,7 @@
- #define MB_TO_BYTES(x) (x * 1024 * 1024)
- 
- #define PROTECTION (PROT_READ | PROT_WRITE | PROT_EXEC)
--#define FLAGS (MAP_SHARED | MAP_ANONYMOUS)
-+#define FLAGS (MAP_HUGETLB | MAP_SHARED | MAP_POPULATE)
- 
- static void check_bytes(char *addr)
- {
-@@ -121,23 +121,20 @@ int main(int argc, char *argv[])
- 
- 	/* mmap to a PUD aligned address to hopefully trigger pmd sharing. */
- 	unsigned long suggested_addr = 0x7eaa40000000;
--	void *haddr = mmap((void *)suggested_addr, length, PROTECTION,
--			   MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
-+	void *haddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
- 	ksft_print_msg("Map haddr: Returned address is %p\n", haddr);
- 	if (haddr == MAP_FAILED)
- 		ksft_exit_fail_msg("mmap1: %s\n", strerror(errno));
- 
- 	/* mmap again to a dummy address to hopefully trigger pmd sharing. */
- 	suggested_addr = 0x7daa40000000;
--	void *daddr = mmap((void *)suggested_addr, length, PROTECTION,
--			   MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
-+	void *daddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
- 	ksft_print_msg("Map daddr: Returned address is %p\n", daddr);
- 	if (daddr == MAP_FAILED)
- 		ksft_exit_fail_msg("mmap3: %s\n", strerror(errno));
- 
- 	suggested_addr = 0x7faa40000000;
--	void *vaddr = mmap((void *)suggested_addr, length, PROTECTION,
--			MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
-+	void *vaddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
- 	ksft_print_msg("Map vaddr: Returned address is %p\n", vaddr);
- 	if (vaddr == MAP_FAILED)
- 		ksft_exit_fail_msg("mmap2: %s\n", strerror(errno));
-_
+> Seems like if you already have to enable it by creating a partition on
+> the host, then you more than likely want your guests to use it. And it's
+> lower overhead so it's "better". Right now it's two things that you have
+> to set at the same time to do one thing.
 
+> Or does having to set it on the host go away with the dynamic approach
+> here [1]?
+
+Yes, the plan is to have it go away on the host with a dynamic approach.
+
+
+> [1]: https://lore.kernel.org/kvmarm/aWjlfl85vSd6sMwT@willie-the-truck/
+
+
+>> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+>> ---
+>>    arch/arm64/include/asm/kvm_host.h |  2 ++
+>>    arch/arm64/include/uapi/asm/kvm.h |  2 ++
+>>    arch/arm64/kvm/pmu-direct.c       | 35 ++++++++++++++++++++++++++++---
+>>    arch/arm64/kvm/pmu.c              | 14 +++++++++++++
+>>    include/kvm/arm_pmu.h             |  9 ++++++++
+>>    5 files changed, 59 insertions(+), 3 deletions(-)
+
+>> diff --git a/arch/arm64/include/asm/kvm_host.h  
+>> b/arch/arm64/include/asm/kvm_host.h
+>> index 41577ede0254f..f0b0a5edc7252 100644
+>> --- a/arch/arm64/include/asm/kvm_host.h
+>> +++ b/arch/arm64/include/asm/kvm_host.h
+>> @@ -353,6 +353,8 @@ struct kvm_arch {
+>>    #define KVM_ARCH_FLAG_WRITABLE_IMP_ID_REGS		10
+>>    	/* Unhandled SEAs are taken to userspace */
+>>    #define KVM_ARCH_FLAG_EXIT_SEA				11
+>> +	/* Partitioned PMU Enabled */
+>> +#define KVM_ARCH_FLAG_PARTITION_PMU_ENABLED		12
+>>    	unsigned long flags;
+
+>>    	/* VM-wide vCPU feature set */
+>> diff --git a/arch/arm64/include/uapi/asm/kvm.h  
+>> b/arch/arm64/include/uapi/asm/kvm.h
+>> index a792a599b9d68..3e0b7619f781d 100644
+>> --- a/arch/arm64/include/uapi/asm/kvm.h
+>> +++ b/arch/arm64/include/uapi/asm/kvm.h
+>> @@ -436,6 +436,8 @@ enum {
+>>    #define   KVM_ARM_VCPU_PMU_V3_FILTER		2
+>>    #define   KVM_ARM_VCPU_PMU_V3_SET_PMU		3
+>>    #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS	4
+>> +#define   KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION	5
+>> +
+>>    #define KVM_ARM_VCPU_TIMER_CTRL		1
+>>    #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER		0
+>>    #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER		1
+>> diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
+>> index 6ebb59d2aa0e7..1dbf50b8891f6 100644
+>> --- a/arch/arm64/kvm/pmu-direct.c
+>> +++ b/arch/arm64/kvm/pmu-direct.c
+>> @@ -44,8 +44,8 @@ bool kvm_pmu_is_partitioned(struct arm_pmu *pmu)
+>>    }
+
+>>    /**
+>> - * kvm_vcpu_pmu_is_partitioned() - Determine if given VCPU has a  
+>> partitioned PMU
+>> - * @vcpu: Pointer to kvm_vcpu struct
+>> + * kvm_pmu_is_partitioned() - Determine if given VCPU has a partitioned  
+>> PMU
+>> + * @kvm: Pointer to kvm_vcpu struct
+>>     *
+>>     * Determine if given VCPU has a partitioned PMU by extracting that
+>>     * field and passing it to :c:func:`kvm_pmu_is_partitioned`
+>> @@ -55,7 +55,36 @@ bool kvm_pmu_is_partitioned(struct arm_pmu *pmu)
+>>    bool kvm_vcpu_pmu_is_partitioned(struct kvm_vcpu *vcpu)
+>>    {
+>>    	return kvm_pmu_is_partitioned(vcpu->kvm->arch.arm_pmu) &&
+>> -		false;
+>> +		test_bit(KVM_ARCH_FLAG_PARTITION_PMU_ENABLED, &vcpu->kvm->arch.flags);
+>> +}
+>> +
+>> +/**
+>> + * has_kvm_pmu_partition_support() - If we can enable/disable partition
+>> + *
+>> + * Return: true if allowed, false otherwise.
+>> + */
+>> +bool has_kvm_pmu_partition_support(void)
+>> +{
+>> +	return has_host_pmu_partition_support() &&
+>> +		kvm_supports_guest_pmuv3() &&
+>> +		armv8pmu_max_guest_counters > -1;
+>> +}
+>> +
+>> +/**
+>> + * kvm_pmu_partition_enable() - Enable/disable partition flag
+>> + * @kvm: Pointer to vcpu
+>> + * @enable: Whether to enable or disable
+>> + *
+>> + * If we want to enable the partition, the guest is free to grab
+>> + * hardware by accessing PMU registers. Otherwise, the host maintains
+>> + * control.
+>> + */
+>> +void kvm_pmu_partition_enable(struct kvm *kvm, bool enable)
+>> +{
+>> +	if (enable)
+>> +		set_bit(KVM_ARCH_FLAG_PARTITION_PMU_ENABLED, &kvm->arch.flags);
+>> +	else
+>> +		clear_bit(KVM_ARCH_FLAG_PARTITION_PMU_ENABLED, &kvm->arch.flags);
+>>    }
+
+>>    /**
+>> diff --git a/arch/arm64/kvm/pmu.c b/arch/arm64/kvm/pmu.c
+>> index 72d5b7cb3d93e..cdf51f24fdaf3 100644
+>> --- a/arch/arm64/kvm/pmu.c
+>> +++ b/arch/arm64/kvm/pmu.c
+>> @@ -759,6 +759,19 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu,  
+>> struct kvm_device_attr *attr)
+
+>>    		return kvm_arm_pmu_v3_set_nr_counters(vcpu, n);
+>>    	}
+>> +	case KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION: {
+>> +		unsigned int __user *uaddr = (unsigned int __user *)(long)attr->addr;
+>> +		bool enable;
+>> +
+>> +		if (get_user(enable, uaddr))
+>> +			return -EFAULT;
+>> +
+>> +		if (!has_kvm_pmu_partition_support())
+>> +			return -EPERM;
+>> +
+>> +		kvm_pmu_partition_enable(kvm, enable);
+>> +		return 0;
+>> +	}
+>>    	case KVM_ARM_VCPU_PMU_V3_INIT:
+>>    		return kvm_arm_pmu_v3_init(vcpu);
+>>    	}
+>> @@ -798,6 +811,7 @@ int kvm_arm_pmu_v3_has_attr(struct kvm_vcpu *vcpu,  
+>> struct kvm_device_attr *attr)
+>>    	case KVM_ARM_VCPU_PMU_V3_FILTER:
+>>    	case KVM_ARM_VCPU_PMU_V3_SET_PMU:
+>>    	case KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS:
+>> +	case KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION:
+>>    		if (kvm_vcpu_has_pmu(vcpu))
+>>    			return 0;
+>>    	}
+>> diff --git a/include/kvm/arm_pmu.h b/include/kvm/arm_pmu.h
+>> index 93586691a2790..ff898370fa63f 100644
+>> --- a/include/kvm/arm_pmu.h
+>> +++ b/include/kvm/arm_pmu.h
+>> @@ -109,6 +109,8 @@ void kvm_pmu_load(struct kvm_vcpu *vcpu);
+>>    void kvm_pmu_put(struct kvm_vcpu *vcpu);
+
+>>    void kvm_pmu_set_physical_access(struct kvm_vcpu *vcpu);
+>> +bool has_kvm_pmu_partition_support(void);
+>> +void kvm_pmu_partition_enable(struct kvm *kvm, bool enable);
+
+>>    #if !defined(__KVM_NVHE_HYPERVISOR__)
+>>    bool kvm_vcpu_pmu_is_partitioned(struct kvm_vcpu *vcpu);
+>> @@ -311,6 +313,13 @@ static inline void  
+>> kvm_pmu_host_counters_enable(void) {}
+>>    static inline void kvm_pmu_host_counters_disable(void) {}
+>>    static inline void kvm_pmu_handle_guest_irq(struct arm_pmu *pmu, u64  
+>> pmovsr) {}
+
+>> +static inline bool has_kvm_pmu_partition_support(void)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>> +static inline void kvm_pmu_partition_enable(struct kvm *kvm, bool  
+>> enable) {}
+>> +
+>>    #endif
+
+>>    #endif
