@@ -1,169 +1,173 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE0238F647
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 10:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B91B823DD;
+	Thu, 12 Mar 2026 11:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773312387; cv=none; b=kzKFXoYQJPKh6gFvObveBpm6bF9Wmj6ivTE3GikBYEa2xWtCq8x9QsSrImeiWXZYixA6+c+A58zjeG/kqAg1kK69wrPC9gWdzIpk39gSG79WJv0CguX79r5C7R47nwuXutUw5ruQfN+xHhBrwqIQyBZobB9UIxRey2GG7zM2PvI=
+	t=1773313292; cv=none; b=Fh4EwCRoTl1XLCS4JbS6L8Wz66U1+lPqr5cltyLJ8n5WOYJBl/UTFEZZ9Q3MQJWIGQAq2AHZ2Xnbnm22k/+8uQ6aVALbDwDSIs3WhTzSUEEyuLcRZjM3k75m/h83LL/4RexAtAMtZZj7Ex3ZM8ftjXJpWjw5ZXQ0myaw8OW9V1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773312387; c=relaxed/simple;
-	bh=QqK4fKBnKsrw0aRpPX6/Mgiw31EdmjhT0xJqXC7trww=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AIdYzY4BMM6c2F32Suk++WTEm+Fwhd83AikxER9sqgldoRc/BZi8duh6qIS/CRNncMlxJ3XnSGmfK2taBnSwcLa7SdIBhi2GLCz1TUK94ENah8Wf424Yu0ebB+n83emEUqGuBc8kbt01dI2o2rywiKLfHPngBsDqYBcUB24Jn9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WmJz0r2J; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773313292; c=relaxed/simple;
+	bh=+Ulv+PCYekiAEop42YtuVmuhDO5Wmf5GGZG23pHYKps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SEcJF27GIEhBbEk1m4R2vjVQjXkNCrfLd6MRMF+nVAaE4l6bNcdQeqnT2R3yqdLzMO1cKnytbxQ+3f4bCKWanmH7zbLbfmIvTmpupZcN2bWE4NJGy3F6nCJj2Y9XGK3RrIBnEWseAEaSFmUf8E1t0Yr5ODM3FjZGDNuZR/JarAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+SGG5FR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WmJz0r2J"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-439f59dfda2so687570f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 03:46:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773312385; x=1773917185; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3vGgz7KnTK9vuGJli7OEIVFiI/JsHt8PWV7ea4j0pww=;
-        b=WmJz0r2JsEpo5cD2TGk5qGe9YT1BLr2qPgz6Dc3Ln+VU1zQh0pxz6dSCE9rogSQZw2
-         wmgZRkVKXH5tMpnkUw2ytOGRMNAHvoiV1pq2xYJa8q85X4NhTefMtvdErZOVx33eSBvp
-         N3CS3pLbnuj6VLr8O1tSSXqnVqjkqeEFuiBjJUyby+kAJbW8+kS/iYrFcrXo7Z0oxfER
-         620ATw+DjFOxJHsX8PsLsszseVTV8wZs1+xE6PoHy0F2a497O+dGYrkp8jXzHPOIp4TW
-         sJkPV8Fwrg9TB67662/SzV3K8HBfZ4RJJhwM0nGB6UoiKh3poCG+tj3aCOW+/Bc4GAgB
-         W56g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773312385; x=1773917185;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3vGgz7KnTK9vuGJli7OEIVFiI/JsHt8PWV7ea4j0pww=;
-        b=uuymkfgKlh8eQIA9i3KHIBTbMPZwapwKoWbJwSu9YFYbIa2ldUr759z/E6aT5RkpLI
-         xtb14EzMICfI3g4OReMr7hwuDjN+IRUzvnKhO5FRGLml+iYnC8aNuRu7f1Z1WFWCZOJ3
-         U2QJNPOeAbcOTYDfcTGLC7LphQri4ZBB8a92fndqHz+/4f/+IKPBNxM3Ll969LEbWyHK
-         sMBpXtVDMWZJ4p/7j5MF72+niPMYMBnkZ7YHEF4Fw8GLc2UypIEQpEu+Ph4fQcZpOCWY
-         Gmrtf+KxZjxT8SxPffHqK+0rS9xT8U1BSOpdR5a6Pyhf3YCnSYAlofL+6AIwakZSMcMt
-         RgQg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2koOjuvOPtQfwH/Cp6MOuEewyLw/TrgfuxhN0NzQxQJk2ZGe+OAdxz7aMA/whHLA/xlgC2OdeTrgfwVQ3jlA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrIqC56GUuAcjTRY4+DyJWnNuBsyxNk/o31ykM/5Bko5xwlZHV
-	r2vmtaeMl8hbwpslQ8MNdSME7L3b8ECxR3wWXrPSCMe1ryM3MOrk9gSR
-X-Gm-Gg: ATEYQzzMQ6eyfXwAUkys8PmTAm0rb1BDNRrZJ/iL0Bi8yQx4vE7NwDaMUx0JBIRMlWP
-	zMsXw1E9OcTjyrP4gnoVgkbb0XLivDzYlY3o+JevNOH8il7dBwFQ/ZH9H6iXQDRw6AXEgPxtNeC
-	0+9AZSQ+LWxNKOgm1kzZkEXcZUO1xbeeRIcGnAudcFIgdvtQLv+vGDKtJp25RWp3HCc3pLTXex+
-	3anurmfY3inpCAs5QSJOv0OI8MvNQlI77cWK1wR3IGWtN+fHbIS4grSBDo1GZlKZXY97/hqKzpy
-	Uxii4pZ9pBsSnI+EnfbfWGMiSvgN7MARSiW/mVDOXyzLbo8JsGlk4ZlRUaDQd5a2yrn80V+Ue8Y
-	2KJCjU63u5JB4QqqHarUSJA+6ByqMOk7quCHiyJDx6naqTW0Rf0MPUIfKH/fBGtbwrpNkV5cRoF
-	oMLozyzFQ=
-X-Received: by 2002:a5d:5d0b:0:b0:439:b79d:b9a5 with SMTP id ffacd0b85a97d-439f8431382mr10986545f8f.37.1773312384396;
-        Thu, 12 Mar 2026 03:46:24 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe1a737csm6568266f8f.10.2026.03.12.03.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 03:46:24 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 12 Mar 2026 11:46:22 +0100
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
-Message-ID: <abKZfhWs9Gojuvip@krava>
-References: <20260303150639.85007-1-leon.hwang@linux.dev>
- <20260303150639.85007-4-leon.hwang@linux.dev>
- <abHwii5stH93Vz5E@krava>
- <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+SGG5FR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 591C6C4CEF7;
+	Thu, 12 Mar 2026 11:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773313291;
+	bh=+Ulv+PCYekiAEop42YtuVmuhDO5Wmf5GGZG23pHYKps=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=p+SGG5FRxlZ4uxcoqLLyxtMOuhYboEMc3iKZe+NZ8LRsukrNgN6+d6B5uyGWLC71y
+	 6fTSEq9NXVq3wpguq2DWqJbiAEl+bm3Jb6GCwCngidmv9YWRzV4yTyfBYE1t84CUrT
+	 dL+kXjY7gaKtBULPEUKubNEGW+tXF8GwO8s/fHtvRyORxb0E9ASZGbnAuAQa1CRKZ5
+	 MTaMHrNlASOYf8pr6ZITrsyx9OBXcSzOdoD/ex/srzXYQi/TRepcLBm6QBZKS6erBv
+	 AjyZpp2Jx7u79jhe5J5Nav83z/FZxx8qk1Nxz9AT7lz/s3u/pzZxETib+jNHEZt9eg
+	 HtCi9k+LloE1w==
+Message-ID: <bb4e4feb-cc51-4418-93a5-47c2781e6d17@kernel.org>
+Date: Thu, 12 Mar 2026 12:01:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next v3 2/6] mptcp: keep rcv_mwnd_seq in sync with
+ subflow rcv_wnd
+Content-Language: fr
+To: Simon Baatz <gmbnomis@gmail.com>
+Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ mptcp@lists.linux.dev, Eric Dumazet <edumazet@google.com>,
+ Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ David Ahern <dsahern@kernel.org>, Jon Maloy <jmaloy@redhat.com>,
+ Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com,
+ Shuah Khan <shuah@kernel.org>, Stefano Brivio <sbrivio@redhat.com>,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>
+References: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com>
+ <20260309-tcp_rfc7323_retract_wnd_rfc-v3-2-4c7f96b1ec69@gmail.com>
+ <334053df-9824-4bfe-b37c-8711d0a5a9bd@kernel.org>
+ <abHnyJInqmGNIWiq@gandalf.schnuecks.de>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <abHnyJInqmGNIWiq@gandalf.schnuecks.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 12, 2026 at 10:24:24AM +0800, Leon Hwang wrote:
-> On 12/3/26 06:45, Jiri Olsa wrote:
-> > On Tue, Mar 03, 2026 at 11:06:36PM +0800, Leon Hwang wrote:
-> >> Uprobe programs that modify regs require different runtime assumptions
-> >> than those that do not. Mixing !kprobe_write_ctx progs with
-> >> kprobe_write_ctx progs via tail calls could break these assumptions.
-> >>
-> >> To address this, reject the combination of !kprobe_write_ctx progs with
-> >> kprobe_write_ctx progs in bpf_map_owner_matches(), which prevents the
-> >> tail callee from modifying regs unexpectedly.
-> > 
-> > hi,
-> > could you please give some example where this is actual problem?
-> > I'd expect it's up to user (whoever installs the tailcall map) to
-> > avoid such situations.
-> > 
-> The self test in patch #6 can verify the problem, that
-> kprobe_write_ctx=true progs can be abused to modify struct pt_regs via
-> tail calls when tracing kernel functions using kprobe_write_ctx=false prog.
-> 
-> Explain the problem by reusing the test code:
-> 
-> int dummy_run;
-> u64 data;
-> 
-> struct {
-> 	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-> 	__uint(max_entries, 1);
-> 	__uint(key_size, sizeof(__u32));
-> 	__uint(value_size, sizeof(__u32));
-> } prog_array_dummy SEC(".maps");
-> 
-> SEC("?kprobe")
-> int dummy_kprobe(void *ctx)
-> {
-> 	dummy_run++;
-> 	bpf_tail_call_static(ctx, &prog_array_dummy, 0);
-> 	return 0;
-> }
-> 
-> SEC("?kprobe")
-> int kprobe(struct pt_regs *regs)
-> {
-> 	data = regs->di = 0;
-> 	return 0;
-> }
-> 
-> The "kprobe" prog will be added to "prog_array_dummy" map.
-> 
-> In user space, the "dummy_kprobe" prog will attach to kernel function
-> "bpf_entry_test1".
-> 
-> Actually, without this patch, when "bpf_fentry_test1" runs, the arg "a"
-> will be updated as 0. Thus, bpf_prog_test_run_tracing() returns -EFAULT
-> instead of 0.
-> 
-> bpf_prog_test_run_tracing()
-> |-->bpf_fentry_test1()
->     |-->dummy_kprobe()
->         |-->kprobe() /* via tail call */
->             |-->regs->di = 0;
->     return 1; /* instead of 2 */
-> return -EFAULT;
-> 
-> Yep, the commit log is not clear to describe this abuse problem. Will
-> update it.
+Hi Simon,
 
-ah right :-\ ok, I think we need to do the suggested one way check and
-that should prevent kprobes having writeable ctx
+On 11/03/2026 23:08, Simon Baatz wrote:
+> On Wed, Mar 11, 2026 at 07:27:34PM +0100, Matthieu Baerts wrote:
+>> On 09/03/2026 09:02, Simon Baatz via B4 Relay wrote:
+>>> From: Simon Baatz <gmbnomis@gmail.com>
+>>>
+>>> MPTCP shares a receive window across subflows and applies it at the
+>>> subflow level by adjusting each subflow's rcv_wnd when needed.  With
+>>> the new TCP tracking of the maximum advertised window sequence,
+>>> rcv_mwnd_seq must stay consistent with these subflow-level rcv_wnd
+>>> adjustments.
+>>
+>> Thank you for these modifications!
+>>
+>>> Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
+>>> ---
+>>>  net/mptcp/options.c | 6 ++++--
+>>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/net/mptcp/options.c b/net/mptcp/options.c
+>>> index 43df4293f58bfbd8a8df6bf24b9f15e0f9e238f6..8a1c5698983cff3082d68290626dd8f1e044527f 100644
+>>> --- a/net/mptcp/options.c
+>>> +++ b/net/mptcp/options.c
+>>
+>> (...)
+>>
+>>> @@ -1338,8 +1339,9 @@ static void mptcp_set_rwin(struct tcp_sock *tp, struct tcphdr *th)
+>>>  		 */
+>>>  		rcv_wnd_new = rcv_wnd_old;
+>>>  		win = rcv_wnd_old - ack_seq;
+>>> -		tp->rcv_wnd = min_t(u64, win, U32_MAX);
+>>> -		new_win = tp->rcv_wnd;
+>>> +		new_win = min_t(u64, win, U32_MAX);
+>>> +		tp->rcv_wnd = new_win;
+>>
+>> Out of curiosity, why did you change the two lines above?
+>> (even if it makes sense, the diff is a bit confusing, and the commit
+>> message doesn't mention this :) )
+> 
+> I wanted to keep tcp_update_max_rcv_wnd_seq() calls close to the
+> respective update sites (same pattern everywhere).
 
-thanks,
-jirka
+Thanks, I now understand the reason.
+
+> In the original form
+> 
+> tp->rcv_wnd = min_t(u64, win, U32_MAX);
+> tcp_update_max_rcv_wnd_seq(tp);
+> new_win = tp->rcv_wnd;
+> 
+> the ordering suggests that tcp_update_max_rcv_wnd_seq() might modify
+> tp->rcv_wnd.
+
+Note that if tp->rcv_mwnd_seq always needs to be modified when
+tp->rcv_wnd and/or tp->rcv_wup are modified, maybe a single helper could
+be called to modify all of them, so it might be less likely to forget
+about modifying tp->rcv_mwnd_seq as well in the future.
+
+But probably it might be unlikely to have new places where tp->rcv_wnd
+and/or tp->rcv_wup need to be modified like here with MPTCP. So probably
+fine like that.
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
+
