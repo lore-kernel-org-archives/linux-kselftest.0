@@ -1,136 +1,103 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011071.outbound.protection.outlook.com [52.101.65.71])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF093BD65E;
-	Thu, 12 Mar 2026 15:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.71
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773330728; cv=fail; b=E6oX72vKUvFZ2ostMdEYfYSzkOjVJ7beSsO3EavM3Wzn/fvqQLwBhF5oxU8H8VND30DzVpjx438p6vIdzC+yCMHItLBYABN68kDKsrDj7Tq7iHMPbTBSO8SOGXGykFPe4hTCKGmJdtabaXQ70w0HkJ6h3ubLaiGGNebdBRtnmlA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773330728; c=relaxed/simple;
-	bh=d3ikSh5mA0O1Ao2raChWDGXqAe+6MnP7eBROdJ5hcZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=rMOIbKW6SMaKDwrcY0lY+42RP1uOwIsiTngNXBLfAydt22TAnSSdlcJ+XGSqVCBl3+hCpc+m5nJAsfAIzewpGVAwzBvmF8Fhn51H9tb4WV/EtolIqgNw9fJibhXLzWp2PODfWoN0sMWAlIKkD8Hk/RuNtS2oLbaHizBUs9zt1LU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=YcuPGq0F; arc=fail smtp.client-ip=52.101.65.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0599390CAE
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 16:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773333615; cv=none; b=u4DTqweVRv+jmsSmwH8HNMYB5ICMYUZeoDMDesx292ekxiS7LLcH9VA4soSttxahq8nw7zJ8wvINoUTrD/aj3xYlUvsRU05Zl9MiNnaPvcdn1Wt5ppicyYRQluScsLSjgYhjy0Ugy1T2pLqeWSeSwofFPxwRNpRmDVUOu8TNcDA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773333615; c=relaxed/simple;
+	bh=q/NXnvhOQfWi+LbQbNSccqrwx2HfOA+DxhA9wpmm7FI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aiXdkE61c6R2djK8jYM6+2dDl5MnlYGVsWe7YQyuSmEGBJf++YnF4CBZSl5GtcU6oMTnUN2KCAfZcZUGhPgUDM1L/Rs8DUXZq+tHUHy68PFu96mx7OsRE3dQUXQnPkpWtHm7bd59GQNORwufBo7t+Nqd8CJM3duSsEGIVcIfKRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YUqQ2YOG; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="YcuPGq0F"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ySRU3nOyqDARDpFjP0FMpkqeuO2tqD0eX2gO82lB0ROTcWT7r9yBKe0PN3WfmfWXXFSlbu7PfWBZ6US3VzZCIbH/pl/TEYev0iXFz5BgNJB2nazSk6dnGIhJhscBgyu9wj8G82rNBv5JuNsU6Os/YS44Q1UGKPVXB99EzWm//Ci7yvCUe4WmLEIAJ3yCnwtL6Cr3u+YA6N+tO0G+yNpr0uwBgON9lxhQziGDmDdNOIcsAVJyePSBwkleyqL3aFJifs6/xn4NIpgYNK823jFxQMBMs5MVWdtEEReCfBhuuNeMckShD2ESq7Hm7Qm+HX4+x20PpTAj8Zc0ZT8J7R03nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BXbgvRbCBRGliD3aBtoPo29wsc3PgFZ40oHApaXDWSM=;
- b=Ibmg4SzaNEiXS39jqh25t0yoEvbjVoNwjzMhjqtwUbs9aK/ESdWwU41sDkJCZUng0fUUuQVqD280CiFVjedikEKvE/ejhkbPAWWgVOS+pywFn3B48EV1wH5AtBd60waTHmqDjfP+d3h1u/1dULV4Pb+H4o/D9TWv/LSXeZyvwEMoTiR7cJxF/M6XM9GiHMfVU+nsAsqZT/qUS/UmQvna8gBvZxZq8jWU9McKDZtSzFAcfgsXRgC27Uq8D1p4VVojytJflM28OFyFwEkr1nU9iCzx9X1fmgCK0hDTYSVHytP5kVdyiAZkofNG21ZKUpXXLlaOXoZdBz2/mddYhcgHyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BXbgvRbCBRGliD3aBtoPo29wsc3PgFZ40oHApaXDWSM=;
- b=YcuPGq0F4NnzTFgjjZMyynl8gBAcmAKW4x4kGyFb8MGIz+tgFATDvmb4577GGS0r5OLI3Uhna/9bRxjSBl8Nibn7reLkRmgeSv/uI1mFzD+YgXlw9FfBizk4MXBOTVYfUHj3lFiP+3Jm0ujPc6EPvNkfXt7SyG8VVdwSfNNo2Jgu2ZTYAMPJUvLPV+rHqb4CGwvKvtJi3FIauIgFUL/eklicgsdD+Cr315WRVqrp1jkN6jr6a6DKsPN82nT92En5HVfWL05d20CgV/7vozD2T4fUtBjz6cvVMRHqBgXkLRhNtTNutLMXjKpZey/mpEvhnZmdJvj4csPMpzUnSsNByQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by GV2PR04MB12163.eurprd04.prod.outlook.com (2603:10a6:150:2ff::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.12; Thu, 12 Mar
- 2026 15:52:02 +0000
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9700.010; Thu, 12 Mar 2026
- 15:52:00 +0000
-Date: Thu, 12 Mar 2026 17:51:57 +0200
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/9] selftests: drivers: bash support for
- remote traffic generators
-Message-ID: <ypu7gl6hqks45xsnypa4l2363boaje24totpdu6vzeplcxaecl@h7bk4hwdoypi>
-References: <20260312141740.295353-1-ioana.ciornei@nxp.com>
- <20260312081923.01b0537d@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312081923.01b0537d@kernel.org>
-X-ClientProxiedBy: AM8P190CA0020.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:219::25) To PAXPR04MB8253.eurprd04.prod.outlook.com
- (2603:10a6:102:1bf::7)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YUqQ2YOG"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id BAA7EC415A5;
+	Thu, 12 Mar 2026 16:40:32 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E273B6001B;
+	Thu, 12 Mar 2026 16:40:10 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EB43910369E41;
+	Thu, 12 Mar 2026 17:40:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1773333608; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=kKLJaS6EbrB3sRJEyYBFRM7jRpN8Md6Kg5iHaeN/7t0=;
+	b=YUqQ2YOGos3AIyhx6et88pkmLUWI6BnfTIalcMT9G3y1US88cRcpAzAYM6nQ+V93UPc+0w
+	x2fZOK1KDHf48VUBWr+0p3F1e0hmDAzw1U1aLCzfui4RQsQxb79gWzoAt58D864dUUlHmP
+	YswFuSA1N7tiu/y9Yu2v5HxVAjyMIVVUwTUg45M+NLFX5Rjml7GBkdmklvhfEHcpdyLh6C
+	XeDce1JCvlc6oDP+89HHSe+GLax7IpJSNILM8AttHYfV2PgDkAbQAq90z3YoWwdPbdXtcz
+	D8THyOZRueXE5lQ1wgZYcWZ3AtTMHcCieO+eES76lzyTKpJ8O+7+NW04AdIDZQ==
+Message-ID: <42abf88e-4fbf-4966-9490-8315f118ddea@bootlin.com>
+Date: Thu, 12 Mar 2026 17:39:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|GV2PR04MB12163:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63812bd3-c9c0-4fb5-1a7d-08de804f4bb3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|19092799006|366016|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	0kuk2zseP9Je8EROwwsDxF85B42ZZtHMkioYVu9IrwadsOek5F/pBvcMCir59c2ItW7sd2DNE4+Ec3AALFwsgKIH95Kxdu8En+n7isXxyc8yhdGksDf/6hY0jPFX8fdbiUHaYRGdr2aH5P3LQO4hbwvMSXQ++sxg9mNw1teQuSomAx2P9LZVm8PNytOwAFAcOFhxawLsq0Tl0kSxnJP1x1PbkH9HHp5y7at4Vvg+Z7ivFCkjjmTLxAmyOq6dpsNERZWNvwcLfGM+eZI0hZZe0etpLwqCISawmx+piEOOs+zuCTCRcJ0XSbfOv8qqzDzHUJE7ZmzDsCs01oj3vVmm2BWCfVO7NgoFCSC5b0MYvj33EoGxt/LRZSpLuUK6cGn4f+tmIpdYeH+EXBbCsNm+xYKhS0HKbdFaLraBtIem3j9DWvzSKUMxKWvEO0SgN95bPBHqc2Huin0I8ZdJutvylb+7IT8aUsY9dOt0rSoSzNNOVGEdzlNySVCf4xuOQoInLiNpa81mFP5S5AlSrou+6MYXLrhkgMJCSl6RVcCGlayi0hdiu4+QY4ii1E0+80EDiyFdPBRjlOy1KrDzG84V3LcRr+w6MMs1su6IrjYX6oiRX92Cgt9RS4kwcX5+B4PGBQIgpdtOyjy5w6HwQ0nuLk/nP8X5TJRJ5wVbWBdmQ95haxk8JwNYPUqgDdB/2R6u
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(19092799006)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?E78MpDPqmF0or9Ku2lu1G4qE6wwNFWb9YSuNGj659ZKwI6E2kiQv9czpZvYS?=
- =?us-ascii?Q?v32MsXtEhDgHhY9p9KSYctevCIp9wX6GFvFfFt+b+PaxvIb9j+JqJ7TGMu4T?=
- =?us-ascii?Q?tu3F2PHuGPncLdJ0fJqKmW6n1yEsJDF6t7HhdGtnbc1T8YBp6mgLunVpfd3v?=
- =?us-ascii?Q?YJ2o5dUWIcxznon+vi79H2O/RNC4/3j/UmHtCeTf6h/9c7XqD0rEK4G5ef/H?=
- =?us-ascii?Q?Q22E5H/XYciNHBj2QEdn/n6yw5k/bqrkhxyoqawMI79YERdK4cK4f9EMENjl?=
- =?us-ascii?Q?x/C8Nwk+cY9KyVH+CyhoS2kM1Scbdfv5M2d8a4QoyZryF9QXWXDsW70GQ+LY?=
- =?us-ascii?Q?TEpVI2at0F3WtcI8IXO8TzX75V3uSeOc/VGYEGlOCF1nPIrBgWzDS4706+yh?=
- =?us-ascii?Q?qhgvNbGUKjbCHZLle/gi3VfQLeCFjvXnHi/oZVHjiBRQPdowFo6+vr5ULgZl?=
- =?us-ascii?Q?OyYwvndtDomIspgm1taRqG2z7WxViJ13uQHOkUFXd9d3n3A0uVX3oYR/LJgl?=
- =?us-ascii?Q?hp5y8IE+g8cX9bA7ji6YZHLcR7xX9/DEhn/o5qae3mmBcVqsrrodKXuyrVeO?=
- =?us-ascii?Q?V7m0wnpiko2n6vc8IUa3tCVeyUa3IDdUjRZ2bY0zyWBGaCCtB2r7YkFZKw6G?=
- =?us-ascii?Q?vitUSeVHxhHGj4m2/BJXXNwEFq20wdKGpsNbj/x7hfCq6Bezxa7EPwbq8uKF?=
- =?us-ascii?Q?Hsstc5Dta3WL8TMmxZFjSPDehkMougy6PIPUT1R9NGodIjc1g6Z4X2s7T77c?=
- =?us-ascii?Q?MDMOgy0vUiUDmF1ZE1BlJfvhlEjm8tftJFpAzm8CghIFtxc9n7HTLuo3YwI1?=
- =?us-ascii?Q?UMFxl1NCyWv+WY9QPi9atDMGGbE7A/Oo0i11dHq+1fYvWc9nxJimhzNjSpsJ?=
- =?us-ascii?Q?KtsHcdVYLHYSCzy7Hn1VkK3wFiPuklGrZ4arSxNjlnUlHM/YqCLGaNhMgsXS?=
- =?us-ascii?Q?OaC9bZdv63uV6LFqQMaRiVXpvijlwtKw8uaVPtrWZ73g0hiS0OH48JoEdpFW?=
- =?us-ascii?Q?CrQhEBseVoru3MOFkiIyQMC6srQtFrfyf3YUAcVR6L0PGOaMDXmL1N8btiVP?=
- =?us-ascii?Q?t73TrrLPkLA9fb8voa49kYrr0julnkvCUHKRihIDgbBB7n4CUHoIauhIQVMe?=
- =?us-ascii?Q?2jHJxE3TKKmblPn0tubtBHT9y3/Z7nVjTj3JNbXxwqFhGqXRyaNmZ/zANFaw?=
- =?us-ascii?Q?Hczcw0+uJHKwge0ObjearEU0oPQuB+lTEM+RVHbBXglWafudB8H/hJPcgFJj?=
- =?us-ascii?Q?TEwPNKeLbWcEwcY9griZOddvYM7mI2iqPDo2fvesIsq6G3T2GSQRf8gKoN9j?=
- =?us-ascii?Q?5s0Bxxm3EdoXzJHhgGcwWBSMsR5Q1tbaZKy9b6Y7nPRmNfczkJLcCXasca//?=
- =?us-ascii?Q?maqhlOV27rGEfyQ5y6HJCwFs0X+xIg+BkroTUS8K6yAZHOAYO8xnm/GhwZGK?=
- =?us-ascii?Q?4Q3BasEE6g4PQNzWVscYHO2Ynr36hgrLUDMLPHuukNl31jUWdiPPY1Ywcz0V?=
- =?us-ascii?Q?wlWsc0TPZ55utNJeFFQ7M874O+OpuRI1qTkHxhq7NjJBAZOZaKMFcWB/mAv4?=
- =?us-ascii?Q?6ndDvpiw+Hku87TuIgeK6XwaCsCYAIYr4PaVyVb88GDOz8Id9eIl4V2dw/dC?=
- =?us-ascii?Q?byJo4OnZaRBXDQ7EEpjW+g8idQc4/jpchGDaBDf2NxbCBPu0sXj7OL36VdWz?=
- =?us-ascii?Q?/hKQ9JTTifV9NuaGdepiOXAq9K44yf58uWizqOeoK+kdyCkvx1DaMElyw325?=
- =?us-ascii?Q?oL9qHLG4Eg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63812bd3-c9c0-4fb5-1a7d-08de804f4bb3
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2026 15:52:00.0147
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 623yVlCqQ0rLHutbZWKFhxrN8oq3RQK/NlbuqsFTlvb3/BuBdQLjaVzkuuXW5kIZMea3jUDUTaZgC/T9laAm9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR04MB12163
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
+ definitions
+To: Andrew Lunn <andrew@lunn.ch>, Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Jakub Kicinski <kuba@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, netdev@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>,
+ Eric Dumazet <edumazet@google.com>,
+ Naveen Mamindlapalli <naveenm@marvell.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Danielle Ratson <danieller@nvidia.com>,
+ Hariprasad Kelam <hkelam@marvell.com>, Ido Schimmel <idosch@nvidia.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, Leon Romanovsky
+ <leon@kernel.org>, Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>,
+ Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Saeed Mahameed <saeedm@nvidia.com>,
+ Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+ Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+References: <20260310104743.907818-1-bjorn@kernel.org>
+ <20260310104743.907818-3-bjorn@kernel.org>
+ <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
+ <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch>
+ <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
+ <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch>
+ <20260311195052.1202174f@kernel.org> <abJJY8whzSOB8O-X@pengutronix.de>
+ <7c45ebf6-0cb2-4a4c-ac12-f4f9bb59c908@lunn.ch>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <7c45ebf6-0cb2-4a4c-ac12-f4f9bb59c908@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, Mar 12, 2026 at 08:19:23AM -0700, Jakub Kicinski wrote:
-> On Thu, 12 Mar 2026 16:17:31 +0200 Ioana Ciornei wrote:
-> > This patch set aims to add the necessary support so that bash written
-> > selftests are also able to easily run with a remote traffic generator
-> > system, either be it in another netns or one accessible through ssh.
+Hi Andrew,
+
+>> One more issue is the test data generator location. The data generator
+>> is not always the CPU. We have HW generators located in components like
+>> PHYs or we may use external source (remote loopback).
 > 
-> I think this breaks a lot of tests:
-> https://netdev.bots.linux.dev/contest.html?pw-n=0&branch=net-next-2026-03-12--15-00&pw-n=0&pass=0
+> At the moment, we don't have a Linux model for such generators. There
+> is interest in them, but nobody has actually stepped up and proposed
+> anything. I do see there is an intersect, we need to be able to
+> represent them in the topology, and know which way they are pointing,
+> but i don't think they have a direct influence on loopback.
 
-I used and set the TARGET variable in net/lib.sh even though it was
-previously defined by drivers/net/lib/sh/lib_netcons.sh.
-Will change the name of the variable.
+If I'm following Oleksij, the idea would be to have on one side the
+ability to "dump" the link topology with a finer granularity so that we
+can see all the different blocks (pcs, pma, pmd, etc.), how they are
+chained together and who's driving them (MAC, PHY (+ phy_index), module,
+etc.), and on another side commands to configure loopback on them, with
+the ability to also configure traffic generators in the future, gather
+stats, etc.
 
-Ioana
+Another can of worms for sure, and probably too much for what Björn is
+trying to achieve. It's hard to say if this is overkill or not, there's
+interest in that for sure, but also quite a lot of work to do...
+
+Maxime
