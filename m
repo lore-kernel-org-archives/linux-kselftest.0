@@ -1,161 +1,119 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192A737700C
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 08:34:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F9233EAEC
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 08:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773304501; cv=none; b=L4Yv8HLe4xV/i55KrXoD5p2qyBfxSiJzJ7VCL70LBaajLJaFxGEwbYDJZa1fktPHn/U9Y+7U7AKTNTG8HF8DMyB6ksem4X6tcUBXCTipGx3V8VJV/uVNI8F8UtLZY9oQHFRq36YSrs/g/IXzNUd0rm7MM/uy4s0YeRZj1JYDuiA=
+	t=1773304600; cv=none; b=iTPycnYSK6Qk1cBkfe7TUUsCSVSRUTtiknbWMbrpIuez0Chv24JZaMrRrPrF9kWHPshf/qmZIg8tQyKTTS24UVvnB3QHYgvWKqUZX4U4AtQY5eg97KEw5jHGXWVr4gGEuONJQEqZkVyttlY5cnDFV7intnC3Nf3lDqEztDyfn7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773304501; c=relaxed/simple;
-	bh=HEFbmcFEHfAGcaqdN8AWPZHaVSbwHCyRRxbL06fN1Aw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qpZTBS+2zuc/+INBLI4F+FFXQ+FHHcBB0g+wsKH8SxYkCjTuiqtZcydiDQnIw939kVLdW75J7zbTM0UCkZ8tBCr9yn0aEWB8dNwsApejHRmzicBzUWMLJ2oEyQFECS/tWJm+nKjL6g7LjnGg6nTUOT8i6K/1yzmRrI8YsmDRAVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=UdvZpJSv; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+	s=arc-20240116; t=1773304600; c=relaxed/simple;
+	bh=nTH+eojhoFFz9HncLBNVY0cEivOENhvAwAr6MGbzqKc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mijvObRgTRffDgbDJEcatA7Hfl5VAnUCv68dBCp8Nt+bVTGQjN9Hfni6rHVbkCx2SztsgGc5QP0v6lYfQ+nGEdbZmF/dITnJUBz/fpzVA7EZb4FGPMAaMn+RguXdwOdTe1NtrsPbDQlW3wM2bNKL7hndHKjizcZ9sq8+Xg7VM3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DquNhBjV; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="UdvZpJSv"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-439c6fc2910so571308f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 01:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1773304495; x=1773909295; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G6aLENJtgw3KKH+EBlODshn2Ly+qSlwDf7sw9+i4eVY=;
-        b=UdvZpJSv/Gz1k9WN42TpPqqvHZL+RQwr245QXejc0Vs0ixuWIfzEZr/IfR7DUW8lXw
-         NsrV9oqjOasQaoz9bze1mZPvfPZSs20EFoDDUUDsew8j5K0zQm7LS1rreFG1N6G3+tLO
-         RMZQnsvuoTkIrU19l6j8v16cYS1o/2qr0kKtw3q99/bTpMzYMCfSJQS0tCIxb66YOhC8
-         T3WtwAvFjEZbr6QNs+p574v+OkM1ZQUC19HjymuyUeCOxzt2bgudC0MPygvJXWL8XQkv
-         JOSP63AIksJiYbW8TMh4yetGVre3NXn02g+lxDfD32r7KywrCPeXECI87/hWUOISc04g
-         I3jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773304495; x=1773909295;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G6aLENJtgw3KKH+EBlODshn2Ly+qSlwDf7sw9+i4eVY=;
-        b=JirsDxGDg9JeX7EiiFWhPx0VXI0nbqAs83HJnNtt8y2Gqu67HcuEuSuDOhoDaB9c3V
-         CuJ/19elkbWIHoXe23mtH//o/LbRXB2WozuEQlWSixPS49+MGqaOSm9pkPRtxKPTOJ1f
-         8x/ht8nWWYI200mEEc+z2h5Eb4OqAx4yTSqplunZ09dXB16WhpqKdWR1V09AMRJHjxcS
-         Z8yhFCIrxpJItwXj5oNRFAMtI0+UOq2c702NicEdbLslcXbKYSP+TJXV4wnQlxvSMHG8
-         RC3vFu+UGXhgLycJxh4fYF/cz3t+ojq0QVjTX7qM0tpStDnlnhPPFGAo8rF0JuDJdXEY
-         St2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXunuJfcAchJa/h4o7J9//TWRmOlBsAYO5W2lqTdd60cWtwjwSpjW87wPLOvxyL1zBiu+PrvjCI0D4Rig3n5Cg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB2k2b2blYeI/pkQB7HdSPeXjuLXelcg5AkvcQg4Zuq/FEi2kM
-	dPB0qU/8C+RLc9MAkgf5QxkTIDLFrGusGcyr4VVJi752RhcJOY6tsphEN3cZa7+F27o=
-X-Gm-Gg: ATEYQzxOyoENzjXTzhEJC6wgNBfFnScB8SC3VudHdAlxMWMilghY5vRtEJZJ4iLxG12
-	CiEYRhhvQqwHrQc1ZYaOnCTt4ESQ0eNnn3s9Babmg8EBP9RCqIDc/9LlE4o5TxwIRYGhDwGmLKi
-	G9zgkQcTh52IJteJB9K2/UWv4IeBvjC45ZSQucH/jJvXRCnw3PLLzLib1sAiW/u5pbLa4nIPjQ8
-	gKvQYtFJvjzSpWmuj2I/H93TmvdkUdN+4HcHTIiKAylq3quY5N9Ev03ZjRgsFY66L7MMeKr+KcM
-	ZWEb8zIkESQs6SvD8ofjOOZ5c/V89m/TUMmUCcZgOfQMZYlNKv6QA72H7/0ytiKHxccnh304nOq
-	DCUXV/PSGNWCUF/72I3gjAG9I8btfcWEbM6RM/CWmjMHNlbOe4+LyKu5D8xEh66aMFzLaBrn/Hm
-	DbLmNGwJ+gZUZVrGhe0RS3tysxZ+8viUieRk1aCTaasw==
-X-Received: by 2002:a5d:584a:0:b0:439:ad2d:99f1 with SMTP id ffacd0b85a97d-439f843cd0dmr10192185f8f.54.1773304494998;
-        Thu, 12 Mar 2026 01:34:54 -0700 (PDT)
-Received: from FV6GYCPJ69 ([85.163.81.98])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe1affe9sm6406633f8f.15.2026.03.12.01.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 01:34:54 -0700 (PDT)
-Date: Thu, 12 Mar 2026 09:34:52 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Or Har-Toov <ohartoov@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
-	Mark Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
-	Dragos Tatulea <dtatulea@nvidia.com>, Shay Drory <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
-	Moshe Shemesh <moshe@nvidia.com>
-Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource support
-Message-ID: <go5wr5qa7wxe7i4kkcbmecomshpkesr26alq4qmlbpjr72hxgt@mpwq6eufylpn>
-References: <jssifysprwuafkinc3dguspngxmplrngqxvotp76vhvu4e5lp6@e7mdrjqc5rme>
- <20260304101522.09da1f58@kernel.org>
- <np44uzfn6jea56uht4yq4te5clapgj7pk6ygyvkl22wxumwnvt@nrpvzjqzxenq>
- <20260305063729.7e40775d@kernel.org>
- <ni23r4jiwgc6zjjsubtl4ujjgxzwpxrylumofdwxgozfnieynm@zirlbneaz6p2>
- <20260306120301.0ebe1ab2@kernel.org>
- <74dcd7c5-8a2b-49a7-a23c-174d17a61955@nvidia.com>
- <20260309133341.7e08b35d@kernel.org>
- <5de5103e-e2e4-4b72-9c3c-22847728fbb8@nvidia.com>
- <20260311145126.7dcca532@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DquNhBjV"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773304586;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7o6Ic5MlHNF41ckgEquaw90LYmRX6RnSZUbqSyihAno=;
+	b=DquNhBjV6TnkfTfEtasziI0Ea+1ve8SuniSNu5Q5kmIbZwisPCPNdviBTwiLHQqX+9nr48
+	nG3jWYx7rfhu2eoQs5yRGa4m4SretLqAP9cIIuUQrpHFAA61au4yHKVz5p6RvTiMbQFCzX
+	rUpSA587+LYmExLO1cHjq2m7k7UNlkU=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?q?Alexis=20Lothor=C3=A9=20=28eBPF=20Foundation=29?= <alexis.lothore@bootlin.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v1] selftests/bpf: Improve tc_tunnel test reliability
+Date: Thu, 12 Mar 2026 16:35:54 +0800
+Message-ID: <20260312083615.31835-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311145126.7dcca532@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Wed, Mar 11, 2026 at 10:51:26PM +0100, kuba@kernel.org wrote:
->On Wed, 11 Mar 2026 20:24:08 +0200 Or Har-Toov wrote:
->> For the dump-it command:
->> devlink resource show
->> pci/0000:03:00.0:
->> <resource>
->> pci/0000:03:00.0/196608:
->> <port-resource>
->> pci/0000:03:00.0/196609:
->> <port-resource>
->> pci/0000:03:00.1:
->> <resource>
->> pci/0000:03:00.1/262144:
->> <port-resource>
->> 
->> devlink resource show scope port
->> pci/0000:03:00.0/196608:
->> <port-resource>
->> pci/0000:03:00.0/196609:
->> <port-resource>
->> pci/0000:03:00.1/262144:
->> <port-resource>
->> 
->> devlink resource show scope dev
->> pci/0000:03:00.0:
->> <resource>
->> pci/0000:03:00.1:
->> <resource>
->
->LGTM
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-I don't see the benefit of exposing the scope to the user to be honest.
-I mean, dump would show all, dump with "dev" handle would be used as a
-selector to dump only things related to "dev". What is the use case of
-this "scope" granularity?
+A test failure was discovered in BPF CI [1] caused by connection timeout.
+The current test timeout of 500ms is insufficient for CI environments,
+particularly under high load.
 
+While the optimal timeout is unclear, this test was converted from the
+original test_tc_tunnel.sh script. The original script used nc with "-w 1"
+to specify a 1-second timeout [2]. Therefore, this test restores the
+timeout to 1s.
 
->
->> For the do-it command:
->> devlink resource show pci/0000:03:00.0
->> pci/0000:03:00.0:
->> <resource>
->> pci/0000:03:00.0/196608:
->> <port-resource>
->> pci/0000:03:00.0/196609:
->> <port-resource>
->> 
->> devlink resource show pci/0000:03:00.0 scope port
->> pci/0000:03:00.0/196608:
->> <port-resource>
->> pci/0000:03:00.0/196609:
->> <port-resource>
->> 
->> devlink resource show pci/0000:03:00.0  scope dev
->> pci/0000:03:00.0:
->> <resource>
->
->Do we have to touch doit? Maybe we should let doit be what it is now
->and consider it legacy going forward? doit which is in fact a filtered
->dump is a bit of a mistake in the first place, from Netlink's
->perspective.
+Test:
+./test_progs -a tc_tunnel
+ #478/1   tc_tunnel/ipip_none:OK
+ #478/2   tc_tunnel/ipip6_none:OK
+ #478/3   tc_tunnel/ip6tnl_none:OK
+ #478/4   tc_tunnel/sit_none:OK
+ #478/5   tc_tunnel/vxlan_eth:OK
+ #478/6   tc_tunnel/ip6vxlan_eth:OK
+ #478/7   tc_tunnel/gre_none:OK
+ #478/8   tc_tunnel/gre_eth:OK
+ #478/9   tc_tunnel/gre_mpls:OK
+ #478/10  tc_tunnel/ip6gre_none:OK
+ #478/11  tc_tunnel/ip6gre_eth:OK
+ #478/12  tc_tunnel/ip6gre_mpls:OK
+ #478/13  tc_tunnel/udp_none:OK
+ #478/14  tc_tunnel/udp_eth:OK
+ #478/15  tc_tunnel/udp_mpls:OK
+ #478/16  tc_tunnel/ip6udp_none:OK
+ #478/17  tc_tunnel/ip6udp_eth:OK
+ #478/18  tc_tunnel/ip6udp_mpls:OK
+ #478     tc_tunnel:OK
+ Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
 
-I don't think we should. If user wants doit, he is going to specify the
-object (dev/port). If user is interested only in things related to
-single device, he should do dump with selector (dev).
+[1] https://github.com/kernel-patches/bpf/actions/runs/22674350732/job/65728072723
+[2] https://lore.kernel.org/all/20251027-tc_tunnel-v3-4-505c12019f9d@bootlin.com/
 
-Let's make this simple.
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+---
+ tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+index 7fc4d7dd70eff..23b5c522ea9fa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+@@ -168,7 +168,7 @@ static int check_server_rx_data(struct subtest_cfg *cfg,
+ 
+ static struct connection *connect_client_to_server(struct subtest_cfg *cfg)
+ {
+-	struct network_helper_opts opts = {.timeout_ms = 500};
++	struct network_helper_opts opts = {.timeout_ms = 1000};
+ 	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
+ 	struct connection *conn = NULL;
+ 	int client_fd, server_fd;
+-- 
+2.43.0
+
