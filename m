@@ -1,136 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B231E2798EA;
-	Thu, 12 Mar 2026 08:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192A737700C
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 08:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773304358; cv=none; b=WMEtX+buNZOZwOnoG2rfYABAnlG7EZjKP3ZmESsQqwubdjT+mclGoV2H58M46aKYmkQS9eH5X6Lt37PMIwFQhXR+Vem7UE/H8pWvv9YqgMlx8Dysc4vptVKZueBKREOmMjn+OB5uW/1y7YSe/4vl0BuCWd3B6ihsG693fvD4F6M=
+	t=1773304501; cv=none; b=L4Yv8HLe4xV/i55KrXoD5p2qyBfxSiJzJ7VCL70LBaajLJaFxGEwbYDJZa1fktPHn/U9Y+7U7AKTNTG8HF8DMyB6ksem4X6tcUBXCTipGx3V8VJV/uVNI8F8UtLZY9oQHFRq36YSrs/g/IXzNUd0rm7MM/uy4s0YeRZj1JYDuiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773304358; c=relaxed/simple;
-	bh=5AYs6BroVkxtKJhCWyhPPa9+11YmMxWFhSfvifCztJo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q6rt69tQLROH3rhq9RWbBiolu2lRy71f9YN+WQT3SOcHiYWhoZQlB9RMRec0Gs6PRrvbxnXkAqwWZHppJCZXbpWyoljzZjDxxnTc9b77XUV3WIWejby8xuDh/SxC+LpwhxO2J+Ae51YwKBNlzTo75VeuoSDFEqrh0XTPLZ5n+c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jIEyu1dv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773304501; c=relaxed/simple;
+	bh=HEFbmcFEHfAGcaqdN8AWPZHaVSbwHCyRRxbL06fN1Aw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qpZTBS+2zuc/+INBLI4F+FFXQ+FHHcBB0g+wsKH8SxYkCjTuiqtZcydiDQnIw939kVLdW75J7zbTM0UCkZ8tBCr9yn0aEWB8dNwsApejHRmzicBzUWMLJ2oEyQFECS/tWJm+nKjL6g7LjnGg6nTUOT8i6K/1yzmRrI8YsmDRAVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=UdvZpJSv; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jIEyu1dv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E244DC4CEF7;
-	Thu, 12 Mar 2026 08:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773304358;
-	bh=5AYs6BroVkxtKJhCWyhPPa9+11YmMxWFhSfvifCztJo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jIEyu1dv/G4tXeoiWpSNi4nEf3g58BTBHj2mu/oATMIOixTT41BqLjCQxdgDqOlMR
-	 dWo1Irhc9Rda6uMgaylO7vhng4jYYp2ncOAl0bMG9Z9Wscn47ydAYWqszHgk8kkwvm
-	 jIIeE2kA2LmeaerQl6GOhhAy00f+21223GH6HUC15vORxdsEiCRKFYCWW5i0G9bczv
-	 E5aqD6XXBCTyhp4zy8LNf+7lQsDqsk4VhKoxq2mYxVoOAz5iP9ArCF0i3h0FnIQmAJ
-	 QktSsW6qGCUJ7X7h8eklysemTHCLn9XpED5QjOdDJWp+TtyksQHMOgjl0o9Bi9QGYd
-	 CTikNaGY7gqYA==
-Message-ID: <2c069fb1-fd23-4e7b-92de-7f4a4eaa4f67@kernel.org>
-Date: Thu, 12 Mar 2026 09:32:32 +0100
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="UdvZpJSv"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-439c6fc2910so571308f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 01:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1773304495; x=1773909295; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=G6aLENJtgw3KKH+EBlODshn2Ly+qSlwDf7sw9+i4eVY=;
+        b=UdvZpJSv/Gz1k9WN42TpPqqvHZL+RQwr245QXejc0Vs0ixuWIfzEZr/IfR7DUW8lXw
+         NsrV9oqjOasQaoz9bze1mZPvfPZSs20EFoDDUUDsew8j5K0zQm7LS1rreFG1N6G3+tLO
+         RMZQnsvuoTkIrU19l6j8v16cYS1o/2qr0kKtw3q99/bTpMzYMCfSJQS0tCIxb66YOhC8
+         T3WtwAvFjEZbr6QNs+p574v+OkM1ZQUC19HjymuyUeCOxzt2bgudC0MPygvJXWL8XQkv
+         JOSP63AIksJiYbW8TMh4yetGVre3NXn02g+lxDfD32r7KywrCPeXECI87/hWUOISc04g
+         I3jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773304495; x=1773909295;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G6aLENJtgw3KKH+EBlODshn2Ly+qSlwDf7sw9+i4eVY=;
+        b=JirsDxGDg9JeX7EiiFWhPx0VXI0nbqAs83HJnNtt8y2Gqu67HcuEuSuDOhoDaB9c3V
+         CuJ/19elkbWIHoXe23mtH//o/LbRXB2WozuEQlWSixPS49+MGqaOSm9pkPRtxKPTOJ1f
+         8x/ht8nWWYI200mEEc+z2h5Eb4OqAx4yTSqplunZ09dXB16WhpqKdWR1V09AMRJHjxcS
+         Z8yhFCIrxpJItwXj5oNRFAMtI0+UOq2c702NicEdbLslcXbKYSP+TJXV4wnQlxvSMHG8
+         RC3vFu+UGXhgLycJxh4fYF/cz3t+ojq0QVjTX7qM0tpStDnlnhPPFGAo8rF0JuDJdXEY
+         St2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXunuJfcAchJa/h4o7J9//TWRmOlBsAYO5W2lqTdd60cWtwjwSpjW87wPLOvxyL1zBiu+PrvjCI0D4Rig3n5Cg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB2k2b2blYeI/pkQB7HdSPeXjuLXelcg5AkvcQg4Zuq/FEi2kM
+	dPB0qU/8C+RLc9MAkgf5QxkTIDLFrGusGcyr4VVJi752RhcJOY6tsphEN3cZa7+F27o=
+X-Gm-Gg: ATEYQzxOyoENzjXTzhEJC6wgNBfFnScB8SC3VudHdAlxMWMilghY5vRtEJZJ4iLxG12
+	CiEYRhhvQqwHrQc1ZYaOnCTt4ESQ0eNnn3s9Babmg8EBP9RCqIDc/9LlE4o5TxwIRYGhDwGmLKi
+	G9zgkQcTh52IJteJB9K2/UWv4IeBvjC45ZSQucH/jJvXRCnw3PLLzLib1sAiW/u5pbLa4nIPjQ8
+	gKvQYtFJvjzSpWmuj2I/H93TmvdkUdN+4HcHTIiKAylq3quY5N9Ev03ZjRgsFY66L7MMeKr+KcM
+	ZWEb8zIkESQs6SvD8ofjOOZ5c/V89m/TUMmUCcZgOfQMZYlNKv6QA72H7/0ytiKHxccnh304nOq
+	DCUXV/PSGNWCUF/72I3gjAG9I8btfcWEbM6RM/CWmjMHNlbOe4+LyKu5D8xEh66aMFzLaBrn/Hm
+	DbLmNGwJ+gZUZVrGhe0RS3tysxZ+8viUieRk1aCTaasw==
+X-Received: by 2002:a5d:584a:0:b0:439:ad2d:99f1 with SMTP id ffacd0b85a97d-439f843cd0dmr10192185f8f.54.1773304494998;
+        Thu, 12 Mar 2026 01:34:54 -0700 (PDT)
+Received: from FV6GYCPJ69 ([85.163.81.98])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe1affe9sm6406633f8f.15.2026.03.12.01.34.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2026 01:34:54 -0700 (PDT)
+Date: Thu, 12 Mar 2026 09:34:52 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Or Har-Toov <ohartoov@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+	Mark Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
+	Dragos Tatulea <dtatulea@nvidia.com>, Shay Drory <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
+	Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource support
+Message-ID: <go5wr5qa7wxe7i4kkcbmecomshpkesr26alq4qmlbpjr72hxgt@mpwq6eufylpn>
+References: <jssifysprwuafkinc3dguspngxmplrngqxvotp76vhvu4e5lp6@e7mdrjqc5rme>
+ <20260304101522.09da1f58@kernel.org>
+ <np44uzfn6jea56uht4yq4te5clapgj7pk6ygyvkl22wxumwnvt@nrpvzjqzxenq>
+ <20260305063729.7e40775d@kernel.org>
+ <ni23r4jiwgc6zjjsubtl4ujjgxzwpxrylumofdwxgozfnieynm@zirlbneaz6p2>
+ <20260306120301.0ebe1ab2@kernel.org>
+ <74dcd7c5-8a2b-49a7-a23c-174d17a61955@nvidia.com>
+ <20260309133341.7e08b35d@kernel.org>
+ <5de5103e-e2e4-4b72-9c3c-22847728fbb8@nvidia.com>
+ <20260311145126.7dcca532@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] mm: prevent droppable mappings from being locked
-To: anthony.yznaga@oracle.com, "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
- Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
- Jason@zx2c4.com, shuah@kernel.org
-References: <20260310155821.17869-1-anthony.yznaga@oracle.com>
- <269b1a31-20d1-4451-b4ba-f55a67f27d96@lucifer.local>
- <de35525c-4522-4117-b6cb-01d48325c4f1@oracle.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <de35525c-4522-4117-b6cb-01d48325c4f1@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311145126.7dcca532@kernel.org>
 
-On 3/12/26 03:16, anthony.yznaga@oracle.com wrote:
-> 
-> On 3/11/26 3:36 AM, Lorenzo Stoakes (Oracle) wrote:
->> On Tue, Mar 10, 2026 at 08:58:20AM -0700, Anthony Yznaga wrote:
->>> Droppable mappings must not be lockable. There is a check for VMAs with
->>> VM_DROPPABLE set in mlock_fixup() along with checks for other types of
->>> unlockable VMAs which ensures this when calling mlock()/mlock2().
->>>
->>> For mlockall(MCL_FUTURE), the check for unlockable VMAs is different.
->>> In apply_mlockall_flags(), if the flags parameter has MCL_FUTURE set,
->>> the
->>> current task's mm's default VMA flag field mm->def_flags has VM_LOCKED
->>> applied to it. VM_LOCKONFAULT is also applied if MCL_ONFAULT is also
->>> set.
->>> When these flags are set as default in this manner they are cleared in
->>> __mmap_complete() for new mappings that do not support mlock. A check
->>> for
->>> VM_DROPPABLE in __mmap_complete() is missing resulting in droppable
->>> mappings created with VM_LOCKED set. To fix this and reduce that
->>> chance of
->>> similar bugs in the future, introduce and use vma_supports_mlock().
->>>
->>> Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always
->>> lazily freeable mappings")
->> We should definitely cc: stable I think.
->>
->> It might result in some backport pain since it'll probably pre-date the
->> __mmap_region() stuff :)) sorry.
-> 
-> I could add a patch at the beginning that does the cheap fix followed by
-> this patch.
+Wed, Mar 11, 2026 at 10:51:26PM +0100, kuba@kernel.org wrote:
+>On Wed, 11 Mar 2026 20:24:08 +0200 Or Har-Toov wrote:
+>> For the dump-it command:
+>> devlink resource show
+>> pci/0000:03:00.0:
+>> <resource>
+>> pci/0000:03:00.0/196608:
+>> <port-resource>
+>> pci/0000:03:00.0/196609:
+>> <port-resource>
+>> pci/0000:03:00.1:
+>> <resource>
+>> pci/0000:03:00.1/262144:
+>> <port-resource>
+>> 
+>> devlink resource show scope port
+>> pci/0000:03:00.0/196608:
+>> <port-resource>
+>> pci/0000:03:00.0/196609:
+>> <port-resource>
+>> pci/0000:03:00.1/262144:
+>> <port-resource>
+>> 
+>> devlink resource show scope dev
+>> pci/0000:03:00.0:
+>> <resource>
+>> pci/0000:03:00.1:
+>> <resource>
+>
+>LGTM
 
-Any backport conflicts should be easy and fast too resolve (if any). No
-need to uglify our mainline patches :)
+I don't see the benefit of exposing the scope to the user to be honest.
+I mean, dump would show all, dump with "dev" handle would be used as a
+selector to dump only things related to "dev". What is the use case of
+this "scope" granularity?
 
--- 
-Cheers,
 
-David
+>
+>> For the do-it command:
+>> devlink resource show pci/0000:03:00.0
+>> pci/0000:03:00.0:
+>> <resource>
+>> pci/0000:03:00.0/196608:
+>> <port-resource>
+>> pci/0000:03:00.0/196609:
+>> <port-resource>
+>> 
+>> devlink resource show pci/0000:03:00.0 scope port
+>> pci/0000:03:00.0/196608:
+>> <port-resource>
+>> pci/0000:03:00.0/196609:
+>> <port-resource>
+>> 
+>> devlink resource show pci/0000:03:00.0  scope dev
+>> pci/0000:03:00.0:
+>> <resource>
+>
+>Do we have to touch doit? Maybe we should let doit be what it is now
+>and consider it legacy going forward? doit which is in fact a filtered
+>dump is a bit of a mistake in the first place, from Netlink's
+>perspective.
+
+I don't think we should. If user wants doit, he is going to specify the
+object (dev/port). If user is interested only in things related to
+single device, he should do dump with selector (dev).
+
+Let's make this simple.
