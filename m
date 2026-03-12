@@ -1,131 +1,141 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA8A2C21DF
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 02:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958353563D5;
+	Thu, 12 Mar 2026 02:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773282294; cv=none; b=gN076LXNgjQ0ySw2nQbcKL6E1vCCaRcvRrfq6gmoiOw83VGGv95Ww5bl4qhtGbSPCTnt5V7AJKNMmLyA4c4i2S86RLwvvi3tOShVINHkNgITHgevt77/nmVWlqk1gV4tBn1tqPB1IXEujfRKinoC/FnH7QJKI5zDDCRIEi4urs4=
+	t=1773282743; cv=none; b=rZ42xiVxrg9osRDvGxD+1jL7tJM5T44JJvxo8jgcapq0mm3OlgxP+PJtDsmcQgxDNptZuRHi3L38vcNqeTvMJ60CIVjrL+viqpQTmk7IBBiaERJeyD+alrPdDYSmNI5tiSW55gz1JxSooJy2kHRW9YthpPAJIJxDl41tqBHE5rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773282294; c=relaxed/simple;
-	bh=t/o8JZUco4a+9p05JAFPQThPlGv3WyinrLjprD+EYkA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uFIrolzLrQBIT3WQ1iR5ePS4RocaFr2nW8ezH2NynbE1EfwEk1Vw/Z25sIUKIIUE9+j17NO+g7ySB4gFnjuNENZLbnunvrfMtHSiYyTv8qW923/5WPPIm+OUl8I83INH/QUWFuFItbTFZfrf/L9NwXMTmH9eT9MUXQ5J8CxjgoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WuIml8+b; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773282743; c=relaxed/simple;
+	bh=Y7racuyOR5wkOk3zqQssoZYtUA6EQW6wa8R9s27TqGc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PM7O/w1jRx7Y30KfX9rIpCy+g/Ozf2dcwj0s8NZ9jaoEaQMeVu60m3YTzpItY8k5xDRR3qDcLvGkKUKNfi+1pFFXZ2uLisZpghylTduaSuByRjvNJUK+NL6rZpdF8Y2BHEkzmyI2OekNUdaYWnoOdbr7ReAUu4/8u5kVltuHf1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9oIvozo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WuIml8+b"
-Message-ID: <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773282281;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w+NS9REi3OjQ/Mu3hl26dakXZd5lzaswGeV0mI0VxH4=;
-	b=WuIml8+bFNWIai4pwtX4tSQzikrGoTasWPFRug7mytOWFiHVJNt6mTJkktE1FTWXVKRaLT
-	g1ZTGbjjaTi+mrujNQC9o7G5g6Q2iRFeWZg+YXNo/pvsk4EKezOY3WBmG3CzbloTpKjOfJ
-	6jEHTin93tow6aBkkOPbIY/3bFRGEoI=
-Date: Thu, 12 Mar 2026 10:24:24 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9oIvozo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41727C4CEF7;
+	Thu, 12 Mar 2026 02:32:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773282743;
+	bh=Y7racuyOR5wkOk3zqQssoZYtUA6EQW6wa8R9s27TqGc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=n9oIvozows9oPyhRgfpnQTFfMHYVko4acxwT//8O8dyu5XgChccPX8OmfuYOUGSyp
+	 7/mrRZA62NfC6qA/llUJH78pcZ6GbJ+OizN0kFxPqaUJSi5qS6DQM6as5balhGNp1H
+	 FxTCrPmwHgyserf483/ZVt5dgGlaaDc4zhdPldCoaL48YBQ9sF3VcqGNvnHg9VbDbh
+	 8vZtcifoOR6OsGk8E7WjSbdZE3bESWi8YDrA1gzXAUMJ80o1HIAdMzToAjWvh/d0xs
+	 nqX29ClvdhdDVvnEBEcpgY/DlJSLw2RPVG2Ni7M253vu5yGCRC+0+mkoZfgHrqwGRu
+	 tAQp/6Au7RMug==
+Date: Wed, 11 Mar 2026 19:32:21 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Andrew
+ Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, Eric
+ Dumazet <edumazet@google.com>, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, Naveen Mamindlapalli
+ <naveenm@marvell.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Danielle Ratson <danieller@nvidia.com>, Hariprasad
+ Kelam <hkelam@marvell.com>, Ido Schimmel <idosch@nvidia.com>, Kory Maincent
+ <kory.maincent@bootlin.com>, Leon Romanovsky <leon@kernel.org>, Michael
+ Chan <michael.chan@broadcom.com>, Oleksij Rempel <o.rempel@pengutronix.de>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, Piergiorgio Beruto
+ <piergiorgio.beruto@gmail.com>, Russell King <linux@armlinux.org.uk>, Saeed
+ Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan
+ <tariqt@nvidia.com>, Willem de Bruijn <willemb@google.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org
+Subject: Re: [PATCH net-next 01/11] ethtool: Add dump_one_dev callback for
+ per-device sub-iteration
+Message-ID: <20260311193221.3306811b@kernel.org>
+In-Reply-To: <20260310104743.907818-2-bjorn@kernel.org>
+References: <20260310104743.907818-1-bjorn@kernel.org>
+	<20260310104743.907818-2-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
-Content-Language: en-US
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>,
- Menglong Dong <menglong8.dong@gmail.com>,
- Puranjay Mohan <puranjay@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260303150639.85007-1-leon.hwang@linux.dev>
- <20260303150639.85007-4-leon.hwang@linux.dev> <abHwii5stH93Vz5E@krava>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <abHwii5stH93Vz5E@krava>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
-On 12/3/26 06:45, Jiri Olsa wrote:
-> On Tue, Mar 03, 2026 at 11:06:36PM +0800, Leon Hwang wrote:
->> Uprobe programs that modify regs require different runtime assumptions
->> than those that do not. Mixing !kprobe_write_ctx progs with
->> kprobe_write_ctx progs via tail calls could break these assumptions.
->>
->> To address this, reject the combination of !kprobe_write_ctx progs with
->> kprobe_write_ctx progs in bpf_map_owner_matches(), which prevents the
->> tail callee from modifying regs unexpectedly.
-> 
-> hi,
-> could you please give some example where this is actual problem?
-> I'd expect it's up to user (whoever installs the tailcall map) to
-> avoid such situations.
-> 
-The self test in patch #6 can verify the problem, that
-kprobe_write_ctx=true progs can be abused to modify struct pt_regs via
-tail calls when tracing kernel functions using kprobe_write_ctx=false prog.
+On Tue, 10 Mar 2026 11:47:31 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> The per-PHY specific dump functions share a lot functionality of with
+> the default dumpit infrastructure, but does not share the actual code.
+> By introducing a new sub-iterator function, the two dumpit variants
+> can be folded into one set of functions.
+>=20
+> Add a new dump_one_dev callback in ethnl_request_ops. When
+> ops->dump_one_dev is set, ethnl_default_start() saves the target
+> device's ifindex for filtered dumps, and ethnl_default_dumpit()
+> delegates per-device iteration to the callback instead of calling
+> ethnl_default_dump_one() directly. No separate start/dumpit/done
+> functions are needed.
+>=20
+> For the existing per-PHY commands (PSE, PLCA, PHY, MSE), the shared
+> ethnl_perphy_dump_one_dev helper provides the xa_for_each_start loop
+> over the device's PHY topology.
+>=20
+> This prepares the ethtool infrastructure for other commands that need
+> similar per-device sub-iteration.
 
-Explain the problem by reusing the test code:
+Feels like this could be split into two patches for ease of review.
 
-int dummy_run;
-u64 data;
+Warning: net/ethtool/netlink.h:441 struct member 'dump_one_dev' not describ=
+ed in 'ethnl_request_ops'
+Warning: net/ethtool/netlink.h:441 struct member 'dump_one_dev' not describ=
+ed in 'ethnl_request_ops'
 
-struct {
-	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-	__uint(max_entries, 1);
-	__uint(key_size, sizeof(__u32));
-	__uint(value_size, sizeof(__u32));
-} prog_array_dummy SEC(".maps");
+> @@ -616,17 +580,41 @@ static int ethnl_default_dumpit(struct sk_buff *skb,
+>  				struct netlink_callback *cb)
+>  {
+>  	struct ethnl_dump_ctx *ctx =3D ethnl_dump_context(cb);
+> +	const struct genl_info *info =3D genl_info_dump(cb);
+>  	struct net *net =3D sock_net(skb->sk);
+>  	netdevice_tracker dev_tracker;
+>  	struct net_device *dev;
+>  	int ret =3D 0;
+> =20
+> +	if (ctx->ops->dump_one_dev && ctx->ifindex) {
+> +		dev =3D netdev_get_by_index(net, ctx->ifindex, &dev_tracker,
+> +					  GFP_KERNEL);
+> +		if (!dev)
+> +			return -ENODEV;
+> +
+> +		ctx->req_info->dev =3D dev;
+> +		ret =3D ctx->ops->dump_one_dev(skb, ctx, &ctx->pos_sub, info);
+> +
+> +		if (ret < 0 && ret !=3D -EOPNOTSUPP && likely(skb->len))
+> +			ret =3D skb->len;
+> +
+> +		netdev_put(dev, &dev_tracker);
+> +		return ret;
+> +	}
+> +
+>  	rcu_read_lock();
+>  	for_each_netdev_dump(net, dev, ctx->pos_ifindex) {
+>  		netdev_hold(dev, &dev_tracker, GFP_ATOMIC);
+>  		rcu_read_unlock();
+> =20
+> -		ret =3D ethnl_default_dump_one(skb, dev, ctx, genl_info_dump(cb));
+> +		if (ctx->ops->dump_one_dev) {
+> +			ctx->req_info->dev =3D dev;
+> +			ret =3D ctx->ops->dump_one_dev(skb, ctx, &ctx->pos_sub,
+> +						     info);
+> +			ctx->req_info->dev =3D NULL;
+> +		} else {
+> +			ret =3D ethnl_default_dump_one(skb, dev, ctx, info);
+> +		}
+> =20
+>  		rcu_read_lock();
+>  		netdev_put(dev, &dev_tracker);
 
-SEC("?kprobe")
-int dummy_kprobe(void *ctx)
-{
-	dummy_run++;
-	bpf_tail_call_static(ctx, &prog_array_dummy, 0);
-	return 0;
-}
+Not sure if it works here but another way to implementing single dump
+and a loop dump concisely is to init both ifindex and pos_ifindex when
+request is parsed and then add
 
-SEC("?kprobe")
-int kprobe(struct pt_regs *regs)
-{
-	data = regs->di = 0;
-	return 0;
-}
+	if (ctx->ifindex && ctx->ifindex !=3D ctx->pos_ifindex)
+		break;
 
-The "kprobe" prog will be added to "prog_array_dummy" map.
-
-In user space, the "dummy_kprobe" prog will attach to kernel function
-"bpf_entry_test1".
-
-Actually, without this patch, when "bpf_fentry_test1" runs, the arg "a"
-will be updated as 0. Thus, bpf_prog_test_run_tracing() returns -EFAULT
-instead of 0.
-
-bpf_prog_test_run_tracing()
-|-->bpf_fentry_test1()
-    |-->dummy_kprobe()
-        |-->kprobe() /* via tail call */
-            |-->regs->di = 0;
-    return 1; /* instead of 2 */
-return -EFAULT;
-
-Yep, the commit log is not clear to describe this abuse problem. Will
-update it.
-
-Thanks,
-Leon
-
+at the start of the loop. That way the body of the loop doesn't have to
+be repeated in a separate if=20
