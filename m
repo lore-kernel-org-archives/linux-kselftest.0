@@ -1,136 +1,178 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F723A168C
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 11:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C1026E711
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 12:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773315689; cv=none; b=T39oNX9dsgEU8IJpFgxhhdY9p1I0jrYwsNamuOKFLvj1tbSHuFQmpttjaMYndZT04y6+SXmuafCU8XmwlYzXiCqlSOFCXDRABPcD5JNcN1KFAj+PGAuAmsk7TkdT3tEgETyJ0gk8F61+ztDe7F39xASlhBobGoOlvb10/z3TgZQ=
+	t=1773318286; cv=none; b=Vv6fWsyPtex3R6vfEZv6oAV4bBmj0bR+2DW1seGnXZW3YkvJa4P/GzDLK1ELqaOJkoa02FpK+stz6NXwN0R4XAWMxg0k3F/B2URsNlkIwpclTgrHx8brxDkHmpJhiF7dqnSpra04q6yh2SNEy4bQTxa55of2aDIgMF04fyH6J8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773315689; c=relaxed/simple;
-	bh=e0qvEWr+SSEH4j0vaCh0CP61XRiN4Et7YLSwqxXb7Ck=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DaWlRtP2eRX7iWX0qRE6sxZmDG5lN33dQkKsPGHxQCB4CMUHDQPLMR1spNmGHBI+OgqV7tEuQLJellgohssA4u+972/Iv+qCKcyh+Y5q95zUP6DcMYEu2rHgZv0UcDQUE1L1yzQuY3hDczrsejKPEb5rjySAp/lrcXum3oCWTo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UaU9qvf2; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773318286; c=relaxed/simple;
+	bh=thDU1lc0YZXHDnsXSBJjM7lkH/txuV9wpd4r0xFdGdg=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VlJyBUGD+mtg5sikBu/8eYhV/3I775Yg4HMaN3asKh63XBX2MBeZLyRpKu0Ti6vLwe4kbjYo91CypskcFSHQWILHG5rqkTh8J7YiitmM8lFrcjX4ZKbGtWOmLe8W6Jxu2SEUJA9Baj+ewG4QUBA5ceS8eDCtQDZAszezRJ8t+YQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gZHx1K8l; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UaU9qvf2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773315687;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3FFU11Mi0bBXwJKlMBJvhw89oPXuQQ6MnaqLH21R0oM=;
-	b=UaU9qvf21kgZQRkMu4jkdvS9+Fbic6x2Y82RcV389wNzH36tPqz+ZA3CMk//W/P+DEzbFF
-	J62mFQ9ifYC2JVjdJAdWMqdH2mNoYS6/39lywSMFz3jjXbjTBzNyJuLN08m6hXyJoPjYaw
-	lgXad65qm9HcnpEdKizCzWfytvot9oc=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-VTST2Oz3P6SVUz4tR9q3BQ-1; Thu,
- 12 Mar 2026 07:41:24 -0400
-X-MC-Unique: VTST2Oz3P6SVUz4tR9q3BQ-1
-X-Mimecast-MFC-AGG-ID: VTST2Oz3P6SVUz4tR9q3BQ_1773315681
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6072E195609F;
-	Thu, 12 Mar 2026 11:41:21 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7D58C180035F;
-	Thu, 12 Mar 2026 11:41:12 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com,
-	Li Wang <liwang@redhat.com>
-Subject: [RESEND PATCH 4/4] selftests/mm: transhuge_stress: skip the test when thp not available
-Date: Thu, 12 Mar 2026 19:40:27 +0800
-Message-ID: <20260312114027.634559-5-chuhu@redhat.com>
-In-Reply-To: <20260312114027.634559-1-chuhu@redhat.com>
-References: <20260312114027.634559-1-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gZHx1K8l"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4853f2826f7so8588685e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 05:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773318284; x=1773923084; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8rYdnhSYW1AF/6LzB31WRXHxUO9w4SQomrMEzPi0XY=;
+        b=gZHx1K8l5SYgLcJAJueDdFbZ/bmQBY7W5JJlamnbDWX1r0r+5gWety4PbYkonTxD7X
+         BtKlZTgNkO8dZTQjGsv7b88xXaPwUYEhISqH12rEMjih/kzqoAUKfuXt+Kf/wYO7Klkk
+         4iiKydxl+1KBhhqcQGTFNh9InRleFmV3JAlr4ol//HUO0KbDqdEZl+mo41z2+HwpWA00
+         q5908BUBrjd+xJXgavS5+bOaRU+jj5Tz4+e1buSWvmKdUSlK+jAH45nFbzDOBINJySkI
+         nWAZWflnxN/IbaFo6CUIrUacPHsUGTRS5i+ReP7GX18CI5zr4Ksdu17eXMaOWk6kwzuD
+         wvLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773318284; x=1773923084;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O8rYdnhSYW1AF/6LzB31WRXHxUO9w4SQomrMEzPi0XY=;
+        b=Crsq9eL3h2N+icdgjTO9rS3Zd8XawXvsyjZgTxA1ebbK2jv/jp58jz7u1pmR/0r6GW
+         7w7fNRW+9lkEoR3o7BCNd75juQTkwKOokgYLTThy000gRVPKDaoFk8q+3CQKP4CWgD/F
+         qbGB/PnQP2tZOexqJPDQFt8IPTrMMy12N/l4+kn/iXIebBs+VCb4Odkhf5ysO6gWpe6u
+         fQ6eddKl6WxgShmmNDQuJSiU2BfVkMUMaSPBXNjXHYQwpjoAv5QqxjtUgUoLZcapOv6R
+         sAFpmnKLNG1Ht+x3xTyYutyGQJvVPwbHuPVUIIzzxT9PRlY1zvKxvsuy+/GB6P3HOiHO
+         Cmpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgZSKgVz4a7Lb9ERw/pkIlLUnnUjEGJKGc580XvnYuN11xK97ec4jncqvIC6EBum4OLhj8uEbmfOWxiiW9xlI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyri/SZ7S0fiNBgkKfSElqEGWIdo8e0WWm7vV4k2WxTjljRf6xN
+	ILDtcKHRAwvuPr4zLIQl//r14Ce4XCHmTuUaie+bGhr3nVJ5q2ROYH62
+X-Gm-Gg: ATEYQzyCcRZbbvlXMtKqD+uQgJPlkov4UgXwGA7P9+aFXIjXjT63RCykwSW7x1rhPO+
+	8+crThILkN0139luMjWANRF4y7CmBF88AuWKun5W7qrZO4V5wxLDkeBEaNjRzjFWnPu46DBQkXR
+	z25T0xQFojk9TtmsRixe+rhpWlrFngJ1t27kiwueDtiETa+SyQh3LsfuBgcP/BihMMgxQ92j+VV
+	Jy6b8Yj1L6FvIy/AXF5Zv7WXHo6dyUFwqv2xn3E1F3X2PodsVPBlaRLpHWDmM1S2TqaS35OKdMk
+	dyRmN+xejQEa3m3oyQz3ZzYpFG6qxTTH8swrMt/YEruoDfWJKXioRpQxN8Xj/M1h7E/aMLRSQZD
+	yza7OMZr2HiMGEmDeSIHSqov92h7e3m9xo/tRCm7gT6DTWVSMYde8ydrum03HbRZdtCeu8DtB
+X-Received: by 2002:a05:600c:8b13:b0:485:30d4:6b9e with SMTP id 5b1f17b1804b1-4854b100b66mr105829985e9.21.1773318283507;
+        Thu, 12 Mar 2026 05:24:43 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::d99c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b5e9179sm125863655e9.3.2026.03.12.05.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2026 05:24:43 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 12 Mar 2026 13:24:42 +0100
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, andrii@kernel.org,
+	shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	eddyz87@gmail.com, martin.lau@linux.dev
+Subject: Re: [PATCH] selftests/bpf: modify_return: isolate fmod_ret hooks by
+ pid
+Message-ID: <abKwikMNfT0lhfl3@krava>
+References: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
 
-The test requires thp, skip the test when thp is not available to avoid
-false positive.
+On Thu, Mar 12, 2026 at 06:42:19PM +0800, Sun Jian wrote:
 
-Tested with thp disabled kernel.
-Before the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..1
-  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 60 transhuge-stress -d 20 # exit=1
+SNIP
 
-After the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # 1..0 # SKIP Transparent Hugepages not available
-  # [SKIP]
-  ok 5 transhuge-stress -d 20 # SKIP
+> diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/testing/selftests/bpf/progs/modify_return.c
+> index 3376d4849f58..5ff18ddb3050 100644
+> --- a/tools/testing/selftests/bpf/progs/modify_return.c
+> +++ b/tools/testing/selftests/bpf/progs/modify_return.c
+> @@ -7,16 +7,29 @@
+>  #include <linux/bpf.h>
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_tracing.h>
+> +#include <stdbool.h>
+>  
+>  char _license[] SEC("license") = "GPL";
+>  
+>  static int sequence = 0;
+>  __s32 input_retval = 0;
+> +__u32 test_pid = 0;
+> +
+> +static __always_inline bool match_pid(void)
+> +{
+> +	__u64 pid_tgid = bpf_get_current_pid_tgid();
+> +
+> +	if (!test_pid)
+> +		return false;
+> +	return (__u32)(pid_tgid >> 32) == test_pid;
+> +}
+>  
+>  __u64 fentry_result = 0;
+>  SEC("fentry/bpf_modify_return_test")
+>  int BPF_PROG(fentry_test, int a, __u64 b)
+>  {
+> +	if (!match_pid())
+> +		return 0;
 
-CC: Li Wang <liwang@redhat.com>
-Signed-off-by: Chunyu Hu <chuhu@redhat.com>
----
- tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I think just simple pid check like we do in other places
+should be enough:
 
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index bcad47c09518..76316696426d 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include "vm_util.h"
- #include "kselftest.h"
-+#include "thp_settings.h"
- 
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -35,6 +36,9 @@ int main(int argc, char **argv)
- 	int pagemap_fd;
- 	int duration = 0;
- 
-+	if (!thp_is_enabled())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
- 	ksft_print_header();
- 
- 	ram = sysconf(_SC_PHYS_PAGES);
--- 
-2.53.0
+	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
+		return 0;
 
+jirka
+
+
+>  	sequence++;
+>  	fentry_result = (sequence == 1);
+>  	return 0;
+> @@ -26,6 +39,8 @@ __u64 fmod_ret_result = 0;
+>  SEC("fmod_ret/bpf_modify_return_test")
+>  int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
+>  {
+> +	if (!match_pid())
+> +		return ret;
+>  	sequence++;
+>  	/* This is the first fmod_ret program, the ret passed should be 0 */
+>  	fmod_ret_result = (sequence == 2 && ret == 0);
+> @@ -36,6 +51,8 @@ __u64 fexit_result = 0;
+>  SEC("fexit/bpf_modify_return_test")
+>  int BPF_PROG(fexit_test, int a, __u64 b, int ret)
+>  {
+> +	if (!match_pid())
+> +		return 0;
+>  	sequence++;
+>  	/* If the input_reval is non-zero a successful modification should have
+>  	 * occurred.
+> @@ -55,6 +72,8 @@ SEC("fentry/bpf_modify_return_test2")
+>  int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char f,
+>  	     int g)
+>  {
+> +	if (!match_pid())
+> +		return 0;
+>  	sequence2++;
+>  	fentry_result2 = (sequence2 == 1);
+>  	return 0;
+> @@ -65,6 +84,8 @@ SEC("fmod_ret/bpf_modify_return_test2")
+>  int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, char f,
+>  	     int g, int ret)
+>  {
+> +	if (!match_pid())
+> +		return ret;
+>  	sequence2++;
+>  	/* This is the first fmod_ret program, the ret passed should be 0 */
+>  	fmod_ret_result2 = (sequence2 == 2 && ret == 0);
+> @@ -76,6 +97,8 @@ SEC("fexit/bpf_modify_return_test2")
+>  int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f,
+>  	     int g, int ret)
+>  {
+> +	if (!match_pid())
+> +		return 0;
+>  	sequence2++;
+>  	/* If the input_reval is non-zero a successful modification should have
+>  	 * occurred.
+> 
+> base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
+> -- 
+> 2.43.0
+> 
+> 
