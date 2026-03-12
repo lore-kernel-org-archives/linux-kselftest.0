@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9A03A3826;
-	Thu, 12 Mar 2026 12:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD483BC685;
+	Thu, 12 Mar 2026 12:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773319823; cv=none; b=lpufsujjTNfrd+PtDmATpPsCD4wNhf1MbS6exsRo+ZAFl1DxO/VtqgQqUyY9Xkr5E2O2LMPlxz6c3/hOBssDlh8AKw2iSPAyRlMdOkDjGkuOcxkLSNZeowmuENaPYq8MdFWZRE7LsXXtSI+3sTWiCH9MF0r2owCSYWHdGWOPyyg=
+	t=1773319883; cv=none; b=WSFVSopKO/ZhPxrnQSf2mXucwDkc7r72IAYCCRFnp52+mRYnaMIridarDaPfRhvjoJSddfvB1mUkoONOGh+cWlQDjneyA+bV16thGF7ssSVXxesDLNaAZp73hB/m8+5fd8BNzGxC5R1hnJQQ+hEwOCw8YVcQKCLYSjnclrjBM3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773319823; c=relaxed/simple;
-	bh=adjljW+VNbO+pN1pMra4pZwRC1mZke1wNpJ+7Qa+hJ4=;
+	s=arc-20240116; t=1773319883; c=relaxed/simple;
+	bh=1kpMZraSaSMBgHci+UWZJQCGccw/Ih5urfcrHjXWRuo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OU65W3NX+V1KgXWhBTNi7krtrdic0I4cc9TMcY/ObKbTAs3XjTOWFxav6yXm0UsVmH1gNjtJ8fwdNeoQ5woCHOi0T7Lmvqe9tYsPZ+lDrU9AAzzq5mBCjKZzsOIlYlFJ4vCh2qTusX7q8PKuOgATIYu6Jtu5Gf7gyFgT37QriLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R3VxknOD; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=UI0hoLWHrJLWpgacgdmf9tMQsqpPOI/SJ22gq28v7VWeWuv02uJKu8O3eK9meTlctGyuXHMM7M6Il2n/uQRHCS5Is6U7VIi09op56brwXNRkcqBKxMPFta/XetkiJC8nlnKkSbz6IHZFrm7EVczlsx9RMAtuH8F5KNIW3UrHanc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zccl76K2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R3VxknOD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3CCC4CEF7;
-	Thu, 12 Mar 2026 12:50:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zccl76K2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E09DDC4CEF7;
+	Thu, 12 Mar 2026 12:51:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773319822;
-	bh=adjljW+VNbO+pN1pMra4pZwRC1mZke1wNpJ+7Qa+hJ4=;
+	s=k20201202; t=1773319882;
+	bh=1kpMZraSaSMBgHci+UWZJQCGccw/Ih5urfcrHjXWRuo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R3VxknODXNCIPm7LSy8wUZk8DApPOKFgkwpKvijaRHBrYIEUoEwRgOLK7boYLNW1O
-	 b1Picp4lm4PXJWe1N9ubhs0Qg4gsdrTZgFn5Rtsgx2uMZkdce17nMRfmoOPtGDda51
-	 L85Kv79rMkwquASxcKxRCTRcJ3EMqOVJKIqOFZUGK+VLE4MRwBgqNf0VFW0PbehFd8
-	 FyBVTJp6tW61g89/dUb97UcWJTyj+pzroFsrt55cPMGj6CowugbTL/bR+dnO0Uz30B
-	 eUcpGwOpiB3HeKsgDMK3Lk7EQ5iMpDDKnxk7YbqHjy1BM/D1sJxOGx46a/qXnAjbYE
-	 UNd/jtMKxTJ2w==
-Message-ID: <457dddf1-04ec-4d1e-8640-b04997fac4f1@kernel.org>
-Date: Thu, 12 Mar 2026 13:50:17 +0100
+	b=Zccl76K23ZyjOTqBoRuG3h640FWnMaYDV4YXH6pFpe8fOT1jSDLWMEzuUmYOir+ic
+	 B+atD0jT7wx4HOMNfkvQmgdtgrUzl776vQhDd8MAJOkpUmo2pLQZYusbS6lqptRJG2
+	 6o4xAmYmITc+e8ku774J8YwlBWsWG83O9LqhJlaf6t47Gfewydo34zibHjXoM79Tjz
+	 EWzZsE5aNBvRWUzwVBkVoFpZ/UIemoy/UHwvGzsly8K0py61/DH1WjW2LBM3u/+Lue
+	 IiTXkuftqxocsLKfplXBeYu8/+O6aY5xRsoFGNwpmeHEHOLRzR6ATRB9oJ0HJjOygx
+	 RKEM5XpZk9fRQ==
+Message-ID: <48274386-34b7-4a4e-b924-918b8813a281@kernel.org>
+Date: Thu, 12 Mar 2026 13:51:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/13] selftests/mm: skip uffd-wp-mremap if UFFD
- write-protect is unsupported
+Subject: Re: [PATCH v2 11/13] selftests/mm: fix double increment in linked
+ list cleanup in compaction_test
 To: Sayali Patil <sayalip@linux.ibm.com>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -46,7 +46,7 @@ Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
  Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org
 References: <cover.1773305677.git.sayalip@linux.ibm.com>
- <ed23ff57a80881c9d087d22709862af40addf49b.1773305678.git.sayalip@linux.ibm.com>
+ <27390ade4251d1f7f6b846bd5836fa79dbf285df.1773305678.git.sayalip@linux.ibm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -93,83 +93,30 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <ed23ff57a80881c9d087d22709862af40addf49b.1773305678.git.sayalip@linux.ibm.com>
+In-Reply-To: <27390ade4251d1f7f6b846bd5836fa79dbf285df.1773305678.git.sayalip@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 3/12/26 13:25, Sayali Patil wrote:
-> The uffd-wp-mremap test requires the UFFD_FEATURE_PAGEFAULT_FLAG_WP
-> capability. On systems where userfaultfd write-protect is
-> not supported, uffd_register() fails and the test reports failures.
+> The cleanup loop of allocated memory currently uses:
 > 
-> Check for the required feature at startup and skip the test when the
-> UFFD_FEATURE_PAGEFAULT_FLAG_WP capability is not present,
-> preventing false failures on unsupported configurations.
+>     for (entry = list; entry != NULL; entry = entry->next) {
+>         munmap(entry->map, MAP_SIZE);
+>         if (!entry->next)
+>             break;
+>         entry = entry->next;
+>     }
 > 
-> Before patch:
->  running ./uffd-wp-mremap
->  ------------------------
->   [INFO] detected THP size: 256 KiB
->   [INFO] detected THP size: 512 KiB
->   [INFO] detected THP size: 1024 KiB
->   [INFO] detected THP size: 2048 KiB
->   [INFO] detected hugetlb page size: 2048 KiB
->   [INFO] detected hugetlb page size: 1048576 KiB
->  1..24
->   [RUN] test_one_folio(size=65536, private=false, swapout=false,
->   hugetlb=false)
->  not ok 1 uffd_register() failed
->   [RUN] test_one_folio(size=65536, private=true, swapout=false,
->   hugetlb=false)
->  not ok 2 uffd_register() failed
->   [RUN] test_one_folio(size=65536, private=false, swapout=true,
->   hugetlb=false)
->  not ok 3 uffd_register() failed
->   [RUN] test_one_folio(size=65536, private=true, swapout=true,
->   hugetlb=false)
->  not ok 4 uffd_register() failed
->   [RUN] test_one_folio(size=262144, private=false, swapout=false,
->   hugetlb=false)
->  not ok 5 uffd_register() failed
->   [RUN] test_one_folio(size=524288, private=false, swapout=false,
->   hugetlb=false)
->  not ok 6 uffd_register() failed
->  .
->  .
->  .
->  Bail out! 24 out of 24 tests failed
->   Totals: pass:0 fail:24 xfail:0 xpass:0 skip:0 error:0
->  [FAIL]
-> not ok 1 uffd-wp-mremap # exit=1
+> The inner entry = entry->next causes the loop to skip every
+> other node, resulting in only half of the mapped regions being
+> unmapped.
 > 
-> After patch:
->  running ./uffd-wp-mremap
->  ------------------------
->  1..0 # SKIP uffd-wp feature not supported
->  [SKIP]
-> ok 1 uffd-wp-mremap # SKIP
+> Remove the redundant increment to ensure every entry is visited
+> and unmapped during cleanup.
 > 
-> Acked-by: Zi Yan <ziy@nvidia.com>
+> Fixes: bd67d5c15cc1 ("Test compaction of mlocked memory")
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
 > Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> ---
->  tools/testing/selftests/mm/uffd-wp-mremap.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
-> index 17186d4a4147..73d53a4da389 100644
-> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
-> +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
-> @@ -19,6 +19,17 @@ static size_t thpsizes[20];
->  static int nr_hugetlbsizes;
->  static size_t hugetlbsizes[10];
->  
-> +static void uffd_wp_feature_supported(void)
-
-Likely that function should be called
-
-"check_uffd_wp_feature_supported()"
-
-Because right now it reads as if it would be returning a bool.
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
