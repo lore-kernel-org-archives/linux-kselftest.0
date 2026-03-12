@@ -1,110 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0147B3BB9EF
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 22:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B160402BAC
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 23:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773355488; cv=none; b=tHEGADaTDE/eLpNILaBJScNEcPglWRvHbTbbzvMgGRgNUhUAqGRolRlNapyUolpz9ZePstcXPz0t9rqV8KmLWqHnLFilyl3FeWfwViaTg2XZ07zLhOEnKc7nO+NyIbn3u7SMXajAZFIrZP4vj2m4Y4Vg4WcHvRf0qKI7qL4y+eU=
+	t=1773358799; cv=none; b=dNyet3lo/Jy1nn8UkI7Jk1Zs5QcMN1QrxHeQBSLNT56/qzQtDJfLxyz9w5bRsthxU5Uyo+1FZY/S+g0oLGBLUOqCAxvn8de9X3uMs5apYa64anHvOFj9qEd7NwDi5JqmcVrMvDC0dDjMrBbxKw3zAGdMFz3xkCh7xMt32jeLIbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773355488; c=relaxed/simple;
-	bh=PZ+ExTNvH3r1z7OlgBOP6Su9+77UcJ9UthTuCroOJOc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uKxebhbFkmCpumX8kyx/d5dZWRNMmVtSsbSjVOH2B9y9JxQIpw+ZHvg0jC5X/rA8pS/QB+gy8SjJotgV/gk5+51G2R31Mkrek0yhJsG+lCVg8ItQP+I4pNmwvpiuTwgCiYWU6QujivpxyXY32R/0Goq0MkH/KO+5wEwhs1VJqg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rA8piUuD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773358799; c=relaxed/simple;
+	bh=81hZpTskJlFntcFcrcsvS621z5Do+6xd4roaKHgFHv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KbnqwsqVBSXMscpOuNaWmtwgxg6ncxHMmkJrybpLwHqrCbct3Qg+1MD4k3G6DKYRCseTQJYKkAxelEZiCdu3y5GHld5pOmSvT+VmIc+ixijuyTKGNE9FeAyX2i//i4GVtykUUEp6/zuje+DIV3EAEYsatRLkaxN2Rdaota5WAtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LnBeq2Ms; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rA8piUuD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9ECAC4AF0D
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 22:44:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773355487;
-	bh=PZ+ExTNvH3r1z7OlgBOP6Su9+77UcJ9UthTuCroOJOc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rA8piUuDVFXKQYUsfrjwk6SaEVW+aIAdCTLFC3sNlVOzwGiPKiQZU1ZBSikNbvUWt
-	 4Acz8vgJGkGrocuoJVXBHZGhdvb3j3Fz7smyS2aHMocoCPqtL1Fa0EaYhflf5oJxx2
-	 D+jLJGWHgUYTnQ5t11eseHtl1+dSi1QIDLVShM20IJMYOyUr1MZYC2qSDGDpKWv9Vh
-	 VIMkPvixw1SBlKil0/ZRRTICkLZvbgqo4Pb++7CnAv4ffb546afArIAiPKQFKwjwnz
-	 FtQEqjUjtkLlfXC43LtftVvAJ4uqgBMXXhC6G5u/BTcjRCPEA+jL1w3W/14We73tQ0
-	 tCv4hxESzn3ew==
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b942424d231so191843866b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 15:44:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUnuor22WTKhnxuVRVXLL437zG/xoXCdSg4WDp38hUr8dzi57sGWzP8/34Fvb01vpFuubPlP1d0sNC/8//sfGU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydbkZO7gNI/UhVVXA6FsqCEYsjqiTJ/zaRchiEAKgnat1mPtjO
-	FHNoLTLmNVA3aTOONxD3xqgWzaGRnhgtNJVgme9lDP4BawbTpO80GfpyM1A3mrxIcJmWcqYBhF/
-	w4i+FxVQzPjZ3T7iAykG0U5L8/Fs6C5w=
-X-Received: by 2002:a17:906:3184:b0:b88:7431:3942 with SMTP id
- a640c23a62f3a-b97651d185emr51530266b.33.1773355486758; Thu, 12 Mar 2026
- 15:44:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LnBeq2Ms"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3585ec417f6so1054067a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 16:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773358792; x=1773963592; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tuWxuj0biLq2l1xmhqHdX16m/kzH5EhGtvvF3ksAcvQ=;
+        b=LnBeq2MsYNkTAUb/gwTtRRiwFNNanz9QHKP9iEuwvyFzO/37X473MTF/nXNH/ASNyb
+         kktVYJ4ahAJb8DlEpFzVAHRYeanCsULKdb4log35YXtaUOibA5yu6B3m7UYQxPKPaayR
+         FSgNuSXraEIrtT4WElxvBgJyGdOzMDaEkWuXR1CNN32r1G8DfhvBexkWugm57TCbbmoG
+         FMGvr2nrcW3JFiLg3yK9xWcvablnc4llNnYQ7edSId/qnOkl2xsUTBawd2Y3nbtgNXLT
+         rK2inuPCPzT4FQmuo306fRRpaOivJiOMLW8+umhrraM+IIkynobueBQkzMBcSy8hpd+4
+         4duQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773358792; x=1773963592;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tuWxuj0biLq2l1xmhqHdX16m/kzH5EhGtvvF3ksAcvQ=;
+        b=SQxBF/qUZg3AeCuW+CtNplqgoGeccbiV104UzhhCnKQlG+RPdbgHSqcuWKhXpo9j6D
+         P2cEhhNvRDCzdFefzstX/bRbN3DdTLDx7mjcny7lMEdqoSuQhb3TuzPqgCjKKabdaU/5
+         muuZErKAJxTRGyhT/t9KWs7dKW0z3KiYpe7eA0tzC7XUA/OX6P8bO9IyHnAVe+v8RJV/
+         Qs0rGzdGDeeOO2/+l0SSpnDvTyvI5R6e9QFlVKTALw1OsrUl/nZjh5mR2K9Jf7x5KRtF
+         VB6QBcAbP6gpCSklVAICXMc1hmbxG+tboWjcVLREI3226EQWwKmcBP/5VX316KurytPm
+         MRkw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPBs17XkIPlJur2zvaN2rDcIcz6Ft2kcdTZYu7Zzz7F5mvxoJv8ecxukM2oeo+EPKz52aZEjTCaKZQ8OVpa7I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKtaJijNSp+wkULCJYtGAZjmx3oYjCXjGQ37hMsLtNy2PBS82G
+	Cdba/9aDD5hHlIyikkeXfqxfZp7NZcBbK1hdu3Gt6kpj5TkzoXBIj7HzlNy2TqEVgg==
+X-Gm-Gg: ATEYQzyn/UQSmUQu6v4Eu7w9ivt7slr3/2LeZg0nRp+msZaGv+fnifCFJT+YnR7ECoe
+	2tpy9nSHLmESzmNLwk/1hzL+nyxLdT8qBpgVlLC42gSzF+fORhhL93YXnnY9xuc+lctO8zYAMqG
+	NM9pinIxFaDGX/Az7E2i64f8p9+2kr1auD3LjeqJE8T7rDb0yXVuVI0N7q60Tk7/CxfbFlJexYB
+	KPnPbtIQocOKS4eDNuQn/To/pjRdPOST+foKIB2NfvY74PCFyoJNUir1Q01r0JXgWsfsxLxQ06q
+	BBWA89KNvm6KtEBz8jLenE3RFQQWeH2zh5o8eZBz9fpY6kM+Gnrn8Lna3hsLX1yO/qPhnZwGlrN
+	KjKgZEYiodtv6swGQ6Uij0miJ41EusqnlX+jnB1WKkVqsbxkq2h3YdLRLh2VYnDd8hKL2cYjIVa
+	5FaexYR2ol8kq1yx7lgl/g0K4qW2WcRSKE/ACCvTm5kwo9FuoPnyEXJlhgt3SJ+g==
+X-Received: by 2002:a17:90b:3d4b:b0:35a:117:9521 with SMTP id 98e67ed59e1d1-35a21fdb67bmr847337a91.10.1773358791623;
+        Thu, 12 Mar 2026 16:39:51 -0700 (PDT)
+Received: from google.com (239.23.105.34.bc.googleusercontent.com. [34.105.23.239])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35a03034401sm6609677a91.16.2026.03.12.16.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2026 16:39:49 -0700 (PDT)
+Date: Thu, 12 Mar 2026 23:39:45 +0000
+From: David Matlack <dmatlack@google.com>
+To: Alex Williamson <alex@shazbot.org>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pranjal Shrivastava <praan@google.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
+ Live Update
+Message-ID: <abNOwcOTXqxCxNzt@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-11-dmatlack@google.com>
+ <20260226170030.5a938c74@shazbot.org>
+ <aaDqhjdLyf1qSTSh@google.com>
+ <20260227084658.3767d801@shazbot.org>
+ <CALzav=fHy23RAzhgkdaL+JA5T2tL9FT6aPgRfXUh7i9zvYCGPA@mail.gmail.com>
+ <20260227105720.522ca97f@shazbot.org>
+ <CALzav=fjRPa_ZbXu7iFXyemcf_8Kq_dZTWT6c-A0bc6czF_Rdw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260312040627.55257-1-liwang@redhat.com> <20260312040627.55257-7-liwang@redhat.com>
-In-Reply-To: <20260312040627.55257-7-liwang@redhat.com>
-From: Yosry Ahmed <yosry@kernel.org>
-Date: Thu, 12 Mar 2026 15:44:35 -0700
-X-Gmail-Original-Message-ID: <CAO9r8zM=EHSsmkZMfc0TEqaviHUW=43=r_PW60enjaoxJXGgEw@mail.gmail.com>
-X-Gm-Features: AaiRm524PNfkYxfVrpc2St54DerNH44DRfyB07Ocb7QbsQotuUYK5q2n16rFokU
-Message-ID: <CAO9r8zM=EHSsmkZMfc0TEqaviHUW=43=r_PW60enjaoxJXGgEw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] selftest/cgroup: fix zswap attempt_writeback() on
- 64K pagesize system
-To: Li Wang <liwang@redhat.com>
-Cc: mkoutny@suse.com, yosryahmed@google.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Muchun Song <muchun.song@linux.dev>, Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALzav=fjRPa_ZbXu7iFXyemcf_8Kq_dZTWT6c-A0bc6czF_Rdw@mail.gmail.com>
 
-On Wed, Mar 11, 2026 at 9:07=E2=80=AFPM Li Wang <liwang@redhat.com> wrote:
->
-> In attempt_writeback(), a memsize of 4M only covers 64 pages on 64K
-> page size systems. When memory.reclaim is called, the kernel prefers
-> reclaiming clean file pages (binary, libc, linker, etc.) over swapping
-> anonymous pages. With only 64 pages of anonymous memory, the reclaim
-> target can be largely or entirely satisfied by dropping file pages,
-> resulting in very few or zero anonymous pages being pushed into zswap.
->
-> This causes zswap_usage to be extremely small or zero, making
-> zswap_usage/2 insufficient to create meaningful writeback pressure.
-> The test then fails because no writeback is triggered.
->
-> On 4K page size systems this is not an issue because 4M covers 1024
-> pages, and file pages are a small fraction of the reclaim target.
->
-> Fix this by always allocating 1024 pages regardless of page size.
-> This ensures enough anonymous pages to reliably populate zswap and
-> trigger writeback, while keeping the original 4M allocation on 4K
-> page size systems.
->
-> =3D=3D=3D Error Log =3D=3D=3D
->   # uname -rm
->   6.12.0-211.el10.ppc64le ppc64le
->
->   # getconf PAGESIZE
->   65536
->
->   # ./test_zswap
->   TAP version 13
->   1..7
->   ok 1 test_zswap_usage
->   ok 2 test_swapin_nozswap
->   ok 3 test_zswapin
->   not ok 4 test_zswap_writeback_enabled
->   ...
->
-> Signed-off-by: Li Wang <liwang@redhat.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Michal Koutn=C3=BD <mkoutny@suse.com>
-> Cc: Muchun Song <muchun.song@linux.dev>
-> Cc: Nhat Pham <nphamcs@gmail.com>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Shakeel Butt <shakeel.butt@linux.dev>
-> Cc: Yosry Ahmed <yosryahmed@google.com>
+On 2026-03-09 10:32 AM, David Matlack wrote:
+> On Fri, Feb 27, 2026 at 9:57 AM Alex Williamson <alex@shazbot.org> wrote:
 
-Acked-by: Yosry Ahmed <yosry@kernel.org>
+> > Sorry if I don't have the whole model in my head yet, but is exposing
+> > the restriction to the vfio user of the device sufficient to manage the
+> > liveupdate orchestration?  For example, a VFIO_DEVICE_INFO_CAP pushes
+> > the knowledge to QEMU... what does QEMU do with that knowledge?  Who
+> > imposes the policy decision to decide what support is sufficient?
+> 
+> Hm.. good questions. I don't think we want userspace inspecting bits
+> exposed by the kernel and trying to infer exactly what's being
+> preserved and whether it's "good enough" to use. And such a UAPI would
+> become tech debt once we finish development, I suspect.
+> 
+> A better approach would be to hide this support from userspace until
+> we decide it is ready for production use-cases.
+> 
+> To enable development and testing, we can add an opt-in mechanism
+
+Here is what I am trending towards sending in v3 as the opt-in mechanism:
+
+diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+index 1e82b44bda1a..770231554221 100644
+--- a/drivers/vfio/pci/Kconfig
++++ b/drivers/vfio/pci/Kconfig
+@@ -58,6 +58,27 @@ config VFIO_PCI_ZDEV_KVM
+ config VFIO_PCI_DMABUF
+        def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER
+
++config VFIO_PCI_LIVEUPDATE
++       bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
++       depends on LIVEUPDATE && VFIO_PCI
++       help
++         Support for preserving devices bound to vfio-pci across a Live
++         Update. The eventual goal is that preserved devices can run
++         uninterrupted during a Live Update, including DMA to preserved
++         memory buffers and P2P. However there are many steps still needed to
++         achieve this, including:
++
++          - Preservation of iommufd files
++          - Preservation of IOMMU driver state
++          - Preservation of PCI state (BAR resources, device state, ...)
++          - Preservation of vfio-pci driver state
++
++         This option should only be enabled by developers working on
++         implementing this support. Once enough support has landed in the
++         kernel, this option will no longer be marked EXPERIMENTAL.
++
++         If you don't know what to do here, say N.
++
+ source "drivers/vfio/pci/mlx5/Kconfig"
+
+ source "drivers/vfio/pci/hisilicon/Kconfig"
+
