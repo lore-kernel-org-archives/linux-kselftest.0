@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DDEE346E55;
-	Thu, 12 Mar 2026 19:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C052E3AB26E;
+	Thu, 12 Mar 2026 19:44:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773344598; cv=none; b=hgkUVYRlCCxDnSz1ivS3/DERR2xa14/N1pjtdjstgMRCnm1t8UNUbyd/bn26wlnplccBvmPacsmAhpnhbkthISBBMqw5xs1RvJFioPF9521mTx8eTMOIDx9n2ZwS51MG1TMiSUJ6T7sI6MWX7jsBI1RP+xZ1E47PbaxWIUPirjY=
+	t=1773344694; cv=none; b=SBKqyDjeuwMYKjlnnHqKJtPKkkFb1GNGq6tqviNnNdkTwZhMnbYEFeQJQrvXefCgc9SlVgxMhhfCTpqe0ZSRszibfIEKix5Psod+CFmrWCeny0LOfKT542sW+5L5fUB9VbMMXxXD7BYBgc+FocQQycVD13xxOfzK3nBGhbC7KF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773344598; c=relaxed/simple;
-	bh=1wNpJYeE1dWpshwdESWmB2GY2hIpas7logaSTVcI+gQ=;
+	s=arc-20240116; t=1773344694; c=relaxed/simple;
+	bh=OTVyLxUvfae+dMqceluPl0oSG2+r6KAk9NfYzk3yz0c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PYRYeJJPrkJ5zu0g3oq6VgMZE/Y05+7IJRtsxpMqdMg9eQNAENWArp9KhIiJPXvH5yheMjqGJ0MoW3Up6LpWj4qrxYE2YFoHW+Lg6rAgFoYUvDbCV5eNOC20bd/GWaR3go646LKsHkQnxmOxwax5pwF/XjKi6YZ55hBIW+1zPtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sIf3SM/c; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=IFoAkIJZBmy2Q9FCl0Pc+KfRBmJhJH/u6Vsh1ZZg7TWOX4G2/IyISEpIzdqHDDv/5DdBivRMIYxkf02CLSCJ7JX0LL7nqiJWNzWToQiEy46T7+ykD2Gk13BZKPakKUuexu820DUeU1C73VmIX9sU33FDnqus20NZEEoc9coQekU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mpEVpsoU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sIf3SM/c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 144FAC19425;
-	Thu, 12 Mar 2026 19:43:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mpEVpsoU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87EB0C4CEF7;
+	Thu, 12 Mar 2026 19:44:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773344598;
-	bh=1wNpJYeE1dWpshwdESWmB2GY2hIpas7logaSTVcI+gQ=;
+	s=k20201202; t=1773344694;
+	bh=OTVyLxUvfae+dMqceluPl0oSG2+r6KAk9NfYzk3yz0c=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sIf3SM/cSF4Eys53CHFttBllrEsLPwddPTKvDcu9JiLouK0OX0hZ4RkiuQZJLDkL3
-	 M54xIf5vSAfgWLRiUZYF0lShQvx7EdsznNcJzOGYJ8eN4EVmZK0JIxPSmeY/llVcxG
-	 T2y5h0U83ZqdtAfZ/w9Uj8UwjmYZ8KL+TuREIABbtAOIuGabIPBZlMfpFrDJ7RKXO6
-	 lKQsD1faOACUQshUGZ5r1H9tGi9Gbjb9Gkp+e/D2c3Nn8aKh++FK91r4WsrrmyvuBJ
-	 /y4VnNqfFDUb7NWvhu9ChkLkZlfFFufi/0uzsRjtQ3mpKjPL9Rocmtx5VZWtsX52xd
-	 yLsZfZ4bNaHdg==
-Message-ID: <17254a02-8155-4857-92de-51b9724d4f5e@kernel.org>
-Date: Thu, 12 Mar 2026 20:43:09 +0100
+	b=mpEVpsoUORd9Ee2TTZ3hNrej9eISTEtQ7YBcHQmQPpqj6nOBRFD1h1mof1H8c9u48
+	 b8iOTQ5kfSPt7O0H1YDgzHSS00IqB+08xctccuEyMEJKEuBf0Y7VTS/0JJ0G2+GF44
+	 QtLTwAOW0V+11aY9tzA66NmW6ioL00dxauahiMNDRzg4NI8Qcn1D0DsG067PVumxDP
+	 rx538igm+rfMNgCahXju4wTr4zyseGrNiiuB6oFr3hylMJSQkcYLQ3Sg+dFYZhh66h
+	 KLY5urkbl7ro08TFSA37m2CE6L0b3Cg3rIkDo3GjW+oTyu47oIKaK3psCLXzbBN+u6
+	 iLFtBgeD3247Q==
+Message-ID: <cb35f32d-ee65-4865-8664-1c9d7547bd5a@kernel.org>
+Date: Thu, 12 Mar 2026 20:44:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH 2/4] selftests/mm: soft-dirty: skip two tests when
- thp is not available
+Subject: Re: [RESEND PATCH 3/4] selftests/mm: split_huge_page_test: skip the
+ test when thp is not available
 To: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org,
  shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -46,7 +46,7 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
  Li Wang <liwang@redhat.com>
 References: <20260312114027.634559-1-chuhu@redhat.com>
- <20260312114027.634559-3-chuhu@redhat.com>
+ <20260312114027.634559-4-chuhu@redhat.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -93,89 +93,18 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260312114027.634559-3-chuhu@redhat.com>
+In-Reply-To: <20260312114027.634559-4-chuhu@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/12/26 12:40, Chunyu Hu wrote:
-> The test_hugepage test contain two sub tests. If just reporting one skip
-> when thp not available, there will be error in the log because the test
-> count don't match the test plan. Change to skip two tests by running the
-> ksft_test_result_skip twice in this case.
-> 
-> Without the fix (run test on thp disabled kernel):
->   ./run_vmtests.sh -t soft_dirty
->   # --------------------
->   # running ./soft-dirty
->   # --------------------
->   # TAP version 13
->   # 1..19
->   # ok 1 Test test_simple
->   # ok 2 Test test_vma_reuse dirty bit of allocated page
->   # ok 3 Test test_vma_reuse dirty bit of reused address page
->   # ok 4 # SKIP Transparent Hugepages not available
->   # ok 5 Test test_mprotect-anon dirty bit of new written page
->   # ok 6 Test test_mprotect-anon soft-dirty clear after clear_refs
->   # ok 7 Test test_mprotect-anon soft-dirty clear after marking RO
->   # ok 8 Test test_mprotect-anon soft-dirty clear after marking RW
->   # ok 9 Test test_mprotect-anon soft-dirty after rewritten
->   # ok 10 Test test_mprotect-file dirty bit of new written page
->   # ok 11 Test test_mprotect-file soft-dirty clear after clear_refs
->   # ok 12 Test test_mprotect-file soft-dirty clear after marking RO
->   # ok 13 Test test_mprotect-file soft-dirty clear after marking RW
->   # ok 14 Test test_mprotect-file soft-dirty after rewritten
->   # ok 15 Test test_merge-anon soft-dirty after remap merge 1st pg
->   # ok 16 Test test_merge-anon soft-dirty after remap merge 2nd pg
->   # ok 17 Test test_merge-anon soft-dirty after mprotect merge 1st pg
->   # ok 18 Test test_merge-anon soft-dirty after mprotect merge 2nd pg
->   # # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
->   # # Planned tests != run tests (19 != 18)
->   # # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:1 error:0
->   # [FAIL]
->   not ok 52 soft-dirty # exit=1
-> 
-> With the fix (run test on thp disabled kernel):
->   ./run_vmtests.sh -t soft_dirty
->   # --------------------
->   # running ./soft-dirty
->   # TAP version 13
->   # --------------------
->   # running ./soft-dirty
->   # --------------------
->   # TAP version 13
->   # 1..19
->   # ok 1 Test test_simple
->   # ok 2 Test test_vma_reuse dirty bit of allocated page
->   # ok 3 Test test_vma_reuse dirty bit of reused address page
->   # # Transparent Hugepages not available
->   # ok 4 # SKIP Test test_hugepage huge page allocation
->   # ok 5 # SKIP Test test_hugepage huge page dirty bit
->   # ok 6 Test test_mprotect-anon dirty bit of new written page
->   # ok 7 Test test_mprotect-anon soft-dirty clear after clear_refs
->   # ok 8 Test test_mprotect-anon soft-dirty clear after marking RO
->   # ok 9 Test test_mprotect-anon soft-dirty clear after marking RW
->   # ok 10 Test test_mprotect-anon soft-dirty after rewritten
->   # ok 11 Test test_mprotect-file dirty bit of new written page
->   # ok 12 Test test_mprotect-file soft-dirty clear after clear_refs
->   # ok 13 Test test_mprotect-file soft-dirty clear after marking RO
->   # ok 14 Test test_mprotect-file soft-dirty clear after marking RW
->   # ok 15 Test test_mprotect-file soft-dirty after rewritten
->   # ok 16 Test test_merge-anon soft-dirty after remap merge 1st pg
->   # ok 17 Test test_merge-anon soft-dirty after remap merge 2nd pg
->   # ok 18 Test test_merge-anon soft-dirty after mprotect merge 1st pg
->   # ok 19 Test test_merge-anon soft-dirty after mprotect merge 2nd pg
->   # # 2 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
->   # # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:2 error:0
->   # [PASS]
->   ok 1 soft-dirty
->   hwpoison_inject
->   # SUMMARY: PASS=1 SKIP=0 FAIL=0
->   1..1
-> CC: Li Wang <liwang@redhat.com>
-> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
-> ---
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>  
+> +	if (!thp_is_enabled()) {
+> +		ksft_exit_skip("Transparent Hugepages not available\n");
+> +	}
+> +
+
+No need for the {}
 
 -- 
 Cheers,
