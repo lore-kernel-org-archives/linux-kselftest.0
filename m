@@ -1,37 +1,40 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E0F35836C;
-	Thu, 12 Mar 2026 13:46:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C023537E7
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 13:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773323216; cv=none; b=K8wRyT5ei1PLGYCZBwTvdKZHCTjHhri4f7b99h2ZVq86htNhvZ94EoC9I2928iNc7ntFYb3LjYzYGmDS2WXPhna4ZrARdGkvQUOyVcHCD8ZdWvsJ6MQnzcsA55ji6DoosxaUx20o+G5Q9z59lygK2b7BO38E0U9vVjcF3lDr3qM=
+	t=1773323508; cv=none; b=Oz66VrR3OEd54O7cd2u1YJhfFMw8ZTIVQE+EZLwfoBqa7XG2Ai/n1pyvVs9Gp42PCSKFU1DQAcHyADMNljIM4cccasT//9SOxso2hMxVeYCyQ7qS4M2HMycfbcJA3p/dAZ1PvMd4iwoms/4KJjXWeyRpUNmcNReHjpinwF6go7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773323216; c=relaxed/simple;
-	bh=NK1kpQElP7tNVLZej9yCF2N25n97vfLQ1BBFkHBs9D0=;
+	s=arc-20240116; t=1773323508; c=relaxed/simple;
+	bh=9ACImsV3PaE3MjN2Tt3sT85C9g5/Cskv8/oIpybHlhQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C1ekyCr1mhVtT22qiP226Hn89spFj2TOFRWtaV4dvYKlVMmyvX0T5T3obvz3K+zNyatu+uQweJYwkS6gkLALHpvI8fGCw9UpFsioMmg866Xl/z1kFJ67gJMjpXs/DZhdfvcbHdFsxGXl+aq9QbCqA/F0tzeeLSN2G1AKrwfKIX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=eQ3z5RCw; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="eQ3z5RCw"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=X/6xw+BeY313gcMqR/pFQo1XTTFv4aKjsic0QBnZdo0=; b=eQ3z5RCwWKU5AfPBqS5uheIaUJ
-	3DuZU7lGyCHRJFIpXZ2TwJp4RvUSn4rGWk5clcHIrX+gibC6UCgkLqBMcCluNv2nA6CByqYPP2Fyw
-	mWyoBldBX4pt+KOicMYEIxBY/On1o1A1SRriOOTS918g9cjrno5KjXa7j5XR3knpUo6g=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1w0gN6-00BKQL-HQ; Thu, 12 Mar 2026 14:46:40 +0100
-Date: Thu, 12 Mar 2026 14:46:40 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=elJ0UmHchwcBg1ZcVQdyTr1lvgij0558gFYdcZs5TtOcfP50Yz8n+kdfVGMJs2OTLD8fXfQNwnLf+MXDFHC0+1dpbt/ecYsshcgrwWiCkPuy9qOGy/IJwFbtHJ5v5GYVVzI43Jmyk52ej6nvzqGf5hH0RKoEVf1lG70uFaPQ91Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w0gRP-0003i6-Hh; Thu, 12 Mar 2026 14:51:07 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w0gRL-0051yO-35;
+	Thu, 12 Mar 2026 14:51:05 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w0gRN-0000000FJkc-0htF;
+	Thu, 12 Mar 2026 14:51:05 +0100
+Date: Thu, 12 Mar 2026 14:51:05 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Jakub Kicinski <kuba@kernel.org>,
 	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
 	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	Donald Hunter <donald.hunter@gmail.com>,
@@ -44,7 +47,6 @@ Cc: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
 	Kory Maincent <kory.maincent@bootlin.com>,
 	Leon Romanovsky <leon@kernel.org>,
 	Michael Chan <michael.chan@broadcom.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
 	Pavan Chebbi <pavan.chebbi@broadcom.com>,
 	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
 	Russell King <linux@armlinux.org.uk>,
@@ -54,39 +56,75 @@ Cc: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
 	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
 Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
  definitions
-Message-ID: <171da8e9-fb09-4cfc-a29e-aefbdc8c3ce9@lunn.ch>
+Message-ID: <abLEyaV-ux5XkAz1@pengutronix.de>
 References: <20260310104743.907818-1-bjorn@kernel.org>
  <20260310104743.907818-3-bjorn@kernel.org>
  <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
- <87tsum3b1o.fsf@all.your.base.are.belong.to.us>
- <ed30934a-4931-40e5-a659-6fc8d12741b5@lunn.ch>
- <20260311194716.600704aa@kernel.org>
+ <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch>
+ <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
+ <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch>
+ <20260311195052.1202174f@kernel.org>
+ <abJJY8whzSOB8O-X@pengutronix.de>
+ <7c45ebf6-0cb2-4a4c-ac12-f4f9bb59c908@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260311194716.600704aa@kernel.org>
+In-Reply-To: <7c45ebf6-0cb2-4a4c-ac12-f4f9bb59c908@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kselftest@vger.kernel.org
 
-> Which reminds me -- I was suggesting that we add an order / id to the
-> stages, not just name. Because AFAIU being able to request the loopback
-> "very last loopback point of MAC" or "first loopback point of PHY"
+On Thu, Mar 12, 2026 at 02:34:40PM +0100, Andrew Lunn wrote:
+> > As for me, it is problematic to help the user to understand the datapath
+> > depth on a switch. For example:
+> 
+> Do you mean Ethernet switch? Or MII switch.
+> 
+> > 
+> > CPU -- xMII --- MAC1 [loop] --- fabric --- MAC2 [loop] --- xMII -- PHY
+> >                                     \----- MACx [loop] ---
+> 
+> In DSA, MAC1 is the CPU port of the switch. It is not represented by a
+> netif. Since there is no netif, you cannot use ethtool on it. So it is
+> impossible to apply loopback here.
+> 
+> This is one of the oddities of DSA. The CPU port and the conduit
+> interface on the host are just plumbing to make the setup work. In
+> terms of networking, they are not important. But sometimes you need to
+> get into the plumbing to find out why it is blocked up, statistics are
+> useful, and maybe loopback as well. We have discussed it a few times
+> that MAC1 should have a netif, but the conclusion is that developers
+> have a hard enough time with the conduit interface, adding yet another
+> oddball interface with no real purpose other than diagnostics is gone
+> to make the confusion even worse.
+> 
+> So i don't think depth is relevant here.
+ 
+I have some projects where we need to configure the egress queue from
+the switch to the CPU MAC. Currently my idea is to represent them as
+optional HW offloading helpers for the host MAC. For example, this
+pipe is already represented on the linux side as one interface:
+eth0 - [ SoC MAC0 --- xMII --- Switch MAC1 ]
 
-How do you define where the MAC ends?
+MAC0 and MAC1 counters are merged to one output.
 
-I suspect some vendors will include the PCS and the PMA, because the
-MAC ends at the MII pins on their SoC. Other vendors are going to say
-the MAC ends at the interface to the PCS, especially those who have
-licensed the PCS, and are using the shared Linux driver for the
-PCS. And the PMA might again be a shared implementation, since it is
-also used for USB, PCIe and SATA.
+So, the egress queue configuration of the Switch MAC1 would be an
+ingress queue configuration of the MAC0 interface.
+The same about remote loopback on MAC1, are additional local loopbacks
+of MAC0. If we do it with counters, why not with everything else? 
 
-If Linux is driving the hardware, using phylink, phylib, PCS drivers
-and generic PHY, we are very likely to have a uniform definition of
-all these parts. Are we happy firmware devices will have a much
-fuzzier, different interpretation, conglomerating it all together?
-
-	Andrew
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
