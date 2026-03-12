@@ -1,93 +1,92 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5EE3A7592
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 13:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E0F35836C;
+	Thu, 12 Mar 2026 13:46:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773322771; cv=none; b=CSMbZ+BPvOk63EguyZHVO8TKJWnHD6JIP7ALI2WopyQcEv77NwD6fE+TdQEO4T8PJGfdX9TSFXkxMDite7LjD2vr8GD7l7Gxdp96LD+VuQF6ed71x5+yzmah+XnyNiRrkb8jVfahIX3rf81lFhynIFtHb8IG6oio4cSnvZGzlCQ=
+	t=1773323216; cv=none; b=K8wRyT5ei1PLGYCZBwTvdKZHCTjHhri4f7b99h2ZVq86htNhvZ94EoC9I2928iNc7ntFYb3LjYzYGmDS2WXPhna4ZrARdGkvQUOyVcHCD8ZdWvsJ6MQnzcsA55ji6DoosxaUx20o+G5Q9z59lygK2b7BO38E0U9vVjcF3lDr3qM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773322771; c=relaxed/simple;
-	bh=uCgy/4a3O45IKbt53bkbdtju6nVoH67NjrRZwRGOQKA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HlWtBq7r+IT6XfIIzzbas2jjPFeTuAq16elvDCNpoABDnUM2WOgGwlmLuXY/hbtIlaRh/iHPvbInZYqGLUv4zjTNrekYUKSWku7Idkf2AbbUy1ODrVwKCCMej5vE2bOZU/crIo77Q4Bv1L8P2GeaNy6iWDNMZUvYGqgLDKkLT9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IkOjbUcC; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773323216; c=relaxed/simple;
+	bh=NK1kpQElP7tNVLZej9yCF2N25n97vfLQ1BBFkHBs9D0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C1ekyCr1mhVtT22qiP226Hn89spFj2TOFRWtaV4dvYKlVMmyvX0T5T3obvz3K+zNyatu+uQweJYwkS6gkLALHpvI8fGCw9UpFsioMmg866Xl/z1kFJ67gJMjpXs/DZhdfvcbHdFsxGXl+aq9QbCqA/F0tzeeLSN2G1AKrwfKIX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=eQ3z5RCw; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IkOjbUcC"
-Message-ID: <14e9e301-38da-4800-a1a6-9913c8d3cbf9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773322757;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rMYxCY6UeSuDYqBhMw/GjMm6u1qYKBPdLAkA3zqj/aY=;
-	b=IkOjbUcC2VEP4LSLMMoZOUZeVQuS5QXzTMHpO6lSR8shlxoVxt9sz6+li1zVGw22ifVZKG
-	2hwPY0AvWefeYF1lFoDXA02IOu7sT2HB0bD8QruPmBC9AlSoGRUl9MZlc2+0TT5NNEAZwq
-	rPxTrFnaNGpH51JUlmZIGsIc4se4H/o=
-Date: Thu, 12 Mar 2026 21:39:03 +0800
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="eQ3z5RCw"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=X/6xw+BeY313gcMqR/pFQo1XTTFv4aKjsic0QBnZdo0=; b=eQ3z5RCwWKU5AfPBqS5uheIaUJ
+	3DuZU7lGyCHRJFIpXZ2TwJp4RvUSn4rGWk5clcHIrX+gibC6UCgkLqBMcCluNv2nA6CByqYPP2Fyw
+	mWyoBldBX4pt+KOicMYEIxBY/On1o1A1SRriOOTS918g9cjrno5KjXa7j5XR3knpUo6g=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1w0gN6-00BKQL-HQ; Thu, 12 Mar 2026 14:46:40 +0100
+Date: Thu, 12 Mar 2026 14:46:40 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Naveen Mamindlapalli <naveenm@marvell.com>,
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+	Danielle Ratson <danieller@nvidia.com>,
+	Hariprasad Kelam <hkelam@marvell.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
+ definitions
+Message-ID: <171da8e9-fb09-4cfc-a29e-aefbdc8c3ce9@lunn.ch>
+References: <20260310104743.907818-1-bjorn@kernel.org>
+ <20260310104743.907818-3-bjorn@kernel.org>
+ <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
+ <87tsum3b1o.fsf@all.your.base.are.belong.to.us>
+ <ed30934a-4931-40e5-a659-6fc8d12741b5@lunn.ch>
+ <20260311194716.600704aa@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>,
- Menglong Dong <menglong8.dong@gmail.com>,
- Puranjay Mohan <puranjay@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260303150639.85007-1-leon.hwang@linux.dev>
- <20260303150639.85007-4-leon.hwang@linux.dev> <abHwii5stH93Vz5E@krava>
- <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev> <abKZfhWs9Gojuvip@krava>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <abKZfhWs9Gojuvip@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311194716.600704aa@kernel.org>
 
-On 2026/3/12 18:46, Jiri Olsa wrote:
-> On Thu, Mar 12, 2026 at 10:24:24AM +0800, Leon Hwang wrote:
->> On 12/3/26 06:45, Jiri Olsa wrote:
-[...]
->>
->> Actually, without this patch, when "bpf_fentry_test1" runs, the arg "a"
->> will be updated as 0. Thus, bpf_prog_test_run_tracing() returns -EFAULT
->> instead of 0.
->>
->> bpf_prog_test_run_tracing()
->> |-->bpf_fentry_test1()
->>     |-->dummy_kprobe()
->>         |-->kprobe() /* via tail call */
->>             |-->regs->di = 0;
->>     return 1; /* instead of 2 */
->> return -EFAULT;
->>
->> Yep, the commit log is not clear to describe this abuse problem. Will
->> update it.
-> 
-> ah right :-\ ok, I think we need to do the suggested one way check and
-> that should prevent kprobes having writeable ctx
-> 
+> Which reminds me -- I was suggesting that we add an order / id to the
+> stages, not just name. Because AFAIU being able to request the loopback
+> "very last loopback point of MAC" or "first loopback point of PHY"
 
-Yeah, will apply strict both-ways check. See
-https://lore.kernel.org/bpf/8a3c7f14-b3d1-4208-acbd-76e5db6c5320@linux.dev/.
+How do you define where the MAC ends?
 
-Thanks,
-Leon
+I suspect some vendors will include the PCS and the PMA, because the
+MAC ends at the MII pins on their SoC. Other vendors are going to say
+the MAC ends at the interface to the PCS, especially those who have
+licensed the PCS, and are using the shared Linux driver for the
+PCS. And the PMA might again be a shared implementation, since it is
+also used for USB, PCIe and SATA.
 
+If Linux is driving the hardware, using phylink, phylib, PCS drivers
+and generic PHY, we are very likely to have a uniform definition of
+all these parts. Are we happy firmware devices will have a much
+fuzzier, different interpretation, conglomerating it all together?
+
+	Andrew
