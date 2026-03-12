@@ -1,90 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C519328243;
-	Thu, 12 Mar 2026 14:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5363C553A;
+	Thu, 12 Mar 2026 14:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773326203; cv=none; b=KbrEYSWK28+//rOJF9NXx/8qlEt3e3v/009ZZceUTrBSOFme2ku6FelFPYDjbsAAhv+QD2kkdZmYFkaDRB6uxw8qVcyfOodsuMcVxDpn/aYbICF86iZNqZz2RdKAhIGaf1fzdr2UKV7XYV1NJn1ikNBYO8CMPfxNZxvMkeof6BU=
+	t=1773326528; cv=none; b=OMLPXEFKoIDS15q1LnKESoXb3LVkqRIyRlXlWDE0Y6QAxAG0gzcPUvG6vXOV8GwREMLGpBMjrApQHYEo5nJYw1yzQ8lqoQeKdh/DHpIudzrWl3sCDkQ67cYLB6UmPjE9RVQK4aMPkND9aZMmGUZ4wS6+BIjyK3e0KrvA4b6s6+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773326203; c=relaxed/simple;
-	bh=uIol7kReUwc484w6eaVeHC9JSYYQ/xkuA7eqjzZdjWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pDPawfswkXfikqxhzcYO2LxWi1DpWmMp1ztChR6+SWmP5/9KXpp/nhs/cPA/nzB000PaWAEwrLT6kEvf7oXVVL9cRIBafGU8klmwKS2m9fjl4/Nb76/W9JO8UtLGji3MV1Q6o8lS5WEIVV9HCXuD58vA6smkNVsgTxD3xhXvI0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOnWULja; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOnWULja"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAC3C4CEF7;
-	Thu, 12 Mar 2026 14:36:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773326202;
-	bh=uIol7kReUwc484w6eaVeHC9JSYYQ/xkuA7eqjzZdjWY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fOnWULjaWfSeAL+ujb69MF5efDFV+BdDdjL+KJ6LPn1/sq6yWSyEvG19ajrOKCXTB
-	 B9C22iW21TAf4Kfv+kkOoWZUbUncIdI6cHV4KkNu1MbG/FKsk0kXSLq4E20/l5bsy8
-	 ltDEl8Zzvs1GWdKYysz6bIX0RXPX4cyvhFPd6xDeB8sCYpyYIt28Ml0ODdbKkxaM6I
-	 fmm3xAfvl4FBFjGgoDqXGq4Hp+FOCn0Kq4CeL5iE3cOl3VR5towpDhpuV6pKZpfS6k
-	 AX+qozqXUO1sXP2+3opJNOITzdgH1ApO40Xl07WPh9VEzDpIFVqRdWJvKssD5p1e6a
-	 baA2jFgDxmXmg==
-Date: Thu, 12 Mar 2026 07:36:41 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Jiri Pirko <jiri@resnulli.us>
-Cc: Or Har-Toov <ohartoov@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Andrew
- Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Mark
- Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, Dragos
- Tatulea <dtatulea@nvidia.com>, Shay Drory <shayd@nvidia.com>, Jiri Pirko
- <jiri@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>
-Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource
- support
-Message-ID: <20260312073641.027d86e7@kernel.org>
-In-Reply-To: <fw6blzybx7hmvxvqoiy7civmzbf4yuhn2xzdna4apypkuwvck7@xh7iwjt27vi6>
-References: <np44uzfn6jea56uht4yq4te5clapgj7pk6ygyvkl22wxumwnvt@nrpvzjqzxenq>
-	<20260305063729.7e40775d@kernel.org>
-	<ni23r4jiwgc6zjjsubtl4ujjgxzwpxrylumofdwxgozfnieynm@zirlbneaz6p2>
-	<20260306120301.0ebe1ab2@kernel.org>
-	<74dcd7c5-8a2b-49a7-a23c-174d17a61955@nvidia.com>
-	<20260309133341.7e08b35d@kernel.org>
-	<5de5103e-e2e4-4b72-9c3c-22847728fbb8@nvidia.com>
-	<20260311145126.7dcca532@kernel.org>
-	<go5wr5qa7wxe7i4kkcbmecomshpkesr26alq4qmlbpjr72hxgt@mpwq6eufylpn>
-	<20260312071916.6b759c3f@kernel.org>
-	<fw6blzybx7hmvxvqoiy7civmzbf4yuhn2xzdna4apypkuwvck7@xh7iwjt27vi6>
+	s=arc-20240116; t=1773326528; c=relaxed/simple;
+	bh=sNP0bK+hPdXgYqMGGdNC15eIC/I9ohCbielxEYspqow=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sfoLtmOtNkb7YYi23ZaY+DQUBqXTzsSeMVa5TYigmTfHkhQVIM6IQZ41vU2VR9hZLewDyEnM85duWJ1mpu/vMVORlAVIjpa2Cno4wmF5R5ny+DsCfE2BS9XMa2oBxuaFICeXMZAFEKOqw5KQZVFK0n0Vap7FahMecF7yslTZtSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 587F2165C;
+	Thu, 12 Mar 2026 07:41:55 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6134B3F7BD;
+	Thu, 12 Mar 2026 07:41:59 -0700 (PDT)
+Date: Thu, 12 Mar 2026 14:41:57 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
+	oupton@kernel.org, miko.lenczewski@arm.com, kevin.brodsky@arm.com,
+	broonie@kernel.org, ardb@kernel.org, suzuki.poulose@arm.com,
+	lpieralisi@kernel.org, joey.gouly@arm.com, yuzenghui@huawei.com
+Subject: Re: [PATCH v15 4/8] arm64: futex: refactor futex atomic operation
+Message-ID: <abLQtbbYidcmPg-7@arm.com>
+References: <20260227151705.1275328-1-yeoreum.yun@arm.com>
+ <20260227151705.1275328-5-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227151705.1275328-5-yeoreum.yun@arm.com>
 
-On Thu, 12 Mar 2026 15:29:53 +0100 Jiri Pirko wrote:
-> >> I don't see the benefit of exposing the scope to the user to be honest.
-> >> I mean, dump would show all, dump with "dev" handle would be used as a
-> >> selector to dump only things related to "dev". What is the use case of
-> >> this "scope" granularity?  
-> >
-> >If we follow the logic that dump should show the user relevant
-> >resources, no matter which sub-object they are attached to -
-> >having a dev specified should only filter the objects to match
-> >the dev, including resources which are on ports of that dev.
-> >
-> >IDK if there's a strong use case for allowing the user to set
-> >scope on CLI but also - I don't see why not?  
+On Fri, Feb 27, 2026 at 03:17:01PM +0000, Yeoreum Yun wrote:
+> Refactor futex atomic operations using ll/sc method with
+> clearing PSTATE.PAN to prepare to apply FEAT_LSUI on them.
 > 
-> At least some small sense of consistency with other dumps? Health
-> reporter and region does not have scope and output mixture of dev-based
-> and port-based objects. Why to confuse user?
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> ---
+>  arch/arm64/include/asm/futex.h | 137 +++++++++++++++++++++------------
+>  1 file changed, 87 insertions(+), 50 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/futex.h b/arch/arm64/include/asm/futex.h
+> index bc06691d2062..9a0efed50743 100644
+> --- a/arch/arm64/include/asm/futex.h
+> +++ b/arch/arm64/include/asm/futex.h
+> @@ -7,21 +7,25 @@
+>  
+>  #include <linux/futex.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/stringify.h>
 
-That's a judgment call - either we confuse users but two commands
-behaving differently, or we confuse users with devlink $thing not
-dumping all instances of the $thing.
+Nit: what needs stringify.h in this file? It get removed (or rather
+moved to lsui.h) in the next patch.
 
-Especially that drivers often retroactively move $things from device
-scope to port scope :(
+-- 
+Catalin
