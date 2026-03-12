@@ -1,124 +1,93 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C2B1C8634;
-	Thu, 12 Mar 2026 13:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5EE3A7592
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 13:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773322503; cv=none; b=tMZqZezfwrhneWRMNZn+ap84BjR1o98E5taJSvhtFnXY/tImrle5IQEyp9mdCSLDXJPdF0HuM6+HtPm781YLvWowUK2FiLMBOlhxHC1PqpsT95MlBFU5FXg5H9fNc0fsH86DXoAh+V8iTyWcfdb6slrIECHkz4gxg8qVl3aiu8o=
+	t=1773322771; cv=none; b=CSMbZ+BPvOk63EguyZHVO8TKJWnHD6JIP7ALI2WopyQcEv77NwD6fE+TdQEO4T8PJGfdX9TSFXkxMDite7LjD2vr8GD7l7Gxdp96LD+VuQF6ed71x5+yzmah+XnyNiRrkb8jVfahIX3rf81lFhynIFtHb8IG6oio4cSnvZGzlCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773322503; c=relaxed/simple;
-	bh=abUO5NxF+XyImsBCdfcJFCjnpcuM6MiArBEb0D0izAI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fUbLrs7/lIFPvQmObH3kEZQHVFnSYxI/tIy9EZO3yyAp09JORDFEcUlyv06WADVRfXY4bSzQ4fqDAaOSDkJXoxk50bPx3B4p/EfbsrltAXBG/qmhM8/xWrhobDlCyFoiJFLQJPZko/AMg8ksoH5VU/z1Q8SyU2qOOkTc66082+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=3jPm94Rg; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1773322771; c=relaxed/simple;
+	bh=uCgy/4a3O45IKbt53bkbdtju6nVoH67NjrRZwRGOQKA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HlWtBq7r+IT6XfIIzzbas2jjPFeTuAq16elvDCNpoABDnUM2WOgGwlmLuXY/hbtIlaRh/iHPvbInZYqGLUv4zjTNrekYUKSWku7Idkf2AbbUy1ODrVwKCCMej5vE2bOZU/crIo77Q4Bv1L8P2GeaNy6iWDNMZUvYGqgLDKkLT9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IkOjbUcC; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="3jPm94Rg"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=WeaIxKlII6s69sFLceD62Bw+/hchaQ0a2WTMKr2AUsU=; b=3jPm94Rg6Q6mQijMM2I9JcR1hR
-	Is3f1RVkc8PlP9kB2MAORWFxAV8iqvJQ7kb+nzfgBVgyJPrD+W4Tm8dzzja/7pWS/J8U1+mP78SOy
-	s2GtJP/i2RQAkOQqPZGezcfHf0jxn1HVJSvTY4Fcw6Du0mWqfa49LIEVxM23XDzEbP28=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1w0gBU-00BKJp-8o; Thu, 12 Mar 2026 14:34:40 +0100
-Date: Thu, 12 Mar 2026 14:34:40 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Naveen Mamindlapalli <naveenm@marvell.com>,
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Hariprasad Kelam <hkelam@marvell.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
- definitions
-Message-ID: <7c45ebf6-0cb2-4a4c-ac12-f4f9bb59c908@lunn.ch>
-References: <20260310104743.907818-1-bjorn@kernel.org>
- <20260310104743.907818-3-bjorn@kernel.org>
- <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
- <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch>
- <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
- <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch>
- <20260311195052.1202174f@kernel.org>
- <abJJY8whzSOB8O-X@pengutronix.de>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IkOjbUcC"
+Message-ID: <14e9e301-38da-4800-a1a6-9913c8d3cbf9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773322757;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rMYxCY6UeSuDYqBhMw/GjMm6u1qYKBPdLAkA3zqj/aY=;
+	b=IkOjbUcC2VEP4LSLMMoZOUZeVQuS5QXzTMHpO6lSR8shlxoVxt9sz6+li1zVGw22ifVZKG
+	2hwPY0AvWefeYF1lFoDXA02IOu7sT2HB0bD8QruPmBC9AlSoGRUl9MZlc2+0TT5NNEAZwq
+	rPxTrFnaNGpH51JUlmZIGsIc4se4H/o=
+Date: Thu, 12 Mar 2026 21:39:03 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abJJY8whzSOB8O-X@pengutronix.de>
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
+ tail-calling kprobe_write_ctx progs
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>,
+ Menglong Dong <menglong8.dong@gmail.com>,
+ Puranjay Mohan <puranjay@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260303150639.85007-1-leon.hwang@linux.dev>
+ <20260303150639.85007-4-leon.hwang@linux.dev> <abHwii5stH93Vz5E@krava>
+ <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev> <abKZfhWs9Gojuvip@krava>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <abKZfhWs9Gojuvip@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> As for me, it is problematic to help the user to understand the datapath
-> depth on a switch. For example:
-
-Do you mean Ethernet switch? Or MII switch.
-
+On 2026/3/12 18:46, Jiri Olsa wrote:
+> On Thu, Mar 12, 2026 at 10:24:24AM +0800, Leon Hwang wrote:
+>> On 12/3/26 06:45, Jiri Olsa wrote:
+[...]
+>>
+>> Actually, without this patch, when "bpf_fentry_test1" runs, the arg "a"
+>> will be updated as 0. Thus, bpf_prog_test_run_tracing() returns -EFAULT
+>> instead of 0.
+>>
+>> bpf_prog_test_run_tracing()
+>> |-->bpf_fentry_test1()
+>>     |-->dummy_kprobe()
+>>         |-->kprobe() /* via tail call */
+>>             |-->regs->di = 0;
+>>     return 1; /* instead of 2 */
+>> return -EFAULT;
+>>
+>> Yep, the commit log is not clear to describe this abuse problem. Will
+>> update it.
 > 
-> CPU -- xMII --- MAC1 [loop] --- fabric --- MAC2 [loop] --- xMII -- PHY
->                                     \----- MACx [loop] ---
+> ah right :-\ ok, I think we need to do the suggested one way check and
+> that should prevent kprobes having writeable ctx
+> 
 
-In DSA, MAC1 is the CPU port of the switch. It is not represented by a
-netif. Since there is no netif, you cannot use ethtool on it. So it is
-impossible to apply loopback here.
+Yeah, will apply strict both-ways check. See
+https://lore.kernel.org/bpf/8a3c7f14-b3d1-4208-acbd-76e5db6c5320@linux.dev/.
 
-This is one of the oddities of DSA. The CPU port and the conduit
-interface on the host are just plumbing to make the setup work. In
-terms of networking, they are not important. But sometimes you need to
-get into the plumbing to find out why it is blocked up, statistics are
-useful, and maybe loopback as well. We have discussed it a few times
-that MAC1 should have a netif, but the conclusion is that developers
-have a hard enough time with the conduit interface, adding yet another
-oddball interface with no real purpose other than diagnostics is gone
-to make the confusion even worse.
+Thanks,
+Leon
 
-So i don't think depth is relevant here.
-
-> ... each port has two xMII loop configurations: towards the xMII or towards
-> the fabric. From a driver perspective, a loop towards the xMII is
-> "remote." However, from a system perspective, a "remote" loop on MAC1 is
-> a local loop at depth=0, whereas a "local" loop on MAC2 is a local loop
-> at depth=1.
-
-If you think about DSA and the Linux representation, the switch fabric
-is not seen at all. All you have are user ports, those going to the
-outside world. They act the same as interfaces directly connected to
-the SoC. So "remote" and "local" must have the same meaning as an
-interface directly connected to the host. And this is true for
-switchdev in general, DSA is not special in any way.
-
-> One more issue is the test data generator location. The data generator
-> is not always the CPU. We have HW generators located in components like
-> PHYs or we may use external source (remote loopback).
-
-At the moment, we don't have a Linux model for such generators. There
-is interest in them, but nobody has actually stepped up and proposed
-anything. I do see there is an intersect, we need to be able to
-represent them in the topology, and know which way they are pointing,
-but i don't think they have a direct influence on loopback.
-
-	Andrew
