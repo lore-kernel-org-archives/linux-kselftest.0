@@ -1,170 +1,168 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F7B38B133
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 08:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F4138AC94;
+	Thu, 12 Mar 2026 08:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773305208; cv=none; b=bcsbohbumbzEwDfCVERoNWVkHBpzgS3YjF8FgRxsueZQiuLmbIn9pD7LBJtEbpLTn57s7SHCwxtriCZdb+P+LIgBAGxXCXH/P1PGDsx10yKVCOlNVlJPV+WIr/wqCCRbf784r1IjQexgSrzZvsAx4WmJeH5qahBBqdDVq6w1z+I=
+	t=1773305734; cv=none; b=nj2XFwBvR6s9OB+oSFKVxY8l8OaaXaAoNWP32rk/hsmldCDRJOqQbZisQQV7eRw9uabFkrRq7+87hbV3jQRXZ7kNqpFEfs+CVZn1LZLoNWjEWBFgxhfcLaSY5puTEFSZ2wKFZMChe1PaDOGZI6Td8eaRoMG2Q3o3DageOEo0ln0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773305208; c=relaxed/simple;
-	bh=/mZilDisdviIicDgh987PANEInYCM0ltIoHh+VCYsYw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kIgGiZT87HiqcqELI0uU09Uwt2pr6vwLPrprd1JduQ3OqiiU6vbu7Uk/sDh5T8AQj7fhZTe2BZV55ybxEDagifXFUuCkJbh2SNzeRAXXOyGP4A7ojY+cY5IkGLGpAaGRMc752ODABo5AuZI5iNar/KZTR+JlfYHyjXgy5JXskMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w0bgR-0000cN-2D; Thu, 12 Mar 2026 09:46:19 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w0bgN-004zeL-0D;
-	Thu, 12 Mar 2026 09:46:16 +0100
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w0bgO-0000000FFGc-19Ts;
-	Thu, 12 Mar 2026 09:46:16 +0100
-Date: Thu, 12 Mar 2026 09:46:16 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Naveen Mamindlapalli <naveenm@marvell.com>,
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Hariprasad Kelam <hkelam@marvell.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
- definitions
-Message-ID: <abJ9WAOrOn5qFmwp@pengutronix.de>
-References: <20260310104743.907818-1-bjorn@kernel.org>
- <20260310104743.907818-3-bjorn@kernel.org>
- <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
- <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch>
- <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
- <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch>
- <20260311195052.1202174f@kernel.org>
- <abJJY8whzSOB8O-X@pengutronix.de>
- <ebab1d3e-8967-444b-be54-437e4dfe3c7e@bootlin.com>
+	s=arc-20240116; t=1773305734; c=relaxed/simple;
+	bh=HxJoocjOCYFRNNtremEq4a9gZs6/4+/JZzLejhliau8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MdMkvHS9596DXu+tlAv3u+UqEcHTOU8TKDXeEKFvQNlkezZjK+azaBSsw2pU9xm/OhL6n9VB+/SnYDoj+3UlHQTtSuYDw50IkVNcKVWPgilVjuZVUC6xQF5Bcd4jw0w/MR+Ux6p7OViLuGdLsorttByKCVbA3z+eZEWUoGyOBgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mEzPIQnv; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEzPIQnv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE3B5C4CEF7;
+	Thu, 12 Mar 2026 08:55:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773305734;
+	bh=HxJoocjOCYFRNNtremEq4a9gZs6/4+/JZzLejhliau8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mEzPIQnv7lpcbrKWbQSKEdwI+BmCAqv9+EhC7qg6Um/kMDsgtjDEe93CG4shWLgkg
+	 gqTkxBO8owX1eCgVCyx4jJCC43iB7ou0V0GuWAGcW4rXjypPMQUMV1pHreHaoZSDKe
+	 4doGDFgYMIwDauXbDCHFPPI6z2ZD4esYqqhXADOo1YNu725Iay0VVjaoKiCt1hKmJc
+	 5z1re9/loSTGJ3veQ+m5147YICU/ztkucG7JjDj1XR6jieHJI39l6UJDOsCaKjCuI1
+	 GdaQ43Yxx/XLOEARcmwCeIU/9xKt1ar5josIKAZi6/s6pDw42HW20TQ4j3OQbO9tXM
+	 vv3OIO8m9oBhQ==
+Message-ID: <e467a4ea-2e42-4b27-8179-e97139badd88@kernel.org>
+Date: Thu, 12 Mar 2026 09:55:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ebab1d3e-8967-444b-be54-437e4dfe3c7e@bootlin.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kselftest@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] mm: prevent droppable mappings from being locked
+To: anthony.yznaga@oracle.com, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, ljs@kernel.org, Liam.Howlett@oracle.com,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, shuah@kernel.org
+References: <20260310155821.17869-1-anthony.yznaga@oracle.com>
+ <ba9a99a0-2ab8-4726-8287-ab21b3da8df5@kernel.org>
+ <9d90dd0b-1d60-4e45-922a-84637cab16a3@oracle.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <9d90dd0b-1d60-4e45-922a-84637cab16a3@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 12, 2026 at 08:49:39AM +0100, Maxime Chevallier wrote:
+On 3/12/26 03:01, anthony.yznaga@oracle.com wrote:
 > 
+> On 3/11/26 2:27 AM, David Hildenbrand (Arm) wrote:
+>> On 3/10/26 16:58, Anthony Yznaga wrote:
+>>> Droppable mappings must not be lockable. There is a check for VMAs with
+>>> VM_DROPPABLE set in mlock_fixup() along with checks for other types of
+>>> unlockable VMAs which ensures this when calling mlock()/mlock2().
+>>>
+>>> For mlockall(MCL_FUTURE), the check for unlockable VMAs is different.
+>>> In apply_mlockall_flags(), if the flags parameter has MCL_FUTURE set,
+>>> the
+>>> current task's mm's default VMA flag field mm->def_flags has VM_LOCKED
+>>> applied to it. VM_LOCKONFAULT is also applied if MCL_ONFAULT is also
+>>> set.
+>>> When these flags are set as default in this manner they are cleared in
+>>> __mmap_complete() for new mappings that do not support mlock. A check
+>>> for
+>>> VM_DROPPABLE in __mmap_complete() is missing resulting in droppable
+>>> mappings created with VM_LOCKED set. To fix this and reduce that
+>>> chance of
+>>> similar bugs in the future, introduce and use vma_supports_mlock().
+>>>
+>>> Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always
+>>> lazily freeable mappings")
+>> Should we Cc: stable? I think we should, to fix mlockall(MCL_FUTURE)
+>> behavior.
 > 
-> On 12/03/2026 06:04, Oleksij Rempel wrote:
-> > On Wed, Mar 11, 2026 at 07:50:52PM -0700, Jakub Kicinski wrote:
-> >> On Wed, 11 Mar 2026 20:26:39 +0100 Andrew Lunn wrote:
-> >>>> For that we have what we need with phy_link_topology, as each PHY has
-> >>>> its index, we should be good to go in that regard hopefully :)  
-> >>>
-> >>> So depth would be local to a component? We could have two PHY
-> >>> components, each with a different index, and depth = 0?
-> >>>
-> >>> I _think_ Jakub's depth was more at a global level? But then it would
-> >>> need to be passed down as we do the enumeration.
-> >>
-> >> Oh, sorry, I responded without reading the whole discussion :)
-> >> No, I imagined the depth would be within a single component, 
-> >> so under control of a single driver (instance). The ordering
-> >> between components should be defined by PHY topology etc so
-> >> it's outside of the loopback config.
-> > 
-> > As for me, it is problematic to help the user to understand the datapath
-> > depth on a switch. For example:
-> > 
-> > CPU -- xMII --- MAC1 [loop] --- fabric --- MAC2 [loop] --- xMII -- PHY
-> >                                     \----- MACx [loop] ---
-> > 
-> > ... each port has two xMII loop configurations: towards the xMII or towards
-> > the fabric. From a driver perspective, a loop towards the xMII is
-> > "remote." However, from a system perspective, a "remote" loop on MAC1 is
-> > a local loop at depth=0, whereas a "local" loop on MAC2 is a local loop
-> > at depth=1.
-> 
-> What's important is to specify clearly in the documentation from which
-> end do we start, where representing the topology. From your scenario
-> here, each block is already well represented and exposed, and if we use
-> local depth definitions we should be fine ?
+> I found this issue through code inspection while doing mshare dev work.
+> I don't have a strong idea how likely it is to happen in practice. If it
+> did it might not be easily diagnosed so I'm fine adding the tag.
 
-I guess my main problem is to imagine depth representation in two
-separate directions for the user. So, the kernel documentation should
-describe what is the starting point of view depending on the device
-type. For example:
-- PHY has typically xMII and MDI end points, so the loop towards the xMII
-  is the local loop and towards the MDI is the remote loop.
-- a switch/bridge has mutiple, application specific end points. So, we
-  have a starting point of view from the fabric. Every loop pointing from
-  the fabric towards the outside world of the switch is the remote loop,
-  independent on connection type (xMII or MDI).
+IIUC, mlockall(MCL_FUTURE) will result in future MAP_DROPPABLE mappings
+to get mlocked. I assume that implies that all pages will get faulted in
+and might not be reclaimable.
 
-Correct?
+With a quick test program that mmaps 4M, we indeed fault in all these
+pages (I assume you test does something similar).
 
-> > Other example would be where we have a chain of components which are
-> > attached on the system in a unexpected direction, where the MDI
-> > interface is pointing towards the main CPU, so the remote loopbacks
-> > became to local loop.
-> 
-> I have a few of these types of setup on my desk, where 3 PHY devices are
-> daisy-chained, we don't support that for now. If we one day add support
-> for standalone PHYs acting as media converters, I expect we'll be able
-> to tell which end is pointing where, and let it up to the user to figure
-> out what "remote" and "local" means in that case.
-> 
-> > 
-> > One more issue is the test data generator location. The data generator
-> > is not always the CPU. We have HW generators located in components like
-> > PHYs or we may use external source (remote loopback).
-> 
-> There were discussions about PRBS, I think the same idea of "pinpointing
-> which block we want to use" can be applied for both loopback and
-> generation ?
+7f5fc4600000-7f5fc4a00000 rw-p 00000000 00:00 0
+Size:               4096 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Rss:                4096 kB
+Pss:                4096 kB
+Pss_Dirty:          4096 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:      4096 kB
+Referenced:         4096 kB
+Anonymous:          4096 kB
+KSM:                   0 kB
+LazyFree:              0 kB
+AnonHugePages:      4096 kB
+ShmemPmdMapped:        0 kB
+FilePmdMapped:         0 kB
+Shared_Hugetlb:        0 kB
+Private_Hugetlb:       0 kB
+Swap:                  0 kB
+SwapPss:               0 kB
+Locked:             4096 kB
 
-Yes, the same apply for the counters. If we represent the data path as
-pipe with different components like loopbacks, PRBS, etc on different
-stages of the pipe, the same we have with counters. For example
-industrial or automotive PHYs have separate counters for xMII and MDI.
-A low depth loopback would not triggers some of counters.
+It's a good question whether memory reclaim would still be able to free
+these pages. I'd assume the folios would get mlocked and essentially
+turned unevictable -- breaking the whole concept of droppable mappings.
 
-Since I do not wont push all of this right now, i suggest to use more
-abstract topology representation to make it easily extendable. 
+So I think we should CC stable.
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Cheers,
+
+David
