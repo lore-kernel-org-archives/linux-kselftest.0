@@ -1,178 +1,164 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C1026E711
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 12:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A12E28507B;
+	Thu, 12 Mar 2026 12:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773318286; cv=none; b=Vv6fWsyPtex3R6vfEZv6oAV4bBmj0bR+2DW1seGnXZW3YkvJa4P/GzDLK1ELqaOJkoa02FpK+stz6NXwN0R4XAWMxg0k3F/B2URsNlkIwpclTgrHx8brxDkHmpJhiF7dqnSpra04q6yh2SNEy4bQTxa55of2aDIgMF04fyH6J8U=
+	t=1773318384; cv=none; b=jgrkbG3jq88of5qjAQ1w+9xFmtXhVksKOWX8hIp3rtU5OuI3nDJQYX3bt6FcZC9TL+fZkiLbfAiif8yhAjdcNReznCxqiUU1Dqg6oPECgj76j8czv8MldpQC3gUhn/F5yUALuJegIJG3sia2OYgZZXc01TeoBfC2u/hIprVKVeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773318286; c=relaxed/simple;
-	bh=thDU1lc0YZXHDnsXSBJjM7lkH/txuV9wpd4r0xFdGdg=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VlJyBUGD+mtg5sikBu/8eYhV/3I775Yg4HMaN3asKh63XBX2MBeZLyRpKu0Ti6vLwe4kbjYo91CypskcFSHQWILHG5rqkTh8J7YiitmM8lFrcjX4ZKbGtWOmLe8W6Jxu2SEUJA9Baj+ewG4QUBA5ceS8eDCtQDZAszezRJ8t+YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gZHx1K8l; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773318384; c=relaxed/simple;
+	bh=QrKrSoahMuXjtRckeoJw3f+mfVbbS4Nqw2h0ej8jDp0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nrSqG8ErLiTYRuix0iGZ7GWUucoUXwt+BbypoHJna4YDiAjfkxRyj/lb/iC8wmIULEoWhSUDmZCzwlgpfwnoUtS5rcGA+WIEwjLcSBoX9PV+2E9lyoh0CogkzpRVNvlTylk2Ypm2fwazmKqyCaijTJeDQ/GcZxtyQZRyNcu1CU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TwBrSu6Q; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gZHx1K8l"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4853f2826f7so8588685e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 05:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773318284; x=1773923084; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8rYdnhSYW1AF/6LzB31WRXHxUO9w4SQomrMEzPi0XY=;
-        b=gZHx1K8l5SYgLcJAJueDdFbZ/bmQBY7W5JJlamnbDWX1r0r+5gWety4PbYkonTxD7X
-         BtKlZTgNkO8dZTQjGsv7b88xXaPwUYEhISqH12rEMjih/kzqoAUKfuXt+Kf/wYO7Klkk
-         4iiKydxl+1KBhhqcQGTFNh9InRleFmV3JAlr4ol//HUO0KbDqdEZl+mo41z2+HwpWA00
-         q5908BUBrjd+xJXgavS5+bOaRU+jj5Tz4+e1buSWvmKdUSlK+jAH45nFbzDOBINJySkI
-         nWAZWflnxN/IbaFo6CUIrUacPHsUGTRS5i+ReP7GX18CI5zr4Ksdu17eXMaOWk6kwzuD
-         wvLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773318284; x=1773923084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O8rYdnhSYW1AF/6LzB31WRXHxUO9w4SQomrMEzPi0XY=;
-        b=Crsq9eL3h2N+icdgjTO9rS3Zd8XawXvsyjZgTxA1ebbK2jv/jp58jz7u1pmR/0r6GW
-         7w7fNRW+9lkEoR3o7BCNd75juQTkwKOokgYLTThy000gRVPKDaoFk8q+3CQKP4CWgD/F
-         qbGB/PnQP2tZOexqJPDQFt8IPTrMMy12N/l4+kn/iXIebBs+VCb4Odkhf5ysO6gWpe6u
-         fQ6eddKl6WxgShmmNDQuJSiU2BfVkMUMaSPBXNjXHYQwpjoAv5QqxjtUgUoLZcapOv6R
-         sAFpmnKLNG1Ht+x3xTyYutyGQJvVPwbHuPVUIIzzxT9PRlY1zvKxvsuy+/GB6P3HOiHO
-         Cmpw==
-X-Forwarded-Encrypted: i=1; AJvYcCUgZSKgVz4a7Lb9ERw/pkIlLUnnUjEGJKGc580XvnYuN11xK97ec4jncqvIC6EBum4OLhj8uEbmfOWxiiW9xlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyri/SZ7S0fiNBgkKfSElqEGWIdo8e0WWm7vV4k2WxTjljRf6xN
-	ILDtcKHRAwvuPr4zLIQl//r14Ce4XCHmTuUaie+bGhr3nVJ5q2ROYH62
-X-Gm-Gg: ATEYQzyCcRZbbvlXMtKqD+uQgJPlkov4UgXwGA7P9+aFXIjXjT63RCykwSW7x1rhPO+
-	8+crThILkN0139luMjWANRF4y7CmBF88AuWKun5W7qrZO4V5wxLDkeBEaNjRzjFWnPu46DBQkXR
-	z25T0xQFojk9TtmsRixe+rhpWlrFngJ1t27kiwueDtiETa+SyQh3LsfuBgcP/BihMMgxQ92j+VV
-	Jy6b8Yj1L6FvIy/AXF5Zv7WXHo6dyUFwqv2xn3E1F3X2PodsVPBlaRLpHWDmM1S2TqaS35OKdMk
-	dyRmN+xejQEa3m3oyQz3ZzYpFG6qxTTH8swrMt/YEruoDfWJKXioRpQxN8Xj/M1h7E/aMLRSQZD
-	yza7OMZr2HiMGEmDeSIHSqov92h7e3m9xo/tRCm7gT6DTWVSMYde8ydrum03HbRZdtCeu8DtB
-X-Received: by 2002:a05:600c:8b13:b0:485:30d4:6b9e with SMTP id 5b1f17b1804b1-4854b100b66mr105829985e9.21.1773318283507;
-        Thu, 12 Mar 2026 05:24:43 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b5e9179sm125863655e9.3.2026.03.12.05.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 05:24:43 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 12 Mar 2026 13:24:42 +0100
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, andrii@kernel.org,
-	shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	eddyz87@gmail.com, martin.lau@linux.dev
-Subject: Re: [PATCH] selftests/bpf: modify_return: isolate fmod_ret hooks by
- pid
-Message-ID: <abKwikMNfT0lhfl3@krava>
-References: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TwBrSu6Q"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62BMWIEb2581500;
+	Thu, 12 Mar 2026 12:26:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=IaLbxO8utFixXJID+in4wpuw7n/xPqaFliR9xg+Vo
+	/Q=; b=TwBrSu6QMf2LO9tJ+5qqw5YF90QbKuaJQMRTe+9KBJYWOruUhq7kGyWAl
+	FX9g3Mtnx8Ctki8AqWmdAZqarmB7K7yfVoRMw9n+h/apvK78ulIz4G32BdqR+dU3
+	l5ybZlbHiSRsWyTkToLXd5yUtBTGM94UuEym+YbQcqV05opzHaYel8xWIT6WgSOA
+	F+GT/poM0yQWI89/7qktD5w/mNNTNQxqRAxwgsdedOJBpFvMtFq2JRV/dz8qRd+p
+	B/vis1g8d+cZrHg0anSFjolyMnbjRmYn68U70yAjRaJ/8i472Ya0qHNNktbVhsSB
+	qfHzv/YZEqw2zVSesy59Tj2RJagJA==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh94tmqj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Mar 2026 12:26:04 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62C9dkw1008838;
+	Thu, 12 Mar 2026 12:26:03 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha7296q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Mar 2026 12:26:03 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62CCQ08T49611250
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 12 Mar 2026 12:26:01 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D53112004E;
+	Thu, 12 Mar 2026 12:26:00 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D5FD02004D;
+	Thu, 12 Mar 2026 12:25:54 +0000 (GMT)
+Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.in.ibm.com (unknown [9.109.243.201])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 12 Mar 2026 12:25:54 +0000 (GMT)
+From: Sayali Patil <sayalip@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org, Sayali Patil <sayalip@linux.ibm.com>
+Subject: [PATCH v2 00/13] selftests/mm: fix failures and robustness improvements
+Date: Thu, 12 Mar 2026 17:55:27 +0530
+Message-ID: <cover.1773305677.git.sayalip@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=QKtlhwLL c=1 sm=1 tr=0 ts=69b2b0dc cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=4qS8iJCPjNy_d4tN1AgA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDA5NSBTYWx0ZWRfX/NZHFqG8TEXT
+ UQU1BfuJk55ozXWIhDLV3GzlZ+BfqItW0P9S0AXPm0lcT3Sbx2Wcq84HbZEE574MHbrIj33akVP
+ o2LkZ7Sp00H0CzU3F02iMQOuWn9FtN/yl05q2nUaWbFRDYTykURlv59qQeV5n9IC3TqnZYzTeyG
+ 9r0CTLLNDugGPxnyr0dsrViciUL41vw/h1lF65Kinnq+jHc7xOAUeFQj4ptPc7jv0XqG+vqM3+p
+ NMz4ggV9aw/OC5B8HnIUx6qfl/mGD6Df3IP9j6ulJGPXXtGy0YQVRLx450SpFDFTQDQMH+ZRcNL
+ +FdVavhWK0fDzoNhUcq2I4FIE6ebZvbxMZ7n2SdUKvqFQf2MS0ji7IRZoaI868MzN2mlrNmGpBh
+ UoQlPbJ/FimdreDTT2lXp1PTZsF7P7Ht3YwenrMvy8zWW969VOjTv554xGahuhly90hGVIKU+CC
+ R33xrQ2WzJqW6BbBYcA==
+X-Proofpoint-ORIG-GUID: ICKPdNTKlEdscOpeOVNgxjJbHMgrb33i
+X-Proofpoint-GUID: Si-Z5Z9mkqEgNksK3q47qN2wjUZehhGu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-12_01,2026-03-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 impostorscore=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 adultscore=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2603120095
 
-On Thu, Mar 12, 2026 at 06:42:19PM +0800, Sun Jian wrote:
+Hi all,
 
-SNIP
+Powerpc systems with a 64K base page size exposed several issues while
+running mm selftests. Some tests assume specific hugetlb configurations,
+use incorrect interfaces, or fail instead of skipping when the required
+kernel features are not available.
 
-> diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/testing/selftests/bpf/progs/modify_return.c
-> index 3376d4849f58..5ff18ddb3050 100644
-> --- a/tools/testing/selftests/bpf/progs/modify_return.c
-> +++ b/tools/testing/selftests/bpf/progs/modify_return.c
-> @@ -7,16 +7,29 @@
->  #include <linux/bpf.h>
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
-> +#include <stdbool.h>
->  
->  char _license[] SEC("license") = "GPL";
->  
->  static int sequence = 0;
->  __s32 input_retval = 0;
-> +__u32 test_pid = 0;
-> +
-> +static __always_inline bool match_pid(void)
-> +{
-> +	__u64 pid_tgid = bpf_get_current_pid_tgid();
-> +
-> +	if (!test_pid)
-> +		return false;
-> +	return (__u32)(pid_tgid >> 32) == test_pid;
-> +}
->  
->  __u64 fentry_result = 0;
->  SEC("fentry/bpf_modify_return_test")
->  int BPF_PROG(fentry_test, int a, __u64 b)
->  {
-> +	if (!match_pid())
-> +		return 0;
+This series fixes these issues and improves test robustness.
 
-I think just simple pid check like we do in other places
-should be enough:
+Please review the patches and provide any feedback or suggestions for
+improvement.
 
-	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
-		return 0;
+Thanks,
+Sayali
 
-jirka
+---
+v1->v2
+  - For "selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap":
+    update FLAGS definition to MAP_HUGETLB | MAP_SHARED | MAP_POPULATE and
+    used it for mmap() calls as suggested during review.
 
+v1: https://lore.kernel.org/all/cover.1773134177.git.sayalip@linux.ibm.com/
+---
 
->  	sequence++;
->  	fentry_result = (sequence == 1);
->  	return 0;
-> @@ -26,6 +39,8 @@ __u64 fmod_ret_result = 0;
->  SEC("fmod_ret/bpf_modify_return_test")
->  int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
->  {
-> +	if (!match_pid())
-> +		return ret;
->  	sequence++;
->  	/* This is the first fmod_ret program, the ret passed should be 0 */
->  	fmod_ret_result = (sequence == 2 && ret == 0);
-> @@ -36,6 +51,8 @@ __u64 fexit_result = 0;
->  SEC("fexit/bpf_modify_return_test")
->  int BPF_PROG(fexit_test, int a, __u64 b, int ret)
->  {
-> +	if (!match_pid())
-> +		return 0;
->  	sequence++;
->  	/* If the input_reval is non-zero a successful modification should have
->  	 * occurred.
-> @@ -55,6 +72,8 @@ SEC("fentry/bpf_modify_return_test2")
->  int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char f,
->  	     int g)
->  {
-> +	if (!match_pid())
-> +		return 0;
->  	sequence2++;
->  	fentry_result2 = (sequence2 == 1);
->  	return 0;
-> @@ -65,6 +84,8 @@ SEC("fmod_ret/bpf_modify_return_test2")
->  int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, char f,
->  	     int g, int ret)
->  {
-> +	if (!match_pid())
-> +		return ret;
->  	sequence2++;
->  	/* This is the first fmod_ret program, the ret passed should be 0 */
->  	fmod_ret_result2 = (sequence2 == 2 && ret == 0);
-> @@ -76,6 +97,8 @@ SEC("fexit/bpf_modify_return_test2")
->  int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f,
->  	     int g, int ret)
->  {
-> +	if (!match_pid())
-> +		return 0;
->  	sequence2++;
->  	/* If the input_reval is non-zero a successful modification should have
->  	 * occurred.
-> 
-> base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
-> -- 
-> 2.43.0
-> 
-> 
+Sayali Patil (13):
+  selftests/mm: restore default nr_hugepages value during cleanup in
+    charge_reserved_hugetlb.sh
+  selftests/mm: fix hugetlb pathname construction in
+    charge_reserved_hugetlb.sh
+  selftests/mm: fix hugetlb pathname construction in
+    hugetlb_reparenting_test.sh
+  selftest/mm: fix cgroup task placement and tolerance in
+    hugetlb_reparenting_test.sh
+  selftests/mm: size tmpfs according to PMD page size in
+    split_huge_page_test
+  selftest/mm: adjust hugepage-mremap test size for large huge pages
+  selftest/mm: register existing mapping with userfaultfd in
+    hugepage-mremap
+  selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap
+  selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported
+  selftests/mm: skip uffd-stress test when nr_pages_per_cpu is zero
+  selftests/mm: fix double increment in linked list cleanup in
+    compaction_test
+  selftests/mm: move hwpoison setup into run_test() and silence modprobe
+    output for memory-failure category
+  selftests/cgroup: extend test_hugetlb_memcg.c to support all huge page
+    sizes
+
+ .../selftests/cgroup/test_hugetlb_memcg.c     | 66 ++++++++++++++-----
+ .../selftests/mm/charge_reserved_hugetlb.sh   | 44 +++++++++----
+ tools/testing/selftests/mm/compaction_test.c  |  3 -
+ tools/testing/selftests/mm/hugepage-mremap.c  | 32 +++------
+ .../selftests/mm/hugetlb_reparenting_test.sh  | 31 +++++----
+ tools/testing/selftests/mm/run_vmtests.sh     | 59 +++++++++++------
+ .../selftests/mm/split_huge_page_test.c       |  5 +-
+ tools/testing/selftests/mm/uffd-stress.c      |  6 +-
+ tools/testing/selftests/mm/uffd-wp-mremap.c   | 13 ++++
+ .../testing/selftests/mm/write_to_hugetlbfs.c |  5 +-
+ 10 files changed, 171 insertions(+), 93 deletions(-)
+
+-- 
+2.52.0
+
