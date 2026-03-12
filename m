@@ -1,132 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B611DDC28;
-	Thu, 12 Mar 2026 04:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C623A5442
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 05:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773291178; cv=none; b=ngfk9ZHJuaZf+hrsMHuWDJiiwYsSoiXOkU6hQj6E/ryo0h2Ofr7d1XheEoxVs7F7YPf1q66mTv1wxwwlZXYfm990cizUWWVULs0ArTC3BX/fx01cqKZP4MxgBRqBheKExvxLd7FKy/25/Jm074EK/8yeeGUDJt5DG2OoGBhAQ28=
+	t=1773291911; cv=none; b=JoTIUwiMiZNrqRAzav4y8Ut8L8QM6X29IaNehS7vmVO9U/64iRN/IlsSZsvUneigUPpTIjU9iYFRN0CUW3dFSqNGKRcUqoDhmmzb5ZBTSVnwTcPfBU1Xld287v+W8LJ6sX3XeEUv0nH7pHeCVmv7z6zlXSICfGrqFBGM/lgGVoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773291178; c=relaxed/simple;
-	bh=SBD/dmp8BPTvxKp8T1wibLDp6tEJo9cqmyfGT+xkaUA=;
+	s=arc-20240116; t=1773291911; c=relaxed/simple;
+	bh=8zELuTv51U8Qj+1Jp80UH9hJK1v4K07BgFQeM2+oZJk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BcQPLMlH5HqK6q4P9vBG0Igqf7lwxm3lbcINAD86pnImr25hfJnWyISdoT3piApwYTXXx+h4LX0glZkkBe4pl26m9MAOd99TR+btVLzzbAiS7sC/lXIkAmqosoYyFMpTvFm0TKsEEfuh2bulchhd1bFcJ0PxjlmFWveWbaezjIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nxc/IBnY; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nxc/IBnY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3ACEC4CEF7;
-	Thu, 12 Mar 2026 04:52:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773291177;
-	bh=SBD/dmp8BPTvxKp8T1wibLDp6tEJo9cqmyfGT+xkaUA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nxc/IBnYSqS9cJj76LagMrz4AAvFI+8Rvna64PzDTc+p4ItB2T8PR41+A9P8QGDxk
-	 LVHp79ZLrM/iqVQdu39fbJ12Gomz79dN30DTU0bLdbq/U5vNWGPAF7BZoO1IvPuQNU
-	 e/18KXBm5HuhTfPq+syLDSqdGC+2hqCEHbAinfrU2525ZM1A5Znwab4/WtM11aBMb9
-	 ckuGyyOiOOci4oTmFbCZFSBf4Huwk6nCGgvjfHTIqvKk80rnrD3rLmcL1eZ4HR1E0z
-	 M4Ojkn7xUOEMUJ/cKswsMH7tqt9mSEgAfNeome3npIrAiU/rn0nsEP/Zr4U6+yWiTw
-	 5k4IRF58plDag==
-Date: Thu, 12 Mar 2026 04:52:54 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Linus Walleij <linusw@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] gpio: Access `gpio_bus_type` in
- gpiochip_setup_dev()
-Message-ID: <abJGpo7t5KCvyGE1@google.com>
-References: <20260223061726.82161-1-tzungbi@kernel.org>
- <20260223061726.82161-2-tzungbi@kernel.org>
- <CAMuHMdU0Xb=Moca5LUex+VxyHQa2-uYJgYf4hzHiSEjDCQQT=Q@mail.gmail.com>
- <CAMRc=McmrJLWGoXjKaqGuCWpLZU4mmcrgs9ESAaL8kG=_R89cw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XVBTpsuwZeHZ7xDDbanSML82xuslukdRo0y7vGMjJ5hno0ZwZ1ox/4c2FpknPUY7LP3NfVhsIMoOKjQxZ/2wXH3+8QXb14Vx841ipt4iQVbASgiUFiP2Vqd307lND1dbARPiXgWm9c0K0YeRsuCNHHN6ogjyvuZceTor85LIopY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w0YDu-0004bZ-Ez; Thu, 12 Mar 2026 06:04:38 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w0YDq-004yCS-1n;
+	Thu, 12 Mar 2026 06:04:35 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w0YDr-0000000FDEl-3BLw;
+	Thu, 12 Mar 2026 06:04:35 +0100
+Date: Thu, 12 Mar 2026 06:04:35 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Naveen Mamindlapalli <naveenm@marvell.com>,
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+	Danielle Ratson <danieller@nvidia.com>,
+	Hariprasad Kelam <hkelam@marvell.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
+ definitions
+Message-ID: <abJJY8whzSOB8O-X@pengutronix.de>
+References: <20260310104743.907818-1-bjorn@kernel.org>
+ <20260310104743.907818-3-bjorn@kernel.org>
+ <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
+ <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch>
+ <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
+ <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch>
+ <20260311195052.1202174f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMRc=McmrJLWGoXjKaqGuCWpLZU4mmcrgs9ESAaL8kG=_R89cw@mail.gmail.com>
+In-Reply-To: <20260311195052.1202174f@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 11, 2026 at 07:36:51AM -0700, Bartosz Golaszewski wrote:
-> On Wed, 11 Mar 2026 12:44:31 +0100, Geert Uytterhoeven
-> <geert@linux-m68k.org> said:
-> > Hi Tzung-Bi,
-> >
-> > On Mon, 23 Feb 2026 at 07:17, Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> >> To make the intent clear, access `gpio_bus_type` only when it's ready in
-> >> gpiochip_setup_dev().
-> >>
-> >> Reviewed-by: Linus Walleij <linusw@kernel.org>
-> >> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> >
-> > Thanks for your patch, which is now commit cc11f4ef666fbca0 ("gpio:
-> > Access `gpio_bus_type` in gpiochip_setup_dev()") in gpio/gpio/for-next.
-> >
-> >> --- a/drivers/gpio/gpiolib.c
-> >> +++ b/drivers/gpio/gpiolib.c
-> >> @@ -901,6 +901,8 @@ static int gpiochip_setup_dev(struct gpio_device *gdev)
-> >>         struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
-> >>         int ret;
-> >>
-> >> +       gdev->dev.bus = &gpio_bus_type;
-> >> +
-> >>         /*
-> >>          * If fwnode doesn't belong to another device, it's safe to clear its
-> >>          * initialized flag.
-> >> @@ -1082,7 +1084,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
-> >>          * then make sure they get free():ed there.
-> >>          */
-> >>         gdev->dev.type = &gpio_dev_type;
-> >> -       gdev->dev.bus = &gpio_bus_type;
-> >>         gdev->dev.parent = gc->parent;
-> >>         device_set_node(&gdev->dev, gpiochip_choose_fwnode(gc));
-> >>
-> >
-> > Postponing this assignment does have an impact on early
-> > messages. E.g. on RBTX4927:
-> >
-> >     -gpio gpiochip0: Static allocation of GPIO base is deprecated, use
-> > dynamic allocation.
-> >     + gpiochip0: Static allocation of GPIO base is deprecated, use
-> > dynamic allocation.
-> >
-> > Or with CONFIG_DEBUG_GPIO=y, e.g. on BeagleBone black:
-> >
-> >     -gpio gpiochip0: (gpio-0-31): created GPIO range 0->7 ==>
-> > 44e10800.pinmux PIN 0->7
-> >     -gpio gpiochip0: (gpio-0-31): created GPIO range 8->11 ==>
-> > 44e10800.pinmux PIN 90->93
-> >     -gpio gpiochip0: (gpio-0-31): created GPIO range 12->27 ==>
-> > 44e10800.pinmux PIN 12->27
-> >     -gpio gpiochip0: (gpio-0-31): created GPIO range 28->31 ==>
-> > 44e10800.pinmux PIN 30->33
-> >     + gpiochip0: (gpio-0-31): created GPIO range 0->7 ==>
-> > 44e10800.pinmux PIN 0->7
-> >     + gpiochip0: (gpio-0-31): created GPIO range 8->11 ==>
-> > 44e10800.pinmux PIN 90->93
-> >     + gpiochip0: (gpio-0-31): created GPIO range 12->27 ==>
-> > 44e10800.pinmux PIN 12->27
-> >     + gpiochip0: (gpio-0-31): created GPIO range 28->31 ==>
-> > 44e10800.pinmux PIN 30->33
-> >      [...]
-> >
-> > Note the spaces at the beginning of the printed lines.
-> > Reverting the commit re-adds the "gpio" prefix.
-
-Thanks for catching this.
-
-> >
+On Wed, Mar 11, 2026 at 07:50:52PM -0700, Jakub Kicinski wrote:
+> On Wed, 11 Mar 2026 20:26:39 +0100 Andrew Lunn wrote:
+> > > For that we have what we need with phy_link_topology, as each PHY has
+> > > its index, we should be good to go in that regard hopefully :)  
+> > 
+> > So depth would be local to a component? We could have two PHY
+> > components, each with a different index, and depth = 0?
+> > 
+> > I _think_ Jakub's depth was more at a global level? But then it would
+> > need to be passed down as we do the enumeration.
 > 
-> As per the comment in gpiochip_add_data_with_key(): we may end up with
-> a functional chip before gpiochip_setup_dev() is called and so before we
-> assign the bus type.
-> 
-> dev_printk() helpers only read the name field of the bus type so it should
-> be safe, I don't see anyone else accessing it before we register it.
-> 
-> I think it makes sense to revert this commit. Tzung-Bi: what do you think?
+> Oh, sorry, I responded without reading the whole discussion :)
+> No, I imagined the depth would be within a single component, 
+> so under control of a single driver (instance). The ordering
+> between components should be defined by PHY topology etc so
+> it's outside of the loopback config.
 
-That makes sense.  I agree, let's revert it.
+As for me, it is problematic to help the user to understand the datapath
+depth on a switch. For example:
+
+CPU -- xMII --- MAC1 [loop] --- fabric --- MAC2 [loop] --- xMII -- PHY
+                                    \----- MACx [loop] ---
+
+... each port has two xMII loop configurations: towards the xMII or towards
+the fabric. From a driver perspective, a loop towards the xMII is
+"remote." However, from a system perspective, a "remote" loop on MAC1 is
+a local loop at depth=0, whereas a "local" loop on MAC2 is a local loop
+at depth=1.
+
+Other example would be where we have a chain of components which are
+attached on the system in a unexpected direction, where the MDI
+interface is pointing towards the main CPU, so the remote loopbacks
+became to local loop.
+
+One more issue is the test data generator location. The data generator
+is not always the CPU. We have HW generators located in components like
+PHYs or we may use external source (remote loopback).
+
+This is why i would prefer to have description of topology by not
+hard coding the perspective of view.
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
