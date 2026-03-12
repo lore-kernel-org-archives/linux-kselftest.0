@@ -1,182 +1,217 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011064.outbound.protection.outlook.com [52.101.70.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3EF37B009;
-	Thu, 12 Mar 2026 14:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.64
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773327528; cv=fail; b=qPLcDGhzzndws03JIb/bLMv9coxMtgq/8Gsod2ZHxg8x/h3lJAc9lHJQ6Ks52v3odpsBOzc+Hx6WIxu9Kb5UJO85GQCde4DYFWGzqk2SnLTYtu098XaSRCHX0n5X85F83/Epu9mU0auldfp5GUCjQaYiysdmW6ot8DlfkR6ZqUE=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773327528; c=relaxed/simple;
-	bh=+ttBJUMT82BZiYmlDL8YdsgCR9MVIdKDMxHdka/INUc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=mz0DLUwFZiMYpq60V0W5Zj1eZsuNQtp5BjCygOpXbxypv2pzaj/ablQhOTfH7lAS3R6nobMEZQzyJMX0QOWVF5XESyLJdTCT5bqmAAzBMw6wYvF5CaA306k+v7g7LtEo8Au5ya8WKtrk9V2KH/23Op7g26PB6P9q7ajzwo5rMvs=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=kv1kd/fq; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=kv1kd/fq; arc=fail smtp.client-ip=52.101.70.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3663C73D8
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 15:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773328373; cv=pass; b=q+OYchs4SagAksri/DpBLaloDYjECTry0CrONm1kPYZp49WIkwpOw2x6HfdYrMT5HX5od70n1GYq5C33U1l/xqdkKuJgBBatmhbyvCMCEJOkNhAlsoIyCf9Z6IKqN0zu0wO4EImEz2QF/omT8ItuGKfFI8TLm3T5bB4gQVdsk4U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773328373; c=relaxed/simple;
+	bh=7YFZADDIkKpHkOE9u07SYpGj3k/kMl91AXKVA2N9GNk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bs898O0JuXQEp0JQvVEsiykBtukgnBICopYt5KSwLLtSFRz+JHU7uvAqDvcauxAGv2jBIVknZUEL6Y9m73ai2tMqscVDEPFrSeaIVi/DApUjUnOi5SbgpYxgcA/U8vlqz7UVXGoDl7glNPWKBFKGkkeKza17TS4xsY5jHYb2bC8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4Q2sPKdX; arc=pass smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="kv1kd/fq";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="kv1kd/fq"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=ZsYF/FdnrvHw6lnpWYNWxBWS1FEvEfj84ZhlhmFSGK/j1Q3woXx/XfVnuwBEJPozBASGm9+Nxo3h/Mv0jBA1w24iab9FMIoSU34llYvRuGHjVKf/fJLFzHOFjTVqUlFS03B+/AvSAbiVLrKKbkiRMYZdfsulTpTTcpoUSCid+a7uTlmZ0AiepFX8wEDgJy2ppAmL+6Y8BIg79OUXmhSPNVJXBxVn6JZhCkCGaOfiLE/6rZwJBxi+qXyVHe5VrHmdCSCVD0F8rVMMOCmEN/PZOC0G+oayNuC3+hBAoYv/MBcqcqKXSGoJgdCKNdZwfyNmfdBVmxgMnLOsDUduyU4Dkw==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ii3cwo7erZ0oC7BhOtlfDcoKFdlCLwmvj1kvAuHYhfs=;
- b=fLu90xRQaBsbpE1PDQeRibKIYPVL/jlNvJplDEDg2q0zrTFSqiX5hlghhmeHfXzfbFF0rLVOFxt3yPUznPLjj0RujHnqoUT0QBWAjh3tfHJTxe6+RHjD5DQb+KIwrVGAzqHqOmOac8MrLYEFvJ5FldRgkKUMqaLdNaF6+IzQVsXMWGVTt8EhGVFX5NcANRLuzHgGzi9nIQcUxzpVWT81K6NYOOlcvyvnISPBYPOZ5ez2Qpeju80Z5bFtP3Xq3JPL3xg/43o3dasbNmJ03t3O+2h5VrKlBpFkiTqF7t88rkh5r3mg855l2ZTihg3Bt+B6++4mLlBkoaLkXZ+EqUjmCw==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ii3cwo7erZ0oC7BhOtlfDcoKFdlCLwmvj1kvAuHYhfs=;
- b=kv1kd/fqvdlJNGgJUOevgYsfbVP8q/ztRJrkvIpVI/+NJynl3sF/j91Q6tWt6QPyxvBivYKCNJs/0WfSK1TYy3JVM/UAcXXfm9PBL2ajGHCfATM2pae7SZJXc4m05qLkOyFh9IAom/to6KMcGO+ipesG7cpoN+JzP60oHfRUlR8=
-Received: from AS4P189CA0045.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:5dd::17)
- by DB3PR08MB8963.eurprd08.prod.outlook.com (2603:10a6:10:42b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.12; Thu, 12 Mar
- 2026 14:58:41 +0000
-Received: from AMS1EPF00000045.eurprd04.prod.outlook.com
- (2603:10a6:20b:5dd:cafe::8e) by AS4P189CA0045.outlook.office365.com
- (2603:10a6:20b:5dd::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.27 via Frontend Transport; Thu,
- 12 Mar 2026 14:58:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AMS1EPF00000045.mail.protection.outlook.com (10.167.16.42) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.18
- via Frontend Transport; Thu, 12 Mar 2026 14:58:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uHDbgalq+Nuej2vyIp54rQQh6HL+j6Ng8ZY0Y+KBavstQFetbCzvHtCIROxvvrBfSmXIzv1sAdH0xGiWx3Fhto25ALqxwVH9YM/RIfdE/muxq3G4dV419p4JEmvyw/YldYflQQsaHUdX2Bt6REkHy/hP+Y7nZbTziqKpa7VfVFncrE01m+M27KfXoBZPAfA85YQ0CCPTN9WixurwHxZCwqimgb3DqxffL6JdQCj4rrS5RuEScg2aRjz9ToLznBj1dNKxcy0+4ByBnz6Hwfzab28yHirloGx4pbFhOEqHgtrDf23wwvJ5VJrFZZOvlXBy+4XNvPCH+WsOhN7x5td+1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ii3cwo7erZ0oC7BhOtlfDcoKFdlCLwmvj1kvAuHYhfs=;
- b=vxfZH0eTzL86p0uSZMyoQ9r4MxTJlgQ2COevzdmLnHnqqrawqxPOMjffZ2Em1Iza5zFAKcgjfb3VHwD4ToFejswvRepLd3YLr1FNaKLSyjJwKEX8lhGRVHdByzxG+qc3GmxOvBOHozcXQfPYDtHlHpokXb7z49deCO4lEdtxEUMdT/jqYAH7xZk8AjXo/fvFihQXD49UjKYiq+FnRTwVyfdNSTH6HrUhpclBSlLIRjGT9eOGEzhBHDmeHq+t6ij5C/rGH0bBJdql9deuPriSbfN8+N2U6DkMa3ADVWHj2GJpZVUw/fhlN5mDqHwVvkhAxrCOWKZdm1J5yTi+nMHfGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ii3cwo7erZ0oC7BhOtlfDcoKFdlCLwmvj1kvAuHYhfs=;
- b=kv1kd/fqvdlJNGgJUOevgYsfbVP8q/ztRJrkvIpVI/+NJynl3sF/j91Q6tWt6QPyxvBivYKCNJs/0WfSK1TYy3JVM/UAcXXfm9PBL2ajGHCfATM2pae7SZJXc4m05qLkOyFh9IAom/to6KMcGO+ipesG7cpoN+JzP60oHfRUlR8=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20) by GV2PR08MB11722.eurprd08.prod.outlook.com
- (2603:10a6:150:305::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.12; Thu, 12 Mar
- 2026 14:57:39 +0000
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::8c9b:58d2:2080:eb98]) by GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::8c9b:58d2:2080:eb98%4]) with mapi id 15.20.9700.010; Thu, 12 Mar 2026
- 14:57:38 +0000
-Date: Thu, 12 Mar 2026 14:57:35 +0000
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
-	oupton@kernel.org, miko.lenczewski@arm.com, kevin.brodsky@arm.com,
-	broonie@kernel.org, ardb@kernel.org, suzuki.poulose@arm.com,
-	lpieralisi@kernel.org, joey.gouly@arm.com, yuzenghui@huawei.com
-Subject: Re: [PATCH v15 4/8] arm64: futex: refactor futex atomic operation
-Message-ID: <abLUX961YjcsNaWm@e129823.arm.com>
-References: <20260227151705.1275328-1-yeoreum.yun@arm.com>
- <20260227151705.1275328-5-yeoreum.yun@arm.com>
- <abLTji8bbO3b3i3r@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abLTji8bbO3b3i3r@arm.com>
-X-ClientProxiedBy: LO4P123CA0309.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:197::8) To GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4Q2sPKdX"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-509062d829dso508721cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 08:12:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773328371; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ILQUFA1Yn+DZC6MvTpeTnSswvuEmCejZuRbbtqCyiw4MaivXrFr+x9sLsjtnjamu5H
+         6epftb3RpEXXEI//YBKt2DZOR7Jp67yI+RXonV69FrJXoeK9BABWE+uXOZnz6A42pOqj
+         60uMqr1fwAH5ETTCi4Yrz/WKsAEzpkLKcXhNVrj+LG6HmlNotLjUjiPrC657tdLYS2Q3
+         DdGWtSGNkwYp6SzIEkX5jDH51plzXW6FbudlcDB9+pG/pOurCh0zH8uR6f6hCxV/emaO
+         c/9kzjsvXK1FkQLPzGH9AkIqC0uDrkCuXiyCc9rtLiaU8pMLvpy13tmVLCAA0JGxcpNR
+         6TZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=bV1YPTxEaaiJh5nG5MVUucC7TmzLQLODECWQRvstcRw=;
+        fh=YFDYbDPGEnYInxrj2g7DJSJ3amTrVCQMuvMDkKbO4yk=;
+        b=W1ZxCXPWNSGmnJyexsBft52Q2YuA2vrSlrdQNQGV7dcHVB1trxVV+P/5zGURimUBWY
+         VsJu4puuYZv10mxwn4LruQFbDppEM6KEaUF/nEvRz0AQ0AOTGYWQF3g22S3uCvJixaoK
+         LRU0EpiU5wDZhniS9zo1yhW+1kF9W1k79rpBDhvBO4mG5hZ66x79P/+/borriXRoti5S
+         IH/lXnlNXIJhZvYp2/y5jG1AUjGa0fQCeMdc0G+qQuxHPi2O8MAcv1wan+tYyko8LUmQ
+         d/RUM1MCa0IVI3CdvCBMhWw97k6uGGQGFuJT+MHPOPJLBHcrAun3vZa1c9E/yb0/P1Yr
+         DSSA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773328371; x=1773933171; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bV1YPTxEaaiJh5nG5MVUucC7TmzLQLODECWQRvstcRw=;
+        b=4Q2sPKdX/2dvlWhCTFaO6pjY0GcE7Ac3wo4299c2UzBFA3NCV2GNENpZQ2k9LbMeCA
+         7WR3Wrs+TBLQ5qeeTP0LVieQbh+e0Zp4B9dCN/wXv2ccuLaLiJP13yBP98Y7IauYEm4B
+         8J6nw0ZrXOE2lw9KpPe8eESOGDYsYAd+F3omC2RjD/qerJ6yLwnB5MSREnuKwmcQeDQk
+         A0wD4Ea1hg3Fovmmc9pz0epe1D/EfofAXBHIYfDTleloG/ndc5yjqptDKPKoVClDHMxK
+         0ttfZuwnBiEeTIr3dhezC37YrICyB+MYIo7Xr8dyEy6QMA61H4iDbYMuis1NQ8wKjuS3
+         5wKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773328371; x=1773933171;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bV1YPTxEaaiJh5nG5MVUucC7TmzLQLODECWQRvstcRw=;
+        b=IxRBcRwowJvOTgmfhNpBgHNP42HZRD7guvu8lGXsIHmCzDG4Rp0L9kTGm2fOmV8T6l
+         MLpdAtHMb0MPyXYhwuHVra0VXl6Rp4rRYIuTqxx5kgVVpzTQiKQa6NUxAPid6j5B+sSd
+         Yf7CgIBeKMYNyTpFP3d7JrLi/XPMp2CYTwLSweodb3kQH65g2yFZGCt/zF59z3YOeYpr
+         RFirW1V7tEt5FcsR/4w0Ehxw4wQLc1OK6DJM5udKYItnUwHgvVgE2s10t5Y1WVH7XTaB
+         6k+sXvKg1m5HkOLOAzQAVOzYWv1wyZz9+Rcuyh0z/5xIahjkCg3RsCbPsnmqySTbamcv
+         Tnug==
+X-Forwarded-Encrypted: i=1; AJvYcCXOgVmd9yxMu1MpRtuLv+nlfBaHBcoG3XIaaVSp7nL2ozVi70F+jbWrCwF1CSTJBWuTcupj6nHoRt38KDZ4I9Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfwNUZrb+mfZwj5CV74QoLHuw+AzcT0nsTqjqGXLE/OEdCaYpN
+	KLXQRODUaIuOfa3s3yfX87Iewt5DATrdycUmZmKlzZq/3EuJp3B9Sfj5+lGk5nFGfyqEQdbk+do
+	c4e0O3/Uy26hyuDV09UNhN0TFmp60anK2yrmJH9nv
+X-Gm-Gg: ATEYQzxnekeHgSFkM9WgMF7YlbOlRNo4f0CEOkAiV41cL59GjQ0p4qZtmRNBdt4Uf+Z
+	4GQgx5CRGLbM9Yx+JXdTSdoo+ZKFYqRyUfKAIPsJbl2iqBkQ6lbE1aR4We9t81mZjeY9WVotV+U
+	CJH3o/dWbDjo8LZFcsuWZNRHsEiLoox5EqZxfI5TJzhcMm5wvExIPVqXfRj22vA9B+2URD0YdUv
+	Xc7692D3VyEVmAw8/0FhiTdgi+nwZf/1vztYReGNWIGMafz33Ey107kGWXXdPO6zXiBl8+a+fLr
+	4CkfuKSm
+X-Received: by 2002:ac8:7d4f:0:b0:509:1471:1bc2 with SMTP id
+ d75a77b69052e-509497b388cmr12752831cf.17.1773328370105; Thu, 12 Mar 2026
+ 08:12:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	GV1PR08MB10521:EE_|GV2PR08MB11722:EE_|AMS1EPF00000045:EE_|DB3PR08MB8963:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f8bcbef-1d3f-45e2-fcf5-08de8047d98d
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info-Original:
- lr9L8MZoAwWftLVW2tw1b5KtMkTw1bQS0m4WsJl9N4TWq5MAuCBR8Gcflj9r+wC8PJ83qEkTdix3IkOGIwbnwKUjDfq5aAFtPOYHO0LKccEpIw1mqG22sKoSXd3qnrJVzkS82I9Ijbh11njxbIEUla8bXuyCx9rJOJP5Huw07zD8kh8eElhV/t7s64s2aDd4yaIyB6E2RH07DiWHErDBa0L/ZKiPWwmq6JT6UjahmtHqEZFodUvuldlAuTEsLNRKf3RaSjU8515q9yjtLUmZLLhGFphYMmzQ4GmFWWvA9G9NsmF/G9sG5RYWWPHniEc0xwm4QOz2FPoyBHopoWIo8lB9LjtQQe0zmyMc0PuB9ZUhorYMK4cX0P02ACGHlMCGm0S1MoqrwwACGUnRwodC7w84TrqRE6PD1v9lIkU6V4J4vZc8rcHRPt6YVpgMR31fidGj5UlhbnptOMRazLU1CGmKMGjU8oaZtvsZmFwjTeqBCWkgOSUx2AqFXMyQhyGv/jV2hCY71P9WbNdr/g5kZAl9m7gm//bxBIl/UmnAatFrWj/z4PrjjDIAKkVvJJqPypd+W3RHPxdeSE7NsqmSrwQ6mvjd4ML02ynrwURaAGuGsIpOReaNI+G/bi9y9fZY1uSLwlssk3POP2wZsvMre1zeHur8C2v3toPDeyKvOYmLPWtA4hBbO7achT9VP4F4hSF3VONid1LPOoe0PrfEAPvF+SL0PphYQe1c2TQEPTc=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR08MB10521.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- A9LjHqS2ZDqfU3ryQGHJwo3vUKPL5aW2Eoy5hi1QJqjkfQrlypAbSJ+8npEBoq5PGYy3QCAr6yiBx+43h9MRsHVDuRWMjHLCrEtYjBkR3s97tzIKcYe3853Gb1OXCcdVlziPw4PIZ3BvuNNd7kC5W1u7iCT4NiwSVSqq06MA8CF1zP+LyVDzHR2d7IqphlgOj+ximM0dd+hiriSZRNEh5T4F8TGdoDOPuHfwrhc4QRoEnN7hh+iGEw3Yq3agJ7HNg9S8D0FjnyDWYGSoe+P2AV73tYs17cpUr4c8iNlQ722/pu2hK7/akKVDNUOgLNy5ZC3BcCXljbMyYUEggxadNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB11722
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS1EPF00000045.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	30fafdc3-b1b6-478c-4cdc-08de8047b432
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|35042699022|36860700016|82310400026|1800799024|7416014|14060799003|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	GjwNEMo5IOqcwO7OwXEBsYP26i8ymoPKCqpViB9bwvrFQGLaWVYf7Hg876PUfD5Ok1pIL/tPM0yQkrmXjjgFX2mTG3bnjifAvWRHVIvK8VSRIudr0bFxYDnxhvj/hP/kzu/mbV1gCA3M7sE3JbdSowhANSJS+k61cAat4kKX/SfDio8ALH4SwOnwOUH9xwegEgV/sikWy87ZILtiRezwLwDcZ5vi0GLl5HdDDym4Ij61Q++WNFO+a0rWXVm6EORKKsHNTVSF7VAr6tfudDQqd/e9ENxjYXCDEngv8WJrbvT0eEs75f+i+9HfTWdD4PBNcMlja8Qfr7IzmUayg/eHdU0qb3Rdrs4xVbToAaalccG5u3yfiK1f4Lvo6xjqAXrDRXvBwKmYyJHjAmDF8405VaTRNHjjxYy/cKEqPAxnDLxVbmDvCf5CaMYabgiUxLulqPMjrurBkye3V9lVrv+OVR/gHapZ2hM+xd6KKDdac6zQ+NaBxD0/ybT1BNdz67VSpY7GStGDOUR5xZO27ooK0viildmWG81XKvEzFygl14Bx4YUHzFfVq3XdlhWBPx+nJDKeEsqXdjhsFlNyLL+qIXLc8vZthsM55x7GbmER0lA1RoDfU3rYBfjN8TvTIbB4+rROdyoOdKwKaa0B7niCo6YL/+6EFLs34QeROTm8yw0aBtyDfBfw0/DKvVT2YAVzuJ/RLXHa90Lydo4F/yQUyIiq6Co2w72p3rcsaZhhA7ehKgC2ZsSDMlSNqYltA0ZzmuPcwCezcPibFw/QYxXkDQ==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(35042699022)(36860700016)(82310400026)(1800799024)(7416014)(14060799003)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	P7D8MJ4toFZtxOX3dSjyCEMw1KbLBXZcoC1MMJWshjk/md6PdEbeqSv7WR/6eyUZKZzfUL3T5uG9isLM08Ht/g8fP5o8dXvgibfY0Si7kxe9YthSCzxTIgi94xphyluR2g05T4h+IhCBRI54nlhdSDKrf0IXgefF6F7usna9VGOgNzxaIpKCwIXEe+oyqXsd4OprI8tdA8z1VxRn3mnBbbbDse8KFIUdMNOwT0kz53OkTGic1YBRMJGXbj1Ks+OjYGbIoa6Rj7HRc0ewI/WMaYsUmFNZCqWD59e8vxu1uwvm7QhScuYNw642Q/yMoxZfMgH7mqgpNEut8UeRgdAD7KLTSzfKSwSRqurk7RJk+A9gd5CRBS0l4+56HKvQ9ihCRMjYgL/05gjUtKToWene8ZB84NTQ4BPRdNFpApAZhqTuSyyL0DB4y2ZExkN/tdun
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2026 14:58:41.3217
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f8bcbef-1d3f-45e2-fcf5-08de8047d98d
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS1EPF00000045.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR08MB8963
+References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
+ <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com> <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com>
+In-Reply-To: <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Thu, 12 Mar 2026 15:12:12 +0000
+X-Gm-Features: AaiRm522D6XFcNwSUoten5LdH11xVpfwhWEV7958HaqQ2gjfWSDLGgyuH4UYDI0
+Message-ID: <CA+EHjTy2urW2Tj5czQDKUHdri7FCLfw2mafTgmmtFs+-7ueoiw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de, 
+	brauner@kernel.org, chao.p.peng@intel.com, chao.p.peng@linux.intel.com, 
+	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com, 
+	david@kernel.org, hpa@zytor.com, ira.weiny@intel.com, jgg@nvidia.com, 
+	jmattson@google.com, jroedel@suse.de, jthoughton@google.com, 
+	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
+	mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
+	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
+	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, seanjc@google.com, shivankg@amd.com, shuah@kernel.org, 
+	steven.price@arm.com, tglx@linutronix.de, vannapurve@google.com, 
+	vbabka@suse.cz, willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com
+Content-Type: text/plain; charset="UTF-8"
 
-> On Fri, Feb 27, 2026 at 03:17:01PM +0000, Yeoreum Yun wrote:
-> > -#define __futex_atomic_op(insn, ret, oldval, uaddr, tmp, oparg)		\
-> > -do {									\
-> > +#define LLSC_FUTEX_ATOMIC_OP(op, insn)					\
-> > +static __always_inline int						\
-> > +__llsc_futex_atomic_##op(int oparg, u32 __user *uaddr, int *oval)	\
-> > +{									\
-> >  	unsigned int loops = FUTEX_MAX_LOOPS;				\
-> > +	int ret, oldval, newval;					\
-> >  									\
-> >  	uaccess_enable_privileged();					\
-> > -	asm volatile(							\
-> > +	asm volatile("// __llsc_futex_atomic_" #op "\n"			\
-> >  "	prfm	pstl1strm, %2\n"					\
-> > -"1:	ldxr	%w1, %2\n"						\
-> > +"1:	ldxr	%w[oldval], %2\n"					\
-> >  	insn "\n"							\
-> > -"2:	stlxr	%w0, %w3, %2\n"						\
-> > +"2:	stlxr	%w0, %w[newval], %2\n"					\
+Hi Ackerley,
+
+Before getting into the UAPI semantics, thank you for all the heavy
+lifting you've done here. Figuring out how to make it all work across
+the different platforms is not easy :)
+
+<snip>
+
+> The policy definitions below provide more details:
 >
-> Looking again at this as I originally reviewed the series without the
-> positional operands.
+> ``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_ZERO`` (default)
 >
-> Can you not use only named operands instead of mixing them? The same
-> comment for all other asm changes in this file.
+>   On a private to shared conversion, the host will read zeros from the
+>   converted memory on the next fault after successful return of the
+>   KVM_SET_MEMORY_ATTRIBUTES2 ioctl.
+>
+>   This is not supported (-EOPNOTSUPP) for a shared to private
+>   conversion. While some CoCo implementations do zero memory contents
+>   such that the guest reads zeros after conversion, the guest is not
+>   expected to trust host-provided zeroing, hence as a UAPI policy, KVM
+>   does not make any such guarantees.
 
-Okay. I'll change to use name operands only.
-Thanks.
+The rationale for not supporting this in the UAPI isn't quite right
+and I think that the prohibition should be removed. It's true that the
+guest is not expected to trust host-provided zeroing. However, if the
+VMM invokes this ioctl with the ZERO policy, the zeroing is performed
+by the hypervisor, not by the (untrusted) host.
 
---
-Sincerely,
-Yeoreum Yun
+Although pKVM handles fresh, zeroed memory provisioning via donation
+rather than attribute conversion, stating that the UAPI cannot make
+guarantees due to trust boundaries is incorrect. The hypervisor is
+precisely the entity the guest trusts to enforce this.
+
+The UAPI should define the semantics for a shared-to-private ZERO
+conversion, even if current architectures return -EOPNOTSUPP because
+they handle fresh memory provisioning via other mechanisms (like
+pKVM's donation path).
+
+How about something like the following:
+
+On a shared to private conversion, the hypervisor will zero the memory
+contents before mapping it into the guest's private address space,
+preventing the untrusted host from injecting arbitrary data into the
+guest. If an architecture handles zeroed-provisioning via mechanisms
+other than attribute conversion, it may return -EOPNOTSUPP.
+
+>   For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle
+>   will support this policy and ensure zeroing for conversions in both
+>   directions.
+>
+> ``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_PRESERVE``
+>
+>   On private/shared conversions in both directions, memory contents
+>   will be preserved and readable. As a concrete example, if the host
+>   writes ``0xbeef`` to memory and converts the memory to shared, the
+>   guest will also read ``0xbeef``, after any necessary hardware or
+>   software provided decryption. After a reverse shared to private
+>   conversion, the host will also read ``0xbeef``.
+
+I think that this example is backwards. If the host writes to memory,
+that memory is already shared, isn't it? Converting it to shared is
+redundant. More importantly, if memory undergoes a shared-to-private
+conversion, the host must lose access entirely.
+
+Maybe a clearer example would reflect actual payload injection and
+bounce buffer sharing:
+- Shared-to-Private (Payload Injection): The host writes a payload
+(e.g., 0xbeef) to shared memory and converts it to private. The guest
+reads 0xbeef in its private address space. The host loses access.
+- Private-to-Shared (Bounce Buffer): The guest writes 0xbeef to
+private memory and converts it to shared. The host reads 0xbeef.
+
+>   pKVM (ARM) is the first user of this policy. Since pKVM does not
+>   protect memory with encryption, a content policy to preserve memory
+>   will not will not involve any decryption. The guest will be able to
+>   read what the host wrote with full content preservation.
+
+This is correct, but to be precise, I think it should explicitly
+mention Stage-2 page tables as the protection mechanism, maybe:
+
+Because pKVM protects private memory via Stage-2 page table isolation
+rather than hardware encryption, content preservation does not require
+cryptographic operations. The hypervisor (at EL2) simply transfers
+page ownership while retaining the data.
+
+Cheers,
+/fuad
+
+
+>   For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle
+>   will support this policy and the contents of converted memory will
+>   be preserved.
+>
+> ``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_NONE``
+>
+>   This is an explicit request that KVM provide no guarantees on memory
+>   contents after conversion. Neither host nor guest should expect any
+>   guarantees about the memory contents after conversion.
+>
+>   For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle will
+>   support this policy and every byte of converted memory will read
+>   ``0xab``.
+>
+> >>  See also: :ref: `KVM_SET_MEMORY_ATTRIBUTES`.
+> >>
+> >
+> > [...snip...]
+> >
