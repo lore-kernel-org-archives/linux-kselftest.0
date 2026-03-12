@@ -1,233 +1,136 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011071.outbound.protection.outlook.com [52.101.65.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96393DCD84
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 15:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773330273; cv=none; b=hugqETLFEiI072dD++3RVmIIijVVzKjbYN4ppxoBF50LOtCB8h8HBlPiYoXG+D5r7zXE5wktFMBUaTudFMdER/ozFpkJjWSyrcUm+GKAKdP7NgiVkahPC8+RpPV431KPGYrgShpxOSGE8qTubpREKXsTgsQVdo8W/1chKwvFqjo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773330273; c=relaxed/simple;
-	bh=576TIn2jifWj7C0GPxk/j0rxm6nFEdPvdqAY5vC0peA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nMSzv4nLexM4np7lg4SLupLOkfadWtDIKfiwEull7y7TxDzABIUuFGWerwAelKfGWQxA78lJBGTS4oiFGfDwjqjy8RaVhm8euQuia77el7IwhrDv8LQ/5d5Atalfd9XlA/qxbJRd1aHmzVPc0fxAWHRB8uiVX+vMMKvKWih7zFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oJBZ0lBQ; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF093BD65E;
+	Thu, 12 Mar 2026 15:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773330728; cv=fail; b=E6oX72vKUvFZ2ostMdEYfYSzkOjVJ7beSsO3EavM3Wzn/fvqQLwBhF5oxU8H8VND30DzVpjx438p6vIdzC+yCMHItLBYABN68kDKsrDj7Tq7iHMPbTBSO8SOGXGykFPe4hTCKGmJdtabaXQ70w0HkJ6h3ubLaiGGNebdBRtnmlA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773330728; c=relaxed/simple;
+	bh=d3ikSh5mA0O1Ao2raChWDGXqAe+6MnP7eBROdJ5hcZI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=rMOIbKW6SMaKDwrcY0lY+42RP1uOwIsiTngNXBLfAydt22TAnSSdlcJ+XGSqVCBl3+hCpc+m5nJAsfAIzewpGVAwzBvmF8Fhn51H9tb4WV/EtolIqgNw9fJibhXLzWp2PODfWoN0sMWAlIKkD8Hk/RuNtS2oLbaHizBUs9zt1LU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=YcuPGq0F; arc=fail smtp.client-ip=52.101.65.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oJBZ0lBQ"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35a032cdd78so4895118a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 08:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773330267; x=1773935067; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DfjX+chjGEd0BK+/hAaiX1yXd2SlEDAudQ7PcUmbUhE=;
-        b=oJBZ0lBQ4b04zIfcaNl/XackVgqW5ZO1YLBQmDf42CwPsejhIR9UfDGVl1U/zScm5O
-         B/C05dMbK6Vl5rUrWnPtZWcy0PtENecw/cUK40G1rnFZbtsAF1KPVzXK12anrPKc0RK9
-         bND5/c31cTkGMisdTOIWGSsARDurM0oUFInsisS9P7hMf+3exDtnSH+X+yJPX0UoTWqw
-         rCJ72t/rXcuBNPEKAgdfJCbxuQljSYCos739fz/wBRIaDsYS0yBsVpPfcgNAwXyVLLYC
-         qX+kGrawofFi5STJYyiUJzhaUkBcWZPPj3SaHuF6T2W0nsE0LZ+YjdzqwTNijeHHGHsA
-         ZmHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773330267; x=1773935067;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DfjX+chjGEd0BK+/hAaiX1yXd2SlEDAudQ7PcUmbUhE=;
-        b=O8a+s7M2BPa8U+1kwuLTBrVt41LTJsrN/2FSjb6cO99BuxVgSj4gcQYkEFojCLAzA0
-         2ETlRS5ed6uC8PwS/knDLTKpVpKApf91AE1w3cGM6z4mDxFc68Y7BHZ8q9OW4aOIun5b
-         lsxTAVSNH7+2vxPF1+voYtDHrzRQ000LnJIh+B/tqTAs2dlfBCI2FnyvPJzF810ZWCDU
-         iH+lujPpbMxnl4yfgFvQcQKjV9nWLc5lgVqRWyWqN89DoeJfAVwl47x7Wa1Ej427qAFO
-         EqF1mEW1AlE4VFf5JNNXwlwi4l4nJcV6PX9QKakKt/HZAolrak8wfTlpxMvqZ/l0ZbdK
-         Y41w==
-X-Forwarded-Encrypted: i=1; AJvYcCXY+TYs4/H/vrkJT42lSI+b/Nj3KtF99O9ECQEX9YtzmTzxXOsW0iy3yFNWLBTcU2t8RAD41kMnX6RnZah3BxY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxryIXgktGD5ky/Ir7AQOv1P+7SIOW2nlPAIT01DyQk3tcbgwkV
-	CrYU+gtQLtBwZihUvYkOD8LBox75wNyQiBbdJUVAJAzWh2yOZwKVJVhyogCwH4OX+PDMdCxPGA1
-	j4/aKVg==
-X-Received: from pjpq11.prod.google.com ([2002:a17:90a:a00b:b0:359:803b:2e2b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1d03:b0:359:8f13:667d
- with SMTP id 98e67ed59e1d1-35a22055567mr113663a91.27.1773330266114; Thu, 12
- Mar 2026 08:44:26 -0700 (PDT)
-Date: Thu, 12 Mar 2026 08:44:24 -0700
-In-Reply-To: <CA+EHjTy2urW2Tj5czQDKUHdri7FCLfw2mafTgmmtFs+-7ueoiw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="YcuPGq0F"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ySRU3nOyqDARDpFjP0FMpkqeuO2tqD0eX2gO82lB0ROTcWT7r9yBKe0PN3WfmfWXXFSlbu7PfWBZ6US3VzZCIbH/pl/TEYev0iXFz5BgNJB2nazSk6dnGIhJhscBgyu9wj8G82rNBv5JuNsU6Os/YS44Q1UGKPVXB99EzWm//Ci7yvCUe4WmLEIAJ3yCnwtL6Cr3u+YA6N+tO0G+yNpr0uwBgON9lxhQziGDmDdNOIcsAVJyePSBwkleyqL3aFJifs6/xn4NIpgYNK823jFxQMBMs5MVWdtEEReCfBhuuNeMckShD2ESq7Hm7Qm+HX4+x20PpTAj8Zc0ZT8J7R03nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BXbgvRbCBRGliD3aBtoPo29wsc3PgFZ40oHApaXDWSM=;
+ b=Ibmg4SzaNEiXS39jqh25t0yoEvbjVoNwjzMhjqtwUbs9aK/ESdWwU41sDkJCZUng0fUUuQVqD280CiFVjedikEKvE/ejhkbPAWWgVOS+pywFn3B48EV1wH5AtBd60waTHmqDjfP+d3h1u/1dULV4Pb+H4o/D9TWv/LSXeZyvwEMoTiR7cJxF/M6XM9GiHMfVU+nsAsqZT/qUS/UmQvna8gBvZxZq8jWU9McKDZtSzFAcfgsXRgC27Uq8D1p4VVojytJflM28OFyFwEkr1nU9iCzx9X1fmgCK0hDTYSVHytP5kVdyiAZkofNG21ZKUpXXLlaOXoZdBz2/mddYhcgHyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BXbgvRbCBRGliD3aBtoPo29wsc3PgFZ40oHApaXDWSM=;
+ b=YcuPGq0F4NnzTFgjjZMyynl8gBAcmAKW4x4kGyFb8MGIz+tgFATDvmb4577GGS0r5OLI3Uhna/9bRxjSBl8Nibn7reLkRmgeSv/uI1mFzD+YgXlw9FfBizk4MXBOTVYfUHj3lFiP+3Jm0ujPc6EPvNkfXt7SyG8VVdwSfNNo2Jgu2ZTYAMPJUvLPV+rHqb4CGwvKvtJi3FIauIgFUL/eklicgsdD+Cr315WRVqrp1jkN6jr6a6DKsPN82nT92En5HVfWL05d20CgV/7vozD2T4fUtBjz6cvVMRHqBgXkLRhNtTNutLMXjKpZey/mpEvhnZmdJvj4csPMpzUnSsNByQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
+ by GV2PR04MB12163.eurprd04.prod.outlook.com (2603:10a6:150:2ff::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.12; Thu, 12 Mar
+ 2026 15:52:02 +0000
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9700.010; Thu, 12 Mar 2026
+ 15:52:00 +0000
+Date: Thu, 12 Mar 2026 17:51:57 +0200
+From: Ioana Ciornei <ioana.ciornei@nxp.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 0/9] selftests: drivers: bash support for
+ remote traffic generators
+Message-ID: <ypu7gl6hqks45xsnypa4l2363boaje24totpdu6vzeplcxaecl@h7bk4hwdoypi>
+References: <20260312141740.295353-1-ioana.ciornei@nxp.com>
+ <20260312081923.01b0537d@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260312081923.01b0537d@kernel.org>
+X-ClientProxiedBy: AM8P190CA0020.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:219::25) To PAXPR04MB8253.eurprd04.prod.outlook.com
+ (2603:10a6:102:1bf::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
- <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
- <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com> <CA+EHjTy2urW2Tj5czQDKUHdri7FCLfw2mafTgmmtFs+-7ueoiw@mail.gmail.com>
-Message-ID: <abLfWHf89TxWqeGZ@google.com>
-Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
-From: Sean Christopherson <seanjc@google.com>
-To: Fuad Tabba <tabba@google.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de, 
-	brauner@kernel.org, chao.p.peng@intel.com, chao.p.peng@linux.intel.com, 
-	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com, 
-	david@kernel.org, hpa@zytor.com, ira.weiny@intel.com, jgg@nvidia.com, 
-	jmattson@google.com, jroedel@suse.de, jthoughton@google.com, 
-	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
-	mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
-	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, shivankg@amd.com, shuah@kernel.org, steven.price@arm.com, 
-	tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz, 
-	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|GV2PR04MB12163:EE_
+X-MS-Office365-Filtering-Correlation-Id: 63812bd3-c9c0-4fb5-1a7d-08de804f4bb3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|19092799006|366016|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	0kuk2zseP9Je8EROwwsDxF85B42ZZtHMkioYVu9IrwadsOek5F/pBvcMCir59c2ItW7sd2DNE4+Ec3AALFwsgKIH95Kxdu8En+n7isXxyc8yhdGksDf/6hY0jPFX8fdbiUHaYRGdr2aH5P3LQO4hbwvMSXQ++sxg9mNw1teQuSomAx2P9LZVm8PNytOwAFAcOFhxawLsq0Tl0kSxnJP1x1PbkH9HHp5y7at4Vvg+Z7ivFCkjjmTLxAmyOq6dpsNERZWNvwcLfGM+eZI0hZZe0etpLwqCISawmx+piEOOs+zuCTCRcJ0XSbfOv8qqzDzHUJE7ZmzDsCs01oj3vVmm2BWCfVO7NgoFCSC5b0MYvj33EoGxt/LRZSpLuUK6cGn4f+tmIpdYeH+EXBbCsNm+xYKhS0HKbdFaLraBtIem3j9DWvzSKUMxKWvEO0SgN95bPBHqc2Huin0I8ZdJutvylb+7IT8aUsY9dOt0rSoSzNNOVGEdzlNySVCf4xuOQoInLiNpa81mFP5S5AlSrou+6MYXLrhkgMJCSl6RVcCGlayi0hdiu4+QY4ii1E0+80EDiyFdPBRjlOy1KrDzG84V3LcRr+w6MMs1su6IrjYX6oiRX92Cgt9RS4kwcX5+B4PGBQIgpdtOyjy5w6HwQ0nuLk/nP8X5TJRJ5wVbWBdmQ95haxk8JwNYPUqgDdB/2R6u
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(19092799006)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?E78MpDPqmF0or9Ku2lu1G4qE6wwNFWb9YSuNGj659ZKwI6E2kiQv9czpZvYS?=
+ =?us-ascii?Q?v32MsXtEhDgHhY9p9KSYctevCIp9wX6GFvFfFt+b+PaxvIb9j+JqJ7TGMu4T?=
+ =?us-ascii?Q?tu3F2PHuGPncLdJ0fJqKmW6n1yEsJDF6t7HhdGtnbc1T8YBp6mgLunVpfd3v?=
+ =?us-ascii?Q?YJ2o5dUWIcxznon+vi79H2O/RNC4/3j/UmHtCeTf6h/9c7XqD0rEK4G5ef/H?=
+ =?us-ascii?Q?Q22E5H/XYciNHBj2QEdn/n6yw5k/bqrkhxyoqawMI79YERdK4cK4f9EMENjl?=
+ =?us-ascii?Q?x/C8Nwk+cY9KyVH+CyhoS2kM1Scbdfv5M2d8a4QoyZryF9QXWXDsW70GQ+LY?=
+ =?us-ascii?Q?TEpVI2at0F3WtcI8IXO8TzX75V3uSeOc/VGYEGlOCF1nPIrBgWzDS4706+yh?=
+ =?us-ascii?Q?qhgvNbGUKjbCHZLle/gi3VfQLeCFjvXnHi/oZVHjiBRQPdowFo6+vr5ULgZl?=
+ =?us-ascii?Q?OyYwvndtDomIspgm1taRqG2z7WxViJ13uQHOkUFXd9d3n3A0uVX3oYR/LJgl?=
+ =?us-ascii?Q?hp5y8IE+g8cX9bA7ji6YZHLcR7xX9/DEhn/o5qae3mmBcVqsrrodKXuyrVeO?=
+ =?us-ascii?Q?V7m0wnpiko2n6vc8IUa3tCVeyUa3IDdUjRZ2bY0zyWBGaCCtB2r7YkFZKw6G?=
+ =?us-ascii?Q?vitUSeVHxhHGj4m2/BJXXNwEFq20wdKGpsNbj/x7hfCq6Bezxa7EPwbq8uKF?=
+ =?us-ascii?Q?Hsstc5Dta3WL8TMmxZFjSPDehkMougy6PIPUT1R9NGodIjc1g6Z4X2s7T77c?=
+ =?us-ascii?Q?MDMOgy0vUiUDmF1ZE1BlJfvhlEjm8tftJFpAzm8CghIFtxc9n7HTLuo3YwI1?=
+ =?us-ascii?Q?UMFxl1NCyWv+WY9QPi9atDMGGbE7A/Oo0i11dHq+1fYvWc9nxJimhzNjSpsJ?=
+ =?us-ascii?Q?KtsHcdVYLHYSCzy7Hn1VkK3wFiPuklGrZ4arSxNjlnUlHM/YqCLGaNhMgsXS?=
+ =?us-ascii?Q?OaC9bZdv63uV6LFqQMaRiVXpvijlwtKw8uaVPtrWZ73g0hiS0OH48JoEdpFW?=
+ =?us-ascii?Q?CrQhEBseVoru3MOFkiIyQMC6srQtFrfyf3YUAcVR6L0PGOaMDXmL1N8btiVP?=
+ =?us-ascii?Q?t73TrrLPkLA9fb8voa49kYrr0julnkvCUHKRihIDgbBB7n4CUHoIauhIQVMe?=
+ =?us-ascii?Q?2jHJxE3TKKmblPn0tubtBHT9y3/Z7nVjTj3JNbXxwqFhGqXRyaNmZ/zANFaw?=
+ =?us-ascii?Q?Hczcw0+uJHKwge0ObjearEU0oPQuB+lTEM+RVHbBXglWafudB8H/hJPcgFJj?=
+ =?us-ascii?Q?TEwPNKeLbWcEwcY9griZOddvYM7mI2iqPDo2fvesIsq6G3T2GSQRf8gKoN9j?=
+ =?us-ascii?Q?5s0Bxxm3EdoXzJHhgGcwWBSMsR5Q1tbaZKy9b6Y7nPRmNfczkJLcCXasca//?=
+ =?us-ascii?Q?maqhlOV27rGEfyQ5y6HJCwFs0X+xIg+BkroTUS8K6yAZHOAYO8xnm/GhwZGK?=
+ =?us-ascii?Q?4Q3BasEE6g4PQNzWVscYHO2Ynr36hgrLUDMLPHuukNl31jUWdiPPY1Ywcz0V?=
+ =?us-ascii?Q?wlWsc0TPZ55utNJeFFQ7M874O+OpuRI1qTkHxhq7NjJBAZOZaKMFcWB/mAv4?=
+ =?us-ascii?Q?6ndDvpiw+Hku87TuIgeK6XwaCsCYAIYr4PaVyVb88GDOz8Id9eIl4V2dw/dC?=
+ =?us-ascii?Q?byJo4OnZaRBXDQ7EEpjW+g8idQc4/jpchGDaBDf2NxbCBPu0sXj7OL36VdWz?=
+ =?us-ascii?Q?/hKQ9JTTifV9NuaGdepiOXAq9K44yf58uWizqOeoK+kdyCkvx1DaMElyw325?=
+ =?us-ascii?Q?oL9qHLG4Eg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63812bd3-c9c0-4fb5-1a7d-08de804f4bb3
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2026 15:52:00.0147
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 623yVlCqQ0rLHutbZWKFhxrN8oq3RQK/NlbuqsFTlvb3/BuBdQLjaVzkuuXW5kIZMea3jUDUTaZgC/T9laAm9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR04MB12163
 
-On Thu, Mar 12, 2026, Fuad Tabba wrote:
-> Hi Ackerley,
+On Thu, Mar 12, 2026 at 08:19:23AM -0700, Jakub Kicinski wrote:
+> On Thu, 12 Mar 2026 16:17:31 +0200 Ioana Ciornei wrote:
+> > This patch set aims to add the necessary support so that bash written
+> > selftests are also able to easily run with a remote traffic generator
+> > system, either be it in another netns or one accessible through ssh.
 > 
-> Before getting into the UAPI semantics, thank you for all the heavy
-> lifting you've done here. Figuring out how to make it all work across
-> the different platforms is not easy :)
-> 
-> <snip>
-> 
-> > The policy definitions below provide more details:
+> I think this breaks a lot of tests:
+> https://netdev.bots.linux.dev/contest.html?pw-n=0&branch=net-next-2026-03-12--15-00&pw-n=0&pass=0
 
-Please drop "CONTENT_POLICY" from the KVM documentation.  From KVM's perspective,
-these are not "policy", they are purely properties of the underlying memory.
-Userspace will likely use the attributes to implement policy of some kind, but
-KVM straight up doesn't care.
+I used and set the TARGET variable in net/lib.sh even though it was
+previously defined by drivers/net/lib/sh/lib_netcons.sh.
+Will change the name of the variable.
 
-> > ``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_ZERO`` (default)
-
-The default behavior absolutely cannot be something that's not supported on
-every conversion type.
-
-> >
-> >   On a private to shared conversion, the host will read zeros from the
-> >   converted memory on the next fault after successful return of the
-> >   KVM_SET_MEMORY_ATTRIBUTES2 ioctl.
-> >
-> >   This is not supported (-EOPNOTSUPP) for a shared to private
-> >   conversion. While some CoCo implementations do zero memory contents
-> >   such that the guest reads zeros after conversion, the guest is not
-> >   expected to trust host-provided zeroing, hence as a UAPI policy, KVM
-> >   does not make any such guarantees.
-> 
-> The rationale for not supporting this in the UAPI isn't quite right
-> and I think that the prohibition should be removed. It's true that the
-> guest is not expected to trust host-provided zeroing. However, if the
-> VMM invokes this ioctl with the ZERO policy, the zeroing is performed
-> by the hypervisor, not by the (untrusted) host.
-
-What entity zeros the data doesn't matter as far as KVM's ABI is concerned.  That's
-a motivating favor to providing ZERO, e.g. it allow userspace to elide additional
-zeroing when it _knows_ the memory holds zeros, but that's orthogonal to KVM's
-contract with userspace.
-
-> Although pKVM handles fresh, zeroed memory provisioning via donation
-> rather than attribute conversion, stating that the UAPI cannot make
-> guarantees due to trust boundaries is incorrect. The hypervisor is
-
-We should avoid using "hypervisor", because (a) it means different things to
-different people and (b) even when there's consensus on what "hypervisor" means,
-whether or not the hypervisor is trusted varies per implementation.
-
-> need to be careful witho precisely the entity the guest trusts to enforce
-> this.
-> 
-> The UAPI should define the semantics for a shared-to-private ZERO
-> conversion, even if current architectures return -EOPNOTSUPP because
-> they handle fresh memory provisioning via other mechanisms (like
-> pKVM's donation path).
-> 
-> How about something like the following:
-> 
-> On a shared to private conversion, the hypervisor will zero the memory
-
-Again, say _nothing_ about "the hypervisor".  _How_ or when anything happens is
-completely irrelevant, the only thing that matters here is _what_ happens.
-
-> contents before mapping it into the guest's private address space,
-> preventing the untrusted host from injecting arbitrary data into the
-> guest. If an architecture handles zeroed-provisioning via mechanisms
-> other than attribute conversion, it may return -EOPNOTSUPP.
-
-No.  I am 100% against bleeding vendor specific information into KVM's ABI for
-this.  What the vendor code does is irrelevant, the _only_ thing that matters
-here is KVM's contract with userspace.
-
-That doesn't mean pKVM guests can't rely on memory being zeroed, but that is a
-contract between pKVM and its guests, not between KVM and host userspace.
-
-> >   For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle
-> >   will support this policy and ensure zeroing for conversions in both
-> >   directions.
-> >
-> > ``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_PRESERVE``
-> >
-> >   On private/shared conversions in both directions, memory contents
-> >   will be preserved and readable. As a concrete example, if the host
-> >   writes ``0xbeef`` to memory and converts the memory to shared, the
-> >   guest will also read ``0xbeef``, after any necessary hardware or
-> >   software provided decryption. After a reverse shared to private
-> >   conversion, the host will also read ``0xbeef``.
-> 
-> I think that this example is backwards. If the host writes to memory,
-> that memory is already shared, isn't it? Converting it to shared is
-> redundant. More importantly, if memory undergoes a shared-to-private
-> conversion, the host must lose access entirely.
-
-Ya, it's messed up.
-
-> Maybe a clearer example would reflect actual payload injection and
-> bounce buffer sharing:
-> - Shared-to-Private (Payload Injection): The host writes a payload
-> (e.g., 0xbeef) to shared memory and converts it to private. The guest
-> reads 0xbeef in its private address space. The host loses access.
-> - Private-to-Shared (Bounce Buffer): The guest writes 0xbeef to
-> private memory and converts it to shared. The host reads 0xbeef.
-> 
-> >   pKVM (ARM) is the first user of this policy. Since pKVM does not
-> >   protect memory with encryption, a content policy to preserve memory
-> >   will not will not involve any decryption. The guest will be able to
-> >   read what the host wrote with full content preservation.
-> 
-> This is correct, but to be precise, I think it should explicitly
-> mention Stage-2 page tables as the protection mechanism, maybe:
-
-pKVM shouldn't be mentioned in here at all.
-
----
-By default, KVM makes no guarantees about the in-memory values after memory is
-convert to/from shared/private.  Optionally, userspace may instruct KVM to
-ensure the contents of memory are zeroed or preserved, e.g. to enable in-place
-sharing of data, or as an optimization to avoid having to re-zero memory when
-the trusted entity guarantees the memory will be zeroed after conversion.
-
-The behaviors supported by a given KVM instance can be queried via <cap>.  If
-the requested behavior is an unsupported, KVM will return -EOPNOTSUPP and
-reject the conversion request.  Note!  The "ZERO" request is only support for
-private to shared conversion!
-
-``KVM_SET_MEMORY_ATTRIBUTES2_ZERO``
-
-  On conversion, KVM guarantees all entities that have "allowed" access to the
-  memory will read zeros.  E.g. on private to shared conversion, both trusted
-  and untrusted code will read zeros.
-
-  Zeroing is currently only supported for private-to-shared conversions, as KVM
-  in general is untrusted and thus cannot guarantee the guest (or any trusted
-  entity) will read zeros after conversion.  Note, some CoCo implementations do
-  zero memory contents such that the guest reads zeros after conversion, and
-  the guest may choose to rely on that behavior.  But that's a contract between
-  the trusted CoCo entity and the guest, not between KVM and the guest.
-
-``KVM_SET_MEMORY_ATTRIBUTES2_PRESERVE``
-
-  On conversion, KVM guarantees memory contents will be preserved with respect
-  to the last written unencrypted value.  As a concrete example, if the host
-  writes ``0xbeef`` to shared memory and converts the memory to private, the
-  guest will also read ``0xbeef``, even if the in-memory data is encrypted as
-  part of the conversion.  And vice versa, if the guest writes ``0xbeef`` to
-  private memory and then converts the memory to shared, the host (and guest)
-  will read ``0xbeef`` (if the memory is accessible).
+Ioana
