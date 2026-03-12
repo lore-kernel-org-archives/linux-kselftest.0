@@ -1,216 +1,257 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946272D8DB5
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 18:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470E43FEB07;
+	Thu, 12 Mar 2026 18:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773338689; cv=none; b=D1/kqDh/mp+PWIN9h1wmEtXYVrlr9NsolTRwRod5z5SuCshkZUwPj9U3dhzclI3arI2u7KtC9P1K1SiBjeoVFnEqWBiYAEFx3A9zNESV0O4zCaFPRS2J0BYo7xsf7faV40by3UdSKXF4sPGXlL833oXrYwCHK7aZKxd5SpL9VoI=
+	t=1773339456; cv=none; b=NbmDJpRHUyHeW7D9bpu5ZRuvnSpDuc/xoKr+k3KDY+AU+D4easM8XxUZw1XH0l8c9a5pQStzhHBu637tzmLjIPN0eRMyseEXoTDMzT2PufTfbb+nt3nc0xlRnVcp4ODOviPtpnu+WUyrCbgWY/UaNKyLddl/0GvqAgCndD+AU/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773338689; c=relaxed/simple;
-	bh=fmvvD0IA4ebRw4+C2da7W4o+Zy+hXaSvEC9feQ3ucBs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oRGW6AFXOuPR6hA9redqxGpyV7ePs81cmiYJo5lV5lPivGLyf+nfoz/lsKsEpb0gOunOjF/glQtwD8ExBrIarfAuXsLAWof/NeIGISBAKA+fnRXxSK7An4klPkgE4fSLhUE3omGatFYsLvcPlYrZpR18CRk/hn6DJDdsKcIfINM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n2dhEe1+; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n2dhEe1+"
-Message-ID: <7f157000-d1a9-4284-afef-12107d6ce40e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773338685;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vbiNkMOD7irzTZplqwAXcc3QjCyah3uOZx2fIketAbM=;
-	b=n2dhEe1+QfH7d38/S+iaxZPuN9a3WrgKNNabk4Yys1LKTkvp0mxEzTWf+IDgFFJKBL+I9h
-	CetwZpeLnj8ZgdNcjV3EnjTIJFXkMaSGnWyCFybsXpLYZp9ZD0YkQ7vzMjTbEy6j0G3IKo
-	6vSSPwjnCmlKClnthmJTEf/Hkatb6DE=
-Date: Thu, 12 Mar 2026 11:04:41 -0700
+	s=arc-20240116; t=1773339456; c=relaxed/simple;
+	bh=oseE2rbEt6AvnSSYQiq+1Dcp8V/0TQwolE8LQt7EC+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tByBQODuvM4sooflSIXLSG91uRfS3mEDZR1cTt5jDoi0/CG7jJRVa2BnXGh2MqGwqOGOQwQfVYvmUvr1TDhf7h5Trk3yMKu0o14PX+N6hrAq320NPibHwSqkzpmFYpilYUHHa9F0Ec3vEnY9uH+5GiTpe3uUSA1b1gF4Qxq6HaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75E22165C;
+	Thu, 12 Mar 2026 11:17:26 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B4223F73B;
+	Thu, 12 Mar 2026 11:17:30 -0700 (PDT)
+Date: Thu, 12 Mar 2026 18:17:28 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
+	oupton@kernel.org, miko.lenczewski@arm.com, kevin.brodsky@arm.com,
+	broonie@kernel.org, ardb@kernel.org, suzuki.poulose@arm.com,
+	lpieralisi@kernel.org, joey.gouly@arm.com, yuzenghui@huawei.com
+Subject: Re: [PATCH v15 5/8] arm64: futex: support futex with FEAT_LSUI
+Message-ID: <abMDOC5DYEm74And@arm.com>
+References: <20260227151705.1275328-1-yeoreum.yun@arm.com>
+ <20260227151705.1275328-6-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 1/4] RDMA/nldev: Add dellink function pointer
-To: David Ahern <dsahern@kernel.org>, Leon Romanovsky <leon@kernel.org>,
- Zhu Yanjun <yanjun.zhu@linux.dev>
-Cc: jgg@ziepe.ca, zyjzyj2000@gmail.com, shuah@kernel.org,
- linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
- <20260310020519.101415-2-yanjun.zhu@linux.dev>
- <20260310190140.GL12611@unreal>
- <5700c718-d10e-4b23-adfc-c14ee1930b18@linux.dev>
- <20260311085434.GW12611@unreal>
- <6a8b0983-a198-470a-8125-b0133ccb7032@linux.dev>
- <b5c2053c-f911-4e0d-8589-4d969bd580a4@kernel.org>
- <e8e1fc5b-7772-40c5-8214-b4f9d4a10d98@linux.dev>
- <434a9a8c-f369-435a-b8bf-d9ae85558c8e@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <434a9a8c-f369-435a-b8bf-d9ae85558c8e@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227151705.1275328-6-yeoreum.yun@arm.com>
 
+On Fri, Feb 27, 2026 at 03:17:02PM +0000, Yeoreum Yun wrote:
+> +#ifdef CONFIG_ARM64_LSUI
+> +
+> +/*
+> + * FEAT_LSUI is supported since Armv9.6, where FEAT_PAN is mandatory.
+> + * However, this assumption may not always hold:
+> + *
+> + *   - Some CPUs advertise FEAT_LSUI but lack FEAT_PAN.
+> + *   - Virtualisation or ID register overrides may expose invalid
+> + *     feature combinations.
+> + *
+> + * Rather than disabling FEAT_LSUI when FEAT_PAN is absent, wrap LSUI
+> + * instructions with uaccess_ttbr0_enable()/disable() when
+> + * ARM64_SW_TTBR0_PAN is enabled.
+> + */
 
-On 3/11/26 10:09 PM, Zhu Yanjun wrote:
->
-> 在 2026/3/11 20:59, Zhu Yanjun 写道:
->>
->> 在 2026/3/11 19:04, David Ahern 写道:
->>> On 3/11/26 4:01 PM, Yanjun.Zhu wrote:
->>>
->>>> Got it. The commit log explains how the netdev_notifier mechanism is
->>> netdev notifiers are the NETDEV_UNREGISTER and friends. This dellink
->>> handler is not related to that; this is an IB stack thing when the rxe
->>> link is removed.
->>>
->>>> used to clean up the related resources.
->>>>
->>>> In the source code, additional comments have been added to explain how
->>>> the dellink operation for rxe is triggered. For iWARP, this change
->>>> should not make any difference because iWARP does not implement the
->>>> dellink function.
->>>>
->>>> The commit is shown below. Please take a look and share your comments.
->>>> If you agree, I will send out the latest commits out very soon.
->>>>
->>>>  From c05038dcdf69c5985837736a8926ba76d9f3e8e4 Mon Sep 17 00:00:00 
->>>> 2001
->>>> From: Zhu Yanjun <yanjun.zhu@linux.dev>
->>>> Date: Fri, 23 Sep 2022 16:52:45 +0000
->>>> Subject: [PATCH 1/1] RDMA/nldev: Add dellink function pointer
->>>>
->>>> The newlink function pointer was previously added to support
->>>> dynamic RDMA link creation. In the RXE driver, this path creates
->>>> a transport socket listening on port 4791. Consequently, a dellink
->>>> function pointer is required to ensure these sockets are properly
->>>> closed when a user administratively removes a link via rdma link
->>>> delete <dev>.
->>>>
->>>> Furthermore, RXE does not rely solely on this nldev path for resource
->>>> management. It also monitors the underlying net_device state via a
->>>> registered netdev_notifier. The rxe_net_event callback serves as a
->>>> fallback mechanism to ensure that transport sockets are forcibly 
->>>> closed
->>>> and all resources are released even if dellink is not explicitly 
->>>> called
->>>> (e.g., if the parent NIC interface is removed or the driver is 
->>>> forcefully
->>>> unloaded).
->>> IMHO, this explanation belongs in the patch that implements dellink 
->>> for rxe.
->>>
->>> This patch adds the handler to allow link implementations to cleanup 
->>> any
->>> resources created by newklink as needed.
->> Thanks for the feedback. I agree that the detailed explanation of 
->> RXE's resource management (like sockets and notifiers) is more 
->> appropriate for the subsequent patch that implements the RXE dellink 
->> handler.
->>
->> I will update the commit message for this patch to focus solely on 
->> the addition of the dellink infrastructure in the RDMA core, and move 
->> the RXE-specific details to the next patch in the series.
->
-> Hi,
->
-> I would like to use the following as the commit log. It seems simple 
-> and direct.
->
-> "
->
-> Add a dellink function pointer to rdma_link_ops to allow drivers to 
-> clean up resources created during newlink.
-> "
+I'd just keep this comment in the commit log. Here you could simply say
+that user access instructions don't require (hardware) PAN toggling. It
+should be obvious why we use ttbr0 toggling like for other uaccess
+routines.
 
-Hi,
+> +#define LSUI_FUTEX_ATOMIC_OP(op, asm_op)				\
+> +static __always_inline int						\
+> +__lsui_futex_atomic_##op(int oparg, u32 __user *uaddr, int *oval)	\
+> +{									\
+> +	int ret = 0;							\
+> +	int oldval;							\
+> +									\
+> +	uaccess_ttbr0_enable();						\
+> +									\
+> +	asm volatile("// __lsui_futex_atomic_" #op "\n"			\
+> +	__LSUI_PREAMBLE							\
+> +"1:	" #asm_op "al	%w3, %w2, %1\n"					\
 
-The final commit is as below. I will send the latest commit out very soon.
+As I mentioned on a previous patch, can we not use named operators here?
 
- From 8fda79a3b0c3f6df6ba0fc70040ce09e4028a2a3 Mon Sep 17 00:00:00 2001
+> +"2:\n"									\
+> +	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)				\
+> +	: "+r" (ret), "+Q" (*uaddr), "=r" (oldval)			\
+> +	: "r" (oparg)							\
+> +	: "memory");							\
+> +									\
+> +	uaccess_ttbr0_disable();					\
+> +									\
+> +	if (!ret)							\
+> +		*oval = oldval;						\
+> +	return ret;							\
+> +}
+> +
+> +LSUI_FUTEX_ATOMIC_OP(add, ldtadd)
+> +LSUI_FUTEX_ATOMIC_OP(or, ldtset)
+> +LSUI_FUTEX_ATOMIC_OP(andnot, ldtclr)
+> +LSUI_FUTEX_ATOMIC_OP(set, swpt)
+> +
+> +static __always_inline int
+> +__lsui_cmpxchg64(u64 __user *uaddr, u64 *oldval, u64 newval)
+> +{
+> +	int ret = 0;
+> +
+> +	uaccess_ttbr0_enable();
+> +
+> +	asm volatile("// __lsui_cmpxchg64\n"
+> +	__LSUI_PREAMBLE
+> +"1:	casalt	%2, %3, %1\n"
+> +"2:\n"
+> +	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)
+> +	: "+r" (ret), "+Q" (*uaddr), "+r" (*oldval)
+> +	: "r" (newval)
+> +	: "memory");
+> +
+> +	uaccess_ttbr0_disable();
+> +
+> +	return ret;
 
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-Date: Fri, 23 Sep 2022 16:52:45 +0000
-Subject: [PATCH 1/1] RDMA/nldev: Add dellink function pointer
+So here it returns EFAULT only if the check failed. The EAGAIN is only
+possible in cmpxchg32. That's fine but I have more comments below.
 
-Add a dellink function pointer to rdma_link_ops to
-allow drivers to clean up resources created during
-newlink.
+> +}
+> +
+> +static __always_inline int
+> +__lsui_cmpxchg32(u32 __user *uaddr, u32 oldval, u32 newval, u32 *oval)
+> +{
+> +	u64 __user *uaddr64;
+> +	bool futex_pos, other_pos;
+> +	int ret, i;
+> +	u32 other, orig_other;
+> +	union {
+> +		u32 futex[2];
+> +		u64 raw;
+> +	} oval64, orig64, nval64;
+> +
+> +	uaddr64 = (u64 __user *) PTR_ALIGN_DOWN(uaddr, sizeof(u64));
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
----
-  drivers/infiniband/core/nldev.c | 12 ++++++++++++
-  include/rdma/rdma_netlink.h     |  2 ++
-  2 files changed, 14 insertions(+)
+Nit: we don't use space after the type cast.
 
-diff --git a/drivers/infiniband/core/nldev.c 
-b/drivers/infiniband/core/nldev.c
-index 2220a2dfab24..dbf2eea078e9 100644
---- a/drivers/infiniband/core/nldev.c
-+++ b/drivers/infiniband/core/nldev.c
-@@ -1824,6 +1824,18 @@ static int nldev_dellink(struct sk_buff *skb, 
-struct nlmsghdr *nlh,
-          return -EINVAL;
-      }
+> +	futex_pos = !IS_ALIGNED((unsigned long)uaddr, sizeof(u64));
+> +	other_pos = !futex_pos;
+> +
+> +	oval64.futex[futex_pos] = oldval;
+> +	ret = get_user(oval64.futex[other_pos], (u32 __user *)uaddr64 + other_pos);
+> +	if (ret)
+> +		return -EFAULT;
+> +
+> +	ret = -EAGAIN;
+> +	for (i = 0; i < FUTEX_MAX_LOOPS; i++) {
 
-+    /*
-+     * This path is triggered by the 'rdma link delete' administrative 
-command.
-+     * For Soft-RoCE (RXE), we ensure that transport sockets are closed 
-here.
-+     * Note: iWARP driver does not implement .dellink, so this logic is
-+     * implicitly scoped to the driver supporting dynamic link deletion 
-like RXE.
-+     */
-+    if (device->link_ops && device->link_ops->dellink) {
-+        err = device->link_ops->dellink(device);
-+        if (err)
-+            return err;
-+    }
-+
-      ib_unregister_device_and_put(device);
-      return 0;
-  }
-diff --git a/include/rdma/rdma_netlink.h b/include/rdma/rdma_netlink.h
-index 326deaf56d5d..2fd1358ea57d 100644
---- a/include/rdma/rdma_netlink.h
-+++ b/include/rdma/rdma_netlink.h
-@@ -5,6 +5,7 @@
+I was wondering if we still need the FUTEX_MAX_LOOPS bound with LSUI. I
+guess with CAS we can have some malicious user that keeps updating the
+futex location or the adjacent one on another CPU. However, I think we'd
+need to differentiate between futex_atomic_cmpxchg_inatomic() use and
+the eor case.
 
-  #include <linux/netlink.h>
-  #include <uapi/rdma/rdma_netlink.h>
-+#include <rdma/ib_verbs.h>
+> +		orig64.raw = nval64.raw = oval64.raw;
+> +
+> +		nval64.futex[futex_pos] = newval;
 
-  struct ib_device;
+I'd keep orig64.raw = oval64.raw and set the nval64 separately (I find
+it clearer, not sure the compiler cares much):
 
-@@ -126,6 +127,7 @@ struct rdma_link_ops {
-      struct list_head list;
-      const char *type;
-      int (*newlink)(const char *ibdev_name, struct net_device *ndev);
-+    int (*dellink)(struct ib_device *dev);
-  };
+		nval64.futex[futex_pos] = newval;
+		nval64.futex[other_pos] = oval64.futex[other_pos];
 
-  void rdma_link_register(struct rdma_link_ops *ops);
+> +
+> +		if (__lsui_cmpxchg64(uaddr64, &oval64.raw, nval64.raw))
+> +			return -EFAULT;
+> +
+> +		oldval = oval64.futex[futex_pos];
+> +		other = oval64.futex[other_pos];
+> +		orig_other = orig64.futex[other_pos];
+> +
+> +		if (other == orig_other) {
+> +			ret = 0;
+> +			break;
+> +		}
+
+Is this check correct? What if the cmpxchg64 failed because futex_pos
+was changed but other_pos remained the same, it will just report success
+here. You need to compare the full 64-bit value to ensure the cmpxchg64
+succeeded.
+
+> +	}
+> +
+> +	if (!ret)
+> +		*oval = oldval;
+> +
+> +	return ret;
+> +}
+> +
+> +static __always_inline int
+> +__lsui_futex_atomic_and(int oparg, u32 __user *uaddr, int *oval)
+> +{
+> +	/*
+> +	 * Undo the bitwise negation applied to the oparg passed from
+> +	 * arch_futex_atomic_op_inuser() with FUTEX_OP_ANDN.
+> +	 */
+> +	return __lsui_futex_atomic_andnot(~oparg, uaddr, oval);
+> +}
+> +
+> +static __always_inline int
+> +__lsui_futex_atomic_eor(int oparg, u32 __user *uaddr, int *oval)
+> +{
+> +	u32 oldval, newval, val;
+> +	int ret, i;
+> +
+> +	if (get_user(oldval, uaddr))
+> +		return -EFAULT;
+> +
+> +	/*
+> +	 * there are no ldteor/stteor instructions...
+> +	 */
+> +	for (i = 0; i < FUTEX_MAX_LOOPS; i++) {
+> +		newval = oldval ^ oparg;
+> +
+> +		ret = __lsui_cmpxchg32(uaddr, oldval, newval, &val);
+
+Since we have a FUTEX_MAX_LOOPS here, do we need it in cmpxchg32 as
+well?
+
+For eor, we need a loop irrespective of whether futex_pos or other_pos
+have changed. For cmpxchg, we need the loop only if other_pos has
+changed and return -EAGAIN if futex_pos has changed since the caller
+needs to update oldval and call again.
+
+So try to differentiate these cases, maybe only keep the loop outside
+cmpxchg32 (I haven't put much though into it).
+
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (val == oldval) {
+> +			*oval = val;
+> +			return 0;
+> +		}
+
+I can see you are adding another check here for the actual value which
+solves the other_pos comparison earlier but that's only for eor and not
+the __lsui_futex_cmpxchg() case.
+
+> +
+> +		oldval = val;
+> +	}
+> +
+> +	return -EAGAIN;
+> +}
+> +
+> +static __always_inline int
+> +__lsui_futex_cmpxchg(u32 __user *uaddr, u32 oldval, u32 newval, u32 *oval)
+> +{
+> +	return __lsui_cmpxchg32(uaddr, oldval, newval, oval);
+> +}
+> +#endif	/* CONFIG_ARM64_LSUI */
+
 -- 
-2.53.0
-
-
-Zhu Yanjun
-
-
->
-> Thanks,
->
-> Zhu Yanjun
->
->
->>
->> Zhu Yanjun
->>
->>>
+Catalin
