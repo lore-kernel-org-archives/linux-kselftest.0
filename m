@@ -1,99 +1,216 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 932113FEB29;
-	Thu, 12 Mar 2026 17:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946272D8DB5
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 18:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773337992; cv=none; b=Y6kRQwDjgF6n3Zw+ilZz/FHQ/T4GVjEMjJK4y4hzpSoE7M05HgZeHJyDJt/zMuKUmpuYw7doGMtHUB/4n89bSvAQ31UKOEW9Cv5HL8pN6R3HsNtYrCpEWGhg/ikGs7N6M0P5A6WqCGjxHAVdJPraqAwvK9qI8oIamcyunka9SGk=
+	t=1773338689; cv=none; b=D1/kqDh/mp+PWIN9h1wmEtXYVrlr9NsolTRwRod5z5SuCshkZUwPj9U3dhzclI3arI2u7KtC9P1K1SiBjeoVFnEqWBiYAEFx3A9zNESV0O4zCaFPRS2J0BYo7xsf7faV40by3UdSKXF4sPGXlL833oXrYwCHK7aZKxd5SpL9VoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773337992; c=relaxed/simple;
-	bh=iGDW5vhq3Q6kZFtorZ0MiHnTnFizA2hhJE+6ztz9Y9Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=frSTRKM3g703rDsM+VaKZ+AruvN8hAsIQHRFsBTmxZPMR8ncIaR+8svMmN9Kl3zfc7kFuK/Vtk60cOP6RVIVHikKU4DTj0mGuJPivApIE651AgeammcERsHUYvwcbV914lps4TBtwLF59VDJejRGpaiFV25kV3+vTcd1KZrHucQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C9FF1A9A;
-	Thu, 12 Mar 2026 10:53:04 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CEC293F73B;
-	Thu, 12 Mar 2026 10:53:07 -0700 (PDT)
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: catalin.marinas@arm.com,
-	will@kernel.org,
-	maz@kernel.org,
-	oupton@kernel.org,
-	miko.lenczewski@arm.com,
-	kevin.brodsky@arm.com,
-	broonie@kernel.org,
-	ardb@kernel.org,
-	suzuki.poulose@arm.com,
-	lpieralisi@kernel.org,
-	joey.gouly@arm.com,
-	yuzenghui@huawei.com,
-	yeoreum.yun@arm.com
-Subject: [PATCH v16 8/8] arm64: Kconfig: add support for LSUI
-Date: Thu, 12 Mar 2026 17:52:43 +0000
-Message-Id: <20260312175243.1593864-9-yeoreum.yun@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260312175243.1593864-1-yeoreum.yun@arm.com>
-References: <20260312175243.1593864-1-yeoreum.yun@arm.com>
+	s=arc-20240116; t=1773338689; c=relaxed/simple;
+	bh=fmvvD0IA4ebRw4+C2da7W4o+Zy+hXaSvEC9feQ3ucBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oRGW6AFXOuPR6hA9redqxGpyV7ePs81cmiYJo5lV5lPivGLyf+nfoz/lsKsEpb0gOunOjF/glQtwD8ExBrIarfAuXsLAWof/NeIGISBAKA+fnRXxSK7An4klPkgE4fSLhUE3omGatFYsLvcPlYrZpR18CRk/hn6DJDdsKcIfINM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n2dhEe1+; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n2dhEe1+"
+Message-ID: <7f157000-d1a9-4284-afef-12107d6ce40e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773338685;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vbiNkMOD7irzTZplqwAXcc3QjCyah3uOZx2fIketAbM=;
+	b=n2dhEe1+QfH7d38/S+iaxZPuN9a3WrgKNNabk4Yys1LKTkvp0mxEzTWf+IDgFFJKBL+I9h
+	CetwZpeLnj8ZgdNcjV3EnjTIJFXkMaSGnWyCFybsXpLYZp9ZD0YkQ7vzMjTbEy6j0G3IKo
+	6vSSPwjnCmlKClnthmJTEf/Hkatb6DE=
+Date: Thu, 12 Mar 2026 11:04:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v5 1/4] RDMA/nldev: Add dellink function pointer
+To: David Ahern <dsahern@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+ Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: jgg@ziepe.ca, zyjzyj2000@gmail.com, shuah@kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
+ <20260310020519.101415-2-yanjun.zhu@linux.dev>
+ <20260310190140.GL12611@unreal>
+ <5700c718-d10e-4b23-adfc-c14ee1930b18@linux.dev>
+ <20260311085434.GW12611@unreal>
+ <6a8b0983-a198-470a-8125-b0133ccb7032@linux.dev>
+ <b5c2053c-f911-4e0d-8589-4d969bd580a4@kernel.org>
+ <e8e1fc5b-7772-40c5-8214-b4f9d4a10d98@linux.dev>
+ <434a9a8c-f369-435a-b8bf-d9ae85558c8e@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <434a9a8c-f369-435a-b8bf-d9ae85558c8e@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Since Armv9.6, FEAT_LSUI supplies the load/store instructions for
-previleged level to access to access user memory without clearing
-PSTATE.PAN bit.
 
-Add Kconfig option entry for FEAT_LSUI.
+On 3/11/26 10:09 PM, Zhu Yanjun wrote:
+>
+> 在 2026/3/11 20:59, Zhu Yanjun 写道:
+>>
+>> 在 2026/3/11 19:04, David Ahern 写道:
+>>> On 3/11/26 4:01 PM, Yanjun.Zhu wrote:
+>>>
+>>>> Got it. The commit log explains how the netdev_notifier mechanism is
+>>> netdev notifiers are the NETDEV_UNREGISTER and friends. This dellink
+>>> handler is not related to that; this is an IB stack thing when the rxe
+>>> link is removed.
+>>>
+>>>> used to clean up the related resources.
+>>>>
+>>>> In the source code, additional comments have been added to explain how
+>>>> the dellink operation for rxe is triggered. For iWARP, this change
+>>>> should not make any difference because iWARP does not implement the
+>>>> dellink function.
+>>>>
+>>>> The commit is shown below. Please take a look and share your comments.
+>>>> If you agree, I will send out the latest commits out very soon.
+>>>>
+>>>>  From c05038dcdf69c5985837736a8926ba76d9f3e8e4 Mon Sep 17 00:00:00 
+>>>> 2001
+>>>> From: Zhu Yanjun <yanjun.zhu@linux.dev>
+>>>> Date: Fri, 23 Sep 2022 16:52:45 +0000
+>>>> Subject: [PATCH 1/1] RDMA/nldev: Add dellink function pointer
+>>>>
+>>>> The newlink function pointer was previously added to support
+>>>> dynamic RDMA link creation. In the RXE driver, this path creates
+>>>> a transport socket listening on port 4791. Consequently, a dellink
+>>>> function pointer is required to ensure these sockets are properly
+>>>> closed when a user administratively removes a link via rdma link
+>>>> delete <dev>.
+>>>>
+>>>> Furthermore, RXE does not rely solely on this nldev path for resource
+>>>> management. It also monitors the underlying net_device state via a
+>>>> registered netdev_notifier. The rxe_net_event callback serves as a
+>>>> fallback mechanism to ensure that transport sockets are forcibly 
+>>>> closed
+>>>> and all resources are released even if dellink is not explicitly 
+>>>> called
+>>>> (e.g., if the parent NIC interface is removed or the driver is 
+>>>> forcefully
+>>>> unloaded).
+>>> IMHO, this explanation belongs in the patch that implements dellink 
+>>> for rxe.
+>>>
+>>> This patch adds the handler to allow link implementations to cleanup 
+>>> any
+>>> resources created by newklink as needed.
+>> Thanks for the feedback. I agree that the detailed explanation of 
+>> RXE's resource management (like sockets and notifiers) is more 
+>> appropriate for the subsequent patch that implements the RXE dellink 
+>> handler.
+>>
+>> I will update the commit message for this patch to focus solely on 
+>> the addition of the dellink infrastructure in the RDMA core, and move 
+>> the RXE-specific details to the next patch in the series.
+>
+> Hi,
+>
+> I would like to use the following as the commit log. It seems simple 
+> and direct.
+>
+> "
+>
+> Add a dellink function pointer to rdma_link_ops to allow drivers to 
+> clean up resources created during newlink.
+> "
 
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Hi,
+
+The final commit is as below. I will send the latest commit out very soon.
+
+ From 8fda79a3b0c3f6df6ba0fc70040ce09e4028a2a3 Mon Sep 17 00:00:00 2001
+
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+Date: Fri, 23 Sep 2022 16:52:45 +0000
+Subject: [PATCH 1/1] RDMA/nldev: Add dellink function pointer
+
+Add a dellink function pointer to rdma_link_ops to
+allow drivers to clean up resources created during
+newlink.
+
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
 ---
- arch/arm64/Kconfig | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+  drivers/infiniband/core/nldev.c | 12 ++++++++++++
+  include/rdma/rdma_netlink.h     |  2 ++
+  2 files changed, 14 insertions(+)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 38dba5f7e4d2..890a1bedbf4a 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -2215,6 +2215,26 @@ config ARM64_GCS
- 
- endmenu # "ARMv9.4 architectural features"
- 
-+config AS_HAS_LSUI
-+	def_bool $(as-instr,.arch_extension lsui)
-+	help
-+	  Supported by LLVM 20+ and binutils 2.45+.
+diff --git a/drivers/infiniband/core/nldev.c 
+b/drivers/infiniband/core/nldev.c
+index 2220a2dfab24..dbf2eea078e9 100644
+--- a/drivers/infiniband/core/nldev.c
++++ b/drivers/infiniband/core/nldev.c
+@@ -1824,6 +1824,18 @@ static int nldev_dellink(struct sk_buff *skb, 
+struct nlmsghdr *nlh,
+          return -EINVAL;
+      }
+
++    /*
++     * This path is triggered by the 'rdma link delete' administrative 
+command.
++     * For Soft-RoCE (RXE), we ensure that transport sockets are closed 
+here.
++     * Note: iWARP driver does not implement .dellink, so this logic is
++     * implicitly scoped to the driver supporting dynamic link deletion 
+like RXE.
++     */
++    if (device->link_ops && device->link_ops->dellink) {
++        err = device->link_ops->dellink(device);
++        if (err)
++            return err;
++    }
 +
-+menu "ARMv9.6 architectural features"
-+
-+config ARM64_LSUI
-+	bool "Support Unprivileged Load Store Instructions (LSUI)"
-+	default y
-+	depends on AS_HAS_LSUI && !CPU_BIG_ENDIAN
-+	help
-+	  The Unprivileged Load Store Instructions (LSUI) provides
-+	  variants load/store instructions that access user-space memory
-+	  from the kernel without clearing PSTATE.PAN bit.
-+
-+	  This feature is supported by LLVM 20+ and binutils 2.45+.
-+
-+endmenu # "ARMv9.6 architectural feature"
-+
- config ARM64_SVE
- 	bool "ARM Scalable Vector Extension support"
- 	default y
+      ib_unregister_device_and_put(device);
+      return 0;
+  }
+diff --git a/include/rdma/rdma_netlink.h b/include/rdma/rdma_netlink.h
+index 326deaf56d5d..2fd1358ea57d 100644
+--- a/include/rdma/rdma_netlink.h
++++ b/include/rdma/rdma_netlink.h
+@@ -5,6 +5,7 @@
+
+  #include <linux/netlink.h>
+  #include <uapi/rdma/rdma_netlink.h>
++#include <rdma/ib_verbs.h>
+
+  struct ib_device;
+
+@@ -126,6 +127,7 @@ struct rdma_link_ops {
+      struct list_head list;
+      const char *type;
+      int (*newlink)(const char *ibdev_name, struct net_device *ndev);
++    int (*dellink)(struct ib_device *dev);
+  };
+
+  void rdma_link_register(struct rdma_link_ops *ops);
 -- 
-LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+2.53.0
 
+
+Zhu Yanjun
+
+
+>
+> Thanks,
+>
+> Zhu Yanjun
+>
+>
+>>
+>> Zhu Yanjun
+>>
+>>>
