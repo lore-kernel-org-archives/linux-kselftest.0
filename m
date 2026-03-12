@@ -1,221 +1,134 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D875308F39;
-	Thu, 12 Mar 2026 12:27:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8363B30F95C;
+	Thu, 12 Mar 2026 12:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773318430; cv=none; b=KvF+CE+C/1nEtejSJwq59ERx+LuM7hO0oG/QWW48lOLC/u3IXARwoxREFYzVYwR6n/tPkA61sxHJnXQkCs1EyCe2MpxwL5KZ6L7rVcLUbP3fhqF+QKEq6VqBJQJe8Aue7X2lCargE9aADc3IXsGrmZSD8A0Aul7aCA5GAlGm8QU=
+	t=1773319423; cv=none; b=Jpn8xpWl+FGZ9WVKZuGTsOl7Smwn53iwe7jfyDp4RBOnzACCg56u83Zu4QsuYff6Bc0iywX1VLyBRqzDZaEPEb9PPWG1RpESEJlqOQ4zLQ480g8ZpmP1UFGz+fYdMj6HbMpxePqZkKv1oaTU0TT8ex/PHEIo44O+2tuQxR7sG7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773318430; c=relaxed/simple;
-	bh=UQWK1EFootOhC4JhnIdVhTZLVaQ4e/BEFwa6AYQbcyY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uZhYVrIK1HSSh2f89mGJ0QGL2KUau3C+YaLb6kChRi8zaTmhakDKQ2HAeDIteRXIJmA7mqKykpFBuiDD8sgRCJn0JoxA8s+CB4BePeXk2gyxC8WXHAPS/nwmfsYGyR49noCeZooLwXwvHK0jib6wFJHmaogKqnNp0yiPsysE4wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=C/0eh1RB; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1773319423; c=relaxed/simple;
+	bh=8S9bNJmF6iH82u3xXOAn4AoJikaKrAnFf4WVKPEmGxk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bjJ5a4PVtoglsAbGX1Jj+zX1vWGOtD0sny2YZpWlJHWwQvLwFOZ67icY7sxdVYWasVFT1KaPWvZIN36lyf29eidXmqIbQQ0kLNqyt3tUW3IIZSzvaV0NozJzWLwSkxWpcqjd8Z3tlI8tRQgtFJ7Q2iChoHZgVdrJwxY2dQqfvq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRUBf3dX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="C/0eh1RB"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62BMVq5w2278406;
-	Thu, 12 Mar 2026 12:26:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=Y4e5DFl5siWIhnuxg
-	ccuPdSzyDnLoJB3bmNN+u1miYM=; b=C/0eh1RBMF1yUyCpP2ePstZuumJZYW5Xq
-	v8P5R3peYXQo89huDfnhZEugvCORSIMAxOgRlrBt3VnPu0mC6tyMVxkNSd91bZry
-	NLQ3hLDWwxnnD0unHaBs/yW/r0xe4on7p1gaQiK2Ltv0EL/ccOo4xnXmK8Xw08eV
-	ccSmcsnwWNV1jlLnICyeeJeq+KAVva2FTlL+lSrwJKrPl3hVKwwLosUyN3Iwiujm
-	KmIxxC84ayjqVX8nvK2IrdLY7t2nu4u7V+LsE5JGKzpqB9z5XXmqc2mv5Uej5MVZ
-	zLatWKwVMO39a5ncO15v9rWW4QxEuNqRunU8eQYNfKE67/CqNy3fQ==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh91jm2x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Mar 2026 12:26:45 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62C9ZAmR014631;
-	Thu, 12 Mar 2026 12:26:44 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha8a8u0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Mar 2026 12:26:44 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62CCQgZQ47513976
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Mar 2026 12:26:42 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2919A20043;
-	Thu, 12 Mar 2026 12:26:42 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 161E42005A;
-	Thu, 12 Mar 2026 12:26:39 +0000 (GMT)
-Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.in.ibm.com (unknown [9.109.243.201])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 12 Mar 2026 12:26:38 +0000 (GMT)
-From: Sayali Patil <sayalip@linux.ibm.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org, Sayali Patil <sayalip@linux.ibm.com>,
-        Miaohe Lin <linmiaohe@huawei.com>
-Subject: [PATCH v2 12/13] selftests/mm: move hwpoison setup into run_test() and silence modprobe output for memory-failure category
-Date: Thu, 12 Mar 2026 17:55:39 +0530
-Message-ID: <35a44ccc4d1587255e8f920b22e983f74c024f2e.1773305678.git.sayalip@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1773305677.git.sayalip@linux.ibm.com>
-References: <cover.1773305677.git.sayalip@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRUBf3dX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55DD1C4CEF7;
+	Thu, 12 Mar 2026 12:43:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773319423;
+	bh=8S9bNJmF6iH82u3xXOAn4AoJikaKrAnFf4WVKPEmGxk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eRUBf3dX6tDFd/wdJL0RAiR1hAauissEfjHzMqVRjfgm6+A8cJRjSAe1kA+dx/TfN
+	 ufTmt8h43/s25vH+jIPrmSlRHhwv30uARgMBqTfJJ9yaXkPQkHPVqfyY8ppn7whChp
+	 frS5QsFEy3F1KNz3/ylj/Cwi+KL7+0iGNFM2Yfr+kCfhPuT6FsDjoSfkZ1qQMntmhj
+	 yN1Hb+b3I99HYlAnXrMkjez3roLSMj9i9rD9AB2BP4zwu027cv0ySlc33z8GT+3rNV
+	 XARl5ZCnCHUgKcB5kbQa7s429uEUlEap6X6vSpvcQ2GM8OFLLW9JVLEQb9fOpVjodd
+	 7ofK99QQPtwxw==
+Message-ID: <536527d3-6ffb-409d-a119-93c13a87823d@kernel.org>
+Date: Thu, 12 Mar 2026 13:43:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: -4pIdlppxyqzTJZJKqAjAXzEJT4ik-7G
-X-Authority-Analysis: v=2.4 cv=E6/AZKdl c=1 sm=1 tr=0 ts=69b2b105 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=uAbxVGIbfxUO_5tXvNgY:22 a=Ikd4Dj_1AAAA:8 a=i0EeH86SAAAA:8 a=VnNF1IyMAAAA:8
- a=QWbft6qDQSdZu_5rdncA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDA5NSBTYWx0ZWRfX6HTZkZX6Uuz9
- r423AdpuJXda5Dk4Sdkv1O7v1mXXqhC+Ttb9xad8jUTEP/eFTtIHKgvFXQQVqqMGIYiGN84pnGp
- kLYNsRKNMUhJ2CKqoNWF4lGcax03V80JBZjSrQ3GKLJnhnL+5lMhIyb19ZTt1E+E9qWC6K594ua
- gt4YI4tn9bGnTrVmS0jsZtZkiXk96UcLdINqzACX/cpX6L52nb2C4Zpb/ejpa0tdka1kIXUvr38
- M5IaOFaHrxQc9rvtZ/S64Na6QPH4+xL+01m54+s4u6gox+AF5Q1DP6QbOyh+0dxSu+yZQSzplES
- acS5o5qUDLT+yhAR2lQPmz7oubA+ci3Le0rSp2WeoEmzGJF0sEeNAsoGPhUQ1w2HhIhrQh9XmCZ
- g8omQ02s3wnlqhtvWdDgPVLxMqTlFUiQ9Y9aiRnl9oZJmwlL/KcVfVu/EZIYVqTnlfJs+yczEux
- Hko5BFpGzAdYj2il3EA==
-X-Proofpoint-ORIG-GUID: Q3CaJOTqwSzc-HTzDttj7c7yIAnlKCjj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-12_01,2026-03-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 impostorscore=0 clxscore=1011 malwarescore=0 phishscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603120095
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/13] selftests/mm: restore default nr_hugepages value
+ during cleanup in charge_reserved_hugetlb.sh
+To: Sayali Patil <sayalip@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
+ Oscar Salvador <osalvador@suse.de>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
+ Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org
+References: <cover.1773305677.git.sayalip@linux.ibm.com>
+ <9d150c91d4fe18732f9a90234e6878b7bd7f61f7.1773305677.git.sayalip@linux.ibm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <9d150c91d4fe18732f9a90234e6878b7bd7f61f7.1773305677.git.sayalip@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-run_vmtests.sh contains special handling to ensure the hwpoison_inject
-module is available for the memory-failure tests. This logic was
-implemented outside of run_test(), making the setup category-specific
-but managed globally.
+On 3/12/26 13:25, Sayali Patil wrote:
+> During cleanup, the value of /proc/sys/vm/nr_hugepages is currently being
+> set to 0.  At the end of the test, if all tests pass, the original
+> nr_hugepages value is restored.  However, if any test fails, it remains
+> set to 0.
+> With this patch, we ensure that the original nr_hugepages value is
+> restored during cleanup, regardless of whether the test passes or fails.
+> 
+> Fixes: 7d695b1c3695b ("selftests/mm: save and restore nr_hugepages value")
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+> ---
+>  tools/testing/selftests/mm/charge_reserved_hugetlb.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+> index 447769657634..c9fe68b6fcf9 100755
+> --- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+> +++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+> @@ -65,7 +65,7 @@ function cleanup() {
+>    if [[ -e $cgroup_path/hugetlb_cgroup_test2 ]]; then
+>      rmdir $cgroup_path/hugetlb_cgroup_test2
+>    fi
+> -  echo 0 >/proc/sys/vm/nr_hugepages
+> +  echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+>    echo CLEANUP DONE
+>  }
+>  
 
-Move the hwpoison_inject handling into run_test() and restrict it
-to the memory-failure category so that:
-1. the module is checked and loaded only when memory-failure tests run,
-2. the test is skipped if the module or the debugfs interface
-(/sys/kernel/debug/hwpoison/) is not available.
-3. the module is unloaded after the test if it was loaded by the script.
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
-This localizes category-specific setup and makes the test flow
-consistent with other per-category preparations.
-
-While updating this logic, fix the module availability check.
-The script previously used:
-
-	modprobe -R hwpoison_inject
-
-The -R option prints the resolved module name to stdout, causing every
-run to print:
-
-	hwpoison_inject
-
-in the test output, even when no action is required, introducing
-unnecessary noise.
-
-Replace this with:
-
-	modprobe -n hwpoison_inject
-
-which verifies that the module is loadable without producing output,
-keeping the selftest logs clean and consistent.
-
-Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
-Acked-by: Zi Yan <ziy@nvidia.com>
-Acked-by: Miaohe Lin <linmiaohe@huawei.com>
-Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
----
- tools/testing/selftests/mm/run_vmtests.sh | 46 ++++++++++++++---------
- 1 file changed, 28 insertions(+), 18 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index eecec0b6eb13..606558cc3b09 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -250,6 +250,27 @@ run_test() {
- 			fi
- 		fi
- 
-+		# Ensure hwpoison_inject is available for memory-failure tests
-+		if [ "${CATEGORY}" = "memory-failure" ]; then
-+			# Try to load hwpoison_inject if not present.
-+			HWPOISON_DIR=/sys/kernel/debug/hwpoison/
-+			if [ ! -d "$HWPOISON_DIR" ]; then
-+				if ! modprobe -n hwpoison_inject > /dev/null 2>&1; then
-+					echo "Module hwpoison_inject not found, skipping..." \
-+						| tap_prefix
-+					skip=1
-+				else
-+					modprobe hwpoison_inject > /dev/null 2>&1
-+					LOADED_MOD=1
-+				fi
-+			fi
-+
-+			if [ ! -d "$HWPOISON_DIR" ]; then
-+				echo "hwpoison debugfs interface not present" | tap_prefix
-+				skip=1
-+			fi
-+		fi
-+
- 		local test=$(pretty_name "$*")
- 		local title="running $*"
- 		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
-@@ -261,6 +282,12 @@ run_test() {
- 		else
- 			local ret=$ksft_skip
- 		fi
-+
-+		# Unload hwpoison_inject if we loaded it
-+		if [ -n "${LOADED_MOD}" ]; then
-+			modprobe -r hwpoison_inject > /dev/null 2>&1
-+		fi
-+
- 		count_total=$(( count_total + 1 ))
- 		if [ $ret -eq 0 ]; then
- 			count_pass=$(( count_pass + 1 ))
-@@ -540,24 +567,7 @@ CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
- 
- CATEGORY="rmap" run_test ./rmap
- 
--# Try to load hwpoison_inject if not present.
--HWPOISON_DIR=/sys/kernel/debug/hwpoison/
--if [ ! -d "$HWPOISON_DIR" ]; then
--	if ! modprobe -q -R hwpoison_inject; then
--		echo "Module hwpoison_inject not found, skipping..."
--	else
--		modprobe hwpoison_inject > /dev/null 2>&1
--		LOADED_MOD=1
--	fi
--fi
--
--if [ -d "$HWPOISON_DIR" ]; then
--	CATEGORY="memory-failure" run_test ./memory-failure
--fi
--
--if [ -n "${LOADED_MOD}" ]; then
--	modprobe -r hwpoison_inject > /dev/null 2>&1
--fi
-+CATEGORY="memory-failure" run_test ./memory-failure
- 
- if [ "${HAVE_HUGEPAGES}" = 1 ]; then
- 	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
 -- 
-2.52.0
+Cheers,
 
+David
