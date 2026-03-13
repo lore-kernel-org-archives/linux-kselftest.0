@@ -1,63 +1,84 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1769D35E95D;
-	Fri, 13 Mar 2026 16:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A6B3C3BE8;
+	Fri, 13 Mar 2026 16:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773420230; cv=none; b=lQi3ubVznNdPP16XpV3tW/KKoWJwgMPf2DywlzHHn0AUqyMNmCuJm6GZSZk+hkbVwiVZ+l8FzHUiBnvGFOhOiFyE2cIeHU8Epsxzoy0odCB6dNd7QUTUd0gPnpAOkKMRNSc3gvOvcHj3P4sCKLAU/RSftzB8OJBWfM5QogK9EdE=
+	t=1773420363; cv=none; b=mxXwIjXLhYIxDEJmpdkQ1ftc/TtPPZ+9ArXF9w0ow06eduOHOFvO9nWl5ql5LIH0a4726lmAXRZGSUydOaDgjp4/Xuqh9gnIXCovLdeOx6HPVpIGb4Cp3cHfxO6D5VDzdxuzHhjmp4CAtido4/mmQb2vkEXI0D17Yry5c0fwzsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773420230; c=relaxed/simple;
-	bh=eWSdCDRVfCTPMs2Uu7aaWJhyEyCXxLt3ODYZVQCkCn4=;
+	s=arc-20240116; t=1773420363; c=relaxed/simple;
+	bh=NcjJzioaIshYM6Iq0uBNPZILW5sdu988IaZAOFh28iU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I9zGQml4FUKycme17sXQ2D+Pt3hztQXqLrCfHvy4JOXINyPuXksQk6saMJSZQkdcCTNJikqL49L0qJ7MUkAYnDXON35UjRDIOXIDt5WJRHoIaBh/tsS3ljIqhODtK9nncwdXwt/GTubmTwCETXgADdVfePxFOoHCEcZYWBm85f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6ED9A176A;
-	Fri, 13 Mar 2026 09:43:42 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CBC73F7BD;
-	Fri, 13 Mar 2026 09:43:46 -0700 (PDT)
-Date: Fri, 13 Mar 2026 16:43:44 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
-	oupton@kernel.org, miko.lenczewski@arm.com, kevin.brodsky@arm.com,
-	broonie@kernel.org, ardb@kernel.org, suzuki.poulose@arm.com,
-	lpieralisi@kernel.org, joey.gouly@arm.com, yuzenghui@huawei.com
-Subject: Re: [PATCH v15 5/8] arm64: futex: support futex with FEAT_LSUI
-Message-ID: <abQ-wLJj8MZfe5tS@arm.com>
-References: <20260227151705.1275328-1-yeoreum.yun@arm.com>
- <20260227151705.1275328-6-yeoreum.yun@arm.com>
- <abMDOC5DYEm74And@arm.com>
- <abPXrvl9tC+nv6q9@e129823.arm.com>
- <abQiSiX_xxjSY96-@arm.com>
- <abQlhhSDkmzUugMW@e129823.arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7PGaESjE8xWW89PUTOodOhwqylNRMF84cJ+oh2G9Mk3dCXbZySZySKcrGRQRiSz66yYe5dHoeNmFtIwLeiGRPKtLc0UdeMsoflymsTaBSTUzwaIZJ3oi4WrWo6emIuSVIlMyM61nN2ZAzj3ZGyNheWuhzIH5XrXcb9Zxo/9BJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pEQay8sw; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pEQay8sw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87053C19421;
+	Fri, 13 Mar 2026 16:46:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773420362;
+	bh=NcjJzioaIshYM6Iq0uBNPZILW5sdu988IaZAOFh28iU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pEQay8swJ7Z5zFwGRN1gDWzlEZAMVfi6oqqFkvbpVsde4d5ZWSE97+wQqLxsr2AWF
+	 C8j3JjZrpcQjAbe2BAZZXIA647lzEKdpVw5aaD+qKoPv0I5/4zetMhLHIbWAnS65nA
+	 /1xU7HQVDktn9eMblP0MMO/njUc+qQgBT/PP1Hf9lHIGitrmLP00CFO7Vye8v7ybCJ
+	 iNpPYUH+CLw5YCKqG6gU4yuJaput0Q5wu0pCho2QAhNxf8bmwZhP8Mn7ls1Pq8rJ1k
+	 KO57/D+Y2hktvZJxmDW1C0qup6321fWIMVxTl76kxitNXVtfqHADB4/lY0smz2tJIH
+	 ZIcVSESFeZENA==
+Date: Fri, 13 Mar 2026 12:46:01 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
+	Jake Edge <jake@lwn.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Askar Safin <safinaskar@zohomail.com>,
+	Gabriele Paoloni <gpaoloni@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 6/9] kernel/api: add API specification for sys_close
+Message-ID: <abQ_SfbhNfVtYVAW@laps>
+References: <20260313150928.2637368-1-sashal@kernel.org>
+ <20260313150928.2637368-7-sashal@kernel.org>
+ <2026031348-deceiving-calculate-0017@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <abQlhhSDkmzUugMW@e129823.arm.com>
+In-Reply-To: <2026031348-deceiving-calculate-0017@gregkh>
 
-On Fri, Mar 13, 2026 at 02:56:06PM +0000, Yeoreum Yun wrote:
-> Thanks for confirmation, I've changed them as we discussed.
-> But let me sent it on v7.0-rc4 based with v17.
+On Fri, Mar 13, 2026 at 04:49:28PM +0100, Greg Kroah-Hartman wrote:
+>On Fri, Mar 13, 2026 at 11:09:16AM -0400, Sasha Levin wrote:
+>> + *   Calling close() on a file descriptor while another thread is using it
+>> + *   (e.g., in a blocking read() or write()) has implementation-defined
+>> + *   behavior. On Linux, the blocked operation continues on the underlying
+>> + *   file and may complete even after close() returns.
+>
+>I'm guessing this came from the man pages?  This is Linux, so we are the
+>"implementation" here :)
 
-No need to rebase to -rc4 unless there are some features you depend on.
-The arm64 for-next/core branch is based on -rc3.
+Right :)
 
-> (Unfortunately, I sent v16 yesterday with missing of those review in
-> this thread).
-
-No worries.
-
-Thanks.
+I was just trying to make it a comparison to posix. I'll clarify the docs here.
 
 -- 
-Catalin
+Thanks,
+Sasha
