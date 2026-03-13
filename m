@@ -1,177 +1,142 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAE9384246
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 08:33:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773390806; cv=pass; b=C4EAVHLubB2grIlHPaub7Hon3t6GyYpkg54HXgxbrE9FsDsVIbqYcHqSQKRBnLMNt0tzV/SwYduWrcJqCJ1lwnblKBRHYClyCZQ9QXBBZiZGOv3upUObnUubAG0vLqb93rXj4TAPZEfLZuPPYLQv2YUSuqH2O9jbJdPXxGfPhGk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773390806; c=relaxed/simple;
-	bh=Nhlp+IHXNVySMgNUt1ii8X1l7FQ+Mw0ootJ8uYr949w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b09S/aCG0KftYkPX2XGOQy9o+x7u+J186uiWN5ibJy/ANO1pMP8HDEUVM1dp7PglEs+ix+3eGwSrM13LuqRnWagIBPUEtD004MjupHbf2cT4qOENjCkyjE44bumRjcy0BbPkSGMWGxCx3QVCXnWrrLj5fH4R9beGbRqci8GBbKU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c9D/VzDW; arc=pass smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527CB388E4B;
+	Fri, 13 Mar 2026 09:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773392573; cv=none; b=n58lR2cmOaRUsH75Zbsy6MOemznPYKYOU1AXE56VIhHF4YhGks5J3jXeOxvUVozvmiLl1TVvY2q6NiXcGIex2fDFqLGqPG1B+mic3RAzfF8imVil3tYYq/OexHKu+ZqSHTUJXbRtW1KW8yWcZJq18t0Y29W6QG3joFIliHDNxhM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773392573; c=relaxed/simple;
+	bh=OGM4EBqnJKJK+8L3o2t7yW0p3EbFYRGIOVy2+mBvoDc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JdhSc1ifTLGsznuKAP3AuKQQxZ0nUqkd+OnUWd2/y6/8QDFpoZfiH7sxFvi4XTs/qU36ylnQMWjRAcuoXtQyKKRGF4uQ/8kiW3i2zYykAED6RsDgjK+YqF4eDfrdMGmpZW2c6KVdX/8oMPC0QsQ7hnKwAQQ2UFoVR+8aQDuZ3TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gGQJzoRQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GemXhqYN; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c9D/VzDW"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-5091ed02c54so295341cf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 01:33:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773390804; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Wm1azHwMo+w+8tiUyOfeNmMqWNczlg46DzB8clPy5YCVkUD+EOC/eCS6iPrH1o0Wbu
-         OiUM5MB9KfDXrvZwEcVZ0GPgwaN0ikYCYn8GzUV69R4EGGtuDVcdq3zu4UHZ+9/DfIIU
-         JWmp5VkQjg/uEstijyyHAgx3MH/kaDcyKHa3fGU+GQ7626mIDOosyoZ+AQG9jUByMjQH
-         /1JOxYPOIc1Y0fMNK9awRA7m+qbU4QenGYujTIbBpGcfQtvifaNTY3MyrzfY/mGhwmEb
-         9SuxCZdggJYP5U/Op27WbgROyxytBJU5lM4lQXv0F8YuapUKTjOAQQSGXgl6uolo+QlE
-         HmGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=cD8HoG2tID/gH/E5EhaBddCA2irOciAAr3AbkzzwhPM=;
-        fh=i3/ogGGB6vRjhQxSl8vFvHwxDos6WNXBSPzeR0G/4aU=;
-        b=NqY75Fu6LxGyU0ZmhJpJqU1C6Dj6kK2bDTA6+K8MXxsaOOMgpIZhL1AU/sVmr7tgtO
-         wlm/7aN0I4tav0gxDhO2yhZlso+PRRo02ylOMa2knuyR0S65V9/ZgVs/trXZz8lkK5fl
-         KFCYS248RJ0JOpBUsIggLEs1GcntHAMUJwFbTFjmunL6XuYXCurod++3wzIcw4HWc1Vi
-         wQOeqf2offveKwFs31remZPpE0FXXRytWfZ2QYtSeM4rkclZh7GO3Bff6uKHPqiF4wZu
-         fYn+vt7pVquEzLpgQkPhf34bIOPILTK7QjXrFsuiBvRz2e4f2t4JiurP8AnpYuEMm3MO
-         LcIQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773390804; x=1773995604; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cD8HoG2tID/gH/E5EhaBddCA2irOciAAr3AbkzzwhPM=;
-        b=c9D/VzDWddEYOEl/qqVUn0JX68GdlzwfOfZhNhJj99a6H7e91FWh9KS7WWMiSTOJ8b
-         nJNLbmAgCGVi6yqHknAiKqS7tHdzpPuoU4hqpT7ICSwkITBVRVH47aE6wjtn9/wS4qz7
-         +G3QmyEuKp+YhXBCo1tYeoJ1gdVhtWIKiOTFE6vChvFB2yUbDIovAVDjsGf7JvFECERS
-         IjecdMlRYCnMceeO+uLt05Qzya7mh9ro7MyUGbvcVrLbIKtXDRwYNr8P5nR4+aLV+sGp
-         X0odav7G38PrPtzmMrlCejq1v+Yv/OYGDSG8WQ33bfLlwXhzLBzeUOZ01Fb20jQBEKnE
-         WIQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773390804; x=1773995604;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cD8HoG2tID/gH/E5EhaBddCA2irOciAAr3AbkzzwhPM=;
-        b=Bj+9RjN/pq/N7m2+UB/GXxetQs3mVXOUeieQPmAFY2Au5dE+mTWugLww/AKLrNEeEl
-         7XeeL5M68MRQHvqsC2JtxBG3e+SgpUMvORxdKBuRtIudMOEGK/lbDtDaACSGXCsIYhP/
-         NgMqaq6SG9SL1uXoQ8qqssWLMM3jcSNR7POXsUuPgaAbKB4gSgPTY1zIxpXF+IG3NyZb
-         i9XBgt1nA54UX7UckOB2GJL2m2I4Z4s7leK+WUXv9huSRbEQG0z8zLJXjAYhkbgkrBvM
-         ISAMwweTih2LqbeIsbIZlwaexhQ9J+WA3MD/KJBvWMyuEVbxu3Stm6lOWe2661fe2iwx
-         Q3vw==
-X-Forwarded-Encrypted: i=1; AJvYcCXFn5qAB6b1yvMxKKeIOXGcOwSdYZ+I+AXa3PtnLc+ECmySlpc+OxNw0EiaGIOSqajzqJx4eyQHpbwWoftKOC0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwjOsc1Dx/CQYhQ3tI/Eu2dOpVh52GRpyPez6Z0tWygLm69J6y
-	lRnMVyq2zwS/VFafYvRbdzk1FYVtUJTUKtFeEOm8lbA2TWKjiNcTvBGq7SFX7NYGiIGZ2jrZDcR
-	ZCMrcwXhUzCEnlwRT3bM4ExnwKHHDOhyKfPN+Q8xC
-X-Gm-Gg: ATEYQzzrBwTN06rlE0WqnnD1yg2z5stprp9hQpEvBQ73hgJkRi9DgaZZTBlrw8o/49Q
-	kycHKhiWGBRWt4bjGWzxXaVE41I7dARaa0UZiVV9HdoUc4VGF/HQC0LE7PQuc5fJIuKz+vZT855
-	P0UdijwvEqJ0K/oojK5hLsfZjIbzGd/TLkZgGopTHUudL0eaK/OUUV6jAW+IpTkKcEBbacijH2m
-	Lsq1A/s4YOPKyKvO2f4D+PH3Ho0K0Y4goLReK1GR+0ctBXOafoCJqmPMaZ2RrfRufQmSx8bHav6
-	183DAW7M
-X-Received: by 2002:a05:622a:1a89:b0:509:45f:fdd2 with SMTP id
- d75a77b69052e-50959e8684bmr8455681cf.15.1773390803655; Fri, 13 Mar 2026
- 01:33:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gGQJzoRQ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GemXhqYN"
+Date: Fri, 13 Mar 2026 10:02:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1773392570;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oDsx7+o6ET1T9lEaarJoduRn33Cm29uhzlwRxM8Y890=;
+	b=gGQJzoRQ2uGkWjFYLIVJcQG2h++KjcZErawdS1vf1/u77pz3dt5ZGnuW5dMvWcUaF/X61R
+	9sGHILSUY/pf/Bth050YQ3gP9lUSeQSCXNERs24QtoYkGbGXGcoxevaWkzI0NNIY6jffHO
+	BmPu0FvocWBXsC5HVzUdqLTdmbc8hBxeu5wzb28c/ZQZZRSGcgWygTbVP891EOlnxkphwB
+	eO4j6rTaKpHAtIN+Gqy32A79j1qD4wHAQsEJratKRkbQXojyPdMMbRUiNcMhe1J4TifEJa
+	ojb7whcdKm962AZMxAVJV4pAHUC6VObNudLE+JeifbJ8LIR2VCgZ4dWYwJ2aBA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1773392570;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oDsx7+o6ET1T9lEaarJoduRn33Cm29uhzlwRxM8Y890=;
+	b=GemXhqYNBQ7Ow9Dwmowa9DEwiFqtOKiTZhLEoww2b/wSgUYfXOTGNAKJfGweJWsEKveiYv
+	3R6Cu4tP0er/TqCw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] selftests/hid: fix compilation when bpf_wq and
+ hid_device are not exported
+Message-ID: <20260313095731-682bbab2-5861-4aea-bc83-420492400c19@linutronix.de>
+References: <20260313-wip-bpf-fixes-v1-0-74b860315060@kernel.org>
+ <20260313-wip-bpf-fixes-v1-1-74b860315060@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
- <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
- <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com>
- <CA+EHjTy2urW2Tj5czQDKUHdri7FCLfw2mafTgmmtFs+-7ueoiw@mail.gmail.com>
- <abLfWHf89TxWqeGZ@google.com> <CAEvNRgFUc+9xCoN9Yo5NThHrvbccWAhPwp9nNM2fvx7QqrcJsg@mail.gmail.com>
- <abNcEkNseDEBIhop@google.com>
-In-Reply-To: <abNcEkNseDEBIhop@google.com>
-From: Fuad Tabba <tabba@google.com>
-Date: Fri, 13 Mar 2026 08:32:46 +0000
-X-Gm-Features: AaiRm51ywXpTuOot2q1XwdhhIuZ40FH3GjYl4tPqPPT-m9I6kc4EDU_1p4w_okM
-Message-ID: <CA+EHjTyjjTf26-ob4kPfQDrHN+7z_YGcvtO989SnEUfR+4fcBA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
-To: Sean Christopherson <seanjc@google.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de, 
-	brauner@kernel.org, chao.p.peng@intel.com, chao.p.peng@linux.intel.com, 
-	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com, 
-	david@kernel.org, hpa@zytor.com, ira.weiny@intel.com, jgg@nvidia.com, 
-	jmattson@google.com, jroedel@suse.de, jthoughton@google.com, 
-	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
-	mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
-	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, shivankg@amd.com, shuah@kernel.org, steven.price@arm.com, 
-	tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz, 
-	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260313-wip-bpf-fixes-v1-1-74b860315060@kernel.org>
 
-Hi,
+On Fri, Mar 13, 2026 at 08:40:24AM +0100, Benjamin Tissoires wrote:
+> This can happen in situations when CONFIG_HID_SUPPORT is set to no, or
+> some complex situations where struct bpf_wq is not exported.
+> 
+> So do the usual dance of hiding them before including vmlinux.h, and
+> then redefining them and make use of CO-RE to have the correct offsets.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202603111558.KLCIxsZB-lkp@intel.com/
+> Cc: stable@vger.kernel.org
 
-On Fri, 13 Mar 2026 at 00:36, Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Mar 12, 2026, Ackerley Tng wrote:
-> > Sean Christopherson <seanjc@google.com> writes:
-> >
-> > > On Thu, Mar 12, 2026, Fuad Tabba wrote:
-> > >> Hi Ackerley,
-> > >>
-> > >> Before getting into the UAPI semantics, thank you for all the heavy
-> > >> lifting you've done here. Figuring out how to make it all work across
-> > >> the different platforms is not easy :)
-> > >>
-> > >> <snip>
-> > >>
-> > >> > The policy definitions below provide more details:
-> > >
-> > > Please drop "CONTENT_POLICY" from the KVM documentation.  From KVM's perspective,
-> > > these are not "policy", they are purely properties of the underlying memory.
-> > > Userspace will likely use the attributes to implement policy of some kind, but
-> > > KVM straight up doesn't care.
-> >
-> > Policy might have been the wrong word. I think this is a property of the
-> > conversion process/request, not a property of the memory like how
-> > shared/private is a property of the memory?
-> >
-> > I'll have to find another word to describe this enum of
->
-> Or just don't?  I'm 100% serious, because unless we carve out a field _just_ for
-> these two flags, they're eventually going to get mixed with other stuff.  At that
-> point, having a precisely named enum container just gets in the way.
+'Fixes' missing? Also for patch 2 in the series.
 
-I agree. It makes sense to drop the enum wrapper and the "policy"
-terminology entirely. Let's go with direct flags passed to the ioctl
-representing the requested memory properties upon conversion.
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
-> > I see you dropped any documentation to do with testing.
->
-> Yes.
->
-> > I meant to document it (at least something about the unspecified case) so it
-> > can be relied on in selftests, with the understanding (already specified
-> > elsewhere in Documentation/virt/kvm/api.rst) that nothing about
-> > KVM_X86_SW_PROTECTED_VM is to be relied on in production, and can be changed
-> > anytime. What do you think?
->
-> KVM_X86_SW_PROTECTED_VM should self-report like all other VM types, and shouldn't
-> support anything that isn't documented as possible.  I.e. we shouldn't allow
-> ZERO on shared=>private "for testing".
->
-> What I do think we should do is scribble memory on conversions without ZERO or
-> PRIVATE, probably guarded by a Kconfig or maybe a module param, to do a best
-> effort enforcement of the ABI, i.e. to try and prevent userspace from depending
-> on uarch/vendor specific behavior.
+Reviewed-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 
-I strongly agree with scribbling/poisoning the memory on default
-conversions. If userspace specifies neither flag, actively destroying
-the data in software is the only way to strictly enforce that the ABI
-makes no guarantees, preventing the VMM from implicitly relying on
-underlying hardware behavior (like TDX automatically zeroing).
+(Some nits below, feel free to ignore them)
 
-Cheers,
-/fuad
+> ---
+>  tools/testing/selftests/hid/progs/hid_bpf_helpers.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+> index 80ab60905865..2c6ec907dd05 100644
+> --- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+> +++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+> @@ -8,9 +8,11 @@
+>  /* "undefine" structs and enums in vmlinux.h, because we "override" them below */
+>  #define hid_bpf_ctx hid_bpf_ctx___not_used
+>  #define hid_bpf_ops hid_bpf_ops___not_used
+> +#define hid_device hid_device___not_used
+>  #define hid_report_type hid_report_type___not_used
+>  #define hid_class_request hid_class_request___not_used
+>  #define hid_bpf_attach_flags hid_bpf_attach_flags___not_used
+> +#define bpf_wq bpf_wq___not_used
+
+'bpf' would sort before 'hid' alphabetically.
+
+>  #define HID_INPUT_REPORT         HID_INPUT_REPORT___not_used
+>  #define HID_OUTPUT_REPORT        HID_OUTPUT_REPORT___not_used
+>  #define HID_FEATURE_REPORT       HID_FEATURE_REPORT___not_used
+> @@ -29,9 +31,11 @@
+>  
+>  #undef hid_bpf_ctx
+>  #undef hid_bpf_ops
+> +#undef hid_device
+>  #undef hid_report_type
+>  #undef hid_class_request
+>  #undef hid_bpf_attach_flags
+> +#undef bpf_wq
+>  #undef HID_INPUT_REPORT
+>  #undef HID_OUTPUT_REPORT
+>  #undef HID_FEATURE_REPORT
+> @@ -55,6 +59,14 @@ enum hid_report_type {
+>  	HID_REPORT_TYPES,
+>  };
+>  
+> +struct hid_device {
+> +	unsigned int id;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct bpf_wq {
+> +	__u64 __opaque[2];
+> +};
+
+The fields are never used, would a forward-declaration be sufficient?
+
+struct bpf_wq;
+
+Then you could also avoid the #define dance for that struct.
+
+> +
+>  struct hid_bpf_ctx {
+>  	struct hid_device *hid;
+>  	__u32 allocated_size;
+> 
+> -- 
+> 2.52.0
+> 
