@@ -1,90 +1,66 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8972235E94B;
-	Fri, 13 Mar 2026 15:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08498376BF8;
+	Fri, 13 Mar 2026 15:58:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773417155; cv=none; b=u7NHl7NVuGNHFkWufwo3U8eA4qW7f8LcgFgfrLI52jsw8JAQfxHuCXbL8QJOEh1nY/pFPaeQJ72d36rfi8Z/A65DO0bfAkQLA1tORSMczy6RdE9yG/9qrLHTkx7Z99VP3MT0kNC+D80x828l9Y1RbCR12wNSxgj7mvNPH892WuA=
+	t=1773417525; cv=none; b=Wp5KjOdd6K2OveoFalEQgmlNTXo0eqoyGUEAwpN7smVIlcZf1o2JWkU35o4D/JI9rdge+0Xsrwd9UVNJYcNHe7BmHVQnHZOcQkv47eIAdLenp2I3kQvLJ0Fli3/a1FPvEj4aYoLq/Nw0w1W5Od1KNK0ah3FWn4W3wHkH05Fb+ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773417155; c=relaxed/simple;
-	bh=cLD4UeOXJEUjkMvUeEZ9aUKn0n85Sd7Thbn1qGBM0uo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k4iGlZLhYkIV7tjDL2IRxRJRh++h7GciVJqF9W/ZXX/CDPuCleA2RpqKPptCYSAJePVtKwcZ08IoD6U18bcuH/JnK3xC09U/llpZEYOmZwhciD01+Q1zqGUOtIBl6DYZxvUAZh470Mi/vzwdIvAdgzG8t1wQd9PQAPRnb9ZUxRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XqOmm3A0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773417525; c=relaxed/simple;
+	bh=iX36zAHKKmeN4eHhotzzC+i5yndNh+W3zdQKxVSXZMQ=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=mfR1aGY4IXSRyK25i+2aeBAF6Kvsl10Me74RaLuM9gXtbPg1/5L9VLt0w5vcLo5tQxt+Qmoh4F6zdXMCJEdLJLQFyo8prNmH4egGSaYXCetDE0BOvg8rLnmrZKNFBTrn071SvgulpRyssAjXm9pPgFU2s/NUZsN6nRPmk21NhzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IBfh9iic; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XqOmm3A0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AA18C19425;
-	Fri, 13 Mar 2026 15:52:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1773417155;
-	bh=cLD4UeOXJEUjkMvUeEZ9aUKn0n85Sd7Thbn1qGBM0uo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XqOmm3A0UZs9o+49rm7NCPNLl6y2BgofzBQ/MVdHloql3+txX9ZVv6nIClHxFk7D0
-	 NxcnY6lKcEMxCqba0hVKiM+eb5ldNI4tGaTnjM5MliA8h9J3pZ6UQkctN7+z79HObz
-	 E3+AUjS96c53npC+NNUFW0NFVEnBwWvYXdq7mx7I=
-Date: Fri, 13 Mar 2026 16:52:30 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Askar Safin <safinaskar@zohomail.com>,
-	Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 6/9] kernel/api: add API specification for sys_close
-Message-ID: <2026031321-steadfast-fang-ba42@gregkh>
-References: <20260313150928.2637368-1-sashal@kernel.org>
- <20260313150928.2637368-7-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBfh9iic"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33DF9C19421;
+	Fri, 13 Mar 2026 15:58:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773417524;
+	bh=iX36zAHKKmeN4eHhotzzC+i5yndNh+W3zdQKxVSXZMQ=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=IBfh9iicleyvi7qoDfxPMLNSSubivhaZEkTsn/J4yYp0oCrqeRLAohPt18kp83zJl
+	 xKb8sDz4GKo7pwx4I7KpkPNuhZrAnbzbdCxlgbjTfbO/9GTmcbwN78/juYDpcIQVKt
+	 9ZHuHuUMG3mi7d65PbfCu2eRvEYQzqvROEhgXdiRsXxWPbGa3D/LkVhF7rK8FXxVet
+	 NAEz+KoAwh6RSb1nTG4ylfnK4TjvKRR7Gbg4SLE9JG0dTS0gNsXNQb513xAvRuZLqh
+	 iKjNyxojsd3szrmvSsOdjtpu6gixp7Nj7UAzDkAqpGaQlbNACavFH1/Qx2XV5K5jDn
+	 1sH0C4NyyiCqQ==
+Date: Fri, 13 Mar 2026 16:58:41 +0100 (CET)
+From: Jiri Kosina <jikos@kernel.org>
+To: Benjamin Tissoires <bentiss@kernel.org>
+cc: Shuah Khan <shuah@kernel.org>, linux-input@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    kernel test robot <lkp@intel.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] selftests/hid: fix compilation when bpf_wq and
+ hid_device are not exported
+In-Reply-To: <20260313-wip-bpf-fixes-v1-1-74b860315060@kernel.org>
+Message-ID: <0n8o2qqo-p89o-139r-0s9o-no5sp12n6np3@xreary.bet>
+References: <20260313-wip-bpf-fixes-v1-0-74b860315060@kernel.org> <20260313-wip-bpf-fixes-v1-1-74b860315060@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260313150928.2637368-7-sashal@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, Mar 13, 2026 at 11:09:16AM -0400, Sasha Levin wrote:
-> + * notes: This syscall has subtle non-POSIX semantics: the fd is ALWAYS closed
-> + *   regardless of the return value. POSIX specifies that on EINTR, the state
-> + *   of the fd is unspecified, but Linux always closes it. HP-UX requires
-> + *   retrying close() on EINTR, but doing so on Linux may close an unrelated
-> + *   fd that was reassigned by another thread. For portable code, the safest
-> + *   approach is to check for errors but never retry close().
+On Fri, 13 Mar 2026, Benjamin Tissoires wrote:
 
-We don't care about HP-UX :)
+> This can happen in situations when CONFIG_HID_SUPPORT is set to no, or
+> some complex situations where struct bpf_wq is not exported.
+> 
+> So do the usual dance of hiding them before including vmlinux.h, and
+> then redefining them and make use of CO-RE to have the correct offsets.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202603111558.KLCIxsZB-lkp@intel.com/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
-> + *   Error codes from the flush callback (EIO, ENOSPC, EDQUOT) indicate that
-> + *   previously written data may have been lost. These errors are particularly
-> + *   common on NFS where write errors are often deferred to close time.
+Acked-by: Jiri Kosina <jkosina@suse.com>
 
-What flush callback?
+-- 
+Jiri Kosina
+SUSE Labs
 
-
-> + *
-> + *   The driver's release() callback errors are explicitly ignored by the
-> + *   kernel, so device driver cleanup errors are not propagated to userspace.
-
-What "The driver" here?  release() callbacks aren't really relevant
-here.
-
-thanks,
-
-greg k-h
