@@ -1,113 +1,150 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64E21A5B9E
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 00:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773361589; cv=none; b=Otm3v9xp9oJA7CSgs1C5ftli7u95Bg/e2UghhOe4/zDJyYofUKUm00SowXeo0iI/yAggNSrJBDllQL9p25M6hGthqG/xk9mlGfXAjN6d5ZiAkJb9wESAWOin/PW5O42rj3uMyabGL8YRvY3itUB5WT+Qm1LhDP3Rb37YnhD+RMM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773361589; c=relaxed/simple;
-	bh=ZPy8ZzMN8npJ4fuX3Wa/GJ7H2ZWdN2LM7NfIB5u+Ue4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vyo8wTCwgrCBVaIsgPg/tcly11ec9dtBu1aVPGa3hX30cmbl0a2nrXq1cwMwjSYimCi+efIUbhFhWKOO6Wx+j6D32TVbqyRNYs+7EYDNk3vyRmC4hngi1ZkIXZqKUao+Q1APnWlbnLf8DSfKYGkYg9K+X/nlrOVyQIWRn/5K+Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EC6CT44F; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15BB184540
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 00:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773362047; cv=pass; b=UgU+kDwNB3u4R9csrY8j9rARMbFlYm9uOV6+HCD0LDh2nCebwEYhX8uJvHMH6mbad6SC62RF/K4Mo1s+JGrMrIV2xAJofEhnxZS7w+WXKvtyQ14wwUEnnEgUgOVYXDgST0IJyMGqR4tK46YPucMDREvB9RCzhX0B5cOI5xD5Uuw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773362047; c=relaxed/simple;
+	bh=P9DYNvw0pXgKNQlqCuTgX5BsLWxpM/GHGwCmn4gqBFQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KTjqacm/ymuBgAO+BWQuszGLxjvTpW0IrzU2hpYLvzkFe0+oJfNdM48shnW64K4nhXWoEZDfRyLAxIm9SxE3xamfxwaMnx094c5WkoSps/hGtaQBNGsSLWw+RHkzU1sKXvo00SIs8L3UilKVRlF4uFGijWTP55ypxFzOrE6e/eY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Vo4xbcbG; arc=pass smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EC6CT44F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773361587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nE/5qQ6YtvkKGa4AVChhKiXkIX3R8WJepoP9vC2ImQA=;
-	b=EC6CT44Fn/Q9h712RBdylvt9f21ALmMiXOM860gsu2wHxhsIX/t8o2GAFEScgOkaWQsFPV
-	8G/aCYIHVUbWI9aHWclUPL/++l28R5MmR9HE5SEGKPbHdW6b6Wf72jeSLcxyUCVYZampbO
-	sBtU09ISEFy9siNyu7aRAyJEuxKjYNo=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-543-gzx9QGhPMpeQBlVAMoUedQ-1; Thu,
- 12 Mar 2026 20:26:22 -0400
-X-MC-Unique: gzx9QGhPMpeQBlVAMoUedQ-1
-X-Mimecast-MFC-AGG-ID: gzx9QGhPMpeQBlVAMoUedQ_1773361579
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 367B81953991;
-	Fri, 13 Mar 2026 00:26:19 +0000 (UTC)
-Received: from gmail.com (unknown [10.72.112.110])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EE07219540C5;
-	Fri, 13 Mar 2026 00:26:07 +0000 (UTC)
-Date: Fri, 13 Mar 2026 08:26:02 +0800
-From: Chunyu Hu <chuhu@redhat.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
-	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
-	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-	baohua@kernel.org, lance.yang@linux.dev
-Subject: Re: [PATCH 0/4] selftests/mm: skip several tests when thp is not
- available
-Message-ID: <abNZmiL2C7KMQM1t@gmail.com>
-References: <20260312114027.634559-1-chuhu@redhat.com>
- <abLHz2qjdeNqdFaZ@kernel.org>
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Vo4xbcbG"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-661d929219bso1884185a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 17:34:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773362044; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KDcKrweT1wsR+4gcXypUMTWZxhUviGL8XafkNP9SD7DLAUcpJ56E2ydwfdwozbIwjH
+         FgKGDTalhdwMCs5scENWngqJqVs99o1q4xsocwOqKj7lSxnM0OutuPC5itX4hzgYbZZa
+         OACNj+Se1c1yvlzT68b9gMWaq8q5vkDo/boy2XFW2X0KfTpYXZMZF/CP9xB6hJpVA/zi
+         GtmFaVtdhywJePMnJBn5DqiGggZnQxL331mZOPzcXzM41CHYu71xypDQ/KPe4NfXloh/
+         f0NnX7Bf+l/5yaSP+z4ls55aJnkk3/K/nIi8fpj5tUgCSb4aR5tx8+hScvndIZHWQXsD
+         WsbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pnJL3Iw0wwI9nfGsL4UNGadpWjx4M7Li4XWaHu9e8Ms=;
+        fh=TGKx5TtN0hW3xwPTYaa+AmKzOXNPk9ObgEoKqQ2k4/0=;
+        b=LMgWkuNDPuc6sxmQJZ6hqeRk9DhK/tS3kcqcf8zOfLGN8jNI4Mqpjk/IrNV2IP5vHf
+         ZEAnKNMvhMkyV/AvafGoTRwbAIsgfWp7LFcbSJoMkjsodGeDLgAsVvAYPG3XCFYgzwAG
+         FY/aZToKyvJEB19xFJo2pCr+otTdqV6Cu9H8pQYU4Jh8fhk+lHo6e4nZn4DoKVx3mHRr
+         ALnsveBuiN/uOW4TL5XFwOuVuHkRJrQv7bq6Z5sueKz35bIWfjEyPXSGSln3BxmAcUVp
+         VN4EHQcRtwtUY7au8PTRjn0SMts9S3KU11YPQws9idGXh4NkSVjOFbDGoEx0eoGPN4n9
+         eMig==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1773362044; x=1773966844; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pnJL3Iw0wwI9nfGsL4UNGadpWjx4M7Li4XWaHu9e8Ms=;
+        b=Vo4xbcbGVbDxB47s28JvwRyPuGtfhUdWydhmCZfZFIXwIoa4Nolcq1178Ix2aIR7FB
+         r8v2I8q08uXsv6RRbkQyx/J8IkETMYbND4jJfuRMx+DOsB9K/PAnXSOpk/xGe4+FFVnY
+         NPlR4d3w/YeSU9Y8BQRRUEGhqf6rDJX+b/7EAqF0bpeIputpz3HhnhP9env9yyvlcV8M
+         6CF60BZb/c/ASGteI40pQ2Z/NPISEnB+B2jy+zyZAowFpJq3PvcpHATD/DnA6DihYKpc
+         S1c3ryc+sbCygNaePFMbd3OB4TYVGxuhDi4cyqcpW1WLnQsu9ucW9sm5xTK7TLg7cS3e
+         p8Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773362044; x=1773966844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pnJL3Iw0wwI9nfGsL4UNGadpWjx4M7Li4XWaHu9e8Ms=;
+        b=MVJxtgRcP1lC5SI6gUcBIsXeV/PiT4G7wnBJ84nfsoR3PwfmLZROdTsnaTAFjq9DLS
+         QRBP8b0f8X1iOdIpwLR7rR8DKh3ouzf0JWbO3pqIFRv9W8cCmqJud5QAG5Ri0CyqgT3J
+         lzg+unium9/iRux84m45egAQHaQZFEBv4HjVdvNqkwBaDX9JCNzqtoS+U5cTUSDSfLjS
+         bD7rl7iFSWaGfnTumJBrDxTkMDz+wS849uyWGm9WIR7c20XqFcVdwbyEsmewUDtetasB
+         krET0v30V0uie9FP4na4o53QZQE6+PY0Ue9oCSyG7k2tTRlx9wp4lY650RRbOan96TuN
+         u26g==
+X-Forwarded-Encrypted: i=1; AJvYcCWjuDqkmkNFMKw0CGvk7wuFo0DGsrbEqxgfSbWrHOYWSMyM3QbJrlqrjigZkj2OaAbizzst9agLBlOdB7Joxyw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZwaMOfjcaTED2DflaURdrA6crzdtfEtvnAfZ1gvOeqDovUW4w
+	0PacZXZ3H0xknDND/DILB6UCDhvzxPUdqG4EhYld/q8xf6aXA1Yq4qRonPE1pF/tBk0BYtL13OK
+	ahO74jjJYqVz/Dnq9ywUbHeSpMnw4iBBotE6XqC1+aQ==
+X-Gm-Gg: ATEYQzx4Fbzu9SnDJQ+XrItjqLYKBDJpyKTyYsEE3m8rAqreWGK6GXJln5HUxczrnS4
+	gfsltPqnN9TUQ+6zpQR3iEfvswo+/lrkFn21m4ZMsTzeSy2UDPRg4b+uVATDzmZsfcezm4M0n0X
+	l4ENnyzquduxXk/JcQGPxpC3EeWKVr2hYpbB2e7SOj7QSr7O/mAOq3Vhay/tHKkNCBW5UZZ0Wuc
+	tYW6LAtwH6Vuww2thKuUDFkMPVSvoIONVsghU3j8nysAwsm+CoC7Yfxsi70hKa2ahZw4BhY24J/
+	EEeAy5HOF6mpbpcVq3gVxsTp54a+46QWbpQfGQ==
+X-Received: by 2002:a05:6402:3486:b0:662:e094:8dcd with SMTP id
+ 4fb4d7f45d1cf-663bb3d3be3mr643429a12.27.1773362043907; Thu, 12 Mar 2026
+ 17:34:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abLHz2qjdeNqdFaZ@kernel.org>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-8-dmatlack@google.com>
+ <20260226160353.6f3371bc@shazbot.org> <20260303210733.GG972761@nvidia.com>
+In-Reply-To: <20260303210733.GG972761@nvidia.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Thu, 12 Mar 2026 20:33:27 -0400
+X-Gm-Features: AaiRm50W9P4A7h3ayFJS5r_ZVIe8OM2EYEDEiGqBav5AUONhmByKJOVge3skGH0
+Message-ID: <CA+CK2bDADhFcMVGoJew9RoJ-DsVhYhiZJGJVwfzTBZdGX++8Ng@mail.gmail.com>
+Subject: Re: [PATCH v2 07/22] vfio/pci: Notify PCI subsystem about devices
+ preserved across Live Update
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
+	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, 
+	kexec@lists.infradead.org, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pranjal Shrivastava <praan@google.com>, Pratyush Yadav <pratyush@kernel.org>, 
+	Raghavendra Rao Ananta <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 12, 2026 at 04:03:59PM +0200, Mike Rapoport wrote:
-> On Thu, Mar 12, 2026 at 07:40:23PM +0800, Chunyu Hu wrote:
-> > There are several tests requires transprarent hugepages, when run on thp
-> > disabled kernel such as realtime kernel, there will be false positve.
-> 
-> I presume that when THP tests run on kernels with THP disabled they fail
-> and it would be a false negative rather than false positive.
+On Tue, Mar 3, 2026 at 4:07=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wro=
+te:
+>
+> On Thu, Feb 26, 2026 at 04:03:53PM -0700, Alex Williamson wrote:
+> > > @@ -203,5 +225,6 @@ void vfio_pci_liveupdate_cleanup(void)
+> > >     if (!liveupdate_enabled())
+> > >             return;
+> > >
+> > > +   WARN_ON_ONCE(pci_liveupdate_unregister_fh(&vfio_pci_liveupdate_fh=
+));
+> >
+> > This is propagation of a poor API choice in liveupdate, the unregister
+> > should return void, it shouldn't be allowed to fail, IMO.  Thanks,
+>
+> +1
+>
+> "destroy" functions that fail are evil. :)
 
+Generally, I agree that unregister, free, or destroy functions
+shouldn't return errors. However, this situation is tricky because the
+state is controlled by user space. The only relavent scenario where
+this function fails is:
 
-This is an interesting point. I'm not naitive speaker. I just learned
-from AI. It really matters what we define as 'postive'. I presume 'postive'
-is we run selftest and got a failure report, that's postive, not thinking
-as it's thp disabled kernel and a 'pass' is postive.
+"-EBUSY if the live update session is active and cannot be quiesced."
 
-I'll add statement about 'postive' in v2 like "a test failure is
-defiend as postive"
+If there are active sessions (incoming or outgoing) with preserved
+data, how can we safely unregister while they are in-flight? It is a
+rare condition, but since the user can cause it, they need to be
+notified that unloading the module right now is not a good idea.
 
-> 
-> > Mark those tests as skip when thp is not available.
-> > 
-> > Chunye Hu (4):
-> >   selftests/mm/guard-regions: skip collapse test when thp not enabled
-> >   selftests/mm: soft-dirty: skip two tests when thp not available
-> >   selftests/mm: split_huge_page_test: skip the test when thp not
-> >     available
-> >   selftests/mm: transhuge_stress: skip the test when thp not available
-> > 
-> >  tools/testing/selftests/mm/guard-regions.c        | 4 ++++
-> >  tools/testing/selftests/mm/soft-dirty.c           | 4 +++-
-> >  tools/testing/selftests/mm/split_huge_page_test.c | 9 +++++++--
-> >  tools/testing/selftests/mm/transhuge-stress.c     | 4 ++++
-> >  4 files changed, 18 insertions(+), 3 deletions(-)
-> > 
-> > 
-> > base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
-> > -- 
-> > 2.53.0
-> > 
-> 
-> -- 
-> Sincerely yours,
-> Mike.
-> 
+Pasha
 
+>
+> Jason
