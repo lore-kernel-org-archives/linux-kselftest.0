@@ -1,81 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55465347BD7
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 03:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9819220C038
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 03:35:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773372238; cv=none; b=suBX1WG8ig12wKIh9igKDy48dp/VE+feVi2gAED+gzV2xR+xXXHcxm9em7OUB0FeEg26rtVIeUlI5QgKM1RROopZ3dadrn26H3y2dVUX+Qug25s4ZmnGFyvInW2t5LMIyjcTx1ifjRJlVxlohnF54tUFzw2iAGKYyx6R1t0d/uo=
+	t=1773372937; cv=none; b=D5ji4zqyRrNLF1TVfn081KcXOSCsZjWZf3Eu/Wx747jhdSkMKGamvJJiSNQKP2SastGFrVK6n6cS8hHzlI17C5ogEF0vvJvSczc2UxZCt22HjkbYyitUacG2TPR1Pe8EVLu17Z/iOE+5Fcp+0TUTkmXMnHWJjNCdhV+C8X/AX80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773372238; c=relaxed/simple;
-	bh=CrO0Z3Kla1w0Ut7d964MhaF1H2bfH9lE/BjVQXgu3hg=;
+	s=arc-20240116; t=1773372937; c=relaxed/simple;
+	bh=aKY6aSiNpqxypTgxDFFgw7UHPZegC04bB/W/aZh8e2s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tlf6e531B1ABLeTtgE+kPZte++/98D3633k2vTZpxYD3z/8kHZOr+bCQ3uQpWIypWba9Auipboz4H5jbctlxsSFPRU5o3S7kudaa2ZQfQQUAa7yiJtFYJGNkxgtrp/0lzlY8EqC5FX/3x0mGQaHma4N4PO/6MiEJkPkL5n8TPAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i0P1yAnf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UZjjR2Kw; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=VVqWnMClmz0wdlSRr/0PlmyVQb1ioP9APgjRFGmslVJKLh0PqzMOkqxHh9s9jvCADpLX1SCQBwsYebFaKH+nO15JJSC6IJzykf98AoM9casBT0lpl88Rkhw3SWXgjlnChyFmnD9L7NJ9kLFr8YYasmi/tOiBQFQpwo+4goUh4xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QOyegFzS; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rtyYpoVE; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i0P1yAnf";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UZjjR2Kw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QOyegFzS";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rtyYpoVE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773372235;
+	s=mimecast20190719; t=1773372935;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=XyUSirNPJAnFjUFfi5pJvHSlQzaYa0PVQM56kebxuis=;
-	b=i0P1yAnfvvt7qQ+0N1l8cyWPt1st0z1F7uizEpjSoK1UMXuOnoALvzqYBbcuMJ0n7z4cmZ
-	eI+Xdlw0hU05Kghv4rjW84ewkmjVCM4rmx20xI/OwqkOvleat/87peydBpo+mj1yh9UU5A
-	9qrBTOIjjsk8ae/6IuVdHBVdd/As564=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=/8O0y76Sw4nNgrZ1YSQxVhOgzkbUj1DKbmac8/V7rFE=;
+	b=QOyegFzSbGdIdohuOj9c9QGmdG8Znk9YMdegPYkbKYFjmaqHXe/kNxCoBqxZMo1XiA1S0h
+	h/nyziLEUd/L9hGjn/G/iAS9/iIxs/TmrpIA1RUpTUTne2rDYwJLD2Y9VC4r/JtigvKyTJ
+	c8xPcUYXDwIJucWcCCeL1o13huw47Cg=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-240-pid9NA6RNQ2-1MuSR5U35A-1; Thu, 12 Mar 2026 23:23:54 -0400
-X-MC-Unique: pid9NA6RNQ2-1MuSR5U35A-1
-X-Mimecast-MFC-AGG-ID: pid9NA6RNQ2-1MuSR5U35A_1773372233
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2aec784479cso54286335ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 20:23:53 -0700 (PDT)
+ us-mta-647-3UeUnsEgOSOZWvu87N6ZYQ-1; Thu, 12 Mar 2026 23:35:34 -0400
+X-MC-Unique: 3UeUnsEgOSOZWvu87N6ZYQ-1
+X-Mimecast-MFC-AGG-ID: 3UeUnsEgOSOZWvu87N6ZYQ_1773372933
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ae53ec06b0so111393365ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 20:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773372233; x=1773977033; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1773372933; x=1773977733; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XyUSirNPJAnFjUFfi5pJvHSlQzaYa0PVQM56kebxuis=;
-        b=UZjjR2KwzZsd87hCoaEjxuFDibmCXAuzQ19khJ2EWHWySfVV+YZ4untWGF52Taia8s
-         whrdCmzfO+tXX1xQ8ZP2VcvGIc87GqHzQgXcjtcFBbIu//UbnlKWkbH5r44Cy8tRlq3G
-         gkvV3/3zZ7PvAya6dKpdvO8J22cqFchZQVJnTEV6zgbyWAQYyX8ptjsGb7PFu4OMTEtv
-         OMu1zkQgK4xqJULYGTtwZ6/maSRnmGKg7f7acGOIPESHUIKIxknODX2G/Gdijkncw3Ku
-         gbhYUzfTqV+W0rlvNGC8yshj9kUsBh1rpJcq++1Az2rxznx016I3i6QoScN14Ls7Luzg
-         qRJg==
+        bh=/8O0y76Sw4nNgrZ1YSQxVhOgzkbUj1DKbmac8/V7rFE=;
+        b=rtyYpoVEUqF6jV6wcireTbijNUBdlNZWmytUwNe+/aC6ZpvO8fqRgpi16CR5W9oVd5
+         6e49y1hDU3lBKBuaUTlL/WvuGO2FkJ+iCQJ7rPtgVJQq0D6sYKVwM36k0cJkAEU8E8Je
+         9MIIinoUWRMqC65F4tYVAnPcznoJ44fEvJE++lYcI1bN+Nj+tLOg3DEFANK/fkqX+NSK
+         X8OSKwBf6q045a38qsC2sNDt/oIIwukUI0F6M+ykpbSVdqQE76WNxjieyOxokgVS739i
+         Wcw5dovfN7c34Ii664hwY7VVIR9h7i+wFqEpg4BtWJyMTLssFubEUD6d5VL663XmFL2j
+         QLYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773372233; x=1773977033;
+        d=1e100.net; s=20251104; t=1773372933; x=1773977733;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XyUSirNPJAnFjUFfi5pJvHSlQzaYa0PVQM56kebxuis=;
-        b=F0kVOdsEFOPvPeyfwOYcXAh7v+zeudi/R7qelI2GDVPMvmP+y3zurUjoI+0UuJ43dV
-         QkpnSo6YdpMVNCXCPmkgkLjhOJXaxOIMF7Bryha/nfsCK88rUXAch8fxXCHKSiQrkKRz
-         fORMYo/6ih6zkSuBUxRRiGHxb2CdIkYnItP9VFdI8qlSP/tkF5BDI4qSOttHL6Azpnzy
-         3jobdn3AlQANl838oWwvJln7wD9OmyYTPYOoxUhLlcZgiyAFj0sqnin/AlVyw9NyKvg/
-         ZVvxkQ2ApnNhTOHm705lVxnO4vVaq8kFq0hdaT7Wbk7Ad3+8AyS3xpG+w205dis1BhsH
-         pfRA==
-X-Forwarded-Encrypted: i=1; AJvYcCWeQuRcsgxIQBz4a5Luw0Lmi5J9p/kSp2mk2p0th0/2Yw0Nwr+cGN0TlULus8K48VMOwNWfNXMrBPArgug4mME=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yysh4rKEMEgqmrYKmAcO88IvjOi8JFs3B6YmJfYICAay/LLfeJO
-	q1nFc0dfze+7tNQdkKE+ISUq9FLc5jgu31pFE81k+6rRS51qAAeDahUG8CsDPTESkZ1SQXPdSih
-	VGFU1VSjIV/3TJD4bpnCSUpK65j59I7Baltzq4wSGUjvMXLfTmnGkiokp+n87AE7UmBctoQ==
-X-Gm-Gg: ATEYQzzoB3p8H8UM88FoJ4iK738pPusxeQvGSdfGTkRFBotZHc7BHSLeGSVhSoQKlNL
-	MRNhFReB7Ewssy3opxcDRUY73cBMG7SaqYr0WipfqJSP5kv/dRVD61VCLTlhS5Q6iYDo8UGHdJq
-	aFgYpf5oCrlo9SoP/aeUPjEjGxqF+F8Z0a246MLx1Tumx/CZoLG2KQWestpFJWZ9e3VYVQQP9Tx
-	h59BjEVaTGC/zHwLpth6nMgaXWGH6cO2BeYtbDAI3jwHSCyNI50p/D/wL0PZ8Rqy6z/lv/xgNhc
-	+3H4yKjL6qmcMpfmauAgDT6mgJ5Pms5q06yx3X2j/HhwJ31PGbjRe6YMLhQPOcWrlIW9Fsdb7dx
-	ONi+QftCWwr4Yels2hg==
-X-Received: by 2002:a05:6300:193:b0:398:9820:f6ff with SMTP id adf61e73a8af0-398ecdc67eemr1371859637.62.1773372232819;
-        Thu, 12 Mar 2026 20:23:52 -0700 (PDT)
-X-Received: by 2002:a05:6300:193:b0:398:9820:f6ff with SMTP id adf61e73a8af0-398ecdc67eemr1371846637.62.1773372232455;
-        Thu, 12 Mar 2026 20:23:52 -0700 (PDT)
+        bh=/8O0y76Sw4nNgrZ1YSQxVhOgzkbUj1DKbmac8/V7rFE=;
+        b=J5IrSduD30ZgGv14xxOfePndsGrT5XX/foPuJ/3l7T+mRDYwfAOgi8kJnaddNlbPGu
+         mONvKFG68tvjfgAuznXdf3+tHVTYt3m2UpBFnLV7VDiB6ZTyLzG2beXojOX2t9DUiT+f
+         LVD+KHs+vslaP+Ln3X5301GOIDsx5mhHu+m95IwkcgfSX9IYOOeffjtcp2rphKfFyKkT
+         dx+0cuNNCWz0comMXCFSYJ2XX7fVt2ZUyhGm+5R6E+gjkaZRktd6l2TaXX1EPU2/Lf4x
+         jUMkf46xvlQo6lWA+TERTEDJsBR7NXHSeU8xbw9bOu5HujiP52oosIThh4Ydpn+3iDvT
+         oxWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVelic3k2J7iMhJDIkfsMIEJpfBV3leeNMxAahh96FBM8e2nCCRMCjwH0Eq9H8DJ5If7KlVnrqjYhdVpsij5yE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZoyodjoTBrqbOtgLFYT8vboaEQxUfU6rI3YvuieuNoCCEL+Ah
+	PPIhubpWj93fFj6VTuIIZbKKmiQL8kWqAxr5zYzpRDmwYTl5ZmM8jXCHiNfjGWge34p27zVOBls
+	Nd+fPEZVNaAKpwKKy4YE2zLostlj4ILxmyCXToRjM4XuDpI88DBWrLZ7OVaHy/yHpu7SC7Q==
+X-Gm-Gg: ATEYQzzJLWMXGGMei5at4/k4ZEMP2r3tjU9WPBuH3yzwoMQJFFO0qg64aVcPhQ6wU70
+	BYxhzgeULk3AAbTaoGiLdNtaZlfqzybe7D9voxsvyRkLRISO9bWnbAMv6F1b8U+X97AodHWCL8S
+	Oc4y2wLLzN/Cj5+ri1V2QKefAiyeFQIkcQbKGGK7q+Qw0tkSqik9wZNJgDuQX7Ycm2Wnb29nwB/
+	ZnYgI5p2RrEAkxwCckdsIrEqCNyiKksbhcL2rruAhKbLUimkchC80/50g5YbF0V6tEOAgJSUIfo
+	TH0YHFBdk3CnWVaq8arhOleXKuzBwQhXI1JTV9nLv/bj3rQoGPq2PDaKD7haZUQI10ZJMV1/34i
+	ESG6Gtw6lQqby0V0hPw==
+X-Received: by 2002:a17:902:e748:b0:2ae:c916:511 with SMTP id d9443c01a7336-2aeca9e0988mr18292905ad.24.1773372932786;
+        Thu, 12 Mar 2026 20:35:32 -0700 (PDT)
+X-Received: by 2002:a17:902:e748:b0:2ae:c916:511 with SMTP id d9443c01a7336-2aeca9e0988mr18292665ad.24.1773372932438;
+        Thu, 12 Mar 2026 20:35:32 -0700 (PDT)
 Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73ebb75624sm421173a12.24.2026.03.12.20.23.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece7ee5b1sm5475595ad.46.2026.03.12.20.35.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 20:23:51 -0700 (PDT)
-Date: Fri, 13 Mar 2026 11:23:50 +0800
+        Thu, 12 Mar 2026 20:35:30 -0700 (PDT)
+Date: Fri, 13 Mar 2026 11:35:28 +0800
 From: Li Wang <liwang@redhat.com>
 To: Yosry Ahmed <yosry@kernel.org>
 Cc: Nhat Pham <nphamcs@gmail.com>, mkoutny@suse.com, yosryahmed@google.com,
@@ -87,12 +87,13 @@ Cc: Nhat Pham <nphamcs@gmail.com>, mkoutny@suse.com, yosryahmed@google.com,
 	Shakeel Butt <shakeel.butt@linux.dev>
 Subject: Re: [PATCH v2 1/7] selftests/cgroup: skip test_zswap if zswap is
  globally disabled
-Message-ID: <abODRsaeEul9Aj2X@redhat.com>
+Message-ID: <abOGAHNnv9OZltdq@redhat.com>
 References: <20260312040627.55257-1-liwang@redhat.com>
  <CAKEwX=MqyGQSMuVCSWmhKfHju5uHBe3ySQEgK9XuKwCvpL4x8w@mail.gmail.com>
  <CAO9r8zPmV8v0tiQvn2xFqX8F2oU23mfbVK67nxMO3QKt49kJeg@mail.gmail.com>
  <abNtUReAUHT6j9Rn@redhat.com>
  <CAO9r8zMh=tAV6UJcH3hhZWrZJO_emVe4raiq4wiBEgC-GAD2=Q@mail.gmail.com>
+ <abODRsaeEul9Aj2X@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -101,23 +102,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAO9r8zMh=tAV6UJcH3hhZWrZJO_emVe4raiq4wiBEgC-GAD2=Q@mail.gmail.com>
+In-Reply-To: <abODRsaeEul9Aj2X@redhat.com>
 
-On Thu, Mar 12, 2026 at 07:58:28PM -0700, Yosry Ahmed wrote:
-> > Yes, this looks more tidy than open it. I'll go this helper in v3.
-> >
+On Fri, Mar 13, 2026 at 11:23:50AM +0800, Li Wang wrote:
+> On Thu, Mar 12, 2026 at 07:58:28PM -0700, Yosry Ahmed wrote:
+> > > Yes, this looks more tidy than open it. I'll go this helper in v3.
 > > >
-> > > static void check_zswap_enabled(void)
-> > > {
-> > >        char value;
-> >
-> > read_text() requires string but not char.
+> > > >
+> > > > static void check_zswap_enabled(void)
+> > > > {
+> > > >        char value;
+> > >
+> > > read_text() requires string but not char.
+> > 
+> > I was just illustrating. This should be passed in as &value. That should work?
 > 
-> I was just illustrating. This should be passed in as &value. That should work?
+> Yes, pass it as &value works well.
 
-Yes, pass it as &value works well.
-
-Patchset v3 is on the way :).
+And use sizeof(&value) just get the pointer's size but not
+the buffer size, so I would recommend: char value[2].
 
 -- 
 Regards,
