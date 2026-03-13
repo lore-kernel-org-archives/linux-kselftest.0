@@ -1,155 +1,155 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC613019A6;
-	Fri, 13 Mar 2026 16:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A637313E00;
+	Fri, 13 Mar 2026 16:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773419254; cv=none; b=lgC/OH9YrVxY6l4kEHIlsjYOdMT/kKp5buRr6/RuVOxqQSGL97oNXFuKcYGm54NQm3Z8RFwdqutUQOSztmMnXhHHURGjO21qVmkm4jRfq0yG/wnvM+roJBeYN/W32Pi6by4a0udtS/bXIMtArVuxIiQ6XkLMEFDzLRki1AsV75A=
+	t=1773419814; cv=none; b=JxhmkMcX8N80bcHnL2XfyJ9oxGNK/+LDONu1/DuwySXn3gPqqnqz7U3fngmsKDj6jKmU5LZZ8Cikeih8hq6Rf5YgshBlV4YNmslRNV6snzM59wFroYcM72FvibA/ENeASw8Gu3RhmknvYCvWDfbO3G8Z6LRGo8dlHLNo5aocJ4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773419254; c=relaxed/simple;
-	bh=/eJtS8h0mKw/fLWieWSxlYbg5ksWap1zDbR7F4gZ0Bk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JXg9wbU8h2lAhbV2qBl7rpN8CD/6gFh+gIS8t4hWRXVh2K2C5yvG8I99rzHmqmaJ9ndK90EL6Qn/HZiCqRSrINDHJDAYuaKoB26CEeiC38erp9DbHbFUsnRGJmhQUBlWCiSE4FX8AWvcuhTz5OHFG03kuWVvoz1x76bnDBsLfRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5ys7i1O; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773419814; c=relaxed/simple;
+	bh=yxUcqh0AcpHROQQEEoQ7r7oTAaEg7FuJwAC+SAMDP3M=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=gpcTNvkcNjkBY+VpT7UUKvI+rn5nYauTwn7xKk/CzjzIvuD1gIsIYPD1QZo1uBZO46+/W1F3EYHTu9VkqADX6Niv+98579sAk5dhUCuk6NqtLLWnuo8IMPXwL5fIjOCpRrDoIRbbTsmyFPKAHa6Qjc4lw8LfhroRT+DEaQrzSnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V7TXBfDT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5ys7i1O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B561C19421;
-	Fri, 13 Mar 2026 16:27:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V7TXBfDT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E272C19421;
+	Fri, 13 Mar 2026 16:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773419254;
-	bh=/eJtS8h0mKw/fLWieWSxlYbg5ksWap1zDbR7F4gZ0Bk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g5ys7i1O4Oyyqudvfshayx5x83ZBrEEd0hPy5o7hcH9EDWSkBdxYYZhK0r1GGyM5G
-	 syCsC3eq1DUtsRKhNj21oAjko603bAQ8oYUQSwVNYXJYnpkqJrZrzL+Qr9e/x3BaDJ
-	 M37e6xzk+OxV1qR3jc4v11SJY98DLwi/oLO/z/dp5RHapEBh2nFHW1mxc2t1ayskjP
-	 OgjJTag8HwIxlnqHx55zKZEE15NKqEvjn2la7wrAn7lMgyKNFTLEAaJPUj811LesBL
-	 GRHk15xq6KF2kJ/9MYge7WEDYF85dN+2wkTaIg/SiwbDVxI2Mij/HaLc6uTCfqkcto
-	 kSe137WPVc22w==
-Date: Fri, 13 Mar 2026 12:27:32 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Askar Safin <safinaskar@zohomail.com>,
-	Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 3/9] kernel/api: add debugfs interface for kernel API
- specifications
-Message-ID: <abQ69FmtBqXX6Irz@laps>
-References: <20260313150928.2637368-1-sashal@kernel.org>
- <20260313150928.2637368-4-sashal@kernel.org>
- <2026031301-duplicate-finalist-b7a5@gregkh>
+	s=k20201202; t=1773419813;
+	bh=yxUcqh0AcpHROQQEEoQ7r7oTAaEg7FuJwAC+SAMDP3M=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=V7TXBfDT+CWpXuMQM09aE4/F+wrh1K/CJsOpJgtGA3GokfzWsZ6ey1lMex3vO/GhS
+	 6ol7Unp8+Nhqy5zTzKw4T3KEDN0+hOWQRgxSe0roTmXq2OJDSRRLrnxk4JTXN75a9Z
+	 8XmobYHZnGWO+Ce/hcjgfI0ZLq9ouZFbW0WVuTHspOQp9Dv3f9xHypO9pj71+J4ppH
+	 yXRpy1K5WfbHHgMxxJh8c3SYYLaFGVDfKzVornauyGzZiIAs8lJclxTOQEGp+SIhd4
+	 3kXnt3O63pv9mVulOmuNRhOHWAhFPptQlhXnXLDF2H7HRuJh54KSQzmkmt+uu8BPO8
+	 tcCtb20WFuZUw==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Andrew
+ Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, Eric
+ Dumazet <edumazet@google.com>, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, Naveen Mamindlapalli
+ <naveenm@marvell.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Danielle Ratson <danieller@nvidia.com>, Hariprasad
+ Kelam <hkelam@marvell.com>, Ido Schimmel <idosch@nvidia.com>, Kory Maincent
+ <kory.maincent@bootlin.com>, Leon Romanovsky <leon@kernel.org>, Michael
+ Chan <michael.chan@broadcom.com>, Oleksij Rempel <o.rempel@pengutronix.de>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, Piergiorgio Beruto
+ <piergiorgio.beruto@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Saeed
+ Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan
+ <tariqt@nvidia.com>, Willem de Bruijn <willemb@google.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org
+Subject: Re: [PATCH net-next 01/11] ethtool: Add dump_one_dev callback for
+ per-device sub-iteration
+In-Reply-To: <20260311193221.3306811b@kernel.org>
+References: <20260310104743.907818-1-bjorn@kernel.org>
+ <20260310104743.907818-2-bjorn@kernel.org>
+ <20260311193221.3306811b@kernel.org>
+Date: Fri, 13 Mar 2026 17:36:50 +0100
+Message-ID: <87eclny9ct.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <2026031301-duplicate-finalist-b7a5@gregkh>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 13, 2026 at 04:32:23PM +0100, Greg Kroah-Hartman wrote:
->On Fri, Mar 13, 2026 at 11:09:13AM -0400, Sasha Levin wrote:
->> Add a debugfs interface to expose kernel API specifications at runtime.
->> This allows tools and users to query the complete API specifications
->> through the debugfs filesystem.
->>
->> The interface provides:
->> - /sys/kernel/debug/kapi/list - lists all available API specifications
->> - /sys/kernel/debug/kapi/specs/<name> - detailed info for each API
->>
->> Each specification file includes:
->> - Function name, version, and descriptions
->> - Execution context requirements and flags
->> - Parameter details with types, flags, and constraints
->> - Return value specifications and success conditions
->> - Error codes with descriptions and conditions
->> - Locking requirements and constraints
->> - Signal handling specifications
->> - Examples, notes, and deprecation status
->>
->> This enables runtime introspection of kernel APIs for documentation
->> tools, static analyzers, and debugging purposes.
->>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  Documentation/dev-tools/kernel-api-spec.rst |  88 ++--
+Jakub Kicinski <kuba@kernel.org> writes:
+
+> On Tue, 10 Mar 2026 11:47:31 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+>> The per-PHY specific dump functions share a lot functionality of with
+>> the default dumpit infrastructure, but does not share the actual code.
+>> By introducing a new sub-iterator function, the two dumpit variants
+>> can be folded into one set of functions.
+>>=20
+>> Add a new dump_one_dev callback in ethnl_request_ops. When
+>> ops->dump_one_dev is set, ethnl_default_start() saves the target
+>> device's ifindex for filtered dumps, and ethnl_default_dumpit()
+>> delegates per-device iteration to the callback instead of calling
+>> ethnl_default_dump_one() directly. No separate start/dumpit/done
+>> functions are needed.
+>>=20
+>> For the existing per-PHY commands (PSE, PLCA, PHY, MSE), the shared
+>> ethnl_perphy_dump_one_dev helper provides the xa_for_each_start loop
+>> over the device's PHY topology.
+>>=20
+>> This prepares the ethtool infrastructure for other commands that need
+>> similar per-device sub-iteration.
 >
->You are removing stuff from the file you created earlier in this patch
->series, is that ok?
+> Feels like this could be split into two patches for ease of review.
 
-Sorry, just a rebasing artifact from shuffling patches around. I'll fix it.
+Hmm, OK! My take was the it was mostly moving stuff.
 
->> --- /dev/null
->> +++ b/kernel/api/kapi_debugfs.c
->> @@ -0,0 +1,503 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Kernel API specification debugfs interface
->> + *
->> + * This provides a debugfs interface to expose kernel API specifications
->> + * at runtime, allowing tools and users to query the complete API specs.
->> + */
+> Warning: net/ethtool/netlink.h:441 struct member 'dump_one_dev' not descr=
+ibed in 'ethnl_request_ops'
+> Warning: net/ethtool/netlink.h:441 struct member 'dump_one_dev' not descr=
+ibed in 'ethnl_request_ops'
+
+Thanks! (I've looked thru all the pw complaints, and fixed locally!)
+
 >
->No copyright line?  :)
-
-I'll add one.
-
->And this is, a totally and crazy interface with debugfs, I love it!
-
-Thanks :)
-
->Two minor minor nits:
->
->> +static int __init kapi_debugfs_init(void)
->> +{
->> +	struct kernel_api_spec *spec;
->> +	struct dentry *spec_dir;
+>> @@ -616,17 +580,41 @@ static int ethnl_default_dumpit(struct sk_buff *sk=
+b,
+>>  				struct netlink_callback *cb)
+>>  {
+>>  	struct ethnl_dump_ctx *ctx =3D ethnl_dump_context(cb);
+>> +	const struct genl_info *info =3D genl_info_dump(cb);
+>>  	struct net *net =3D sock_net(skb->sk);
+>>  	netdevice_tracker dev_tracker;
+>>  	struct net_device *dev;
+>>  	int ret =3D 0;
+>>=20=20
+>> +	if (ctx->ops->dump_one_dev && ctx->ifindex) {
+>> +		dev =3D netdev_get_by_index(net, ctx->ifindex, &dev_tracker,
+>> +					  GFP_KERNEL);
+>> +		if (!dev)
+>> +			return -ENODEV;
 >> +
->> +	/* Create main directory */
->> +	kapi_debugfs_root = debugfs_create_dir("kapi", NULL);
+>> +		ctx->req_info->dev =3D dev;
+>> +		ret =3D ctx->ops->dump_one_dev(skb, ctx, &ctx->pos_sub, info);
 >> +
->> +	/* Create list file */
->> +	debugfs_create_file("list", 0444, kapi_debugfs_root, NULL, &kapi_list_fops);
+>> +		if (ret < 0 && ret !=3D -EOPNOTSUPP && likely(skb->len))
+>> +			ret =3D skb->len;
 >> +
->> +	/* Create specs subdirectory */
->> +	spec_dir = debugfs_create_dir("specs", kapi_debugfs_root);
->> +
->> +	/* Create a file for each API spec */
->> +	for (spec = __start_kapi_specs; spec < __stop_kapi_specs; spec++) {
->> +		debugfs_create_file(spec->name, 0444, spec_dir, spec, &kapi_spec_fops);
+>> +		netdev_put(dev, &dev_tracker);
+>> +		return ret;
 >> +	}
->
->No need for { }
-
-ack
-
 >> +
->> +	pr_info("Kernel API debugfs interface initialized\n");
+>>  	rcu_read_lock();
+>>  	for_each_netdev_dump(net, dev, ctx->pos_ifindex) {
+>>  		netdev_hold(dev, &dev_tracker, GFP_ATOMIC);
+>>  		rcu_read_unlock();
+>>=20=20
+>> -		ret =3D ethnl_default_dump_one(skb, dev, ctx, genl_info_dump(cb));
+>> +		if (ctx->ops->dump_one_dev) {
+>> +			ctx->req_info->dev =3D dev;
+>> +			ret =3D ctx->ops->dump_one_dev(skb, ctx, &ctx->pos_sub,
+>> +						     info);
+>> +			ctx->req_info->dev =3D NULL;
+>> +		} else {
+>> +			ret =3D ethnl_default_dump_one(skb, dev, ctx, info);
+>> +		}
+>>=20=20
+>>  		rcu_read_lock();
+>>  		netdev_put(dev, &dev_tracker);
 >
->When code is working properly, it should be quiet, no need for this as
->initializing this can not fail.
+> Not sure if it works here but another way to implementing single dump
+> and a loop dump concisely is to init both ifindex and pos_ifindex when
+> request is parsed and then add
+>
+> 	if (ctx->ifindex && ctx->ifindex !=3D ctx->pos_ifindex)
+> 		break;
+>
+> at the start of the loop. That way the body of the loop doesn't have to
+> be repeated in a separate if=20
 
-ack
+Indeed! I think that would work, and that'd be cleaner!
 
--- 
-Thanks,
-Sasha
+Cheers!
