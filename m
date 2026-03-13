@@ -1,84 +1,60 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DA11E868
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 12:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF3127456;
+	Fri, 13 Mar 2026 13:03:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773406122; cv=none; b=W6r1i+6o4WLOslIRpbmBCE4fxva6SodgeetEChjEoQRzyzQmWBd76EcACDi492PZNfR+Ejgwj2L1VUOSqBOaDVhX7jZ8glz7SiPMoTAPCdLKdrZWwtZrPKDilW/US7d/Uzw6unCrHQWxk4412lX4I9zi1TMgtqFMImoTt08ZvZQ=
+	t=1773407001; cv=none; b=qJNDBrjd48ubhNZcq3K6cuzkv6aS0svplqcKdMxhRcRHemDEMt0FfWgBbWiV1vrjvbv/H0cs9NW0hko4etnQREUEeKs18kispXDEAogRIxWkQ/ekdqQYGXlZFqKVZmbHZCxJHiT0PAivP5TSvhd4Rs5zHWkGpiUhaCDM0S/dI3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773406122; c=relaxed/simple;
-	bh=79NxmM+MkB1TRN1x7LdwDBd2mAtRT5MtMtXj1hldAyQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aYTGIalwvm6nra9pr155XETekN9Gcp+bOouqtN9XS1LmbryWaXTc+DYJFp41lYo6WNCe8PhtxVoGkpTysQtIseLpT6yRID/C9mgpRvPQNndFbm9xhtvSZM+rPIVB0FT4NkVH5UxNJ/BQNS+Ex+EMn/LzDf2h0uiZ3ikxSF+1Rbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ZWbi5m7F; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/gMItvD1; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ZWbi5m7F; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/gMItvD1; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1773407001; c=relaxed/simple;
+	bh=5mNoHIACtt9SZgMP0Y+R8drx7nGYHYBDolSvg789j/I=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=I37GHqCGXjUz3/UuMyYEReVttcS+cmmx0SzpSbVasyswOWyBPLOylqBLNq+ECPaPn7ACd4JKPuzXU8kxsQ3KanE4JnMxlTp4THO3OG4jqnO6MiZ+2TQoJLDWfrSxP6lPYoPbb6+bYAxzD4JY4npslKq9P99TpWt7LOeluwWu1bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=KakmyC2t; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ZWbi5m7F";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/gMItvD1";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ZWbi5m7F";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/gMItvD1"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id C454F5BD15;
-	Fri, 13 Mar 2026 12:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773406118; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=eMkWZ1dQnPzBx9E00xU6bbEorgylJXE6cy6xk7cFZT0=;
-	b=ZWbi5m7FlzCT9NYvWaZeixzTYmPS+0karceJoFpHnxpTHJ1Khs5/QLI2Z5wIHAVqd5Dif2
-	ZmlbhqBBXzm6H8l1OghgA0m65xiNALAngHK2UGBfCOyUbJYxr2YzLvKGz/4jVpebHbo7fp
-	vL2ozYYDVyzbBBVgdfLY6ow4EtcZLyw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773406118;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=eMkWZ1dQnPzBx9E00xU6bbEorgylJXE6cy6xk7cFZT0=;
-	b=/gMItvD1IMkkpVKbbYc+u104npKOnYhmSVklqk3dRWpZ73SvmMLKxKNpH4l5vDY8Tjcyr0
-	PAe21pVfFvNQUqDA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ZWbi5m7F;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="/gMItvD1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773406118; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=eMkWZ1dQnPzBx9E00xU6bbEorgylJXE6cy6xk7cFZT0=;
-	b=ZWbi5m7FlzCT9NYvWaZeixzTYmPS+0karceJoFpHnxpTHJ1Khs5/QLI2Z5wIHAVqd5Dif2
-	ZmlbhqBBXzm6H8l1OghgA0m65xiNALAngHK2UGBfCOyUbJYxr2YzLvKGz/4jVpebHbo7fp
-	vL2ozYYDVyzbBBVgdfLY6ow4EtcZLyw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773406118;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=eMkWZ1dQnPzBx9E00xU6bbEorgylJXE6cy6xk7cFZT0=;
-	b=/gMItvD1IMkkpVKbbYc+u104npKOnYhmSVklqk3dRWpZ73SvmMLKxKNpH4l5vDY8Tjcyr0
-	PAe21pVfFvNQUqDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3262240521;
-	Fri, 13 Mar 2026 12:48:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id WeEmCaYHtGk6WQAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Fri, 13 Mar 2026 12:48:38 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	horms@kernel.org,
-	pabeni@redhat.com,
-	kuba@kernel.org,
-	edumazet@google.com,
-	davem@davemloft.net,
-	Fernando Fernandez Mancera <fmancera@suse.de>
-Subject: [PATCH net-next v3] selftests: net: add ipv6 RA route to ECMP merge test
-Date: Fri, 13 Mar 2026 13:48:27 +0100
-Message-ID: <20260313124827.3945-1-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="KakmyC2t"
+Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62D92K5O1066675;
+	Fri, 13 Mar 2026 13:02:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=MR9Y7/vrxBVXCj8cRh5AdHsWfo3OwqgvnazIkEnjRPg=; b=Kakm
+	yC2t2grpA9wMPTmgl8NL+Gn9DMYc4Fad54Gia79BXTwMybx9qnio5FuNjWP64M7v
+	Qt6fB5yYAdxGOTgzA/h6FdUV0xSrXmPDxUQFJpC0G6+OBAwD+FtLsINZ1/torboy
+	gcmtnCEZ1SAaBK/q0Z+cq7x3ax8iLP4Ab54Bww7MByCNogqjqd10Vwg2I6Lfp6TT
+	Y2CGMuZ82TBr0n4km9Z7mLO+hmKJ+Kn5UIRPSD6Q0uKwiyiSnvECZNYuBc4Pv6Ot
+	/LiRkQuDjmaQOHptI1VEbai17UtjRyho2X+IW14mLSgJy5s5ICnRrx2+e4/+CnxX
+	85Hr6pKRtTvhNPFVJg==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cuh5y7jdw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Mar 2026 13:02:41 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Fri, 13 Mar 2026 13:02:35 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
+CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
+        Slava Imameev
+	<slava.imameev@crowdstrike.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Add trampolines single and multi-level pointer params test coverage
+Date: Sat, 14 Mar 2026 00:02:20 +1100
+Message-ID: <20260313130220.18590-3-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260313130220.18590-1-slava.imameev@crowdstrike.com>
+References: <20260313130220.18590-1-slava.imameev@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,96 +62,168 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Queue-Id: C454F5BD15
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
-X-Spam-Level: 
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDEwMyBTYWx0ZWRfX58nb4hHpLRYZ
+ tP3s2Bl4m1zW0Ohbf6mNL4r+5np5oYt2/y6TIi1N09uE/BqTD1YOIV0LKLohOo6Utqvf8B4je61
+ NwKXzeY3JLQOtoFci22QW4YJCfUiskx/J/GiEeuE/O2rDZlSUPyR6RpCAoJVRHxKw2u6G3ZIHaZ
+ Sc70Z1PAfdfDV7xBA8MTF2CyIlVF5epDv7uZ1YlgcZ+rCZqfFXidok49UeMpsZLhxRn3h7/rCvg
+ YjmZfjeE6rFW0NLneF/hFGd6zYKeGZSzENkEPYg5iXKAonn5LpFwWHtwHxOK+iDAB+6MYARFNga
+ hZVeDiZBK9QxpP5GqrvXTlla6PSEEuKMUJVIYlKxbYZJa6QXFLwkGYiVKPqkFKjtqMvcX9KgoOx
+ ohRik9pbD0jNP1ezEoRA/l0aLy2+g10Ie1flilV3Lu5tm1Dbx0VsFwOBww4i4N1QhI81/ZqZdB7
+ ShLy9jtCuiQX8yLq4wQ==
+X-Proofpoint-ORIG-GUID: bv9DVZeJD2XCzeXFu_iwq4DoWGE8bglk
+X-Authority-Analysis: v=2.4 cv=Mt1fKmae c=1 sm=1 tr=0 ts=69b40af1 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=pl6vuDidAAAA:8
+ a=Vh-PTBDqdCVuQZtVsP0A:9
+X-Proofpoint-GUID: bv9DVZeJD2XCzeXFu_iwq4DoWGE8bglk
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11728
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 malwarescore=0 adultscore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603130103
 
-As commit bbf4a17ad9ff ("ipv6: Fix ECMP sibling count mismatch when
-clearing RTF_ADDRCONF") pointed out, RA routes are not elegible for ECMP
-merging.
+Add single and multi-level pointer parameters and return value test
+coverage for BPF trampolines. Includes verifier tests for single and
+multi-level pointers. The tests check verifier logs for pointers
+inferred as scalar() type.
 
-Add a test scenario mixing RA and static routes with gateway to check
-that they are not getting merged.
-
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
 ---
-v2: added CONFIG_IPV6_ROUTE_INFO to the config
-v3: added CONFIG_IPV6_ROUTER_PREF to the config, tested with virtme-ng
----
- tools/testing/selftests/net/config       |  2 ++
- tools/testing/selftests/net/fib_tests.sh | 17 +++++++++++++++++
- 2 files changed, 19 insertions(+)
+ net/bpf/test_run.c                            | 17 +++++
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/verifier_ctx_ptr_param.c        | 68 +++++++++++++++++++
+ 3 files changed, 87 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index cd49b7dfe216..2a390cae41bf 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -43,6 +43,8 @@ CONFIG_IPV6_ILA=m
- CONFIG_IPV6_IOAM6_LWTUNNEL=y
- CONFIG_IPV6_MROUTE=y
- CONFIG_IPV6_MULTIPLE_TABLES=y
-+CONFIG_IPV6_ROUTE_INFO=y
-+CONFIG_IPV6_ROUTER_PREF=y
- CONFIG_IPV6_RPL_LWTUNNEL=y
- CONFIG_IPV6_SEG6_LWTUNNEL=y
- CONFIG_IPV6_SIT=y
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index 439461080c60..05dadc3f55b1 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -1534,6 +1534,23 @@ fib6_ra_to_static()
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 56bc8dc1e281..14c4814a7dab 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -567,6 +567,23 @@ noinline void bpf_fentry_test_sinfo(struct skb_shared_info *sinfo)
+ {
+ }
  
- 	log_test $ret 0 "ipv6 promote RA route to static"
++noinline void bpf_fentry_test_ppvoid(void **pp)
++{
++}
++
++noinline void bpf_fentry_test_pppvoid(void ***ppp)
++{
++}
++
++noinline void bpf_fentry_test_ppfile(struct file **ppf)
++{
++}
++
++noinline struct file **bpf_fexit_test_ret_ppfile(void)
++{
++	return (struct file **)NULL;
++}
++
+ __bpf_kfunc int bpf_modify_return_test(int a, int *b)
+ {
+ 	*b += 1;
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 8cdfd74c95d7..bcf01cb4cfe4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -115,6 +115,7 @@
+ #include "verifier_lsm.skel.h"
+ #include "verifier_jit_inline.skel.h"
+ #include "irq.skel.h"
++#include "verifier_ctx_ptr_param.skel.h"
  
-+	# Prepare for RA route with gateway
-+	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.accept_ra_rt_info_max_plen=64
-+
-+	# Add initial route to cause ECMP merging
-+	$IP -6 route add 2001:12::/64 via fe80::dead:beef dev veth1
-+
-+	$NS_EXEC ra6 -i veth2 -d 2001:10::1 -R 2001:12::/64#1#120
-+
-+	# Routes are not merged as RA routes are not elegible for ECMP
-+	check_rt_num 2 "$($IP -6 route list | grep -c "2001:12::/64 via")"
-+
-+	$IP -6 route append 2001:12::/64 via fe80::dead:feeb dev veth1
-+
-+	check_rt_num 2 "$($IP -6 route list | grep -c "nexthop via")"
-+
-+	log_test "$ret" 0 "ipv6 RA route with nexthop do not merge into ECMP with static"
-+
- 	set +e
+ #define MAX_ENTRIES 11
  
- 	cleanup &> /dev/null
+@@ -259,6 +260,7 @@ void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
+ void test_irq(void)			      { RUN(irq); }
+ void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
+ void test_verifier_jit_inline(void)               { RUN(verifier_jit_inline); }
++void test_verifier_ctx_ptr_param(void)       { RUN(verifier_ctx_ptr_param); }
+ 
+ static int init_test_val_map(struct bpf_object *obj, char *map_name)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c b/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
+new file mode 100644
+index 000000000000..b507dc850543
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Verifier tests for single- and multi-level pointer parameter handling
++ * Copyright (c) 2026 CrowdStrike, Inc.
++ */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++
++SEC("fentry/bpf_fentry_test_ppvoid")
++__description("fentry/void**: void ** inferred as scalar")
++__success __retval(0)
++__log_level(2)
++__msg("R1=ctx() R2=scalar()")
++__naked void fentry_ppvoid_as_scalar(void)
++{
++    asm volatile ("					\
++	r2 = *(u64 *)(r1 + 0);	\
++	r0 = 0;	\
++	exit;	\
++	" ::: __clobber_all);
++}
++
++SEC("fentry/bpf_fentry_test_pppvoid")
++__description("fentry/void***: void *** inferred as scalar")
++__success __retval(0)
++__log_level(2)
++__msg("R1=ctx() R2=scalar()")
++__naked void fentry_pppvoid_as_scalar(void)
++{
++    asm volatile ("					\
++	r2 = *(u64 *)(r1 + 0);	\
++	r0 = 0;	\
++	exit;	\
++	" ::: __clobber_all);
++}
++
++SEC("fentry/bpf_fentry_test_ppfile")
++__description("fentry/struct file***: struct file *** inferred as scalar")
++__success __retval(0)
++__log_level(2)
++__msg("R1=ctx() R2=scalar()")
++__naked void fentry_ppfile_as_scalar(void)
++{
++    asm volatile ("					\
++	r2 = *(u64 *)(r1 + 0);	\
++	r0 = 0;	\
++	exit;	\
++	" ::: __clobber_all);
++}
++
++SEC("fexit/bpf_fexit_test_ret_ppfile")
++__description("fexit/return struct file**: returned struct file ** inferred as scalar")
++__success __retval(0)
++__log_level(2)
++__msg("R1=ctx() R2=scalar()")
++__naked void fexit_ppfile_as_scalar(void)
++{
++    asm volatile ("					\
++	r2 = *(u64 *)(r1 + 0);	\
++	r0 = 0;	\
++	exit;	\
++	" ::: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
-2.53.0
+2.34.1
 
