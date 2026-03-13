@@ -1,32 +1,30 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFB01D6195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA4B330D23
 	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 02:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773369089; cv=none; b=f3RuK9U8xqP1D28ZcJVDTC+Jy9/SR9jP8ddOuHylvSzyGCwjns3HYO9W4n6oSdim4MWMuko0uqCb7pNIRAEbywlPE4M0kjROz/DI0r0TVoz/EBw3BwJvmuC9b1IkKXil8knescDHAuPbkM34sefvW9LF5MNg75GJALVTjDs1zWI=
+	t=1773369090; cv=none; b=mLdNpvevIK3zjGoNp00bJuTh2YjuCx0fogWhMMD1yMXnKk9t4sZM4KApXv0V0LJWFMg7RN9JvHKHJoAS77It7I5AypZLHjDwclyXrdh+iKgQ0b34/N3/BjJwtnRdQpIUP72tl8ftVz5EpJk0SQRMHRFtqQzjA2Gk8PZEm7+Uv44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773369089; c=relaxed/simple;
-	bh=RdxgVfWxOb3cEIRp2as5BGXasld4xijXJAKk0IljJf8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C4j9sicaBzzS3tvCSRRtE3XkpxN/CaTVSWEFvbNwsmHuq2EJwTIZw11xc3koj8QMfPDOID5iK601d3oAxJz1awQRSRb+xRiK2bwIUngICMwKUni1bPrSvrOBoll1I60n9ms9sxN9T/69cIUQpnlmPNOLAXDhn5LwDECFKdKkl50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=okJB5fvF; arc=none smtp.client-ip=91.218.175.177
+	s=arc-20240116; t=1773369090; c=relaxed/simple;
+	bh=T/arHJtCiXgkZIiXroQwIDaD7oUAecKRKTDTYxRCbDU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=g9Fnzk66dcaYcGG+/s86Ei8rNMDLvMiUQDNXjK3fvVSRtUlLnSrxF9WxkC4u/Goa0T7xenvlB0bpImN+qQ//dmxTnvQ+ucxHo+AFYlhSu+UHQ3GozQaou406Nd6JhuYAoIVUocZ/zS7FK2+BKSfic4QD0YffXzmvynmfTMJE0cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SWxc8LOU; arc=none smtp.client-ip=91.218.175.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="okJB5fvF"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SWxc8LOU"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773369086;
+	t=1773369076;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jgjLv/aP4cmns8ANwSBzZkpjEyjj5ONPa7os313b8Vw=;
-	b=okJB5fvF0377bboxt7WVQfA7cT/e3hShOf0UF2mlISK8Y8bbCTNGeVKtDdVpqZ4z16KGAP
-	FVJc7z0XIFqAvfSzXHqzogTjDpnM/lLimoVXRUKNoCDIX1ERKu9Di2t3oQLX03Koe0VDfi
-	EASOfFrZ6KaKSSs4nWIGFixhl5PNLVk=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HP0IQ82rRcJ748p0Ao6fhqXnx5Qzg9WsCdy3eGHs70Y=;
+	b=SWxc8LOUmdZA32XLMgGwUmNjpz5pXkwhuQHPd+35F0zr4UvDfQMTn9BeECnh+OBgzmYAe4
+	NpmXwlGeHIAeh/6NE9xh1Mb5ykee73+uTgcPCW6degQgW9OY7AqmXO7PScyKwKJqSdgYHK
+	WUqndSipnCAmH8x36emxG2qYCmOIbWE=
 From: Zhu Yanjun <yanjun.zhu@linux.dev>
 To: jgg@ziepe.ca,
 	leon@kernel.org,
@@ -35,11 +33,9 @@ To: jgg@ziepe.ca,
 	dsahern@kernel.org,
 	linux-rdma@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 4/4] RDMA/rxe: Add testcase for net namespace rxe
-Date: Thu, 12 Mar 2026 19:30:58 -0700
-Message-ID: <20260313023058.13020-5-yanjun.zhu@linux.dev>
-In-Reply-To: <20260313023058.13020-1-yanjun.zhu@linux.dev>
-References: <20260313023058.13020-1-yanjun.zhu@linux.dev>
+Subject: [PATCH v7 0/4] RDMA/rxe: Add the support that rxe can work in net namespace
+Date: Thu, 12 Mar 2026 19:30:54 -0700
+Message-ID: <20260313023058.13020-1-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,20 +45,94 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add 4 testcases for rxe with net namespace.
+Currently rxe does not work correctly in network namespaces.
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
----
- MAINTAINERS                                   |  2 +
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/rdma/Makefile         |  7 ++
- tools/testing/selftests/rdma/config           |  3 +
- tools/testing/selftests/rdma/rxe_ipv6.sh      | 63 ++++++++++++++
- .../selftests/rdma/rxe_rping_between_netns.sh | 85 +++++++++++++++++++
- .../selftests/rdma/rxe_socket_with_netns.sh   | 76 +++++++++++++++++
- .../rdma/rxe_test_NETDEV_UNREGISTER.sh        | 63 ++++++++++++++
- 8 files changed, 300 insertions(+)
+When the rdma_rxe module is loaded, a UDP socket listening on port
+4791 is created in init_net. When users run:
+
+    ip link add ... type rxe
+
+inside another network namespace, the RXE RDMA link is created but it
+cannot function properly because the underlying UDP socket belongs to
+init_net. Other network namespaces cannot use that socket.
+
+To address this issue, this series introduces net namespace support
+for rxe and moves socket management to be per network namespace.
+
+The series first introduces per-net namespace management for the IPv4
+and IPv6 sockets used by rxe. The sockets are created when the network
+namespace becomes active and are released when the namespace is
+destroyed.
+
+Based on this infrastructure, rxe RDMA links are then created and
+destroyed within each network namespace. This ensures that both the
+UDP sockets and RDMA links are correctly scoped to the namespace in
+which they are used.
+
+With these changes, rxe RDMA links can be created and used both in
+init_net and in other network namespaces, and resources are properly
+cleaned up during namespace teardown.
+
+The series also includes a selftest to verify RXE functionality in
+network namespaces.
+
+"
+# make -C tools/testing/selftests/ TARGETS=rdma run_tests
+make: Entering directory 'tools/testing/selftests'
+make[1]: Nothing to be done for 'all'.
+TAP version 13
+1..4
+# timeout set to 45
+# selftests: rdma: rxe_rping_between_netns.sh
+# client DISCONNECT EVENT...
+ok 1 selftests: rdma: rxe_rping_between_netns.sh
+# timeout set to 45
+# selftests: rdma: rxe_ipv6.sh
+ok 2 selftests: rdma: rxe_ipv6.sh
+# timeout set to 45
+# selftests: rdma: rxe_socket_with_netns.sh
+ok 3 selftests: rdma: rxe_socket_with_netns.sh
+# timeout set to 45
+# selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
+ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
+make: Leaving directory 'tools/testing/selftests'
+"
+
+V6 -> V7: Add selftests to INFINIBAND DRIVER;
+		Move the Macro to the beginning of the file;
+		Add comments about dellink;
+V5 -> V6: Fix some problems based on Leon's advice
+V4 -> V5: Fix rcu warnings
+V3 -> V4: Squash all the changes about rxe_ns.c/h into one commit.
+V2 -> V3: Fix build warnings
+V1 -> V2: Fix the problems based on David Ahern.
+
+
+Zhu Yanjun (4):
+  RDMA/nldev: Add dellink function pointer
+  RDMA/rxe: Add net namespace support for IPv4/IPv6 sockets
+  RDMA/rxe: Support RDMA link creation and destruction per net namespace
+  RDMA/rxe: Add testcase for net namespace rxe
+
+ MAINTAINERS                                   |   2 +
+ drivers/infiniband/core/nldev.c               |  12 ++
+ drivers/infiniband/sw/rxe/Makefile            |   3 +-
+ drivers/infiniband/sw/rxe/rxe.c               |  38 ++++-
+ drivers/infiniband/sw/rxe/rxe_net.c           | 144 +++++++++++++-----
+ drivers/infiniband/sw/rxe/rxe_net.h           |   9 +-
+ drivers/infiniband/sw/rxe/rxe_ns.c            | 124 +++++++++++++++
+ drivers/infiniband/sw/rxe/rxe_ns.h            |  26 ++++
+ include/rdma/rdma_netlink.h                   |   2 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/rdma/Makefile         |   7 +
+ tools/testing/selftests/rdma/config           |   3 +
+ tools/testing/selftests/rdma/rxe_ipv6.sh      |  63 ++++++++
+ .../selftests/rdma/rxe_rping_between_netns.sh |  85 +++++++++++
+ .../selftests/rdma/rxe_socket_with_netns.sh   |  76 +++++++++
+ .../rdma/rxe_test_NETDEV_UNREGISTER.sh        |  63 ++++++++
+ 16 files changed, 612 insertions(+), 46 deletions(-)
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.c
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.h
  create mode 100644 tools/testing/selftests/rdma/Makefile
  create mode 100644 tools/testing/selftests/rdma/config
  create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
@@ -70,371 +140,6 @@ Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
  create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
  create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 837db4f7bcca..07b341831f16 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12551,6 +12551,7 @@ F:	include/uapi/linux/if_infiniband.h
- F:	include/uapi/rdma/
- F:	samples/bpf/ibumad_kern.c
- F:	samples/bpf/ibumad_user.c
-+F:	tools/testing/selftests/rdma/
- 
- INGENIC JZ4780 NAND DRIVER
- M:	Harvey Hunt <harveyhuntnexus@gmail.com>
-@@ -24503,6 +24504,7 @@ L:	linux-rdma@vger.kernel.org
- S:	Supported
- F:	drivers/infiniband/sw/rxe/
- F:	include/uapi/rdma/rdma_user_rxe.h
-+F:	tools/testing/selftests/rdma/rxe*
- 
- SOFTLOGIC 6x10 MPEG CODEC
- M:	Bluecherry Maintainers <maintainers@bluecherrydvr.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 450f13ba4cca..110e07c0d99d 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -94,6 +94,7 @@ TARGETS += proc
- TARGETS += pstore
- TARGETS += ptrace
- TARGETS += openat2
-+TARGETS += rdma
- TARGETS += resctrl
- TARGETS += riscv
- TARGETS += rlimits
-diff --git a/tools/testing/selftests/rdma/Makefile b/tools/testing/selftests/rdma/Makefile
-new file mode 100644
-index 000000000000..7dd7cba7a73c
---- /dev/null
-+++ b/tools/testing/selftests/rdma/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_PROGS := rxe_rping_between_netns.sh \
-+		rxe_ipv6.sh \
-+		rxe_socket_with_netns.sh \
-+		rxe_test_NETDEV_UNREGISTER.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
-new file mode 100644
-index 000000000000..4ffb814e253b
---- /dev/null
-+++ b/tools/testing/selftests/rdma/config
-@@ -0,0 +1,3 @@
-+CONFIG_TUN
-+CONFIG_VETH
-+CONFIG_RDMA_RXE
-diff --git a/tools/testing/selftests/rdma/rxe_ipv6.sh b/tools/testing/selftests/rdma/rxe_ipv6.sh
-new file mode 100755
-index 000000000000..b7059bfd6d7c
---- /dev/null
-+++ b/tools/testing/selftests/rdma/rxe_ipv6.sh
-@@ -0,0 +1,63 @@
-+#!/bin/bash
-+
-+# Configuration
-+NS_NAME="net6"
-+VETH_HOST="veth0"
-+VETH_NS="veth1"
-+RXE_NAME="rxe6"
-+PORT=4791
-+IP6_ADDR="2001:db8::1/64"
-+
-+exec > /dev/null
-+
-+# Cleanup function to run on exit (even on failure)
-+cleanup() {
-+    ip netns del "$NS_NAME" 2>/dev/null
-+    modprobe -r rdma_rxe 2>/dev/null
-+    echo "Done."
-+}
-+trap cleanup EXIT
-+
-+# 1. Prerequisites check
-+for mod in tun veth rdma_rxe; do
-+    if ! modinfo "$mod" >/dev/null 2>&1; then
-+        echo "Error: Kernel module '$mod' not found."
-+        exit 1
-+    fi
-+done
-+
-+modprobe rdma_rxe
-+
-+# 2. Setup Namespace and Networking
-+echo "Setting up IPv6 network namespace..."
-+ip netns add "$NS_NAME"
-+ip link add "$VETH_HOST" type veth peer name "$VETH_NS"
-+ip link set "$VETH_NS" netns "$NS_NAME"
-+ip netns exec "$NS_NAME" ip addr add "$IP6_ADDR" dev "$VETH_NS"
-+ip netns exec "$NS_NAME" ip link set "$VETH_NS" up
-+ip link set "$VETH_HOST" up
-+
-+# 3. Add RDMA Link
-+echo "Adding RDMA RXE link..."
-+if ! ip netns exec "$NS_NAME" rdma link add "$RXE_NAME" type rxe netdev "$VETH_NS"; then
-+    echo "Error: Failed to create RXE link."
-+    exit 1
-+fi
-+
-+# 4. Verification: Port should be listening
-+# Using -H to skip headers and -q for quiet exit codes
-+if ! ip netns exec "$NS_NAME" ss -Hul6n sport = :$PORT | grep -q ":$PORT"; then
-+    echo "Error: UDP port $PORT is NOT listening after link creation."
-+    exit 1
-+fi
-+echo "Verified: Port $PORT is active."
-+
-+# 5. Removal and Verification
-+echo "Deleting RDMA link..."
-+ip netns exec "$NS_NAME" rdma link del "$RXE_NAME"
-+
-+if ip netns exec "$NS_NAME" ss -Hul6n sport = :$PORT | grep -q ":$PORT"; then
-+    echo "Error: UDP port $PORT still active after link deletion."
-+    exit 1
-+fi
-+echo "Verified: Port $PORT closed successfully."
-diff --git a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
-new file mode 100755
-index 000000000000..e5b876f58c6e
---- /dev/null
-+++ b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
-@@ -0,0 +1,85 @@
-+#!/bin/bash
-+
-+# Configuration
-+NS="test1"
-+VETH_A="veth-a"
-+VETH_B="veth-b"
-+IP_A="1.1.1.1"
-+IP_B="1.1.1.2"
-+PORT=4791
-+
-+exec > /dev/null
-+
-+# --- Cleanup Routine ---
-+cleanup() {
-+    echo "Cleaning up resources..."
-+    rdma link del rxe1 2>/dev/null
-+    ip netns exec "$NS" rdma link del rxe0 2>/dev/null
-+    ip link delete "$VETH_B" 2>/dev/null
-+    ip netns del "$NS" 2>/dev/null
-+    modprobe -r rdma_rxe 2>/dev/null
-+}
-+trap cleanup EXIT
-+
-+# --- Prerequisite Checks ---
-+if [[ $EUID -ne 0 ]]; then
-+   echo "This script must be run as root"
-+   exit 1
-+fi
-+
-+modprobe rdma_rxe || { echo "Failed to load rdma_rxe"; exit 1; }
-+
-+# --- Setup Network Topology ---
-+echo "Setting up network namespace and veth pair..."
-+ip netns add "$NS"
-+ip link add "$VETH_A" type veth peer name "$VETH_B"
-+ip link set "$VETH_A" netns "$NS"
-+
-+# Configure Namespace side (test1)
-+ip netns exec "$NS" ip addr add "$IP_A/24" dev "$VETH_A"
-+ip netns exec "$NS" ip link set "$VETH_A" up
-+ip netns exec "$NS" ip link set lo up
-+
-+# Configure Host side
-+ip addr add "$IP_B/24" dev "$VETH_B"
-+ip link set "$VETH_B" up
-+
-+# --- RXE Link Creation ---
-+echo "Creating RDMA links..."
-+ip netns exec "$NS" rdma link add rxe0 type rxe netdev "$VETH_A"
-+rdma link add rxe1 type rxe netdev "$VETH_B"
-+
-+# Verify UDP 4791 is listening
-+check_port() {
-+    local target=$1 # "host" or "ns"
-+    if [ "$target" == "ns" ]; then
-+        ip netns exec "$NS" ss -Huln sport == :$PORT | grep -q ":$PORT"
-+    else
-+        ss -Huln sport == :$PORT | grep -q ":$PORT"
-+    fi
-+}
-+
-+check_port "ns" || { echo "Error: RXE port not listening in namespace"; exit 1; }
-+check_port "host" || { echo "Error: RXE port not listening on host"; exit 1; }
-+
-+# --- Connectivity Test ---
-+echo "Testing connectivity with rping..."
-+ping -c 2 -W 1 "$IP_A" > /dev/null || { echo "Ping failed"; exit 1; }
-+
-+# Start rping server in background
-+ip netns exec "$NS" rping -s -a "$IP_A" -v > /dev/null 2>&1 &
-+RPING_PID=$!
-+sleep 1 # Allow server to bind
-+
-+# Run rping client
-+rping -c -a "$IP_A" -d -v -C 3
-+RESULT=$?
-+
-+kill $RPING_PID 2>/dev/null
-+
-+if [ $RESULT -eq 0 ]; then
-+    echo "SUCCESS: RDMA traffic verified."
-+else
-+    echo "FAILURE: rping failed."
-+    exit 1
-+fi
-diff --git a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
-new file mode 100755
-index 000000000000..002e5098f751
---- /dev/null
-+++ b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
-@@ -0,0 +1,76 @@
-+#!/bin/bash
-+
-+# Configuration
-+PORT=4791
-+MODS=("tun" "rdma_rxe")
-+
-+exec > /dev/null
-+
-+# --- Helper: Cleanup Routine ---
-+cleanup() {
-+    echo "Cleaning up resources..."
-+    rdma link del rxe1 2>/dev/null
-+    rdma link del rxe0 2>/dev/null
-+    ip link del tun0 2>/dev/null
-+    ip link del tun1 2>/dev/null
-+    for m in "${MODS[@]}"; do modprobe -r "$m" 2>/dev/null; done
-+}
-+
-+# Ensure cleanup runs on script exit or interrupt
-+trap cleanup EXIT
-+
-+# --- Phase 1: Environment Check ---
-+if [[ $EUID -ne 0 ]]; then
-+   echo "Error: This script must be run as root."
-+   exit 1
-+fi
-+
-+for m in "${MODS[@]}"; do
-+    modprobe "$m" || { echo "Error: Failed to load $m"; exit 1; }
-+done
-+
-+# --- Phase 2: Create Interfaces & RXE Links ---
-+echo "Creating tun0 (1.1.1.1) and rxe0..."
-+ip tuntap add mode tun tun0
-+ip addr add 1.1.1.1/24 dev tun0
-+ip link set tun0 up
-+rdma link add rxe0 type rxe netdev tun0
-+
-+# Verify port 4791 is listening
-+if ! ss -Huln sport = :$PORT | grep -q ":$PORT"; then
-+    echo "Error: UDP port $PORT not found after rxe0 creation"
-+    exit 1
-+fi
-+
-+echo "Creating tun1 (2.2.2.2) and rxe1..."
-+ip tuntap add mode tun tun1
-+ip addr add 2.2.2.2/24 dev tun1
-+ip link set tun1 up
-+rdma link add rxe1 type rxe netdev tun1
-+
-+# Verify port 4791 is still listening
-+if ! ss -Huln sport = :$PORT | grep -q ":$PORT"; then
-+    echo "Error: UDP port $PORT missing after rxe1 creation"
-+    exit 1
-+fi
-+
-+# --- Phase 3: Targeted Deletion ---
-+echo "Deleting rxe1..."
-+rdma link del rxe1
-+
-+# Port should still be active because rxe0 is still alive
-+if ! ss -Huln sport = :$PORT | grep -q ":$PORT"; then
-+    echo "Error: UDP port $PORT closed prematurely"
-+    exit 1
-+fi
-+
-+echo "Deleting rxe0..."
-+rdma link del rxe0
-+
-+# Port should now be gone
-+if ss -Huln sport = :$PORT | grep -q ":$PORT"; then
-+    echo "Error: UDP port $PORT still exists after all links deleted"
-+    exit 1
-+fi
-+
-+echo "Test passed successfully."
-diff --git a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
-new file mode 100755
-index 000000000000..021ca451499d
---- /dev/null
-+++ b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
-@@ -0,0 +1,63 @@
-+#!/bin/bash
-+
-+# Configuration
-+DEV_NAME="tun0"
-+RXE_NAME="rxe0"
-+RDMA_PORT=4791
-+
-+exec > /dev/null
-+
-+# --- Cleanup Routine ---
-+# Ensures environment is clean even if the script hits an error
-+cleanup() {
-+    echo "Performing cleanup..."
-+    rdma link del $RXE_NAME 2>/dev/null
-+    ip link del $DEV_NAME 2>/dev/null
-+    modprobe -r rdma_rxe 2>/dev/null
-+}
-+trap cleanup EXIT
-+
-+# 1. Dependency Check
-+if ! modinfo rdma_rxe >/dev/null 2>&1; then
-+    echo "Error: rdma_rxe module not found."
-+    exit 1
-+fi
-+
-+modprobe rdma_rxe
-+
-+# 2. Setup TUN Device
-+echo "Creating $DEV_NAME..."
-+ip tuntap add mode tun "$DEV_NAME"
-+ip addr add 1.1.1.1/24 dev "$DEV_NAME"
-+ip link set "$DEV_NAME" up
-+
-+# 3. Attach RXE Link
-+echo "Attaching RXE link $RXE_NAME to $DEV_NAME..."
-+rdma link add "$RXE_NAME" type rxe netdev "$DEV_NAME"
-+
-+# 4. Verification: Port Check
-+# Use -H (no header) and -q (quiet) for cleaner scripting logic
-+if ! ss -Huln sport == :$RDMA_PORT | grep -q ":$RDMA_PORT"; then
-+    echo "Error: UDP port $RDMA_PORT is not listening."
-+    exit 1
-+fi
-+echo "Verified: RXE is listening on UDP $RDMA_PORT."
-+
-+# 5. Trigger NETDEV_UNREGISTER
-+# We delete the underlying device without deleting the RDMA link first.
-+echo "Triggering NETDEV_UNREGISTER by deleting $DEV_NAME..."
-+ip link del "$DEV_NAME"
-+
-+# 6. Final Verification
-+# The RXE link and the UDP port should be automatically cleaned up by the kernel.
-+if rdma link show "$RXE_NAME" 2>/dev/null; then
-+    echo "Error: $RXE_NAME still exists after netdev removal."
-+    exit 1
-+fi
-+
-+if ss -Huln sport == :$RDMA_PORT | grep -q ":$RDMA_PORT"; then
-+    echo "Error: UDP port $RDMA_PORT still listening after netdev removal."
-+    exit 1
-+fi
-+
-+echo "Success: NETDEV_UNREGISTER handled correctly."
 -- 
 2.52.0
 
