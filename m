@@ -1,143 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456563AB280;
-	Fri, 13 Mar 2026 19:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB953D3491;
+	Fri, 13 Mar 2026 20:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773429075; cv=none; b=GX5/1MthfVJ5d7DIBHNc3drAVR1MKEjRq50jmtaqxKBjEsX+OtfR8s2JYTG5fIVKyFVzc8dHzi90wJYhot/f5TW+M4wy2lc5L0AOSVx1RNG/4ZPPl8TnDWHURLKF/ZHuiMIwpV7Tk8kZuAqD4cMkcfRop87rC5vIeTbyZeeDVxs=
+	t=1773433592; cv=none; b=jd5ZaaO5z3257yZids7Iw0QJParUH09fv4ZooS4YGxigwrEZFQFSGyUPlUb2y4F9BpUpNxyUfPU3HsiQtS6ushRK/IUNw6Z146j4Y7mC8hbmTO/GJyG8Q78dT7TAToHOQZ9CIMEdD92wJZPRSSSRvCXT0evfVdNOl7kpAqZ146M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773429075; c=relaxed/simple;
-	bh=doYwiQkJo973h+xP370H4wFzfMyN2oKUIPL/Gy0lfC8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=sLWOk1YuYgexahQozWD7T4Rh0YL7I9ev0nzMnYJK+kliPHvuiaDcz18+cBFEzEVG4qpDkuMu83a/kAVCNatTQe8aNowH80cbgC8lQQ58W+5DOA+Ody00dBxOx1MKBxJI7A/7AONWZ6sik4+oRWBsjhCXKdxVd16z/vwZ7Xg6vMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvXBlKTh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773433592; c=relaxed/simple;
+	bh=hZVfQ0/dCkzXftH42Scb31RyIHJH7EPTXFQkVpXgmu4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ldv+0ZBWWWiiEajbeSO6JR5L4UlalhcPpkg31wXLJpX/qEg/+6s27CZcWjhWHksrESTs2URXr6fr/tqsrQZ8KjIzSXXjcRqU6XGo4oFhZ0PgCBoyWA4gqI4IcPZyP1z2Drs0C8NVmjrekVkD3V2gi4YsgJ+HV5IjIflvV9IXxb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=r4C/z/mI; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvXBlKTh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 369EFC19421;
-	Fri, 13 Mar 2026 19:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773429074;
-	bh=doYwiQkJo973h+xP370H4wFzfMyN2oKUIPL/Gy0lfC8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=kvXBlKThy2c6q4ru8fzGHaRg0j7zHgAOkMQPYjm1U4YXbfPJOqnLYDzOQnrEuSrHz
-	 SFAiLguTQLD+i+0TD7r7J0WXDJOFNP6IaKJLw0fnZUjJy1Q5hg2Qb9skgONKkcN13L
-	 nXoYvu0y6KbM/NRKymswZ6aFbrofpzzfU6kJwO5BFlw0n96fVx98cXrjumVNJ1OlwT
-	 47Ffn5vqxsQ3/yLDt3zFleJvpjUAV2jcD/RVWI9XbnqJPwotK86ayt/FRwpIX/CDRu
-	 mq2cmqCGv9Z4+gP6C00mtdCkYm1eBvQvh0skziQ0U5maXO3S4coyZH64kytubmRR3b
-	 0+ARNXoVlihcA==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
- <andrew@lunn.ch>, Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, "David S.
- Miller" <davem@davemloft.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
- Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Naveen Mamindlapalli <naveenm@marvell.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Danielle Ratson
- <danieller@nvidia.com>, Hariprasad Kelam <hkelam@marvell.com>, Ido
- Schimmel <idosch@nvidia.com>, Kory Maincent <kory.maincent@bootlin.com>,
- Leon Romanovsky <leon@kernel.org>, Michael Chan
- <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>,
- Piergiorgio Beruto <piergiorgio.beruto@gmail.com>, Russell King
- <linux@armlinux.org.uk>, Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan
- <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Willem de Bruijn
- <willemb@google.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
- definitions
-In-Reply-To: <42abf88e-4fbf-4966-9490-8315f118ddea@bootlin.com>
-References: <20260310104743.907818-1-bjorn@kernel.org>
- <20260310104743.907818-3-bjorn@kernel.org>
- <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
- <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch>
- <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
- <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch>
- <20260311195052.1202174f@kernel.org> <abJJY8whzSOB8O-X@pengutronix.de>
- <7c45ebf6-0cb2-4a4c-ac12-f4f9bb59c908@lunn.ch>
- <42abf88e-4fbf-4966-9490-8315f118ddea@bootlin.com>
-Date: Fri, 13 Mar 2026 20:11:11 +0100
-Message-ID: <873423y27k.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="r4C/z/mI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1773433589;
+	bh=hZVfQ0/dCkzXftH42Scb31RyIHJH7EPTXFQkVpXgmu4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=r4C/z/mIL+rqocLEAV09aYd6g2xXeYN9hxiTcc37VWKFKrnDJP0BRCaAk4x6xWO3Z
+	 lenoKJNNZwfWrzqgkG4TBgIQrBYqlG8sa02csaQ+oCJfLRByVEOjpMK7cl/yQHr92i
+	 s7EC/TOmNSno7HlsW+Uv8WPZkzPPOUND8HvnDvYk=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Fri, 13 Mar 2026 21:26:28 +0100
+Subject: [PATCH v2 1/2] tools/nolibc: add support for
+ program_invocation_{,short_}name
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260313-nolibc-err-h-v2-1-f4481053b07a@weissschuh.net>
+References: <20260313-nolibc-err-h-v2-0-f4481053b07a@weissschuh.net>
+In-Reply-To: <20260313-nolibc-err-h-v2-0-f4481053b07a@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773433588; l=4762;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=hZVfQ0/dCkzXftH42Scb31RyIHJH7EPTXFQkVpXgmu4=;
+ b=bNiyQIt7AszDCvjZbgYDR+7FIUYmxuMEjIgret8aprZ2Nl5CnG8HLO8n1FH/2vqYGnKeT3FgA
+ GEuEc8NC4V6Cpf5gz9v83YWHcn1Ribl7Qfx6rn7EntmX4PBuhPi1gxZ
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Folks, thanks for the elaborate discussion (accidental complexity vs
-essential complexity comes to mind...)!
+Add support for the GNU extensions 'program_invocation_name' and
+'program_invocation_short_name'. These are useful to print error
+messages, which by convention include the program name.
 
-Maxime Chevallier <maxime.chevallier@bootlin.com> writes:
+As these are global variables which take up memory even if not used,
+similar to 'errno', gate them behind NOLIBC_IGNORE_ERRNO.
 
-> Hi Andrew,
->
->>> One more issue is the test data generator location. The data generator
->>> is not always the CPU. We have HW generators located in components like
->>> PHYs or we may use external source (remote loopback).
->>=20
->> At the moment, we don't have a Linux model for such generators. There
->> is interest in them, but nobody has actually stepped up and proposed
->> anything. I do see there is an intersect, we need to be able to
->> represent them in the topology, and know which way they are pointing,
->> but i don't think they have a direct influence on loopback.
->
-> If I'm following Oleksij, the idea would be to have on one side the
-> ability to "dump" the link topology with a finer granularity so that we
-> can see all the different blocks (pcs, pma, pmd, etc.), how they are
-> chained together and who's driving them (MAC, PHY (+ phy_index), module,
-> etc.), and on another side commands to configure loopback on them, with
-> the ability to also configure traffic generators in the future, gather
-> stats, etc.
->
-> Another can of worms for sure, and probably too much for what Bj=C3=B6rn =
-is
-> trying to achieve. It's hard to say if this is overkill or not, there's
-> interest in that for sure, but also quite a lot of work to do...
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/nolibc/crt.h                   | 26 ++++++++++++++++++++++
+ tools/include/nolibc/errno.h                 |  2 ++
+ tools/testing/selftests/nolibc/nolibc-test.c | 33 ++++++++++++++++++++++++++++
+ 3 files changed, 61 insertions(+)
 
-It's great to have these discussion as input to the first (minimal!)
-series, so we can extend/build on it later.
+diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+index d9262998dae9..842f86e41f2f 100644
+--- a/tools/include/nolibc/crt.h
++++ b/tools/include/nolibc/crt.h
+@@ -17,6 +17,7 @@ const unsigned long *_auxv __attribute__((weak));
+ void _start(void);
+ static void __stack_chk_init(void);
+ static void exit(int);
++static char *strrchr(const char *s, int c);
+ 
+ extern void (*const __preinit_array_start[])(int, char **, char**) __attribute__((weak));
+ extern void (*const __preinit_array_end[])(int, char **, char**) __attribute__((weak));
+@@ -27,6 +28,24 @@ extern void (*const __init_array_end[])(int, char **, char**) __attribute__((wea
+ extern void (*const __fini_array_start[])(void) __attribute__((weak));
+ extern void (*const __fini_array_end[])(void) __attribute__((weak));
+ 
++extern char *program_invocation_name __attribute__((weak));
++extern char *program_invocation_short_name __attribute__((weak));
++
++static __inline__
++char *__nolibc_program_invocation_short_name(char *long_name)
++{
++	char *short_name;
++
++	if (!long_name)
++		return NULL;
++
++	short_name = strrchr(long_name, '/');
++	if (!short_name || !short_name[0])
++		return NULL;
++
++	return short_name + 1;
++}
++
+ void _start_c(long *sp);
+ __attribute__((weak,used))
+ #if __nolibc_has_feature(undefined_behavior_sanitizer)
+@@ -76,6 +95,13 @@ void _start_c(long *sp)
+ 		;
+ 	_auxv = auxv;
+ 
++#ifndef NOLIBC_IGNORE_ERRNO
++	if (argc > 0) {
++		program_invocation_name = argv[0];
++		program_invocation_short_name = __nolibc_program_invocation_short_name(argv[0]);
++	}
++#endif /* NOLIBC_IGNORE_ERRNO */
++
+ 	for (ctor_func = __preinit_array_start; ctor_func < __preinit_array_end; ctor_func++)
+ 		(*ctor_func)(argc, argv, envp);
+ 	for (ctor_func = __init_array_start; ctor_func < __init_array_end; ctor_func++)
+diff --git a/tools/include/nolibc/errno.h b/tools/include/nolibc/errno.h
+index 08a33c40ec0c..64d9f9bc6539 100644
+--- a/tools/include/nolibc/errno.h
++++ b/tools/include/nolibc/errno.h
+@@ -15,6 +15,8 @@
+ #ifndef NOLIBC_IGNORE_ERRNO
+ #define SET_ERRNO(v) do { errno = (v); } while (0)
+ int errno __attribute__((weak));
++char *program_invocation_name __attribute__((weak));
++char *program_invocation_short_name __attribute__((weak));
+ #else
+ #define SET_ERRNO(v) do { } while (0)
+ #endif
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 180611aabbfb..07af23833879 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -702,6 +702,37 @@ static void constructor2(int argc, char **argv, char **envp)
+ 		constructor_test_value |= 1 << 1;
+ }
+ 
++int test_program_invocation_name(void)
++{
++	char buf[100];
++	char *dirsep;
++	ssize_t r;
++	int fd;
++
++	fd = open("/proc/self/cmdline", O_RDONLY);
++	if (fd == -1)
++		return 1;
++
++	r = read(fd, buf, sizeof(buf));
++	close(fd);
++	if (r < 1 || r == sizeof(buf))
++		return 1;
++
++	buf[r - 1] = '\0';
++
++	if (strcmp(program_invocation_name, buf) != 0)
++		return 1;
++
++	dirsep = strrchr(buf, '/');
++	if (!dirsep || dirsep[1] == '\0')
++		return 1;
++
++	if (strcmp(program_invocation_short_name, dirsep + 1) != 0)
++		return 1;
++
++	return 0;
++}
++
+ int run_startup(int min, int max)
+ {
+ 	int test;
+@@ -716,6 +747,7 @@ int run_startup(int min, int max)
+ #ifdef NOLIBC
+ 	test_auxv = _auxv;
+ #endif
++	bool proc = access("/proc", R_OK) == 0;
+ 
+ 	for (test = min; test >= 0 && test <= max; test++) {
+ 		int llen = 0; /* line length */
+@@ -741,6 +773,7 @@ int run_startup(int min, int max)
+ 		CASE_TEST(constructor);      EXPECT_EQ(is_nolibc, constructor_test_value, 0x3); break;
+ 		CASE_TEST(linkage_errno);    EXPECT_PTREQ(1, linkage_test_errno_addr(), &errno); break;
+ 		CASE_TEST(linkage_constr);   EXPECT_EQ(1, linkage_test_constructor_test_value, 0x3); break;
++		CASE_TEST(prog_name);        EXPECT_ZR(proc, test_program_invocation_name()); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
 
-If I try to make sense of the above discussions...
+-- 
+2.53.0
 
-Rough agreement on:
-
- - Depth/ordering should be local to a component, not global across the
-   whole path.
- - Cross-component ordering comes from existing infrastructure (PHY link
-   topology, phy_index).
- - The current component set (MAC/PHY/MODULE) is reasonable for a first
-   pass.
- - HW traffic generators and full topology dumps are interesting but out
-   of scope for now (Please? ;-)).
-
-
-So, maybe the next steps are:
-
- 1. Keep the current component model (MAC/PHY/MODULE) and the
-    NEAR_END/FAR_END direction (naming need to change as Maxime said).
-=20
- 2. Add a depth (or order?) field to ETHTOOL_A_LOOPBACK_ENTRY as Jakub
-    suggested, local to each component instance. This addresses the
-    "multiple loopback points within one MAC" case without requiring a
-    global ordering. I hope it addresses what Oleksij's switch example
-    needs (multiple local loops at different depths within one
-    component) *insert that screaming emoji*.
-=20
- 3. Document the viewpoint convention clearly.
-=20
- 4. Punt on the grand topology dump. Too much to chew.
-=20
- 5. Don't worry about DSA CPU ports - they don't have a netif, so
-    loopback doesn't apply there today. If someone adds netifs for CPU
-    ports later, depth handles it.
-
-TL;DR: Add depth, document the viewpoint convention, and ship
-it^W^Winterate.
-
-Did I get that right?
-
-
-Enjoy the w/e!
-Bj=C3=B6rn
