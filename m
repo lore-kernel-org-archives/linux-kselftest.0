@@ -1,189 +1,137 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D33239EF02;
-	Fri, 13 Mar 2026 14:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773411989; cv=none; b=ihEsLDjbuUzqgM2WjxKTocgJMwdEyYOCkHHmm8s4rLr6mFJSQrTuVfbGbzh7kShErjP0EoUjpIGSNtDuAXVmtGEreeppscy2inpqeZKkbwD+IsuDcLwGJ94WfOnOOLCtgXkxmOyDLGCPQf/fJhnVZcJgM1Vo9Vp8hyAPeXAAseU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773411989; c=relaxed/simple;
-	bh=YDONQVeDoxOyLOBCTBcgikjeN15N0j0BLu5D3DexxXw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uQR08Oc5r2MOhOfOdZ+VfUVcuGihO2AljZsTGhju8uuNuBfeOUzGean8RnGduhw1KCL2I6abXsloFnRdNCAxj1g023xGinGnEMprvHmwn/kP9skZi6I9ivS3amqKwUkHlLIUzJwWHtBcUeuhTPfAQA3ii1R7kQv9enQNRu5LKZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PeAS+waH; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D2930EF7F
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 14:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773412093; cv=pass; b=RD/fbhRvSBRsKILhWMPQw3W7I8Y5RneZC9XmwEut6tbtgPaHhUL16ewg/CXZRUNDURus2sAjs1i2wIszAUPTWKaT+vnB60dcVfuIFoQkRPWzWsLOyFRNomLc8ZbCA17+Ui8Y//ifn9gAkwmhp+5cQ3makQY1Ckz3aH4JKenrXQE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773412093; c=relaxed/simple;
+	bh=3DhJJ93cKQQk3SpyT61kIFsBKzCFpwnhRvsErphsARo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z79iEO1BXCV103I8fr/+T4MqXAkz2qDaDQZIRMOarocMhUzXR8YtCce+v5s1VD0kUQkNZuugrZWvaQ6M4gbszAcLuujG03dl69Q5aCG2XkkfVkde+1XaYhrFJ4ZoArpOQi+FNzsQPz/ncgI7qQtTGnOB0C/f9dnyu/hatgvlDWA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=YWB87fJu; arc=pass smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PeAS+waH"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62D70tIW2533623;
-	Fri, 13 Mar 2026 14:26:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=cHgUOd
-	stFRXEITYlGgY3DjCI5zusFpP4mQmBTm8g4tE=; b=PeAS+waHZCe+gRpC7rst33
-	/ypJ0yEBn6Sqly7InNjbZjZF4CMRZiasBvQ5gJVggi2tzT8N/BjCJABjQOU36om3
-	s4p8KeSvUDs695WcC0C8jLCes95jxkT1Sz9r5PRRsMRjc0X5y5YYPWd/9PeENmBr
-	RwiN06qLd2tXQWBJKjuW6ZonBdYNrKkjPj/Qc0lWuBDjig42lvJVIeNQiBZdJfii
-	njPLOBmU6dh8OM3aGMZnG1bI7x1VURfDKrlm6/voMFSPm27vLULsR2isuJlQwHiJ
-	IZje9zSqHc6iAFkyC+aWHGJnxAELndNy23qclzF3yKfEbNDoq6KUqE72mMUui9JQ
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh96fxv2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 14:26:08 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62DASuWI014748;
-	Fri, 13 Mar 2026 14:26:07 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha8f042-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 14:26:07 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62DEQ7OY24183498
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Mar 2026 14:26:07 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1EF4D5805C;
-	Fri, 13 Mar 2026 14:26:07 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9AB4458051;
-	Fri, 13 Mar 2026 14:26:02 +0000 (GMT)
-Received: from [9.39.23.217] (unknown [9.39.23.217])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 13 Mar 2026 14:26:02 +0000 (GMT)
-Message-ID: <0e9cea41-7c49-446a-b67b-256584960516@linux.ibm.com>
-Date: Fri, 13 Mar 2026 19:56:01 +0530
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="YWB87fJu"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6642c9254c2so1009266a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 07:28:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773412090; cv=none;
+        d=google.com; s=arc-20240605;
+        b=hUY9EsOR3UEJDLOieCKCYB2ehy+A/9IBdQBKBkfTVIB1mVZLNsg9LScjWQrr7Sc+YM
+         5YOI8bqhU+3ISuP261QoGSO6ut5AhlBDcu1PQQFEz0Yh6h5eIeCSZygnUvtpzBbUMdS8
+         EmYT+Vm6ZgAiOC0EMtv8s0JFbewkDMyQGWqkmLaXSgQ+tgSnxPeuhy5FidylvP2H6oEx
+         hjd/T5h2bDDJXtDNOFZ7GvLplLnV5GInn2NlaYS02DQ7ZBiwsL9mu118LRTN3qTImD33
+         8q4ZngV7IjY7c2Ijq1hoOvWq+bT92f2gyrozlnlxSlH0/8z7NJyC7WxePOi3dHBxV74V
+         gGOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3DhJJ93cKQQk3SpyT61kIFsBKzCFpwnhRvsErphsARo=;
+        fh=80U792ImeZAcLKJs9DCX30YXSfPEBFjS7cCb2pOmgDw=;
+        b=UNRZD7F2nteZCMUe6LCw6RCYiJ7mhCjeHX8CWzL89Y+N+Db0QorvW/UU6vExGOntgv
+         nuTeLTzplK0OSwWkYx9IatO27yES3fnBcNw8jnBG0WZtllNFz+2Hedaekwbx9w0HUjSy
+         kiqVmmo5uyX9zWO81FgFQieqeY2BsUgTz7006Nu2t23dGbQCg0ktkv3Xur6F6hdd9Tt6
+         +tAs8kDPH1Et0KIK8iHhV02QdFWnHc47iQuDb8R2c+e3p+lsHRG3FoLCSuHlgT8Ui9KM
+         E5v8iHmM9oXRHUJYZZXcQpDNZUqaYPcofkFP/UK3VL83jhV8o526zAmfCPG1cSZYQjZv
+         bkGQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1773412090; x=1774016890; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3DhJJ93cKQQk3SpyT61kIFsBKzCFpwnhRvsErphsARo=;
+        b=YWB87fJu1urKVHYo0MietW1J8yEK9dBucNkODt2BZV7FSS2FrPohmTdi/nTZOWcvzL
+         mWwh5Tq08dzYSAwWdFMpHd0JgwR5JJrMJkCNh94LNN+0BcBeR7VGRXO8B76QeamtUgDr
+         pxPFHv+LxsPO7Osn3g840JJyjI6LgEKSzuISp9fpgbShhzaikX2bcX8d5+CQ71//B8H+
+         w3rs3wMbtcj73jePmfDU1F6X1iH3OLkjbGX6ru6+drlOLnYyNLPJxNfF75eh3oJxxNOc
+         b5B/yvERWCKrj3yt1SwhCPJJdJkhPRFb6ytDjFY/QAArmFB90B3Qs2XAB0dFFwgjdnFn
+         4Nhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773412090; x=1774016890;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3DhJJ93cKQQk3SpyT61kIFsBKzCFpwnhRvsErphsARo=;
+        b=S2PvHBtLl0Zv82PRAQOiilw5qz1/SC0j6jifjATu7uhYGMtOw6VX3kFwZVZJrmIv1l
+         vudv3m5QtAtgUK3jwOC0ftUaDTWsQoOhQT/+TyKsgF81hrOerA20owipuxtCaYnJumbX
+         1+33T1fzVolZL7zpVh4TiS2CbepCbFro7iFEtQE9qflnu8qcjbBCZzGqKncux6or2yHG
+         FgFDXCwXsFxTe6WrSjwQ4lm+s16/NjUYGCLGtyLD9WGdR9Z//cpisWzeiPZo8O4rpNK/
+         KbtBcOvoKxlT2MGkRUXdp5sIA1GUSA2zwhj4dRBM3D3bRmcMzDwVagoK9lgS/bryHGtf
+         p/HQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXa886G5jnm+60tnupyty2FaHI6dkFdawI9MXAuR/lLtyhxZpq2V+a4ymbWir19qbXOPil0pwfJ7z2sGZs2yGc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKo2f7hZSMeOqQInzFtPdc5LYvTVbIkO6EtmM+2p9O0cfJFQ5L
+	ZLFysvLyPEeZe4JyxyA0bPHUnG2DMeHNlqE8R59zs9ZqA1rZGFsjmILqBgaFswdfojzMykR8wip
+	+XHqrRmuxPXJOk78COjoHwtKjytg3vP9V+sosFk3DBA==
+X-Gm-Gg: ATEYQzz2/tlkOk7Ua7eFyi3KHpyM4EfKDE2uaK1Phf/DfG2NSfcSu230E+f//+dSzyd
+	yKkstM0kyZSFC/FeICbtEMJ1bVRCOGqFq6Td8F922NyqV+JSy24uc6MDmwz5dVDVIYBpAkTC8ih
+	i0tDMM3tq3wTSo1e9RG/+hN0/QrBm2H844TQb2yIvj6OlpVT8ehxm2ciGNF8J+3xKKXpmKi1yZb
+	WR1GNI5xhVY2lriGB1snciNLckJsQTq1IwdG7vk/UnH+rLmjTNR1L+tMIt/szDBynoNDmT6FJK0
+	4Wtxhm/b5xyzGQ1/JH9GV5yp+vU0tdg/hrCpkQ==
+X-Received: by 2002:a05:6402:35cd:b0:663:8be1:3649 with SMTP id
+ 4fb4d7f45d1cf-663ba9b776dmr1936388a12.3.1773412090104; Fri, 13 Mar 2026
+ 07:28:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/13] selftests/mm: skip uffd-wp-mremap if UFFD
- write-protect is unsupported
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1773305677.git.sayalip@linux.ibm.com>
- <ed23ff57a80881c9d087d22709862af40addf49b.1773305678.git.sayalip@linux.ibm.com>
- <457dddf1-04ec-4d1e-8640-b04997fac4f1@kernel.org>
-Content-Language: en-IN
-From: Sayali Patil <sayalip@linux.ibm.com>
-In-Reply-To: <457dddf1-04ec-4d1e-8640-b04997fac4f1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDExMiBTYWx0ZWRfXyFrqHXKrDTlG
- bzQvlTv3Cb2GKRRUrNjAU6EuIDJ461ZhAr/WMhxlpJSDafWfDGonUbvbiQNF9xdVvPuIzEeS8HA
- apyqevWK40VZEbtnabkDiEE92kH3VR/xbJMWtbS0s0Uou9SPKcIqJwP5JzGFsB9Xk4nkxapF3k8
- vKAqtr8/43BK3DQXMOOEo0SwiRdyyShmPOv41cWERTzUxLAoBhMB+JZvrbSQNqlC6840avUtqw8
- 2rXOBboz9w/JSBsFJ0umqNOZ01FHDJDEroX3uCbLe0wnTM4caXPSlcOOhXbA2iQ28oEvuZwwXtS
- updEWv4IpJLxckm3U6xkvKnkkzznaj+1Cl3GtawakHiMSSHNhvX87VnNVdQwlSCUmjpAiSFFfSt
- VjMChdvegxscTvl0BIS2uwxir/rJsV/cxoer8fCoU6Oxc0+a+/nGTwfWhanQlnX2MVfs+rwTA/D
- mS+yql/XKIykP0JGJpw==
-X-Proofpoint-ORIG-GUID: BzLx54M8v8O-Pi911du9xGBNDUIkuQC0
-X-Authority-Analysis: v=2.4 cv=RLO+3oi+ c=1 sm=1 tr=0 ts=69b41e80 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=Ikd4Dj_1AAAA:8
- a=VnNF1IyMAAAA:8 a=VwQbUJbxAAAA:8 a=PItrhlCilDZ6J6cGNoIA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: wqVStvOSDOc9kufZk6OpbR-pzgZSWe-l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-13_02,2026-03-13_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 bulkscore=0 adultscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603130112
+References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-8-dmatlack@google.com>
+ <20260226160353.6f3371bc@shazbot.org> <20260303210733.GG972761@nvidia.com>
+ <CA+CK2bDADhFcMVGoJew9RoJ-DsVhYhiZJGJVwfzTBZdGX++8Ng@mail.gmail.com> <20260313122525.GB1586734@nvidia.com>
+In-Reply-To: <20260313122525.GB1586734@nvidia.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Fri, 13 Mar 2026 10:27:33 -0400
+X-Gm-Features: AaiRm524CkK4OBTNvXFWcAvWcl42dW_YCeYpiFYkXzW17TUn9itgLI7yXbb39d4
+Message-ID: <CA+CK2bD2ryZsvgono-5Yg0jwwCa-p55wefT=hn3DRsDJVc0ADg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/22] vfio/pci: Notify PCI subsystem about devices
+ preserved across Live Update
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
+	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, 
+	kexec@lists.infradead.org, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pranjal Shrivastava <praan@google.com>, Pratyush Yadav <pratyush@kernel.org>, 
+	Raghavendra Rao Ananta <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Mar 13, 2026 at 8:25=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+>
+> On Thu, Mar 12, 2026 at 08:33:27PM -0400, Pasha Tatashin wrote:
+>
+> > If there are active sessions (incoming or outgoing) with preserved
+> > data, how can we safely unregister while they are in-flight? It is a
+> > rare condition, but since the user can cause it, they need to be
+> > notified that unloading the module right now is not a good idea.
+>
+> IMHO blow up the kernel or something in the core code, you can't stop
+> module unloading once it starts so it is pointless to propogate this
 
-On 12/03/26 18:20, David Hildenbrand (Arm) wrote:
-> On 3/12/26 13:25, Sayali Patil wrote:
->> The uffd-wp-mremap test requires the UFFD_FEATURE_PAGEFAULT_FLAG_WP
->> capability. On systems where userfaultfd write-protect is
->> not supported, uffd_register() fails and the test reports failures.
->>
->> Check for the required feature at startup and skip the test when the
->> UFFD_FEATURE_PAGEFAULT_FLAG_WP capability is not present,
->> preventing false failures on unsupported configurations.
->>
->> Before patch:
->>   running ./uffd-wp-mremap
->>   ------------------------
->>    [INFO] detected THP size: 256 KiB
->>    [INFO] detected THP size: 512 KiB
->>    [INFO] detected THP size: 1024 KiB
->>    [INFO] detected THP size: 2048 KiB
->>    [INFO] detected hugetlb page size: 2048 KiB
->>    [INFO] detected hugetlb page size: 1048576 KiB
->>   1..24
->>    [RUN] test_one_folio(size=65536, private=false, swapout=false,
->>    hugetlb=false)
->>   not ok 1 uffd_register() failed
->>    [RUN] test_one_folio(size=65536, private=true, swapout=false,
->>    hugetlb=false)
->>   not ok 2 uffd_register() failed
->>    [RUN] test_one_folio(size=65536, private=false, swapout=true,
->>    hugetlb=false)
->>   not ok 3 uffd_register() failed
->>    [RUN] test_one_folio(size=65536, private=true, swapout=true,
->>    hugetlb=false)
->>   not ok 4 uffd_register() failed
->>    [RUN] test_one_folio(size=262144, private=false, swapout=false,
->>    hugetlb=false)
->>   not ok 5 uffd_register() failed
->>    [RUN] test_one_folio(size=524288, private=false, swapout=false,
->>    hugetlb=false)
->>   not ok 6 uffd_register() failed
->>   .
->>   .
->>   .
->>   Bail out! 24 out of 24 tests failed
->>    Totals: pass:0 fail:24 xfail:0 xpass:0 skip:0 error:0
->>   [FAIL]
->> not ok 1 uffd-wp-mremap # exit=1
->>
->> After patch:
->>   running ./uffd-wp-mremap
->>   ------------------------
->>   1..0 # SKIP uffd-wp feature not supported
->>   [SKIP]
->> ok 1 uffd-wp-mremap # SKIP
->>
->> Acked-by: Zi Yan <ziy@nvidia.com>
->> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
->> ---
->>   tools/testing/selftests/mm/uffd-wp-mremap.c | 13 +++++++++++++
->>   1 file changed, 13 insertions(+)
->>
->> diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
->> index 17186d4a4147..73d53a4da389 100644
->> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
->> +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
->> @@ -19,6 +19,17 @@ static size_t thpsizes[20];
->>   static int nr_hugetlbsizes;
->>   static size_t hugetlbsizes[10];
->>   
->> +static void uffd_wp_feature_supported(void)
-> Likely that function should be called
+I see, I will send a separate LUO patches to make unregister functions
+return void.
+
+Pasha
+
 >
-> "check_uffd_wp_feature_supported()"
->
-> Because right now it reads as if it would be returning a bool.
->
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->
-Thanks for the review. I'll rename it to
-"check_uffd_wp_feature_supported()" in the next version.
+> Jason
