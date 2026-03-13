@@ -1,68 +1,64 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAD43D5255
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 20:59:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F95328B5E
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 22:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773435560; cv=none; b=p2d6JAdDxBRnmJ2qOzvhHcmbmmc7OOeZXTQG/kt3IinUmQaEs2uRgzeySGuFEKDnT1A1YV4T1gUCF9MMxe9AVfyl77i5xIChtAtjIVnjmS3zeEHPK3+v+Zp9+WJWQbee9FNpXp7tUyQ4qHOBitSmKUM9tRN6MJQAPF6Vejeaprs=
+	t=1773440156; cv=none; b=TCMrE06VOmQgbpeZPacITm/Q3IL+a7qmlkpVX7HRLXNzz+WNszV2nW3Ailq9Tnr82EjqwpAzGB/N871EMiKWaYvAhyOwvdqbOHypK4SR3+OWYXiptPVYef9+OSLZloL6F4EBCLXKRFZyvUYZlcHJjzRJgLrgM+DZz6me6c2sTfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773435560; c=relaxed/simple;
-	bh=csQBdTnyzr0JSm7zjXTuth96BuITEbEVBybFpbpIwyk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BqKCWuj+l1mdvV9Ebx7iZKsUB6cI4cy2z7yAp6nsRj5iSi1l4Vqz14ZqitQX5W64iy3UHHi9SmImhEOAlbUxVdAntNpcAjw7xMaXDAsJeFNLKkGAEVoOU2EJlYCFCfVsJ3VuenC+9n1Aw55GLKqZyrhzlVNoLNYK7Ai1E0DqJD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=D3Uwbq4C; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1773440156; c=relaxed/simple;
+	bh=rBRKXwPprM37HUegKVwfVcNsabxW+lLVWS1raaRWpgw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=B67fV7IxBhZBJ7XBmnnXodP5qx52M/rxvUA0ahxbAtgRUZ25q4PWtFRjvs0MQQGMjneET6mdTY4LVLcQGRQGf2brBZuM7d5Cv3V86yhCt0DlbyUAtD5mOCNFQGb3RHUPjfuj+8RyDTrWkzASzHBGT1Z53YNADH+ojeKIQf6g5C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JN4LYzaE; arc=none smtp.client-ip=74.125.224.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="D3Uwbq4C"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852f8ac7e9so30093985e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 13:59:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JN4LYzaE"
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-64ad9fabd08so3445587d50.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 15:15:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773435556; x=1774040356; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/dCEg0dd6B9Tjl1kgEu3NhdDbbVSDX6h4iOv2b5vp0o=;
-        b=D3Uwbq4CEtNyw1GcsJQB8sOGJX5Fa4kmaGYo+SHnQeb4vdlB7BV+VhAunyHWi7tNce
-         qGpgY1sX67tu1JoeRP5NPeTBhX3JjzsJQLo9ehbGEnsBPI3rKdJsQKqOHdvxHVrbH2rU
-         mYQJ2o817IsuNWxZIeVpevWdOS/BSOaGVd/yTX5nwurbhLIIt7hdWolBDfuoIXuPxSW0
-         lz3Gn6UWzhNQoHJPKYS1Vw802Wb8u3QKqIFQIDdkCcWvpRVbbBq1DiUCLzrWnSokyHv7
-         V9kibxIjF9XJzb84MvGw/zR2fDjUF+bUZ0QX4zRqrVhfUAoApGwbreaALFrGp+foEMX0
-         Jrgw==
+        d=gmail.com; s=20230601; t=1773440154; x=1774044954; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DXzMG7YyZwcIs9g8M/AdNb6aJuadGUAGleE1leZ+rzM=;
+        b=JN4LYzaE2FORMA3UEmj/YKCmhZmxtr+W5epGwRa2siA4j1kJiwOBeR5fyaxkGjRUjJ
+         q1qw6BpdiBtFbRGZ718WHS0y27TipQk+WwR6q6j7CV0Dtus9QawMfweMVWThxt5RDbG0
+         8NzNFNvKWwBLEDGW/y7pMl67DUwH45cya3gLwnHSfKnyOilTNqS3TpTxWenCwPaD0otH
+         nqjAIEgH8UMaG9zyqpGJSMk5LCD5mPzQDklZjFMI+wbAiTXo92OES94r96NEDRvqxtfZ
+         rH82+LENQIlMZHEQH9v5ZlRb/7RSw67UiJQ9jLaFFKMTOi/2HuFkAez1x2NMAp2It+Qt
+         xKYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773435556; x=1774040356;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/dCEg0dd6B9Tjl1kgEu3NhdDbbVSDX6h4iOv2b5vp0o=;
-        b=Udn/1POxQIVlSxzi00YgdiOJEBPLDUpJzusFWzXhZU1BbKY7zlyShlXM6uHRtts7we
-         PBG+HkbPh5PwS5M+xoBYaD5oIV6EV7iKnBoaJjpeGnYwLi1DQZUuMBUZSWSLMcjIuSws
-         U4ZYO9ltx5GToBl0fyOCyw+s1ku6E6e+HmEj/msSrULk63jF5rkD4vb+TxnTERXlY4He
-         TXaex1w6HjfSyHcaIIuPOj67vSnY/LMbrngF4f3ZB+IjPvgzzJCsUkCfyEw/RYUKG2CB
-         mimzBhhFpaUO3qYyjXcD8ar5JLh7Kj4QTCAu6U+KW4JYwje2rq0sJr5kpfI+kXsCn0dc
-         5iSw==
-X-Forwarded-Encrypted: i=1; AJvYcCUTn734N9EIN2lYwvE8nqLERnlfK7cXFIA2QvXP6PmVcq72EekFb8FrZ+iKQblrns/S2W2+/ldo7aCZ0Mi6lhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7geFQtDJZe/5ircL9diwJtcGc+wUzXJZcYFk9bRLTiBMIbBJX
-	2VD7DAjkAZkFuRtfZWUJD+Qqwdbq1+liT0iAVCC9bYATrFRSBBW2ZcpYYcWvwrK3IZt4ob8IRCA
-	oo2G9JP0=
-X-Gm-Gg: ATEYQzzT2P/+DqSXdU+vFROK9YUe9uhKHNGX/nZGH4prr8HBtCLGoxmu5yJGHVEQjeJ
-	yVd3voxMQs1foFe3mJ0npK5XrreQ/86we3N9AE/fDx3q7e2DiFWR0mf21J2XFj2SaSTCLiSzgp5
-	lcZwTg1f7aRWVqBi86dr2ZESW4jdC51VpkSUwi2SMn7UiAOYewtnADfFQN9Vdwlh7YVx6mfqSlm
-	MXwePyCqllQFwbUAE8mo9U6PKNULQ8sPsrsYKTJhNKp5h5QgMKpUMV/ec7e6iXksa/Rhu8VGypU
-	o7SNXN2CbGizhQE2mGUTvLdJ84w0A/aXCkFYedfDe9tRG9NthEhKN8PuwW0C4INRivNHYKCzqfk
-	/5s/2fqwmrSVJyisqxbfECJ+/Ru6V+4xV67VgIcbrzKNKXOgJ15dJWzyZIug5LWerjSQfOVsuO9
-	U7sJUqoF3Ve6YwXqoFQx3O
-X-Received: by 2002:a05:600c:c0c3:20b0:485:5981:1411 with SMTP id 5b1f17b1804b1-4855981166bmr45853985e9.23.1773435556207;
-        Fri, 13 Mar 2026 13:59:16 -0700 (PDT)
-Received: from [127.0.0.1] ([2804:5078:834:1300:58f2:fc97:371f:3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab526d3csm4042611eec.18.2026.03.13.13.59.12
+        d=1e100.net; s=20251104; t=1773440154; x=1774044954;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DXzMG7YyZwcIs9g8M/AdNb6aJuadGUAGleE1leZ+rzM=;
+        b=AKWSyNy/dt6KRBsm+gP7w2CSr6UPJkkLvl9IOmVbuOH85xwwgxh+5L5shkE5nzkqWX
+         xGueAe9KFMmpxM2EjIAfRFGHFzkUw8OLecG3RFBXJdGXvH4ZCd1fdcLv6xm6sbIY5qGe
+         bZjPOawrAdvEyXqK+XKCUq7FhuZo3Mgd8ttSWZ8wcj1twnAVe0DGhC2eBn8nkHFjO2zr
+         6QvkWbd4mJ00cyEaUoHXDJvYUL0VYFlMiZHKIobCJ281ArBR12Fw2PITlgdEnLTq28w/
+         SGOErq+UmJmymzScogCny9zGY8bfih/h9Jb3X4uzmgrnFlHuLjlp8SzxYKNmELyMTCkF
+         Y06w==
+X-Forwarded-Encrypted: i=1; AJvYcCWq6ts7XH4MxKAR7EevczNjF39qm/IOwWPLFBtaJ6NMAMg1s59/HA7oYaBNYS7xCT+IOHdyrYXs0nJF9a6bZ9k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjSg3p+yCrWBfOLJw1c/xpuUTL19+9CPKqxR7MSaQglTMFS5/7
+	ll6R1I6hOAHQgNNzUiFgZbuk+1mu+D2MtqtvMe2YlFlxS2EwyTLV3PvA
+X-Gm-Gg: ATEYQzzg9uxyzLwz/wVXmy4plvzJHCxWEJezfSIvylD+e94Sr3PO4NPi4qgDjqnBdbV
+	mnw+xmzDFE2DbvgEx2z7JltdmVMJn6Nq7/Qod+vvvUGSbwCqk0Sm+8i+9lq0gfnPDZ7AFPlM7He
+	SAMv7JIkiq8NSmheaxdhCy6pVgJBOk6LS/lwbQDKSYK8GXfskoHgign0hJhu9eBtBoQgLMXDv6x
+	GkV8VFSbffv8aqdWrb4gE9YCw1GwnIiSMY5/OwG2MBxloxYJyZ61Qpb/db7M4FppawCAkk3PC4p
+	xVQz1RA8IHhDUCXjSX+kmDHBqlna1C3uRIGeRnChIGYTBCbT0L935V/1fBrhp7ZBVMsx08FDWm2
+	gfRF/79dl6vGZYjgTk9GTMmiaXnPc9iiAkl4V8lOheiuivBVpEan1URq0V97oDcYmEW17SA2sI5
+	YG6DbpgTcWYWMyUXX9T1vo+A==
+X-Received: by 2002:a05:690e:446:b0:64d:6658:3445 with SMTP id 956f58d0204a3-64e6304494bmr3950749d50.48.1773440153963;
+        Fri, 13 Mar 2026 15:15:53 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:50::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64e65b39917sm1796322d50.13.2026.03.13.15.15.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 13:59:15 -0700 (PDT)
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-Date: Fri, 13 Mar 2026 17:58:39 -0300
-Subject: [PATCH 8/8] selftests: livepatch: functions.sh: Extend check for
- taint flag kernel message
+        Fri, 13 Mar 2026 15:15:53 -0700 (PDT)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Date: Fri, 13 Mar 2026 15:15:47 -0700
+Subject: [PATCH net-next] selftests/vsock: auto-detect kernel for guest VMs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,49 +67,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260313-lp-tests-old-fixes-v1-8-71ac6dfb3253@suse.com>
-References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
-In-Reply-To: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
- Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773435515; l=1115;
- i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
- bh=csQBdTnyzr0JSm7zjXTuth96BuITEbEVBybFpbpIwyk=;
- b=GZFkqsGQmRtJSxuKY0Pl1xY69C7WZjWhDrYyBHAZcepdSz5AAxV1bkP9VYtsNctvJ/lXx7vQA
- zFraRerPgyFCgu8ZkptriwDws9SBHSt1Pf6+hqhdMjA4CoGvDgEyv7+
-X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
- pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
+Message-Id: <20260313-vsock-vmtest-autodetect-kernel-v1-1-705c35bdc7fe@meta.com>
+X-B4-Tracking: v=1; b=H4sIAJOMtGkC/x3NUQoCIRAG4KvIPO+ArrSRV4keRP9q2NLQSRaWv
+ XvQd4Fvp44m6BTMTg1DutRCwbjJUHrG8gBLpmBotvNivfM8ek0rj7eiK8ev1gxFUl7RCl6c83I
+ 5Ift4dpYmQ5+Gu2z/4EoFygWb0u04fprCRWJ6AAAA
+X-Change-ID: 20260313-vsock-vmtest-autodetect-kernel-dd695ed3a710
+To: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jakub Kicinski <kuba@kernel.org>, Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-On SLE kernels there is a warning when a livepatch is disabled:
-  livepatch: attempt to disable live patch test_klp_livepatch, setting
-  NO_SUPPORT taint flag
+From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Extend lightly the detection of messages when a livepatch is disabled
-to cover this case as well.
+When running vmtest.sh inside a nested VM the running kernel may not be
+installed on the filesystem at the standard /boot/ or /usr/lib/modules/
+paths.
 
-Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+Previously, this would cause vng to fail with "does not exist" since it
+could not find the kernel image. Instead, this patch uses --dry-run to
+detect if the kernel is available. If not, then we fall back to the
+kernel in the kernel source tree. If that fails, then we die.
+
+This way runners, like NIPA, can use vng --run arch/x86/boot/bzImage to
+setup an outer VM, and vmtest.sh will still do the right thing setting
+up the inner VM.
+
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- tools/testing/selftests/livepatch/functions.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/vsock/vmtest.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 781346d6e94e0..73a1d4e6acaeb 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -324,7 +324,7 @@ function check_result {
- 	# - filter out dmesg timestamp prefixes
- 	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
- 		 grep -e 'livepatch:' -e 'test_klp' | \
--		 grep -v '\(tainting\|taints\) kernel' | \
-+		 grep -v '\(tainting\|taints\|taint\) \(kernel\|flag\)' | \
- 		 sed 's/^\[[ 0-9.]*\] //' | \
- 		 sed 's/^\[[ ]*[CT][0-9]*\] //')
+diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
+index 86e338886b33..7247ac99cf33 100755
+--- a/tools/testing/selftests/vsock/vmtest.sh
++++ b/tools/testing/selftests/vsock/vmtest.sh
+@@ -441,6 +441,12 @@ vm_start() {
  
+ 	if [[ "${BUILD}" -eq 1 ]]; then
+ 		kernel_opt="${KERNEL_CHECKOUT}"
++	elif vng --run --dry-run &>/dev/null; then
++		kernel_opt=""
++	elif vng --run "${KERNEL_CHECKOUT}" --dry-run &>/dev/null; then
++		kernel_opt="${KERNEL_CHECKOUT}"
++	else
++		die "No suitable kernel found"
+ 	fi
+ 
+ 	if [[ "${ns}" != "init_ns" ]]; then
 
+---
+base-commit: 8f921f61005450589c0bc1a941a5ddde21d9aed9
+change-id: 20260313-vsock-vmtest-autodetect-kernel-dd695ed3a710
+
+Best regards,
 -- 
-2.52.0
+Bobby Eshleman <bobbyeshleman@meta.com>
 
