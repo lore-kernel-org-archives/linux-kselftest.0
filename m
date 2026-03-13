@@ -1,114 +1,73 @@
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833C038F62A;
-	Fri, 13 Mar 2026 09:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479243815C6;
+	Fri, 13 Mar 2026 09:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773395265; cv=none; b=poa8NKB1MuNfNJ856qYysG8IVQ3TAnI/I01IvzFPxvlqQrGcRmAB2nU5VHDkVrpgwsvqVwDlvKHVgkLG8pp6J0DXg9Xs8HJL+j0c/TYusU/2fU2L7AS5y04Ez7Oyxn4jNptmGAbJxZ/SnzWj8QV6hME8lMwfKaMruPIXEgjBo38=
+	t=1773395822; cv=none; b=QSGO/rpcee52r7BMas08amDryLvknmQ03Hqe0LwMN96UqUZjmgOYk+WLs6AUGl8HL1RpQn16GO903SaienA4iukMpUDAbHG7yJurBj12oz8ce1Yyek6JM7g6BZHLTVX2zYHQKLaNRuFoQrZA2uo6VyhTSpZlOyEd90bNuXezH7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773395265; c=relaxed/simple;
-	bh=pasMR4Ygz9qFZaIQ1r+gvgo/O4vK/SWhOSegJiBFM+s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uPgFWLpK9tmF6Ph1Nh1VoYgLDudw1OaDpwKSjzJWjW40eER1GuvLORCimNXc4Rn1CjTb+Fqw2Hl3KE9nPYzZ95JZLzbkXk/Gzp/jRc6g9Qk5gBOF5Y523Dvc5iwPbEycTmVE3GpYaDm9fKDjIJ4999YDsDNp0TEQfswTLGkCG0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=pzn12l3+; arc=none smtp.client-ip=113.46.200.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="pzn12l3+"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=OD26JToyDDl5Sgwi12v/k4z4U3Ry0aaK+EFkcVoSzl0=;
-	b=pzn12l3+8i2u0VdW8ObsjpHBUYiRi5QgiY9/e9Ff2NU9gMiDOJb6ykZehU1P2/eldejwciE1Q
-	4ilwISyzTFydBUQAtNmC1IpmPAkEpUypzMGzoAp5lBtKuPSrq/kNRlK1uAA2mrgvhVgZ0SfvnwL
-	nEkQP9EhdJ/amGMMMnpDTGI=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4fXKKG5zmszmV6J;
-	Fri, 13 Mar 2026 17:42:42 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 505C640565;
-	Fri, 13 Mar 2026 17:47:40 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 13 Mar
- 2026 17:47:38 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
-	<hca@linux.ibm.com>, <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-	<borntraeger@linux.ibm.com>, <svens@linux.ibm.com>, <tglx@kernel.org>,
-	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-	<hpa@zytor.com>, <arnd@arndb.de>, <shuah@kernel.org>, <kees@kernel.org>,
-	<luto@amacapital.net>, <wad@chromium.org>, <kevin.brodsky@arm.com>,
-	<charlie@rivosinc.com>, <macro@orcam.me.uk>, <deller@gmx.de>,
-	<ldv@strace.io>, <anshuman.khandual@arm.com>, <song@kernel.org>,
-	<ryan.roberts@arm.com>, <mark.rutland@arm.com>, <ada.coupriediaz@arm.com>,
-	<broonie@kernel.org>, <pengcan@kylinos.cn>, <liqiang01@kylinos.cn>,
-	<thuth@redhat.com>, <andreas@gaisler.com>,
-	<schuster.simon@siemens-energy.com>, <jremus@linux.ibm.com>,
-	<jgross@suse.com>, <mathieu.desnoyers@efficios.com>, <yeoreum.yun@arm.com>,
-	<kmal@cock.li>, <dvyukov@google.com>, <akpm@linux-foundation.org>,
-	<reddybalavignesh9979@gmail.com>, <richard.weiyang@gmail.com>,
-	<x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v13 12/12] selftests: sud_test: Support aarch64
-Date: Fri, 13 Mar 2026 17:47:38 +0800
-Message-ID: <20260313094738.3985794-13-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260313094738.3985794-1-ruanjinjie@huawei.com>
-References: <20260313094738.3985794-1-ruanjinjie@huawei.com>
+	s=arc-20240116; t=1773395822; c=relaxed/simple;
+	bh=sUSsb3ixnzGIpyB3xgyXUrK7xtZKxUpeLNCxPEMMnvI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TmW2ZkEQgJtzV5shGeAqp+dXkL7Xl7FuCu35wDXbPVRYvyWS7JBean7TnyoHn6Llk56alE15D4dxkwvZU2oRbmRsFB+1n1Kx+GFVNVthjGY0CUY3yKK+32Zbb4VvROnKz0QNZyjCJINOV5pNyYIXkcwxkTuk1mLUJwrZBn5fdM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3533165C;
+	Fri, 13 Mar 2026 02:56:54 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 697293F73B;
+	Fri, 13 Mar 2026 02:56:58 -0700 (PDT)
+Date: Fri, 13 Mar 2026 09:56:55 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
+	oupton@kernel.org, miko.lenczewski@arm.com, kevin.brodsky@arm.com,
+	broonie@kernel.org, ardb@kernel.org, suzuki.poulose@arm.com,
+	lpieralisi@kernel.org, joey.gouly@arm.com, yuzenghui@huawei.com
+Subject: Re: [PATCH v15 7/8] KVM: arm64: use CAST instruction for swapping
+ guest descriptor
+Message-ID: <abPfZ27gbcBoAhEi@arm.com>
+References: <20260227151705.1275328-1-yeoreum.yun@arm.com>
+ <20260227151705.1275328-8-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227151705.1275328-8-yeoreum.yun@arm.com>
 
-From: kemal <kmal@cock.li>
+On Fri, Feb 27, 2026 at 03:17:04PM +0000, Yeoreum Yun wrote:
+> +static int __lsui_swap_desc(u64 __user *ptep, u64 old, u64 new)
+> +{
+> +	u64 tmp = old;
+> +	int ret = 0;
+> +
+> +	/*
+> +	 * FEAT_LSUI is supported since Armv9.6, where FEAT_PAN is mandatory.
+> +	 * However, this assumption may not always hold:
+> +	 *
+> +	 *   - Some CPUs advertise FEAT_LSUI but lack FEAT_PAN.
+> +	 *   - Virtualisation or ID register overrides may expose invalid
+> +	 *     feature combinations.
+> +	 *
+> +	 * Rather than disabling FEAT_LSUI when FEAT_PAN is absent, wrap LSUI
+> +	 * instructions with uaccess_ttbr0_enable()/disable() when
+> +	 * ARM64_SW_TTBR0_PAN is enabled.
+> +	 */
+> +	uaccess_ttbr0_enable();
+> +
+> +	asm volatile(__LSUI_PREAMBLE
 
-Support aarch64 to test "Syscall User Dispatch" with sud_test
-selftest testcase.
+I haven't tried, so just asking. Does the toolchain complain if it does
+not support LSUI or is this path eliminated (due to
+cpucap_is_possible()) before being handed over to gas? It's probably
+fine but worth checking.
 
-Signed-off-by: kemal <kmal@cock.li>
----
- tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c | 2 +-
- tools/testing/selftests/syscall_user_dispatch/sud_test.c      | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c b/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-index 073a03702ff5..6059abe75cb3 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-@@ -41,7 +41,7 @@
-  * out of the box, but don't enable them until they support syscall user
-  * dispatch.
-  */
--#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__aarch64__)
- #define TEST_BLOCKED_RETURN
- #endif
- 
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-index b855c6000287..3ffea2f4a66d 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-@@ -192,6 +192,10 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
- 	((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A0] =
- 			((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A7];
- #endif
-+#ifdef __aarch64__
-+	((ucontext_t *)ucontext)->uc_mcontext.regs[0] = (unsigned int)
-+			((ucontext_t *)ucontext)->uc_mcontext.regs[8];
-+#endif
- }
- 
- int setup_sigsys_handler(void)
 -- 
-2.34.1
-
+Catalin
