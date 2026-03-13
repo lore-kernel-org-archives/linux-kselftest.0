@@ -1,186 +1,166 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63783D47BD;
-	Fri, 13 Mar 2026 20:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E46371064;
+	Fri, 13 Mar 2026 20:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773433592; cv=none; b=VYIHF0DZ/jfEqN8TEvImLkHs+Dad+pe2btVgYAk7c+oOkDfu3b0HitLQA8hUtjzBD+fP0QhrRWX3Gg/ZafruUc+aQ+qNeaVoSuP+UUll0Qqhr4iei1bNXD1pqWV8x2r0c2LD3kaaRrnvD5jf/rkYf1dOw2t0nbbm2Abo3BgHDdU=
+	t=1773433976; cv=none; b=hL88tfc7zkTRA+YgeRssFEq0K2LbCpbjtGRpO0ry34B6XGaqtqsH46ZezbpxyIybct21XPG9OoOME11cdAN91lnorZxI0fodJBWPz2BXzJXkbIUEdPJc6JtxQlZa/svLZMLsrDgDmShhqCAe4AsqjPm7tmAeBxQXOMoElWcE9cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773433592; c=relaxed/simple;
-	bh=W+GOkaEic19kj5wIqrB+q7DKO2lLJFO2hQbTMu3jxlQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=u9uSK+FJUZls6Cc/u6ynUWPJQ85TuVORkCT5AdlcRH4Wprg6J6lis3flgSvGJt8aedFIAOjfFbIMG7oJO7JwWckI5dhLPRalz/4PBW6Nt/OsLUp2t64MWBLimL6iz1H26zeG3+U2bmhYsch9k5rGhcJSlxxbIeqMIkEj6oJAOmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=OBVWoYeQ; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1773433976; c=relaxed/simple;
+	bh=xIWOR4Xe13E2Ir9yUvPwaa4rH35Gg6GEN0r+dx8HhZM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YhUMVNa6qXc0OwVpEWt9b0/w2wG3baqyRcDY9W8fgZIQ9/ErYwiBjWrFIs3wvzEwKjMU/Rde9HEOMXG/KTwv+k2D6o3kHB2oGqsbMtMgWSapdUKI2kBX5hSpUod3ibUHL9sQaprD3qys4Hci5uMs3SUpY9pqL5j41gZ1RE8LTWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iAIXXdpD; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="OBVWoYeQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1773433589;
-	bh=W+GOkaEic19kj5wIqrB+q7DKO2lLJFO2hQbTMu3jxlQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=OBVWoYeQCNC3VZPjGyNCjiUSXnSGpC5Xui5ra5ue9DD/IWhrCdz6Hp9VMAwiijEik
-	 lwCrgNCIx+Nzb6MV0oC10nrqsDy3ixxwlKR8hL7mmRWpFezoqIOFIP6xlcGZtiZBNE
-	 DxeGkslQvIDCpuKSnZobeiBX3l2f3zBURgNsrv7E=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Fri, 13 Mar 2026 21:26:29 +0100
-Subject: [PATCH v2 2/2] tools/nolibc: add err.h
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iAIXXdpD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773433972; x=1804969972;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xIWOR4Xe13E2Ir9yUvPwaa4rH35Gg6GEN0r+dx8HhZM=;
+  b=iAIXXdpDDxj3bo5z4XOH+2s/hlqLwy/MegB/yRZSYle43dawvYNOBeQ3
+   KWKHBkgDs6yBEOzWW1bBZLhsezzYWealeHMIu2/Yu3wgU5e7z6C67jyvj
+   Z3MaLVP55xhGUWKCPlqcW17sTt/Vbcbzcaw8S7OEsjPmKRHXTqCb7i0hs
+   lR00zCYQT7NOl8XqGIW8frvUu5MrtdI266Rox74HFzzAocHOh5q8Ib6Rw
+   f/pKPPqUD/j/LspgWOsLBXHVIWOIWqPplf2PQ8D9rP2JJiE1zcbtwkW04
+   RZDqiDZ1L4NYNLeOwjyqyDKwqcKxfZTt4lvEn+pE9BYTFFAqMNrNst9Vk
+   g==;
+X-CSE-ConnectionGUID: Qgzh0TcFTtSiJXERAV5Wig==
+X-CSE-MsgGUID: clpRXDvJQ2qzvYTaZSm73g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11728"; a="74519243"
+X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
+   d="scan'208";a="74519243"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 13:32:51 -0700
+X-CSE-ConnectionGUID: FHcCMGAkS2Wi88jJGtfFqw==
+X-CSE-MsgGUID: ey/86xT6TpSwe6hIcxQlPA==
+X-ExtLoop1: 1
+Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 13:32:50 -0700
+From: Reinette Chatre <reinette.chatre@intel.com>
+To: shuah@kernel.org,
+	Dave.Martin@arm.com,
+	james.morse@arm.com,
+	tony.luck@intel.com,
+	babu.moger@amd.com,
+	ilpo.jarvinen@linux.intel.com
+Cc: fenghuay@nvidia.com,
+	peternewman@google.com,
+	zide.chen@intel.com,
+	dapeng1.mi@linux.intel.com,
+	ben.horgan@arm.com,
+	yu.c.chen@intel.com,
+	jason.zeng@intel.com,
+	reinette.chatre@intel.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev
+Subject: [PATCH v3 00/10] selftests/resctrl: Fixes and improvements focused on Intel platforms
+Date: Fri, 13 Mar 2026 13:32:27 -0700
+Message-ID: <cover.1773432891.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260313-nolibc-err-h-v2-2-f4481053b07a@weissschuh.net>
-References: <20260313-nolibc-err-h-v2-0-f4481053b07a@weissschuh.net>
-In-Reply-To: <20260313-nolibc-err-h-v2-0-f4481053b07a@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773433588; l=3111;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=W+GOkaEic19kj5wIqrB+q7DKO2lLJFO2hQbTMu3jxlQ=;
- b=dtonDzrKCeAZ82bWTQ2kmmm1ld1gjzRMnDqH4a1HRVWlsdCMa0h/NzW45AXCyMalOXO5wkHEj
- C1BPzcLCFlrBnSka2FyT9UhRdJKa8Z39BxBU2KKgr/6frEgfOSgp+A3
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Add a few convenient helpers to print error and warning messages.
+Changes since v2:
+- v2: https://lore.kernel.org/linux-patches/cover.1772582958.git.reinette.chatre@intel.com/
+- Rebased on top of v7.0-rc3.
+- Split "selftests/resctrl: Improve accuracy of cache occupancy test" into
+  changes impacting L3 and L2 respectively. (Ilpo)
+- "long_mask" -> "full_mask", "return_value" -> "measurement", "org_count"
+  -> "orig_count". (Ilpo)
+- Use PATH_MAX where appropriate. (Ilpo)
+- Handle errors first to reduce indentation. (Ilpo)
+- Detailed changes in changelogs.
+- No functional changes since v2. Series tested by running 20 iterations of all
+  tests on Emerald Rapids, Granite Rapids, Sapphire Rapids, Ice Lake, Sierra
+  Forest, and Broadwell.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Acked-by: Willy Tarreau <w@1wt.eu>
----
- tools/include/nolibc/Makefile |  1 +
- tools/include/nolibc/err.h    | 91 +++++++++++++++++++++++++++++++++++++++++++
- tools/include/nolibc/nolibc.h |  1 +
- 3 files changed, 93 insertions(+)
+Changes since v1:
+- v1: https://lore.kernel.org/lkml/cover.1770406608.git.reinette.chatre@intel.com/
+- The new perf interface that resctrl selftests can utilize has been accepted and
+  merged into v7.0-rc2. This series can thus now be considered for inclusion.
+  For reference,
+  commit 6a8a48644c4b ("perf/x86/intel/uncore: Add per-scheduler IMC CAS count events")
+  The resctrl selftest changes making use of the new perf interface are backward
+  compatible. The selftests do not require a v7.0-rc2 kernel to run but the
+  tests can only pass on recent Intel platforms running v7.0-rc2 or later.
+- Combine the two outstanding resctrl selftest submissions into one series
+  for easier tracking:
+  https://lore.kernel.org/lkml/084e82b5c29d75f16f24af8768d50d39ba0118a5.1769101788.git.reinette.chatre@intel.com/
+  https://lore.kernel.org/lkml/cover.1770406608.git.reinette.chatre@intel.com/
+- Fix typo in changelog of "selftests/resctrl: Improve accuracy of cache
+  occupancy test": "the data my be in L2" -> "the data may be in L2"
+- Add Zide Chen's RB tags.
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 1958dda98895..5d242312943f 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -30,6 +30,7 @@ all_files := \
- 		ctype.h \
- 		dirent.h \
- 		elf.h \
-+		err.h \
- 		errno.h \
- 		fcntl.h \
- 		getopt.h \
-diff --git a/tools/include/nolibc/err.h b/tools/include/nolibc/err.h
-new file mode 100644
-index 000000000000..2373c4999b71
---- /dev/null
-+++ b/tools/include/nolibc/err.h
-@@ -0,0 +1,91 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * formatted error message for NOLIBC
-+ * Copyright (C) 2026 Thomas Weißschuh <linux@weissschuh.net>
-+ */
-+
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
-+#ifndef _NOLIBC_ERR_H
-+#define _NOLIBC_ERR_H
-+
-+#include "errno.h"
-+#include "stdarg.h"
-+#include "sys.h"
-+
-+static __attribute__((unused))
-+void vwarn(const char *fmt, va_list args)
-+{
-+#ifndef NOLIBC_IGNORE_ERRNO
-+	fprintf(stderr, "%s: ", program_invocation_short_name);
-+#endif
-+	vfprintf(stderr, fmt, args);
-+	fprintf(stderr, ": %m\n");
-+}
-+
-+static __attribute__((unused))
-+void vwarnx(const char *fmt, va_list args)
-+{
-+#ifndef NOLIBC_IGNORE_ERRNO
-+	fprintf(stderr, "%s: ", program_invocation_short_name);
-+#endif
-+	vfprintf(stderr, fmt, args);
-+	fprintf(stderr, "\n");
-+}
-+
-+static __attribute__((unused))
-+void warn(const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	vwarn(fmt, args);
-+	va_end(args);
-+}
-+
-+static __attribute__((unused))
-+void warnx(const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	vwarnx(fmt, args);
-+	va_end(args);
-+}
-+
-+static __attribute__((noreturn, unused))
-+void verr(int eval, const char *fmt, va_list args)
-+{
-+	vwarn(fmt, args);
-+	exit(eval);
-+}
-+
-+static __attribute__((noreturn, unused))
-+void verrx(int eval, const char *fmt, va_list args)
-+{
-+	warnx(fmt, args);
-+	exit(eval);
-+}
-+
-+static __attribute__((noreturn, unused))
-+void err(int eval, const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	verr(eval, fmt, args);
-+	va_end(args);
-+}
-+
-+static __attribute__((noreturn, unused))
-+void errx(int eval, const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	verrx(eval, fmt, args);
-+	va_end(args);
-+}
-+
-+#endif /* _NOLIBC_ERR_H */
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index d1d08b7f8599..fe8195483b6d 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -130,6 +130,7 @@
- #include "getopt.h"
- #include "poll.h"
- #include "math.h"
-+#include "err.h"
- 
- /* Used by programs to avoid std includes */
- #define NOLIBC
+Cover letter updated to be accurate wrt perf changes:
+
+The resctrl selftests fail on recent Intel platforms. Intermittent failures
+in the CAT test and permanent failures of MBM and MBA tests on new platforms
+like Sierra Forest and Granite Rapids.
+
+The MBM and MBA resctrl selftests both generate memory traffic and compare the
+memory bandwidth measurements between the iMC PMUs and MBM to determine pass or
+fail. Both these tests are failing on recent platforms like Sierra Forest and
+Granite Rapids that have two events that need to be read and combined
+for a total memory bandwidth count instead of the single event available on
+earlier platforms.
+
+resctrl selftests prefer to obtain event details via sysfs instead of adding
+model specific details on which events to read. Enhancements to perf to expose
+the new event details are available since:
+ commit 6a8a48644c4b ("perf/x86/intel/uncore: Add per-scheduler IMC CAS count events")
+This series demonstrates use of the new sysfs interface to perf
+to obtain accurate iMC read memory bandwidth measurements.
+
+An additional issue with all the tests is that these selftests are part
+performance tests and determine pass/fail on performance heuristics selected
+after running the tests on a variety of platforms. When new platforms
+arrive the previous heuristics may cause the tests to fail. These failures are
+not because of an issue with the resctrl subsystem the tests intend to test
+but because of the architectural changes in the new platforms.
+
+Adapt the resctrl tests to not be as sensitive to architectural changes
+while adjusting the remaining heuristics to ensure tests pass on a variety
+of platforms. More details in individual patches.
+
+Tested by running 100 iterations of all tests on Emerald Rapids, Granite
+Rapids, Sapphire Rapids, Ice Lake, Sierra Forest, and Broadwell.
+
+Reinette Chatre (10):
+  selftests/resctrl: Improve accuracy of cache occupancy test
+  selftests/resctrl: Reduce interference from L2 occupancy during cache
+    occupancy test
+  selftests/resctrl: Do not store iMC counter value in counter config
+    structure
+  selftests/resctrl: Prepare for parsing multiple events per iMC
+  selftests/resctrl: Support multiple events associated with iMC
+  selftests/resctrl: Increase size of buffer used in MBM and MBA tests
+  selftests/resctrl: Raise threshold at which MBM and PMU values are
+    compared
+  selftests/resctrl: Remove requirement on cache miss rate
+  selftests/resctrl: Simplify perf usage in CAT test
+  selftests/resctrl: Reduce L2 impact on CAT test
+
+ tools/testing/selftests/resctrl/cache.c       |  30 ++--
+ tools/testing/selftests/resctrl/cat_test.c    |  41 ++----
+ tools/testing/selftests/resctrl/cmt_test.c    |  36 ++++-
+ tools/testing/selftests/resctrl/fill_buf.c    |   4 +-
+ tools/testing/selftests/resctrl/mba_test.c    |   6 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |   6 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  20 ++-
+ tools/testing/selftests/resctrl/resctrl_val.c | 135 +++++++++++++-----
+ 8 files changed, 179 insertions(+), 99 deletions(-)
 
 -- 
-2.53.0
+2.50.1
 
