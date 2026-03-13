@@ -1,153 +1,176 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A96D1F151C;
-	Fri, 13 Mar 2026 13:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7CC223336;
+	Fri, 13 Mar 2026 13:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773407010; cv=none; b=Ece1G2dBdQJP/lvLhQHSS8iXlHt990eNLHC1sBvxMqMVhQkut4X8pFTDbrouOJrqhmCFHFd4AgCLhGa830d19/nBesM98WzEj+O6CF0dV5y9vK57ADUKL4O1bxLl+ExYjKEMmhYBOOmg3rlD5sQ/7pZfeSI2w6iANeyndxqhfrg=
+	t=1773407778; cv=none; b=ri+V6Eo0fuO3oRzi980FBQyyNilSqQBjJX1fffcm3C3IsgKKIl5/odsTavloXld4Lge2+s4AwXVvHz65DbaZ4LcSvoVTiq7NXrEP0QhcVoyu8M976P8Mvq9VKkXPMDznuGZbPgQP3pi0EYRzix1AJAL3MGzFPJGodlJfaR6ox1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773407010; c=relaxed/simple;
-	bh=1zmQ8zQMj4MGfJJo7YfPo05bQHIBl28jvNdCXvqs8x0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NIWUoOcsTwqS64urkFMfsqAFbe5eQiIN1dP8dQE7utQj+XiUqaVNwXHwzGJBhoUQLHSaqqKuPB++PIhagxHg+BvqRXlwYTaziW5CVpTVs4zVG7aX4Y35M+08qbJD8EjYMXv1n9zGgnzfENqZvCCpoOUYKkieM7wbve9hYwhXxFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=nrI2fmyZ; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1773407778; c=relaxed/simple;
+	bh=3BgQXh9doMaVreka5OJDzVHJcwJHGqpgYXRU/iQP0Mw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XTsls8N47fGBojw2z1udxIxReSc3fyeWYYmXpupXOP8VIMZ2iGjj+i8KnXCzZwEMCbNb3DlofF7R2k+wM9ltbb3MAVSfpp+35EQK6olH7gjF45QEOsBNNw8YrnJuxcWe4O37tvLvmaqO8YagYrEpCAMyWuMNVsmUxgi/AwCKrbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=GvtyrQ3P; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=zz19DQwL; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="nrI2fmyZ"
-Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62D97vHW895510;
-	Fri, 13 Mar 2026 13:02:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=DuoEQ2pV/7yVh3IEgtmtI4tqjtw5lKwCATX4jI1eMJk=; b=nrI2
-	fmyZNR0IfbImdv+cwvXz6rmnG/R3T/CDcd23LcksIgiNQMbD69Y/gKYy1D0aPUMp
-	/6jnUA0yA5C3Pc68vciYJXbgnYPNzRD6VezT7szniwUK1Au5+n4Y0hqRkVfphytx
-	TT8lYe1Lh6yz5nnXpTwinhG7tJqalZ6cB2CpfBxJ06IcxuTgPNCNdazpAwwyBv7V
-	X9u+PBH3QpcyatiIHZGfQjmNXPa+Zmh+mlBT48AUsWH7I5vgnujtZmQk0pBqCgcY
-	PWWaODp8mkACL2pgcsmmUPT5+cXXt5Y+YCzVgQzEbIpZuuNkwOmwLFdQjyp2DT/f
-	TRmqCcTFQe9LWX9qWQ==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cuh51fjbx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 13:02:36 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Fri, 13 Mar 2026 13:02:30 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
-CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
-        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
-        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
-        Slava Imameev
-	<slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next v5 1/2] bpf: Support pointer param types via SCALAR_VALUE for trampolines
-Date: Sat, 14 Mar 2026 00:02:19 +1100
-Message-ID: <20260313130220.18590-2-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260313130220.18590-1-slava.imameev@crowdstrike.com>
-References: <20260313130220.18590-1-slava.imameev@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="GvtyrQ3P";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="zz19DQwL"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.stl.internal (Postfix) with ESMTP id 0B30A1D001E8;
+	Fri, 13 Mar 2026 09:16:14 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Fri, 13 Mar 2026 09:16:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1773407773; x=
+	1773494173; bh=ZEJ90FcF0L41COAXJBmumbj/27G8Ou6IO8TuBIK501s=; b=G
+	vtyrQ3PPkysdLImTPecUL+Zroa9CLHMf0CRWpFkNYwNtJCCupBOsOogfqz6VM5zj
+	KhIMG5ker3P2Lp9I9L6gRyB7W0vqbFUbYmat6/7d3mf6J0eruaVuBZ2PcivOXIBM
+	sRX8BdaP7Vs1kNafppIECgzb8Ie43WyzrYpDgdAyNmt/mebOk8WtFrigdtbjw3q4
+	QLyLA2nVlu7tSrRznim2j2MvN3OMeCADk8qkJMAJzdwqo04t7I5maK2flZ2nlA5B
+	ieDpoHW71zeDtYk2MFfUMSkvlg4lcFT5UApaQU75foBIBmwcKyk6vxZKbyjcmT/y
+	6yRZBZir6zdQcZKHWjOrA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1773407773; x=1773494173; bh=ZEJ90FcF0L41COAXJBmumbj/27G8Ou6IO8T
+	uBIK501s=; b=zz19DQwL9jl/+H7VkE7FLJiXLDEq8B2nP2FyBJW/iS5g+7ZWPHT
+	/m/1EkgR99gdz16qOxpsXNAvOpX6WuqHcHdYVk98HWIs3lbZ+kvgM2qySC4k/ImF
+	M/QGRE+wd3HqPUBaL+W0FJMs6l3c00onGxq8Cd/+uYvhO2YtvPKzKJUlkNlfdxmh
+	szCKFLWe9D+yoKwMwQ+CIQ0QvQUV8hBACzn/L+MlkyKi726j1aP25PtaKgbVsI+C
+	eLALmnzEzGpEZZ4dLetc6XdWWtuaFYn65KUhAo0zn5W3R0b/ZYxD/UraC3/WIXLc
+	DaQu3P61h3jOzcU9XL7LX1IHY/Tu5YHeL2Q==
+X-ME-Sender: <xms:HQ60aczyuk4OeeYslMFv8LlfwNygn1jxOI24gwy-QUDHqglHy21btg>
+    <xme:HQ60aezmUheNRh515RFDPQ3W2aZYEAPCpMMbT168CZld8d78Im5X3NYNOYMrNz4OJ
+    YAlUi5ym6RtrLc_ignlLqvIPPlrOu9VJm7QwtHSV3BlfFfdT66UqGY>
+X-ME-Received: <xmr:HQ60aVJ2UGmAJ2-EOZcuJuLDSnPPbFQR8g6olBMMbenP0bjpbjXKTFCrjiKz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvkeeljeehucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepudekieeijedvfedugfeiiedujeeiheeihfekieffhefgheeludeifefg
+    ueejkeejnecuffhomhgrihhnpehivghtfhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgv
+    thdpnhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
+    ifihhlfhhrvggurdhophgvnhhsohhurhgtvgesghhmrghilhdrtghomhdprhgtphhtthho
+    pehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehkuh
+    gsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhf
+    thdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtg
+    hpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopehhohhrmhhs
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprh
+    gtphhtthhopehskhhhrghnsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhg
+X-ME-Proxy: <xmx:HQ60aahYjiJbB-P95wRDvm-ITEAhgBNyuGq5iE159TC_avBZMEF_fg>
+    <xmx:HQ60aWPtIdW6jpknPKZmVLHt6RrpT2vKd3lY8OzT5-CKFEHph1a9vA>
+    <xmx:HQ60aV6DNShB4w_0C8sH8byIM1Qw5lnmWYF01g_YEZ4sMYk31ntaWA>
+    <xmx:HQ60adloJLCOiUQdhMNuvxvDyK4ymN8sIdG5SL1NVHOIKpItUu43zg>
+    <xmx:HQ60aSdCBGrH9piWGEk4gzjjYEvY_kmD-sAMNqyyHcY_Kax62Wx0Gm2z>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Mar 2026 09:16:12 -0400 (EDT)
+Date: Fri, 13 Mar 2026 14:16:10 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Wilfred Mallawa <wilfred.opensource@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Alistair Francis <alistair.francis@wdc.com>,
+	Damien Le'Moal <dlemoal@kernel.org>,
+	Wilfred Mallawa <wilfred.mallawa@wdc.com>
+Subject: Re: [RFC net-next 1/3] net/tls_sw: support randomized zero padding
+Message-ID: <abQOGm6BqAE5eEln@krikkit>
+References: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
+ <20260309054837.2299732-3-wilfred.opensource@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-GUID: FPZz3Yijip3avmZxro_xXoPlBhoxwFY_
-X-Authority-Analysis: v=2.4 cv=JtX8bc4C c=1 sm=1 tr=0 ts=69b40aec cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=R_n4Uisa8axJ7jemP0ek:22 a=pl6vuDidAAAA:8
- a=QHqYeUcJvB07a7jHZo8A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDEwMyBTYWx0ZWRfX3KXvbyNRxodf
- 5rfohIJ6e8Xbz6uCFo92bIPbttFs5WWfirsJC1wG6+RXjXgAesPxWjYL6fu7i2m13XZbcP+eX5h
- 6iUQe9VKdjgCibwhqW36aomZ2KiYu60KCLqqR1Eigzumy7o/7a99MhL4KMvBJ13ESO4WKZbkOow
- P14amWlOkrOCXzWW5yY6gjIIqw1ihXlZbhdV3tTImZThQcrIVI41eU6MpJ/eP7s+eh6bTz0jKrS
- TKR3Hm+wroTB5TEWrNIwl+edmjFlXyO4Cxq6PvCaiBiZ7E2KBZmWoo36Ddp3XpvttpF4HJHDy24
- CZZbbdfxKBGE/REKcHjKGNotPkQTG+POJt0M8Le2fcXdghCZ4rziD9dEgNL0GV8vfH2UPz0gPz/
- imHPMWPaLwpkxkCs4/X0EDBCFSLHDu0mxVq46d34qXIlZh1h8B2nBYSX/4BAK9cks6PkBd/ibV4
- ASNEmB+kiY49zABD9Gg==
-X-Proofpoint-ORIG-GUID: FPZz3Yijip3avmZxro_xXoPlBhoxwFY_
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11728
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 phishscore=0 adultscore=0 malwarescore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603130103
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260309054837.2299732-3-wilfred.opensource@gmail.com>
 
-Add BPF verifier support for single- and multi-level pointer
-parameters and return values in BPF trampolines by treating these
-parameters as SCALAR_VALUE.
+2026-03-09, 15:48:36 +1000, Wilfred Mallawa wrote:
+> From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+> 
+> Currently, for TLS 1.3, ktls does not support record zero padding [1].
+> Record zero padding is used to allow the sender to hide the size of the
+> traffic patterns from an observer. TLS is susceptible to a variety of traffic
+> analysis attacks based on observing the length and timing of encrypted
+> packets [2]. Upcoming Western Digital NVMe-TCP hardware controllers
+> implement TLS 1.3. Which from a security perspective, can benefit from having
+> record zero padding enabled to mitigate against traffic analysis attacks [2].
+> 
+> Thus, for TX, add support to appending a randomized number of zero padding
+> bytes to end-of-record (EOR) records that are not full. The number of zero
 
-This extends the existing support for int and void pointers that are
-already treated as SCALAR_VALUE.
+I don't think this is the right behavior. I expect that a user that
+enables zero-padding would want _every_ record they send to be padded,
+and their payload is going to be split into however many records that
+requires. This could mean that data that would just fit in a record
+will get split into one full + one very small record.
 
-This provides consistent logic for single and multi-level pointers:
-if a type is treated as SCALAR for a single-level pointer, the same
-applies to multi-level pointers. The exception is pointer-to-struct,
-which is currently PTR_TO_BTF_ID for single-level but treated as
-scalar for multi-level pointers since the verifier lacks context
-to infer the size of target memory regions.
+As it is, if I repeatedly call send with MSG_MORE to let ktls chunk
+this for me, zero-padding has no effect. That doesn't seem right.
 
-Safety is ensured by existing BTF verification, which rejects invalid
-pointer types at the BTF verification stage.
+Does that make sense?
 
-Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
----
- kernel/bpf/btf.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+> padding bytes to append is determined by the remaining record room and the
+> user specified upper bound (minimum of the two). That is
+> rand([0, min(record_room, upper_bound)]).
+> 
+> For TLS 1.3, zero padding is added after the content type byte, as such,
+> if the record in context meets the above conditions for zero padding,
+> attach a zero padding buffer to the content type byte before a record is
+> encrypted. The padding buffer is freed when the record is freed.
+> 
+> By default, record zero padding is disabled, and userspace may enable it
+> by using the setsockopt TLS_TX_RANDOM_PAD option.
+> 
+> [1] https://datatracker.ietf.org/doc/html/rfc8446#section-5.4l
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 09fcbb125155..524bb2d6d964 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6508,13 +6508,6 @@ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
- 		return prog->aux->attach_btf;
- }
- 
--static bool is_void_or_int_ptr(struct btf *btf, const struct btf_type *t)
--{
--	/* skip modifiers */
--	t = btf_type_skip_modifiers(btf, t->type, NULL);
--	return btf_type_is_void(t) || btf_type_is_int(t);
--}
--
- u32 btf_ctx_arg_idx(struct btf *btf, const struct btf_type *func_proto,
- 		    int off)
- {
-@@ -6903,10 +6896,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 	}
- 
- 	/*
--	 * If it's a pointer to void, it's the same as scalar from the verifier
--	 * safety POV. Either way, no futher pointer walking is allowed.
-+	 * If it's a single or multilevel pointer, except a pointer
-+	 * to a structure, it's the same as scalar from the verifier
-+	 * safety POV. Multilevel pointers to structures are treated as
-+	 * scalars. The verifier lacks the context to infer the size of
-+	 * their target memory regions. Either way, no further pointer
-+	 * walking is allowed.
- 	 */
--	if (is_void_or_int_ptr(btf, t))
-+	if (!btf_type_is_struct_ptr(btf, t))
- 		return true;
- 
- 	/* this is a pointer to another type */
+nit: there's a stray 'l' at the end of that link (and other references
+to that section in your commit messages within the series)
+
+
+> @@ -1033,6 +1055,8 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+>  	unsigned char record_type = TLS_RECORD_TYPE_DATA;
+>  	bool is_kvec = iov_iter_is_kvec(&msg->msg_iter);
+>  	bool eor = !(msg->msg_flags & MSG_MORE);
+> +	bool tls_13 = (prot->version == TLS_1_3_VERSION);
+> +	bool rec_zero_pad = eor && tls_13 && tls_ctx->tx_record_zero_pad;
+
+Thus here, rec_zero_pad would simply be tls_ctx->tx_record_zero_pad
+(the tls_13 check should be redundant I think?).
+
+
+> @@ -1085,8 +1110,19 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+>  			full_record = true;
+>  		}
+>  
+> +		if (rec_zero_pad && !full_record)
+> +			zero_pad_len = record_room - try_to_copy;
+
+And I would turn this logic the other way around:
+
+ - decide zero_pad_len (get_random if that's the API approach we want,
+   discussion in the cover letter) for every new record
+ - adjust record_room based on that
+ - then see if the record will be full
+
+
+(I'll postpone looking at the actual implementation for now)
+
 -- 
-2.34.1
-
+Sabrina
