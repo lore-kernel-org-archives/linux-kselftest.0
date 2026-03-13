@@ -1,217 +1,152 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDA61A7264
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 03:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B759038D
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 04:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773373553; cv=none; b=FtOVu0fQ7Ox/kOjATQSkZ1qynwFC49LWA9LfHLq7EqEIoXJvpMh9RoT+rTwtWOa2bpWJxnXtDliGh4TJ4PgUI7thBcUbmWNbIyQEDZxE/I4iKntqoASeGqNxPlEpesG1rSAeJfX7LdDzXJw4Ul/dRZifUc+PLFYbZJd57AWB8Tc=
+	t=1773376553; cv=none; b=avm8tqKiQz+ZxiD+G7/y3f25pm4tlIx0DjKKdVYS/TjjOIyP1YYOKOLUmw74HAktENi5UorD+KZy3wWeqUJkL+/qT2P+Cju4BNSDOn3S2zVMC5Cuczx8SEQ84fpoNzf0m+hdqGKVkMyLjlxtqxJ0CZ144tOZ26rZ3H+ioSgWnGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773373553; c=relaxed/simple;
-	bh=jphlk6Wj+UkJ81XaEDeMJBkuYruhl/JogH1+TkUDXFY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IdKv3ENjW+PnAuf4rc4ygqQki9rLJvIKCadwdFaTVJnx4rOctALtQO7zUKiX0qkzg1BdF9oqdyUsUOZUNFdFUf9zsugpKUCM+DpPaxyyAuuuWPmqjBpjl+lBaQgLM1tLZTVB7783+tdE5bCO7vuuyE02+Mh/j8EKOGLIUZgSdKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+dUIwhy; arc=none smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773376553; c=relaxed/simple;
+	bh=H8aA10ybfVs+UhYWbO+wI2YbXimySe8fYYBQQLHCR+8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JbibTq+NR3I6A7fm+JT1Eu+WYxY0bRUnDiqjVyaZRlmykcnI/ABK51zBJqJszmT4qGTAM7ZYxbmjpSjEtfIksqDFiEz0SNbhR9DbTOboNxOA3DdoW8n6xi4h6/kNTlKRmfZ9vUiRksCHtvHVHPZ/53fLfgutInuQbr8ZIQXjdOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h0cnDX3K; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+dUIwhy"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2be27fa54feso2442285eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 20:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773373551; x=1773978351; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QfuNVGLPrYe0cNk/DRUBsR0PvweqtpMYTG7g9a6Yn3c=;
-        b=l+dUIwhyGvVQc3HkxBrx+Pd/6cWNGncldGO96lRn4huLguqyntLeXyAQJcBUK+8wZB
-         vbrkLWkENbY+njsxRY6y9zedGKJWHpNO4Eph7DiSpkey3rHejImYHcptTwuAHWdctPs+
-         re4IZ8c1pht1Yqyrq+nFCIkhHGXH2/fxcnvQBdJUlHvwtfpb2v8Afc1NyvePJQ/KxcMN
-         S74q3fbLsLVRKTc4D8xmorEWfj7aXdWZHmtZy0ri5X3Ywxg1duoWmcgwwx48+S5x+hBK
-         OINTIdwI8gTZB7IAB75IDRnC81MS9S6Iw+QhbYw4q4AAQ9b8p8PD76ae9V8LkcsZ50eL
-         HpUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773373551; x=1773978351;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QfuNVGLPrYe0cNk/DRUBsR0PvweqtpMYTG7g9a6Yn3c=;
-        b=Kzb+7yi4BAU5gRgaPIShZm5lvOAq3a/2XZJmnvlK2tuRSvR9hKtw+YpLpYVRGPRhjl
-         EEepAjgFZGdk6WZz5eQVisr2ErHDOhHWsElWpJzMLvyUHUIlZpq+zLRttDbFshXBH/Pv
-         eGYV7tG8W4Dm/hDULSJYz6AHyBZqC4rHJwuvOtLLjh8YM69kobEDmK3YS8G7QlPXvKUN
-         /JrC93w3Zo3idhBFw5aGRl7Z8sFvPha5BCLW0gNpPzvSELe8XChaA1rKOC3CexP5782n
-         rVE3GSqELU2dV9meeGX3k8XOK+kiZsYy2c+rw9aktn2AzhaQVjRyk5+tzWRTW+Qj0nmq
-         T3xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwCKLPR5Ve0+0fS3l0IbusZxgy66MbpSCEp1hgg6EllR7UiLqibxiArWScMJuE2je2f1DETrBy+cOu1lcEyYk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyumPnHF8MHZidlAWxdIk6s5Zuy4r9p4Yhi5jMnqWD2rC5KipAT
-	SQnndyNEZE+TFq/bivpRKfKxZDQ5bJ/2kHZyju7XaPVJqHhEuOpJc0IM
-X-Gm-Gg: ATEYQzx2qYGlxdcf8CbUo/HUeWZtDlCOdbGmG7WmlO7mxZ+e7xznCzF+7FwRJsGbl7Q
-	do8Nx7fZcznQBKyOgfnv5lmj77EZeQhWixP1LIC5rBQ6uKoHg4cja+UFd33YDBGhQbkqt18PaIk
-	3E6iSCM+vg1FVTlT74x5lXK/H86GvoJ0/7Hhy2I/hZGrfTL4NLm+g2GWXCbDMmBqf0PxKnTcp8x
-	J6VxLDLgFwTQHly81reIihko87zdw0tNEChtczsugd9iK45TVrZ/sR8O5ukcohz/DCCEGMmqcvy
-	JcOJOdd2KEf8Ca8WmEHW7daYLByyzE9LjBJmTldRQPm/xgAeG+KBvH5K1ikSwlpOcDFrnA76klQ
-	3Na5FRoNINC/W+6YMY8UHjtUMUKU1bkB7KAJJWQDUAENCXNMHkta5tcEnSyBvUlawBiMFw/QPkP
-	MOKlXxeUWTLi2N2xSM5zEJGBHXDjjpTzZ5iwU42iS3MMsVxDyhqKYzEHNr/OVanWNskKFA5HgnU
-	JwlawIfbxU0JFSpf/Ga0Fy+0ZY=
-X-Received: by 2002:a05:7300:2389:b0:2b7:24ad:5c54 with SMTP id 5a478bee46e88-2bea5400f2dmr811212eec.9.1773373550759;
-        Thu, 12 Mar 2026 20:45:50 -0700 (PDT)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab3a0c34sm904347eec.7.2026.03.12.20.45.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 20:45:50 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	andrii@kernel.org,
-	shuah@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v2] selftests/bpf: modify_return: isolate fmod_ret hooks by pid
-Date: Fri, 13 Mar 2026 11:45:40 +0800
-Message-ID: <20260313034540.255805-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
-References: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h0cnDX3K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773376550;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KO24SViWbBFyUmZPm0oquBx38uo8Cx9eC3hA3EZRPlo=;
+	b=h0cnDX3KRGp0fcansOgWwlSjEy2f6UWArTd1GPpK8sRDof8nxBKDgDEruq2TzdnApmJMHI
+	8FxHu4ylxMZ6XAamyNCLDm1A83IiUr9HJE1yshAPr7vVKNMMCqdDBluwHiGv6Rcrt5gcUt
+	ZeXsjvYfh5/mUy+dU1g1IyFlJ1wSWHY=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-130-bIao7Us7PF6lRlBFhAW2aQ-1; Fri,
+ 13 Mar 2026 00:35:45 -0400
+X-MC-Unique: bIao7Us7PF6lRlBFhAW2aQ-1
+X-Mimecast-MFC-AGG-ID: bIao7Us7PF6lRlBFhAW2aQ_1773376543
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 13ED61800365;
+	Fri, 13 Mar 2026 04:35:43 +0000 (UTC)
+Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.18])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1ED3119540C2;
+	Fri, 13 Mar 2026 04:35:36 +0000 (UTC)
+From: Li Wang <liwang@redhat.com>
+To: yosryahmed@google.com,
+	nphamcs@gmail.com
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>
+Subject: [PATCH v3 1/7] selftests/cgroup: skip test_zswap if zswap is globally disabled
+Date: Fri, 13 Mar 2026 12:35:26 +0800
+Message-ID: <20260313043532.103987-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-modify_return's fmod_ret programs can override bpf_modify_return_test()'s
-return value, which conflicts with get_func_ip_test when selftests run in
-parallel.
+test_zswap currently only checks whether zswap is present by testing
+/sys/module/zswap. This misses the runtime global state exposed in
+/sys/module/zswap/parameters/enabled.
 
-Store current tgid in BSS and make modify_return hooks act only for that
-tgid. For other tasks, fentry/fexit become no-ops and fmod_ret returns the
-original ret.
+When zswap is built/loaded but globally disabled, the zswap cgroup
+selftests run in an invalid environment and may fail spuriously.
 
-Drop the serial-only restriction and remove the TODO comment.
+Check the runtime enabled state before running the tests:
+  - skip if zswap is not configured,
+  - fail if the enabled knob cannot be read,
+  - skip if zswap is globally disabled.
 
-Tested:
-  sudo ./test_progs -t modify_return
-  sudo ./test_progs -t get_func_ip_test
-  sudo ./test_progs -j$(nproc) -t modify_return
-  sudo ./test_progs -j$(nproc) -t get_func_ip_test
+Also print a hint in the skip message on how to enable zswap.
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Signed-off-by: Li Wang <liwang@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Michal Koutný <mkoutny@suse.com>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Nhat Pham <nphamcs@gmail.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Yosry Ahmed <yosryahmed@google.com>
 ---
 
-v2:
-- inline pid checks per suggestion from Jiri Olsa <jolsa@kernel.org>
+Notes:
+    v3:
+    	- Replace tri-state zswap_enabled() with check_zswap_enabled() for clearer flow.
+    	- Move skip/fail decisions into the helper instead of branching in main().
+    	- Make read failure reporting more explicit by naming
+    	  `/sys/module/zswap/parameters/enabled`.
+    	- Keep skip hint for enabling zswap:
+    	  `echo 1 > /sys/module/zswap/parameters/enabled`.
+    
+    v2:
+    	- remove enable/disable_zswap functions
+    	- skip the test if zswap is not enabled
+    	- reporting fail when zswap_enabled return -1
 
- .../selftests/bpf/prog_tests/modify_return.c        |  8 +++++---
- tools/testing/selftests/bpf/progs/modify_return.c   | 13 +++++++++++++
- 2 files changed, 18 insertions(+), 3 deletions(-)
+ tools/testing/selftests/cgroup/test_zswap.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-index a70c99c2f8c8..4661d77ebdfc 100644
---- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-+++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-@@ -5,6 +5,7 @@
-  */
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+index 64ebc3f3f203..e69d845d3592 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -589,9 +589,21 @@ struct zswap_test {
+ };
+ #undef T
  
- #include <test_progs.h>
-+#include <unistd.h>
- #include "modify_return.skel.h"
- 
- #define LOWER(x) ((x) & 0xffff)
-@@ -23,11 +24,13 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
- 	if (!ASSERT_OK_PTR(skel, "skel_load"))
- 		goto cleanup;
- 
-+	skel->bss->input_retval = input_retval;
-+	skel->bss->test_pid = getpid();
+-static bool zswap_configured(void)
++static void check_zswap_enabled(void)
+ {
+-	return access("/sys/module/zswap", F_OK) == 0;
++	char value[2];
 +
- 	err = modify_return__attach(skel);
- 	if (!ASSERT_OK(err, "modify_return__attach failed"))
- 		goto cleanup;
- 
--	skel->bss->input_retval = input_retval;
- 	prog_fd = bpf_program__fd(skel->progs.fmod_ret_test);
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
- 	ASSERT_OK(err, "test_run");
-@@ -49,8 +52,7 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
- 	modify_return__destroy(skel);
++	if (access("/sys/module/zswap", F_OK))
++		ksft_exit_skip("zswap isn't configured\n");
++
++	if (read_text("/sys/module/zswap/parameters/enabled", value,
++						sizeof(value)) <= 0)
++		ksft_exit_fail_msg("Failed to read "
++				"/sys/module/zswap/parameters/enabled\n");
++
++	if (value[0] == 'N')
++		ksft_exit_skip("zswap is disabled (hint: echo 1 > "
++				"/sys/module/zswap/parameters/enabled)\n");
  }
  
--/* TODO: conflict with get_func_ip_test */
--void serial_test_modify_return(void)
-+void test_modify_return(void)
- {
- 	run_test(0 /* input_retval */,
- 		 2 /* want_side_effect */,
-diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/testing/selftests/bpf/progs/modify_return.c
-index 3376d4849f58..68fabd2efe8d 100644
---- a/tools/testing/selftests/bpf/progs/modify_return.c
-+++ b/tools/testing/selftests/bpf/progs/modify_return.c
-@@ -12,11 +12,14 @@ char _license[] SEC("license") = "GPL";
+ int main(int argc, char **argv)
+@@ -604,8 +616,7 @@ int main(int argc, char **argv)
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
  
- static int sequence = 0;
- __s32 input_retval = 0;
-+__u32 test_pid = 0;
+-	if (!zswap_configured())
+-		ksft_exit_skip("zswap isn't configured\n");
++	check_zswap_enabled();
  
- __u64 fentry_result = 0;
- SEC("fentry/bpf_modify_return_test")
- int BPF_PROG(fentry_test, int a, __u64 b)
- {
-+	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
-+		return 0;
- 	sequence++;
- 	fentry_result = (sequence == 1);
- 	return 0;
-@@ -26,6 +29,8 @@ __u64 fmod_ret_result = 0;
- SEC("fmod_ret/bpf_modify_return_test")
- int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
- {
-+	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
-+		return ret;
- 	sequence++;
- 	/* This is the first fmod_ret program, the ret passed should be 0 */
- 	fmod_ret_result = (sequence == 2 && ret == 0);
-@@ -36,6 +41,8 @@ __u64 fexit_result = 0;
- SEC("fexit/bpf_modify_return_test")
- int BPF_PROG(fexit_test, int a, __u64 b, int ret)
- {
-+	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
-+		return 0;
- 	sequence++;
- 	/* If the input_reval is non-zero a successful modification should have
- 	 * occurred.
-@@ -55,6 +62,8 @@ SEC("fentry/bpf_modify_return_test2")
- int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char f,
- 	     int g)
- {
-+	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
-+		return 0;
- 	sequence2++;
- 	fentry_result2 = (sequence2 == 1);
- 	return 0;
-@@ -65,6 +74,8 @@ SEC("fmod_ret/bpf_modify_return_test2")
- int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, char f,
- 	     int g, int ret)
- {
-+	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
-+		return ret;
- 	sequence2++;
- 	/* This is the first fmod_ret program, the ret passed should be 0 */
- 	fmod_ret_result2 = (sequence2 == 2 && ret == 0);
-@@ -76,6 +87,8 @@ SEC("fexit/bpf_modify_return_test2")
- int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f,
- 	     int g, int ret)
- {
-+	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
-+		return 0;
- 	sequence2++;
- 	/* If the input_reval is non-zero a successful modification should have
- 	 * occurred.
-
-base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
+ 	/*
+ 	 * Check that memory controller is available:
 -- 
-2.43.0
+2.53.0
 
