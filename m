@@ -1,206 +1,115 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28790386565
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 06:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35C1346A13
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 06:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773382449; cv=none; b=ZaJSSciVjllWODhaGzTEHLjV7fSIlPMVwSrSLpSGHrGVkz5IBicNSbE42h52LeV1IG9xxJG1mDfM5VEuMPIXHdtLhWQwRZYVGhNdmWdQKDNXmUNJVFXwNfHt+6RoTzIjEoVrQVa3pCx2ONcZ+eYAYWI9bksKHTz2T+4G2q2i2jI=
+	t=1773383696; cv=none; b=CXKmC6t/CBjXY57IX+V6eu4NtXik8SI7S/CXaFAXJtQdJRjGvGIpXUYyz/Hn44rI22vZPSo5PlPcO4DQ6nwuhnOnWS4PBSiBK2o5Bot9MHCcRXMNEtAbIs0+oIJ8qnuZJRKsqvTn+PLpEClc9wHU1blCaqKd4RzNjEjJGpppo/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773382449; c=relaxed/simple;
-	bh=9Nmx5HAs+7DRtlj9EWQELGCrvyUoFEJQW/16VzmDbeo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iS8cfrGw4lHYW+LOIR5NS/s2HbpGENNXGdJMnrjenR3mg7rVfyqDBy3svoPChH9z0rykjIWZsdsarrwLhgIMC+7uKTg0r39GdyoDHjOJEJbquYzobsxhLktlGHXvJ8MUrCsf8sF133uihLanzKE7JafUiHlfeHq0Uu5FnwEs8hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JqQmIwwA; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+	s=arc-20240116; t=1773383696; c=relaxed/simple;
+	bh=Q0wVQHhsmNqM24Qtw9M0BntfWCp5kq7h5Pk/AhbueeI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P4h5VubhQ1EXX90pqkEoAdSsNqbsD+JtYBT5O14s/YPwLssFPkchiDSvN6Ez2ptoYqoA7YZCX5S0eFynfRBHkFu/rp1ouGrwFKRxMl2lI+gy0ESHNBonjysrFnQ+ICZIaMtERxCsghoE18rvMFNjKty5S75V/1Btscsowu7AW1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYZpciPZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JqQmIwwA"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3594620fe97so12549537a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 23:14:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773382439; x=1773987239; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BkSCz6rjDBChxZIrEywkjbjk8auemBVpkQ44aK+RFnM=;
-        b=JqQmIwwARJAMX4oM4CkS45Q83CEQfRQAn9v/+iMrb4xFW99/DZKWMU1/6Zs4KnMCSL
-         PVATJLyRJi2lXZ5iLD+38xHTWln/gIzZvvcYOz/4E0CO4USi+Qg66F7rPhMbBZf0h47A
-         aBbGRR1/rlf1C1KPZDh8AGmwm0dBuyvxUoL4AkthMTOJJjnXgjn3hRicF8C209yE9/O+
-         nNzDvoa8AtgTrQsaXwmzKPalV0X7WzCA4BFGGMY2YLUUBsMR0/CS6ajhJx/HbeQHpqiA
-         DE2nxz0bCUqJOz+4/QfKjnUKCK+W1i/k89JqVJHQhPqz+wnAI4I/Gc/4F4a/cVhKw1MO
-         ptsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773382439; x=1773987239;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BkSCz6rjDBChxZIrEywkjbjk8auemBVpkQ44aK+RFnM=;
-        b=OUeFF2xiBjt1aAV9idgNNkchpaBsMRZX7fh1PGsWtIvyA38z77Z+ze33IHqvVcoenM
-         OJLB4WPlU+uju9d3cZh/PHHY95tWEqIcXcbWMjJQUfiTurLoatFxJx0g+jDQrZmpY+P/
-         V8BVh6ltPnzRspoY34x2ibSIeoOph2OeIaqPoGpaFcRcdjOSckwUa5xbcDrNXcs6SZxY
-         G8a4Ry0qt6TEHPCdZq4OFdEWVkLXZjW8ofUVoopu4HE+4LFyPEpIyG9KOhF9hzvJx+c7
-         3rGLbKq1quxnkEXAXEOL4+uYl+JAD375tflItYpWUZVTnnfyNs78pdeSDuO4i6AS/abH
-         PjVA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTBdDs9m6pKFNw30BLjY8RXPKRn0AKQYQsUSLZF9Ixzs31xX6N8lAxJuNt6q9aTnX0gAOuQVt1083y2JpULN4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuzHnRu5cjr/u2/uKWverqqUQZnJlm5CrTB4U9EqYvyLQplE+k
-	JyNCtfvt3keDhWi66zDUv7XQm+dXVRXILhxGASMvyHWnaAQ0fjfaBA+luwtWzUecPoOr44bi7/A
-	aGUEil8iXlOLxAY7wgjnC2cQFgg==
-X-Received: from pjbin22.prod.google.com ([2002:a17:90b:4396:b0:35a:5f:8f72])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:2784:b0:352:ba0f:fb28 with SMTP id 98e67ed59e1d1-35a21e4ee53mr2119101a91.1.1773382438985;
- Thu, 12 Mar 2026 23:13:58 -0700 (PDT)
-Date: Fri, 13 Mar 2026 06:13:22 +0000
-In-Reply-To: <20260313-gmem-inplace-conversion-v3-0-5fc12a70ec89@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYZpciPZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E0FC19421
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 06:34:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773383696;
+	bh=Q0wVQHhsmNqM24Qtw9M0BntfWCp5kq7h5Pk/AhbueeI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZYZpciPZUCP7DFkzMawgbl+7hjxu+d4KbtYEqLuY5RZofb4b+oRQoW7OnYKvi080v
+	 r13iKoXUJ2Uy41wp5O7Nh3/++b4mtFuXFYge0GsC2zgugE95otf2/2H2GO2KVP0LEG
+	 9q1m21WROtAtw4FYPKI1UQSVPzxT48UuhhOpFuQG8gU/tXuSblvhbCAHqkzOB+1VNt
+	 a2Y2xfivFST5Q33zm8AQ0Q3lS0cqu/+MBaiknO2mmmp6Ef7NAm1CnzKEnjSCYHgz6f
+	 v/jWoe3i41OEVZNZcQLK8ul4w4IUHZfv/r08w7Jew7GWskyhimH643jBxdCvr3rrob
+	 EJUYV1roqbtPQ==
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b942424d231so224053166b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 23:34:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXUr/TiGGsPZDxOi4mqGicSu5oINI6h1aZkgRqj0PhZNvGGGgwHzUhKehIN4Kl672xp6UjBuCIyStquNtXQO2c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvwS1r5OfPK3xZk377iBmqX0h6xMVmTZfqBsyxx4P2cXrtAodV
+	N/4F/RsIa62zNnQLRueyVHtRX1Vavyi8pxQxRZfF9VTz+Wszj5lEWBBV2UxGtpTKo06xNJndlDS
+	sn64URfimBTkiFNX6o8FkS/vqCYcIN9U=
+X-Received: by 2002:a17:907:7389:b0:b96:ee7e:a65d with SMTP id
+ a640c23a62f3a-b976538221fmr83259566b.58.1773383694832; Thu, 12 Mar 2026
+ 23:34:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260313-gmem-inplace-conversion-v3-0-5fc12a70ec89@google.com>
-X-Developer-Key: i=ackerleytng@google.com; a=ed25519; pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773382364; l=4578;
- i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=9Nmx5HAs+7DRtlj9EWQELGCrvyUoFEJQW/16VzmDbeo=; b=DC8qeXu7SmMxXtijO6A9hehP0079wJhd+/Ee0WJofb9dO8LXR93tj+fDRl0UuiAZE+leNa+Qb
- nuEvk/7QGtbD81QpOVmb7HRi0PKdPhIGZa0guKDbYWzcbQKlcpmTgdP
-X-Mailer: b4 0.14.3
-Message-ID: <20260313-gmem-inplace-conversion-v3-43-5fc12a70ec89@google.com>
-Subject: [PATCH RFC v3 43/43] KVM: selftests: Update tests to use flag-enabled
- library functions
-From: Ackerley Tng <ackerleytng@google.com>
-To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	ira.weiny@intel.com, jmattson@google.com, jroedel@suse.de, 
-	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
-	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
-	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
-	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
-	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
-	aneesh.kumar@kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20260313043532.103987-1-liwang@redhat.com>
+In-Reply-To: <20260313043532.103987-1-liwang@redhat.com>
+From: Yosry Ahmed <yosry@kernel.org>
+Date: Thu, 12 Mar 2026 23:34:41 -0700
+X-Gmail-Original-Message-ID: <CAO9r8zMsbVHKnCzfQcdtomRMWTNFgTGY4XALxwm+i9m1SUPPvg@mail.gmail.com>
+X-Gm-Features: AaiRm52d_LSDbxu5r_s7A_TjYxa-WyeCVfUKwcqT9K0KvGU83T161Inpfc6nrB8
+Message-ID: <CAO9r8zMsbVHKnCzfQcdtomRMWTNFgTGY4XALxwm+i9m1SUPPvg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/7] selftests/cgroup: skip test_zswap if zswap is
+ globally disabled
+To: Li Wang <liwang@redhat.com>
+Cc: yosryahmed@google.com, nphamcs@gmail.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Update tests to use the set_memory_attributes-related library functions
-that now allow specification of flags.
+> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+> index 64ebc3f3f203..e69d845d3592 100644
+> --- a/tools/testing/selftests/cgroup/test_zswap.c
+> +++ b/tools/testing/selftests/cgroup/test_zswap.c
+> @@ -589,9 +589,21 @@ struct zswap_test {
+>  };
+>  #undef T
+>
+> -static bool zswap_configured(void)
+> +static void check_zswap_enabled(void)
+>  {
+> -       return access("/sys/module/zswap", F_OK) == 0;
+> +       char value[2];
 
-This was manually tested by updating content_mode in main() and
-recompiling/running.
+Please wait for discussions on the previous version to conclude and
+give people a little bit of time to respond before sending the next
+version.
 
-TODOs:
+I think this can just be be:
 
-+ If we introduce self-reporting of supported content modes, test based on
-  reported content modes. If supported content modes are relatively static,
-  accept a command line argument for this test to test different content
-  modes.
-+ Fold this patch into the earlier patches after getting through RFC.
----
- .../selftests/kvm/guest_memfd_conversions_test.c     | 20 +++++++++++++++-----
- .../selftests/kvm/x86/private_mem_conversions_test.c | 10 +++++++---
- 2 files changed, 22 insertions(+), 8 deletions(-)
+    char value;
+    ...
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_conversions_test.c b/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
-index 8727474325451..42f3ea950c192 100644
---- a/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
-@@ -27,6 +27,7 @@ typedef FIXTURE_DATA(gmem_conversions) test_data_t;
- FIXTURE_SETUP(gmem_conversions) { }
- 
- static uint64_t page_size;
-+static u64 content_mode;
- 
- static void guest_do_rmw(void);
- #define GUEST_MEMFD_SHARING_TEST_GVA 0x90000000ULL
-@@ -192,7 +193,9 @@ static void test_private(test_data_t *t, loff_t pgoff, char starting_val,
- static void test_convert_to_private(test_data_t *t, loff_t pgoff,
- 				    char starting_val, char write_val)
- {
--	gmem_set_private(t->gmem_fd, pgoff * page_size, page_size);
-+	gmem_set_memory_attributes(t->gmem_fd, pgoff * page_size, page_size,
-+				   KVM_MEMORY_ATTRIBUTE_PRIVATE,
-+				   content_mode);
- 	test_private(t, pgoff, starting_val, write_val);
- }
- 
-@@ -208,7 +211,8 @@ static void test_convert_to_shared(test_data_t *t, loff_t pgoff,
- 				   char starting_val, char host_write_val,
- 				   char write_val)
- {
--	gmem_set_shared(t->gmem_fd, pgoff * page_size, page_size);
-+	gmem_set_memory_attributes(t->gmem_fd, pgoff * page_size, page_size,
-+				   0, content_mode);
- 	test_shared(t, pgoff, starting_val, host_write_val, write_val);
- }
- 
-@@ -298,7 +302,9 @@ GMEM_CONVERSION_MULTIPAGE_TEST_INIT_SHARED(unallocated_folios, 8)
- 	if (test_page != second_page_to_fault)
- 		host_do_rmw(t->mem, second_page_to_fault, 0, 'A');
- 
--	gmem_set_private(t->gmem_fd, 0, nr_pages * page_size);
-+	gmem_set_memory_attributes(t->gmem_fd, 0, nr_pages * page_size,
-+				   KVM_MEMORY_ATTRIBUTE_PRIVATE,
-+				   content_mode);
- 	for (i = 0; i < nr_pages; ++i) {
- 		char expected = (i == test_page || i == second_page_to_fault) ? 'A' : 0;
- 
-@@ -429,7 +435,8 @@ static void test_convert_to_private_fails(test_data_t *t, loff_t pgoff,
- 
- 	do {
- 		ret = __gmem_set_private(t->gmem_fd, offset,
--					 nr_pages * page_size, &error_offset);
-+					 nr_pages * page_size, &error_offset,
-+					 content_mode);
- 	} while (ret == -1 && errno == EINTR);
- 	TEST_ASSERT(ret == -1 && errno == EAGAIN,
- 		    "Wanted EAGAIN on page %lu, got %d (ret = %d)", pgoff,
-@@ -465,7 +472,9 @@ GMEM_CONVERSION_MULTIPAGE_TEST_INIT_SHARED(elevated_refcount, 4)
- 
- 	unpin_pages();
- 
--	gmem_set_private(t->gmem_fd, 0, nr_pages * page_size);
-+	gmem_set_memory_attributes(t->gmem_fd, 0, nr_pages * page_size,
-+				   KVM_MEMORY_ATTRIBUTE_PRIVATE,
-+				   content_mode);
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		char expected = i == test_page ? 'B' : 'C';
-@@ -481,6 +490,7 @@ int main(int argc, char *argv[])
- 		     KVM_MEMORY_ATTRIBUTE_PRIVATE);
- 
- 	page_size = getpagesize();
-+	content_mode = KVM_SET_MEMORY_ATTRIBUTES2_PRESERVE;
- 
- 	return test_harness_run(argc, argv);
- }
-diff --git a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-index f85717662a73b..7d72c36d102c9 100644
---- a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-+++ b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-@@ -306,9 +306,13 @@ static void handle_exit_hypercall(struct kvm_vcpu *vcpu)
- 	if (do_fallocate)
- 		vm_guest_mem_fallocate(vm, gpa, size, map_shared);
- 
--	if (set_attributes)
--		vm_mem_set_memory_attributes(vm, gpa, size,
--					     map_shared ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE);
-+	if (set_attributes) {
-+		u64 attrs = map_shared ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE;
-+
-+		vm_mem_set_memory_attributes(vm, gpa, size, attrs,
-+					     KVM_SET_MEMORY_ATTRIBUTES2_PRESERVE);
-+	}
-+
- 	run->hypercall.ret = 0;
- }
- 
+    if (read_text(.., &value, sizeof(value)) < 0)
 
--- 
-2.53.0.851.ga537e3e6e9-goog
-
+> +
+> +       if (access("/sys/module/zswap", F_OK))
+> +               ksft_exit_skip("zswap isn't configured\n");
+> +
+> +       if (read_text("/sys/module/zswap/parameters/enabled", value,
+> +                                               sizeof(value)) <= 0)
+> +               ksft_exit_fail_msg("Failed to read "
+> +                               "/sys/module/zswap/parameters/enabled\n");
+> +
+> +       if (value[0] == 'N')
+> +               ksft_exit_skip("zswap is disabled (hint: echo 1 > "
+> +                               "/sys/module/zswap/parameters/enabled)\n");
+>  }
+>
+>  int main(int argc, char **argv)
+> @@ -604,8 +616,7 @@ int main(int argc, char **argv)
+>         if (cg_find_unified_root(root, sizeof(root), NULL))
+>                 ksft_exit_skip("cgroup v2 isn't mounted\n");
+>
+> -       if (!zswap_configured())
+> -               ksft_exit_skip("zswap isn't configured\n");
+> +       check_zswap_enabled();
+>
+>         /*
+>          * Check that memory controller is available:
+> --
+> 2.53.0
+>
+>
