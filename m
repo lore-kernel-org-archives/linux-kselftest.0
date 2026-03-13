@@ -1,80 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189813BC69A;
-	Fri, 13 Mar 2026 15:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB3A3BD65F
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 15:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773416421; cv=none; b=D6ikck9hJgjWzczeM5Lt52lQCp1XcryqnyI+S6MW0s/FBFysCdgMb1F9fVGmY8wXXQqtmlhJ9Ci7kt6VedvhdOocuB3NdYHg4z8J/hgh+HzRIbWPTaWPfmLa2L5pi+FtDJihJXb3m5pNnnNP/roJq5HURjRK25wc8PWnXyPi9vw=
+	t=1773416731; cv=none; b=f+LoYckH0r/hUYVxHAN5EUyEPoc2kslJYGKZYbr8BHBC+0sj0PLowY30JERKC9Wa7gxyEpFi+IZwxeAui/YMxqAILsNcl4iBXkxCPuVh3/XgZ4SOGBjaRpl+JLgCjO+SW9TIzeBDNhuFGGpJVL6DqLCnfPWMiz4l/QtwVsIOYcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773416421; c=relaxed/simple;
-	bh=pwb/Ix5jC1tAW+ErobqQ5iF4F/G3peyTxTbfmU1XGjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RV/4XlfHPbpJfzPAQVnjY2q+JGZWzYZJkH8DTo4bw0pX/QDl9fEW6xQHvirxAptUopP8EIpgNWrvuzP1HrwPbKmAHdn4k5kThOHNHIxbwpAFQ0z23xcb3zYfJAXlUGcFSKBrFyEP2+opbnFgea6JkCfux/RFGBgs6kmoqLNDFQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nKbp0tik; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773416731; c=relaxed/simple;
+	bh=ih3Rem8ez1m/UeZdhhbrirn/qXqZUnYA/rNla9ScMnk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ItU/gBI/g9TM9DCQze+iPMWawl1knflUdMtkDP8jhsSjdyjkciiO5Kp1EtwjcWm40fbj8rtBh3H1wPpupftHH9niHx4jtr6nI60kF2Z8gsL7fh4XQsQuh453KeqyIL0pRF/nHIz/8kOrpaWiOMAa1LM77oN48dSky9wo968ZQx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=J+MyWJKm; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nKbp0tik"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34723C19421;
-	Fri, 13 Mar 2026 15:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773416420;
-	bh=pwb/Ix5jC1tAW+ErobqQ5iF4F/G3peyTxTbfmU1XGjc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nKbp0tikNz9cHqTQsUNTiVm08JCp0gVeXxTbxWur61UQyg3WtGaOpohGDd6s/y7Z3
-	 ZnuwtK8eylQDGefKyEv03T2+UtutBIOS9k82FoLHMeiNOvOVimuvRKVoWBhnEn20oH
-	 E5z+pdhcfRtTz58G12rgvz1gtHva6r1wZ5yIn16DWAprc1TCk9e5f+S7r7LMNMjTHa
-	 2Q0fsGlz0boe8NpUN6Ds6vaAN+Z99RiG7h6XIDLQCN3GtzMrg95u/BNAzLvBvPXMy6
-	 3AVmfDK3p+Qa2Sjrz61SDOEsWcxrLouEUPs5FPq06yBhSPhNgUzVQtt/qBJcK8pL8g
-	 Ljv2XJ1QO550Q==
-Date: Fri, 13 Mar 2026 15:40:14 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org, 
-	david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com, mhocko@suse.com, 
-	ziy@nvidia.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
-Subject: Re: [PATCH 0/4] selftests/mm: skip several tests when thp is not
- available
-Message-ID: <68b17560-3033-472c-9638-a2e2058529f8@lucifer.local>
-References: <20260312114027.634559-1-chuhu@redhat.com>
- <abLHz2qjdeNqdFaZ@kernel.org>
- <abNZmiL2C7KMQM1t@gmail.com>
- <abQq-Mt0p3vz5rQm@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J+MyWJKm"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35a032cdd78so9793208a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 08:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1773416729; x=1774021529; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qe2Sep21p9IzCULSaXAl1wdem+djxjYgrVntlTLH2o8=;
+        b=J+MyWJKmq3TeYCE8dGWnkFvkTtg21IoJtTEY/WGCvGWRJfdlvFX4a+UVvq1xSOaXIR
+         Ogl13w+WD9fZJ4kJoSstt6y1dFwu74p7Hq1IlSMGFJBWPtVT0FoJWRBSeuuAWNYVgexN
+         Tk3BFyKK+c/N/I/cqyB9KFHLXiJzOfHXSEfaRe2q8BhDiUrBQNPUm6iHT5D60DTkl4ol
+         CtsfWmQkT+L3WoENEiGNUENT7dZmgiUls7HJXks2NILq/DMuhrydOLzZ0M/3ks8UuSgD
+         EBK99HKoFfFRTnXg0TtH8BBcuBNg757hPC6JqBrGBihIvRtybg68xRtfO+LNv7D9d81A
+         wtAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773416729; x=1774021529;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qe2Sep21p9IzCULSaXAl1wdem+djxjYgrVntlTLH2o8=;
+        b=YW1BRDhFdMSAZjxSLOapFu7/6PElEznMogo1/WjTGGygdY6XqCl7c+ScanAINeQM8q
+         FipEUT6IVA0loboTp+f4JKuXzlqdKUYU+TMooRRELUEAShM+BKI+zYQlIjTpTO7U/Htx
+         xqIITsgBrrE4AfS5x0Ro6HRSkyIu5rS9vHaU/IC0n1XRPPvhKY0NgkZNlNJX3jGUpNqw
+         E6OS4yPVSSPIZamWlWhzYgoCjCyKYWVCMhFA3EuvziChNC6tCIDlvBBBasL3RhUKAo4m
+         flElW3Y5GRfcLE1xx2Qe9BxHAIDOxVCmtY9dUQ+t/uPBYgkVuKpl1q3W6G2Pg5AsMH4W
+         WJRA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7SWxMQHyDtUFGLMhBkJqXgL8K6mwbRxfvOy7E413T0wbeqYVK9khZopDoq/hmWya9N9UQwXhLkjTvkR5EVx0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyBz5diIt+O5Rj5w+qmvBJgykWywF027BZiT3YjCbT3ueww5hR
+	/iF3R4IqleuE+NgcdcqTEWsHsD0ndE8cQsivgqaKfTe+6TJy8ta+oc21d/Twp9jtw49den01Y4M
+	00W4BNQ==
+X-Received: from pgmr19.prod.google.com ([2002:a63:2053:0:b0:c73:cc95:c0e4])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3d8a:b0:359:1821:b4e3
+ with SMTP id 98e67ed59e1d1-35a21ec0e6amr3676826a91.15.1773416728908; Fri, 13
+ Mar 2026 08:45:28 -0700 (PDT)
+Date: Fri, 13 Mar 2026 08:45:27 -0700
+In-Reply-To: <20260313-gmem-inplace-conversion-v3-0-5fc12a70ec89@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abQq-Mt0p3vz5rQm@kernel.org>
+Mime-Version: 1.0
+References: <20260313-gmem-inplace-conversion-v3-0-5fc12a70ec89@google.com>
+Message-ID: <abQxF2Gbd7sSsCcq@google.com>
+Subject: Re: [PATCH RFC v3 00/43] guest_memfd: In-place conversion support
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	ira.weiny@intel.com, jmattson@google.com, jroedel@suse.de, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, Mar 13, 2026 at 05:19:20PM +0200, Mike Rapoport wrote:
-> On Fri, Mar 13, 2026 at 08:26:02AM +0800, Chunyu Hu wrote:
-> > On Thu, Mar 12, 2026 at 04:03:59PM +0200, Mike Rapoport wrote:
-> > > On Thu, Mar 12, 2026 at 07:40:23PM +0800, Chunyu Hu wrote:
-> > > > There are several tests requires transprarent hugepages, when run on thp
-> > > > disabled kernel such as realtime kernel, there will be false positve.
-> > >
-> > > I presume that when THP tests run on kernels with THP disabled they fail
-> > > and it would be a false negative rather than false positive.
-> >
-> > This is an interesting point. I'm not naitive speaker. I just learned
-> > from AI. It really matters what we define as 'postive'. I presume 'postive'
-> > is we run selftest and got a failure report, that's postive, not thinking
-> > as it's thp disabled kernel and a 'pass' is postive.
->
-> I think that a passing test is "positive" and a failing test is "negative".
-> So a test that fails because of misconfiguration is a false negative to me.
+On Fri, Mar 13, 2026, Ackerley Tng wrote:
+> Hi,
+> 
+> (Here's the motivation for this series, which I realized was missing from
+> the earlier revisions of this series)
 
-(Ostensibly native speaker here :P)
+...
+
+> I'm intending RFC (v3) as a basis for discussion of flags/content
+> modes (name TBD) to allow userspace to request guarantees on how the memory
+> contents will look like after setting memory attributes. The last 6 patches
+> implement content mode support. These patches will be reordered, and some
+> of them could be absorbed into earlier patches, in later revisions.
+> 
+> Here are the discussion points I can think of (please add on):
+> 
+> 1. (Might hopefully resolve soon?) Should ZERO be supported on shared to
+>    private conversions? Discussion is at [6].
+
+No.  There is no use case.  The entire point of CoCo is that the VMM is untrusted.
+Having the guest rely on the VMM to zero memory makes no sense whatsoever.  There
+may be a contract between the trusted whatever and the guest, but that's between
+those two entities, the VMM is not involved, period.
+
+PRESERVE is different because the intent is to allow the guest to operate on
+*untrusted* data.  Operating on untrusted zeros is nonsensical.
+
+ZERO for private=>shared is different between the VMM trusts the host kernel.
+
+> 2. Do we need a CAP for userspace to query the flags/modes supported?
 
 Yes.
 
-False positive = the test passed when it should have failed.
-False negative = The test failed when it should have passed.
+>    It seems like there won't be anything dynamic about the flags/modes
+>    supported.
+> 
+>    The userspace code can check what platform it is running on, and then
+>    decide ZERO or PRESERVE based on the platform:
+> 
+>    If the VM is running on TDX,
 
-Cheers, Lorenzo
+No.  No, no, no, no.  I have said this over, and over, and over.  The contract
+is between userspace and KVM, not between userspace and the underlying CoCo
+implementation.  Anything that requires making assumptions based on the VM type
+is a non-starter for me.
+
+>    it would want to specify ZERO all the
+>    time. If the VM were running on pKVM it would want to specify PRESERVE
+>    if it wants to enable in-place sharing, and ZERO if it wants to zero the
+>    memory.
+> 
+>    If someday TDX supports PRESERVE, then there's room for discovery of
+>    which algorithm to choose when running the guest. Perhaps that's when
+>    the CAP should be introduced?
+> 
+> 3. What do people think of the structure of how various content modes are
+>    checked for support or applied? I used overridable weak functions for
+>    architectures that haven't defined support, and defined overrides for
+>    x86 to show how I think it would work. For CoCo platforms, I only
+>    implemented TDX for illustration purposes and might need help with the
+>    other platforms. Should I have used kvm_x86_ops? I tried and found
+>    myself defining lots of boilerplate.
+> 
+> 4. enum for ZERO and PRESERVE?
+> 
+>    Pros:
+> 
+>    * No way to define both ZERO and PRESERVE (make impossible states
+>      unrepresentable)
+>        * e.g. enum kvm_device_type in __u32 type in struct
+>          kvm_create_device
+>        * But maybe someday some modes can be used together?
+
+Huh?  Oh, you don't mean "enum", you mean "values vs. flags".  Because in C you
+can obviously have an enum of flags.
+
+I don't have a strong preference, though I think I'd vote for flags.
+
+Practically speaking, I doubt we'll ever have more than DEFAULT, ZERO, and PRESERVE,
+i.e. more than '0', '1, and '2'.  Perhaps I lack imagination, but I can't think
+of any operation that we would want to become ABI.  ZERO is special purely because
+various CoCo implementations already zero memory on conversion.  Everything else
+fits into PRESERVE, because if the kernel perform the operation, then userspace
+can do the same, and likely more performantly and obviously without needing a
+contract with KVM.
+
+The only other option I can think of is if a CoCo implementation wanted to use an
+specific value other than '0' to fill a page on conversion.  Given that starting
+from '0' is by far the most common state in computing, I just don't see that
+happening.  E.g. that's be like adding k1salloc() in addition to kmalloc() and
+kzalloc().
+
+So, we're likely only going to have DEFAULT, ZERO, and PRESERVE, at which point
+whether we use flags or values is a wash in terms of how many bits we need: 2.
+
+If we use flags, then we can have a single CAP to enumerate all FLAGS that are
+supported KVM_SET_MEMORY_ATTRIBUTES2.  If we use values, we'd need a separate CAP
+for flags and a separate cap for conversion operations.
+
+Using values would allow providing a dedicated field in kvm_memory_attributes2,
+which _might_ make some code more readable.  But for me, that doesn't outweigh the
+disadvantage of needing another CAP.
