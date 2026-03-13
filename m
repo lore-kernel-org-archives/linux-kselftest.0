@@ -1,140 +1,156 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A8438C41C;
-	Fri, 13 Mar 2026 10:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C85538E12B
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 10:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773396688; cv=none; b=GTy1fF8sa5OWPJEs5pifTyaVwXpWfIs/XE4v49lgt62fHD6lTk+M6ZOl/GxpxgbahxANL7X+Gm87Lx5/owJcmBg5BJVF02+CeKHOlBv9qY0+xbt2+nOIhr0xY10AH7T+B5q1OcvuTMVON0me8wVxnXciSjl9h69UqNL/1F/cXIo=
+	t=1773399187; cv=none; b=Zujk1yOO3a5ILN/PxTA+WRfVGoFMBkSbA/D5V+HHBiYMGYst5atW/grBj6mcD/05whfsJA9c0rJpp4uPe0cioJkZaK/6hnDha7Ten4KTiWhq4brStTlkPtLEEzL4GuUqYhHWKnhDWjw3q3QQdZ+jZcpB6ZQe2ot3bKl/xJ6a8zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773396688; c=relaxed/simple;
-	bh=w5IzxonWrKm2lznvGNAIa+dekQxpfGuqCPinal0N5eI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hc9v5/pX5v9fvraKiQBfCwTJG701QeSQsctAJM9om9qN4D0jX4HPKwxKGuRgQuO+Beak1d+EM9qc9oIOeAhtyNalKZVePqrYi5SnKJ6e7FUdglTtpartkXKFhtRs4e2MSGpxhUmCBYGcyFproR31Fhmu4HO31jRiMBDCWlDU7ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=M3PDeF0g; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1773399187; c=relaxed/simple;
+	bh=2Xm0BRu2Cs2z3oeU+RWd6oUeKYAmIS1aqz1IYM1B3rM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BNjjZDGVO2DqePibAj3aTod9Bt4/DXDYDnqIE124t13azQtOUB0PoSXzxyKEQ4dP/b9DKbRBD5Wuemkp9yu0Tiwyqf16xKn8zbAoi4mVSbAHmd3fjKr9EuqCJQSK016Ze3f2ORTD8iZiVwq3SxQZOLZlZ7OwCjga1WRD37AwtBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Qgxrxi3Z; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="M3PDeF0g"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62CMOXgx1007198;
-	Fri, 13 Mar 2026 10:10:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=Gkf4rOT4CFaHfJxJ8D6AnxUn1V1vbC
-	NLe4eo89TKRVk=; b=M3PDeF0gXGFqD48QC2BpkNs1MMLp/DRkX8ixVJrAeH+Y81
-	W5LBdFxIMnOijR8IPo+U4OfZ3RJzu81EufLpCnV2umrJMy4W4Xznce+EcTi8oBFt
-	MK0TkwABzoihI34EBFwcHOUyC0v6nsSk8OBVH5yTgpXrMJYZtePhsEZa3y/b2f6H
-	qNvNaaTu439Owg9EOALvJ69qMo/2kORyEyuS+LSFflGOK8CcemELgnkhF4KlyQ8j
-	b13WVQdZlyWMU1VZMA+ZxByLSS5T5uerSNEy/1fyW7N/PlM0ucUP61Qv/xnFqSyt
-	O29mnQBIbaUXaxOi7al5ZNdBxiaBitAA4nNaYrYA==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh91q6mk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 10:10:32 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62D5UuVS008897;
-	Fri, 13 Mar 2026 10:10:30 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha766vm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 10:10:30 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62DAAQ1Q53608886
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Mar 2026 10:10:26 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AD84F2006C;
-	Fri, 13 Mar 2026 10:10:26 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3578C2004B;
-	Fri, 13 Mar 2026 10:10:24 +0000 (GMT)
-Received: from osiris (unknown [9.111.5.66])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 13 Mar 2026 10:10:24 +0000 (GMT)
-Date: Fri, 13 Mar 2026 11:10:22 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oleg@redhat.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, arnd@arndb.de,
-        shuah@kernel.org, kees@kernel.org, luto@amacapital.net,
-        wad@chromium.org, kevin.brodsky@arm.com, charlie@rivosinc.com,
-        macro@orcam.me.uk, deller@gmx.de, ldv@strace.io,
-        anshuman.khandual@arm.com, song@kernel.org, ryan.roberts@arm.com,
-        mark.rutland@arm.com, ada.coupriediaz@arm.com, broonie@kernel.org,
-        pengcan@kylinos.cn, liqiang01@kylinos.cn, thuth@redhat.com,
-        andreas@gaisler.com, schuster.simon@siemens-energy.com,
-        jremus@linux.ibm.com, jgross@suse.com, mathieu.desnoyers@efficios.com,
-        yeoreum.yun@arm.com, kmal@cock.li, dvyukov@google.com,
-        akpm@linux-foundation.org, reddybalavignesh9979@gmail.com,
-        richard.weiyang@gmail.com, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v13 11/12] arm64: Use generic TIF bits for common thread
- flags
-Message-ID: <20260313101022.13729C56-hca@linux.ibm.com>
-References: <20260313094738.3985794-1-ruanjinjie@huawei.com>
- <20260313094738.3985794-12-ruanjinjie@huawei.com>
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Qgxrxi3Z"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4853f2826f7so19652775e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 03:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1773399182; x=1774003982; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DNZyinWuxfhj/HMKnN0a7zD6/loa3Iui4nBmpRal/7w=;
+        b=Qgxrxi3Z1pmqTpEf2hOuwp1v9wxDcikS6dCTFPGb3AFgX+a2Vt9wEVsBKJd0m7BkQc
+         rVmyshwWIlb85fo2wCPq3haizlv/iZmN/FTXhp7YCuJtfC3r3WjWxd9m/CRkqcWWmVw/
+         vA6dJgzohJTWTrE4zvFz9ChPdtx/xdv2KnbmoBV4HEHpxcy4ATZxTwYBJFY67qEM1mhE
+         m1VNFyf/5E+f9uGykeoAuCTlREUM6PRvuhsbUf8oj8XuRscNpn4wdoMM+EaFLPg+d4Il
+         bA6H4rXfQm4nbtZGtf/4DM7sETGx9yvo1KPeTn3A4kDvNc42gqR3s3nA2egT2B+9xpqi
+         esUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773399182; x=1774003982;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DNZyinWuxfhj/HMKnN0a7zD6/loa3Iui4nBmpRal/7w=;
+        b=kVx7AYvOzKvuoWn3rZjBfmiuJZd+gZ5LMqL5wsp0LaN7Rkypzt6N4SiA+4VjQTGy/j
+         WccJClnZOm6oHFQhORpLMSrpqav6ImFbGGyce0LfV4Y4EQ60nAoz97hxGEOxiLn9UDqc
+         d0eCXQT2zF8OrLe0to3izm/ukXSdZfkbgqydnlQgCVLv8wXYj8z/4V8RMd+mPToY1ZXy
+         kDFnWsLpMiabD4u/8ww5//hW5HyhCCoVKxpURyIDlR0FqwvSmNTosBDwAyCgV7+x00nY
+         gwJ1AIV1y5mTo70IHv9ke4KZVcPvl/r9/HIsGOxUcVkbc4KPRTzQWlXRnrKfG8u6efIg
+         k06g==
+X-Forwarded-Encrypted: i=1; AJvYcCV4UqSOkM1d+AUzbocDBEmUJwfAMkEV5rgtdhaH+DDNKKCxdmm0gViv3mAUPfVViSyGogEjkYT/7JZX+jxRSrY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2qjWlQpJplKJ4y2gAemRnkdnAAPmw5eYM8mcN3Kz88f3WKqEV
+	qKZ124joZjcZpIZ5BUi9+m3fi/KN1FHqJLoWY/wSbyxhZ/skkuTWvZyX88xwTjjBUl9+AUVSO1J
+	B2ROvXsXR0107qVHxbZnKMVb9uTUT92lzC6swS+5LbLZfzTxQIB9bNNJNGjBvt9k=
+X-Gm-Gg: ATEYQzyHecCgWJv/Sh031ozu1EZf9JRqgfhxitNdn3m6abk2252lHtOgfRsYMH2vZ59
+	yMBR9ulP6L5CpaKzKCBDy/2suY122Re5xUuBCK1T7YXg4tx2MMp1QpjiB8GtzTMGeeJstGbhelC
+	pUX2hq/Tvqu3Q+bhssUaQf5hdstNNPmf7xNzwMkxGSFwR7dwwMp/1SWga4MAx6mZoTBlH2i1LGC
+	xZ/eu6Gokciz/Ax0ZITCB/994GunWMQHiPSKFk368R08cxanYKdFIih+hTg52TN9ipCsAwpmbyW
+	uirw7YaNrBr5q0Dy3ocB1uxtpk3HutOL1KzcP1qlAU+gsN3tgFllDRlSD+0Aofd9QyYD7E5tWE6
+	BWnGRsHIvhaFfNYDt4r3PF6Jtas5ZN3z8Yk/nElgWk/P0SEix7jHm2nKqNdywmoATLjbkCpOHj9
+	S3j0c3cWVzgqDaG0A2fKOAR83IHEPkic3q2z8ukuRjsI0C/cvRsm9RsxgsNFN9kw==
+X-Received: by 2002:a05:600c:1f8d:b0:485:4278:24fb with SMTP id 5b1f17b1804b1-48556711dfcmr40023815e9.32.1773399182370;
+        Fri, 13 Mar 2026 03:53:02 -0700 (PDT)
+Received: from ?IPV6:2001:67c:2fbc:1:5172:7646:5893:2ac6? ([2001:67c:2fbc:1:5172:7646:5893:2ac6])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4855778d268sm24283095e9.8.2026.03.13.03.52.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Mar 2026 03:53:01 -0700 (PDT)
+Message-ID: <a2724a9d-4f03-431e-934d-b6aa64d1ad45@openvpn.net>
+Date: Fri, 13 Mar 2026 11:52:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260313094738.3985794-12-ruanjinjie@huawei.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: BCADzvpbkvwpu6qt2LtTmNdZt-NTgdEB
-X-Authority-Analysis: v=2.4 cv=E6/AZKdl c=1 sm=1 tr=0 ts=69b3e299 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=i0EeH86SAAAA:8
- a=VnNF1IyMAAAA:8 a=yb_icw7U1PEggasoSeYA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDA3OCBTYWx0ZWRfX204njEZ7La+7
- lopLeqJAvBsdIgcWc7JF7JKlYJi59Je0zliAQV0GcuRR3gN8/wyQtSb5D/ATDtU4sWZjTKpvV/l
- AcZwh/tIq2vjmMDaZTwOouNhNy9OmALovQnv4y/8OVc1k10fK7hCIWjW71P46WpjhsNMvxnoJX8
- ELxU/zlYAj8DS3iG5RHANoiskwvgvoNssJ4Zj2rUgNy64CX7p26+epoqWE7fBG/jpSSPXrNkvE8
- N0LPr9ll7usEul4bSWf48Mko9DwYOBWC2IDjO6WjkJfnM28Dk2cKDO9UE8iC42p2RfBae+FZt88
- 6fbwgNuzR84w8Qig2mu4VEY+10CxhBs4B+MJoPOm9wRbPIl6f6lSoJP8qpvKfmEKOhebB6UI/Za
- BnTSAx5nmkxfhFIeEF605P9Wn/XMUWyROrvIxXzdbXmodCskURFIexm+D3qtOVKFbs/laAiG614
- 18vCvat/UhZ9R8rwL4g==
-X-Proofpoint-ORIG-GUID: jxPi3LKPbFj4QvC6Ms7r0r-sH3yGugOe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-13_02,2026-03-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 impostorscore=0 clxscore=1011 malwarescore=0 phishscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603130078
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 5/9] selftests: ovpn: add notification parsing
+ and matching
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Ralf Lici <ralf@mandelbit.com>,
+ Sabrina Dubroca <sd@queasysnail.net>, Paolo Abeni <pabeni@redhat.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, horms@kernel.org
+References: <20260310145006.30858-1-antonio@openvpn.net>
+ <20260310145006.30858-6-antonio@openvpn.net>
+ <20260311201738.20d816bd@kernel.org>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <20260311201738.20d816bd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Mar 13, 2026 at 05:47:37PM +0800, Jinjie Ruan wrote:
-> Use the generic TIF bits defined in <asm-generic/thread_info_tif.h> for
-> standard thread flags (TIF_SIGPENDING, TIF_NEED_RESCHED, TIF_NOTIFY_RESUME,
-> TIF_RESTORE_SIGMASK, TIF_SINGLESTEP, etc.) instead of defining
-> them locally.
+
+
+On 12/03/2026 04:17, Jakub Kicinski wrote:
+> On Tue, 10 Mar 2026 15:50:02 +0100 Antonio Quartulli wrote:
+>> -TEST_FILES = common.sh
+>> +TEST_FILES = \
+>> +	common.sh \
+>> +	data64.key \
+>> +	tcp_peers.txt \
+>> +	udp_peers.txt \
+>> +	../../../../net/ynl/pyynl/cli.py \
+>> +	json
+>> +# end of TEST_FILES
 > 
-> Arm64-specific bits (TIF_FOREIGN_FPSTATE, TIF_MTE_ASYNC_FAULT, TIF_SVE,
-> TIF_SSBD, etc.) are renumbered to start at bit 16 to avoid conflicts.
+> needs alphabetical sorting
+
+Dang.
+
 > 
-> This enables RSEQ optimizations which require CONFIG_HAVE_GENERIC_TIF_BITS
-> combined with the generic entry infrastructure (already used by arm64).
-> 
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> ---
->  arch/arm64/Kconfig                    |  1 +
->  arch/arm64/include/asm/thread_info.h  | 62 ++++++++++++---------------
->  arch/s390/include/asm/thread_info.h   |  7 ++-
+> Please do use/steal the script from NIPA that validates the format of
+> Makefiles, cause it's really easy to make a mistake on these
+> https://github.com/linux-netdev/nipa/tree/main/tests/patch/check_selftest
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com> # s390
+Thanks a lot! We were looking exactly for those.
 
->  arch/x86/include/asm/thread_info.h    |  6 +--
->  include/asm-generic/thread_info_tif.h |  5 +++
->  5 files changed, 38 insertions(+), 43 deletions(-)
+Regards,
 
-FWIW, I guess you want to do the same for loongarch was well?
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.
+
