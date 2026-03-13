@@ -1,218 +1,144 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C233A1D02
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 14:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773411641; cv=pass; b=PWHfK8RcK3mK8C45zD4fyizoxpV6wyyfbF5k/VCcJt1QYNYS+JXEwbM1t8tCTokF/rbII21QOyPJKlkuq1jFMgXJ9Pk48QPjRTjnEwkxJjRl7KxQ1+EanhzsUM2Qd/Avh/XIWLZuR5TgalOObRo53kMN0bNy4JhddKJiz+44nmQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773411641; c=relaxed/simple;
-	bh=BcGrGeHXe2jO7d1iGFXYIT6nIOBt21TcAx873DkzSmc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ldYRdrR64u3c43AEjyt52yfknuil3e371hT//exwf3NgPqAIFnFFW5G4YWw4HKF6k9RrYtG2MBwHC0eIJCGV8fr+B5cgoMv3MGe/Gircju3n8xVOrcxoXo4s7FMdjSXWcfNtp1hh4CJZexnrp6lNrGXp9hU+gXQU8vOlLw/1bLs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kG3HQbER; arc=pass smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2B13563EB
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 14:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773411744; cv=none; b=FwLIyS8pBmllomaJ8lmGpyMLV6lvBr5NwVtZVGozuoP5uS79U451tUgL/55RZDKrlOANOgAM9M0TxMa9n309EGhpdQ3WColpMe4jB3Ose2LkxEEdLLnxWVkj825NyQ7uMWGjXQcJkRdT/RPkLeGUAADToba+qkzQ0fnNmd+UitI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773411744; c=relaxed/simple;
+	bh=qs+FeU50DrlvqhF27orPwTWo+s1bAUOoX6Y3YglXETc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=TeQGmh6Ni5TqfL/5ecP4eFqa3ov850Mohzq2cFHI0nPYBvjBXU53y9dzbCUtBhWOgeBxCS2vsNIGUcrq5yt6/Jjzf4IftrZH6mRzkwrsX3osb4BClukkDoecpO3FoaVJSkC/vm1yMb5Vg99yRXac9zwMhQbj28iKF9wGg9+LuEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=csiaSIRJ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=h+9rvb2L; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kG3HQbER"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-4327790c4e9so1763838f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 07:20:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773411637; cv=none;
-        d=google.com; s=arc-20240605;
-        b=D82RhNjtNuqjnJ4jug/xua00p8zNSOl2KLmI+SORROurg9yX5pYGp+SDOaTbbhQFXV
-         LwA5sDJi65AOF4PdSd9vM8CGnxR5gR7VYxGzA0JrrmiXbJIAMV4j7apZq2EblZiRwRxY
-         xsAYs8NjRlZExc4oEHeoQGA+3AoC2iTcmhp6e5dGmiiYqkIhrjGIIex2Al6d+QcJN6Sk
-         22iZpRxbL27iL+AEE7Mokvhagsat5vfcJsdO2zTUIiP41ySIheCpR3t9jwCUjA4fszNM
-         XpUb8/Kz6gNP2P/NOqdQbV2xWkUxl4tY6LpJMCfFuB+uqb9UHtRuzwfTWOSpnKfVg/Kv
-         mRyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=bWchfiAssZCYRh2ybEE9+73QVqevcBXDejsJHQ9I4ag=;
-        fh=ryEvKQJoJ23jL8FrEFKMCOMm/6qFisyrDlrOx7M+hdw=;
-        b=R1rTZIYhE170jGsZlBVhBVD3l4irdWCeRr0OvjP7r5RmweewEa/B4COHzfObf1Hpqt
-         Br+uR1I/YrU5N8/kogWD6JDiZc7fQO4HzRqw1i8GpWxWbPAsDpo5tlITBTKsRpioP6Cw
-         C+LNbGf3Uy+PmKC+eLMG9M28/f9IBV/ysDBgoQujnF2cmnV8w8ROrk/Cf4ObLe11osBL
-         oMjbvaRKJjMj0rrXRpZDW65qT3lCmQGMYRNHbgwmukOF1/bgIBjPkKHWrrbJt/kEaVDm
-         fYUgC316xuomktjyWZa55uheE1KK6QWMp3+pfRqGHB0jq4c3ku6F/4cAe9eCtZlPfND0
-         O0Jg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="csiaSIRJ";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="h+9rvb2L"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62DC02Ri4140725
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 14:22:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	qs+FeU50DrlvqhF27orPwTWo+s1bAUOoX6Y3YglXETc=; b=csiaSIRJZfSYLPYA
+	OrDIRC1jhNz96DNbH4FgjgNtXEk06/yjZyfbyDL8yH+010LGfAbN/1SJ3/Po24YE
+	HHlDtbCDvHuxPyoZitbxXcFzqaEzrCFwcNcf3oJGiS4HNZaZC95RC/CVRzgSSrxL
+	n+e3yegRuYAVPYp6fvqm4RDOmCoDhdhByr8kx2p9eOBCYHzb/sQhogV42oFLU8z3
+	W60tQTewvGrjRV+dmK0/cKLFk8fGCQr2uWD39SmQM3gXripaRMy6ucknAoHYm6CQ
+	2UaZksqdljY5jERkLaXws6E57GU7ooZqzWtRe5wlcCO4Uy/dLoO1eWCrs3RAWtxg
+	Ou1FSA==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cvbn29y5g-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 14:22:21 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cd7a25c5a9so1219007485a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 07:22:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773411637; x=1774016437; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=oss.qualcomm.com; s=google; t=1773411740; x=1774016540; darn=vger.kernel.org;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bWchfiAssZCYRh2ybEE9+73QVqevcBXDejsJHQ9I4ag=;
-        b=kG3HQbERLbJYaeuTD9m/kguBCv5zI+Mq+aWyiXKCA3R9iPTVQGA+nuQzt+uyA5O6By
-         M6dRitgyWHk+3zw9mbz157+RGAR2UUZnU+xdTYukCIJfM24F5fr+Bm2BMRsAanZlreJM
-         CJLsihgB5/f6xcAXxGvEjaHb0xeM583mveFAiGBb1Z3M9KovKTRC8M5/uHLG2P2GMJMF
-         mAN54oATyO8LQCn/RQcVEyVpAoT+qHebTROoXCvaHxPj3HM+1bjlqBMIr34Cheho/k8Z
-         3YiBWjsg5D0aOKT4lAb7pERgpoGD7+Kj/lyKWRQobX3/GqM9Ipt6Hf5Bn8ZeyTeMk/4g
-         IWdg==
+        bh=qs+FeU50DrlvqhF27orPwTWo+s1bAUOoX6Y3YglXETc=;
+        b=h+9rvb2LxHk+fo28jtMJLv0o3l/L//rkKb57DKr9ey1s4IKkl9sQhp1gA3qKpkrcCH
+         pB1g4M1EommcFWrl2KuFZd48tyo6yJsBFeSY6QOH0MXgmzeHTS+Fyugp81+3ktZzSdBX
+         KPcjxQRmjFI82VC/YwuzoA81clw7OtwUU23v6BkD7/o3RH4PUexn9RouFBYPNSRDbEza
+         3tJC4K8u10/CO8hIVWuAZYh6oE7+XUE8ARd1GC0++1O1aiuS8G2BOADCpxhgyihnLzg8
+         /H4s0HqSp/Rai0sHD2Re5WcTWmFTTPhvkDVcVnmIipakfue4O8HgyDZEJJVXKupVRVW1
+         7gsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773411637; x=1774016437;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bWchfiAssZCYRh2ybEE9+73QVqevcBXDejsJHQ9I4ag=;
-        b=cNZG87/gBaOWgYtqmhD7EJWqWsyQpbHd0vXzmcC5mVGfYr3zTAdozdfdssVm1B7Wuv
-         ryYJaS6s2SPZ8mCdkkfZj8+m6xgveC3vADJPIp9FA1TkrI1d+bpDFmmVWzf60dci+O9S
-         YOkjFr/E8AxSOYNOzoUaXZpGn8XsuyAQZU5bKKrM/33vbKMfzPf8q4+WkVhFcYjKtXdJ
-         MI+Q4Z03iz9tsdAA1dmT+ZwOXGWRDsYdzqHNhisaQD7gDTwsoo9dofNv1C3kDx4p2U98
-         ChY7/sCURa4OAlnE5+5Ng+Chl1DXb1SplFcAuWw2ymd5JOVefqSR77vSav5G/HCZldvi
-         H2LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBRAzbzbpLknmbyj2ZR8dvOSIbas7E1y6CHPs62EAuwlGFFWqXobjA+7hOE6gaFRL7QtASfsIPsplQl0PM7pE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdWw+OqCwfkjcv6f8TepvgLZDqwkZvrYtV4PW0jmGF5dbTXWGy
-	ho8SNOOZfjoMA0tb/F9IJMx390ir0lk9JqNqCsdhYD720EYbV0i5PqSgKA5BEuZvRZjpJhxey+X
-	MtUAuzKxf1v2+VyaEbzRRXd1R7//Sy44=
-X-Gm-Gg: ATEYQzx8nsYxdi3OpbmDX8RXKWj5hqN5T6qg4QB6AxY6yk8fjo+9HTpzH0L8MafLqzt
-	oHFN6HUPXjwDSc990/pCq+epJIbCTcn0tq4g6H2RePqHhTqqW4M7ItmZOUQ0oswuwK0u0htja/w
-	ZNTa74rLu0WeuTfD5AzhVJ1tOFAVr4wL95xBWJqSLGq6QHIxjxE+mEZE6wlJG6w44UPcuIZsfer
-	3GnCePxHhm8b0mg69ShO4Lm7KSA9CCQvS+N5W5c5lIuP7kNUWZTkChfBVEHwjxZSIKiTuMQeGFc
-	I7i39cfjsj7r3veV28wNNsdkdFI8VQ7x0dehK5yFp05IeBWiMqPT6I4BgggnBljCMJc=
-X-Received: by 2002:a05:6000:186f:b0:439:b629:42d7 with SMTP id
- ffacd0b85a97d-43a04dcbb39mr6923759f8f.46.1773411636611; Fri, 13 Mar 2026
- 07:20:36 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773411740; x=1774016540;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qs+FeU50DrlvqhF27orPwTWo+s1bAUOoX6Y3YglXETc=;
+        b=oOMNx45zWZ+BpRna76KeP5/iz+2h5r/QVZQykrpzLvZ+337X5EzeVuWa244LVUBPQm
+         /6qNcze7xbAYyrAm3sEDZq6ApbVJSGCDgwVkOFQIZ73m25jNIMQ3v91MleblQSxODa6O
+         85e4fHCJCLAuUEydLJfURXL4eE5sHfEWQuYnReTW3TrvZh0B0eVDuUe8yqJsmhTF+9FQ
+         x6U+6uv7U3fE7qNBLbKWWZnl4UWcvIjekGi71UtNspCuHJVVH7jX6DzRrhV0jtZT8WJ2
+         SlGQ5lbFivQOkzHlAZl6PK9BPptcpBNeksxjCd/m6VgKOEl8BgdABkKpcyiqGbOBFOlZ
+         nFPw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4rAlD5oqnLTTL8obMBRJBVqZuaZUlkUk3KqVwyn6I1U9s7JM2k/Y+IbAtTwFIfTemWYG0hT+a1UYCIk28Fsc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxpp+wtNp/65a5qtZ124APZbQgITMpAypw6dcFrVgzVw+SVeQjr
+	xvmoD8bmQteYBidLbCjJOrAW3PZ8SkvSMU37M0wWbh7jO19NXUozISsUm3uu+jkTRmBHwdsRg1J
+	2oJn1AaTLMWgwdw8qkBp9EZXOK2yk/k6ZyzbyjByprh42S3Dlus+sXHBOlUsHHau0dSfnI3Q=
+X-Gm-Gg: ATEYQzy1THr+bj41NG5sCGAglIAWmgeU2uVSUGfbUqf/sRvEr1jsmOsF3/3raEkyZXl
+	w+2aj21Au7PQ57+F4w6LHnVjm4US/g1dgP5025nU3GuV3RUQRvT9r+52SCtjnYZdMFQus6wikWD
+	2sCx4MkTEFm9aXBRZ3LZQOhwhRr3NtFy7UazeAx2TtrbsUjo6THYcypXWgRMiUSj8OjP38qTsld
+	V1so9BkiPRaqiQlG8/VhUdEykYWJVf5S+DmUUL8CDGt7DDjSTN+wHxPFRYNxdO39mecizlW1e0e
+	vj2qVunck2gqqWhkGCAyXiwuBnVJIsZeHIDTOZyI/zzsOdbswuLIWs5K5PMzxqEaxfuFFeCrVrX
+	Az3/Fi5QiAQ7NEHUuhZYGsRqXa3h8Y7g0+PkeOEGwA8ErIVlmzPQQzaTxPFVK
+X-Received: by 2002:a05:620a:909:b0:8cd:b620:9be2 with SMTP id af79cd13be357-8cdb6209c9fmr328968985a.38.1773411740459;
+        Fri, 13 Mar 2026 07:22:20 -0700 (PDT)
+X-Received: by 2002:a05:620a:909:b0:8cd:b620:9be2 with SMTP id af79cd13be357-8cdb6209c9fmr328963685a.38.1773411739954;
+        Fri, 13 Mar 2026 07:22:19 -0700 (PDT)
+Received: from localhost (ip-86-49-249-15.bb.vodafone.cz. [86.49.249.15])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48557a73494sm25547505e9.13.2026.03.13.07.22.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2026 07:22:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260312080113.843408-1-hbathini@linux.ibm.com>
- <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev> <ec4e7ff6-55e3-4889-b507-fee71fab99f8@linux.ibm.com>
-In-Reply-To: <ec4e7ff6-55e3-4889-b507-fee71fab99f8@linux.ibm.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 13 Mar 2026 07:20:25 -0700
-X-Gm-Features: AaiRm523Q6Wteh_7o3CKQT5m-0--e3n8H5bS0Ist7DgivFI_rPZYAXRBWJjbods
-Message-ID: <CAADnVQK--hKVH=FBMLiF7io2kBLfqwkXM9porBS1T--og=R4Yw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: improve test coverage for
- kfunc call
-To: Hari Bathini <hbathini@linux.ibm.com>, Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 13 Mar 2026 15:22:17 +0100
+Message-Id: <DH1PZT7KCZE2.1LC6II43GX0XT@oss.qualcomm.com>
+Subject: Re: [PATCH 04/27] RISC-V: KVM: Introduce common
+ kvm_riscv_isa_check_host()
+Cc: "Palmer Dabbelt" <palmer@dabbelt.com>, "Paul Walmsley" <pjw@kernel.org>,
+        "Alexandre Ghiti" <alex@ghiti.fr>, "Shuah Khan" <shuah@kernel.org>,
+        "Anup
+ Patel" <anup@brainfault.org>,
+        "Andrew Jones"
+ <andrew.jones@oss.qualcomm.com>,
+        <kvm-riscv@lists.infradead.org>, <kvm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+To: "Anup Patel" <anup.patel@oss.qualcomm.com>,
+        "Paolo Bonzini"
+ <pbonzini@redhat.com>,
+        "Atish Patra" <atish.patra@linux.dev>
+From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?=
+ <radim.krcmar@oss.qualcomm.com>
+References: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com>
+ <20260120080013.2153519-5-anup.patel@oss.qualcomm.com>
+In-Reply-To: <20260120080013.2153519-5-anup.patel@oss.qualcomm.com>
+X-Proofpoint-ORIG-GUID: 7Jxud5LAzYwao3nRjkjaBYGxhXcUsG7X
+X-Proofpoint-GUID: 7Jxud5LAzYwao3nRjkjaBYGxhXcUsG7X
+X-Authority-Analysis: v=2.4 cv=ZKfaWH7b c=1 sm=1 tr=0 ts=69b41d9d cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=fuErIE+P63Icv3tqjtEZBw==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=M51BFTxLslgA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=EUspDBNiAAAA:8 a=sIBLlZgNAvny2aHwhmQA:9 a=QEXdDO2ut3YA:10
+ a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDExNCBTYWx0ZWRfXxShP4zxr+X4Q
+ utjtgF3QTbR9ppi54XxLNeTgzz1SrHRu7AY5YGNkRjZLlUcq+X/9SC/mA60A7cbzu/iJVn0P5+U
+ 3W6zmnx7jhTYM/ybFkGsGxw8okQO9czcXGb+ckPXATwLuJjsbCfwovthy4x005fbdEY/lrBhvQX
+ VSzm323r0dC3LTTlW7btL7YDC/3YTJCBMchH/RNp/qPlKbNphZIsJoE+jeeVqWKhxUhpC14LhTV
+ phY4ZOdexaPSByssfT980gGBT1HE6CKmlvARFQa1SIzz2IY+Nj/xUK74ErWgtQnWJU2bnhmNz0x
+ 5yOz8iEKDihS4I4yEQPNXXX88hPSUFGprcwCyEV0G4CYJosS4BpUbsy0NUmQuVUzzBFF9YVL0vy
+ SfSbCKZ1W//FKRMWMAvAF0fUlms6VQydI6SNT7RQnziH3ve0nIqnMF8ELGsdjpFi4CHU5/9bTXE
+ FfyCt/pd8sXKVeX2RVg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-13_02,2026-03-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 spamscore=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 priorityscore=1501 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603130114
 
-On Fri, Mar 13, 2026 at 2:30=E2=80=AFAM Hari Bathini <hbathini@linux.ibm.co=
-m> wrote:
+2026-01-20T13:29:50+05:30, Anup Patel <anup.patel@oss.qualcomm.com>:
+> Rename kvm_riscv_vcpu_isa_check_host() to kvm_riscv_isa_check_host()
+> and use it as common function with KVM RISC-V to check isa extensions
+> supported by host.
 >
->
->
-> On 12/03/26 11:52 pm, Yonghong Song wrote:
-> >
-> >
-> > On 3/12/26 1:01 AM, Hari Bathini wrote:
-> >> On powerpc, immediate load instructions are sign extended. In case
-> >> of unsigned types, arguments should be explicitly zero-extended by
-> >> the caller. For kfunc call, this needs to be handled in the JIT code.
-> >> In bpf_kfunc_call_test4(), that tests for sign-extension of signed
-> >> argument types in kfunc calls, add some additional failure checks.
-> >> And add bpf_kfunc_call_test5() to test zero-extension of unsigned
-> >> argument types in kfunc calls.
-> >>
-> >> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-> >
-> > LGTM with a nit below.
-> >
-> > Acked-by: Yonghong Song <yonghong.song@linux.dev>
->
-> Thanks for the review, Yonghong.
->
-> >
-> >> ---
-> >>
-> >> Changes in v2:
-> >> - Added asm version of the selftest for consistent testing across
-> >>    different BPF ISA versions.
-> >> - Added comments clearly stating the intent of the test cases.
-> >> - Updated sign-extension selftest to have additional failure checks.
-> >>
-> >>
-> >>   .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
-> >>   .../selftests/bpf/progs/kfunc_call_test.c     | 98 +++++++++++++++++=
-++
-> >>   .../selftests/bpf/test_kmods/bpf_testmod.c    | 54 +++++++++-
-> >>   .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
-> >>   4 files changed, 154 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/
-> >> tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> >> index f79c8e53cb3e..62f3fb79f5d1 100644
-> >> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> >> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> >> @@ -74,6 +74,8 @@ static struct kfunc_test_params kfunc_tests[] =3D {
-> >>       TC_TEST(kfunc_call_test1, 12),
-> >>       TC_TEST(kfunc_call_test2, 3),
-> >>       TC_TEST(kfunc_call_test4, -1234),
-> >> +    TC_TEST(kfunc_call_test5, 0),
-> >> +    TC_TEST(kfunc_call_test5_asm, 0),
-> >>       TC_TEST(kfunc_call_test_ref_btf_id, 0),
-> >>       TC_TEST(kfunc_call_test_get_mem, 42),
-> >>       SYSCALL_TEST(kfunc_syscall_test, 0),
-> >> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/
-> >> tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> >> index 8b86113a0126..5edc51564f71 100644
-> >> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> >> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> >> @@ -2,8 +2,106 @@
-> >>   /* Copyright (c) 2021 Facebook */
-> >>   #include <vmlinux.h>
-> >>   #include <bpf/bpf_helpers.h>
-> >> +#include "bpf_misc.h"
-> >>   #include "../test_kmods/bpf_testmod_kfunc.h"
-> >> +SEC("tc")
-> >> +int kfunc_call_test5(struct __sk_buff *skb)
-> >> +{
-> >> +    struct bpf_sock *sk =3D skb->sk;
-> >> +    int ret;
-> >> +    u32 val32;
-> >> +    u16 val16;
-> >> +    u8 val8;
-> >> +
-> >> +    if (!sk)
-> >> +        return -1;
-> >> +
-> >> +    sk =3D bpf_sk_fullsock(sk);
-> >> +    if (!sk)
-> >> +        return -1;
-> >> +
-> >> +    /*
-> >> +     * Test with constant values to verify zero-extension.
-> >> +     * ISA-dependent BPF asm:
-> >> +     *   With ALU32:    w1 =3D 0xFF; w2 =3D 0xFFFF; w3 =3D 0xFFFFffff
-> >> +     *   Without ALU32: r1 =3D 0xFF; r2 =3D 0xFFFF; r3 =3D 0xFFFFffff
-> >> +     * Both zero-extend to 64-bit before the kfunc call.
-> >> +     */
-> >> +    ret =3D bpf_kfunc_call_test5(0xFF, 0xFFFF, 0xFFFFffffULL);
-> >
-> > Can we just use 0xFFFFffff instead of 0xFFFFffffULL?
->
-> Alexei, can you confirm if I need to respin with this change?
+> Signed-off-by: Anup Patel <anup.patel@oss.qualcomm.com>
+> ---
 
-I prefer the explicit type when the constant is on the boundary.
-
-I was about to apply it, but it fails on s390. See CI:
-
-Error: #160 kfunc_call
-Error: #160/13 kfunc_call/kfunc_call_test5_asm
-Error: #160/13 kfunc_call/kfunc_call_test5_asm
-verify_success:PASS:skel 0 nsec
-verify_success:PASS:bpf_object__find_program_by_name 0 nsec
-verify_success:PASS:kfunc_call_test5_asm 0 nsec
-verify_success:FAIL:retval unexpected retval: actual 6 !=3D expected 0
-Test Results:
-bpftool: PASS
-test_progs: FAIL (returned 1)
-
-It doesn't look to be endianness related (which is often
-the case for breaking s390).
-In this case it could be an s390 JIT issue?
-
-Ilya ?
-
-pw-bot: cr
+Reviewed-by: Radim Kr=C4=8Dm=C3=A1=C5=99 <radim.krcmar@oss.qualcomm.com>
