@@ -1,132 +1,84 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213D222B594
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 00:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F8A1DF248;
+	Fri, 13 Mar 2026 01:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773362197; cv=none; b=IcK6gI8B8V55U0+Em1aARJrTKC3FuZ1AvLC8vlBczP2Sh+KPvHRYPCeCdMnhHPaQNYq7p3mIRcX5eU8emJsoPBdO2mA37+k6E78h2IdwIUFOqHMjE5EwATWS/HcWYoTvi/iO/H2aotYHc2Efap1UrpE90HVvlWt0CIWhkhDC/sQ=
+	t=1773364816; cv=none; b=ZM8MTzBHkANa1IwTsTc5UrywUJDX7cg2DkNbJYBFMhKCxNlnyj2ObKPn+olFiUruGAFE6rixNwhTvM6Upp+mMfQDe7KMD1hUv8/ZjcTuPa6bRiURWzSH9hT34kdXIg4eYNOCyTG/p+MpMsayixaO2+gl79j2yqKaV4ycxExMN2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773362197; c=relaxed/simple;
-	bh=9oIvEgCdqEl+AGZYDSEAFBDA6RTB3elZif62x1BQroI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Noit4/C6EKC+RVoAqWrttf5mkOi1AMezLgHow6gNFpaXb1r5QmdR94WYKC0SjWmcj5El2iBkFgRJdM8kk/wC1QDkSA9TWVZq0usfJ/8i8n7HLYFD1tYsCIp6B9OTAFEQva7LqbwLhya0WS1jPBP4eoLefAwIMyy3Iyz1xlb41ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tbr6d3rA; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1773364816; c=relaxed/simple;
+	bh=P4ZEgW86XX8zZ5kp4HAscbCZWOXTfT0ha0aGANsnC2A=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PmUzYmXzgoaDDc8kweESKWjHP9r1nQeaJywEMOt7wHG5oXMx3AUgsTyQ2i5++dSnNseodbzYrmLOZGcUF4GDY5+RI0IQ2g2cdTzbS0vv8mTSOxw347qA7rPpW+ezAREY4c/NzHNXWRySPsSLlX1NeSdIhhlNsFLRkht0GMQsmtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kE+/Pp9x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tbr6d3rA"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-358f058973fso1725260a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 17:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773362195; x=1773966995; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=msDdWC7KsVzGR7+a7KYP2KJHZfc1KrX2g6o6c66TQ0I=;
-        b=Tbr6d3rA2menzviTRGUxxZ/si/4YqVxHLGAIIYU6rftjAVvS4DqBQFBP+SNle6fuGw
-         BH61TbGgpLa0hrFoPxm7W2WyN0FxrzKw5wj6dfMQ6molTQcALy10kT/SA2kdGdB487OM
-         8m7OKaFZjLA3qfFIr9iGtEhB1zTiFJOGY7lM8+lbg31xmTBOytAlDlV1uiFKnIz70yoO
-         ymOdFRtG1OnQYqpdEXjqrUdzwgSeY4IuS9YuG4qXBbv6KclUNvdx6yBQ3N65rfDmFUBL
-         xSd4h7fnjC7mYOcv61a9sHykaFyLshubWOaXp6RJ/WzVOFLy2EBwWmrMUFPW/ye2Groq
-         wY4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773362195; x=1773966995;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=msDdWC7KsVzGR7+a7KYP2KJHZfc1KrX2g6o6c66TQ0I=;
-        b=flor7FRuApKhMtNi2ePIQQyxcwzZYqGs9vJChxWGINEFCUlu5RpO49FXXff1u3LsWs
-         praj8tH1Yj46VwDkJQN0Ma0Cd2D0fn4B0PjFojH+2ngTN0nzXq5pTPzJ4aXY/6QdPmiT
-         1PjfhREfrwI3v7Jp8xzD/eyboJQ8yT/OqiUxaAumRwxEMNoYq+826achqR2Q3loYI+13
-         6lgbk4f29L2eQkiwNc/TJf5RPSlITjXQxIhyB9+TpsNoRUeWZJRZ3ftSKxlf9PR5Yl9m
-         1xJ7oYH5sJ9ANyoYfDLomWciDB9zJLQVwLOo9jfPB7YNH9CXLukbHXEBMRnPVe6XgurS
-         HQlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVBk1evgG34rxG7m7rrFtLC+cIvWfKTvPE7qU77g2f5ptJ/Hr8hSQ07S5bZkUzrl771G4wOd2eXKts/0L8hYlM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnrEoSpx0jvAjNq8DgqibijxnrdDgABoPwXCvkiuKDob7Kx9hm
-	chVieXYNrfHY5ltW3Kz4zPZQExAIimjBoinUTyrUXJeHbnRBmg4Sxr1W5vgKDztcQF/rgVGdCNl
-	BmK1XHw==
-X-Received: from pjdd8.prod.google.com ([2002:a17:90a:2c8:b0:359:8f01:6c5a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:28c4:b0:359:fcba:6517
- with SMTP id 98e67ed59e1d1-35a21fd7ab5mr1194105a91.19.1773362195351; Thu, 12
- Mar 2026 17:36:35 -0700 (PDT)
-Date: Thu, 12 Mar 2026 17:36:34 -0700
-In-Reply-To: <CAEvNRgFUc+9xCoN9Yo5NThHrvbccWAhPwp9nNM2fvx7QqrcJsg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kE+/Pp9x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11225C4CEF7;
+	Fri, 13 Mar 2026 01:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773364816;
+	bh=P4ZEgW86XX8zZ5kp4HAscbCZWOXTfT0ha0aGANsnC2A=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=kE+/Pp9x6ygFSEREwaPZXLi1ydHmkkhiY9z591Sz8i1l44GmEt9dtWIZ2NLGoXp6N
+	 APgkAugetZaL2e+LmL6N9EwENbqIG0NsSHKIsPTaDbGOuqQBvyDw+Gbd+dRP//cXOJ
+	 OjlxDibJXe97UuXvC43ag1Ia62DSOf03qMf7a1rlu/7mGJ/JnXmeW5RSirOBSwsUUG
+	 Kjd5k9sneNUzEXxCfrHiwaQlNG3LoBaWoB35f03aIS+4L91Ti1ApcCrB7DLuHlt6yI
+	 bSUSYBC07fgcfS3EHTDkyi3pzrAxy4G1xttW6zJY2HpNXvV6PZfPKDLz7tgusHpcDw
+	 /1oj+oWlBx9cQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CF803808200;
+	Fri, 13 Mar 2026 01:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
- <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
- <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com>
- <CA+EHjTy2urW2Tj5czQDKUHdri7FCLfw2mafTgmmtFs+-7ueoiw@mail.gmail.com>
- <abLfWHf89TxWqeGZ@google.com> <CAEvNRgFUc+9xCoN9Yo5NThHrvbccWAhPwp9nNM2fvx7QqrcJsg@mail.gmail.com>
-Message-ID: <abNcEkNseDEBIhop@google.com>
-Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de, 
-	brauner@kernel.org, chao.p.peng@intel.com, chao.p.peng@linux.intel.com, 
-	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com, 
-	david@kernel.org, hpa@zytor.com, ira.weiny@intel.com, jgg@nvidia.com, 
-	jmattson@google.com, jroedel@suse.de, jthoughton@google.com, 
-	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
-	mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
-	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, shivankg@amd.com, shuah@kernel.org, steven.price@arm.com, 
-	tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz, 
-	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/4] genetlink: apply reject policy for split
+ ops
+ on the dispatch path
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177336481130.624594.17160246209499400936.git-patchwork-notify@kernel.org>
+Date: Fri, 13 Mar 2026 01:20:11 +0000
+References: <20260311032839.417748-1-kuba@kernel.org>
+In-Reply-To: <20260311032839.417748-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Thu, Mar 12, 2026, Ackerley Tng wrote:
-> Sean Christopherson <seanjc@google.com> writes:
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 10 Mar 2026 20:28:35 -0700 you wrote:
+> Looks like I somehow missed adding default reject policies to commands
+> in families using split Netlink ops. I realized this randomly trying
+> to dump page pools for a specific device and always getting all of them
+> back. The per-device dump is simply not implemented so the request
+> should have been rejected. Patch 2 is the real change, the rest is
+> just accompaniment.
 > 
-> > On Thu, Mar 12, 2026, Fuad Tabba wrote:
-> >> Hi Ackerley,
-> >>
-> >> Before getting into the UAPI semantics, thank you for all the heavy
-> >> lifting you've done here. Figuring out how to make it all work across
-> >> the different platforms is not easy :)
-> >>
-> >> <snip>
-> >>
-> >> > The policy definitions below provide more details:
-> >
-> > Please drop "CONTENT_POLICY" from the KVM documentation.  From KVM's perspective,
-> > these are not "policy", they are purely properties of the underlying memory.
-> > Userspace will likely use the attributes to implement policy of some kind, but
-> > KVM straight up doesn't care.
-> 
-> Policy might have been the wrong word. I think this is a property of the
-> conversion process/request, not a property of the memory like how
-> shared/private is a property of the memory?
-> 
-> I'll have to find another word to describe this enum of
+> [...]
 
-Or just don't?  I'm 100% serious, because unless we carve out a field _just_ for
-these two flags, they're eventually going to get mixed with other stuff.  At that
-point, having a precisely named enum container just gets in the way.
+Here is the summary with links:
+  - [net-next,v2,1/4] genetlink: use maxattr of 0 for the reject policy
+    https://git.kernel.org/netdev/net-next/c/b93ec16310b4
+  - [net-next,v2,2/4] genetlink: apply reject policy for split ops on the dispatch path
+    https://git.kernel.org/netdev/net-next/c/e3a5b7f8ef2a
+  - [net-next,v2,3/4] selftests: net: make sure that Netlink rejects unknown attrs in dump
+    https://git.kernel.org/netdev/net-next/c/e911be835432
+  - [net-next,v2,4/4] selftests: net: add test for Netlink policy dumps
+    https://git.kernel.org/netdev/net-next/c/c1f9a89b0c90
 
-> I see you dropped any documentation to do with testing.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Yes.
 
-> I meant to document it (at least something about the unspecified case) so it
-> can be relied on in selftests, with the understanding (already specified
-> elsewhere in Documentation/virt/kvm/api.rst) that nothing about
-> KVM_X86_SW_PROTECTED_VM is to be relied on in production, and can be changed
-> anytime. What do you think?
-
-KVM_X86_SW_PROTECTED_VM should self-report like all other VM types, and shouldn't
-support anything that isn't documented as possible.  I.e. we shouldn't allow
-ZERO on shared=>private "for testing".
-
-What I do think we should do is scribble memory on conversions without ZERO or
-PRIVATE, probably guarded by a Kconfig or maybe a module param, to do a best
-effort enforcement of the ABI, i.e. to try and prevent userspace from depending
-on uarch/vendor specific behavior.
