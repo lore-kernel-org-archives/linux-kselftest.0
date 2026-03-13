@@ -1,105 +1,272 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010066.outbound.protection.outlook.com [52.101.201.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBA03A1A4C;
-	Fri, 13 Mar 2026 15:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773415170; cv=none; b=LQ4F24YbccLOIif2nvzOb6OBhjGdYTFwBqMw7apGdfBmcO/O60WxBSK+ASfxugyo6waBThnBcAdLidJEHlQniDQSMpLL4RjSVpWDU12LEeEgHDtwIz+UCjfm1ZUlVFSSiqVCszr5SMuvuBjk4tmBJsWvsd1PVN1zUrMZAZOE2TU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773415170; c=relaxed/simple;
-	bh=upgXH5FQcgGip5m+WEM2EL5BEmevnHCGmPvU2Fnkj+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZmB4cC93of7q63oj41+w4yKL8AwUP+KEo6bpN9kHcq6XBbb2jfb0oBIwm1a9MTPR1XOldHeUUiYomr4Bi2kEXjOkJgvcIadvoedfbEKySpy3UuNch6EBp/yRuv/vYrp7/EJDPUsg3tDIzr8lPvRk/ZyuwucDNPB+lQT4HWd/Hoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ej3fenwU; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C161438F649;
+	Fri, 13 Mar 2026 15:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773415666; cv=fail; b=TdLZg//x7AMLdpGEknZ64irXBBG9B409ymxL9/LmtkRRdJgtdLPpi0VgLMCgPyY4vVlBahJ7eiTJc/u6POSfJw2WitXVF9bms3fVvpN2nkt5WwBECwXMk9yzrxnAoDNwy6fNG4FNuR1LgMF5yPsaClXwUzbZu/4/0v8fQNvTX2A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773415666; c=relaxed/simple;
+	bh=fgSXU3wTM1xVC958JjPomg+AihK8toBIZPq0ZhsFjsY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qxRk2bqeCG3f0XuIC39l9K7ACY/eg0pTdBJtC1li+u8KscuhoQuZPb2IqI2NwWcZFUuNZ2aDpqXwj0wfiNlx3+jISTOEPc07CKBUMP2jlLhVD1PJzOqchh2ZCxvRz9gC5Fm9pQmnVLlT0h/LLJfs0VhL9rkLOOKJVvc01PFT+Vw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=rRDYtP+W; arc=fail smtp.client-ip=52.101.201.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ej3fenwU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E268C19421;
-	Fri, 13 Mar 2026 15:19:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773415170;
-	bh=upgXH5FQcgGip5m+WEM2EL5BEmevnHCGmPvU2Fnkj+0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ej3fenwU7ZNxV+t8CeOoTK4z/PpDPzKZ2CWbxzdLP9h6tNFm0kvHP4tsQJTZ7eiqP
-	 tksjxO2fZew7oWFELdX+xngRg9cVlsqinaiD9zRwBBSDq3mC/RIFG+OzXsP0fdcI6B
-	 bDrdJWwspTjUDePvf+hbAfYUqT84CQ841Xhea0gA1n4zQPduJjWok+KVDJ2DAgRBTu
-	 q7/MWBaxIx9teU4VNzGwYuXE5duGq/tAn8O1wEXPC2PglMw3kFvp4jq4/2VMm39zhI
-	 eG2C0mgrRSvZqyBxqizbILdhryeIMHrruyob2NzwYCuLyCNJGKXkXcvLV2n0npPibJ
-	 NI+UgubaEer2w==
-Date: Fri, 13 Mar 2026 17:19:20 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Chunyu Hu <chuhu@redhat.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
-	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
-	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-	baohua@kernel.org, lance.yang@linux.dev
-Subject: Re: [PATCH 0/4] selftests/mm: skip several tests when thp is not
- available
-Message-ID: <abQq-Mt0p3vz5rQm@kernel.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="rRDYtP+W"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XatkMuL9wfR+LxG4ZMysbxmp/ualSWPUCgEikCwVafle7bril0EUCoIhYhe9s/A1tmR4Z17fx3hJvT2tsSp/cvXzKiTtSy4QOA6WzlDn5fgmUM7kqKf1AvmSGdBS3eYB+4UjGgN0yogg8Udy44svh2+WYNwlZtRmUFmNOYeGdyR9KjqX3WRV2xCHqwe/VUdQodpcrUZmqZacNtWTudu+nvdviqkLfXHXifGNRPk9Bp6LCEKq0NuMk64jQirP+AIqZChwU/7rvCoIpWj3OGKH7GMdUnRRambhIVeL/muB05/2uwqq3Irj3lwHOd721+JffrR3ENDnfwyZrwmfL58Hdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jqXN54q+8fQ5y3QlTp72ArBpHFjr2fC069vojlgOKoU=;
+ b=gLfBQFssWvgjSoIdLpYaVD0O9/TRML2zAAxHoFA1LXQUawJRP+hNwClOliW+0DpRJy6+1ynnN3H/I7qWL9fHeOhuZhKRprsfnCrA7hl67pg9nIgXeGpm3+R+gC69E7X/KYVnTvZhhgJ6wLVn6mupi8Ub9gGPjkWgkrhAoq79j/R+e+P60tZKQNh+QHLIpczz17bdOP7jHaMlhXdZG5NNs57mHFOlKp317wBTnMMPEqrYM3O5aolfiOPY4v5bCeI/kt7ZYTU2w1KWdL06ryVX5dO4T4JvyOqjIzNY2IY9Vs8c6iKNEmVkyKHPegxmCxa29zkzYTzH1MF23ulyDlcFdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jqXN54q+8fQ5y3QlTp72ArBpHFjr2fC069vojlgOKoU=;
+ b=rRDYtP+W93wjTnx3wDKdeCBTykcFBu9cA4R7dba+hL3I8IQ6cKZtPssUKWgwddhAvcv50pMnlodWzQlarEnJoavui7X/lp1vW+rjhDT7v8FOfYr5PnXLmHVQSFJ5X9fh6f9SdzxzI/AWFhwpnzAoF3zlZSxS/PJk8BYR/wEreRIkhi4yBJqe5VsJstlKYXTa20G0Bihs5AUShjviQ6Eqx+ok35avHNhcFrRoEXzO0BaD3jOFAyyxXNr12TDkx5EAhD1MdBmM50Uea3hPKF77AGvaNZhqSSJNPstfHxXl/r2QB9Ym+CzWgxyn3sok5bofFHxM14fnu0ZGaFkiE/wtBw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ IA1PR12MB8312.namprd12.prod.outlook.com (2603:10b6:208:3fc::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.7; Fri, 13 Mar
+ 2026 15:27:37 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9723.000; Fri, 13 Mar 2026
+ 15:27:37 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org, david@kernel.org,
+ shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ surenb@google.com, mhocko@suse.com, baolin.wang@linux.alibaba.com,
+ npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
+ lance.yang@linux.dev, Li Wang <liwang@redhat.com>
+Subject: Re: [RESEND PATCH 3/4] selftests/mm: split_huge_page_test: skip the
+ test when thp is not available
+Date: Fri, 13 Mar 2026 11:27:30 -0400
+X-Mailer: MailMate (2.0r6290)
+Message-ID: <DC5C1A71-2250-4723-9CEF-EDD300DD26E8@nvidia.com>
+In-Reply-To: <abQqLQ_6QqVgzunL@kernel.org>
 References: <20260312114027.634559-1-chuhu@redhat.com>
- <abLHz2qjdeNqdFaZ@kernel.org>
- <abNZmiL2C7KMQM1t@gmail.com>
+ <20260312114027.634559-4-chuhu@redhat.com>
+ <CD772D2C-F489-498D-A61C-9EA0D377B174@nvidia.com>
+ <abQqLQ_6QqVgzunL@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: SJ0PR03CA0296.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::31) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abNZmiL2C7KMQM1t@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|IA1PR12MB8312:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0acdf10f-0dd7-4cbb-748b-08de81150e5f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|17002099007|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	smzV/JU2/4Uo8Su8A9fAPk8l1hIrge89KIp48Ea5+1uZ+Y+GUqDUqTWNfHjSUsoIJ5jSxCxw2IHlDjDlCt+ACrGmgux0v1Xck5gmgMPhO21oB6j+9xs/qZcb5HNBum9GXlcyWbUV8KorsxDOeq7doThj72hnDNhrMLb++we61rs/0C42kSrr/cxG52SQJwIGzIf1SI3bUwewfnci8YrEmcZnOkDteqru4LWJGTgi5reSqpZbRTrUNWtxWWhx8qaasjhSOoQ+CK8q2kAyLAQ4UDtzFsfaS7rB3VNfVU66HYURA/v5hrMBEjdVoLPKqlWIlLLKVsti8r9sM6ez1URv4QqxTb4YuLcl/7v30Fqi37oArbFjFgLLecSUWoKH6g8WpqA8tlFYsRbnxJMKTnRaOCx5RnnbAXqz1yQ526/TsTCPL75o9tOkfspgmjKx7EOlB/tTzW4ukRJqYZd9kmWb18hCz/V3mS283MBwxuQxS4hronrzfnqyS+OAlujyzF8fPu0zqPxtfWGZ4IBWIbgKUIpqEjc44+b+N30AvPJHqvrVfOu2eHajAYeg9EyW1eaFWjlftZQlVvXMuz6kfRGCLYUlQl2V4ke8pGc+MQD4b2+hfTsD08W1jWPY6RsDfWgSG26pqi6dB+Io9LFhQ8D0MMglAf2TeFp+DD6sGIXp7scEBKzXRuN+IS5sVDNO0y5Cbu8K5h8jD4nxrdwAvTQ4sFZlvG3zsnkXepilHA+xbyA=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(17002099007)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aHVKWm9oend2eXBmL3ZWcHB0bGJVdGhzY053SXdSMTUxZGtTTldZUGJQZ3JE?=
+ =?utf-8?B?V05NNHlCTW9aSGx5UnFobmlXbkdLZFoxRnZ4MzlVY2VncHZCZm1XMkxCZENU?=
+ =?utf-8?B?ZGF4OWNFWm1EbVNxWXpVdnIreXhiU1MrUTlBanZKY3kzZTArMDVlcGs2YWx2?=
+ =?utf-8?B?bmRsRDV4VGJMK2UyQWVWb2theFQ3M0xrZWtmckpSREk2LzV6ZGdtVEdPUzBy?=
+ =?utf-8?B?cEptY1ZuR2dhUGdjb1BqMStjVlEyMENRSmxoeHhxZS91cU5SUGMxQkxPYlhR?=
+ =?utf-8?B?WVkzZzZTVHZxYTMrbzYxNFdWWjE4ek56d0ErMytEUnJpWVZVbjR5SjNqSFp0?=
+ =?utf-8?B?UUs3ZzZxRnlNUW9kQ2Q3a0t2Qm5JTmdaZVU0azNWSko5TDh6TndCNXRiV0pL?=
+ =?utf-8?B?UkVDL1hYSisweHpoaDNCTkc1K3c2ZkVvY25vbXQ0Y0dpV1AyUjNEKzhQYlZr?=
+ =?utf-8?B?NE9kMW1zeVAwUjVLZjlabng0Q1lyR3pBRWlOcm81dXo3bjdoVHk2cStYU1R5?=
+ =?utf-8?B?a25HQ0V4ODQ4RnBWMEtWTGE3aDNPMVB4TXJ0b0xSdXpCa3pQZ0ppZHlxN1FU?=
+ =?utf-8?B?VURwVHRNdEN2NmpxNE82YjY4ZnU3OFJyYWpFNllsSklFakJEOW9PZVRrcTZV?=
+ =?utf-8?B?dCt0Vkk1bTdVY2Z4Nk5TWXpxb1V5Q0Jia2kvQ2xPcHdMY2JXK0NjY3pjeG04?=
+ =?utf-8?B?SVhEMkNtOEpseWc2UUorTmRoQXdvalNGMUJ3alVRZGJMRmJuK1lqWW1xVVZK?=
+ =?utf-8?B?WG8rOGNPNm1BMXhoTThqVE5pM3Qwa1NML1dmQVpRZTViYTVtTW1GTURpWFNQ?=
+ =?utf-8?B?K2RENHRYTTJtUCtYV0tob3NMMUNhRHdmM2hLZ0xwcHVETkhUcDlnbGpHS2V4?=
+ =?utf-8?B?ckMxSjYyOW0rajczOS9rNzk1YzdSSi9xMzdyQjU5WDdwQmNkZ0gvMmFRNGdK?=
+ =?utf-8?B?QUZ6Yy9wTlpVSjB1Vmw4RldMUUIycXRXdmNLNFZhVll3cjN5OUdRZDZKZEF0?=
+ =?utf-8?B?a2RUMDBqRmpFcVNtL3dMRXc0T3piU3ZzbUE1R3lKcGtJbUQyQ3FORGxIbkJQ?=
+ =?utf-8?B?a3ZVNHlyS3Jya0RHNmNSYnpXVWVnRm9WYUU0MnRuUmo4SFluZGJYTm5NQmlq?=
+ =?utf-8?B?VStJck9mV1UvV0VoWlJnSC9haFZEZDJCcGNpMm5GdlpGWWdtWGp2VUNmbkFI?=
+ =?utf-8?B?UjJZRUF2aTBnL3FSdHBJZncrT3pJczFxa3JISWF3TWw1cW1LcjE0TG1QaDB2?=
+ =?utf-8?B?eGxqVnUzOWNaNlFaRklRYkdwelBkOFplWTNNT2FJWnQvU0lnNXJDcnVtTkdT?=
+ =?utf-8?B?RDhrQ3p4QlNkLysyOGVIUjRBV1dRRTFrWWQ1d01tbWxGS0t2Qm1JdVUrYW1B?=
+ =?utf-8?B?cXA0OVpYTkZrNlhQVHp2eVMrQmtJUnVhb1REcENkUng4RmlMZTlMZVRyUEZT?=
+ =?utf-8?B?djFUcC9HSjNsZkI5d041aWE0elREbUMyMlRFQ0tmeWZQcE9Da1VZb04xbG4x?=
+ =?utf-8?B?cEwxNkZ2dTJGZVpoaTVubzNUNDJiRlN0VnlrTFBQWFhhRDZVRGpmZkNJWksz?=
+ =?utf-8?B?RlZ0ZjdaWWtiSTJLdGp0NzdoQXJ3S2RGKzVHOHBNR0ZCVXF1bVRPVmtWZ2pw?=
+ =?utf-8?B?OTBEUkFqak9oTE9GclNpYkJobWxVS0loQTBiSEdHT3o4VnVpNysvNnBBbEQr?=
+ =?utf-8?B?MXpCUlFZMlpMcVFIUEl3bk9pYVcyOFhFRzIvb25qSXN0U05UNHlMUEJvSUZl?=
+ =?utf-8?B?akJVOTIxOU82bVpRUkJSMUNmRnBiM2VvdzBhWGp4NXhZNDZJSUpIZGRnVUlD?=
+ =?utf-8?B?Y25kb3R2aVNpMk1ZR2tTZkx1YkwyaXdBdXVUQ1o0c1d0MTd1TGdtVUxKLytv?=
+ =?utf-8?B?a1VXd1N0RWFMdnVqYTNxcXc5K3hVRkp5NE5LTWlnSjNsVHFoWE14RmJqOTd5?=
+ =?utf-8?B?aUxldXIxVEVrNE9LZ0lxR25kdU8wMFpqYUxRc1lCaWJvSjNaNDN3NVlBL2lz?=
+ =?utf-8?B?ZCt0eTVoS3A3TEZ5aUxXSVlhdExkWCtHNWo3Ky84R1dhUDlGNWs4RDIvV1Vu?=
+ =?utf-8?B?YXFETFhrS3ZvOU1kNFZOUVRSZ2tCL2cvVlJIeWV0RmRQT3djNzh1OVdJUzBx?=
+ =?utf-8?B?cDUxYUk1T1VqNS9YY3NMV25acSt6Z0NpSnBQblpWL1JxaFNyaWR0Z2JtNkR1?=
+ =?utf-8?B?a1dNQWhUcUFHWHhzRy9VLzB4WTlHM2g2bk1rZ3NDUVZsM245TzNSbm1HM2Zu?=
+ =?utf-8?B?Yys3RnF1UWR6cG44WWw4bWtCSFYxR0M0aEhwV2pMMFVmYTNOelpReWEzMVk5?=
+ =?utf-8?B?NW8zQmZPZ1FDRVA2Ulp2enJTdWtPbHlKZXlSc1p2RTk0UUF0TzNOQT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0acdf10f-0dd7-4cbb-748b-08de81150e5f
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2026 15:27:37.1441
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NEZhgflGly5imFIfEkFVQ8MaW8a8FkyB4fVKVWYQGc7RsO5iyaoAtFDbQMhcc9Vg
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8312
 
-On Fri, Mar 13, 2026 at 08:26:02AM +0800, Chunyu Hu wrote:
-> On Thu, Mar 12, 2026 at 04:03:59PM +0200, Mike Rapoport wrote:
-> > On Thu, Mar 12, 2026 at 07:40:23PM +0800, Chunyu Hu wrote:
-> > > There are several tests requires transprarent hugepages, when run on thp
-> > > disabled kernel such as realtime kernel, there will be false positve.
-> > 
-> > I presume that when THP tests run on kernels with THP disabled they fail
-> > and it would be a false negative rather than false positive.
-> 
-> This is an interesting point. I'm not naitive speaker. I just learned
-> from AI. It really matters what we define as 'postive'. I presume 'postive'
-> is we run selftest and got a failure report, that's postive, not thinking
-> as it's thp disabled kernel and a 'pass' is postive.
+On 13 Mar 2026, at 11:15, Mike Rapoport wrote:
 
-I think that a passing test is "positive" and a failing test is "negative".
-So a test that fails because of misconfiguration is a false negative to me.
- 
-> I'll add statement about 'postive' in v2 like "a test failure is
-> defiend as postive"
-> 
-> > 
-> > > Mark those tests as skip when thp is not available.
-> > > 
-> > > Chunye Hu (4):
-> > >   selftests/mm/guard-regions: skip collapse test when thp not enabled
-> > >   selftests/mm: soft-dirty: skip two tests when thp not available
-> > >   selftests/mm: split_huge_page_test: skip the test when thp not
-> > >     available
-> > >   selftests/mm: transhuge_stress: skip the test when thp not available
-> > > 
-> > >  tools/testing/selftests/mm/guard-regions.c        | 4 ++++
-> > >  tools/testing/selftests/mm/soft-dirty.c           | 4 +++-
-> > >  tools/testing/selftests/mm/split_huge_page_test.c | 9 +++++++--
-> > >  tools/testing/selftests/mm/transhuge-stress.c     | 4 ++++
-> > >  4 files changed, 18 insertions(+), 3 deletions(-)
-> > > 
-> > > 
-> > > base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
-> > > -- 
-> > > 2.53.0
-> > > 
-> > 
-> > -- 
-> > Sincerely yours,
-> > Mike.
-> > 
-> 
+> On Thu, Mar 12, 2026 at 10:11:12AM -0400, Zi Yan wrote:
+>> On 12 Mar 2026, at 7:40, Chunyu Hu wrote:
+>>
+>>> When thp is not enabled on some kernel config such as realtime kernel, =
+the
+>>> test will report failure. Fix the false positive by skipping the test
+>>> directly when thp is not enabled.
+>>>
+>>> There's a naming conflict on write_file() function, both thp_settings.h=
+ and
+>>> split_huge_page_test.c define it. To make use of thp_is_enabled() helpe=
+r in
+>>> the thp_settings.h, rename this local write_file to safe_write_file to
+>>> avoid the conflict. The reason to use 'safe_' is it does some error che=
+ck.
+>>
+>> Both write_file() do safe checks. Actually the code of both functions lo=
+oks
+>> almost identical except that the thp_settings one does exit() instead of
+>> ksft_exit_fail_msg().
+>>
+>> Can you rename the split_huge_page_test=E2=80=99s write_file() to write_=
+file_local()
+>> and add a comment above the function like
+>> /* add _local to avoid a function conflict with thp_settings.h */?
+>
+> Looks like we can move the version that uses ksft_exit_fail_msg() to
+> vm_util and drop the other one.
 
--- 
-Sincerely yours,
-Mike.
+Could work.
+
+tools/testing/selftests/mm/khugepaged.c uses the write_file() from
+thp_settings.h in file_setup_area(), which is part of struct mem_ops.
+I thought struct mem_ops was passed to some syscall, but it turns out
+that it is used locally. The only downside is that file_setup_area() now
+has this ksefltest friendly code. Someone might want to clean up
+tools/testing/selftests/mm/khugepaged.c with kselftests APIs. :)
+
+
+>
+>> With that, feel free to add:
+>>
+>> Reviewed-by: Zi Yan <ziy@nvidia.com>
+>>
+>> Thanks.
+>>
+>>>
+>>> Tested with thp disabled kernel:
+>>> Before The fix:
+>>>   # --------------------------------------------------
+>>>   # running ./split_huge_page_test /tmp/xfs_dir_Ywup9p
+>>>   # --------------------------------------------------
+>>>   # TAP version 13
+>>>   # Bail out! Reading PMD pagesize failed
+>>>   # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>>   # [FAIL]
+>>>   not ok 61 split_huge_page_test /tmp/xfs_dir_Ywup9p # exit=3D1
+>>>
+>>> After the fix:
+>>>   # --------------------------------------------------
+>>>   # running ./split_huge_page_test /tmp/xfs_dir_YHPUPl
+>>>   # --------------------------------------------------
+>>>   # TAP version 13
+>>>   # 1..0 # SKIP Transparent Hugepages not available
+>>>   # [SKIP]
+>>>   ok 6 split_huge_page_test /tmp/xfs_dir_YHPUPl # SKIP
+>>>
+>>> CC: Li Wang <liwang@redhat.com>
+>>> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+>>> ---
+>>>  tools/testing/selftests/mm/split_huge_page_test.c | 9 +++++++--
+>>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/=
+testing/selftests/mm/split_huge_page_test.c
+>>> index e0167111bdd1..615b75ca62cc 100644
+>>> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+>>> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>>> @@ -21,6 +21,7 @@
+>>>  #include <time.h>
+>>>  #include "vm_util.h"
+>>>  #include "kselftest.h"
+>>> +#include "thp_settings.h"
+>>>
+>>>  uint64_t pagesize;
+>>>  unsigned int pageshift;
+>>> @@ -255,7 +256,7 @@ static int check_after_split_folio_orders(char *vad=
+dr_start, size_t len,
+>>>  	return status;
+>>>  }
+>>>
+>>> -static void write_file(const char *path, const char *buf, size_t bufle=
+n)
+>>> +static void safe_write_file(const char *path, const char *buf, size_t =
+buflen)
+>>>  {
+>>>  	int fd;
+>>>  	ssize_t numwritten;
+>>> @@ -283,7 +284,7 @@ static void write_debugfs(const char *fmt, ...)
+>>>  	if (ret >=3D INPUT_MAX)
+>>>  		ksft_exit_fail_msg("%s: Debugfs input is too long\n", __func__);
+>>>
+>>> -	write_file(SPLIT_DEBUGFS, input, ret + 1);
+>>> +	safe_write_file(SPLIT_DEBUGFS, input, ret + 1);
+>>>  }
+>>>
+>>>  static char *allocate_zero_filled_hugepage(size_t len)
+>>> @@ -772,6 +773,10 @@ int main(int argc, char **argv)
+>>>  		ksft_finished();
+>>>  	}
+>>>
+>>> +	if (!thp_is_enabled()) {
+>>> +		ksft_exit_skip("Transparent Hugepages not available\n");
+>>> +	}
+>>> +
+>>>  	if (argc > 1)
+>>>  		optional_xfs_path =3D argv[1];
+>>>
+>>> --=20
+>>> 2.53.0
+>>
+>>
+>> Best Regards,
+>> Yan, Zi
+>
+> --=20
+> Sincerely yours,
+> Mike.
+
+
+Best Regards,
+Yan, Zi
