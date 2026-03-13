@@ -1,101 +1,46 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74827348479
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 22:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D8E3E4C60;
+	Fri, 13 Mar 2026 23:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773441122; cv=none; b=iBoMHYAlv1dlDpv9B7yI/U3wUQ4cA82Lv5BghEQAuGqHIF3gyZJ2aTKxV1U7qvsqu/BM5SD3uaj1OQvKK8kp9Db+dO+QoP7IbfD1hSfIDtOz6ukMYPpYAVCgkHhc1DivQ0ebcyTvMVzix/fi/Sse8cDTZpQTNOZmvj/nCGqgAXk=
+	t=1773444049; cv=none; b=RjDXvUzI12LGlULh2gpZf+KEGrP6VcWnWXJaB8ocUesKvPz0xu0fN3UXfrPtym2larnOLf90NCPZ144RxzaqAlquj5wTLAhP4rYtwj7xQVIK1KS75hR0FWhERvuRGCZGp6QU7jnrtnp4rum9Pc3aeBcJvgi7zIh89qKNK0Lhm3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773441122; c=relaxed/simple;
-	bh=wjojKKaX79Oylk4nRbk2Afn0b74BPVXORwp7GkLlWJQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q78PpfobsSkS8c/ExjqwzYF0MznEoLFZnHDnaTObIf7KJE2p6ki9bYB7KtQ3slD+OSJPWrW0Z00aL1ioi7tLEcnUxAH8mR0hIRd4lM+oTHHcVqLfWYKep3RJ0lIm1u9oovSQWOQUCuJk3r3nh4ft3IdnQh37xZcJzLDIoo4zYsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=BXRULFNf; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1773444049; c=relaxed/simple;
+	bh=cGqiI5xuJik7Tou8GjfeWbop/vKbAKRDllFYzK95mUs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AmOFzwjFF/HbY4hmSLSaYRGu8SND0WptDHLeu8E3VGp1qAzGUnZK93+XkEUXbsmC6bK7U2qNLklBV9qPw2+qpt86EqqTaj8p2TerB7pm9t+qtjE6LJqUwr5lVrsxljwt11p6qRinbyy91kHJAV4UHp5qLF2xvQi4PeNgAaeC4PQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pukSWFd8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="BXRULFNf"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-466ebbf7ff7so1012533b6e.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 15:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1773441119; x=1774045919; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2y5EWQGYuEN/ZCflQeFgRrVsCOx6mBcfWBilIa1oha8=;
-        b=BXRULFNf5tftUe/TelKc+3Ff5dkLAcFvEC55K2Kc4/xs/dSSt1l5EVvqMLbl0530OY
-         WaWWqJ7lMkXaZ4Rhqo9NPlRTKGwZwryjvZ2WfEUfpPsvIFfrTUXBahRyTa28irPtNQOj
-         +GR+eZZJLR6EuJ7MXF6gE7b4v4CKyZnxeOa7CrkDTO5S1JfQiYl8Uh8JPOMZFaYUng9z
-         s7sod3U9+QtWrOsN339jfwlW7YF5kCOfbvAdG6LRRhqiNS+kkU54AW3uxXfGfVXMMnh9
-         lRuzgXLrBw+qc0eEDYvt5gdVKI4f9THEd78Vy0kLLutQPoNfO4KDZWzzcb44ZyvKkFmO
-         jX9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773441119; x=1774045919;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2y5EWQGYuEN/ZCflQeFgRrVsCOx6mBcfWBilIa1oha8=;
-        b=azSi5JpESA1trAMKP0FApza4It5KUv1lZYeoPTaviuFb7er9Yo7eOy2OIn7IQm/fTt
-         Yvk+9/Te1+Jq2mRHD281CpYunnlhxH5UlLCFDNEl88c925CwAGJylGW+O57Y5Acbu9Ay
-         pbTJjfoWa4IJXlHiWZ3RxO0tq411TsR9H6QkhScvYlyDQWrxXrVI/FLjLyAwHt6IHpGZ
-         R5c+BLJo19Y7/wUMn3D75yrVrJeZhOzDjyAPXAoCQMEHtOW7fyGiy+ZC62QSncaTg4m8
-         vphOGm90KUFTzoip2DUNKPgksw1y5k7jVh4pk3sp0pPOLGUkGMxkXZwHMCwwMCIBgi/X
-         M6Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCX76m1nP/pJuMGsVbhD+WjW6Y124nLr6d+hBfft5bn+yWHk4Y98fuqAXD/X0dmF87Dn/2iLM074UupEUeqVd7Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAVauIj1afkWE0UGJ6M5vGWHb485WnOlanHH1eaKgE2iNh8+yy
-	MmgjCi7A9TKk4ddMTAmxNKR8LFcs09Qe8zHd6DLPscvLS1yvxlEnNn2isIwgbrOqUBk=
-X-Gm-Gg: ATEYQzxKmNO4ps2iq92AmQyVZlKWSFBJ72ndDa0YM+ovGyU+ohJa6mBhn5TqOY/oPVj
-	fblD8LhGyqJWAIIJZ1sbsgDuRlcRPyt7cAFWrY+1w4XZsESOL0WtrY2Npz+kdY82ZtP8ocHQWA7
-	a+Xi89p/AulkVrANliMw1hh4Mr6hYHwkBEkyapYUae2Mlx4DK/4RvHKrPxEGv9Ev/bAKoT7L6zf
-	qO9z2kUXTQ47dtj5WWIbfXVkuhClv3hEikcmid/zLAgef3x3TziuuL8io7En3KXm6PDjw5pUyGM
-	/G+TY6REe/HZro+my3YP8kcT+LtNwXnyftLuqx/rvXzOuEHrci0WBtLigS8iWGGeKON4iVzTxOW
-	faV1w1u7Jy5AeO2lJhRyvnQrMUqvCS9mht1N3P2DcYiFbH4KpcCxkvFti2zA+AT1VSXjU+Yuw0h
-	3nrFva5iWt
-X-Received: by 2002:a05:6808:5241:b0:466:f57b:2ad2 with SMTP id 5614622812f47-467572f2c66mr2275298b6e.31.1773441119188;
-        Fri, 13 Mar 2026 15:31:59 -0700 (PDT)
-Received: from 20HS2G4.. ([2a09:bac1:76c0:540::22f:7d])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-467342fab49sm5408516b6e.16.2026.03.13.15.31.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 15:31:57 -0700 (PDT)
-From: Chris J Arges <carges@cloudflare.com>
-To: Joe Damato <joe@dama.to>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pukSWFd8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BECC19421;
+	Fri, 13 Mar 2026 23:20:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773444048;
+	bh=cGqiI5xuJik7Tou8GjfeWbop/vKbAKRDllFYzK95mUs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=pukSWFd8filQiwpH+ixlWoiKrSqx1tzIU8i9t69ixJmKA53dfzsn0GvCrgK4la19c
+	 udCMmxCfW+5yfurF/ZXt/u7FPUWjr47AsyH5pQqWsAi02AvNQWmY/eeEPbWVe763ii
+	 krCJHbrPyPPOdL+lg0Kq+E/YJXLw5YRr20GCM48K8NZZRLaazaGVjMmoqfc1Covyxh
+	 WXVFrq3P2mzr/PDMVEx45XVgd+VaWBZq5HnfOJCm2Pw6OB9sTrbxnQoeAQfPyEwGJX
+	 8Tiq5YK7ii6T5lWgqe8DyzVOECditKVakElYM74GljWYeQ/9A6wgGpshp85turhtg0
+	 5iHIvJZu6KCOA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
-	Andy Gospodarek <gospo@broadcom.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Petr Machata <petrm@nvidia.com>,
-	David Wei <dw@davidwei.uk>,
-	Chris J Arges <carges@cloudflare.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Carolina Jubran <cjubran@nvidia.com>,
-	Nimrod Oren <noren@nvidia.com>,
-	Gal Pressman <gal@nvidia.com>,
-	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-Cc: Bui Quang Minh <minhquangbui99@gmail.com>,
-	Daniel Zahka <daniel.zahka@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
+	donald.hunter@gmail.com,
+	shuah@kernel.org,
+	sdf@fomichev.me,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v4 6/6] selftests: drv-net: xdp: Add rss_hash metadata tests
-Date: Fri, 13 Mar 2026 17:27:36 -0500
-Message-ID: <20260313223029.454755-7-carges@cloudflare.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260313223029.454755-1-carges@cloudflare.com>
-References: <20260313223029.454755-1-carges@cloudflare.com>
+Subject: [PATCH net-next] tools: ynl: rework policy access to support recursion
+Date: Fri, 13 Mar 2026 16:20:47 -0700
+Message-ID: <20260313232047.2068518-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -104,382 +49,298 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This test loads xdp_metadata.bpf which calls bpf_xdp_metadata_rx_hash() on
-incoming packets. The metadata from that packet is then sent to a BPF
-map for validation. It borrows structure from xdp.py, reusing common
-functions.
+Donald points out that the current naive implementation using dicts
+breaks if policy is recursive (child nest uses policy idx already
+used by its parent).
 
-The test checks the device's xdp-rx-metadata-features via netlink
-before running and skips on devices that do not advertise hash support.
-This can be run on veth devices as well as real hardware.
+Lean more into the NlPolicy class. This lets us "render" the policy
+on demand, when user accesses it. If someone wants to do an infinite
+walk that's on them :) Show policy info as attributes of the class
+and use dict format to descend into sub-policies for extra neatness.
 
-The test is fairly simple and just verifies that a TCP or UDP packet can be
-identified as an L4 flow. This minimal test also passes if run on a veth
-device.
-
-Signed-off-by: Chris J Arges <carges@cloudflare.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../testing/selftests/drivers/net/hw/Makefile |   1 +
- .../drivers/net/hw/lib/py/__init__.py         |   2 +
- .../selftests/drivers/net/hw/xdp_metadata.py  | 146 ++++++++++++++++
- .../selftests/net/lib/xdp_metadata.bpf.c      | 163 ++++++++++++++++++
- 4 files changed, 312 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/net/hw/xdp_metadata.py
- create mode 100644 tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+CC: donald.hunter@gmail.com
+CC: shuah@kernel.org
+CC: sdf@fomichev.me
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/net/ynl/pyynl/cli.py               |   4 +-
+ tools/net/ynl/pyynl/lib/ynl.py           | 152 ++++++++++++++++-------
+ tools/testing/selftests/net/nl_nlctrl.py |  26 ++--
+ 3 files changed, 120 insertions(+), 62 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 91df028abfc0..fa933ce94400 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -41,6 +41,7 @@ TEST_PROGS = \
- 	rss_input_xfrm.py \
- 	toeplitz.py \
- 	tso.py \
-+	xdp_metadata.py \
- 	xsk_reconfig.py \
- 	#
+diff --git a/tools/net/ynl/pyynl/cli.py b/tools/net/ynl/pyynl/cli.py
+index fc9e84754e4b..8275a806cf73 100755
+--- a/tools/net/ynl/pyynl/cli.py
++++ b/tools/net/ynl/pyynl/cli.py
+@@ -313,11 +313,11 @@ RELATIVE_SCHEMA_DIR='../../../../Documentation/netlink'
+     if args.policy:
+         if args.do:
+             pol = ynl.get_policy(args.do, 'do')
+-            output(pol.attrs if pol else None)
++            output(pol.to_dict() if pol else None)
+             args.do = None
+         if args.dump:
+             pol = ynl.get_policy(args.dump, 'dump')
+-            output(pol.attrs if pol else None)
++            output(pol.to_dict() if pol else None)
+             args.dump = None
  
-diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-index b8d9ae282390..df4da5078c48 100644
---- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-@@ -25,6 +25,7 @@ try:
-     from net.lib.py import bkg, cmd, bpftool, bpftrace, defer, ethtool, \
-         fd_read_timeout, ip, rand_port, rand_ports, wait_port_listen, \
-         wait_file, tool
-+    from net.lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
-     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
-     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
-         ksft_setup, ksft_variants, KsftNamedVariant
-@@ -40,6 +41,7 @@ try:
-                "bkg", "cmd", "bpftool", "bpftrace", "defer", "ethtool",
-                "fd_read_timeout", "ip", "rand_port", "rand_ports",
-                "wait_port_listen", "wait_file", "tool",
-+               "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
-                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
-                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
-                "ksft_setup", "ksft_variants", "KsftNamedVariant",
-diff --git a/tools/testing/selftests/drivers/net/hw/xdp_metadata.py b/tools/testing/selftests/drivers/net/hw/xdp_metadata.py
-new file mode 100644
-index 000000000000..33a1985356d9
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/xdp_metadata.py
-@@ -0,0 +1,146 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+Tests for XDP metadata kfuncs (e.g. bpf_xdp_metadata_rx_hash).
-+
-+These tests load device-bound XDP programs from xdp_metadata.bpf.o
-+that call metadata kfuncs, send traffic, and verify the extracted
-+metadata via BPF maps.
-+"""
-+from lib.py import ksft_run, ksft_eq, ksft_exit, ksft_ge, ksft_ne, ksft_pr
-+from lib.py import KsftNamedVariant, ksft_variants
-+from lib.py import CmdExitFailure, KsftSkipEx, NetDrvEpEnv
-+from lib.py import NetdevFamily
-+from lib.py import bkg, cmd, rand_port, wait_port_listen
-+from lib.py import ip, bpftool, defer
-+from lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
-+
-+
-+def _load_xdp_metadata_prog(cfg, prog_name, bpf_file="xdp_metadata.bpf.o"):
-+    """Load a device-bound XDP metadata program and return prog/map info.
-+
-+    Returns:
-+        dict with 'id', 'name', and 'maps' (name -> map_id).
-+    """
-+    abs_path = cfg.net_lib_dir / bpf_file
-+    pin_dir = "/sys/fs/bpf/xdp_metadata_test"
-+
-+    cmd(f"rm -rf {pin_dir}", shell=True, fail=False)
-+    cmd(f"mkdir -p {pin_dir}", shell=True)
-+
-+    try:
-+        bpftool(f"prog loadall {abs_path} {pin_dir} type xdp "
-+                f"xdpmeta_dev {cfg.ifname}")
-+    except CmdExitFailure as e:
-+        cmd(f"rm -rf {pin_dir}", shell=True, fail=False)
-+        raise KsftSkipEx(
-+            f"Failed to load device-bound XDP program '{prog_name}'"
-+        ) from e
-+    defer(cmd, f"rm -rf {pin_dir}", shell=True, fail=False)
-+
-+    pin_path = f"{pin_dir}/{prog_name}"
-+    ip(f"link set dev {cfg.ifname} xdpdrv pinned {pin_path}")
-+    defer(ip, f"link set dev {cfg.ifname} xdpdrv off")
-+
-+    xdp_info = ip(f"-d link show dev {cfg.ifname}", json=True)[0]
-+    prog_id = xdp_info["xdp"]["prog"]["id"]
-+
-+    return {"id": prog_id,
-+            "name": xdp_info["xdp"]["prog"]["name"],
-+            "maps": bpf_prog_map_ids(prog_id)}
-+
-+
-+def _send_probe(cfg, port, proto="tcp"):
-+    """Send a single payload from the remote end using socat.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+        port: Port number for the exchange.
-+        proto: Protocol to use, either "tcp" or "udp".
-+    """
-+    cfg.require_cmd("socat", remote=True)
-+
-+    if proto == "tcp":
-+        rx_cmd = f"socat -{cfg.addr_ipver} -T 2 TCP-LISTEN:{port},reuseport STDOUT"
-+        tx_cmd = f"echo -n rss_hash_test | socat -t 2 -u STDIN TCP:{cfg.baddr}:{port}"
-+    else:
-+        rx_cmd = f"socat -{cfg.addr_ipver} -T 2 -u UDP-RECV:{port},reuseport STDOUT"
-+        tx_cmd = f"echo -n rss_hash_test | socat -t 2 -u STDIN UDP:{cfg.baddr}:{port}"
-+
-+    with bkg(rx_cmd, exit_wait=True):
-+        wait_port_listen(port, proto=proto)
-+        cmd(tx_cmd, host=cfg.remote, shell=True)
-+
-+
-+# BPF map keys matching the enums in xdp_metadata.bpf.c
-+_SETUP_KEY_PORT = 1
-+
-+_RSS_KEY_HASH = 0
-+_RSS_KEY_TYPE = 1
-+_RSS_KEY_PKT_CNT = 2
-+_RSS_KEY_ERR_CNT = 3
-+
-+XDP_RSS_L4 = 0x8  # BIT(3) from enum xdp_rss_hash_type
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("tcp", "tcp"),
-+    KsftNamedVariant("udp", "udp"),
-+])
-+def test_xdp_rss_hash(cfg, proto):
-+    """Test RSS hash metadata extraction via bpf_xdp_metadata_rx_hash().
-+
-+    This test will only run on devices that support xdp-rx-metadata-features.
-+
-+    Loads the xdp_rss_hash program from xdp_metadata, sends a packet using
-+    the specified protocol, and verifies that the program extracted a non-zero
-+    hash with an L4 hash type.
-+    """
-+    dev_info = cfg.netnl.dev_get({"ifindex": cfg.ifindex})
-+    rx_meta = dev_info.get("xdp-rx-metadata-features", [])
-+    if "hash" not in rx_meta:
-+        raise KsftSkipEx("device does not support XDP rx hash metadata")
-+
-+    prog_info = _load_xdp_metadata_prog(cfg, "xdp_rss_hash")
-+
-+    port = rand_port()
-+    bpf_map_set("map_xdp_setup", _SETUP_KEY_PORT, port)
-+
-+    rss_map_id = prog_info["maps"]["map_rss"]
-+
-+    _send_probe(cfg, port, proto=proto)
-+
-+    rss = bpf_map_dump(rss_map_id)
-+
-+    pkt_cnt = rss.get(_RSS_KEY_PKT_CNT, 0)
-+    err_cnt = rss.get(_RSS_KEY_ERR_CNT, 0)
-+    hash_val = rss.get(_RSS_KEY_HASH, 0)
-+    hash_type = rss.get(_RSS_KEY_TYPE, 0)
-+
-+    ksft_ge(pkt_cnt, 1, comment="should have received at least one packet")
-+    ksft_eq(err_cnt, 0, comment=f"RSS hash error count: {err_cnt}")
-+
-+    ksft_ne(hash_val, 0,
-+            f"RSS hash should be non-zero for {proto.upper()} traffic")
-+    ksft_pr(f"  RSS hash: {hash_val:#010x}")
-+
-+    ksft_pr(f"  RSS hash type: {hash_type:#06x}")
-+    ksft_ne(hash_type & XDP_RSS_L4, 0,
-+            f"RSS hash type should include L4 for {proto.upper()} traffic")
-+
-+
-+def main():
-+    """Run XDP metadata kfunc tests against a real device."""
-+    with NetDrvEpEnv(__file__) as cfg:
-+        cfg.netnl = NetdevFamily()
-+        ksft_run(
-+            [
-+                test_xdp_rss_hash,
-+            ],
-+            args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/net/lib/xdp_metadata.bpf.c b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-new file mode 100644
-index 000000000000..f71f59215239
---- /dev/null
-+++ b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <stddef.h>
-+#include <linux/bpf.h>
-+#include <linux/in.h>
-+#include <linux/if_ether.h>
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
-+#include <linux/udp.h>
-+#include <linux/tcp.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_helpers.h>
-+
-+enum {
-+	XDP_PORT = 1,
-+	XDP_PROTO = 4,
-+} xdp_map_setup_keys;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 5);
-+	__type(key, __u32);
-+	__type(value, __s32);
-+} map_xdp_setup SEC(".maps");
-+
-+/* RSS hash results: key 0 = hash, key 1 = hash type,
-+ * key 2 = packet count, key 3 = error count.
-+ */
-+enum {
-+	RSS_KEY_HASH = 0,
-+	RSS_KEY_TYPE = 1,
-+	RSS_KEY_PKT_CNT = 2,
-+	RSS_KEY_ERR_CNT = 3,
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, 4);
-+} map_rss SEC(".maps");
-+
-+/* Mirror of enum xdp_rss_hash_type from include/net/xdp.h.
-+ * Needed because the enum is not part of UAPI headers.
-+ */
-+enum xdp_rss_hash_type {
-+	XDP_RSS_L3_IPV4 = 1U << 0,
-+	XDP_RSS_L3_IPV6 = 1U << 1,
-+	XDP_RSS_L3_DYNHDR = 1U << 2,
-+	XDP_RSS_L4 = 1U << 3,
-+	XDP_RSS_L4_TCP = 1U << 4,
-+	XDP_RSS_L4_UDP = 1U << 5,
-+	XDP_RSS_L4_SCTP = 1U << 6,
-+	XDP_RSS_L4_IPSEC = 1U << 7,
-+	XDP_RSS_L4_ICMP = 1U << 8,
-+};
-+
-+extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
-+				    enum xdp_rss_hash_type *rss_type) __ksym;
-+
-+static __always_inline __u16 get_dest_port(void *l4, void *data_end,
-+					   __u8 protocol)
-+{
-+	if (protocol == IPPROTO_UDP) {
-+		struct udphdr *udp = l4;
-+
-+		if ((void *)(udp + 1) > data_end)
-+			return 0;
-+		return udp->dest;
-+	} else if (protocol == IPPROTO_TCP) {
-+		struct tcphdr *tcp = l4;
-+
-+		if ((void *)(tcp + 1) > data_end)
-+			return 0;
-+		return tcp->dest;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("xdp")
-+int xdp_rss_hash(struct xdp_md *ctx)
-+{
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	enum xdp_rss_hash_type rss_type = 0;
-+	struct ethhdr *eth = data;
-+	__u8 l4_proto = 0;
-+	__u32 hash = 0;
-+	__u32 key, val;
-+	void *l4 = NULL;
-+	__u32 *cnt;
-+	int ret;
-+
-+	if ((void *)(eth + 1) > data_end)
-+		return XDP_PASS;
-+
-+	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
-+		struct iphdr *iph = (void *)(eth + 1);
-+
-+		if ((void *)(iph + 1) > data_end)
-+			return XDP_PASS;
-+		l4_proto = iph->protocol;
-+		l4 = (void *)(iph + 1);
-+	} else if (eth->h_proto == bpf_htons(ETH_P_IPV6)) {
-+		struct ipv6hdr *ip6h = (void *)(eth + 1);
-+
-+		if ((void *)(ip6h + 1) > data_end)
-+			return XDP_PASS;
-+		l4_proto = ip6h->nexthdr;
-+		l4 = (void *)(ip6h + 1);
-+	}
-+
-+	if (!l4)
-+		return XDP_PASS;
-+
-+	/* Filter on the configured protocol (map_xdp_setup key XDP_PROTO).
-+	 * When set, only process packets matching the requested L4 protocol.
-+	 */
-+	key = XDP_PROTO;
-+	__s32 *proto_cfg = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+
-+	if (proto_cfg && *proto_cfg != 0 && l4_proto != (__u8)*proto_cfg)
-+		return XDP_PASS;
-+
-+	/* Filter on the configured port (map_xdp_setup key XDP_PORT).
-+	 * Only applies to protocols with ports (UDP, TCP).
-+	 */
-+	key = XDP_PORT;
-+	__s32 *port_cfg = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+
-+	if (port_cfg && *port_cfg != 0) {
-+		__u16 dest = get_dest_port(l4, data_end, l4_proto);
-+
-+		if (!dest || bpf_ntohs(dest) != (__u16)*port_cfg)
-+			return XDP_PASS;
-+	}
-+
-+	ret = bpf_xdp_metadata_rx_hash(ctx, &hash, &rss_type);
-+	if (ret < 0) {
-+		key = RSS_KEY_ERR_CNT;
-+		cnt = bpf_map_lookup_elem(&map_rss, &key);
-+		if (cnt)
-+			__sync_fetch_and_add(cnt, 1);
-+		return XDP_PASS;
-+	}
-+
-+	key = RSS_KEY_HASH;
-+	bpf_map_update_elem(&map_rss, &key, &hash, BPF_ANY);
-+
-+	key = RSS_KEY_TYPE;
-+	val = (__u32)rss_type;
-+	bpf_map_update_elem(&map_rss, &key, &val, BPF_ANY);
-+
-+	key = RSS_KEY_PKT_CNT;
-+	cnt = bpf_map_lookup_elem(&map_rss, &key);
-+	if (cnt)
-+		__sync_fetch_and_add(cnt, 1);
-+
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+     if args.ntf:
+diff --git a/tools/net/ynl/pyynl/lib/ynl.py b/tools/net/ynl/pyynl/lib/ynl.py
+index 0eedeee465d8..9c078599cea0 100644
+--- a/tools/net/ynl/pyynl/lib/ynl.py
++++ b/tools/net/ynl/pyynl/lib/ynl.py
+@@ -143,32 +143,117 @@ from .nlspec import SpecFamily
+     pass
+ 
+ 
+-# pylint: disable=too-few-public-methods
+ class NlPolicy:
+     """Kernel policy for one mode (do or dump) of one operation.
+ 
+-    Returned by YnlFamily.get_policy(). Contains a dict of attributes
+-    the kernel accepts, with their validation constraints.
++    Returned by YnlFamily.get_policy(). Attributes of the policy
++    are accessible as attributes of the object. Nested policies
++    can be accessed indexing the object like a dictionary::
+ 
+-    Attributes:
+-        attrs: dict mapping attribute names to policy dicts, e.g.
+-        page-pool-stats-get do policy::
++        pol = ynl.get_policy('page-pool-stats-get', 'do')
++        pol['info'].type            # 'nested'
++        pol['info']['id'].type      # 'uint'
++        pol['info']['id'].min_value # 1
+ 
+-            {
+-                'info': {'type': 'nested', 'policy': {
+-                    'id':      {'type': 'uint', 'min-value': 1,
+-                                'max-value': 4294967295},
+-                    'ifindex': {'type': 'u32', 'min-value': 1,
+-                                'max-value': 2147483647},
+-                }},
+-            }
++    Each policy entry always has a 'type' attribute (e.g. u32, string,
++    nested). Optional attributes depending on the 'type': min-value,
++    max-value, min-length, max-length, mask.
+ 
+-        Each policy dict always contains 'type' (e.g. u32, string,
+-        nested). Optional keys: min-value, max-value, min-length,
+-        max-length, mask, policy.
++    Policies can form infinite nesting loops. These loops are trimmed
++    when policy is converted to a dict with pol.to_dict().
+     """
+-    def __init__(self, attrs):
+-        self.attrs = attrs
++    def __init__(self, ynl, policy_idx, policy_table, attr_set, props=None):
++        self._policy_idx = policy_idx
++        self._policy_table = policy_table
++        self._ynl = ynl
++        self._props = props or {}
++        self._entries = {}
++        self._cache = {}
++        if policy_idx is not None and policy_idx in policy_table:
++            for attr_id, decoded in policy_table[policy_idx].items():
++                if attr_set and attr_id in attr_set.attrs_by_val:
++                    spec = attr_set.attrs_by_val[attr_id]
++                    name = spec['name']
++                else:
++                    spec = None
++                    name = f'attr-{attr_id}'
++                self._entries[name] = (spec, decoded)
++
++    def __getitem__(self, name):
++        """Descend into a nested policy by attribute name."""
++        if name not in self._cache:
++            spec, decoded = self._entries[name]
++            props = dict(decoded)
++            child_idx = None
++            child_set = None
++            if 'policy-idx' in props:
++                child_idx = props.pop('policy-idx')
++                if spec and 'nested-attributes' in spec.yaml:
++                    child_set = self._ynl.attr_sets[spec.yaml['nested-attributes']]
++            self._cache[name] = NlPolicy(self._ynl, child_idx,
++                                         self._policy_table,
++                                         child_set, props)
++        return self._cache[name]
++
++    def __getattr__(self, name):
++        """Access this policy entry's own properties (type, min-value, etc.).
++
++        Underscores in the name are converted to dashes, so that
++        pol.min_value looks up "min-value".
++        """
++        key = name.replace('_', '-')
++        try:
++            # Hack for level-0 which we still want to have .type but we don't
++            # want type to pointlessly show up in the dict / JSON form.
++            if not self._props and name == "type":
++                return "nested"
++            return self._props[key]
++        except KeyError:
++            raise AttributeError(name)
++
++    def get(self, name, default=None):
++        """Look up a child policy entry by attribute name, with a default."""
++        try:
++            return self[name]
++        except KeyError:
++            return default
++
++    def __contains__(self, name):
++        return name in self._entries
++
++    def __len__(self):
++        return len(self._entries)
++
++    def __iter__(self):
++        return iter(self._entries)
++
++    def keys(self):
++        """Return attribute names accepted by this policy."""
++        return self._entries.keys()
++
++    def to_dict(self, seen=None):
++        """Convert to a plain dict, suitable for JSON serialization.
++
++        Nested NlPolicy objects are expanded recursively. Cyclic
++        references are trimmed (resolved to just {"type": "nested"}).
++        """
++        if seen is None:
++            seen = set()
++        result = dict(self._props)
++        if self._policy_idx is not None:
++            if self._policy_idx not in seen:
++                seen = seen | {self._policy_idx}
++                children = {}
++                for name in self:
++                    children[name] = self[name].to_dict(seen)
++                if self._props:
++                    result['policy'] = children
++                else:
++                    result = children
++        return result
++
++    def __repr__(self):
++        return repr(self.to_dict())
+ 
+ 
+ class NlAttr:
+@@ -1308,28 +1393,6 @@ from .nlspec import SpecFamily
+     def do_multi(self, ops):
+         return self._ops(ops)
+ 
+-    def _resolve_policy(self, policy_idx, policy_table, attr_set):
+-        attrs = {}
+-        if policy_idx not in policy_table:
+-            return attrs
+-        for attr_id, decoded in policy_table[policy_idx].items():
+-            if attr_set and attr_id in attr_set.attrs_by_val:
+-                spec = attr_set.attrs_by_val[attr_id]
+-                name = spec['name']
+-            else:
+-                spec = None
+-                name = f'attr-{attr_id}'
+-            if 'policy-idx' in decoded:
+-                sub_set = None
+-                if spec and 'nested-attributes' in spec.yaml:
+-                    sub_set = self.attr_sets[spec.yaml['nested-attributes']]
+-                nested = self._resolve_policy(decoded['policy-idx'],
+-                                              policy_table, sub_set)
+-                del decoded['policy-idx']
+-                decoded['policy'] = nested
+-            attrs[name] = decoded
+-        return attrs
+-
+     def get_policy(self, op_name, mode):
+         """Query running kernel for the Netlink policy of an operation.
+ 
+@@ -1341,8 +1404,8 @@ from .nlspec import SpecFamily
+             mode: 'do' or 'dump'
+ 
+         Returns:
+-            NlPolicy with an attrs dict mapping attribute names to
+-            their policy properties (type, min/max, nested, etc.),
++            NlPolicy acting as a read-only dict mapping attribute names
++            to their policy properties (type, min/max, nested, etc.),
+             or None if the operation has no policy for the given mode.
+             Empty policy usually implies that the operation rejects
+             all attributes.
+@@ -1353,5 +1416,4 @@ from .nlspec import SpecFamily
+         if mode not in op_policy:
+             return None
+         policy_idx = op_policy[mode]
+-        attrs = self._resolve_policy(policy_idx, policy_table, op.attr_set)
+-        return NlPolicy(attrs)
++        return NlPolicy(self, policy_idx, policy_table, op.attr_set)
+diff --git a/tools/testing/selftests/net/nl_nlctrl.py b/tools/testing/selftests/net/nl_nlctrl.py
+index d19e206c2c02..fe1f66dc9435 100755
+--- a/tools/testing/selftests/net/nl_nlctrl.py
++++ b/tools/testing/selftests/net/nl_nlctrl.py
+@@ -68,39 +68,35 @@ from lib.py import NetdevFamily, EthtoolFamily, NlctrlFamily
+     # dev-get: do has a real policy with ifindex, dump has no policy
+     # (only the reject-all policy with maxattr=0)
+     pol = ndev.get_policy('dev-get', 'do')
+-    ksft_in('ifindex', pol.attrs,
+-            comment="dev-get do policy should have ifindex")
+-    ksft_eq(pol.attrs.get('ifindex', {}).get('type'), 'u32')
++    ksft_in('ifindex', pol, comment="dev-get do policy should have ifindex")
++    ksft_eq(pol['ifindex'].type, 'u32')
+ 
+     pol_dump = ndev.get_policy('dev-get', 'dump')
+-    ksft_eq(len(pol_dump.attrs), 0,
+-            comment="dev-get should not accept any attrs")
++    ksft_eq(len(pol_dump), 0, comment="dev-get should not accept any attrs")
+ 
+     # napi-get: both do and dump have real policies
+     pol_do = ndev.get_policy('napi-get', 'do')
+-    ksft_ge(len(pol_do.attrs), 1)
++    ksft_ge(len(pol_do), 1)
+ 
+     pol_dump = ndev.get_policy('napi-get', 'dump')
+-    ksft_ge(len(pol_dump.attrs), 1)
++    ksft_ge(len(pol_dump), 1)
+ 
+     # -- ethtool (full ops) --
+     et = EthtoolFamily()
+ 
+     # strset-get (has both do and dump, full ops share policy)
+     pol_do = et.get_policy('strset-get', 'do')
+-    ksft_ge(len(pol_do.attrs), 1, comment="strset-get should have a do policy")
++    ksft_ge(len(pol_do), 1, comment="strset-get should have a do policy")
+ 
+     pol_dump = et.get_policy('strset-get', 'dump')
+-    ksft_ge(len(pol_dump.attrs), 1,
+-            comment="strset-get should have a dump policy")
++    ksft_ge(len(pol_dump), 1, comment="strset-get should have a dump policy")
+ 
+     # Same policy means same attribute names
+-    ksft_eq(set(pol_do.attrs.keys()), set(pol_dump.attrs.keys()))
++    ksft_eq(set(pol_do.keys()), set(pol_dump.keys()))
+ 
+     # linkinfo-set is do-only (SET command), no dump
+     pol_do = et.get_policy('linkinfo-set', 'do')
+-    ksft_ge(len(pol_do.attrs), 1,
+-            comment="linkinfo-set should have a do policy")
++    ksft_ge(len(pol_do), 1, comment="linkinfo-set should have a do policy")
+ 
+     pol_dump = et.get_policy('linkinfo-set', 'dump')
+     ksft_eq(pol_dump, None,
+@@ -113,9 +109,9 @@ from lib.py import NetdevFamily, EthtoolFamily, NlctrlFamily
+ 
+     # dev-get do policy should have named attributes from the spec
+     pol = ndev.get_policy('dev-get', 'do')
+-    ksft_ge(len(pol.attrs), 1)
++    ksft_ge(len(pol), 1)
+     # All attr names should be resolved (no 'attr-N' fallbacks)
+-    for name in pol.attrs:
++    for name in pol:
+         ksft_true(not name.startswith('attr-'),
+                   comment=f"unresolved attr name: {name}")
+ 
 -- 
-2.43.0
+2.53.0
 
