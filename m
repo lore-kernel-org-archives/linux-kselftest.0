@@ -1,68 +1,68 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D9C3822B0
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 20:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D7F382F1E
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 20:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773435534; cv=none; b=JUcLBoHTWBdx7QcXSfu85zOdiEN6g9+mLddh4dx3EiQ12dmGWoJrvhsZJ8X315I1EhM1e15SeTFrP/4Pxiy4YBLl6ZWf2Kz1b/1QtIk5IlyabYKsgmDHD4Ce+fUhaNTv/b01LUZdtdGZhmMwHhn1QmIQJ3arOMT2FJvHmlW32q8=
+	t=1773435541; cv=none; b=ADsS9uB08K6+6Yk8ZBlQRAE4GoA7BX5FZsoDBo7SBswE3VzrtWOF5BwUy4opyhvlDW30sfDvNuM2H4WRq4L+u+dSBfrXU8KkOffgXySo9YCPqNSglPrG5692iM91Qh0yAgnH7B0tdeBUGoV7GkJ5Jvf+26WtGNjqxck3pdcejc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773435534; c=relaxed/simple;
-	bh=1RfbEstq7Ctycg2Jjjbdik5k6wt6QjUzw7dgsIUK4B0=;
+	s=arc-20240116; t=1773435541; c=relaxed/simple;
+	bh=EjlOG59djdew0+CoAm6FPU4BQF51f7/++vwrXk3pauQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rsg6Egiu5W1GBtNn3RWzfVIGiVexQf4L60NglW41EmvZ2p/9qFhiTt//abu6l1nu9JBtI9uvwg5Pcm4LljUUv3N5Gw8eaQ6I719BkrA7geuhETIIayS2W3xMPowC1rQCaLP7dRjM2CHyrrjTWKS1leqwnshBxy8Ii874DZ9viJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Gh01QykV; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:To:Cc; b=I0rb+9D9UXLFGYPht3vLdhiaxZMUcfBchZBIyorndfRjlMVVeboO3VmPYxWAYYtSNSDkPMzmiz4LV2atQufz++v3478pWMbYhRvHhjpHdXieMurDaoouefV+gbyJ3OQOERiepeyeVeZl54pEruPoAXY1eYBtBhhSvlLIgNrTbSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Tgj2ykcK; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Gh01QykV"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48374014a77so25193475e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 13:58:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Tgj2ykcK"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4852fdb36a8so29617755e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 13:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773435529; x=1774040329; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1773435533; x=1774040333; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iETlcb04uVTRpZaVmkcYa5KMez1NknEs+5aPJ6reEiA=;
-        b=Gh01QykVHQt/Jmjc8t4Jh+wE9xEjnw99M9n3Yu2B0QxzcwDWP8AO8ZyKFJ9jxw5Sjn
-         39//qw5978H0u1V+IR6BFQbpsiaoar1SWHOAM2y/Zq1IOsvROMeQIENZ7VA7/aXoyD56
-         YNnDZR5WcdgCNvLg7J4TaTFqOqZNp5QGxdPW/k12DQ6fMb7KFxGmXmARFpRWR1mh/4cv
-         GQ6a43Ag9JsK5bO2C3fWtsdYM8BYNgsTsYhg/2lrxKa0zs7YKPqMFnINYDSUTap9q8eS
-         JrD0CBLviiJC1UQugSLEbN/vxFE0qUdwvmoVvLar7cLZLaSuYrwriS+IiDypwFZKmAtw
-         LQtA==
+        bh=IyL9HjXlVtkM7LllEkbV4aKNC8jKN7b938wPwskLBwc=;
+        b=Tgj2ykcKd1OSqQFNk4hDh7KMoxqVRSAWfBcZVvhLM8l9BIqsYpsU1g/F9Pm8I7eQa6
+         SSf9XOHc6a7ggClEKdwYe8AyJHw3eYp6y7wcyU3rs9LsEELyi3T7/zWPx4D8tdycRHyB
+         nmm54VymCoSEVyFehwk+VyNN0lMezpdlbUryNzAUr2G7G9beCKimcftcgUxvCqJjsIFW
+         ATwz7PGZyvsgbrJjW0uz7E3m/sWf2cy+oin1eQ4jtQbrWPRSeyAZjYhJsGGH7TUlxJI2
+         YUsVGWn6fBjJkfxPhZ6o8mIs4T88YL8V4Q8MQsYTfKjp+xKcKeM5OxS4pEEgZDy+6pGj
+         ZHHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773435529; x=1774040329;
+        d=1e100.net; s=20251104; t=1773435533; x=1774040333;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=iETlcb04uVTRpZaVmkcYa5KMez1NknEs+5aPJ6reEiA=;
-        b=mbRrHInPWrsB7cHGMk2Jfk+U2/RG0i9hH887POHjTRdYl+YjsuJUUShrRg4r9sIeSG
-         mIYu4JJF7M7zZ6aCzJ2Tir2iJx+6m2tLgLX3Kig49+kXMd5wsztQl57wr9QQ6z68BzRN
-         okZm2Nr/RO7p0cyt2D3EDelzJM0d6GJwHq6Nxqy9NIKnW0oAaWw5GedBq9R376cc2aZG
-         +78vEus7hzfXVjJUsACfJXvLv2x1w0CmgH/A/KbWUUwu0DZq8ybBT5MEUSBZ0RBMce0n
-         fjTCLTq/JMiWshw1QVgOEwER6nJPUHJQSFJKuYwcIJfeUaNYEybRwUn/dsNtE1ivLi+i
-         Z+5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUlMCncoewwahOfRlZfuNNwuZH64AEcyn5wiXeH3HtH2cro5us7KWl5vHilf8Ff1D23XjgV4XMUrd1TXmhAxkE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/AoxwlEIeC2AY5Ad8PMnTz0w4ykAaQmnVYdmz5N97mY69jL+A
-	ZqockN3ZShZkymUfpjp9ZGuTQGM8V/gg23yddCjMezyTTC5z1dMl3Wx1n49q6mJgFwfbvCnAV26
-	xVqtD5gM=
-X-Gm-Gg: ATEYQzzCAru2iAs7hyBpWXjVzYhvxP54084+plGKECQc+iLSqCKZwScwxuu6IfUsDyb
-	BGRDyz+gHIBFam0GkU1T3psFJXN92uqGPLIDV8hNlRvKyUKM9jx3jk74A+3MQdvyIln+jCHtZ71
-	yrwGtJtSo6/2GK/RrY1vo6MAdTwjyxwFVe3IJO41o0i1yE3umsd24vuKMX+DOR3BFr/az+6z/M/
-	eGRPQePYzBGWjcFP4878G0nfDT1yFqxxU0tDt2RAA1p3xg0icRVyzsfBtIuN0WcMfwp7DSrJTu8
-	48/rf/IcdaHglaRcHa6ZOvj/0jCS6qCIZLPGQ74Goc/zhqN0mmo7OPz5s1AsI/Bkk94cvrf+oBf
-	c1/AVomHjqe0TUHWKFBYKBsJ4F57PJhZ3BpcA4ah31mOffh3Rd+FU0WU+MccM+bEJUBdFs27W1T
-	FE+7kULkjYPYzqiy++8Kyw
-X-Received: by 2002:a05:600c:a45:b0:485:4006:960c with SMTP id 5b1f17b1804b1-48556702a7dmr80842015e9.16.1773435528862;
-        Fri, 13 Mar 2026 13:58:48 -0700 (PDT)
+        bh=IyL9HjXlVtkM7LllEkbV4aKNC8jKN7b938wPwskLBwc=;
+        b=F6zaFokpE5zZiH14ZYqnQLx6AeXK/3lbWhoSVSfYuBfGDubT0r2LWkAwgXR+RBtxxw
+         XTllisZXZiOx2+F7+RNAlfbqT68m+AdpjO5/gocoTaY6LHiEibpPbvJy0eK1myjmt3aK
+         NgFAaqb62FSFBdEF9dEjZB/a5kNEjpeT+EuH3NVnaIGhwswM2gis8F9epXfhSmiDgcAE
+         M3D1IUN6fl1eIdBj6y9ypztvfxbzvtEP3h7niuytwnRfkjXLowJtMlYoBcQnrnCJwNUC
+         YvKak7iwYTiopRvfg6vwkTXTMbVoMJCH0xYofa6EsuvYF6ZOyYPb7ltroFUA5ypbJ13E
+         jEcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUER5AOInfqhMiOSZSwRMN8mLKUOj1x4schMC6hxs5RaedxKuGAMnZytXhl94so08SeypPoR9NpU3E8cUPpJug=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFYZHPZ4VTChBcGa1OUYY3fuE8NyvubsTrM+uhf9gHRAt3FdlC
+	Ec9hGkn0iX2AaTImgQPIlQ4YpzvYpUirfHy+Kj0XwHdCUgbhL6uyoTTd726sfyd+JOZs8/Thot6
+	wWEjYQps=
+X-Gm-Gg: ATEYQzwAzQZJ72u0r0TyBUtHSof79eqBNPzOGBB9GNIqyNV9OU8np6gnV1ht2OkMguq
+	2MJHlgHCP1hXRhsDn4C7PROTA3V1wnpovYACXKrjh8VjmkP6ot4dLXuFRck1E+GMKnoo+Zmrqid
+	0KNPDhV5tUzdf/T6wh/c/cW6yKoexMRWrle/WJiX3rXCGJF75ofrMSz5+hVpHlRztRJd65vHEjK
+	e5HbOS0bKU7or1qvg/NMCiSxSHoHTBcsxqbXHbUBLgZF+SEgoUcw6vTFc484+vQ5hVY1X6DhXPk
+	2pJE6UGyxVN6hRYGEoP6s8xNUaBM5pgbMFpWgqw21xEY5YcwXX8MpAElrxAHH6cPFSkzDUYkNpz
+	A9dTCJEn9DbQNY5eDISLybE57gO4Ww4cIqCHKG7nvZUngDg3IY5vV10Mc+N8uhuUTBNyXIX4dkN
+	R/MczO4Kgk8+D2ljr99s/M
+X-Received: by 2002:a05:600c:3106:b0:485:3ae3:b394 with SMTP id 5b1f17b1804b1-48556711ec9mr93938275e9.31.1773435533423;
+        Fri, 13 Mar 2026 13:58:53 -0700 (PDT)
 Received: from [127.0.0.1] ([2804:5078:834:1300:58f2:fc97:371f:3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab526d3csm4042611eec.18.2026.03.13.13.58.44
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab526d3csm4042611eec.18.2026.03.13.13.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 13:58:47 -0700 (PDT)
+        Fri, 13 Mar 2026 13:58:52 -0700 (PDT)
 From: Marcos Paulo de Souza <mpdesouza@suse.com>
-Date: Fri, 13 Mar 2026 17:58:33 -0300
-Subject: [PATCH 2/8] selftests: livepatch: test-kprobe: Replace true/false
- mod param by 1/0
+Date: Fri, 13 Mar 2026 17:58:34 -0300
+Subject: [PATCH 3/8] selftests: livepatch: test-kprobe: Check if kprobes
+ can work with livepatches
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260313-lp-tests-old-fixes-v1-2-71ac6dfb3253@suse.com>
+Message-Id: <20260313-lp-tests-old-fixes-v1-3-71ac6dfb3253@suse.com>
 References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
 In-Reply-To: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
 To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
@@ -80,61 +80,106 @@ To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
 Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773435515; l=2034;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773435515; l=4054;
  i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
- bh=1RfbEstq7Ctycg2Jjjbdik5k6wt6QjUzw7dgsIUK4B0=;
- b=R/GLdILhXCj8zr9ANzfi18u0WJVrCq1VW4lQo+ZqgoW+db89pYy4Iz86oJs/y0P/+VEgo2FKf
- LOOHZgWkIL8Dsc4KGGsnzlUUdTL2ENdD52Z9KhNOzQydZXdxZIg7thn
+ bh=EjlOG59djdew0+CoAm6FPU4BQF51f7/++vwrXk3pauQ=;
+ b=xZN725oHRhRMUg03sM0SZCOuYCUu9nt2V0hUx489e2bRu67lftT7q8cyHkbL3lWbpZa14HSz7
+ hFuv+iFkRw+Ayny0g91NJzaN2GfJQ55AD558wEgqL6bGe6yz0o0MgOi
 X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
  pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
 
-Older kernels don't support true/false for boolean module parameters
-because they lack commit 0d6ea3ac94ca
-("lib/kstrtox.c: add "false"/"true" support to kstrtobool()"). Replace
-true/false by 1/0 so the test module can be loaded on older kernels.
+Running the upstream selftests on older kernels can presente some issues
+regarding features being not present. One of such issues if the missing
+capability of having both kprobes and livepatches on the same function.
+
+The support was introduced in commit 0bc11ed5ab60c
+("kprobes: Allow kprobes coexist with livepatch"), which means that older
+kernels may lack this change.
+
+The lack of this feature can be checked when a kprobe without a
+post_handler is loaded and checking that the enabled_function's file
+shows the flag "I". A kernel with the proper support for kprobes and
+livepatches would presente the flag only when a post_handler is
+registered.
 
 No functional changes.
 
 Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 ---
- tools/testing/selftests/livepatch/test-kprobe.sh | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/livepatch/test-kprobe.sh | 52 ++++++++++++++----------
+ 1 file changed, 31 insertions(+), 21 deletions(-)
 
 diff --git a/tools/testing/selftests/livepatch/test-kprobe.sh b/tools/testing/selftests/livepatch/test-kprobe.sh
-index b67dfad03d97f..cdf31d0e51955 100755
+index cdf31d0e51955..44cd16156dbd4 100755
 --- a/tools/testing/selftests/livepatch/test-kprobe.sh
 +++ b/tools/testing/selftests/livepatch/test-kprobe.sh
-@@ -20,11 +20,11 @@ start_test "livepatch interaction with kprobed function with post_handler"
+@@ -16,30 +16,19 @@ setup_config
+ # when it uses a post_handler since only one IPMODIFY maybe be registered
+ # to any given function at a time.
  
- echo 1 > "$SYSFS_KPROBES_DIR/enabled"
- 
--load_mod $MOD_KPROBE has_post_handler=true
-+load_mod $MOD_KPROBE has_post_handler=1
- load_failing_mod $MOD_LIVEPATCH
- unload_mod $MOD_KPROBE
- 
--check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=true
-+check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=1
- % insmod test_modules/$MOD_LIVEPATCH.ko
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
-@@ -39,14 +39,14 @@ insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or
- 
+-start_test "livepatch interaction with kprobed function with post_handler"
+-
+-echo 1 > "$SYSFS_KPROBES_DIR/enabled"
+-
+-load_mod $MOD_KPROBE has_post_handler=1
+-load_failing_mod $MOD_LIVEPATCH
+-unload_mod $MOD_KPROBE
+-
+-check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=1
+-% insmod test_modules/$MOD_LIVEPATCH.ko
+-livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
+-livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
+-livepatch: failed to patch object 'vmlinux'
+-livepatch: failed to enable patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
+-insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
+-% rmmod test_klp_kprobe"
+-
  start_test "livepatch interaction with kprobed function without post_handler"
  
--load_mod $MOD_KPROBE has_post_handler=false
-+load_mod $MOD_KPROBE has_post_handler=0
+ load_mod $MOD_KPROBE has_post_handler=0
++
++# Check if commit 0bc11ed5ab60c ("kprobes: Allow kprobes coexist with livepatch")
++# is missing, meaning that livepatches and kprobes can't be used together.
++# When the commit is missing, kprobes always set IPMODIFY (the I flag), even
++# when the post handler is missing.
++if grep --quiet ") R I" "$SYSFS_DEBUG_DIR/tracing/enabled_functions"; then
++	unload_mod $MOD_KPROBE
++	skip "Running kernel doesn't support kprobes along livepatches"
++fi
++
  load_lp $MOD_LIVEPATCH
  
  unload_mod $MOD_KPROBE
- disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH
+@@ -61,4 +50,25 @@ livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+ livepatch: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH"
  
--check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=false
-+check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=0
- % insmod test_modules/$MOD_LIVEPATCH.ko
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
++start_test "livepatch interaction with kprobed function with post_handler"
++
++echo 1 > "$SYSFS_KPROBES_DIR/enabled"
++
++load_mod $MOD_KPROBE has_post_handler=1
++load_failing_mod $MOD_LIVEPATCH
++unload_mod $MOD_KPROBE
++
++check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=1
++% insmod test_modules/$MOD_LIVEPATCH.ko
++livepatch: enabling patch '$MOD_LIVEPATCH'
++livepatch: '$MOD_LIVEPATCH': initializing patching transition
++livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
++livepatch: failed to patch object 'vmlinux'
++livepatch: failed to enable patch '$MOD_LIVEPATCH'
++livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
++livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++livepatch: '$MOD_LIVEPATCH': unpatching complete
++insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
++% rmmod test_klp_kprobe"
++
+ exit 0
 
 -- 
 2.52.0
