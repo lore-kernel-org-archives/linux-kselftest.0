@@ -1,48 +1,61 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8512D3DA5C3;
-	Fri, 13 Mar 2026 18:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B753537D0;
+	Fri, 13 Mar 2026 18:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773424879; cv=none; b=BOQSpWJXc3oJv0SIWZ9KSBjNEldnpuOLHo4Rgo0wbTK73d5TlExHF8Htq541UydrjjFgvoAQ915Tr5dVY+twEKnBxg1H03/d7j3xy1Cd2wSHEYwF+921R+4XWf9Cud3MH3qg/7B9AimsQb/YKrPCf/Xa46+iugcXHwxTVpct00I=
+	t=1773425939; cv=none; b=u2eRhWdZ3ljPwVyhhIzLNbd6MrCCzMlsHM0RrIFBaCyuKJKTNSutS1lUDYiHjS9Kfc3UbZ8O1+0QoELj6t2SdkELV8urmUAaid5ne/w6kyAREdmVEXRn2BpVXQEhBZKD82q7e9IrwyQVlEf4SLP763SJ20tzXSeFIEHl5uQ3p4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773424879; c=relaxed/simple;
-	bh=MRzGhrN9hVB2ZGyVFh5yWabHT/MNGX9ojKRdz5/Xkvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cLjTAbEIJslpX1U0c6Y23qzl8Uaa63/uyzkA33M77AkCw/o20Tz8nlC91E2hJnoeZ9NIcuVKYs3DTlYzlR5vvSoZTOflmFqN5/Dp0zFIwLnRWv1m+/t6hxeApyPwOGgFumsJEkTMu24KRjbPQQm6/NPKEDqMoZIphtu2LGRwoc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTB3aETE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773425939; c=relaxed/simple;
+	bh=2NXO+yF+55T7F+hpfAb0nuG4E5nybIth2x/Lfeit0v0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=XdwrgaZZAJv4G6I2UYoHtplsnchdY864Qi/qvJk+Xqy+XDc4jRVhZloSebu+7pIWdk1cSgcI6A4W80mmNYDf2T47G4VdFANHSMLbCOn4Yf0mcZ9nprQJpDyw3AV55v3l/uRPUJh6/jwUAqjKgtgvcIRDDlihMozx6u9HKWkkcnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkuBmUY5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTB3aETE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79BEC19424;
-	Fri, 13 Mar 2026 18:01:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkuBmUY5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49944C19421;
+	Fri, 13 Mar 2026 18:18:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773424879;
-	bh=MRzGhrN9hVB2ZGyVFh5yWabHT/MNGX9ojKRdz5/Xkvs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oTB3aETEPFbMFd1V2117aVAW9Pg22Xn73fZp3/WCMkLiJnEkurTHr93HA0Zkj+m6h
-	 L9khE7FeruWr9tfW/SPZgWtKrrglrpa3x2CT91Mjewrw2EreQ/dr6eB6BedfqfcxQ/
-	 kYa3anCs35ma72duwKhUmsH/mPriCCXIFRm2NlLUr1FOYtQrdR66obbCkb0ZGnlv7F
-	 +wVSWPAa81bjcPcKLXB5daOLsOTt3srjLSA5EIWqFnB7hHMC9Ea637oKqpWsAhFeNb
-	 Sx2sjr5a4nEg3oO+WymUK4S8i4VAiQE9nup7ZpSV//ORiSK4ihRMfMsvmq+op8PTV6
-	 6ietsbRCeYc3A==
-Date: Fri, 13 Mar 2026 18:01:12 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Chunyu Hu <chuhu@redhat.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev, 
-	Li Wang <liwang@redhat.com>
-Subject: Re: [RESEND PATCH 4/4] selftests/mm: transhuge_stress: skip the test
- when thp not available
-Message-ID: <121d35f0-c46f-4c03-a470-8e8969181fe4@lucifer.local>
-References: <20260312114027.634559-1-chuhu@redhat.com>
- <20260312114027.634559-5-chuhu@redhat.com>
- <708647e9-fc49-430c-a12c-f2b44caa273d@kernel.org>
- <abN5z5jpKL2GOWc3@gmail.com>
+	s=k20201202; t=1773425939;
+	bh=2NXO+yF+55T7F+hpfAb0nuG4E5nybIth2x/Lfeit0v0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=WkuBmUY5zECY4w8HigOp4c5Dc0Y7y2nfHD6yuEYwFaBxRHSoHOnEVTjF7hkT0eQkA
+	 AFvQ0/U9ShmNbMyzF+0wQhrhDsQwyNxKjC32q2tl+0EsRInNZqjgNxUjA0SajeBrn6
+	 kHFj31oHvk4O5GY8i8NmF5RD6dgQrjiCuW1ZNS0TlFAoxlpUagAwvkYpFuqyVtZphY
+	 QVlHtHnRkgjRr9/4FntuZCDQbU9JYgsYDVeDARhaRlMuvQRsZqk8X1fkK1i1jrac4k
+	 8sYPWv4uyylodoV2LcLxP/nDTVvuq2bcgK0cxCWY0hcOSstFpl3VMDzH3SGAkgADCP
+	 f+nDIUI0cgl7Q==
+Date: Fri, 13 Mar 2026 13:18:58 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Christian Bruel <christian.bruel@foss.st.com>
+Cc: Koichiro Den <den@valinux.co.jp>, jingoohan1@gmail.com, mani@kernel.org,
+	lpieralisi@kernel.org, kwilczynski@kernel.org, robh@kernel.org,
+	bhelgaas@google.com, cassel@kernel.org, Frank.Li@nxp.com,
+	vigneshr@ti.com, s-vadapalli@ti.com, hongxing.zhu@nxp.com,
+	l.stach@pengutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, minghuan.Lian@nxp.com,
+	mingkai.hu@nxp.com, roy.zang@nxp.com, jesper.nilsson@axis.com,
+	heiko@sntech.de, srikanth.thokala@intel.com,
+	marek.vasut+renesas@gmail.com, yoshihiro.shimoda.uh@renesas.com,
+	geert+renesas@glider.be, magnus.damm@gmail.com,
+	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+	thierry.reding@gmail.com, jonathanh@nvidia.com,
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+	kishon@kernel.org, jirislaby@kernel.org, rongqianfeng@vivo.com,
+	18255117159@163.com, shawn.lin@rock-chips.com,
+	nicolas.frattaroli@collabora.com, linux.amoon@gmail.com,
+	vidyas@nvidia.com, shuah@kernel.org, linux-omap@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@axis.com,
+	linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v10 3/8] PCI: dwc: Advertise dynamic inbound mapping
+ support
+Message-ID: <20260313181858.GA1427542@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,77 +64,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <abN5z5jpKL2GOWc3@gmail.com>
+In-Reply-To: <b2b03ebe-9482-4a13-b22f-7b44da096eed@foss.st.com>
 
-On Fri, Mar 13, 2026 at 10:43:27AM +0800, Chunyu Hu wrote:
-> On Thu, Mar 12, 2026 at 08:46:23PM +0100, David Hildenbrand (Arm) wrote:
-> > On 3/12/26 12:40, Chunyu Hu wrote:
-> > > The test requires thp, skip the test when thp is not available to avoid
-> > > false positive.
-> > >
-> > > Tested with thp disabled kernel.
-> > > Before the fix:
-> > >   # --------------------------------
-> > >   # running ./transhuge-stress -d 20
-> > >   # --------------------------------
-> > >   # TAP version 13
-> > >   # 1..1
-> > >   # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-> > >   # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-> > >   # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > >   # [FAIL]
-> > >   not ok 60 transhuge-stress -d 20 # exit=1
-> > >
-> > > After the fix:
-> > >   # --------------------------------
-> > >   # running ./transhuge-stress -d 20
-> > >   # --------------------------------
-> > >   # 1..0 # SKIP Transparent Hugepages not available
-> > >   # [SKIP]
-> > >   ok 5 transhuge-stress -d 20 # SKIP
-> > >
-> > > CC: Li Wang <liwang@redhat.com>
-> > > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
-> > > ---
-> > >  tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-> > > index bcad47c09518..76316696426d 100644
-> > > --- a/tools/testing/selftests/mm/transhuge-stress.c
-> > > +++ b/tools/testing/selftests/mm/transhuge-stress.c
-> > > @@ -17,6 +17,7 @@
-> > >  #include <sys/mman.h>
-> > >  #include "vm_util.h"
-> > >  #include "kselftest.h"
-> > > +#include "thp_settings.h"
-> > >
-> > >  int backing_fd = -1;
-> > >  int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-> > > @@ -35,6 +36,9 @@ int main(int argc, char **argv)
-> > >  	int pagemap_fd;
-> > >  	int duration = 0;
-> > >
-> > > +	if (!thp_is_enabled())
-> > > +		ksft_exit_skip("Transparent Hugepages not available\n");
-> > > +
-> > >  	ksft_print_header();
-> >
-> > Shouldn't that go under the ksft_print_header(), like you did in patch #3?
->
-> It will print the TAP version. I'll change in v2 as you suggested. Thanks!
+On Fri, Mar 13, 2026 at 04:59:26PM +0100, Christian Bruel wrote:
+> Hello,
+> 
+> While testing after this series, I encountered regressions on the STM32MP2,
+> which I am unsure how to fix. The failures depend on the order in which the
+> tests are run.
 
-With that done, LGTM and:
+c0f1506f6354 ("PCI: dwc: Advertise dynamic inbound mapping support")
+appeared in v7.0-rc1, so apparently we added a regression in v7.0?  Do
+we need to revert this?
 
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-
->
-> >
-> > --
-> > Cheers,
-> >
-> > David
-> >
->
-
-Cheers, Lorenzo
+> The STM32 ATU has 4 inbound entries. After enumeration, the first 4 ATU
+> entries are allocated within ib_window_map.
+> 
+> On the first run of ./pci_endpoint_test -v BAR3(for example),
+> SUBRRANGE_SETUP calls dw_pcie_ep_ib_atu_addr(), which frees only one ATU
+> entry (BAR3), because we were in the bar_to_atu case, for the first submap
+> but fails to allocate the second submap. So the test FAILs.
+> 
+> On the second run with a different BAR, SUBRRANGE_SETUP test calls
+> dw_pcie_ep_ib_atu_addr() again, freeing the required ATU entry (BAR1) and
+> successfully using the second ATU entry (3), which was left unallocated by
+> the first test. then now the test PASSes
+> 
+> Therefore, the first invocation of ./pci_endpoint_test on any BAR always
+> fails. Other invocations are fine because the first one has left the missing
+> necessary ATU entry free. Whatever initial BAR number is used
+> 
+> I am unsure how to fix this. Always freeing all BARs before calling
+> set_bar() in the epf-test seems overkill, but safe.
+> I am also considering modifying dw_pcie_ep_clear_ib_maps() to clear N
+> num_submap entries even if ib_atu_indexes was not used yet, since only the
+> full BAR is used during the first invocation from bar_to_atu. But the
+> question is which ATU entry to select ? BAR+1 ?. This seems empirical.
+> 
+> I am not bothered by test failures due to an insufficient number of BARs
+> (this is already the case for BAR5,6), but the fact that the failures depend
+> on the test order is frustrating and show a regression.
+> 
+> But I'm not satisfied with either of the 2 possible fixes mentioned above.
+> 
+> Do you have any other thought ?
+> 
+> thank you
+> 
+> Christian
