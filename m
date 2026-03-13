@@ -1,147 +1,168 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0F4312807
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 08:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773388810; cv=none; b=CCy7cf27q0uXuOgti61TGoNw5LmorhD9qJHzPV5OuluKZXUh2GmG/6qslvwbmtcfjBsmH+GqI+We/3/ZKXDWv8hvTT4B/M7kIa1U9+ViCsIypE23mto0/0Yrsw3evdEUTvim4b21MxRQ8wsoP1DfhFB71npT7Wz1qPFg9aG8+KU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773388810; c=relaxed/simple;
-	bh=dhJ7PMyw4LBFr7hpUOj8aPlDG/Pq+Tfywa8ZaPivs7c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VCoNfZqJst6X/2B4k2Fo1Fbabgj49FBBtoh/qPLNi/f2WvljPZn4U4DUGl7wrLB4Px20oOdrdDByydtirZX2zZZ/0cdsQ270XGVJ8BHSpG7ZJORq7YcOdOe4kgGvYA+pny4AC5KsrED70+xMzLLP65Q7r4cztnFesjOfheJQlBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GXmgzWNG; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=iOb9tjJz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24AF36E467
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 08:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773390733; cv=pass; b=V73wyqQmw8+tVWiuIey8yavoOMPt9n1GCrxFnar8QERpxJlBdpXyx/KE+wo3VOqsQY7rI5StnLDL6fArLMxx/aBNKUbaIBkhbqE8Ks0/g4ASzOpXwdAzzBgBvjvDR98WLLcep9O6BAx0iIa9r60f1DljOq+BDG+z0qD1qdBH7AA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773390733; c=relaxed/simple;
+	bh=73CFgCEKHFJELY9UP5/RhebVFajDLrcQrE0lsXPbdIc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p2YbTeYjV9XBo3Nh81hhasHFf3BdU2Om53Phg1Dh6w/pXZ2Eq/XhRBFldkoYClgvIgbyzyKe50DI6prhbNSzYggQGYL4HSgT/Q0WaBtsgM7yzLwA4NrsnxcZ9as05YOAX9xsPaw9x8vZTufoeC8a44YTu5c0ltASeK45V1oqcMU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nQJMmXtD; arc=pass smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GXmgzWNG";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="iOb9tjJz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773388807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lUt1gcYqzrYknbcgM6G0CiCCOogoU5FAXbp8MqBc1GI=;
-	b=GXmgzWNGxXzyJjaJCuj9fecNkC6c8VH9AXNbNCpIEwXq+N+t/dEEIlo//HiOSHwJ4IIHIR
-	OXGL6YNRatnC/gbCGSu4K+Dz6m2dwC6p39dAJUTA+xsV/JxtgDUlNyouSYuMwOhuu1TT9I
-	I5/yDpXI+a54hr3s+U/7A7PJppRVME4=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-562-v4lgW4wJMjmH02bX8PmLHQ-1; Fri, 13 Mar 2026 04:00:05 -0400
-X-MC-Unique: v4lgW4wJMjmH02bX8PmLHQ-1
-X-Mimecast-MFC-AGG-ID: v4lgW4wJMjmH02bX8PmLHQ_1773388804
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2ae669a8ff1so123412515ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 01:00:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nQJMmXtD"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-509069a7a7fso391371cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 01:32:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773390731; cv=none;
+        d=google.com; s=arc-20240605;
+        b=L3PBmgObqhDX285u/Ny++Vwcf7T9yjmyf7jS0Ybi4KdnHYqtJc9gt/rQFHBz5PfbTM
+         RVkdodedkIK96KR1k8hZqUYM5LTgbxABAV2WOnnZi6HfGvLUZ7muveSbCyxgg06SaNH9
+         fy0TRtNmq5azrN7g7/t/kxPwNo0QU5Uj3U4V21ZUU/Th72l2AO8BODoiSrEn9l0ANGjw
+         4SD2bE08AuB+liJf1TcuezAkzAuBoxIiLLE7mdZDbWhlcRGYqeRAPilvmyEUR/oRr0AW
+         rA4UUBCag84vljSAP9k1JW2U7+9lP5UCY3AWyjVcScORyUSOcRohQk0rxCDaRMT3e1di
+         5i2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=+ZginHenLFfV4BXN5/Mah3uAKtVZ/csIYirzOzG2w24=;
+        fh=09Sy19N137aHR/thwFNBzBRk5pdmngN5qHZjdNzT2gU=;
+        b=SqcFNkhsbx0yLgn3zcOcHdAsE5rgPwjAbMzyymwU48vjaBai0DmqKudhScon7gUJXZ
+         as88XryeQNrfzlyZyfaU8m/cmbqvayxkrCIqRkv1vuBPbRTlnOqi3G+8GhWTibHBGluq
+         h/l9OzSs3CqO8kFYfoXt0k0e6SOVLndAwBaQHnngWmPokBApLH3U7LUQI8z/0YeX+uEk
+         BvXuF+i2g7SQrDK/QPWeWaF+yNllxmMhxGvrmc+VgAKCf4tQllR2dY+BcYkyOl3fzdEL
+         JvBcPmgZoRovXsACPOJWku/Zo1y5yqKwxax3u1WJ5rWhCg6ka4ulv5PvWsf3PqFxoDTb
+         lWHg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773388803; x=1773993603; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUt1gcYqzrYknbcgM6G0CiCCOogoU5FAXbp8MqBc1GI=;
-        b=iOb9tjJzGu35XsHixsnMBjJ9R1uXiIqFuxKPTyB10EY/2UmbkZ/eFx+a7elTAoJfEJ
-         cifTH64I6NcJFzbriIRjuFGt5mu42V5F9zsOTLuwlhNy9BHnPK27G7DDtmhNafHgkbkz
-         59ikEMXAPN7geqH4/VbewzBiSlWduTYgWC/XDAGScBC4De8Wax0N0ImGDH4vJjAGvbmS
-         mki6ZFtdg/fZALW4jZXJlouvkvWJ6hHPaNziY5d1jt1wJLugSAA+HN8rEIQKpNE9A93N
-         2PjGYMVL6CclZjMLm5HqgxKZK34H/YjvzOI6FtXjRIMgs6foZNG0qxP/Ku8MobehrNtm
-         /t+A==
+        d=google.com; s=20251104; t=1773390731; x=1773995531; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ZginHenLFfV4BXN5/Mah3uAKtVZ/csIYirzOzG2w24=;
+        b=nQJMmXtDeSbfqyR+LkB3F6MP0abezHJlWnsMbWoEcXY08iHzHCjQhwLMn8VR4iT2Be
+         G1UgMm5hGMR3gYMYgmgkeR25dFtszddTUZNA8KbWejU6Qg0bU6y5QU4ORGPkXuJSWgdL
+         qF0bNUYpsGBcQsDCD9VCFAx8lIRtDxgdSh9W9HQrqGJFElIOD/TzbthIFloS0wM57u0Z
+         quzVdUomwO1CWThAvGKXHVUhtRBgezKzUsbQRN2pRl9u8QU58pk9XVuVvuJUsevLO37B
+         /2oUkr+FqlOR2zNGSgeYYq3id7E/zCJFtLM+z9d6ojL5T/PvKBMvtY9I0pHKEDDVyg/a
+         +l9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773388803; x=1773993603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lUt1gcYqzrYknbcgM6G0CiCCOogoU5FAXbp8MqBc1GI=;
-        b=X0/99B1jb1LSImdHT57aScbllP6p68+OV1jD5RrtQ+hRs7VXzZTntZKwHh2aBaZzu+
-         xDGDyJDxUgHUiXsDnk9iU3mDGmAdusgLrRnIAkH5DxLYep+ZJDFZM2L8EgcnNpsHVoD4
-         9ZEJcRiAN6kefh5S3H7O5G30F63qZue66Y836i/LXn+A/zyEgK+PeUPcN1qBv4WOWoua
-         VwasYWr+gMSEme7NrTnfCpnubq54a/19c5R/PyWEPUoV17ZK9ZiPG+poFmralN4xwxTB
-         BtJMxW0CaY/N4gbDfo5QuqJ/HTvEQeOjAKdxSXI05wtoS7iwz/bifL5LH1USj69N9iIq
-         2F1w==
-X-Forwarded-Encrypted: i=1; AJvYcCV0yR9EVxFq+ZnWN4E+MybIjTSohPcvdcOT/6XMc5jkPicSeMjWeQL10K6SjeoonXnvs2QFdmdw/vMRKma//qk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX4+gkntKGo/LOItD+Sc7863HXEXdnHAOJ2IYwFq3ThWNcQGVp
-	sP5exoDRiADGn4wkSCwFpaTBMQBmfK3NgFpdFFJk8+oyAbffjFq1RaDBIQkWO7SbJQg3N9crnV2
-	xO1XI0JuKphsmxrJ0gdTB33YVF0MvMVgDIhxkrj59QsIluThdMUDkzTCWz4LAhU9S/IFe3jilkb
-	PFwA==
-X-Gm-Gg: ATEYQzypUj+GFSNR2Yvo7wRiTNFRmHfkb6we+LwBMyGC3aYch+0slkt4nS6nwh9gAHW
-	bYQO7nFiyM1AOd1d9WMPt1tcIE4sCDYtorUgG2iNvOQhCPXbHNWF6KrD9ZtrOWNdZsM3/oVKtu6
-	GcUetUxXLv93oaZ93srTW6sEKLdmscvgsVGxH0Bn/icFey2YKyGp6ulGTYaHJBl7jhwbPCo8/pj
-	UY6wbFBde98UQus+W7SwF1tLV2aL2A5Pq8GU/K4+Sxr0IToe7ZXBJvxpEnEhxLjIHCU+W1f2ymz
-	3EaVbClMQSRHPf1cvVrSAmlYn7yAukmzRoLtlrXlGCFI32Yo8JG3wQ5ENm4IPmWbRR19hZeXzYd
-	f+20zIyPRI4FDCZn1IQ==
-X-Received: by 2002:a17:903:2ace:b0:2ae:ba41:55 with SMTP id d9443c01a7336-2aecab1f315mr23815215ad.26.1773388803691;
-        Fri, 13 Mar 2026 01:00:03 -0700 (PDT)
-X-Received: by 2002:a17:903:2ace:b0:2ae:ba41:55 with SMTP id d9443c01a7336-2aecab1f315mr23814895ad.26.1773388803242;
-        Fri, 13 Mar 2026 01:00:03 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece825aaesm12117585ad.73.2026.03.13.01.00.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 01:00:02 -0700 (PDT)
-Date: Fri, 13 Mar 2026 16:00:00 +0800
-From: Li Wang <liwang@redhat.com>
-To: Yosry Ahmed <yosry@kernel.org>
-Cc: yosryahmed@google.com, nphamcs@gmail.com,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>
-Subject: Re: [PATCH v3 1/7] selftests/cgroup: skip test_zswap if zswap is
- globally disabled
-Message-ID: <abPEALhYmtBnEULi@redhat.com>
-References: <20260313043532.103987-1-liwang@redhat.com>
- <CAO9r8zMsbVHKnCzfQcdtomRMWTNFgTGY4XALxwm+i9m1SUPPvg@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1773390731; x=1773995531;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ZginHenLFfV4BXN5/Mah3uAKtVZ/csIYirzOzG2w24=;
+        b=YwfvFYUyAEXWFOi6shrrZuD4klmsyNgdb2cZaZx0wLKaAEbUe8wYKftP0RM6lUGzKI
+         IxrFyzbLEpqydy5OMpuFsTV2EmghJAkdxFYYP2FQpF/y+5Eat69k6rIjOGPsZCongG0d
+         dSzdV/BuhdkCJKN6+hV6Qz95N/v7AajKktLfu2YR4I3Ey6TGmf4HNVD4P0gjTTFXIZcg
+         dbQhO+qBv95Yliwuxx+IyRb1MqXRkt7b2J6AUzrb0reRWQEP64LtWs/V1PSmkksG6klx
+         CTPo0R9rOg0HFz4vIb9RWQICmV0/Zvd+XDz0Oc8w2ZlUdQSIiu2Wk7TUVou7R3lbg1L9
+         2PwA==
+X-Forwarded-Encrypted: i=1; AJvYcCVlWT9YYWcFUvIhdDNvNY9w6GFkuUyDCb/vjT8T7cbNcHILMWxeEU5wpRhRbUNx6SpKmsYQKUjt/rU/F9y1ofA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7FjsAatAGHBGnWgfPvodD2O288N3/1uv5l8QBOAycVoonJ74X
+	+YljFAv/jb4P7+cw6NlhMO7YvQlxLQFTgs/IGJBD0+9WU10UlGLK4l4Q069o0Atrg33l78xDyfp
+	177MG9pqw/V42s0pcZvWBNNtlY7mKy/LnG55Zb77+
+X-Gm-Gg: ATEYQzzscNqmN55p7HHRN2NQYmbqGh7lGUX4r2cr91JC1RxZoXshablPpT9Z7zJtMDQ
+	Vz2zDSNsJohY7u8Uy9WqfGZ7LVGksEEUIWDroqqrWjcJPmZQ1lYNIsjJ2MQpOCP5tLiHVIL0/+Q
+	CvaMLcRAGQAf+uko28rgC0Ht/d328aOdmInkN3Ix+PuZnsnPNpy4cdTdqKdCSQ9iVar1kXuacUR
+	QdEkq488/LvmQKrLre/tMXuAdUJwC7atgXQ7K0ZJImCg5roQpo9IA8hTEFlyMPD3WIjn0jCZHxJ
+	SERtUcFt
+X-Received: by 2002:a05:622a:58c:b0:506:9852:75ec with SMTP id
+ d75a77b69052e-50959e1d20cmr8206111cf.9.1773390730313; Fri, 13 Mar 2026
+ 01:32:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO9r8zMsbVHKnCzfQcdtomRMWTNFgTGY4XALxwm+i9m1SUPPvg@mail.gmail.com>
+References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
+ <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
+ <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com>
+ <CA+EHjTy2urW2Tj5czQDKUHdri7FCLfw2mafTgmmtFs+-7ueoiw@mail.gmail.com>
+ <abLfWHf89TxWqeGZ@google.com> <CAEvNRgFUc+9xCoN9Yo5NThHrvbccWAhPwp9nNM2fvx7QqrcJsg@mail.gmail.com>
+In-Reply-To: <CAEvNRgFUc+9xCoN9Yo5NThHrvbccWAhPwp9nNM2fvx7QqrcJsg@mail.gmail.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Fri, 13 Mar 2026 08:31:33 +0000
+X-Gm-Features: AaiRm52mXTtSsie7DL9lVs7x2V-5c-a3ZmVbxJyJb1VBocy3h5inh1iSGtq73Is
+Message-ID: <CA+EHjTzJmJZF=XE2NWsTZ9yCVix8oLp6M_Jb5m2EuC-W5p+U4A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de, 
+	brauner@kernel.org, chao.p.peng@intel.com, chao.p.peng@linux.intel.com, 
+	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com, 
+	david@kernel.org, hpa@zytor.com, ira.weiny@intel.com, jgg@nvidia.com, 
+	jmattson@google.com, jroedel@suse.de, jthoughton@google.com, 
+	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
+	mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
+	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
+	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, shivankg@amd.com, shuah@kernel.org, steven.price@arm.com, 
+	tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 12, 2026 at 11:34:41PM -0700, Yosry Ahmed wrote:
-> > diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-> > index 64ebc3f3f203..e69d845d3592 100644
-> > --- a/tools/testing/selftests/cgroup/test_zswap.c
-> > +++ b/tools/testing/selftests/cgroup/test_zswap.c
-> > @@ -589,9 +589,21 @@ struct zswap_test {
-> >  };
-> >  #undef T
+Hi Ackerley,
+
+<snip>
+
+> > By default, KVM makes no guarantees about the in-memory values after memory is
+> > convert to/from shared/private.  Optionally, userspace may instruct KVM to
+> > ensure the contents of memory are zeroed or preserved, e.g. to enable in-place
+> > sharing of data, or as an optimization to avoid having to re-zero memory when
+> > the trusted entity guarantees the memory will be zeroed after conversion.
 > >
-> > -static bool zswap_configured(void)
-> > +static void check_zswap_enabled(void)
-> >  {
-> > -       return access("/sys/module/zswap", F_OK) == 0;
-> > +       char value[2];
-> 
-> Please wait for discussions on the previous version to conclude and
-> give people a little bit of time to respond before sending the next
-> version.
+>
+> How about:
+>
+> or as an optimization to avoid having to re-zero memory when userspace
+> could have relied on the trusted entity to guarantee the memory will be
+> zeroed as part of the entire conversion process.
+>
+> > The behaviors supported by a given KVM instance can be queried via <cap>.  If
+>
+> I started with some implementation and was questioning the value of a
+> CAP. It seems like there won't be anything dynamic about this?
 
-Sorry for the rush. I thought that I had clarified the issue there.
+We can drop the CAP for now. Probing via the ioctl and handling
+-EOPNOTSUPP is entirely sufficient for the VMM to discover whether
+ZERO or PRESERVE are supported for a given architecture and conversion
+direction.
 
-> I think this can just be be:
-> 
->     char value;
->     ...
-> 
->     if (read_text(.., &value, sizeof(value)) < 0)
+> The userspace code can check what platform it is running on, and then
+> decide ZERO or PRESERVE based on the platform:
+>
+> If the VM is running on TDX, it would want to specify ZERO all the
+> time. If the VM were running on pKVM it would want to specify PRESERVE
+> if it wants to enable in-place sharing, and ZERO if it wants to zero the
+> memory.
+>
+> If someday TDX supports PRESERVE, then there's room for discovery of
+> which algorithm to choose when running the guest. Perhaps that's when
+> the CAP should be introduced?
+>
+> > the requested behavior is an unsupported, KVM will return -EOPNOTSUPP and
+> > reject the conversion request.  Note!  The "ZERO" request is only support for
+> > private to shared conversion!
 
-This actuall introduce a problem to the code, as in read_text()
-that achivement is:
+I think that this makes sensefor the UAPI. Returning -EOPNOTSUPP for
+shared-to-private ZERO conversions.
 
-  len = read(fd, buf, max_len - 1);
+For pKVM's specific use cases where the VMM requires a zeroed page to
+be injected into the guest's private space via attribute conversion,
+the VMM can simply `memset()` the shared memory to zero in userspace,
+and then invoke the ioctl with the
+`KVM_SET_MEMORY_ATTRIBUTES2_PRESERVE` flag. This completely offloads
+the UAPI from making guarantees on behalf of the trusted entity, while
+still satisfying pKVM's functional requirements.
 
-When 'sizeof(value) == 1' pass in that makes read(fd, &value, 0);
-read zero, after that, the value is set to '\0'.
-
-With your < 0 check, this is treated as success, then value == 'N' is false,
-the check_zswap_enabled will report wrong status (enabled) on disabled.
-
--- 
-Regards,
-Li Wang
-
+Cheers,
+/fuad
