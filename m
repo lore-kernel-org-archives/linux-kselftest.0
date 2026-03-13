@@ -1,198 +1,209 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05ABF22256F;
-	Fri, 13 Mar 2026 09:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2579E381AF2;
+	Fri, 13 Mar 2026 09:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773394217; cv=none; b=JMqEAM6pv9b9SKwbE7ASIkC/36th3s6bNpZH+G56OgQsiBO99A73R9XtaGysbj6stEQtStw2fiRVKRTH8Z4UuATpD49eLnxYPIVFhBVplIgUjWtHcVSn7UAYdzqaG1pxyYHTmF5lKRnO2WHQd/AEq5PhEXbGwFmNbHZrYfnoaTM=
+	t=1773395245; cv=none; b=FiovzKMiTdtVgPe6cZnRrjX2v4cLDxBFeZUaQAgWLucCZe4yqiUqxbSXiDnAUCsZ0ZvcI56QVaueJIT+iIqQzysOp3PC/2wUqZMPr5nmVbCBJ0CQHWlnvgZRjxH0ty4Inewdib8nZWMC8JB8nPmKoIRq9BTQtEu+tDKjsjq56mU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773394217; c=relaxed/simple;
-	bh=qc05WWl7Lm9nFXBtakuH0KvtMf5pk/h1eBlPEav4eoM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a4kGqKCNBBY+PmhQ2MS5Kk7dHzC7pQpXIJnxDzFfqXghrscETR82YOEwf34eEg3cnm7Xg3QhD+1DwS6FT8CLgyGOscW3DrQ9NtHnPlqs7dg+fz36GrYFNU73M95NZUoxgO3r5UQ0LF8/3cFKsqBFeTlscKK3tMv4w2qPWCYeX+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VETa/Vrh; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1773395245; c=relaxed/simple;
+	bh=PC8MPKy+0j88dG6m0YHbapY86SedgwhcjHHl97ED1nw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=l+pITzB6kh8tdTRM0r39G7WbNLS2qhIFCw0wmQOJudtgHxLBY+WUFAO/NisXuiVN/7fjqRLxWnB6cOMyoZNA1kfFUhy4o7l4D5gu1q7H14ZhNO1GfN4dSUc7jNTVn5GRY7MfVEHFIHKvLY5zmHcH+pHWDFdTMPu9j09PhDLPFMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=zvvkMfff; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VETa/Vrh"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62D6ZZER2206305;
-	Fri, 13 Mar 2026 09:29:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=HE5Qi3
-	EihYLD8YY4FpHuo1qkorI6ypCTOKTEtMLwtPE=; b=VETa/Vrh++h4coO1YfSlnp
-	yhuaT0ftUwRy+uWGwlvIDYctkWDxAnH5I1GPqlOYS9mmlTrAsrEQHLgqJeevExVH
-	Cqu/bKawYnJnnojM1AUdj4RW+tvsQztlQCquVKdIe8z0KuWXZL1najqspS6+YK6s
-	6SKIbSKdTjjiSNhsi3Anl3WihxoXaPErToNZ6pYTRps8rl0OoxU2Bt1b1htCgGWt
-	GEtQ6C0uFWzAp8SGaiOkN9gY4E6glhr1SYSZMixdKFmn745hzAGWMv/qw2n/gKoj
-	XSlyS4PP1Wk9uZKbhsTtNoUI1TJA7cQdhP8oBR8a0KgG5VsFI1iM2/SzQ1ub8WsQ
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh98es5n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 09:29:57 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62D5O8XI025686;
-	Fri, 13 Mar 2026 09:29:56 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cuha8e1ey-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 09:29:56 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62D9TsZT46334426
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Mar 2026 09:29:54 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AFDDD2004F;
-	Fri, 13 Mar 2026 09:29:54 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7F2DC20043;
-	Fri, 13 Mar 2026 09:29:53 +0000 (GMT)
-Received: from [9.78.106.17] (unknown [9.78.106.17])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 13 Mar 2026 09:29:53 +0000 (GMT)
-Message-ID: <ec4e7ff6-55e3-4889-b507-fee71fab99f8@linux.ibm.com>
-Date: Fri, 13 Mar 2026 14:59:52 +0530
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="zvvkMfff"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=cZjClz0X85FauiimsTBvm71yzU+z1eB+WPKIVfy5JZQ=;
+	b=zvvkMfffjRkFQeMrQXv9YrXuadrddXIMmquFLYMTryeH3MZJznmq/A/fccJTgIfmOxlcSUvZi
+	1QSDGFhCPdTlpaQtqF07u1M4O6HSHPj6Rn2Vt1q89LoPOkqq9TNLNpVdWvyJcYtUJ7rplRnWDST
+	vzGRMmDZKQwAWKoqxyTE/YA=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fXKJ83XJKznTWB;
+	Fri, 13 Mar 2026 17:41:44 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1BA8040565;
+	Fri, 13 Mar 2026 17:47:19 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
+ (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 13 Mar
+ 2026 17:47:17 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
+	<hca@linux.ibm.com>, <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
+	<borntraeger@linux.ibm.com>, <svens@linux.ibm.com>, <tglx@kernel.org>,
+	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+	<hpa@zytor.com>, <arnd@arndb.de>, <shuah@kernel.org>, <kees@kernel.org>,
+	<luto@amacapital.net>, <wad@chromium.org>, <kevin.brodsky@arm.com>,
+	<charlie@rivosinc.com>, <macro@orcam.me.uk>, <deller@gmx.de>,
+	<ldv@strace.io>, <anshuman.khandual@arm.com>, <song@kernel.org>,
+	<ryan.roberts@arm.com>, <mark.rutland@arm.com>, <ada.coupriediaz@arm.com>,
+	<broonie@kernel.org>, <pengcan@kylinos.cn>, <liqiang01@kylinos.cn>,
+	<thuth@redhat.com>, <andreas@gaisler.com>,
+	<schuster.simon@siemens-energy.com>, <jremus@linux.ibm.com>,
+	<jgross@suse.com>, <mathieu.desnoyers@efficios.com>, <yeoreum.yun@arm.com>,
+	<kmal@cock.li>, <dvyukov@google.com>, <akpm@linux-foundation.org>,
+	<reddybalavignesh9979@gmail.com>, <richard.weiyang@gmail.com>,
+	<x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH v13 01/12] arm64/ptrace: Refactor syscall_trace_enter/exit() to accept flags parameter
+Date: Fri, 13 Mar 2026 17:47:27 +0800
+Message-ID: <20260313094738.3985794-2-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260313094738.3985794-1-ruanjinjie@huawei.com>
+References: <20260313094738.3985794-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: improve test coverage for
- kfunc call
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-References: <20260312080113.843408-1-hbathini@linux.ibm.com>
- <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=M+pA6iws c=1 sm=1 tr=0 ts=69b3d915 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8
- a=wFA0YCTz-keeHaNuyW8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: uNo_lfeklqp90At1W4DnGwbnh_K-iSrO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDA2OSBTYWx0ZWRfX0vxJCrOZ0oPL
- arfsMnBfTWl4syhgNkBS3wvrnCN1Nw1KK7nKDxfMPLa0Mxrai+WOUq9LjP1f9nYoyC3U75ImK4w
- 3uaoGp2YbsIKRgYw4kB/UazYPTKKj9jUyWTOCU95CKvOfrYZZzQt4F5/M7kUPsgiAB1/VK80eL6
- Y0tB6O+cC6p5nuwILb/lfwW/jmisz2z1YrG/hfsSG6/0UtQcv4+Sdsp2J/p2/4VPEo5D94H8VWi
- X6WWKikcH4F8720rOOR6fq4mv4zk8Sv3jgSCrRfr0JfO51XWkEcZUYXFcrmhTCfO6Xp6eNOq7bj
- zIQy8DYmYRKwzn95bzau48mEXzgBNAUPAeOD+F9DXUvWvJxPLehm/QmfHIEDidSVAWYPBsfIP2+
- 8ut3vffFCG0JzLT5A06O3Ewk0N/83i06w/c9mCvE4qh4MJhBQpekxTqw2uTNJfRphy7CaSeWsDA
- 3aY1jNIfrSCk4sXf+KQ==
-X-Proofpoint-ORIG-GUID: uNo_lfeklqp90At1W4DnGwbnh_K-iSrO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-13_01,2026-03-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 clxscore=1015 bulkscore=0 adultscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603130069
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
+Refactor syscall_trace_enter() and syscall_trace_exit() to move thread
+flag reading to the caller and adopt standard helpers. This aligns
+arm64's internal tracing logic with the requirements of the generic
+entry framework.
 
+[Changes]
+1. Function signature changes:
+   - syscall_trace_enter(regs) → syscall_trace_enter(regs, flags)
+   - syscall_trace_exit(regs) → syscall_trace_exit(regs, flags)
 
-On 12/03/26 11:52 pm, Yonghong Song wrote:
-> 
-> 
-> On 3/12/26 1:01 AM, Hari Bathini wrote:
->> On powerpc, immediate load instructions are sign extended. In case
->> of unsigned types, arguments should be explicitly zero-extended by
->> the caller. For kfunc call, this needs to be handled in the JIT code.
->> In bpf_kfunc_call_test4(), that tests for sign-extension of signed
->> argument types in kfunc calls, add some additional failure checks.
->> And add bpf_kfunc_call_test5() to test zero-extension of unsigned
->> argument types in kfunc calls.
->>
->> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-> 
-> LGTM with a nit below.
-> 
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+2. Move flags reading to caller:
+   - Previously: read_thread_flags() called inside each function.
+   - Now: caller (like el0_svc_common) passes flags as parameter.
+   - Benefit: Avoids redundant flag reading and simplifies the interface.
 
-Thanks for the review, Yonghong.
+3. Use syscall_get_nr() helper:
+   - Replace direct regs->syscallno access with
+     syscall_get_nr(current, regs).
+   - This helper is functionally equivalent to direct access on arm64.
 
-> 
->> ---
->>
->> Changes in v2:
->> - Added asm version of the selftest for consistent testing across
->>    different BPF ISA versions.
->> - Added comments clearly stating the intent of the test cases.
->> - Updated sign-extension selftest to have additional failure checks.
->>
->>
->>   .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
->>   .../selftests/bpf/progs/kfunc_call_test.c     | 98 +++++++++++++++++++
->>   .../selftests/bpf/test_kmods/bpf_testmod.c    | 54 +++++++++-
->>   .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
->>   4 files changed, 154 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/ 
->> tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> index f79c8e53cb3e..62f3fb79f5d1 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> @@ -74,6 +74,8 @@ static struct kfunc_test_params kfunc_tests[] = {
->>       TC_TEST(kfunc_call_test1, 12),
->>       TC_TEST(kfunc_call_test2, 3),
->>       TC_TEST(kfunc_call_test4, -1234),
->> +    TC_TEST(kfunc_call_test5, 0),
->> +    TC_TEST(kfunc_call_test5_asm, 0),
->>       TC_TEST(kfunc_call_test_ref_btf_id, 0),
->>       TC_TEST(kfunc_call_test_get_mem, 42),
->>       SYSCALL_TEST(kfunc_syscall_test, 0),
->> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/ 
->> tools/testing/selftests/bpf/progs/kfunc_call_test.c
->> index 8b86113a0126..5edc51564f71 100644
->> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
->> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
->> @@ -2,8 +2,106 @@
->>   /* Copyright (c) 2021 Facebook */
->>   #include <vmlinux.h>
->>   #include <bpf/bpf_helpers.h>
->> +#include "bpf_misc.h"
->>   #include "../test_kmods/bpf_testmod_kfunc.h"
->> +SEC("tc")
->> +int kfunc_call_test5(struct __sk_buff *skb)
->> +{
->> +    struct bpf_sock *sk = skb->sk;
->> +    int ret;
->> +    u32 val32;
->> +    u16 val16;
->> +    u8 val8;
->> +
->> +    if (!sk)
->> +        return -1;
->> +
->> +    sk = bpf_sk_fullsock(sk);
->> +    if (!sk)
->> +        return -1;
->> +
->> +    /*
->> +     * Test with constant values to verify zero-extension.
->> +     * ISA-dependent BPF asm:
->> +     *   With ALU32:    w1 = 0xFF; w2 = 0xFFFF; w3 = 0xFFFFffff
->> +     *   Without ALU32: r1 = 0xFF; r2 = 0xFFFF; r3 = 0xFFFFffff
->> +     * Both zero-extend to 64-bit before the kfunc call.
->> +     */
->> +    ret = bpf_kfunc_call_test5(0xFF, 0xFFFF, 0xFFFFffffULL);
-> 
-> Can we just use 0xFFFFffff instead of 0xFFFFffffULL?
+4. Re-read syscall number after tracepoint:
+  - Re-fetch the syscall number after trace_sys_enter() as it may have
+    been modified by BPF or ftrace probes, matching generic entry behavior.
 
-Alexei, can you confirm if I need to respin with this change?
+5. Update syscall.c:
+   - el0_svc_common() now passes flags to tracing functions and
+     re-fetches flags before exit to handle potential TIF updates.
 
-- Hari
+[Why this matters]
+- Aligns arm64 with the generic entry interface.
+- Makes future migration to generic entry framework.
+- Properly handles syscall number modifications by tracers.
+- Uses standard architecture-independent helpers.
+
+No functional changes intended.
+
+Cc: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ arch/arm64/include/asm/syscall.h |  4 ++--
+ arch/arm64/kernel/ptrace.c       | 26 +++++++++++++++++---------
+ arch/arm64/kernel/syscall.c      |  5 +++--
+ 3 files changed, 22 insertions(+), 13 deletions(-)
+
+diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
+index 5e4c7fc44f73..30b203ef156b 100644
+--- a/arch/arm64/include/asm/syscall.h
++++ b/arch/arm64/include/asm/syscall.h
+@@ -120,7 +120,7 @@ static inline int syscall_get_arch(struct task_struct *task)
+ 	return AUDIT_ARCH_AARCH64;
+ }
+ 
+-int syscall_trace_enter(struct pt_regs *regs);
+-void syscall_trace_exit(struct pt_regs *regs);
++int syscall_trace_enter(struct pt_regs *regs, unsigned long flags);
++void syscall_trace_exit(struct pt_regs *regs, unsigned long flags);
+ 
+ #endif	/* __ASM_SYSCALL_H */
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index ba5eab23fd90..8d296a07fbf7 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -2408,9 +2408,9 @@ static void report_syscall_exit(struct pt_regs *regs)
+ 	}
+ }
+ 
+-int syscall_trace_enter(struct pt_regs *regs)
++int syscall_trace_enter(struct pt_regs *regs, unsigned long flags)
+ {
+-	unsigned long flags = read_thread_flags();
++	long syscall;
+ 	int ret;
+ 
+ 	if (flags & (_TIF_SYSCALL_EMU | _TIF_SYSCALL_TRACE)) {
+@@ -2423,19 +2423,27 @@ int syscall_trace_enter(struct pt_regs *regs)
+ 	if (secure_computing() == -1)
+ 		return NO_SYSCALL;
+ 
+-	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+-		trace_sys_enter(regs, regs->syscallno);
++	/* Either of the above might have changed the syscall number */
++	syscall = syscall_get_nr(current, regs);
+ 
+-	audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
++	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT)) {
++		trace_sys_enter(regs, syscall);
++
++		/*
++		 * Probes or BPF hooks in the tracepoint may have changed the
++		 * system call number as well.
++		 */
++		 syscall = syscall_get_nr(current, regs);
++	}
++
++	audit_syscall_entry(syscall, regs->orig_x0, regs->regs[1],
+ 			    regs->regs[2], regs->regs[3]);
+ 
+-	return regs->syscallno;
++	return syscall;
+ }
+ 
+-void syscall_trace_exit(struct pt_regs *regs)
++void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
+ {
+-	unsigned long flags = read_thread_flags();
+-
+ 	audit_syscall_exit(regs);
+ 
+ 	if (flags & _TIF_SYSCALL_TRACEPOINT)
+diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+index c062badd1a56..e8fd0d60ab09 100644
+--- a/arch/arm64/kernel/syscall.c
++++ b/arch/arm64/kernel/syscall.c
+@@ -124,7 +124,7 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+ 		 */
+ 		if (scno == NO_SYSCALL)
+ 			syscall_set_return_value(current, regs, -ENOSYS, 0);
+-		scno = syscall_trace_enter(regs);
++		scno = syscall_trace_enter(regs, flags);
+ 		if (scno == NO_SYSCALL)
+ 			goto trace_exit;
+ 	}
+@@ -143,7 +143,8 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+ 	}
+ 
+ trace_exit:
+-	syscall_trace_exit(regs);
++	flags = read_thread_flags();
++	syscall_trace_exit(regs, flags);
+ }
+ 
+ void do_el0_svc(struct pt_regs *regs)
+-- 
+2.34.1
 
