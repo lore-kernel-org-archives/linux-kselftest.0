@@ -1,165 +1,163 @@
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010041.outbound.protection.outlook.com [52.101.85.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50581DD525;
-	Fri, 13 Mar 2026 12:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773404014; cv=none; b=Hgu6RiqdbztPtJG1Lnqkr71PpX0hcGtWmDPPdPU+y8OQHqu8RcDSMTpYDxBH5XbCaHZLkIZVHLcEHPTWh0x//JMGbCLGkeZiTYxOqdXR9H6DoM+3GZZbWE1jpVPAIVL35SXTN/Lz49Vj18ts9tOkgPlvlHj5q8ojTdmMj8l+lNw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773404014; c=relaxed/simple;
-	bh=x0L+UUd1mcB90gut7uy58LcQWmgnUYlF/geoDE6K61M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ntqk091TC0hFrcOgRkPEstsPFidqbnWVH+nfGK9DwgCXoWkw3N0cWZ2jObr4SgEr/h/1tJ2gmsDWnbjx6Swgm8KnxyksgU1jK8XHPShdAS/AJUEAguHbfun1uUPnAc8+aJ/GuWxbT7BdSzeMpdIGrVVGiSJZEWSDZCp6jSQsLpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=TkTGtYRT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vJhshjGN; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECFD3C2D;
+	Fri, 13 Mar 2026 12:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773404733; cv=fail; b=AYGFWwjtq9Ns2DyJn8lFnAdnnLvJbnZKUkV5dRknVa+9BZghYxKELX2/P0ZpWS+IudUC/rMgkZAAURG2xHNr7LBOquy5sCJnKtRbC3zyRo48tqauc+d82/01aVMLyvIcAthVVPD0G7I+mDHW9kNC5yf5o7S95bOuk0ZKVgbx9fg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773404733; c=relaxed/simple;
+	bh=idcrNelrWhRT+hp1LqZtHLvzMR1XekpLY25hkO8UcA0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=JOR6UBTThLTg0QixT1uXEwLg7lzo6gpUiQcOtJZFjM8EwdY7CEHa8L4F8B+LBItGKgAFL0DDqNZaxMH8sIR/exGzvCcwNoBH2FXuu0LtJOOnlYnq17EiNidj11+Ftf/qoKqbZ9xbypb1riBAAqypQ1rLibTIQWMZ+F1/m+sbg+k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=W7FPv1r6; arc=fail smtp.client-ip=52.101.85.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="TkTGtYRT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vJhshjGN"
-Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
-	by mailfout.stl.internal (Postfix) with ESMTP id 766421D001BE;
-	Fri, 13 Mar 2026 08:13:29 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Fri, 13 Mar 2026 08:13:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1773404009; x=
-	1773490409; bh=cfi+FgdXOVCbi/A/05Y8huvpMIKeMYdFQM/36XiqOkI=; b=T
-	kTGtYRTvd2gXKD5JfEaAJTXFtzfRDQSsh8hYtPhbk/dfwoP5oqU76IvZU16CcbSX
-	qndVnmVvFk80v2fpE4UG6ZUrbt9tLgmgWMb9HBZ1MKiA+gw1UUEcQc6O7WMVRc43
-	+T5lJA4DphlifgnJxjdARNrkTkm6X2lvMA5y/a3qLcyNht3zMUCfipu7SUU3aYj8
-	c4Xn0tmDCNFXZuWGytaqSV2P2kpjCkvOhW8ZbiIvWuZXoRLyEZRq3OIHj3ymVp2K
-	4bsqX0znZL/x9cS1U8V1IheFyg2F0w6S3moTL3TAeuNhj3mSy05KZHGkJCYsxxS6
-	+o5r+zrqfDPNaiNBSco8w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1773404009; x=1773490409; bh=cfi+FgdXOVCbi/A/05Y8huvpMIKeMYdFQM/
-	36XiqOkI=; b=vJhshjGN7eAYzgtREzpeT3Qtwq3ESzugzxExG/OqrdTkyrdELnf
-	c7xG0vknuiAtZqkRjARFKPYhDsM1KOTeC01RpG+JY4i+Vs0udsDtsUpymnVjEFMW
-	TQTMbzYf4LY2ZKhCDgVoIqp7+DvWQke+dmOkqYOHa1q+3Fpw2SahJXs86XeX6DLd
-	19MC3t/VRBQ77ayePo54YWVIR+kQXs5omCRG35WCLpyso9ATWrOmtq7LIlJy67UK
-	MXo/Zo4XsWc14om8RJPHT6PBMvzlnupy0A1kLRl4cqqjKn+j7Regy8A4CX105SN6
-	xmj3piaIeCvK90cwEREhiaxxCMbYKDeUE8w==
-X-ME-Sender: <xms:aP-zadMfVEZ7lvyNYRUBYqv4I-ExRLwwZvFGIIAqHBwQTwxYSjq1mw>
-    <xme:aP-zaYu6FXRtzpexz3mf3377rCzAOhxxJoUGvHAVpObfTlMrlXUtlOQTYB7RK3ni_
-    hzix1A_Pz_NIF2HX5e_ixehUtXJn82VInlgO6ImdOVpRqSh5mD9Hkw>
-X-ME-Received: <xmr:aP-zaa9unL-ok8tV2cdbNDQUnfHFKfekK-U8oYOqRPkBPKcJQmYTUO-k-3Be>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvkeelieefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepudekieeijedvfedugfeiiedujeeiheeihfekieffhefgheeludeifefg
-    ueejkeejnecuffhomhgrihhnpehivghtfhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgv
-    thdpnhgspghrtghpthhtohepudekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
-    ifihhlfhhrvggurdhophgvnhhsohhurhgtvgesghhmrghilhdrtghomhdprhgtphhtthho
-    pehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehkuh
-    gsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhf
-    thdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtg
-    hpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopehhohhrmhhs
-    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprh
-    gtphhtthhopehskhhhrghnsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhg
-X-ME-Proxy: <xmx:aP-zacHxek6p0-SD06HW_n7k2lJaqFzB46jFkrdzWyhpZEDn-EoWrQ>
-    <xmx:aP-zaZQUL7d-DwYrF2lv5Eu4nxrMmhcJt4l5E9ZRIEZDqTivOZfRwA>
-    <xmx:aP-zaatx7594jO25804KQTTx67LejvSF76sR7MYQ6iE57jJyUXQeZQ>
-    <xmx:aP-zaWARXWKEDyUN5_Yc8AvyzDIZ4ND4x_F5TAyWgkzQgqbtLZV87Q>
-    <xmx:af-zaZdBkpG9qqj1TLvmhc88oFnYh_V8ZfiJnL6GUFXG3DW79IFWyBla>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 13 Mar 2026 08:13:28 -0400 (EDT)
-Date: Fri, 13 Mar 2026 13:13:26 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Wilfred Mallawa <wilfred.opensource@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Alistair Francis <alistair.francis@wdc.com>,
-	Damien Le'Moal <dlemoal@kernel.org>, Daiki Ueno <dueno@redhat.com>,
-	Simo Sorce <ssorce@redhat.com>,
-	Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Subject: Re: [RFC net-next 0/3] tls_sw: add tx record zero padding
-Message-ID: <abP_Zvrgd5TDKsUP@krikkit>
-References: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="W7FPv1r6"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=W+Jv/cqj3AZqGlCVFH2tRR/SwzqoxiVxjIWXyFsuH0stmcV0yc+odFkLmotMrEQB3TbHC6JjkRa9gjJMqRhAurx0Iv/KGLk+UZMgXe6OsHaTyIpRaiH8Imag+FcL3GeHi0dh4uCaZg3KwV7i1ORM/rsuR2J/TiOVCCCQ3lhvrOoIMv1ORtZ5JPwJblSLWQDuUp9pppdIwpMoehQQR/snkj55iOjmi5osdYQ9vaeSP/wLByMW0/HE5S0lv0YglHjjuQU7tuTiNoUneuQVf6a754sip0q4aoUtg5hJIthVQ1FljiQT40Geu0Ct19+A4b71oP0LWSUXfpKjiyUf9GXLMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=idcrNelrWhRT+hp1LqZtHLvzMR1XekpLY25hkO8UcA0=;
+ b=aahF15FWxZze0qSpDt+TK2rSJDBegTWsr3SLrJEOe/kJ6YIpySKI8Rkd1jTELEqRZLaAFOAS7i8YHX+whvTrpMx1ZMuZ/YWDgjXhdipme8osJz7OTUxeqx14Tc24RT8c8kuHS1w2kn2ZRmuQIJrR4s/kypDeaURJf5Il5k5NhGxv/ZPLZZWud1PxbDygwYQ4FFsvhZWVrjL5Iq3RDwamwQOMFfp4scCq+5gD5cj8RQXRKv6DD1eLeIgo6NiTXlurMn+4SIN6R+5Wv6qE4D5NRGSefCse5L3ROWbCWztCl2QyKNjFSbiRPNlmE6ZSMB8AO8Veva124yI4bct4Lv/Blg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=idcrNelrWhRT+hp1LqZtHLvzMR1XekpLY25hkO8UcA0=;
+ b=W7FPv1r6i+8Y5pbkNr3195+Gkf3Q0ZvoluCSvCTn0reQcO5xjQd0ss0zlK1nZZE/88tknGEVbIbhXfqcAHqEsygnn0MU8o5VluAltaE6dPO7MwBvirDyKYquXZoI/uMxUblDzB14diAnEE1coxfh5Jt5xotPyDAiwkfs4Rmxy4xlkF3oinKxpnEcbgIZ9cHH6ZKGiIfLNhpHCy1Ug1WVgJ/2Omg9HLSX0XK4W23/r/8T9OXbygc7B27/ixHZQ6b+MEpNP1JJ19K0+wePrrm2uACHFuQWES60z6bRNS3KGDw+95r3ci/wn3GCelcYk0pexEqxGKerG+CVyFvDIsRRfw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by MW6PR12MB7070.namprd12.prod.outlook.com (2603:10b6:303:238::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.8; Fri, 13 Mar
+ 2026 12:25:27 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.022; Fri, 13 Mar 2026
+ 12:25:27 +0000
+Date: Fri, 13 Mar 2026 09:25:25 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pranjal Shrivastava <praan@google.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 07/22] vfio/pci: Notify PCI subsystem about devices
+ preserved across Live Update
+Message-ID: <20260313122525.GB1586734@nvidia.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-8-dmatlack@google.com>
+ <20260226160353.6f3371bc@shazbot.org>
+ <20260303210733.GG972761@nvidia.com>
+ <CA+CK2bDADhFcMVGoJew9RoJ-DsVhYhiZJGJVwfzTBZdGX++8Ng@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+CK2bDADhFcMVGoJew9RoJ-DsVhYhiZJGJVwfzTBZdGX++8Ng@mail.gmail.com>
+X-ClientProxiedBy: BN9PR03CA0175.namprd03.prod.outlook.com
+ (2603:10b6:408:f4::30) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|MW6PR12MB7070:EE_
+X-MS-Office365-Filtering-Correlation-Id: a897b295-5266-439c-57c8-08de80fb9b86
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	MMQX88LAAT225OuoAupVoT0P7I1PZPJPYRxXUdOAh0xe7k3XVlVK6Vncy4yFMqHxlxF5fB5pH4pTLQmMpxdpJ2bTeYS5xozL8u49HIsBFVsu3zCZGf7jY5GI5Dx9fwsiG3hT9yvBTnzoi2mtHib7zK3Rqs+L1az2cn0RHH7Wb4TMb1ZtfAcQLalN0Nb8InBNwuHsFOhR7VjuCFN/VQMo3ZQUdluLOFeOpPSYkg87FW6zokeWhD2MGGVBQ6l5mFUylQm2dmkCGSNEIYsXsqx5n2GDUmynhOywQGPpcrxxEIjGQUL242zgVHucVrtjhnNt3NyXH9fudAkRjqkDYJ+8wxVREfFipi7TjoKvjR/Pzrbpo27trlS7ZBgRdXBNgCDH29TzhyMQv2wnS0wL2h9SNY2SN3vTNh3PMKbK4JVbRGQ9Jpj0xUf/muXfnbGjDMfeSyCB2jBJ3g2njwO8Xy3+5kfIc/faIhVEk9BRkL8Q+FS5sn2gzTrvf+t2VNzNN91Ui9xusye4Q3A/n6+9hnFRJjAnyjOCtBlVrj8Do0OzeaL6m0rf7r/rS0Feu7Uw/iqf2hriBPyqn2ht4tcDVSCfKYs1/CJObORvcaj8O1UzWgJ/osS+jipURQzaIRZZosRGkrh8Xqq8JbwxT0MGHU0yycaQFhNwdZVb6dVSK2wUwvBtIy1jzSyRhJxzyAFtW/Xksxs8dq8afMZEB0L4UHl4UzEYgqrDMPz6Ym0I5F4x4rQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?WRdsjV8JarRq8xe0n8kOcWH3XRXXICr30V4x94szwr8jd/46TRBxbhfFdwC8?=
+ =?us-ascii?Q?hYeN2V0hbVDq46Dxe0qzI8kwpXoqVzCOGmdywIOHLnPEEbp1p8c3BrPlhLlv?=
+ =?us-ascii?Q?KLdAggJInlt8Sgm15TiyL1dZNjDAQiPDb8KaQpIG5HhiLPacYtSnRxjc2FDP?=
+ =?us-ascii?Q?akzuu6w/vMc8LhdFpNghzKOn3suhjwovbAAR3ec5r3TqHUcKAvmtZQIhxLyv?=
+ =?us-ascii?Q?5kU+hjzJ+UeeZ+N07WTz3bQ/O+OfvZOENHt2hNptyKEMWlSzOu44VX9ODf41?=
+ =?us-ascii?Q?H1chhipOsWw36RybdNjZu06TPORR2LxUHk79+zfVR81U5OslAnfqCM1TxMIy?=
+ =?us-ascii?Q?U9Li9tkK6IFBuZ2C0mjgsExvYphmRH+WC0CVt0kE/8q9UEgQpoh7NKxWSKrm?=
+ =?us-ascii?Q?cnF5mXcKIgZaorTuhGKj2hKqnJZw9Fdakl01kp2vHlceQ4lTVxrxnB6l6jOM?=
+ =?us-ascii?Q?Tl8Tgqs7gDgH4ylTjoE+wIdbF0moruXRT5E6LRmJTx+yTKGdJmEhWqWOHEWP?=
+ =?us-ascii?Q?EY41P8G2/1uwIu3/P1rAMTv7I04V+wWddlN13zc7VeQyA1H8GxWGyad3QaLy?=
+ =?us-ascii?Q?/xEN+HMs67oOHzVqznPfl8aydpACFu+63HeANzZztJTYXbV9p3atVUgtya+2?=
+ =?us-ascii?Q?53hqnN/xFbqV727Io7sdAZtqUO57FKPhc09jeTdhH8JpmL6lgwtqO75EJIy+?=
+ =?us-ascii?Q?qBN5eOkKTXzLyBtfGSzoNCerMYkaKLjKadP9bukKbHT6tbtLY/shFXHbtrde?=
+ =?us-ascii?Q?ai+P7XOsm9ssM8QM+g7jLBLQjmBrGd+QVn3PxOv6UbfHz/eNq+Y5ToCPBiWU?=
+ =?us-ascii?Q?p9AsDmyrhosFLedx31uo1fIF1W0HLVaxpPeMyA0boRWUnC/6REfcpfo+Gh/H?=
+ =?us-ascii?Q?KUSDDvaSfIHC14s4gOH7T7t4mOuySr5ytZlMsDlXBC22St7k7oAGGbKaftTf?=
+ =?us-ascii?Q?HaWnzMtCCMcP08lK4hsx8IwkOshAtuGKUI4u4KoY6mm/HLnvUGZ9AMopUJyK?=
+ =?us-ascii?Q?HjzgH0itOu43yKkGhz56JMDVagqF+sVMNJuiNPdR/6qF+xIE8KBhs/zvMk6E?=
+ =?us-ascii?Q?eKxjaZ1q2YA2vwItEZECwYf3qE7sNP7G7mvbmbaVJ4djLEjym5yPO1L52vac?=
+ =?us-ascii?Q?SFI3hmMYxkJxXsv2GwwSc+SEwkzbrqgHdBIhNJ/rfqyyc6UchK6fLkvKgv0r?=
+ =?us-ascii?Q?uO6sgGQko0zk4hAnUPEK/YldWKTJCZdhySgYme43u/L9lI2x1CSC2jzwcGLN?=
+ =?us-ascii?Q?590z4aZWZRucqtpksSHz0uSdnbmdXrySb/fp8fMWa4eapD0nIHV6iVQg/o2p?=
+ =?us-ascii?Q?+xBZ4L/1xQ4C5gCP97WR4a0je6cmTe1DBr5ABWFPZS9FY6gNgSmCx7c7Dgmg?=
+ =?us-ascii?Q?A+y1c4LG6jQJJ4E3xZNw9dvz1RYnXlmqgBy3X//ulDAETsZxS4OveMrdpAxB?=
+ =?us-ascii?Q?ep6Rdo2irE4AI3IH/ha1iotBY+O6GJ/nb672iBdox7PNkbjAeRUo+8vuL7Or?=
+ =?us-ascii?Q?7prWHAN7dy9M7aPsJPvgiETURzj9WyAdQeTSF1zmOB/xWfm9rK8JEJF2tjZE?=
+ =?us-ascii?Q?BNomXF3KGOq+dDgatkkGLuHPXR+pJxr3HfXdtpys0zU6qVJqJJXD11w/lY06?=
+ =?us-ascii?Q?J7WSkLYVQFiLimGZU1o9oLxpYKX3oqyoZhAzvMYWVtg+5PmBfCnAcsK0OKIo?=
+ =?us-ascii?Q?6uApoSooWHbYVXZz/NorBgsxK4Lr7v4vrR9wf7uItBticlpB?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a897b295-5266-439c-57c8-08de80fb9b86
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2026 12:25:27.0695
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nQy+zIXQFwKMMmod60bDIF3j/e8YPN0OinVZA+I7w7pOgtAUtn6KsNRT14SQumHF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB7070
 
-Hi Wilfred,
-Sorry for the delay, I'm juggling a few too many things at the moment.
+On Thu, Mar 12, 2026 at 08:33:27PM -0400, Pasha Tatashin wrote:
 
-2026-03-09, 15:48:35 +1000, Wilfred Mallawa wrote:
-> From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-> 
-> Currently, for TLS 1.3, ktls does not support record zero padding [1].
+> If there are active sessions (incoming or outgoing) with preserved
+> data, how can we safely unregister while they are in-flight? It is a
+> rare condition, but since the user can cause it, they need to be
+> notified that unloading the module right now is not a good idea.
 
-to be precise: "on TX" (here, in the subject, and a few spots in the
-rest of the series)
+IMHO blow up the kernel or something in the core code, you can't stop
+module unloading once it starts so it is pointless to propogate this
 
-> Record zero padding is used to allow the sender to hide the size of the
-> traffic patterns from an observer. TLS is susceptible to a variety of traffic
-> analysis attacks based on observing the length and timing of encrypted
-> packets [2]. Upcoming Western Digital NVMe-TCP hardware controllers
-> implement TLS 1.3. Which from a security perspective, can benefit from having
-> record zero padding enabled to mitigate against traffic analysis attacks [2].
-> 
-> Thus, for TX, this series adds support to adding randomized number of zero
-> padding bytes to end-of-record (EOR) records that are not full. This
-> feature is disabled by default and can be enabled by the new
-> TLS_TX_RANDOM_PAD socket option. TLS_TX_RANDOM_PAD allows users to set an upper
-> bound for the number of bytes to be used in zero padding, and can be set
-> back to 0 to disable zero padding altogher. The number of zero padding bytes
-> to append is determined by the remaining record room and the user specified
-> upper bound (minimum of the two). That is
-> rand([0, min(record_room, upper_bound)]).
-
-From an API point of view, I'm not sure TLS_TX_RANDOM_PAD (and with
-only an upper bound) is what we want. Passing {lower_bound,upper_bound}
-via the setsockopt would be more flexible, allow to always pad if
-userspace desires (maybe they're only sending very short records and
-want to hide that with 1000B+ padding every time? no idea), and also
-allow fixed-size padding if desired (by passing
-lower_bound==upper_bound).
-But I'm not involved in userspace libraries so I don't know.
-
-I'm also worried about the (still WIP) 1.3 offload proposal. Are HW
-implementations going to support this? Should we consider that as a
-problem wrt transparency of HW offload in ktls?
-
-> Also a selftest is added to test the usage of TLS_TX_RANDOM_PAD.
-> However, it does not test for zero padding bytes as that is stripped in
-> the ktls RX path.
-
-Couldn't you use "raw RX" type tests and parse_tls_records to check
-the padding?
-
-> Additional testing done on a linux NVMe Target with
-> TLS by issuing an FIO workload to the target and asserting that the target
-> kernel sees and strips the zero padding attached.
-> 
-> [1] https://datatracker.ietf.org/doc/html/rfc8446#section-5.4l
-> [2] https://datatracker.ietf.org/doc/html/rfc8446#appendix-E.3
-> 
-> Wilfred Mallawa (3):
->   net/tls_sw: support randomized zero padding
->   net/tls: add randomized zero padding socket option
->   selftest: tls: add tls record zero pad test
-
--- 
-Sabrina
+Jason
