@@ -1,108 +1,165 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A1835DA45;
-	Fri, 13 Mar 2026 11:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50581DD525;
+	Fri, 13 Mar 2026 12:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773403069; cv=none; b=SN6ESMzmO4CsQbKTC5102aXTGlVYg5033+kOKxZQ3cN++QaarOvj+MmHeaqTvQpFqvvjJ4RiEIh25bfdau9YIjBPGyA6XcU2RKn+JV6IDONsH6gYUH7/yGu/OEPWXmBES/X5IF8S9pGLX84TOX04ysE+k1m3tmZdQvi8DoG5AJA=
+	t=1773404014; cv=none; b=Hgu6RiqdbztPtJG1Lnqkr71PpX0hcGtWmDPPdPU+y8OQHqu8RcDSMTpYDxBH5XbCaHZLkIZVHLcEHPTWh0x//JMGbCLGkeZiTYxOqdXR9H6DoM+3GZZbWE1jpVPAIVL35SXTN/Lz49Vj18ts9tOkgPlvlHj5q8ojTdmMj8l+lNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773403069; c=relaxed/simple;
-	bh=CrD3I2JAdDJPk+hpeYfNjnkJT2Gk2XwXZZ5AIzoGlgU=;
+	s=arc-20240116; t=1773404014; c=relaxed/simple;
+	bh=x0L+UUd1mcB90gut7uy58LcQWmgnUYlF/geoDE6K61M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P71tkdDgOmQKEiNcc7c57sxdrICnLE/VmxfvZigjOUuariEsPAYmr1rmuo5GnJdHXuxq5o2WgRyFHTdD/8eAHt7HChsfGRhDMP/ByjyWOUpDw+huyPHwVyaue7fewHHy7ZpaMy1f3WBAFD0Htmx8FzWZzZOW5AteA0kRFdUvdC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=qo6KOLQw; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=ntqk091TC0hFrcOgRkPEstsPFidqbnWVH+nfGK9DwgCXoWkw3N0cWZ2jObr4SgEr/h/1tJ2gmsDWnbjx6Swgm8KnxyksgU1jK8XHPShdAS/AJUEAguHbfun1uUPnAc8+aJ/GuWxbT7BdSzeMpdIGrVVGiSJZEWSDZCp6jSQsLpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=TkTGtYRT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vJhshjGN; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qo6KOLQw"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=nfiAMheGFm3B9wEX22RY8FMrrz8Bp0H6yrIVSJqYtkE=; b=qo6KOLQwMn3ekceaiDDnPHv4WD
-	4LWyiqlIbC6wYdeylyf9WLTAPNBuMAu7HbV83tzMs+RHgKMEo7Dn4seWf33zhVoIIbciY79dBnuYT
-	O50eaYNg09aG+RDcwFoWbX4nelYbeolVOadVpLNr6gKLqeOP6A4iFIxdNhIVGFVhRQLIbX/AjX+Xq
-	xRwPeJ1fSfLTnwzSKSyUiTQbulTS2G9M380PMs0MeDA5zC82qkooDB7+Jt61zJSyqLdI6BwH8SLGx
-	0s4pVcM5WPIteXG3NkLiPG3ucRI01SzT/GSdau0kCE51WzUfzVZDwd9odSAVFBkKPMXPtjnG3VBki
-	J5OBlXWg==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w118X-0000000D2cC-3C3g;
-	Fri, 13 Mar 2026 11:57:01 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 87EC930327F; Fri, 13 Mar 2026 12:57:00 +0100 (CET)
-Date: Fri, 13 Mar 2026 12:57:00 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oleg@redhat.com,
-	hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-	borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	hpa@zytor.com, arnd@arndb.de, shuah@kernel.org, kees@kernel.org,
-	luto@amacapital.net, wad@chromium.org, kevin.brodsky@arm.com,
-	charlie@rivosinc.com, macro@orcam.me.uk, deller@gmx.de,
-	ldv@strace.io, anshuman.khandual@arm.com, song@kernel.org,
-	ryan.roberts@arm.com, mark.rutland@arm.com, ada.coupriediaz@arm.com,
-	broonie@kernel.org, pengcan@kylinos.cn, liqiang01@kylinos.cn,
-	thuth@redhat.com, andreas@gaisler.com,
-	schuster.simon@siemens-energy.com, jremus@linux.ibm.com,
-	jgross@suse.com, mathieu.desnoyers@efficios.com,
-	yeoreum.yun@arm.com, kmal@cock.li, dvyukov@google.com,
-	akpm@linux-foundation.org, reddybalavignesh9979@gmail.com,
-	richard.weiyang@gmail.com, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v13 00/12] arm64: entry: Convert to Generic Entry
-Message-ID: <20260313115700.GA2872@noisy.programming.kicks-ass.net>
-References: <20260313094738.3985794-1-ruanjinjie@huawei.com>
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="TkTGtYRT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vJhshjGN"
+Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
+	by mailfout.stl.internal (Postfix) with ESMTP id 766421D001BE;
+	Fri, 13 Mar 2026 08:13:29 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Fri, 13 Mar 2026 08:13:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1773404009; x=
+	1773490409; bh=cfi+FgdXOVCbi/A/05Y8huvpMIKeMYdFQM/36XiqOkI=; b=T
+	kTGtYRTvd2gXKD5JfEaAJTXFtzfRDQSsh8hYtPhbk/dfwoP5oqU76IvZU16CcbSX
+	qndVnmVvFk80v2fpE4UG6ZUrbt9tLgmgWMb9HBZ1MKiA+gw1UUEcQc6O7WMVRc43
+	+T5lJA4DphlifgnJxjdARNrkTkm6X2lvMA5y/a3qLcyNht3zMUCfipu7SUU3aYj8
+	c4Xn0tmDCNFXZuWGytaqSV2P2kpjCkvOhW8ZbiIvWuZXoRLyEZRq3OIHj3ymVp2K
+	4bsqX0znZL/x9cS1U8V1IheFyg2F0w6S3moTL3TAeuNhj3mSy05KZHGkJCYsxxS6
+	+o5r+zrqfDPNaiNBSco8w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1773404009; x=1773490409; bh=cfi+FgdXOVCbi/A/05Y8huvpMIKeMYdFQM/
+	36XiqOkI=; b=vJhshjGN7eAYzgtREzpeT3Qtwq3ESzugzxExG/OqrdTkyrdELnf
+	c7xG0vknuiAtZqkRjARFKPYhDsM1KOTeC01RpG+JY4i+Vs0udsDtsUpymnVjEFMW
+	TQTMbzYf4LY2ZKhCDgVoIqp7+DvWQke+dmOkqYOHa1q+3Fpw2SahJXs86XeX6DLd
+	19MC3t/VRBQ77ayePo54YWVIR+kQXs5omCRG35WCLpyso9ATWrOmtq7LIlJy67UK
+	MXo/Zo4XsWc14om8RJPHT6PBMvzlnupy0A1kLRl4cqqjKn+j7Regy8A4CX105SN6
+	xmj3piaIeCvK90cwEREhiaxxCMbYKDeUE8w==
+X-ME-Sender: <xms:aP-zadMfVEZ7lvyNYRUBYqv4I-ExRLwwZvFGIIAqHBwQTwxYSjq1mw>
+    <xme:aP-zaYu6FXRtzpexz3mf3377rCzAOhxxJoUGvHAVpObfTlMrlXUtlOQTYB7RK3ni_
+    hzix1A_Pz_NIF2HX5e_ixehUtXJn82VInlgO6ImdOVpRqSh5mD9Hkw>
+X-ME-Received: <xmr:aP-zaa9unL-ok8tV2cdbNDQUnfHFKfekK-U8oYOqRPkBPKcJQmYTUO-k-3Be>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvkeelieefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepudekieeijedvfedugfeiiedujeeiheeihfekieffhefgheeludeifefg
+    ueejkeejnecuffhomhgrihhnpehivghtfhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgv
+    thdpnhgspghrtghpthhtohepudekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
+    ifihhlfhhrvggurdhophgvnhhsohhurhgtvgesghhmrghilhdrtghomhdprhgtphhtthho
+    pehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehkuh
+    gsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhf
+    thdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtg
+    hpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopehhohhrmhhs
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprh
+    gtphhtthhopehskhhhrghnsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhg
+X-ME-Proxy: <xmx:aP-zacHxek6p0-SD06HW_n7k2lJaqFzB46jFkrdzWyhpZEDn-EoWrQ>
+    <xmx:aP-zaZQUL7d-DwYrF2lv5Eu4nxrMmhcJt4l5E9ZRIEZDqTivOZfRwA>
+    <xmx:aP-zaatx7594jO25804KQTTx67LejvSF76sR7MYQ6iE57jJyUXQeZQ>
+    <xmx:aP-zaWARXWKEDyUN5_Yc8AvyzDIZ4ND4x_F5TAyWgkzQgqbtLZV87Q>
+    <xmx:af-zaZdBkpG9qqj1TLvmhc88oFnYh_V8ZfiJnL6GUFXG3DW79IFWyBla>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Mar 2026 08:13:28 -0400 (EDT)
+Date: Fri, 13 Mar 2026 13:13:26 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Wilfred Mallawa <wilfred.opensource@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Alistair Francis <alistair.francis@wdc.com>,
+	Damien Le'Moal <dlemoal@kernel.org>, Daiki Ueno <dueno@redhat.com>,
+	Simo Sorce <ssorce@redhat.com>,
+	Wilfred Mallawa <wilfred.mallawa@wdc.com>
+Subject: Re: [RFC net-next 0/3] tls_sw: add tx record zero padding
+Message-ID: <abP_Zvrgd5TDKsUP@krikkit>
+References: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260313094738.3985794-1-ruanjinjie@huawei.com>
+In-Reply-To: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
 
-On Fri, Mar 13, 2026 at 05:47:26PM +0800, Jinjie Ruan wrote:
+Hi Wilfred,
+Sorry for the delay, I'm juggling a few too many things at the moment.
 
-> Jinjie Ruan (11):
->   arm64/ptrace: Refactor syscall_trace_enter/exit() to accept flags
->     parameter
->   arm64/ptrace: Expand secure_computing() in place
->   arm64/ptrace: Use syscall_get_arguments() helper for audit
->   arm64: ptrace: Move rseq_syscall() before audit_syscall_exit()
->   arm64: syscall: Introduce syscall_exit_to_user_mode_work()
->   arm64/ptrace: Define and use _TIF_SYSCALL_EXIT_WORK
->   arm64/ptrace: Skip syscall exit reporting for PTRACE_SYSEMU_SINGLESTEP
->   arm64: entry: Convert to generic entry
->   arm64: Inline el0_svc_common()
->   s390: Rename TIF_SINGLE_STEP to TIF_SINGLESTEP
->   arm64: Use generic TIF bits for common thread flags
+2026-03-09, 15:48:35 +1000, Wilfred Mallawa wrote:
+> From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
 > 
-> kemal (1):
->   selftests: sud_test: Support aarch64
-> 
->  arch/arm64/Kconfig                            |   3 +-
->  arch/arm64/include/asm/entry-common.h         |  76 ++++++++++++
->  arch/arm64/include/asm/syscall.h              |  19 ++-
->  arch/arm64/include/asm/thread_info.h          |  76 ++++--------
->  arch/arm64/kernel/debug-monitors.c            |   7 ++
->  arch/arm64/kernel/ptrace.c                    | 115 ------------------
->  arch/arm64/kernel/signal.c                    |   2 +-
->  arch/arm64/kernel/syscall.c                   |  29 ++---
->  arch/s390/include/asm/thread_info.h           |   7 +-
->  arch/s390/kernel/process.c                    |   2 +-
->  arch/s390/kernel/ptrace.c                     |  20 +--
->  arch/s390/kernel/signal.c                     |   6 +-
->  arch/x86/include/asm/thread_info.h            |   6 +-
->  include/asm-generic/thread_info_tif.h         |   5 +
->  .../syscall_user_dispatch/sud_benchmark.c     |   2 +-
->  .../syscall_user_dispatch/sud_test.c          |   4 +
->  16 files changed, 166 insertions(+), 213 deletions(-)
+> Currently, for TLS 1.3, ktls does not support record zero padding [1].
 
-AFAICT arm64 is still using exit_to_user_mode_prepare_legacy() after
-this. This cannot be right.
+to be precise: "on TX" (here, in the subject, and a few spots in the
+rest of the series)
+
+> Record zero padding is used to allow the sender to hide the size of the
+> traffic patterns from an observer. TLS is susceptible to a variety of traffic
+> analysis attacks based on observing the length and timing of encrypted
+> packets [2]. Upcoming Western Digital NVMe-TCP hardware controllers
+> implement TLS 1.3. Which from a security perspective, can benefit from having
+> record zero padding enabled to mitigate against traffic analysis attacks [2].
+> 
+> Thus, for TX, this series adds support to adding randomized number of zero
+> padding bytes to end-of-record (EOR) records that are not full. This
+> feature is disabled by default and can be enabled by the new
+> TLS_TX_RANDOM_PAD socket option. TLS_TX_RANDOM_PAD allows users to set an upper
+> bound for the number of bytes to be used in zero padding, and can be set
+> back to 0 to disable zero padding altogher. The number of zero padding bytes
+> to append is determined by the remaining record room and the user specified
+> upper bound (minimum of the two). That is
+> rand([0, min(record_room, upper_bound)]).
+
+From an API point of view, I'm not sure TLS_TX_RANDOM_PAD (and with
+only an upper bound) is what we want. Passing {lower_bound,upper_bound}
+via the setsockopt would be more flexible, allow to always pad if
+userspace desires (maybe they're only sending very short records and
+want to hide that with 1000B+ padding every time? no idea), and also
+allow fixed-size padding if desired (by passing
+lower_bound==upper_bound).
+But I'm not involved in userspace libraries so I don't know.
+
+I'm also worried about the (still WIP) 1.3 offload proposal. Are HW
+implementations going to support this? Should we consider that as a
+problem wrt transparency of HW offload in ktls?
+
+> Also a selftest is added to test the usage of TLS_TX_RANDOM_PAD.
+> However, it does not test for zero padding bytes as that is stripped in
+> the ktls RX path.
+
+Couldn't you use "raw RX" type tests and parse_tls_records to check
+the padding?
+
+> Additional testing done on a linux NVMe Target with
+> TLS by issuing an FIO workload to the target and asserting that the target
+> kernel sees and strips the zero padding attached.
+> 
+> [1] https://datatracker.ietf.org/doc/html/rfc8446#section-5.4l
+> [2] https://datatracker.ietf.org/doc/html/rfc8446#appendix-E.3
+> 
+> Wilfred Mallawa (3):
+>   net/tls_sw: support randomized zero padding
+>   net/tls: add randomized zero padding socket option
+>   selftest: tls: add tls record zero pad test
+
+-- 
+Sabrina
