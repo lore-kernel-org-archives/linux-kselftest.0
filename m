@@ -1,128 +1,217 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9819220C038
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 03:35:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDA61A7264
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 03:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773372937; cv=none; b=D5ji4zqyRrNLF1TVfn081KcXOSCsZjWZf3Eu/Wx747jhdSkMKGamvJJiSNQKP2SastGFrVK6n6cS8hHzlI17C5ogEF0vvJvSczc2UxZCt22HjkbYyitUacG2TPR1Pe8EVLu17Z/iOE+5Fcp+0TUTkmXMnHWJjNCdhV+C8X/AX80=
+	t=1773373553; cv=none; b=FtOVu0fQ7Ox/kOjATQSkZ1qynwFC49LWA9LfHLq7EqEIoXJvpMh9RoT+rTwtWOa2bpWJxnXtDliGh4TJ4PgUI7thBcUbmWNbIyQEDZxE/I4iKntqoASeGqNxPlEpesG1rSAeJfX7LdDzXJw4Ul/dRZifUc+PLFYbZJd57AWB8Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773372937; c=relaxed/simple;
-	bh=aKY6aSiNpqxypTgxDFFgw7UHPZegC04bB/W/aZh8e2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VVqWnMClmz0wdlSRr/0PlmyVQb1ioP9APgjRFGmslVJKLh0PqzMOkqxHh9s9jvCADpLX1SCQBwsYebFaKH+nO15JJSC6IJzykf98AoM9casBT0lpl88Rkhw3SWXgjlnChyFmnD9L7NJ9kLFr8YYasmi/tOiBQFQpwo+4goUh4xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QOyegFzS; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rtyYpoVE; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773373553; c=relaxed/simple;
+	bh=jphlk6Wj+UkJ81XaEDeMJBkuYruhl/JogH1+TkUDXFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IdKv3ENjW+PnAuf4rc4ygqQki9rLJvIKCadwdFaTVJnx4rOctALtQO7zUKiX0qkzg1BdF9oqdyUsUOZUNFdFUf9zsugpKUCM+DpPaxyyAuuuWPmqjBpjl+lBaQgLM1tLZTVB7783+tdE5bCO7vuuyE02+Mh/j8EKOGLIUZgSdKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+dUIwhy; arc=none smtp.client-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QOyegFzS";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rtyYpoVE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773372935;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/8O0y76Sw4nNgrZ1YSQxVhOgzkbUj1DKbmac8/V7rFE=;
-	b=QOyegFzSbGdIdohuOj9c9QGmdG8Znk9YMdegPYkbKYFjmaqHXe/kNxCoBqxZMo1XiA1S0h
-	h/nyziLEUd/L9hGjn/G/iAS9/iIxs/TmrpIA1RUpTUTne2rDYwJLD2Y9VC4r/JtigvKyTJ
-	c8xPcUYXDwIJucWcCCeL1o13huw47Cg=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-647-3UeUnsEgOSOZWvu87N6ZYQ-1; Thu, 12 Mar 2026 23:35:34 -0400
-X-MC-Unique: 3UeUnsEgOSOZWvu87N6ZYQ-1
-X-Mimecast-MFC-AGG-ID: 3UeUnsEgOSOZWvu87N6ZYQ_1773372933
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ae53ec06b0so111393365ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 20:35:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+dUIwhy"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2be27fa54feso2442285eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 20:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773372933; x=1773977733; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/8O0y76Sw4nNgrZ1YSQxVhOgzkbUj1DKbmac8/V7rFE=;
-        b=rtyYpoVEUqF6jV6wcireTbijNUBdlNZWmytUwNe+/aC6ZpvO8fqRgpi16CR5W9oVd5
-         6e49y1hDU3lBKBuaUTlL/WvuGO2FkJ+iCQJ7rPtgVJQq0D6sYKVwM36k0cJkAEU8E8Je
-         9MIIinoUWRMqC65F4tYVAnPcznoJ44fEvJE++lYcI1bN+Nj+tLOg3DEFANK/fkqX+NSK
-         X8OSKwBf6q045a38qsC2sNDt/oIIwukUI0F6M+ykpbSVdqQE76WNxjieyOxokgVS739i
-         Wcw5dovfN7c34Ii664hwY7VVIR9h7i+wFqEpg4BtWJyMTLssFubEUD6d5VL663XmFL2j
-         QLYw==
+        d=gmail.com; s=20230601; t=1773373551; x=1773978351; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QfuNVGLPrYe0cNk/DRUBsR0PvweqtpMYTG7g9a6Yn3c=;
+        b=l+dUIwhyGvVQc3HkxBrx+Pd/6cWNGncldGO96lRn4huLguqyntLeXyAQJcBUK+8wZB
+         vbrkLWkENbY+njsxRY6y9zedGKJWHpNO4Eph7DiSpkey3rHejImYHcptTwuAHWdctPs+
+         re4IZ8c1pht1Yqyrq+nFCIkhHGXH2/fxcnvQBdJUlHvwtfpb2v8Afc1NyvePJQ/KxcMN
+         S74q3fbLsLVRKTc4D8xmorEWfj7aXdWZHmtZy0ri5X3Ywxg1duoWmcgwwx48+S5x+hBK
+         OINTIdwI8gTZB7IAB75IDRnC81MS9S6Iw+QhbYw4q4AAQ9b8p8PD76ae9V8LkcsZ50eL
+         HpUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773372933; x=1773977733;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/8O0y76Sw4nNgrZ1YSQxVhOgzkbUj1DKbmac8/V7rFE=;
-        b=J5IrSduD30ZgGv14xxOfePndsGrT5XX/foPuJ/3l7T+mRDYwfAOgi8kJnaddNlbPGu
-         mONvKFG68tvjfgAuznXdf3+tHVTYt3m2UpBFnLV7VDiB6ZTyLzG2beXojOX2t9DUiT+f
-         LVD+KHs+vslaP+Ln3X5301GOIDsx5mhHu+m95IwkcgfSX9IYOOeffjtcp2rphKfFyKkT
-         dx+0cuNNCWz0comMXCFSYJ2XX7fVt2ZUyhGm+5R6E+gjkaZRktd6l2TaXX1EPU2/Lf4x
-         jUMkf46xvlQo6lWA+TERTEDJsBR7NXHSeU8xbw9bOu5HujiP52oosIThh4Ydpn+3iDvT
-         oxWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVelic3k2J7iMhJDIkfsMIEJpfBV3leeNMxAahh96FBM8e2nCCRMCjwH0Eq9H8DJ5If7KlVnrqjYhdVpsij5yE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZoyodjoTBrqbOtgLFYT8vboaEQxUfU6rI3YvuieuNoCCEL+Ah
-	PPIhubpWj93fFj6VTuIIZbKKmiQL8kWqAxr5zYzpRDmwYTl5ZmM8jXCHiNfjGWge34p27zVOBls
-	Nd+fPEZVNaAKpwKKy4YE2zLostlj4ILxmyCXToRjM4XuDpI88DBWrLZ7OVaHy/yHpu7SC7Q==
-X-Gm-Gg: ATEYQzzJLWMXGGMei5at4/k4ZEMP2r3tjU9WPBuH3yzwoMQJFFO0qg64aVcPhQ6wU70
-	BYxhzgeULk3AAbTaoGiLdNtaZlfqzybe7D9voxsvyRkLRISO9bWnbAMv6F1b8U+X97AodHWCL8S
-	Oc4y2wLLzN/Cj5+ri1V2QKefAiyeFQIkcQbKGGK7q+Qw0tkSqik9wZNJgDuQX7Ycm2Wnb29nwB/
-	ZnYgI5p2RrEAkxwCckdsIrEqCNyiKksbhcL2rruAhKbLUimkchC80/50g5YbF0V6tEOAgJSUIfo
-	TH0YHFBdk3CnWVaq8arhOleXKuzBwQhXI1JTV9nLv/bj3rQoGPq2PDaKD7haZUQI10ZJMV1/34i
-	ESG6Gtw6lQqby0V0hPw==
-X-Received: by 2002:a17:902:e748:b0:2ae:c916:511 with SMTP id d9443c01a7336-2aeca9e0988mr18292905ad.24.1773372932786;
-        Thu, 12 Mar 2026 20:35:32 -0700 (PDT)
-X-Received: by 2002:a17:902:e748:b0:2ae:c916:511 with SMTP id d9443c01a7336-2aeca9e0988mr18292665ad.24.1773372932438;
-        Thu, 12 Mar 2026 20:35:32 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece7ee5b1sm5475595ad.46.2026.03.12.20.35.30
+        d=1e100.net; s=20251104; t=1773373551; x=1773978351;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QfuNVGLPrYe0cNk/DRUBsR0PvweqtpMYTG7g9a6Yn3c=;
+        b=Kzb+7yi4BAU5gRgaPIShZm5lvOAq3a/2XZJmnvlK2tuRSvR9hKtw+YpLpYVRGPRhjl
+         EEepAjgFZGdk6WZz5eQVisr2ErHDOhHWsElWpJzMLvyUHUIlZpq+zLRttDbFshXBH/Pv
+         eGYV7tG8W4Dm/hDULSJYz6AHyBZqC4rHJwuvOtLLjh8YM69kobEDmK3YS8G7QlPXvKUN
+         /JrC93w3Zo3idhBFw5aGRl7Z8sFvPha5BCLW0gNpPzvSELe8XChaA1rKOC3CexP5782n
+         rVE3GSqELU2dV9meeGX3k8XOK+kiZsYy2c+rw9aktn2AzhaQVjRyk5+tzWRTW+Qj0nmq
+         T3xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVwCKLPR5Ve0+0fS3l0IbusZxgy66MbpSCEp1hgg6EllR7UiLqibxiArWScMJuE2je2f1DETrBy+cOu1lcEyYk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyumPnHF8MHZidlAWxdIk6s5Zuy4r9p4Yhi5jMnqWD2rC5KipAT
+	SQnndyNEZE+TFq/bivpRKfKxZDQ5bJ/2kHZyju7XaPVJqHhEuOpJc0IM
+X-Gm-Gg: ATEYQzx2qYGlxdcf8CbUo/HUeWZtDlCOdbGmG7WmlO7mxZ+e7xznCzF+7FwRJsGbl7Q
+	do8Nx7fZcznQBKyOgfnv5lmj77EZeQhWixP1LIC5rBQ6uKoHg4cja+UFd33YDBGhQbkqt18PaIk
+	3E6iSCM+vg1FVTlT74x5lXK/H86GvoJ0/7Hhy2I/hZGrfTL4NLm+g2GWXCbDMmBqf0PxKnTcp8x
+	J6VxLDLgFwTQHly81reIihko87zdw0tNEChtczsugd9iK45TVrZ/sR8O5ukcohz/DCCEGMmqcvy
+	JcOJOdd2KEf8Ca8WmEHW7daYLByyzE9LjBJmTldRQPm/xgAeG+KBvH5K1ikSwlpOcDFrnA76klQ
+	3Na5FRoNINC/W+6YMY8UHjtUMUKU1bkB7KAJJWQDUAENCXNMHkta5tcEnSyBvUlawBiMFw/QPkP
+	MOKlXxeUWTLi2N2xSM5zEJGBHXDjjpTzZ5iwU42iS3MMsVxDyhqKYzEHNr/OVanWNskKFA5HgnU
+	JwlawIfbxU0JFSpf/Ga0Fy+0ZY=
+X-Received: by 2002:a05:7300:2389:b0:2b7:24ad:5c54 with SMTP id 5a478bee46e88-2bea5400f2dmr811212eec.9.1773373550759;
+        Thu, 12 Mar 2026 20:45:50 -0700 (PDT)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab3a0c34sm904347eec.7.2026.03.12.20.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 20:35:30 -0700 (PDT)
-Date: Fri, 13 Mar 2026 11:35:28 +0800
-From: Li Wang <liwang@redhat.com>
-To: Yosry Ahmed <yosry@kernel.org>
-Cc: Nhat Pham <nphamcs@gmail.com>, mkoutny@suse.com, yosryahmed@google.com,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>
-Subject: Re: [PATCH v2 1/7] selftests/cgroup: skip test_zswap if zswap is
- globally disabled
-Message-ID: <abOGAHNnv9OZltdq@redhat.com>
-References: <20260312040627.55257-1-liwang@redhat.com>
- <CAKEwX=MqyGQSMuVCSWmhKfHju5uHBe3ySQEgK9XuKwCvpL4x8w@mail.gmail.com>
- <CAO9r8zPmV8v0tiQvn2xFqX8F2oU23mfbVK67nxMO3QKt49kJeg@mail.gmail.com>
- <abNtUReAUHT6j9Rn@redhat.com>
- <CAO9r8zMh=tAV6UJcH3hhZWrZJO_emVe4raiq4wiBEgC-GAD2=Q@mail.gmail.com>
- <abODRsaeEul9Aj2X@redhat.com>
+        Thu, 12 Mar 2026 20:45:50 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	andrii@kernel.org,
+	shuah@kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH v2] selftests/bpf: modify_return: isolate fmod_ret hooks by pid
+Date: Fri, 13 Mar 2026 11:45:40 +0800
+Message-ID: <20260313034540.255805-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
+References: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abODRsaeEul9Aj2X@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 13, 2026 at 11:23:50AM +0800, Li Wang wrote:
-> On Thu, Mar 12, 2026 at 07:58:28PM -0700, Yosry Ahmed wrote:
-> > > Yes, this looks more tidy than open it. I'll go this helper in v3.
-> > >
-> > > >
-> > > > static void check_zswap_enabled(void)
-> > > > {
-> > > >        char value;
-> > >
-> > > read_text() requires string but not char.
-> > 
-> > I was just illustrating. This should be passed in as &value. That should work?
-> 
-> Yes, pass it as &value works well.
+modify_return's fmod_ret programs can override bpf_modify_return_test()'s
+return value, which conflicts with get_func_ip_test when selftests run in
+parallel.
 
-And use sizeof(&value) just get the pointer's size but not
-the buffer size, so I would recommend: char value[2].
+Store current tgid in BSS and make modify_return hooks act only for that
+tgid. For other tasks, fentry/fexit become no-ops and fmod_ret returns the
+original ret.
 
+Drop the serial-only restriction and remove the TODO comment.
+
+Tested:
+  sudo ./test_progs -t modify_return
+  sudo ./test_progs -t get_func_ip_test
+  sudo ./test_progs -j$(nproc) -t modify_return
+  sudo ./test_progs -j$(nproc) -t get_func_ip_test
+
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+
+v2:
+- inline pid checks per suggestion from Jiri Olsa <jolsa@kernel.org>
+
+ .../selftests/bpf/prog_tests/modify_return.c        |  8 +++++---
+ tools/testing/selftests/bpf/progs/modify_return.c   | 13 +++++++++++++
+ 2 files changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/tools/testing/selftests/bpf/prog_tests/modify_return.c
+index a70c99c2f8c8..4661d77ebdfc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
++++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <test_progs.h>
++#include <unistd.h>
+ #include "modify_return.skel.h"
+ 
+ #define LOWER(x) ((x) & 0xffff)
+@@ -23,11 +24,13 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
+ 	if (!ASSERT_OK_PTR(skel, "skel_load"))
+ 		goto cleanup;
+ 
++	skel->bss->input_retval = input_retval;
++	skel->bss->test_pid = getpid();
++
+ 	err = modify_return__attach(skel);
+ 	if (!ASSERT_OK(err, "modify_return__attach failed"))
+ 		goto cleanup;
+ 
+-	skel->bss->input_retval = input_retval;
+ 	prog_fd = bpf_program__fd(skel->progs.fmod_ret_test);
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+ 	ASSERT_OK(err, "test_run");
+@@ -49,8 +52,7 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
+ 	modify_return__destroy(skel);
+ }
+ 
+-/* TODO: conflict with get_func_ip_test */
+-void serial_test_modify_return(void)
++void test_modify_return(void)
+ {
+ 	run_test(0 /* input_retval */,
+ 		 2 /* want_side_effect */,
+diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/testing/selftests/bpf/progs/modify_return.c
+index 3376d4849f58..68fabd2efe8d 100644
+--- a/tools/testing/selftests/bpf/progs/modify_return.c
++++ b/tools/testing/selftests/bpf/progs/modify_return.c
+@@ -12,11 +12,14 @@ char _license[] SEC("license") = "GPL";
+ 
+ static int sequence = 0;
+ __s32 input_retval = 0;
++__u32 test_pid = 0;
+ 
+ __u64 fentry_result = 0;
+ SEC("fentry/bpf_modify_return_test")
+ int BPF_PROG(fentry_test, int a, __u64 b)
+ {
++	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
++		return 0;
+ 	sequence++;
+ 	fentry_result = (sequence == 1);
+ 	return 0;
+@@ -26,6 +29,8 @@ __u64 fmod_ret_result = 0;
+ SEC("fmod_ret/bpf_modify_return_test")
+ int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
+ {
++	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
++		return ret;
+ 	sequence++;
+ 	/* This is the first fmod_ret program, the ret passed should be 0 */
+ 	fmod_ret_result = (sequence == 2 && ret == 0);
+@@ -36,6 +41,8 @@ __u64 fexit_result = 0;
+ SEC("fexit/bpf_modify_return_test")
+ int BPF_PROG(fexit_test, int a, __u64 b, int ret)
+ {
++	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
++		return 0;
+ 	sequence++;
+ 	/* If the input_reval is non-zero a successful modification should have
+ 	 * occurred.
+@@ -55,6 +62,8 @@ SEC("fentry/bpf_modify_return_test2")
+ int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char f,
+ 	     int g)
+ {
++	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
++		return 0;
+ 	sequence2++;
+ 	fentry_result2 = (sequence2 == 1);
+ 	return 0;
+@@ -65,6 +74,8 @@ SEC("fmod_ret/bpf_modify_return_test2")
+ int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, char f,
+ 	     int g, int ret)
+ {
++	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
++		return ret;
+ 	sequence2++;
+ 	/* This is the first fmod_ret program, the ret passed should be 0 */
+ 	fmod_ret_result2 = (sequence2 == 2 && ret == 0);
+@@ -76,6 +87,8 @@ SEC("fexit/bpf_modify_return_test2")
+ int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f,
+ 	     int g, int ret)
+ {
++	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
++		return 0;
+ 	sequence2++;
+ 	/* If the input_reval is non-zero a successful modification should have
+ 	 * occurred.
+
+base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
 -- 
-Regards,
-Li Wang
+2.43.0
 
