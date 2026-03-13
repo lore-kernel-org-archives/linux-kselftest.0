@@ -1,98 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9394A191;
-	Fri, 13 Mar 2026 00:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64E21A5B9E
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 00:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773361267; cv=none; b=k0SiSk6q+Zp1GHXdGQ+xFmtxxvEj2GE26XGicFozinqY1CG4mAXIHZ447lA7WyCFzFuS+tdMJM+xlxfcZ26e34ikQ3ZjCQ09clwUneKod3Lxqeo3bMYpFJj14ftnAR+pmDeWntdvAcekb0aOYyHoJ0L5Ul9p3raBFlZQ3MJ79ZQ=
+	t=1773361589; cv=none; b=Otm3v9xp9oJA7CSgs1C5ftli7u95Bg/e2UghhOe4/zDJyYofUKUm00SowXeo0iI/yAggNSrJBDllQL9p25M6hGthqG/xk9mlGfXAjN6d5ZiAkJb9wESAWOin/PW5O42rj3uMyabGL8YRvY3itUB5WT+Qm1LhDP3Rb37YnhD+RMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773361267; c=relaxed/simple;
-	bh=EGu7h6sqch53CVjj+74drrbwn+MhP5k4eHR8FWN8LjM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pAieOhl4H17uHIZeHkMJD8x1tzKYmHrYGCUf866lOSUlYHYjmMwr+BOuoknzxw12EkjiYPMzEbAy4c+LElcwUq5myL1O3M6xU9uLU1hpugTpBOpsEPReTJeJ1tO8N/yJqJIzfORk9iXSISeLg+YEyylQ/g1VQO4OoA4X2UVRs5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TzfOX2BK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773361589; c=relaxed/simple;
+	bh=ZPy8ZzMN8npJ4fuX3Wa/GJ7H2ZWdN2LM7NfIB5u+Ue4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vyo8wTCwgrCBVaIsgPg/tcly11ec9dtBu1aVPGa3hX30cmbl0a2nrXq1cwMwjSYimCi+efIUbhFhWKOO6Wx+j6D32TVbqyRNYs+7EYDNk3vyRmC4hngi1ZkIXZqKUao+Q1APnWlbnLf8DSfKYGkYg9K+X/nlrOVyQIWRn/5K+Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EC6CT44F; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TzfOX2BK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4088C4CEF7;
-	Fri, 13 Mar 2026 00:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773361267;
-	bh=EGu7h6sqch53CVjj+74drrbwn+MhP5k4eHR8FWN8LjM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TzfOX2BKtrlz/XUUA32/AYFnB40A/Lg1pwVHbSHCw2QMhRcymAVqM3fJ/0MvuADtR
-	 1+oJpFiUWZn7koeq1wN0rE9sUdsG82bnHSOYi+/mNPYnGGVk+CMZwB/8ZndsyYvA+a
-	 +T0qHWxErFA6ejnhdxTRHVeHXMEWp7t+C0cwVPOufOcY7mc1MXYH0HDA9J0E7owrCm
-	 bGWBqHZd7R8xpN/SU00KCUtq6oupOX8XqBnrmJZMfMizUgQrsCDHncoCz92jD+VTP8
-	 UGj04yCM7l1Myx4deMxTcPm8j44oUrX5XsoynEIEAz8m+8T7hqmeSKUlLH+LR0CPfz
-	 0kA6bPFkrW5JQ==
-Date: Thu, 12 Mar 2026 17:21:04 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Maxime Chevallier
- <maxime.chevallier@bootlin.com>, netdev@vger.kernel.org, "David S. Miller"
- <davem@davemloft.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter
- <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, Naveen
- Mamindlapalli <naveenm@marvell.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Danielle Ratson <danieller@nvidia.com>,
- Hariprasad Kelam <hkelam@marvell.com>, Ido Schimmel <idosch@nvidia.com>,
- Kory Maincent <kory.maincent@bootlin.com>, Leon Romanovsky
- <leon@kernel.org>, Michael Chan <michael.chan@broadcom.com>, Oleksij Rempel
- <o.rempel@pengutronix.de>, Pavan Chebbi <pavan.chebbi@broadcom.com>,
- Piergiorgio Beruto <piergiorgio.beruto@gmail.com>, Russell King
- <linux@armlinux.org.uk>, Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan
- <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Willem de Bruijn
- <willemb@google.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
- definitions
-Message-ID: <20260312172104.2ed465f0@kernel.org>
-In-Reply-To: <171da8e9-fb09-4cfc-a29e-aefbdc8c3ce9@lunn.ch>
-References: <20260310104743.907818-1-bjorn@kernel.org>
-	<20260310104743.907818-3-bjorn@kernel.org>
-	<580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
-	<87tsum3b1o.fsf@all.your.base.are.belong.to.us>
-	<ed30934a-4931-40e5-a659-6fc8d12741b5@lunn.ch>
-	<20260311194716.600704aa@kernel.org>
-	<171da8e9-fb09-4cfc-a29e-aefbdc8c3ce9@lunn.ch>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EC6CT44F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773361587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nE/5qQ6YtvkKGa4AVChhKiXkIX3R8WJepoP9vC2ImQA=;
+	b=EC6CT44Fn/Q9h712RBdylvt9f21ALmMiXOM860gsu2wHxhsIX/t8o2GAFEScgOkaWQsFPV
+	8G/aCYIHVUbWI9aHWclUPL/++l28R5MmR9HE5SEGKPbHdW6b6Wf72jeSLcxyUCVYZampbO
+	sBtU09ISEFy9siNyu7aRAyJEuxKjYNo=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-543-gzx9QGhPMpeQBlVAMoUedQ-1; Thu,
+ 12 Mar 2026 20:26:22 -0400
+X-MC-Unique: gzx9QGhPMpeQBlVAMoUedQ-1
+X-Mimecast-MFC-AGG-ID: gzx9QGhPMpeQBlVAMoUedQ_1773361579
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 367B81953991;
+	Fri, 13 Mar 2026 00:26:19 +0000 (UTC)
+Received: from gmail.com (unknown [10.72.112.110])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EE07219540C5;
+	Fri, 13 Mar 2026 00:26:07 +0000 (UTC)
+Date: Fri, 13 Mar 2026 08:26:02 +0800
+From: Chunyu Hu <chuhu@redhat.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
+	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
+	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+	baohua@kernel.org, lance.yang@linux.dev
+Subject: Re: [PATCH 0/4] selftests/mm: skip several tests when thp is not
+ available
+Message-ID: <abNZmiL2C7KMQM1t@gmail.com>
+References: <20260312114027.634559-1-chuhu@redhat.com>
+ <abLHz2qjdeNqdFaZ@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abLHz2qjdeNqdFaZ@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Thu, 12 Mar 2026 14:46:40 +0100 Andrew Lunn wrote:
-> > Which reminds me -- I was suggesting that we add an order / id to the
-> > stages, not just name. Because AFAIU being able to request the loopback
-> > "very last loopback point of MAC" or "first loopback point of PHY"  
+On Thu, Mar 12, 2026 at 04:03:59PM +0200, Mike Rapoport wrote:
+> On Thu, Mar 12, 2026 at 07:40:23PM +0800, Chunyu Hu wrote:
+> > There are several tests requires transprarent hugepages, when run on thp
+> > disabled kernel such as realtime kernel, there will be false positve.
 > 
-> How do you define where the MAC ends?
+> I presume that when THP tests run on kernels with THP disabled they fail
+> and it would be a false negative rather than false positive.
 
-MAC may not be the greatest of names because I'd include in it
-everything past the PHY, up to the DMA blocks.
 
-> I suspect some vendors will include the PCS and the PMA, because the
-> MAC ends at the MII pins on their SoC. Other vendors are going to say
-> the MAC ends at the interface to the PCS, especially those who have
-> licensed the PCS, and are using the shared Linux driver for the
-> PCS. And the PMA might again be a shared implementation, since it is
-> also used for USB, PCIe and SATA.
+This is an interesting point. I'm not naitive speaker. I just learned
+from AI. It really matters what we define as 'postive'. I presume 'postive'
+is we run selftest and got a failure report, that's postive, not thinking
+as it's thp disabled kernel and a 'pass' is postive.
+
+I'll add statement about 'postive' in v2 like "a test failure is
+defiend as postive"
+
 > 
-> If Linux is driving the hardware, using phylink, phylib, PCS drivers
-> and generic PHY, we are very likely to have a uniform definition of
-> all these parts. Are we happy firmware devices will have a much
-> fuzzier, different interpretation, conglomerating it all together?
+> > Mark those tests as skip when thp is not available.
+> > 
+> > Chunye Hu (4):
+> >   selftests/mm/guard-regions: skip collapse test when thp not enabled
+> >   selftests/mm: soft-dirty: skip two tests when thp not available
+> >   selftests/mm: split_huge_page_test: skip the test when thp not
+> >     available
+> >   selftests/mm: transhuge_stress: skip the test when thp not available
+> > 
+> >  tools/testing/selftests/mm/guard-regions.c        | 4 ++++
+> >  tools/testing/selftests/mm/soft-dirty.c           | 4 +++-
+> >  tools/testing/selftests/mm/split_huge_page_test.c | 9 +++++++--
+> >  tools/testing/selftests/mm/transhuge-stress.c     | 4 ++++
+> >  4 files changed, 18 insertions(+), 3 deletions(-)
+> > 
+> > 
+> > base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
+> > -- 
+> > 2.53.0
+> > 
+> 
+> -- 
+> Sincerely yours,
+> Mike.
+> 
 
-As long as the kernel API lets "integrated" devices expose both a MAC
-and a PHY node I don't think we should let anyone conglomerate.
-
-I see your point that the enum would work nicely for PHY stages.
-But it will be limiting for MAC stages.
-These conflicting preferences make having all of loopback config 
-in one API tricky. I guess we could have a half-measure to add in
-the kernel the "well known" PHY stage name, and WARN_ON_ONCE() if 
-some driver exposes PHY stage in something that's not a PHY.
-Or uses an unknown name for a PHY stage?
