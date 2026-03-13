@@ -1,54 +1,54 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF0C37B03D
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 06:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B9E342538
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 06:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773382410; cv=none; b=fV8d8DT92GblQushdNtFMQpVLW/DbIV3sXpy3uFIkqtTqquDxMSeT8yvEslOodfbYeNxT0/+Qh0HMEPrTMFkPfJHu5CMAjh4HiPW1QRpKfLeVqLMvHpHBDTrHL1x+/6VT+w0B+IXJAMJsXlxRvwLAlCm7u05aZgVEZF3uMNbxj0=
+	t=1773382411; cv=none; b=fVR9YN7J2eOMCofnPFjxP29r5L01PDQh7ofKRElbtcoi3XR9iZfNBgbyTdOnEAM/oZ/WYH4xd/xQBH17GiaxV4GPKl4cG40ZPLPSqX8hIUWmOOqgW3uaVpUzAUY/ol9rm5/R7aGi3lkZT5bcyZOdwJU3QCdmIyyxxbDezcmjpJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773382410; c=relaxed/simple;
-	bh=efC+TzVwwA+lCFeRajm2dnq2MqPAbO6F5f4+fKbrYw4=;
+	s=arc-20240116; t=1773382411; c=relaxed/simple;
+	bh=MEMjE4y0f6LhKehfiB3tEKsufTe0/3lqX56LNLOryw8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SaPf9Jfwc0rtHCqFKe460iMmwX1lwILsPajNkUp+Am08rAgHmq+7A/ojXo2TFHklKo4St6KHiQiyl8yANSo2pMW5vbxQAPIZAelNg6SVFM+SsLal9cKdNtchBoLIHLBfNErM+fc+MqJVAdm7cgFcXaWWJ5AV4cheu6mST0KRWUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HN0YAtv9; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=MuS6jF9gMD2x234oi42VI6Hfv8xWPAPuvmTyp6jBjZ2BeI5K00A1YaCQkt+9C99rwrRa5JvOYUHmhmplytyxwhm9LxRbSKlaAyLxLAZErO91VlD/ge5ONj5UG+FCB4tVqIscMX7O5/SXOhsVPW6uROH4dkJoF66z1y48DBbRgSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PCvpItMr; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HN0YAtv9"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c73887d0297so1003473a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 23:13:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PCvpItMr"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-358e425c261so2028337a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 23:13:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773382407; x=1773987207; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1773382408; x=1773987208; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SKsDiBkOMuSiXMAD20hKx6nWgAocdhX8X7LRy61gCzM=;
-        b=HN0YAtv9b/GcBALegpZP+cvZMrB9a8Ql4i9AZ7cPdzRvHSC/8Uh5Zi0iUIA2OBWggb
-         j1cG+89Mc3Ccrhf1GOxAWK3nF46U/5XcIcgnaooCLRkOJ030XDOPMb8Pwmv6i9/ZrBNL
-         ndEXC8uFasURBp90S1vd6F7PEPla0EkxjcaU9L0xtYHyLHaOC60Lcy3Ba+/EhpjO2QsJ
-         CBo4BMOX+VM4EvwdxzYOw2H+/y66PeLT/deCVbr1plyE4Pn+2/iqs6uhAa7Orz59KChs
-         kf42r/VSx0LBHjJi+5ItkuHqMyk4jpdp8z+/vpHlOLMkdrtvuD7Z28k9jGl2aTeWjxyo
-         ZBdQ==
+        bh=Oy9U1Yzq6xW4Th7f+ij9YnI65zWgo+o6WIuvEc9wDEI=;
+        b=PCvpItMrjaeVJNGTuPpKNj5fOiZLmSkSLpRzFSncoeyM/6KZBHNcqQSWQm9UFyA6vG
+         vn1koSVoD3UmqL9LfQ1FYvb8gRGvOTiyu+0wYKEkmK8YImOZ0xaWA2wcUmpKIJ6Egp+q
+         kvnkFOP0wATHEQ0o9QCX7FHje+Nt6+aZC3LGos9qUXQ1fEQrkM8JOmEQ3QaTpyPZsnY8
+         LekJPDI6gHnsPoYV/Afxz/NbVV6fQGvv82s33Cqp7qcutiehXHGGtm0yglruW60NEjC4
+         l4G5Tww0J2LcZduRIo8QDDoJs+1xixaFX55v8Js4BTfh1lBLBWE8iBlTDJ+MrgkeuUlk
+         o2cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773382407; x=1773987207;
+        d=1e100.net; s=20251104; t=1773382408; x=1773987208;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SKsDiBkOMuSiXMAD20hKx6nWgAocdhX8X7LRy61gCzM=;
-        b=aSOhwBzXt+i7IpQNsyfaRP+mCqk+GZz3JAmmm0ypSuFguk9huoIZElqr20jzVoHZIy
-         gIwsiYd9pHPep6JVDriyboWPw8Q39FJDbk8vhRm812F8QeH+fh73ALLr2RrV7bZtKGSm
-         OEae3dDIwFF/Ska1yaOn7k6fOYG68CyB334SSYeAU9wJ+I18zBQosxoyzUCqLp4ztD+K
-         anjb0uwdiw18TVB7hvsZWGSVjufE61IrN10W9lAelRatVl9jO8OIcQN/9Opd7Ty9RMUd
-         4arbMh7sGB8PEArlWbCcgcmtVeMXQqxHObfDMQcgHHOf3AgfwivjGhkex8XUbep4mgvA
-         f7eg==
-X-Forwarded-Encrypted: i=1; AJvYcCUOBZxLJeNTrH8sGwJiwqbTwQOiuXJ/gj8BBf8s/HpT17OadQq49ROToS2ei2XY1st9yfw+l9D+N35xtsZNYBk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztS8HJhW/YpDKWVQyJBfhDya+P1sfI4DZJeHmJ6VIKZxTg3c3l
-	ackZ3EETRUkL1qZH8IKGG4l7OG/AsGIDjUiHGRikNaPkP3OFEIFbs7oBqOu1KDjxJupEf16//+K
-	UrzwXfFPGQPJejDPKRoZHTULLuQ==
-X-Received: from pgbcr10.prod.google.com ([2002:a05:6a02:410a:b0:c73:959f:8cb0])
+        bh=Oy9U1Yzq6xW4Th7f+ij9YnI65zWgo+o6WIuvEc9wDEI=;
+        b=OwlDCxp2Zpu1R+jHVacvZAZs1aoDlFtORIvFcmV+QmQAtFAtromuD2XK5BkJ0W+lnZ
+         ERXq5toX3nHQf62UDQ1xKBwJX6jDHGcVF5uMoV9PHOmTaML65koVH/thtMjpuOAA1i7+
+         8t3ClyK41XAejkkiNcOfzxBb+Vqvhd7aBKgSWFpkZA094QuTrVgkGoH+CGYaKBXTRZJN
+         vbe+RKIjcg1l8KqQ6v2w0j3uFYgBTD1H6Gyh8NG6X2XtdNvgBonwC9SuTtDn1l56c6mH
+         dVV3BsSAbKR23myW1JdkuGSGtY9VzotM/Fd8IlXXc4ttS6oiE7t+cNbbO1x4C+Eau4bX
+         7SjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ0J5ljAx1MbPGqiqWeCRUf8WkcEyhahjtUz3BZUXQwvp9w1b55K7VVfe4sPAon/VaJ8T31Ds1K5LWDo2gGpw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4NA+MCb8cHvuZaOks5M0EgDz3KpUNZ9cqKP/VTOoQgie41H88
+	NSWVrdUv7OkBh6zg2MTJZwmMZSYlwyuElGUfT3ynNM9osSh8/0Ga7//qWSxtbMU4RbFXlAE1KJR
+	SJOJX28E8S6lxg46EzaHSUrepdA==
+X-Received: from pjbfz16.prod.google.com ([2002:a17:90b:250:b0:35a:624:7b40])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:144d:b0:398:9ef1:f8f with SMTP id adf61e73a8af0-398ecb1744amr1704318637.27.1773382406593;
- Thu, 12 Mar 2026 23:13:26 -0700 (PDT)
-Date: Fri, 13 Mar 2026 06:13:02 +0000
+ 2002:a17:90a:d2c8:b0:359:8d70:c4e2 with SMTP id 98e67ed59e1d1-35a21e9918dmr1865751a91.11.1773382408169;
+ Thu, 12 Mar 2026 23:13:28 -0700 (PDT)
+Date: Fri, 13 Mar 2026 06:13:03 +0000
 In-Reply-To: <20260313-gmem-inplace-conversion-v3-0-5fc12a70ec89@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,13 +58,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260313-gmem-inplace-conversion-v3-0-5fc12a70ec89@google.com>
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519; pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773382364; l=1693;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773382364; l=2213;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=efC+TzVwwA+lCFeRajm2dnq2MqPAbO6F5f4+fKbrYw4=; b=dXLbU8TDG6aMEm1oHbIyweTeDvQxQuyJ0+hdf+31mE9HrelOO4tSatiFFzIn09YxmWZrCjBur
- ALwKc2H67ijDc6hNbI8tzXF4Vo/omiqpUdsqXy6yiqfUIbMskk/03MF
+ bh=MEMjE4y0f6LhKehfiB3tEKsufTe0/3lqX56LNLOryw8=; b=oNq0kuW26yPSYn9oq/nhubUv5O2dPP0/W8tRj/6R2mWwZXnJf1A8F24iejaOWNgvwxoSBckOV
+ iuOURBWHN2HA7FkQ/wo060NPdk3fi8GDpTOL3GcHBC/7nPnhCfrsT3v
 X-Mailer: b4 0.14.3
-Message-ID: <20260313-gmem-inplace-conversion-v3-23-5fc12a70ec89@google.com>
-Subject: [PATCH RFC v3 23/43] KVM: selftests: Test conversion before allocation
+Message-ID: <20260313-gmem-inplace-conversion-v3-24-5fc12a70ec89@google.com>
+Subject: [PATCH RFC v3 24/43] KVM: selftests: Convert with allocated folios in
+ different layouts
 From: Ackerley Tng <ackerleytng@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
 	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
@@ -87,44 +88,56 @@ Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Add two test cases to the guest_memfd conversions selftest to cover
-the scenario where a conversion is requested before any memory has been
-allocated in the guest_memfd region.
+Add a guest_memfd selftest to verify that memory conversions work
+correctly with allocated folios in different layouts.
 
-The KVM_MEMORY_CONVERT_GUEST ioctl can be called on a memory region at any
-time. If the guest has not yet faulted in any pages for that region, the
-kernel must record the conversion request and apply the requested state
-when the pages are eventually allocated.
-
-The new tests cover both conversion directions.
+By iterating through which pages are initially faulted, the test covers
+various layouts of contiguous allocated and unallocated regions, exercising
+conversion with different range layouts.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 Co-developed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/guest_memfd_conversions_test.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ .../selftests/kvm/guest_memfd_conversions_test.c   | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/guest_memfd_conversions_test.c b/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
-index 8044581d5e5e6..b48aa5d9f8cd4 100644
+index b48aa5d9f8cd4..9dc47316112fa 100644
 --- a/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
 +++ b/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
-@@ -255,6 +255,20 @@ GMEM_CONVERSION_MULTIPAGE_TEST_INIT_SHARED(indexing, 4)
- 	}
+@@ -269,6 +269,36 @@ GMEM_CONVERSION_TEST_INIT_PRIVATE(before_allocation_private)
+ 	test_convert_to_shared(t, 0, 0, 'A', 'B');
  }
  
 +/*
-+ * Test that even if there are no folios yet, conversion requests are recorded
-+ * in guest_memfd.
++ * Test that when some of the folios in the conversion range are allocated,
++ * conversion requests are handled correctly in guest_memfd.  Vary the ranges
++ * allocated before conversion, using test_page, to cover various layouts of
++ * contiguous allocated and unallocated regions.
 + */
-+GMEM_CONVERSION_TEST_INIT_SHARED(before_allocation_shared)
++GMEM_CONVERSION_MULTIPAGE_TEST_INIT_SHARED(unallocated_folios, 8)
 +{
-+	test_convert_to_private(t, 0, 0, 'A');
-+}
++	const int second_page_to_fault = 4;
++	int i;
 +
-+GMEM_CONVERSION_TEST_INIT_PRIVATE(before_allocation_private)
-+{
-+	test_convert_to_shared(t, 0, 0, 'A', 'B');
++	/*
++	 * Fault 2 of the pages to test filemap range operations except when
++	 * test_page == second_page_to_fault.
++	 */
++	host_do_rmw(t->mem, test_page, 0, 'A');
++	if (test_page != second_page_to_fault)
++		host_do_rmw(t->mem, second_page_to_fault, 0, 'A');
++
++	gmem_set_private(t->gmem_fd, 0, nr_pages * page_size);
++	for (i = 0; i < nr_pages; ++i) {
++		char expected = (i == test_page || i == second_page_to_fault) ? 'A' : 0;
++
++		test_private(t, i, expected, 'B');
++	}
++
++	for (i = 0; i < nr_pages; ++i)
++		test_convert_to_shared(t, i, 'B', 'C', 'D');
 +}
 +
  int main(int argc, char *argv[])
