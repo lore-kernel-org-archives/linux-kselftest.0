@@ -1,263 +1,88 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F23E223708
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Mar 2026 13:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE09B336885;
+	Sat, 14 Mar 2026 14:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773495745; cv=none; b=mrKsI2zTXOvlpfEUXIbNx6miNvUrOm6wo6ESx70lSwbmSesKYpCO8GqrC2fMU3Ofm74Hee0hVci2dwjTNPq7ZACsH4DsEPakKNck657DX9I635uy/sQFayQbxgJQof/ONyPKlh32PCjG0e/vISz4RkuCplAg08Gfnpw38hFg/mk=
+	t=1773499161; cv=none; b=h55nsdTkAqxWRCOV0/9u/fshNp70FDztCl0+ruUHwklG7U/Jzlz8nzcwij4XYUAgZ1NNuXa0+Cb+RhlUP5HvQetS6/7j2Li3EC6ATSp28E8z865txFHRKzmTQ5qOYDwAVIDrwzfEqJYaV94AtsAqAzerLMWhKXFp+hkBM/G+CQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773495745; c=relaxed/simple;
-	bh=vD0lWqO8uPTniXCR2wzvzqwCRNCqPfEZxRMIzwdc90o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F50F9HxFPNT33Iq4CvbDHYoII+DuXiB1Mopg5urwETlUqg0pmn6vEbpa9DW7P3/17QEsDDbhRcIMD0jaIeR0HymKDnC/QbDsAXdhPeppbd8S7i7KXk+9Uee3jI/MyGbUuAnl344KnwXjU7RcWWutwffAFAMkeHCBsx4cDQFAh/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A7BirgDy; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773499161; c=relaxed/simple;
+	bh=aQt3yN9oC3u1DOXjtnYQ5HIfBnNmVUHhH7ZmHIhVroA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=i9R3L+gh/R+6urQcMg7KdaJvtYMAFWoV1LSlwJomLLnx1PlYA1Cp2w12jR8S3oX5y6kQDkcmQLELNlaYQ/t6rZHOpL2ho3a6kjxHlS5AjU8lNmZwkj82kYEIQ7upJlH8znPwIEOmluP8EFT+dy8v11WmkcNb83ARvxAcxDbGvEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fe4C0h2l; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A7BirgDy"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773495741;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OitJ18LbV3U8rIZ7uUZRphAgZiJyxDjT4DUpok4Nlpw=;
-	b=A7BirgDycIkrKxpduErh6TtnO3g1rvWxWRAz4oB4AOJ4lU3EPtc8Z3jCl4qvieXD6L/HgS
-	TXp5YLGteQV+l+Fq9IqnYkzimJohlcxQVv/um1xYZXinKhWX2SnOFVhoaJmoR4Tah+nYzR
-	CM9FEO49PV8d89/TSEqHkQfgs8t6vUI=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org,
-	edumazet@google.com
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v1] selftests: bonding: add test for stacked bond header_parse recursion
-Date: Sat, 14 Mar 2026 21:42:05 +0800
-Message-ID: <20260314134211.33405-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fe4C0h2l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB1CC116C6;
+	Sat, 14 Mar 2026 14:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773499161;
+	bh=aQt3yN9oC3u1DOXjtnYQ5HIfBnNmVUHhH7ZmHIhVroA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fe4C0h2lchpICgSlw+ppLPYHruXnZ693hXcbr8PGWUJynuH/xCXsqBNBNqTKYBBWU
+	 JFGaF9Eg/7Bpq0U3Ii/Syh1OiXBYkh1/1j6EbLo4xk4YR9wLYR/68Z1QU2QhLPD4VN
+	 GM9m3fod9gbqSiJ9GCNhUepzy/clCbd6FhRxbdNpdZ6JFglAqHLyHkxFEugI4Dy5lD
+	 plly/5Hxhknq/WaxaK/jbOaflkCpMoMTr4EYxdnGtxyFHdJ1pgIrQBmOlJNNxs6GSC
+	 ZgIYskqHCxZWE7pyWy26Psu0o/XTgbEIpJQeZCp78ifF44GX/1+QmiFrjBUhFBNao8
+	 yUxs22wZp2ryA==
+Date: Sat, 14 Mar 2026 07:39:19 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Wilfred Mallawa <wilfred.opensource@gmail.com>
+Cc: Sabrina Dubroca <sd@queasysnail.net>, John Fastabend
+ <john.fastabend@gmail.com>, "David S . Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Alistair Francis
+ <alistair.francis@wdc.com>, Damien Le'Moal <dlemoal@kernel.org>, Wilfred
+ Mallawa <wilfred.mallawa@wdc.com>
+Subject: Re: [RFC net-next 1/3] net/tls_sw: support randomized zero padding
+Message-ID: <20260314073919.2f92b966@kernel.org>
+In-Reply-To: <abQOGm6BqAE5eEln@krikkit>
+References: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
+	<20260309054837.2299732-3-wilfred.opensource@gmail.com>
+	<abQOGm6BqAE5eEln@krikkit>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
+On Fri, 13 Mar 2026 14:16:10 +0100 Sabrina Dubroca wrote:
+> 2026-03-09, 15:48:36 +1000, Wilfred Mallawa wrote:
+> > From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+> > 
+> > Currently, for TLS 1.3, ktls does not support record zero padding [1].
+> > Record zero padding is used to allow the sender to hide the size of the
+> > traffic patterns from an observer. TLS is susceptible to a variety of traffic
+> > analysis attacks based on observing the length and timing of encrypted
+> > packets [2]. Upcoming Western Digital NVMe-TCP hardware controllers
+> > implement TLS 1.3. Which from a security perspective, can benefit from having
+> > record zero padding enabled to mitigate against traffic analysis attacks [2].
+> > 
+> > Thus, for TX, add support to appending a randomized number of zero padding
+> > bytes to end-of-record (EOR) records that are not full. The number of zero  
+> 
+> I don't think this is the right behavior. I expect that a user that
+> enables zero-padding would want _every_ record they send to be padded,
+> and their payload is going to be split into however many records that
+> requires. This could mean that data that would just fit in a record
+> will get split into one full + one very small record.
+> 
+> As it is, if I repeatedly call send with MSG_MORE to let ktls chunk
+> this for me, zero-padding has no effect. That doesn't seem right.
+> 
+> Does that make sense?
 
-Add a selftest to reproduce the infinite recursion in bond_header_parse()
-when bonds are stacked (bond1 -> bond0 -> gre). When a packet is received
-via AF_PACKET SOCK_DGRAM on the topmost bond, dev_parse_header() calls
-bond_header_parse() which used skb->dev (always the topmost bond) to get
-the bonding struct. This caused it to recurse back into itself
-indefinitely, leading to stack overflow.
+Or maybe you could refer to existing implementations of this feature
+in user space libs? The padding feature seems slightly nebulous, 
+I wasn't aware of anyone actually using it. Maybe I should ask...
+are you actually planning to use it, or are you checking a box?
 
-Before Eric's fix [2], the test triggers:
-
-  ./bond-stacked-header-parse.sh
-
-  [  71.999481] BUG: MAX_LOCK_DEPTH too low!
-  [  72.000170] turning off the locking correctness validator.
-  [  72.001029] Please attach the output of /proc/lock_stat to the bug report
-  [  72.002079] depth: 48  max: 48!
-  ...
-
-After Eric's fix [2], everything works fine:
-
-  ./bond-stacked-header-parse.sh
-  TEST: Stacked bond header_parse does not recurse                  [ OK ]
-
-Also verified via make run_tests -C drivers/net/bonding:
-
-  ...
-  ok 3 selftests: drivers/net/bonding: bond-eth-type-change.sh
-  # timeout set to 1200
-  # selftests: drivers/net/bonding: bond-stacked-header-parse.sh
-  # TEST: Stacked bond header_parse does not recurse                [ OK ]
-  ok 4 selftests: drivers/net/bonding: bond-stacked-header-parse.sh
-  # timeout set to 1200
-  # selftests: drivers/net/bonding: bond-lladdr-target.sh
-  # PASS
-  ...
-
-[1] https://lore.kernel.org/netdev/CANn89iK2EURqsjtd=OVP4awYTJHGcR-UU-V9WovpWR1Z3f03oQ@mail.gmail.com/
-[2] https://lore.kernel.org/netdev/20260314115650.3646361-1-edumazet@google.com/
-
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
----
- .../selftests/drivers/net/bonding/Makefile    |   1 +
- .../net/bonding/bond-stacked-header-parse.sh  | 142 ++++++++++++++++++
- 2 files changed, 143 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
-
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index 6c5c60adb5e8..055f6af03b5d 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -5,6 +5,7 @@ TEST_PROGS := \
- 	bond-arp-interval-causes-panic.sh \
- 	bond-break-lacpdu-tx.sh \
- 	bond-eth-type-change.sh \
-+	bond-stacked-header-parse.sh \
- 	bond-lladdr-target.sh \
- 	bond_ipsec_offload.sh \
- 	bond_lacp_prio.sh \
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh b/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
-new file mode 100755
-index 000000000000..d377bedaef63
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
-@@ -0,0 +1,142 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test that bond_header_parse() does not infinitely recurse with stacked bonds.
-+#
-+# When a non-Ethernet device (e.g. GRE) is enslaved to a bond that is itself
-+# enslaved to another bond (bond1 -> bond0 -> gre), receiving a packet via
-+# AF_PACKET SOCK_DGRAM triggers dev_parse_header() -> bond_header_parse().
-+# Since parse() used skb->dev (always the topmost bond) instead of a passed-in
-+# dev pointer, it would recurse back into itself indefinitely.
-+
-+ALL_TESTS="
-+	bond_test_stacked_header_parse
-+"
-+REQUIRE_MZ=no
-+NUM_NETIFS=0
-+lib_dir=$(dirname "$0")
-+source "$lib_dir"/../../../net/forwarding/lib.sh
-+
-+require_command()
-+{
-+	if ! command -v "$1" &>/dev/null; then
-+		echo "SKIP: $1 is not installed"
-+		exit "$ksft_skip"
-+	fi
-+}
-+
-+bond_test_stacked_header_parse()
-+{
-+	local devdummy="test-dummy0"
-+	local devgre="test-gre0"
-+	local devbond0="test-bond0"
-+	local devbond1="test-bond1"
-+
-+	RET=0
-+
-+	# Setup: dummy -> gre -> bond0 -> bond1
-+	modprobe dummy 2>/dev/null
-+	modprobe ip_gre 2>/dev/null
-+	modprobe bonding 2>/dev/null
-+
-+	ip link add name "$devdummy" type dummy
-+	if [ $? -ne 0 ]; then
-+		log_test_skip "could not create dummy device (CONFIG_DUMMY)"
-+		return
-+	fi
-+	ip addr add 10.0.0.1/24 dev "$devdummy"
-+	ip link set "$devdummy" up
-+
-+	ip link add name "$devgre" type gre local 10.0.0.1
-+	if [ $? -ne 0 ]; then
-+		log_test_skip "could not create GRE device (CONFIG_NET_IPGRE)"
-+		ip link del "$devdummy" 2>/dev/null
-+		return
-+	fi
-+
-+	ip link add name "$devbond0" type bond mode active-backup
-+	check_err $? "could not create bond0"
-+	ip link add name "$devbond1" type bond mode active-backup
-+	check_err $? "could not create bond1"
-+
-+	ip link set "$devgre" master "$devbond0"
-+	check_err $? "could not enslave $devgre to $devbond0"
-+	ip link set "$devbond0" master "$devbond1"
-+	check_err $? "could not enslave $devbond0 to $devbond1"
-+
-+	ip link set "$devgre" up
-+	ip link set "$devbond0" up
-+	ip link set "$devbond1" up
-+
-+	# Send a GRE-encapsulated packet to 10.0.0.1 while an AF_PACKET
-+	# SOCK_DGRAM socket is listening on bond1. The receive path calls
-+	# dev_parse_header() which invokes bond_header_parse(). With the
-+	# bug, this recurses infinitely and causes a stack overflow.
-+	#
-+	# Use Python to:
-+	# 1. Open AF_PACKET SOCK_DGRAM on bond1
-+	# 2. Send a GRE packet to 10.0.0.1 via raw socket
-+	# 3. Try to receive (triggers parse path)
-+	python3 -c "
-+import socket, struct, time
-+
-+# AF_PACKET SOCK_DGRAM on bond1
-+ETH_P_ALL = 0x0003
-+pkt_fd = socket.socket(socket.AF_PACKET, socket.SOCK_DGRAM,
-+                       socket.htons(ETH_P_ALL))
-+pkt_fd.settimeout(2)
-+pkt_fd.bind(('$devbond1', ETH_P_ALL))
-+
-+# Build GRE-encapsulated IP packet
-+def build_ip_hdr(proto, saddr, daddr, payload_len):
-+    ihl_ver = 0x45
-+    total_len = 20 + payload_len
-+    hdr = struct.pack('!BBHHHBBH4s4s',
-+        ihl_ver, 0, total_len, 0, 0, 64, proto, 0,
-+        socket.inet_aton(saddr), socket.inet_aton(daddr))
-+    # compute checksum
-+    words = struct.unpack('!10H', hdr)
-+    s = sum(words)
-+    while s >> 16:
-+        s = (s & 0xffff) + (s >> 16)
-+    chksum = ~s & 0xffff
-+    hdr = hdr[:10] + struct.pack('!H', chksum) + hdr[12:]
-+    return hdr
-+
-+inner = build_ip_hdr(17, '192.168.1.1', '192.168.1.2', 8) + b'\x00' * 8
-+gre_hdr = struct.pack('!HH', 0, 0x0800)  # flags=0, proto=IP
-+outer = build_ip_hdr(47, '10.0.0.2', '10.0.0.1', len(gre_hdr) + len(inner))
-+pkt = outer + gre_hdr + inner
-+
-+raw_fd = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
-+raw_fd.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
-+raw_fd.sendto(pkt, ('10.0.0.1', 0))
-+raw_fd.close()
-+
-+try:
-+    pkt_fd.recv(2048)
-+except socket.timeout:
-+    pass
-+pkt_fd.close()
-+" 2>/dev/null
-+
-+	# If we get here without a kernel crash/hang, the test passed.
-+	# Also check dmesg for signs of the recursion bug.
-+	if dmesg | tail -20 | grep -q "BUG: MAX_LOCK_DEPTH\|stack-overflow\|stack overflow"; then
-+		check_err 1 "kernel detected recursion in bond_header_parse"
-+	fi
-+
-+	# Cleanup
-+	ip link del "$devbond1" 2>/dev/null
-+	ip link del "$devbond0" 2>/dev/null
-+	ip link del "$devgre" 2>/dev/null
-+	ip link del "$devdummy" 2>/dev/null
-+
-+	log_test "Stacked bond header_parse does not recurse"
-+}
-+
-+require_command python3
-+
-+tests_run
-+
-+exit "$EXIT_STATUS"
--- 
-2.43.0
-
+Second question - do we also need to support zero-byte records (entire
+record is padding) to prevent timing attacks?
