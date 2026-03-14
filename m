@@ -1,99 +1,69 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52695347518;
-	Sat, 14 Mar 2026 17:52:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823A72F851;
+	Sat, 14 Mar 2026 18:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773510721; cv=none; b=pip7+K2DyOMVqlcvy1/NtirypLWBLIFDSI9mNlVYTaTUtmAd18tq6LL3wdxhpmo2zs6gr9PoBdyahILs32TZYFdKdXWPfiF3W/sS6V2WI2DhB/Jtj/buS3rrtYgA3JgAwj0AdL1cENofolY0DoMQ5Z7ofNYr5YHCMpXST7x4aLY=
+	t=1773512304; cv=none; b=GwULPmlR3pl6Y4vCIHYxY0eMr8hzMmlwb+wXn2DMyAWcd5uDPWb8VighXw1QARQYZNFoTGPWbCB5E6Rkw902ZWKHDfBomDCplJ8wqVEwXQykr+ME8cYqkjLHvTY2UsKdPTlNwBhsROVH5CHl0LQjhoC8pXZ+JxxPkVHX2Xn5Ac8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773510721; c=relaxed/simple;
-	bh=iGDW5vhq3Q6kZFtorZ0MiHnTnFizA2hhJE+6ztz9Y9Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=l7rxCcAdifG9Az08ZTGSKA7oggcbAfQrQ6gKGhGbWahch/bslVj5V0pnRDZmek84Sf25jkEEScr8fl5N3159REFd8K5By13phSazotlSLucPsChrC7+XcpwX2C3xOcdbMAhn/o9GM+6siMYMjv1cn1tHTKBwR7K4I0aMqaX02pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2CA9152B;
-	Sat, 14 Mar 2026 10:51:53 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7E58B3F73B;
-	Sat, 14 Mar 2026 10:51:57 -0700 (PDT)
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: catalin.marinas@arm.com,
-	will@kernel.org,
-	maz@kernel.org,
-	oupton@kernel.org,
-	miko.lenczewski@arm.com,
-	kevin.brodsky@arm.com,
-	broonie@kernel.org,
-	ardb@kernel.org,
-	suzuki.poulose@arm.com,
-	lpieralisi@kernel.org,
-	joey.gouly@arm.com,
-	yuzenghui@huawei.com,
-	yeoreum.yun@arm.com
-Subject: [PATCH v17 8/8] arm64: Kconfig: add support for LSUI
-Date: Sat, 14 Mar 2026 17:51:33 +0000
-Message-Id: <20260314175133.1084528-9-yeoreum.yun@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260314175133.1084528-1-yeoreum.yun@arm.com>
-References: <20260314175133.1084528-1-yeoreum.yun@arm.com>
+	s=arc-20240116; t=1773512304; c=relaxed/simple;
+	bh=68Bjyoi3gtdErelVO/sN0br35R51BTPCrE2rCbJxO44=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H1L36lQA72nGGy59SXGouwXW1OguRaAIcZaplBGYWLrYzhw53qGv6b7AnS7vKmR6loksuSnw1XVxDGq/2nHjbMTlFINOubTZAGNobFEZnaMFFidr1pCKWvjkUAuH+Quj/cjRybjzFhxM/PmOZT4Jo5NIAJa29QZEIQIUs2SmpI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ljmQoDo6; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ljmQoDo6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00466C116C6;
+	Sat, 14 Mar 2026 18:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773512304;
+	bh=68Bjyoi3gtdErelVO/sN0br35R51BTPCrE2rCbJxO44=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ljmQoDo6+8N5qariNMP+lxBxK9JyF7T0M+fUn2PH5u1KxLF9wwqV4xeYeOD9teSUI
+	 0vRosx7dOI9CiCAb440Az7+OWWQgJXPXB9o73UyHwNLk7jTd7Kvb44zSI5Yg+eqMih
+	 Z4tqWM39rhUqviuVVfoBB7EyeE0f3aG67KuYz81hK+3HV3pD1sKJ9fHwr2ySEXA8Dt
+	 YZd9LQ+Y+G938tznqGltVQiP8SgiEHeMISaghcdU4Wy2FDoHlP0RKyN7bgzEngnDGT
+	 XqYkaEvqCd3epEpoGm0D8oEqQJV/9aal++4UMS4E34uFBDZgv/yPrLkytWT8aFAwbH
+	 iemdxGuEO1zJQ==
+Date: Sat, 14 Mar 2026 11:18:22 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org, Thomas
+ Gleixner <tglx@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Jonathan Corbet
+ <corbet@lwn.net>, Dmitry Vyukov <dvyukov@google.com>, Randy Dunlap
+ <rdunlap@infradead.org>, Cyril Hrubis <chrubis@suse.cz>, Kees Cook
+ <kees@kernel.org>, Jake Edge <jake@lwn.net>, David Laight
+ <david.laight.linux@gmail.com>, Askar Safin <safinaskar@zohomail.com>,
+ Gabriele Paoloni <gpaoloni@redhat.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Christian Brauner <brauner@kernel.org>, Alexander
+ Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>,
+ Masahiro Yamada <masahiroy@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, Arnd Bergmann
+ <arnd@arndb.de>
+Subject: Re: [PATCH 0/9] Kernel API Specification Framework
+Message-ID: <20260314111822.63a2ba4a@kernel.org>
+In-Reply-To: <20260313150928.2637368-1-sashal@kernel.org>
+References: <20260313150928.2637368-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Since Armv9.6, FEAT_LSUI supplies the load/store instructions for
-previleged level to access to access user memory without clearing
-PSTATE.PAN bit.
+On Fri, 13 Mar 2026 11:09:10 -0400 Sasha Levin wrote:
+> This enables static analysis tools to verify userspace API usage at compile
+> time, test generation based on formal specifications, consistent error handling
+> validation, automated documentation generation, and formal verification of
+> kernel interfaces.
 
-Add Kconfig option entry for FEAT_LSUI.
-
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
----
- arch/arm64/Kconfig | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 38dba5f7e4d2..890a1bedbf4a 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -2215,6 +2215,26 @@ config ARM64_GCS
- 
- endmenu # "ARMv9.4 architectural features"
- 
-+config AS_HAS_LSUI
-+	def_bool $(as-instr,.arch_extension lsui)
-+	help
-+	  Supported by LLVM 20+ and binutils 2.45+.
-+
-+menu "ARMv9.6 architectural features"
-+
-+config ARM64_LSUI
-+	bool "Support Unprivileged Load Store Instructions (LSUI)"
-+	default y
-+	depends on AS_HAS_LSUI && !CPU_BIG_ENDIAN
-+	help
-+	  The Unprivileged Load Store Instructions (LSUI) provides
-+	  variants load/store instructions that access user-space memory
-+	  from the kernel without clearing PSTATE.PAN bit.
-+
-+	  This feature is supported by LLVM 20+ and binutils 2.45+.
-+
-+endmenu # "ARMv9.6 architectural feature"
-+
- config ARM64_SVE
- 	bool "ARM Scalable Vector Extension support"
- 	default y
--- 
-LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
-
+Could you give some examples? We have machine readable descriptions for
+Netlink interfaces, we approached syzbot folks and they did not really
+seem to care for those.
