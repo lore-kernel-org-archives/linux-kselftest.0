@@ -1,60 +1,46 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFBD246778;
-	Sat, 14 Mar 2026 08:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F23E223708
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Mar 2026 13:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773476558; cv=none; b=O/YaCzW55zne/2ZGVb3IJQeFGcSQDNjI+CPgIu9gavDqdyEnnuEwzeMAEZACivr36Y1Q7lPZfDo+pkynjdHP0OGAPEl1tjn4YLectnab2lAY1+nIe5rKsZmEiKCzP9qLQf/JTs5MkTxgtjSRKTnUzTKg9TbNMdHtDhpwhLWn+aY=
+	t=1773495745; cv=none; b=mrKsI2zTXOvlpfEUXIbNx6miNvUrOm6wo6ESx70lSwbmSesKYpCO8GqrC2fMU3Ofm74Hee0hVci2dwjTNPq7ZACsH4DsEPakKNck657DX9I635uy/sQFayQbxgJQof/ONyPKlh32PCjG0e/vISz4RkuCplAg08Gfnpw38hFg/mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773476558; c=relaxed/simple;
-	bh=660Vy3EMsjhWe5OrruCu5GUjTQfy+9Nleh1gLGZXUBI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VAGPN32aDPa1OtgU5o/2lNyr7J6nEMM92Pqj5Wk17z2bhQZL064+ywoElrEweaVR3XBVMMiq44HudSGs8bIMPF6l6pTrkAQwLF3GkWgRlK/FRDoJlFRKcjZK4224TKiVvNcqNIcFEdBWmGct72XyeTAwkD7ybQpEan45kXhFGo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=s2F+ab/Q; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1773495745; c=relaxed/simple;
+	bh=vD0lWqO8uPTniXCR2wzvzqwCRNCqPfEZxRMIzwdc90o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F50F9HxFPNT33Iq4CvbDHYoII+DuXiB1Mopg5urwETlUqg0pmn6vEbpa9DW7P3/17QEsDDbhRcIMD0jaIeR0HymKDnC/QbDsAXdhPeppbd8S7i7KXk+9Uee3jI/MyGbUuAnl344KnwXjU7RcWWutwffAFAMkeHCBsx4cDQFAh/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A7BirgDy; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="s2F+ab/Q"
-Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62E4E1Wo3079559;
-	Sat, 14 Mar 2026 08:21:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=xsYk8lAVJywbgjJCX2hXfmP74QOpx5+xy0dSbZAf6yE=; b=s2F+
-	ab/QTkSaF+Iot5v2RAO9sqtgQc4qNTlQpmlQO0d418n636NlskvKWUTcUacGV9q9
-	YJfVDYu8DPMcTAfJKUe3fdTFxBkZuDwsShoQUCGXDtL7xa01wF+49y+AyYEVb8C0
-	ccPAnDrLQOayM7escBn+L3W21j+1G1oy/n4dS4mLPjgpSqPj+SSG/8A7j1oUBkbb
-	vW/69w9uftDFUzsfxCR5Fk1ZWhl8XWobVItx5LOrWa40YXxJmxVkla8AyMWJK/xH
-	JsfMQBCGCSEGleyYCcvof4ggsiCfOHujKnGF1ORA+l42aPpaWmBNvCRgO1/yKlOz
-	8+9L1sNlQ/xBloSrYw==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cw08eghff-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 14 Mar 2026 08:21:57 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Sat, 14 Mar 2026 08:21:52 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
-CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
-        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
-        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
-        Slava Imameev
-	<slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next v6 2/2] selftests/bpf: Add trampolines single and multi-level pointer params test coverage
-Date: Sat, 14 Mar 2026 19:21:27 +1100
-Message-ID: <20260314082127.7939-3-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260314082127.7939-1-slava.imameev@crowdstrike.com>
-References: <20260314082127.7939-1-slava.imameev@crowdstrike.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A7BirgDy"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773495741;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OitJ18LbV3U8rIZ7uUZRphAgZiJyxDjT4DUpok4Nlpw=;
+	b=A7BirgDycIkrKxpduErh6TtnO3g1rvWxWRAz4oB4AOJ4lU3EPtc8Z3jCl4qvieXD6L/HgS
+	TXp5YLGteQV+l+Fq9IqnYkzimJohlcxQVv/um1xYZXinKhWX2SnOFVhoaJmoR4Tah+nYzR
+	CM9FEO49PV8d89/TSEqHkQfgs8t6vUI=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org,
+	edumazet@google.com
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v1] selftests: bonding: add test for stacked bond header_parse recursion
+Date: Sat, 14 Mar 2026 21:42:05 +0800
+Message-ID: <20260314134211.33405-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,168 +48,216 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH016.crowdstrike.sys (10.100.11.68) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: ZC9jvN8Q3D7pSg_JcINvUUnfgNmJ0gs3
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE0MDA2MyBTYWx0ZWRfX7t+Sry/pwNWr
- rS2qF0zt1mq3SIQVU3fe+p4uRhSREXmFfsi0nqrXgbPCiXqjP7WyWUxQ0Mdcu/ab+YzN+8n2Psv
- FXK2cEi+frTjB7EbaZM11zobGovdY7JVJyZXsXDYWI9Dem+V+juzAzOshvCqnCbeGYqPmEZ56gK
- I6Yb+hFfSYyiZqD1gF6uYWKARq5pMddkZt+i/pyPX1N+WIQimObP6681rq6kBnR+LEEOgestXbc
- e9fsjE2fBaIgPEnGBHufKztPMISROQgrPD+dENVQY2q755epG6zUYbIFM57M8r0aZm5hVsGobcy
- tqIPOAsp8TJyZ+acOIj7NMso/wRuVm1jQ2uglW1YKffw1rDvvb9Ru/TFHJCxRBdXLpWH5Wxt66M
- FB1S0wFWYqtzeDhYU18aKElOVUpw+zfVdWbirRvKD5UYewJ0SVXFGcyeHRSPkzPasPW8Wlg4Po9
- wBc2F100GN1LnVuRuOw==
-X-Authority-Analysis: v=2.4 cv=fsfRpV4f c=1 sm=1 tr=0 ts=69b51aa6 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=2KvRFfd_T_-xjmS8C1aD:22 a=pl6vuDidAAAA:8
- a=Vh-PTBDqdCVuQZtVsP0A:9
-X-Proofpoint-GUID: ZC9jvN8Q3D7pSg_JcINvUUnfgNmJ0gs3
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11728
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 malwarescore=0 clxscore=1015 bulkscore=0
- suspectscore=0 spamscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603140063
+X-Migadu-Flow: FLOW_OUT
 
-Add single and multi-level pointer parameters and return value test
-coverage for BPF trampolines. Includes verifier tests for single and
-multi-level pointers. The tests check verifier logs for pointers
-inferred as scalar() type.
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
+Add a selftest to reproduce the infinite recursion in bond_header_parse()
+when bonds are stacked (bond1 -> bond0 -> gre). When a packet is received
+via AF_PACKET SOCK_DGRAM on the topmost bond, dev_parse_header() calls
+bond_header_parse() which used skb->dev (always the topmost bond) to get
+the bonding struct. This caused it to recurse back into itself
+indefinitely, leading to stack overflow.
+
+Before Eric's fix [2], the test triggers:
+
+  ./bond-stacked-header-parse.sh
+
+  [  71.999481] BUG: MAX_LOCK_DEPTH too low!
+  [  72.000170] turning off the locking correctness validator.
+  [  72.001029] Please attach the output of /proc/lock_stat to the bug report
+  [  72.002079] depth: 48  max: 48!
+  ...
+
+After Eric's fix [2], everything works fine:
+
+  ./bond-stacked-header-parse.sh
+  TEST: Stacked bond header_parse does not recurse                  [ OK ]
+
+Also verified via make run_tests -C drivers/net/bonding:
+
+  ...
+  ok 3 selftests: drivers/net/bonding: bond-eth-type-change.sh
+  # timeout set to 1200
+  # selftests: drivers/net/bonding: bond-stacked-header-parse.sh
+  # TEST: Stacked bond header_parse does not recurse                [ OK ]
+  ok 4 selftests: drivers/net/bonding: bond-stacked-header-parse.sh
+  # timeout set to 1200
+  # selftests: drivers/net/bonding: bond-lladdr-target.sh
+  # PASS
+  ...
+
+[1] https://lore.kernel.org/netdev/CANn89iK2EURqsjtd=OVP4awYTJHGcR-UU-V9WovpWR1Z3f03oQ@mail.gmail.com/
+[2] https://lore.kernel.org/netdev/20260314115650.3646361-1-edumazet@google.com/
+
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
 ---
- net/bpf/test_run.c                            | 17 +++++
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_ctx_ptr_param.c        | 68 +++++++++++++++++++
- 3 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
+ .../selftests/drivers/net/bonding/Makefile    |   1 +
+ .../net/bonding/bond-stacked-header-parse.sh  | 142 ++++++++++++++++++
+ 2 files changed, 143 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 56bc8dc1e281..14c4814a7dab 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -567,6 +567,23 @@ noinline void bpf_fentry_test_sinfo(struct skb_shared_info *sinfo)
- {
- }
- 
-+noinline void bpf_fentry_test_ppvoid(void **pp)
-+{
-+}
-+
-+noinline void bpf_fentry_test_pppvoid(void ***ppp)
-+{
-+}
-+
-+noinline void bpf_fentry_test_ppfile(struct file **ppf)
-+{
-+}
-+
-+noinline struct file **bpf_fexit_test_ret_ppfile(void)
-+{
-+	return (struct file **)NULL;
-+}
-+
- __bpf_kfunc int bpf_modify_return_test(int a, int *b)
- {
- 	*b += 1;
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 8cdfd74c95d7..bcf01cb4cfe4 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -115,6 +115,7 @@
- #include "verifier_lsm.skel.h"
- #include "verifier_jit_inline.skel.h"
- #include "irq.skel.h"
-+#include "verifier_ctx_ptr_param.skel.h"
- 
- #define MAX_ENTRIES 11
- 
-@@ -259,6 +260,7 @@ void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
- void test_irq(void)			      { RUN(irq); }
- void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
- void test_verifier_jit_inline(void)               { RUN(verifier_jit_inline); }
-+void test_verifier_ctx_ptr_param(void)       { RUN(verifier_ctx_ptr_param); }
- 
- static int init_test_val_map(struct bpf_object *obj, char *map_name)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c b/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
-new file mode 100644
-index 000000000000..d5cc8fc01fe6
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+index 6c5c60adb5e8..055f6af03b5d 100644
+--- a/tools/testing/selftests/drivers/net/bonding/Makefile
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -5,6 +5,7 @@ TEST_PROGS := \
+ 	bond-arp-interval-causes-panic.sh \
+ 	bond-break-lacpdu-tx.sh \
+ 	bond-eth-type-change.sh \
++	bond-stacked-header-parse.sh \
+ 	bond-lladdr-target.sh \
+ 	bond_ipsec_offload.sh \
+ 	bond_lacp_prio.sh \
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh b/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
+new file mode 100755
+index 000000000000..d377bedaef63
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Verifier tests for single- and multi-level pointer parameter handling
-+ * Copyright (c) 2026 CrowdStrike, Inc.
-+ */
++++ b/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
+@@ -0,0 +1,142 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test that bond_header_parse() does not infinitely recurse with stacked bonds.
++#
++# When a non-Ethernet device (e.g. GRE) is enslaved to a bond that is itself
++# enslaved to another bond (bond1 -> bond0 -> gre), receiving a packet via
++# AF_PACKET SOCK_DGRAM triggers dev_parse_header() -> bond_header_parse().
++# Since parse() used skb->dev (always the topmost bond) instead of a passed-in
++# dev pointer, it would recurse back into itself indefinitely.
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
++ALL_TESTS="
++	bond_test_stacked_header_parse
++"
++REQUIRE_MZ=no
++NUM_NETIFS=0
++lib_dir=$(dirname "$0")
++source "$lib_dir"/../../../net/forwarding/lib.sh
 +
-+SEC("fentry/bpf_fentry_test_ppvoid")
-+__description("fentry/void**: void ** inferred as scalar")
-+__success __retval(0)
-+__log_level(2)
-+__msg("R1=ctx() R2=scalar()")
-+__naked void fentry_ppvoid_as_scalar(void)
++require_command()
 +{
-+    asm volatile ("					\
-+	r2 = *(u64 *)(r1 + 0);	\
-+	r0 = 0;	\
-+	exit;	\
-+	" ::: __clobber_all);
++	if ! command -v "$1" &>/dev/null; then
++		echo "SKIP: $1 is not installed"
++		exit "$ksft_skip"
++	fi
 +}
 +
-+SEC("fentry/bpf_fentry_test_pppvoid")
-+__description("fentry/void***: void *** inferred as scalar")
-+__success __retval(0)
-+__log_level(2)
-+__msg("R1=ctx() R2=scalar()")
-+__naked void fentry_pppvoid_as_scalar(void)
++bond_test_stacked_header_parse()
 +{
-+    asm volatile ("					\
-+	r2 = *(u64 *)(r1 + 0);	\
-+	r0 = 0;	\
-+	exit;	\
-+	" ::: __clobber_all);
++	local devdummy="test-dummy0"
++	local devgre="test-gre0"
++	local devbond0="test-bond0"
++	local devbond1="test-bond1"
++
++	RET=0
++
++	# Setup: dummy -> gre -> bond0 -> bond1
++	modprobe dummy 2>/dev/null
++	modprobe ip_gre 2>/dev/null
++	modprobe bonding 2>/dev/null
++
++	ip link add name "$devdummy" type dummy
++	if [ $? -ne 0 ]; then
++		log_test_skip "could not create dummy device (CONFIG_DUMMY)"
++		return
++	fi
++	ip addr add 10.0.0.1/24 dev "$devdummy"
++	ip link set "$devdummy" up
++
++	ip link add name "$devgre" type gre local 10.0.0.1
++	if [ $? -ne 0 ]; then
++		log_test_skip "could not create GRE device (CONFIG_NET_IPGRE)"
++		ip link del "$devdummy" 2>/dev/null
++		return
++	fi
++
++	ip link add name "$devbond0" type bond mode active-backup
++	check_err $? "could not create bond0"
++	ip link add name "$devbond1" type bond mode active-backup
++	check_err $? "could not create bond1"
++
++	ip link set "$devgre" master "$devbond0"
++	check_err $? "could not enslave $devgre to $devbond0"
++	ip link set "$devbond0" master "$devbond1"
++	check_err $? "could not enslave $devbond0 to $devbond1"
++
++	ip link set "$devgre" up
++	ip link set "$devbond0" up
++	ip link set "$devbond1" up
++
++	# Send a GRE-encapsulated packet to 10.0.0.1 while an AF_PACKET
++	# SOCK_DGRAM socket is listening on bond1. The receive path calls
++	# dev_parse_header() which invokes bond_header_parse(). With the
++	# bug, this recurses infinitely and causes a stack overflow.
++	#
++	# Use Python to:
++	# 1. Open AF_PACKET SOCK_DGRAM on bond1
++	# 2. Send a GRE packet to 10.0.0.1 via raw socket
++	# 3. Try to receive (triggers parse path)
++	python3 -c "
++import socket, struct, time
++
++# AF_PACKET SOCK_DGRAM on bond1
++ETH_P_ALL = 0x0003
++pkt_fd = socket.socket(socket.AF_PACKET, socket.SOCK_DGRAM,
++                       socket.htons(ETH_P_ALL))
++pkt_fd.settimeout(2)
++pkt_fd.bind(('$devbond1', ETH_P_ALL))
++
++# Build GRE-encapsulated IP packet
++def build_ip_hdr(proto, saddr, daddr, payload_len):
++    ihl_ver = 0x45
++    total_len = 20 + payload_len
++    hdr = struct.pack('!BBHHHBBH4s4s',
++        ihl_ver, 0, total_len, 0, 0, 64, proto, 0,
++        socket.inet_aton(saddr), socket.inet_aton(daddr))
++    # compute checksum
++    words = struct.unpack('!10H', hdr)
++    s = sum(words)
++    while s >> 16:
++        s = (s & 0xffff) + (s >> 16)
++    chksum = ~s & 0xffff
++    hdr = hdr[:10] + struct.pack('!H', chksum) + hdr[12:]
++    return hdr
++
++inner = build_ip_hdr(17, '192.168.1.1', '192.168.1.2', 8) + b'\x00' * 8
++gre_hdr = struct.pack('!HH', 0, 0x0800)  # flags=0, proto=IP
++outer = build_ip_hdr(47, '10.0.0.2', '10.0.0.1', len(gre_hdr) + len(inner))
++pkt = outer + gre_hdr + inner
++
++raw_fd = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
++raw_fd.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
++raw_fd.sendto(pkt, ('10.0.0.1', 0))
++raw_fd.close()
++
++try:
++    pkt_fd.recv(2048)
++except socket.timeout:
++    pass
++pkt_fd.close()
++" 2>/dev/null
++
++	# If we get here without a kernel crash/hang, the test passed.
++	# Also check dmesg for signs of the recursion bug.
++	if dmesg | tail -20 | grep -q "BUG: MAX_LOCK_DEPTH\|stack-overflow\|stack overflow"; then
++		check_err 1 "kernel detected recursion in bond_header_parse"
++	fi
++
++	# Cleanup
++	ip link del "$devbond1" 2>/dev/null
++	ip link del "$devbond0" 2>/dev/null
++	ip link del "$devgre" 2>/dev/null
++	ip link del "$devdummy" 2>/dev/null
++
++	log_test "Stacked bond header_parse does not recurse"
 +}
 +
-+SEC("fentry/bpf_fentry_test_ppfile")
-+__description("fentry/struct file**: struct file ** inferred as scalar")
-+__success __retval(0)
-+__log_level(2)
-+__msg("R1=ctx() R2=scalar()")
-+__naked void fentry_ppfile_as_scalar(void)
-+{
-+    asm volatile ("					\
-+	r2 = *(u64 *)(r1 + 0);	\
-+	r0 = 0;	\
-+	exit;	\
-+	" ::: __clobber_all);
-+}
++require_command python3
 +
-+SEC("fexit/bpf_fexit_test_ret_ppfile")
-+__description("fexit/return struct file**: returned struct file ** inferred as scalar")
-+__success __retval(0)
-+__log_level(2)
-+__msg("R1=ctx() R2=scalar()")
-+__naked void fexit_ppfile_as_scalar(void)
-+{
-+    asm volatile ("					\
-+	r2 = *(u64 *)(r1 + 0);	\
-+	r0 = 0;	\
-+	exit;	\
-+	" ::: __clobber_all);
-+}
++tests_run
 +
-+char _license[] SEC("license") = "GPL";
++exit "$EXIT_STATUS"
 -- 
-2.34.1
+2.43.0
 
