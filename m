@@ -1,346 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D8E3E4C60;
-	Fri, 13 Mar 2026 23:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675A454763
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Mar 2026 00:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773444049; cv=none; b=RjDXvUzI12LGlULh2gpZf+KEGrP6VcWnWXJaB8ocUesKvPz0xu0fN3UXfrPtym2larnOLf90NCPZ144RxzaqAlquj5wTLAhP4rYtwj7xQVIK1KS75hR0FWhERvuRGCZGp6QU7jnrtnp4rum9Pc3aeBcJvgi7zIh89qKNK0Lhm3c=
+	t=1773446451; cv=none; b=VzWtHRe7Ktw6MIc6mxtBfggpaZ36S+Ayd/005TqUPoYItOIhtCltIRKwE/J8E+btcyN0yFb0FWgBw+YjEzQ9OyecSOzFUG1FRWM/mSUf8f86FvPQZDkSziDJ5aAHDIAE+7yzhMMSbpffILrpQQCqlRNirV8Eok+KfcSjdgmVxMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773444049; c=relaxed/simple;
-	bh=cGqiI5xuJik7Tou8GjfeWbop/vKbAKRDllFYzK95mUs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AmOFzwjFF/HbY4hmSLSaYRGu8SND0WptDHLeu8E3VGp1qAzGUnZK93+XkEUXbsmC6bK7U2qNLklBV9qPw2+qpt86EqqTaj8p2TerB7pm9t+qtjE6LJqUwr5lVrsxljwt11p6qRinbyy91kHJAV4UHp5qLF2xvQi4PeNgAaeC4PQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pukSWFd8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773446451; c=relaxed/simple;
+	bh=SzNVxez9V7PcAZk5QZpuj9c+Tw1VVy/fO1zY3LpJVPE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GGH6eGAakOACr7C5R3oUC8bNnBfJAxk8mYwXsARcejPWPCD9tQ/wnT9DCrsLORlMvAJ0PE5oigXRukv9av15Y63atZAoAVK3dJZdFEkE8/afijwfTCz7k0EKmSp/7as6UCXAdHqpa/iz67faTzizpVzbS4PFD0MI/x/kP6kWdhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QN2vWmB7; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pukSWFd8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BECC19421;
-	Fri, 13 Mar 2026 23:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773444048;
-	bh=cGqiI5xuJik7Tou8GjfeWbop/vKbAKRDllFYzK95mUs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pukSWFd8filQiwpH+ixlWoiKrSqx1tzIU8i9t69ixJmKA53dfzsn0GvCrgK4la19c
-	 udCMmxCfW+5yfurF/ZXt/u7FPUWjr47AsyH5pQqWsAi02AvNQWmY/eeEPbWVe763ii
-	 krCJHbrPyPPOdL+lg0Kq+E/YJXLw5YRr20GCM48K8NZZRLaazaGVjMmoqfc1Covyxh
-	 WXVFrq3P2mzr/PDMVEx45XVgd+VaWBZq5HnfOJCm2Pw6OB9sTrbxnQoeAQfPyEwGJX
-	 8Tiq5YK7ii6T5lWgqe8DyzVOECditKVakElYM74GljWYeQ/9A6wgGpshp85turhtg0
-	 5iHIvJZu6KCOA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	donald.hunter@gmail.com,
-	shuah@kernel.org,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] tools: ynl: rework policy access to support recursion
-Date: Fri, 13 Mar 2026 16:20:47 -0700
-Message-ID: <20260313232047.2068518-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QN2vWmB7"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-7987531082aso30283597b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2026 17:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773446449; x=1774051249; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WNbQtouWXaM1HjP+6LQU3raUMR1ZrEf/jm2QyUp1DKQ=;
+        b=QN2vWmB7n3xuS/e1Uh9/uWXSL4iSDvOe272H/UGq/jF62o76DizbTK4/4XvPxuRFe4
+         cgdaddZjqW78NeY2hZoWk5oSOZc3BQnYifOv+EmmldtgPFtvpG/Avj4LpAusxHlHva8b
+         +8nFU24KdWKPHN3MdnKSgXAF8c0JTA4rSqz3Kf5tgnD6Tn52HTX5M9fomXHgv5TCw/9q
+         HOeEblGPxYxG6UegVl1kEhgYXi4TfBYXZHb/fPg/b8G7HJuNk8kxLvjkFe1QcO9XavhW
+         TaxWe7SGOQLf7SrPnlAIdy2D/PKHsRsRDho7Ff5G3dumCqmdTgCqLoKHcqpm4lijkzVa
+         sqOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773446449; x=1774051249;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WNbQtouWXaM1HjP+6LQU3raUMR1ZrEf/jm2QyUp1DKQ=;
+        b=hF6r7mw/TW4ACCGoVQHHzRe3b0XZhmtrzbrbAZI2iJEhwsSgpcMFiplhPBnF1YpTWu
+         9B1VmxXjGnXX8b2R2Xh+fuvk48IVdvVGvF0i9vGlQmw7aPyKAJh41XarfUSW9IByVGYh
+         ze890jgiNL3UYEmxGvHVc1yrvhl5vHllh2a5ie4a/aAfe0fO9bXE8LfG1O6blOFicrWq
+         7nO34+EtFHOtxlFPD911EVgL8QH1pXSN5Y9wBR5p3k9RZA4u4UYp2An8qv0pz21phbQK
+         XHaBapFYO1GXv4Vu+VdpLYsvW0NKmcfQGp7xCCsuaIRJlICXgLr4GJ1eXb3yg4kbS1iI
+         viaA==
+X-Forwarded-Encrypted: i=1; AJvYcCUflWlayELF0c9bGzFy81GM4MQOK/fakZaVPzz18GmWTT7F6igPweAOfHp55FX0LlJdc+lDU1Hgo7v2on9ArPI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdA58r4lvJebcsXHuenKj9GS1kwA/NgnsZ2PPlrx+ar40KVvt0
+	WnN2VvYsnBA0bicpJ8jVBaMZIJF4CHBeT+C6k31pmipj6kmhLV+YTnpPvKYZiw==
+X-Gm-Gg: ATEYQzwHW8cZVckgNOC/cLU33nz2kAoLDyGWZiuFB6zTFZ2rOrm2dcyzAuGkU6EEYwE
+	ETBLpuoEvPNMOMMkT/P19wBvHM3MzSOje4ckmC5ukH/otW97c6jS3ZsdW/RxWfbX6gKKgbrkCRs
+	DWeHFgBHI3+SdW2G79xJ3nIccC7Urszi0ydU9WbqByKH8eAHvoGGQANu0Zr8WwNtObUT04MEOeH
+	XoeZaCF/zdi2oMG3JJoqgrNT6BHNVBYc8UWX0g/BQtgL8ehvQ0gupRmDmy3Lqz/RZKSX7Igqmgc
+	djSaKg/IUkWGerDqjvKO0ih1i3+2xl0BC5aX2SOEZuh+NJg2n9hqqIq1IzWy/2ZVX+QK8xM6vH8
+	Z6+aGRmkp+eNvek9lFLW9Y35OIDCMSefAee1lEdTM2FvQqugNYBIdPcEBhV4QR0AltOFuc33hYh
+	xtIV2T2F05Zo11hBaENMO4SQStQKBX4nY=
+X-Received: by 2002:a05:690c:ec8:b0:796:5a14:87c6 with SMTP id 00721157ae682-79a1c0892b5mr54774307b3.4.1773446449477;
+        Fri, 13 Mar 2026 17:00:49 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:7::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7991923673asm55811097b3.21.2026.03.13.17.00.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2026 17:00:49 -0700 (PDT)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next 0/2] selftests/vsock: support nested VM runner for
+ vmtest.sh
+Date: Fri, 13 Mar 2026 17:00:13 -0700
+Message-Id: <20260313-vsock-vmtest-nested-fixes-v1-0-d0e6274c3193@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA6ltGkC/x3KQQqDMBAF0KsMf+2AMUVqrlK6EPNtQ2ksmRAE8
+ e6lXb93wFgSDUEOFLZkacsI4jrB8pzzg5oigmDoh7H3zmuzbXlpe1da1UyrjLqmnaaTu67xEv0
+ 8jQ6d4FP4BwS5IfO394r7eX4B8SxAJXUAAAA=
+X-Change-ID: 20260313-vsock-vmtest-nested-fixes-918fd4d3a961
+To: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jakub Kicinski <kuba@kernel.org>, Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-Donald points out that the current naive implementation using dicts
-breaks if policy is recursive (child nest uses policy idx already
-used by its parent).
+This series fixes a few issues trying to launch vmtest.sh in a nested VM
+environment and were discovered when trying to prepare the tests for
+netdev CI/CD.
 
-Lean more into the NlPolicy class. This lets us "render" the policy
-on demand, when user accesses it. If someone wants to do an infinite
-walk that's on them :) Show policy info as attributes of the class
-and use dict format to descend into sub-policies for extra neatness.
+When taken together these patches make vmtest.sh work both on bare metal
+and in nested VMs, regardless of the outer VM's user, coincidental path
+overlaps, or filesystem settings.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
-CC: donald.hunter@gmail.com
-CC: shuah@kernel.org
-CC: sdf@fomichev.me
-CC: linux-kselftest@vger.kernel.org
----
- tools/net/ynl/pyynl/cli.py               |   4 +-
- tools/net/ynl/pyynl/lib/ynl.py           | 152 ++++++++++++++++-------
- tools/testing/selftests/net/nl_nlctrl.py |  26 ++--
- 3 files changed, 120 insertions(+), 62 deletions(-)
+Bobby Eshleman (2):
+      selftests/vsock: fix vmtest.sh for read-only nested VM runners
+      selftests/vsock: fix vsock_test path shadowing in nested VMs
 
-diff --git a/tools/net/ynl/pyynl/cli.py b/tools/net/ynl/pyynl/cli.py
-index fc9e84754e4b..8275a806cf73 100755
---- a/tools/net/ynl/pyynl/cli.py
-+++ b/tools/net/ynl/pyynl/cli.py
-@@ -313,11 +313,11 @@ RELATIVE_SCHEMA_DIR='../../../../Documentation/netlink'
-     if args.policy:
-         if args.do:
-             pol = ynl.get_policy(args.do, 'do')
--            output(pol.attrs if pol else None)
-+            output(pol.to_dict() if pol else None)
-             args.do = None
-         if args.dump:
-             pol = ynl.get_policy(args.dump, 'dump')
--            output(pol.attrs if pol else None)
-+            output(pol.to_dict() if pol else None)
-             args.dump = None
- 
-     if args.ntf:
-diff --git a/tools/net/ynl/pyynl/lib/ynl.py b/tools/net/ynl/pyynl/lib/ynl.py
-index 0eedeee465d8..9c078599cea0 100644
---- a/tools/net/ynl/pyynl/lib/ynl.py
-+++ b/tools/net/ynl/pyynl/lib/ynl.py
-@@ -143,32 +143,117 @@ from .nlspec import SpecFamily
-     pass
- 
- 
--# pylint: disable=too-few-public-methods
- class NlPolicy:
-     """Kernel policy for one mode (do or dump) of one operation.
- 
--    Returned by YnlFamily.get_policy(). Contains a dict of attributes
--    the kernel accepts, with their validation constraints.
-+    Returned by YnlFamily.get_policy(). Attributes of the policy
-+    are accessible as attributes of the object. Nested policies
-+    can be accessed indexing the object like a dictionary::
- 
--    Attributes:
--        attrs: dict mapping attribute names to policy dicts, e.g.
--        page-pool-stats-get do policy::
-+        pol = ynl.get_policy('page-pool-stats-get', 'do')
-+        pol['info'].type            # 'nested'
-+        pol['info']['id'].type      # 'uint'
-+        pol['info']['id'].min_value # 1
- 
--            {
--                'info': {'type': 'nested', 'policy': {
--                    'id':      {'type': 'uint', 'min-value': 1,
--                                'max-value': 4294967295},
--                    'ifindex': {'type': 'u32', 'min-value': 1,
--                                'max-value': 2147483647},
--                }},
--            }
-+    Each policy entry always has a 'type' attribute (e.g. u32, string,
-+    nested). Optional attributes depending on the 'type': min-value,
-+    max-value, min-length, max-length, mask.
- 
--        Each policy dict always contains 'type' (e.g. u32, string,
--        nested). Optional keys: min-value, max-value, min-length,
--        max-length, mask, policy.
-+    Policies can form infinite nesting loops. These loops are trimmed
-+    when policy is converted to a dict with pol.to_dict().
-     """
--    def __init__(self, attrs):
--        self.attrs = attrs
-+    def __init__(self, ynl, policy_idx, policy_table, attr_set, props=None):
-+        self._policy_idx = policy_idx
-+        self._policy_table = policy_table
-+        self._ynl = ynl
-+        self._props = props or {}
-+        self._entries = {}
-+        self._cache = {}
-+        if policy_idx is not None and policy_idx in policy_table:
-+            for attr_id, decoded in policy_table[policy_idx].items():
-+                if attr_set and attr_id in attr_set.attrs_by_val:
-+                    spec = attr_set.attrs_by_val[attr_id]
-+                    name = spec['name']
-+                else:
-+                    spec = None
-+                    name = f'attr-{attr_id}'
-+                self._entries[name] = (spec, decoded)
-+
-+    def __getitem__(self, name):
-+        """Descend into a nested policy by attribute name."""
-+        if name not in self._cache:
-+            spec, decoded = self._entries[name]
-+            props = dict(decoded)
-+            child_idx = None
-+            child_set = None
-+            if 'policy-idx' in props:
-+                child_idx = props.pop('policy-idx')
-+                if spec and 'nested-attributes' in spec.yaml:
-+                    child_set = self._ynl.attr_sets[spec.yaml['nested-attributes']]
-+            self._cache[name] = NlPolicy(self._ynl, child_idx,
-+                                         self._policy_table,
-+                                         child_set, props)
-+        return self._cache[name]
-+
-+    def __getattr__(self, name):
-+        """Access this policy entry's own properties (type, min-value, etc.).
-+
-+        Underscores in the name are converted to dashes, so that
-+        pol.min_value looks up "min-value".
-+        """
-+        key = name.replace('_', '-')
-+        try:
-+            # Hack for level-0 which we still want to have .type but we don't
-+            # want type to pointlessly show up in the dict / JSON form.
-+            if not self._props and name == "type":
-+                return "nested"
-+            return self._props[key]
-+        except KeyError:
-+            raise AttributeError(name)
-+
-+    def get(self, name, default=None):
-+        """Look up a child policy entry by attribute name, with a default."""
-+        try:
-+            return self[name]
-+        except KeyError:
-+            return default
-+
-+    def __contains__(self, name):
-+        return name in self._entries
-+
-+    def __len__(self):
-+        return len(self._entries)
-+
-+    def __iter__(self):
-+        return iter(self._entries)
-+
-+    def keys(self):
-+        """Return attribute names accepted by this policy."""
-+        return self._entries.keys()
-+
-+    def to_dict(self, seen=None):
-+        """Convert to a plain dict, suitable for JSON serialization.
-+
-+        Nested NlPolicy objects are expanded recursively. Cyclic
-+        references are trimmed (resolved to just {"type": "nested"}).
-+        """
-+        if seen is None:
-+            seen = set()
-+        result = dict(self._props)
-+        if self._policy_idx is not None:
-+            if self._policy_idx not in seen:
-+                seen = seen | {self._policy_idx}
-+                children = {}
-+                for name in self:
-+                    children[name] = self[name].to_dict(seen)
-+                if self._props:
-+                    result['policy'] = children
-+                else:
-+                    result = children
-+        return result
-+
-+    def __repr__(self):
-+        return repr(self.to_dict())
- 
- 
- class NlAttr:
-@@ -1308,28 +1393,6 @@ from .nlspec import SpecFamily
-     def do_multi(self, ops):
-         return self._ops(ops)
- 
--    def _resolve_policy(self, policy_idx, policy_table, attr_set):
--        attrs = {}
--        if policy_idx not in policy_table:
--            return attrs
--        for attr_id, decoded in policy_table[policy_idx].items():
--            if attr_set and attr_id in attr_set.attrs_by_val:
--                spec = attr_set.attrs_by_val[attr_id]
--                name = spec['name']
--            else:
--                spec = None
--                name = f'attr-{attr_id}'
--            if 'policy-idx' in decoded:
--                sub_set = None
--                if spec and 'nested-attributes' in spec.yaml:
--                    sub_set = self.attr_sets[spec.yaml['nested-attributes']]
--                nested = self._resolve_policy(decoded['policy-idx'],
--                                              policy_table, sub_set)
--                del decoded['policy-idx']
--                decoded['policy'] = nested
--            attrs[name] = decoded
--        return attrs
--
-     def get_policy(self, op_name, mode):
-         """Query running kernel for the Netlink policy of an operation.
- 
-@@ -1341,8 +1404,8 @@ from .nlspec import SpecFamily
-             mode: 'do' or 'dump'
- 
-         Returns:
--            NlPolicy with an attrs dict mapping attribute names to
--            their policy properties (type, min/max, nested, etc.),
-+            NlPolicy acting as a read-only dict mapping attribute names
-+            to their policy properties (type, min/max, nested, etc.),
-             or None if the operation has no policy for the given mode.
-             Empty policy usually implies that the operation rejects
-             all attributes.
-@@ -1353,5 +1416,4 @@ from .nlspec import SpecFamily
-         if mode not in op_policy:
-             return None
-         policy_idx = op_policy[mode]
--        attrs = self._resolve_policy(policy_idx, policy_table, op.attr_set)
--        return NlPolicy(attrs)
-+        return NlPolicy(self, policy_idx, policy_table, op.attr_set)
-diff --git a/tools/testing/selftests/net/nl_nlctrl.py b/tools/testing/selftests/net/nl_nlctrl.py
-index d19e206c2c02..fe1f66dc9435 100755
---- a/tools/testing/selftests/net/nl_nlctrl.py
-+++ b/tools/testing/selftests/net/nl_nlctrl.py
-@@ -68,39 +68,35 @@ from lib.py import NetdevFamily, EthtoolFamily, NlctrlFamily
-     # dev-get: do has a real policy with ifindex, dump has no policy
-     # (only the reject-all policy with maxattr=0)
-     pol = ndev.get_policy('dev-get', 'do')
--    ksft_in('ifindex', pol.attrs,
--            comment="dev-get do policy should have ifindex")
--    ksft_eq(pol.attrs.get('ifindex', {}).get('type'), 'u32')
-+    ksft_in('ifindex', pol, comment="dev-get do policy should have ifindex")
-+    ksft_eq(pol['ifindex'].type, 'u32')
- 
-     pol_dump = ndev.get_policy('dev-get', 'dump')
--    ksft_eq(len(pol_dump.attrs), 0,
--            comment="dev-get should not accept any attrs")
-+    ksft_eq(len(pol_dump), 0, comment="dev-get should not accept any attrs")
- 
-     # napi-get: both do and dump have real policies
-     pol_do = ndev.get_policy('napi-get', 'do')
--    ksft_ge(len(pol_do.attrs), 1)
-+    ksft_ge(len(pol_do), 1)
- 
-     pol_dump = ndev.get_policy('napi-get', 'dump')
--    ksft_ge(len(pol_dump.attrs), 1)
-+    ksft_ge(len(pol_dump), 1)
- 
-     # -- ethtool (full ops) --
-     et = EthtoolFamily()
- 
-     # strset-get (has both do and dump, full ops share policy)
-     pol_do = et.get_policy('strset-get', 'do')
--    ksft_ge(len(pol_do.attrs), 1, comment="strset-get should have a do policy")
-+    ksft_ge(len(pol_do), 1, comment="strset-get should have a do policy")
- 
-     pol_dump = et.get_policy('strset-get', 'dump')
--    ksft_ge(len(pol_dump.attrs), 1,
--            comment="strset-get should have a dump policy")
-+    ksft_ge(len(pol_dump), 1, comment="strset-get should have a dump policy")
- 
-     # Same policy means same attribute names
--    ksft_eq(set(pol_do.attrs.keys()), set(pol_dump.attrs.keys()))
-+    ksft_eq(set(pol_do.keys()), set(pol_dump.keys()))
- 
-     # linkinfo-set is do-only (SET command), no dump
-     pol_do = et.get_policy('linkinfo-set', 'do')
--    ksft_ge(len(pol_do.attrs), 1,
--            comment="linkinfo-set should have a do policy")
-+    ksft_ge(len(pol_do), 1, comment="linkinfo-set should have a do policy")
- 
-     pol_dump = et.get_policy('linkinfo-set', 'dump')
-     ksft_eq(pol_dump, None,
-@@ -113,9 +109,9 @@ from lib.py import NetdevFamily, EthtoolFamily, NlctrlFamily
- 
-     # dev-get do policy should have named attributes from the spec
-     pol = ndev.get_policy('dev-get', 'do')
--    ksft_ge(len(pol.attrs), 1)
-+    ksft_ge(len(pol), 1)
-     # All attr names should be resolved (no 'attr-N' fallbacks)
--    for name in pol.attrs:
-+    for name in pol:
-         ksft_true(not name.startswith('attr-'),
-                   comment=f"unresolved attr name: {name}")
- 
+ tools/testing/selftests/vsock/vmtest.sh | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
+---
+base-commit: 8f921f61005450589c0bc1a941a5ddde21d9aed9
+change-id: 20260313-vsock-vmtest-nested-fixes-918fd4d3a961
+
+Best regards,
 -- 
-2.53.0
+Bobby Eshleman <bobbyeshleman@meta.com>
 
