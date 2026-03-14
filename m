@@ -1,207 +1,282 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9163F32AAD6
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Mar 2026 17:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3720F17C203;
+	Sat, 14 Mar 2026 17:38:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773508030; cv=none; b=VIz/c+mlnUuQeD1uD/w4zVmLDfTkqSt27mdVywqv1KZg0K2GzTZt+QAJgbhaCBR0JHlZDnaxF5B9v/JcytNBG8JFxVMD2Qw3uT91kLwHCz7P+lTJPqhvhXDZ/7nB61Xnhak5r6jPmBKTceouXJ4pEY3o2yKzB8C/l6NgY28H4kM=
+	t=1773509915; cv=none; b=ChPXct7mKlK72kfc6S3TgUma/n3ysAsq/TUUEy787VOp5+3y65URt8deqYIIfqyWqQojIaWrB42fQlaUOWdQvTpN5jMKYyaoVWZ+4ShthndwUQ4augUpj8RgbKoiAPmJC1rC9fp2OzfPn8Oac901H9a0PW9xNn1/UeMBDTCV8jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773508030; c=relaxed/simple;
-	bh=JmwWTR8tdLBqN2ZJaJyR7rVbXUX1qdfFYCxVt/hEa7g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FbMpaXNyLXHK/tszCcOHfTKzEqcmn2BFQLigNjN9FhZT5hHc3N8SwYE+wiCY6B+/FDSKwSK97XUB9Kf5UkdnHAK3HXuDs9UgSrdSHDUViHA7MN5OtJ4Qm1BfqRwCHG1k+foDNH9b3xMEXE/KdDxmNEGtXcv1jeiKh4p7RB4jPpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BWFty480; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773509915; c=relaxed/simple;
+	bh=SngmtCX0STPKoLm+RGwl2Lu3zFwL5c8NoAbzNq5GSLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JZTMB1Ze3m9jLx8p8TbqNG5ZLv83cs2DD7VLrSEFJ8A/BvKzeqCAAQ/tNqCdBNukcWOW8xuhhXWkxhZlm+PRW8c8Itz78E1EFSu3uX+rjE7JXbZwN/zuZTJetxWtNB1dwnhosSFZQl75ISzcUmxYsyxN7oY0hCL3pLrtEEiOGaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=se8qoNzu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWFty480"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-439b7c2788dso2015698f8f.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Mar 2026 10:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773508027; x=1774112827; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5sXk7QR4yMzNPBEKkRLre6dWWa+kcD2gx8NHV2qKsY=;
-        b=BWFty480jywnAD/7ZFee5N8T62z2IE/FjH743p1sW3j17wAr5gxT5uOk0v5dUt8eAF
-         0aMnMQfCtlSFyPr5Wc+933PTvHAujBjbejXVa56t7DE6aIdKUeHOCnfmoWEpmUkKvu1b
-         gzePfN+a4Wz3urK9FgP6GEm1Ou8oZYWfPDpcxZhr3jdFc0ScCLv0B6Tn+iAm6PZO+vP3
-         kMHCTQZTZsWrdjrXfoHySO5b4H2ataeyA7TVJNNgh1mCLq8mgPxqa541+tnsSc2Du6+c
-         6Rdd0LvkvOjGXb6kVP92TTUgYYD9yXJgujIHdlf0gn7+JmZ2tLY106r/y3H8AOvgq4FD
-         +enw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773508027; x=1774112827;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n5sXk7QR4yMzNPBEKkRLre6dWWa+kcD2gx8NHV2qKsY=;
-        b=ABmPEFdHlFMYJ0cw24Grl7vDZM8c4KnC6ZqkWClOX4+HA/Ib9QUtjLq0s2antPrlff
-         C0zsdxc7/szMHhdz665D5eSQ3Rp85B9kuQv/GNxk15oIeulnW8XT9KQuKuS6KBnz1XDV
-         zys5Y5/G2xNxYwv0mhGzkEPmIquwzb8yhP4sDlqrxwQquZ9x3Yuo4spgjeG118SXlJLM
-         2DYWxIE6vooqwxNOCWUUcGnWRsRdEUhtH6nXwj4cQQ+gjcB4S+fM2bXUY1mfsAuEgUIc
-         IJFkpHrAvYaUGru8EDom8fX4ai4kdLKUKsmDVtpL56+zOxNaZwlX3YWeZOZzSmLjRgd+
-         SbDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUVPL/DRCDOmWXIHvR6R5RLlBaIXNGHkOQabTKy3oJXa8v/WlPuJQn5sA9M/PCt+igi8grvRMysetNG+Gi5ltY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGNCfW512CiE2N3U7ZN6MBUR17zR/Ga7VPtcas8+gtSbyyOx78
-	vBjOwnlih9qTy6JCXuHRmrNyHbUrkrCWIcDvj8a7ztgicVALmITSn2mE
-X-Gm-Gg: ATEYQzwDJySELqhKo2UC0UEzmXkzkAE1Q5HTulNNgWyFGqPP9r54XklZD/UlNE7AvaY
-	6vTiaeCQa0lb1RR4c925hAF7DmOmoHNeQUDFVZODI/NmzASNeORqeAyNX8Ssva06aQiX6XbnnPh
-	Ew6jRtAx3YNPzL+oOisaCshPtUgCnXOV5J3q02enwBv5ck9kfmLrPuVUppulRw/6AWUoFz2vS3U
-	2OIxAsUH+L2z398HCbo8RlCfykOPMScT6xbGxK+RJQqRE9xPbLLdPNLiTctnsdtZ/QmJV6MklmM
-	lsCRbkgrRuzsgw7g82aJh962gJpNnlVzGdcqESK3VXwOWtt/ECticAdEEEE80j1HOgW1QeR146D
-	XdyozHGyGdD+oYHeVrK+XKWpb07zADH6tgCATZ6X1N3LlZGd3mAFUJdkhoaAdbSx/9JfUEdngXC
-	Pr5dnCVxq850pEQOJtMuYw0sP05qY/g1OMzkAtmqqFjdOHQWV35gcyJ8WoWSF4rrqO+7EHqSRlm
-	700B1WMQgkG3gPy2bwvRwo=
-X-Received: by 2002:a05:6000:2dc2:b0:439:d74f:2109 with SMTP id ffacd0b85a97d-43a04dc36c8mr12532240f8f.49.1773508026649;
-        Sat, 14 Mar 2026 10:07:06 -0700 (PDT)
-Received: from gandalf.schnuecks.de (p200300c14f1996009e6b00fffe39b8a7.dip0.t-ipconnect.de. [2003:c1:4f19:9600:9e6b:ff:fe39:b8a7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe2186e3sm31604155f8f.26.2026.03.14.10.07.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Mar 2026 10:07:06 -0700 (PDT)
-Received: by gandalf.schnuecks.de (Postfix, from userid 500)
-	id A232730395F4; Sat, 14 Mar 2026 18:07:05 +0100 (CET)
-Date: Sat, 14 Mar 2026 18:07:05 +0100
-From: Simon Baatz <gmbnomis@gmail.com>
-To: Eric Dumazet <edumazet@google.com>
-Cc: Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	David Ahern <dsahern@kernel.org>, Jon Maloy <jmaloy@redhat.com>,
-	Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com,
-	Shuah Khan <shuah@kernel.org>, Stefano Brivio <sbrivio@redhat.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev
-Subject: Re: [PATCH net-next v3 6/6] selftests/net: packetdrill: add
- tcp_rcv_neg_window.pkt
-Message-ID: <abWVuS1XJaKrndJw@gandalf.schnuecks.de>
-References: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com>
- <20260309-tcp_rfc7323_retract_wnd_rfc-v3-6-4c7f96b1ec69@gmail.com>
- <CANn89i+PypF1cK4mnp8L_eCG_z+3Aj6uxJoohm_=DwGfR1=4FA@mail.gmail.com>
- <abCkmiCSPkmxzECa@gandalf.schnuecks.de>
- <CANn89iKYxs644ardFFSKo8d0EXL_2A5eUQjWZ3yp9-Q4tVLKzQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="se8qoNzu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0BCC116C6;
+	Sat, 14 Mar 2026 17:38:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773509915;
+	bh=SngmtCX0STPKoLm+RGwl2Lu3zFwL5c8NoAbzNq5GSLg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=se8qoNzuXWBfLrqyfEsEL0q5iIUhk6qFHDef8/WDG5xzE9qxULHKYBNVeDZl4HItF
+	 ubBI3yCFx8/OoMThHScbeWz1IXinaqKilIAJQPOKpBZJ2cXmbfs+m87ae3Pc9qaOaU
+	 l7CCpKNgm7GeH+IFnYUaQwLu7Ky/Yb/OF9rBINcfxjwz576TbcpCtFlA+0WQuoSIWN
+	 5lIdEQKgeYGBdOuDdaGIgBLi8t3yPiFw8G4WMRNCagKzyWHRFJW8+ZARxOfxmKBZYD
+	 Zbl1ObHrvMbTq1rupgBtIfpdqoCiFrDPp6fnpAKi1/eCijIIWkTgQVOuGF1ZojuJZs
+	 EwrBPyElACQ5w==
+Date: Sat, 14 Mar 2026 10:38:33 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: netdev@vger.kernel.org, edumazet@google.com, Jiayuan Chen
+ <jiayuan.chen@shopee.com>, Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v1] selftests: bonding: add test for stacked bond
+ header_parse recursion
+Message-ID: <20260314103833.36698c29@kernel.org>
+In-Reply-To: <20260314134211.33405-1-jiayuan.chen@linux.dev>
+References: <20260314134211.33405-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iKYxs644ardFFSKo8d0EXL_2A5eUQjWZ3yp9-Q4tVLKzQ@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Eric,
-
-On Sat, Mar 14, 2026 at 04:58:28AM +0100, Eric Dumazet wrote:
-> On Wed, Mar 11, 2026 at 12:09???AM Simon Baatz <gmbnomis@gmail.com> wrote:
-> >
-> > Hi Eric,
-> >
-> > On Tue, Mar 10, 2026 at 09:54:58AM +0100, Eric Dumazet wrote:
-> > > On Mon, Mar 9, 2026 at 9:03???AM Simon Baatz via B4 Relay
-> > > <devnull+gmbnomis.gmail.com@kernel.org> wrote:
-> > > >
-> > > > From: Simon Baatz <gmbnomis@gmail.com>
-> > > >
-> > > > The test ensures we correctly apply the maximum advertised window limit
-> > > > when rcv_nxt advances past rcv_mwnd_seq, so that the "usable window"
-> > > > is properly clamped to zero rather than becoming negative.
-> > > >
-> > > > Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
-> > > > ---
-> > > >  .../net/packetdrill/tcp_rcv_neg_window.pkt         | 26 ++++++++++++++++++++++
-> > > >  1 file changed, 26 insertions(+)
-> > > >
-> > > > diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt
-> > > > new file mode 100644
-> > > > index 0000000000000000000000000000000000000000..15a9b4938f16d175ac54f3fd192ed2b59b0a4399
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt
-> > > > @@ -0,0 +1,26 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +--mss=1000
-> > > > +
-> > > > +`./defaults.sh`
-> > > > +
-> > > > +// Establish a connection.
-> > > > +   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-> > > > +   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-> > > > +   +0 setsockopt(3, SOL_SOCKET, SO_RCVBUF, [20000], 4) = 0
-> > > > +   +0 bind(3, ..., ...) = 0
-> > > > +   +0 listen(3, 1) = 0
-> > > > +
-> > > > +   +0 < S 0:0(0) win 32792 <mss 1000,nop,wscale 7>
-> > > > +   +0 > S. 0:0(0) ack 1 win 18980 <mss 1460,nop,wscale 0>
-> > > > +  +.1 < . 1:1(0) ack 1 win 257
-> > > > +
-> > > > +   +0 accept(3, ..., ...) = 4
-> > > > +
-> > > > +// A too big packet is accepted if the receive queue is empty
-> > > > +   +0 < P. 1:20001(20000) ack 1 win 257
-> > >
-> > > We do not see the answer, it seems this test is not complete ?
-> >
-> > Actually we do not want to see an answer.  The packet won't trigger
-> > an immediate ACK (it is larger than the advertised window, but does
-> > not cause immediate memory pressure).
-> >
-> > When we then send a RST before the delayed ACK would be generated:
-> >
-> > > > +// Send a RST immediately so that there is no rcv_wup/rcv_mwnd_seq update yet
-> > > > +   +0 < R. 20001:20001(0) ack 1 win 257
-> >
-> > We are in a state where rcv_wup, rcv_wnd, and rcv_mwnd_seq have not
-> > been updated yet, but we must still accept the RST
-> > (rcv_nxt == 20001 > rcv_mwnd_seq, tcp_max_receive_window() == 0)
-> >
-> > > > +
-> > > > +  +.1 %{ assert tcpi_state == TCP_CLOSE, tcpi_state }%
-> >
-> > And we verify that we accepted the RST here.
-> >
-> > Given how subtle this sequence is, and considering the limited value
-> > of this test, I am also fine with dropping it if it is too fragile or
-> > confusing.
+On Sat, 14 Mar 2026 21:42:05 +0800 Jiayuan Chen wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
 > 
-> Sorry I missed your answer.
+> Add a selftest to reproduce the infinite recursion in bond_header_parse()
+> when bonds are stacked (bond1 -> bond0 -> gre). When a packet is received
+> via AF_PACKET SOCK_DGRAM on the topmost bond, dev_parse_header() calls
+> bond_header_parse() which used skb->dev (always the topmost bond) to get
+> the bonding struct. This caused it to recurse back into itself
+> indefinitely, leading to stack overflow.
 > 
-> Ok then please use :
+> Before Eric's fix [2], the test triggers:
 > 
-> // A too big packet is accepted if the receive queue is empty
->    +0 < P. 1:20001(20000) ack 1 win 257
->    +0 %{ assert tcpi_bytes_received == 20000, tcpi_bytes_received;
-> assert tcpi_bytes_acked == 0, tcpi_bytes_acked }%
+>   ./bond-stacked-header-parse.sh
+> 
+>   [  71.999481] BUG: MAX_LOCK_DEPTH too low!
+>   [  72.000170] turning off the locking correctness validator.
+>   [  72.001029] Please attach the output of /proc/lock_stat to the bug report
+>   [  72.002079] depth: 48  max: 48!
+>   ...
+> 
+> After Eric's fix [2], everything works fine:
+> 
+>   ./bond-stacked-header-parse.sh
+>   TEST: Stacked bond header_parse does not recurse                  [ OK ]
+> 
+> Also verified via make run_tests -C drivers/net/bonding:
+> 
+>   ...
+>   ok 3 selftests: drivers/net/bonding: bond-eth-type-change.sh
+>   # timeout set to 1200
+>   # selftests: drivers/net/bonding: bond-stacked-header-parse.sh
+>   # TEST: Stacked bond header_parse does not recurse                [ OK ]
+>   ok 4 selftests: drivers/net/bonding: bond-stacked-header-parse.sh
+>   # timeout set to 1200
+>   # selftests: drivers/net/bonding: bond-lladdr-target.sh
+>   # PASS
+>   ...
+> 
+> [1] https://lore.kernel.org/netdev/CANn89iK2EURqsjtd=OVP4awYTJHGcR-UU-V9WovpWR1Z3f03oQ@mail.gmail.com/
+> [2] https://lore.kernel.org/netdev/20260314115650.3646361-1-edumazet@google.com/
+> 
+> Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> ---
+>  .../selftests/drivers/net/bonding/Makefile    |   1 +
+>  .../net/bonding/bond-stacked-header-parse.sh  | 142 ++++++++++++++++++
+>  2 files changed, 143 insertions(+)
+>  create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
+> 
+> diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+> index 6c5c60adb5e8..055f6af03b5d 100644
+> --- a/tools/testing/selftests/drivers/net/bonding/Makefile
+> +++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+> @@ -5,6 +5,7 @@ TEST_PROGS := \
+>  	bond-arp-interval-causes-panic.sh \
+>  	bond-break-lacpdu-tx.sh \
+>  	bond-eth-type-change.sh \
+> +	bond-stacked-header-parse.sh \
 
-Unfortunately, tcpi_bytes_acked is the TX direction, it will always
-be 0 here.
+this list is alphabetically sorted
 
-Instead, we can still test that the oversized packet is accepted and
-indirectly verify that no immediate ACK is sent by eliciting and
-checking a RST:
+>  	bond-lladdr-target.sh \
+>  	bond_ipsec_offload.sh \
+>  	bond_lacp_prio.sh \
+> diff --git a/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh b/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
+> new file mode 100755
+> index 000000000000..d377bedaef63
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/bonding/bond-stacked-header-parse.sh
 
-// A too big packet is accepted if the receive queue is empty, but does not trigger
-// an immediate ACK.
-   +0 < P. 1:20001(20000) ack 1 win 257
-   +0 %{ assert tcpi_bytes_received == 20000, tcpi_bytes_received; }%
+please run shellcheck on this file. Most of the reports are probably 
+false positive but some are reasonable I think?
 
-// Send a RST immediately so that there is no rcv_wup/rcv_mwnd_seq update yet
-   +0 < R. 20001:20001(0) ack 1 win 257
+> @@ -0,0 +1,142 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Test that bond_header_parse() does not infinitely recurse with stacked bonds.
+> +#
+> +# When a non-Ethernet device (e.g. GRE) is enslaved to a bond that is itself
+> +# enslaved to another bond (bond1 -> bond0 -> gre), receiving a packet via
+> +# AF_PACKET SOCK_DGRAM triggers dev_parse_header() -> bond_header_parse().
+> +# Since parse() used skb->dev (always the topmost bond) instead of a passed-in
+> +# dev pointer, it would recurse back into itself indefinitely.
+> +
+> +ALL_TESTS="
+> +	bond_test_stacked_header_parse
+> +"
+> +REQUIRE_MZ=no
+> +NUM_NETIFS=0
+> +lib_dir=$(dirname "$0")
+> +source "$lib_dir"/../../../net/forwarding/lib.sh
+> +
+> +require_command()
+> +{
+> +	if ! command -v "$1" &>/dev/null; then
+> +		echo "SKIP: $1 is not installed"
+> +		exit "$ksft_skip"
+> +	fi
+> +}
+> +
+> +bond_test_stacked_header_parse()
+> +{
+> +	local devdummy="test-dummy0"
+> +	local devgre="test-gre0"
+> +	local devbond0="test-bond0"
+> +	local devbond1="test-bond1"
+> +
+> +	RET=0
+> +
+> +	# Setup: dummy -> gre -> bond0 -> bond1
+> +	modprobe dummy 2>/dev/null
+> +	modprobe ip_gre 2>/dev/null
+> +	modprobe bonding 2>/dev/null
 
-// Verify that the RST was accepted. Indirectly this also verifies that no immediate
-// ACK was sent for the data packet above.
-   +0 < . 20001:20001(0) ack 1 win 257
-    * > R 1:1(0)
+Doesn't rtnetlink auto-load the link modules?
 
-As the series is merged now (thank you!), I will send this
-separately, as suggested.
+> +	ip link add name "$devdummy" type dummy
+> +	if [ $? -ne 0 ]; then
+> +		log_test_skip "could not create dummy device (CONFIG_DUMMY)"
+> +		return
+> +	fi
+> +	ip addr add 10.0.0.1/24 dev "$devdummy"
+> +	ip link set "$devdummy" up
+> +
+> +	ip link add name "$devgre" type gre local 10.0.0.1
+> +	if [ $? -ne 0 ]; then
+> +		log_test_skip "could not create GRE device (CONFIG_NET_IPGRE)"
+> +		ip link del "$devdummy" 2>/dev/null
+> +		return
+> +	fi
 
-- Simon
+You have to add the dependencies to
+tools/testing/selftests/drivers/net/bonding/config
 
--- 
-Simon Baatz <gmbnomis@gmail.com>
+You can keep these checks if you really want to but we don't really
+encourage them
+
+> +	ip link add name "$devbond0" type bond mode active-backup
+> +	check_err $? "could not create bond0"
+> +	ip link add name "$devbond1" type bond mode active-backup
+> +	check_err $? "could not create bond1"
+> +
+> +	ip link set "$devgre" master "$devbond0"
+> +	check_err $? "could not enslave $devgre to $devbond0"
+> +	ip link set "$devbond0" master "$devbond1"
+> +	check_err $? "could not enslave $devbond0 to $devbond1"
+> +
+> +	ip link set "$devgre" up
+> +	ip link set "$devbond0" up
+> +	ip link set "$devbond1" up
+> +
+> +	# Send a GRE-encapsulated packet to 10.0.0.1 while an AF_PACKET
+> +	# SOCK_DGRAM socket is listening on bond1. The receive path calls
+> +	# dev_parse_header() which invokes bond_header_parse(). With the
+> +	# bug, this recurses infinitely and causes a stack overflow.
+> +	#
+> +	# Use Python to:
+> +	# 1. Open AF_PACKET SOCK_DGRAM on bond1
+> +	# 2. Send a GRE packet to 10.0.0.1 via raw socket
+> +	# 3. Try to receive (triggers parse path)
+> +	python3 -c "
+> +import socket, struct, time
+
+is this AI-generated?
+
+You can add an extra script in TEST_FILES and just call it.
+No need for inline scripts..
+
+> +# AF_PACKET SOCK_DGRAM on bond1
+> +ETH_P_ALL = 0x0003
+> +pkt_fd = socket.socket(socket.AF_PACKET, socket.SOCK_DGRAM,
+> +                       socket.htons(ETH_P_ALL))
+> +pkt_fd.settimeout(2)
+> +pkt_fd.bind(('$devbond1', ETH_P_ALL))
+> +
+> +# Build GRE-encapsulated IP packet
+> +def build_ip_hdr(proto, saddr, daddr, payload_len):
+> +    ihl_ver = 0x45
+> +    total_len = 20 + payload_len
+> +    hdr = struct.pack('!BBHHHBBH4s4s',
+> +        ihl_ver, 0, total_len, 0, 0, 64, proto, 0,
+> +        socket.inet_aton(saddr), socket.inet_aton(daddr))
+> +    # compute checksum
+> +    words = struct.unpack('!10H', hdr)
+> +    s = sum(words)
+> +    while s >> 16:
+> +        s = (s & 0xffff) + (s >> 16)
+> +    chksum = ~s & 0xffff
+> +    hdr = hdr[:10] + struct.pack('!H', chksum) + hdr[12:]
+> +    return hdr
+> +
+> +inner = build_ip_hdr(17, '192.168.1.1', '192.168.1.2', 8) + b'\x00' * 8
+> +gre_hdr = struct.pack('!HH', 0, 0x0800)  # flags=0, proto=IP
+> +outer = build_ip_hdr(47, '10.0.0.2', '10.0.0.1', len(gre_hdr) + len(inner))
+> +pkt = outer + gre_hdr + inner
+> +
+> +raw_fd = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
+> +raw_fd.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
+> +raw_fd.sendto(pkt, ('10.0.0.1', 0))
+> +raw_fd.close()
+> +
+> +try:
+> +    pkt_fd.recv(2048)
+> +except socket.timeout:
+> +    pass
+> +pkt_fd.close()
+> +" 2>/dev/null
+> +
+> +	# If we get here without a kernel crash/hang, the test passed.
+> +	# Also check dmesg for signs of the recursion bug.
+> +	if dmesg | tail -20 | grep -q "BUG: MAX_LOCK_DEPTH\|stack-overflow\|stack overflow"; then
+> +		check_err 1 "kernel detected recursion in bond_header_parse"
+> +	fi
+> +
+> +	# Cleanup
+> +	ip link del "$devbond1" 2>/dev/null
+> +	ip link del "$devbond0" 2>/dev/null
+> +	ip link del "$devgre" 2>/dev/null
+> +	ip link del "$devdummy" 2>/dev/null
+> +
+> +	log_test "Stacked bond header_parse does not recurse"
+> +}
+> +
+> +require_command python3
+
+No need, we have pure python tests 
+
+> +tests_run
+> +
+> +exit "$EXIT_STATUS"
+
