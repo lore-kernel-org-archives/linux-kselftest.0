@@ -1,96 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EE6299A87;
-	Sat, 14 Mar 2026 15:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B837A296BC8;
+	Sat, 14 Mar 2026 16:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773502822; cv=none; b=vFdEN2ZT0eqfpEuLjDXeZ8bakMvn5sfq5Yk9bn/0LFMU6kDz0n5hIRCvOWaociLgCLXMgmRLNw5JGAYgctWsDERfPb1DUeZ9dgZSePow+kLeJwXPsYLNPQ9+Y2fQQVtSbygtmkNdwAvYT96DlvrVSRed+bjY8Qn7x2v8E7Oh4Nc=
+	t=1773506120; cv=none; b=HjlfKd5f3keuniOGEqXzFrxfVVRUs4YoEX2gnGoH31nnTS63YLt49QUYwLq+x+Nt37DeJPeRQCkOs+dehS1gI6Zm5If3kJiWghVzjmExJbudnDSJqGAx6REBRF3JRG9et2ev1hJQ4nMMkDF+QeLk1Q/XOBX8CsbgtCa3TDE5B6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773502822; c=relaxed/simple;
-	bh=WoPbqZeSHQS7/U+Zg1lu7MCzHBCJT+hDh8F/zCHEdfU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=KCLhRnRaU07o/JSnEn23V9EnqMUCtIdj7OdRJWgNhNJVBTYsAnLRg/UUhA1Hu4WHm9vG0ylSR/r0Sc1QgndnSO8G2oE/M5a2Y38RHbR0Cj+2zc9jmdzIQloKCe6SVh0ZcD7puqVnAzC488JMEBNZ7xVANAZ9C99v1yN6iFiAS/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xj3JbUmK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773506120; c=relaxed/simple;
+	bh=L/eakVxCmU6z4MfVX/Tn/gRdChsPQgl7sUT4bvaSUng=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bRPbhTFDWzZ7qGiIE3bXY+QHHgGd59zP7M3jqtCkpgzNpRvKISR6sXbtviPm8HM1VTXg+xMHtJ8y0YRBLtiDGFgqPlu/Ipf64H/1T6IaV/yQWDnDW3jiNpymX7B8hbYustewDhUI6LJPhlvu4Yj41u1PXHPrLqdOHbhEx8vVFFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qjg3QaOw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xj3JbUmK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC7DC116C6;
-	Sat, 14 Mar 2026 15:40:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qjg3QaOw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF82C116C6;
+	Sat, 14 Mar 2026 16:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773502821;
-	bh=WoPbqZeSHQS7/U+Zg1lu7MCzHBCJT+hDh8F/zCHEdfU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Xj3JbUmKkanbsDjkE/3Byh+gqQTGmHKnhZaI6Z1U35pQMoOszufYV3Qrne9mZSRBN
-	 ++Gj8dVw3EOi87nLPIm52u0T2zvchjYdpxIAMRORdR+qE/KLLSFRJLVmtzZbj+0kq1
-	 +/+VkLA8chEuMNvDXUhPvjEOr6/LkTcKRJBrb9340y++jggBFvIRT3/o3r36UyJFOo
-	 f4vzO/58MHMxP9qIEU0/JyUuuklqJmo4c7v8AYSfknR9+RYRYvIwiNCjgCeY7SyfPd
-	 Za+G/i3r0KlmG7RJ0ahd5l9TgclIFP6ghLhgcoKAh6wtVXf88i9VEnd0ijP52uiqCn
-	 0kSWvazn0MIpQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 402493808200;
-	Sat, 14 Mar 2026 15:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1773506120;
+	bh=L/eakVxCmU6z4MfVX/Tn/gRdChsPQgl7sUT4bvaSUng=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Qjg3QaOwYiWXU5CENRLW0EU8+MysNrtBRN2lvo+qCMxW8LYTl2pHBh9iA9403VxSo
+	 5dd8vVB4NmjmecXcm9k3ZqyWASernSVsaMKsS4LoG1EJf9fJ0r2Z9aWWZwd1M2+6eD
+	 mO6e5RDg2kBMD04bhJtS/FkC+tsPOiWBthQVCt0c7BYi8ENxytga7jlW2ofHhNCl3A
+	 mOu2WXZoc6VyfBoXP5h43Yp+NOy2yWtLyAr9og2MIkYWzJ66gQDdpYxOKfXKCLAq3C
+	 i3/TG5kz8TUhyZFL+pmVgsiG0vg7f/ZXhTEhlbe8Iu8M+iUjsRh2NvQMhHhcp8jX5e
+	 Z9V5Q4/GbV9tA==
+Date: Sat, 14 Mar 2026 09:35:18 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: netdev@vger.kernel.org
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Michael Chan
+ <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ linux-kselftest@vger.kernel.org, Willem de Bruijn <willemb@google.com>,
+ Shuah Khan <shuah@kernel.org>, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
+ intel-wired-lan@lists.osuosl.org, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>
+Subject: Re: [PATCH net-next v4 0/3] ethtool: Dynamic RSS context
+ indirection table resizing
+Message-ID: <20260314093518.43b820b7@kernel.org>
+In-Reply-To: <20260313071322.3489243-1-bjorn@kernel.org>
+References: <20260313071322.3489243-1-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/6] tcp: RFC 7323-compliant window retraction
- handling
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177350281603.1717807.13218820187988201902.git-patchwork-notify@kernel.org>
-Date: Sat, 14 Mar 2026 15:40:16 +0000
-References: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com>
-In-Reply-To: 
- <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com>
-To: Simon Baatz <gmbnomis@gmail.com>
-Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- corbet@lwn.net, skhan@linuxfoundation.org, dsahern@kernel.org,
- jmaloy@redhat.com, kerneljasonxing@gmail.com, mfreemon@cloudflare.com,
- shuah@kernel.org, sbrivio@redhat.com, matttbe@kernel.org,
- martineau@kernel.org, geliang@kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Fri, 13 Mar 2026 08:13:12 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> Some NICs (e.g. bnxt) change their RSS indirection table size based on
+> the queue count, because the hardware table is a shared resource. The
+> ethtool core locks ctx->indir_size at context creation, so drivers
+> have to reject channel changes when RSS contexts exist.
+>=20
+> This series adds resize helpers and wires them up in bnxt.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 09 Mar 2026 09:02:25 +0100 you wrote:
-> Hi,
-> 
-> this series implements the receiver-side requirements for TCP window
-> retraction as specified in RFC 7323 and adds packetdrill tests to
-> cover the new behavior.
-> 
-> Please see the first patch for background and implementation
-> details. Since MPTCP adjusts the TCP receive window on subflows, the
-> relevant MPTCP code paths are updated accordingly.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v3,1/6] tcp: implement RFC 7323 window retraction receiver requirements
-    https://git.kernel.org/netdev/net-next/c/0e24d17bd966
-  - [net-next,v3,2/6] mptcp: keep rcv_mwnd_seq in sync with subflow rcv_wnd
-    https://git.kernel.org/netdev/net-next/c/81714374a29c
-  - [net-next,v3,3/6] tcp: increase LINUX_MIB_BEYOND_WINDOW for SKB_DROP_REASON_TCP_OVERWINDOW
-    https://git.kernel.org/netdev/net-next/c/e2b9c52a2b00
-  - [net-next,v3,4/6] selftests/net: packetdrill: add tcp_rcv_wnd_shrink_nomem.pkt
-    https://git.kernel.org/netdev/net-next/c/ec1adf8ecf95
-  - [net-next,v3,5/6] selftests/net: packetdrill: add tcp_rcv_wnd_shrink_allowed.pkt
-    https://git.kernel.org/netdev/net-next/c/ba58b3e70b86
-  - [net-next,v3,6/6] selftests/net: packetdrill: add tcp_rcv_neg_window.pkt
-    https://git.kernel.org/netdev/net-next/c/3eb371eddad0
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Sorry Bjorn, I was typing the explanation below and I realized that=20
+we may be violating user intent. We should already record the user_size
+from rss_set_prep_indir() as part of the context (and presumably some
+netdev state for the main context?) and don't allow shrinking the
+context below that mark..
 
 
+Now for the broader audience - my understanding is that the RSS table
+is a precious resource for most if not all drivers.
+The direction of this work is to allow user to explicitly specify what
+RSS table size they want. The Netlink API for RSS already allows users
+to send tables smaller than what the device reports (Netlink code just
+"replicates" the table). So if the user asks for X entries the driver
+should be able to allocate a table of any size as long as its a
+multiple of X. This series only support "global" resizing but it
+should be simple to add the state for the driver to mark in the context
+what table size it actually allocated. The only reason we haven't added
+the support for that is that it's quite hard to know how to implement
+it without docs for the FW/HW.. fbnic has fixed table sizes so we can't
+even prototype there :S
+
+Please reply if you'd like to collaborate on adding support for the
+user-defined RSS context sizing.
