@@ -1,40 +1,40 @@
 Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0E8374730;
-	Sun, 15 Mar 2026 21:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15A737C90C;
+	Sun, 15 Mar 2026 21:16:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773609418; cv=pass; b=LiZvnsnx+8jfSLZeMeVU7Gdit/RT85Xyd04aMb2WF49VadADFG6geOvOM6fxW1GLTgySu0O6jn8YWiOOZynHNgfzjyZFDRtK2SY0id6LdiYsqjWLRGA4T3g0nQW92aA11hoRSsTGkTj5HNUvGrhNhA5T9faKKDQU9icri27X8uM=
+	t=1773609419; cv=pass; b=fud8CWiQql+jDTuTt2Mf4eJE2reR55y0I/SrtmIAkm7vqRVobLkg8A9keAavCDoFqUevQS2/wOKmasVghx3jNklhw8Iap8d+6R7TjYD6Kfk/5aeC1DTP/lCrdL0AaO+masnV7qinsz2Dh/DNgLoc/i/QOJUyeTZvKGTgNYQ0vBY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773609418; c=relaxed/simple;
-	bh=XgWFRb8ONcA2GQ/HdeRNANjgs9ScGEr/4d+esA/Kb7c=;
+	s=arc-20240116; t=1773609419; c=relaxed/simple;
+	bh=DqDIHMd4MJlmLaUnm4FNNfD7TmiR4u66qXh4CXNuOwo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nGxmulUTmCQfWRrFGFTw8P/W8pwEPfPsOtAVRgmUl7QGF37209Ivkgd+wO/hEQb7+o9wT7N/Oq0iPGgnCmQKv2FPsQkA1SG0PZc0tw29qW7V4nJdDCSdbk28VKSVU7/HiyZh0lqUl/QdzmBOXkNnwEXWtu/dMjI5yyHG96VRg6Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=kPN6H4LK; arc=pass smtp.client-ip=136.143.169.57
+	 MIME-Version; b=kiPKzfy8BvTlyoqFk8ToWq05gwHf/EgpVnXSoGAfmvQ+BIeR2Jz6BsajP+ARXVpqlggG78zf3uV7UxoeO+QndNY54R0FfbDcXtXM0+kCIXTvBTeRSZ3q9HXRAL8TRgB0iOu42N/oF1KIal0VoSSIbWVcRjs+S7kRItCu9Rj6MVo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=mRKvtOrA; arc=pass smtp.client-ip=136.143.169.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="kPN6H4LK"
+	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="mRKvtOrA"
 ARC-Seal: i=1; a=rsa-sha256; t=1773609408; cv=none; 
 	d=zohomail.eu; s=zohoarc; 
-	b=lNef373UeMm0iTQWWKrHcct/tu4eWkXuoq1YrcJmXNoowTPVX2utToTSG8VUJkKlkcYKdZj/OzMgxEcGpAELDDMWTPMZsd5BTe3nZsbVTXJpDpFz4C9+hgs4mmaEGCSwtq9Enh5vJEVsVMo4U90yFsTijguR1idtLkyHpmaV8OE=
+	b=lf8gOwNzs/6s9S6FOheTFv/NAmKKwLAz3V9pKOOY7EAxHq4xxqxCniJ/4R5yqoJNZOWapw8RYiasrkAeOsV9/KqA7iNEUZWg9Z+VF7M38cT4hk8lWAwJKP1OzaVM7XVviM3NpUcsJBxxazkqplreQE4ZtXbdWjziv+e0tAa1Lio=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
 	t=1773609408; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=6MFsWg559qWHVDZpDzdEbMHixOdjZsqRsUni07ha0iI=; 
-	b=OLFDFzqsVZLxXpDriXqvNhsuu2C8Eu7+XopA5yfh6K5DQ2u2PsNcAdYOrQssr4ys03B12MpC4TsVkIVsAZu21YV0AM6CAqbbOA4B6I5H2qkrdbGpfT5mthKtYhax+z11umJL2Be7/uQS2bFFsTIel5jQszzYpFrtPxRC1ZLf3o8=
+	bh=f220kEhJ66X+jXJtp71OpS8vD3cCaDjeBL3VruhruPw=; 
+	b=Bz3+lbamzurYIo0APAIpnPx5Ic4ylNBr4tzRArbiN9d2XBLcZS0ufWfAesgLZIpQvjEABnoP06hNkdpo2jL0AvS4hUuXWsS/9IVZ2g4aVtz27Q0zJKWTvKq0YylB7bb9Tso+BrmF/NE75D6gFuweppZvsNCEhTrSMYUTyWSQaFA=
 ARC-Authentication-Results: i=1; mx.zohomail.eu;
 	dkim=pass  header.i=objecting.org;
 	spf=pass  smtp.mailfrom=objecting@objecting.org;
 	dmarc=pass header.from=<objecting@objecting.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773609407;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773609408;
 	s=zmail; d=objecting.org; i=objecting@objecting.org;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=6MFsWg559qWHVDZpDzdEbMHixOdjZsqRsUni07ha0iI=;
-	b=kPN6H4LKvc7zWCP/shk0uVhACzcOMqOsocQa6iSygoiYD9kKeOdYHvGj4RniL4F3
-	PfCOzo13yrDkItGYdRcjUmt+xC5fd9M8RK5pT5gWFuqtsKZ0WiQGWMV/TdL7Q9Twf6M
-	Z85fwPYHHEjgbXoNiskqR93fOBNLf9FH4S9mq7/w=
-Received: by mx.zoho.eu with SMTPS id 1773609406065337.3837088591996;
+	bh=f220kEhJ66X+jXJtp71OpS8vD3cCaDjeBL3VruhruPw=;
+	b=mRKvtOrAR5+aynrUnR0JQNyO6z4mZUboVkpZRCIF01b1w6zUSkjIlQyaBmWTVjM3
+	FPdvSGYpbpdjUJrazlbOOYhTHZnI7G2tv1KNp4bAVNojnePyQglOXQPRcnKVc7HeOXd
+	2mcNbpA87xdghBxSgnGlM1Dwetv5Vk6KEicVD6n4=
+Received: by mx.zoho.eu with SMTPS id 1773609406740167.70234176599104;
 	Sun, 15 Mar 2026 22:16:46 +0100 (CET)
 From: Josh Law <objecting@objecting.org>
 To: Andrew Morton <akpm@linux-foundation.org>
@@ -45,9 +45,9 @@ Cc: Brendan Higgins <brendan.higgins@linux.dev>,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	Josh Law <objecting@objecting.org>
-Subject: [PATCH v3 3/8] lib/glob: accept [^...] as character class negation syntax
-Date: Sun, 15 Mar 2026 21:16:33 +0000
-Message-Id: <20260315211641.408318-6-objecting@objecting.org>
+Subject: [PATCH v2 3/5] lib/tests: add glob test cases for escapes, edge cases, and new features
+Date: Sun, 15 Mar 2026 21:16:34 +0000
+Message-Id: <20260315211641.408318-7-objecting@objecting.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260315211641.408318-1-objecting@objecting.org>
 References: <20260315211641.408318-1-objecting@objecting.org>
@@ -60,45 +60,87 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-glob(7) specifies [!...] for negated character classes, but many
-users are more familiar with the regex-style [^...] syntax.  Tools
-like git, rsync, and bash all accept both forms, and the difference
-is a common source of confusion when writing glob patterns.
+The glob kunit test suite had no coverage for backslash escape
+sequences, and was missing edge cases around wildcards with empty
+strings, inverted ranges, unclosed brackets, and consecutive
+wildcards.
 
-Accept '^' as an alias for '!' at the start of a character class so
-that both [!a-z] and [^a-z] work as expected.
+Add test cases covering:
+  - Backslash escapes: \*, \?, \[, \\, non-metachar after backslash,
+    and trailing backslash matching a literal '\' character.
+  - Wildcards matching special characters in the string (*, [, \, ?).
+  - Wildcards with empty strings: * matches empty, ** matches empty,
+    ? does not match empty.
+  - Inverted (backwards) ranges: [z-a] and [9-0] now match thanks to
+    endpoint normalization.
+  - Single-character ranges: [a-a] matches 'a'.
+  - Caret negation: [^a] and [^a-z] as alias for [!...].
+  - Unclosed bracket: [ treated as literal.
+  - Consecutive wildcards: ***a, *?*, *?*?* patterns.
 
 Signed-off-by: Josh Law <objecting@objecting.org>
 ---
- lib/glob.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ lib/tests/glob_kunit.c | 47 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/lib/glob.c b/lib/glob.c
-index df7f00619b1b..c5508be0d215 100644
---- a/lib/glob.c
-+++ b/lib/glob.c
-@@ -33,9 +33,9 @@ MODULE_LICENSE("Dual MIT/GPL");
-  * Like !fnmatch(@pat, @str, 0) and unlike the shell, this does NOT
-  * treat / or leading . specially; it isn't actually used for pathnames.
-  *
-- * Note that according to glob(7) (and unlike bash), character classes
-- * are complemented by a leading !; this does not support the regex-style
-- * [^a-z] syntax.
-+ * Note that according to glob(7), character classes are complemented by
-+ * a leading !.  The regex-style [^a-z] syntax is also accepted as an
-+ * alias.
-  *
-  * An opening bracket without a matching close is matched literally.
-  */
-@@ -72,7 +72,7 @@ bool __pure glob_match(char const *pat, char const *str)
- 		case '[': {	/* Character class */
- 			if (c == '\0')	/* No possible match */
- 				return false;
--			bool match = false, inverted = (*pat == '!');
-+			bool match = false, inverted = (*pat == '!' || *pat == '^');
- 			char const *class = inverted ? pat + 1 : pat;
- 			unsigned char a = *class++;
- 
+diff --git a/lib/tests/glob_kunit.c b/lib/tests/glob_kunit.c
+index 362b1eda8e5b..9b53060e7c8e 100644
+--- a/lib/tests/glob_kunit.c
++++ b/lib/tests/glob_kunit.c
+@@ -80,6 +80,53 @@ static const struct glob_test_case glob_test_cases[] = {
+ 	{ .pat = "*bc", .str = "bc", .expected = true },
+ 	{ .pat = "*bc", .str = "bbc", .expected = true },
+ 	{ .pat = "*bc", .str = "bcbc", .expected = true },
++	/* Backslash escape sequences */
++	{ .pat = "\\*", .str = "*", .expected = true },
++	{ .pat = "\\*", .str = "a", .expected = false },
++	{ .pat = "\\?", .str = "?", .expected = true },
++	{ .pat = "\\?", .str = "a", .expected = false },
++	{ .pat = "\\[", .str = "[", .expected = true },
++	{ .pat = "\\[", .str = "a", .expected = false },
++	{ .pat = "a\\bc", .str = "abc", .expected = true },
++	{ .pat = "\\\\", .str = "\\", .expected = true },
++	{ .pat = "\\\\", .str = "a", .expected = false },
++	/* Trailing backslash (matches literal backslash) */
++	{ .pat = "a\\", .str = "a\\", .expected = true },
++	{ .pat = "a\\", .str = "a", .expected = false },
++	/* Wildcards matching special characters in string */
++	{ .pat = "?", .str = "*", .expected = true },
++	{ .pat = "?", .str = "[", .expected = true },
++	{ .pat = "?", .str = "\\", .expected = true },
++	{ .pat = "?", .str = "?", .expected = true },
++	/* Wildcards with empty strings */
++	{ .pat = "*", .str = "", .expected = true },
++	{ .pat = "*", .str = "a", .expected = true },
++	{ .pat = "**", .str = "", .expected = true },
++	{ .pat = "**", .str = "abc", .expected = true },
++	{ .pat = "?", .str = "", .expected = false },
++	/* Inverted (backwards) ranges */
++	{ .pat = "[z-a]", .str = "m", .expected = true },
++	{ .pat = "[z-a]", .str = "z", .expected = true },
++	{ .pat = "[z-a]", .str = "a", .expected = true },
++	{ .pat = "[9-0]", .str = "5", .expected = true },
++	{ .pat = "[9-0]", .str = "a", .expected = false },
++	/* Single-character range */
++	{ .pat = "[a-a]", .str = "a", .expected = true },
++	{ .pat = "[a-a]", .str = "b", .expected = false },
++	/* Caret negation syntax */
++	{ .pat = "[^a]", .str = "b", .expected = true },
++	{ .pat = "[^a]", .str = "a", .expected = false },
++	{ .pat = "[^a-z]", .str = "0", .expected = true },
++	{ .pat = "[^a-z]", .str = "m", .expected = false },
++	/* Unclosed bracket (treated as literal) */
++	{ .pat = "[", .str = "[", .expected = true },
++	{ .pat = "[", .str = "a", .expected = false },
++	{ .pat = "[abc", .str = "[abc", .expected = true },
++	/* Consecutive wildcards */
++	{ .pat = "***a", .str = "a", .expected = true },
++	{ .pat = "*?*", .str = "a", .expected = true },
++	{ .pat = "*?*?*", .str = "ab", .expected = true },
++	{ .pat = "*?*?*", .str = "a", .expected = false },
+ 	/* Multiple asterisks (complex backtracking) */
+ 	{ .pat = "*ac*", .str = "abacadaeafag", .expected = true },
+ 	{ .pat = "*ac*ae*ag*", .str = "abacadaeafag", .expected = true },
 -- 
 2.34.1
 
