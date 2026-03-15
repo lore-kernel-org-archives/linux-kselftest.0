@@ -1,204 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B43371D02
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 16:21:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A972B9BA;
+	Sun, 15 Mar 2026 16:38:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773591671; cv=none; b=aNuQlsi7iy+uIqgTgwTJlJUv9LAaykWz4/cIvp8Fvz0SF/d2LvvQ6P5SvgA3bOH1EF/zqOQnZ+Hly+tITwQzNCcEGklEOd/0RD6Oz90L7ZsTlGyiHk6A/FTJVRNFJ9P+32Oi3Awrxc+q+MQTnTpnxZKfINdrjyQSKnK3z8uJTNs=
+	t=1773592705; cv=none; b=EOS0JoSO64qvDMxhTdmbrhB8PpLJgqmI/ww6SIiVC2brXtI2or3hrO9QGF4DI3VtDm4VHAPiz5gRtgGeuMBNamRB7cKTpgvFIOzz75Ojz5stm2EA/OWcWW3hUhhZdtwK7HCsZmxVm/1UofPih+L1kHOdl7rMu+stcWXTG1mRLlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773591671; c=relaxed/simple;
-	bh=J9tpxWupWAX2Pt9UrNoCAOtAMFKzeL/kxywB4YHzQck=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WdLZ329tipO37EqDIgUpGhe3cryBlxV3iYNGxUjE/Y3YVvCMQB6kBIHDfZMNBPN8IXlkuQq7etb4Qz4uvo0BSXD7Dw7R1d7qcwZfLd+RxbzQyQ326vIuNBkD0T6kaF4bRrvkW7hU1qPmXAKyH8NMdKnhPTGvLu7CgTMcDDGnDDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcI2sQuJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773592705; c=relaxed/simple;
+	bh=WrNeMYsAA03DHVECs98FC7knzVMNjLmWyKvwlzN4Krw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pHBmT8NL4pQcHhjEgl4wif5HRLz1rz23MlvfmD2CyOsax86i3au41AN+3WAcgkz/QzCkwAWXAktLTbyf3na7CePt0jcjXeLxILJ3+ucdZvt3pwfPl2vMrcEOUkk5fH7cYyLam550l6b5kLGqkRv9RdYF8KZ0a+dz8Pipu32RQ7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODlndx/l; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcI2sQuJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE08C19424
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 16:21:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODlndx/l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A308C4CEF7;
+	Sun, 15 Mar 2026 16:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773591670;
-	bh=J9tpxWupWAX2Pt9UrNoCAOtAMFKzeL/kxywB4YHzQck=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TcI2sQuJ7WLaS13QUciw8Uxhj+hdgUQDlacsejXtr/bxKSWKCjzz7Ea3fFPRoUlay
-	 N3WSo3PD6fkLu5crkikQWa/vMNHQrYaPWsAWw8T1ZC9nOkjWQLPnQ3pbYVrPsOv4Xj
-	 PoqKzGcPA7NzcxwnifOT6RbAsV/JORzkjXMSZXOod/HURPcE6jzsEBtbHl9rGVIgEy
-	 jg5QYWn/Z1N/lPB4RfrDkDnn888aZw5NAX/ABLOOxG/6TKc1Btz12o7Qvx7ks02z/1
-	 kJpfyI/eb8qcMJWjKtOgcmpPFwZtlK0f3DKRR6x581H2elxt92/lKQ5k2JrmSKL4vT
-	 RzTvQ6LOIEC/w==
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-899fc265126so46002326d6.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 09:21:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX/iWvi8YAtwyXx8lxSLx8VWC7OIFbBLRzMNkW+z0bEksN72FDo75r5ZCrBg/pdfeTVG4LBApyyga/3TzhntXw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYFZvb7mdtvV3Dz0H9bnsLfl9b+p3Fj7LblXBlVQ+3yeNRu5V9
-	nqmszmxxeBXVbcRs5+zemYRIrCrMkoB6sNq3nLBVjT92uBXo9oHMThbyQkR4hJNPhV/K7LjDoO2
-	d9HQdALUqqoKFd/jQxHacS4KVPDHt8M4=
-X-Received: by 2002:ad4:458e:0:b0:89c:47a0:392d with SMTP id
- 6a1803df08f44-89c47a03bc9mr28826996d6.44.1773591669600; Sun, 15 Mar 2026
- 09:21:09 -0700 (PDT)
+	s=k20201202; t=1773592705;
+	bh=WrNeMYsAA03DHVECs98FC7knzVMNjLmWyKvwlzN4Krw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ODlndx/l2BTSbPjRspV9GLT7+5T3/4XNm1uJzTAR5k+bHedYGFbm7JcgrzbAMgwWW
+	 h3t+0iwi22VFwi/vk45Kz2w9HYLdExgXOq8xBGIQKNkp/kZKGRqwYWpyQfSimyVgB7
+	 WrKPZMlYKJl6FxwhgiR9lK+Hi0KC8ofixzUzYoWcVFS2xLl6FqTtVBCdp6trj9wHFZ
+	 G1cjoMWJmWsNxRMB0F4r6FJFjTbPCymS+hka/0zDBbmt7PBcrnAvIG9To3of5IcfVp
+	 JWhdazvUhIMZ2QhFYQA0dxWVuzXyQyBnyelMGJ1ME9cZe/XmLRTuJJVXnFz+VDnPI7
+	 1D2bXfJj7EFFg==
+Date: Sun, 15 Mar 2026 22:08:06 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Niklas Cassel <cassel@kernel.org>
+Cc: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Vignesh Raghavendra <vigneshr@ti.com>, 
+	Siddharth Vadapalli <s-vadapalli@ti.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Richard Zhu <hongxing.zhu@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, 
+	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Minghuan Lian <minghuan.Lian@nxp.com>, Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>, 
+	Jesper Nilsson <jesper.nilsson@axis.com>, Jingoo Han <jingoohan1@gmail.com>, 
+	Heiko Stuebner <heiko@sntech.de>, Srikanth Thokala <srikanth.thokala@intel.com>, 
+	Marek Vasut <marek.vasut+renesas@gmail.com>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Christian Bruel <christian.bruel@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Manikanta Maddireddy <mmaddireddy@nvidia.com>, Koichiro Den <den@valinux.co.jp>, 
+	Damien Le Moal <dlemoal@kernel.org>, linux-pci@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	linux-arm-kernel@axis.com, linux-rockchip@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 00/10] PCI: endpoint: Differentiate between disabled
+ and reserved BARs
+Message-ID: <skfqxnugt4t7eidfny5ojczq3wpu4u5yjfd6wdk3ikjmbgru7t@63nfqvrl5mvs>
+References: <20260312130229.2282001-12-cassel@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310104743.907818-3-bjorn@kernel.org> <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
- <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch> <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
- <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch> <20260311195052.1202174f@kernel.org>
- <abJJY8whzSOB8O-X@pengutronix.de> <7c45ebf6-0cb2-4a4c-ac12-f4f9bb59c908@lunn.ch>
- <42abf88e-4fbf-4966-9490-8315f118ddea@bootlin.com> <873423y27k.fsf@all.your.base.are.belong.to.us>
- <abbLu-OjngRjcc09@pengutronix.de>
-In-Reply-To: <abbLu-OjngRjcc09@pengutronix.de>
-From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Date: Sun, 15 Mar 2026 17:20:58 +0100
-X-Gmail-Original-Message-ID: <CAJ+HfNhpvSZpsVjvjGU0PaoDR4-b1PLzcXXemqm6hDjanMcd3w@mail.gmail.com>
-X-Gm-Features: AaiRm53Tq_eYzYSBfM-BMOsNrHN8Bd6s8DtX-VVRf7Uot0lHRK-mNGUtckgT_lU
-Message-ID: <CAJ+HfNhpvSZpsVjvjGU0PaoDR4-b1PLzcXXemqm6hDjanMcd3w@mail.gmail.com>
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI definitions
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	Naveen Mamindlapalli <naveenm@marvell.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Danielle Ratson <danieller@nvidia.com>, Hariprasad Kelam <hkelam@marvell.com>, 
-	Ido Schimmel <idosch@nvidia.com>, Kory Maincent <kory.maincent@bootlin.com>, 
-	Leon Romanovsky <leon@kernel.org>, Michael Chan <michael.chan@broadcom.com>, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, 
-	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, 
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260312130229.2282001-12-cassel@kernel.org>
 
-On Sun, 15 Mar 2026 at 16:10, Oleksij Rempel <o.rempel@pengutronix.de> wrot=
-e:
->
-> Hi Bj=C3=B6rn,
->
-> On Fri, Mar 13, 2026 at 08:11:11PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
-> > Folks, thanks for the elaborate discussion (accidental complexity vs
-> > essential complexity comes to mind...)!
->
-> Sorry for overthinking :)
+On Thu, Mar 12, 2026 at 02:02:28PM +0100, Niklas Cassel wrote:
+> Hello all,
+> 
+> This series was originally written in response to the patch series from
+> Manikanta Maddireddy that was posted here:
+> https://lore.kernel.org/linux-pci/291dab65-3fa6-4fc8-90a2-4ad608ca015c@nvidia.com/T/#t
+> 
+> Manikanta has reviewed this series and will send a small series on top of
+> this one.
+> 
 
-Haha, don't be! I think it's great that we have these discussions
-upfront! If this is overthinking, please continue to do that! :-)
+Applied to pci/endpoint, thanks!
 
-> > Maxime Chevallier <maxime.chevallier@bootlin.com> writes:
-> >
-> > > Hi Andrew,
-> > >
-> > >>> One more issue is the test data generator location. The data genera=
-tor
-> > >>> is not always the CPU. We have HW generators located in components =
-like
-> > >>> PHYs or we may use external source (remote loopback).
-> > >>
-> > >> At the moment, we don't have a Linux model for such generators. Ther=
-e
-> > >> is interest in them, but nobody has actually stepped up and proposed
-> > >> anything. I do see there is an intersect, we need to be able to
-> > >> represent them in the topology, and know which way they are pointing=
-,
-> > >> but i don't think they have a direct influence on loopback.
-> > >
-> > > If I'm following Oleksij, the idea would be to have on one side the
-> > > ability to "dump" the link topology with a finer granularity so that =
-we
-> > > can see all the different blocks (pcs, pma, pmd, etc.), how they are
-> > > chained together and who's driving them (MAC, PHY (+ phy_index), modu=
-le,
-> > > etc.), and on another side commands to configure loopback on them, wi=
-th
-> > > the ability to also configure traffic generators in the future, gathe=
-r
-> > > stats, etc.
-> > >
-> > > Another can of worms for sure, and probably too much for what Bj=C3=
-=B6rn is
-> > > trying to achieve. It's hard to say if this is overkill or not, there=
-'s
-> > > interest in that for sure, but also quite a lot of work to do...
-> >
-> > It's great to have these discussion as input to the first (minimal!)
-> > series, so we can extend/build on it later.
-> >
-> > If I try to make sense of the above discussions...
-> >
-> > Rough agreement on:
-> >
-> >  - Depth/ordering should be local to a component, not global across the
-> >    whole path.
->
-> ack
->
-> >  - Cross-component ordering comes from existing infrastructure (PHY lin=
-k
-> >    topology, phy_index).
->
-> ack
->
-> >  - The current component set (MAC/PHY/MODULE) is reasonable for a first
-> >    pass.
->
-> I do not have strong opinion here.
->
-> >  - HW traffic generators and full topology dumps are interesting but ou=
-t
-> >    of scope for now (Please? ;-)).
->
-> It didn't tried to push it here. My point is - image me or may be you,
-> will need to implement it in the next step. This components will need to
-> cooperate and user will need to understand the relation and/or topology.
->
-> The diagnostic is all about topology.
+- Mani
 
-I hear you, and I hope this didn't come across as negative. I
-definitely think we need something that we all can continue to build
-on. ...and if my summary/view isn't, please holler!
+> 
+> Changes since v3:
+> -Modified patch 1 to simply drop BAR_RESERVED for a BAR following an
+>  only_64bit BAR (Manivannan).
+> -Added a patch from Manikanta, to make his follow-up series smaller,
+>  since this series touches the same lines anyway.
+> 
+> Link to v3:
+> https://lore.kernel.org/linux-pci/20260302095913.48155-11-cassel@kernel.org/
+> 
+> 
+> Koichiro Den (2):
+>   PCI: endpoint: Describe reserved subregions within BARs
+>   PCI: dw-rockchip: Describe RK3588 BAR4 DMA ctrl window
+> 
+> Manikanta Maddireddy (1):
+>   PCI: endpoint: Allow only_64bit on BAR_RESERVED
+> 
+> Niklas Cassel (7):
+>   PCI: endpoint: Do not mark the BAR succeeding a 64-bit BAR as
+>     BAR_RESERVED
+>   PCI: endpoint: Introduce pci_epc_bar_type BAR_DISABLED
+>   PCI: dwc: Replace certain BAR_RESERVED with BAR_DISABLED in glue
+>     drivers
+>   PCI: dwc: Disable BARs in common code instead of in each glue driver
+>   PCI: endpoint: pci-epf-test: Advertise reserved BARs
+>   misc: pci_endpoint_test: Give reserved BARs a distinct error code
+>   selftests: pci_endpoint: Skip reserved BARs
+> 
+>  drivers/misc/pci_endpoint_test.c              | 21 ++++++++-
+>  drivers/pci/controller/dwc/pci-dra7xx.c       |  4 --
+>  drivers/pci/controller/dwc/pci-imx6.c         | 22 +++------
+>  drivers/pci/controller/dwc/pci-keystone.c     | 12 +++++
+>  .../pci/controller/dwc/pci-layerscape-ep.c    |  6 ---
+>  drivers/pci/controller/dwc/pcie-artpec6.c     |  4 --
+>  .../pci/controller/dwc/pcie-designware-ep.c   | 24 ++++++++++
+>  .../pci/controller/dwc/pcie-designware-plat.c | 10 ----
+>  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 23 ++++++----
+>  drivers/pci/controller/dwc/pcie-keembay.c     |  3 --
+>  drivers/pci/controller/dwc/pcie-qcom-ep.c     | 12 -----
+>  drivers/pci/controller/dwc/pcie-rcar-gen4.c   | 16 ++-----
+>  drivers/pci/controller/dwc/pcie-stm32-ep.c    | 10 ----
+>  drivers/pci/controller/dwc/pcie-tegra194.c    | 19 ++------
+>  drivers/pci/controller/dwc/pcie-uniphier-ep.c | 19 +-------
+>  drivers/pci/controller/pcie-rcar-ep.c         |  3 --
+>  drivers/pci/endpoint/functions/pci-epf-test.c | 24 ++++++++++
+>  drivers/pci/endpoint/pci-epc-core.c           |  5 +-
+>  include/linux/pci-epc.h                       | 46 +++++++++++++++----
+>  .../pci_endpoint/pci_endpoint_test.c          |  4 ++
+>  20 files changed, 154 insertions(+), 133 deletions(-)
+> 
+> 
+> base-commit: 0b74f7d72399d4c4422ed3d68ef28b3612f71e74
+> -- 
+> 2.53.0
+> 
 
-> > So, maybe the next steps are:
-> >
-> >  1. Keep the current component model (MAC/PHY/MODULE) and the
-> >     NEAR_END/FAR_END direction (naming need to change as Maxime said).
->
-> Probably good to document that NEAR_END/FAR_END or local/remote is
-> related to the viewpoint convention. Otherwise it will get confusing
-> with components which mount in a unusual direction (embedded worlds is
-> full of it :))
-
-ACK!
-
-> >  2. Add a depth (or order?) field to ETHTOOL_A_LOOPBACK_ENTRY as Jakub
-> >     suggested, local to each component instance. This addresses the
-> >     "multiple loopback points within one MAC" case without requiring a
-> >     global ordering. I hope it addresses what Oleksij's switch example
-> >     needs (multiple local loops at different depths within one
-> >     component) *insert that screaming emoji*.
->
-> ack. I guess "depth" fits to the "viewpoint" terminology.
->
-> >  3. Document the viewpoint convention clearly.
->
-> ack
->
-> >  4. Punt on the grand topology dump. Too much to chew.
->
-> ack
->
-> >  5. Don't worry about DSA CPU ports - they don't have a netif, so
-> >     loopback doesn't apply there today. If someone adds netifs for CPU
-> >     ports later, depth handles it.
->
-> ack
->
-> > TL;DR: Add depth, document the viewpoint convention, and ship
-> > it^W^Winterate.
-> >
-> > Did I get that right?
->
-> I'm ok with it, but maintainers will have the last word.
-
-Agreed!
-Bj=C3=B6rn
+-- 
+மணிவண்ணன் சதாசிவம்
