@@ -1,56 +1,56 @@
-Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7137260D;
-	Sun, 15 Mar 2026 20:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773605928; cv=pass; b=ql8+CSvT5bPSmxpB3aFTPkVi09XyNDKMmEnzAvwGmU4uWKr5If4plV/Zg+ZS8v6op3VDROgersdgDGnFbBf/rvjD5M3eihXO0VwOxxHhqzSeW/0S79S3kc4PG+Ap3NFxyQ7AL1cCv5vurdSNh42L5C7GncWvPOypbIZOVQIRyEs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773605928; c=relaxed/simple;
-	bh=TvoodWqX4Zt9qaZn8/cmtP96TLJg6Fl3uNkMx+/OM/s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GkheNPiFEI4p2smEhZ2PZgVtRPVfFfC0mnR+2zTh1eICUoMi5Q207CpoMtuMfR+oGZ0kD6EPpfX6KRDl5NHWZ2fJ51KsughkmmT7O0jNdzVtdtFYZQbYqxC3bzr/F5fg9EXSY7Ix14X2z+GZjK5vhLMrsNcbaViq5dLL4nYSZyo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=G9YiP62M; arc=pass smtp.client-ip=136.143.169.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4005A1DF254;
+	Sun, 15 Mar 2026 21:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773608423; cv=none; b=KsY2eB5QqvzmHYW8NmR/U55IOWMqCqDp8WgK6mRpAX5HKA+Lwl0Lq2NKFLvC084nc0quZbvW68d6K/4oMPkPflEN3wVkT6ZqBQ348Iws/beg1XiZS1MkSIy46uNUQErThDB160boHEg7/o4whR2qkrZtds95uM2ZBH65Gm12AIE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773608423; c=relaxed/simple;
+	bh=XnIOlQqQj664a9OSr2rVhvLZUQiwYMWAxdX1C8eCcLc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l3qKL9pxgiiK2+vb9L8uKHuG1RoVaphc/J0JaanmmofBCOVrMa2cL+RilapIaUkPPm49rlQ7Kn4uF1lMFoz/WBy1wUWCpmwFIm5nnd75a3rHqe8woBF+RejYlip5b9SpgfnlO6HQPKXUzpU4+qX+QU69RlXKauc4J1tPijVYWTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pylHVRuK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="G9YiP62M"
-ARC-Seal: i=1; a=rsa-sha256; t=1773605899; cv=none; 
-	d=zohomail.eu; s=zohoarc; 
-	b=iMO5rkVZil4xqap4z7PGcVxxfBRle3SMOFh7Op9OEMKgxckpOSksXOnlW4UAJgJ+evQ2HedIcj4PeFknMhQV25yhdR8QLmd0J42+lqzjiX0W6N+WQTmLrXy/TSKfVl67/WrPmvJl6NNZA041P14hvdIF5/VM/9HLKcuhSeplhb8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1773605899; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=IKJGSUF4neu8mf6CKhF1x8j3j8JrAeeYnr9Wq9xiqSo=; 
-	b=Eq7DDB5T9eDeIFTpk2acAAbiNTtDkeACbZqPXH4fa4IN7bSZfmNgW9VokhzwW+CXd/7SvjiR48lC7yXHB26pRoCD+ysnxOA60vTzFkrsjjlIL8F+AFS6+CXH3QiPPfwZGUptWX7LL5+NE/zOzt22xz+MtSvqe1XiU1eLHi2iNo0=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-	dkim=pass  header.i=objecting.org;
-	spf=pass  smtp.mailfrom=objecting@objecting.org;
-	dmarc=pass header.from=<objecting@objecting.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773605899;
-	s=zmail; d=objecting.org; i=objecting@objecting.org;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=IKJGSUF4neu8mf6CKhF1x8j3j8JrAeeYnr9Wq9xiqSo=;
-	b=G9YiP62MSDYMqlSoAR/ziqMrltcy9SZCES96/58tKOjfadJlFo5HbGUZK9p1ISgE
-	3NKZJSEfg5lNqglVwEsG7HN1izpjEGTx6pRQgOwkmanJxsaleSDMXDeP/bt4Io6IVwO
-	iOaapeqE5pTHswspp5xHWxqB977ODNqVBS5dbg7w=
-Received: by mx.zoho.eu with SMTPS id 1773605898407517.8260685904943;
-	Sun, 15 Mar 2026 21:18:18 +0100 (CET)
-From: Josh Law <objecting@objecting.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pylHVRuK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E0DC4CEF7;
+	Sun, 15 Mar 2026 21:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773608423;
+	bh=XnIOlQqQj664a9OSr2rVhvLZUQiwYMWAxdX1C8eCcLc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=pylHVRuKIp2RySkn/vjGtU/jKV1EUrVmO8HhjUb40IJr6XYVS6+PqAWYKKzNda/8O
+	 y184DIjBgJEjfd5/R9qy+uV826AOyPG/T2NO+e3YcEU4PuVF7A5L0v1S8m/7bEKOFb
+	 42qorg8HwSp+7e/4tT1DVBuZCUEAdVHeodEZZFd+CwGxxRbGGsLOqQztzRe1qz09GZ
+	 /ChjDeMNDtuJowFl1rtPt3dGO9wUJ8gvg3tJOFoj8VPEjGhyE3rxNT77b4O/b9smkF
+	 1rgPFaP0/9+0jTeOg+fasWgnxj7lDeB/7UoMmF8bjcXwAUINz7mmgy382fgs1VOxUa
+	 s+7qj+322iGbg==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
 	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Josh Law <objecting@objecting.org>
-Subject: [PATCH v2 1/8] lib/glob: normalize inverted character class ranges
-Date: Sun, 15 Mar 2026 20:18:09 +0000
-Message-Id: <20260315201816.362559-2-objecting@objecting.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260315201816.362559-1-objecting@objecting.org>
-References: <20260315201816.362559-1-objecting@objecting.org>
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH 00/10] mm/damon: let DAMON be paused and resumed
+Date: Sun, 15 Mar 2026 13:59:59 -0700
+Message-ID: <20260315210012.94846-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,44 +58,112 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-When a character class range has its endpoints reversed (e.g., [z-a]),
-the comparison a <= c && c <= b can never be true, so the range
-silently matches nothing.  A pattern like "file[9-0]" intended to
-match any digit would fail to match anything, with no indication
-that the range is backwards.
+DAMON utilizes a few mechanisms that enhance itself over time. Adaptive
+regions adjustment, goal-based DAMOS quota auto-tuning and monitoring
+intervals auto-tuning like self-training mechanisms are such examples.
+It also adds access frequency stability information (age) to the
+monitoring results, which makes it enhanced over time.
 
-Swap the endpoints when a > b so that inverted ranges behave the
-same as their forward equivalents: [z-a] matches the same characters
-as [a-z], and [9-0] matches the same as [0-9].  This is consistent
-with how GNU fnmatch and other glob implementations handle reversed
-ranges.
+Sometimes users have to stop DAMON.  In this case, DAMON internal state
+that enhanced over the time of the last execution simply goes away.
+Restarted DAMON have to train itself and enhance its output from the
+scratch.  This makes DAMON less useful in such cases.  Introducing three
+such use cases below.
 
-Signed-off-by: Josh Law <objecting@objecting.org>
----
- lib/glob.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Investigation of DAMON.  It is best to do the investigation online,
+especially when it is a production environment.  DAMON therefore
+provides features for such online investigations, including DAMOS stats,
+monitoring result snapshot exposure, and multiple tracepoints.  When
+those are insufficient, and there are additional clues that could be
+interfered by DAMON, users have to temporarily stop DAMON to collect the
+additional clues.  It is not very useful since many of DAMON internal
+clues are gone when DAMON is stopped.  The loss of the monitoring
+results that improved over time is also problematic, especially in
+production environments.
 
-diff --git a/lib/glob.c b/lib/glob.c
-index 7aca76c25bcb..cb45a9a47f28 100644
---- a/lib/glob.c
-+++ b/lib/glob.c
-@@ -94,7 +94,13 @@ bool __pure glob_match(char const *pat, char const *str)
- 						goto literal;
- 
- 					class += 2;
--					/* Any special action if a > b? */
-+					/* Normalize inverted ranges like [z-a] */
-+					if (a > b) {
-+						unsigned char tmp = a;
-+
-+						a = b;
-+						b = tmp;
-+					}
- 				}
- 				if (a <= c && c <= b)
- 					match = true;
+Monitoring of workloads that have different user-known phases.  For
+example, in Android, applications are known to have very different
+access patterns and behaviors when they are running on the foreground
+and the background.  It can therefore be useful to separate monitoring
+of apps based on whether they are running on the foreground and on the
+background.  Having two DAMON threads per application that paused and
+resumed for the apps foreground/background switches can be useful for
+the purpose.  But such pause/resume of the execution is not supported.
+
+Tests of DAMON.  A few DAMON selftests are using drgn to dump the
+internal DAMON status.  The tests show if the dumped status is the same
+as what the test code expected.  Because DAMON keeps running and
+modifying its internal status, there are chances of data races that can
+cause false test results.  Stopping DAMON can avoid the race.  But,
+since the internal state of DAMON is dropped, the test coverage will be
+limited.
+
+Let DAMON execution be paused and resumed without loss of the internal
+state, to overhaul the limitations.  For this, introduce a new DAMON
+context parameter, namely 'pause'.  API callers can update it while the
+context is running, using the online parameters update functions
+(damon_commit_ctx() and damon_call()).  Once it is set, kdamond_fn()
+main loop will do only limited works excluding the monitoring and DAMOS
+works, while sleeping sampling intervals per the work.  The limited
+works include handling of the online parameters update.  Hence users can
+unset the 'pause' parameter again.  Once it is unset, kdamond_fn() main
+loop will do all the work again (resumed).  Under the paused state, it
+also does stop condition checks and handling of it, so that paused DAMON
+can also be stopped if needed.  Expose the feature to the user space via
+DAMON sysfs interface.  Also, update existing drgn-based tests to test
+and use the feature.
+
+Tests
+=====
+
+I confirmed the feature functionality using real time tracing ('perf
+trace' or 'trace-cmd stream') of damon:damon_aggregated DAMON
+tracepoint.  By pausing and resuming the DAMON execution, I was able to
+see the trace stops and continued as expected.  Note that the pause
+feature support is added to DAMON user-space tool (damo) after v3.1.9.
+Users can use '--pause_ctx' command line option of damo for that, and I
+actually used it for my test.  The extended drgn-based selftests are
+also testing a part of the functionality.
+
+Patches Sequence
+================
+
+Patch 1 introduces the new core API for the pause feature.  Patch 2
+extend DAMON sysfs interface for the new parameter.  Patches 3-5 update
+design, usage and ABI documents for the new sysfs file, respectively.
+The following five patches are for tests.  Patch 6 implements a new
+kunit test for the pause parameter online commitment.  Patches 7 and 8
+extend DAMON selftest helpers to support the new feature.  Patch 9
+extends selftest to test the commitment of the feature.  Finally, patch
+10 updates existing selftest to be safe from the race condition using
+the pause/resume feature.
+
+SeongJae Park (10):
+  mm/damon/core: introduce damon_ctx->paused
+  mm/damon/sysfs: add pause file under context dir
+  Docs/mm/damon/design: update for context pause/resume feature
+  Docs/admin-guide/mm/damon/usage: update for pause file
+  Docs/ABI/damon: update for pause sysfs file
+  mm/damon/tests/core-kunit: test pause commitment
+  selftests/damon/_damon_sysfs: support pause file staging
+  selftests/damon/drgn_dump_damon_status: dump pause
+  selftests/damon/sysfs.py: check pause on assert_ctx_committed()
+  selftets/damon/sysfs.py: pause DAMON before dumping status
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  7 +++++
+ Documentation/admin-guide/mm/damon/usage.rst  | 12 +++++---
+ Documentation/mm/damon/design.rst             |  7 +++++
+ include/linux/damon.h                         |  2 ++
+ mm/damon/core.c                               |  8 +++++
+ mm/damon/sysfs.c                              | 30 +++++++++++++++++++
+ mm/damon/tests/core-kunit.h                   |  4 +++
+ tools/testing/selftests/damon/_damon_sysfs.py | 10 ++++++-
+ .../selftests/damon/drgn_dump_damon_status.py |  1 +
+ tools/testing/selftests/damon/sysfs.py        | 28 +++++++++++++++++
+ 10 files changed, 104 insertions(+), 5 deletions(-)
+
+
+base-commit: 027cb70b08db6e3df632c49a8c7590ea830f7a96
 -- 
-2.34.1
-
+2.47.3
