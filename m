@@ -1,119 +1,124 @@
-Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7253737C11D;
-	Sun, 15 Mar 2026 21:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC0C37C90F
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 21:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773609512; cv=pass; b=KG0NCytmH75+NipcJzxpC9pWOfEIcGU7CLrW4BsVIkkKqAiWZUwT1a55Lr9oJiEO1f0/5Qpg7KZU2KsxkrzVQet/iJGLiLKHXBq9hIveuuc9xZ2DDjWOFPAAbVNynek7hq4kYigwzOIkUiU2sShQM2Pw0T0IZQEcpiPi674XcgE=
+	t=1773609819; cv=pass; b=XvKoZPAf/7T1F/xps6w4rKM1f7jCKBwrvxIUMsOZE3aXiMkXazbH/abKrwidMapV2J0JjbMVDdbn6RrjTUe3RG53+Fb6KHsSb+Xo0u2Eq5e/CWWNQ7K653MbygMd7EOcrLNTimRCSOuT496BVC0EooT00XS6sXfT0JB07jdrEjI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773609512; c=relaxed/simple;
-	bh=nDNdIz9w1v6GX9HKPOLSEpcSx9VPTmDZ0uZ7Lf2JPJQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VhtR5k7fA1SnDG5pK0VP9fSn741HiO9Q7xO7SQUIlfW3f+74CzAKFqMbuIWDC8dgwKZCPerZ/DxvnAnDSlCeqPOIZqLnexz33XfvgLIxZOGsgjyhL7p4hMp+lPz6KOyVZVZskOJizH7S/qSOaPdLt+fM2IDq4wbJzy1TjWiUuHA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=l36v47qb; arc=pass smtp.client-ip=136.143.169.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
+	s=arc-20240116; t=1773609819; c=relaxed/simple;
+	bh=PP2J4eDkV4dT2Pk3acy4PoFiAE07CbC3k3o5xlkGmyY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JUuDtXK5strh8grhSJXpi/YbzSPzc2ACh7POGwYfzp/mNg77lTtKUnZbOlC4sQ17cFO5WQGzCb84+LFs5Uf4E4XhhnYnA4iPyS6F1YvqVJxU/+X5Qxkh/69QZ/LVZhqztYzd5MgINMdOq4/ijjG0FFlheLkZH2WszjCL+xFWhxw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HT8hY7ud; arc=pass smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="l36v47qb"
-ARC-Seal: i=1; a=rsa-sha256; t=1773609498; cv=none; 
-	d=zohomail.eu; s=zohoarc; 
-	b=j2NQ4NaCPXhUZg34VA6Qc4tuEQhPUd+bVyGSoOyifS4zEKb1uACYYAgC1yEpmoe7nSQi7HgmPV0ToJa9CnpjWX8xF9QklCb+NDxUor9zgFJ7mOlDr2XAzzBeEyt3eQgHjOzGrXe2NlUqhM45fUix/5JdoMjWAWYs9BZX4NxisT0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1773609498; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=x5o3NZywWI/GlA27vRpItmX4VibMyB/hLnI+Hl7u6to=; 
-	b=Db2IYWbuiG7BCFVihBBMD9gYCz65QuvpZ3Byb4Po/YpjllmPiAVXGEFYNBcBk2sQHF7xbUDIyPImO8VbGHozx4G6QAsuxWUdYq+dLeEBNRXG2mgZJgj4FdO0J3QiVZub85lH97UHSoovUUrSGrpE8CH3IvXXmMDG/jYtlOwUGdA=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-	dkim=pass  header.i=objecting.org;
-	spf=pass  smtp.mailfrom=objecting@objecting.org;
-	dmarc=pass header.from=<objecting@objecting.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773609498;
-	s=zmail; d=objecting.org; i=objecting@objecting.org;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-	bh=x5o3NZywWI/GlA27vRpItmX4VibMyB/hLnI+Hl7u6to=;
-	b=l36v47qbQKkOb7PfQaP9j7WCsgu74BQRK+YHQXkEiWo5xmX+Ys8HG6IJr8zIL7I7
-	8GUPbegq6MnnmzpMrjo3m2k1gJedQMEGtGX3DLGyn3n7p3X+Kx0LlqMv6RWygz2+C6p
-	tuK5W7gU7VOIyFi9Tl6NPDXmbmU81ph6E4DHkX5o=
-Received: by mx.zoho.eu with SMTPS id 17736094951831004.9757762051256;
-	Sun, 15 Mar 2026 22:18:15 +0100 (CET)
-From: Josh Law <objecting@objecting.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	Josh Law <objecting@objecting.org>
-Subject: [PATCH v4 8/8] kunit: validate glob filter patterns before use
-Date: Sun, 15 Mar 2026 21:18:07 +0000
-Message-Id: <20260315211807.411173-9-objecting@objecting.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260315211807.411173-1-objecting@objecting.org>
-References: <20260315211807.411173-1-objecting@objecting.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HT8hY7ud"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2be9ffbcf9aso152870eec.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 14:23:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773609816; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RdlSdCi855s/b7J7iXZvPWO1txjfQnf8Kcu8debkfmiwyUJJVrrrkqXCS5vI8SmrJK
+         UR7cHGk0Ts84AqHX0lmgFCqZZDRx3kSPDXfLryQOtlYawpEgZK1shcbejV1SaMfW2Lts
+         AlYI91OociFxiL87ZKIUMXXYLtvziWYq8zoj9MuFgHMDeauXRRbsnXpy59dTJDCusfWG
+         xOVgm8cZIFigcJKmYphLw42kawarR7ZMvimr/SBgABUa23MceL98HqpQNXcCbPYwHSer
+         +e3VwKnJYJuRV6LrBHNbNVE9YeyIvZ72zuQ+ZEzg8sWInrQvfvtIvGiEj8r3ruM8+ciA
+         L98A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=IkQe1o5B6paHiUn+z4l+GM/Kq0EzHLVr9WcX/nooLFw=;
+        fh=XLNJUOKbMGhbFLtC3u7cBy2u6B3Qa4dl6c9Ken5OEK0=;
+        b=k3ZTBBGGy1X/16E3eHmXhWln4GwNwp/KMPg71dW19iZzx+ByKVGaxDKxckutsZDMdy
+         dM684g2rBKCVV81AWojg6FLBtUZPcKk2WtiWRLp7YKc67yhRgOkx4D9zr6fWLuvDz4p4
+         5KSTZDkpfOij2Jxb3sk0YC7TQ/bEBFPtfI5+Xa/Dzhr2/cxfYcL+hq6I3yrs3100pUFr
+         apmG6uVINhxTA87x5QigtLTbujswKZS0pYRDh9Xj6pN0BQVAaxOKIQllEKQOvLs7lbir
+         QVfFMZTjc0bYEO1Q8/YSHQnSLjGw4AOu7L1b+Vt5xW3Oty9AYyQewHvZEgRjLj6n7Fao
+         AADg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773609816; x=1774214616; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IkQe1o5B6paHiUn+z4l+GM/Kq0EzHLVr9WcX/nooLFw=;
+        b=HT8hY7udMPkogRrUh/oYbrvszNT3VMQ+d24BceY9urykM4mH73VhC9wEEtgPslgtLK
+         PDtlW5/oGt7kJJzfMDn7enddERZfE9dtjqUHe3JRiLgelkK3kZY7SsWMdXjKkfoYvFTL
+         mE5x7cfad8vifw54TAGmzS5iEbvAwtQ2rF6mNSeCGm33x66DMIRUbOW0SJgdfIZvNxAT
+         lnj92w7pU3ZqxZU5s7F67ggFrmA4UIogf/cG8lhwNHkjum//GzC1tHbjmY1RhLleMeHi
+         RccTbVnioBTZMQ8uomWRVwIE+4iTpZuv7uzv7F1zSkEE/JaIMhXNP7hu3mCbQwh9y8wB
+         n0lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773609816; x=1774214616;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IkQe1o5B6paHiUn+z4l+GM/Kq0EzHLVr9WcX/nooLFw=;
+        b=jNEpqLPKsRaG4t69VkI5OulasYSUwksXUCTLOI4AMCZpZZb9aaPxbcIO+dXaQd/aiu
+         3Lc9jCiEHLi8vubX3JzzxHIcDFCxL0ITfveN1Q97B+Kt7fHf30udYXSVPQfg/vq8zMJP
+         GV2sIrhaCyr1jVdBwkYviZ2D89YdQzP6mR+Nx6/dPoJEPf+D9+Qhz/KbEEahtJwnajOD
+         x/sma0VZRdK90DXbb6gzCulP1Vhc3958AgUejmKOdkMKiNS5fzrsHA8p1TT5W4NtsddR
+         1KhH4c5EdnBjo9pCYmf0Bv+tAeMB9W3LGtGLe17l62lgzNA/iU+ApzA3pLD108kzCLX4
+         QMhw==
+X-Forwarded-Encrypted: i=1; AJvYcCXfjHgf1NiSCkTuwrcRsJpVxiRhht4JDGdt01ZfPPgExz9tCNxVIgyV5HYc9K01lJi7HMmhHQ6uwGv1q6dD6j0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnKDVStslbtvaQbJA0rqbs9nl3SYjEQdDYgnekmJYiac/b1C6n
+	Zn6iYZzmznZCkv76PGJ+HppUAHBzAcKp2oHrc+E8xA1i7qaMmt0gKFl2o8l5Ox2inm6WQpCFiET
+	eTReLLp9hrWQumk7ZW7fKUB12UsXm0RU=
+X-Gm-Gg: ATEYQzxS1/Y99mTm61tZWcYF6AgegKMdu/4JNDyWiRhDclg6NQzTgRk+UjxCXjM7LBO
+	WNpiq5vch+wG8lbO4W59QwcU9euJC7KkBgThJdKtfJmZ+x8EQzxpEyoOt81wpdccfu8Hr/i3hSk
+	i70CXY1EbvCF+5sQ3SHHKr9fMIKozSEA4sQjjJJ9QEWXwW5+nOjQDw2xL6wAg1hy5Y/sK5DE/DX
+	XR1JK9IJXUYna7oprUdsp0LXBDa1b91rF3OQvWTDy7V/cNF2OyUdtSlDn7lYT7YpTPla0pQV6dh
+	AaQaekkH9/QF4Ad19BJbxAtuTE1PZ4bunIzKooSPv+sWtzOVGCRrPANxPEfnJpy8H8e4PYOna1B
+	XDpiMp4+YZDbFfu8PBSA1fNI=
+X-Received: by 2002:a05:7300:8ca9:b0:2bd:db75:c28b with SMTP id
+ 5a478bee46e88-2bea56065damr2711462eec.7.1773609815900; Sun, 15 Mar 2026
+ 14:23:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+References: <20260309-cstr-rename-macro-v2-1-25f7de75944e@kernel.org>
+In-Reply-To: <20260309-cstr-rename-macro-v2-1-25f7de75944e@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 15 Mar 2026 22:23:22 +0100
+X-Gm-Features: AaiRm53Z5esmB8NqhpEo3Ukkf4yvUe-1ALiBGT0hKmtMX4C3iH5_QYhJU6S78z0
+Message-ID: <CANiq72=1koL5z-5WzyPfFX4otxgSL_oKGVt8ju7iShki0LwJhg@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: update `kernel::c_str!` documentation
+To: Tamir Duberstein <tamird@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Breno Leitao <leitao@debian.org>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Waiman Long <longman@redhat.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-kunit_parse_glob_filter() accepts user-provided glob patterns via the
-filter_glob module parameter but does not check whether they are
-well-formed.  A malformed pattern like "suite[.test" (unclosed bracket)
-or "suite\" (trailing backslash) is silently passed to glob_match()
-which handles it gracefully but not in the way the user likely intended
-— the bracket is matched as a literal character rather than starting a
-character class.
+On Mon, Mar 9, 2026 at 6:02=E2=80=AFPM Tamir Duberstein <tamird@kernel.org>=
+ wrote:
+>
+> Now that all literals are C-Strings, update the documentation to explain
+> that use of this macro should be limited to non-literal strings.
+>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1075
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
 
-Use glob_validate() to reject malformed patterns early with -EINVAL,
-so users get a clear error instead of silently wrong filter results.
+Applied to `rust-next` -- thanks everyone!
 
-Signed-off-by: Josh Law <objecting@objecting.org>
----
- lib/kunit/executor.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+    [ Apply sentence case to comment. Reword title. - Miguel ]
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 1fef217de11d..f0cc15e4b34d 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -91,6 +91,8 @@ static int kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
- 	const char *period = strchr(filter_glob, '.');
- 
- 	if (!period) {
-+		if (!glob_validate(filter_glob))
-+			return -EINVAL;
- 		parsed->suite_glob = kstrdup(filter_glob, GFP_KERNEL);
- 		if (!parsed->suite_glob)
- 			return -ENOMEM;
-@@ -102,12 +104,23 @@ static int kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
- 	if (!parsed->suite_glob)
- 		return -ENOMEM;
- 
-+	if (!glob_validate(parsed->suite_glob)) {
-+		kfree(parsed->suite_glob);
-+		return -EINVAL;
-+	}
-+
- 	parsed->test_glob = kstrdup(period + 1, GFP_KERNEL);
- 	if (!parsed->test_glob) {
- 		kfree(parsed->suite_glob);
- 		return -ENOMEM;
- 	}
- 
-+	if (!glob_validate(parsed->test_glob)) {
-+		kfree(parsed->test_glob);
-+		kfree(parsed->suite_glob);
-+		return -EINVAL;
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.34.1
-
+Cheers,
+Miguel
