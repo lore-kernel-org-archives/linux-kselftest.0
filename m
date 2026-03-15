@@ -1,41 +1,41 @@
 Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531D437C939;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021A037C935;
 	Sun, 15 Mar 2026 21:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773609509; cv=pass; b=AmXAeMEbfyqU8UrvFqkVMbfRbDfT1ev3jN1CTWhdmvVIOrTM9rcvJetbc/0UgC9E7w3Z2AGKvpJ9CRjFa/f7vVbT5c/HECwcza9bodHmwId8kXxJJQMwxwbprZ9cC0O3/BAjQSOkWJj7ciaJfsPJeUxP1u1HPgyaeP1s3HCzyo0=
+	t=1773609509; cv=pass; b=fHN44APsxfBEWw7ahYNQ+IhuwaYaXIpmf66qOjmByP8zUzcmIsMOFm/X48RqaGYW/n3dEj39RQVEfXWh/SmxCv86mdy5Wt84jxXcNJgwTkdAo4J95nBY4LUwUtojQ7sE8i9PW8RNCCnHGJJj14Js9T1kbihCl3DdcXNPsEvLPk4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773609509; c=relaxed/simple;
-	bh=MrFEroHwYorqSWGBoY5ocHzyEC+JzAla+WphZ3zVa6Q=;
+	bh=NK8NcdJxCO2LV2WJNqfKBaNOOeGuUndAUUlIXnyHtxA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LRZICogfvNLf1GFC3TClZpgp5NqmGx4+QqyFA2OzvsELloAaqM1XDV2hj3m29qVs5reCqbIo7mZSuEzIDKEBXWHuQg/h2yJuq/V0FgzHQMoRSqqYDM86DyOhdUGzycN2PVEte1GWdrB0GdspgVq7NPLfcsHnb4DNBHt9quHt6ck=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=A+FHKzaP; arc=pass smtp.client-ip=136.143.169.57
+	 MIME-Version; b=Or333EtE14bncgX6hzEsr59Bgj7ydX5VnswMfFuQBu7y29CyMCKzZu9Ups+n7OeHjOGM305q5eMKM2DRfa7EkWUX3u1c2x1/23X9SXSLz//iX5YmiLo+/YKZLqBvFUXZsasABRC7d3wWGtAi/DiP/+CBWxuU6F9Vrw8DeEzT/yE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=CILVSGnW; arc=pass smtp.client-ip=136.143.169.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="A+FHKzaP"
-ARC-Seal: i=1; a=rsa-sha256; t=1773609495; cv=none; 
+	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="CILVSGnW"
+ARC-Seal: i=1; a=rsa-sha256; t=1773609494; cv=none; 
 	d=zohomail.eu; s=zohoarc; 
-	b=LXSDq398A/5aYtmwFr9ymG457T2fs4BtNeoVAHjTSTGXLXoerCemQBfbHzO+szA68X90e5Pag6HeZw0XixX006ACXt/2G16Uu8i3wStz1J4DWvIUzL/UUEqw86Omo82FrnOt6l/YnZwQGF7KW3ZAX+6BhHItWw19UPVq6o2thT8=
+	b=j9/v+5bua3+bhcBOQTQ2VVeMdGwIgxR07xdEGeU5dPzL35KFTP6otf3+qYYtNY7xDGsIhRLXd515nMCJ5wmexfRuoK2UQI/jJBDRbytBpwfa/+5gxMzU3JbtAAILDaNFktJtnBizr+czSu8kspauroz6TWGIvw9PTubb4+zA3W0=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1773609495; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=/JtZCIPsgGracX5Mx/4hRAMi9BpwqYEGpkwpzrg8Moo=; 
-	b=KgYMNTVWGBUuNBvafXnBM/3JGglA6WgPf47qHGbvQkB6PGBFK8ScqyQu3pmA2oyY+5G8pXuNiO0wntjk8a8MwWA7ifx3zsM9hkNfCLxD2/NIUbWUtTQy9CWS4PSEoQwXQ1hoZJitruBGCDZ7PdaAHiBeDzHlE1XTWdUCWOQsih8=
+	t=1773609494; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=ZH0GCSbT5tKftFXXPeA2gjcQUx1mgWMeocoKefb8MuM=; 
+	b=b0WcXK1a2PYxC7t1IbQbKXFBi2EALNHeGL8bU1KURmJrUlahzFbjaPQ91sUR4Gj0GRy5eWSQ7aMSZ+h+R22mymANBhVXy/bJZ9m4WysGVwjmUqfiicBru8V8W8o/tts33uzrq9SlgITZwtgIWUXoxBAfhETgsCtjRMqh4ksN5jw=
 ARC-Authentication-Results: i=1; mx.zohomail.eu;
 	dkim=pass  header.i=objecting.org;
 	spf=pass  smtp.mailfrom=objecting@objecting.org;
 	dmarc=pass header.from=<objecting@objecting.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773609495;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773609494;
 	s=zmail; d=objecting.org; i=objecting@objecting.org;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=/JtZCIPsgGracX5Mx/4hRAMi9BpwqYEGpkwpzrg8Moo=;
-	b=A+FHKzaPzrOgjPIsz+y/T/qBtA74zcKllis6BmVDGC5pl8qKrZ9FScgo8lStt+GC
-	6EjJ8PKHE7FsFANWeStpPD1VaWHmTbcCPvnrjjA9p8W6xrVrc59fLwKPP8E8zgPbLGT
-	ff8jUSakjLMfLzLyJMhDRQNXr83jDTMXQCRbyvAc=
-Received: by mx.zoho.eu with SMTPS id 1773609494489924.6100757135223;
-	Sun, 15 Mar 2026 22:18:14 +0100 (CET)
+	bh=ZH0GCSbT5tKftFXXPeA2gjcQUx1mgWMeocoKefb8MuM=;
+	b=CILVSGnWPEvRdYjboZp+cAJpoZupJxfEHFvmHNFga75YCg6O1KyLyPAYTlrCC+Em
+	NpLPoqFNmz8gK0NQOE6+f8Q4Pel/DyoB7l4gYphIUrx1MIF/GK7xCg12jTQhLF1WYzj
+	KkFWk1vnFRuegMOkBZ3JNNGZkbWjLEqBPsT4QhAE=
+Received: by mx.zoho.eu with SMTPS id 1773609493106193.04598114097564;
+	Sun, 15 Mar 2026 22:18:13 +0100 (CET)
 From: Josh Law <objecting@objecting.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>,
@@ -45,9 +45,9 @@ Cc: Brendan Higgins <brendan.higgins@linux.dev>,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	Josh Law <objecting@objecting.org>
-Subject: [PATCH v4 7/8] lib/tests: add kunit tests for glob_match_nocase() and glob_validate()
-Date: Sun, 15 Mar 2026 21:18:06 +0000
-Message-Id: <20260315211807.411173-8-objecting@objecting.org>
+Subject: [PATCH v4 5/8] lib/glob: add glob_validate() for pattern syntax checking
+Date: Sun, 15 Mar 2026 21:18:04 +0000
+Message-Id: <20260315211807.411173-6-objecting@objecting.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260315211807.411173-1-objecting@objecting.org>
 References: <20260315211807.411173-1-objecting@objecting.org>
@@ -60,113 +60,93 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Add parameterized test cases for the new glob API functions:
+Add glob_validate() which checks whether a glob pattern is
+syntactically well-formed before matching.  It detects:
 
-glob_match_nocase() tests verify case-insensitive matching for
-  literal characters, wildcards, character class ranges, and
-  backslash escapes -- e.g., pattern "a*c" matches string "ABC",
-  and range [A-Z] matches lowercase 'm'.
+  - Unclosed character classes: a '[' with no matching ']'
+  - Trailing backslash: a '\' at end of pattern with nothing to escape
 
-glob_validate() tests verify detection of malformed patterns:
-  well-formed patterns (character classes, escapes, wildcards) return
-  true, while unclosed brackets ("[abc") and trailing backslashes
-  ("abc\") return false.
+glob_match() already handles these gracefully (unclosed brackets are
+matched literally, a trailing backslash matches itself), but callers
+that accept patterns from userspace may want to reject malformed input
+upfront with a clear error rather than silently falling back to
+literal matching.
+
+For example, the kunit executor accepts a filter_glob module parameter
+to select which tests to run.  A user who types "snd_*.[codec_test"
+(forgetting the closing bracket) would currently see the '[' matched
+literally instead of starting a character class, producing silently
+wrong filter results.  With glob_validate(), the executor can reject
+the pattern early and report -EINVAL, as done in the following patch.
 
 Signed-off-by: Josh Law <objecting@objecting.org>
 ---
- lib/tests/glob_kunit.c | 77 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ include/linux/glob.h |  1 +
+ lib/glob.c           | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 44 insertions(+)
 
-diff --git a/lib/tests/glob_kunit.c b/lib/tests/glob_kunit.c
-index 9b53060e7c8e..711cb44d1fc8 100644
---- a/lib/tests/glob_kunit.c
-+++ b/lib/tests/glob_kunit.c
-@@ -157,8 +157,85 @@ static void glob_test_match(struct kunit *test)
- 			    params->pat, params->str, params->expected);
+diff --git a/include/linux/glob.h b/include/linux/glob.h
+index 36527ae89730..deceaa2e4a74 100644
+--- a/include/linux/glob.h
++++ b/include/linux/glob.h
+@@ -7,5 +7,6 @@
+ 
+ bool __pure glob_match(char const *pat, char const *str);
+ bool __pure glob_match_nocase(char const *pat, char const *str);
++bool __pure glob_validate(char const *pat);
+ 
+ #endif	/* _LINUX_GLOB_H */
+diff --git a/lib/glob.c b/lib/glob.c
+index 172b8ba3cd8e..8ee539d19cc4 100644
+--- a/lib/glob.c
++++ b/lib/glob.c
+@@ -186,3 +186,46 @@ bool __pure glob_match_nocase(char const *pat, char const *str)
+ 	return __glob_match(pat, str, true);
  }
- 
-+/* Case-insensitive matching tests */
-+static const struct glob_test_case glob_nocase_test_cases[] = {
-+	{ .pat = "abc", .str = "ABC", .expected = true },
-+	{ .pat = "ABC", .str = "abc", .expected = true },
-+	{ .pat = "aBc", .str = "AbC", .expected = true },
-+	{ .pat = "a*c", .str = "ABC", .expected = true },
-+	{ .pat = "A?C", .str = "abc", .expected = true },
-+	{ .pat = "[A-Z]", .str = "m", .expected = true },
-+	{ .pat = "[a-z]", .str = "M", .expected = true },
-+	{ .pat = "abc", .str = "abd", .expected = false },
-+	{ .pat = "ABC", .str = "ABD", .expected = false },
-+	{ .pat = "a*z", .str = "ABZ", .expected = true },
-+	{ .pat = "\\A", .str = "a", .expected = true },
-+};
+ EXPORT_SYMBOL(glob_match_nocase);
 +
-+KUNIT_ARRAY_PARAM(glob_nocase, glob_nocase_test_cases, glob_case_to_desc);
-+
-+static void glob_test_match_nocase(struct kunit *test)
++/**
++ * glob_validate - Check whether a glob pattern is well-formed
++ * @pat: Shell-style pattern to validate.
++ *
++ * Return: true if @pat is a syntactically valid glob pattern, false
++ * if it contains malformed constructs.  The following are considered
++ * invalid:
++ *
++ *  - An opening '[' with no matching ']' (unclosed character class).
++ *  - A trailing '\' with no character following it.
++ *
++ * Note that glob_match() handles these gracefully (an unclosed bracket
++ * is matched literally, a trailing backslash matches itself), but
++ * callers that accept patterns from user input may wish to reject
++ * malformed patterns early with a clear error.
++ */
++bool __pure glob_validate(char const *pat)
 +{
-+	const struct glob_test_case *params = test->param_value;
-+
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    glob_match_nocase(params->pat, params->str),
-+			    params->expected,
-+			    "nocase Pattern: \"%s\", String: \"%s\", Expected: %d",
-+			    params->pat, params->str, params->expected);
++	while (*pat) {
++		switch (*pat++) {
++		case '\\':
++			if (*pat == '\0')
++				return false;
++			pat++;
++			break;
++		case '[':
++			if (*pat == '!' || *pat == '^')
++				pat++;
++			/* ] as first character is literal, not end of class */
++			if (*pat == ']')
++				pat++;
++			while (*pat && *pat != ']')
++				pat++;
++			if (*pat == '\0')
++				return false;
++			pat++;	/* skip ']' */
++			break;
++		}
++	}
++	return true;
 +}
-+
-+/* Pattern validation tests */
-+struct glob_validate_case {
-+	const char *pat;
-+	bool expected;
-+};
-+
-+static const struct glob_validate_case glob_validate_test_cases[] = {
-+	{ .pat = "abc", .expected = true },
-+	{ .pat = "*", .expected = true },
-+	{ .pat = "?", .expected = true },
-+	{ .pat = "[abc]", .expected = true },
-+	{ .pat = "[!abc]", .expected = true },
-+	{ .pat = "[^abc]", .expected = true },
-+	{ .pat = "[a-z]", .expected = true },
-+	{ .pat = "[]abc]", .expected = true },
-+	{ .pat = "\\*", .expected = true },
-+	{ .pat = "\\\\", .expected = true },
-+	{ .pat = "", .expected = true },
-+	/* Invalid patterns */
-+	{ .pat = "[", .expected = false },
-+	{ .pat = "[abc", .expected = false },
-+	{ .pat = "[!abc", .expected = false },
-+	{ .pat = "abc\\", .expected = false },
-+	{ .pat = "\\", .expected = false },
-+	{ .pat = "abc[def", .expected = false },
-+};
-+
-+static void glob_validate_case_to_desc(const struct glob_validate_case *t,
-+				       char *desc)
-+{
-+	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "pat:\"%s\"", t->pat);
-+}
-+
-+KUNIT_ARRAY_PARAM(glob_validate, glob_validate_test_cases,
-+		  glob_validate_case_to_desc);
-+
-+static void glob_test_validate(struct kunit *test)
-+{
-+	const struct glob_validate_case *params = test->param_value;
-+
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    glob_validate(params->pat),
-+			    params->expected,
-+			    "validate Pattern: \"%s\", Expected: %d",
-+			    params->pat, params->expected);
-+}
-+
- static struct kunit_case glob_kunit_test_cases[] = {
- 	KUNIT_CASE_PARAM(glob_test_match, glob_gen_params),
-+	KUNIT_CASE_PARAM(glob_test_match_nocase, glob_nocase_gen_params),
-+	KUNIT_CASE_PARAM(glob_test_validate, glob_validate_gen_params),
- 	{}
- };
- 
++EXPORT_SYMBOL(glob_validate);
 -- 
 2.34.1
 
