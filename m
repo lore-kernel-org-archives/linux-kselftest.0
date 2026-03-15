@@ -1,113 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9136417B50F;
-	Sun, 15 Mar 2026 06:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD762853E0
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 10:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773557186; cv=none; b=Eo7dsggxidqCW0S+rgPYE5uMqNqHlW7RqpVPR7yekSqNkuee6Q2M/WojHwOX+4/bjhsGONEk9YuGC841wsvSpnM9lBSDQr7gdX1y5W9WmSp6bg8lAMfcuBQNHVyBHTGz4ia1rpb8glI4H0RCqgIzG33DUS/J7EaCUQD8H84ilaM=
+	t=1773571280; cv=none; b=GL94H5TwpFKdNdktZgTnsidnvhB8PY9eJFMsGK5q6wkQiLtOaSZFStqqM1AAeG/BQOAX0oqGS1RDX5fgeoLgCJ6OKIJ0ub3q3/WJrYzpySrbPbKI67ZSKcdhVTc/QgHR2vx/vVQyJy9FUWJf8+IPkd8Tqh1yRJ5pYcThqGPpCX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773557186; c=relaxed/simple;
-	bh=IpUTDcZ1Uu4Z1bfflk4CngBLm8hUBNUIhtC4bYm5ODw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YqkSKKnY17k9HaBeX9eWjSJn1jXckSjh6Zum4IKjCCyfCJ+q7JK9+9aSaTmVE97QwXDcH26LUsY81Oh29LUdKOldq7znSJfEVArP3BFBZdlM4HfWgeTGxEgEjJg8fs1qOkO5KzJ/dNqjZpZxIxy3YcdRMo8LlKE3zsV1MdZIBcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4sTG/4E; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773571280; c=relaxed/simple;
+	bh=W3TpesNUzk4PoVFebg08Gv3V5Volkw6OQHS4++M+YUo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pCPsgitqwmnZpMd3bE/Sm5uKZmVZP7yJMIoiYVN44AxTpdTgfPoRCuuNb9AkSWXZ6hvAh6Gvm4N0hMKnS5Ue9b1FnquJoeKvr8EN3WF1s5OFwDUuRUQJMArzdQ24l69clyYIN1zHBYCcDZV6BMWNvURaYdhV24VkONUlYOfsTsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hOMYHhtx; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4sTG/4E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B7DC4CEF7;
-	Sun, 15 Mar 2026 06:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773557186;
-	bh=IpUTDcZ1Uu4Z1bfflk4CngBLm8hUBNUIhtC4bYm5ODw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z4sTG/4E6mbg52QlUCguplRl3s+AbHo/83S7cwIrGRmYk7p6ogy+RDg5b5gNufUzM
-	 XWlobTcH2/a8HyZR0gU2s0+avyy0Fza9PGIpBMLulzkWL6QjsUWBNKDiqTMw6nTODm
-	 NXPXNVnC8Vr5cvZN598o/xc8pjrkX7Ya0b9boOwsgWg8rRcnQB4dTATj5TMKV81o3y
-	 KqpoQB6xnb2BuzgFny89j5tSBGOXe3SBzu4jGmOrQqK/ZH+Aa/8d0zdoIKVq1PWIsP
-	 EsFrwGyjyj2BkZ9IP7N0DqY4AZ8A7l3Ye6N1a6aiAUFLCLFUwBQw9Y3AbCaTirhNSN
-	 wD0KzKDOK75nQ==
-Date: Sun, 15 Mar 2026 02:46:24 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, linux-api@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
-	tools@kernel.org, x86@kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>, Askar Safin <safinaskar@zohomail.com>,
-	Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 0/9] Kernel API Specification Framework
-Message-ID: <abZVwFwKSsxvwCw3@laps>
-References: <20260313150928.2637368-1-sashal@kernel.org>
- <20260314111822.63a2ba4a@kernel.org>
- <20260314224435.35465615@pumpkin>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hOMYHhtx"
+Message-ID: <8f118476-ca9b-45f3-b59e-e4cff341ef0f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773571266;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KXJauw0u7U+303cKTYIvtRsw7zrCRqeUHKpiha7GoqM=;
+	b=hOMYHhtxKU3tLZYIADlYPMRZtWbPE2vX8yQgRwcXF8Y+i0ulLZrI02BF+7BHukYlhOE5nD
+	bmRd/H3buAlYOUMhsfghUbaxME6vjkOu+anfg84ZH+zfR91iDr6/3T5C/r2RbQqiPJ7ha2
+	kgWubIEyPZjApDNGFfxD1dfRF+rakJU=
+Date: Sun, 15 Mar 2026 18:40:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260314224435.35465615@pumpkin>
+Subject: Re: [PATCH net v1] selftests: bonding: add test for stacked bond
+ header_parse recursion
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, edumazet@google.com,
+ Jiayuan Chen <jiayuan.chen@shopee.com>, Jay Vosburgh <jv@jvosburgh.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260314134211.33405-1-jiayuan.chen@linux.dev>
+ <20260314103833.36698c29@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260314103833.36698c29@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Mar 14, 2026 at 10:44:35PM +0000, David Laight wrote:
->On Sat, 14 Mar 2026 11:18:22 -0700
->Jakub Kicinski <kuba@kernel.org> wrote:
->
->> On Fri, 13 Mar 2026 11:09:10 -0400 Sasha Levin wrote:
->> > This enables static analysis tools to verify userspace API usage at compile
->> > time, test generation based on formal specifications, consistent error handling
->> > validation, automated documentation generation, and formal verification of
->> > kernel interfaces.
+
+On 3/15/26 1:38 AM, Jakub Kicinski wrote:
+> On Sat, 14 Mar 2026 21:42:05 +0800 Jiayuan Chen wrote:
+>> From: Jiayuan Chen <jiayuan.chen@shopee.com>
 >>
->> Could you give some examples? We have machine readable descriptions for
->> Netlink interfaces, we approached syzbot folks and they did not really
->> seem to care for those.
+>> Add a selftest to reproduce the infinite recursion in bond_header_parse()
+>> when bonds are stacked (bond1 -> bond0 -> gre). When a packet is received
+>> via AF_PACKET SOCK_DGRAM on the topmost bond, dev_parse_header() calls
+>> bond_header_parse() which used skb->dev (always the topmost bond) to get
+>> the bonding struct. This caused it to recurse back into itself
+>> indefinitely, leading to stack overflow.
+>>
+>> Before Eric's fix [2], the test triggers:
+>>
+>>    ./bond-stacked-header-parse.sh
+>>
+>>    [  71.999481] BUG: MAX_LOCK_DEPTH too low!
+>>   
+[...]
+>> +	ip link add name "$devbond0" type bond mode active-backup
+>> +	check_err $? "could not create bond0"
+>> +	ip link add name "$devbond1" type bond mode active-backup
+>> +	check_err $? "could not create bond1"
+>> +
+>> +	ip link set "$devgre" master "$devbond0"
+>> +	check_err $? "could not enslave $devgre to $devbond0"
+>> +	ip link set "$devbond0" master "$devbond1"
+>> +	check_err $? "could not enslave $devbond0 to $devbond1"
+>> +
+>> +	ip link set "$devgre" up
+>> +	ip link set "$devbond0" up
+>> +	ip link set "$devbond1" up
+>> +
+>> +	# Send a GRE-encapsulated packet to 10.0.0.1 while an AF_PACKET
+>> +	# SOCK_DGRAM socket is listening on bond1. The receive path calls
+>> +	# dev_parse_header() which invokes bond_header_parse(). With the
+>> +	# bug, this recurses infinitely and causes a stack overflow.
+>> +	#
+>> +	# Use Python to:
+>> +	# 1. Open AF_PACKET SOCK_DGRAM on bond1
+>> +	# 2. Send a GRE packet to 10.0.0.1 via raw socket
+>> +	# 3. Try to receive (triggers parse path)
+>> +	python3 -c "
+>> +import socket, struct, time
+> is this AI-generated?
 >
->The whole thing reminds me of doxygen comment blocks.
->They tend to make it hard to read the source files, hard to search
->the source files (due to all the extra matches) and are pretty much
->always out of date.
+> You can add an extra script in TEST_FILES and just call it.
+> No need for inline scripts..
 >
->The kerndoc comment blocks for trivial helper functions are hard enough
->to keep up to date.
+>> +# AF_PACKET SOCK_DGRAM on bond1
+>> +ETH_P_ALL = 0x0003
+>> +pkt_fd = socket.socket(socket.AF_PACKET, socket.SOCK_DGRAM,
+>> +                       socket.htons(ETH_P_ALL))
+>> +pkt_fd.settimeout(2)
+>> +pkt_fd.bind(('$devbond1', ETH_P_ALL))
+>> +
+>> +# Build GRE-encapsulated IP packet
+>> +def build_ip_hdr(proto, saddr, daddr, payload_len):
+>> +    ihl_ver = 0x45
+>> +    total_len = 20 + payload_len
+>> +    hdr = struct.pack('!BBHHHBBH4s4s',
+>> +        ihl_ver, 0, total_len, 0, 0, 64, proto, 0,
+>> +        socket.inet_aton(saddr), socket.inet_aton(daddr))
+>> +    # compute checksum
+>> +    words = struct.unpack('!10H', hdr)
+>> +    s = sum(words)
+>> +    while s >> 16:
+>> +        s = (s & 0xffff) + (s >> 16)
+>> +    chksum = ~s & 0xffff
+>> +    hdr = hdr[:10] + struct.pack('!H', chksum) + hdr[12:]
+>> +    return hdr
+>> +
+>> +inner = build_ip_hdr(17, '192.168.1.1', '192.168.1.2', 8) + b'\x00' * 8
+>> +gre_hdr = struct.pack('!HH', 0, 0x0800)  # flags=0, proto=IP
+>> +outer = build_ip_hdr(47, '10.0.0.2', '10.0.0.1', len(gre_hdr) + len(inner))
+>> +pkt = outer + gre_hdr + inner
+>> +
+>> +raw_fd = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
+>> +raw_fd.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
+>> +raw_fd.sendto(pkt, ('10.0.0.1', 0))
+>> +raw_fd.close()
+>> +
+>> +try:
+>> +    pkt_fd.recv(2048)
+>> +except socket.timeout:
+>> +    pass
+>> +pkt_fd.close()
+>> +" 2>/dev/null
+>> +
+>> +	# If we get here without a kernel crash/hang, the test passed.
+>> +	# Also check dmesg for signs of the recursion bug.
+>> +	if dmesg | tail -20 | grep -q "BUG: MAX_LOCK_DEPTH\|stack-overflow\|stack overflow"; then
+>> +		check_err 1 "kernel detected recursion in bond_header_parse"
+>> +	fi
+>> +
+>> +	# Cleanup
+>> +	ip link del "$devbond1" 2>/dev/null
+>> +	ip link del "$devbond0" 2>/dev/null
+>> +	ip link del "$devgre" 2>/dev/null
+>> +	ip link del "$devdummy" 2>/dev/null
+>> +
+>> +	log_test "Stacked bond header_parse does not recurse"
+>> +}
+>> +
+>> +require_command python3
+> No need, we have pure python tests
 >
->The only way even parameter descriptions are going to stay correct is if the
->compiler is using the definition and only the comment part is extra.
->For error returns you'll need the documentation to be at the return site.
+>> +tests_run
+>> +
+>> +exit "$EXIT_STATUS"
+Thanks Jakub,
 
-When CONFIG_KAPI_RUNTIME_CHECKS is enabled, the specs are enforced at
-the syscall boundary. The SYSCALL_DEFINEx macro grows a wrapper that
-calls kapi_validate_syscall_params() before the real implementation and
-kapi_validate_syscall_return() after it. Parameter constraints (ranges,
-valid flag masks, alignment) are checked on every syscall entry, and
-return values are validated against the documented success/error ranges
-on every exit.
+All the feedback makes sense, will address them in v2.
 
-If a spec goes stale, it has runtime consequences. A new flag bit added
-without updating the spec's valid_mask means callers using that flag get
-EINVAL, which any test exercising that path catches immediately. An
-implementation returning an undocumented error code triggers a warning
-from the return validation.
+Regarding the Python script, I originally had something simpler like:
 
-The selftest in the series (tools/testing/selftests/kapi/test_kapi.c)
-exercises this with real syscalls, both valid and invalid inputs,
-verifying the validation layer catches violations.
+# AF_PACKET SOCK_DGRAM on non-Ethernet device triggers dev_parse_header()
+timeout 5 tcpdump -c 1 -i "$devbond1" >/dev/null 2>&1 &
+sleep 1
 
--- 
-Thanks,
-Sasha
+# Send a GRE packet so it arrives via gre -> bond0 -> bond1
+python3 -c "
+from scapy.all import *
+send(IP(src='10.0.0.2', dst='10.0.0.1')/GRE()/IP()/UDP(), verbose=0)
+"
+
+But I wasn't sure if scapy is an acceptable dependency for selftests,
+and I also wasn't confident that tcpdump will always use AF_PACKET
+SOCK_DGRAM internally. So I ended up writing the Python script to
+handle both the SOCK_DGRAM listener and packet construction myself.
+
+Is it fine to just inline a few lines like the scapy approach above,
+
+or would you prefer keeping it as a separate script?
+
+
