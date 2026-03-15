@@ -1,65 +1,73 @@
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11020081.outbound.protection.outlook.com [52.101.69.81])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023091.outbound.protection.outlook.com [40.107.162.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBE423817E;
-	Sun, 15 Mar 2026 19:08:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4454335DA4D;
+	Sun, 15 Mar 2026 19:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.91
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773601734; cv=fail; b=OsfhI6ftNG1Qwvyl6D8Y9vo+xVtz+1mtTL3vuoW/7EjFuU11/4OXYnOg7KfCwUL/npux+99FGHwEQqrZtTjfAE4xoWhylSv0UtjS96BdKUYDUVhaqCxLFzowEdJmLcaGv53l47IY0RnIvUgGx+aLUane/z/8IfyQUV0eYloRaGM=
+	t=1773601889; cv=fail; b=Okpmq05zRCO8w4kOPNx2IJccPNMwldQgQSUer7z5Q5x4OaDvR1fLwru2vToyGV0z6PpQsTxTbc/o+Ot2I/5c8eX4s2wtNRPS1XGnZtjY+hGMlGpoFLxmLHuIKeknZGSohpHlBhJltpwzwwVSB/AeJOLqm3NfUtryBhgngazUnY8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773601734; c=relaxed/simple;
-	bh=+aNKPjr4boL0t2HPR+egGrFhRkRAbJ33dZg5hoMiZC8=;
+	s=arc-20240116; t=1773601889; c=relaxed/simple;
+	bh=BFCQHKETg5WWo3i0IiYe1aHSJ/VkHSjdwbIl/XQAtQY=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=al20b2MF9gXFI4tZCidnmct+rJaW8XcgiS5ogFM4lFI17681rMt/2KkIIcxVmX7ABIBbsa+ORZ9w/wNZifUxJPOyyfmn74d3mH6mdeuHUWYxWboKM4oESbc2n8SzRoxmvJ/zg0knLBUXGFBB/6sgNNZHD3En6u+ts0nPfjNU+VM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=yqEWGcic; arc=fail smtp.client-ip=52.101.69.81
+	 Content-Type:MIME-Version; b=h+qaIVokP+9mOEGhtSGI7QT/bCAg5YfcPEJuCS5K8Jwg2v/DS32O8h1xOWOpweAx2GOM7HVGwnZ2UH4lNiyxsDJ7YXSWC5LMDjuUhY+wPKEJRE8XhXqhM3ljIdriD2CcggU2GM94bb6JdaK8SKN01r1X/7rCdjA5xDACEopLR8s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=X/puvnYy; arc=fail smtp.client-ip=40.107.162.91
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="yqEWGcic"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="X/puvnYy"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wxVvLA1FEfTyKmrUn+WZDFQKLrGc89iuxjc6VNqfd/AOZITgRUsr1rq37kh2tUsL0meCvRnM2g7gvMgFvrKB5ebu0U8tITYW3Awq9JcDabH3Sgfv0aBU11Ve32hKJUvj+XCEAHnB+LQjX7redtouDtH4dPE27g/lgO+Yj4qRAYQJHPv3sYkeCn6J6+t8Ze07IOJkFMGpsfRnlE/jS7dm6gpHK7Wk0P8mmDmvo3ZFWnZlAO+K8uXP7zyK9FbAGR/dlVO373vvmrk5jkbD+RgUeeRfpj8L1Ww+VCAqVbzEJqKeGjI89Oo/vXalpHWalcUuHS+trtcMmbDPnBNettcc0A==
+ b=b2IAOmuqeMaahq2GrN0ae27sCHSSyNOTg/0MwxnkwTORj+1rUuGqZ6xMoPpn055caXr3HddV6gOxmTfsMDH46/EocW6Oi7v8UQu8gXrGuinGLxVj+rxp9NJrCeIkM8OOPJl/E9enGFd1F/dmLRT5jzS/ofL0Z10ytBxeSDmsYP2662IOwhsDnld+Tngmy2vnXjwZpN0xcaSdVYpR/n4BgKr86ID/eaFa5Hkkr667zEWjD8IWkmeYgGVexVUFYfzLBBSYPiy3GErxcXmAqtxxENpVehDqRAqAjdNW3QTH9Rh1F2TBeycCfdOGNLrF8ajGWH1uqN+SSNr6hiU3CsUjlg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zJeWjC5LXKR6EhCjSRcCJKV3iRWPBU3/gSF8fZYVsjI=;
- b=XlZ94aZZKsHGL8ey761IzU6sTNL6AULTdRKN1YMcHnoJow2oUm3stDeXuWj9Pu9e3BZ8C76VpQsuAMDoNzFc9aOy+tGRwHKvEstjkKSG6sT8GO2mqY9D/V1RrFeGsV/az9AuiiYYDpIQ+QnywlL7yTG0FQvevACZjeQRvchLSZnVr5mJ4r6riWLJoUpcZqv+PYUp+LsrwtF8EMLo90wxFIV8bAmIcQsr6u0UDmWzajciCATHRLuSwR+Q7W5tVNsqLPaUybry+qByoyRDlvJPSuglRKTktRbQhCcxyfTbbPTvdvvX3gWUBQSkY1Tp8Aqz3OltBxpJ+CIt7NZLwf6lzQ==
+ bh=b97B/eehhfkDzcU1RAj6VnYtAd/LZ7Q5x0tin2iEU1U=;
+ b=ejeM2OHiRD7R5BEHg7CzFYixz9mZbeuEUBu2Yp0oLzVYjQwCVkvHZbtKP2GjJP8v14/K8dNQWEgB74MQB9mpFuxYXEUWCemR7WTLwmwqbCvsHGwUh+cU82cqTrRHVKY5GrYrazzTu8vjz6F5RP+8N1KF564o6hTI1oWC9O/CBb8NgT6/viBmV+hNFvy2mHDYdMMTgcH3FDapcR+7JNWNykyx2odvKUsPeIE/CFAgLVhNSsvCMzsJ4Hq/dAHzMgFj84e1ovbAdfvOoviA7Um4qjMUd/PhrOsrgVxHNlE5IFg1Q0I8Umn70J3/yXtYKMBobX2IvDgeY5otXkI7VOGy3Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
  header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zJeWjC5LXKR6EhCjSRcCJKV3iRWPBU3/gSF8fZYVsjI=;
- b=yqEWGcic7C7oLgmsFglI8PJG5A8AReWWTADrQehNITOH2DLG+xlLDhdluf+BVz23d8/WIFOih7LNXSv3L80/liAlRsa7lhGxsdXb1pWaI6nkARIDb9YslxkkHqVaiD48CaststaOGeoaGnrDNNiZbjaeEb3xA0H9RtAfQrxU16g3qc9RJP8db8MDD+RX+8ZlkC7bCQvOJQmf+536cKZw29gCsf50G23GZonbLwuXKq7l8hqffIga86GLiDZBSY2TKWjGaVhz0dAIEqbDiZJDP/8zoCWxpDdPBb6vUoVyMa+woJSfYyR0f3APDjAAATznAnT1ejBdOp3jnafUlcnIcQ==
+ bh=b97B/eehhfkDzcU1RAj6VnYtAd/LZ7Q5x0tin2iEU1U=;
+ b=X/puvnYyi1EtY/PdHcsjSxEy0Qq5UgIOAzBDwLZYR9pKU0n4dwCrswl99sTab6P1bwcCNi88kxPQ2RmfmGAhayab6popCxrlnWLHTdIgJuWCyj9gVED6T9kT0EKRIp3sKTrPvqcsb0RDvYfX726dfBosh8SGTdDIId4njO7mv++EtQzL9F93iuIArtYUlUIYCAR+rh8zsrKxoPr6tw/kQ0yeNTjmnxHWfZdr14U/or4WY5GlEz7d6JSDh+GZ+hg2hMWo6Vi2sBHo9y3x2W8sYFlcZjmPcF8zLl5A5DaqnNuPh/2YeEXo1F/8jKe3zBzQGPxecLugObpK0rdET+C5WA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=virtuozzo.com;
 Received: from AM8PR08MB6355.eurprd08.prod.outlook.com (2603:10a6:20b:363::24)
  by AS2PR08MB9920.eurprd08.prod.outlook.com (2603:10a6:20b:55a::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.18; Sun, 15 Mar
- 2026 19:08:50 +0000
+ 2026 19:11:24 +0000
 Received: from AM8PR08MB6355.eurprd08.prod.outlook.com
  ([fe80::79bf:15ff:6428:dea9]) by AM8PR08MB6355.eurprd08.prod.outlook.com
  ([fe80::79bf:15ff:6428:dea9%4]) with mapi id 15.20.9700.021; Sun, 15 Mar 2026
- 19:08:50 +0000
-Message-ID: <29501b9f-4c69-4687-823d-8df6b13bfb76@virtuozzo.com>
-Date: Sun, 15 Mar 2026 20:08:48 +0100
+ 19:11:24 +0000
+Message-ID: <39daf4da-911d-440e-b175-ec5c2a8425d6@virtuozzo.com>
+Date: Sun, 15 Mar 2026 20:11:23 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: x86: test_shadow_stack: return KSFT_SKIP when
- test is skipped
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, Shuah Khan <shuah@kernel.org>,
- "H . Peter Anvin" <hpa@zytor.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260301014733.454260-1-aleksey.oladko@virtuozzo.com>
+Subject: Re: [PATCH] selftests: do not override CFLAGS set by the build
+ environment
+To: Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
+ Christian Brauner <brauner@kernel.org>, Seth Forshee <sforshee@kernel.org>,
+ Tony Luck <tony.luck@intel.com>, Reinette Chatre
+ <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>,
+ James Morse <james.morse@arm.com>, Babu Moger <babu.moger@amd.com>,
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Abhinav Saxena <xandfury@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+References: <20260306002100.519673-1-aleksey.oladko@virtuozzo.com>
 Content-Language: en-US
 From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-In-Reply-To: <20260301014733.454260-1-aleksey.oladko@virtuozzo.com>
+In-Reply-To: <20260306002100.519673-1-aleksey.oladko@virtuozzo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0077.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1e::16) To AM8PR08MB6355.eurprd08.prod.outlook.com
+X-ClientProxiedBy: FR4P281CA0267.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:e8::15) To AM8PR08MB6355.eurprd08.prod.outlook.com
  (2603:10a6:20b:363::24)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -69,67 +77,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM8PR08MB6355:EE_|AS2PR08MB9920:EE_
-X-MS-Office365-Filtering-Correlation-Id: a62145cb-1800-4fa6-403f-08de82c64aca
+X-MS-Office365-Filtering-Correlation-Id: 5e12ad75-2136-4a81-cb53-08de82c6a6ac
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|22082099003|56012099003|18002099003;
+	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|921020|22082099003|56012099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	vX7y/zq+bP9/TBvXD9WO1H/egk9HzzFCEa2AsP1LkSinsBxULHyj9HRdEIEXONLYr/vZiNkHrc7hsJm/vlFrcNkn7nknlA3dl4yjPgiiD8UxAasCwufAhrlKPIy39X9Lz9ZGaGP+9kW7Q8F7NNrSB39EVhYDvVgwl16b9eAFMhhEbf7CLvf+p3G9NNpmQk4wKfh936YawxuhHeQ5RM0S9pUiCThrtK1kGvKPgyDQgZErfeK3TEEGz2qHQhV9c2nh2B2oqdE+CeGLK9TONIPYsZ2I7QGvLuh7TmlLKlwMJ8sdViaKpIjVi/QAtGvaC49AZ1U5n5+irAtZbiAWHxUB60InaZj7YZTsFenMpoWSwTYXrp6V38JqfLlQrNS+Wz09HpGbq6wyznz0tOTujt30kItlV5+90+Lf8ugbYNiE5h/YN4G0tEaDV64gE1ObX2URDUiO996PZFYQRyLOSNQRmcpsanMMAs+IGkhS5FLBwDR/LEoHgEUxR3U7zYFD9Cc1zKkPsf3764GCW+J+OJf1V9gVDNLCS3P166Iq+XMDExJF/+56HmBhBElX1XusP51A0cga1U1igCbU2rrBwZnD43CryY3MTsV1U6AHKU/LEZ9bucuoh2Ppg2ymeYC3iH5SP8tOUnHpxdvuBDS04aBONBJsOARb0nLaAKjV8fDa1vUS37MyHq2dHDW5kmxySyTYvOzM3CWFvZskyPvcQRaunWyEzoKJrMFqW/01WHHkQLE=
+	3E9eaTnSnEfRQ6cjIVmvwA/oaCk44XHIEQxzXto0B559lgqQ90JdmoL/ky5Xphf0lybg+vzTTBAYXOsAAxc0UHU4IiUvvO1TK69NJHkctWXr6GtnCNxb0aamP/omBItvit52HOTvwAqZL6p3VZPgSVEnQwqm5GHbGSngJpSLN8sYRvgWcFWZkk4Kf/zpYjHlwzQJe3ADm9EkUcCx1GsUB1GB72Vb7bRmSIUF7mDdJOH8v5iNEFsoA9Dyn0jpkNgzT3Rc9WatS2rD971B45P8dFdZTie0xYHDlbDwkj04O5/MYyvacc1n+nXr5xc6fnCovU7Cf29tkgDI9yYiZuM5ELHnBJXZQud3mBn8Z/5wymPNqpErxD7XRoW0DIXSaWQv3nNnHiVPRBIVfYq7jY5oMM8BG46/a3LH6xkhuTOoGf9svjYQGEwlg8TBihVF0OVTDTp5iHEM7VLlRPqNHj7OZ6Oqg1cQfYkyg4AlPkUBqSWZEdL4GuQjejeNQwvYzpaUoxv1+IeZQHJ2GZyn288EHVcGzDAwUlvd6q1lpiYMJ0ih4mxHKPonEouLAPOKFhHi+vJnod021NAJ6W/aHdXuKLloFjEKykS6vqPl6kjmDC2HkJip3kQltZgPpis2+5FLsuAn7cMA6vtxZZPC9gTu9RL2jLVr2u1h2un7LuvpSs2i3JFqq5PGt5EuA/XLOaYV8QqQpnODLIMVgZYmSTASIye3DLqUiAFEmRQ7OOO2CFqPHWT1zVCfv0Qvo5JEpkclQFd1k6Bo5dC5rNOAlA2yDQ==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR08MB6355.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR08MB6355.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(921020)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bk90QmdrelVkYUc1NndSaytwVEZaeGlsVTVrb2NlY2NGTEZlVmMveGYwNDVD?=
- =?utf-8?B?MjZlUTdGM2RnNVBrbGZJRmc2YklZcUg0THVMYkoyZ3V6SFdEQmpJSjV4Y0tu?=
- =?utf-8?B?WVByN1EvT3JYUk5uYVowL2NFZ2dCekRNWUFCT1ExcmdCemVkU0dCZjBNelFi?=
- =?utf-8?B?eUlwaUNESjMzU2ZHWjg2NU0wVHo3L2t4T1A1b1NYZ280ZFAreTVFSGJWUWQr?=
- =?utf-8?B?dHZXYWdUQ25CSGMrMGdBWDZJakg4cmlTb3NTUGpmQ0Y1cHhtSzkybjNxZDJR?=
- =?utf-8?B?bDJlNWdXdDU0K1lablVteE42MzBOTWVTaG1MTEdMcFZiclFsSnlKZEY0VnlM?=
- =?utf-8?B?REN1OEtYai9NelFBSzJ2ei94VGxyd001UDVkYnZmYWRYaURUWHo3cnZ2NlYv?=
- =?utf-8?B?L1hLc01qWXZGcWdkYXNma0diZVBXTG5ZSjdBc3FVdnYwOGJyZlE4M1ovSnFv?=
- =?utf-8?B?KzM1K0VFVWxFbEFTVW53dWdvMU1hbzNCQnl5aWtCTEFQRzNEK1JqZmgweldD?=
- =?utf-8?B?eis0b1FYT0xCVGV0aUY2TTJsaFdqVUwyYWVhQlEwazhiRFlIRm4xWGhDcnE1?=
- =?utf-8?B?VXpYZEpGSjB6NXNBa3ZGNHpkaDBUYkV1L0R0RnJmaXptU0x6a3NRUzdvMzJT?=
- =?utf-8?B?SDFvYUo4ZGFWSHlJRGV0MFRMdlVTTGQ0V08rNWQ3MzZKQ254c0RoV1pJSHRZ?=
- =?utf-8?B?MHJiKzlNZTNockhUSVFYbDRPejVBNkVZRkwyd0xnSHZEbW5MdzBUZ1d5TzRh?=
- =?utf-8?B?L0NObnA2UFQwRDNNVkZGa1JNaTRwSjlRQStQS0pMQ01tWmRESmNscHYvZ09h?=
- =?utf-8?B?c1NoVEVDTXIzZDRiOXV0NVlMcDV0dFFuOVYwWktkUXVHZFMrcVlLcmRJR3hG?=
- =?utf-8?B?OWI0akg0OXBHTXhjUDV1MDNPZUR4STlZeUZTeGpibmxBa1lUTmsrYWM0Z1dQ?=
- =?utf-8?B?UHM0eEZMUFZpaFdOWlNQV1NjREdBeThhMldCWWptSjlxczBheUZnQ1NiUklS?=
- =?utf-8?B?UUlWWDFCMk94UnlLQmg0TUlTUHhHUEpVUWhHSzYwQW51SEJLTnBZN3VvaVlH?=
- =?utf-8?B?U0RvTm1HWG9VN2d6ZVVXY1I1UGJMUlF6Y24xUk1Ld05FTTM4aXFSVmQwRGpL?=
- =?utf-8?B?Q0x0YU55aFB1cU1WMytxdEx3ZHFOeVVXR2ovcW8rWEVYb0RSS0JlNnEvdXRW?=
- =?utf-8?B?Z3g4NmJQQ09xeHNsU3lzYzExQzIwQTFxb3lvaFh6TldKZmlmc05oWi8xMGh0?=
- =?utf-8?B?MWU3R2E2aUsxM0pIYkhmMGlOUVR3Uk8vbFdBNFVjZjJIZHk5L0lrL0tUUDV4?=
- =?utf-8?B?eUpqQURuaDllMkhLVWF6b3BJM2dSb250Z2Q4WUcwOUx6bGIxTFJvamtxeW5j?=
- =?utf-8?B?MXNmQTFMQUNIaFZ2RjVyc01kaHhKTkxNaThYYmsySHpodSs3THpEOVgzREw2?=
- =?utf-8?B?WXRUTHJoSUFpNTZheVR0dnh0aDE3SU5zcTE1d05pNjFnOFRTTzVWcGp5WDRv?=
- =?utf-8?B?TU93TTJSeDhrcDBNZzhSQUFHQUhxaTRQbUIrYjRQK2xTY3hxWTRZNms3dnpU?=
- =?utf-8?B?dEg0UDVaR1V2Z0c3WFVNSVdRelpLZ1RVYzVZbis2MHVFMktvdGN6cXNSRlpi?=
- =?utf-8?B?YmUvcmhaWGxIL0diVis4c3d3ajZ1VFYxNXUyaHQwRERmenlOUXAzZVhHbEtH?=
- =?utf-8?B?Q3FtMktaQ1hFL09XWU50bjE1MmlVUjRPYXZXa2lGK0JPVlJvTFlvdHdoWnp3?=
- =?utf-8?B?by9vOTVPZ2NxQzBHNWhROEtoOXdTVEhpb1JycjBLTFZ0bFZWSFZpVXBMM1Jq?=
- =?utf-8?B?Uk13OGJVME9kaThjQjZpaDg1NUMzTi9EdUFoNmE0bzJrRURZU0g4MUgwcklU?=
- =?utf-8?B?blBTdnBLNVgrNzBLdTlmWXlHWnRQNGY0Tjd1dnNrN0M5eUtGZ3FtR2FrVitX?=
- =?utf-8?B?Wi9PUVpRTS9YdGN6Vk1CSDNUZTNIYk9qaFY0Y0pRM2ppaFF0ZW1OdmNNRDFu?=
- =?utf-8?B?dlNpZFBIblZzdHlvRkdUdWkvM0htUEh1V2xDMHU3RXJ5cFpGQU1Nd0VGUWEr?=
- =?utf-8?B?THVCZVJ3M2tnQ2wvcDNJUWZTTmtJSXlPaENxV001MExMNGUzYjBDbXlxM21X?=
- =?utf-8?B?WnZneVpaRW5yRVUyWmxmQkVKdmVSY3pVYXJoSEpZOS9UZ3RnSVA2RlJ1SUlF?=
- =?utf-8?B?QXhoR1pwZXd4eENaVTJLQ3AvM2paM2NSaEMwZi9ySk5sbFdYVEJENElUM0d1?=
- =?utf-8?B?cGRtb3VSSXdmMUYwMDhvM0htZmd4aER5dzM1cXRlZDJxQVc1NWJwU0hpa2ZS?=
- =?utf-8?B?ZXQrSjlxVDU0a2FSM25VaUx2Qy9acTBySUw1TElFUmQ4a09SZEVoc1BBOWNj?=
- =?utf-8?Q?bOYqmjL+eeOU1GZY=3D?=
+	=?utf-8?B?MTkxQ0cwYWxCdndCaGdKUytHNWhYSm1VNVNsekVXZ3ZnbHdSWit1STVRRTlZ?=
+ =?utf-8?B?RlVSRTdxb05lckRMcy8vclZFenc1RTcvRW8wV1pvNWovNDJEeTBDWXF5OVl3?=
+ =?utf-8?B?eTBBeml1RDdvZEpESE1jUWpFdUxTK3BpcWZjUHB6NHcrUDd5UEVvTjFKbjZ6?=
+ =?utf-8?B?eGhFbUtkSWxoR2pGVzBnMHFhNzNmNDUrbW0vaG9nYXY0YXFjekVxZlBodkhp?=
+ =?utf-8?B?V3h5bmpyWFRId2xZSG05dGo5cnQxc2ZEUDRBWFVLRFJXaHVyYWowRnI1bGRl?=
+ =?utf-8?B?aFJobno5eVB4cEFyblA1S0hHRWpNQ0QwUHR0cWMzR0VNemoyYWFodSttQjNK?=
+ =?utf-8?B?TnpjSk5WVGRDc1MvNWlDMkV4QTBLTjJ1and3ekNTQ3QxbUhLRmJvSkE2eHBs?=
+ =?utf-8?B?SjQycUFvVkwyMDNaUStWRmdEenBvek54dVVpU3FJQTlkSjdEcUVKK2FQbDd3?=
+ =?utf-8?B?a1BLdGcra3RMbXNoR2Q1bUY5eHpFa0FyNm9jOW5OOTh2Q0RBYnE4a2YvWHll?=
+ =?utf-8?B?MVlzTGxmdjQzR2tpa3QyLzBuS3MrU1dwZWRpZlpCdGFYdEVPbmlqeWxJUUZa?=
+ =?utf-8?B?RlZCVXBncXVCbWZ0VTZGL0JYY3l2OGtGK0FGdmlkOHdrSVYwWTVJY05Fc3Jn?=
+ =?utf-8?B?a2k5L3FBc2VNeTJ0QTNOcExydUVlcVZWNERybXdKcUF1KzJGL1oweWpSemhs?=
+ =?utf-8?B?aG1WOGVGWHdCcDVLbWltM25kbnJZa0NPSDlnOUI5ZTBDQlhEcjRzT2JCV3d6?=
+ =?utf-8?B?WHVQWmdiSXcyVVFmOFp2ZitXcE5QVmFuUjRxWmtwL3BNSXRCSTZMYmlsMmtG?=
+ =?utf-8?B?S3lrVjBrYkpWZGZmenR0RzdVZk9UcGlIUjFuVHowVTA4N2NjbmRtUVY3R0xB?=
+ =?utf-8?B?TEMxM2VXYXVxNE9UQjNyeEhXS0d6VFZCLzhGWW1NMzh2VlNJVGpJOVo4YXN3?=
+ =?utf-8?B?Ylp3QkhSUWE4c09FQVpvaTlzcGRrdzFDV242Qk5icXZNand2a1dHZlhsVkhY?=
+ =?utf-8?B?Njc1a0dieGJIeW5GeWhhTlRpd3dIM1Z5SEV6ZTNMazFESWJkcDEvVm1ZNGxz?=
+ =?utf-8?B?OE8zVGoySkU1RGNhdmhDZ2dCY0Z1NGNRSlRhVkR4RURjUDNDcGNVUTU2R2lj?=
+ =?utf-8?B?c1VPSis2clptUmxDaE45MjdpcXRuRnBXdFltOXdJcVRBeEkzYWFsUklPc0Nk?=
+ =?utf-8?B?amV3UGtDNUJZUzZJNWxlb2M0V3dsUklxYVE0MTdkZmxTYjJpaEdKOXdNZVB1?=
+ =?utf-8?B?Tml0aHBvVVN5a3Q0NEZ5ZVNzSVcwMGM5c1hsMllvMng5dXdudVVGWUlaYU42?=
+ =?utf-8?B?bit1REk5Zlc1STdYZGtiTmpVVUtjR09pNEJvR0FhQ2tOK0F2Q3dXU0hiUnN4?=
+ =?utf-8?B?Vm1pRWFiTmJyZEYzdzdqV3ozNElmMmxNTlBSVG9waWU1YUtpa09TUVVJSmJH?=
+ =?utf-8?B?TDdGZGh0OVBpbXVnbGtpemNZYTY4MSs0Z09OSGpCdVZMU1EyNER2YzdlZnVq?=
+ =?utf-8?B?NkpSc0ttU21YUytlTnpsdDRiMkVkcFBUazNoRGhVVzc3emExMytKZkdzblhi?=
+ =?utf-8?B?NGNWaW8ybGpKZnltMU1XOFlpdXRsZmt3UE9EdDBVS3JSUGVjK3RNaXA3Umtu?=
+ =?utf-8?B?ZDZvTjZSOXJBNjErcGZqUGdkUmdmckJGa1oxQVJWYXNhMW9seEFjcWR3dUF3?=
+ =?utf-8?B?OUN0MG41NWVuTHlkWDFxRko0cmptdTM0KzFXcTZBKzk3WEVzMncvTThDSE1h?=
+ =?utf-8?B?Tzk3NThVMjhuVmFkVnZzb2EwZmd5cFdQdzhNVXZjN0h5VDBDTi80cHh6cURF?=
+ =?utf-8?B?c0RkMzJic0pFZ2lvZENaTmgyU2g0ZWlLNlR6SDlYWVh6THU4ZGVxK1ZFTEFT?=
+ =?utf-8?B?QzJUWkh0Wit6d09haHhlTFhrcno5K2VLWXd4dSszUXpDTm1DQ2FlUzk0SFBn?=
+ =?utf-8?B?enZyTU1CWTNLdFVLMk5KWHNwNnIvcjhVTitCRWFJTXRBd2g4OWdRcTZKOUF5?=
+ =?utf-8?B?eE1sMGIxb3Vwdnc2ZWI3c2k0ZnMyZWRKa2JBZENiakQycy83Lzk3TlZmdVA1?=
+ =?utf-8?B?OXUramU2cHNRZjZJZmJ2UzVvb2dEN3k5K2w1RWZaNEE1WUhsWFBURllLblhx?=
+ =?utf-8?B?TGd0U0Z3MW0vNWdLeDkxclRzMldPN3IwbE5VbnZNdDdkL3JVS1labWc4bVo4?=
+ =?utf-8?B?bVdMb1d1UXlFV2gvWlFPS0RpbnFKbkhkbmdYSUxoNlZHK0lxMldVS3NNbUNS?=
+ =?utf-8?B?TzI3TkkzMzBKMTBQaUFhV3NKd3BkYjlFZk56eXZNUXpHVG5SRnM0RXkxdnJ4?=
+ =?utf-8?B?cXVtVS90ZWpIdy9PY2JLNWhiaTQyMXoxOU00QzJLV1pwYk8rYjdaajNxcEN2?=
+ =?utf-8?Q?OCIKZDH4IJjusAts=3D?=
 X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a62145cb-1800-4fa6-403f-08de82c64aca
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e12ad75-2136-4a81-cb53-08de82c6a6ac
 X-MS-Exchange-CrossTenant-AuthSource: AM8PR08MB6355.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2026 19:08:50.4340
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2026 19:11:24.5657
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6PTB/SukfCPRTTAckDE/yQtwaafVy8CuQr+rjGDaC41GFA9IP6Cn1CaGAIaVbgCbyfTBrK3BTsncybIrJOX8F0oURqJbJlD/69cUKcpehOA=
+X-MS-Exchange-CrossTenant-UserPrincipalName: cM1hmeJCnM+AnvYmnE3cnAHYbKlD2Ij2NsAE7lOivkoRsBDB09d7YtiVg6/koJHVK/T56WGuJ5936go/KGsQcXm/IKEpkOtmwO8+k3U+4og=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9920
 
 Hi,
@@ -140,52 +148,209 @@ improve.
 
 Thanks!
 
-On 3/1/26 2:47 AM, Aleksei Oladko wrote:
-> test_shadow_stack prints a message indicating that the test is
-> skipped in some cases, but still returns 1. This causes the test
-> to be reported as failed instead of skipped.
+On 3/6/26 1:21 AM, Aleksei Oladko wrote:
+> Some kselftests Makefiles assign CFLAGS using 'CFLAGS=...'
+> which overrides any CFLAGS provided by the build environment.
 >
-> Return KSFT_SKIP in the skip path so the result is reported
-> correctly.
+> If the environment set flags, overriding CFLAGS may result in
+> inconsistent compiler and linker options and cause build failures,
+> for example when building PIE binaries:
+>
+>    # export CFLAGS="-fPIE"
+>    # export LDFLAGS="-pie"
+>    # make -C tools/testing/selftests/ TARGETS=mount_setattr
+>    make: Entering directory '/build/kernel/tools/testing/selftests'
+>    make[1]: Entering directory '/build/kernel/tools/testing/selftests/mount_setattr'
+>      CC       mount_setattr_test
+>    /usr/bin/ld: warning: -z pack-relative-relocs ignored
+>    /usr/bin/ld: /tmp/ccikConN.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIE
+>    collect2: error: ld returned 1 exit status
+>    make[1]: *** [../lib.mk:222: /build/kernel/tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
+>
+> Fix this by appending to CFLAGS using 'CFLAGS+=' instead of
+> overriding them.
+>
+> The fix is not applied to the Makefiles in x86, riscv, mm, arm64
+> and powerpc as they fully define their flags.
 >
 > Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
 > ---
->   tools/testing/selftests/x86/test_shadow_stack.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
+>   tools/testing/selftests/efivarfs/Makefile             | 2 +-
+>   tools/testing/selftests/exec/Makefile                 | 2 +-
+>   tools/testing/selftests/firmware/Makefile             | 4 ++--
+>   tools/testing/selftests/ipc/Makefile                  | 4 ++--
+>   tools/testing/selftests/mount/Makefile                | 4 ++--
+>   tools/testing/selftests/mount_setattr/Makefile        | 2 +-
+>   tools/testing/selftests/move_mount_set_group/Makefile | 2 +-
+>   tools/testing/selftests/resctrl/Makefile              | 2 +-
+>   tools/testing/selftests/safesetid/Makefile            | 2 +-
+>   tools/testing/selftests/signal/Makefile               | 2 +-
+>   tools/testing/selftests/timens/Makefile               | 2 +-
+>   tools/testing/selftests/tty/Makefile                  | 2 +-
+>   tools/testing/selftests/vDSO/Makefile                 | 2 +-
+>   13 files changed, 16 insertions(+), 16 deletions(-)
 >
-> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-> index 21af54d5f4ea..1747ea4cb725 100644
-> --- a/tools/testing/selftests/x86/test_shadow_stack.c
-> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
-> @@ -35,6 +35,7 @@
->   #include <sys/signal.h>
->   #include <linux/elf.h>
->   #include <linux/perf_event.h>
-> +#include "kselftest.h"
+> diff --git a/tools/testing/selftests/efivarfs/Makefile b/tools/testing/selftests/efivarfs/Makefile
+> index e3181338ba5e..f6c412059af3 100644
+> --- a/tools/testing/selftests/efivarfs/Makefile
+> +++ b/tools/testing/selftests/efivarfs/Makefile
+> @@ -1,5 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+> -CFLAGS = -Wall
+> +CFLAGS += -Wall
 >   
->   /*
->    * Define the ABI defines if needed, so people can run the tests
-> @@ -981,7 +982,7 @@ int main(int argc, char *argv[])
+>   TEST_GEN_FILES := open-unlink create-read
+>   TEST_PROGS := efivarfs.sh
+> diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+> index 45a3cfc435cf..54cdefb9ccb0 100644
+> --- a/tools/testing/selftests/exec/Makefile
+> +++ b/tools/testing/selftests/exec/Makefile
+> @@ -1,5 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0
+> -CFLAGS = -Wall
+> +CFLAGS += -Wall
+>   CFLAGS += -Wno-nonnull
+>   CFLAGS += $(KHDR_INCLUDES)
 >   
->   	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
->   		printf("[SKIP]\tCould not enable Shadow stack\n");
-> -		return 1;
-> +		return KSFT_SKIP;
->   	}
+> diff --git a/tools/testing/selftests/firmware/Makefile b/tools/testing/selftests/firmware/Makefile
+> index 7992969deaa2..dd9acf972cf5 100644
+> --- a/tools/testing/selftests/firmware/Makefile
+> +++ b/tools/testing/selftests/firmware/Makefile
+> @@ -1,7 +1,7 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   # Makefile for firmware loading selftests
+> -CFLAGS = -Wall \
+> -         -O2
+> +CFLAGS += -Wall \
+> +          -O2
 >   
->   	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
-> @@ -991,12 +992,12 @@ int main(int argc, char *argv[])
+>   TEST_PROGS := fw_run_tests.sh
+>   TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_upload.sh fw_lib.sh
+> diff --git a/tools/testing/selftests/ipc/Makefile b/tools/testing/selftests/ipc/Makefile
+> index 50e9c299fc4a..5a5577767a35 100644
+> --- a/tools/testing/selftests/ipc/Makefile
+> +++ b/tools/testing/selftests/ipc/Makefile
+> @@ -3,11 +3,11 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
+>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/i386/)
+>   ifeq ($(ARCH),i386)
+>           ARCH := x86
+> -	CFLAGS := -DCONFIG_X86_32 -D__i386__
+> +	CFLAGS += -DCONFIG_X86_32 -D__i386__
+>   endif
+>   ifeq ($(ARCH),x86_64)
+>   	ARCH := x86
+> -	CFLAGS := -DCONFIG_X86_64 -D__x86_64__
+> +	CFLAGS += -DCONFIG_X86_64 -D__x86_64__
+>   endif
 >   
->   	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
->   		printf("[SKIP]\tCould not re-enable Shadow stack\n");
-> -		return 1;
-> +		return KSFT_SKIP;
->   	}
+>   CFLAGS += $(KHDR_INCLUDES)
+> diff --git a/tools/testing/selftests/mount/Makefile b/tools/testing/selftests/mount/Makefile
+> index 2d9454841644..38361a896363 100644
+> --- a/tools/testing/selftests/mount/Makefile
+> +++ b/tools/testing/selftests/mount/Makefile
+> @@ -1,7 +1,7 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   # Makefile for mount selftests.
+> -CFLAGS = -Wall \
+> -         -O2
+> +CFLAGS += -Wall \
+> +          -O2
 >   
->   	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
->   		printf("[SKIP]\tCould not enable WRSS\n");
-> -		ret = 1;
-> +		ret = KSFT_SKIP;
->   		goto out;
->   	}
+>   TEST_PROGS := run_unprivileged_remount.sh run_nosymfollow.sh
+>   TEST_GEN_FILES := unprivileged-remount-test nosymfollow-test
+> diff --git a/tools/testing/selftests/mount_setattr/Makefile b/tools/testing/selftests/mount_setattr/Makefile
+> index 4d4f810cdf2c..fbdb8f69b548 100644
+> --- a/tools/testing/selftests/mount_setattr/Makefile
+> +++ b/tools/testing/selftests/mount_setattr/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   # Makefile for mount selftests.
+> -CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2 -pthread
+> +CFLAGS += -g $(KHDR_INCLUDES) -Wall -O2 -pthread
 >   
+>   LOCAL_HDRS += ../filesystems/wrappers.h
+>   
+> diff --git a/tools/testing/selftests/move_mount_set_group/Makefile b/tools/testing/selftests/move_mount_set_group/Makefile
+> index 94235846b6f9..8771a5491ea3 100644
+> --- a/tools/testing/selftests/move_mount_set_group/Makefile
+> +++ b/tools/testing/selftests/move_mount_set_group/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   # Makefile for mount selftests.
+> -CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2
+> +CFLAGS += -g $(KHDR_INCLUDES) -Wall -O2
+>   
+>   TEST_GEN_FILES += move_mount_set_group_test
+>   
+> diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
+> index 984534cfbf1b..1d566a91faa7 100644
+> --- a/tools/testing/selftests/resctrl/Makefile
+> +++ b/tools/testing/selftests/resctrl/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+> -CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
+> +CFLAGS += -g -Wall -O2 -D_FORTIFY_SOURCE=2
+>   CFLAGS += $(KHDR_INCLUDES)
+>   
+>   TEST_GEN_PROGS := resctrl_tests
+> diff --git a/tools/testing/selftests/safesetid/Makefile b/tools/testing/selftests/safesetid/Makefile
+> index e815bbf2d0f4..d3811515d8e3 100644
+> --- a/tools/testing/selftests/safesetid/Makefile
+> +++ b/tools/testing/selftests/safesetid/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   # Makefile for SafeSetID selftest.
+> -CFLAGS = -Wall -O2
+> +CFLAGS += -Wall -O2
+>   LDLIBS = -lcap
+>   
+>   TEST_PROGS := safesetid-test.sh
+> diff --git a/tools/testing/selftests/signal/Makefile b/tools/testing/selftests/signal/Makefile
+> index e0bf7058d19c..6c437f95132d 100644
+> --- a/tools/testing/selftests/signal/Makefile
+> +++ b/tools/testing/selftests/signal/Makefile
+> @@ -1,5 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+> -CFLAGS = -Wall
+> +CFLAGS += -Wall
+>   TEST_GEN_PROGS = mangle_uc_sigmask
+>   TEST_GEN_PROGS += sas
+>   
+> diff --git a/tools/testing/selftests/timens/Makefile b/tools/testing/selftests/timens/Makefile
+> index f0d51d4d2c87..357077792395 100644
+> --- a/tools/testing/selftests/timens/Makefile
+> +++ b/tools/testing/selftests/timens/Makefile
+> @@ -1,7 +1,7 @@
+>   TEST_GEN_PROGS := timens timerfd timer clock_nanosleep procfs exec futex vfork_exec
+>   TEST_GEN_PROGS_EXTENDED := gettime_perf
+>   
+> -CFLAGS := -Wall -Werror -pthread
+> +CFLAGS += -Wall -Werror -pthread
+>   LDLIBS := -lrt -ldl
+>   
+>   include ../lib.mk
+> diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
+> index 7f6fbe5a0cd5..e9c22dafe5e1 100644
+> --- a/tools/testing/selftests/tty/Makefile
+> +++ b/tools/testing/selftests/tty/Makefile
+> @@ -1,5 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0
+> -CFLAGS = -O2 -Wall
+> +CFLAGS += -O2 -Wall
+>   TEST_GEN_PROGS := tty_tstamp_update tty_tiocsti_test
+>   LDLIBS += -lcap
+>   
+> diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+> index e361aca22a74..1f4628ceb975 100644
+> --- a/tools/testing/selftests/vDSO/Makefile
+> +++ b/tools/testing/selftests/vDSO/Makefile
+> @@ -11,7 +11,7 @@ TEST_GEN_PROGS += vdso_test_correctness
+>   TEST_GEN_PROGS += vdso_test_getrandom
+>   TEST_GEN_PROGS += vdso_test_chacha
+>   
+> -CFLAGS := -std=gnu99 -O2 -Wall -Wstrict-prototypes
+> +CFLAGS += -std=gnu99 -O2 -Wall -Wstrict-prototypes
+>   
+>   ifeq ($(CONFIG_X86_32),y)
+>   LDLIBS += -lgcc_s
