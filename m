@@ -1,124 +1,266 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC0C37C90F
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 21:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773609819; cv=pass; b=XvKoZPAf/7T1F/xps6w4rKM1f7jCKBwrvxIUMsOZE3aXiMkXazbH/abKrwidMapV2J0JjbMVDdbn6RrjTUe3RG53+Fb6KHsSb+Xo0u2Eq5e/CWWNQ7K653MbygMd7EOcrLNTimRCSOuT496BVC0EooT00XS6sXfT0JB07jdrEjI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773609819; c=relaxed/simple;
-	bh=PP2J4eDkV4dT2Pk3acy4PoFiAE07CbC3k3o5xlkGmyY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JUuDtXK5strh8grhSJXpi/YbzSPzc2ACh7POGwYfzp/mNg77lTtKUnZbOlC4sQ17cFO5WQGzCb84+LFs5Uf4E4XhhnYnA4iPyS6F1YvqVJxU/+X5Qxkh/69QZ/LVZhqztYzd5MgINMdOq4/ijjG0FFlheLkZH2WszjCL+xFWhxw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HT8hY7ud; arc=pass smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E24C244660;
+	Sun, 15 Mar 2026 23:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773619165; cv=none; b=GZCBu4tUp6l26ToIGAmT3CXyrhPhr2PtwNS3KrP/ckHGHN6mKyP0VaMRnsQreDgVCX7lWfJ+XvQuLLPm9/m+EUv/F4kaff32TX9WNdce/Lmobth7nqWmuMpJkKvzBZPRr6u+D5XhwX0cUjlsHX42/BQh0nNgeUQNuK/y+joiiIU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773619165; c=relaxed/simple;
+	bh=js3XDkkdfnkRx4wSmzZ7xEmH1dOAHxlOXB3KzszNhTQ=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=m3ufTQ59IeqHMZGi75rw3KNPbG4qPYhcZjWx7JhEfscTaNKBtbhohCV6C4S3fnYjojI/9HLffOh/Xgn+UsqV2ExhiEnSX/QJT7YoEIebnniXeBdtmSlnHtqhuUM0CRJdJKjTNwMNxWMwkBIXZWEwwPe9TIaxXCdtbNfIFH9owKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=iRYqmNW1; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HT8hY7ud"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2be9ffbcf9aso152870eec.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 14:23:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773609816; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RdlSdCi855s/b7J7iXZvPWO1txjfQnf8Kcu8debkfmiwyUJJVrrrkqXCS5vI8SmrJK
-         UR7cHGk0Ts84AqHX0lmgFCqZZDRx3kSPDXfLryQOtlYawpEgZK1shcbejV1SaMfW2Lts
-         AlYI91OociFxiL87ZKIUMXXYLtvziWYq8zoj9MuFgHMDeauXRRbsnXpy59dTJDCusfWG
-         xOVgm8cZIFigcJKmYphLw42kawarR7ZMvimr/SBgABUa23MceL98HqpQNXcCbPYwHSer
-         +e3VwKnJYJuRV6LrBHNbNVE9YeyIvZ72zuQ+ZEzg8sWInrQvfvtIvGiEj8r3ruM8+ciA
-         L98A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=IkQe1o5B6paHiUn+z4l+GM/Kq0EzHLVr9WcX/nooLFw=;
-        fh=XLNJUOKbMGhbFLtC3u7cBy2u6B3Qa4dl6c9Ken5OEK0=;
-        b=k3ZTBBGGy1X/16E3eHmXhWln4GwNwp/KMPg71dW19iZzx+ByKVGaxDKxckutsZDMdy
-         dM684g2rBKCVV81AWojg6FLBtUZPcKk2WtiWRLp7YKc67yhRgOkx4D9zr6fWLuvDz4p4
-         5KSTZDkpfOij2Jxb3sk0YC7TQ/bEBFPtfI5+Xa/Dzhr2/cxfYcL+hq6I3yrs3100pUFr
-         apmG6uVINhxTA87x5QigtLTbujswKZS0pYRDh9Xj6pN0BQVAaxOKIQllEKQOvLs7lbir
-         QVfFMZTjc0bYEO1Q8/YSHQnSLjGw4AOu7L1b+Vt5xW3Oty9AYyQewHvZEgRjLj6n7Fao
-         AADg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773609816; x=1774214616; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IkQe1o5B6paHiUn+z4l+GM/Kq0EzHLVr9WcX/nooLFw=;
-        b=HT8hY7udMPkogRrUh/oYbrvszNT3VMQ+d24BceY9urykM4mH73VhC9wEEtgPslgtLK
-         PDtlW5/oGt7kJJzfMDn7enddERZfE9dtjqUHe3JRiLgelkK3kZY7SsWMdXjKkfoYvFTL
-         mE5x7cfad8vifw54TAGmzS5iEbvAwtQ2rF6mNSeCGm33x66DMIRUbOW0SJgdfIZvNxAT
-         lnj92w7pU3ZqxZU5s7F67ggFrmA4UIogf/cG8lhwNHkjum//GzC1tHbjmY1RhLleMeHi
-         RccTbVnioBTZMQ8uomWRVwIE+4iTpZuv7uzv7F1zSkEE/JaIMhXNP7hu3mCbQwh9y8wB
-         n0lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773609816; x=1774214616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=IkQe1o5B6paHiUn+z4l+GM/Kq0EzHLVr9WcX/nooLFw=;
-        b=jNEpqLPKsRaG4t69VkI5OulasYSUwksXUCTLOI4AMCZpZZb9aaPxbcIO+dXaQd/aiu
-         3Lc9jCiEHLi8vubX3JzzxHIcDFCxL0ITfveN1Q97B+Kt7fHf30udYXSVPQfg/vq8zMJP
-         GV2sIrhaCyr1jVdBwkYviZ2D89YdQzP6mR+Nx6/dPoJEPf+D9+Qhz/KbEEahtJwnajOD
-         x/sma0VZRdK90DXbb6gzCulP1Vhc3958AgUejmKOdkMKiNS5fzrsHA8p1TT5W4NtsddR
-         1KhH4c5EdnBjo9pCYmf0Bv+tAeMB9W3LGtGLe17l62lgzNA/iU+ApzA3pLD108kzCLX4
-         QMhw==
-X-Forwarded-Encrypted: i=1; AJvYcCXfjHgf1NiSCkTuwrcRsJpVxiRhht4JDGdt01ZfPPgExz9tCNxVIgyV5HYc9K01lJi7HMmhHQ6uwGv1q6dD6j0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnKDVStslbtvaQbJA0rqbs9nl3SYjEQdDYgnekmJYiac/b1C6n
-	Zn6iYZzmznZCkv76PGJ+HppUAHBzAcKp2oHrc+E8xA1i7qaMmt0gKFl2o8l5Ox2inm6WQpCFiET
-	eTReLLp9hrWQumk7ZW7fKUB12UsXm0RU=
-X-Gm-Gg: ATEYQzxS1/Y99mTm61tZWcYF6AgegKMdu/4JNDyWiRhDclg6NQzTgRk+UjxCXjM7LBO
-	WNpiq5vch+wG8lbO4W59QwcU9euJC7KkBgThJdKtfJmZ+x8EQzxpEyoOt81wpdccfu8Hr/i3hSk
-	i70CXY1EbvCF+5sQ3SHHKr9fMIKozSEA4sQjjJJ9QEWXwW5+nOjQDw2xL6wAg1hy5Y/sK5DE/DX
-	XR1JK9IJXUYna7oprUdsp0LXBDa1b91rF3OQvWTDy7V/cNF2OyUdtSlDn7lYT7YpTPla0pQV6dh
-	AaQaekkH9/QF4Ad19BJbxAtuTE1PZ4bunIzKooSPv+sWtzOVGCRrPANxPEfnJpy8H8e4PYOna1B
-	XDpiMp4+YZDbFfu8PBSA1fNI=
-X-Received: by 2002:a05:7300:8ca9:b0:2bd:db75:c28b with SMTP id
- 5a478bee46e88-2bea56065damr2711462eec.7.1773609815900; Sun, 15 Mar 2026
- 14:23:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="iRYqmNW1"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1w1vME-009wKc-Pn; Mon, 16 Mar 2026 00:58:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+	bh=O4gI/Phh6+FM3wWv9TWPeK+mlSeNx1LmLzz7uoHfQJo=; b=iRYqmNW1Y5AkwkvFKl9gqFnULk
+	/Pr+0ia5kTk/zpLgPnvl3Qnw01X8P0XZgAt2b1BsjgCFVlbj/alaZdiOC1o/C5xXlZEW8oZxPNwsy
+	9Grbo8IFx/dwgFuqGTZDr/7Q3chST6omGt5Wf9BIb04yTki3DV6rsJXCUN3PByCqf/p+vrXhsNg70
+	rPavJoyal53jsfJ1jPQC+OiYNXChhajTyEa362Mg5kpp2kUiSm5LKCFWJbNVIUCnXGjcZ2YH8KySW
+	JX2MwcOMJjSXHxKlmDNo3bYDhCCWdorEbytwMkEGWr32/WllEHuByalY+OwVMvibbo8dO9xdOf7qO
+	FfgWoltg==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1w1vMD-000526-65; Mon, 16 Mar 2026 00:58:53 +0100
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1w1vLy-006y27-QR; Mon, 16 Mar 2026 00:58:38 +0100
+Message-ID: <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
+Date: Mon, 16 Mar 2026 00:58:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260309-cstr-rename-macro-v2-1-25f7de75944e@kernel.org>
-In-Reply-To: <20260309-cstr-rename-macro-v2-1-25f7de75944e@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 15 Mar 2026 22:23:22 +0100
-X-Gm-Features: AaiRm53Z5esmB8NqhpEo3Ukkf4yvUe-1ALiBGT0hKmtMX4C3iH5_QYhJU6S78z0
-Message-ID: <CANiq72=1koL5z-5WzyPfFX4otxgSL_oKGVt8ju7iShki0LwJhg@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: update `kernel::c_str!` documentation
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Breno Leitao <leitao@debian.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Waiman Long <longman@redhat.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
+To: Martin KaFai Lau <martin.lau@linux.dev>, Jiayuan Chen <mrpre@163.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
+ <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
+ <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+ <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 9, 2026 at 6:02=E2=80=AFPM Tamir Duberstein <tamird@kernel.org>=
- wrote:
->
-> Now that all literals are C-Strings, update the documentation to explain
-> that use of this macro should be limited to non-literal strings.
->
-> Link: https://github.com/Rust-for-Linux/linux/issues/1075
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
+On 3/10/26 23:20, Martin KaFai Lau wrote:
+> On 3/6/26 6:09 AM, Michal Luczaj wrote:
+>> On 3/6/26 06:01, Jiayuan Chen wrote:
+>>>
+>>> On 3/6/26 7:30 AM, Michal Luczaj wrote:
+>>>> unix_stream_connect() sets sk_state (`WRITE_ONCE(sk->sk_state,
+>>>> TCP_ESTABLISHED)`) _before_ it assigns a peer (`unix_peer(sk) = newsk`).
+>>>> sk_state == TCP_ESTABLISHED makes sock_map_sk_state_allowed() believe that
+>>>> socket is properly set up, which would include having a defined peer. IOW,
+>>>> there's a window when unix_stream_bpf_update_proto() can be called on
+>>>> socket which still has unix_peer(sk) == NULL.
+>>>>
+>>>>             T0 bpf                            T1 connect
+>>>>             ------                            ----------
+>>>>
+>>>>                                   WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
+>>>> sock_map_sk_state_allowed(sk)
+>>>> ...
+>>>> sk_pair = unix_peer(sk)
+>>>> sock_hold(sk_pair)
+>>>>                                   sock_hold(newsk)
+>>>>                                   smp_mb__after_atomic()
+>>>>                                   unix_peer(sk) = newsk
+>>>>
+>>>> BUG: kernel NULL pointer dereference, address: 0000000000000080
+>>>> RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
+>>>> Call Trace:
+>>>>     sock_map_link+0x564/0x8b0
+>>>>     sock_map_update_common+0x6e/0x340
+>>>>     sock_map_update_elem_sys+0x17d/0x240
+>>>>     __sys_bpf+0x26db/0x3250
+>>>>     __x64_sys_bpf+0x21/0x30
+>>>>     do_syscall_64+0x6b/0x3a0
+>>>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>>>
+>>>> Initial idea was to move peer assignment _before_ the sk_state update[1],
+>>>> but that involved an additional memory barrier, and changing the hot path
+>>>> was rejected. Then a check during proto update was considered[2], but a
+>>>> follow-up discussion[3] concluded the root cause is sockmap taking a wrong
+>>>> lock. Or, more specifically, an insufficient lock[4].
+>>>>
+>>>> Thus, teach sockmap about the af_unix-specific locking: af_unix protects
+>>>> critical sections under unix_state_lock() operating on unix_sock::lock.
+>>>>
+>>>> [1]: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@rbox.co/
+>>>> [2]: https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/
+>>>> [3]: https://lore.kernel.org/netdev/7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev/
+>>>> [4]: https://lore.kernel.org/netdev/CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com/
+>>>>
+>>>> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+>>>> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
+>>>> Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
+>>>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>>>> ---
+>>>>    net/core/sock_map.c | 35 +++++++++++++++++++++++++++++------
+>>>>    1 file changed, 29 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+>>>> index 7ba6a7f24ccd..6109fbe6f99c 100644
+>>>> --- a/net/core/sock_map.c
+>>>> +++ b/net/core/sock_map.c
+>>>> @@ -12,6 +12,7 @@
+>>>>    #include <linux/list.h>
+>>>>    #include <linux/jhash.h>
+>>>>    #include <linux/sock_diag.h>
+>>>> +#include <net/af_unix.h>
+>>>>    #include <net/udp.h>
+>>>>    
+>>>>    struct bpf_stab {
+>>>> @@ -115,19 +116,43 @@ int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype)
+>>>>    }
+>>>>    
+>>>>    static void sock_map_sk_acquire(struct sock *sk)
+>>>> -	__acquires(&sk->sk_lock.slock)
+>>>>    {
+>>>>    	lock_sock(sk);
+>>>> +
+>>>> +	if (sk_is_unix(sk))
+>>>> +		unix_state_lock(sk);
+>>>> +
+>>>>    	rcu_read_lock();
+>>>>    }
+>>>>    
+>>>
+>>> This introduces a new ordering constraint: lock_sock() before
+>>> unix_state_lock(). Kuniyuki flagged in the v2 review that taking
+>>> lock_sock() inside unix_state_lock() in the future would create an
+>>> ABBA deadlock, which is exactly why the order was settled this way. However,
+>>> the thread did not reach a conclusion on whether that constraint should be
+>>> documented in the code.
+>>>
+>>> Since there is nothing enforcing this ordering mechanically, a brief comment
+>>> at sock_map_sk_acquire() would help future readers avoid introducing the
+>>> inverse ordering.
+>>
+>> Sure, will do.
+>>
+>>>>    static void sock_map_sk_release(struct sock *sk)
+>>>> -	__releases(&sk->sk_lock.slock)
+>>>>    {
+>>>>    	rcu_read_unlock();
+>>>> +
+>>>> +	if (sk_is_unix(sk))
+>>>> +		unix_state_unlock(sk);
+>>>> +
+>>>>    	release_sock(sk);
+>>>>    }
+>>>>    
+>>>> +static inline void sock_map_sk_acquire_fast(struct sock *sk)
+>>>> +{
+>>>> +	local_bh_disable();
+>>>> +	bh_lock_sock(sk);
+>>>> +
+>>>> +	if (sk_is_unix(sk))
+>>>> +		unix_state_lock(sk);
+>>>> +}
+>>>> +
+>>>
+>>>
+>>> v2 and v3 differ here in a way that deserves a closer look. In v2, AF_UNIX
+>>> sockets took only unix_state_lock() in the fast path, skipping
+>>> bh_lock_sock() entirely:
+>>>
+>>> /* v2 */
+>>> if (sk_is_unix(sk))
+>>>     unix_state_lock(sk);
+>>> else
+>>>     bh_lock_sock(sk);
+>>>
+>>> v3 takes both for AF_UNIX sockets.
+>>>
+>>> bh_lock_sock() protects sock::sk_lock.slock, whereas the state that
+>>> actually needs protection here — sk_state and unix_peer() — lives under
+>>> unix_sock::lock. Since unix_state_lock() is already sufficient to close
+>>> the race against unix_stream_connect(), is bh_lock_sock() still doing
+>>> anything useful for AF_UNIX sockets in this path?
+>>
+>> Yeah, good point. I think I was just trying to keep the _fast variant
+>> aligned with the sleepy one. Which I agree might be unnecessary.
+> 
+> I hope the common use case should not be calling 
+> bpf_map_update_elem(sockmap) only.
+> 
+> Beside, from looking at the may_update_sockmap(), I don't know if it is 
+> even doable (or useful) to bpf_map_update_elem(unix_sk) in 
+> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking 
+> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case 
+> when the bpf_map_update_elem(sockmap) support was added iirc.
 
-Applied to `rust-next` -- thanks everyone!
+What about a situation when unix_sk is stored in a sockmap, then tc prog
+looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
+useful, but seems doable.
 
-    [ Apply sentence case to comment. Reword title. - Miguel ]
+> The only path left is bpf_iter, which I believe was the primary use case 
+> when adding bpf_map_update_elem(sockmap) support [1]. It would be nice 
+> to avoid bh_lock_sock() when calling from all bpf_iter (tcp/udp/unix) 
+> where lock_sock() has already been done. It is more for 
+> reading-correctness though. This just came to my mind. 
+> has_current_bpf_ctx() can be used to check this. sockopt_lock_sock() has 
+> been using it to conditionally take lock_sock() or not.
 
-Cheers,
-Miguel
+[ One clarification: bh_lock_sock() is a sock_map_update_elem() thing,
+which can only be called by a bpf prog. IOW, has_current_bpf_ctx() is
+always `true` in sock_map_update_elem(), right? ]
+
+Let me know if I'm correctly rephrasing your idea: assume all bpf-context
+callers hold the socket locked or keep it "stable" (meaning: "sk won't
+surprise sockmap update by some breaking state change coming from another
+thread"). As you said, most bpf iters already take the sock_lock(), and I
+have a patch that fixes sock_{map,hash}_seq_show(). Then we could try
+dropping that bh_lock_sock().
+
+> [ I would still keep patch 3 though. ]
+
+Right.
+
+> [1]: https://lore.kernel.org/bpf/20200821102948.21918-1-lmb@cloudflare.com/
+> 
+>>
+>> In a parallel thread I've asked Kuniyuki if it might be better to
+>> completely drop patch 2/5, which would change how we interact with
+>> sock_map_close(). Lets see how it goes.
+>>
+> 
+> If patch 2 is dropped, lock_sock() is always needed for unix_sk?
+
+For sock_map_update_elem_sys() I wanted to lock_sock()+unix_state_lock()
+following Kuniyuki's suggestion to keep locking pattern/order (that repeats
+when unix bpf iter prog invokes bpf_map_update_elem() ->
+sock_map_update_elem()). For sock_map_update_elem() not, we can't sleep there.
