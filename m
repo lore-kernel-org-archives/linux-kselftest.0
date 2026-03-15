@@ -1,28 +1,28 @@
-Received: from sender-of-o58.zoho.eu (sender-of-o58.zoho.eu [136.143.169.58])
+Received: from sender-of-o53.zoho.eu (sender-of-o53.zoho.eu [136.143.169.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F315C37C916;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C707137C91E;
 	Sun, 15 Mar 2026 21:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.58
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773609428; cv=pass; b=NJasfA05yTmfr4Utnq7u5XOJGxZ/Y+afZ4OiuOHFXcPdxuq8HOe0wi+PKIcq+an/JgqvwLWvx5f9xHr/wg3kmjTPEQ5E5KJTZXIMguNDBZTQrg03OdMHH5TLWKgQyQr0RppFc3XrYHo268tkbHV13L+WLH4s9RIdk+9y7lOdfBI=
+	t=1773609429; cv=pass; b=nrGzH1MA/nPy/oT5trKsRYYxUD37z4wiXd4N/wxRut9Oj6udvEcCgqJB4QxQH0NpnJKqOqXx+72R5iAbHpwSHFV0qQoyI7M/ONtsyxA4/LPCYUMxK0cCt0/I03cMQwzM3rDPRIlTcwuWleC2SsYqJU+Ztu+OtpnNEJYtXDeNbew=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773609428; c=relaxed/simple;
+	s=arc-20240116; t=1773609429; c=relaxed/simple;
 	bh=nDNdIz9w1v6GX9HKPOLSEpcSx9VPTmDZ0uZ7Lf2JPJQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=if9hEJJ4V0oeHUISwttBFoUFN97fY4yGhCxi/maMXHMF4MGvM+hBw6OYWmLwAntTwNZI47FCjoeh3+CjYymHCGIvrcHUqH1i8/wWktIsA1ufk75b7tpRxYL4e3/2VkjA4/DgNKvmWZLPOI5AbUKx0NvmNDy38pql9f5sDO/RFlA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=MQoCZPfA; arc=pass smtp.client-ip=136.143.169.58
+	 MIME-Version:Content-Type; b=md+wBtYl6ZMWpLj/cq6cI561LArRYY3KetSC7Tm1HlznoH7/buXYjoB8AgG1a4gFtSZkQAYTbbBdL4/5YjWkgIRJJrMjLOTtq6SYcsV0wT/rjCaUFbAk5fuS1GdM57btZHyNRXfohkvqgl/DNsSUkOJCn61DVvvXu/eVtECR71U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=ef0ifKlB; arc=pass smtp.client-ip=136.143.169.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="MQoCZPfA"
+	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="ef0ifKlB"
 ARC-Seal: i=1; a=rsa-sha256; t=1773609412; cv=none; 
 	d=zohomail.eu; s=zohoarc; 
-	b=A79LWGUHiBGd6hZ14+/rGkKCS90fdDybm8lmdpHW5uwvE3S0Bj6PfsBkQqVmmefj9sYs7Voep2Eb+tDZ5EyvSEv5mE8tPuLeOa215bj5QKzJd5Fg+Rkd7lxwqs3ePh1veA0LS3HlFnCnQVksAjjePfXs+ZlVUQa5lBizMTgHGzE=
+	b=EX8dFZtT0jQITut3bEFsSkfHsTNyJmRtAEd3Ll0A82JK1CKs/1RI7AFlyJuXLwHecNih5IuD8fwuiLh1AgjlSfeemV8fZLrWPWJMMxfhyn9tngBxAMcQ7/m5stofld0VYp61fiDZVfa8NIyMNzILLuBgxwF5b4/337wmXwbGOnY=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
 	t=1773609412; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
 	bh=x5o3NZywWI/GlA27vRpItmX4VibMyB/hLnI+Hl7u6to=; 
-	b=aCEIasKyOqoW7mbO7m9uwp4XDxvseoZJ3OtOThVr/Isst2V7apkidmUsZu+37LUaadYPJBKgmXBhpVgzM0BPiliagYjr9Iv1FB09vMn7Rb5TdrMBvZEDw0zFgR6te0EkJwCUqWL2k/8+DyqJQsyU0MtqF1PU/lW/z0WySz2rQBk=
+	b=RALPJU4pNJuVVCFPR9C638pwf7ebP7dlT/O/Zl8Ik/UwJmHR/oQAITmv2nZpy7T3GIk19Vf2MKV6GeqDkfyjBYWW+flfkvOhMNPhtQyjYpvosIdtKrAKx/g1fekn/tZc5wdlqOsGNTsskIbHhauNa8SgmgoibSf2pkWbDNr6Mpg=
 ARC-Authentication-Results: i=1; mx.zohomail.eu;
 	dkim=pass  header.i=objecting.org;
 	spf=pass  smtp.mailfrom=objecting@objecting.org;
@@ -31,11 +31,11 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773609412;
 	s=zmail; d=objecting.org; i=objecting@objecting.org;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
 	bh=x5o3NZywWI/GlA27vRpItmX4VibMyB/hLnI+Hl7u6to=;
-	b=MQoCZPfAaFkO+OAeQ/o/tegzYfrQDPNgKrvI8yPtk66vDhIW56cakCuafNJT6Hvm
-	F+fbJqa7GsQsHpB7ykAOoUz9p5y3/WH6NbSBfjFvAiUNC5VCjpxsVm75z1WGZWz4UQr
-	oAOoxxeGo2LgS4dETelyYveD7VK4HOyv2IeAOZAc=
-Received: by mx.zoho.eu with SMTPS id 1773609411488530.2548253520487;
-	Sun, 15 Mar 2026 22:16:51 +0100 (CET)
+	b=ef0ifKlBRC1VmqbwX1whoKq7JQYDm5ePaybcfNqKU+uThXTKloJ+5NwvQRdYeO8/
+	ZJ+eSltbCp47/0e6HrWgw4Lmy97u5FdKAwKQMaKkbZpIF6SijsNurTep2Fagz7W4RAU
+	0BDI1tvtO6biNQZ+ClX3GaaqtNvld0ogOKn0ybhg=
+Received: by mx.zoho.eu with SMTPS id 177360940880345.2258325308685;
+	Sun, 15 Mar 2026 22:16:48 +0100 (CET)
 From: Josh Law <objecting@objecting.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>,
@@ -45,9 +45,9 @@ Cc: Brendan Higgins <brendan.higgins@linux.dev>,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	Josh Law <objecting@objecting.org>
-Subject: [PATCH v3 8/8] kunit: validate glob filter patterns before use
-Date: Sun, 15 Mar 2026 21:16:41 +0000
-Message-Id: <20260315211641.408318-14-objecting@objecting.org>
+Subject: [PATCH v2 5/5] kunit: validate glob filter patterns before use
+Date: Sun, 15 Mar 2026 21:16:37 +0000
+Message-Id: <20260315211641.408318-10-objecting@objecting.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260315211641.408318-1-objecting@objecting.org>
 References: <20260315211641.408318-1-objecting@objecting.org>
