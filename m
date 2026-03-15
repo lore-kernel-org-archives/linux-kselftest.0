@@ -1,41 +1,41 @@
 Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FB037B016;
-	Sun, 15 Mar 2026 20:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7137260D;
+	Sun, 15 Mar 2026 20:18:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773605928; cv=pass; b=BekQWC4TG41A81l0ZhtAKgPRsM1AlkCh+kyUXnCY3jAA3c94yQAPIUkRC1g+AwxyJcDA1HD42BOsLlH+E5ql5ggNVCQlGG9yv6hrhBpUxQNcbdrXKwtUpVOe/5g1/h7+r0k1Xbi/vHbU2+C1OLc2mY3PrToj6jItNzIAi2YpWes=
+	t=1773605928; cv=pass; b=ql8+CSvT5bPSmxpB3aFTPkVi09XyNDKMmEnzAvwGmU4uWKr5If4plV/Zg+ZS8v6op3VDROgersdgDGnFbBf/rvjD5M3eihXO0VwOxxHhqzSeW/0S79S3kc4PG+Ap3NFxyQ7AL1cCv5vurdSNh42L5C7GncWvPOypbIZOVQIRyEs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773605928; c=relaxed/simple;
-	bh=XgWFRb8ONcA2GQ/HdeRNANjgs9ScGEr/4d+esA/Kb7c=;
+	bh=TvoodWqX4Zt9qaZn8/cmtP96TLJg6Fl3uNkMx+/OM/s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kB3RixdppOj9oaHLmKiLOnPWUe9wdsfJDz2/0nr/bC5/zTgWiucCLJfa8P8vlzczQTf03aaKsiTS31z1BGAB2NBfwto2qOh+z0gaIEt4m8hXzxNrgfT4vBTxZW1PcDVE8NFwb2zauBXTDw5RMeAe7zzuAjL+gOUmsi88TkecKMM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=UVrLeEDn; arc=pass smtp.client-ip=136.143.169.57
+	 MIME-Version; b=GkheNPiFEI4p2smEhZ2PZgVtRPVfFfC0mnR+2zTh1eICUoMi5Q207CpoMtuMfR+oGZ0kD6EPpfX6KRDl5NHWZ2fJ51KsughkmmT7O0jNdzVtdtFYZQbYqxC3bzr/F5fg9EXSY7Ix14X2z+GZjK5vhLMrsNcbaViq5dLL4nYSZyo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=G9YiP62M; arc=pass smtp.client-ip=136.143.169.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="UVrLeEDn"
-ARC-Seal: i=1; a=rsa-sha256; t=1773605901; cv=none; 
+	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="G9YiP62M"
+ARC-Seal: i=1; a=rsa-sha256; t=1773605899; cv=none; 
 	d=zohomail.eu; s=zohoarc; 
-	b=HP/3YoaJ+Asns4nltYUTozZREvMjGk5VEJTiv6DN/VCTzY79ZwLPHVpPtot1DRfeMUBj4USeXiT4l48w/bp5a4C/UCfNtUm7NUeE8QLYVJhCVNjEbf6DLsb3maV2F9z8vsFEbUfOKhpBsYrrK2ng93OdD3QapJKa6K0QlQ0yrAg=
+	b=iMO5rkVZil4xqap4z7PGcVxxfBRle3SMOFh7Op9OEMKgxckpOSksXOnlW4UAJgJ+evQ2HedIcj4PeFknMhQV25yhdR8QLmd0J42+lqzjiX0W6N+WQTmLrXy/TSKfVl67/WrPmvJl6NNZA041P14hvdIF5/VM/9HLKcuhSeplhb8=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1773605901; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=6MFsWg559qWHVDZpDzdEbMHixOdjZsqRsUni07ha0iI=; 
-	b=RcrzUsV/vNQ8tsnaoWVDvXi5WifxtfekqqnVjc3W2sLPb5t33k6W3Jph5+gezH2+hWvrgiv7kFz+PJUgZgo6hkBjtiTQmWUK8sybO8nP9V4Sek/+FXLL8+sxWhvGLUjW3qLRO+HnhUvJmjEjzPhemX13apTcmlRBJvb89EoIxZg=
+	t=1773605899; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=IKJGSUF4neu8mf6CKhF1x8j3j8JrAeeYnr9Wq9xiqSo=; 
+	b=Eq7DDB5T9eDeIFTpk2acAAbiNTtDkeACbZqPXH4fa4IN7bSZfmNgW9VokhzwW+CXd/7SvjiR48lC7yXHB26pRoCD+ysnxOA60vTzFkrsjjlIL8F+AFS6+CXH3QiPPfwZGUptWX7LL5+NE/zOzt22xz+MtSvqe1XiU1eLHi2iNo0=
 ARC-Authentication-Results: i=1; mx.zohomail.eu;
 	dkim=pass  header.i=objecting.org;
 	spf=pass  smtp.mailfrom=objecting@objecting.org;
 	dmarc=pass header.from=<objecting@objecting.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773605901;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773605899;
 	s=zmail; d=objecting.org; i=objecting@objecting.org;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=6MFsWg559qWHVDZpDzdEbMHixOdjZsqRsUni07ha0iI=;
-	b=UVrLeEDnYCosB0ex4RnCPeyiyxC3nZVxuw9e1SSCRAe4T+3Gtft+yy5tmcRaV6Mj
-	bvrpKl/2PshBNLcFs69hYP9mkoH5qoNlbnhyOwNyqDIRDBBFAGCyS8LCI2RkcFvq7uX
-	yPC5kq3u1sFNWibdy4ex+AKDXTDWygONSstVSdE8=
-Received: by mx.zoho.eu with SMTPS id 1773605899686143.73605095344908;
-	Sun, 15 Mar 2026 21:18:19 +0100 (CET)
+	bh=IKJGSUF4neu8mf6CKhF1x8j3j8JrAeeYnr9Wq9xiqSo=;
+	b=G9YiP62MSDYMqlSoAR/ziqMrltcy9SZCES96/58tKOjfadJlFo5HbGUZK9p1ISgE
+	3NKZJSEfg5lNqglVwEsG7HN1izpjEGTx6pRQgOwkmanJxsaleSDMXDeP/bt4Io6IVwO
+	iOaapeqE5pTHswspp5xHWxqB977ODNqVBS5dbg7w=
+Received: by mx.zoho.eu with SMTPS id 1773605898407517.8260685904943;
+	Sun, 15 Mar 2026 21:18:18 +0100 (CET)
 From: Josh Law <objecting@objecting.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>,
@@ -45,9 +45,9 @@ Cc: Brendan Higgins <brendan.higgins@linux.dev>,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	Josh Law <objecting@objecting.org>
-Subject: [PATCH v2 3/8] lib/glob: accept [^...] as character class negation syntax
-Date: Sun, 15 Mar 2026 20:18:11 +0000
-Message-Id: <20260315201816.362559-4-objecting@objecting.org>
+Subject: [PATCH v2 1/8] lib/glob: normalize inverted character class ranges
+Date: Sun, 15 Mar 2026 20:18:09 +0000
+Message-Id: <20260315201816.362559-2-objecting@objecting.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260315201816.362559-1-objecting@objecting.org>
 References: <20260315201816.362559-1-objecting@objecting.org>
@@ -60,45 +60,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-glob(7) specifies [!...] for negated character classes, but many
-users are more familiar with the regex-style [^...] syntax.  Tools
-like git, rsync, and bash all accept both forms, and the difference
-is a common source of confusion when writing glob patterns.
+When a character class range has its endpoints reversed (e.g., [z-a]),
+the comparison a <= c && c <= b can never be true, so the range
+silently matches nothing.  A pattern like "file[9-0]" intended to
+match any digit would fail to match anything, with no indication
+that the range is backwards.
 
-Accept '^' as an alias for '!' at the start of a character class so
-that both [!a-z] and [^a-z] work as expected.
+Swap the endpoints when a > b so that inverted ranges behave the
+same as their forward equivalents: [z-a] matches the same characters
+as [a-z], and [9-0] matches the same as [0-9].  This is consistent
+with how GNU fnmatch and other glob implementations handle reversed
+ranges.
 
 Signed-off-by: Josh Law <objecting@objecting.org>
 ---
- lib/glob.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ lib/glob.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/lib/glob.c b/lib/glob.c
-index df7f00619b1b..c5508be0d215 100644
+index 7aca76c25bcb..cb45a9a47f28 100644
 --- a/lib/glob.c
 +++ b/lib/glob.c
-@@ -33,9 +33,9 @@ MODULE_LICENSE("Dual MIT/GPL");
-  * Like !fnmatch(@pat, @str, 0) and unlike the shell, this does NOT
-  * treat / or leading . specially; it isn't actually used for pathnames.
-  *
-- * Note that according to glob(7) (and unlike bash), character classes
-- * are complemented by a leading !; this does not support the regex-style
-- * [^a-z] syntax.
-+ * Note that according to glob(7), character classes are complemented by
-+ * a leading !.  The regex-style [^a-z] syntax is also accepted as an
-+ * alias.
-  *
-  * An opening bracket without a matching close is matched literally.
-  */
-@@ -72,7 +72,7 @@ bool __pure glob_match(char const *pat, char const *str)
- 		case '[': {	/* Character class */
- 			if (c == '\0')	/* No possible match */
- 				return false;
--			bool match = false, inverted = (*pat == '!');
-+			bool match = false, inverted = (*pat == '!' || *pat == '^');
- 			char const *class = inverted ? pat + 1 : pat;
- 			unsigned char a = *class++;
+@@ -94,7 +94,13 @@ bool __pure glob_match(char const *pat, char const *str)
+ 						goto literal;
  
+ 					class += 2;
+-					/* Any special action if a > b? */
++					/* Normalize inverted ranges like [z-a] */
++					if (a > b) {
++						unsigned char tmp = a;
++
++						a = b;
++						b = tmp;
++					}
+ 				}
+ 				if (a <= c && c <= b)
+ 					match = true;
 -- 
 2.34.1
 
