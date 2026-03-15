@@ -1,143 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A972B9BA;
-	Sun, 15 Mar 2026 16:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF6E1F7569
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Mar 2026 16:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773592705; cv=none; b=EOS0JoSO64qvDMxhTdmbrhB8PpLJgqmI/ww6SIiVC2brXtI2or3hrO9QGF4DI3VtDm4VHAPiz5gRtgGeuMBNamRB7cKTpgvFIOzz75Ojz5stm2EA/OWcWW3hUhhZdtwK7HCsZmxVm/1UofPih+L1kHOdl7rMu+stcWXTG1mRLlQ=
+	t=1773593115; cv=none; b=L0ym9d+AXSLsPLvtCHB6lhnLBvi3WHOJgVPf8GyUDusyIBbOwBR62TidsWHSepq3YwyDW5XoN6N+62cB56pVOAUyibaFoWR7JxnCVRi3JHyt1B8jTB3ulqANsHOrr2OdNeIo02Ra37aA4RIYZJs6SuViT+DllVkJPJ7sR7qLINs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773592705; c=relaxed/simple;
-	bh=WrNeMYsAA03DHVECs98FC7knzVMNjLmWyKvwlzN4Krw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pHBmT8NL4pQcHhjEgl4wif5HRLz1rz23MlvfmD2CyOsax86i3au41AN+3WAcgkz/QzCkwAWXAktLTbyf3na7CePt0jcjXeLxILJ3+ucdZvt3pwfPl2vMrcEOUkk5fH7cYyLam550l6b5kLGqkRv9RdYF8KZ0a+dz8Pipu32RQ7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODlndx/l; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773593115; c=relaxed/simple;
+	bh=EaUAwKfk1pYCiPnR95+voQwIKZP/WHGMOY8kPjCJGQ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n/GAtfqdj8C9ePRrSOVJMwl0La9svoM7MKblYJb6UC/D7j6NqZjo9lwH80h0w9/uDh/5WvBHIjgTIGm2S1T9SL8Pq2kxIbZAtYP4PEcRWpbdzaU26uLinQGfy6T8GgGT/iA4cBNnlWqS0vM6ieS5qfVe+H4iojhqnYwG+zRKcaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IYaFTzyQ; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODlndx/l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A308C4CEF7;
-	Sun, 15 Mar 2026 16:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773592705;
-	bh=WrNeMYsAA03DHVECs98FC7knzVMNjLmWyKvwlzN4Krw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ODlndx/l2BTSbPjRspV9GLT7+5T3/4XNm1uJzTAR5k+bHedYGFbm7JcgrzbAMgwWW
-	 h3t+0iwi22VFwi/vk45Kz2w9HYLdExgXOq8xBGIQKNkp/kZKGRqwYWpyQfSimyVgB7
-	 WrKPZMlYKJl6FxwhgiR9lK+Hi0KC8ofixzUzYoWcVFS2xLl6FqTtVBCdp6trj9wHFZ
-	 G1cjoMWJmWsNxRMB0F4r6FJFjTbPCymS+hka/0zDBbmt7PBcrnAvIG9To3of5IcfVp
-	 JWhdazvUhIMZ2QhFYQA0dxWVuzXyQyBnyelMGJ1ME9cZe/XmLRTuJJVXnFz+VDnPI7
-	 1D2bXfJj7EFFg==
-Date: Sun, 15 Mar 2026 22:08:06 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Siddharth Vadapalli <s-vadapalli@ti.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Richard Zhu <hongxing.zhu@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, 
-	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Minghuan Lian <minghuan.Lian@nxp.com>, Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>, 
-	Jesper Nilsson <jesper.nilsson@axis.com>, Jingoo Han <jingoohan1@gmail.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Srikanth Thokala <srikanth.thokala@intel.com>, 
-	Marek Vasut <marek.vasut+renesas@gmail.com>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Christian Bruel <christian.bruel@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Manikanta Maddireddy <mmaddireddy@nvidia.com>, Koichiro Den <den@valinux.co.jp>, 
-	Damien Le Moal <dlemoal@kernel.org>, linux-pci@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	linux-arm-kernel@axis.com, linux-rockchip@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 00/10] PCI: endpoint: Differentiate between disabled
- and reserved BARs
-Message-ID: <skfqxnugt4t7eidfny5ojczq3wpu4u5yjfd6wdk3ikjmbgru7t@63nfqvrl5mvs>
-References: <20260312130229.2282001-12-cassel@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IYaFTzyQ"
+Message-ID: <6555dc32-b651-4c45-adaf-e3aecb013904@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773593100;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bfVgWC/kUc0Eksi2IfYDFwks3YrVHqxzEhca1Pyur7g=;
+	b=IYaFTzyQtoHqS74uWZY/TQAeJinECnpokR5dvOinjxOCHCiRxNZlyYeg/CSSA1eeTS4+fl
+	WgmWQwjVZZQDHRSAYEFVr03UQJrBpnQN1YnE5Hm7AQgUA/7f+3hullFiXkp5q98BiE1uWV
+	L4i34PgWPDj6QCqYpw0EWLQBi56Ht6A=
+Date: Sun, 15 Mar 2026 09:44:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Improve connect_force_port
+ test reliability
+Content-Language: en-GB
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260312062042.387367-1-jiayuan.chen@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260312062042.387367-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260312130229.2282001-12-cassel@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 12, 2026 at 02:02:28PM +0100, Niklas Cassel wrote:
-> Hello all,
-> 
-> This series was originally written in response to the patch series from
-> Manikanta Maddireddy that was posted here:
-> https://lore.kernel.org/linux-pci/291dab65-3fa6-4fc8-90a2-4ad608ca015c@nvidia.com/T/#t
-> 
-> Manikanta has reviewed this series and will send a small series on top of
-> this one.
-> 
 
-Applied to pci/endpoint, thanks!
 
-- Mani
+On 3/11/26 11:20 PM, Jiayuan Chen wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+>
+> No functional changes.
 
-> 
-> Changes since v3:
-> -Modified patch 1 to simply drop BAR_RESERVED for a BAR following an
->  only_64bit BAR (Manivannan).
-> -Added a patch from Manikanta, to make his follow-up series smaller,
->  since this series touches the same lines anyway.
-> 
-> Link to v3:
-> https://lore.kernel.org/linux-pci/20260302095913.48155-11-cassel@kernel.org/
-> 
-> 
-> Koichiro Den (2):
->   PCI: endpoint: Describe reserved subregions within BARs
->   PCI: dw-rockchip: Describe RK3588 BAR4 DMA ctrl window
-> 
-> Manikanta Maddireddy (1):
->   PCI: endpoint: Allow only_64bit on BAR_RESERVED
-> 
-> Niklas Cassel (7):
->   PCI: endpoint: Do not mark the BAR succeeding a 64-bit BAR as
->     BAR_RESERVED
->   PCI: endpoint: Introduce pci_epc_bar_type BAR_DISABLED
->   PCI: dwc: Replace certain BAR_RESERVED with BAR_DISABLED in glue
->     drivers
->   PCI: dwc: Disable BARs in common code instead of in each glue driver
->   PCI: endpoint: pci-epf-test: Advertise reserved BARs
->   misc: pci_endpoint_test: Give reserved BARs a distinct error code
->   selftests: pci_endpoint: Skip reserved BARs
-> 
->  drivers/misc/pci_endpoint_test.c              | 21 ++++++++-
->  drivers/pci/controller/dwc/pci-dra7xx.c       |  4 --
->  drivers/pci/controller/dwc/pci-imx6.c         | 22 +++------
->  drivers/pci/controller/dwc/pci-keystone.c     | 12 +++++
->  .../pci/controller/dwc/pci-layerscape-ep.c    |  6 ---
->  drivers/pci/controller/dwc/pcie-artpec6.c     |  4 --
->  .../pci/controller/dwc/pcie-designware-ep.c   | 24 ++++++++++
->  .../pci/controller/dwc/pcie-designware-plat.c | 10 ----
->  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 23 ++++++----
->  drivers/pci/controller/dwc/pcie-keembay.c     |  3 --
->  drivers/pci/controller/dwc/pcie-qcom-ep.c     | 12 -----
->  drivers/pci/controller/dwc/pcie-rcar-gen4.c   | 16 ++-----
->  drivers/pci/controller/dwc/pcie-stm32-ep.c    | 10 ----
->  drivers/pci/controller/dwc/pcie-tegra194.c    | 19 ++------
->  drivers/pci/controller/dwc/pcie-uniphier-ep.c | 19 +-------
->  drivers/pci/controller/pcie-rcar-ep.c         |  3 --
->  drivers/pci/endpoint/functions/pci-epf-test.c | 24 ++++++++++
->  drivers/pci/endpoint/pci-epc-core.c           |  5 +-
->  include/linux/pci-epc.h                       | 46 +++++++++++++++----
->  .../pci_endpoint/pci_endpoint_test.c          |  4 ++
->  20 files changed, 154 insertions(+), 133 deletions(-)
-> 
-> 
-> base-commit: 0b74f7d72399d4c4422ed3d68ef28b3612f71e74
-> -- 
-> 2.53.0
-> 
+This is not true as you mentioned below.
 
--- 
-மணிவண்ணன் சதாசிவம்
+>
+> The connect_force_port test can fail intermittently because the
+> hardcoded server ports (60123/60124) may already be in use by other
+> tests or processes in CI environments [1].
+>
+> Fix this by using dynamically assigned ports (port 0) for start_server
+> and propagating the actual port to the BPF programs at runtime via
+> skel->bss->port. Convert the test from the legacy bpf_object__open_file
+> loading model to the skeleton (skel) pattern, which provides direct
+> access to BPF global variables without introducing maps or other
+> mechanisms.
+
+I suggest you have two patches:
+   . patch 1: fix port issue
+   . patch 2: improve code from bpf_object__*() to skel based.
+     patch 2 is optional.
+
+>
+> Test:
+>
+>    ./test_progs -a connect_force_port -v
+>
+>    test_v4:PASS:skel4_open_and_load 0 nsec
+>    attach_progs:PASS:attach connect 0 nsec
+>    attach_progs:PASS:attach getpeername 0 nsec
+>    attach_progs:PASS:attach getsockname 0 nsec
+>    run_tests:PASS:start_server tcp 0 nsec
+>    run_tests:PASS:get_socket_local_port 0 nsec
+>    run_tests:PASS:connect_to_fd 0 nsec
+>    run_tests:PASS:verify_ports 0 nsec
+>    run_tests:PASS:start_server udp 0 nsec
+>    run_tests:PASS:get_socket_local_port 0 nsec
+>    run_tests:PASS:connect_to_fd 0 nsec
+>    run_tests:PASS:verify_ports 0 nsec
+>    test_v6:PASS:skel6_open_and_load 0 nsec
+>    attach_progs:PASS:attach connect 0 nsec
+>    attach_progs:PASS:attach getpeername 0 nsec
+>    attach_progs:PASS:attach getsockname 0 nsec
+>    run_tests:PASS:start_server tcp 0 nsec
+>    run_tests:PASS:get_socket_local_port 0 nsec
+>    run_tests:PASS:connect_to_fd 0 nsec
+>    run_tests:PASS:verify_ports 0 nsec
+>    run_tests:PASS:start_server udp 0 nsec
+>    run_tests:PASS:get_socket_local_port 0 nsec
+>    run_tests:PASS:connect_to_fd 0 nsec
+>    run_tests:PASS:verify_ports 0 nsec
+>    #80      connect_force_port:OK
+>    Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>
+> [1] https://github.com/kernel-patches/bpf/actions/runs/22697676317/job/65808536038
+>
+> Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> ---
+>   .../bpf/prog_tests/connect_force_port.c       | 190 +++++++++---------
+>   .../selftests/bpf/progs/connect_force_port4.c |  10 +-
+>   .../selftests/bpf/progs/connect_force_port6.c |  10 +-
+>   3 files changed, 108 insertions(+), 102 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
+> index 24d553109f8dd..3e62f9b9f1d94 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
+> @@ -3,6 +3,8 @@
+>   #include <test_progs.h>
+>   #include "cgroup_helpers.h"
+>   #include "network_helpers.h"
+> +#include "connect_force_port4.skel.h"
+> +#include "connect_force_port6.skel.h"
+>   
+>   static int verify_ports(int family, int fd,
+>   			__u16 expected_local, __u16 expected_peer)
+> @@ -46,122 +48,122 @@ static int verify_ports(int family, int fd,
+>   	return 0;
+>   }
+>   
+>
+[...]
+
