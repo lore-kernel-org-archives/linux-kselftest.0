@@ -1,144 +1,82 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1F533A9D3
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 04:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56DB347539;
+	Mon, 16 Mar 2026 06:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773636283; cv=none; b=uSPJOl8LuyskRPZqyQG9mrx6Zxosjn4s4JCzGJ9wYoL1AGxD7TKZfTh4Zq9zh1M02+7O8loj4iEmx25p0FfR04ksjVqLHUDUaEO3tawLlrSLC5Oi7n11NpG2QvmDMEMq+vQ6ZB/rnmcwk9hKnf8HJsk4w0WXJzpYUYllQ1sVwPs=
+	t=1773641931; cv=none; b=M56dDKslNfn49YkoP/jIW7NYxnMUsqxf55hMg1o6hKYfebeOclcvJGs+xXwFcq2P17zUz9fLvkt7NFWdJnte+3LTlnsHt9JBDMaHkh1w2shP5eb9+Ui65gurk7C5TPdcUGUKTf/2OCIAdXzYGvhTUhsQyoY2bQWDTaXA+1aRnnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773636283; c=relaxed/simple;
-	bh=JHYNOgg1EKqT6k0vaVSLWP3VZdNs5XpkE/XalqOPBOk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PGyoCa33NEJa3LHsxyMuq7ROHEMX88KTlO1mmc7qqRgZZCFe9VVwFOWkC06tXQ449QzANOCtvYr61CWGsEZDnGw3E+GIdxXZyk5nO0gh7Fp89DSraJnscphYdDGxsERQNTH/lvejVEeEfYJNR4vdifVS3xQ9nTITm7C8AaNP94w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RxqrWLvD; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773641931; c=relaxed/simple;
+	bh=mV2Bu+6pDC/dmjcbpEZFd1LBe7AtpHPzl2EX2ejAXA0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wt4xlKDIx1Xc4zBIuuduaeiK+qVqMj7sBBNqW9IugxLrWb1gnjp5eLgbx0m2lcpTnxWxSBbzcYCXjGY9Gjdsq8ZtnnNcnztq5gpZy6uKGz8/gLCzf8wphq666R/uIaJTvWkVXzZRaocwDn47Xy73TUz4LquneHC2CXrkW/qWv/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qsyHuQuK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RxqrWLvD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773636281;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tcVcRvBzVtTBY3hfLbgONkTdIQJJ/qtR9JdltENskko=;
-	b=RxqrWLvDz+CVx9L+cty2u7b5Yxk+w4jJI4ziWLNbf9q7qSAO8rC0VdQuBezMFr/nLWk8Zs
-	1bXwT5dO7hCAARDwIHbU/+PkzFztrNpbGo29Lp9jUx1JW5lzocodGQxPHisBtDDZBwLtA0
-	mvLwQpI2ZlhceK6IBN5JbSDnmKp12ag=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-5-AA6dxcJNMZWoz4jPtcyc7A-1; Mon,
- 16 Mar 2026 00:44:37 -0400
-X-MC-Unique: AA6dxcJNMZWoz4jPtcyc7A-1
-X-Mimecast-MFC-AGG-ID: AA6dxcJNMZWoz4jPtcyc7A_1773636275
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF726180034F;
-	Mon, 16 Mar 2026 04:44:34 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F5051955E80;
-	Mon, 16 Mar 2026 04:44:26 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qsyHuQuK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868BBC19421;
+	Mon, 16 Mar 2026 06:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773641931;
+	bh=mV2Bu+6pDC/dmjcbpEZFd1LBe7AtpHPzl2EX2ejAXA0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qsyHuQuK/fDs6nCxEINWEtuCbLJ7v6ffmoWRBRAREq3EVn0ZQ+fnvL4VmRoKjG8NS
+	 xmfgqzRRuIEqSXf4bYMB/NVioYiV3HSRLus3TgCuPqyBkWMPnno8FLWun8p8mvI65B
+	 bOJoqeJJtorgkijv87w/aVc2QAawYw18eOhxO+b2I7/aCg9/dFidrTlJ9ARVQjXjxD
+	 ZUoawcJl/UdiDDdw2iuMqg+HvxY0o183K4Ocw2Wm6ACyFbVSt7iTPYSTYyuNkMTE2X
+	 NopKEFWhoQfHsnHvJeIZijcbs8geB1Qu2b30YGBhwasFhdt9tiMNYaya1XX2zp7syU
+	 Dy/yByI2fZgmA==
+Date: Mon, 16 Mar 2026 08:18:40 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Chunyu Hu <chuhu@redhat.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
+	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
+	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+	baohua@kernel.org, lance.yang@linux.dev,
 	Li Wang <liwang@redhat.com>
-Subject: [PATCH v2 5/5] selftests/mm: transhuge_stress: skip the test when thp not available
-Date: Mon, 16 Mar 2026 12:43:35 +0800
-Message-ID: <20260316044335.1390608-6-chuhu@redhat.com>
-In-Reply-To: <20260316044335.1390608-1-chuhu@redhat.com>
+Subject: Re: [PATCH v2 1/5] selftests/mm/guard-regions: skip collapse test
+ when thp not enabled
+Message-ID: <abegwBHT_2nlmWKM@kernel.org>
 References: <20260316044335.1390608-1-chuhu@redhat.com>
+ <20260316044335.1390608-2-chuhu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260316044335.1390608-2-chuhu@redhat.com>
 
-The test requires thp, skip the test when thp is not available to avoid
-false positive.
+On Mon, Mar 16, 2026 at 12:43:31PM +0800, Chunyu Hu wrote:
+> When thp is not available, just skip the collape tests to avoid the false
+> positive.
 
-Tested with thp disabled kernel.
-Before the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..1
-  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 60 transhuge-stress -d 20 # exit=1
+... to avoid the false negative
 
-After the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..0 # SKIP Transparent Hugepages not available
-  # [SKIP]
-  ok 5 transhuge-stress -d 20 # SKIP
+> Without the change, run with a thp disabled kernel:
+>   ./run_vmtests.sh -t madv_guard
+>   <snip/>
+>   # #  RUN           guard_regions.file.multi_vma ...
+>   # #            OK  guard_regions.file.multi_vma
+>   # ok 89 guard_regions.file.multi_vma
+>   # #  RUN           guard_regions.file.basic ...
+>   # #            OK  guard_regions.file.basic
+>   # ok 90 guard_regions.file.basic
 
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-CC: Li Wang <liwang@redhat.com>
-Signed-off-by: Chunyu Hu <chuhu@redhat.com>
----
-V2 changes:
-  - Move the exit chunk to the front of ksft_print_headers() as suggested
-    by David.
-  - Add reviewed by from Zi and Lorenzo
----
- tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
- 1 file changed, 4 insertions(+)
+It would be useful to include output of two failing THP tests rather
+then just the output of the last two test.
+You can also add '-n' option to run_vmtest.sh to reduce amount of leading
+#, but for that I don't feel strongly.
 
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index bcad47c09518..7a9f1035099b 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include "vm_util.h"
- #include "kselftest.h"
-+#include "thp_settings.h"
- 
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -37,6 +38,9 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 
-+	if (!thp_is_enabled())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / psize() / 4)
- 		ram = SIZE_MAX / 4;
+With that updated
+
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+
 -- 
-2.53.0
-
+Sincerely yours,
+Mike.
