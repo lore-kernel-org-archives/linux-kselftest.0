@@ -1,153 +1,168 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012012.outbound.protection.outlook.com [40.93.195.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572CF18DF80
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 18:11:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CC33DA7E1;
+	Mon, 16 Mar 2026 18:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773684714; cv=pass; b=Izo5y+/ngQnCvnpB01jtkAwLLvVXZsFrfa/Bd6IYws4bOfuX4RDs535t5uNF5djybhV748HbiZsvP1RilmfrnLaEpMEzVETyFmG8UxRe8cGTiN9CBhuxdUsqm2+ay3ZJXDfdtbC6ZZVRvt1HjF9Gr+lhYerghWeVBvoYjNePfJE=
+	t=1773685281; cv=fail; b=JJloAEDbbYc38UCEmvfhMumkLizf6ubKs2DHMPmiqTGBiavyFVn3eGi55fpn5zm7Z8/yjZ8bLHfkUh9OrfR49do9TMDnt/hdKUEZhlwMGMATGqZU03rxWZx9gUJkQhhJWa7NuVKi0JwoYKdpLSGSt06enIUYYlctI6ssIALv/To=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773684714; c=relaxed/simple;
-	bh=m7+JQVttlm8dL3EZ1N+mfhiI+GNnG3dsJzvTlqZYD9k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DqlqqWf6pRBVnzOjMF6gparylbfh8CmmoRW+40MdAbXT6WnSp/wdXO8v0IMzxLDN2+WfXJIsxzkdm4J3i6kFYHaHB5HY73p+LJO+1lgVVzfRuY74s7z7Xb6DUddTgKUEAud5vfXDQyHUHZdlRj5bxwjoiui2lDKwROAtIEr/bO4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VBhIongm; arc=pass smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1773685281; c=relaxed/simple;
+	bh=HG71p2B/zHaFD3EX5OxvzPtSNls14F9W13UScveAkJE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gtF/SjX54t6hC83/fBe7ekZReqfWTCiYGwmaQdwMYXk8sHUQOV9yVwLDFMSWX1Nz0B4rBlZzIkCaHiklkRzmOwk8ZUvAC7SpKRusvEf8U0ywd04I2aYtA5tdawov/AHb5QLicS9eDyB99JrHx+Ddv0mizZob83i5+8FfJDwjWq8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SkYmDUex; arc=fail smtp.client-ip=40.93.195.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VBhIongm"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a1273de95aso7330582e87.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 11:11:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773684711; cv=none;
-        d=google.com; s=arc-20240605;
-        b=itN2pQoA37bOJ2HT/pBIA9EfDREuLaq13fFrm8fwnA8s8raR1ShMbXv08r+eMNkkAj
-         txDSCK7wAr8CEeG2SMWDdTO2RiswdMg9RCH2ypyrIF18Imiwboy7T5zKT0z77YoGq3PG
-         sIx8bn1Xtn2LKl1LIJgwUVdgJoP/db72Km+/ICY3hN53HTToOBvsocqy/aZwBfe4h5lE
-         Dx0xQxfrzJDKujylz7W1Y8t40iKK71hYRG0fQP8CT7aS4HLP6VqI5KuZUTeFhr4AdF/v
-         WgJwfhO9jHNDcfDcZ1y50PDIIHLY1LtFUjeJ7bR3s/6ZcLrz1gXvAT+y4n3IWej4LKRe
-         b7ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hacBXTanIx+HGRz6G551slI/wF3dk8INyCTw5fzLvmE=;
-        fh=K5qWtzaHCe+F59cgONQp22SqlPlFKjz5Buu60DKArwI=;
-        b=d8UnhBjPrLIdx3ADGzEpS6QtTYl3WSg0tLyBYKQ9QDVqFs9SamrrKvYAiTheax6Ilw
-         IGIdOYkYMQI6qK0RlQap03WXHcIq+nH7/xRliOciFhbwoHRnfKeQSFPknfg6OAyWk/Es
-         88OjZEpOitLjPWFNOvOlZbwXXoSj5o6Y1zY2BcwsS3niePei/7r4V+pMvkLl0O2UpA/s
-         VC9XcDBrCDHbMt2uF3kwhBw6N+MkpDvIkn7WpMN8OfjGB5c7Yy5zQrpJ9WUZMvzYoDYs
-         bFZeFp4hmhPMW3A2nL+oAKybn56EMIePZ9wGP+Pq/OYYGi2SxDFo9wZUIK5YCH2wJsM8
-         6P7w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773684711; x=1774289511; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hacBXTanIx+HGRz6G551slI/wF3dk8INyCTw5fzLvmE=;
-        b=VBhIongmjKT5GX15RigVAqB3TAHg5zb3CPQCJF1PG3YwTx7werPdrRv43tZqYqSGH7
-         3tYYHUI+GOUEQf+ijdR1xB+SObWGZgkGEWqLuvHymr76oqSHHMWG9Wx2taw3G+FTLHDo
-         Ao5UDZjjZxr3Ryk4cOG3aNv96TYdm7mJ/cJrLHXY+AMI4cjhSuGTfeTZrQF9IB7pjSZ4
-         C3FjEw9pY45ntR3Jpyk8cQw4M1v44473xYnYuus73S9Vq3tWMtAB69WUudaO9PF5JuJq
-         I885hbcRKWNiwfqMmFtSJJ385YFJlNipH0AGR0lqcmK3MX51zePLBhbkMLmPFQvSHt/x
-         PweA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773684711; x=1774289511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hacBXTanIx+HGRz6G551slI/wF3dk8INyCTw5fzLvmE=;
-        b=ac/Sp86lX7OorTPgkcqCS62iPCCP3hsIVryg7sRyDSF0p0MlXGGuqp+d9PeNxE5Qh8
-         qPhdxMD3tpjh5yOe3UFyharCclSkc1QZU6z4i2ELFBcN45eJPJ3aibu7qP9tjVdMVLza
-         nR9JrHwwc/nQ4Q25P9NPif55no7MZo7s5b0vp/q/9DkwlMe0PBRe6Cd6IruVcDXFtl+k
-         vljME9X780R4HnloscKqT3blVo8I9+AqKmt/KF85ghv78pBLEC7jxUzHSB4626SYL+lb
-         rikkjsbAs+ydq66Rzr4KQR/6RoPlX2FfNQ1SHUrB0EyDqefN+hZko7S4w8AmieV1o7fU
-         DWHg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdtuAHH28fI5p+fKnCGHAxaJzFT5AGhOVXZI+rhlzNpYefMlHvMn3miiT6zQ+Xw2eEjVpSQTD1z3k838P00Yc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdiaXlym4bf/qJsFfTYdOBs3mVXo5yzLrHLAlH5bPSGuOvVZS9
-	VYSOkYRMQlZmpM1EgCSjEKauMsjk9vB1oZe28d/lYGas+8WGrowA+8/zK5+653o9Hj9MpnrPelH
-	ZqKo8WHGqhiCUgtx4AlUGBNtv+W7SmJES89C3EzFF
-X-Gm-Gg: ATEYQzxI8U9dwBTrLsldu56tlw5kLrFU/hoVMMmyUhauIDWYg808lvNBBsY96ntJcSi
-	IOUXx8SbFVkbv+b/guP6SK8HzPrJNQEQqEsbc1fyaQ05YbY2jUFEBpvcI+eScrC7pRX4TNxvfd7
-	a+BmWKsmKmbh53Ic7ZeRYWCnRvCguEBt9kJ8yCq5w1nHxG2KhS1FjPrkqIa0OwDf6z2FCCsO4Rd
-	hqoVTST6gdkOkoi8lHutptMNPQJ6qePvkKEbgeh2UiW7oc+vd0VTMynB/cAplnuyEnoMx5SWj2a
-	ORVTu+Bn
-X-Received: by 2002:a05:6512:24db:b0:5a1:44d3:7601 with SMTP id
- 2adb3069b0e04-5a162afb717mr3098120e87.20.1773684710999; Mon, 16 Mar 2026
- 11:11:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SkYmDUex"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jLxLidbuRVApcMPfU1IbByuezvqqL+uWRFUDlfv6IGDcxYjHrCh1mKsTEWNzYLRcDEVU73g76nPi8UVFdjgq+7orLyxYBFSIC3cIYS1gUZ+/4wdQWijc0Nx6wpQxuMRhhQ6tTKN7PmKZB3u+/EnkNhr1RQe88XpzLUEigpQOF7G7pu94/LVmexGJm23wYiSWeaZPWt15Q0fghCNZF0+PBvpLUMO5grtzSgYJnV2tH679Z3lxlJiwL/26V8iaj5qVMziSSUpxp9D10i9CgG/fmuFK0tFWPCIGrVhGOE4pBXfTg7lmrxakvoBZn4sJUOa9f2EcZ07BBMiNTGdfAgvFzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mCSACYY0ysJpzB+6G8iEyJzdjtiN7fklKKXTb636ZZ8=;
+ b=aIasLsH15Bn2o2Peqk0EEWXX0+ZaNXwQ++IIR1dwroG+9aQyg0Sr2T4yIvfvdA4Zf5PT1ZpWPztuRYss/N3G9ytvSBEOL3wXXVwz3LOZkkzD7S6ZKowJ4EZ2uRHb2lCr1UNo1PgYhfVntUJsuvmlesCUJMlPprcB4q1QkMN6YbHMKf14aDvxNe2XX9iKZGcvpq77XCw9Sct03SeIOjbJ5RwNQiExiOiDJoUhOEzDZHwEXOR5aPqYEQlKWACFzE/pEE12D7H5G2H6WsUaycAvsewmKNVpeBNz5ayWUGqtIfyAVam3wo3jfIDpfSwUnYM4ubAhnbJ9nEE+CHjUnfjeog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mCSACYY0ysJpzB+6G8iEyJzdjtiN7fklKKXTb636ZZ8=;
+ b=SkYmDUexBNEDEl+EWYws3u3g5Fa6ZeWc98UNz996uU2GVQm7Q64377ONoYZnSnYouRzDZbYCVOJaayXNoaiX2UOXW877ZEm6bJw4+7jEZuYo0AcMaowNjRE6wGH6ZfiQYEFfoVYL6P3PNnToVlTq6knwslR8KiSPyD1O8OYsqZedj4MmrHC/vG4Q07WCTHK3YA2nxnkQqY2q4txIdXimLk/pd7a5/2UJymK6sn3M1WFNQP152SA062Nz2raXtctQJvr4zSNa7Az4zXU8SbSnBlmf/98quMQKbqbhLH26oGARpuPCV+UEM2kVMrGFFMOe5SOm+IAzzF1lYXH4H1XMNQ==
+Received: from DS7P220CA0031.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:223::25) by
+ LV2PR12MB5824.namprd12.prod.outlook.com (2603:10b6:408:176::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.13; Mon, 16 Mar
+ 2026 18:21:04 +0000
+Received: from DS1PEPF00017098.namprd05.prod.outlook.com
+ (2603:10b6:8:223:cafe::eb) by DS7P220CA0031.outlook.office365.com
+ (2603:10b6:8:223::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.25 via Frontend Transport; Mon,
+ 16 Mar 2026 18:21:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF00017098.mail.protection.outlook.com (10.167.18.102) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9700.17 via Frontend Transport; Mon, 16 Mar 2026 18:21:02 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 16 Mar
+ 2026 11:20:40 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 16 Mar
+ 2026 11:20:39 -0700
+Received: from nvidia-4028GR-scsim.nvidia.com (10.127.8.11) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Mon, 16 Mar 2026 11:20:36 -0700
+From: <mhonap@nvidia.com>
+To: <dmatlack@google.com>, <alwilliamson@nvidia.com>, <dave.jiang@intel.com>,
+	<ankita@nvidia.com>
+CC: <kjaju@nvidia.com>, <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <mhonap@nvidia.com>,
+	<stable@vger.kernel.org>
+Subject: [PATCH] selftests/vfio: Fix VLA initialisation in vfio_pci_irq_set()
+Date: Mon, 16 Mar 2026 23:50:25 +0530
+Message-ID: <20260316182025.3383443-1-mhonap@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-11-dmatlack@google.com>
- <20260226170030.5a938c74@shazbot.org> <aaDqhjdLyf1qSTSh@google.com>
- <20260227084658.3767d801@shazbot.org> <CALzav=fHy23RAzhgkdaL+JA5T2tL9FT6aPgRfXUh7i9zvYCGPA@mail.gmail.com>
- <20260227105720.522ca97f@shazbot.org> <CALzav=fjRPa_ZbXu7iFXyemcf_8Kq_dZTWT6c-A0bc6czF_Rdw@mail.gmail.com>
- <abNOwcOTXqxCxNzt@google.com> <20260313083918.00005731@linux.microsoft.com>
-In-Reply-To: <20260313083918.00005731@linux.microsoft.com>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 16 Mar 2026 11:11:20 -0700
-X-Gm-Features: AaiRm52c977M5CVgCJmgqL9NIwQ1v_KtuafdRnOMJexlLUpZndu_UH9phsJ7tcA
-Message-ID: <CALzav=eGLpo5nrsHq5L8bUTC=FWZ-SgrTE1FoScrWB4p+NDgnA@mail.gmail.com>
-Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
- Live Update
-To: Jacob Pan <jacob.pan@linux.microsoft.com>
-Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
-	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, 
-	kexec@lists.infradead.org, kvm@vger.kernel.org, 
-	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
-	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017098:EE_|LV2PR12MB5824:EE_
+X-MS-Office365-Filtering-Correlation-Id: b25c3b34-51b8-4f55-e612-08de8388c7f7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700016|82310400026|376014|56012099003|18002099003|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	ZbTRMX1pvOtb4LSy3/MN+tXgVow5SoQGUn0jGeFmxbvE4pRkkDbyeL9A6Flhq69766azl+J+6hUtPnTEzqgZXy0VdYH6Zn2M0qos/RjbuxavO1++owhNZmnewOAavbcJMnA46dj34kVRSrUNNnd4RqaltyKmdPGqqCUNT6K5xvFwqtTnRr+dkXycRz8eN9ZRftJeTZlQDX/J3uYQ9gk87YNYGKFfTjzfynbBL5f8igHbLufqRaDK9iAH5/qC4j5drWredllNxsI1sK9/5DluQORhLhAaHZ7PkTrHl1L1VRYPtzvlL9UyFLU30y2xGS4v/78HZ5rlN51A7MuhVnrNkibBjL+SM4/Fz6U7OtLWrtGpAGwSqll8NmQy98l2f/gqy8vtIPXPpn8z8Cn/YT6sfncWNLVEUP4YXEV4Ik1+C8HVC63uSG7rLN5tkG4trkPVoAarF02CXgUAU4j5P9FlXCEYWZVAS1sf32Z4so+rMaD94levHTm637/60rVCViqgir0CvIjcDZ0MBOxcarauJLMY1pSM8EQwo0/Qo1rudB5OXN+kI7uhvBcVf2nrVzVNs0V9H9Y11qGsms+dNEl9TMJA1oiOtlmRtkFxKRW4bjeNXsKqay9qb9EjjVHXq0x6I5Ut/zsw/yL1ggB+L7tVQWYNm0vh3JxQRksOOMSgWN9LhP92yNTI0B9qmFPpPocs9lKsGCfMCZgai/PkRa1WxbiQWeQbRlNQJold2MUB1DYNX1HA0F7iOiGzdoMjv/FdRjZunuAvKDgAP2HQ0KVWHg==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(82310400026)(376014)(56012099003)(18002099003)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	mICpesmhsM8DzuVyddZSo5uyy06COJJ53B1tj4QwQo3w/xX7eNj0Keg+47ZltlQfIMOqox79I1pv4DRseBf8DHG83MQqDhtaQfhvKexHZWv6Pd2ZotY6vkaOWTZXGlLKGhas9O7DVYFgBGQxim+W6pZHI9EbIqANzEIbJRDzhGJqrWHNvv+80r36rjC3KDEu3WXMAOYgibI4ti1JMZOL9vj9nF3YRoq9nEdjUa6H6NPVDLq6vB1YOgGfEiFDAkAULIsncWvFqwfBIYi7DesmO6QMS5flIUNzDcWgSUJRy3NmMvFNz4uGZQRbh5qSTnDPHat9aDUDLaet9PgrgqDp96P9oeJr7O9JwR4B+aizQiVd065sUe0zJt3mV8CGHmu/RCb5IAomLJUmtjU2svJx4ZMCk6jnfhnYCGftJPWSRbzfvUqy2/YyacOXpmhC6wDi
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2026 18:21:02.5320
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b25c3b34-51b8-4f55-e612-08de8388c7f7
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF00017098.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5824
 
-On Fri, Mar 13, 2026 at 8:39=E2=80=AFAM Jacob Pan <jacob.pan@linux.microsof=
-t.com> wrote:
-> On Thu, 12 Mar 2026 23:39:45 +0000
-> David Matlack <dmatlack@google.com> wrote:
+From: Manish Honap <mhonap@nvidia.com>
 
-> > +config VFIO_PCI_LIVEUPDATE
-> > +       bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
-> > +       depends on LIVEUPDATE && VFIO_PCI
-> > +       help
-> > +         Support for preserving devices bound to vfio-pci across a
-> > Live
-> > +         Update. The eventual goal is that preserved devices can run
-> > +         uninterrupted during a Live Update, including DMA to
-> > preserved
-> > +         memory buffers and P2P. However there are many steps still
-> > needed to
-> > +         achieve this, including:
-> > +
-> > +          - Preservation of iommufd files
-> > +          - Preservation of IOMMU driver state
-> In the interim, what do you think about moving forward with noiommu
-> mode without preserving IOMMU driver state?
+C does not permit an initialiser expression on a variable-length array
+(C99 Section 6.7.9 constraint: "The type of the entity to be initialized
+shall not be a variable length array type").
 
-I haven't gotten a chance to look at your noiommu patches yet, but I
-do think noiommu will probably be a good way to develop the VFIO and
-PCI support for Live Update without blocking on IOMMU driver support.
+vfio_pci_irq_set() declared:
 
-> I=E2=80=99ve tested your
-> vfio_pci_liveupdate_kexec_test with the noiommu cdev, and it works as
-> expected.
+      u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
 
-Would you be able to send patches to add noiommu support to VFIO
-selftests? That would be very helpful toward allowing us to develop
-and test Live Update support with noiommu.
+where `count` is a runtime function parameter, making `buf` a VLA.
+
+GCC rejects this with (tried with GCC-9.4.0):
+
+      error: variable-sized object may not be initialized
+
+Fix by removing the `= {}` initialiser and inserting an explicit
+memset() immediately after the declaration.  memset() on a VLA is
+perfectly legal and achieves the same zero-initialisation on all
+conforming C implementations.
+
+This fix is self-contained: it touches only the existing vfio selftest
+helper library and carries no dependency on any other patch.  It was
+originally included as PATCH 20/20 in the CXL Type-2 VFIO passthrough
+RFC series [1] but belongs on the vfio list independently, as noted by
+Dave Jiang.
+
+[1] https://lore.kernel.org/all/20260311203440.752648-1-mhonap@nvidia.com/
+
+Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
+Cc: stable@vger.kernel.org
+Suggested-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Manish Honap <mhonap@nvidia.com>
+
+---
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index fac4c0ecadef..3258e814f450 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -26,8 +26,10 @@
+ static void vfio_pci_irq_set(struct vfio_pci_device *device,
+ 			     u32 index, u32 vector, u32 count, int *fds)
+ {
+-	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
++	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
+ 	struct vfio_irq_set *irq = (void *)&buf;
++
++	memset(buf, 0, sizeof(buf));
+ 	int *irq_fds = (void *)&irq->data;
+
+ 	irq->argsz = sizeof(buf);
+--
+2.25.1
+
