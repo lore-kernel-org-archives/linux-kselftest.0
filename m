@@ -1,67 +1,67 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13B237269A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5EB374174
 	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 22:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773700167; cv=none; b=iXZhYXGSZ3fXqt8bsERkJXUPAVOIK6RHjBXXHEXcEBDpyUbgJ5sNfPg+vnS9B1zoi+voxr3/JhST0z6rg61ZiV8CJLeo6irbGMpZQxTi3aOPXBFmMoew25waVlPa2Ft7MmqK3hIJFWYuzLnT1VTuSH3w3vMa1tXCvDHZEi1Gvvg=
+	t=1773700167; cv=none; b=IgLFCuqHzN0LSJ/MKAxytr9HTz3glDsLeugUO0nxY9e2SDY2KwcvK58MfMocKA4LBUTCai+9nc5ECpfhbLgcNk6aoQRNvFZjal/iX3J8/qQPbP2qCAOcrwXqAmUtg0rJmtNU5LPQm6W20gJvjFB4mnQKbUzNO+BjPWBL1ypxihI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773700167; c=relaxed/simple;
-	bh=jyNxYmx5UB2XwVBzrPIt/v521XrQK8jWoaatFoXioqs=;
+	bh=KysKv+4UMfhnDnTvr6BO8IlevtyErd4SdDk4OwtDiUU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=epJV1GkmK3/6GZJdbWJdbKiSAEDlkZuMMGIUqQgIqZLpkZP62SM8HTV5SNnbpFBBzrsVPAx7r51+/PGE5/yIxpeX20s/4OeNA4O0FOp91gRfbyP3taY62ndiNFW76NSrIDfpanZVUizyLuUz0TUs1h9O3SRjoJdiMkzOPdQWEbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMn9rRFa; arc=none smtp.client-ip=209.85.128.169
+	 In-Reply-To:To:Cc; b=ml9XN2ze6nmSN8VTrsymaGXMiEfeax11T69218bCd22s8m2sll7LWxA1agXsxDrBdPrfeBcNaT5z/QjBtKnxZKWFN99jL2O3naFrNM4IICJoWhWCawh6eL7M6ckJhXwiRh8ymTCcVPZHvqja9sB5qPVZAlJJtlXO0tXHuWOhRDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d7x2AqX1; arc=none smtp.client-ip=74.125.224.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMn9rRFa"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-79495b1aaa7so47108037b3.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d7x2AqX1"
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-64e87a81639so629360d50.0
         for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 15:29:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773700163; x=1774304963; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773700162; x=1774304962; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=omed2F+AqWiwSMzDcFuf7st7hlR6TZL1wyoNIJPdTr0=;
-        b=XMn9rRFal8dlvd7EaX0AqXe5plw4ois8LmhTEgSEDmwkYClkt+Pd9SFtojlgWOBOm/
-         tucB/NyVFiglUhpi/tqaiY8JATMVWzzp80oERakv557SKHU0pTOeEn/KkrIMFi2qWj8l
-         tPfai8Z9vngm80FYz3ni50W3vdoQ1cZ3tq1loIZSb9/myJJdvMOwJSKICCTFA8+RXKFc
-         fa2Gb7USJGm6RbR/bRz2xUBEN33yOkpHfq75+EK1jAyh5XaXOLJM7K6gy3QM+BNHiXO3
-         I9Wj9fvGATzEPyflcEALH4rhjtiEgS5g1R1Zgfh99A2UiNjBcIAEq+KHn5wTC0j92Qrm
-         fBfw==
+        bh=Mhg1Y4Ej84+nsyH2qvB8M3otNVTGHX9lgToOwhjqhW4=;
+        b=d7x2AqX1KCf2gCvxClxT7pQg8TYtC6zI88CvaFlV9h0wNBR52J0zPbkx1pUD9Ih8xD
+         Ddi9IopD4EBbUGrXBgIucM6DgLnbrfJSgk84SJLOkFjT33hsSG1qj3v4xDhtEXibD7l+
+         JX6lXmIMQLE0nCaYnwVQhIh+rBkaiNgYAk/XYi/WlA5fgA+Eo6xGWMP1bpJ5Rl/4zh6F
+         aFQTrrI+SaDsTzeO6nU6ApCekP36+9+UWcbUWMVZYkwmX5fNt6JnXIHXaH176PTT3pQz
+         9goHQWQ+k2u5t51hkqzNl4sIrYsCje9VT4QoTz/pyN+dgw7LbzEt91BH02I0UReCsI+U
+         UX5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773700163; x=1774304963;
+        d=1e100.net; s=20251104; t=1773700162; x=1774304962;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=omed2F+AqWiwSMzDcFuf7st7hlR6TZL1wyoNIJPdTr0=;
-        b=JpBJ95gW91npBqvwqQrFXQbS3DTLn/aX1kvamsYXJ4LQeU9/DQLOKMudOTcIhrFxzw
-         Q6WuVYZfGpQdrl/4Wr50rkoGE9zvWJSVWSjXeMkwbUMn8TyCfh24rds2pJorRJZD2Qf6
-         0hMHgBDU0wQDIn+lHvap8SbHtVkYnQJO0BX4035RU6OYGOAsYvuxLOmC9I77IxnS7gqD
-         /t08gm6NQmK6TyhKBzyRNUJGfohTVHctH18WydacRE2OFl9ccszx3H0cFDe69ACqHYBS
-         R/fPItWDMFPcJUG+MoUvcOqkLpJvzKOkgc8GybH95X4Rb9HEq3X2YirQWWYMy0avdqHk
-         7zhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCgjXD1H+2m9ZvvPfwCX9MRZb2J3Sznka/kBjW9foOyyH8La/B6OY/vt0ttl5gLWHjCkBfFmZBwrkHx6PiY3c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyshdfkVt53/ht6VFYHkWO5mcwhQZG+qU7navdVg6hY+ezCE0wS
-	G7CjTQVju+OeKP6cB0F4QTUPZL2xPQzhfMjUwwdQ5cPRSTNF4tH8uTkS9dUFSQ==
-X-Gm-Gg: ATEYQzwp3cgofVhfSZkadf1YFfjeZwZ1920DJ+zJIsmaENbd8X/ct53RqzdcxrJcjCR
-	igWmGL9CUhCSRpCqth5hrBNDNgIxvOSbtp2sEeTmGaXZGOPgDlmt4EkgXV80/bN0pNLyKsljW2g
-	90Yid+kBf0bnVW8tAb7ehiPhhsevCgEAZmPRP+8Dzflfkt/U+F510mrhhJH8kfQhTe+Yvlasrgo
-	dqIrzD3BkH2MEAsYMpwjbSJQq0CUoH9ik46N6/7MAR/tq0iFc6IsEw838F4wUYizc9/Uf0LHKN6
-	B1ArdfZbAAr4k8s7QhUBY+97fFJcu/R8xJf60KIZ1QnjeoEJfTrniZ6NMsuwcXiWyWc5J/Yo16D
-	Z5O+sXmf4xF/SNDtMIIt/EuFPp8zZ3wQnGnxBYGMZFGLO4bsnIc31paNUbBcQlU+TBqioJqhzAs
-	BjuDHqjH3Ajj9VnDP+qPIQ7g==
-X-Received: by 2002:a05:690c:81:b0:79a:3a79:a4b5 with SMTP id 00721157ae682-79a3a79b4eamr90331507b3.11.1773700162705;
-        Mon, 16 Mar 2026 15:29:22 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:5b::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-79917deb69asm92905497b3.10.2026.03.16.15.29.22
+        bh=Mhg1Y4Ej84+nsyH2qvB8M3otNVTGHX9lgToOwhjqhW4=;
+        b=ZjrUW7QV5HAgSJ10JQ7SuiwQuDHHMgBJZn2vo3MHCJ8vb9Rr6OmHfmB2jct1OGFYrU
+         LTZE8EkAFwfGcVxdscile9RgixgYU1rVnCAzSZz/UgjV1tfsagQ4S6xTUFCc3CkpmL3a
+         uwonvmhJLXgQf2rsjI//KTOz9jsHlG5Pm5ZYnBRzw5ttsm25m3ZDXCiIWVt107WoyWtU
+         DMTfACfSnB+y0AkVwq9MGvZ9Zea8VP/s5V90ZYDziI84Su7libWpGWGQmgQcMuEOj4H/
+         XPO3x7xVa4pUOLGnUmEY86HOMH8jenEcb07mSDLnCgNB+cwh7ES9W6T8cA40m9YMibSt
+         bEgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUntLgtblxf3THMr1iIjoBCDfPncNDXjrHranVwHAuCo7L/inABFAbQfzSZKL25XJ3o9yTYjBUSQ0B1WxS6SoI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycVzAcpgEukTE6iid4MuE6etXrYodnWW9aKkWjl2A6tcScowr6
+	WQ3AQhecG2EhiSG2poW+eHTMfmo5sn7NoZ/Znae0elYDQnHW1pkuTIEO
+X-Gm-Gg: ATEYQzxCbjA4e5+5aRRdaLZAcOR3hm4iJ59dHk8/lhrqT6cBXpEt8OvIeGVpAux79mN
+	h4ysxhy4KurCbUSv5JS7wynA43L8GlQ85P/KDhI9V0RGq02dzoZFM8CzEuro9r5rZ7s6nBAUl88
+	v5HRw+WC4OMpfnIzM4qf6jVdvuZtFK5K/1zpDk9W345Fb4eUzgk2SkhelGhXSxBDU1QGbfXppxJ
+	Sj1tNYwHNSKGJqnuvNUAuLj51aQZNIRHmkL/e41bXmjA1H08Rwb+eIi+OGTJe++sJ4VCfawTVka
+	xqMlBQCBowWD4UX3MCUTBl/DN/hxavqjFL/JhYMrYTmll7+jWfDLg6SagdMcUQTdVizdGDpWiZT
+	ExJLyF9iUg229hMRryx1f23gZ6U9BEVu9KkphieDWeWXPDb4odbpG6PRSvshxW0Ju7cSxWILJnt
+	/7CUcS5hUGdxyVTg64tUeXDBC2ulg/kg89
+X-Received: by 2002:a05:690c:1c:b0:798:34a:52de with SMTP id 00721157ae682-79a1c1ddd0fmr149731677b3.51.1773700161934;
+        Mon, 16 Mar 2026 15:29:21 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:45::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-79917f08134sm92221467b3.36.2026.03.16.15.29.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 15:29:22 -0700 (PDT)
+        Mon, 16 Mar 2026 15:29:21 -0700 (PDT)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Mon, 16 Mar 2026 15:29:13 -0700
-Subject: [PATCH net-next 2/6] selftests: drv-net: extract _find_bss_map_id
- helper in NetDrvContEnv
+Date: Mon, 16 Mar 2026 15:29:12 -0700
+Subject: [PATCH net-next 1/6] net: devmem: support TX through netkit leased
+ queues
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-2-b53c8cd72b23@meta.com>
+Message-Id: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-1-b53c8cd72b23@meta.com>
 References: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-0-b53c8cd72b23@meta.com>
 In-Reply-To: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-0-b53c8cd72b23@meta.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -86,56 +86,257 @@ X-Mailer: b4 0.14.3
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Factor out a _find_bss_map_id() helper from _attach_bpf() so it can be
-reused by other BPF attachment methods. This will be used by subsequent
-patches in this series that add support for netkit devmem TX testing.
+When a netkit virtual device leases queues from a physical NIC, devmem
+TX bindings created on the netkit device should use the physical NIC
+for DMA operations rather than the virtual device, which has no DMA
+capability.
 
-No functional change to existing tests.
+In bind_tx_doit, walk the device's leased rx queues to discover the
+underlying physical device that supports netmem_tx. Use this device
+for DMA device lookup and pass it as the real_tx_dev in the binding.
+When real_tx_dev is set, it is also used for NUMA-local allocations.
+
+Extend validate_xmit_unreadable_skb() to support the netkit case, where
+the skb is validated twice: once on the netkit guest device and again on
+the physical NIC after BPF redirect or ip forwarding. Both invocations
+must pass for the skb to be transmitted.
 
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- tools/testing/selftests/drivers/net/lib/py/env.py | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ net/core/dev.c         | 26 +++++++++++++++++++-------
+ net/core/devmem.c      | 16 ++++++++++------
+ net/core/devmem.h      |  6 ++++--
+ net/core/netdev-genl.c | 38 +++++++++++++++++++++++++++++++++-----
+ 4 files changed, 66 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index ccff345fe1c1..08e90448f48d 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -467,6 +467,15 @@ class NetDrvContEnv(NetDrvEpEnv):
-                 return (bpf['pref'], bpf['options']['prog']['id'])
-         raise Exception("Failed to get BPF prog ID")
+diff --git a/net/core/dev.c b/net/core/dev.c
+index ca4b26dfb1bd..105bd27be024 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3981,24 +3981,36 @@ static struct sk_buff *sk_validate_xmit_skb(struct sk_buff *skb,
+ static struct sk_buff *validate_xmit_unreadable_skb(struct sk_buff *skb,
+ 						    struct net_device *dev)
+ {
++	struct net_devmem_dmabuf_binding *binding;
+ 	struct skb_shared_info *shinfo;
++	struct net_device *real_tx_dev;
+ 	struct net_iov *niov;
  
-+    def _find_bss_map_id(self, prog_id):
-+        """Find the .bss map ID for a loaded BPF program."""
-+        prog_info = bpftool(f"prog show id {prog_id}", json=True)
-+        for map_id in prog_info.get("map_ids", []):
-+            map_info = bpftool(f"map show id {map_id}", json=True)
-+            if map_info.get("name", "").endswith("bss"):
-+                return map_id
-+        raise Exception(f"Failed to find .bss map for prog {prog_id}")
+ 	if (likely(skb_frags_readable(skb)))
+ 		goto out;
+ 
+-	if (!dev->netmem_tx)
+-		goto out_free;
+-
+ 	shinfo = skb_shinfo(skb);
++	if (shinfo->nr_frags == 0)
++		goto out;
+ 
+-	if (shinfo->nr_frags > 0) {
+-		niov = netmem_to_net_iov(skb_frag_netmem(&shinfo->frags[0]));
+-		if (net_is_devmem_iov(niov) &&
+-		    READ_ONCE(net_devmem_iov_binding(niov)->dev) != dev)
++	niov = netmem_to_net_iov(skb_frag_netmem(&shinfo->frags[0]));
++	if (!net_is_devmem_iov(niov))
++		goto out;
 +
-     def _attach_bpf(self):
-         bpf_obj = self.test_dir / "nk_forward.bpf.o"
-         if not bpf_obj.exists():
-@@ -478,17 +487,7 @@ class NetDrvContEnv(NetDrvEpEnv):
-         self._tc_attached = True
++	binding = net_devmem_iov_binding(niov);
++	real_tx_dev = READ_ONCE(binding->real_tx_dev);
++
++	if (real_tx_dev) {
++		if (!real_tx_dev->netmem_tx)
++			goto out_free;
++		if (READ_ONCE(binding->dev) != dev && real_tx_dev != dev)
+ 			goto out_free;
++		goto out;
+ 	}
  
-         (self._bpf_prog_pref, self._bpf_prog_id) = self._get_bpf_prog_ids()
--        prog_info = bpftool(f"prog show id {self._bpf_prog_id}", json=True)
--        map_ids = prog_info.get("map_ids", [])
--
--        bss_map_id = None
--        for map_id in map_ids:
--            map_info = bpftool(f"map show id {map_id}", json=True)
--            if map_info.get("name").endswith("bss"):
--                bss_map_id = map_id
--
--        if bss_map_id is None:
--            raise Exception("Failed to find .bss map")
-+        bss_map_id = self._find_bss_map_id(self._bpf_prog_id)
++	if (READ_ONCE(binding->dev) != dev || !dev->netmem_tx)
++		goto out_free;
++
+ out:
+ 	return skb;
  
-         ipv6_addr = ipaddress.IPv6Address(self.ipv6_prefix)
-         ipv6_bytes = ipv6_addr.packed
+diff --git a/net/core/devmem.c b/net/core/devmem.c
+index 7ede81509968..a4148cba5b5f 100644
+--- a/net/core/devmem.c
++++ b/net/core/devmem.c
+@@ -181,12 +181,13 @@ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+ }
+ 
+ struct net_devmem_dmabuf_binding *
+-net_devmem_bind_dmabuf(struct net_device *dev,
++net_devmem_bind_dmabuf(struct net_device *dev, struct net_device *real_tx_dev,
+ 		       struct device *dma_dev,
+ 		       enum dma_data_direction direction,
+ 		       unsigned int dmabuf_fd, struct netdev_nl_sock *priv,
+ 		       struct netlink_ext_ack *extack)
+ {
++	struct net_device *node_dev = real_tx_dev ?: dev;
+ 	struct net_devmem_dmabuf_binding *binding;
+ 	static u32 id_alloc_next;
+ 	struct scatterlist *sg;
+@@ -205,13 +206,14 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+ 		return ERR_CAST(dmabuf);
+ 
+ 	binding = kzalloc_node(sizeof(*binding), GFP_KERNEL,
+-			       dev_to_node(&dev->dev));
++			       dev_to_node(&node_dev->dev));
+ 	if (!binding) {
+ 		err = -ENOMEM;
+ 		goto err_put_dmabuf;
+ 	}
+ 
+ 	binding->dev = dev;
++	binding->real_tx_dev = real_tx_dev;
+ 	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
+ 
+ 	err = percpu_ref_init(&binding->ref,
+@@ -254,7 +256,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+ 	 * allocate MTU sized chunks here. Leave that for future work...
+ 	 */
+ 	binding->chunk_pool = gen_pool_create(PAGE_SHIFT,
+-					      dev_to_node(&dev->dev));
++					      dev_to_node(&node_dev->dev));
+ 	if (!binding->chunk_pool) {
+ 		err = -ENOMEM;
+ 		goto err_tx_vec;
+@@ -268,7 +270,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+ 		struct net_iov *niov;
+ 
+ 		owner = kzalloc_node(sizeof(*owner), GFP_KERNEL,
+-				     dev_to_node(&dev->dev));
++				     dev_to_node(&node_dev->dev));
+ 		if (!owner) {
+ 			err = -ENOMEM;
+ 			goto err_free_chunks;
+@@ -280,7 +282,8 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+ 		owner->binding = binding;
+ 
+ 		err = gen_pool_add_owner(binding->chunk_pool, dma_addr,
+-					 dma_addr, len, dev_to_node(&dev->dev),
++					 dma_addr, len,
++					 dev_to_node(&node_dev->dev),
+ 					 owner);
+ 		if (err) {
+ 			kfree(owner);
+@@ -397,7 +400,8 @@ struct net_devmem_dmabuf_binding *net_devmem_get_binding(struct sock *sk,
+ 	 */
+ 	dst_dev = dst_dev_rcu(dst);
+ 	if (unlikely(!dst_dev) ||
+-	    unlikely(dst_dev != READ_ONCE(binding->dev))) {
++	    unlikely(dst_dev != READ_ONCE(binding->dev) &&
++		     dst_dev != READ_ONCE(binding->real_tx_dev))) {
+ 		err = -ENODEV;
+ 		goto out_unlock;
+ 	}
+diff --git a/net/core/devmem.h b/net/core/devmem.h
+index 1c5c18581fcb..ffcf97a33633 100644
+--- a/net/core/devmem.h
++++ b/net/core/devmem.h
+@@ -20,6 +20,8 @@ struct net_devmem_dmabuf_binding {
+ 	struct dma_buf_attachment *attachment;
+ 	struct sg_table *sgt;
+ 	struct net_device *dev;
++	/* Phys dev behind a virtual dev (e.g. netkit) with a queue lease. */
++	struct net_device *real_tx_dev;
+ 	struct gen_pool *chunk_pool;
+ 	/* Protect dev */
+ 	struct mutex lock;
+@@ -84,7 +86,7 @@ struct dmabuf_genpool_chunk_owner {
+ 
+ void __net_devmem_dmabuf_binding_free(struct work_struct *wq);
+ struct net_devmem_dmabuf_binding *
+-net_devmem_bind_dmabuf(struct net_device *dev,
++net_devmem_bind_dmabuf(struct net_device *dev, struct net_device *real_tx_dev,
+ 		       struct device *dma_dev,
+ 		       enum dma_data_direction direction,
+ 		       unsigned int dmabuf_fd, struct netdev_nl_sock *priv,
+@@ -165,7 +167,7 @@ static inline void net_devmem_put_net_iov(struct net_iov *niov)
+ }
+ 
+ static inline struct net_devmem_dmabuf_binding *
+-net_devmem_bind_dmabuf(struct net_device *dev,
++net_devmem_bind_dmabuf(struct net_device *dev, struct net_device *real_tx_dev,
+ 		       struct device *dma_dev,
+ 		       enum dma_data_direction direction,
+ 		       unsigned int dmabuf_fd,
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 7d073894ca74..2b34924dc30f 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -1037,7 +1037,7 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+ 		goto err_rxq_bitmap;
+ 	}
+ 
+-	binding = net_devmem_bind_dmabuf(netdev, dma_dev, DMA_FROM_DEVICE,
++	binding = net_devmem_bind_dmabuf(netdev, NULL, dma_dev, DMA_FROM_DEVICE,
+ 					 dmabuf_fd, priv, info->extack);
+ 	if (IS_ERR(binding)) {
+ 		err = PTR_ERR(binding);
+@@ -1082,6 +1082,8 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ {
+ 	struct net_devmem_dmabuf_binding *binding;
++	struct net_device *real_tx_dev = NULL;
++	struct netdev_rx_queue *lease_rxq;
+ 	struct netdev_nl_sock *priv;
+ 	struct net_device *netdev;
+ 	struct device *dma_dev;
+@@ -1089,6 +1091,7 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ 	struct sk_buff *rsp;
+ 	int err = 0;
+ 	void *hdr;
++	int i;
+ 
+ 	if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_DEV_IFINDEX) ||
+ 	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_DMABUF_FD))
+@@ -1124,16 +1127,41 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ 		goto err_unlock_netdev;
+ 	}
+ 
+-	if (!netdev->netmem_tx) {
++	for (i = 0; i < netdev->real_num_rx_queues; i++) {
++		lease_rxq = READ_ONCE(__netif_get_rx_queue(netdev, i)->lease);
++
++		if (!lease_rxq)
++			continue;
++
++		real_tx_dev = lease_rxq->dev;
++		break;
++	}
++
++	if (real_tx_dev) {
++		if (!netif_device_present(real_tx_dev)) {
++			err = -ENODEV;
++			goto err_unlock_netdev;
++		}
++
++		if (!real_tx_dev->netmem_tx) {
++			err = -EOPNOTSUPP;
++			NL_SET_ERR_MSG(info->extack,
++				       "Driver for queue lease device does not support netmem TX");
++			goto err_unlock_netdev;
++		}
++	}
++
++	if (!real_tx_dev && !netdev->netmem_tx) {
+ 		err = -EOPNOTSUPP;
+ 		NL_SET_ERR_MSG(info->extack,
+ 			       "Driver does not support netmem TX");
+ 		goto err_unlock_netdev;
+ 	}
+ 
+-	dma_dev = netdev_queue_get_dma_dev(netdev, 0);
+-	binding = net_devmem_bind_dmabuf(netdev, dma_dev, DMA_TO_DEVICE,
+-					 dmabuf_fd, priv, info->extack);
++	dma_dev = netdev_queue_get_dma_dev(real_tx_dev ?: netdev, 0);
++	binding = net_devmem_bind_dmabuf(netdev, real_tx_dev, dma_dev,
++					 DMA_TO_DEVICE, dmabuf_fd, priv,
++					 info->extack);
+ 	if (IS_ERR(binding)) {
+ 		err = PTR_ERR(binding);
+ 		goto err_unlock_netdev;
 
 -- 
 2.52.0
