@@ -1,86 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D5B26E6FA;
-	Mon, 16 Mar 2026 23:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7183783BB;
+	Mon, 16 Mar 2026 23:58:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773703893; cv=none; b=Bm5R16rDIjgpLUcSpKh0wilSgvZ2KWx11yckNZu4T8Sj44VNnITX4yTHMmKSoLAF7xBOV2aM/kJ2PWxrOeWPMr5IccM6DmEFLxLqrNoFpuyqvHqqyWUpMLmRDjLL+MSJmicxNuA4R0iOMpASRw91DQ/FdeZcOlqlsfzFNilh9xo=
+	t=1773705530; cv=none; b=NNJbgpLe9d5H1Rlcadhgv/srDm5i6a4WW3ge8lUxDEv8ZiH90LULRuNTjYWY6Stf+yb6YcmpBzPqZa/sRgsvz7Ox7slxax/+nx1hbyOzsWudkTwpEQH7LBOiCF6itKn0xVC/D+VqNWmNCYdbYbL6O6f+GiDsQVAmdbhaloLQwEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773703893; c=relaxed/simple;
-	bh=mokbVaSNGRbUCQQ4SGbI4E3yKDImZ3QdINhNbLzi8Po=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oJOxktom5xoSENDTSL6KYlNk5xLg/ZFHmKCTk/7PNpeuPAtJ1fqvrfOoThwvOPdpP5gtRYVsv751Y0iXrtySzmHawfvtq6Na3fGveEKbj6yXc6/8TqiJgpnFdgAWSlp4OwnbrZKVFZDxIh7k1cqUfq9cyF4vviGIUAGQPDVWboA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hN1fRzFk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773705530; c=relaxed/simple;
+	bh=a+dZEUyDdeIHPJiM8oefSvBrM8pYFXqhXmANYTD+3vA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g3oLflppJ7I9RyBWb3T4uTFILGJiGyUkm4ycQKan6C0j6/UzIv9nAMB18W7rg/efzgo03HcI9wEiK6CQ+AHFof+7bjpJMrM6fRXQq+AGh4KmrALHgNp9ouP2/BlSlqneD+V2xF4ThYNSZq/5cq79GB6h1kQtsCN7n8Xv4FzPT3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJ1mX8Nt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hN1fRzFk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A749C19421;
-	Mon, 16 Mar 2026 23:31:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJ1mX8Nt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3A0C19421;
+	Mon, 16 Mar 2026 23:58:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773703893;
-	bh=mokbVaSNGRbUCQQ4SGbI4E3yKDImZ3QdINhNbLzi8Po=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=hN1fRzFkuoAPo5qf7cCUj/3UZ74Zrg2FGMIpeV+WXs3DgSmup1ufDh90hMZjFc0TC
-	 DFJ5TZCjZPQKQKjORnD6nXc/kg4X+SL6SJtuFZKzc/SmJH8x3Lpni7zXRGSJmC7zCx
-	 g7VH7wJOZJqANs6wbO3dzR0eI7+48NtQaOEffLB3o9yHJpLmt0FdQpGcv1EWJJtNb/
-	 ADvmnC44FS9xSHGIWnlJtVwSRO6c9ouBQkKC+O0VI4rosda2SYh3oAyxbDRgyDV0SU
-	 SPJVnJB69/VFFVSBjUhPhbnu67KO1WBCN7X1nUwGRmGsi0HPAY8in067EPcMCo8ChC
-	 2fFBt9f9P7NSg==
-Date: Mon, 16 Mar 2026 16:31:31 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>, Pavan
- Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, linux-kselftest@vger.kernel.org, Willem de Bruijn
- <willemb@google.com>, Shuah Khan <shuah@kernel.org>, Maxime Chevallier
- <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
- intel-wired-lan@lists.osuosl.org, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>
-Subject: Re: [PATCH net-next v4 0/3] ethtool: Dynamic RSS context
- indirection table resizing
-Message-ID: <20260316163131.2ff161c5@kernel.org>
-In-Reply-To: <87a4w9p95i.fsf@all.your.base.are.belong.to.us>
-References: <20260313071322.3489243-1-bjorn@kernel.org>
-	<20260314093518.43b820b7@kernel.org>
-	<87a4w9p95i.fsf@all.your.base.are.belong.to.us>
+	s=k20201202; t=1773705530;
+	bh=a+dZEUyDdeIHPJiM8oefSvBrM8pYFXqhXmANYTD+3vA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QJ1mX8NtKnuWu39FtAk1jpREYWAVb1YzObRCQ6ku0yKy/+sLB/HjqwW4HDBzu0jXd
+	 x7XqumFhuzgIDkVPGkgOyDktOAQ7CPdSDhg8OBJL2RvwKTUHJ8mejNfO4jKkKzv5UM
+	 80RbM9PP58dR1hEDQNGSdE1SCVQ9a6LXZqp/0O3sAXFr2m3Vvzn7/9+6vRNA322/pf
+	 GEbXyr3RDWlWV/RurYMWHjFosbU6unNsjIIBa/pODwQORxEG+GLPncysC1mNg2dC8t
+	 EsZ/lCYfgtarqaKCYuyrcm1hvFeZGyxIIWsNxyWrTqwmhlwcz/ODHbv0JTp3m3u9Q8
+	 vrP+zviZZgY/w==
+From: Allison Henderson <achender@kernel.org>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	rds-devel@oss.oracle.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	shuah@kernel.org,
+	allison.henderson@oracle.com
+Subject: [PATCH net-next v1] selftest: rds: add tools/testing/selftests/net/rds/config
+Date: Mon, 16 Mar 2026 16:58:48 -0700
+Message-ID: <20260316235848.2395654-1-achender@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, 15 Mar 2026 13:30:33 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
-> Jakub Kicinski <kuba@kernel.org> writes:
->=20
-> > On Fri, 13 Mar 2026 08:13:12 +0100 Bj=C3=B6rn T=C3=B6pel wrote: =20
-> >> Some NICs (e.g. bnxt) change their RSS indirection table size based on
-> >> the queue count, because the hardware table is a shared resource. The
-> >> ethtool core locks ctx->indir_size at context creation, so drivers
-> >> have to reject channel changes when RSS contexts exist.
-> >>=20
-> >> This series adds resize helpers and wires them up in bnxt. =20
-> >
-> > Sorry Bjorn, I was typing the explanation below and I realized that=20
-> > we may be violating user intent. We should already record the user_size
-> > from rss_set_prep_indir() as part of the context (and presumably some
-> > netdev state for the main context?) and don't allow shrinking the
-> > context below that mark.. =20
->=20
-> Don't be sorry! Good catch, and glad you caught it now rather than after
-> it landed.
->=20
-> I'll respin with user_size tracked in the context (and netdev state for
-> context 0) as a lower bound, so resize never folds below the size the
-> user explicitly configured.
->=20
-> WDYT?
+This patch adds an rds selftest config.  Also adjust the config
+generation script to point to this new file
 
-Yes, keep in mind that AFAIR context 0 is not currently tracked
-in the xarray. So maybe add the size of the main / default context=20
-as a field in struct ethtool_netdev_state ?  Or we can start tracking
-it (partially). IDK what's cleaner.
+Signed-off-by: Allison Henderson <achender@kernel.org>
+---
+ tools/testing/selftests/net/rds/config    | 5 +++++
+ tools/testing/selftests/net/rds/config.sh | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/rds/config b/tools/testing/selftests/net/rds/config
+new file mode 100644
+index 000000000000..103f9d941d10
+--- /dev/null
++++ b/tools/testing/selftests/net/rds/config
+@@ -0,0 +1,5 @@
++CONFIG_RDS=y
++CONFIG_RDS_TCP=y
++CONFIG_NET_NS=y
++CONFIG_VETH=y
++CONFIG_NET_SCH_NETEM=y
+diff --git a/tools/testing/selftests/net/rds/config.sh b/tools/testing/selftests/net/rds/config.sh
+index 791c8dbe1095..7cf56ee8882f 100755
+--- a/tools/testing/selftests/net/rds/config.sh
++++ b/tools/testing/selftests/net/rds/config.sh
+@@ -24,7 +24,7 @@ while getopts "g" opt; do
+   esac
+ done
+ 
+-CONF_FILE="tools/testing/selftests/net/config"
++CONF_FILE="tools/testing/selftests/net/rds/config"
+ 
+ # no modules
+ scripts/config --file "$CONF_FILE" --disable CONFIG_MODULES
+-- 
+2.43.0
+
