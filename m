@@ -1,166 +1,151 @@
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58D71EA84
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 14:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773670568; cv=none; b=vFJzhGywoBoKuSx88QZaYH6YrK2Bck4jMuYETb19torkbbEnBU/7Oo85bKxvfidkFaECMVg+JNGHepwfuxSTSyTft1kgNVT4VkZfHtS3f7vVjnjhh7WkpMFINHPBA1O5Kj5iC9yLOkpghZKYS887NdgWUmTgFJLCCB1L7QZyzVw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773670568; c=relaxed/simple;
-	bh=QJkROlYAAMtA2AGK13Zr9Dg6PXgZQvDDOmnAOX7+8uM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=OeEHdEYTfBUQOV1/YyHP9P2o8l4uO259j3mhDnkDpnkcVwG88HO0sJsdkeVsvjRluy/dXlIIkm+ksw8uNW3ZiTEd4bDbwqN3CB9Pa3WXbxVspNVeTqEwX61l2a7U2ox9Ezbscu0tOZzFZqU/E8injHlXfZOpw9uebPEae4xbX5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=yBUJs0Th; arc=none smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C58285041
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 14:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773671402; cv=pass; b=bVNqKeTQVyCkgzaEggrbSwy4tTkeS1fvVjrnBPJ25tdWtvME71Ptq+a7v2FgEU62bhF/Jxe/jCamM2ARYYh+Hrh8x6AuKdaFoj+/JimY7E/CPjS2mjdyJ3s6YdECpzuBB6rYZgYAwG2/p7GLgbPcbfh7v9kkfz7FUm+Z6IcscXw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773671402; c=relaxed/simple;
+	bh=rJRFS+rK9leg5GTdMzhBulrcz4gOf+cJLikV/upD6AI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eV0gUYr2x1J7XpKJ1oB+IOrPJJR8Qf+ThcJS1w7fU8mj027E0vE1zh5VQ2o5XfA70Vp+IBjxUCgPheQoX6DPBj0jeB0lpt2Wxr/L4+Va5I2NzKuRGNhSKyZJIIC2RsWqgzHID6FXGMWUREaubRWEPHAhwtCTGcPP7pwbtOYomcE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fWghmkLH; arc=pass smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="yBUJs0Th"
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-94e578a0fa5so2568555241.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 07:16:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fWghmkLH"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-439c5b40f60so3632282f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 07:30:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773671399; cv=none;
+        d=google.com; s=arc-20240605;
+        b=W2WiDJ6SddD4G0yeHrhrAbK47SrFMs3ArkAWmuKsLPJnChqtd8JBF5YrLT5+72HYiC
+         38Jdr1pjwuhv8Yh6gx9sxAhO5kxbLT9/0hXc+W51TzVHNlheh5rZZN4tcAQCnIAZJqTw
+         ZdzVFpOiyCuHpl+3fMbmIoLHSL7uXLtv/BU6Z76dfqd2zsepzwAev8a83mYozoCVFR+B
+         ICvthGbbQYkDkk+5/uVW9i4x9uEF3R4Ko9fC/JY9ByWWGUKWjOnSphYbl5wjJwg0a7FJ
+         ii2YYYwkqWjpxquIdvOZ39oAoeygnQQxeIMaYAq5zSMKJYbW4ivKlVORciyutQdV+sue
+         xR1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=b8O1jcNEYGgYscyDPYtdi391cu8OxzVlX8P/V5t1fLY=;
+        fh=6sD7LpEfjJJr43upOkiH30uyTXg0h01jcvTtJwjb9GU=;
+        b=D1j2Qocv6fVC+fTSRKE9ycrEr6r2Ns3rw695mlXn1xG6ai3ZYpWTCIX7/zUiq/bL/F
+         Hee8iDeteLVJHQWtF1UD1mqlLBFlsH6xqjWA06/jfRRBv5rv1yg90KceBzKPRN/cPx57
+         p6T8roSAa5TAZI1xIUmCuE0Tc18M9gVPenqPOwFu8zY8khkap+YEsjUCy7cGN4nhjIyP
+         lKLIa5YN+i8D8RtrHDtuQoWXeEvCL9VIaJ9NNp3N5lOZBLUsqFiIZNpYQqIOB6zo7Ea9
+         PdnS9/DCthNDmXzqKwv+Bs7TUnvzBmwR1I2hs7DNOatduM0OrN8rAVML+z4748n9zVGY
+         8JLA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773670565; x=1774275365; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773671399; x=1774276199; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G+pZogzXY0yFkLhI9otlHstzKzlH6EsSqZlTH+u5uWI=;
-        b=yBUJs0ThfOMd/s94gMUZpyhuGcJ9LQJdi9D+Jz7mkWH4Fow5FBdeWXzKuuNXHRTaL6
-         ckxTwd5lluNe1doeUx6QfQ9bHyNEMDTOm/cecSPqdg0IVj5Qwa4XYE22sD2yWRBH2xIH
-         59KDIadZCZPxTbP3Lz25iBATZF2GqefI1Hc8faEu7sTAMWF4AZT38H64zsj1/nW90O3g
-         jGqPz8DdFUe/RB4uw7XjBGc8utnW+yIGRQzTAfu8rkOWxYXNyT0Wv1BTKQ9SQFzwLu7w
-         XHxfTzxaqdDC0Au7DVsM3cyx2HLL/zcugOMeEV63Sj+j9TE9qmJo96pVO13Clo+795Rd
-         8QtQ==
+        bh=b8O1jcNEYGgYscyDPYtdi391cu8OxzVlX8P/V5t1fLY=;
+        b=fWghmkLH9MDk/jsLw3gQlzKnzQ/FrP8v3FHykcCGHU8nMKLcDqV1GsL3hZsuF44RUH
+         /seiDrM8IzRen6N1c1TfJIKQsqAz99kbrMkfxTPfPswtVMNB77ZfrG28uywbFkGNcQdp
+         SIZ8vAaXcA2eIwcZOLCkD25ghgd8ftxmazqiFqWrdUQ5XDsLJkvzhNZLFBD5bw0GNFXZ
+         I9nT+7veYlgugvho7eVe86nQcNEnAorkNNq9zF6uQKFJZdvNnBvEqFpWP6bfgdmLn3Pd
+         l+FLxD+/WBH1aes90irKKXDoJpqCKOhz3EEBM2M7x1fyhdyRQRG4+DtbTYQZY6CuhqFw
+         6TIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773670565; x=1774275365;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G+pZogzXY0yFkLhI9otlHstzKzlH6EsSqZlTH+u5uWI=;
-        b=bA4tXkPoU94uea6mm7lYETVbdzJMLQ5NyW0xs3E5TM6YOP384XM7ITnsgRZ2oWS3Z7
-         fZOygYdgt9MQc/T9QWaMO0/XYRDo10Hh2xRXSwv4j6kwZmGXimEhhg2+VdQzWk3ElLe7
-         jlNcM8HncPuApQ7HluKpE1oTSsmRSMXnn64v012DIYrvNpjAuo/26cYjB+vDuUvC49ZG
-         /YITO19m4Jm++JG9ZmXqVaM2w7JL3xVD0KsGqEcSSXufhw77Ffh9p9v4LOwl3DUXfpyA
-         /d9D/v2gINa+Dnni1FOPK4GQnmZcFpyzvhnVU04R0Q7PKe1S3p1ZvXOFoX8Wco5mW4bz
-         0cQA==
-X-Forwarded-Encrypted: i=1; AJvYcCXV2iAQ8aJhZ8NBMSncHq9sXPIjnqZNt7BsclSWAswADoQBppCoyop8NbKAj9EeV6sOpw/cAU480RK7e0BI37g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmvTEe/rDJZfYtWF+1Rja/jp9ctqSMNN74BP4HL0rZyD7txyyo
-	UPP9Qjd+MhcvURoiSQP2PqP0TNtMFL7ZnexlGLgvy+w8QKZ7jqmoLAdoqQ78O4/Nq60=
-X-Gm-Gg: ATEYQzx5uOJgk2H/yRfcoxOBisO8KpDZOSR+o/6cYrq85UAuIl/0lHgb4pOKLwS/pxc
-	JVKY7iaiKuIBb5Yle3IhZL3wRyy3mbhyyhqkuBVFOtgsb6tKXFvoO+JbIMn8pyZhIY4sz0r32lF
-	rXTuKRGP5Wk+FjR3CVuO0hbwqG3HeEbQX7A9O2Uw7PX5eG+xU+kp8EcALj1oxOv4/vZbkaK0F/c
-	WIRuqsjcPZEkcor8gFWyXZEJra+6GycLudHkCE17qR+oyUJ//l8Rr/1/dJYB3YeVjc1lNU+l2FY
-	ATX9TumqanlyzGOqQQG6QCH1hW3UHx42if3kRAhHgVbLMRjmrBSsk2GMOj66Ah+KrXgutja9SQ4
-	iMc2Dk1+Ys4YzhfIG/f2wI62KfPNqkjRos5+TI0jHM3erDIYu2hIqg/IkL61wQZYlRI6t73LMrl
-	BkAZWjDeQp4s7jjOlnclZLbJY=
-X-Received: by 2002:a05:6102:2911:b0:5ff:d434:b507 with SMTP id ada2fe7eead31-6020e2cbe78mr5485366137.17.1773670565121;
-        Mon, 16 Mar 2026 07:16:05 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda2152a41sm1223428785a.43.2026.03.16.07.16.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Mar 2026 07:16:04 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773671399; x=1774276199;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=b8O1jcNEYGgYscyDPYtdi391cu8OxzVlX8P/V5t1fLY=;
+        b=AXWLF5g3gZvO6BQ2eKfk9nNyzTLgDOGY5bsXwK2lwWwxeWcuSo6mXxha9oL1mTRuUZ
+         ApO1HdN83YmhAs3e2I6mKRrsp+2RTzP3hnDJPGx8fdjRWu8wUVFoJH9S9syhnNzrFgWe
+         nk5AFdvIBpUCO8zEkbCr9ixEMSvqP18EHz28yc0MNrRSIC2nhrfSmVD9iGO88hZkr+dO
+         XlObVNEv5LRlqdzCjiC25LcZv+FiShn+x6DefyzClLv1zICJg8W4AoB1hw0r7bDUA0mu
+         L2JXehikRIeGgoh+6MHo/FMDoyrJqfrj4aBKs0wmFqbdpf108uq2grlbyx+XLBPKRsvN
+         XTPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUfXFpuUp0sfeFiBEQHcnZ2zRSxwzfPOruK8kDj8dmF9RzU2omXiA74a9TC7NvFOIdWAGdzXjLIfLClVM7OUsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywb5mSOPdXjCJHbv2q+cxUb79E5YCGaGBBopyz15eJCHLbu4V/o
+	oUUoWuH/A8RUGBBw1Mf1H+tyRHM8lGNZc0rAT7Q6M1AgcaBYhahyKEqIo3Y232cBot7lD5MlDfD
+	zOaHW2vRRO0ejuqCTnLr+Dx8KZ8DQa4s=
+X-Gm-Gg: ATEYQzy3njSRunmZMhspOCEcP+dc9V/BFDI/wrcw/QDTfu/Ij4cwd1LrsqmNd38KmuF
+	7A1vLhze0rJy+tMe/sW0+Hv9AK5zsj1YivJZw0Dif18J4nPhTbusBkaynscPPKQOqsK0r3GUgus
+	p9q1fF5DGK/ZRWQMo7n/TDbHhP/xSxhGMRT5KszMT0xbVkhwGe7P+Rfhz3zMibfG+AqLhawsIye
+	NskD0F29JholWjlWbPphD5v1GqomfrjlReAUijZw7VtkOxEnFbtYhAx2YTMHZy/GFM5HdPMu2Yz
+	rGUgGMTlqNW7+XhZXIzQ8Sa8j4+3fLthCq4QfA0ozupRa+tfYpGOlbQOjXn6ERVXLlg=
+X-Received: by 2002:a05:6000:381:b0:439:d8cb:1392 with SMTP id
+ ffacd0b85a97d-43a04d91a43mr25216111f8f.26.1773671398558; Mon, 16 Mar 2026
+ 07:29:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260316112843.78657-1-pilgrimtao@gmail.com> <20260316112843.78657-7-pilgrimtao@gmail.com>
+In-Reply-To: <20260316112843.78657-7-pilgrimtao@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 16 Mar 2026 07:29:46 -0700
+X-Gm-Features: AaiRm52jfrG-QXxCpkn-e4a_CxQ3E_JeYlW7Cp4Cm58pDy-9uGQT9qrmcAXzcQM
+Message-ID: <CAADnVQKLsC2=RcehL54yHQ-vv0poXydFkRDHW1JZxAEncE=SxQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 6/8] bpf: allow bpf_list_front/back result as
+ the prev argument of bpf_list_add_impl
+To: Chengkaitao <pilgrimtao@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 16 Mar 2026 10:16:03 -0400
-Message-Id: <DH49QO1Y58GG.2LRJUAR3P1HJT@etsalapatis.com>
-Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
- <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
- <jolsa@kernel.org>, <shuah@kernel.org>
-Subject: Re: [PATCH] selftests/bpf: restrict ns_current_pid_tgid updates to
- target task
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Sun Jian" <sun.jian.kdev@gmail.com>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20260316073409.4040-1-sun.jian.kdev@gmail.com>
-In-Reply-To: <20260316073409.4040-1-sun.jian.kdev@gmail.com>
 
-On Mon Mar 16, 2026 at 3:34 AM EDT, Sun Jian wrote:
-> ns_current_pid_tgid uses a shared syscall tracepoint for
-> current_pid_tgid tracepoint subtests. When selftests run in parallel,
-> unrelated tasks can trigger the same hook and overwrite BSS results,
-> causing false failures.
+On Mon, Mar 16, 2026 at 4:29=E2=80=AFAM Chengkaitao <pilgrimtao@gmail.com> =
+wrote:
 >
-> Store the expected pid/tgid in BSS and update user_pid/user_tgid only
-> when bpf_get_ns_current_pid_tgid() returns values matching the target
-> task.
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
 >
-> This prevents unrelated tasks from interfering with the test, allows
-> dropping the serial-only restriction, and removes the obsolete TODO
-> comment.
+> KF_ARG_PTR_TO_LIST_NODE normally requires an owning reference
+> (PTR_TO_BTF_ID | MEM_ALLOC and ref_obj_id). For bpf_list_add_impl's
+> third argument (prev), allow a non-owning reference with ref_obj_id=3D=3D=
+0
+> so that the result of bpf_list_front() or bpf_list_back() can be passed
+> as the insertion point. When prev is such a non-owning ref, skip the
+> MEM_ALLOC/ref_obj_id checks and jump to the shared list-node processing.
+> Owning refs (e.g. from pop + refcount_acquire) still pass the existing
+> checks and reach the same label.
 >
-> Tested:
->   ./test_progs -t current_pid_tgid
->   ./test_progs -j$(nproc) -t current_pid_tgid
->
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 > ---
->  .../testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c | 5 +++--
->  .../testing/selftests/bpf/progs/test_ns_current_pid_tgid.c | 7 +++++++
->  2 files changed, 10 insertions(+), 2 deletions(-)
+>  kernel/bpf/verifier.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c=
- b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> index 99c953f2be21..e3938bb48151 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> @@ -34,6 +34,8 @@ static int get_pid_tgid(pid_t *pid, pid_t *tgid,
->  	bss->ino =3D st.st_ino;
->  	bss->user_pid =3D 0;
->  	bss->user_tgid =3D 0;
-> +	bss->expected_pid =3D *pid;
-> +	bss->expected_tgid =3D *tgid;
->  	return 0;
->  }
-> =20
-> @@ -200,8 +202,7 @@ static void test_ns_current_pid_tgid_new_ns(int (*fn)=
-(void *), void *arg)
->  		return;
->  }
-> =20
-> -/* TODO: use a different tracepoint */
-> -void serial_test_current_pid_tgid(void)
-> +void test_current_pid_tgid(void)
->  {
->  	if (test__start_subtest("root_ns_tp"))
->  		test_current_pid_tgid_tp(NULL);
-> diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c=
- b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-> index 386315afad65..d02c182a7100 100644
-> --- a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-> +++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-> @@ -14,6 +14,8 @@ struct {
-> =20
->  __u64 user_pid =3D 0;
->  __u64 user_tgid =3D 0;
-> +__u64 expected_pid =3D 0;
-> +__u64 expected_tgid =3D 0;
->  __u64 dev =3D 0;
->  __u64 ino =3D 0;
-> =20
-> @@ -24,6 +26,11 @@ static void get_pid_tgid(void)
->  	if (bpf_get_ns_current_pid_tgid(dev, ino, &nsdata, sizeof(struct bpf_pi=
-dns_info)))
->  		return;
-> =20
-> +	if (expected_pid && nsdata.pid !=3D expected_pid)
-> +		return;
-> +	if (expected_tgid && nsdata.tgid !=3D expected_tgid)
-> +		return;
-> +
->  	user_pid =3D nsdata.pid;
->  	user_tgid =3D nsdata.tgid;
->  }
->
-> base-commit: f338e77383789c0cae23ca3d48adcc5e9e137e3c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 98ddb370feb5..0a6f2e6a5d28 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13737,6 +13737,14 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>                                 return ret;
+>                         break;
+>                 case KF_ARG_PTR_TO_LIST_NODE:
+> +                       if (meta->func_id =3D=3D special_kfunc_list[KF_bp=
+f_list_add_impl]
+> +                           && i =3D=3D 2 && type_is_non_owning_ref(reg->=
+type)
+> +                           && !reg->ref_obj_id) {
+> +                               /* Allow bpf_list_front/back return value=
+ as
+> +                                * list_add_impl's third arg (R3).
+> +                                */
+> +                               goto check_ok;
+> +                       }
 
+This is too specific and non scalable.
+Another kfunc with similar requirements would need a separate 'if'
+with func_id =3D=3D new_kfunc and potentially different 'i =3D=3D N'.
+Let's introduce a new double underscore suffix for this
+or some other way.
+
+pw-bot: cr
