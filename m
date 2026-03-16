@@ -1,322 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F873378826;
-	Mon, 16 Mar 2026 22:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8FA35028C;
+	Mon, 16 Mar 2026 22:57:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773701117; cv=none; b=GhNmukDRlrIg72XfmcmJpeCnp6VsgLbnrrDZKENhmUttwoudWbMSWtWYGWw9NSiipmBpZVOlXEWOwOvMEkzRuqpARhihXszWi5jgtHjCFuJZDycDBx5Hcro9SdTV5m9hh71RTjJWIp4Uyk5VNPmslk5E0PPZlobOkNs7d6NeFLY=
+	t=1773701878; cv=none; b=AjUNFH2jvGq8l3EzeX4JN+2Ffh2gMxrj46EKp7Il2z8ZAhMFG+EIh4S0p3DORtu7+hMh0rrU5P8qij1c51JyYO/7CRTCYzXuCeBkcKduO36LoIlqroT2voapv7XoStZaLu2/Qwj86FkXnGsbBQgDisUYX2j+OgvbPYbGkONb1Oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773701117; c=relaxed/simple;
-	bh=32rlDhmCkQ4jOtAgK9feJws4V+wYoAB+fZ/p02O4mpA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IkwvEPZvno7aA6YGwkAd5CIhR5i5vR5KrW0iU4x7muowyjkGscMJQ74pv6h0KQTlSdwgeIoeL7/uL4iV5Am1DeNxw4GcsTUX3SHk2dNybo1xBaBbnZ+PnWBHCvOhc0Mj9QgOELdy9P5BJRBhLjYvkIr6vvZjHsBpcGkZSR3LUAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIVarzt1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773701878; c=relaxed/simple;
+	bh=mEnlDtD+uMXBaY3t2IfkmLKFopSN2YDt1ilz6+WKW4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Vu7xdIW5UxGQMMrJ5XOdy27SluBTkn49II5s8nY7NNTlOJ8Dru7UVX0sPPy9La+DlsEEHByA6rCZtAzGsRMn697SSIRvM8q2zxtN/MLCAXgEBHXlN7K8T7JhT7HkMIBWGk3hdINK/E3XNteVgHo2bhQjenwT9ssO2qxooowO2fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dYytfHIU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIVarzt1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB8EC2BCAF;
-	Mon, 16 Mar 2026 22:45:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dYytfHIU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B5CC19421;
+	Mon, 16 Mar 2026 22:57:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773701117;
-	bh=32rlDhmCkQ4jOtAgK9feJws4V+wYoAB+fZ/p02O4mpA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uIVarzt1/mgxRouM/oaieOoLqsSSzQoZ93D8x0S9RIqw8wJXFZ1mkP9ynsc7qSaK7
-	 NHPPUZD8UaKsksAFXroO4Wpj7a0cPMzMHDomvF/ULuCd6lloBlW9kNeqFvnncBEOcl
-	 mKx0nXrvK0+vdIhsl8YbrpvTK/vxBr2KUN749b8ZGxAaOl/PMgg7GvdI2qMyG7NAe9
-	 MskKQWFMN0W/ctw1IdyU1ctrAUNEKsOsOnvXz5/4XRPL8Y2KnZZaNLrO5N+nSB6GKL
-	 KW6ozR/FJ7vlWTDY0PeBHNO4P2O9MTfbVDs9ELUznYERB8CXYWFgnbw4n2eDKbKKql
-	 fB7HBWCbAJOUw==
+	s=k20201202; t=1773701878;
+	bh=mEnlDtD+uMXBaY3t2IfkmLKFopSN2YDt1ilz6+WKW4U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dYytfHIUOzat5FH4iDWFKQ+0LqEBB/CopaYZWcxqPfMn6TDVJ5aH2m7e7b6i2uI+G
+	 njfJqsJHJEfJczHdFp+9mf+HI3bQ1IsCULV7Za2wDaYAEj9Fo0kh8Pi7OuDertqPRS
+	 Rl0/jJqSngDaNVj6stP+jWC41xXtSehkjltX63SMWOlUwrzAnPwCmSA2iV+L1CjHhA
+	 LnNsPapvzaV6qITwziVvpn7+IND6I895QjO8R0ZPpEt5pxkemP75Fgna1R/Tbpw178
+	 fu0AaoYy8JiT2wSC0G1wnhYdgF9IahedQfdKYUX95VoEM5I5nt2m650V/+QJ3gT5aZ
+	 kaEqPojDY5xFA==
+Date: Mon, 16 Mar 2026 15:57:56 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	willemb@google.com,
-	petrm@nvidia.com,
-	dw@davidwei.uk,
-	mst@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v3 6/6] selftests: drv-net: gro: add a test for GRO depth
-Date: Mon, 16 Mar 2026 15:45:05 -0700
-Message-ID: <20260316224505.279672-7-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260316224505.279672-1-kuba@kernel.org>
-References: <20260316224505.279672-1-kuba@kernel.org>
+To: Dmitry Vyukov <dvyukov@google.com>
+Cc: syzkaller <syzkaller@googlegroups.com>, Sasha Levin <sashal@kernel.org>,
+ linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org, Thomas
+ Gleixner <tglx@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Jonathan Corbet
+ <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, Cyril Hrubis
+ <chrubis@suse.cz>, Kees Cook <kees@kernel.org>, Jake Edge <jake@lwn.net>,
+ David Laight <david.laight.linux@gmail.com>, Askar Safin
+ <safinaskar@zohomail.com>, Gabriele Paoloni <gpaoloni@redhat.com>, Mauro
+ Carvalho Chehab <mchehab@kernel.org>, Christian Brauner
+ <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Andrew
+ Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 0/9] Kernel API Specification Framework
+Message-ID: <20260316155756.25b985f5@kernel.org>
+In-Reply-To: <CACT4Y+arWePyxnV3hWk5RanWZpoc7=ALQ6DV_2MCuQkNoTtJUw@mail.gmail.com>
+References: <20260313150928.2637368-1-sashal@kernel.org>
+	<20260314111822.63a2ba4a@kernel.org>
+	<CACT4Y+arWePyxnV3hWk5RanWZpoc7=ALQ6DV_2MCuQkNoTtJUw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Reuse the long sequence test to max out the GRO contexts.
-Repeat for a single queue, 8 queues, and default number
-of queues but flow steering to just one.
+On Mon, 16 Mar 2026 08:05:53 +0100 Dmitry Vyukov wrote:
+> On Sat, 14 Mar 2026 at 19:18, Jakub Kicinski <kuba@kernel.org> wrote:
+> > On Fri, 13 Mar 2026 11:09:10 -0400 Sasha Levin wrote:  
+> > > This enables static analysis tools to verify userspace API usage at compile
+> > > time, test generation based on formal specifications, consistent error handling
+> > > validation, automated documentation generation, and formal verification of
+> > > kernel interfaces.  
+> >
+> > Could you give some examples? We have machine readable descriptions for
+> > Netlink interfaces, we approached syzbot folks and they did not really
+> > seem to care for those.  
+> 
+> I think our reasoning wrt syzkaller was that not all interfaces in all
+> relevant kernels are described with netlink yml descriptions, so we
+> need to continue using the extraction of interfaces from the source
+> code. And if we have that code, then using yml as an additional data
+> source only adds code/complexity. Additionally, we may extract some
+> extra constraints/info from code that are not present in yml.
+> 
+> Realistically system call descriptions may have the same problem for
+> us at this point, since we extract lots of info from the source code
+> already:
+> https://raw.githubusercontent.com/google/syzkaller/refs/heads/master/sys/linux/auto.txt
 
-The SW GRO's capacity should be around 64 per queue
-(8 buckets, up to 8 skbs in a chain).
+yup! we haven't tried to make the yml spec super useful to syzbot 
+to be fair. I'm just flagging that example because in our case we
+quickly went from "this will obviously be useful to syzbot" to
+"although we could, it may not be super practical"
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v2:
- - move this "test" to SW, we can check SW GRO capacity too
-v1: https://lore.kernel.org/20260205220541.2992807-10-kuba@kernel.org
----
- tools/testing/selftests/drivers/net/gro.py | 201 +++++++++++++++++++--
- 1 file changed, 181 insertions(+), 20 deletions(-)
+> (and LLMs obviously can allow us to extract more)
 
-diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
-index 2da53686354f..795dbcc583a3 100755
---- a/tools/testing/selftests/drivers/net/gro.py
-+++ b/tools/testing/selftests/drivers/net/gro.py
-@@ -35,11 +35,18 @@ coalescing behavior.
-   - large_rem: Large packet remainder handling
- """
- 
-+import glob
- import os
-+import re
- from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import NetDrvEpEnv, KsftXfailEx
-+from lib.py import NetdevFamily, EthtoolFamily
- from lib.py import bkg, cmd, defer, ethtool, ip
--from lib.py import ksft_variants
-+from lib.py import ksft_variants, KsftNamedVariant
-+
-+
-+# gro.c uses hardcoded DPORT=8000
-+GRO_DPORT = 8000
- 
- 
- def _resolve_dmac(cfg, ipver):
-@@ -113,6 +120,98 @@ from lib.py import ksft_variants
-         ksft_pr(eth_cmd)
- 
- 
-+def _get_queue_stats(cfg, queue_id):
-+    """Get stats for a specific Rx queue."""
-+    cfg.wait_hw_stats_settle()
-+    data = cfg.netnl.qstats_get({"ifindex": cfg.ifindex, "scope": ["queue"]},
-+                                dump=True)
-+    for q in data:
-+        if q.get('queue-type') == 'rx' and q.get('queue-id') == queue_id:
-+            return q
-+    return {}
-+
-+
-+def _setup_isolated_queue(cfg):
-+    """Set up an isolated queue for testing using ntuple filter.
-+
-+    Remove queue 1 from the default RSS context and steer test traffic to it.
-+    """
-+    test_queue = 1
-+
-+    qcnt = len(glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*"))
-+    if qcnt < 2:
-+        raise KsftXfailEx(f"Need at least 2 queues, have {qcnt}")
-+
-+    # Remove queue 1 from default RSS context by setting its weight to 0
-+    weights = ["1"] * qcnt
-+    weights[test_queue] = "0"
-+    ethtool(f"-X {cfg.ifname} weight " + " ".join(weights))
-+    defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    # Set up ntuple filter to steer our test traffic to the isolated queue
-+    flow  = f"flow-type tcp{cfg.addr_ipver} "
-+    flow += f"dst-ip {cfg.addr} dst-port {GRO_DPORT} action {test_queue}"
-+    output = ethtool(f"-N {cfg.ifname} {flow}").stdout
-+    ntuple_id = int(output.split()[-1])
-+    defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
-+
-+    return test_queue
-+
-+
-+def _setup_queue_count(cfg, num_queues):
-+    """Configure the NIC to use a specific number of queues."""
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < num_queues:
-+        raise KsftXfailEx(f"Need at least {num_queues} queues, max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+    ethtool(f"-L {cfg.ifname} combined {num_queues}")
-+
-+
-+def _run_gro_bin(cfg, test_name, protocol=None, num_flows=None,
-+                 order_check=False, verbose=False, fail=False):
-+    """Run gro binary with given test and return the process result."""
-+    if not hasattr(cfg, "bin_remote"):
-+        cfg.bin_local = cfg.net_lib_dir / "gro"
-+        cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
-+
-+    if protocol is None:
-+        ipver = cfg.addr_ipver
-+        protocol = f"ipv{ipver}"
-+    else:
-+        ipver = "6" if protocol[-1] == "6" else "4"
-+
-+    dmac = _resolve_dmac(cfg, ipver)
-+
-+    base_args = [
-+        f"--{protocol}",
-+        f"--dmac {dmac}",
-+        f"--smac {cfg.remote_dev['address']}",
-+        f"--daddr {cfg.addr_v[ipver]}",
-+        f"--saddr {cfg.remote_addr_v[ipver]}",
-+        f"--test {test_name}",
-+    ]
-+    if num_flows:
-+        base_args.append(f"--num-flows {num_flows}")
-+    if order_check:
-+        base_args.append("--order-check")
-+    if verbose:
-+        base_args.append("--verbose")
-+
-+    args = " ".join(base_args)
-+
-+    rx_cmd = f"{cfg.bin_local} {args} --rx --iface {cfg.ifname}"
-+    tx_cmd = f"{cfg.bin_remote} {args} --iface {cfg.remote_ifname}"
-+
-+    with bkg(rx_cmd, ksft_ready=True, exit_wait=True, fail=fail) as rx_proc:
-+        cmd(tx_cmd, host=cfg.remote)
-+
-+    return rx_proc
-+
-+
- def _setup(cfg, mode, test_name):
-     """ Setup hardware loopback mode for GRO testing. """
- 
-@@ -233,30 +332,14 @@ from lib.py import ksft_variants
- 
-     _setup(cfg, mode, test_name)
- 
--    base_cmd_args = [
--        f"--{protocol}",
--        f"--dmac {_resolve_dmac(cfg, ipver)}",
--        f"--smac {cfg.remote_dev['address']}",
--        f"--daddr {cfg.addr_v[ipver]}",
--        f"--saddr {cfg.remote_addr_v[ipver]}",
--        f"--test {test_name}",
--        "--verbose"
--    ]
--    base_args = " ".join(base_cmd_args)
--
-     # Each test is run 6 times to deflake, because given the receive timing,
-     # not all packets that should coalesce will be considered in the same flow
-     # on every try.
-     max_retries = 6
-     for attempt in range(max_retries):
--        rx_cmd = f"{cfg.bin_local} {base_args} --rx --iface {cfg.ifname}"
--        tx_cmd = f"{cfg.bin_remote} {base_args} --iface {cfg.remote_ifname}"
--
-         fail_now = attempt >= max_retries - 1
--
--        with bkg(rx_cmd, ksft_ready=True, exit_wait=True,
--                 fail=fail_now) as rx_proc:
--            cmd(tx_cmd, host=cfg.remote)
-+        rx_proc = _run_gro_bin(cfg, test_name, protocol=protocol,
-+                               verbose=True, fail=fail_now)
- 
-         if rx_proc.ret == 0:
-             return
-@@ -270,11 +353,89 @@ from lib.py import ksft_variants
-         ksft_pr(f"Attempt {attempt + 1}/{max_retries} failed, retrying...")
- 
- 
-+def _capacity_variants():
-+    """Generate variants for capacity test: mode x queue setup."""
-+    setups = [
-+        ("isolated", _setup_isolated_queue),
-+        ("1q", lambda cfg: _setup_queue_count(cfg, 1)),
-+        ("8q", lambda cfg: _setup_queue_count(cfg, 8)),
-+    ]
-+    for mode in ["sw", "hw", "lro"]:
-+        for name, func in setups:
-+            yield KsftNamedVariant(f"{mode}_{name}", mode, func)
-+
-+
-+@ksft_variants(_capacity_variants())
-+def test_gro_capacity(cfg, mode, setup_func):
-+    """
-+    Probe GRO capacity.
-+
-+    Start with 8 flows and increase by 2x on each successful run.
-+    Retry up to 3 times on failure.
-+
-+    Variants combine mode (sw, hw, lro) with queue setup:
-+      - isolated: Use a single queue isolated from RSS
-+      - 1q: Configure NIC to use 1 queue
-+      - 8q: Configure NIC to use 8 queues
-+    """
-+    max_retries = 3
-+
-+    _setup(cfg, mode, "capacity")
-+    queue_id = setup_func(cfg)
-+
-+    num_flows = 8
-+    while True:
-+        success = False
-+        for attempt in range(max_retries):
-+            if queue_id is not None:
-+                stats_before = _get_queue_stats(cfg, queue_id)
-+
-+            rx_proc = _run_gro_bin(cfg, "capacity", num_flows=num_flows)
-+            output = rx_proc.stdout
-+
-+            if queue_id is not None:
-+                stats_after = _get_queue_stats(cfg, queue_id)
-+                qstat_pkts = (stats_after.get('rx-packets', 0) -
-+                              stats_before.get('rx-packets', 0))
-+                gro_pkts = (stats_after.get('rx-hw-gro-packets', 0) -
-+                            stats_before.get('rx-hw-gro-packets', 0))
-+                qstat_str = f" qstat={qstat_pkts} hw-gro={gro_pkts}"
-+            else:
-+                qstat_str = ""
-+
-+            # Parse and print STATS line
-+            match = re.search(
-+                r'STATS: received=(\d+) wire=(\d+) coalesced=(\d+)', output)
-+            if match:
-+                received = int(match.group(1))
-+                wire = int(match.group(2))
-+                coalesced = int(match.group(3))
-+                status = "PASS" if received == num_flows else "FAIL"
-+                ksft_pr(f"flows={num_flows} attempt={attempt + 1} "
-+                        f"received={received} wire={wire} "
-+                        f"coalesced={coalesced}{qstat_str} [{status}]")
-+                if received == num_flows:
-+                    success = True
-+                    break
-+            else:
-+                ksft_pr(rx_proc)
-+                ksft_pr(f"flows={num_flows} attempt={attempt + 1}"
-+                        f"{qstat_str} [FAIL - can't parse stats]")
-+
-+        if not success:
-+            ksft_pr(f"Stopped at {num_flows} flows")
-+            break
-+
-+        num_flows *= 2
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
- 
-     with NetDrvEpEnv(__file__) as cfg:
--        ksft_run(cases=[test], args=(cfg,))
-+        cfg.ethnl = EthtoolFamily()
-+        cfg.netnl = NetdevFamily()
-+        ksft_run(cases=[test, test_gro_capacity], args=(cfg,))
-     ksft_exit()
- 
- 
--- 
-2.53.0
-
+Didn't even think of that. LLMs should make short work of this sort of
+extraction of information from source code..
