@@ -1,168 +1,122 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012012.outbound.protection.outlook.com [40.93.195.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CC33DA7E1;
-	Mon, 16 Mar 2026 18:21:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773685281; cv=fail; b=JJloAEDbbYc38UCEmvfhMumkLizf6ubKs2DHMPmiqTGBiavyFVn3eGi55fpn5zm7Z8/yjZ8bLHfkUh9OrfR49do9TMDnt/hdKUEZhlwMGMATGqZU03rxWZx9gUJkQhhJWa7NuVKi0JwoYKdpLSGSt06enIUYYlctI6ssIALv/To=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773685281; c=relaxed/simple;
-	bh=HG71p2B/zHaFD3EX5OxvzPtSNls14F9W13UScveAkJE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gtF/SjX54t6hC83/fBe7ekZReqfWTCiYGwmaQdwMYXk8sHUQOV9yVwLDFMSWX1Nz0B4rBlZzIkCaHiklkRzmOwk8ZUvAC7SpKRusvEf8U0ywd04I2aYtA5tdawov/AHb5QLicS9eDyB99JrHx+Ddv0mizZob83i5+8FfJDwjWq8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SkYmDUex; arc=fail smtp.client-ip=40.93.195.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703053DB627;
+	Mon, 16 Mar 2026 18:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773687086; cv=none; b=YmsSDPBcJEIr1uXMFqpWBwEjOL0V/ku2qDkc7iE0jbIU2moG6oP5qekM378sA6ujnDJe8IIK/jKZF87E8Mg4zTvVnEG5WYl+P2olMazrt10r5Dd1TpIVhZtQQP+sIYvkfQQ4bNJXxHpY2HmtzccH5TylW46tEsGGbdngdGGc7Is=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773687086; c=relaxed/simple;
+	bh=c5BLHuGtkY+WxXe6JvvfcNckrVRMkknyPNj8lzgWAGA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IAAzVioqjhOqWVazLmgUEV9s+jmbtcgaLoCU6qiX+Nwk2Wrisi2cc8v3y8plHfSn4e0sm23GwXvKKRM6FbuCVMcmsi2apmd6O0rI7kBYR4/335kCuiBsIjiKs6N2LaPyvfV4bGqWttqfD0D+2R4HZYoTbIGI7YW5cPAuCXukrgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TI9OwbAr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SkYmDUex"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jLxLidbuRVApcMPfU1IbByuezvqqL+uWRFUDlfv6IGDcxYjHrCh1mKsTEWNzYLRcDEVU73g76nPi8UVFdjgq+7orLyxYBFSIC3cIYS1gUZ+/4wdQWijc0Nx6wpQxuMRhhQ6tTKN7PmKZB3u+/EnkNhr1RQe88XpzLUEigpQOF7G7pu94/LVmexGJm23wYiSWeaZPWt15Q0fghCNZF0+PBvpLUMO5grtzSgYJnV2tH679Z3lxlJiwL/26V8iaj5qVMziSSUpxp9D10i9CgG/fmuFK0tFWPCIGrVhGOE4pBXfTg7lmrxakvoBZn4sJUOa9f2EcZ07BBMiNTGdfAgvFzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mCSACYY0ysJpzB+6G8iEyJzdjtiN7fklKKXTb636ZZ8=;
- b=aIasLsH15Bn2o2Peqk0EEWXX0+ZaNXwQ++IIR1dwroG+9aQyg0Sr2T4yIvfvdA4Zf5PT1ZpWPztuRYss/N3G9ytvSBEOL3wXXVwz3LOZkkzD7S6ZKowJ4EZ2uRHb2lCr1UNo1PgYhfVntUJsuvmlesCUJMlPprcB4q1QkMN6YbHMKf14aDvxNe2XX9iKZGcvpq77XCw9Sct03SeIOjbJ5RwNQiExiOiDJoUhOEzDZHwEXOR5aPqYEQlKWACFzE/pEE12D7H5G2H6WsUaycAvsewmKNVpeBNz5ayWUGqtIfyAVam3wo3jfIDpfSwUnYM4ubAhnbJ9nEE+CHjUnfjeog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mCSACYY0ysJpzB+6G8iEyJzdjtiN7fklKKXTb636ZZ8=;
- b=SkYmDUexBNEDEl+EWYws3u3g5Fa6ZeWc98UNz996uU2GVQm7Q64377ONoYZnSnYouRzDZbYCVOJaayXNoaiX2UOXW877ZEm6bJw4+7jEZuYo0AcMaowNjRE6wGH6ZfiQYEFfoVYL6P3PNnToVlTq6knwslR8KiSPyD1O8OYsqZedj4MmrHC/vG4Q07WCTHK3YA2nxnkQqY2q4txIdXimLk/pd7a5/2UJymK6sn3M1WFNQP152SA062Nz2raXtctQJvr4zSNa7Az4zXU8SbSnBlmf/98quMQKbqbhLH26oGARpuPCV+UEM2kVMrGFFMOe5SOm+IAzzF1lYXH4H1XMNQ==
-Received: from DS7P220CA0031.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:223::25) by
- LV2PR12MB5824.namprd12.prod.outlook.com (2603:10b6:408:176::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.13; Mon, 16 Mar
- 2026 18:21:04 +0000
-Received: from DS1PEPF00017098.namprd05.prod.outlook.com
- (2603:10b6:8:223:cafe::eb) by DS7P220CA0031.outlook.office365.com
- (2603:10b6:8:223::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.25 via Frontend Transport; Mon,
- 16 Mar 2026 18:21:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS1PEPF00017098.mail.protection.outlook.com (10.167.18.102) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9700.17 via Frontend Transport; Mon, 16 Mar 2026 18:21:02 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 16 Mar
- 2026 11:20:40 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 16 Mar
- 2026 11:20:39 -0700
-Received: from nvidia-4028GR-scsim.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 16 Mar 2026 11:20:36 -0700
-From: <mhonap@nvidia.com>
-To: <dmatlack@google.com>, <alwilliamson@nvidia.com>, <dave.jiang@intel.com>,
-	<ankita@nvidia.com>
-CC: <kjaju@nvidia.com>, <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <mhonap@nvidia.com>,
-	<stable@vger.kernel.org>
-Subject: [PATCH] selftests/vfio: Fix VLA initialisation in vfio_pci_irq_set()
-Date: Mon, 16 Mar 2026 23:50:25 +0530
-Message-ID: <20260316182025.3383443-1-mhonap@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TI9OwbAr"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 122A7C19421;
+	Mon, 16 Mar 2026 18:51:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773687086;
+	bh=c5BLHuGtkY+WxXe6JvvfcNckrVRMkknyPNj8lzgWAGA=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=TI9OwbAreyKJpxRuEvgrPZSlxbkvbS3zpQMBLErdVOEHD8TWXPhbo0t96YGso2gCF
+	 zum9L1rdWr1k9XWY+eTu2LriBGySqk2YAfgNk94ejcBRM21mBBO58PfsHHt2XwKgcq
+	 ecRvTpui7tgQiy0daUGqiYc7cS5EJi8sYlJYAqz7m8044Z86tuKNHtfAQDgrDka2Ma
+	 /9qwMdBfTXSK0k4SRss3toaFySzx547ix/livfiscNQ0uGx9N8vQGhlMm2E3+GD9Vo
+	 9bZmMKZUF2ktVE3g02F21tthRZwiEs1gyMM/7a8aiDvr4RtN5xOKGN0wPXHb42rrxc
+	 +rVx6Uj6qqshA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 026DAF53D8B;
+	Mon, 16 Mar 2026 18:51:26 +0000 (UTC)
+From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
+Date: Mon, 16 Mar 2026 19:51:10 +0100
+Subject: [PATCH net-next] selftests/net: packetdrill: improve
+ tcp_rcv_neg_window.pkt
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF00017098:EE_|LV2PR12MB5824:EE_
-X-MS-Office365-Filtering-Correlation-Id: b25c3b34-51b8-4f55-e612-08de8388c7f7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700016|82310400026|376014|56012099003|18002099003|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	ZbTRMX1pvOtb4LSy3/MN+tXgVow5SoQGUn0jGeFmxbvE4pRkkDbyeL9A6Flhq69766azl+J+6hUtPnTEzqgZXy0VdYH6Zn2M0qos/RjbuxavO1++owhNZmnewOAavbcJMnA46dj34kVRSrUNNnd4RqaltyKmdPGqqCUNT6K5xvFwqtTnRr+dkXycRz8eN9ZRftJeTZlQDX/J3uYQ9gk87YNYGKFfTjzfynbBL5f8igHbLufqRaDK9iAH5/qC4j5drWredllNxsI1sK9/5DluQORhLhAaHZ7PkTrHl1L1VRYPtzvlL9UyFLU30y2xGS4v/78HZ5rlN51A7MuhVnrNkibBjL+SM4/Fz6U7OtLWrtGpAGwSqll8NmQy98l2f/gqy8vtIPXPpn8z8Cn/YT6sfncWNLVEUP4YXEV4Ik1+C8HVC63uSG7rLN5tkG4trkPVoAarF02CXgUAU4j5P9FlXCEYWZVAS1sf32Z4so+rMaD94levHTm637/60rVCViqgir0CvIjcDZ0MBOxcarauJLMY1pSM8EQwo0/Qo1rudB5OXN+kI7uhvBcVf2nrVzVNs0V9H9Y11qGsms+dNEl9TMJA1oiOtlmRtkFxKRW4bjeNXsKqay9qb9EjjVHXq0x6I5Ut/zsw/yL1ggB+L7tVQWYNm0vh3JxQRksOOMSgWN9LhP92yNTI0B9qmFPpPocs9lKsGCfMCZgai/PkRa1WxbiQWeQbRlNQJold2MUB1DYNX1HA0F7iOiGzdoMjv/FdRjZunuAvKDgAP2HQ0KVWHg==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(82310400026)(376014)(56012099003)(18002099003)(13003099007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	mICpesmhsM8DzuVyddZSo5uyy06COJJ53B1tj4QwQo3w/xX7eNj0Keg+47ZltlQfIMOqox79I1pv4DRseBf8DHG83MQqDhtaQfhvKexHZWv6Pd2ZotY6vkaOWTZXGlLKGhas9O7DVYFgBGQxim+W6pZHI9EbIqANzEIbJRDzhGJqrWHNvv+80r36rjC3KDEu3WXMAOYgibI4ti1JMZOL9vj9nF3YRoq9nEdjUa6H6NPVDLq6vB1YOgGfEiFDAkAULIsncWvFqwfBIYi7DesmO6QMS5flIUNzDcWgSUJRy3NmMvFNz4uGZQRbh5qSTnDPHat9aDUDLaet9PgrgqDp96P9oeJr7O9JwR4B+aizQiVd065sUe0zJt3mV8CGHmu/RCb5IAomLJUmtjU2svJx4ZMCk6jnfhnYCGftJPWSRbzfvUqy2/YyacOXpmhC6wDi
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2026 18:21:02.5320
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b25c3b34-51b8-4f55-e612-08de8388c7f7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS1PEPF00017098.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5824
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260316-improve_tcp_neg_usable_wnd_test-v1-1-f16d5e365107@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3NQQrCMBBG4auUWRtoUivoVUSGmPzWAZ2GJNZC6
+ d0NLr/NexsVZEGhS7dRxiJFZm2wh47C0+sEI7GZXO9O/WBHI++U5wVcQ2LFxJ/i7y/wVyNXlGq
+ ct4M7x2PwdqRWSRkPWf+HKymqUayVbvv+AxTGEoB7AAAA
+X-Change-ID: 20260315-improve_tcp_neg_usable_wnd_test-2a1329d4ca15
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773687085; l=2076;
+ i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
+ bh=ns9OJwOj9IGXzUoNWp91AiRCpz66QceoQnlEDdYlvAg=;
+ b=aGLkhiswPMUPyKJ30KormGEXHe9rlLCtTcgK3UyAcW1S57f5CBIuxVzZENkkCoVI0stE9jFtS
+ 15RLqZ4BcOvBtElun7+2vJzfo+ZGtH9lmc+5i+iqgra7IWtpM6KQ5yN
+X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
+ pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
+X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
+ auth_id=641
+X-Original-From: Simon Baatz <gmbnomis@gmail.com>
+Reply-To: gmbnomis@gmail.com
 
-From: Manish Honap <mhonap@nvidia.com>
+From: Simon Baatz <gmbnomis@gmail.com>
 
-C does not permit an initialiser expression on a variable-length array
-(C99 Section 6.7.9 constraint: "The type of the entity to be initialized
-shall not be a variable length array type").
+The test depends on accepting a packet that is larger than the
+advertised window and that does not trigger an immediate ACK.
 
-vfio_pci_irq_set() declared:
+Previously, the test might still pass even if kernel behavior changed
+unexpectedly. Add assertions verifying that the large packet was
+accepted and no ACK was sent.
 
-      u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
+Suggested-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
+---
+ .../selftests/net/packetdrill/tcp_rcv_neg_window.pkt       | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-where `count` is a runtime function parameter, making `buf` a VLA.
-
-GCC rejects this with (tried with GCC-9.4.0):
-
-      error: variable-sized object may not be initialized
-
-Fix by removing the `= {}` initialiser and inserting an explicit
-memset() immediately after the declaration.  memset() on a VLA is
-perfectly legal and achieves the same zero-initialisation on all
-conforming C implementations.
-
-This fix is self-contained: it touches only the existing vfio selftest
-helper library and carries no dependency on any other patch.  It was
-originally included as PATCH 20/20 in the CXL Type-2 VFIO passthrough
-RFC series [1] but belongs on the vfio list independently, as noted by
-Dave Jiang.
-
-[1] https://lore.kernel.org/all/20260311203440.752648-1-mhonap@nvidia.com/
-
-Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
-Cc: stable@vger.kernel.org
-Suggested-by: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Manish Honap <mhonap@nvidia.com>
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt
+index 15a9b4938f16d175ac54f3fd192ed2b59b0a4399..b9ab264b2a118f273af269d83a371740ae47359c 100644
+--- a/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt
++++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt
+@@ -1,4 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
++// Test maximum advertised window limit when rcv_nxt advances past
++// rcv_mwnd_seq. The "usable window" must be properly clamped to zero
++// rather than becoming negative.
+ 
+ --mss=1000
+ 
+@@ -17,10 +20,15 @@
+ 
+    +0 accept(3, ..., ...) = 4
+ 
+-// A too big packet is accepted if the receive queue is empty
++// A too big packet is accepted if the receive queue is empty. It
++// does not trigger an immediate ACK.
+    +0 < P. 1:20001(20000) ack 1 win 257
++   +0 %{ assert tcpi_bytes_received == 20000, tcpi_bytes_received; }%
++
+ // Send a RST immediately so that there is no rcv_wup/rcv_mwnd_seq update yet
+    +0 < R. 20001:20001(0) ack 1 win 257
+ 
+-  +.1 %{ assert tcpi_state == TCP_CLOSE, tcpi_state }%
+-
++// Verify that the RST was accepted. Indirectly this also verifies that no
++// immediate ACK was sent for the data packet above.
++   +0 < . 20001:20001(0) ack 1 win 257
++   +0 > R 1:1(0)
 
 ---
- tools/testing/selftests/vfio/lib/vfio_pci_device.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+base-commit: 5446b8691eb8278f10deca92048fad84ffd1e4d5
+change-id: 20260315-improve_tcp_neg_usable_wnd_test-2a1329d4ca15
 
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index fac4c0ecadef..3258e814f450 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -26,8 +26,10 @@
- static void vfio_pci_irq_set(struct vfio_pci_device *device,
- 			     u32 index, u32 vector, u32 count, int *fds)
- {
--	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
-+	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
- 	struct vfio_irq_set *irq = (void *)&buf;
-+
-+	memset(buf, 0, sizeof(buf));
- 	int *irq_fds = (void *)&irq->data;
+Best regards,
+-- 
+Simon Baatz <gmbnomis@gmail.com>
 
- 	irq->argsz = sizeof(buf);
---
-2.25.1
 
