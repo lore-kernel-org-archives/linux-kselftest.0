@@ -1,160 +1,181 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9583F2949E0
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 11:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E406834DCCC
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 11:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773660260; cv=none; b=EIN8v8QKKm5xrvoT62BvBIdYtFv7iqhZ9HbCcWLe5Cshvp96MvFfbtPKKz5AzzOS1BoW/d8+hFcGLGCigXvqeO3vDXy/LV1AyWkMfZh9FbACnDvJ1VGqHpxXhsWkiRhHdjvaZQCKMKWPUiJghsq6MgJd2hrbYa+On//gDhjJdSk=
+	t=1773660538; cv=none; b=Cme10z6PogcPJqf6sYh4pRshwmC/04qoPKM6DUYuPP4qbF8QQJPy3QZ9XvmmnEgxeCygccyHbkTAysOVKc7sY4EYmWLXF3Nx2eB/7njxeo6IJN+RA/05HVqSO0zEbJXQDLgmtu6WDE4/b+C0gYYKbzOSKEbBcc9h9ioFyi//q/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773660260; c=relaxed/simple;
-	bh=vExqsQuY0TOh0C4OqHS5ONqjXZPb4O5dkQOinRtjo/I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R/DaW7e9OIIuPk8kHUOO8mRuU4q+jzW6CsmTcPVB2JYYBvNPjhrUu0xNYDElYvtoINctnaod81imiBj4Atv6fydGeZadLZDwJEGp3n/EkKGcLw0eF3LL7Nmqfi3F/cv3RaugOZ9qkj5TRfWqrSlsUCnc/IFnIT+p5Uo3617NQHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B6Fqyz5I; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=NV6fEPkw; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773660538; c=relaxed/simple;
+	bh=1O+LEkCcALqHcjZwSpKQxGV6mvhgBFLNsSL9qxtZpNs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OQqJ7tdgy6aLHObNpYUk2faYhGM8UUHvMqTkDUQQ9cTJzxm0sqRN2rPA/zaiUyLPtLsscHzr3nT/rQvK9I3X9xMPJ0vXwtV103aBmf0CpunVrtAcZ/2FET12cabtZ5mC4zbMWzC6hGC+ZwwH0Zm1tiYti+8RgyZcdC6dsuM1l8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mzJQopGs; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B6Fqyz5I";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="NV6fEPkw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773660258;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H9hWHpx6fXvQ6tiAS+Vx6gKKziz7E3xCqMnpnyHx+ks=;
-	b=B6Fqyz5IVSt3GT1ulMlu9mvzM+CA70XjObXe+5Gd8yBnDbRV3zsSgLTfcMrhOcE/J71QOG
-	Zx2eMifGvjFmI/YyF4iMbpGml7mir8HQ2GfFjhBHsP4haMNshDJt7b35DI7za79IwcDZdm
-	EbzAGhVf3jD+0u46sDwYtQzxdKLcTbs=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-344-makZ_M5LPjWXm7GKBg1lBQ-1; Mon, 16 Mar 2026 07:24:17 -0400
-X-MC-Unique: makZ_M5LPjWXm7GKBg1lBQ-1
-X-Mimecast-MFC-AGG-ID: makZ_M5LPjWXm7GKBg1lBQ_1773660256
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-48532df52c5so64751115e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 04:24:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzJQopGs"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-35ba749f441so322148a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 04:28:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773660256; x=1774265056; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H9hWHpx6fXvQ6tiAS+Vx6gKKziz7E3xCqMnpnyHx+ks=;
-        b=NV6fEPkwo3NU6CHi+YqL3sv30eFK9RhGWJQR0Knl42QG5QcFR8RBiOI+JigYlrQ+ft
-         LGQ8FC4dvwlQ3gOowpzISZ1VOIpl7/aLKeHBalDrxcaglCK55flHNEs0qPgzy661nEHQ
-         z35/UnsD686/RIgK7SWhdl/mXAmJVaWLEV5LEDIot/ba+1/LUZUKjIGl6L+UjpRKWnup
-         h+QRARlNlUHN0TOsmfY/Qsndq9UJT3hYuCevWZVnPTlpJWvgBzmptRdqo4KZJcNFxA7n
-         fGXpt2MMVTI0W7xknSJXubk/Xxi824XhoEAacu613aezcKyhyoTGMiO0QpYEP7Pdl/0K
-         ud+Q==
+        d=gmail.com; s=20230601; t=1773660536; x=1774265336; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ntIiD+GdH03++TVgBGF+pBQuOhfJiM87likhblk8EQ=;
+        b=mzJQopGs/RKtIDhXvrPisJO7Emh7R0GUHblMPaBeaH8KoJUIgI89/eWYYVUbvN0V33
+         80UbliMs1oEtdyKyc4xYrRW8KrXbn6mNpfcPhU5eyebOYhob78lknH01y0SmwdEnAkG6
+         CxUJ5HQCrfinCLbNyVDyiNmHthzzxhu6VVJNa2SXIgVAndFGBY+xbQoND5/d1fSouoLc
+         xB094FCwDxPTPY2u7PU6k5KLBnc7v1fpnPYMBN788eJZTdq5rVyBauZJqVDf3fbZP2p6
+         AVX0JxH0Ys9gyrVt61kf9mdh6GL4kHjRWQLK39TEdqZSR2OosDIU0RaVQ2Uedq+LAfU3
+         t11g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773660256; x=1774265056;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H9hWHpx6fXvQ6tiAS+Vx6gKKziz7E3xCqMnpnyHx+ks=;
-        b=VBtd0RN0OSnB6Pe7b61gROgywiXPC9B6/+NijXdCtTwV2iCy9rJUCwvhguJ/9lviXh
-         B8wDoCMh2JKPcWFrQma2p4bYZ9MvmGptMRe7YovDI6rONiWl5GxJMDeLvzpGTsUslFj0
-         N9xOeos6mDqWHUu5nrwlc8L63GekEKnMwEUZzu9DWycQXTL5ObhIFQCaxmd+IxAfX0xO
-         oG+A+o7ApgGhBy/n7VmKp3j7TnfHQHwE8fAAdFn6OcT3hcAXc1XnfGrdDRWrZDVHZu9R
-         sgkIKf4lGG8djtyJdE5GTgYZug5kcUQY9iFnoPcmQw4N+kbe68uMdroQOVzn2C1k/JHZ
-         zDxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQk6MRqisZbj8vIRjUjyuRT437cV17wtVyg7pLh6O93CbNAuq1gCZDMpj2ZdAVK8o/1Ebsoagm0XwlxgldAz8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbPHaWmFM7agZxLH1zlvA/K65DyuYtcxerfkKqtKavMtGC4fG8
-	+QIgThvk0po2PGRggX7TrzQ0yIRJJtMjsOa/qPNU7YD4T5ZhHJ7JQx/BifoX/AD1HywjPyg1s/S
-	yfB5QfCa1q70+nAjg4FahzLMEN9Dlo4EEhT/zJ8ynGSY4xmpyVR83/E3GaqvLpDWgCqaiSQ==
-X-Gm-Gg: ATEYQzx1IIOC81+pl7a7tyz2kcsKg5FeI+KVFB59XyhMedpN2MhINNiWnMnb4GONLKG
-	laCqDUXyrdBPw672z6f3msY84HtpXHyx9yQVfMf7e1QlPl1KpIB80R8fA9AOIwsBBf6h6n9V0pI
-	Ml7wOoiedS9nzG9obWiw2bSdWgruDjPhl7EOv/XJdSqMxXwAzMOPXGkK/oTg94k16yCVCxgKRp5
-	ZSJKTBN+qaXhfO276msbwRwzLJ2sLUwn4gqin9tXY/gh0td9KO6uGhveniRVyV13GKdPosI5dXD
-	GGcqkxkg6rX3ue01pot3gufAbzPdh0VhENBqq4r+o7kjHX4116z+VxvbV9Lv8LwjDNckOVMvnVx
-	D+in0tiVuzGzZgmYFHaKZb3rp/4eUdFjmAHwoNnxBdFS3BuHPU/f32Zc=
-X-Received: by 2002:a05:600c:468e:b0:485:3f58:d9d with SMTP id 5b1f17b1804b1-48556714b67mr207129285e9.32.1773660256087;
-        Mon, 16 Mar 2026 04:24:16 -0700 (PDT)
-X-Received: by 2002:a05:600c:468e:b0:485:3f58:d9d with SMTP id 5b1f17b1804b1-48556714b67mr207128715e9.32.1773660255574;
-        Mon, 16 Mar 2026 04:24:15 -0700 (PDT)
-Received: from [192.168.88.32] ([216.128.11.95])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541aa73dasm1215197765e9.2.2026.03.16.04.24.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Mar 2026 04:24:15 -0700 (PDT)
-Message-ID: <2551cc98-5280-4a9f-8345-0a39e0e09dac@redhat.com>
-Date: Mon, 16 Mar 2026 12:24:13 +0100
+        d=1e100.net; s=20251104; t=1773660536; x=1774265336;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2ntIiD+GdH03++TVgBGF+pBQuOhfJiM87likhblk8EQ=;
+        b=qFbaBep9CW1/Z2ihm2WcUCksvCLzWeqveBUJFJTndcM7sPkeFTwp/Z0W0sXMK11Ks1
+         b/v0lDki7j/F4bZsGwujzymRmsUB/60o6kzOe/j9Mu7zyOFwrHVwqh8cYMFvllcQRhat
+         HBnzr+zIbeXV/GBORxc0EAnauW3Rt/p1fJkwhYxsqUsBVUQUZ84Q/lgAaaC4Z/mFeU5R
+         rmzLAeSt9shls3tk7W9oSfw2oxVFZT2YO0OXrDv+lrFLkoakLjXsw78tYapiiDxwwqfc
+         5N5UESUrLj/sWUDQRKAARq6EAyj/FoC4m0Ae2e7NSiqOiNIgYSyo0/qDXnFJYUQcgbxr
+         bfxg==
+X-Forwarded-Encrypted: i=1; AJvYcCUeX32ufsNI/swoUyILEOW9jHwqI4MNYXExcXWaTbb/Ua1kvB3WT82DajZXua9j1j0G3ZKLvRwIyfodjaJjtB8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyF2vJl5riZDTvtnl5DMx3oRqqb+M/TrwVYpOStPmhaQjUWjvG0
+	fJtJqdLbW0aAavgSWon1w+4yU4Mq1neOaMagSR4DYwFOVODPoCe23rwW
+X-Gm-Gg: ATEYQzyWk32TuDSQ79ofHppY839ecGGnlZIXDmQSmq3i4hs59wrtqJe0CjdkjUkiq7G
+	1tMxrmsCR0thpZxa6RIUkArlRfV3XFOHG9dQZfWkDY1dboZxcY5dpY4kNmu3AzAfbwrtxUvCbI1
+	arGd0reqgwTaQgZhwSwaLzutRvqRHPSXXEf/sHxJjvpawbjGR1Ss4+9xos4hZg8ND67uR1IBK7C
+	42ZvCZAJwStEwohfU3Pa2ye5JdocgZJksDAmyvX/eQfoKNWkK0NaKloKB6cVJMsl5W9g/BQdKRT
+	xqkfGP7tF5ePq9JPoVsSsDu1aj/+PUaT/Y69LgXUQr7fWkYXKPMu3simkTCJ41GOFptOnj/H58o
+	6tkdMNuUPrlzxLSkl6eUZnhbJ5rFHt327/qru1vV/Pg8MKoGNO08I3YTcV9lRh430sMW5hgnqml
+	J5TYyDARZodjRVEv/lQwHu3QBlpDlyG4EdDjisEW7h2jQW1PBxxrvToNg=
+X-Received: by 2002:a17:90b:278a:b0:35b:9719:b7ab with SMTP id 98e67ed59e1d1-35b9719b972mr4306322a91.23.1773660536304;
+        Mon, 16 Mar 2026 04:28:56 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7401588ecesm4684940a12.32.2026.03.16.04.28.48
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 16 Mar 2026 04:28:55 -0700 (PDT)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v8 0/8] bpf: Extend the bpf_list family of APIs
+Date: Mon, 16 Mar 2026 19:28:35 +0800
+Message-ID: <20260316112843.78657-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 05/14] tcp: grow rcvbuf to back scaled-window
- quantization slack
-To: atwellwea@gmail.com, netdev@vger.kernel.org, davem@davemloft.net,
- kuba@kernel.org, edumazet@google.com, ncardwell@google.com
-Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, mptcp@lists.linux.dev,
- dsahern@kernel.org, horms@kernel.org, kuniyu@google.com,
- andrew+netdev@lunn.ch, willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
- skhan@linuxfoundation.org, corbet@lwn.net, matttbe@kernel.org,
- martineau@kernel.org, geliang@kernel.org, rostedt@goodmis.org,
- mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 0x7f454c46@gmail.com
-References: <20260314201348.1786972-1-atwellwea@gmail.com>
- <20260314201348.1786972-6-atwellwea@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260314201348.1786972-6-atwellwea@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/14/26 9:13 PM, atwellwea@gmail.com wrote:
-> From: Wesley Atwell <atwellwea@gmail.com>
-> 
-> Teach TCP to grow sk_rcvbuf when scale rounding would otherwise expose
-> more sender-visible window than the current hard receive-memory backing
-> can cover.
-> 
-> The new helper keeps backlog and memory-pressure limits in the same
-> units as the rest of the receive path, while __tcp_select_window()
-> backs any rounding slack before advertising it.
-> 
-> Signed-off-by: Wesley Atwell <atwellwea@gmail.com>
-> ---
->  include/net/tcp.h     | 12 ++++++++++++
->  net/ipv4/tcp_input.c  | 36 ++++++++++++++++++++++++++++++++++--
->  net/ipv4/tcp_output.c | 15 +++++++++++++--
->  3 files changed, 59 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index fc22ab6b80d5..5b479ad44f89 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -397,6 +397,7 @@ int tcp_ioctl(struct sock *sk, int cmd, int *karg);
->  enum skb_drop_reason tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb);
->  void tcp_rcv_established(struct sock *sk, struct sk_buff *skb);
->  void tcp_rcvbuf_grow(struct sock *sk, u32 newval);
-> +bool tcp_try_grow_rcvbuf(struct sock *sk, int needed);
->  void tcp_rcv_space_adjust(struct sock *sk);
->  int tcp_twsk_unique(struct sock *sk, struct sock *sktw, void *twp);
->  void tcp_twsk_destructor(struct sock *sk);
-> @@ -1844,6 +1845,17 @@ static inline int tcp_rwnd_avail(const struct sock *sk)
->  	return tcp_rmem_avail(sk) - READ_ONCE(sk->sk_backlog.len);
->  }
->  
-> +/* Passive children clone the listener's sk_socket until accept() grafts
-> + * their own struct socket, 
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-AFAICS, the above statement is false, see sk_set_socket() in sk_clone()
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported. The patches enhance the BPF list API, making it more
+list-like.
 
-> so only sockets that point back to themselves
-> + * should autotune receive-buffer backing.
-> + */
-> +static inline bool tcp_rcvbuf_grow_allowed(const struct sock *sk)
-> +{
-> +	struct socket *sock = READ_ONCE(sk->sk_socket);
+Five new kfuncs have been added:
+bpf_list_del: remove a node from the list
+bpf_list_add_impl: insert a node after a given list node
+bpf_list_is_first: check if a node is the first in the list
+bpf_list_is_last: check if a node is the last in the list
+bpf_list_empty: check if the list is empty
 
-You can just check `sk->sk_socket`. Also you could re-use this helper in
-tcp_data_queue_ofo().
+refactor kfunc checks to table-driven approach, and add test cases for
+the aforementioned kfuncs.
 
-/P
+Changes in v8:
+- Use [patch v7 5/5] as the start of the patch series
+- Introduce double pointer prev_ptr in __bpf_list_del
+- Extract refactored __bpf_list_del/add into separate patches
+- Allow bpf_list_front/back result as the prev argument of bpf_list_add
+- Split test cases
+
+Changes in v7:
+- Replace bpf_list_node_is_edge with bpf_list_is_first/is_last
+- Reimplement __bpf_list_del and __bpf_list_add
+- Simplify test cases
+
+Changes in v6:
+- Merge [patch v5 (2,4,6)/6] into [patch v6 4/5]
+- If list_head was 0-initialized, init it
+- refactor kfunc checks to table-driven approach
+
+Changes in v5:
+- Fix bpf_obj leak on bpf_list_add_impl error
+
+Changes in v4:
+- [patch v3 1/6] Revert to version v1
+- Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
+
+Changes in v3:
+- Add a new lock_rec member to struct bpf_reference_state for lock
+  holding detection.
+- Add test cases to verify that the verifier correctly restricts calls
+  to bpf_list_del when the spin_lock is not held.
+
+Changes in v2:
+- Remove the head parameter from bpf_list_del
+- Add bpf_list_add/is_first/is_last/empty to API and test cases
+
+Link to v7:
+https://lore.kernel.org/all/20260308134614.29711-1-pilgrimtao@gmail.com/
+
+Link to v6:
+https://lore.kernel.org/all/20260304143459.78059-1-pilgrimtao@gmail.com/
+
+Link to v5:
+https://lore.kernel.org/all/20260304031606.43884-1-pilgrimtao@gmail.com/
+
+Link to v4:
+https://lore.kernel.org/all/20260303135219.33726-1-pilgrimtao@gmail.com/
+
+Link to v3:
+https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
+
+Link to v2:
+https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
+
+Link to v1:
+https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (8):
+  bpf: refactor kfunc checks using table-driven approach in verifier
+  bpf: refactor __bpf_list_del to take list node pointer
+  bpf: Introduce the bpf_list_del kfunc.
+  bpf: refactor __bpf_list_add to take insertion point via **prev_ptr
+  bpf: Add bpf_list_add_impl to insert node after a given list node
+  bpf: allow bpf_list_front/back result as the prev argument of
+    bpf_list_add_impl
+  bpf: add bpf_list_is_first/last/empty kfuncs
+  selftests/bpf: Add test cases for
+    bpf_list_del/add/is_first/is_last/empty
+
+ kernel/bpf/helpers.c                          | 121 +++++--
+ kernel/bpf/verifier.c                         | 116 +++++--
+ .../testing/selftests/bpf/bpf_experimental.h  |  16 +
+ .../selftests/bpf/progs/refcounted_kptr.c     | 311 ++++++++++++++++++
+ 4 files changed, 519 insertions(+), 45 deletions(-)
+
+-- 
+2.50.1 (Apple Git-155)
 
