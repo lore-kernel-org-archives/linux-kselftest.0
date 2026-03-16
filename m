@@ -1,31 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758A0352F95;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75989357A4A;
 	Mon, 16 Mar 2026 21:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773698339; cv=none; b=tGM1bbAOCGgcsREhUK+hw/4tXhEPiamMZjZmvYvKYBhcgSpv6Uc/R3hwWXUcE8lq2khzrYvWi3m+dYob6udqraWUFHJ6kkeubMn5U74ELK1yxQ/TUjRal73q0ALQBJucsSq34iO0ClPWbEeb3ixMfQ2DTE8Divt+osiozE1KVCM=
+	t=1773698339; cv=none; b=oAMXlnktQuB5M9aQOYP2airtRoJHsakQ4SEMMnq9cgEEdg0f6SbSJWWJJiys+jypXansHJqDaEHpBF7OEA0fuAoEe7bK2tNauZJF0wsqAG/CptfKOj+I+i8ajMugHgaUFTn3RPlipuLlPf5ojyqqbrphVDCWU9ZueDSMyVSGHco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773698339; c=relaxed/simple;
-	bh=09UBJof3B5Uo2cvsJCIOyv678r1epMItyfkRl7UeRuA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gQX55clQXRTzq/a5MKOJZHOO7eLbmzsTzjcQi8U+36cE2NTc5CZ+4/YWqLLwgFU9vFRkZJFfptLtCpdVeZG9y49vMOLWY8WSP6nf2uYN1vIQlA22P9LCsMbQZEKcrfBoUeu0APji7mYDFZdv5Uhe9vTEla3A8IPwnbZjvzdtNZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=TsQtIku0; arc=none smtp.client-ip=159.69.126.157
+	bh=UXwH0L1n9dRh7aiNabmuyTyMypVw1624YCLDekb4I1E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=sxXuyodA6bsWqJiLJztr/+YFEfd/dSyCWuiDnnd3vUX6087INK3BhMmPVQRWsYFMSFsPRtpFnhHcEURzM00cmqx9q0H6B7NsK2f28QqN06LgL9Pm4d1VCoNoWlQdppCsj6NXiOAcl39Dawf2xUbxZVwGD8xpzbaHW/MVF+PkaJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=La9cGOm0; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="TsQtIku0"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="La9cGOm0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1773698335;
-	bh=09UBJof3B5Uo2cvsJCIOyv678r1epMItyfkRl7UeRuA=;
-	h=From:Subject:Date:To:Cc:From;
-	b=TsQtIku0XblRLVpA7szwqi4IIxffhc9sxdlUKKmJgIVEvflbT+vkkD22NFD6RXPSG
-	 iyP20QP8KHcTid/R2mLrHvxV/slDi8C11orcKnDwkFO1xlP2dOgCvQBHEVuZLvkf/h
-	 nOjXe3hEsYNvotnQ8V6Ff3PtoMrtNKC0TywWylSU=
+	bh=UXwH0L1n9dRh7aiNabmuyTyMypVw1624YCLDekb4I1E=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=La9cGOm0VPpwo4hmBZfJE6o6l2Iumu31X5qf7PCARzMvYk3hzkywwqTw93bU5z5Eu
+	 fSmoISF6hzTPWz2wX0ootlNq7xK7kgPWgVf9WD6TlW3U9jNHmdUU8VbdPldfslVrQZ
+	 fXDOdPce31z2lCK/5rCAQQQ2wMLuJwEER5kxF12A=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 0/2] tools/nolibc: add err.h
-Date: Mon, 16 Mar 2026 22:58:49 +0100
-Message-Id: <20260316-nolibc-err-h-v3-0-6ef80c051ab7@weissschuh.net>
+Date: Mon, 16 Mar 2026 22:58:50 +0100
+Subject: [PATCH v3 1/2] tools/nolibc: add support for
+ program_invocation_{,short_}name
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,56 +35,162 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XMSw7CIBSF4a00jMXwKKU6ch/GAS0XuYmhDVTUN
- N27tCOjcfif5HwzSRAREjlWM4mQMeEQSshdRXpvwhUo2tJEMNEwyTkNww27nkKM1FPrZGO0sta
- 6lpTLGMHhc+POl9Ie0zTE16Znvq5/oMwpo1oqc7CgHVf29ABMKfX+7vcBJrJqWXwK8ksQRXB13
- XKmZMe0+RGWZXkD6XDANu8AAAA=
-X-Change-ID: 20260311-nolibc-err-h-df36a75dddf8
+Message-Id: <20260316-nolibc-err-h-v3-1-6ef80c051ab7@weissschuh.net>
+References: <20260316-nolibc-err-h-v3-0-6ef80c051ab7@weissschuh.net>
+In-Reply-To: <20260316-nolibc-err-h-v3-0-6ef80c051ab7@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773698335; l=1356;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773698335; l=4906;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=09UBJof3B5Uo2cvsJCIOyv678r1epMItyfkRl7UeRuA=;
- b=GOCla33X3gDehpNDeavTye1hqwPmZcIoPQXKK+rcp+tdiJCpGNkogMYtiBdkDJQhrMreVGbD4
- cymndFc84fzC1O3FOvVQ8kLNEgx8rAT7RunVQmapFxnMB28FgcXo8iu
+ bh=UXwH0L1n9dRh7aiNabmuyTyMypVw1624YCLDekb4I1E=;
+ b=GU8Zck35kK3Tmb6G81Wt+AhlVKSMHjQv8c0N1wusD4cTwiQQBMsfq1HLt5WjTbDxURXdZGwtj
+ 61Tgsmjw2ONB+4cZPl1jVDnKv8159Bqw10T4HEgswyCGc+Gidy5sxZA
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Add a few convenient helpers to print error and warning messages.
+Add support for the GNU extensions 'program_invocation_name' and
+'program_invocation_short_name'. These are useful to print error
+messages, which by convention include the program name.
+
+As these are global variables which take up memory even if not used,
+similar to 'errno', gate them behind NOLIBC_IGNORE_ERRNO.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Changes in v3:
-- Make sure program_invocation_{short_,}name are never NULL.
-- Provide dummy definitions of program_invocation_{short_,}name
-  when NOLIBC_IGNORE_ERRNO is set.
-- Drop Ack from Willy.
-- Link to v2: https://patch.msgid.link/20260313-nolibc-err-h-v2-0-f4481053b07a@weissschuh.net
+ tools/include/nolibc/crt.h                   | 26 ++++++++++++++++++++++
+ tools/include/nolibc/errno.h                 |  4 ++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 33 ++++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
 
-Changes in v2:
-- Fix program_invocation_name test to handle test execution as /init
-- Drop already applied patches
-- Link to v1: https://patch.msgid.link/20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net
+diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+index d9262998dae9..5bb492555f13 100644
+--- a/tools/include/nolibc/crt.h
++++ b/tools/include/nolibc/crt.h
+@@ -17,6 +17,7 @@ const unsigned long *_auxv __attribute__((weak));
+ void _start(void);
+ static void __stack_chk_init(void);
+ static void exit(int);
++static char *strrchr(const char *s, int c);
+ 
+ extern void (*const __preinit_array_start[])(int, char **, char**) __attribute__((weak));
+ extern void (*const __preinit_array_end[])(int, char **, char**) __attribute__((weak));
+@@ -27,6 +28,24 @@ extern void (*const __init_array_end[])(int, char **, char**) __attribute__((wea
+ extern void (*const __fini_array_start[])(void) __attribute__((weak));
+ extern void (*const __fini_array_end[])(void) __attribute__((weak));
+ 
++#ifndef NOLIBC_IGNORE_ERRNO
++extern char *program_invocation_name __attribute__((weak));
++extern char *program_invocation_short_name __attribute__((weak));
++
++static __inline__
++char *__nolibc_program_invocation_short_name(char *long_name)
++{
++
++	char *short_name;
++
++	short_name = strrchr(long_name, '/');
++	if (!short_name || !short_name[0])
++		return long_name;
++
++	return short_name + 1;
++}
++#endif /* NOLIBC_IGNORE_ERRNO */
++
+ void _start_c(long *sp);
+ __attribute__((weak,used))
+ #if __nolibc_has_feature(undefined_behavior_sanitizer)
+@@ -76,6 +95,13 @@ void _start_c(long *sp)
+ 		;
+ 	_auxv = auxv;
+ 
++#ifndef NOLIBC_IGNORE_ERRNO
++	if (argc > 0 && argv[0]) {
++		program_invocation_name = argv[0];
++		program_invocation_short_name = __nolibc_program_invocation_short_name(argv[0]);
++	}
++#endif /* NOLIBC_IGNORE_ERRNO */
++
+ 	for (ctor_func = __preinit_array_start; ctor_func < __preinit_array_end; ctor_func++)
+ 		(*ctor_func)(argc, argv, envp);
+ 	for (ctor_func = __init_array_start; ctor_func < __init_array_end; ctor_func++)
+diff --git a/tools/include/nolibc/errno.h b/tools/include/nolibc/errno.h
+index 08a33c40ec0c..bab83692ea1c 100644
+--- a/tools/include/nolibc/errno.h
++++ b/tools/include/nolibc/errno.h
+@@ -15,8 +15,12 @@
+ #ifndef NOLIBC_IGNORE_ERRNO
+ #define SET_ERRNO(v) do { errno = (v); } while (0)
+ int errno __attribute__((weak));
++char *program_invocation_name __attribute__((weak)) = "";
++char *program_invocation_short_name __attribute__((weak)) = "";
+ #else
+ #define SET_ERRNO(v) do { } while (0)
++#define program_invocation_name ""
++#define program_invocation_short_name ""
+ #endif
+ 
+ 
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 180611aabbfb..07af23833879 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -702,6 +702,37 @@ static void constructor2(int argc, char **argv, char **envp)
+ 		constructor_test_value |= 1 << 1;
+ }
+ 
++int test_program_invocation_name(void)
++{
++	char buf[100];
++	char *dirsep;
++	ssize_t r;
++	int fd;
++
++	fd = open("/proc/self/cmdline", O_RDONLY);
++	if (fd == -1)
++		return 1;
++
++	r = read(fd, buf, sizeof(buf));
++	close(fd);
++	if (r < 1 || r == sizeof(buf))
++		return 1;
++
++	buf[r - 1] = '\0';
++
++	if (strcmp(program_invocation_name, buf) != 0)
++		return 1;
++
++	dirsep = strrchr(buf, '/');
++	if (!dirsep || dirsep[1] == '\0')
++		return 1;
++
++	if (strcmp(program_invocation_short_name, dirsep + 1) != 0)
++		return 1;
++
++	return 0;
++}
++
+ int run_startup(int min, int max)
+ {
+ 	int test;
+@@ -716,6 +747,7 @@ int run_startup(int min, int max)
+ #ifdef NOLIBC
+ 	test_auxv = _auxv;
+ #endif
++	bool proc = access("/proc", R_OK) == 0;
+ 
+ 	for (test = min; test >= 0 && test <= max; test++) {
+ 		int llen = 0; /* line length */
+@@ -741,6 +773,7 @@ int run_startup(int min, int max)
+ 		CASE_TEST(constructor);      EXPECT_EQ(is_nolibc, constructor_test_value, 0x3); break;
+ 		CASE_TEST(linkage_errno);    EXPECT_PTREQ(1, linkage_test_errno_addr(), &errno); break;
+ 		CASE_TEST(linkage_constr);   EXPECT_EQ(1, linkage_test_constructor_test_value, 0x3); break;
++		CASE_TEST(prog_name);        EXPECT_ZR(proc, test_program_invocation_name()); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
 
----
-Thomas Weißschuh (2):
-      tools/nolibc: add support for program_invocation_{,short_}name
-      tools/nolibc: add err.h
-
- tools/include/nolibc/Makefile                |  1 +
- tools/include/nolibc/crt.h                   | 26 +++++++++
- tools/include/nolibc/err.h                   | 87 ++++++++++++++++++++++++++++
- tools/include/nolibc/errno.h                 |  4 ++
- tools/include/nolibc/nolibc.h                |  1 +
- tools/testing/selftests/nolibc/nolibc-test.c | 33 +++++++++++
- 6 files changed, 152 insertions(+)
----
-base-commit: 745dadd6d3d984feafb96f27b60d74b29ade4957
-change-id: 20260311-nolibc-err-h-df36a75dddf8
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.53.0
 
