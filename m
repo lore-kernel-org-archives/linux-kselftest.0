@@ -1,58 +1,58 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508322E06EF
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 20:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221DF30FC27
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 20:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773693523; cv=none; b=EFdI9lBdZt6FoOJ9NMa5rjfvxR7G6GyoKHTRsHBFQPlVFcZRHTvfK55debpV5wjCGzmdBtawCmzK7ecm4r6QqmXPGbZw1ZrsMDAXeAGAUP0AQVooO+/wtIcF2E/TRYOzIrlAKS78f8Ao5it8t04IXVxGuyiK44LGQ5bQHIclSoE=
+	t=1773694034; cv=none; b=SE/dVIic52AfpGy3x1dfiib9/8AyNAjCW60m29OgI4EuoJtz9CKCom6MRoCsgMmtfQWa4tBRGzcDLlTUrXMBRoXoppL8arcOi4gMe6SvjhBolPBPL16R/3IgHpfIJM/1mTF6Td6zwatxqG9pDFrroySIoct6D9Ip9LLTqOotUCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773693523; c=relaxed/simple;
-	bh=HaggyQjHOfgzxcCADMxxd3tw5ezilB9mJQAhnwH9ZB0=;
+	s=arc-20240116; t=1773694034; c=relaxed/simple;
+	bh=AIY8UP0yNh9KzQ/vVCThI/ieMqrkxLoTzKa4VdpbFog=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iedFTgzOnTWA2E8YpMdH0LkO4CLsNGSk5TeSGTLLVcXraxbSfcUnWcXLRvLDwx6k3y9YgkNLag+Eo+cG7IfmMJCj2By+GDX3q8DrnqMI7qaxLtc/aY+NzEI0nnkzWXZFZVvbdx5rTvgkE1vi/sHMkSDDJW/+c1A/rpGlUSKfLJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WH26W2Og; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=HJiiVKxYBiYaL6pEyQbMerkbowvF6L/Tm0n9Ti+335RZVS7gE59mPPkPXw37Xu8SkQXDuO4rjm5/TfUFG2uAuw0wLJ2cOL9WJLn1xyqNcHiljJYcsEXgZjX7Sjpr4nRhK9HfWB7s3HhhCR8oZgVIFr+DKUQ1bnOY3kX/i8VLwX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZkboWyOS; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WH26W2Og"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZkboWyOS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773693520;
+	s=mimecast20190719; t=1773694032;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DWqmjuWF70znpZxm47ikMW1Pcmq6K7FsNzZd5IofOT0=;
-	b=WH26W2OgnGlTwBThwsSckbMon1NU0YmblHRHHgTJRYFBpuwvM1Eu2rf0is+/RTWhysUhwG
-	ILIpO7nWmF3zLis4BJtGvT9bTqSOA+UKb5CUposX3AeL09AMmqvvMehOKfWID4UlrsPxSz
-	kVPPytPzwd2C9nqEEeo/DyNtDQlHQvQ=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=d6gVZiwYaKkGROwF0u6TRKlDOwKpZpCfappwo6e9/Bw=;
+	b=ZkboWyOSzfYLAjEURMIC6egUiHEnNjwv/1C3VofJ/E66uif+3rTZl+RpEz2i+f+oNwvMqt
+	Lrmk3TvUVYam0ErEC2v7GfEJ5YDt1cMOurX2xYTYXgDYmCK6ewgPrdehrayDQGR9n7MBYA
+	JCe6csxOmhouHMQBPdYa9Uc4CZ3E/Nc=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-638-XM390azuPS6lGnKv9xsxQQ-1; Mon,
- 16 Mar 2026 16:38:37 -0400
-X-MC-Unique: XM390azuPS6lGnKv9xsxQQ-1
-X-Mimecast-MFC-AGG-ID: XM390azuPS6lGnKv9xsxQQ_1773693515
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-218-R85epJyVNsWvGYN4xqss0Q-1; Mon,
+ 16 Mar 2026 16:47:08 -0400
+X-MC-Unique: R85epJyVNsWvGYN4xqss0Q-1
+X-Mimecast-MFC-AGG-ID: R85epJyVNsWvGYN4xqss0Q_1773694027
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7D48B195605E;
-	Mon, 16 Mar 2026 20:38:35 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D890A1800365;
+	Mon, 16 Mar 2026 20:47:06 +0000 (UTC)
 Received: from redhat.com (unknown [10.22.88.140])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C58F71955F19;
-	Mon, 16 Mar 2026 20:38:32 +0000 (UTC)
-Date: Mon, 16 Mar 2026 16:38:29 -0400
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AC3371955F19;
+	Mon, 16 Mar 2026 20:47:04 +0000 (UTC)
+Date: Mon, 16 Mar 2026 16:47:02 -0400
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: Marcos Paulo de Souza <mpdesouza@suse.com>
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
 	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] selftests: livepatch: test-kprobe: Check if kprobes
- can work with livepatches
-Message-ID: <abhqRTBtF1hLDmPq@redhat.com>
+Subject: Re: [PATCH 4/8] selftests: livepatch: functions: Introduce
+ check_sysfs_exists
+Message-ID: <abhsRg0h1YZTWEy_@redhat.com>
 References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
- <20260313-lp-tests-old-fixes-v1-3-71ac6dfb3253@suse.com>
+ <20260313-lp-tests-old-fixes-v1-4-71ac6dfb3253@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,83 +61,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260313-lp-tests-old-fixes-v1-3-71ac6dfb3253@suse.com>
+In-Reply-To: <20260313-lp-tests-old-fixes-v1-4-71ac6dfb3253@suse.com>
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Fri, Mar 13, 2026 at 05:58:34PM -0300, Marcos Paulo de Souza wrote:
-> Running the upstream selftests on older kernels can presente some issues
-> regarding features being not present. One of such issues if the missing
-> capability of having both kprobes and livepatches on the same function.
->
-
-nit picking, but slightly reworded for clarity and spelling:
-
-Running upstream selftests on older kernels can be problematic when
-features or fixes from newer versions are not present. For example,
-older kernels may lack the capability to support kprobes and livepatches
-on the same function simultaneously.
-
-> The support was introduced in commit 0bc11ed5ab60c
-> ("kprobes: Allow kprobes coexist with livepatch"), which means that older
-> kernels may lack this change.
-> 
-> The lack of this feature can be checked when a kprobe without a
-> post_handler is loaded and checking that the enabled_function's file
-> shows the flag "I". A kernel with the proper support for kprobes and
-> livepatches would presente the flag only when a post_handler is
-
-nit: s/presente/present 
-
-> registered.
-> 
-> No functional changes.
+On Fri, Mar 13, 2026 at 05:58:35PM -0300, Marcos Paulo de Souza wrote:
+> Return 0 if the livepatch sysfs attribute don't exists, and 1 otherwise.
+> This new function will be used in the next patches.
 > 
 > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 > ---
->  tools/testing/selftests/livepatch/test-kprobe.sh | 52 ++++++++++++++----------
->  1 file changed, 31 insertions(+), 21 deletions(-)
+>  tools/testing/selftests/livepatch/functions.sh | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/livepatch/test-kprobe.sh b/tools/testing/selftests/livepatch/test-kprobe.sh
-> index cdf31d0e51955..44cd16156dbd4 100755
-> --- a/tools/testing/selftests/livepatch/test-kprobe.sh
-> +++ b/tools/testing/selftests/livepatch/test-kprobe.sh
-> @@ -16,30 +16,19 @@ setup_config
->  # when it uses a post_handler since only one IPMODIFY maybe be registered
->  # to any given function at a time.
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 8ec0cb64ad94a..781346d6e94e0 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -339,6 +339,20 @@ function check_result {
+>  	fi
+>  }
 >  
-> -start_test "livepatch interaction with kprobed function with post_handler"
-> -
-> -echo 1 > "$SYSFS_KPROBES_DIR/enabled"
-> -
-> -load_mod $MOD_KPROBE has_post_handler=1
-> -load_failing_mod $MOD_LIVEPATCH
-> -unload_mod $MOD_KPROBE
-> -
-> -check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=1
-> -% insmod test_modules/$MOD_LIVEPATCH.ko
-> -livepatch: enabling patch '$MOD_LIVEPATCH'
-> -livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> -livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
-> -livepatch: failed to patch object 'vmlinux'
-> -livepatch: failed to enable patch '$MOD_LIVEPATCH'
-> -livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
-> -livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> -livepatch: '$MOD_LIVEPATCH': unpatching complete
-> -insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
-> -% rmmod test_klp_kprobe"
-> -
->  start_test "livepatch interaction with kprobed function without post_handler"
->  
->  load_mod $MOD_KPROBE has_post_handler=0
+> +# check_sysfs_exists(modname, attr) - check sysfs attribute existence
+> +#	modname - livepatch module creating the sysfs interface
+> +#	attr - attribute name to be checked
+> +function check_sysfs_exists() {
+> +	local mod="$1"; shift
+> +	local attr="$1"; shift
 > +
-> +# Check if commit 0bc11ed5ab60c ("kprobes: Allow kprobes coexist with livepatch")
-> +# is missing, meaning that livepatches and kprobes can't be used together.
-> +# When the commit is missing, kprobes always set IPMODIFY (the I flag), even
-> +# when the post handler is missing.
-> +if grep --quiet ") R I" "$SYSFS_DEBUG_DIR/tracing/enabled_functions"; then
+> +	if [[ ! -f "$SYSFS_KLP_DIR/$mod/$attr" ]]; then
+> +		return 0
+> +	fi
+> +
+> +	return 1
+> +}
+> +
 
-Will flags R I always be in this order?
+I don't have my shell coding hat on, but a few questions:
 
+1. I thought shell functions usually returned 1 for a failed result and
+   0 on success?
+
+2. Could this be reduced to (assuming inverting the return as well):
+
+  function check_sysfs_exists() {
+  	local mod="$1"; shift
+  	local attr="$1"; shift
+  
+  	[[ -f "$SYSFS_KLP_DIR/$mod/$attr" ]]
+  }
+
+3. A higher level question, but the other check_* functions will die
+   "reason" on failure.  Would it be better to name this one with
+   does_sysfs_exist() to indicate that subtle difference?  (Or "has" or
+   some other kind of prefix.)
+
+Regards,
 --
 Joe
 
