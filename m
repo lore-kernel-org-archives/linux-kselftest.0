@@ -1,87 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F16146D5A;
-	Mon, 16 Mar 2026 23:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D5B26E6FA;
+	Mon, 16 Mar 2026 23:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773703788; cv=none; b=Gp2LB5bgKuW1l5yuTmZXJ36CLIFUwlPYZaBh5gTmScA8YPFyVPSW9iXQN91PgEmHleWOoyZSxZKK8pQDcsVKhtU0a9XBcSfKM5tp0nBNV2FBrm51peQW0OdAcYfcPp3xTTzXQC1OQDGDasavNiuAjPVHxjhvFBC97ueYD+gO3wg=
+	t=1773703893; cv=none; b=Bm5R16rDIjgpLUcSpKh0wilSgvZ2KWx11yckNZu4T8Sj44VNnITX4yTHMmKSoLAF7xBOV2aM/kJ2PWxrOeWPMr5IccM6DmEFLxLqrNoFpuyqvHqqyWUpMLmRDjLL+MSJmicxNuA4R0iOMpASRw91DQ/FdeZcOlqlsfzFNilh9xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773703788; c=relaxed/simple;
-	bh=NCadKS5ZsnHD2ps3JUYPHi7Yeh7UZFaGoaJyQDUn554=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jeSqYRoNqjMW7H1EBJjwTREnlPXeIqmHlyAjKioUfmCFEGmwEhBnytIiKV1qegJiMq/WeIezPmWD7Gbi01qDCsbCmS4hn9thnJQAtQ2D9ZJmWSPI+GWyCufinJFXQtlr8GMmn5BWxKet9sNWqo/+SJ1f8wenNxGkV9plFkxKcLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VCAQuhQY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773703893; c=relaxed/simple;
+	bh=mokbVaSNGRbUCQQ4SGbI4E3yKDImZ3QdINhNbLzi8Po=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oJOxktom5xoSENDTSL6KYlNk5xLg/ZFHmKCTk/7PNpeuPAtJ1fqvrfOoThwvOPdpP5gtRYVsv751Y0iXrtySzmHawfvtq6Na3fGveEKbj6yXc6/8TqiJgpnFdgAWSlp4OwnbrZKVFZDxIh7k1cqUfq9cyF4vviGIUAGQPDVWboA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hN1fRzFk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VCAQuhQY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA388C19421;
-	Mon, 16 Mar 2026 23:29:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hN1fRzFk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A749C19421;
+	Mon, 16 Mar 2026 23:31:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773703788;
-	bh=NCadKS5ZsnHD2ps3JUYPHi7Yeh7UZFaGoaJyQDUn554=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VCAQuhQYZcMND8Fu7rUdMk0lzEdJMHLtiw/XbeupwvkmulIXY3GA5LMTU1qasfKuC
-	 57Pm5IDe+FCqs8l6G0OoDGf9zk07bHw3z39KGe/WSDhezLZheaKZP5ywtRBBpX6Vrr
-	 KjAHsVFaW+mha9DGzYwyNd5kc7/7WlY4fjYh3ByrfMNk3eqXg7kMfo7I/UfzRgbMFW
-	 2RhfiFXeeH1fk5rpCoEtjh3/xrqvF+KdB++0qLnmfINKkFv+BsTX09nlPd0X+RiKcG
-	 hP7ku4/qrryLZUtWArBY1UYFh3icQ0RkoussBqGzC+jiAFosp8e3s9+nvsvU4Z3qjg
-	 Qt5WwQTeJ4AwQ==
-Date: Mon, 16 Mar 2026 19:29:46 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Dmitry Vyukov <dvyukov@google.com>,
-	syzkaller <syzkaller@googlegroups.com>, linux-api@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
-	tools@kernel.org, x86@kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Askar Safin <safinaskar@zohomail.com>,
-	Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 0/9] Kernel API Specification Framework
-Message-ID: <abiSas7bIIXkb4Uj@laps>
-References: <20260313150928.2637368-1-sashal@kernel.org>
- <20260314111822.63a2ba4a@kernel.org>
- <CACT4Y+arWePyxnV3hWk5RanWZpoc7=ALQ6DV_2MCuQkNoTtJUw@mail.gmail.com>
- <20260316155756.25b985f5@kernel.org>
+	s=k20201202; t=1773703893;
+	bh=mokbVaSNGRbUCQQ4SGbI4E3yKDImZ3QdINhNbLzi8Po=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hN1fRzFkuoAPo5qf7cCUj/3UZ74Zrg2FGMIpeV+WXs3DgSmup1ufDh90hMZjFc0TC
+	 DFJ5TZCjZPQKQKjORnD6nXc/kg4X+SL6SJtuFZKzc/SmJH8x3Lpni7zXRGSJmC7zCx
+	 g7VH7wJOZJqANs6wbO3dzR0eI7+48NtQaOEffLB3o9yHJpLmt0FdQpGcv1EWJJtNb/
+	 ADvmnC44FS9xSHGIWnlJtVwSRO6c9ouBQkKC+O0VI4rosda2SYh3oAyxbDRgyDV0SU
+	 SPJVnJB69/VFFVSBjUhPhbnu67KO1WBCN7X1nUwGRmGsi0HPAY8in067EPcMCo8ChC
+	 2fFBt9f9P7NSg==
+Date: Mon, 16 Mar 2026 16:31:31 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>, Pavan
+ Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, linux-kselftest@vger.kernel.org, Willem de Bruijn
+ <willemb@google.com>, Shuah Khan <shuah@kernel.org>, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
+ intel-wired-lan@lists.osuosl.org, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>
+Subject: Re: [PATCH net-next v4 0/3] ethtool: Dynamic RSS context
+ indirection table resizing
+Message-ID: <20260316163131.2ff161c5@kernel.org>
+In-Reply-To: <87a4w9p95i.fsf@all.your.base.are.belong.to.us>
+References: <20260313071322.3489243-1-bjorn@kernel.org>
+	<20260314093518.43b820b7@kernel.org>
+	<87a4w9p95i.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260316155756.25b985f5@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 16, 2026 at 03:57:56PM -0700, Jakub Kicinski wrote:
->Didn't even think of that. LLMs should make short work of this sort of
->extraction of information from source code..
+On Sun, 15 Mar 2026 13:30:33 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> Jakub Kicinski <kuba@kernel.org> writes:
+>=20
+> > On Fri, 13 Mar 2026 08:13:12 +0100 Bj=C3=B6rn T=C3=B6pel wrote: =20
+> >> Some NICs (e.g. bnxt) change their RSS indirection table size based on
+> >> the queue count, because the hardware table is a shared resource. The
+> >> ethtool core locks ctx->indir_size at context creation, so drivers
+> >> have to reject channel changes when RSS contexts exist.
+> >>=20
+> >> This series adds resize helpers and wires them up in bnxt. =20
+> >
+> > Sorry Bjorn, I was typing the explanation below and I realized that=20
+> > we may be violating user intent. We should already record the user_size
+> > from rss_set_prep_indir() as part of the context (and presumably some
+> > netdev state for the main context?) and don't allow shrinking the
+> > context below that mark.. =20
+>=20
+> Don't be sorry! Good catch, and glad you caught it now rather than after
+> it landed.
+>=20
+> I'll respin with user_size tracked in the context (and netdev state for
+> context 0) as a lower bound, so resize never folds below the size the
+> user explicitly configured.
+>=20
+> WDYT?
 
-This is the primary reason that this proposal resurfaced :)
-
-I've originally proposed[1] something like this almost a decade ago, but when I
-started trying to write the actual specs I hit a brick wall: it was simply not
-tractable.
-
-With LLMs, writing the specs is something we can actually pull off, and we can
-verify their correctness so LLMs don't get to hallucinate.
-
-The specs you see in the following patches are all LLM generated.
-
--- 
-Thanks,
-Sasha
+Yes, keep in mind that AFAIR context 0 is not currently tracked
+in the xarray. So maybe add the size of the main / default context=20
+as a field in struct ethtool_netdev_state ?  Or we can start tracking
+it (partially). IDK what's cleaner.
