@@ -1,138 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B37B3DB64B;
-	Mon, 16 Mar 2026 19:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AD73ED10F
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 20:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773690831; cv=none; b=d8aLL8SV5SUN01D2K0vBdNaH+yosSVa45rWlngie4HamIWjifUIULQ2+i4wtD3zkQhuTvmfmS/vvo5E3Qq225mxf/tCtw+Gh4sTUDb0EHo0S1Vs+s05+3eOetAZSU1Fw08etIXb0J7FRUABMPliTDpnN8LN+ftE7xV7jDzLm5H8=
+	t=1773691973; cv=none; b=IaKC/kb0K6eBYOTaEsLIKH8CtPMvp/l5vbhxkzQ8bqRqvWoQJHoZGOJP1Q54QUe87DkWyLrrl9aEWOJuGAJLSK7j2WV/0lCKdJKzS72r++D4H7HKtklD5dpWXFbdKqvZ7UAVZ1OqUNtahJwHLRaKS9Gx3HZKtOdNwkEvZyBRNYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773690831; c=relaxed/simple;
-	bh=4gAWIaQHRU4NRXeDrvanjMXhFCTsNn7ar/qA+AJSFaY=;
+	s=arc-20240116; t=1773691973; c=relaxed/simple;
+	bh=B1ZXfhdffSJR5UllIG7xSMLudvIuOdzjfWaUORTXvjk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WYT0NpzjUGWyuklrVQSyAmQqmhlQsq2hkPxx5him1X06PDtfN+97sRfiAuVQ/cnY/ADj6UQOdUP0VY+l6geLUFHgwPh2yTUFY5hd2egQemtvfsQt2q3ov5e8yg9tK3YHHRfY+rRQM+Hvl4cMUbQM/xqrVHt+G+IxKQyWu7I/au0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t18WZDn9; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=B5Im7G0gX7P0/RLKev52ryZ8Q/Ddt3W8pinpcioYbsz6LRu+gBGdoO9g2noCnRzihOGErHBZmmWsrfMyrIguls+zlm7FM7i2k0GsKwXgblE0g8DuD5+5KgqnNaqcSXMf9MZHAfEafBN4AvoJZ06lwWdtX/b33kfRG5DhKKeP5QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LoyQVflQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t18WZDn9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2C4C19421;
-	Mon, 16 Mar 2026 19:53:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773690830;
-	bh=4gAWIaQHRU4NRXeDrvanjMXhFCTsNn7ar/qA+AJSFaY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=t18WZDn9tATEb4JJzJCP9h4y8am1c2DaDUz3D/4c3LR1CanJ8UkdHvKzHoDrkzqwo
-	 cnZqDSmkqMxoaOazN6kyMRySPjKL5FflxSUqcK1EHqAmR2/5ZPN/yWm6x8ymrAIIFs
-	 76t6R/a7DYawFl64pYb1e0E58DrnNlZ6BIUZ2q0+NiAg2ois1UX6KCQjfJUgfoKW7r
-	 96YqIgjC03vZMIEz6U7rVSTMNEd13dqxfQ8IpR6bwDwrNQJ3W9SJLAFJCCnd37UYNl
-	 3/0fB29fX9RoRMAkTQMLtatWLzapsdev43Tee2b0HtWmPSjLY0SEr6XhrqWzmZYj0B
-	 OoMZNIGvNHjUg==
-Date: Mon, 16 Mar 2026 19:53:46 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH] selftests/mm: add THP sysfs interface test
-Message-ID: <c4cb6dfe-59b2-44e6-adbc-9ee63bed79fd@lucifer.local>
-References: <20260309-thp_selftest_v2-v1-1-a00cef41da44@debian.org>
- <9cb63c24-eaff-4954-97d5-2a422a0401fc@lucifer.local>
- <abgJtJYQsGMPsTHr@gmail.com>
- <be860d86-75be-4c75-95ea-03bf79524be2@kernel.org>
- <abggyaVTdNe6n_ew@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LoyQVflQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773691970;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xGljA4uILLKFhtcR+6r6n0BSLyAdCgRwO5WiOXFsz4c=;
+	b=LoyQVflQ9neAvciH+Erk1I/Ob3JDrH/PO7pDV7ODnYDDg7XK6D85FvH8egmGD49xMPKPKq
+	Qk80Bx1vR83t9eWVYs5WDrJJoJiD6ebyjXlK3hFKXjMBocYVl5fOuUf8iI94bDfB4kVZ1Y
+	rgH+HgxUT+3pkGvi/GPkaD1tySmqpxI=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-253-2y0VBO6GM7i6QVcEhUf7nQ-1; Mon,
+ 16 Mar 2026 16:12:46 -0400
+X-MC-Unique: 2y0VBO6GM7i6QVcEhUf7nQ-1
+X-Mimecast-MFC-AGG-ID: 2y0VBO6GM7i6QVcEhUf7nQ_1773691965
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1695B195609D;
+	Mon, 16 Mar 2026 20:12:45 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.88.140])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 53998180075C;
+	Mon, 16 Mar 2026 20:12:42 +0000 (UTC)
+Date: Mon, 16 Mar 2026 16:12:38 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
+	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] selftests: livepatch: test-syscall: Check for
+ ARCH_HAS_SYSCALL_WRAPPER
+Message-ID: <abhjYtyveer4niGM@redhat.com>
+References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
+ <20260313-lp-tests-old-fixes-v1-1-71ac6dfb3253@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <abggyaVTdNe6n_ew@gmail.com>
+In-Reply-To: <20260313-lp-tests-old-fixes-v1-1-71ac6dfb3253@suse.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Mon, Mar 16, 2026 at 09:02:33AM -0700, Breno Leitao wrote:
-> On Mon, Mar 16, 2026 at 03:44:14PM +0100, David Hildenbrand (Arm) wrote:
-> > On 3/16/26 14:47, Breno Leitao wrote:
-> > > On Mon, Mar 16, 2026 at 12:55:13PM +0000, Lorenzo Stoakes (Oracle) wrote:
-> > >> On Mon, Mar 09, 2026 at 05:00:34AM -0700, Breno Leitao wrote:
-> > >>> Add a shell-based selftest that exercises the full set of THP sysfs
-> > >>> knobs: enabled (global and per-size anon), defrag, use_zero_page,
-> > >>> hpage_pmd_size, shmem_enabled (global and per-size), shrink_underused,
-> > >>> khugepaged/ tunables, and per-size stats files.
-> > >>>
-> > >>> Each writable knob is tested for valid writes, invalid-input rejection,
-> > >>> idempotent writes, and mode transitions where applicable. All original
-> > >>> values are saved before testing and restored afterwards.
-> > >>>
-> > >>> The test uses the kselftest KTAP framework (ktap_helpers.sh) for
-> > >>> structured TAP 13 output, making results parseable by the kselftest
-> > >>> harness. The test plan is printed at the end since the number of test
-> > >>> points is dynamic (depends on available hugepage sizes and sysfs files).
-> > >>>
-> > >>> This is particularly useful for validating the refactoring of
-> > >>> enabled_store() and anon_enabled_store() to use sysfs_match_string()
-> > >>> and the new change_enabled()/change_anon_orders() helpers.
-> > >>>
-> > >>> Signed-off-by: Breno Leitao <leitao@debian.org>
-> > >>
-> > >> The test is broken locally for me, returning error code 127.
-> > >>
-> > >> I do appreciate the effort here, so I'm sorry to push back negatively, but I
-> > >> feel a bash script here is pretty janky, and frankly if any of these interfaces
-> > >> were as broken as this it'd be a major failure that would surely get picked up
-> > >> far sooner elsewhere.
-> > >>
-> > >> So while I think this might be useful as a local test for your sysfs interface
-> > >> changes, I don't think this is really suited to the mm selftests.
-> > >
-> > > That is totally fine. This test is what I have been using to test the
-> > > changes, and I decide to share it in case someone find it useful.
-> > >
-> > > Let's drop it.
-> >
-> > Out of interest, to we know why the test is failing for Lorenzo?
->
-> I really don't know, but, it sounds like ktap was not found?
+On Fri, Mar 13, 2026 at 05:58:32PM -0300, Marcos Paulo de Souza wrote:
+> Instead of checking if the architecture running the test was powerpc,
+> check if CONF_ARCH_HAS_SYSCALL_WRAPPER is defined or not.
+> 
+> No functional changes.
+> 
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> ---
+>  tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> index dd802783ea849..c01a586866304 100644
+> --- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> @@ -12,15 +12,14 @@
+>  #include <linux/slab.h>
+>  #include <linux/livepatch.h>
+>  
+> -#if defined(__x86_64__)
+> +#if !defined(CONFIG_ARCH_HAS_SYSCALL_WRAPPER)
+> +#define FN_PREFIX
+> +#elif defined(__x86_64__)
+>  #define FN_PREFIX __x64_
+>  #elif defined(__s390x__)
+>  #define FN_PREFIX __s390x_
+>  #elif defined(__aarch64__)
+>  #define FN_PREFIX __arm64_
+> -#else
+> -/* powerpc does not select ARCH_HAS_SYSCALL_WRAPPER */
+> -#define FN_PREFIX
 
-Yeah CONFIG_KUNIT is not set so could be :)
+The patch does maintain the previous behavior, but I'm wondering if the
+original assertion about ARCH_HAS_SYSCALL_WRAPPER on Power was correct:
 
->
-> Then the first early-exit path hit:
-> ktap_skip_all "..."   # undefined → returns 127 exit "$KSFT_SKIP"
-> # expands to: exit "" → exits with last $? = 127
->
-> > I agree that the test is a bit excessive, in particular when it comes to
-> > invalid/idempotent values etc. I could see some value for testing
-> > whether setting the modes keeps working, but also then I wonder if that
-> > is really something we'll be changing frequently (and that breaks easily).
->
-> yea, I make it very excessive, because there were some intrinsics in
-> those sysfs that I was gettingit wrong when doing the intial conversion.
->
-> So, the test is something that I trust now, and I found it useful when
-> finding regressiosn.
->
-> Is is something that will chagne frequently? probably not!
->
-> That said, would you like to have a simplified/different version of this
-> test?
+  $ grep ARCH_HAS_SYSCALL_WRAPPER arch/powerpc/Kconfig
+          select ARCH_HAS_SYSCALL_WRAPPER         if !SPU_BASE && !COMPAT
+          depends on PPC64 && ARCH_HAS_SYSCALL_WRAPPER
 
-In an ideal world we'd use kunit or something to assert it internal to the
-kernel I guess, but if we do have something scaled down it'd at least be nice to
-have in C? :)
+Perhaps I just forgot what that additional piece of information that
+explains the comment (highly probable these days), and if so, might be
+nice to add to this commit since I don't see it in 6a71770442b5
+("selftests: livepatch: Test livepatching a heavily called syscall").
 
-I am not sure how useful it'd be though overall, I don't see us changing this
-too often and really we're more interested in asserting behaviour.
+Thanks,
+--
+Joe
 
-Sadly THP is inherently tricky to test generally because of its very nature, I
-wish we could have better test isolation etc.
-
-See tools/testing/vma for a forlorn dream of kernel code being run in userland
-(but oh how the stubs/duplicate declarations/etc. are a pain).
-
-I suspect THP could never be given the same treatment though! :)
-
-Cheers, Lorenzo
