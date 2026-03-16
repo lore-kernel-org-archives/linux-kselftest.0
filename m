@@ -1,135 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246E43E6DD6;
-	Mon, 16 Mar 2026 18:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B37B3DB64B;
+	Mon, 16 Mar 2026 19:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773687167; cv=none; b=Fw5VCgTnf2rvgSa+JSqMgu1o9xn/k0eIco1cPyXghKH0fF6HnYfl7QQR3A373vJBn5nLGFPoHHRnqU3+NjGUftpsb6RyiX60VDLJlYzcEGziSha8CEz7/LIsVRZ4XWi6YHnYOJm18EDPnjBpOmsiA6MjAHCrTFs9gEr4FTNF21M=
+	t=1773690831; cv=none; b=d8aLL8SV5SUN01D2K0vBdNaH+yosSVa45rWlngie4HamIWjifUIULQ2+i4wtD3zkQhuTvmfmS/vvo5E3Qq225mxf/tCtw+Gh4sTUDb0EHo0S1Vs+s05+3eOetAZSU1Fw08etIXb0J7FRUABMPliTDpnN8LN+ftE7xV7jDzLm5H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773687167; c=relaxed/simple;
-	bh=X2WRgow73IXJgxoQWmrjEMGdBEIYvdEfm5UJNxPJNZQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iNpTlQ/Gfn8aJIdyQYgBTq7o/7rLrBZrsewYC7EnDE9FEOxh8rz7wqxV2E/Ht1gYn7n3YW/V76uuHiQdbrTXAujMWqHIgsDtG38Z5Fx1UFy27aBC5wV7KReyAZdIIZCXY2yAp7pSNcfzHAqC7sOFaPELz44QkmdsnaEdSsfBaHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h7Tqo6HE; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773690831; c=relaxed/simple;
+	bh=4gAWIaQHRU4NRXeDrvanjMXhFCTsNn7ar/qA+AJSFaY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WYT0NpzjUGWyuklrVQSyAmQqmhlQsq2hkPxx5him1X06PDtfN+97sRfiAuVQ/cnY/ADj6UQOdUP0VY+l6geLUFHgwPh2yTUFY5hd2egQemtvfsQt2q3ov5e8yg9tK3YHHRfY+rRQM+Hvl4cMUbQM/xqrVHt+G+IxKQyWu7I/au0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t18WZDn9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h7Tqo6HE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773687166; x=1805223166;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=X2WRgow73IXJgxoQWmrjEMGdBEIYvdEfm5UJNxPJNZQ=;
-  b=h7Tqo6HEejjUqdVshbpQFqcSvs1UH46CMTvJCiJCv5hF2c5JaVyfbGi9
-   byKBpaLz0hsblFRuU1MNv84r8pexUw0PdfnG0eVJaPibdG9eCS5kW9aUm
-   CQodwV5RDgUpT1Zj9VL+ntFyxoO+U/UXIoYaUGy+w6Fe8o/2LvhMBPRJa
-   X81D6oHYmY5mMUrjOg15gn1E9SSmOPi/T1DtCALM8HUsWoF6msbZcpSkr
-   galDOHCLt8z025nbDoN2F7Ubb0OB61qaa+ohycPiP8caJImFYFWTH4ue7
-   Lir19gD9oxlS4ScYEIUd2xaqZ/ce1CtgQbSuv9XrPTojM2mpxZ2tiwbN5
-   Q==;
-X-CSE-ConnectionGUID: QF5hZy2nTe2k2jWfbts4jw==
-X-CSE-MsgGUID: EfejeFGZQACKND65gewAeQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="86068646"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="86068646"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 11:52:45 -0700
-X-CSE-ConnectionGUID: MEVmIqu5RwawiTzdLyaIQQ==
-X-CSE-MsgGUID: 5oi9YWQaS/uORmMZVA7DMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="252522056"
-Received: from lstrano-mobl6.amr.corp.intel.com (HELO [10.124.223.96]) ([10.124.223.96])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 11:52:43 -0700
-Message-ID: <378be028-fb82-4208-85e8-f47dfd424515@intel.com>
-Date: Mon, 16 Mar 2026 11:52:43 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t18WZDn9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2C4C19421;
+	Mon, 16 Mar 2026 19:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773690830;
+	bh=4gAWIaQHRU4NRXeDrvanjMXhFCTsNn7ar/qA+AJSFaY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t18WZDn9tATEb4JJzJCP9h4y8am1c2DaDUz3D/4c3LR1CanJ8UkdHvKzHoDrkzqwo
+	 cnZqDSmkqMxoaOazN6kyMRySPjKL5FflxSUqcK1EHqAmR2/5ZPN/yWm6x8ymrAIIFs
+	 76t6R/a7DYawFl64pYb1e0E58DrnNlZ6BIUZ2q0+NiAg2ois1UX6KCQjfJUgfoKW7r
+	 96YqIgjC03vZMIEz6U7rVSTMNEd13dqxfQ8IpR6bwDwrNQJ3W9SJLAFJCCnd37UYNl
+	 3/0fB29fX9RoRMAkTQMLtatWLzapsdev43Tee2b0HtWmPSjLY0SEr6XhrqWzmZYj0B
+	 OoMZNIGvNHjUg==
+Date: Mon, 16 Mar 2026 19:53:46 +0000
+From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH] selftests/mm: add THP sysfs interface test
+Message-ID: <c4cb6dfe-59b2-44e6-adbc-9ee63bed79fd@lucifer.local>
+References: <20260309-thp_selftest_v2-v1-1-a00cef41da44@debian.org>
+ <9cb63c24-eaff-4954-97d5-2a422a0401fc@lucifer.local>
+ <abgJtJYQsGMPsTHr@gmail.com>
+ <be860d86-75be-4c75-95ea-03bf79524be2@kernel.org>
+ <abggyaVTdNe6n_ew@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/vfio: Fix VLA initialisation in
- vfio_pci_irq_set()
-To: mhonap@nvidia.com, dmatlack@google.com, alwilliamson@nvidia.com,
- ankita@nvidia.com
-Cc: kjaju@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-References: <20260316182025.3383443-1-mhonap@nvidia.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20260316182025.3383443-1-mhonap@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <abggyaVTdNe6n_ew@gmail.com>
 
+On Mon, Mar 16, 2026 at 09:02:33AM -0700, Breno Leitao wrote:
+> On Mon, Mar 16, 2026 at 03:44:14PM +0100, David Hildenbrand (Arm) wrote:
+> > On 3/16/26 14:47, Breno Leitao wrote:
+> > > On Mon, Mar 16, 2026 at 12:55:13PM +0000, Lorenzo Stoakes (Oracle) wrote:
+> > >> On Mon, Mar 09, 2026 at 05:00:34AM -0700, Breno Leitao wrote:
+> > >>> Add a shell-based selftest that exercises the full set of THP sysfs
+> > >>> knobs: enabled (global and per-size anon), defrag, use_zero_page,
+> > >>> hpage_pmd_size, shmem_enabled (global and per-size), shrink_underused,
+> > >>> khugepaged/ tunables, and per-size stats files.
+> > >>>
+> > >>> Each writable knob is tested for valid writes, invalid-input rejection,
+> > >>> idempotent writes, and mode transitions where applicable. All original
+> > >>> values are saved before testing and restored afterwards.
+> > >>>
+> > >>> The test uses the kselftest KTAP framework (ktap_helpers.sh) for
+> > >>> structured TAP 13 output, making results parseable by the kselftest
+> > >>> harness. The test plan is printed at the end since the number of test
+> > >>> points is dynamic (depends on available hugepage sizes and sysfs files).
+> > >>>
+> > >>> This is particularly useful for validating the refactoring of
+> > >>> enabled_store() and anon_enabled_store() to use sysfs_match_string()
+> > >>> and the new change_enabled()/change_anon_orders() helpers.
+> > >>>
+> > >>> Signed-off-by: Breno Leitao <leitao@debian.org>
+> > >>
+> > >> The test is broken locally for me, returning error code 127.
+> > >>
+> > >> I do appreciate the effort here, so I'm sorry to push back negatively, but I
+> > >> feel a bash script here is pretty janky, and frankly if any of these interfaces
+> > >> were as broken as this it'd be a major failure that would surely get picked up
+> > >> far sooner elsewhere.
+> > >>
+> > >> So while I think this might be useful as a local test for your sysfs interface
+> > >> changes, I don't think this is really suited to the mm selftests.
+> > >
+> > > That is totally fine. This test is what I have been using to test the
+> > > changes, and I decide to share it in case someone find it useful.
+> > >
+> > > Let's drop it.
+> >
+> > Out of interest, to we know why the test is failing for Lorenzo?
+>
+> I really don't know, but, it sounds like ktap was not found?
 
+Yeah CONFIG_KUNIT is not set so could be :)
 
-On 3/16/26 11:20 AM, mhonap@nvidia.com wrote:
-> From: Manish Honap <mhonap@nvidia.com>
-> 
-> C does not permit an initialiser expression on a variable-length array
-> (C99 Section 6.7.9 constraint: "The type of the entity to be initialized
-> shall not be a variable length array type").
-> 
-> vfio_pci_irq_set() declared:
-> 
->       u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
-> 
-> where `count` is a runtime function parameter, making `buf` a VLA.
-> 
-> GCC rejects this with (tried with GCC-9.4.0):
-> 
->       error: variable-sized object may not be initialized
-> 
-> Fix by removing the `= {}` initialiser and inserting an explicit
-> memset() immediately after the declaration.  memset() on a VLA is
-> perfectly legal and achieves the same zero-initialisation on all
-> conforming C implementations.
-> 
-> This fix is self-contained: it touches only the existing vfio selftest
-> helper library and carries no dependency on any other patch.  It was
-> originally included as PATCH 20/20 in the CXL Type-2 VFIO passthrough
-> RFC series [1] but belongs on the vfio list independently, as noted by
-> Dave Jiang.
-> 
-> [1] https://lore.kernel.org/all/20260311203440.752648-1-mhonap@nvidia.com/
-> 
-> Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
-> Cc: stable@vger.kernel.org
-> Suggested-by: Dave Jiang <dave.jiang@intel.com>
+>
+> Then the first early-exit path hit:
+> ktap_skip_all "..."   # undefined → returns 127 exit "$KSFT_SKIP"
+> # expands to: exit "" → exits with last $? = 127
+>
+> > I agree that the test is a bit excessive, in particular when it comes to
+> > invalid/idempotent values etc. I could see some value for testing
+> > whether setting the modes keeps working, but also then I wonder if that
+> > is really something we'll be changing frequently (and that breaks easily).
+>
+> yea, I make it very excessive, because there were some intrinsics in
+> those sysfs that I was gettingit wrong when doing the intial conversion.
+>
+> So, the test is something that I trust now, and I found it useful when
+> finding regressiosn.
+>
+> Is is something that will chagne frequently? probably not!
+>
+> That said, would you like to have a simplified/different version of this
+> test?
 
-You can drop this tag. I didn't suggest the changes. It's your patch. :)
- 
-> Signed-off-by: Manish Honap <mhonap@nvidia.com>
+In an ideal world we'd use kunit or something to assert it internal to the
+kernel I guess, but if we do have something scaled down it'd at least be nice to
+have in C? :)
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+I am not sure how useful it'd be though overall, I don't see us changing this
+too often and really we're more interested in asserting behaviour.
 
+Sadly THP is inherently tricky to test generally because of its very nature, I
+wish we could have better test isolation etc.
 
-> 
-> ---
->  tools/testing/selftests/vfio/lib/vfio_pci_device.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> index fac4c0ecadef..3258e814f450 100644
-> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> @@ -26,8 +26,10 @@
->  static void vfio_pci_irq_set(struct vfio_pci_device *device,
->  			     u32 index, u32 vector, u32 count, int *fds)
->  {
-> -	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
-> +	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
->  	struct vfio_irq_set *irq = (void *)&buf;
-> +
-> +	memset(buf, 0, sizeof(buf));
->  	int *irq_fds = (void *)&irq->data;
-> 
->  	irq->argsz = sizeof(buf);
-> --
-> 2.25.1
-> 
+See tools/testing/vma for a forlorn dream of kernel code being run in userland
+(but oh how the stubs/duplicate declarations/etc. are a pain).
 
+I suspect THP could never be given the same treatment though! :)
+
+Cheers, Lorenzo
