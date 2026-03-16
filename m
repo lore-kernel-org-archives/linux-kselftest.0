@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B9F21B185;
-	Mon, 16 Mar 2026 06:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B4333A9D1;
+	Mon, 16 Mar 2026 06:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773642567; cv=none; b=ZdPLVM0KbU1GJtL/eoMrxUgJJa4R1AdivzC4/imFQUbyO1tGDLB2jMOr8w7hyaO+TJS9g13WXAS1DebLLvKFDHvKmvVsmEwxvxYm7xxBH+dQAEzC8n/K61yMb5a47l0rkQKxRLIZJno4QdgaGtdkD1Ho9iHKSzVN/viUNiXu/KY=
+	t=1773642617; cv=none; b=tJe9tNp3S5MxMCi6ZISdx/fj+Y69BBjmjMUq6GFJgjUwJjWyxb5txsmhUH/xRorvquPrd1iJaNpS73mkYXaS8dOb1bXFbjHV3DhjPFcejDJYclsR+CGrtiltG7kbgpXqq4tm/QAkGQTlvOYwTpFXSVKoAWbOJ6+Nhx+WQe3uKN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773642567; c=relaxed/simple;
-	bh=ktXRXkP5hrIO2loAV8z65+7YYpRkolR39H5JtUzQg6s=;
+	s=arc-20240116; t=1773642617; c=relaxed/simple;
+	bh=BoAh9R2GzWm0J+6HTrGxGxOCOG2wr51zWGNUGEpZehg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pIV1XBqzwWi4hN7eg/wdjlnBL/67UWD/nRODVl6NM/V4WOcD6O2c6Yth+AIbB6uQZAyDr6U2VHI7B44z8dT1AaTRYhMv/b/OcebSl9XbPowQtBByD49ysNlVX3jZPbP4tz3PwUeHXbSHtpt3q11b3OsMZ64ypiW27EimyUu6m3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1EHAFsp; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=vB6RZsRCyUmxoQmZztEPQOzvyK2KXq6dbghKwPgGmY6PiriEB+6Vfjm0xVAExoaMYGYZ/LN+fXOyASp7oa7/nQHxoUTm1Dn6GK5tI2fPekqtGWIzlvOspaApF2nHFmTOV9AlHmXY4Be5d8ts2ltah5SigjtBVrxJtoPwaYkhyRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KrAO+LMX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1EHAFsp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A81C2BC9E;
-	Mon, 16 Mar 2026 06:29:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KrAO+LMX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B7BCC19421;
+	Mon, 16 Mar 2026 06:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773642566;
-	bh=ktXRXkP5hrIO2loAV8z65+7YYpRkolR39H5JtUzQg6s=;
+	s=k20201202; t=1773642617;
+	bh=BoAh9R2GzWm0J+6HTrGxGxOCOG2wr51zWGNUGEpZehg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u1EHAFsp9jlP2J2cwUKw8HzJN07gL/SrtcH4P4ScAdVPoK3NKpmev9F1XykTIgAOw
-	 FvMBt/kSQgiNysyDgoNWApuF1zHEqvzk7B1H73sbpJbSFrjSAyBK+FGVD1jgfBiya0
-	 veXnsLgv7Q3o0uGoOwKv0+jveNvUsf+/MtDmmyszyBdKFvLx4mUsH9oBWGthwjlIw/
-	 TxN07vLkVnVgvTKlUGlBkcbQHJk1hIrWmbO0u8dDuTnwsc3LadUJ9YuG5prA9ca1kM
-	 L/4IM9vXIATWNgSDjOnNaaFNmtV4HfdE3/4gRZojDX6qZqheX9SgM84Yl/GtNqnpmr
-	 ya8fMRR8FVwZQ==
-Date: Mon, 16 Mar 2026 08:29:16 +0200
+	b=KrAO+LMXLmFNA8i12ZwNrpk7GdRAUsDf+a4vK3fq4p42YlFyHT/saU0gROlAzEKZE
+	 DnmJq0GG+T+nCaApEM7GEx42dCUaniKigKA31VydRZDVqJIrTzNwa8f92MuB0fhzqW
+	 du0TclxXK/qCbTgLDG9cUoUBQSYyZNHWtvVfOOutDP8UAtIqQX2bbNhWGEH1hiljIW
+	 3bKcxWK8wHsYTKsgbmOBPMcK7kE1bw79Av0ZmI+Z5kaugNNbJVar+5/f26oHY7BdMI
+	 msTWuTlOldO+Wi11E0O9yu/c9+AEp+1iEDrO60RLPr/LpRyDIgC4jHw0HSu/aaKFs4
+	 QBe2R/bLqAiig==
+Date: Mon, 16 Mar 2026 08:30:07 +0200
 From: Mike Rapoport <rppt@kernel.org>
 To: Chunyu Hu <chuhu@redhat.com>
 Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
@@ -37,11 +37,11 @@ Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
 	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
 	baohua@kernel.org, lance.yang@linux.dev,
 	Li Wang <liwang@redhat.com>
-Subject: Re: [PATCH v2 4/5] selftests/mm: split_huge_page_test: skip the test
- when thp is not available
-Message-ID: <abejPBPP0J2m8j18@kernel.org>
+Subject: Re: [PATCH v2 5/5] selftests/mm: transhuge_stress: skip the test
+ when thp not available
+Message-ID: <abejb7wggISdsIad@kernel.org>
 References: <20260316044335.1390608-1-chuhu@redhat.com>
- <20260316044335.1390608-5-chuhu@redhat.com>
+ <20260316044335.1390608-6-chuhu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,32 +50,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260316044335.1390608-5-chuhu@redhat.com>
+In-Reply-To: <20260316044335.1390608-6-chuhu@redhat.com>
 
-On Mon, Mar 16, 2026 at 12:43:34PM +0800, Chunyu Hu wrote:
-> When thp is not enabled on some kernel config such as realtime kernel, the
-> test will report failure. Fix the false positive by skipping the test
-> directly when thp is not enabled.
+On Mon, Mar 16, 2026 at 12:43:35PM +0800, Chunyu Hu wrote:
+> The test requires thp, skip the test when thp is not available to avoid
+> false positive.
 > 
-> Tested with thp disabled kernel:
-> Before The fix:
->   # --------------------------------------------------
->   # running ./split_huge_page_test /tmp/xfs_dir_Ywup9p
->   # --------------------------------------------------
+> Tested with thp disabled kernel.
+> Before the fix:
+>   # --------------------------------
+>   # running ./transhuge-stress -d 20
+>   # --------------------------------
 >   # TAP version 13
->   # Bail out! Reading PMD pagesize failed
+>   # 1..1
+>   # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
+>   # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
 >   # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
 >   # [FAIL]
->   not ok 61 split_huge_page_test /tmp/xfs_dir_Ywup9p # exit=1
+>   not ok 60 transhuge-stress -d 20 # exit=1
 > 
 > After the fix:
->   # --------------------------------------------------
->   # running ./split_huge_page_test /tmp/xfs_dir_YHPUPl
->   # --------------------------------------------------
+>   # --------------------------------
+>   # running ./transhuge-stress -d 20
+>   # --------------------------------
 >   # TAP version 13
 >   # 1..0 # SKIP Transparent Hugepages not available
 >   # [SKIP]
->   ok 6 split_huge_page_test /tmp/xfs_dir_YHPUPl # SKIP
+>   ok 5 transhuge-stress -d 20 # SKIP
 > 
 > Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
 > Reviewed-by: Zi Yan <ziy@nvidia.com>
