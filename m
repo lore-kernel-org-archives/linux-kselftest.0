@@ -1,461 +1,146 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A582F38236E
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 11:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B416C29B799
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 11:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773660595; cv=none; b=DOilAe1JZDR0YJRDWI4KapJIx0SnSkXbWtsVh2gwh0Lw2tA8JdTP2/aMxLPixTwFynQdKnXG9tx9f5oGUvqqfWNQkJgSkk1JFOkntC3+HheWuE5aOtuvX88J6IaBE1FNApC4j27GmoBoDt9L5F3wbbpsWY6k65VC/rnfNsbE6Js=
+	t=1773660685; cv=none; b=d7O5WWfDa8vut+++kCaC5JW5PkhwG36ydPskKrn0dLNvGjaxhfVh3CKidDY0vbc/usf9BGmP4CiQZwjWHGGGcRoyyIJ+9f6Brf6oRPOgutbPzBph0KPsLBCPEkfLnXTCOII1nbF5TgHklvPdeyHjdqOIpx1sUa94776h3x6BEpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773660595; c=relaxed/simple;
-	bh=iFNWymfmfxX/QJqdbdhLQocWSeqa+lLLvreHPgxAa/o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WPMXc+po8EdvM4/1DTc8wS1RRZE6FUpiLYu4o+3DzU+gWS+kkCbfoMGKnVPDKEnyrfX0AxG46zKZrhQ6abLgSOdKHnf3h+K10k6eQuE61cEJW39AaVTDahxopumWhVBZQ6BfprO8lpDYhcEbpcWJD5Dc5dGlk7YTnof9dYeijfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OSrMChax; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773660685; c=relaxed/simple;
+	bh=RnzcoqiCgiO1PMBkGL95IiCkLD+8z6QAFA5shSuEMyY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iKCDgIcGMFA+3zDKxKr5SnLAsA3Ou/YvVh+OTa5g/+e6ao89s+fF8OFXs/FhbCtkeebIeBEaEkWP1htJD1x2v/DhzJgiy9cWoFglTp56NXhg+b82VOy78hNdpi69CMsshCJugR9ptzHwwAjHNu+qMxczLOFPaumWn2gAU4fyktw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d/yymGbn; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UDppKzRu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OSrMChax"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c73aabd620bso2959806a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 04:29:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d/yymGbn";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UDppKzRu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773660682;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WoMK2QRfTtUly3K0u8u4VXZMMCNoL+hLg9jh7niAtnw=;
+	b=d/yymGbnR6Zo4Cp56EDz80mzlMy73/hUUT/ZOtUs3LWua/Nq+o1rsGONOBkzMkgAdn+rY6
+	GVD5Ei4bDiHg0biABtDnPnmVWTC0PDUTLQ9q0teeZLXYoprPVZMrl6D77bBIo6Du8+uIsQ
+	57JpZ/JmDN59mc/Zwze0R8yPmGkLerc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-29-FUQ0u0YKPyuXkpDqubR4Hw-1; Mon, 16 Mar 2026 07:31:21 -0400
+X-MC-Unique: FUQ0u0YKPyuXkpDqubR4Hw-1
+X-Mimecast-MFC-AGG-ID: FUQ0u0YKPyuXkpDqubR4Hw_1773660680
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-43b42fe9031so691821f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 04:31:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773660593; x=1774265393; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sZLdK6dkEj8TjVSrlUlFfcQoiH20fwv6lL/iTYgpM30=;
-        b=OSrMChaxTPi4rDkJrzJHNphoewSkJtP5z7riBpE2UEna6QWdR8LbiXTQG3+mFnfa5s
-         btHmPhExpGSCLUAMdyKWw+1Huy2EbqZDP6kVlEYskK7LaNubH0TLP+0dK6iuk7SFMz0j
-         20MyrehWCqBTVe5yYbrMqv5ofIW/Xmdp5nWr2MhjqMmsrYnBoLWe5EHZSJTL54RuQmI7
-         x2ceCsGGuayqUps9/n18uygPhisCZCIHHcSm8SmY3vjfuHlZhH0l89FQF5+kH2kXMo4Z
-         n3xI6ZcKMo9s9jRh1aWrhg59+W04FEGsHJiNht/YJBykyvTEA1HePlaXRjWgih2TT2gT
-         wqMA==
+        d=redhat.com; s=google; t=1773660680; x=1774265480; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WoMK2QRfTtUly3K0u8u4VXZMMCNoL+hLg9jh7niAtnw=;
+        b=UDppKzRuU7Pe/GCKKqNYcueBD/LliCnEK3jXMx4fh0840B2SsiFqRidgEEIePWreL9
+         5Mf0ZttplO9N+IdusUXUFUS7Sv2fP17FngrSaqIcxDn3T+0tGaORf9IkRCm/M7yZl9TT
+         wZR61g1b1LFXUEICy3rRgeQH69lsBzd8t0XA55QmuJVRFIxJ4a2nrT6rk0JuqrY52YuX
+         l4YZaIqIEwY/xVvDXZy93egx2P1b3S7E/yxMEq+aGm9KImJOZFA8qX0NrdewW9Qar2jK
+         K5lLAcJyXy32WtU+ohOVQL5Uv/3c0ZpxJMxL4reuLFykINnhp78lAJ4iNkORGmACj73r
+         7DvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773660593; x=1774265393;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sZLdK6dkEj8TjVSrlUlFfcQoiH20fwv6lL/iTYgpM30=;
-        b=cLO8ngAXvN3W6p02PgCHS22F+U98SVMNGNNvb2ZlM7WRGe+5uZrbMJVY8jnXZMCoRj
-         Atn7whTkgC0qU2cDLJSH0bTjtXtHmPFXJ1ukdLmbkwWdAFLsRg3cw8talG+yoPnrIFUp
-         PhP6jzxuIyhjZqX9fymOjj/XS0KWh4IKAOWNf7FWGxt1aJxtuRCvJCtN/XwcbhjEaBYH
-         Xq11CzqIj5GaFv/oVg3cZ2rgZOLPs9YOc5lPrmOKBsyf7aqgX78xWzrFAj+2uADQP/4y
-         ef7G3jd8lldddDMPNGrKx4zbGI2TiXGV+dOnCNqv8ZALq3AhYhGq0didG0u60LA1L2qe
-         6iXA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtCp3A2KJYAc0mNy23oaSfLCQIXBIIEYmFNryjMSXxQSXZJ0yj9YXLcNfXfb34lfAKIxDVLYgLCQ+8PAC9THU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJ9SxTT/ulvkA3jow6m+k0YhdBtT5PEejjGVvapX0IUhZQLyOx
-	++9rKIU5eu9se6+cmyYz47EE0XuVRl/v1N7IrbZXmoQSSyJesfwvSJpC
-X-Gm-Gg: ATEYQzwmWIYwFX4NjhXEFWX9Wwp+NQsEwJz+HDCZUd4CEB1Q8XIn7sF8e4PF5T6FvxK
-	ZM+6nygbdh/EZsu/8CncONQGR4FZtqoiw2Lyw+TTSPPWQ5AOoTYI/5BxuDLiK5lQr1n1NSJDnXY
-	7O2NqYipv0z75bSSoLn2vThiGk9vcOt+4BjpdqFz4oSOh/csFogJH39iihXtcWi7b63dsiDAGwy
-	wd3f7reqzMDsHz7Y/VszhXgpoPfAlsrOPRbTUimHjdZJ+omrJPh0WI4oTyAKcQOGb2uRaHrBbWu
-	n3T87JLORrNxTO6DpPzd3sFx1wgVBFZ1bC4pIFfvA9xFEO5kRpLLeJrRprDAzjn/Dw5vDqEp9Iy
-	mXV4z/zB3WmsKSGpOpb9zFpDKWIkBOltsvkaEUktvsUbDOFTnVXuvYY6MvbdtcVcckT5DJRX5Gi
-	j5EKajRFgPLQpO56Uwluao97H4NHNvYynsmLcbMWcTwNnoZQ7AGYjGYV1nRgnEO1eMhQ==
-X-Received: by 2002:a05:6a21:685:b0:398:6ea8:21d8 with SMTP id adf61e73a8af0-398ec9b4a31mr11583444637.15.1773660592920;
-        Mon, 16 Mar 2026 04:29:52 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7401588ecesm4684940a12.32.2026.03.16.04.29.45
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 16 Mar 2026 04:29:51 -0700 (PDT)
-From: Chengkaitao <pilgrimtao@gmail.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	chengkaitao@kylinos.cn,
-	linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v8 8/8] selftests/bpf: Add test cases for bpf_list_del/add/is_first/is_last/empty
-Date: Mon, 16 Mar 2026 19:28:43 +0800
-Message-ID: <20260316112843.78657-9-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260316112843.78657-1-pilgrimtao@gmail.com>
-References: <20260316112843.78657-1-pilgrimtao@gmail.com>
+        d=1e100.net; s=20251104; t=1773660680; x=1774265480;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WoMK2QRfTtUly3K0u8u4VXZMMCNoL+hLg9jh7niAtnw=;
+        b=lbkoUofYcysP1Z8RFsvi6maX8ReNGKFbiCq49fN/qgEx+3m01KhVwNyLkeTbYk+z8i
+         r58zKBaJ/PK/oJT5/6Lee5gg5eGm0U4ZUGXJ5whnKQbs9qoZpHAvfnb8NNa1J/sTh2aB
+         Sm65u8V6NwvtH4WxkIEpHAQ6w3s1/QbeVOwNoIyJfjMJnoabDB4JprTCs5R1wtVNC1x8
+         wycfecPbIz50CNs0f6ptVF7ej/IDAx7gHYioN1/IhES5NWgvYoxoFpGkYXwrzzn59rtE
+         0VJzY7MBmDNOvNj9R8bU0oN52JeoEQmAMFbuR5u82cG/VZXSOqAaK+t0c6Dv3iTNOMiO
+         urAA==
+X-Forwarded-Encrypted: i=1; AJvYcCVqHcFlVzu5i1J4ODPsveADR5szworwqE9ei43np8h/6HgLxlz8nD2VFjYu4gGgBDdHODftdjJSPCKkO3ZCKtc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxHKyZ7vJCwmBVYrjxs2+ustiKbHaeziqEtzAWXCGypsnbe1q3
+	jK04MjeZMeLBdILmR8FbdwVauqApEri8p9TaxOcMiYxIGtcXnBBxSO1mOcKN3HaJl+MUrVPtc9F
+	UEwd7OrSm0Bn1+R2FogZIs8LP/vcx9ASSd3T7uCJg7QOwwQ9tr+el2FRWbdBnzvWOLori0g==
+X-Gm-Gg: ATEYQzyqFyWbSASD4ooL/HJsooZOj8aXzhfG9CJTj+G+BsTgz+85LsgWscMeR6zs+Ry
+	K+pkT0Jq9DR6cLq4DTDZfo1cTVOVBiNczKnuJ59C9Uz0YGYpepmkcsTTa9UnJ5tW+WRKbaupJFP
+	Djpo62X73CMnILIDnUA/F2UaIpwEeiD3nt4W5C4n/T8ryZo2/yDKA1cvtjdMGKDOFtecgqCD5hl
+	NYlbVVlfpokOgDoeY64oQlKZP0iaxE1mWClp4dbkWjtMHmZ4GeNqeZBX3TClxLCoCUenagAkHNN
+	qeTeXKQ20FECSnfFa9FZRXQarPXjVe+Qvm2pBQt86owEu11ceAoQ4kLjxWB9IyUyGMXLamk8/CQ
+	ZJBQzBZbpZRtzgr0aOv2BDKj/6ZJWnsoGhtetdV0zTrWX2CDMWXvWLv4=
+X-Received: by 2002:a05:6000:1887:b0:439:fe98:20f9 with SMTP id ffacd0b85a97d-43a04daf124mr23932758f8f.27.1773660680208;
+        Mon, 16 Mar 2026 04:31:20 -0700 (PDT)
+X-Received: by 2002:a05:6000:1887:b0:439:fe98:20f9 with SMTP id ffacd0b85a97d-43a04daf124mr23932679f8f.27.1773660679649;
+        Mon, 16 Mar 2026 04:31:19 -0700 (PDT)
+Received: from [192.168.88.32] ([216.128.11.95])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43a0b2e2c71sm28145619f8f.22.2026.03.16.04.31.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 04:31:19 -0700 (PDT)
+Message-ID: <95ecd36e-e32f-4ca2-ba35-6d251a64ad30@redhat.com>
+Date: Mon, 16 Mar 2026 12:31:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 05/14] tcp: grow rcvbuf to back scaled-window
+ quantization slack
+To: atwellwea@gmail.com, netdev@vger.kernel.org, davem@davemloft.net,
+ kuba@kernel.org, edumazet@google.com, ncardwell@google.com
+Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, mptcp@lists.linux.dev,
+ dsahern@kernel.org, horms@kernel.org, kuniyu@google.com,
+ andrew+netdev@lunn.ch, willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+ skhan@linuxfoundation.org, corbet@lwn.net, matttbe@kernel.org,
+ martineau@kernel.org, geliang@kernel.org, rostedt@goodmis.org,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 0x7f454c46@gmail.com
+References: <20260314201348.1786972-1-atwellwea@gmail.com>
+ <20260314201348.1786972-6-atwellwea@gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260314201348.1786972-6-atwellwea@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+On 3/14/26 9:13 PM, atwellwea@gmail.com wrote:
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index 57a2a6daaad3..53781cf591d2 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+> @@ -3375,13 +3375,24 @@ u32 __tcp_select_window(struct sock *sk)
+>  	 * scaled window will not line up with the MSS boundary anyway.
+>  	 */
+>  	if (tp->rx_opt.rcv_wscale) {
+> +		int rcv_wscale = 1 << tp->rx_opt.rcv_wscale;
+> +
+>  		window = free_space;
+>  
+>  		/* Advertise enough space so that it won't get scaled away.
+> -		 * Import case: prevent zero window announcement if
+> +		 * Important case: prevent zero-window announcement if
+>  		 * 1<<rcv_wscale > mss.
+>  		 */
+> -		window = ALIGN(window, (1 << tp->rx_opt.rcv_wscale));
+> +		window = ALIGN(window, rcv_wscale);
+> +
+> +		/* Back any scale-quantization slack before we expose it.
+> +		 * Otherwise tcp_can_ingest() can reject data which is still
+> +		 * within the sender-visible window.
+> +		 */
+> +		if (window > free_space &&
+> +		    (!tcp_rcvbuf_grow_allowed(sk) ||
+> +		     !tcp_try_grow_rcvbuf(sk, tcp_space_from_win(sk, window))))
+> +			window = round_down(free_space, rcv_wscale);
 
-Extend refcounted_kptr with tests for bpf_list_add (including prev from
-bpf_list_front and bpf_refcount_acquire), bpf_list_del (including node
-from bpf_rbtree_remove and bpf_refcount_acquire), bpf_list_empty,
-bpf_list_is_first/last, and push_back on uninit head.
+It looks like this can cause the advertised window to shrink even if we
+are in the 'do not allow window to shrink' branch.
 
-To verify the validity of bpf_list_del/add, the test also expects the
-verifier to reject calls to bpf_list_del/add made without holding the
-spin_lock.
+Also why the other branch (shrinking allowed) is not touched?
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
----
- .../testing/selftests/bpf/bpf_experimental.h  |  16 +
- .../selftests/bpf/progs/refcounted_kptr.c     | 311 ++++++++++++++++++
- 2 files changed, 327 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 44466acf8083..5821f0000e1f 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -85,6 +85,22 @@ extern int bpf_list_push_back_impl(struct bpf_list_head *head,
- /* Convenience macro to wrap over bpf_list_push_back_impl */
- #define bpf_list_push_back(head, node) bpf_list_push_back_impl(head, node, NULL, 0)
- 
-+/* Description
-+ *	Insert 'new' after 'prev' in the BPF linked list with head 'head'.
-+ *	The bpf_spin_lock protecting the list must be held. 'prev' must already
-+ *	be in that list; 'new' must not be in any list. The 'meta' and 'off'
-+ *	parameters are rewritten by the verifier, no need for BPF programs to
-+ *	set them.
-+ * Returns
-+ *	0 on success, -EINVAL if head is NULL, prev is not in the list with head,
-+ *	or new is already in a list.
-+ */
-+extern int bpf_list_add_impl(struct bpf_list_head *head, struct bpf_list_node *new,
-+			     struct bpf_list_node *prev, void *meta, __u64 off) __ksym;
-+
-+/* Convenience macro to wrap over bpf_list_add_impl */
-+#define bpf_list_add(head, new, prev) bpf_list_add_impl(head, new, prev, NULL, 0)
-+
- /* Description
-  *	Remove the entry at the beginning of the BPF linked list.
-  * Returns
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-index c847398837cc..e5558994a76d 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-@@ -367,6 +367,317 @@ long insert_rbtree_and_stash__del_tree_##rem_tree(void *ctx)		\
- INSERT_STASH_READ(true, "insert_stash_read: remove from tree");
- INSERT_STASH_READ(false, "insert_stash_read: don't remove from tree");
- 
-+SEC("tc")
-+__description("list_empty_test: list empty before add, non-empty after add")
-+__success __retval(0)
-+int list_empty_test(void *ctx)
-+{
-+	struct node_data *node_new;
-+
-+	bpf_spin_lock(&lock);
-+	if (!bpf_list_empty(&head)) {
-+		bpf_spin_unlock(&lock);
-+		return -1;
-+	}
-+	bpf_spin_unlock(&lock);
-+
-+	node_new = bpf_obj_new(typeof(*node_new));
-+	if (!node_new)
-+		return -2;
-+
-+	bpf_spin_lock(&lock);
-+	bpf_list_push_front(&head, &node_new->l);
-+
-+	if (bpf_list_empty(&head)) {
-+		bpf_spin_unlock(&lock);
-+		return -3;
-+	}
-+	bpf_spin_unlock(&lock);
-+	return 0;
-+}
-+
-+static struct node_data *__add_in_list(struct bpf_list_head *head,
-+				       struct bpf_spin_lock *lock)
-+{
-+	struct node_data *node_new, *node_ref;
-+
-+	node_new = bpf_obj_new(typeof(*node_new));
-+	if (!node_new)
-+		return NULL;
-+
-+	node_ref = bpf_refcount_acquire(node_new);
-+
-+	bpf_spin_lock(lock);
-+	bpf_list_push_front(head, &node_new->l);
-+	bpf_spin_unlock(lock);
-+	return node_ref;
-+}
-+
-+SEC("tc")
-+__description("list_is_edge_test: is_first on first node, is_last on last node")
-+__success __retval(0)
-+int list_is_edge_test(void *ctx)
-+{
-+	struct node_data *node_first, *node_last;
-+	int err = 0;
-+
-+	node_last = __add_in_list(&head, &lock);
-+	if (!node_last)
-+		return -1;
-+
-+	node_first = __add_in_list(&head, &lock);
-+	if (!node_first) {
-+		bpf_obj_drop(node_last);
-+		return -2;
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	if (!bpf_list_is_first(&head, &node_first->l)) {
-+		err = -3;
-+		goto fail;
-+	}
-+	if (!bpf_list_is_last(&head, &node_last->l))
-+		err = -4;
-+
-+fail:
-+	bpf_spin_unlock(&lock);
-+	bpf_obj_drop(node_first);
-+	bpf_obj_drop(node_last);
-+	return err;
-+}
-+
-+SEC("tc")
-+__description("list_del_test1: del returns removed nodes")
-+__success __retval(0)
-+int list_del_test1(void *ctx)
-+{
-+	struct node_data *node_first, *node_last;
-+	struct bpf_list_node *bpf_node_first, *bpf_node_last;
-+	int err = 0;
-+
-+	node_last = __add_in_list(&head, &lock);
-+	if (!node_last)
-+		return -1;
-+
-+	node_first = __add_in_list(&head, &lock);
-+	if (!node_first) {
-+		bpf_obj_drop(node_last);
-+		return -2;
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	bpf_node_last = bpf_list_del(&head, &node_last->l);
-+	bpf_node_first = bpf_list_del(&head, &node_first->l);
-+	bpf_spin_unlock(&lock);
-+
-+	if (bpf_node_first)
-+		bpf_obj_drop(container_of(bpf_node_first, struct node_data, l));
-+	else
-+		err = -3;
-+
-+	if (bpf_node_last)
-+		bpf_obj_drop(container_of(bpf_node_last, struct node_data, l));
-+	else
-+		err = -4;
-+
-+	bpf_obj_drop(node_first);
-+	bpf_obj_drop(node_last);
-+	return err;
-+}
-+
-+SEC("tc")
-+__description("list_del_test2: remove an arbitrary node from the list")
-+__success __retval(0)
-+int list_del_test2(void *ctx)
-+{
-+	struct bpf_rb_node *rb;
-+	struct bpf_list_node *l;
-+	struct node_data *n;
-+	long err;
-+
-+	err = __insert_in_tree_and_list(&head, &root, &lock);
-+	if (err)
-+		return err;
-+
-+	bpf_spin_lock(&lock);
-+	rb = bpf_rbtree_first(&root);
-+	if (!rb) {
-+		bpf_spin_unlock(&lock);
-+		return -4;
-+	}
-+
-+	rb = bpf_rbtree_remove(&root, rb);
-+	if (!rb) {
-+		bpf_spin_unlock(&lock);
-+		return -5;
-+	}
-+
-+	n = container_of(rb, struct node_data, r);
-+	l = bpf_list_del(&head, &n->l);
-+	bpf_spin_unlock(&lock);
-+	bpf_obj_drop(n);
-+	if (!l)
-+		return -6;
-+
-+	bpf_obj_drop(container_of(l, struct node_data, l));
-+	return 0;
-+}
-+
-+SEC("tc")
-+__description("list_add_test1: insert new node after prev")
-+__success __retval(0)
-+int list_add_test1(void *ctx)
-+{
-+	struct node_data *node_first;
-+	struct node_data *new_node;
-+	long err = 0;
-+
-+	node_first = __add_in_list(&head, &lock);
-+	if (!node_first)
-+		return -1;
-+
-+	new_node = bpf_obj_new(typeof(*new_node));
-+	if (!new_node) {
-+		err = -2;
-+		goto fail;
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	err = bpf_list_add(&head, &new_node->l, &node_first->l);
-+	bpf_spin_unlock(&lock);
-+	if (err) {
-+		err = -3;
-+		goto fail;
-+	}
-+
-+fail:
-+	bpf_obj_drop(node_first);
-+	return 0;
-+}
-+
-+SEC("tc")
-+__description("list_add_test2: list_add accepts list_front return value as prev")
-+__success __retval(0)
-+int list_add_test2(void *ctx)
-+{
-+	struct node_data *new_node, *tmp;
-+	struct bpf_list_node *bpf_node;
-+	long err = 0;
-+
-+	tmp = __add_in_list(&head, &lock);
-+	if (!tmp)
-+		return -1;
-+
-+	new_node = bpf_obj_new(typeof(*new_node));
-+	if (!new_node) {
-+		err = -2;
-+		goto fail;
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	bpf_node = bpf_list_front(&head);
-+	if (!bpf_node) {
-+		bpf_spin_unlock(&lock);
-+		bpf_obj_drop(new_node);
-+		err = -3;
-+		goto fail;
-+	}
-+
-+	err = bpf_list_add(&head, &new_node->l, bpf_node);
-+	bpf_spin_unlock(&lock);
-+	if (err) {
-+		err = -4;
-+		goto fail;
-+	}
-+
-+fail:
-+	bpf_obj_drop(tmp);
-+	return err;
-+}
-+
-+struct uninit_head_val {
-+	struct bpf_spin_lock lock;
-+	struct bpf_list_head head __contains(node_data, l);
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, int);
-+	__type(value, struct uninit_head_val);
-+	__uint(max_entries, 1);
-+} uninit_head_map SEC(".maps");
-+
-+SEC("tc")
-+__description("list_push_back_uninit_head: push_back on 0-initialized list head")
-+__success __retval(0)
-+int list_push_back_uninit_head(void *ctx)
-+{
-+	struct uninit_head_val *st;
-+	struct node_data *node;
-+	int ret = -1, key = 0;
-+
-+	st = bpf_map_lookup_elem(&uninit_head_map, &key);
-+	if (!st)
-+		return -1;
-+
-+	node = bpf_obj_new(typeof(*node));
-+	if (!node)
-+		return -1;
-+
-+	bpf_spin_lock(&st->lock);
-+	ret = bpf_list_push_back(&st->head, &node->l);
-+	bpf_spin_unlock(&st->lock);
-+
-+	return ret;
-+}
-+
-+SEC("?tc")
-+__failure __msg("bpf_spin_lock at off=32 must be held for bpf_list_head")
-+long list_del_without_lock_fail(void *ctx)
-+{
-+	struct bpf_rb_node *rb;
-+	struct bpf_list_node *l;
-+	struct node_data *n;
-+
-+	bpf_spin_lock(&lock);
-+	rb = bpf_rbtree_first(&root);
-+	bpf_spin_unlock(&lock);
-+	if (!rb)
-+		return -1;
-+
-+	n = container_of(rb, struct node_data, r);
-+	/* Error case: delete list node without holding lock */
-+	l = bpf_list_del(&head, &n->l);
-+	if (!l)
-+		return -2;
-+	bpf_obj_drop(container_of(l, struct node_data, l));
-+
-+	return 0;
-+}
-+
-+SEC("?tc")
-+__failure __msg("bpf_spin_lock at off=32 must be held for bpf_list_head")
-+long list_add_without_lock_fail(void *ctx)
-+{
-+	struct bpf_rb_node *rb;
-+	struct bpf_list_node *l;
-+	struct node_data *n;
-+
-+	bpf_spin_lock(&lock);
-+	rb = bpf_rbtree_first(&root);
-+	l = bpf_list_front(&head);
-+	bpf_spin_unlock(&lock);
-+	if (!rb || !l)
-+		return -1;
-+
-+	n = container_of(l, struct node_data, l);
-+	/* Error case: add list node without holding lock */
-+	if (bpf_list_add(&head, &n->l, l))
-+		return -2;
-+
-+	return 0;
-+}
-+
- SEC("tc")
- __success
- long rbtree_refcounted_node_ref_escapes(void *ctx)
--- 
-2.50.1 (Apple Git-155)
+/P
 
