@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE3833A031
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 04:44:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EABF33A9E9
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 04:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773636257; cv=none; b=slQRcXjmjG3xsDepQRcT7+xlBEdYjIdookqzeROrozi2JQshpGYaGeCEB8fP4MbhsLNPb1RVicaIco7uP9FuD0L3GRsMWULZlyLsHGJcoxxumaD8xbmDnVClY7CWvB4c1UFs0SRUg7TvEwJIB90CNVYzTYSikTkciz5p8FwZ+rM=
+	t=1773636267; cv=none; b=ixxhmpRMGQnnxPeAUhAvUPO82Y9JgTYsINS2tqP7EJjSEWK3FN+mLp+zC652/JD1rhUKUXYVWZhrXoKtuwdpjZy9cZ3bLoabFzWhl632h/4FCFCt19oNl74dlU8RjtgOMYzYFDyUZYEhHdFfrumt+hdebiY0qw7CWMkqLn3JMMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773636257; c=relaxed/simple;
-	bh=zhfRwvktEFbZNAGP6IWPgWCro9pMmybpSK0ZbziHp8I=;
+	s=arc-20240116; t=1773636267; c=relaxed/simple;
+	bh=qGhnEep0RBSzZ0dq8guG7AmCL7nWwSAsr5IYP1RjcoU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SNlCtUxwmlyDouNMDUHq1OtGlw/bRDVgvoeVYld/Fqt7nT6G5PfFVnEsvc/ei4BECSj/XuP1lMtxLN56Nv7dtCiOXsPGEKSLa61WhseBMw4+CWs6pCYnaYtU7qZj4lwz+k4K/sEglke63c6e1ouuV9nU12mUglNvPFz5APOzlHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IfJTo5LO; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=kUZNnkhxVMZsjfrGfFNwmc9uSN97NMGKBf+0xN7Xx0rfmYqX9X+UAi/aljqoe6hCxbMmeR/MOpDTBGrmYqi4gevQIv9NBvuU5WYqsmwlUA5ZFkbur6o05wLwVyId3VvBPNwDf0Qk3qJDAB8cPNTf3CmeoR/aLWlVBFh3r3Aqtys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Xr75kVBz; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IfJTo5LO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Xr75kVBz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773636254;
+	s=mimecast20190719; t=1773636265;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=J+5vIvfueq6IMhLJl1sQj/A9x+kVAV9b++ZY+Mb8ytI=;
-	b=IfJTo5LOrPgq86BkljzzCsYdh88u5ZNUwmxnO9+geRyj7GiS2ElTrFcyiErFXWwsXxybmX
-	f2GLQb2ku1KHhC76NxzPsZR5HMvBOUcpHZCr9RYFAk5afJwVrSSJ6wRasoM8L8FMdI2ujC
-	22vHgGeKB2GTH38xwg99zcY7R0S6IQ0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=f0kOdSCeg55Ok0Trt0Fwz3GMewBTQG5BCQViHUjgEfw=;
+	b=Xr75kVBzyCscVNt6q/5k182+DxtbczPIwt2XnxNzaiSX0fDDShA7XUujForKxQ5/N7mXbj
+	QO7LmQ/p8F/ZFD/FPicWktDIOPIG7vdI4nsn6YkuLasxqaRlT4TOfjwMznFHG/5bNZCL/B
+	DJ8qms4p856Fu1NT7prdA6XMIjKnGmk=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-412-8OuO6jwKNUyHHMlH86adPw-1; Mon,
- 16 Mar 2026 00:44:11 -0400
-X-MC-Unique: 8OuO6jwKNUyHHMlH86adPw-1
-X-Mimecast-MFC-AGG-ID: 8OuO6jwKNUyHHMlH86adPw_1773636248
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-12-u9wUhbjxMVecISbYFoBuJA-1; Mon,
+ 16 Mar 2026 00:44:19 -0400
+X-MC-Unique: u9wUhbjxMVecISbYFoBuJA-1
+X-Mimecast-MFC-AGG-ID: u9wUhbjxMVecISbYFoBuJA_1773636257
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 93CBB180044D;
-	Mon, 16 Mar 2026 04:44:08 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E867E19373D8;
+	Mon, 16 Mar 2026 04:44:16 +0000 (UTC)
 Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D8881955E80;
-	Mon, 16 Mar 2026 04:43:59 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4748319560B7;
+	Mon, 16 Mar 2026 04:44:08 +0000 (UTC)
 From: Chunyu Hu <chuhu@redhat.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -63,11 +63,10 @@ Cc: linux-kselftest@vger.kernel.org,
 	dev.jain@arm.com,
 	baohua@kernel.org,
 	lance.yang@linux.dev,
-	chuhu@redhat.com,
-	Li Wang <liwang@redhat.com>
-Subject: [PATCH v2 2/5] selftests/mm: soft-dirty: skip two tests when thp is not available
-Date: Mon, 16 Mar 2026 12:43:32 +0800
-Message-ID: <20260316044335.1390608-3-chuhu@redhat.com>
+	chuhu@redhat.com
+Subject: [PATCH v2 3/5] selftests/mm: move write_file helper to vm_util
+Date: Mon, 16 Mar 2026 12:43:33 +0800
+Message-ID: <20260316044335.1390608-4-chuhu@redhat.com>
 In-Reply-To: <20260316044335.1390608-1-chuhu@redhat.com>
 References: <20260316044335.1390608-1-chuhu@redhat.com>
 Precedence: bulk
@@ -79,108 +78,157 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-The test_hugepage test contain two sub tests. If just reporting one skip
-when thp not available, there will be error in the log because the test
-count don't match the test plan. Change to skip two tests by running the
-ksft_test_result_skip twice in this case.
+thp_settings provides write_file() helper for safely writing to a file and
+exit when write failure happens. It's a very low level helper and many sub
+tests need such a helper, not only thp tests.
 
-Without the fix (run test on thp disabled kernel):
-  ./run_vmtests.sh -t soft_dirty
-  # --------------------
-  # running ./soft-dirty
-  # --------------------
-  # TAP version 13
-  # 1..19
-  # ok 1 Test test_simple
-  # ok 2 Test test_vma_reuse dirty bit of allocated page
-  # ok 3 Test test_vma_reuse dirty bit of reused address page
-  # ok 4 # SKIP Transparent Hugepages not available
-  # ok 5 Test test_mprotect-anon dirty bit of new written page
-  # ok 6 Test test_mprotect-anon soft-dirty clear after clear_refs
-  # ok 7 Test test_mprotect-anon soft-dirty clear after marking RO
-  # ok 8 Test test_mprotect-anon soft-dirty clear after marking RW
-  # ok 9 Test test_mprotect-anon soft-dirty after rewritten
-  # ok 10 Test test_mprotect-file dirty bit of new written page
-  # ok 11 Test test_mprotect-file soft-dirty clear after clear_refs
-  # ok 12 Test test_mprotect-file soft-dirty clear after marking RO
-  # ok 13 Test test_mprotect-file soft-dirty clear after marking RW
-  # ok 14 Test test_mprotect-file soft-dirty after rewritten
-  # ok 15 Test test_merge-anon soft-dirty after remap merge 1st pg
-  # ok 16 Test test_merge-anon soft-dirty after remap merge 2nd pg
-  # ok 17 Test test_merge-anon soft-dirty after mprotect merge 1st pg
-  # ok 18 Test test_merge-anon soft-dirty after mprotect merge 2nd pg
-  # # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
-  # # Planned tests != run tests (19 != 18)
-  # # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:1 error:0
-  # [FAIL]
-  not ok 52 soft-dirty # exit=1
+split_huge_page_test also defines a write_file locally. The two have minior
+differences in return type and used exit api. And there would be conflicts
+if split_huge_page_test wanted to include thp_settings.h because of
+different prototype, making it less convenient.
 
-With the fix (run test on thp disabled kernel):
-  ./run_vmtests.sh -t soft_dirty
-  # --------------------
-  # running ./soft-dirty
-  # TAP version 13
-  # --------------------
-  # running ./soft-dirty
-  # --------------------
-  # TAP version 13
-  # 1..19
-  # ok 1 Test test_simple
-  # ok 2 Test test_vma_reuse dirty bit of allocated page
-  # ok 3 Test test_vma_reuse dirty bit of reused address page
-  # # Transparent Hugepages not available
-  # ok 4 # SKIP Test test_hugepage huge page allocation
-  # ok 5 # SKIP Test test_hugepage huge page dirty bit
-  # ok 6 Test test_mprotect-anon dirty bit of new written page
-  # ok 7 Test test_mprotect-anon soft-dirty clear after clear_refs
-  # ok 8 Test test_mprotect-anon soft-dirty clear after marking RO
-  # ok 9 Test test_mprotect-anon soft-dirty clear after marking RW
-  # ok 10 Test test_mprotect-anon soft-dirty after rewritten
-  # ok 11 Test test_mprotect-file dirty bit of new written page
-  # ok 12 Test test_mprotect-file soft-dirty clear after clear_refs
-  # ok 13 Test test_mprotect-file soft-dirty clear after marking RO
-  # ok 14 Test test_mprotect-file soft-dirty clear after marking RW
-  # ok 15 Test test_mprotect-file soft-dirty after rewritten
-  # ok 16 Test test_merge-anon soft-dirty after remap merge 1st pg
-  # ok 17 Test test_merge-anon soft-dirty after remap merge 2nd pg
-  # ok 18 Test test_merge-anon soft-dirty after mprotect merge 1st pg
-  # ok 19 Test test_merge-anon soft-dirty after mprotect merge 2nd pg
-  # # 2 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
-  # # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:2 error:0
-  # [PASS]
-  ok 1 soft-dirty
-  hwpoison_inject
-  # SUMMARY: PASS=1 SKIP=0 FAIL=0
-  1..1
+It's possisble to merge the two, although some tests don't use the
+kselftest infrastrucutre for testing. It would also work when using the
+ksft_exit_msg() to exit in my test, as the counters are all zero. Output
+will be like:
 
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-CC: Li Wang <liwang@redhat.com>
+  TAP version 13
+  1..62
+  Bail out! /proc/sys/vm/drop_caches1 open failed: No such file or directory
+  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+So here just leave one version of write_file, and move it into the vm_util.
+This make it easy to maitain and user could just include one vm_util.h when
+then don't need thp setting helpers. Keep the prototype of returning the
+written bytes num.
+
+Suggested-by: Mike Rapoport <rppt@kernel.org>
 Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 ---
 Changes in v2:
-  - add reviewed by from Lorenzo and Zi
-  - add acked-by from David
+  new patch from v2
 ---
- tools/testing/selftests/mm/soft-dirty.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../selftests/mm/split_huge_page_test.c       | 15 ------------
+ tools/testing/selftests/mm/thp_settings.c     | 24 +------------------
+ tools/testing/selftests/mm/thp_settings.h     |  1 -
+ tools/testing/selftests/mm/vm_util.c          | 16 +++++++++++++
+ tools/testing/selftests/mm/vm_util.h          |  2 ++
+ 5 files changed, 19 insertions(+), 39 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
-index 59c0dbe99a9b..bcfcac99b436 100644
---- a/tools/testing/selftests/mm/soft-dirty.c
-+++ b/tools/testing/selftests/mm/soft-dirty.c
-@@ -82,7 +82,9 @@ static void test_hugepage(int pagemap_fd, int pagesize)
- 	int i, ret;
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index e0167111bdd1..93f205327b84 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -255,21 +255,6 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
+ 	return status;
+ }
  
- 	if (!thp_is_enabled()) {
--		ksft_test_result_skip("Transparent Hugepages not available\n");
-+		ksft_print_msg("Transparent Hugepages not available\n");
-+		ksft_test_result_skip("Test %s huge page allocation\n", __func__);
-+		ksft_test_result_skip("Test %s huge page dirty bit\n", __func__);
- 		return;
- 	}
+-static void write_file(const char *path, const char *buf, size_t buflen)
+-{
+-	int fd;
+-	ssize_t numwritten;
+-
+-	fd = open(path, O_WRONLY);
+-	if (fd == -1)
+-		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+-
+-	numwritten = write(fd, buf, buflen - 1);
+-	close(fd);
+-	if (numwritten < 1)
+-		ksft_exit_fail_msg("Write failed\n");
+-}
+-
+ static void write_debugfs(const char *fmt, ...)
+ {
+ 	char input[INPUT_MAX];
+diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
+index 574bd0f8ae48..02de28ecf31a 100644
+--- a/tools/testing/selftests/mm/thp_settings.c
++++ b/tools/testing/selftests/mm/thp_settings.c
+@@ -6,6 +6,7 @@
+ #include <string.h>
+ #include <unistd.h>
  
++#include "vm_util.h"
+ #include "thp_settings.h"
+ 
+ #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
+@@ -64,29 +65,6 @@ int read_file(const char *path, char *buf, size_t buflen)
+ 	return (unsigned int) numread;
+ }
+ 
+-int write_file(const char *path, const char *buf, size_t buflen)
+-{
+-	int fd;
+-	ssize_t numwritten;
+-
+-	fd = open(path, O_WRONLY);
+-	if (fd == -1) {
+-		printf("open(%s)\n", path);
+-		exit(EXIT_FAILURE);
+-		return 0;
+-	}
+-
+-	numwritten = write(fd, buf, buflen - 1);
+-	close(fd);
+-	if (numwritten < 1) {
+-		printf("write(%s)\n", buf);
+-		exit(EXIT_FAILURE);
+-		return 0;
+-	}
+-
+-	return (unsigned int) numwritten;
+-}
+-
+ unsigned long read_num(const char *path)
+ {
+ 	char buf[21];
+diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
+index 76eeb712e5f1..7748a9009191 100644
+--- a/tools/testing/selftests/mm/thp_settings.h
++++ b/tools/testing/selftests/mm/thp_settings.h
+@@ -63,7 +63,6 @@ struct thp_settings {
+ };
+ 
+ int read_file(const char *path, char *buf, size_t buflen);
+-int write_file(const char *path, const char *buf, size_t buflen);
+ unsigned long read_num(const char *path);
+ void write_num(const char *path, unsigned long num);
+ 
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index a6d4ff7dfdc0..b4b3b48f8dc9 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -764,3 +764,19 @@ int unpoison_memory(unsigned long pfn)
+ 
+ 	return ret > 0 ? 0 : -errno;
+ }
++
++unsigned int write_file(const char *path, const char *buf, size_t buflen)
++{
++	int fd;
++	ssize_t numwritten;
++
++	fd = open(path, O_WRONLY);
++	if (fd == -1)
++		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
++
++	numwritten = write(fd, buf, buflen - 1);
++	close(fd);
++	if (numwritten < 1)
++		ksft_exit_fail_msg("Write failed\n");
++	return (unsigned int) numwritten;
++}
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index e9c4e24769c1..22c8805e0d7a 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -166,3 +166,5 @@ int unpoison_memory(unsigned long pfn);
+ 
+ #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
+ #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
++
++unsigned int write_file(const char *path, const char *buf, size_t buflen);
 -- 
 2.53.0
 
