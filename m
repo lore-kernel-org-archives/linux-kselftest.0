@@ -1,151 +1,229 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011050.outbound.protection.outlook.com [52.101.52.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C58285041
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 14:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156062D7DF1;
+	Mon, 16 Mar 2026 14:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773671402; cv=pass; b=bVNqKeTQVyCkgzaEggrbSwy4tTkeS1fvVjrnBPJ25tdWtvME71Ptq+a7v2FgEU62bhF/Jxe/jCamM2ARYYh+Hrh8x6AuKdaFoj+/JimY7E/CPjS2mjdyJ3s6YdECpzuBB6rYZgYAwG2/p7GLgbPcbfh7v9kkfz7FUm+Z6IcscXw=
+	t=1773672182; cv=fail; b=GACgXfaWhOSLFv1JU2EA41YaT5ZAV6Icy4UsDHbAT2ZdUcUvbATmt7UzOyNArJNYlUp7EhQIq/0aajtzq4D/TeRSvRCZqxrK7HpZu0OZsaQDk9U1lhNwrmYXn0XK0kovEYjfTdqg3widkEZbw5q+AjlRbGY9RFm6ws6NSTrXRg0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773671402; c=relaxed/simple;
-	bh=rJRFS+rK9leg5GTdMzhBulrcz4gOf+cJLikV/upD6AI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eV0gUYr2x1J7XpKJ1oB+IOrPJJR8Qf+ThcJS1w7fU8mj027E0vE1zh5VQ2o5XfA70Vp+IBjxUCgPheQoX6DPBj0jeB0lpt2Wxr/L4+Va5I2NzKuRGNhSKyZJIIC2RsWqgzHID6FXGMWUREaubRWEPHAhwtCTGcPP7pwbtOYomcE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fWghmkLH; arc=pass smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773672182; c=relaxed/simple;
+	bh=9auMUbx6ihBBXD2FhavYPxahR8zfgHZ98JUlIPZ6Xo8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=CagOr2lQutUm5M3VWXpuLUsg4fViOdQOvilyb1QPBqjYVUnlnpTqgFVGDPb4QTQUY8fJZDpwTsQiKYFlRMTtqocQfm1FL87056R2X94P6XPhU29MYUxaiW1031iQCEuucKwL7AAuZUfidi3DSwcPCZvM9pq94HtgdKDJ+9iEToQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mhoIfkOI; arc=fail smtp.client-ip=52.101.52.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fWghmkLH"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-439c5b40f60so3632282f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 07:30:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773671399; cv=none;
-        d=google.com; s=arc-20240605;
-        b=W2WiDJ6SddD4G0yeHrhrAbK47SrFMs3ArkAWmuKsLPJnChqtd8JBF5YrLT5+72HYiC
-         38Jdr1pjwuhv8Yh6gx9sxAhO5kxbLT9/0hXc+W51TzVHNlheh5rZZN4tcAQCnIAZJqTw
-         ZdzVFpOiyCuHpl+3fMbmIoLHSL7uXLtv/BU6Z76dfqd2zsepzwAev8a83mYozoCVFR+B
-         ICvthGbbQYkDkk+5/uVW9i4x9uEF3R4Ko9fC/JY9ByWWGUKWjOnSphYbl5wjJwg0a7FJ
-         ii2YYYwkqWjpxquIdvOZ39oAoeygnQQxeIMaYAq5zSMKJYbW4ivKlVORciyutQdV+sue
-         xR1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=b8O1jcNEYGgYscyDPYtdi391cu8OxzVlX8P/V5t1fLY=;
-        fh=6sD7LpEfjJJr43upOkiH30uyTXg0h01jcvTtJwjb9GU=;
-        b=D1j2Qocv6fVC+fTSRKE9ycrEr6r2Ns3rw695mlXn1xG6ai3ZYpWTCIX7/zUiq/bL/F
-         Hee8iDeteLVJHQWtF1UD1mqlLBFlsH6xqjWA06/jfRRBv5rv1yg90KceBzKPRN/cPx57
-         p6T8roSAa5TAZI1xIUmCuE0Tc18M9gVPenqPOwFu8zY8khkap+YEsjUCy7cGN4nhjIyP
-         lKLIa5YN+i8D8RtrHDtuQoWXeEvCL9VIaJ9NNp3N5lOZBLUsqFiIZNpYQqIOB6zo7Ea9
-         PdnS9/DCthNDmXzqKwv+Bs7TUnvzBmwR1I2hs7DNOatduM0OrN8rAVML+z4748n9zVGY
-         8JLA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773671399; x=1774276199; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b8O1jcNEYGgYscyDPYtdi391cu8OxzVlX8P/V5t1fLY=;
-        b=fWghmkLH9MDk/jsLw3gQlzKnzQ/FrP8v3FHykcCGHU8nMKLcDqV1GsL3hZsuF44RUH
-         /seiDrM8IzRen6N1c1TfJIKQsqAz99kbrMkfxTPfPswtVMNB77ZfrG28uywbFkGNcQdp
-         SIZ8vAaXcA2eIwcZOLCkD25ghgd8ftxmazqiFqWrdUQ5XDsLJkvzhNZLFBD5bw0GNFXZ
-         I9nT+7veYlgugvho7eVe86nQcNEnAorkNNq9zF6uQKFJZdvNnBvEqFpWP6bfgdmLn3Pd
-         l+FLxD+/WBH1aes90irKKXDoJpqCKOhz3EEBM2M7x1fyhdyRQRG4+DtbTYQZY6CuhqFw
-         6TIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773671399; x=1774276199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=b8O1jcNEYGgYscyDPYtdi391cu8OxzVlX8P/V5t1fLY=;
-        b=AXWLF5g3gZvO6BQ2eKfk9nNyzTLgDOGY5bsXwK2lwWwxeWcuSo6mXxha9oL1mTRuUZ
-         ApO1HdN83YmhAs3e2I6mKRrsp+2RTzP3hnDJPGx8fdjRWu8wUVFoJH9S9syhnNzrFgWe
-         nk5AFdvIBpUCO8zEkbCr9ixEMSvqP18EHz28yc0MNrRSIC2nhrfSmVD9iGO88hZkr+dO
-         XlObVNEv5LRlqdzCjiC25LcZv+FiShn+x6DefyzClLv1zICJg8W4AoB1hw0r7bDUA0mu
-         L2JXehikRIeGgoh+6MHo/FMDoyrJqfrj4aBKs0wmFqbdpf108uq2grlbyx+XLBPKRsvN
-         XTPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUfXFpuUp0sfeFiBEQHcnZ2zRSxwzfPOruK8kDj8dmF9RzU2omXiA74a9TC7NvFOIdWAGdzXjLIfLClVM7OUsQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywb5mSOPdXjCJHbv2q+cxUb79E5YCGaGBBopyz15eJCHLbu4V/o
-	oUUoWuH/A8RUGBBw1Mf1H+tyRHM8lGNZc0rAT7Q6M1AgcaBYhahyKEqIo3Y232cBot7lD5MlDfD
-	zOaHW2vRRO0ejuqCTnLr+Dx8KZ8DQa4s=
-X-Gm-Gg: ATEYQzy3njSRunmZMhspOCEcP+dc9V/BFDI/wrcw/QDTfu/Ij4cwd1LrsqmNd38KmuF
-	7A1vLhze0rJy+tMe/sW0+Hv9AK5zsj1YivJZw0Dif18J4nPhTbusBkaynscPPKQOqsK0r3GUgus
-	p9q1fF5DGK/ZRWQMo7n/TDbHhP/xSxhGMRT5KszMT0xbVkhwGe7P+Rfhz3zMibfG+AqLhawsIye
-	NskD0F29JholWjlWbPphD5v1GqomfrjlReAUijZw7VtkOxEnFbtYhAx2YTMHZy/GFM5HdPMu2Yz
-	rGUgGMTlqNW7+XhZXIzQ8Sa8j4+3fLthCq4QfA0ozupRa+tfYpGOlbQOjXn6ERVXLlg=
-X-Received: by 2002:a05:6000:381:b0:439:d8cb:1392 with SMTP id
- ffacd0b85a97d-43a04d91a43mr25216111f8f.26.1773671398558; Mon, 16 Mar 2026
- 07:29:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mhoIfkOI"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sT5+iJX5JKgZhyfOuT7BAvNZ3BHdWweukY40EImwb6RRKBeFI//XCzbw7uaAMBNIcTiEwyJFBxXFReS+gmxbHW5BQR8g2II0L6ERdtNh3RjC5T7gI8RoBpsELu1B/XE3Yc05Pu+2wQrgvhkWN1jxbZgHwcfJXHjKprFzkuXf9NyLL5HBYuQlSqCQO1qobHg2JaYa2f6WeIplo9+Yl6frgiP6+IGNZdo0dl8TdMBemLsZaL+P38vVriaWA3YuC9ghXNxZoqxKVApXP+DWjA7rpl4d3UWNZUVSzsa/72IPoNocskn0a41vkTET5aVBplzmedN2DfB4pfXTnFBNoWWw1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FIpFQDNgwtM+CQ6l7kxrisLsHFMuakhK1ZbrvcNhA5E=;
+ b=MmScW2aD0TEwkUf+W6+TA0HKnhrripNYt+6fphp4Hr/DYD+GvX+rcgNd3Mr5o6UP+xm/2otp3JJ7LbGO8ggS2wSKDWC2FXUIyXXOfshTPONZMy6efR4hpV4Lh2L8qzNJkOn0Ms5cw35IhoDSraG2qb4xdgdc233ZbCFsXJb/b9PxG0avYYMeK1APZbiS8HB/+GCtr/5KlqtPBRtURaeyy7xo+9jxVW5tuP4jxFtRO3YDyxUMJOgxJTKE4X5QrSStIqgDy0BVlhP5o3WDLJjn2TSFZU3BlgzhyjU3rYnK3pDJbPLiwjfw0ojZCu/oXxyEcLVgFY4RR0T28Ldtqgjw1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FIpFQDNgwtM+CQ6l7kxrisLsHFMuakhK1ZbrvcNhA5E=;
+ b=mhoIfkOIyFrZqvfNS5sNvaCz1XGnXJ3NGiQ7oQiuO+rCdIKTPWzfLe5Eb13bVha20dnxwrCcsIW1p4ArHYgXpJ+T278o+2hT6tBkl0yp5UlcglivwhF6doCmnwR0FxRc7mOikRlUfvC4QkDEjx50kUa+HoqZ455MeihT/a3Cz5SQSVQall4+A2b25SOGncHjVpaCrmA6zLRMtR/nSqJSJHWd2K9WiOe/ZmIHCtEwglTiz8D9q3p+ZjFZS0za7V/qIjXTZ8ZYLUTbPozVwXMwhYX/AYT5FmtJYK0C87wN5irJkLOjXlWwYTt4lMiDAGRgH1VUh1KvYii3D4AaP+CL8A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by PH7PR12MB6956.namprd12.prod.outlook.com (2603:10b6:510:1b9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.16; Mon, 16 Mar
+ 2026 14:42:57 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.022; Mon, 16 Mar 2026
+ 14:42:57 +0000
+Date: Mon, 16 Mar 2026 15:42:47 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, tj@kernel.org, void@manifault.com,
+	changwoo@igalia.com, mingo@redhat.com, peterz@infradead.org,
+	shuah@kernel.org, dietmar.eggemann@arm.com
+Subject: Re: [PATCH 1/2] sched_ext: Prevent SCX_KICK_WAIT deadlock by
+ serialization
+Message-ID: <abgW57af9nXrXHxN@gpd4>
+References: <20260316100249.1651641-1-christian.loehle@arm.com>
+ <20260316100249.1651641-2-christian.loehle@arm.com>
+ <abfgRv5DkOnCzz-q@gpd4>
+ <1e72dc1d-ce46-4dcd-9811-761221fa20c0@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1e72dc1d-ce46-4dcd-9811-761221fa20c0@arm.com>
+X-ClientProxiedBy: MI1P293CA0006.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:2::16) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260316112843.78657-1-pilgrimtao@gmail.com> <20260316112843.78657-7-pilgrimtao@gmail.com>
-In-Reply-To: <20260316112843.78657-7-pilgrimtao@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 16 Mar 2026 07:29:46 -0700
-X-Gm-Features: AaiRm52jfrG-QXxCpkn-e4a_CxQ3E_JeYlW7Cp4Cm58pDy-9uGQT9qrmcAXzcQM
-Message-ID: <CAADnVQKLsC2=RcehL54yHQ-vv0poXydFkRDHW1JZxAEncE=SxQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 6/8] bpf: allow bpf_list_front/back result as
- the prev argument of bpf_list_add_impl
-To: Chengkaitao <pilgrimtao@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|PH7PR12MB6956:EE_
+X-MS-Office365-Filtering-Correlation-Id: 352df937-269c-4524-3042-08de836a503e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|7053199007|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	b+hOOd2gY+AEIRp3yNu8CbMs8vsOAE1VHgEToUWOjh+KQZGVC1LNkLrrM4RUFg6FBrPcIPxEY73SgBwEdKyh+UVaJo3PTQJTB69PRxWkKxxLg8xA6fcvrJFqFHYHNwycvmOhvZTPPnei7k4vB+zaxZcsz0AwUfeejKLk0QFJKSM5NBlicLpP8fv+6gJ10rmL6zhiyYJeRhkGenB0AZJyib21pBFjWKdDVBpXaKgdVZhxcV71bKGNEJ89DUu5BJQthJV20VZQ5xPLp68qGbUkKszsw3M4wr9V19t5IGp4ZH86+k3NPiXKDW7zM1jyX8rIF4dGm4pm9RiDqktY0NdTyLeep19+VlDkGuAs6exSVup5GAMWnLA7S3jB2P0iK2Lx6oDOHJZRaSk8YCFnI+nfT6jB9WkIYGcozH2MdYt/hxXdvP4WWLyORD/UOlYwqIJY4JbNJ8NHBvZbJ8P8jyD7GsF94uPZwfdaVRu10zz19ApGSVJJewyOmRYKi+iNpRGHQcljUOirr4f9HVeOUplMtc5vKto+JnWr9FQyDsqGmcPu8qpVuGORjRkBC1fgaQHBC2gq6XAFnyS8mN5SaX+GYbi5CCTRaRR/13uywJUdrHIExgA9zt6F++r+R+LmBfUWlJMDG/IAmTjOVHDzEfPAT3Y0vORTqL6+K4A3DsvIlDLMheaPObG3mtlsKwvQa336E35wclGj4GycYQ1653Dm1kQe8YRARpawSP697L013ks=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(7053199007)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cTJyb1lTUHFEaDdTYXpEUHVpRHlVWWxZc2ZsQXB0TUxxUkU2N2FocGRpM2s4?=
+ =?utf-8?B?MHVPK2IwOEhLYzc4NmZGWVF4Q2VRdyt6aVZaWjdHY2t1Zmp6MEpmT2tUaDZN?=
+ =?utf-8?B?a05Canp0TG9NalpHSjI3VWhaTGthVDNORU01K3ZBcGxDeGdKQU5KN2psV0w5?=
+ =?utf-8?B?eGo2Y2NXaVlFLyt1aHUzZWhQTjdzdEJxMitKUnlrTWEvNVpUMDdQNHoreE9k?=
+ =?utf-8?B?d0hmbmJ5UysrRm0rTk5tU2NRVzFkSDhDbHNFWElOZnRJc0lsZVZoMDhFdkZE?=
+ =?utf-8?B?R3JsVWJHNWNEM1ZDMFBONE92UXlpZGNPUU95MkFBL3BqVXpabDk5WE9wdDNX?=
+ =?utf-8?B?M0NzYWZuLzBOaTFhWW03T2F2cjlNT2doZ2doZVJjK0NmWGk5ZURyZ0tzK21R?=
+ =?utf-8?B?cWs3WG1FNEh4VGtVMHB3QWIyRUl0aVBENlY4d01yNlU1KzJ5bXB6RXZVTTVs?=
+ =?utf-8?B?UFM1L09rR0J5QURpTlZsQW56MC9XLzBPVDJpZ2dXQkt0OXRkZUs4RVVBQWdN?=
+ =?utf-8?B?b0oybXRzUmJBclJLSm5nSUhTaEVOaDF1bWJkVjVmMG8yQ2dXYkJJY2VSVU9Y?=
+ =?utf-8?B?b1Q5RUkyRUJMQ2NrRkdzU1hnRk8zQld5cUxBSEYvKzVoYWJXcjN5S2MxT1oz?=
+ =?utf-8?B?cDVoVWROWTZndVh5ZGJGK2d5MUllUWlVSWVmNE5zZTNLNGFiNzl3RXVoTVhG?=
+ =?utf-8?B?OWo4M0g2S3RocENWOEt5QkxONU5GVVNFeWdGaVRxNXdsWHpoMkNwYlRjeTFp?=
+ =?utf-8?B?WGJpRHV0S2xIbHg0bnR2S3UycXhCMWlWRGVTbVpiQ2grZk5Xc2hpd210ZmRD?=
+ =?utf-8?B?Z0J0amF6bU14VVMrT251ZkFMUlQrMFpCOGJPVkVXUkNCSkg2VklWaWtPUmRL?=
+ =?utf-8?B?Mnl4eWtDU0NsK2dwRVd3QjBsRjhRT3lyT0JWL09ZUmRYUWFKK1dHV01ENkM5?=
+ =?utf-8?B?R0h0c29LTzZWcU5tTk1nYVdRcSszUGFXbnBFam9XMEdRRVlYUmxibkRTTVB0?=
+ =?utf-8?B?ZjBCYmpxTGYxb3hyNk41QlNnbk9FL0xra3ZOcjlQdzk3NVdHUmhJTXJ1YzNZ?=
+ =?utf-8?B?R3hGQ1M4Z3p6NkZPNnJJdm00MHJjME0vWUF3TEs5N2V3Slc5OHZmcFV5NFEx?=
+ =?utf-8?B?NjVsVzhQY3ovc05pR2haZll4OE9MdUtDR1VlaTNVQm83RUJuNGlFL0pYMG9N?=
+ =?utf-8?B?RENnOWt0bUZyM3VPcDRQaTdwYW45REorK0JOV3NxQS92dDByM2duS1BnTFBX?=
+ =?utf-8?B?TXZPaXpOZXgvVXpUbENzTHNkMXNuZXBUVmw3K3Yyd1Vpd1RBZFp6VnA3clB4?=
+ =?utf-8?B?aDI2NEtSZ21HTEkzSmQ3YW0xT2ZjbEM4U2VDNG4rWGJvWXFvUjVROS8yNTZK?=
+ =?utf-8?B?ek5jejRLSGI3NUl6WkpPNlhNdnU2NzcyNVFJTTZTTXI5T285M1RUK2hWWGlu?=
+ =?utf-8?B?L3piMENiaW9Vam9ic01WZ3ZtdFZFTlE5Mk9oUUFzZjNCckpiRThoM0hqNDhH?=
+ =?utf-8?B?SjFmdmpQN0EyeE5YS0tHQ3lHNFZQL2x4bHZhNERyanM4WnNyeWFBZWl6L29D?=
+ =?utf-8?B?SGoxV0xNQnphRXJDMXhTWE85YWYxaVZUem1LN0luWThiNTgzN1pteU1rUE5S?=
+ =?utf-8?B?RGFBd2MzR1BiUlBhMlAyY0Q3Lys1dzNoY0pCL0lHalJubU4xN05kUy9hT21D?=
+ =?utf-8?B?eFhXbWtHc2JuT0E3ZGwwcHFnRHdieEJRSEwzbzNvMWo0a1lyYStFQ1JCdUJj?=
+ =?utf-8?B?N2kwRlk1c01EdGZJamtLNEN5SHJ3V1RtWlFyL3V4STVFaEM4WlIyRmlRTWlF?=
+ =?utf-8?B?VFZuNS9OUW9jQkFueHB4WXB4bmNvckNDbDltalNTdXpzSkJkclM0bTl2QWsv?=
+ =?utf-8?B?ZVZteURpR203T2pad1daU01FTE5VM1JCRGhJZXE3MlBWRm5iOVhpTGtkU2pV?=
+ =?utf-8?B?MlpoV1BEOURBV2c0ajMzQmRMcEVzcUJuMklIVTFMeVpSLzNUbktVT0VydlZJ?=
+ =?utf-8?B?cjUxOFlYZDVtS3BGRkFYVGhJTzZBTjNuWXNEQXdKR0RvTVFncFM0ZEtRRGx6?=
+ =?utf-8?B?aSszbVN6TjdzTDJxMUI1Tm1LY09ZVk8vd296VUllK1NVc0VVZFZpakdILzBT?=
+ =?utf-8?B?VU55RmJyblIyUTg2WCtPTllhNHpudUZWVEdhTktPbjlMVWxRZlA4UWZ3T3l6?=
+ =?utf-8?B?dElGRnZ4N3EyRU5lZFY5WGZkc2ZvU0kxQ2Nkd3h5K09DZzBJTktWeEdWdUg5?=
+ =?utf-8?B?ajNUcWhiQWVJb043NHpkM25lYlZKQVFGV1M1ZHZNektvYkFacUpVcjdBWnFq?=
+ =?utf-8?B?bk4yQTlvWDVLamlNeEJBLzh4eXVkK3l3Q3p3ZzZaaWxLejBZOHJWQT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 352df937-269c-4524-3042-08de836a503e
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2026 14:42:57.0940
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 66tWVdyXWSbEAjeQkdfX8uE5TO0JwE2+cpcxaRpV+bomVrk8mA95M9JxqTvsaf5UzCsKnaXANjzuMLgLz8KlCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6956
 
-On Mon, Mar 16, 2026 at 4:29=E2=80=AFAM Chengkaitao <pilgrimtao@gmail.com> =
-wrote:
->
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->
-> KF_ARG_PTR_TO_LIST_NODE normally requires an owning reference
-> (PTR_TO_BTF_ID | MEM_ALLOC and ref_obj_id). For bpf_list_add_impl's
-> third argument (prev), allow a non-owning reference with ref_obj_id=3D=3D=
-0
-> so that the result of bpf_list_front() or bpf_list_back() can be passed
-> as the insertion point. When prev is such a non-owning ref, skip the
-> MEM_ALLOC/ref_obj_id checks and jump to the shared list-node processing.
-> Owning refs (e.g. from pop + refcount_acquire) still pass the existing
-> checks and reach the same label.
->
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> ---
->  kernel/bpf/verifier.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 98ddb370feb5..0a6f2e6a5d28 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -13737,6 +13737,14 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
->                                 return ret;
->                         break;
->                 case KF_ARG_PTR_TO_LIST_NODE:
-> +                       if (meta->func_id =3D=3D special_kfunc_list[KF_bp=
-f_list_add_impl]
-> +                           && i =3D=3D 2 && type_is_non_owning_ref(reg->=
-type)
-> +                           && !reg->ref_obj_id) {
-> +                               /* Allow bpf_list_front/back return value=
- as
-> +                                * list_add_impl's third arg (R3).
-> +                                */
-> +                               goto check_ok;
-> +                       }
+On Mon, Mar 16, 2026 at 11:12:43AM +0000, Christian Loehle wrote:
+> On 3/16/26 10:49, Andrea Righi wrote:
+> > Hi Christian,
+> > 
+> > On Mon, Mar 16, 2026 at 10:02:48AM +0000, Christian Loehle wrote:
+> >> SCX_KICK_WAIT causes kick_cpus_irq_workfn() to busy-wait using
+> >> smp_cond_load_acquire() until the target CPU's current SCX task has been
+> >> context-switched out (its kick_sync counter advanced).
+> >>
+> >> If multiple CPUs each issue SCX_KICK_WAIT targeting one another
+> >> concurrently — e.g. CPU A waits for CPU B, B waits for CPU C, C waits for
+> >> CPU A — all CPUs can end up wedged inside smp_cond_load_acquire()
+> >> simultaneously.  Because each victim CPU is spinning in hardirq/irq_work
+> >> context, it cannot reschedule, so no kick_sync counter ever advances and
+> >> the system deadlocks.
+> >>
+> >> Fix this by serializing access to the wait loop behind a global raw
+> >> spinlock (scx_kick_wait_lock).  Only one CPU at a time may execute the
+> >> wait loop; any other CPU that has SCX_KICK_WAIT work to do and fails to
+> >> acquire the lock records itself in scx_kick_wait_pending and returns.
+> >> When the active waiter finishes and releases the lock, it replays the
+> >> pending set by re-queuing each pending CPU's kick_cpus_irq_work, ensuring
+> >> no wait request is silently dropped.
+> >>
+> >> This is deliberately a coarse serialization: multiple simultaneous wait
+> >> operations now run sequentially, increasing latency.  In exchange,
+> >> deadlocks are impossible regardless of the cycle length (A->B->C->...->A).
+> >>
+> >> Also clear scx_kick_wait_pending in free_kick_syncs() so that any stale
+> >> bits left by a CPU that deferred just as the scheduler exited are reset
+> >> before the next scheduler instance loads.
+> >>
+> >> Fixes: 90e55164dad4 ("sched_ext: Implement SCX_KICK_WAIT")
+> >> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> >> ---
+> >>  kernel/sched/ext.c | 45 +++++++++++++++++++++++++++++++++++++++++++--
+> >>  1 file changed, 43 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+> >> index 26a6ac2f8826..b63ae13d0486 100644
+> >> --- a/kernel/sched/ext.c
+> >> +++ b/kernel/sched/ext.c
+> >> @@ -89,6 +89,19 @@ struct scx_kick_syncs {
+> >>  
+> >>  static DEFINE_PER_CPU(struct scx_kick_syncs __rcu *, scx_kick_syncs);
+> >>  
+> >> +/*
+> >> + * Serialize %SCX_KICK_WAIT processing across CPUs to avoid wait cycles.
+> >> + * Callers failing to acquire @scx_kick_wait_lock defer by recording
+> >> + * themselves in @scx_kick_wait_pending and are retriggered when the active
+> >> + * waiter completes.
+> >> + *
+> >> + * Lock ordering: @scx_kick_wait_lock is always acquired before
+> >> + * @scx_kick_wait_pending_lock; the two are never taken in the opposite order.
+> >> + */
+> >> +static DEFINE_RAW_SPINLOCK(scx_kick_wait_lock);
+> >> +static DEFINE_RAW_SPINLOCK(scx_kick_wait_pending_lock);
+> >> +static cpumask_t scx_kick_wait_pending;
+> >> +
+> >>  /*
+> >>   * Direct dispatch marker.
+> >>   *
+> >> @@ -4279,6 +4292,13 @@ static void free_kick_syncs(void)
+> >>  		if (to_free)
+> >>  			kvfree_rcu(to_free, rcu);
+> >>  	}
+> >> +
+> >> +	/*
+> >> +	 * Clear any CPUs that were waiting for the lock when the scheduler
+> >> +	 * exited.  Their irq_work has already returned so no in-flight
+> >> +	 * waiter can observe the stale bits on the next enable.
+> >> +	 */
+> >> +	cpumask_clear(&scx_kick_wait_pending);
+> > 
+> > Do we need a raw_spin_lock/unlock(&scx_kick_wait_pending_lock) here to make
+> > sure we're not racing with with cpumask_set_cpu()/cpumask_clear_cpu()?
+> > Probably it's not that relevant at this point, but I'd keep the locking for
+> > correctness.
+> 
+> Of course, thanks. Noted for v2!
+> 
+> Are you fine with the approach, i.e. hitting it with the sledge hammer of global
+> serialization?
+> I have something more complex in mind too, but yeah, we'd need to at least either
+> let scx_bpf_kick_cpu() fail / -ERETRY or restrict kicking/kicked CPUs and introduce
+> a whole lot of infra, which seems a bit overkill for a apparently barely used
+> interface and also would be nasty to backport.
 
-This is too specific and non scalable.
-Another kfunc with similar requirements would need a separate 'if'
-with func_id =3D=3D new_kfunc and potentially different 'i =3D=3D N'.
-Let's introduce a new double underscore suffix for this
-or some other way.
+Yes, the current approach looks reasonable to me, I think the potential
+latency increase (assuming there's any noticeable increase) is totally
+acceptable in order to fix the deadlock.
 
-pw-bot: cr
+Thanks,
+-Andrea
