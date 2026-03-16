@@ -1,91 +1,89 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE67835B621
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 21:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877C236A03C
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 21:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773697900; cv=none; b=LRKuQSIIR7t2uJ1+Qkyz0OEnsMcWy148m5FSybltpSrytzJLUKzmTNM9A6NbSJqj1Dz/PGnCa9gfHZ8FCcgT/zWAlo+k9Se5XRvCvQDIikGT9D9rLhVnLm1q+neWKjhAN51k4DqwK//yYGj2T5AHTMcTHk2FTMlFQowLYbQHbeQ=
+	t=1773698133; cv=none; b=Zx689KTi5uoZIgkgOwwMRaKBwDJfsaTe+kpkkhdqoNeLnzR7akMQWgmd9Wwfyvg+cbiueQmDFKCs31gMM7nX3wL3WZFLrceKeMFGX0tmJaI7/BgxQRrkLVA7p7XthB1++9mIXMBfeo1d4RsISBxd4A9J4dAKoE1KhPORpc1k8p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773697900; c=relaxed/simple;
-	bh=22FQQziovkybfpoEgGEar4XKtg0Elmc86WdBJzgy3AA=;
+	s=arc-20240116; t=1773698133; c=relaxed/simple;
+	bh=VwTPs7MM4jCqIwuQ92ztyqXRl2nBE6DnvlDQACxGWH8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nIzPvlxc8dJPg6a1YInEDQSFsJko/2QQaMWwF4iLrlta5BM9G/fjTIU7olmNJwn1Gcgvl01aAE0VinENwTC+la4bavTlt7JQo4AhSUB6brpMfw0S8DWYvEM2rfgfTQs+oMabcbCnpXnx/RZOea/hRiEr4JnDUzZiRsYx89XCYYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RD0AnySI; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cOd7IWURMAxgPnWKoXbFcPWQRVjr74J0pTGtjqS8RgNbRIMmJgOiMp/mTC12mVK2NtovWYfohqHpHMze4+5BbAyO3n/ye1rqZae+SHq3/RYByVzcR0uU2MC3n5yPxzzQQJQPt9jqzy5nDFtXuZCfxy1GkBb9PlLWTZj/YRK3n9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JxEEVieu; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RD0AnySI"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-48538c5956bso1424355e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 14:51:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JxEEVieu"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2b052562254so33175ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 14:55:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773697897; x=1774302697; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1773698132; x=1774302932; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sj1cmcN77XR2dLCOZTKXheeb7KLeaY6rrHsbkVnSpso=;
-        b=RD0AnySIyW2JLlyg7kNXl182x2dz/yCOKiV8rMCNirdvIxNN//NbP5veoW6pRZAjMc
-         VMNNx0e+j9nYXfS29C/+e9D96vDDDn/yiOIH1EQfXQ0kYdIHkEA54StylbnMud08dKf3
-         hfWsoCeGFIiVmAJsn4K/BA3NIBfmYWNZEuvdYRk+AmefdaoU9dlTMatvzUxBHxTAEWG6
-         tx9oxN/7gvvwIaQ6sRwrWvGSp+OxO6IzG5fV0sgGZuV2Fvw4OzYovZhTvKRvFEOkjfKT
-         f184BTCR1W7vw32vW7CGApplGLqpd/1aU9rIiG17+SvxQ4//R7iJZRXBRpwA530ZOiSa
-         HIAg==
+        bh=OzZGe5xJiZCdI8yLv+9J6duKMFuSxCgV09Lwr9FRsuY=;
+        b=JxEEVieulD5WEyfi1qBA+HUPpJPkKfrzQXyKDf3qJa6RP2v7MB+wT8HCjatwLv8OnK
+         o2qKGm1ky1VbXOBRxMTwFtvbYqsW6eqeEM/y50cWsb3VO3vV7ubF5NO3efC6gRwqiAh2
+         0OqTNcwjMdolW7pDwuxfmRgUsFyxWl0HgF8Oc9FH5sWssiQZyv9a7mwz/K7NU41WVX53
+         RXUPIwq0JtQ7nqgMas6DlehowXoAsxFV9Lmgmz8KCVHzEkDtp9LI1P4q0qLur/1/VGDK
+         H9neH3i4Law/kfUQ3oQSLChaAMznQVbWxH9JkrBv/NEyt2KKRMgu6sW6o57kwWBTfW8R
+         bTmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773697897; x=1774302697;
+        d=1e100.net; s=20251104; t=1773698132; x=1774302932;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Sj1cmcN77XR2dLCOZTKXheeb7KLeaY6rrHsbkVnSpso=;
-        b=d+Fj9Io5+Azto/OAshgpxWkgYRCvBZLsXRigwEWh5PMOyzwa6G8+af6a/klCmx/ld9
-         3PDsPfpBejm+THTc8MAt1KwLmg3BVPvloArY6j3Vqwdz2tuLKa+m3VBu2q/9bF1BAPeN
-         V3jguGuvWRVwE+iuxDhCQV8+t/KbMlB8IGh7cGSiQy0GElab4Vw1E5Vl3SeaJNu0gSAa
-         VLGHtL7EubGcZdSqTl5mVvJaCapwv61/rbgU+7eA1w6s6K9qG9Mj/XrK3YxcdH74NDdV
-         AvtjYAm094oBFs1Nn7/EzTRvpWblPwrKPfNicnwrSU6jknicFJl51xn0KHvcdAj4cFZc
-         5Vgw==
-X-Forwarded-Encrypted: i=1; AJvYcCV4TiyJH54VRDwbu26//IhSun9tNEHznOhYGSsLbJJWQ6d2lrcvSv9I/49H+NCvxT1pBNISEVgEUZ1k2fEriY0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJxRBJ+iKjY45ExL9Yzr2XLa1ZJnsUaLOyr7Gt8QL9SrXBVmZ1
-	zEnDqZDsCL7FbTUggtZtwYurmr0LDTsDFnGw9BRgmOTbw3zgroXW+3jd
-X-Gm-Gg: ATEYQzw51VGXeuQTXp4D7Hhtoa1qOls4XMtBC5wdVGaQHGDraicpsgaHro636znGvN+
-	mm8uE6tG7YBaL7GgedqeNHPE6W9cx3by1XszTZMBXAM2BhEMj2pNvNjlbcvRRQp/I+WvcAc2bza
-	WSZgh3TQ7natr18fQnYB5w51hKAspMVRg8mmatiwP2flujNmAWSKNmzmLotjjG64WyK3i9ej07/
-	AYB+ynFpJylFxmj1uK/+J1sIjCggfsvDIvmrE32BT9eT+qXj5rV6lnhIAQovT4MgMOCSzBVuXa6
-	q+xhdF5xRBzz2a1L9g3PV9tllawsiXh9yTzcltTKeu5OqlKGvp5aAdwFjIYqnVSZZARMRk0pDDd
-	homyy8z8BvtnqmxR7h7XXOss1TWcpTpfuhbprlV9DDpGF7iHpE+rTLefxQhrMlropTdh/8o7CA5
-	rfaEbFTvayN/048BcnOsVyhUz8UQzkhXmDffVD0kEgiyf/3yx/7ec8Y/XLeD1O3AoBuLH9ObfQh
-	zVwwnbJ1MhO5tFjVh1fKEg=
-X-Received: by 2002:a05:600c:3e1a:b0:485:3428:774c with SMTP id 5b1f17b1804b1-4856eab522emr17811775e9.4.1773697896899;
-        Mon, 16 Mar 2026 14:51:36 -0700 (PDT)
-Received: from gandalf.schnuecks.de (p200300c14f1996009e6b00fffe39b8a7.dip0.t-ipconnect.de. [2003:c1:4f19:9600:9e6b:ff:fe39:b8a7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856eae3037sm20082795e9.11.2026.03.16.14.51.36
+        bh=OzZGe5xJiZCdI8yLv+9J6duKMFuSxCgV09Lwr9FRsuY=;
+        b=nrQXgO1eoQU0hxV6hm6ywnZ1H8SFrzeoj4U8pY5tl+sWVPDAZA4qbcYMHefaqse8Bg
+         9Ly/MTvbagK7Uj8rB/25AZbtUUo39tMYYtjRp/Ym1rHg616ITsi4FFycV1WYaC2cJg02
+         Mo7XTdykF+ELvNyZFIgUfCQQElHeM8X5KQi6TvivSqF/+K5PhUYWzuAA77UkRVdpuNi0
+         /lRcDoTcqmR2PQDrfWgl6idziEaFvv54n2ss4AyDiS8S4hD0W2xxF6MIGdlrIVTZAEoF
+         +2GkIuqZHabrixVFPvqBsKqpBYBTd7MGzxYLA+3pcgVwKGRXbpbokV31nqRXeXknVeBG
+         Ic0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVCD9lr9L7ZQhP9ZalsfL79wWf32P9b+nLGcmNDTYp3DZGgqU72d77AQEjRd8c8DONWXnZvZYeHZURJ3/rMKiQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOVb3mn9/C6izjAlyzblAURtjLaz6uK9FQdjFA/zOSMTdiU0ES
+	ph9MpmVT5V7b67UZ7zlEKsvGsnrZ6//2Dq0IrzAncxi9UcJ/coVkb0yRIRhRJuTDaw==
+X-Gm-Gg: ATEYQzziSqD9qkaNSY0gHeFUNbqE4Sk40dzVS4K9oh/yVKXYbBgG/EKF6i3IZUT0dCr
+	l9WDnGg7STDcSuMfzusw1yYddJbueNBNnDHNHn3wM0TCMVKL8ff187TXwR9dgNk5ZZ24yQI7Z9k
+	DFbMFFkP8ZJSGkSYVUYuG6/dzoRd5lr9nVjxkZ/cBaph8g6NDF7cy9JyhVFwEP9QThg01us3JV9
+	3N8kPJigBUsqz8WZJZGnvP3qNwPhzMQBQ9Xv8/QiaGeux4T5A18tbeueeicCUHblhie/hBuXtEn
+	mVuGvfj7MP8NNZkfMSOJZw6OdmYYwELbHICMY6N8MYUS2IjOI5agXclxlvO+Jw47BpYAPkOJVbs
+	B/fqe9wWUJTJ6mSTGR0nDfNhVujYCcte2GHRXtMvoalqCUmDXpkmZk5jNt+LLADvEW/0M5ZpiKV
+	8fLFQc/WZpYjfmGaPYObFp02bPN/JAdJaoF0fbwpFbuzp0UBQe/kDcR40TSQ==
+X-Received: by 2002:a17:902:e885:b0:2ae:4e8e:954e with SMTP id d9443c01a7336-2b06599f6camr431285ad.5.1773698131381;
+        Mon, 16 Mar 2026 14:55:31 -0700 (PDT)
+Received: from google.com (60.89.247.35.bc.googleusercontent.com. [35.247.89.60])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece7edd14sm155239485ad.50.2026.03.16.14.55.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 14:51:36 -0700 (PDT)
-Received: by gandalf.schnuecks.de (Postfix, from userid 500)
-	id 903633040F3A; Mon, 16 Mar 2026 22:51:35 +0100 (CET)
-Date: Mon, 16 Mar 2026 22:51:35 +0100
-From: Simon Baatz <gmbnomis@gmail.com>
-To: Eric Dumazet <edumazet@google.com>
-Cc: Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	David Ahern <dsahern@kernel.org>, Jon Maloy <jmaloy@redhat.com>,
-	Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com,
-	Shuah Khan <shuah@kernel.org>, Stefano Brivio <sbrivio@redhat.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev
-Subject: Re: [PATCH net-next v3 6/6] selftests/net: packetdrill: add
- tcp_rcv_neg_window.pkt
-Message-ID: <abh7Z5GEhEzty18d@gandalf.schnuecks.de>
-References: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com>
- <20260309-tcp_rfc7323_retract_wnd_rfc-v3-6-4c7f96b1ec69@gmail.com>
- <CANn89i+PypF1cK4mnp8L_eCG_z+3Aj6uxJoohm_=DwGfR1=4FA@mail.gmail.com>
- <abCkmiCSPkmxzECa@gandalf.schnuecks.de>
- <CANn89iKYxs644ardFFSKo8d0EXL_2A5eUQjWZ3yp9-Q4tVLKzQ@mail.gmail.com>
- <abWVuS1XJaKrndJw@gandalf.schnuecks.de>
+        Mon, 16 Mar 2026 14:55:30 -0700 (PDT)
+Date: Mon, 16 Mar 2026 14:55:26 -0700
+From: Vipin Sharma <vipinsh@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
+	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 11/22] docs: liveupdate: Document VFIO device file
+ preservation
+Message-ID: <20260316215056.GC1846904.vipinsh@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-12-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,116 +92,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <abWVuS1XJaKrndJw@gandalf.schnuecks.de>
+In-Reply-To: <20260129212510.967611-12-dmatlack@google.com>
 
-On Sat, Mar 14, 2026 at 06:07:05PM +0100, Simon Baatz wrote:
-> Hi Eric,
+On Thu, Jan 29, 2026 at 09:24:58PM +0000, David Matlack wrote:
+> Add documentation for preserving VFIO device files across a Live Update,
+> as well as some generic file preservation documentation. This
+> documentation will be extended in the future as new types of files are
+> supported and new dependency/ordering requirements are added.
 > 
-> On Sat, Mar 14, 2026 at 04:58:28AM +0100, Eric Dumazet wrote:
-> > On Wed, Mar 11, 2026 at 12:09???AM Simon Baatz <gmbnomis@gmail.com> wrote:
-> > >
-> > > Hi Eric,
-> > >
-> > > On Tue, Mar 10, 2026 at 09:54:58AM +0100, Eric Dumazet wrote:
-> > > > On Mon, Mar 9, 2026 at 9:03???AM Simon Baatz via B4 Relay
-> > > > <devnull+gmbnomis.gmail.com@kernel.org> wrote:
-> > > > >
-> > > > > From: Simon Baatz <gmbnomis@gmail.com>
-> > > > >
-> > > > > The test ensures we correctly apply the maximum advertised window limit
-> > > > > when rcv_nxt advances past rcv_mwnd_seq, so that the "usable window"
-> > > > > is properly clamped to zero rather than becoming negative.
-> > > > >
-> > > > > Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
-> > > > > ---
-> > > > >  .../net/packetdrill/tcp_rcv_neg_window.pkt         | 26 ++++++++++++++++++++++
-> > > > >  1 file changed, 26 insertions(+)
-> > > > >
-> > > > > diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt
-> > > > > new file mode 100644
-> > > > > index 0000000000000000000000000000000000000000..15a9b4938f16d175ac54f3fd192ed2b59b0a4399
-> > > > > --- /dev/null
-> > > > > +++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_neg_window.pkt
-> > > > > @@ -0,0 +1,26 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > > +
-> > > > > +--mss=1000
-> > > > > +
-> > > > > +`./defaults.sh`
-> > > > > +
-> > > > > +// Establish a connection.
-> > > > > +   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-> > > > > +   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-> > > > > +   +0 setsockopt(3, SOL_SOCKET, SO_RCVBUF, [20000], 4) = 0
-> > > > > +   +0 bind(3, ..., ...) = 0
-> > > > > +   +0 listen(3, 1) = 0
-> > > > > +
-> > > > > +   +0 < S 0:0(0) win 32792 <mss 1000,nop,wscale 7>
-> > > > > +   +0 > S. 0:0(0) ack 1 win 18980 <mss 1460,nop,wscale 0>
-> > > > > +  +.1 < . 1:1(0) ack 1 win 257
-> > > > > +
-> > > > > +   +0 accept(3, ..., ...) = 4
-> > > > > +
-> > > > > +// A too big packet is accepted if the receive queue is empty
-> > > > > +   +0 < P. 1:20001(20000) ack 1 win 257
-> > > >
-> > > > We do not see the answer, it seems this test is not complete ?
-> > >
-> > > Actually we do not want to see an answer.  The packet won't trigger
-> > > an immediate ACK (it is larger than the advertised window, but does
-> > > not cause immediate memory pressure).
-> > >
-> > > When we then send a RST before the delayed ACK would be generated:
-> > >
-> > > > > +// Send a RST immediately so that there is no rcv_wup/rcv_mwnd_seq update yet
-> > > > > +   +0 < R. 20001:20001(0) ack 1 win 257
-> > >
-> > > We are in a state where rcv_wup, rcv_wnd, and rcv_mwnd_seq have not
-> > > been updated yet, but we must still accept the RST
-> > > (rcv_nxt == 20001 > rcv_mwnd_seq, tcp_max_receive_window() == 0)
-> > >
-> > > > > +
-> > > > > +  +.1 %{ assert tcpi_state == TCP_CLOSE, tcpi_state }%
-> > >
-> > > And we verify that we accepted the RST here.
-> > >
-> > > Given how subtle this sequence is, and considering the limited value
-> > > of this test, I am also fine with dropping it if it is too fragile or
-> > > confusing.
-> > 
-> > Sorry I missed your answer.
-> > 
-> > Ok then please use :
-> > 
-> > // A too big packet is accepted if the receive queue is empty
-> >    +0 < P. 1:20001(20000) ack 1 win 257
-> >    +0 %{ assert tcpi_bytes_received == 20000, tcpi_bytes_received;
-> > assert tcpi_bytes_acked == 0, tcpi_bytes_acked }%
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  Documentation/userspace-api/liveupdate.rst | 144 +++++++++++++++++++++
+>  1 file changed, 144 insertions(+)
 > 
-> Unfortunately, tcpi_bytes_acked is the TX direction, it will always
-> be 0 here.
-> 
-> Instead, we can still test that the oversized packet is accepted and
-> indirectly verify that no immediate ACK is sent by eliciting and
-> checking a RST:
-> 
-> // A too big packet is accepted if the receive queue is empty, but does not trigger
-> // an immediate ACK.
->    +0 < P. 1:20001(20000) ack 1 win 257
->    +0 %{ assert tcpi_bytes_received == 20000, tcpi_bytes_received; }%
-> 
-> // Send a RST immediately so that there is no rcv_wup/rcv_mwnd_seq update yet
->    +0 < R. 20001:20001(0) ack 1 win 257
-> 
-> // Verify that the RST was accepted. Indirectly this also verifies that no immediate
-> // ACK was sent for the data packet above.
->    +0 < . 20001:20001(0) ack 1 win 257
->     * > R 1:1(0)
-> 
-> As the series is merged now (thank you!), I will send this
-> separately, as suggested.
+> diff --git a/Documentation/userspace-api/liveupdate.rst b/Documentation/userspace-api/liveupdate.rst
+> index 41c0473e4f16..dbf1e4aeddd7 100644
+> --- a/Documentation/userspace-api/liveupdate.rst
+> +++ b/Documentation/userspace-api/liveupdate.rst
+> @@ -14,6 +14,150 @@ ioctl uAPI
+>  ===========
+>  .. kernel-doc:: include/uapi/linux/liveupdate.h
+>  
+> +File Preservation
+> +=================
 
-Patch is at: https://lore.kernel.org/netdev/20260316-improve_tcp_neg_usable_wnd_test-v1-1-f16d5e365107@gmail.com/
+Should we use the existing way where documentation is written in code
+files and referenced here? Maybe luo_file.c for this?
 
--- 
-Simon Baatz <gmbnomis@gmail.com>
+> +
+> +File Retrieval
+> +==============
+
+Same as above.
+
+> +
+> +
+> +VFIO Character Device (cdev) Files
+> +==================================
+> +
+
+vfio_pci_liveupdate.c
