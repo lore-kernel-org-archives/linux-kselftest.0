@@ -1,25 +1,85 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEC24280035;
-	Mon, 16 Mar 2026 11:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9583F2949E0
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 11:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773659570; cv=none; b=cX1dEBAPgEC61KW4ILT5qeQe4oITkKl7jsbrYS+K8rzCNk6AUB7sUySh5dmnL0BI+gihpKSpaEqIwc1NXBRUeijo2ZTynEYa5QbGted2uFdeeOMRM1ote7EDVDhB/2XpBMWbYxXz4hLr87jcsI5CG8hSGesTf2HPLEwRbt8pbPY=
+	t=1773660260; cv=none; b=EIN8v8QKKm5xrvoT62BvBIdYtFv7iqhZ9HbCcWLe5Cshvp96MvFfbtPKKz5AzzOS1BoW/d8+hFcGLGCigXvqeO3vDXy/LV1AyWkMfZh9FbACnDvJ1VGqHpxXhsWkiRhHdjvaZQCKMKWPUiJghsq6MgJd2hrbYa+On//gDhjJdSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773659570; c=relaxed/simple;
-	bh=0zQ6fs2ohWt+9jsO2su/IMuFegSZK3H8H4KQEDebPP0=;
+	s=arc-20240116; t=1773660260; c=relaxed/simple;
+	bh=vExqsQuY0TOh0C4OqHS5ONqjXZPb4O5dkQOinRtjo/I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n2dXXDdbxalRln6LF3aTsR9XTm37IHFaKxXg0S05EDMdovUYPPkf8WCnXR5+oA9wp1H1ovn4yDxcoat1iuGuKJsOSpuxCSVwkuTc8IeDGcl9DVQydEjk7xOGNZyIdaiX4K6MW5lCAapPkgS3EJWoe3zWxmr4y/1JyYPR2kG3gnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A4461477;
-	Mon, 16 Mar 2026 04:12:42 -0700 (PDT)
-Received: from [10.1.28.15] (e127648.arm.com [10.1.28.15])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1897B3F778;
-	Mon, 16 Mar 2026 04:12:45 -0700 (PDT)
-Message-ID: <1e72dc1d-ce46-4dcd-9811-761221fa20c0@arm.com>
-Date: Mon, 16 Mar 2026 11:12:43 +0000
+	 In-Reply-To:Content-Type; b=R/DaW7e9OIIuPk8kHUOO8mRuU4q+jzW6CsmTcPVB2JYYBvNPjhrUu0xNYDElYvtoINctnaod81imiBj4Atv6fydGeZadLZDwJEGp3n/EkKGcLw0eF3LL7Nmqfi3F/cv3RaugOZ9qkj5TRfWqrSlsUCnc/IFnIT+p5Uo3617NQHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B6Fqyz5I; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=NV6fEPkw; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B6Fqyz5I";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="NV6fEPkw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773660258;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H9hWHpx6fXvQ6tiAS+Vx6gKKziz7E3xCqMnpnyHx+ks=;
+	b=B6Fqyz5IVSt3GT1ulMlu9mvzM+CA70XjObXe+5Gd8yBnDbRV3zsSgLTfcMrhOcE/J71QOG
+	Zx2eMifGvjFmI/YyF4iMbpGml7mir8HQ2GfFjhBHsP4haMNshDJt7b35DI7za79IwcDZdm
+	EbzAGhVf3jD+0u46sDwYtQzxdKLcTbs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-344-makZ_M5LPjWXm7GKBg1lBQ-1; Mon, 16 Mar 2026 07:24:17 -0400
+X-MC-Unique: makZ_M5LPjWXm7GKBg1lBQ-1
+X-Mimecast-MFC-AGG-ID: makZ_M5LPjWXm7GKBg1lBQ_1773660256
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-48532df52c5so64751115e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 04:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773660256; x=1774265056; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H9hWHpx6fXvQ6tiAS+Vx6gKKziz7E3xCqMnpnyHx+ks=;
+        b=NV6fEPkwo3NU6CHi+YqL3sv30eFK9RhGWJQR0Knl42QG5QcFR8RBiOI+JigYlrQ+ft
+         LGQ8FC4dvwlQ3gOowpzISZ1VOIpl7/aLKeHBalDrxcaglCK55flHNEs0qPgzy661nEHQ
+         z35/UnsD686/RIgK7SWhdl/mXAmJVaWLEV5LEDIot/ba+1/LUZUKjIGl6L+UjpRKWnup
+         h+QRARlNlUHN0TOsmfY/Qsndq9UJT3hYuCevWZVnPTlpJWvgBzmptRdqo4KZJcNFxA7n
+         fGXpt2MMVTI0W7xknSJXubk/Xxi824XhoEAacu613aezcKyhyoTGMiO0QpYEP7Pdl/0K
+         ud+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773660256; x=1774265056;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H9hWHpx6fXvQ6tiAS+Vx6gKKziz7E3xCqMnpnyHx+ks=;
+        b=VBtd0RN0OSnB6Pe7b61gROgywiXPC9B6/+NijXdCtTwV2iCy9rJUCwvhguJ/9lviXh
+         B8wDoCMh2JKPcWFrQma2p4bYZ9MvmGptMRe7YovDI6rONiWl5GxJMDeLvzpGTsUslFj0
+         N9xOeos6mDqWHUu5nrwlc8L63GekEKnMwEUZzu9DWycQXTL5ObhIFQCaxmd+IxAfX0xO
+         oG+A+o7ApgGhBy/n7VmKp3j7TnfHQHwE8fAAdFn6OcT3hcAXc1XnfGrdDRWrZDVHZu9R
+         sgkIKf4lGG8djtyJdE5GTgYZug5kcUQY9iFnoPcmQw4N+kbe68uMdroQOVzn2C1k/JHZ
+         zDxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQk6MRqisZbj8vIRjUjyuRT437cV17wtVyg7pLh6O93CbNAuq1gCZDMpj2ZdAVK8o/1Ebsoagm0XwlxgldAz8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbPHaWmFM7agZxLH1zlvA/K65DyuYtcxerfkKqtKavMtGC4fG8
+	+QIgThvk0po2PGRggX7TrzQ0yIRJJtMjsOa/qPNU7YD4T5ZhHJ7JQx/BifoX/AD1HywjPyg1s/S
+	yfB5QfCa1q70+nAjg4FahzLMEN9Dlo4EEhT/zJ8ynGSY4xmpyVR83/E3GaqvLpDWgCqaiSQ==
+X-Gm-Gg: ATEYQzx1IIOC81+pl7a7tyz2kcsKg5FeI+KVFB59XyhMedpN2MhINNiWnMnb4GONLKG
+	laCqDUXyrdBPw672z6f3msY84HtpXHyx9yQVfMf7e1QlPl1KpIB80R8fA9AOIwsBBf6h6n9V0pI
+	Ml7wOoiedS9nzG9obWiw2bSdWgruDjPhl7EOv/XJdSqMxXwAzMOPXGkK/oTg94k16yCVCxgKRp5
+	ZSJKTBN+qaXhfO276msbwRwzLJ2sLUwn4gqin9tXY/gh0td9KO6uGhveniRVyV13GKdPosI5dXD
+	GGcqkxkg6rX3ue01pot3gufAbzPdh0VhENBqq4r+o7kjHX4116z+VxvbV9Lv8LwjDNckOVMvnVx
+	D+in0tiVuzGzZgmYFHaKZb3rp/4eUdFjmAHwoNnxBdFS3BuHPU/f32Zc=
+X-Received: by 2002:a05:600c:468e:b0:485:3f58:d9d with SMTP id 5b1f17b1804b1-48556714b67mr207129285e9.32.1773660256087;
+        Mon, 16 Mar 2026 04:24:16 -0700 (PDT)
+X-Received: by 2002:a05:600c:468e:b0:485:3f58:d9d with SMTP id 5b1f17b1804b1-48556714b67mr207128715e9.32.1773660255574;
+        Mon, 16 Mar 2026 04:24:15 -0700 (PDT)
+Received: from [192.168.88.32] ([216.128.11.95])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541aa73dasm1215197765e9.2.2026.03.16.04.24.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 04:24:15 -0700 (PDT)
+Message-ID: <2551cc98-5280-4a9f-8345-0a39e0e09dac@redhat.com>
+Date: Mon, 16 Mar 2026 12:24:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -27,104 +87,74 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] sched_ext: Prevent SCX_KICK_WAIT deadlock by
- serialization
-To: Andrea Righi <arighi@nvidia.com>
-Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, tj@kernel.org, void@manifault.com,
- changwoo@igalia.com, mingo@redhat.com, peterz@infradead.org,
- shuah@kernel.org, dietmar.eggemann@arm.com
-References: <20260316100249.1651641-1-christian.loehle@arm.com>
- <20260316100249.1651641-2-christian.loehle@arm.com> <abfgRv5DkOnCzz-q@gpd4>
+Subject: Re: [PATCH net-next v2 05/14] tcp: grow rcvbuf to back scaled-window
+ quantization slack
+To: atwellwea@gmail.com, netdev@vger.kernel.org, davem@davemloft.net,
+ kuba@kernel.org, edumazet@google.com, ncardwell@google.com
+Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, mptcp@lists.linux.dev,
+ dsahern@kernel.org, horms@kernel.org, kuniyu@google.com,
+ andrew+netdev@lunn.ch, willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+ skhan@linuxfoundation.org, corbet@lwn.net, matttbe@kernel.org,
+ martineau@kernel.org, geliang@kernel.org, rostedt@goodmis.org,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 0x7f454c46@gmail.com
+References: <20260314201348.1786972-1-atwellwea@gmail.com>
+ <20260314201348.1786972-6-atwellwea@gmail.com>
 Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <abfgRv5DkOnCzz-q@gpd4>
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260314201348.1786972-6-atwellwea@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/16/26 10:49, Andrea Righi wrote:
-> Hi Christian,
+On 3/14/26 9:13 PM, atwellwea@gmail.com wrote:
+> From: Wesley Atwell <atwellwea@gmail.com>
 > 
-> On Mon, Mar 16, 2026 at 10:02:48AM +0000, Christian Loehle wrote:
->> SCX_KICK_WAIT causes kick_cpus_irq_workfn() to busy-wait using
->> smp_cond_load_acquire() until the target CPU's current SCX task has been
->> context-switched out (its kick_sync counter advanced).
->>
->> If multiple CPUs each issue SCX_KICK_WAIT targeting one another
->> concurrently — e.g. CPU A waits for CPU B, B waits for CPU C, C waits for
->> CPU A — all CPUs can end up wedged inside smp_cond_load_acquire()
->> simultaneously.  Because each victim CPU is spinning in hardirq/irq_work
->> context, it cannot reschedule, so no kick_sync counter ever advances and
->> the system deadlocks.
->>
->> Fix this by serializing access to the wait loop behind a global raw
->> spinlock (scx_kick_wait_lock).  Only one CPU at a time may execute the
->> wait loop; any other CPU that has SCX_KICK_WAIT work to do and fails to
->> acquire the lock records itself in scx_kick_wait_pending and returns.
->> When the active waiter finishes and releases the lock, it replays the
->> pending set by re-queuing each pending CPU's kick_cpus_irq_work, ensuring
->> no wait request is silently dropped.
->>
->> This is deliberately a coarse serialization: multiple simultaneous wait
->> operations now run sequentially, increasing latency.  In exchange,
->> deadlocks are impossible regardless of the cycle length (A->B->C->...->A).
->>
->> Also clear scx_kick_wait_pending in free_kick_syncs() so that any stale
->> bits left by a CPU that deferred just as the scheduler exited are reset
->> before the next scheduler instance loads.
->>
->> Fixes: 90e55164dad4 ("sched_ext: Implement SCX_KICK_WAIT")
->> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
->> ---
->>  kernel/sched/ext.c | 45 +++++++++++++++++++++++++++++++++++++++++++--
->>  1 file changed, 43 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
->> index 26a6ac2f8826..b63ae13d0486 100644
->> --- a/kernel/sched/ext.c
->> +++ b/kernel/sched/ext.c
->> @@ -89,6 +89,19 @@ struct scx_kick_syncs {
->>  
->>  static DEFINE_PER_CPU(struct scx_kick_syncs __rcu *, scx_kick_syncs);
->>  
->> +/*
->> + * Serialize %SCX_KICK_WAIT processing across CPUs to avoid wait cycles.
->> + * Callers failing to acquire @scx_kick_wait_lock defer by recording
->> + * themselves in @scx_kick_wait_pending and are retriggered when the active
->> + * waiter completes.
->> + *
->> + * Lock ordering: @scx_kick_wait_lock is always acquired before
->> + * @scx_kick_wait_pending_lock; the two are never taken in the opposite order.
->> + */
->> +static DEFINE_RAW_SPINLOCK(scx_kick_wait_lock);
->> +static DEFINE_RAW_SPINLOCK(scx_kick_wait_pending_lock);
->> +static cpumask_t scx_kick_wait_pending;
->> +
->>  /*
->>   * Direct dispatch marker.
->>   *
->> @@ -4279,6 +4292,13 @@ static void free_kick_syncs(void)
->>  		if (to_free)
->>  			kvfree_rcu(to_free, rcu);
->>  	}
->> +
->> +	/*
->> +	 * Clear any CPUs that were waiting for the lock when the scheduler
->> +	 * exited.  Their irq_work has already returned so no in-flight
->> +	 * waiter can observe the stale bits on the next enable.
->> +	 */
->> +	cpumask_clear(&scx_kick_wait_pending);
+> Teach TCP to grow sk_rcvbuf when scale rounding would otherwise expose
+> more sender-visible window than the current hard receive-memory backing
+> can cover.
 > 
-> Do we need a raw_spin_lock/unlock(&scx_kick_wait_pending_lock) here to make
-> sure we're not racing with with cpumask_set_cpu()/cpumask_clear_cpu()?
-> Probably it's not that relevant at this point, but I'd keep the locking for
-> correctness.
+> The new helper keeps backlog and memory-pressure limits in the same
+> units as the rest of the receive path, while __tcp_select_window()
+> backs any rounding slack before advertising it.
+> 
+> Signed-off-by: Wesley Atwell <atwellwea@gmail.com>
+> ---
+>  include/net/tcp.h     | 12 ++++++++++++
+>  net/ipv4/tcp_input.c  | 36 ++++++++++++++++++++++++++++++++++--
+>  net/ipv4/tcp_output.c | 15 +++++++++++++--
+>  3 files changed, 59 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index fc22ab6b80d5..5b479ad44f89 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -397,6 +397,7 @@ int tcp_ioctl(struct sock *sk, int cmd, int *karg);
+>  enum skb_drop_reason tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb);
+>  void tcp_rcv_established(struct sock *sk, struct sk_buff *skb);
+>  void tcp_rcvbuf_grow(struct sock *sk, u32 newval);
+> +bool tcp_try_grow_rcvbuf(struct sock *sk, int needed);
+>  void tcp_rcv_space_adjust(struct sock *sk);
+>  int tcp_twsk_unique(struct sock *sk, struct sock *sktw, void *twp);
+>  void tcp_twsk_destructor(struct sock *sk);
+> @@ -1844,6 +1845,17 @@ static inline int tcp_rwnd_avail(const struct sock *sk)
+>  	return tcp_rmem_avail(sk) - READ_ONCE(sk->sk_backlog.len);
+>  }
+>  
+> +/* Passive children clone the listener's sk_socket until accept() grafts
+> + * their own struct socket, 
 
-Of course, thanks. Noted for v2!
+AFAICS, the above statement is false, see sk_set_socket() in sk_clone()
 
-Are you fine with the approach, i.e. hitting it with the sledge hammer of global
-serialization?
-I have something more complex in mind too, but yeah, we'd need to at least either
-let scx_bpf_kick_cpu() fail / -ERETRY or restrict kicking/kicked CPUs and introduce
-a whole lot of infra, which seems a bit overkill for a apparently barely used
-interface and also would be nasty to backport.
+> so only sockets that point back to themselves
+> + * should autotune receive-buffer backing.
+> + */
+> +static inline bool tcp_rcvbuf_grow_allowed(const struct sock *sk)
+> +{
+> +	struct socket *sock = READ_ONCE(sk->sk_socket);
+
+You can just check `sk->sk_socket`. Also you could re-use this helper in
+tcp_data_queue_ofo().
+
+/P
+
