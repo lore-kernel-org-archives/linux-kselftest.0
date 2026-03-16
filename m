@@ -1,129 +1,165 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501CD20468E
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 07:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773644769; cv=pass; b=H9hx1Al8fAvmSwSf8LoaaoI70NGpwPhHWWvsU2s1yt1ydGXEgDqdT5Hb68Gmmt3E5Dvbm+QINduxkEymaCyIEKBmjh3TUUwZ+Poc3a6pKa8F2C/JRVmrGAgBDHGC71XK78jhck//zB6YoVF8iCtAsjC3/6zsgOr2ayz/KAfoDEU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773644769; c=relaxed/simple;
-	bh=DWa/MwbMbU4Cgy8HcLpzA6KnltFCFdwdVTLoxcjvQIo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MGxDwCfQnDggsFARzItD5A7X6ZUezKxEf/JE38rINShInrXpI/Y5Nz8AnbVmereSE4iofY94MmZGt1O6ooEFre3mG/NPiqNrrnhDDM7oCq5uGKLfBaY7Uw4HvUyJ3UjyNS7t2t92gZBhPxqt97YuIE3iUYYyjZhr3b1st5KvYqc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rrvNm/sp; arc=pass smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79ABF7080E
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 07:34:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773646463; cv=none; b=P9lFfHf1XWPLVRULE/TZBMqyapn0ALYd+19UZHWk9w9PTHRxGCcR3t69D+l3kp3Xa2aRTWj04QJGt675fUbufs3598Cdywq083G344ednXU3AiglnVs5ChKEIxxnChOUvkNwQHXVes6CE1lwS4mjQMM83DR12loFLCDomVssycM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773646463; c=relaxed/simple;
+	bh=IqUaZKF+nwTuN1re1AFZQs0CX1BJ7DOi3AgNK8zWc1U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ok5az/WvAXpE8sJqJGXFFSueJPZPkj5FcrIpXqoHquFBesc3ZNJwoSFUfJJCRRAvba3DmwyNv8uc1g0tq8c0H+94C4nbAILycva+v1MfAk7w0yI1A1Uw9sVgz2WVBgfSB5m1u2L5OP9OBmtVMA6ov1ynvAcvylDNMKr2BzZ4b9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SM7hmDTk; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rrvNm/sp"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-38a32d36396so36575211fa.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 00:06:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773644766; cv=none;
-        d=google.com; s=arc-20240605;
-        b=krZFPY/OYQDQAsYd2jfIwXOrcdPTZuJbO7ecGbrE7oxXge3y7kWAjUv24TkbATTD0x
-         TKh3Za3LfcYNRSPFbwEwMJO/XrJL+SUESn3NRLegacRMn/RUqsl/QxfjvF8eWfexkpH/
-         KIfw2AmB8y5QVAYP+7LolXsFYLPBBq1adYCf5OJAiBwGYmdqRUqgwhgvHAhgsWh1bm9i
-         CP5fe3UUZRVrU7pJntBJeR5qvjUX8fj/iM+qejHeKAUGFJr8Bx1kVeJ2A6hY58pThqfr
-         iVmAMfvkUtDxgIrFLDs2z2dhh8fMfT80fal+mqNpn2xJswAfA6Y3Y9B0QJwLqo7LCBZF
-         CpaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=DWa/MwbMbU4Cgy8HcLpzA6KnltFCFdwdVTLoxcjvQIo=;
-        fh=wwl9QIIWG5di4wH8Ld+a+J8bWkaz2Dg37k/vrnq9o7A=;
-        b=THLxe9I7ORZl6N0M0Upw5P1UDUfr0FThYz8CStnLuVyiq/PXJOapiVkyRutzA3xvvB
-         5RtbqwaROWZrfqd7brSieGRwvrBT+LliP7ZSElGd1k8WKE87jpeSFFV+3jPuJE6VreTB
-         r/fh5GqwLzTqPZ9YNl/OfCrY4FTGcSdigNkQY+yto6uUa3h2gKL7jwJPHcVB48jMrthV
-         jQVBz6L5NPwGgcCcRFVPDKUof372sfTyEnWIJBR7WdW3CYrWRs0njUvr5nYlSqb5/7KA
-         Hz8E5HG6O5W84Fhqhm2DOIDq7OYZB+BRG8JFX9Cxq1H7qyQRmPJIcXzASRirHu/MwcUJ
-         Q9gA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SM7hmDTk"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-79881805788so42489267b3.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 00:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773644766; x=1774249566; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DWa/MwbMbU4Cgy8HcLpzA6KnltFCFdwdVTLoxcjvQIo=;
-        b=rrvNm/sp0ejqtQpts4YJvKIZJai0U7h6SimZ1+626FCi7l4L6Dzs/D5AfC15pRBoWr
-         kv/dIm7CfHnm9HMv/wH+hAenKg7VAAA/E7tVULHXPbxFq6YGS4qlbY3FPnHscS4jfzMo
-         D3dH3ecOve/eQGzSnAb4Ojy44wq5Nw/0FFYtscPxcItm710bCdD1kjJ/hOB3448XZy8f
-         K4xi4VdbUD1F+Vo4MhfBcbKbgnUdds5xx8LCHziC6xxbqHA6MvyjhOKbbiisyPVocwZ3
-         KxoLuACxgOlrc3AY0BNPbelvSOBLVO9w1iQzbOC3uVjI5svhEljwS33qC/sFSOyzUjaG
-         pJow==
+        d=gmail.com; s=20230601; t=1773646461; x=1774251261; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TYofxbTxVeUb8gRUtgDsMF1YdvMI5jrpYMWP5TzQcpU=;
+        b=SM7hmDTkx0DormTDHnC6ff6vhhLnift14Y7cpQ9C4xIVBTbjBniqAK3ZYFmYGK7YR8
+         VoiBdN3ejONTZ/XWtcITaa2S/dp82UA1WL6CIh6cXXGW7hOP/IdA9Xc+Awoj5EOgyQTA
+         +lGqgpY93gXykfoSMZFnz11wQ3Ha7KCdpLpc9+PQtnPQrvHtp3qkm7j3SQjSAuIlOrUc
+         yD61tqj8Rim7j5X2vEPEa81Z9gw00yPFGQyDS+eQZryT3Dvv01ArfMxjATJWDWqlUVW2
+         KQP9FxNEP7wT23x6hGdcAWo3bX7r8XwpUzDuvJDNbaeLYi2HVK30m4gAWSFcaoFJuPHc
+         HmUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773644766; x=1774249566;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1773646461; x=1774251261;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DWa/MwbMbU4Cgy8HcLpzA6KnltFCFdwdVTLoxcjvQIo=;
-        b=gRaXIRgRrcMw7lSFENumHsTB78YqPppmqGFoIqDe9wSqc0X4KFwzjfEd9X7hqFvikn
-         eDQ40TUfH2hZ11ac/iGLLbApUsSOimMEBu3jJVqnWozRuLTlAXFJH94zpZgGtoSZVjhj
-         Do8LecNO1At3tjZPGYpUoLP7POyGGU0RfLGirBR1kNiz57lOA/DhqMsvS9Pca+0+zrCO
-         yy+nhu8sTCw2XRs3TgigMLryNinK1E1djtAm4eJkOAfWA3OirGRhEk4e32AYmG4cW2Bm
-         s3JGU2C9LDf5sG4voKgyTTudjXy0LT+KFu0/PL2/oTgoDn/nmPZANz43Fh685/ot5u7S
-         1xNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXz0gQjBh9bXnvJDDoXolQZ7Kqtny9k+rQjMNQdTbCMc6tbSkucUnI1W3MgktC5d03Tds+ArUwdmk6N9NOYq88=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAZR1X8VKUGPsS192HkcUcTVPiBno/ASp5dKHitSTWXalCiXEx
-	EgtYFrw4da7EcuinbJ+8gYNl8bvoqfs7wKFSZG3WxPgcemoyTPrszSgLw7cMK5Em7Fz6rPWaAlw
-	3qx+55OZvHOzt15YDiHKSe6onE6PgkwXD0iqv8gzl
-X-Gm-Gg: ATEYQzxeBBAh/m9w47B1acAC/JWaxYtp9Sdq3hSwQ7IElGZ4p5H73vqUXnAasFzyaUY
-	RzZiMVcBvNYE31Mfj27PLhMkuO3bfjatSRVuTC5Fpnb20wgi6J1QXKLGoiOTEljES1q1Zmnbrr6
-	IL9VSxTPMj+zxzsOWgCq/oVmBR8rccJsZiRMYMv83xnBo0AI3mz4NpwvNKP81FXp/q3NYpa2Ry/
-	WsVQ2/e1I0jHg+KhMu/LfypgFT2yH15lO4ZyjQH9yqfWpL0eJkrc3rmDJcLpMQ/7vYkeimlWw3t
-	8K1E/1qVxN+Bq0xOYdvwiDxOUO57U+cUaGOpXtEgG5UqLXSBzQfAA7c7WzzJn0/txbrB+g==
-X-Received: by 2002:a05:651c:4356:10b0:38a:2db9:eb72 with SMTP id
- 38308e7fff4ca-38a8864c94amr30667511fa.16.1773644766146; Mon, 16 Mar 2026
- 00:06:06 -0700 (PDT)
+        bh=TYofxbTxVeUb8gRUtgDsMF1YdvMI5jrpYMWP5TzQcpU=;
+        b=WTAOqzS2JMA1VCwRTh+bkOSKGtAMqzxZGuEDeeDA9Oi8Dcw9seW+t1juRudek0P/Ah
+         8YxicenjP4Vimr9UgaNcwl9UHpOCjYF4QxgNgPrZKLTAKRrldBk8/0f2LNmTmJqInhfZ
+         VHAkWpWe63zAsIdYDilf8m+NyyI8bnv0nAjkzkd7AlB/v7bw6YDlCMIjkf2cFONiEroO
+         uBINiDR2tFgK78/XF02ABAsbr2KqM6wh9K46k/2Xvgm98/iHn2k5hsiOhhCKB9F0JDuH
+         NbvNiPdLZz1XM+/F3M5AnX5xNgXlD6XtILft+m7kfkBUOQnFGWkEsNhIuTxYVz5DZbyx
+         E7XA==
+X-Forwarded-Encrypted: i=1; AJvYcCU36nOu/JQrI8CwNL002/NkMWfJtI3w48VEXag/azF107vdIajHuYq2DKoa57i19mYH9IulGjN0VeBqk/bzldc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5N/NT4k74Q15ZODCPsOVwpgKRZMzva7kxQQxWihVK4Er4h7uH
+	Lp3ciW9UJ5N8SF8VhsnMmUhiQIqXwfXsxNSHp4p7vhZh/VaSM5+Bc0pn
+X-Gm-Gg: ATEYQzxSqQRoomt61ozj7cbibkSU0vOqqHlxTC8rtX3rrQj5HWyWFVTLblIWkxr31TG
+	vBGn5iDS+TqKifUFsCE0N3F4xuZ9FCdhlVeylxyUpt01hpAK8voGSzPloyh+pWVuXfEnJit9ofk
+	YkNllpIF8KR6mHklChb+S2MME0gEw+V937cSWZHzYvCkH0Z0WQdhkYfNoEK7kGXGHWj1Ve6m3tY
+	GiZp4+SSM0ZRNKWnTnBPBRewSdI9DlJautw+JCkefUjy06cwdYmVPSj+o186vyq6MYYrIgCwXRK
+	5BU234ZjqUF4z9b4Oyj1nXYK8r093N+WAFleU1F/N/vkdMYMcUPHC8NPbtW41+MsDuo/MJwxqoA
+	ERrcQTKVCQ7kpNb6HxLGXBnxxjCVZFuQDXdpKA8urqpQGG00RoXHCQjs76YdJjls4X3J5LU7gbj
+	qr6Lxj6qmfO8AObmSnFnTyuuRIagpqrF4DQ7q8ofAIdnkxvQimzs9rQXszkOrxyWZHPAw0BUfUt
+	cgSPxMvxxpRmxUZGZ0JOIQ2Jf2EHW/h5kx3Mw==
+X-Received: by 2002:a05:690c:4484:b0:796:2fde:5dbe with SMTP id 00721157ae682-79a1c1c0293mr112773817b3.44.1773646461577;
+        Mon, 16 Mar 2026 00:34:21 -0700 (PDT)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64e65a3bedcsm5250551d50.1.2026.03.16.00.34.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 00:34:21 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH] selftests/bpf: restrict ns_current_pid_tgid updates to target task
+Date: Mon, 16 Mar 2026 15:34:09 +0800
+Message-ID: <20260316073409.4040-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260313150928.2637368-1-sashal@kernel.org> <20260314111822.63a2ba4a@kernel.org>
-In-Reply-To: <20260314111822.63a2ba4a@kernel.org>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Mon, 16 Mar 2026 08:05:53 +0100
-X-Gm-Features: AaiRm53tuutFjpddzDm8MgJQk_X6I9zzb6Uz-8-_BFX3BICSXZm9HxgKcE0xoPQ
-Message-ID: <CACT4Y+arWePyxnV3hWk5RanWZpoc7=ALQ6DV_2MCuQkNoTtJUw@mail.gmail.com>
-Subject: Re: [PATCH 0/9] Kernel API Specification Framework
-To: Jakub Kicinski <kuba@kernel.org>, syzkaller <syzkaller@googlegroups.com>
-Cc: Sasha Levin <sashal@kernel.org>, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, tools@kernel.org, 
-	x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>, 
-	Jake Edge <jake@lwn.net>, David Laight <david.laight.linux@gmail.com>, 
-	Askar Safin <safinaskar@zohomail.com>, Gabriele Paoloni <gpaoloni@redhat.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Sat, 14 Mar 2026 at 19:18, Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri, 13 Mar 2026 11:09:10 -0400 Sasha Levin wrote:
-> > This enables static analysis tools to verify userspace API usage at compile
-> > time, test generation based on formal specifications, consistent error handling
-> > validation, automated documentation generation, and formal verification of
-> > kernel interfaces.
->
-> Could you give some examples? We have machine readable descriptions for
-> Netlink interfaces, we approached syzbot folks and they did not really
-> seem to care for those.
+ns_current_pid_tgid uses a shared syscall tracepoint for
+current_pid_tgid tracepoint subtests. When selftests run in parallel,
+unrelated tasks can trigger the same hook and overwrite BSS results,
+causing false failures.
 
-I think our reasoning wrt syzkaller was that not all interfaces in all
-relevant kernels are described with netlink yml descriptions, so we
-need to continue using the extraction of interfaces from the source
-code. And if we have that code, then using yml as an additional data
-source only adds code/complexity. Additionally, we may extract some
-extra constraints/info from code that are not present in yml.
+Store the expected pid/tgid in BSS and update user_pid/user_tgid only
+when bpf_get_ns_current_pid_tgid() returns values matching the target
+task.
 
-Realistically system call descriptions may have the same problem for
-us at this point, since we extract lots of info from the source code
-already:
-https://raw.githubusercontent.com/google/syzkaller/refs/heads/master/sys/linux/auto.txt
-(and LLMs obviously can allow us to extract more)
+This prevents unrelated tasks from interfering with the test, allows
+dropping the serial-only restriction, and removes the obsolete TODO
+comment.
+
+Tested:
+  ./test_progs -t current_pid_tgid
+  ./test_progs -j$(nproc) -t current_pid_tgid
+
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+ .../testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c | 5 +++--
+ .../testing/selftests/bpf/progs/test_ns_current_pid_tgid.c | 7 +++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+index 99c953f2be21..e3938bb48151 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
++++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+@@ -34,6 +34,8 @@ static int get_pid_tgid(pid_t *pid, pid_t *tgid,
+ 	bss->ino = st.st_ino;
+ 	bss->user_pid = 0;
+ 	bss->user_tgid = 0;
++	bss->expected_pid = *pid;
++	bss->expected_tgid = *tgid;
+ 	return 0;
+ }
+ 
+@@ -200,8 +202,7 @@ static void test_ns_current_pid_tgid_new_ns(int (*fn)(void *), void *arg)
+ 		return;
+ }
+ 
+-/* TODO: use a different tracepoint */
+-void serial_test_current_pid_tgid(void)
++void test_current_pid_tgid(void)
+ {
+ 	if (test__start_subtest("root_ns_tp"))
+ 		test_current_pid_tgid_tp(NULL);
+diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
+index 386315afad65..d02c182a7100 100644
+--- a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
++++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
+@@ -14,6 +14,8 @@ struct {
+ 
+ __u64 user_pid = 0;
+ __u64 user_tgid = 0;
++__u64 expected_pid = 0;
++__u64 expected_tgid = 0;
+ __u64 dev = 0;
+ __u64 ino = 0;
+ 
+@@ -24,6 +26,11 @@ static void get_pid_tgid(void)
+ 	if (bpf_get_ns_current_pid_tgid(dev, ino, &nsdata, sizeof(struct bpf_pidns_info)))
+ 		return;
+ 
++	if (expected_pid && nsdata.pid != expected_pid)
++		return;
++	if (expected_tgid && nsdata.tgid != expected_tgid)
++		return;
++
+ 	user_pid = nsdata.pid;
+ 	user_tgid = nsdata.tgid;
+ }
+
+base-commit: f338e77383789c0cae23ca3d48adcc5e9e137e3c
+-- 
+2.43.0
+
