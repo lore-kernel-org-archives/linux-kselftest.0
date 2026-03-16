@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D9B370D55;
-	Mon, 16 Mar 2026 22:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D51B377575;
+	Mon, 16 Mar 2026 22:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773701114; cv=none; b=tlOkhG2I1mCFOv+YJiXUZ1V6GE1swYWYCyRC8LJ75ukrR2AvJEkzfFl3naX95Fz0W+ysufWZq18lfe9HFlm3u064E41xQgikwNQibkwkrOGdNO/sMC0yZtOSZ1F9snH943I5ibLwC6l4xQ5tHYUJC4mPGgb24N/vwof1ctp7g60=
+	t=1773701115; cv=none; b=gaGFtHJqX4vb6ejI9cyN+RHDXcCqyoqs6HEkzTYopBIzFL09LVIVdAPYHHbBUcdhym+5ubLSM14UWH2fg8lABStCWV5KkDx7DuklcW1d2koKu8vo/KtW3qKPE98/d/t/gxZzBrLwIyodeLuvroQBeHML7aZsGVpACoQRdYlQ7rI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773701114; c=relaxed/simple;
-	bh=C8i7l0DSbqE1tF4lx+Rsiu+cCgRxyKdIiVFUyi3jQDM=;
+	s=arc-20240116; t=1773701115; c=relaxed/simple;
+	bh=t9v+BbdiZEho5knByy3n74Ffc2Al8mUrBsfoi8IC98Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QwLSfp5DQerMnH3DXprXNn7uUb4MLvCGQBOQNKXCYTM/2wjaNvlvZmvTnOAWTlTXM7dS/2DI8tLL+jDZtYbKl9nNKjDUSNEhhcC3NMe5iQCL4hb5sPeSx8bF4c2Gi+SNQMZ4jE3oPemlRMibWBKD6d+e69UxTHCumHM4D8lzudc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tY6qKU6h; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=G1G/0nwZW2QOu1Wf6Kd2fz6sCW6ZBLuRGXbk7MwxxJiiFuAyjsjCGRc2a1QoId7HI22+AajCIDVkNZ77/wJTltZRPmJTWStm/8fVZ5GG9oalXkP/k9ifh3QUkb13AGa+zHpJYiXpXZkYUml9HOQh6QLeKemnuY6Toid95X2zKok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pKANsSlr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tY6qKU6h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8DE5C2BCB1;
-	Mon, 16 Mar 2026 22:45:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pKANsSlr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62292C2BCAF;
+	Mon, 16 Mar 2026 22:45:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1773701114;
-	bh=C8i7l0DSbqE1tF4lx+Rsiu+cCgRxyKdIiVFUyi3jQDM=;
+	bh=t9v+BbdiZEho5knByy3n74Ffc2Al8mUrBsfoi8IC98Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tY6qKU6hBBfj7mI0SXSZu4yI4wHxA7htPsnam277P907l9/eKTcwW4Ksl4W45yEzT
-	 WA+HI4epwJSOtOcFpNJYbHJnlQjHwpxwnR3zcXDt/bRzzMSdVzT2vpT4WdAQ7+qQtX
-	 HrPH/S4o5rbCpyEpql+CvMHOq2pLf///+eKwmZuvABTUTnv383PlhBQiY188U6Rzz6
-	 /LUQ6FISP6h8gK5mJK1eYuGND73EMb6k3spTSocXzbdTx5yoNgo1uTemBuZvJIbyyh
-	 pzoPAkl+qwr9uLA5EuAyloLYj+VOhEJhiWHi2IPI5wWRbCQPfsy7FrEygAB9zjIM3o
-	 5AF1bikec8ZLQ==
+	b=pKANsSlr05UQ5VnnUKsu72/p70V9RXLhcZisOSbM5JncaUrn6G/X4QeVkRn5u3Qwz
+	 zMWL4vZ5H0B7Xqtd0a7xDzfpe+AhKcZnIL9eAmuHKAWRDgxeBnPtAlutglVIx5jvbX
+	 fv+IPx7schsDlcDMK/1/zk7th23xa++uzUwRp92fQT5qsagH41AeAIpivYL4QkLu6E
+	 hkuqtnRsMWpPPguAR6m0mE1JlI6DJkf7u6QQPGmeJATF/s3rKP/fTmGLb1YnQdFbwH
+	 dqC8LBmDm1AvnHG6kizQqxe5eBb2McdPchu2r3xIETrRA5YJcW5uhWg2pNNefSx2W7
+	 SSw2FcfkQv7IA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -40,9 +40,9 @@ Cc: netdev@vger.kernel.org,
 	dw@davidwei.uk,
 	mst@redhat.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v3 2/6] selftests: drv-net: give HW stats sync time extra 25% of margin
-Date: Mon, 16 Mar 2026 15:45:01 -0700
-Message-ID: <20260316224505.279672-3-kuba@kernel.org>
+Subject: [PATCH net-next v3 3/6] selftests: drv-net: gro: use SO_TXTIME to schedule packets together
+Date: Mon, 16 Mar 2026 15:45:02 -0700
+Message-ID: <20260316224505.279672-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260316224505.279672-1-kuba@kernel.org>
 References: <20260316224505.279672-1-kuba@kernel.org>
@@ -54,36 +54,138 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There are transient failures for devices which update stats
-periodically, especially if it's the FW DMA'ing the stats
-rather than host periodic work querying the FW. Wait 25%
-longer than strictly necessary.
+Longer packet sequence tests are quite flaky when the test is run
+over a real network. Try to avoid at least the jitter on the sender
+side by scheduling all the packets to be sent at once using SO_TXTIME.
+Use hardcoded tx time of 5msec in the future. In my test increasing
+this time past 2msec makes no difference so 5msec is plenty of margin.
+Since we now expect more output buffering make sure to raise SNDBUF.
 
-For devices which don't report stats-block-usecs we retain
-25 msec as the default wait time (0.025sec == 20,000usec * 1.25).
+Note that this is an opportunistic reliability improvement which
+will only work if the qdisc can schedule Tx time for us (fq).
+Fiddling with qdisc config was deemed too complex, so it's not
+part of the patch.
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
 Reviewed-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Petr Machata <petrm@nvidia.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/drivers/net/lib/py/env.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v3:
+ - update the commit msg
+v2: https://lore.kernel.org/20260207003509.3927744-7-kuba@kernel.org
+ - only enable TXTIME when we are sending a single flow
+v1: https://lore.kernel.org/20260205220541.2992807-7-kuba@kernel.org
+---
+ tools/testing/selftests/net/lib/gro.c | 57 +++++++++++++++++++++++++--
+ 1 file changed, 54 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index ccff345fe1c1..6a71c7e7f136 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -288,8 +288,8 @@ from . import bpftool, RtnlFamily, Netlink
-                 if "Operation not supported" not in e.cmd.stderr:
-                     raise
+diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
+index 02e29509fbea..5b3f8fca08e6 100644
+--- a/tools/testing/selftests/net/lib/gro.c
++++ b/tools/testing/selftests/net/lib/gro.c
+@@ -63,6 +63,7 @@
+ #include <linux/filter.h>
+ #include <linux/if_packet.h>
+ #include <linux/ipv6.h>
++#include <linux/net_tstamp.h>
+ #include <net/ethernet.h>
+ #include <net/if.h>
+ #include <netinet/in.h>
+@@ -74,6 +75,7 @@
+ #include <stdio.h>
+ #include <stdarg.h>
+ #include <string.h>
++#include <time.h>
+ #include <unistd.h>
  
--            self._stats_settle_time = 0.025 + \
--                data.get('stats-block-usecs', 0) / 1000 / 1000
-+            self._stats_settle_time = \
-+                1.25 * data.get('stats-block-usecs', 20000) / 1000 / 1000
+ #include "kselftest.h"
+@@ -123,6 +125,9 @@ static int tcp_offset = -1;
+ static int total_hdr_len = -1;
+ static int ethhdr_proto = -1;
+ static bool ipip;
++static uint64_t txtime_ns;
++
++#define TXTIME_DELAY_MS 5
  
-         time.sleep(self._stats_settle_time)
+ static void vlog(const char *fmt, ...)
+ {
+@@ -330,13 +335,37 @@ static void fill_transportlayer(void *buf, int seq_offset, int ack_offset,
  
+ static void write_packet(int fd, char *buf, int len, struct sockaddr_ll *daddr)
+ {
++	char control[CMSG_SPACE(sizeof(uint64_t))];
++	struct msghdr msg = {};
++	struct iovec iov = {};
++	struct cmsghdr *cm;
+ 	int ret = -1;
+ 
+-	ret = sendto(fd, buf, len, 0, (struct sockaddr *)daddr, sizeof(*daddr));
++	iov.iov_base = buf;
++	iov.iov_len = len;
++
++	msg.msg_iov = &iov;
++	msg.msg_iovlen = 1;
++	msg.msg_name = daddr;
++	msg.msg_namelen = sizeof(*daddr);
++
++	if (txtime_ns) {
++		memset(control, 0, sizeof(control));
++		msg.msg_control = control;
++		msg.msg_controllen = sizeof(control);
++
++		cm = CMSG_FIRSTHDR(&msg);
++		cm->cmsg_level = SOL_SOCKET;
++		cm->cmsg_type = SCM_TXTIME;
++		cm->cmsg_len = CMSG_LEN(sizeof(uint64_t));
++		memcpy(CMSG_DATA(cm), &txtime_ns, sizeof(txtime_ns));
++	}
++
++	ret = sendmsg(fd, &msg, 0);
+ 	if (ret == -1)
+-		error(1, errno, "sendto failure");
++		error(1, errno, "sendmsg failure");
+ 	if (ret != len)
+-		error(1, errno, "sendto wrong length");
++		error(1, 0, "sendmsg wrong length: %d vs %d", ret, len);
+ }
+ 
+ static void create_packet(void *buf, int seq_offset, int ack_offset,
+@@ -1058,6 +1087,7 @@ static void check_recv_pkts(int fd, int *correct_payload,
+ 
+ static void gro_sender(void)
+ {
++	int bufsize = 4 * 1024 * 1024; /* 4 MB */
+ 	const int fin_delay_us = 100 * 1000;
+ 	static char fin_pkt[MAX_HDR_LEN];
+ 	struct sockaddr_ll daddr = {};
+@@ -1067,6 +1097,27 @@ static void gro_sender(void)
+ 	if (txfd < 0)
+ 		error(1, errno, "socket creation");
+ 
++	if (setsockopt(txfd, SOL_SOCKET, SO_SNDBUF, &bufsize, sizeof(bufsize)))
++		error(1, errno, "cannot set sndbuf size, setsockopt failed");
++
++	/* Enable SO_TXTIME unless test case generates more than one flow
++	 * SO_TXTIME could result in qdisc layer sorting the packets at sender.
++	 */
++	if (true) {
++		struct sock_txtime so_txtime = { .clockid = CLOCK_MONOTONIC, };
++		struct timespec ts;
++
++		if (setsockopt(txfd, SOL_SOCKET, SO_TXTIME,
++			       &so_txtime, sizeof(so_txtime)))
++			error(1, errno, "setsockopt SO_TXTIME");
++
++		if (clock_gettime(CLOCK_MONOTONIC, &ts))
++			error(1, errno, "clock_gettime");
++
++		txtime_ns = ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++		txtime_ns += TXTIME_DELAY_MS * 1000000ULL;
++	}
++
+ 	memset(&daddr, 0, sizeof(daddr));
+ 	daddr.sll_ifindex = if_nametoindex(ifname);
+ 	if (daddr.sll_ifindex == 0)
 -- 
 2.53.0
 
