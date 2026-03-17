@@ -1,239 +1,277 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F91D331A5E
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 09:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4200359A9C;
+	Tue, 17 Mar 2026 09:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773738028; cv=none; b=P/p3RhXJCbNTxtRiYHh+sEzWACD70q8wEEMO3uAksONdiyOHAOJ51LVhdwS9wzi8Z78ytg/L98nmIfNiMR5A/GB5IXycpAmT2Nm/YyJr33qQR6PDAhsqKdW03AQe1MUyEOex9vYaVotW/CKEIjbwZfNIrunetS4Ab5KjyfXdlo8=
+	t=1773738977; cv=none; b=WJpufrHpLX8A+4DDEwg0739ACPma3ZWTRqlLMuvF3otKW5GrlTsZM3/fOgswgSpTa8RhztQV99D2cw+sWgAFK5Ss0n8dhZRQt95yT50nPCFn4DHmZ5vBfa6jmZ7ye5bHbceTZO4+Ythpo2j+nzauYsBOL0pM1gG1lPOW4fkTyxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773738028; c=relaxed/simple;
-	bh=VG9d8PQEQrMfuIF7UGzCQD8kj7dSnfgOISNY/i2xpf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KYezwVeBAKSAYJCg5YEdmCe91Gu+ft3i2J4Qw5RCfIRRfkTcIukO8D7+QdOdBrq5PDKqKHnD7l9XjnNxhNOXPhazthBsGaggYs7z9YnjHTmoUlbqeipmjC2XQYKrQ0ilyrW3K8KXdv+Y22Nd/1UnsdaCpKt1UBmgrdZ2EGvIJ+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FOGNxoWT; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FOGNxoWT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773738026;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LfW4PQO+j4EnEpboaPKhMu3WfMztmYGSmgtjCkFC7Vk=;
-	b=FOGNxoWTuqgo60doXp25y2eVxodVuTBi0LAXOM2doTVFtGKrXIAEjY68WjoAx2ILq/Re9M
-	YfJlRdxQGCCQ7i+si2kmlRhJMY/EEaQvyJw94ceEbvFSlcujyCQUpXNUpEuTjA8FwsvxJb
-	CPwLgmig3whIoHSxQdXhcVKKcdD5jFM=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-490-x904NKE3O2OvpD80PB_H_g-1; Tue,
- 17 Mar 2026 05:00:21 -0400
-X-MC-Unique: x904NKE3O2OvpD80PB_H_g-1
-X-Mimecast-MFC-AGG-ID: x904NKE3O2OvpD80PB_H_g_1773738018
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 30E0C18005B3;
-	Tue, 17 Mar 2026 09:00:17 +0000 (UTC)
-Received: from gmail.com (unknown [10.72.112.28])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2E6D41800576;
-	Tue, 17 Mar 2026 09:00:07 +0000 (UTC)
-Date: Tue, 17 Mar 2026 17:00:03 +0800
-From: Chunyu Hu <chuhu@redhat.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
-	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
-	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-	baohua@kernel.org, lance.yang@linux.dev
-Subject: Re: [PATCH v2 3/5] selftests/mm: move write_file helper to vm_util
-Message-ID: <abkYE-tUzy6cz_kH@gmail.com>
-References: <20260316044335.1390608-1-chuhu@redhat.com>
- <20260316044335.1390608-4-chuhu@redhat.com>
- <abekn9aBMw1e1Rw1@kernel.org>
+	s=arc-20240116; t=1773738977; c=relaxed/simple;
+	bh=gdRJterNtiWXE2lPMotbl3vIjLd4ExsZMRTrBxRHj8Q=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:From:To:Cc:
+	 References:In-Reply-To; b=o7KOCp7VOQPpXgmsccHSB4hxCOPA/3BZLd2dyoTvUODtZ9qO8IIhMagtFOt6cM+610C8AzowNmBem9SeFf+ohiBnc+1eMDQEQmfGzjFl/8SS/jhEsX3KNkcdOUpDzhyeJJ1I2jEiLIfPNY/2qbMJuJwSXLDQ45zBf3xHjzFFRQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F70D1476;
+	Tue, 17 Mar 2026 02:16:06 -0700 (PDT)
+Received: from [10.1.36.21] (e127648.arm.com [10.1.36.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9D8B3F778;
+	Tue, 17 Mar 2026 02:16:07 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------pcQpEH5wFrr6igGq0AtOzsXK"
+Message-ID: <718b1c2f-d1ee-46bf-9c0a-87f601a3f394@arm.com>
+Date: Tue, 17 Mar 2026 09:15:59 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abekn9aBMw1e1Rw1@kernel.org>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] sched_ext: Prevent SCX_KICK_WAIT deadlock by
+ serialization
+From: Christian Loehle <christian.loehle@arm.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, void@manifault.com, arighi@nvidia.com,
+ changwoo@igalia.com, mingo@redhat.com, peterz@infradead.org,
+ shuah@kernel.org, dietmar.eggemann@arm.com
+References: <20260316100249.1651641-1-christian.loehle@arm.com>
+ <20260316100249.1651641-2-christian.loehle@arm.com>
+ <abhB4bCsvd9WDxid@slm.duckdns.org>
+ <d0d1d1fa-7ba3-456d-b2a9-cc3f550e2cf1@arm.com>
+ <31280e71-3924-43dd-8dbb-494cb7a3e988@arm.com>
+Content-Language: en-US
+In-Reply-To: <31280e71-3924-43dd-8dbb-494cb7a3e988@arm.com>
 
-On Mon, Mar 16, 2026 at 08:35:11AM +0200, Mike Rapoport wrote:
-> On Mon, Mar 16, 2026 at 12:43:33PM +0800, Chunyu Hu wrote:
-> > thp_settings provides write_file() helper for safely writing to a file and
-> > exit when write failure happens. It's a very low level helper and many sub
-> > tests need such a helper, not only thp tests.
-> > 
-> > split_huge_page_test also defines a write_file locally. The two have minior
-> > differences in return type and used exit api. And there would be conflicts
-> > if split_huge_page_test wanted to include thp_settings.h because of
-> > different prototype, making it less convenient.
-> > 
-> > It's possisble to merge the two, although some tests don't use the
-> > kselftest infrastrucutre for testing. It would also work when using the
-> > ksft_exit_msg() to exit in my test, as the counters are all zero. Output
-> > will be like:
-> > 
-> >   TAP version 13
-> >   1..62
-> >   Bail out! /proc/sys/vm/drop_caches1 open failed: No such file or directory
-> >   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > 
-> > So here just leave one version of write_file, and move it into the vm_util.
-> > This make it easy to maitain and user could just include one vm_util.h when
-> > then don't need thp setting helpers. Keep the prototype of returning the
-> > written bytes num.
-> > 
-> > Suggested-by: Mike Rapoport <rppt@kernel.org>
-> > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
-> > ---
-> > Changes in v2:
-> >   new patch from v2
-> > ---
-> >  .../selftests/mm/split_huge_page_test.c       | 15 ------------
-> >  tools/testing/selftests/mm/thp_settings.c     | 24 +------------------
-> >  tools/testing/selftests/mm/thp_settings.h     |  1 -
-> >  tools/testing/selftests/mm/vm_util.c          | 16 +++++++++++++
-> >  tools/testing/selftests/mm/vm_util.h          |  2 ++
-> >  5 files changed, 19 insertions(+), 39 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> > index e0167111bdd1..93f205327b84 100644
-> > --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> > +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> > @@ -255,21 +255,6 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
-> >  	return status;
-> >  }
-> >  
-> > -static void write_file(const char *path, const char *buf, size_t buflen)
-> > -{
-> > -	int fd;
-> > -	ssize_t numwritten;
-> > -
-> > -	fd = open(path, O_WRONLY);
-> > -	if (fd == -1)
-> > -		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-> > -
-> > -	numwritten = write(fd, buf, buflen - 1);
-> > -	close(fd);
-> > -	if (numwritten < 1)
-> > -		ksft_exit_fail_msg("Write failed\n");
-> > -}
-> > -
-> >  static void write_debugfs(const char *fmt, ...)
-> >  {
-> >  	char input[INPUT_MAX];
-> > diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
-> > index 574bd0f8ae48..02de28ecf31a 100644
-> > --- a/tools/testing/selftests/mm/thp_settings.c
-> > +++ b/tools/testing/selftests/mm/thp_settings.c
-> > @@ -6,6 +6,7 @@
-> >  #include <string.h>
-> >  #include <unistd.h>
-> >  
-> > +#include "vm_util.h"
-> >  #include "thp_settings.h"
-> >  
-> >  #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
-> > @@ -64,29 +65,6 @@ int read_file(const char *path, char *buf, size_t buflen)
-> >  	return (unsigned int) numread;
-> >  }
-> >  
-> > -int write_file(const char *path, const char *buf, size_t buflen)
-> > -{
-> > -	int fd;
-> > -	ssize_t numwritten;
-> > -
-> > -	fd = open(path, O_WRONLY);
-> > -	if (fd == -1) {
-> > -		printf("open(%s)\n", path);
-> > -		exit(EXIT_FAILURE);
-> > -		return 0;
-> > -	}
-> > -
-> > -	numwritten = write(fd, buf, buflen - 1);
-> > -	close(fd);
-> > -	if (numwritten < 1) {
-> > -		printf("write(%s)\n", buf);
-> > -		exit(EXIT_FAILURE);
-> > -		return 0;
-> > -	}
-> > -
-> > -	return (unsigned int) numwritten;
-> > -}
-> > -
-> >  unsigned long read_num(const char *path)
-> >  {
-> >  	char buf[21];
-> > diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
-> > index 76eeb712e5f1..7748a9009191 100644
-> > --- a/tools/testing/selftests/mm/thp_settings.h
-> > +++ b/tools/testing/selftests/mm/thp_settings.h
-> > @@ -63,7 +63,6 @@ struct thp_settings {
-> >  };
-> >  
-> >  int read_file(const char *path, char *buf, size_t buflen);
-> > -int write_file(const char *path, const char *buf, size_t buflen);
-> >  unsigned long read_num(const char *path);
-> >  void write_num(const char *path, unsigned long num);
-> >  
-> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> > index a6d4ff7dfdc0..b4b3b48f8dc9 100644
-> > --- a/tools/testing/selftests/mm/vm_util.c
-> > +++ b/tools/testing/selftests/mm/vm_util.c
-> > @@ -764,3 +764,19 @@ int unpoison_memory(unsigned long pfn)
-> >  
-> >  	return ret > 0 ? 0 : -errno;
-> >  }
-> > +
-> > +unsigned int write_file(const char *path, const char *buf, size_t buflen)
-> > +{
-> > +	int fd;
-> > +	ssize_t numwritten;
-> > +
-> > +	fd = open(path, O_WRONLY);
-> > +	if (fd == -1)
-> > +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-> > +
-> > +	numwritten = write(fd, buf, buflen - 1);
-> > +	close(fd);
-> > +	if (numwritten < 1)
-> > +		ksft_exit_fail_msg("Write failed\n");
-> > +	return (unsigned int) numwritten;
-> 
-> If we exit on any failure, the function can be void just like in
-> split_huge_page_test.c. This will also simplify write_num() and read_num()
-> in thp_settigns.c
+This is a multi-part message in MIME format.
+--------------pcQpEH5wFrr6igGq0AtOzsXK
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Good point. I will change it to void. I wont touch read_file() here.
+On 3/17/26 08:23, Christian Loehle wrote:
+> On 3/16/26 22:26, Christian Loehle wrote:
+>> On 3/16/26 17:46, Tejun Heo wrote:
+>>> Hello,
+>>>
+>>> On Mon, Mar 16, 2026 at 10:02:48AM +0000, Christian Loehle wrote:
+>>>> @@ -5686,11 +5718,20 @@ static void kick_cpus_irq_workfn(struct irq_work *irq_work)
+>>>>  		 * task is picked subsequently. The latter is necessary to break
+>>>>  		 * the wait when $cpu is taken by a higher sched class.
+>>>>  		 */
+>>>> -		if (cpu != cpu_of(this_rq))
+>>>> +		if (cpu != this_cpu)
+>>>>  			smp_cond_load_acquire(wait_kick_sync, VAL != ksyncs[cpu]);
+>>>
+>>> Given that irq_work is executed at the end of IRQ handling, we can just
+>>> reschedule the irq work when the condition is not met (or separate that out
+>>> into its own irq_work). That way, I think we can avoid the global lock.
+>>>
+>> I'll go poke at it some more, but I think it's not guaranteed that B actually
+>> advances kick_sync if A keeps kicking. At least not if the handling is in HARD irqwork?
+>> Or what would the separated out irq work do differently?
+> 
+> So in my particular example I do the SCX_KICK_WAIT in ops.enqueue(), which is fair, but
+> I don't think we can delay calling that until we've advanced our local kick_sync and if we
+> don't we end up in the deadlock, even if e.g. we separate out the retry (and make that lazy),
+> because then the local CPU is able to continuously issue new kicks (which will have to
+> be handled by the non-retry path) without advancing it's own kick_sync.
+> The closest thing to that I can get working is separating out the SCX_KICK_WAIT entirely and
+> make that lazy. In practice though that would realistically make the SCX_KICK_WAIT latency
+> most likely a lot higher than with the global lock, is that what you had in mind?
+> Or am I missing something here?
 
-> 
-> > +}
-> > diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> > index e9c4e24769c1..22c8805e0d7a 100644
-> > --- a/tools/testing/selftests/mm/vm_util.h
-> > +++ b/tools/testing/selftests/mm/vm_util.h
-> > @@ -166,3 +166,5 @@ int unpoison_memory(unsigned long pfn);
-> >  
-> >  #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
-> >  #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
-> > +
-> > +unsigned int write_file(const char *path, const char *buf, size_t buflen);
-> > -- 
-> > 2.53.0
-> > 
-> 
-> -- 
-> Sincerely yours,
-> Mike.
-> 
+Something like the attached, for completeness
+--------------pcQpEH5wFrr6igGq0AtOzsXK
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-sched_ext-Prevent-SCX_KICK_WAIT-deadlocks-with-lazy-.patch"
+Content-Disposition: attachment;
+ filename*0="0001-sched_ext-Prevent-SCX_KICK_WAIT-deadlocks-with-lazy-.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
 
+RnJvbSBjMmU4ODJiNGM1NDY4MGE1N2JjMDgxN2IzYzk4MTlmZjVmM2JiZDIxIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gTG9laGxlIDxjaHJpc3RpYW4ubG9l
+aGxlQGFybS5jb20+CkRhdGU6IFR1ZSwgMTcgTWFyIDIwMjYgMDk6MDc6NDkgKzAwMDAKU3Vi
+amVjdDogW1BBVENIIDEvMl0gc2NoZWRfZXh0OiBQcmV2ZW50IFNDWF9LSUNLX1dBSVQgZGVh
+ZGxvY2tzIHdpdGggbGF6eSBpcnFfd29yawoKU0NYX0tJQ0tfV0FJVCB3YWl0cyBmb3IgdGhl
+IHRhcmdldCBDUFUncyBraWNrX3N5bmMgdG8gY2hhbmdlIGFmdGVyCnJlc2NoZWR1bGluZyBp
+dC4gSWYgbXVsdGlwbGUgQ1BVcyBmb3JtIGEgd2FpdCBjeWNsZSBjb25jdXJyZW50bHksCmUu
+Zy4gQSB3YWl0cyBmb3IgQiwgQiBmb3IgQyBhbmQgQyBmb3IgQSwgYW5kIHRoZSB3YWl0IHJ1
+bnMgZnJvbQpoYXJkIGlycV93b3JrLCBlYWNoIENQVSBjYW4gZW5kIHVwIHNwaW5uaW5nIGlu
+IGlycSBjb250ZXh0IHdhaXRpbmcKZm9yIGFub3RoZXIgQ1BVIHdoaWNoIGNhbm5vdCByZXNj
+aGVkdWxlLiBObyBraWNrX3N5bmMgYWR2YW5jZXMgYW5kCnRoZSBzeXN0ZW0gZGVhZGxvY2tz
+LgoKRGVmZXJyaW5nIG9ubHkgdGhlIHJldHJ5IHBhdGggaXMgbm90IGVub3VnaC4gU0NYX0tJ
+Q0tfV0FJVCBjYW4gYmUKaXNzdWVkIGZyb20gb3BzLmVucXVldWUoKSwgc28gYSBDUFUgY2Fu
+IGtlZXAgYXJtaW5nIGZyZXNoIHdhaXRzIGJlZm9yZQppdCBnb2VzIHRocm91Z2ggYW5vdGhl
+ciBTQ1ggc2NoZWR1bGluZyBjeWNsZSBhbmQgYWR2YW5jZXMgaXRzIG93bgpraWNrX3N5bmMu
+IElmIHRoZSBpbml0aWFsIHdhaXQgaGFuZGxpbmcgc3RpbGwgcnVucyBvbiBoYXJkIGlycV93
+b3JrLAphIHdhaXQgY3ljbGUgY2FuIGtlZXAgcmVhcm1pbmcgd2l0aG91dCBtYWtpbmcgcHJv
+Z3Jlc3MuCgpTcGxpdCB0aGUga2ljayBwYXRocyBpbnN0ZWFkLiBLZWVwIG5vcm1hbCBhbmQg
+aWRsZSBraWNrcyBvbiB0aGUKZXhpc3RpbmcgaGFyZCBpcnFfd29yayBzbyBwcm9tcHQgcmVz
+Y2hlZHVsaW5nIGJlaGF2aW9yIGlzIHVuY2hhbmdlZCwKYnV0IHJvdXRlIHRoZSBmdWxsIFND
+WF9LSUNLX1dBSVQgaGFuZGxpbmcgKGkuZS4gaW5pdGlhbCBraWNrLCBraWNrX3N5bmMKc25h
+cHNob3QgYW5kIHJldHJpZXMpIHRocm91Z2ggYSBkZWRpY2F0ZWQgbGF6eSBpcnFfd29yay4K
+VGhpcyBnaXZlcyB3YWl0IGN5Y2xlcyBhIGNvbnRleHQgdGhhdCBjYW4geWllbGQgYW5kIGJl
+IHJldHJpZ2dlcmVkCmluc3RlYWQgb2YgcGlubmluZyBhbGwgcGFydGljaXBhbnRzIGluIGhh
+cmQgaXJxIGNvbnRleHQsIGVsaW1pbmF0aW5nCnRoZSBkZWFkbG9jayB3aXRob3V0IHNlcmlh
+bGl6aW5nIHVucmVsYXRlZCBraWNrcyAoZS5nLiB0aHJvdWdoIGEgZ2xvYmFsCnNwaW5sb2Nr
+KS4KCkZpeGVzOiA5MGU1NTE2NGRhZDQgKCJzY2hlZF9leHQ6IEltcGxlbWVudCBTQ1hfS0lD
+S19XQUlUIikKU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIExvZWhsZSA8Y2hyaXN0aWFuLmxv
+ZWhsZUBhcm0uY29tPgotLS0KIGtlcm5lbC9zY2hlZC9leHQuYyAgIHwgMTMxICsrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0KIGtlcm5lbC9zY2hlZC9zY2hl
+ZC5oIHwgICAyICsKIDIgZmlsZXMgY2hhbmdlZCwgOTQgaW5zZXJ0aW9ucygrKSwgMzkgZGVs
+ZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEva2VybmVsL3NjaGVkL2V4dC5jIGIva2VybmVsL3Nj
+aGVkL2V4dC5jCmluZGV4IDI2YTZhYzJmODgyNi4uOGQxMzNjYzljNWY0IDEwMDY0NAotLS0g
+YS9rZXJuZWwvc2NoZWQvZXh0LmMKKysrIGIva2VybmVsL3NjaGVkL2V4dC5jCkBAIC00NzEz
+LDYgKzQ3MTMsOSBAQCBzdGF0aWMgdm9pZCBzY3hfZHVtcF9zdGF0ZShzdHJ1Y3Qgc2N4X2V4
+aXRfaW5mbyAqZWksIHNpemVfdCBkdW1wX2xlbikKIAkJaWYgKCFjcHVtYXNrX2VtcHR5KHJx
+LT5zY3guY3B1c190b193YWl0KSkKIAkJCWR1bXBfbGluZSgmbnMsICIgIGNwdXNfdG9fd2Fp
+dCAgIDogJSpwYiIsCiAJCQkJICBjcHVtYXNrX3ByX2FyZ3MocnEtPnNjeC5jcHVzX3RvX3dh
+aXQpKTsKKwkJaWYgKCFjcHVtYXNrX2VtcHR5KHJxLT5zY3guY3B1c190b193YWl0X2tpY2sp
+KQorCQkJZHVtcF9saW5lKCZucywgIiAgY3B1c190b193YWl0X2tpY2s6ICUqcGIiLAorCQkJ
+CSAgY3B1bWFza19wcl9hcmdzKHJxLT5zY3guY3B1c190b193YWl0X2tpY2spKTsKIAogCQl1
+c2VkID0gc2VxX2J1Zl91c2VkKCZucyk7CiAJCWlmIChTQ1hfSEFTX09QKHNjaCwgZHVtcF9j
+cHUpKSB7CkBAIC01NTgzLDEyICs1NTg2LDQzIEBAIHN0YXRpYyBib29sIGNhbl9za2lwX2lk
+bGVfa2ljayhzdHJ1Y3QgcnEgKnJxKQogCXJldHVybiAhaXNfaWRsZV90YXNrKHJxLT5jdXJy
+KSAmJiAhKHJxLT5zY3guZmxhZ3MgJiBTQ1hfUlFfSU5fQkFMQU5DRSk7CiB9CiAKLXN0YXRp
+YyBib29sIGtpY2tfb25lX2NwdShzMzIgY3B1LCBzdHJ1Y3QgcnEgKnRoaXNfcnEsIHVuc2ln
+bmVkIGxvbmcgKmtzeW5jcykKK3N0YXRpYyB2b2lkIGtpY2tfb25lX2NwdShzMzIgY3B1LCBz
+dHJ1Y3QgcnEgKnRoaXNfcnEpCit7CisJc3RydWN0IHJxICpycSA9IGNwdV9ycShjcHUpOwor
+CXN0cnVjdCBzY3hfcnEgKnRoaXNfc2N4ID0gJnRoaXNfcnEtPnNjeDsKKwljb25zdCBzdHJ1
+Y3Qgc2NoZWRfY2xhc3MgKmN1cl9jbGFzczsKKwl1bnNpZ25lZCBsb25nIGZsYWdzOworCisJ
+cmF3X3NwaW5fcnFfbG9ja19pcnFzYXZlKHJxLCBmbGFncyk7CisJY3VyX2NsYXNzID0gcnEt
+PmN1cnItPnNjaGVkX2NsYXNzOworCisJLyoKKwkgKiBEdXJpbmcgQ1BVIGhvdHBsdWcsIGEg
+Q1BVIG1heSBkZXBlbmQgb24ga2lja2luZyBpdHNlbGYgdG8gbWFrZQorCSAqIGZvcndhcmQg
+cHJvZ3Jlc3MuIEFsbG93IGtpY2tpbmcgc2VsZiByZWdhcmRsZXNzIG9mIG9ubGluZSBzdGF0
+ZS4gSWYKKwkgKiBAY3B1IGlzIHJ1bm5pbmcgYSBoaWdoZXIgY2xhc3MgdGFzaywgd2UgaGF2
+ZSBubyBjb250cm9sIG92ZXIgQGNwdS4KKwkgKiBTa2lwIGtpY2tpbmcuCisJICovCisJaWYg
+KChjcHVfb25saW5lKGNwdSkgfHwgY3B1ID09IGNwdV9vZih0aGlzX3JxKSkgJiYKKwkgICAg
+IXNjaGVkX2NsYXNzX2Fib3ZlKGN1cl9jbGFzcywgJmV4dF9zY2hlZF9jbGFzcykpIHsKKwkJ
+aWYgKGNwdW1hc2tfdGVzdF9jcHUoY3B1LCB0aGlzX3NjeC0+Y3B1c190b19wcmVlbXB0KSkg
+eworCQkJaWYgKGN1cl9jbGFzcyA9PSAmZXh0X3NjaGVkX2NsYXNzKQorCQkJCXJxLT5jdXJy
+LT5zY3guc2xpY2UgPSAwOworCQkJY3B1bWFza19jbGVhcl9jcHUoY3B1LCB0aGlzX3NjeC0+
+Y3B1c190b19wcmVlbXB0KTsKKwkJfQorCisJCXJlc2NoZWRfY3VycihycSk7CisJfSBlbHNl
+IHsKKwkJY3B1bWFza19jbGVhcl9jcHUoY3B1LCB0aGlzX3NjeC0+Y3B1c190b19wcmVlbXB0
+KTsKKwl9CisKKwlyYXdfc3Bpbl9ycV91bmxvY2tfaXJxcmVzdG9yZShycSwgZmxhZ3MpOwor
+fQorCitzdGF0aWMgdm9pZCBraWNrX29uZV9jcHVfd2FpdChzMzIgY3B1LCBzdHJ1Y3QgcnEg
+KnRoaXNfcnEsIHVuc2lnbmVkIGxvbmcgKmtzeW5jcykKIHsKIAlzdHJ1Y3QgcnEgKnJxID0g
+Y3B1X3JxKGNwdSk7CiAJc3RydWN0IHNjeF9ycSAqdGhpc19zY3ggPSAmdGhpc19ycS0+c2N4
+OwogCWNvbnN0IHN0cnVjdCBzY2hlZF9jbGFzcyAqY3VyX2NsYXNzOwotCWJvb2wgc2hvdWxk
+X3dhaXQgPSBmYWxzZTsKIAl1bnNpZ25lZCBsb25nIGZsYWdzOwogCiAJcmF3X3NwaW5fcnFf
+bG9ja19pcnFzYXZlKHJxLCBmbGFncyk7CkBAIC01NjA5LDEyICs1NjQzLDEwIEBAIHN0YXRp
+YyBib29sIGtpY2tfb25lX2NwdShzMzIgY3B1LCBzdHJ1Y3QgcnEgKnRoaXNfcnEsIHVuc2ln
+bmVkIGxvbmcgKmtzeW5jcykKIAkJfQogCiAJCWlmIChjcHVtYXNrX3Rlc3RfY3B1KGNwdSwg
+dGhpc19zY3gtPmNwdXNfdG9fd2FpdCkpIHsKLQkJCWlmIChjdXJfY2xhc3MgPT0gJmV4dF9z
+Y2hlZF9jbGFzcykgeworCQkJaWYgKGN1cl9jbGFzcyA9PSAmZXh0X3NjaGVkX2NsYXNzKQog
+CQkJCWtzeW5jc1tjcHVdID0gcnEtPnNjeC5raWNrX3N5bmM7Ci0JCQkJc2hvdWxkX3dhaXQg
+PSB0cnVlOwotCQkJfSBlbHNlIHsKKwkJCWVsc2UKIAkJCQljcHVtYXNrX2NsZWFyX2NwdShj
+cHUsIHRoaXNfc2N4LT5jcHVzX3RvX3dhaXQpOwotCQkJfQogCQl9CiAKIAkJcmVzY2hlZF9j
+dXJyKHJxKTsKQEAgLTU2MjQsOCArNTY1Niw2IEBAIHN0YXRpYyBib29sIGtpY2tfb25lX2Nw
+dShzMzIgY3B1LCBzdHJ1Y3QgcnEgKnRoaXNfcnEsIHVuc2lnbmVkIGxvbmcgKmtzeW5jcykK
+IAl9CiAKIAlyYXdfc3Bpbl9ycV91bmxvY2tfaXJxcmVzdG9yZShycSwgZmxhZ3MpOwotCi0J
+cmV0dXJuIHNob3VsZF93YWl0OwogfQogCiBzdGF0aWMgdm9pZCBraWNrX29uZV9jcHVfaWZf
+aWRsZShzMzIgY3B1LCBzdHJ1Y3QgcnEgKnRoaXNfcnEpCkBAIC01NjQ2LDIwICs1Njc2LDEw
+IEBAIHN0YXRpYyB2b2lkIGtpY2tfY3B1c19pcnFfd29ya2ZuKHN0cnVjdCBpcnFfd29yayAq
+aXJxX3dvcmspCiB7CiAJc3RydWN0IHJxICp0aGlzX3JxID0gdGhpc19ycSgpOwogCXN0cnVj
+dCBzY3hfcnEgKnRoaXNfc2N4ID0gJnRoaXNfcnEtPnNjeDsKLQlzdHJ1Y3Qgc2N4X2tpY2tf
+c3luY3MgX19yY3UgKmtzeW5jc19wY3B1ID0gX190aGlzX2NwdV9yZWFkKHNjeF9raWNrX3N5
+bmNzKTsKLQlib29sIHNob3VsZF93YWl0ID0gZmFsc2U7Ci0JdW5zaWduZWQgbG9uZyAqa3N5
+bmNzOwogCXMzMiBjcHU7CiAKLQlpZiAodW5saWtlbHkoIWtzeW5jc19wY3B1KSkgewotCQlw
+cl93YXJuX29uY2UoImtpY2tfY3B1c19pcnFfd29ya2ZuKCkgY2FsbGVkIHdpdGggTlVMTCBz
+Y3hfa2lja19zeW5jcyIpOwotCQlyZXR1cm47Ci0JfQotCi0Ja3N5bmNzID0gcmN1X2RlcmVm
+ZXJlbmNlX2JoKGtzeW5jc19wY3B1KS0+c3luY3M7Ci0KIAlmb3JfZWFjaF9jcHUoY3B1LCB0
+aGlzX3NjeC0+Y3B1c190b19raWNrKSB7Ci0JCXNob3VsZF93YWl0IHw9IGtpY2tfb25lX2Nw
+dShjcHUsIHRoaXNfcnEsIGtzeW5jcyk7CisJCWtpY2tfb25lX2NwdShjcHUsIHRoaXNfcnEp
+OwogCQljcHVtYXNrX2NsZWFyX2NwdShjcHUsIHRoaXNfc2N4LT5jcHVzX3RvX2tpY2spOwog
+CQljcHVtYXNrX2NsZWFyX2NwdShjcHUsIHRoaXNfc2N4LT5jcHVzX3RvX2tpY2tfaWZfaWRs
+ZSk7CiAJfQpAQCAtNTY2OCwyOSArNTY4OCw1MSBAQCBzdGF0aWMgdm9pZCBraWNrX2NwdXNf
+aXJxX3dvcmtmbihzdHJ1Y3QgaXJxX3dvcmsgKmlycV93b3JrKQogCQlraWNrX29uZV9jcHVf
+aWZfaWRsZShjcHUsIHRoaXNfcnEpOwogCQljcHVtYXNrX2NsZWFyX2NwdShjcHUsIHRoaXNf
+c2N4LT5jcHVzX3RvX2tpY2tfaWZfaWRsZSk7CiAJfQorfQogCi0JaWYgKCFzaG91bGRfd2Fp
+dCkKK3N0YXRpYyB2b2lkIGtpY2tfd2FpdF9pcnFfd29ya2ZuKHN0cnVjdCBpcnFfd29yayAq
+aXJxX3dvcmspCit7CisJc3RydWN0IHJxICp0aGlzX3JxID0gdGhpc19ycSgpOworCXN0cnVj
+dCBzY3hfcnEgKnRoaXNfc2N4ID0gJnRoaXNfcnEtPnNjeDsKKwlzdHJ1Y3Qgc2N4X2tpY2tf
+c3luY3MgX19yY3UgKmtzeW5jc19wY3B1ID0gX190aGlzX2NwdV9yZWFkKHNjeF9raWNrX3N5
+bmNzKTsKKwl1bnNpZ25lZCBsb25nICprc3luY3M7CisJczMyIHRoaXNfY3B1ID0gY3B1X29m
+KHRoaXNfcnEpOworCXMzMiBjcHU7CisKKwlpZiAodW5saWtlbHkoIWtzeW5jc19wY3B1KSkg
+eworCQlwcl93YXJuX29uY2UoImtpY2tfd2FpdF9pcnFfd29ya2ZuKCkgY2FsbGVkIHdpdGgg
+TlVMTCBzY3hfa2lja19zeW5jcyIpOwogCQlyZXR1cm47CisJfQorCisJa3N5bmNzID0gcmN1
+X2RlcmVmZXJlbmNlX2JoKGtzeW5jc19wY3B1KS0+c3luY3M7CisKKwlmb3JfZWFjaF9jcHUo
+Y3B1LCB0aGlzX3NjeC0+Y3B1c190b193YWl0X2tpY2spIHsKKwkJa2lja19vbmVfY3B1X3dh
+aXQoY3B1LCB0aGlzX3JxLCBrc3luY3MpOworCQljcHVtYXNrX2NsZWFyX2NwdShjcHUsIHRo
+aXNfc2N4LT5jcHVzX3RvX3dhaXRfa2ljayk7CisJfQogCiAJZm9yX2VhY2hfY3B1KGNwdSwg
+dGhpc19zY3gtPmNwdXNfdG9fd2FpdCkgewogCQl1bnNpZ25lZCBsb25nICp3YWl0X2tpY2tf
+c3luYyA9ICZjcHVfcnEoY3B1KS0+c2N4LmtpY2tfc3luYzsKIAogCQkvKgotCQkgKiBCdXN5
+LXdhaXQgdW50aWwgdGhlIHRhc2sgcnVubmluZyBhdCB0aGUgdGltZSBvZiBraWNraW5nIGlz
+IG5vCi0JCSAqIGxvbmdlciBydW5uaW5nLiBUaGlzIGNhbiBiZSB1c2VkIHRvIGltcGxlbWVu
+dCBlLmcuIGNvcmUKLQkJICogc2NoZWR1bGluZy4KKwkJICogQ2hlY2sgd2hldGhlciB0aGUg
+dGFyZ2V0IENQVSBoYXMgZ29uZSB0aHJvdWdoIGEgc2NoZWR1bGluZworCQkgKiBjeWNsZSBz
+aW5jZSBTQ1hfS0lDS19XQUlUIHdhcyBpc3N1ZWQgYnkgdGVzdGluZyBraWNrX3N5bmMuCisJ
+CSAqIElmIHRoZSBjb25kaXRpb24gaXMgYWxyZWFkeSBtZXQsIG9yIHRoaXMgQ1BVIGtpY2tl
+ZCBpdHNlbGYsCisJCSAqIGNsZWFyIGZyb20gdGhlIHdhaXQgbWFzay4gT3RoZXJ3aXNlIGxl
+YXZlIGl0IHNldCBhbmQKKwkJICogcmUtcXVldWUgYmVsb3c6IHdlIHlpZWxkIGFuZCByZXRy
+eSB3aXRob3V0IGV2ZXIgYmxvY2tpbmcsCisJCSAqIHdoaWNoIGVsaW1pbmF0ZXMgdGhlIHBv
+c3NpYmlsaXR5IG9mIGRlYWRsb2NrIHdoZW4gbXVsdGlwbGUKKwkJICogQ1BVcyBpc3N1ZSBT
+Q1hfS0lDS19XQUlUIHRhcmdldGluZyBlYWNoIG90aGVyIGluIGEgY3ljbGUuCiAJCSAqCi0J
+CSAqIHNtcF9jb25kX2xvYWRfYWNxdWlyZSgpIHBhaXJzIHdpdGggc3RvcmVfcmVsZWFzZXMg
+aW4KLQkJICogcGlja190YXNrX3NjeCgpIGFuZCBwdXRfcHJldl90YXNrX3NjeCgpLiBUaGUg
+Zm9ybWVyIGJyZWFrcwotCQkgKiB0aGUgd2FpdCBpZiBTQ1gncyBzY2hlZHVsaW5nIHBhdGgg
+aXMgZW50ZXJlZCBldmVuIGlmIHRoZSBzYW1lCi0JCSAqIHRhc2sgaXMgcGlja2VkIHN1YnNl
+cXVlbnRseS4gVGhlIGxhdHRlciBpcyBuZWNlc3NhcnkgdG8gYnJlYWsKLQkJICogdGhlIHdh
+aXQgd2hlbiAkY3B1IGlzIHRha2VuIGJ5IGEgaGlnaGVyIHNjaGVkIGNsYXNzLgorCQkgKiBz
+bXBfbG9hZF9hY3F1aXJlKCkgcGFpcnMgd2l0aCB0aGUgc21wX3N0b3JlX3JlbGVhc2UoKSBp
+bgorCQkgKiBwaWNrX3Rhc2tfc2N4KCkgYW5kIHB1dF9wcmV2X3Rhc2tfc2N4KCkuCiAJCSAq
+LwotCQlpZiAoY3B1ICE9IGNwdV9vZih0aGlzX3JxKSkKLQkJCXNtcF9jb25kX2xvYWRfYWNx
+dWlyZSh3YWl0X2tpY2tfc3luYywgVkFMICE9IGtzeW5jc1tjcHVdKTsKLQotCQljcHVtYXNr
+X2NsZWFyX2NwdShjcHUsIHRoaXNfc2N4LT5jcHVzX3RvX3dhaXQpOworCQlpZiAoY3B1ID09
+IHRoaXNfY3B1IHx8CisJCSAgICBzbXBfbG9hZF9hY3F1aXJlKHdhaXRfa2lja19zeW5jKSAh
+PSBrc3luY3NbY3B1XSkKKwkJCWNwdW1hc2tfY2xlYXJfY3B1KGNwdSwgdGhpc19zY3gtPmNw
+dXNfdG9fd2FpdCk7CiAJfQorCisJaWYgKCFjcHVtYXNrX2VtcHR5KHRoaXNfc2N4LT5jcHVz
+X3RvX3dhaXQpKQorCQlpcnFfd29ya19xdWV1ZSgmdGhpc19ycS0+c2N4LmtpY2tfd2FpdF9p
+cnFfd29yayk7CiB9CiAKIC8qKgpAQCAtNTc5NCw4ICs1ODM2LDEwIEBAIHZvaWQgX19pbml0
+IGluaXRfc2NoZWRfZXh0X2NsYXNzKHZvaWQpCiAJCUJVR19PTighemFsbG9jX2NwdW1hc2tf
+dmFyX25vZGUoJnJxLT5zY3guY3B1c190b19raWNrX2lmX2lkbGUsIEdGUF9LRVJORUwsIG4p
+KTsKIAkJQlVHX09OKCF6YWxsb2NfY3B1bWFza192YXJfbm9kZSgmcnEtPnNjeC5jcHVzX3Rv
+X3ByZWVtcHQsIEdGUF9LRVJORUwsIG4pKTsKIAkJQlVHX09OKCF6YWxsb2NfY3B1bWFza192
+YXJfbm9kZSgmcnEtPnNjeC5jcHVzX3RvX3dhaXQsIEdGUF9LRVJORUwsIG4pKTsKKwkJQlVH
+X09OKCF6YWxsb2NfY3B1bWFza192YXJfbm9kZSgmcnEtPnNjeC5jcHVzX3RvX3dhaXRfa2lj
+aywgR0ZQX0tFUk5FTCwgbikpOwogCQlycS0+c2N4LmRlZmVycmVkX2lycV93b3JrID0gSVJR
+X1dPUktfSU5JVF9IQVJEKGRlZmVycmVkX2lycV93b3JrZm4pOwogCQlycS0+c2N4LmtpY2tf
+Y3B1c19pcnFfd29yayA9IElSUV9XT1JLX0lOSVRfSEFSRChraWNrX2NwdXNfaXJxX3dvcmtm
+bik7CisJCXJxLT5zY3gua2lja193YWl0X2lycV93b3JrID0gSVJRX1dPUktfSU5JVF9MQVpZ
+KGtpY2tfd2FpdF9pcnFfd29ya2ZuKTsKIAogCQlpZiAoY3B1X29ubGluZShjcHUpKQogCQkJ
+Y3B1X3JxKGNwdSktPnNjeC5mbGFncyB8PSBTQ1hfUlFfT05MSU5FOwpAQCAtNjU0MywxNiAr
+NjU4NywyNSBAQCBzdGF0aWMgdm9pZCBzY3hfa2lja19jcHUoc3RydWN0IHNjeF9zY2hlZCAq
+c2NoLCBzMzIgY3B1LCB1NjQgZmxhZ3MpCiAJCQlyYXdfc3Bpbl9ycV91bmxvY2sodGFyZ2V0
+X3JxKTsKIAkJfQogCQljcHVtYXNrX3NldF9jcHUoY3B1LCB0aGlzX3JxLT5zY3guY3B1c190
+b19raWNrX2lmX2lkbGUpOworCQlpcnFfd29ya19xdWV1ZSgmdGhpc19ycS0+c2N4LmtpY2tf
+Y3B1c19pcnFfd29yayk7CiAJfSBlbHNlIHsKLQkJY3B1bWFza19zZXRfY3B1KGNwdSwgdGhp
+c19ycS0+c2N4LmNwdXNfdG9fa2ljayk7Ci0KLQkJaWYgKGZsYWdzICYgU0NYX0tJQ0tfUFJF
+RU1QVCkKLQkJCWNwdW1hc2tfc2V0X2NwdShjcHUsIHRoaXNfcnEtPnNjeC5jcHVzX3RvX3By
+ZWVtcHQpOwotCQlpZiAoZmxhZ3MgJiBTQ1hfS0lDS19XQUlUKQorCQlpZiAoZmxhZ3MgJiBT
+Q1hfS0lDS19XQUlUKSB7CiAJCQljcHVtYXNrX3NldF9jcHUoY3B1LCB0aGlzX3JxLT5zY3gu
+Y3B1c190b193YWl0KTsKLQl9CisJCQljcHVtYXNrX3NldF9jcHUoY3B1LCB0aGlzX3JxLT5z
+Y3guY3B1c190b193YWl0X2tpY2spOworCisJCQlpZiAoZmxhZ3MgJiBTQ1hfS0lDS19QUkVF
+TVBUKQorCQkJCWNwdW1hc2tfc2V0X2NwdShjcHUsIHRoaXNfcnEtPnNjeC5jcHVzX3RvX3By
+ZWVtcHQpOworCisJCQlpcnFfd29ya19xdWV1ZSgmdGhpc19ycS0+c2N4LmtpY2tfd2FpdF9p
+cnFfd29yayk7CisJCX0gZWxzZSB7CisJCQljcHVtYXNrX3NldF9jcHUoY3B1LCB0aGlzX3Jx
+LT5zY3guY3B1c190b19raWNrKTsKKworCQkJaWYgKGZsYWdzICYgU0NYX0tJQ0tfUFJFRU1Q
+VCkKKwkJCQljcHVtYXNrX3NldF9jcHUoY3B1LCB0aGlzX3JxLT5zY3guY3B1c190b19wcmVl
+bXB0KTsKIAotCWlycV93b3JrX3F1ZXVlKCZ0aGlzX3JxLT5zY3gua2lja19jcHVzX2lycV93
+b3JrKTsKKwkJCWlycV93b3JrX3F1ZXVlKCZ0aGlzX3JxLT5zY3gua2lja19jcHVzX2lycV93
+b3JrKTsKKwkJfQorCX0KIG91dDoKIAlsb2NhbF9pcnFfcmVzdG9yZShpcnFfZmxhZ3MpOwog
+fQpkaWZmIC0tZ2l0IGEva2VybmVsL3NjaGVkL3NjaGVkLmggYi9rZXJuZWwvc2NoZWQvc2No
+ZWQuaAppbmRleCA0M2JiZjA2OTNjY2EuLjAxMGMwODIxZDIzMCAxMDA2NDQKLS0tIGEva2Vy
+bmVsL3NjaGVkL3NjaGVkLmgKKysrIGIva2VybmVsL3NjaGVkL3NjaGVkLmgKQEAgLTgwNSwx
+MSArODA1LDEzIEBAIHN0cnVjdCBzY3hfcnEgewogCWNwdW1hc2tfdmFyX3QJCWNwdXNfdG9f
+a2lja19pZl9pZGxlOwogCWNwdW1hc2tfdmFyX3QJCWNwdXNfdG9fcHJlZW1wdDsKIAljcHVt
+YXNrX3Zhcl90CQljcHVzX3RvX3dhaXQ7CisJY3B1bWFza192YXJfdAkJY3B1c190b193YWl0
+X2tpY2s7CiAJdW5zaWduZWQgbG9uZwkJa2lja19zeW5jOwogCWxvY2FsX3QJCQlyZWVucV9s
+b2NhbF9kZWZlcnJlZDsKIAlzdHJ1Y3QgYmFsYW5jZV9jYWxsYmFjawlkZWZlcnJlZF9iYWxf
+Y2I7CiAJc3RydWN0IGlycV93b3JrCQlkZWZlcnJlZF9pcnFfd29yazsKIAlzdHJ1Y3QgaXJx
+X3dvcmsJCWtpY2tfY3B1c19pcnFfd29yazsKKwlzdHJ1Y3QgaXJxX3dvcmsJCWtpY2tfd2Fp
+dF9pcnFfd29yazsKIAlzdHJ1Y3Qgc2N4X2Rpc3BhdGNoX3EJYnlwYXNzX2RzcTsKIH07CiAj
+ZW5kaWYgLyogQ09ORklHX1NDSEVEX0NMQVNTX0VYVCAqLwotLSAKMi4zNC4xCgo=
+
+--------------pcQpEH5wFrr6igGq0AtOzsXK--
