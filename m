@@ -1,76 +1,181 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086FD37FF5B;
-	Tue, 17 Mar 2026 08:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F98238CFE4;
+	Tue, 17 Mar 2026 08:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773735789; cv=none; b=msU/1xIgxcNNA3UXq672zl0WDKvZQqEUmwp1mqSUp6HuT3R0uguchL+GrzR8/2Wb+GLL0EOU3L3s4BykiYKcej5pRBZyXHLuMviJRmYOWPvLF1DTs8qW3BIWceFLWpSIqzg+8mERHl1lHZ8tiwDLEtnk1i/vW7FqRykOC0qe7Mk=
+	t=1773736426; cv=none; b=osUZkYn3GS3pVcSsAyZogFhDphZqs/Up+Lqo3ZPZYeUsRMQDDQI6FgHVVV8muIoU3KKJDaHizaQLAKy+Eky0sz7K6wFa0kZjEgjiBBfHMj8BL3oURZCqaMHqV6LGmzz1jnnYE6IstTYiOe5/kVEpnQhgJKSzyIuVEHLUN0XteDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773735789; c=relaxed/simple;
-	bh=+F76O8aBvA0EcbPwPKP5h7Vtzr+YIb11ETrRnddDRv4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=PgRfVzoOSFd1gWxuw0dqpEzJ3n/6HrlzVwYBs4e79sQP6Mh5jYQ7gCQ1KDki5pKT39vERpq33jTkAF7pb+/9V1h4UfmFPz2CpvEEscsdBN7Lri8CUriUYI8LEy4xFgFyaZzZYcwEUgP1+NAco4gH279K62O3CMgGuCf1NuOlKjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DC611476;
-	Tue, 17 Mar 2026 01:23:00 -0700 (PDT)
-Received: from [10.1.36.21] (e127648.arm.com [10.1.36.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2559A3F7BD;
-	Tue, 17 Mar 2026 01:23:02 -0700 (PDT)
-Message-ID: <31280e71-3924-43dd-8dbb-494cb7a3e988@arm.com>
-Date: Tue, 17 Mar 2026 08:23:00 +0000
+	s=arc-20240116; t=1773736426; c=relaxed/simple;
+	bh=qMEDh19S2IxsnzaDOCfwxKcmOXxAXTg1gJxujDJWFuU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AuYF/QYuWALuJo422vvkvLuFa47SGAjPkE94Ejx0MAtbeMx+YmbEwMZiZO9FUZlGhb7EmGxbryTMnXZ+8zC1G+e42o3V+dXbF207a9UW70d3NIVQUsaZm9WjTG9pnasboj3ZiLwcFE8YV/OfG1TdivFzwyVKnlp/gYqdCj+1uKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X5HbCTFU; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X5HbCTFU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CC9BC2BCB0;
+	Tue, 17 Mar 2026 08:33:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773736426;
+	bh=qMEDh19S2IxsnzaDOCfwxKcmOXxAXTg1gJxujDJWFuU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=X5HbCTFUov6428X/j4+guO5bZ1gT63Ske57pyVXAREs+wpZUpVJwcUnTd9SLVuySS
+	 Flmw/zsFSYgVuyisfdjs3mbUojgItejTKXxKAHlbo/RfeVsx0c0jMBIkQICS3+YYTa
+	 NnfWCH5IhCRgDOgAk+X+tvLTggjqfV3LfKzv3NSbX9igcTd1h+5uRnBa6v0bkOXXk5
+	 zgfJjNjHOdNzPQrkH8pBFtKLXT0iyzWifPFiYiY0/yqpMwlFd/jsfQBkFsxv97Y/ab
+	 lu+mYE5u+AtM7tXsIK9UwGvAJtAYpve89ujsXRtUpUJ9T/yk+byR6YgCIpAGwtzhOV
+	 rAB3g+ZToWnvw==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Andrew Lunn <andrew@lunn.ch>
+Subject: [PATCH net-next v5 0/3] ethtool: Dynamic RSS context indirection table resizing
+Date: Tue, 17 Mar 2026 09:33:33 +0100
+Message-ID: <20260317083339.2811865-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] sched_ext: Prevent SCX_KICK_WAIT deadlock by
- serialization
-From: Christian Loehle <christian.loehle@arm.com>
-To: Tejun Heo <tj@kernel.org>
-Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, void@manifault.com, arighi@nvidia.com,
- changwoo@igalia.com, mingo@redhat.com, peterz@infradead.org,
- shuah@kernel.org, dietmar.eggemann@arm.com
-References: <20260316100249.1651641-1-christian.loehle@arm.com>
- <20260316100249.1651641-2-christian.loehle@arm.com>
- <abhB4bCsvd9WDxid@slm.duckdns.org>
- <d0d1d1fa-7ba3-456d-b2a9-cc3f550e2cf1@arm.com>
-Content-Language: en-US
-In-Reply-To: <d0d1d1fa-7ba3-456d-b2a9-cc3f550e2cf1@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/16/26 22:26, Christian Loehle wrote:
-> On 3/16/26 17:46, Tejun Heo wrote:
->> Hello,
->>
->> On Mon, Mar 16, 2026 at 10:02:48AM +0000, Christian Loehle wrote:
->>> @@ -5686,11 +5718,20 @@ static void kick_cpus_irq_workfn(struct irq_work *irq_work)
->>>  		 * task is picked subsequently. The latter is necessary to break
->>>  		 * the wait when $cpu is taken by a higher sched class.
->>>  		 */
->>> -		if (cpu != cpu_of(this_rq))
->>> +		if (cpu != this_cpu)
->>>  			smp_cond_load_acquire(wait_kick_sync, VAL != ksyncs[cpu]);
->>
->> Given that irq_work is executed at the end of IRQ handling, we can just
->> reschedule the irq work when the condition is not met (or separate that out
->> into its own irq_work). That way, I think we can avoid the global lock.
->>
-> I'll go poke at it some more, but I think it's not guaranteed that B actually
-> advances kick_sync if A keeps kicking. At least not if the handling is in HARD irqwork?
-> Or what would the separated out irq work do differently?
+Hi!
 
-So in my particular example I do the SCX_KICK_WAIT in ops.enqueue(), which is fair, but
-I don't think we can delay calling that until we've advanced our local kick_sync and if we
-don't we end up in the deadlock, even if e.g. we separate out the retry (and make that lazy),
-because then the local CPU is able to continuously issue new kicks (which will have to
-be handled by the non-retry path) without advancing it's own kick_sync.
-The closest thing to that I can get working is separating out the SCX_KICK_WAIT entirely and
-make that lazy. In practice though that would realistically make the SCX_KICK_WAIT latency
-most likely a lot higher than with the global lock, is that what you had in mind?
-Or am I missing something here?
+[ Michael and Pavan, I removed your Tested-by:/Reviewed-by: although
+the changes were pretty small. Please re-add if you're still OK with
+it. ]
+
+Some NICs (e.g. bnxt) change their RSS indirection table size based on
+the queue count, because the hardware table is a shared resource. The
+ethtool core locks ctx->indir_size at context creation, so drivers
+have to reject channel changes when RSS contexts exist.
+
+This series adds resize helpers and wires them up in bnxt.
+
+Patch 1 adds core helpers:
+  ethtool_rxfh_can_resize() - read-only validation
+  ethtool_rxfh_resize() - fold/unfold a raw table in place
+  ethtool_rxfh_ctxs_can_resize() - validate all non-default contexts
+  ethtool_rxfh_ctxs_resize() - resize all non-default contexts,
+    with locking and RSS_NTF notifications
+
+Both ethtool_rxfh_can_resize() and ethtool_rxfh_resize() now take a
+user_size parameter: the number of indirection table entries the user
+originally provided. When shrinking, the table will not fold below
+this floor, preserving user intent.
+
+The user_size is tracked in ctx->indir_user_size for non-default RSS
+contexts and in dev->ethtool->rss_indir_user_size for context 0. It
+is set when the indirection table is configured via netlink or ioctl,
+and cleared to zero on reset-to-default.
+
+Patch 2 uses them in bnxt_set_channels(). Validation runs before
+bnxt_close_nic(); actual resize is deferred until after. RSS table
+size only changes on P5 chips with older firmware.
+
+Patch 3 adds HW tests in rss_drv.py (devices without dynamic table
+sizing are skipped):
+  resize_periodic - fold/unfold with a non-default [3,2,1,0]
+    sub-table (user_size=4), verifying exact content preservation
+    (main + ctx)
+  resize_below_user_size_reject - periodic sub-table with user_size
+    between big and small device table sizes; verifies that shrinking
+    below user_size is rejected even when the table is periodic
+    (main + ctx)
+  resize_nonperiodic_reject - non-periodic table blocks channel
+    reduction, with an extra periodic context to exercise
+    multi-context validation (main + ctx)
+  resize_nonperiodic_no_corruption - failed resize leaves table
+    contents and channel count unchanged (main + ctx)
+
+Running the tests:
+
+  # On real hardware
+  sudo NETIF=eth0 ./rss_drv.py
+
+Changes v4 -> v5:
+
+ - Track user-provided indirection table size (user_size) as a resize
+   floor. Added indir_user_size to ethtool_rxfh_context and
+   rss_indir_user_size to ethtool_netdev_state. ethtool_rxfh_can_resize()
+   and ethtool_rxfh_resize() now take a user_size parameter and reject
+   shrinking below it. (Jakub)
+ - Propagated user_size out of rss_set_prep_indir() and stored it on
+   successful set in both netlink and ioctl paths.
+ - resize_periodic test now sends a 4-entry sub-table (user_size=4)
+   instead of replicating to full device table size
+ - Added resize_below_user_size_reject test to verify user_size floor.
+ - Removed "Open items" section - user_size tracking is now implemented.
+
+Changes v3 -> v4:
+
+ - Rebased onto net-next
+ - Added Reviewed-by: from Michael
+ - Added missing Cc: to make the pwbots happier
+
+Changes v2 -> v3:
+
+ - Changed ethtool_rxfh_can_resize() to return bool instead of int;
+   true means resize is possible, false means it is not. Inverted
+   callers accordingly. (Jakub)
+ - Added Tested-by from Pavan
+
+Changes v1 -> v2:
+
+ - Dropped netdevsim support and netdevsim selftest (Jakub)
+ - Split ethtool_rxfh_contexts_resize_all() into separate validate
+   (ethtool_rxfh_ctxs_can_resize) and apply (ethtool_rxfh_ctxs_resize)
+   so drivers can validate before closing the device (Jakub)
+ - Shortened helper names (Jakub)
+ - Replaced scoped_guard(mutex) with explicit mutex_lock/unlock
+   (Jakub)
+ - Removed defensive zero-size check, bare expressions instead of != 0
+   comparisons, ! instead of == 0 (Jakub)
+ - In bnxt, moved bnxt_check_rings() before RSS validation and
+   deferred actual resize to after bnxt_close_nic() (Jakub, Michael)
+ - Added comment that RSS table size only changes on P5 chips with
+   older firmware (Michael)
+ - Use non-default [3,2,1,0]xN pattern set via netlink to distinguish
+   correct fold from driver resetting to defaults (Jakub)
+ - Check exact indirection table pattern, not just set(indir) (Jakub)
+ - Use ksft_raises() instead of try/except/else (Jakub)
+ - Removed queue_count=8 from NetDrvEnv (Jakub)
+ - Added ksft_variants to resize_nonperiodic_reject for ctx coverage
+ - Added extra periodic context in reject test for multi-context
+   validation coverage
+ - Added resize_nonperiodic_no_corruption test
+
+
+Björn Töpel (3):
+  ethtool: Add RSS indirection table resize helpers
+  bnxt_en: Resize RSS contexts on channel count change
+  selftests: rss_drv: Add RSS indirection table resize tests
+
+ .../net/ethernet/broadcom/bnxt/bnxt_ethtool.c |  38 ++-
+ include/linux/ethtool.h                       |  11 +
+ net/ethtool/common.c                          | 150 +++++++++++
+ net/ethtool/ioctl.c                           |  15 +-
+ net/ethtool/rss.c                             |  24 +-
+ .../selftests/drivers/net/hw/rss_drv.py       | 233 +++++++++++++++++-
+ 6 files changed, 450 insertions(+), 21 deletions(-)
+
+
+base-commit: 348baefbb635cbb448e154f38c93657d4cf23936
+-- 
+2.53.0
+
