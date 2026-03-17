@@ -1,84 +1,85 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F58C3EC2C2
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 14:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5FA3E8687
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 14:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773758473; cv=none; b=tt7Z7XFCIRfZFKoWromErTrACd+xUPeBvfF24CMUHira8LFJSHfH67xuRwsYMMg/BRNaHX0x6sGNsljKnbnF2AD7TCV4mYfBgbFtxrpow6N82NwsmStpEsKUuFwZKihaW7BVsPsc0AsPojC9ywWzRUssNOI1v4z185gqHKqNmqo=
+	t=1773758805; cv=none; b=iVAtuFB/a2Qq8pUmmFshieJwfix9gWie1CQSKHp0rXjzoKSeHmGoyUd4kS6ar2MJDjbh7mYNo6P6ejG/fx51XAM8xkTkW94/iQvk6vWFLlhk3H5dNbbZFNHvPlG0n+r4AzO8pab+E90OmOMAZop2EX1OHbSgGncFvQt2I37vC9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773758473; c=relaxed/simple;
-	bh=Xec3Bnqs8cOPFzLKCllX85qxRCNRZ4+RoA71Mx5laDg=;
+	s=arc-20240116; t=1773758805; c=relaxed/simple;
+	bh=PJwDGvf6trB943jn00qkBQDhhgwKxS7QkCVGOozd50M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c0G004ibfgqaqbm5GJBV9s2d8yRW5sEc3FQJpGcYzagjQlgSH1TVsSZod0AcxX34OUticgEJHaHVoPASGTNePrykoExeOs0Jgtwj8SU4ywwuybvU7FKVMZ8AKKgMSEp5UUSlaVqK5eGb+Z4Aeu/cZudeCUdOHGAeX0LG3oJimHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gEPGIAi7; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=WG0++1L1; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=EKGdaJjnOlAb4m6Bt1V5bsYLwrntcguJHZg2ywFXtqFIt1wY1wW6H6iCUgHkTNLISE+5mCDAnH9yWxGS2JhybB3cDbjAzI7Qb/DmbNVpRkMHNcUp+6P8y7peyjmxDYrnrhJGqI46fGw03NqtI5m40/Y08vMDxc138ZsEqmcIMFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NO1iierS; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=pMlPTG9P; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gEPGIAi7";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="WG0++1L1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NO1iierS";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="pMlPTG9P"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773758471;
+	s=mimecast20190719; t=1773758803;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Oqu0XWMuuVA5H9z7yGNPz2Wm4cgx+SYtal3EMhGWndY=;
-	b=gEPGIAi7o2ng8GtasCfQWzW/aGk9OdZr36y/NGKl9OgH4CzoQ7Bksl2cmhQaEwe9M/E1T2
-	LckqQNUS1IFFGNOsIkyzG5Zv6vG0u2Etu14O5HmRISBcjlx9nle+880q7c47MzNw9QndXe
-	Y0uh9C4ZEcEG4IzdqkP2IM4gifs6cwI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=PYgcgasxNaCa6wbkN3+j7gIOt+KWXemXDliasEJTpOA=;
+	b=NO1iierSMGnI9X6xT1e4X0bTzifwN7VKYYKtE6CFH9yEHBnyqJUG+l4zJbCb8utIqV7kK6
+	gckJkmxYfhACHpXuzNgpBeFxZF2Rssknd3u2DRUYgpP6vAaODeMA0pqmhK2dAu111akntz
+	zdXM2uESKEI3aF6+9PuGfEUpUBZJeUA=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-501-RZyhL4-bM2KqIevMncDHGw-1; Tue, 17 Mar 2026 10:41:09 -0400
-X-MC-Unique: RZyhL4-bM2KqIevMncDHGw-1
-X-Mimecast-MFC-AGG-ID: RZyhL4-bM2KqIevMncDHGw_1773758468
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-48542d5aa9eso47289085e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 07:41:08 -0700 (PDT)
+ us-mta-456-7eQigNaeMauOMnc7UIs66g-1; Tue, 17 Mar 2026 10:46:39 -0400
+X-MC-Unique: 7eQigNaeMauOMnc7UIs66g-1
+X-Mimecast-MFC-AGG-ID: 7eQigNaeMauOMnc7UIs66g_1773758799
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-89c4ec516e5so337870486d6.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 07:46:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773758468; x=1774363268; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1773758799; x=1774363599; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oqu0XWMuuVA5H9z7yGNPz2Wm4cgx+SYtal3EMhGWndY=;
-        b=WG0++1L1eJ+K+WollAoxNY0IvNCOkHl8MTu5IUk2XEXne0hF+bhL0zlZAsloN5//sJ
-         aR8i/KD8c/pbmwNMymLN/pIIjdY9Mg/A5riYsUTRPBnGKQ3N2xqgpQ/iQW/NHBnEuvum
-         MHxRe3kNV2PE47ZV7MU8G4SyRk7DQGmKftWuYRLcVPo6KjhdowfO6HrvZxEq0XL3ZDX0
-         gbAqDWbbjBkETbeleliXwNVwNe2GERGbDB8IHAAdm2p+aveqSwZ22NzijIsXLY3+e0qE
-         3VS6j/AdV/Ps08Ztt+zoYMj1wu6GheW9S3Ss3oVU51vA3Fg2G0B93ivEDPq8aGRH6v3Q
-         Ts0Q==
+        bh=PYgcgasxNaCa6wbkN3+j7gIOt+KWXemXDliasEJTpOA=;
+        b=pMlPTG9PVkskqz/dOz3RrAN0rica3bqhcGOP1yr90IjXf0/wzBFNlX8jYoHw+Otgmc
+         s+twZKY8zKjhRPjpJiEPYi1vL1yAr35Lc5KCsic0TxSoHFVWTjkW8oDz+t0dHZX7hdvQ
+         Uy27x7kXIUazrKO2i2Hpyxw+Ilsl0xL/okDwchS4VyUB/jyOXSwsK7G2PaY7pKILbzwV
+         DjrKfH9XyY0SFPj1oHEM5YHxzunlBsVxSR6wF9L8OjJzSTfz1SwGJ8UBjnKSmDD9gVhl
+         Ikt2C61WByxfkov9D2mOUi45zzizXx7jYZWGgeJa7/Fe+5NKzxfgI+3/P3RuAVRWaxFA
+         iTdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773758468; x=1774363268;
+        d=1e100.net; s=20251104; t=1773758799; x=1774363599;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Oqu0XWMuuVA5H9z7yGNPz2Wm4cgx+SYtal3EMhGWndY=;
-        b=L7fkpzJ4GwZ00RO18xURSxORafKhemkg30rqEHAtFHDVaeac5TP2ar1eqIw5/evfZw
-         5qs/yWSCh2PhzHsr6ddDgzfpVT6zNN6UADejYjxVTuv91E9gNyrkmfXkqKhMObMdyAp3
-         hZkyhBZ8ww6ABHRmNl85XJ+va14VE2jsDSIz+C5qAm8yYp9Q/vOZ+pO4j/6Jx5XJcFfv
-         oOoo6/dw1MUogEdYJJ9ynAQSzAmFLZcyTfjWQdubXS1rq0nY60Cre5zTFvUEmu+4qZrF
-         WyYjyjHdXYSvOprYVtZbC3KZSAVNsaye++hAgQnxncA5RlF9Dez2y/j1qIicjzRsOQtf
-         PtTA==
-X-Gm-Message-State: AOJu0Ywy0R7o8AzgWyjvFrZ3uwy1cYc12HEA0x6H0Yr1OHoIzVWzo0TK
-	RX3uCYfZbe960aF9uq9lG1eOIx6BA/4/vKES1o12T37lvfz2POyqBbiIH9HwGqbWaMioXJyvmov
-	II7Oa+zXVkVVLeQUfXF6WaKKtOlcJPbmo4UVzrsqYMicVAF2ERAsjBmf4Q/VZFG26s0Cmrw==
-X-Gm-Gg: ATEYQzwXl4UGVtAfTO2LP0QssUuZ6a8GLFMDf+8opQF17tSCR7Hwr99ZxMikI3lbdHd
-	N96p15JMHq+AOu+7trti0wBMu/jEQnJQLLaN19EVhMz1PhKET0pIzpf15DAv1y3A9A5Zl9JRg+U
-	bVTaU1Xee/2ilN55mGMWRwjL5AvO4FhbosUsXc8sZbm8PADlcD27p9rOqrM47w7W2VDdaRIsYTZ
-	NbmHPE5ufF/zApvfQYQiF0FlizATBH/09Z1Mvu2kN+oZc3RYvLFtELxcMLHAU+j20QfhMMDUiZD
-	O1YKQdMV4KgCTc2j808o5XC+3HIuE8RJsCjY2b84gMXOiE87z+/yHb9NxzzUSieBsKpkmsm/C5T
-	CAsR8p2bRJg31954cWhJcQ6rHnr898TJYsLFDBm3pZGARn34XHScQnM4=
-X-Received: by 2002:a05:600c:35cd:b0:485:ae14:8191 with SMTP id 5b1f17b1804b1-485ae14864fmr48934175e9.5.1773758467683;
-        Tue, 17 Mar 2026 07:41:07 -0700 (PDT)
-X-Received: by 2002:a05:600c:35cd:b0:485:ae14:8191 with SMTP id 5b1f17b1804b1-485ae14864fmr48933695e9.5.1773758467265;
-        Tue, 17 Mar 2026 07:41:07 -0700 (PDT)
+        bh=PYgcgasxNaCa6wbkN3+j7gIOt+KWXemXDliasEJTpOA=;
+        b=MLQIpGuPYBdv0nmVzr3mcOHLKcqbOZQj9IQbs9yMBXb9oVHoBh0igJ3k2kHEmpwODA
+         EC4LNSiiOj2ht9B3Fw1MCN+BlJ/MpIit5jL6PX6FnUS3mLv/+CtFvgtZMH8nTPhRh+JZ
+         JpceUxZVvijQOHQrJkQXtEytoyhFZ1Rd2kLD9CmEro/6Vje2Q9lwFYlWNtFbAMOSehsi
+         sg7p23p3eXnRZ6GvlTPa+ER54d9v8PuFQRbUUYl3fYuqz7lH8zhgD6HTXUzUOFqMDVRf
+         uce4JJZzPgs6BrbZkP9CaxQQVIJpfxI3yXC6IO1Gf7+edW6FKpGvh7ECBIrkRq0b/pOs
+         CeTA==
+X-Forwarded-Encrypted: i=1; AJvYcCV2oSXwaSw9ckup0mKudI0FDsoDwIWK7JDwhM1ZflXwD6/Zc3b2fqKRFZ9NdCmJHCPjg0k7EcHIfddZcT8L4nY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwphdnD00PaSA+tAeja3oetoW6Sq63JbXOM7x8KC5T0HHvR0kbn
+	LCxrQt/mhwL/QsuRXSGatPG1GPfdICox4vO5gDI+JCA2bR3eByxq79bnBYNSedIpn2r0QctsuRk
+	WxRmjPovQNS6wrUZ3k3JKs5UU9iDfKeGzLl76Vlu2XypnxLNktUu3nEUk3pBZqbSKIaqn1g==
+X-Gm-Gg: ATEYQzwpnf+wx+KK+2FTutqBcCOM7fpW+ZNOIl2f9Ite3CHvEWZdPnxeqltRA5VbVis
+	bitQt1hPCDr76KeThbe4LQOF+YWwG0DtD96pqMht8pJviwqZqysr04cTrKRsCQo9gphAg+g008J
+	MLjcowysik62AFMu4w1yIYmfwykPEheAJum6BFFb1ZwvuMzmoKjY1S8dB+SZC+UGqy8kHqY/w6Y
+	m4StwDkDGPGgw29HOxD5Fl1/uZe5I1R4zpDcIseTveCBs7YgXnZNROOX9ZgYUJd5E6rK/h3U75y
+	mzPMorvkYFWpBLSoEpSQ8J2fw5vv4T2yzDF8xGmLR46f7/uC9+ZFM+E1OC3TICQmzWj8kD+0Hnk
+	yinb4qPMA/5wIN2WPKxmGgYcz9bfrdeHmEzwWPvyFqiJirdqTUrAqt6A=
+X-Received: by 2002:a05:6214:130d:b0:899:ee4e:63b6 with SMTP id 6a1803df08f44-89a81f6062fmr268303346d6.44.1773758799341;
+        Tue, 17 Mar 2026 07:46:39 -0700 (PDT)
+X-Received: by 2002:a05:6214:130d:b0:899:ee4e:63b6 with SMTP id 6a1803df08f44-89a81f6062fmr268302936d6.44.1773758798845;
+        Tue, 17 Mar 2026 07:46:38 -0700 (PDT)
 Received: from [192.168.88.32] ([216.128.11.95])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe2186e3sm57258205f8f.26.2026.03.17.07.41.06
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c4feaaebasm49171566d6.37.2026.03.17.07.46.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2026 07:41:06 -0700 (PDT)
-Message-ID: <728fc0aa-4c07-4092-91bb-6b9f76c2f3eb@redhat.com>
-Date: Tue, 17 Mar 2026 15:41:05 +0100
+        Tue, 17 Mar 2026 07:46:38 -0700 (PDT)
+Message-ID: <302d1a45-dd5d-4d50-a99c-ce73de196d0c@redhat.com>
+Date: Tue, 17 Mar 2026 15:46:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,55 +87,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1] selftest: rds: add
- tools/testing/selftests/net/rds/config
-To: Allison Henderson <achender@kernel.org>, netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, edumazet@google.com,
- rds-devel@oss.oracle.com, kuba@kernel.org, horms@kernel.org,
- linux-rdma@vger.kernel.org, shuah@kernel.org, allison.henderson@oracle.com
-References: <20260316235848.2395654-1-achender@kernel.org>
+Subject: Re: [PATCH net-next 1/2] selftests/vsock: fix vmtest.sh for read-only
+ nested VM runners
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Jakub Kicinski <kuba@kernel.org>, Bobby Eshleman <bobbyeshleman@meta.com>
+References: <20260313-vsock-vmtest-nested-fixes-v1-0-d0e6274c3193@meta.com>
+ <20260313-vsock-vmtest-nested-fixes-v1-1-d0e6274c3193@meta.com>
 Content-Language: en-US
 From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260316235848.2395654-1-achender@kernel.org>
+In-Reply-To: <20260313-vsock-vmtest-nested-fixes-v1-1-d0e6274c3193@meta.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/17/26 12:58 AM, Allison Henderson wrote:
-> This patch adds an rds selftest config.  
+On 3/14/26 1:00 AM, Bobby Eshleman wrote:
+>  tools/testing/selftests/vsock/vmtest.sh | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
+> index 86e338886b33..c2cfcdf05d99 100755
+> --- a/tools/testing/selftests/vsock/vmtest.sh
+> +++ b/tools/testing/selftests/vsock/vmtest.sh
+> @@ -42,6 +42,8 @@ readonly KERNEL_CMDLINE="\
+>  	virtme.ssh virtme_ssh_channel=tcp virtme_ssh_user=$USER \
+>  "
+>  readonly LOG=$(mktemp /tmp/vsock_vmtest_XXXX.log)
+> +readonly TEST_HOME=$(mktemp -d /tmp/vmtest_home_XXXX)
 
-Why? what improvement produces or what issues does that address?
+shellcheck complains:
 
-> diff --git a/tools/testing/selftests/net/rds/config b/tools/testing/selftests/net/rds/config
-> new file mode 100644
-> index 000000000000..103f9d941d10
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/rds/config
-> @@ -0,0 +1,5 @@
-> +CONFIG_RDS=y
-> +CONFIG_RDS_TCP=y
-> +CONFIG_NET_NS=y
-> +CONFIG_VETH=y
-> +CONFIG_NET_SCH_NETEM=y
-> diff --git a/tools/testing/selftests/net/rds/config.sh b/tools/testing/selftests/net/rds/config.sh
-> index 791c8dbe1095..7cf56ee8882f 100755
-> --- a/tools/testing/selftests/net/rds/config.sh
-> +++ b/tools/testing/selftests/net/rds/config.sh
-> @@ -24,7 +24,7 @@ while getopts "g" opt; do
->    esac
->  done
->  
-> -CONF_FILE="tools/testing/selftests/net/config"
-> +CONF_FILE="tools/testing/selftests/net/rds/config"
->  
->  # no modules
->  scripts/config --file "$CONF_FILE" --disable CONFIG_MODULES
+In vmtest.sh line 45:
+readonly TEST_HOME=$(mktemp -d /tmp/vmtest_home_XXXX)
+         ^-------^ SC2155 (warning): Declare and assign separately to
+avoid masking return values.
 
-This looks wrong?!? The script is going to update the config file which
-is under git control. You probably want to copy the default config in a
-tmp file file, edit the latter and add it to .gitignore and EXTRA_CLEAN.
+> @@ -451,11 +464,14 @@ vm_start() {
+>  		--run \
+>  		${kernel_opt} \
+>  		${verbose_opt} \
+> +		--rwdir=/root=${TEST_HOME} \
 
-The issue looks pre-existent, but since you are touching this part...
+And here, too:
+
+In vmtest.sh line 467:
+		--rwdir=/root=${TEST_HOME} \
+                              ^----------^ SC2086 (info): Double quote
+to prevent globbing and word splitting.
+
+Did you mean:
+		--rwdir=/root="${TEST_HOME}" \
+
+The first occurrence could possibly be explicitly silenced explicitly,
+but it's probably better to really address the latter.
 
 /P
-
 
