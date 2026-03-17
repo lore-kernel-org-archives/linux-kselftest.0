@@ -1,149 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E412B32AAA0
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 09:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE673644BC;
+	Tue, 17 Mar 2026 09:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739545; cv=none; b=WmxJL5z8fweqxzZq4pb9IcfQXgRhHrEnJTVdxrISjeQWE6rajR5pZvZP4ZUGjJrx3a+U2G6IUDraXPRvLVFekL6XXOcAECT1At6UD1NFXDoMg0ikYgLeagc4FbxK6CIfykFm7by4kdNIBTOvzY7FszFA1b7FCIoedgfD/ckbBqk=
+	t=1773740399; cv=none; b=PKSQ3LrZKEQfY3IAjHJd4ee75mmf1EIrN/xjnoYBTKCxHtZB7ilZ+RWpejoAr7ei28iSV7qejGVtOvG2bGPtGyrIaHoDDeGzqGQQNZH3X3bPWiZBB9D7D6fWb0BKzmiYh0tArIikCW4DSe5jRb++WWHNgPfI1bsAGfeaOTpDa8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739545; c=relaxed/simple;
-	bh=NlEYLh+CSv2ptFyqAFOscytJpzqxlTIZEPiPfda0LhE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=N4qHIrd4gvJGk0wmpR/B3rSDtvl/82mn+0yckf8bGwBGfHtfpRF8TtIc2kEpG8/c8HhraV5ofniDGmOW/zVs1+08X68B5eD4mNzEliGhGIZwpoqYyIJ/jsIzU+tFhiT6gLSMc/JyoMgdN5waj6Z2lyX4UIikBl27l2jAekuU1eI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JtdT+Di7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773740399; c=relaxed/simple;
+	bh=X1b5odisZXG8hdNFbSDTR5iFNZss9HSTUn4ZhTne3CQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=edxKdopvmPGgdSD4M2X31G6qQXRmljHkydxumOlm5ttyXPUw4KjlxctiKXdgZqB/uvPhaEWSgqJZYKcoggbNFjgn/yaunm/yUhJuDeXxLapgHGLfQJJZ4bWzFzDolqNml6ovwYXlpH9hNBbo25FJAfvJSwauWLWFvRUSqrhWXt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J8KDi95o; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JtdT+Di7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773739543;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HGsi5yl8JKiyZRFNdI9Aenref4UbeHYmyNWTDritDOs=;
-	b=JtdT+Di7epXKRhaoPA6Lh7iSVWu8Bm9TWj00CBVeXEp416UaLzNbAM5UqKOtPSsRg4/RxX
-	HbCtwqkaT1YfzH+Th73XA4d1vuxjzHKbU4XMuF1NbXYVLC6WNxf9odBn7qp1jpHvYoe50T
-	STF32iPKHHcn6L7paraeUeeP3jsskag=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-648-8GGVyfOnN6un6g9XQ-spTg-1; Tue,
- 17 Mar 2026 05:25:39 -0400
-X-MC-Unique: 8GGVyfOnN6un6g9XQ-spTg-1
-X-Mimecast-MFC-AGG-ID: 8GGVyfOnN6un6g9XQ-spTg_1773739537
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D4CDE18005B0;
-	Tue, 17 Mar 2026 09:25:36 +0000 (UTC)
-Received: from [192.168.1.153] (unknown [10.45.224.69])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CE3161800576;
-	Tue, 17 Mar 2026 09:25:29 +0000 (UTC)
-From: Albert Esteve <aesteve@redhat.com>
-Date: Tue, 17 Mar 2026 10:24:45 +0100
-Subject: [PATCH v6 5/5] kunit: Add documentation for warning backtrace
- suppression API
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J8KDi95o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773740398; x=1805276398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X1b5odisZXG8hdNFbSDTR5iFNZss9HSTUn4ZhTne3CQ=;
+  b=J8KDi95oU4zckLczd4wkuUMMh4os5uUQnJMpsShA5IoM1qCHHMpjWjPN
+   cySE2OLEvJaZ0m7Gap+iuuIV2ve/fvKFeiicvLCdap0nfXnF76CZ/AIDO
+   GehwrgVGoRNrFB1I/q9ztJAkcC72xiOlzHwM339PRo6vFSMZ2y4J4WFTP
+   Axp9hEdA+HyFypEtn7nAkUXoQZHqddxU1ET6r5ekwoxWTJL+N3tDCBdju
+   QDPCdS1nt5Baf7MvN1H89E95VF/MIBjlf8aGqj5YSfiGc4QfkeaJq2XYS
+   gal15vL3s+gfCGnUcRzHCKEJz/4jWGIIzIRmE0GlcWxyCKCb9e8kkBARp
+   w==;
+X-CSE-ConnectionGUID: FsV2ZaIJQ2mhek7txgXcoQ==
+X-CSE-MsgGUID: PWW6wnZaTvyg8ra9sT0tew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="78620630"
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="78620630"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 02:39:57 -0700
+X-CSE-ConnectionGUID: tFN7HEKcRe24Er0BrMiG6A==
+X-CSE-MsgGUID: Lov8Ur2cTwq1C6vhxZNkGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="252705194"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa002.jf.intel.com with ESMTP; 17 Mar 2026 02:39:54 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w2Qu1-000000004Pd-1tU4;
+	Tue, 17 Mar 2026 09:39:53 +0000
+Date: Tue, 17 Mar 2026 10:39:21 +0100
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Willy Tarreau <w@1wt.eu>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH v3 1/2] tools/nolibc: add support for
+ program_invocation_{,short_}name
+Message-ID: <202603171011.58aT1Db0-lkp@intel.com>
+References: <20260316-nolibc-err-h-v3-1-6ef80c051ab7@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260317-kunit_add_support-v6-5-dd22aeb3fe5d@redhat.com>
-References: <20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com>
-In-Reply-To: <20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
- linux-doc@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
- Linux Kernel Functional Testing <lkft@linaro.org>, 
- Dan Carpenter <dan.carpenter@linaro.org>, 
- Alessandro Carminati <acarmina@redhat.com>, 
- Albert Esteve <aesteve@redhat.com>, Kees Cook <kees@kernel.org>, 
- David Gow <david@davidgow.net>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773739485; l=2206;
- i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=zffkV3aP+LRb63HE4Cugtw9tkVeluLJxk1TZs6/vS7w=;
- b=xi7QMbvvT0J1dRWy0KlqnqQitH/PSQLUAgKbbKLFYdzU0n6EX8wvnLuZoSc5f5tmfTND76HVS
- bouO5u5E76MAyvEjL9Wl88tqUS1vAldKxm8cG0kkE/uNJu+J4Va4LFO
-X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
- pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260316-nolibc-err-h-v3-1-6ef80c051ab7@weissschuh.net>
 
-From: Guenter Roeck <linux@roeck-us.net>
+Hi Thomas,
 
-Document API functions for suppressing warning backtraces.
+kernel test robot noticed the following build errors:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
-Signed-off-by: Albert Esteve <aesteve@redhat.com>
----
- Documentation/dev-tools/kunit/usage.rst | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+[auto build test ERROR on 745dadd6d3d984feafb96f27b60d74b29ade4957]
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index ebd06f5ea4550..f1f8e2619d2d6 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -157,6 +157,34 @@ Alternatively, one can take full control over the error message by using
- 	if (some_setup_function())
- 		KUNIT_FAIL(test, "Failed to setup thing for testing");
- 
-+Suppressing warning backtraces
-+------------------------------
-+
-+Some unit tests trigger warning backtraces either intentionally or as side
-+effect. Such backtraces are normally undesirable since they distract from
-+the actual test and may result in the impression that there is a problem.
-+
-+Such backtraces can be suppressed. To suppress a backtrace in some_function(),
-+use the following code.
-+
-+.. code-block:: c
-+
-+	static void some_test(struct kunit *test)
-+	{
-+		DEFINE_SUPPRESSED_WARNING(some_function);
-+
-+		KUNIT_START_SUPPRESSED_WARNING(some_function);
-+		trigger_backtrace();
-+		KUNIT_END_SUPPRESSED_WARNING(some_function);
-+	}
-+
-+SUPPRESSED_WARNING_COUNT() returns the number of suppressed backtraces. If the
-+suppressed backtrace was triggered on purpose, this can be used to check if
-+the backtrace was actually triggered.
-+
-+.. code-block:: c
-+
-+	KUNIT_EXPECT_EQ(test, SUPPRESSED_WARNING_COUNT(some_function), 1);
- 
- Test Suites
- ~~~~~~~~~~~
-@@ -1211,4 +1239,4 @@ For example:
- 		dev_managed_string = devm_kstrdup(fake_device, "Hello, World!");
- 
- 		// Everything is cleaned up automatically when the test ends.
--	}
-\ No newline at end of file
-+	}
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/tools-nolibc-add-support-for-program_invocation_-short_-name/20260317-060704
+base:   745dadd6d3d984feafb96f27b60d74b29ade4957
+patch link:    https://lore.kernel.org/r/20260316-nolibc-err-h-v3-1-6ef80c051ab7%40weissschuh.net
+patch subject: [PATCH v3 1/2] tools/nolibc: add support for program_invocation_{,short_}name
+config: s390-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260317/202603171011.58aT1Db0-lkp@intel.com/config)
+compiler: s390x-linux-gnu-gcc (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171011.58aT1Db0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603171011.58aT1Db0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   nolibc-test.c: In function 'run_startup':
+>> nolibc-test.c:750:9: error: unknown type name 'bool'
+     750 |         bool proc = access("/proc", R_OK) == 0;
+         |         ^~~~
+   nolibc-test.c:49:1: note: 'bool' is defined in header '<stdbool.h>'; this is probably fixable by adding '#include <stdbool.h>'
+      48 | #include "nolibc-test-linkage.h"
+     +++ |+#include <stdbool.h>
+      49 | 
 
 -- 
-2.52.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
