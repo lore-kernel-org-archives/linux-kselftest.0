@@ -1,47 +1,47 @@
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012048.outbound.protection.outlook.com [40.107.209.48])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010016.outbound.protection.outlook.com [52.101.193.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7A93914FA;
-	Tue, 17 Mar 2026 21:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5430239151B;
+	Tue, 17 Mar 2026 21:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773782577; cv=fail; b=D/hKo92knRsbTSByzDImCcUTeJn0gUhp5coLtKXRVWa0rWWMFB/ok4LmLL85GYFMZuv0CUHfyXxFPVt4MPhUcALCJ4eEEivlMILgKekb4WeLr9BPdGTdVYN9Wp05xwvr/ViiB4GiqI9t8rJbrda854F2yyd8r0MHKkCvfQ5yiP0=
+	t=1773782582; cv=fail; b=Hh8p/137ifEhQRORAwLYWkJ+ESlDiVQAvyVdGlAV7OxI6R8K0XNdv4zguJfdj2GGn3WusxxQoxlqU6XRZ/PmC5ucZtkWZudj1G2yWfVpIwrdDbTNcOAg//FggMXX0YXZSYFUSkrv1tO3qxLMEE6eNR6o0hxR9N162Q2eVwL8zns=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773782577; c=relaxed/simple;
-	bh=AEiXMlQWEp8LP6eQr+pWNjWw9hVV1gRQNTexmzDsIAc=;
+	s=arc-20240116; t=1773782582; c=relaxed/simple;
+	bh=jruc/9Sp0FE9nCvqjikf+6rgzZj8MHZjVdBkg172NSI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=joSod0l1eiEX04XtBJ3hs1TAVJOCbT/0ctoQwzMHNWu7XF4XA6rU6TcdexqlAmUWG2fAU2Ibl7w4vy0tz2baehsOTsczq3WwN/8T1+71BLEmELwZgQVRuLVJjedxmcdonaR2B5VjY0JHtl5QaqZbVvS+OQcFTYRbFcIgoq0Ciq4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ORxSSGzU; arc=fail smtp.client-ip=40.107.209.48
+	 Content-Type:MIME-Version; b=OqgQtlW67oCbiFIB/lntdMC3rrDnMMcgkkwK3ktp362/pLciVnbRr3EpV3tVVGIehZnOHukbelQHB/UKapxOd9lXVwhOhgdCdRXUSRL9zoM7OSDdjEXblWEuCjzaxuUVXcr4lmxiXN0CCGsTwQKuF8FKwpl/Izf9h7UvQAaxJ4E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=O4dRYjo7; arc=fail smtp.client-ip=52.101.193.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ORxSSGzU"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="O4dRYjo7"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Hux2AgOpnlymG5ZRzbssRxsg5CKxwUb2UB8fwg/wukt64UuzqnsHnQGXCpXzi6olSkyX6fV6UC+23wdca5lJG5hVEugCoU3z2eMw6ek7+fwkr0czkUJtroxI46MvbPfDK1lvm30tjSIwQJA7SU41stsOlXyAUUFMWv7RNypX8LPwoe0K30xTbr2RTqcsPHZqU2IqpHLFrZRbZ/klpguyl4vWcODkqWpSE5HCJWfK173vYh08TNCkmghtlwJXYJwIPZvKyW8o6qPw0jgtm0WTWCYO74wIYa3ok7chTzx6EQRBvYAMwlg+QJg1W6JOspwdyEaTYbmH4n3e6XJMLmBFlg==
+ b=SzS2GMpBT5ESVANWz87C/J430EB4dGMW0GZEKEVT4HtSNaFIJEYfsekQGiAW8NNtT7X+tE3pZUaHrEd3H43M3W+nLgKFbG2I2fSmjZ2ibGSuWBarrn70fhT+Umf83dt5j3S/Q9oU4RLPRC9nKaBxNoYWMoFSPYhbOuZ/KotG1FlAgm7Yxi4agW3ECXOWQ+PMvcjXTa2ZhOB2dmr8eVngoDtNe4JM6uSY5TrQ3QvlbEq6cnEB3PWt6BY2a6aNShq+xn6dzcVxc3FWR405wgfTqU+g1GPsqb0nFCu3jk5qOPXAIgOzc9GtfIYEGtqxtvTIliEEzdMkiFnM88HOxkXTlQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=johDCN/8J8x0u8T3tPAD9T+nVp5ukXPmXStOfPO8/K0=;
- b=mPkVaSkHcQ6QHbAojiU67HB5gR7/46xQ0WxGuawJVu4lvLjG1SMS6hZdZKDzXJz4KMsaR+FDk+84bj4rk3srfOxbtBmLMeB4WGAlmyG/0OI9c8KJDKai8tXu4hFf8WJ5ikL0Z4X4JxKDFcge1o6nU/BjfvvwuSCHJrXli1qTN8pXit8xsAKkg0JIalAl+ViTUhwayI+KsfyFz6CwdBI28oe62LZNI2FrclJhBEpzYtMqlzPLsE6sGnYPVYapN96Jp7Ybd573F7W9FdQfkSX1g2JT7uTYZyoXvRZjgflBAef7LyjtTFnyAls4wbxxHHq6Gj5djMOHLOCJMYvPuMlplQ==
+ bh=kSrWiDk7tYGikVgXQ2fwHl5l0H01KrR1hJKB0WXQdbk=;
+ b=xwZiebQMMheqJuI7vrFkoWj4I03s4k7gLemZpoYFFCWOH+e42npnyQ7itEC9VptKe1jzSgHtsqhYCranBBjjxEmvxHtw6M4sJ8pxskYC9BKSKR22/NFD4R7Lh1ipOIV1AaujIrZExsSLmF5RrYe0jrKJxsxgf3Qw4hc+ncdkaMs/jsHLkDE7qUaUmluhqeLc2qtXEgxRgGgO/DMRY+XiQYW42/mqj6mhYOA1DaPIj1RvZ6rWRX0u65RDjOODl0mzaO3xI24i7nHH9MecofoRkAq7y/L9Q1tv1MvvKsfZs2MBhcU2reEamEtKFcOOEzJmG92N5YxTfWCkssY+g3KyVA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=johDCN/8J8x0u8T3tPAD9T+nVp5ukXPmXStOfPO8/K0=;
- b=ORxSSGzUQQwktA+chjAnNyDhVURi/L9PbVGlSX5y1YZqJrXBf60DMGac9DbIci7dfWIruSUVvYGRfsKjbHTRgzKoxqxRoOhJoMOQ0F5JLJS92CkaeA2QF0bak7oM+j/fRucgryu78Nb7vL9myauYfI0x4T8FimLZJhhU/wmnx8znBBoTdBUYghsVJBrKAzARQ/CGaIHk4P/8FtsrC57Val+zr+I1VXReclmvtUpVGhpDoOcaLpuLMCEYPQBIclugEMHPca+kEerTZotXZ1G9kWcB2xAc8yE7aBLHcGpf+lgT2aFjNN/23v459r9xFbPVopzUTKDPAiO3MnUqA6lfSw==
+ bh=kSrWiDk7tYGikVgXQ2fwHl5l0H01KrR1hJKB0WXQdbk=;
+ b=O4dRYjo7QYztOpmV0IRy0OKkNIz/ob7BD01sxVTr4xvhDl+imqYmhphvYxl79jGfIG2ZiE1q/jyF8FYNGag2NUqZAG2fZnERqsb+IL+tzWEJnvGVsJARfcLUqy6mnvCdHJU53AHbv6hpo0gjM3ymcKnB8OSvdrpWY3K1PFknKmguXKE4SEfWfdDT3OO8dxEFvW4Osc2SfQnUQMF5OrgrZvURzamfKfkCyOLvZMxI+GF0Zo68xpoxp8iCtxDz28JGmoDqxSwp7gAJI+2Sg5JIL/tK5hRcKZE+PivuYg6rO1pAzJY5aJ+ikqiulCDXFBmgg6o917OArF8AjmQccLiBKA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from DS0PR12MB6486.namprd12.prod.outlook.com (2603:10b6:8:c5::21) by
  BN7PPF5D27497F1.namprd12.prod.outlook.com (2603:10b6:40f:fc02::6d1) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Tue, 17 Mar
- 2026 21:22:53 +0000
+ 2026 21:22:58 +0000
 Received: from DS0PR12MB6486.namprd12.prod.outlook.com
  ([fe80::88a9:f314:c95f:8b33]) by DS0PR12MB6486.namprd12.prod.outlook.com
  ([fe80::88a9:f314:c95f:8b33%4]) with mapi id 15.20.9723.014; Tue, 17 Mar 2026
- 21:22:53 +0000
+ 21:22:58 +0000
 From: Joel Fernandes <joelagnelf@nvidia.com>
 To: linux-kernel@vger.kernel.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
@@ -53,16 +53,16 @@ To: linux-kernel@vger.kernel.org,
 Cc: rcu@vger.kernel.org,
 	Joel Fernandes <joelagnelf@nvidia.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH -next v1 02/16] kvm-check-branches.sh: Remove in favor of kvm-series.sh
-Date: Tue, 17 Mar 2026 17:22:03 -0400
-Message-Id: <20260317212217.1527644-3-joelagnelf@nvidia.com>
+Subject: [PATCH -next v1 04/16] torture: Print informative message for test without recheck file
+Date: Tue, 17 Mar 2026 17:22:05 -0400
+Message-Id: <20260317212217.1527644-5-joelagnelf@nvidia.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260317212217.1527644-1-joelagnelf@nvidia.com>
 References: <20260317212217.1527644-1-joelagnelf@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: CY5PR03CA0036.namprd03.prod.outlook.com
- (2603:10b6:930:8::26) To DS0PR12MB6486.namprd12.prod.outlook.com
+X-ClientProxiedBy: BL1PR13CA0214.namprd13.prod.outlook.com
+ (2603:10b6:208:2bf::9) To DS0PR12MB6486.namprd12.prod.outlook.com
  (2603:10b6:8:c5::21)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -72,179 +72,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DS0PR12MB6486:EE_|BN7PPF5D27497F1:EE_
-X-MS-Office365-Filtering-Correlation-Id: 744fbafe-e446-4ee3-32f3-08de846b59a5
+X-MS-Office365-Filtering-Correlation-Id: 80310a04-707b-454f-7856-08de846b5c16
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|376014|1800799024|56012099003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	osV7GDoN/aI3P+jvQ18d6ryXZbK5mOw7RvSQjpSNSLZz6Wva+ZoGeMvsHGZQEJNCMUO9QdsmMs/GVJv/s4CaxhaRLtVXl4mtkrrWQTg+b7xJttNLIK8ooIXe88bqycB4QOj+tWy1hmckEoMq7Ra1uj2eh7ugu1ckTrAoPiBdpnHUI+LEpj1gRGrMx3RdRsOV5MS3l2g28gQnHb1HO/9ZiXPVlojA34EOoVSuw0yTn5JHu+uX+hveiF1RPRwHNoCcJgVEXYXkKmd+CnRNFvx6G0la0p4lRUofX8/8mUbQpRArvaDJ/qQHnmSEZ/Re+aQ+SuNab1nW6aeprUg7SMDDiaj6UPJl1mMEwlDAhjqWqYvgXx8VcpFzk8kBmSYAp/I/qKtB18/beWxRZEqJg8Al2iEDNKD8z4Hsdh8e38hi8S3o+C5A1T2XkcjvislZENkJ8MEY2KxyruWtcZII1qQXiaRpbVJyhcGp9u1YDBw7gsgkof3ZFisE21OV+7JT/v5K4pLM9bobG0qZU7gNash82/DyUUCW+HaLKDq0z9v6W1reMmHfH4p6qSUKB8zLsbxDwQQNUccckaFHXWLWTxO9C0W6232u/zBPJku/eHI0SI/oVBWr9mrP1bXXWTsAUhYI6dJdCQoqRhj2CvurMxzVjJLbF7MC4L71G0p8tS8+ZFVCdVIgk9iYk/f5LNsNX2OR5TBZdee/SrtZbQ8GIBdjSQirI8dkwZSgIHZqr+aUPlo=
+	mqHEc07HiGSu6bTXGKpEYdviMBSgug9jKVlpO5IBoO1iceaHwtBN9L+YIZAhi8QqzRvp42U29c+ErBatLoXp17CVZCT45uK+tgo/Wsn/dBGqr735PTdLcAdHFe1W+NsxiIoc2EE9QmjvGfxtrGL1dXJGHXcR0DOKTv87yLvQRjaPiP0Qr/JHtpbtBq0+09S+VOCizajrCxBM8EsUdMgDbrMGAee1L1JyPnKSxhXSMf4lkZEDzElyiKATQ6zgkkMSFPooarYft+ETggjvy78BBy9J4K6qls/TIUrStlEOXPhFIBARcUOgLY5NfhdNdeTbPCGRNhErOIUheJX6FP8KJ0mj6jUVwgfMzxaDUbwer/tQ2uAqYWp3lwEbDDgFEGt/+TbQjcXnSdg3Yy7qTozttVFkkO94ljbPLclioUeRvn9g3YwVYy25Dd90ECWvQs+nZtkLUwaR8+6I+TOW9Iiu1r3odDynaNaPB3cluREbUWtLsB0XZ0qQI1VQgTJzE6FVd4gKzQSATcVvlVfqloNjGr0jYeAvwSCxYcivb210qxlfs9fSsm2BpHm5GON576CzZ58pPuz3Y0Gak7YkzDbKA5sytfmzakf4gUFcvYzpkKQ5crZPJvfCpZHPFe3JIAcg3WPcZ4g5HrWndSrFlYKZWdW3rF1toWxWi8++/Gd0DNUXgfZIWiY6nNMXTrNyS1aVK5oV09VuDLJaTDaOMNdjxj0CZf2RM4LCv4O81PLETnQ=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6486.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RD1F4LK2Go/pflMseNMDYpBoyNvnhSgJDrTwtbiv8cF7E93SQcrlCWg/sW0a?=
- =?us-ascii?Q?Nq4kZ6Bo8ckaAmnUi8rupUYB/SJcbGrIVl7xfTwMVA2L02I4h8Y3W0o4m4Go?=
- =?us-ascii?Q?BcgEQJHNUzif8/374t6hu9DrvqTosexDfQizE396Uz+OGeMNVS/3akX6cY5u?=
- =?us-ascii?Q?/uNhaCwN8Q5VzZtFvmG/DoVOdh13EbigvQr029VTzQby3GXizDhR7uETE5pE?=
- =?us-ascii?Q?QWRNwPB9EXl+q3kOEffyqYCPx4mg/VNqMADRJ/Yq2xVc9KsRO7El7yDx6Tcx?=
- =?us-ascii?Q?gR7JXNEBIlxIPx/3RYyuQD747XdQF2fmUeQd33iIkFCOYCmrhimc7fZs80Td?=
- =?us-ascii?Q?dJjx64zDlFG7ErQ5oj0Wno4ec+HXwzhQVhRli0EupWBO0y7Xwz9ZZF26doGb?=
- =?us-ascii?Q?9SNs0kpBQDWmtEAk9Q35JuH4X2dFahFLWniEIglpivBGHnaO6q0tijY/ZhAI?=
- =?us-ascii?Q?04IfOC84UpLWz2+jaeH0iqMKb6fhHjnUafbf+Z8q7I37ZnU8EW78RFsLK1Bn?=
- =?us-ascii?Q?VE1TfoGuBnrFGK1N8Pj20wBE/g59obyrPL+nrUPull9Fhd1mnkG+DuMCBFmI?=
- =?us-ascii?Q?C7a1H2gKdZRSmV78NcjcZ+NsEl25YxeS//y1dFJ048r7ZGWLakmxBvyP2ynb?=
- =?us-ascii?Q?LqAj9o85EerS2UdMcfKdBdsVf7z02xwlBHIMVVufN7kL3tyT0imkcZSEMWZe?=
- =?us-ascii?Q?Zv3LaJPyuOQPYS8+d6K3rmKso6XWroxPJwRlZBimY5iWiyrEKyHRr/vxDuNN?=
- =?us-ascii?Q?fYkAHwV8row/ue6Zw3Lvg4gONeuC/3h9alIXnA46MZyOafnW4fpkFFwWYL7X?=
- =?us-ascii?Q?LrMhfwqpYTk04mUe56aGi7KJL0LVgI+Fca4UmgfZa42ckcXXcvqvNqmtUvmo?=
- =?us-ascii?Q?zdv8js82gchrYvO6uujyrKwOikogHH7xibkeObYIY7wowPT8sIP315buUDHs?=
- =?us-ascii?Q?Rj6rdZZNQmH38Iy2iR2rLrlzGSspOe1gig9YrAk1ISPe2h4YwLccWAK78fBI?=
- =?us-ascii?Q?qSGfjyXc8N8KrUY6IdoJePqE783oXfDcBFS7mrNzq+4lBlR/Lxao3SyZ/17x?=
- =?us-ascii?Q?40ZEsJqktbp7YMlLO1aZg7OQqA2sa096ZXCbxE7R74zFwBSXHJ3PfPuuSZGd?=
- =?us-ascii?Q?tCFu5UR4Ia2q8xHp+G1y057ik7TmH9cofLsQJUbw2v1lbgdiUEcgTCxq+sit?=
- =?us-ascii?Q?Md+6je58r310/T1XgMjht2Ad/FYEPrO8RXqeYtlm4xOTBkfzCy2KCO1n/Sgf?=
- =?us-ascii?Q?cQJOn4vnQMo14qN2aHy7hhl5vxkDu9H3HlhKsqk+w4p852+OYHT/VtY0XfcE?=
- =?us-ascii?Q?z/z8WEXY72MzUUFYcwgCqiACjwUOIjXJdQXncJtyAc5MVhNdCmRpZejjh7WE?=
- =?us-ascii?Q?SDmZj/p6uYPQIfidmiIteqkGt47r0/XgPql6uGuS5R9aESOSByl4K31BBigZ?=
- =?us-ascii?Q?fShl3oYChGWFGqT2c9rI1QzkUNO1PUx+TMxrWvzxd3tONstYZ3Z5y/UNG5Vj?=
- =?us-ascii?Q?YGgnoxG8qblYaWL41GDxqVRDHjBePEu+ghSFZhhWITErwYO8na5VBEbhMZ7y?=
- =?us-ascii?Q?z1tXyj9buS1D+Zl1NIuhKaC8OhSvzdqhHmj30wUwqEPXYWa4KAW9VkAhMC91?=
- =?us-ascii?Q?kuXs0di2xcEq/ZCJY7DCv0U0aEBa+q0sbFiGYJjk5hAbJG8gxFXMf82TsFgB?=
- =?us-ascii?Q?bv8MkEC6HVcA/eC127EYEqhAjtXtrIARfGeVhBwp3xkGzz/hT7LY6lBvFkYt?=
- =?us-ascii?Q?+3+C404BEA=3D=3D?=
+	=?us-ascii?Q?neKrDFniUpP7103iROmH8Csxhn5kOqJ2z7aluuofNMnILvqM7jLir3uu1+0E?=
+ =?us-ascii?Q?LKzoRqrrLyImiI79B9LXDemvgjiV8SVq4x22BwBLdDINXvs+IC9MwSEa7iv9?=
+ =?us-ascii?Q?cm5I5gR1FgXd1NaaHjuWURlDCpnGAOKh+kMRI7vO/SsVKbofSUSDt63khois?=
+ =?us-ascii?Q?Elk5uUDmMkf7+9XmC5F8G85Ea9CPtg5lP6DYNqQcyzSEcq1cAzkSiqzUcg+x?=
+ =?us-ascii?Q?IUw7NttyA8tbdxnGSRSdljK48yyTnB3GqjeZ+TVGa5ywYS2xgQSrz/JYNCz9?=
+ =?us-ascii?Q?Jtndt6fnodDb4EvUw6wKtAPYTXTKWmaUo2UZ01K1eAaYCwNttQOFiwluwbz2?=
+ =?us-ascii?Q?c8xyuiYh8iG+9aMipJqV471QM/v4xEWx4mvsTjd09Dtx0sLRN+zyrVEKwMfs?=
+ =?us-ascii?Q?7CLK2AWVliU3OXJdWj3vAQde9MIEusPeaIY/LVv//N/2O9UckOgtBJyDT8Hm?=
+ =?us-ascii?Q?nIN9/S4EMYl07AV+GwFWY7kT5s8GH0QNLq+KlHdzTgLbsUKwHKrgHu+lIW2o?=
+ =?us-ascii?Q?6OuIxl3rZ6I3WvF2dV6st/aalCWenkJ7obfl3F+Tro9NWhLhxA1s8F3cPgN+?=
+ =?us-ascii?Q?s4m43gH77FX0/JuAvqqGBMu85aenF31atXRsLqbBER6JgMtUoUIqyGe61qTr?=
+ =?us-ascii?Q?aWfU1g4mz8pZtlpR/KpSW+H5lg80fbexMoeOwUfw3JDg3QRfoahRXL/+ZfTu?=
+ =?us-ascii?Q?PS/dmT5+MiC0V9XR7sKEjKPhfBgLF9zi27qzDalRZDdt5wX8N6mei+CbCnLn?=
+ =?us-ascii?Q?q/EiXOzjGauCR1sJ3Xu3gZE9ixFhBx0jYjC3BWMYQrIMd77K8QCfDy1qBy9D?=
+ =?us-ascii?Q?yQmTIXtFwbcLxdEmmxgrT7+I0/wLaE88UEZeIFzmkWETq0jSfZ1Vh3XG1V3g?=
+ =?us-ascii?Q?RhOTa5bhDV/vtLCqKTISO0eg64FeKTrCBG3gAh+N1MxNZ8+TOuRXtWWmJ4Ld?=
+ =?us-ascii?Q?zCdbFU9eWflZQzvSJqDk3VsqLmx+cEANBMibhwZI+5kdcqj9m66gE9Bf+fn0?=
+ =?us-ascii?Q?yWrl3XmD2hHXycNOuPkOrW83euSM2G/CQbA6dJo+e5jY72inba3IBHXueIne?=
+ =?us-ascii?Q?PFVDyWu5PkraJnf+IvzCVsJ/m4cEiVIKZIgiMwWZY0CrCK9/Hgdw7TrzDVWO?=
+ =?us-ascii?Q?mMY3Ntb2HC58C0HR6J7MFGujtQAdKNjKfuF4dLx6FDePAZPGW9zhe0NVCGOb?=
+ =?us-ascii?Q?E4T37mheVE+W8EtkVlGjnRjpFyt0g7xJvEC55s20L4aVC8Xxc0dlWRm/rhB0?=
+ =?us-ascii?Q?N3gWDSMIHEd7JpZKkIJANZZxkidkScpG/U/FwQ+9pC0OGI8vI5inYG+yF3od?=
+ =?us-ascii?Q?lMrkH7NuhwcrUvZFJ7jgbgIlUMmdOGeiWc79f1VeuUY1RVCQcqLgFyrxRF8z?=
+ =?us-ascii?Q?Zr44zHOqZwIoe1gGTg+UpXJe/d5y8TkTDeshvLmW4968pXMn9MyxJbz5QQIs?=
+ =?us-ascii?Q?JREVi2PF3mtWl/oiGqTEpiuVuDRaQB/MFoDqzCJ7ISQaZY2HX9dsGIJcp5tl?=
+ =?us-ascii?Q?UscCIDSomel2YPQKixU8r00NNUKo08922aRhEPULH0O6nDzgurf2BH9xpJC+?=
+ =?us-ascii?Q?hsNlogPsO3r8kTg5u6w0u5HN3k0eq6iyv/ho/8FC7zQGZfGj0MAbdkGAR1YT?=
+ =?us-ascii?Q?CO4qPvplRY8ifUstdM/pDGCeCDWKE2h8ayG+Ea0VYwGTrgaUyIM8C5CciNpX?=
+ =?us-ascii?Q?CFuiTFnMfpupHiMvBBQWCtKW0sHvZHWXO5uHUgoRHw1mrSZEPqGetupbZkQ5?=
+ =?us-ascii?Q?2Q+bwh0MFQ=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 744fbafe-e446-4ee3-32f3-08de846b59a5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80310a04-707b-454f-7856-08de846b5c16
 X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6486.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 21:22:53.4780
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 21:22:57.5839
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DuwAdwY8ORd1IMFds8gutVRrycOYXpRGOL6m9tUKvIW2U8aSd0go1nUfs8pUx7RzsDrr7LBnSfNm7Hy2rS7hHQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: kLH7p+zVeRcr/0mPPa895lxsA2P8b4eB8pmCoBIQPJl+N8WyAAPSZwVEOCPM6+YhUIgUFo3B3/7ar+uY0+23lw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PPF5D27497F1
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-The kvm-series.sh script is an order-of-magnitude optimization of
-kvm-check-branches.sh, so remove the old script.
+If a type of torture test lacks a recheck file, a bash diagnostic is
+printed, which looks like a torture-test bug.  This commit gets rid of
+this false positive by explicitly checking for the file, invoking it if
+it exists, otherwise printing an informative non-diagnostic message.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
 ---
- .../rcutorture/bin/kvm-check-branches.sh      | 102 ------------------
- 1 file changed, 102 deletions(-)
- delete mode 100755 tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
+ tools/testing/selftests/rcutorture/bin/kvm-recheck.sh | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-deleted file mode 100755
-index ed0ec7f0927e..000000000000
---- a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-+++ /dev/null
-@@ -1,102 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0+
--#
--# Run a group of kvm.sh tests on the specified commits.  This currently
--# unconditionally does three-minute runs on each scenario in CFLIST,
--# taking advantage of all available CPUs and trusting the "make" utility.
--# In the short term, adjustments can be made by editing this script and
--# CFLIST.  If some adjustments appear to have ongoing value, this script
--# might grow some command-line arguments.
--#
--# Usage: kvm-check-branches.sh commit1 commit2..commit3 commit4 ...
--#
--# This script considers its arguments one at a time.  If more elaborate
--# specification of commits is needed, please use "git rev-list" to
--# produce something that this simple script can understand.  The reason
--# for retaining the simplicity is that it allows the user to more easily
--# see which commit came from which branch.
--#
--# This script creates a yyyy.mm.dd-hh.mm.ss-group entry in the "res"
--# directory.  The calls to kvm.sh create the usual entries, but this script
--# moves them under the yyyy.mm.dd-hh.mm.ss-group entry, each in its own
--# directory numbered in run order, that is, "0001", "0002", and so on.
--# For successful runs, the large build artifacts are removed.  Doing this
--# reduces the disk space required by about two orders of magnitude for
--# successful runs.
--#
--# Copyright (C) Facebook, 2020
--#
--# Authors: Paul E. McKenney <paulmck@kernel.org>
--
--if ! git status > /dev/null 2>&1
--then
--	echo '!!!' This script needs to run in a git archive. 1>&2
--	echo '!!!' Giving up. 1>&2
--	exit 1
--fi
--
--# Remember where we started so that we can get back at the end.
--curcommit="`git status | head -1 | awk '{ print $NF }'`"
--
--nfail=0
--ntry=0
--resdir="tools/testing/selftests/rcutorture/res"
--ds="`date +%Y.%m.%d-%H.%M.%S`-group"
--if ! test -e $resdir
--then
--	mkdir $resdir || :
--fi
--mkdir $resdir/$ds
--echo Results directory: $resdir/$ds
--
--RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
--PATH=${RCUTORTURE}/bin:$PATH; export PATH
--. functions.sh
--echo Using all `identify_qemu_vcpus` CPUs.
--
--# Each pass through this loop does one command-line argument.
--for gitbr in $@
--do
--	echo ' --- git branch ' $gitbr
--
--	# Each pass through this loop tests one commit.
--	for i in `git rev-list "$gitbr"`
--	do
--		ntry=`expr $ntry + 1`
--		idir=`awk -v ntry="$ntry" 'END { printf "%04d", ntry; }' < /dev/null`
--		echo ' --- commit ' $i from branch $gitbr
--		date
--		mkdir $resdir/$ds/$idir
--		echo $gitbr > $resdir/$ds/$idir/gitbr
--		echo $i >> $resdir/$ds/$idir/gitbr
--
--		# Test the specified commit.
--		git checkout $i > $resdir/$ds/$idir/git-checkout.out 2>&1
--		echo git checkout return code: $? "(Commit $ntry: $i)"
--		kvm.sh --allcpus --duration 3 --trust-make --datestamp "$ds/$idir" > $resdir/$ds/$idir/kvm.sh.out 2>&1
--		ret=$?
--		echo kvm.sh return code $ret for commit $i from branch $gitbr
--		echo Run results: $resdir/$ds/$idir
--		if test "$ret" -ne 0
--		then
--			# Failure, so leave all evidence intact.
--			nfail=`expr $nfail + 1`
--		else
--			# Success, so remove large files to save about 1GB.
--			( cd $resdir/$ds/$idir/$rrd; rm -f */vmlinux */bzImage */System.map */Module.symvers )
--		fi
--	done
--done
--date
--
--# Go back to the original commit.
--git checkout "$curcommit"
--
--if test $nfail -ne 0
--then
--	echo '!!! ' $nfail failures in $ntry 'runs!!!'
--	exit 1
--else
--	echo No failures in $ntry runs.
--	exit 0
--fi
+diff --git a/tools/testing/selftests/rcutorture/bin/kvm-recheck.sh b/tools/testing/selftests/rcutorture/bin/kvm-recheck.sh
+index 4791774b8485..63bbbdd5f4ef 100755
+--- a/tools/testing/selftests/rcutorture/bin/kvm-recheck.sh
++++ b/tools/testing/selftests/rcutorture/bin/kvm-recheck.sh
+@@ -39,7 +39,12 @@ do
+ 		X*)
+ 			;;
+ 		*)
+-			kvm-recheck-${TORTURE_SUITE}.sh $i
++			if test -f tools/testing/selftests/rcutorture/bin/kvm-recheck-${TORTURE_SUITE}.sh
++			then
++				kvm-recheck-${TORTURE_SUITE}.sh $i
++			else
++				echo No kvm-recheck-${TORTURE_SUITE}.sh, so no ${TORTURE_SUITE}-specific analysis.
++			fi
+ 		esac
+ 		if test -f "$i/qemu-retval" && test "`cat $i/qemu-retval`" -ne 0 && test "`cat $i/qemu-retval`" -ne 137
+ 		then
 -- 
 2.34.1
 
