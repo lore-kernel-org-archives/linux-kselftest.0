@@ -1,77 +1,59 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6F23B2FD9;
-	Tue, 17 Mar 2026 22:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F92D2D7DF3;
+	Tue, 17 Mar 2026 23:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773788041; cv=none; b=FHqrilG+AFOrXX8s4F9sJS7mcHZyYKI7P+esmH4hkN5mKjigIqzWV2KJJlWZT1fQYkCO4qiovZBMRQ6xUV0qu8JhBJAxXy0igBO3eYfiyP5xVKJo1jZ6ThTUxcr0rZYgjRHNNpW+tVGCrCBlx4ALODQ67F2W7pEI15kXzpcTeE0=
+	t=1773788990; cv=none; b=FemcwoIbciK8uh/Haw/t59Hpv2TZFhZyYzgZbUaxWY7zPhKjJ2o3fXLjrQrYtPCSgYdWgDdB1N6ZIBKsCZGglvt+VOQzM0FM+tDKOznvwhMJ+EbfgQiHpml5WlY0Nv/Fuxi4litMUCt3Ftfn7aeXv2/8Zfxb651QIStBbXp99KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773788041; c=relaxed/simple;
-	bh=FAObWFLkD069InRJHS6MNR6EjyuV+FnW18Rz4FFWxpY=;
+	s=arc-20240116; t=1773788990; c=relaxed/simple;
+	bh=iC20zC/9D2U2kbeHwnm4GeZrbhM0rOArXLQNcEKTaEk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nW0CpJmNsNXuYIFUMvwNPIMgOU+p9bQMTexBIVCn1D2/c0tX5lJbPlDY3YGXLRP1U4LJN7aW1K89KqUWtSkj6LobJwec3pWgmD9Bnu8ZlotEqDJx2OLMrtpQB4Elo13lPB6QCtFJAOjwVSc2BP+Zx68+WXLOXvO49QoDLF6aK+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TMQkI9fH; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=uZ0D+QT/9wE58jw82BPDiNmyL6fZ5SrK0oLWRjJOJu2tcIqQhuZ5MAsHYQQK7ubBMsfIU/hrleQPATxsXJiBMsYBKpLfa5HpV92G2lSFs7qz8l2knLm7Y2BwMHqykfxtMPwBj97nJMe+GJ9y/VQs6CAFM32AgkM9Dil1IcBQqh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxqlXgul; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TMQkI9fH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3657C4CEF7;
-	Tue, 17 Mar 2026 22:53:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxqlXgul"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA22EC4CEF7;
+	Tue, 17 Mar 2026 23:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773788040;
-	bh=FAObWFLkD069InRJHS6MNR6EjyuV+FnW18Rz4FFWxpY=;
+	s=k20201202; t=1773788990;
+	bh=iC20zC/9D2U2kbeHwnm4GeZrbhM0rOArXLQNcEKTaEk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TMQkI9fHTKCGKLyQQZySbwqwXFeM9iSmrObVq8Tco+BxzMNvl5aUXZQ4QTA6M5USy
-	 UU6tS+PBzcHPRQZNRtHoCqeW2Ji5IpLt4iX1LFj7c6QaAGyq9qUQc458JKmlNUFQZS
-	 0DAPgmVOLrwpWuZ9YUOJTFUplEc1kHXw9zCztG/CGJIq+fcITU/iE321mxzG/wykxk
-	 3MAkpiJspySH+DveerQnnNfdSH9UqNCLgSHWfCOwtIHnIMGN/lsEO4/dhmcQUYVj5W
-	 8ER4N4DDLQ2gG44EmoVkcfcEQLXT1oz7K7Cl4PKdfmutmqqtSNe53QT3VHYM6ZmMy+
-	 SQCfeCGeyQ7tw==
-Date: Tue, 17 Mar 2026 15:53:59 -0700
+	b=YxqlXgulEx/NSJxOOYUI53/0UcSZaX5txvgdzIuDJk0DC8FStWgSCbLIkI+ie7QZO
+	 Q15U+OsdaNEQkRaLV1lbgdDyu5oIqaT3cfToosl0LSisg/VD68cBR7eYhx3YmMnPTt
+	 740NQVTW113gVfklFGt05lM7A780XGZkQGXQkulWkmfVqZR+VweSKgD8dgnOA4Vlzn
+	 Z92Q1YNJRYwaiPva+bpx4yg4kXtaBdR/7ffh9fvxvuuO7qiBDNWzIRvj9D5EokEVC2
+	 oT2S9ZgtP18k+3qLUIrhrsRbh5fw8p6fgoXf2KfuCc1+5zInDC5VvdcXnJLHYmE/hk
+	 XHQAraCWgejjA==
+Date: Tue, 17 Mar 2026 16:09:48 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
- <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, Willem de Bruijn
- <willemb@google.com>, Shuah Khan <shuah@kernel.org>, Maxime Chevallier
- <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH net-next v5 2/3] bnxt_en: Resize RSS contexts on channel
- count change
-Message-ID: <20260317155359.33b855b1@kernel.org>
-In-Reply-To: <20260317083339.2811865-3-bjorn@kernel.org>
-References: <20260317083339.2811865-1-bjorn@kernel.org>
-	<20260317083339.2811865-3-bjorn@kernel.org>
+To: donald.hunter@gmail.com
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, sdf@fomichev.me, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] tools: ynl: rework policy access to support
+ recursion
+Message-ID: <20260317160948.5a358df0@kernel.org>
+In-Reply-To: <20260313232047.2068518-1-kuba@kernel.org>
+References: <20260313232047.2068518-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 17 Mar 2026 09:33:35 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
-> +		if (netif_is_rxfh_configured(dev) &&
-> +		    !ethtool_rxfh_can_resize(bp->rss_indir_tbl,
-> +					old_tbl_size, new_tbl_size,
-> +					dev->ethtool->rss_indir_user_size)) {
-> +			netdev_warn(dev, "RSS table resize not possible\n");
-> +			return -EINVAL;
-> +		}
+On Fri, 13 Mar 2026 16:20:47 -0700 Jakub Kicinski wrote:
+> Donald points out that the current naive implementation using dicts
+> breaks if policy is recursive (child nest uses policy idx already
+> used by its parent).
+> 
+> Lean more into the NlPolicy class. This lets us "render" the policy
+> on demand, when user accesses it. If someone wants to do an infinite
+> walk that's on them :) Show policy info as attributes of the class
+> and use dict format to descend into sub-policies for extra neatness.
 
-Now that we know the size of the table that user has set=20
-we can skip the netif_is_rxfh_configured(dev) and depend fully on
-ethtool_rxfh_can_resize(... rss_indir_user_size) ?
-
-Otherwise we're not making much use of dev->ethtool->rss_indir_user_size
-(the one for the default context / context 0).
-Regardless of the table size user provided IFF_RXFH_CONFIGURED will be
-set.
-
-Which brings me to my last point - I think you can delete
-IFF_RXFH_CONFIGURED and have netif_is_rxfh_configured(dev)
-operate on ..user_size ? We should probably have a new helper
-for when driver lost control over rings and has to reset indir table
-forgetting user config (bnxt mlx5 clearing IFF_RXFH_CONFIGURED).
-Helper should clear the state and issue a Netlink notification?
+Hi Donald, you promised to take a look when officially posted?
