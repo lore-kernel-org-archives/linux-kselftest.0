@@ -1,103 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE673644BC;
-	Tue, 17 Mar 2026 09:39:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE1139151E
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 09:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773740399; cv=none; b=PKSQ3LrZKEQfY3IAjHJd4ee75mmf1EIrN/xjnoYBTKCxHtZB7ilZ+RWpejoAr7ei28iSV7qejGVtOvG2bGPtGyrIaHoDDeGzqGQQNZH3X3bPWiZBB9D7D6fWb0BKzmiYh0tArIikCW4DSe5jRb++WWHNgPfI1bsAGfeaOTpDa8o=
+	t=1773740682; cv=none; b=LbFxp6l+iZpfVbu6WGJaXbwtIo7NJFcuLeM4E8yi5dIO+ixXiClEZJFrgJMMO40CJSMZnRirCwTH6BV6lNxoS8r5xBVmF7A9brOyVZeK91whzO7SAG6Y5u23V0HyYEAw+EQF9tLdlJg9/zGuiG59fqU6CbabGX7gCnL9Oh2UmUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773740399; c=relaxed/simple;
-	bh=X1b5odisZXG8hdNFbSDTR5iFNZss9HSTUn4ZhTne3CQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=edxKdopvmPGgdSD4M2X31G6qQXRmljHkydxumOlm5ttyXPUw4KjlxctiKXdgZqB/uvPhaEWSgqJZYKcoggbNFjgn/yaunm/yUhJuDeXxLapgHGLfQJJZ4bWzFzDolqNml6ovwYXlpH9hNBbo25FJAfvJSwauWLWFvRUSqrhWXt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J8KDi95o; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773740682; c=relaxed/simple;
+	bh=+7p12v0qLWfDfZl5y6IA7wA+qjZCljlSoPLi26qsFJU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T+iDTGBSvON0D132MbN7TjQyPmKHAr0l97DGikiE4UJgrGHkuSkdsOgcxN62FMX04NrWiLvzrd3/aXVvSmk6/5X7cvbAjxVVXqcVICKmHPPkrl5/Z4qF5a6QFgDUIwm+2EjHIovfDCPipLcFqDoiO2NoRE2Ayk5k60x5MGacnZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dPEyaLHP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J8KDi95o"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773740398; x=1805276398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X1b5odisZXG8hdNFbSDTR5iFNZss9HSTUn4ZhTne3CQ=;
-  b=J8KDi95oU4zckLczd4wkuUMMh4os5uUQnJMpsShA5IoM1qCHHMpjWjPN
-   cySE2OLEvJaZ0m7Gap+iuuIV2ve/fvKFeiicvLCdap0nfXnF76CZ/AIDO
-   GehwrgVGoRNrFB1I/q9ztJAkcC72xiOlzHwM339PRo6vFSMZ2y4J4WFTP
-   Axp9hEdA+HyFypEtn7nAkUXoQZHqddxU1ET6r5ekwoxWTJL+N3tDCBdju
-   QDPCdS1nt5Baf7MvN1H89E95VF/MIBjlf8aGqj5YSfiGc4QfkeaJq2XYS
-   gal15vL3s+gfCGnUcRzHCKEJz/4jWGIIzIRmE0GlcWxyCKCb9e8kkBARp
-   w==;
-X-CSE-ConnectionGUID: FsV2ZaIJQ2mhek7txgXcoQ==
-X-CSE-MsgGUID: PWW6wnZaTvyg8ra9sT0tew==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="78620630"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="78620630"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 02:39:57 -0700
-X-CSE-ConnectionGUID: tFN7HEKcRe24Er0BrMiG6A==
-X-CSE-MsgGUID: Lov8Ur2cTwq1C6vhxZNkGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="252705194"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa002.jf.intel.com with ESMTP; 17 Mar 2026 02:39:54 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w2Qu1-000000004Pd-1tU4;
-	Tue, 17 Mar 2026 09:39:53 +0000
-Date: Tue, 17 Mar 2026 10:39:21 +0100
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Willy Tarreau <w@1wt.eu>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dPEyaLHP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773740680;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=c8GlmATBq0zxhVHV+3sWeuVgZ4UPDFrGCjDb3oe3T+I=;
+	b=dPEyaLHP1YT7nxRmYcY1FNFaLwH63NYsDUSYZ6eSjDjbw91mHQztnaBAAeQzpoaupDPSbK
+	/zp1+UBnfDCMrFWlSm9iY6EMjP5oFIW0LOBdLhjyQehBwMWH1TVT+ND49E1L5gPlczHa1n
+	DaSWXNOrKbzCjnDlBw+3frSGIdQz8U0=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-358-IBhb6YRVOZK4LFIeCThPZQ-1; Tue,
+ 17 Mar 2026 05:44:35 -0400
+X-MC-Unique: IBhb6YRVOZK4LFIeCThPZQ-1
+X-Mimecast-MFC-AGG-ID: IBhb6YRVOZK4LFIeCThPZQ_1773740672
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1A622195609E;
+	Tue, 17 Mar 2026 09:44:32 +0000 (UTC)
+Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9BDD73000223;
+	Tue, 17 Mar 2026 09:44:23 +0000 (UTC)
+From: Chunyu Hu <chuhu@redhat.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH v3 1/2] tools/nolibc: add support for
- program_invocation_{,short_}name
-Message-ID: <202603171011.58aT1Db0-lkp@intel.com>
-References: <20260316-nolibc-err-h-v3-1-6ef80c051ab7@weissschuh.net>
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com,
+	npache@redhat.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	baohua@kernel.org,
+	lance.yang@linux.dev,
+	chuhu@redhat.com
+Subject: [PATCH v3 0/5] selftests/mm: skip several tests when thp is not available
+Date: Tue, 17 Mar 2026 17:44:14 +0800
+Message-ID: <20260317094419.1429259-1-chuhu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260316-nolibc-err-h-v3-1-6ef80c051ab7@weissschuh.net>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Hi Thomas,
+There are several tests requires transprarent hugepages, when run on thp
+disabled kernel such as realtime kernel, there will be false negative.
+Mark those tests as skip when thp is not available.
 
-kernel test robot noticed the following build errors:
+Changes in v3:
+  - patch 1 update commit message to show the log snippet with where the
+    fail happens, change the 'false positive' to 'false negative'.
+    Update reviwed by
+  - patch 2 update reviewed-by
+  - patch 3 make write_file to void return
+  - patch 4 and patch 5 updated reviewed-by/acked-by
 
-[auto build test ERROR on 745dadd6d3d984feafb96f27b60d74b29ade4957]
+Changes in v2:
+  - replace 'false postive' with 'false negative' in cover letter
+  - patch 1 and patch 2 add reviewed-by/acked-by
+  - new patch 3 to add write_file() in vm_util as a common helper
+  - patch 4 removed the {} in if block, removed the write_file helper
+    rename chunk in v1. Add reviewed-by
+  - patch 5 move the exit chunk to the front of ksft_print_headers() as
+    suggested by David.  Add review by.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/tools-nolibc-add-support-for-program_invocation_-short_-name/20260317-060704
-base:   745dadd6d3d984feafb96f27b60d74b29ade4957
-patch link:    https://lore.kernel.org/r/20260316-nolibc-err-h-v3-1-6ef80c051ab7%40weissschuh.net
-patch subject: [PATCH v3 1/2] tools/nolibc: add support for program_invocation_{,short_}name
-config: s390-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260317/202603171011.58aT1Db0-lkp@intel.com/config)
-compiler: s390x-linux-gnu-gcc (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171011.58aT1Db0-lkp@intel.com/reproduce)
+Chunyu Hu (5):
+  selftests/mm/guard-regions: skip collapse test when thp not enabled
+  selftests/mm: soft-dirty: skip two tests when thp is not available
+  selftests/mm: move write_file helper to vm_util
+  selftests/mm: split_huge_page_test: skip the test when thp is not
+    available
+  selftests/mm: transhuge_stress: skip the test when thp not available
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603171011.58aT1Db0-lkp@intel.com/
+ tools/testing/selftests/mm/guard-regions.c    |  4 ++++
+ tools/testing/selftests/mm/soft-dirty.c       |  4 +++-
+ .../selftests/mm/split_huge_page_test.c       | 19 ++++-----------
+ tools/testing/selftests/mm/thp_settings.c     | 24 +------------------
+ tools/testing/selftests/mm/thp_settings.h     |  1 -
+ tools/testing/selftests/mm/transhuge-stress.c |  4 ++++
+ tools/testing/selftests/mm/vm_util.c          | 16 +++++++++++++
+ tools/testing/selftests/mm/vm_util.h          |  2 ++
+ 8 files changed, 34 insertions(+), 40 deletions(-)
 
-All errors (new ones prefixed by >>):
 
-   nolibc-test.c: In function 'run_startup':
->> nolibc-test.c:750:9: error: unknown type name 'bool'
-     750 |         bool proc = access("/proc", R_OK) == 0;
-         |         ^~~~
-   nolibc-test.c:49:1: note: 'bool' is defined in header '<stdbool.h>'; this is probably fixable by adding '#include <stdbool.h>'
-      48 | #include "nolibc-test-linkage.h"
-     +++ |+#include <stdbool.h>
-      49 | 
-
+base-commit: f338e77383789c0cae23ca3d48adcc5e9e137e3c
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0
+
