@@ -1,149 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AF8391500
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 09:46:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0783439D6D9;
+	Tue, 17 Mar 2026 09:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773740806; cv=none; b=CYA/8gTYDuwnKzRuzqW7Z0Z263Fjm4Ykl/AiW5NZgWszq8prz+qfUWE8M9St5alNaC8QM5rIt5rMpH3t+5huBhPS/nKUDf3nUsO9ddYhtsM6DfMYYVyWNkmVELgCoecg14oeuinMAaNTk35dol+29N0pgeEjqrzn8sS7Vd+6fv8=
+	t=1773740994; cv=none; b=gh5LCLKKEYE3CmTu8CVhCSR1ac+hlMj+BxoNwINAyIOAhtc4nhvnv8Jxx0OunhCF9H5mzO68OyDMoH5a0n0Fr2/RAoC4CnXgXRa3duhMvckzOsYEjUZWyid/C+EtSFecTrtI0zerVozjyF2+jpZ3nkGKs3qsEUzt18NBzgzqr8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773740806; c=relaxed/simple;
-	bh=0ZNjKjARdZvcdL31QoVs+UqP+O/z4+0bO2/UPGbm13o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TSlY5jGP1K2x4wTvacKKoP+eihgpV8Qey74+7epl/pp3/nxINuHGGhfGSo/obotnLvhXsiY7vIo8slAn1ja5ut77PzdVAiuCtPHZoY5yaWVKp7buLBhv54T2bRi8IC9HHa+K+fkJ5MWI0hCUqk1XZ/WoOCNFsiPgw8R4yC/srL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sp4EIUta; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773740994; c=relaxed/simple;
+	bh=Y37P4OdefzXCY9joMqOUrRnFRWZPXLodPfge2HEhFEU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EWw52LzJIt8b9prCbhkjLYoAYus66TOCYZ/xlZNjiEyan2fd7kt1xjbj4utwfeoZHntWnCAE5T4K2/nw2OwpSSUcUcOvbY3U2Tpvm2aXgBi2zTEUex/yL2C8Z5QXdhs9rjqkQUB4gLQky3CDS13v5i0y4a4X5KUC4aA7rNkcvFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjAmoTJC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sp4EIUta"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773740804;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z5cQUZey16cto7EAHb0l8lICJnDidIXEapbKPGxTzr4=;
-	b=Sp4EIUta7FWyqn28SfeaswQLCfaMbLNHYqUbtoMZ8IkXn2axF+ze8UWeKCA5Ha13q/9EGD
-	rJT4mNg0Rz965jNLbRju8o/BtpLA8o2NXHh18KD/SQWRWUL5+qI0nJUo8ajd25aB75Qyc1
-	Zz4AyLxjgzYzb5nuTG0HiiSQ9XEKfSM=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-93-0mhKkR4OM9-7BSVc9bVC4w-1; Tue,
- 17 Mar 2026 05:46:37 -0400
-X-MC-Unique: 0mhKkR4OM9-7BSVc9bVC4w-1
-X-Mimecast-MFC-AGG-ID: 0mhKkR4OM9-7BSVc9bVC4w_1773740795
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 66D4418002D0;
-	Tue, 17 Mar 2026 09:46:35 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9935C3000223;
-	Tue, 17 Mar 2026 09:45:10 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com,
-	Li Wang <liwang@redhat.com>
-Subject: [PATCH v3 5/5] selftests/mm: transhuge_stress: skip the test when thp not available
-Date: Tue, 17 Mar 2026 17:44:19 +0800
-Message-ID: <20260317094419.1429259-6-chuhu@redhat.com>
-In-Reply-To: <20260317094419.1429259-1-chuhu@redhat.com>
-References: <20260317094419.1429259-1-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjAmoTJC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEC9C4CEF7;
+	Tue, 17 Mar 2026 09:49:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773740993;
+	bh=Y37P4OdefzXCY9joMqOUrRnFRWZPXLodPfge2HEhFEU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mjAmoTJC6USk8SekAtF8SLRTp1QiZRLQqpVDJaLpzUVOpG6VwUb+5ibGwtGB/x8lH
+	 N7OYw01V/jjNLgXWzhv1iWS19CoIxJ0XTaNuFmMzzmzR/cP8Wq9Ww2wrQLaFhpuqrO
+	 JJ0xmyDLdRip83l9ur+Ahi/o9Us1w/Zf/BxSlar1Xg6RhSIidUGcBsWiuee2N9VffB
+	 mY9hV92Fv9EBMfezkkdxwNp6brgFwvGNb790meJr1T/NRCz69CWNGuFQ3w8NAK+zqx
+	 i/TFwty4RI5wmBDq2iLpx1S6dM2vs04HSp+k/30oQfa/xpW9gbv70HYTfHGPMRLCqw
+	 O3+T5FJKNPYBw==
+Message-ID: <e8f25a5f-940b-4b89-8a88-ef984bd78238@kernel.org>
+Date: Tue, 17 Mar 2026 10:49:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 6/6] selftests: drv-net: xdp: Add rss_hash
+ metadata tests
+To: Chris J Arges <carges@cloudflare.com>, Joe Damato <joe@dama.to>,
+ Jakub Kicinski <kuba@kernel.org>, Andy Gospodarek <gospo@broadcom.com>,
+ Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>,
+ Petr Machata <petrm@nvidia.com>, David Wei <dw@davidwei.uk>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+ Carolina Jubran <cjubran@nvidia.com>, Nimrod Oren <noren@nvidia.com>,
+ Gal Pressman <gal@nvidia.com>,
+ Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: Bui Quang Minh <minhquangbui99@gmail.com>,
+ Daniel Zahka <daniel.zahka@gmail.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
+References: <20260313223029.454755-1-carges@cloudflare.com>
+ <20260313223029.454755-7-carges@cloudflare.com>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260313223029.454755-7-carges@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The test requires thp, skip the test when thp is not available to avoid
-false positive.
 
-Tested with thp disabled kernel.
-Before the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..1
-  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 60 transhuge-stress -d 20 # exit=1
 
-After the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..0 # SKIP Transparent Hugepages not available
-  # [SKIP]
-  ok 5 transhuge-stress -d 20 # SKIP
+On 13/03/2026 23.27, Chris J Arges wrote:
+> diff --git a/tools/testing/selftests/net/lib/xdp_metadata.bpf.c b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+> new file mode 100644
+> index 000000000000..f71f59215239
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+> @@ -0,0 +1,163 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <stddef.h>
+> +#include <linux/bpf.h>
+> +#include <linux/in.h>
+> +#include <linux/if_ether.h>
+> +#include <linux/ip.h>
+> +#include <linux/ipv6.h>
+> +#include <linux/udp.h>
+> +#include <linux/tcp.h>
+> +#include <bpf/bpf_endian.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +enum {
+> +	XDP_PORT = 1,
+> +	XDP_PROTO = 4,
+> +} xdp_map_setup_keys;
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__uint(max_entries, 5);
+> +	__type(key, __u32);
+> +	__type(value, __s32);
+> +} map_xdp_setup SEC(".maps");
+> +
+> +/* RSS hash results: key 0 = hash, key 1 = hash type,
+> + * key 2 = packet count, key 3 = error count.
+> + */
+> +enum {
+> +	RSS_KEY_HASH = 0,
+> +	RSS_KEY_TYPE = 1,
+> +	RSS_KEY_PKT_CNT = 2,
+> +	RSS_KEY_ERR_CNT = 3,
+> +};
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__type(key, __u32);
+> +	__type(value, __u32);
+> +	__uint(max_entries, 4);
+> +} map_rss SEC(".maps");
+> +
+> +/* Mirror of enum xdp_rss_hash_type from include/net/xdp.h.
+> + * Needed because the enum is not part of UAPI headers.
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-CC: Li Wang <liwang@redhat.com>
-Signed-off-by: Chunyu Hu <chuhu@redhat.com>
----
-V3 changes:
-  - Add review by from Mike
-  - Add acked-by from David
-V2 changes:
-  - Move the exit chunk to the front of ksft_print_headers() as suggested
-    by David.
-  - Add reviewed by from Zi and Lorenzo
----
- tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
- 1 file changed, 4 insertions(+)
+It is on purpose that enum is not part of UAPI headers, because BPF
+progs (like this) are suppose to handle this via CO-RE.
 
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index bcad47c09518..7a9f1035099b 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include "vm_util.h"
- #include "kselftest.h"
-+#include "thp_settings.h"
- 
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -37,6 +38,9 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 
-+	if (!thp_is_enabled())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / psize() / 4)
- 		ram = SIZE_MAX / 4;
--- 
-2.53.0
+Asking CO-RE experts (e.g. Cc Andrii), will below enum xdp_rss_hash_type
+usage automatically get relocated by libbpf, based on running kernel?
+(or do we need some explicit bpf_core_ calls?)
 
+> + */
+> +enum xdp_rss_hash_type {
+> +	XDP_RSS_L3_IPV4 = 1U << 0,
+> +	XDP_RSS_L3_IPV6 = 1U << 1,
+> +	XDP_RSS_L3_DYNHDR = 1U << 2,
+> +	XDP_RSS_L4 = 1U << 3,
+> +	XDP_RSS_L4_TCP = 1U << 4,
+> +	XDP_RSS_L4_UDP = 1U << 5,
+> +	XDP_RSS_L4_SCTP = 1U << 6,
+> +	XDP_RSS_L4_IPSEC = 1U << 7,
+> +	XDP_RSS_L4_ICMP = 1U << 8,
+> +};
+
+--Jesper
