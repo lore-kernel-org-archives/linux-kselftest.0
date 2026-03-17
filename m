@@ -1,150 +1,244 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FCB37F752;
-	Tue, 17 Mar 2026 05:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C9A1B808;
+	Tue, 17 Mar 2026 06:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773726230; cv=none; b=jfWtf9l/3KezTqrr1Mr1S3sUpqRXPf5H3mKGyoS1EQNwiyo7p2lvxBuZqyPlsPfwfN71zeC5mSOUgb99YXsFJwQqmQ9KIK4nerdv2XlnxopE+a+/JL55IUp4+IJse7Fe6IF7HgcXpK2fDi3tFCRCj4SiF+rYIXoFqAuIS+ntw1A=
+	t=1773727254; cv=none; b=MbsUqyCWL2AL5I9UolngDtABhEjacN8xgtXQb+A8Quhz/za/eOgzyCThrZcLBQ2HU2X/VrxPfzNqnNDM/CYNx2vhr5LbWaJ3WagRKXuynuk26vVJrTqUc7fxY59QLe/dAQ7ZUiMyaQgZw4Yne1pIL4tk/6xfrGly4jhGfK82KyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773726230; c=relaxed/simple;
-	bh=aPJSwxGH6jNMzmpJsV3VWFn7DBqjxw2t4PJgg3D/cuw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XDf1fZVbvU8URTV3cQ0JdU/Sg8L7nhQNbVkYHkGmF5m8U3qM+n+8o4/V7JWmNBXYSof5XgxvVYgK4Ytt86eibrx0Onak4UeneWMy0T581F7xiGrIqVoTvmJ8rmls4s+BXLp67bMBSbnw5U8EWMWKUoaa5pAFGVRMJIefZuMiNXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P9P16qWF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773727254; c=relaxed/simple;
+	bh=ZbT0szciqEdnubLNma9s97NrEmBw1Ekyabj7uRLIRO8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fccWx+rYHYuinXSApM46PSS3usZ2vPqoU5iYzB37t+46cMieS5zdHW749RJFAyIcYyMx7K0wD8RZZwARgXxqNeEcp5n0S/+0qg9F2th8MSowfqbsPu0l56fMWbUOiyuqz4OsEoxhnq5U8ewMblOsfy2z9qwCfsiKJ6zxpY/CM+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A/HXc1Yo; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P9P16qWF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F8FC4CEF7;
-	Tue, 17 Mar 2026 05:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773726229;
-	bh=aPJSwxGH6jNMzmpJsV3VWFn7DBqjxw2t4PJgg3D/cuw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P9P16qWF5ooL+iMl2PrfJJDFMJjHxAx856NDb9rJnaSJVoH6HeaE40ymfvWrF6dgt
-	 IDNO+1BU/L7bQpZB16aPEttGPgQNyCUp4LydF7OAOEmA8DXIvpY022XOrostvXPJfK
-	 hS246hpL/l+jgIOTok0YltjBZL0PggpEib3zodIQS4mXI3d7VwITGLJB6970J7qtlL
-	 N4w+eNtWvGvkmRREB4Oz6K+ZFFzwMXrGqlVOMpbNztTrIcWnOAdTbgdagsBC8kpYme
-	 QpQy5kurZ3x6/Kv5ncJlLstfAe7Q8y84BIOTxQDrHT3f5LGy5HVG7sBijUrA8DfB1w
-	 1R5hkhGudmOxA==
-Date: Tue, 17 Mar 2026 07:43:41 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-Cc: Breno Leitao <leitao@debian.org>,
-	"David Hildenbrand (Arm)" <david@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH] selftests/mm: add THP sysfs interface test
-Message-ID: <abjqDUpkezMfvCHz@kernel.org>
-References: <20260309-thp_selftest_v2-v1-1-a00cef41da44@debian.org>
- <9cb63c24-eaff-4954-97d5-2a422a0401fc@lucifer.local>
- <abgJtJYQsGMPsTHr@gmail.com>
- <be860d86-75be-4c75-95ea-03bf79524be2@kernel.org>
- <abggyaVTdNe6n_ew@gmail.com>
- <c4cb6dfe-59b2-44e6-adbc-9ee63bed79fd@lucifer.local>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A/HXc1Yo"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62GNNRLK3931551;
+	Tue, 17 Mar 2026 06:00:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=5Yjg5g
+	/Ahc6j34B08hDY6aKdtXUYcqbFsbEYEzxC3OU=; b=A/HXc1YoYpQ8e0y0khcJx7
+	YkJ1bo4JF3HC7EyuqyQsPGg0tVAynOUnVoxW3sRGBuQIGnLOHD4KFYg6TyzT/JJs
+	RTXRW3emRR7IeCRym7NjxelfxZW8tIzCNAY3UNwml6l4SEMnKE2a0aUI5Wvb+xbC
+	rX+Ii+6WnDueAhBDu41lq7K6jig1/z4UbfkVK7JcRubNz9WFC1Xy0+LsyKYfeS6c
+	htpjOG6es0mDIeKkIA/UFFY1M647NOIKsbmuOPJqxH5mu0JgZkE6GgztZb4/gegQ
+	xl1n3NSdAsp+wcr7UxknXAWLIB6eeX4MLHxbDytBWm8wmJsHbaztrVzbc8CSp1KA
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cvyauas9j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Mar 2026 06:00:33 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62H5sKeJ005412;
+	Tue, 17 Mar 2026 06:00:32 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cwj0s7xyj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Mar 2026 06:00:32 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62H60VbG30409360
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Mar 2026 06:00:31 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AFBA958052;
+	Tue, 17 Mar 2026 06:00:31 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B945C58050;
+	Tue, 17 Mar 2026 06:00:26 +0000 (GMT)
+Received: from [9.109.249.251] (unknown [9.109.249.251])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 17 Mar 2026 06:00:26 +0000 (GMT)
+Message-ID: <cf815c21-138e-44c8-986d-d8496503ee32@linux.ibm.com>
+Date: Tue, 17 Mar 2026 11:30:25 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/13] selftests/mm: fix failures and robustness
+ improvements
+Content-Language: en-GB
+To: Sayali Patil <sayalip@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        David Hildenbrand
+ <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Michal Hocko
+ <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1773305677.git.sayalip@linux.ibm.com>
+ <20260312150526.3662b2717b9a91776a2e43f5@linux-foundation.org>
+ <1f944b56-acb6-44ee-8cc2-6031fcedaeaa@linux.ibm.com>
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+In-Reply-To: <1f944b56-acb6-44ee-8cc2-6031fcedaeaa@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c4cb6dfe-59b2-44e6-adbc-9ee63bed79fd@lucifer.local>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE3MDA0NyBTYWx0ZWRfX+UdZtfvf5grV
+ 4145cssHg2Zlpgr4ZiB8zKRTrq5yXg7hPMvdvqWjwhroyurTRe1ut+wD0PuJec0919RNjAIREbE
+ CoiKtyGwKHQwWEbClIC93aJ8ctkSiEBYQhrXjdw5+cB03EEc5bqsE/Cbw1PPSqgRSm31WP2k51n
+ YzG44mJR2QNhcArUOKMCYffu/pnQ7+0EQm0zYwYGKHzaHFoQxMq5rpJcZ1cBlmTK2T4gDv6JLvZ
+ pEwn/0LeqEYaRY8bq/tgEMEwGqH2N//4sNRWd1wx+V6j7DWL3Y6nIiT1cRrWMB3uVMC4QUkPvmE
+ YXxb20OXEsZxEFgejEooJL/hMzBsSTulYdYJi+N2y0uRqVQX9c3XCMVBkPEzSBA5TU/dKDP1AAX
+ AemShboyQQmrzXojp0TkMdW+n3pDzpGbsIkfH+aPPEpFF9xbv7kCEno+xk6NAsf+eORcCrwGsda
+ Q4zIXMSr2uqFG62sbjQ==
+X-Authority-Analysis: v=2.4 cv=GIQF0+NK c=1 sm=1 tr=0 ts=69b8ee01 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
+ a=v5kZQaA_ZERCB-NnuxkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: cRTqZndxSEC7CgUEAR5nuNwsEFknjtV0
+X-Proofpoint-GUID: aPR9dRKlnxe4-p9tKIl3u6q1blr5e4HN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-17_01,2026-03-16_06,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 impostorscore=0 suspectscore=0 adultscore=0 clxscore=1011
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603170047
 
-On Mon, Mar 16, 2026 at 07:53:46PM +0000, Lorenzo Stoakes (Oracle) wrote:
-> On Mon, Mar 16, 2026 at 09:02:33AM -0700, Breno Leitao wrote:
-> > On Mon, Mar 16, 2026 at 03:44:14PM +0100, David Hildenbrand (Arm) wrote:
-> > > On 3/16/26 14:47, Breno Leitao wrote:
-> > > > On Mon, Mar 16, 2026 at 12:55:13PM +0000, Lorenzo Stoakes (Oracle) wrote:
-> > > >> On Mon, Mar 09, 2026 at 05:00:34AM -0700, Breno Leitao wrote:
-> > > >>> Add a shell-based selftest that exercises the full set of THP sysfs
-> > > >>> knobs: enabled (global and per-size anon), defrag, use_zero_page,
-> > > >>> hpage_pmd_size, shmem_enabled (global and per-size), shrink_underused,
-> > > >>> khugepaged/ tunables, and per-size stats files.
-> > > >>>
-> > > >>> Each writable knob is tested for valid writes, invalid-input rejection,
-> > > >>> idempotent writes, and mode transitions where applicable. All original
-> > > >>> values are saved before testing and restored afterwards.
-> > > >>>
-> > > >>> The test uses the kselftest KTAP framework (ktap_helpers.sh) for
-> > > >>> structured TAP 13 output, making results parseable by the kselftest
-> > > >>> harness. The test plan is printed at the end since the number of test
-> > > >>> points is dynamic (depends on available hugepage sizes and sysfs files).
-> > > >>>
-> > > >>> This is particularly useful for validating the refactoring of
-> > > >>> enabled_store() and anon_enabled_store() to use sysfs_match_string()
-> > > >>> and the new change_enabled()/change_anon_orders() helpers.
-> > > >>>
-> > > >>> Signed-off-by: Breno Leitao <leitao@debian.org>
-> > > >>
-> > > >> The test is broken locally for me, returning error code 127.
-> > > >>
-> > > >> I do appreciate the effort here, so I'm sorry to push back negatively, but I
-> > > >> feel a bash script here is pretty janky, and frankly if any of these interfaces
-> > > >> were as broken as this it'd be a major failure that would surely get picked up
-> > > >> far sooner elsewhere.
-> > > >>
-> > > >> So while I think this might be useful as a local test for your sysfs interface
-> > > >> changes, I don't think this is really suited to the mm selftests.
-> > > >
-> > > > That is totally fine. This test is what I have been using to test the
-> > > > changes, and I decide to share it in case someone find it useful.
-> > > >
-> > > > Let's drop it.
-> > >
-> > > Out of interest, to we know why the test is failing for Lorenzo?
-> >
-> > I really don't know, but, it sounds like ktap was not found?
-> 
-> Yeah CONFIG_KUNIT is not set so could be :)
 
-Nah, CONFIG_KUNIT has nothing to do with ktap_helpers.sh, probably your
-environment does not bring in tools/testing/selftests/kselftest
- 
-> >
-> > Then the first early-exit path hit:
-> > ktap_skip_all "..."   # undefined → returns 127 exit "$KSFT_SKIP"
-> > # expands to: exit "" → exits with last $? = 127
-> >
-> > > I agree that the test is a bit excessive, in particular when it comes to
-> > > invalid/idempotent values etc. I could see some value for testing
-> > > whether setting the modes keeps working, but also then I wonder if that
-> > > is really something we'll be changing frequently (and that breaks easily).
-> >
-> > yea, I make it very excessive, because there were some intrinsics in
-> > those sysfs that I was gettingit wrong when doing the intial conversion.
-> >
-> > So, the test is something that I trust now, and I found it useful when
-> > finding regressiosn.
-> >
-> > Is is something that will chagne frequently? probably not!
-> >
-> > That said, would you like to have a simplified/different version of this
-> > test?
-> 
-> In an ideal world we'd use kunit or something to assert it internal to the
-> kernel I guess, but if we do have something scaled down it'd at least be nice to
-> have in C? :)
-> 
-> I am not sure how useful it'd be though overall, I don't see us changing this
-> too often and really we're more interested in asserting behaviour.
-> 
-> Sadly THP is inherently tricky to test generally because of its very nature, I
-> wish we could have better test isolation etc.
-> 
-> See tools/testing/vma for a forlorn dream of kernel code being run in userland
-> (but oh how the stubs/duplicate declarations/etc. are a pain).
-> 
-> I suspect THP could never be given the same treatment though! :)
-> 
-> Cheers, Lorenzo
+On 13/03/26 7:46 pm, Sayali Patil wrote:
+>
+> On 13/03/26 03:35, Andrew Morton wrote:
+>> On Thu, 12 Mar 2026 17:55:27 +0530 Sayali Patil 
+>> <sayalip@linux.ibm.com> wrote:
+>>
+>>> Hi all,
+>>>
+>>> Powerpc systems with a 64K base page size exposed several issues while
+>>> running mm selftests. Some tests assume specific hugetlb 
+>>> configurations,
+>>> use incorrect interfaces, or fail instead of skipping when the required
+>>> kernel features are not available.
+>>>
+>>> This series fixes these issues and improves test robustness.
 
--- 
-Sincerely yours,
-Mike.
+
+Hello Sayali,
+
+
+I still see, below test failure. Apart from this, everyting else is 
+working as expected.
+
+
+# # ------------------------------------------------
+# # running ./hugetlb_reparenting_test.sh -cgroup-v2
+# # ------------------------------------------------
+# # cleanup
+# #
+# # Test charge, rmdir, uncharge
+# # mkdir
+# # write
+# # Writing to this path: /mnt/huge/test
+# # Writing this size: 26843545600
+# # Populating.
+# # Not writing to memory.
+# # Using method=0
+# # Shared mapping.
+# # RESERVE mapping.
+# # Allocating using HUGETLBFS.
+# #
+# # rmdir
+# # uncharge
+# # cleanup
+# # done
+# #
+# #
+# # Test child only hugetlb usage
+# # setup
+# # write
+# # Writing to this path: /mnt/huge/test2
+# # Writing this size: 26843545600
+# # Populating.
+# # Not writing to memory.
+# # Using method=0
+# # Shared mapping.
+# # RESERVE mapping.
+# # Allocating using HUGETLBFS.
+# #
+# # Assert memory charged correctly for child only use.
+# # actual = 11 MB
+# # expected = 0 MB
+# # FAIL
+# # cleanup
+# # [FAIL]
+# not ok 12 hugetlb_reparenting_test.sh -cgroup-v2 # exit=1
+
+
+Regards,
+
+Venkat.
+
+>> Thanks, I updated mm.git's mm-new branch to this version.
+>>
+>>> ---
+>>> v1->v2
+>>>    - For "selftests/mm: ensure destination is hugetlb-backed in 
+>>> hugepage-mremap":
+>>>      update FLAGS definition to MAP_HUGETLB | MAP_SHARED | 
+>>> MAP_POPULATE and
+>>>      used it for mmap() calls as suggested during review.
+>> That was a really small change (below).  It's better to wait a while
+>> (half to one week) before resending an entire series.  So as to
+>> hopefully accumulate more changes.
+>>
+>>
+>>
+>> --- a/tools/testing/selftests/mm/hugepage-mremap.c~b
+>> +++ a/tools/testing/selftests/mm/hugepage-mremap.c
+>> @@ -31,7 +31,7 @@
+>>   #define MB_TO_BYTES(x) (x * 1024 * 1024)
+>>     #define PROTECTION (PROT_READ | PROT_WRITE | PROT_EXEC)
+>> -#define FLAGS (MAP_SHARED | MAP_ANONYMOUS)
+>> +#define FLAGS (MAP_HUGETLB | MAP_SHARED | MAP_POPULATE)
+>>     static void check_bytes(char *addr)
+>>   {
+>> @@ -121,23 +121,20 @@ int main(int argc, char *argv[])
+>>         /* mmap to a PUD aligned address to hopefully trigger pmd 
+>> sharing. */
+>>       unsigned long suggested_addr = 0x7eaa40000000;
+>> -    void *haddr = mmap((void *)suggested_addr, length, PROTECTION,
+>> -               MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
+>> +    void *haddr = mmap((void *)suggested_addr, length, PROTECTION, 
+>> FLAGS, fd, 0);
+>>       ksft_print_msg("Map haddr: Returned address is %p\n", haddr);
+>>       if (haddr == MAP_FAILED)
+>>           ksft_exit_fail_msg("mmap1: %s\n", strerror(errno));
+>>         /* mmap again to a dummy address to hopefully trigger pmd 
+>> sharing. */
+>>       suggested_addr = 0x7daa40000000;
+>> -    void *daddr = mmap((void *)suggested_addr, length, PROTECTION,
+>> -               MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
+>> +    void *daddr = mmap((void *)suggested_addr, length, PROTECTION, 
+>> FLAGS, fd, 0);
+>>       ksft_print_msg("Map daddr: Returned address is %p\n", daddr);
+>>       if (daddr == MAP_FAILED)
+>>           ksft_exit_fail_msg("mmap3: %s\n", strerror(errno));
+>>         suggested_addr = 0x7faa40000000;
+>> -    void *vaddr = mmap((void *)suggested_addr, length, PROTECTION,
+>> -            MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
+>> +    void *vaddr = mmap((void *)suggested_addr, length, PROTECTION, 
+>> FLAGS, fd, 0);
+>>       ksft_print_msg("Map vaddr: Returned address is %p\n", vaddr);
+>>       if (vaddr == MAP_FAILED)
+>>           ksft_exit_fail_msg("mmap2: %s\n", strerror(errno));
+>> _
+>>
+>>
+> Thanks for the guidance. I'll make sure to follow this approach from 
+> next time.
+>
