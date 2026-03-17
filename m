@@ -1,57 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD54B37FF52;
-	Tue, 17 Mar 2026 18:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43DC3F8805
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 19:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773772651; cv=none; b=XJS4pVpwNMsooYoPo/3uWaFNM4j8OhFDhyQcwAHXASalj8uy6xnPyQ+p5yliQBJ/KA2fG2l/2Zul09oknlg8If2rJKrzYIbxoQQx3UNKTGk/QxfryfwU51sD2R8JY+sedO0ovxYKDVQ4kB1SrFaVlCXUCaFzfAxmXFBvuJ2RGIo=
+	t=1773774355; cv=none; b=K32xq2b/Bv+Zb6779lPajKgmnIqBLjvLZQpjPKtSOlMxGm0nf0Bkjs/VN5frAR0EjLmfSiv99ydHyzRixIP53CAl/uQxyAfk/lYZaJJ/69J16SxLYtAbYCyE6BsCoGX0so/Fq5wFdrBwYltFp3PBRPq8ugw4hcIJsTB0sawBQr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773772651; c=relaxed/simple;
-	bh=X1fPag/Ma0Or3n9BwLwG0BHnymxAfli1gvz6SmhvgXc=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=jobimD2zLSFbl3Dv2qFEIj+bK1cw39+IZi7iVun8J2JTWj8mRllPjD2CPvhnOCgDSLO5kwo3qkmaHHM8jiQ6ZtIf8uYUUWOdwqIfXyZtrnyDezoWjFKkNHbfZOK44phfvEmN9MlGiiLpFbolg4m9koiXy08Bu9mQkW/anP5+NOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=xBLlVrZS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773774355; c=relaxed/simple;
+	bh=NF7Y5dovv3G3Tx+4h2I1Qh9S7vSOMcSBIjkIkaAtasM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=udReLfAY9OVT2ZWIzwcCb9NtTTY4sxk/3mk7VVcBDSmXt6ZsLLvJRK1JY0+z96eC5uzEdeU/7sFuaVbMC009wEZM/PLRbLdRCIq87gdNeN5ET1bNQAwOO8+APMgt1v+IxPkXlwYDjEnqpIzHHdFOu8E+Uxg9OLpDCFsL2ESeNh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=5AEK/lmA; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="xBLlVrZS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2CDC4CEF7;
-	Tue, 17 Mar 2026 18:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1773772651;
-	bh=X1fPag/Ma0Or3n9BwLwG0BHnymxAfli1gvz6SmhvgXc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=xBLlVrZSOfM9FPIB0k7xOsujepC5gsf6N9xIoEhu0lP7W7dyGaurgbK030QQFBJLG
-	 uvPeZNqE/I/Hpo6HjsIoE2XzGgo2h0w/sf9uQIYKx7uXY/WKXYI1NsikK3REwoNNky
-	 L+q5URynkmWbhbeuvVKmsijD61veTJYwQWSeDvI4=
-Date: Tue, 17 Mar 2026 11:37:30 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Chunyu Hu <chuhu@redhat.com>
-Cc: david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
- baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
-Subject: Re: [PATCH v3 0/5] selftests/mm: skip several tests when thp is not
- available
-Message-Id: <20260317113730.45d5cef4ba84be4df631677f@linux-foundation.org>
-In-Reply-To: <20260317094419.1429259-1-chuhu@redhat.com>
-References: <20260317094419.1429259-1-chuhu@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="5AEK/lmA"
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 62HGZgtQ394977
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 12:05:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=Jb+cvCHXzroux0bE867G
+	z8WloAHRp7RfIB9TE5DglOk=; b=5AEK/lmACjc9t+b0G/7+CVvrW5k7M1aTwhXu
+	uYQNyjwtapTNLv333UkQkCJjtoCM6N66qobqYq8qPnFjtV+t2erAHQIqk4qw9tsc
+	i/h5dw78QbPO5/gEGKsZNsXaqq5Q+9V8sfpAqxTaA1xCbxVxVm0wfR1tUPeAxmw5
+	F7Md/E0uEL3i0mEM7O/VrJTmR3ngwBYBT9D8bg//kHCFI3tphZXXRGxFPScQj7Ir
+	IsWR787UdSBhszYh9X898nmRFgyJA5SSGtC6NvWgFQDruVtrDpDaOENIr+QWj1Ug
+	T1jQoEw7FXjfelJ9Oj3fqCoxwArsOE64xeJbUdZ/0fY3BNgixw==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by m0089730.ppops.net (PPS) with ESMTPS id 4cy77cxyg5-4
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 12:05:52 -0700 (PDT)
+Received: from twshared61449.03.prn5.facebook.com (2620:10d:c085:208::7cb7) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Tue, 17 Mar 2026 19:05:50 +0000
+Received: by devvm6375.cco0.facebook.com (Postfix, from userid 721855)
+	id 78BC16AA975A; Tue, 17 Mar 2026 12:05:47 -0700 (PDT)
+Date: Tue, 17 Mar 2026 12:05:47 -0700
+From: Ted Logan <tedlogan@fb.com>
+To: Matt Evans <mattev@meta.com>
+CC: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
+        Shuah Khan <shuah@kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        kernel
+ test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and x86_64
+Message-ID: <abmmC0DUZ9gBDjui@devvm6375.cco0.facebook.com>
+References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+ <e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com>
+X-FB-Internal: Safe
+X-Authority-Analysis: v=2.4 cv=evvSD4pX c=1 sm=1 tr=0 ts=69b9a610 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=855S8uPTkML1Oy45N9_h:22 a=qqi52k1n9YqV2eshQTIA:9
+ a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: 23HKD2xqE4lduxZQFul9cwJrBD5VcjPY
+X-Proofpoint-ORIG-GUID: 23HKD2xqE4lduxZQFul9cwJrBD5VcjPY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE3MDE2OCBTYWx0ZWRfX9z71f7jC/+/Q
+ KzPUL0c7GrE2K5soBi7e+CN7HM4wCe2QxcnEUF+F07KYvlmkNC7xzVGjXJ3YqrY0oBG3607tjiq
+ BR2bohLrdXymVu7bpVszJr/3vPphtBNZqX8khGzNnS0OAQ480DWOHbfdi5OgcylXZ3vp5DSNWsJ
+ 0wtqoC3M2yBfEGjdM5I12thEVnXVanxpJlVE/1dUIJHVFd+xELw0kt2CDYfSMeUOA+67rouOYR/
+ 4ezz5uMvgpNUVoPAKGsTnlQndkweISjqEcIeHWbrtimFR3cp2cLPTJ2MJEXHc/7l3QZfWhxyEJc
+ 7L3QoUui9XytPo7xfLddeuQYUhjqHMr69Z8ova1bm0aaGV777pvXfImTMitUdqw9Ubt/cKZZ7AC
+ shtBx6jTCc2rU31VOdL5mwOcKplsduUMnKvNKkMgqiag/3h2PCquHtDuRwd0q1Rvw2MwwflAD4N
+ 3mTBCwgJXmrXVLiDULQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-17_04,2026-03-17_02,2025-10-01_01
 
-On Tue, 17 Mar 2026 17:44:14 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
+On Tue, Mar 17, 2026 at 01:55:17PM +0000, Matt Evans wrote:
+> On 03/02/2026 01:23, Ted Logan wrote:
+> > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> > index ead27892ab65..8e90e409e91d 100644
+> > --- a/tools/testing/selftests/vfio/Makefile
+> > +++ b/tools/testing/selftests/vfio/Makefile
+> > @@ -1,3 +1,10 @@
+> > +ARCH ?= $(shell uname -m)
+> > +
+> > +ifeq (,$(filter $(ARCH),arm64 x86_64))
+> 
+> This fails to build (i.e. elides the build) on my local arm64 machine,
+> because uname -m returns 'aarch64', not 'arm64'.
+> 
+> Are you seeing an arm64 (Linux! [1]) machine where uname -m is 'arm64'...?
+> 
+> This patch needs some translation, of the sort in
+>  tools/testing/selftests/mm/Makefile:15
+> 
+> 
+> -Matt
+> 
+> [1] Note on macOS/M-Mac, uname -m is indeed 'arm64', but not so on Linux.
 
-> There are several tests requires transprarent hugepages, when run on thp
-> disabled kernel such as realtime kernel, there will be false negative.
-> Mark those tests as skip when thp is not available.
+I didn't have an aarch64 system handy to test when I sent my first
+patch, so I went with David's comment in an earlier thread that x86_64
+and arm64 are supported. I did just fire up a Linux VM on my Mac and I
+see it does indeed report the arch as aarch64, and that it builds the
+self-tests without warnings. I'll mail a patch to translate the
+architecture as you suggest.
 
-AI review asked some questions:
-https://sashiko.dev/#/patchset/20260317094419.1429259-1-chuhu%40redhat.com
+- Ted
