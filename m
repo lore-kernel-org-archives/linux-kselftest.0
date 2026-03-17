@@ -1,64 +1,64 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861A5347FD9
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 06:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE52349AF4
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 06:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773730311; cv=none; b=qFBQaMf1TQYMYPliyS4FXsu0F/P7I1givBvdmHsIYrB7FsqCiP5YJkqIbhihluAgPGzKpdLBtFbbpLvOeggH5S7bvUZzVjagFP6z9Sv/wru8R55mq+yzI4bWwJNmUowhWT0F0/nuzJnbU0C76z1Uo4zjqIL+xnqhFk0V/hyG+gs=
+	t=1773730313; cv=none; b=NiRoXpc7EexGvtx/DKLbrlVrRgoh8rvnhdB5uYS7vOud6c4x+C0cwrKQ30H9YMMWFGL3l0RGYsbZjfxm3wmmAhtzwHrGP8aIqE2ZzjZYzt9W58hpJonRCXiNCTy28ptDs3SP2J6YOfl4OZbu/TTVz45hX2gmv7ZzH7QsTrmQm6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773730311; c=relaxed/simple;
-	bh=ImbWQoR+dgm8+9dV9PXvczLRAxo2SxKksFr3fwuIhLo=;
+	s=arc-20240116; t=1773730313; c=relaxed/simple;
+	bh=evB/X8tNk78bHrQ/MFYt8wsGBWuU1gJMZqIau8s3uvk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RbpJVtYD/AQas94CziBGenJr8BWmnAfBUfN9qnjMiInKYymMqZsl0aWbCnLo+alYSA8pecZF44iKUMi1W9dR8gjZBoRpDJ/YvIKH++mV7rxvh0faYEWDal2hJyq+4EjnqHaPK/J5sVfd6wKo8V5BDD9uS96LCsbykaD7iarwB7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VEttchVN; arc=none smtp.client-ip=209.85.210.43
+	 MIME-Version; b=qUU/+OTlEtMjeqA0+xujPcF6gZmrPo53w5+RSDhm3Wb9X9TvyCAY4rz9SkqH/ZTdSFC2tsK3hE6of0jJ2jV0JUyopU5Mh721I2sMlvLWdOEf5Kqp6d0b1E1ap8tz9qXqj0j9bOHFBLEdHnu69/FJTslXn5+vBK47dnChD1P3HDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=edP9a+/P; arc=none smtp.client-ip=209.85.210.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VEttchVN"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7d74a59262fso4664406a34.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 23:51:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="edP9a+/P"
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7d556c1a79eso5940811a34.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2026 23:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773730309; x=1774335109; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773730311; x=1774335111; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j+IJ2HT7GzgVpfj7oyAsWSh4v8318zxK4LdAKWsY7NU=;
-        b=VEttchVNmTAHva0Ips9bn6B3mdor+xxVQf0380ZUVMKtJtDtfk/gyhYG7XLoFWKkPw
-         6etKYvToF3rOsEG49LUZbO369awuHZec7IBpfrx2ITkKnfDMo/jp57EMC4blBav62+7C
-         dkSuoB4EL9fD1eCFQGT96caDptfve5+p2WuKUz7QSfY1diQyndBSkphZ/yL7UP2O7xs1
-         paQ0V9pLgewZ6DggzyTaN330Ruy56PqJgXT+dh2CQfNF8KbZqdMgwPB6he8jb2U4tdvm
-         akiXfYAAULVp0jqVV17GwqNpHDP6QiQDFCPT+nPGwNu6jlg1cWXYwdfu2QxnmLLGjgoe
-         bPyA==
+        bh=+Nu5fdG7ljOunxtDElL00N3RnG2qS7orERGCqEegHO8=;
+        b=edP9a+/PyTUTASdPoNDae9hEmSrVrYiE3pYK+ouU7XZYN1Uoz8hmzs3m8hFmfksg9L
+         PsMf8Zr8y8zP50ENDvqudplXcgjFFma/vRm0koa/UVv2O19db83cOReSAukJi1QLKsqr
+         I4bnkrCHkMc/uVs9YI2Y4PCXYlgqJTIQN2w2zoxVYI6Bp7eW/cuT45+/HG55DRviOqVH
+         6vvpjRye3yvNvgOTWlAcwRXIFDcyqWKHgTPyoH8Xu26VNXH8LiY61QysGfmk6YSAnyu2
+         JPRsAM6pPyd/qpgxf7OtYuQ56lN7gtJnFZ+1NImZMeFckZNFTxYKNADZJslJ+aWlHYE1
+         jbAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773730309; x=1774335109;
+        d=1e100.net; s=20251104; t=1773730311; x=1774335111;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=j+IJ2HT7GzgVpfj7oyAsWSh4v8318zxK4LdAKWsY7NU=;
-        b=ZGk0nMPf0vmLpVBWgMzpNvPIvSrgOpZ/vvW1tyIHubysiKJLs4+pM+Zd/w0qRF9SK9
-         zMzLWa0CM3mlogn7zaU74D2TZOUbwtZiIL94QvJct/Gm93/tZWgA/BdKFp9FvD5jNnxS
-         i8juznFH4KQGE9AMFK7ygtMTrLVELbUoHSunMAFnHT+NbjbXws5DIyuuVxE7yZHO5adK
-         WS/SVeypweTX7uHkb6CpGX5DEmqX/2nrRpzvBkqEkms8yPlbRFvVhuk8m4eqE/0drFfx
-         FlP7w374kYznBSn5m1gVDGKony+8QhAuWS0RkqA98V2VqEdiQVn6iG1R0NmCmus/lY/Q
-         PdvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVnCPxko2aJA1+uJteKzJ1tc7sSgowd77dMTrk1Wz53cFwMT5BG/Lg5klQUoppOrqvuWpasDvuiWev9YypNPe4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAchBX0M1bRiT7kSRH66db7gCV+Xwh8dba5l8Vm9TlyralLt5p
-	5zBkKF2h/iiXmS05pm7P9PGJZcXos7DTFgXof/1psw98Y95oKTtUPB/1
-X-Gm-Gg: ATEYQzxk97SF5fS36ZBiBv6qVxEc0biLBI77CX+LqNjnjGyvAPMvDEhnhpxs70/QrjM
-	geyf6wNlsxTxTU7pEcULkpVU05y91Mr0FjMKdJyP4hYO99iUMnmjrct9OmlQQnvhFjXm/hVBlNQ
-	P9NuQXPe7EwhxWKvocwx3MQCLsiVLpkUGuMeHnZcRwRUvCEdfLN9ZXPHkfjEpZmdWvTiOgMKh4T
-	hlcfnGqNBwIr5ughPWjKx4TyI2gSA1UxyqJ9d4AFFl714xPL5KUsqmFQh5ijWIBhOKdpFkpsvTX
-	/JJzlrK0qHTg5xpVMxvVK223yppyluexNYZLg9g+wALAB4cYCXECCEuFOin5Nm/yxvG1Gyx+eOj
-	fdAXH3tdoT+JOFDwOL+UwdXObMjpDdCegVebgXifHuiTZTHnVMM9LEqgdK8MH/9rq+N5YrLv0kw
-	l/AwvXMQ0/SWsPXh1cXcpzdOixRcxFFkzyg3cKNhYSC+kRUbMXmr1XOjqFvFXsdKctEpG33rpLA
-	MRZV5jKD9XocXhZWtszkLAj1M5qcWr14Z0qyQlR8g==
-X-Received: by 2002:a05:6830:3686:b0:7d7:4721:9a56 with SMTP id 46e09a7af769-7d78260bee6mr11651705a34.32.1773730309488;
-        Mon, 16 Mar 2026 23:51:49 -0700 (PDT)
+        bh=+Nu5fdG7ljOunxtDElL00N3RnG2qS7orERGCqEegHO8=;
+        b=kENmjYjZjBINhYGwnQxvBJYuaLo/GqF6xu9kOvCw8SqdlGWeJn+cGXwl6bfjTVFRDQ
+         jcN9/dKE/+xurnNlwB+EtC+IKFbVt0fKS+gLrwdVrRtS5BeJR/uP9skBseiELLBk5YsF
+         84B2Hw8T8ZCdllLtOuhJNPSvtV/D8nAPCuVrGo3w2WxB7jUwaT2XLc7hU+DSxXL3ENXY
+         9NMR+0+rKgiPrAHS6bZ7BHFUBgZeHgLW080p8efUz/p6iQ8XVYbtBrDDpRksQCznhMxM
+         OqMkTWxyjiECEcHlpVFVn8V6a9NpDqWBTvncYE+9sbugxWRe5ZrspuFM3Quj3nERsp2M
+         daIw==
+X-Forwarded-Encrypted: i=1; AJvYcCVEtPNNzNOMEUS37/iHhiWKOtQL/xvV16anubNIdwc1XiZ49O1CnsceGvowtfZOmWkn+uJxB4p57QI6itBDCaU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQU8ofqWHrvhKXGsih8YMoK2Ji8xNDQri6nSkO0PiREBO5ZV2+
+	JxC04vCHMilCRgR4MnWmoyI15+fsYzGKv5Ccl1hy832Q8+vRx0Pm5ba0
+X-Gm-Gg: ATEYQzyVN7pgDu+e/IpSeC7GL139eKVB/atTcu+vQbIb4URsYW0Ub1LYlGlaf79GuCC
+	eSyszg7Zu4DMGtwtEZY6BHVe15Zsuj7P+OSHxtshxy6yWbM5kwLl7AMzllVLnwr6YnfzXlFlbg2
+	dfh+SG1en5Xxyp7VX+5LPvddGvKyPComCHIcob9wCWo9S74Yd4bCqdC7BwNjCHiEShhS6cBqd4c
+	IPia+XQWu+77qmM44ABlgnxBYp64HKSIsi0ZrSB2rCsqbY1Zr5TNzqA3oxZUbm6BpZS1MTRG5m4
+	SPxQ+5Ny2hpHeYuwBZ34nsra/C/V/CjpKjny3wvxUtkaj3jOg+VqYSOkkI+KPJi0J5DOimFtvhA
+	qftS8V8SOdENzmgk1DcRZ1+3n3US8tPy+Ctc7ew+mSl2u5KEROp+r9o0RcoVdeXdVh5dK3BIOXL
+	BZc9f+/72XWf4YcinHGWBrhv9tzJk1fb2E/cw+Jt20eW2srUuPfIcagaiVGCG9dKrfPAN+ztv5G
+	XvuIzqD+kM58UVmUghjNQEXaDmH4PjuyHxeTT6RHA==
+X-Received: by 2002:a05:6830:6619:b0:7d7:466f:b2fd with SMTP id 46e09a7af769-7d78246af9bmr10197156a34.2.1773730310733;
+        Mon, 16 Mar 2026 23:51:50 -0700 (PDT)
 Received: from Atwell-Laptop.. (108-212-132-20.lightspeed.irvnca.sbcglobal.net. [108.212.132.20])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d76ae68a4bsm14058432a34.19.2026.03.16.23.51.47
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d76ae68a4bsm14058432a34.19.2026.03.16.23.51.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 23:51:48 -0700 (PDT)
+        Mon, 16 Mar 2026 23:51:50 -0700 (PDT)
 From: Wesley Atwell <atwellwea@gmail.com>
 To: netdev@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -73,9 +73,9 @@ Cc: linux-kernel@vger.kernel.org,
 	pabeni@redhat.com,
 	shuah@kernel.org,
 	Wesley Atwell <atwellwea@gmail.com>
-Subject: [PATCH net-next 1/3] selftests: packetdrill: stop pinning rwnd in tcp_ooo_rcv_mss
-Date: Tue, 17 Mar 2026 00:51:35 -0600
-Message-ID: <20260317065137.1533226-2-atwellwea@gmail.com>
+Subject: [PATCH net-next 2/3] tcp: keep scaled no-shrink window representable
+Date: Tue, 17 Mar 2026 00:51:36 -0600
+Message-ID: <20260317065137.1533226-3-atwellwea@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260317065137.1533226-1-atwellwea@gmail.com>
 References: <20260317065137.1533226-1-atwellwea@gmail.com>
@@ -87,41 +87,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-tcp_ooo_rcv_mss.pkt cares about the OOO SACK state and the resulting
-tcpi_rcv_mss update.
+In the scaled no-shrink path, __tcp_select_window() currently rounds the
+raw free-space value up to the receive-window scale quantum.
 
-Its exact advertised receive-window value is incidental to that test and
-can legitimately move when unrelated rwnd accounting changes adjust the
-ACK window.
+That can expose fresh sender-visible credit beyond the currently backed
+free space.
 
-Drop the hard-coded win 81 checks and keep only the ACK/SACK shape and
-the tcpi_rcv_mss assertion.
+Fix this without changing the meaning of the stored receive-window
+state. Keep tp->rcv_wnd representable in scaled units by rounding larger
+windows down to the scale quantum and preserving only the small
+non-zero case that would otherwise scale away to zero.
+
+tcp_select_window() already preserves the no-shrink guarantee from the
+currently offered window, so later no-shrink decisions continue to
+reason from a right edge the peer actually saw on the wire.
+
+This removes the larger-window quantization slack from rounding
+free_space up, while preserving the small non-zero case needed to avoid
+scaling away to zero.
 
 Signed-off-by: Wesley Atwell <atwellwea@gmail.com>
 ---
- tools/testing/selftests/net/packetdrill/tcp_ooo_rcv_mss.pkt | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ net/ipv4/tcp_output.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_ooo_rcv_mss.pkt b/tools/testing/selftests/net/packetdrill/tcp_ooo_rcv_mss.pkt
-index 7e6bc5fb0c8d78f36dc3d18842ff11d938c4e41b..0b19de9f9307b3d0ee579bc9e3a2b9219a88cd8a 100644
---- a/tools/testing/selftests/net/packetdrill/tcp_ooo_rcv_mss.pkt
-+++ b/tools/testing/selftests/net/packetdrill/tcp_ooo_rcv_mss.pkt
-@@ -17,11 +17,13 @@ sysctl -q net.ipv4.tcp_rmem="4096 131072 $((32*1024*1024))"`
-    +0 accept(3, ..., ...) = 4
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 35c3b0ab5a0cb714155d5720fe56888f71aecced..bd3a43148a87e891bc632a47ffb5b82c475e8f6f 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3375,13 +3375,19 @@ u32 __tcp_select_window(struct sock *sk)
+ 	 * scaled window will not line up with the MSS boundary anyway.
+ 	 */
+ 	if (tp->rx_opt.rcv_wscale) {
+-		window = free_space;
++		u32 gran = 1U << tp->rx_opt.rcv_wscale;
  
-    +0 < . 2001:11001(9000) ack 1 win 257
--   +0 > . 1:1(0) ack 1 win 81 <nop,nop,sack 2001:11001>
-+// This test cares about the OOO SACK state and the resulting tcpi_rcv_mss.
-+// Keep the ACK/SACK shape exact, but do not pin the precise advertised
-+// receive window here because unrelated rwnd accounting changes can adjust it.
-+   +0 > . 1:1(0) ack 1 <nop,nop,sack 2001:11001>
- 
- // check that ooo packet properly updates tcpi_rcv_mss
-    +0 %{ assert tcpi_rcv_mss == 1000, tcpi_rcv_mss }%
- 
-    +0 < . 11001:21001(10000) ack 1 win 257
--   +0 > . 1:1(0) ack 1 win 81 <nop,nop,sack 2001:21001>
--
-+   +0 > . 1:1(0) ack 1 <nop,nop,sack 2001:21001>
+-		/* Advertise enough space so that it won't get scaled away.
+-		 * Import case: prevent zero window announcement if
+-		 * 1<<rcv_wscale > mss.
++		/* Keep tp->rcv_wnd representable in scaled units so later
++		 * no-shrink decisions reason about the same right edge we
++		 * can advertise on the wire. Preserve only a small non-zero
++		 * offer that would otherwise get scaled away to zero.
+ 		 */
+-		window = ALIGN(window, (1 << tp->rx_opt.rcv_wscale));
++		if (free_space >= gran)
++			window = round_down(free_space, gran);
++		else if (free_space > 0)
++			window = gran;
++		else
++			window = 0;
+ 	} else {
+ 		window = tp->rcv_wnd;
+ 		/* Get the largest window that is a nice multiple of mss.
 -- 
 2.43.0
