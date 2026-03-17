@@ -1,144 +1,301 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43CED35B62F;
-	Tue, 17 Mar 2026 09:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D15835A395
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 09:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739177; cv=none; b=KKXOencYyjnAdffkL43jQDszBmUT4DhzT1kJWsiH1dpEjVUYXM1FKUz1gfdsILWXHqqGQ9VvrVWv71/wjw98OdBMkuakKvn8DDb2Mndf4cpjf/7FEwotdSrJ0xGqhGDd37pSo2aKliRXowBpAXeyJnUWw279aTQqkSMKfq2jpEE=
+	t=1773739509; cv=none; b=kiMz0JU5ybYIC5wPzN2spJd/K8paG3P/37kewhmIByYLwBLrrFbA4bvGNlNDi6Zx41C5uOAQsnVC0nbF+Yv+HSf9uuGPYmydWa7rQpocMNVKsGcuyjjqGemCD5hkPcoezBTbuawFTsbndSMFD8EI2PJhaqxPPRwDLtKqEu9PYH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739177; c=relaxed/simple;
-	bh=OyOWpIYAg37ljOOCQd/vHb4rHlLIRmAfgms8yuzkksU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WfPNLHfqZcOjAOqDMl3YhpKJS0qcy9gxEC3RNxA50QbAOeL0sw8G7de9y7iyrzYmoibnwv0zcrflXI3aUT8P4YNoSM/GBKu3XYOfMUcmAawJ0DeTl+WKhQz91VUYCvfhWDNMonJsbOJaGhX/Onq/iHQnJgJ8TEp/vk73TxeOPKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=TEGwqO50; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pqtKTrB2; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1773739509; c=relaxed/simple;
+	bh=bJiw2fCIyVOW1mxKKbHzwEUXYne2FJgUTUWqzDnzFLo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DCzHEaJmDUBGxN1D7QM8t13SZVsQKIfN9MCKmtf796hAaNs7krJZplM4Y7nFjFWSVds5QPIJnsDf9xlzgbw4kbVbkHHNTUExGL2QM7yGsfpomRL1LjS8IGiBMN5DPkc2Zwqq8+wRYZlZuGz3RzIi0vdUPvonnGa6Ia20lKPgNVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FfebmK8Q; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="TEGwqO50";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pqtKTrB2"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.stl.internal (Postfix) with ESMTP id 8C30D1D00144;
-	Tue, 17 Mar 2026 05:19:30 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Tue, 17 Mar 2026 05:19:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1773739170; x=
-	1773825570; bh=mxpAyC1s7/VO7u79kIstiYH59Ic5wP4Xx6EiPC23nvs=; b=T
-	EGwqO50SMtz9UyggQ52u8YvsBX7yzsbhhh5DTWTA2zP+ARSRgtQF5yMZ17Z9tajz
-	sBPNsIgmcn1+b2MwmOw9GlPEzi1uYVJqaN9ERw13lAkt7VGkSxjbTmKpv55xHlYX
-	Vk/omvB/Rgg8AvB8X3gUsQij0Zm5mS6ER3f9ZBQU6fwhM2RXWX73koke+wwe3Lwq
-	F+HkqgXGrZrcamB3EOhM+u3qYMwAMhErnZ8iIAv+5J+VrYB+A/nw00KW0NhZee31
-	6OTykKi0WAkiw/56WgWvnwU+g+bBKMRbMigOeaDitlmWzRSl82cvpheNTvoJkJo+
-	ul/kQwpy2DNJtA94qz18Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1773739170; x=1773825570; bh=mxpAyC1s7/VO7u79kIstiYH59Ic5wP4Xx6E
-	iPC23nvs=; b=pqtKTrB2XSyR/rYthSoZw1JQ8J28pcLV1vmG/RTHo5oYJzoWcVm
-	b2i5OWJESUR7ytmtRUE00THEg4qqHmUX+mxzwz+jQKgZqGrovPeCNXrqAmHTmfaO
-	rBl1c54NWAE5DndmKBTkXz+v9dRtRmihGKOCo7Pmw0ANvwyev8DYikIahhwz3qP6
-	PGyeKCCFI1ESL9/QlIZA2oN1f4AyihTUwPMQkauDLRMHzfZxxOprYoOW4Z6549BQ
-	cqXLnvO0Vei+uGx7r5ztSppos0Cb3TJWx7s8AwUrT+TQKR0fVGUWSPfEhh5z0DqO
-	u99QQn8YMdMadOcV05qBmz/D3ZZAn5P5z6A==
-X-ME-Sender: <xms:oRy5aZJLMGALHEU0PXuFBca-kCszg21I8-FhGL1vxgCXqT8sWautnw>
-    <xme:oRy5aRcjj0xNEJxPMiom2eQSuFQRYHxH6u0geKVTfWmCA-QP8ZLy0UqwOa_QqMRmi
-    ml9f4-8Le3fr-4aH_Gynavqv2b14aFV3qG_mJzmaH11OXkCb8lCLb4>
-X-ME-Received: <xmr:oRy5aTU9ojeMG5U21JkI2w2voBL8Pu2U8EERYwzzvZ-Zo_CB7iiaIl45lOuF>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftddtkeejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
-    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedujedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopeifihhlfhhrvggurdhmrghllhgrfigrseifuggtrdgtohhmpdhrtghpthht
-    oheptghorhgsvghtsehlfihnrdhnvghtpdhrtghpthhtohepughlvghmohgrlheskhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdp
-    rhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprh
-    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:oRy5aXhsMh_C4C6O2OHrvx5B4nS42vvuqxMWcuI7k-41_Kz-Bi1oHQ>
-    <xmx:oRy5aVibbWeh0kI7O8_xJ1gHSK4QvCimMxkoHRkR9ag-4T2lqD8P0w>
-    <xmx:oRy5aUsNAivdeU3hTtKobJe7-EOxtNwG4ot852dfVaarkAG1pxDutg>
-    <xmx:oRy5abu9tH9IcKdOOXExGsKbCSBitrMBzBLrZDQoi3vr5edPpkkQIQ>
-    <xmx:ohy5aekr5c4ZeVFDRhwSPowm0KuWnqPAsNqU63DuH2ryTD5yVBRZ9pM6>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 17 Mar 2026 05:19:29 -0400 (EDT)
-Date: Tue, 17 Mar 2026 10:19:27 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Wilfred Mallawa <wilfred.mallawa@wdc.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"dlemoal@kernel.org" <dlemoal@kernel.org>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Alistair Francis <Alistair.Francis@wdc.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-	"horms@kernel.org" <horms@kernel.org>,
-	"edumazet@google.com" <edumazet@google.com>,
-	Daiki Ueno <dueno@redhat.com>, Simo Sorce <ssorce@redhat.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [RFC net-next 1/3] net/tls_sw: support randomized zero padding
-Message-ID: <abkcnzIJ5q0XCVJ7@krikkit>
-References: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
- <20260309054837.2299732-3-wilfred.opensource@gmail.com>
- <abQOGm6BqAE5eEln@krikkit>
- <20260314073919.2f92b966@kernel.org>
- <9e9f6eb89ba95e9fbb764e2807420e98b566bf37.camel@wdc.com>
- <20260316180355.37d45785@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FfebmK8Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773739507;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=v2L3IsKbVCXlEY8N3babcTFT7cMuipE4uuM+dNpsWbk=;
+	b=FfebmK8Qa5qTkWuqy06+J2WjF0PCPgSmgUe19XV4Kq7wkxXQRRit0e0TBU9qoqPC9gY4xm
+	9eRESy4fq2iAV+1uhQTjJr4Iff3mtKq86L0R7AJIZ9Z5NrrpnXMkvmvOrf4/IhQ2hd2UwP
+	wrPbF0s+XcWYM/n23zc6vLy9EwCKqyI=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-638-ulCBqY83NIKoaRAp6HatOg-1; Tue,
+ 17 Mar 2026 05:25:01 -0400
+X-MC-Unique: ulCBqY83NIKoaRAp6HatOg-1
+X-Mimecast-MFC-AGG-ID: ulCBqY83NIKoaRAp6HatOg_1773739497
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0D93F1944EB8;
+	Tue, 17 Mar 2026 09:24:56 +0000 (UTC)
+Received: from [192.168.1.153] (unknown [10.45.224.69])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 659B8180035F;
+	Tue, 17 Mar 2026 09:24:46 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH v6 0/5] kunit: Add support for suppressing warning
+ backtraces
+Date: Tue, 17 Mar 2026 10:24:40 +0100
+Message-Id: <20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260316180355.37d45785@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zXMTQrCMBBA4auUWZuSpCT+rLyHSBmbqR2kSZmkI
+ pTe3SC4/BbvbZBJmDJcmg2E3pw5xQp/aGCYMD5JcagGq63XnbHqtUYuPYbQ53VZkhRlx86dtH+
+ YcwhQu0Vo5M/vebtXj5JmVSYh/J+cdtabzh6da433xmllFA4oM0e8CoUJSzukGfb9C1wN+oyhA
+ AAA
+X-Change-ID: 20260312-kunit_add_support-2f35806b19dd
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Alessandro Carminati <acarmina@redhat.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Kees Cook <kees@kernel.org>, 
+ Albert Esteve <aesteve@redhat.com>, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ Dan Carpenter <dan.carpenter@linaro.org>, 
+ =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
+ Kees Cook <kees@kernel.org>, Simona Vetter <simona.vetter@ffwll.ch>, 
+ David Gow <david@davidgow.net>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773739485; l=10237;
+ i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
+ bh=bJiw2fCIyVOW1mxKKbHzwEUXYne2FJgUTUWqzDnzFLo=;
+ b=ABn9We0fiidxQc8J1WKKczkQopcxc+TgYe29t+Mbi0bdyZsh54tNUBtocIUQu97QBwx+fodNA
+ 35vFRYe7M8cB0fst+v+36X3BN8jeMbdyIRgTZSkgh0ybmyPUYvVWTRg
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-2026-03-16, 18:03:55 -0700, Jakub Kicinski wrote:
-> On Tue, 17 Mar 2026 00:53:07 +0000 Wilfred Mallawa wrote:
-> > > Or maybe you could refer to existing implementations of this feature
-> > > in user space libs? The padding feature seems slightly nebulous, 
-> > > I wasn't aware of anyone actually using it. Maybe I should ask...
-> > > are you actually planning to use it, or are you checking a box?  
-> > 
-> > For upcoming WD hardware, we were planning on informing users to use
-> > this feature if an extra layer of security can benefit their particular
-> > configuration. But to answer your question, I think this falls more
-> > into the "checking a box"...
-> > 
-> > I'm happy to drop this series if there's not much added value from
-> > having this as an available option for users.
-> 
-> I'm not much of a security person, and maybe Sabrina will disagree
-> but I feel like it's going to be hard for us to design this feature
-> in a sensible way if we don't know at least one potential attack :S
+Some unit tests intentionally trigger warning backtraces by passing bad
+parameters to kernel API functions. Such unit tests typically check the
+return value from such calls, not the existence of the warning backtrace.
 
-No, same here, that's why I tried to CC some userspace developers on
-the cover (as well as for awareness of what's going on in the kernel
-and the API being discussed -- adding them here again).
+Such intentionally generated warning backtraces are neither desirable
+nor useful for a number of reasons:
+- They can result in overlooked real problems.
+- A warning that suddenly starts to show up in unit tests needs to be
+  investigated and has to be marked to be ignored, for example by
+  adjusting filter scripts. Such filters are ad hoc because there is
+  no real standard format for warnings. On top of that, such filter
+  scripts would require constant maintenance.
 
-My understanding is that attacks of this type are mainly "observers
-will figure out what type of traffic I'm doing based on message
-length", and I feel all those "traffic pattern masking" features are
-only interesting for very paranoid users. The RFC links to some
-research, and maybe the kind of statistics/machine learning that those
-attacks require has improved since, which could make such attacks more
-realistic? No idea.
+One option to address the problem would be to add messages such as
+"expected warning backtraces start/end here" to the kernel log.
+However, that would again require filter scripts, might result in
+missing real problematic warning backtraces triggered while the test
+is running, and the irrelevant backtrace(s) would still clog the
+kernel log.
 
+Solve the problem by providing a means to identify and suppress specific
+warning backtraces while executing test code. Support suppressing multiple
+backtraces while at the same time limiting changes to generic code to the
+absolute minimum.
+
+Overview:
+Patch#1 Introduces the suppression infrastructure.
+Patch#2 Mitigate the impact at WARN*() sites.
+Patch#3 Adds selftests to validate the functionality.
+Patch#4 Demonstrates real-world usage in the DRM subsystem.
+Patch#5 Documents the new API and usage guidelines.
+
+Design Notes:
+The objective is to suppress unwanted WARN*() generated messages.
+
+Although most major architectures share common bug handling via `lib/bug.c`
+and `report_bug()`, some minor or legacy architectures still rely on their
+own platform-specific handling. This divergence must be considered in any
+such feature. Additionally, a key challenge in implementing this feature is
+the fragmentation of `WARN*()` messages emission: specific part in the
+macro, common with BUG*() part in the exception handler.
+As a result, any intervention to suppress the message must occur before the
+illegal instruction.
+
+Lessons from the Previous Attempt
+In earlier iterations, suppression logic was added inside the
+`__report_bug()` function to intercept WARN*() messages not producing
+messages in the macro.
+To implement the check in the bug handler code, two strategies were
+considered:
+
+* Strategy #1: Use `kallsyms` to infer the originating functionid, namely
+  a pointer to the function. Since in any case, the user interface relies
+  on function names, they must be translated in addresses at suppression-
+  time or at check-time.
+  Assuming to translate at suppression-time, the `kallsyms` subsystem needs
+  to be used to determine the symbol address from the name, and again to
+  produce the functionid from `bugaddr`. This approach proved unreliable
+  due to compiler-induced transformations such as inlining, cloning, and
+  code fragmentation. Attempts to preventing them is also unconvenient
+  because several `WARN()` sites are in functions intentionally declared
+  as `__always_inline`.
+
+* Strategy #2: Store function name `__func__` in `struct bug_entry` in
+  the `__bug_table`. This implementation was used in the previous version.
+  However, `__func__` is a compiler-generated symbol, which complicates
+  relocation and linking in position-independent code. Workarounds such as
+  storing offsets from `.rodata` or embedding string literals directly into
+  the table would have significantly either increased complexity or
+  increase the __bug_table size.
+  Additionally, architectures not using the unified `BUG()` path would
+  still require ad-hoc handling. Because current WARN*() message production
+  strategy, a few WARN*() macros still need a check to suppress the part of
+  the message produced in the macro itself.
+
+As a result, previous version proposed a per-macro solution, which offers
+better control on where the suppression logic is applied.
+
+For this iteration, the `__report_bug()` centralized approach was
+revisited after the discussion in the previous version [1].
+However, again this approach did not work because:
+- Some warning output is generated directly in the macros before calling
+  the centralized functions (e.g., `__warn_printk()` in `__WARN_printf()`)
+- Functions in the warning path like `warn_slowpath_fmt()` are marked
+  `__always_inline`, making it difficult to intercept early enough
+- So, by the time `__report_bug()` is called, output has already been written
+  to the console, making suppression ineffective
+
+Current Proposal: Check Directly in the `WARN()` Macros.
+This avoids the need for function symbol resolution or ELF section
+modification.
+Suppression is implemented directly in the `WARN*()` macros.
+
+A helper function, `__kunit_is_suppressed_warning()`, is used to determine
+whether suppression applies. It is marked as `noinstr`, since some `WARN*()`
+sites reside in non-instrumentable sections. The function uses a static
+branch for the fast path check (which is `noinstr`-safe), and only calls
+the actual suppression check (which uses `strcmp`, and is surrounded by
+instrumentation_begin()/end() calls) when suppressions are active.
+The list of suppressed warnings is protected with RCU (Read-Copy-Update)
+to allow concurrent read access without locks.
+
+To minimize runtime impact when no suppressions are active, static branching
+is used via a static key (`kunit_suppress_warnings_key`). The branch is
+automatically enabled when the first suppression starts and disabled when the
+last suppression ends, tracked via an atomic counter. This keeps the suppression
+check code out-of-line, reducing code bloat at each `WARN*()` site while
+maintaining minimal runtime overhead in the common case (no active suppressions).
+
+This series is based on the RFC patch and subsequent discussion at
+https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
+and offers a more comprehensive solution of the problem discussed there.
+
+[1] https://lore.kernel.org/all/CAGegRW76X8Fk_5qqOBw_aqBwAkQTsc8kXKHEuu9ECeXzdJwMSw@mail.gmail.com/
+
+Changes since RFC:
+- Introduced CONFIG_KUNIT_SUPPRESS_BACKTRACE
+- Minor cleanups and bug fixes
+- Added support for all affected architectures
+- Added support for counting suppressed warnings
+- Added unit tests using those counters
+- Added patch to suppress warning backtraces in dev_addr_lists tests
+
+Changes since v1:
+- Rebased to v6.9-rc1
+- Added Tested-by:, Acked-by:, and Reviewed-by: tags
+  [I retained those tags since there have been no functional changes]
+- Introduced KUNIT_SUPPRESS_BACKTRACE configuration option, enabled by
+  default.
+
+Changes since v2:
+- Rebased to v6.9-rc2
+- Added comments to drm warning suppression explaining why it is needed.
+- Added patch to move conditional code in arch/sh/include/asm/bug.h
+  to avoid kerneldoc warning
+- Added architecture maintainers to Cc: for architecture specific patches
+- No functional changes
+
+Changes since v3:
+- Rebased to v6.14-rc6
+- Dropped net: "kunit: Suppress lock warning noise at end of dev_addr_lists tests"
+  since 3db3b62955cd6d73afde05a17d7e8e106695c3b9
+- Added __kunit_ and KUNIT_ prefixes.
+- Tested on interessed architectures.
+
+Changes since v4:
+- Rebased to v6.15-rc7
+- Dropped all code in __report_bug()
+- Moved all checks in WARN*() macros.
+- Dropped all architecture specific code.
+- Made __kunit_is_suppressed_warning nice to noinstr functions.
+
+Changes since v5:
+- Rebased to v7.0-rc3
+- Added RCU protection for the suppressed warnings list.
+- Added static key and branching optimization.
+- Removed custom `strcmp` implementation and reworked
+  __kunit_is_suppressed_warning() entrypoint function.
+
+Alessandro Carminati (2):
+  bug/kunit: Core support for suppressing warning backtraces
+  bug/kunit: Suppressing warning backtraces reduced impact on WARN*()
+    sites
+
+Guenter Roeck (3):
+  Add unit tests to verify that warning backtrace suppression works.
+  drm: Suppress intentional warning backtraces in scaling unit tests
+  kunit: Add documentation for warning backtrace suppression API
+
+ Documentation/dev-tools/kunit/usage.rst |  30 ++++++-
+ drivers/gpu/drm/tests/drm_rect_test.c   |  16 ++++
+ include/asm-generic/bug.h               |  48 +++++++----
+ include/kunit/bug.h                     |  62 ++++++++++++++
+ include/kunit/test.h                    |   1 +
+ lib/kunit/Kconfig                       |   9 ++
+ lib/kunit/Makefile                      |   9 +-
+ lib/kunit/backtrace-suppression-test.c  | 105 ++++++++++++++++++++++++
+ lib/kunit/bug.c                         |  54 ++++++++++++
+ 9 files changed, 316 insertions(+), 18 deletions(-)
+ create mode 100644 include/kunit/bug.h
+ create mode 100644 lib/kunit/backtrace-suppression-test.c
+ create mode 100644 lib/kunit/bug.c
+
+--
+2.34.1
+
+---
+Alessandro Carminati (2):
+      bug/kunit: Core support for suppressing warning backtraces
+      bug/kunit: Suppressing warning backtraces reduced impact on WARN*() sites
+
+Guenter Roeck (3):
+      Add unit tests to verify that warning backtrace suppression works.
+      drm: Suppress intentional warning backtraces in scaling unit tests
+      kunit: Add documentation for warning backtrace suppression API
+
+ Documentation/dev-tools/kunit/usage.rst |  30 ++++++++-
+ drivers/gpu/drm/tests/drm_rect_test.c   |  16 +++++
+ include/asm-generic/bug.h               |  44 ++++++++-----
+ include/kunit/bug.h                     |  61 ++++++++++++++++++
+ include/kunit/test.h                    |   1 +
+ lib/kunit/Kconfig                       |   9 +++
+ lib/kunit/Makefile                      |   9 ++-
+ lib/kunit/backtrace-suppression-test.c  | 109 ++++++++++++++++++++++++++++++++
+ lib/kunit/bug.c                         |  71 +++++++++++++++++++++
+ 9 files changed, 332 insertions(+), 18 deletions(-)
+---
+base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
+change-id: 20260312-kunit_add_support-2f35806b19dd
+
+Best regards,
 -- 
-Sabrina
+Albert Esteve <aesteve@redhat.com>
+
