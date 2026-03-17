@@ -1,142 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0783439D6D9;
-	Tue, 17 Mar 2026 09:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC39A2F1FDE
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 10:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773740994; cv=none; b=gh5LCLKKEYE3CmTu8CVhCSR1ac+hlMj+BxoNwINAyIOAhtc4nhvnv8Jxx0OunhCF9H5mzO68OyDMoH5a0n0Fr2/RAoC4CnXgXRa3duhMvckzOsYEjUZWyid/C+EtSFecTrtI0zerVozjyF2+jpZ3nkGKs3qsEUzt18NBzgzqr8o=
+	t=1773741802; cv=none; b=GB6AviTFEIOTAWLHB32oqdcMFNqd3yo9t3g7IXZIAcTrv+rdGxZc6FBNt59x95IM9RqQrPI2bRPdG20G7EmOnnVq5o/aPt7W78KnQj/tvEKRdd3l/P919RVdcFTRleTdNQv81llqxB0YjsIfvA0JHfPABUVR2REWuQn/5UOS4Vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773740994; c=relaxed/simple;
-	bh=Y37P4OdefzXCY9joMqOUrRnFRWZPXLodPfge2HEhFEU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EWw52LzJIt8b9prCbhkjLYoAYus66TOCYZ/xlZNjiEyan2fd7kt1xjbj4utwfeoZHntWnCAE5T4K2/nw2OwpSSUcUcOvbY3U2Tpvm2aXgBi2zTEUex/yL2C8Z5QXdhs9rjqkQUB4gLQky3CDS13v5i0y4a4X5KUC4aA7rNkcvFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjAmoTJC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773741802; c=relaxed/simple;
+	bh=8fV85trx/R47h5vifBybTf4+W6z3VyyEvYi8IAwoEbM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hEjYwn8jugrCKfAYGu/RAMl3xEbR7kl2TBjMynTLmIbVFuR7f8lF0C14MAab1PXWPFWhPMVDWjeYJUnmslT6rX0tlGh6JZPS12gt/G/1TvvrK13Plz2jQvTLiuNukWEfluNkWJwowYkdHUbqckyd5jCDAKSB5ZAoQEsvKEIPhAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rUbADpQk; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjAmoTJC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEC9C4CEF7;
-	Tue, 17 Mar 2026 09:49:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773740993;
-	bh=Y37P4OdefzXCY9joMqOUrRnFRWZPXLodPfge2HEhFEU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mjAmoTJC6USk8SekAtF8SLRTp1QiZRLQqpVDJaLpzUVOpG6VwUb+5ibGwtGB/x8lH
-	 N7OYw01V/jjNLgXWzhv1iWS19CoIxJ0XTaNuFmMzzmzR/cP8Wq9Ww2wrQLaFhpuqrO
-	 JJ0xmyDLdRip83l9ur+Ahi/o9Us1w/Zf/BxSlar1Xg6RhSIidUGcBsWiuee2N9VffB
-	 mY9hV92Fv9EBMfezkkdxwNp6brgFwvGNb790meJr1T/NRCz69CWNGuFQ3w8NAK+zqx
-	 i/TFwty4RI5wmBDq2iLpx1S6dM2vs04HSp+k/30oQfa/xpW9gbv70HYTfHGPMRLCqw
-	 O3+T5FJKNPYBw==
-Message-ID: <e8f25a5f-940b-4b89-8a88-ef984bd78238@kernel.org>
-Date: Tue, 17 Mar 2026 10:49:46 +0100
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rUbADpQk"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852fdb36a8so64748815e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 03:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1773741799; x=1774346599; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MZ5u5gAltLh5uEgFrUNUWe9cgVa4WC5hN8ka5M2ffvk=;
+        b=rUbADpQkuiiBeXzifch61iUj/UQN8yFJYfMG7eI8mujtU8DoJFPex5YmujwzyVVfP4
+         31PNCh7y1ViR1VIxCVgCy7+rghs38AMrw55WfPVjwWh2ZTkmqAb/NAuT+TUiNtBb55kR
+         5w7QQXIIRDWlkrEjaqAvX82ps0ewx6Ffa7iE+rwPrl+UotT6f0LehGdjcZwg7Rk7XgZU
+         Lh2XGOu6Vw21D1xvzOqI+ILc1bgbyJ0dhKdkSmQ0f8tjXvYXd0dYAUUuJNaeOQgB3+XZ
+         JOcOCXvd6SRn+0tU+qZdYwZg7A/VGzBsIuxYraLz3ZZIeDCnpeJVLaiG5RLoQED8zcYy
+         aEmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773741799; x=1774346599;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MZ5u5gAltLh5uEgFrUNUWe9cgVa4WC5hN8ka5M2ffvk=;
+        b=gOGnJTjp1ok9Pu1zz7zizPblvgoXPxQEDv8u7fO+nyH1fMdoqWhyStHFKq95k7od2Q
+         jWKo+ZHt90qkkT/qgzjUQjRzut7vpnPbU1NJyfovY+7aWUR5txkSddcEvXOG5UMnt+te
+         1jPgCftfLbuVHYhclUar1MN4Ggd975zACm9PYJZZuQ9tyO25pJwrdie1jww8VG7z4NoU
+         P8keJ4SBFPSaycwNiisud7YvyAl9n4GHmZHfIUXoEgjmkgUWaKRzLDhyUj7zpzfCNfFF
+         WBE1baosD3J1Gu+xzI9jE8/Yt1Rc0hFHUoroy57Qf88oTi0SztH1cpE/bTZg24i6yviY
+         TSXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPb+ocK5s+RdkFQADbfjLrxLsmP4e+hpbYu1PIwBbeCHPmQbiPQb7bSDeQPePds7r808uCJ+ptkqEe5e+3Os8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz96o9PKBiNVIkNejT5YDmQtKNd6/ldhhL3rHGcM9im7JogKCt1
+	AnmlsGCQNeOpzXeFbicAAyZpDfeMiYYUQEpIAWGNnxVoHipfuCeBAVdb/wyq5o+5+vU=
+X-Gm-Gg: ATEYQzwYeYY22BJthUh/EM5ZI9H7eBwuR0H76IpTBnQfsyVYoPEBLDw3qqCyJN5mTgr
+	3jyd50PDUehlXxhUU1588ySf+5c4U15YyPFK4kncBqKRgtxPpaiezgYMVfN2akD7mH4xgQIvOVL
+	3VXpmA4KlQh769KT8385XIlBS38tW9pMBm8+lNRy0OrrIocuq8KgqLD0z36uxKmq7LQSY2YjOg/
+	otgCRrG+qtABxCumhXpJGYjwf5pR1IoK9blJAiMUKFijq6i85io9/5+maPZySFtVrQ9BW4FF1mu
+	Fyw0nwcjYCk8lb74epnOlNnOuRVTa/mUByPtSNwAnWDVoMZK9ailBgGwpLdYHF+OMRIRkasHdA1
+	/5UW7PbSIKedIsW/AC2qGmQmpMgf/ypxKyGRAWSh7j+EWE4++TMIOg5K6fUCoUTBm6dM5qNXGJY
+	afr+3qAKG4ohWiH80/thbh8+h/pjbf
+X-Received: by 2002:a05:600c:c4ac:b0:485:33ad:3c9f with SMTP id 5b1f17b1804b1-4855670c164mr271097835e9.25.1773741799028;
+        Tue, 17 Mar 2026 03:03:19 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856eaa3b66sm63481085e9.11.2026.03.17.03.03.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2026 03:03:18 -0700 (PDT)
+Date: Tue, 17 Mar 2026 13:03:15 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Albert Esteve <aesteve@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	dri-devel@lists.freedesktop.org, workflows@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Alessandro Carminati <acarmina@redhat.com>,
+	Guenter Roeck <linux@roeck-us.net>, Kees Cook <kees@kernel.org>,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>
+Subject: Re: [PATCH v6 0/5] kunit: Add support for suppressing warning
+ backtraces
+Message-ID: <abkm46TIIBBbuuC_@stanley.mountain>
+References: <20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 6/6] selftests: drv-net: xdp: Add rss_hash
- metadata tests
-To: Chris J Arges <carges@cloudflare.com>, Joe Damato <joe@dama.to>,
- Jakub Kicinski <kuba@kernel.org>, Andy Gospodarek <gospo@broadcom.com>,
- Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
- Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>,
- Petr Machata <petrm@nvidia.com>, David Wei <dw@davidwei.uk>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Carolina Jubran <cjubran@nvidia.com>, Nimrod Oren <noren@nvidia.com>,
- Gal Pressman <gal@nvidia.com>,
- Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Bui Quang Minh <minhquangbui99@gmail.com>,
- Daniel Zahka <daniel.zahka@gmail.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
-References: <20260313223029.454755-1-carges@cloudflare.com>
- <20260313223029.454755-7-carges@cloudflare.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20260313223029.454755-7-carges@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com>
 
+I think this is great to suppress some warnings, and I already ACKed
+this patchset.  But we're still going to have some warnings where the
+warning is the whole point of the test.
 
+It would be great if marked these somehow:
+1) At minimum we should mark them so people seeing the warning know it's
+intentional.  "Intentional Stack Trace".  I've sent at least one patch
+to add that printk before the stack trace but it was ignored.  We could
+do this piecemeal.
 
-On 13/03/2026 23.27, Chris J Arges wrote:
-> diff --git a/tools/testing/selftests/net/lib/xdp_metadata.bpf.c b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-> new file mode 100644
-> index 000000000000..f71f59215239
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-> @@ -0,0 +1,163 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <stddef.h>
-> +#include <linux/bpf.h>
-> +#include <linux/in.h>
-> +#include <linux/if_ether.h>
-> +#include <linux/ip.h>
-> +#include <linux/ipv6.h>
-> +#include <linux/udp.h>
-> +#include <linux/tcp.h>
-> +#include <bpf/bpf_endian.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +enum {
-> +	XDP_PORT = 1,
-> +	XDP_PROTO = 4,
-> +} xdp_map_setup_keys;
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 5);
-> +	__type(key, __u32);
-> +	__type(value, __s32);
-> +} map_xdp_setup SEC(".maps");
-> +
-> +/* RSS hash results: key 0 = hash, key 1 = hash type,
-> + * key 2 = packet count, key 3 = error count.
-> + */
-> +enum {
-> +	RSS_KEY_HASH = 0,
-> +	RSS_KEY_TYPE = 1,
-> +	RSS_KEY_PKT_CNT = 2,
-> +	RSS_KEY_ERR_CNT = 3,
-> +};
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__type(key, __u32);
-> +	__type(value, __u32);
-> +	__uint(max_entries, 4);
-> +} map_rss SEC(".maps");
-> +
-> +/* Mirror of enum xdp_rss_hash_type from include/net/xdp.h.
-> + * Needed because the enum is not part of UAPI headers.
+2) It would be nice if the print was standardized enough so CI systems
+could automatically filter it out.
 
-It is on purpose that enum is not part of UAPI headers, because BPF
-progs (like this) are suppose to handle this via CO-RE.
+regards,
+dan carpenter
 
-Asking CO-RE experts (e.g. Cc Andrii), will below enum xdp_rss_hash_type
-usage automatically get relocated by libbpf, based on running kernel?
-(or do we need some explicit bpf_core_ calls?)
-
-> + */
-> +enum xdp_rss_hash_type {
-> +	XDP_RSS_L3_IPV4 = 1U << 0,
-> +	XDP_RSS_L3_IPV6 = 1U << 1,
-> +	XDP_RSS_L3_DYNHDR = 1U << 2,
-> +	XDP_RSS_L4 = 1U << 3,
-> +	XDP_RSS_L4_TCP = 1U << 4,
-> +	XDP_RSS_L4_UDP = 1U << 5,
-> +	XDP_RSS_L4_SCTP = 1U << 6,
-> +	XDP_RSS_L4_IPSEC = 1U << 7,
-> +	XDP_RSS_L4_ICMP = 1U << 8,
-> +};
-
---Jesper
