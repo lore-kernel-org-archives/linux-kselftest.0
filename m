@@ -1,86 +1,57 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E5B2DCF61;
-	Tue, 17 Mar 2026 18:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD54B37FF52;
+	Tue, 17 Mar 2026 18:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773772636; cv=none; b=MoOakyboGzSCSieAuhCdl0q3ON8WhVKp1mPyPKQKBegYnzmcoqotqA/uNrTuOu5k4I/vFMPmyORFcEtSIsS2Q0pgmrZ1QRegMP4JeXe/C7GsE/G/QvkO2dJz8oOULAfby0L6/5YfWQhvh6pUlq2TahEfwBdd69lfCJ35v2UUf40=
+	t=1773772651; cv=none; b=XJS4pVpwNMsooYoPo/3uWaFNM4j8OhFDhyQcwAHXASalj8uy6xnPyQ+p5yliQBJ/KA2fG2l/2Zul09oknlg8If2rJKrzYIbxoQQx3UNKTGk/QxfryfwU51sD2R8JY+sedO0ovxYKDVQ4kB1SrFaVlCXUCaFzfAxmXFBvuJ2RGIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773772636; c=relaxed/simple;
-	bh=jjcYOoT+KqyE0+318IMagSsAV+L00HD2nLksUrDJOkc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=aGsvLc1liy/w9qwhzPr2mPLVCzogRpqmb3NpyK4WNKz88s+Cvd+cHpUJ2DGXtC5u1XXTsTRu5i+hQDEU06Nxie+vSoZKy31CE1cYeHNH1RBcl0axLvHf6x/qW3ElAtesiECKxTLstPX+76QJ8LasSdVO0jricilONlUJMownghQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=HU23TiBs; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1773772651; c=relaxed/simple;
+	bh=X1fPag/Ma0Or3n9BwLwG0BHnymxAfli1gvz6SmhvgXc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=jobimD2zLSFbl3Dv2qFEIj+bK1cw39+IZi7iVun8J2JTWj8mRllPjD2CPvhnOCgDSLO5kwo3qkmaHHM8jiQ6ZtIf8uYUUWOdwqIfXyZtrnyDezoWjFKkNHbfZOK44phfvEmN9MlGiiLpFbolg4m9koiXy08Bu9mQkW/anP5+NOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=xBLlVrZS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="HU23TiBs"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B2A7540C7C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1773772634; bh=Avh8bhKuzqGLIIUjaifKg+vcNZMYJQrDENcH3wShTl0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=HU23TiBswDJw7ocrB3Ctri2W3DFMwL/2dNxFiwJ4fzzBd8CStXvB3XVumbVzMZrvZ
-	 dj7BNgXi1gFXZmCIoIB6JL19enkQrRabKTa502NoNfZt+LccNv4m078xjT3IJ/8XL8
-	 f8nEWjAiXLobDaMTGJny6nnvjGDM08J7647WLf+TgxNf466qqIwuoTP2AfT7RZVeix
-	 PavOAT/0V+8f+D+Lsg+xMGF9SB1yxzkS6D9kikgdjau4o3cGYVOkRJa0qdanItIFmO
-	 PpsCB7zvlWBRwFRhLuVv27z6PsgxW3Eu4j/DuNEAUcGxMGNwa2cbZ2C+iS/UzkDKNY
-	 TSFPhLFDi6//g==
-Received: from localhost (c-71-229-227-126.hsd1.co.comcast.net [71.229.227.126])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id B2A7540C7C;
-	Tue, 17 Mar 2026 18:37:14 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Sasha Levin <sashal@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Cc: linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
- workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org, Thomas
- Gleixner <tglx@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Dmitry Vyukov <dvyukov@google.com>, Randy Dunlap <rdunlap@infradead.org>,
- Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>, Jake Edge
- <jake@lwn.net>, David Laight <david.laight.linux@gmail.com>, Askar Safin
- <safinaskar@zohomail.com>, Gabriele Paoloni <gpaoloni@redhat.com>, Mauro
- Carvalho Chehab <mchehab@kernel.org>, Christian Brauner
- <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Andrew
- Morton <akpm@linux-foundation.org>, Masahiro Yamada
- <masahiroy@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Ingo
- Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 5/9] kernel/api: add API specification for sys_open
-In-Reply-To: <abQ-iIylzpuqlRv3@laps>
-References: <20260313150928.2637368-1-sashal@kernel.org>
- <20260313150928.2637368-6-sashal@kernel.org>
- <2026031343-raft-panhandle-0a21@gregkh> <abQ-iIylzpuqlRv3@laps>
-Date: Tue, 17 Mar 2026 12:37:13 -0600
-Message-ID: <878qbq9uau.fsf@trenco.lwn.net>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="xBLlVrZS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2CDC4CEF7;
+	Tue, 17 Mar 2026 18:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1773772651;
+	bh=X1fPag/Ma0Or3n9BwLwG0BHnymxAfli1gvz6SmhvgXc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=xBLlVrZSOfM9FPIB0k7xOsujepC5gsf6N9xIoEhu0lP7W7dyGaurgbK030QQFBJLG
+	 uvPeZNqE/I/Hpo6HjsIoE2XzGgo2h0w/sf9uQIYKx7uXY/WKXYI1NsikK3REwoNNky
+	 L+q5URynkmWbhbeuvVKmsijD61veTJYwQWSeDvI4=
+Date: Tue, 17 Mar 2026 11:37:30 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Chunyu Hu <chuhu@redhat.com>
+Cc: david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
+ baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
+Subject: Re: [PATCH v3 0/5] selftests/mm: skip several tests when thp is not
+ available
+Message-Id: <20260317113730.45d5cef4ba84be4df631677f@linux-foundation.org>
+In-Reply-To: <20260317094419.1429259-1-chuhu@redhat.com>
+References: <20260317094419.1429259-1-chuhu@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Sasha Levin <sashal@kernel.org> writes:
+On Tue, 17 Mar 2026 17:44:14 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
 
-> On Fri, Mar 13, 2026 at 04:33:57PM +0100, Greg Kroah-Hartman wrote:
->>On Fri, Mar 13, 2026 at 11:09:15AM -0400, Sasha Levin wrote:
+> There are several tests requires transprarent hugepages, when run on thp
+> disabled kernel such as realtime kernel, there will be false negative.
+> Mark those tests as skip when thp is not available.
 
->>> + * since-version: 1.0
->>
->>I think since older versions :)
->
-> Right. I guess that in my mind 1.0 was the first official "release". I'll
-> update it to 0.01.
-
-That kind of raises the question of just what since-version means.  The
-version-0.01 (or 1.0) version of open() surely didn't do everything
-described in this specification.  So it's saying that some version of
-the system call has existed since then?
-
-Thanks,
-
-jon
+AI review asked some questions:
+https://sashiko.dev/#/patchset/20260317094419.1429259-1-chuhu%40redhat.com
