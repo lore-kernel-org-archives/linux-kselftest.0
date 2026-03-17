@@ -1,196 +1,78 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B6D2DAFCB
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 03:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0893528314E;
+	Tue, 17 Mar 2026 03:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773717311; cv=none; b=ffa4u2ZAsH1VylIgVrct5tTwK5ijND2OsgGSg0J39gIMmXIcOWs+Z44ThBGN497hHUEHCsEKfSW3ZfJ1CAk4zA8V7F3/klO1DCHLFZOXESIvAZjNzMY8XDLl6ziTW0GMgkPoL974H/ot5HqPzYYps5+042wE9KfZua6F5dS8fig=
+	t=1773718781; cv=none; b=MRWdb2ovKlAGP/EYRJGstwR2Kezt4HtPyksJ5Uy5C6ti0/eF7+oD0mriwYWHl1HO3WqOHkSQdFvxJdxdvvASJys2ZWlbh2LOmGXlS8Xje+rZKqfuo8+5WXLX8FnAdgsrUoCBLrXnuUUZbAwXQV8dXM23eRcv9ZeWoH6bJU5auVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773717311; c=relaxed/simple;
-	bh=u9j4brnSDo8//98Yyz0fnvBYwaPwkcxQZ7mB+zhOi5k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fqPV26/yVVwb7AKnOZtFw/0jeC7ukuH14y9fA9q2v/bL1U5whX7in6rlx208RkZzKSmDt88lziCimqJ7n57WvkPs8orkTWKFd4wKfeasf2KlO1Av9/e9hDt7k5EyBLI7ChEdw6luephhaGGGNZ3wB111RDK8LPb9LM+ypPwzbrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lInlWLGN; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773718781; c=relaxed/simple;
+	bh=8hAg0zyKA73FfN0mgQFWxOrvxGPICMcp9p0vfIzXr0g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dH+YsOuFUcBsgmvu8EV4OUX2WipYaZagyh0bkUDACVFZvlc0DiXQJDjw7AMvpDdz03hh5BiBwQsI1X7HSO4ZAOp00eJwTjRanOjlOzgRP46eaWRQ2GXKGDOVmdICCCm9cw2Vu0Zf+9JEZXj+0DeAFxK8fx7Ax3rApdUIh+btHZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u3/f5Xj2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lInlWLGN"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773717296;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5OFIL9jskOttKe4q3KAmy9/OgNPILMLxvL01TmeKtD4=;
-	b=lInlWLGNFcRvWWP7ELc7zWQ7QJJe+yhsn8ybEq7J0Lsjqwyw/ppMYaHIhLtYG2+AdeKeVq
-	ftUXKlVIQlx5YGsaXfXVd/dDStCYH7akcHW4B0WikEP1gsXXjHFIvm5jqDF+bEL3IuBfek
-	49esE9W1pOaj5IDhcFLJQhXi+8r0UIQ=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2] selftests: bonding: add test for stacked bond header_parse recursion
-Date: Tue, 17 Mar 2026 11:14:30 +0800
-Message-ID: <20260317031435.364094-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u3/f5Xj2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE3DC19421;
+	Tue, 17 Mar 2026 03:39:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773718780;
+	bh=8hAg0zyKA73FfN0mgQFWxOrvxGPICMcp9p0vfIzXr0g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=u3/f5Xj26oC+Xc5dBDvC9c7X32Cu7H5EZrFwvC4Z76fUwpYtWYjD6o9eKhHiGfbaG
+	 veb4hxLWtqwa30Tyx9C+ML0M17XdES4hQ07yAtvkNM9s8EPgCfzHnKZJrZmnJb3fs/
+	 Nrnsz67vJ2WSoq6jMgx7FwzSff6Vl2tdazDYaD2ROFrm2a20RjZDmJzmd7FovxZG4Q
+	 rFuoi+1vG+kevJyJQ05+XOUzz++CD0M/KDVTpq/3e544f0xoHmcuT6df6s8nuKuwWI
+	 GmwMntQUqoP1tMyDBHzrBn2GVouHytsgkL7YOLMDvC1XsUD8odi3fFV3/lPPpEpr8R
+	 EniZ+VgqR0Fww==
+Date: Mon, 16 Mar 2026 20:39:39 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Ioana Ciornei <ioana.ciornei@nxp.com>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman
+ <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/3] net: dpaa2-mac: extend APIs related to
+ statistics
+Message-ID: <20260316203939.7629aebf@kernel.org>
+In-Reply-To: <20260312142249.297192-2-ioana.ciornei@nxp.com>
+References: <20260312142249.297192-1-ioana.ciornei@nxp.com>
+	<20260312142249.297192-2-ioana.ciornei@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
+On Thu, 12 Mar 2026 16:22:47 +0200 Ioana Ciornei wrote:
+> Extend the dpmac_counter_id enum with the newly added counters which can
+> be interrogated through the MC firmware. Also add the
+> dpmac_get_statistics() API which can be used to retrieve multiple MAC
+> counters through a single firmware command.
 
-Add a selftest to reproduce the infinite recursion in bond_header_parse()
-when bonds are stacked (bond1 -> bond0 -> gre). When a packet is received
-via AF_PACKET SOCK_DGRAM on the topmost bond, dev_parse_header() calls
-bond_header_parse() which used skb->dev (always the topmost bond) to get
-the bonding struct. This caused it to recurse back into itself
-indefinitely, leading to stack overflow.
+>  #ifndef __FSL_DPMAC_H
+>  #define __FSL_DPMAC_H
+> @@ -170,6 +170,50 @@ int dpmac_set_link_state(struct fsl_mc_io *mc_io,
+>   *			      pause frames.
+>   * @DPMAC_CNT_EGR_GOOD_FRAME: counts frames transmitted without error, including
+>   *			      pause frames.
+> + * @DPMAC_CNT_EGR_FRAME_64: counts transmitted 64-bytes frames, good or bad.
+> + * @DPMAC_CNT_EGR_FRAME_127: counts transmitted 65 to 127-bytes frames, good or bad.
+> + * @DPMAC_CNT_EGR_FRAME_255: counts transmitted 128 to 255-bytes frames, good or bad.
+> + * @DPMAC_CNT_EGR_FRAME_511: counts transmitted 256 to 511-bytes frames, good or bad.
+> + * @DPMAC_CNT_EGR_FRAME_1023: counts transmitted 512 to 1023-bytes frames, good or bad.
+> + * @DPMAC_CNT_EGR_FRAME_1518: counts transmitted 1024 to 1518-bytes frames, good or bad.
 
-Before commit b7405dcf7385 ("bonding: prevent potential infinite loop
-in bond_header_parse()"), the test triggers:
+please try to wrap netdev code at 80 chars, especially if it's just
+comments where wrapping doesn't hurt readability.
 
-  ./bond_stacked_header_parse.sh
+> + * @DPMAC_CNT_EGR_FRAME_1519_MAX: counts transmitted 1519-bytes frames and
+> + * larger (up to max frame length specified), good or bad.
 
-  [  71.999481] BUG: MAX_LOCK_DEPTH too low!
-  [  72.000170] turning off the locking correctness validator.
-  [  72.001029] Please attach the output of /proc/lock_stat to the bug report
-  [  72.002079] depth: 48  max: 48!
-  ...
-
-After the fix, everything works fine:
-
-  ./bond_stacked_header_parse.sh
-  TEST: Stacked bond header_parse does not recurse                  [ OK ]
-
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
----
-Changes in v2:
-- Use tcpdump + scapy instead of custom Python script
-- Remove unnecessary modprobe and skip checks
-- Add CONFIG_NET_IPGRE to config dependencies
-
-v1: https://lore.kernel.org/netdev/20260316165946.46e9f8f7@kernel.org/T/#t
-https://lore.kernel.org/netdev/CANn89iK2EURqsjtd=OVP4awYTJHGcR-UU-V9WovpWR1Z3f03oQ@mail.gmail.com/
----
- .../selftests/drivers/net/bonding/Makefile    |  1 +
- .../net/bonding/bond_stacked_header_parse.sh  | 69 +++++++++++++++++++
- .../selftests/drivers/net/bonding/config      |  1 +
- 3 files changed, 71 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
-
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index 6c5c60adb5e8..9af5f84edd37 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -11,6 +11,7 @@ TEST_PROGS := \
- 	bond_macvlan_ipvlan.sh \
- 	bond_options.sh \
- 	bond_passive_lacp.sh \
-+	bond_stacked_header_parse.sh \
- 	dev_addr_lists.sh \
- 	mode-1-recovery-updelay.sh \
- 	mode-2-recovery-updelay.sh \
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh b/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
-new file mode 100755
-index 000000000000..4d0ec6e89e75
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
-@@ -0,0 +1,69 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test that bond_header_parse() does not infinitely recurse with stacked bonds.
-+#
-+# When a non-Ethernet device (e.g. GRE) is enslaved to a bond that is itself
-+# enslaved to another bond (bond1 -> bond0 -> gre), receiving a packet via
-+# AF_PACKET SOCK_DGRAM triggers dev_parse_header() -> bond_header_parse().
-+# Since parse() used skb->dev (always the topmost bond) instead of a passed-in
-+# dev pointer, it would recurse back into itself indefinitely.
-+
-+ALL_TESTS="
-+	bond_test_stacked_header_parse
-+"
-+REQUIRE_MZ=no
-+NUM_NETIFS=0
-+lib_dir=$(dirname "$0")
-+source "$lib_dir"/../../../net/forwarding/lib.sh
-+
-+bond_test_stacked_header_parse()
-+{
-+	local devdummy="test-dummy0"
-+	local devgre="test-gre0"
-+	local devbond0="test-bond0"
-+	local devbond1="test-bond1"
-+
-+	RET=0
-+
-+	# Setup: dummy -> gre -> bond0 -> bond1
-+	ip link add name "$devdummy" type dummy
-+	ip addr add 10.0.0.1/24 dev "$devdummy"
-+	ip link set "$devdummy" up
-+
-+	ip link add name "$devgre" type gre local 10.0.0.1
-+
-+	ip link add name "$devbond0" type bond mode active-backup
-+	ip link add name "$devbond1" type bond mode active-backup
-+
-+	ip link set "$devgre" master "$devbond0"
-+	ip link set "$devbond0" master "$devbond1"
-+
-+	ip link set "$devgre" up
-+	ip link set "$devbond0" up
-+	ip link set "$devbond1" up
-+
-+	# tcpdump on a non-Ethernet bond uses AF_PACKET SOCK_DGRAM (cooked
-+	# capture), which triggers dev_parse_header() -> bond_header_parse()
-+	# on receive. With the bug, this recurses infinitely.
-+	timeout 5 tcpdump -c 1 -i "$devbond1" >/dev/null 2>&1 &
-+	local tcpdump_pid=$!
-+	sleep 1
-+
-+	# Send a GRE packet to 10.0.0.1 so it arrives via gre -> bond0 -> bond1
-+	python3 -c "from scapy.all import *; send(IP(src='10.0.0.2', dst='10.0.0.1')/GRE()/IP()/UDP(), verbose=0)"
-+	check_err $? "failed to send GRE packet (scapy installed?)"
-+
-+	wait "$tcpdump_pid" 2>/dev/null
-+
-+	ip link del "$devbond1" 2>/dev/null
-+	ip link del "$devbond0" 2>/dev/null
-+	ip link del "$devgre" 2>/dev/null
-+	ip link del "$devdummy" 2>/dev/null
-+
-+	log_test "Stacked bond header_parse does not recurse"
-+}
-+
-+tests_run
-+
-+exit "$EXIT_STATUS"
-diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
-index 991494376223..14f21f0e4d2f 100644
---- a/tools/testing/selftests/drivers/net/bonding/config
-+++ b/tools/testing/selftests/drivers/net/bonding/config
-@@ -13,6 +13,7 @@ CONFIG_NET_CLS_MATCHALL=m
- CONFIG_NETCONSOLE=m
- CONFIG_NETCONSOLE_DYNAMIC=y
- CONFIG_NETCONSOLE_EXTENDED_LOG=y
-+CONFIG_NET_IPGRE=y
- CONFIG_NETDEVSIM=m
- CONFIG_NET_SCH_INGRESS=y
- CONFIG_NLMON=y
--- 
-2.43.0
+Other entries in this doc prefix the continuation lines..
 
