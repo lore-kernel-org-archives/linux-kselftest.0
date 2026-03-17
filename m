@@ -1,168 +1,150 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011070.outbound.protection.outlook.com [52.101.62.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2299531353B;
-	Tue, 17 Mar 2026 05:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773724471; cv=fail; b=l1cPtHA+EktZz5OOkPHI6kY0MymDpY8OhYsTrwGPpj4i6JlD5y+0VqnULZzDsc4UoS4AW544AoIbUu0ORWiyibtSLUYpqwC6JDO6//NAxr5+TGXAbyj54POiK+fzh3Avl1ARUrtEJOmuhSFrCLMipO2sj9tbwVnawgk090b3bUQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773724471; c=relaxed/simple;
-	bh=HfbZj9AxDMqCNqfSyzfinFR2UiW+BnuQLHF5IbENP3c=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QRlASyRk2Q45eEQ11fn/8HyorrYH7Iq1aH8pbMqnlKslopo5YhX8U6BKwetLucxnkyp4PMsNp5hy1V6/z70sKPP2GouqT6VeaMp0ZNYu6LiVT0Rmk8auwhiZZKQxV35ZTk86mksF9cF4EIZ3ZreQqm+W3/BpK6PdcCOZefowQ+M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LMx0R6xe; arc=fail smtp.client-ip=52.101.62.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FCB37F752;
+	Tue, 17 Mar 2026 05:43:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773726230; cv=none; b=jfWtf9l/3KezTqrr1Mr1S3sUpqRXPf5H3mKGyoS1EQNwiyo7p2lvxBuZqyPlsPfwfN71zeC5mSOUgb99YXsFJwQqmQ9KIK4nerdv2XlnxopE+a+/JL55IUp4+IJse7Fe6IF7HgcXpK2fDi3tFCRCj4SiF+rYIXoFqAuIS+ntw1A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773726230; c=relaxed/simple;
+	bh=aPJSwxGH6jNMzmpJsV3VWFn7DBqjxw2t4PJgg3D/cuw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XDf1fZVbvU8URTV3cQ0JdU/Sg8L7nhQNbVkYHkGmF5m8U3qM+n+8o4/V7JWmNBXYSof5XgxvVYgK4Ytt86eibrx0Onak4UeneWMy0T581F7xiGrIqVoTvmJ8rmls4s+BXLp67bMBSbnw5U8EWMWKUoaa5pAFGVRMJIefZuMiNXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P9P16qWF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LMx0R6xe"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KhekdPZteLm+PC926u9hJxVIJ8rk5c5ex4SQ7P8cOSTiGjCQ1yRLHb8+O+g9bAq+LB6KyFwhsH7bf6iNVq1cXVgVAjE9tXCzDfqBfiS+m0lLfjznU5gIB/5wCk2sboR205E1tfK9CN5iUEiW8jRxQaYxY4irB/vNHaBlFvRo8AQ9SZJm1ulWvvqynThhXbhcB5wKFGYajns5P9vWnHSnXipl+Cd8BhccRXGvOPPEV6qxRIVEHKw9hJ8GKBbnJeexAk+RYtB2yMSlimtWdWfrDAZoft70lxSCd86BHEa44VXf/24jvGY0R3X9uD5UU3J2ZizzSpedJtA+o0iRRnmhkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lzMZwPfS3e12E6Fyv9T6SmEA13fnw1TtSbUNKwLi1Bs=;
- b=w4bvBllDezJ0M8yvcSXMQVzD9PkMjZfcH/CJHfNZSvSJ2i2WOVIKewsn48iVFuVtBUCY72yGSRm7J2aDEBV0CUaI+4oCxpcWzYutO5GvUwng7Gdc73Ekgc4u0dKgMqNz3gO909Tjn4+RRCJ5U4QsgP4pJ7/wo0sPs4HSyIxJ7l9y38yH7Z7wD4wCriwSzlsbdoUhpFzUjldIncGexmGP2tbeyFV7hdtpnPy0L9A9eP+WM7NE2jHIwrHeOgFbuC4re7CUyKe9cowflK0m8rsB9Ff5tyrg+o6B0Xfqwth0mTTC3NKLeqrDQtlHSqfph0svKg866+5NQBqYNzs4TSW+kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lzMZwPfS3e12E6Fyv9T6SmEA13fnw1TtSbUNKwLi1Bs=;
- b=LMx0R6xe643K4m90bUTQIEKkL8Qs0HCBVsIr0viUajF8X0Bmzm75nD+d9irHV0dGlbfyTOdbRHcGOaNM+z+lWoTNQX7l0t6qMqkD+7GDOtoyEpJ3/hTQJ1ml57SBp8A6JY4G4i5+piStrjabC1oFQZNG9imaMI776c2FRQVURiFt/uIXj1PRtDNYe4kV36rMOjghdgW5OrAJ5aR2/z3z1fHKmFdpzkjVk1i9OMPdZcYzG78bs+Eg0kz/YxdEiGzsCKmOoNNnT1eITmICElSpkeyi9Y0vedHtrzMBa9mBbOpMSYLm8hNR1EjP4FUPHDi49kf0z4MYcuz6mBOlEkfGRQ==
-Received: from CH2PR07CA0056.namprd07.prod.outlook.com (2603:10b6:610:5b::30)
- by IA1PR12MB7590.namprd12.prod.outlook.com (2603:10b6:208:42a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.16; Tue, 17 Mar
- 2026 05:14:25 +0000
-Received: from CH1PEPF0000AD75.namprd04.prod.outlook.com
- (2603:10b6:610:5b:cafe::79) by CH2PR07CA0056.outlook.office365.com
- (2603:10b6:610:5b::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.25 via Frontend Transport; Tue,
- 17 Mar 2026 05:14:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH1PEPF0000AD75.mail.protection.outlook.com (10.167.244.54) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9700.17 via Frontend Transport; Tue, 17 Mar 2026 05:14:24 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 16 Mar
- 2026 22:14:10 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 16 Mar
- 2026 22:14:09 -0700
-Received: from nvidia-4028GR-scsim.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 16 Mar 2026 22:14:06 -0700
-From: <mhonap@nvidia.com>
-To: <dmatlack@google.com>, <alwilliamson@nvidia.com>, <dave.jiang@intel.com>,
-	<ankita@nvidia.com>
-CC: <kjaju@nvidia.com>, <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <mhonap@nvidia.com>,
-	<stable@vger.kernel.org>
-Subject: [PATCH] vfio: selftests: Fix VLA initialisation in vfio_pci_irq_set()
-Date: Tue, 17 Mar 2026 10:44:02 +0530
-Message-ID: <20260317051402.3725670-1-mhonap@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P9P16qWF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F8FC4CEF7;
+	Tue, 17 Mar 2026 05:43:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773726229;
+	bh=aPJSwxGH6jNMzmpJsV3VWFn7DBqjxw2t4PJgg3D/cuw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P9P16qWF5ooL+iMl2PrfJJDFMJjHxAx856NDb9rJnaSJVoH6HeaE40ymfvWrF6dgt
+	 IDNO+1BU/L7bQpZB16aPEttGPgQNyCUp4LydF7OAOEmA8DXIvpY022XOrostvXPJfK
+	 hS246hpL/l+jgIOTok0YltjBZL0PggpEib3zodIQS4mXI3d7VwITGLJB6970J7qtlL
+	 N4w+eNtWvGvkmRREB4Oz6K+ZFFzwMXrGqlVOMpbNztTrIcWnOAdTbgdagsBC8kpYme
+	 QpQy5kurZ3x6/Kv5ncJlLstfAe7Q8y84BIOTxQDrHT3f5LGy5HVG7sBijUrA8DfB1w
+	 1R5hkhGudmOxA==
+Date: Tue, 17 Mar 2026 07:43:41 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>,
+	"David Hildenbrand (Arm)" <david@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH] selftests/mm: add THP sysfs interface test
+Message-ID: <abjqDUpkezMfvCHz@kernel.org>
+References: <20260309-thp_selftest_v2-v1-1-a00cef41da44@debian.org>
+ <9cb63c24-eaff-4954-97d5-2a422a0401fc@lucifer.local>
+ <abgJtJYQsGMPsTHr@gmail.com>
+ <be860d86-75be-4c75-95ea-03bf79524be2@kernel.org>
+ <abggyaVTdNe6n_ew@gmail.com>
+ <c4cb6dfe-59b2-44e6-adbc-9ee63bed79fd@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD75:EE_|IA1PR12MB7590:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd5ba854-cad2-4633-0b1a-08de83e40e59
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700016|376014|13003099007|7053199007|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	daXKRTU9YMlaHb1R6gVp6jEPEcFvq0afpy8a3M6QUw1EN3PXTaadiUzmW6PYWNTBfR0l26B3465IOSBc5V29OvfPLhnZORrMDSb6jKLrEU76zuyOMfDCXLjHsjH6DxciwF4i1930fnGjHL0pzU0Q5PF8KqHOiuPzHFTicyqgRa9KGxPEhujtKYG8drO+dxWOBhQpTKOnpKuKzNRmCO7v0imIRImhyrq25c7WgRqwWp19WrP3O2ylGqFlQn4aXP6Crbp0pjVKECyzdqMBut6SJcUcltDb/m0lFsBRh7Y9pWk7YnScMIeINq6a8Vat0rqt7g58GDZkzf+EhtiKY/OeGiUmtOI3HUAcjyLb7oK71ZD6mvqVkVR/Ruox85NzZr9NhPrhDkXa4pbhN/wTMbN3AXQQMGgz9hCbguBaA+DoKY2OqqJvtOYEymbWxkBiOJn8roJVoAMxjTepJCstCdDnul+OibbomOywBYTo2xMK7AusAuC0lIIoJwKzCLDsbLAiR3K4UMXFhmQq0L+UvSSkSHRimeCNEZ7cvtqRpkWEbncXaVKf1v/PIEd/AHlW7IartZ1pBbv5aBMYELJxn1yruuX0R4GtchEWxjQj9ngR695RV8zkF1BQBPdM1lQUVC9DjFcwYEb2u7EkXn5FbjitY5I7zuSrF9oKj21e2kCBT1JgkxBKtWCsf5tA1oQZcJgBI2c8gUmcpghdDDfava1X8LWOHCrjl+4bR/oWk2djwjGNcLkVSJampH8ta0uUfN+bWnL4+r7AkQDk+jcL+XVHkg==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700016)(376014)(13003099007)(7053199007)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	CQMsyyTGL6h3poBePYdWGQYoJX95jssrMcvQ4d8CSsznXjpFh2wo/YND4YRhjscLwpzpv2/eAXqPTwiPzY6VAL8C+EP6Bzl1WjIaKCYzk9AYxEMOGctb59kCkNND2V1fLDneSC2L1KNvWXu/DVfAJ6r+bDys1xyGb8phjdmv1bKHleCynZYGXN9BchZNFahXfvmdyHs/GZwasz8N7AlhnJfUJqEWT5dMDi2oNsQqiBThr0ebYobrfyu65fqrOphS0dsJu6zkYQ8rE7G3DoerSQCr8VEhv2OSvP1gqERQTugMmhgCtXo2QGDvZzZyjqz0L6zwgjkQuLfe9Wrc3ZY15RxjU73DCUkNznOzqODEgxMx/ISK92YNfTfBCxm8JfOg3DJnf6d5BnPOYkfWcBKPRSkV2zGdoxTV3GsU3+WsJccMi+83SnLfPSuh3lgGhwh9
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 05:14:24.8167
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd5ba854-cad2-4633-0b1a-08de83e40e59
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH1PEPF0000AD75.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7590
+In-Reply-To: <c4cb6dfe-59b2-44e6-adbc-9ee63bed79fd@lucifer.local>
 
-From: Manish Honap <mhonap@nvidia.com>
+On Mon, Mar 16, 2026 at 07:53:46PM +0000, Lorenzo Stoakes (Oracle) wrote:
+> On Mon, Mar 16, 2026 at 09:02:33AM -0700, Breno Leitao wrote:
+> > On Mon, Mar 16, 2026 at 03:44:14PM +0100, David Hildenbrand (Arm) wrote:
+> > > On 3/16/26 14:47, Breno Leitao wrote:
+> > > > On Mon, Mar 16, 2026 at 12:55:13PM +0000, Lorenzo Stoakes (Oracle) wrote:
+> > > >> On Mon, Mar 09, 2026 at 05:00:34AM -0700, Breno Leitao wrote:
+> > > >>> Add a shell-based selftest that exercises the full set of THP sysfs
+> > > >>> knobs: enabled (global and per-size anon), defrag, use_zero_page,
+> > > >>> hpage_pmd_size, shmem_enabled (global and per-size), shrink_underused,
+> > > >>> khugepaged/ tunables, and per-size stats files.
+> > > >>>
+> > > >>> Each writable knob is tested for valid writes, invalid-input rejection,
+> > > >>> idempotent writes, and mode transitions where applicable. All original
+> > > >>> values are saved before testing and restored afterwards.
+> > > >>>
+> > > >>> The test uses the kselftest KTAP framework (ktap_helpers.sh) for
+> > > >>> structured TAP 13 output, making results parseable by the kselftest
+> > > >>> harness. The test plan is printed at the end since the number of test
+> > > >>> points is dynamic (depends on available hugepage sizes and sysfs files).
+> > > >>>
+> > > >>> This is particularly useful for validating the refactoring of
+> > > >>> enabled_store() and anon_enabled_store() to use sysfs_match_string()
+> > > >>> and the new change_enabled()/change_anon_orders() helpers.
+> > > >>>
+> > > >>> Signed-off-by: Breno Leitao <leitao@debian.org>
+> > > >>
+> > > >> The test is broken locally for me, returning error code 127.
+> > > >>
+> > > >> I do appreciate the effort here, so I'm sorry to push back negatively, but I
+> > > >> feel a bash script here is pretty janky, and frankly if any of these interfaces
+> > > >> were as broken as this it'd be a major failure that would surely get picked up
+> > > >> far sooner elsewhere.
+> > > >>
+> > > >> So while I think this might be useful as a local test for your sysfs interface
+> > > >> changes, I don't think this is really suited to the mm selftests.
+> > > >
+> > > > That is totally fine. This test is what I have been using to test the
+> > > > changes, and I decide to share it in case someone find it useful.
+> > > >
+> > > > Let's drop it.
+> > >
+> > > Out of interest, to we know why the test is failing for Lorenzo?
+> >
+> > I really don't know, but, it sounds like ktap was not found?
+> 
+> Yeah CONFIG_KUNIT is not set so could be :)
 
-C does not permit an initialiser expression on a variable-length array
-(C99 Section 6.7.9 constraint: "The type of the entity to be initialized
-shall not be a variable length array type").
+Nah, CONFIG_KUNIT has nothing to do with ktap_helpers.sh, probably your
+environment does not bring in tools/testing/selftests/kselftest
+ 
+> >
+> > Then the first early-exit path hit:
+> > ktap_skip_all "..."   # undefined → returns 127 exit "$KSFT_SKIP"
+> > # expands to: exit "" → exits with last $? = 127
+> >
+> > > I agree that the test is a bit excessive, in particular when it comes to
+> > > invalid/idempotent values etc. I could see some value for testing
+> > > whether setting the modes keeps working, but also then I wonder if that
+> > > is really something we'll be changing frequently (and that breaks easily).
+> >
+> > yea, I make it very excessive, because there were some intrinsics in
+> > those sysfs that I was gettingit wrong when doing the intial conversion.
+> >
+> > So, the test is something that I trust now, and I found it useful when
+> > finding regressiosn.
+> >
+> > Is is something that will chagne frequently? probably not!
+> >
+> > That said, would you like to have a simplified/different version of this
+> > test?
+> 
+> In an ideal world we'd use kunit or something to assert it internal to the
+> kernel I guess, but if we do have something scaled down it'd at least be nice to
+> have in C? :)
+> 
+> I am not sure how useful it'd be though overall, I don't see us changing this
+> too often and really we're more interested in asserting behaviour.
+> 
+> Sadly THP is inherently tricky to test generally because of its very nature, I
+> wish we could have better test isolation etc.
+> 
+> See tools/testing/vma for a forlorn dream of kernel code being run in userland
+> (but oh how the stubs/duplicate declarations/etc. are a pain).
+> 
+> I suspect THP could never be given the same treatment though! :)
+> 
+> Cheers, Lorenzo
 
-vfio_pci_irq_set() declared:
-
-      u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
-
-where `count` is a runtime function parameter, making `buf` a VLA.
-
-GCC rejects this with (tried with GCC-9.4.0):
-
-      error: variable-sized object may not be initialized
-
-Fix by removing the `= {}` initialiser and inserting an explicit
-memset() immediately after the declaration.  memset() on a VLA is
-perfectly legal and achieves the same zero-initialisation on all
-conforming C implementations.
-
-Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
-Cc: stable@vger.kernel.org
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Reviewed-by: David Matlack <dmatlack@google.com>
-Signed-off-by: Manish Honap <mhonap@nvidia.com>
----
-
-This fix is self-contained: it touches only the existing vfio selftest
-helper library and carries no dependency on any other patch.  It was
-originally included as PATCH 20/20 in the CXL Type-2 VFIO passthrough
-RFC series [1] but belongs on the vfio list independently, as noted by
-Dave Jiang.
-
-[1] https://lore.kernel.org/all/20260311203440.752648-1-mhonap@nvidia.com/
-
- tools/testing/selftests/vfio/lib/vfio_pci_device.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index fac4c0ecadef..3258e814f450 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -26,8 +26,10 @@
- static void vfio_pci_irq_set(struct vfio_pci_device *device,
- 			     u32 index, u32 vector, u32 count, int *fds)
- {
--	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
-+	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
- 	struct vfio_irq_set *irq = (void *)&buf;
-+
-+	memset(buf, 0, sizeof(buf));
- 	int *irq_fds = (void *)&irq->data;
-
- 	irq->argsz = sizeof(buf);
---
-2.25.1
+-- 
+Sincerely yours,
+Mike.
