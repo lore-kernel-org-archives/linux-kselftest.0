@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671063A1E7E
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 09:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B96139F188
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 09:45:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773740710; cv=none; b=UcdTMCO+I/vHBOjKP8cD/65JCtp5UMY46gQXBnu+g6XNCMPEeVfYFBYEwrDg/r+nMIuQzsNV9y3j+cjNN9PAqQx8zrQuIBiuGlo0THhGIxDM3yxKNY8cIgRf5Uijph7JgdwnTApIqj0gEwJ6+SZ+L/7fB7i7FU6nG7y8/4JPpNI=
+	t=1773740718; cv=none; b=gmLj+bHpuu3HvCT7bedXpu3EPy+N2ex0Et7T1QlrLVL5tWI62+iSyAkipYMuTnvDNUno5Hj0KWZkLf1B28qOk1yPOBJmawfujt+u0NWk16wIApI72/UPtxZlhqjZDpOL+A9SWgeQtv5FMCsZEzZ0qVtMYH1zjRPH+AJL1QdxJSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773740710; c=relaxed/simple;
-	bh=OE+85ZkZfJMKV7KlChdYR0YkchlqT0sUm+im9MFJO7c=;
+	s=arc-20240116; t=1773740718; c=relaxed/simple;
+	bh=8kcSjbIIEeXJAGXv7dzdKrrWxBbWF0Q3ow1gEe2ds6c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tl61fK07YMVY401trIeO2KgoW0trzPSroyj3uNaO0YFRFuiBFFP1Afj9wMm+GMYHfoWVgu1B8sX+Csv5uwqEHSiB/pU64uq4GBarZ/KyVpKiq7ANp5d/seFO7jmcJoz5m/JMedX+GmXuVde4ShsV3iMHebYobK6KAznajyYi76o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cTfAVG/R; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=U+6tYiDwa64J0/THFoxm0hGEA2voqosA5cmeBRElLnyiLtp8TG9c+33vXbB2Aldvm3i/X/7txgQleldhEQ2f4fBTDF/Lbknm9ybsJABIHE/vPsDgTMO9KFI5PRqJSWLkJmUTu8rY/gUMbzjxhsBiGKjXIe9V+fFDuVO61dAf16Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gvDXPXN5; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cTfAVG/R"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gvDXPXN5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773740708;
+	s=mimecast20190719; t=1773740716;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=m14eZlieSHU0U3GZgc7YUIvhhsIX8Oki0rAROpoPAiw=;
-	b=cTfAVG/RQC4e2RxdauCifG1ijA5I5HncRyTM2TbvkBuevg8yOKWt23jMOsw8aJz0lDyLTj
-	mKfd9ECoEQZBE1JEqTtExy1NJfgNTagFe3T5zxe/RVcjUpZiOdALXN+IZ52Ugw8xU5hQvw
-	mSm1Pv8WR55vUPhCBm3VSkUzNvOs9pE=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=cP9CaaUU0YGWeU606cF4HfEnHjH3cqBLv/sm6TUkYWs=;
+	b=gvDXPXN5dP/riYTODhhRjDn02IyBbSvvwdqrOkIa3KWclFGr9K2docOWKw3zMDikgj0sxi
+	V8Pe/5Hmw4eZR8A66Ulph48FaUqyadbQ3BCyz6Ui7ELfdmD7JemY8LnyAp5Lt1rS6e5+pi
+	gRbLWTOea5xh7njO/h1pi523FhfFsB4=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-111-GYbXuR_-OfSXQGCzbuK7-w-1; Tue,
- 17 Mar 2026 05:45:02 -0400
-X-MC-Unique: GYbXuR_-OfSXQGCzbuK7-w-1
-X-Mimecast-MFC-AGG-ID: GYbXuR_-OfSXQGCzbuK7-w_1773740700
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-583-DL5tgSA6MBu6aROkysy7Rw-1; Tue,
+ 17 Mar 2026 05:45:12 -0400
+X-MC-Unique: DL5tgSA6MBu6aROkysy7Rw-1
+X-Mimecast-MFC-AGG-ID: DL5tgSA6MBu6aROkysy7Rw_1773740710
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5CAD418005B8;
-	Tue, 17 Mar 2026 09:45:00 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E054A19560A1;
+	Tue, 17 Mar 2026 09:45:09 +0000 (UTC)
 Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2EB303000223;
-	Tue, 17 Mar 2026 09:44:51 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A4AC03000223;
+	Tue, 17 Mar 2026 09:45:01 +0000 (UTC)
 From: Chunyu Hu <chuhu@redhat.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -63,10 +63,11 @@ Cc: linux-kselftest@vger.kernel.org,
 	dev.jain@arm.com,
 	baohua@kernel.org,
 	lance.yang@linux.dev,
-	chuhu@redhat.com
-Subject: [PATCH v3 3/5] selftests/mm: move write_file helper to vm_util
-Date: Tue, 17 Mar 2026 17:44:17 +0800
-Message-ID: <20260317094419.1429259-4-chuhu@redhat.com>
+	chuhu@redhat.com,
+	Li Wang <liwang@redhat.com>
+Subject: [PATCH v3 4/5] selftests/mm: split_huge_page_test: skip the test when thp is not available
+Date: Tue, 17 Mar 2026 17:44:18 +0800
+Message-ID: <20260317094419.1429259-5-chuhu@redhat.com>
 In-Reply-To: <20260317094419.1429259-1-chuhu@redhat.com>
 References: <20260317094419.1429259-1-chuhu@redhat.com>
 Precedence: bulk
@@ -78,184 +79,71 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-thp_settings provides write_file() helper for safely writing to a file and
-exit when write failure happens. It's a very low level helper and many sub
-tests need such a helper, not only thp tests.
+When thp is not enabled on some kernel config such as realtime kernel, the
+test will report failure. Fix the false positive by skipping the test
+directly when thp is not enabled.
 
-split_huge_page_test also defines a write_file locally. The two have minior
-differences in return type and used exit api. And there would be conflicts
-if split_huge_page_test wanted to include thp_settings.h because of
-different prototype, making it less convenient.
+Tested with thp disabled kernel:
+Before The fix:
+  # --------------------------------------------------
+  # running ./split_huge_page_test /tmp/xfs_dir_Ywup9p
+  # --------------------------------------------------
+  # TAP version 13
+  # Bail out! Reading PMD pagesize failed
+  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+  # [FAIL]
+  not ok 61 split_huge_page_test /tmp/xfs_dir_Ywup9p # exit=1
 
-It's possisble to merge the two, although some tests don't use the
-kselftest infrastrucutre for testing. It would also work when using the
-ksft_exit_msg() to exit in my test, as the counters are all zero. Output
-will be like:
+After the fix:
+  # --------------------------------------------------
+  # running ./split_huge_page_test /tmp/xfs_dir_YHPUPl
+  # --------------------------------------------------
+  # TAP version 13
+  # 1..0 # SKIP Transparent Hugepages not available
+  # [SKIP]
+  ok 6 split_huge_page_test /tmp/xfs_dir_YHPUPl # SKIP
 
-  TAP version 13
-  1..62
-  Bail out! /proc/sys/vm/drop_caches1 open failed: No such file or directory
-  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-So here we just keep the version in split_huge_page_test, and move it into
-the vm_util. This makes it easy to maitain and user could just include one
-vm_util.h when they don't need thp setting helpers. Keep the prototype of
-void return as the function will exit on any error, return value is not
-necessary, and will simply the callers like write_num() and write_string().
-
-Suggested-by: Mike Rapoport <rppt@kernel.org>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+CC: Li Wang <liwang@redhat.com>
 Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 ---
-Changes in v3:
-  - make the write_file void return
-Changes in v2:
-  new patch from v2
+V3 chagnes:
+  - add acked-by from David
+  - add reviewed by from Mike
+V2 changes:
+  - removed the {} in if block
+  - removed the write_file helper rename chunk, as there's a new patch 3 to
+    resolve the conflict with thp_settings.h by moving it to vm_util.
+  - Add reviewed by from Zi and Lorenzo
 ---
- .../selftests/mm/split_huge_page_test.c       | 15 --------
- tools/testing/selftests/mm/thp_settings.c     | 35 ++-----------------
- tools/testing/selftests/mm/thp_settings.h     |  1 -
- tools/testing/selftests/mm/vm_util.c          | 15 ++++++++
- tools/testing/selftests/mm/vm_util.h          |  2 ++
- 5 files changed, 20 insertions(+), 48 deletions(-)
+ tools/testing/selftests/mm/split_huge_page_test.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index e0167111bdd1..93f205327b84 100644
+index 93f205327b84..500d07c4938b 100644
 --- a/tools/testing/selftests/mm/split_huge_page_test.c
 +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -255,21 +255,6 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
- 	return status;
- }
+@@ -21,6 +21,7 @@
+ #include <time.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
++#include "thp_settings.h"
  
--static void write_file(const char *path, const char *buf, size_t buflen)
--{
--	int fd;
--	ssize_t numwritten;
--
--	fd = open(path, O_WRONLY);
--	if (fd == -1)
--		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
--
--	numwritten = write(fd, buf, buflen - 1);
--	close(fd);
--	if (numwritten < 1)
--		ksft_exit_fail_msg("Write failed\n");
--}
--
- static void write_debugfs(const char *fmt, ...)
- {
- 	char input[INPUT_MAX];
-diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
-index 574bd0f8ae48..e748ebfb3d4e 100644
---- a/tools/testing/selftests/mm/thp_settings.c
-+++ b/tools/testing/selftests/mm/thp_settings.c
-@@ -6,6 +6,7 @@
- #include <string.h>
- #include <unistd.h>
- 
-+#include "vm_util.h"
- #include "thp_settings.h"
- 
- #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
-@@ -64,29 +65,6 @@ int read_file(const char *path, char *buf, size_t buflen)
- 	return (unsigned int) numread;
- }
- 
--int write_file(const char *path, const char *buf, size_t buflen)
--{
--	int fd;
--	ssize_t numwritten;
--
--	fd = open(path, O_WRONLY);
--	if (fd == -1) {
--		printf("open(%s)\n", path);
--		exit(EXIT_FAILURE);
--		return 0;
--	}
--
--	numwritten = write(fd, buf, buflen - 1);
--	close(fd);
--	if (numwritten < 1) {
--		printf("write(%s)\n", buf);
--		exit(EXIT_FAILURE);
--		return 0;
--	}
--
--	return (unsigned int) numwritten;
--}
--
- unsigned long read_num(const char *path)
- {
- 	char buf[21];
-@@ -104,10 +82,7 @@ void write_num(const char *path, unsigned long num)
- 	char buf[21];
- 
- 	sprintf(buf, "%ld", num);
--	if (!write_file(path, buf, strlen(buf) + 1)) {
--		perror(path);
--		exit(EXIT_FAILURE);
--	}
-+	write_file(path, buf, strlen(buf) + 1);
- }
- 
- int thp_read_string(const char *name, const char * const strings[])
-@@ -165,11 +140,7 @@ void thp_write_string(const char *name, const char *val)
- 		printf("%s: Pathname is too long\n", __func__);
- 		exit(EXIT_FAILURE);
+ uint64_t pagesize;
+ unsigned int pageshift;
+@@ -757,6 +758,9 @@ int main(int argc, char **argv)
+ 		ksft_finished();
  	}
--
--	if (!write_file(path, val, strlen(val) + 1)) {
--		perror(path);
--		exit(EXIT_FAILURE);
--	}
-+	write_file(path, val, strlen(val) + 1);
- }
  
- unsigned long thp_read_num(const char *name)
-diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
-index 76eeb712e5f1..7748a9009191 100644
---- a/tools/testing/selftests/mm/thp_settings.h
-+++ b/tools/testing/selftests/mm/thp_settings.h
-@@ -63,7 +63,6 @@ struct thp_settings {
- };
- 
- int read_file(const char *path, char *buf, size_t buflen);
--int write_file(const char *path, const char *buf, size_t buflen);
- unsigned long read_num(const char *path);
- void write_num(const char *path, unsigned long num);
- 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index a6d4ff7dfdc0..ad96d19d1b85 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -764,3 +764,18 @@ int unpoison_memory(unsigned long pfn)
- 
- 	return ret > 0 ? 0 : -errno;
- }
++	if (!thp_is_enabled())
++		ksft_exit_skip("Transparent Hugepages not available\n");
 +
-+void write_file(const char *path, const char *buf, size_t buflen)
-+{
-+	int fd;
-+	ssize_t numwritten;
-+
-+	fd = open(path, O_WRONLY);
-+	if (fd == -1)
-+		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-+
-+	numwritten = write(fd, buf, buflen - 1);
-+	close(fd);
-+	if (numwritten < 1)
-+		ksft_exit_fail_msg("Write failed\n");
-+}
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index e9c4e24769c1..1a07305ceff4 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -166,3 +166,5 @@ int unpoison_memory(unsigned long pfn);
+ 	if (argc > 1)
+ 		optional_xfs_path = argv[1];
  
- #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
-+
-+void write_file(const char *path, const char *buf, size_t buflen);
 -- 
 2.53.0
 
