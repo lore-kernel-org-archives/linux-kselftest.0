@@ -1,244 +1,278 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com [35.158.23.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430893D5247;
-	Tue, 17 Mar 2026 13:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.153.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773755734; cv=fail; b=hdF0Ae4Fm/rlHii1rw5u6wVODUeFFxpJqOdbn3aWnQxOwesWolZpR9UGaipZ2BmQxfiW43JPKwK8lHnZpRtb6doi3ZDHBsupJ2mhEC3MJSjwYuC+ZVJuR1O7pp99IPPwcOhEdPDWu9f7Uuk6BQQrtIVZyoeKKP/D3Sf6nia8Vzc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773755734; c=relaxed/simple;
-	bh=pyXNuoaHPn9qEGMStu1+W2wljwGXR1ujpxHwzDkS+oM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=W25VWK/6XZcvzjigkENVLlMT9kIstuaDZ7jNp15YtVoceogf4g1GlcAbpFsdIXj311KlXTrbBus4AfQ+Jw1zQUi7mvsc7f6nOBWDb132VhBRJasfnuezAFz9HSTV82Bc30sbXO9DimFnGLFw6uTmjmMFPgkz8Cr/tCbVKWOJNKw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=rZNFcpX3; arc=fail smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8D33E1220;
+	Tue, 17 Mar 2026 14:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.158.23.94
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773756648; cv=none; b=V1Ur3H89nRkwP/2UYKXOsQEnOFYE353PZHDy9CjR3G1DwbjH0c3tBNe+RI8j9XCn5Km51UPjPXv1O999/TOcPk0K5MEabVFBCyBjB34LGIKdJ3sWPOKyiYKoufY74ZCNawonNf8W5ChPxw3gIN6/PqBfArvAhwTvBsCMBDm/8C0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773756648; c=relaxed/simple;
+	bh=h8DqssJHliEArre89krkO9nmrYyn9eD8cljS3zx9+FY=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ib9yMkS8ptihReXHuNhWAys++fvuSKapNPdA/PiFHIMLkUYL94LqP8QQBbJsJkc7ZY8m4/hhofEnxsyaly7zcjApfsAbPA3Vqu7cQS8cAEbghiu+nYRB5fVXVZM+pUeD+KTNvkMyybyuf0SI1Hr2RfS/MghvBITfQlGuSFiTcKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=Ww37T4L5; arc=none smtp.client-ip=35.158.23.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="rZNFcpX3"
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 62HChoMS394359;
-	Tue, 17 Mar 2026 06:55:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=0Pkgy7mtSNvSG++vHjvYdJH+pzyTdZOxMn3GiZPpL+w=; b=rZNFcpX3pb3C
-	1DBeLrrk4rGE5WQn0ytZwOhHrIYBgRU8nerPaq5ARIX730gJv/vnp1p24vKAr5Ti
-	s4lUMcAHNQV8KHVmFDF4mHP/vvBQwmf2lOBkgTOU815UZ7cMHh3UqKU/YaXUsBHr
-	taxBRLN7oPjXbTS+nwGUuiSJlGy1sMYxwIx5FFW2adIphxaXEAbj2KUrqz1UEGVr
-	kKke8fmN2CHuh3BxYBzc7/iHFL8qmWFI0yms5n6K9WkKPPy0gT8d3YmS2E6llIZG
-	QGaR9Ab9S5tUChTjWgD9J4PJKQVegVo7l5JBdkBrX2PDnZUD05DkWF6PX2QzFL1i
-	U5MocbsIWA==
-Received: from ph0pr06cu001.outbound.protection.outlook.com (mail-westus3azon11011013.outbound.protection.outlook.com [40.107.208.13])
-	by m0089730.ppops.net (PPS) with ESMTPS id 4cy77crw83-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 17 Mar 2026 06:55:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EFngRDR97lVRpLrCaWgEqw2yY9VkvX/KCakrJl3OqwbMoUGTYvUp/GsMDX2vx3MUfNUBIKusPxHJg2r8crWfPKwa0mm2D3EtqNIOaTO6RKnK+iqG9C0meRKYfwWMCXMfMxkZGauKuiJ4BtSaChwSZYP1jGtRf2ICxUN9E/DtcUgktrLVLeGlOaJGzK6OXI1RbUREQK9Vqv1NNoopUYmw00hZ1hqxzb22iX+HIp8ADhIjW11IuPR1TbBBioBoFgQbxIuuAElDtnEqcmm+BHl/gMesPf2ULWKJTjNeIfCTZdvdrv1uqfY01yX7/Q7//uF5uGz7325vOoyeVOHtz11YdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0Pkgy7mtSNvSG++vHjvYdJH+pzyTdZOxMn3GiZPpL+w=;
- b=VRNlJ0m5U8Z03ETyHZJR8k0IYPncL1UirjEAkNyKx5bpdg/MhFRomuMjk47cqinGvhbAs7yrzFWjh11AyDyvB4z2bVnRjeayVzPg11yUpLzKpgizF8vkFt1FjI7bazZxiaWXt/CD6T0sq8vej4UbnKoZaty5J1fdWEC2LdeNAQRaK+gALhBFwPD27TQu8WQ6uTizh6BNnGIjd5co4Se6NhHcTRGEfsAxaAePOxwm1QC4kufpGcr7IW87VKV5LNq/GbL4XP3R1eoBskB1r3KQs1nigR/zf5QB6mcSBKwPtw/4NwhnMqM6KJTxeLcarCkjhKrBKIBEoHE+cq9k75uZxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from PH0PR15MB7038.namprd15.prod.outlook.com (2603:10b6:510:38d::10)
- by SA1PR15MB5185.namprd15.prod.outlook.com (2603:10b6:806:235::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.14; Tue, 17 Mar
- 2026 13:55:22 +0000
-Received: from PH0PR15MB7038.namprd15.prod.outlook.com
- ([fe80::617b:b77c:494d:de19]) by PH0PR15MB7038.namprd15.prod.outlook.com
- ([fe80::617b:b77c:494d:de19%3]) with mapi id 15.20.9723.018; Tue, 17 Mar 2026
- 13:55:21 +0000
-Message-ID: <e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com>
-Date: Tue, 17 Mar 2026 13:55:17 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and x86_64
-To: Ted Logan <tedlogan@fb.com>, David Matlack <dmatlack@google.com>,
-        Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
-Content-Language: en-GB
-From: Matt Evans <mattev@meta.com>
-In-Reply-To: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0256.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::21) To PH0PR15MB7038.namprd15.prod.outlook.com
- (2603:10b6:510:38d::10)
+	dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="Ww37T4L5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazoncorp2; t=1773756647; x=1805292647;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=EG2KxvtvKuLJMrtPzQrxGfLqKgk4P5/+m3H+Afhe/r8=;
+  b=Ww37T4L5UOgn54SzaVdGDcjn2JsRaHHR4TvbAOVC2B9smnPG2t3MHiou
+   G8uaCflnZN7QikTwXockV9iotOsXu0Sn4k2aEw6lmP0Lvw8TNC+ifgsPs
+   ga4GwAFP8jktntBM5OQAnJjVPHoMTZRizuy76dEVWxy11WIh4yIjHP/yM
+   DSV+AG9xJ0a97pRxkD+NyYLB9aUUr/26lk6wKLpXoOam+2uMHPsR/cuKZ
+   dYBvYc+mrY9pv4g9PHvPr4jumVUwDl+uoDrvrj0tD9j8m4NL6uMCDL+hU
+   rBUlQlRIA48oxBAxyWj6shNlppk4LgP2KEMf/bqlxOd8/PrEocgq+gfDn
+   w==;
+X-CSE-ConnectionGUID: 50sTFI+ITou6QpDaL/EN5Q==
+X-CSE-MsgGUID: HRI71rBvTtyKXxSQR/YpmA==
+X-IronPort-AV: E=Sophos;i="6.23,124,1770595200"; 
+   d="scan'208";a="10999248"
+Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
+  by internal-fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 14:10:41 +0000
+Received: from EX19MTAEUB001.ant.amazon.com [54.240.197.226:2147]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.1.179:2525] with esmtp (Farcaster)
+ id cd7ff187-903b-4748-99ad-b6e08a8de02a; Tue, 17 Mar 2026 14:10:41 +0000 (UTC)
+X-Farcaster-Flow-ID: cd7ff187-903b-4748-99ad-b6e08a8de02a
+Received: from EX19D005EUB004.ant.amazon.com (10.252.51.126) by
+ EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Tue, 17 Mar 2026 14:10:33 +0000
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19D005EUB004.ant.amazon.com (10.252.51.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Tue, 17 Mar 2026 14:10:32 +0000
+Received: from EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c]) by
+ EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c%3]) with mapi id
+ 15.02.2562.037; Tue, 17 Mar 2026 14:10:32 +0000
+From: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
+To: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
+	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
+	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
+	<willy@infradead.org>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+	"vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org" <rppt@kernel.org>,
+	"surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>,
+	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net"
+	<daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "eddyz87@gmail.com"
+	<eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
+	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
+	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
+	<jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
+	<jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "riel@surriel.com"
+	<riel@surriel.com>, "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
+	"jgross@suse.com" <jgross@suse.com>, "yu-cheng.yu@intel.com"
+	<yu-cheng.yu@intel.com>, "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com"
+	<coxu@redhat.com>, "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
+	"ackerleytng@google.com" <ackerleytng@google.com>, "yosry@kernel.org"
+	<yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
+	"maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com"
+	<tabba@google.com>, "prsampat@amd.com" <prsampat@amd.com>,
+	"wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>, "mlevitsk@redhat.com"
+	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
+	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
+	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
+	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
+	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
+	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
+	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
+	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
+	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
+	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
+	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
+	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
+	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
+	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
+	"Manwaring, Derek" <derekmn@amazon.com>, "Kalyazin, Nikita"
+	<kalyazin@amazon.co.uk>
+Subject: [PATCH v11 00/16] Direct Map Removal Support for guest_memfd
+Thread-Topic: [PATCH v11 00/16] Direct Map Removal Support for guest_memfd
+Thread-Index: AQHcthfR9FvOPBnm+0O/5mGRmD0KDA==
+Date: Tue, 17 Mar 2026 14:10:32 +0000
+Message-ID: <20260317141031.514-1-kalyazin@amazon.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR15MB7038:EE_|SA1PR15MB5185:EE_
-X-MS-Office365-Filtering-Correlation-Id: e9573108-5371-4766-9129-08de842cd495
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	Y8gWKdM4N//rIm8SsNuXEyY4zNH1pciU+ibhjvE42dMuXpKRET+HuZCnzK/k+n+CRLrKywHuLDw1AqCc6YpYkQm/2ELws7vAl5mSDHqi4RHGCu2nJfOgoVy7saFkhDivKauI/Nf/LKhwvlkhjXo4DaAPcNkADjc8V0MwWchS8n2EMgd015i6qfG6p2ApCIwk/+J7Y9dNyuTSEYpNgPxMWU+qF1NmqYksiskk8xF0+l4rKl2QlpW1AkX16Bhem/y1kgm1otf9krQ7P2JmtNnOHrpCSnq3GK5XQj3VAxxsXvqBUsRxokd6YQbgk6wlwpymYbiLyjhT2UfD+jrAaZwraVLGONvXsuH5PXN//VqJ/SfJxtAW0hwPQlhNw9JZV2TkXArB9yw2evn0rinCej9mPn7Y+t7pHddngjq/OoIftwesTyfS/HBK2I5cynW3eSv5oTsT6D+7ojMjD+K3ngLYrXefcBNPgRDUfUnlekgLzT3Oi+Bvonl1UBXT45Vd2Ff59VSN/oWydHD7I8vBUhfHAqJa2+g5xAgQPzcj34IJWKRbmD42RrfJKzlDuGuI28WN51Dx3VChkrdw9CVbXTZG2Sn6+7qvL9y/m+R+Nl14uyVs3qhweObmcSJHr5zYTgW4hF/iJLIXPxvZrHBVbdeapA0EHDSWMccnBLThZuyHKocSiVTqZ291c8fizvAN297kHrEq/d8DMLIA26M7Mz+1Da0HElWvPBHeB/qaeoTPW88xC6rXcPIUXug4t/2p+IRz
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR15MB7038.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RjhySVdINlR2V3YyZlhRSU5zaUMyQi85blYvTjBQaEI2d3hDZnhaZGhGRXVQ?=
- =?utf-8?B?NmtESmlDd05vY3JSRTRyZXg5NXFHUHRocGxtMFpSYXoxb3grMXVBWW55ZXpo?=
- =?utf-8?B?UjJ1RUk2ZzVDclpWWWI1T0F6enMvYmhkUUZROVFjYWpZNDh2b1V1TEdkSVdG?=
- =?utf-8?B?bElpR2JpOWR5cTcvUFVUNUNJbjh3TTBpY0tZYmZBUUQ0citMOTVKTUxZVk5o?=
- =?utf-8?B?dmNHUFJLUnZ3NENkKzM3NG9KcU5lRmhCTTJZQkRid2taQU9ybTE5MklCc0xQ?=
- =?utf-8?B?MU9PYjhIMTFFN2ptclYwMHg2Z1k5MnJDVG5PMGphTkMxS05PNzNYaUcrQWVX?=
- =?utf-8?B?ZnlkYmQ3QU9JL2RZZVI2TE9BMm5YYTdCeDBscVVIZDBxTmQ0VkRKNmkvaHFY?=
- =?utf-8?B?RnlTN3ZwZnprUTlzY0c1NXNtSnpYTXNSNm9EM05hR0VCVUVtOHl5K1RJU3dP?=
- =?utf-8?B?L1kxVDRXei9MT1lrMnRKd1o0TTJYMFZkS1ljVEdLREF0OGxYM3RNbXpPdmg4?=
- =?utf-8?B?RS8wbGdObE9QWnY2VVNFSlREb0hjczBRb3VZdWVHeldhaDRDcWF3VWVuMjZp?=
- =?utf-8?B?TGJCdzNuVFFGK1JabTc5RnNYWkQyZGtvaG9ZWTNsb0hMOFpJWW12OXpFc2pj?=
- =?utf-8?B?MWxrSTFkMDNVclNWenI5RmsyYXA2ZTU5Q3BWaEJXYzYvZWY2V21oVjNZWlZj?=
- =?utf-8?B?VFRkOTJtUkE4Z0RqcTRiNzNWSFJmcGoyT3hLUFBHNFl3TURkOWRCWmlXUDhh?=
- =?utf-8?B?OHVEbjVhQjhZbGdPWEpvTDIxL0FScVg5TWZkeExRRUMrcGgvY1N2UDlUQkR5?=
- =?utf-8?B?enNFbXhmNlBvSDBWam9yaFU4TSs1RTNCVmpRTEZQSmVkNStZQWRIbGlRajJZ?=
- =?utf-8?B?dTdJYW92QmN0K0E1M3hhK0FOZHhQOXp5b1dWTTVUK0JYY3JLSGtyRE9xYmk2?=
- =?utf-8?B?Vk9HTk10RjBhRXc5MGZ4dHYrc0E2UWFRK1A5alJlQ3RTQmNjcDBCQ08wT1JT?=
- =?utf-8?B?RDlmMU83OGxLRVViZDlNaXlWa1djSXEvdG5VWUpqeVhzNHRhMTlaTFp1ZlF1?=
- =?utf-8?B?ZFJKNVc3T2hnM2VNeTVLL252cjFwRzE3M29KaFZ5dlVLaXJ1RDIvSEFjdy9a?=
- =?utf-8?B?Q2ZYNEVXOXBzUHY1b3A5MTNrd2c1YmpOazNsQUhXV2JsNWFvQXdyNFNKbTdG?=
- =?utf-8?B?cTBVbmROdXptV3k1eitwd3B5eFR2Z2czNUNxeWJhWGc5VU16aDRjQURyc3VU?=
- =?utf-8?B?MzR5Zyt0Rm1jYTRsM0JZbThBSWJXWGVjMDMyMVUxZEozdUIxQ3MrdnlxLzVu?=
- =?utf-8?B?UXNObVNGKzJmeUFNOXZNbkU2SEFVUlBQQWRJaER2Q2krYzNmNitxSE1ndE82?=
- =?utf-8?B?cDAvWDFMU3lpb2FpMXhOREs2VFpsQUlyRDZIRTVWQWpCWGQxUGJsOGRmZmE3?=
- =?utf-8?B?YVRiNUEzZXorYktscmNqUTdLOFRHY1pDM2xiamFjczFKT05sbUx6WnRtQXZa?=
- =?utf-8?B?YVIvMjAvRFJuZ3JEdlBZbnQ3bFB4R3Uvek1uVGxHYytEQWlOT3BEQjU3bXkz?=
- =?utf-8?B?MGJNRFljSGpPQ0FFYlJWOGZvUVpQV3VZVGxEck5RNEVtdFZMQStYbEpkck9W?=
- =?utf-8?B?dUZObGVJSWlIaE5vTUhqK09DVC9kMmY0QThhNllqc3RpOEVrQWtRRm9jUkRv?=
- =?utf-8?B?NHJIbXRSd0czeEMzSTJVRDRoSHMzOWpkQ09JeDRQNkRrWFc2S2JJK3RSek9x?=
- =?utf-8?B?bGRSeXdwSWp4d3FOY3ZHY2s0TG15cTNkYnpreVUwbzZnb3owdHVnYk1ONlNp?=
- =?utf-8?B?eXJLNmxxQlZJTW5zcysrZXUrb2RJN3RxY054RkJPTVIrZHBOc3cvK3NGYmFy?=
- =?utf-8?B?eTdVMDBPcVViYUdpVUN0YkExVzJIVWt5eDQzL0w0SVJBRnM1Vk5ZYjNXVUcv?=
- =?utf-8?B?aTJnZjJnQjNMa2FLdGZwMFVXWUdiVjZJZ1VFOU91Q1dLZzFtRG9mdHJhUFA3?=
- =?utf-8?B?ZGh1eXdabXY5OGJ0REo0RWJRTXY2RmZzQXBXUTUyb3hZWWpnYTVjUnprR21n?=
- =?utf-8?B?YTVKZll6b3FuRlFVRmVRam1rMEI4Sy9NMkhDL2EvNnJPT3l5dXpjcml0dVhB?=
- =?utf-8?B?elUxclZJNllveUJGNGhXaEM2cXpSWGx2V1djb0E0RTJFU0JuUnhwTUFVbjZm?=
- =?utf-8?B?c08rRE90KzM2Qlh0ZCtqSzc5ZWdvNndaZ0ZENElVM3F0em5xWTR3R3pkdG15?=
- =?utf-8?B?R1k5Ym91MGNtNlJyRzRhSnBKK0Y1dnVoaXN5OTMwSElHM25MbEdrNjlYdFZO?=
- =?utf-8?Q?84i4kpq87Q6eCu3zqY?=
-X-Exchange-RoutingPolicyChecked:
-	pMpeGBQKdnCCta3v2Fc7AYBnTUyxM+8NjbiAF14KKzCI4uhCQ0ErLBg9bFEhEiqXGZT33hHGWmbHu6NQVSo6eflSzK8lmKTKFT0FDwcRsCC+p4m6wXxB7E4EVq8/fGvkZu93UwYwZ+QAlGD5t73WAs5GRvk3dg0ovPehomkjPlVYxJhB7uiz1qTRu9ugpLmQSwGJ233sIYPAJl0Ki1U34vU4jXQbsiMVNnXpOJXsk2unb9ib00CHnO+jvwyBvaUMOjmUEB/F1NCgHp+IA9okPkNuVtbOlHJbnes8mRGjfBPEi0DDGISPAEj/mEbI7nLYWxcYqOn3TnFjtp7Q5t1l8A==
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9573108-5371-4766-9129-08de842cd495
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR15MB7038.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 13:55:21.5300
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xCHoS2fNTA3LROokJVSYX8P0ryEEsylASDvdUY00ENFl8GQIuMupH/n4wY3VOAgJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB5185
-X-Authority-Analysis: v=2.4 cv=evvSD4pX c=1 sm=1 tr=0 ts=69b95d4c cx=c_pps
- a=ERW18fiFji9WgYXv9zI75g==:117 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=855S8uPTkML1Oy45N9_h:22
- a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8 a=FOH2dFAWAAAA:8 a=FFIxxfwi2EMO3RiUjG0A:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 2X5ynyk3OB5WsWyGvUYknrbJL__InB_b
-X-Proofpoint-ORIG-GUID: 2X5ynyk3OB5WsWyGvUYknrbJL__InB_b
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE3MDEyMyBTYWx0ZWRfX2dnyJZC/ym3M
- EVDIQS9vHk28PblwM4sLfferZmhffoeoRys3PTpT/6SY+LX/XOLUkpAiKsdZd5imL5sNV+J11QG
- Tia5IrPCdn7DpzITN33Yh3NWHXZ1t9dnqP5Ad8Y2I+qdTLyO1PslO5MHWoxFHbRJHbzbjrjSb/A
- vOzKMSKBzahdkSlYxlFqS8Y2mpfPkM0NAzjh5lbaxtyVw44q7QpfV85C+47YOpHeqxaN2REPFe2
- 9FZkVIxvcYetf7Itlkve9UIDInULHGTkcMmRvwNGOZmV5aqgSH+jcVdDYiTu9fCUeyfEQ2Lmbur
- BLsOW+aTWheM/SFRuS0FhraViu3YJk8Hafq0eZU+svYwPSUP12NFLxH6ZoL/fgEGpUF1AX7+Jj9
- KrwcWzjt7AobQAB1BppaelFdRAmzFny/bUNkF0wo6FbnBhgFVlSn90BMU8I9Sgt6ErtD7xZ8xc+
- 7k0SCzMwJEBGY8Svrdw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-17_01,2026-03-17_01,2025-10-01_01
 
-Hi Ted,
-
-On 03/02/2026 01:23, Ted Logan wrote:
-> Only build vfio self-tests on arm64 and x86_64; these are the only
-> architectures where the vfio self-tests are run. Addresses compiler
-> warnings for format and conversions on i386.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@intel.com/
-> Signed-off-by: Ted Logan <tedlogan@fb.com>
-> ---
-> Do not build vfio self-tests for 32-bit architectures, where they're
-> untested and unmaintained. Only build these tests for arm64 and x86_64,
-> where they're regularly tested.
-> 
-> Compiler warning fixed by patch:
-> 
->    In file included from tools/testing/selftests/vfio/lib/include/libvfio.h:6:
->    tools/testing/selftests/vfio/lib/include/libvfio/iommu.h:49:2: warning: format specifies type 'unsigned long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
->       49 |         VFIO_ASSERT_EQ(__iommu_unmap(iommu, region, NULL), 0);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:32:37: note: expanded from macro 'VFIO_ASSERT_EQ'
->       32 | #define VFIO_ASSERT_EQ(_a, _b, ...) VFIO_ASSERT_OP(_a, _b, ==, ##__VA_ARGS__)
->          |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:27:22: note: expanded from macro 'VFIO_ASSERT_OP'
->       26 |         fprintf(stderr, "  Observed: %#lx %s %#lx\n",                           \
->          |                                              ~~~~
->       27 |                         (u64)__lhs, #_op, (u64)__rhs);                          \
->          |                                           ^~~~~~~~~~
-> ---
-> Changes in v2:
-> - Add white space around arch checks
-> - Clean up uname command
-> - Link to v1: https://lore.kernel.org/r/20260130-vfio-selftest-only-64bit-v1-1-d89ac0944c01@fb.com
-> ---
->  tools/testing/selftests/vfio/Makefile | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
-> index ead27892ab65..8e90e409e91d 100644
-> --- a/tools/testing/selftests/vfio/Makefile
-> +++ b/tools/testing/selftests/vfio/Makefile
-> @@ -1,3 +1,10 @@
-> +ARCH ?= $(shell uname -m)
-> +
-> +ifeq (,$(filter $(ARCH),arm64 x86_64))
-
-This fails to build (i.e. elides the build) on my local arm64 machine,
-because uname -m returns 'aarch64', not 'arm64'.
-
-Are you seeing an arm64 (Linux! [1]) machine where uname -m is 'arm64'...?
-
-This patch needs some translation, of the sort in
- tools/testing/selftests/mm/Makefile:15
-
-
--Matt
-
-[1] Note on macOS/M-Mac, uname -m is indeed 'arm64', but not so on Linux.
-
-> +# Do nothing on unsupported architectures
-> +include ../lib.mk
-> +else
-> +
->  CFLAGS = $(KHDR_INCLUDES)
->  TEST_GEN_PROGS += vfio_dma_mapping_test
->  TEST_GEN_PROGS += vfio_dma_mapping_mmio_test
-> @@ -28,3 +35,5 @@ TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_PROGS_O) $(LIBVFIO_O))
->  -include $(TEST_DEP_FILES)
->  
->  EXTRA_CLEAN += $(TEST_GEN_PROGS_O) $(TEST_DEP_FILES)
-> +
-> +endif
-> 
-> ---
-> base-commit: c3cbc276c2a33b04fc78a86cdb2ddce094cb3614
-> change-id: 20260130-vfio-selftest-only-64bit-422518bdeba7
-> 
-> Best regards,
-
+[ based on kvm/next ]=0A=
+=0A=
+Unmapping virtual machine guest memory from the host kernel's direct map=0A=
+is a successful mitigation against Spectre-style transient execution=0A=
+issues: if the kernel page tables do not contain entries pointing to=0A=
+guest memory, then any attempted speculative read through the direct map=0A=
+will necessarily be blocked by the MMU before any observable=0A=
+microarchitectural side-effects happen.  This means that Spectre-gadgets=0A=
+and similar cannot be used to target virtual machine memory.  Roughly=0A=
+60% of speculative execution issues fall into this category [1, Table=0A=
+1].=0A=
+=0A=
+This patch series extends guest_memfd with the ability to remove its=0A=
+memory from the host kernel's direct map, to be able to attain the above=0A=
+protection for KVM guests running inside guest_memfd.=0A=
+=0A=
+Additionally, a Firecracker branch with support for these VMs can be=0A=
+found on GitHub [2].=0A=
+=0A=
+For more details, please refer to the v5 cover letter.  No substantial=0A=
+changes in design have taken place since.=0A=
+=0A=
+See also related write() syscall support in guest_memfd [3] where=0A=
+the interoperation between the two features is described.=0A=
+=0A=
+Changes since v10:=0A=
+ - David: use a generic implementation for=0A=
+   folio_{zap,restore}_direct_map instead of per-arch and return void=0A=
+   from folio_restore_direct_map instead of int.  Ackerley, I dropped your=
+=0A=
+   "Reviewed-by:" as the patch 02/16 has changed significantly.  Could you=
+=0A=
+   have another look when you have time?=0A=
+ - David: fix: kvm_gmem_folio_zap_direct_map: do not set=0A=
+   KVM_GMEM_FOLIO_NO_DIRECT_MAP on failure=0A=
+ - David: minor readability fixes=0A=
+=0A=
+v10: https://lore.kernel.org/kvm/20260126164445.11867-1-kalyazin@amazon.com=
+=0A=
+v9: https://lore.kernel.org/kvm/20260114134510.1835-1-kalyazin@amazon.com=
+=0A=
+v8: https://lore.kernel.org/kvm/20251205165743.9341-1-kalyazin@amazon.com=
+=0A=
+v7: https://lore.kernel.org/kvm/20250924151101.2225820-1-patrick.roy@campus=
+.lmu.de=0A=
+v6: https://lore.kernel.org/kvm/20250912091708.17502-1-roypat@amazon.co.uk=
+=0A=
+v5: https://lore.kernel.org/kvm/20250828093902.2719-1-roypat@amazon.co.uk=
+=0A=
+v4: https://lore.kernel.org/kvm/20250221160728.1584559-1-roypat@amazon.co.u=
+k=0A=
+RFCv3: https://lore.kernel.org/kvm/20241030134912.515725-1-roypat@amazon.co=
+.uk=0A=
+RFCv2: https://lore.kernel.org/kvm/20240910163038.1298452-1-roypat@amazon.c=
+o.uk=0A=
+RFCv1: https://lore.kernel.org/kvm/20240709132041.3625501-1-roypat@amazon.c=
+o.uk=0A=
+=0A=
+[1] https://download.vusec.net/papers/quarantine_raid23.pdf=0A=
+[2] https://github.com/firecracker-microvm/firecracker/tree/feature/secret-=
+hiding=0A=
+[3] https://lore.kernel.org/kvm/20251114151828.98165-1-kalyazin@amazon.com=
+=0A=
+=0A=
+Nikita Kalyazin (4):=0A=
+  set_memory: set_direct_map_* to take address=0A=
+  set_memory: add folio_{zap,restore}_direct_map helpers=0A=
+  mm/secretmem: make use of folio_{zap,restore}_direct_map=0A=
+  mm/gup: drop local variable in gup_fast_folio_allowed=0A=
+=0A=
+Patrick Roy (12):=0A=
+  mm/gup: drop secretmem optimization from gup_fast_folio_allowed=0A=
+  mm: introduce AS_NO_DIRECT_MAP=0A=
+  KVM: guest_memfd: Add stub for kvm_arch_gmem_invalidate=0A=
+  KVM: x86: define kvm_arch_gmem_supports_no_direct_map()=0A=
+  KVM: arm64: define kvm_arch_gmem_supports_no_direct_map()=0A=
+  KVM: guest_memfd: Add flag to remove from direct map=0A=
+  KVM: selftests: load elf via bounce buffer=0A=
+  KVM: selftests: set KVM_MEM_GUEST_MEMFD in vm_mem_add() if guest_memfd=0A=
+    !=3D -1=0A=
+  KVM: selftests: Add guest_memfd based vm_mem_backing_src_types=0A=
+  KVM: selftests: cover GUEST_MEMFD_FLAG_NO_DIRECT_MAP in existing=0A=
+    selftests=0A=
+  KVM: selftests: stuff vm_mem_backing_src_type into vm_shape=0A=
+  KVM: selftests: Test guest execution from direct map removed gmem=0A=
+=0A=
+ Documentation/virt/kvm/api.rst                | 21 +++---=0A=
+ arch/arm64/include/asm/kvm_host.h             | 13 ++++=0A=
+ arch/arm64/include/asm/set_memory.h           |  7 +-=0A=
+ arch/arm64/mm/pageattr.c                      | 19 +++--=0A=
+ arch/loongarch/include/asm/set_memory.h       |  8 ++-=0A=
+ arch/loongarch/mm/pageattr.c                  | 25 +++----=0A=
+ arch/riscv/include/asm/set_memory.h           |  7 +-=0A=
+ arch/riscv/mm/pageattr.c                      | 17 ++---=0A=
+ arch/s390/include/asm/set_memory.h            |  7 +-=0A=
+ arch/s390/mm/pageattr.c                       | 13 ++--=0A=
+ arch/x86/include/asm/kvm_host.h               |  6 ++=0A=
+ arch/x86/include/asm/set_memory.h             |  7 +-=0A=
+ arch/x86/kvm/x86.c                            |  5 ++=0A=
+ arch/x86/mm/pat/set_memory.c                  | 23 +++---=0A=
+ include/linux/kvm_host.h                      | 14 ++++=0A=
+ include/linux/pagemap.h                       | 16 +++++=0A=
+ include/linux/secretmem.h                     | 18 -----=0A=
+ include/linux/set_memory.h                    | 22 ++++--=0A=
+ include/uapi/linux/kvm.h                      |  1 +=0A=
+ kernel/power/snapshot.c                       |  4 +-=0A=
+ lib/buildid.c                                 |  8 ++-=0A=
+ mm/execmem.c                                  |  6 +-=0A=
+ mm/gup.c                                      | 41 +++++------=0A=
+ mm/memory.c                                   | 42 +++++++++++=0A=
+ mm/mlock.c                                    |  2 +-=0A=
+ mm/secretmem.c                                | 18 ++---=0A=
+ mm/vmalloc.c                                  | 11 +--=0A=
+ .../testing/selftests/kvm/guest_memfd_test.c  | 17 ++++-=0A=
+ .../testing/selftests/kvm/include/kvm_util.h  | 37 +++++++---=0A=
+ .../testing/selftests/kvm/include/test_util.h |  8 +++=0A=
+ tools/testing/selftests/kvm/lib/elf.c         |  8 +--=0A=
+ tools/testing/selftests/kvm/lib/io.c          | 23 ++++++=0A=
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 59 ++++++++-------=0A=
+ tools/testing/selftests/kvm/lib/test_util.c   |  8 +++=0A=
+ tools/testing/selftests/kvm/lib/x86/sev.c     |  1 +=0A=
+ .../selftests/kvm/pre_fault_memory_test.c     |  1 +=0A=
+ .../selftests/kvm/set_memory_region_test.c    | 52 ++++++++++++--=0A=
+ .../kvm/x86/private_mem_conversions_test.c    |  7 +-=0A=
+ virt/kvm/guest_memfd.c                        | 71 ++++++++++++++++---=0A=
+ 39 files changed, 474 insertions(+), 199 deletions(-)=0A=
+=0A=
+=0A=
+base-commit: d2ea4ff1ce50787a98a3900b3fb1636f3620b7cf=0A=
+-- =0A=
+2.50.1=0A=
+=0A=
