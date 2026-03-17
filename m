@@ -1,49 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C5F25A2C6;
-	Tue, 17 Mar 2026 08:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F91D331A5E
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 09:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773737129; cv=none; b=YFq24GT+OMO9jdu7gqP7aIvAK0qAI17Z+cbGMdfAYliUK1XxcBYILyu0/SXq7MYp0XdUoF/WN8m3pqeZ1UJml/8P2GUf529M5Rpz0/p43XVFpS6sWx555rYJ9rZdl9avHlJ6vU8ApQCeKs67/zkSOM/rI1I4oAlLoqwjptVJcuY=
+	t=1773738028; cv=none; b=P/p3RhXJCbNTxtRiYHh+sEzWACD70q8wEEMO3uAksONdiyOHAOJ51LVhdwS9wzi8Z78ytg/L98nmIfNiMR5A/GB5IXycpAmT2Nm/YyJr33qQR6PDAhsqKdW03AQe1MUyEOex9vYaVotW/CKEIjbwZfNIrunetS4Ab5KjyfXdlo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773737129; c=relaxed/simple;
-	bh=Zo6yw1mAyD4MxWYXRaqbuKoO6iygTs63aqmw/CfuPrg=;
+	s=arc-20240116; t=1773738028; c=relaxed/simple;
+	bh=VG9d8PQEQrMfuIF7UGzCQD8kj7dSnfgOISNY/i2xpf0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Whx6rFKa/UY5rUnxz9TIedA6i8RgoCb+hABze9GZRWs5fPL/egotVQdzV0SO2KnmjsZaFdnAWzF/d+JvCTB8IiySyVBDuRXgV1QgTolasJl/5Ja39QzCrMAJnGEEgwPzp085CLG61Eo2gGKaEbyr5D8BTuO9yr09rjDvxJeh7ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MWxjrMp6; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYezwVeBAKSAYJCg5YEdmCe91Gu+ft3i2J4Qw5RCfIRRfkTcIukO8D7+QdOdBrq5PDKqKHnD7l9XjnNxhNOXPhazthBsGaggYs7z9YnjHTmoUlbqeipmjC2XQYKrQ0ilyrW3K8KXdv+Y22Nd/1UnsdaCpKt1UBmgrdZ2EGvIJ+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FOGNxoWT; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MWxjrMp6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030A7C4CEF7;
-	Tue, 17 Mar 2026 08:45:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773737129;
-	bh=Zo6yw1mAyD4MxWYXRaqbuKoO6iygTs63aqmw/CfuPrg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MWxjrMp6K6R0o7Q+bJjI/SPcVgg9uRqw/NVogBDNxIxU9g+kLl75KBSwQX5Csh6cb
-	 kG/Fh4usrU4Bxg6jLTPYjtwjSwhygytDx8iHL9EzTZVGRzvysQIs3vVgow1v6zwzHn
-	 DlVE35GFI1HhCiQF7kujveQbDItw8iBNN8eIHFbifDxvbSxL9uM4S7VX2574LL8cSA
-	 NMTL78OKHQN0yxnvssG4DPRjQjSvJcoQKfaXWHVgtO4ci80ffsCjuRpLq9E7Whv/Bh
-	 MGtvCBCmZl6yah5annGFpUIfg2eu4z8GMBXnFJQUFqzUMq4smisQw3egIkvO/Ri7h7
-	 00RS8mnGk7/Kg==
-Date: Tue, 17 Mar 2026 08:45:24 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FOGNxoWT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773738026;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LfW4PQO+j4EnEpboaPKhMu3WfMztmYGSmgtjCkFC7Vk=;
+	b=FOGNxoWTuqgo60doXp25y2eVxodVuTBi0LAXOM2doTVFtGKrXIAEjY68WjoAx2ILq/Re9M
+	YfJlRdxQGCCQ7i+si2kmlRhJMY/EEaQvyJw94ceEbvFSlcujyCQUpXNUpEuTjA8FwsvxJb
+	CPwLgmig3whIoHSxQdXhcVKKcdD5jFM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-490-x904NKE3O2OvpD80PB_H_g-1; Tue,
+ 17 Mar 2026 05:00:21 -0400
+X-MC-Unique: x904NKE3O2OvpD80PB_H_g-1
+X-Mimecast-MFC-AGG-ID: x904NKE3O2OvpD80PB_H_g_1773738018
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 30E0C18005B3;
+	Tue, 17 Mar 2026 09:00:17 +0000 (UTC)
+Received: from gmail.com (unknown [10.72.112.28])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2E6D41800576;
+	Tue, 17 Mar 2026 09:00:07 +0000 (UTC)
+Date: Tue, 17 Mar 2026 17:00:03 +0800
+From: Chunyu Hu <chuhu@redhat.com>
 To: Mike Rapoport <rppt@kernel.org>
-Cc: Breno Leitao <leitao@debian.org>, 
-	"David Hildenbrand (Arm)" <david@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH] selftests/mm: add THP sysfs interface test
-Message-ID: <51a4855d-89cf-49e7-bd4f-f0ba13f23102@lucifer.local>
-References: <20260309-thp_selftest_v2-v1-1-a00cef41da44@debian.org>
- <9cb63c24-eaff-4954-97d5-2a422a0401fc@lucifer.local>
- <abgJtJYQsGMPsTHr@gmail.com>
- <be860d86-75be-4c75-95ea-03bf79524be2@kernel.org>
- <abggyaVTdNe6n_ew@gmail.com>
- <c4cb6dfe-59b2-44e6-adbc-9ee63bed79fd@lucifer.local>
- <abjqDUpkezMfvCHz@kernel.org>
+Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
+	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
+	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+	baohua@kernel.org, lance.yang@linux.dev
+Subject: Re: [PATCH v2 3/5] selftests/mm: move write_file helper to vm_util
+Message-ID: <abkYE-tUzy6cz_kH@gmail.com>
+References: <20260316044335.1390608-1-chuhu@redhat.com>
+ <20260316044335.1390608-4-chuhu@redhat.com>
+ <abekn9aBMw1e1Rw1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,63 +64,176 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <abjqDUpkezMfvCHz@kernel.org>
+In-Reply-To: <abekn9aBMw1e1Rw1@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Tue, Mar 17, 2026 at 07:43:41AM +0200, Mike Rapoport wrote:
-> On Mon, Mar 16, 2026 at 07:53:46PM +0000, Lorenzo Stoakes (Oracle) wrote:
-> > On Mon, Mar 16, 2026 at 09:02:33AM -0700, Breno Leitao wrote:
-> > > On Mon, Mar 16, 2026 at 03:44:14PM +0100, David Hildenbrand (Arm) wrote:
-> > > > On 3/16/26 14:47, Breno Leitao wrote:
-> > > > > On Mon, Mar 16, 2026 at 12:55:13PM +0000, Lorenzo Stoakes (Oracle) wrote:
-> > > > >> On Mon, Mar 09, 2026 at 05:00:34AM -0700, Breno Leitao wrote:
-> > > > >>> Add a shell-based selftest that exercises the full set of THP sysfs
-> > > > >>> knobs: enabled (global and per-size anon), defrag, use_zero_page,
-> > > > >>> hpage_pmd_size, shmem_enabled (global and per-size), shrink_underused,
-> > > > >>> khugepaged/ tunables, and per-size stats files.
-> > > > >>>
-> > > > >>> Each writable knob is tested for valid writes, invalid-input rejection,
-> > > > >>> idempotent writes, and mode transitions where applicable. All original
-> > > > >>> values are saved before testing and restored afterwards.
-> > > > >>>
-> > > > >>> The test uses the kselftest KTAP framework (ktap_helpers.sh) for
-> > > > >>> structured TAP 13 output, making results parseable by the kselftest
-> > > > >>> harness. The test plan is printed at the end since the number of test
-> > > > >>> points is dynamic (depends on available hugepage sizes and sysfs files).
-> > > > >>>
-> > > > >>> This is particularly useful for validating the refactoring of
-> > > > >>> enabled_store() and anon_enabled_store() to use sysfs_match_string()
-> > > > >>> and the new change_enabled()/change_anon_orders() helpers.
-> > > > >>>
-> > > > >>> Signed-off-by: Breno Leitao <leitao@debian.org>
-> > > > >>
-> > > > >> The test is broken locally for me, returning error code 127.
-> > > > >>
-> > > > >> I do appreciate the effort here, so I'm sorry to push back negatively, but I
-> > > > >> feel a bash script here is pretty janky, and frankly if any of these interfaces
-> > > > >> were as broken as this it'd be a major failure that would surely get picked up
-> > > > >> far sooner elsewhere.
-> > > > >>
-> > > > >> So while I think this might be useful as a local test for your sysfs interface
-> > > > >> changes, I don't think this is really suited to the mm selftests.
-> > > > >
-> > > > > That is totally fine. This test is what I have been using to test the
-> > > > > changes, and I decide to share it in case someone find it useful.
-> > > > >
-> > > > > Let's drop it.
-> > > >
-> > > > Out of interest, to we know why the test is failing for Lorenzo?
-> > >
-> > > I really don't know, but, it sounds like ktap was not found?
-> >
-> > Yeah CONFIG_KUNIT is not set so could be :)
->
-> Nah, CONFIG_KUNIT has nothing to do with ktap_helpers.sh, probably your
-> environment does not bring in tools/testing/selftests/kselftest
+On Mon, Mar 16, 2026 at 08:35:11AM +0200, Mike Rapoport wrote:
+> On Mon, Mar 16, 2026 at 12:43:33PM +0800, Chunyu Hu wrote:
+> > thp_settings provides write_file() helper for safely writing to a file and
+> > exit when write failure happens. It's a very low level helper and many sub
+> > tests need such a helper, not only thp tests.
+> > 
+> > split_huge_page_test also defines a write_file locally. The two have minior
+> > differences in return type and used exit api. And there would be conflicts
+> > if split_huge_page_test wanted to include thp_settings.h because of
+> > different prototype, making it less convenient.
+> > 
+> > It's possisble to merge the two, although some tests don't use the
+> > kselftest infrastrucutre for testing. It would also work when using the
+> > ksft_exit_msg() to exit in my test, as the counters are all zero. Output
+> > will be like:
+> > 
+> >   TAP version 13
+> >   1..62
+> >   Bail out! /proc/sys/vm/drop_caches1 open failed: No such file or directory
+> >   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > 
+> > So here just leave one version of write_file, and move it into the vm_util.
+> > This make it easy to maitain and user could just include one vm_util.h when
+> > then don't need thp setting helpers. Keep the prototype of returning the
+> > written bytes num.
+> > 
+> > Suggested-by: Mike Rapoport <rppt@kernel.org>
+> > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+> > ---
+> > Changes in v2:
+> >   new patch from v2
+> > ---
+> >  .../selftests/mm/split_huge_page_test.c       | 15 ------------
+> >  tools/testing/selftests/mm/thp_settings.c     | 24 +------------------
+> >  tools/testing/selftests/mm/thp_settings.h     |  1 -
+> >  tools/testing/selftests/mm/vm_util.c          | 16 +++++++++++++
+> >  tools/testing/selftests/mm/vm_util.h          |  2 ++
+> >  5 files changed, 19 insertions(+), 39 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> > index e0167111bdd1..93f205327b84 100644
+> > --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> > +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> > @@ -255,21 +255,6 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
+> >  	return status;
+> >  }
+> >  
+> > -static void write_file(const char *path, const char *buf, size_t buflen)
+> > -{
+> > -	int fd;
+> > -	ssize_t numwritten;
+> > -
+> > -	fd = open(path, O_WRONLY);
+> > -	if (fd == -1)
+> > -		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+> > -
+> > -	numwritten = write(fd, buf, buflen - 1);
+> > -	close(fd);
+> > -	if (numwritten < 1)
+> > -		ksft_exit_fail_msg("Write failed\n");
+> > -}
+> > -
+> >  static void write_debugfs(const char *fmt, ...)
+> >  {
+> >  	char input[INPUT_MAX];
+> > diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
+> > index 574bd0f8ae48..02de28ecf31a 100644
+> > --- a/tools/testing/selftests/mm/thp_settings.c
+> > +++ b/tools/testing/selftests/mm/thp_settings.c
+> > @@ -6,6 +6,7 @@
+> >  #include <string.h>
+> >  #include <unistd.h>
+> >  
+> > +#include "vm_util.h"
+> >  #include "thp_settings.h"
+> >  
+> >  #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
+> > @@ -64,29 +65,6 @@ int read_file(const char *path, char *buf, size_t buflen)
+> >  	return (unsigned int) numread;
+> >  }
+> >  
+> > -int write_file(const char *path, const char *buf, size_t buflen)
+> > -{
+> > -	int fd;
+> > -	ssize_t numwritten;
+> > -
+> > -	fd = open(path, O_WRONLY);
+> > -	if (fd == -1) {
+> > -		printf("open(%s)\n", path);
+> > -		exit(EXIT_FAILURE);
+> > -		return 0;
+> > -	}
+> > -
+> > -	numwritten = write(fd, buf, buflen - 1);
+> > -	close(fd);
+> > -	if (numwritten < 1) {
+> > -		printf("write(%s)\n", buf);
+> > -		exit(EXIT_FAILURE);
+> > -		return 0;
+> > -	}
+> > -
+> > -	return (unsigned int) numwritten;
+> > -}
+> > -
+> >  unsigned long read_num(const char *path)
+> >  {
+> >  	char buf[21];
+> > diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
+> > index 76eeb712e5f1..7748a9009191 100644
+> > --- a/tools/testing/selftests/mm/thp_settings.h
+> > +++ b/tools/testing/selftests/mm/thp_settings.h
+> > @@ -63,7 +63,6 @@ struct thp_settings {
+> >  };
+> >  
+> >  int read_file(const char *path, char *buf, size_t buflen);
+> > -int write_file(const char *path, const char *buf, size_t buflen);
+> >  unsigned long read_num(const char *path);
+> >  void write_num(const char *path, unsigned long num);
+> >  
+> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> > index a6d4ff7dfdc0..b4b3b48f8dc9 100644
+> > --- a/tools/testing/selftests/mm/vm_util.c
+> > +++ b/tools/testing/selftests/mm/vm_util.c
+> > @@ -764,3 +764,19 @@ int unpoison_memory(unsigned long pfn)
+> >  
+> >  	return ret > 0 ? 0 : -errno;
+> >  }
+> > +
+> > +unsigned int write_file(const char *path, const char *buf, size_t buflen)
+> > +{
+> > +	int fd;
+> > +	ssize_t numwritten;
+> > +
+> > +	fd = open(path, O_WRONLY);
+> > +	if (fd == -1)
+> > +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+> > +
+> > +	numwritten = write(fd, buf, buflen - 1);
+> > +	close(fd);
+> > +	if (numwritten < 1)
+> > +		ksft_exit_fail_msg("Write failed\n");
+> > +	return (unsigned int) numwritten;
+> 
+> If we exit on any failure, the function can be void just like in
+> split_huge_page_test.c. This will also simplify write_num() and read_num()
+> in thp_settigns.c
 
-Yeah I copy the mm tests to /mnt in vng before running to avoid ro
-filesystem issues.
+Good point. I will change it to void. I wont touch read_file() here.
 
-Not a fan of us relying on the entire tree structure being there either
-then :)
+> 
+> > +}
+> > diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> > index e9c4e24769c1..22c8805e0d7a 100644
+> > --- a/tools/testing/selftests/mm/vm_util.h
+> > +++ b/tools/testing/selftests/mm/vm_util.h
+> > @@ -166,3 +166,5 @@ int unpoison_memory(unsigned long pfn);
+> >  
+> >  #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
+> >  #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+> > +
+> > +unsigned int write_file(const char *path, const char *buf, size_t buflen);
+> > -- 
+> > 2.53.0
+> > 
+> 
+> -- 
+> Sincerely yours,
+> Mike.
+> 
 
-Cheers, Lorenzo
