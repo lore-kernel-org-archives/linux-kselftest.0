@@ -1,96 +1,109 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E642291C10;
-	Wed, 18 Mar 2026 16:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B790331218
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 17:06:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773852718; cv=none; b=Z1MSE4gUio/AO24MADzrTU25SQhIhVeZuVCD40K/KvzIfjIHl/18MZeDWFoZ6PabEiuw+0LT1IpVhuqkXFZQ6Gx+csSkayDj/7efy7zoJ/xeqNQ1EgVH3Uusi5Dg9FDkdwrwr8w7tCujpT4o2eA13brVhDg5rXhpXk9xC2srZno=
+	t=1773853583; cv=none; b=iIIHR7Cf2bud6wSBIEk7NZgEguyQVEbJxUGSv8/asNYN0q5/efc7DcDumkUBuGm4zvR6/OczwCMLKTJsk8Sz2J8XRYD9RGC5npCsIVMxsUdqYm8zQJtBo5DH9JMt/67/QXEnhoQnY1ebRHMCQLIpU6o9fZZfBHi8pY2lopXNo1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773852718; c=relaxed/simple;
-	bh=o/7yE6t93yQtFz6v7eAty53R//5LEtd721EuvOxoFn4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ry1YugnDZ6UrEDel3xG0RLCAuWYL4pH4mefB8867JWXOuNGYlkGJoBJ7HbQ+9oiw5EbpLGbNyUNDMzfuzQzDuwz6IV6HCHyuOsrK0v+fY6z7T0W8cIidAUbcNCAlProPu/eTfqECS7Q1InbpvJzviPZxuognERlMRR1VEPOh5/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=WulDNP+7; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1773853583; c=relaxed/simple;
+	bh=VbDdPt5V2iYDxuFM5o59Js8zGg623WZdAgM4YWkYbu8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uC2Q8XA/Qlqb53/UTh5JJhF8+xCb7/bSrtOYhmmuqyH/Ph5o/6SUURDMJADpkiSa5Z3RsleDk0LRFYOP/y0i9tEtuPsDfzMlXm/JJp3euPxc7DBATQZHlyVOXoCBfiqnTb3gFnwyEvtd7Q55OhCOIQANJOloyrS31eivONmVc0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=pHVGGxZ6; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="WulDNP+7"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E0DEB40423
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1773852717; bh=nwEcRE80LRGRnH9IJ42jxIknbbtHfjezvT1c6qQwbv0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=WulDNP+7m6R8KkZAmeQSGPLvxaBvyXQI3v8TmWnQJHpjpLqPlKPJVWSwB4DatvWg3
-	 rt+SLAibuW96kRdSaOHpEuKw/vI3du5FlbI77xppMGnbxiRi5f1PTKH6zQAZNTz3fD
-	 7lYEJmmvcfYwypJHzACPy3BbF+zm7L4mq7PgPbdVIdw+OxSHRrZpGnIKX76mhOz3jP
-	 8KZxYjeaT/mVq+xis0VkYp/IJtfBs8I8+rlsyPViutIJ2bf2grknK6n2LdqEeMKDAk
-	 +MrzzQC6TEeUpSgHQgo7VHnbZHoMbbeb5KepqqlXsE9iRWTiY7dIX/SkuRUNIaEb/A
-	 jo1pLvWiAW/RQ==
-Received: from localhost (c-71-229-227-126.hsd1.co.comcast.net [71.229.227.126])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id E0DEB40423;
-	Wed, 18 Mar 2026 16:51:56 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
- workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org, Thomas
- Gleixner <tglx@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Vyukov
- <dvyukov@google.com>, Randy Dunlap <rdunlap@infradead.org>, Cyril Hrubis
- <chrubis@suse.cz>, Kees Cook <kees@kernel.org>, Jake Edge <jake@lwn.net>,
- David Laight <david.laight.linux@gmail.com>, Askar Safin
- <safinaskar@zohomail.com>, Gabriele Paoloni <gpaoloni@redhat.com>, Mauro
- Carvalho Chehab <mchehab@kernel.org>, Christian Brauner
- <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Andrew
- Morton <akpm@linux-foundation.org>, Masahiro Yamada
- <masahiroy@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Ingo
- Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 1/9] kernel/api: introduce kernel API specification
- framework
-In-Reply-To: <abq3f5vdcwRXGJGX@laps>
-References: <20260313150928.2637368-1-sashal@kernel.org>
- <20260313150928.2637368-2-sashal@kernel.org>
- <87h5qe9wig.fsf@trenco.lwn.net> <abq3f5vdcwRXGJGX@laps>
-Date: Wed, 18 Mar 2026 10:51:56 -0600
-Message-ID: <87jyv95bdf.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="pHVGGxZ6"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1w2uLC-002c7Y-GZ; Wed, 18 Mar 2026 18:05:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=9PjUi89Rq5UeOAy8wYWz7JCds8tIZvlL7cDob3xI8us=; b=pHVGGxZ6bGP58yl0P/YsBDrG4z
+	wP8Z+87vN2YGOtei8ZYgbf16cLT5hBZKtTRua5ogL1iAIyGk/pPz5eW3Px2k4vDVrU3bvWHmpWwbS
+	JrFVLIMJlDfRuMaIkv0Y8E0jFiCSW9RgwWKBRmYWKw+wHjMeCGS4nkoJE9ZSfyzbmvwfbR+pxGXEW
+	dlGaTfyl1diOBd/7+OUDJYz9i0O2q0iRcHmxH3RqE/5ohXLK1Oy9Oww1OBKAVhnMAzFL5Kz8Hw/kM
+	9ROKw1LMay1klkUjVLpeWBEsEIt6QNlEJDDNb0a4JderIMjPm8hq+9dLmIz8h7Qb/HltdF24Lch+1
+	3Gu8XxuA==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1w2uLB-0008NP-6n; Wed, 18 Mar 2026 18:05:53 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1w2uL9-00D1bi-AC; Wed, 18 Mar 2026 18:05:51 +0100
+Message-ID: <c7742de5-7b68-4520-95b4-7ed5ed997c0a@rbox.co>
+Date: Wed, 18 Mar 2026 18:05:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 1/5] bpf, sockmap: Annotate af_unix sock::sk_state
+ data-races
+To: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-1-2f0c7410c523@rbox.co>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-1-2f0c7410c523@rbox.co>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Sasha Levin <sashal@kernel.org> writes:
+On 3/6/26 00:30, Michal Luczaj wrote:
+> sock_map_sk_state_allowed() and sock_map_redirect_allowed() read af_unix
+> socket sk_state locklessly.
+> 
+> Use READ_ONCE(). Note that for sock_map_redirect_allowed() change affects
+> not only af_unix, but all non-TCP sockets (UDP, af_vsock).
+> 
+> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> ---
+>  net/core/sock_map.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index b0e96337a269..02a68be3002a 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
 
-> On Tue, Mar 17, 2026 at 11:49:27AM -0600, Jonathan Corbet wrote:
->>So the reason for two completely separate mechanisms is not entirely
->>clear to me.  The kerneldoc variant is essentially documentation, while
->>the macro stuff is to be built into the executable?  What if you want
->>both?
->>
->>It would be nice to only have one way if at all possible; I'm sure that
->>crossed your mind at some point :)  If there have to be two, having both
->>examples describe the same function would make the parallels more clear.
->
-> Woops, I forgot to finish writing my reply to this :)
->
-> Under the hood, kerneldoc specs are translated into those macros so they could
-> be part of the build process and embedded into the resulting binary (both for
-> documentation as well as the runtime validation).
->
-> I don't think anyone would use the macro format directly, but as it's there
-> anyway I figured I'd offer it as an option. Would it make sense to just hide it
-> behind the scenes?
+...
 
-If there are two ways of doing it, people will use both ways.  My
-kneejerk reaction would be to hide the macros as an implementation
-detail, but perhaps that's just me.
+> @@ -543,7 +543,7 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
+>  	if (sk_is_tcp(sk))
+>  		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
+>  	if (sk_is_stream_unix(sk))
+> -		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
+> +		return (1 << READ_ONCE(sk->sk_state)) & TCPF_ESTABLISHED;
+>  	if (sk_is_vsock(sk) &&
+>  	    (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET))
+>  		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
+> 
 
-Thanks,
+Another reason to (conditionally) take unix_state_lock() at
+sock_map_update_elem{,_sys}(): chunk above can be dropped.
 
-jon
