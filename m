@@ -1,212 +1,194 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010024.outbound.protection.outlook.com [52.101.85.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467563F8811
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 19:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773861241; cv=none; b=QIkUtOm1gAi00t0nSvt7oB5JOSTqlDrNXbjRaiQFeoadTIuC833FiUybo0AqsNmEHjy7Xv0B9BLs0d6h84bUm2Oka0WdjTp4442rRY17LlBK7d9ykfC5Fd/vGEn2/ljj3/T59kxP/DwaIMFdVqYLHXykHPi6VqMKwpmj6Ja/xDo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773861241; c=relaxed/simple;
-	bh=bOIv1idMYclJig7dHHf8ZB5kdbI0WSQDOttniO+KCbs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WBYnr0HIRErvH1PFY5yFkZ2xc42q0KK897uvUP5gqAKOyZUB9QjIMSqlOWgp1VqyyvuFV0PR7qXLeIdbCBJ9Sta9TOEP5rYg2z/hh7rrnqV6FpPdQqT/lgqzo4ewo75qBkL3DNkfwlS/LywivS+DM5rz2Cwj5YkVjQjxbmmzacM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=Sgpm/1Fe; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423322264C7;
+	Wed, 18 Mar 2026 20:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773867238; cv=fail; b=qolh1F4nuI+l3HetdSAJ0R2G2OKW1kLMR5Q5cI62rsw6WQ4lV6vfxP00ZweJx9vKRM2Ictcs+Vy1L8eR9f6hti4uCWmhetK5VAz2U/kzsf6mUh6aW/FUBCm9U5aMAnzefHI0YHwyGvtOotaxUb47aUJwnkKUQd4cIS+kYOL08oY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773867238; c=relaxed/simple;
+	bh=IC9K2wLg66nK3Y/nCn3irqXl9O9Qz/SxPLrPQEVpxmM=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Eg5AHtIL7tHhEyaoGCXNvZWdRxFAGRp61uVjJ+F7zltV9kkzYkWP5tZac/hU3SW7JW6HbpRkWnoyabLkS67FBEv0TLgJA5vSUuX78L57WDxSgBU6Zgvh0E6Y9eldN6UAVMOa7dHpSJEklmRloZ1/nZXwa3vJUGnbG12WVPt8j/w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Utd4+jrA; arc=fail smtp.client-ip=52.101.85.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="Sgpm/1Fe"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2a9296b3926so1541955ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 12:13:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1773861237; x=1774466037; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zDgUXurlnboqnR9kUYXcG83BLVmHtjY+C3jwCrk3SN8=;
-        b=Sgpm/1FemW4HE9FTESN1VKa0U/dX6wBSVM5HUsfiIG47WQC20EEqnxPb1t+oTS/d3e
-         jFRrMFtgf+hDSf+1ydPyeV1lDFibFJbMaS7RXU4AqItu3W/NV5IyW1lTcCip84phvBEl
-         E/k7MzwS9iFsAi/cRiBr8yhB7cAKPohxUQp/tFsmE5VE9AA9MkbN2KhG4z+9mQa9kiSQ
-         Y3xRtgKXqVaLuFrSxUm/MUCR9bpWNuZkCqsEA3cMZnjrBFdD5gAUcJq1WmdLPXFY6Qzb
-         XfUDzoAci9plLTe+bN6KY+Hers7Q0wWCTu2FwzaBTgUV2U2oyPY8NX9oHvO3cfpayZNh
-         V24Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773861237; x=1774466037;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zDgUXurlnboqnR9kUYXcG83BLVmHtjY+C3jwCrk3SN8=;
-        b=DTTkU2ylnqKEER19WDixkyTNveKbjC/anOO3cUoHCvP5SkGx9mkNOdYnHbM9rkmfCl
-         a1Hs5SbZTv4bMXtPgp87jVMNvDZ4wCpc4NSwviuRjd3jcv4huhyfOfloTPHqWXQkO2cn
-         KkyodzmLWgC8+r4XJsj6dglAkkxMAFmWXmz65o02nBZxQnq8O8V9Ff0cBmfK6/WbZzw8
-         9u7iRoOu9tn8/WSbsTJkyG2NxIA5tKhdHh8x4TsYfcLCPavorp2Ciw5GHZSQJWCJ4q/o
-         f/t3DXskHMCIQ0oPxOIYPJrRSNYBgH8tkVapqSqLj7Nogg6hiRAtWCQDapeyKQh9PKS4
-         AG+A==
-X-Forwarded-Encrypted: i=1; AJvYcCX1O1KH3qixMc0S9+fHczETDqJWvVy0slL5T8Yga9A3lkDzYONHW3MAmVh8lYo2GO0u5ix5o2Wdmhc70pmN5yA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3by1BEL8OFtqarHdqVm0Bs5Gyrym43S8w7r7pDrxGtqTrvvnZ
-	Eoobp4/UNeuRsmDUiOVDT6KTglKHKRMJL4REg9u+1FBkTAtvIo5+9b3CCCSh7aTBL5s=
-X-Gm-Gg: ATEYQzyCEiaQAgx/avQC2/GlWjVTR8WD8ktLapo82+8p7Ia6/fj4mwNWOJS7SoclLQL
-	tdRy1qPQV73X6jvOAU0YJR7XHZpyqVytcOOEx38Sxaon4fyQv+NN0SyE89ttLBYDTjvkDxxTjdm
-	MOr5Yadrmvyuc8wqzWKu7NqcRtjVQf0ni/RwD1SoWrM0j3rvfleMUkz7NOHtOh215Nlhu5ke1/n
-	shGoHoidZPdQpVZFt2HyGAmOYr2vntrvymivVrcSii7OhYKG9FGJnyM9h7PZE7ax2d1LXS/z6E0
-	Vq3QzeqRukG48J3be0x/M+2HJWGzsVk22rdVw2vqdI8K0sov+1WGk6Ux0MdjSO9/AENHXb/KTN7
-	hnQ2i2DfrkO5gFXg4mHujPiaCCy1PIveOvzLfp5fNiKnp/1dSq9UU4wksCMQWSo5yLDqfV2+Dxx
-	+JUgo3
-X-Received: by 2002:a17:903:2a90:b0:2b0:4158:c9d1 with SMTP id d9443c01a7336-2b06e3e5bacmr53777575ad.36.1773861237621;
-        Wed, 18 Mar 2026 12:13:57 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:73::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e627132sm36037645ad.74.2026.03.18.12.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 12:13:57 -0700 (PDT)
-From: Joe Damato <joe@dama.to>
-To: netdev@vger.kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: horms@kernel.org,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	linux-kernel@vger.kernel.org,
-	leon@kernel.org,
-	Joe Damato <joe@dama.to>,
-	linux-kselftest@vger.kernel.org
-Subject: [net-next v3 12/12] selftests: drv-net: Add USO test
-Date: Wed, 18 Mar 2026 12:13:17 -0700
-Message-ID: <20260318191325.1819881-13-joe@dama.to>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260318191325.1819881-1-joe@dama.to>
-References: <20260318191325.1819881-1-joe@dama.to>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Utd4+jrA"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lJFjhl3rbrZQP4SLzapavwd7DPNK1rWFb2bTCLDlohHG9kXmuPEDVN85Kb48pT3SjtXbt4t63fCtsaEGKTDg+tZER6S9uOic4NVwgocjW19zHVxRv97wlb/qyybWJr9OFvfoWb9GuXouyjJmwf9FpGITbsuUuU6DqMCnohwZrcmMTcI5CQeVN5qFnC6Z25a9xG9v22j1giMEGQ6dpDrqKbmf0zzOz97gqftbStpV9psGnU6ag1ELyThA+ew/Dznf5ipdLKqHHyFRcPY9/634XixoYI3Hi5hIFyFLGy2LCgU7voIAiC5g5B0Sxhh0VXvgtBG2OA4mJP4CV72a2tTb/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EWhbPilCbw/x98sZo2BQiu2Pdfd2YzGwB0xgla6e0zE=;
+ b=srnByaV5kiSLokLjqRNB0NT5Ha1Qt1Q0xMZOLz4JuQQgI2/km4iY6QTgVbGthqOBeLvWMiEtzcf1uwe5i69tTj/zMFwvbj7R8Arhzxm8aVEaAJvq0QRKClTWc3EkPNK+YHcP4dd5Lb5VULqM5n9IrfbYTYsT2QATs+57x+1sVg4UlJeoPtU0wYEhf9gAnj1Xkt4+UAA52LHZFrnUg4nx/E+Grp4PBnM0XjABx7q9lJ/yfjj1lzugSiyHrS8xIhL7foC9NrQgfVgI+gJF3rpE9zUfbFs7s+8B5dmnjHXBDx+48BrkDeZlN2e5w/thqfw8Y2oThO/CBh422OnPkWbU8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EWhbPilCbw/x98sZo2BQiu2Pdfd2YzGwB0xgla6e0zE=;
+ b=Utd4+jrAN9Ojlu5WNgeV4JNvcnL3aCQWRrYdvh9yn3V4fSnGQzNiPaFMYr1/XAa5ZKTA+GDmZjWW+TYJKcgOsZ/AaSVdAmjZ0G/aMVzRjaIKItJfbVvq2OL0OUsICn1o4rwmvXTunIDDswoUPcQKpIsZ5HVbrAsYO10S4q6DFQshdmEx96xS8/aqnv6mc45yQVru7bs7mL8ee7yOLtPsuovE9RqmJZ86lPETdozA1/Czb1TWyzNS/5/N0MCJFlkRgESMGJEse3/R8sjemnJ1ABtBWrlI4teHfVZQRINQukB9Shfb2RA4Yrt6y7+8/oF6RUz60rmArnLnKfcspEHs+A==
+Received: from MN2PR08CA0029.namprd08.prod.outlook.com (2603:10b6:208:239::34)
+ by DS7PR12MB8290.namprd12.prod.outlook.com (2603:10b6:8:d8::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.9; Wed, 18 Mar
+ 2026 20:53:52 +0000
+Received: from BL6PEPF00020E5F.namprd04.prod.outlook.com
+ (2603:10b6:208:239:cafe::6c) by MN2PR08CA0029.outlook.office365.com
+ (2603:10b6:208:239::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.27 via Frontend Transport; Wed,
+ 18 Mar 2026 20:53:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BL6PEPF00020E5F.mail.protection.outlook.com (10.167.249.20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9723.19 via Frontend Transport; Wed, 18 Mar 2026 20:53:51 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 18 Mar
+ 2026 13:53:31 -0700
+Received: from nvidia.com (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 18 Mar
+ 2026 13:53:30 -0700
+Date: Wed, 18 Mar 2026 14:53:23 -0600
+From: Alex Williamson <alwilliamson@nvidia.com>
+To: <mhonap@nvidia.com>
+CC: <dmatlack@google.com>, <dave.jiang@intel.com>, <ankita@nvidia.com>,
+	<kjaju@nvidia.com>, <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH] vfio: selftests: Fix VLA initialisation in
+ vfio_pci_irq_set()
+Message-ID: <20260318145323.7e9831a4@nvidia.com>
+In-Reply-To: <20260317051402.3725670-1-mhonap@nvidia.com>
+References: <20260317051402.3725670-1-mhonap@nvidia.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF00020E5F:EE_|DS7PR12MB8290:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4f56686-20de-4e88-3868-08de85307619
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|82310400026|1800799024|376014|13003099007|18002099003|22082099003|7053199007|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	wcyYODMQbXpRZXxw8su8Bu/xxvry0K3DvvfNO9Y7yVdsc/De+sar7xT7qX9RDtRimqvlA7WSVIRvL7jWh0hB/iZfVpUbWEKd4QzjiUy+Hf2zoqDeZGQHB0JNxYz74gEmhxCv3o2L8eUS7Dxbe/XUIuMIKC1hp3A2T6K/CYVEAUdhgidP2gnNhNFX/OT4fh9RtMNFhoYRJriK7uJSuR4/gQ8JQibaX+jFCA9oe0geIPMEXj4hXgmnE4a6N4HMJndZf3hJqBviY4TK02V65mm3ob65UjkF7fi7w2loJ1t8y/XR/MTImcwEc2OOwX+dxByzmpFxO4GpawRfrTpWMiIrFq3TKLMjSRNt5h9XI340nXrIaIRwsQ3pEh/B1jsTJKxjQKDOIzFiVLA18ixYlcQE/3KWlcutHPl5BYHx00FAOYwWlsdo9/Re5iNxbKUM7M0i27n0JFgKAHgq4nIuQAUZv7GwGmAmUFUofdzglV1Da7othKjLNqyKe/B16XD6+h2OEyMMeK431dq+7FvOSd8HU7oeaUCenWhmYMtXIZxJHuptbhb/hRHK/rLAAjtmUyszAVFu1MY9dXA0ewVs7Iip4al6Ry2PtKCfb133cufsRp05YK+S9/Y2d62JzVUHwqvkDhsKrWcHw6SWvQTJ58Zag6EPWXcSe7BVaikBXIhXIzY+Lcw6ta8btKUXhoftDJBuJqK5IU1CEsu0iPXQsPoZnXjjnnXzTXGtBAmGzCZH3/PoW5P40Wc7TVVnrcDpptj5f8dUpyCKq1Eu7wldhrVakg==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(1800799024)(376014)(13003099007)(18002099003)(22082099003)(7053199007)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	n2LWieUu5AUG6LNyAcwJJHUYf7x2xo+2eFnIg1/FgQUO+mlIzYjPZyRBI1Vmkkr4c4L84YySz45nxDaPQsPRhLLXQnpNGOUgBtyMaNxEk68pr+rbaBOJnSsM+orC7HENdGmHHGFNo9sEXUF9Gg87WRkqX8vGl/93GWOX8RM6ORbgMwdMziJBwuMhKjewj3KWxRqi4u9HW4/HEoSpV1OR1B5J0PHjRAETjPVnmkBsplB5e9M3Uu87Kt9tesNFSURs64fiwOISLtz0urMGM8cpZAIUAlXjxtzqEph05RrWEBzwSjgLIj+CWcW7jnKaCzldrtKnF/TqAezG9p3Y/MT8Snx/dhSSEQcDkDBMFu7PVjB5wFBgkVurhCqd6tzrFOOZNjLSqhKuSUnAfOLyVqs8WBxN8SzVsOxDhwy3NGW4VWgvIt0/xHN4HDE2Vtj9GLxH
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2026 20:53:51.7542
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4f56686-20de-4e88-3868-08de85307619
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF00020E5F.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8290
 
-Add a simple test for USO. Can be used with netdevsim or real hardware.
-Tests both ipv4 and ipv6 with several full segments and a partial
-segment.
+On Tue, 17 Mar 2026 10:44:02 +0530
+<mhonap@nvidia.com> wrote:
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Joe Damato <joe@dama.to>
----
- rfcv2:
-   - new in rfcv2
+> From: Manish Honap <mhonap@nvidia.com>
+> 
+> C does not permit an initialiser expression on a variable-length array
+> (C99 Section 6.7.9 constraint: "The type of the entity to be initialized
+> shall not be a variable length array type").
+> 
+> vfio_pci_irq_set() declared:
+> 
+>       u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
+> 
+> where `count` is a runtime function parameter, making `buf` a VLA.
+> 
+> GCC rejects this with (tried with GCC-9.4.0):
+> 
+>       error: variable-sized object may not be initialized
+> 
+> Fix by removing the `= {}` initialiser and inserting an explicit
+> memset() immediately after the declaration.  memset() on a VLA is
+> perfectly legal and achieves the same zero-initialisation on all
+> conforming C implementations.
+> 
+> Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Reviewed-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Manish Honap <mhonap@nvidia.com>
+> ---
+> 
+> This fix is self-contained: it touches only the existing vfio selftest
+> helper library and carries no dependency on any other patch.  It was
+> originally included as PATCH 20/20 in the CXL Type-2 VFIO passthrough
+> RFC series [1] but belongs on the vfio list independently, as noted by
+> Dave Jiang.
+> 
+> [1] https://lore.kernel.org/all/20260311203440.752648-1-mhonap@nvidia.com/
+> 
+>  tools/testing/selftests/vfio/lib/vfio_pci_device.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> index fac4c0ecadef..3258e814f450 100644
+> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> @@ -26,8 +26,10 @@
+>  static void vfio_pci_irq_set(struct vfio_pci_device *device,
+>  			     u32 index, u32 vector, u32 count, int *fds)
+>  {
+> -	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count] = {};
+> +	u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
+>  	struct vfio_irq_set *irq = (void *)&buf;
+> +
+> +	memset(buf, 0, sizeof(buf));
+>  	int *irq_fds = (void *)&irq->data;
+> 
+>  	irq->argsz = sizeof(buf);
+> --
+> 2.25.1
+> 
 
- tools/testing/selftests/drivers/net/Makefile |  1 +
- tools/testing/selftests/drivers/net/uso.py   | 87 ++++++++++++++++++++
- 2 files changed, 88 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/uso.py
+This unnecessarily split the declaration block.  Without objection,
+I'll commit this with the following change:
 
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 8154d6d429d3..800065fe443f 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -22,6 +22,7 @@ TEST_PROGS := \
- 	ring_reconfig.py \
- 	shaper.py \
- 	stats.py \
-+	uso.py \
- 	xdp.py \
- # end of TEST_PROGS
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index d306ab81123a..fc75e04ef010 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -32,9 +32,9 @@ static void vfio_pci_irq_set(struct vfio_pci_device *device,
+ {
+        u8 buf[sizeof(struct vfio_irq_set) + sizeof(int) * count];
+        struct vfio_irq_set *irq = (void *)&buf;
++       int *irq_fds = (void *)&irq->data;
  
-diff --git a/tools/testing/selftests/drivers/net/uso.py b/tools/testing/selftests/drivers/net/uso.py
-new file mode 100755
-index 000000000000..da7a68b15734
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/uso.py
-@@ -0,0 +1,87 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""Test USO
-+
-+Sends large UDP datagrams with UDP_SEGMENT and verifies that the peer
-+receives the correct number of individual segments with correct sizes.
-+"""
-+import socket
-+import struct
-+import time
-+
-+from lib.py import ksft_pr, ksft_run, ksft_exit, KsftSkipEx
-+from lib.py import ksft_eq, ksft_ge
-+from lib.py import NetDrvEpEnv
-+from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
-+
-+# python doesn't expose this constant, so we need to hardcode it to enable UDP
-+# segmentation for large payloads
-+UDP_SEGMENT = 103
-+
-+def _send_uso(cfg, ipver, mss, total_payload, port):
-+    if ipver == "4":
-+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-+        dst = (cfg.remote_addr_v["4"], port)
-+    else:
-+        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-+        dst = (cfg.remote_addr_v["6"], port)
-+
-+    sock.setsockopt(socket.IPPROTO_UDP, UDP_SEGMENT, mss)
-+    payload = bytes(range(256)) * ((total_payload // 256) + 1)
-+    payload = payload[:total_payload]
-+    sock.sendto(payload, dst)
-+    sock.close()
-+    return payload
-+
-+def _get_rx_packets(cfg):
-+    stats = ip(f"-s link show dev {cfg.remote_ifname}",
-+               json=True, host=cfg.remote)[0]
-+    return stats['stats64']['rx']['packets']
-+
-+def _test_uso(cfg, ipver, mss, total_payload):
-+    cfg.require_ipver(ipver)
-+
-+    try:
-+        ethtool(f"-K {cfg.ifname} tx-udp-segmentation on")
-+    except Exception:
-+        raise KsftSkipEx("Device does not support tx-udp-segmentation")
-+    defer(ethtool, f"-K {cfg.ifname} tx-udp-segmentation off")
-+
-+    expected_segs = (total_payload + mss - 1) // mss
-+
-+    rx_before = _get_rx_packets(cfg)
-+
-+    port = rand_port(stype=socket.SOCK_DGRAM)
-+    _send_uso(cfg, ipver, mss, total_payload, port)
-+
-+    time.sleep(0.5)
-+
-+    rx_after = _get_rx_packets(cfg)
-+    rx_delta = rx_after - rx_before
-+
-+    ksft_ge(rx_delta, expected_segs,
-+            comment=f"Expected >= {expected_segs} rx packets, got {rx_delta}")
-+
-+def test_uso_v4(cfg):
-+    """USO IPv4: 11 segments (10 full + 1 partial)."""
-+    _test_uso(cfg, "4", 1400, 1400 * 10 + 500)
-+
-+def test_uso_v6(cfg):
-+    """USO IPv6: 11 segments (10 full + 1 partial)."""
-+    _test_uso(cfg, "6", 1400, 1400 * 10 + 500)
-+
-+def test_uso_v4_exact(cfg):
-+    """USO IPv4: exact multiple of MSS (5 full segments)."""
-+    _test_uso(cfg, "4", 1400, 1400 * 5)
-+
-+def main() -> None:
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run([test_uso_v4,
-+                  test_uso_v6,
-+                  test_uso_v4_exact],
-+                 args=(cfg, ))
-+    ksft_exit()
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.52.0
+        memset(buf, 0, sizeof(buf));
+-       int *irq_fds = (void *)&irq->data;
+ 
+        irq->argsz = sizeof(buf);
+        irq->flags = VFIO_IRQ_SET_ACTION_TRIGGER;
 
+Thanks,
+Alex
