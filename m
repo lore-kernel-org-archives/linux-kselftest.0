@@ -1,157 +1,212 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F4F30FC12;
-	Wed, 18 Mar 2026 17:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467563F8811
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 19:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773856521; cv=none; b=roioAG7GAb1MYS/X098UZrSj29Ge4nDxh6vy0T+kOdDVjQxoHwgR3PzGuIO/83E4XaSE91iQa8tm0+KUS9nlCcdHxh8H+FqZcTCjpLrNXjCoYb+raRX3DBPBXzW8AE5VQuOi33cN9Mz0xxSDm3onVUKyoynV5G3C5Ji+TuvFAfk=
+	t=1773861241; cv=none; b=QIkUtOm1gAi00t0nSvt7oB5JOSTqlDrNXbjRaiQFeoadTIuC833FiUybo0AqsNmEHjy7Xv0B9BLs0d6h84bUm2Oka0WdjTp4442rRY17LlBK7d9ykfC5Fd/vGEn2/ljj3/T59kxP/DwaIMFdVqYLHXykHPi6VqMKwpmj6Ja/xDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773856521; c=relaxed/simple;
-	bh=P7kc8uMgiIZ6+hoGNZb7Lk8njJKNoXVRMLqykWqJoGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zm0IwgZHgZv0TGcZQ1lx11LEPgke9cK2Q/fSeOPQdAlvk/iU1V/u39saeCwQ7SGe/ZCVI5TIMM1C9s79kbLLzg7Wv2FkCcMy04COKOScRa3H+HiY6nlMHKdsH8kYhIX0u2+oUxyG+pOohnLuMgpMgwSTgRL3qibccw1P5sUTi74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EiKdhGp6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773861241; c=relaxed/simple;
+	bh=bOIv1idMYclJig7dHHf8ZB5kdbI0WSQDOttniO+KCbs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WBYnr0HIRErvH1PFY5yFkZ2xc42q0KK897uvUP5gqAKOyZUB9QjIMSqlOWgp1VqyyvuFV0PR7qXLeIdbCBJ9Sta9TOEP5rYg2z/hh7rrnqV6FpPdQqT/lgqzo4ewo75qBkL3DNkfwlS/LywivS+DM5rz2Cwj5YkVjQjxbmmzacM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=Sgpm/1Fe; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EiKdhGp6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A08CC19421;
-	Wed, 18 Mar 2026 17:55:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773856521;
-	bh=P7kc8uMgiIZ6+hoGNZb7Lk8njJKNoXVRMLqykWqJoGk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EiKdhGp6pdH65RIGYoSzbzMf8ER0a1QHMKbgVNC7S8zStXsscXtq7PQbte82l2Tqg
-	 +WtCvx/g5Q5O/WCLTI+Szz0cAJGQpCbK467KwxsAMJOz+W3Y6THn1N6Bpo1+7hbPN1
-	 PGL+UUQUudWs2KZ5ZYFNskog3b7S5KQ1hJaoiZi7rTaK/2UB6Do89Mcw2qYnPt7KEo
-	 hoVqp7yZg39DZfMY1Dl0qY3PFub6rgRwYvu0mKzzEgcYkdiE8U5A6Z0S/75h+Ewlix
-	 wRjjgkfsSlrmIinJhYWiXXRkj30qXUQ64JQiz2lKyT16nVfr/fcjV1GB2vaTK02sLa
-	 SFPy2O2pbJp+g==
-Date: Wed, 18 Mar 2026 17:55:34 +0000
-From: Jean-Philippe Brucker <jpb@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v10 16/30] KVM: arm64: Support TPIDR2_EL0
-Message-ID: <20260318175534.GN2390801@myrica>
-References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
- <20260306-kvm-arm64-sme-v10-16-43f7683a0fb7@kernel.org>
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="Sgpm/1Fe"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2a9296b3926so1541955ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 12:13:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1773861237; x=1774466037; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zDgUXurlnboqnR9kUYXcG83BLVmHtjY+C3jwCrk3SN8=;
+        b=Sgpm/1FemW4HE9FTESN1VKa0U/dX6wBSVM5HUsfiIG47WQC20EEqnxPb1t+oTS/d3e
+         jFRrMFtgf+hDSf+1ydPyeV1lDFibFJbMaS7RXU4AqItu3W/NV5IyW1lTcCip84phvBEl
+         E/k7MzwS9iFsAi/cRiBr8yhB7cAKPohxUQp/tFsmE5VE9AA9MkbN2KhG4z+9mQa9kiSQ
+         Y3xRtgKXqVaLuFrSxUm/MUCR9bpWNuZkCqsEA3cMZnjrBFdD5gAUcJq1WmdLPXFY6Qzb
+         XfUDzoAci9plLTe+bN6KY+Hers7Q0wWCTu2FwzaBTgUV2U2oyPY8NX9oHvO3cfpayZNh
+         V24Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773861237; x=1774466037;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zDgUXurlnboqnR9kUYXcG83BLVmHtjY+C3jwCrk3SN8=;
+        b=DTTkU2ylnqKEER19WDixkyTNveKbjC/anOO3cUoHCvP5SkGx9mkNOdYnHbM9rkmfCl
+         a1Hs5SbZTv4bMXtPgp87jVMNvDZ4wCpc4NSwviuRjd3jcv4huhyfOfloTPHqWXQkO2cn
+         KkyodzmLWgC8+r4XJsj6dglAkkxMAFmWXmz65o02nBZxQnq8O8V9Ff0cBmfK6/WbZzw8
+         9u7iRoOu9tn8/WSbsTJkyG2NxIA5tKhdHh8x4TsYfcLCPavorp2Ciw5GHZSQJWCJ4q/o
+         f/t3DXskHMCIQ0oPxOIYPJrRSNYBgH8tkVapqSqLj7Nogg6hiRAtWCQDapeyKQh9PKS4
+         AG+A==
+X-Forwarded-Encrypted: i=1; AJvYcCX1O1KH3qixMc0S9+fHczETDqJWvVy0slL5T8Yga9A3lkDzYONHW3MAmVh8lYo2GO0u5ix5o2Wdmhc70pmN5yA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3by1BEL8OFtqarHdqVm0Bs5Gyrym43S8w7r7pDrxGtqTrvvnZ
+	Eoobp4/UNeuRsmDUiOVDT6KTglKHKRMJL4REg9u+1FBkTAtvIo5+9b3CCCSh7aTBL5s=
+X-Gm-Gg: ATEYQzyCEiaQAgx/avQC2/GlWjVTR8WD8ktLapo82+8p7Ia6/fj4mwNWOJS7SoclLQL
+	tdRy1qPQV73X6jvOAU0YJR7XHZpyqVytcOOEx38Sxaon4fyQv+NN0SyE89ttLBYDTjvkDxxTjdm
+	MOr5Yadrmvyuc8wqzWKu7NqcRtjVQf0ni/RwD1SoWrM0j3rvfleMUkz7NOHtOh215Nlhu5ke1/n
+	shGoHoidZPdQpVZFt2HyGAmOYr2vntrvymivVrcSii7OhYKG9FGJnyM9h7PZE7ax2d1LXS/z6E0
+	Vq3QzeqRukG48J3be0x/M+2HJWGzsVk22rdVw2vqdI8K0sov+1WGk6Ux0MdjSO9/AENHXb/KTN7
+	hnQ2i2DfrkO5gFXg4mHujPiaCCy1PIveOvzLfp5fNiKnp/1dSq9UU4wksCMQWSo5yLDqfV2+Dxx
+	+JUgo3
+X-Received: by 2002:a17:903:2a90:b0:2b0:4158:c9d1 with SMTP id d9443c01a7336-2b06e3e5bacmr53777575ad.36.1773861237621;
+        Wed, 18 Mar 2026 12:13:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:73::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e627132sm36037645ad.74.2026.03.18.12.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2026 12:13:57 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: horms@kernel.org,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	linux-kernel@vger.kernel.org,
+	leon@kernel.org,
+	Joe Damato <joe@dama.to>,
+	linux-kselftest@vger.kernel.org
+Subject: [net-next v3 12/12] selftests: drv-net: Add USO test
+Date: Wed, 18 Mar 2026 12:13:17 -0700
+Message-ID: <20260318191325.1819881-13-joe@dama.to>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260318191325.1819881-1-joe@dama.to>
+References: <20260318191325.1819881-1-joe@dama.to>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260306-kvm-arm64-sme-v10-16-43f7683a0fb7@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 06, 2026 at 05:01:08PM +0000, Mark Brown wrote:
-> SME adds a new thread ID register, TPIDR2_EL0. This is used in userspace
-> for delayed saving of the ZA state but in terms of the architecture is
-> not really connected to SME other than being part of FEAT_SME. It has an
-> independent fine grained trap and the runtime connection with the rest
-> of SME is purely software defined.
-> 
-> Expose the register as a system register if the guest supports SME,
-> context switching it along with the other EL0 TPIDRs.
+Add a simple test for USO. Can be used with netdevsim or real hardware.
+Tests both ipv4 and ipv6 with several full segments and a partial
+segment.
 
-I guess the register also needs to be added to locate_register(),
-read_sr_from_cpu and write_sr_to_cpu now
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ rfcv2:
+   - new in rfcv2
 
-> 
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/include/asm/kvm_host.h          |  1 +
->  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 15 +++++++++++++++
->  arch/arm64/kvm/sys_regs.c                  |  3 ++-
->  3 files changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index e5194ffc40a7..ec1ede0c3c12 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -445,6 +445,7 @@ enum vcpu_sysreg {
->  	CSSELR_EL1,	/* Cache Size Selection Register */
->  	TPIDR_EL0,	/* Thread ID, User R/W */
->  	TPIDRRO_EL0,	/* Thread ID, User R/O */
-> +	TPIDR2_EL0,	/* Thread ID, Register 2 */
->  	TPIDR_EL1,	/* Thread ID, Privileged */
->  	CNTKCTL_EL1,	/* Timer Control Register (EL1) */
->  	PAR_EL1,	/* Physical Address Register */
-> diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> index 5624fd705ae3..8c3b3d6df99f 100644
-> --- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> @@ -88,6 +88,17 @@ static inline bool ctxt_has_sctlr2(struct kvm_cpu_context *ctxt)
->  	return kvm_has_sctlr2(kern_hyp_va(vcpu->kvm));
->  }
->  
-> +static inline bool ctxt_has_sme(struct kvm_cpu_context *ctxt)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	if (!system_supports_sme())
-> +		return false;
+ tools/testing/selftests/drivers/net/Makefile |  1 +
+ tools/testing/selftests/drivers/net/uso.py   | 87 ++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/uso.py
 
-kvm_has_sme() already checks this
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index 8154d6d429d3..800065fe443f 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -22,6 +22,7 @@ TEST_PROGS := \
+ 	ring_reconfig.py \
+ 	shaper.py \
+ 	stats.py \
++	uso.py \
+ 	xdp.py \
+ # end of TEST_PROGS
+ 
+diff --git a/tools/testing/selftests/drivers/net/uso.py b/tools/testing/selftests/drivers/net/uso.py
+new file mode 100755
+index 000000000000..da7a68b15734
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/uso.py
+@@ -0,0 +1,87 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""Test USO
++
++Sends large UDP datagrams with UDP_SEGMENT and verifies that the peer
++receives the correct number of individual segments with correct sizes.
++"""
++import socket
++import struct
++import time
++
++from lib.py import ksft_pr, ksft_run, ksft_exit, KsftSkipEx
++from lib.py import ksft_eq, ksft_ge
++from lib.py import NetDrvEpEnv
++from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
++
++# python doesn't expose this constant, so we need to hardcode it to enable UDP
++# segmentation for large payloads
++UDP_SEGMENT = 103
++
++def _send_uso(cfg, ipver, mss, total_payload, port):
++    if ipver == "4":
++        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++        dst = (cfg.remote_addr_v["4"], port)
++    else:
++        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
++        dst = (cfg.remote_addr_v["6"], port)
++
++    sock.setsockopt(socket.IPPROTO_UDP, UDP_SEGMENT, mss)
++    payload = bytes(range(256)) * ((total_payload // 256) + 1)
++    payload = payload[:total_payload]
++    sock.sendto(payload, dst)
++    sock.close()
++    return payload
++
++def _get_rx_packets(cfg):
++    stats = ip(f"-s link show dev {cfg.remote_ifname}",
++               json=True, host=cfg.remote)[0]
++    return stats['stats64']['rx']['packets']
++
++def _test_uso(cfg, ipver, mss, total_payload):
++    cfg.require_ipver(ipver)
++
++    try:
++        ethtool(f"-K {cfg.ifname} tx-udp-segmentation on")
++    except Exception:
++        raise KsftSkipEx("Device does not support tx-udp-segmentation")
++    defer(ethtool, f"-K {cfg.ifname} tx-udp-segmentation off")
++
++    expected_segs = (total_payload + mss - 1) // mss
++
++    rx_before = _get_rx_packets(cfg)
++
++    port = rand_port(stype=socket.SOCK_DGRAM)
++    _send_uso(cfg, ipver, mss, total_payload, port)
++
++    time.sleep(0.5)
++
++    rx_after = _get_rx_packets(cfg)
++    rx_delta = rx_after - rx_before
++
++    ksft_ge(rx_delta, expected_segs,
++            comment=f"Expected >= {expected_segs} rx packets, got {rx_delta}")
++
++def test_uso_v4(cfg):
++    """USO IPv4: 11 segments (10 full + 1 partial)."""
++    _test_uso(cfg, "4", 1400, 1400 * 10 + 500)
++
++def test_uso_v6(cfg):
++    """USO IPv6: 11 segments (10 full + 1 partial)."""
++    _test_uso(cfg, "6", 1400, 1400 * 10 + 500)
++
++def test_uso_v4_exact(cfg):
++    """USO IPv4: exact multiple of MSS (5 full segments)."""
++    _test_uso(cfg, "4", 1400, 1400 * 5)
++
++def main() -> None:
++    with NetDrvEpEnv(__file__) as cfg:
++        ksft_run([test_uso_v4,
++                  test_uso_v6,
++                  test_uso_v4_exact],
++                 args=(cfg, ))
++    ksft_exit()
++
++if __name__ == "__main__":
++    main()
+-- 
+2.52.0
 
-Thanks,
-Jean
-
-> +
-> +	vcpu = ctxt_to_vcpu(ctxt);
-> +	return kvm_has_sme(kern_hyp_va(vcpu->kvm));
-> +}
-> +
->  static inline bool ctxt_is_guest(struct kvm_cpu_context *ctxt)
->  {
->  	return host_data_ptr(host_ctxt) != ctxt;
-> @@ -127,6 +138,8 @@ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
->  {
->  	ctxt_sys_reg(ctxt, TPIDR_EL0)	= read_sysreg(tpidr_el0);
->  	ctxt_sys_reg(ctxt, TPIDRRO_EL0)	= read_sysreg(tpidrro_el0);
-> +	if (ctxt_has_sme(ctxt))
-> +		ctxt_sys_reg(ctxt, TPIDR2_EL0)	= read_sysreg_s(SYS_TPIDR2_EL0);
->  }
->  
->  static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
-> @@ -204,6 +217,8 @@ static inline void __sysreg_restore_user_state(struct kvm_cpu_context *ctxt)
->  {
->  	write_sysreg(ctxt_sys_reg(ctxt, TPIDR_EL0),	tpidr_el0);
->  	write_sysreg(ctxt_sys_reg(ctxt, TPIDRRO_EL0),	tpidrro_el0);
-> +	if (ctxt_has_sme(ctxt))
-> +		write_sysreg_s(ctxt_sys_reg(ctxt, TPIDR2_EL0), SYS_TPIDR2_EL0);
->  }
->  
->  static inline void __sysreg_restore_el1_state(struct kvm_cpu_context *ctxt,
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index f13ff8e630f2..66248fd48a7d 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -3511,7 +3511,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
->  	  .visibility = s1poe_visibility },
->  	{ SYS_DESC(SYS_TPIDR_EL0), NULL, reset_unknown, TPIDR_EL0 },
->  	{ SYS_DESC(SYS_TPIDRRO_EL0), NULL, reset_unknown, TPIDRRO_EL0 },
-> -	{ SYS_DESC(SYS_TPIDR2_EL0), undef_access },
-> +	{ SYS_DESC(SYS_TPIDR2_EL0), NULL, reset_unknown, TPIDR2_EL0,
-> +	  .visibility = sme_visibility},
->  
->  	{ SYS_DESC(SYS_SCXTNUM_EL0), undef_access },
->  
-> 
-> -- 
-> 2.47.3
-> 
-> 
