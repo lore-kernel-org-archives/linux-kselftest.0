@@ -1,204 +1,134 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470C421ADC7;
-	Wed, 18 Mar 2026 15:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBE93EB816;
+	Wed, 18 Mar 2026 15:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773849032; cv=none; b=UNZjjM01HvaefOLU7zRX8QHnD7aPgyBhDuSXPaTBKvrewZPTCHHwdHZj8bgkzAkEYMO5/ypdR7UxbipCtYrSlPKLcKqMvyd1Eyq+VZoXdvu6f73ZDxVkhJPsnbuxVGLoJRt845qvRA4xelfFbyynt2jQKfAgi+XTQDOCAHprwnI=
+	t=1773849059; cv=none; b=ssn9Gup/MBoRY+FbFslWzom7u82CIVwkOSmOQYW2ykc4sEc6SbU02hv6w8atSthk+nxHQfcM123Lu5d58PrsHlBoef/dH+gtNpisy8i9+1SmP9NFLUZveygEqqRj0sSFJCpkkaUY1zStR7srOu6DsaV/UGnrtgv3LC0g8ZwuhU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773849032; c=relaxed/simple;
-	bh=CrltttxUhqp5Vd18DjWh/G2vFxyiJizaO2/2C6z0s1I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Kf/hRKwWkNb1Pp6F4KX666y72ffIPXNS8D5E/a5peK4nXOFYElWdwJuxCvkLfzFKxlAr9snN5vouqIXEYCumL19gLei0P86100SiqAWKzfRnb4anR1yUo/yAxi7ZcYF8LbXeu/2vwEcsjr0khClPUlg0IkaygxgEm7i3+njbRD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ZdUtQ81R; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1773849059; c=relaxed/simple;
+	bh=+lnjUkf0OHEY53UwRr8h7v/oOtyDAetw7DI1iPHt9uQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o35tdwc1xM9zJFnFDYIR0t+sAK90+ThumG4eBfwJA02uahsbS+TUKxLb9MqMj6A8b4lB2SEmMAAhYZ28KCJetGaIxeQmrblNXhVu+wFh7FqmticMYIH9BPZXu11fj04nxeVN5oCqdTovEcW4D9yH8VXzIqriWSQeMamcMZq+ztA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M1n2O9jy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ZdUtQ81R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1773849020;
-	bh=CrltttxUhqp5Vd18DjWh/G2vFxyiJizaO2/2C6z0s1I=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZdUtQ81RWqZBUEvU0CdmQRaWpt1q7ieeRyR05NlaaPCKUPMrDDZMTlTXoQdyux+5Y
-	 7hSp8QQURjEJ5PkeGaZU8mtFcysLO23wpGm+OAIG7p18Eo4xPujFrpjOlgpe740Xl0
-	 +YrAeYBYn5GIfnhT6gxbJ3Gvy715FussGiB1eX+0=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 18 Mar 2026 16:50:16 +0100
-Subject: [PATCH v4 1/2] tools/nolibc: add support for
- program_invocation_{,short_}name
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M1n2O9jy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E07C2BCAF;
+	Wed, 18 Mar 2026 15:50:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773849059;
+	bh=+lnjUkf0OHEY53UwRr8h7v/oOtyDAetw7DI1iPHt9uQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M1n2O9jyso3dRNfr2RL7B/BoUToKVIyLaPL8YERp/Gjvx3V6RZZrVmOHHRwYpvrKq
+	 HT6GYgSxGZvmeI8s05wE85MTrDk0kYKpONf6U+vyVc5KkRsSIyusrBw9J/QD05wt2a
+	 yO2dD+pvRncyx8QPa2DTHddBv72di/lHTp3xvBsshy+BqK+cckrphgENS1SlML2eNu
+	 8VRd90d/qtkDqBzglq2dKW2zzCRlxowbIt+SKpRnPTmzBZVdUAkXNd4gnrsonelGGZ
+	 gTfmwoaCU+EGnF3wSyBFgsN3WlAZRnRnP4UTv0w0FGO3Gm/P2I7HPjql5UoJR+568D
+	 i4Yc5FIj7Lt3w==
+Date: Wed, 18 Mar 2026 16:50:53 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Christian Bruel <christian.bruel@foss.st.com>
+Cc: Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Koichiro Den <den@valinux.co.jp>, fabrice.gasnier@foss.st.com,
+	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] PCI: endpoint: pci-epf-test: Handle -ENOSPC in
+ subrange map test
+Message-ID: <abrJ3X7BIU3In-bm@ryzen>
+References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
+ <20260318-skip-bar_subrange-tests-if-enospc-v1-2-f1a49534ebea@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260318-nolibc-err-h-v4-1-08247a694bd9@weissschuh.net>
-References: <20260318-nolibc-err-h-v4-0-08247a694bd9@weissschuh.net>
-In-Reply-To: <20260318-nolibc-err-h-v4-0-08247a694bd9@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773849019; l=5074;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=CrltttxUhqp5Vd18DjWh/G2vFxyiJizaO2/2C6z0s1I=;
- b=sxeXtpDSphiP/ja4oc9JlwX4imD1l+tYlXxoLUoTmhDbsqQLohWxByGjlxAHLjatkTr73Bp9S
- 0yG2BeZnxzYCe51jf7uboBC27KjH9hemnzlfrHqiwE2tm6R/AJ5bhhP
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318-skip-bar_subrange-tests-if-enospc-v1-2-f1a49534ebea@foss.st.com>
 
-Add support for the GNU extensions 'program_invocation_name' and
-'program_invocation_short_name'. These are useful to print error
-messages, which by convention include the program name.
+On Wed, Mar 18, 2026 at 03:46:28PM +0100, Christian Bruel wrote:
+> Report pci_epc_set_bar() -ENOSPC failure with the
+> STATUS_BAR_SUBRANGE_SETUP_NOSPC status bit. This can be used to
+> skip the subrange test if there is not enough iATU resources to
+> allocate it.
+> 
+> Link: https://lore.kernel.org/linux-pci/20260317152707.GA85951@bhelgaas/T/#m87e4c24173097a0ea70195b71aab294ad8d6c283
 
-As these are global variables which take up memory even if not used,
-similar to 'errno', gate them behind NOLIBC_IGNORE_ERRNO.
+I would drop the link.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/crt.h                   | 26 +++++++++++++++++++++
- tools/include/nolibc/errno.h                 |  4 ++++
- tools/testing/selftests/nolibc/nolibc-test.c | 34 ++++++++++++++++++++++++++++
- 3 files changed, 64 insertions(+)
 
-diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-index d9262998dae9..5bb492555f13 100644
---- a/tools/include/nolibc/crt.h
-+++ b/tools/include/nolibc/crt.h
-@@ -17,6 +17,7 @@ const unsigned long *_auxv __attribute__((weak));
- void _start(void);
- static void __stack_chk_init(void);
- static void exit(int);
-+static char *strrchr(const char *s, int c);
+> Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+> ---
+>  drivers/pci/endpoint/functions/pci-epf-test.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+> index 14e61ebe1f116ce04789b6f4c3e965296701ec53..6437f08f0cd4bd4645e380c915b7cf81e66b7c35 100644
+> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
+> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+> @@ -54,6 +54,7 @@
+>  #define STATUS_BAR_SUBRANGE_SETUP_FAIL		BIT(15)
+>  #define STATUS_BAR_SUBRANGE_CLEAR_SUCCESS	BIT(16)
+>  #define STATUS_BAR_SUBRANGE_CLEAR_FAIL		BIT(17)
+> +#define STATUS_BAR_SUBRANGE_SETUP_NOSPC		BIT(18)
+
+Perhaps STATUS_BAR_SUBRANGE_SETUP_SKIP ?
+
+>  
+>  #define FLAG_USE_DMA			BIT(0)
+>  
+> @@ -903,6 +904,8 @@ static void pci_epf_test_bar_subrange_setup(struct pci_epf_test *epf_test,
+>  		dev_err(&epf->dev, "pci_epc_set_bar() failed: %d\n", ret);
+>  		bar->submap = old_submap;
+>  		bar->num_submap = old_nsub;
+> +		if (ret == -ENOSPC)
+> +			status |= STATUS_BAR_SUBRANGE_SETUP_NOSPC;
+>  		kfree(submap);
+>  		goto err;
+>  	}
+
+Here you will have both STATUS_BAR_SUBRANGE_SETUP_NOSPC and
+STATUS_BAR_SUBRANGE_SETUP_FAIL set.
+
+Usually, we only have one bit set.
+
+
+Perhaps something like:
+
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index 582938b7b4f1..36e5d22f79ab 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -895,6 +895,10 @@ static void pci_epf_test_bar_subrange_setup(struct pci_epf_test *epf_test,
+                bar->submap = old_submap;
+                bar->num_submap = old_nsub;
+                kfree(submap);
++               if (ret == -ENOSPC) {
++                       status |= STATUS_BAR_SUBRANGE_SETUP_SKIP;
++                       goto err_status_set;
++               }
+                goto err;
+        }
+        kfree(old_submap);
+@@ -918,6 +922,7 @@ static void pci_epf_test_bar_subrange_setup(struct pci_epf_test *epf_test,
  
- extern void (*const __preinit_array_start[])(int, char **, char**) __attribute__((weak));
- extern void (*const __preinit_array_end[])(int, char **, char**) __attribute__((weak));
-@@ -27,6 +28,24 @@ extern void (*const __init_array_end[])(int, char **, char**) __attribute__((wea
- extern void (*const __fini_array_start[])(void) __attribute__((weak));
- extern void (*const __fini_array_end[])(void) __attribute__((weak));
- 
-+#ifndef NOLIBC_IGNORE_ERRNO
-+extern char *program_invocation_name __attribute__((weak));
-+extern char *program_invocation_short_name __attribute__((weak));
-+
-+static __inline__
-+char *__nolibc_program_invocation_short_name(char *long_name)
-+{
-+
-+	char *short_name;
-+
-+	short_name = strrchr(long_name, '/');
-+	if (!short_name || !short_name[0])
-+		return long_name;
-+
-+	return short_name + 1;
-+}
-+#endif /* NOLIBC_IGNORE_ERRNO */
-+
- void _start_c(long *sp);
- __attribute__((weak,used))
- #if __nolibc_has_feature(undefined_behavior_sanitizer)
-@@ -76,6 +95,13 @@ void _start_c(long *sp)
- 		;
- 	_auxv = auxv;
- 
-+#ifndef NOLIBC_IGNORE_ERRNO
-+	if (argc > 0 && argv[0]) {
-+		program_invocation_name = argv[0];
-+		program_invocation_short_name = __nolibc_program_invocation_short_name(argv[0]);
-+	}
-+#endif /* NOLIBC_IGNORE_ERRNO */
-+
- 	for (ctor_func = __preinit_array_start; ctor_func < __preinit_array_end; ctor_func++)
- 		(*ctor_func)(argc, argv, envp);
- 	for (ctor_func = __init_array_start; ctor_func < __init_array_end; ctor_func++)
-diff --git a/tools/include/nolibc/errno.h b/tools/include/nolibc/errno.h
-index 08a33c40ec0c..bab83692ea1c 100644
---- a/tools/include/nolibc/errno.h
-+++ b/tools/include/nolibc/errno.h
-@@ -15,8 +15,12 @@
- #ifndef NOLIBC_IGNORE_ERRNO
- #define SET_ERRNO(v) do { errno = (v); } while (0)
- int errno __attribute__((weak));
-+char *program_invocation_name __attribute__((weak)) = "";
-+char *program_invocation_short_name __attribute__((weak)) = "";
- #else
- #define SET_ERRNO(v) do { } while (0)
-+#define program_invocation_name ""
-+#define program_invocation_short_name ""
- #endif
- 
- 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 180611aabbfb..51da2f9e281b 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -42,6 +42,7 @@
- #include <unistd.h>
- #include <limits.h>
- #include <ctype.h>
-+#include <stdbool.h>
- 
- #pragma GCC diagnostic ignored "-Wmissing-prototypes"
- 
-@@ -702,6 +703,37 @@ static void constructor2(int argc, char **argv, char **envp)
- 		constructor_test_value |= 1 << 1;
+ err:
+        status |= STATUS_BAR_SUBRANGE_SETUP_FAIL;
++err_status_set:
+        reg->status = cpu_to_le32(status);
  }
- 
-+int test_program_invocation_name(void)
-+{
-+	char buf[100];
-+	char *dirsep;
-+	ssize_t r;
-+	int fd;
-+
-+	fd = open("/proc/self/cmdline", O_RDONLY);
-+	if (fd == -1)
-+		return 1;
-+
-+	r = read(fd, buf, sizeof(buf));
-+	close(fd);
-+	if (r < 1 || r == sizeof(buf))
-+		return 1;
-+
-+	buf[r - 1] = '\0';
-+
-+	if (strcmp(program_invocation_name, buf) != 0)
-+		return 1;
-+
-+	dirsep = strrchr(buf, '/');
-+	if (!dirsep || dirsep[1] == '\0')
-+		return 1;
-+
-+	if (strcmp(program_invocation_short_name, dirsep + 1) != 0)
-+		return 1;
-+
-+	return 0;
-+}
-+
- int run_startup(int min, int max)
- {
- 	int test;
-@@ -716,6 +748,7 @@ int run_startup(int min, int max)
- #ifdef NOLIBC
- 	test_auxv = _auxv;
- #endif
-+	bool proc = access("/proc", R_OK) == 0;
- 
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; /* line length */
-@@ -741,6 +774,7 @@ int run_startup(int min, int max)
- 		CASE_TEST(constructor);      EXPECT_EQ(is_nolibc, constructor_test_value, 0x3); break;
- 		CASE_TEST(linkage_errno);    EXPECT_PTREQ(1, linkage_test_errno_addr(), &errno); break;
- 		CASE_TEST(linkage_constr);   EXPECT_EQ(1, linkage_test_constructor_test_value, 0x3); break;
-+		CASE_TEST(prog_name);        EXPECT_ZR(proc, test_program_invocation_name()); break;
- 		case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
 
--- 
-2.53.0
 
+
+This patch should probably be 1/3.
+
+
+Kind regards,
+Niklas
