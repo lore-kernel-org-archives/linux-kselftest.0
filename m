@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCA72586C2;
-	Wed, 18 Mar 2026 07:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2286A285CA4;
+	Wed, 18 Mar 2026 07:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773819313; cv=none; b=iJ/j1DppadJSyhGosGVMkME57zDyiS1EbNVFHQuMtZ3GMZG2Cx+XFq/lkms/BvmzM3IMhAX1yU4hi1N3GGfACzYqBfnSCTTXIXyG4Kh9ralo9og60rWg02x2S4KO+Vl6DtdMiWNzxErPWkMeh7el5pF5BIpVt3o1FjedsIx3q7M=
+	t=1773819499; cv=none; b=F4MdNm11z1D/Lu4Jq3rlP7Q/KECufyBWmUGnCsxFsp7QW3MaueQkDXRHf5LQzPynq2/toED/bAVUGdM4aFAi6fCqUlbTv4AaFbYu/XrT5OC62k0aw8IwnNSQx+OHC9IKLnDjB/1tR399gKWiOCF9IMoO44i+QCT5PCh9Br1Vang=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773819313; c=relaxed/simple;
-	bh=aKgcvPGTjYha//Cur4xRQFNmv+GIS6eHhEkPZRVaV+g=;
+	s=arc-20240116; t=1773819499; c=relaxed/simple;
+	bh=lAavQhWxUHh6y2yrdQoAQfAj8drjCm9e/GYE2XSeyn4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O1BMdfY3coZPiS10mEho7ZOcsbrfwiG+5zIoLpO8t2Oo5QGGCYFQkHCRkMfNqJfLsWmgPmpivD4/jhIwKM9GEHVZn1JfARb8Xjbc7/ITGSmkgmbyfT3ALBYDb5SPyxfrmSN3G7NOwCsMchmNBFUXmeCm/goVIa7rsDlk1VsXBhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dBGgZIb+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=M+cgo7Z/CMmZt4hJeE/f/0a9KFpkdZqt6imXIqttcIt72SLQcVBdwpF0RaA3R63eQ39AgA5s/cpTwu+hiKlu9MrREMQ1/ZLixuDfzrjsXo5sLXbwikW4nyf/qv7OWZBcvWslXBJe/sQmRwZAfEk+wBkRciWsb/KOTCoyP1OO3M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V2Ntsu55; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dBGgZIb+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8163C19421;
-	Wed, 18 Mar 2026 07:35:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V2Ntsu55"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB500C19421;
+	Wed, 18 Mar 2026 07:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773819313;
-	bh=aKgcvPGTjYha//Cur4xRQFNmv+GIS6eHhEkPZRVaV+g=;
+	s=k20201202; t=1773819498;
+	bh=lAavQhWxUHh6y2yrdQoAQfAj8drjCm9e/GYE2XSeyn4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dBGgZIb+ecwylwaxTk0P155leL9bw1r4hZwUIDB4+tm7bPE1ypoetja9t3ZmzSaDD
-	 6KxanD+Ro5fANTpuBuHWvBvR0zNIlB1k173drlfkGBzTC7JqBDGNp5RN7GAGQTLzja
-	 tia7yL5G8mVVk+2pKUWkiXIDw9IrDSNsOUhfEWc9sPs1ikgIdTYT+0h2/AhnvyYSTj
-	 i/EDNUnE5nChQY6TsfWPo/7nLECcFXsGVOYHVHYS9vLwCmWF/57Mf+YCdwYkz4dbAy
-	 t5UVqN2Yn4DaNlx8BZvTdR0lEFoXcNyV+1COoQ5YrcFuBPEbIjkJ1AWGAdMAF1zI1U
-	 20t2h+ipomKZQ==
-Date: Wed, 18 Mar 2026 09:35:08 +0200
+	b=V2Ntsu558QoaAICbByIqy4hCtufSKkWV6RFmG1v8kx6g0jX9Hz/4QP0+X6T9AzipU
+	 CKDO3AVN33S9phh8FfX/0ip8Xud2JKQ5ExMRmOoISNcBXJwvji+L+gQLKAPiEXGJ4V
+	 4tnEBnp5UrfwDTfM2qrAv4PN7paoxM2XD4WlBSYM6Ouifp7bLgpY6TJ2/PvujZXAR1
+	 ewvYRtBHPkDz/KJ7MaMu7vI1Z2uLpAqJcfCZec1jog/ndCZSvAvfxjHHjm0NdG8jbo
+	 MgumssLY4K/0BfZGf1IA8juJI8omzcWinfh3l23GPlbPOSU82T5BYW4Y7YnTMOM4vo
+	 Jv8TnATToccdA==
+Date: Wed, 18 Mar 2026 09:38:13 +0200
 From: Mike Rapoport <rppt@kernel.org>
 To: Pratyush Yadav <pratyush@kernel.org>
 Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
@@ -34,11 +34,11 @@ Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: Re: [PATCH 4/6] selftests/liveupdate: add test for zero-size memfd
- preservation
-Message-ID: <abpVrFwp9h6lqfhm@kernel.org>
+Subject: Re: [PATCH 5/6] selftests/liveupdate: add test for operations on a
+ preserved memfd
+Message-ID: <abpWZZWaxUVg1HYd@kernel.org>
 References: <20260309115441.266805-1-pratyush@kernel.org>
- <20260309115441.266805-5-pratyush@kernel.org>
+ <20260309115441.266805-6-pratyush@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,69 +47,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260309115441.266805-5-pratyush@kernel.org>
+In-Reply-To: <20260309115441.266805-6-pratyush@kernel.org>
 
-On Mon, Mar 09, 2026 at 11:54:37AM +0000, Pratyush Yadav wrote:
+On Mon, Mar 09, 2026 at 11:54:38AM +0000, Pratyush Yadav wrote:
 > From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 > 
-> A zero-size memfd is a special case of memfd preservation. It takes a
-> different path from normal both during preservation and during restore.
-> In the serialization structure, the number of folios if zero and the
-
-                                                       ^ typo: is
-
-> vmalloc array with folios is empty. The restore logic should check for
-> this and make sure to not touch the invalid array.
+> Once a memfd is preserved, certain operations are not allowed to
+> succeed since they might make the state of the memfd inconsistent with
+> the serialized state. Among these operations are truncating or growing
+> the memfd. Writes and reads to already existing memfd should succeed.
 > 
-> Add a test to make sure this path works as expected. In stage 1, the
-> test creates and preserves a memfd without any data. In stage 2, the
-> test retrieves the memfd and makes sure it is still without data.
+> Add a test that makes sure a preserved memfd does not allow growing or
+> shrinking, but does allow reads and writes to existing memory to go
+> thorough.
 > 
+> Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
 > Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-> ---
->  .../testing/selftests/liveupdate/luo_memfd.c  | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
-> index 52b5f6b16e19..56106cd09978 100644
-> --- a/tools/testing/selftests/liveupdate/luo_memfd.c
-> +++ b/tools/testing/selftests/liveupdate/luo_memfd.c
-> @@ -36,6 +36,9 @@
->  #define MEMFD_DATA_BUFFER_SIZE SZ_1M
->  #define RANDOM_DATA_FILE "luo_random_data.bin"
->  
-> +#define ZERO_SESSION_NAME "zero_session"
-> +#define ZERO_MEMFD_TOKEN 1
-> +
->  #define LIVEUPDATE_DEV "/dev/liveupdate"
->  static int luo_fd = -1, stage;
->  
-> @@ -89,6 +92,50 @@ TEST(memfd_data)
->  	}
->  }
->  
-> +/*
-> + * Test that a zero-sized memfd is preserved across live update.
-> + */
-> +TEST(zero_memfd)
-> +{
-> +	int zero_fd, session;
-> +	struct liveupdate_session_preserve_fd preserve_arg = { .size = sizeof(preserve_arg) };
-> +	struct liveupdate_session_retrieve_fd retrieve_arg = { .size = sizeof(retrieve_arg) };
-> +
-> +	switch (stage) {
-> +	case 1:
-
-Helper functions?  And in other tests that do save and restore too?
-
-Otherwise
 
 Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-
-> +		session = luo_create_session(luo_fd, ZERO_SESSION_NAME);
-> +		ASSERT_GE(session, 0);
-> +
 
 -- 
 Sincerely yours,
