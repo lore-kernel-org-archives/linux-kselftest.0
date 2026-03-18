@@ -1,186 +1,90 @@
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1680E3ED101
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 15:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B136127EFEE;
+	Wed, 18 Mar 2026 15:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773846214; cv=none; b=AH4S4h4eRELG8zS4GNtD1KCO53Y7ZQ23LK0RL4snIwRURsO7yphtIFTFBntu0Y7/cGcZgqmSTosVzcrWI9UBSAXVv9O8chlj+gJyEx6CWVCIiMdwFsgqM6Qyo75XZHpc9QEOKnAPPE2/Wa6lYMyAL3xJH0z6GdKIUzMM3ovhGpo=
+	t=1773847942; cv=none; b=KjuWi2bvpIIG9HDECOP3ZE6lejg4eESe509JZPl55kVtzIggEtUhAn3cWSOt4hpf4ONDmJG9+uI1u2xCuTY2/f/Q8h+QeJbHbR3ZQEXIIP8QYhmSV/29RBvUe2F/GOLI84SpCGBPyvmp0miqi0e19G7aJcjxJ2hp50QjYzOGOXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773846214; c=relaxed/simple;
-	bh=fFbx4L7c5RG8MsSh64xUKulTqmO1Wn4GpSHiz4YrwzM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GzS9EjKd/HtOY7oaQipdsuvPtOiouylfi/bV1tmYdyC+Hc9rQmnsUJgwlN0vUi5sLdTrwB8EGQd497jWh4O1Ea3C46wgam3EhsvtHPoRtVRVdgqe0YzzwAAK8NQL92Dbd45XosD9NuG9X+Xbm+EpMm9LQjWirLptk7FE0wI+MCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-127380532eeso192907c88.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 08:03:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773846209; x=1774451009;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LwI56IvSstpXQXaX8+DYC8cYl7ak5TMhpM2nnpgQBwA=;
-        b=i4kkTqVxqkhIN6jQ8UOOVwo9GzWK3V3MHq/2XW5PytPdpHTcFI+HI5BjAj7HNySCk0
-         R8H8T6usIXJHP02lPORARkV0nABXA0i4Pbl+ATMxamUYJ3PR4CAS24Drr1X64wCEPILi
-         4l3yLogbza8sDrnEXsDrJqVPDu3YBvhypLsvW+LTbbDFVlQnYBjyPM3ldXTLrSf7IYlY
-         U1lKH6KHb950bO1kt3GLIoAz1uOTXTY2cXg53Lq+JA8YJWbCO4Zvbyo7I613RFmTq36C
-         WZdkKlt+fgrZ6biTZG8sAq8wC0uHGKkKwW8+Btd//HEb6mvimnU71FjgjWK92nkTxBPL
-         l5IQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWiZZ3q+Vm6lpXaGhf+QDf4uhMTZvmqA+wKqKU/uJIQqyqOeh1mxYMcQ2IrON2Ro5JD2kalJ1CPct+ih+nXPLk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGMV46RqkMAWWn1CuTQXfTL7k3OdeisMijkkD+FUbhhEHs8l6m
-	QNFyfFBnSUXydaOJY2Ozq6otWlc8bVVvR/sI1P77nwyX9o5Qh6XkjNU=
-X-Gm-Gg: ATEYQzz3BLRsJDMWPb3+nvQOu1nDFWvYnAMQJiVj0P90PleyFiEHsFgL5pQAUbQATGe
-	zko0Ez+Da2liTM6X4gnzG4UtFMQM6MFLQVFlH2uUtZ8KNhPp/3clPo0sNOOwGDd4IGBMmBlDqSB
-	m19rKF/Ww/f1hbigR8k6tnaF221SM+FtEfekBkP9+nkDquYuUiC2T35CMD2a4x6NrT58+XJ1GmW
-	Jja4Q/zdekoA/Wix93lxiDVQwYb7tWDwtuavxjXIlyB7wtv3ta0zk6LMkTu27Pz6uLjpNphTPZ2
-	ayx9UrliRFQY/dAjccZygvZwJLZQADcMI0/8rVT/sNEAwveOpP2mBjJA8fet2ZY/4rqmUGkmL+O
-	Ty4mu4mjpF48jh0PC4pA7Ay9I1fzQa9RxDnMVdau27fdmYrS/DQe0qRVaEXm3y/5Ldu8rIgrVmt
-	kAhj7C1ohhQ0o1GKBA49emowoLdxg3aCs18MJm/6hfkwh2S2PYkA/xLb7jrqvm6nWmk/zVKLIj4
-	Xt1SPytOFFXvu4EXA==
-X-Received: by 2002:a05:7022:43aa:b0:11b:c1ab:bdd4 with SMTP id a92af1059eb24-129a70eab62mr1700585c88.38.1773846208379;
-        Wed, 18 Mar 2026 08:03:28 -0700 (PDT)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-129a7256263sm3541023c88.4.2026.03.18.08.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 08:03:27 -0700 (PDT)
-From: Stanislav Fomichev <sdf@fomichev.me>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	andrew+netdev@lunn.ch,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com,
-	saeedm@nvidia.com,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	alexanderduyck@fb.com,
-	kernel-team@meta.com,
-	johannes@sipsolutions.net,
-	sd@queasysnail.net,
-	jianbol@nvidia.com,
-	dtatulea@nvidia.com,
-	sdf@fomichev.me,
-	mohsin.bashr@gmail.com,
-	jacob.e.keller@intel.com,
-	willemb@google.com,
-	skhawaja@google.com,
-	bestswngs@gmail.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-rdma@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	leon@kernel.org
-Subject: [PATCH net-next v2 13/13] selftests: net: add team_bridge_macvlan rx_mode test
-Date: Wed, 18 Mar 2026 08:03:05 -0700
-Message-ID: <20260318150305.123900-14-sdf@fomichev.me>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260318150305.123900-1-sdf@fomichev.me>
-References: <20260318150305.123900-1-sdf@fomichev.me>
+	s=arc-20240116; t=1773847942; c=relaxed/simple;
+	bh=zcSDVZOm/DIOWLjP1a1OYnDj8XnY+hRZW2+iIhv+0wQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PdIOXxj6hz35pbUni1kQFJX0DLN0hIM5+C5cw5hhXcijqgAvNn2/3IdIksbzdd9Eh7I9iIaRsirIeBRBKQcikhZpVZzlqBx0Y8aoBq8q154NPheekW541PSc+17mDOHtl/m3IhJ6M1y5h8EamUCc5FDTiMNU4xWGXphGx4jSUkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HutKBBKv; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HutKBBKv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAF1C2BC87;
+	Wed, 18 Mar 2026 15:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773847942;
+	bh=zcSDVZOm/DIOWLjP1a1OYnDj8XnY+hRZW2+iIhv+0wQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HutKBBKvVtTWpWIhzWm1Vf+XBqTX1mkoyxJGhDZkh2ysLmG2+CrmtNrCflKo/ibwL
+	 7y5SvIXuLCGllVBRvFpkw8CHHIFtoJntrFwLBpVovam+ZWigBAm1xMoS2cY8nqt6mS
+	 jy+fW7Qs/ylIuvpS63XkiWV+UI3pmU98Sf+9q0nUJvAkp1eyfLk3DkwHNM2ylIoM1/
+	 fZK8iu67F8XrV4m9Y92zdMhXtSegXnau7SeyGpnU6Qi2QRsrOaaF08lQ8Z6256A2Ba
+	 sk9gD5kGtG1wchboXsJU4QBkVo/IlBAwsGjFADVRLNa4fxDTOIGE5aJd6cJ2lBwoSM
+	 bO6bKobL9LBWA==
+Date: Wed, 18 Mar 2026 16:32:17 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Christian Bruel <christian.bruel@foss.st.com>
+Cc: Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Koichiro Den <den@valinux.co.jp>, fabrice.gasnier@foss.st.com,
+	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] selftests: pci_endpoint: Skip subrange map test if
+ iATU allocation fails
+Message-ID: <abrFgYcgpmNwDvNg@ryzen>
+References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
+ <20260318-skip-bar_subrange-tests-if-enospc-v1-1-f1a49534ebea@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318-skip-bar_subrange-tests-if-enospc-v1-1-f1a49534ebea@foss.st.com>
 
-Add a test that exercises the ndo_change_rx_flags path through a
-macvlan -> bridge -> team -> dummy stack. This triggers dev_uc_add
-under addr_list_lock which flips promiscuity on the lower device.
-With the new work queue approach, this must not deadlock.
+On Wed, Mar 18, 2026 at 03:46:27PM +0100, Christian Bruel wrote:
+> Handle -ENOSPC error. If the number of available inbound ATU entries is
+> insufficient to map the subrange, skip the test instead of failing.
+> 
+> Link: https://lore.kernel.org/linux-pci/20260317152707.GA85951@bhelgaas/T/#m87e4c24173097a0ea70195b71aab294ad8d6c283
 
-Link: https://lore.kernel.org/netdev/20260214033859.43857-1-jiayuan.chen@linux.dev/
-Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
----
- tools/testing/selftests/net/config       |  1 +
- tools/testing/selftests/net/rtnetlink.sh | 44 ++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+I would drop the link, it does not really add any value.
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 2a390cae41bf..94d722770420 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -101,6 +101,7 @@ CONFIG_NET_SCH_HTB=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_SCH_NETEM=y
- CONFIG_NET_SCH_PRIO=m
-+CONFIG_NET_TEAM=y
- CONFIG_NET_VRF=y
- CONFIG_NF_CONNTRACK=m
- CONFIG_NF_CONNTRACK_OVS=y
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index 5a5ff88321d5..c499953d4885 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -23,6 +23,7 @@ ALL_TESTS="
- 	kci_test_encap
- 	kci_test_macsec
- 	kci_test_macsec_vlan
-+	kci_test_team_bridge_macvlan
- 	kci_test_ipsec
- 	kci_test_ipsec_offload
- 	kci_test_fdb_get
-@@ -636,6 +637,49 @@ kci_test_macsec_vlan()
- 	end_test "PASS: macsec_vlan"
- }
- 
-+# Test ndo_change_rx_flags call from dev_uc_add under addr_list_lock spinlock.
-+# When we are flipping the promisc, make sure it runs on the work queue.
-+#
-+# https://lore.kernel.org/netdev/20260214033859.43857-1-jiayuan.chen@linux.dev/
-+# With (more conventional) macvlan instead of macsec.
-+# macvlan -> bridge -> team -> dummy
-+kci_test_team_bridge_macvlan()
-+{
-+	local vlan="test_macv1"
-+	local bridge="test_br1"
-+	local team="test_team1"
-+	local dummy="test_dummy1"
-+	local ret=0
-+
-+	run_cmd ip link add $team type team
-+	if [ $ret -ne 0 ]; then
-+		end_test "SKIP: team_bridge_macvlan: can't add team interface"
-+		return $ksft_skip
-+	fi
-+
-+	run_cmd ip link add $dummy type dummy
-+	run_cmd ip link set $dummy master $team
-+	run_cmd ip link set $team up
-+	run_cmd ip link add $bridge type bridge vlan_filtering 1
-+	run_cmd ip link set $bridge up
-+	run_cmd ip link set $team master $bridge
-+	run_cmd ip link add link $bridge name $vlan \
-+		address 00:aa:bb:cc:dd:ee type macvlan mode bridge
-+	run_cmd ip link set $vlan up
-+
-+	run_cmd ip link del $vlan
-+	run_cmd ip link del $bridge
-+	run_cmd ip link del $team
-+	run_cmd ip link del $dummy
-+
-+	if [ $ret -ne 0 ]; then
-+		end_test "FAIL: team_bridge_macvlan"
-+		return 1
-+	fi
-+
-+	end_test "PASS: team_bridge_macvlan"
-+}
-+
- #-------------------------------------------------------------------
- # Example commands
- #   ip x s add proto esp src 14.0.0.52 dst 14.0.0.70 \
--- 
-2.53.0
+> Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+> ---
+>  tools/testing/selftests/pci_endpoint/pci_endpoint_test.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> index c417fb3a198b2d92c3060938c23807cc8bea5573..8ea2fda4539d11eb22b22800a7cb8bbaa99c91ba 100644
+> --- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> +++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> @@ -88,6 +88,8 @@ TEST_F(pci_ep_bar, BAR_SUBRANGE_TEST)
+>  		SKIP(return, "Subrange map is not supported");
+>  	if (ret == -ENOBUFS)
+>  		SKIP(return, "BAR is reserved");
+> +	if (ret == -ENOSPC)
+> +		SKIP(return, "Not enough ATU entries to allocate subrange");
 
+ATU is a DWC specific term.
+I would use "inbound windows" instead.
+E.g. "Not enough inbound windows to allocate subrange"
+
+
+Considering that the selftests is highest up the stack, I would put this
+patch as 3/3 and not 1/3.
+
+
+Kind regards,
+Niklas
