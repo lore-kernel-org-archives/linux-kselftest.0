@@ -1,143 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023114.outbound.protection.outlook.com [40.107.162.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74BB3B6C1C;
-	Wed, 18 Mar 2026 12:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773835630; cv=none; b=nT4hkps1E9fhJyMhuBVKuRBDlniPI8DMDVECydjI+rDj7tT7Mo/iuiS4AlIHKmGrAfyLZdqLzCvhQSdSGtzUc+6exihUftWvsxQ3hHAd/KsY9uU4u2TuE9+y+bw9wrd7b3kr/6qFxv1ku9HOpL9ujU4Yb14gFgD6u6MfKN2C84g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773835630; c=relaxed/simple;
-	bh=Qwy/Zw7mfBZ5j/QG9jUPEflfhiHhV/iYcxuVi6gsuBg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XB9hxSJl0vU/6RbqT6+yvTgs3R/D3xbfjvUe6E5AEnwLHE/oj9l6Z0kREBmH1LZAHAucxlln4GnOtSovG8vQVjL+ksvjS26Kk722FmGuZqdTLrkYZ2xBSWBnDJ7aWUu1ZETnoAhOk1XnQeF9upV6CZeT/cRcpnNg7pouzHJl+tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=leByJek7; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3B737AA63;
+	Wed, 18 Mar 2026 12:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.114
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773836533; cv=fail; b=PzT12nOxlSc9Ir9itr2rjnYGvtXyQ5QNmBDow8xpaV/IMMkjX3Pl20Pa/zW0oAutwQriEHyjDA9323nfJzUPB5pnYqZl0d87U4nvCijVgpG1OUlIoQpkthFiMmSw+UWrFzGC3wPEPs8H60FKAYb4tQ3+xtfBjY2+7Z4KepZB22s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773836533; c=relaxed/simple;
+	bh=DqCiXWX0+4/XcGoVhqNO0utJU4u2ZZ8onyMfgfyIflU=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=HpmdNnmcFkO1N0UiEFAZ41wrK7yFwTcEZGcr0Y0aAb5q1MkjCiY/1tyhFogvG/vWmBG1FQxbkpAkd6Mm7+xxik4yCnjnO5wO+/7FWnUDFkgs7nlwtCDyK24/qEpLlbhDfKVtSzCVZz+tqZITybX7WbbpqQHSjNFQkI9YsjGd1Ss=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=wOkulb4c; arc=fail smtp.client-ip=40.107.162.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="leByJek7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D426FC2BCB3;
-	Wed, 18 Mar 2026 12:07:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773835630;
-	bh=Qwy/Zw7mfBZ5j/QG9jUPEflfhiHhV/iYcxuVi6gsuBg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=leByJek7uVZg6cUI421E1qlsRgFu5i1j9Nrcp9TwCu1n/m2wuj0G9A52e2o93gCeH
-	 UE8Pm3pCz99lvNY5DqI85yN3uJYOlzA3MSCA7F49p9zmHwWV9oVeNp2NZ1TNGNAfRS
-	 oGhFtbj4lm5IYM6RTSEdhV8PdXr6kYryFRfIw7C4fAjIQdQMagG3Z2yZR9xv/SxKwc
-	 zK9ZzLYMWbYW2D+n2DghLnEarPNB2t3FbiaIQPvqj5iRhnDXQEt2/q1ki88ccS2Q9s
-	 b7uYJ/mi0bRuEp60/+SEKCMz7RW1DeHIkSAEHZKEVgY1R4GQiYyZ8OaOiRipCnMwrN
-	 uolUohi6Gzm/A==
-Message-ID: <ee3ca88c-d6ea-44cf-8f75-e996d52c4c92@kernel.org>
-Date: Wed, 18 Mar 2026 13:07:03 +0100
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="wOkulb4c"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FG4149eeF2BypUeCc3oTpTNoT8xaq3fLJsPhQTR0qVqBTA8Hi8DgBoikPfOjoJclMbDeojIqbUeirW36/RK7jAiLU6e/lIkRL1U7ccwBEHiUV2pmU/HoXt1d1FbUFNw6u+7tW1cv78Fpk28AkpfESbAGmfntKPZdEWaV2Dfa293sSze7jAWGNgjWOYxm0nl0fjukP7VnEZi1oo9gj9KECLKHnzxJzVmzJvdeiTVapMP/cQXFRzF6hj2fle0ZjpVE0ggm6KTRtiDJk7y95ziqdc6hlygP0ltVCfypkVYfMax0sGkOQzRqjWS4yY5ePyaXSvKKrisxdpgPRVCECnROpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cII6IWXqlDfrwosr4EmtT1W7PdmqCqC/TgOY5suwxNA=;
+ b=upbY2dtuqxYEWiQyKMNpSdi/S7t0i42ynVBIW4Kc6khzfrRvyK24C7+3IcL/FPeDav0faSVkg7OghaDwiAQgj8aMFcgXiBqWBMPouQc9mKrmWJw0ST76RJZYL2IC+Uq5uqHYqW8fZeC67Q9/SnD8ZsGaxRVOa2Upwvukno/ax53yHh9YTNXZeGp+V1kNVBGv+HfLh7k1T9h/trkLXUgWtafaqQA9tNb/T0vExqmoxVIyknHvFQWVTVJl/Ht0U0oyJn9V1q8E6JkUIoKxQZujBs78OpDjqWV1LN/c2dsEaA+0TWJ7LRgsorpLMVd8rFNBa3QqkOLoJErLlc7Jxp3w+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cII6IWXqlDfrwosr4EmtT1W7PdmqCqC/TgOY5suwxNA=;
+ b=wOkulb4c2ObMa8JGXaGPzdmfrMH6sMYKUL+AgGFHv7La+D/D9k2bu7umR1gN5HOSz0UrIencLkaDqXj6Fv18X7EMqKyF8Fo0/7oYXi4PlQPcR7cobfLYI6uJ380xIYiiJsLEgPoF22+9+MCCe305wD+gLwFuwMT/hgFNGjOptWm16bP48wML9fu9oG/d49tO6idHOuPgvqd7r+E7rb+u2HhyuMtxXtRU+hmidSN+yytJeon4qJ9OTP8xiVUsyMRz2MkA5BevePTD/viXB8Xok9i41pMo3OfU3yafNOFLt1Q144CBdgrVP/QfI421i7fLM48wXpECguAKjUWjKxztTQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
+ by DBAPR08MB5830.eurprd08.prod.outlook.com (2603:10a6:10:1a7::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Wed, 18 Mar
+ 2026 12:22:08 +0000
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9723.018; Wed, 18 Mar 2026
+ 12:22:06 +0000
+From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Jan Kara <jack@suse.cz>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Andrei Vagin <avagin@google.com>,
+	Kirill Tkhai <tkhai@ya.ru>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Adrian Reber <areber@redhat.com>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v6 0/5] pid_namespace: make init creation more flexible
+Date: Wed, 18 Mar 2026 13:21:48 +0100
+Message-ID: <20260318122157.280595-1-ptikhomirov@virtuozzo.com>
+X-Mailer: git-send-email 2.53.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0045.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:c7::14) To DU0PR08MB9003.eurprd08.prod.outlook.com
+ (2603:10a6:10:471::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] selftests/mm: skip several tests when thp is not
- available
-To: Chunyu Hu <chuhu@redhat.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
- baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
-References: <20260317094419.1429259-1-chuhu@redhat.com>
- <20260317113730.45d5cef4ba84be4df631677f@linux-foundation.org>
- <abpu4OMsy3Xl5QA0@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <abpu4OMsy3Xl5QA0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|DBAPR08MB5830:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a1b2dcf-aa04-4d20-d931-08de84e8f826
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|52116014|376014|366016|10070799003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	q2Tv2Q95XJBn9Ilwav93YKH3Tq7B8K7qyCB3JVEYHP+HI0z8R1zSjkndciEIk0zAEJpveH2/D8CyAyrPs1znsyb9PKeLiEEhHM0+kToGffY/GHBbTP19vjxQ5vtK7IYWR9fdANZy50B8dhzOVgraqes6M5AOxcujRzw+zomSaJjuFVEyZKGp0oLN0cr3XpdSWI03nUkvappKbwyyMPlg7lLO2uE8u3s+GzYbhXapq1MAVokLxyo7LtfUBTl0KncmTA52BK3eCxJ8iXn/c4I7A0RgtgrO61sMsGCyoTG/IaBrXrT+TyLs2p7TjOITxMG2tlf0RX9aSNcTCeKQN8Y9u/1DaK3GVE/mFowfzDLGhY3FRpiH/7ajc6rJvTiaNXnBzEYcf0s75IYUdUY7+3AUFw8+y5J7s4u7EV7M5oJq3pmWyl5asQtFsaaVzy8tIza4mRbYvVx387aaBr6qptThGk2l9FO9ufi5hthnpXoQWC/2OrR2SM2Ro6XyonbFwsDyqMvkyXN56hnM2PNI59sKFaeaeen8cf+gvF8p34xJfkRzuc8Zg4aFW76yJe1tbUn78msL+A/x5hzdHefzjT9SIKedHpBX040RQyLXa2H6Fn29mKGk7mtXAq2ePrzDZzMYgRGFMf4NUoqYpe6q23gtNP/tNrKY67FOZrx3c43VTpVLrFU/eitjhHiGGXLLPbPbHKkTXENzyF+NPr3cK6GTPzXUa0TtGY6cdOfr0125ERU=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(52116014)(376014)(366016)(10070799003)(56012099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eHZIamZZTmp1cXUzMk52RmozYmtMOHltYzMxZjVlc092VUd5TUdERU10dGdE?=
+ =?utf-8?B?V09kODgrLzRQeGk0QWdleFZHWEo1RFhXMHQ3RlNlSDFKeFFEQTRkdzNxU2Fj?=
+ =?utf-8?B?R2FNRnZrYnpsd2lUTGt1ZHc3U0JlZ3piQ3MwYjZmUGo3MmhGa2FOZndmREFv?=
+ =?utf-8?B?cmlSUlR3Ui8ySHVzbmFSMG1KbWlEQTlXUDlnVHYrdXhzRStzc1BRQVl2OTJj?=
+ =?utf-8?B?b2dEVm1pNTJyaUJ1cnQxck5qZTN3bmFYN1BiQzYwYVRjN3Q0bENQVW5UNjQy?=
+ =?utf-8?B?K3h5OUl6OGFCbDE0MUF2T05tbzV6OUd1ckhwTWsyWFFWbGMrWUdVUTA4WUc5?=
+ =?utf-8?B?QWEvZnhkTnh1VXdvZjdpRUtrNHloNzJIeHNZZ0ZoVE9KYkxZRngvVmVxU1JL?=
+ =?utf-8?B?bkxNUTJCUzlWejB3R1FSNUQwNWEzZDdvR04rOWprdkNkZFkvVEdqSnJBeHVZ?=
+ =?utf-8?B?eGRDYVBvcjk5L1VMYnNzWWtxa0tPSmI3U3dMNUYxVTd1Nys3S05XczVHSWEx?=
+ =?utf-8?B?d2trY1NqeDZlZXlNN2pQSk5TUzZqZDR1VXVTeVlvNjFyV2VZTXkzcFZ1bEUr?=
+ =?utf-8?B?d1ovWmRCcDMxMTQ1czhweE1MY2FYbURHYlE5SWtrYXdYaksxWGw2YUJ0cHAr?=
+ =?utf-8?B?dVVsSllsYkhKWlN2UkFvWThBRUdUZDMyc1JaTDdibHd5WGhVRDY4N2lsbDJr?=
+ =?utf-8?B?b0hBVnJWSmdiQ2tQb3ZZODFpRmZRZjI4YVFPTURhaFJYR3JDT1VWeHVRYlZG?=
+ =?utf-8?B?Rk1SeWZrMzZPMzNEa3d2eVJQNWJBVlBxbmxLOFRldExGcU9XaWVUZVJDMEdw?=
+ =?utf-8?B?cm10OEZob3pNcTVML2QrVWhudjVzNzkzeXZMblFVVVZQYkRKemZSRGcyYU51?=
+ =?utf-8?B?eUpPYldBS0FveWtNcVFuZEdpM0JCb2pqcnJoVDhBZ0lOdnRMVXl5ZnpFWjNO?=
+ =?utf-8?B?T3dGS25hdFVVaXF4S3dkMW15S1d6UStYT1F1d1JKaFZabVQ3c1hwZHNOQUpS?=
+ =?utf-8?B?WTIxNk13cFlPYWVLZXlWSzFRc2MvNXZwUmZhTWdrMVRJd1Bsb0VDNHRWaEVC?=
+ =?utf-8?B?aC9YRytVVjl2dkF6M2FXUnE5T3ZGUU5DZXA4aitCaTQ5cjZRc3NsdXdrdit0?=
+ =?utf-8?B?N0J6b3VVbHNNRmN3aXRTZXd1TGhYUDVDWitnTEV3bUxzU3RqanAvVUpkdU4v?=
+ =?utf-8?B?eTd1cDBFRFFBRUlXT2I5cUpaQzVEQzBZYlJ3ZDdyNnB0emFPcFZTMGE5empY?=
+ =?utf-8?B?UmlBdTdPZkorNG50enZVTlhMMzNmVzR4Ni9MVXpXMWpodzROdmR5N3RSUVc0?=
+ =?utf-8?B?L2FmNXBMZXZyRlJ4ajNQbXlkcXdXNHNqT1IraldwSTA5ZUovM1JwLzB6TFp6?=
+ =?utf-8?B?aUlWWTdjc3Y0NVYrenVDNzlRemgrMFAwYnpNUXMxTURNZHcrcDU3cURoZ2N6?=
+ =?utf-8?B?NnZtdGxwelZkT24xVG5hN3lmcFFCU3creWd3RGlRR053dEpKL1BqYlJHTWFP?=
+ =?utf-8?B?Q2swMWJkOXhvNlRmd0FKc2REd09VRHVLWUh0RExEem5uVTB0MHlyckV0c3lI?=
+ =?utf-8?B?dnZhUm5DSGxPdEoxRmtTNSt3VS95bEFTMXVKZFo1Vi9TeEk1bDJad1VQQ0Ey?=
+ =?utf-8?B?ZnY1aGVOaEVPTURsdUs2TGdOMWVHZW45QmFuNHd6VGtNUExiOWhGUW1hdUhr?=
+ =?utf-8?B?enhLZ1pXSWFsOVJaU0pmM3JTekYzalFmai9ndk9mV0pDZ01LMWNiSS9nck9z?=
+ =?utf-8?B?UWNyTSsxcHJONHRwYml0WnV6SVR3QUw0S3JZQ2RxMXRMK0J3WGF2OS8vQXRj?=
+ =?utf-8?B?c1Zaek1LL0Z2a2xhNXI5Q0RmQ2FMZVdERmJsN0JIZXo0cmN2RG5Md1g2SUNs?=
+ =?utf-8?B?QlFsNExDS1RlQUR4T3dQNW4wQ3A5OFAzbkhtRUxrekl5ZTVWL3RoVHNOUEs0?=
+ =?utf-8?B?NDZTZytSY3JwTk5JOXVLdWZoVDVaMVV0dVBzSG1jUzVVTTdBTXVPcTIxeTRu?=
+ =?utf-8?B?SXliUXV0SllSeUVqckhMRmVvYmEvRmR0SUkvZWZuRnVmUGE5WVozQ3pIdGNr?=
+ =?utf-8?B?UXdYa0YzNjROdGRJUnROTS9GVk1pVFpKRTMzM1lwRUdiaTc3bkVjZCt4Rkpv?=
+ =?utf-8?B?RWdhb005SmJGdTdQTUZsLzJQZkhpSkY5OXZ1UE50WDFza3hQWHRPSkpXc2VE?=
+ =?utf-8?B?anNBUm1IZk01SUlRRFRtYzBkWGJVQkhpQ0RCd3kyTWRnZERVcEU3S2FLZkI0?=
+ =?utf-8?B?R2oxbGJmUlJXbDBxNXpuZWpRNHQrK3JMd2R3b2t0d2x1Lzd1SXJGSC84Y1ZE?=
+ =?utf-8?B?UjdzSkNHYVlkYVJxcVdMMkFobE96eGlKeWhBNUlyd3BudnMydGZUVEZtV1g3?=
+ =?utf-8?Q?p1GAEnKVV3xn9aD5gLcStldDz0fbct/Kwl3kyQXTWdjIm?=
+X-MS-Exchange-AntiSpam-MessageData-1: 632nDw9uVM5SKsiIea9VHmUG/e2J3IVtTR8=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a1b2dcf-aa04-4d20-d931-08de84e8f826
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2026 12:22:06.6031
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qdPH9tFv3nm7oLtDZCbmNWiPsrUNt6Gl6twKsVV8p+vgTXSQq/X2NhxOPfF8uDOf8di0RZvNpC8EculO9QKwJ2h3iW3K/ZnlwjCW3rlJHTY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR08MB5830
 
-On 3/18/26 10:22, Chunyu Hu wrote:
-> On Tue, Mar 17, 2026 at 11:37:30AM -0700, Andrew Morton wrote:
->> On Tue, 17 Mar 2026 17:44:14 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
->>
->>> There are several tests requires transprarent hugepages, when run on thp
->>> disabled kernel such as realtime kernel, there will be false negative.
->>> Mark those tests as skip when thp is not available.
->>
->> AI review asked some questions:
->> https://sashiko.dev/#/patchset/20260317094419.1429259-1-chuhu%40redhat.com
-> 
-> Hi Andrew,
-> 
-> Nice tool.
->  
-> For question one. In guard-region test, collapse tests are for checking
-> collapse is denied when operating on guard region, not for checking
-> madvise(MADV_COLLAPSE) will fail when thp is setup to 'never with sysfs,
-> result is same, but it's a different test. Maybe we don't have strong
-> interest to test when thp is set to 'never' in this collapse test.
-> Do you perfer we let it run when thp is setup with 'never'?
-> 
-> For question two. In soft dirty test. Yes, test_mprotect skip logic has
-> similar issue when open failed. 'Bail out' would be shown. Maybe we
-> do this in other series or you prefer me to fix it in this series?
+The first patch properly annotates accesses to ->child_reaper with
+_ONCE macroses, to protect unlocked accesses from possible cpu/compiler
+optimization problems.
 
-IMHO, that's something for another series (if at all).
+The second patch makes sure that the init is always a first process in
+the pid namespace, previously this was only checked for set_tid case.
 
-> 
-> For question three. Add buffer length check in write_file() helper and
-> check if written bytes equal expected bytes. It's easy to add a buffer
-> lenghth check and make it robust. It's not easy to do the partial
-> written check as that will make the helper more complex and need one
-> more parameter as expected written bytes. Maybe for such question, we
-> should do with other series, not in this one?
+The third patch allows to join pid namespace before pid namespace init
+is created, that allows to create pid namespace by one process and then
+create pid namespace init from another process after setns(). Please see
+the detailed description in the patch commit message. It depends on the
+second patch.
 
-The AI brings up many things that are irrelevant in practice (in
-particular for tests). So I wouldn't worry about that. You are only
-moving code.
+The forth and the final patch is a comprehansive test, that tests both
+basic usecase of creating pid namespace and init separately, and a more
+specific usecase which shows how we can improve clone3(set_tid)
+usability after this change.
+
+This change is generally useful as it makes clone3(set_tid) more
+universal, and let's it work in all the cases evenly. Also it is highly
+useful to CRIU to handle nested containers.
+
+v2: Use *_ONCE for ->child_reaper accesses atomicity, and avoid taking
+task_list lock for reading it. Rebase to master.
+v3: Separate *_ONCE change and "init is first" checks into separate
+commits.
+v4: Update second patch commit message. Include Oleg's review tags.
+v5: Handle one more READ_ONCE case. Include Andrei's review tags. Base
+on top of mm tree.
+v6: Require root in pidns_init_via_setns_set_tid test and move the
+wrapper userns creation to the top of pidns_init_via_setns. Add an entry
+to MAINTAINERS file for the tests. Base back on top of master.
+
+This series is also available here:
+https://github.com/Snorch/linux/commits/allow-creating-pid-namespace-init-after-setns-v6/
+
+Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+
+Pavel Tikhomirov (5):
+  pid_namespace: avoid optimization of accesses to ->child_reaper
+  pid: check init is created first after idr alloc
+  pid_namespace: allow opening pid_for_children before init was created
+  selftests: Add tests for creating pidns init via setns
+  MAINTAINERS: add a new entry for testing pidns init creation via setns
+
+ MAINTAINERS                                   |   7 +
+ kernel/exit.c                                 |   3 +-
+ kernel/fork.c                                 |   5 +-
+ kernel/pid.c                                  |  19 +-
+ kernel/pid_namespace.c                        |   9 -
+ .../selftests/pid_namespace/.gitignore        |   1 +
+ .../testing/selftests/pid_namespace/Makefile  |   2 +-
+ .../pid_namespace/pidns_init_via_setns.c      | 238 ++++++++++++++++++
+ 8 files changed, 264 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/pid_namespace/pidns_init_via_setns.c
 
 -- 
-Cheers,
+2.53.0
 
-David
