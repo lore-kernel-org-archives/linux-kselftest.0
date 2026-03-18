@@ -1,128 +1,109 @@
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7311F5437
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 00:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D6F1C3BF7
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 01:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773795248; cv=none; b=L6R8MhqUdgOyM3/960DJJ6o03oKYpxTv/GDt0ve7Enp/UIfaSQWRMXDHqhKprEvzaUb5mMU4P7Upn7HJ6xDJP+lc5YQJkumopoo+9bPcEv6Jq9gdQm8TYrVOZvU0XrCXU78/RjiB+69oTap6M3jNk0+7Yj/15ax8SntsnHmPuOw=
+	t=1773795883; cv=none; b=cy+MC2GwLkSjcpPfJbxs/TE+iP/fQAH0SdXVF4yW8Hjmit/4a2K2QNjHElb6+qEAZVLi9ybfNSPnvF7lHDl7joz+z850xZNOK63/R+kPhhej+3StIXZ0K2RfZrcXF8uttxTo9I7V8BjpJqOatplpHkDS9vjI7rRP/uBDuNOTGyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773795248; c=relaxed/simple;
-	bh=LEYmdWK7Kk552UX5ZZybeDPpxRvo8AVLuiMGGPj5UHQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=klTBh81/Jddbk2pnjQe5By7OfOmxFX7R34wRrbVTNmHmJIhIozmR+l5bRqrD8Fu5geWi03s76z6G1obxA2bhqtMmZKGB85EI/vau05n13nPtTWo0Pc1gjnKJ9sFcA5ovfn26+jzXD8c8l/LzpWkvUZow77r41wpIdjfPN4cEadE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BTBcZmcy; arc=none smtp.client-ip=74.125.224.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773795883; c=relaxed/simple;
+	bh=THzzDNF8GpfxxtI/EItqwopxBXguI9PXFA2AmDPRreE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=TadfHdw4Fum7dtixixCe3u7eH5uVjmhwJzDsc39h3c/PMJSYWewu84jTaaQGHQAUm3iGt65bu3QC7OdxDp8H9Vx6tNAo7wDXJ2GTZO/HZsp8gCsllA069/gyHEfSKS4tkDSrdTEgs1vyZ1zeS8KWDRGAIn4x+wfWwrQ1mcsy94U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--treapking.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G7g7KjGb; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--treapking.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BTBcZmcy"
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-64ca2b32f46so4985607d50.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 17:54:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G7g7KjGb"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2aad5fec175so304395375ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 18:04:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773795246; x=1774400046; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UAEC4LpUFt6nufrPf92R86ddLY16BiwOGudignGq+G0=;
-        b=BTBcZmcyZtxR4rtVUZQpSET3dHYGss21xAB6JfH2H/zrMsqGYHKcTDAkpnvvE0u+Tp
-         GVoy6LHccnwgnd+4wt/1IiZTRh/PhtdhBuszUFlddEvU/t3yDuQ1xL7MLq0BVXRbDVsO
-         5vFm/YJBgUdA5WiQrMRjVH18/asRNE01Igj8tzl40J5/sF27vWNIQZvql5DboAzQdAJY
-         t8wO0KKUbZ5b0zq3dPF9e3Hj7VEe7RaHOOPF2bdGW0oeMfYmAD4jePrEcswmuJroQxtv
-         +zPHY5zP2FELIyNEiUGv18OZaRpJhyIRjL26+1AcOLAiP2BoFsW18hvuYrMkCq2bDpaQ
-         kHcQ==
+        d=google.com; s=20251104; t=1773795881; x=1774400681; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=citUlJS1cTHKzG0Mc8HWnWcaRo8SkwkYhwdVqJdujW0=;
+        b=G7g7KjGbnWH43vL/CqCumIps8DTjJ8i0bJoLJXIZP+Nw2ZmjqL3uVMTMCRB/jjVPhU
+         Uc/LQ9SkVGGWCva7G3lT04onzH7SQOHDOiXRBgHkj5yVMARE5sP2PfLK7gfYi14EC0aR
+         xDZb5PJle2hB+LgzU9D7q9Mt14JAysnZA+Gec4JTIDsn1/QmYWU1PN9GU0lcvtTVQ1UJ
+         GgM9AFxIK3BGXHAlVO7NUQeSY8nK4fE4OAdoesCF+9kXUuwZ5IE7oEKeqQfwbYqRllSi
+         AssF/SbpKI58x4ld6luoRhRzT4z4+lT+FjDUI4LP+fURzk94QnzbzmGNfehT6rYru10Z
+         pXsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773795246; x=1774400046;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UAEC4LpUFt6nufrPf92R86ddLY16BiwOGudignGq+G0=;
-        b=PPI6KAt2TfAzZHwKh6xqbWQq0Dsm7zBFvhITdtYzeh3LDAJM50dF1HXjurzR7809y9
-         ZPTXnyOnN8eRAiOaqWMl92UZQJiII8VpxH7Dp80SH3Eds788fig9920u8QkPZvYmUaS+
-         KjKWAu4qqs4xb/00RcmdiAdtxZ09BUHE9rhWfYzLgqeJn6tlyRQ8a6Vg/xO4bE+V4hY2
-         U7of/KQWwYnXzI+h17Y5ysWElhDIH2EmNXlAdGSSd9q/MdInpeWMh9Cb7i7uMstPs9CO
-         u4mrC3oXrDLd1bui5nLpy7hQi/r7owiGmOHghioOMMduu7eyV9cMj/tmwyv0Eyey+sAh
-         aW5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXHXVt5v4c8aGKIg5GhPftVOwrYaEaNrnIAkb+M9aPWKu3dFEw6O/2onF4y5Oj2eB7AjwRMmXW6fcNwN0/LVBs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzmf2e1WawXBLt8CN+UUM78AXDCNra27Ot4aQi5mBfRQztBZB4e
-	+yP9oZgtioaViuBVWNCH/rHyBlXOdLr4tOGqwQRSFGWeAWHcr2G3cpT0
-X-Gm-Gg: ATEYQzytI4Bokvv+XSneyoMHaxlGtz2Xm70y9rX4jpbpOtm3wKonqcLN524WasQ4YYF
-	/V6rTHB2BAjcqfEmX2STQcN5AK5UGxLc24EMb0bwFa4fVYFWqo45NgYLEh8IWn4HQvgCnSuxtcL
-	+PzF5uoLL7+IeHqlKXsidOnaYC4zbE374o6a/r8R2y7OUrtO2M83UsRJ6hBSXK4+5v2FaEMuVa4
-	NauEn0nKauKP+0nkUeJfVtTecJr/V1e2luozXvsot7nh/t7f3zJf9vehJ+IFry3JyFQZh7mN007
-	hea2sQXg8DebAFgblDvzisUCww0YLf4DYhhmPjBxM4jz3Q/ATDq1iLx70nDVtP4Lm6ymCSxPpue
-	f328FsHPz74f0m6iZsbCh4Ghw8cJIJRX3I3kvBYtR/m47ht5btvrqrObfiEvJN+dJ8Uerg3HbzY
-	eQz8m8FcN0RM625ZJv4xkXSc73iz+i3iTW2i41AzQ9D71OXMk=
-X-Received: by 2002:a53:ee53:0:b0:64a:db17:3ce6 with SMTP id 956f58d0204a3-64e912ebf63mr1522789d50.2.1773795245924;
-        Tue, 17 Mar 2026 17:54:05 -0700 (PDT)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:73::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64e91c29074sm746207d50.20.2026.03.17.17.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 17:54:05 -0700 (PDT)
-Date: Tue, 17 Mar 2026 17:54:04 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>, Wei Wang <weibunny@fb.com>,
-	David Wei <dw@davidwei.uk>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 5/6] selftests: drv-net: add netkit devmem RX
- test
-Message-ID: <abn3rJGXXyDYSNzA@devvm11784.nha0.facebook.com>
-References: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-0-b53c8cd72b23@meta.com>
- <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-5-b53c8cd72b23@meta.com>
- <abns9COj7WagFtZ8@mini-arch>
+        d=1e100.net; s=20251104; t=1773795881; x=1774400681;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=citUlJS1cTHKzG0Mc8HWnWcaRo8SkwkYhwdVqJdujW0=;
+        b=p4hqCqVpdUhR+NptJnOBmCqOAu2044fywQMVG3UPncmnZhLTp0iE7JdCCYOlM2nH0b
+         +d/l1+qZqv6G6ULp5DnDCZylAN+oa8Ioqyj+bdmznUaIula2/5ylzzS7QDehUapZ//hF
+         YDEOssbR1FyzLb5sygfQ03Lmomxr7x3kM1FBPQCYpf5TmKe+pdFUnK9uv2YIhHK+HqZa
+         EwT67jIEAy7zbv2u59AepisdlqXOymr8Ig0amad0fPMF4LyYVsTPfJodU+p8jbz+WRZi
+         wUT1Z6BWO3bGVdr1zK1rPDjUrz6HRKN9zNwM0Yvg5LhHR9uypDXO8OprbF3NUGbCr6Zg
+         Zicg==
+X-Forwarded-Encrypted: i=1; AJvYcCV89jJWOqJfrDFeSvgqMk+jujPtLGVOHP+TOgF5nHkc+6N3n0TVHIbB3iFt7vUnrjSPEBhwSN7pvhmU+d44yow=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6eCwVGKet4qYlEZPsdylyovMrFY3uQ+V81PYBaT72mbSHIGNT
+	Ko7VHgOAzpou8qYxNuYlPhYN6yk++0GxxD8blDdVn8JcwYblldqpkmDw/36mhF1SheiKFwzywjU
+	ND34znN5ieRv3mJowow==
+X-Received: from plhb12.prod.google.com ([2002:a17:903:228c:b0:2ae:4f41:cd11])
+ (user=treapking job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:e751:b0:2ae:cefd:18d6 with SMTP id d9443c01a7336-2b06e3244e9mr14740125ad.2.1773795880882;
+ Tue, 17 Mar 2026 18:04:40 -0700 (PDT)
+Date: Tue, 17 Mar 2026 18:01:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abns9COj7WagFtZ8@mini-arch>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
+Message-ID: <20260318010325.2003395-1-treapking@google.com>
+Subject: [PATCH net] selftests: drv-net: ping: Wait for carrier after toggling offloads
+From: Pin-yen Lin <treapking@google.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Taehee Yoo <ap420073@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, Pin-yen Lin <treapking@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 17, 2026 at 05:08:20PM -0700, Stanislav Fomichev wrote:
-> On 03/16, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > 
-> > Add tests for devmem RX over a netkit device with a leased queue. This
-> > is the same as the other devmem RX test except for ncdevmem executes in
-> > a namespace, binds to a netkit, and skips the ethtool NIC configuration
-> > steps (relying on the test runner for that setup).
-> > 
-> > The RX path is setup as the following:
-> > 
-> >  RX Path
-> >  -------
-> > 
-> >  Remote            Physical NIC          Netkit Host        Netkit Guest (netns)
-> >    |                    |                     |                    |
-> >    |--- TCP send ------>|                     |                    |
-> >                         |-------------------->|                    |
-> >                       dmabuf                  |--- BPF redirect -->|
-> > 
-> 
-> Is it too messy to parametrize the existing test to run both with and
-> without the namespaces? Feels like should be somewhat doable in python?
+Toggling checksum offload (or HW-GRO via feature dependencies) can cause
+certain physical interfaces to undergo a reset or a temporary link-down
+state. In the ping.py test, this leads to immediate test failures if the
+ping is attempted before the carrier is restored.
 
-IIUC, we could have main() do something like:
+This is observed when running the test with GVE driver when HW-GRO is
+enabled. When checksum offload is toggled, HW-GRO is toggled as well
+because of the feature dependency. This leads to an interface reset,
+causing the subsequent ping to fail.
 
-for env [NetDrvContEnv, NetDrvEpEnv]:
-    with env as cfg:
-        [...]
-        ksft_run(tests, args=(cfg,))
+Add a sleep period after changing these features to allow the link to
+stabilize.
 
+Fixes: 75cc19c8ff89 ("selftests: drv-net: add xdp cases for ping.py")
+Signed-off-by: Pin-yen Lin <treapking@google.com>
 
-And then the tests could call helpers that check cfg.netns to use the
-nk_{guest,host}_ip6 addresses when true, otherwise use the regular
-addresses?
+---
 
-It should be doable if I'm following your drift.
+ tools/testing/selftests/drivers/net/ping.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Best,
-Bobby
+diff --git a/tools/testing/selftests/drivers/net/ping.py b/tools/testing/selftests/drivers/net/ping.py
+index da3623c5e8a9..951cd99136c3 100755
+--- a/tools/testing/selftests/drivers/net/ping.py
++++ b/tools/testing/selftests/drivers/net/ping.py
+@@ -64,7 +64,10 @@ def _set_offload_checksum(cfg, netnl, on) -> None:
+     try:
+         ethtool(f" -K {cfg.ifname} rx {on} tx {on} ")
+     except:
+-        return
++        pass
++
++    if no_sleep != True:
++        time.sleep(10)
+ 
+ def _set_xdp_generic_sb_on(cfg) -> None:
+     prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+-- 
+2.53.0.851.ga537e3e6e9-goog
+
+base-commit: 64dcbde7f8f870a4f2d9daf24ffb06f9748b5dd3
+branch: net-upstream
