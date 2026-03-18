@@ -1,324 +1,254 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94FB33C52F;
-	Wed, 18 Mar 2026 03:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4218175A6F
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 04:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773805118; cv=none; b=fg8vNHrf/wLdPguX5ofO3kuv2inIX7OBaIRlk1TORAReZBQ5GIYVnvLKBejYs96aMF3BsKnIe8saLs1yUF2zi0RHvVU/Uyn6nIH/2gIYbijfc/8ucFuUnUI12tVPBr+CIH7au1NASOJA+h1i/B/V7hZ/Jei60JxEBpRq3XCtxco=
+	t=1773807496; cv=none; b=AmzjyoSby+dhKJB/SKrzdzIQaJo5E8nM/6yBRXmZpXV1rF1rYO0xSSS6FVHkpU40Skic/u577EwKOtycDp6Uggu61sfBj8rxTKl9CWYNxCIpU19B8vQ5jhJ9EqegAKZHrIqG3UMM4oUu9m0fTKkMIyTtU12Co9g+scm8ESwsuLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773805118; c=relaxed/simple;
-	bh=H3+biuMDIwtvpw/lKfuWh8wcDmApjzaumWcCer1NJB8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G/JdTsYJ2ETyV0021O/Fzy3r9hUAvfw9+s4MSVRiirD3KTJoga1Y8EzHVsePdnptqxbxGJmdz/dn47AACfdRMSM6qfGoM6op7uolWD18ZOeoHXME6jsMa7//pNZXCHJBIoHomvPoycctm7LoUwgktr03QkSS3sa6ECMzn/5jnW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ANl/Sniw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773807496; c=relaxed/simple;
+	bh=cU4xf4Eh+lqYYN+H3LadtDOPt9AQFQm4099xMMpjf+0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=AjdWNSr/0C9IAvluC7D56Pcbhu06QdHE693soByBSGg6VArgKnhuWMF5ybIONjQNvhl3jS3zojgBMA4CCMbN63YifxNIvVTljbqL51MFb613vPdnzv+w3xBk9HFRtVZ+FbJOo1ytj/MTuLyPrbhMLLYqaxqUchCVjifWQZoT6CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name; spf=pass smtp.mailfrom=chrisdown.name; dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.b=G5sk7Fz6; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ANl/Sniw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B55AC19421;
-	Wed, 18 Mar 2026 03:38:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773805118;
-	bh=H3+biuMDIwtvpw/lKfuWh8wcDmApjzaumWcCer1NJB8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ANl/SniwL+TmA0oXVh2dwcUVAnHtGP4P66KWWgpwT0/BafG09KKJgc4HLK2X5XPmZ
-	 YTUKfI5i2R4dfZrSckaSRIdG8qAVsd3LP6y+420/Nupu77TPH/2PXNv228mltzxQtl
-	 yMGVwKt9zWH0Qdfz60yEJzWEaJJjS3a2lMyRAfT5QrapSFrCwpaZ46T4+zGN1eIRrr
-	 7W/fb9C0UDD1C5uLGWjGiW/I30np0STHnfFsbiXQczQ5bGddyQjm+9qyU/soreY7zx
-	 4Z0W89HzJaIzYyDgbUK/PMcTv/I0mDUBl2Qjgq9wsVEI6p+do9IL90a+0AN4/QTeLk
-	 T49Cbc04Cqrlw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	willemb@google.com,
-	petrm@nvidia.com,
-	dw@davidwei.uk,
-	mst@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v4 6/6] selftests: drv-net: gro: add a test for GRO depth
-Date: Tue, 17 Mar 2026 20:38:19 -0700
-Message-ID: <20260318033819.1469350-7-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260318033819.1469350-1-kuba@kernel.org>
-References: <20260318033819.1469350-1-kuba@kernel.org>
+	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.b="G5sk7Fz6"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2aecc6b0861so1603135ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 21:18:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google; t=1773807494; x=1774412294; darn=vger.kernel.org;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3O/0uI2fOT2z8JCTJP8YkN4bS7/cK07tAt5pbKhSODY=;
+        b=G5sk7Fz6CxZzcqHOcP+2/xj5F9MNjzbOr82l4Hneu4J6DPyMH+sziS3axWwvD2Ifvr
+         eiAw7GFyo5grF1ARDYHq3wjhVltItZiraRPYtNn2q4VviNZmCJyIff1Xm0UlWUbtn62d
+         WXfjU77b1zLd60M9vM9cC9VjlqbJCuWz6oCmM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773807494; x=1774412294;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3O/0uI2fOT2z8JCTJP8YkN4bS7/cK07tAt5pbKhSODY=;
+        b=LUEuqkfxL91476ao08m9WgTbEDHMrIGypT6AzbBm+A06CFbiP8Ny0n5oNel6anhyF+
+         He6iRzT5olt4k8rX7uB/BSxTXqdmMyFPmr+L31n63akMNvQ5u2jrSkR/mWLn7D8bFWnz
+         IaHkA3CKEp+hrkpt0vFCAikjPWzWdTTfjwe8ncKuk6RFR/NJ7xblvdwpVLyLNWLEzJpo
+         7PLaNAY6h+VQzW9OO3q65B0s1ftPXv7KBT6l+gcEnKcM4l9gjDgfrJRmevQ7XsFqozi5
+         519CQ+832Z9TF74/5vDj+ATbq/kqwiKJDXuvRk/c/MfZ1W/G+CIQbwjpjl6whWfKy6E/
+         lhGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWYwzXiSK7R9mOOU5SNkNFnDyHNNDFvwrv5S3FhOaA//3dq7nx1zWZIzVa1/gUcZavFRRV5X9OIt60j5W08a0M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaixZGxjs4sX/FZdIxDxhBVbGzMNtxnAPtAk55KoBnzNyAYEJR
+	0a6Y7cg/EjpW52uFb1FfpbVt3l/+yvA6Vt1KM4qiczySGedDNeEvA3wMrTlhHG8mpzw=
+X-Gm-Gg: ATEYQzzpkTjN/v7iNPTENws1RwcgYzkXlC6TwzBt8xRxPiASsYJ+Aen5GOf8Vi70vHo
+	G+7gLR7WKJzDw3/pWdF4r6uw7zwsSc/ol1Qst+gYeTPZMtgtl5wvhUIJB0CUpNyJskVGpmySY6+
+	y0wXo78CYpPgHyMfjyHwvtUt4XB0LqV0onX/b2ZxQzXt0eHr++RKdE/tAkx5n2cQv1mltdcbPQZ
+	wlrtsSMbib+ipycGZvBhNqvhvh86iM3RBf4OPWh6XTjx3TQFK9jc9G98geAUQZ5Ci2cFZZIHmNf
+	yil8BSmpGeqa8QxLmf67p8NEA5gb5oBECMH1WnjZDDzY21A5J/1i3IG4tiCt+CMFGuoi9Ghj7Fm
+	LQTVoHRAp0VMOwgHSuSXwFTgoE3npWMeg/ByOB8ZJrkUVTtn7t4XljzvI8OXIxjruyzVvo5Kftc
+	xZcI3ueXJ9DfoUkFJVUdK6
+X-Received: by 2002:a17:903:1666:b0:2ae:3afc:eb42 with SMTP id d9443c01a7336-2b06e3f7ce6mr19434655ad.38.1773807494369;
+        Tue, 17 Mar 2026 21:18:14 -0700 (PDT)
+Received: from localhost ([116.86.198.140])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e632418sm12962395ad.81.2026.03.17.21.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2026 21:18:13 -0700 (PDT)
+Date: Wed, 18 Mar 2026 12:18:11 +0800
+From: Chris Down <chris@chrisdown.name>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>, kernel-team@fb.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] selftests/mm: Add UFFDIO_MOVE huge zeropage PMD
+ regression test
+Message-ID: <abongwF3X0G8xY1I@chrisdown.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/2.3 (50e3b1f3) (2026-01-25)
 
-Reuse the long sequence test to max out the GRO contexts.
-Repeat for a single queue, 8 queues, and default number
-of queues but flow steering to just one.
+The existing uffd-unit-tests move-pmd coverage exercises PMD-sized
+UFFDIO_MOVE on anonymous THPs, but it does not force the huge zeropage
+PMD path in move_pages_huge_pmd().
 
-The SW GRO's capacity should be around 64 per queue
-(8 buckets, up to 8 skbs in a chain).
+Add a dedicated anonymous UFFDIO_MOVE PMD test that exercises this
+relatively comprehensively.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Chris Down <chris@chrisdown.name>
 ---
-v3:
- - rename [FAIL] to [MISS] to avoid confusing NIPA
-v2: https://lore.kernel.org/20260316224505.279672-7-kuba@kernel.org
- - move this "test" to SW, we can check SW GRO capacity too
-v1: https://lore.kernel.org/20260205220541.2992807-10-kuba@kernel.org
----
- tools/testing/selftests/drivers/net/gro.py | 201 +++++++++++++++++++--
- 1 file changed, 181 insertions(+), 20 deletions(-)
+ tools/testing/selftests/mm/uffd-unit-tests.c | 100 +++++++++++++++++++
+ tools/testing/selftests/mm/vm_util.c         |  12 +++
+ tools/testing/selftests/mm/vm_util.h         |   1 +
+ 3 files changed, 113 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
-index 2da53686354f..70709bf670c7 100755
---- a/tools/testing/selftests/drivers/net/gro.py
-+++ b/tools/testing/selftests/drivers/net/gro.py
-@@ -35,11 +35,18 @@ coalescing behavior.
-   - large_rem: Large packet remainder handling
- """
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 6f5e404a446c..9cc4cbab9a23 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -1227,6 +1227,99 @@ static void uffd_move_pmd_test(uffd_global_test_opts_t *gopts, uffd_test_args_t
+ 			      uffd_move_pmd_handle_fault);
+ }
  
-+import glob
- import os
-+import re
- from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import NetDrvEpEnv, KsftXfailEx
-+from lib.py import NetdevFamily, EthtoolFamily
- from lib.py import bkg, cmd, defer, ethtool, ip
--from lib.py import ksft_variants
-+from lib.py import ksft_variants, KsftNamedVariant
++static void uffd_move_pmd_huge_zeropage_test(uffd_global_test_opts_t *gopts,
++					     uffd_test_args_t *targs)
++{
++	unsigned long pmd_size = read_pmd_pagesize();
++	unsigned long pmd_pages;
++	unsigned long bytes = gopts->nr_pages * gopts->page_size;
++	char *orig_area_src = gopts->area_src, *orig_area_dst = gopts->area_dst;
++	char *aligned_src, *aligned_dst;
++	unsigned long src_offs, dst_offs, max_offs;
++	pthread_t uffd_mon;
++	struct uffd_args args = { 0 };
++	char c = '\0';
++	int pagemap_fd;
 +
++	if (pmd_size <= gopts->page_size) {
++		uffd_test_skip("huge page size is 0, feature missing?");
++		return;
++	}
++	if (!detect_huge_zeropage()) {
++		uffd_test_skip("transparent huge zeropage disabled");
++		return;
++	}
 +
-+# gro.c uses hardcoded DPORT=8000
-+GRO_DPORT = 8000
++	pmd_pages = pmd_size / gopts->page_size;
++	if (bytes < pmd_size) {
++		uffd_test_skip("not enough pages for one PMD-sized move");
++		return;
++	}
++
++	aligned_src = ALIGN_UP(orig_area_src, pmd_size);
++	aligned_dst = ALIGN_UP(orig_area_dst, pmd_size);
++	src_offs = (aligned_src - orig_area_src) / gopts->page_size;
++	dst_offs = (aligned_dst - orig_area_dst) / gopts->page_size;
++	max_offs = src_offs > dst_offs ? src_offs : dst_offs;
++	if (max_offs + pmd_pages > gopts->nr_pages) {
++		uffd_test_skip("could not find aligned PMD-sized src/dst window");
++		return;
++	}
++
++	if (madvise(orig_area_dst, bytes, MADV_HUGEPAGE))
++		err("madvise(MADV_HUGEPAGE) failure");
++	if (madvise(orig_area_src, bytes, MADV_DONTFORK))
++		err("madvise(MADV_DONTFORK) failure");
++	if (madvise(aligned_src, pmd_size, MADV_DONTNEED))
++		err("madvise(MADV_DONTNEED) failure");
++
++	/* Fault in a PMD-sized huge zeropage mapping in the source. */
++	force_read_pages(aligned_src, pmd_pages, gopts->page_size);
++
++	pagemap_fd = pagemap_open();
++	if (!pagemap_is_huge_zero(pagemap_fd, aligned_src)) {
++		close(pagemap_fd);
++		uffd_test_skip("could not fault in the huge zeropage");
++		return;
++	}
++	gopts->area_src = aligned_src;
++	gopts->area_dst = aligned_dst;
++
++	if (uffd_register(gopts->uffd, gopts->area_dst, pmd_size, true, false, false))
++		err("register failure");
++
++	args.gopts = gopts;
++	args.handle_fault = uffd_move_pmd_handle_fault;
++	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
++		err("uffd_poll_thread create");
++
++	/*
++	 * One fault on dst should trigger a single PMD-sized UFFDIO_MOVE from
++	 * the huge zeropage PMD we populated in the source.
++	 */
++	force_read_pages(gopts->area_dst, pmd_pages, gopts->page_size);
++
++	if (write(gopts->pipefd[1], &c, sizeof(c)) != sizeof(c))
++		err("pipe write");
++	if (pthread_join(uffd_mon, NULL))
++		err("join() failed");
++
++	if (args.missing_faults != 1 || args.minor_faults != 0) {
++		uffd_test_fail("stats check error");
++	} else if (!pagemap_is_huge_zero(pagemap_fd, gopts->area_dst)) {
++		uffd_test_fail("moved destination is not a huge zeropage PMD");
++	} else if (!check_huge_anon(gopts->area_dst, 0, pmd_size)) {
++		/* vm_normal_page_pmd() must continue to treat the moved PMD as special. */
++		uffd_test_fail("moved huge zeropage PMD counted as AnonHugePages");
++	} else {
++		uffd_test_pass();
++	}
++
++	gopts->area_src = orig_area_src;
++	gopts->area_dst = orig_area_dst;
++	close(pagemap_fd);
++}
++
+ static void uffd_move_pmd_split_test(uffd_global_test_opts_t *gopts, uffd_test_args_t *targs)
+ {
+ 	if (madvise(gopts->area_dst, gopts->nr_pages * gopts->page_size, MADV_NOHUGEPAGE))
+@@ -1550,6 +1643,13 @@ uffd_test_case_t uffd_tests[] = {
+ 		.uffd_feature_required = UFFD_FEATURE_MOVE,
+ 		.test_case_ops = &uffd_move_test_pmd_case_ops,
+ 	},
++	{
++		.name = "move-pmd-huge-zeropage",
++		.uffd_fn = uffd_move_pmd_huge_zeropage_test,
++		.mem_targets = MEM_ANON,
++		.uffd_feature_required = UFFD_FEATURE_MOVE,
++		.test_case_ops = &uffd_move_test_pmd_case_ops,
++	},
+ 	{
+ 		.name = "move-pmd-split",
+ 		.uffd_fn = uffd_move_pmd_split_test,
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index a6d4ff7dfdc0..55cc4cc058a2 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -120,6 +120,18 @@ bool pagemap_is_populated(int fd, char *start)
+ 				PAGE_IS_PRESENT | PAGE_IS_SWAPPED);
+ }
  
- 
- def _resolve_dmac(cfg, ipver):
-@@ -113,6 +120,98 @@ from lib.py import ksft_variants
-         ksft_pr(eth_cmd)
- 
- 
-+def _get_queue_stats(cfg, queue_id):
-+    """Get stats for a specific Rx queue."""
-+    cfg.wait_hw_stats_settle()
-+    data = cfg.netnl.qstats_get({"ifindex": cfg.ifindex, "scope": ["queue"]},
-+                                dump=True)
-+    for q in data:
-+        if q.get('queue-type') == 'rx' and q.get('queue-id') == queue_id:
-+            return q
-+    return {}
++bool pagemap_is_huge_zero(int fd, char *start)
++{
++	uint64_t categories;
 +
++	if (!pagemap_scan_supported(fd, start))
++		return false;
 +
-+def _setup_isolated_queue(cfg):
-+    """Set up an isolated queue for testing using ntuple filter.
++	categories = pagemap_scan_get_categories(fd, start);
++	return (categories & (PAGE_IS_PRESENT | PAGE_IS_PFNZERO | PAGE_IS_HUGE)) ==
++		(PAGE_IS_PRESENT | PAGE_IS_PFNZERO | PAGE_IS_HUGE);
++}
 +
-+    Remove queue 1 from the default RSS context and steer test traffic to it.
-+    """
-+    test_queue = 1
-+
-+    qcnt = len(glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*"))
-+    if qcnt < 2:
-+        raise KsftXfailEx(f"Need at least 2 queues, have {qcnt}")
-+
-+    # Remove queue 1 from default RSS context by setting its weight to 0
-+    weights = ["1"] * qcnt
-+    weights[test_queue] = "0"
-+    ethtool(f"-X {cfg.ifname} weight " + " ".join(weights))
-+    defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    # Set up ntuple filter to steer our test traffic to the isolated queue
-+    flow  = f"flow-type tcp{cfg.addr_ipver} "
-+    flow += f"dst-ip {cfg.addr} dst-port {GRO_DPORT} action {test_queue}"
-+    output = ethtool(f"-N {cfg.ifname} {flow}").stdout
-+    ntuple_id = int(output.split()[-1])
-+    defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
-+
-+    return test_queue
-+
-+
-+def _setup_queue_count(cfg, num_queues):
-+    """Configure the NIC to use a specific number of queues."""
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < num_queues:
-+        raise KsftXfailEx(f"Need at least {num_queues} queues, max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+    ethtool(f"-L {cfg.ifname} combined {num_queues}")
-+
-+
-+def _run_gro_bin(cfg, test_name, protocol=None, num_flows=None,
-+                 order_check=False, verbose=False, fail=False):
-+    """Run gro binary with given test and return the process result."""
-+    if not hasattr(cfg, "bin_remote"):
-+        cfg.bin_local = cfg.net_lib_dir / "gro"
-+        cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
-+
-+    if protocol is None:
-+        ipver = cfg.addr_ipver
-+        protocol = f"ipv{ipver}"
-+    else:
-+        ipver = "6" if protocol[-1] == "6" else "4"
-+
-+    dmac = _resolve_dmac(cfg, ipver)
-+
-+    base_args = [
-+        f"--{protocol}",
-+        f"--dmac {dmac}",
-+        f"--smac {cfg.remote_dev['address']}",
-+        f"--daddr {cfg.addr_v[ipver]}",
-+        f"--saddr {cfg.remote_addr_v[ipver]}",
-+        f"--test {test_name}",
-+    ]
-+    if num_flows:
-+        base_args.append(f"--num-flows {num_flows}")
-+    if order_check:
-+        base_args.append("--order-check")
-+    if verbose:
-+        base_args.append("--verbose")
-+
-+    args = " ".join(base_args)
-+
-+    rx_cmd = f"{cfg.bin_local} {args} --rx --iface {cfg.ifname}"
-+    tx_cmd = f"{cfg.bin_remote} {args} --iface {cfg.remote_ifname}"
-+
-+    with bkg(rx_cmd, ksft_ready=True, exit_wait=True, fail=fail) as rx_proc:
-+        cmd(tx_cmd, host=cfg.remote)
-+
-+    return rx_proc
-+
-+
- def _setup(cfg, mode, test_name):
-     """ Setup hardware loopback mode for GRO testing. """
- 
-@@ -233,30 +332,14 @@ from lib.py import ksft_variants
- 
-     _setup(cfg, mode, test_name)
- 
--    base_cmd_args = [
--        f"--{protocol}",
--        f"--dmac {_resolve_dmac(cfg, ipver)}",
--        f"--smac {cfg.remote_dev['address']}",
--        f"--daddr {cfg.addr_v[ipver]}",
--        f"--saddr {cfg.remote_addr_v[ipver]}",
--        f"--test {test_name}",
--        "--verbose"
--    ]
--    base_args = " ".join(base_cmd_args)
--
-     # Each test is run 6 times to deflake, because given the receive timing,
-     # not all packets that should coalesce will be considered in the same flow
-     # on every try.
-     max_retries = 6
-     for attempt in range(max_retries):
--        rx_cmd = f"{cfg.bin_local} {base_args} --rx --iface {cfg.ifname}"
--        tx_cmd = f"{cfg.bin_remote} {base_args} --iface {cfg.remote_ifname}"
--
-         fail_now = attempt >= max_retries - 1
--
--        with bkg(rx_cmd, ksft_ready=True, exit_wait=True,
--                 fail=fail_now) as rx_proc:
--            cmd(tx_cmd, host=cfg.remote)
-+        rx_proc = _run_gro_bin(cfg, test_name, protocol=protocol,
-+                               verbose=True, fail=fail_now)
- 
-         if rx_proc.ret == 0:
-             return
-@@ -270,11 +353,89 @@ from lib.py import ksft_variants
-         ksft_pr(f"Attempt {attempt + 1}/{max_retries} failed, retrying...")
- 
- 
-+def _capacity_variants():
-+    """Generate variants for capacity test: mode x queue setup."""
-+    setups = [
-+        ("isolated", _setup_isolated_queue),
-+        ("1q", lambda cfg: _setup_queue_count(cfg, 1)),
-+        ("8q", lambda cfg: _setup_queue_count(cfg, 8)),
-+    ]
-+    for mode in ["sw", "hw", "lro"]:
-+        for name, func in setups:
-+            yield KsftNamedVariant(f"{mode}_{name}", mode, func)
-+
-+
-+@ksft_variants(_capacity_variants())
-+def test_gro_capacity(cfg, mode, setup_func):
-+    """
-+    Probe GRO capacity.
-+
-+    Start with 8 flows and increase by 2x on each successful run.
-+    Retry up to 3 times on failure.
-+
-+    Variants combine mode (sw, hw, lro) with queue setup:
-+      - isolated: Use a single queue isolated from RSS
-+      - 1q: Configure NIC to use 1 queue
-+      - 8q: Configure NIC to use 8 queues
-+    """
-+    max_retries = 3
-+
-+    _setup(cfg, mode, "capacity")
-+    queue_id = setup_func(cfg)
-+
-+    num_flows = 8
-+    while True:
-+        success = False
-+        for attempt in range(max_retries):
-+            if queue_id is not None:
-+                stats_before = _get_queue_stats(cfg, queue_id)
-+
-+            rx_proc = _run_gro_bin(cfg, "capacity", num_flows=num_flows)
-+            output = rx_proc.stdout
-+
-+            if queue_id is not None:
-+                stats_after = _get_queue_stats(cfg, queue_id)
-+                qstat_pkts = (stats_after.get('rx-packets', 0) -
-+                              stats_before.get('rx-packets', 0))
-+                gro_pkts = (stats_after.get('rx-hw-gro-packets', 0) -
-+                            stats_before.get('rx-hw-gro-packets', 0))
-+                qstat_str = f" qstat={qstat_pkts} hw-gro={gro_pkts}"
-+            else:
-+                qstat_str = ""
-+
-+            # Parse and print STATS line
-+            match = re.search(
-+                r'STATS: received=(\d+) wire=(\d+) coalesced=(\d+)', output)
-+            if match:
-+                received = int(match.group(1))
-+                wire = int(match.group(2))
-+                coalesced = int(match.group(3))
-+                status = "PASS" if received == num_flows else "MISS"
-+                ksft_pr(f"flows={num_flows} attempt={attempt + 1} "
-+                        f"received={received} wire={wire} "
-+                        f"coalesced={coalesced}{qstat_str} [{status}]")
-+                if received == num_flows:
-+                    success = True
-+                    break
-+            else:
-+                ksft_pr(rx_proc)
-+                ksft_pr(f"flows={num_flows} attempt={attempt + 1}"
-+                        f"{qstat_str} [FAIL - can't parse stats]")
-+
-+        if not success:
-+            ksft_pr(f"Stopped at {num_flows} flows")
-+            break
-+
-+        num_flows *= 2
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
- 
-     with NetDrvEpEnv(__file__) as cfg:
--        ksft_run(cases=[test], args=(cfg,))
-+        cfg.ethnl = EthtoolFamily()
-+        cfg.netnl = NetdevFamily()
-+        ksft_run(cases=[test, test_gro_capacity], args=(cfg,))
-     ksft_exit()
- 
- 
+ unsigned long pagemap_get_pfn(int fd, char *start)
+ {
+ 	uint64_t entry = pagemap_get_entry(fd, start);
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index e9c4e24769c1..e0b6ae1b12f5 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -85,6 +85,7 @@ uint64_t pagemap_get_entry(int fd, char *start);
+ bool pagemap_is_softdirty(int fd, char *start);
+ bool pagemap_is_swapped(int fd, char *start);
+ bool pagemap_is_populated(int fd, char *start);
++bool pagemap_is_huge_zero(int fd, char *start);
+ unsigned long pagemap_get_pfn(int fd, char *start);
+ void clear_softdirty(void);
+ bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len);
+
+base-commit: f0caa1d49cc07b30a7e2f104d3853ec6dc1c3cad
 -- 
 2.53.0
 
