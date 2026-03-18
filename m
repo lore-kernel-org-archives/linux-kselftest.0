@@ -1,207 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805E7369974;
-	Wed, 18 Mar 2026 07:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B3F33D6D2;
+	Wed, 18 Mar 2026 07:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773818138; cv=none; b=d4vJOgyEiZ7ZvGne6ipUl876aFbYMsL63OEUJymCkJMlLEHdlZ6VlBvTEyg3EjSyLo2fYxIvyNI/bgynB81FkE8LbHJ0zzPgG7y9uCpiM1X2FsTI8Z6XQ/4y8uLrlxii/XTNFpNMobiE4eHhHYgSujvjPc3+i5vwM/RKGvFxl8c=
+	t=1773818402; cv=none; b=KE3PKsSPIgImdlIvOGlJCLsfUgmHTk17YkN0lN2REWH0bhBG+nkzDSuYILb5g9VaVowTyxAGxK/0jr3SHnJxMIjwByD2CL598k1qQKf0NoYqpC2HCv0NeEEvPiZKcIuEwOrvzLC4udgOX/falQj9ysCEj7aXthXXsmPpg+3Pevs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773818138; c=relaxed/simple;
-	bh=HA57TZoe4kUHc2+bGmz45ludm6iUpxni9mm++DOzFxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q85Mfbl73Gt8Rbi1XcUerOnscaCLcasMCPzYfLe1EvL0pzjLbI4SzwEwdQxp5w9Pb8HWKsjYbYkNqDmogw1iDPa4VJqoIki7eoXLQgyeEkOJGaN30yG2Zw307ve+QBmI7cHTH+iMPb9JedePsEM9dIleUWP75DwOhwSf1zbmMpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9cufFL5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773818402; c=relaxed/simple;
+	bh=X5phuSWAi+AekiVmJplfRCsVo8uogimNNVasgHiT+fc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qJPtjZtjDCQkbde3vwI4ZBOiLbzESPvAu/H0EBFCTbFyKwd19Pd5sCIPfPjekUNgtrUox801gMcLQD4VIHuEAV6XhAcdH7DJq27QYY9HebNCJ58ylpvQfBPW+Gg0l9PwXNLpyuKI5WcDnUnb6rbfv0UnwyjaDcr128y9yk+rwuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=Texf1fR7; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=qpNl5rE5; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9cufFL5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7960C19421;
-	Wed, 18 Mar 2026 07:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773818138;
-	bh=HA57TZoe4kUHc2+bGmz45ludm6iUpxni9mm++DOzFxw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T9cufFL5XjwyV8VXoZUq2Dftqo/gLYu5x7FdiDrcQd3PhMf4B3ZtRpskY4DrsJJf6
-	 BzCUja/lf6wGuGhbSazOGuLsVkWXa/rlQpcfrcIEAeKNMCscbjfjpXws473vaOElIR
-	 dUGryHxVz5asQsZwiGhc1D6dCqiHeq88gfVDNuslgWqkGi5lQQP8IVrAkZwPBnuL5F
-	 AhbCCG3Pb0ZuzyCND91nwa/v0KsO7/pMp9TVbz/MsRydZlXlpZzvL3B1q/mO2hx5eH
-	 6FFpKCA3y0F3bJuNjTkXh0pt0lztkIS9GX5nJZLKi8yykdnUkdfdCeeEllMbdSx2xx
-	 /+XFAKcy+FeMA==
-Date: Wed, 18 Mar 2026 09:15:31 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 1/6] selftests/liveupdate: add framework for memfd tests
-Message-ID: <abpRE6cfsyuoeiiq@kernel.org>
-References: <20260309115441.266805-1-pratyush@kernel.org>
- <20260309115441.266805-2-pratyush@kernel.org>
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="Texf1fR7";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="qpNl5rE5"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1773818397;
+	bh=X5phuSWAi+AekiVmJplfRCsVo8uogimNNVasgHiT+fc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Texf1fR7MpUQXbhKZ3r5lCbDFcKanyIvQGpuru+ac3NJf31YHpxWkEI1A1DUIROn8
+	 QiJKyJVX9teGYGQCYfPyXwjtJalOQLa57EuHvNSDd6bCfoIuVBpR8lD8QZT7049hv8
+	 So6YobSJiUDVXyOY4LBhrA3kZ5GJZmCrP6dM/c7V+Vh58wMMOH6l1W5sMQ//RyMFxl
+	 qCZd4XA5DhHANb9oQqR776+aWoafsv3ItE4tA+Bc7D84sj0r0nPYwWny87nh1Oz1oj
+	 d+l2cDFmVkNxUTouNSXsIX6P7/Aq+4lh0iFGvZk8eGOSsB9IzCrhhT0Qv3sb2kDWwu
+	 fVdrC1uHmUGFhCouKJNIaflO4msMfu5PswND/E87W6lnODe3/GXMju4/SfWpJ+hBhk
+	 kZdxeT07EhIJiXShmDQ7VoFtX+XhOdRXW/Mn/MLrOid40ztiTjUShNOhQNThtqYlNi
+	 nuD85Ld11CctdfwXPAPAFaHTPDxqFBf9qpi6BJ9zLo+xNoAVFGg3K9uVcGh+bUXfC1
+	 VF2yGO5xaR/NSjp2ABzs/tXo8f7ESbvNa4uhKXMuEWun87kiti46ZSLpu+9AIhEnZp
+	 FNOpwCyMhv4xYuSadOYZC7cXu6zWn8RRzvGhRwbrLqO2g7TdDIo61A5scH3Jj1K+6R
+	 5ML/euN1jtWWhCjHV4t0CAks=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 81A141E8095; Wed, 18 Mar 2026 15:19:57 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1773818395;
+	bh=X5phuSWAi+AekiVmJplfRCsVo8uogimNNVasgHiT+fc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qpNl5rE5r9s4HGR5C5zoYZp41Nar5DgaVFwhro3oSMCpd5UfhZK5BQplxz+HLYUKb
+	 2KBjObMcJLK+yATmIxAScBLPE1PiqjOeQdUZMDGHz4hvmFuyR4Wh6iICoAhUP68krk
+	 ZUpG+J6DW5Ckv5wgzEyll5ulWaN/xwUKjip76QBfgbtMz/vwdGW5rUsOxaLb6furlr
+	 altfwFsKt4ue0ye9jwGLOpJ6D3G+jdulPzn0gqSY22GXka+wAySqed3yRuzbyc1Ide
+	 3IdvOBpTIiKWKkqMVG+I8hzzwYK6VW+WDtM9ElIx9QTYF5g9aSmL1GOIIvjNFbfl9T
+	 mqH2adK9MV7MdobI7KxyzSEMaZO7jCVBMm+1NoM7nEQJb/8Sq125YXvGr/BYQ6tWX0
+	 uv3NP5cX+gf06wZS4w129Pn2D6zfRCj0ct2GooFAEr4h1PxoTiKhv78aSkW4WgovRx
+	 Ww8XVG/ZjvLyzjUbErYNwDgvziruTl5rS4OypaisAP8isSoTTSSqkZG0hoReggwqtr
+	 viygdr/kbPE45c5yBj8DKsXg2CT587nziE6+va+hyVzcPksbyDIAjxXhbo/5ajFMvj
+	 CID5Y/M0dAhv5ooByXR4NZqB8UULRIa44wkTi+7IdYDKzePMm8qbfIgzuBbrmgRkfv
+	 qm19t9zmdFQRH8Y/qEIwuPv0=
+Received: from [IPV6:2001:8003:8824:9e00:6d16:7ef9:c827:387c] (unknown [IPv6:2001:8003:8824:9e00:6d16:7ef9:c827:387c])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id D67AD1E808F;
+	Wed, 18 Mar 2026 15:19:55 +0800 (AWST)
+Message-ID: <6522d194-12f1-49d2-ba91-ef3e26b49817@davidgow.net>
+Date: Wed, 18 Mar 2026 15:19:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260309115441.266805-2-pratyush@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/8] lib/glob: bug fixes, new features, and tests
+To: Josh Law <objecting@objecting.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+ Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+References: <20260315211807.411173-1-objecting@objecting.org>
+ <b077cc42-ee35-4165-9936-49ef7d53e0e8@davidgow.net>
+ <A5DA6F8B-C9B9-4BBB-ABE5-89A9E6EA577A@objecting.org>
+Content-Language: fr
+From: David Gow <david@davidgow.net>
+In-Reply-To: <A5DA6F8B-C9B9-4BBB-ABE5-89A9E6EA577A@objecting.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 09, 2026 at 11:54:34AM +0000, Pratyush Yadav wrote:
-> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
+Le 18/03/2026 à 12:32 AM, Josh Law a écrit :
 > 
-> Currently memfd preservation using LUO is only tested indirectly via the
-> luo_multi_session or luo_kexec_simple tests. Their main purpose is to
-> test other live update functionality.
 > 
-> Add a framework for writing memfd tests. The framework hooks into the
-> kselftest harness, but adds some things on top to make it suitable for
-> live update.
+> On 17 March 2026 07:19:47 GMT, David Gow <david@davidgow.net> wrote:
+>> Hi Josh,
+>>
+>> Le 16/03/2026 à 5:17 AM, Josh Law a écrit :
+>>> Bug fixes, extensions, and test coverage for lib/glob.c:
+>>>
+>>> Patches 1-3 fix corner cases in the existing glob_match():
+>>>     - Inverted character class ranges like [z-a] are now normalized
+>>>       instead of silently failing to match.
+>>>     - A trailing backslash is treated as a literal '\' rather than
+>>>       reading past the end of the pattern string.
+>>>     - [^...] is accepted as an alias for [!...] to match the
+>>>       regex-style negation syntax documented in glob(7).
+>>>
+>>> Patches 4-5 add two new utility functions:
+>>>     - glob_match_nocase() for case-insensitive matching, useful for
+>>>       subsystems like ATA that need case-folded denylist comparisons.
+>>>     - glob_validate() for checking pattern syntax before use, so
+>>>       callers can reject malformed patterns early with a clear error.
+>>>
+>>> Patches 6-7 add kunit test coverage:
+>>>     - 47 new test cases for glob_match covering escapes, inverted
+>>>       ranges, caret negation, edge cases, and unclosed brackets.
+>>>     - 11 test cases for glob_match_nocase.
+>>>     - 17 test cases for glob_validate.
+>>>
+>>> Patch 8 adds a real in-tree caller for glob_validate() in the kunit
+>>> executor, validating user-provided filter_glob patterns and returning
+>>> -EINVAL for malformed ones.
+>>>
+>>> Changes since v3:
+>>>     - Resend: v3 accidentally included stale v2 patch files in the
+>>>       same email thread.  No code changes from v3.
+>>>
+>>> Changes since v2:
+>>>     - Fixed missing '^' in __glob_match metacharacter comment (patch 4).
+>>>     - Dropped unnecessary braces in glob_validate case '[' (patch 5).
+>>>     - Added real-world example to glob_validate() commit message (patch 5).
+>>>
+>>> Changes since v1:
+>>>     - Added patch 8 (kunit executor caller for glob_validate).
+>>>     - Updated glob_match_nocase() commit message to reference the ATA
+>>>       denylist as the intended caller (follow-up patch).
+>>>
+>>> Josh Law (8):
+>>>     lib/glob: normalize inverted character class ranges
+>>>     lib/glob: treat trailing backslash as literal character
+>>>     lib/glob: accept [^...] as character class negation syntax
+>>>     lib/glob: add case-insensitive glob_match_nocase()
+>>>     lib/glob: add glob_validate() for pattern syntax checking
+>>>     lib/tests: add glob test cases for escapes, edge cases, and new
+>>>       features
+>>>     lib/tests: add kunit tests for glob_match_nocase() and glob_validate()
+>>>     kunit: validate glob filter patterns before use
+>>>
+>>>    include/linux/glob.h   |   2 +
+>>>    lib/glob.c             | 123 ++++++++++++++++++++++++++++++++++++----
+>>>    lib/kunit/executor.c   |  13 +++++
+>>>    lib/tests/glob_kunit.c | 124 +++++++++++++++++++++++++++++++++++++++++
+>>>    4 files changed, 252 insertions(+), 10 deletions(-)
+>>>
+>>
+>> Thanks: always good to have better test coverage (and those are some nasty corner cases!)
+>>
+>> Series is:
+>>
+>> Acked-by: David Gow <david@davidgow.net>
+>> Tested-by: David Gow <david@davidgow.net>
+>>
+>> I'm making the assumption that this is going in via mm-nonmm, not the kselftest/kunit tree, as it has dependencies in that branch.
+>>
+>> Cheers,
+>> -- David
+>>
 > 
-> The LUO FD (/dev/liveupdate) can only be opened by one process at a
-> time. Each test runs in its own process. This means the LUO FD must be
-> owned by the main process and shared to children. main() opens the LUO
-> FD and shares it to child runners using a global variable.
 > 
-> Live update tests run in two stages. One before kexec and one after.
-> Detect the stage using a special state session. If the session is
-> present, it means the test is in post-kexec state.
-> 
-> Additionally, take in an optional --stage argument that lets callers
-> specify expected stage. This is useful as a safety net to catch LUO core
-> failures. If LUO core fails to preserve the state session properly, this
-> option can help detect this and fail early. Since the option is not
-> recognized by the kselftest harness, remove it from argv before calling
-> test_harness_run().
-> 
-> Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-with a few nits below.
-
-> ---
->  tools/testing/selftests/liveupdate/Makefile   |  1 +
->  .../testing/selftests/liveupdate/luo_memfd.c  | 77 +++++++++++++++++++
->  2 files changed, 78 insertions(+)
->  create mode 100644 tools/testing/selftests/liveupdate/luo_memfd.c
-> 
-> diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
-> index 080754787ede..051daae55eec 100644
-> --- a/tools/testing/selftests/liveupdate/Makefile
-> +++ b/tools/testing/selftests/liveupdate/Makefile
-> @@ -6,6 +6,7 @@ TEST_GEN_PROGS += liveupdate
->  
->  TEST_GEN_PROGS_EXTENDED += luo_kexec_simple
->  TEST_GEN_PROGS_EXTENDED += luo_multi_session
-> +TEST_GEN_PROGS_EXTENDED += luo_memfd
->  
->  TEST_FILES += do_kexec.sh
->  
-> diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
-> new file mode 100644
-> index 000000000000..b779eee18387
-> --- /dev/null
-> +++ b/tools/testing/selftests/liveupdate/luo_memfd.c
-> @@ -0,0 +1,77 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (c) 2026, Google LLC.
-> + * Pratyush Yadav (Google) <pratyush@kernel.org>
-> + */
-> +
-> +/*
-> + * Selftests for memfd preservation via LUO.
-> + */
-> +
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +#include <string.h>
-> +#include <sys/ioctl.h>
-> +#include <unistd.h>
-> +
-> +#include <linux/liveupdate.h>
-> +
-> +#include "../kselftest.h"
-> +#include "../kselftest_harness.h"
-> +
-> +#include "luo_test_utils.h"
-> +
-> +#define STATE_SESSION_NAME "luo-state"
-> +#define STATE_MEMFD_TOKEN 1
-> +
-> +#define LIVEUPDATE_DEV "/dev/liveupdate"
-> +static int luo_fd = -1, stage;
-
-Nit: declaring stage on a separate line is a bit clearer.
-
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	int session, expected_stage = 0;
-
-Ditto.
-
-> +
-> +	/*
-> +	 * The test takes an optional --stage argument. This lets callers
-> +	 * provide the expected stage, and if that doesn't match the test errors
-> +	 * out.
-> +	 *
-> +	 * Look for the stage. Since test_harness_run() doesn't recognize it,
-> +	 * once found, remove it from argv.
-> +	 */
-> +	for (int i = 1; i < argc; i++) {
-> +		if (strcmp(argv[i], "--stage") == 0) {
-> +			if (i + 1 < argc) {
-> +				expected_stage = atoi(argv[i + 1]);
-> +				memmove(&argv[i], &argv[i + 2], (argc - i - 1) * sizeof(char *));
-> +				argc -= 2;
-> +				i--;
-> +			} else {
-> +				ksft_exit_fail_msg("Option --stage requires an argument\n");
-> +			}
-> +		}
-> +	}
-> +
-> +	luo_fd = luo_open_device();
-> +	if (luo_fd < 0)
-> +		ksft_exit_skip("Failed to open %s (%s). Is the luo module loaded?\n",
-
-LUO can't be a module :) Maybe
-
-"Is LUO enabled in the kernel?"
-
-
-> +			       strerror(errno), LUO_DEVICE);
-> +
-> +	session = luo_retrieve_session(luo_fd, STATE_SESSION_NAME);
-> +	if (session == -ENOENT)
-> +		stage = 1;
-> +	else if (session >= 0)
-> +		stage = 2;
-> +	else
-> +		fail_exit("Failed to check for state session");
-
-There is ksft_exit_fail_perror(), would be more consistent with other exit
-paths.
-
-> +
-> +	if (expected_stage && expected_stage != stage)
-> +		ksft_exit_fail_msg("Stage mismatch: expected %d, got %d\n",
-> +				   expected_stage, stage);
-> +
-> +	if (stage == 1)
-> +		create_state_file(luo_fd, STATE_SESSION_NAME, STATE_MEMFD_TOKEN, 2);
-> +
-> +	test_harness_run(argc, argv);
-> +}
-> -- 
-> 2.53.0.473.g4a7958ca14-goog
+> Also, David? You mean the *ENTIRE* series as in the code too (the new functions) Or just your kunit changes
 > 
 
--- 
-Sincerely yours,
-Mike.
+I only really need to Ack the KUnit changes, but I did test the entire 
+series, so feel free to apply it to all of them.
+
+Cheers,
+-- David
+
