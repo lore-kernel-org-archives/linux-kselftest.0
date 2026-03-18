@@ -1,219 +1,143 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2A53D1CA8;
-	Wed, 18 Mar 2026 11:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74BB3B6C1C;
+	Wed, 18 Mar 2026 12:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773834716; cv=none; b=INjF64VyceDJtCrYYzUQJvodjZbwk+5gfQL8LsAslGdrS3aJR5PGwZ+GzdLvgxJFmOl8Yt0oUk1Z/rwrH2DX5KZ6CW980FeNWkQcT5rpAL8W6tj5rhxwke731ESnLQYiWlTZcD8zd5qfDMYLZzZD4f6cd1MXUjdmuWp7Od59cKA=
+	t=1773835630; cv=none; b=nT4hkps1E9fhJyMhuBVKuRBDlniPI8DMDVECydjI+rDj7tT7Mo/iuiS4AlIHKmGrAfyLZdqLzCvhQSdSGtzUc+6exihUftWvsxQ3hHAd/KsY9uU4u2TuE9+y+bw9wrd7b3kr/6qFxv1ku9HOpL9ujU4Yb14gFgD6u6MfKN2C84g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773834716; c=relaxed/simple;
-	bh=NdvYSfGJA3TaQt+fA44orlNXTsVGaF7BQFG0Ch+sVP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UHDrj5cYu8+b1uWWv4IM1/quEv3aX9G5aGuxjQlyP6W21JmPlo/n5UWFO+c9x8oPNEWFX32MLfF+W+uxt4ZhbPRTa1AEinAUA7YlV2/dSfM6FYMVp/cUR959IWGZNYPCt9ENXsjHXBBGWmgb+4S5I/P9SeDeKEMP7X10k9yF/vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JhQ+cmB5; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1773835630; c=relaxed/simple;
+	bh=Qwy/Zw7mfBZ5j/QG9jUPEflfhiHhV/iYcxuVi6gsuBg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XB9hxSJl0vU/6RbqT6+yvTgs3R/D3xbfjvUe6E5AEnwLHE/oj9l6Z0kREBmH1LZAHAucxlln4GnOtSovG8vQVjL+ksvjS26Kk722FmGuZqdTLrkYZ2xBSWBnDJ7aWUu1ZETnoAhOk1XnQeF9upV6CZeT/cRcpnNg7pouzHJl+tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=leByJek7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JhQ+cmB5"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=XsXlEQr1q7kaSib/qBKH1VAa8U1xAnF1cwUdbfssMpw=; b=JhQ+cmB5U5Bo4sqJHXaHxh5K30
-	qsRu64UMEWVEQUPtbKg2j1GcYYkzFegZVNIwM4UcHmF0ZNSoAl6GvcEO6boch0Rlb/DAgqkFxhdcF
-	VzUDTGFp82ZwKfmoVnMBDALRFb63hCWK/X162ONh6imlORUilou3erYJueXXjnTlgwrkYBaFY0Ug8
-	axFhd0FI97tvxf8ND0SXcGxm/00hqgBb2xFNf1ZPyVomlG63Y0eb3zjGYTe0/1Pn96V+XOw62XH0T
-	OU1PynNmpsh4HzQ7VTLrpak7oqCdGGgFBF6T73PqjNGLBXpJexbbCsw2l4pKW11/u7X2UN0l83sgO
-	RAovC8mA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w2pR1-0000000B7JZ-1WlA;
-	Wed, 18 Mar 2026 11:51:35 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0AF263007C4; Wed, 18 Mar 2026 12:51:34 +0100 (CET)
-Date: Wed, 18 Mar 2026 12:51:34 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Albert Esteve <aesteve@redhat.com>
-Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	dri-devel@lists.freedesktop.org, workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Alessandro Carminati <acarmina@redhat.com>,
-	Guenter Roeck <linux@roeck-us.net>, Kees Cook <kees@kernel.org>,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>
-Subject: Re: [PATCH v6 0/5] kunit: Add support for suppressing warning
- backtraces
-Message-ID: <20260318115134.GA3738786@noisy.programming.kicks-ass.net>
-References: <20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com>
- <69f4eb09-efbd-4bd1-81b8-963b78e1a3a3@kernel.org>
- <20260317113025.GG2872@noisy.programming.kicks-ass.net>
- <CADSE00Jy=G7HhRkb7vmFSuGFmvpGGt1TQ2NA+7XGLZ4b=g3rxQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="leByJek7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D426FC2BCB3;
+	Wed, 18 Mar 2026 12:07:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773835630;
+	bh=Qwy/Zw7mfBZ5j/QG9jUPEflfhiHhV/iYcxuVi6gsuBg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=leByJek7uVZg6cUI421E1qlsRgFu5i1j9Nrcp9TwCu1n/m2wuj0G9A52e2o93gCeH
+	 UE8Pm3pCz99lvNY5DqI85yN3uJYOlzA3MSCA7F49p9zmHwWV9oVeNp2NZ1TNGNAfRS
+	 oGhFtbj4lm5IYM6RTSEdhV8PdXr6kYryFRfIw7C4fAjIQdQMagG3Z2yZR9xv/SxKwc
+	 zK9ZzLYMWbYW2D+n2DghLnEarPNB2t3FbiaIQPvqj5iRhnDXQEt2/q1ki88ccS2Q9s
+	 b7uYJ/mi0bRuEp60/+SEKCMz7RW1DeHIkSAEHZKEVgY1R4GQiYyZ8OaOiRipCnMwrN
+	 uolUohi6Gzm/A==
+Message-ID: <ee3ca88c-d6ea-44cf-8f75-e996d52c4c92@kernel.org>
+Date: Wed, 18 Mar 2026 13:07:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADSE00Jy=G7HhRkb7vmFSuGFmvpGGt1TQ2NA+7XGLZ4b=g3rxQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/5] selftests/mm: skip several tests when thp is not
+ available
+To: Chunyu Hu <chuhu@redhat.com>, Andrew Morton <akpm@linux-foundation.org>
+Cc: shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
+ baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
+References: <20260317094419.1429259-1-chuhu@redhat.com>
+ <20260317113730.45d5cef4ba84be4df631677f@linux-foundation.org>
+ <abpu4OMsy3Xl5QA0@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <abpu4OMsy3Xl5QA0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 18, 2026 at 10:25:00AM +0100, Albert Esteve wrote:
-
-> So back to my test on this. Alessandro detailed two strategies in the
-> last version, one of them (storing the function name in `struct
-> bug_entry`) was already used and discarded in older iterations of this
-> series. So let's focus on the other strategy, using 'kallsyms`. Let's
-> assume we still store the function name when registering a new symbol
-> to suppress. Otherwise, we might need to check address ranges to
-> ensure bugaddr is within the function's scope, which sounds trickier?
-
-> With `kallsyms` we can infer the originating functionid. But this
-> approach works unreliably with compiler-induced transformations (e.g.,
-> inlining, cloning, code fragmentation). And we still cannot prevent
-> all output. 
-
-> Additionally, we would need to prevent prints in
-> `warn_slowpath_fmt()`. There may be other `printk`s embedded in the
-> macros, but let's focus on suppressing all warnings as a best effort.
-> It would already improve the quality of life for testers.
-
-warn_slowpath_fmt() should be completely unused on x86, s390 and
-possibly others. But sure.
-
-> Considering these remaining issues, I managed to create a centralised
-> proposal. Please find the main changes at the bottom of this message.
+On 3/18/26 10:22, Chunyu Hu wrote:
+> On Tue, Mar 17, 2026 at 11:37:30AM -0700, Andrew Morton wrote:
+>> On Tue, 17 Mar 2026 17:44:14 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
+>>
+>>> There are several tests requires transprarent hugepages, when run on thp
+>>> disabled kernel such as realtime kernel, there will be false negative.
+>>> Mark those tests as skip when thp is not available.
+>>
+>> AI review asked some questions:
+>> https://sashiko.dev/#/patchset/20260317094419.1429259-1-chuhu%40redhat.com
 > 
-> But again, even with these, the solution remains unreliable. We can
-> mitigate this by registering the test name on the suppression list (at
-> least, I can make the new test in this series pass with that). Not
-> ideal, but we could mention it in the documentation. Something like
-> "Suppression is matched by the function where the warning is reported.
-> If the warning is triggered from a helper (or the compiler inlines it
-> into the test), that function name may differ. In that case, register
-> and start suppression for both the test and the helper so the test
-> passes regardless of inlining."
+> Hi Andrew,
 > 
-> Would that be a more acceptable solution? Is there a better option I
-> am not seeing?
+> Nice tool.
+>  
+> For question one. In guard-region test, collapse tests are for checking
+> collapse is denied when operating on guard region, not for checking
+> madvise(MADV_COLLAPSE) will fail when thp is setup to 'never with sysfs,
+> result is same, but it's a different test. Maybe we don't have strong
+> interest to test when thp is set to 'never' in this collapse test.
+> Do you perfer we let it run when thp is setup with 'never'?
+> 
+> For question two. In soft dirty test. Yes, test_mprotect skip logic has
+> similar issue when open failed. 'Bail out' would be shown. Maybe we
+> do this in other series or you prefer me to fix it in this series?
 
-Yes, definitely. This is the sort of thing I was aiming for.
+IMHO, that's something for another series (if at all).
 
-Other option would be the __FILE__ and __LINE__ data, you can match
-uniquely against that and not worry about the compiler transforms.
-Perhaps less user friendly as a function identifier, but meh, this isn't
-aimed at users anyway, but kernel devs.
+> 
+> For question three. Add buffer length check in write_file() helper and
+> check if written bytes equal expected bytes. It's easy to add a buffer
+> lenghth check and make it robust. It's not easy to do the partial
+> written check as that will make the helper more complex and need one
+> more parameter as expected written bytes. Maybe for such question, we
+> should do with other series, not in this one?
 
-The kunit userspace could even scrape the __FILE__ and __LINE__ from the
-kernel it was compiled against if it so wants. It should be simple
-enough to write a tool that takes the source and a function name and
-outputs the relevant __FILE__ and __LINE__ thingies. All you need is a
-very rudimentary C parser and we've got a ton of those around.
+The AI brings up many things that are irrelevant in practice (in
+particular for tests). So I wouldn't worry about that. You are only
+moving code.
 
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index c78600212b6c1..3cb004a7803f4 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -39,6 +39,7 @@
->  #include <linux/sys_info.h>
->  #include <trace/events/error_report.h>
->  #include <asm/sections.h>
-> +#include <kunit/bug.h>
-> 
->  #define PANIC_TIMER_STEP 100
->  #define PANIC_BLINK_SPD 18
-> @@ -1080,9 +1081,14 @@ void __warn(const char *file, int line, void
-> *caller, unsigned taint,
->  void warn_slowpath_fmt(const char *file, int line, unsigned taint,
->                        const char *fmt, ...)
->  {
-> -       bool rcu = warn_rcu_enter();
-> +       bool rcu;
->         struct warn_args args;
-> 
-> +       if (__kunit_is_suppressed_warning_at((unsigned long)__builtin_return_address(0)))
-> +               return;
-> +
-> +       rcu = warn_rcu_enter();
-> +
->         pr_warn(CUT_HERE);
-> 
->         if (!fmt) {
-> 
-> diff --git a/lib/bug.c b/lib/bug.c
-> index 623c467a8b76c..e90b038d9225e 100644
-> --- a/lib/bug.c
-> +++ b/lib/bug.c
-> @@ -48,6 +48,7 @@
->  #include <linux/rculist.h>
->  #include <linux/ftrace.h>
->  #include <linux/context_tracking.h>
-> +#include <kunit/bug.h>
-> 
->  extern struct bug_entry __start___bug_table[], __stop___bug_table[];
-> 
-> @@ -223,6 +224,9 @@ static enum bug_trap_type __report_bug(struct
-> bug_entry *bug, unsigned long buga
->         no_cut   = bug->flags & BUGFLAG_NO_CUT_HERE;
->         has_args = bug->flags & BUGFLAG_ARGS;
-> 
-> +       if (warning && __kunit_is_suppressed_warning_at(bugaddr))
-> +               return BUG_TRAP_TYPE_WARN;
-> +
+-- 
+Cheers,
 
-I suppose there's a question here if a suppressed warn counts towards
-the once logic below.
-
->         if (warning && once) {
->                 if (done)
->                         return BUG_TRAP_TYPE_WARN;
-> 
-> diff --git a/lib/kunit/bug.c b/lib/kunit/bug.c
-> index 9c2c4ee013d92..13ffddb044636 100644
-> --- a/lib/kunit/bug.c
-> +++ b/lib/kunit/bug.c
-> @@ -11,6 +11,7 @@
->  #include <linux/export.h>
->  #include <linux/instrumentation.h>
->  #include <linux/jump_label.h>
-> +#include <linux/kallsyms.h>
->  #include <linux/rculist.h>
->  #include <linux/string.h>
-> 
-> @@ -68,4 +69,16 @@ noinstr bool __kunit_is_suppressed_warning(const
-> char *function)
->  }
->  EXPORT_SYMBOL_GPL(__kunit_is_suppressed_warning);
-> 
-> +bool __kunit_is_suppressed_warning_at(unsigned long addr)
-> +{
-> +       char buf[KSYM_SYMBOL_LEN];
-> +
-> +       if (!static_branch_unlikely(&kunit_suppress_warnings_key))
-> +               return false;
-
-At this point you don't need this to be a static_branch either, both
-callers are already in warn slowpaths and nobody cares.
-
-> +       if (sprint_symbol_no_offset(buf, addr) <= 0)
-> +               return false;
-> +       return __kunit_check_suppress(buf);
-> +}
-> +EXPORT_SYMBOL_GPL(__kunit_is_suppressed_warning_at);
-
-I don't think you need this export, both callers are definitely
-in-kernel.
+David
