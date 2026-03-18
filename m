@@ -1,119 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB6225A2B4;
-	Wed, 18 Mar 2026 07:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005BD37700A
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 08:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773819832; cv=none; b=Qlvcmc+eiMU+93/n4m/l4Pbgykmd1SNfcXCwDIycsll09KpVd5RAd65JezGZr3YYBftijpvrw/+6eS4JuQVwEUCwTyeIoM4S3XfQ4ItfkJwq1EVTqzwFzgM1ZTcGzBdwqwqDqCqVY43OXuTZ4EqUSa4WrbpvBAr2+12YMCCl2RI=
+	t=1773821313; cv=none; b=OReyPV0JXrc0p2OXj2JT4a1zCtYioWIDkXiRkp6uVoFM8aa+E0VuijK9Xhs1+3zm5mWf4kE09NJw7HOPJeWwq9pJ0222AWPgXkhDYAopCv598X2DMWkz647/6SQ9VZ5IAX2qhmnJCKBFMryVYBS5v7PBD+qpT6GK7nqDmudL4kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773819832; c=relaxed/simple;
-	bh=MR6pOI/j04PYleruQQa98TK1ndpttSpNVdbTItOLHTk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=soM0E8uf2rWp831evZWhM6HEXuoHQ9vmOU8St4kibwnD0/rF3hE4lWDAHRPhDldN2wCbBMdTzpnAP2leB0rlQSzNAiCxZ2m5z4HPo0sbN2wh9zlGKDYJ1deNoGy58S/6HYUqngXjnEmeAekNHcKIzpviXCvKtJrg/98kJhgDgOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uU4ZfC6Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773821313; c=relaxed/simple;
+	bh=MqJ9ZODeYbEt0R/xkzyrWcY/8t2782x/WwNEhSmtbkQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=S/PUKdy+8a77fHCmXNB9yHBBGduhE7CiY7TH+iq4HdjzjipLUAAF/1j6eBhu0HPnvo35Of0msqaMjEe/sxTf1suQ5UeICASFFiqC68VNtR9xDmWQ1wqny/22ehtfgu/Krvq+3xkXKu3CrOTgT0oR6yxYn9PPQ+j4ZFMu1j0a1uA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hmazur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o6fEQN37; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hmazur.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uU4ZfC6Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88217C19421;
-	Wed, 18 Mar 2026 07:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773819832;
-	bh=MR6pOI/j04PYleruQQa98TK1ndpttSpNVdbTItOLHTk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uU4ZfC6YLNJjoYyZgv6kgFdMKaBV84iR8hPCq0E1OE6spltjUu/iP0HXsirHpUwDu
-	 R83utcMVIA+GmZ/fCO9wargcDNarNQ8TimXdWLZpq61FDfxzqXxgIynR1VX/AelDwm
-	 1Yohcc8zUdOTT6a1ILg1eEcsPWtu33ZRds3x09hgai4XByGOrpujYJ76dU/H20x3G9
-	 Q5Dkc8PGAIh2FlCj3H1Tkm2YynaeAJON+XazYalreEdjfim4cqyBKkUxpiSZIiGN31
-	 iYEU2EMCTTVOieIutCSZy6irvOJQgoij8wf6B92iAo76kO5zdDzkHEq01UmEW6HQHr
-	 hXwKwDiwqHxDA==
-Date: Wed, 18 Mar 2026 09:43:47 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 6/6] selftests/liveupdate: add fallocate test for memfd
-Message-ID: <abpXs6RgiUDSBA8-@kernel.org>
-References: <20260309115441.266805-1-pratyush@kernel.org>
- <20260309115441.266805-7-pratyush@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o6fEQN37"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4853b00f9f5so69323725e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 01:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1773821310; x=1774426110; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mdYdIRk6feS5LmqJGvOQ7B+0xu4yK3/jsJnsUSbLLIk=;
+        b=o6fEQN37pScovNkRKghGHvFr6BB9INpdqsMK6FQUS9yCBDtqjc3cd7hBVbiVcmZi7k
+         Z7dsvJQU6vM2VCfAUBkXXO+sN+O86NWYliW+aB4jdmHjUtp2u6A1VDDKubRb1FDUNNT6
+         A57TMFvrm0lIcexIjZxxMVLPdmiX+hUCF6VhdR4lNJ4BeZUFKuVRkCPzZdL+kGR1WnqA
+         E8gYYDyf24aTq/Zj23IIfpmaV1bun6REPbo0jlLLa2sjMKKVavSmSlDM2BbOvvYEbPuN
+         v4aH0ojWWKtvzdHoosNnp/u/HxlDWpj7r4CiQocOW2BE4HknDpdzW9ZOu7kvE1lG445X
+         GXyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773821310; x=1774426110;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mdYdIRk6feS5LmqJGvOQ7B+0xu4yK3/jsJnsUSbLLIk=;
+        b=nw9mBxnQ968Ur/mZeOfYR5TwuD+qpBeTlIvUO+nzrAdoJK02wrqd9XgNoUSXaVZAy3
+         5PSfV57pPQtMbSN3iB1bNTIQxXvlYATZB8QTQOmt6eoH+YJ7Nb2t2EtRSVwjnbpx66uK
+         u7brXczgKRtuWbC2Z2shDgYJt8697CfhoQ862S/8+Um1A03/YbzoEYUM7O8z9OobfDvx
+         2KfNPCH7f8HR/pjsVEbNqqCvJNwLswbh9neMDq8WR84KYwXFDow9kZbikuTBFiLBzqUc
+         guIAlhfVx4A7cv0ULaTKcOvTwb4oSqfR5MiAjycf35TTrSvjmDCErh/xzxGibqanfV0D
+         yviw==
+X-Forwarded-Encrypted: i=1; AJvYcCWolpU0UDNy2h0gHFMcYM75jy57GKR4IlY2MtagSf73mTKdvvzN8enxDb1tZg26qlR+Zn/m3q0q4eeMWrWfgv0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzWPsbb74eZJK0W7oW0tFjjXbZ1lytRJK8+m0g8yDqjLBkplP3
+	oDMvJTG9Ly+1jaaZcKpwytgpFUUuj890vIy1JHhCB68Rq5Pm0W3iD4+tczjp9ddf9+GouP5M0SP
+	rkUXnyA==
+X-Received: from wmcx8-n2.prod.google.com ([2002:a05:600c:c1c8:20b0:485:34ec:2b75])
+ (user=hmazur job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4ed4:b0:485:3c2d:d02b
+ with SMTP id 5b1f17b1804b1-486f4444050mr39767575e9.22.1773821310122; Wed, 18
+ Mar 2026 01:08:30 -0700 (PDT)
+Date: Wed, 18 Mar 2026 08:08:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260309115441.266805-7-pratyush@kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.959.g497ff81fa9-goog
+Message-ID: <20260318080825.3063959-1-hmazur@google.com>
+Subject: [PATCH v1 0/1] Make the script complaint with 'sh' shell
+From: Hubert Mazur <hmazur@google.com>
+To: Shuah Khan <shuah@kernel.org>, Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+Cc: Slawomir Rosek <srosek@google.com>, Lukasz Majczak <lmajczak@google.com>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Hubert Mazur <hmazur@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 09, 2026 at 11:54:39AM +0000, Pratyush Yadav wrote:
-> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
-> 
-> When memory is added to a memfd via fallocate(), it does not get zeroed
-> immediately. This is tracked by the absence of the uptodate folio flag.
-> Initially, memfd preservation simply saved the folio flags at preserve
-> time. This led to a bug, where all writes to un-initialized fallocated
-> memory after preserve were lost after live update. This is fixed by
-> patch [0] (not in mainline as of writing this).
-> 
-> Add a test that fallocates some memory in a memfd, preserves it, writes
-> to it. Then in stage 2 it verifies the written content is still present.
-> 
-> [0] https://lore.kernel.org/linux-mm/20260223173931.2221759-2-pratyush@kernel.org/
+Hello,
 
-Looks like it's already in mm-stable, so it's sha should be stable already.
- 
-> Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-> ---
->  .../testing/selftests/liveupdate/luo_memfd.c  | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
-> index 75f88101e7b5..dde3c78db50e 100644
-> --- a/tools/testing/selftests/liveupdate/luo_memfd.c
-> +++ b/tools/testing/selftests/liveupdate/luo_memfd.c
-> @@ -43,6 +43,11 @@
->  #define PRESERVED_MEMFD_TOKEN 1
->  #define PRESERVED_BUFFER_SIZE SZ_1M
->  
-> +#define FALLOCATE_SESSION_NAME "fallocate_session"
-> +#define FALLOCATE_MEMFD_TOKEN 1
-> +#define FALLOCATE_BUFFER_SIZE SZ_1M
-> +#define RANDOM_DATA_FILE_FALLOCATE "luo_random_data_fallocate.bin"
+I'm sending a change that modifies the script a bit to make it
+compliant with the 'sh' shell. The reason behind it is that the test
+cannot be executed on x86 embedded devices without bash. The introduced
+changes are:
+- /bin/bash -> /bin/sh
+- Usage of env $UID changed to command execution $(id -u)
+- $FUNCNAME env changed to local variables with function names
 
-FILESYSTEM_COPY_ or something like that?
+I'm aware that the last one may be the most controversial since it is
+not the most elegant one, though I didn't find any better solution
+to retrieve the name of currently executed function in 'sh'.
 
-> +
->  #define LIVEUPDATE_DEV "/dev/liveupdate"
->  static int luo_fd = -1, stage;
->  
-> @@ -193,6 +198,65 @@ TEST(preserved_ops)
->  	ASSERT_EQ(lseek(fd, 0, SEEK_END), PRESERVED_BUFFER_SIZE);
->  }
->  
-> +/*
-> + * Test that an fallocated memfd is preserved across live update and can be
-> + * written to after being preserved.
-> + */
-> +TEST(fallocate_memfd)
-> +{
-> +	int fd, session;
-> +	char *buffer;
-> +	struct liveupdate_session_preserve_fd preserve_arg = { .size = sizeof(preserve_arg) };
-> +	struct liveupdate_session_retrieve_fd retrieve_arg = { .size = sizeof(retrieve_arg) };
-> +
-> +	buffer = malloc(FALLOCATE_BUFFER_SIZE);
-> +	ASSERT_NE(buffer, NULL);
-> +
-> +	switch (stage) {
-> +	case 1:
+Please take a look.
 
-Functions again :)
+Regards,
+Hubert
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Hubert Mazur (1):
+  selftests/cpu-hotplug: Make the script complaint with sh shell
+
+ tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.53.0.959.g497ff81fa9-goog
+
