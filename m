@@ -1,70 +1,48 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954543E1208;
-	Wed, 18 Mar 2026 15:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D8F3EB7E1;
+	Wed, 18 Mar 2026 16:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773849571; cv=none; b=e5vO3gXP8dV7UB73+IC/q37AZsmSirHmo2fRC751KqBrjfJlsFI87k7EUqjJvTCCSEO9tQ4sv2+ZzhplKrpxDKPqjvl5bcoAR9cr3D0NYmBoaDNNXb9zaqfA3j5eStAevohWs5pywdvX7aRwoZ/r4kT/stIEYN7snIUv0ldmTCI=
+	t=1773849815; cv=none; b=qA35gt+hdXxzYJ1WF+TDaaxxCyipgUBkPB79+KbVRZPEi+pqcxajvriE94oMGYuMvKPF4/U93VNUf5Ky0tDb4mn3Y/XaH1s2r3Dy6UiTgqperMh3m2V+6D01+XRH00l5oUPtYp57K6sOluSU6Frvp0QSNuPP+lBPvsdDhxBnEKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773849571; c=relaxed/simple;
-	bh=/X0YlCpfDx+7GE4gYCD2ji/irbhRczxe13pO90tN+ts=;
+	s=arc-20240116; t=1773849815; c=relaxed/simple;
+	bh=aNn+fWw0djIb7dqDy7dLKcRFCOkUefcH/gjoXK/Vs9A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DGD6mHEoEeLS3Ngkq/3A+zdIs5aKJUspErGkIkRuQUc0Kx6m/0iEwXhnyIBOKotv2zwAa739f4PAUzJtS+CPH+U43Ay/zakUffh6qM6ggmiWzdDe6GjV/T0fNO/wLJQQSfvd1Ci2ZjqXi+AhekrkvuYC6sae9M+/SuJAZOTPF6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=K5h205g3; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bku92WW2xFjL1IAdWUaj/E74UtnyF3IBKRGAaMRz6s4ceZwJIQDfKtdGzk+/Gw/OZGPTLbfqcVF5Cerwc0gOvMFKdl4GB0bkcAkTs1oXtoXoGZNCjFLhkGnbpw6tPGMktLcSwxcfD4tXkZ61QDCS5xIpH/QgTIvXJ4+tbtKGnhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WlosT2SN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="K5h205g3"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=IveppaNPJT54QFrgVviokBkEo5h/cNL1a68V6Vsapn4=; b=K5h205g38VqadK+bKr61TqLPDr
-	sr5DSGstfyqcEiG9s0nLqqkewGb0yAJ6KlwaDCuBd3NDNKvmkWqhtNL/04ilUUci7BokG3O5usmg1
-	6ZCve42SkVC+AEn19S3zspkD1rxd8QaMSezAkBuXayo9v+2EojNYtqBz1ngb1RKesWXM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1w2tIX-00CEhX-Pn; Wed, 18 Mar 2026 16:59:05 +0100
-Date: Wed, 18 Mar 2026 16:59:05 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Naveen Mamindlapalli <naveenm@marvell.com>,
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Hariprasad Kelam <hkelam@marvell.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
- definitions
-Message-ID: <7620dcbc-8423-4351-96d9-3e0e9e7c0b8a@lunn.ch>
-References: <20260310104743.907818-3-bjorn@kernel.org>
- <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
- <b3825c0d-02e5-4625-831f-4346ce4eabd2@lunn.ch>
- <085bb0a9-85d3-4d62-9ac4-3461b61da5f3@bootlin.com>
- <438dae03-4dac-4e66-9f4d-e08b0434c9b4@lunn.ch>
- <20260311195052.1202174f@kernel.org>
- <abJJY8whzSOB8O-X@pengutronix.de>
- <7c45ebf6-0cb2-4a4c-ac12-f4f9bb59c908@lunn.ch>
- <42abf88e-4fbf-4966-9490-8315f118ddea@bootlin.com>
- <873423y27k.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WlosT2SN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D906C19421;
+	Wed, 18 Mar 2026 16:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773849814;
+	bh=aNn+fWw0djIb7dqDy7dLKcRFCOkUefcH/gjoXK/Vs9A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WlosT2SN5hWG5HX8Futk7jLWgV7BImofp+/g/PJDRrmtx7DtTLc4HP9KWiGdtFDWz
+	 RjJn9ioriyx8OsCUsYxN53VcFjgKMA+2sdXgM7RkdkSIhYWsL/RkZC3cC4O1INHErz
+	 wZXzH7hyKz7xsLTr8jJW3eKp6AcDnrQrYrJQ7Va5Rbtq4Ke1Wo5k1qqJHaNa5i2fEV
+	 kCYveN1RFfSbAL+Z3pld+VxlAb+du2ZhnlR4FzWuCT+aVKFQAZlp+Qr8BZWKQPHfZJ
+	 aVOGKyZ9+R19wKYm3hUZA8Jy8NDKcx96sdheQcdFJam/5U6a/8cBBWX9D18vSww17U
+	 xevxCknVq2NWw==
+Date: Wed, 18 Mar 2026 17:03:28 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Christian Bruel <christian.bruel@foss.st.com>
+Cc: Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Koichiro Den <den@valinux.co.jp>, fabrice.gasnier@foss.st.com,
+	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] misc: pci_endpoint_test: Handle -ENOSPC in subrange
+ mapping test case
+Message-ID: <abrM0Jvo_sdWSTLc@ryzen>
+References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
+ <20260318-skip-bar_subrange-tests-if-enospc-v1-3-f1a49534ebea@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,35 +51,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <873423y27k.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <20260318-skip-bar_subrange-tests-if-enospc-v1-3-f1a49534ebea@foss.st.com>
 
-> So, maybe the next steps are:
-> 
->  1. Keep the current component model (MAC/PHY/MODULE) and the
->     NEAR_END/FAR_END direction (naming need to change as Maxime said).
->  
->  2. Add a depth (or order?) field to ETHTOOL_A_LOOPBACK_ENTRY as Jakub
->     suggested, local to each component instance. This addresses the
->     "multiple loopback points within one MAC" case without requiring a
->     global ordering. I hope it addresses what Oleksij's switch example
->     needs (multiple local loops at different depths within one
->     component) *insert that screaming emoji*.
->  
->  3. Document the viewpoint convention clearly.
->  
->  4. Punt on the grand topology dump. Too much to chew.
->  
->  5. Don't worry about DSA CPU ports - they don't have a netif, so
->     loopback doesn't apply there today. If someone adds netifs for CPU
->     ports later, depth handles it.
-> 
-> TL;DR: Add depth, document the viewpoint convention, and ship
-> it^W^Winterate.
-> 
-> Did I get that right?
+On Wed, Mar 18, 2026 at 03:46:29PM +0100, Christian Bruel wrote:
+> Return -ENOSPC instead of -EOI when the status reports the NOSPC bit.
 
-Sounds reasonable. The first version can be KISS, we just need to keep
-in mind reality is more complex and try to avoid adding any roadblocks
-for making it more complex to reflect that reality.
+s/EOI/EIO/
 
-    Andrew
+
+> This signifies to the pci_endpoint test to skip this test instead of
+> reporting a failure.
+> 
+> Link: https://lore.kernel.org/linux-pci/20260317152707.GA85951@bhelgaas/T/#m87e4c24173097a0ea70195b71aab294ad8d6c283
+
+I would drop the link.
+
+I would put this patch after pci_epf_test.c patch and before selftest patch.
+
+
+> Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+> ---
+>  drivers/misc/pci_endpoint_test.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+> index 55e128ed82f00ae13b6fe9768cdbe56adbe8f9da..34ba06fb53f04e48c1c05f4aae85e6ecd03ef447 100644
+> --- a/drivers/misc/pci_endpoint_test.c
+> +++ b/drivers/misc/pci_endpoint_test.c
+> @@ -61,6 +61,7 @@
+>  #define STATUS_BAR_SUBRANGE_SETUP_FAIL		BIT(15)
+>  #define STATUS_BAR_SUBRANGE_CLEAR_SUCCESS	BIT(16)
+>  #define STATUS_BAR_SUBRANGE_CLEAR_FAIL		BIT(17)
+> +#define STATUS_BAR_SUBRANGE_SETUP_NOSPC		BIT(18)
+>  
+>  #define PCI_ENDPOINT_TEST_LOWER_SRC_ADDR	0x0c
+>  #define PCI_ENDPOINT_TEST_UPPER_SRC_ADDR	0x10
+> @@ -476,8 +477,11 @@ static int pci_endpoint_test_bar_subrange_cmd(struct pci_endpoint_test *test,
+>  		return -ETIMEDOUT;
+>  
+>  	status = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
+> -	if (status & fail_bit)
+> +	if (status & fail_bit) {
+> +		if (status & STATUS_BAR_SUBRANGE_SETUP_NOSPC)
+> +			return -ENOSPC;
+
+Perhaps this should be something like:
+
+if (command == COMMAND_BAR_SUBRANGE_SETUP && status & STATUS_BAR_SUBRANGE_SETUP_SKIP)
+
+Personally, I'm not a big fan of having a common function for both
+pci_endpoint_test_bar_subrange_setup() and
+pci_endpoint_test_bar_subrange_clear() and then sending in parameters
+for which bits to check. It make it hard to have small differences
+between them (like checking for an bit that is only valid for one of
+the commands).
+
+I can understand why Koichiro wrote it why he did, but since we now
+want differences, perhaps add a preparation patch that makes it two
+separate functions?
+
+It is not like pci_endpoint_test_bar_subrange_cmd() is a big function
+anyway.
+
+
+Kind regards,
+Niklas
