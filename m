@@ -1,118 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D8F3EB7E1;
-	Wed, 18 Mar 2026 16:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601A73EF654
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 16:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773849815; cv=none; b=qA35gt+hdXxzYJ1WF+TDaaxxCyipgUBkPB79+KbVRZPEi+pqcxajvriE94oMGYuMvKPF4/U93VNUf5Ky0tDb4mn3Y/XaH1s2r3Dy6UiTgqperMh3m2V+6D01+XRH00l5oUPtYp57K6sOluSU6Frvp0QSNuPP+lBPvsdDhxBnEKo=
+	t=1773850596; cv=none; b=sUFxpwcbYSVyr4AsytnKOtspg4va1dSlr4RxBS+cEfBFMSOx8/jCb9KPSCzLPPLcB0k9mJPxVLdqVnncQoNw1KF9bDSLw8EsOLJCel8CuIA8HFlSFjL507IdUbDW3OmRSsJBXkqG7x6qCY8wErYuKmTmgCx9z9ZXwVYoqp6ggLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773849815; c=relaxed/simple;
-	bh=aNn+fWw0djIb7dqDy7dLKcRFCOkUefcH/gjoXK/Vs9A=;
+	s=arc-20240116; t=1773850596; c=relaxed/simple;
+	bh=cVJluK3TyDFVcOJa07LmzKrKJzuXgnk0YMFEuT5VkI4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bku92WW2xFjL1IAdWUaj/E74UtnyF3IBKRGAaMRz6s4ceZwJIQDfKtdGzk+/Gw/OZGPTLbfqcVF5Cerwc0gOvMFKdl4GB0bkcAkTs1oXtoXoGZNCjFLhkGnbpw6tPGMktLcSwxcfD4tXkZ61QDCS5xIpH/QgTIvXJ4+tbtKGnhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WlosT2SN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=u4JQRN8ODiWZ+nFo8E6dGllTU3sPRjHWqt6OoPaCos9i+YxKact4HxBmMsl+z9jqGM5XT13/s0vr2WdKPjqp2ivRlNLEAFrLnLDvJUVa8befKXys349kxPQ9ajRK2YgeGrRC6ja6VwlYUMQbCP+RjV6rsf22EV1a7DdsECsmg94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AoSz+IWV; arc=none smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WlosT2SN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D906C19421;
-	Wed, 18 Mar 2026 16:03:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773849814;
-	bh=aNn+fWw0djIb7dqDy7dLKcRFCOkUefcH/gjoXK/Vs9A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WlosT2SN5hWG5HX8Futk7jLWgV7BImofp+/g/PJDRrmtx7DtTLc4HP9KWiGdtFDWz
-	 RjJn9ioriyx8OsCUsYxN53VcFjgKMA+2sdXgM7RkdkSIhYWsL/RkZC3cC4O1INHErz
-	 wZXzH7hyKz7xsLTr8jJW3eKp6AcDnrQrYrJQ7Va5Rbtq4Ke1Wo5k1qqJHaNa5i2fEV
-	 kCYveN1RFfSbAL+Z3pld+VxlAb+du2ZhnlR4FzWuCT+aVKFQAZlp+Qr8BZWKQPHfZJ
-	 aVOGKyZ9+R19wKYm3hUZA8Jy8NDKcx96sdheQcdFJam/5U6a/8cBBWX9D18vSww17U
-	 xevxCknVq2NWw==
-Date: Wed, 18 Mar 2026 17:03:28 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Christian Bruel <christian.bruel@foss.st.com>
-Cc: Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Koichiro Den <den@valinux.co.jp>, fabrice.gasnier@foss.st.com,
-	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] misc: pci_endpoint_test: Handle -ENOSPC in subrange
- mapping test case
-Message-ID: <abrM0Jvo_sdWSTLc@ryzen>
-References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
- <20260318-skip-bar_subrange-tests-if-enospc-v1-3-f1a49534ebea@foss.st.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AoSz+IWV"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-128ef6c4a41so18316c88.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 09:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773850587; x=1774455387; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dla1BTbyc4l54nWX3/vfHTdXPEelTK/vnnV7aOlfzTg=;
+        b=AoSz+IWVLDGje93UL+/laOx3Mm0bxjDxLZJaDpknBN4X8GKG9GRLRfG7DxLwpZjh+5
+         dJV1k8J7EkT4oSMBi2qaQTnxP8BhAtdYbcLnuf75ASSnQ8dmIc+Lyh8cElL5B02r13Po
+         LOZ4JY7M6r+bLWm7dHU0ExjewkvCEXrXAWzJdHMiQvti0m7mOkrONr/hn/m1pmpQGSrk
+         GTydgAkOkKDELZQ2TztMxAnRJnEvqdes/NdSkDwOHACBTXTCEM3QIYyy/JKWlQlwyucA
+         ycNIKH81TaqjKFEiaSmD1KzL+/zx1SaBO2bYv7IwkRw5Vh1CvAKBaM9VhN/1+xtGkYs2
+         FuOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773850587; x=1774455387;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dla1BTbyc4l54nWX3/vfHTdXPEelTK/vnnV7aOlfzTg=;
+        b=COIp5B3XdAaHGIk7oLZFm1nLTC8l2g4XekjbwLqm+DvbGjpe+MEfl3/Ep1egUftEFo
+         ZoWF0Hzc1T6zRt/3Xt1cwLa+BuRY+skKN//ONlT46eJUXc+0IruM7xMrQYJnE3aV57H5
+         5mGp2Nnpu/JGETVkXu3uvSPL4OiNJXm1cnIo62xPakZ+fUVPUkaT93h7N2o8k1L9RhFP
+         hB1ewKSom0R5XHRwec6KZkZl/iv6M1UzczrIjT8icV+LZkj4a2ovqmFUCmSJGesu9z0h
+         WvnM1EVD9zi4EqsgzayhrSHzMrGDRqdOme4Q2Fe3KuYptvTx3q6xf66VWtgEu2H+9CYK
+         bxvw==
+X-Forwarded-Encrypted: i=1; AJvYcCWjs5G6LlXmrG87XipY3kdohtpxAMoCYununOm9J4F1XW04KYeIu/J8pNTTFS5Lee7iGG3BSrbnYIbgCoSqwpM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynwfGcOIaUHWidXfdN7KPUynex2Y0Qd8nU51Edb52JzJJcxXpf
+	uB+0jyyI0a7wbvGSY/aepqdf9/UnPT1ivEwbKXsnd1Dtug+fV6yIFRs=
+X-Gm-Gg: ATEYQzzXt5Po/6WxY4k7rbeXLwGXDn7QUHE9JNcVDht3xBHOvCBURsI0yUT0FU+yv4a
+	0c2bMFI0wil9Zpp8HSUKuY7mje5rKJ2Ok/Uf7PqmTIaSImuVgyZw29fDv5+EyHyS5zSLtPhpdbd
+	wm/eUSAvV3wZGZTHcmoEv8Mrfp16BKtWMA9gQfbVpmOWtUazyVDfKEl5STTsGwSmWCbDAiMZIrW
+	4hcZSWlDIBOFGbJWcJqi1lrEKqwT/sL1/yrDxN9K5dBK/WFeaYy2XCbgL82o0dZiLW+RPq7USiB
+	/1oCkbhrOy/Q4RjKXcZmgaEEuRr6hXYtAkxQJwH5+pssKU4Fzh7xJnIiOKzXqMDyxA8V01BiKgl
+	SUvaIN3mtas0BuZJQXIKerqaq56C3Bb6mKTFrZdAieKou3QTiVXLB+rHOBPEs6EqGqBs7/2GqaM
+	g6mWMFY1Y///SnJIc2Uum7gl6TJoEp2U7ANSpSjrcq8hLmv2FICUdpBWkPgguG/mC8cuhIsTcub
+	5uoPo8LrZv5572Vew==
+X-Received: by 2002:a05:7022:6a5:b0:128:d471:8c1 with SMTP id a92af1059eb24-1299ba3e555mr1770451c88.17.1773850586365;
+        Wed, 18 Mar 2026 09:16:26 -0700 (PDT)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-129b41289e7sm3582603c88.10.2026.03.18.09.16.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2026 09:16:25 -0700 (PDT)
+Date: Wed, 18 Mar 2026 09:16:24 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	corbet@lwn.net, skhan@linuxfoundation.org, andrew+netdev@lunn.ch,
+	michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
+	anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
+	saeedm@nvidia.com, tariqt@nvidia.com, mbloch@nvidia.com,
+	alexanderduyck@fb.com, kernel-team@meta.com,
+	johannes@sipsolutions.net, sd@queasysnail.net, jianbol@nvidia.com,
+	dtatulea@nvidia.com, mohsin.bashr@gmail.com,
+	jacob.e.keller@intel.com, willemb@google.com, skhawaja@google.com,
+	bestswngs@gmail.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, leon@kernel.org
+Subject: Re: [PATCH net-next v2 02/13] wifi: cfg80211: use __rtnl_unlock in
+ nl80211_pre_doit
+Message-ID: <abrP2NavLA4f5iHE@mini-arch>
+Mail-Followup-To: Stanislav Fomichev <stfomichev@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
+	skhan@linuxfoundation.org, andrew+netdev@lunn.ch,
+	michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
+	anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
+	saeedm@nvidia.com, tariqt@nvidia.com, mbloch@nvidia.com,
+	alexanderduyck@fb.com, kernel-team@meta.com,
+	johannes@sipsolutions.net, sd@queasysnail.net, jianbol@nvidia.com,
+	dtatulea@nvidia.com, mohsin.bashr@gmail.com,
+	jacob.e.keller@intel.com, willemb@google.com, skhawaja@google.com,
+	bestswngs@gmail.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, leon@kernel.org
+References: <20260318150305.123900-1-sdf@fomichev.me>
+ <20260318150305.123900-3-sdf@fomichev.me>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260318-skip-bar_subrange-tests-if-enospc-v1-3-f1a49534ebea@foss.st.com>
+In-Reply-To: <20260318150305.123900-3-sdf@fomichev.me>
 
-On Wed, Mar 18, 2026 at 03:46:29PM +0100, Christian Bruel wrote:
-> Return -ENOSPC instead of -EOI when the status reports the NOSPC bit.
-
-s/EOI/EIO/
-
-
-> This signifies to the pci_endpoint test to skip this test instead of
-> reporting a failure.
+On 03/18, Stanislav Fomichev wrote:
+> nl80211_pre_doit acquires rtnl_lock and then wiphy_lock, releasing
+> rtnl while keeping wiphy_lock held until post_doit. With the
+> introduction of rx_mode_wq and its flush in netdev_run_todo, calling
+> rtnl_unlock here creates a circular lock dependency:
 > 
-> Link: https://lore.kernel.org/linux-pci/20260317152707.GA85951@bhelgaas/T/#m87e4c24173097a0ea70195b71aab294ad8d6c283
-
-I would drop the link.
-
-I would put this patch after pci_epf_test.c patch and before selftest patch.
-
-
-> Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+>   Chain exists of:
+>     (wq_completion)rx_mode_wq --> rtnl_mutex --> &rdev->wiphy.mtx
+> 
+>    Possible unsafe locking scenario:
+> 
+>          CPU0                    CPU1
+>          ----                    ----
+>     lock(&rdev->wiphy.mtx);
+>                                  lock(rtnl_mutex);
+>                                  lock(&rdev->wiphy.mtx);
+>     lock((wq_completion)rx_mode_wq);
+> 
+> Switch to __rtnl_unlock to skip netdev_run_todo in nl80211_pre_doit.
+> This seems safe because we run before the op.
+> 
+> Link: http://lore.kernel.org/netdev/69b5ad67.a00a0220.3b25d1.001a.GAE@google.com
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 > ---
->  drivers/misc/pci_endpoint_test.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  net/wireless/nl80211.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-> index 55e128ed82f00ae13b6fe9768cdbe56adbe8f9da..34ba06fb53f04e48c1c05f4aae85e6ecd03ef447 100644
-> --- a/drivers/misc/pci_endpoint_test.c
-> +++ b/drivers/misc/pci_endpoint_test.c
-> @@ -61,6 +61,7 @@
->  #define STATUS_BAR_SUBRANGE_SETUP_FAIL		BIT(15)
->  #define STATUS_BAR_SUBRANGE_CLEAR_SUCCESS	BIT(16)
->  #define STATUS_BAR_SUBRANGE_CLEAR_FAIL		BIT(17)
-> +#define STATUS_BAR_SUBRANGE_SETUP_NOSPC		BIT(18)
+> diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+> index 2225f5d0b124..ce5f25d4c87e 100644
+> --- a/net/wireless/nl80211.c
+> +++ b/net/wireless/nl80211.c
+> @@ -18192,7 +18192,7 @@ static int nl80211_pre_doit(const struct genl_split_ops *ops,
+>  		__release(&rdev->wiphy.mtx);
+>  	}
+>  	if (!(internal_flags & NL80211_FLAG_NEED_RTNL))
+> -		rtnl_unlock();
+> +		__rtnl_unlock();
 >  
->  #define PCI_ENDPOINT_TEST_LOWER_SRC_ADDR	0x0c
->  #define PCI_ENDPOINT_TEST_UPPER_SRC_ADDR	0x10
-> @@ -476,8 +477,11 @@ static int pci_endpoint_test_bar_subrange_cmd(struct pci_endpoint_test *test,
->  		return -ETIMEDOUT;
->  
->  	status = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
-> -	if (status & fail_bit)
-> +	if (status & fail_bit) {
-> +		if (status & STATUS_BAR_SUBRANGE_SETUP_NOSPC)
-> +			return -ENOSPC;
+>  	return 0;
+>  out_unlock:
+> -- 
+> 2.53.0
+> 
 
-Perhaps this should be something like:
+ERROR: modpost: "__rtnl_unlock" [net/wireless/cfg80211.ko] undefined!
 
-if (command == COMMAND_BAR_SUBRANGE_SETUP && status & STATUS_BAR_SUBRANGE_SETUP_SKIP)
+Gonna re-run local nipa ingest locally to see if anything else pops up.
 
-Personally, I'm not a big fan of having a common function for both
-pci_endpoint_test_bar_subrange_setup() and
-pci_endpoint_test_bar_subrange_clear() and then sending in parameters
-for which bits to check. It make it hard to have small differences
-between them (like checking for an bit that is only valid for one of
-the commands).
-
-I can understand why Koichiro wrote it why he did, but since we now
-want differences, perhaps add a preparation patch that makes it two
-separate functions?
-
-It is not like pci_endpoint_test_bar_subrange_cmd() is a big function
-anyway.
-
-
-Kind regards,
-Niklas
+---
+pw-bot: cr
