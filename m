@@ -1,109 +1,148 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B790331218
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 17:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5DF2F83A2;
+	Wed, 18 Mar 2026 17:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773853583; cv=none; b=iIIHR7Cf2bud6wSBIEk7NZgEguyQVEbJxUGSv8/asNYN0q5/efc7DcDumkUBuGm4zvR6/OczwCMLKTJsk8Sz2J8XRYD9RGC5npCsIVMxsUdqYm8zQJtBo5DH9JMt/67/QXEnhoQnY1ebRHMCQLIpU6o9fZZfBHi8pY2lopXNo1Y=
+	t=1773854856; cv=none; b=GtVZA3Lkbsicf6p4Fh1LRo03GY/26ebSPwTJujoxpLbdgCUbC/Rh5fVh5ZxKKL1yQaG33ImsdQEzShfksVrFFNt7fGUQBhPL1XB37y9dbvvYdDq5RqdXzNneFzv8Vc7J2rTDyJyF/eTDz3jG62n0kP/gTAaSeGCVY5jfbkzQ3xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773853583; c=relaxed/simple;
-	bh=VbDdPt5V2iYDxuFM5o59Js8zGg623WZdAgM4YWkYbu8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uC2Q8XA/Qlqb53/UTh5JJhF8+xCb7/bSrtOYhmmuqyH/Ph5o/6SUURDMJADpkiSa5Z3RsleDk0LRFYOP/y0i9tEtuPsDfzMlXm/JJp3euPxc7DBATQZHlyVOXoCBfiqnTb3gFnwyEvtd7Q55OhCOIQANJOloyrS31eivONmVc0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=pHVGGxZ6; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1773854856; c=relaxed/simple;
+	bh=T9bC6g62zkjZlkxi+B63SQAYsJpcohcn3oqwWLqc/zk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BWoEVek+6BtVIVpUuHPUuptszXZxRebJz06X/BnHeOzwEGOTiUP86jk9fwwaxaOQQ06XLyOVY+3aHXb1SSvONHbi7pKPt0zjgs/fJ7bFQ6p7Yq4dZT72U3Tyxm0Q4TgkheQU/vHeiqs3Iieodn4R07LZHxvyoLeVPi3h6JUMWi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0PWTNv2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="pHVGGxZ6"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1w2uLC-002c7Y-GZ; Wed, 18 Mar 2026 18:05:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=9PjUi89Rq5UeOAy8wYWz7JCds8tIZvlL7cDob3xI8us=; b=pHVGGxZ6bGP58yl0P/YsBDrG4z
-	wP8Z+87vN2YGOtei8ZYgbf16cLT5hBZKtTRua5ogL1iAIyGk/pPz5eW3Px2k4vDVrU3bvWHmpWwbS
-	JrFVLIMJlDfRuMaIkv0Y8E0jFiCSW9RgwWKBRmYWKw+wHjMeCGS4nkoJE9ZSfyzbmvwfbR+pxGXEW
-	dlGaTfyl1diOBd/7+OUDJYz9i0O2q0iRcHmxH3RqE/5ohXLK1Oy9Oww1OBKAVhnMAzFL5Kz8Hw/kM
-	9ROKw1LMay1klkUjVLpeWBEsEIt6QNlEJDDNb0a4JderIMjPm8hq+9dLmIz8h7Qb/HltdF24Lch+1
-	3Gu8XxuA==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1w2uLB-0008NP-6n; Wed, 18 Mar 2026 18:05:53 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1w2uL9-00D1bi-AC; Wed, 18 Mar 2026 18:05:51 +0100
-Message-ID: <c7742de5-7b68-4520-95b4-7ed5ed997c0a@rbox.co>
-Date: Wed, 18 Mar 2026 18:05:49 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0PWTNv2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76149C19421;
+	Wed, 18 Mar 2026 17:27:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773854856;
+	bh=T9bC6g62zkjZlkxi+B63SQAYsJpcohcn3oqwWLqc/zk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=c0PWTNv2SzUQd+Ef31U2tJLHT/aTwdz2C0Jm+dvGlGhHJSH3SGAlB1CVuSGZ1eR+u
+	 CO6A3NqVzKMU1gUn+Jo9FuYmA4vvQc7/qgCw1wGJ87XPYIDjjtpx1p3Bi9FUgm3Q0z
+	 mRYmy3IiFE3ZZMPR5Q+CgPV2uyh3bUB1HDZTxeaXM/HjSYAH1Kg144iOpQUbJJY/+r
+	 eEHgj4j5ecEStg029m6OqbSEwEehSF3g4Xyk9aGdl8KBlpudw57Kkmb2U7F9QN2Gco
+	 PCm00fat2kiYqjQ4dxJkKoWNGjrptOcPO4tBtxe28vNZX8RUqi9o5muZNBT+zCQ2sQ
+	 B2obfRn24xa3w==
+Date: Wed, 18 Mar 2026 17:27:48 +0000
+From: Jean-Philippe Brucker <jpb@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>, Mark Rutland <mark.rutland@arm.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v10 17/30] KVM: arm64: Support SME identification
+ registers for guests
+Message-ID: <20260318172748.GA2390801@myrica>
+References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+ <20260306-kvm-arm64-sme-v10-17-43f7683a0fb7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 1/5] bpf, sockmap: Annotate af_unix sock::sk_state
- data-races
-To: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Cong Wang <cong.wang@bytedance.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-1-2f0c7410c523@rbox.co>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-1-2f0c7410c523@rbox.co>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260306-kvm-arm64-sme-v10-17-43f7683a0fb7@kernel.org>
 
-On 3/6/26 00:30, Michal Luczaj wrote:
-> sock_map_sk_state_allowed() and sock_map_redirect_allowed() read af_unix
-> socket sk_state locklessly.
+On Fri, Mar 06, 2026 at 05:01:09PM +0000, Mark Brown wrote:
+> The primary register for identifying SME is ID_AA64PFR1_EL1.SME.  This
+> is hidden from guests unless SME is enabled by the VMM.
+> When it is visible it is writable and can be used to control the
+> availability of SME2.
 > 
-> Use READ_ONCE(). Note that for sock_map_redirect_allowed() change affects
-> not only af_unix, but all non-TCP sockets (UDP, af_vsock).
+> There is also a new register ID_AA64SMFR0_EL1 which we make writable,
+> forcing it to all bits 0 if SME is disabled.  This includes the field
+> SMEver giving the SME version, userspace is responsible for ensuring
+> the value is consistent with ID_AA64PFR1_EL1.SME.  It also includes
+> FA64, a separately enableable extension which provides the full FPSIMD
+> and SVE instruction set including FFR in streaming mode.  Userspace can
+> control the availability of FA64 by writing to this field.  The other
+> features enumerated there only add new instructions, there are no
+> architectural controls for these.
 > 
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
->  net/core/sock_map.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> There is a further identification register SMIDR_EL1 which provides a
+> basic description of the SME microarchitecture, in a manner similar to
+> MIDR_EL1 for the PE.  It also describes support for priority management
+> and a basic affinity description for shared SME units, plus some RES0
+> space.  We do not support priority management for guests so this is
+> hidden from guests, along with any new fields.
 > 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index b0e96337a269..02a68be3002a 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-
+> As for MIDR_EL1 and REVIDR_EL1 we expose the implementer and revision
+> information to guests with the raw value from the CPU we are running on,
+> this may present issues for asymmetric systems or for migration as it
+> does for the existing registers.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 ...
+> +#define IMPLEMENTATION_ID_FILTERED(reg, mask, reg_visibility) {	\
+> +	SYS_DESC(SYS_##reg),				\
+> +	.access = access_imp_id_reg,			\
+> +	.get_user = get_id_reg,				\
+> +	.set_user = set_imp_id_reg,			\
+> +	.reset = reset_imp_id_reg,			\
+> +	.visibility = reg_visibility,				\
 
-> @@ -543,7 +543,7 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
->  	if (sk_is_tcp(sk))
->  		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
->  	if (sk_is_stream_unix(sk))
-> -		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
-> +		return (1 << READ_ONCE(sk->sk_state)) & TCPF_ESTABLISHED;
->  	if (sk_is_vsock(sk) &&
->  	    (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET))
->  		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
+nit: rogue backslash
+
+> +	.val = mask,					\
+> +	}
+> +
+>  static u64 reset_mdcr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *r)
+>  {
+>  	__vcpu_assign_sys_reg(vcpu, r->reg, vcpu->kvm->arch.nr_pmu_counters);
+> @@ -3238,7 +3280,6 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  				       ID_AA64PFR1_EL1_MTE_frac |
+>  				       ID_AA64PFR1_EL1_NMI |
+>  				       ID_AA64PFR1_EL1_RNDR_trap |
+> -				       ID_AA64PFR1_EL1_SME |
+>  				       ID_AA64PFR1_EL1_RES0 |
+>  				       ID_AA64PFR1_EL1_MPAM_frac |
+>  				       ID_AA64PFR1_EL1_MTE)),
+> @@ -3248,7 +3289,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  		    ID_AA64PFR2_EL1_MTESTOREONLY),
+>  	ID_UNALLOCATED(4,3),
+>  	ID_WRITABLE(ID_AA64ZFR0_EL1, ~ID_AA64ZFR0_EL1_RES0),
+> -	ID_HIDDEN(ID_AA64SMFR0_EL1),
+> +	ID_WRITABLE(ID_AA64SMFR0_EL1, ~ID_AA64SMFR0_EL1_RES0),
+>  	ID_UNALLOCATED(4,6),
+>  	ID_WRITABLE(ID_AA64FPFR0_EL1, ~ID_AA64FPFR0_EL1_RES0),
+>  
+> @@ -3454,6 +3495,13 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  	{ SYS_DESC(SYS_CCSIDR_EL1), access_ccsidr },
+>  	{ SYS_DESC(SYS_CLIDR_EL1), access_clidr, reset_clidr, CLIDR_EL1,
+>  	  .set_user = set_clidr, .val = ~CLIDR_EL1_RES0 },
+> +	IMPLEMENTATION_ID_FILTERED(SMIDR_EL1,
+> +				   (SMIDR_EL1_NSMC | SMIDR_EL1_HIP |
+> +				    SMIDR_EL1_AFFINITY2 |
+> +				    SMIDR_EL1_IMPLEMENTER |
+> +				    SMIDR_EL1_REVISION | SMIDR_EL1_SH |
+> +				    SMIDR_EL1_AFFINITY),
+> +				   sme_visibility),
+
+Shouldn't we sanitize the SMIDR value obtained in reset_imp_id_reg() and
+add SMPS to this mask, if we're hiding everything from the guest?
+
+Thanks,
+Jean
+
+>  	IMPLEMENTATION_ID(AIDR_EL1, GENMASK_ULL(63, 0)),
+>  	{ SYS_DESC(SYS_CSSELR_EL1), access_csselr, reset_unknown, CSSELR_EL1 },
+>  	ID_FILTERED(CTR_EL0, ctr_el0,
 > 
-
-Another reason to (conditionally) take unix_state_lock() at
-sock_map_update_elem{,_sys}(): chunk above can be dropped.
-
+> -- 
+> 2.47.3
+> 
+> 
