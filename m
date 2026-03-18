@@ -1,135 +1,97 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE84E279DB6
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 17:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BA3306D3F;
+	Wed, 18 Mar 2026 17:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773856194; cv=none; b=NOLnRMQMlUlHskvcd899YEMkLvp3eb77rxGVBrYUXLcyb0W1871ufpUsiVQY1ho50J0XiQl14eTeMn3JlwCsi++mNpvy1lmsz2V6gqTH06Ecb22ov3SvBoqfrpKQWP1uS+9clMp6SVgKr7CCwOipDOzOpotTp62/PDOdSf7MUa0=
+	t=1773856235; cv=none; b=qV13YfpubHhMgcPMkuWQ5sBQ+L5DeqayUJUQNeXxeRsMALnf0WysuD1respL6cJXEm3jfBrKSCNVu8SHTqQ4dxP/Syf2GTi6/sgFWOvsDsoVxnca+FZJCZ4Bqr3H6blhwjnjxP0EnIrY9vhHBry9mPWIMudNcYzwWszhZqK4MWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773856194; c=relaxed/simple;
-	bh=HGCegGKd/wL01yykR6BtOd16uHaQDYMxuA7939bT0Ac=;
+	s=arc-20240116; t=1773856235; c=relaxed/simple;
+	bh=yY5/7b9upughYC3SjZivmgk/LeNfjtglZwOe0Pmiuss=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fZQBY9XqsfyXZljLOUsZi0iisdsekyUpF2Pqur79lHqAXqjMMdZW6xovmb0RsNBZWKxOS5grK8CIVsSkmLF6iCmxpZsMqXmt1yGzMsKjhqhBxPxpiRXC2tIP+j5YjVNVmUTUsFHzdccBdHUdv6oDA0EmagDe1Y5qyjh61LJeW2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=CUvwReGQ; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=r/lhag5TR3BWR3aQtpLMvfWy2wNiD2IasVXQZzAgBhw5bYVCt57gq1wZdPXIT28PHDWH3Q/gdk1z9PoBZsjdhQbS5qk5t6G+tBW4XPKUBQ7H5COeyQAK6kNS5UXgw5N/CiiRygnNT6sTA7hE9O5n0YRtduN4FvP77uUafNxuaCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oFzHOehq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="CUvwReGQ"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7d751ef36ccso82200a34.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 10:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1773856192; x=1774460992; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DwZzEUBvZTlA64oHuhM8Cu6PFpv3s+PziJS94hKbClM=;
-        b=CUvwReGQONVpYZsnOprkScrRcNCgbCu+nCgzLBt1zlng+nXeh8HWMFnX0FiDkfdFAt
-         zMPzDSRqAez68f4L5nKycu9km5fvjHTyzdYEDFKWpTg1KbQ2tsf19LNoiKnfue0l3cZ8
-         rdSel2wcFNrvEARgczNTw7Mu6f0gUz7w55BPqz/4TRBDzZSKlGwGEX0wlDQuc/D2TGeU
-         1+RqrKZGMyoSweO2/HpG/QDicGASfKopbkS6YkyyjBPAJjhhyWNJ2laSY0jLa/kZdQeb
-         Zf28KP6sGPtixBR5yWg2aV0Dp6/06Ap6yUePYsYyb63SwSbkebWRHdAW2mBWrD+fF8MA
-         xLTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773856192; x=1774460992;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DwZzEUBvZTlA64oHuhM8Cu6PFpv3s+PziJS94hKbClM=;
-        b=MED7+fu5diAy8933pmadwAuypxK3pyt2m8sa0K/Vcr1zJnFECQ9v7Bs4qglPe0r6p3
-         lKxufahSjWzIyvyuFI/xaSm9pxT68MsXEw60RjUiTXDgaG8OZNmpoQwP8/3Tj1pCkssY
-         T+tVKZJtM1vuh5BRKWyle8dWgz8vubv6kSXKA3Vry2N9WTf/CYlknRiEObVEw/OOepPZ
-         Ext3ICF+u3SSdvpJkhP7wdcGJmoXwzcnck8FeE4o6ARS/YTLeg1KdZD+I7gqdxCY70sF
-         divjsE5n7FemBG10h2ikfte5ksN+BgAXT+cmKDCiEWvuPRMIqbbhvmZF1bH0Syth+2L+
-         +A2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXs1tYMPPzU7irdf/aUG47y3xJCtuq4CEiX31wUWUkDlI5ErKCQE+KLszgnKJpV20ZhBRgfQxnCZiNs81ulGWk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yykp5OtEjLSkE4yqXtmn2IMK+upxxeJmoIVUltX43b+uSa5/Xoo
-	Pvxsc+Ao/FLJt3WL0CzlxcKnY1FdbUvccdXMix822YIQlVdize1cee4BGpCvebaVqcw=
-X-Gm-Gg: ATEYQzwqpAgpRgSZWcguYFajPtRplOttHsjD2ltX13ZQtcNaOop/5sAoaMG6BGofxdT
-	wE6WkBPBTws4iDCo1N7Eha/qR8vqLFhtGMFvYUgHpEMpT8tMPmKwaSs1uCKv10aMjk6QDHKbiYN
-	z4F/PtHPHpABeTvYv2SqXfAo9YyiBlAd7rz3KHopMNPJ9qIzbhh8s4GLpOohqv68mLkv0Ru7OiC
-	F5yHxHfZOWktR/wLgczLSQa+4Q9CYqisxgYw3htqgamUwHilTUjuRQJDMK5PPWeBULF390CKlS1
-	y8JfTy4n2BpvQgiPXUjfpCS5pQiwyvWaQADPnZUG+fR3oJnG/xv8i2p+H6ymBRpNmvUrmXTAsDL
-	+SG6iof6jCiNYEDf8URSMqZkk6c4dJcCgVYo32OWEwj6jIgwvG5WT4Cvl+FjHvD8HRhgYVjpzdT
-	iuiRn9
-X-Received: by 2002:a05:6830:82bd:b0:7d7:d216:2b26 with SMTP id 46e09a7af769-7d7d2163d29mr1417083a34.4.1773856191557;
-        Wed, 18 Mar 2026 10:49:51 -0700 (PDT)
-Received: from CMGLRV3 ([2a09:bac5:947d:1b37::2b6:4e])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d7c9b3696asm2632316a34.16.2026.03.18.10.49.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 10:49:51 -0700 (PDT)
-Date: Wed, 18 Mar 2026 12:49:48 -0500
-From: Frederick Lawler <fred@cloudflare.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Eric Paris <eparis@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	LSM List <linux-security-module@vger.kernel.org>,
-	audit@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	kernel-team <kernel-team@cloudflare.com>
-Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF
- LSM programs via BPF kfuncs
-Message-ID: <abrlvEjQKUdAOcw5@CMGLRV3>
-References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
- <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
- <CAADnVQJCJaLjGCwjCX9VtT615c4kn7v5bxviUmGFVj=uTtUHMg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFzHOehq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF59C19421;
+	Wed, 18 Mar 2026 17:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773856235;
+	bh=yY5/7b9upughYC3SjZivmgk/LeNfjtglZwOe0Pmiuss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oFzHOehqxPUBE7i33A7/NP22cW2clKfq9HsIUn7W7o4UHr7O9Lz9Wmkw/PPf2wkHI
+	 ctC2BWjwX8axh8JicFZcyV9D2zPPPewV92QGVgApK71nEBzHnSzVhqy5SyaEanAh/O
+	 bJULBoZWTqa8HIoOjsslsg4nFfniEa4ws77JYIoBhQvx2lVojRQOCfL5bDv9mQFzqq
+	 6qv/h0sSEjO0+6M9lbDW3+Jocwxh4Ql5eBhtCdOtvdVaWuHUOMoiUOaTkVPHFsYE2w
+	 XZjZisZ+6yJKDaDv9yzd0hbYe/9omcj4qQBJmjYPH7uBxxJvrrI8U0JZ8QjkU5JvNB
+	 SeJTkOn/TCowQ==
+Date: Wed, 18 Mar 2026 17:50:27 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Jean-Philippe Brucker <jpb@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>, Mark Rutland <mark.rutland@arm.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v10 09/30] KVM: arm64: Define internal features for SME
+Message-ID: <4403381b-c4a0-43d4-8b24-b0d0c1e75d24@sirena.org.uk>
+References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+ <20260306-kvm-arm64-sme-v10-9-43f7683a0fb7@kernel.org>
+ <20260318174410.GG2390801@myrica>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="VvvcpSFxAc69oYKR"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJCJaLjGCwjCX9VtT615c4kn7v5bxviUmGFVj=uTtUHMg@mail.gmail.com>
+In-Reply-To: <20260318174410.GG2390801@myrica>
+X-Cookie: The coast was clear.
 
-Hi Alexei,
 
-On Tue, Mar 17, 2026 at 06:15:59PM -0700, Alexei Starovoitov wrote:
-> On Mon, Mar 16, 2026 at 7:44 PM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > On Wed, 11 Mar 2026 at 22:31, Frederick Lawler <fred@cloudflare.com> wrote:
-> > >
-> > > The motivation behind the change is to give BPF LSM developers the
-> > > ability to report accesses via the audit subsystem much like how LSMs
-> > > operate today.
-> 
-> Sure, but bpf lsm-s don't need to follow such conventions.
-> audit is nothing but a message passing from kernel to user space
-> and done in a very inefficient way by wrapping strings into skb/netlink.
-> bpf progs can do this message passing already via various ways:
-> perfbuf, ringbuf, streams.
-> Teach your user space to consume one of them.
+--VvvcpSFxAc69oYKR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Audit provides additional functionality by keeping messages close to the
-syscall, and in-line with other messages for that syscall. Aside from
-that, BPF is arguably too flexible. I'm sure it's already understood,
-but the idea here is to reduce bespoke logging implementations and reduce
-attack surface for violation reporting. Audit is already provided by the
-kernel and a well leveraged pipeline.
+On Wed, Mar 18, 2026 at 05:44:10PM +0000, Jean-Philippe Brucker wrote:
+> On Fri, Mar 06, 2026 at 05:01:01PM +0000, Mark Brown wrote:
 
-WRT to performance characteristics, would you rather see this
-implementation leverage those maps in a way to reduce that, background
-workers, or something else? This is something we've considered, but left out
-of RFC to collect more opinion on perf considerations.
+> > +#define kvm_has_sme(kvm)	(system_supports_sme() &&		\
+> > +				 test_bit(KVM_ARCH_FLAG_GUEST_HAS_SME, &(kvm)->arch.flags))
 
-Thanks for bring this up. I forgot to include that in the RFC cover, sorry.
+> Can the GUEST_HAS_SME flag ever be set if !system_supports_sme()?  Seems
+> like it depends on KVM_ARM_VCPU_SME feature which can't be set if the
+> system doesn't support it, so the system_supports_sme() check is redundant
 
-Best,
-Fred
+It can't be, the reason for the system_supports_sme() check is that SME
+is a build time option as well as a runtime one.  If the kernel is built
+without SME support then the compiler can remove the code at build time,
+the existing code does the same thing for at least SVE.
+
+--VvvcpSFxAc69oYKR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmm65eIACgkQJNaLcl1U
+h9C7Xgf/buA9UbqSWGotQIhCCZi2M8eucZopqvd2y+Yz8RG3CGGJcgD210T2RV24
+2IbAutf88VUJrFR05vpgpG9gonNcjRjEvn2/eV3H8+WdYm4Ux9/TZJqkwuJaS0Jf
+39osJNAabwFqCXDqefCQim9F3CLM2T3uw9wqnJfUtYtQw8GHF6s1W1H8aQDwTtkv
+kjWYT4mxAx42Ta5pmQdK1oIm01baX1EdxIoN1IGi9wDGb+snfdVos4ncMJzpeX7R
+S8lhOFeaJBjRWmF8MP9AGE42bI39DrkJmWx5PySdEQaOZn4NHuwezaggAA+hiI35
+x6P1xYKFo3bdSU5DNoh79SXWEfgziw==
+=4AVX
+-----END PGP SIGNATURE-----
+
+--VvvcpSFxAc69oYKR--
