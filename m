@@ -1,50 +1,50 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF233E1213
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 15:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16013E715C
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 15:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773846206; cv=none; b=NL2LhKb2YoLpllZGnWo4Ega+yTPoNJ/tZouNHgfxqLEojqXJfNNjKK+JrvVl/k3OK9CJEZK7l9sbyJcJPhtSc52bjqjobBwqw9zdMhlopDsx+mc/9uQDBp4gulRvqTLLLQc09f/88yUh/ypqGYD8KbxBXsZkqyAhjWS5YAMblI0=
+	t=1773846207; cv=none; b=O9okj1ULx/eJyQQ5K/fpaKUaZfw2BrJgG1ceznpjLqXMLx3ieIMA6Iz21OVhpJpGVvomGuva43CGf/UEBKVjv8YK+REUW+9SOSudEmQIfQFi6LuuMxkt9SxfzG79b57+pTubex8/RsGfJDnJY5GtooGEEYxBwjXG1KDNsJ1hzoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773846206; c=relaxed/simple;
-	bh=kmwCimBJS+SWU8B61KoU5L9nhpuZjJHve7vQIDv7gNY=;
+	s=arc-20240116; t=1773846207; c=relaxed/simple;
+	bh=tpq4CPEg4PF7xY4vX/qaHiEsjc2ICDqk3bHyi4H6/ME=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JTo5IX1tFFb+zWPHbh50yiPXyPBMX9JW6icf0//Lhfmwf2vTcZxAf8QxybHn2NZ2Jxgk9gt53WxIArcb5zUUcGHrgqwYMN3lLKWA9aonnNW+IYU8BAt44c7ca2i+AlUsS8e6he6PLIQ3qqvFNRU5PJ12yUbLHC3ARtMeXgstm6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.82.173
+	 MIME-Version; b=Q8l3a3AuSIjDsx8bRKGrhoMNbTB0e+XcMPlx9PdfE5ldJGF2HaD49xuT19wJ/QxNqZ9tCNvCVwJOiSON2kjha7IaHZTiBEIqQ1wyNNQMBmoWmghBGR9m4bw3k2yUXV9ipraosUt93xJf9DDOdhcW2x34bjERY+TKtnhnOVxQQkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.82.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2beab594d8eso18449eec.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 08:03:22 -0700 (PDT)
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2c0bdf1988cso41607eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 08:03:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773846202; x=1774451002;
+        d=1e100.net; s=20251104; t=1773846204; x=1774451004;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=yuVySmXB1N20uvWlkE4WXWJqrOPMyoG70opz84fOKRg=;
-        b=d8+cBYV2GDgugHznjRsL/Cqu8jA8ZmpGpj9HC+2BVwPMG9us07eoooR/SPOSY7x+EP
-         0ws2CoPzVWurKaByZXOli3JDLyGZdyLQSFsaduGZU+Y5YF6+KE0YRSJVMIXvbwVFXv+W
-         DqP05YRUGGnd/Szv4x68dk46R8MORI3rK2MXMqZh09B/Kxdg19D4pdsyd/nAKaLFdug5
-         oPa1lfG9mYe+X9OH/gh0O+5REbSqYXoXlJjogKjgnCceSNzK+D7HNMnsMA4gvTFD9vkh
-         l9HC2vo0Ikycfk9qSvGIwvcFXmGF/HyaN3+j89gCtnceR/OajU9e/NRDARustVBr4wj8
-         tuIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVi0b9QuaQ/EJhpNpYMHHJ+AkSEy55BKXDze58/x4f/qIKqWBa7VYnlMabL5aK03aNVnP/Pa6dgD1YtzLOlOf4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyktXkJxxrHEqzUml3r3Exx2USiCs0mQjyGKW021Pnf/uc6MFr
-	I6G5KgP0PANBhbpcajbS/xpyPJupXYjfL+SZRoYfTS4qFdQp8HIBFw0=
-X-Gm-Gg: ATEYQzy14S55mTUadrHY5l1+/B5jj74gkpBZtTs5TucuoA117aujcdIgx7xx2vvH3gu
-	1b9bdzGkzawQaV2JO0zkHBlzaptBwRPBC9mY5WXICOxRH7uTyIK0dcnIsg+ewJZmjdrpoyVG11C
-	5v48OXMlrlTkYcei3tzsuxKxFZZieamI9z0bv8vDfzw+8I0/tqvUOunyBelr2Zaena7L0AB+RZz
-	IuAf2h3c+A4OoVsyn42FYJ+znzncl6i9AQK2wZN/hoS2kU533cKtmvl2y0auMzW9pICC0JgW5Z9
-	9rm17KGre1gFtmNFJGfr3t5Jhu0Fy3L5dsqNmDkhFmEpZFMDK1yLudbxYs90NnNTVzGqIR3Cneo
-	2JfLH9uVcVkJoz0DJi4kt3ZmD2CraPIv+Gz5k+lVcSXRw8/RtMVjNuhDcXGG7JHajaKHYKb9eOo
-	8aIX/56kQvK4VFBWFOXYIMpcc7KVK0ABuAetXFtuqKcedANVt96EUhxHZ5tcg+DkWQegG+2cH5L
-	5yTi2iM9bf1oJ8npg==
-X-Received: by 2002:a05:7300:ec11:b0:2c0:c96a:a4db with SMTP id 5a478bee46e88-2c0e4f5b6b3mr1808937eec.4.1773846201496;
-        Wed, 18 Mar 2026 08:03:21 -0700 (PDT)
+        bh=ZI1/cLnyDnVOs4qvF1/y00bhWF98dmH7Q3P7jVrTCz8=;
+        b=Op9oi+ZxCfRSiqA0YOQFFyzuzfeoE3CWaLp5jYhGfGvp30suPQZytoiUBit8twgPXn
+         QLtejOsjI2MAW6dlMcK8Fr1UcN+6y0LZT1rKoY49ltUdv+M+iJMaqduxK+zwPbTX2IbJ
+         kb1Dl64cPGS0MASNIlXpRdBof3aI7ZPq3AS6/DojRjmEp5WKgrf9AnQzQKb2B0S+ElF3
+         IdC3UqTA8hvXZatKXqJ1fKcOgBrIN5hxEA3+vYvTdnEx1p7rCv3klN9/lnK5tPunIfUI
+         JkdiDeZdOqkJtAHvf3BFY9KshOm44ve+scWRKsKhM3apXcuVFnAUTmmZukPbTKLtzqd2
+         ZVaw==
+X-Forwarded-Encrypted: i=1; AJvYcCURCtLssb9UYoPaA/cdvsfBUZg8+NEFAuWHqW6wwez5fm84lh++47V7kP8dA4NQ9t8SiA86COAQI3DtiU4yDfQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo7YsGbasrQuEF6TfFZFoH5Piu/Ct0vQvHdkHGFh5AsI5UttnS
+	1AGoXEN33AN7X6LpvJfpKo0HLdYAC2ElFLUHPRCp1imRh8i3HoH+lfA=
+X-Gm-Gg: ATEYQzxw+GYVg2RKk3B0I2xBHJd8ZMX1EoFTP4g/aA3UUsASuU6Sg6YTv4e++O1kkGE
+	Ymkiy966ahebsbPx9xlEEB0lvYRtKb0CdHSAabpHU+HTsMdIFmpmqy2HLRMHeBPuAysB5NRXiZw
+	ZfTzczKorV6/qqcZMcTjDno6RAMEBJJdKVr7iLDVKAbbcEgPHNSqcEcw/O4aIkfVe5ZBq/Pl6a6
+	1R1+V2Xah0JonLdiUmTWpaEvuJd0iou4IgkexIXVALvVzxzc/jHLqaXX5NCO8OINUrSJyp5wwXF
+	U0L60aWgIvqjeQm9Fxw1FpvL/57ip3teFKfP5M7oqxC41w0fo8PtUeMEoIrx19GyyYmp+618jYt
+	XNw5PsmPiBrhmOuXPG0gfKUYU6joZf2Wt163U56jSncNqjD+T30mGrdrwfFgEPwZn8NQRYQvXIl
+	ST9UWY7QdZFQRtE5M6jrCrrjRhnnJlKjBzJLSCYswxi1jz711BZ43o4ac/wWtb6WgUHgVr1/IYy
+	SZphW93u5Uj2EsB8w==
+X-Received: by 2002:a05:7300:3724:b0:2be:126c:e335 with SMTP id 5a478bee46e88-2c0e5011ac8mr1873924eec.10.1773846202672;
+        Wed, 18 Mar 2026 08:03:22 -0700 (PDT)
 Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c0e55ca0f6sm4007492eec.25.2026.03.18.08.03.20
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c0e56062e4sm4123423eec.30.2026.03.18.08.03.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 08:03:20 -0700 (PDT)
+        Wed, 18 Mar 2026 08:03:22 -0700 (PDT)
 From: Stanislav Fomichev <sdf@fomichev.me>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -81,9 +81,9 @@ Cc: davem@davemloft.net,
 	linux-wireless@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	leon@kernel.org
-Subject: [PATCH net-next v2 08/13] bnxt: use snapshot in bnxt_cfg_rx_mode
-Date: Wed, 18 Mar 2026 08:03:00 -0700
-Message-ID: <20260318150305.123900-9-sdf@fomichev.me>
+Subject: [PATCH net-next v2 09/13] iavf: convert to ndo_set_rx_mode_async
+Date: Wed, 18 Mar 2026 08:03:01 -0700
+Message-ID: <20260318150305.123900-10-sdf@fomichev.me>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260318150305.123900-1-sdf@fomichev.me>
 References: <20260318150305.123900-1-sdf@fomichev.me>
@@ -95,108 +95,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With the introduction of ndo_set_rx_mode_async (as discussed in [0])
-we can call bnxt_cfg_rx_mode directly. Convert bnxt_cfg_rx_mode to
-use uc/mc snapshots and move its call in bnxt_sp_task to the
-section that resets BNXT_STATE_IN_SP_TASK. Switch to direct call in
-bnxt_set_rx_mode.
+Convert iavf from ndo_set_rx_mode to ndo_set_rx_mode_async.
+iavf_set_rx_mode now takes explicit uc/mc list parameters and
+uses __hw_addr_sync_dev on the snapshots instead of __dev_uc_sync
+and __dev_mc_sync.
 
-0: https://lore.kernel.org/netdev/CACKFLi=5vj8hPqEUKDd8RTw3au5G+zRgQEqjF+6NZnyoNm90KA@mail.gmail.com/
+The iavf_configure internal caller passes the real lists directly.
 
-Cc: Michael Chan <michael.chan@broadcom.com>
-Cc: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
 Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 24 ++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 225217b32e4b..ce430690efb5 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -11039,7 +11039,8 @@ static int bnxt_setup_nitroa0_vnic(struct bnxt *bp)
- 	return rc;
- }
- 
--static int bnxt_cfg_rx_mode(struct bnxt *);
-+static int bnxt_cfg_rx_mode(struct bnxt *, struct netdev_hw_addr_list *,
-+			    struct netdev_hw_addr_list *);
- static bool bnxt_mc_list_updated(struct bnxt *, u32 *,
- 				 const struct netdev_hw_addr_list *);
- 
-@@ -11135,7 +11136,7 @@ static int bnxt_init_chip(struct bnxt *bp, bool irq_re_init)
- 		vnic->rx_mask |= mask;
- 	}
- 
--	rc = bnxt_cfg_rx_mode(bp);
-+	rc = bnxt_cfg_rx_mode(bp, &bp->dev->uc, &bp->dev->mc);
- 	if (rc)
- 		goto err_out;
- 
-@@ -13610,11 +13611,12 @@ static void bnxt_set_rx_mode(struct net_device *dev,
- 	if (mask != vnic->rx_mask || uc_update || mc_update) {
- 		vnic->rx_mask = mask;
- 
--		bnxt_queue_sp_work(bp, BNXT_RX_MASK_SP_EVENT);
-+		bnxt_cfg_rx_mode(bp, uc, mc);
- 	}
- }
- 
--static int bnxt_cfg_rx_mode(struct bnxt *bp)
-+static int bnxt_cfg_rx_mode(struct bnxt *bp, struct netdev_hw_addr_list *uc,
-+			    struct netdev_hw_addr_list *mc)
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 7925ee152c76..6632d35ad0fe 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -1147,14 +1147,18 @@ bool iavf_promiscuous_mode_changed(struct iavf_adapter *adapter)
+ /**
+  * iavf_set_rx_mode - NDO callback to set the netdev filters
+  * @netdev: network interface device structure
++ * @uc: snapshot of uc address list
++ * @mc: snapshot of mc address list
+  **/
+-static void iavf_set_rx_mode(struct net_device *netdev)
++static void iavf_set_rx_mode(struct net_device *netdev,
++			     struct netdev_hw_addr_list *uc,
++			     struct netdev_hw_addr_list *mc)
  {
- 	struct net_device *dev = bp->dev;
- 	struct bnxt_vnic_info *vnic = &bp->vnic_info[BNXT_VNIC_DEFAULT];
-@@ -13623,7 +13625,7 @@ static int bnxt_cfg_rx_mode(struct bnxt *bp)
- 	bool uc_update;
+ 	struct iavf_adapter *adapter = netdev_priv(netdev);
  
- 	netif_addr_lock_bh(dev);
--	uc_update = bnxt_uc_list_updated(bp, &dev->uc);
-+	uc_update = bnxt_uc_list_updated(bp, uc);
- 	netif_addr_unlock_bh(dev);
+ 	spin_lock_bh(&adapter->mac_vlan_list_lock);
+-	__dev_uc_sync(netdev, iavf_addr_sync, iavf_addr_unsync);
+-	__dev_mc_sync(netdev, iavf_addr_sync, iavf_addr_unsync);
++	__hw_addr_sync_dev(uc, netdev, iavf_addr_sync, iavf_addr_unsync);
++	__hw_addr_sync_dev(mc, netdev, iavf_addr_sync, iavf_addr_unsync);
+ 	spin_unlock_bh(&adapter->mac_vlan_list_lock);
  
- 	if (!uc_update)
-@@ -13642,7 +13644,7 @@ static int bnxt_cfg_rx_mode(struct bnxt *bp)
- 	if (netdev_uc_count(dev) > (BNXT_MAX_UC_ADDRS - 1)) {
- 		vnic->rx_mask |= CFA_L2_SET_RX_MASK_REQ_MASK_PROMISCUOUS;
- 	} else {
--		netdev_for_each_uc_addr(ha, dev) {
-+		netdev_hw_addr_list_for_each(ha, uc) {
- 			memcpy(vnic->uc_list + off, ha->addr, ETH_ALEN);
- 			off += ETH_ALEN;
- 			vnic->uc_filter_count++;
-@@ -14600,6 +14602,7 @@ static void bnxt_ulp_restart(struct bnxt *bp)
- static void bnxt_sp_task(struct work_struct *work)
- {
- 	struct bnxt *bp = container_of(work, struct bnxt, sp_task);
-+	struct net_device *dev = bp->dev;
+ 	spin_lock_bh(&adapter->current_netdev_promisc_flags_lock);
+@@ -1207,7 +1211,7 @@ static void iavf_configure(struct iavf_adapter *adapter)
+ 	struct net_device *netdev = adapter->netdev;
+ 	int i;
  
- 	set_bit(BNXT_STATE_IN_SP_TASK, &bp->state);
- 	smp_mb__after_atomic();
-@@ -14613,9 +14616,6 @@ static void bnxt_sp_task(struct work_struct *work)
- 		bnxt_reenable_sriov(bp);
- 	}
+-	iavf_set_rx_mode(netdev);
++	iavf_set_rx_mode(netdev, &netdev->uc, &netdev->mc);
  
--	if (test_and_clear_bit(BNXT_RX_MASK_SP_EVENT, &bp->sp_event))
--		bnxt_cfg_rx_mode(bp);
--
- 	if (test_and_clear_bit(BNXT_RX_NTP_FLTR_SP_EVENT, &bp->sp_event))
- 		bnxt_cfg_ntp_filters(bp);
- 	if (test_and_clear_bit(BNXT_HWRM_EXEC_FWD_REQ_SP_EVENT, &bp->sp_event))
-@@ -14680,6 +14680,12 @@ static void bnxt_sp_task(struct work_struct *work)
- 	/* These functions below will clear BNXT_STATE_IN_SP_TASK.  They
- 	 * must be the last functions to be called before exiting.
- 	 */
-+	if (test_and_clear_bit(BNXT_RX_MASK_SP_EVENT, &bp->sp_event)) {
-+		bnxt_lock_sp(bp);
-+		bnxt_cfg_rx_mode(bp, &dev->uc, &dev->mc);
-+		bnxt_unlock_sp(bp);
-+	}
-+
- 	if (test_and_clear_bit(BNXT_RESET_TASK_SP_EVENT, &bp->sp_event))
- 		bnxt_reset(bp, false);
- 
+ 	iavf_configure_tx(adapter);
+ 	iavf_configure_rx(adapter);
+@@ -5150,7 +5154,7 @@ static const struct net_device_ops iavf_netdev_ops = {
+ 	.ndo_open		= iavf_open,
+ 	.ndo_stop		= iavf_close,
+ 	.ndo_start_xmit		= iavf_xmit_frame,
+-	.ndo_set_rx_mode	= iavf_set_rx_mode,
++	.ndo_set_rx_mode_async	= iavf_set_rx_mode,
+ 	.ndo_validate_addr	= eth_validate_addr,
+ 	.ndo_set_mac_address	= iavf_set_mac,
+ 	.ndo_change_mtu		= iavf_change_mtu,
 -- 
 2.53.0
 
