@@ -1,278 +1,312 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33AD723C8A0
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 05:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A760B27456;
+	Wed, 18 Mar 2026 06:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773811844; cv=none; b=miCB1oIMRKHYjlF8orjzlYvlK1+1F80kiU9qPc4zaMwwL7ex9aYIF7RPGCr4GDcYkb5kXTP06jXu6Rh/DU/afgs+kV9Z2ghEJlhgcueY4cvgum5UEAQv59nfWYU3jLiZH+WheNj0rBB3NJa4MJtoil9oJdmBNKxtB47rk3ljQzc=
+	t=1773813664; cv=none; b=YtJ7oRzpnfW5REsz1vESjqrgYVWcmb5Sj85lJKgJhQiGQnyylEJa8Urr8Opw9JbLpwczITO95Ad15+nM7RIrNuCn6msP2ptQwgzccVXIyv4SSy/H+HSSPi9otvs13VSDTeO8XZQdhZWWc2mUz/rEwbRUImQ4Yb8TiGvXFVvslJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773811844; c=relaxed/simple;
-	bh=ZvCJFeDSd/BSxhIBtIvsyeHsiy2szlH0v6CxPZqYnqc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RNj9pYuCJ0LvFaWSSYZTWk1s8EagXP63PAkR1hV7jufeHga740qRPAWerA4E1uPpqNgZiX/tX+mlDAwobzKMjiFV+ECfwCl9oAiZ/F/2B0QUa/18dYKkzFKNxG4ClyhUPiTQRtpj0xBbekjA7Znl4cVQJ5NeNhW2dG7mrmYlc8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2a8fba89cb5so8948275ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2026 22:30:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773811841; x=1774416641;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=km464EwkBVLUM1f6zH0j5r/iq0Pwuvbh+QT1ThGEU8g=;
-        b=Ni8G1tfqPxhOn5O88nHvRcwDfLKXDmrGK9Lyb7Hr5ljqYapITjgT/31DaJN0wOV/2x
-         3u1GWdlejfUgup7As39gKYh5TOLDfrHQfS1K11sNV3hCuyjcumfgH/pBFyhrUA3nURLG
-         80/XBh8ta+7bTN0lRSYIkFczeLfhpburar8T6PYqDHDiOvQ1hdzcTRURUcZBxQFWAiZR
-         8ei+V9phlPW+qrhq1C754IJlkS0QaCatRuzPouX4I1JV+AsurpNswY6+uuGUzEMR79hD
-         8aaC23a5BAuj5f6JCmdMQ9y4ez3ehj+LI0sSSITDl3H4cW3Sr4yEGNrf478NhQoPzjOf
-         zaZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUfGgHEIyij0fiDXIt114C8JbJ3g4xsM8gZw+jp7oL6LcipnuFlyd+cGY6w+WemtbvJkH3bIpkWzK5G7URhRFA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLfrhK8iP9gH6Lrvqow5dagIhH3mmaPgxUPzY01X0iU9koS0nl
-	lIOVPRAWLIStig31lVTEIDMyZvjqYfe7bEmzzimrsTEolOPcNdikaSLr
-X-Gm-Gg: ATEYQzweDQGd+CkXG73KojJyQqxVQ3+TIr5OzaJ6iqfneISzr3TjHfo7os/6zsOHgHF
-	XSUTh26Yi9IyL8fBpgquuCgEt4mQwy1bAmnzpoCR7JBQq9hR2tqHDRc2eS0piUEUylPeRPkXgsq
-	ce66oelBn83jxNgBbbtMIZ2LtuVJBM7wKAyqVViVuou92U/+d5tgCv7haeTXOyhWL8WoeF9IVVP
-	zedes2uQZkwuEdd5I+SbTeLqxacRONQSbSQSkJD7qILujC1SX4IGfd1u5FshuYilEOMCR9XmWxB
-	U2zBCtFiPQRxm6Y9XesJYCbVashjWl7NEF0/HanyDcjmuzkyIbfn2tW73UNclTWZbIU7l8yFvTZ
-	DMKoHp40An9mWcSGeX/ZSxm3909ZYJSXXIQbqBvIJwMVntDarcykJLRwHHYpBhzoxKBR+RPE8V8
-	jTWABUrvud4E4ayDbwwr95NWhrCiqgTvjRuJ9OdYt8ntf1sigOq+7kjJ9Tuy6bhCNhxANErP+ce
-	taU6XeB4ld8Sl3X1tFbJ6DCIoY=
-X-Received: by 2002:a17:902:cecb:b0:2ae:ba08:a491 with SMTP id d9443c01a7336-2b06e21c10cmr14208845ad.0.1773811841439;
-        Tue, 17 Mar 2026 22:30:41 -0700 (PDT)
-Received: from [192.168.1.11] ([121.175.158.237])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e60526dsm16054815ad.62.2026.03.17.22.30.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2026 22:30:41 -0700 (PDT)
-Message-ID: <0a6b3cae-802b-4229-a130-4392fd49c5c9@kzalloc.com>
-Date: Wed, 18 Mar 2026 14:30:37 +0900
+	s=arc-20240116; t=1773813664; c=relaxed/simple;
+	bh=rMROIzV9bRqUzrcYakjh5WuCieIdwd/xKsodgkFDVNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eYBiK3ddZ84xLpjbIpHoqVkceWzvxq7hLJoKNlYbroDsR+/bWvmhT8RzCWXZ8pBWYLvvCbe+fk0HfIwfYj1fHad7zl5PuTxOLE/Uu/YfrQ40+t+B+hQd3431ATw8YORuPCYSUz4iheFsLL6sYUUmPIZMMpg7U5bv+zPevP8/Jjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8v+oRE3; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X8v+oRE3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69A3C19421;
+	Wed, 18 Mar 2026 06:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773813664;
+	bh=rMROIzV9bRqUzrcYakjh5WuCieIdwd/xKsodgkFDVNI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=X8v+oRE3pAOSEuTZjHr3Oh2Z90dWfnHsJQFNulFAQ7hMIthNoAunZdyZRb5sZKniy
+	 ngr35Qzru8Zw228d/5ms2ZOTo/LOEvhUZeyp+dSJycdHqdCW/Sa77oJPO5geAs81vs
+	 EfRIhPsBzneWimQ5B3/iCgflUbUgW2eLJlTTE+odf0kly6dVlRdUF7wQIdsLiGWSJl
+	 QoqCMBaYVBMENWG/+wnRZZXCx3IkGynxtsV8sCiC28Zjau3gQjWUz4/yRNcEsfy7Lu
+	 4Cm8GfYHzT0DBh9bG3TcCcjDLflUKriHcrKma2+9xwoGNxtMG+Z+NyJltTuZkGtV1U
+	 V5pI5HHyzW1iw==
+Date: Wed, 18 Mar 2026 07:00:55 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Sasha Levin <sashal@kernel.org>, linux-api@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
+ tools@kernel.org, x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, "Paul
+ E. McKenney" <paulmck@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Dmitry Vyukov <dvyukov@google.com>, Randy
+ Dunlap <rdunlap@infradead.org>, Cyril Hrubis <chrubis@suse.cz>, Kees Cook
+ <kees@kernel.org>, Jake Edge <jake@lwn.net>, David Laight
+ <david.laight.linux@gmail.com>, Askar Safin <safinaskar@zohomail.com>,
+ Gabriele Paoloni <gpaoloni@redhat.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Christian Brauner <brauner@kernel.org>, Alexander
+ Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>,
+ Masahiro Yamada <masahiroy@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, Arnd Bergmann
+ <arnd@arndb.de>
+Subject: Re: [PATCH 1/9] kernel/api: introduce kernel API specification
+ framework
+Message-ID: <20260318070055.39f1af80@foz.lan>
+In-Reply-To: <87h5qe9wig.fsf@trenco.lwn.net>
+References: <20260313150928.2637368-1-sashal@kernel.org>
+	<20260313150928.2637368-2-sashal@kernel.org>
+	<87h5qe9wig.fsf@trenco.lwn.net>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] lkdtm: Add lockdep related crash tests
-To: Tzung-Bi Shih <tzungbi@kernel.org>, Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- "max.byungchul.park@gmail.com" <max.byungchul.park@gmail.com>,
- Byungchul Park <byungchul@sk.com>, Yeoreum Yun <yeoreum.yun@arm.com>,
- Yeoreum Yun <ppbuk5246@gmail.com>
-References: <20251215072539.2580180-1-tzungbi@kernel.org>
-Content-Language: en-US
-From: Yunseong Kim <ysk@kzalloc.com>
-Organization: kzalloc
-In-Reply-To: <20251215072539.2580180-1-tzungbi@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Hi Tzung-Bi,
+On Tue, 17 Mar 2026 11:49:27 -0600
+Jonathan Corbet <corbet@lwn.net> wrote:
 
-Thanks for the great work!
-
-I'm very interested in this work as it will be helpful for verifying
-whether kernel crash dumps are correctly extracted when a deadlock is
-detected by lockdep. I really hope to see this merged.
-
-I have a couple of questions regarding the organization of these tests:
-
-Is the intent of this new lockdep.c specifically to validate the lockdep
-infrastructure itself rather than providing general deadlock.c code It
-feels like "deadlock" might be a broader category. For example, DEPT
-(Dependency Tracker) can track wait/event dependencies for PG_locked/writeback.
-I'm planning a follow-up contribution to cover these cases that DEPT can detect.
-
-Do you think it would be better to implement deadlock detection for LKDTM
-(like the ones DEPT handles) in a separate deadlock.c instead of
-lockdep.c? I'd love to hear your thoughts on the scope.
-
-Best regards,
-Yunseong
-
-On 12/15/25 4:25 PM, Tzung-Bi Shih wrote:
-> Introduce various lockdep related crash tests.
+> Sasha Levin <sashal@kernel.org> writes:
 > 
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
-> v3:
-> - Add some entries in tools/testing/selftests/lkdtm/tests.txt.
+> > Add a framework for formally documenting kernel APIs with inline
+> > specifications. This framework provides:
+> >
+> > - Structured API documentation with parameter specifications, return
+> >   values, error conditions, and execution context requirements
+> > - Runtime validation capabilities for debugging (CONFIG_KAPI_RUNTIME_CHECKS)
+> > - Export of specifications via debugfs for tooling integration
+> > - Support for both internal kernel APIs and system calls  
 > 
-> v2: https://lore.kernel.org/all/20251117033337.3730681-1-tzungbi@kernel.org/
-> - Fix "warning: suggest braces around empty body in an 'else' statement [-Wempty-body]"
->   reported by 0day test robot.
+> So I'll confess I have only scanned over the implementation, but I have
+> some thoughts on the earlier stuff.
 > 
-> v1: https://lore.kernel.org/lkml/20251114062535.1827309-1-tzungbi@kernel.org/T/#u
+> [...]
 > 
->  drivers/misc/lkdtm/Makefile             |  1 +
->  drivers/misc/lkdtm/core.c               |  1 +
->  drivers/misc/lkdtm/lkdtm.h              |  1 +
->  drivers/misc/lkdtm/lockdep.c            | 98 +++++++++++++++++++++++++
->  tools/testing/selftests/lkdtm/tests.txt |  8 ++
->  5 files changed, 109 insertions(+)
->  create mode 100644 drivers/misc/lkdtm/lockdep.c
+> > diff --git a/Documentation/dev-tools/kernel-api-spec.rst b/Documentation/dev-tools/kernel-api-spec.rst
+> > new file mode 100644
+> > index 0000000000000..7c0c1694f1f4a
+> > --- /dev/null
+> > +++ b/Documentation/dev-tools/kernel-api-spec.rst
+> > @@ -0,0 +1,482 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +======================================
+> > +Kernel API Specification Framework
+> > +======================================
+> > +
+> > +:Author: Sasha Levin <sashal@kernel.org>
+> > +:Date: June 2025  
 > 
-> diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
-> index 03ebe33185f9..830b71c8e6a0 100644
-> --- a/drivers/misc/lkdtm/Makefile
-> +++ b/drivers/misc/lkdtm/Makefile
-> @@ -11,6 +11,7 @@ lkdtm-$(CONFIG_LKDTM)		+= usercopy.o
->  lkdtm-$(CONFIG_LKDTM)		+= kstack_erase.o
->  lkdtm-$(CONFIG_LKDTM)		+= cfi.o
->  lkdtm-$(CONFIG_LKDTM)		+= fortify.o
-> +lkdtm-$(CONFIG_LKDTM)		+= lockdep.o
->  lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
->  
->  KASAN_SANITIZE_stackleak.o	:= n
-> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-> index 5732fd59a227..43e91388940f 100644
-> --- a/drivers/misc/lkdtm/core.c
-> +++ b/drivers/misc/lkdtm/core.c
-> @@ -96,6 +96,7 @@ static const struct crashtype_category *crashtype_categories[] = {
->  	&stackleak_crashtypes,
->  	&cfi_crashtypes,
->  	&fortify_crashtypes,
-> +	&lockdep_crashtypes,
->  #ifdef CONFIG_PPC_64S_HASH_MMU
->  	&powerpc_crashtypes,
->  #endif
-> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-> index 015e0484026b..d2d97e6f323e 100644
-> --- a/drivers/misc/lkdtm/lkdtm.h
-> +++ b/drivers/misc/lkdtm/lkdtm.h
-> @@ -84,6 +84,7 @@ extern struct crashtype_category usercopy_crashtypes;
->  extern struct crashtype_category stackleak_crashtypes;
->  extern struct crashtype_category cfi_crashtypes;
->  extern struct crashtype_category fortify_crashtypes;
-> +extern struct crashtype_category lockdep_crashtypes;
->  extern struct crashtype_category powerpc_crashtypes;
->  
->  /* Each category's init/exit routines. */
-> diff --git a/drivers/misc/lkdtm/lockdep.c b/drivers/misc/lkdtm/lockdep.c
-> new file mode 100644
-> index 000000000000..e029e9e60ce6
-> --- /dev/null
-> +++ b/drivers/misc/lkdtm/lockdep.c
-> @@ -0,0 +1,98 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2025 Google LLC
-> + *
-> + * Tests related to lockdep warnings.
-> + */
-> +#include "lkdtm.h"
-> +#include <linux/cleanup.h>
-> +#include <linux/irqflags.h>
-> +#include <linux/mutex.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/srcu.h>
-> +
-> +static DEFINE_SPINLOCK(lock_A);
-> +static DEFINE_SPINLOCK(lock_B);
-> +
-> +/* For "WARNING: possible circular locking dependency detected". */
-> +static void lkdtm_LOCKDEP_CIRCULAR_LOCK(void)
-> +{
-> +	scoped_guard(spinlock, &lock_A)
-> +		scoped_guard(spinlock, &lock_B) {}
-> +	scoped_guard(spinlock, &lock_B)
-> +		scoped_guard(spinlock, &lock_A) {}
-> +}
-> +
-> +/* For "WARNING: possible recursive locking detected". */
-> +static void lkdtm_LOCKDEP_RECURSIVE_LOCK(void)
-> +{
-> +	guard(spinlock)(&lock_A);
-> +	guard(spinlock)(&lock_A);
-> +}
-> +
-> +/* For "WARNING: inconsistent lock state". */
-> +static void lkdtm_LOCKDEP_INCONSISTENT_LOCK(void)
-> +{
-> +	lockdep_softirq_enter();
-> +	scoped_guard(spinlock, &lock_A) {}
-> +	lockdep_softirq_exit();
-> +
-> +	scoped_guard(spinlock, &lock_A) {}
-> +}
-> +
-> +/* For "WARNING: Nested lock was not taken". */
-> +static void lkdtm_LOCKDEP_NESTED_LOCK_NOT_HELD(void)
-> +{
-> +	spin_lock_nest_lock(&lock_B, &lock_A);
-> +}
-> +
-> +/* For "WARNING: bad unlock balance detected!". */
-> +static void lkdtm_LOCKDEP_BAD_UNLOCK_BALANCE(void)
-> +{
-> +	spin_unlock(&lock_A);
-> +}
-> +
-> +/* For "WARNING: held lock freed!". */
-> +static void lkdtm_LOCKDEP_HELD_LOCK_FREED(void)
-> +{
-> +	spin_lock(&lock_A);
-> +	spin_lock_init(&lock_A);
-> +}
-> +
-> +/* For "WARNING: lock held when returning to user space!". */
-> +static void lkdtm_LOCKDEP_HELD_LOCK(void)
-> +{
-> +	spin_lock(&lock_A);
-> +}
-> +
-> +/* For "WARNING: suspicious RCU usage". */
-> +static void lkdtm_LOCKDEP_SUSPICIOUS_RCU(void)
-> +{
-> +	struct srcu_struct srcu;
-> +	void __rcu *res = NULL;
-> +	int idx;
-> +
-> +	init_srcu_struct(&srcu);
-> +
-> +	idx = srcu_read_lock(&srcu);
-> +	rcu_dereference(res);
-> +	srcu_read_unlock(&srcu, idx);
-> +
-> +	cleanup_srcu_struct(&srcu);
-> +}
-> +
-> +static struct crashtype crashtypes[] = {
-> +	CRASHTYPE(LOCKDEP_CIRCULAR_LOCK),
-> +	CRASHTYPE(LOCKDEP_RECURSIVE_LOCK),
-> +	CRASHTYPE(LOCKDEP_INCONSISTENT_LOCK),
-> +	CRASHTYPE(LOCKDEP_NESTED_LOCK_NOT_HELD),
-> +	CRASHTYPE(LOCKDEP_BAD_UNLOCK_BALANCE),
-> +	CRASHTYPE(LOCKDEP_HELD_LOCK_FREED),
-> +	CRASHTYPE(LOCKDEP_HELD_LOCK),
-> +	CRASHTYPE(LOCKDEP_SUSPICIOUS_RCU),
-> +};
-> +
-> +struct crashtype_category lockdep_crashtypes = {
-> +	.crashtypes = crashtypes,
-> +	.len	    = ARRAY_SIZE(crashtypes),
-> +};
-> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-> index cff124c1eddd..7b32dece3d3a 100644
-> --- a/tools/testing/selftests/lkdtm/tests.txt
-> +++ b/tools/testing/selftests/lkdtm/tests.txt
-> @@ -83,3 +83,11 @@ FORTIFY_STR_MEMBER detected buffer overflow
->  FORTIFY_MEM_OBJECT detected buffer overflow
->  FORTIFY_MEM_MEMBER detected field-spanning write
->  PPC_SLB_MULTIHIT Recovered
-> +#LOCKDEP_CIRCULAR_LOCK Lockdep can only trigger once
-> +#LOCKDEP_RECURSIVE_LOCK Hangs the system
-> +#LOCKDEP_INCONSISTENT_LOCK Lockdep can only trigger once
-> +#LOCKDEP_NESTED_LOCK_NOT_HELD Cause a deadlock in subsequent lockdep tests
-> +#LOCKDEP_BAD_UNLOCK_BALANCE Lockdep can only trigger once
-> +#LOCKDEP_HELD_LOCK_FREED Lockdep can only trigger once
-> +#LOCKDEP_HELD_LOCK Cause a deadlock in subsequent lockdep tests
-> +#LOCKDEP_SUSPICIOUS_RCU Lockdep can only trigger once
+> Has it not changed since then?
+> 
+> > +.. contents:: Table of Contents
+> > +   :depth: 3
+> > +   :local:
+> > +
+> > +Introduction
+> > +============  
+> 
+> [...]
+> 
+> > +Usage Guide
+> > +===========
+> > +
+> > +Basic API Specification
+> > +-----------------------
+> > +
+> > +API specifications are written as KAPI-annotated kerneldoc comments directly in
+> > +the source file, immediately preceding the function implementation. The ``kapi``
+> > +tool extracts these annotations to produce structured specifications.
+> > +
+> > +.. code-block:: c
+> > +
+> > +    /**
+> > +     * kmalloc - allocate kernel memory
+> > +     * @size: Number of bytes to allocate
+> > +     * @flags: Allocation flags (GFP_*)  
+> 
+> Given that the text thus far has talked about user-space API validation,
+> it's a bit surprising to see an internal function used as an example.
+> 
+> Also, maybe it should be kmalloc_obj()?  <runs away>
+> 
+> > +     * context-flags: KAPI_CTX_PROCESS | KAPI_CTX_SOFTIRQ | KAPI_CTX_HARDIRQ
+> > +     * param-count: 2  
+> 
+> param-count is two, but you only document one of them?
+> 
+> > +     * param: size
+> > +     *   type: KAPI_TYPE_UINT
+> > +     *   flags: KAPI_PARAM_IN
+> > +     *   constraint-type: KAPI_CONSTRAINT_RANGE
+> > +     *   range: 0, KMALLOC_MAX_SIZE
+> > +     *
+> > +     * error: ENOMEM, Out of memory
+> > +     *   desc: Insufficient memory available for the requested allocation.
+> > +     */  
+> 
+> Honest question: can this be made a bit easier for people to create,
+> with less shift-key wear?  My biggest worry with a system like this is
+> that people won't take the time to create and maintain the entries, so
+> anything that would ease the task would help.  Is there an impediment to
+> something like:
+> 
+>   contexts: process, softirq, hardirq
+> 
+>   param: size
+>     type: uint, input
+>     constraint: range(0, KMALLOC_MAX_SIZE)
+> 
+> See what I'm getting at?  ISTM that your DSL could be made a bit less
+> verbose and shouty while being just as well defined, but perhaps I'm
+> missing something?
+> 
+> Even better, of course, would be to add a "description" field for each
+> parameter, and allow that rather than the @param description that
+> kerneldoc currently uses.  That would keep all the information together,
+> at the minor cost of adding another significant complication to the
+> kernel-doc script.  Mauro won't mind :)
 
+No, I won't ;-) 
+
+It sounds a lot better to use kernel-doc also for kAPI than to have an
+independent tool.
+
+It is also very confusing if we end with a kernel-doc-like format
+that it is not parsed by kernel-doc.
+
+> 
+> > +    void *kmalloc(size_t size, gfp_t flags)
+> > +    {
+> > +        /* Implementation */
+> > +    }
+> > +
+> > +Alternatively, specifications can be defined using the ``DEFINE_KERNEL_API_SPEC``
+> > +macro for compiled-in specs that are stored in the ``.kapi_specs`` ELF section:
+> > +
+> > +.. code-block:: c
+> > +
+> > +    #include <linux/kernel_api_spec.h>
+> > +
+> > +    DEFINE_KERNEL_API_SPEC(sys_open)
+> > +    KAPI_DESCRIPTION("Open or create a file")
+> > +    KAPI_CONTEXT(KAPI_CTX_PROCESS | KAPI_CTX_SLEEPABLE)
+> > +    /* ... parameter, error, constraint definitions ... */
+> > +    KAPI_END_SPEC  
+> 
+> So the reason for two completely separate mechanisms is not entirely
+> clear to me.  The kerneldoc variant is essentially documentation, while
+> the macro stuff is to be built into the executable?  What if you want
+> both?
+
+You can easily add support at kernel-doc to output such macros.
+
+All you need is to create a new class derived from OutputFormat and
+make it produce any different output format, including:
+
+    #include <linux/kernel_api_spec.h>
+
+    DEFINE_KERNEL_API_SPEC(sys_open)
+    KAPI_DESCRIPTION("Open or create a file")
+    KAPI_CONTEXT(KAPI_CTX_PROCESS | KAPI_CTX_SLEEPABLE)
+    /* ... parameter, error, constraint definitions ... */
+    KAPI_END_SPEC  
+
+I'd say that converting from such output to `.kapi_specs`` ELF section
+itself and/or to sysfs/debugfs - e.g. something that would require to
+compile or be linked with Kernel's compiled binaries should be done by a
+separate tool, but we should aim to have a singe tool to process 
+kernel documentation markups.
+
+It is hard enough to maintain just one tool - and to have people actually
+writing documentation. Having a second one to handle it, with a different
+format will likely increase a lot the documentation burden.
+
+> It would be nice to only have one way if at all possible; I'm sure that
+> crossed your mind at some point :)  If there have to be two, having both
+> examples describe the same function would make the parallels more clear.
+> 
+> > +System Call Specification
+> > +-------------------------
+> > +
+> > +System calls are documented inline in the implementation file (e.g., ``fs/open.c``)
+> > +using KAPI-annotated kerneldoc comments. When ``CONFIG_KAPI_RUNTIME_CHECKS`` is
+> > +enabled, the ``SYSCALL_DEFINEx`` macros automatically look up the specification
+> > +and validate parameters before and after the syscall executes.
+> > +
+> > +IOCTL Specification
+> > +-------------------
+> > +
+> > +IOCTLs use the same annotation approach with additional structure field
+> > +specifications  
+> 
+> This might be a really good place for an example
+> 
+> [...]
+> 
+> > +Usage Examples
+> > +--------------
+> > +
+> > +Query specific API::
+> > +
+> > +    $ cat /sys/kernel/debug/kapi/apis/kmalloc/specification
+> > +    API: kmalloc
+> > +    Version: 3.0
+> > +    Description: Allocate kernel memory
+> > +
+> > +    Parameters:
+> > +      [0] size (size_t, in): Number of bytes to allocate
+> > +          Range: 0 - 4194304
+> > +      [1] flags (flags, in): Allocation flags (GFP_*)
+> > +          Mask: 0x1ffffff  
+> 
+> Ah, you do document that second parameter somewhere :)
+> 
+> > +    Returns: pointer - Pointer to allocated memory or NULL
+> > +
+> > +    Errors:
+> > +      ENOMEM: Out of memory
+> > +
+> > +    Context: process, softirq, hardirq
+> > +
+> > +    Side Effects:
+> > +      - Allocates memory from kernel heap  
+> 
+> That part wasn't in your example
+> 
+> > +Export all specifications::
+> > +
+> > +    $ cat /sys/kernel/debug/kapi/export/all.json > kernel-apis.json
+> > +
+> > +Enable validation for specific API::
+> > +
+> > +    $ echo 1 > /sys/kernel/debug/kapi/apis/kmalloc/validate
+> > +
+> > +Performance Considerations
+> > +==========================
+> > +
+> > +Memory Overhead
+> > +---------------
+> > +
+> > +Each API specification consumes approximately 400-450KB of memory due to the
+> > +fixed-size arrays in ``struct kernel_api_spec``. With the current 4 syscall
+> > +specifications, total memory usage is approximately 1.7MB. Consider:  
+> 
+> Ouch.
+> 
+> > +Documentation Generation
+> > +------------------------
+> > +
+> > +The framework exports specifications via debugfs that can be used
+> > +to generate documentation. Tools for automatic documentation generation
+> > +from specifications are planned for future development.  
+> 
+> Documentation always comes last :)
+> 
+> Interesting stuff.
+> 
+> jon
+
+
+
+Thanks,
+Mauro
