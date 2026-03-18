@@ -1,48 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009CE369202;
-	Wed, 18 Mar 2026 07:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805E7369974;
+	Wed, 18 Mar 2026 07:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773818095; cv=none; b=BiLsnje+mkAkIIbUs0lvVirn3d0xqs4UtyPSvVMC8s5T5aobOWi59m5DkgUqsLH0NQmgmcHMhowxQ8g44qKhsZh0AzDMxOqyF+5lQP4IYqE93Raj+AAbkxYVo74YxWSD/pU+YmhcxGgMk1IeFBAhoR0swM3N6E1E8V/dZLzAAZs=
+	t=1773818138; cv=none; b=d4vJOgyEiZ7ZvGne6ipUl876aFbYMsL63OEUJymCkJMlLEHdlZ6VlBvTEyg3EjSyLo2fYxIvyNI/bgynB81FkE8LbHJ0zzPgG7y9uCpiM1X2FsTI8Z6XQ/4y8uLrlxii/XTNFpNMobiE4eHhHYgSujvjPc3+i5vwM/RKGvFxl8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773818095; c=relaxed/simple;
-	bh=Zv7Cg2XLcFPwRgksghRWizVcr027bWJBFbKuA/65BiE=;
+	s=arc-20240116; t=1773818138; c=relaxed/simple;
+	bh=HA57TZoe4kUHc2+bGmz45ludm6iUpxni9mm++DOzFxw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lplVY3jwjNdD7LLGMZWm7aqaRtrmIAZ+EHysCGPc/kQtbLPGU0X43+4Iwni2HzB8L0/J6QlAX/KjMy6UR/02pvxs2YLviUZdz+4/9vkVJN5P+hi+FFhLqGRAKDHUE8dXdlD6nVj9RHbhXBO3LckGlc4ySkU7Gd3mw4BRfzHMxF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V5+9UMJB; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q85Mfbl73Gt8Rbi1XcUerOnscaCLcasMCPzYfLe1EvL0pzjLbI4SzwEwdQxp5w9Pb8HWKsjYbYkNqDmogw1iDPa4VJqoIki7eoXLQgyeEkOJGaN30yG2Zw307ve+QBmI7cHTH+iMPb9JedePsEM9dIleUWP75DwOhwSf1zbmMpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9cufFL5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V5+9UMJB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86097C2BCB1;
-	Wed, 18 Mar 2026 07:14:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9cufFL5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7960C19421;
+	Wed, 18 Mar 2026 07:15:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773818094;
-	bh=Zv7Cg2XLcFPwRgksghRWizVcr027bWJBFbKuA/65BiE=;
+	s=k20201202; t=1773818138;
+	bh=HA57TZoe4kUHc2+bGmz45ludm6iUpxni9mm++DOzFxw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V5+9UMJBL8DVdZ1zKyXJXjD2uT1BNv2qwOMf/snDCDF7UVJqMr4QpTcH5XFAMHTSa
-	 EDlKjyBCgeDYj6UDzhxyNuq5ekn/JAdq+Rjc13r8q7Hq3/CG+UI5NdvCUiAG/MB2js
-	 WPrFKfZXstABcu50agWDlQmud0xWnBNYIRyn4nC38b5YkrwXEKeh19kV5JT4L6eXPr
-	 nGp4Eq3KfArCBIIBBNNFkgSW+z3UqpWQg80VFOMKxL/RBM+UTCEhXs2rAxd4D3IdyK
-	 ARv8UPOdzTk3d3OaKGVkadsFIEKA00ni1YveTG7pNYjs9u8rSTsbE3riEMEXR6kthu
-	 t2/dVBwHUD8tw==
-Date: Wed, 18 Mar 2026 07:14:50 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Yunseong Kim <ysk@kzalloc.com>
-Cc: Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	"max.byungchul.park@gmail.com" <max.byungchul.park@gmail.com>,
-	Byungchul Park <byungchul@sk.com>,
-	Yeoreum Yun <yeoreum.yun@arm.com>,
-	Yeoreum Yun <ppbuk5246@gmail.com>
-Subject: Re: [PATCH v3] lkdtm: Add lockdep related crash tests
-Message-ID: <abpQ6j48SGQv9a3v@google.com>
-References: <20251215072539.2580180-1-tzungbi@kernel.org>
- <0a6b3cae-802b-4229-a130-4392fd49c5c9@kzalloc.com>
+	b=T9cufFL5XjwyV8VXoZUq2Dftqo/gLYu5x7FdiDrcQd3PhMf4B3ZtRpskY4DrsJJf6
+	 BzCUja/lf6wGuGhbSazOGuLsVkWXa/rlQpcfrcIEAeKNMCscbjfjpXws473vaOElIR
+	 dUGryHxVz5asQsZwiGhc1D6dCqiHeq88gfVDNuslgWqkGi5lQQP8IVrAkZwPBnuL5F
+	 AhbCCG3Pb0ZuzyCND91nwa/v0KsO7/pMp9TVbz/MsRydZlXlpZzvL3B1q/mO2hx5eH
+	 6FFpKCA3y0F3bJuNjTkXh0pt0lztkIS9GX5nJZLKi8yykdnUkdfdCeeEllMbdSx2xx
+	 /+XFAKcy+FeMA==
+Date: Wed, 18 Mar 2026 09:15:31 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH 1/6] selftests/liveupdate: add framework for memfd tests
+Message-ID: <abpRE6cfsyuoeiiq@kernel.org>
+References: <20260309115441.266805-1-pratyush@kernel.org>
+ <20260309115441.266805-2-pratyush@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,215 +46,162 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a6b3cae-802b-4229-a130-4392fd49c5c9@kzalloc.com>
+In-Reply-To: <20260309115441.266805-2-pratyush@kernel.org>
 
-On Wed, Mar 18, 2026 at 02:30:37PM +0900, Yunseong Kim wrote:
-> Hi Tzung-Bi,
+On Mon, Mar 09, 2026 at 11:54:34AM +0000, Pratyush Yadav wrote:
+> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 > 
-> Thanks for the great work!
+> Currently memfd preservation using LUO is only tested indirectly via the
+> luo_multi_session or luo_kexec_simple tests. Their main purpose is to
+> test other live update functionality.
 > 
-> I'm very interested in this work as it will be helpful for verifying
-> whether kernel crash dumps are correctly extracted when a deadlock is
-> detected by lockdep. I really hope to see this merged.
+> Add a framework for writing memfd tests. The framework hooks into the
+> kselftest harness, but adds some things on top to make it suitable for
+> live update.
 > 
-> I have a couple of questions regarding the organization of these tests:
+> The LUO FD (/dev/liveupdate) can only be opened by one process at a
+> time. Each test runs in its own process. This means the LUO FD must be
+> owned by the main process and shared to children. main() opens the LUO
+> FD and shares it to child runners using a global variable.
 > 
-> Is the intent of this new lockdep.c specifically to validate the lockdep
-> infrastructure itself rather than providing general deadlock.c code It
-> feels like "deadlock" might be a broader category. For example, DEPT
-> (Dependency Tracker) can track wait/event dependencies for PG_locked/writeback.
-> I'm planning a follow-up contribution to cover these cases that DEPT can detect.
+> Live update tests run in two stages. One before kexec and one after.
+> Detect the stage using a special state session. If the session is
+> present, it means the test is in post-kexec state.
+> 
+> Additionally, take in an optional --stage argument that lets callers
+> specify expected stage. This is useful as a safety net to catch LUO core
+> failures. If LUO core fails to preserve the state session properly, this
+> option can help detect this and fail early. Since the option is not
+> recognized by the kselftest harness, remove it from argv before calling
+> test_harness_run().
+> 
+> Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 
-Yes, the lockdep.c is designed for lockdep; "deadlock" should be a
-different set of issues (e.g., lockdep isn't only for deadlock).
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-> 
-> Do you think it would be better to implement deadlock detection for LKDTM
-> (like the ones DEPT handles) in a separate deadlock.c instead of
-> lockdep.c? I'd love to hear your thoughts on the scope.
+with a few nits below.
 
-I think separate them would be easier to understand and review.
+> ---
+>  tools/testing/selftests/liveupdate/Makefile   |  1 +
+>  .../testing/selftests/liveupdate/luo_memfd.c  | 77 +++++++++++++++++++
+>  2 files changed, 78 insertions(+)
+>  create mode 100644 tools/testing/selftests/liveupdate/luo_memfd.c
+> 
+> diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
+> index 080754787ede..051daae55eec 100644
+> --- a/tools/testing/selftests/liveupdate/Makefile
+> +++ b/tools/testing/selftests/liveupdate/Makefile
+> @@ -6,6 +6,7 @@ TEST_GEN_PROGS += liveupdate
+>  
+>  TEST_GEN_PROGS_EXTENDED += luo_kexec_simple
+>  TEST_GEN_PROGS_EXTENDED += luo_multi_session
+> +TEST_GEN_PROGS_EXTENDED += luo_memfd
+>  
+>  TEST_FILES += do_kexec.sh
+>  
+> diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
+> new file mode 100644
+> index 000000000000..b779eee18387
+> --- /dev/null
+> +++ b/tools/testing/selftests/liveupdate/luo_memfd.c
+> @@ -0,0 +1,77 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright (c) 2026, Google LLC.
+> + * Pratyush Yadav (Google) <pratyush@kernel.org>
+> + */
+> +
+> +/*
+> + * Selftests for memfd preservation via LUO.
+> + */
+> +
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <string.h>
+> +#include <sys/ioctl.h>
+> +#include <unistd.h>
+> +
+> +#include <linux/liveupdate.h>
+> +
+> +#include "../kselftest.h"
+> +#include "../kselftest_harness.h"
+> +
+> +#include "luo_test_utils.h"
+> +
+> +#define STATE_SESSION_NAME "luo-state"
+> +#define STATE_MEMFD_TOKEN 1
+> +
+> +#define LIVEUPDATE_DEV "/dev/liveupdate"
+> +static int luo_fd = -1, stage;
 
+Nit: declaring stage on a separate line is a bit clearer.
+
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int session, expected_stage = 0;
+
+Ditto.
+
+> +
+> +	/*
+> +	 * The test takes an optional --stage argument. This lets callers
+> +	 * provide the expected stage, and if that doesn't match the test errors
+> +	 * out.
+> +	 *
+> +	 * Look for the stage. Since test_harness_run() doesn't recognize it,
+> +	 * once found, remove it from argv.
+> +	 */
+> +	for (int i = 1; i < argc; i++) {
+> +		if (strcmp(argv[i], "--stage") == 0) {
+> +			if (i + 1 < argc) {
+> +				expected_stage = atoi(argv[i + 1]);
+> +				memmove(&argv[i], &argv[i + 2], (argc - i - 1) * sizeof(char *));
+> +				argc -= 2;
+> +				i--;
+> +			} else {
+> +				ksft_exit_fail_msg("Option --stage requires an argument\n");
+> +			}
+> +		}
+> +	}
+> +
+> +	luo_fd = luo_open_device();
+> +	if (luo_fd < 0)
+> +		ksft_exit_skip("Failed to open %s (%s). Is the luo module loaded?\n",
+
+LUO can't be a module :) Maybe
+
+"Is LUO enabled in the kernel?"
+
+
+> +			       strerror(errno), LUO_DEVICE);
+> +
+> +	session = luo_retrieve_session(luo_fd, STATE_SESSION_NAME);
+> +	if (session == -ENOENT)
+> +		stage = 1;
+> +	else if (session >= 0)
+> +		stage = 2;
+> +	else
+> +		fail_exit("Failed to check for state session");
+
+There is ksft_exit_fail_perror(), would be more consistent with other exit
+paths.
+
+> +
+> +	if (expected_stage && expected_stage != stage)
+> +		ksft_exit_fail_msg("Stage mismatch: expected %d, got %d\n",
+> +				   expected_stage, stage);
+> +
+> +	if (stage == 1)
+> +		create_state_file(luo_fd, STATE_SESSION_NAME, STATE_MEMFD_TOKEN, 2);
+> +
+> +	test_harness_run(argc, argv);
+> +}
+> -- 
+> 2.53.0.473.g4a7958ca14-goog
 > 
-> Best regards,
-> Yunseong
-> 
-> On 12/15/25 4:25 PM, Tzung-Bi Shih wrote:
-> > Introduce various lockdep related crash tests.
-> > 
-> > Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> > ---
-> > v3:
-> > - Add some entries in tools/testing/selftests/lkdtm/tests.txt.
-> > 
-> > v2: https://lore.kernel.org/all/20251117033337.3730681-1-tzungbi@kernel.org/
-> > - Fix "warning: suggest braces around empty body in an 'else' statement [-Wempty-body]"
-> >   reported by 0day test robot.
-> > 
-> > v1: https://lore.kernel.org/lkml/20251114062535.1827309-1-tzungbi@kernel.org/T/#u
-> > 
-> >  drivers/misc/lkdtm/Makefile             |  1 +
-> >  drivers/misc/lkdtm/core.c               |  1 +
-> >  drivers/misc/lkdtm/lkdtm.h              |  1 +
-> >  drivers/misc/lkdtm/lockdep.c            | 98 +++++++++++++++++++++++++
-> >  tools/testing/selftests/lkdtm/tests.txt |  8 ++
-> >  5 files changed, 109 insertions(+)
-> >  create mode 100644 drivers/misc/lkdtm/lockdep.c
-> > 
-> > diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
-> > index 03ebe33185f9..830b71c8e6a0 100644
-> > --- a/drivers/misc/lkdtm/Makefile
-> > +++ b/drivers/misc/lkdtm/Makefile
-> > @@ -11,6 +11,7 @@ lkdtm-$(CONFIG_LKDTM)		+= usercopy.o
-> >  lkdtm-$(CONFIG_LKDTM)		+= kstack_erase.o
-> >  lkdtm-$(CONFIG_LKDTM)		+= cfi.o
-> >  lkdtm-$(CONFIG_LKDTM)		+= fortify.o
-> > +lkdtm-$(CONFIG_LKDTM)		+= lockdep.o
-> >  lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
-> >  
-> >  KASAN_SANITIZE_stackleak.o	:= n
-> > diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-> > index 5732fd59a227..43e91388940f 100644
-> > --- a/drivers/misc/lkdtm/core.c
-> > +++ b/drivers/misc/lkdtm/core.c
-> > @@ -96,6 +96,7 @@ static const struct crashtype_category *crashtype_categories[] = {
-> >  	&stackleak_crashtypes,
-> >  	&cfi_crashtypes,
-> >  	&fortify_crashtypes,
-> > +	&lockdep_crashtypes,
-> >  #ifdef CONFIG_PPC_64S_HASH_MMU
-> >  	&powerpc_crashtypes,
-> >  #endif
-> > diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-> > index 015e0484026b..d2d97e6f323e 100644
-> > --- a/drivers/misc/lkdtm/lkdtm.h
-> > +++ b/drivers/misc/lkdtm/lkdtm.h
-> > @@ -84,6 +84,7 @@ extern struct crashtype_category usercopy_crashtypes;
-> >  extern struct crashtype_category stackleak_crashtypes;
-> >  extern struct crashtype_category cfi_crashtypes;
-> >  extern struct crashtype_category fortify_crashtypes;
-> > +extern struct crashtype_category lockdep_crashtypes;
-> >  extern struct crashtype_category powerpc_crashtypes;
-> >  
-> >  /* Each category's init/exit routines. */
-> > diff --git a/drivers/misc/lkdtm/lockdep.c b/drivers/misc/lkdtm/lockdep.c
-> > new file mode 100644
-> > index 000000000000..e029e9e60ce6
-> > --- /dev/null
-> > +++ b/drivers/misc/lkdtm/lockdep.c
-> > @@ -0,0 +1,98 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright 2025 Google LLC
-> > + *
-> > + * Tests related to lockdep warnings.
-> > + */
-> > +#include "lkdtm.h"
-> > +#include <linux/cleanup.h>
-> > +#include <linux/irqflags.h>
-> > +#include <linux/mutex.h>
-> > +#include <linux/spinlock.h>
-> > +#include <linux/srcu.h>
-> > +
-> > +static DEFINE_SPINLOCK(lock_A);
-> > +static DEFINE_SPINLOCK(lock_B);
-> > +
-> > +/* For "WARNING: possible circular locking dependency detected". */
-> > +static void lkdtm_LOCKDEP_CIRCULAR_LOCK(void)
-> > +{
-> > +	scoped_guard(spinlock, &lock_A)
-> > +		scoped_guard(spinlock, &lock_B) {}
-> > +	scoped_guard(spinlock, &lock_B)
-> > +		scoped_guard(spinlock, &lock_A) {}
-> > +}
-> > +
-> > +/* For "WARNING: possible recursive locking detected". */
-> > +static void lkdtm_LOCKDEP_RECURSIVE_LOCK(void)
-> > +{
-> > +	guard(spinlock)(&lock_A);
-> > +	guard(spinlock)(&lock_A);
-> > +}
-> > +
-> > +/* For "WARNING: inconsistent lock state". */
-> > +static void lkdtm_LOCKDEP_INCONSISTENT_LOCK(void)
-> > +{
-> > +	lockdep_softirq_enter();
-> > +	scoped_guard(spinlock, &lock_A) {}
-> > +	lockdep_softirq_exit();
-> > +
-> > +	scoped_guard(spinlock, &lock_A) {}
-> > +}
-> > +
-> > +/* For "WARNING: Nested lock was not taken". */
-> > +static void lkdtm_LOCKDEP_NESTED_LOCK_NOT_HELD(void)
-> > +{
-> > +	spin_lock_nest_lock(&lock_B, &lock_A);
-> > +}
-> > +
-> > +/* For "WARNING: bad unlock balance detected!". */
-> > +static void lkdtm_LOCKDEP_BAD_UNLOCK_BALANCE(void)
-> > +{
-> > +	spin_unlock(&lock_A);
-> > +}
-> > +
-> > +/* For "WARNING: held lock freed!". */
-> > +static void lkdtm_LOCKDEP_HELD_LOCK_FREED(void)
-> > +{
-> > +	spin_lock(&lock_A);
-> > +	spin_lock_init(&lock_A);
-> > +}
-> > +
-> > +/* For "WARNING: lock held when returning to user space!". */
-> > +static void lkdtm_LOCKDEP_HELD_LOCK(void)
-> > +{
-> > +	spin_lock(&lock_A);
-> > +}
-> > +
-> > +/* For "WARNING: suspicious RCU usage". */
-> > +static void lkdtm_LOCKDEP_SUSPICIOUS_RCU(void)
-> > +{
-> > +	struct srcu_struct srcu;
-> > +	void __rcu *res = NULL;
-> > +	int idx;
-> > +
-> > +	init_srcu_struct(&srcu);
-> > +
-> > +	idx = srcu_read_lock(&srcu);
-> > +	rcu_dereference(res);
-> > +	srcu_read_unlock(&srcu, idx);
-> > +
-> > +	cleanup_srcu_struct(&srcu);
-> > +}
-> > +
-> > +static struct crashtype crashtypes[] = {
-> > +	CRASHTYPE(LOCKDEP_CIRCULAR_LOCK),
-> > +	CRASHTYPE(LOCKDEP_RECURSIVE_LOCK),
-> > +	CRASHTYPE(LOCKDEP_INCONSISTENT_LOCK),
-> > +	CRASHTYPE(LOCKDEP_NESTED_LOCK_NOT_HELD),
-> > +	CRASHTYPE(LOCKDEP_BAD_UNLOCK_BALANCE),
-> > +	CRASHTYPE(LOCKDEP_HELD_LOCK_FREED),
-> > +	CRASHTYPE(LOCKDEP_HELD_LOCK),
-> > +	CRASHTYPE(LOCKDEP_SUSPICIOUS_RCU),
-> > +};
-> > +
-> > +struct crashtype_category lockdep_crashtypes = {
-> > +	.crashtypes = crashtypes,
-> > +	.len	    = ARRAY_SIZE(crashtypes),
-> > +};
-> > diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-> > index cff124c1eddd..7b32dece3d3a 100644
-> > --- a/tools/testing/selftests/lkdtm/tests.txt
-> > +++ b/tools/testing/selftests/lkdtm/tests.txt
-> > @@ -83,3 +83,11 @@ FORTIFY_STR_MEMBER detected buffer overflow
-> >  FORTIFY_MEM_OBJECT detected buffer overflow
-> >  FORTIFY_MEM_MEMBER detected field-spanning write
-> >  PPC_SLB_MULTIHIT Recovered
-> > +#LOCKDEP_CIRCULAR_LOCK Lockdep can only trigger once
-> > +#LOCKDEP_RECURSIVE_LOCK Hangs the system
-> > +#LOCKDEP_INCONSISTENT_LOCK Lockdep can only trigger once
-> > +#LOCKDEP_NESTED_LOCK_NOT_HELD Cause a deadlock in subsequent lockdep tests
-> > +#LOCKDEP_BAD_UNLOCK_BALANCE Lockdep can only trigger once
-> > +#LOCKDEP_HELD_LOCK_FREED Lockdep can only trigger once
-> > +#LOCKDEP_HELD_LOCK Cause a deadlock in subsequent lockdep tests
-> > +#LOCKDEP_SUSPICIOUS_RCU Lockdep can only trigger once
-> 
+
+-- 
+Sincerely yours,
+Mike.
