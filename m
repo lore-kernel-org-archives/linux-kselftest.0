@@ -1,47 +1,47 @@
 Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023114.outbound.protection.outlook.com [40.107.162.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9663CBE96;
-	Wed, 18 Mar 2026 12:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5E83D34AE;
+	Wed, 18 Mar 2026 12:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.114
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773836536; cv=fail; b=CiUAv5krB6ZGAeboWiASl35S9bG3QqQmhEC+fG3vZ9jnt5HkxrPpw3pIYzOMWYAnebSkLj/ycJYy6Zd6xV/W1aLgmVazXupC6ZjFxQv0iKCkui0/7qeonMvIwDMmFZcuSB20pBsIu83pfuZeQpYXnapsZs+kRixKB/+DmQj2ul4=
+	t=1773836538; cv=fail; b=EYg10U4UnlTGJow8NLz3BmPXe2AIm7MiFmpErrvdxGJKevfcqpKEUsgSvCEw6MrecMbGn88dbFG50/0aIdsdRtQrz3tr1bgCmDKYDU0U4zVWlq6sT1Y/TrSMIQFeF5w5t2etUDjYbMtmts3gi4qGWHYYJPi+ax+XtAbz8tl05BI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773836536; c=relaxed/simple;
-	bh=H3nNbilRsOq8Zmd5xd10VjBKKlAc+D3HbdAOPHifoGQ=;
+	s=arc-20240116; t=1773836538; c=relaxed/simple;
+	bh=I4LzKJjJGM6QB3t/+r9Hrpfw+/miktV71rtx8crGOKI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IsrzqZXzvSpwC8paf2438VvSvbzRnn7oIJ9bdJgMsCJAZG5RksVD5ViXRdaFffmTjYIp94frF1VDcK5h8qSvrSYBL0FdrjIoWIVM0Xcg8786nF16ZJ6zvbPUOkxL+FaRup+xKw5bCSh4iSm3SvrtqLYcgrgoKd3D/On1GVNp04c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=oYIfx95c; arc=fail smtp.client-ip=40.107.162.114
+	 Content-Type:MIME-Version; b=LZDrbYNbjLzkT+wJZyHKSAahDKoj3n/ChNknXExZTeXYMUysnED1QRF8CPMi45Igqxot26K2BCpTuD91YgzUicRok0kAVRT3znWmuXwgZKjLt1o7gHhGhzBwtUq09Fhc+YCwS8bo2nWDmEv8VqJJ5FbnD000NP1FxnucKYBWZQ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=GKrRt0tG; arc=fail smtp.client-ip=40.107.162.114
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="oYIfx95c"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="GKrRt0tG"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xr8M299yfl9/I7hJSyHvstbR8gwteMM2nhT3Q6SbGxcbHUV2xHCg+zuvhuIphHJs3BD5l6kMjTAms77Bu20IfU7YQ2au7bz9dcu6iR+uzud7o86fFgSNUxPVtE+ks5NDCrv7DYvVLKIVN/aJUUqaJuTmNhTc2kJ2v8HQovBAthhWUk2NrQGx+O0x1nqS0ENE39fkT30IRO6anW/2u6g+/EyCHu/+rsfnmJ3J3QfW2jU+QVFMVW8mDMSMv8ZQF0/DaFaxiCxTlG3tQzndpQnOfzFcUUFXN/tVVbUVZH80Uw1dqOg3F3HuyUjVcVESdzogM6DWMmKGkZAbrvG7Akaipw==
+ b=IE3qfqJQ8wCW/WvNFKM/D+j784L3t6sqomMp+cIyTv0CcNzGDwDUYLCZIwERoXXtvgW9Qgc6K4KKeGxC8lBzfszbadkG4fNmT1yais6FHPbBM1wrY7YJKAytaioG2qnOx0906erGBpJk5WPDXfTofXLejoABbhelLxoyUh/eEOKgZ27Lwlr/LIeVSTejYiHh9t131xtga7531opAvT2X1bZEDr8X0DJsfHuySJdVQYhNXBbcr1cuPT7Rm3LjNRK69E6EbQI7dVM+XKgoVhwpN/fSgTPdSWiD03YrKkZFq5+DJNRFJ0H6/95KOgQmcQu/Rcbi37/7i1jFlR2ShrvdeA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vs3By2K2+N7O04VPitwDlFvry+2pepCa+9ziz5w52yo=;
- b=HhpZZpWChvteCcBThANXqvqxUeZ3Jx8HXKRNh+sLUxuibtQQ+xvZlKHE+HzGP/lUbV9UPuKJpe/dtWCbkYIFQgpevjQ6kUUNytEFQCic3x+7YefbvJDpebMzP7/fkHzP8qckJ4uXVh6YhIM074ss7GQjr+xbUHJAtEPwEwsfOGdTv9VCy/kXwhJAAXSgv4JJgo1/chOrhsIEUGd1SfjMRMk19S9B3dGSco5QjeCbJp2B8ZcqboyvkOtgmuI6C8StKyprhcMM3E31TwspQQpqegvY7Id4m9FWsvvbmtTdbua0L5xgYpeZoiJz0wMS12Jf7bbXPSjrCIFfPTY2bq6S1w==
+ bh=kKPu28Rcf7AjhOJB2C8rhjFC24Bo2XHiAAL87jZaCCc=;
+ b=MZbskxu211p3KNuxofwaw5IN13WZGgLMiEFdi6zWn+P+0Kb0OSES8eyAGPJ3uTVfsGIxxRpX4WHBCbbDeLL7rWxMJuePWCgSHB5S2H8w57aO1DG1Rf8Z5LCcBVYAb/n0xNgNlC7OlCEmA617orjvBYGS+RdyfcwthQnwXiNihvmxVCOS2643PmigfJA6rgXPS62NTRo7lrAVCnknXWpvZ2kgQCL8UvscG/3VcG5WV78ACmnnVm2ow8zZJCTcBr1ocjy34/tsG7kXNf5Bfwk5eIDK59gKRbFa3b5vY6vuRszTrzn0RaLrDsBipdnK+fDXV35/CyoNBV59Gop/hEwTiQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
  header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vs3By2K2+N7O04VPitwDlFvry+2pepCa+9ziz5w52yo=;
- b=oYIfx95cN2Ro/2Lw1KmInE7KalohPXq0pwwfinBucuR/uZJ/yUeFwSGPX1dXqoT6EAA/RdhyUhrYGblqk6vSbit57jK5aoqAzroRTj21o2XW/Rt4b5ZQ9O7B3hYgyvTNQVRCsL2PFYEAmTJJYPLDIKRiKicOYQ6e2obl9yCdZiymH9qkhjO3Ydytrhevt1zunqIbTgbTv3RxDhCGX3oRsvrZQT0kbB9Bj1ryLtepsFIbNAeIDU6sfgohNMoNqe1tf3pYXGDqNFlJR49EHyqS4gBWirzDqRb2ZxioQa7WR8ce99CgZ8c1ZTUUhdqetENICZj+G2qJirHN5BYbEoRtHg==
+ bh=kKPu28Rcf7AjhOJB2C8rhjFC24Bo2XHiAAL87jZaCCc=;
+ b=GKrRt0tGDG+2G6hOBDwJiA0TYmf8yAwycSVun/IhsTKytDmwUeyvz19FF1H309V4od8ATxWF7+dKusAPUhS8RqHUed0sNL/kNB5qlGhdunsbajR+bNOSCqTssKgiHR+4mY4BqzxZfR4vHzuCVRhL8JBEXYx8PFDN9R7GgceYzjGTTajSmtZaFxjGrv6BFLHCO4NQ5OPVigheHvP7EgG9j2R4S9SUbpzH04WzQCcbW8kzFKXX4evdp5n9lzPwsrtowi0bzR/BCoGl56lUldrAqDXZYlTDuiL2NVVAg+MZZjd1o1uFT4jTvxbV0N5U4Z4mtSn8SRCtYeRa8m/hviYM5Q==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=virtuozzo.com;
 Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
  by DBAPR08MB5830.eurprd08.prod.outlook.com (2603:10a6:10:1a7::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Wed, 18 Mar
- 2026 12:22:10 +0000
+ 2026 12:22:12 +0000
 Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
  ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
  ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9723.018; Wed, 18 Mar 2026
- 12:22:10 +0000
+ 12:22:12 +0000
 From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
 To: Christian Brauner <brauner@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -64,14 +64,14 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 2/5] pid: check init is created first after idr alloc
-Date: Wed, 18 Mar 2026 13:21:50 +0100
-Message-ID: <20260318122157.280595-3-ptikhomirov@virtuozzo.com>
+Subject: [PATCH v6 3/5] pid_namespace: allow opening pid_for_children before init was created
+Date: Wed, 18 Mar 2026 13:21:51 +0100
+Message-ID: <20260318122157.280595-4-ptikhomirov@virtuozzo.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260318122157.280595-1-ptikhomirov@virtuozzo.com>
 References: <20260318122157.280595-1-ptikhomirov@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: FR4P281CA0045.DEUP281.PROD.OUTLOOK.COM
  (2603:10a6:d10:c7::14) To DU0PR08MB9003.eurprd08.prod.outlook.com
  (2603:10a6:10:471::13)
@@ -83,126 +83,170 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|DBAPR08MB5830:EE_
-X-MS-Office365-Filtering-Correlation-Id: f7245605-f4cb-45ba-2964-08de84e8fa7d
+X-MS-Office365-Filtering-Correlation-Id: 6321cbf1-175c-4fc8-0f30-08de84e8fb67
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|7416014|52116014|376014|366016|10070799003|56012099003|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	iK6bCTlaU5thLPnCUNqXgJ7vGsXOi9icnix/CkHCrFoiehZpgWV/6PSiWY6V/OghJhxSku26Q1myk73I5XoRzmcuIRNkN1uMMN8eykaj7C6gKClyty9dCUcNiOfN0nrAmiTk779cw51dEsS+izYzKr0dqQqRIE7kSa24nbB8+jca2eUkbGtihDvsWAeczGe6/6qkN/SuiXgwuzY6neGMok3uzobrMHuNh9emlAI/HB5DhBydgDq1IPzWQjIDPq8O5K1LOtR6k4F2zlt1o56kwq/PW7zjzRYnV4Gie7qelaC4/mKWGN3EhLCk/z3QOpD6sGtGv9w4iozLxoaLBE2C6RulU2CNp2oIuT1JDEApQAKdqAtA/XRaiNc8EaBWMhufYwbT89L+iRi5DtFb9R6vzkHgi05cqj7XCl6ptFihPW+CmTlMLFpTt7vCMgGB2t0rQxYVTyxCUBD7PZwOHj4u+itk0+N1OspJZ4K/fEi9M6Y6vNiuORC9ELXf8raJXw5ISLCdQ/tGLwy0GhgPJZ9D23PipGNCTRc2u1atjlvouDz/+P3U68cdLfkEOfPwzZdNk1dO7ZsVuqKBwK7Zq0t6VxcZxJh0tLGnscuZ7eeDindZHw+p18i1WLXgQdpfiejnvcYwQvFGm18qUv13/w/PKEJ8HOE5Ew3EbR6vBqEJgbe6d8azDw2Rv2AJ95WLKlu6QCMtq2yHIeBgMAYW0JqUKW4pPlU7OcgexpEKDjBl3mg=
+	OyAqhvjDf0oAO3Xb5IkwDqfF2V4opCx3gVPVhD//5ibNVPV+CfkL4bwPn/14Ls1wMEBB3T1Iv4NYP4btBguTPRx0o14mCZfG1+0Qh6lMiq+BWyuZffIA0OANxsEAjfwAkzKLFzf2ybs/vEFp1jOuPmPBGL8ZBIqtCmMbljhen/haFf90j4VEbdRJe2m7+MuV4TlnA1780AYY1PkfGyi26Kg81WT8GgLBW/S1+/1BWweuZzXyUyFvVPbLmt0wl1ktRGvJ5svaJa5/C8eoTBU76dX0cJ9f3VyppSdhpNQUSYr+URue2RrzeDSPx+sUZ6scg+Uih5jQSRKD+ZE0cM274lQDvFGL67oqAqveNx7JEpJm0PWGmMBQFto52v2BzOY4osthx4K5KFEYKfOe8y5s09kMOGnbNYWq7IwPKjijWcsUiDTwX2pXjeC5gKnhuMlWx/sYgxYhx7sHLCL9zaHhlmQ22EsaQTPijiFRWy+DyghiEBdkuZikgjJ9JizTJl8+CEfsjRFl3eIxXkRFRJF3Dy79p81yaKCePIuTiGzS3CjsB+epkZ3zz7EUndMbmd++iwS7T4drDCU385puIWRkOhIIXSiKWx8LuTmQ4ZQ8zD0WIpOm5ZOEmA8SRRRksRE97IdXSRgsDXIbXhQFoSTBgJplKdKKZdXJSp+3AW6mc8kKav/VLVzhYjyo29VKWGq5CWW1r04DKaxaVxZjRtt2pGaBZ0fLqDeXb6m14pWwRE0=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(52116014)(376014)(366016)(10070799003)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?EI8jkrVBy22s+3MX3MqKse9g6e+181nKDIcM0oYLWJYGViJ58H3HitVGgf7k?=
- =?us-ascii?Q?YIPDwPJuWxASBYFZngaGPirFlwxjyJ8OWHxuiS6uT5Jmx6G7kGecwnDkXsI0?=
- =?us-ascii?Q?GJVna0kaJbo5umM6JslmyxSdMxwEwgqy6vZZ6aLO0nOpEOkXuUXSFQR6ITRY?=
- =?us-ascii?Q?gUVtrkzgEPe7M2nbHCfc0CrgHPVStBtSRj0va6/1YbTCKvE3jS/hqB7FOCf+?=
- =?us-ascii?Q?lZXQLjzEqd+bznw9o0IZploc7D33TauM8npuz2d8BMl/4kZ7jf7FdD9XyrGu?=
- =?us-ascii?Q?GOeLuczUp3eECQki2U9i4l+r8oTm5oc7azXRKANjiDt6bzMaIgUeo6LLLAZe?=
- =?us-ascii?Q?gZCGcoEjvf9jJr1UdCfL0SE2CtLGZ1kjPyb/k8KJxgUY8+C+jjdRktr1lLau?=
- =?us-ascii?Q?V/Oekmq/o3mY9PD+I8llUqHijLHpTejdpFBMk+2KHRk2OMDF/HyIkEQwNuKC?=
- =?us-ascii?Q?ty8H9wA074B2mIiqMAp1t2feiQ5sjsonShUL+d05WLBzDrlJ5/htFGEXBEKY?=
- =?us-ascii?Q?pnWjdYqJSHwnoVZGDg8Uuy9gWFRSXi0We7W8Xpz/MjD1HBcvOUr4fd2qgp3k?=
- =?us-ascii?Q?8w/K9IXSuWiaMEg0NJpS9a3jFSM1pL+ssYfJtJRbV3QLk2QLAeUo+EYmN5pk?=
- =?us-ascii?Q?IhNo53TlQAAGoCFJW8pD6zXNpfZOjdFU9xafcMaKYdgsuVQxu9w24xU40I7b?=
- =?us-ascii?Q?7O4xSEIrPU88DLFP9uHCNwcoQPe26JhOfdxqKdBohhg43MfStxjU3GHuJeP1?=
- =?us-ascii?Q?Y3Er40ZgapKYw4rM7RYIQ/YIiPHOZRgQmZ1AVu2hByCu6YjJnATQASHAcq47?=
- =?us-ascii?Q?YsHPXJVlpQbuPpne2IikWHBFYUYKVm94AzaTJ4rm1/cOua4gCCYyN+0Vctic?=
- =?us-ascii?Q?o/IeGTZfpoYEUYHFk5VGW12iCcSv7xewTc/D1wyygVAKkphVixnYHEC6nOoA?=
- =?us-ascii?Q?wS9iT/su0+41AEVHb1O0vyUIFsrz8Y9IdBcmjGwv3iuVf+2gV1mOR7HD0zaG?=
- =?us-ascii?Q?x1wszJu4R0Zb1s77viK7I8a9lMmng4tzn2u1bPdkU8DD6zZ693qeJ3VEhbEu?=
- =?us-ascii?Q?4UbGUTKK0W4IURi4vl2e8Ys7lBo3qPZm3SH8lOKAffrY2VbhjvyOWTdFXtqC?=
- =?us-ascii?Q?peRaZt8uHzTDxGWN53mt/DiUzbIRCYLEYsxMDnhYkbNEyPjvVwNrWmVc0CVx?=
- =?us-ascii?Q?TihOoi2dG9/HIN+qKIqqtHcc1L4NW1R3zPLKX4cmlU1NslARlPol1PG8Rwrn?=
- =?us-ascii?Q?EfX7ujOG8JbHozQGlrfUycg7jLNOICxsHvR5aQ1HYMU+q8KcTrBMbEN/k7x+?=
- =?us-ascii?Q?fSu2Xrk/MFNMPAfbIg9K58iouXmrSbBBLhvamYzil2DyndNQgT9w+sdynwi2?=
- =?us-ascii?Q?ci2J3VT48U0mChRqpnZnTb8cqU2htUMeJ4jOsYF5sujvvKDzErKlVQYOxYEX?=
- =?us-ascii?Q?P7Kg90Z6c9HIXTCp2/49m9puJqDjEa4lAq4uLORdkb9SBZB1lzYFLaQp2/07?=
- =?us-ascii?Q?cjV59MTvS9pAl3rkjzSKPlPD4lgbtaECZs6sClJoaL82N7DoFl1uRs4Hxfqk?=
- =?us-ascii?Q?d9WdZv2Bw7MQqfbJnNR5cs269AwtzyOt+PXXS5RTQERkfjnYyaTKFPdCwiFu?=
- =?us-ascii?Q?i5aA1uf+BXhFf6PZKcVDj2s9WdkYEhbZKLwizGa+rIHS6ipDOOl+atxIKAzG?=
- =?us-ascii?Q?UA4ncRa0M6YXdn294TQIr1cYBwoYQyUEAZWrBUGfbKB2TKz6HUxAW4MJjMJa?=
- =?us-ascii?Q?FpbFjQLuhgX8cH3KZq25LSlKiYGEOrsjrIhDCoAgKmBgbtw6cKQggK+9a/fd?=
-X-MS-Exchange-AntiSpam-MessageData-1: ++S4XDDN5Wmk9hSdJvV+6mLiH1ej39HhiEU=
+	=?utf-8?B?dXR5UzdCTkt3RGhvQldRQThRUXl2NTJSSjFNMXNwMmsrblpCd1V6Rm1OYXFI?=
+ =?utf-8?B?NHZjeHlEODFtcXpSanM2WTBrMkpRWkFLcFlCYWNlTHhUREJEbThOd1h3a2Q1?=
+ =?utf-8?B?NkJYYUJFeHpEZE4rN0lmWUwzTXZyYjNWeDVwaXNoWVNDOTdTNHYzUHVoRGdz?=
+ =?utf-8?B?ckg0Rks3OXNzaHJPRXh3L2xUTkZoL29FU3JIdnY2WUtMa2N6RThFdUp1VHZE?=
+ =?utf-8?B?dmRvTVRQNGJLVjc1d1d3Z0E0ZUxDaERwazlHbmh4eWF4dHJjeW0zajczaVRG?=
+ =?utf-8?B?anlGbHdtUWlabHNNU3o0UGI0NDZyc3lGelFoVkZCN1dmZmdWVTRKZmdjRzBC?=
+ =?utf-8?B?b0UrOGhNTGREbUwrRi9icXRIOURJSWEraTRoblVaT1dMQUNOcDJDYVNESzBM?=
+ =?utf-8?B?WFRUZzhiZTdSaG1GWGxBQW1YbUovdk9qVkVXc21BUDRWRTZQaDZ3c1EzekYv?=
+ =?utf-8?B?OGJNS3RYVG5UdDIxRUxCVVhIeEJYQ25oQk1LK1lPbEVOUHdkWTFjSkFlOUE1?=
+ =?utf-8?B?WXQ3SHFodGFFZzU3Z1crUnRXU2kzRDQxaFlZNEVvUE9FNlpTMlZMTGJNTU5i?=
+ =?utf-8?B?VzdObXpsY2RJczQrSUxqQi84SzlPcVZFSFduZmdYdjdZdVNCOFltanRDN0xp?=
+ =?utf-8?B?OG9nd2JxWWtybHpXZmxyUk1xVkR6QURGbUJ6eXpidTZiaExyOEhlM1R4ekdV?=
+ =?utf-8?B?bVZ1R3FOYTdsMVQxNW9HYlkvWXVaTEhnVmh0ZW5xK3N3SXFWMTZnd1FBdVRZ?=
+ =?utf-8?B?dVJMU3BRdldTY0d4TloxMDErL29QRFhKZjd5aVNVUmhXUVg3SlpndTJiaGV3?=
+ =?utf-8?B?QVNUOVFnYU1ZcnplcE9XQXoyZWhaWlhod0lGdEpUWmxEK3Ezb21EMEZZenQ3?=
+ =?utf-8?B?NFFqckJZYWJibk8yb0xhY2xYeFp5S3lyR2ZFR0s3MS84aHR3eVc3V2pGTjZs?=
+ =?utf-8?B?c0dtbWV1cmdCb0ZON0JFS2FtamxydXYrQXk2V05UUktmQ0pEWWlzN3BwME92?=
+ =?utf-8?B?b08rVDJRZGFRK3VlaWVWcm5jSzc1dG5TOXVRSWNDRlVNSkcyOUtHMTBWUnRw?=
+ =?utf-8?B?T3FFNlg0cTFJNFMxOHBoUUc0MGZ5eHdyMGRERUM0aklPQXU1V2lJR3RxeDVP?=
+ =?utf-8?B?UWpoa2hUSS9iMEYyUXZUUnltL09iK283MGNRYzI4b3ZURFp2RFkzeVhCcmJT?=
+ =?utf-8?B?UFRNdy9NWDNuQ3cwZHArSUJxQ3VlT3FhQWZnaUpyOXFNTWdta2c5dFFUdWgr?=
+ =?utf-8?B?U1FNRk5obHJ4cTYyMUhZVW55eWNIVWJqUlNXTTZkMkU2R0lNNjlBN2tNZ3do?=
+ =?utf-8?B?Tk5vVUFleDFJTCtjRXZWNE8wQ2J1MC9GTzNxOSt4Z0g3Q3VFN2VKZWJsQ3I5?=
+ =?utf-8?B?QVZOcmpYYVNHUmlOQnpSa1BIZTJxNVhsZW9Nb0VFMUI2R1hGSHkvSnkrNDN0?=
+ =?utf-8?B?SUQxNi9OY1hFUVNYL3lUcUV0VmcyT0RJSEk3ZFdBZjI3bDMrcGc0RTFnNXNh?=
+ =?utf-8?B?T2NUQ01od1lGZTcrYzdFNHZGRXA5RWtQMkxBK2RZUlNxRjQ0SkZDd1g5dldx?=
+ =?utf-8?B?NzRRTFp5VFdwTWVub0NGcDJ2aVZHbkh6eEZoR0U5WWMrWk1EYVpkNGtEZ2tP?=
+ =?utf-8?B?TG5Xb1hRWVU3VkRURHB4YjNneTJJNC9kT1A3dDB4WWJpWURCaDhCZlhEaHlt?=
+ =?utf-8?B?Tm1ZazJENGN5TXYwSlhtNk9OSG0xcyt2ZmFrS2FQalhVWVRjTkxPNlhLRWJE?=
+ =?utf-8?B?c1pXekZKcE5idGtRY2Z6K25RVTYzWDc1NVVqc3NvUjVpZXN0MTdqeWtzNytT?=
+ =?utf-8?B?ekk4UFdIdHhOQWpoeHNZVVdmb3cyOERQck12S0tvV0t2b3lIczNidCtJeXpj?=
+ =?utf-8?B?Vk5OUFJHcFVlbUFDNDYxSmh2d0IzaEp3SThOYmp6OEQ5WUN4RjFVTnBCaEpQ?=
+ =?utf-8?B?NXJUb0s3UFJHVm82QWlBRld3TmFzc3NBTkpnVXJQL1NObFo4VkRGVlFqdVlP?=
+ =?utf-8?B?ckRFalVFVDlzS0lYRU1IUUZ2VGxGOVRZY3ltcjhFaEZ4cnd6NC80UG05MkRv?=
+ =?utf-8?B?WDhGMVlXQ3hjSXZEdHNmZFVkSk1jTnpXMXFITHd6ejlYMEJqc21zM1ROY2lp?=
+ =?utf-8?B?UFRwcnB5clpUSXBBMTFqUXN2dnNSa2ViRXlpWnR4S3h6TVUyVGxTWmx6cmpM?=
+ =?utf-8?B?V2QvZi9ud1JjT2ZQZEx4NmRxYjgyZXd5S3hFZGZzKytlWXhwTEdEOEJPQTlk?=
+ =?utf-8?B?ZjZBNDFQbEw3WktKaGZGbTBjWDZtNWFpeS91TkNhTlJBVUNreWFqek1LWFNU?=
+ =?utf-8?B?RG01OUhidVE1UmxRdGI0dHhqN2kxY2lvMVpDV0dBMHdRQkhMWFFKK05MZElK?=
+ =?utf-8?Q?RsuRVh56pFLqi7XavetbBzAYgJ8K5ji6j6TOSREwxRC2X?=
+X-MS-Exchange-AntiSpam-MessageData-1: ftTFZRXBFHpPKApTClwgVBdPT7oNHnSWfHc=
 X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7245605-f4cb-45ba-2964-08de84e8fa7d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6321cbf1-175c-4fc8-0f30-08de84e8fb67
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2026 12:22:10.4638
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2026 12:22:11.9905
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CS6WSE/UwPwZEt/wZnyixlStMRbMILg27qTUUcTAzoY+tEwD55xWtlMsx65cJUUYTJdfPz5xDw/mss793KSyagrPBk2RyX0o0Z/Qfv3OQAQ=
+X-MS-Exchange-CrossTenant-UserPrincipalName: X/HGrdB2Y6tgAq+j+Z2zQqo01waGGYtRmUC7YxqKMNjbh+G6F8hdhvIXbw/Lqz0ZyiuTIqnV+6254dQbJhHcvVMop2MIZWDbyGSMsuu8big=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR08MB5830
 
-This moves the condition (tid != 1 && !tmp->child_reaper) to after idr
-alloc, so it not only covers that first process in pid namespace has pid
-1 in case of clone3(set_tid) requesting wrong pid, but also if idr
-itself gives wrong pid for some reason.
+This effectively gives us an ability to create the pid namespace init as
+a child of the process (setns-ed to the pid namespace) different to the
+process which created the pid namespace itself.
 
-This could've been the case before this patch, when creating first
-process the alloc_pid()->pidfs_add_pid() code path fails, so that the
-idr->idr_next is non zero anymore and next process calling to
-alloc_pid(), will get 2 as a pid from idr_alloc_cyclic(). Though thanks
-to PIDNS_ADDING logic, free_pid() disables further pid allocation in
-this case and it does not lead to any real problem.
+Original problem:
 
-Note: This is also a preparation for the next patch in the series, which
-will introduce an ability of creating init from the task different to
-the task which had created the pid namespace. Needed to make sure that
-init is always first, even in this new case.
+There is a cool set_tid feature in clone3() syscall, it allows you to
+create process with desired pids on multiple pid namespace levels. Which
+is useful to restore processes in CRIU for nested pid namespace case.
 
-Suggested-by: Oleg Nesterov <oleg@redhat.com>
-Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+In nested container case we can potentially see this kind of pid/user
+namespace tree:
+
+                            Process
+                          ┌─────────┐
+    User NS0 ──▶ Pid NS0 ──▶ Pid p0 │
+        │           │     │         │
+        ▼           ▼     │         │
+    User NS1 ──▶ Pid NS1 ──▶ Pid p1 │
+        │           │     │         │
+       ...         ...    │   ...   │
+        │           │     │         │
+        ▼           ▼     │         │
+    User NSn ──▶ Pid NSn ──▶ Pid pn │
+                          └─────────┘
+
+So to create the "Process" and set pids {p0, p1, ... pn} for it on all
+pid namespace levels we can use clone3() syscall set_tid feature, BUT
+the syscall does not allow you to set pid on pid namespace levels you
+don't have permission to. So basically you have to be in "User NS0" when
+creating the "Process" to actually be able to set pids on all levels.
+
+It is ok for almost any process, but with pid namespace init this does
+not work, as currently we can only create pid namespace init and the pid
+namespace itself simultaneously, so to make "Pid NSn" owned by "User
+NSn" we have to be in the "User NSn".
+
+We can't possibly be in "User NS0" and "User NSn" at the same time,
+hence the problem.
+
+Alternative solution:
+
+Yes, for the case of pid namespace init we can use old and gold
+/proc/sys/kernel/ns_last_pid interface on the levels lower than n. But
+it is much more complicated and introduces tons of extra code to do. It
+would be nice to make clone3() set_tid interface also aplicable to this
+corner case.
+
+Implementation:
+
+Now when anyone can setns to the pid namespace before the creation of
+init, and thus multiple processes can fork children to the pid
+namespace, it is important that we enforce the first process created is
+always pid namespace init. (Note that this was done by the previous
+preparational patch as a standalon useful change.) We only allow other
+processes after the init sets pid_namespace->child_reaper.
+
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 Acked-by: Andrei Vagin <avagin@google.com>
 Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
---
-v3: Split from main commit. Merge two checks of ->child_reaper into one.
-v4: Update commit message about PIDNS_ADDING.
-v5: Add Andrei's review tag.
----
- kernel/pid.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/pid.c b/kernel/pid.c
-index 386e51fcebb3..677c84e319dd 100644
---- a/kernel/pid.c
-+++ b/kernel/pid.c
-@@ -215,12 +215,6 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *arg_set_tid,
- 			retval = -EINVAL;
- 			if (tid < 1 || tid >= pid_max[ns->level - i])
- 				goto out_abort;
--			/*
--			 * Also fail if a PID != 1 is requested and
--			 * no PID 1 exists.
--			 */
--			if (tid != 1 && !READ_ONCE(tmp->child_reaper))
--				goto out_abort;
- 			retval = -EPERM;
- 			if (!checkpoint_restore_ns_capable(tmp->user_ns))
- 				goto out_abort;
-@@ -296,9 +290,18 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *arg_set_tid,
- 
- 		pid->numbers[i].nr = nr;
- 		pid->numbers[i].ns = tmp;
--		tmp = tmp->parent;
- 		i--;
- 		retried_preload = false;
-+
-+		/*
-+		 * PID 1 (init) must be created first.
-+		 */
-+		if (!READ_ONCE(tmp->child_reaper) && nr != 1) {
-+			retval = -EINVAL;
-+			goto out_free;
-+		}
-+
-+		tmp = tmp->parent;
+--
+v2: Use *_ONCE for ->child_reaper accesses atomicity, and avoid taking
+task_list lock for reading it. Rebase to master, and thus remove
+now excess pidns_ready variable.
+v3: Separate *_ONCE change and "init is first" checks into separate
+commits.
+v5: Add Andrei's review tag.
+
+Note: I didn't find anything in copy_process() around setting the
+->child_reaper which can influence the pid namespace, so it looks like
+the pid namespace is fully setup at the point when init sets
+->child_reaper to receive more processes. Thus tasklist lock looks
+excess in pidns_for_children_get()'s ->child_reaper check and it should
+be safe not to have it in the corresponding check in alloc_pid()
+(introduced earlier in this series).
+---
+ kernel/pid_namespace.c | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+index e48f5de41361..d36afc58ee1d 100644
+--- a/kernel/pid_namespace.c
++++ b/kernel/pid_namespace.c
+@@ -369,15 +369,6 @@ static struct ns_common *pidns_for_children_get(struct task_struct *task)
  	}
+ 	task_unlock(task);
  
- 	/*
+-	if (ns) {
+-		read_lock(&tasklist_lock);
+-		if (!ns->child_reaper) {
+-			put_pid_ns(ns);
+-			ns = NULL;
+-		}
+-		read_unlock(&tasklist_lock);
+-	}
+-
+ 	return ns ? &ns->ns : NULL;
+ }
+ 
 -- 
 2.53.0
 
