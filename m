@@ -1,133 +1,103 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6930C3B19A2
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 11:04:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525F53009FA;
+	Thu, 19 Mar 2026 11:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773918298; cv=none; b=b6yVK/fjziAWYrpiAjiOXdKLhURdkr+T0qvzJ8tDGMIODfp22/+C6osvLj3PPLQ2mUV2QSvoeG7Bs/cFFd0zPVbgd+nO3MeRK8MP0905KJVTayYs6jPOLFIDb9oAtMxV0PtVUNt9TOuno5/srGhCqy1of8bJnHkxF2dhKgVBrpk=
+	t=1773920182; cv=none; b=Sy/fRKcbjaqT/nUfEQWSHQQpG54Iva8RYFARVM04yMJaQAy4nEsHjhe24Ho0+dpH5dfhoaQT0A7n2CuF6MLcPpVtEkzOqY+bcyeX6iOGDcgozL6QNoTb74tT+RzoQxvm5EPn2BcRLbtfyTtdN5Bjyg7ZC+1hz0ZXZk3iS4mIHKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773918298; c=relaxed/simple;
-	bh=1Bf8hEc28hXPuMHfJ5X9+M/T8gNJcK2S392R/vHPZnI=;
+	s=arc-20240116; t=1773920182; c=relaxed/simple;
+	bh=mI5Niued13lWroralkbRCKzUCQf0t2KVY0BX5P2HIXI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b9/jh3PVX2E9ewJ3HNNuFFKsqmB8FiPNGEIUg6ED3dBkZZ4v/KmcF17I/Pjl763qarEVx2Ifbf0zjv2huhYid4k7Xrto++e4wkpq7zoPE+O8HyES57Sy5ZkrD9qfqQSPOHvZ3BgWICqbBg4xwSPl5rWUGq+vD9TEz+GFylGQgMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=INJG7fmQ; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=iTTMjbVycavxLnV++K549EpTjv8Q2vCE2nxp4qRszpY20VFNgJkA2/fHZRj72e+7Gy6KXjpjvGy0nIz7c3N5REQzu78MloK1mT5Z22IQvyWFn8CDnkXfwt0GKg6glgthYqCiEMbDlgPGy01c8kE/ej84922HZggxM659vE4YQk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XHpexXCk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="INJG7fmQ"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4853e1ce427so8489645e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 04:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773918296; x=1774523096; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4c37mbwDiETLi9rFX7FTGZ50jj9ijci/rDw/K+jJUg=;
-        b=INJG7fmQ9XcVQ1GNpOKE+8YTOoE1uHV/MwPQw6Vw9IXFp+cYna4CIlvtQfFrO/9YdQ
-         YW3OCZYeeuE3Y/457yCYbLgKy/wc1k4LR42bIt0frPSzbJUo1E2Iv7ZdSDfDQnrBWWsx
-         SJO0qtMjAyiDZMFLSpaKrV05HZpQtXCYdT8e8pVWasT1sXnxs+6cw7LmzvUWxUaSYJZm
-         5vKuxsJJqEBobS12jL+lZvvvEhaVjbhS50SZI9LdypTtjQ8h7GXj23g6ZFdNpPMsRGG4
-         1F9n25MeMRMbISV/zEz+9tHNBFxOoaZTeON7Sf6PE1YJK7trMmdM7DRxgZLZewtI/Pbf
-         ioeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773918296; x=1774523096;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e4c37mbwDiETLi9rFX7FTGZ50jj9ijci/rDw/K+jJUg=;
-        b=Buvv+cfQiYGLpuqePMoB4php45ZbIlKVuvSRpDiFTjWDOAsjrSc0WKeqz6HYXVBdSt
-         9oMNVzWnc45sWeyGZECtfwSx9n6zCzmzF7X88VjF801oP6qFCChheG8e4dqv1FC3i9KP
-         8tiiS9iyOncRRRNZejEDZ7kAArrlLZ4smj1FMOXsOpcUKAcjh1yAI94euhDXiMKC/iCm
-         DCx6dVlvyVYTBnN+cy1m89LFbgbxEQeMUZtexxeJJ3gRmGIw8rwCuW8HQUPYBitNOYWZ
-         3ywPoUdO3IXX8zyAeLaCEJ7nBI8reXXHWI89KA+5vE/KEeOklNZegeK/MNkTRpUG9/WE
-         4D0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXB0XZY+TZLfPk5Q70qFaz5/hUH/Mo8kN/sy4Yz+BHk5QALuBr/PxzOYNtMSpsBuGmaLyACTILIFNUpVguYuS0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJu0ZvayEwt/wS1oo1evJO7vIv661BGlBD/ovZyd5Ni56Am3Dj
-	YUpI1ddlhbRhI/Zwv82jFFlK1ErK148TYJbXu9714U5qyzbz2Md8Sv27
-X-Gm-Gg: ATEYQzycgFSPIiVnZ/+5zw2rox7UsoSAEHZmFlX88Y3F7eZ+EhxAbvmRHLk4BCIVPi+
-	qnFO7LjfuE9lwfOYQ9O6Xh245xMz8zjkUMhRhxX6pBuUXA0Bf6AcZF3lVmp9ENdiesfmYkvlQdw
-	ZKcGROGcwVtWZj4yO+/+/SaAIptfxUoGbfSfzpwkeEHpI0+oj8s+vtPEEd3yQBqpP0CMngNxqhT
-	SNPseXOmtidHdvWWJIwUgXHpUrIzW0/vOYPURrJmOrdr7VQQRXtY4ybbgXYU8H+YaxuQD33MW0K
-	nYqWV+m+y1GZHtt/ld9p1SXsDPqKOhqe2eb3v5S/qlasSFhA1mfsLi99w9+NjDu6skmRrL0K+dg
-	QfIkNV3Su1BKWVR35t79kZYZ7rV03DNWFIvmKGJQo5INdZoF/g0Rex3fVyGbC/X8MnQGE67zxY/
-	j+bFWWx3hFxpOA2OzyYHJuG7udw+jljQlX+fmIyxDXyumrWek4auYNTVDlAs8MPLni47sM95djb
-	WyhrovuKR/CFnjI0xmTz3BTO0vFpEJFE4grxsyKGODGBc//dsPHzJDxMt1Qd7zXOUWErBE2XQ==
-X-Received: by 2002:a05:600c:4685:b0:485:40c6:f507 with SMTP id 5b1f17b1804b1-486f456feb6mr116918225e9.30.1773918295491;
-        Thu, 19 Mar 2026 04:04:55 -0700 (PDT)
-Received: from mail.gmail.com (lfbn-ren-1-685-61.w81-53.abo.wanadoo.fr. [81.53.253.61])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fb59678csm16217465e9.0.2026.03.19.04.04.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 04:04:54 -0700 (PDT)
-Date: Thu, 19 Mar 2026 12:04:52 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	shuah@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/bpf: move trampoline_count to dedicated
- bpf_testmod target
-Message-ID: <abvYVE-CJcmRypCR@mail.gmail.com>
-References: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
- <20260319040337.366375-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XHpexXCk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F33C5C19424;
+	Thu, 19 Mar 2026 11:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773920181;
+	bh=mI5Niued13lWroralkbRCKzUCQf0t2KVY0BX5P2HIXI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XHpexXCkQZc2a0WGs+u/3+2VTNF+KRD14kC2QA6c7zMjyOUx5myQJvh+vbaFWZZYI
+	 PkDz/dVqJSKLgdrb+NN70uG25yNaA9M44vKj/kQ5GuwdfYH255ziQiAmi1NzOzyZiJ
+	 /8WTsu6NNVkJqRCNl9+PcKKKxtLW4uvNoGVSw6pNX0LAejWDXq5WzhGN672Azj4NhE
+	 b+jV5GgVqsJigImfZfeZ3GkF+E+7TBdg8GVwGOPg3Q1cCGDeRIsR3OB/kk5mv3/J0c
+	 u9tFsLou+jwl1UTMJ808IGY/4gI2T5SnbmogIj90tKX6dcA8qE0JfSUoZ3pwacu1ZE
+	 rhZOdG1Z82C7Q==
+Date: Thu, 19 Mar 2026 11:36:14 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Ben Copeland <ben.copeland@linaro.org>
+Cc: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: alsa: add config for required kernel options
+Message-ID: <0abf3675-886e-44f9-a9f7-d9198b66086e@sirena.org.uk>
+References: <20260319084347.134744-1-ben.copeland@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Kx5iu//9ocq2fYx+"
+Content-Disposition: inline
+In-Reply-To: <20260319084347.134744-1-ben.copeland@linaro.org>
+X-Cookie: Given my druthers, I'd druther not.
+
+
+--Kx5iu//9ocq2fYx+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260319040337.366375-1-sun.jian.kdev@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 19, 2026 at 12:03:37PM +0800, Sun Jian wrote:
-> trampoline_count fills all trampoline attachment slots for a single
-> target function and verifies that one extra attach fails with -E2BIG.
-> 
-> It currently targets bpf_modify_return_test, which is also used by
-> other selftests such as modify_return, get_func_ip_test, and
-> get_func_args_test. When such tests run in parallel, they can contend
-> for the same per-function trampoline quota and cause unexpected attach
-> failures. This issue is currently masked by harness serialization.
-> 
-> Move trampoline_count to a dedicated bpf_testmod target and register it
-> for fmod_ret attachment. This keeps the test semantics unchanged while
-> isolating it from other selftests, so it no longer needs to run in
-> serial mode. Remove the TODO comment as well.
-> 
-> Tested:
->   ./test_progs -t trampoline_count -vv
->   ./test_progs -t modify_return -vv
->   ./test_progs -t get_func_ip_test -vv
->   ./test_progs -t get_func_args_test -vv
->   ./test_progs -j$(nproc) -t trampoline_count -vv
->   ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test -vv
->   20 runs of:
->     ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test
-> 
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
-> 
-> v2:
-> - rewrite the subject to describe the change
-> - resend with the correct patch content
+On Thu, Mar 19, 2026 at 08:43:47AM +0000, Ben Copeland wrote:
+> The alsa kselftests are missing a config file to declare their required
+> kernel configuration options. This causes the utimer-test (timer_f.utimer)
+> to fail on kernels without CONFIG_SND_UTIMER enabled, as the
+> SNDRV_TIMER_IOCTL_CREATE ioctl returns -1.
+>=20
+> Add the config file with the necessary sound configs so that
+> 'make kselftest-merge' can enable them automatically.
 
-Please increment the version number when making these changes. Otherwise
-it can be quite confusing to everyone. I believe this is the third
-variant of your v2 on the mailing list.
+These tests fit awkwardly into the config fragment stuff, since pcm-test
+and mixer-test are mostly testing drivers we should in theory have every
+single audio driver enabled as part of the fragment, but that is
+annoying to maintain and bloaty.  Fortunately people usually put these
+in their defconfigs so we actually do the right thing in practice most
+of the time without the need to build a custom kernel.  On the other
+hand the test-pcmtest-driver test requires a test module which *does*
+need a config option so it requires a cutom config.
 
-> - resend as a reply to v1
+Separately to what we're doing here utimer-test ought to skip rather
+than fail if the driver it needs isn't present just as a general
+kselftest style thing, I see it's not doing that now.
 
-That can also be a bit confusing as it will fold the email into existing
-conversations. You can instead link to the previous version from the
-changelogs.
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
-[...]
+--Kx5iu//9ocq2fYx+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Paul
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmm7360ACgkQJNaLcl1U
+h9CVzQf/Q7nlYX1wL0lRpQve3LLU1B1wDKVuqUi3J0Qm6abmoWQmskN6oqpt6iBJ
+WMF2nL6i9Q+ClABE094gmKdtqgICw9Pl51+66+hLlwHf8xoChYbaAK+qA2lgw81G
+pldSA2lPiFEk+8DlNFiTR6cLLd6C01H+mtGFAbwqlGdAqlY7ZOnSqKyJOv8DBKnc
+GYSGI4a0ui0ZXNQn8SY0Xsj/JR9N9vMZcLQ7JnUK5x2ENPnwLWSOQBqN5sQxLxYo
+UxgdNHwCWxZMVmNkILvQ7lBe0KQ/lXjVHogKfhhbQ9cgSFtT5zU+/w75DNd8bIHG
+rWfX/W/XjGA5Zr9G+XrZAVRJGiowBQ==
+=wpOt
+-----END PGP SIGNATURE-----
+
+--Kx5iu//9ocq2fYx+--
