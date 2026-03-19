@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450A815B998;
-	Thu, 19 Mar 2026 21:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCFA3AEF5F;
+	Thu, 19 Mar 2026 21:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773956821; cv=none; b=L2RETjb13tTxBitAfYljQ1pzdWWUHtjJkyjOHTWRsYKCp2/KGqu+4CzY/o0S1NYxA38G/yShtYcCjb/R/2onCnlKy34T2f7OrH93sFgoLVgx9QUWr1OJNNlD4pS53z5tuwEhwS6W8ktUxENfZeuvzEBkHp0QhmIlhtNNNSLw27w=
+	t=1773956925; cv=none; b=RoHYib7ViJxnHzLnfxO0IMS2aN1scDDnPYfBkcgHUyevgfW58bIArBcFBaLa6p6Jxc1toAa+cZuF8qQYCWVJFZL0qBMdpRHJvODQv/f0dTLNOZCVD53OzAvx2jP7PeuBOYzWdsIdzzpLLQ7cGLsyHWlk1ptLmlF2yBm1CKihnSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773956821; c=relaxed/simple;
-	bh=1IBkxxVID0OqECcdtfslaXIofuQKudUDRH508pH5n2M=;
+	s=arc-20240116; t=1773956925; c=relaxed/simple;
+	bh=XnzQTklrSR9ouPzmgc9VsJCQGhrX2SeFT7FyxZbT7WQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=THYk4ZN6sPGCDk/71bDVLEp2DoDYBZfdoDajZns9KYwWK5BuQGVpD2kQLdkHvhi2pCoQ/2BZrqIh8dBTHXQdd9rqOttAW8nZdFLGBOBJnAi4OjYUNPDfXdECsx2YlvHzb/ULxt/aBpvAjoWD0NxcRW8K9jEnqZu0EQifr1jM5Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQKZ4msA; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=IEQLoHAGlOKRtMk/WOprxfat1u7hinrReQsoQePPg4u7+5Wl7iZBH+mK2bR/lmWVzofIUkwMnZ77kcB/TNg+wk5uUBEm/px6rX472geZkEy15zChkloNW++Erk2Zl6UMhypGd339d1/V1lrW7UTRnrMyOuofNGDTMS5CCY7jsrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=et1Zm07x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQKZ4msA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245CFC19424;
-	Thu, 19 Mar 2026 21:46:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="et1Zm07x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E56FC2BC9E;
+	Thu, 19 Mar 2026 21:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773956820;
-	bh=1IBkxxVID0OqECcdtfslaXIofuQKudUDRH508pH5n2M=;
+	s=k20201202; t=1773956924;
+	bh=XnzQTklrSR9ouPzmgc9VsJCQGhrX2SeFT7FyxZbT7WQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YQKZ4msA9Q1UVupgLQQX8vWm3a7QrdO9XU5owvbsusQVdWvjaxArz8Et/bp6ovnOs
-	 V4HRFc5TXhTPy+WL9rihFat9A7NxNhUsmKYne7rM0Ij8oDuzhoMr58/+PIR/FYiYD1
-	 dzHjoWQMJ8UnPNd2CVNKGDOaTCL+87qcEGvwEiHNxP7BFDaHZeiEhiHkoDx72Umg2e
-	 JudAWOILwmo/e0oIm3hyYcEXKJCYV9HLTcDuZA6yot54xC7QRWgWD/FWZOSXXSQKTB
-	 1MGGDP4CxlwXaGUi+0RRy9CUVPXvDu4C5KsZpNLIMzTnccQi/qlIRdrgJZ3ckpm32d
-	 mB7HhYdpglAaQ==
-Message-ID: <eeac1781-d809-4108-9abf-63a9800a9ea2@kernel.org>
-Date: Thu, 19 Mar 2026 22:46:53 +0100
+	b=et1Zm07xdmkYSe+PmNq7hbjk919Aa4uCh0SamqVkV9EronDzdGfnmMzVdcxryKspq
+	 7OsFTrapVR7Xzg0agRnyLzQpoGxGfspujLlZMTMduhJZl/rCo7YxpEFCyogBr4+UTD
+	 aYC0ERlA/0daio6rjolrBXhbO2IH9e8uxfYh2Nds3FYAjyXkA1HvCPcA5Wk0kfI5bL
+	 s68eqr0RIV/5SHyHiDacGW9A90wuItRLEWCT+D3TmmeLqLj7iF/cN+XoKf8bevYYIp
+	 G63lKPA0ZVCFs4ZyO47QmThbB8dOG64RmDsFDIqKzLgkYv7vj3Nm16hX5j5FT+EXCl
+	 D8BBgjcjzm+Cg==
+Message-ID: <78352e6f-fa40-41ee-b044-62f682f3ca43@kernel.org>
+Date: Thu, 19 Mar 2026 22:48:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,18 +35,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] selftests/mm/guard-regions: skip collapse test
- when thp not enabled
+Subject: Re: [PATCH v4 3/5] selftests/mm: move write_file helper to vm_util
 To: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org,
  shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
  rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
  baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
- Li Wang <liwang@redhat.com>
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
 References: <20260319160656.1480279-1-chuhu@redhat.com>
- <20260319160656.1480279-2-chuhu@redhat.com>
+ <20260319160656.1480279-4-chuhu@redhat.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -93,63 +91,30 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260319160656.1480279-2-chuhu@redhat.com>
+In-Reply-To: <20260319160656.1480279-4-chuhu@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/19/26 17:06, Chunyu Hu wrote:
-> When thp is not available, just skip the collape tests to avoid the false
-> negative.
-> 
-> Without the change, run with a thp disabled kernel:
->   ./run_vmtests.sh -t madv_guard -n 1
->   <snip/>
->   #  RUN           guard_regions.anon.collapse ...
->   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
->   # collapse: Test terminated by assertion
->   #          FAIL  guard_regions.anon.collapse
->   not ok 2 guard_regions.anon.collapse
->   <snip/>
->   #  RUN           guard_regions.shmem.collapse ...
->   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
->   # collapse: Test terminated by assertion
->   #          FAIL  guard_regions.shmem.collapse
->   not ok 32 guard_regions.shmem.collapse
->   <snip/>
->   #  RUN           guard_regions.file.collapse ...
->   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
->   # collapse: Test terminated by assertion
->   #          FAIL  guard_regions.file.collapse
->   not ok 62 guard_regions.file.collapse
->   <snip/>
->   # FAILED: 87 / 90 tests passed.
->   # 17 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
->   # Totals: pass:70 fail:3 xfail:0 xpass:0 skip:17 error:0
-> 
-> With this change, run with thp disabled kernel:
->   ./run_vmtests.sh -t madv_guard -n 1
->   <snip/>
->   #  RUN           guard_regions.anon.collapse ...
->   #      SKIP      Transparent Hugepages not available
->   #            OK  guard_regions.anon.collapse
->   ok 2 guard_regions.anon.collapse # SKIP Transparent Hugepages not available
->   <snip/>
->   #  RUN           guard_regions.file.collapse ...
->   #      SKIP      Transparent Hugepages not available
->   #            OK  guard_regions.file.collapse
->   ok 62 guard_regions.file.collapse # SKIP Transparent Hugepages not available
->   <snip/>
->   #  RUN           guard_regions.shmem.collapse ...
->   #      SKIP      Transparent Hugepages not available
->   #            OK  guard_regions.shmem.collapse
->   ok 32 guard_regions.shmem.collapse # SKIP Transparent Hugepages not available
->   <snip/>
->   # PASSED: 90 / 90 tests passed.
->   # 20 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
->   # Totals: pass:70 fail:0 xfail:0 xpass:0 skip:20 error:0
-> 
-> CC: Li Wang <liwang@redhat.com>
-> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+
+> +
+> +void write_file(const char *path, const char *buf, size_t buflen)
+> +{
+> +	int fd;
+> +	ssize_t numwritten;
+> +
+> +	fd = open(path, O_WRONLY);
+> +	if (fd == -1)
+> +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+> +
+> +	numwritten = write(fd, buf, buflen - 1);
+> +	close(fd);
+> +	if (numwritten < 1)
+> +		ksft_exit_fail_msg("Write failed\n");
+I guess we could indeed test here easily for
+
+	if (numwritten != buflen - 1)
+
+But then, we don't really expect only partial writes to succeed here.
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
