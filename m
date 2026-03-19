@@ -1,244 +1,235 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF752C15B0
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 15:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730E23033DC;
+	Thu, 19 Mar 2026 15:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773934779; cv=none; b=drFmqt5cmdJDOGqjvV7UkZOg8hs+FHqTyeVqzLti7By7puAqs8rzRkbtpWuFDek3ZnJlIGqMQ93EruaWLLuBe0w+HQE7mSdYfwPmcQVXFiBqgcrRjIylql+SccLd2FKOM9amLKby4YzFJrvkqIUgTyidkFgZlQlx/8ABHlM4sLM=
+	t=1773934933; cv=none; b=LoEwFVCqZLI5YahWLfT+YEu4Bj0enRL/QCO3Nq5Fd5WbRYsOFvLWbCHw9oW5lB817XLwCTrTMUfQMJBZDVl6HBV1falDHWcn9h8eSosTRCbQFvtVV5fu5zSTEnVvGmzlN2lVqrPvzhUjoRl/xzezcoOasS1FnjFusN6vzrzDgrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773934779; c=relaxed/simple;
-	bh=x//o4bWkdTa7UjZoqWBDqdBqMxSW98X7OQ5Mn059qxs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=dGnYNlkwYWd2FhZStktcB1By7mM92w6sUwKPyAKmSWjm0XNsr2iLBg0vQ104jNPGxmDoKvUOe2lIB5KQ4NJf4w2Q8pRkg7ojWX3aFNRr3M9u6rv29nz1RAy6ASWZzP38QSep65iqfKJYlpII2dhJp9FEF7nzJavQ7Ew1/rbdskg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=QbBSLqt/; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1773934933; c=relaxed/simple;
+	bh=ddwCQSambwYhQk+Gsdfv4G9cQ4n4k0xN/Xf5jL5ONSU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QS3ZS4EuL7DZsxlSG3fVzIW8QB0tFaYgfFfzWDVGDcIHCDG0RXEGBDtAM6IrXzIahhLoFkunzsfTVnWkP2KLaPAxfIzzIvkFif5l/OpQe2Y9Wwc88g5WqI+aqXBoiE8hAyMF2jvq2BRYPRDtkbV/jdTlUjOCwiqrhsYbCItqffc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z018L9Ma; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="QbBSLqt/"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-899fb2b94c1so14259836d6.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 08:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773934776; x=1774539576; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9f+nxQqpbmkQKG1AStGiZRyAzlhJyR4x4hzFywy9Ago=;
-        b=QbBSLqt/a46IQeKhCnmfhXuvfzQ71UUU/ir9ucua7JBrMQ5AJ58dWuXrKFc6CmAaB4
-         uSq7kxkbMpcxAzdSHs45yyv9FxsInnIoURGn4uwWRqS725tUzbkxyb693cPtcAL+hP2u
-         UqQMEP1edtW8/r9UnTAtQjnxIAX2ML7vvA2pYyEoZ+sy1extujt04qgcoZjniIU/wQRm
-         PIXC2rNRmQCQlIsb08ZMmrbBBd06LqmClJHOX+cuZg7Mt1Vv0SGrkFfaYNCD9LLhhAHG
-         1YST7blvwdFGXt2BHxWiEoU33Zf3MInEDzSJJzy75SCHckZjnRL5lQP078gofnmmsHsC
-         4C5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773934776; x=1774539576;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9f+nxQqpbmkQKG1AStGiZRyAzlhJyR4x4hzFywy9Ago=;
-        b=YVec/RVnhayI8v/cFvFMC5ZHFxcdhFaInXDbB0qLZZ9GW7mSPo3b0fHRKi3BhIoqMf
-         DwRKw1e8eHdNdyAbDc3CEzPl1EuFmxBk4epdbzY9ZsNGbJ1gGLrUNkvvV9lOcTNiXon3
-         yArwSfbTEiPH8MvxQxBs/IRmiBfN1Rpb5tiL7ecvEo9Q4SIK+3/SMrbcqIyEVekuhby/
-         GPtBdlVduQ+hPu0GzVhfDJi6+/U1vpNlcyh/4tUnhGEHKvonLHd8c3flZHiVrrZjDhsT
-         hboqWaUMI13cs9d7RhRZ7l4UtES1Nt7nyeSQ/LxheZmNF8s6Zyd+KvmoLbSFigQh6gEv
-         1glQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVRqgxvjXTwHote3pOBTTCVYkPzGCB/n582eJ35i6Wuq7hwch8Yj28UHk3zq7wk2eb9z3/d/R90eRC/8TjfJ2E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/xsq8jyZXsCvkoyE4H6t++ExfM7mJ5XpqoZu/vHSYBV1cuyed
-	4LKmsenS9r5K8ZfdJQpcR7JVSHV8IfGtwaKUJiobTQr4STe4Jfk9eXh8mPaniPveR8pSkSY7ac9
-	4vVDTieg=
-X-Gm-Gg: ATEYQzy00AdPMI+uUw4JU+6SqHM0AjXEGx+cXBHsnsWZ+riJNFDrFi3nKSHz/Zeq+Oh
-	5yZjIM3loyZKTd2DQuxAGpRUT1mMpwYpsyegs0JU/jFs/Fl8A3muYxJKByMfrb62HI3mJJlJ8LR
-	NsVJ7kpYFDElaf62WoBatpHSIyHZ7SOOEHcfZsqCJf51jkt4AxuRvQNVYCP0RQbSbvHERpagKUi
-	2vWFUuoRyMxvFy1dIIQmFXoZMS5D0xn9oNgwT1cTAFF0R3jS7dTGi2n0C+kI8RFvtyMJ99dPqSg
-	g6j7D1E+tD6t4HGAjHhSSprWyezh0K6TXhwpy2z86/GXloLhrSSuhCF+QM0E+bjHrbmtqyRf/+C
-	dg2ITuNr+/7HjvUi1lrjjJ1auSquke3uIPZ8vQMX+YKBVCRriE1ZPNifMgFtFmF54jUGBZm7r0f
-	37EjYAyvoVqimmIeB4nKScR7Y=
-X-Received: by 2002:a05:6214:3003:b0:89c:6252:4a4a with SMTP id 6a1803df08f44-89c6b5a797emr112213066d6.49.1773934775593;
-        Thu, 19 Mar 2026 08:39:35 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c6b90d1a8sm63300886d6.18.2026.03.19.08.39.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2026 08:39:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z018L9Ma"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75EEAC19424;
+	Thu, 19 Mar 2026 15:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773934933;
+	bh=ddwCQSambwYhQk+Gsdfv4G9cQ4n4k0xN/Xf5jL5ONSU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z018L9Mak6kJMccjvcDtf9kU/gKi2xvWqu3Nn24TK/JUCbiVBonRRqd9vGgzuKqc6
+	 a7MZUk1D5gPNrtaqHxzmo7toXNDIsCnJgjlbap47KUZP52UrYfIlOcdn1mX340p3MS
+	 o7kPN5nendZl6j4TQJQD0QAC337GqDQJrMnyOXi5tKmBB/xH4TFMhEgSXdrhYQ8d0A
+	 VpTfsK862COAupBKT5D+iLtiIf1kZNqUKaKRXOycyq+RjGiZFSjTs7aapyfZM9C+df
+	 NNhyAxNRNuOh4sarGLaHaNAET257IrdhIg1tGmDQjKglosykUDoKj4wfDyyrUAbsZl
+	 wXPDOxkUEGj+w==
+Date: Thu, 19 Mar 2026 17:42:06 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Chris Down <chris@chrisdown.name>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>, kernel-team@fb.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] selftests/mm: Add UFFDIO_MOVE huge zeropage PMD
+ regression test
+Message-ID: <abwZTnbQ5QWSYvAh@kernel.org>
+References: <abongwF3X0G8xY1I@chrisdown.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 19 Mar 2026 11:39:34 -0400
-Message-Id: <DH6VE8XMH4H8.ETICJE2QVEA5@etsalapatis.com>
-To: "Chengkaitao" <pilgrimtao@gmail.com>, <martin.lau@linux.dev>,
- <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
- <haoluo@google.com>, <jolsa@kernel.org>, <shuah@kernel.org>,
- <chengkaitao@kylinos.cn>, <linux-kselftest@vger.kernel.org>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v8 1/8] bpf: refactor kfunc checks using
- table-driven approach in verifier
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.20.1
-References: <20260316112843.78657-1-pilgrimtao@gmail.com>
- <20260316112843.78657-2-pilgrimtao@gmail.com>
-In-Reply-To: <20260316112843.78657-2-pilgrimtao@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abongwF3X0G8xY1I@chrisdown.name>
 
-On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->
-> Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
-> checks with btf_id_in_kfunc_table() and static kfunc tables for easier
-> maintenance.
->
-> Prepare for future extensions to the bpf_list API family.
->
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+On Wed, Mar 18, 2026 at 12:18:11PM +0800, Chris Down wrote:
+> The existing uffd-unit-tests move-pmd coverage exercises PMD-sized
+> UFFDIO_MOVE on anonymous THPs, but it does not force the huge zeropage
+> PMD path in move_pages_huge_pmd().
+> 
+> Add a dedicated anonymous UFFDIO_MOVE PMD test that exercises this
+> relatively comprehensively.
+> 
+> Signed-off-by: Chris Down <chris@chrisdown.name>
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-The change is valid, can you see if you can remove some of the
-is_bpf_*api_kfunc calls areound line 13000 and replace them with=20
-btf_id_in_kfunc_table calls?=20
-
-And can you also do this refactoring for the other kfunc families? That
-way we replace all functions that match on the btf_id into a single call
-that takes in the array we are scanning for a match.
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
 > ---
->  kernel/bpf/verifier.c | 79 +++++++++++++++++++++++++++++++------------
->  1 file changed, 57 insertions(+), 22 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 4fbacd2149cd..64c1f8343dfa 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -12639,6 +12639,53 @@ BTF_ID(func, bpf_session_is_return)
->  BTF_ID(func, bpf_stream_vprintk)
->  BTF_ID(func, bpf_stream_print_stack)
-> =20
-> +static const enum special_kfunc_type bpf_list_api_kfuncs[] =3D {
-> +	KF_bpf_list_push_front_impl,
-> +	KF_bpf_list_push_back_impl,
-> +	KF_bpf_list_pop_front,
-> +	KF_bpf_list_pop_back,
-> +	KF_bpf_list_front,
-> +	KF_bpf_list_back,
-> +};
-> +
-> +/* Kfuncs that take a list node argument (bpf_list_node *). */
-Nit: Why add a description on just this and bpf_rbtree_node_api_kfuncs?
-I think a small comment on top of each if fine if a bit wordy because
-it's easy to spot when scanning for a specific kfunc family.
-> +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] =3D {
-> +	KF_bpf_list_push_front_impl,
-> +	KF_bpf_list_push_back_impl,
-> +};
-> +
-> +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
-> +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] =3D {
-> +	KF_bpf_rbtree_remove,
-> +	KF_bpf_rbtree_add_impl,
-> +	KF_bpf_rbtree_left,
-> +	KF_bpf_rbtree_right,
-> +};
-> +
-> +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] =3D {
-> +	KF_bpf_rbtree_add_impl,
-> +	KF_bpf_rbtree_remove,
-> +	KF_bpf_rbtree_first,
-> +	KF_bpf_rbtree_root,
-> +	KF_bpf_rbtree_left,
-> +	KF_bpf_rbtree_right,
-> +};
-> +
-> +static const enum special_kfunc_type bpf_res_spin_lock_kfuncs[] =3D {
-> +	KF_bpf_res_spin_lock,
-> +	KF_bpf_res_spin_unlock,
-> +	KF_bpf_res_spin_lock_irqsave,
-> +	KF_bpf_res_spin_unlock_irqrestore,
-> +};
-> +
-> +static bool btf_id_in_kfunc_table(u32 btf_id, const enum special_kfunc_t=
-ype *kfuncs, int n)
+>  tools/testing/selftests/mm/uffd-unit-tests.c | 100 +++++++++++++++++++
+>  tools/testing/selftests/mm/vm_util.c         |  12 +++
+>  tools/testing/selftests/mm/vm_util.h         |   1 +
+>  3 files changed, 113 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+> index 6f5e404a446c..9cc4cbab9a23 100644
+> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+> @@ -1227,6 +1227,99 @@ static void uffd_move_pmd_test(uffd_global_test_opts_t *gopts, uffd_test_args_t
+>  			      uffd_move_pmd_handle_fault);
+>  }
+>  
+> +static void uffd_move_pmd_huge_zeropage_test(uffd_global_test_opts_t *gopts,
+> +					     uffd_test_args_t *targs)
 > +{
-> +	for (int i =3D 0; i < n; i++)
-> +		if (btf_id =3D=3D special_kfunc_list[kfuncs[i]])
-> +			return true;
-> +	return false;
+> +	unsigned long pmd_size = read_pmd_pagesize();
+> +	unsigned long pmd_pages;
+> +	unsigned long bytes = gopts->nr_pages * gopts->page_size;
+> +	char *orig_area_src = gopts->area_src, *orig_area_dst = gopts->area_dst;
+> +	char *aligned_src, *aligned_dst;
+> +	unsigned long src_offs, dst_offs, max_offs;
+> +	pthread_t uffd_mon;
+> +	struct uffd_args args = { 0 };
+> +	char c = '\0';
+> +	int pagemap_fd;
+> +
+> +	if (pmd_size <= gopts->page_size) {
+> +		uffd_test_skip("huge page size is 0, feature missing?");
+> +		return;
+> +	}
+> +	if (!detect_huge_zeropage()) {
+> +		uffd_test_skip("transparent huge zeropage disabled");
+> +		return;
+> +	}
+> +
+> +	pmd_pages = pmd_size / gopts->page_size;
+> +	if (bytes < pmd_size) {
+> +		uffd_test_skip("not enough pages for one PMD-sized move");
+> +		return;
+> +	}
+> +
+> +	aligned_src = ALIGN_UP(orig_area_src, pmd_size);
+> +	aligned_dst = ALIGN_UP(orig_area_dst, pmd_size);
+> +	src_offs = (aligned_src - orig_area_src) / gopts->page_size;
+> +	dst_offs = (aligned_dst - orig_area_dst) / gopts->page_size;
+> +	max_offs = src_offs > dst_offs ? src_offs : dst_offs;
+> +	if (max_offs + pmd_pages > gopts->nr_pages) {
+> +		uffd_test_skip("could not find aligned PMD-sized src/dst window");
+> +		return;
+> +	}
+> +
+> +	if (madvise(orig_area_dst, bytes, MADV_HUGEPAGE))
+> +		err("madvise(MADV_HUGEPAGE) failure");
+> +	if (madvise(orig_area_src, bytes, MADV_DONTFORK))
+> +		err("madvise(MADV_DONTFORK) failure");
+> +	if (madvise(aligned_src, pmd_size, MADV_DONTNEED))
+> +		err("madvise(MADV_DONTNEED) failure");
+> +
+> +	/* Fault in a PMD-sized huge zeropage mapping in the source. */
+> +	force_read_pages(aligned_src, pmd_pages, gopts->page_size);
+> +
+> +	pagemap_fd = pagemap_open();
+> +	if (!pagemap_is_huge_zero(pagemap_fd, aligned_src)) {
+> +		close(pagemap_fd);
+> +		uffd_test_skip("could not fault in the huge zeropage");
+> +		return;
+> +	}
+> +	gopts->area_src = aligned_src;
+> +	gopts->area_dst = aligned_dst;
+> +
+> +	if (uffd_register(gopts->uffd, gopts->area_dst, pmd_size, true, false, false))
+> +		err("register failure");
+> +
+> +	args.gopts = gopts;
+> +	args.handle_fault = uffd_move_pmd_handle_fault;
+> +	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
+> +		err("uffd_poll_thread create");
+> +
+> +	/*
+> +	 * One fault on dst should trigger a single PMD-sized UFFDIO_MOVE from
+> +	 * the huge zeropage PMD we populated in the source.
+> +	 */
+> +	force_read_pages(gopts->area_dst, pmd_pages, gopts->page_size);
+> +
+> +	if (write(gopts->pipefd[1], &c, sizeof(c)) != sizeof(c))
+> +		err("pipe write");
+> +	if (pthread_join(uffd_mon, NULL))
+> +		err("join() failed");
+> +
+> +	if (args.missing_faults != 1 || args.minor_faults != 0) {
+> +		uffd_test_fail("stats check error");
+> +	} else if (!pagemap_is_huge_zero(pagemap_fd, gopts->area_dst)) {
+> +		uffd_test_fail("moved destination is not a huge zeropage PMD");
+> +	} else if (!check_huge_anon(gopts->area_dst, 0, pmd_size)) {
+> +		/* vm_normal_page_pmd() must continue to treat the moved PMD as special. */
+> +		uffd_test_fail("moved huge zeropage PMD counted as AnonHugePages");
+> +	} else {
+> +		uffd_test_pass();
+> +	}
+> +
+> +	gopts->area_src = orig_area_src;
+> +	gopts->area_dst = orig_area_dst;
+> +	close(pagemap_fd);
 > +}
 > +
->  static bool is_task_work_add_kfunc(u32 func_id)
+>  static void uffd_move_pmd_split_test(uffd_global_test_opts_t *gopts, uffd_test_args_t *targs)
 >  {
->  	return func_id =3D=3D special_kfunc_list[KF_bpf_task_work_schedule_sign=
-al] ||
-> @@ -13038,22 +13085,14 @@ static int check_reg_allocation_locked(struct b=
-pf_verifier_env *env, struct bpf_
-> =20
->  static bool is_bpf_list_api_kfunc(u32 btf_id)
->  {
-> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_back_impl] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_pop_front] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_pop_back] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_front] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_back];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_list_api_kfuncs,
-> +				     ARRAY_SIZE(bpf_list_api_kfuncs));
+>  	if (madvise(gopts->area_dst, gopts->nr_pages * gopts->page_size, MADV_NOHUGEPAGE))
+> @@ -1550,6 +1643,13 @@ uffd_test_case_t uffd_tests[] = {
+>  		.uffd_feature_required = UFFD_FEATURE_MOVE,
+>  		.test_case_ops = &uffd_move_test_pmd_case_ops,
+>  	},
+> +	{
+> +		.name = "move-pmd-huge-zeropage",
+> +		.uffd_fn = uffd_move_pmd_huge_zeropage_test,
+> +		.mem_targets = MEM_ANON,
+> +		.uffd_feature_required = UFFD_FEATURE_MOVE,
+> +		.test_case_ops = &uffd_move_test_pmd_case_ops,
+> +	},
+>  	{
+>  		.name = "move-pmd-split",
+>  		.uffd_fn = uffd_move_pmd_split_test,
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index a6d4ff7dfdc0..55cc4cc058a2 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -120,6 +120,18 @@ bool pagemap_is_populated(int fd, char *start)
+>  				PAGE_IS_PRESENT | PAGE_IS_SWAPPED);
 >  }
-> =20
->  static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
+>  
+> +bool pagemap_is_huge_zero(int fd, char *start)
+> +{
+> +	uint64_t categories;
+> +
+> +	if (!pagemap_scan_supported(fd, start))
+> +		return false;
+> +
+> +	categories = pagemap_scan_get_categories(fd, start);
+> +	return (categories & (PAGE_IS_PRESENT | PAGE_IS_PFNZERO | PAGE_IS_HUGE)) ==
+> +		(PAGE_IS_PRESENT | PAGE_IS_PFNZERO | PAGE_IS_HUGE);
+> +}
+> +
+>  unsigned long pagemap_get_pfn(int fd, char *start)
 >  {
-> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_add_impl] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remove] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_first] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_root] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_left] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_right];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_rbtree_api_kfuncs,
-> +				     ARRAY_SIZE(bpf_rbtree_api_kfuncs));
->  }
-> =20
->  static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
-> @@ -13071,10 +13110,8 @@ static bool is_bpf_graph_api_kfunc(u32 btf_id)
-> =20
->  static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
->  {
-> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_unlock] ||
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsave] |=
-|
-> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_unlock_irqresto=
-re];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_res_spin_lock_kfuncs,
-> +				     ARRAY_SIZE(bpf_res_spin_lock_kfuncs));
->  }
-> =20
->  static bool is_bpf_arena_kfunc(u32 btf_id)
-> @@ -13163,14 +13200,12 @@ static bool check_kfunc_is_graph_node_api(struc=
-t bpf_verifier_env *env,
-> =20
->  	switch (node_field_type) {
->  	case BPF_LIST_NODE:
-> -		ret =3D (kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_front=
-_impl] ||
-> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_back_im=
-pl]);
-> +		ret =3D btf_id_in_kfunc_table(kfunc_btf_id, bpf_list_node_api_kfuncs,
-> +					    ARRAY_SIZE(bpf_list_node_api_kfuncs));
->  		break;
->  	case BPF_RB_NODE:
-> -		ret =3D (kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remove] =
-||
-> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_add_impl] =
-||
-> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_left] ||
-> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_right]);
-> +		ret =3D btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_node_api_kfuncs=
-,
-> +					    ARRAY_SIZE(bpf_rbtree_node_api_kfuncs));
->  		break;
->  	default:
->  		verbose(env, "verifier internal error: unexpected graph node argument =
-type %s\n",
+>  	uint64_t entry = pagemap_get_entry(fd, start);
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index e9c4e24769c1..e0b6ae1b12f5 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -85,6 +85,7 @@ uint64_t pagemap_get_entry(int fd, char *start);
+>  bool pagemap_is_softdirty(int fd, char *start);
+>  bool pagemap_is_swapped(int fd, char *start);
+>  bool pagemap_is_populated(int fd, char *start);
+> +bool pagemap_is_huge_zero(int fd, char *start);
+>  unsigned long pagemap_get_pfn(int fd, char *start);
+>  void clear_softdirty(void);
+>  bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len);
+> 
+> base-commit: f0caa1d49cc07b30a7e2f104d3853ec6dc1c3cad
+> -- 
+> 2.53.0
+> 
 
+-- 
+Sincerely yours,
+Mike.
