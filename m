@@ -1,173 +1,241 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8AE534405C;
-	Thu, 19 Mar 2026 17:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214C634A3CC;
+	Thu, 19 Mar 2026 17:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773940094; cv=none; b=edWrBBdEx/jNO0p0WkNjdMFh9ZCSPzQi7QrGZpHvw+UoRVAxRnRqbUpWtQeIFAKfXiEnSR3Wxzln+WO9TRnfBCqcHlxZxxWjJdGIXpTD2OUs77Qgg4Ee9RWU6Q/748NEAUMWD89JNnTsEVD/7BW9kOYJlgVOXk1wu1BVc4f+HBU=
+	t=1773940832; cv=none; b=AEj+KkAJ7//aPO8IYLhHxpKsLQN+720pekrf1ucwd/uAmmzg2zpq7YTClyF0MYlaecgRkkZjwhjBqo6+7H8lRu/2WZFAnPi+skg0gJ3woHOdnGd8iDNb7ctcT/FS3i1ybAzq8cApFri6UORqtKsqFNXJcDuswE/rXpTJb8wkt0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773940094; c=relaxed/simple;
-	bh=T43xfGTyy+CkhFtBZ/lvhJq/l+Hy1fuTD/+fXPUaTG0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=JDVTAewFAwBULLFEpp5oz/PXuvlndGsfPFW5MqwyoRzsIGOLGm1IEJ8TAC+AefiaCUuun/wlhg3qwDc3OkzLUjOST+Q6VycDEaVUH0V0tt8sj+3TnnUopXA8tEoIvo2qWngJ9GTk4IGO9um2XVcDct3vFKDidBnOQEDbfhgivgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 556462247;
-	Thu, 19 Mar 2026 10:08:05 -0700 (PDT)
-Received: from [10.57.60.82] (unknown [10.57.60.82])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99D683F778;
-	Thu, 19 Mar 2026 10:08:01 -0700 (PDT)
-Message-ID: <16598f59-df24-488b-af74-e3f2a2732755@arm.com>
-Date: Thu, 19 Mar 2026 18:07:59 +0100
+	s=arc-20240116; t=1773940832; c=relaxed/simple;
+	bh=kgD69+muWITBcTGV+KnbYP0pvQSkkY00OjAstUepKTY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eDZMHr0TTfygl0d39I0mqS8qVfhX7R6HLCUk0vesgofPsWDUxay5mBsFp/te/oc70YNDY1lvkOSmHUN6DnNpvqojIe9HX8LT1wbV0HM4HMNQq9kmXV5q0yOyersNt7jrEN1DD9+ZzXkcTTDgPmA1LxeVppw3ib6Ni+xrg/Y5Om8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QRpy9Hsp; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QRpy9Hsp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 276EEC19424;
+	Thu, 19 Mar 2026 17:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773940831;
+	bh=kgD69+muWITBcTGV+KnbYP0pvQSkkY00OjAstUepKTY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QRpy9HspVOZRZmYSyOUluLhCW++p7IYk/JfgMXF8/I6KwQNt0a7Il/pRFHYqeGTxA
+	 p8hRxBLbUEGCLblYuhsPZd20WTgVIKXNT5IP2NvK9nU+43GNMVqaebUPI9XqtHX8/p
+	 t+tOPiuAR720tqf3kAgj6SsQy551k5QBq1RwYvSjV7GLPQ0QYFHNItmVo+fyjMd/Ru
+	 ns7J8tk6IKfWw+UmRemKyORFNPfLe4atGyXEJtZA7F3P21Uqz8n7eVNEQoeoM+8HwL
+	 C6te3esHkTUSuwxl/hDH+GQAQ8Cj63BgZeVryqmZWz1iThwHipQIuFNYCd7SPZlzJy
+	 Da5HQQOmzC1wA==
+Date: Thu, 19 Mar 2026 19:20:21 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Chunyu Hu <chuhu@redhat.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
+	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
+	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+	baohua@kernel.org, lance.yang@linux.dev
+Subject: Re: [PATCH v4 3/5] selftests/mm: move write_file helper to vm_util
+Message-ID: <abwwVUnk1QlYJ0zD@kernel.org>
+References: <20260319160656.1480279-1-chuhu@redhat.com>
+ <20260319160656.1480279-4-chuhu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 RESEND 13/14] arm64: Use generic TIF bits for common
- thread flags
-To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
- will@kernel.org, oleg@redhat.com, chenhuacai@kernel.org, kernel@xen0n.name,
- hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
- borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
- arnd@arndb.de, peterz@infradead.org, luto@kernel.org, shuah@kernel.org,
- kees@kernel.org, wad@chromium.org, deller@gmx.de, macro@orcam.me.uk,
- akpm@linux-foundation.org, ldv@strace.io, anshuman.khandual@arm.com,
- ryan.roberts@arm.com, mark.rutland@arm.com, thuth@redhat.com,
- song@kernel.org, ada.coupriediaz@arm.com, linusw@kernel.org,
- broonie@kernel.org, pengcan@kylinos.cn, liqiang01@kylinos.cn,
- ziyao@disroot.org, guanwentao@uniontech.com, guoren@kernel.org,
- schuster.simon@siemens-energy.com, jremus@linux.ibm.com, david@kernel.org,
- mathieu.desnoyers@efficios.com, edumazet@google.com, kmal@cock.li,
- dvyukov@google.com, reddybalavignesh9979@gmail.com, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260317082020.737779-1-ruanjinjie@huawei.com>
- <20260317082020.737779-14-ruanjinjie@huawei.com>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20260317082020.737779-14-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260319160656.1480279-4-chuhu@redhat.com>
 
-On 17/03/2026 09:20, Jinjie Ruan wrote:
-> Use the generic TIF bits defined in <asm-generic/thread_info_tif.h> for
-> standard thread flags (TIF_SIGPENDING, TIF_NEED_RESCHED, TIF_NOTIFY_RESUME,
-> TIF_RESTORE_SIGMASK, TIF_SINGLESTEP, etc.) instead of defining
-> them locally.
->
-> Arm64-specific bits (TIF_FOREIGN_FPSTATE, TIF_MTE_ASYNC_FAULT, TIF_SVE,
-> TIF_SSBD, etc.) are renumbered to start at bit 16 to avoid conflicts.
->
-> This enables RSEQ optimizations which require CONFIG_HAVE_GENERIC_TIF_BITS
-> combined with the generic entry infrastructure (already used by arm64).
->
-> Cc: Thomas Gleixner <tglx@kernel.org>
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+On Fri, Mar 20, 2026 at 12:06:54AM +0800, Chunyu Hu wrote:
+> thp_settings provides write_file() helper for safely writing to a file and
+> exit when write failure happens. It's a very low level helper and many sub
+> tests need such a helper, not only thp tests.
+> 
+> split_huge_page_test also defines a write_file locally. The two have minior
+> differences in return type and used exit api. And there would be conflicts
+> if split_huge_page_test wanted to include thp_settings.h because of
+> different prototype, making it less convenient.
+> 
+> It's possisble to merge the two, although some tests don't use the
+> kselftest infrastrucutre for testing. It would also work when using the
+> ksft_exit_msg() to exit in my test, as the counters are all zero. Output
+> will be like:
+> 
+>   TAP version 13
+>   1..62
+>   Bail out! /proc/sys/vm/drop_caches1 open failed: No such file or directory
+>   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> So here we just keep the version in split_huge_page_test, and move it into
+> the vm_util. This makes it easy to maitain and user could just include one
+> vm_util.h when they don't need thp setting helpers. Keep the prototype of
+> void return as the function will exit on any error, return value is not
+> necessary, and will simply the callers like write_num() and write_string().
+> 
+> Suggested-by: Mike Rapoport <rppt@kernel.org>
+> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+
 > ---
->  arch/arm64/Kconfig                   |  1 +
->  arch/arm64/include/asm/thread_info.h | 62 ++++++++++++----------------
->  2 files changed, 28 insertions(+), 35 deletions(-)
->
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 96fef01598be..33cf901fb1a0 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -224,6 +224,7 @@ config ARM64
->  	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
->  	select HAVE_BUILDTIME_MCOUNT_SORT
->  	select HAVE_EFFICIENT_UNALIGNED_ACCESS
-> +	select HAVE_GENERIC_TIF_BITS
->  	select HAVE_GUP_FAST
->  	select HAVE_FTRACE_GRAPH_FUNC
->  	select HAVE_FUNCTION_TRACER
-> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-> index f89a15dc6ad5..be1a0651cfe2 100644
-> --- a/arch/arm64/include/asm/thread_info.h
-> +++ b/arch/arm64/include/asm/thread_info.h
-> @@ -58,42 +58,34 @@ void arch_setup_new_exec(void);
+> Changes in v3:
+>   - make the write_file void return
+> Changes in v2:
+>   new patch from v2
+> ---
+>  .../selftests/mm/split_huge_page_test.c       | 15 --------
+>  tools/testing/selftests/mm/thp_settings.c     | 35 ++-----------------
+>  tools/testing/selftests/mm/thp_settings.h     |  1 -
+>  tools/testing/selftests/mm/vm_util.c          | 15 ++++++++
+>  tools/testing/selftests/mm/vm_util.h          |  2 ++
+>  5 files changed, 20 insertions(+), 48 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index e0167111bdd1..93f205327b84 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -255,21 +255,6 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
+>  	return status;
+>  }
 >  
->  #endif
+> -static void write_file(const char *path, const char *buf, size_t buflen)
+> -{
+> -	int fd;
+> -	ssize_t numwritten;
+> -
+> -	fd = open(path, O_WRONLY);
+> -	if (fd == -1)
+> -		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+> -
+> -	numwritten = write(fd, buf, buflen - 1);
+> -	close(fd);
+> -	if (numwritten < 1)
+> -		ksft_exit_fail_msg("Write failed\n");
+> -}
+> -
+>  static void write_debugfs(const char *fmt, ...)
+>  {
+>  	char input[INPUT_MAX];
+> diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
+> index 574bd0f8ae48..e748ebfb3d4e 100644
+> --- a/tools/testing/selftests/mm/thp_settings.c
+> +++ b/tools/testing/selftests/mm/thp_settings.c
+> @@ -6,6 +6,7 @@
+>  #include <string.h>
+>  #include <unistd.h>
 >  
-> -#define TIF_SIGPENDING		0	/* signal pending */
-> -#define TIF_NEED_RESCHED	1	/* rescheduling necessary */
-> -#define TIF_NEED_RESCHED_LAZY	2	/* Lazy rescheduling needed */
-> -#define TIF_NOTIFY_RESUME	3	/* callback before returning to user */
-> -#define TIF_FOREIGN_FPSTATE	4	/* CPU's FP state is not current's */
-> -#define TIF_UPROBE		5	/* uprobe breakpoint or singlestep */
-> -#define TIF_MTE_ASYNC_FAULT	6	/* MTE Asynchronous Tag Check Fault */
-> -#define TIF_NOTIFY_SIGNAL	7	/* signal notifications exist */
-> -#define TIF_PATCH_PENDING	13	/* pending live patching update */
-> -#define TIF_MEMDIE		18	/* is terminating due to OOM killer */
-> -#define TIF_FREEZE		19
-> -#define TIF_RESTORE_SIGMASK	20
-> -#define TIF_SINGLESTEP		21
-> -#define TIF_32BIT		22	/* 32bit process */
-> -#define TIF_SVE			23	/* Scalable Vector Extension in use */
-> -#define TIF_SVE_VL_INHERIT	24	/* Inherit SVE vl_onexec across exec */
-> -#define TIF_SSBD		25	/* Wants SSB mitigation */
-> -#define TIF_TAGGED_ADDR		26	/* Allow tagged user addresses */
-> -#define TIF_SME			27	/* SME in use */
-> -#define TIF_SME_VL_INHERIT	28	/* Inherit SME vl_onexec across exec */
-> -#define TIF_KERNEL_FPSTATE	29	/* Task is in a kernel mode FPSIMD section */
-> -#define TIF_TSC_SIGSEGV		30	/* SIGSEGV on counter-timer access */
-> -#define TIF_LAZY_MMU_PENDING	31	/* Ops pending for lazy mmu mode exit */
-> +/*
-> + * Tell the generic TIF infrastructure which bits arm64 supports
-> + */
-> +#define HAVE_TIF_NEED_RESCHED_LAZY
-> +#define HAVE_TIF_RESTORE_SIGMASK
-> +#define HAVE_TIF_SINGLESTEP
+> +#include "vm_util.h"
+>  #include "thp_settings.h"
+>  
+>  #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
+> @@ -64,29 +65,6 @@ int read_file(const char *path, char *buf, size_t buflen)
+>  	return (unsigned int) numread;
+>  }
+>  
+> -int write_file(const char *path, const char *buf, size_t buflen)
+> -{
+> -	int fd;
+> -	ssize_t numwritten;
+> -
+> -	fd = open(path, O_WRONLY);
+> -	if (fd == -1) {
+> -		printf("open(%s)\n", path);
+> -		exit(EXIT_FAILURE);
+> -		return 0;
+> -	}
+> -
+> -	numwritten = write(fd, buf, buflen - 1);
+> -	close(fd);
+> -	if (numwritten < 1) {
+> -		printf("write(%s)\n", buf);
+> -		exit(EXIT_FAILURE);
+> -		return 0;
+> -	}
+> -
+> -	return (unsigned int) numwritten;
+> -}
+> -
+>  unsigned long read_num(const char *path)
+>  {
+>  	char buf[21];
+> @@ -104,10 +82,7 @@ void write_num(const char *path, unsigned long num)
+>  	char buf[21];
+>  
+>  	sprintf(buf, "%ld", num);
+> -	if (!write_file(path, buf, strlen(buf) + 1)) {
+> -		perror(path);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	write_file(path, buf, strlen(buf) + 1);
+>  }
+>  
+>  int thp_read_string(const char *name, const char * const strings[])
+> @@ -165,11 +140,7 @@ void thp_write_string(const char *name, const char *val)
+>  		printf("%s: Pathname is too long\n", __func__);
+>  		exit(EXIT_FAILURE);
+>  	}
+> -
+> -	if (!write_file(path, val, strlen(val) + 1)) {
+> -		perror(path);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	write_file(path, val, strlen(val) + 1);
+>  }
+>  
+>  unsigned long thp_read_num(const char *name)
+> diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
+> index 76eeb712e5f1..7748a9009191 100644
+> --- a/tools/testing/selftests/mm/thp_settings.h
+> +++ b/tools/testing/selftests/mm/thp_settings.h
+> @@ -63,7 +63,6 @@ struct thp_settings {
+>  };
+>  
+>  int read_file(const char *path, char *buf, size_t buflen);
+> -int write_file(const char *path, const char *buf, size_t buflen);
+>  unsigned long read_num(const char *path);
+>  void write_num(const char *path, unsigned long num);
+>  
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index a6d4ff7dfdc0..ad96d19d1b85 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -764,3 +764,18 @@ int unpoison_memory(unsigned long pfn)
+>  
+>  	return ret > 0 ? 0 : -errno;
+>  }
 > +
-> +#include <asm-generic/thread_info_tif.h>
+> +void write_file(const char *path, const char *buf, size_t buflen)
+> +{
+> +	int fd;
+> +	ssize_t numwritten;
 > +
-> +#define TIF_FOREIGN_FPSTATE	16	/* CPU's FP state is not current's */
-> +#define TIF_MTE_ASYNC_FAULT	17	/* MTE Asynchronous Tag Check Fault */
-> +#define TIF_FREEZE		18
-
-Turns out this flag became unused a long time ago, see commit
-d88e4cb67197 ("freezer: remove now unused TIF_FREEZE"), and it was
-probably reintroduced by mistake in the original arm64 implementation,
-commit b3901d54dc4f ("arm64: Process management"). Good opportunity to
-remove it I think.
-
-Otherwise:
-
-Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
-
-> +#define TIF_32BIT		19      /* 32bit process */
-> +#define TIF_SVE			20	/* Scalable Vector Extension in use */
-> +#define TIF_SVE_VL_INHERIT	21	/* Inherit SVE vl_onexec across exec */
-> +#define TIF_SSBD		22	/* Wants SSB mitigation */
-> +#define TIF_TAGGED_ADDR		23	/* Allow tagged user addresses */
-> +#define TIF_SME			24	/* SME in use */
-> +#define TIF_SME_VL_INHERIT	25	/* Inherit SME vl_onexec across exec */
-> +#define TIF_KERNEL_FPSTATE	26	/* Task is in a kernel mode FPSIMD section */
-> +#define TIF_TSC_SIGSEGV		27	/* SIGSEGV on counter-timer access */
-> +#define TIF_LAZY_MMU_PENDING	28	/* Ops pending for lazy mmu mode exit */
+> +	fd = open(path, O_WRONLY);
+> +	if (fd == -1)
+> +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+> +
+> +	numwritten = write(fd, buf, buflen - 1);
+> +	close(fd);
+> +	if (numwritten < 1)
+> +		ksft_exit_fail_msg("Write failed\n");
+> +}
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index e9c4e24769c1..1a07305ceff4 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -166,3 +166,5 @@ int unpoison_memory(unsigned long pfn);
 >  
-> -#define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
-> -#define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
-> -#define _TIF_NEED_RESCHED_LAZY	(1 << TIF_NEED_RESCHED_LAZY)
-> -#define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
-> -#define _TIF_FOREIGN_FPSTATE	(1 << TIF_FOREIGN_FPSTATE)
-> -#define _TIF_PATCH_PENDING	(1 << TIF_PATCH_PENDING)
-> -#define _TIF_UPROBE		(1 << TIF_UPROBE)
-> -#define _TIF_32BIT		(1 << TIF_32BIT)
-> -#define _TIF_SVE		(1 << TIF_SVE)
-> -#define _TIF_MTE_ASYNC_FAULT	(1 << TIF_MTE_ASYNC_FAULT)
-> -#define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
-> -#define _TIF_TSC_SIGSEGV	(1 << TIF_TSC_SIGSEGV)
-> +#define _TIF_FOREIGN_FPSTATE	BIT(TIF_FOREIGN_FPSTATE)
-> +#define _TIF_32BIT		BIT(TIF_32BIT)
-> +#define _TIF_SVE		BIT(TIF_SVE)
-> +#define _TIF_MTE_ASYNC_FAULT	BIT(TIF_MTE_ASYNC_FAULT)
-> +#define _TIF_TSC_SIGSEGV	BIT(TIF_TSC_SIGSEGV)
->  
->  #ifdef CONFIG_SHADOW_CALL_STACK
->  #define INIT_SCS							\
+>  #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
+>  #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+> +
+> +void write_file(const char *path, const char *buf, size_t buflen);
+> -- 
+> 2.53.0
+> 
+
+-- 
+Sincerely yours,
+Mike.
