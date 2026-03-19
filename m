@@ -1,103 +1,244 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8223E7169
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 15:39:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF752C15B0
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 15:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773934745; cv=none; b=p6MsoiK7p0Pv8v5eZ1StqVWL9N1e6lPJo7UbFAztm5m8kHNcE57DUHBJNYNuzxBcNzObji3VmHWg1euPI94+nN3N2w1YmENVBo/F8zYmkzVhajrsBO1kqOv20kLxCl5mHv69XdzaY7+KPXVKvNUf1D3f64k64LT4YGKAj5CCY5E=
+	t=1773934779; cv=none; b=drFmqt5cmdJDOGqjvV7UkZOg8hs+FHqTyeVqzLti7By7puAqs8rzRkbtpWuFDek3ZnJlIGqMQ93EruaWLLuBe0w+HQE7mSdYfwPmcQVXFiBqgcrRjIylql+SccLd2FKOM9amLKby4YzFJrvkqIUgTyidkFgZlQlx/8ABHlM4sLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773934745; c=relaxed/simple;
-	bh=BducJre5dIvWUwqIuXg2VZYe2Xl4IFaR4KGdZYCz85Y=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=C1i1lHpDxXIGt9VeR2IdnwdqMfz99B75L98hKirhnF7IWjpPAvJGx4OMtAxSpI9+eOzoIMaWQporC/wMiWOd6ZOqk36fENa8nM+Ydmkf1HHj8PmjhhFKHV8iO6rjte7sCjLa2ogIoEixgLZLA2dt0lkfy6Fq93ZNaow1iP6tVx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ElpFaWiv; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1773934779; c=relaxed/simple;
+	bh=x//o4bWkdTa7UjZoqWBDqdBqMxSW98X7OQ5Mn059qxs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=dGnYNlkwYWd2FhZStktcB1By7mM92w6sUwKPyAKmSWjm0XNsr2iLBg0vQ104jNPGxmDoKvUOe2lIB5KQ4NJf4w2Q8pRkg7ojWX3aFNRr3M9u6rv29nz1RAy6ASWZzP38QSep65iqfKJYlpII2dhJp9FEF7nzJavQ7Ew1/rbdskg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=QbBSLqt/; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ElpFaWiv"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5a27a7f711eso916641e87.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 08:39:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="QbBSLqt/"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-899fb2b94c1so14259836d6.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 08:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1773934740; x=1774539540; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1bCGX/ouIFX/0r7IDQvkvFcVLJ3SRfiz7ptJfb2y+lc=;
-        b=ElpFaWiveGbwlSCq9lWl5GgNDWEgnAOcaSHcVYDurQbB0M2Tme4LxBopjR7SO3TKpS
-         buYjMEsl3E1nQeEmbtrF0Umw1MbtvMx4L0/oqr1JC+V08FicyYiHZTPb0DCH9ZekfYEX
-         WCH9O8LssRuUuvCjiSynhDalrji5n52rAAiyE=
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773934776; x=1774539576; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9f+nxQqpbmkQKG1AStGiZRyAzlhJyR4x4hzFywy9Ago=;
+        b=QbBSLqt/a46IQeKhCnmfhXuvfzQ71UUU/ir9ucua7JBrMQ5AJ58dWuXrKFc6CmAaB4
+         uSq7kxkbMpcxAzdSHs45yyv9FxsInnIoURGn4uwWRqS725tUzbkxyb693cPtcAL+hP2u
+         UqQMEP1edtW8/r9UnTAtQjnxIAX2ML7vvA2pYyEoZ+sy1extujt04qgcoZjniIU/wQRm
+         PIXC2rNRmQCQlIsb08ZMmrbBBd06LqmClJHOX+cuZg7Mt1Vv0SGrkFfaYNCD9LLhhAHG
+         1YST7blvwdFGXt2BHxWiEoU33Zf3MInEDzSJJzy75SCHckZjnRL5lQP078gofnmmsHsC
+         4C5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773934740; x=1774539540;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1bCGX/ouIFX/0r7IDQvkvFcVLJ3SRfiz7ptJfb2y+lc=;
-        b=VYXYSrZ/qegkroI13ipB7+M0+dOWHlDkYFG9ZNEyif8pjXhbfxSsGxDN5UXa4pLqcf
-         bdfLFLaoobIrUWhBb/0uN90ZRdS9csgoR37WuFs0OfNveCH43ZeJkFsOu1hUKtSgyFEO
-         e/dJfrB57e4Xk7m9egsXhLcTo7DrGhEx9d3bMHjCskKzDAo7Hjq9oHzxA9d0b75dMJYf
-         fu2L1W1tqh7hVTaQNXyIFDKGSUOmal6/Y4yS5FDNRHenLcH8ZxBWzkt5PNDzUTKgaBC+
-         ppBA/IrqxjE7XxSIns11T5ZfW1XibpA1yqaqyx6nAeKRAJeyyi70mUKUIsc0X2uGXZ+f
-         Xd2A==
-X-Forwarded-Encrypted: i=1; AJvYcCWhmIQSTXXy2NxF/0iHXrDF9GYez89vSs1Xfgwk2gqAPcZ6+6Nx88sjEeiW1zFhi5+tjmf+PatbXD6WsAL0fh0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrsICnlsZACP7Wg8Un49xmZ51WHQx0ax2xnEmnPLcricCofM+3
-	op5x4RQrlKe9GRsVLJD8GrrgAY0ZyKFs8tYypnBAll96321x8MQTl3ZSJ7XjOS1GYg==
-X-Gm-Gg: ATEYQzx11cgY6qHD+QgkyYcZr0kRXh1Envt2kgQ38II88xtO/KJa4rfncUBnkpCwaFC
-	19avcNqBI2DJPENX0WOzXcixP+I1VPKCw0CBhPWQaU/zmWIUWVILosE7SAMXks7nJgd+SAWTlgy
-	Y4uytcZqXj5NCdF8cP9wxyk82XoHvILvdupOJoGJYAcU+YBXDrDItdoPrRuZDn1oubQ5PVNCDmI
-	PpOn5Jtn5/slpoV14PNRVaSvO9+Ci8JhdMFvkSAwhGukKjoyhpXNmsfo/IKBGvG9qDduddcLpaC
-	xE5Wzpn2YhNisHws5xFOywXEES5NLAjzSR/Lx67xsXR22w5GDicsyVTZkRF4uZ6wsnG3EznlY+i
-	G5imRhV9/iFh5vFdOO5N95VHZrH726oX0K/vIzp3c4FXyXwIde8JColp4vc29S+JeyK6H2jiKps
-	zaKvfB8oTYBF7NFL/bcb/ZYBXRtjJTkQas51Z+TMrXbVc=
-X-Received: by 2002:a19:c207:0:b0:5a1:d0d:1ba9 with SMTP id 2adb3069b0e04-5a27959cde1mr2020086e87.7.1773934740184;
-        Thu, 19 Mar 2026 08:39:00 -0700 (PDT)
-Received: from dmaluka1.corp.google.com ([2a00:79e1:abd:1300:d347:f02a:266b:b67])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a279c3025bsm1253728e87.34.2026.03.19.08.38.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 08:38:59 -0700 (PDT)
-From: Dmytro Maluka <dmaluka@chromium.org>
-To: Shuah Khan <shuah@kernel.org>,
-	Jihed Chaibi <jihed.chaibi.dev@gmail.com>,
-	Dmytro Maluka <dmaluka@chromium.org>,
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] selftests/cpu-hotplug: Fix check for cpu hotplug not supported
-Date: Thu, 19 Mar 2026 16:38:12 +0100
-Message-ID: <20260319153825.2813576-1-dmaluka@chromium.org>
-X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
+        d=1e100.net; s=20251104; t=1773934776; x=1774539576;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9f+nxQqpbmkQKG1AStGiZRyAzlhJyR4x4hzFywy9Ago=;
+        b=YVec/RVnhayI8v/cFvFMC5ZHFxcdhFaInXDbB0qLZZ9GW7mSPo3b0fHRKi3BhIoqMf
+         DwRKw1e8eHdNdyAbDc3CEzPl1EuFmxBk4epdbzY9ZsNGbJ1gGLrUNkvvV9lOcTNiXon3
+         yArwSfbTEiPH8MvxQxBs/IRmiBfN1Rpb5tiL7ecvEo9Q4SIK+3/SMrbcqIyEVekuhby/
+         GPtBdlVduQ+hPu0GzVhfDJi6+/U1vpNlcyh/4tUnhGEHKvonLHd8c3flZHiVrrZjDhsT
+         hboqWaUMI13cs9d7RhRZ7l4UtES1Nt7nyeSQ/LxheZmNF8s6Zyd+KvmoLbSFigQh6gEv
+         1glQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVRqgxvjXTwHote3pOBTTCVYkPzGCB/n582eJ35i6Wuq7hwch8Yj28UHk3zq7wk2eb9z3/d/R90eRC/8TjfJ2E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/xsq8jyZXsCvkoyE4H6t++ExfM7mJ5XpqoZu/vHSYBV1cuyed
+	4LKmsenS9r5K8ZfdJQpcR7JVSHV8IfGtwaKUJiobTQr4STe4Jfk9eXh8mPaniPveR8pSkSY7ac9
+	4vVDTieg=
+X-Gm-Gg: ATEYQzy00AdPMI+uUw4JU+6SqHM0AjXEGx+cXBHsnsWZ+riJNFDrFi3nKSHz/Zeq+Oh
+	5yZjIM3loyZKTd2DQuxAGpRUT1mMpwYpsyegs0JU/jFs/Fl8A3muYxJKByMfrb62HI3mJJlJ8LR
+	NsVJ7kpYFDElaf62WoBatpHSIyHZ7SOOEHcfZsqCJf51jkt4AxuRvQNVYCP0RQbSbvHERpagKUi
+	2vWFUuoRyMxvFy1dIIQmFXoZMS5D0xn9oNgwT1cTAFF0R3jS7dTGi2n0C+kI8RFvtyMJ99dPqSg
+	g6j7D1E+tD6t4HGAjHhSSprWyezh0K6TXhwpy2z86/GXloLhrSSuhCF+QM0E+bjHrbmtqyRf/+C
+	dg2ITuNr+/7HjvUi1lrjjJ1auSquke3uIPZ8vQMX+YKBVCRriE1ZPNifMgFtFmF54jUGBZm7r0f
+	37EjYAyvoVqimmIeB4nKScR7Y=
+X-Received: by 2002:a05:6214:3003:b0:89c:6252:4a4a with SMTP id 6a1803df08f44-89c6b5a797emr112213066d6.49.1773934775593;
+        Thu, 19 Mar 2026 08:39:35 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c6b90d1a8sm63300886d6.18.2026.03.19.08.39.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2026 08:39:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Mar 2026 11:39:34 -0400
+Message-Id: <DH6VE8XMH4H8.ETICJE2QVEA5@etsalapatis.com>
+To: "Chengkaitao" <pilgrimtao@gmail.com>, <martin.lau@linux.dev>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
+ <haoluo@google.com>, <jolsa@kernel.org>, <shuah@kernel.org>,
+ <chengkaitao@kylinos.cn>, <linux-kselftest@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v8 1/8] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.20.1
+References: <20260316112843.78657-1-pilgrimtao@gmail.com>
+ <20260316112843.78657-2-pilgrimtao@gmail.com>
+In-Reply-To: <20260316112843.78657-2-pilgrimtao@gmail.com>
 
-If CONFIG_HOTPLUG_CPU is disabled, /sys/devices/system/cpu/cpu*
-directories are still populated, so the test fails to correctly detect
-that CPU hotplug is not supported.
+On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>
+> Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
+> checks with btf_id_in_kfunc_table() and static kfunc tables for easier
+> maintenance.
+>
+> Prepare for future extensions to the bpf_list API family.
+>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Fix this by checking for the presence of 'online' files in those
-directories instead. The 'online' node is created for the given CPU if
-and only if this CPU supports hotplug. So if none of the CPUs have
-'online' nodes, it means CPU hotplug is not supported.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Signed-off-by: Dmytro Maluka <dmaluka@chromium.org>
----
- tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The change is valid, can you see if you can remove some of the
+is_bpf_*api_kfunc calls areound line 13000 and replace them with=20
+btf_id_in_kfunc_table calls?=20
 
-diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-index 6232a46ca6e1..287cfd5809f6 100755
---- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-+++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-@@ -24,7 +24,7 @@ prerequisite()
- 		exit $ksft_skip
- 	fi
- 
--	if ! ls $SYSFS/devices/system/cpu/cpu* > /dev/null 2>&1; then
-+	if ! ls $SYSFS/devices/system/cpu/cpu*/online > /dev/null 2>&1; then
- 		echo $msg cpu hotplug is not supported >&2
- 		exit $ksft_skip
- 	fi
--- 
-2.53.0.851.ga537e3e6e9-goog
+And can you also do this refactoring for the other kfunc families? That
+way we replace all functions that match on the btf_id into a single call
+that takes in the array we are scanning for a match.
+
+> ---
+>  kernel/bpf/verifier.c | 79 +++++++++++++++++++++++++++++++------------
+>  1 file changed, 57 insertions(+), 22 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 4fbacd2149cd..64c1f8343dfa 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12639,6 +12639,53 @@ BTF_ID(func, bpf_session_is_return)
+>  BTF_ID(func, bpf_stream_vprintk)
+>  BTF_ID(func, bpf_stream_print_stack)
+> =20
+> +static const enum special_kfunc_type bpf_list_api_kfuncs[] =3D {
+> +	KF_bpf_list_push_front_impl,
+> +	KF_bpf_list_push_back_impl,
+> +	KF_bpf_list_pop_front,
+> +	KF_bpf_list_pop_back,
+> +	KF_bpf_list_front,
+> +	KF_bpf_list_back,
+> +};
+> +
+> +/* Kfuncs that take a list node argument (bpf_list_node *). */
+Nit: Why add a description on just this and bpf_rbtree_node_api_kfuncs?
+I think a small comment on top of each if fine if a bit wordy because
+it's easy to spot when scanning for a specific kfunc family.
+> +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] =3D {
+> +	KF_bpf_list_push_front_impl,
+> +	KF_bpf_list_push_back_impl,
+> +};
+> +
+> +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
+> +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] =3D {
+> +	KF_bpf_rbtree_remove,
+> +	KF_bpf_rbtree_add_impl,
+> +	KF_bpf_rbtree_left,
+> +	KF_bpf_rbtree_right,
+> +};
+> +
+> +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] =3D {
+> +	KF_bpf_rbtree_add_impl,
+> +	KF_bpf_rbtree_remove,
+> +	KF_bpf_rbtree_first,
+> +	KF_bpf_rbtree_root,
+> +	KF_bpf_rbtree_left,
+> +	KF_bpf_rbtree_right,
+> +};
+> +
+> +static const enum special_kfunc_type bpf_res_spin_lock_kfuncs[] =3D {
+> +	KF_bpf_res_spin_lock,
+> +	KF_bpf_res_spin_unlock,
+> +	KF_bpf_res_spin_lock_irqsave,
+> +	KF_bpf_res_spin_unlock_irqrestore,
+> +};
+> +
+> +static bool btf_id_in_kfunc_table(u32 btf_id, const enum special_kfunc_t=
+ype *kfuncs, int n)
+> +{
+> +	for (int i =3D 0; i < n; i++)
+> +		if (btf_id =3D=3D special_kfunc_list[kfuncs[i]])
+> +			return true;
+> +	return false;
+> +}
+> +
+>  static bool is_task_work_add_kfunc(u32 func_id)
+>  {
+>  	return func_id =3D=3D special_kfunc_list[KF_bpf_task_work_schedule_sign=
+al] ||
+> @@ -13038,22 +13085,14 @@ static int check_reg_allocation_locked(struct b=
+pf_verifier_env *env, struct bpf_
+> =20
+>  static bool is_bpf_list_api_kfunc(u32 btf_id)
+>  {
+> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_pop_front] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_pop_back] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_front] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_back];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_list_api_kfuncs,
+> +				     ARRAY_SIZE(bpf_list_api_kfuncs));
+>  }
+> =20
+>  static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
+>  {
+> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_add_impl] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remove] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_first] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_root] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_left] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_right];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_rbtree_api_kfuncs,
+> +				     ARRAY_SIZE(bpf_rbtree_api_kfuncs));
+>  }
+> =20
+>  static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
+> @@ -13071,10 +13110,8 @@ static bool is_bpf_graph_api_kfunc(u32 btf_id)
+> =20
+>  static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
+>  {
+> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_unlock] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsave] |=
+|
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_unlock_irqresto=
+re];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_res_spin_lock_kfuncs,
+> +				     ARRAY_SIZE(bpf_res_spin_lock_kfuncs));
+>  }
+> =20
+>  static bool is_bpf_arena_kfunc(u32 btf_id)
+> @@ -13163,14 +13200,12 @@ static bool check_kfunc_is_graph_node_api(struc=
+t bpf_verifier_env *env,
+> =20
+>  	switch (node_field_type) {
+>  	case BPF_LIST_NODE:
+> -		ret =3D (kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_front=
+_impl] ||
+> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_back_im=
+pl]);
+> +		ret =3D btf_id_in_kfunc_table(kfunc_btf_id, bpf_list_node_api_kfuncs,
+> +					    ARRAY_SIZE(bpf_list_node_api_kfuncs));
+>  		break;
+>  	case BPF_RB_NODE:
+> -		ret =3D (kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remove] =
+||
+> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_add_impl] =
+||
+> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_left] ||
+> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_right]);
+> +		ret =3D btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_node_api_kfuncs=
+,
+> +					    ARRAY_SIZE(bpf_rbtree_node_api_kfuncs));
+>  		break;
+>  	default:
+>  		verbose(env, "verifier internal error: unexpected graph node argument =
+type %s\n",
 
