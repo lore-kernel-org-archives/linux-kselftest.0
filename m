@@ -1,65 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAD5330D43;
-	Thu, 19 Mar 2026 03:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E3232863D
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 03:59:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773892694; cv=none; b=mM3pxNFXUU4N9N2Sr1gBd1mgS9x6bbh7odj0YmutqYB8i5za88ftvtKL7LaXBfsuCjhsnFTHncyMwuDaiaYEnfSj8Fh4pcrMApB3pryfvCr0vE1PeMXFwhGvpcBU7jnidIRWMJqs1/56O/nmx7SaIkgpJJroOQsdyVp5vHsxg7U=
+	t=1773892793; cv=none; b=UkZqYhMtCnB3NSf1j68ZwLGgb4Bv9mRlyOvxDz1pp1+LLju55gqAyhxZbo6N/Uo4Ael73gVHANMq2VxAihXwqGCEHX2U0MVtAzOf4OgUL7TuGwLhMR2zLj2TlrLept7vpB+hJhNM2YbfDVi+te1sL0J9gfnvtnq6i8aLqkH41T4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773892694; c=relaxed/simple;
-	bh=aXK622JtSXQMEp2SQnA+NHyhFJ4PVhCIymapKPSD0Rg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=X3ZqDz4JT5peZPqpjPOKzqU1bDsGYrl/awCidZv4Y3cpKe2l+6hepeLDMfQhD1YFp2MoSTJtMDNUnj0haGyRydHcseqkfLTDX6mHEUUcGbqcPppZMjkJkpEJzP/J/CBbJqf4n7h5/Sb+wEsqr6Ni5wY+1bCq7MxwL88JU2C9RKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YiwD485g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773892793; c=relaxed/simple;
+	bh=oWqHbJE0RgHeconSPxGmhGmIvFeYcOmGiF+at8wQ+os=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ql20F13vBmLawTz6t1kWuXcfLuJuha+gaD6Lzv+rJWKCdHAdjvSirvFMTUb++cNGm2Ejj/DIUSp6eCkP0JsBegefPZnQw/gX3h5OTc2BvGrBcqNPnTN7eqY+vh9ntZVnbg8b182UXzqJ/EipV4AuPyuTFNNWpSQRzM8vQYNnYMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wnu9dG0A; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YiwD485g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D695C19425;
-	Thu, 19 Mar 2026 03:58:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773892693;
-	bh=aXK622JtSXQMEp2SQnA+NHyhFJ4PVhCIymapKPSD0Rg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=YiwD485gnt+mCG7h1Y9AKnpNjYKVyxfS3SMMrD4T3fGbjlNVWQLj94WbNAOR6PvEj
-	 KAk4svngxvkMXBa3Iy0EDApza4mpm7doAkULGOMSjdNOR/dFIMVjVyRTS/QdCksPZB
-	 DQfwGNiB5SnyAjvR6M6KxiwCHnzfUc2x5335HM9Ibf9LHvL8hr1ER6m0tRkZCdRu82
-	 plgBBs7s30wSfXHdA1Xc3uI5sgu8CGlAqS9QOpsLCJ8ZybV+k/Ld0aMg1oR3DwRNok
-	 8gdw7tbI4URAqc4PjpmX/pJSeD1aeOrLpnn0cSOthPJjpmEh8ts7Koqn7Xt3gaQlto
-	 Fnwzu+l3Air+A==
-Content-Type: multipart/mixed; boundary="===============7791003114239354641=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wnu9dG0A"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773892779;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tSIDmGv3R2Er5QnrPE+2YlUWLwJfW8e8iOpiPPtWs+w=;
+	b=wnu9dG0AkKVTGqvV86bsejYvGoYyGvBGra+rBCnTcb0DBJbwHnNqiE+7vxnS7okjJapjT6
+	nFkYagOKLlbiLZKTptkB88YM/60gQ0bwnwc9lg6kgWAfuvMfxNdHO/5IXprEOSUG5Xv4oz
+	/HL0U/z7MXmGeCqxQMCLhsz4npYZq1c=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v3] selftests: bonding: add test for stacked bond header_parse recursion
+Date: Thu, 19 Mar 2026 11:58:56 +0800
+Message-ID: <20260319035902.6106-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <87c4c600b8e7bbfa2f924701996532378d20c89791083f7c10886498177c614c@mail.kernel.org>
-In-Reply-To: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
-References: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
-Subject: Re: [PATCH] selftests/bpf: trampoline_count: use dedicated bpf_testmod target
-From: bot+bpf-ci@kernel.org
-To: sun.jian.kdev@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,shuah@kernel.org
-Cc: martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,paul.chaignon@gmail.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,sun.jian.kdev@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 19 Mar 2026 03:58:13 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============7791003114239354641==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-> selftests/bpf: trampoline_count: use dedicated bpf_testmod target
+Add a selftest to reproduce the infinite recursion in bond_header_parse()
+when bonds are stacked (bond1 -> bond0 -> gre). When a packet is received
+via AF_PACKET SOCK_DGRAM on the topmost bond, dev_parse_header() calls
+bond_header_parse() which used skb->dev (always the topmost bond) to get
+the bonding struct. This caused it to recurse back into itself
+indefinitely, leading to stack overflow.
 
-Alexei Starovoitov asked for the subject to not use
-"trampoline_count:" as a prefix, since it is not a standard
-subsystem prefix. The preferred form would be "selftests/bpf:"
-followed by a description of what the patch does.
+Before commit b7405dcf7385 ("bonding: prevent potential infinite loop
+in bond_header_parse()"), the test triggers:
 
-https://lore.kernel.org/bpf/CAADnVQJ9HZTHKCzwmqUwhePbCQ5qPQrSd=yejUS17eHbMm0fuQ@mail.gmail.com/
+  ./bond_stacked_header_parse.sh
 
+  [  71.999481] BUG: MAX_LOCK_DEPTH too low!
+  [  72.000170] turning off the locking correctness validator.
+  [  72.001029] Please attach the output of /proc/lock_stat to the bug report
+  [  72.002079] depth: 48  max: 48!
+  ...
 
+After the fix, everything works fine:
+
+  ./bond_stacked_header_parse.sh
+  TEST: Stacked bond header_parse does not recurse                  [ OK ]
+
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Changes in v3:
+- Fix CONFIG_NET_IPGRE sorting order in config
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23278379564
---===============7791003114239354641==--
+Changes in v2:
+- Use tcpdump + scapy instead of custom Python script
+- Remove unnecessary modprobe and skip checks
+- Add CONFIG_NET_IPGRE to config dependencies
+
+v1: https://lore.kernel.org/netdev/20260316165946.46e9f8f7@kernel.org/T/#t
+https://lore.kernel.org/netdev/CANn89iK2EURqsjtd=OVP4awYTJHGcR-UU-V9WovpWR1Z3f03oQ@mail.gmail.com/
+---
+ .../selftests/drivers/net/bonding/Makefile    |  1 +
+ .../net/bonding/bond_stacked_header_parse.sh  | 69 +++++++++++++++++++
+ .../selftests/drivers/net/bonding/config      |  1 +
+ 3 files changed, 71 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
+
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+index 6c5c60adb5e8..9af5f84edd37 100644
+--- a/tools/testing/selftests/drivers/net/bonding/Makefile
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -11,6 +11,7 @@ TEST_PROGS := \
+ 	bond_macvlan_ipvlan.sh \
+ 	bond_options.sh \
+ 	bond_passive_lacp.sh \
++	bond_stacked_header_parse.sh \
+ 	dev_addr_lists.sh \
+ 	mode-1-recovery-updelay.sh \
+ 	mode-2-recovery-updelay.sh \
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh b/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
+new file mode 100755
+index 000000000000..4d0ec6e89e75
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
+@@ -0,0 +1,69 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test that bond_header_parse() does not infinitely recurse with stacked bonds.
++#
++# When a non-Ethernet device (e.g. GRE) is enslaved to a bond that is itself
++# enslaved to another bond (bond1 -> bond0 -> gre), receiving a packet via
++# AF_PACKET SOCK_DGRAM triggers dev_parse_header() -> bond_header_parse().
++# Since parse() used skb->dev (always the topmost bond) instead of a passed-in
++# dev pointer, it would recurse back into itself indefinitely.
++
++ALL_TESTS="
++	bond_test_stacked_header_parse
++"
++REQUIRE_MZ=no
++NUM_NETIFS=0
++lib_dir=$(dirname "$0")
++source "$lib_dir"/../../../net/forwarding/lib.sh
++
++bond_test_stacked_header_parse()
++{
++	local devdummy="test-dummy0"
++	local devgre="test-gre0"
++	local devbond0="test-bond0"
++	local devbond1="test-bond1"
++
++	RET=0
++
++	# Setup: dummy -> gre -> bond0 -> bond1
++	ip link add name "$devdummy" type dummy
++	ip addr add 10.0.0.1/24 dev "$devdummy"
++	ip link set "$devdummy" up
++
++	ip link add name "$devgre" type gre local 10.0.0.1
++
++	ip link add name "$devbond0" type bond mode active-backup
++	ip link add name "$devbond1" type bond mode active-backup
++
++	ip link set "$devgre" master "$devbond0"
++	ip link set "$devbond0" master "$devbond1"
++
++	ip link set "$devgre" up
++	ip link set "$devbond0" up
++	ip link set "$devbond1" up
++
++	# tcpdump on a non-Ethernet bond uses AF_PACKET SOCK_DGRAM (cooked
++	# capture), which triggers dev_parse_header() -> bond_header_parse()
++	# on receive. With the bug, this recurses infinitely.
++	timeout 5 tcpdump -c 1 -i "$devbond1" >/dev/null 2>&1 &
++	local tcpdump_pid=$!
++	sleep 1
++
++	# Send a GRE packet to 10.0.0.1 so it arrives via gre -> bond0 -> bond1
++	python3 -c "from scapy.all import *; send(IP(src='10.0.0.2', dst='10.0.0.1')/GRE()/IP()/UDP(), verbose=0)"
++	check_err $? "failed to send GRE packet (scapy installed?)"
++
++	wait "$tcpdump_pid" 2>/dev/null
++
++	ip link del "$devbond1" 2>/dev/null
++	ip link del "$devbond0" 2>/dev/null
++	ip link del "$devgre" 2>/dev/null
++	ip link del "$devdummy" 2>/dev/null
++
++	log_test "Stacked bond header_parse does not recurse"
++}
++
++tests_run
++
++exit "$EXIT_STATUS"
+diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
+index 991494376223..b62c70715293 100644
+--- a/tools/testing/selftests/drivers/net/bonding/config
++++ b/tools/testing/selftests/drivers/net/bonding/config
+@@ -14,6 +14,7 @@ CONFIG_NETCONSOLE=m
+ CONFIG_NETCONSOLE_DYNAMIC=y
+ CONFIG_NETCONSOLE_EXTENDED_LOG=y
+ CONFIG_NETDEVSIM=m
++CONFIG_NET_IPGRE=y
+ CONFIG_NET_SCH_INGRESS=y
+ CONFIG_NLMON=y
+ CONFIG_VETH=y
+-- 
+2.43.0
+
