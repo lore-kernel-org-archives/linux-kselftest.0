@@ -1,45 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DAB13959D;
-	Thu, 19 Mar 2026 01:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A7D1C84A6;
+	Thu, 19 Mar 2026 01:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773883087; cv=none; b=FV/pfFdHMpHlMedcNyv4ZfoZqyaIpTomXdkq+DOHpCtCRPMtdO5JXiOvgnDPmAdA54dCFKbCW/FnwWOO93RfZTFRRdOhljnSGRPsL18LVSWDOd8QcPDZCu5OfPuCms5pRaKN7MZ6Pg74Pqcr/aiSoC0i/r3LM3n+exfxutUoMgI=
+	t=1773883533; cv=none; b=kdOM5WLbZfx2E9UVSdxkDI3MmkglEUYDILaNZSGvoD0JKygfmf8tazcl62fQ/zkaxayMJ8eKifC/gVGBmQSd0NeWHMPHDaUQExbUzmnrgnS8eXzmDRJfDnj5UlVYdIRLuUI4uqZKgGekBE3MhPToljPIYD7Mh3R+Hy2tWQIjMA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773883087; c=relaxed/simple;
-	bh=1IcHSe1kx32yk+/lPVOb3amCp9k9O3DIwnwELfiCgeg=;
+	s=arc-20240116; t=1773883533; c=relaxed/simple;
+	bh=p12nku/LYCjTC5niFkrQGpAeCi+46klPr+3XLdRv/fk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fa3YKvdgtcco67Wwvz01P38HMbK5nzzoikfwgWJ1ytGTDBc+pZ/C0OJMPDG6Mf4jtoC9mV0IlgqnFsaVysmRaxfW9TTW9OGyn4/UhcVjUsWyT0h1THYhBF44PfkyZzh/5XDH8e9pKgtWJBoy+UwChy4LWJ0aaE2Z5oT9nQy12t8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVOs3Vqr; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=W7DnsH7X1jUcFzhhXcVwOp/70tpcfIoUSz7y2Zyckz5cvCp9aQp9a0ddslHzuQHiGqgx2f2qpQFjLQGAiVtMbd2SgLMjz3HX4rO6i7714sDSJG6iuZtojnU1VmHlRTexiYR8XiSbzRW7BJtR0vBIRfy1gsEB8zCB/O5f05pDdgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oRDINDio; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVOs3Vqr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41B2C19421;
-	Thu, 19 Mar 2026 01:18:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oRDINDio"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACB58C19421;
+	Thu, 19 Mar 2026 01:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773883087;
-	bh=1IcHSe1kx32yk+/lPVOb3amCp9k9O3DIwnwELfiCgeg=;
+	s=k20201202; t=1773883533;
+	bh=p12nku/LYCjTC5niFkrQGpAeCi+46klPr+3XLdRv/fk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=HVOs3VqrZaQjaYHiut5itf5b5ueLkxSDuyzf41TIyVsXI5w8ilsETv6B2dpmu8w4r
-	 16Uzlii/A9Und3mfRTym08FtbczeEmFEW5TdYlmHmRiexTTiPvYtdI7qJqVaopPGGj
-	 QKYKFjcM8BAF0O0WQOjZugQMGt8N8ng8cIPVPWn2D5AFI6fXYWMQ8asWgdjRIDAj57
-	 QdKHY5wU+T2IvfnV18eeeFEW12iGATAp4j4U/YYZDIbfvOFIjtO/xXubjCy+2QPx3G
-	 YH+8pzIrIQLsL0blrl5xEel5cLL6Hq4v/LJ/Ia6SLj/GRC2w6lU+Oj4ypfDwdX85X0
-	 39KA3LMTPbwJw==
-Date: Wed, 18 Mar 2026 18:18:05 -0700
+	b=oRDINDioKO55UkLxu9w3M3+p80tGi4AgWcufCDBZlX2TomYaoC4mrJFQ0J1TJS8Nb
+	 NOHabxIB88BxD4QCLPNNbwQp4EJCi2F1ICpdcfWOYIa3fbIunkfjN5sAb3c5B7wbKc
+	 LiFk/k+8vrY53shygWissZhDyjLneO4VdSWMhDCV6YWCkINwjSGfNqcGL1rlN3w/hh
+	 DXtdCmTisw9cT8nBvaEsl4ie5cjX7BhgeYojkh36BnaE22wRECYe0SG847wQoikI6z
+	 bSUWo7SmyCw6+KimZGk20Vj+ipLnAciB0jXMSmMbDE31UsEDxDOz5xDMIfzPs12NV3
+	 +xqWWdBlOgMnQ==
+Date: Wed, 18 Mar 2026 18:25:31 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Jiayuan Chen <jiayuan.chen@shopee.com>, Jiri
- Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 2/2] selftests: team: add non-Ethernet header_ops
- reproducer
-Message-ID: <20260318181805.397dba97@kernel.org>
-In-Reply-To: <20260317124606.157035-3-jiayuan.chen@linux.dev>
-References: <20260317124606.157035-1-jiayuan.chen@linux.dev>
-	<20260317124606.157035-3-jiayuan.chen@linux.dev>
+To: Pin-yen Lin <treapking@google.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Taehee Yoo
+ <ap420073@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, Willem de Bruijn
+ <willemb@google.com>
+Subject: Re: [PATCH net] selftests: drv-net: ping: Wait for carrier after
+ toggling offloads
+Message-ID: <20260318182531.2e8bf837@kernel.org>
+In-Reply-To: <CAHwYsirHq7PRWg-jeGz=+Yrn2Td=o3vBSXrjfPos57V0VQL6gA@mail.gmail.com>
+References: <20260318010325.2003395-1-treapking@google.com>
+	<20260318172802.46c1fef1@kernel.org>
+	<CAHwYsirHq7PRWg-jeGz=+Yrn2Td=o3vBSXrjfPos57V0VQL6gA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,17 +51,33 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 17 Mar 2026 20:45:54 +0800 Jiayuan Chen wrote:
->  CONFIG_IPV6=y
-> +CONFIG_NET_IPGRE=y
->  CONFIG_MACVLAN=y
->  CONFIG_NETDEVSIM=m
+On Wed, 18 Mar 2026 17:51:11 -0700 Pin-yen Lin wrote:
+> > On Tue, 17 Mar 2026 18:01:17 -0700 Pin-yen Lin wrote:  
+> > > Toggling checksum offload (or HW-GRO via feature dependencies) can cause
+> > > certain physical interfaces to undergo a reset or a temporary link-down
+> > > state. In the ping.py test, this leads to immediate test failures if the
+> > > ping is attempted before the carrier is restored.
+> > >
+> > > This is observed when running the test with GVE driver when HW-GRO is
+> > > enabled. When checksum offload is toggled, HW-GRO is toggled as well
+> > > because of the feature dependency. This leads to an interface reset,
+> > > causing the subsequent ping to fail.
+> > >
+> > > Add a sleep period after changing these features to allow the link to
+> > > stabilize.  
+> >
+> > Sounds like the test found a legitimate problem. The configuration
+> > should not return to user space until the operation has completed.
+> > User should not have to sleep 10sec each time they touch NIC
+> > configuration.  
+> 
+> To clarify, the configuration operation itself completes before
+> returning to userspace. However, the short link-down during the
+> configuration triggers asynchronous systemd events. These userspace
+> operations affect the subsequent pings. Sorry for not making this
+> clear in the commit message.
 
-Again the sort :)
-
-Please use the validate_* scripts from here:
-https://github.com/linux-netdev/nipa/tree/main/tests/patch/check_selftest
-they take the file name as the only arg and will tell if you its sorted.
-For whatever definition of "sorted" we adopted...
--- 
-pw-bot: cr
+Can we somehow avoid / suppress this systemd behavior as part of
+(your local) environment setup? Each environment will have some 
+setups steps. We assume that DAD is disabled, IPv6 addresses are 
+not flushed on ifdown, of course no firewalls.. 
