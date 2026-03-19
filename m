@@ -1,114 +1,103 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54523AC0E5
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 08:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E7925C6EE;
+	Thu, 19 Mar 2026 08:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773909900; cv=none; b=eGY6oKbd+lpjoDQ7SxdJAcG2jnUiwjGUh7Sy+g8g5SPfE/N3k6CBx+KP5I+9bUa5xRdZTc9A7D/OhzRIz8VysAH4H4vzAQgmDwpRtTK97AY8xBoGY18C2uUOJDiF+tjdQiFwSGPsk4JJ1u+fsnxwp5aUXnqVU1EhwDlB77I57M8=
+	t=1773910041; cv=none; b=DSJxS5G9xfok/yDcgZ/Rbq4WDLVJGmmou5pgWpt7d1Y8vcRM4UwE5Bz3+iHEpeHeOZ84jd6sMV3FVi13h8Le5FnDzV2fd/9JpFSEv8y34R15quGcPs5fgqXRHv65x6wm21tE8uhapII7HIUNfirXwpfiKiNn+p/Uej52Hbvm1mA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773909900; c=relaxed/simple;
-	bh=gxLBEZqdXaKc856agQwhtmyN5sTi6Yx6xfnEKXHzg5c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sVT4mv3L0kJDvELrfxbwHvg+EPyTcBT/Mk5ozTlNmYFbseikpciY5aoPNLmQ+a/tIWoJJ5yTiAPrUDUpDv38DGU8GqxAx+lzVVogqpGMzVXnQwsH/VTIjhj72Xfy6DYDkPxkWCe7D7dCXHLahWD1xCtzSZunz8yvaKFMjk+YoDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=w2FOyMnD; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1773910041; c=relaxed/simple;
+	bh=pwvwZxQZtDDSZnYJ8zrqkuvH3FZMuj6jpLZlzktWxo4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QOYXzSQRzEXTOpS47MqOLMHw8uoW0rwPiCZR810D+KNw3dGPqIMVn4eT/77C0r1YAxJuUdmJN+I74aseoaW30NiByQVeOkZWQdP164vMWV9u7aa2t2NyKkhqCiDyHYWuyW6/O8UvssjNpJMJEZaS+gilPW1UuKdRbgA17ZHzigQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xnt6CYgG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="w2FOyMnD"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4853e1ce427so7070505e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 01:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773909897; x=1774514697; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CSYKzBrwIsqKKLO2G7NMhCI1+z9REObNSxdVlwMMyGA=;
-        b=w2FOyMnDG3jt0mHYKcsIGpcWDzwqIk8cCyDCGfF2jW22hKmUmQi5H43iJSRlCLG/Kq
-         bdZH+h6pXlQ+h8o4RGgzR4jYiEP2utIxreuyoF1ZwbxA8CuEL/h+Xo5MA0lT1miqn1qu
-         iw9ck1ifE78vwCE4wE5FYSyQEXcwwYXXi3FrBzq9gtPGk6ZkqaHHuqPVKKKB8Yhjaykk
-         T9EpN3ZjZWWk9hfoe+LR9UIhiDQOgWmotsndYAXdruiH8yvpgQfZLQ6WFbZx4F+hekCc
-         B6DYQCy+pwJyjRmtZ16nvTCZxjhX6Akt5yb4dfnmKAmB8Aw7oceIhJYImh12spHzlxS1
-         nZlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773909897; x=1774514697;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CSYKzBrwIsqKKLO2G7NMhCI1+z9REObNSxdVlwMMyGA=;
-        b=CU6K9/AukJasIlOFwy3Xk9hllWItT5AMcLGm+eVDWE1v9QQSwcWAqUnKbw85tVG/14
-         ySNDjRHqmWUbjX5oiCqfJRVp0Hx8qo/kImF8hqNw8Q1WNR23cedlKe3MA0L2BwALOoos
-         7aLqTnE3n4R8lzRyj8GGjbahySHxMB7s5n6T5/RGDJaiom3JrAZKAKx7qs99en+JLB84
-         ef9oNpPVlR1igGe+NNqdvyue2qIx1kPBAE3iXJBd0TkEtSroqIYgLz9rTAVJ66QTP+r3
-         kgvcnvuC3FIy71JqpgGPxT4tyurczU+RZipE3S4TXiIfmEzY6VLqGV2KNRDpI/d5Ruzs
-         WyJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXU/IvjJ15DXEtuMJi8tzXnw0kG10SId9hIfv1kF6rJjCANI6o7mE6UojWgc6x2br0LWv3pl1xoHD7eqbXmkwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy81s6a9fWyRLzAsF6Vio+UQuXXDrQMQuZyMBB6wZrkuF/mYnKq
-	962xtyxJ1XR+hPq6zoevo8zmm9KxmKtyfjOdIkYWssoCm8LoeHbk0cIl1sfwyIQk2Q==
-X-Gm-Gg: ATEYQzzmqdwF+xT+i0BcoOBdsQw5bqSLnR/fSYl7U4cuiDpMn1j0VFL/CpjryxuMETN
-	YTi6PqjBBli/pQyAEv4XGP/Lq3Zte1n04jPIQ7pddHpVGtiiqOA0i/7vPA2uX9G4mIOjeu9R/BJ
-	jpFs91O8d05hkDOfKLgB0hPSCgxAXh1lsuHjxZg30Oxme8gNpNglpkH/7kVRk+jvFHZ8vXJIuDe
-	959afRsQvuq7ncaUf+s6caXTRKClRMARKPcPZlzIEhShEe1E+6tjRwQMgqLB8cASaYU53fkpzE+
-	OOl/CR9HPBZuVK+jPxZCOrRtmGX1KaOofBsJD83cgRvS/BqMhtYuyTEF/xyLvIT29KxKN80WjGW
-	F1574J3Xjm+0QpJyi7wIsZ+39F+Jx22AI88eWHwR6FtqKPy7J/pIC0tVUHGzUqnckzJ3LVfaA4F
-	sSKJbk8ylHJIQLg997MwkDPJJ6lGISSHII+O9zklZJgALCH8fDYBBRpPn8YUDAa6CSXQWgG0Q8P
-	+wkJOqfdXxis5LRcnSN/3c=
-X-Received: by 2002:a05:600c:630f:b0:477:b734:8c53 with SMTP id 5b1f17b1804b1-486f44384c9mr112835575e9.12.1773909897008;
-        Thu, 19 Mar 2026 01:44:57 -0700 (PDT)
-Received: from pickles.copeland.me.uk ([149.40.2.133])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fc61dd4asm12899015e9.14.2026.03.19.01.44.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 01:44:56 -0700 (PDT)
-From: Ben Copeland <ben.copeland@linaro.org>
-To: Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ben Copeland <ben.copeland@linaro.org>
-Subject: [PATCH] selftests: alsa: add config for required kernel options
-Date: Thu, 19 Mar 2026 08:43:47 +0000
-Message-ID: <20260319084347.134744-1-ben.copeland@linaro.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xnt6CYgG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08CAC19424;
+	Thu, 19 Mar 2026 08:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773910041;
+	bh=pwvwZxQZtDDSZnYJ8zrqkuvH3FZMuj6jpLZlzktWxo4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xnt6CYgGMmfUfnixFGE4K9swNrbY3fC8suhYsT4AJgjRqnwVXqhrPL3uB/xUUwuc8
+	 sMFfFyFu6j5LPK8rspzTycLGV3Jl0kA+AikWek+n1osvog0PSsee/D/eFnK/Vx+t44
+	 ImdeqfpU0mG7rYS8j1kuyogr1zXmkER3YZy99pCgYVrxXKB37oMFj0jtqILmfhR/bH
+	 FROv35LALmFSkIet48BnZM3jTcx8MyPlJMp9OAaManIMjQQWlqgwVq4gtw5ol/YBWm
+	 eQFpidkwLxDpk98CUa1VCvYV4aUTruIxTH+o5c7WrpAYrOIVoGbOo1qBCyGiBGHe14
+	 NpFYSLPvUelzg==
+Date: Thu, 19 Mar 2026 09:47:15 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Koichiro Den <den@valinux.co.jp>
+Cc: Christian Bruel <christian.bruel@foss.st.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	fabrice.gasnier@foss.st.com, linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] selftests: pci_endpoint: Skip subrange map test if
+ iATU allocation fails
+Message-ID: <abu4E-cQP7SBv1Gt@ryzen>
+References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
+ <20260318-skip-bar_subrange-tests-if-enospc-v1-1-f1a49534ebea@foss.st.com>
+ <vki7ty3z5jncmzeltk7udsbynffdld4xhcm3b2yjrgx25cfqkm@4ld66m3jbjqo>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <vki7ty3z5jncmzeltk7udsbynffdld4xhcm3b2yjrgx25cfqkm@4ld66m3jbjqo>
 
-The alsa kselftests are missing a config file to declare their required
-kernel configuration options. This causes the utimer-test (timer_f.utimer)
-to fail on kernels without CONFIG_SND_UTIMER enabled, as the
-SNDRV_TIMER_IOCTL_CREATE ioctl returns -1.
+On Thu, Mar 19, 2026 at 10:28:41AM +0900, Koichiro Den wrote:
+> On Wed, Mar 18, 2026 at 03:46:27PM +0100, Christian Bruel wrote:
+> > Handle -ENOSPC error. If the number of available inbound ATU entries is
+> > insufficient to map the subrange, skip the test instead of failing.
+> >
+> > Link: https://lore.kernel.org/linux-pci/20260317152707.GA85951@bhelgaas/T/#m87e4c24173097a0ea70195b71aab294ad8d6c283
+> > Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+> > ---
+> >  tools/testing/selftests/pci_endpoint/pci_endpoint_test.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> > index c417fb3a198b2d92c3060938c23807cc8bea5573..8ea2fda4539d11eb22b22800a7cb8bbaa99c91ba 100644
+> > --- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> > +++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> > @@ -88,6 +88,8 @@ TEST_F(pci_ep_bar, BAR_SUBRANGE_TEST)
+> >		SKIP(return, "Subrange map is not supported");
+> >	if (ret == -ENOBUFS)
+> >		SKIP(return, "BAR is reserved");
+> > +	if (ret == -ENOSPC)
+> > +		SKIP(return, "Not enough ATU entries to allocate subrange");
+>
+> Thank you for handling this!
+>
+> pci_endpoint_test_bar_subrange() can also return -ENOSPC locally:
+> https://github.com/torvalds/linux/blob/v7.0-rc4/drivers/misc/pci_endpoint_test.c#L538
+> While that is a different resource limit case, I think it would still be
+> reasonable to treat it as SKIP as well.
 
-Add the config file with the necessary sound configs so that
-'make kselftest-merge' can enable them automatically.
+	sub_size = bar_size / nsub;
+	if (sub_size < sizeof(u32)) {
+		ret = -ENOSPC;
+		goto out_clear;
+	}
 
-Link: https://lore.kernel.org/linux-kselftest/0e9c25d3-efbd-433b-9fb1-0923010101b9@stanley.mountain/
-Signed-off-by: Ben Copeland <ben.copeland@linaro.org>
----
- tools/testing/selftests/alsa/config | 7 +++++++
- 1 file changed, 7 insertions(+)
- create mode 100644 tools/testing/selftests/alsa/config
+What is this test for anyway?
 
-diff --git a/tools/testing/selftests/alsa/config b/tools/testing/selftests/alsa/config
-new file mode 100644
-index 000000000000..810cc31f09b3
---- /dev/null
-+++ b/tools/testing/selftests/alsa/config
-@@ -0,0 +1,7 @@
-+CONFIG_SND=y
-+CONFIG_SND_TIMER=y
-+CONFIG_SND_PCM=y
-+CONFIG_SND_PCM_TIMER=y
-+CONFIG_SND_PCMTEST=m
-+CONFIG_SND_UTIMER=y
-+CONFIG_DEBUG_FS=y
--- 
-2.53.0
+If sub_size < 4 ?
+ return -ENOSPACE ?
 
+ENOSPC seem like a weird return for this.
+
+Wouldn't EINVAL be a better return code for this?
+
+
+Kind regards,
+Niklas
