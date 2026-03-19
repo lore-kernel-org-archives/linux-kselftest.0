@@ -1,72 +1,74 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D05396B68
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 18:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F7C230BE9
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 18:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773944300; cv=none; b=umwpHguHHHwhmnZcGinJHHPQVA49SQbXAWtx0BBf7CWtyoSUFxCF5Gy1a+D6RROgSRJJCEVVmxAiea6maJOjZzjbTHQo4pKOdeqgOZ3fVkL/DMSdROQpmI+VQAgpCixL0b7qmBpyIGtw4c6Z3vXwEhl7HxOi5SIYVtCxWDjVqmU=
+	t=1773944993; cv=none; b=XY0GFGmfbXgZU0cmGxgOvYOMeV1crYzkP26Fzk8uRC1Wl3aEYYfRmlfqArOxdbKR2eXsOWOAb1y7oUBlJqVmiSC3IdLk8VYrypZ5sURmMDPmIl+tCUd8lMmRw7j34taM9GMhHsvwqR7RuORmM3U1xkKSEXblxCOguw9TySyeyDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773944300; c=relaxed/simple;
-	bh=ks0M/klZENCM5dZMeKF033TXPM1stqWEgRH+1plE3FQ=;
+	s=arc-20240116; t=1773944993; c=relaxed/simple;
+	bh=l+b+ARBQj3dJ/ZowWqKuBa047ok7XkTYvsb110E9hQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h/shx6Y/4oQLDy5gXY6eD83I+xe+9UTRB3fK9rNWIl/e8KVlyivJ0M8BQ+aLrsS6QoS5wDgnmrujxxMAm1ufEFGPalD5HtNutBKhJabDICLQq1GqsmKkfO2BFLsipHwtjkZbtu9iev+p3Q0Q1EucffXxf+sdX/zbjoVpKmrTxlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NE1QxMU7; arc=none smtp.client-ip=209.85.215.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=TVLD0F+xlD4Sr7/+LmLiWCi9wKw8V1MNQvg3X9KgmGCaZfX8fMbVQhf849eXCETrbWJIPK+B5LDHHSKApEy/Q4O6lWPZlsPdmr8m+02O+7XDXOqjT9Rwpc9Vy7lwIS3WuocXDMCOKVFC7lJ7cRH+pU1IY8VTQV9NGjO3cB6DZ8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fkyBdYg0; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NE1QxMU7"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c2af7d09533so796204a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 11:18:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fkyBdYg0"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ab46931cf1so19603025ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 11:29:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773944298; x=1774549098; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1773944992; x=1774549792; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+aMRchp8AKKMlv02F6neHZa+UurEBvVp2lJmGUVOIYQ=;
-        b=NE1QxMU7LlmjNMpsIopylaPm56FU0I+TpunRKrWMw/PQE+E59SU35XwT/3SZBHmwnI
-         LZztziSBYjnehnfajUTEVc2epOW3GRDBsq8YHuU+HYIjRfVX0LHO2Zz5ZBZ002EcbhZT
-         ZgW2oMxUiIpxTf+mRyeLfMBTJarZiYdUu9QfPOtr8e9+wxms4DD2FgOH1hxXfHBc1j1+
-         EiJqMAgtNQCSOGIJSgJhlMqVUA6Mw2Pe/rjSS52ueEGb53J1GPVHLH9rTeKcQigQdtvI
-         iHzDnMOZB/0SCO6FLPj4Lq6WRymIFZ+xxbpr+koBQATHqOSxqrXW8w1yZ6KAM5KeAoGs
-         uG/w==
+        bh=l+b+ARBQj3dJ/ZowWqKuBa047ok7XkTYvsb110E9hQE=;
+        b=fkyBdYg0UYYEFTzz1iHXDkP6Jtbl4V51bg5x3MNQ2RlDKz9pn84MncTxSyv7z5Fwn7
+         l7Gta53hEyPyVojun9uERa3KXcf8xe89B8cK217SHwLghp4WgQUtfnml0eMaBOSjyo1j
+         idvIlr3V329B7RVMekLhMQsS5BS1cg4+tGZVVXs92US9hdYAkpp+36o/3jUFc+3GHEiR
+         cDDs9sGcy9NLCDPEIdOw2NNzhNA0iR18KE68Z8D6Adi0BcsDITQZTtzmAgx3Rv0SJjsY
+         jt3yngYp7jImpI5IuCeU6EgUg1Nq4KoFUR+Uy/VX0AM8qa6O5BuTm5YvtpG5epHYu72D
+         TZPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773944298; x=1774549098;
+        d=1e100.net; s=20251104; t=1773944992; x=1774549792;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+aMRchp8AKKMlv02F6neHZa+UurEBvVp2lJmGUVOIYQ=;
-        b=myNzvFVX631j6de++JqJC1ZuWUYNL6ktjquxg+7K7O7WIfreiUMmZ07+7A2gVCUdE9
-         xACvsizPzg1OFD/WmSGgaAZXH9ABCUt3p+iQOfrM6/MiiwBL5JAhbcsS1nf53/RLMqzp
-         90kcGu4tMrlKQ59MAwDcfxak1WSBHmIVLsgrKyw7JxS5NQasFHyzvzJNH8vwiQfY1P3J
-         dayzj7EeuICkECJNoPinoguEiobE8eCMH7rvI9nDy0QITyDPdJ7xzOqw0AelZtdaMeZV
-         J+FjRQF1J8cFoUqYLOC/vztK8Lec9+NBQqgLrZyMmp2BbkgmmEu2zJidcG5RfS+H0mjD
-         Z5ew==
-X-Forwarded-Encrypted: i=1; AJvYcCV3MGgRViIZPQNzQnO2dIuQ2rcNLRjlZPJPgPzUtW9JHYNIGJLwuRMPi71/ooNI7nfq6j7pxiENReeXJtOKK5g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyTFGQc3qaq9SPgDLRrb5Vc/ZWybx/Fn7IIcLdK3vtXS5hUGCj
-	vtCLk8gOA38TTR2Kk2Kn0IpltimL/vd4/kA59j0ZYyhXp28IJ/Xn4MyoxTOUaE3ERg==
-X-Gm-Gg: ATEYQzxQ+NaP/GEzkeAoLTbd3AUSK6gUfkBptzIgPu9QtBcY8SQt6NL+Kns3mm7ajb7
-	DjieSJymC9xM9MiDxpGoL1YS2jVa9ymFqVcZVKe8ex44ucOOum2FwFD1oVfgCzKi/eUyFLhVzfS
-	vDqV4TEdSF+GWeHCptgkOBixhDx60+yeOAkCg3VlVzaGxyVT5ABE5zPmuACYd21ZS2zXDnFhBd9
-	MFbJRAJ0rWkYmwWRNnbMQonS2aE9xMzi0TmPAGaDhOCNAS8iHxzKdo7kF9pxZIsCzj5QxrdQaMh
-	xuHUaye1bcB7q5/fLDDbhI60Y4mo2PQxTXM/MUbXLFbLOMbyVZrp80bN5nOyJ26ddfCjEDTtsnj
-	AkGbbTZSNl3vS3053EjOD5x9EuTVnK8x3ZTd2rrpKYsB06dsOnsIqWWxazVjylSFWnTxzD1T9Jq
-	z4/xyQ6cpB3/REKDuIBPcuKQ7Wos6gjpMcC3eOVXmncY3JmQybA9XAxkIIuVq3HErFhBDyw0io
-X-Received: by 2002:a05:6a20:6b9d:b0:39b:83cf:ebb0 with SMTP id adf61e73a8af0-39bcec0675cmr234015637.66.1773944298146;
-        Thu, 19 Mar 2026 11:18:18 -0700 (PDT)
+        bh=l+b+ARBQj3dJ/ZowWqKuBa047ok7XkTYvsb110E9hQE=;
+        b=QFYTGiviz9iii2oLHqfo6+Cz2nlszmZ28kYJkuTCOtlyeocn7/dltHmp2JFkZC79Hh
+         2hIZzCxCbrktgJQMmyt8G0ZrzQrX582ZXRf4bMpnw3Ffih8EiPnTS8z91AMojtcedPQy
+         WN4/WxDujM8O9SOQatc8iPRtrRW743BP1U0hxb9HzdMhrITTRyZdTjpk36j0CqpM5ECq
+         Hn5L0iRbJQyWJmvwS7/lhjH4y/pUFpSNQu1BkXVIJGffr1xjmk62IJZGuumy62Duh59L
+         UXW6eMrRNA04heWa0GGUZ6OwuJ6DnFCPgrOmuPodM3I7T6ivkknR9NMOn8GcxZoEC/fN
+         S6hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUEiX1yhoEH8T2ATUoNYNCZwHCSuhYVmmFz8Nvn5HYABVr0VWsctYsrE0MqvX+lUL7isLveCMSevWtjTzxZ+vM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGORDwSYDB4eZvMl6/7NzpL0GmK+2azAANTQMA6aDhmpwYECBa
+	vfwiSMhJqT4Rp2Z/+XiKAbnXW7a3AX9Y3xPsPi/8EulW/EIxgdpxHx2gUELgA/jEPJk9PxwNMRU
+	Ol28RmA==
+X-Gm-Gg: ATEYQzz3RlTS1SRd2ZmL2Dciozz44ukVb9u9DBIA0s3KulrVMspoWwZWZqKEuP8GVA6
+	KYjc5MrR43+OElIWp0lgXVaZ1cpbdkDFUAeTwNl2fnRvHx1J2IE5KnrUXx5HHPHjsk2GW6zSe4f
+	876+i5Y+JU2lIhgJdtKaVhaUpp07un8lMl18vvjXDN56+7DTG2o6Uf65F9IaALVp638uz+lzJqJ
+	Nd3Lx1UlzP8QHLI1V+8KptGMkCTEt2xBWw54HkHpJI1SJyPI5HQsxg9UED5OqK43BDaK5SjTlqQ
+	8F+Tk/MwkA9XPZ9ddlzQeG0lAbC+2yxeuibmj9Km9iXF1v/I6YYBk9OEj+4gMZOIkIM2bEVkQIA
+	Ea1uChsvJhVMeB+GD3D/LT6fvSXaTONnCq1UhpvJtAnhbwzxygQxOMIKMuzOKO211ajLXfmAhl+
+	Cq0KRB+vU16Dkkwg36VQKO/JhtrExhSF0rugWw5u3SZHHLs48edxlCJS1OZ124GQ==
+X-Received: by 2002:a17:903:11c9:b0:2ae:5ab4:f4c0 with SMTP id d9443c01a7336-2b0827bcf04mr2347095ad.13.1773944991550;
+        Thu, 19 Mar 2026 11:29:51 -0700 (PDT)
 Received: from google.com (239.23.105.34.bc.googleusercontent.com. [34.105.23.239])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c74443cc2ddsm64311a12.24.2026.03.19.11.18.17
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e5f12d9sm62873345ad.39.2026.03.19.11.29.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 11:18:17 -0700 (PDT)
-Date: Thu, 19 Mar 2026 18:18:13 +0000
+        Thu, 19 Mar 2026 11:29:50 -0700 (PDT)
+Date: Thu, 19 Mar 2026 18:29:46 +0000
 From: David Matlack <dmatlack@google.com>
-To: Yi Lai <yi1.lai@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Alex Mastro <amastro@fb.com>, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vfio: selftests: Support DMR and GNR-D DSA devices
-Message-ID: <abw95W9pCyLF_5n8@google.com>
-References: <20260319072719.472216-1-yi1.lai@intel.com>
+To: Rubin Du <rubind@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 1/2] selftests/vfio: Skip MSI tests for drivers that
+ cannot raise interrupts
+Message-ID: <abxAmnZ6yncRVCIY@google.com>
+References: <20260317214239.124857-1-rubind@nvidia.com>
+ <20260317214239.124857-2-rubind@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,96 +77,16 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260319072719.472216-1-yi1.lai@intel.com>
+In-Reply-To: <20260317214239.124857-2-rubind@nvidia.com>
 
-On 2026-03-19 03:27 PM, Yi Lai wrote:
-> Currently, the VFIO DSA driver test only supports the SPR DSA device ID.
-> Attempting to run the test on newer platforms like DMR or GNR-D results
-> in a "No driver found" error, causing the test to be skipped.
-> 
-> Refactor the 'dsa_probe' function to use a switch statement for
+On 2026-03-17 02:42 PM, Rubin Du wrote:
+> Some device drivers may not have the capability to trigger MSI/MSI-X
+> interrupts from software. Add checks to skip the send_msi test and
+> the MSI portion of the mix_and_match test when the driver's send_msi
+> callback is NULL, allowing these drivers to still run the DMA tests.
 
-nit: s/Refactor the 'dsa_probe' function/Refactor dsa_probe()/
+I would prefer not to make send_msi() optional if possible. We sould
+need changes like this in all future tests that want to use send_msi().
 
-If you append () to the end of function names in commit messages and
-comments it makes it clear you are referring to a function.
-
-> checking device IDs. This improves maintainability and makes it easier
-> to add new device IDs in the future.
-> 
-> Add the following DSA device IDs to the supported list:
-> PCI_DEVICE_ID_INTEL_DSA_DMR  (0x1212)
-> PCI_DEVICE_ID_INTEL_DSA_GNRD (0x11fb)
-> 
-> Signed-off-by: Yi Lai <yi1.lai@intel.com>
-
-Thanks for the patch. Looks good aside from some small nits.
-
-Were you able to test that vfio_pci_driver_test passes with both of the new
-devices?
-
-> ---
->  .../selftests/vfio/lib/drivers/dsa/dsa.c        | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> index c75045bcab79..0cbc7606d904 100644
-> --- a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> +++ b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> @@ -65,10 +65,23 @@ static bool dsa_int_handle_request_required(struct vfio_pci_device *device)
->  
->  static int dsa_probe(struct vfio_pci_device *device)
->  {
-> -	if (!vfio_pci_device_match(device, PCI_VENDOR_ID_INTEL,
-> -				   PCI_DEVICE_ID_INTEL_DSA_SPR0))
-> +	u16 vendor, device_id;
-> +
-> +	vendor = vfio_pci_config_readw(device, PCI_VENDOR_ID);
-> +	device_id = vfio_pci_config_readw(device, PCI_DEVICE_ID);
-> +
-> +	if (vendor != PCI_VENDOR_ID_INTEL)
->  		return -EINVAL;
-
-nit: s/vendor/vendor_id/ to be consistent with device_id and
-vfio_pci_device_match().
-
-Also you can initialized these variables when they are declared to
-simplify the code a bit. e.g.
-
-diff --git a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-index 0cbc7606d904..19d9630b24c2 100644
---- a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-+++ b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-@@ -65,12 +65,10 @@ static bool dsa_int_handle_request_required(struct vfio_pci_device *device)
-
- static int dsa_probe(struct vfio_pci_device *device)
- {
--       u16 vendor, device_id;
-+       const u16 vendor_id = vfio_pci_config_readw(device, PCI_VENDOR_ID);
-+       const u16 device_id = vfio_pci_config_readw(device, PCI_DEVICE_ID);
-
--       vendor = vfio_pci_config_readw(device, PCI_VENDOR_ID);
--       device_id = vfio_pci_config_readw(device, PCI_DEVICE_ID);
--
--       if (vendor != PCI_VENDOR_ID_INTEL)
-+       if (vendor_id != PCI_VENDOR_ID_INTEL)
-                return -EINVAL;
-
-        switch (device_id) {
-
->  
-> +	switch (device_id) {
-> +	case PCI_DEVICE_ID_INTEL_DSA_SPR0:
-> +	case PCI_DEVICE_ID_INTEL_DSA_DMR:
-> +	case PCI_DEVICE_ID_INTEL_DSA_GNRD:
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
->  	if (dsa_int_handle_request_required(device)) {
->  		dev_err(device, "Device requires requesting interrupt handles\n");
->  		return -EINVAL;
-> -- 
-> 2.43.0
-> 
+Is there really no way for the nv_falcon to do something to cause the NV
+GPU to send an MSI?
