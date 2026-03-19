@@ -1,131 +1,215 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E470538BF61;
-	Thu, 19 Mar 2026 16:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE6A33EF0A6;
+	Thu, 19 Mar 2026 17:05:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773938382; cv=none; b=q/Br8HjmborIltSyhLoancfJ3NhMhV6ePkEXswFxsS6ru0MXtob26LJBIkHVCN2QWkUDnMgQHTmXTCkRZCRrAcGEUsQoOEQSCir1EBmqKdjd9+IoFZ155ykIIEdvJ2uihFRNEiQqdC4m1moJOw7TvdQEbtY1K+tN1ovjUvbLa60=
+	t=1773939929; cv=none; b=PxfgGnbnN6pKsVr8XHdMb+R/lHXw0EmlIbTUJdcsa11TGDIEDq0s9kqMSb2Z63e990ivs7dOueNrsPY1soZLySxMX5efevEV0qmQzMQo862+IIDfmUlxswPSWK2coBZJh9pDPu1f6Uc5DgiiM6whPVTXeRGMXqgn8uUw/A83xWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773938382; c=relaxed/simple;
-	bh=Y+Hv0DkWk/c+ewBI0ps5vOPQ63BNCB7+d21mTtAJtvo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dNkVrqjoCvIDbN/TAyMzvanvlwP9mV0uMYMMIk0HyHYLRP7eNrAnBlRgcDJxyUuOHA1jP8lbqjwzUWDq6jntF3dk1C+odb+9gUnQBTQV5zr/dqnxgj1OmrSpcIEfU5SVy5d7vYc7OX7WJEMrGacHGW1AxJW/G3UhSJVUXk8ZULQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=bmMuGENd; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="bmMuGENd"
-Received: from localhost (unknown [52.148.171.5])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 744CF20B710C;
-	Thu, 19 Mar 2026 09:39:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 744CF20B710C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1773938375;
-	bh=8r3Rrhjz62mzvDnQKQk9Pz54iwWA+pJBFG61+YWArBw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bmMuGENdC7hPcV8u5wKM+LeF+mgtVIFSJy2h9p6W0i9+tl+Hp7PwExVnUfQO1xHwB
-	 Ouf5VcCqaSQUs5qKCHuxTDWMmMZ137/dgQcmFiu/HC6R4d58LdmNNYeQegg7/tAA4c
-	 QVfQmqGCCPaKOdhfIjpxs7czL0tSUxWhHGO5GW4k=
-Date: Thu, 19 Mar 2026 09:39:32 -0700
-From: Jacob Pan <jacob.pan@linux.microsoft.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran
- <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro
- <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, Andrew Morton
- <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, David Rientjes
- <rientjes@google.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe
- <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke
- <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
- kexec@lists.infradead.org, kvm@vger.kernel.org, Leon Romanovsky
- <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, =?UTF-8?Q?Mich?=
- =?UTF-8?Q?a=C5=82?= Winiarski <michal.winiarski@intel.com>, Mike Rapoport
- <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, Pasha Tatashin
- <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>,
- Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta
- <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed
- <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, Shuah Khan
- <skhan@linuxfoundation.org>, Thomas =?UTF-8?Q?Hellstr=C3=B6m?=
- <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>,
- Vipin Sharma <vipinsh@google.com>, Vivek Kasireddy
- <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu
- <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
- Live Update
-Message-ID: <20260319093932.000078c2@linux.microsoft.com>
-In-Reply-To: <CALzav=eGLpo5nrsHq5L8bUTC=FWZ-SgrTE1FoScrWB4p+NDgnA@mail.gmail.com>
-References: <20260129212510.967611-1-dmatlack@google.com>
-	<20260129212510.967611-11-dmatlack@google.com>
-	<20260226170030.5a938c74@shazbot.org>
-	<aaDqhjdLyf1qSTSh@google.com>
-	<20260227084658.3767d801@shazbot.org>
-	<CALzav=fHy23RAzhgkdaL+JA5T2tL9FT6aPgRfXUh7i9zvYCGPA@mail.gmail.com>
-	<20260227105720.522ca97f@shazbot.org>
-	<CALzav=fjRPa_ZbXu7iFXyemcf_8Kq_dZTWT6c-A0bc6czF_Rdw@mail.gmail.com>
-	<abNOwcOTXqxCxNzt@google.com>
-	<20260313083918.00005731@linux.microsoft.com>
-	<CALzav=eGLpo5nrsHq5L8bUTC=FWZ-SgrTE1FoScrWB4p+NDgnA@mail.gmail.com>
-Organization: LSG
-X-Mailer: Claws Mail 3.21.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1773939929; c=relaxed/simple;
+	bh=Gf5XBFJJvDKd0hS1w0/LnzSIYLjFJzLH0x+kzjR0qA4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Fj5DrnJ8oSqpkwtJf1Uqjj1m1m4v3keg9gj4GSpEpnkgFCNSsmsgXLyBJTUuOYA9mQS1smEn6SoXifjJ+LW+J9/vx38hoGogUbT3R/dkcyYoCoNy9ASPeLl4WAt3BDvuSjR/H2DEfQquzyJRa8fmPStkY7Ed1AHcFIuY1rFNP0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D2AF1A25;
+	Thu, 19 Mar 2026 10:05:20 -0700 (PDT)
+Received: from [10.57.60.82] (unknown [10.57.60.82])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BB053F778;
+	Thu, 19 Mar 2026 10:05:16 -0700 (PDT)
+Message-ID: <64da7780-3176-461f-b61d-7a5828ce55a4@arm.com>
+Date: Thu, 19 Mar 2026 18:05:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 RESEND 11/14] s390: Rename TIF_SINGLE_STEP to
+ TIF_SINGLESTEP
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, oleg@redhat.com, chenhuacai@kernel.org, kernel@xen0n.name,
+ hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+ borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+ arnd@arndb.de, peterz@infradead.org, luto@kernel.org, shuah@kernel.org,
+ kees@kernel.org, wad@chromium.org, deller@gmx.de, macro@orcam.me.uk,
+ akpm@linux-foundation.org, ldv@strace.io, anshuman.khandual@arm.com,
+ ryan.roberts@arm.com, mark.rutland@arm.com, thuth@redhat.com,
+ song@kernel.org, ada.coupriediaz@arm.com, linusw@kernel.org,
+ broonie@kernel.org, pengcan@kylinos.cn, liqiang01@kylinos.cn,
+ ziyao@disroot.org, guanwentao@uniontech.com, guoren@kernel.org,
+ schuster.simon@siemens-energy.com, jremus@linux.ibm.com, david@kernel.org,
+ mathieu.desnoyers@efficios.com, edumazet@google.com, kmal@cock.li,
+ dvyukov@google.com, reddybalavignesh9979@gmail.com, x86@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260317082020.737779-1-ruanjinjie@huawei.com>
+ <20260317082020.737779-12-ruanjinjie@huawei.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20260317082020.737779-12-ruanjinjie@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Hi David,
+On 17/03/2026 09:20, Jinjie Ruan wrote:
+> Rename TIF_SINGLE_STEP to TIF_SINGLESTEP to align with the naming
+> convention used by arm64, x86, and other architectures.
+>
+> By aligning the name, TIF_SINGLESTEP can be consolidated into the generic
+> TIF bits definitions, reducing architectural divergence and simplifying
+> cross-architecture entry/exit logic.
+>
+> No functional changes intended.
+>
+> Acked-by: Heiko Carstens <hca@linux.ibm.com>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 
-On Mon, 16 Mar 2026 11:11:20 -0700
-David Matlack <dmatlack@google.com> wrote:
+Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
 
-> On Fri, Mar 13, 2026 at 8:39=E2=80=AFAM Jacob Pan
-> <jacob.pan@linux.microsoft.com> wrote:
-> > On Thu, 12 Mar 2026 23:39:45 +0000
-> > David Matlack <dmatlack@google.com> wrote: =20
->=20
-> > > +config VFIO_PCI_LIVEUPDATE
-> > > +       bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
-> > > +       depends on LIVEUPDATE && VFIO_PCI
-> > > +       help
-> > > +         Support for preserving devices bound to vfio-pci across
-> > > a Live
-> > > +         Update. The eventual goal is that preserved devices can
-> > > run
-> > > +         uninterrupted during a Live Update, including DMA to
-> > > preserved
-> > > +         memory buffers and P2P. However there are many steps
-> > > still needed to
-> > > +         achieve this, including:
-> > > +
-> > > +          - Preservation of iommufd files
-> > > +          - Preservation of IOMMU driver state =20
-> > In the interim, what do you think about moving forward with noiommu
-> > mode without preserving IOMMU driver state? =20
->=20
-> I haven't gotten a chance to look at your noiommu patches yet, but I
-> do think noiommu will probably be a good way to develop the VFIO and
-> PCI support for Live Update without blocking on IOMMU driver support.
->=20
-> > I=E2=80=99ve tested your
-> > vfio_pci_liveupdate_kexec_test with the noiommu cdev, and it works
-> > as expected. =20
->=20
-> Would you be able to send patches to add noiommu support to VFIO
-> selftests? That would be very helpful toward allowing us to develop
-> and test Live Update support with noiommu.
-
-It is included in the noiommu patchset; the only difference is that the
-VFIO cdev name is prefixed with noiommu, which is not strictly required
-and is done out of caution.
-
-/dev/vfio/
-|-- devices
-|   `-- noiommu-vfio0
-
-https://lore.kernel.org/linux-iommu/20260312155637.376854-10-jacob.pan@linu=
-x.microsoft.com/
+> ---
+>  arch/s390/include/asm/thread_info.h |  4 ++--
+>  arch/s390/kernel/process.c          |  2 +-
+>  arch/s390/kernel/ptrace.c           | 20 ++++++++++----------
+>  arch/s390/kernel/signal.c           |  6 +++---
+>  4 files changed, 16 insertions(+), 16 deletions(-)
+>
+> diff --git a/arch/s390/include/asm/thread_info.h b/arch/s390/include/asm/thread_info.h
+> index 6a548a819400..1bcd42614e41 100644
+> --- a/arch/s390/include/asm/thread_info.h
+> +++ b/arch/s390/include/asm/thread_info.h
+> @@ -69,7 +69,7 @@ void arch_setup_new_exec(void);
+>  #define TIF_GUARDED_STORAGE	17	/* load guarded storage control block */
+>  #define TIF_ISOLATE_BP_GUEST	18	/* Run KVM guests with isolated BP */
+>  #define TIF_PER_TRAP		19	/* Need to handle PER trap on exit to usermode */
+> -#define TIF_SINGLE_STEP		21	/* This task is single stepped */
+> +#define TIF_SINGLESTEP		21	/* This task is single stepped */
+>  #define TIF_BLOCK_STEP		22	/* This task is block stepped */
+>  #define TIF_UPROBE_SINGLESTEP	23	/* This task is uprobe single stepped */
+>  
+> @@ -77,7 +77,7 @@ void arch_setup_new_exec(void);
+>  #define _TIF_GUARDED_STORAGE	BIT(TIF_GUARDED_STORAGE)
+>  #define _TIF_ISOLATE_BP_GUEST	BIT(TIF_ISOLATE_BP_GUEST)
+>  #define _TIF_PER_TRAP		BIT(TIF_PER_TRAP)
+> -#define _TIF_SINGLE_STEP	BIT(TIF_SINGLE_STEP)
+> +#define _TIF_SINGLESTEP	BIT(TIF_SINGLESTEP)
+>  #define _TIF_BLOCK_STEP		BIT(TIF_BLOCK_STEP)
+>  #define _TIF_UPROBE_SINGLESTEP	BIT(TIF_UPROBE_SINGLESTEP)
+>  
+> diff --git a/arch/s390/kernel/process.c b/arch/s390/kernel/process.c
+> index 0df95dcb2101..3accc0c064a0 100644
+> --- a/arch/s390/kernel/process.c
+> +++ b/arch/s390/kernel/process.c
+> @@ -122,7 +122,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>  	/* Don't copy debug registers */
+>  	memset(&p->thread.per_user, 0, sizeof(p->thread.per_user));
+>  	memset(&p->thread.per_event, 0, sizeof(p->thread.per_event));
+> -	clear_tsk_thread_flag(p, TIF_SINGLE_STEP);
+> +	clear_tsk_thread_flag(p, TIF_SINGLESTEP);
+>  	p->thread.per_flags = 0;
+>  	/* Initialize per thread user and system timer values */
+>  	p->thread.user_timer = 0;
+> diff --git a/arch/s390/kernel/ptrace.c b/arch/s390/kernel/ptrace.c
+> index 125ca4c4e30c..d2cf91f4ac3f 100644
+> --- a/arch/s390/kernel/ptrace.c
+> +++ b/arch/s390/kernel/ptrace.c
+> @@ -90,8 +90,8 @@ void update_cr_regs(struct task_struct *task)
+>  	new.start.val = thread->per_user.start;
+>  	new.end.val = thread->per_user.end;
+>  
+> -	/* merge TIF_SINGLE_STEP into user specified PER registers. */
+> -	if (test_tsk_thread_flag(task, TIF_SINGLE_STEP) ||
+> +	/* merge TIF_SINGLESTEP into user specified PER registers. */
+> +	if (test_tsk_thread_flag(task, TIF_SINGLESTEP) ||
+>  	    test_tsk_thread_flag(task, TIF_UPROBE_SINGLESTEP)) {
+>  		if (test_tsk_thread_flag(task, TIF_BLOCK_STEP))
+>  			new.control.val |= PER_EVENT_BRANCH;
+> @@ -119,18 +119,18 @@ void update_cr_regs(struct task_struct *task)
+>  void user_enable_single_step(struct task_struct *task)
+>  {
+>  	clear_tsk_thread_flag(task, TIF_BLOCK_STEP);
+> -	set_tsk_thread_flag(task, TIF_SINGLE_STEP);
+> +	set_tsk_thread_flag(task, TIF_SINGLESTEP);
+>  }
+>  
+>  void user_disable_single_step(struct task_struct *task)
+>  {
+>  	clear_tsk_thread_flag(task, TIF_BLOCK_STEP);
+> -	clear_tsk_thread_flag(task, TIF_SINGLE_STEP);
+> +	clear_tsk_thread_flag(task, TIF_SINGLESTEP);
+>  }
+>  
+>  void user_enable_block_step(struct task_struct *task)
+>  {
+> -	set_tsk_thread_flag(task, TIF_SINGLE_STEP);
+> +	set_tsk_thread_flag(task, TIF_SINGLESTEP);
+>  	set_tsk_thread_flag(task, TIF_BLOCK_STEP);
+>  }
+>  
+> @@ -143,7 +143,7 @@ void ptrace_disable(struct task_struct *task)
+>  {
+>  	memset(&task->thread.per_user, 0, sizeof(task->thread.per_user));
+>  	memset(&task->thread.per_event, 0, sizeof(task->thread.per_event));
+> -	clear_tsk_thread_flag(task, TIF_SINGLE_STEP);
+> +	clear_tsk_thread_flag(task, TIF_SINGLESTEP);
+>  	clear_tsk_thread_flag(task, TIF_PER_TRAP);
+>  	task->thread.per_flags = 0;
+>  }
+> @@ -155,19 +155,19 @@ static inline unsigned long __peek_user_per(struct task_struct *child,
+>  {
+>  	if (addr == offsetof(struct per_struct_kernel, cr9))
+>  		/* Control bits of the active per set. */
+> -		return test_thread_flag(TIF_SINGLE_STEP) ?
+> +		return test_thread_flag(TIF_SINGLESTEP) ?
+>  			PER_EVENT_IFETCH : child->thread.per_user.control;
+>  	else if (addr == offsetof(struct per_struct_kernel, cr10))
+>  		/* Start address of the active per set. */
+> -		return test_thread_flag(TIF_SINGLE_STEP) ?
+> +		return test_thread_flag(TIF_SINGLESTEP) ?
+>  			0 : child->thread.per_user.start;
+>  	else if (addr == offsetof(struct per_struct_kernel, cr11))
+>  		/* End address of the active per set. */
+> -		return test_thread_flag(TIF_SINGLE_STEP) ?
+> +		return test_thread_flag(TIF_SINGLESTEP) ?
+>  			-1UL : child->thread.per_user.end;
+>  	else if (addr == offsetof(struct per_struct_kernel, bits))
+>  		/* Single-step bit. */
+> -		return test_thread_flag(TIF_SINGLE_STEP) ?
+> +		return test_thread_flag(TIF_SINGLESTEP) ?
+>  			(1UL << (BITS_PER_LONG - 1)) : 0;
+>  	else if (addr == offsetof(struct per_struct_kernel, starting_addr))
+>  		/* Start address of the user specified per set. */
+> diff --git a/arch/s390/kernel/signal.c b/arch/s390/kernel/signal.c
+> index 4874de5edea0..83f7650f2032 100644
+> --- a/arch/s390/kernel/signal.c
+> +++ b/arch/s390/kernel/signal.c
+> @@ -423,7 +423,7 @@ static void handle_signal(struct ksignal *ksig, sigset_t *oldset,
+>  	else
+>  		ret = setup_frame(ksig->sig, &ksig->ka, oldset, regs);
+>  
+> -	signal_setup_done(ret, ksig, test_thread_flag(TIF_SINGLE_STEP));
+> +	signal_setup_done(ret, ksig, test_thread_flag(TIF_SINGLESTEP));
+>  }
+>  
+>  /*
+> @@ -491,7 +491,7 @@ void arch_do_signal_or_restart(struct pt_regs *regs)
+>  			regs->gprs[2] = regs->orig_gpr2;
+>  			current->restart_block.arch_data = regs->psw.addr;
+>  			regs->psw.addr = VDSO_SYMBOL(current, restart_syscall);
+> -			if (test_thread_flag(TIF_SINGLE_STEP))
+> +			if (test_thread_flag(TIF_SINGLESTEP))
+>  				clear_thread_flag(TIF_PER_TRAP);
+>  			break;
+>  		case -ERESTARTNOHAND:
+> @@ -499,7 +499,7 @@ void arch_do_signal_or_restart(struct pt_regs *regs)
+>  		case -ERESTARTNOINTR:
+>  			regs->gprs[2] = regs->orig_gpr2;
+>  			regs->psw.addr = __rewind_psw(regs->psw, regs->int_code >> 16);
+> -			if (test_thread_flag(TIF_SINGLE_STEP))
+> +			if (test_thread_flag(TIF_SINGLESTEP))
+>  				clear_thread_flag(TIF_PER_TRAP);
+>  			break;
+>  		}
