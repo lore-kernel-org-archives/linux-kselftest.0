@@ -1,204 +1,282 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DC83033E8
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 14:11:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72FD2313E3D
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 14:14:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773929487; cv=none; b=AI0UhqLxSzVWzXG6qLItscNvxukKMP/L5KcazWLgAVvmBCwOHbMetbNxcpM1p37r5+BDkbef2aMoW80J8T6N/JwZCmvU87PkrpJN6hejJGMG4gEX7oHJHkTUeK7W7RkkuMcDCQaHZUkTzvtnsAqvbAxAopI/L+e3lcS8q3bKG3Y=
+	t=1773929670; cv=none; b=HQinsNBnAauL2+6siqPH12vjyBw9cjlqf0HdtzUQv6to5yG0EllQvVhtQeFcF9+rNwST7maMsHwDYBKCS86j1dx3S8eyhO3HgDPk4hLQzQ3LqoIC9vHAzlpL5IQw8DunBAF98645BSXv6FBIlo63L/CSgZZyCd8v1ewoe3EzyHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773929487; c=relaxed/simple;
-	bh=ZoKqfLZmL/m8aDQmzpCMQIqxQutaiEBwAABS+Lwg80w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Fv7sK4lzqeRbiL/Eg68YvFkRPPoNnE9F8w7SJnFM5c8lRy+iGFnWdhhkynz2dJx3xLuXQJ7vaPPJTmwb4mWyZLKBWlzjZQjmpETlJaM2iw5WceeKLSou0dDdJ1x7eLLrHI1Rko/F82Pe82P0tO7qkfRuF6Xy/O6zYlVjBI1SoVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=S5m57HWr; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1773929670; c=relaxed/simple;
+	bh=mpGYkuoFur83l6peicrslGmVrZid01nUXuHUka+y71s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M+4nzu7JgLKlZWjcD9viG9Cn1kBkjQALYJIXtJLoJ6RYmXvl4paLmiJs1LDk/mZtBGlJKOfUIpxVx/FAzxfZw/mwx/5vmJo8CvrChmnbzjPn1HKFz0ZxJ0AENLBlXX7mLIG9qJQs+PQ+G7nHYaWYuo1DgumAQJLwkdHCDBb6r78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S96EPfOC; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=iu7yQySe; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="S5m57HWr"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48558d6ef83so7749115e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 07:11:25 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S96EPfOC";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="iu7yQySe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773929664;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=05ZLtwPhIcLryILrFOZd9fzma2aS/obGeE4L6IYUapg=;
+	b=S96EPfOCvTZ4Mp/+RS50ULM/OWw2DCnZg+u3DYB6yznV717BJ7aOeNJ5/54gphZFxgF+x3
+	1/38S3oHI4NT9+Nd8Q6qFaecmG03LdpGPa39QV9oTE3CzoJkmX881xZDT3OuWu+G3XgmJ5
+	d/Sqfwmpk/y33Kv4FlhBVpVV3R8vjOY=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-596-Vtj6s-1IMU-FH6MzSylGrA-1; Thu, 19 Mar 2026 10:14:14 -0400
+X-MC-Unique: Vtj6s-1IMU-FH6MzSylGrA-1
+X-Mimecast-MFC-AGG-ID: Vtj6s-1IMU-FH6MzSylGrA_1773929653
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-439c794edd9so786009f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 07:14:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773929484; x=1774534284; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZoKqfLZmL/m8aDQmzpCMQIqxQutaiEBwAABS+Lwg80w=;
-        b=S5m57HWr87aghFW/RbHgO8/EdA9Lzep/dbn8C1EUNPLwIBRMG1eCLTK0nAUdT+Ip0O
-         szn8za9rWVDady2QlwylZk9CDol9jSUHJeWAuYDQDB8/45qCk+XsyOeSc+Y7SK5pvDcH
-         +cv4iNnUZ1Pd1G5fcYzz74fsBfKuZ58X3sGQUu2BP/83MhcjC2Rq3SVExf+/B61jlt+x
-         SGyEXX7orHWY5wRIoa7VbMkYng7Rh/l2F+Hte7qu/h56SYKdF9klcSXoaPHGHeRn3CV/
-         BZ+SP4ahzZul7MliJeIa8HwngjD3zhQdwiSuT20Hz4atrP9s1Ix/ffVsxXHzqihCr9nc
-         O+IQ==
+        d=redhat.com; s=google; t=1773929652; x=1774534452; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=05ZLtwPhIcLryILrFOZd9fzma2aS/obGeE4L6IYUapg=;
+        b=iu7yQySeGbzO2g7rk6w8DZjWVZ6kevMjkjtO1iU+JzIMHNjn3uKj5UkF7MNvYCEvsY
+         JE62HhJvC3xXbXlbXURPyIR6n4c9ub4y5IjkL34ibyoRnffm1G+1/cjQ50SZ4hMXZ6gc
+         MMQArtt7TdZNQTLnDyvpTE/FZQ5MQzzMQ8Q0xkJfYSZHHXqhT/fn6jGMv5fU424w1Lwn
+         bbc0ZneuVfDM+1c/3FWEW5igLySN2tDVxGqlJ5xeTZ5PoQec9BgJ3t/CcaXUeRyzLOSS
+         RsCCvv0aaEBaHrHG3RSPXcPHJw9svinfQ91IobkaC+trDYr3S5I5fMEbUj7Ftvj9uo/c
+         6hjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773929484; x=1774534284;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZoKqfLZmL/m8aDQmzpCMQIqxQutaiEBwAABS+Lwg80w=;
-        b=BXZK2mOOc9ZM/blqzuSZ/4E7eyCz2QxX4QqiJxd01WitNFv/so3iyH7Vu31NiGjm9G
-         Ai5HShLBnymwACqHJltgXyLGxwv3bd1IokKJGnz2jwaLysdulUZeiA+Wp/gxs+VM4P+9
-         VAiYwe3lMlH1urMTBAnX0BqqL1GJG35+VUosiKXVzJHOXDscfvgqUeFBxqKzv8TOnNgU
-         h+DMK+HiFyto4nQ9kCE7hgch5WsmkpSq+F7Sjsm1+qoW+V5hdZEw6izv+K+wqldWNQ4x
-         Cn0+Zka3uRcU2hnXjlrvvoDXq8GNkcB6zPxJKHTlBkg4RVPxufRC06j1fGBgkGjjJmP3
-         cDIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhGTASkv0M5NruMWBscRewg6TqNnUZLmB4qLJ2uEwF+V5YcGBVn5qEdsK8PBrnKyNZhFGsWpLP3uBcyB26a6Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ/MLXrVxJJel2phEcg5PQHu6e6TNUjX9rU5uEi72DPnBWMJ2X
-	OGbfLwPZPhRWInnk9JmkkJ8bPvx9WXNNtBTaMEcOLXjomy5/q3rTT3Eq8lqyzOq5rDk=
-X-Gm-Gg: ATEYQzxRTGqnxEzam6ytEMngB3x5dnfSJ0a1MYLgOvIxjDzYK3CczYKNVIAoT00SJPh
-	bwG5+r5jZVPagN0Nm7Mvd5NzhDoANCA6pl3VvItf9gw6l+isC25hbTD3wjd92cRSFNxzqApSxzT
-	f+nmmpRKQUERIDL/sE0uozj2520d7y4FzbowslspUi7sfj8h9XjoKYr2BTXk0zqaWbG6cixNVOe
-	2kFyt4w9iycLTJ9HBlG/Z2tPESfqEjGBuQg6AoKGaQnmnQdvDWOaKWupzx4/TjwTemV/Amu+8dh
-	2jSMnpl0aGDlcNrZWgObHaPAqyY4PBckuHdQztaHQpUk6Z+DIgAjO/Zm8LkldIcqbusQLSkkYpD
-	u2N2xjtBrVgcU4oPtX/Xtny5a9WILKVJZmvp9lBCn6C83ZGjqfuybPqtzpJcanKXRhmOgVz+8qX
-	8hcRR3JrCYm4FeruFTaI07qcYoBSpUouJqw670AqxalRHrTFw6jJSb8lb1LDva/w==
-X-Received: by 2002:a05:600c:3516:b0:485:3b34:2f51 with SMTP id 5b1f17b1804b1-486f44220f2mr121294065e9.4.1773929483990;
-        Thu, 19 Mar 2026 07:11:23 -0700 (PDT)
-Received: from ?IPv6:2804:5078:834:1300:58f2:fc97:371f:3? ([2804:5078:834:1300:58f2:fc97:371f:3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f4bc320dsm77929105e9.4.2026.03.19.07.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 07:11:23 -0700 (PDT)
-Message-ID: <0d85d8d7533a7a78d1f8fcc1fff8ffc73b1cf225.camel@suse.com>
-Subject: Re: [PATCH 1/8] selftests: livepatch: test-syscall: Check for
- ARCH_HAS_SYSCALL_WRAPPER
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Miroslav Benes <mbenes@suse.cz>, Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>,
- live-patching@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Thu, 19 Mar 2026 11:11:19 -0300
-In-Reply-To: <alpine.LSU.2.21.2603191349440.22987@pobox.suse.cz>
-References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
-	 <20260313-lp-tests-old-fixes-v1-1-71ac6dfb3253@suse.com>
-	 <abhjYtyveer4niGM@redhat.com>
-	 <alpine.LSU.2.21.2603191349440.22987@pobox.suse.cz>
-Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
- keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
- Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
- gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
- GO8seNG8sYiP6JfRjl7Hyqca6YsE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (by Flathub.org) 
+        d=1e100.net; s=20251104; t=1773929652; x=1774534452;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=05ZLtwPhIcLryILrFOZd9fzma2aS/obGeE4L6IYUapg=;
+        b=IOaIIaXiPUdSNlgZpsgLy6HIaEc6rONYZpwPiowGPKmOr/jVdOAnEG3MBrSoAAd+QF
+         rop2uFsHKhPzeWhzPKmO1BlnjKmpH6u20iEULs1iXlZ930NAC5eABcwirKedsIOb+G7A
+         PvU2KFtOkg42ThNW69hRGxt82XHpqHy7zfPj7cEJJeYC5qcCtnNgY3i1Ik9cBsBugTeK
+         tG/9OujWote6g2hmXzPSpiIkn0RzUlTRqMTjn3kuQz3HvY/3/xdUqfB/kBefswFoZk2t
+         F3WbP3rB/MKyeMlmz2y+15rclPEj3hFEiAJzljVMZjTpjMXYQHQzxs93RHTk4yTbDhCQ
+         g9jg==
+X-Forwarded-Encrypted: i=1; AJvYcCX8nSU1EsFj3z7+xQ9tHWb1/YGzXaIgR2xAPNdmLMi4yfOwYcOZB/Nqc9l+aaQJZc2nHs/xIZ0jkkNqBylXl6s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUSgLrcKa1d2RzsvJX0qSx5MIPNZKxzCHWObvSHVYWZgc/Yz6U
+	RuX4T5GrzLvS+R/5Cs2VAan9aFNbqnEpeBy631htnBqpIHDwobp+KNFJpUx3I0stctoYRBY2zSD
+	Oc+6Mg2dNAW45W/hcH5BwfTfehQPX8MdzI8T0Bm9m27SZbynutnbBU/BXkF04eq63coXgPQ==
+X-Gm-Gg: ATEYQzwJjb02mXKmOZSOI4bB4kXDuv5KeAWyCfF3g2oOU6ATzT64wWvbUAz2qugAuRU
+	Sin54bSa7FmUeXBpJm+0ZsZjLdm8KZKXqURO48KOwi/pYT1el1Cz88utzeE4ycDP3rglTD6pQqH
+	ZVF+uDOp4In2cw62M4Pnqk2jHebyROr2zVU9tpdyr6Q0uFyYRrZVIqe6YRQ9kjM4WZfFvTnwuwy
+	KMP+TdKXhgHlmuPqlZyFFeS24EdWNeaEWWVJ+v+RbF/YTRwa61fVvM1E0A7UOD4ZOltvZijKFAY
+	vDJSNH7zuNRojOz4eHmvm4FEdoUK3oTvuUmkoIe5F7KJq3rPMyaBYRjvfggFdMCvaWOeSG2lhE1
+	qtAPHk/Eju/YKxIfeRV6QPBhjAFKKUdhvdCGCssX1WrfGJ3YzV7sl8LT9
+X-Received: by 2002:a5d:5887:0:b0:43b:4d25:959b with SMTP id ffacd0b85a97d-43b527a97a6mr13497162f8f.17.1773929652457;
+        Thu, 19 Mar 2026 07:14:12 -0700 (PDT)
+X-Received: by 2002:a5d:5887:0:b0:43b:4d25:959b with SMTP id ffacd0b85a97d-43b527a97a6mr13497081f8f.17.1773929651885;
+        Thu, 19 Mar 2026 07:14:11 -0700 (PDT)
+Received: from [192.168.88.32] ([216.128.11.196])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b518a2cd3sm14518317f8f.32.2026.03.19.07.14.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2026 07:14:11 -0700 (PDT)
+Message-ID: <c1fe7bdb-2e24-4dcc-a804-4f1f180eb4bc@redhat.com>
+Date: Thu, 19 Mar 2026 15:14:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 2/2] selftests: net: add tests for filtered dumps
+ of page pool
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
+ horms@kernel.org, donald.hunter@gmail.com, shuah@kernel.org,
+ matttbe@kernel.org, chuck.lever@oracle.com, hawk@kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260319035649.2396137-1-kuba@kernel.org>
+ <20260319035649.2396137-2-kuba@kernel.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260319035649.2396137-2-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2026-03-19 at 13:54 +0100, Miroslav Benes wrote:
-> On Mon, 16 Mar 2026, Joe Lawrence wrote:
->=20
-> > On Fri, Mar 13, 2026 at 05:58:32PM -0300, Marcos Paulo de Souza
-> > wrote:
-> > > Instead of checking if the architecture running the test was
-> > > powerpc,
-> > > check if CONF_ARCH_HAS_SYSCALL_WRAPPER is defined or not.
->=20
-> There is a typo...=20
-> s/CONF_ARCH_HAS_SYSCALL_WRAPPER/CONFIG_ARCH_HAS_SYSCALL_WRAPPER/
+On 3/19/26 4:56 AM, Jakub Kicinski wrote:
+> Add tests for page pool dumps of a specific ifindex.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>  tools/testing/selftests/net/nl_netdev.py | 119 ++++++++++++++++++++++-
+>  1 file changed, 117 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
+> index eff55c64a012..ceb44c8e1fec 100755
+> --- a/tools/testing/selftests/net/nl_netdev.py
+> +++ b/tools/testing/selftests/net/nl_netdev.py
+> @@ -9,7 +9,7 @@ import errno
+>  from os import system
+>  from lib.py import ksft_run, ksft_exit
+>  from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
+> -from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
+> +from lib.py import NetdevFamily, NetdevSimDev, NlError, defer, ip
+>  
+>  
+>  def empty_check(nf) -> None:
+> @@ -255,6 +255,117 @@ from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
+>          nsim.dfs_write("pp_hold", "y")
+>  
+>  
+> +def page_pool_dump_ifindex(nf) -> None:
+> +    """Test page pool dump filtering by ifindex."""
+> +    nsimdev1 = NetdevSimDev(queue_count=3)
+> +    rm_nsim1 = defer(nsimdev1.remove)
+> +    nsimdev2 = NetdevSimDev(queue_count=5)
+> +    defer(nsimdev2.remove)
+> +
+> +    nsim1 = nsimdev1.nsims[0]
+> +    nsim2 = nsimdev2.nsims[0]
+> +
+> +    ip(f"link set dev {nsim1.ifname} up")
+> +    ip(f"link set dev {nsim2.ifname} up")
+> +
+> +    # Unfiltered dump should have pools from both devices
+> +    all_pp = nf.page_pool_get({}, dump=True)
+> +    pp1_all = [pp for pp in all_pp
+> +               if pp.get("ifindex") == nsim1.ifindex]
+> +    pp2_all = [pp for pp in all_pp
+> +               if pp.get("ifindex") == nsim2.ifindex]
+> +    ksft_ge(len(pp1_all), 1)
+> +    ksft_ge(len(pp2_all), 1)
+> +
+> +    # Filtered dump should only return pools for that device
+> +    pp1_flt = nf.page_pool_get({'ifindex': nsim1.ifindex}, dump=True)
+> +    ksft_eq(pp1_flt, pp1_all)
+> +
+> +    pp2_flt = nf.page_pool_get({'ifindex': nsim2.ifindex}, dump=True)
+> +    ksft_eq(pp2_flt, pp2_all)
+> +
+> +    # Non-existent ifindex should return empty dump
+> +    pp_none = nf.page_pool_get({'ifindex': 12345678}, dump=True)
+> +    ksft_eq(len(pp_none), 0)
+> +
+> +    # Device down - no pools for that ifindex
+> +    ip(f"link set dev {nsim1.ifname} down")
+> +    pp1_down = nf.page_pool_get({'ifindex': nsim1.ifindex}, dump=True)
+> +    ksft_eq(len(pp1_down), 0)
+> +
+> +    # Remove device, dump by its old ifindex should return empty
+> +    old_ifindex = nsim1.ifindex
+> +    rm_nsim1.exec()
+> +    pp1_gone = nf.page_pool_get({'ifindex': old_ifindex}, dump=True)
+> +    ksft_eq(len(pp1_gone), 0)
+> +
+> +
+> +def page_pool_ifindex_leak_check(nf) -> None:
+> +    """Test that zombie page pools don't show up under the original ifindex."""
+> +    nsimdev = NetdevSimDev()
+> +    rm_nsim = defer(nsimdev.remove)
+> +    nsim = nsimdev.nsims[0]
+> +
+> +    ip(f"link set dev {nsim.ifname} up")
+> +    nsim.dfs_write("pp_hold", "y")
+> +
+> +    pp_up = nf.page_pool_get({'ifindex': nsim.ifindex}, dump=True)
+> +    ksft_ge(len(pp_up), 1)
+> +
+> +    # Remove device with leaked page - pool becomes zombie (orphaned to lo)
+> +    old_ifindex = nsim.ifindex
+> +    rm_nsim.exec()
+> +
+> +    # Zombie pool should NOT appear under the original device
+> +    pp_down = nf.page_pool_get({'ifindex': old_ifindex}, dump=True)
+> +    ksft_eq(len(pp_down), 0)
+> +
+> +    # But it should appear in an unfiltered dump (under loopback)
+> +    pp_all = nf.page_pool_get({}, dump=True)
+> +    orphans = [pp for pp in pp_all
+> +               if "detach-time" in pp and "ifindex" not in pp]
+> +    ksft_ge(len(orphans), 1)
+> +
+> +
+> +def page_pool_stats_ifindex_check(nf) -> None:
+> +    """Test page pool stats dump filtering by ifindex."""
+> +    nsimdev1 = NetdevSimDev(queue_count=3)
+> +    defer(nsimdev1.remove)
+> +    nsimdev2 = NetdevSimDev(queue_count=5)
+> +    defer(nsimdev2.remove)
+> +
+> +    nsim1 = nsimdev1.nsims[0]
+> +    nsim2 = nsimdev2.nsims[0]
+> +
+> +    ip(f"link set dev {nsim1.ifname} up")
+> +    ip(f"link set dev {nsim2.ifname} up")
+> +
+> +    # Unfiltered stats dump
+> +    all_stats = nf.page_pool_stats_get({}, dump=True)
+> +    s1_all = [s for s in all_stats
+> +              if s.get("info", {}).get("ifindex") == nsim1.ifindex]
+> +    s2_all = [s for s in all_stats
+> +              if s.get("info", {}).get("ifindex") == nsim2.ifindex]
+> +    ksft_ge(len(s1_all), 1)
+> +    ksft_ge(len(s2_all), 1)
+> +
+> +    # Filtered stats dump
+> +    s1_flt = nf.page_pool_stats_get({'info': {'ifindex': nsim1.ifindex}},
+> +                                    dump=True)
+> +    ksft_eq(s1_flt, s1_all)
+> +
+> +    # Non-existent ifindex should return empty
+> +    s_none = nf.page_pool_stats_get({'info': {'ifindex': 12345678}}, dump=True)
+> +    ksft_eq(len(s_none), 0)
+> +
+> +    # info.id should be rejected for stats dump
+> +    with ksft_raises(NlError) as cm:
+> +        nf.page_pool_stats_get({'info': {'id': s1_all[0]['info']['id']}},
+> +                               dump=True)
+> +    ksft_eq(cm.exception.nl_msg.error, -errno.EINVAL)
+> +    ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.info.id')
+> +
+> +
+>  def main() -> None:
+>      """ Ksft boiler plate main """
+>      nf = NetdevFamily()
+> @@ -265,7 +376,11 @@ from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
+>                napi_set_threaded,
+>                dev_set_threaded,
+>                nsim_rxq_reset_down,
+> -              page_pool_check],
+> +              page_pool_check,
+> +              page_pool_dump_ifindex,
+> +              page_pool_ifindex_leak_check,
+> +              page_pool_stats_ifindex_check
 
-Thanks, I'll fix it in my next version.
+It looks like the new selftests are consistently failing?!?
 
->=20
-> > >=20
-> > > No functional changes.
-> > >=20
-> > > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > > ---
-> > > =C2=A0tools/testing/selftests/livepatch/test_modules/test_klp_syscall=
-.
-> > > c | 7 +++----
-> > > =C2=A01 file changed, 3 insertions(+), 4 deletions(-)
-> > >=20
-> > > diff --git
-> > > a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall
-> > > .c
-> > > b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall
-> > > .c
-> > > index dd802783ea849..c01a586866304 100644
-> > > ---
-> > > a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall
-> > > .c
-> > > +++
-> > > b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall
-> > > .c
-> > > @@ -12,15 +12,14 @@
-> > > =C2=A0#include <linux/slab.h>
-> > > =C2=A0#include <linux/livepatch.h>
-> > > =C2=A0
-> > > -#if defined(__x86_64__)
-> > > +#if !defined(CONFIG_ARCH_HAS_SYSCALL_WRAPPER)
-> > > +#define FN_PREFIX
-> > > +#elif defined(__x86_64__)
-> > > =C2=A0#define FN_PREFIX __x64_
-> > > =C2=A0#elif defined(__s390x__)
-> > > =C2=A0#define FN_PREFIX __s390x_
-> > > =C2=A0#elif defined(__aarch64__)
-> > > =C2=A0#define FN_PREFIX __arm64_
-> > > -#else
-> > > -/* powerpc does not select ARCH_HAS_SYSCALL_WRAPPER */
-> > > -#define FN_PREFIX
-> >=20
-> > The patch does maintain the previous behavior, but I'm wondering if
-> > the
-> > original assertion about ARCH_HAS_SYSCALL_WRAPPER on Power was
-> > correct:
-> >=20
-> > =C2=A0 $ grep ARCH_HAS_SYSCALL_WRAPPER arch/powerpc/Kconfig
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select ARCH_HAS_=
-SYSCALL_WRAPPER=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if !SPU_BAS=
-E &&
-> > !COMPAT
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 depends on PPC64=
- && ARCH_HAS_SYSCALL_WRAPPER
-> >=20
-> > Perhaps I just forgot what that additional piece of information
-> > that
-> > explains the comment (highly probable these days), and if so, might
-> > be
-> > nice to add to this commit since I don't see it in 6a71770442b5
-> > ("selftests: livepatch: Test livepatching a heavily called
-> > syscall").
->=20
-> I would take a bit further. We would rely on=20
-> CONFIG_ARCH_HAS_SYSCALL_WRAPPER being set/unset per listed
-> architectures=20
-> "correctly" for us. If it changes somehow (though I cannot imagine
-> reasons=20
-> for that but let's say we add new architecture. LoongArch also
-> supports=20
-> live patching.), the above might evaluate to something broken.
->=20
+# 5.79 [+0.24] ok 10 nl_netdev.page_pool_ifindex_leak_check
+# 6.21 [+0.42] # Exception| Traceback (most recent call last):
+# 6.22 [+0.00] # Exception|   File
+"/srv/vmksft/testing/wt-2/tools/testing/selftests/net/lib/py/ksft.py",
+line 338, in ksft_run
+# 6.23 [+0.01] # Exception|     func(*args)
+# 6.23 [+0.00] # Exception|     ~~~~^^^^^^^
+# 6.23 [+0.00] # Exception|   File
+"/srv/vmksft/testing/wt-2/tools/testing/selftests/net/./nl_netdev.py",
+line 344, in page_pool_stats_ifindex_check
+# 6.25 [+0.02] # Exception|     all_stats = nf.page_pool_stats_get({},
+dump=True)
+# 6.25 [+0.00] # Exception|   File
+"/srv/vmksft/testing/wt-2/tools/net/ynl/pyynl/lib/ynl.py", line 1385, in _op
+# 6.26 [+0.01] # Exception|     return self._ops(ops)[0]
+# 6.26 [+0.00] # Exception|            ~~~~~~~~~^^^^^
+# 6.26 [+0.00] # Exception|   File
+"/srv/vmksft/testing/wt-2/tools/net/ynl/pyynl/lib/ynl.py", line 1342, in
+_ops
+# 6.27 [+0.01] # Exception|     raise NlError(nl_msg)
+# 6.27 [+0.00] # Exception| net.ynl.pyynl.lib.ynl.NlError: Netlink
+error: Operation not supported
+# 6.28 [+0.01] # Exception|
+# 6.32 [+0.04] not ok 11 nl_netdev.page_pool_stats_ifindex_check
+# 6.32 [+0.00] # Totals: pass:10 fail:1 xfail:0 xpass:0 skip:0 error:0
+not ok 1 selftests: net: nl_netdev.py # exit=1
 
-I agree. Given that nobody even complained about it, I would say that
-people testing on ppc64le has this defined correctly. Whenever new
-archs start supporting livepatching, we can always revisit.
-
-> So I would perhaps prefer to stay with the logic that defines
-> FN_PREFIX=20
-> per architecture and has also #else branch for the rest. And more
-> comments=20
-> never hurt.
-
-Agreed.
-
->=20
-> Btw, see also=20
-> https://sashiko.dev/#/patchset/20260313-lp-tests-old-fixes-v1-0-71ac6dfb3=
-253%40suse.com
-> =C2=A0
-> for the Sashiko AI review. It also commented on this patch. Marcos, I
-> guess that you will look there and I will just omit what Sashiko
-> found in=20
-> my review if I spot the same thing.
-
-I already checked there. Maybe adding more context to the patch and
-code will avoid further confusion about it. Let me add it in the v2.
-Thanks for the reviews Miroslav and Joe!
-
->=20
-> Miroslav
