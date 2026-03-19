@@ -1,121 +1,159 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF38386C32
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 21:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773955315; cv=pass; b=LQ+JtK4gsm6Opc5lUr1LkcX/y0sI5heuFdgf/P7MgCGlEJxI1V1OzLIJpMb+G3OvZs8KibZsswJ5sZDUwbNw5/x6a5J6WmzPxkctOROrUh05R0irvVjSj8g13Yv7VH3IfcubARkLD5J4pUUYIHse9pSimSIHomK8RT1dPRC5cFc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773955315; c=relaxed/simple;
-	bh=221SE52RqevFko6XNRwaQM9HvEmE73WFUCY4jlFOO1g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iikESSNbgPpXfQnim+36IRNT5YjtlYHOtDE7N3XamS6BeRSYVWtsEVvQS2W2CVAv8WOq02ek1CeYXqibYx+GtWi9Wmv2VoyzdbEi1+acLZ6RA9as6JSvI/7y8sZF2H4Zj9xysgB2LUQf3tnInGUr4ZR2tug0Tkz9xrbh6Cf3rfM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OYuYh8jf; arc=pass smtp.client-ip=74.125.82.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450A815B998;
+	Thu, 19 Mar 2026 21:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773956821; cv=none; b=L2RETjb13tTxBitAfYljQ1pzdWWUHtjJkyjOHTWRsYKCp2/KGqu+4CzY/o0S1NYxA38G/yShtYcCjb/R/2onCnlKy34T2f7OrH93sFgoLVgx9QUWr1OJNNlD4pS53z5tuwEhwS6W8ktUxENfZeuvzEBkHp0QhmIlhtNNNSLw27w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773956821; c=relaxed/simple;
+	bh=1IBkxxVID0OqECcdtfslaXIofuQKudUDRH508pH5n2M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=THYk4ZN6sPGCDk/71bDVLEp2DoDYBZfdoDajZns9KYwWK5BuQGVpD2kQLdkHvhi2pCoQ/2BZrqIh8dBTHXQdd9rqOttAW8nZdFLGBOBJnAi4OjYUNPDfXdECsx2YlvHzb/ULxt/aBpvAjoWD0NxcRW8K9jEnqZu0EQifr1jM5Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQKZ4msA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OYuYh8jf"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-126ea4e9694so747208c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 14:21:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773955314; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LSH23QHaWT5BIdANKOZDJJyavCRPhjZY94Selk3STWqsNUCnv7yy9DHdDsNJl7D+yq
-         jr94qhLkjjfQ5P67fAqYQ2PzzSC2k0FOrk1rXRd0hWpCBd22UhL+RhaQF+GX6UpqQQQ7
-         D4wdFvcdj55MZsfbjJHnoLIf/WStMFoxFAgxfX1H9c/b9dE9z0DzvjDF2oCvlvk8EmA4
-         MQJLZDrcToV/NrqynRKBIxcvJxMaI4MjRUCkSVLFshntUe5dLRypIjIXm35Pbek0TRDF
-         +aMRHWrY/V499iQzzUSz/OSLkLMeyS8YPxTult4oQ+O7ArLeT/oxp65gc/7ksfpEekLU
-         ibyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=221SE52RqevFko6XNRwaQM9HvEmE73WFUCY4jlFOO1g=;
-        fh=wjzR9ZYE0IaSG9WQc1L/iETaTAjB3ZUoVePJHdlGwiU=;
-        b=huERTMtGmrQX5RiCVLKM4ctGKRGHFK/8izGI/PMcwkvNyM8iVtTml76CQdtJ72WQXo
-         TxDhLGobsS17TgWaeQQwIwZIk0mcncfybCqnVw1cEEvtBsTHtV4p9kaB4mySQPIYuzRp
-         fUVeczvurnHiHX+ROaFEWP89spUzi4yqttfOBIMfntkDCPW9AwOc8D/9X2G6xSrZXu/0
-         3qrWCoIi4RlXdwjsGUCfnDiU/Uf1FRTJIFTUKK+eZX3FGwbrTlEl3/ogFxNfTxm6aVqp
-         wlNPVPrbSLfs63qP/ueaI+k0iLr4QbTcukYy3ZVKk5WwbMqfjRPx0MsVKws69jFRvpMv
-         lm2g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773955314; x=1774560114; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=221SE52RqevFko6XNRwaQM9HvEmE73WFUCY4jlFOO1g=;
-        b=OYuYh8jfWV2zj7Qi8ABMTbYmtjujUtTUnbz7b0NTJLQMYfF2g+mzGrFbUPrc/DO/Pg
-         X6C9wum5FUU8glVsIpa+/uk9lxDtUp/2qYvkrReSXp1AW+VSACojZFSXpUZk01GD4bQG
-         e8JRAo4FYHNQk1LVU2ZlhEANmCqa2Zfe8MW8Ql8zUj73XV1vb/VVJF2B6vAHhoUdyvcH
-         XzFDGGT/kcuuhedVkMzS4aazAjwY9J4vPvRbm/XnjQ3990KiWOOExQw+79gGsWqSuXhw
-         Q98rb8m4CQ9zgW3ItwnUYce8SLHVzIzVcaJWDqnTib3jRUHOC5GViTpktknGdAV/izSU
-         hxsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773955314; x=1774560114;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=221SE52RqevFko6XNRwaQM9HvEmE73WFUCY4jlFOO1g=;
-        b=JuPnRFSeQPN06PBF1UZot5TXnxWnfpPEsFT9GypK2bG0gw8g2fL73/dyvRA3UZDyaD
-         CQQoACIPjYrxH3lnhDQB3WyU8kfadddBLLXJDBzfY7V4YjGYyCxwNyLeuBivh0ZMbFs+
-         FrzwMts3RdkZIsVOeu7m/up8Xp3z2yVb3Z75tk/9i7MgdbxrJVVlHnn/LFSWk9fLN/rz
-         uhkwbbmH5006EXPuQV4uRoUGXe2NcYopnTaBXZZmsCObMz8sFbQAhH+CVs0E2VYsGdSS
-         h4u2dRRnkXET7KDXvZvdLyN33AThnp+6e3MGRud1mmlqoOaKH9JkOwfAMdTASWSQomnB
-         tuhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZZNIP4+XTBIqVvPDTUCdRd9q5SjFFIMypK94RxJzApAw3aZ/Mt45SIMD0rlS7e9qbCYZqbpWYa1dEoPcpff8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVNvVczwRlUJv++UX0IXGaDxtiBHeEYzytHfWRQx5rnhu4WFh3
-	JtS3mXjHkjaUH77u0E7JF2y/xgscgytonYmGwVRW3joZoo19ZZU1OUFbhpzV0n3O9vrEerFNnFH
-	o9g9GtmJ6aRVvsWCYJBi4EXXZUbVAUQQ=
-X-Gm-Gg: ATEYQzywxdBT6wW5HhI5MAaPJS5r5Y8RRhjM9G84WTZUZ/ZqfaKW0IHfJmBaE67Y0bc
-	PS93ci+yE8GHhau8F9U3MO9Q1MSXn58sgT2Wf6FmSv802F2+d6krUOzAUG/4jhE+u43F1b91jf/
-	o1VSoiWyqbqeiZ0Af+hgNExBpywjhm9cbOjgJ/XPl/5Z3G+xjeniUkSuKAvheCy3c5mjmzGLvl4
-	1gn4QrrxUhxfQ3l7eBTP8je7O2wCCrpi5WZrKr3tOLL7JYdVCiNHho4f9cq0tPTG6HDvjIxE+Jo
-	EnjpaF5rBH2zUhHWwX1fcBneL/OhbMnEPstqIQiI
-X-Received: by 2002:a05:7022:68c:b0:128:d5f1:d594 with SMTP id
- a92af1059eb24-12a7265ef91mr378865c88.10.1773955313615; Thu, 19 Mar 2026
- 14:21:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQKZ4msA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245CFC19424;
+	Thu, 19 Mar 2026 21:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773956820;
+	bh=1IBkxxVID0OqECcdtfslaXIofuQKudUDRH508pH5n2M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YQKZ4msA9Q1UVupgLQQX8vWm3a7QrdO9XU5owvbsusQVdWvjaxArz8Et/bp6ovnOs
+	 V4HRFc5TXhTPy+WL9rihFat9A7NxNhUsmKYne7rM0Ij8oDuzhoMr58/+PIR/FYiYD1
+	 dzHjoWQMJ8UnPNd2CVNKGDOaTCL+87qcEGvwEiHNxP7BFDaHZeiEhiHkoDx72Umg2e
+	 JudAWOILwmo/e0oIm3hyYcEXKJCYV9HLTcDuZA6yot54xC7QRWgWD/FWZOSXXSQKTB
+	 1MGGDP4CxlwXaGUi+0RRy9CUVPXvDu4C5KsZpNLIMzTnccQi/qlIRdrgJZ3ckpm32d
+	 mB7HhYdpglAaQ==
+Message-ID: <eeac1781-d809-4108-9abf-63a9800a9ea2@kernel.org>
+Date: Thu, 19 Mar 2026 22:46:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260317065137.1533226-1-atwellwea@gmail.com> <20260317065137.1533226-3-atwellwea@gmail.com>
- <f5c9a512-4779-4cc4-aed9-37ce0131b3b8@redhat.com>
-In-Reply-To: <f5c9a512-4779-4cc4-aed9-37ce0131b3b8@redhat.com>
-From: Wesley Atwell <atwellwea@gmail.com>
-Date: Thu, 19 Mar 2026 15:21:43 -0600
-X-Gm-Features: AaiRm538XUw4IKToQaoAq11Z10_mTYAUbrTsrzh12UMqCaa0aGQGRCabgU4juzM
-Message-ID: <CAN=sVvxQg026ch7k+GKxORd1hpQzQtROT2=tNQ1h2HH-re5-eA@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/3] tcp: keep scaled no-shrink window representable
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, davem@davemloft.net, dsahern@kernel.org, 
-	edumazet@google.com, horms@kernel.org, kuba@kernel.org, kuniyu@google.com, 
-	ncardwell@google.com, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/5] selftests/mm/guard-regions: skip collapse test
+ when thp not enabled
+To: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org,
+ shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
+ baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
+ Li Wang <liwang@redhat.com>
+References: <20260319160656.1480279-1-chuhu@redhat.com>
+ <20260319160656.1480279-2-chuhu@redhat.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260319160656.1480279-2-chuhu@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Paolo,
+On 3/19/26 17:06, Chunyu Hu wrote:
+> When thp is not available, just skip the collape tests to avoid the false
+> negative.
+> 
+> Without the change, run with a thp disabled kernel:
+>   ./run_vmtests.sh -t madv_guard -n 1
+>   <snip/>
+>   #  RUN           guard_regions.anon.collapse ...
+>   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
+>   # collapse: Test terminated by assertion
+>   #          FAIL  guard_regions.anon.collapse
+>   not ok 2 guard_regions.anon.collapse
+>   <snip/>
+>   #  RUN           guard_regions.shmem.collapse ...
+>   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
+>   # collapse: Test terminated by assertion
+>   #          FAIL  guard_regions.shmem.collapse
+>   not ok 32 guard_regions.shmem.collapse
+>   <snip/>
+>   #  RUN           guard_regions.file.collapse ...
+>   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
+>   # collapse: Test terminated by assertion
+>   #          FAIL  guard_regions.file.collapse
+>   not ok 62 guard_regions.file.collapse
+>   <snip/>
+>   # FAILED: 87 / 90 tests passed.
+>   # 17 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+>   # Totals: pass:70 fail:3 xfail:0 xpass:0 skip:17 error:0
+> 
+> With this change, run with thp disabled kernel:
+>   ./run_vmtests.sh -t madv_guard -n 1
+>   <snip/>
+>   #  RUN           guard_regions.anon.collapse ...
+>   #      SKIP      Transparent Hugepages not available
+>   #            OK  guard_regions.anon.collapse
+>   ok 2 guard_regions.anon.collapse # SKIP Transparent Hugepages not available
+>   <snip/>
+>   #  RUN           guard_regions.file.collapse ...
+>   #      SKIP      Transparent Hugepages not available
+>   #            OK  guard_regions.file.collapse
+>   ok 62 guard_regions.file.collapse # SKIP Transparent Hugepages not available
+>   <snip/>
+>   #  RUN           guard_regions.shmem.collapse ...
+>   #      SKIP      Transparent Hugepages not available
+>   #            OK  guard_regions.shmem.collapse
+>   ok 32 guard_regions.shmem.collapse # SKIP Transparent Hugepages not available
+>   <snip/>
+>   # PASSED: 90 / 90 tests passed.
+>   # 20 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+>   # Totals: pass:70 fail:0 xfail:0 xpass:0 skip:20 error:0
+> 
+> CC: Li Wang <liwang@redhat.com>
+> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 
-I re-checked that corner more carefully. I do not want to overstate it as a
-common path, but I also do not think the current code rules it out.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
-rcv_wscale is fixed at connection setup, while full_space/free_space are
-recomputed later from the current receive-buffer state. The tree explicitly
-allows later SO_RCVBUF reduction, and the window clamp can also change later,
-so I do not see an invariant that keeps full_space above one scale quantum
-once the scale has been negotiated.
+-- 
+Cheers,
 
-That said, my reason for keeping the small non-zero case is not that
-unconditional scale-down would be less safe. It is that it would also change
-the long-standing behavior that avoids scaling a non-zero offer away to zero.
-My intent here was to remove the larger-window round-up slack without changing
-that smaller legacy case in the same patch.
-
-If you would prefer to also change that small non-zero case, I can do that in
-v2 instead.
-
-I will also rename gran to granularity in v2, if so.
-
-Thanks,
-Wesley
+David
