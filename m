@@ -1,149 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27833E92AF
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 16:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406743ED117
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 16:17:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773936482; cv=none; b=mIrYUd3QQ3sBddTIi+ETIzceSJQgRC6JYs0kbR7qZNqZ/hh5XSh3jo9QiBbjpXj14l3ivijjo1zHL/j42uBEH+Lf1PxR/qib8D9MHAaORag/VKkIm9477GB3keWGnC5DpW4iSXt5ykyi2ksX6mONAOQAIaDp+KfU9EuJGOYA2k0=
+	t=1773937080; cv=none; b=XqNmB5KfIVfs1vymTWYdpDqGdA1GyXlEYIE+UvttD/qz2ZF5Y3/O6X4aLp3k1KNXDyHdsf+SiBs6QBF2Latnea2zuFd9hGsgxGBrVvPgP32EXz0sSqk8RPcsj1NI40VagFmBAdZnFU5u0BJgds4IkLerOg6Yxm0Bmk6UCOXeLt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773936482; c=relaxed/simple;
-	bh=0ZNjKjARdZvcdL31QoVs+UqP+O/z4+0bO2/UPGbm13o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ECyVv1ga7mI7CKKBrG8D4GX9AQ3wIeUqK86jnXNAt5bCbY5HNxzxmXAzFiGx7YXPWqsufULVaw6Pi+pgrrrH21jtqc9omfl//W+qbI7soSKLt/v5erCv20ywzMp0KRGfKaSH3fqdyvZLleeTY2jCoNTW+CgzwHrIuTxYsxQNyEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SBPRnUNL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773937080; c=relaxed/simple;
+	bh=XKiAp1DwwODDUNt3mgTzBLo9BnWUOH4i7exkuuLcN+s=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=q9LbIct+Jo5fRsmI7oaL5bqZh2uqAQC1zE/5ckIn9vmwOlUdA0akjrvKXzV9HtRULDqVKh5E00iLYBLm2J9OhRRwKEfk6aMXXEYAl99xLUegGhx8vw9qQtyHqpas8C8nycboPOhaUoW7UxUrS6L7amHdQXtTvkUnwbGO3tukrw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=iXyUDGCo; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SBPRnUNL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773936480;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z5cQUZey16cto7EAHb0l8lICJnDidIXEapbKPGxTzr4=;
-	b=SBPRnUNLTp5yaMl552KMqwBnKgjtZjQMNmi0BpmWhujBULDQJoyj+0M2w9Jd4JH5brFc8m
-	38u/VKITK5Kj5rZ0QM8EjGnvBVv+SxTgHshzaFOrCSfonulvmH4Mc1xhCacBtsB1Xv3tzV
-	fpZSe39zC+0R4ePKJ7ytdS/yLW0aeLU=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-647-8cvUmgKlOZ-xXseQPxlJNQ-1; Thu,
- 19 Mar 2026 12:07:57 -0400
-X-MC-Unique: 8cvUmgKlOZ-xXseQPxlJNQ-1
-X-Mimecast-MFC-AGG-ID: 8cvUmgKlOZ-xXseQPxlJNQ_1773936474
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0BE9A195607B;
-	Thu, 19 Mar 2026 16:07:54 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 82A8C30001A1;
-	Thu, 19 Mar 2026 16:07:45 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com,
-	Li Wang <liwang@redhat.com>
-Subject: [PATCH v4 5/5] selftests/mm: transhuge_stress: skip the test when thp not available
-Date: Fri, 20 Mar 2026 00:06:56 +0800
-Message-ID: <20260319160656.1480279-6-chuhu@redhat.com>
-In-Reply-To: <20260319160656.1480279-1-chuhu@redhat.com>
-References: <20260319160656.1480279-1-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="iXyUDGCo"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8cfc40e4158so48316185a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 09:17:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773937073; x=1774541873; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ld55lyS+UNJ7gvafEyeKeCDZS977J+HXiJ8/KK+leDU=;
+        b=iXyUDGCoe+kIjRyxhuhBUzWXNGzcvmwnBmqVfwtDu5PVTvLWG0OmCpu2uctwdXKKQE
+         h2pJIwPFwDLGvECxjmJbTl/OUa0DKz4wGpbYGHeUgEVFWazQlKpI0SvtyR3EU17ROeVY
+         sIYSVhSlUeXxv0zLY+zl+gCweeME13OxbRb0MX9U+vIUPmHdNzPQgIkKzf+BPMBK6f0E
+         OY+3W56Hy3/fWVPq/jOAGvD2W+Q4af+KzTrdNzGKVyO/MFkqOOn5vTDI1BPaXM7ioccF
+         fc0Zt+QAbOpRjJRxP/a17iAz8Xg1t7KEN4cQL3yAvVxvJed9dhWYoHM1J3M34orL8M19
+         kQ1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773937073; x=1774541873;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ld55lyS+UNJ7gvafEyeKeCDZS977J+HXiJ8/KK+leDU=;
+        b=c2JEuoVaWdCeVVPq4GQ5l5lPZZML/1byYTAnIJCRNgNd+9CfALD6Ij0Nby42jRonjz
+         dvEjZyhuLdSso/KMsHajchxL6MB5Su2E1Q+rE/8oCejsPx1dsU+6OpJFt7EMc7pjoei8
+         pAKyaYe5HXVto0+QjZUxU/eOh2aA4YH53awi91mTJZvNwVAcb6uT1LUe6x0RtZTWRX7g
+         zw9RtJ4zoCL9cNnKAZCfIxwe+Sw23jVuw5q9dbUsCU+LXaLsH1Uh9bKlbY679PiJj1cr
+         mudDBcN4mzadEEc1B/giwTVZzVLToEwFXZWTzFJC4PAEegMLmBvUtkaTzhsA0w/mLm6x
+         QZsw==
+X-Forwarded-Encrypted: i=1; AJvYcCUzagQie1NFvEMgmRtbikU1uWi6epvThd2vcQpui4+xFbVCr5Ve4FHJUUVj+ASP1EGS3aoFzwyqsZeBSdBrRt4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrI0HDy7gtp8+BKbZONFnksuYGq1iDamJbGCbRLylpJClLzbRX
+	0mTDuY5cuD+wt9t66SJ6wv7JYRvOgEwif2JC9VjRk1UmO4sMENIrBvgYu7FfK2dtZkU=
+X-Gm-Gg: ATEYQzzfd9bWrTK1+66N3toqZKbn9q4BDuKgqRhoIj/SLD4JuQ55hR8X/jq6C4oVQDj
+	8e2Ybrpu5wnXQsU9r/jLhmuf0BBFA6AKUg+ob6hMPaXhcQEXz5F2ZWYfWwpua2vskKbqfKbQRkb
+	g13xJ02Wf+AtXakENYta8+ABncuqFFkkcEuV1AjGmNeZKVIg1rGWZi+I/6wJAwNDtsDkV1246bo
+	nVyOwwAaKIVZpeRUQ/LGxX3IuzlrDrK6zFYu1xFoMvdewA9y8y0EWvVNgRX9VIBpmsnnSquGS9s
+	0DZ+8Io1tK/XUZhIHGkB6xlvtGo7c8L8hqYRzsmq3Wmt1aRL+SJ4rqJCu9uvi5oTcXZ15QobFvU
+	6E7X5tbEGCWFTRebkWCVNMTU07Hi76i2P2cv2QnlbIXMcjXFu897JvceaHoC7SPx3o0dB/Gs/j7
+	4xV19pAUyaBkfYt8E4SPskiqw=
+X-Received: by 2002:a05:620a:4709:b0:8ca:2baa:6656 with SMTP id af79cd13be357-8cfad2eab27mr1171304085a.55.1773937072730;
+        Thu, 19 Mar 2026 09:17:52 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfad1e1fbbsm493643485a.42.2026.03.19.09.17.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2026 09:17:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Mar 2026 12:17:50 -0400
+Message-Id: <DH6W7K2SLPYB.PCO7FQ6CR1YZ@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v8 2/8] bpf: refactor __bpf_list_del to take
+ list node pointer
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Chengkaitao" <pilgrimtao@gmail.com>, <martin.lau@linux.dev>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
+ <haoluo@google.com>, <jolsa@kernel.org>, <shuah@kernel.org>,
+ <chengkaitao@kylinos.cn>, <linux-kselftest@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260316112843.78657-1-pilgrimtao@gmail.com>
+ <20260316112843.78657-3-pilgrimtao@gmail.com>
+In-Reply-To: <20260316112843.78657-3-pilgrimtao@gmail.com>
 
-The test requires thp, skip the test when thp is not available to avoid
-false positive.
+On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>
+> Refactor __bpf_list_del to accept (head, struct list_head *n) instead of
+> (head, bool tail). The caller now passes the specific node to remove:
+> bpf_list_pop_front passes h->next, bpf_list_pop_back passes h->prev.
+>
+> Prepares for introducing bpf_list_del(head, node) kfunc to remove an
+> arbitrary node when the user holds ownership.
+>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
+>  kernel/bpf/helpers.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index cb6d242bd093..e87b263c5fe6 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2426,9 +2426,10 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf=
+_list_head *head,
+>  	return __bpf_list_add(n, head, true, meta ? meta->record : NULL, off);
+>  }
+> =20
+> -static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, =
+bool tail)
+> +static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
+> +					    struct list_head *n)
+>  {
+> -	struct list_head *n, *h =3D (void *)head;
+> +	struct list_head *h =3D (void *)head;
 
-Tested with thp disabled kernel.
-Before the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..1
-  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 60 transhuge-stress -d 20 # exit=1
+Note: The cast to void then back to list_head is necessary to avoid an
+"incompatible pointer types" error.
 
-After the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..0 # SKIP Transparent Hugepages not available
-  # [SKIP]
-  ok 5 transhuge-stress -d 20 # SKIP
+>  	struct bpf_list_node_kern *node;
+> =20
+>  	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+> @@ -2439,7 +2440,6 @@ static struct bpf_list_node *__bpf_list_del(struct =
+bpf_list_head *head, bool tai
+>  	if (list_empty(h))
+>  		return NULL;
+> =20
+> -	n =3D tail ? h->prev : h->next;
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-CC: Li Wang <liwang@redhat.com>
-Signed-off-by: Chunyu Hu <chuhu@redhat.com>
----
-V3 changes:
-  - Add review by from Mike
-  - Add acked-by from David
-V2 changes:
-  - Move the exit chunk to the front of ksft_print_headers() as suggested
-    by David.
-  - Add reviewed by from Zi and Lorenzo
----
- tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
- 1 file changed, 4 insertions(+)
+The new code reads n _before_ we check if the list is initialized. So the n=
+ we
+are passing from the caller may well be NULL. However, __bpf_list_del()
+will in that case now a) call INIT_LIST_HEAD(() to properly set up
+prev/next, b) call list_empty() on the newly initialized list and exit
+without ever reading the NULL passed by the caller.
 
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index bcad47c09518..7a9f1035099b 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include "vm_util.h"
- #include "kselftest.h"
-+#include "thp_settings.h"
- 
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -37,6 +38,9 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 
-+	if (!thp_is_enabled())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / psize() / 4)
- 		ram = SIZE_MAX / 4;
--- 
-2.53.0
+This is kind of counterintuitive: We are passing essentially a garbage
+value to __bpf_list_del that we thankfully end upi ignoring. Can you
+move the init check logic into the top-level kfuncs to make sure the
+list_head we're passing to __bpf_list_del is always valid? You can also
+just init the list and return NULL in that case - we know it's empty.
+
+>  	node =3D container_of(n, struct bpf_list_node_kern, list_head);
+>  	if (WARN_ON_ONCE(READ_ONCE(node->owner) !=3D head))
+>  		return NULL;
+> @@ -2451,12 +2451,16 @@ static struct bpf_list_node *__bpf_list_del(struc=
+t bpf_list_head *head, bool tai
+> =20
+>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_hea=
+d *head)
+>  {
+> -	return __bpf_list_del(head, false);
+> +	struct list_head *h =3D (void *)head;
+> +
+> +	return __bpf_list_del(head, h->next);
+>  }
+> =20
+>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head=
+ *head)
+>  {
+> -	return __bpf_list_del(head, true);
+> +	struct list_head *h =3D (void *)head;
+> +
+> +	return __bpf_list_del(head, h->prev);
+>  }
+> =20
+>  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *h=
+ead)
 
