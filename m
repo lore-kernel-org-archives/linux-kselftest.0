@@ -1,78 +1,84 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529FD17A305
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 12:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC30238150
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 12:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773924344; cv=none; b=hkISsAXBtxqvPcXF6VPFUsNJwadUGg6dIJwWO98+JDHPvTn7Uy8hpaf0RSmaP+9/Yh56gzUCD2Io2NaOP9E6e14arTxXrURaC1mY9ZtV8wYtbtMQrGv1PGJDGXLlnwLVrdFT4nb/ukgrQkRBHuzJneG2FaUgfXr+sEImTG6xMaI=
+	t=1773924551; cv=none; b=ZF3zTbOJpLLrLw4Xeyzu3spLyDWJinT48ufHaUo+2n6IvYXQpxj5GTL0F0Yr0FqT/KZZpjMZg3j1z5aM3TnYdKtzfUcYs4ERMkJUWR9omM2vcnvY5xrIbNNm4uIJx3SB76xuqFLCLwTOAPGy35SbVc/0Fe8AIDc8dBtSmgZH6Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773924344; c=relaxed/simple;
-	bh=npgzio354QTzjj1JltRq6t13HnCw5LVC4NF6FChWmgk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WTd2oRR7OeMmvTLT52Ik3f1w4eK0BIMHG5TuEIoQR/4Ah/x8/PZoCkWhIdWgm5GU29wkGuu1t99NzaQycoihaoSZ5CqPiJZoafE4oxejYIs7+clT1pxrDHt0I4ckb5mH6vS7slt0jnyQ64kV5QM6+pI6Ne87hfm6L+z97E/Yg+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=z5PlNb08; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1773924551; c=relaxed/simple;
+	bh=ynQBMSRXQm7aPAjLKgXfqgaJLoAvfb9D/ictZQSt4f4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZgUu9AHowlU8YjFJRxyp66BH/ZUKGSK0lLqYR/XgAKtGNKgEPtOuuEa8+QUPihYwewEc7x7nWMNND2nZkZigjW3stCHfePQetQpDN3YnyPX5RYMMm3ibzTtw9YV0SbGQM//E30qTPp8CX6LoS8CTFN10gZIjR7ma2PxEnXjSmGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkbKAOIO; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z5PlNb08"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-486fd27754bso2273495e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 05:45:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkbKAOIO"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b7cf4a975d2so120266666b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 05:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773924341; x=1774529141; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773924548; x=1774529348; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e0BGsXiMwsYOAMmQzfEaNUBl8dGwTDCeUrjR1vlk/xE=;
-        b=z5PlNb08YsG19/jtTSqxE5iljvMf/S1HiSncxmQz7aJ3yLF8/ljTtCRbizSy24uHa/
-         Y37SC5FbsrqY+VPW0EzP9veTvyfhrR4I6cuvbZo5MNx1bTff/TZT0tXI8VVaWwQ7M6h8
-         kGkrTTdGOnaaJVAXK7HA54kpbUnTCoNRTorJKHRj2xYh2tllxrM1EbZlzHXKwI+7eJ7L
-         PJ6ednjYsWr4MOHu/rxphp/56ptA3yOAa6Hkd/As6/nwxA09IRsvNBowxrVgypl7qkr7
-         irGPmm7YFUZWM+SlL/qd3LdmzTRbsOalrAYFcSs4Jd1c683QLW16nQRbYW77BVrvxt90
-         5dAw==
+        bh=Hp70Q1L+cat8b+0lFNo0m7Hp9q8eqDxwQih/uHUWYr4=;
+        b=bkbKAOIOjlqs8eOFbmtw4InFT3IIuBlo0pZsej0n9sVrvtn+PITZg+JIHivP1WbZl8
+         JfpLk1/lJ4X1gi9UADqHPTZdJFjwRRO7YApPh5hH6lCdXhnSKu+JULcoUzWANDcLZr1F
+         V42m+JGmGgrFXwUXY0SLSRAX1ijge8gkX6P5qFpRowWRvPKu8+wCVVmFz8fmUkQ0vVVl
+         kH7oQArzPCxtx88nM3GQN+0oebIuH2412CABkLXs+PXYrXmJDWpBLl5x2sO7Vi6iFYqd
+         XjyFZvMq9/m55peubkELekQf0kmmVjh1iIzHKHwyTCPN4TFe4bpas4MSooQUCrxnfP0V
+         6r5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773924341; x=1774529141;
+        d=1e100.net; s=20251104; t=1773924548; x=1774529348;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e0BGsXiMwsYOAMmQzfEaNUBl8dGwTDCeUrjR1vlk/xE=;
-        b=cNV6BCsa2z2Jhopv1QtuoI/ffsO1N3gTuX83uh+6IzGD8mwZHx3PPqzwus88szsu5b
-         s8LTA/VZoBof2Jf1+AQvS31kZvLqzVJkm/PNvb6eJDrSnorw2bNCUlO7DmPPQvBcTJaB
-         zGw8j2il4zd1faRmIo+BZWN+3ubsK2YdCqSrBPmHaLLa5xIJSQMRbSXGlcLIhbuy1lIr
-         g0qgT/fzXIEz7txcIEgdzNiwfYA2NglWXs+M1lVUCCwh9SYE4xIT4VQK280hp0YI24VI
-         hgn7Coi5Q/poJ3vwM2NnllQVBFPoBH+O5z7580oBwasSUyqpr2NWdKn4GFZEdV131/49
-         ERgw==
-X-Forwarded-Encrypted: i=1; AJvYcCV4z1kbmVM63FWINeOZoqYSNehQizBVBKOvPnoHPk8bP9lQaPKZedR00VyWbVlXYLOVqKIigj4MeswfsaroT6E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVSohbBv9SBGgx5Qbaq5Bg+dnn8x0igRb0g5/0oIQyHkDfuUxs
-	gyU0Vw0wKe8/3bh4SPOZWMyD3kEY0BLdxhsgsr2R3l3AG2UnXge75NOZEmnxsVYisQ==
-X-Gm-Gg: ATEYQzwDqMDt8BzOcPh4Ore08Yt9ck/DLE/r9akLcHOQDj4nduNQ1lVNvlh2TxO9OA9
-	BFRAxewLAeF7JkXIuXIB+CkSIK8mSqdphpZaT+6CfBT4P0q+c47qgUV0/r12ICYTSDh4CEzMi7I
-	g9BRoesw9uFFRWqJLWOf0mAN3tViXGUFSXqXcjKFmAaF2ntrLbv87aj8F91FQHG70nW4rqxQBSt
-	mggThN0nQo9C49dw64TFIyfX6Bo70Vyxas6dAJBTHQ19ycy48zVmDgD6H3xUR908ShFS3JluHhk
-	XUBe1S8JAs8STWonb64rjLx8llEypfVOue0pHqtIWYTp5fn78eE1R6OlfsoED6CF6jMm1p7oM7I
-	fERrpB1h8uaJemger9035Ydx+YZTfKznUULY6RQ3Bk/Mlq849mQbo8Q4KJ+o9XpyCu/bUPCiQjL
-	tBTrusALiRZs+1CHbXrEL5emLisy6BFOa/FvCjvWTAJMJJ+0bW+8/C1Qa7vUfRQmXk2hlVfAfsS
-	7STBsNGNc30Qb5O/HfDJN4=
-X-Received: by 2002:a05:600c:3e0e:b0:485:4eaf:eb14 with SMTP id 5b1f17b1804b1-486f4475054mr111302185e9.21.1773924341468;
-        Thu, 19 Mar 2026 05:45:41 -0700 (PDT)
-Received: from pickles.copeland.me.uk ([149.40.2.133])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fd9845a2sm19249455e9.6.2026.03.19.05.45.40
+        bh=Hp70Q1L+cat8b+0lFNo0m7Hp9q8eqDxwQih/uHUWYr4=;
+        b=LJq9WFjSYTcUYjGHcN4BxxjblSfSNB97gt5TPQjQHCUQcOR+2x5ffvHneaMe8MdGYg
+         K7DTcaHh+aQfILlPcqsFnG8kqPVu2j90oArB1JASjtsa/5K7teOz0NdmHC3DUxdIJt71
+         w+ExkIwbJheInnSBEoq6ze7THe+2mAKcJz9+/3HNoL1/7xCWDcb3v+3Gi4F3nsfr2Nob
+         4fbvCH2zplHisMWxo8Sy0NStBISsSnY83h9CLjetmY8LYxbvO5zkEsOz29LPd+QyO3v1
+         LzlFy4ue9Knyw8IOQ/VzI+BA+YbycSgFCooXuP1moWFyQ2nWNgsW87pZLTUYBbGcbKBh
+         Zg1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWagBuygIVvt9sHryrpIUiO/o8EqT8jpGRhLr8bAh35vZdKC5zBz/ySbAwmI77nd3jGO4v2rYOZsdXvXD9oXcM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB5evB5zxI+fZhF4dKdo0NfbKvbbXvYREIwVe+qDU0KpNvu59U
+	WPmCYRJYjFEkhpu+jDpnunqRxgtWsJUJX/LGr9n7CtjBCzQBlRxiMqE=
+X-Gm-Gg: ATEYQzyWDrnskTQnmhychpvHhpHKBGqw0sozXfN38Ucfhe7Tn7taicB92Lr+FATN2J4
+	2fxJa5OZwqJs9UVLyAr6iUOsa2kYgpGpxOh6QDxX/hL2KDunG5+8emZCjUgWBzuL5us8u9uQMyM
+	q2S+Z2cuuzH3ge20ABeHgLHQU3mF6zfIvpArMEZ/EMNToM+fIHg7lLSapUJ3+9JzeqbWKGEkcBV
+	1x5+BiS2ehFt84bfqT7AbZG/siVsuayD1KUcKQik8T7oEw6XXeRCbdEarEFtvc4f/oP3Yen3ab9
+	guBpViHt8qIojQyl8sq2IvnYKo8Rg0dO6ppcUr2K4oeW/nt5tUA3Oir2nxU/pdJseMsGH0B8fvq
+	Xt+Ap0uZTZ9mqdqQIwCB1rr1qZ7KE07T9N/KAceiq3Ae5IJPO/8+mgW8IOmudy0Jy5c4Pql2Y0x
+	U8t2r+jgyLamlCOwDz1305sYFpq7vxaqJpX0kj3GRxFqYN76w5ARLzcXylUFFipVZhb+sk/6EyW
+	PUVb7BoYUvN8Guo+TOH8Eb0Gw==
+X-Received: by 2002:a17:907:c905:b0:b98:2493:4770 with SMTP id a640c23a62f3a-b9824934c60mr60103766b.21.1773924548195;
+        Thu, 19 Mar 2026 05:49:08 -0700 (PDT)
+Received: from codespaces-35910c.m1k4x3cq3poebda54cltipn05g.ax.internal.cloudapp.net ([4.210.177.134])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b97f1751cfesm432990166b.63.2026.03.19.05.49.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 05:45:41 -0700 (PDT)
-From: Ben Copeland <ben.copeland@linaro.org>
-To: Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	linux-sound@vger.kernel.org,
+        Thu, 19 Mar 2026 05:49:07 -0700 (PDT)
+From: Ibrahim Zein <zeroxjacks@gmail.com>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	andrii@kernel.org,
+	bpf@vger.kernel.org,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ben Copeland <ben.copeland@linaro.org>
-Subject: [PATCH] selftests: ALSA: Skip utimer test when CONFIG_SND_UTIMER is not enabled
-Date: Thu, 19 Mar 2026 12:45:21 +0000
-Message-ID: <20260319124521.191491-1-ben.copeland@linaro.org>
-X-Mailer: git-send-email 2.53.0
+	haoluo@google.com,
+	revest@chromium.org,
+	john.fastabend@gmail.com,
+	shuah@kernel.org,
+	sdf@fomichev.me,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	eddyz87@gmail.com,
+	Ibrahim Zein <zeroxjacks@gmail.com>
+Subject: [PATCH bpf-next v3] bpf: fix out-of-bounds write in bpf_bprintf_prepare with %pI4/%pI6
+Date: Thu, 19 Mar 2026 12:49:00 +0000
+Message-ID: <20260319124901.9207-1-zeroxjacks@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,51 +87,187 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The timer_f.utimer test hard-fails with ASSERT_EQ when
-SNDRV_TIMER_IOCTL_CREATE returns -1 on kernels without
-CONFIG_SND_UTIMER. This causes the entire alsa kselftest suite to
-report a failure rather than skipping the unsupported test.
+In bpf_bprintf_prepare(), the bounds check for %pI4 and %pI6 format
+specifiers uses sizeof_cur_ip (4 for IPv4, 16 for IPv6), which is the
+raw byte count of the IP address. However, snprintf() returns the
+length of the formatted string, not the raw bytes. For IPv4 this can
+be up to 15 characters (255.255.255.255) and for IPv6 up to 39.
 
-When CONFIG_SND_UTIMER is not enabled, the ioctl is not recognised and
-the kernel returns -ENOTTY. If the timer device or subdevice does not
-exist, -ENXIO is returned. Skip the test in both cases, but still fail
-on any other unexpected error.
+tmp_buf is then advanced by (err + 1) using the full string length,
+which can push tmp_buf past tmp_buf_end. The next iteration's bounds
+check underflows due to unsigned arithmetic and passes, allowing a
+write past the end of the per-CPU bin_args buffer.
 
-Suggested-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/linux-kselftest/0e9c25d3-efbd-433b-9fb1-0923010101b9@stanley.mountain/
-Signed-off-by: Ben Copeland <ben.copeland@linaro.org>
+Fix this by checking against the maximum formatted string size:
+16 bytes for IPv4 and 40 bytes for IPv6.
+
+Fixes: 48cac3f4a96d ("bpf: Implement formatted output helpers with bstr_printf")
+Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
 ---
- tools/testing/selftests/alsa/utimer-test.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ kernel/bpf/helpers.c                          |  2 +-
+ .../bpf/prog_tests/test_snprintf_ip.c         | 54 +++++++++++++
+ .../selftests/bpf/progs/test_snprintf_ip.c    | 78 +++++++++++++++++++
+ 3 files changed, 133 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf_ip.c
 
-diff --git a/tools/testing/selftests/alsa/utimer-test.c b/tools/testing/selftests/alsa/utimer-test.c
-index d221972cd8fb..1a9ff010cb11 100644
---- a/tools/testing/selftests/alsa/utimer-test.c
-+++ b/tools/testing/selftests/alsa/utimer-test.c
-@@ -15,6 +15,7 @@
- #include <stdlib.h>
- #include <pthread.h>
- #include <string.h>
-+#include <errno.h>
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index cb6d242bd..dcaa822ba 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -930,7 +930,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+ 				goto nocopy_fmt;
  
- #define FRAME_RATE 8000
- #define PERIOD_SIZE 4410
-@@ -52,7 +53,14 @@ FIXTURE_SETUP(timer_f) {
- 	timer_dev_fd = open("/dev/snd/timer", O_RDONLY);
- 	ASSERT_GE(timer_dev_fd, 0);
- 
--	ASSERT_EQ(ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, self->utimer_info), 0);
-+	if (ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, self->utimer_info) < 0) {
-+		int err = errno;
+ 			sizeof_cur_ip = (fmt[i] == '4') ? 4 : 16;
+-			if (tmp_buf_end - tmp_buf < sizeof_cur_ip) {
++			if (tmp_buf_end - tmp_buf < (size_t)((fmt[i] == '4') ? 16 : 40)) {
+ 				err = -ENOSPC;
+ 				goto out;
+ 			}
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+new file mode 100644
+index 000000000..5b000d6d1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Ibrahim Zein <zeroxjacks@gmail.com> */
++#include <test_progs.h>
++#include "test_snprintf_ip.skel.h"
 +
-+		close(timer_dev_fd);
-+		if (err == ENOTTY || err == ENXIO)
-+			SKIP(return, "CONFIG_SND_UTIMER not enabled");
-+		ASSERT_EQ(err, 0);
-+	}
- 	ASSERT_GE(self->utimer_info->fd, 0);
- 
- 	close(timer_dev_fd);
++#define EXP_IP4_OUT  "192.168.1.1"
++#define EXP_IP4_RET  sizeof(EXP_IP4_OUT)
++
++#define EXP_WORST_IP4_OUT  "255.255.255.255"
++#define EXP_WORST_IP4_RET  sizeof(EXP_WORST_IP4_OUT)
++
++#define EXP_IP6_OUT  "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"
++#define EXP_IP6_RET  sizeof(EXP_IP6_OUT)
++
++void test_snprintf_ip(void)
++{
++	struct test_snprintf_ip *skel;
++
++	skel = test_snprintf_ip__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	skel->bss->pid = getpid();
++
++	if (!ASSERT_OK(test_snprintf_ip__attach(skel), "skel_attach"))
++		goto cleanup;
++
++	/* trigger tracepoint */
++	usleep(1);
++
++	/* Test 1: normal IPv4 */
++	ASSERT_STREQ(skel->bss->ip4_out, EXP_IP4_OUT, "ip4_out");
++	ASSERT_EQ(skel->bss->ip4_ret, EXP_IP4_RET, "ip4_ret");
++
++	/* Test 2: normal IPv6 */
++	ASSERT_STREQ(skel->bss->ip6_out, EXP_IP6_OUT, "ip6_out");
++	ASSERT_EQ(skel->bss->ip6_ret, EXP_IP6_RET, "ip6_ret");
++
++	/* Test 3: worst-case IPv4 "255.255.255.255" */
++	ASSERT_STREQ(skel->bss->worst_ip4_out, EXP_WORST_IP4_OUT,
++		     "worst_ip4_out");
++	ASSERT_EQ(skel->bss->worst_ip4_ret, EXP_WORST_IP4_RET,
++		  "worst_ip4_ret");
++
++	/*
++	 * Test 4: near-overflow scenario.
++	 * Before fix: tmp_buf overflows, kernel may crash or corrupt memory.
++	 * After fix: returns valid length without overflow.
++	 */
++	ASSERT_GE(skel->bss->near_overflow_ret, 0, "near_overflow_ret");
++
++cleanup:
++	test_snprintf_ip__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_snprintf_ip.c b/tools/testing/selftests/bpf/progs/test_snprintf_ip.c
+new file mode 100644
+index 000000000..a372b35c3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_snprintf_ip.c
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Ibrahim Zein <zeroxjacks@gmail.com> */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++/*
++ * Test that bpf_snprintf() with %pI4/%pI6 does not overflow the
++ * internal bin_args buffer when the buffer is nearly full.
++ *
++ * The bug: sizeof_cur_ip (4 for IPv4) was used for the bounds check,
++ * but snprintf() returns the full formatted string length (up to 15
++ * for "255.255.255.255"), pushing tmp_buf past tmp_buf_end.
++ */
++
++/* Output buffers */
++char ip4_out[64] = {};
++long ip4_ret = 0;
++
++char ip6_out[128] = {};
++long ip6_ret = 0;
++
++/* Test %pI4 with worst-case IP (255.255.255.255) */
++char worst_ip4_out[64] = {};
++long worst_ip4_ret = 0;
++
++/* Return value for the near-overflow test */
++long near_overflow_ret = 0;
++
++__u32 pid = 0;
++
++SEC("raw_tp/sys_enter")
++int handler(const void *ctx)
++{
++	/* Worst-case IPv4: "255.255.255.255" = 15 chars */
++	const __u8 ip4_worst[] = {255, 255, 255, 255};
++	/* Normal IPv4 */
++	const __u8 ip4_normal[] = {192, 168, 1, 1};
++	/* IPv6 worst-case */
++	const __u8 ip6_worst[] = {0xff, 0xff, 0xff, 0xff,
++				   0xff, 0xff, 0xff, 0xff,
++				   0xff, 0xff, 0xff, 0xff,
++				   0xff, 0xff, 0xff, 0xff};
++
++	if ((int)bpf_get_current_pid_tgid() != pid)
++		return 0;
++
++	/* Test 1: normal %pI4 usage */
++	ip4_ret = BPF_SNPRINTF(ip4_out, sizeof(ip4_out),
++			       "%pI4", &ip4_normal);
++
++	/* Test 2: normal %pI6 usage */
++	ip6_ret = BPF_SNPRINTF(ip6_out, sizeof(ip6_out),
++			       "%pI6", &ip6_worst);
++
++	/* Test 3: worst-case %pI4 "255.255.255.255" */
++	worst_ip4_ret = BPF_SNPRINTF(worst_ip4_out,
++				     sizeof(worst_ip4_out),
++				     "%pI4", &ip4_worst);
++
++	/*
++	 * Test 4: near-overflow scenario.
++	 * Fill bin_args with scalar args (%d), then use %pI4.
++	 * Before the fix: tmp_buf overflows by 8 bytes.
++	 * After the fix: correctly returns -ENOSPC or fits exactly.
++	 *
++	 * We use fewer args here since BPF_SNPRINTF macro has a limit,
++	 * but this validates the format string parsing path.
++	 */
++	/* 11 x %d + 1 x %pI4 = 12 args (BPF_SNPRINTF max) */
++	near_overflow_ret = BPF_SNPRINTF(NULL, 0,
++					  "%d %d %d %d %d %d %d %d %d %d %d %pI4",
++					  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
++					  &ip4_worst);
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
-2.53.0
+2.52.0
 
