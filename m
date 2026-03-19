@@ -1,103 +1,135 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F73F34DCEE
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 19:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5914382291;
+	Thu, 19 Mar 2026 20:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773950217; cv=none; b=rpVQYpEDfQ08Lg870B/gy4mvLLSTm8snbx19+HsUqmYdqhxFEOrLaTHTTxg5WOOuGFqhtxOIongMsOTJxLweEib8CJf+YJ5KdujAqb3f3h6qOsNTwHmLjvofCsGjyaMytKf1Xz0kM5Znc64vrWudXUMZKh1wGpJ9EDH4CNtLSdA=
+	t=1773951235; cv=none; b=S5BjYftE8Ghe6W6Zpwqv2a+bCn99EBs70k0uZkSobFFOJGlbTaoZ3j7tVko6BgVO0acSrkTl/4QZ16F5pFrD/ejSfJ6tdQU/mEkYAF9qlaZrnUkxrDxOpfDFeq6rTebvZtrpeL0l0YTPApyt38fh9S8Fdp5lkfYCVHl2Fdu7RJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773950217; c=relaxed/simple;
-	bh=A5ZzQf31sXGiyMkHY7CP5QbAbk7vbbn517yUbBfo44s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C1uKViLHwIqsEP93NZW/o6yxZ/7kiBxcHds/w/A4cWTCOUftkK+bB13jBCsWvRGwEuIw8/eCzOSJfZd81XOb8sOHl2nhZd00sNdO9L87Y7JqXN83DgzfUWyyNcDAUz+s+okK6e9d0XGiUxntVyX1V6kwHy2j6FuPmvu77aSS0Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XxvOS7+M; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1773951235; c=relaxed/simple;
+	bh=Z0OGo9jp5u16fbxBSyidbk5n0E7mWHKv/eXc9MK3sYg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eDGGeX0izbQYs1VHdLHkRvmWjj6O/qFP6JHnNHzuDupUiLphWei18IKVNQGdZA00DZjGoTfo9cZkx53YGSDSsZIIoX8GFtUkt2TlcDcB0dhC5x2XdHHCtv5srf0+m4ZhHGJ62YmmikJJiPo6Gu+xDILAL/v61u2eMkpeX11KlmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAgZkjDA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XxvOS7+M"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id AB2254E42721;
-	Thu, 19 Mar 2026 19:56:53 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6904460050;
-	Thu, 19 Mar 2026 19:56:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 507AB10450A9C;
-	Thu, 19 Mar 2026 20:56:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773950212; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=cm39P2d/41DdSfdDZCfUJLAJ/BGyonppmELDf76R9UI=;
-	b=XxvOS7+Mr7dkDyD+4Xtt6WqyG1iBNRgP8jj9BFlmVqB91FM5yVSIyhwAlfC5kl04J/r4Gv
-	wwCGP/Iw8BUpDmvdgZkmpGZQQQsZmTVkmM+fI+hYdUlK8Vsxg/epPiLaAPct53XF7h6Eg5
-	pQ7t9JP+H2hhL+W7NuPQGbKbY58U5FIY0bgwAj43f8MK48vYmMw7I7j9P5OvI1tzG7ofa7
-	OXa3RZYyEwEGS5vCQ/ES3WpX0eT+xEl32oiWJeQllbIFgDd6P0suFjfT/Dul/S0VmATgtR
-	GDma6ce4742Ti2GK9Dxk9MMUm6Luv7YV7bzbWa+QDEnzVJkYWQw0PWL0WbS29g==
-Message-ID: <2e4a7b45-8029-425e-8b86-9f3031bd081e@bootlin.com>
-Date: Thu, 19 Mar 2026 20:56:46 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAgZkjDA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED3BC19424;
+	Thu, 19 Mar 2026 20:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773951235;
+	bh=Z0OGo9jp5u16fbxBSyidbk5n0E7mWHKv/eXc9MK3sYg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JAgZkjDA0EQmeozmfJVtzrtoI3DF4OYL73IQVQUEppjVEBQHo2BLq/3tVn+KfqDgn
+	 E7oBHGhBTSPcG4onkcybnpqBtNjb/x/GShXRBgyBttAbtdL051Ewx8yoTi7Iup+sOd
+	 hzF20oGzc6fkwdIfvTPLNPEYyWaUUQW17d5/IxEzqzq8g1+wk5eKAW+POMPo7Pw/Bi
+	 ZnNwYxrMQwTXyymTfs2n0cXPlf2VrlffDNsOpFRp8olw306JcP23krYR3mDS/uJJqp
+	 emPHxUwAwAMZ49S42k1NY5VlVueX0t6Dp5dOPdgRYYbTrykiDgzpewCGb57o3DhwG+
+	 8hNeli5/bqCOA==
+From: Simon Horman <horms@kernel.org>
+To: achender@kernel.org
+Cc: Simon Horman <horms@kernel.org>,
+	kuba@kernel.org,
+	rds-devel@oss.oracle.com,
+	linux-rdma@vger.kernel.org,
+	pabeni@redhat.com,
+	linux-kselftest@vger.kernel.org,
+	allison.henderson@oracle.com,
+	edumazet@google.com,
+	netdev@vger.kernel.org
+Subject: Re: [net-next,v2,2/2] selftests: rds: Add -c config option to rds/config.sh
+Date: Thu, 19 Mar 2026 20:13:29 +0000
+Message-ID: <20260319201329.1059998-1-horms@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260319004618.2577324-3-achender@kernel.org>
+References: <20260319004618.2577324-3-achender@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 1/2] net: page_pool: support dumping pps of a
- specific ifindex via Netlink
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, donald.hunter@gmail.com,
- shuah@kernel.org, matttbe@kernel.org, chuck.lever@oracle.com,
- hawk@kernel.org, linux-kselftest@vger.kernel.org
-References: <20260319035649.2396137-1-kuba@kernel.org>
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <20260319035649.2396137-1-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-Hi Jakub,
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
 
-On 19/03/2026 04:56, Jakub Kicinski wrote:
-> NIPA tries to make sure that HW tests don't modify system state.
-> It saves the state of page pools, too. Now that I write this commit
-> message I realize that this is impractical since page pool IDs and
-> state will get legitimately changed by the tests. But I already
-> spent a couple of hours implementing the filtering, so..
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+selftests: rds: Add -c config option to rds/config.sh
 
-[...]
+This patch adds a new -c flag to config.sh that enables callers to specify
+the file path of the config they would like to update. If no config is
+specified, the default will be the .config of the current directory.
 
-> diff --git a/net/core/page_pool_user.c b/net/core/page_pool_user.c
-> index ee5060d8eec0..01509d1b3cba 100644
-> --- a/net/core/page_pool_user.c
-> +++ b/net/core/page_pool_user.c
-> @@ -79,7 +79,7 @@ struct page_pool_dump_cb {
->  
->  static int
->  netdev_nl_page_pool_get_dump(struct sk_buff *skb, struct netlink_callback *cb,
-> -			     pp_nl_fill_cb fill)
-> +			     pp_nl_fill_cb fill, struct nlattr *ifindex_attr)
->  {
->  	struct page_pool_dump_cb *state = (void *)cb->ctx;
->  	const struct genl_info *info = genl_info_dump(cb);
-> @@ -88,9 +88,17 @@ netdev_nl_page_pool_get_dump(struct sk_buff *skb, struct netlink_callback *cb,
->  	struct page_pool *pool;
->  	int err = 0;
->  
-> +	if (ifindex_attr)
-> +		state->ifindex = nla_get_u32(ifindex_attr);
-> +
->  	rtnl_lock();
->  	mutex_lock(&page_pools_lock);
->  	for_each_netdev_dump(net, netdev, state->ifindex) {
-> +		/* Either the provided ifindex doesn't exist or done dumping */
-> +		if (ifindex_attr &&
-> +		    netdev->ifindex != nla_get_u32(ifindex_attr))
-> +			break;
+> diff --git a/tools/testing/selftests/net/rds/config.sh b/tools/testing/selftests/net/rds/config.sh
+> index 791c8dbe1095..e7a619d7cff0 100755
+> --- a/tools/testing/selftests/net/rds/config.sh
+> +++ b/tools/testing/selftests/net/rds/config.sh
+> @@ -6,15 +6,20 @@ set -u
+>  set -x
+>
+>  unset KBUILD_OUTPUT
+> +CONF_FILE=""
+> +FLAGS=""
+>
+>  GENERATE_GCOV_REPORT=0
+> -while getopts "g" opt; do
+> +while getopts "gc:" opt; do
+>    case ${opt} in
+>      g)
+>        GENERATE_GCOV_REPORT=1
+>        ;;
+> +    c)
+> +      CONF_FILE=$OPTARG
+> +      ;;
+>      :)
+> -      echo "USAGE: config.sh [-g]"
+> +      echo "USAGE: config.sh [-g] [-c config]"
+>        exit 1
+>        ;;
+>      ?)
+> @@ -24,30 +29,32 @@ while getopts "g" opt; do
+>    esac
+>  done
+>
+> -CONF_FILE="tools/testing/selftests/net/config"
+> +if [[ "$CONF_FILE" != "" ]]; then
+> +	FLAGS="--file $CONF_FILE"
+> +fi
 
-If the passed ifindex doesn't exist, isn't netdev NULL here ?
+This changes the default behavior - config.sh now modifies .config in the
+current directory when no -c option is provided, but the README.txt wasn't
+updated. Looking at README.txt:
 
-Maxime
+    # Create a suitable gcov enabled .config
+    tools/testing/selftests/net/rds/config.sh -g
+
+    # Alternatly create a gcov disabled .config
+    tools/testing/selftests/net/rds/config.sh
+
+    # build the kernel
+    vng --build  --config tools/testing/selftests/net/config
+
+Won't this workflow break? The old config.sh modified
+tools/testing/selftests/net/config, but the new version modifies .config.
+When following the README, config.sh now modifies .config, but vng builds
+using the unmodified tools/testing/selftests/net/config, so the kernel
+would be built with incorrect configuration (CONFIG_RDS, CONFIG_RDS_TCP,
+CONFIG_NET_NS, CONFIG_VETH, CONFIG_NET_SCH_NETEM may not be properly
+enabled, and CONFIG_MODULES may not be disabled).
+
+Should the README examples be updated to either use
+"-c tools/testing/selftests/net/config" or adjust the vng command to use
+".config"?
+
+Alternatively, for backward compatibility, the default could remain
+tools/testing/selftests/net/config and require "-c .config" for the new
+behavior.
+
+>
+>  # no modules
+> -scripts/config --file "$CONF_FILE" --disable CONFIG_MODULES
+> +scripts/config $FLAGS --disable CONFIG_MODULES
+
+[ ... ]
