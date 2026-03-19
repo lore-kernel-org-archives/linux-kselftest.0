@@ -1,161 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A548236A03A;
-	Thu, 19 Mar 2026 17:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773940873; cv=none; b=GLpXSkaNhTViztPbCRpqZInx8fKuPUoNLV9T4T2ViXj/7tJYxzzdbqTzjCOvdJazN4NV6IFbTisUupfWuQwV/wBTLUNb317gqzoWMhYtM4Mas+jN7p96hp1zIu28Uhy0f2fRoWvX81QiZHwNca33jWDx1QAmyXnI8KzKD7VCvyk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773940873; c=relaxed/simple;
-	bh=3b6YqAkapmSDefp0qy4dwdPUjANX/OK7tVoPqcanxz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i1MTcjJd27qTjlp+A5lWn6PpvISi5xMSkZ+D0+fK40B1sMdgkSMLmWYqeDi+rjPZ98OyKLZiZsjDGxY/N/myISCI6SojAPrtmQN84dKUiGiwTUEf0q1zxjxg8kY2Y6U+PHVQ/6qvTIoc3LxbeGwO2sNi7o78zSCyACEHVHiVLEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZdx2Prs; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7F436F40E
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 17:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773941068; cv=pass; b=eC3IqpqxWrkI0fix8epRsLIDivOPfXAeAx55Xfy/6z7lKE5wdlq6cZwRagvLq6rIgCXoWpM4OQ3tszDxej7l2lIHbyYJC88m2am/vSIQHPEajyKwyQBAEfSbe64UARLisSJ23mDXNrhq5+p1ydzrlDJvcbTZEGYRao/ddjReg8s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773941068; c=relaxed/simple;
+	bh=PnRXQ5r536tu9dvMTvBl5NRPrIFr2RFjQXbYpbnAzLg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UoCtr9t3PD/GNw3Lfskl4pv+aHYIDFuFfjN5GYlGb9YfT1KQIQ9X/yAEmmrmwjcgrnuWKOZzdn1RjqcSoOqkwtP1o5b25EG3QjhgOCExii2hu2modMK2iai2ACGCgttvvWnz5rc8GMf7/JQgrfgqnbTBGq5AzmriNqtBP4niL1A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sB5di3FR; arc=pass smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZdx2Prs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C273C19424;
-	Thu, 19 Mar 2026 17:21:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773940873;
-	bh=3b6YqAkapmSDefp0qy4dwdPUjANX/OK7tVoPqcanxz4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SZdx2PrsXJgpbU+zzwntBo7drYhhQRyydtcfqtmVAEsmkXY7+2UhwaaC7x10LCpfE
-	 mP0SFlWNqdUwMc2eGLEt0whI2xqWw3K0UeDHirldfuA4lxdsS8qoFlu7X13/K+uS2b
-	 T028yzQuWp9PEU7X6z2FA/+wlqYCzqU0/qIXbVic8fc+RHAIMOD/LynnSqhHnw/kaN
-	 VhTEejhGk95L05hPq9XelkmzOOcP0XP+VX976DuV7nSORSQyP02R+pJiJXOJJojzYv
-	 HJ61YNSvhfV//T9wo4Lym3BUyr3g9QM3foHE0XpkAvogerRe/ZRjsF8mPGVAnsO0/8
-	 VjpYK6I4QvJAA==
-Date: Thu, 19 Mar 2026 19:21:03 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Chunyu Hu <chuhu@redhat.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
-	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
-	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-	baohua@kernel.org, lance.yang@linux.dev,
-	Li Wang <liwang@redhat.com>
-Subject: Re: [PATCH v4 1/5] selftests/mm/guard-regions: skip collapse test
- when thp not enabled
-Message-ID: <abwwf6WlLwdQDBE0@kernel.org>
-References: <20260319160656.1480279-1-chuhu@redhat.com>
- <20260319160656.1480279-2-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sB5di3FR"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5a126c8aab9so1322571e87.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 10:24:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773941065; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Q/nGUVIvH66WP7+w0jgls16cnvtomwHAKNzjdtZwj/SRxOqhBrgivDmCOietcMTO8f
+         SrF5g86jUFfWiT2TMJnAxMmzN9Kg8kL17tQfzudDxHg9wJ0adIu5c6JQ3mbxVt7xcxSA
+         o2NHNXhS/YtFIr2OcnR87WcMXsi6Eu9zo0etSbR117lPu84W++44Ir5TZ18Kdmw93ndT
+         WlTlR92eUjeySsXP9q3SKCBx6mmVEledC5EarfB6bQfj7xYd4gH868x0HPZC9oKbYMGv
+         XW6Ik8yGheTtEM+4z3hnYUhW9/ytoJmtJhaaOzQvU1t/Tf/JhhO7tdLHoyaG9wnjA10k
+         LeBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bWL7Mvz3ZFb3DsvrD6klOpnMDDqkJa/pdjIb2Ow02uU=;
+        fh=hoQPMa70+MvAn+RZ9beqPk9CLJ8lKeENfCLHDi4eSSk=;
+        b=dVcyRTDY4Ysp9ZdTPD2Y4LkHCMk3QKR/G6KSHtV8kLSK9qgfw2OBGuinDqmuzyaaEy
+         KzZKr/CdVyW+MY+CJban5j6+BzQJLU2GumcvOjQd791JnZzTCY1mt7ofZr3l4g54oZzt
+         ib1fpfGY9SLJZfHn9zS8xKZATrE5/RJ5ftKOyg+fCfxM+TC6a2nIyVVCD/zQ9qFaI0Z2
+         CLlns3PN551M1lnv5sdGhqPY+PKC9ctv9E9URZcnuinWRR+j1ZTVQIOHoP2WCEhv2Kzn
+         2bGC7DJQ83mQ+Rk31OmkWE6NT3Ov2kgN8HERJQRoQa2wZD5F9nW0Gn/vjfJbY4HCJfbC
+         9eeg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1773941065; x=1774545865; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bWL7Mvz3ZFb3DsvrD6klOpnMDDqkJa/pdjIb2Ow02uU=;
+        b=sB5di3FRgJ9AXnlpTkOtdsmLaYjKyf8sZRsiZOwR5HpmHxIGL2jjU8LyMmZQnHAleu
+         ODrpsSSqH5k4tpjlbe1BqR4g0C/xT16CzNerIj6obCQ+CsbtCFO2qqBtRS0Mv+q8lt1P
+         d8PpNaiyi+hZcdIs9ovvDvAzKiuqUN4fZ5Grl5FnScr9r8uwFk1TkI6z+oS6rWvWWxMj
+         uFIiRzqoc+tCdOawOx8cT2HfgpCa7ryPk8VhHaTK1CX8oWB5nrKOomORqAQskIZerm++
+         jGKnE3uIgXTlIkpLLemWDbo/z685KXLGIkfyr0L87hpdUKENvZWhFpPXFsxm6eticyrl
+         TSqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773941065; x=1774545865;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bWL7Mvz3ZFb3DsvrD6klOpnMDDqkJa/pdjIb2Ow02uU=;
+        b=WGmEmkJdPEwIXP12iOm/DNJQp40Y63dsD0cfCfZkCXmeku03BTLfj0Ee5Sq/q6r4v4
+         /78xeGaigE3fz23zyKt6W68akgf8HZeJHDNNEPrriRQ8kzotTUR+iXUvtUt2qGq1nodY
+         J3u0+jRF6PdRVgr7OCGbOBq8tQBbrzGlmU3TRkruuutuSK/T/8EGdvBWGA956OqYRkqD
+         De/nUUW4KiY99WQKejSxdDMEe1vQJhlqm9+WtRDbCsO4FTv7qkfRkwKxtFyzZ2y57A26
+         400qb5SVIxzsCB4T0IvSwv1c6VsIss0TNp9hhpGTegpdNN690yFyC2Hz3hphpemEnbPI
+         ojyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWoGFHaM2g1/ZWVRK+3Nzzs34hOmX8mNJ0e/uo8Jb/HnPjKjDgEei8w2bDnn1eT9peXSV77jnUWLM5vHdm/IMg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFFnxEmw1kvcT9CT5eYdUr8tSYXGB92iF5DGuBy3+5VHUjRZLf
+	tF3CmSOMvuGlO+3x/4ifPEPHWECuxSIOYdrX7NEWQPuJwtFGn1SmsBn2nfziVq79JPFW04y4SqY
+	DHTG9GNJr0izQo81ITIBhQ3EeAM157dsPWDyjnjRq
+X-Gm-Gg: ATEYQzwrylBs15jBMRe5nOOmdmcERL4SKYq7XnHSgcoKaTe4hGCcGk6OD/SDgC2sPXW
+	BA+gDn6M4k9Cp+d/xP67PRQo2XkaoGy7uJ19UHOvRZMUfM3/GyE1CKW9Quguu2QuG7DU+Uch+8R
+	Myi8CjumSp+XS4ZdGlgdeRiOQv+VpFmjpdJP3zQCzckLhVIeSWWjj3Fks4yOcx4i6jzHMfDcJcm
+	QSQ7mWrQ3W/hN1L2CDjtCDdIlH7uE4cd1Qewsc69X/PqLOIq7U5GVTGmI3G6eMqSNDqwrvKIeOI
+	V+0bkl63
+X-Received: by 2002:a05:6512:4016:b0:5a2:7e5b:5a48 with SMTP id
+ 2adb3069b0e04-5a27e5b5b70mr1566015e87.26.1773941064245; Thu, 19 Mar 2026
+ 10:24:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319160656.1480279-2-chuhu@redhat.com>
+References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-11-dmatlack@google.com>
+ <20260226170030.5a938c74@shazbot.org> <aaDqhjdLyf1qSTSh@google.com>
+ <20260227084658.3767d801@shazbot.org> <CALzav=fHy23RAzhgkdaL+JA5T2tL9FT6aPgRfXUh7i9zvYCGPA@mail.gmail.com>
+ <20260227105720.522ca97f@shazbot.org> <CALzav=fjRPa_ZbXu7iFXyemcf_8Kq_dZTWT6c-A0bc6czF_Rdw@mail.gmail.com>
+ <abNOwcOTXqxCxNzt@google.com> <20260313083918.00005731@linux.microsoft.com>
+ <CALzav=eGLpo5nrsHq5L8bUTC=FWZ-SgrTE1FoScrWB4p+NDgnA@mail.gmail.com> <20260319093932.000078c2@linux.microsoft.com>
+In-Reply-To: <20260319093932.000078c2@linux.microsoft.com>
+From: David Matlack <dmatlack@google.com>
+Date: Thu, 19 Mar 2026 10:23:56 -0700
+X-Gm-Features: AaiRm53rqLDO8igOEPnPEHv7Le9OPlkg99gzLBiOllDBuZj0inzOHo1IukO9vNo
+Message-ID: <CALzav=fvG+s6MYNzxhuHFmQkmTRJJASXAGs=zQWWSnSv3Y=J9A@mail.gmail.com>
+Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
+ Live Update
+To: Jacob Pan <jacob.pan@linux.microsoft.com>
+Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, 
+	kexec@lists.infradead.org, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 20, 2026 at 12:06:52AM +0800, Chunyu Hu wrote:
-> When thp is not available, just skip the collape tests to avoid the false
-> negative.
-> 
-> Without the change, run with a thp disabled kernel:
->   ./run_vmtests.sh -t madv_guard -n 1
->   <snip/>
->   #  RUN           guard_regions.anon.collapse ...
->   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
->   # collapse: Test terminated by assertion
->   #          FAIL  guard_regions.anon.collapse
->   not ok 2 guard_regions.anon.collapse
->   <snip/>
->   #  RUN           guard_regions.shmem.collapse ...
->   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
->   # collapse: Test terminated by assertion
->   #          FAIL  guard_regions.shmem.collapse
->   not ok 32 guard_regions.shmem.collapse
->   <snip/>
->   #  RUN           guard_regions.file.collapse ...
->   # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
->   # collapse: Test terminated by assertion
->   #          FAIL  guard_regions.file.collapse
->   not ok 62 guard_regions.file.collapse
->   <snip/>
->   # FAILED: 87 / 90 tests passed.
->   # 17 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
->   # Totals: pass:70 fail:3 xfail:0 xpass:0 skip:17 error:0
-> 
-> With this change, run with thp disabled kernel:
->   ./run_vmtests.sh -t madv_guard -n 1
->   <snip/>
->   #  RUN           guard_regions.anon.collapse ...
->   #      SKIP      Transparent Hugepages not available
->   #            OK  guard_regions.anon.collapse
->   ok 2 guard_regions.anon.collapse # SKIP Transparent Hugepages not available
->   <snip/>
->   #  RUN           guard_regions.file.collapse ...
->   #      SKIP      Transparent Hugepages not available
->   #            OK  guard_regions.file.collapse
->   ok 62 guard_regions.file.collapse # SKIP Transparent Hugepages not available
->   <snip/>
->   #  RUN           guard_regions.shmem.collapse ...
->   #      SKIP      Transparent Hugepages not available
->   #            OK  guard_regions.shmem.collapse
->   ok 32 guard_regions.shmem.collapse # SKIP Transparent Hugepages not available
->   <snip/>
->   # PASSED: 90 / 90 tests passed.
->   # 20 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
->   # Totals: pass:70 fail:0 xfail:0 xpass:0 skip:20 error:0
-> 
-> CC: Li Wang <liwang@redhat.com>
-> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+On Thu, Mar 19, 2026 at 9:39=E2=80=AFAM Jacob Pan <jacob.pan@linux.microsof=
+t.com> wrote:
+>
+> Hi David,
+>
+> On Mon, 16 Mar 2026 11:11:20 -0700
+> David Matlack <dmatlack@google.com> wrote:
+>
+> > On Fri, Mar 13, 2026 at 8:39=E2=80=AFAM Jacob Pan
+> > <jacob.pan@linux.microsoft.com> wrote:
+> > > On Thu, 12 Mar 2026 23:39:45 +0000
+> > > David Matlack <dmatlack@google.com> wrote:
+> >
+> > > > +config VFIO_PCI_LIVEUPDATE
+> > > > +       bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
+> > > > +       depends on LIVEUPDATE && VFIO_PCI
+> > > > +       help
+> > > > +         Support for preserving devices bound to vfio-pci across
+> > > > a Live
+> > > > +         Update. The eventual goal is that preserved devices can
+> > > > run
+> > > > +         uninterrupted during a Live Update, including DMA to
+> > > > preserved
+> > > > +         memory buffers and P2P. However there are many steps
+> > > > still needed to
+> > > > +         achieve this, including:
+> > > > +
+> > > > +          - Preservation of iommufd files
+> > > > +          - Preservation of IOMMU driver state
+> > > In the interim, what do you think about moving forward with noiommu
+> > > mode without preserving IOMMU driver state?
+> >
+> > I haven't gotten a chance to look at your noiommu patches yet, but I
+> > do think noiommu will probably be a good way to develop the VFIO and
+> > PCI support for Live Update without blocking on IOMMU driver support.
+> >
+> > > I=E2=80=99ve tested your
+> > > vfio_pci_liveupdate_kexec_test with the noiommu cdev, and it works
+> > > as expected.
+> >
+> > Would you be able to send patches to add noiommu support to VFIO
+> > selftests? That would be very helpful toward allowing us to develop
+> > and test Live Update support with noiommu.
+>
+> It is included in the noiommu patchset; the only difference is that the
+> VFIO cdev name is prefixed with noiommu, which is not strictly required
+> and is done out of caution.
+>
+> /dev/vfio/
+> |-- devices
+> |   `-- noiommu-vfio0
+>
+> https://lore.kernel.org/linux-iommu/20260312155637.376854-10-jacob.pan@li=
+nux.microsoft.com/
 
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-> ---
-> Changes in v4:
->   - use thp_available instead of thp_is_enabled() as when thp is set to
->     never, madvise(MADV_COLLAPSE) will still succeed by design. So a
->     failure in madvise(MADV_COLLAPSE) on guard region will verify guard
->     region denies it. This is suggested from AI.
->   - removed the 'Reviewed-by' and 'Acked-by' as the code changes. Sorry for
->     that but it seems the changes is a little huge? (1 out of 2 lines)..
-> Changes in v3:
->   - commit message: update the log snippet with where the fail happens and
->     add the '-n1' to the command.
->   - fix the 'false positive' to 'false negative'
->   - add reviwed by from Mike
-> Changes in v2:
->   - add reviewed by from Zi and Lorenzo
->   - add acked-by from David
-> ---
->  tools/testing/selftests/mm/guard-regions.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-> index dbd21d66d383..48e8b1539be3 100644
-> --- a/tools/testing/selftests/mm/guard-regions.c
-> +++ b/tools/testing/selftests/mm/guard-regions.c
-> @@ -21,6 +21,7 @@
->  #include <sys/uio.h>
->  #include <unistd.h>
->  #include "vm_util.h"
-> +#include "thp_settings.h"
->  
->  #include "../pidfd/pidfd.h"
->  
-> @@ -2195,6 +2196,9 @@ TEST_F(guard_regions, collapse)
->  	char *ptr;
->  	int i;
->  
-> +	if (!thp_available())
-> +		SKIP(return, "Transparent Hugepages not available\n");
-> +
->  	/* Need file to be correct size for tests for non-anon. */
->  	if (variant->backing != ANON_BACKED)
->  		ASSERT_EQ(ftruncate(self->fd, size), 0);
-> 
-> base-commit: 8a30aeb0d1b4e4aaf7f7bae72f20f2ae75385ccb
-> -- 
-> 2.53.0
-> 
-
--- 
-Sincerely yours,
-Mike.
+This one flew under my radar. I will take a look and respond there, thanks!
