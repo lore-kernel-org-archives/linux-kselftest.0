@@ -1,228 +1,273 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555BB40DFA4
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 08:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773907762; cv=none; b=oXzDF5ON+FFYEVn0jZ/06nxRArjTlltqjJvn/fA0mg2WoKTzP1wjWj+YpczdYdGif5n/vQFV3EVgfrmy75HgJc8u3fBgQjz2lj7XfBPAt/cvMsBueYq1QVO1AHywAE2j/UBKhvbhS99xqOK8ro/ptaPIUyO1eQpnfhK/V2+TjaI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773907762; c=relaxed/simple;
-	bh=9HCjcz1ZaBKpGqOlxhy2gEzigHWfwfIbgjPAOTBjU40=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gv7oF5XxJ+sBGJbQzSqL+fabSCkiOIPFnIdxQT1BJGVnuymV4d/KSd2bFA+iPGn0NvX9jelXiOqrpxrZnvh0UmieLj85nIiHa0Styl/cxVonEt0b4F9NbK/fEQW3kVEsVj/Zf7D+c4jgi4l7gWxzB7vHdJbHvUumOHzC3kKI9sQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BmicJZwQ; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D651918DF9D;
+	Thu, 19 Mar 2026 08:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773909071; cv=fail; b=V52zaewGSUqwd8+plj7FTU2lDduBAuBjoxCMEk/VJkYpI77Xpy3tIoUxZvJNyMU6mZH3bBMw1atJwQUaftzZI5RAB2qWlzCnZ/NKxfqns1qLMQk/dNoInAGVcEDCQNjrzkt60VeOAg6OFifkC8QTYCjNf1FWwNfXomUKZPMnEaQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773909071; c=relaxed/simple;
+	bh=RLGGIpg0ze6flIFGWmAnfBeoqN5AgaqKB43T7l9qpMQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=EJBCT8z0lJxsc1OrSk+3oQWXzIwf6mDLSknsQzYOir3zmj0heqszosQ/8in1lhkEdd5wZbr2P5JBV530VxZ1byLU54iOS6mJQh9ExytfwZOFWFqj2M8ii71KpSJc8oaqp+Lnz6OuSkEhm+qzz/wX8oHaOM6Od1Wcvbn+9vlUjsI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZMrqLNtM; arc=fail smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BmicJZwQ"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4852fdb36a8so3343315e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 01:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773907760; x=1774512560; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i5/KWZ2KC3mOSlZnSNWNvP91BfBBZR4N9DqaTZXz5O0=;
-        b=BmicJZwQWGQ37KgDjl7YkM2JNwUt43L/QNeKoY2bXWRxZtVb91qX0wVmcJSE2G/F++
-         aXfkOeXceusVE0PR+rHoFpVkUo4+hKzb7URLrVzQ3zLutyDenM79c0iDu0mW4ZqsFzT+
-         Dj6qSYkNeieHBkVetEVjkNaMcKlLlP8W410/MKd09OFLqkCEY/YZ8K5uc6FJAKSxJfoy
-         fqbI6dyJSKNInPKjqU5axbxwjmhNrhHQ6P20QqGkw+q0VdEsCaN7fsvvYqVeNnLv87J8
-         vrN/8+mYt9c2U5+y8EFQU/Ns5gRQUedeoWh8o46jf0a8xJzgG/w7UMJ2p4E1W5lLtUkQ
-         v/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773907760; x=1774512560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i5/KWZ2KC3mOSlZnSNWNvP91BfBBZR4N9DqaTZXz5O0=;
-        b=aN9XIdBwMO2NCc+TPzefv8/wvytBuo2h+acCvdd/DK0R5eIrSwxM0m9bS3OZCQD+8O
-         /DinLDZC2ILQGuGYL2D+5K1zuzOL+RC3qTBQXUNj0vSAy3Xoey7jDjiqOPzGtW3XjmrV
-         yRJHuk7aXnksUrTak/4yhB/Yp54U5jF1zJyNEex5FJRCbzbfekJjOzHgndBgn6CZ7wyx
-         Waka7+Xjts+1dfNSvjs/sgw3OKYntJaZAJgNWTaXmvd8xZmBKX8IEE9YXRLyVCHopGZs
-         iQC2gib6RuVxUn0Wkk55cvkT1UOIl7na73895g6m7T+PeqUc7HlLH0DxpkhBnHwDTBJE
-         fGLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4MXOIoumc0+QNUSN8QyV1Eoc6SgtxRTCB/AwMi+Na6PCO4K0WsC5WBHrDV90VHHp5MNk0jOa0UCONZlejY2o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwidQllBnbp5m85mykHrYP3eKxgZ07uDkPHTKdSQXrVD3LXrflH
-	2f4XW8juIU98t8SvEBmGyHPed4SSHxXp3NlnbVaf/uAssKI0ZiIR5pat
-X-Gm-Gg: ATEYQzysrANYLnyy+zbKS6qXS5yCzNNPpwXWOn5BTRwNeM75dBr/bDLcMtojpvr2khD
-	To2vfoN1cG7DRrCQijkA4sGT7Kv9pqeHFTmZlsiBsOwSo6c/19YVUQEFbgUxkOuqwVb4BBBjEJi
-	nVX07jw113NwxgSfPil8oczOubi0V/pptZ31IcK7z9jaPzMQA0BBLWxsOy6l0om7njl8GmH9Ljd
-	dbCubhk6CdfNmf0H5YAoaaKBgW0uC50No9kY6mS9eGXGU3Ho/LbEm02ZfsM9hRxni60ix73xNIQ
-	6iJbDaMOEpH33/s/DynkkMOOSiq02u7gvK0nQHRJ4q2m3Blg0C36ldYOiB7/Vgns6wzYOfYqZ0L
-	MMCjXb7xi4Qf9SGKMQc+i/4i3le4Mo0n389T+kC5288m8t/kiLJz4u1Imrd5rO6Nzr9vBk05+
-X-Received: by 2002:a05:600c:4585:b0:483:709e:f238 with SMTP id 5b1f17b1804b1-486f4479926mr106286935e9.29.1773907759363;
-        Thu, 19 Mar 2026 01:09:19 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f462caf0sm56441725e9.2.2026.03.19.01.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 01:09:18 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 19 Mar 2026 09:09:16 +0100
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	shuah@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	paul.chaignon@gmail.com, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/bpf: move trampoline_count to dedicated
- bpf_testmod target
-Message-ID: <abuvLDBz2GJ6cx_X@krava>
-References: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
- <20260319040337.366375-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZMrqLNtM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773909069; x=1805445069;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=RLGGIpg0ze6flIFGWmAnfBeoqN5AgaqKB43T7l9qpMQ=;
+  b=ZMrqLNtMffTvVpR0A+jNi/+L6fUZsdtS8UnHLHGaI078F8VOX6B6Tmq/
+   v2+Nxm0Xp2mf/34mWj/40vvBWeORYIoMpBTD2eeEE5HcxdkPgQqyh/pSJ
+   1x6LD5K1lcwj0TIkf0oBXdfG9SxDhzSryiipN2LO2tyqzojlumnes44Ve
+   KIIazXGi3aUunPUnrbEOLbAVDfWRmzjPO8cGxHlQhxazYO4oxZsmwh+RJ
+   KLq2XPCbiVOqUXOB/XA/AtUC0VKuAY571uZBYov+KSUGI8HhAaxGQ9S6J
+   xIDwjmGP/QIgU4/2etfeGZGn7vfPD2tk2bInUKKR7imX8pdRDqUwKLoaU
+   A==;
+X-CSE-ConnectionGUID: RktDd7s/SKGvanh7VwQfyg==
+X-CSE-MsgGUID: GhnpIo0uQ2mZUI/l8PHOKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11733"; a="74888140"
+X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
+   d="scan'208";a="74888140"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 01:31:08 -0700
+X-CSE-ConnectionGUID: JEGLWNVoTai0AVyzurdXLQ==
+X-CSE-MsgGUID: Gkf1JOAPT+mXSBAGah7NgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
+   d="scan'208";a="220296905"
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 01:31:08 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Thu, 19 Mar 2026 01:31:07 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Thu, 19 Mar 2026 01:31:07 -0700
+Received: from CH4PR04CU002.outbound.protection.outlook.com (40.107.201.1) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Thu, 19 Mar 2026 01:31:06 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=V4S8C8ObyHLY8AMZRjJvJwiApB7syGTOdvAcmVXtSsp4bvRQfaHFwA8dELB3Rzp0+R9WmP2r/oGn0gZxfIB5mUo0k7t68nzg4D5cH0sb//UGxhn86SARtB2IZYkEQzqkvHTrl7nXsy9+CVo8dyoa7mesWhpyba6bl2/4PQmVUJLejFUNn9l+Dd4pAPpRAiw+ymJNdVjUW9LULMzKYMAtqMmPUVTkh3NeoxGTDruUhl69/ePmEmX8XBWDtZaG1ACRcwFo1V13u5XoLQJhr38JcfqiKjGdsLXqsj6UUa+OWgDQrL44l/tlNFfPDNfOHm4BjhCWcVbRLCWVOeXtkCqhNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V/x2ox8UZqVMipUKg539XC2icTmNmPM3zRuEuHh5eek=;
+ b=I7hb9V2obrqZk3L9a5FWuXuQ4N4/vqqJa++y/R0HI23SOYlXwKDII2aN6HWZxcfR/Xv1IG4tNDx7wMI5TbqznfPJm8STtOodWNR8ltti85uKTwajIZC0m1wK9gF2CloSKCloCYbDagg+Tdy7XzqhHHHkcSnUI8IkzFd7h380vpzY0SeuS0lBhHd7xJz734tWZthXXRQ/PEmmBKx5xQaR8Ucotq5SJL0l2FElXIVCcvAILgG/6kRgQpyAjgoEi/4WyrgEKuDD5Osl4usO9jjqRWAth+9uzmIz8g1SbVlelSsaTNd4ebbHyudpE4J2DTcY7WxulF07+tn8Be1qAhKdUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA3PR11MB8986.namprd11.prod.outlook.com (2603:10b6:208:577::21)
+ by CO1PR11MB4962.namprd11.prod.outlook.com (2603:10b6:303:99::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.17; Thu, 19 Mar
+ 2026 08:31:01 +0000
+Received: from IA3PR11MB8986.namprd11.prod.outlook.com
+ ([fe80::e6f0:6afb:6ef9:ab5c]) by IA3PR11MB8986.namprd11.prod.outlook.com
+ ([fe80::e6f0:6afb:6ef9:ab5c%5]) with mapi id 15.20.9723.006; Thu, 19 Mar 2026
+ 08:31:00 +0000
+From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+To: Stanislav Fomichev <sdf@fomichev.me>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>
+CC: "davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+	<edumazet@google.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "horms@kernel.org"
+	<horms@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "michael.chan@broadcom.com"
+	<michael.chan@broadcom.com>, "pavan.chebbi@broadcom.com"
+	<pavan.chebbi@broadcom.com>, "Nguyen, Anthony L"
+	<anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
+	<przemyslaw.kitszel@intel.com>, "saeedm@nvidia.com" <saeedm@nvidia.com>,
+	"tariqt@nvidia.com" <tariqt@nvidia.com>, "mbloch@nvidia.com"
+	<mbloch@nvidia.com>, "alexanderduyck@fb.com" <alexanderduyck@fb.com>,
+	"kernel-team@meta.com" <kernel-team@meta.com>, "johannes@sipsolutions.net"
+	<johannes@sipsolutions.net>, "sd@queasysnail.net" <sd@queasysnail.net>,
+	"jianbol@nvidia.com" <jianbol@nvidia.com>, "dtatulea@nvidia.com"
+	<dtatulea@nvidia.com>, "mohsin.bashr@gmail.com" <mohsin.bashr@gmail.com>,
+	"Keller, Jacob E" <jacob.e.keller@intel.com>, "willemb@google.com"
+	<willemb@google.com>, "skhawaja@google.com" <skhawaja@google.com>,
+	"bestswngs@gmail.com" <bestswngs@gmail.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "intel-wired-lan@lists.osuosl.org"
+	<intel-wired-lan@lists.osuosl.org>, "linux-rdma@vger.kernel.org"
+	<linux-rdma@vger.kernel.org>, "linux-wireless@vger.kernel.org"
+	<linux-wireless@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "leon@kernel.org" <leon@kernel.org>
+Subject: RE: [Intel-wired-lan] [PATCH net-next v2 08/13] bnxt: use snapshot in
+ bnxt_cfg_rx_mode
+Thread-Topic: [Intel-wired-lan] [PATCH net-next v2 08/13] bnxt: use snapshot
+ in bnxt_cfg_rx_mode
+Thread-Index: AQHctuhy6Syyj/hw/UaVLArroIy2m7W1hwNw
+Date: Thu, 19 Mar 2026 08:31:00 +0000
+Message-ID: <IA3PR11MB89866985981DB64EFEBDF0ACE54FA@IA3PR11MB8986.namprd11.prod.outlook.com>
+References: <20260318150305.123900-1-sdf@fomichev.me>
+ <20260318150305.123900-9-sdf@fomichev.me>
+In-Reply-To: <20260318150305.123900-9-sdf@fomichev.me>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA3PR11MB8986:EE_|CO1PR11MB4962:EE_
+x-ms-office365-filtering-correlation-id: 6a3f9567-1344-4a32-ef89-08de8591da14
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016|56012099003|22082099003|18002099003|7053199007|38070700021;
+x-microsoft-antispam-message-info: aleoCaY1N49HW39zK1rsNZB+9rihflDsCd+HpvMaZhf7iNz2wx2jmdQqAf8JZqOiC1eh1VciIEfhGbgwM+Q51w7VbKw0f4F8aRaXuc5FxUlirrB3BMpIUuj5XFxdadF/D6peaN2HMLV9/FgNT7m9H6dfa6H077bR+4aUyowK8Se/UjNQyjtwfGEIhNZUp8Jq7wnLi1lt7cDnxYMDCO8YTs8G3wMzS17oQgahAs1QCn9I+qquttRRuuBIblfhmwchNwrz8rrRlwR7+pNwugHIsjM+PcKmsne9wiJeYq2cg7yVOso3XHcqWYDailCM34zQkERUcHQZSW2+K8oyEWsZMmr06qg3lSSIzY1mJHn28Zo8LFldWd0AFFPTrXJMFmob9/RMS9wZAfrNjOYJ9G1n1zAFpBsOfu/MarnBa2UPLwKa36+/AeNJMxCySSoBJ1C7IfNvSbgF4kjdjLpsaAjHYTpvbhm+7NkvFYQXeqGrezQX63KxBjBPZyANIR1B+LYBT6cyZrAPtHW/PXaT+GH9QToJAy7aDUaQYSkOhHnUkuiSOyz9yRc+gUrKiQAYmirhE5/sQtn/DpUU6I7mLDr5fZ3ieqj2PxVQx+1fvYlzUojMr9yK0tDADm+EqiJb1nQL/RT4cXrlEHHtvL7RHDB/b0SdZ51l4BKAR/GhETYv5E913uY0d5GzJf9uIuiQhFzK++NVjeUrqSh+fHGSJg3Yat4OfwYyyoPkQeVa3XYN9iV4vJkCkggD64vrUJLQqNz9
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB8986.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(56012099003)(22082099003)(18002099003)(7053199007)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Gb5nm+NMH7U/uAwU4zLMJ1zmq676NAhxe6lHe/wwKLtQRGg1sP0rdmlZBQHd?=
+ =?us-ascii?Q?i1EgiHgnCYij6FEZ3pwmcDMH2vENKglN6qKOadoA42PzcYyaPpztcaCK3b4i?=
+ =?us-ascii?Q?0VF+GivWyrT1Ecy8sGA1JprRD63hDEfjQLEsxUV5HQ6RfgS0/9AaKkU+CyRC?=
+ =?us-ascii?Q?vOzWBnwbJPDp+tqcBB2vbE6FfT+zMdwFB0+hoz+88HVHyXorAUVvGV0w/YON?=
+ =?us-ascii?Q?gWEErAgVl+kMhgCUpMTee+aPLB5SmQ/pNWKq6ctxyk5L/GcV6tf8px9dQe7v?=
+ =?us-ascii?Q?YqKDHwC9ZAZpbw0mcRvT+cEn3MWQwkea7Ba3kM2RB9QEbxloRDbfxQ0dsY0L?=
+ =?us-ascii?Q?jkY2GhXRlOMLZf/RlAnr62Ry7lLlhHc1vb9NX0mj/xXpa+KME230abqRZ5N+?=
+ =?us-ascii?Q?3dutd4FAfAK0zVfwKWktyn3vcFuQPxMLtB+KajIbvShYH+7VsVOKgbNEYXqq?=
+ =?us-ascii?Q?+76Xo95esZTdcPxFPrDwFNizIZMfZILOtWXTlHKXScv/c6O1/yivQyEiUcMP?=
+ =?us-ascii?Q?BlIhY1Jb95hLwt+OfbCf3bhu8nRp03c66cghveCmzHrzkOKcpBjKCrZBW1Ir?=
+ =?us-ascii?Q?mqNOGuFIA5xjrUY30mQXoTTq3C9bLymZptbGuSG51fQoZ0cnjtSaoxsRBe5r?=
+ =?us-ascii?Q?5c25MWoMcA8Ft7juglIJPsaxoGIpPXmpb+c2gNCbTh6AlTl8K3dXWBQf3hlh?=
+ =?us-ascii?Q?63HTWxMrLaZaFha3VHtZHulQ4YOLbh1eKH2204te7THCq5KanQmDUhNd38Xw?=
+ =?us-ascii?Q?A7LhU7QMaacFjuNWuvCoAX4eRQGADaBeBUhlBj1Pcfykm4Dgpz2tA4ckKN5X?=
+ =?us-ascii?Q?jsCiwSdcX2Zr4PbFVNgEu9xLum1MHMsdxsDfv045utBOUB/kd0Qqi6Xz556U?=
+ =?us-ascii?Q?4izkXTkmiPRxM0GQCRHac/Qi8l8jDFw81gOZZ8cHHc0ixdw5BTwaOhcNnkN8?=
+ =?us-ascii?Q?imqFGiANR+EZPAjTXg0Tdmqw0szav5i5HtPBwuPJopuQk+EgC82fnBvfrTgG?=
+ =?us-ascii?Q?xHRV+GOO0PQKPWLoS8xq6OQ3FOOmlVDQEui0y+K0da+SvshV0jCRnIKtBFHJ?=
+ =?us-ascii?Q?kDrlZEhDWKxmz022Og2JRtLGVveiZuubyUEO5Pg0XNstpbDwbhD8z4EVzZ43?=
+ =?us-ascii?Q?QkPCXvladfy+CrV5vkMV77GQZAxiFXsAw5S0ROQulySdubb7jpODGC9mMuN8?=
+ =?us-ascii?Q?6py33cvrYaNps0qINuTTkBoIVpfHNOOctpO7sFfvNM1rJYAHzQwSD0RjNM92?=
+ =?us-ascii?Q?96u8N8c0ibZKZnL6NUfWteBeQjnUdun4hh/1CakdSYXCK+oTvaww6Eop0b1t?=
+ =?us-ascii?Q?mANxl5JtSP0zlW9t6ATkgdypCGKXPeTT+2YxXew7CRAdO0eWM6/k6zd/Q1Ao?=
+ =?us-ascii?Q?kjMtnLyZpyYQOqCeqD2nXyXw48cg8XBlHgNRbpqQcxWHY56xCKxLdbHRh9Op?=
+ =?us-ascii?Q?pNxWVT/eVLA02hhFhn7Ij2CXueN85GEnGcM2L8nxbzSTGy+CEF2Sw2CqNpc1?=
+ =?us-ascii?Q?8ljNyhdu7LzxXWGja6w3B8HpuKM1tzUPs8wSK+xqiIder1ckawo6U50qgWAd?=
+ =?us-ascii?Q?bo4Z2wLvnhWIggkHQ/Kro1D9DEo41TAeqMGvpOo8Vinthp/yejjtjqlpjCc6?=
+ =?us-ascii?Q?iQZw4LRECNfZzsPkZunFsweAARh9H3ERQ/BoJ6qVXt/OOFc41SDWw0ktH09z?=
+ =?us-ascii?Q?o6REGrVqllH3w57l2/1GHWJM6m3MatSJMgkcMAzH/O2alFOt6nzZD+mUnIh6?=
+ =?us-ascii?Q?3Xk1wccbvwB9tppid/DzvZ9D08bKLAQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319040337.366375-1-sun.jian.kdev@gmail.com>
+X-Exchange-RoutingPolicyChecked: KUUAYG+vXqwnRX1F6FOYEaN++zI4dCAJDUPJYT/yruA60Ow0L63UfS8FZUmZBPQvAMQob60/289GaH07V7OILPUcuhUXzjUl5jdOjELAeRpUlJPfiXODbasaanDMLDCW9lw8z9n/hQo05zfzf5Qiv5R+om+zD+AQ07YophkVKN7vZrSB/mDV5t6WFUCehe397/+W1MLO/FvlGzn5pb1ndp7BB3z+Sz0XDPq4LfkEItIp5V14TJzZjUBrpzy9LrXUJ5WFU7OXNkgGOppSglxhDKfkfRdEdWXMQVJ8DYagdm0+Wj47zezNdQs9sDeR+qHayMpaJ9Y+2mhRTh7yzSN3gg==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB8986.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a3f9567-1344-4a32-ef89-08de8591da14
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Mar 2026 08:31:00.8460
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MjIGcCH1js2UeSICevENROSwqbqim7fZyMvtpBJiyN+XaxuPjrBLIDIjgOi/7h/arem5PXCXrsGWNFT4TzCmyeA4M49B6bOomy+4DsejYCQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4962
+X-OriginatorOrg: intel.com
 
-On Thu, Mar 19, 2026 at 12:03:37PM +0800, Sun Jian wrote:
-> trampoline_count fills all trampoline attachment slots for a single
-> target function and verifies that one extra attach fails with -E2BIG.
-> 
-> It currently targets bpf_modify_return_test, which is also used by
-> other selftests such as modify_return, get_func_ip_test, and
-> get_func_args_test. When such tests run in parallel, they can contend
-> for the same per-function trampoline quota and cause unexpected attach
-> failures. This issue is currently masked by harness serialization.
-> 
-> Move trampoline_count to a dedicated bpf_testmod target and register it
-> for fmod_ret attachment. This keeps the test semantics unchanged while
-> isolating it from other selftests, so it no longer needs to run in
-> serial mode. Remove the TODO comment as well.
-> 
-> Tested:
->   ./test_progs -t trampoline_count -vv
->   ./test_progs -t modify_return -vv
->   ./test_progs -t get_func_ip_test -vv
->   ./test_progs -t get_func_args_test -vv
->   ./test_progs -j$(nproc) -t trampoline_count -vv
->   ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test -vv
->   20 runs of:
->     ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test
-> 
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+
+
+> -----Original Message-----
+> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf
+> Of Stanislav Fomichev
+> Sent: Wednesday, March 18, 2026 4:03 PM
+> To: netdev@vger.kernel.org
+> Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; horms@kernel.org; corbet@lwn.net;
+> skhan@linuxfoundation.org; andrew+netdev@lunn.ch;
+> michael.chan@broadcom.com; pavan.chebbi@broadcom.com; Nguyen, Anthony
+> L <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
+> <przemyslaw.kitszel@intel.com>; saeedm@nvidia.com; tariqt@nvidia.com;
+> mbloch@nvidia.com; alexanderduyck@fb.com; kernel-team@meta.com;
+> johannes@sipsolutions.net; sd@queasysnail.net; jianbol@nvidia.com;
+> dtatulea@nvidia.com; sdf@fomichev.me; mohsin.bashr@gmail.com; Keller,
+> Jacob E <jacob.e.keller@intel.com>; willemb@google.com;
+> skhawaja@google.com; bestswngs@gmail.com; linux-doc@vger.kernel.org;
+> linux-kernel@vger.kernel.org; intel-wired-lan@lists.osuosl.org; linux-
+> rdma@vger.kernel.org; linux-wireless@vger.kernel.org; linux-
+> kselftest@vger.kernel.org; leon@kernel.org
+> Subject: [Intel-wired-lan] [PATCH net-next v2 08/13] bnxt: use
+> snapshot in bnxt_cfg_rx_mode
+>=20
+> With the introduction of ndo_set_rx_mode_async (as discussed in [0])
+> we can call bnxt_cfg_rx_mode directly. Convert bnxt_cfg_rx_mode to use
+> uc/mc snapshots and move its call in bnxt_sp_task to the section that
+> resets BNXT_STATE_IN_SP_TASK. Switch to direct call in
+> bnxt_set_rx_mode.
+>=20
+> 0:
+> https://lore.kernel.org/netdev/CACKFLi=3D5vj8hPqEUKDd8RTw3au5G+zRgQEqjF+
+> 6NZnyoNm90KA@mail.gmail.com/
+>=20
+> Cc: Michael Chan <michael.chan@broadcom.com>
+> Cc: Pavan Chebbi <pavan.chebbi@broadcom.com>
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 > ---
-> 
-> v2:
-> - rewrite the subject to describe the change
-> - resend with the correct patch content
-> - resend as a reply to v1
-> 
->  .../selftests/bpf/prog_tests/trampoline_count.c |  3 +--
->  .../selftests/bpf/progs/test_trampoline_count.c |  6 +++---
->  .../selftests/bpf/test_kmods/bpf_testmod.c      | 17 +++++++++++++++++
->  3 files changed, 21 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> index 6cd7349d4a2b..b19358aed126 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> @@ -30,8 +30,7 @@ static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
->  	return prog;
->  }
->  
-> -/* TODO: use different target function to run in concurrent mode */
-> -void serial_test_trampoline_count(void)
-> +void test_trampoline_count(void)
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c | 24 ++++++++++++++--------
+> -
+>  1 file changed, 15 insertions(+), 9 deletions(-)
+
+...
+
+> -static int bnxt_cfg_rx_mode(struct bnxt *bp)
+> +static int bnxt_cfg_rx_mode(struct bnxt *bp, struct
+> netdev_hw_addr_list *uc,
+> +			    struct netdev_hw_addr_list *mc)
 >  {
->  	char *file = "test_trampoline_count.bpf.o";
->  	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
-> diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> index 7765720da7d5..14ad2f53cf33 100644
-> --- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> @@ -3,19 +3,19 @@
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
->  
-> -SEC("fentry/bpf_modify_return_test")
-> +SEC("fentry/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fentry_test, int a, int *b)
->  {
->  	return 0;
->  }
->  
-> -SEC("fmod_ret/bpf_modify_return_test")
-> +SEC("fmod_ret/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
->  {
->  	return 0;
->  }
->  
-> -SEC("fexit/bpf_modify_return_test")
-> +SEC("fexit/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fexit_test, int a, int *b, int ret)
+>  	struct net_device *dev =3D bp->dev;
+>  	struct bnxt_vnic_info *vnic =3D &bp-
+> >vnic_info[BNXT_VNIC_DEFAULT];
+> @@ -13623,7 +13625,7 @@ static int bnxt_cfg_rx_mode(struct bnxt *bp)
+>  	bool uc_update;
+>=20
+>  	netif_addr_lock_bh(dev);
+> -	uc_update =3D bnxt_uc_list_updated(bp, &dev->uc);
+> +	uc_update =3D bnxt_uc_list_updated(bp, uc);
+>  	netif_addr_unlock_bh(dev);
+>=20
+>  	if (!uc_update)
+> @@ -13642,7 +13644,7 @@ static int bnxt_cfg_rx_mode(struct bnxt *bp)
+>  	if (netdev_uc_count(dev) > (BNXT_MAX_UC_ADDRS - 1)) {
+>  		vnic->rx_mask |=3D
+> CFA_L2_SET_RX_MASK_REQ_MASK_PROMISCUOUS;
+This limit check uses the live device list, dev->uc.
+In the new async model, the live list can differ from the snapshot.
 
-last part of the trampoline_count test executes the probe through the
-kernel's test_run which executes bpf_modify_return_test
+>  	} else {
+> -		netdev_for_each_uc_addr(ha, dev) {
+> +		netdev_hw_addr_list_for_each(ha, uc) {
+This loop iterates the snapshot list, uc. */
+So, the guard above and the loop below are checking different data.
 
-I don't think it changes much because the programs are doing nothing
-I guess it's there just to make sure the link failure did not screw
-up anything
+>  			memcpy(vnic->uc_list + off, ha->addr, ETH_ALEN);
+>  			off +=3D ETH_ALEN;
+>  			vnic->uc_filter_count++;
+> @@ -14600,6 +14602,7 @@ static void bnxt_ulp_restart(struct bnxt *bp)
+> static void bnxt_sp_task(struct work_struct *work)  {
+>  	struct bnxt *bp =3D container_of(work, struct bnxt, sp_task);
+> +	struct net_device *dev =3D bp->dev;
+>=20
+>  	set_bit(BNXT_STATE_IN_SP_TASK, &bp->state);
+>  	smp_mb__after_atomic();
+> @@ -14613,9 +14616,6 @@ static void bnxt_sp_task(struct work_struct
+> *work)
+>  		bnxt_reenable_sriov(bp);
+>  	}
 
-we could call bpf_testmod_trampoline_count_test from
-bpf_testmod_test_read and have the test to call
-trigger_module_test_read
+...
 
-jirka
+> 2.53.0
 
-
->  {
->  	return 0;
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index e62c6b78657f..6eaceb4dfbec 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -581,6 +581,12 @@ noinline int bpf_fentry_shadow_test(int a)
->  }
->  EXPORT_SYMBOL_GPL(bpf_fentry_shadow_test);
->  
-> +noinline int bpf_testmod_trampoline_count_test(int a, int *b)
-> +{
-> +	*b += 1;
-> +	return a + *b;
-> +}
-> +
->  __bpf_hook_end();
->  
->  static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
-> @@ -1843,6 +1849,16 @@ struct bpf_struct_ops testmod_multi_st_ops = {
->  
->  extern int bpf_fentry_test1(int a);
->  
-> +BTF_KFUNCS_START(bpf_testmod_trampoline_count_ids)
-> +BTF_ID_FLAGS(func, bpf_testmod_trampoline_count_test)
-> +BTF_KFUNCS_END(bpf_testmod_trampoline_count_ids)
-> +
-> +static const struct
-> +btf_kfunc_id_set bpf_testmod_trampoline_count_fmodret_set = {
-> +	.owner = THIS_MODULE,
-> +	.set = &bpf_testmod_trampoline_count_ids,
-> +};
-> +
->  static int bpf_testmod_init(void)
->  {
->  	const struct btf_id_dtor_kfunc bpf_testmod_dtors[] = {
-> @@ -1859,6 +1875,7 @@ static int bpf_testmod_init(void)
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmod_kfunc_set);
-> +	ret = ret ?: register_btf_fmodret_id_set(&bpf_testmod_trampoline_count_fmodret_set);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops, bpf_testmod_ops);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops2, bpf_testmod_ops2);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops3, bpf_testmod_ops3);
-> 
-> base-commit: 8a30aeb0d1b4e4aaf7f7bae72f20f2ae75385ccb
-> -- 
-> 2.43.0
-> 
