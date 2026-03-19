@@ -1,71 +1,70 @@
 Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583B23FFAD9
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 23:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5558405AA3
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 23:30:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773963057; cv=none; b=PjT1gAltTSv9H2ZQgkvHTeXlK822js/+ag3ZdtgfMleDkrrVCYTByKfYRKPABvKoaVVLmwozzMGbdjMy5Aq+tO7v6fwEJEpHZBxx/8uJ0+uoQ4TKWNqiNgmz1wccz7GPM1nMPkK4R7S7+ckAoBGL62YmnKk1YWMX8D4OcyZLHtM=
+	t=1773963057; cv=none; b=NRpOf1zWKif7vt/5/esKqYMhIJKWKGehMhZjr4ofa1vlauY4QrBH1snEac3DgAnmWP1AtUm9c3ZbbJyNsJn2Pdui8ZimLHRH8eAqUVOwRceoVvgi5wbw6gCK5fpSAuedy/H6Ab5X6cdZCLJD4a8XpP5mosVEKvQM0myEsLQ/DD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773963057; c=relaxed/simple;
-	bh=CZuA2q2lMteTu44UK74Tv+Gl9XkYvploUKv+Q7AJ1Us=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tEagMigcKYu3qW51SgXIj8J0JrPlCgfJCrC2LoMaFG12EunA2TAHg7ouwy/XKbNx8rKWb7tNUocPlCptCjWgNgbfm+5vzOBzHQ0NOwXddVW7CZK11SGrdTWRhL3V/r2EGUjtoYRy//VSQ0RkIhQRWDTNwbNihFmi2r+VlsBNtPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fXoUcC8I; arc=none smtp.client-ip=209.85.216.74
+	bh=wOqfNAc1NvD9OIIK2IFuT9hSXcRKmOriHgtHRjPE5Bg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=t69UGEAbA3iXT+li/hwIv91B3886ppESaGSxYZEHxKSUcWhUDRaf4J0PrEPWpGyTUDOnoKZlfCZ6t8/DUIGHqyRGn0oZbjIjoLgL4N7CJhc0c8rWaEEaLax3B7YQpOIRUjn5LxyGs4/WXonQ9Cmso2ba1ir+oTIGEC68zk9RnYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HGaV+NDi; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fXoUcC8I"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35a032cdd78so7692062a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 16:30:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HGaV+NDi"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3568090851aso1108419a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 16:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773963055; x=1774567855; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yCIxwFZ47k6gWbx57q3bhruGtmGGBP4Tv/5VwuBdu0A=;
-        b=fXoUcC8I/hiFAgr6fSop0cQgjdk7Rey95UBBUww3AiT25mdU38z/k52uDG/LLKJVQ6
-         l6hFwDM6Ieyb13cuYlSkRO6hrkvzO4d6EDgta3ANhPAVlid6BUMHkZslQwBt80Xfb0UR
-         lf6YNkVTtNlk8Ortasz1eKqZwpgNxAe76BYjwqskyyTSV88M+K8AcQsB2UAdhUv7Uopc
-         bxyu1DJcyygIoEojg00JdDhepp4nba8hGoLJBHVKKCd0C+8ilItpRSCiy3CV61PeUhhN
-         CvqWAhJUKlv0oiG2TKsUb2K9lK2ktg79oAbFWcENI1152824k/FXR5eCfLf7tlW7yPgP
-         +7FQ==
+        d=google.com; s=20251104; t=1773963056; x=1774567856; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sCHbx83iK3r3PTq425PBvHDhuCzYUl5sN2W6Ton0yI0=;
+        b=HGaV+NDiMEwkOvFzpApfF2e5KIRVd0goCxK0Vx35cSeGT4nTdQxZDfuD+EonWkY5xl
+         H6sjXYoeqhZtC5aOe4qNdluoVvTV94G2nOK7uDVTzUa/EzbQTvA3DPyS9uwt/SJWNZxD
+         01++syQG2Jb9rOkselcyNyfm+cdlcSOtJiW3qpzu4bBsRCQ7YyQYJiaVoRwiJPRFRFu4
+         9b8eR10pOV+FdQOHr/2UI8eChLDSsIAIE7cKqLUahZVjtTS6ZH2/bEqp1UfidqWMNRPy
+         deXTlBic0mkjlrHzxSuabHLHjDRCmh/p9xAUqiagBUXbQMsJ/nWKVMpFXmUWO1IchJDR
+         kQrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773963055; x=1774567855;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yCIxwFZ47k6gWbx57q3bhruGtmGGBP4Tv/5VwuBdu0A=;
-        b=MZ7UWLGJUIwxooPNErHmEFzAl7AlkuCWjcwCI1hZ0+69zkLOgQr9PMTgPl8uZYO8Lh
-         dBGyJJky1MiLcNp8Rq4WFAjG/8nmVNzSz+nuTVSIauEdOZR+OuKP73aFcvfGU52KZJq8
-         0F8nLNMPxBtnYOFT2wqKA/Qw78jnTGxphjA5cGkieb/g5w8210kKqa/ZmnjGxcXYGZye
-         cMLcR7JlQ5c5MkWzzWWGhtpHp76X9Y40Ds0y0FrQmrOyNYzPjjHC1x2BtaKXLsNHRu+o
-         pGsMr9n1Gngeukzv0lqrUhQ9kAvjgwL1eAuts2uzCHehqPAsxX0M9DN0iRCeB7OKxATh
-         DEww==
-X-Forwarded-Encrypted: i=1; AJvYcCWD3MgFKs6qaBWQBKVIBp88lLtZYp+u4yzoeGzeUDj6F0AuXhDg2YcOAW3SCzpWOw9YT+ugQjmbUJo3EyqFCwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2HYQtbsGSSzsfjJCw91HQiME+GcYykoRRysWM6WW9qzoFe0Cb
-	a9UC/9EcpZyggP5SPLrB9dOBXUSYKjkAk5IrGT5/FSQX+9bBfmNqdUQRE0dCGrMggjrdPledyiB
-	QBpH5cQ==
-X-Received: from pgww9-n1.prod.google.com ([2002:a05:6a02:2c89:10b0:c74:42:8993])
- (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3d05:b0:398:a6d4:dbf7
- with SMTP id adf61e73a8af0-39bcec2990dmr884293637.55.1773963054511; Thu, 19
- Mar 2026 16:30:54 -0700 (PDT)
-Date: Thu, 19 Mar 2026 23:30:27 +0000
+        d=1e100.net; s=20251104; t=1773963056; x=1774567856;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sCHbx83iK3r3PTq425PBvHDhuCzYUl5sN2W6Ton0yI0=;
+        b=XIUBuo2+qQ9YajUQlTOe7IePgKCNdoTXrsyRzcBD09ICR4LTt0JjFldbwtopK8cEWi
+         IzFxh5TFoBsFm7J9DPPDSwo99BdHYct6i4F3rqUm+hCG3cDeq7Ro5ssSTvNSBuxHMVnj
+         g2VDEBLCez+CN2ffuOhnFdZLdfVtXc8SETEYKS16T2+OHR3jZcS0LQgiKKckJwMyWnJd
+         e1zhYqjhFg0uefzy01NR/JXJyoCJO0bDFJNve5MOFJqbO7NckNPKJdR8KPn4XVHULSAg
+         28FkI0jtfVwkkut8foEW5t+nyPfoBrRNHdOwiN8GnLvYMrtsNlNtNIHPEDPqCNsSuEqz
+         nAZw==
+X-Forwarded-Encrypted: i=1; AJvYcCVwqNFFIPkQ9BTqZBz0ckdEuyUXc+GzLyVtgz29hqboLEBtH8CgZT1gfCaUXMrS6mVPrjKxY6m6LnMGbgzzIiY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJ9QEYQjksCWf/e7TdndqscNlOK8RQad4tUd5Q5NObgZkjDonM
+	Y3oXhaL2ewnvb6xwviO8tjo5MhC9PVX9yVQ+H7Lw9GmkdL+DnvdLtsRgqZU8bFEdx3Ra+89b9sT
+	w7ZSlSQ==
+X-Received: from pjvi6.prod.google.com ([2002:a17:90a:dc06:b0:35b:9c1e:a503])
+ (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3e44:b0:359:9158:7459
+ with SMTP id 98e67ed59e1d1-35bd297b148mr776486a91.0.1773963056138; Thu, 19
+ Mar 2026 16:30:56 -0700 (PDT)
+Date: Thu, 19 Mar 2026 23:30:28 +0000
+In-Reply-To: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIABOHvGkC/x2NQQqDMBBFryKz7oBJqaXdCj1At6WLYH50wKhMq
- FTEu3fo8vF5/+1UoIJC92onxSpF5snAnyrqhjD1YInG5Gvf1Gd344w868YpyPhRcE4cMYYNkZN 8WVPHq+cL4FxswtUksqtFYes/86Lno6X3cfwAHAkyQXsAAAA=
-X-Change-Id: 20260319-memory-failure-mf-delayed-fix-rfc-v2-5ee11d6a7260
+References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
 X-Developer-Key: i=wyihan@google.com; a=ed25519; pk=cRi0fKzS5BMxlHyHY2pJv3w/1zcgfYKr6EYGYppdMYc=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773963053; l=2186;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773963053; l=1352;
  i=wyihan@google.com; s=20260319; h=from:subject:message-id;
- bh=mpcY4kRf+nPP5p5eWgT3Y1evjSbcjRoF+f54tj5v7pY=; b=mWnFvQ5ui3ggdbSI/gbCZaSWpVcU5hlhGvSATXtAyXZwDfjEUhF4BWK5E7B5/5PQNCDI5xSiU
- xIX5xLfd+SSA0zwnDrFuPU+talg1mimDxNRWM7dNEzT6Wnry6w6Sa0M
+ bh=wOqfNAc1NvD9OIIK2IFuT9hSXcRKmOriHgtHRjPE5Bg=; b=YPNL8jxwq4kWmS/RsAYB4N4wCDzvDeNXcDvt36H56rqlisScdhaT3wHvfkS9+Dbew0Z0kkT6f
+ pQOjgJ05T0TC8Im8YK9ko5dIngtrrkkjKMNkE/VDDjMrdxjo70z5Djw
 X-Mailer: b4 0.14.3
-Message-ID: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
-Subject: [PATCH RFC v2 0/7] mm: Fix MF_DELAYED handling on memory failure
+Message-ID: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-1-92c596402a7a@google.com>
+Subject: [PATCH RFC v2 1/7] mm: memory_failure: Clarify the MF_DELAYED definition
 From: Lisa Wang <wyihan@google.com>
 To: Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi <nao.horiguchi@gmail.com>, 
 	Andrew Morton <akpm@linux-foundation.org>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -80,58 +79,35 @@ Cc: rientjes@google.com, seanjc@google.com, ackerleytng@google.com,
 	vannapurve@google.com, michael.roth@amd.com, jiaqiyan@google.com, 
 	tabba@google.com, dave.hansen@linux.intel.com, Lisa Wang <wyihan@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Here's a second revision to fix MF_DELAYED handling on memory failure.
-
-This patch series addresses an issue in the memory failure handling path
-where MF_DELAYED is incorrectly treated as an error. This issue was
-discovered while testing memory failure handling for guest_memfd.
-
-The proposed solution involves -
-1. Clarifying the definition of MF_DELAYED to mean that memory failure
-   handling is only partially completed, and that the metadata for the
-   memory that failed (as in struct page/folio) is still referenced.
-2. Updating shmem=E2=80=99s handling to align with the clarified definition=
-.
-3. Updating how the result of .error_remove_folio() is interpreted.
-
-RFC v2 is a more complete solution that includes parts 1 and 2 above to
-address David=E2=80=99s comment [1]. Selftests are included for all the abo=
-ve.
-
-+ RFC v1: https://lore.kernel.org/all/cover.1760551864.git.wyihan@google.co=
-m/
-
-[1]: https://lore.kernel.org/all/91dbea57-d5b0-49b7-8920-3a2d252c46b0@redha=
-t.com/
+This patch clarifies the definition of MF_DELAYED to represent cases
+where a folio's removal is initiated but not immediately completed
+(e.g., due to remaining metadata references).
 
 Signed-off-by: Lisa Wang <wyihan@google.com>
 ---
-Lisa Wang (7):
-      mm: memory_failure: Clarify the MF_DELAYED definition
-      mm: memory_failure: Allow truncate_error_folio to return MF_DELAYED
-      mm: shmem: Update shmem handler to the MF_DELAYED definition
-      mm: memory_failure: Generalize extra_pins handling to all MF_DELAYED =
-cases
-      mm: selftests: Add shmem memory failure test
-      KVM: selftests: Add memory failure tests in guest_memfd_test
-      KVM: selftests: Test guest_memfd behavior with respect to stage 2 pag=
-e tables
+ mm/memory-failure.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- mm/memory-failure.c                                |  17 +-
- mm/shmem.c                                         |   2 +-
- tools/testing/selftests/kvm/guest_memfd_test.c     | 233 +++++++++++++++++=
-++++
- tools/testing/selftests/mm/Makefile                |   3 +
- tools/testing/selftests/mm/run_vmtests.sh          |   1 +
- .../selftests/mm/shmem_memory_failure_test.c       |  98 +++++++++
- 6 files changed, 344 insertions(+), 10 deletions(-)
----
-base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
-change-id: 20260319-memory-failure-mf-delayed-fix-rfc-v2-5ee11d6a7260
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index ee42d4361309..4f143334d5a1 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -862,9 +862,10 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+  * by the m-f() handler immediately.
+  *
+  * MF_DELAYED - The m-f() handler marks the page as PG_hwpoisoned'ed.
+- * The page is unmapped, and is removed from the LRU or file mapping.
+- * An attempt to access the page again will trigger page fault and the
+- * PF handler will kill the process.
++ * It means the page was partially isolated (e.g. removed from file mapping
++ * or the LRU) but full cleanup is deferred (e.g. the metadata for the
++ * memory, as in struct page/folio, is still referenced). Any further
++ * access to the page will result in the process being killed.
+  *
+  * MF_RECOVERED - The m-f() handler marks the page as PG_hwpoisoned'ed.
+  * The page has been completely isolated, that is, unmapped, taken out of
 
-Best regards,
---=20
-Lisa Wang <wyihan@google.com>
+-- 
+2.53.0.959.g497ff81fa9-goog
 
