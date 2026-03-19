@@ -1,132 +1,140 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B06F3C3BF7;
-	Thu, 19 Mar 2026 10:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D703C345D
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 10:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773917252; cv=none; b=Z7vZxc/4zk0be+1nzKK9gdLSlCbvRHjfge511Wmo61cGOuKxwUxQ4c5C4R13vOKhOlA0RsFZZvZEX2xuKccPw03F202UGrPOr9pZ/cURMVldPwwWmC0rsy9zB2ZMuUyyYDPbSHG1qouAVLi+UaS3qfNkOymdIjzPI8XhS3Tu5Hk=
+	t=1773917410; cv=none; b=c8N7v1LBJfY0mrU+husybuTS7/V1+Q7y6NJUKb2L3ziREiPbQTXivJyKYT4dhp0Et8ROsOqRcv/XHYayRLY2KMFoMfe3/7B87JEQ7gYYoW3cQpDPcAAeZYJKaxKuihRt1IdA3ANGicdRkl1pQBNLO/BS1/V9MEZvyiFFFMUEPsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773917252; c=relaxed/simple;
-	bh=/DerbCNH93nWcJFCcSyH0vcBP/3BK3w3yhhKoecJM9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OMhMQKCGejKvzsomPK3CAaK66pyW5fg+quP20P0SW3tA/ZZLIenV81JhNfGdfnZEMhhTPJXwUuwRZyUPo5vTeyWdo9gOcfWPrZYMKQhk0hy9Nj1KEbmf5W9sOZf+ukf0t6NNQ/dE7r0hXke6ymQcsx+1IZHc8bz8oxQ5ZvyTVuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=NizkEOSU; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1773917410; c=relaxed/simple;
+	bh=0PnjIJb7BB31tuXTXb9O9K08P7IZqTFP8xOl5ts49z0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k4BCXHNTi/PM8g7Y+xtqWTDIqJVb6VyzYwLK4dmQSyNZCp8sBdZtG6sz2w7VogYil9G5uUXo88QQQ1ePNlb51dgkxUxKs3AoFKIDdc1kXWJu51BPOF7IxP1RdBR6hema57IBuUt8R5I7UXIPJlpa8A0aK+XVMcP+wnVkG5oRbmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G+Kx2lPx; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VvQ8IT3A; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="NizkEOSU"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=z1erKPSf72XxaBH0XjMFCVpHOlYK1KeCMMQpje1nYbA=; b=NizkEOSUB33l
-	Neoe0txsjaFtnn9IUsHoJlWbnKPak8JwR6aN6OSw8VUm0kFWjXwm6e09ya+/YzU1SWajy9DKNppC+
-	eXc9zOEL7iZDggqxu1v+Wo7NeFJiWyyWApzx2cOzwhd3VP0Cnj9j7BL5qiCBcEuM18ilzOw/rm26B
-	THJjVC9xK/f7PMQNnd4LalIw2iB5kcKOCzNvziCPDFK9yeVvkQLVXtrjwOPaTf3D8EB5XG1bR3X4n
-	NRSK9CewA/vWROkIW7JJ2BA5+gzYU1s+LqeIz65N7Vj0nGhV8xBDs36Ibc8CApFCZ2XwOR/6Tv/yg
-	CgG3jdgrLKC2YgdyZFBsaw==;
-Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
-	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1w3AdB-007bwL-2M;
-	Thu, 19 Mar 2026 11:31:25 +0100
-Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 62JAVQ8q146132
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 19 Mar 2026 10:31:26 GMT
-Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 62JAVOZg146131;
-	Thu, 19 Mar 2026 10:31:24 GMT
-From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Aaron Conole <aconole@redhat.com>,
-        Ilya Maximets <imaximet@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Stefano Brivio <sbrivio@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dev@openvswitch.org,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH net-next v5 0/4] selftests: net: fix false failures due to missing features and host interference
-Date: Thu, 19 Mar 2026 10:31:19 +0000
-Message-ID: <20260319103123.146112-1-aleksey.oladko@virtuozzo.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G+Kx2lPx";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VvQ8IT3A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773917406;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0/QrmoRE0Ec4371GT4zD9Iw4up8oNW0PlcBOJIQ423E=;
+	b=G+Kx2lPxc9Wbbn1+W9zbtvE/F26K9bWO4osEXZCIVPgZYZez2P5n8+vVOAER70/meXY2/s
+	raw97bhPHo0nMMnBaY3ergBU77IVcyq6AVGTuxw9Hwwi+LTh6Hhx/S2VPF5r8h7kYm463b
+	LCNbtEOngQg34KvjWEktqFdFqtL6dh0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-602-kJOFshhOMI2L5t6f5cnDzw-1; Thu, 19 Mar 2026 06:50:05 -0400
+X-MC-Unique: kJOFshhOMI2L5t6f5cnDzw-1
+X-Mimecast-MFC-AGG-ID: kJOFshhOMI2L5t6f5cnDzw_1773917404
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4836abfc742so9423085e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 03:50:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773917404; x=1774522204; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0/QrmoRE0Ec4371GT4zD9Iw4up8oNW0PlcBOJIQ423E=;
+        b=VvQ8IT3Aq1s1RyVJaXQI4RrEZ7dyWGk020Baz9N+pqwNDlwipjtbf/Skmc0RUvGxmx
+         2cVR3/c654Oky2bZ8emjucih6vYPK2Ts61EnpQ8PN2U+88Cu00y143KKPROs0NT+v63A
+         V0S7mHyaknQJl2FBHXMmfz2WaZGmKu0QWxKuzSiOVAn/13ZhGIkR8GRc0wrwPQRaer6J
+         XmmwVcKjTiJZ+WtZjbWmc6dZkGqPErjV+v7Q65a+1fhjpO8goTmNWgwHNSuNaRHyh5pL
+         Dm6V728+aduL770sSAfWXqJQL4JqK/FglPJcpeZJtxKHDBfD8wG+6+mY3CzAgJER/6x9
+         Jy+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773917404; x=1774522204;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0/QrmoRE0Ec4371GT4zD9Iw4up8oNW0PlcBOJIQ423E=;
+        b=GQLGeX3sxIK9QdziqTzYTM7LONsK1N8nUC2KgO+JTejLTvmPg7dMV1Tc9wJobOZHEI
+         OdwclcIf7oAVvk7ui1OtXuQARNlQRL864QUesbJq+PrrkDQ6okpPVIfF5YOBboxdHy+i
+         SVATRIGWJU+fHNGKGtLBOTrDvH565vwHVloSm1vQGVqDpvE79t5L6v2Zlso32MkGxbIV
+         KnQiS53NeWa5YP7isX3f4RgUBZnvv0hZsqmRMo8giQZkWHfhHaN3IqW+OdSl0bvXFAqB
+         +idBCZlX/H2Wy+K1HNqIjdBOFE+5Dpt1DgPKkBjfsULplTT+M7h+2xzHEIB1wDBwX79f
+         pZow==
+X-Forwarded-Encrypted: i=1; AJvYcCWUVidV5oBXe1GVwYog28uQrNeNfx5X4kgtrTL7L34Lv856EkXiHV7/LeyxHgRhVdcB/0HIIi1Hko1nOceihFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKTkFR8tZfAgK3+iS/IyRuQOs9Y6RE3KWwjW1Emjzn32TdMIm1
+	ku3mLzRaOBKd725ODTOLGU/bXmEEnxXLHRFKkRPQ6VAWICqVjM0SljQe/auTFaYwu+d1B4CvRyY
+	gsFHDC386hTq0lhfJZpz8AP+KMyfkWxSGYkJv/0AfxIF0zmBjgjXedbYWti5FLsY54nAfJw==
+X-Gm-Gg: ATEYQzzDuo0UgG+xRhUseOkmetZB4If6gShMqRbfnOX3sqaX37cyxfJNWszDCLsM8N6
+	ztslxlRV6ES9LjegUgZp2jfgyBcE1GVnCXdyRuIQU1FrCjDmRkNIYbsRziFscfy5O4tqW8nZZzl
+	uBdQEizty5jAVA2ypQZjNeBItCPwEo0nsaq56E7tcRC5/nehfXISwb+bwgwUDQ2/2HBZKZw+zAV
+	WgO9elzb0fpjDaoPbTUsF81bQ9XN3NFpli0bfIW0g3uRMD11jstsQWYzZxnU3STkD/IOUhAYOq3
+	YqtLPlyaWYPovgaq2gQqsupWIqR85xajvjCfr8NW0wWQup/RU7jf7BBooj0WLVMG8XRg5/3W5GO
+	nR6g35yRAMPU2hu46TpDgR4PHFYMEUiA0bUNKvpsiJam33YgfSxJ1mzSz
+X-Received: by 2002:a05:600c:1d10:b0:477:7ae0:cd6e with SMTP id 5b1f17b1804b1-486f4422046mr113298435e9.5.1773917404167;
+        Thu, 19 Mar 2026 03:50:04 -0700 (PDT)
+X-Received: by 2002:a05:600c:1d10:b0:477:7ae0:cd6e with SMTP id 5b1f17b1804b1-486f4422046mr113297875e9.5.1773917403694;
+        Thu, 19 Mar 2026 03:50:03 -0700 (PDT)
+Received: from [192.168.88.32] ([216.128.11.196])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b518a2cd3sm13432241f8f.32.2026.03.19.03.50.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2026 03:50:03 -0700 (PDT)
+Message-ID: <f5c9a512-4779-4cc4-aed9-37ce0131b3b8@redhat.com>
+Date: Thu, 19 Mar 2026 11:50:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 2/3] tcp: keep scaled no-shrink window
+ representable
+To: Wesley Atwell <atwellwea@gmail.com>, netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+ horms@kernel.org, kuba@kernel.org, kuniyu@google.com, ncardwell@google.com,
+ shuah@kernel.org
+References: <20260317065137.1533226-1-atwellwea@gmail.com>
+ <20260317065137.1533226-3-atwellwea@gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260317065137.1533226-3-atwellwea@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 3/17/26 7:51 AM, Wesley Atwell wrote:
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index 35c3b0ab5a0cb714155d5720fe56888f71aecced..bd3a43148a87e891bc632a47ffb5b82c475e8f6f 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+> @@ -3375,13 +3375,19 @@ u32 __tcp_select_window(struct sock *sk)
+>  	 * scaled window will not line up with the MSS boundary anyway.
+>  	 */
+>  	if (tp->rx_opt.rcv_wscale) {
+> -		window = free_space;
+> +		u32 gran = 1U << tp->rx_opt.rcv_wscale;
+>  
+> -		/* Advertise enough space so that it won't get scaled away.
+> -		 * Import case: prevent zero window announcement if
+> -		 * 1<<rcv_wscale > mss.
+> +		/* Keep tp->rcv_wnd representable in scaled units so later
+> +		 * no-shrink decisions reason about the same right edge we
+> +		 * can advertise on the wire. Preserve only a small non-zero
+> +		 * offer that would otherwise get scaled away to zero.
+>  		 */
+> -		window = ALIGN(window, (1 << tp->rx_opt.rcv_wscale));
+> +		if (free_space >= gran)
+> +			window = round_down(free_space, gran);
 
-This series addresses several issues in the networking kselftests
-that cause false-positive failures depending on the host environment,
-kernel configuration, or library versions.
+The receive window already has a similar rounding in the `free_space <
+(full_space >> 1)` case. This is basically excluding only:
 
-The main focus of these changes is to isolate tests from the host
-environment (using namespaces) and to ensure proper fallback or
-skipping when dependencies are missing.
+	gran > free_space >= (full_space >> 1)
 
-Summary of changes:
-1. Fixes ovs-dpctl.py to return a non-zero exit code when pyroute2
-   is too old. This allows pmtu.sh to correctly fall back to ovs-vsctl
-   instead of assuming the configuration was successful.
-2-4. Move reuseport test into dedicated network namespaces. This prevents
-   failures caused by port conflicts with host processes or interference
-   from host firewall rules.
-5. Ensures io_uring is enabled via sysctl before running io_uring_zerocopy
-   test, preventing failures on systems where kernel.io_uring_disabled
-   is set.
+which IDK if is a realistic situation, perhaps just do the scale down
+unconditionally?
 
-Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Also minor nit, prefer 'granularity' over 'gran'
 
-Changes in v2:
-- Fixed a typo by adding the missing backslash in Makefile
-- Added a Fixes: tag to the appropriate commit as requested
-- Link to v1: https://lore.kernel.org/linux-kselftest/20260120230558.328423-1-aleksey.oladko@virtuozzo.com
-
-Changes in v3:
-- renamed pmtu.sh to pmtu-test.sh and used pmtu.sh as the name
-  of the wrapper. 
-- since the test now runs in a dedicated netns, updates the ovs
-  test case to correctly move network interfaces into the target
-  namespace.
-- Link to v2: https://lore.kernel.org/linux-kselftest/f7t1pj9v8h7.fsf@redhat.com/T/#t
-
-Changes in v4:
-- dropped the patch "selftests: net: fib_tests: skip rp_filter test if
-  cls_basic is unavailable" since the test environment is expected to
-  have all mandatory config options enabled.
-- moved isolation logic from in_netns.sh wrapper to unshare() call in
-  reuseport_ tests
-- Link to v3: https://lore.kernel.org/linux-kselftest/20260306000127.519064-1-aleksey.oladko@virtuozzo.com/T/#t
-
-Changes in v4:
-- changed patch prefix/tag from "net" to "next-next"
-- Link to v4: https://lore.kernel.org/linux-kselftest/20260309152013.565216-1-aleksey.oladko@virtuozzo.com/T/#t
-
-Aleksei Oladko (3):
-  selftests: net: run reuseport in an isolated netns
-  selftests: net: rename pmtu.sh to pmtu-test.sh
-  selftests: net: io_uring_zerocopy: enable io_uring for the test
-
-Konstantin Khorenko (1):
-  selftests: net: run pmtu.sh in netns to avoid host firewall
-    interference
-
- tools/testing/selftests/net/Makefile          |    1 +
- .../selftests/net/io_uring_zerocopy_tx.sh     |    9 +
- tools/testing/selftests/net/pmtu-test.sh      | 2492 +++++++++++++++++
- tools/testing/selftests/net/pmtu.sh           | 2492 +----------------
- tools/testing/selftests/net/reuseport_bpf.c   |   11 +
- .../testing/selftests/net/reuseport_bpf_cpu.c |   10 +
- .../selftests/net/reuseport_bpf_numa.c        |   10 +
- .../selftests/net/reuseport_dualstack.c       |   11 +
- 8 files changed, 2546 insertions(+), 2490 deletions(-)
- create mode 100755 tools/testing/selftests/net/pmtu-test.sh
-
--- 
-2.43.0
+/P
 
