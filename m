@@ -1,175 +1,142 @@
-Received: from sender-of-o58.zoho.eu (sender-of-o58.zoho.eu [136.143.169.58])
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A393B9DA9;
-	Thu, 19 Mar 2026 22:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773959052; cv=pass; b=Wd6RVtL3gVht8A2jOte+b2n4dumWye6XmmcSuHeO58dfIe2zov1cXwrsxGHQ/QW9Fb0s6hW5rB6Rs+bykOQ3yHFkC2Slf4pNuYYyby2hfLlH1jTTfEPVHOKjpR9+dBjpn+8R/N09DfwaiWSm2KmgmlsOJT5RtrQ1gU2xdocU/uI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773959052; c=relaxed/simple;
-	bh=XSSwjdN9JcQYLVR3vCu+DEQAWu5fOd/1QdFaaPevUvQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=XhLdszYCa0YVhfw/nBrmAWUwNh+ZCpsrKa7ocYEiJzJFKCoRuEGJjWDJ3iNNNT+dHOdqbHU4DnL2yYBpOxVrPeTR7shNUDy3xrt4W8y2XzQsAwdSP8+Jigirs0RhtLemPgkey/JRKfyCZo13hga+cLWcg34HULNCBP5vFj1EArg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=YvRlnJvj; arc=pass smtp.client-ip=136.143.169.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7BA37997C
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 22:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773960947; cv=none; b=FD7j860xXuqH5vuoyULW5ZvJ88MeDsHJKuPEj0+ZCl4K4RthtJ9U+nveOVeo8lJ2LaXF92gCaRELbqwY0hcs0rZGm9due4mX6X/opE8BPYqKGasGK8xUihgXE8EjT638rNA0ksgEvGoHqLErRo+6oX8qxCImOzyKWADoz9ycQQU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773960947; c=relaxed/simple;
+	bh=i7MipWj9sHBdfSHGjRKSPIm5ZRjwYZfYp01SnJS/juM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qhz4HHX5G03bc4NtHL0DMOt//1Qq1aiHrd+A37VaIoS345xu1AjmnHEcuzUgTG0SQTop/2KzHRBom8p67qxcxe5T/Qcbvh7TeQWvb95eVPZHF0oaeGecrFXM4CE/D/b5vsa79tH9pB8YbXn9M/8lr+vYXF6fQ5FcxOtwN5EOIpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=jSniGa++; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="YvRlnJvj"
-ARC-Seal: i=1; a=rsa-sha256; t=1773959027; cv=none; 
-	d=zohomail.eu; s=zohoarc; 
-	b=DuWwGe94Eaozsed+M7RTnGddEXtyNnF3nv6BrDX8STE5at0p+VyblHiHrmjNtLh4axcjaLDxqYpQLTJDJz92j7GUhn8aXi5z/ThI0FXmiaUNaH9R534BlJMq6nHQy6alwxR8P1eyglo/fIRd1BTnF5beSSlzlrORyy1SPN7ZeUQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1773959027; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Tv6/ma7sHaT9XOL0hYS2sCzv4C5uxOayKiNXO6qgaZY=; 
-	b=V8xhuDgV9dANZDLMXIE5pdQ4pxj5Zjdt1GdifCKAyjAJ+DgB5m4lRKa25DjnaB2xqpjVP1IHLvG4PyS64YHIaGzul8ELu0AfPGI1pUkihFNwDKFPNw3e6GoqXl6HY2bO30MC2Q7/nvL/hrvCkcaO67KboUQAAEby791PlWAiQ2A=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-	dkim=pass  header.i=objecting.org;
-	spf=pass  smtp.mailfrom=objecting@objecting.org;
-	dmarc=pass header.from=<objecting@objecting.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773959027;
-	s=zmail; d=objecting.org; i=objecting@objecting.org;
-	h=Date:Date:From:From:To:To:CC:Subject:Subject:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
-	bh=Tv6/ma7sHaT9XOL0hYS2sCzv4C5uxOayKiNXO6qgaZY=;
-	b=YvRlnJvjXXA91OQ2Z7nVePuWYQeXrfsp7aOC41jEHdlCbbjIGNNGpR4o4xy1wPuC
-	B4AQHy5SeAQ7HZrak1mUT71V15EmZmwhz2qz6X04mZxUv4KwawlWUttqvOF0wwjn+ja
-	Bj5Gl7rcPw9tcwazrZWGo0o4/WKbRuMDQzYh2hjo=
-Received: by mx.zoho.eu with SMTPS id 1773959024036155.69379496020167;
-	Thu, 19 Mar 2026 23:23:44 +0100 (CET)
-Date: Thu, 19 Mar 2026 22:23:44 +0000
-From: Josh Law <objecting@objecting.org>
-To: David Gow <david@davidgow.net>, Andrew Morton <akpm@linux-foundation.org>
-CC: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/8] lib/glob: bug fixes, new features, and tests
-User-Agent: Thunderbird for Android
-In-Reply-To: <6522d194-12f1-49d2-ba91-ef3e26b49817@davidgow.net>
-References: <20260315211807.411173-1-objecting@objecting.org> <b077cc42-ee35-4165-9936-49ef7d53e0e8@davidgow.net> <A5DA6F8B-C9B9-4BBB-ABE5-89A9E6EA577A@objecting.org> <6522d194-12f1-49d2-ba91-ef3e26b49817@davidgow.net>
-Message-ID: <A6112AAB-305D-4E25-A838-08E6EBF55A4A@objecting.org>
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="jSniGa++"
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62JM8XGG1034757
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 15:55:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=9IPS5TmzCBkUYq50HKth
+	yh6opnGe6lVtdHPipIOQpTs=; b=jSniGa++7ZCOOdJEGsdbkAbxz1ILM17NcXhm
+	4rCFj2H+AA2f/rLU3ouY3Py/0jE8zPlPzmEAPON1SaAmxEMNphue3xlqenYJDTbe
+	6AVqm/xNbHPpydL5PMK4mAoxxoVS8lGapuCqU7L0ZUMR0z1DxqzIihldHw2txLk6
+	MxZbyNCyZTKCq4/2ijJPsU20BGjXdZ5HQ0Tv5osInVeiU02bfiLnhrg89kqKLsen
+	3TGa+Irgd29Yvf3AuB7Yx1B6A9MtoIikcxsJjmo1B3dErfnuzJUQfTYRI2VwOW8C
+	QnBPmrKR/kmLnfYgAQi3HOqR4AktqYEzGNQldn/YUn7B8tyKbQ==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4d0m7ur4mt-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 15:55:45 -0700 (PDT)
+Received: from twshared6524.02.snb2.facebook.com (2620:10d:c0a8:fe::f072) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Thu, 19 Mar 2026 22:55:43 +0000
+Received: by devvm6375.cco0.facebook.com (Postfix, from userid 721855)
+	id BAB72718EE5A; Thu, 19 Mar 2026 15:55:38 -0700 (PDT)
+Date: Thu, 19 Mar 2026 15:55:38 -0700
+From: Ted Logan <tedlogan@fb.com>
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Matt Evans <mattev@meta.com>
+Subject: Re: [PATCH] vfio: selftests: Build tests on aarch64
+Message-ID: <abx+6mcpGwt0MzrG@devvm6375.cco0.facebook.com>
+References: <20260317-vfio-selftests-aarch64-v1-1-2266077563e7@fb.com>
+ <abw5ng4M14Je2OfU@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <abw5ng4M14Je2OfU@google.com>
+X-FB-Internal: Safe
+X-Authority-Analysis: v=2.4 cv=ROy+3oi+ c=1 sm=1 tr=0 ts=69bc7ef1 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=8elwO82fXORLTBIkMd32:22 a=VwQbUJbxAAAA:8
+ a=VabnemYjAAAA:8 a=FOH2dFAWAAAA:8 a=4HMHHBYQn7QH22SDB_8A:9 a=CjuIK1q_8ugA:10
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE5MDE4NCBTYWx0ZWRfX4y/rs10wuaLv
+ pOgVAvxS9xiByqXiY0I1GcUW2dI+afPNUkbek9nN+DJojGD7PwN2SBF9l9FhKrj0E/8vPfi8d8b
+ 3bjybUKSSDAvQiNL2q+2rCSRD3tDY9dMu6gRwdWoAsK0Gt7ubG5BAcloyNK3VwJ9aOi+x16UNzO
+ fBXPIf7VAi7BtX8Pgkk6szLNzxhHf4+1kDXZJrpyeAzVqMXkSAEGzfnb+JBQMScWsMR7/FDjJG7
+ awDDHudW7SiGhWG6nS9E8bTbg4PnPe/XATRX3pwyVUg5Bv+YBsrPXtyIGe9bUHOxywz2Idv7o6s
+ MYdLxSCkHmex1ASePOVKRehrUc2JI8viXNSx08dCScclWNBY4cSq2Ry44IiZLgk3eSt0khhBAJk
+ UfV8oGWHeSt2nrO85cZVkpKdscshm4835ba2oGAiOc8W2lVx8OobeHLD5LEEzKagt0G4o5sjSGO
+ zMAd4v55Ib5DCU460Cw==
+X-Proofpoint-ORIG-GUID: o98ypAvUfdABjapa9Gt3DFn9mZEjFCx5
+X-Proofpoint-GUID: o98ypAvUfdABjapa9Gt3DFn9mZEjFCx5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-19_04,2026-03-19_05,2025-10-01_01
 
+Hi David,
 
+On Thu, Mar 19, 2026 at 05:59:58PM +0000, David Matlack wrote:
+> On 2026-03-17 04:25 PM, Ted Logan wrote:
+> > Also build vfio self-tests on aarch64 variants, in addition to arm64 and
+> 
+> s/self-tests/selftests/
+> 
+> > x86_64.
+> 
+> This could be worded better to clarify that this is about fixing the
+> VFIO selftests to allow native builds on arm64 host platforms.
+> 
+> > 
+> > Reported-by: Matt Evans <mattev@meta.com>
+> > Closes: https://lore.kernel.org/all/e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com/
+> 
+> Please also add a fixes tag, since it was not the intent of the original
+> commit was to disallow native arm64 builds.
+> 
+>   Fixes: a55d4bbbe644 ("vfio: selftests: only build tests on arm64 and x86_64")
 
-On 18 March 2026 07:19:53 GMT, David Gow <david@davidgow=2Enet> wrote:
->Le 18/03/2026 =C3=A0 12:32 AM, Josh Law a =C3=A9crit=C2=A0:
->>=20
->>=20
->> On 17 March 2026 07:19:47 GMT, David Gow <david@davidgow=2Enet> wrote:
->>> Hi Josh,
->>>=20
->>> Le 16/03/2026 =C3=A0 5:17 AM, Josh Law a =C3=A9crit=C2=A0:
->>>> Bug fixes, extensions, and test coverage for lib/glob=2Ec:
->>>>=20
->>>> Patches 1-3 fix corner cases in the existing glob_match():
->>>>     - Inverted character class ranges like [z-a] are now normalized
->>>>       instead of silently failing to match=2E
->>>>     - A trailing backslash is treated as a literal '\' rather than
->>>>       reading past the end of the pattern string=2E
->>>>     - [^=2E=2E=2E] is accepted as an alias for [!=2E=2E=2E] to match =
-the
->>>>       regex-style negation syntax documented in glob(7)=2E
->>>>=20
->>>> Patches 4-5 add two new utility functions:
->>>>     - glob_match_nocase() for case-insensitive matching, useful for
->>>>       subsystems like ATA that need case-folded denylist comparisons=
-=2E
->>>>     - glob_validate() for checking pattern syntax before use, so
->>>>       callers can reject malformed patterns early with a clear error=
-=2E
->>>>=20
->>>> Patches 6-7 add kunit test coverage:
->>>>     - 47 new test cases for glob_match covering escapes, inverted
->>>>       ranges, caret negation, edge cases, and unclosed brackets=2E
->>>>     - 11 test cases for glob_match_nocase=2E
->>>>     - 17 test cases for glob_validate=2E
->>>>=20
->>>> Patch 8 adds a real in-tree caller for glob_validate() in the kunit
->>>> executor, validating user-provided filter_glob patterns and returning
->>>> -EINVAL for malformed ones=2E
->>>>=20
->>>> Changes since v3:
->>>>     - Resend: v3 accidentally included stale v2 patch files in the
->>>>       same email thread=2E  No code changes from v3=2E
->>>>=20
->>>> Changes since v2:
->>>>     - Fixed missing '^' in __glob_match metacharacter comment (patch =
-4)=2E
->>>>     - Dropped unnecessary braces in glob_validate case '[' (patch 5)=
-=2E
->>>>     - Added real-world example to glob_validate() commit message (pat=
-ch 5)=2E
->>>>=20
->>>> Changes since v1:
->>>>     - Added patch 8 (kunit executor caller for glob_validate)=2E
->>>>     - Updated glob_match_nocase() commit message to reference the ATA
->>>>       denylist as the intended caller (follow-up patch)=2E
->>>>=20
->>>> Josh Law (8):
->>>>     lib/glob: normalize inverted character class ranges
->>>>     lib/glob: treat trailing backslash as literal character
->>>>     lib/glob: accept [^=2E=2E=2E] as character class negation syntax
->>>>     lib/glob: add case-insensitive glob_match_nocase()
->>>>     lib/glob: add glob_validate() for pattern syntax checking
->>>>     lib/tests: add glob test cases for escapes, edge cases, and new
->>>>       features
->>>>     lib/tests: add kunit tests for glob_match_nocase() and glob_valid=
-ate()
->>>>     kunit: validate glob filter patterns before use
->>>>=20
->>>>    include/linux/glob=2Eh   |   2 +
->>>>    lib/glob=2Ec             | 123 +++++++++++++++++++++++++++++++++++=
-+----
->>>>    lib/kunit/executor=2Ec   |  13 +++++
->>>>    lib/tests/glob_kunit=2Ec | 124 +++++++++++++++++++++++++++++++++++=
-++++++
->>>>    4 files changed, 252 insertions(+), 10 deletions(-)
->>>>=20
->>>=20
->>> Thanks: always good to have better test coverage (and those are some n=
-asty corner cases!)
->>>=20
->>> Series is:
->>>=20
->>> Acked-by: David Gow <david@davidgow=2Enet>
->>> Tested-by: David Gow <david@davidgow=2Enet>
->>>=20
->>> I'm making the assumption that this is going in via mm-nonmm, not the =
-kselftest/kunit tree, as it has dependencies in that branch=2E
->>>=20
->>> Cheers,
->>> -- David
->>>=20
->>=20
->>=20
->> Also, David? You mean the *ENTIRE* series as in the code too (the new f=
-unctions) Or just your kunit changes
->>=20
->
->I only really need to Ack the KUnit changes, but I did test the entire se=
-ries, so feel free to apply it to all of them=2E
->
->Cheers,
->-- David
->
+Thanks for the feedback, I'll add that to the next version.
 
+> > ---
+> > Signed-off-by: Ted Logan <tedlogan@fb.com>
+> > ---
+> >  tools/testing/selftests/vfio/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> > index 8e90e409e91d..98bc8d6271a4 100644
+> > --- a/tools/testing/selftests/vfio/Makefile
+> > +++ b/tools/testing/selftests/vfio/Makefile
+> > @@ -1,4 +1,4 @@
+> > -ARCH ?= $(shell uname -m)
+> > +ARCH ?= $(shell uname -m | sed -e 's/aarch64.*/arm64/')
+> 
+> Perhaps we can just include tools/scripts/Makefile.arch to avoid having
+> to maintain yet another "uname -m" translation?
 
+I took a look at tools/scripts/Makefile.arch and it includes a
+translation from x85_64 to x86, so it doesn't look like we can use it to
+distinguish architectures here. It sounds like the simplest thing to do
+is add aarch64 to the list of allowed architectures so I'll do that in
+the next patch.
 
-Thanks!
-
-
-Andrew=2E This is ready to be merged
-
-
-V/R
-
-Josh Law
+> This would make it harder to prevent aarch64_be though, which Alex
+> indicated we might want to do.
+> 
+> >  
+> >  ifeq (,$(filter $(ARCH),arm64 x86_64))
+> >  # Do nothing on unsupported architectures
+> > 
+> > ---
+> > base-commit: 96ca4caf9066f5ebd35b561a521af588a8eb0215
+> > change-id: 20260317-vfio-selftests-aarch64-636abf0f7674
+> > 
+> > Best regards,
+> > -- 
+> > Ted Logan <tedlogan@fb.com>
+> > 
