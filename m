@@ -1,55 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE67333426
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 14:15:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EC914AD0D
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 14:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773929701; cv=none; b=p54EkQZcH2vM/kglde1XD5fD954uwY+YliUCkH34BwuCOn7ODmHx4WeYs5Spp93BOhgCmVRnsX7163+hNIq4jH4cAwx6wR27FLoc0wXj+k4ghNTTI7aQ7H3j1G7hzM7sPSAp7+5KCoTwfW23BpAyNecCTU5lsQ9YcqvyhHTMFWA=
+	t=1773929777; cv=none; b=u1SEEatsfnR66ryHZqr1pg5uvW4aYtYEobsQ68ejgp0w81VEYZo1GYlcmaUc6GLX3yGuDuuq2hclZKiw6H+LAit9UfJUNP6vQigSEML3ePQ9kqj3JPOGskWpzRaaua0mo9zAF3dlkUsySeh1yJKUtrdP3TFmPgW7IJpJfjHgWgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773929701; c=relaxed/simple;
-	bh=siBUZXFQrW3WG414z3XwSGJh9Rh8xvrFpXx8+5dxurc=;
+	s=arc-20240116; t=1773929777; c=relaxed/simple;
+	bh=PGE6RDGMzwVDhtY8HsGAs0Ps1xRoQIDmL3tvMJBJhho=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iVv+lWDS0wqCXDsBLKApmmJBN57aMW8yEgW7qckVaPU2ofC98ekfiPFC2p55AmDH3oyS7gRNOhYxYWAEODfPrtUe7evH9FOgZOk4GoZO4JqCzvsHVRp0NGHKYR27/f58dSPiP8SlqoWgRf3Ot4p7lPMD3giJUqO7/vWOcZDPDfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWiZfyKt; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=OSFUC01bmoDjakkjm7qI2QnawAhkmGkShVW+3BwVrYo5oiwmGADNVRM3YxM7TKHVAacDDKuPgZBGcde0HMGdIimewbUOVODap4mBchqaKi5H8pveo7vXcZvkbTByXYiYvVnMX0fdenpP6eP2x/CuqH1qatjXD/NP/UMBMhRmkWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tDvsy2j9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWiZfyKt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85152C2BCB3
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 14:15:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tDvsy2j9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67EA6C2BCB0
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 14:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773929701;
-	bh=siBUZXFQrW3WG414z3XwSGJh9Rh8xvrFpXx8+5dxurc=;
+	s=k20201202; t=1773929777;
+	bh=PGE6RDGMzwVDhtY8HsGAs0Ps1xRoQIDmL3tvMJBJhho=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QWiZfyKtSTu5VAxd4NqtdosVlxNOZnsHbkOQroXm2rh1idU5YG8k0RfWGpxwGCsMO
-	 Wl3an4UDbftKqPR8r1IJMvXJ054gr5E1HGZCnX0ICm66qH37HIiFyv78l7GVGBMSHS
-	 eYHBYLrdHYVQr8dmggUnbBtmgv9xzC86dtA2FJ33hdmLZOWS6r5MGhu4Td0Vj/LE7d
-	 XoSBPWofUiZd6GCi0mfRHVBbS5JJ03kiAkF1tzcgpt2mNJOexQ+Z+mriiq393PqD0J
-	 ot9OUqwM8is6k+pMj1BNTtx/haTMxWsCkdqWBehXuBX5spNW+r1VTgV4D1Hb2aeg4o
-	 QyP4k80MrRJAQ==
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-79a46260385so10405667b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 07:15:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVCNYtjf5xJyoh0ZQLrsheS5rbYuU0kJfWDIjoS2NzIE46nzxEVogt1exQPdIDIgV1aDnxYSvXgu3IXC7FmMuQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy75yFCSZbhUpSaVXlnp53WBRRvsrp4nmZaD8A9PPwq2WKvC4E3
-	2RFWY31DXwmyweGiCNBfgms6EtYomLhXRoRrIsR3qYyMEHnAjMIAYZSzrYoq+dnFiqTXKP21oLu
-	8WL6lpwI2lZ9rOKAhYcmpAyGhw4+MfDk=
-X-Received: by 2002:a05:690c:e3ce:b0:798:6042:12f8 with SMTP id
- 00721157ae682-79a71cb3425mr66055977b3.55.1773929700196; Thu, 19 Mar 2026
- 07:15:00 -0700 (PDT)
+	b=tDvsy2j9PnDtkFCwE99O71DlAaMBmGZGq6WRt9Sdf/h8Oeqx58PkMsI9VaPuT0QAY
+	 fQi89eGy+/tqDtifeSyzGAKScGlRoHbd23gL9ApkQ4KWqXzeR+noPrPDXZXKgw7jdY
+	 +RTD86Oyjuk2/wiHyGYYqXbThJnMLTl20hiRhl5kBZ5EMi4KukdwOxMhC96OgD0n4i
+	 2/EHVOt51pvIvcjD0tn4o72kpuPhFeEjEdulHadBH8uBJiKbdmq+wGPJ18D/CuWGGk
+	 0V4W41CSaqnpWKugiLOde7+n1K8Ij08Ep12gPcyV+cNjCsmTTW4nfz4jIJGOJPufa4
+	 7QHSSbSqSwXQw==
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-793fdbb8d3aso6993907b3.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 07:16:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWUO8BPeNAvpj8rYgNGU3BTWEsyqQna9KKHAhACFItkaECoZSmFV/wlei1yL/Zpikc8M/StWZT7vJFT6N3vT/8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/b35KsnizdSmAvZkH0EXA1VfsqpcI3Dhwr1XnwFZ1O/11wNGI
+	/l7CudjfY0VLqb+4OW5mmU5YLsCokVp9jf1HX6Dc8Cs2KVukU1rKvn86/fTjl1+0pLL/0FW77dR
+	EpkG/Ff8e06oYuczOUVyWxp/nXdx0wno=
+X-Received: by 2002:a05:690c:c241:b0:79a:3e8d:9bd8 with SMTP id
+ 00721157ae682-79a7188db3emr77250547b3.2.1773929776689; Thu, 19 Mar 2026
+ 07:16:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260317082020.737779-1-ruanjinjie@huawei.com> <20260317082020.737779-5-ruanjinjie@huawei.com>
-In-Reply-To: <20260317082020.737779-5-ruanjinjie@huawei.com>
+References: <20260317082020.737779-1-ruanjinjie@huawei.com> <20260317082020.737779-6-ruanjinjie@huawei.com>
+In-Reply-To: <20260317082020.737779-6-ruanjinjie@huawei.com>
 From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 19 Mar 2026 15:14:49 +0100
-X-Gmail-Original-Message-ID: <CAD++jL=s1LzyoyANzTiU-Y1xh7b9fqUSHOOYnZdPReJctQ-QvQ@mail.gmail.com>
-X-Gm-Features: AaiRm529IHnMzPCccxvwnmkfcrTA0f3Z6ET0HOvZ4g4MIV-cA5draGQXMNj2eRI
-Message-ID: <CAD++jL=s1LzyoyANzTiU-Y1xh7b9fqUSHOOYnZdPReJctQ-QvQ@mail.gmail.com>
-Subject: Re: [PATCH v13 RESEND 04/14] arm64/ptrace: Use syscall_get_arguments()
- helper for audit
+Date: Thu, 19 Mar 2026 15:16:05 +0100
+X-Gmail-Original-Message-ID: <CAD++jLkSru0GMUqrrt6yTw7G3krZgqVYb7-VpKnYE+_jDWv9rQ@mail.gmail.com>
+X-Gm-Features: AaiRm51Qmj9OhyThBYRWUBuxkG1rKYZYAjAodFs5qvq19NWoEnb24r2RFgakiyw
+Message-ID: <CAD++jLkSru0GMUqrrt6yTw7G3krZgqVYb7-VpKnYE+_jDWv9rQ@mail.gmail.com>
+Subject: Re: [PATCH v13 RESEND 05/14] arm64: ptrace: Move rseq_syscall()
+ before audit_syscall_exit()
 To: Jinjie Ruan <ruanjinjie@huawei.com>
 Cc: catalin.marinas@arm.com, will@kernel.org, oleg@redhat.com, 
 	chenhuacai@kernel.org, kernel@xen0n.name, hca@linux.ibm.com, 
@@ -75,18 +75,38 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Mar 17, 2026 at 9:20=E2=80=AFAM Jinjie Ruan <ruanjinjie@huawei.com>=
  wrote:
 
-> Extract syscall_enter_audit() helper and use syscall_get_arguments()
-> to get syscall arguments, matching the generic entry implementation.
+> Move the rseq_syscall() check earlier in the syscall exit path to ensure
+> it operates on the original instruction pointer (regs->pc) before any
+> potential modification by a tracer.
 >
-> The new code:
-> - Checks audit_context() first to avoid unnecessary memcpy when audit
->   is not active.
-> - Uses syscall_get_arguments() helper instead of directly accessing
->   regs fields.
-> - Is now exactly equivalent to generic entry's syscall_enter_audit().
+> [Background]
+> When CONFIG_DEBUG_RSEQ is enabled, rseq_syscall() verifies that a system
+> call was not executed within an rseq critical section by examining
+> regs->pc. If a violation is detected, it triggers a SIGSEGV.
 >
-> No functional changes.
+> [Problem]
+> Currently, arm64 invokes rseq_syscall() after report_syscall_exit().
+> However, during report_syscall_exit(), a ptrace tracer can modify the
+> task's instruction pointer via PTRACE_SETREGS. This leads to an
+> inconsistency where rseq may analyze a post-trace PC instead of the
+> actual PC at the time of syscall exit.
 >
+> [Why this matters]
+> The rseq check is intended to validate the execution context of the
+> syscall itself. Analyzing a tracer-modified PC can lead to incorrect
+> detection or missed violations. Moving the check earlier ensures rseq
+> sees the authentic state of the task.
+>
+> [Alignment]
+> This change aligns arm64 with:
+> - Generic entry, which calls rseq_syscall() first.
+> - arm32 implementation, which also performs the check before audit.
+>
+> [Impact]
+> There is no functional change to signal delivery; SIGSEGV will still be
+> processed in arm64_exit_to_user_mode() at the end of the exit path.
+>
+> Cc: Thomas Gleixner <tglx@kernel.org>
 > Cc: Will Deacon <will@kernel.org>
 > Cc: Catalin Marinas <catalin.marinas@arm.com>
 > Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
