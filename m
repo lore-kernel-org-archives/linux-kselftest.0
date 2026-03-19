@@ -1,125 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84AF39C00F;
-	Thu, 19 Mar 2026 05:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773897730; cv=none; b=AKtGZkbeaZjPqEM8xXKs6xVOL5G+/Gy300yR9Flolu+/kVGz1Ktbz1XkEA53fB41AohAgN0RpLsJkqLJZquEn1+mYsaKJ9qmzQ+W6ztS30VGyVLFT4Jdvq1aesPtXL5EFaIYKUf6JdEFRXHwuA7hOG245A8/w+Dkls6QMd35hu0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773897730; c=relaxed/simple;
-	bh=gKzlHjNwVy7/eu8xZ7uHLGZKBMO4b6mmZ9XNI0j6RLc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rwsQ6qdwMeGJe59WLnBHCX0mF1Ba3UxdrroKiPlv901wZd10PQG64HOwOU2aRSdEzXnf7ZNyzOUcZ/8Nxti9YcnPqVSKxniAqvXTxKxeyTt6P3EaviYTGJXy9Xh66P8QTKYmU8/DMvZR/ZuoWi5gQCD0zVXw89rCPduq2NgySGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLE1gPG+; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA12314B62
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 06:14:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773900892; cv=pass; b=AFyQe5250mWasPq1GI8bSpCRkACdgoqtT8kN4GAOi/uqWtAhn8LiRYjBAeNrcsXs74XMDc7m41+uQ5OyIBRhJ8d+vkpMBN28hRLpSV+KM9tZMcDiTTWotmVf4S4I+KXH5ZwwSHB1gP92p+DD9e6x/BtKn3rLXJYGda4ALR8Mgyk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773900892; c=relaxed/simple;
+	bh=ahj5e8v5Ei0e7fMom0NKavN5sfGycf2Srrr3iKT0Cc4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eg3e+AuAK2WuDKDqAK73j3iFOvJ11PJuLEo950VcQIRMadD9YLFUViUW7rju1TeIlc48NBdh41PL8VLMMeBYicmFh36hVxbUuxqoG13GLmfKkQDqFgOsisWKlLCeZt0WBSe0vXlFfSdyBY9WQTN6np09AQUYRtyXCeN84ptvX0Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kW5aviW/; arc=pass smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLE1gPG+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2B2C2BCB1;
-	Thu, 19 Mar 2026 05:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773897729;
-	bh=gKzlHjNwVy7/eu8xZ7uHLGZKBMO4b6mmZ9XNI0j6RLc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eLE1gPG+Hya7//RWaiPAEKxtepx386lQ0Cm8RdvkucYG+iOXOFeZPuszuRWKmhmqY
-	 Hlxm5qQmMgd/Efqo63G8l2SuLp2Bxr4GnzCPV7S+DNGqdG8Q89JJ+QMbBAMNdzoeIK
-	 OzXL+h+ya25rpojtJ7Hg/DmBKzOkdSFMuw7s2gKefp9JqRLIUXm7mTtbh2QiioYEka
-	 4gWS9afrhZHM7PFTk3oiT+rnkAAeDLRe6Ix7R7uS3YviH0REcZaLVT1Z/Ug7VkjHEa
-	 01/5O4fI4zM/Io7soEAT3UH61w2LoEMW0vljBhU7MvbGN30cHB29E8t3vNMLgsG97M
-	 tr4+UyLCjhRDg==
-From: SeongJae Park <sj@kernel.org>
-To: 
-Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH v2 10/10] selftets/damon/sysfs.py: pause DAMON before dumping status
-Date: Wed, 18 Mar 2026 22:21:53 -0700
-Message-ID: <20260319052157.99433-11-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260319052157.99433-1-sj@kernel.org>
-References: <20260319052157.99433-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kW5aviW/"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4856cd3f1ffso5499105e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 23:14:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773900888; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EvPZOItF3ZvN2LW4nN4CCI2JR43BO3Lx7YMKW8JNgMZrRLOtkMWnbMPGJRVLBiu/5Z
+         7FxwxegqRg0A0xI4vr2azrIcejyL/hHDiLr8D0F5uxyuY628aiCPpnb1Gfdrbr4hXkdI
+         55ZgeBaOZMa9T2YdrWZwAjiLTkYoGrHZgD9EzhxUfByq8NR4B7HOf9I07dWR1eJnuX1V
+         mOjG+IqHoSFX6AydKDsPib95Jq/3sn+44Y2yVPJ+6LEOO3BnM6lZ+DyJ7/S25iaLrIjJ
+         R5qy0PslqnXsDDWC7tqap8U+ix0S32pvl7aVQUKUcsB67wxYbY3A3B+gZFw7rZOF4Iv8
+         3IlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LYmV+yVLZmo+hPcweb4z07eI5e4Eab7WRQcbmZBHF40=;
+        fh=CFiuiS/rkp5RhGJoorRfzKmAfbTe3tJfg9hJBbJH8nc=;
+        b=jvAjrKOSfz+XBbp/tArGT0wbPIt3lCVFVEehHwqL1VJ3+U/jvHRmffG1ZoV4SICkuV
+         KNrKlF+R0x6ZBCWpRMakf/iAyDbc/nwdQMJ0ib0kFgagd6xIoLIBtdcjy5OQvWQ+e8cy
+         J/Z5GQhM+1M+nmAPiUb0h0YJppsiWpqApeXLryTwciYL+jpo4IxynFAcbHeKnMKZhesf
+         bYbWHXnF1CnzjxME5FO/4q7jf8yuhdOdNt2FKUwbO2CsKDtacgBBM3RKOk3EfeBWCF0G
+         wENalRuhJ2LrXmMXnz1UCbBfVsENs+xmmLb7az+X5J6krjt5hq3T0lLPw/7EKt8dLEEs
+         aLmg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773900888; x=1774505688; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LYmV+yVLZmo+hPcweb4z07eI5e4Eab7WRQcbmZBHF40=;
+        b=kW5aviW/rZaCpdigsX9LlfgsSZV1fPuaKKfTwEO9aaw/d99RSW39+HaS9I2Yfo4y1y
+         7JlYaVMo560R/ReN8m2BDG2xkAE8wKBHVh9IKLB2dDGGdtXSoXEB61PeeKm2SYQM0+qP
+         qI50irdATv2W++pIPSNkMlN0SO6W5jw0fOKUQmZtpC1YTcJ7lQRp+nkygCH6T8pRH2Qo
+         9SLCER9z49p5Bgr960WOWB/zGdb8y6sRTdKgM1N8A/3wr12aF3EBPI4CiLxrlYjtHkqH
+         bJCibAgUDWsHolW2YV0w3pOkLwcolFK4K8R+k9diowkvpAvY1s4sqjIkxeuPeaDisrTz
+         PCUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773900888; x=1774505688;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LYmV+yVLZmo+hPcweb4z07eI5e4Eab7WRQcbmZBHF40=;
+        b=FF4CWjldKls0ocCUQdglpK+lh4/4ut5OjiXM4H6IeOAkGjh8Ech5cS/KMq7bBIcN9A
+         KMHzLNkyOLfdLll2Emsx4w0NJas92KH80sS2S7wpOIdLmRckn5zAIrFdhXtSzX+L2D2A
+         0zZdpRkmLGod3VPWED63w9ISYeRC1Enum+MrJ1OsMGmocMy60JcxhlrPvee4qqfz4u3U
+         mjcgk63QHeFVKqpWmzu20ECNufnyNF3M7Z+ESqAwcpJ5ZlRg/5M4z0smgB/B/7hFFhJN
+         vzPWozce8GHGElDmuORhn4b7HSJjS7xR43jXP5bSqyaUoEvca5nbKu/WLYet3gxjx8wa
+         Od+A==
+X-Forwarded-Encrypted: i=1; AJvYcCXqb98Wd63+0izAo83DearxRx1O8PFDqX3y4rwmFL+6mTtdetvbZG//To5mFOTswji9Q7h1ojNnu1UBTfbyPvQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/99OU3vPg9IT9mJ51CKmRXy/4oWpYFMP88rsxD2pH/DpIsXub
+	S/J4JoT4oGMke8pQOVo/35N9tpCDLYGKFDjuZt1aP9xEjTd1OZotrlhke3IhXEB6jHxPHFrYSwl
+	Cg8+f4fVEJjmRgz1Ca5RHoVPTZ58J5xg=
+X-Gm-Gg: ATEYQzy75pL4xx9dnXu1gw5P8krvoQR9By4HTAWUJyLZvkKDRw7mVLamqQGp7Sr9/6T
+	wg7TgqwSh4Zm9wvjaZHTQFUQn/JdAJKQBorm9VC6z9+FKF/IDVHuRAy+8DzPvdiiy9zzXg/ih8E
+	Ho/sIeyAPmlpyGGcWgzzxp6r1KsJYMYF6mMFU3lUnXOlzRRFUJxR84BRYkd923nvGaiBmH/6Cqx
+	/nqqKDEZCNxlSmNjVmKziWRvNmDlBh0/A2xgMV3CqKhL0lGWKeH45JzRgFW3Ttgzpm8LcuXcA6s
+	Sl6C7KLX95BgxuNhdsOtY44MZNbQXrEWtel3WZUT6wXwfhcpm6qN81t8aOQGDo18y6jShDycXJb
+	nxK2ESkW16/6FgaGs1mU4eNMZNQ==
+X-Received: by 2002:a05:600c:8706:b0:485:39b2:a47c with SMTP id
+ 5b1f17b1804b1-486f445fac2mr90958645e9.25.1773900888388; Wed, 18 Mar 2026
+ 23:14:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260319031227.330505-1-sun.jian.kdev@gmail.com> <20260319040337.366375-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <20260319040337.366375-1-sun.jian.kdev@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 18 Mar 2026 23:14:37 -0700
+X-Gm-Features: AaiRm52DskLo1ZppEqz-30QTaNt_fpupNrXKzogunioIvSEXOJSrNHANtDzQT_A
+Message-ID: <CAADnVQJAg1hYmsbVaHcR0jYZY2v3A4iNOiPaMAWRVGpf0qPN_w@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: move trampoline_count to dedicated
+ bpf_testmod target
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The sysfs.py test commits DAMON parameters, dump the internal DAMON
-state, and show if the parameters are committed as expected using the
-dumped state.  While the dumping is ongoing, DAMON is alive.  It can
-make internal changes including addition and removal of regions.  It can
-therefore make a race that can result in false test results.  Pause
-DAMON execution during the state dumping to avoid such races.
+On Wed, Mar 18, 2026 at 9:04=E2=80=AFPM Sun Jian <sun.jian.kdev@gmail.com> =
+wrote:
+>
+> trampoline_count fills all trampoline attachment slots for a single
+> target function and verifies that one extra attach fails with -E2BIG.
+>
+> It currently targets bpf_modify_return_test, which is also used by
+> other selftests such as modify_return, get_func_ip_test, and
+> get_func_args_test. When such tests run in parallel, they can contend
+> for the same per-function trampoline quota and cause unexpected attach
+> failures. This issue is currently masked by harness serialization.
+>
+> Move trampoline_count to a dedicated bpf_testmod target and register it
+> for fmod_ret attachment. This keeps the test semantics unchanged while
+> isolating it from other selftests, so it no longer needs to run in
+> serial mode. Remove the TODO comment as well.
+>
+> Tested:
+>   ./test_progs -t trampoline_count -vv
+>   ./test_progs -t modify_return -vv
+>   ./test_progs -t get_func_ip_test -vv
+>   ./test_progs -t get_func_args_test -vv
+>   ./test_progs -j$(nproc) -t trampoline_count -vv
+>   ./test_progs -j$(nproc) -t
+>     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
+> kprobe_multi_test -vv
+>   20 runs of:
+>     ./test_progs -j$(nproc) -t
+>     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
+> kprobe_multi_test
+>
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.py | 31 ++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index e6d34ba05893f..704729c7a318e 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -193,18 +193,48 @@ def assert_ctx_committed(ctx, dump):
-     assert_true(dump['pause'] == ctx.pause, 'pause', dump)
- 
- def assert_ctxs_committed(kdamonds):
-+    ctxs_paused_for_dump = []
-+    for kd in kdamonds.kdamonds:
-+        for ctx in kd.contexts:
-+            if ctx.pause is False:
-+                ctx.pause = True
-+                err = kd.commit()
-+                if err is not None:
-+                    print('pause fail (%s)' % err)
-+                    kdamonds.stop()
-+                    exit(1)
-+                ctxs_paused_for_dump.append(ctx)
-+
-     status, err = dump_damon_status_dict(kdamonds.kdamonds[0].pid)
-     if err is not None:
-         print(err)
-         kdamonds.stop()
-         exit(1)
- 
-+    for kd in kdamonds.kdamonds:
-+        for ctx in kd.contexts:
-+            if ctx in ctxs_paused_for_dump:
-+                ctx.pause = False
-+                err = kd.commit()
-+                if err is not None:
-+                    print('resume fail (%s)' % err)
-+                    kdamonds.stop()
-+                    exit(1)
-+                # restore for comparison
-+                ctx.pause = True
-+
-     ctxs = kdamonds.kdamonds[0].contexts
-     dump = status['contexts']
-     assert_true(len(ctxs) == len(dump), 'ctxs length', dump)
-     for idx, ctx in enumerate(ctxs):
-         assert_ctx_committed(ctx, dump[idx])
- 
-+    # restore for the caller
-+    for kd in kdamonds.kdamonds:
-+        for ctx in kd.contexts:
-+            if ctx in ctxs_paused_for_dump:
-+                ctx.pause = False
-+
- def main():
-     kdamonds = _damon_sysfs.Kdamonds(
-             [_damon_sysfs.Kdamond(
-@@ -302,6 +332,7 @@ def main():
-         print('kdamond start failed: %s' % err)
-         exit(1)
-     kdamonds.kdamonds[0].contexts[0].targets[1].obsolete = True
-+    kdamonds.kdamonds[0].contexts[0].pause = True
-     kdamonds.kdamonds[0].commit()
-     del kdamonds.kdamonds[0].contexts[0].targets[1]
-     assert_ctxs_committed(kdamonds)
--- 
-2.47.3
+if you want to land these patches please participate in code reviews:
+https://lore.kernel.org/bpf/CAADnVQ+TKKptnNB25V3=3Dbcdybh5G6c2DyW2sYtXvyRaV=
+nPN8MA@mail.gmail.com/
