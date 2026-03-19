@@ -1,163 +1,175 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender-of-o58.zoho.eu (sender-of-o58.zoho.eu [136.143.169.58])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6583B52EF
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 22:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A393B9DA9;
+	Thu, 19 Mar 2026 22:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.58
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773958190; cv=pass; b=IfDLUh3n328dHDrksM5nGG6ksul/Dz815CRZIHEc5vidtU0eu44JenkCktiXAeTddsrNJYK80pl0XLIldkTYckS+drdIQAeg3hdacWIrGrQfyXKLO9jbusGV6Q+wvq9DddOKAlnfoS+PnYE2agr7csCWxibUvZUzc4a7ZSvtdyM=
+	t=1773959052; cv=pass; b=Wd6RVtL3gVht8A2jOte+b2n4dumWye6XmmcSuHeO58dfIe2zov1cXwrsxGHQ/QW9Fb0s6hW5rB6Rs+bykOQ3yHFkC2Slf4pNuYYyby2hfLlH1jTTfEPVHOKjpR9+dBjpn+8R/N09DfwaiWSm2KmgmlsOJT5RtrQ1gU2xdocU/uI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773958190; c=relaxed/simple;
-	bh=7oOcuw602t0Hs62ASwAporxmUlW6f0Mxodgh2CLwYtM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o2SPAqbmWvcPYzvc1t+1aconxlST8ELCI6cdv/Xa8EBV9F3K21IORQzlotRjocj6crcgFvn9IF/VxdY7bGDfO5Ub4BZh/6VjVRD5/lCXS58nerK5O3pujvwLVbddZKF+rIc5hKV0QA6Y4cRkZtuP+0yUbj7rfKL/pJ3J79gTanY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F64ZwUsg; arc=pass smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1773959052; c=relaxed/simple;
+	bh=XSSwjdN9JcQYLVR3vCu+DEQAWu5fOd/1QdFaaPevUvQ=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=XhLdszYCa0YVhfw/nBrmAWUwNh+ZCpsrKa7ocYEiJzJFKCoRuEGJjWDJ3iNNNT+dHOdqbHU4DnL2yYBpOxVrPeTR7shNUDy3xrt4W8y2XzQsAwdSP8+Jigirs0RhtLemPgkey/JRKfyCZo13hga+cLWcg34HULNCBP5vFj1EArg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=YvRlnJvj; arc=pass smtp.client-ip=136.143.169.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F64ZwUsg"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5a12c19affeso847113e87.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 15:09:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773958187; cv=none;
-        d=google.com; s=arc-20240605;
-        b=A1pzk4oiSiBYfZ9dRxpSLvYHzaYb9QEWFLN00mzSvhG8rvOaQ1Md+bK7ejKsrIDJ1N
-         VKuTYGFLF/2Xcj/9nt6D8pCEs3DXnzZUPJ4yvnBFsrSE5v1dmVB+OOpAaqVZ9l/+bo3C
-         UCdCISZ3yvhe+Z4QkiEsOay3GEhr6bOB3Cax+fDj2Npq7ePbJ/p3ty9CBUWjM/2Y31V/
-         Mcn6+10P3gcbVhbtf19UrG7+w5FmnKcCGBaU2igE9N5yULTtCrb3c7gCXf6N4URBkJgb
-         jimDs1a2UXWQjHIAsPNeP25+3uniKd/1YDjmQx6oByG0ez8WOPL/QxWIEtS6vrz3CmIZ
-         mTsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=svD4wMks8gwyXRL5XOV+qF8B6FaNKoBJNHk7PXgg3Q0=;
-        fh=oBLwvr15u4F1rqJo88CWH0rwMg4EXrcQckGCA4Y1DpE=;
-        b=eGOUw0WR4dTgBwjs3cWiZXEnJZAal2WVBJXGNhgQyEAD8hylWRuOSHlKD82MJLBGgu
-         ABI+0DSeTEhCBw5qcuUgN3LvmLeERc35MzfbxGxIfwnU9uc6zp4UZCeF17i6IR5X4pW8
-         3kmTuaNXDZZM53fySqBO73tJxSqk6dwlnEt2DvgJ/lCvNrGd7xI5atx3rT9MeqFp7LYt
-         n3ClPX7s7ip3BBHnYzRQtZ/nFNnowUm+GqJd726tCqN98oY5pFp0z5xQy6Q18EqO2FCA
-         QP7ozVoStfGxftgBa6hgYJ7yYRBXvh+ISN5bguiU+aTiuaW1Jy4FsA7svvnfE/AkJLK8
-         692Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773958187; x=1774562987; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=svD4wMks8gwyXRL5XOV+qF8B6FaNKoBJNHk7PXgg3Q0=;
-        b=F64ZwUsggRvGf4oIJg5Pnpz/U5EPeC1NcxDs7F+x5V2FIoW4NMVVGcs/24x7SP8/1k
-         v7dCerCmDCdDZcyzC6wkbd5LkmSGdwGtqCA35r25QrgjSIv2kivWsxb0wg+cwYffsvWF
-         Pw50IEZPO7PQqP3m4bpQ17TvTqH3YlZgrD1z8pbMiPziV+6tP2lswRGU1QyXLt3U3Jpm
-         fE5XjdNMNEpFPGnrMzsvzqLTNT+IqAF5j5wVBPPkH4EbTVqzigsAZMh1h/++MBvDYY5F
-         01C5u3beOCIA5iMplFYqw495/j09gBcboHxHJNC1TSklD+udxxTBnWchD2geS7e2JAM8
-         GRoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773958187; x=1774562987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=svD4wMks8gwyXRL5XOV+qF8B6FaNKoBJNHk7PXgg3Q0=;
-        b=qWiafKky9lXP0RSS75qQ9idkGA6c4aq4efeI0FPXDlxZKp9jb67Pm355UxbUEswA6H
-         XFvYclbIDigHI3YgqVm6SpRDLnE6OLPPhIxAA081f8bbhr7Sva711YvgSUFzgSRKNe29
-         hsTnZjYl3smSVzrGkiY7Bujt1lX01UNOaX9kGiU/H6KcJPH7TnS1IV/UjJ5Ia6RRZRZ3
-         TkOPxlIHPPZl+GttPrZWjjf4uJ0R/1NzPQUEZBgxj2t86pXUxudNRf8JlqBPzNTIydB0
-         QnH47SfmtxH8w30Q3UE9/YueZmrhOvAZW0clQaVYYSz17hyk0sftwbAwShyYhCeOwWDG
-         oWag==
-X-Forwarded-Encrypted: i=1; AJvYcCWuFh/zDXR7NwPG3WCN8aoS9nk2WVIcliJNaPdd3UE0PdZnCsHIQ809uzAtJjTunKeE0CW/UJKEE3qEVoCK2Gw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXE26evaOZW0JzmjxhsmXLpO1MhpsfRroADz0aAvqmwOq/6a5x
-	09p/faTrqBtbZEhvRNfLbBWBF51/Gj0rII21Z/Fz4YCcRfmvbZldT8r9O4PgLA1eczKnEaddnUf
-	5JSC+PgWOnNpl/RdZfi49dTuFCn3dh5wrczY+11I0
-X-Gm-Gg: ATEYQzzQ8nz3FOX9SKV93rBMH6IRh84gY7grARjTO897Ohuei884CdeGV8AIV4W0pbi
-	rZIkbzw30T6Xn0yUEe87x/tNsoc+40KCnzxE7HGtb3zay23eenI2GDSiTqoOB9amdI9QJJcs1BL
-	1CZQTtYKbUdXaJh3sRBtOUWsAnvme/nm7Qu2NyAOGlcEX/nrV/mCnS4ONhvLjC7I3QgxzDiB+yt
-	JktB+S5c8483ksAZZ9rPv56vDFTtFlM4JrRNwtAHqgf/oJfnxxqYP0Roy42l0VHXSUjiMhg3vrN
-	jhFBffLp
-X-Received: by 2002:a05:6512:3b22:b0:5a1:742d:277f with SMTP id
- 2adb3069b0e04-5a27de01545mr1986403e87.11.1773958186394; Thu, 19 Mar 2026
- 15:09:46 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="YvRlnJvj"
+ARC-Seal: i=1; a=rsa-sha256; t=1773959027; cv=none; 
+	d=zohomail.eu; s=zohoarc; 
+	b=DuWwGe94Eaozsed+M7RTnGddEXtyNnF3nv6BrDX8STE5at0p+VyblHiHrmjNtLh4axcjaLDxqYpQLTJDJz92j7GUhn8aXi5z/ThI0FXmiaUNaH9R534BlJMq6nHQy6alwxR8P1eyglo/fIRd1BTnF5beSSlzlrORyy1SPN7ZeUQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+	t=1773959027; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Tv6/ma7sHaT9XOL0hYS2sCzv4C5uxOayKiNXO6qgaZY=; 
+	b=V8xhuDgV9dANZDLMXIE5pdQ4pxj5Zjdt1GdifCKAyjAJ+DgB5m4lRKa25DjnaB2xqpjVP1IHLvG4PyS64YHIaGzul8ELu0AfPGI1pUkihFNwDKFPNw3e6GoqXl6HY2bO30MC2Q7/nvL/hrvCkcaO67KboUQAAEby791PlWAiQ2A=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+	dkim=pass  header.i=objecting.org;
+	spf=pass  smtp.mailfrom=objecting@objecting.org;
+	dmarc=pass header.from=<objecting@objecting.org>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773959027;
+	s=zmail; d=objecting.org; i=objecting@objecting.org;
+	h=Date:Date:From:From:To:To:CC:Subject:Subject:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+	bh=Tv6/ma7sHaT9XOL0hYS2sCzv4C5uxOayKiNXO6qgaZY=;
+	b=YvRlnJvjXXA91OQ2Z7nVePuWYQeXrfsp7aOC41jEHdlCbbjIGNNGpR4o4xy1wPuC
+	B4AQHy5SeAQ7HZrak1mUT71V15EmZmwhz2qz6X04mZxUv4KwawlWUttqvOF0wwjn+ja
+	Bj5Gl7rcPw9tcwazrZWGo0o4/WKbRuMDQzYh2hjo=
+Received: by mx.zoho.eu with SMTPS id 1773959024036155.69379496020167;
+	Thu, 19 Mar 2026 23:23:44 +0100 (CET)
+Date: Thu, 19 Mar 2026 22:23:44 +0000
+From: Josh Law <objecting@objecting.org>
+To: David Gow <david@davidgow.net>, Andrew Morton <akpm@linux-foundation.org>
+CC: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/8] lib/glob: bug fixes, new features, and tests
+User-Agent: Thunderbird for Android
+In-Reply-To: <6522d194-12f1-49d2-ba91-ef3e26b49817@davidgow.net>
+References: <20260315211807.411173-1-objecting@objecting.org> <b077cc42-ee35-4165-9936-49ef7d53e0e8@davidgow.net> <A5DA6F8B-C9B9-4BBB-ABE5-89A9E6EA577A@objecting.org> <6522d194-12f1-49d2-ba91-ef3e26b49817@davidgow.net>
+Message-ID: <A6112AAB-305D-4E25-A838-08E6EBF55A4A@objecting.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-5-dmatlack@google.com>
- <20260225143328.35be89f6@shazbot.org> <aZ-CnywNgMnr6f1k@google.com> <CAAywjhR4Azqx8hXRap0eLUrwetYRiX8TALEM=b+1BorPc3eJdQ@mail.gmail.com>
-In-Reply-To: <CAAywjhR4Azqx8hXRap0eLUrwetYRiX8TALEM=b+1BorPc3eJdQ@mail.gmail.com>
-From: David Matlack <dmatlack@google.com>
-Date: Thu, 19 Mar 2026 15:09:18 -0700
-X-Gm-Features: AaiRm51momKlFVcCV9Yk7taG4PZCOSiNfgaYNzeVE1MwV2qirg6S-TkURRRSfl8
-Message-ID: <CALzav=cMEkenGKYvA=rNmTmVjpf_DW_92MCFx-2gxqKbrdG0Kg@mail.gmail.com>
-Subject: Re: [PATCH v2 04/22] vfio/pci: Register a file handler with Live
- Update Orchestrator
-To: Samiullah Khawaja <skhawaja@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
-	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
-	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
-	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
-	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
 
-On Wed, Feb 25, 2026 at 3:55=E2=80=AFPM Samiullah Khawaja <skhawaja@google.=
-com> wrote:
+
+
+On 18 March 2026 07:19:53 GMT, David Gow <david@davidgow=2Enet> wrote:
+>Le 18/03/2026 =C3=A0 12:32 AM, Josh Law a =C3=A9crit=C2=A0:
+>>=20
+>>=20
+>> On 17 March 2026 07:19:47 GMT, David Gow <david@davidgow=2Enet> wrote:
+>>> Hi Josh,
+>>>=20
+>>> Le 16/03/2026 =C3=A0 5:17 AM, Josh Law a =C3=A9crit=C2=A0:
+>>>> Bug fixes, extensions, and test coverage for lib/glob=2Ec:
+>>>>=20
+>>>> Patches 1-3 fix corner cases in the existing glob_match():
+>>>>     - Inverted character class ranges like [z-a] are now normalized
+>>>>       instead of silently failing to match=2E
+>>>>     - A trailing backslash is treated as a literal '\' rather than
+>>>>       reading past the end of the pattern string=2E
+>>>>     - [^=2E=2E=2E] is accepted as an alias for [!=2E=2E=2E] to match =
+the
+>>>>       regex-style negation syntax documented in glob(7)=2E
+>>>>=20
+>>>> Patches 4-5 add two new utility functions:
+>>>>     - glob_match_nocase() for case-insensitive matching, useful for
+>>>>       subsystems like ATA that need case-folded denylist comparisons=
+=2E
+>>>>     - glob_validate() for checking pattern syntax before use, so
+>>>>       callers can reject malformed patterns early with a clear error=
+=2E
+>>>>=20
+>>>> Patches 6-7 add kunit test coverage:
+>>>>     - 47 new test cases for glob_match covering escapes, inverted
+>>>>       ranges, caret negation, edge cases, and unclosed brackets=2E
+>>>>     - 11 test cases for glob_match_nocase=2E
+>>>>     - 17 test cases for glob_validate=2E
+>>>>=20
+>>>> Patch 8 adds a real in-tree caller for glob_validate() in the kunit
+>>>> executor, validating user-provided filter_glob patterns and returning
+>>>> -EINVAL for malformed ones=2E
+>>>>=20
+>>>> Changes since v3:
+>>>>     - Resend: v3 accidentally included stale v2 patch files in the
+>>>>       same email thread=2E  No code changes from v3=2E
+>>>>=20
+>>>> Changes since v2:
+>>>>     - Fixed missing '^' in __glob_match metacharacter comment (patch =
+4)=2E
+>>>>     - Dropped unnecessary braces in glob_validate case '[' (patch 5)=
+=2E
+>>>>     - Added real-world example to glob_validate() commit message (pat=
+ch 5)=2E
+>>>>=20
+>>>> Changes since v1:
+>>>>     - Added patch 8 (kunit executor caller for glob_validate)=2E
+>>>>     - Updated glob_match_nocase() commit message to reference the ATA
+>>>>       denylist as the intended caller (follow-up patch)=2E
+>>>>=20
+>>>> Josh Law (8):
+>>>>     lib/glob: normalize inverted character class ranges
+>>>>     lib/glob: treat trailing backslash as literal character
+>>>>     lib/glob: accept [^=2E=2E=2E] as character class negation syntax
+>>>>     lib/glob: add case-insensitive glob_match_nocase()
+>>>>     lib/glob: add glob_validate() for pattern syntax checking
+>>>>     lib/tests: add glob test cases for escapes, edge cases, and new
+>>>>       features
+>>>>     lib/tests: add kunit tests for glob_match_nocase() and glob_valid=
+ate()
+>>>>     kunit: validate glob filter patterns before use
+>>>>=20
+>>>>    include/linux/glob=2Eh   |   2 +
+>>>>    lib/glob=2Ec             | 123 +++++++++++++++++++++++++++++++++++=
++----
+>>>>    lib/kunit/executor=2Ec   |  13 +++++
+>>>>    lib/tests/glob_kunit=2Ec | 124 +++++++++++++++++++++++++++++++++++=
+++++++
+>>>>    4 files changed, 252 insertions(+), 10 deletions(-)
+>>>>=20
+>>>=20
+>>> Thanks: always good to have better test coverage (and those are some n=
+asty corner cases!)
+>>>=20
+>>> Series is:
+>>>=20
+>>> Acked-by: David Gow <david@davidgow=2Enet>
+>>> Tested-by: David Gow <david@davidgow=2Enet>
+>>>=20
+>>> I'm making the assumption that this is going in via mm-nonmm, not the =
+kselftest/kunit tree, as it has dependencies in that branch=2E
+>>>=20
+>>> Cheers,
+>>> -- David
+>>>=20
+>>=20
+>>=20
+>> Also, David? You mean the *ENTIRE* series as in the code too (the new f=
+unctions) Or just your kunit changes
+>>=20
 >
-> On Wed, Feb 25, 2026 at 3:15=E2=80=AFPM David Matlack <dmatlack@google.co=
-m> wrote:
-> >
-> > On 2026-02-25 02:33 PM, Alex Williamson wrote:
-> > > On Thu, 29 Jan 2026 21:24:51 +0000
-> > > David Matlack <dmatlack@google.com> wrote:
-> >
-> > > > +int __init vfio_pci_liveupdate_init(void)
-> > > > +{
-> > > > +   if (!liveupdate_enabled())
-> > > > +           return 0;
-> > > > +
-> > > > +   return liveupdate_register_file_handler(&vfio_pci_liveupdate_fh=
-);
-> > > > +}
-> > >
-> > > liveupdate_register_file_handler() "pins" vfio-pci with a
-> > > try_module_get().  Since this is done in our module_init function and
-> > > unregister occurs in our module_exit function, rather than relative
-> > > to any actual device binding or usage, this means vfio-pci CANNOT be
-> > > unloaded.  That seems bad.  Thanks,
-> >
-> > Good point. So a better approach that would allow vfio-pci to be
-> > unloaded would be to register the file handler when the number of
-> > devices bound to vfio-pci goes from 0->1 and then unregister on 1->0.
+>I only really need to Ack the KUnit changes, but I did test the entire se=
+ries, so feel free to apply it to all of them=2E
 >
-> Yeah maybe a kref that gets inc/dec in probe/remove. I have a similar
-> problem with iommufd preservation, but I think I can handle it based
-> on the number of iommufd open.
+>Cheers,
+>-- David
 >
-> I am wondering whether this file handler registration kref stuff can
-> be moved into LUO by adding it to LUO file_handler and the modules
-> only call get/put?
 
-Circling back here, the new plan is for LUO to not take a module
-reference in liveupdate_register_file_handler():
 
-  https://lore.kernel.org/lkml/20260318141637.1870220-13-pasha.tatashin@sol=
-een.com/
 
-In the next version of this series I am going to rebase on top of
-Pasha's changes and keep the call to
-liveupdate_register_file_handler() where it is.
+Thanks!
+
+
+Andrew=2E This is ready to be merged
+
+
+V/R
+
+Josh Law
