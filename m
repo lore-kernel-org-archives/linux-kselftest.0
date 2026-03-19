@@ -1,44 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F327512CDBE;
-	Thu, 19 Mar 2026 01:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DAB13959D;
+	Thu, 19 Mar 2026 01:18:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773882583; cv=none; b=e6kq8tP8vHCCRhBxSYjGS/IkpE/WFg8X+cWCvCmsN220aNO4og7Bfla1MG9WhyDcbQFkYxFxA+6OiqrCSHCtR9yit2afsENAx9lZ6lsrNafkjAl2lI1OQ7gSl6EWQhTNaU5nZPlwMTByDWbBUJheZuti82RMthczbzevCewKuvQ=
+	t=1773883087; cv=none; b=FV/pfFdHMpHlMedcNyv4ZfoZqyaIpTomXdkq+DOHpCtCRPMtdO5JXiOvgnDPmAdA54dCFKbCW/FnwWOO93RfZTFRRdOhljnSGRPsL18LVSWDOd8QcPDZCu5OfPuCms5pRaKN7MZ6Pg74Pqcr/aiSoC0i/r3LM3n+exfxutUoMgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773882583; c=relaxed/simple;
-	bh=RhMB3/fHMzbhw16EY3EgqZfIYShBpgY65aoZHTTgXnE=;
+	s=arc-20240116; t=1773883087; c=relaxed/simple;
+	bh=1IcHSe1kx32yk+/lPVOb3amCp9k9O3DIwnwELfiCgeg=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VSjKoSu9Rr6G6rW3ywKNtfkI8KJHolIK7Y3NaFIo7mlbEyveIVz2HiVeELICIpTCk2/PN03cEoWu179F2/0o37X/o0znzHRwqbTfZx02nHuY13DQTQRTv8IO7JYI9Xigk7BenCyHyl+rZHSDgLrhXZJq/ggonrsCiodnap0407A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SCOwA5cr; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=fa3YKvdgtcco67Wwvz01P38HMbK5nzzoikfwgWJ1ytGTDBc+pZ/C0OJMPDG6Mf4jtoC9mV0IlgqnFsaVysmRaxfW9TTW9OGyn4/UhcVjUsWyT0h1THYhBF44PfkyZzh/5XDH8e9pKgtWJBoy+UwChy4LWJ0aaE2Z5oT9nQy12t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVOs3Vqr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SCOwA5cr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3D4C19421;
-	Thu, 19 Mar 2026 01:09:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVOs3Vqr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41B2C19421;
+	Thu, 19 Mar 2026 01:18:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773882582;
-	bh=RhMB3/fHMzbhw16EY3EgqZfIYShBpgY65aoZHTTgXnE=;
+	s=k20201202; t=1773883087;
+	bh=1IcHSe1kx32yk+/lPVOb3amCp9k9O3DIwnwELfiCgeg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SCOwA5crE2+APr3zQAzRsZEWEyOS87rwJOYBM46cKJIDXjAxrEse6ijIT8ExAsMeg
-	 MaU99JIgcJ+XR1od/tkWvQssz+JAvhLzGCQgKHYF9gVgdoIWeQeP8ciVuScih5MGgG
-	 +RrtaIWycmQt+Ft9neEObC7I8f/obI22CvddTw66nrYKFaL3MtGMK8OhKl28XUNHVg
-	 VqbWwenR/6VAgBZXTU8xTUSNxM0ldGts24p6VdveH9q15R6ZFX1OgUEh2DpaZMZBsW
-	 MNG3yo6dcfdK4b8Q1d8FdtHNjMKoVY1NTJy3Ig0ZdtgWnX//q57AXr7O6rHw6rIT0/
-	 o3t6cjuYf3rnA==
-Date: Wed, 18 Mar 2026 18:09:41 -0700
+	b=HVOs3VqrZaQjaYHiut5itf5b5ueLkxSDuyzf41TIyVsXI5w8ilsETv6B2dpmu8w4r
+	 16Uzlii/A9Und3mfRTym08FtbczeEmFEW5TdYlmHmRiexTTiPvYtdI7qJqVaopPGGj
+	 QKYKFjcM8BAF0O0WQOjZugQMGt8N8ng8cIPVPWn2D5AFI6fXYWMQ8asWgdjRIDAj57
+	 QdKHY5wU+T2IvfnV18eeeFEW12iGATAp4j4U/YYZDIbfvOFIjtO/xXubjCy+2QPx3G
+	 YH+8pzIrIQLsL0blrl5xEel5cLL6Hq4v/LJ/Ia6SLj/GRC2w6lU+Oj4ypfDwdX85X0
+	 39KA3LMTPbwJw==
+Date: Wed, 18 Mar 2026 18:18:05 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Jiayuan Chen <jiayuan.chen@shopee.com>, Jay
- Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+Cc: netdev@vger.kernel.org, Jiayuan Chen <jiayuan.chen@shopee.com>, Jiri
+ Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
  Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
  Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2] selftests: bonding: add test for stacked bond
- header_parse recursion
-Message-ID: <20260318180941.40dcf453@kernel.org>
-In-Reply-To: <20260317031435.364094-1-jiayuan.chen@linux.dev>
-References: <20260317031435.364094-1-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH net v2 2/2] selftests: team: add non-Ethernet header_ops
+ reproducer
+Message-ID: <20260318181805.397dba97@kernel.org>
+In-Reply-To: <20260317124606.157035-3-jiayuan.chen@linux.dev>
+References: <20260317124606.157035-1-jiayuan.chen@linux.dev>
+	<20260317124606.157035-3-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,20 +49,17 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 17 Mar 2026 11:14:30 +0800 Jiayuan Chen wrote:
->  CONFIG_NETCONSOLE_EXTENDED_LOG=y
+On Tue, 17 Mar 2026 20:45:54 +0800 Jiayuan Chen wrote:
+>  CONFIG_IPV6=y
 > +CONFIG_NET_IPGRE=y
+>  CONFIG_MACVLAN=y
 >  CONFIG_NETDEVSIM=m
->  CONFIG_NET_SCH_INGRESS=y
->  CONFIG_NLMON=y
 
-Sorry this also has to be sorted and the special characters are a bit
-tricky. As you can see from CONFIG_NET_SCH_INGRESS the sorting algo
-considers _ to be after letters, so you need to move the new addition
-down.
+Again the sort :)
 
-When you repost you can target net-next, FWIW.
-If the selftest is part of the same series as the fix we let them go
-together but standalone selftest postings should go to net-next.
+Please use the validate_* scripts from here:
+https://github.com/linux-netdev/nipa/tree/main/tests/patch/check_selftest
+they take the file name as the only arg and will tell if you its sorted.
+For whatever definition of "sorted" we adopted...
 -- 
 pw-bot: cr
