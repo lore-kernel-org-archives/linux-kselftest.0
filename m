@@ -1,89 +1,56 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAA92BE65F
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 04:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F0F397E92;
+	Thu, 19 Mar 2026 05:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773893050; cv=none; b=EmHUJwv2/v2hhAZtQzh8XRC+7VRsQwfJM0THWKULM3uMBnZeLgZbKpZEPkgXXSRzyife2QZLMmAqVgghK0ARjwtjMPGdgEHtPkHfQSdobjQ0rfuk2DhkRPbk6XauWU6AlLi397zFxjdtwLkj3iEVcI5UNZS5wjLAjHSYGRqscbM=
+	t=1773897727; cv=none; b=B4rnrHXMoaDT0QtZVJap7DiMGZSp9tdSuQLQiiGkzLBYsnGJEis6EjY0/PaHHx9KstNdaA8e469CVqb4GIObbPY7S7HhvtYp0hN8z+SJGAZClwlcWgo+HgfetXczBYpJNj4t8Fj5nP1xhjReQBzV35vIUMea5pT1EzQCIZwTtS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773893050; c=relaxed/simple;
-	bh=al28sz6aoPxmVJCaRFJbTqr9Acsx8Cb6Jpl7mkM1zU8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RO1Awe4KS9zhRM9O/Z2r/gaOLk4Ef4sf/vYY3WTcrTwCX3cV4P6KYUizrnLZB3S0yARszVjZ7xNKsXi6W8FUqcFA1o3Me/K8xS+6Eq36bJ24QiOQe/F92QuV7MDdFaIqAJus0aq0hPDyJHa0RpX6WUHBGi4HN4q+/fdU3iytBXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PC8lTvwQ; arc=none smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773897727; c=relaxed/simple;
+	bh=o/Ftk1V+walX/j4lo8sRORN5eVEOzqwrT6r4WeWLY1I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vbll24TA/nlNvAphb3We6ZvkVWil39UdD1TMXDVK5CbpCUJYbNigwlm2snbjU0esBZUejfg86iHuabBjK5wWWARK1Io75deYnv2sWxbwEP5jcDv+bbHHz6OI9B0I9VXKyRqA/+RXhuSyHxomHJrLUrO3TuvKcc4n0H1vM/OcAWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gwo2MNMQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PC8lTvwQ"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2ba895adfeaso649078eec.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2026 21:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773893048; x=1774497848; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aFidzLk14rThG8oUyNmMDZ2YZWMvX9mGuKIL63l9/g0=;
-        b=PC8lTvwQVztLBlJ+bUrBvlKzamJQi40Tm4C2N62cg06c25F2Q4iDCPTofjZDiyTyWa
-         yJn7aPsvNgUF4qkzadYxGuzyY1TPrxOnTAA5sJyoLvo9zex34zmJmRD5396R9aO+QFrS
-         NWiUlB4lSl3iFbTKbt6OCJmw1zkDUQGSSewCwXTSxO2RN3B3oZ96rw13HMwF/f8kyLnx
-         J+0GbJWQXOOWUPriuCwd9eWD1mpxdsd+lTDy++MdVgWUFQ8K99aO7T8EoT16lX5VveBa
-         UcAp1l/ab6KJQfYluYTgcw5vs+y1xkZC3xJa2mLaCNRELIIXtTGyPA+stD7lNypXVZYz
-         PicA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773893048; x=1774497848;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aFidzLk14rThG8oUyNmMDZ2YZWMvX9mGuKIL63l9/g0=;
-        b=nyDNCm8E4UdJSbl3hCpG0d69bR/ssS9sRM9z88lpwlbw93bkBfl7XUvudIpJ+V42gR
-         lIXw0ZBMmaVbutEtYtGpPmo7XTgIyG8qbKfFdOAfeSmz5FwMeCJd5Q6BvCiYZ7pm5Xx7
-         WXgHG2KrF5N5oVg7AqTAIaTNNS9C2n8BYa9EySmjjGAwA2Bwy/8/8Ze9CobXGWScKrCg
-         kvV2MvxmFmJE5gQ1SdSuptoTn/s2f9m+Qx7MJFzPu3oi9rxAw3MMHwndKnuMPa95bXaV
-         uqki/6vAZxj2oR5yvHU0KIU9A8TDOivEz/KhZ086kR1uPMIHCmtZYHCYBr82GbCLvYSB
-         Bntg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCNIAPERW47hB7zWDfWoB4U85HPmKtYPhQF1VRln1QuzHMqjNZJjp2bLFLntfzA+F2hJmv2avKg/myvh91H8c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylJRyMiPxZprSIP1ue7oehbZ8xquM7ARGvaYsYB4v1pbz5yz67
-	TRHWlNT9KZ2rp6mUuK4Gzbgnfgwz5l8x+FObwxpgbV6gEOuIQyxqLfZa
-X-Gm-Gg: ATEYQzwe25ut/VqVLzKi3epkvN22KdhP47KvgRpXpYwHNAwu3GEKpc9SZr8hDMkPYs0
-	5C2Am0Pn2gZoaErI036wPhf4yJOSOdTLJoEB1G6+8ajrSOuy0pywAkbV0SXahiVwP7lPa5+IeMn
-	AHL3Ar0ialRm8qvHMqehFA5MsCEfFTrfVPzZQI3OsnCxXtgoQ9ouBteMiQzJel0TrHDFvoxZYfi
-	e1vthaOYbo1iRWVbRcw3vEOFiDwfalQuvBQ6XTaz3GHDAX6DEGYUlqSVQZ5avSW0RoMBMp3YQ2B
-	yuliWeJ1UEHhw8wOquxz1B/CJLHNBoaxprny6zUzetf7CLAGducm2w4l2VrcQS0/oTgEj678f64
-	ylEvPCT74WaT0EbdzkDDzwQkQIdz9zP3GeDxHlcOtojEl4rH+hTgkNMLYzYWgvR+XqcMx1b6TQX
-	3L/06UvECz9UnpmgbAJY5dOJK0AIsZ5tijzYgDVz4A17gp/u67hgbDFLu/3Rux8zmn5EqbV2xCj
-	50llkcrg6i+IsrCfIth5J5VK/o=
-X-Received: by 2002:a05:7022:410:b0:128:d577:dc21 with SMTP id a92af1059eb24-1299ba8eb6bmr2987001c88.13.1773893048389;
-        Wed, 18 Mar 2026 21:04:08 -0700 (PDT)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c0e560fb5fsm8470953eec.31.2026.03.18.21.03.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 21:04:08 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	shuah@kernel.org
-Cc: martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	paul.chaignon@gmail.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gwo2MNMQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73F5C19425;
+	Thu, 19 Mar 2026 05:22:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773897727;
+	bh=o/Ftk1V+walX/j4lo8sRORN5eVEOzqwrT6r4WeWLY1I=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Gwo2MNMQy0NRf6Y8NkdQ2lcm+gbTmK0nYJ0t8ghYQcdpJboAtu7xhDX6XjLOWIhtq
+	 sfPJ64VoJDBlxrSHYdco5I7A+dTs0rgaSVJ+6XvEXZP2IO7rs0HEqgLNqcUDwm/F8r
+	 2lR+lByE3vGGLgVy8hZFaPYpeeMCOsb2RwDJNElCOqMR4USYVRBaWjdkKDoe6p5BGN
+	 GmDXh26cV++CtbxnEt/UcT/veisfqDLO5BbaQB34Ch03vaHgw7k0KhxRtvyID6YpfH
+	 5c0rzPAJO1go2PcUzYbTz9H/grcCAKYtDelVquVq9QXTtCuHxBkWok6ytc+fCuen0T
+	 aReCqZT4jDCYg==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v2] selftests/bpf: move trampoline_count to dedicated bpf_testmod target
-Date: Thu, 19 Mar 2026 12:03:37 +0800
-Message-ID: <20260319040337.366375-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
-References: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v2 00/10] mm/damon: let DAMON be paused and resumed
+Date: Wed, 18 Mar 2026 22:21:43 -0700
+Message-ID: <20260319052157.99433-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,132 +59,120 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-trampoline_count fills all trampoline attachment slots for a single
-target function and verifies that one extra attach fails with -E2BIG.
+DAMON utilizes a few mechanisms that enhance itself over time. Adaptive
+regions adjustment, goal-based DAMOS quota auto-tuning and monitoring
+intervals auto-tuning like self-training mechanisms are such examples.
+It also adds access frequency stability information (age) to the
+monitoring results, which makes it enhanced over time.
 
-It currently targets bpf_modify_return_test, which is also used by
-other selftests such as modify_return, get_func_ip_test, and
-get_func_args_test. When such tests run in parallel, they can contend
-for the same per-function trampoline quota and cause unexpected attach
-failures. This issue is currently masked by harness serialization.
+Sometimes users have to stop DAMON.  In this case, DAMON internal state
+that enhanced over the time of the last execution simply goes away.
+Restarted DAMON have to train itself and enhance its output from the
+scratch.  This makes DAMON less useful in such cases.  Introducing three
+such use cases below.
 
-Move trampoline_count to a dedicated bpf_testmod target and register it
-for fmod_ret attachment. This keeps the test semantics unchanged while
-isolating it from other selftests, so it no longer needs to run in
-serial mode. Remove the TODO comment as well.
+Investigation of DAMON.  It is best to do the investigation online,
+especially when it is a production environment.  DAMON therefore
+provides features for such online investigations, including DAMOS stats,
+monitoring result snapshot exposure, and multiple tracepoints.  When
+those are insufficient, and there are additional clues that could be
+interfered by DAMON, users have to temporarily stop DAMON to collect the
+additional clues.  It is not very useful since many of DAMON internal
+clues are gone when DAMON is stopped.  The loss of the monitoring
+results that improved over time is also problematic, especially in
+production environments.
 
-Tested:
-  ./test_progs -t trampoline_count -vv
-  ./test_progs -t modify_return -vv
-  ./test_progs -t get_func_ip_test -vv
-  ./test_progs -t get_func_args_test -vv
-  ./test_progs -j$(nproc) -t trampoline_count -vv
-  ./test_progs -j$(nproc) -t
-    trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-kprobe_multi_test -vv
-  20 runs of:
-    ./test_progs -j$(nproc) -t
-    trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-kprobe_multi_test
+Monitoring of workloads that have different user-known phases.  For
+example, in Android, applications are known to have very different
+access patterns and behaviors when they are running on the foreground
+and the background.  It can therefore be useful to separate monitoring
+of apps based on whether they are running on the foreground and on the
+background.  Having two DAMON threads per application that paused and
+resumed for the apps foreground/background switches can be useful for
+the purpose.  But such pause/resume of the execution is not supported.
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
+Tests of DAMON.  A few DAMON selftests are using drgn to dump the
+internal DAMON status.  The tests show if the dumped status is the same
+as what the test code expected.  Because DAMON keeps running and
+modifying its internal status, there are chances of data races that can
+cause false test results.  Stopping DAMON can avoid the race.  But,
+since the internal state of DAMON is dropped, the test coverage will be
+limited.
 
-v2:
-- rewrite the subject to describe the change
-- resend with the correct patch content
-- resend as a reply to v1
+Let DAMON execution be paused and resumed without loss of the internal
+state, to overhaul the limitations.  For this, introduce a new DAMON
+context parameter, namely 'pause'.  API callers can update it while the
+context is running, using the online parameters update functions
+(damon_commit_ctx() and damon_call()).  Once it is set, kdamond_fn()
+main loop will do only limited works excluding the monitoring and DAMOS
+works, while sleeping sampling intervals per the work.  The limited
+works include handling of the online parameters update.  Hence users can
+unset the 'pause' parameter again.  Once it is unset, kdamond_fn() main
+loop will do all the work again (resumed).  Under the paused state, it
+also does stop condition checks and handling of it, so that paused DAMON
+can also be stopped if needed.  Expose the feature to the user space via
+DAMON sysfs interface.  Also, update existing drgn-based tests to test
+and use the feature.
 
- .../selftests/bpf/prog_tests/trampoline_count.c |  3 +--
- .../selftests/bpf/progs/test_trampoline_count.c |  6 +++---
- .../selftests/bpf/test_kmods/bpf_testmod.c      | 17 +++++++++++++++++
- 3 files changed, 21 insertions(+), 5 deletions(-)
+Tests
+=====
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-index 6cd7349d4a2b..b19358aed126 100644
---- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-@@ -30,8 +30,7 @@ static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
- 	return prog;
- }
- 
--/* TODO: use different target function to run in concurrent mode */
--void serial_test_trampoline_count(void)
-+void test_trampoline_count(void)
- {
- 	char *file = "test_trampoline_count.bpf.o";
- 	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
-diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-index 7765720da7d5..14ad2f53cf33 100644
---- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-+++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-@@ -3,19 +3,19 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
--SEC("fentry/bpf_modify_return_test")
-+SEC("fentry/bpf_testmod_trampoline_count_test")
- int BPF_PROG(fentry_test, int a, int *b)
- {
- 	return 0;
- }
- 
--SEC("fmod_ret/bpf_modify_return_test")
-+SEC("fmod_ret/bpf_testmod_trampoline_count_test")
- int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
- {
- 	return 0;
- }
- 
--SEC("fexit/bpf_modify_return_test")
-+SEC("fexit/bpf_testmod_trampoline_count_test")
- int BPF_PROG(fexit_test, int a, int *b, int ret)
- {
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index e62c6b78657f..6eaceb4dfbec 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -581,6 +581,12 @@ noinline int bpf_fentry_shadow_test(int a)
- }
- EXPORT_SYMBOL_GPL(bpf_fentry_shadow_test);
- 
-+noinline int bpf_testmod_trampoline_count_test(int a, int *b)
-+{
-+	*b += 1;
-+	return a + *b;
-+}
-+
- __bpf_hook_end();
- 
- static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
-@@ -1843,6 +1849,16 @@ struct bpf_struct_ops testmod_multi_st_ops = {
- 
- extern int bpf_fentry_test1(int a);
- 
-+BTF_KFUNCS_START(bpf_testmod_trampoline_count_ids)
-+BTF_ID_FLAGS(func, bpf_testmod_trampoline_count_test)
-+BTF_KFUNCS_END(bpf_testmod_trampoline_count_ids)
-+
-+static const struct
-+btf_kfunc_id_set bpf_testmod_trampoline_count_fmodret_set = {
-+	.owner = THIS_MODULE,
-+	.set = &bpf_testmod_trampoline_count_ids,
-+};
-+
- static int bpf_testmod_init(void)
- {
- 	const struct btf_id_dtor_kfunc bpf_testmod_dtors[] = {
-@@ -1859,6 +1875,7 @@ static int bpf_testmod_init(void)
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmod_kfunc_set);
-+	ret = ret ?: register_btf_fmodret_id_set(&bpf_testmod_trampoline_count_fmodret_set);
- 	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops, bpf_testmod_ops);
- 	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops2, bpf_testmod_ops2);
- 	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops3, bpf_testmod_ops3);
+I confirmed the feature functionality using real time tracing ('perf
+trace' or 'trace-cmd stream') of damon:damon_aggregated DAMON
+tracepoint.  By pausing and resuming the DAMON execution, I was able to
+see the trace stops and continued as expected.  Note that the pause
+feature support is added to DAMON user-space tool (damo) after v3.1.9.
+Users can use '--pause_ctx' command line option of damo for that, and I
+actually used it for my test.  The extended drgn-based selftests are
+also testing a part of the functionality.
 
-base-commit: 8a30aeb0d1b4e4aaf7f7bae72f20f2ae75385ccb
+Patches Sequence
+================
+
+Patch 1 introduces the new core API for the pause feature.  Patch 2
+extend DAMON sysfs interface for the new parameter.  Patches 3-5 update
+design, usage and ABI documents for the new sysfs file, respectively.
+The following five patches are for tests.  Patch 6 implements a new
+kunit test for the pause parameter online commitment.  Patches 7 and 8
+extend DAMON selftest helpers to support the new feature.  Patch 9
+extends selftest to test the commitment of the feature.  Finally, patch
+10 updates existing selftest to be safe from the race condition using
+the pause/resume feature.
+
+Changelog
+=========
+
+Changes from RFC v1
+(https://lore.kernel.org/20260315210012.94846-1-sj@kernel.org)
+- Continuously cancel new damos_walk() requests when paused.
+- Initialize damon_sysfs_context->pause.
+- Make sysfs.py dump-purpose pausing to work for all contexts.
+
+SeongJae Park (10):
+  mm/damon/core: introduce damon_ctx->paused
+  mm/damon/sysfs: add pause file under context dir
+  Docs/mm/damon/design: update for context pause/resume feature
+  Docs/admin-guide/mm/damon/usage: update for pause file
+  Docs/ABI/damon: update for pause sysfs file
+  mm/damon/tests/core-kunit: test pause commitment
+  selftests/damon/_damon_sysfs: support pause file staging
+  selftests/damon/drgn_dump_damon_status: dump pause
+  selftests/damon/sysfs.py: check pause on assert_ctx_committed()
+  selftets/damon/sysfs.py: pause DAMON before dumping status
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  7 ++++
+ Documentation/admin-guide/mm/damon/usage.rst  | 12 ++++---
+ Documentation/mm/damon/design.rst             |  7 ++++
+ include/linux/damon.h                         |  2 ++
+ mm/damon/core.c                               |  9 ++++++
+ mm/damon/sysfs.c                              | 31 ++++++++++++++++++
+ mm/damon/tests/core-kunit.h                   |  4 +++
+ tools/testing/selftests/damon/_damon_sysfs.py | 10 +++++-
+ .../selftests/damon/drgn_dump_damon_status.py |  1 +
+ tools/testing/selftests/damon/sysfs.py        | 32 +++++++++++++++++++
+ 10 files changed, 110 insertions(+), 5 deletions(-)
+
+
+base-commit: 89fea69e3a636d7f4c7a0dee9c25e2b417a74c7a
 -- 
-2.43.0
-
+2.47.3
