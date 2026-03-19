@@ -1,116 +1,137 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448B02D8DCA;
-	Thu, 19 Mar 2026 22:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583B23FFAD9
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 23:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773961155; cv=none; b=TFDezRC4UFdQjiyOQBLz7SeTV6kQhRnWlF681kzpuVrdx609GDCtBOaW0IaHX28uT9NghNbBvwOeRBXFfbQ1qOydNTM7HSs1jpLGAWKDzUtZourQaiN6wKxa0BaV9T5JPDBGQ/90RL5RmWV6zZrR9VZfwssnBxprh5Bz/1dUOxw=
+	t=1773963057; cv=none; b=PjT1gAltTSv9H2ZQgkvHTeXlK822js/+ag3ZdtgfMleDkrrVCYTByKfYRKPABvKoaVVLmwozzMGbdjMy5Aq+tO7v6fwEJEpHZBxx/8uJ0+uoQ4TKWNqiNgmz1wccz7GPM1nMPkK4R7S7+ckAoBGL62YmnKk1YWMX8D4OcyZLHtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773961155; c=relaxed/simple;
-	bh=ONzUuF7YXRHtxG6C5m8pqOWjW1/0369DdaRHWLVGQUM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=pXZ+7ay4Vjm8Uh+WT39443Eg2TzfPh/KQjJI+zSmb8twC9XSPEvHMARDBxoKwQZBz29Jq0Ug7hk9lqlI2jAbpYf7R9o8FDFeQABGELTM7gLNVC0bNrydXJ4s9T2XbfcIpwJfnm2CWQP9GdCfyH90wva1dUZuzvzH5ks9nkZl0bY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=aYpp18l2; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1773963057; c=relaxed/simple;
+	bh=CZuA2q2lMteTu44UK74Tv+Gl9XkYvploUKv+Q7AJ1Us=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tEagMigcKYu3qW51SgXIj8J0JrPlCgfJCrC2LoMaFG12EunA2TAHg7ouwy/XKbNx8rKWb7tNUocPlCptCjWgNgbfm+5vzOBzHQ0NOwXddVW7CZK11SGrdTWRhL3V/r2EGUjtoYRy//VSQ0RkIhQRWDTNwbNihFmi2r+VlsBNtPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fXoUcC8I; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="aYpp18l2"
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62JJNxjO3410603;
-	Thu, 19 Mar 2026 15:59:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=s2048-2025-q2; bh=yfkOij3eo7R60Zv8vy
-	jBG7VIux7htb+TCxTIX4lg/9k=; b=aYpp18l2tKfL6BHH5ZB0luO8UpDP/YLPGO
-	aNpUdIgixjIpfJWTNzrwKuK+Oj7avCo1xgknR/drhgzDtlLZsCtq7rnDYgHd85CC
-	a5bHbRk7caAglEXYplHQWvcvENKNFIo2SiNuVBqiWtpppHQUR2bzff9ghkXRNiGl
-	AeI19313xBs2pEHICFLrvVqAxQwnGJM8tuzX4pDTpqjwc0Npbq15+KY4b8BN5BaB
-	ZYgKm3MA3Lr3JPSbXULMfJ4PA5j3NKkuKwnORt2tKO+lpaAKasDsvx1JNDHfMEWE
-	4kMe2m3aJf9hTrHdgjLjpT9RbzeuiM+1b7FxvPA/NvqFL+v7+bNQ==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4d0a05ghv8-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 19 Mar 2026 15:59:03 -0700 (PDT)
-Received: from devvm6375.cco0.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.35; Thu, 19 Mar 2026 22:59:02 +0000
-From: Ted Logan <tedlogan@fb.com>
-Date: Thu, 19 Mar 2026 15:58:47 -0700
-Subject: [PATCH v2] vfio: selftests: Build tests on aarch64
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fXoUcC8I"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35a032cdd78so7692062a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 16:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1773963055; x=1774567855; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yCIxwFZ47k6gWbx57q3bhruGtmGGBP4Tv/5VwuBdu0A=;
+        b=fXoUcC8I/hiFAgr6fSop0cQgjdk7Rey95UBBUww3AiT25mdU38z/k52uDG/LLKJVQ6
+         l6hFwDM6Ieyb13cuYlSkRO6hrkvzO4d6EDgta3ANhPAVlid6BUMHkZslQwBt80Xfb0UR
+         lf6YNkVTtNlk8Ortasz1eKqZwpgNxAe76BYjwqskyyTSV88M+K8AcQsB2UAdhUv7Uopc
+         bxyu1DJcyygIoEojg00JdDhepp4nba8hGoLJBHVKKCd0C+8ilItpRSCiy3CV61PeUhhN
+         CvqWAhJUKlv0oiG2TKsUb2K9lK2ktg79oAbFWcENI1152824k/FXR5eCfLf7tlW7yPgP
+         +7FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773963055; x=1774567855;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yCIxwFZ47k6gWbx57q3bhruGtmGGBP4Tv/5VwuBdu0A=;
+        b=MZ7UWLGJUIwxooPNErHmEFzAl7AlkuCWjcwCI1hZ0+69zkLOgQr9PMTgPl8uZYO8Lh
+         dBGyJJky1MiLcNp8Rq4WFAjG/8nmVNzSz+nuTVSIauEdOZR+OuKP73aFcvfGU52KZJq8
+         0F8nLNMPxBtnYOFT2wqKA/Qw78jnTGxphjA5cGkieb/g5w8210kKqa/ZmnjGxcXYGZye
+         cMLcR7JlQ5c5MkWzzWWGhtpHp76X9Y40Ds0y0FrQmrOyNYzPjjHC1x2BtaKXLsNHRu+o
+         pGsMr9n1Gngeukzv0lqrUhQ9kAvjgwL1eAuts2uzCHehqPAsxX0M9DN0iRCeB7OKxATh
+         DEww==
+X-Forwarded-Encrypted: i=1; AJvYcCWD3MgFKs6qaBWQBKVIBp88lLtZYp+u4yzoeGzeUDj6F0AuXhDg2YcOAW3SCzpWOw9YT+ugQjmbUJo3EyqFCwA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2HYQtbsGSSzsfjJCw91HQiME+GcYykoRRysWM6WW9qzoFe0Cb
+	a9UC/9EcpZyggP5SPLrB9dOBXUSYKjkAk5IrGT5/FSQX+9bBfmNqdUQRE0dCGrMggjrdPledyiB
+	QBpH5cQ==
+X-Received: from pgww9-n1.prod.google.com ([2002:a05:6a02:2c89:10b0:c74:42:8993])
+ (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3d05:b0:398:a6d4:dbf7
+ with SMTP id adf61e73a8af0-39bcec2990dmr884293637.55.1773963054511; Thu, 19
+ Mar 2026 16:30:54 -0700 (PDT)
+Date: Thu, 19 Mar 2026 23:30:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIABOHvGkC/x2NQQqDMBBFryKz7oBJqaXdCj1At6WLYH50wKhMq
+ FTEu3fo8vF5/+1UoIJC92onxSpF5snAnyrqhjD1YInG5Gvf1Gd344w868YpyPhRcE4cMYYNkZN 8WVPHq+cL4FxswtUksqtFYes/86Lno6X3cfwAHAkyQXsAAAA=
+X-Change-Id: 20260319-memory-failure-mf-delayed-fix-rfc-v2-5ee11d6a7260
+X-Developer-Key: i=wyihan@google.com; a=ed25519; pk=cRi0fKzS5BMxlHyHY2pJv3w/1zcgfYKr6EYGYppdMYc=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773963053; l=2186;
+ i=wyihan@google.com; s=20260319; h=from:subject:message-id;
+ bh=mpcY4kRf+nPP5p5eWgT3Y1evjSbcjRoF+f54tj5v7pY=; b=mWnFvQ5ui3ggdbSI/gbCZaSWpVcU5hlhGvSATXtAyXZwDfjEUhF4BWK5E7B5/5PQNCDI5xSiU
+ xIX5xLfd+SSA0zwnDrFuPU+talg1mimDxNRWM7dNEzT6Wnry6w6Sa0M
+X-Mailer: b4 0.14.3
+Message-ID: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
+Subject: [PATCH RFC v2 0/7] mm: Fix MF_DELAYED handling on memory failure
+From: Lisa Wang <wyihan@google.com>
+To: Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi <nao.horiguchi@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: rientjes@google.com, seanjc@google.com, ackerleytng@google.com, 
+	vannapurve@google.com, michael.roth@amd.com, jiaqiyan@google.com, 
+	tabba@google.com, dave.hansen@linux.intel.com, Lisa Wang <wyihan@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260319-vfio-selftests-aarch64-v2-1-bb2621c24dc4@fb.com>
-X-B4-Tracking: v=1; b=H4sIAKd/vGkC/4WNQQrCMBBFr1Jm7UiS1gm48h7SRVondkAbyZSgl
- N7d2Au4fA/++ysoZ2GFc7NC5iIqaa7gDg2MU5jvjHKrDM44Mq31WKIkVH7EhXVRDCGPE3VILYU
- hmujJd1DHr8xR3nv42leeRJeUP/tPsT/7N1ksWnSOyHh/opb9JQ7HMT2h37btC5OsNFi5AAAA
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
-        Shuah Khan <shuah@kernel.org>
-CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Matt Evans <mattev@meta.com>,
-        Ted Logan
-	<tedlogan@fb.com>
-X-Mailer: b4 0.13.0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE5MDE4NCBTYWx0ZWRfX3SXOE+S+dxIs
- IWyOgwpRovZ8qFwVUXlMTJliU9ABRLRfAE7kJTYZ5jlMP3L6fcN0vBG7QIubvv7APe1aKMo1dkA
- Tp3VfadSLJec7+we48MCsvy2vMPtyb4lFSA7kx4/B5yDee3uq59es4mGzsTCyxhedg5biUa9uzt
- +GnpH6wHoItEM384ZCwUltSwBTgrf8Huruk4Cux2nKxrtUfqWuv4asN0gxeEH3tj69B2EKQtSl9
- Dy8x4VHcF4uVKYpXD/M15x4NKhFDKuSwY7Z8EeOiZMsBfDYEMzNwxFDJOgSULAkj2QsY1Tbv/5a
- 8qaU4J0wgMZOuUugT9v+LWoMfmmjW8hNO2y0kNQcSiNr45YjwzbSyqTxRSJmS4tDqkSEJTunfbn
- mc4R8ryUI3fzTVctB8s45dz96zR0g7NDu+BhAwNF9cU6WfFus/jDGF2ZbpckwphLqktVr7TgR80
- q72Tm1QDGHgkkFtrG2w==
-X-Authority-Analysis: v=2.4 cv=Qd9rf8bv c=1 sm=1 tr=0 ts=69bc7fb7 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=PAz_-FQ8hEVmOPYdF0yf:22 a=VwQbUJbxAAAA:8
- a=VabnemYjAAAA:8 a=FOH2dFAWAAAA:8 a=s9GQCUODTCKCGM6_g2IA:9 a=QEXdDO2ut3YA:10
- a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: wLDbI77tko3bOm1QZBaz0joNI2fFtFaf
-X-Proofpoint-GUID: wLDbI77tko3bOm1QZBaz0joNI2fFtFaf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-19_04,2026-03-19_05,2025-10-01_01
+Content-Transfer-Encoding: quoted-printable
 
-Fix vfio selftests on aarch64, allowing native builds on aarch64 hosts.
+Here's a second revision to fix MF_DELAYED handling on memory failure.
 
-Reported-by: Matt Evans <mattev@meta.com>
-Closes: https://lore.kernel.org/all/e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com/
-Fixes: a55d4bbbe644 ("vfio: selftests: only build tests on arm64 and x86_64")
-Signed-off-by: Ted Logan <tedlogan@fb.com>
+This patch series addresses an issue in the memory failure handling path
+where MF_DELAYED is incorrectly treated as an error. This issue was
+discovered while testing memory failure handling for guest_memfd.
+
+The proposed solution involves -
+1. Clarifying the definition of MF_DELAYED to mean that memory failure
+   handling is only partially completed, and that the metadata for the
+   memory that failed (as in struct page/folio) is still referenced.
+2. Updating shmem=E2=80=99s handling to align with the clarified definition=
+.
+3. Updating how the result of .error_remove_folio() is interpreted.
+
+RFC v2 is a more complete solution that includes parts 1 and 2 above to
+address David=E2=80=99s comment [1]. Selftests are included for all the abo=
+ve.
+
++ RFC v1: https://lore.kernel.org/all/cover.1760551864.git.wyihan@google.co=
+m/
+
+[1]: https://lore.kernel.org/all/91dbea57-d5b0-49b7-8920-3a2d252c46b0@redha=
+t.com/
+
+Signed-off-by: Lisa Wang <wyihan@google.com>
 ---
-Changes in v2:
-- Add aarch64 to the list of allowed architectures, rather than trying
-  to maintain a new architecture substitution.
-- Update wording of commit message.
-- Link to v1: https://lore.kernel.org/r/20260317-vfio-selftests-aarch64-v1-1-2266077563e7@fb.com
----
- tools/testing/selftests/vfio/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Lisa Wang (7):
+      mm: memory_failure: Clarify the MF_DELAYED definition
+      mm: memory_failure: Allow truncate_error_folio to return MF_DELAYED
+      mm: shmem: Update shmem handler to the MF_DELAYED definition
+      mm: memory_failure: Generalize extra_pins handling to all MF_DELAYED =
+cases
+      mm: selftests: Add shmem memory failure test
+      KVM: selftests: Add memory failure tests in guest_memfd_test
+      KVM: selftests: Test guest_memfd behavior with respect to stage 2 pag=
+e tables
 
-diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
-index 8e90e409e91d..0684932d91bf 100644
---- a/tools/testing/selftests/vfio/Makefile
-+++ b/tools/testing/selftests/vfio/Makefile
-@@ -1,6 +1,6 @@
- ARCH ?= $(shell uname -m)
- 
--ifeq (,$(filter $(ARCH),arm64 x86_64))
-+ifeq (,$(filter $(ARCH),aarch64 arm64 x86_64))
- # Do nothing on unsupported architectures
- include ../lib.mk
- else
-
+ mm/memory-failure.c                                |  17 +-
+ mm/shmem.c                                         |   2 +-
+ tools/testing/selftests/kvm/guest_memfd_test.c     | 233 +++++++++++++++++=
+++++
+ tools/testing/selftests/mm/Makefile                |   3 +
+ tools/testing/selftests/mm/run_vmtests.sh          |   1 +
+ .../selftests/mm/shmem_memory_failure_test.c       |  98 +++++++++
+ 6 files changed, 344 insertions(+), 10 deletions(-)
 ---
-base-commit: 96ca4caf9066f5ebd35b561a521af588a8eb0215
-change-id: 20260317-vfio-selftests-aarch64-636abf0f7674
+base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
+change-id: 20260319-memory-failure-mf-delayed-fix-rfc-v2-5ee11d6a7260
 
 Best regards,
--- 
-Ted Logan <tedlogan@fb.com>
+--=20
+Lisa Wang <wyihan@google.com>
 
