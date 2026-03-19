@@ -1,83 +1,121 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884EE393DDD;
-	Thu, 19 Mar 2026 21:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773954260; cv=none; b=j787wYJJ0s/hEEfVkxjvSWUhR02biTduxa5ncSzKuc3/D5BHPAGAzCye1qcH/RmFwn4Z5Fn9OPeHQ6S5MZAqHfRRXauDm4Zl+Fm15zl46WZkZenoaLKctenq53B+T0SI/1xbZQkb1jqOcfSKewk+3wt0EGpRqD4aBWwyowhEruY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773954260; c=relaxed/simple;
-	bh=TSXpxfxn1C06Oh5nU3gCmTrE8hHiC5bRR/YzQOMCiGQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q729EohMSOON+rave9T8yFEXBikXmLzYAXQmHYeDgHKO0bUT/pV2yaq6CtW2mgzKK4c6WM6d6iSCYgjuLsiZLggz8EyJhiiF/28o9mMHyQA1HiKpfYccpQtc4KVLWO2hfrjIiZ0CmECj7VNfc9HNDcy30BTdTdzhJ8DKsSgkxGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=t0RoVT7S; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF38386C32
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 21:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773955315; cv=pass; b=LQ+JtK4gsm6Opc5lUr1LkcX/y0sI5heuFdgf/P7MgCGlEJxI1V1OzLIJpMb+G3OvZs8KibZsswJ5sZDUwbNw5/x6a5J6WmzPxkctOROrUh05R0irvVjSj8g13Yv7VH3IfcubARkLD5J4pUUYIHse9pSimSIHomK8RT1dPRC5cFc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773955315; c=relaxed/simple;
+	bh=221SE52RqevFko6XNRwaQM9HvEmE73WFUCY4jlFOO1g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iikESSNbgPpXfQnim+36IRNT5YjtlYHOtDE7N3XamS6BeRSYVWtsEVvQS2W2CVAv8WOq02ek1CeYXqibYx+GtWi9Wmv2VoyzdbEi1+acLZ6RA9as6JSvI/7y8sZF2H4Zj9xysgB2LUQf3tnInGUr4ZR2tug0Tkz9xrbh6Cf3rfM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OYuYh8jf; arc=pass smtp.client-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="t0RoVT7S"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 4E0CD4E42721;
-	Thu, 19 Mar 2026 21:04:13 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 019ED60050;
-	Thu, 19 Mar 2026 21:04:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2E8FF10450AAD;
-	Thu, 19 Mar 2026 22:04:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773954252; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=+UkuwtudtqGZeLAsD+YVOGIQG7rB/ZI2tIrrLumZKXQ=;
-	b=t0RoVT7SUzHnPmLNghomPUxEN9iUFcrmq23TeNIl7RS49Na56t6LZyAQOzmFmxhM6Uk4NE
-	JiA+fctzt5EiDJPKdsHTvw2IWsK/9Y1GWvnM+0JrKdG4oNRl95V8YS5TeKQV2Oue3IcUgQ
-	R5TOCobm2tIuJ85P/Twky+y+keHiBUxX8Tuf/ZjU4iKiB+KqkIbkOPJzWXV4VFiEmXCO5M
-	J0OBSaJBJCMTUBhDgyneolG4U4HN6yMWajo+/Hunqsm4P5s0FEVLg+okd35OkKxHhajf8w
-	VXWEheOwoL0e4v+ZSfNQv+a3++OHr43CSC/Vjv2BdL8QE31QiB7lV5FsIE+s6g==
-Message-ID: <d34f58a4-84cd-4c5a-84d9-85bd615429b9@bootlin.com>
-Date: Thu, 19 Mar 2026 22:04:06 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OYuYh8jf"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-126ea4e9694so747208c88.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 14:21:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773955314; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LSH23QHaWT5BIdANKOZDJJyavCRPhjZY94Selk3STWqsNUCnv7yy9DHdDsNJl7D+yq
+         jr94qhLkjjfQ5P67fAqYQ2PzzSC2k0FOrk1rXRd0hWpCBd22UhL+RhaQF+GX6UpqQQQ7
+         D4wdFvcdj55MZsfbjJHnoLIf/WStMFoxFAgxfX1H9c/b9dE9z0DzvjDF2oCvlvk8EmA4
+         MQJLZDrcToV/NrqynRKBIxcvJxMaI4MjRUCkSVLFshntUe5dLRypIjIXm35Pbek0TRDF
+         +aMRHWrY/V499iQzzUSz/OSLkLMeyS8YPxTult4oQ+O7ArLeT/oxp65gc/7ksfpEekLU
+         ibyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=221SE52RqevFko6XNRwaQM9HvEmE73WFUCY4jlFOO1g=;
+        fh=wjzR9ZYE0IaSG9WQc1L/iETaTAjB3ZUoVePJHdlGwiU=;
+        b=huERTMtGmrQX5RiCVLKM4ctGKRGHFK/8izGI/PMcwkvNyM8iVtTml76CQdtJ72WQXo
+         TxDhLGobsS17TgWaeQQwIwZIk0mcncfybCqnVw1cEEvtBsTHtV4p9kaB4mySQPIYuzRp
+         fUVeczvurnHiHX+ROaFEWP89spUzi4yqttfOBIMfntkDCPW9AwOc8D/9X2G6xSrZXu/0
+         3qrWCoIi4RlXdwjsGUCfnDiU/Uf1FRTJIFTUKK+eZX3FGwbrTlEl3/ogFxNfTxm6aVqp
+         wlNPVPrbSLfs63qP/ueaI+k0iLr4QbTcukYy3ZVKk5WwbMqfjRPx0MsVKws69jFRvpMv
+         lm2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773955314; x=1774560114; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=221SE52RqevFko6XNRwaQM9HvEmE73WFUCY4jlFOO1g=;
+        b=OYuYh8jfWV2zj7Qi8ABMTbYmtjujUtTUnbz7b0NTJLQMYfF2g+mzGrFbUPrc/DO/Pg
+         X6C9wum5FUU8glVsIpa+/uk9lxDtUp/2qYvkrReSXp1AW+VSACojZFSXpUZk01GD4bQG
+         e8JRAo4FYHNQk1LVU2ZlhEANmCqa2Zfe8MW8Ql8zUj73XV1vb/VVJF2B6vAHhoUdyvcH
+         XzFDGGT/kcuuhedVkMzS4aazAjwY9J4vPvRbm/XnjQ3990KiWOOExQw+79gGsWqSuXhw
+         Q98rb8m4CQ9zgW3ItwnUYce8SLHVzIzVcaJWDqnTib3jRUHOC5GViTpktknGdAV/izSU
+         hxsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773955314; x=1774560114;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=221SE52RqevFko6XNRwaQM9HvEmE73WFUCY4jlFOO1g=;
+        b=JuPnRFSeQPN06PBF1UZot5TXnxWnfpPEsFT9GypK2bG0gw8g2fL73/dyvRA3UZDyaD
+         CQQoACIPjYrxH3lnhDQB3WyU8kfadddBLLXJDBzfY7V4YjGYyCxwNyLeuBivh0ZMbFs+
+         FrzwMts3RdkZIsVOeu7m/up8Xp3z2yVb3Z75tk/9i7MgdbxrJVVlHnn/LFSWk9fLN/rz
+         uhkwbbmH5006EXPuQV4uRoUGXe2NcYopnTaBXZZmsCObMz8sFbQAhH+CVs0E2VYsGdSS
+         h4u2dRRnkXET7KDXvZvdLyN33AThnp+6e3MGRud1mmlqoOaKH9JkOwfAMdTASWSQomnB
+         tuhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWZZNIP4+XTBIqVvPDTUCdRd9q5SjFFIMypK94RxJzApAw3aZ/Mt45SIMD0rlS7e9qbCYZqbpWYa1dEoPcpff8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVNvVczwRlUJv++UX0IXGaDxtiBHeEYzytHfWRQx5rnhu4WFh3
+	JtS3mXjHkjaUH77u0E7JF2y/xgscgytonYmGwVRW3joZoo19ZZU1OUFbhpzV0n3O9vrEerFNnFH
+	o9g9GtmJ6aRVvsWCYJBi4EXXZUbVAUQQ=
+X-Gm-Gg: ATEYQzywxdBT6wW5HhI5MAaPJS5r5Y8RRhjM9G84WTZUZ/ZqfaKW0IHfJmBaE67Y0bc
+	PS93ci+yE8GHhau8F9U3MO9Q1MSXn58sgT2Wf6FmSv802F2+d6krUOzAUG/4jhE+u43F1b91jf/
+	o1VSoiWyqbqeiZ0Af+hgNExBpywjhm9cbOjgJ/XPl/5Z3G+xjeniUkSuKAvheCy3c5mjmzGLvl4
+	1gn4QrrxUhxfQ3l7eBTP8je7O2wCCrpi5WZrKr3tOLL7JYdVCiNHho4f9cq0tPTG6HDvjIxE+Jo
+	EnjpaF5rBH2zUhHWwX1fcBneL/OhbMnEPstqIQiI
+X-Received: by 2002:a05:7022:68c:b0:128:d5f1:d594 with SMTP id
+ a92af1059eb24-12a7265ef91mr378865c88.10.1773955313615; Thu, 19 Mar 2026
+ 14:21:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 1/2] net: page_pool: support dumping pps of a
- specific ifindex via Netlink
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- donald.hunter@gmail.com, shuah@kernel.org, matttbe@kernel.org,
- chuck.lever@oracle.com, hawk@kernel.org, linux-kselftest@vger.kernel.org
-References: <20260319035649.2396137-1-kuba@kernel.org>
- <2e4a7b45-8029-425e-8b86-9f3031bd081e@bootlin.com>
- <20260319131843.65de0c2d@kernel.org>
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <20260319131843.65de0c2d@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20260317065137.1533226-1-atwellwea@gmail.com> <20260317065137.1533226-3-atwellwea@gmail.com>
+ <f5c9a512-4779-4cc4-aed9-37ce0131b3b8@redhat.com>
+In-Reply-To: <f5c9a512-4779-4cc4-aed9-37ce0131b3b8@redhat.com>
+From: Wesley Atwell <atwellwea@gmail.com>
+Date: Thu, 19 Mar 2026 15:21:43 -0600
+X-Gm-Features: AaiRm538XUw4IKToQaoAq11Z10_mTYAUbrTsrzh12UMqCaa0aGQGRCabgU4juzM
+Message-ID: <CAN=sVvxQg026ch7k+GKxORd1hpQzQtROT2=tNQ1h2HH-re5-eA@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/3] tcp: keep scaled no-shrink window representable
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, davem@davemloft.net, dsahern@kernel.org, 
+	edumazet@google.com, horms@kernel.org, kuba@kernel.org, kuniyu@google.com, 
+	ncardwell@google.com, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Paolo,
 
+I re-checked that corner more carefully. I do not want to overstate it as a
+common path, but I also do not think the current code rules it out.
 
-On 19/03/2026 21:18, Jakub Kicinski wrote:
-> On Thu, 19 Mar 2026 20:56:46 +0100 Maxime Chevallier wrote:
->>>  	for_each_netdev_dump(net, netdev, state->ifindex) {
->>> +		/* Either the provided ifindex doesn't exist or done dumping */
->>> +		if (ifindex_attr &&
->>> +		    netdev->ifindex != nla_get_u32(ifindex_attr))
->>> +			break;  
->>
->> If the passed ifindex doesn't exist, isn't netdev NULL here ?
-> 
-> The for_each will give us the next netdev after or not enter the loop
-> at all. (the selftest in patch 2 does cover this case FWIW)
+rcv_wscale is fixed at connection setup, while full_space/free_space are
+recomputed later from the current receive-buffer state. The tree explicitly
+allows later SO_RCVBUF reduction, and the window clamp can also change later,
+so I do not see an invariant that keeps full_space above one scale quantum
+once the scale has been negotiated.
 
-Ah I missed the loop skipping step. I like that construct then, wish I'd
-thought of that with the ethnl phy dumpit stuff, I may take inspiration
-here as it avoids treating filtered and non-filtered dumps differently.
+That said, my reason for keeping the small non-zero case is not that
+unconditional scale-down would be less safe. It is that it would also change
+the long-standing behavior that avoids scaling a non-zero offer away to zero.
+My intent here was to remove the larger-window round-up slack without changing
+that smaller legacy case in the same patch.
 
-Sorry for the noise then,
+If you would prefer to also change that small non-zero case, I can do that in
+v2 instead.
 
-Maxime
+I will also rename gran to granularity in v2, if so.
+
+Thanks,
+Wesley
