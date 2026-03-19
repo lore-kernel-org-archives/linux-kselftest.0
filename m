@@ -1,103 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E7925C6EE;
-	Thu, 19 Mar 2026 08:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609CD2E8E16;
+	Thu, 19 Mar 2026 09:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773910041; cv=none; b=DSJxS5G9xfok/yDcgZ/Rbq4WDLVJGmmou5pgWpt7d1Y8vcRM4UwE5Bz3+iHEpeHeOZ84jd6sMV3FVi13h8Le5FnDzV2fd/9JpFSEv8y34R15quGcPs5fgqXRHv65x6wm21tE8uhapII7HIUNfirXwpfiKiNn+p/Uej52Hbvm1mA=
+	t=1773912622; cv=none; b=M7QwlGnHsYPG9ynkoVG5bCa96u8Plslsp/zwbGRefM1z+zQjuI9kBYJ65Alcpx5vLfex/yB5uRLrdc2VKi5eljzaDRH5f5oI7gHSwoYQpNYVi14GfY2JqapMmrTW8M64/2z15O1S6UhOi3w4gMnORdBtdCIcT4UiZn1yHVSqW4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773910041; c=relaxed/simple;
-	bh=pwvwZxQZtDDSZnYJ8zrqkuvH3FZMuj6jpLZlzktWxo4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QOYXzSQRzEXTOpS47MqOLMHw8uoW0rwPiCZR810D+KNw3dGPqIMVn4eT/77C0r1YAxJuUdmJN+I74aseoaW30NiByQVeOkZWQdP164vMWV9u7aa2t2NyKkhqCiDyHYWuyW6/O8UvssjNpJMJEZaS+gilPW1UuKdRbgA17ZHzigQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xnt6CYgG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773912622; c=relaxed/simple;
+	bh=g5EM4pX9cYmpw2XboZ/HmxQq/VtdJvm/30bzyVmZW18=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ZaxGpQTaIObR37c/ofNzNJ/YffW16+D4lQ9SAqYktSBv45XT+IIWHjaiXjVmYVOinQVSTunFTzk3S7W9xBv9HV/lsgSyBWZXyO+QPhNr2iUMLwxjDr1w14fVLdzMNs3qgaqulIsU+zEKVudInfFlyiRJrElyAW9nUwo6XvCGAWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S4tiAHSV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xnt6CYgG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08CAC19424;
-	Thu, 19 Mar 2026 08:47:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4tiAHSV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF33C19424;
+	Thu, 19 Mar 2026 09:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773910041;
-	bh=pwvwZxQZtDDSZnYJ8zrqkuvH3FZMuj6jpLZlzktWxo4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xnt6CYgGMmfUfnixFGE4K9swNrbY3fC8suhYsT4AJgjRqnwVXqhrPL3uB/xUUwuc8
-	 sMFfFyFu6j5LPK8rspzTycLGV3Jl0kA+AikWek+n1osvog0PSsee/D/eFnK/Vx+t44
-	 ImdeqfpU0mG7rYS8j1kuyogr1zXmkER3YZy99pCgYVrxXKB37oMFj0jtqILmfhR/bH
-	 FROv35LALmFSkIet48BnZM3jTcx8MyPlJMp9OAaManIMjQQWlqgwVq4gtw5ol/YBWm
-	 eQFpidkwLxDpk98CUa1VCvYV4aUTruIxTH+o5c7WrpAYrOIVoGbOo1qBCyGiBGHe14
-	 NpFYSLPvUelzg==
-Date: Thu, 19 Mar 2026 09:47:15 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Koichiro Den <den@valinux.co.jp>
-Cc: Christian Bruel <christian.bruel@foss.st.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	fabrice.gasnier@foss.st.com, linux-pci@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] selftests: pci_endpoint: Skip subrange map test if
- iATU allocation fails
-Message-ID: <abu4E-cQP7SBv1Gt@ryzen>
-References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
- <20260318-skip-bar_subrange-tests-if-enospc-v1-1-f1a49534ebea@foss.st.com>
- <vki7ty3z5jncmzeltk7udsbynffdld4xhcm3b2yjrgx25cfqkm@4ld66m3jbjqo>
+	s=k20201202; t=1773912622;
+	bh=g5EM4pX9cYmpw2XboZ/HmxQq/VtdJvm/30bzyVmZW18=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=S4tiAHSVczUMZbwvYfsDOOcsj/4OltTS4CLc+ckNSEoC6vJk6c1skyVt6xg4A0QCb
+	 N8x0zfqXKr0QdmMWPuFhLxTIi0IPdm5G9g49WBlacHnF0gPtFQZVvUZIn02hI836Ql
+	 2pFeXbxYSDEAstt6zX19hFI1016lq++pzMegg729Le6+020FwDtl/cwT+j5GLu9dgd
+	 x7dYY4FpKLvLsUOKugedSjBVivdRE1z/29aKF3JplV2bFvLHIEoxHW8z5KkjGWaHE2
+	 SPv2f4NNU5fvyXUyl2Qave2TBOe/1oCezmjSCr1ljIe68rTavn6Joj6Mn63ayvlVip
+	 XiVaAgC2EaLMA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D0293808200;
+	Thu, 19 Mar 2026 09:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <vki7ty3z5jncmzeltk7udsbynffdld4xhcm3b2yjrgx25cfqkm@4ld66m3jbjqo>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests/net: packetdrill: improve
+ tcp_rcv_neg_window.pkt
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177391261329.1113925.12303763027691478280.git-patchwork-notify@kernel.org>
+Date: Thu, 19 Mar 2026 09:30:13 +0000
+References: 
+ <20260316-improve_tcp_neg_usable_wnd_test-v1-1-f16d5e365107@gmail.com>
+In-Reply-To: 
+ <20260316-improve_tcp_neg_usable_wnd_test-v1-1-f16d5e365107@gmail.com>
+To: Simon Baatz <gmbnomis@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Thu, Mar 19, 2026 at 10:28:41AM +0900, Koichiro Den wrote:
-> On Wed, Mar 18, 2026 at 03:46:27PM +0100, Christian Bruel wrote:
-> > Handle -ENOSPC error. If the number of available inbound ATU entries is
-> > insufficient to map the subrange, skip the test instead of failing.
-> >
-> > Link: https://lore.kernel.org/linux-pci/20260317152707.GA85951@bhelgaas/T/#m87e4c24173097a0ea70195b71aab294ad8d6c283
-> > Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
-> > ---
-> >  tools/testing/selftests/pci_endpoint/pci_endpoint_test.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> > index c417fb3a198b2d92c3060938c23807cc8bea5573..8ea2fda4539d11eb22b22800a7cb8bbaa99c91ba 100644
-> > --- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> > +++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> > @@ -88,6 +88,8 @@ TEST_F(pci_ep_bar, BAR_SUBRANGE_TEST)
-> >		SKIP(return, "Subrange map is not supported");
-> >	if (ret == -ENOBUFS)
-> >		SKIP(return, "BAR is reserved");
-> > +	if (ret == -ENOSPC)
-> > +		SKIP(return, "Not enough ATU entries to allocate subrange");
->
-> Thank you for handling this!
->
-> pci_endpoint_test_bar_subrange() can also return -ENOSPC locally:
-> https://github.com/torvalds/linux/blob/v7.0-rc4/drivers/misc/pci_endpoint_test.c#L538
-> While that is a different resource limit case, I think it would still be
-> reasonable to treat it as SKIP as well.
+Hello:
 
-	sub_size = bar_size / nsub;
-	if (sub_size < sizeof(u32)) {
-		ret = -ENOSPC;
-		goto out_clear;
-	}
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-What is this test for anyway?
+On Mon, 16 Mar 2026 19:51:10 +0100 you wrote:
+> From: Simon Baatz <gmbnomis@gmail.com>
+> 
+> The test depends on accepting a packet that is larger than the
+> advertised window and that does not trigger an immediate ACK.
+> 
+> Previously, the test might still pass even if kernel behavior changed
+> unexpectedly. Add assertions verifying that the large packet was
+> accepted and no ACK was sent.
+> 
+> [...]
 
-If sub_size < 4 ?
- return -ENOSPACE ?
+Here is the summary with links:
+  - [net-next] selftests/net: packetdrill: improve tcp_rcv_neg_window.pkt
+    https://git.kernel.org/netdev/net-next/c/96a584db75bb
 
-ENOSPC seem like a weird return for this.
-
-Wouldn't EINVAL be a better return code for this?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Kind regards,
-Niklas
