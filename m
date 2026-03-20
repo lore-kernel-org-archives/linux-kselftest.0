@@ -1,82 +1,55 @@
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADCB330315
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 08:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BDD2D7DE4;
+	Fri, 20 Mar 2026 08:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773996137; cv=none; b=GvBBanSH6tmoWaZQIiQedd8c3qXJxfyS7mKvvMdbzQlZpsZUlyBl2xG4zCeFJrrM7HvFe+Nbz6eYAQfx+qHUAKeApJDSYW3j731B3s1fK7EHJkHqKoOkW3cSFP2Ii2mzZk1vQRM7lDUM2RpH2VIDa5DbGyUcZmA+0CvHGfBM4aQ=
+	t=1773997113; cv=none; b=E5xRvcDQbrIx7ESL2uPGu9iXmG2uqWZFRMMxtxhONdL1j/GJt0fVBHDOXQSE8jrFUXRaEUcZM78m5KAIZdNU8gh2EbxTGWqORj5UwF3uUvRsXkCn6f/PiS1ixDJ9261pwtZA/0qT3qTSfKELlwCz0Li4wtJTKMc8PhGZ2m4M298=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773996137; c=relaxed/simple;
-	bh=5Q7aLuxOVdADzoU0uivwq0xD+2sqiuHUFUnRzhh3DKo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AE6ioNve5hajMT4AiOOKoWclr5xnH+OWle5nldIc3q/N9ezUVHBAsHUFH1eXLI0ND+4H/+k7geYfPnCbCDjAAReuK+mm/9Cl+/BDH3007jkM2TXXBYKDmX1d5jj+o3NrqGcoSC6DEoW3tULD80OT9iVvT1MyPO+vJwZDXNVEf4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mV1ujL4F; arc=none smtp.client-ip=209.85.215.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773997113; c=relaxed/simple;
+	bh=8nPQneXFF/ra88eUSzDnf+3hZGWsTS3xWgX4U2RN5mA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mN9H4w9SVCZl2jNsFJNzvOU5g+22trt0N4Dd90uAOtTbD71TCDeR1ZMVY7dM7Q8YiBYtPaOft8NrJDKPWudScbaFcWijaLb4+IrDHd04YOQnA1eTZL/w7EEuVWcTe/tqu2h5AHFuRlPq6PmfIZgJaW7VepW9UXvCMj0efSPT5rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o47TkY5w; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mV1ujL4F"
-Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-c73fbdd9b53so605787a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 01:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773996135; x=1774600935; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TVhVfvEdh8PGLTq9OCpKCKnbK78t+8gkIfnExz2ct6g=;
-        b=mV1ujL4F+PLg4+Qoce68BOLDq4TYZ3R+sRDJ8w83pAVFNL697z1QfO9niV0bw53m2d
-         qZ39IAmJCnS1OC0ts9Tegd2l+E9DeQuiK1vWBpY5NzZUs7VFxxprNQwZbd/liQKckaDY
-         i7SI2lryLhX57J8gRIYwDbwVN19q2awvVcgHjUKlNVGJdrOSwGqV8YIKsVqslvViI6xA
-         NrjqSuMOPNbiuvq7Qq8x/EtcXYwgVxGGKuo7RoNFwaQYaR/BxZ4JTsUPaT6ba4BupZXo
-         u7YvN3qz3wvWQLsZpb6VZ2XlnkA/2AfvWXd0MK4a6iuzs6U0W7SWCyG+z9euY1HfopGR
-         YyUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773996135; x=1774600935;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TVhVfvEdh8PGLTq9OCpKCKnbK78t+8gkIfnExz2ct6g=;
-        b=gMkQQmhf+fNEStsbFXsyiWsaxpS7KrMUiimdJ2QCUlrm3/Y196PNNp4wQA1OoSYFli
-         kqJAhhjEDxl/+mQcdFj/MD3kk6hfi/CjYQQB0zh4sB1fKx2ziZtKe6eC+2A0hnhhkYKW
-         1bbnP2MvpZlIJgVe7vs2SYvlQ0pb3euxjyjGfa82RRGx0FZ51/1zK6iHacHJspW7D53e
-         jUOvDwGBCA93s7QVoiQ9OKP2TaM/uoWY6be8lwfSn9EH7mzx2iFgbyVQvI39lomKt1Di
-         hcQtHedxbn4MgeV6It5gdUuE5dCiRAitFeOLFG/yFdwLLkFCWeppUiJ0DS7TBbodejFj
-         yRVw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCc12R4fha1m/CiGAqmVNtjohWpL0jA5nxIrm24ZpIQt2jH+ziF7/2hlg4J/TB/OafpJVnteryOEF1fa7/Gu0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywcwg6Xwg3ffrRfgISLrhMkqHEzj7+ZrKJJhu+FSndsvuJTcWIk
-	0gC/GPAkszx9rw6tagCgCf+0DfDiTKwq4VKXTWyTC82FR6Ls+Qxy0u7x
-X-Gm-Gg: ATEYQzxtX8oMnz6HPgnI5GfuY7rsBQknOIx1gC0vcF7KupF/2oi5shI8EoseFjruOIh
-	8qdtG8l4scZtyPXQrtN2i+SSFfbDxWOMIB88gdPaSsrlobIQV9m5y44AZb9M5bqGfAkB79lC4Ix
-	v9gbGyWbOTTKUShC1g5L690VCYXoMOX6ATLfz4NjOF2S59RdtEcNIxaWINuFrd0NdWvPdZYjfHa
-	r5kUJaLs4uqBrBjjY9yzUe7gx00YSQ+WaUhyIqiI9IuOqYyPD2G2fGyZBOquDD6v6xOafJEutOv
-	+S1eMWvK1Js11QELrXhehe8VdeaDtqMaQhsOq9UrjXpbDLjdfA7LUL/oRTMbj6sON3b+2XgNd4/
-	hYdDD5PZ8D1AOEGq6JseErHzFNwJuvU2OoVilZu94ePbbmmpy7lrN6lG4XK4/hFSF9VdvnCUPGt
-	+v+6KNhWKCuWGBkww/CPwd
-X-Received: by 2002:a05:6a20:3c8e:b0:38e:99a0:105b with SMTP id adf61e73a8af0-39bceb7edb0mr2140353637.51.1773996134580;
-        Fri, 20 Mar 2026 01:42:14 -0700 (PDT)
-Received: from 7940hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c743a7ff47csm1288665a12.6.2026.03.20.01.42.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 01:42:14 -0700 (PDT)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: test access to ringbuf position with map pointer
-Date: Fri, 20 Mar 2026 16:41:55 +0800
-Message-ID: <20260320084155.288417-1-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o47TkY5w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF14C4CEF7;
+	Fri, 20 Mar 2026 08:58:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773997113;
+	bh=8nPQneXFF/ra88eUSzDnf+3hZGWsTS3xWgX4U2RN5mA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=o47TkY5wjE/QZbzbl4U+Np4mGBvnuVxPzvPmdUY/YBSI+jhnLL77gMeuSwgBHJJsT
+	 Q1gKW6CTmiyDZhBJ3ysYo3yfZVK+h6n54YCPNXS3iGZurj1tFNLjcyy6GXfVaV4V+z
+	 9AMHAoX2dDad546UwGX5SHGFB83P+RG9UEp1lz8tMCERZgnqoj6DWjbDrYJ9vOBQn1
+	 fdGp8TE+2J3d4xx1MwTTzE93JdYYfKCc/CqxUTxkPBR1miFHWFXHlOtB6ZUmY8xMKF
+	 gniYkt709406m+ZMv1x8XRXbSfbdRkjhKno/83UirWFwnj3PXmg4Fepdid8X8jWjgv
+	 UdW2oaNe/biFw==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Gal Pressman <gal@nvidia.com>,
+	Willem de Bruijn <willemb@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v7 0/4] ethtool: Dynamic RSS context indirection table resizing
+Date: Fri, 20 Mar 2026 09:58:20 +0100
+Message-ID: <20260320085826.1957255-1-bjorn@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -84,65 +57,160 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add the testing to access the bpf_ringbuf with the map pointer.
-"consumer_pos" and "producer_pos" is accessed in this testing. We reserve
-128 bytes in the ringbuf to test the producer_pos, which should be
-"128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
+Hi!
 
-It will be helpful if we want to evaluate the usage of the ringbuf in bpf
-prog with the consumer and producer position.
+Some NICs (e.g. bnxt) change their RSS indirection table size based on
+the queue count, because the hardware table is a shared resource. The
+ethtool core locks ctx->indir_size at context creation, so drivers
+have to reject channel changes when RSS contexts exist.
 
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
- .../testing/selftests/bpf/progs/map_ptr_kern.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+This series adds resize helpers and wires them up in bnxt. It also
+adds tracking of the user provided indirection table size to the
+ethtool core.
 
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-index efaf622c28dd..c3fa57ec430b 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -647,21 +647,39 @@ static inline int check_devmap_hash(void)
- 	return 1;
- }
- 
-+struct bpf_ringbuf {
-+	unsigned long consumer_pos;
-+	unsigned long producer_pos;
-+} __attribute__((preserve_access_index));
-+
- struct bpf_ringbuf_map {
- 	struct bpf_map map;
-+	struct bpf_ringbuf *rb;
- } __attribute__((preserve_access_index));
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 1 << 10);
- } m_ringbuf SEC(".maps");
- 
- static inline int check_ringbuf(void)
- {
- 	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
- 	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
-+	struct bpf_ringbuf *rb;
-+	void *ptr;
- 
- 	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
- 
-+	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
-+	VERIFY(ptr);
-+
-+	bpf_ringbuf_discard(ptr, 0);
-+	rb = ringbuf->rb;
-+	VERIFY(rb);
-+	VERIFY(rb->consumer_pos == 0);
-+	VERIFY(rb->producer_pos == 128 + 8);
-+
- 	return 1;
- }
- 
+Patch 1 tracks the user-provided indirection table size (user_size)
+in ctx->indir_user_size for non-default RSS contexts and in
+dev->ethtool->rss_indir_user_size for context 0. It is set when the
+indirection table is configured via netlink or ioctl, and cleared to
+zero on reset-to-default.
+
+IFF_RXFH_CONFIGURED is removed, and replaced with rss_indir_user_size.
+The flag is redundant now that user_size captures the same
+information.
+
+Patch 2 adds core resize helpers:
+  ethtool_rxfh_indir_can_resize() - read-only validation for context 0
+  ethtool_rxfh_indir_resize() - fold/unfold context 0 table in place
+  ethtool_rxfh_ctxs_can_resize() - validate all non-default contexts
+  ethtool_rxfh_ctxs_resize() - resize all non-default contexts,
+    with locking and RSS_NTF notifications
+
+Patch 3 uses the resize helpers in bnxt_set_channels().
+
+Patch 4 adds HW tests in rss_drv.py (devices without dynamic table
+sizing are skipped):
+  resize_periodic - fold/unfold with a non-default [3,2,1,0]
+    sub-table (user_size=4), verifying exact content preservation
+    (main + ctx)
+  resize_below_user_size_reject - periodic sub-table with user_size
+    between big and small device table sizes; verifies that shrinking
+    below user_size is rejected even when the table is periodic
+    (main + ctx)
+  resize_nonperiodic_reject - non-periodic table blocks channel
+    reduction, with an extra periodic context to exercise
+    multi-context validation (main + ctx)
+  resize_nonperiodic_no_corruption - failed resize leaves table
+    contents and channel count unchanged (main + ctx)
+
+Running the tests:
+
+  # On real hardware
+  sudo NETIF=eth0 ./rss_drv.py
+
+Changes v6 -> v7:
+
+ - Renamed ethtool_rxfh_indir_clear() to ethtool_rxfh_indir_lost() to
+   align with ethtool_rxfh_context_lost() naming (Jakub)
+ - Updated kdoc to clearly state when the function should  called (Jakub)
+ - Added netdev_err() inside ethtool_rxfh_indir_lost() similar to
+   ethtool_rxfh_context_lost() (Jakub)
+ - In mlx5 mlx5e_attach_netdev(), moved conditional rtnl_lock() above
+   the channel-reduction block so ethtool_rxfh_indir_lost() runs under
+   RTNL when the netdev is registered (needed for ethnl_notify())
+   (sashiko.dev)
+
+Changes v5 -> v6:
+
+ - rss_set_prep_indir() returns user_size (>= 0) on success instead
+   of using a u32 *user_sizep output parameter (Jakub)
+ - Removed IFF_RXFH_CONFIGURED; netif_is_rxfh_configured() now checks
+   dev->ethtool->rss_indir_user_size instead of priv_flags (Jakub)
+ - Added ethtool_rxfh_indir_lost() helper for drivers that
+   forcibly reset indirection tables. Sends ETHTOOL_MSG_RSS_NTF
+   notification. Converted bnxt and mlx5 to use it (Jakub)
+ - ethtool_rxfh_indir_can_resize()/ethtool_rxfh_indir_resize() wrap
+   the internal resize logic for context 0, reading user_size from
+   dev->ethtool->rss_indir_user_size. Removes the need for
+   netif_is_rxfh_configured() guards in drivers (Jakub)
+ - Removed netif_is_rxfh_configured() guards in bnxt_set_channels()
+   and nsim_set_channels() (Jakub)
+ - More consistent function names
+
+Changes v4 -> v5:
+
+ - Track user-provided indirection table size (user_size) as a resize
+   floor. Added indir_user_size to ethtool_rxfh_context and
+   rss_indir_user_size to ethtool_netdev_state. ethtool_rxfh_can_resize()
+   and ethtool_rxfh_resize() now take a user_size parameter and reject
+   shrinking below it. (Jakub)
+ - Propagated user_size out of rss_set_prep_indir() and stored it on
+   successful set in both netlink and ioctl paths.
+ - resize_periodic test now sends a 4-entry sub-table (user_size=4)
+   instead of replicating to full device table size
+ - Added resize_below_user_size_reject test to verify user_size floor.
+ - Removed "Open items" section - user_size tracking is now implemented.
+
+Changes v3 -> v4:
+
+ - Rebased onto net-next
+ - Added Reviewed-by: from Michael
+ - Added missing Cc: to make the pwbots happier
+
+Changes v2 -> v3:
+
+ - Changed ethtool_rxfh_can_resize() to return bool instead of int;
+   true means resize is possible, false means it is not. Inverted
+   callers accordingly. (Jakub)
+ - Added Tested-by from Pavan
+
+Changes v1 -> v2:
+
+ - Dropped netdevsim support and netdevsim selftest (Jakub)
+ - Split ethtool_rxfh_contexts_resize_all() into separate validate
+   (ethtool_rxfh_ctxs_can_resize) and apply (ethtool_rxfh_ctxs_resize)
+   so drivers can validate before closing the device (Jakub)
+ - Shortened helper names (Jakub)
+ - Replaced scoped_guard(mutex) with explicit mutex_lock/unlock
+   (Jakub)
+ - Removed defensive zero-size check, bare expressions instead of != 0
+   comparisons, ! instead of == 0 (Jakub)
+ - In bnxt, moved bnxt_check_rings() before RSS validation and
+   deferred actual resize to after bnxt_close_nic() (Jakub, Michael)
+ - Added comment that RSS table size only changes on P5 chips with
+   older firmware (Michael)
+ - Use non-default [3,2,1,0]xN pattern set via netlink to distinguish
+   correct fold from driver resetting to defaults (Jakub)
+ - Check exact indirection table pattern, not just set(indir) (Jakub)
+ - Use ksft_raises() instead of try/except/else (Jakub)
+ - Removed queue_count=8 from NetDrvEnv (Jakub)
+ - Added ksft_variants to resize_nonperiodic_reject for ctx coverage
+ - Added extra periodic context in reject test for multi-context
+   validation coverage
+ - Added resize_nonperiodic_no_corruption test
+
+
+Björn Töpel (4):
+  ethtool: Track user-provided RSS indirection table size
+  ethtool: Add RSS indirection table resize helpers
+  bnxt_en: Resize RSS contexts on channel count change
+  selftests: rss_drv: Add RSS indirection table resize tests
+
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |   3 +-
+ .../net/ethernet/broadcom/bnxt/bnxt_ethtool.c |  35 ++-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  21 +-
+ include/linux/ethtool.h                       |  13 +
+ include/linux/netdevice.h                     |   7 +-
+ net/ethtool/common.c                          | 183 ++++++++++++++
+ net/ethtool/ioctl.c                           |   9 +-
+ net/ethtool/rss.c                             |  24 +-
+ .../selftests/drivers/net/hw/rss_drv.py       | 233 +++++++++++++++++-
+ 9 files changed, 488 insertions(+), 40 deletions(-)
+
+
+base-commit: ca7e99335aea7c5977683624ba319157a4603f96
 -- 
 2.53.0
 
