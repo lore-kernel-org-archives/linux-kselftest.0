@@ -1,104 +1,96 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732EF275114
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 13:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF00F29DB8F
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 13:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774013520; cv=none; b=k3rh1+FWcVthpAF01M9Gbl8SWiIAcV0mDerSitpdgJltTQjsbqiIvcDG6XFfV4j/6HUSKwhyPzeOC+ut86wrwW4OChGQkcjoTyLh638t//ObjOqbfuJ+RTobrxSFkibhJ4MoPsLTVmXgStp4EteUFFk2ZjL0ek2YthJb5IYxBQM=
+	t=1774014071; cv=none; b=DV6uiYQl4ky+V1dz7S4EJyGT0FWdnV/6GDwTqTnEXJzP9HYsaj4C/G6N4erfr2Qm0sXWkSl7Ihe3ZslPGJ13QI9R8NwFpcRDna082l0I1viwZHEBQhNvvjUDwAKJQSEYlo2vbEbpb1Jox3ysw/HR2lp2D8HPtlNBEIMWqGi3ltQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774013520; c=relaxed/simple;
-	bh=wY5zD2n0xMPvK2mJYnUtl70hsw8J6F9rA9251e67RkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eyTfl/BF3gBHF3bDXZ4cxa31b0LpfTsqNp4mAf3x3uCQFbkl3XxshC6zwlnJNa4tW3Zxm7xr2V+h7DNtEq8tvlKiEtapj5rIn/yT9cTGCVLPL2qd0jirxIf8K5IytqfR7FJcTDSvGwbVmcObPZP6Z2nyFeMxeTr6Zh9tmPBgUVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EiyOY4q5; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1774014071; c=relaxed/simple;
+	bh=4cQ77l3jUUu/0NTgxuBkklNb6Y2mFPOzQNvBYvPzuUA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U1h/MGIG5OgYBz+AlW/qlXkobpAdQwZZcoITppFIRg5AVa2YQebBx3Nk/CKjAZS8KrsBRcgoPYRTGB/XVfZjwqiv7xEVoaguRmStrawODaZqoukD79L9jGb42dlbKCf9+kchfkKbdqhstBfeVqxB3G3jQClPL2WtknL3/5g6K+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ww44zBT8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EiyOY4q5"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4870206f73bso2254635e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 06:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774013518; x=1774618318; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=amc/zHZZsI9E8OgKdEyfRT1GbcDfhXpxuLDiJuXetJ4=;
-        b=EiyOY4q5CG6535iQ32YmD5B5CIben1RtM2vL+agjqwqZG6CEde62TSmAZOF11+A8oI
-         P/ijbnC9Pp+8PewO/rPOMIrk1GiuaDVqk3gHzFCgZFZqABivPf7g23YFR5Td2WHK2rhI
-         rrNADZcn+aAsIwUvy/Kd/bNIyEoPPfTY4mhbrqz4XdGXqEx9OYM8dFktUOtj3U45Ejs2
-         Nb7t1zZvlKUQGpcf6GafAdbsAxauiFG+/K070q7Lg9V2cL0osM65AG+1Y9v/gIMUv38c
-         4pSW6OE8jwtfd7wARCP9rFniDCnNooxTCp3lEhx5w5xvglBBcHanZruGSKx7iBTKG1ek
-         dqOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774013518; x=1774618318;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=amc/zHZZsI9E8OgKdEyfRT1GbcDfhXpxuLDiJuXetJ4=;
-        b=Eqa1jc6n+QU1yyKmLorWcO5qtNGNvnjAlqJpfiYhBI0KWfgRigHtl8AsK5vKFLM7h/
-         NB0K0TodvAKJ5Dply6SRnKZiuXyTPHxwyeB5erj9HGvTpeZ+5a6i/SlroQ3l54nmDq3G
-         XawMomtzxRb8NywfJyNzLREs3NxCrv1kujL+4tDhk2UD46zL1cOpz3q+lcdX7gdx0K0g
-         ohphNqDM6n9+W/DE3H5p9dHEkNV96oh19e4nmlfhi+S57W6eerKgLbefdjl4SYgPqZhg
-         WQZGbsvInBQaJqdsNRufli/+e/va8SqUqV/VQTe0e7Fd2/pgPoTyIvYVk+QcuxyO9aRJ
-         BSGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWAfk6kqhpqUzMC67fJbD1pmu/gzXBgiimbc+gBO9+aXp6AGydRgdyWYddhkbFPKno934T5fEndbzoV77Fc3UE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkwDZD1FvwbsxqLnHy42bI1comvKW3ILleaIvzSy6V6Eieo/24
-	K7PZ84SskeuxPOgcoOwV0+eIpiASUlmkzd6NqP0bDpJ4NLaqt95eB3mbeXVJbPDg0Qo=
-X-Gm-Gg: ATEYQzwFT9rFLD3+1WtK1coKx+nNs+qOx5O3ifWO0OxtAgcCmfesWgbZwsRyd9vgLQ7
-	/Oyq/4ZUMl6isc2LHQBdO/SrmCDAPuan+/OP4hv7a9yd5MhyXQVqNW7uhLKzwd9t3YCpeDkas66
-	7ZJK7krJ+6F/kqgjU6b0lp3VUXLiY6NQR2LHvAPSVDLvFZRSl3kDBOVDCgoqkSPw/20xDlTFKH5
-	URkjV9bywOl/HrSXL1Wm3iSuTwMHbGPV2/nF9ao49cju1mb1QvGOhrzE2sKDsZ1GQBd//egQoKC
-	JClDzTo/3t/xIqLA7tR4enPgoopUwHGA37XpRqTCvakd7EYISUI1mErYy7Zc2DY+s5/6alM5TiT
-	U4+H0QVUKAxlo5dthtH6KvezUcu9H+QOauQvdwH+1r3Rj7gwHFEO7ZhtZN2rzn4wXFQ3uRREmtT
-	QSknW7Zr3DJ4eJAzRR+aQG013Bzw==
-X-Received: by 2002:a05:600c:8b06:b0:485:41c4:e2e4 with SMTP id 5b1f17b1804b1-486fee1ae91mr48403695e9.23.1774013517736;
-        Fri, 20 Mar 2026 06:31:57 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48700377b71sm18314375e9.0.2026.03.20.06.31.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 06:31:57 -0700 (PDT)
-Date: Fri, 20 Mar 2026 14:31:55 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] kselftests: livepatch: Adapt tests to be executed on
- 4.12 kernels
-Message-ID: <ab1MS1OmUVZsmTGq@pathway.suse.cz>
-References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ww44zBT8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC4FC4CEF7
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 13:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774014071;
+	bh=4cQ77l3jUUu/0NTgxuBkklNb6Y2mFPOzQNvBYvPzuUA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ww44zBT8YZ32c5W/sr0XJLW1VRxTvZHMiL/3oSaZdEm53jx6FFoIRcyE/YmJSKuhY
+	 vUpfMsZpnblONjDHF6wQCNtH7jHTt90/TYH4TOHcTZy6TRCTCXXmMA0XTGN38NRNyi
+	 cg8yjzjdr3yrFaHnbJNlH8rLx6ejfEz7mB/MJ/eLuDr156jeE0YJ+NGSj1O7upmW9M
+	 KrAvcUh0+Db+QXarBipd8Sn8vTKBkE5lTxgv+EaJ81rY8x5nUnhF2WCiedOKJEGu2f
+	 ROw2opoBPCWT9eOuWyJILlE0s5KZWlUnCGsOm4ot1lCFLAYcqqYugTNCHXEGyR6bvg
+	 jKNINJOE8MSdQ==
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-64c9a6d7f81so560760d50.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 06:41:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW/yEGi0hchsNQ0eV8AEKGHWGSlXAiZ5dYpj/+s5z0ABlfWy2lHqLPd5O6qkSX1tx4zjJCRvmB3Wxc6Wtrd3EU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDskuOWi16l1zT1pvNj7one0RoD1VqK4Akv9kEAc4w1tL//MiS
+	rmrRvPiaYqCm2ZDd/3fUWbW7Zp2yzCMpM5ywvF65ieLTjncgJ56JSwP106HEVmDxRB+q8+w6RF2
+	PbYBG1Mgf40OpU98IckZ+lHM5zlbsp+Q=
+X-Received: by 2002:a05:690c:4992:b0:79a:9308:956d with SMTP id
+ 00721157ae682-79a93089ad2mr24134867b3.42.1774014070583; Fri, 20 Mar 2026
+ 06:41:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
+References: <20260320104222.1381274-1-ruanjinjie@huawei.com> <20260320104222.1381274-5-ruanjinjie@huawei.com>
+In-Reply-To: <20260320104222.1381274-5-ruanjinjie@huawei.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Fri, 20 Mar 2026 14:40:59 +0100
+X-Gmail-Original-Message-ID: <CAD++jLnGb261e-OBSM0Cq1WeqreC0_mhwr2Drs=jxTA_BPdZJA@mail.gmail.com>
+X-Gm-Features: AaiRm53_RKos6cVTpDm6VjWzuRZcscDfdc9HHkMQundtQ2MYdyZbCDI6tg8vY8E
+Message-ID: <CAD++jLnGb261e-OBSM0Cq1WeqreC0_mhwr2Drs=jxTA_BPdZJA@mail.gmail.com>
+Subject: Re: [PATCH v14 4/4] selftests: sud_test: Support aarch64
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org, 
+	kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com, 
+	agordeev@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com, 
+	oleg@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, hpa@zytor.com, arnd@arndb.de, shuah@kernel.org, 
+	kevin.brodsky@arm.com, yeoreum.yun@arm.com, anshuman.khandual@arm.com, 
+	thuth@redhat.com, ryan.roberts@arm.com, mark.rutland@arm.com, song@kernel.org, 
+	ziyao@disroot.org, schuster.simon@siemens-energy.com, jremus@linux.ibm.com, 
+	akpm@linux-foundation.org, mathieu.desnoyers@efficios.com, kmal@cock.li, 
+	dvyukov@google.com, reddybalavignesh9979@gmail.com, x86@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri 2026-03-13 17:58:31, Marcos Paulo de Souza wrote:
-> These patches don't really change how the patches are run, just skip
-> some tests on kernels that don't support a feature (like kprobe and
-> livepatched living together) or when a livepatch sysfs attribute is
-> missing.
-> 
-> The last patch slightly adjusts check_result function to skip dmesg
-> messages on SLE kernels when a livepatch is removed.
-> 
-> These patches are based on printk/for-next branch.
-> 
-> Please review! Thanks!
+On Fri, Mar 20, 2026 at 11:41=E2=80=AFAM Jinjie Ruan <ruanjinjie@huawei.com=
+> wrote:
 
-JFYI, I am suprised how good was the review made by the Sashiko AI, see
-https://sashiko.dev/#/patchset/20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253%40suse.com
+> From: kemal <kmal@cock.li>
+>
+> Support aarch64 to test "Syscall User Dispatch" feature with
+> sud_test selftest testcase.
+>
+> On qemu-kvm machine, the sud_benchmark test results are as below:
+>
+>         # ./sud_benchmark
+>         Calibrating test set to last ~5 seconds...
+>         test iterations =3D 24500000
+>         Avg syscall time 208ns.
+>         Enabling syscall trapping.
+>         Caught sys_1c2
+>         trapped_call_count 1, native_call_count 0.
+>         Avg syscall time 213ns.
+>         Interception overhead: 2.5% (+5ns).
+>
+> Reviewed-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> Signed-off-by: kemal <kmal@cock.li>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 
-It pointed out many problems mentioned in the human review.
-IMHO, it was also able to explain them very well.
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
-Well, it missed some higher level views.
-
-Best Regards,
-Petr
+Yours,
+Linus Walleij
