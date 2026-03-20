@@ -1,128 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D4138F658;
-	Fri, 20 Mar 2026 11:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3792F3B19B3
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 12:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774007914; cv=none; b=C7Z+oAbIykyrxbppk7299rN8/w7NkaynaH+tQei4FkbJj+TbQRkhF8rTOPL7YxoeNwTVvEs5dvITfXaLkeV6FlvqrnWqYkPEqoG0Ieja8kyZ8tjJl4IsY177K6QiS1yEj/3ZYjNYyw0l6ELb22lRh+jGY72RnhmdgA81YuLebsU=
+	t=1774010460; cv=none; b=R+2tLUuVqHJreI/TbAy3XwluU3DtywEYk92Bwo3xPAISHwgQhMaxSOM5aji0QOB2LSy76JkOCLS+hTxM17R0vSms9AOrCL48M8Oth0bC92hO3e5E5cxnzSVSjOfd6AkZOX0sGKxN+XHqsDo7PEcmmdk86RfGTUwfw39Qkvz9uC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774007914; c=relaxed/simple;
-	bh=Ryo1Qk3L6fhEy2jkfzXaQ5d40PDZj2eheNRbmld+wIc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YXvn+8tc0lr/QOzC2DlZ/vaP2bacRM3X6CQHAn35yX0OH12HQrEkdtIYxf8gtzmWAtCQ66OUzAbIWt8xVIV3TKQMxXZc6t+FXefuT6dGsF+pq/xYxkv8una9DKaX6lvfhM55KlkMj4JaNJgsRvziyNMTUcyBJ8U3sTefrWxTdQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZj1TehD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774010460; c=relaxed/simple;
+	bh=nlSLXtGJiwX9ZtMmKOu07rZzm0ootMaXdI2dBRIMygc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oJC2H/L75mONlgAkt4K150HgeCqKhfnkBGafzjHO1vXXBoFZ3Aci1dafzvBO647NI7Hdz3m+G0mhfbNSxdo6qMAvs4f35oq5g4WYtZ1EYGy4IPOBAxrYAzl7Ob6tij0R3DECAi2gQovsRvYNzORV/DkyP+gW1im1Cpk9CQxTIsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CFRNvwg3; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZj1TehD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C356C4CEF7;
-	Fri, 20 Mar 2026 11:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774007914;
-	bh=Ryo1Qk3L6fhEy2jkfzXaQ5d40PDZj2eheNRbmld+wIc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UZj1TehDLwaJJfofAcz9/qeUE9czNEiAtXFAu65TdU3+3yPMd6v7XpRwGbj1afsQR
-	 XNPJMfCfwHlXEtTY+0WJqstX9r2SfqQZaxxdG0jXtrl9bK5NsD/spqw5yq8tbOYPF4
-	 wifxJj4R7hvAsH/bxI9LTuH7wNEXOqpnR//PYH8xe5czt73pGE2B1lQPqI2c9hzMgP
-	 52e+opofUym8AxByKc+/d7Jh56E9gAIv0peRbAR8WJpgZOpK49ogawWfn4bpBaz1JB
-	 dRHvp4tKCgw218V8vWAckR0HlgsZc8EeXq7t2dB2MgvORpfzCIXItBG5K+L7etRlW6
-	 AQilL/An/hVZw==
-Message-ID: <3beda8ac-4611-4908-a90e-8c91e3df7f2c@kernel.org>
-Date: Fri, 20 Mar 2026 12:58:27 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CFRNvwg3"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso16535445e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 05:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774010453; x=1774615253; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KKuF987lzPL37cu98t8t+5v0Gzw20cN38RF+tKv41j0=;
+        b=CFRNvwg3LLe/nUyRzS5q+HRWcw0XLKLSI5ApbS7H7igYRGZZrz/HL4BDkJw+5Gu6sh
+         BFDwwaRQejNyHG+ZV6n5lTTVJoDEaWQ3udFrpSAuq6HTI3svn0BCCHD61qaAjzWjjLRX
+         hDlnUhfqnYLe091BXU+4zdVhGz+irylvUIG8UUE7I+tWwTiSQ7RhFue3i12fdSy6e734
+         xtABMxXLNC431xxzaE1VEckPTILAc4y3VQ/PL9FSt/OUDNq9KQzWob8zGjE9jEeHIZeK
+         GlxHlcJr4uqDS3buC+nzxUvzNNXcAiCqFCYQcVpOkzBkqOT9B7mNUIbnqHS9cO4QYYXC
+         /Sdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774010453; x=1774615253;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KKuF987lzPL37cu98t8t+5v0Gzw20cN38RF+tKv41j0=;
+        b=GoRh/MGaTD3CPjJiPD1qRclMNALVTPiSZ8GvORAf0FWlXUnus0zypOB2lcRIJ/RtDh
+         493mzbpzGUowQxI1KzmnrF7Rtf53gIjPXb7P1LpknYzqkzC9KpJ7CAqQduwFf+XeqZAm
+         2OOBQEdDvz8nTQc0S0v/AjOLIQL+mhbh1Y+0K6t2DwPmoZFQkPvCq0uCX9qA/y/RBd8n
+         zL1fogxYJ6w75vIvwRyOXaWYpxuQbWHa86oa4Q23q2hBl5xZxrMpiLdw+XFNEFz1NNu8
+         i9k5kFVvYI0Glg/zTCTktz0psY6kJRyb5quMarD665nW55bU5pAyqsumeJuZkckl3sD6
+         qC2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXAes8YpHPI01WGXi14HnX785CISnm41RlPRVLp1pwgVeOdGZ9YjVY5j7ZlygF38LTBU/wMMJ/X4qGP4lcNQOU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMhRS7ym5tSa5c/me2bJbtpyIQ10t76j/60ux1X58WAr14pSCf
+	otYStiohgmXauJ8F9cnq590obbPFfr5fOrMn/H8lTjnYe4/tzF61R8aY
+X-Gm-Gg: ATEYQzztZbSGiIyL5RGzUu1RAblyJ0he8tzxnAz+enx2njvdDGk5PPJ9FF4iYI+7jBn
+	PHT+uwazagKs6uNG6mVG1oP9r5fTuDq8fLUHb4gGdgYzL0b4f3qNoKU/VTeKIzzXx0tPnjybLPb
+	T4QQ+NqMrqeStbOY4qKBe51dirS2ft3KHPN1tMEAp8x6ssx8NWcwFWHPY/QA/fX/mHWdtwAfes5
+	bstfXNpoOMfevxcGzMr24Qz/jCcTmfS+9ldd0pIbI0MaUhgYbDmZ6ApGZY91mrfHTQY5jSd5i4r
+	rGh9j+ewsJFKOx04mUTrIHvGtWBLoR+hzqN0E/DhlsMgoJW8xz+VIX6MGVyctoYiZSgroR+6Dxf
+	BQh6eiA8ytdFBKlWyQojuPIpOHuBCm/Xb0Thy+pe4Hb7GjvRXuJtJT/UtC9+nSm3Lrx+1+Q+0
+X-Received: by 2002:a05:600c:c111:b0:485:3f30:6250 with SMTP id 5b1f17b1804b1-486ff024da8mr29812595e9.20.1774010452991;
+        Fri, 20 Mar 2026 05:40:52 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::d99c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe7d6c54sm146845355e9.4.2026.03.20.05.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2026 05:40:52 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 20 Mar 2026 13:40:51 +0100
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	shuah@kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: test access to ringbuf position
+ with map pointer
+Message-ID: <ab1AUyefoWABRs0T@krava>
+References: <20260320084155.288417-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/15] userfaultfd: introduce mfill_copy_folio_locked()
- helper
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Andrea Arcangeli <aarcange@redhat.com>,
- Axel Rasmussen <axelrasmussen@google.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Hugh Dickins
- <hughd@google.com>, James Houghton <jthoughton@google.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
- Nikita Kalyazin <kalyazin@amazon.com>, Oscar Salvador <osalvador@suse.de>,
- Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>,
- kvm@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org
-References: <20260306171815.3160826-1-rppt@kernel.org>
- <20260306171815.3160826-2-rppt@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260306171815.3160826-2-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320084155.288417-1-dongml2@chinatelecom.cn>
 
-On 3/6/26 18:18, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Fri, Mar 20, 2026 at 04:41:55PM +0800, Menglong Dong wrote:
+> Add the testing to access the bpf_ringbuf with the map pointer.
+> "consumer_pos" and "producer_pos" is accessed in this testing. We reserve
+> 128 bytes in the ringbuf to test the producer_pos, which should be
+> "128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
 > 
-> Split copying of data when locks held from mfill_atomic_pte_copy() into
-> a helper function mfill_copy_folio_locked().
+> It will be helpful if we want to evaluate the usage of the ringbuf in bpf
+> prog with the consumer and producer position.
 > 
-> This makes improves code readability and makes complex
-> mfill_atomic_pte_copy() function easier to comprehend.
-> 
-> No functional change.
-> 
-> Acked-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 > ---
+>  .../testing/selftests/bpf/progs/map_ptr_kern.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> index efaf622c28dd..c3fa57ec430b 100644
+> --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> @@ -647,21 +647,39 @@ static inline int check_devmap_hash(void)
+>  	return 1;
+>  }
+>  
+> +struct bpf_ringbuf {
+> +	unsigned long consumer_pos;
+> +	unsigned long producer_pos;
+> +} __attribute__((preserve_access_index));
+> +
+>  struct bpf_ringbuf_map {
+>  	struct bpf_map map;
+> +	struct bpf_ringbuf *rb;
+>  } __attribute__((preserve_access_index));
+>  
+>  struct {
+>  	__uint(type, BPF_MAP_TYPE_RINGBUF);
+> +	__uint(max_entries, 1 << 10);
 
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
+do you need to set max_entries? there's already check below
+making sure it's 4096
 
--- 
-Cheers,
+jirka
 
-David
+
+>  } m_ringbuf SEC(".maps");
+>  
+>  static inline int check_ringbuf(void)
+>  {
+>  	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
+>  	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
+> +	struct bpf_ringbuf *rb;
+> +	void *ptr;
+>  
+>  	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
+>  
+> +	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
+> +	VERIFY(ptr);
+> +
+> +	bpf_ringbuf_discard(ptr, 0);
+> +	rb = ringbuf->rb;
+> +	VERIFY(rb);
+> +	VERIFY(rb->consumer_pos == 0);
+> +	VERIFY(rb->producer_pos == 128 + 8);
+> +
+>  	return 1;
+>  }
+>  
+> -- 
+> 2.53.0
+> 
