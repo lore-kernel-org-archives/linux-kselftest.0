@@ -1,68 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9DF34DB54;
-	Fri, 20 Mar 2026 19:35:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A191335F61E;
+	Fri, 20 Mar 2026 19:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774035322; cv=none; b=TstsRQ873J0vA+JmQn+TGYoDlqJvCSQFEcpBVnT4Re3+/5z5ScmqsUlmrwfkrmrCW1qF+MT07AvJKXt1LXjZZhfrn2dQu8ptVrJsTBfL/vN8L0vLBhSk1yRq4AUEnogrYSfmwFE123cI2BSFArKbskgHgom2hL6R1yidUf855+k=
+	t=1774036042; cv=none; b=tKc0ApyWz6oi0uhxBf13ha38Le1RnENG4k7H7hTNOnHZS51ISdWruP2RDd9mnQA2ADs0OYGgCsiSvrUcQTD2ecGNSKQ00dzyo8U9V9zJxuO3pT0BbGm5V3ZuNHU5qRfLZvns0VGI9I9kJ/S70Av+Z7P+yal7b+oS+X1JD8GzDOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774035322; c=relaxed/simple;
-	bh=lz8NbgQKGoPYkg9rAXWIFF2VzNwNk75zfobC+DqUxZ4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=lVqxHxDDp61+a45c/k7bkWdTS6vKbBwbrb0rSf0iMCnvPewf/Tqqi8/oolyU9wJ1U3O9GJc7jyIF2teyJSlWSw5s6c8Wp9IUAKXq88wuvol9m9odWjgwvWj7YJU8AP5OQCE6NjL+fxQMvitlnqNhx7AQgFUXS5S+/PPJTDmt90c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Oew7NkoS; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Oew7NkoS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438F9C2BCC6;
-	Fri, 20 Mar 2026 19:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774035321;
-	bh=lz8NbgQKGoPYkg9rAXWIFF2VzNwNk75zfobC+DqUxZ4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Oew7NkoSOTo3/RzCToFkaK99ExN8a/9ytm1keifE+lhzyqQTb083d2zboZF+og7En
-	 fZvqvq9GFceNQAg0+KJWN5eEzQga/3rPaTSx6vGjCWUT1qBEOE04hIWxKIJh1JW62P
-	 YuD0rDhqiN0Bfip4E9lzKEx5JAnsV/vsrPsJ4d/4=
-Date: Fri, 20 Mar 2026 12:35:20 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Li Wang <liwang@redhat.com>
-Cc: Yosry Ahmed <yosry@kernel.org>, yosryahmed@google.com,
- nphamcs@gmail.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, Johannes Weiner
- <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, Michal
- =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>, Muchun Song
- <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, Roman Gushchin
- <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>
-Subject: Re: [PATCH v3 1/7] selftests/cgroup: skip test_zswap if zswap is
- globally disabled
-Message-Id: <20260320123520.616900ef63996ba448bcd91f@linux-foundation.org>
-In-Reply-To: <CAEemH2cQSoTEVb+8NxZpc=qQVrd5DBhj7HmJA5o9GZFke3zj0Q@mail.gmail.com>
-References: <20260313043532.103987-1-liwang@redhat.com>
-	<CAO9r8zMsbVHKnCzfQcdtomRMWTNFgTGY4XALxwm+i9m1SUPPvg@mail.gmail.com>
-	<abPEALhYmtBnEULi@redhat.com>
-	<CAO9r8zMciNGa1ei-pSvx+ndrCJtZguGj12R3sa8PkDHYwsvGzw@mail.gmail.com>
-	<CAEemH2cQSoTEVb+8NxZpc=qQVrd5DBhj7HmJA5o9GZFke3zj0Q@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1774036042; c=relaxed/simple;
+	bh=luQp34YqCJQJMr1YdZuIjYAPSkHmmtEPxkVN1w1TxtU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UgaM04RwkHB4jk/a84uc31kVDaADL2/yBLrSPM7o01Vqonlut0SR09+y6DY/K43GjMQEhrma6BWKqOr3qu1lsawPoSaIWicI0nDWm3JqJd9jFODp8+1BYTkrBPMpetwLFophiB+5slir66i5Oq8FJyK5gTW1zdNwixuVUgbp6qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C3241596;
+	Fri, 20 Mar 2026 12:47:06 -0700 (PDT)
+Received: from NH27D9T0LF (unknown [10.57.20.69])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B772C3FA1F;
+	Fri, 20 Mar 2026 12:47:10 -0700 (PDT)
+Date: Fri, 20 Mar 2026 20:46:43 +0100
+From: Emanuele Rocca <emanuele.rocca@arm.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, Clint George <clintbgeorge@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [PATCH] kselftest/coredump: reintroduce null pointer dereference
+Message-ID: <ab2kI0PI_Vk6bU88@NH27D9T0LF>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 20 Mar 2026 09:25:10 +0800 Li Wang <liwang@redhat.com> wrote:
+Commit 673a55cc49da replaced the null pointer dereference used in
+crashing_child() with __builtin_trap to address the following LLVM warnings:
 
-> Hi Yosry,
-> 
-> Do you know who will help merge this patchset?
+ coredump_test_helpers.c:59:6: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+ coredump_test_helpers.c:59:6: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
 
-That would be me.
+All coredump tests expect crashing_child() to result in a SIGSEGV. However, the
+behavior of __builtin_trap is architecture-dependent. On x86 it yields SIGILL,
+on aarch64 SIGTRAP. Given that neither of those signals are SIGSEGV, both
+coredump_socket_test and coredump_socket_protocol_test are currently failing:
 
-> Should I wait or ping someone to move on the process?
+ get_pidfd_info: mask=0xd7, coredump_mask=0x5, coredump_signal=5
+ socket_coredump_signal_sigsegv: coredump_signal=5, expected SIGSEGV=11
 
-A few more reviewed-by's would be nice.
+Qualify the pointer with volatile instead of calling __builtin_trap to fix the
+tests.
 
-Meanwhile, AI review has a lot of things to say:
-	https://sashiko.dev/#/patchset/20260313043532.103987-1-liwang@redhat.com
+Signed-off-by: Emanuele Rocca <emanuele.rocca@arm.com>
+---
+ tools/testing/selftests/coredump/coredump_test_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.c b/tools/testing/selftests/coredump/coredump_test_helpers.c
+index 5c8adee63641..2c850e0b1b57 100644
+--- a/tools/testing/selftests/coredump/coredump_test_helpers.c
++++ b/tools/testing/selftests/coredump/coredump_test_helpers.c
+@@ -56,7 +56,7 @@ void crashing_child(void)
+ 		pthread_create(&thread, NULL, do_nothing, NULL);
+ 
+ 	/* crash on purpose */
+-	__builtin_trap();
++	i = *(volatile int *)NULL;
+ }
+ 
+ int create_detached_tmpfs(void)
+-- 
+2.43.0
+
