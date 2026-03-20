@@ -1,353 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59601376BFD;
-	Fri, 20 Mar 2026 08:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BE333ADBA;
+	Fri, 20 Mar 2026 09:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773997130; cv=none; b=ZHM9EfLWqHWV/kS9oN3HBs62qlg0JlzGQMkWwypHAH8r3fJhSgaVzhQg3lf2E2n2Voigf9xtaIGdOMiXBDLvKwt89HHjCJuEFOPFGJCTSWUH0HCcXJ7E88OkIVdy0OySS/twhUbxOVr1RbRfmy3OLGpILZvgiwwd9HSAB2ZmYBk=
+	t=1773998487; cv=none; b=TNuy9zTGdNtNVocvNswLUiLeidTDF3XYoD0vfonprWhUAcxJi5AIJYHKHIAlSg9UfGbGj7jD0hRqsYVF3rSyHDuMrifsgW3Dx/ihFUSmouyk7wUEfAfW5YzpoxUhN/ytHCPbUDWdK//O0Fmv0h1vVWsVKklNZon5ZyaIYe3XJWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773997130; c=relaxed/simple;
-	bh=n31d8NYjTDg4u78LNNFct5Yi6pJSfLNaOmI/4D6Nfd8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MROhQWoE/B/15DjKDxObCCBjU1KZwwj1kJPkbWPGZN4EcXGb0LBgqaV7oMuNOflUcryKO/GMrN+4ESvMAHZkhopfVBus2Ek+XvhWlCRELak8LvyKmVecxtrL+W1wZ2nfkwG9URl5iZjxqIj3MR1Rioza/ipotRpF4tKIFKKt3vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z8dV2r4B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773998487; c=relaxed/simple;
+	bh=3m8Eshu25DLuulkOFyj7c2pOEu+9wu8nxRGbBQ/DhQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=lONxlu375+Rq/1D/CmjdwLNhGo4wqGN8mJxH2uND+oaL/rWLus1BPRA87r5iasPp/nu0bhl3usQrYmZ6xdzKzbUBZ6+30q7Za+l8uo4r1cJwr9fOCZwtuZ7ZYhsAuVZeBp6k2R5WKfwcOF+FX/vps5Wm2O9/X9nrde81AjH3bb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FgyWhZ0T; arc=none smtp.client-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z8dV2r4B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43224C4CEF7;
-	Fri, 20 Mar 2026 08:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773997130;
-	bh=n31d8NYjTDg4u78LNNFct5Yi6pJSfLNaOmI/4D6Nfd8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z8dV2r4Boh1D1IuphrQlWfJnmQpdloXi1stlxvXmqkpYR6hPrWdzARWamdzUfnhKs
-	 YG+2Z08r1+zpyIVsOkQaoz9tB+tJCjk/L2fwF0daCQE63Wm4bRTFUUJsK1kNOEHNUq
-	 CYutHtVbRpiAa5c7HWiri+OeL2xK91WStI4k20NpWUBLolEH+K4AZv0aEZW85p92cK
-	 v2MV6UYacKg9MB4QZhVONNjF2KkAHU/p1tvGUsw4Zc3v4WAgwDGhFelBvyJg2VHSJC
-	 xFSPn4mnGQdT2FEOzGokyqvcNYfFUl5h+2Y79CYi3spDxkGNF/nuyZyPCQmNrqpVym
-	 m1VImU44ndqnw==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To: Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Gal Pressman <gal@nvidia.com>,
-	Willem de Bruijn <willemb@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v7 4/4] selftests: rss_drv: Add RSS indirection table resize tests
-Date: Fri, 20 Mar 2026 09:58:24 +0100
-Message-ID: <20260320085826.1957255-5-bjorn@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260320085826.1957255-1-bjorn@kernel.org>
-References: <20260320085826.1957255-1-bjorn@kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FgyWhZ0T"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Vg0WdVEqTXSBpZm4qvokjHJVOQZLDCFu+VDlhdAL6G4=;
+	b=FgyWhZ0T5h9S4nlhkYys1pcjT6ZC/1I85cy8eT5YS7tx3+DSGmHWZ10EZE3CZ2WXQs5VhM6MF
+	FnvwCFH/7bx7ugv5LebsKdkh1RL7gPXdbAmgbld9PJVIxQZXNKqbgTz8AP3Gwom/WPQmUNz4hGI
+	i1pUtNpz2oiLDKm+uTscfwk=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fccPZ6NfrzKm4D;
+	Fri, 20 Mar 2026 17:16:18 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4B5B6402AB;
+	Fri, 20 Mar 2026 17:21:20 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 20 Mar 2026 17:21:17 +0800
+Message-ID: <6a01d0ee-86b2-7dcf-eb62-61bc8b5864ef@huawei.com>
+Date: Fri, 20 Mar 2026 17:21:15 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v13 RESEND 13/14] arm64: Use generic TIF bits for common
+ thread flags
+Content-Language: en-US
+To: Kevin Brodsky <kevin.brodsky@arm.com>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <oleg@redhat.com>, <chenhuacai@kernel.org>,
+	<kernel@xen0n.name>, <hca@linux.ibm.com>, <gor@linux.ibm.com>,
+	<agordeev@linux.ibm.com>, <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
+	<tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <arnd@arndb.de>,
+	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
+	<kees@kernel.org>, <wad@chromium.org>, <deller@gmx.de>, <macro@orcam.me.uk>,
+	<akpm@linux-foundation.org>, <ldv@strace.io>, <anshuman.khandual@arm.com>,
+	<ryan.roberts@arm.com>, <mark.rutland@arm.com>, <thuth@redhat.com>,
+	<song@kernel.org>, <ada.coupriediaz@arm.com>, <linusw@kernel.org>,
+	<broonie@kernel.org>, <pengcan@kylinos.cn>, <liqiang01@kylinos.cn>,
+	<ziyao@disroot.org>, <guanwentao@uniontech.com>, <guoren@kernel.org>,
+	<schuster.simon@siemens-energy.com>, <jremus@linux.ibm.com>,
+	<david@kernel.org>, <mathieu.desnoyers@efficios.com>, <edumazet@google.com>,
+	<kmal@cock.li>, <dvyukov@google.com>, <reddybalavignesh9979@gmail.com>,
+	<x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-s390@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260317082020.737779-1-ruanjinjie@huawei.com>
+ <20260317082020.737779-14-ruanjinjie@huawei.com>
+ <16598f59-df24-488b-af74-e3f2a2732755@arm.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <16598f59-df24-488b-af74-e3f2a2732755@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-Add resize tests to rss_drv.py. Devices without dynamic table sizing
-are skipped via _require_dynamic_indir_size().
 
-resize_periodic: set a periodic 4-entry table, shrink channels to
-fold, grow back to unfold. Check the exact pattern is preserved. Has
-main and non-default context variants.
 
-resize_below_user_size_reject: send a periodic table with user_size
-between the big and small device table sizes. Verify that shrinking
-below user_size is rejected even though the table is periodic. Has
-main and non-default context variants.
+On 2026/3/20 1:07, Kevin Brodsky wrote:
+> On 17/03/2026 09:20, Jinjie Ruan wrote:
+>> Use the generic TIF bits defined in <asm-generic/thread_info_tif.h> for
+>> standard thread flags (TIF_SIGPENDING, TIF_NEED_RESCHED, TIF_NOTIFY_RESUME,
+>> TIF_RESTORE_SIGMASK, TIF_SINGLESTEP, etc.) instead of defining
+>> them locally.
+>>
+>> Arm64-specific bits (TIF_FOREIGN_FPSTATE, TIF_MTE_ASYNC_FAULT, TIF_SVE,
+>> TIF_SSBD, etc.) are renumbered to start at bit 16 to avoid conflicts.
+>>
+>> This enables RSEQ optimizations which require CONFIG_HAVE_GENERIC_TIF_BITS
+>> combined with the generic entry infrastructure (already used by arm64).
+>>
+>> Cc: Thomas Gleixner <tglx@kernel.org>
+>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+>> ---
+>>  arch/arm64/Kconfig                   |  1 +
+>>  arch/arm64/include/asm/thread_info.h | 62 ++++++++++++----------------
+>>  2 files changed, 28 insertions(+), 35 deletions(-)
+>>
 
-resize_nonperiodic_reject: set a non-periodic table (equal N), verify
-that channel reduction is rejected.
+[...]
 
-resize_nonperiodic_no_corruption: verify a failed resize leaves both
-the indirection table contents and the channel count unchanged.
+>> + */
+>> +#define HAVE_TIF_NEED_RESCHED_LAZY
+>> +#define HAVE_TIF_RESTORE_SIGMASK
+>> +#define HAVE_TIF_SINGLESTEP
+>> +
+>> +#include <asm-generic/thread_info_tif.h>
+>> +
+>> +#define TIF_FOREIGN_FPSTATE	16	/* CPU's FP state is not current's */
+>> +#define TIF_MTE_ASYNC_FAULT	17	/* MTE Asynchronous Tag Check Fault */
+>> +#define TIF_FREEZE		18
+> 
+> Turns out this flag became unused a long time ago, see commit
+> d88e4cb67197 ("freezer: remove now unused TIF_FREEZE"), and it was
+> probably reintroduced by mistake in the original arm64 implementation,
+> commit b3901d54dc4f ("arm64: Process management"). Good opportunity to
+> remove it I think.
 
-Signed-off-by: Björn Töpel <bjorn@kernel.org>
----
- .../selftests/drivers/net/hw/rss_drv.py       | 233 +++++++++++++++++-
- 1 file changed, 229 insertions(+), 4 deletions(-)
+Totally agree. Let's get rid of it. No point in keeping dead code.
 
-diff --git a/tools/testing/selftests/drivers/net/hw/rss_drv.py b/tools/testing/selftests/drivers/net/hw/rss_drv.py
-index 2d1a33189076..bd59dace6e15 100755
---- a/tools/testing/selftests/drivers/net/hw/rss_drv.py
-+++ b/tools/testing/selftests/drivers/net/hw/rss_drv.py
-@@ -5,9 +5,9 @@
- Driver-related behavior tests for RSS.
- """
- 
--from lib.py import ksft_run, ksft_exit, ksft_ge
--from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx
--from lib.py import defer, ethtool
-+from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge
-+from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, ksft_raises
-+from lib.py import defer, ethtool, CmdExitFailure
- from lib.py import EthtoolFamily, NlError
- from lib.py import NetDrvEnv
- 
-@@ -45,6 +45,18 @@ def _maybe_create_context(cfg, create_context):
-     return ctx_id
- 
- 
-+def _require_dynamic_indir_size(cfg, ch_max):
-+    """Skip if the device does not dynamically size its indirection table."""
-+    ethtool(f"-X {cfg.ifname} default")
-+    ethtool(f"-L {cfg.ifname} combined 2")
-+    small = len(_get_rss(cfg)['rss-indirection-table'])
-+    ethtool(f"-L {cfg.ifname} combined {ch_max}")
-+    large = len(_get_rss(cfg)['rss-indirection-table'])
-+
-+    if small == large:
-+        raise KsftSkipEx("Device does not dynamically size indirection table")
-+
-+
- @ksft_variants([
-     KsftNamedVariant("main", False),
-     KsftNamedVariant("ctx", True),
-@@ -76,11 +88,224 @@ def indir_size_4x(cfg, create_context):
-         _test_rss_indir_size(cfg, test_max, context=ctx_id)
- 
- 
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_periodic(cfg, create_context):
-+    """Test that a periodic indirection table survives channel changes.
-+
-+    Set a non-default periodic table ([3, 2, 1, 0] x N) via netlink,
-+    reduce channels to trigger a fold, then increase to trigger an
-+    unfold. Using a reversed pattern (instead of [0, 1, 2, 3]) ensures
-+    the test can distinguish a correct fold from a driver that silently
-+    resets the table to defaults. Verify the exact pattern is preserved
-+    and the size tracks the channel count.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+
-+    # Set a non-default periodic pattern via netlink.
-+    # Send only 4 entries (user_size=4) so the kernel replicates it
-+    # to fill the device table. This allows folding down to 4 entries.
-+    rss = _get_rss(cfg, context=ctx_id)
-+    orig_size = len(rss['rss-indirection-table'])
-+    pattern = [3, 2, 1, 0]
-+    req = {'header': {'dev-index': cfg.ifindex}, 'indir': pattern}
-+    if ctx_id:
-+        req['context'] = ctx_id
-+    else:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+    cfg.ethnl.rss_set(req)
-+
-+    # Shrink — should fold
-+    ethtool(f"-L {cfg.ifname} combined 4")
-+    rss = _get_rss(cfg, context=ctx_id)
-+    indir = rss['rss-indirection-table']
-+
-+    ksft_ge(orig_size, len(indir), "Table did not shrink")
-+    ksft_eq(indir, [3, 2, 1, 0] * (len(indir) // 4),
-+            "Folded table has wrong pattern")
-+
-+    # Grow back — should unfold
-+    ethtool(f"-L {cfg.ifname} combined {ch_max}")
-+    rss = _get_rss(cfg, context=ctx_id)
-+    indir = rss['rss-indirection-table']
-+
-+    ksft_eq(len(indir), orig_size, "Table size not restored")
-+    ksft_eq(indir, [3, 2, 1, 0] * (len(indir) // 4),
-+            "Unfolded table has wrong pattern")
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_below_user_size_reject(cfg, create_context):
-+    """Test that shrinking below user_size is rejected.
-+
-+    Send a table via netlink whose size (user_size) sits between
-+    the small and large device table sizes. The table is periodic,
-+    so folding would normally succeed, but the user_size floor must
-+    prevent it.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+
-+    # Measure the table size at max channels
-+    rss = _get_rss(cfg, context=ctx_id)
-+    big_size = len(rss['rss-indirection-table'])
-+
-+    # Measure the table size at reduced channels
-+    ethtool(f"-L {cfg.ifname} combined 4")
-+    rss = _get_rss(cfg, context=ctx_id)
-+    small_size = len(rss['rss-indirection-table'])
-+    ethtool(f"-L {cfg.ifname} combined {ch_max}")
-+
-+    if small_size >= big_size:
-+        raise KsftSkipEx("Table did not shrink at reduced channels")
-+
-+    # Find a user_size
-+    user_size = None
-+    for div in [2, 4]:
-+        candidate = big_size // div
-+        if candidate > small_size and big_size % candidate == 0:
-+            user_size = candidate
-+            break
-+    if user_size is None:
-+        raise KsftSkipEx("No suitable user_size between small and big table")
-+
-+    # Send a periodic sub-table of exactly user_size entries.
-+    # Pattern safe for 4 channels.
-+    pattern = [0, 1, 2, 3] * (user_size // 4)
-+    if len(pattern) != user_size:
-+        raise KsftSkipEx(f"user_size ({user_size}) not divisible by 4")
-+    req = {'header': {'dev-index': cfg.ifindex}, 'indir': pattern}
-+    if ctx_id:
-+        req['context'] = ctx_id
-+    else:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+    cfg.ethnl.rss_set(req)
-+
-+    # Shrink channels — table would go to small_size < user_size.
-+    # The table is periodic so folding would work, but user_size
-+    # floor must reject it.
-+    with ksft_raises(CmdExitFailure):
-+        ethtool(f"-L {cfg.ifname} combined 4")
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_nonperiodic_reject(cfg, create_context):
-+    """Test that a non-periodic table blocks channel reduction.
-+
-+    Set equal weight across all queues so the table is not periodic
-+    at any smaller size, then verify channel reduction is rejected.
-+    An additional context with a periodic table is created to verify
-+    that validation catches the non-periodic one even when others
-+    are fine.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+    ctx_ref = f"context {ctx_id}" if ctx_id else ""
-+
-+    # Create an extra context with a periodic (foldable) table so that
-+    # the validation must iterate all contexts to find the bad one.
-+    extra_ctx = _maybe_create_context(cfg, True)
-+    ethtool(f"-X {cfg.ifname} context {extra_ctx} equal 2")
-+
-+    ethtool(f"-X {cfg.ifname} {ctx_ref} equal {ch_max}")
-+    if not create_context:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    with ksft_raises(CmdExitFailure):
-+        ethtool(f"-L {cfg.ifname} combined 2")
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_nonperiodic_no_corruption(cfg, create_context):
-+    """Test that a failed resize does not corrupt table or channel count.
-+
-+    Set a non-periodic table, attempt a channel reduction (which must
-+    fail), then verify both the indirection table contents and the
-+    channel count are unchanged.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+    ctx_ref = f"context {ctx_id}" if ctx_id else ""
-+
-+    ethtool(f"-X {cfg.ifname} {ctx_ref} equal {ch_max}")
-+    if not create_context:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    rss_before = _get_rss(cfg, context=ctx_id)
-+
-+    with ksft_raises(CmdExitFailure):
-+        ethtool(f"-L {cfg.ifname} combined 2")
-+
-+    rss_after = _get_rss(cfg, context=ctx_id)
-+    ksft_eq(rss_after['rss-indirection-table'],
-+            rss_before['rss-indirection-table'],
-+            "Indirection table corrupted after failed resize")
-+
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ksft_eq(channels['combined-count'], ch_max,
-+            "Channel count changed after failed resize")
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
-     with NetDrvEnv(__file__) as cfg:
-         cfg.ethnl = EthtoolFamily()
--        ksft_run([indir_size_4x], args=(cfg, ))
-+        ksft_run([indir_size_4x, resize_periodic,
-+                  resize_below_user_size_reject,
-+                  resize_nonperiodic_reject,
-+                  resize_nonperiodic_no_corruption], args=(cfg, ))
-     ksft_exit()
- 
- 
--- 
-2.53.0
+Thanks for the review.
 
+> 
+> Otherwise:
+> 
+> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> 
+>> +#define TIF_32BIT		19      /* 32bit process */
+>> +#define TIF_SVE			20	/* Scalable Vector Extension in use */
+>> +#define TIF_SVE_VL_INHERIT	21	/* Inherit SVE vl_onexec across exec */
+>> +#define TIF_SSBD		22	/* Wants SSB mitigation */
+>> +#define TIF_TAGGED_ADDR		23	/* Allow tagged user addresses */
+>> +#define TIF_SME			24	/* SME in use */
+>> +#define TIF_SME_VL_INHERIT	25	/* Inherit SME vl_onexec across exec */
+>> +#define TIF_KERNEL_FPSTATE	26	/* Task is in a kernel mode FPSIMD section */
+>> +#define TIF_TSC_SIGSEGV		27	/* SIGSEGV on counter-timer access */
+>> +#define TIF_LAZY_MMU_PENDING	28	/* Ops pending for lazy mmu mode exit */
+>>  
+>> -#define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
+>> -#define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+>> -#define _TIF_NEED_RESCHED_LAZY	(1 << TIF_NEED_RESCHED_LAZY)
+>> -#define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
+>> -#define _TIF_FOREIGN_FPSTATE	(1 << TIF_FOREIGN_FPSTATE)
+>> -#define _TIF_PATCH_PENDING	(1 << TIF_PATCH_PENDING)
+>> -#define _TIF_UPROBE		(1 << TIF_UPROBE)
+>> -#define _TIF_32BIT		(1 << TIF_32BIT)
+>> -#define _TIF_SVE		(1 << TIF_SVE)
+>> -#define _TIF_MTE_ASYNC_FAULT	(1 << TIF_MTE_ASYNC_FAULT)
+>> -#define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
+>> -#define _TIF_TSC_SIGSEGV	(1 << TIF_TSC_SIGSEGV)
+>> +#define _TIF_FOREIGN_FPSTATE	BIT(TIF_FOREIGN_FPSTATE)
+>> +#define _TIF_32BIT		BIT(TIF_32BIT)
+>> +#define _TIF_SVE		BIT(TIF_SVE)
+>> +#define _TIF_MTE_ASYNC_FAULT	BIT(TIF_MTE_ASYNC_FAULT)
+>> +#define _TIF_TSC_SIGSEGV	BIT(TIF_TSC_SIGSEGV)
+>>  
+>>  #ifdef CONFIG_SHADOW_CALL_STACK
+>>  #define INIT_SCS							\
+> 
