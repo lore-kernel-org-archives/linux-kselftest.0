@@ -1,145 +1,121 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9278538D68E
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 13:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359E63BE14C;
+	Fri, 20 Mar 2026 13:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774014117; cv=none; b=mMC6YpYuHZclPRMZF33ejLgVATPvB91yG/gs3AbRYrYTOC4IsjgYgQlK/zZ0YHq65WYlaTok1UXvET4U6y0NL337qEgydwLu+0QCSlos6uwsWtuy/ORrJRTyzmDBNLTe57yFO6bBocnkfExZSY7KDo286hNIZq0GjS2Ww9CNkoc=
+	t=1774014226; cv=none; b=WAcVwv7ughwUJxR9UOZGxzpGHoI7dSc7OccROXhttOGyG9gujyejD+2GiS67W7ED+keADcsH2ILED59uIZnyO7xqqkfl0IuH8JR4/vQ5xZtC9zpEk6Hb4qv4/9B70r5789F5b8G/8YPf1U9PJPFCdSuUG6yEwY/DPbzPpJq0now=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774014117; c=relaxed/simple;
-	bh=WwESOdXDfmYShiieGLB63KsCG1PufYfWbMl4RCcvGqs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gDyg/jZFMkiJXDLtCAjS0xGNjDvuXZsIglD3gXXlM1zVQQy6eW5cA+C1H8JZvAABXqokW8J7CW8GmxtLaqnquVLa+9K85hZShKiyT3rZpqpR3hIP7lBHsizOd4TENwwWA6u/tYs6HSC2qG5UA9HWifmAtZUhjrzKsNqqEikGItI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OWBGUbg8; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1774014226; c=relaxed/simple;
+	bh=REdsHyTaW8dT1fc7fefZKHjbQODkQcLjcxpu1UnGYck=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cUPnEnmYJMZ7mVFlgf8STr4KzjUx1ePDlNJhikF+N6ObH9740lhs+tzUEAAzsGom9o3HkrED4ELzleNHHIrPjtnJ/6x/x2gQwSfy6Dbc1Jmz+H6khH4bLFTOJhS0v7QSxMvboNZM4Lfaf1OYIes3F92SIq90ucHgDDRQsIx5V/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kfjxitld; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OWBGUbg8"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-439b9b190easo1523557f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 06:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774014114; x=1774618914; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Pj4MC8T5uD6QbNxS5LtnCZJ45IF95A7XBuXQVLse3fo=;
-        b=OWBGUbg8U7yySiSCsxCepQMPYLJwrEvvQZFPl/LXDyJqx2oSQv9MTYxlMigm15oA+v
-         heebIcvE/1YiwYzyphFdX98IS2vruSIZtg3QUQGaAwkbKNbxaeWrz3fyS93lB+O8DM4j
-         ymEaC3Dpm2J22gYfiZX/SL0ufH6qvnslQvzim5/CAgIbR0CX2OXOF1iqV0S8cz4mOITS
-         W+f2MvDYYOA8KpoZ9NXaRD03/jg3cpOHE+updLYJKmfLT9gzWdM7E28jbR+LLqJokztt
-         g9kwAawFDAU6Xn4owOSpDGTIREZH/zd+5wVh9yaWZp6WBDP7TEJgfg5l9DCvBBzrqqdx
-         jiXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774014114; x=1774618914;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pj4MC8T5uD6QbNxS5LtnCZJ45IF95A7XBuXQVLse3fo=;
-        b=NJJc/sl4rZhvAd6GXeUmN3YJyGvaZ3Q+ZCpTbDLScelcF1N2SvYDTXMQDbYwsR1CQm
-         Q24BhFvGbk3kRox7LTQIn1Ez9Y+5W/ElEkJZyG9hKzUxqVRPxmhSBb/hdHYb/mZyIBlZ
-         FmmBr8qXeFCbfhg4ClqjiZwBUA794GqxymWsdzd2BMBRsxfbrXteHqL+8pAHQ+jF4LPl
-         jIJ0APIIhX5oQ9uoNkCJugLei1N7IXABmAh/40tFO16JJlkAr1qQLdGyHY+u6P7Hviwa
-         H6q84pQgP2rcSmLfk01zjI3iQ8adoCIOELJgAG8VzuM9eLdnVQa2+4pFN0UQQ+JZyN5v
-         oqNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVstTg3fWZXdsB/MQDSNZssYx5zPITdw+b+uIvcKm0n/Z7kPKXRy8iwBNPUrzz/hf8jGo8ILI3nugBeg+mOjGo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPCqI/skuAADHDcnZM9a3uEa0e2hSSg2AbuJbEK4ilmZEtSvFj
-	c25zP/P1Bszar1hbILu6jGUFJtlLFAC+y3xBAj6kZHyWIR+hO12wiSNAFmIQLrTTAUg=
-X-Gm-Gg: ATEYQzyoOfXh6TEJmkKbi/Pf3UjDS20qnPE8YQTqBqmz4aLqB2QtE8UTTVu+6Ogg6vg
-	bbW+He2KAfq2c+luvv8Kne5OhA7/rmp3th4nkEbUC74dvfcM7Lw06Taho9REL3cAUuHOxgCu5lJ
-	1WP1/PURp3hwWtovVVM8iuEthCLjIu5L2nwpOBlQHtY0JIDYDLhimltBBTWFzLYLKCpAVoRZrsL
-	4XKkHboX7I7pAcZNlon7TIbWr4aQJ3QBl5KgCoU9nXgH+TKEmBG16uuUp4Hnzj+3tjO5FNj7SJL
-	Wa8ISDe2YUTIFDpRP6nn9QYtdwaOvn6q9ga3S/DIeoyQY5gtwKu4WjcA+oWUt2KXvOnwQjPry+z
-	BoyuppRpCbh32ecc6uZ09dBAYxaqKDIInMQ7QBkTUStVnPBkNcMYCPyn4RSi96+lN+Tb/V3o/Kb
-	GPiMgWoM+WFiaztv0wV55r7juhjwuFAbkF/anB7FtRvR0PHRtpLetxalKrtQjY4frPHMw=
-X-Received: by 2002:a05:6000:1788:b0:439:d8e2:9a40 with SMTP id ffacd0b85a97d-43b644851a3mr5725374f8f.55.1774014113733;
-        Fri, 20 Mar 2026 06:41:53 -0700 (PDT)
-Received: from ?IPv6:2804:1bc4:224:7800:585c:db3a:fcb:e21f? ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b647177e8sm6628376f8f.34.2026.03.20.06.41.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 06:41:53 -0700 (PDT)
-Message-ID: <ab5946563beb7551a65fa9b1a4ff78cd48ba4b24.camel@suse.com>
-Subject: Re: [PATCH 8/8] selftests: livepatch: functions.sh: Extend check
- for taint flag kernel message
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes
-	 <mbenes@suse.cz>, Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan
-	 <shuah@kernel.org>, live-patching@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Fri, 20 Mar 2026 10:41:47 -0300
-In-Reply-To: <ab1K6oR06sLm9LM_@pathway.suse.cz>
-References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
-	 <20260313-lp-tests-old-fixes-v1-8-71ac6dfb3253@suse.com>
-	 <ab1K6oR06sLm9LM_@pathway.suse.cz>
-Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
- keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
- Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
- gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
- GO8seNG8sYiP6JfRjl7Hyqca6YsE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (by Flathub.org) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kfjxitld"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18E6C4CEF7;
+	Fri, 20 Mar 2026 13:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774014225;
+	bh=REdsHyTaW8dT1fc7fefZKHjbQODkQcLjcxpu1UnGYck=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Kfjxitldh1RDpbKQynIQqf4B3nWNfmOIjM+QRv2m9sK/38emcCrGlv88MAiBacv2Y
+	 88o8WM/dYf110MbVffMNs29TIfE9dBTy/GFjNFHotOtauPXt1gIpaVC/jB+xXbizjf
+	 +HjkEMsGgAw8Y3mp8pSF/zjSHEK2h8LCFWmcylrq4yjGXQHV7KtKR5j1j/8tVlzzMT
+	 iRe9TcndIKUHcErBilBxBKgyJleZNgZVqHhC3XUJQWCWgjboYkoU9g+eNvEzI+9UYU
+	 zqAubJdri4pPgL9ll3KgkoSjuaaVsLFoDRAFSMyRsGfvtF3+fYiapZLJT3H+SlPMsU
+	 PYLu6Dkveuntg==
+Date: Fri, 20 Mar 2026 14:43:40 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Christian Bruel <christian.bruel@foss.st.com>
+Cc: Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Koichiro Den <den@valinux.co.jp>, fabrice.gasnier@foss.st.com,
+	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] misc: pci_endpoint_test: Handle -ENOSPC in subrange
+ mapping test case
+Message-ID: <ab1PDA1QBMXF_50E@ryzen>
+References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
+ <20260318-skip-bar_subrange-tests-if-enospc-v1-3-f1a49534ebea@foss.st.com>
+ <abrM0Jvo_sdWSTLc@ryzen>
+ <28a71759-1095-4403-b356-d291a828daba@foss.st.com>
+ <ab0seD_G4ER7R_9N@ryzen>
+ <e6b385b5-f61c-4b0d-82ed-4018db76538f@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6b385b5-f61c-4b0d-82ed-4018db76538f@foss.st.com>
 
-On Fri, 2026-03-20 at 14:26 +0100, Petr Mladek wrote:
-> On Fri 2026-03-13 17:58:39, Marcos Paulo de Souza wrote:
-> > On SLE kernels there is a warning when a livepatch is disabled:
-> > =C2=A0 livepatch: attempt to disable live patch test_klp_livepatch,
-> > setting
-> > =C2=A0 NO_SUPPORT taint flag
-> >=20
-> > Extend lightly the detection of messages when a livepatch is
-> > disabled
-> > to cover this case as well.
-> >=20
-> > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > ---
-> > =C2=A0tools/testing/selftests/livepatch/functions.sh | 2 +-
-> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/tools/testing/selftests/livepatch/functions.sh
-> > b/tools/testing/selftests/livepatch/functions.sh
-> > index 781346d6e94e0..73a1d4e6acaeb 100644
-> > --- a/tools/testing/selftests/livepatch/functions.sh
-> > +++ b/tools/testing/selftests/livepatch/functions.sh
-> > @@ -324,7 +324,7 @@ function check_result {
-> > =C2=A0	# - filter out dmesg timestamp prefixes
-> > =C2=A0	result=3D$(dmesg | awk -v last_dmesg=3D"$LAST_DMESG" 'p; $0 =3D=
-=3D
-> > last_dmesg { p=3D1 }' | \
-> > =C2=A0		 grep -e 'livepatch:' -e 'test_klp' | \
-> > -		 grep -v '\(tainting\|taints\) kernel' | \
-> > +		 grep -v '\(tainting\|taints\|taint\)
-> > \(kernel\|flag\)' | \
-> > =C2=A0		 sed 's/^\[[ 0-9.]*\] //' | \
-> > =C2=A0		 sed 's/^\[[ ]*[CT][0-9]*\] //')
->=20
-> With the upstream maintainer hat on:
->=20
-> I am afraid that we could not take this. It is needed only because
-> of another out-of-tree patch. It does not describe the upstream
-> behavior. It might even hide problems.
->=20
-> We should maintain a SUSE-specific patch against the selftests
-> as a counter-part for the patch adding the tainting.
->=20
-> Or we could try to upstream the patch which adds the tainting.
-> Well, we might want to limit the tainting only to livepatches
-> with callbacks or shadow variables. IMHO, only these features
-> are source of potential problems.
+On Fri, Mar 20, 2026 at 02:25:10PM +0100, Christian Bruel wrote:
+> On 3/20/26 12:16, Niklas Cassel wrote:
+> > 
+> > FWIW, I think an even better solution is to introduce a new register,
+> > named e.g. errno in struct pci_epf_test_reg;
+> > 
+> > That way, we don't need to take a new bit, e.g.:
+> > +#define STATUS_BAR_SUBRANGE_SETUP_NOSPC          BIT(18)
+> > 
+> > For every unique error code a command can return.
+> > 
+> > We would simply return STATUS_BAR_SUBRANGE_CLEAR_FAIL, and then the host
+> > side driver looks at the errno register to see the specific error code.
+> > 
+> > This way, all other _FAIL commands could also return a more specific error
+> > in case of failure.
 
-TBH I wasn't expecting this patch to be merged, but I send it anyway
-since the change wasn't big. But I agree, we can drop this one from the
-patchset.
+(snip)
 
->=20
-> Best Rerards,
-> Petr
+> But it is not consistent with other tests that use the status field to carry
+> error information. For example, pci_epf_test_read/write/copy, set the
+> STATUS_SRC/DTS_ADDR_INVALID bit to distinguish these errors from other
+> -EINVAL.
+> 
+> Introducing a new errno field would result in having two different APIs for
+> returning failure status.
+> 
+> In light of the STATUS_SRC/DST_ADDR_INVALID usage, I wonder if my initial
+> proposal to set a status bit along with the FAIL bit might actually be
+> simpler and more consistent what is already done here.
+
+You are right that the read/write/copy tests actually set two bits in the
+status register.
+
+With:
+#define STATUS_SRC_ADDR_INVALID         BIT(7)
+#define STATUS_DST_ADDR_INVALID         BIT(8)
+
+Potentially being reused by the write/copy/read tests.
+
+At least these bits are reuse for more than one test case.
+
+So, perhaps to keep things in line with the existing design
+perhaps just name the new bit something like:
+
+#define STATUS_SKIP_INSUFFICIENT_RESOURCES	BIT(18)
+
+or something like that.
+
+At least then, other test cases will be able to reuse this status bit,
+just like multiple test cases can use the STATUS_SRC_ADDR_INVALID status
+bits.
+
+
+And yes, I agree that, like you do in your initial proposal, having this
+new STATUS_SKIP_INSUFFICIENT_RESOURCES bit set in addition to the
+STATUS_BAR_SUBRANGE_CLEAR_FAIL bit, is probably the best way forward that
+is in line with the current design.
+
+
+Kind regards,
+Niklas
