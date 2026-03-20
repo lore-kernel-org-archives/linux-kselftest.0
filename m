@@ -1,94 +1,46 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4833E314A84
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 01:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E80129ACF6
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 02:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773969923; cv=none; b=r8coP+K8Jwkb+50yeBNh3iGLFF6/UnJlIfRdzlDj2LL65tVjo6RaOt1jfaxE1g+nVzRtuMriRt917OW+dXgjYXfQWoH3BQL7TVYx8T0pp85mMvsFoWU6Pp1Ew27dKGX8yYz8ulEmgxnsFeUEvOllivOx39z0Y/cvClTlyNzMlcA=
+	t=1773973413; cv=none; b=dCEXgd/4tubscWmqd3T2lRMDzrktcolPKwzQz1S+H3lZK8ppiVqi97Uj5tC+guDOCcHgXe31lwVU1PiwKfQWpnov9ZWyjStzyMtu6/ekKFpLVl4qT75ChzfCmTDt/4UdlwjeHIJYFPsIpaxHDhBNlhrn4+zzj9/+XL7+bGGzvxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773969923; c=relaxed/simple;
-	bh=fFbx4L7c5RG8MsSh64xUKulTqmO1Wn4GpSHiz4YrwzM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h2WPD38Rsl7NB6xIA5VhSYn28jxEa6WgoxHm9mzwjW1zWYqlY1eIDy8JuOr96AD1hhj295fxa8M2hEDBNbNLlQXU4/+Ed0mqCbHefFotaZoLms3GR51HgzAiLufKKTpu0N972pd5xwjC3KJP7KuRjXfR1Ppas/5ZIGcIOX3/v+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2c0ea57fea7so1407681eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 18:25:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773969919; x=1774574719;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LwI56IvSstpXQXaX8+DYC8cYl7ak5TMhpM2nnpgQBwA=;
-        b=B+WkzCOzl2eCqw7XMkI0N/TxDqPWwgYxBUUXpWkz36Iw7IbrGJqDx76x91FfXPWTQd
-         MwKfr/9c9A2GnFdqXXs6TMr+uhAiIRF9SodVJOyH2af0taNcgLbjclbosnGAawjvZ1HE
-         nMD4fuf62zB/W49HOTfHWsPQvq/hBN6Zwe7GisbPsPVr93WZBBErrYEzTAWfEArOQbPf
-         M69oa6CMOY76o60y5EJwyYESDyesf8gtcnnfPWlL5z8M1pMU+oI9RPQSscvl5rMP4CsS
-         O7zOCnIC7TJ1VN7dZTQT6LKHNZDXs42ec6bdIrqhugL9Z+OAcFdaigT22Deps56P1jWm
-         vyFw==
-X-Forwarded-Encrypted: i=1; AJvYcCWu5ujncQNN2T+KTGfZrKh+gn/d4eu2FLymA4XuRouiLoUw5ECfNmkSofkBi5J0tVHi8oW5+fZ1n2Q+mmC4F8Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZIaiM5MRQjtg2XJQMbhEMB9unP8p9zNcQ20ZLEJ2YGIgMZp6w
-	64bIK5zFPzE0DBar2E8DvlBlxe6ImZRLCBUtaHIZqZKBRJkjrRccjNM=
-X-Gm-Gg: ATEYQzxrISfOidtC88Xnm30mykyaf6ipt1aSNePWQ8qwiW4DeeAxAv8saiyOJJmF3YP
-	deDx7+cAPvCON984h02GR1poYkI2ruCSqEO8XU0DapTEP9HHn23ma3YhkX0lOmV9aJHkP7XPJQP
-	QiWCQnI+NZA+n0mQuyYK7IHC0DI9h0YZ2QVFAKL37YBErj0qjkwDXCPWF6hPaJivVdsbSzYN9Is
-	+1AJiOULeYvOVc1NfTxQutCtN0Eb454ojnfMjkvArvxgGMeXeAYVauXujdq2aF+/Lx0Oj52Vseg
-	WRhnodxU/ie1jfO0Ukw7Wb5AFMoGQpqy8YAvyD4No7ChzDvGGxro2ntOaf4jYqhG+D5GsdHpeZM
-	t38syAAu3+wfhYcvcDVn/bHMt+MXv4jyXNH6Isr9jzktJO/Cpobm+JcZbuCiLNRBXh164A6LT9V
-	PxZydaK2J4EXKil7izcNZRHsha2YQWT6GND6dnpibwkMokqAP3872rogx4pOYHbu0Z00wdCt0Yl
-	ruxG0ySBrQoRao66g==
-X-Received: by 2002:a05:7301:4198:b0:2c0:c415:cfd0 with SMTP id 5a478bee46e88-2c109666ba0mr851744eec.15.1773969919058;
-        Thu, 19 Mar 2026 18:25:19 -0700 (PDT)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b29d28csm1378065eec.19.2026.03.19.18.25.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 18:25:18 -0700 (PDT)
-From: Stanislav Fomichev <sdf@fomichev.me>
+	s=arc-20240116; t=1773973413; c=relaxed/simple;
+	bh=KXpL+DPSw0ll3nV0SDPDphWQtLeMyLbBAZ4vbSw2tCg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tNfH4Km14Wvcj/ODEzahHmr+wG7D0DYt/x7yfkh+zjmibRpbTyIEy/gIJNft61zQ6H6FrMTo3lp30vLhiXTUN1NDOwX+3wLAwQEHxNDEb3WKJiN/LMQ2PjdlTtW06OJlCKuhgR9wjB+mET41b6TMZZ/73rNLpF3K+xd2jkrM75o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DoTXgwV4; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DoTXgwV4"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773973399;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Mbz1ujW0y/BU6S2LnKy9UrFDQp61sCFnYUpCv21JJIk=;
+	b=DoTXgwV4naIgWCCwnhqNXeGMM3h0ZVRY/8vOsrHsuaUbbiQwpL2Owq+raYfQO+94pP9l1r
+	V0XhqtGKe9ugWsHjcew7EZtp+63RGgSm6xI0QRVEna9ktS+TkBXbUpv61GJXLmQtRdm8eW
+	Skv/oS4weVurQ1zlmxio7OP6SIIOe/I=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	andrew+netdev@lunn.ch,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com,
-	saeedm@nvidia.com,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	alexanderduyck@fb.com,
-	kernel-team@meta.com,
-	johannes@sipsolutions.net,
-	sd@queasysnail.net,
-	jianbol@nvidia.com,
-	dtatulea@nvidia.com,
-	sdf@fomichev.me,
-	mohsin.bashr@gmail.com,
-	jacob.e.keller@intel.com,
-	willemb@google.com,
-	skhawaja@google.com,
-	bestswngs@gmail.com,
-	aleksandr.loktionov@intel.com,
-	kees@kernel.org,
-	linux-doc@vger.kernel.org,
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-rdma@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	leon@kernel.org
-Subject: [PATCH net-next v3 13/13] selftests: net: add team_bridge_macvlan rx_mode test
-Date: Thu, 19 Mar 2026 18:25:01 -0700
-Message-ID: <20260320012501.2033548-14-sdf@fomichev.me>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260320012501.2033548-1-sdf@fomichev.me>
-References: <20260320012501.2033548-1-sdf@fomichev.me>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v4] selftests: bonding: add test for stacked bond header_parse recursion
+Date: Fri, 20 Mar 2026 10:22:39 +0800
+Message-ID: <20260320022245.392384-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,93 +48,158 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add a test that exercises the ndo_change_rx_flags path through a
-macvlan -> bridge -> team -> dummy stack. This triggers dev_uc_add
-under addr_list_lock which flips promiscuity on the lower device.
-With the new work queue approach, this must not deadlock.
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-Link: https://lore.kernel.org/netdev/20260214033859.43857-1-jiayuan.chen@linux.dev/
-Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+Add a selftest to reproduce the infinite recursion in bond_header_parse()
+when bonds are stacked (bond1 -> bond0 -> gre). When a packet is received
+via AF_PACKET SOCK_DGRAM on the topmost bond, dev_parse_header() calls
+bond_header_parse() which used skb->dev (always the topmost bond) to get
+the bonding struct. This caused it to recurse back into itself
+indefinitely, leading to stack overflow.
+
+Before commit b7405dcf7385 ("bonding: prevent potential infinite loop
+in bond_header_parse()"), the test triggers:
+
+  ./bond_stacked_header_parse.sh
+
+  [  71.999481] BUG: MAX_LOCK_DEPTH too low!
+  [  72.000170] turning off the locking correctness validator.
+  [  72.001029] Please attach the output of /proc/lock_stat to the bug report
+  [  72.002079] depth: 48  max: 48!
+  ...
+
+After the fix, everything works fine:
+
+  ./bond_stacked_header_parse.sh
+  TEST: Stacked bond header_parse does not recurse                  [ OK ]
+
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
 ---
- tools/testing/selftests/net/config       |  1 +
- tools/testing/selftests/net/rtnetlink.sh | 44 ++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+Changes in v4:
+- Fix shellcheck warnings (Simon Horman)
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 2a390cae41bf..94d722770420 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -101,6 +101,7 @@ CONFIG_NET_SCH_HTB=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_SCH_NETEM=y
- CONFIG_NET_SCH_PRIO=m
-+CONFIG_NET_TEAM=y
- CONFIG_NET_VRF=y
- CONFIG_NF_CONNTRACK=m
- CONFIG_NF_CONNTRACK_OVS=y
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index 5a5ff88321d5..c499953d4885 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -23,6 +23,7 @@ ALL_TESTS="
- 	kci_test_encap
- 	kci_test_macsec
- 	kci_test_macsec_vlan
-+	kci_test_team_bridge_macvlan
- 	kci_test_ipsec
- 	kci_test_ipsec_offload
- 	kci_test_fdb_get
-@@ -636,6 +637,49 @@ kci_test_macsec_vlan()
- 	end_test "PASS: macsec_vlan"
- }
- 
-+# Test ndo_change_rx_flags call from dev_uc_add under addr_list_lock spinlock.
-+# When we are flipping the promisc, make sure it runs on the work queue.
+Changes in v3:
+- Fix CONFIG_NET_IPGRE sorting order in config
+
+Changes in v2:
+- Use tcpdump + scapy instead of custom Python script
+- Remove unnecessary modprobe and skip checks
+- Add CONFIG_NET_IPGRE to config dependencies
+
+v1: https://lore.kernel.org/netdev/20260316165946.46e9f8f7@kernel.org/T/#t
+https://lore.kernel.org/netdev/CANn89iK2EURqsjtd=OVP4awYTJHGcR-UU-V9WovpWR1Z3f03oQ@mail.gmail.com/
+---
+ .../selftests/drivers/net/bonding/Makefile    |  1 +
+ .../net/bonding/bond_stacked_header_parse.sh  | 72 +++++++++++++++++++
+ .../selftests/drivers/net/bonding/config      |  1 +
+ 3 files changed, 74 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
+
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+index 6c5c60adb5e8..9af5f84edd37 100644
+--- a/tools/testing/selftests/drivers/net/bonding/Makefile
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -11,6 +11,7 @@ TEST_PROGS := \
+ 	bond_macvlan_ipvlan.sh \
+ 	bond_options.sh \
+ 	bond_passive_lacp.sh \
++	bond_stacked_header_parse.sh \
+ 	dev_addr_lists.sh \
+ 	mode-1-recovery-updelay.sh \
+ 	mode-2-recovery-updelay.sh \
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh b/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
+new file mode 100755
+index 000000000000..36bcdef711b0
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/bond_stacked_header_parse.sh
+@@ -0,0 +1,72 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +#
-+# https://lore.kernel.org/netdev/20260214033859.43857-1-jiayuan.chen@linux.dev/
-+# With (more conventional) macvlan instead of macsec.
-+# macvlan -> bridge -> team -> dummy
-+kci_test_team_bridge_macvlan()
++# Test that bond_header_parse() does not infinitely recurse with stacked bonds.
++#
++# When a non-Ethernet device (e.g. GRE) is enslaved to a bond that is itself
++# enslaved to another bond (bond1 -> bond0 -> gre), receiving a packet via
++# AF_PACKET SOCK_DGRAM triggers dev_parse_header() -> bond_header_parse().
++# Since parse() used skb->dev (always the topmost bond) instead of a passed-in
++# dev pointer, it would recurse back into itself indefinitely.
++
++# shellcheck disable=SC2034
++ALL_TESTS="
++	bond_test_stacked_header_parse
++"
++REQUIRE_MZ=no
++NUM_NETIFS=0
++lib_dir=$(dirname "$0")
++source "$lib_dir"/../../../net/forwarding/lib.sh
++
++# shellcheck disable=SC2329
++bond_test_stacked_header_parse()
 +{
-+	local vlan="test_macv1"
-+	local bridge="test_br1"
-+	local team="test_team1"
-+	local dummy="test_dummy1"
-+	local ret=0
++	local devdummy="test-dummy0"
++	local devgre="test-gre0"
++	local devbond0="test-bond0"
++	local devbond1="test-bond1"
 +
-+	run_cmd ip link add $team type team
-+	if [ $ret -ne 0 ]; then
-+		end_test "SKIP: team_bridge_macvlan: can't add team interface"
-+		return $ksft_skip
-+	fi
++	# shellcheck disable=SC2034
++	RET=0
 +
-+	run_cmd ip link add $dummy type dummy
-+	run_cmd ip link set $dummy master $team
-+	run_cmd ip link set $team up
-+	run_cmd ip link add $bridge type bridge vlan_filtering 1
-+	run_cmd ip link set $bridge up
-+	run_cmd ip link set $team master $bridge
-+	run_cmd ip link add link $bridge name $vlan \
-+		address 00:aa:bb:cc:dd:ee type macvlan mode bridge
-+	run_cmd ip link set $vlan up
++	# Setup: dummy -> gre -> bond0 -> bond1
++	ip link add name "$devdummy" type dummy
++	ip addr add 10.0.0.1/24 dev "$devdummy"
++	ip link set "$devdummy" up
 +
-+	run_cmd ip link del $vlan
-+	run_cmd ip link del $bridge
-+	run_cmd ip link del $team
-+	run_cmd ip link del $dummy
++	ip link add name "$devgre" type gre local 10.0.0.1
 +
-+	if [ $ret -ne 0 ]; then
-+		end_test "FAIL: team_bridge_macvlan"
-+		return 1
-+	fi
++	ip link add name "$devbond0" type bond mode active-backup
++	ip link add name "$devbond1" type bond mode active-backup
 +
-+	end_test "PASS: team_bridge_macvlan"
++	ip link set "$devgre" master "$devbond0"
++	ip link set "$devbond0" master "$devbond1"
++
++	ip link set "$devgre" up
++	ip link set "$devbond0" up
++	ip link set "$devbond1" up
++
++	# tcpdump on a non-Ethernet bond uses AF_PACKET SOCK_DGRAM (cooked
++	# capture), which triggers dev_parse_header() -> bond_header_parse()
++	# on receive. With the bug, this recurses infinitely.
++	timeout 5 tcpdump -c 1 -i "$devbond1" >/dev/null 2>&1 &
++	local tcpdump_pid=$!
++	sleep 1
++
++	# Send a GRE packet to 10.0.0.1 so it arrives via gre -> bond0 -> bond1
++	python3 -c "from scapy.all import *; send(IP(src='10.0.0.2', dst='10.0.0.1')/GRE()/IP()/UDP(), verbose=0)"
++	check_err $? "failed to send GRE packet (scapy installed?)"
++
++	wait "$tcpdump_pid" 2>/dev/null
++
++	ip link del "$devbond1" 2>/dev/null
++	ip link del "$devbond0" 2>/dev/null
++	ip link del "$devgre" 2>/dev/null
++	ip link del "$devdummy" 2>/dev/null
++
++	log_test "Stacked bond header_parse does not recurse"
 +}
 +
- #-------------------------------------------------------------------
- # Example commands
- #   ip x s add proto esp src 14.0.0.52 dst 14.0.0.70 \
++tests_run
++
++exit "$EXIT_STATUS"
+diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
+index 991494376223..b62c70715293 100644
+--- a/tools/testing/selftests/drivers/net/bonding/config
++++ b/tools/testing/selftests/drivers/net/bonding/config
+@@ -14,6 +14,7 @@ CONFIG_NETCONSOLE=m
+ CONFIG_NETCONSOLE_DYNAMIC=y
+ CONFIG_NETCONSOLE_EXTENDED_LOG=y
+ CONFIG_NETDEVSIM=m
++CONFIG_NET_IPGRE=y
+ CONFIG_NET_SCH_INGRESS=y
+ CONFIG_NLMON=y
+ CONFIG_VETH=y
 -- 
-2.53.0
+2.43.0
 
