@@ -1,196 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B343238E5F7
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 10:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56B2391E4E;
+	Fri, 20 Mar 2026 10:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774003210; cv=none; b=TTGkRgPdnW/o8+YAJ43sK1EXxFhDmZUC1X7nUM4IT4+HsVjarloNl9A86GKhKzOvY8LLcPB5ELeG+dc7FqTCjTOJnzEozKHu/uYeL19+SExV968B9GHmBdBzbgJoon+WXSca4D2ngtJY6HuUf+OZTi0ehIj/HVbQU40yrru6rt8=
+	t=1774003275; cv=none; b=s4j7Lj984MktWsnEs7h+u6gxFIV/jjmh5mH0MP1i/JF3G9CyEirB6vsqAea6TxIPY2oSxzml8hSeGWGI1+Tl5U54XLigc1X8buE5oYDfu7AT8VmgvlY2Nt8chTeJzkR9XMxUlGTJRif7shJ/VfYQDI1Z+iyVTG1LRi/ZKHsIBck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774003210; c=relaxed/simple;
-	bh=KhvGOABQwXa6rkGgYv9t6dQ9Z9yU5u0qnrdOnEi/t5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mttxXwIC3sPv4eCwaVbRzeEcQi6eBHgs7WbB3D8PZEf9NVwSdbsBAIBwVobUFadoVqeMN5m0vjrDvSEPztDGG1/6eFs4Nto2itF31we1AUArss31MfeGjpFv7P9AXPiOMC6CJY6pNUPl+WwZI5EZyZdlGlqlFtk1DwcrUsRB0Ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D+YvyVpd; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fzzrDqSk; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774003275; c=relaxed/simple;
+	bh=vpVQRC72hsKlKsly8+/GTjJniVRmFHuzXm2q5+hvNRE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rZMoNWHPbcyYDixPe6xnnjjrPInQ0i7iHmcwd+YzvRkUgLPS/A1zIxZBWpCFSavScn4A+yEscMwFOtmGUW3CEBZw5i0N3yuPvThx0GXfWhp8Fo06MfsKdE9r+93+Lg0zQsreHMkYOroLepc979NFz9EjVfN5KmkGrXUNbOuvH0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=e0Dh+Jkq; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D+YvyVpd";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fzzrDqSk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774003206;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x3EfRhA4fDW6Hdtad/Pghe6EEW3AEZgUxlL1m715MFE=;
-	b=D+YvyVpdufFFkX3ltikMY5kAMBAl1Wh+fvQAjfIu0FAgK7HidVcs+hyvRXBwXuwP0kGV3P
-	iJsxFocHZTCqWOHq2QIyEKAjKMehCRzGm4PSQ64en6c6cYWBqb8Hwp0mM8YRzKeU4f9J8C
-	oZInWDSYedWr1F9fO9UaFkxyu3P53tI=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-91-7klAZzM5M7KM-Eja6WqosQ-1; Fri, 20 Mar 2026 06:40:05 -0400
-X-MC-Unique: 7klAZzM5M7KM-Eja6WqosQ-1
-X-Mimecast-MFC-AGG-ID: 7klAZzM5M7KM-Eja6WqosQ_1774003204
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2b061868724so132210925ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 03:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774003204; x=1774608004; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x3EfRhA4fDW6Hdtad/Pghe6EEW3AEZgUxlL1m715MFE=;
-        b=fzzrDqSkjELU5PHPyBu/7lBkssFHWKqVhJRRrdqG/uS8LQDXLY0ozJrx3OdPrm95ig
-         zT6GQTpASawFTTkFXCrHDZQYe+wgS5i4w7/5q9ePvGM2bYbr6AvmWbY2Oo9VEKNOt4Qq
-         HhohRP0x75kO7shcP88mqJt5lNrLtV8Yr6gtnGqaui3H1tcqoaQW01cmxwMsIT+dCC8U
-         mMhJSV2/ycf/bTNKWfstAHu5B40tCYlVhQRZYH8fuURdiBQGlWIeGPdcZFaWAYU9Zdlf
-         7UcXAlh+l1dviri9Gvz1DRmZZ2lUmzeVWl1mVmigWt5csSFanHLakNFa+hLTn8AuOdYc
-         r9QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774003204; x=1774608004;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x3EfRhA4fDW6Hdtad/Pghe6EEW3AEZgUxlL1m715MFE=;
-        b=KpQpR0hE5EUGFdsTa/cWtJy36UIjXkZiUf5qFIPd33PgNOEukoE6Ucxvh3I2PksBJB
-         T7yfyTeWOmj6W8xkP5S5wdwAA8zywQ28By2aeoyTEbADB9h5fVP0lii63mKNPThBEVjT
-         1B2/ysDl9CPWzFawGxOUYkWPDlNga4T6ydbvh3OVMxn31+UpidBYhSC7esIMywuzitDA
-         hYs8aMo9CafslxhEsJS+PsqHWPqfQDWS73nhgpcZzwjAbbv7LyWqys0LJK9UenXBpP5Z
-         TXDdgTeQa9OphG/GxAkdW9sMY9jxcfU5W2VRaT6/FpKTmlnitjggT8sUwOznrdtlm3ZV
-         gceA==
-X-Forwarded-Encrypted: i=1; AJvYcCVvlJGJD1ImPvd4ko1TJjKEAe7wQSNsauxGcdohk45ivpPmUwPW8r2IVc4i77rR+2PNv11kprhcZZP1V9HWVkg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXa8q04WMTMltMEr6ajcbyAKBrMKlkz5N8Eeh9uyGzAxRlj74R
-	wpufZb0KWvGOYUJnpl3nOtA74j9/Y9NltwlrYrwWtzjdG2hWKwE3au+/EtIk3Ae7ZbNrzczk8Qd
-	hhrLi0WdLVvbFlauNpuDgxs8Ls17oS3dNaxW8LlKKd6oHdulIK+RXycuRtkIqFBbC5gn3Cg==
-X-Gm-Gg: ATEYQzwZSx31s0ZBU13rLFjA9npgpNJa97bGUyOL5nC6foJAy+kxwrN67KhSadkmvGX
-	waK1d9LtJ4pkOWc3to96hzRgcuGijsb6zVmOoBmYJTDn3b6xRmarUFuyXaBmsB6jMqdHVOhIKjV
-	URlQLFa16TkIaDXd0PCEGHBOO0ELF/iNh2aDTgPY8Ld+zkLUnmWT9+MSCfULBT+sFRKyl50iPqF
-	5AZ6NS2qdKG9ErNF65dAJ6uGnYWpq9Uo9ufixaySVfFZzIY88AzN7gjU02IymZCm5rYlkbPl2zw
-	94o+0iI8kr3nQRVGWbcy+n2B6EJxmb552ZhiXrfXyiqp1rystNAfWmJTXt4HMla955wFbFULxbT
-	0Xj6XsoRrfmiZLXQbEQ==
-X-Received: by 2002:a17:903:acb:b0:2b0:44da:6245 with SMTP id d9443c01a7336-2b082797679mr24677825ad.31.1774003204403;
-        Fri, 20 Mar 2026 03:40:04 -0700 (PDT)
-X-Received: by 2002:a17:903:acb:b0:2b0:44da:6245 with SMTP id d9443c01a7336-2b082797679mr24677495ad.31.1774003203994;
-        Fri, 20 Mar 2026 03:40:03 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b083679867sm23410205ad.65.2026.03.20.03.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 03:40:03 -0700 (PDT)
-Date: Fri, 20 Mar 2026 18:40:00 +0800
-From: Li Wang <liwang@redhat.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	James Houghton <jthoughton@google.com>,
-	Sebastian Chlad <sebastianchlad@gmail.com>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
-Subject: Re: [PATCH 1/7] memcg: Scale up vmstats flush threshold with
- log2(nums_possible_cpus)
-Message-ID: <ab0kAE7mJkEL9kWb@redhat.com>
-References: <20260319173752.1472864-1-longman@redhat.com>
- <20260319173752.1472864-2-longman@redhat.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="e0Dh+Jkq"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=hJSEOOAhj/r6zguq6KmRPCSMSABE64v2gT/NO93bRjA=;
+	b=e0Dh+JkqNoMciVayHgin+0LjX4MpNFT6ER7rvoJu8i5SDzMhl/mWV/OtIMBdH/Nphhbfv/77p
+	yVR4oRwD8pdUgqzsTDx1bv44cl23ZK1qW5wxLNk/xtNYX3d1Bw3uHxmgCgX7ILsrASKvrRFlQJK
+	P5z3C70+WVwiTHfY8wJuhn0=
+Received: from mail.maildlp.com (unknown [172.19.162.92])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4fcf8X1bpKzLlTD;
+	Fri, 20 Mar 2026 18:35:08 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id F356840565;
+	Fri, 20 Mar 2026 18:41:09 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
+ (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 20 Mar
+ 2026 18:41:07 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <chenhuacai@kernel.org>,
+	<kernel@xen0n.name>, <hca@linux.ibm.com>, <gor@linux.ibm.com>,
+	<agordeev@linux.ibm.com>, <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
+	<oleg@redhat.com>, <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <arnd@arndb.de>,
+	<shuah@kernel.org>, <kevin.brodsky@arm.com>, <ruanjinjie@huawei.com>,
+	<yeoreum.yun@arm.com>, <anshuman.khandual@arm.com>, <thuth@redhat.com>,
+	<ryan.roberts@arm.com>, <mark.rutland@arm.com>, <song@kernel.org>,
+	<ziyao@disroot.org>, <linusw@kernel.org>,
+	<schuster.simon@siemens-energy.com>, <jremus@linux.ibm.com>,
+	<akpm@linux-foundation.org>, <mathieu.desnoyers@efficios.com>,
+	<kmal@cock.li>, <dvyukov@google.com>, <reddybalavignesh9979@gmail.com>,
+	<x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-s390@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH v14 0/4] arm64: Use generic TIF bits for common thread flags
+Date: Fri, 20 Mar 2026 18:42:18 +0800
+Message-ID: <20260320104222.1381274-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319173752.1472864-2-longman@redhat.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-On Thu, Mar 19, 2026 at 01:37:46PM -0400, Waiman Long wrote:
-> The vmstats flush threshold currently increases linearly with the
-> number of online CPUs. As the number of CPUs increases over time, it
-> will become increasingly difficult to meet the threshold and update the
-> vmstats data in a timely manner. These days, systems with hundreds of
-> CPUs or even thousands of them are becoming more common.
-> 
-> For example, the test_memcg_sock test of test_memcontrol always fails
-> when running on an arm64 system with 128 CPUs. It is because the
-> threshold is now 64*128 = 8192. With 4k page size, it needs changes in
-> 32 MB of memory. It will be even worse with larger page size like 64k.
-> 
-> To make the output of memory.stat more correct, it is better to
-> scale up the threshold logarithmically instead of linearly with the
-> number of CPUs. With the log2 scale, we can use the possibly larger
-> num_possible_cpus() instead of num_online_cpus() which may change at
-> run time.
-> 
-> Although there is supposed to be a periodic and asynchronous flush of
-> vmstats every 2 seconds, the actual time lag between succesive runs
-> can actually vary quite a bit. In fact, I have seen time lags of up
-> to 10s of seconds in some cases. So we couldn't too rely on the hope
-> that there will be an asynchronous vmstats flush every 2 seconds. This
-> may be something we need to look into.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  mm/memcontrol.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 772bac21d155..8d4ede72f05c 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -548,20 +548,20 @@ struct memcg_vmstats {
->   *    rstat update tree grow unbounded.
->   *
->   * 2) Flush the stats synchronously on reader side only when there are more than
-> - *    (MEMCG_CHARGE_BATCH * nr_cpus) update events. Though this optimization
-> - *    will let stats be out of sync by atmost (MEMCG_CHARGE_BATCH * nr_cpus) but
-> - *    only for 2 seconds due to (1).
-> + *    (MEMCG_CHARGE_BATCH * (ilog2(nr_cpus) + 1)) update events. Though this
-> + *    optimization will let stats be out of sync by up to that amount but only
-> + *    for 2 seconds due to (1).
->   */
->  static void flush_memcg_stats_dwork(struct work_struct *w);
->  static DECLARE_DEFERRABLE_WORK(stats_flush_dwork, flush_memcg_stats_dwork);
->  static u64 flush_last_time;
-> +static int vmstats_flush_threshold __ro_after_init;
->  
->  #define FLUSH_TIME (2UL*HZ)
->  
->  static bool memcg_vmstats_needs_flush(struct memcg_vmstats *vmstats)
->  {
-> -	return atomic_read(&vmstats->stats_updates) >
-> -		MEMCG_CHARGE_BATCH * num_online_cpus();
-> +	return atomic_read(&vmstats->stats_updates) > vmstats_flush_threshold;
->  }
->  
->  static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val,
-> @@ -5191,6 +5191,13 @@ int __init mem_cgroup_init(void)
->  
->  	memcg_pn_cachep = KMEM_CACHE(mem_cgroup_per_node,
->  				     SLAB_PANIC | SLAB_HWCACHE_ALIGN);
-> +	/*
-> +	 * Logarithmically scale up vmstats flush threshold with the number
-> +	 * of CPUs.
-> +	 * N.B. ilog2(1) = 0.
-> +	 */
-> +	vmstats_flush_threshold = MEMCG_CHARGE_BATCH *
-> +				  (ilog2(num_possible_cpus()) + 1);
+This series use generic TIF bits for common thread flags and add
+Syscall User Dispatch (SUD) testcase support for AArch64. So we can
+enables RSEQ optimizations for arm64.
 
-Changing the threashold from linearly to logarithmically looks smarter,
-but my concern is that, on large systems (hundreds/thousands of CPUs),
-the threshold drops dramatically.
+These patches follow the foundational series (v13 resend 1-10, "arm64:
+entry: Convert to Generic Entry") and are intended for the next cycle or
+an immutable branch based on v7.0-rc1.
 
-For example, 1024 CPUs it goes from 65536 (256MB) to only 704 (2.7MB),
-that's almost 100x. Could this potentially raise a performance issue
-as frequently read 'memory.stat' on a heavily loaded system?
+Changes in v14:
+- Split into two patch sets as Linus Walleij suggested, this is the second
+  patch set.
+- Remove TIF_FREEZE for arm64.
+- Add Signed-off-by and test results for sud_benchmark.
+- Collect Reviewed-by and Acked-by.
+- Link to v13 resend: https://lore.kernel.org/all/20260317082020.737779-15-ruanjinjie@huawei.com/
 
-Maybe go with MEMCG_CHARGE_BATCH * int_sqrt(num_possible_cpus()),
-which sits between linear and log2?
+Changes in v13 resend:
+- Fix exit_to_user_mode_prepare_legacy() issues.
+- Also move TIF_SINGLESTEP to generic TIF infrastructure for loongarch.
+- Use generic TIF bits for arm64 and moving TIF_SINGLESTEP to
+  generic TIF for related architectures separately.
+- Refactor syscall_trace_enter/exit() to accept flags and Use
+  syscall_get_nr() helper separately.
+- Tested with slice_test for rseq optimizations.
+- Add acked-by.
+- Link to v13: https://lore.kernel.org/all/20260313094738.3985794-1-ruanjinjie@huawei.com/
+
+Changes in v13:
+- Rebased on v7.0-rc3, so drop the firt applied arm64 patch.
+- Use generic TIF bits to enables RSEQ optimization.
+- Update most of the commit message to make it more clear.
+- Link to v12: https://lore.kernel.org/all/20260203133728.848283-1-ruanjinjie@huawei.com/
+
+Changes in v12:
+- Rebased on "sched/core", so remove the four generic entry patches.
+- Move "Expand secure_computing() in place" and
+  "Use syscall_get_arguments() helper" patch forward, which will group all
+  non-functional cleanups at the front.
+- Adjust the explanation for moving rseq_syscall() before
+  audit_syscall_exit().
+- Link to v11: https://lore.kernel.org/all/20260128031934.3906955-1-ruanjinjie@huawei.com/
+
+Changes in v11:
+- Remove unused syscall in syscall_trace_enter().
+- Update and provide a detailed explanation of the differences after
+  moving rseq_syscall() before audit_syscall_exit().
+- Rebased on arm64 (for-next/entry), and remove the first applied 3 patchs.
+- syscall_exit_to_user_mode_work() for arch reuse instead of adding
+  new syscall_exit_to_user_mode_work_prepare() helper.
+- Link to v10: https://lore.kernel.org/all/20251222114737.1334364-1-ruanjinjie@huawei.com/
+
+Changes in v10:
+- Rebased on v6.19-rc1, rename syscall_exit_to_user_mode_prepare() to
+  syscall_exit_to_user_mode_work_prepare() to avoid conflict.
+- Also inline syscall_trace_enter().
+- Support aarch64 for sud_benchmark.
+- Update and correct the commit message.
+- Add Reviewed-by.
+- Link to v9: https://lore.kernel.org/all/20251204082123.2792067-1-ruanjinjie@huawei.com/
+
+Changes in v9:
+- Move "Return early for ptrace_report_syscall_entry() error" patch ahead
+  to make it not introduce a regression.
+- Not check _TIF_SECCOMP/SYSCALL_EMU for syscall_exit_work() in
+  a separate patch.
+- Do not report_syscall_exit() for PTRACE_SYSEMU_SINGLESTEP in a separate
+  patch.
+- Add two performance patch to improve the arm64 performance.
+- Add Reviewed-by.
+- Link to v8: https://lore.kernel.org/all/20251126071446.3234218-1-ruanjinjie@huawei.com/
+
+Changes in v8:
+- Rename "report_syscall_enter()" to "report_syscall_entry()".
+- Add ptrace_save_reg() to avoid duplication.
+- Remove unused _TIF_WORK_MASK in a standalone patch.
+- Align syscall_trace_enter() return value with the generic version.
+- Use "scno" instead of regs->syscallno in el0_svc_common().
+- Move rseq_syscall() ahead in a standalone patch to clarify it clearly.
+- Rename "syscall_trace_exit()" to "syscall_exit_work()".
+- Keep the goto in el0_svc_common().
+- No argument was passed to __secure_computing() and check -1 not -1L.
+- Remove "Add has_syscall_work() helper" patch.
+- Move "Add syscall_exit_to_user_mode_prepare() helper" patch later.
+- Add miss header for asm/entry-common.h.
+- Update the implementation of arch_syscall_is_vdso_sigreturn().
+- Add "ARCH_SYSCALL_WORK_EXIT" to be defined as "SECCOMP | SYSCALL_EMU"
+  to keep the behaviour unchanged.
+- Add more testcases test.
+- Add Reviewed-by.
+- Update the commit message.
+- Link to v7: https://lore.kernel.org/all/20251117133048.53182-1-ruanjinjie@huawei.com/
+
+Jinjie Ruan (3):
+  s390: Rename TIF_SINGLE_STEP to TIF_SINGLESTEP
+  asm-generic: Move TIF_SINGLESTEP to generic TIF bits
+  arm64: Use generic TIF bits for common thread flags
+
+kemal (1):
+  selftests: sud_test: Support aarch64
+
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/thread_info.h          | 61 ++++++++-----------
+ arch/loongarch/include/asm/thread_info.h      | 11 ++--
+ arch/s390/include/asm/thread_info.h           |  7 +--
+ arch/s390/kernel/process.c                    |  2 +-
+ arch/s390/kernel/ptrace.c                     | 20 +++---
+ arch/s390/kernel/signal.c                     |  6 +-
+ arch/x86/include/asm/thread_info.h            |  6 +-
+ include/asm-generic/thread_info_tif.h         |  5 ++
+ .../syscall_user_dispatch/sud_benchmark.c     |  2 +-
+ .../syscall_user_dispatch/sud_test.c          |  4 ++
+ 11 files changed, 61 insertions(+), 64 deletions(-)
 
 -- 
-Regards,
-Li Wang
+2.34.1
 
