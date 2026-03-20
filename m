@@ -1,323 +1,155 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013039.outbound.protection.outlook.com [40.93.201.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F5E3B637E
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 15:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774021333; cv=none; b=mbNDLaSYYKNHWgj9Gx2Z27nonMY8WmjkAY/BND66smmGUCoa2KRP7uTo7CLS2hgDlpZrPIt6s/jR84iKgJeVWcaouKsxTnqUuPlfYsq6hk1Xec8qog018tMq5RaT8ENnONKSSpYcVAwqNtWP7mvsRIP638AnrsoR63prmkhfXS8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774021333; c=relaxed/simple;
-	bh=GlvAavZbqeljA8Sa2OJilqymV+4h9KyZBFsyNSU1R2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C9ySOyQ466PdZC6HPRvmyrogMA2vD8z0CY4ltEuuI7syR18i2vyCjK641iL0wCyBXbjJcSzV9Jn+gKQ1jgiCwmi0TR2It0axX38JKGyEVCRuOaFzVAFOEeW0qRyngPenqE1rvQRRzCCUDJ88Y526hCeexXxm133unBSCSIbLEcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vg8+E2Hv; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14413B637E;
+	Fri, 20 Mar 2026 15:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.39
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774021634; cv=fail; b=KzkrF7O7QEbeG/AK0PIFHt4xptlljCIKKxbY3dPAPwFPWhJMUXFKCuBf++A+UncGD+nRgHG9xB1FyV2RGDF6bVWVXuSz93zL6ZAbkckRHZsn8vsVmtg5lr8CQGsSbdLrclX2zxoTvPHkYIJLvj8uVR7ayPo/LVfn5jUaYg/R0Tw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774021634; c=relaxed/simple;
+	bh=ZTlliCPhcZ6GOiwVF8YIO0gxl+FGd+Jf3MQcU1pkhr4=;
+	h=Message-ID:Date:To:Cc:References:Subject:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=olYjp/spdVzxrJo+JA5xKVj5MLJLkIRRVJNjTaKHoPNiBbuLS6CRoLqarXAO8YLHQX81xRZQrofiJDr95/Dhuyk2u7u6q4VzHYRzVuzzRS/TqIWh95HB1CxgHEqC19XVWnIQonfhEq4xM3W/fRRcMVJuDcD9J1k9xnhB76z9B9g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=citrix.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=P3PovQQe; arc=fail smtp.client-ip=40.93.201.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=citrix.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vg8+E2Hv"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2c107ef474fso230115eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 08:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774021331; x=1774626131; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qhx7QtPFHsmhBqKEQ6XlDZutQ+YSTAHptMBIGgI83fw=;
-        b=Vg8+E2HvQBxYjm95Khh3/xH1Lq+QBhfWxH2NMRDDA0kVO3MXpnkcPN54GjnBKp4JpR
-         +WnCIfxYCdMRAiu0UHu8WRZ/lnNlJ6eV9DLlAQ3e27TbJ9tf+gq5wEcqKu1khQ5GqeZq
-         cfauEPV9SctzJPs20QSBV20efJAuXFkQFSS1oNo5s8/XFTsuLacCSSJ6v71NFtf7s/WQ
-         6pcucWOqi4Ws35jgBcv6o0wlP5ayZ0uLUBKu2Y9/Q/H5mjM2gv3zEdl66dQhAkHqmK7Y
-         T2veQZpvxMNlxoDOhsr5e7SHlNabrnaLfWjGCqyy3ed9HaqnLvksIOYg6W47R0Bh/KMf
-         yXJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774021331; x=1774626131;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qhx7QtPFHsmhBqKEQ6XlDZutQ+YSTAHptMBIGgI83fw=;
-        b=GlzVqY63fqWfsjCiubdutrEx/kx93KjtmM3WxSeB2PisGNCU2YyV+VyPV43fwBB3Qu
-         WuC2gKeSMYizlC2OnqhZTsyrYqFTENYVY2rOK3HKKVk3htMot5JytSE0r2iNBNafqNid
-         7FUu0BfPZ7GRbk/rqzz+UrDZ/XzgwEIEShAoHlvbE2qxEF5uTd4Npnda3UjWCkEureaR
-         YUAfeXUDGiSnriNnw4+fpP6s59nXgJLqdpv+Qc7LxnpkyTqmobCokZOleG4IlE4xAdrq
-         L2fAWdkywF3glhhBgYMNzbi0Q7xe9v4iE0+s7uCrEWo2Lsi2Lk+pY23tQrZTYpC/7dZX
-         Z2Eg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqLfMGFgrQmBuaEd3gW6lKKFCcPNrjPTkAQRmrx/2tRdlIp+wfGTfrRpnOnBGZpdY7HpEj9zZPwQIwPLgWo9M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz37KUoyRoPK0BcHf/b0L/oNm9SgcM/LFztFxT/yHIvB0dnztZ4
-	o/QasRNk/gk2dAbchUF3fYRvruUUCr5uH3pxXydS/a+7YdJh74F5RIw=
-X-Gm-Gg: ATEYQzxDKhBoERMYC2M7g9MtRD3ExbqRrU9mWP0XZw1l1lQMuWLMcNTy/8JW4PbWjXX
-	GULtGBH3xcUlJ42LX8GpdHr5fJPvCnrZLEtTYYP9Qxmr4Ny6xFlXU7ycwD5KOhO0CplZtdcUJey
-	o8s6f9727iPcwNKUvodITZyBLb1npIgOKikle3Hic/00Ea6lPTRanh1PuwuCEGQODY3xjoLG9P/
-	cjsOMoqKqlv9TlHVYQjQBrNNMupGXmi4nNtRYprw7iWvClhVf6+0GdGCl9jsZ2x2ghGrQ7VZgNm
-	H8rIqSg2YV+XEjoThUOMhOaro6sehRsaopwSdHqgjoPC3iDF6U9mV8o6oqy7ptvNkRqdoR0N462
-	2ZGTKMJPLiHT9xbw8gNRi9LcwM6YM4SnCrVZe32Jarlf4gVU+OW2vxyES5bKL6GlhZnBWKq69gG
-	Sb/g52Zeh33aj0N8Z+qyk+y6tVXDouL2cv33WHKo9RJbHbd7iWLrlrwCS1+GkUtlHmmhewFD8iV
-	DRqtP/XS2n4iOE2qxJmj3a7BOMe
-X-Received: by 2002:a05:7300:5b88:b0:2b7:32a6:82d1 with SMTP id 5a478bee46e88-2c10962a891mr1874265eec.13.1774021330366;
-        Fri, 20 Mar 2026 08:42:10 -0700 (PDT)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b14bac4sm4502825eec.4.2026.03.20.08.42.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 08:42:09 -0700 (PDT)
-Date: Fri, 20 Mar 2026 08:42:09 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-	"bestswngs@gmail.com" <bestswngs@gmail.com>,
-	"kernel-team@meta.com" <kernel-team@meta.com>,
-	"przemyslaw.kitszel@intel.com" <przemyslaw.kitszel@intel.com>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"horms@kernel.org" <horms@kernel.org>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"anthony.l.nguyen@intel.com" <anthony.l.nguyen@intel.com>,
-	"willemb@google.com" <willemb@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"skhawaja@google.com" <skhawaja@google.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	"kees@kernel.org" <kees@kernel.org>,
-	Jianbo Liu <jianbol@nvidia.com>,
-	"alexanderduyck@fb.com" <alexanderduyck@fb.com>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"leon@kernel.org" <leon@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	"michael.chan@broadcom.com" <michael.chan@broadcom.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	"sd@queasysnail.net" <sd@queasysnail.net>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	"jacob.e.keller@intel.com" <jacob.e.keller@intel.com>,
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-	"mohsin.bashr@gmail.com" <mohsin.bashr@gmail.com>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"pavan.chebbi@broadcom.com" <pavan.chebbi@broadcom.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"aleksandr.loktionov@intel.com" <aleksandr.loktionov@intel.com>,
-	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 06/13] mlx5: convert to ndo_set_rx_mode_async
-Message-ID: <ab1q0aEaGmocJogG@mini-arch>
-Mail-Followup-To: Stanislav Fomichev <stfomichev@gmail.com>,
-	Cosmin Ratiu <cratiu@nvidia.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-	"bestswngs@gmail.com" <bestswngs@gmail.com>,
-	"kernel-team@meta.com" <kernel-team@meta.com>,
-	"przemyslaw.kitszel@intel.com" <przemyslaw.kitszel@intel.com>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"horms@kernel.org" <horms@kernel.org>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"anthony.l.nguyen@intel.com" <anthony.l.nguyen@intel.com>,
-	"willemb@google.com" <willemb@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"skhawaja@google.com" <skhawaja@google.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	"kees@kernel.org" <kees@kernel.org>,
-	Jianbo Liu <jianbol@nvidia.com>,
-	"alexanderduyck@fb.com" <alexanderduyck@fb.com>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"leon@kernel.org" <leon@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	"michael.chan@broadcom.com" <michael.chan@broadcom.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	"sd@queasysnail.net" <sd@queasysnail.net>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	"jacob.e.keller@intel.com" <jacob.e.keller@intel.com>,
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-	"mohsin.bashr@gmail.com" <mohsin.bashr@gmail.com>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"pavan.chebbi@broadcom.com" <pavan.chebbi@broadcom.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"aleksandr.loktionov@intel.com" <aleksandr.loktionov@intel.com>,
-	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-References: <20260320012501.2033548-1-sdf@fomichev.me>
- <20260320012501.2033548-7-sdf@fomichev.me>
- <c0915086dc876f59e3c69886a8629efa3540d737.camel@nvidia.com>
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="P3PovQQe"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ssKo989bDeUenwaPbU/uIf+jhOIAuNlNwiKCSOXqm7rnweU81lfain/fzo5hRs6MxqKYlttuFVCcpiYsa9k6HRTrXLGaIu/IWfx/9WLFZc8CXgW5URN+TsSinFtUqksFRaE85dzN51wuJ6mH+lF76NHVoEUBNk0PRhzwk5HBD0/SVnN2yCHfSqx9IxK8T+PnUGz/RCJGVlQ3kKi7SX1iFAevxUwWN0h1ES+3aB/T5UpXMRTJNgtAVU8z3QfXqVdfWVIpmlVnCKD0TfCqEqkCT5EqutDc33jKGDOnUjLoLczc6+25HxcuJnxbPpWzGTyoOa4oY9hwTGhELLrZXylkAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZTlliCPhcZ6GOiwVF8YIO0gxl+FGd+Jf3MQcU1pkhr4=;
+ b=uWO93p3O73Et1W9zqYMcBlqV6QGW3VWTtg/BPw05pUQlGCGbDiYwstHpu4ZbV3aYdOtZ4tIAs1g2n6G+c/ot5H7DG2sBd3QjPsCt5kVP2+f3Fv3Nux9Slu812jCGKzayPg66R6ewao/016euY/MIqkbdpODWUkZ7/sE+fWggWhOl2wzW1YnqMhyXT01CtRe1F2ooHH64j+zj882H0w311S4A0ySKBVy14daGts/MPrXxnMY1NpO88eYewqZJWWDhPc8J4zuo+qL7IsbKXhbsXMOR8WwAsfqjZlUswE1ciSM9dm+Y3CeGW9UhW5dP8TQAgA70MEq3htz3IoHj4EFLIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
+ dkim=pass header.d=citrix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=citrix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZTlliCPhcZ6GOiwVF8YIO0gxl+FGd+Jf3MQcU1pkhr4=;
+ b=P3PovQQeDHJ8J8pox2hJho57zsP2haMqGFa+bTFLqtbaZYRrtS5DdWBIsUkCMK5e/kId4mqVH+89H0lDKslnL/MQUV2YEXEbG3/NCB81N32sdD5WrQEoVGAp35n18EVpsCh83+ymV6cMJtVm/hzZ2v+qDP20CM3uXjF3VdDr37M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=citrix.com;
+Received: from CH8PR03MB8275.namprd03.prod.outlook.com (2603:10b6:610:2b9::7)
+ by CH7PR03MB7857.namprd03.prod.outlook.com (2603:10b6:610:24d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.23; Fri, 20 Mar
+ 2026 15:47:08 +0000
+Received: from CH8PR03MB8275.namprd03.prod.outlook.com
+ ([fe80::a70d:dc32:bba8:ce37]) by CH8PR03MB8275.namprd03.prod.outlook.com
+ ([fe80::a70d:dc32:bba8:ce37%6]) with mapi id 15.20.9723.019; Fri, 20 Mar 2026
+ 15:47:08 +0000
+Message-ID: <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com>
+Date: Fri, 20 Mar 2026 15:47:05 +0000
+User-Agent: Mozilla Thunderbird
+To: dave.hansen@intel.com, yi1.lai@intel.com
+Cc: Andrew Cooper <andrew.cooper3@citrix.com>, bp@alien8.de,
+ dave.hansen@linux.intel.com, hpa@zytor.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+ shuah@kernel.org, tglx@kernel.org, x86@kernel.org
+References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com>
+Subject: Re: [PATCH] selftests/x86: Fix sysret_rip assertion failure on FRED
+ systems
+Content-Language: en-GB
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+In-Reply-To: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P123CA0070.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1::34) To CH8PR03MB8275.namprd03.prod.outlook.com
+ (2603:10b6:610:2b9::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c0915086dc876f59e3c69886a8629efa3540d737.camel@nvidia.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH8PR03MB8275:EE_|CH7PR03MB7857:EE_
+X-MS-Office365-Filtering-Correlation-Id: acf8b48b-a419-436b-90ee-08de8697f13e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	N5N/q+YvJPSSoCQF0nhe9HJ2/GKaQyt5onY5Q4yKOPC8XxntwTHCiilF8PnRK6cfAD/+G6F+yqFCOspQFK0f+PlRkvMcxSR3gAMGN71NwfhH29rABl7MvjuvyZARTJdNMyIWZ3AMlDlWq4lJF4uOMZSqXZgiLeGL8wmDHYltDXufbFId0qJd2G5pieDa37YQux8hePXs9u19zZLINBnuNAux7JxDWfW+HydEQdkWN1hWyZ1WnJzSMaJVgrgdd+p8owM9vcNIJvcMe09D5RslSyOSkQLtnUnBf+Qg+BiUwU02YepLsDr+6Np5ewFKVfmFjCe9umGAvYoNQxrxCGD2DMjrd5AiH0IGazCCYuYR88PJDb/HCVF8pkzFidi1+hjKhQ+Z/SWjJ060SpvpkBLkut1EdJKD43a/I+0Qb5NHCnSL7509F5js/x8GahcDYyxzKXBVGbRzIs2bFvJ9ZUB1s8WEBmTQVCaenZXfKjpqkobIslFfgQsUkCCwPr0iZ8YF6Trbin0iQOnWq9WKq23c0l9Yj0w8F7m89BvZJfMau40g70B1W31485w5l1q5sgs4escXDQnwIvGGOsD/HA0wJlAKCbGK6QYejVtSenxk7MLXfe1dng7pXPteXD7NUqGLHfVuxqRgOQd8q4OGhgzlT7XEeYxaLny4HxMPlJTG2qi4cqTs/1j05oCKP4ElEqe/zymMpY4NIGokxmwRYXiA13mbeZCIce/rILlHgEGtxOU=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH8PR03MB8275.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Zm92QjdIRmxxeHM5dlZEWjVhQkdUTXZ3N2htN1FwZmRKQm1hYXlSQy80RmN4?=
+ =?utf-8?B?WGRnSmxLR0dKMzBWQ3pTQlVGY3BTYTRteUZNeGtpUlRaeXpzczhGdldOaGQ3?=
+ =?utf-8?B?YXg1THdobGFaL1ExY0crQVk5SExkQnJNUkNJZ0grY2FFeStNZ2UxWStPYito?=
+ =?utf-8?B?Ry9sS2ZWWit5SGkyMFlJNGFqa01TWVdmK3l3M1Vhc1NraDJsMHRSOW41MjJF?=
+ =?utf-8?B?N284a2Vuc0pQQUpyREZSckJia29ReE4raXVtRjE0dFlqMEZkVlM4MDk4OEg0?=
+ =?utf-8?B?Z3RmOEwrZFB5UWxsc1liZVVZNnUzY3dqcXo3WUNiUGI2M1U3cEJEVkZYeW54?=
+ =?utf-8?B?WnFneGVVYmJXd1NqQ3g0VVcvbyt1RHlVOFVlMklQaWRNcmFOQ2J0WncwWnBq?=
+ =?utf-8?B?c21jUFBPZyt2eC9PMUJjazRjZUFGTmdRSFVjRDVXaHdySGRVTjY5bEF3SG9V?=
+ =?utf-8?B?TVZ4VGxVNFFIU0xDeUF5MVhPQ081elpYSHZYRUZPcEs5Z0V4VWVPMjJtN21p?=
+ =?utf-8?B?anF6ajcwY2w0MzZOZzVFQVQ2aWNNTmIyWmEvZDF0Ui9pY1RnUTJsTHVac1JH?=
+ =?utf-8?B?QkVYc3dUVGJnYjU4aHFSNGEzTXZ3cGFFNEk3Y2lDNjhhemRnazFkam5OV1JL?=
+ =?utf-8?B?ajlTandZWXlGYkp1RTcrUVBlM0xqL1dvbGtyMXBRZXhGRXQ1Mk8zMy9JQlRJ?=
+ =?utf-8?B?bTNGM2Y4S2REV1ljV0RDVUlRRWhmKzFIMTJhQWFFaG45Y2hPRGJ0dlMvT2Vz?=
+ =?utf-8?B?cVFNMkYzMWh0eEtBMmUxa3o3d3hpemh1dm8xbEppUzI5YWxJQ3hKUlhwRFNw?=
+ =?utf-8?B?ZHIyK2diSDZBb1dGdTRwRTZZb2IxZy9VNjJqSlZSWEpjMkNnSnJrdDdPeG1X?=
+ =?utf-8?B?MklqYjdBQXNZVFUyY3hueXBXQUowSVNuT0lrbXdsWndhczluYTRwdkNxMHpy?=
+ =?utf-8?B?T2RNaW9qd3BtYTBUUTltSWQwZzJaQ2VkeitYTXQ1NFArM25rUi80ZGJPeW10?=
+ =?utf-8?B?ZjZxalVrS0dhYWlTTExvdzJ3Q2hhK3JtbnVJeDE5WlNhWGFvRjNYbjBkbG4w?=
+ =?utf-8?B?TEpxQlM1ODROdEVYS2Z2eUtrcDg2NGFZVFIzTG5RU20yeUNFeXZpVnZCcjZM?=
+ =?utf-8?B?ZEVLL3E2US9FZWhhbEdCam4vSE00RFdXMkRxN29rbnNzdC9wT0szeW84amF1?=
+ =?utf-8?B?MUpZVEdtL1dWM0hLNkRvYTFMUHdxVDExQjR6N0VBNDJQK0xBQk5VL09IakRo?=
+ =?utf-8?B?KzVFRWZpT2oxYjR5dWcrcHRReENHYnVKYmorMFp0K2lYYksrSXhVWHYvVVRm?=
+ =?utf-8?B?NFNyRkw1Rm95TE9PRGJ5eGlGT3VnQmlYbGFERGVXRXlJQWliYWFiS1hmTGFh?=
+ =?utf-8?B?ZXU5UU9QYnQxQm1UM1FmNmw2eGhYYjFZaWttQkFGbkdQdWlweHFiMW5mNm5F?=
+ =?utf-8?B?QWhVd3VMb3JyazN2TnRjcFlzd2ZWRGxkb3lpOWV3ZW1MNFNSa1piZTZxaDBM?=
+ =?utf-8?B?WmlNekRzM1hUV29aNjFYaHp1SUQyM0dJNDlxZkl1K1lDYkJGQ21zUlhvaFo4?=
+ =?utf-8?B?SmowY3pCcnUzZVFoSWN1RnhNYUpwMGowR1JpRWJGTlBZSklMSmptK1lKVXZW?=
+ =?utf-8?B?QTlIQTUzT3JmL2lCQ0xuVyt4VW1oTWM4ZWlEL0J2SWc1bmx2bE8xRkMySHdP?=
+ =?utf-8?B?b3hyak9RQklnYW5PZ2tNSUw0NXVVL2lUN3FyYmNyVGc3RVVMM2VvQWFDN09S?=
+ =?utf-8?B?elRlWG9hZDljMjVhZjNpcVBqdC9JU0NOeFUzMkMzSUFQUkZDdDhuNzFuWHRh?=
+ =?utf-8?B?ZE9QaGxMT3lSK0RKZmhOKy9jQVlKVmdMTnJJMEpMNlRwa0Fra3FpTTJobmlv?=
+ =?utf-8?B?V2JHZ09mZXFtaFMvamEyWmxvejArRzhRSUJ6UWhNYTcyTXVaUXlVK0lWSm56?=
+ =?utf-8?B?dS9ha1pSWWFzNmFtSUxVUUpLWTNobm9vczcyOVYxNmNaTzVzY0JSSW44YnZu?=
+ =?utf-8?B?aENGMnllQ0pJYVhDK3V4OVg4dXR3Q3pORmZRSmNrNE5ha25EMVRJR0E5YS8r?=
+ =?utf-8?B?bnlvK0dPVFpLZVdZOUdhZUtrODNiMjlYaG9EbndSdE1UZExyVWZiQmZoT1dO?=
+ =?utf-8?B?NndQTDR4dWkvYWtsZW4zN0k2WGRoMjRiZVJ0QUhsc3BGNWFiNlBwLy9MZzNV?=
+ =?utf-8?B?VmNhOHJFQ1RtRG9PLytReG9kU3A0T3BvTCtLaEFyOGpjUGMyUDMxNy9adWZL?=
+ =?utf-8?B?R0hGc1VCUXJYdUpkbFh2RGhINEoyb0w5V21hVDM0QzhkWHVFV09HZGNkS0lD?=
+ =?utf-8?B?L3J5VXZIMnZJSGpEbzkxTGQzcGFPTUQwcnRZMWp0amFOY0JQVVB4UT09?=
+X-OriginatorOrg: citrix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: acf8b48b-a419-436b-90ee-08de8697f13e
+X-MS-Exchange-CrossTenant-AuthSource: CH8PR03MB8275.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 15:47:07.9623
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: asp9aEySd62YNY64uof4NphGq4M2SZur1jQWWyMRLWemWWP1TXXANKnnbOCUrXZjs8yKmRdoZRfHuzfts/DZKNHGwJNkWJmCdaeF8U5GTKM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH7PR03MB7857
 
-On 03/20, Cosmin Ratiu wrote:
-> On Thu, 2026-03-19 at 18:24 -0700, Stanislav Fomichev wrote:
-> > Convert mlx5 from ndo_set_rx_mode to ndo_set_rx_mode_async. The
-> > driver's mlx5e_set_rx_mode now receives uc/mc snapshots and calls
-> > mlx5e_fs_set_rx_mode_work directly instead of queueing work.
-> > 
-> > mlx5e_sync_netdev_addr and mlx5e_handle_netdev_addr now take
-> > explicit uc/mc list parameters and iterate with
-> > netdev_hw_addr_list_for_each instead of netdev_for_each_{uc,mc}_addr.
-> > 
-> > Fallback to netdev's uc/mc in a few places and grab addr lock.
-> > 
-> > Cc: Saeed Mahameed <saeedm@nvidia.com>
-> > Cc: Tariq Toukan <tariqt@nvidia.com>
-> > Cc: Cosmin Ratiu <cratiu@nvidia.com>
-> > Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> > ---
-> >  .../net/ethernet/mellanox/mlx5/core/en/fs.h   |  5 +++-
-> >  .../net/ethernet/mellanox/mlx5/core/en_fs.c   | 30 ++++++++++++-----
-> > --
-> >  .../net/ethernet/mellanox/mlx5/core/en_main.c | 16 +++++++---
-> >  3 files changed, 36 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/fs.h
-> > b/drivers/net/ethernet/mellanox/mlx5/core/en/fs.h
-> > index c3408b3f7010..091b80a67189 100644
-> > --- a/drivers/net/ethernet/mellanox/mlx5/core/en/fs.h
-> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/fs.h
-> > @@ -201,7 +201,10 @@ int mlx5e_add_vlan_trap(struct
-> > mlx5e_flow_steering *fs, int  trap_id, int tir_nu
-> >  void mlx5e_remove_vlan_trap(struct mlx5e_flow_steering *fs);
-> >  int mlx5e_add_mac_trap(struct mlx5e_flow_steering *fs, int  trap_id,
-> > int tir_num);
-> >  void mlx5e_remove_mac_trap(struct mlx5e_flow_steering *fs);
-> > -void mlx5e_fs_set_rx_mode_work(struct mlx5e_flow_steering *fs,
-> > struct net_device *netdev);
-> > +void mlx5e_fs_set_rx_mode_work(struct mlx5e_flow_steering *fs,
-> > +			       struct net_device *netdev,
-> > +			       struct netdev_hw_addr_list *uc,
-> > +			       struct netdev_hw_addr_list *mc);
-> >  int mlx5e_fs_vlan_rx_add_vid(struct mlx5e_flow_steering *fs,
-> >  			     struct net_device *netdev,
-> >  			     __be16 proto, u16 vid);
-> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_fs.c
-> > b/drivers/net/ethernet/mellanox/mlx5/core/en_fs.c
-> > index 55255fe6e415..a9daefbd8f8f 100644
-> > --- a/drivers/net/ethernet/mellanox/mlx5/core/en_fs.c
-> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_fs.c
-> > @@ -609,20 +609,26 @@ static void mlx5e_execute_l2_action(struct
-> > mlx5e_flow_steering *fs,
-> >  }
-> >  
-> >  static void mlx5e_sync_netdev_addr(struct mlx5e_flow_steering *fs,
-> > -				   struct net_device *netdev)
-> > +				   struct net_device *netdev,
-> > +				   struct netdev_hw_addr_list *uc,
-> > +				   struct netdev_hw_addr_list *mc)
-> >  {
-> >  	struct netdev_hw_addr *ha;
-> >  
-> > -	netif_addr_lock_bh(netdev);
-> > +	if (!uc || !mc) {
-> > +		netif_addr_lock_bh(netdev);
-> > +		mlx5e_sync_netdev_addr(fs, netdev, &netdev->uc,
-> > &netdev->mc);
-> > +		netif_addr_unlock_bh(netdev);
-> > +		return;
-> > +	}
-> >  
-> >  	mlx5e_add_l2_to_hash(fs->l2.netdev_uc, netdev->dev_addr);
-> > -	netdev_for_each_uc_addr(ha, netdev)
-> > +
-> > +	netdev_hw_addr_list_for_each(ha, uc)
-> >  		mlx5e_add_l2_to_hash(fs->l2.netdev_uc, ha->addr);
-> >  
-> > -	netdev_for_each_mc_addr(ha, netdev)
-> > +	netdev_hw_addr_list_for_each(ha, mc)
-> >  		mlx5e_add_l2_to_hash(fs->l2.netdev_mc, ha->addr);
-> > -
-> > -	netif_addr_unlock_bh(netdev);
-> >  }
-> >  
-> >  static void mlx5e_fill_addr_array(struct mlx5e_flow_steering *fs,
-> > int list_type,
-> > @@ -724,7 +730,9 @@ static void mlx5e_apply_netdev_addr(struct
-> > mlx5e_flow_steering *fs)
-> >  }
-> >  
-> >  static void mlx5e_handle_netdev_addr(struct mlx5e_flow_steering *fs,
-> > -				     struct net_device *netdev)
-> > +				     struct net_device *netdev,
-> > +				     struct netdev_hw_addr_list *uc,
-> > +				     struct netdev_hw_addr_list *mc)
-> >  {
-> >  	struct mlx5e_l2_hash_node *hn;
-> >  	struct hlist_node *tmp;
-> > @@ -736,7 +744,7 @@ static void mlx5e_handle_netdev_addr(struct
-> > mlx5e_flow_steering *fs,
-> >  		hn->action = MLX5E_ACTION_DEL;
-> >  
-> >  	if (fs->state_destroy)
-> > -		mlx5e_sync_netdev_addr(fs, netdev);
-> > +		mlx5e_sync_netdev_addr(fs, netdev, uc, mc);
-> >  
-> >  	mlx5e_apply_netdev_addr(fs);
-> >  }
-> > @@ -820,7 +828,9 @@ static void mlx5e_destroy_promisc_table(struct
-> > mlx5e_flow_steering *fs)
-> >  }
-> >  
-> >  void mlx5e_fs_set_rx_mode_work(struct mlx5e_flow_steering *fs,
-> > -			       struct net_device *netdev)
-> > +			       struct net_device *netdev,
-> > +			       struct netdev_hw_addr_list *uc,
-> > +			       struct netdev_hw_addr_list *mc)
-> >  {
-> >  	struct mlx5e_l2_table *ea = &fs->l2;
-> >  
-> > @@ -850,7 +860,7 @@ void mlx5e_fs_set_rx_mode_work(struct
-> > mlx5e_flow_steering *fs,
-> >  	if (enable_broadcast)
-> >  		mlx5e_add_l2_flow_rule(fs, &ea->broadcast,
-> > MLX5E_FULLMATCH);
-> >  
-> > -	mlx5e_handle_netdev_addr(fs, netdev);
-> > +	mlx5e_handle_netdev_addr(fs, netdev, uc, mc);
-> >  
-> >  	if (disable_broadcast)
-> >  		mlx5e_del_l2_flow_rule(fs, &ea->broadcast);
-> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> > b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> > index f7009da94f0b..e86cf1ee108d 100644
-> > --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> > @@ -4108,11 +4108,16 @@ static void mlx5e_nic_set_rx_mode(struct
-> > mlx5e_priv *priv)
-> >  	queue_work(priv->wq, &priv->set_rx_mode_work);
-> >  }
-> >  
-> > -static void mlx5e_set_rx_mode(struct net_device *dev)
-> > +static void mlx5e_set_rx_mode(struct net_device *dev,
-> > +			      struct netdev_hw_addr_list *uc,
-> > +			      struct netdev_hw_addr_list *mc)
-> >  {
-> >  	struct mlx5e_priv *priv = netdev_priv(dev);
-> >  
-> > -	mlx5e_nic_set_rx_mode(priv);
-> > +	if (mlx5e_is_uplink_rep(priv))
-> > +		return; /* no rx mode for uplink rep */
-> > +
-> > +	mlx5e_fs_set_rx_mode_work(priv->fs, dev, uc, mc);
-> 
-> While this chunk is correct, I think there's a logical conflict waiting
-> to happen with Saeed's pending patch touching this area ([1]).
-> 
-> You have inlined mlx5e_nic_set_rx_mode here, but after Saeed's patch
-> the mlx5e_is_uplink_rep condition added here should be dropped.
-> 
-> Not sure the automatic merge will do that.
-> 
-> [1]
-> https://lore.kernel.org/netdev/20260319005456.82745-1-saeed@kernel.org/T/#u
+> First, CPUID doesn't tell you if FRED is in use. Is it even on by
+> default yet? There might not be a better way to do this than checking
+> CPUID, but checking CPUID is imprecise at best.
 
-Thanks for the heads up, will try to wait for this to be pulled before
-reposting!
+A reliable way to distinguish IDT and FRED mode is to:
+
+1) Load $3 into %fs (x86_64) or %gs (i386) (i.e. whichever isn't thread
+local stoage)
+2) execute a breakpoint, ignore the signal
+3) Look to see whether %fs/%gs holds 3 or 0
+
+IRET has a fun behaviour where it zeroes NULL selectors even if they had
+a non-zero RPL.
+
+ERETU doesn't do this; Andy Luto and I asked for this minor information
+leak to be removed, and Intel agreed as it served no purpose anyone
+could identify.
+
+As a consequence, you can use it to determine whether the kernel used
+IRET or ERET to return back to userspace.
+
+~Andrew
