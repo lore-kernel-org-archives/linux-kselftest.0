@@ -1,125 +1,132 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D9E399343;
-	Fri, 20 Mar 2026 10:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968F51A6812
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 10:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774003283; cv=none; b=Hlb78+F31eXZJQij+wGg4zBaVpaRuSgoI7Nf60P+gZfbXt/D72klXtkfxNUrgu+U5l09yaPCUvW+Uf28wMABbZp/Z8t+MCaz4UUFDo2vCVpUEWpeOyVEiyRi6uSQ3nSh5sKS/NWMCig3Yi44Mz+JJEMSKLVF6i+W3h91e76Jorc=
+	t=1774003509; cv=none; b=NGwYxrJlUvipmFHJ7Pv06evxVqh/q2R+nI8w6iO912vLFxmppD51vg6fLHXgpn6aZ5lIk9HeCxAUXFitjteygeE1zKMpxFY9yq6231Ama/ParDDL4/vN+M1KpDmwwB4JDZ6uAleTZVd7BmNE1EpKDp5x2vts+CHzLlUVTB3QMBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774003283; c=relaxed/simple;
-	bh=MScY+gmT9rsuqnKns4y6+tv93ikZ6jKfqFztH3XxhI0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gQlg18Eb8wtkFuaFm6Do+bSDVDJ7aM+ha73k6JPLF/xa1c6Lk5lh6Uw9DBkj03x+cIY2nEu1BSl5uHb/048Svuzdde/xVsaz9m+AirCIERoDuWBL/OB44pjPO8ZW5cgYYJ1XO91v65qMlh7Zf/dJdRID9lrwjVQf64gFkeYYtj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OIhmm4cV; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1774003509; c=relaxed/simple;
+	bh=LTReSAlW+daAbHYenzXxD9a2qj+sCp94lFb1UB88tGk=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=gdMOk/n8NOFRnLXOHbsLar0zLn8exoDjzyYX0K3Mybiq0L6LgwLeCiR3P1dCSpkRMdEOTjzI756FO1WNPj4meZIepAOPssFrwEKnkXnHgiM2oMUDKKcb5N84M+EV55362CEFlQnR9eercv0IEN5KCCKZiWJXY1TNugImsnyzXwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=k9nWrIOa; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qUGgy6QE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=k9nWrIOa; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qUGgy6QE; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OIhmm4cV"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=6ReFRWMNlcAIzygaQHDIHcvAfK0/APpypoLdcs/3JIQ=;
-	b=OIhmm4cVECm6pCD5T5U4YorHv8ATbzN2X3DExx/zGE49puRUxFGQHuCiFEhiLBDnRJgAMdyyQ
-	gmfoc0kiaRUXurBARvkaKdu6r42BwjnKaK00xZbNWyceytpd07ZhygecRBEmLKKKYI7U0HWs4jG
-	4ZEquaKeLcZY35DezR59zIA=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4fcf8h5fdKzLlTD;
-	Fri, 20 Mar 2026 18:35:16 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 889FE40565;
-	Fri, 20 Mar 2026 18:41:18 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 20 Mar
- 2026 18:41:16 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <chenhuacai@kernel.org>,
-	<kernel@xen0n.name>, <hca@linux.ibm.com>, <gor@linux.ibm.com>,
-	<agordeev@linux.ibm.com>, <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
-	<oleg@redhat.com>, <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <arnd@arndb.de>,
-	<shuah@kernel.org>, <kevin.brodsky@arm.com>, <ruanjinjie@huawei.com>,
-	<yeoreum.yun@arm.com>, <anshuman.khandual@arm.com>, <thuth@redhat.com>,
-	<ryan.roberts@arm.com>, <mark.rutland@arm.com>, <song@kernel.org>,
-	<ziyao@disroot.org>, <linusw@kernel.org>,
-	<schuster.simon@siemens-energy.com>, <jremus@linux.ibm.com>,
-	<akpm@linux-foundation.org>, <mathieu.desnoyers@efficios.com>,
-	<kmal@cock.li>, <dvyukov@google.com>, <reddybalavignesh9979@gmail.com>,
-	<x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-s390@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: [PATCH v14 4/4] selftests: sud_test: Support aarch64
-Date: Fri, 20 Mar 2026 18:42:22 +0800
-Message-ID: <20260320104222.1381274-5-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260320104222.1381274-1-ruanjinjie@huawei.com>
-References: <20260320104222.1381274-1-ruanjinjie@huawei.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="k9nWrIOa";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qUGgy6QE";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="k9nWrIOa";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qUGgy6QE"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 07D584D248;
+	Fri, 20 Mar 2026 10:45:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1774003507; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j4+DHdFhN/27sxpZW9TrPfo4NdrOua5L4ap8TIQRrM4=;
+	b=k9nWrIOa7gWCNtNBVKH4rmyrOATImDtMeiaNGIG7DcCXXX5+23KmQUJr2jU1uyHu2cVNzS
+	1zIsgHL+Zvv1OxZUSL98bWhS9eo/JVImy/90elgEt8F1WzykTTin0XdA3OkP+Phe9Zx8LC
+	lUBxTmwV19CXv2h2mb+QEpKiCUnOeho=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1774003507;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j4+DHdFhN/27sxpZW9TrPfo4NdrOua5L4ap8TIQRrM4=;
+	b=qUGgy6QEfTFUxTczTX8/Be8/0ReWt0CvAIwnOdAOS63jFoAMrF56W0ghFNrzNCSVLQ9hYq
+	6tVHSdVfbVAZ1dBg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1774003507; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j4+DHdFhN/27sxpZW9TrPfo4NdrOua5L4ap8TIQRrM4=;
+	b=k9nWrIOa7gWCNtNBVKH4rmyrOATImDtMeiaNGIG7DcCXXX5+23KmQUJr2jU1uyHu2cVNzS
+	1zIsgHL+Zvv1OxZUSL98bWhS9eo/JVImy/90elgEt8F1WzykTTin0XdA3OkP+Phe9Zx8LC
+	lUBxTmwV19CXv2h2mb+QEpKiCUnOeho=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1774003507;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j4+DHdFhN/27sxpZW9TrPfo4NdrOua5L4ap8TIQRrM4=;
+	b=qUGgy6QEfTFUxTczTX8/Be8/0ReWt0CvAIwnOdAOS63jFoAMrF56W0ghFNrzNCSVLQ9hYq
+	6tVHSdVfbVAZ1dBg==
+Date: Fri, 20 Mar 2026 11:45:06 +0100 (CET)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+cc: Joe Lawrence <joe.lawrence@redhat.com>, 
+    Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
+    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] selftests: livepatch: test-syscall: Check for
+ ARCH_HAS_SYSCALL_WRAPPER
+In-Reply-To: <0d85d8d7533a7a78d1f8fcc1fff8ffc73b1cf225.camel@suse.com>
+Message-ID: <alpine.LSU.2.21.2603201136401.12616@pobox.suse.cz>
+References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>  <20260313-lp-tests-old-fixes-v1-1-71ac6dfb3253@suse.com>  <abhjYtyveer4niGM@redhat.com>  <alpine.LSU.2.21.2603191349440.22987@pobox.suse.cz>
+ <0d85d8d7533a7a78d1f8fcc1fff8ffc73b1cf225.camel@suse.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MIME_TRACE(0.00)[0:+];
+	FROM_EQ_ENVFROM(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-From: kemal <kmal@cock.li>
+> > So I would perhaps prefer to stay with the logic that defines
+> > FN_PREFIX 
+> > per architecture and has also #else branch for the rest. And more
+> > comments 
+> > never hurt.
+> 
+> Agreed.
 
-Support aarch64 to test "Syscall User Dispatch" feature with
-sud_test selftest testcase.
+Hm, so I thought about a bit more and I very likely misunderstood the 
+motivation behind the patch. I will speculate and correct me if I am 
+wrong, please. The idea behind the whole patch set is to make the 
+selftests run on older kernels which I think is something we should 
+support. The issue is that old kernels (like mentioned 4.12) do not have 
+syscall wrappers at all. getpid() syscall is just plain old sys_getpid 
+there and not the current __x64_sys_getpid on x86. The patch fixes it 
+by checking CONFIG_ARCH_HAS_SYSCALL_WRAPPER and defining FN_PREFIX 
+accordingly.
 
-On qemu-kvm machine, the sud_benchmark test results are as below:
+So, if this is correct, I think it should be done differently. We should 
+have something like syscall_wrapper.h which would define FN_PREFIX for 
+the supported architectures and different kernel versions since the 
+wrappers may have changed a couple of times during the history. In that 
+case there could then be an #else branch which might just error out with 
+the message to add proper syscall wrapper naming.
 
-	# ./sud_benchmark
-	Calibrating test set to last ~5 seconds...
-	test iterations = 24500000
-	Avg syscall time 208ns.
-	Enabling syscall trapping.
-	Caught sys_1c2
-	trapped_call_count 1, native_call_count 0.
-	Avg syscall time 213ns.
-	Interception overhead: 2.5% (+5ns).
+The changelog then should explain it because it is not in fact tight to 
+powerpc.
 
-Reviewed-by: Yeoreum Yun <yeoreum.yun@arm.com>
-Signed-off-by: kemal <kmal@cock.li>
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c | 2 +-
- tools/testing/selftests/syscall_user_dispatch/sud_test.c      | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+What do you think? Am I off again?
 
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c b/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-index 073a03702ff5..6059abe75cb3 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-@@ -41,7 +41,7 @@
-  * out of the box, but don't enable them until they support syscall user
-  * dispatch.
-  */
--#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__aarch64__)
- #define TEST_BLOCKED_RETURN
- #endif
- 
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-index b855c6000287..3ffea2f4a66d 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-@@ -192,6 +192,10 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
- 	((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A0] =
- 			((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A7];
- #endif
-+#ifdef __aarch64__
-+	((ucontext_t *)ucontext)->uc_mcontext.regs[0] = (unsigned int)
-+			((ucontext_t *)ucontext)->uc_mcontext.regs[8];
-+#endif
- }
- 
- int setup_sigsys_handler(void)
--- 
-2.34.1
-
+Miroslav
