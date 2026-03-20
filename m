@@ -1,159 +1,87 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185BB35BDA5
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 07:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFBD31F992
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 07:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773991338; cv=none; b=tSrUojQImXpUe5nlUQcNsdFmS0mezM+NEKzto1ZF5YM5MAyVExEDQpUp4Aigtrn5qoGtxCvA4l3g18BsHDEOQoV/EQBkFani+zWZc56MDX5odJ4Fg4lvrTYLwaRX7xNVyq4AARWz0AJYDD5n3AgA/2gxRcpf+TssC9g8ZTjurS0=
+	t=1773992025; cv=none; b=CwFDlIcJsqbck85Kp5HfVPrAbvzc/ATH3O8mbE5wCVj4h6Lq9dTSjemQNn6s1vL7HFmKHO9B4OjY/3mGDNaxvTo0c2Ur38s2fvmB9bw01/DcKxp92x68wplahaEn9JFNcRBQQak1T+6Ss21Eax0lIwUc2ZKEeyvCsqrpZaQ21Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773991338; c=relaxed/simple;
-	bh=7e11Rzezl2KDjcTyl1P9NIZgWk2RomPzHy1FDC7uNv0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sNAjZy/wRaEBkvu0HE0EV7xux6STqdO9LIMGdIN2oH3b4mA5UeSDfBVLZJjFbPlTzSuKG6hu7uvPJ+FSRUUX66gDdYX02yvjpYhfTEgwj5/Nt+kKbcywp06aWjb66+l4YM4PpEJfyavVsIDpAzeIAiGp2oWx55JJ8zabuHA4qIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l6KY6N+1; arc=none smtp.client-ip=91.218.175.182
+	s=arc-20240116; t=1773992025; c=relaxed/simple;
+	bh=mDxASL2NYfrGfQNB0AwjVZ78bVAlLUC3X5AxC4QKgxY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Ja823PHyUweQiXhonZv5EYzPw6Gg/HZkp8RQt02IqUH0CYm/Or9scu7JwyK5Et8nWYzNMloktHWHOdwySigO6AdPgUVIepG9KvgEsSEZM3Nl3n7oz8IyCN0iWTxyOwWiwpQiE/GrieE8LHyDzaUw09PicjBfRZhejAehPZYgIG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i20Ts1sl; arc=none smtp.client-ip=95.215.58.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l6KY6N+1"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i20Ts1sl"
+Message-ID: <d1ea4d44-f380-4017-b90c-ecaec6e5a30f@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773991335;
+	t=1773992011;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YuM6ZDfBtwkarCW76CZ0oiAYb2DsFaCVZvlmDq14wkk=;
-	b=l6KY6N+1HdNRwdQu6L3pDItnls13HfjoZtSImh1Mi+QbCijSQQPnOsmZEpxmGoiy4a6RbW
-	Ak0znyySyP5mL9q35NAzSu1VKNf1t2VZgqPRwFRRvyXz41QVqFfQV3rwkxHbLGbq1xlApG
-	MQSJbASqvkMdWyXwH1u9w7enV7zeCSU=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v3 2/2] selftests: team: add non-Ethernet header_ops reproducer
-Date: Fri, 20 Mar 2026 15:21:27 +0800
-Message-ID: <20260320072139.134249-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260320072139.134249-1-jiayuan.chen@linux.dev>
-References: <20260320072139.134249-1-jiayuan.chen@linux.dev>
+	bh=ewotJeu+IfO3qRPmLBMELeKgiPEzDCIRjYWohnQPmXs=;
+	b=i20Ts1slsIChM5gklO7p6itL8svLCLzmi4nQyBODoE/0qpdfC30pWm8mAKA3mQ+9ejAwBV
+	c36ydo+vuNorO7uJqL6OwG3helgZ1QrTQ/LY/m/TGkZL+KS8Wn9E/6kCvCtgEEt7KB+cUj
+	BycYm4cKumdY+fJlRcKclG+/pVMawv0=
+Date: Fri, 20 Mar 2026 15:33:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v5 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: Paolo Abeni <pabeni@redhat.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com,
+ syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+ Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Clark Williams <clrkwllms@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Jussi Maki <joamaki@gmail.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+References: <20260309030702.128520-1-jiayuan.chen@linux.dev>
+ <20260309030702.128520-2-jiayuan.chen@linux.dev> <abAFRbJNinhN3O5v@penguin>
+ <CANn89i+5yOzdiBTWm4ekc0UvMxQp=mhXbz0rU5WnfxEu3NrAhg@mail.gmail.com>
+ <CANn89iLOyWzWW7w262Vsy2MOMVDXA0+UZGpEbsdLwe6e75mhKQ@mail.gmail.com>
+ <abARG4sHFdUNqcRV@penguin> <8d746046-eed9-4d82-a064-c20b6a131bdc@redhat.com>
+ <c72ba406-fc16-4ce0-b75f-3105b64caef6@linux.dev>
+In-Reply-To: <c72ba406-fc16-4ce0-b75f-3105b64caef6@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-Add a team selftest that sets up:
-  g0 (gre) -> b0 (bond) -> t0 (team)
+On 3/12/26 7:02 PM, Jiayuan Chen wrote:
+> f who calls it, preventing similar crashes from other potential code 
+> paths.
 
-and triggers IPv6 traffic on t0. This reproduces the non-Ethernet
-header_ops confusion scenario and protects against regressions in stacked
-team/bond/gre configurations.
 
-Using this script, the panic reported by syzkaller can be reproduced [1].
 
-After the fix:
 
-  # ./non_ether_header_ops.sh
-  PASS: non-Ethernet header_ops stacking did not crash
+Sorry for the noise.
 
-[1] https://syzkaller.appspot.com/bug?extid=3d8bc31c45e11450f24c
+Could we include both:
+1. Add link status check in xdp
+2. Adding a defensive null check in bond_rr_gen_slave_id()
 
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
----
- .../selftests/drivers/net/team/Makefile       |  1 +
- .../testing/selftests/drivers/net/team/config |  2 +
- .../drivers/net/team/non_ether_header_ops.sh  | 41 +++++++++++++++++++
- 3 files changed, 44 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/team/non_ether_header_ops.sh
 
-diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/testing/selftests/drivers/net/team/Makefile
-index 45a3e7ad3dcb..02d6f51d5a06 100644
---- a/tools/testing/selftests/drivers/net/team/Makefile
-+++ b/tools/testing/selftests/drivers/net/team/Makefile
-@@ -3,6 +3,7 @@
- 
- TEST_PROGS := \
- 	dev_addr_lists.sh \
-+	non_ether_header_ops.sh \
- 	options.sh \
- 	propagation.sh \
- 	refleak.sh \
-diff --git a/tools/testing/selftests/drivers/net/team/config b/tools/testing/selftests/drivers/net/team/config
-index 558e1d0cf565..5d36a22ef080 100644
---- a/tools/testing/selftests/drivers/net/team/config
-+++ b/tools/testing/selftests/drivers/net/team/config
-@@ -1,7 +1,9 @@
-+CONFIG_BONDING=y
- CONFIG_DUMMY=y
- CONFIG_IPV6=y
- CONFIG_MACVLAN=y
- CONFIG_NETDEVSIM=m
-+CONFIG_NET_IPGRE=y
- CONFIG_NET_TEAM=y
- CONFIG_NET_TEAM_MODE_ACTIVEBACKUP=y
- CONFIG_NET_TEAM_MODE_LOADBALANCE=y
-diff --git a/tools/testing/selftests/drivers/net/team/non_ether_header_ops.sh b/tools/testing/selftests/drivers/net/team/non_ether_header_ops.sh
-new file mode 100755
-index 000000000000..948a43576bdc
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/team/non_ether_header_ops.sh
-@@ -0,0 +1,41 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# shellcheck disable=SC2154
-+#
-+# Reproduce the non-Ethernet header_ops confusion scenario with:
-+#   g0 (gre) -> b0 (bond) -> t0 (team)
-+#
-+# Before the fix, direct header_ops inheritance in this stack could call
-+# callbacks with the wrong net_device context and crash.
-+
-+lib_dir=$(dirname "$0")
-+source "$lib_dir"/../../../net/lib.sh
-+
-+trap cleanup_all_ns EXIT
-+
-+setup_ns ns1
-+
-+ip -n "$ns1" link add d0 type dummy
-+ip -n "$ns1" addr add 10.10.10.1/24 dev d0
-+ip -n "$ns1" link set d0 up
-+
-+ip -n "$ns1" link add g0 type gre local 10.10.10.1
-+ip -n "$ns1" link add b0 type bond mode active-backup
-+ip -n "$ns1" link add t0 type team
-+
-+ip -n "$ns1" link set g0 master b0
-+ip -n "$ns1" link set b0 master t0
-+
-+ip -n "$ns1" link set g0 up
-+ip -n "$ns1" link set b0 up
-+ip -n "$ns1" link set t0 up
-+
-+# IPv6 address assignment triggers MLD join reports that call
-+# dev_hard_header() on t0, exercising the inherited header_ops path.
-+ip -n "$ns1" -6 addr add 2001:db8:1::1/64 dev t0 nodad
-+for i in $(seq 1 20); do
-+	ip netns exec "$ns1" ping -6 -I t0 ff02::1 -c1 -W1 &>/dev/null || true
-+done
-+
-+echo "PASS: non-Ethernet header_ops stacking did not crash"
-+exit "$EXIT_STATUS"
--- 
-2.43.0
+This way, the bond layer is robust regardless of who calls it,
+preventing similar crashes from other potential code paths.
 
