@@ -1,90 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2527E2E1F11;
-	Fri, 20 Mar 2026 20:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C82352C58;
+	Fri, 20 Mar 2026 21:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774040034; cv=none; b=i/AZ4HvhRulesmdRYppo+SNbEoylqmROBz8TeRyqUTMiC29Wn35/yFjh8JTPlspgbej87rWqyEnW4gowNK2ZmZV+ts26+3Vi/Dp+NCwcSulvuIfagHwYlt6YCOUVJVRAqUIuyZHhP+nkwz6jekKNeSYNg0lsUSDxBH3sWsstncI=
+	t=1774041561; cv=none; b=mv/4vzQ3yB7xl8lteW2CrG3wAb6jo3uubFQsL4ej/GDHGoVWbuVnL6MB/+ALzj7C+gHSM+b9Af/PQ5aZhGv5VerG3MmIBCf6A953Tg/2EQgP9TWcH/3kCo1GGJfgBca/f3Kaci6vgE4oQSb4WBMrDrSxj47uebwLk7n7/XcyWjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774040034; c=relaxed/simple;
-	bh=XroiJxEEGdNWjceuamhV1OA5FIszYsMzqzw5iXiJN2E=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Q+693vVuxpjdODzyK2tTuMFVeiJ1CZSIHa2nOrl06vNooNLAw0bMFe1mTF8w4mWhAoHlesrTM9FJAw02keEbXtoYvGoA6TfisbeYVAVbz9ph6w1ebBArABP7rLZiZsqWgk9MAjiOnFCNHhhhDS8BW5kCVpv6VswOZ4mo9SXujTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=pZnf/QTW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774041561; c=relaxed/simple;
+	bh=cHPxWmUQCW0OGjONm+0ATWYFHtiKrwFaP74Jw2QvcUk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uJNlsoRRXGO0W6MdchzAO+lrskFbfz/063SMG78TmSvrehLFfY5Km6tnxItFrTXS4napSZM1sf2rYytotsvpoxw4v6avwVoW63HJ5B4tpJOsneB1jwAse5hqLF/c8g7WT9eLLb9k4BL0hND41ZvzrrFrRxYYShqCNwbQ6q1TswE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=ThMDAt8p; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=217cv47C; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="pZnf/QTW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36074C4CEF7;
-	Fri, 20 Mar 2026 20:53:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774040033;
-	bh=XroiJxEEGdNWjceuamhV1OA5FIszYsMzqzw5iXiJN2E=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pZnf/QTW0b89tenZJtxRPDk9uPa+iHqgqViWgH9ajaHkxJ4DKtUYwocSR8YvvaEd1
-	 /B9LLPkifVtUseT9Jwhp1I5HyRnz627dFVbs1yVLbEvKqYrHE7jzXImjCSwImIw265
-	 +oQtb1WHLE1XEIptM3nown4JQcTBxGza3bm/nBcE=
-Date: Fri, 20 Mar 2026 13:53:52 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Audra Mitchell <audra@redhat.com>
-Cc: david@kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com,
- vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- shuah@kernel.org, usama.anjum@collabora.com, colin.i.king@gmail.com,
- avagin@google.com, linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: Fix soft-dirty kselftest supported check
-Message-Id: <20260320135352.53cc24edc1ce1666141168f6@linux-foundation.org>
-In-Reply-To: <20260320184010.759461-2-audra@redhat.com>
-References: <f7fef55d-4334-4d1d-b6c6-b409fea7e2a1@kernel.org>
-	<20260320184010.759461-1-audra@redhat.com>
-	<20260320184010.759461-2-audra@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="ThMDAt8p";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="217cv47C"
+Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 02FF51400275;
+	Fri, 20 Mar 2026 17:19:14 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-09.internal (MEProxy); Fri, 20 Mar 2026 17:19:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1774041553;
+	 x=1774127953; bh=7OkcGIC7RuGIkDJJhjm7ZPFlO126MQ8vzH/zf/jBsS4=; b=
+	ThMDAt8pIWL0Ccyj8Yug95ofcvtR+lXloze2l+HX5NEbDV7g0wIk/S3TdRovKnwp
+	kTR78qpS6D795xCo43yWJEwiAPnl1cjwgs/PPGxdeXtwv2mJ2vo6YvdNSbTx/d+2
+	N8ErCgVC0TkAnheqzcBeWZ9eQGEotAxXvDiAssqeCbKjJs86ouBBYwZ4TY2xgcde
+	xGU23Wf2LQC0I6HIxKh2sVGLz49UxpaPZVCj5QTtUCnjwvZuh7kcknkbhPLqN5Z3
+	MreE1dtthcjEAdJ2Um1Sl1TVJbGbd09Iws9k1YjL4n9IJSmpMlH1sVjiqqV3Juh9
+	OccGCM0Aj6lY2hNDh0cPRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774041553; x=
+	1774127953; bh=7OkcGIC7RuGIkDJJhjm7ZPFlO126MQ8vzH/zf/jBsS4=; b=2
+	17cv47CMxWHPzE4oWrWhuDFse0IJtbq8ZsAPkSTkYqNgqgZ4q3aC+X1DRa7aPpUa
+	27w4YuOQpJZrrcc8gp4ur7e+PCDVEM8dEpRJOTvLmVOr0PyCG0vq7w4DCjVrKr0s
+	2onJGITU9VsvYPveW2r5DhI3oWXvm4gF7FqSv4qVZJmwoU3vPdAGZPH4r034O6Uy
+	EX61Px/KediXmtGgsPPq9930eFwWt0FbFAC2f1oDUb+blU3UqmAWNI/yH3CNRvHb
+	nBpam32sQOPLoZBZETmXM02M+QlTdiOPyeSbnfdtTUGrinHlJSPNogenvIhDYGNb
+	7fr9eoEPC210k0sIlNesQ==
+X-ME-Sender: <xms:0bm9aREm-SKE6oS_yYz57Lmgq9t6oKoUZkfpBLii0xTJTgiKy6VuxQ>
+    <xme:0bm9aSV5rHLIUNZQrf6IxtjE5UnBp4wBBwuEbpAhQtxYiZ_c5owvXvh5bJi6PUG0t
+    9IuI5UfALKBNDl2rb57_bVwNPn7TeL80o9wJ9CEPPyhgtDBG5mf>
+X-ME-Received: <xmr:0bm9aVUjJg_fFwz3PB7vFLBXCvc_tMOOEPTiRkM2aICYu3I4xkqH2CCVL2c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefuddtleejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
+    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeekheejieetffefueeiteejtdejffdvleelvdeuvdffvdefteeghfevkeeu
+    vdefvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghlvgigsehshhgriigsohhtrdhorhhg
+    pdhnsggprhgtphhtthhopeekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtvg
+    gulhhoghgrnhesfhgsrdgtohhmpdhrtghpthhtohepughmrghtlhgrtghksehgohhoghhl
+    vgdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidq
+    khhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
+    hnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehm
+    rghtthgvvhesmhgvthgrrdgtohhmpdhrtghpthhtoheprghlvgigsehshhgriigsohhtrd
+    horhhg
+X-ME-Proxy: <xmx:0bm9aYJJCzJ8UXM1ngmQ4qCad5k5R0doEvt_Qs9JL58o0vixDjcsmQ>
+    <xmx:0bm9aVDtznl4DN1HWuakQLrLgyuPUMqT_hkRAkv8yq6eYUBWveSYmw>
+    <xmx:0bm9aYegnfnnTGE_tYthak5_HnLjnhQhunKW1Lg91XQEZEC_sif5xg>
+    <xmx:0bm9aU3TSnZhtbYpP70hIYTOVyPyAWIqu53trwSXJR9hxqLD4iq8Qg>
+    <xmx:0bm9abEDNihA-VLp__ukacEHsFRWmZtlxuOIZsqZjTd0MbDU9EtDDudv>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 Mar 2026 17:19:13 -0400 (EDT)
+Date: Fri, 20 Mar 2026 15:17:04 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: Ted Logan <tedlogan@fb.com>
+Cc: David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>,
+ <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, Matt Evans <mattev@meta.com>,
+ alex@shazbot.org
+Subject: Re: [PATCH v2] vfio: selftests: Build tests on aarch64
+Message-ID: <20260320151704.4cff8a83@shazbot.org>
+In-Reply-To: <20260319-vfio-selftests-aarch64-v2-1-bb2621c24dc4@fb.com>
+References: <20260319-vfio-selftests-aarch64-v2-1-bb2621c24dc4@fb.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 20 Mar 2026 14:39:15 -0400 Audra Mitchell <audra@redhat.com> wrote:
+On Thu, 19 Mar 2026 15:58:47 -0700
+Ted Logan <tedlogan@fb.com> wrote:
 
-> On architectures with separate user address space, such as s390 or
-> those without an MMU, the soft-dirty kselftest may fail when checking
-> to see if the feature is supported.
+> Fix vfio selftests on aarch64, allowing native builds on aarch64 hosts.
 > 
->   # --------------------
->   # running ./soft-dirty
->   # --------------------
->   # TAP version 13
->   # 1..15
->   # Bail out! PAGEMAP_SCAN succeeded unexpectedly
->   # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->   # [FAIL]
->   not ok 1 soft-dirty # exit=1
->   # SUMMARY: PASS=0 SKIP=0 FAIL=1
+> Reported-by: Matt Evans <mattev@meta.com>
+> Closes: https://lore.kernel.org/all/e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com/
+> Fixes: a55d4bbbe644 ("vfio: selftests: only build tests on arm64 and x86_64")
+> Signed-off-by: Ted Logan <tedlogan@fb.com>
+> ---
+> Changes in v2:
+> - Add aarch64 to the list of allowed architectures, rather than trying
+>   to maintain a new architecture substitution.
+> - Update wording of commit message.
+> - Link to v1: https://lore.kernel.org/r/20260317-vfio-selftests-aarch64-v1-1-2266077563e7@fb.com
+> ---
+>  tools/testing/selftests/vfio/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> The soft-dirty test will initate an ioctl with the PAGEMAP_SCAN flag with
-> an invalid address for the page_region. This is done intentionally to
-> have the ioctl return with an expected EFAULT and with the correct
-> categories returned.
+> diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> index 8e90e409e91d..0684932d91bf 100644
+> --- a/tools/testing/selftests/vfio/Makefile
+> +++ b/tools/testing/selftests/vfio/Makefile
+> @@ -1,6 +1,6 @@
+>  ARCH ?= $(shell uname -m)
+>  
+> -ifeq (,$(filter $(ARCH),arm64 x86_64))
+> +ifeq (,$(filter $(ARCH),aarch64 arm64 x86_64))
+>  # Do nothing on unsupported architectures
+>  include ../lib.mk
+>  else
 > 
-> However, on architectures with separate user address space, such as s390 or
-> those without an MMU, the call to __access_ok (used to validate the
-> variables provided with the ioctl) will always return true and we will not
-> fail as expected.
-> 
->         if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) ||
->             !IS_ENABLED(CONFIG_MMU))
->                 return true;
-> 
-> Let's simplify the check for PAGEMAP_SCAN and provide a valid page_region
-> address so that we get a non-errno return if it is supported.
+> ---
+> base-commit: 96ca4caf9066f5ebd35b561a521af588a8eb0215
+> change-id: 20260317-vfio-selftests-aarch64-636abf0f7674
 
-AI review asked some questions about v1:
-	https://sashiko.dev/#/patchset/20260320184010.759461-2-audra%40redhat.com
+Applied to vfio next branch for v7.1.  Thanks,
 
-These might have been addressed in this version but without a
-versioning tag and without a what-i-changed description I find it
-hard(er) to tell.
-
+Alex
