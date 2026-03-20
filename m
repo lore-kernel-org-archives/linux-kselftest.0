@@ -1,46 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E9D2C027C;
-	Fri, 20 Mar 2026 02:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0812E40DFC1;
+	Fri, 20 Mar 2026 02:46:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773974630; cv=none; b=hrCiTkpPuTr9qSsuQwPkGtu96ziKTJo4gZv06yETx3ZYF8ahAQshDUOkV8Je8Af0cWa83AZJZrWmEz7Ft9tB9B0Eknk16pgva09l4MdfpMRrVhBtKNF/HCoFzdHm03INk3aH5zkT0ABiF32Fctnq/4D7/YZa5oVGPy91KT64lPE=
+	t=1773974766; cv=none; b=QyFQUesMOO/JWRa0DkTpovYISfca3fiXQe6AvzYYEMs/P9gX0LBbB9yg6xHa4AxQhQlKsL8Qgsveiwobel4SeuHOMGveyWq37kIc6EHiyQh4zo5UeKSrirdxxRa/39bgoDKpeXKz4+XdWlO1SkPeb+VdnrpdMpQ+xm89+wyDkbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773974630; c=relaxed/simple;
-	bh=IM7odbRo5JmXvV35WSNt2mLDPESwML5Li6T+qlytX5s=;
+	s=arc-20240116; t=1773974766; c=relaxed/simple;
+	bh=YunpBLhttoCZ/wIAcy4nfrL4p7VGWHFXXCquZN24h8o=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=nQPA8YiT56h4P4rezfmazWnp7t5ZufgUcHPC71tCH2uedKtOxrDiPOF48lyo/A/jL8kjFVPPdr1oP+njC9DtnEZ4md6gqaZ5AZLigh6yeP9IdtkXfG8tTJ57du4SY2Q/gfcwZ5JK/po2eKHzKUJ1sz7zvL3J0fqmgG8kzJLJcQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Hgkr4hg7; arc=none smtp.client-ip=10.30.226.201
+	 Mime-Version:Content-Type; b=X7X9blmp9xVR/Wap+Em0Hl8G4mdHnPIb34+jyn8xQRmmBcmwXW7yohYSrjjEarAySd56+eBPoxnqau7Hg4rZU+bL3vkL/AUoEFlpvQ8vRlU9r6LlGSGPV0lTzzffOVi4iTBBYQ/hRwntyqrcVTac/NQYji0I1Mvu9j61i9VYDfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=czaTvFVh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Hgkr4hg7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D87C19424;
-	Fri, 20 Mar 2026 02:43:48 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="czaTvFVh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07CDDC19424;
+	Fri, 20 Mar 2026 02:46:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1773974628;
-	bh=IM7odbRo5JmXvV35WSNt2mLDPESwML5Li6T+qlytX5s=;
+	s=korg; t=1773974765;
+	bh=YunpBLhttoCZ/wIAcy4nfrL4p7VGWHFXXCquZN24h8o=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Hgkr4hg7zQXTt/YOkRxPkZIHUtK1zTNcywzH1MTqkkREzmi+9td5X05r118VG/gIv
-	 EUhIpque6aM/JP1B3c6Vr0hPdX5qI+jqzi3lt2YguscLplbGdsloC37l/N6PfVU0CG
-	 3BB+Li1V5rF2Lm7aIiOKKHmYDkcoC8MS2OnOO6CE=
-Date: Thu, 19 Mar 2026 19:43:47 -0700
+	b=czaTvFVhyni42YpuVBn1vWRh3Ky008Qc+XQuV8/+XFzKKmLC4NNt+pmObYqOsPzqK
+	 yh8tyZF4bDmbUAUWMBZ/hcGG+vgyAVxgnPloZ0wgZwj/PxinC+3kAEOQZY8h/2UFMo
+	 NRO4j9fuAShXnW+lMiJxKYTnE90r7LTXL5dGkcXs=
+Date: Thu, 19 Mar 2026 19:46:04 -0700
 From: Andrew Morton <akpm@linux-foundation.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt
- <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, Tejun Heo
- <tj@kernel.org>, Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>, Shuah
- Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
- James Houghton <jthoughton@google.com>, Sebastian Chlad
- <sebastianchlad@gmail.com>, Guopeng Zhang <zhangguopeng@kylinos.cn>, Li
- Wang <liwan@redhat.com>
-Subject: Re: [PATCH 0/7] selftests: memcg: Fix test_memcontrol test failures
- with large page sizes
-Message-Id: <20260319194347.1048fc8d737b6e8f9d82663d@linux-foundation.org>
-In-Reply-To: <20260319173752.1472864-1-longman@redhat.com>
-References: <20260319173752.1472864-1-longman@redhat.com>
+To: Chunyu Hu <chuhu@redhat.com>
+Cc: david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
+ baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
+Subject: Re: [PATCH v4 0/5] selftests/mm: skip several tests when thp is not
+ available
+Message-Id: <20260319194604.0a9a733f521caf2dc2bf18c8@linux-foundation.org>
+In-Reply-To: <20260319160656.1480279-1-chuhu@redhat.com>
+References: <20260319160656.1480279-1-chuhu@redhat.com>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -51,33 +47,11 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 19 Mar 2026 13:37:45 -0400 Waiman Long <longman@redhat.com> wrote:
+On Fri, 20 Mar 2026 00:06:51 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
 
-> There are a number of test failures with the running of the
-> test_memcontrol selftest on a 128-core arm64 system on kernels with
-> 4k/16k/64k page sizes. This patch series makes some minor changes to
-> the kernel and the test_memcontrol selftest to address these failures.
-> 
-> The first kernel patch scales the memcg vmstats flush threshold
-> logarithmetically instead of linearly with the total number of CPUs. The
-> second kernel patch scale down MEMCG_CHARGE_BATCH with increases in page
-> size. These 2 patches help to reduce the discrepancies between the
-> reported usage data with the real ones.
-> 
-> The next 5 test_memcontrol selftest patches adjust the testing code to
-> greatly reduce the chance that it will report failure, though some
-> occasional failures is still possible.
-> 
-> To verify the changes, the test_memcontrol selftest was run 100
-> times each on a 128-core arm64 system on kernels with 4k/16k/64k
-> page sizes.  No failure was observed other than some failures of the
-> test_memcg_reclaim test when running on a 16k page size kernel. The
-> reclaim_until() call failed because of the unexpected over-reclaim of
-> memory. This will need a further look but it happens with the 16k page
-> size kernel only and I don't have a production ready kernel config file
-> to use in buildinig this 16k page size kernel. The new test_memcontrol
-> selftest and kernel were also run on a 96-core x86 system to make sure
-> there was no regression.
+> There are several tests requires transprarent hugepages, when run on thp
+> disabled kernel such as realtime kernel, there will be false negative.
+> Mark those tests as skip when thp is not available.
 
-AI reviewbot asks questions:
-	https://sashiko.dev/#/patchset/20260319173752.1472864-1-longman%40redhat.com
+A couple of questions from Sashiko:
+	https://sashiko.dev/#/patchset/20260319160656.1480279-1-chuhu%40redhat.com
