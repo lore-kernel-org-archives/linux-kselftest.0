@@ -1,50 +1,50 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACE92D131D
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 01:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73192D3A75
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 01:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773969909; cv=none; b=r9S82JbCIcvF2h3NITS6SA+Rui2c8eaUByO4w3N8eBmZzUynnN0OauYxdRJ+zg6fPe2bVCThC37QURguAfOiRRDSf2AV47Go5AH/JsItVndvKIsxDJ4SLGJCmohdxjWl5t76guBKaowJW11Ey2Qd+sOm8tpR34rqcse2nWOLE5g=
+	t=1773969910; cv=none; b=ulI2d350aj/ItPojxQCbY30Fy9rXKOdVe5PF1riMOJgFY8Jd5K+TI2dofufCrN4MF8R8ZKS8Pgcisk2SCrOFe5FGt2j+s7UWJwm+ZR43tti2gnS+FkLFrdyRbReDFdl86uaNcVIQ5Cvu+jSrajvvIyKudmV+TFNegwYnodRTqZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773969909; c=relaxed/simple;
-	bh=fiWuZ9fcbL8sdigaSwTTvp8tHDm8kXTBMV+vvmAza+E=;
+	s=arc-20240116; t=1773969910; c=relaxed/simple;
+	bh=XclYFxLz8YWyIYAfWaCWDvbF9YZKt7pn6pNrTl1z7TY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VNv54WRr63YdrfBMkBIa2DmdJyTsf9HtOjRsziHmvTtkRdxx5My9mtYoFdHWlBRDHy2qhI81AqerWX4giqW+pJexg9iX/b/itwcm7d81u0s/GMf0tSSJUyX7VvXZik6jm7Dcbv+DlZJ+JmP+sv4v9IQJVL+rmOTZeRfCYOjnlEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.82.52
+	 MIME-Version; b=fF/SqR5hQR9B2EkFDMVy7bxzh1i6m2Z+pEqsB3vSZHw6kaNKZGgayJONZZG266HFGCaaZbsmeVncInglGDHfdyVzXMx5dSMewaumfTrUeFBfIp+7Grrl2q9V6BgPtE4YdVq94MTl23qqwc9637wBLfp6c4cHZjRqDv7vBNs9PbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.82.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-1279eced0b9so216980c88.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 18:25:06 -0700 (PDT)
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2b4520f6b32so2342834eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 18:25:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773969906; x=1774574706;
+        d=1e100.net; s=20251104; t=1773969907; x=1774574707;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=7EJnW3kdUcA/mWdICiYp+Buoz7NoSHqg/f92gpxvDwE=;
-        b=busWn/IxhNl8hmZZgV5r/NY96SkyeR3N3nvsx7lKBC5qhLjOHnj/SLZ0dBqfdatISY
-         AEAKlgeXNcOKo6uOfQjc7U8kfFSqJLRplgmx6dIQQkEDNjLSat7eG5n2QGXW573XayP0
-         +3c/nb1eeL4qmZ1FvjH94EpX+iCkSIOE6u3eb6msnEEqUWGB+0hmb5BO6LjGesnggx5Y
-         Nx26OhL2hRcri+qErMxEYIMIfE5oHahE5dqsvMhUkhboV2cEIe197g86lPk2S13GSJ0X
-         X3AKICJ+Jl9vAC1ZWBHTh11zhEsbYKTcDIT4dLiUBvCdqU8nEBJ8YfXeHZOYd9Y/lXsa
-         ZsLA==
-X-Forwarded-Encrypted: i=1; AJvYcCWrEf9aGML4W3p/+/N5hZO8WZKMAxOCJnhmRlFT/OMAOQgQZrY27OI9acQbsEv4I6RD6sWRO66J1VVR5hTcIIE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNlC2w+FUHptE1TRL8IR5sHrlHKJtCajQaHSOROd6KqnQGGF2N
-	7BWXl7CMkH7NLWgNLzbGuuw7ii8iangVPkbAdWbTr1EUvvXdoxxWagc=
-X-Gm-Gg: ATEYQzwiPKL7S87PneUhUZDQdsDuJvEsXSZSq1gtOji86hqcsdRXkhqCtrT5fEwF4tw
-	jM6adlfow4vhrsaKK0sA/5C7GDdO739l4D/z87z/YwYQnJhxhYbNP1OR2p4eoCpK50NjGjmOoY7
-	WnALGMGC0l6B3JmMt2dXulfHzHeawtcCQHAt7lZ/zM+pcGG+J/iUt5i2hAdgb3MUk0u09p+rczu
-	P+T+6NkLGP69Ld6RC6BOP1mTNldB1TZnE4dVZG4RdV7XbcmBoDf5tNP8TbrbDBtaC7sQl+jJJxi
-	EWTmiXA41rgVIiVNPyJBdCI4aao7w2RGN718Thfbh2MCTThno7bML+bSuhxtUMRiNwbHVdhwlCi
-	DYeZRKFxcDt1jFlfOxMfht9QF24hesfLH/6UJxtZut5e0+55Am42xEIy0iublyY282ET+AZI99v
-	AFKpKlBG3clmqspGpuhhHi21psQLqJS1QiZSr/6WyICDnb8SRleX75TafJSv6kkMWrv+bGm7gCy
-	SqnG9zTg3Uf33/ruQ==
-X-Received: by 2002:a05:7022:ec18:b0:128:d17b:e7ab with SMTP id a92af1059eb24-12a726f6573mr546108c88.36.1773969905386;
-        Thu, 19 Mar 2026 18:25:05 -0700 (PDT)
+        bh=0WCep2sMd+XcNQUXoONoloTYC004nnvk8vp16Ef+qqc=;
+        b=BLP+HXEqV5fxylxockVN/qL5u6qVy+GW8gNHM7ydxfTUiYDx1fZ1ZmqVk9vptcpiZM
+         AIyz0W2gxPkxeCm+J0OBnqW4l0bN/WxdFdCiTh2fhEoaqqxukinysuDRCVNQNZzlpgm6
+         6ZPv+OKjofM9hDBiZCof04/ecwPqOocMHNKozWP3trtd5QxfMmijxkkn0sk05ToNFVWZ
+         D9U9X8aNF8xNM4So+49BjoCM/pdjXpkpBXSzcNtsEdLHfH56XUdaJ9yqVNgVENtcXRg3
+         VvgO4Gee0Nqt85b41oN7sUQNltew71mKnQ5GznfeH910aRHVcTW4UpQPQLzLcNS3bPdC
+         Pqsw==
+X-Forwarded-Encrypted: i=1; AJvYcCVyvYZ4PUnn3awGESy6TTUUxr6xfI4/N2MEVU/oT3FHyl7eV7NyiWigYDYHju3CsIC55h+/8jR2pdKJrJl0Nrw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrcVrQ22wYTiEgeCOlbqbt0l0jM5+yFLz+9if3ogV2CSpWhTqJ
+	7dvd0Je4fwGpDgzIdZERHeVFb9/v3HFZUFhC7VyltUXIbTyiPIrH/7M=
+X-Gm-Gg: ATEYQzzQ2UIhilEkfNIJUDFhvFwN0P9zWuFQ0OtdEOobEymHliKiArKC+95Fg9bmVTE
+	xpWgCUfXcTsF+Hn8wAajT0lVD+cLz+cMVocnt95aG56XBsrPTwdYm9D3EprX8Jo6MRIuSf8ior1
+	ONAhty6zEIhcVUZj8YkpPrQrKtxkYjaho8aasCvZWayr3StvW11GgcpcAnFbs3WnzUGExXpxLVN
+	V+cEn0T1BGirFyz0bqmLCOjekKvl8V47a9I5Ci1puB1VBqBQoRk5wdEORs+9jlCxGVfnwl7H/cs
+	uy9wywrjUJVVacmPbbRXyy6NZS13H98uo7whA/XXr2EqLKO46WlvZ8ccBHHDfKrGvkHac6vVX18
+	arwKrOjhkSJP2rFINzwMNMb0uPoGhgIYQJxVOvU4EfCwbQ8IrcwrHdcdmTy7ln+uFD+JD8FJ88E
+	ykBYbqsbxKKqJdBuDJ47kiNyKlzEt13aqtW3jcTArREZnGE2fLqKCD5qi5Zwd1mq31k+5QJhW0Y
+	3jJVDkFgtzMI3RMVQ==
+X-Received: by 2002:a05:7300:e208:b0:2b0:52cc:fe69 with SMTP id 5a478bee46e88-2c109567323mr694475eec.5.1773969906707;
+        Thu, 19 Mar 2026 18:25:06 -0700 (PDT)
 Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a736b952asm749391c88.12.2026.03.19.18.25.04
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b31ebd5sm1142605eec.27.2026.03.19.18.25.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 18:25:05 -0700 (PDT)
+        Thu, 19 Mar 2026 18:25:06 -0700 (PDT)
 From: Stanislav Fomichev <sdf@fomichev.me>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -83,9 +83,9 @@ Cc: davem@davemloft.net,
 	linux-wireless@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	leon@kernel.org
-Subject: [PATCH net-next v3 02/13] wifi: cfg80211: use __rtnl_unlock in nl80211_pre_doit
-Date: Thu, 19 Mar 2026 18:24:50 -0700
-Message-ID: <20260320012501.2033548-3-sdf@fomichev.me>
+Subject: [PATCH net-next v3 03/13] net: introduce ndo_set_rx_mode_async and dev_rx_mode_work
+Date: Thu, 19 Mar 2026 18:24:51 -0700
+Message-ID: <20260320012501.2033548-4-sdf@fomichev.me>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260320012501.2033548-1-sdf@fomichev.me>
 References: <20260320012501.2033548-1-sdf@fomichev.me>
@@ -97,71 +97,255 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-nl80211_pre_doit acquires rtnl_lock and then wiphy_lock, releasing
-rtnl while keeping wiphy_lock held until post_doit. With the
-introduction of rx_mode_wq and its flush in netdev_run_todo, calling
-rtnl_unlock here creates a circular lock dependency:
+Add ndo_set_rx_mode_async callback that drivers can implement instead
+of the legacy ndo_set_rx_mode. The legacy callback runs under the
+netif_addr_lock spinlock with BHs disabled, preventing drivers from
+sleeping. The async variant runs from a work queue with rtnl_lock and
+netdev_lock_ops held, in fully sleepable context.
 
-  Chain exists of:
-    (wq_completion)rx_mode_wq --> rtnl_mutex --> &rdev->wiphy.mtx
+When __dev_set_rx_mode() sees ndo_set_rx_mode_async, it schedules
+dev_rx_mode_work instead of calling the driver inline. The work
+function takes two snapshots of each address list (uc/mc) under
+the addr_lock, then drops the lock and calls the driver with the
+work copies. After the driver returns, it reconciles the snapshots
+back to the real lists under the lock.
 
-   Possible unsafe locking scenario:
-
-         CPU0                    CPU1
-         ----                    ----
-    lock(&rdev->wiphy.mtx);
-                                 lock(rtnl_mutex);
-                                 lock(&rdev->wiphy.mtx);
-    lock((wq_completion)rx_mode_wq);
-
-Switch to __rtnl_unlock to skip netdev_run_todo in nl80211_pre_doit.
-This seems safe because we run before the op.
-
-Link: http://lore.kernel.org/netdev/69b5ad67.a00a0220.3b25d1.001a.GAE@google.com
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 ---
- net/core/rtnetlink.c   | 1 +
- net/wireless/core.c    | 1 +
- net/wireless/nl80211.c | 2 +-
- 3 files changed, 3 insertions(+), 1 deletion(-)
+ Documentation/networking/netdevices.rst |  8 +++
+ include/linux/netdevice.h               | 20 ++++++
+ net/core/dev.c                          | 95 +++++++++++++++++++++++--
+ 3 files changed, 116 insertions(+), 7 deletions(-)
 
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index dad4b1054955..b1bfb4a4aedd 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -150,6 +150,7 @@ void __rtnl_unlock(void)
- 		head = next;
- 	}
+diff --git a/Documentation/networking/netdevices.rst b/Documentation/networking/netdevices.rst
+index 35704d115312..dc83d78d3b27 100644
+--- a/Documentation/networking/netdevices.rst
++++ b/Documentation/networking/netdevices.rst
+@@ -289,6 +289,14 @@ struct net_device synchronization rules
+ ndo_set_rx_mode:
+ 	Synchronization: netif_addr_lock spinlock.
+ 	Context: BHs disabled
++	Notes: Deprecated in favor of sleepable ndo_set_rx_mode_async.
++
++ndo_set_rx_mode_async:
++	Synchronization: rtnl_lock() semaphore. In addition, netdev instance
++	lock if the driver implements queue management or shaper API.
++	Context: process (from a work queue)
++	Notes: Sleepable version of ndo_set_rx_mode. Receives snapshots
++	of the unicast and multicast address lists.
+ 
+ ndo_setup_tc:
+ 	``TC_SETUP_BLOCK`` and ``TC_SETUP_FT`` are running under NFT locks
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 469b7cdb3237..b05bdd67b807 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1117,6 +1117,16 @@ struct netdev_net_notifier {
+  *	This function is called device changes address list filtering.
+  *	If driver handles unicast address filtering, it should set
+  *	IFF_UNICAST_FLT in its priv_flags.
++ *	Cannot sleep, called with netif_addr_lock_bh held.
++ *	Deprecated in favor of sleepable ndo_set_rx_mode_async.
++ *
++ * void (*ndo_set_rx_mode_async)(struct net_device *dev,
++ *				 struct netdev_hw_addr_list *uc,
++ *				 struct netdev_hw_addr_list *mc);
++ *	Sleepable version of ndo_set_rx_mode. Called from a work queue
++ *	with rtnl_lock and netdev_lock_ops(dev) held. The uc/mc parameters
++ *	are snapshots of the address lists - iterate with
++ *	netdev_hw_addr_list_for_each(ha, uc).
+  *
+  * int (*ndo_set_mac_address)(struct net_device *dev, void *addr);
+  *	This function  is called when the Media Access Control address
+@@ -1437,6 +1447,9 @@ struct net_device_ops {
+ 	void			(*ndo_change_rx_flags)(struct net_device *dev,
+ 						       int flags);
+ 	void			(*ndo_set_rx_mode)(struct net_device *dev);
++	void			(*ndo_set_rx_mode_async)(struct net_device *dev,
++							 struct netdev_hw_addr_list *uc,
++							 struct netdev_hw_addr_list *mc);
+ 	int			(*ndo_set_mac_address)(struct net_device *dev,
+ 						       void *addr);
+ 	int			(*ndo_validate_addr)(struct net_device *dev);
+@@ -1903,6 +1916,7 @@ enum netdev_reg_state {
+  *				has been enabled due to the need to listen to
+  *				additional unicast addresses in a device that
+  *				does not implement ndo_set_rx_mode()
++ *	@rx_mode_work:		Work queue entry for ndo_set_rx_mode_async()
+  *	@uc:			unicast mac addresses
+  *	@mc:			multicast mac addresses
+  *	@dev_addrs:		list of device hw addresses
+@@ -2293,6 +2307,7 @@ struct net_device {
+ 	unsigned int		promiscuity;
+ 	unsigned int		allmulti;
+ 	bool			uc_promisc;
++	struct work_struct	rx_mode_work;
+ #ifdef CONFIG_LOCKDEP
+ 	unsigned char		nested_level;
+ #endif
+@@ -4661,6 +4676,11 @@ static inline bool netif_device_present(const struct net_device *dev)
+ 	return test_bit(__LINK_STATE_PRESENT, &dev->state);
  }
-+EXPORT_SYMBOL_NS_GPL(__rtnl_unlock, "NETDEV_INTERNAL");
  
- void rtnl_unlock(void)
++static inline bool netif_up_and_present(const struct net_device *dev)
++{
++	return (dev->flags & IFF_UP) && netif_device_present(dev);
++}
++
+ void netif_device_detach(struct net_device *dev);
+ 
+ void netif_device_attach(struct net_device *dev);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 200d44883fc1..fedc423306fc 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -2381,6 +2381,8 @@ static void netstamp_clear(struct work_struct *work)
+ static DECLARE_WORK(netstamp_work, netstamp_clear);
+ #endif
+ 
++static struct workqueue_struct *rx_mode_wq;
++
+ void net_enable_timestamp(void)
  {
-diff --git a/net/wireless/core.c b/net/wireless/core.c
-index 23afc250bc10..a78a9b613c94 100644
---- a/net/wireless/core.c
-+++ b/net/wireless/core.c
-@@ -41,6 +41,7 @@ MODULE_AUTHOR("Johannes Berg");
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("wireless configuration support");
- MODULE_ALIAS_GENL_FAMILY(NL80211_GENL_NAME);
-+MODULE_IMPORT_NS("NETDEV_INTERNAL");
- 
- /* RCU-protected (and RTNL for writers) */
- LIST_HEAD(cfg80211_rdev_list);
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index e15cd26f3a79..f8ed8730cf1c 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -18203,7 +18203,7 @@ static int nl80211_pre_doit(const struct genl_split_ops *ops,
- 		__release(&rdev->wiphy.mtx);
- 	}
- 	if (!(internal_flags & NL80211_FLAG_NEED_RTNL))
--		rtnl_unlock();
-+		__rtnl_unlock();
- 
+ #ifdef CONFIG_JUMP_LABEL
+@@ -9669,22 +9671,84 @@ int netif_set_allmulti(struct net_device *dev, int inc, bool notify)
  	return 0;
- out_unlock:
+ }
+ 
+-/*
+- *	Upload unicast and multicast address lists to device and
+- *	configure RX filtering. When the device doesn't support unicast
+- *	filtering it is put in promiscuous mode while unicast addresses
+- *	are present.
++static void dev_rx_mode_work(struct work_struct *work)
++{
++	struct net_device *dev = container_of(work, struct net_device,
++					      rx_mode_work);
++	struct netdev_hw_addr_list uc_snap, mc_snap, uc_ref, mc_ref;
++	const struct net_device_ops *ops = dev->netdev_ops;
++	int err;
++
++	__hw_addr_init(&uc_snap);
++	__hw_addr_init(&mc_snap);
++	__hw_addr_init(&uc_ref);
++	__hw_addr_init(&mc_ref);
++
++	rtnl_lock();
++	netdev_lock_ops(dev);
++
++	if (!netif_up_and_present(dev))
++		goto out;
++
++	if (ops->ndo_set_rx_mode_async) {
++		netif_addr_lock_bh(dev);
++
++		err = __hw_addr_list_snapshot(&uc_snap, &dev->uc,
++					      dev->addr_len);
++		if (!err)
++			err = __hw_addr_list_snapshot(&uc_ref, &dev->uc,
++						      dev->addr_len);
++		if (!err)
++			err = __hw_addr_list_snapshot(&mc_snap, &dev->mc,
++						      dev->addr_len);
++		if (!err)
++			err = __hw_addr_list_snapshot(&mc_ref, &dev->mc,
++						      dev->addr_len);
++		netif_addr_unlock_bh(dev);
++
++		if (err) {
++			netdev_WARN(dev, "failed to sync uc/mc addresses\n");
++			__hw_addr_flush(&uc_snap);
++			__hw_addr_flush(&uc_ref);
++			__hw_addr_flush(&mc_snap);
++			goto out;
++		}
++
++		ops->ndo_set_rx_mode_async(dev, &uc_snap, &mc_snap);
++
++		netif_addr_lock_bh(dev);
++		__hw_addr_list_reconcile(&dev->uc, &uc_snap,
++					 &uc_ref, dev->addr_len);
++		__hw_addr_list_reconcile(&dev->mc, &mc_snap,
++					 &mc_ref, dev->addr_len);
++		netif_addr_unlock_bh(dev);
++	}
++
++out:
++	netdev_unlock_ops(dev);
++	rtnl_unlock();
++}
++
++/**
++ * __dev_set_rx_mode() - upload unicast and multicast address lists to device
++ * and configure RX filtering.
++ * @dev: device
++ *
++ * When the device doesn't support unicast filtering it is put in promiscuous
++ * mode while unicast addresses are present.
+  */
+ void __dev_set_rx_mode(struct net_device *dev)
+ {
+ 	const struct net_device_ops *ops = dev->netdev_ops;
+ 
+ 	/* dev_open will call this function so the list will stay sane. */
+-	if (!(dev->flags&IFF_UP))
++	if (!netif_up_and_present(dev))
+ 		return;
+ 
+-	if (!netif_device_present(dev))
++	if (ops->ndo_set_rx_mode_async) {
++		queue_work(rx_mode_wq, &dev->rx_mode_work);
+ 		return;
++	}
+ 
+ 	if (!(dev->priv_flags & IFF_UNICAST_FLT)) {
+ 		/* Unicast addresses changes may only happen under the rtnl,
+@@ -11708,6 +11772,16 @@ void netdev_run_todo(void)
+ 
+ 	__rtnl_unlock();
+ 
++	/* Make sure all pending rx_mode work completes before returning.
++	 *
++	 * rx_mode_wq may be NULL during early boot:
++	 * core_initcall(netlink_proto_init) vs subsys_initcall(net_dev_init).
++	 *
++	 * Check current_work() to avoid flushing from the wq.
++	 */
++	if (rx_mode_wq && !current_work())
++		flush_workqueue(rx_mode_wq);
++
+ 	/* Wait for rcu callbacks to finish before next phase */
+ 	if (!list_empty(&list))
+ 		rcu_barrier();
+@@ -12099,6 +12173,7 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
+ #endif
+ 
+ 	mutex_init(&dev->lock);
++	INIT_WORK(&dev->rx_mode_work, dev_rx_mode_work);
+ 
+ 	dev->priv_flags = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
+ 	setup(dev);
+@@ -12203,6 +12278,8 @@ void free_netdev(struct net_device *dev)
+ 
+ 	kfree(rcu_dereference_protected(dev->ingress_queue, 1));
+ 
++	cancel_work_sync(&dev->rx_mode_work);
++
+ 	/* Flush device addresses */
+ 	dev_addr_flush(dev);
+ 
+@@ -13296,6 +13373,10 @@ static int __init net_dev_init(void)
+ 	if (register_pernet_device(&default_device_ops))
+ 		goto out;
+ 
++	rx_mode_wq = alloc_ordered_workqueue("rx_mode_wq", 0);
++	if (!rx_mode_wq)
++		goto out;
++
+ 	open_softirq(NET_TX_SOFTIRQ, net_tx_action);
+ 	open_softirq(NET_RX_SOFTIRQ, net_rx_action);
+ 
 -- 
 2.53.0
 
