@@ -1,113 +1,202 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AE13A7F49;
-	Fri, 20 Mar 2026 11:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15212368957
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774006016; cv=none; b=p4A0hhT4YSChe5UiUrbeFgWYRf9sPrOMyM+Vh+/43qtZf1o29Mf4QA7rVxNgTo8CIKotgIb/NrN64KGRmok+ICL2PWcXv9brvWnvMbA+nVW+qsbz+VSMA869ByWO/P6lPByJ4szyZaOrTe68F9+hWA1uJ2eDVQ70I2ar1oaTTk4=
+	t=1774006413; cv=none; b=ifX75DjAbBZfBsUb8vCX0zpvsbmipiAF1XIkujXsskX06zDksmGW5vHHeWAwIfr/uwlnR0a22Aghpbldxj2AzmLvQ36xwcqAekjS5XSBx4cSZCZGkBLTkS3LaEvLUDJwRSXsL+Z85iXC9h5oSgxLpedfR7sVcBkNXgHzeixDGWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774006016; c=relaxed/simple;
-	bh=162dit8g8/7CY8fNPwJVXoMvncY0FTaddvmuQ6lnsVg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b+ghvJhtvcVSPE4mvZ3FQZiyRF2PIeXbkzb0H1TFwq6S+P2L/+ZEWKc23+W/JdhfoaPrfo1zPR55uawHqtSsheHBBO3zSNsj4WxDBgYu4Q2C47AdUTUW/gh3NmiV0llBUf3/XYXtNfg0YvjRbrm17gmMNTGRSQ4PV97IY5uqo4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwpY4F0E; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774006413; c=relaxed/simple;
+	bh=ZlmFijkHDWcuZv/ee3JFBOPSYSxx5p0eNtkud6YlakI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hYHy7Our2LDdFjhA5qGNR78gjb9pwn3eB0VcC+XhVDYpW/cy9Y45QsiR2U6I5tcbOYzFeL4XVMpZJlRYj/RZypSuI/jA8PAMwpaap86SittO+1B/hEQ/OzdwFYgJy2aIpiXjbYvpLqPlLjpOfcpNPvJjmfDwgsQ+k4fWjXWzXUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=byhVwfbH; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwpY4F0E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C257C4CEF7;
-	Fri, 20 Mar 2026 11:26:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774006016;
-	bh=162dit8g8/7CY8fNPwJVXoMvncY0FTaddvmuQ6lnsVg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iwpY4F0ElgB7R6ZfLqDV67akJiYWw79mDZfWcusfNaR2Fz247iqqm4EJGUpKHI3SU
-	 t9UrGVSb2LGr+lZGqrKdsXK3+DkiUpmoUc06IRnM6A1+ZQ7c5TGMtjNdREc22Hz1rf
-	 dQxs5+q6u2ehwf4NauPemFW6JjeZIrp5bP8roFYkUoJSyZb51q11n952Hat9+YImjH
-	 IJfRN1bUP+TNuGCe+4XoyrLuquXk9X8fMOAHZNUZSUgmfQLlc54DG9NJIcGo1+Xc+5
-	 EgwnI0qt5ByW5dTkbaQvqioDSgUW5o9Lj7TKugfu/W6qJDqh8/4mZ2azBBsgnUblx6
-	 S+f10ws4IsEYQ==
-Message-ID: <f7fef55d-4334-4d1d-b6c6-b409fea7e2a1@kernel.org>
-Date: Fri, 20 Mar 2026 12:26:50 +0100
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="byhVwfbH"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-486ff201041so4907355e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 04:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774006410; x=1774611210; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3S86zsIMdrfTwxyiohbEf4eM7eTcf7P9TI7z+BHhdfE=;
+        b=byhVwfbHXPf5P7OwGS+TG0esceb9hcFhU0D0mqG3czZLr4+tCAy/AXSLLuZWWiT4d7
+         USqaFl36l0+IOCXbgCTXfWLK1VwKJupErFr3+H2pb2ESFAalSbtxISh8R2C51xUMFLZH
+         7Ujtoka11JoBA1aEGpkYknYzLosAgctEkLwIkM3YK6evOSuecM84ZdaKSmmFkxHOa82v
+         P0NWXhJtB6AMIfFQkL0cpC88dslaDb4Iha0rjJ8ujfxQWGKqpcfYMyubTuPbszAU5e2V
+         ChT08bLtIpjcbQz45sV+JuA5v8qvA2cRe0Gwz5/bzxiZ1MuF38sXjTrpTd7E1DVxaH+A
+         aX9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774006410; x=1774611210;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3S86zsIMdrfTwxyiohbEf4eM7eTcf7P9TI7z+BHhdfE=;
+        b=L60seULLU/qKBK15A+qc1cjr2eHR/AljxhuRDEzhv6UOXvtR0PBx7OoH7FcPcOMVR0
+         692dYFiGNhc4/NwHT0+zBX0mpxkmdQHzXie9F+SDkPWWfkuhwLNUZzUOjxr4EsouxhcY
+         dbcj4mzLRfLxkIA3pXZuO5A7jphE31HSx6nvMMtxlBwD0N97QVaLLQGlGZjCK+21Cwwg
+         8iIRpMP0UUqWQNEsbSosMZUzVM61JdjBjtmj5T89hqk/QrvPZ70KcroRruqTbJzeMdrM
+         o5W35Tvvq4kO8XbNzhVFdSOsvMNyYqzGwEx07P7oUgMP0Qbdu3HIJvtWlgXBs8W5q/lg
+         e4+w==
+X-Forwarded-Encrypted: i=1; AJvYcCWt7fYiocaLlrW/OmX01h1/lpPWIE8GxluiSDFFY0zm8wCXvR36yzka7LoUUJy2zaUXPr/+IKgjdy4vYXo0z7Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhyMSbUEwc8axqf/kZ+F5NuRP6DrIi2XL//OlBm3y88k5dgPaA
+	92gqMJrSHfqlHSIA+oTUJdLXCzIOfor+TSpzp4Ktq2bnPdLSftIO6/Nn/6YgP+Lj9os=
+X-Gm-Gg: ATEYQzz6xpFRfcSIhXDm8+VDNcbtXapqktBUNPi8CfnPxWUXPqW7JMILstLeaKZ+acG
+	pcy97B4wwNFLhRkSv6M+jgVDiXotiFhmGNXPVnWUF8a/T+SLbAAcf6/4sNNFG9fGy67xUPDxMjb
+	pNjL/dFEhtFyLvVU3sBze9LLxGXklXfm06JbyLx8cBKkNW5yGC6Hj5JjaY9aClKkYxde4Nn+Svb
+	2AlL136xN1GEv+i0cM9F4rdIgdnbkgNy7UdOWBHEFUFfanw5N+XPPs/zPsGK0lyIo3CLfVWofVL
+	+bPpnMUyUZFZdxeEdbtrdjBAEBj5ausiTlwoSP+R32GPEUYQMqbJQ+F7Ze6AVV58nLCnx09bUji
+	4NelCT8V0+wBooH10gA8A9m2dTrnc/MUiSnipKWoZ/S11Aw+q5uoBU2+hdAK8ncQmxxo0ULjY2j
+	VqFjNOQvZNHEBeGDP/HXMMbP6jUg==
+X-Received: by 2002:a05:600c:8b61:b0:483:78c5:d743 with SMTP id 5b1f17b1804b1-486fee25f53mr38809955e9.28.1774006410163;
+        Fri, 20 Mar 2026 04:33:30 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe7dc4a2sm61221255e9.5.2026.03.20.04.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2026 04:33:29 -0700 (PDT)
+Date: Fri, 20 Mar 2026 12:33:28 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/8] selftests: livepatch: test-kprobe: Check if kprobes
+ can work with livepatches
+Message-ID: <ab0wiEuokqDwq5_v@pathway.suse.cz>
+References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
+ <20260313-lp-tests-old-fixes-v1-3-71ac6dfb3253@suse.com>
+ <abhqRTBtF1hLDmPq@redhat.com>
+ <c4249fb8b36aba8649e4dcdac022f2d646413756.camel@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Fix soft-dirty kselftest supported check
-To: Audra Mitchell <audra@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
- lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20260218184210.206466-1-audra@redhat.com>
- <c1b6f8eb-602b-4306-ad60-7a181fd94a45@kernel.org> <abludfGu4upPcyRI@fedora>
- <f635585f-7488-4bfe-8566-1c19f493c6a3@kernel.org> <abxHibvF8E5dcrUf@fedora>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <abxHibvF8E5dcrUf@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c4249fb8b36aba8649e4dcdac022f2d646413756.camel@suse.com>
 
-On 3/19/26 19:59, Audra Mitchell wrote:
->> What about simply testing for success on a test area, wouldn't that be more reliable
->> and clearer?
+On Thu 2026-03-19 11:35:16, Marcos Paulo de Souza wrote:
+> On Mon, 2026-03-16 at 16:38 -0400, Joe Lawrence wrote:
+> > On Fri, Mar 13, 2026 at 05:58:34PM -0300, Marcos Paulo de Souza
+> > wrote:
+> > > Running the upstream selftests on older kernels can presente some
+> > > issues
+> > > regarding features being not present. One of such issues if the
+> > > missing
+> > > capability of having both kprobes and livepatches on the same
+> > > function.
+> > > 
+> > 
+> > nit picking, but slightly reworded for clarity and spelling:
+> > 
+> > Running upstream selftests on older kernels can be problematic when
+> > features or fixes from newer versions are not present. For example,
+> > older kernels may lack the capability to support kprobes and
+> > livepatches
+> > on the same function simultaneously.
 > 
-> Hey I tested your version of this patch and it works fine on s390 and x86_64.
-> I have no issue with this version at all!
+> Much better, I'll pick your description for v2.
 > 
-> Would you prefer to push this fix since you wrote it or do you want me to push
-> a v2 and give you credit?
+> > 
+> > > The support was introduced in commit 0bc11ed5ab60c
+> > > ("kprobes: Allow kprobes coexist with livepatch"), which means that
+> > > older
+> > > kernels may lack this change.
+> > > 
+> > > The lack of this feature can be checked when a kprobe without a
+> > > post_handler is loaded and checking that the enabled_function's
+> > > file
+> > > shows the flag "I". A kernel with the proper support for kprobes
+> > > and
+> > > livepatches would presente the flag only when a post_handler is
+> > 
+> > nit: s/presente/present
+> 
+> > > --- a/tools/testing/selftests/livepatch/test-kprobe.sh
+> > > +++ b/tools/testing/selftests/livepatch/test-kprobe.sh
+> > > @@ -16,30 +16,19 @@ setup_config
+> > >  # when it uses a post_handler since only one IPMODIFY maybe be
+> > > registered
+> > >  # to any given function at a time.
+> > >  
+> > > -start_test "livepatch interaction with kprobed function with
+> > > post_handler"
+> > > -
+> > > -echo 1 > "$SYSFS_KPROBES_DIR/enabled"
+> > > -
+> > > -load_mod $MOD_KPROBE has_post_handler=1
+> > > -load_failing_mod $MOD_LIVEPATCH
+> > > -unload_mod $MOD_KPROBE
+> > > -
+> > > -check_result "% insmod test_modules/test_klp_kprobe.ko
+> > > has_post_handler=1
+> > > -% insmod test_modules/$MOD_LIVEPATCH.ko
+> > > -livepatch: enabling patch '$MOD_LIVEPATCH'
+> > > -livepatch: '$MOD_LIVEPATCH': initializing patching transition
+> > > -livepatch: failed to register ftrace handler for function
+> > > 'cmdline_proc_show' (-16)
+> > > -livepatch: failed to patch object 'vmlinux'
+> > > -livepatch: failed to enable patch '$MOD_LIVEPATCH'
+> > > -livepatch: '$MOD_LIVEPATCH': canceling patching transition, going
+> > > to unpatch
+> > > -livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+> > > -livepatch: '$MOD_LIVEPATCH': unpatching complete
+> > > -insmod: ERROR: could not insert module
+> > > test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
+> > > -% rmmod test_klp_kprobe"
+> > > -
+> > >  start_test "livepatch interaction with kprobed function without
+> > > post_handler"
+> > >  
+> > >  load_mod $MOD_KPROBE has_post_handler=0
+> > > +
+> > > +# Check if commit 0bc11ed5ab60c ("kprobes: Allow kprobes coexist
+> > > with livepatch")
+> > > +# is missing, meaning that livepatches and kprobes can't be used
+> > > together.
+> > > +# When the commit is missing, kprobes always set IPMODIFY (the I
+> > > flag), even
+> > > +# when the post handler is missing.
+> > > +if grep --quiet ") R I"
+> > > "$SYSFS_DEBUG_DIR/tracing/enabled_functions"; then
+> > 
+> > Will flags R I always be in this order?
+> 
+> 		seq_printf(m, " (%ld)%s%s%s%s%s",
+> 			   ftrace_rec_count(rec),
+> 			   rec->flags & FTRACE_FL_REGS ? " R" : "  ",
+> 			   rec->flags & FTRACE_FL_IPMODIFY ? " I" : " 
+> ",
+> 
+> So this is safe. I'll add a comment in the patch to explain why this is
+> safe too. Thanks for the comment!
 
-The credit is all yours :) Please polish the patch description to make
-it clearer why the current check is problematic.
+I would personally check also "cmdline_proc_show" to make sure that
+the line is about this function. Something like:
 
--- 
-Cheers,
+     grep --quiet ") "cmdline_proc_show.*([0-9]\+) R"
 
-David
+
+But I am afraid that this approach is not good. It breaks the test.
+It won't longer be able to catch regressions when the kprobe
+sets "FTRACE_FL_IPMODIFY" by mistake again.
+
+We could add a version check. But it would break users who backport
+the fix into older kernels.
+
+IMHO, the best solution would be to keep the test as is.
+Whoever is running the test with older kernels should mark it
+as "failure-expected". The test is pointing out an existing problem
+in the old kernel. IMHO, it should not hide it.
+
+Best Regards,
+Petr
