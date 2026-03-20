@@ -1,67 +1,66 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517DE3EAC71
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 18:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307B33EAC7C
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 18:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774031382; cv=none; b=jlNT3S9kQ7Wqht88QDb679DMuf8YoSiFfucLsWzD4eHQin7HYnucNCb+8QT/uax2PqA3xEBUSnf7slNvaY2i7GuOu0MXmiJug5KtOtOoAXl39hUwiMVI9Vtc020dzN2S61yxZkSwvzpSLPEyooxjrc94UlcOUDgqAydsIHYYdgg=
+	t=1774031384; cv=none; b=nz2AhZ60bBbHttGm4gh7Fxztz0+ZfqC+YgNkHXoled3BZLLpiSzVGROxbN9v0+q2p75fiwDevzvOU2JRNhVoMM0+t1qR7FAj5AYLk63JS1T/Y5fr7XvPh35lxKEksQnNGHJmVy868Ie28f/VvXD/FfWXUYlPcO+okVjbUyffwSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774031382; c=relaxed/simple;
-	bh=CNCvVk8M6cXHeuhKo9e9N7wSVZT50Sy8YkEIIck7oxw=;
+	s=arc-20240116; t=1774031384; c=relaxed/simple;
+	bh=cpG8FMOz2DdVE7NDetULkNb5Rgu46fSihd8mpdjDxpY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Kdsb4UxCh+RThFQw9C150IW80ozN4ARCV3eNARF4rsI9EVo0YqXGNJJDnkYn7TUStusQdcnbB8n5pr1fAOkYD8Oxy7/hAiAGiiiGAZV0jJYTyZJO/Ab1LcwpUv+GajCRQeDIGaO72EUb/b+hdZcZEYUydbZehz49/sNv+mdaApI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WPj7X55w; arc=none smtp.client-ip=209.85.128.50
+	 In-Reply-To:To:Cc; b=iZ3MUcbIiZ/cOnoubrGDOeFI/bpMSifnSePAUaFXYIzWYWBOEMYwSQ20QlrKqP5oJ9J9M65gf1AHKC88Y8xBC+rockzsbq2sb+s9Nw6yzGj47oqkNkrWeLZ8WF672+YEivJOSpfM9C6+AsQxCXX/aCCQLFVgAgLaDZP3095+AIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KaJFJzPa; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WPj7X55w"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-486fd27754bso13944355e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:29:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KaJFJzPa"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-486ff201041so7748375e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:29:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774031378; x=1774636178; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1774031381; x=1774636181; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Xhj6iK9mxvXqiBpyK8tX4BgiBzUUg/ToJ+/LCEiKyk8=;
-        b=WPj7X55w+Y6s2MWVQlCI8Yj+owhrOT5jlZGwcgAsQPKRj/nN8t4LIfKBwGWF116k/D
-         4WSe26YFYdjuJbeBRaQld/VIH7UhTEDwO8ZmXwRAlvdtjfJdBfEn9DlV4W4C4kA8o911
-         VVNQs4Wanf5RXLm7aLZrBmklaSou2Hd33vuJRHg963dfJDpZWhKPLeKcEnzV7cSc0Lp+
-         M2LCIcTIq/qca4eghkMvRMzGlMaFuGTXJQRsl/lSZM5CRW5clBw0EBoZ0EPC2DE7+MLX
-         wOrZ0ZMm2wxbIKABkLXqJzZbTPrp17bvIBFdVeGj24QFGexkZwmhwzECx4RcN69XkNr6
-         /31A==
+        bh=rA24wnZPGTtYWW5mEcxJWsdXnmz/t11mmo2UtnUImAQ=;
+        b=KaJFJzPaLAJf2Wiree5mJFAjBqvzziaRSFucfJvuh77uDAPsvHtGqicBcLKDpIs9N4
+         1eKNU48cpHjsrlM2JXCZwV7pAzgnnwF9Z8dFRhmnDc6fokZYtNfYVlgTtBqzqwlLhADI
+         g45m3gj9zHcpUrJaX8GuBrcaNPCBpTJ8P5u3MkWbo+Ts9VRrD2QM5VLtHS51GYvn9cQ+
+         r3rtWRzfHpUpViGs1wQDfrLK9yXEFolPL1tCejw6lgF0uzXS0ENSMv3WS9+ZZNXVDoe/
+         1mY1KQuMfZJnVQzVuMBMViLfxNgeVhTdoHCE0yNjovL+YiTxZ0iD0uRdZOVZaoEKZqTD
+         KKaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774031378; x=1774636178;
+        d=1e100.net; s=20251104; t=1774031381; x=1774636181;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Xhj6iK9mxvXqiBpyK8tX4BgiBzUUg/ToJ+/LCEiKyk8=;
-        b=mVgSdHoXR8evf07zUNKQiBhzYxY3PQ2skjHWDXisxhSaXeoGQlsahjcIs5x+z/f7UI
-         MiZGPMlKmCrBLHOMoKzNkll82gMaiB8ThZ65cST2ICoR5hLHLn98XKDwFjkUi1WvTH4+
-         JvD1tgw+Jaw+3PVbk/ynnjaER3tO1LM3fJZbcAQvNKdqZRXjnatUGBqhI3fkKF5S0CHl
-         RSx8nJgBBbmcqi0jJedKcK7LC7LZYa4Qvu57B7Z/RgRrFeudbJb0I4xtDPzYsaUuL4Uq
-         XLhhrXZKXHsHhcmErD7x2vHHmwolGQAAMw8q8fy9pQCbRnoOnkKmvk48cH80PmheDM3R
-         hyeQ==
-X-Gm-Message-State: AOJu0YzxEKGuu/O9f74oxMTKOBerAS1yGpFCLOPRlVVdFUXGNPOIBdHG
-	nQH43HGZiA/vlviyKrdnZdqBz2GG32xmGQTzMx2vnJJGwGY/+Yuj0rk/a6OoVht9rnkkJwESjkm
-	WtbIE
-X-Gm-Gg: ATEYQzzkKJpK0fIhH+h+z+bYfIGE4neqyfLNAyAatQzOKR6h8lHXG0efADUcih6BIoX
-	NyEASm5mIJMXCHNd6BVk/ATplK5mFApLv9YkdvzgcUZt3PJsMu4YH6NID812iC0NPbnirkd/Ldf
-	Y4dq9NXhZidDz61b6eLIQueZlD5X9cvlyXchQIsHstyR+TomIFG/yz4KXBZssBXESVxlvneopCg
-	vIhdOxy+7A8ryIrURHzN4518J4xkRXEW6M1VU7kUl1dQEs+fqClO21vI5LLvGv/vQpAJK7T86OU
-	tFMA6XMjq7E6rhmbWvTaTA8FMk9oDcwRRaank8A1nHBzLRUI/0f0HUVMAOleV1aW5TtZzhUFmcj
-	RsO+UmLrs0ZOllPKIoCcyIURC+BG/KwiYQxDg9OdbeOOS/gEKi+SWrLJS1FvxoctTVC3rrjyLM+
-	rUwFZfNZR+NQ==
-X-Received: by 2002:a05:600c:c493:b0:485:4388:3492 with SMTP id 5b1f17b1804b1-486fedbd0b0mr62060455e9.11.1774031378372;
-        Fri, 20 Mar 2026 11:29:38 -0700 (PDT)
+        bh=rA24wnZPGTtYWW5mEcxJWsdXnmz/t11mmo2UtnUImAQ=;
+        b=quSpBzqizUpa6w3mYM5DqpI0tFOz+3JwkMsEW6UimEBvIKSUXM1qTX4BWD4ZojLJ0G
+         RqW7c2Ub5aD1IGzOmqE/icFWP3OU+wAWHoYw+YLWop31p2tPlzpX04WI0kdRjEXDm/xk
+         SAe9V0wqBdmCr0nBEfGJ1mPEogDA7VojPlP8V3PTc5bgJ0UQAOU/iUrdWvjLvs6esfqY
+         Kyyxkq88bx7jC5DfPKUhKHpNiN92FZwwdM6qa7Kn05Ogxo1mLknRthD4JYKb8HB6LBt0
+         KvVq8d6VHXqaJkvgPGGwFUSxoqH2AQOgiT812biQgz59Dv+ICtbKXe+6hhcq9/gs8fr0
+         SfiQ==
+X-Gm-Message-State: AOJu0YzC99MJUofi48zR1C6aMfw/9VD5IvGS85/h4/AyCSBNUIfBRESL
+	cijpre54ofz/NH/iEcALN3T1x9gI66ZsdlBb4/xEIxsyiD0VE+v3R7+9Q7EHzI9UpEsubWArXUq
+	5rwk6
+X-Gm-Gg: ATEYQzz3vrQnpEUsSoe7NuvslDVVWS+kZJB2WFHw/8162bDUJ3SwCflSLdXrKZ/MZHb
+	O23nHycUca9YvNzIl/SEehJ6TjBgUG6v8/rWPsMH0UohyC0n9H9JbfN0HmOhSc50WJDXNkSPB2a
+	l/X4XEHAd+gbIFH5Ax1K9r8meICBJLATE3D5wZ+KhOoMYnUyreGjwSNMIukgaU0O7hcvhH9kJq/
+	mmkapPiPqh6UBc7EWpzRoN6/BxCGy7Ec0Uy7Bm/4Kp8SsRvewg2zeMwaMARcxZj4Wzs51f1M8Sg
+	aGpI80AgYvSBz/Cm4DcvfYq7BKBk3H0MbK6VvLNlJvAL/q0ABqehfbH5nNQ+CI0782e8VjQE95i
+	7AFDovF93o7NN+vUpfTd/Ypa72YOR/pHXhQQGgPFlKI/t/uV4+Q+bG2S71wPQL53punxl6pt7uK
+	k8/c3OzPBarA==
+X-Received: by 2002:a05:600c:8710:b0:485:49c5:8eb7 with SMTP id 5b1f17b1804b1-486fee049b8mr57609475e9.22.1774031381174;
+        Fri, 20 Mar 2026 11:29:41 -0700 (PDT)
 Received: from localhost ([189.99.238.44])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64eabd6dc60sm1903545d50.6.2026.03.20.11.29.37
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-79a9054bee1sm19590707b3.32.2026.03.20.11.29.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 11:29:37 -0700 (PDT)
+        Fri, 20 Mar 2026 11:29:40 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Fri, 20 Mar 2026 15:29:19 -0300
-Subject: [PATCH 4/6] selftests/run_kselftest.sh: Allow choosing per-test
- log directory
+Date: Fri, 20 Mar 2026 15:29:20 -0300
+Subject: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260320-selftests-fixes-v1-4-79144f76be01@suse.com>
+Message-Id: <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
 References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
 In-Reply-To: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
 To: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
@@ -79,108 +78,71 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kbuild@vger.kernel.org, 
  =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openssh-sha256; t=1774031363; l=3675;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1774031363; l=1910;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=CNCvVk8M6cXHeuhKo9e9N7wSVZT50Sy8YkEIIck7oxw=;
+ bh=cpG8FMOz2DdVE7NDetULkNb5Rgu46fSihd8mpdjDxpY=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QGta/eA4GB0RU2QzWdbG6D7/tTx92qA+t+0kDc8F5W+598SHiw+WPZ/kiCt8flBMjTE4/+7KpIW
- 5TyEdF0vKTwA=
+ QDMVmx6RaJvh6ZDL3DpDxYeaGitgTI1K4JwSL8awdClLmxe0/DS5gSxplARYMTz0tTK8EUb7pLb
+ TUpDgbMGFWAc=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-The --per-test-log option currently hard-codes /tmp. However, the system
-under test will most likely have tmpfs mounted there. Since it's not clear
-which filenames the log files will have, the user should be able to specify
-a persistent directory to store the logs. Keeping those logs are important
-because the run_kselftest.sh runner will only yield KTAP output, trimming
-information that is otherwise available through running individual tests
-directly.
+Track failures explicitly in the top-level selftests all/install loops.
 
-Allow --per-test-log to take an optional directory argument. Keep the
-existing behaviour when the option is passed without an argument, but if
-a directory is provided, create it if needed, reject non-directory paths
-and non-writable directories, canonicalize it, and have runner.sh write
-per-test logs there instead of /tmp.
+The current code multiplies `ret` by each sub-make exit status. For
+example, with `TARGETS=net`, the implicit `net/lib` dependency runs after
+`net`, so a failed `net` build can be followed by a successful `net/lib`
+build and reset the final result to success.
 
-This also makes relative paths safe by resolving them before the runner
-changes into a collection directory.
+Set `ret` to 1 on any non-zero sub-make exit code and keep it sticky, so
+the top-level make returns failure when any selected selftest target
+fails.
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- tools/testing/selftests/kselftest/runner.sh |  3 ++-
- tools/testing/selftests/run_kselftest.sh    | 30 +++++++++++++++++++++++++++--
- 2 files changed, 30 insertions(+), 3 deletions(-)
+ tools/testing/selftests/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 3a62039fa621..6e13818fe433 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -6,6 +6,7 @@ export skip_rc=4
- export timeout_rc=124
- export logfile=/dev/stdout
- export per_test_logging=
-+export per_test_log_dir=/tmp
- export RUN_IN_NETNS=
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 450f13ba4cca..0949f370ad78 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -209,14 +209,14 @@ export KHDR_INCLUDES
+ .DEFAULT_GOAL := all
  
- # Defaults for "settings" file fields:
-@@ -189,7 +190,7 @@ run_many()
- 		BASENAME_TEST=$(basename $TEST)
- 		test_num=$(( test_num + 1 ))
- 		if [ -n "$per_test_logging" ]; then
--			logfile="/tmp/$BASENAME_TEST"
-+			logfile="$per_test_log_dir/$BASENAME_TEST"
- 			cat /dev/null > "$logfile"
- 		fi
- 		if [ -n "$RUN_IN_NETNS" ]; then
-diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-index 5f7bce9a640b..fdbbe5b8b079 100755
---- a/tools/testing/selftests/run_kselftest.sh
-+++ b/tools/testing/selftests/run_kselftest.sh
-@@ -22,7 +22,7 @@ usage()
- 	cat <<EOF
- Usage: $0 [OPTIONS]
-   -s | --summary		Print summary with detailed log in output.log (conflict with -p)
--  -p | --per-test-log		Print test log in /tmp with each test name (conflict with -s)
-+  -p | --per-test-log [DIR]	Print test log in /tmp or DIR with each test name (conflict with -s)
-   -t | --test COLLECTION:TEST	Run TEST from COLLECTION
-   -S | --skip COLLECTION:TEST	Skip TEST from COLLECTION
-   -c | --collection COLLECTION	Run all tests from COLLECTION
-@@ -50,7 +50,33 @@ while true; do
- 			shift ;;
- 		-p | --per-test-log)
- 			per_test_logging=1
--			shift ;;
-+			if [ -n "$2" ] && [ "${2#-}" = "$2" ]; then
-+				per_test_log_dir="$2"
-+				if [ -e "$per_test_log_dir" ] && [ ! -d "$per_test_log_dir" ]; then
-+					echo "Per-test log path is not a dir:" \
-+					     "$per_test_log_dir" >&2
-+					exit 1
-+				fi
-+				if [ ! -d "$per_test_log_dir" ] && \
-+				   ! mkdir -p "$per_test_log_dir"; then
-+					echo "Could not create log dir:" \
-+					     "$per_test_log_dir" >&2
-+					exit 1
-+				fi
-+				per_test_log_dir=$(cd "$per_test_log_dir" && pwd -P)
-+				if [ -z "$per_test_log_dir" ]; then
-+					echo "Could not resolve per-test log directory" >&2
-+					exit 1
-+				fi
-+				if [ ! -w "$per_test_log_dir" ]; then
-+					echo "Per-test log dir is not writable:" \
-+					     "$per_test_log_dir" >&2
-+					exit 1
-+				fi
-+				shift 2
-+			else
-+				shift
-+			fi ;;
- 		-t | --test)
- 			TESTS="$TESTS $2"
- 			shift 2 ;;
+ all:
+-	@ret=1;							\
++	@ret=0;							\
+ 	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do	\
+ 		BUILD_TARGET=$$BUILD/$$TARGET;			\
+ 		mkdir $$BUILD_TARGET  -p;			\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
+ 				O=$(abs_objtree)		\
+ 				$(if $(FORCE_TARGETS),|| exit);	\
+-		ret=$$((ret * $$?));				\
++		[ $$? -eq 0 ] || ret=1;			\
+ 	done; exit $$ret;
+ 
+ run_tests: all
+@@ -274,7 +274,7 @@ ifdef INSTALL_PATH
+ 	install -m 744 kselftest/ksft.py $(INSTALL_PATH)/kselftest/
+ 	install -m 744 run_kselftest.sh $(INSTALL_PATH)/
+ 	rm -f $(TEST_LIST)
+-	@ret=1;	\
++	@ret=0;	\
+ 	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
+@@ -283,7 +283,7 @@ ifdef INSTALL_PATH
+ 				OBJ_PATH=$(INSTALL_PATH) \
+ 				O=$(abs_objtree)		\
+ 				$(if $(FORCE_TARGETS),|| exit);	\
+-		ret=$$((ret * $$?));		\
++		[ $$? -eq 0 ] || ret=1;		\
+ 	done; exit $$ret;
+ 
+ 
 
 -- 
 2.53.0
