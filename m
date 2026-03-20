@@ -1,202 +1,123 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15212368957
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7915B38D016
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774006413; cv=none; b=ifX75DjAbBZfBsUb8vCX0zpvsbmipiAF1XIkujXsskX06zDksmGW5vHHeWAwIfr/uwlnR0a22Aghpbldxj2AzmLvQ36xwcqAekjS5XSBx4cSZCZGkBLTkS3LaEvLUDJwRSXsL+Z85iXC9h5oSgxLpedfR7sVcBkNXgHzeixDGWg=
+	t=1774006496; cv=none; b=B/jXLuehiki9bSixfwFtVoXNsVyEXdviKG/vy/E+gT8TZRYt01tMsppWUVJLHqyuP8J+H6regtvyEjD6Vtyx5URJ5C4MAcWYSwakz5GIcsI4OyufNF8SaWbuzOntROfI1WwKFyncjLePQ3Yp9xiParhlxTYfT0le0fkq1DCBGHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774006413; c=relaxed/simple;
-	bh=ZlmFijkHDWcuZv/ee3JFBOPSYSxx5p0eNtkud6YlakI=;
+	s=arc-20240116; t=1774006496; c=relaxed/simple;
+	bh=XNytlImA8FiqJPbGYO8Rr1KbGrdsMdMRsDBUv/IiWw4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hYHy7Our2LDdFjhA5qGNR78gjb9pwn3eB0VcC+XhVDYpW/cy9Y45QsiR2U6I5tcbOYzFeL4XVMpZJlRYj/RZypSuI/jA8PAMwpaap86SittO+1B/hEQ/OzdwFYgJy2aIpiXjbYvpLqPlLjpOfcpNPvJjmfDwgsQ+k4fWjXWzXUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=byhVwfbH; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=LaiH3936K/lA4nlM4WOUVtNg5grM2PlBH+SWaLdCFOyXqBu6lSk1Z/7YHZBeMGqTI3BKHJpEnAF8tehS0p7nvMf538wnJfgepJDzJx2dK/Lakn4qeEZtvzEPASAg3Av+IvqWccGjdojal8Vwh1y+rAF1Wn/TJIBzOBbOxL+cetU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bFfhqtIq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qZd2R/Qp; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="byhVwfbH"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-486ff201041so4907355e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 04:33:31 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bFfhqtIq";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qZd2R/Qp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774006493;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/XAFuMj8200/2Yl3T2tu1n7OQ463xMtcQ3l4BrZLY4E=;
+	b=bFfhqtIqeBuElOI+hN5D54U35GC8X9VERCpC2ZNHsRKqiKBy4DWxVtwsUYT/lt0/4ev+ft
+	igUXOg3zmrqSsp1vt48vbcPHiZFwIQh9e+tlDg/kb2PPCpvMsPr48tCvZ2AQpMYiTaDS+4
+	eW4Rbe7LnhcvNPiYtByDZsMsit+4rTI=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-474-8zh0HVDDPfqEcJM872s4jg-1; Fri, 20 Mar 2026 07:34:52 -0400
+X-MC-Unique: 8zh0HVDDPfqEcJM872s4jg-1
+X-Mimecast-MFC-AGG-ID: 8zh0HVDDPfqEcJM872s4jg_1774006491
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2a90510a6d1so17792245ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 04:34:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774006410; x=1774611210; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3S86zsIMdrfTwxyiohbEf4eM7eTcf7P9TI7z+BHhdfE=;
-        b=byhVwfbHXPf5P7OwGS+TG0esceb9hcFhU0D0mqG3czZLr4+tCAy/AXSLLuZWWiT4d7
-         USqaFl36l0+IOCXbgCTXfWLK1VwKJupErFr3+H2pb2ESFAalSbtxISh8R2C51xUMFLZH
-         7Ujtoka11JoBA1aEGpkYknYzLosAgctEkLwIkM3YK6evOSuecM84ZdaKSmmFkxHOa82v
-         P0NWXhJtB6AMIfFQkL0cpC88dslaDb4Iha0rjJ8ujfxQWGKqpcfYMyubTuPbszAU5e2V
-         ChT08bLtIpjcbQz45sV+JuA5v8qvA2cRe0Gwz5/bzxiZ1MuF38sXjTrpTd7E1DVxaH+A
-         aX9A==
+        d=redhat.com; s=google; t=1774006491; x=1774611291; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/XAFuMj8200/2Yl3T2tu1n7OQ463xMtcQ3l4BrZLY4E=;
+        b=qZd2R/QppXgvzsjeSwXMnFCJKiDMXqVHWZUuU0kzaP8uo44u4XSU5lJIU6o8nLQuVS
+         li84ftjS3fLEfQTHqXATa3xjLbfJnL2NpCbBMyx2EbUtvAOo2mnqNii56sKilAzdlxjr
+         4mcrM6OQvLm6AWXcsGLbaDL91itBNTik6yYA3sg5FQeWpVfB00fncAqPLLGFZK06RO1n
+         BfNgObTLAM/AZQ7/tO9qKCruwdu6RF+0413qUmML6NAc8zmDBH3U8Gf1XMKlQBSdYjd1
+         XW4jqq+IeVyoGXpdTMecWPkmWLDAaOqUDF+1pEeJlT1r0obX3cRoSBnfZEuPHdHpTVyY
+         sl4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774006410; x=1774611210;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3S86zsIMdrfTwxyiohbEf4eM7eTcf7P9TI7z+BHhdfE=;
-        b=L60seULLU/qKBK15A+qc1cjr2eHR/AljxhuRDEzhv6UOXvtR0PBx7OoH7FcPcOMVR0
-         692dYFiGNhc4/NwHT0+zBX0mpxkmdQHzXie9F+SDkPWWfkuhwLNUZzUOjxr4EsouxhcY
-         dbcj4mzLRfLxkIA3pXZuO5A7jphE31HSx6nvMMtxlBwD0N97QVaLLQGlGZjCK+21Cwwg
-         8iIRpMP0UUqWQNEsbSosMZUzVM61JdjBjtmj5T89hqk/QrvPZ70KcroRruqTbJzeMdrM
-         o5W35Tvvq4kO8XbNzhVFdSOsvMNyYqzGwEx07P7oUgMP0Qbdu3HIJvtWlgXBs8W5q/lg
-         e4+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWt7fYiocaLlrW/OmX01h1/lpPWIE8GxluiSDFFY0zm8wCXvR36yzka7LoUUJy2zaUXPr/+IKgjdy4vYXo0z7Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhyMSbUEwc8axqf/kZ+F5NuRP6DrIi2XL//OlBm3y88k5dgPaA
-	92gqMJrSHfqlHSIA+oTUJdLXCzIOfor+TSpzp4Ktq2bnPdLSftIO6/Nn/6YgP+Lj9os=
-X-Gm-Gg: ATEYQzz6xpFRfcSIhXDm8+VDNcbtXapqktBUNPi8CfnPxWUXPqW7JMILstLeaKZ+acG
-	pcy97B4wwNFLhRkSv6M+jgVDiXotiFhmGNXPVnWUF8a/T+SLbAAcf6/4sNNFG9fGy67xUPDxMjb
-	pNjL/dFEhtFyLvVU3sBze9LLxGXklXfm06JbyLx8cBKkNW5yGC6Hj5JjaY9aClKkYxde4Nn+Svb
-	2AlL136xN1GEv+i0cM9F4rdIgdnbkgNy7UdOWBHEFUFfanw5N+XPPs/zPsGK0lyIo3CLfVWofVL
-	+bPpnMUyUZFZdxeEdbtrdjBAEBj5ausiTlwoSP+R32GPEUYQMqbJQ+F7Ze6AVV58nLCnx09bUji
-	4NelCT8V0+wBooH10gA8A9m2dTrnc/MUiSnipKWoZ/S11Aw+q5uoBU2+hdAK8ncQmxxo0ULjY2j
-	VqFjNOQvZNHEBeGDP/HXMMbP6jUg==
-X-Received: by 2002:a05:600c:8b61:b0:483:78c5:d743 with SMTP id 5b1f17b1804b1-486fee25f53mr38809955e9.28.1774006410163;
-        Fri, 20 Mar 2026 04:33:30 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe7dc4a2sm61221255e9.5.2026.03.20.04.33.29
+        d=1e100.net; s=20251104; t=1774006491; x=1774611291;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/XAFuMj8200/2Yl3T2tu1n7OQ463xMtcQ3l4BrZLY4E=;
+        b=d1Gb5J0JSjK6pztL9lqr2KjaPShhP3laKsoRzUbH1grn8fY0vIG4sRHou33Uzbp19J
+         riigh7Kfk/5tZKOhONBszxEHGk4IONdvoNhoP8VgRoOq9eQJX0mqsUbup4f4eH5Nnc1z
+         zXaaSv14o+ezr7VSwwNTCKx1y+XaogzfA8oimMo9ttLXFZGkLW/4l5MGdE78LXZ+nHwv
+         8FeG14EmZERiTe9HYelPOhf+SMMMOtJ3Itc7oHhPYhCyjg9CyoYKJBIFzfK/de8wCOrb
+         ACaT6j/GtwsW0Ecoc2+XLUnUOjBbvQX0AYAYDAWwnbbPBC1Gj2RX97O46p/3LA2B5tex
+         G9jg==
+X-Forwarded-Encrypted: i=1; AJvYcCXnw0MzMwHTUdVV/Z+zOjYr2YpuKLMRVQ3BrywNJ0+SxbuTxtx4MlrjW6+UCsGMDl7O6H3Xz50p8fC1c8QNYQw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYlQNclVPqOpFARL97gLf4uH685jgQ1afdzPTeP9r2l8iv8PeP
+	lx/4Jm7hm9bOjvRq3e64QMSBldml2TeHJ0R6rOTdzHfEdroNL1u9uBcQMM7P6c8w/V7wCyUOuoe
+	twOyVq5Egs0H0gh6H9mLI+MUmk/45X0av0xsVh08xOXsTP7CLtDchLhqk5RmPyJRnw5OkSw==
+X-Gm-Gg: ATEYQzyeEEqovcIWz9x/zr/qu3PEWdNfMhMGIk2aNgRu/7W4KgF1I/Zulczt4pY44DT
+	wYg3HpCrkktzLx8KQCyb7fjtb9YN/EA8/eZXI0r6CrRxnLkF7lMaIz7/NEkUMPBHP59Zv9/w3QV
+	ZN7efzn42dLyjK01ZR2gXxden0PDICFlrh/YkP+qAHvpW/Dca8jtIB9pDHa1B+F/6sN0uOmyCC8
+	8NOsiuJJpircLr6P298MG2+jtAiQORxRUIbkPtHILYwLHi1UX3KXNr2R3e7HPJ1zcRZtBwrbxts
+	IHhRhd/t/HSll7qRjo0aA+ghnbdl5vbdyG8urPQYK1vRUfSxcOBf47XUFU1jGJm/3OEe539O+xC
+	wyvQeV9GplD0JX9pkWQ==
+X-Received: by 2002:a17:902:c40f:b0:2ae:4d6b:b2c7 with SMTP id d9443c01a7336-2b0827564dfmr22400385ad.9.1774006491339;
+        Fri, 20 Mar 2026 04:34:51 -0700 (PDT)
+X-Received: by 2002:a17:902:c40f:b0:2ae:4d6b:b2c7 with SMTP id d9443c01a7336-2b0827564dfmr22400125ad.9.1774006490957;
+        Fri, 20 Mar 2026 04:34:50 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0836a3066sm19628795ad.75.2026.03.20.04.34.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 04:33:29 -0700 (PDT)
-Date: Fri, 20 Mar 2026 12:33:28 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] selftests: livepatch: test-kprobe: Check if kprobes
- can work with livepatches
-Message-ID: <ab0wiEuokqDwq5_v@pathway.suse.cz>
-References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
- <20260313-lp-tests-old-fixes-v1-3-71ac6dfb3253@suse.com>
- <abhqRTBtF1hLDmPq@redhat.com>
- <c4249fb8b36aba8649e4dcdac022f2d646413756.camel@suse.com>
+        Fri, 20 Mar 2026 04:34:50 -0700 (PDT)
+Date: Fri, 20 Mar 2026 19:34:48 +0800
+From: Li Wang <liwang@redhat.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tejun Heo <tj@kernel.org>,
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	James Houghton <jthoughton@google.com>,
+	Sebastian Chlad <sebastianchlad@gmail.com>,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
+Subject: Re: [PATCH 3/7] selftests: memcg: Iterate pages based on the actual
+ page size
+Message-ID: <ab0w2PCcYBEKxm2B@redhat.com>
+References: <20260319173752.1472864-1-longman@redhat.com>
+ <20260319173752.1472864-4-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c4249fb8b36aba8649e4dcdac022f2d646413756.camel@suse.com>
+In-Reply-To: <20260319173752.1472864-4-longman@redhat.com>
 
-On Thu 2026-03-19 11:35:16, Marcos Paulo de Souza wrote:
-> On Mon, 2026-03-16 at 16:38 -0400, Joe Lawrence wrote:
-> > On Fri, Mar 13, 2026 at 05:58:34PM -0300, Marcos Paulo de Souza
-> > wrote:
-> > > Running the upstream selftests on older kernels can presente some
-> > > issues
-> > > regarding features being not present. One of such issues if the
-> > > missing
-> > > capability of having both kprobes and livepatches on the same
-> > > function.
-> > > 
-> > 
-> > nit picking, but slightly reworded for clarity and spelling:
-> > 
-> > Running upstream selftests on older kernels can be problematic when
-> > features or fixes from newer versions are not present. For example,
-> > older kernels may lack the capability to support kprobes and
-> > livepatches
-> > on the same function simultaneously.
+On Thu, Mar 19, 2026 at 01:37:48PM -0400, Waiman Long wrote:
+> The current test_memcontrol test fault in memory by write a value
+> to the start of a page based on the default value of 4k page size.
+> Micro-optimize it by using the actual system page size to do the
+> iteration.
 > 
-> Much better, I'll pick your description for v2.
-> 
-> > 
-> > > The support was introduced in commit 0bc11ed5ab60c
-> > > ("kprobes: Allow kprobes coexist with livepatch"), which means that
-> > > older
-> > > kernels may lack this change.
-> > > 
-> > > The lack of this feature can be checked when a kprobe without a
-> > > post_handler is loaded and checking that the enabled_function's
-> > > file
-> > > shows the flag "I". A kernel with the proper support for kprobes
-> > > and
-> > > livepatches would presente the flag only when a post_handler is
-> > 
-> > nit: s/presente/present
-> 
-> > > --- a/tools/testing/selftests/livepatch/test-kprobe.sh
-> > > +++ b/tools/testing/selftests/livepatch/test-kprobe.sh
-> > > @@ -16,30 +16,19 @@ setup_config
-> > >  # when it uses a post_handler since only one IPMODIFY maybe be
-> > > registered
-> > >  # to any given function at a time.
-> > >  
-> > > -start_test "livepatch interaction with kprobed function with
-> > > post_handler"
-> > > -
-> > > -echo 1 > "$SYSFS_KPROBES_DIR/enabled"
-> > > -
-> > > -load_mod $MOD_KPROBE has_post_handler=1
-> > > -load_failing_mod $MOD_LIVEPATCH
-> > > -unload_mod $MOD_KPROBE
-> > > -
-> > > -check_result "% insmod test_modules/test_klp_kprobe.ko
-> > > has_post_handler=1
-> > > -% insmod test_modules/$MOD_LIVEPATCH.ko
-> > > -livepatch: enabling patch '$MOD_LIVEPATCH'
-> > > -livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> > > -livepatch: failed to register ftrace handler for function
-> > > 'cmdline_proc_show' (-16)
-> > > -livepatch: failed to patch object 'vmlinux'
-> > > -livepatch: failed to enable patch '$MOD_LIVEPATCH'
-> > > -livepatch: '$MOD_LIVEPATCH': canceling patching transition, going
-> > > to unpatch
-> > > -livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> > > -livepatch: '$MOD_LIVEPATCH': unpatching complete
-> > > -insmod: ERROR: could not insert module
-> > > test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
-> > > -% rmmod test_klp_kprobe"
-> > > -
-> > >  start_test "livepatch interaction with kprobed function without
-> > > post_handler"
-> > >  
-> > >  load_mod $MOD_KPROBE has_post_handler=0
-> > > +
-> > > +# Check if commit 0bc11ed5ab60c ("kprobes: Allow kprobes coexist
-> > > with livepatch")
-> > > +# is missing, meaning that livepatches and kprobes can't be used
-> > > together.
-> > > +# When the commit is missing, kprobes always set IPMODIFY (the I
-> > > flag), even
-> > > +# when the post handler is missing.
-> > > +if grep --quiet ") R I"
-> > > "$SYSFS_DEBUG_DIR/tracing/enabled_functions"; then
-> > 
-> > Will flags R I always be in this order?
-> 
-> 		seq_printf(m, " (%ld)%s%s%s%s%s",
-> 			   ftrace_rec_count(rec),
-> 			   rec->flags & FTRACE_FL_REGS ? " R" : "  ",
-> 			   rec->flags & FTRACE_FL_IPMODIFY ? " I" : " 
-> ",
-> 
-> So this is safe. I'll add a comment in the patch to explain why this is
-> safe too. Thanks for the comment!
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-I would personally check also "cmdline_proc_show" to make sure that
-the line is about this function. Something like:
+Reviewed-by: Li Wang <liwang@redhat.com>
 
-     grep --quiet ") "cmdline_proc_show.*([0-9]\+) R"
+-- 
+Regards,
+Li Wang
 
-
-But I am afraid that this approach is not good. It breaks the test.
-It won't longer be able to catch regressions when the kprobe
-sets "FTRACE_FL_IPMODIFY" by mistake again.
-
-We could add a version check. But it would break users who backport
-the fix into older kernels.
-
-IMHO, the best solution would be to keep the test as is.
-Whoever is running the test with older kernels should mark it
-as "failure-expected". The test is pointing out an existing problem
-in the old kernel. IMHO, it should not hide it.
-
-Best Regards,
-Petr
