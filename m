@@ -1,48 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59412EACF2;
-	Fri, 20 Mar 2026 04:18:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2042C159E;
+	Fri, 20 Mar 2026 06:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773980318; cv=none; b=m0jBt1ZS1/iefJktGRS3Ykdu4XdPbIylT5y0JWxZFQjo/wWRECLAUT12IMY10r5F1eSAQOeeqif6z5k4rs9EeVXVnzYZkbafqiTqCGtL/D9+Zho7+WM39OQbAYETFO2kVtbgwPV/Jd7U5N3Tr+cVKDggzFyv29+QAsjuINsS5U0=
+	t=1773988388; cv=none; b=AYAWhzBqQYv7Reyc5rAzJhWkVhH0OQLrY7+F9dlfP2FRoqSOc8O0+Hs4pQB/OKQp0N6j8Eg3J0eS8cx7K9KUTK4/YnO+nOjJ6Gt3bTADtJ7m+3tY0HteDfrliMmIZT7/D3/RCel+BK9D04ZX/wbfZ9EtGc+RAox+1Io7yHSwDCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773980318; c=relaxed/simple;
-	bh=8Viogy5I6XdIOcsQgFjSY4jrz9LKSIZECDVq9Eqxz70=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y6Aq5euG6h1W9Xtg13eara2nPkKpoL75iI1KGiX/oh8ltLteXuaeM/3SKDUNsPMAnK8NqtroBt0bzTcFXBA7gLHip9jdvpR3MNg46SNoKfLk7zxvEy47qcmMc4cr2wPU3iPrHyqnxg+y93VfoVhgcM2ffIwJbBn7FgaXU/sZAW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jlAVjXEz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773988388; c=relaxed/simple;
+	bh=z9jlBI9zsqRab22cNceO1thi/Q85QnOaQcb08+AiAY0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=dc5JC1d0hmzthAF01HtV8Dt21I479GjRRjB+PPOKwvNQAvNrb8bejvD0yuFKGiRD6H7RnRMl0bpPJDbmuUV662BbHm/7XF0aHfV9YuGGCjLSTxTR2cIarSGxKHuKEBn4EtCFtiWLHmWXFGahC1qt9dAJUeZYoVTxjXqjoG+OM/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eShQUgML; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jlAVjXEz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F467C19425;
-	Fri, 20 Mar 2026 04:18:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773980317;
-	bh=8Viogy5I6XdIOcsQgFjSY4jrz9LKSIZECDVq9Eqxz70=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jlAVjXEzbhXH2HVFPFh83+mTlx02lBdtTJlQOlFLCfz38o7jz4YHxZFQZB+Xg/xo1
-	 zSGLKGxHORXuVVyI544qK9jBHJ9YtK20FSFKjHV+ueWWorKvVFAzbyaLFBeL4u1vFw
-	 1/henN0oAYusxJOa/gplRwewxSehTzwHtUvqlalX4DiVvQW523mdtqsp5beVpF5zDJ
-	 WLL1MHheNYKTRkuYdgYRnDSEvF0k1lGYJcw6cSH1tYxzmH1KEbp0MOtyUYY4LHWBam
-	 hftN+fDOhjVO7S3N4a/eAJ9Fvs3QbNCs7C8iD+IBFxDju5tzWgm4otSgwRqyy8o2Pk
-	 A4D/tsZv+uCvg==
-From: Allison Henderson <achender@kernel.org>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	rds-devel@oss.oracle.com,
-	kuba@kernel.org,
-	shuah@kernel.org,
-	horms@kernel.org,
-	linux-rdma@vger.kernel.org,
-	allison.henderson@oracle.com
-Subject: [PATCH net-next v3 2/2] selftests: rds: Add -c config option to rds/config.sh
-Date: Thu, 19 Mar 2026 21:18:34 -0700
-Message-ID: <20260320041834.2761069-3-achender@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eShQUgML"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773988387; x=1805524387;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=z9jlBI9zsqRab22cNceO1thi/Q85QnOaQcb08+AiAY0=;
+  b=eShQUgMLepVTmz+ZSbUU7NQ6WCSoo94ydwPJOKmgH5Wcvw/amKRLbmu3
+   k0v6eZQhfLxjQqmNuxri3blKFL2KNy9R9ob+dfXYVGqRs5HgD60irLvob
+   Hbbdw1CTLfF3YMEpN0C+owWktBz9iXBgVzyRtFKbqrO0AHTLXi9w0IP1D
+   UXM4WOozyGy2UbdEIUlTObvhLTwY0PPHJvK+EhnMRyeaVDbniiIGWjvZz
+   Mq0qAHEJxI6Zoa1M34KtdMBy+o1/a6UKjDwZ3TyFTIyUX1G2eYflT+zkc
+   Z95Ufzp5RWZu5W5tsJGHFPkUpIUKFzNK/bnzbFkerVZkhUE8DAtXNB0BG
+   A==;
+X-CSE-ConnectionGUID: p9xNmiqqQoSBclxCMku8Hg==
+X-CSE-MsgGUID: +pL08wLDQm6ALp86Y6EaaQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="78676068"
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="78676068"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 23:33:06 -0700
+X-CSE-ConnectionGUID: nwOt+bYrThqLVjq8n8DFqg==
+X-CSE-MsgGUID: RHEopZUJT8+b/wWhp3ZiEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="247360210"
+Received: from ly-workstation.sh.intel.com ([10.239.182.64])
+  by fmviesa001.fm.intel.com with ESMTP; 19 Mar 2026 23:33:04 -0700
+From: Yi Lai <yi1.lai@intel.com>
+To: Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	hpa@zytor.com,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	yi1.lai@intel.com
+Subject: [PATCH] selftests/x86: Fix sysret_rip assertion failure on FRED systems
+Date: Fri, 20 Mar 2026 14:33:01 +0800
+Message-ID: <20260320063301.489599-1-yi1.lai@intel.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260320041834.2761069-1-achender@kernel.org>
-References: <20260320041834.2761069-1-achender@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,107 +65,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch adds a new -c flag to config.sh that enables callers
-to specify the file path of the config they would like to update.
-If no config is specified, the default will be the .config of the
-current directory.
+The existing 'sysret_rip' selftest asserts that 'regs->r11 ==
+regs->flags'. This check relies on the behavior of the SYSCALL
+instruction on legacy x86_64, which saves 'RFLAGS' into 'R11'.
 
-Signed-off-by: Allison Henderson <achender@kernel.org>
+However, on systems with FRED (Flexible Return and Event Delivery)
+enabled, instead of using registers, all state is saved onto the stack.
+Consequently, 'R11' retains its userspace value, causing the assertion
+to fail.
+
+Fix this by detecting FRED support via CPUID (Leaf 0x7, Subleaf 0x1, EAX
+bit 17) and skipping the register assertion if FRED is present.
+
+Signed-off-by: Yi Lai <yi1.lai@intel.com>
 ---
- tools/testing/selftests/net/rds/README.txt |  5 ++-
- tools/testing/selftests/net/rds/config.sh  | 37 +++++++++++++---------
- 2 files changed, 26 insertions(+), 16 deletions(-)
+ tools/testing/selftests/x86/sysret_rip.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/rds/README.txt b/tools/testing/selftests/net/rds/README.txt
-index cbde2951ab13..c6fe003d503b 100644
---- a/tools/testing/selftests/net/rds/README.txt
-+++ b/tools/testing/selftests/net/rds/README.txt
-@@ -31,8 +31,11 @@ EXAMPLE:
-     # Alternatly create a gcov disabled .config
-     tools/testing/selftests/net/rds/config.sh
+diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
+index 2e423a335e1c..0228d6174d5b 100644
+--- a/tools/testing/selftests/x86/sysret_rip.c
++++ b/tools/testing/selftests/x86/sysret_rip.c
+@@ -21,6 +21,7 @@
+ #include <sys/user.h>
+ #include <sys/mman.h>
+ #include <assert.h>
++#include <cpuid.h>
  
-+    # Config paths may also be specified with the -c flag
-+    tools/testing/selftests/net/rds/config.sh -c .config.local
+ #include "helpers.h"
+ 
+@@ -64,9 +65,18 @@ static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
+ 	ctx->uc_mcontext.gregs[REG_RIP] = rip;
+ 	ctx->uc_mcontext.gregs[REG_RCX] = rip;
+ 
+-	/* R11 and EFLAGS should already match. */
+-	assert(ctx->uc_mcontext.gregs[REG_EFL] ==
+-	       ctx->uc_mcontext.gregs[REG_R11]);
++	/*
++	 * SYSCALL works differently on FRED, it does not save RIP and RFLAGS
++	 * to RCX and R11.
++	 */
++	unsigned int eax, ebx, ecx, edx;
 +
-     # build the kernel
--    vng --build  --config tools/testing/selftests/net/config
-+    vng --build --config .config
++	__cpuid_count(0x7, 0x1, eax, ebx, ecx, edx);
++	if (!(eax & (1 << 17))) {
++		/* R11 and EFLAGS should already match. */
++		assert(ctx->uc_mcontext.gregs[REG_EFL] ==
++		       ctx->uc_mcontext.gregs[REG_R11]);
++	}
  
-     # launch the tests in a VM
-     vng -v --rwdir ./ --run . --user root --cpus 4 -- \
-diff --git a/tools/testing/selftests/net/rds/config.sh b/tools/testing/selftests/net/rds/config.sh
-index 791c8dbe1095..29a79314dd60 100755
---- a/tools/testing/selftests/net/rds/config.sh
-+++ b/tools/testing/selftests/net/rds/config.sh
-@@ -6,15 +6,20 @@ set -u
- set -x
- 
- unset KBUILD_OUTPUT
-+CONF_FILE=""
-+FLAGS=()
- 
- GENERATE_GCOV_REPORT=0
--while getopts "g" opt; do
-+while getopts "gc:" opt; do
-   case ${opt} in
-     g)
-       GENERATE_GCOV_REPORT=1
-       ;;
-+    c)
-+      CONF_FILE=$OPTARG
-+      ;;
-     :)
--      echo "USAGE: config.sh [-g]"
-+      echo "USAGE: config.sh [-g] [-c config]"
-       exit 1
-       ;;
-     ?)
-@@ -24,30 +29,32 @@ while getopts "g" opt; do
-   esac
- done
- 
--CONF_FILE="tools/testing/selftests/net/config"
-+if [[ "$CONF_FILE" != "" ]]; then
-+	FLAGS=(--file "$CONF_FILE")
-+fi
- 
- # no modules
--scripts/config --file "$CONF_FILE" --disable CONFIG_MODULES
-+scripts/config "${FLAGS[@]}" --disable CONFIG_MODULES
- 
- # enable RDS
--scripts/config --file "$CONF_FILE" --enable CONFIG_RDS
--scripts/config --file "$CONF_FILE" --enable CONFIG_RDS_TCP
-+scripts/config "${FLAGS[@]}" --enable CONFIG_RDS
-+scripts/config "${FLAGS[@]}" --enable CONFIG_RDS_TCP
- 
- if [ "$GENERATE_GCOV_REPORT" -eq 1 ]; then
- 	# instrument RDS and only RDS
--	scripts/config --file "$CONF_FILE" --enable CONFIG_GCOV_KERNEL
--	scripts/config --file "$CONF_FILE" --disable GCOV_PROFILE_ALL
--	scripts/config --file "$CONF_FILE" --enable GCOV_PROFILE_RDS
-+	scripts/config "${FLAGS[@]}" --enable CONFIG_GCOV_KERNEL
-+	scripts/config "${FLAGS[@]}" --disable GCOV_PROFILE_ALL
-+	scripts/config "${FLAGS[@]}" --enable GCOV_PROFILE_RDS
- else
--	scripts/config --file "$CONF_FILE" --disable CONFIG_GCOV_KERNEL
--	scripts/config --file "$CONF_FILE" --disable GCOV_PROFILE_ALL
--	scripts/config --file "$CONF_FILE" --disable GCOV_PROFILE_RDS
-+	scripts/config "${FLAGS[@]}" --disable CONFIG_GCOV_KERNEL
-+	scripts/config "${FLAGS[@]}" --disable GCOV_PROFILE_ALL
-+	scripts/config "${FLAGS[@]}" --disable GCOV_PROFILE_RDS
- fi
- 
- # need network namespaces to run tests with veth network interfaces
--scripts/config --file "$CONF_FILE" --enable CONFIG_NET_NS
--scripts/config --file "$CONF_FILE" --enable CONFIG_VETH
-+scripts/config "${FLAGS[@]}" --enable CONFIG_NET_NS
-+scripts/config "${FLAGS[@]}" --enable CONFIG_VETH
- 
- # simulate packet loss
--scripts/config --file "$CONF_FILE" --enable CONFIG_NET_SCH_NETEM
-+scripts/config "${FLAGS[@]}" --enable CONFIG_NET_SCH_NETEM
- 
+ 	sethandler(SIGSEGV, sigsegv_for_sigreturn_test, SA_RESETHAND);
+ }
 -- 
 2.43.0
 
