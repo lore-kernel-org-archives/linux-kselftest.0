@@ -1,65 +1,66 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335CC3E716A
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 18:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248953E714B
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 18:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774031369; cv=none; b=tzQ4y2rBlFJnxyhI/btz28edyeWjWWWJQR76GCK5uUOGkdwkjO8mDgM8SQ5NJL62ByQT51uzNQOc4BnZzWuimdzv6M095SsLKPiAWDNUoluwwAUYIs/6N9rhAyq+n4c6gDRqlRfryTG9lfZiE/64rkx3w+J9/+AUGNFiUcwxfk4=
+	t=1774031372; cv=none; b=insJAwsj7qOrHNTtKHIu0XvrF0NYb7wI73jzJDWhulqqeHMXUjCR4K7aU83ltzXaA5os5iV4xwG3LxTZ2WMuubZJzvf4WXBi8xuOaGYZrLuXKwVUjzYEVuabAXyQnDVEG9kYCil33yVPoek4zA8SsxD7RdeTVfOhZScbcd3hNTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774031369; c=relaxed/simple;
-	bh=ZK2PP6H5Htd3EMxs/tbHhD+tM4DKDuhATR/fPLzNQiQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ty2jmdNsWsuH2lrFWwCWzW2d4XZDbENy/hhUOHsq5o3uoZo6dPumOJYGTvu/8IzTtgHlMA7UhBeGzPZIMSs3oV2mJyj32CddvL0K8sgcdtBX9bpyfIM2hPXflhtzgX4zj23PZztMfs35OHjSxKLsOapwfAz/lCI37NNaho73B64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IZgFClXw; arc=none smtp.client-ip=209.85.128.46
+	s=arc-20240116; t=1774031372; c=relaxed/simple;
+	bh=O7o7FBrPlToXKzC8pwAquL6Os+AvG4huHyd9CtSYQdo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=PSaX+9wo9XYzTeBcGviugVQ2EYq79t3tgCizuF9JPi/SVe171la0BOPtv8nENvN2SWNA8PGzd+RHGIc/Ci+CMqSVbGykpAirD6jyIrjl7aL8AxxLOMTuKDpPMJ/zSYA6N4ZcNm8124xAguaQkC9sI1gJnjTOlK0WQabiBGzolec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HLDZLO08; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IZgFClXw"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-486fe655187so13504505e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:29:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HLDZLO08"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48540d21f7dso10654365e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:29:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774031366; x=1774636166; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zI2ieTUFXonsrBR68Y1B781kbM8PTDVs2B5gc4uGYm4=;
-        b=IZgFClXwGgS+tMGGJ5bFW+tdktw9xzed/D+vCT+COQ4jx5uQRHQtT+jHQ2PJROZw+z
-         TxP0sjD/n+MeyEApNHy9BX+SwJkrd4P1YDT6T6mG4fw5oM31qveGAYUBxwNqIZXa/LE2
-         JvdqAPCDkuH66rJm0LXy2qyZd74PmH7vg+lhj8nf8Bfd1ME/wQcYIGR5Ym8YHs9MnUZ4
-         8OUDkJh3RnIeOyQP8AW0zN94sXaHJd2qJks3wAeEdakZLThsHGlIOF7XoorIyDCmnNaO
-         FUFQuEDJtcbYTiwVDQhe0h2agHivlG1qfK8lis3Unjpr5QbAuU81+BRXjrS1cxZBKdkP
-         pGmw==
+        d=suse.com; s=google; t=1774031369; x=1774636169; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EVnHCyxPSc13ZQGZZoG5qnRzMcihNg1l/YgU2d0QRXU=;
+        b=HLDZLO08EijGIj3i1NCrBWixoJ1Gqj95z7/ezrdjqeovFJldXbZIHuAj4psQrUjCRx
+         YolOaxSz1GZYwk9/F+Zyw29GPNbcZiTkvMfHcBJJHvpGx5odhpM6+qkNhOfhNEdbg9RH
+         nZHsHH2yIyfo05Ad5h4PAmMGwiX1ica7AkabGPyuwb+nvsv+67wUpNZZ1ngSOWtUEvUY
+         JYm+XllKYZzZVYCNPXIJw19HCJosUl84zz82tt13OW/vqydzaR8+ZzNSRV+gl14MKbw3
+         zjZg5RuzOrl42LtTd3LMFFsNvMjDX2xQiHXbiPC7hXV4KtVtisAdNYDp2gksd+9yX6gO
+         aQrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774031366; x=1774636166;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zI2ieTUFXonsrBR68Y1B781kbM8PTDVs2B5gc4uGYm4=;
-        b=lpS8nffIBA/L23/bXuW0Ynwu/GPACr94woUc+M03fqQuGpGypM0BPdhW9ZC5OBEa68
-         2yUiranVG7zuD5/oTpPRX65M5zrs8hWb2y1RkeyQq7kv9kubTUTEGtIv7koIxDZio5hZ
-         zUKXP9PlhDQIvKzvtBHu2VBHKCjSwEhhm+jYnomFTD7pkYb5pNTlUEgCVbi/HPnlDd6r
-         BjgBkfAbJgZeUuT8bNAjsZ8Usd5pjUslKR8rLgHirl8Jc+Egipu+NiBU4YkD0nA9Ej+k
-         PHh8nsavk1+HJ3V+YW5gaifLhUUVVO/v6hRW7d7PIM/fNJS/BUEedUjDAGEksiH8KLQC
-         mnSQ==
-X-Gm-Message-State: AOJu0YwsS9QguqfWrESQLYl6+EPeb1pmTC9I7tPlvugPIW4d8QJfJeuL
-	72FZdB1QrBT5qFYXRlekLng55ChH0kJ+mZHZw86TfcICjiul3zo4BeV3lXIWu2D37bAmyzHXU8r
-	HIm+z
-X-Gm-Gg: ATEYQzx7gVHHRcwwvw6uKaHQjPJ2z5bRcmNEe0sPso1s67MM9l6Gd7dP+P2j3reCkwY
-	FmEn3F+qY7ZPzSxLrZNWpbQwbArg8rHDRJVDHY5/q3rHnnJ/nTjL3+HzwfJNhcn40SzMTZT59yr
-	61I0t9XB9ew6RONfcaM7eWlbGd4KV451ZWXD1TOVjw+b8DP5RNzplZHQYuGiuvjWS03bl8l444z
-	FoC2Ll2Sxurdjg5FXZ3JHrhAorUHPXBRhL0dGOVhGMIe6KNbSqOi3qlHF3ntbimeB9j9y5pFqUv
-	yR8v6kmlOTE/Vc0gb3/98TdESSLqWFtGrhLHf4w2C156kQUMiKZSEflVRmNR9KNyoOJCj+SBi0n
-	3/ougy8/oHfAVsmMq8vmp1M+efT7QAywsDIM9c1unb2FuJXNKH278e4XAyXHmAAId9I3UIPJKuE
-	JqDKzlAWtOiA==
-X-Received: by 2002:a05:600c:35c1:b0:485:3b50:fe54 with SMTP id 5b1f17b1804b1-486fedb2545mr69529735e9.11.1774031366421;
-        Fri, 20 Mar 2026 11:29:26 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774031369; x=1774636169;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EVnHCyxPSc13ZQGZZoG5qnRzMcihNg1l/YgU2d0QRXU=;
+        b=nUeyRKyEZk7iRS/wec+RxJC0YkkoqlwYXTe/wfDLJeXjFFyMfNwCrZjRLw9t+hisl1
+         QjMx5DKFTY71vZR4wH5e430EEDEW6KouBtBIfX6RjMJlvma6GcYGibOR82gSHKi84bSW
+         eacKxa1NBIbbNnewI+Pz+ctwLGPUU/DACq+LHO6yHDBQD7La5C/NRFNpRNa5gLYDo2me
+         K8B4p7L3zprRlrLJ7EkoQYDLV1RHrQlk4zFaPEQ9NQMFdXkL4ErR/stkNMxbT9rLq4rW
+         mV1K88zkuuRUlWAfV2ZzT36kAJFEIbAFZ5r6x3m1RCBK2CbiT4nrwyJliR49IoFu+4yd
+         8GIw==
+X-Gm-Message-State: AOJu0YwIiSTzm+v/n+1OUngEvvQSjU6c8KCVPVtF4JcJobTERXlpyAve
+	QAJbLJmrrtLhJkyua3OB+3KDrIWe+n2mpfkfsRrceveB5lwPGtQH8m49JBtKdi42DjfSRBD+lgs
+	fIVfq
+X-Gm-Gg: ATEYQzyTAsbWXH+PLYjy5OReHfl0dHw/kfOJNzkxAKEKOh0U5fGlKfmS81PwE/QF9gk
+	ngekAw3w/l1E4sRQS01/hzNCdU7yArRF4X+LVPk3MLLHkWz12sZe7jBrnERTpQGx/VpsNkyibzW
+	3AdPA2t8CcNdO5NDwKk3Ft61c61vDfLSq5/LrR2IFTMIpPFJnMu2kqJzgLh5caBArbPc7CewnvH
+	sD95jVbMKR9yA9JrMjTLobjBNx7FLRIk3aBFz4cqPGVOV9RuDSlKz02yHKl9wmJ91Wjw8VeOIUQ
+	Jb+F4qf/5O1bJ48wrjdXaK+hvIwW/WdRe9Vc+QHkyihemjOVk64J1+GJRVcJR5pq3ULmGeZjlFk
+	kPQpI+81Y4IoZev1IkKkzBZb4A8V2/6ppRvtW216vlQlh8FgTjCwtWeZtDj3iYbSdnJF0BjQy0I
+	I0mvPDmoW/YQ==
+X-Received: by 2002:a05:600c:17d8:b0:483:703e:4ad9 with SMTP id 5b1f17b1804b1-486ff0291d7mr36513385e9.19.1774031369285;
+        Fri, 20 Mar 2026 11:29:29 -0700 (PDT)
 Received: from localhost ([189.99.238.44])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-79a90553b04sm19518657b3.28.2026.03.20.11.29.25
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-79a903e0b8csm19938127b3.12.2026.03.20.11.29.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 11:29:25 -0700 (PDT)
+        Fri, 20 Mar 2026 11:29:28 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Subject: [PATCH 0/6] selftests: run_kselftest.sh cleanup and fixes
-Date: Fri, 20 Mar 2026 15:29:15 -0300
-Message-Id: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
+Date: Fri, 20 Mar 2026 15:29:16 -0300
+Subject: [PATCH 1/6] selftests/run_kselftest.sh: Remove unused $ROOT
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,58 +69,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAPuRvWkC/x3M0QrCMAyF4VcZuTbYdSjoq4gX6ZpuAe0kKUMYe
- 3czLz8O/9nAWIUN7t0GyquYLNXRnzoYZ6oTo2Q3xBCvYYgBjV+lsTXDIl82zJRj6nO5hHwDrz7
- K/8Gjx9OdyBiTUh3n42dRmaSe32SNFfb9B4t4OzmBAAAA
-X-Change-ID: 20260320-selftests-fixes-dad2b1df50d9
+Message-Id: <20260320-selftests-fixes-v1-1-79144f76be01@suse.com>
+References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
+In-Reply-To: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
 To: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
  Nicolas Schier <nsc@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kbuild@vger.kernel.org, 
  =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openssh-sha256; t=1774031362; l=1348;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1774031363; l=594;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=ZK2PP6H5Htd3EMxs/tbHhD+tM4DKDuhATR/fPLzNQiQ=;
+ bh=O7o7FBrPlToXKzC8pwAquL6Os+AvG4huHyd9CtSYQdo=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QDusXjprKnLKlyP7MGf/ErCP+mTOT5X0BuS1RBlRTJ9qnSW1rl08GzXeciqDYnRapZnufVA2lyA
- 3geAkd9hTwwA=
+ QGTUlS6YOvkJjppJyfBvXK+uRYUVLQot9lB+mJUvYRjukWYP1Bcj5+pxL/nZwWFDAkKeJr2lRpf
+ /0YazDWx3yAw=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Hi Shuah,
+Fix the following shellcheck warning:
 
-Please consider merging the following patches. They are mostly small fixes
-to run_kselftest.sh, plus one feature: adding the option of passing a
-directory to the "-p --per-test-log" argument.
-
-There is a small corner case spotted in tools/testing/selftests/Makefile
-regarding failing sub-targets, and also the removal of the default install
-directory for out of tree builds in the top-level Makefile.
-
-Thank you!
+ROOT appears unused. Verify use (or export if used externally). [SC2034]
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
-Ricardo B. Marlière (6):
-      selftests/run_kselftest.sh: Remove unused $ROOT
-      selftests/run_kselftest.sh: Add missing quotes
-      selftests/run_kselftest.sh: Resolve BASE_DIR with pwd -P
-      selftests/run_kselftest.sh: Allow choosing per-test log directory
-      selftests: Preserve subtarget failures in all/install
-      kbuild: remove kselftest output in mrproper
+ tools/testing/selftests/run_kselftest.sh | 1 -
+ 1 file changed, 1 deletion(-)
 
- Makefile                                    |  1 +
- tools/testing/selftests/Makefile            |  8 ++---
- tools/testing/selftests/kselftest/runner.sh |  3 +-
- tools/testing/selftests/run_kselftest.sh    | 46 +++++++++++++++++++++--------
- 4 files changed, 40 insertions(+), 18 deletions(-)
----
-base-commit: c612261bedd6bbab7109f798715e449c9d20ff2f
-change-id: 20260320-selftests-fixes-dad2b1df50d9
+diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+index 84d45254675c..9abea79018d7 100755
+--- a/tools/testing/selftests/run_kselftest.sh
++++ b/tools/testing/selftests/run_kselftest.sh
+@@ -21,7 +21,6 @@ else
+ fi
+ 
+ . ./kselftest/runner.sh
+-ROOT=$PWD
+ 
+ usage()
+ {
 
-Best regards,
 -- 
-Ricardo B. Marlière <rbm@suse.com>
+2.53.0
 
