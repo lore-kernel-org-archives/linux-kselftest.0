@@ -1,155 +1,266 @@
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013039.outbound.protection.outlook.com [40.93.201.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14413B637E;
-	Fri, 20 Mar 2026 15:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.39
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774021634; cv=fail; b=KzkrF7O7QEbeG/AK0PIFHt4xptlljCIKKxbY3dPAPwFPWhJMUXFKCuBf++A+UncGD+nRgHG9xB1FyV2RGDF6bVWVXuSz93zL6ZAbkckRHZsn8vsVmtg5lr8CQGsSbdLrclX2zxoTvPHkYIJLvj8uVR7ayPo/LVfn5jUaYg/R0Tw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774021634; c=relaxed/simple;
-	bh=ZTlliCPhcZ6GOiwVF8YIO0gxl+FGd+Jf3MQcU1pkhr4=;
-	h=Message-ID:Date:To:Cc:References:Subject:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=olYjp/spdVzxrJo+JA5xKVj5MLJLkIRRVJNjTaKHoPNiBbuLS6CRoLqarXAO8YLHQX81xRZQrofiJDr95/Dhuyk2u7u6q4VzHYRzVuzzRS/TqIWh95HB1CxgHEqC19XVWnIQonfhEq4xM3W/fRRcMVJuDcD9J1k9xnhB76z9B9g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=citrix.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=P3PovQQe; arc=fail smtp.client-ip=40.93.201.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=citrix.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997303CD8BD
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 15:49:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774021767; cv=none; b=UpnHTcwl8O6KcnOTaFkuAkSQoRp0cZqgknHoNAy6HH8JTExdVay8gCu/dIqRRT+McUI9qhM8wQE48KvvSmD5CWwC5nHFALl04B/rBzA8TOuzrcHWLSOV2hANmL8xtGcCVsUMmAejZIUh6kk7SSgRjEWFy3jJPmeCsSDHHMsi6p0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774021767; c=relaxed/simple;
+	bh=5bNAXGs4cIMFl6Jp32gKXXVAunXQc+McFM1c11Lf6k8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pgTwKHZMg4u7mMmaH2yK2ckV5SHNlVfPKn7Rk3q8BPCT9xAme4Bs2Y18QzWPmrfsuQpoOAI0k72fZ2gmfu2dWcblbKtlSmthbFoJiolNUDMDDWy2vSs7z5d43nhEUs7Eq28UE+yAApurMo6NzuPL0RS7GiKOZGrDFjFgFE7fMM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TqsD+V0e; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="P3PovQQe"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ssKo989bDeUenwaPbU/uIf+jhOIAuNlNwiKCSOXqm7rnweU81lfain/fzo5hRs6MxqKYlttuFVCcpiYsa9k6HRTrXLGaIu/IWfx/9WLFZc8CXgW5URN+TsSinFtUqksFRaE85dzN51wuJ6mH+lF76NHVoEUBNk0PRhzwk5HBD0/SVnN2yCHfSqx9IxK8T+PnUGz/RCJGVlQ3kKi7SX1iFAevxUwWN0h1ES+3aB/T5UpXMRTJNgtAVU8z3QfXqVdfWVIpmlVnCKD0TfCqEqkCT5EqutDc33jKGDOnUjLoLczc6+25HxcuJnxbPpWzGTyoOa4oY9hwTGhELLrZXylkAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZTlliCPhcZ6GOiwVF8YIO0gxl+FGd+Jf3MQcU1pkhr4=;
- b=uWO93p3O73Et1W9zqYMcBlqV6QGW3VWTtg/BPw05pUQlGCGbDiYwstHpu4ZbV3aYdOtZ4tIAs1g2n6G+c/ot5H7DG2sBd3QjPsCt5kVP2+f3Fv3Nux9Slu812jCGKzayPg66R6ewao/016euY/MIqkbdpODWUkZ7/sE+fWggWhOl2wzW1YnqMhyXT01CtRe1F2ooHH64j+zj882H0w311S4A0ySKBVy14daGts/MPrXxnMY1NpO88eYewqZJWWDhPc8J4zuo+qL7IsbKXhbsXMOR8WwAsfqjZlUswE1ciSM9dm+Y3CeGW9UhW5dP8TQAgA70MEq3htz3IoHj4EFLIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=citrix.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZTlliCPhcZ6GOiwVF8YIO0gxl+FGd+Jf3MQcU1pkhr4=;
- b=P3PovQQeDHJ8J8pox2hJho57zsP2haMqGFa+bTFLqtbaZYRrtS5DdWBIsUkCMK5e/kId4mqVH+89H0lDKslnL/MQUV2YEXEbG3/NCB81N32sdD5WrQEoVGAp35n18EVpsCh83+ymV6cMJtVm/hzZ2v+qDP20CM3uXjF3VdDr37M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from CH8PR03MB8275.namprd03.prod.outlook.com (2603:10b6:610:2b9::7)
- by CH7PR03MB7857.namprd03.prod.outlook.com (2603:10b6:610:24d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.23; Fri, 20 Mar
- 2026 15:47:08 +0000
-Received: from CH8PR03MB8275.namprd03.prod.outlook.com
- ([fe80::a70d:dc32:bba8:ce37]) by CH8PR03MB8275.namprd03.prod.outlook.com
- ([fe80::a70d:dc32:bba8:ce37%6]) with mapi id 15.20.9723.019; Fri, 20 Mar 2026
- 15:47:08 +0000
-Message-ID: <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com>
-Date: Fri, 20 Mar 2026 15:47:05 +0000
-User-Agent: Mozilla Thunderbird
-To: dave.hansen@intel.com, yi1.lai@intel.com
-Cc: Andrew Cooper <andrew.cooper3@citrix.com>, bp@alien8.de,
- dave.hansen@linux.intel.com, hpa@zytor.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
- shuah@kernel.org, tglx@kernel.org, x86@kernel.org
-References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com>
-Subject: Re: [PATCH] selftests/x86: Fix sysret_rip assertion failure on FRED
- systems
-Content-Language: en-GB
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-In-Reply-To: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P123CA0070.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1::34) To CH8PR03MB8275.namprd03.prod.outlook.com
- (2603:10b6:610:2b9::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TqsD+V0e"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2b6b0500e06so2316180eec.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 08:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774021762; x=1774626562; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1noh5STaRC1HybhuYlkIMhR1r7TUdhM17pEfO/82ZhA=;
+        b=TqsD+V0efLCtHkR1v28WRt0ZjiiW/DszxVXs02Ss3Npx+nBeLDXahfbuKHiLDCTLSe
+         inyjk1ptvRR6l54nMhspWFgyvXYAUxbWUYiolNYh9Qa1qGeooZziXfx+RfI9uXO2njsA
+         PIpZtIu7oWFT6pEsus+o8J8qjU+m5TpUDuoHorrWyc0ytHXUY8FhseaZTO8w+V5uKNYY
+         a7o8ojWZZeV2eg031HmOhxAtE60w6Jg0HANc8MKeFab2GPPV44poRCB9TV1I26WLeYov
+         WLaN85UITDG7rFc9tb0RrZC4GSNptfEm1lkkFmW71Hpg0Y6NXP4QijvMFvn72cUC5MRc
+         tQgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774021762; x=1774626562;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1noh5STaRC1HybhuYlkIMhR1r7TUdhM17pEfO/82ZhA=;
+        b=DXioKZzlNtQxv0tmc02E9Dw4Ahc3DekgY8wFffXMtc235rp3rIErqKWPb9QVydTyct
+         +eqf3bwN2+B7rAvmPx0Bb+QGNK0LWOKCbPiqJlutSyqB3vRsRmkHJr/NBAfWb84c+C7g
+         KHsmKQSSkGvPJg5XG1c45AyedBsDmqgnWlIWmydhdnmm1Bn8Z7s5q8Sdu+KypFjbf/rm
+         FaAk5prHf+oB+qovaRPIuK8wvPvkKDQsccVPUACNf+Yi/v6Yi0/XOL5yhFumATZqLMd8
+         fyLXxFK/BoWMDtUKKYo4KXy4xPwFa6/t5h1OdGBtriC0hsC9sybEZCTW+X8HlqYYaRmI
+         /mYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXCWeY9QFrNbz+E3zh2CFTIS5IVp4Pe2n4HzOh4kNKDuRtED2RY1n70S1i+WI+HJlzMNFEYKwbr02YNQmdh/gE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK+fGXBhpHuazQorhkzU9geLNNf8fvyFUfo1LfLb/o5+h1yMKp
+	wsKxYln1ThPJfIaVKMDaq/HM+kOytJ9HfBwD0sINM1ZHm3BaVJsVFWE=
+X-Gm-Gg: ATEYQzxYkOM/rLeXZsuDEF6fAxHoQMNnrwIlMPBkKPLMGMIhCoRauylTocyf0xwbmPu
+	AHRVMzJWGoDLniZd6mCE1dbCxbokh2+vS9hv0AMTnOAuGxTNw5B1VQMAB70/DPaKPiUR1hmjrP1
+	UxH5bO11GpdVGLa5dlpHS7M0NT7AsGydoySspa7CaQOAPwZ5vqqxV0mPbhvfuhmmBjxQv2eGtZJ
+	s5HR+Dth0sc6FRi3eUWXypdT4VkEXcSfZ64Kwjia1JTGusfJHL08Krdvjh2fIG1mfPWM17AUc72
+	SmpLXRKN8ilLJb2woLklAe9VeUI6q7rdOjLza1AfgEh29JhJ1pTVBGfOCohaU0YW4QHBCvP5qs1
+	jUezESlb9KFDW9geRXXECp8reF+I2jpn3NhCoSf61Cal84rOSvGO0hoipRQD5zNnqhJHOXidatv
+	LWGt3XdivyVpQuDfS9o9rQwjXVRaqdZoJYIZ97k3f/qm6Y2WHzihzZGxnjtenCL6EvOfZBHIdvG
+	oce/DmOrshLOY8fvt+x/nR7EKbt
+X-Received: by 2002:a05:693c:3106:b0:2b7:b7e7:9025 with SMTP id 5a478bee46e88-2c10980a36dmr1639723eec.31.1774021762125;
+        Fri, 20 Mar 2026 08:49:22 -0700 (PDT)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b17b1b8sm3724371eec.8.2026.03.20.08.49.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2026 08:49:21 -0700 (PDT)
+Date: Fri, 20 Mar 2026 08:49:20 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+Cc: Stanislav Fomichev <sdf@fomichev.me>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"horms@kernel.org" <horms@kernel.org>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"michael.chan@broadcom.com" <michael.chan@broadcom.com>,
+	"pavan.chebbi@broadcom.com" <pavan.chebbi@broadcom.com>,
+	"Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+	"Kitszel, Przemyslaw" <przemyslaw.kitszel@intel.com>,
+	"saeedm@nvidia.com" <saeedm@nvidia.com>,
+	"tariqt@nvidia.com" <tariqt@nvidia.com>,
+	"mbloch@nvidia.com" <mbloch@nvidia.com>,
+	"alexanderduyck@fb.com" <alexanderduyck@fb.com>,
+	"kernel-team@meta.com" <kernel-team@meta.com>,
+	"johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+	"sd@queasysnail.net" <sd@queasysnail.net>,
+	"jianbol@nvidia.com" <jianbol@nvidia.com>,
+	"dtatulea@nvidia.com" <dtatulea@nvidia.com>,
+	"mohsin.bashr@gmail.com" <mohsin.bashr@gmail.com>,
+	"Keller, Jacob E" <jacob.e.keller@intel.com>,
+	"willemb@google.com" <willemb@google.com>,
+	"skhawaja@google.com" <skhawaja@google.com>,
+	"bestswngs@gmail.com" <bestswngs@gmail.com>,
+	"kees@kernel.org" <kees@kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"leon@kernel.org" <leon@kernel.org>
+Subject: Re: [Intel-wired-lan] [PATCH net-next v3 03/13] net: introduce
+ ndo_set_rx_mode_async and dev_rx_mode_work
+Message-ID: <ab1sgEg9ii3se1Zq@mini-arch>
+Mail-Followup-To: Stanislav Fomichev <stfomichev@gmail.com>,
+	"Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"horms@kernel.org" <horms@kernel.org>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"michael.chan@broadcom.com" <michael.chan@broadcom.com>,
+	"pavan.chebbi@broadcom.com" <pavan.chebbi@broadcom.com>,
+	"Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+	"Kitszel, Przemyslaw" <przemyslaw.kitszel@intel.com>,
+	"saeedm@nvidia.com" <saeedm@nvidia.com>,
+	"tariqt@nvidia.com" <tariqt@nvidia.com>,
+	"mbloch@nvidia.com" <mbloch@nvidia.com>,
+	"alexanderduyck@fb.com" <alexanderduyck@fb.com>,
+	"kernel-team@meta.com" <kernel-team@meta.com>,
+	"johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+	"sd@queasysnail.net" <sd@queasysnail.net>,
+	"jianbol@nvidia.com" <jianbol@nvidia.com>,
+	"dtatulea@nvidia.com" <dtatulea@nvidia.com>,
+	"mohsin.bashr@gmail.com" <mohsin.bashr@gmail.com>,
+	"Keller, Jacob E" <jacob.e.keller@intel.com>,
+	"willemb@google.com" <willemb@google.com>,
+	"skhawaja@google.com" <skhawaja@google.com>,
+	"bestswngs@gmail.com" <bestswngs@gmail.com>,
+	"kees@kernel.org" <kees@kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"leon@kernel.org" <leon@kernel.org>
+References: <20260320012501.2033548-1-sdf@fomichev.me>
+ <20260320012501.2033548-4-sdf@fomichev.me>
+ <IA3PR11MB89865C96824F6518F4A01B9CE54CA@IA3PR11MB8986.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH8PR03MB8275:EE_|CH7PR03MB7857:EE_
-X-MS-Office365-Filtering-Correlation-Id: acf8b48b-a419-436b-90ee-08de8697f13e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	N5N/q+YvJPSSoCQF0nhe9HJ2/GKaQyt5onY5Q4yKOPC8XxntwTHCiilF8PnRK6cfAD/+G6F+yqFCOspQFK0f+PlRkvMcxSR3gAMGN71NwfhH29rABl7MvjuvyZARTJdNMyIWZ3AMlDlWq4lJF4uOMZSqXZgiLeGL8wmDHYltDXufbFId0qJd2G5pieDa37YQux8hePXs9u19zZLINBnuNAux7JxDWfW+HydEQdkWN1hWyZ1WnJzSMaJVgrgdd+p8owM9vcNIJvcMe09D5RslSyOSkQLtnUnBf+Qg+BiUwU02YepLsDr+6Np5ewFKVfmFjCe9umGAvYoNQxrxCGD2DMjrd5AiH0IGazCCYuYR88PJDb/HCVF8pkzFidi1+hjKhQ+Z/SWjJ060SpvpkBLkut1EdJKD43a/I+0Qb5NHCnSL7509F5js/x8GahcDYyxzKXBVGbRzIs2bFvJ9ZUB1s8WEBmTQVCaenZXfKjpqkobIslFfgQsUkCCwPr0iZ8YF6Trbin0iQOnWq9WKq23c0l9Yj0w8F7m89BvZJfMau40g70B1W31485w5l1q5sgs4escXDQnwIvGGOsD/HA0wJlAKCbGK6QYejVtSenxk7MLXfe1dng7pXPteXD7NUqGLHfVuxqRgOQd8q4OGhgzlT7XEeYxaLny4HxMPlJTG2qi4cqTs/1j05oCKP4ElEqe/zymMpY4NIGokxmwRYXiA13mbeZCIce/rILlHgEGtxOU=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH8PR03MB8275.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Zm92QjdIRmxxeHM5dlZEWjVhQkdUTXZ3N2htN1FwZmRKQm1hYXlSQy80RmN4?=
- =?utf-8?B?WGRnSmxLR0dKMzBWQ3pTQlVGY3BTYTRteUZNeGtpUlRaeXpzczhGdldOaGQ3?=
- =?utf-8?B?YXg1THdobGFaL1ExY0crQVk5SExkQnJNUkNJZ0grY2FFeStNZ2UxWStPYito?=
- =?utf-8?B?Ry9sS2ZWWit5SGkyMFlJNGFqa01TWVdmK3l3M1Vhc1NraDJsMHRSOW41MjJF?=
- =?utf-8?B?N284a2Vuc0pQQUpyREZSckJia29ReE4raXVtRjE0dFlqMEZkVlM4MDk4OEg0?=
- =?utf-8?B?Z3RmOEwrZFB5UWxsc1liZVVZNnUzY3dqcXo3WUNiUGI2M1U3cEJEVkZYeW54?=
- =?utf-8?B?WnFneGVVYmJXd1NqQ3g0VVcvbyt1RHlVOFVlMklQaWRNcmFOQ2J0WncwWnBq?=
- =?utf-8?B?c21jUFBPZyt2eC9PMUJjazRjZUFGTmdRSFVjRDVXaHdySGRVTjY5bEF3SG9V?=
- =?utf-8?B?TVZ4VGxVNFFIU0xDeUF5MVhPQ081elpYSHZYRUZPcEs5Z0V4VWVPMjJtN21p?=
- =?utf-8?B?anF6ajcwY2w0MzZOZzVFQVQ2aWNNTmIyWmEvZDF0Ui9pY1RnUTJsTHVac1JH?=
- =?utf-8?B?QkVYc3dUVGJnYjU4aHFSNGEzTXZ3cGFFNEk3Y2lDNjhhemRnazFkam5OV1JL?=
- =?utf-8?B?ajlTandZWXlGYkp1RTcrUVBlM0xqL1dvbGtyMXBRZXhGRXQ1Mk8zMy9JQlRJ?=
- =?utf-8?B?bTNGM2Y4S2REV1ljV0RDVUlRRWhmKzFIMTJhQWFFaG45Y2hPRGJ0dlMvT2Vz?=
- =?utf-8?B?cVFNMkYzMWh0eEtBMmUxa3o3d3hpemh1dm8xbEppUzI5YWxJQ3hKUlhwRFNw?=
- =?utf-8?B?ZHIyK2diSDZBb1dGdTRwRTZZb2IxZy9VNjJqSlZSWEpjMkNnSnJrdDdPeG1X?=
- =?utf-8?B?MklqYjdBQXNZVFUyY3hueXBXQUowSVNuT0lrbXdsWndhczluYTRwdkNxMHpy?=
- =?utf-8?B?T2RNaW9qd3BtYTBUUTltSWQwZzJaQ2VkeitYTXQ1NFArM25rUi80ZGJPeW10?=
- =?utf-8?B?ZjZxalVrS0dhYWlTTExvdzJ3Q2hhK3JtbnVJeDE5WlNhWGFvRjNYbjBkbG4w?=
- =?utf-8?B?TEpxQlM1ODROdEVYS2Z2eUtrcDg2NGFZVFIzTG5RU20yeUNFeXZpVnZCcjZM?=
- =?utf-8?B?ZEVLL3E2US9FZWhhbEdCam4vSE00RFdXMkRxN29rbnNzdC9wT0szeW84amF1?=
- =?utf-8?B?MUpZVEdtL1dWM0hLNkRvYTFMUHdxVDExQjR6N0VBNDJQK0xBQk5VL09IakRo?=
- =?utf-8?B?KzVFRWZpT2oxYjR5dWcrcHRReENHYnVKYmorMFp0K2lYYksrSXhVWHYvVVRm?=
- =?utf-8?B?NFNyRkw1Rm95TE9PRGJ5eGlGT3VnQmlYbGFERGVXRXlJQWliYWFiS1hmTGFh?=
- =?utf-8?B?ZXU5UU9QYnQxQm1UM1FmNmw2eGhYYjFZaWttQkFGbkdQdWlweHFiMW5mNm5F?=
- =?utf-8?B?QWhVd3VMb3JyazN2TnRjcFlzd2ZWRGxkb3lpOWV3ZW1MNFNSa1piZTZxaDBM?=
- =?utf-8?B?WmlNekRzM1hUV29aNjFYaHp1SUQyM0dJNDlxZkl1K1lDYkJGQ21zUlhvaFo4?=
- =?utf-8?B?SmowY3pCcnUzZVFoSWN1RnhNYUpwMGowR1JpRWJGTlBZSklMSmptK1lKVXZW?=
- =?utf-8?B?QTlIQTUzT3JmL2lCQ0xuVyt4VW1oTWM4ZWlEL0J2SWc1bmx2bE8xRkMySHdP?=
- =?utf-8?B?b3hyak9RQklnYW5PZ2tNSUw0NXVVL2lUN3FyYmNyVGc3RVVMM2VvQWFDN09S?=
- =?utf-8?B?elRlWG9hZDljMjVhZjNpcVBqdC9JU0NOeFUzMkMzSUFQUkZDdDhuNzFuWHRh?=
- =?utf-8?B?ZE9QaGxMT3lSK0RKZmhOKy9jQVlKVmdMTnJJMEpMNlRwa0Fra3FpTTJobmlv?=
- =?utf-8?B?V2JHZ09mZXFtaFMvamEyWmxvejArRzhRSUJ6UWhNYTcyTXVaUXlVK0lWSm56?=
- =?utf-8?B?dS9ha1pSWWFzNmFtSUxVUUpLWTNobm9vczcyOVYxNmNaTzVzY0JSSW44YnZu?=
- =?utf-8?B?aENGMnllQ0pJYVhDK3V4OVg4dXR3Q3pORmZRSmNrNE5ha25EMVRJR0E5YS8r?=
- =?utf-8?B?bnlvK0dPVFpLZVdZOUdhZUtrODNiMjlYaG9EbndSdE1UZExyVWZiQmZoT1dO?=
- =?utf-8?B?NndQTDR4dWkvYWtsZW4zN0k2WGRoMjRiZVJ0QUhsc3BGNWFiNlBwLy9MZzNV?=
- =?utf-8?B?VmNhOHJFQ1RtRG9PLytReG9kU3A0T3BvTCtLaEFyOGpjUGMyUDMxNy9adWZL?=
- =?utf-8?B?R0hGc1VCUXJYdUpkbFh2RGhINEoyb0w5V21hVDM0QzhkWHVFV09HZGNkS0lD?=
- =?utf-8?B?L3J5VXZIMnZJSGpEbzkxTGQzcGFPTUQwcnRZMWp0amFOY0JQVVB4UT09?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: acf8b48b-a419-436b-90ee-08de8697f13e
-X-MS-Exchange-CrossTenant-AuthSource: CH8PR03MB8275.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 15:47:07.9623
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: asp9aEySd62YNY64uof4NphGq4M2SZur1jQWWyMRLWemWWP1TXXANKnnbOCUrXZjs8yKmRdoZRfHuzfts/DZKNHGwJNkWJmCdaeF8U5GTKM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH7PR03MB7857
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <IA3PR11MB89865C96824F6518F4A01B9CE54CA@IA3PR11MB8986.namprd11.prod.outlook.com>
 
-> First, CPUID doesn't tell you if FRED is in use. Is it even on by
-> default yet? There might not be a better way to do this than checking
-> CPUID, but checking CPUID is imprecise at best.
+On 03/20, Loktionov, Aleksandr wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf
+> > Of Stanislav Fomichev
+> > Sent: Friday, March 20, 2026 2:25 AM
+> > To: netdev@vger.kernel.org
+> > Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> > pabeni@redhat.com; horms@kernel.org; corbet@lwn.net;
+> > skhan@linuxfoundation.org; andrew+netdev@lunn.ch;
+> > michael.chan@broadcom.com; pavan.chebbi@broadcom.com; Nguyen, Anthony
+> > L <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
+> > <przemyslaw.kitszel@intel.com>; saeedm@nvidia.com; tariqt@nvidia.com;
+> > mbloch@nvidia.com; alexanderduyck@fb.com; kernel-team@meta.com;
+> > johannes@sipsolutions.net; sd@queasysnail.net; jianbol@nvidia.com;
+> > dtatulea@nvidia.com; sdf@fomichev.me; mohsin.bashr@gmail.com; Keller,
+> > Jacob E <jacob.e.keller@intel.com>; willemb@google.com;
+> > skhawaja@google.com; bestswngs@gmail.com; Loktionov, Aleksandr
+> > <aleksandr.loktionov@intel.com>; kees@kernel.org; linux-
+> > doc@vger.kernel.org; linux-kernel@vger.kernel.org; intel-wired-
+> > lan@lists.osuosl.org; linux-rdma@vger.kernel.org; linux-
+> > wireless@vger.kernel.org; linux-kselftest@vger.kernel.org;
+> > leon@kernel.org
+> > Subject: [Intel-wired-lan] [PATCH net-next v3 03/13] net: introduce
+> > ndo_set_rx_mode_async and dev_rx_mode_work
+> > 
+> > Add ndo_set_rx_mode_async callback that drivers can implement instead
+> > of the legacy ndo_set_rx_mode. The legacy callback runs under the
+> > netif_addr_lock spinlock with BHs disabled, preventing drivers from
+> > sleeping. The async variant runs from a work queue with rtnl_lock and
+> > netdev_lock_ops held, in fully sleepable context.
+> > 
+> > When __dev_set_rx_mode() sees ndo_set_rx_mode_async, it schedules
+> > dev_rx_mode_work instead of calling the driver inline. The work
+> > function takes two snapshots of each address list (uc/mc) under the
+> > addr_lock, then drops the lock and calls the driver with the work
+> > copies. After the driver returns, it reconciles the snapshots back to
+> > the real lists under the lock.
+> > 
+> > Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> > ---
+> >  Documentation/networking/netdevices.rst |  8 +++
+> >  include/linux/netdevice.h               | 20 ++++++
+> >  net/core/dev.c                          | 95 +++++++++++++++++++++++-
+> > -
+> >  3 files changed, 116 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/Documentation/networking/netdevices.rst
+> > b/Documentation/networking/netdevices.rst
+> > index 35704d115312..dc83d78d3b27 100644
+> > --- a/Documentation/networking/netdevices.rst
+> > +++ b/Documentation/networking/netdevices.rst
+> > @@ -289,6 +289,14 @@ struct net_device synchronization rules
+> >  ndo_set_rx_mode:
+> >  	Synchronization: netif_addr_lock spinlock.
+> >  	Context: BHs disabled
+> 
+> ...
+> 
+> > to
+> > +device
+> > + * and configure RX filtering.
+> > + * @dev: device
+> > + *
+> > + * When the device doesn't support unicast filtering it is put in
+> > +promiscuous
+> > + * mode while unicast addresses are present.
+> >   */
+> >  void __dev_set_rx_mode(struct net_device *dev)  {
+> >  	const struct net_device_ops *ops = dev->netdev_ops;
+> > 
+> >  	/* dev_open will call this function so the list will stay sane.
+> > */
+> > -	if (!(dev->flags&IFF_UP))
+> > +	if (!netif_up_and_present(dev))
+> >  		return;
+> > 
+> > -	if (!netif_device_present(dev))
+> > +	if (ops->ndo_set_rx_mode_async) {
+> > +		queue_work(rx_mode_wq, &dev->rx_mode_work);
+> >  		return;
+> This early return skips the legacy core fallback below.
+> Before this patch, __dev_set_rx_mode() continued into the
+> existing unicast-filter handling when the device did not
+> advertise IFF_UNICAST_FLT.
+> 
+> After this patch, any driver that implements
+> ndo_set_rx_mode_async but does not set IFF_UNICAST_FLT
+> will never hit that fallback path.
 
-A reliable way to distinguish IDT and FRED mode is to:
+I believe this is addressed later in "net: move promiscuity handling into
+dev_rx_mode_work"? That should take care of doing __dev_set_promiscuity
+for !IFF_UNICAST_FLT+ndo_set_rx_mode_async. Not sure if there is a
+better way to rearrange the chunks in the patches.
 
-1) Load $3 into %fs (x86_64) or %gs (i386) (i.e. whichever isn't thread
-local stoage)
-2) execute a breakpoint, ignore the signal
-3) Look to see whether %fs/%gs holds 3 or 0
+        if (ops->ndo_set_rx_mode_async) {
+                ...
 
-IRET has a fun behaviour where it zeroes NULL selectors even if they had
-a non-zero RPL.
-
-ERETU doesn't do this; Andy Luto and I asked for this minor information
-leak to be removed, and Intel agreed as it served no purpose anyone
-could identify.
-
-As a consequence, you can use it to determine whether the kernel used
-IRET or ERET to return back to userspace.
-
-~Andrew
++		promisc_inc = dev_uc_promisc_update(dev);
++
++		netif_addr_unlock_bh(dev);
++	} else {
++		netif_addr_lock_bh(dev);
++		promisc_inc = dev_uc_promisc_update(dev);
++		netif_addr_unlock_bh(dev);
++	}
++
++	if (promisc_inc)
++		__dev_set_promiscuity(dev, promisc_inc, false);
++
