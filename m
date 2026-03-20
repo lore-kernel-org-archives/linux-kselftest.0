@@ -1,278 +1,213 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11020073.outbound.protection.outlook.com [52.101.229.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BBB3BD63F
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 14:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774015305; cv=none; b=Zf+eOoO22oRIIVh3Y3ZfIl49lnCL3uvF8S9l/uUeqm0eRyXhYC3wZxGulkmuc41DiQdAigtQzUTUDckTSmq34AaXc2LrB+7TQOQXdyEkOtWqBgfiVEmNXOpR6Sp8M8fJZOBjCz5dvCorg0xW/Vxprx4unEyQ2+Ni8SUcneiM7ys=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774015305; c=relaxed/simple;
-	bh=rgm+30RzqyLfplCZAhhg2e1uMDdrhPfgeOG6ziSXyn0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=OGTi8w4Hl6Jc2HociM1UojfLcygTR190cCa+Zu7yAmeAZidiJeeeoPT2AgYptc/yUfc4ALXGp1vt/xhDDlJbDQfTSrisscDWTPgDrux+Krdg53liRG55qLp0wwfN4MFcwDSwUH6rznRvHvOFxHiihwA48dKJZ2Uf/YuaPp7QcWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SFeyL2mM; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874F92D595D;
+	Fri, 20 Mar 2026 14:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774015558; cv=fail; b=ftLDeVtP0XGILAzRD/O1aolAom6rAK1d0AcNCMUpQxxZYFqG7M3SrMzlXVfg8vcUEpgMrrDwwUxa0SiVCZVj5dksrs7VQm4Xax/XTrc+rljkEEGil91v7tcATUo7Bk22CvjNABlZmhDTA0jELkuBM/XAk1asZNZ9SKfS7pdJ0qI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774015558; c=relaxed/simple;
+	bh=6Q/6wkUDyHhR46KfU1vTF/OzEaxUgz4UTktBZS3IshY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=H/71oZtPaUaS0+p3oqIE6E1L0tp0EWfiDHVv/NIIYgz6UHAM/wMWcdyy1fVamZK5ucr5reQpalOctnX/Oyf0Q0eZ6wRpn/mp931atuPz1fGAQgH4epR359OvLSSVjWvJZgdFNkvu8s0kdV+TDM+yTIt/xA1K9JP8pcxly9E7lSs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=Q2enuc7K; arc=fail smtp.client-ip=52.101.229.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SFeyL2mM"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-486fe655187so11037175e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 07:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774015301; x=1774620101; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L2e3felPcCk2121Y5bIhuiA5cprSPhyerpxVIBRBO+Q=;
-        b=SFeyL2mMfoZvnvs409CKYKRwLCap+eQ5MqY7NY7TAt5Dyk4Nm+/h5mZRf6JTe+3OGp
-         YjS7tj/pAEsKR/ixaclp2r2lk2E6/yqxGvv+e4BmujuN3kN4z11bfTUT2p+TZcEBLKvv
-         UqCaIiJpNuX3bB07v7evA2NM3jVAZ/IwJ8bijup0tNAyy/42NKDywtV9RtQRT0c9wL/K
-         KOW9RI61KQh9iw6F4W7d38atQXyF0X/MBkvpdrnJ2XUejwGQOjN0/9EIAzj5V3kfJq+y
-         85v+OCWIbHXRQp4D2GGgut/XCG257qRDbicE4HkKPNKOyNfj2AT4nEdA+7nl7FMAgAIA
-         XIfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774015301; x=1774620101;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L2e3felPcCk2121Y5bIhuiA5cprSPhyerpxVIBRBO+Q=;
-        b=rOWsLmW52dVAGfuFPtEUsK89JWK5lP4Ln7GHEjdxYuqTLqy84ky5pXVHbaYVtEMmoT
-         p1JWB0Rq+asOmhs3nPJgmr5+R/+TGDKMRVqrnYOVW1nkmllOuhZcTyQgKN20FBKaKuOd
-         +S3pU3Irr7HGzlEXVYVAqt9FFqaCGIFB4NylQI+dn98OY7FiVnBBFDalfzBQmtpTvXn5
-         L9Ow6EGzMVwzoIfz+cBzmILNABqfqP8maF7g5f6dm+O3XjopfFzlXTsiOX0M/VfUZTOU
-         sOrOT7rvxnJFy3hvA+sEuYTWVT7B9ugmJmbiIsKvAkcyx9gnSt5BiHu+zVCUtcbkYxG7
-         00OA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgMbw1m+8hEa6vAS9TFqqUXmbCpbeOvcQFjUJj32yhnec8sdm5rwc5zF2AKyeJ8H1mT1hsmb9HzA/KpE5FG4I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMHqKLbS0IDHdi3PAnevoJOe6Ju81GKkPQRiGxVXBWrEDXvjyz
-	UZ/1GROVWiWpNckuKDBqFfYRvaeZBMxWHD5+tqX5kZ5QpMIDeD/TDHQm
-X-Gm-Gg: ATEYQzwqem3J1glgGH4AApwRfdmXA1tCErO9HPsYD/z8iTWwlMEE5XrL+/a5IMipwOS
-	481tn7uPdSM/8yQopzFYifqQogJ3DcWm2OYmaSTM7ZQ4ZtNUi/63vBXZtTq0BOkN8RNkRmrWcEw
-	xtooHJC4DmoyyI19dxYHqpoa1jP6n7V60o6xyz3Efy01cCxOORLu8aA6tCtN2tsy2xs5CTUIb6Q
-	bb0qrNplIqSTYG5ZBRWane8bhMo4JVrT8Y7R2QqL+wPR5aUo9Cjlk77JOK5+Z/58Xv7Q9YyjnDn
-	g1SA9DrC601R2QcN8sS16OGDJ37I/GmG+EcPAOaB+CUvEP9rEZRv+GgbOYvZN+adw0mCfg0UPDE
-	wKaNTyiPNgSHRqT0gs9pakqrP2jUiR+YFpaf0TK9DyulcNDNDZmvPuoz9tSPEMxZGpdNCPOMX0p
-	W8rKYbpEemq1Tu2g==
-X-Received: by 2002:a05:600c:3e0e:b0:483:2c98:4368 with SMTP id 5b1f17b1804b1-486fee02d8emr42772225e9.18.1774015293134;
-        Fri, 20 Mar 2026 07:01:33 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::5:f9f5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe807262sm17993235e9.0.2026.03.20.07.01.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 07:01:32 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- shuah@kernel.org, martin.lau@kernel.org, eddyz87@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
- paul.chaignon@gmail.com, jolsa@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Sun Jian
- <sun.jian.kdev@gmail.com>
-Subject: Re: [PATCH v3] selftests/bpf: move trampoline_count to dedicated
- bpf_testmod target
-In-Reply-To: <20260320074150.628094-1-sun.jian.kdev@gmail.com>
-References: <20260320074150.628094-1-sun.jian.kdev@gmail.com>
-Date: Fri, 20 Mar 2026 14:01:31 +0000
-Message-ID: <87zf42k3b8.fsf@gmail.com>
+	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="Q2enuc7K"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WrtqxztLpjAVCPtvKz8UilQ0bhkzDGG5wSibAxFHpZgB+V+EToOo0jSNMfQs6S/EGLYvFYK/Oko8xUYFcSCgdIyrLjVwWh5jGsUrdZUGSrGRSBaCXTgoGCpqjUb5vucH5W716SahnLDK4epoBdOGDif6R/qF7sOBJs5ue2LOg0EPaLCtWJ3++eee7SyZoWQ9Tc60pMbWplACVxr00L/GV4JoPhR+YiEppR3ENeD+z15jWVgqgxJTR8eq/VSp1rSbkDRx4cNCxIwaH9g8FcT7mgIZmUv9IO6kCI3LVTXmVYXq6IHlLacfmTn9E2kG5FELB+7PI3/KLu2Ji147ZPLRYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sQ6D6fq2Jx0RD21yesreq++MliJxomYjPmAHeQ9Y0p0=;
+ b=RjUia9+sF6alKatxUEMbOF/DI3mLEhK7H3aVmd7P3lN1+JPSqHR/iq0dWps9bGtyXMdKvzC1t3AZQNx5hErym7u6KFR9RE3BdB868nmvG8ne+gELm4hVnCWWaK5bNdHRB5aaKWpUWhI3yeulAHaDkukAaQ1U9Zee18AUKR79vIzvanC3qebxk2ibwqbzpMP+3z8JFxGWT1gZ+pG5Mn0hmougFZXI7L8mIG/eldc22EL43Qcuk9xusMzF+UT6l0mWSeJ5GD1O/r4SCSWcge5TY+L4VFiKKyP9I+Wz2L2Qjk2LQt5w6RhvYzN0ZPJilp6hVUf/HTjioLy+LmBzGlijNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
+ header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sQ6D6fq2Jx0RD21yesreq++MliJxomYjPmAHeQ9Y0p0=;
+ b=Q2enuc7K2jR0BiO2cz5FsVV+KHbkRGKoSAnr0mGUGZ1pkyg4UvPmdsbJb3rKejXh3yENae1MYpfRNhL5+GuU0X5XJu8RLR/byX2P/78jqUShC9alDAw3RRmSWlHPkDZ7Sknj0ZE47SVwbZVBgpBGJuaYAq0LKVuDivgsrkt34d0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=valinux.co.jp;
+Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
+ by TYRP286MB5562.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:190::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.20; Fri, 20 Mar
+ 2026 14:05:55 +0000
+Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9723.022; Fri, 20 Mar 2026
+ 14:05:55 +0000
+Date: Fri, 20 Mar 2026 23:05:54 +0900
+From: Koichiro Den <den@valinux.co.jp>
+To: Christian Bruel <christian.bruel@foss.st.com>
+Cc: Manivannan Sadhasivam <mani@kernel.org>, 
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Niklas Cassel <cassel@kernel.org>, fabrice.gasnier@foss.st.com, linux-pci@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] selftests: pci_endpoint: Skip subrange map test if
+ iATU allocation fails
+Message-ID: <nk2cc2ikag2ofpskmnnc7mqzsvtizwcjm6rlkrkuqesq673h3l@mamriu2gshit>
+References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
+ <20260318-skip-bar_subrange-tests-if-enospc-v1-1-f1a49534ebea@foss.st.com>
+ <vki7ty3z5jncmzeltk7udsbynffdld4xhcm3b2yjrgx25cfqkm@4ld66m3jbjqo>
+ <d3e8d869-1a10-4a50-a9ed-3c6bc10a6178@foss.st.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d3e8d869-1a10-4a50-a9ed-3c6bc10a6178@foss.st.com>
+X-ClientProxiedBy: TY4P286CA0102.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:380::16) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:38f::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|TYRP286MB5562:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54eade25-055a-4713-3f92-08de8689cd9a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|366016|1800799024|7416014|376014|7053199007|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	IoF2ko1Ozr6IzdwclARwFYyatmfTl8wWa3o3ieZjxczKzyf+5IsImYRafXgm4MAsaIXomtyAEtCdIMESMuXR2UFIK0RyzAvPbuB6BDMx2DuDnnfJK5my6eb89UDki5qhHEIalH+uuNn2dFByi4XM0Zje4SEO6sm4y5FsF2TjW6j82/D1dTJ9YGNVmAvrmrIZUJ5bMG+C2Y7XOSRd7gg5vXX8I52nIzC8bXLVAt0uVBok58HDhVG4Rya8P3pDGgh693VlPG6tLlyY5df8QW9T6F36mwF8dsfVxKvWOYyxLi0SkIHNRnHjkx8yvTzk+ThUUMbNtcuBEEGYf1l7qxTeO+blF7BOD8Q0LQ0UvpShqp14ckNdTMw73dtBcRxsQytR4vapPeP6s6mZWuY8TP8VRwnUrHoyec/fURkyqFVkUvhQAFebd+3So/dHj+D4G95zEjLTdCBdM2qeUgK/vIER4WPxEgiI7zSTuZ+uVZC/Qv6/HrjMoS+FO/v0xRcYANQ1kwmTDdnMzDtgZ/yl5WJDgelW92Fr8WGycDFQCDQ3lSIaV24ipan5SOFgg7JgmSPkPpA7MUezosqlGpct9zJtsxknvdawJ5MOhm0Jgxbr9pUDnuRe2pORgKVDh15m3c9EwP472hPjhFKBea8cwm8oDoz5eBJM0plU5kQ+m9gYmu50FacnSb3xNotJq9f0ePlS
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(7416014)(376014)(7053199007)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?APw9rnsx+9iQjC0fwfnVLkabi9JuyGeYJZwWFmn5CIz1QbviO893HyeMkpz7?=
+ =?us-ascii?Q?iMGjciXIWNywjYou7HtfouMfLUFxCQlcM6/TXwaV91dkVzzcGqhh4R8V8Ukc?=
+ =?us-ascii?Q?qsSWO2wAsSsieLpJflBX1wpR0ZvrsA1kiBmc9pARm3ZsmDIXzgAormQ03orE?=
+ =?us-ascii?Q?eO5CrBY6YoWbeeV1zwKgaoeF6QlTTf0R/AYY67AVVA+9M7nnYkHpQjkVGeNV?=
+ =?us-ascii?Q?MPi75zslj7aIjSTgYTcR2TW6/JUQwxdUQ0JxFM2QEZkCSBDa2cT2cYy2g/ux?=
+ =?us-ascii?Q?tn8iIGYksl/LmDVTz3gQi9aQZ0RQWokUKqjbMQMuEz3vdwXYJelwvaEZju/I?=
+ =?us-ascii?Q?qqoVIx67z9UlTngJ6frpOympk2C9App3J6clDniISo1/I105WwDj/msjMRyT?=
+ =?us-ascii?Q?fp1KeILVDe362jDsExWibxE1fPRltoTzizShvZxvzaK7QDhoLzVyM+v1bD43?=
+ =?us-ascii?Q?byIVWUhKvmJaR8svEdBkOg846FWJyGOSVAFDLplEzdZXqYYD/y9UM1OTV5hC?=
+ =?us-ascii?Q?h/n06HaQ9MG04bGXpx77V/3gx6LRrrIid742kWUDDAhRFNg+VHd0BrzZtUXi?=
+ =?us-ascii?Q?RngG/QTxWcnglfdVvX9apSTfnMZiD1/rUk5dj/ssNwAdUq2GWkIcRG9EoeXs?=
+ =?us-ascii?Q?IH6BlGBNAD6ygvc1qvXOQiUEhZH2OnhuwnfzMmacipYEHZ3gOOHo3vz/vV0p?=
+ =?us-ascii?Q?jnJAy5JBPTByo+TYXdx9qnMh8UFiyF5yIaVKJDSvKHJ6HhRs2ArqVckFmTnb?=
+ =?us-ascii?Q?Xw7W7lIJWqFfoXMpOusrSS/6/pRdpOv1qDFypcEwffEwyuzuHd4eYFlduRJV?=
+ =?us-ascii?Q?XJJ/w8tvJBpOTpe5qqbmiqwbLPcZ7m2y5DJorCg4yLVQvg5QvWGaRnYe5H4u?=
+ =?us-ascii?Q?B/I11UKBw3y10chSNVfGWNhd1tKuallBGkg848MKRtemvrMK23+k8oGdbGMV?=
+ =?us-ascii?Q?n3sbkLIgxX/dt9yGErk+w41w9aa675ONVbtypKlTnmF06F39WTaMN49isamc?=
+ =?us-ascii?Q?VzV33SPnRDZNZ2f+wGuYF5FVOfdcHcnXdqUYL5sM0TKzcnbxct0eSwWOJ6KQ?=
+ =?us-ascii?Q?c0yDGwtHJFh8nIkHho3e4+AghfOx0aKv8f3KVilYvOPdcgcNnJW38DOu7Qi6?=
+ =?us-ascii?Q?qpNIIy25/gqJDfg/FhFPElIAKjpCkCWVeKUlcMd9uh4tIGNfhq+NeAAmbwgK?=
+ =?us-ascii?Q?QEY6xqe9PHnI5+HfAc59xR/t4W4LbdQfQz+Ap8kerDoBFGMvGI8geVH/0aDb?=
+ =?us-ascii?Q?/FIUxzPS2PYArWylbPYHdmp46zABsHb9U5hNfhhsgmQDXXQZQyo36y+2mC9f?=
+ =?us-ascii?Q?CMfrajSEbkyJsnZhjTLUYIrHChodSo/QPm7++80xB/hUvOl6hKxaQ29urIrX?=
+ =?us-ascii?Q?Dp2vfAM8yDWHATkHfOxpaIA89kTWtDExILXEwDPHr3uqRPBtL8K2tDmUki6e?=
+ =?us-ascii?Q?BsmUXu6RsEHNpaDGbhPh4yTxU3JOPfEOO92DWscDZrlmFZPSS91k18kc+iNu?=
+ =?us-ascii?Q?38pxTEQLiCrqDquhwkQ+Jf9QNPMZXF0wiBFRJ4escipvsey45ixOGuKxuWEm?=
+ =?us-ascii?Q?48q5r+FDih6EeF4iqiQUe4suGKzVUlSd1S+gd8babSI0+VTKbpyKGkcE4kaB?=
+ =?us-ascii?Q?MqD3kbWTiabDqmy4Sdvr5hIGJD0lH2JCfSC847FY5rAF9o+ChMTL8j6MZKpb?=
+ =?us-ascii?Q?b51g0ubTQzQFJxwTWepGCxuAwid8chMtmmt8zkZUZtnnqnBB5AkuuQOVvLJP?=
+ =?us-ascii?Q?E63Ph2Z3vXYdwPdy5LqaN1jeinj7s3jSfJ/sQ5c4psrwXXwPKqig?=
+X-OriginatorOrg: valinux.co.jp
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54eade25-055a-4713-3f92-08de8689cd9a
+X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 14:05:55.1906
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lA17axSasCgNppMe5bT/1t0Hok6MCjsFHlRgjQM27OYLKYuaCbybcXEgdMCgNj3VCWjBgfJGQGTKw4x38KjGCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYRP286MB5562
 
-Sun Jian <sun.jian.kdev@gmail.com> writes:
+On Fri, Mar 20, 2026 at 11:04:28AM +0100, Christian Bruel wrote:
+> Hello Koichiro, thank you for your comment
+> 
+> On 3/19/26 02:28, Koichiro Den wrote:
+> > On Wed, Mar 18, 2026 at 03:46:27PM +0100, Christian Bruel wrote:
+> > > Handle -ENOSPC error. If the number of available inbound ATU entries is
+> > > insufficient to map the subrange, skip the test instead of failing.
+> > > 
+> > > Link: https://lore.kernel.org/linux-pci/20260317152707.GA85951@bhelgaas/T/#m87e4c24173097a0ea70195b71aab294ad8d6c283
+> > > Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+> > > ---
+> > >   tools/testing/selftests/pci_endpoint/pci_endpoint_test.c | 2 ++
+> > >   1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> > > index c417fb3a198b2d92c3060938c23807cc8bea5573..8ea2fda4539d11eb22b22800a7cb8bbaa99c91ba 100644
+> > > --- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> > > +++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+> > > @@ -88,6 +88,8 @@ TEST_F(pci_ep_bar, BAR_SUBRANGE_TEST)
+> > >   		SKIP(return, "Subrange map is not supported");
+> > >   	if (ret == -ENOBUFS)
+> > >   		SKIP(return, "BAR is reserved");
+> > > +	if (ret == -ENOSPC)
+> > > +		SKIP(return, "Not enough ATU entries to allocate subrange");
+> > 
+> > Thank you for handling this!
+> > 
+> > pci_endpoint_test_bar_subrange() can also return -ENOSPC locally:
+> > https://github.com/torvalds/linux/blob/v7.0-rc4/drivers/misc/pci_endpoint_test.c#L538
+> > While that is a different resource limit case, I think it would still be
+> > reasonable to treat it as SKIP as well.
+> 
+> Regarding Niklas's feedback to use the local EINVAL instead of ENOSPC in
+> pci_endpoint_test_bar_subrange(), I prefer to leave this for you to handle.
+> That will cover this case.
 
-> trampoline_count fills all trampoline attachment slots for a single
-> target function and verifies that one extra attach fails with -E2BIG.
->
-> It currently targets bpf_modify_return_test, which is also used by
-> other selftests such as modify_return, get_func_ip_test, and
-> get_func_args_test. When such tests run in parallel, they can contend
-> for the same per-function trampoline quota and cause unexpected attach
-> failures. This issue is currently masked by harness serialization.
->
-> Move trampoline_count to a dedicated bpf_testmod target and register it
-> for fmod_ret attachment. Also route the final trigger through
-> trigger_module_test_read, so the execution path exercises the  same
-> dedicated target.
->
-> This keeps the test semantics unchanged while isolating it from other
-> selftests, so it no longer needs to run in serial mode. Remove the
-> TODO comment as well.
-Is it really worth it just for ditching serial mode, does it improve
-test_progs speed? Either way it's worth adding a comment for
-bpf_testmod_trampoline_count_test() explaining that no other test should
-attempt attaching to it.
->
-> Tested:
->   ./test_progs -t trampoline_count -vv
->   ./test_progs -t modify_return -vv
->   ./test_progs -t get_func_ip_test -vv
->   ./test_progs -t get_func_args_test -vv
->   ./test_progs -j$(nproc) -t trampoline_count -vv
->   ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test -vv
->   20 runs of:
->     ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test
->
-> Suggested-by: Jiri Olsa <jolsa@kernel.org>
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
-> Link:https://lore.kernel.org/bpf/abicUI4YQ5KkQ_Ro@mail.gmail.com/T/#m6253b7fe96fe1a4df65b274c95aac786598a9857
->
-> v3:
-> - route the final trigger through trigger_module_test_read() and make
->   bpf_testmod_test_read() call the dedicated trampoline_count target,
->   as suggested by Jiri
->
-> v2:
-> - rewrite the subject to describe the change
-> - resend with the correct patch content
->
->  .../bpf/prog_tests/trampoline_count.c         | 17 ++++----------
->  .../bpf/progs/test_trampoline_count.c         |  6 ++---
->  .../selftests/bpf/test_kmods/bpf_testmod.c    | 23 +++++++++++++++++++
->  3 files changed, 30 insertions(+), 16 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> index 6cd7349d4a2b..dd2e5c84a4b5 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> @@ -30,16 +30,14 @@ static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
->  	return prog;
->  }
->  
-> -/* TODO: use different target function to run in concurrent mode */
-> -void serial_test_trampoline_count(void)
-> +void test_trampoline_count(void)
->  {
->  	char *file = "test_trampoline_count.bpf.o";
->  	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
-> -	int bpf_max_tramp_links, err, i, prog_fd;
-> +	int bpf_max_tramp_links, i;
->  	struct bpf_program *prog;
->  	struct bpf_link *link;
->  	struct inst *inst;
-> -	LIBBPF_OPTS(bpf_test_run_opts, opts);
->  
->  	bpf_max_tramp_links = get_bpf_max_tramp_links();
->  	if (!ASSERT_GE(bpf_max_tramp_links, 1, "bpf_max_tramp_links"))
-> @@ -80,17 +78,10 @@ void serial_test_trampoline_count(void)
->  		goto cleanup;
->  
->  	/* and finally execute the probe */
-> -	prog_fd = bpf_program__fd(prog);
-> -	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
-> +	if (!ASSERT_OK(trigger_module_test_read(256),
-> +		       "trigger_module_test_read"))
->  		goto cleanup;
->  
-> -	err = bpf_prog_test_run_opts(prog_fd, &opts);
-> -	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-> -		goto cleanup;
-> -
-> -	ASSERT_EQ(opts.retval & 0xffff, 33, "bpf_modify_return_test.result");
-> -	ASSERT_EQ(opts.retval >> 16, 2, "bpf_modify_return_test.side_effect");
-> -
->  cleanup:
->  	for (; i >= 0; i--) {
->  		bpf_link__destroy(inst[i].link);
-> diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> index 7765720da7d5..14ad2f53cf33 100644
-> --- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> @@ -3,19 +3,19 @@
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
->  
-> -SEC("fentry/bpf_modify_return_test")
-> +SEC("fentry/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fentry_test, int a, int *b)
->  {
->  	return 0;
->  }
->  
-> -SEC("fmod_ret/bpf_modify_return_test")
-> +SEC("fmod_ret/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
->  {
->  	return 0;
->  }
->  
-> -SEC("fexit/bpf_modify_return_test")
-> +SEC("fexit/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fexit_test, int a, int *b, int ret)
->  {
->  	return 0;
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index e62c6b78657f..47583577e021 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -470,6 +470,8 @@ noinline void bpf_testmod_stacktrace_test_1(void)
->  
->  int bpf_testmod_fentry_ok;
->  
-> +noinline int bpf_testmod_trampoline_count_test(int a, int *b);
-> +
->  noinline ssize_t
->  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->  		      const struct bin_attribute *bin_attr,
-> @@ -548,6 +550,10 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->  			21, 22, 23, 24, 25, 26) != 231)
->  		goto out;
->  
-> +	i = 2;
-> +	if (bpf_testmod_trampoline_count_test(1, &i) != 4 || i != 3)
-> +		goto out;
-> +
-Do we need to add this test for the bpf_testmod_trampoline_count_test(),
-if it's supposed to be used only for the trampoline count test, which
-probably does not care what function actually does internally.
->  	bpf_testmod_stacktrace_test_1();
->  
->  	bpf_testmod_fentry_ok = 1;
-> @@ -581,6 +587,12 @@ noinline int bpf_fentry_shadow_test(int a)
->  }
->  EXPORT_SYMBOL_GPL(bpf_fentry_shadow_test);
->  
-> +noinline int bpf_testmod_trampoline_count_test(int a, int *b)
-> +{
-> +	*b += 1;
-> +	return a + *b;
-> +}
-> +
->  __bpf_hook_end();
->  
->  static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
-> @@ -1843,6 +1855,16 @@ struct bpf_struct_ops testmod_multi_st_ops = {
->  
->  extern int bpf_fentry_test1(int a);
->  
-> +BTF_KFUNCS_START(bpf_testmod_trampoline_count_ids)
-> +BTF_ID_FLAGS(func, bpf_testmod_trampoline_count_test)
-> +BTF_KFUNCS_END(bpf_testmod_trampoline_count_ids)
-> +
-> +static const struct
-> +btf_kfunc_id_set bpf_testmod_trampoline_count_fmodret_set = {
-> +	.owner = THIS_MODULE,
-> +	.set = &bpf_testmod_trampoline_count_ids,
-> +};
-> +
->  static int bpf_testmod_init(void)
->  {
->  	const struct btf_id_dtor_kfunc bpf_testmod_dtors[] = {
-> @@ -1859,6 +1881,7 @@ static int bpf_testmod_init(void)
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmod_kfunc_set);
-> +	ret = ret ?: register_btf_fmodret_id_set(&bpf_testmod_trampoline_count_fmodret_set);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops, bpf_testmod_ops);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops2, bpf_testmod_ops2);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops3, bpf_testmod_ops3);
->
-> base-commit: 8a30aeb0d1b4e4aaf7f7bae72f20f2ae75385ccb
-> -- 
-> 2.43.0
+So could you consider the following tiny patch as a prerequisite for your
+series?
+https://lore.kernel.org/linux-pci/20260320140139.2415480-1-den@valinux.co.jp/
+
+> 
+> > 
+> > If you agree and keep your current approach, then I think the SKIP message
+> > might be better phrased more generically, e.g. "Insufficient resources".
+> 
+> OK I agree, the error message should be less specific to DWC terminology,
+> even though this case can currently only occur on it.
+
+Yes, I agree. As mentioned in my reply to Niklas, the other -ENOSPC is better
+replaced with -EINVAL, so I just submitted a tiny patch. That concern should be
+resolved.
+
+> 
+> > 
+> > If you prefer to keep that local case as FAIL (or at least distinguish it
+> > with a different SKIP message), that would likely require a bit more
+> > changes overall. Note: Niklas' earlier feedback on the SKIP message would
+> > still apply.
+> 
+> OK, as Niklas also suggested, I will not set an additional local bit besides
+> the fail bit. The question is whether we should name it SKIP or NOSPC. I
+> slightly prefer NOSPC, as this is what is used in the selftest to indicate
+> skipping.
+
+Personally, Niklas' "errno in struct pci_epf_test_reg" idea sounds the best
+among the options discussed so far.
+
+Best regards,
+Koichiro
+
+> 
+> thank you
+> 
+> Christian
+> 
+> > 
+> > Best regards,
+> > Koichiro
+> > 
+> > >   	EXPECT_FALSE(ret) TH_LOG("Test failed for BAR%d", variant->barno);
+> > >   }
+> > > 
+> > > -- 
+> > > 2.34.1
+> > > 
+> 
