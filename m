@@ -1,132 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92073A4517;
-	Fri, 20 Mar 2026 11:16:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AF93A5425
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774005375; cv=none; b=K+vYwNn3ZP6QZTOYXii4yoH1fCxrerJrPFizIZ5BwibPQIJ5FL/iZqBEOrkCjmcPuaKLLNkBOvY7N0Tesi9rUn9jtjCJ0l7//eJ7RvW36+mBSUCM9GyR+WJE9+yl/IqQNnWh+NApfUwGfWEjmvdjRnWe/W1+sJ+aYi6bNh5C7S8=
+	t=1774005516; cv=none; b=fOD/0SCygDQTrxk4prSgKMJ10iIR4nG+nvF3JrcLkLKOUAr/p2AnuWXRaG8vW5ZrG0p6H8XYr8AOB37IEflTWlJMoJeThmBjmVTFxsmRGb0H+lt3z5gg4nlur0qNcWKHb3ukJUu/Wse58Ya/wSm+LGDP8ygzcBwt4LaaOCP8DMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774005375; c=relaxed/simple;
-	bh=tUluXszkRozVfMsYUbs+pkVKTIwBbvZX3p3JYxGVrfM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JpdLKarLxGu+8P4zUbZxCVJbTTFVD1ExSOQyJnPopcFXzXwHlbEEiZIn/2dJiTHQqJEg3ZCmBmxJGG4v0sOLtV5kKYB+bZi2pguJj+1I2Trh6zySfJGD9NlsIsBBmkmTPLrT1OYtJvHvZFQ7F1IFH5qjRXQs6jkQw0+qst7gJOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=syoBq3D0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774005516; c=relaxed/simple;
+	bh=gwdkwNw1aCvfhHjq2xoOr/jQl/jvktxMB15tf+L9W7c=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=KPjbDm+NY0t19/NyTeOH/US54veVlFF6ThLvGTLUI6Pz9sq335pxiBJmTyULxqPp7Fd7ThOycEPJLwDE1OmLFduwgJ7aoje9myinG7H3qpbKqg0d64SGzPay5v0wbSB0k9OBi6rtW7lb/UGqJuUkzUcqPwdvsgWzPhiOLXWuzY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kgRuvsT9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JacdX4NA; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kgRuvsT9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JacdX4NA; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="syoBq3D0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABE6C2BC9E;
-	Fri, 20 Mar 2026 11:16:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774005374;
-	bh=tUluXszkRozVfMsYUbs+pkVKTIwBbvZX3p3JYxGVrfM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=syoBq3D0KJj0LB7Cv/YxzrtscFMUqnYgmMBa/SAFc/5wYC5HfOuGYDqAdJxP+UpIM
-	 C1yZhAN3cicymqBtJxIWTJvDYOmrxfFtc2YCNVmF38ac+xTembdWNS7jSLXEDIiVVg
-	 MaLwmAkkE6fodCQqf+CH8eQy6Z/+kAZHWZ8Kd2rjBkswSH+AIA3/W72R01YkyfYN4i
-	 rWvP3a9ZZC/eUqCQZr6SXa2hWrL+KFWizvmZ5JfxR04WIbGk68ZJAYrWykedTT0edG
-	 hJHpFlbpB6r2JmaaVWoPCPJan92ym0az1Hubpo789F77IdgVY1eSIY82YLO3pLxpUC
-	 C+0JAFzejQ0KA==
-Date: Fri, 20 Mar 2026 12:16:08 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Christian Bruel <christian.bruel@foss.st.com>
-Cc: Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Koichiro Den <den@valinux.co.jp>, fabrice.gasnier@foss.st.com,
-	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] misc: pci_endpoint_test: Handle -ENOSPC in subrange
- mapping test case
-Message-ID: <ab0seD_G4ER7R_9N@ryzen>
-References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
- <20260318-skip-bar_subrange-tests-if-enospc-v1-3-f1a49534ebea@foss.st.com>
- <abrM0Jvo_sdWSTLc@ryzen>
- <28a71759-1095-4403-b356-d291a828daba@foss.st.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kgRuvsT9";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JacdX4NA";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kgRuvsT9";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JacdX4NA"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4F4684D257;
+	Fri, 20 Mar 2026 11:18:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1774005513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OEKzWlRteGURu5UFh1+Dmq/KxX/rb8EkALXBIWobc1Y=;
+	b=kgRuvsT9YXCHTi1Wsrn+gTu69NEMWsgwpWzK/JDK86hy9BVrbpHIx/dy6oQa0aYwQo7nAv
+	KfDLLVLYuVLgYtA71VvmMQKMddVBr7z2aDek93OPif4hl8ehJB+7HUV0cKE6bw1ZEV0768
+	e/XC4QcQqcTg9+2FwOBTJmalhc0Ko5E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1774005513;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OEKzWlRteGURu5UFh1+Dmq/KxX/rb8EkALXBIWobc1Y=;
+	b=JacdX4NAREjXR/xmQZOlii4IFZ6lmo17g6a6b5GYzCJGCWEY7j1h6cyBM8iE3aklo70PUZ
+	o3g+C8AxRcBWmEBQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1774005513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OEKzWlRteGURu5UFh1+Dmq/KxX/rb8EkALXBIWobc1Y=;
+	b=kgRuvsT9YXCHTi1Wsrn+gTu69NEMWsgwpWzK/JDK86hy9BVrbpHIx/dy6oQa0aYwQo7nAv
+	KfDLLVLYuVLgYtA71VvmMQKMddVBr7z2aDek93OPif4hl8ehJB+7HUV0cKE6bw1ZEV0768
+	e/XC4QcQqcTg9+2FwOBTJmalhc0Ko5E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1774005513;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OEKzWlRteGURu5UFh1+Dmq/KxX/rb8EkALXBIWobc1Y=;
+	b=JacdX4NAREjXR/xmQZOlii4IFZ6lmo17g6a6b5GYzCJGCWEY7j1h6cyBM8iE3aklo70PUZ
+	o3g+C8AxRcBWmEBQ==
+Date: Fri, 20 Mar 2026 12:18:33 +0100 (CET)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+    Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/8] selftests: livepatch: test-kprobe: Replace true/false
+ mod param by 1/0
+In-Reply-To: <a57eb2eb73eb8bd817196b8505ab59d5c3bc187b.camel@suse.com>
+Message-ID: <alpine.LSU.2.21.2603201213400.12616@pobox.suse.cz>
+References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>  <20260313-lp-tests-old-fixes-v1-2-71ac6dfb3253@suse.com>  <alpine.LSU.2.21.2603191401380.22987@pobox.suse.cz> <a57eb2eb73eb8bd817196b8505ab59d5c3bc187b.camel@suse.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28a71759-1095-4403-b356-d291a828daba@foss.st.com>
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.992];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_ZERO(0.00)[0];
+	ARC_NA(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	URIBL_BLOCKED(0.00)[pobox.suse.cz:helo,pobox.suse.cz:mid];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:helo,pobox.suse.cz:mid]
+X-Spam-Flag: NO
 
-On Fri, Mar 20, 2026 at 10:35:20AM +0100, Christian Bruel wrote:
-> Hello,
+On Thu, 19 Mar 2026, Marcos Paulo de Souza wrote:
+
+> On Thu, 2026-03-19 at 14:03 +0100, Miroslav Benes wrote:
+> > A nit but I think that "test-kprobe: " is unnecessary noise in the
+> > subject 
+> > and can be dropped. It applies to all patches in the series.
 > 
+> Ok, I'll drop it in the v2.
+> 
+> > 
+> > On Fri, 13 Mar 2026, Marcos Paulo de Souza wrote:
+> > 
+> > > Older kernels don't support true/false for boolean module
+> > > parameters
+> > > because they lack commit 0d6ea3ac94ca
+> > > ("lib/kstrtox.c: add "false"/"true" support to kstrtobool()").
+> > > Replace
+> > > true/false by 1/0 so the test module can be loaded on older
+> > > kernels.
 > > > 
-> > > diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-> > > index 55e128ed82f00ae13b6fe9768cdbe56adbe8f9da..34ba06fb53f04e48c1c05f4aae85e6ecd03ef447 100644
-> > > --- a/drivers/misc/pci_endpoint_test.c
-> > > +++ b/drivers/misc/pci_endpoint_test.c
-> > > @@ -61,6 +61,7 @@
-> > >   #define STATUS_BAR_SUBRANGE_SETUP_FAIL		BIT(15)
-> > >   #define STATUS_BAR_SUBRANGE_CLEAR_SUCCESS	BIT(16)
-> > >   #define STATUS_BAR_SUBRANGE_CLEAR_FAIL		BIT(17)
-> > > +#define STATUS_BAR_SUBRANGE_SETUP_NOSPC		BIT(18)
-> > >   #define PCI_ENDPOINT_TEST_LOWER_SRC_ADDR	0x0c
-> > >   #define PCI_ENDPOINT_TEST_UPPER_SRC_ADDR	0x10
-> > > @@ -476,8 +477,11 @@ static int pci_endpoint_test_bar_subrange_cmd(struct pci_endpoint_test *test,
-> > >   		return -ETIMEDOUT;
-> > >   	status = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
-> > > -	if (status & fail_bit)
-> > > +	if (status & fail_bit) {
-> > > +		if (status & STATUS_BAR_SUBRANGE_SETUP_NOSPC)
-> > > +			return -ENOSPC;
+> > > No functional changes.
 > > 
-> > Perhaps this should be something like:
-> > 
-> > if (command == COMMAND_BAR_SUBRANGE_SETUP && status & STATUS_BAR_SUBRANGE_SETUP_SKIP)
+> > We also define a bool module parameter in 
+> > test_modules/test_klp_callbacks_busy.c. Does it have a similar
+> > problem?
 > 
-> I'm not sure about replacing STATUS_BAR_SUBRANGE_SETUP_NOSPC by
-> STATUS_BAR_SUBRANGE_SETUP_SKIP
-> 
-> The selftest will use if (ret == -ENOSPC), so we need to return this
-> information (bellow). and semantically SKIP does not imply ENOPSC (instead
-> of the contrary)
-> 
-> as you prefer,
+> No, because n/N was accepted as false already on 4.12 (SLE12-SP5). I'm
+> not sure about older versions tough.
 
-FWIW, I think an even better solution is to introduce a new register,
-named e.g. errno in struct pci_epf_test_reg;
+strtobool() (predecessor of kstrtobool()) has it from the beginning and 
+that is ~2010 which predates the kernel live patching itself so I think we 
+are good.
 
-That way, we don't need to take a new bit, e.g.:
-+#define STATUS_BAR_SUBRANGE_SETUP_NOSPC          BIT(18)
-
-For every unique error code a command can return.
-
-We would simply return STATUS_BAR_SUBRANGE_CLEAR_FAIL, and then the host
-side driver looks at the errno register to see the specific error code.
-
-This way, all other _FAIL commands could also return a more specific error
-in case of failure.
-
-
-> 
-> To minimize changes, what about something like:
-> 
->  unsigned int fail_bit = status & fail_bits;
-> 
->  if (fail_bit == STATUS_BAR_SUBRANGE_SETUP_NOSPC)
->    return -ENOSPC;
-> 
->  if (fail_bit == STATUS_BAR_SUBRANGE_SETUP_FAIL)
->    return -EIO;
-> 
-> called with
-> 
->        pci_endpoint_test_bar_subrange_cmd(...,
->        STATUS_BAR_SUBRANGE_SETUP_FAIL | STATUS_BAR_SUBRANGE_SETUP_NOSPC);
-> 
-> replacing the fail_bit parameter with fail_bits.
-
-Sounds okay to me, but I think the idea of adding an errno register is
-more extensible.
-
-
-Kind regards,
-Niklas
+Miroslav
