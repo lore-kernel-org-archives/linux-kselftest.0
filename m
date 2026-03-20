@@ -1,60 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A138E1A6809;
-	Fri, 20 Mar 2026 01:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE75175A83
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 01:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773968977; cv=none; b=AmLlbAwb8aXEzgIcBAGszYmp86oHq3z/VpVlgeQoZBEXGtVUCTEsw94kEAmUY0N2nNAOf6q3ewzHsLY8MrZPHWYgivJKivWBzb/Kl8cMAdwR2v2c3CNdeBnDUsD3VXc85hm1Wbx+7lCut69uMG+tlqwdQPsTPBPqf8iYSNOemGU=
+	t=1773969904; cv=none; b=BRGMNn9IztCM1t5W5oaYiF9JBHqLqFi90NnM7NYnjAfYC+YZK4KkEHALyTm4xGEYLebLY1sy5+6AoguDq7IIDlDIJ/YbuOhDUvGFOb+ybKpBWnHU8WRLkxLV4OtzALGRhOtPk62G42VrctKjvfVpv5tcyksAEpotFB3WX1+bHmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773968977; c=relaxed/simple;
-	bh=Eh8u5fRl2jl7IiJCj/aoUOgKAuSG6seXnhZbnDfFHWw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=f6TOD404qGvLkj3Uyd4cqXc73VkA2wUVuSk/WWf2GvphOB/1JD4KUgRC7Vp89zJlNZUefbIca7BjeX4VgdG/oe+3lDMiHa7qto6Y34/Yms1iKdJ1br9IDKai5kcLprmI1QwjkZApGpLkKPT9kzUh0gLtsiouh8zANAPI3qoz5rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lHU/j16E; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lHU/j16E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773968975; x=1805504975;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Eh8u5fRl2jl7IiJCj/aoUOgKAuSG6seXnhZbnDfFHWw=;
-  b=lHU/j16E/a8xqOtD768FLm6cxlnLk62Kb8ic1X36I6YGgty/SR21BleS
-   EFc8Eu1XXp4TjJUgV/Mc9TQ+G1ZfFQxtKPHUfpuelyyMryLQUmowbVpw5
-   c2S3nbZq3gze9WyWmthT75yTyJ1AgvnWPAXsJ5FJZFl9L7zOY0gNMeMbu
-   U/yy3nbom1JZ5RXQ6Tcm4j8u/CA/IEkuUvft7gbyKY14xuTkjbHp5LH3W
-   uxKkS4+DTJTMgfkDAvjL6oWgT1Fy5ntE83Z5ED1VUP2ezDvVaPyDEfkwu
-   tb4xAvmvYGzv8j2MGAYFsG5IIYoV3qWchR1xlG6/LBa8L/lIu2yVg5fSU
-   Q==;
-X-CSE-ConnectionGUID: w3yVY2o0T++pI8/eTnPayA==
-X-CSE-MsgGUID: jM1XH83hR7uDYsS4egSAGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="92626658"
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="92626658"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 18:09:34 -0700
-X-CSE-ConnectionGUID: JkoDgQHeTmKyhIfb22RIHw==
-X-CSE-MsgGUID: PzwUfweWQtiSxLPIf4sCJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="220072732"
-Received: from ly-workstation.sh.intel.com ([10.239.182.64])
-  by fmviesa007.fm.intel.com with ESMTP; 19 Mar 2026 18:09:32 -0700
-From: Yi Lai <yi1.lai@intel.com>
-To: Shuah Khan <shuah@kernel.org>,
-	David Matlack <dmatlack@google.com>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Alex Mastro <amastro@fb.com>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1773969904; c=relaxed/simple;
+	bh=k/3MiZh6ObBA2Gh0WgqU7rsQmjvA6q6JXhNX15TphY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B7RkQdoQo/XlH2csnYn+XGAxS40o3CYFoMr57tY+BUEp3AfI3DJ1ueI9Fvsc8F7zDYfq1YR5ur6KxAy9aMxdu/+fQmPiRi3G7MZa6SZhuE22m2m3NTxWC7r7J6se4h1s+0cduh/BGpDJb5sLF1b5aTIsRNlp9J4MiEXkU5pRxos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2c0ecaae7dfso2572786eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2026 18:25:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773969903; x=1774574703;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6rpuLOskCPApojyOfZj7pXXkMzfKSIlGWmqpeqvyGp0=;
+        b=gRHqDkRf2cabte2q5G6w9KO1fUuO1iuGcjIiQVTtWHMbkOT08xaGQ/GzPh4OANbOIT
+         8yErZsB1FM/sfFMv3IlCmjySHOUqEVykXKZ5yP+upgLI4iMWy6vO8xp90fkPDpCOxCnR
+         BeiwanQyCRnHecbm1hH8VYNgYqH8uBAxdNOIeXNRpm89j1ML7+ors0EIBnq7fnbb8ZGI
+         PAF7f4bpZ5OUzgDpgnNzfIUBkqLWajTy1gY6WJD0oQtp2rIaE32+221JMCKLFeYC/eNl
+         a8wPItbZsmWXIArqxOxDIPUv02kGTNoICmEVXOCkrRttm/WRm7OPLEYHDHY7lOuX6hgS
+         wP/g==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ86VS9Czdl4p396ZP6/Th9KgCd4ig26XQtCPN2Bxz5FcOfoh8YyxNvW0e3koOHSjpyCOdwUqQlJZ57mrEfWI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXpRrEWutcwOFzrd1GWu0Ft8T9eskBdbYUhTe6gMMyNu4/j2Ql
+	7GgMTZqHPdOHwqm6/vYR+HSX11mDuoeHjvXXDO+ylF3NcabFrsLNjsM=
+X-Gm-Gg: ATEYQzyVfJ4v+LDyUcHkHICRgRr330dSS8V8CDp3tTa2fAD/2dvnd6YIufSEgiHk3wG
+	g1NawaUBiaL5sXtyMDLIkC4oYom7HQlP6MS7Bny8Lb8WV0KgKDgaQKApuvznpz0mXuy5QEPa/Ha
+	jvuUPAqyy3Df/VEFHB7iKx63VCng3NfLGYZO9nridqBYhw+Nj57wFQQQkOclOsoieZWLT0wFOjt
+	hjQ3fOI12hDofp3di8uNU9ldfUURWtWK+KGsE7m9uD0r2xHDalKRNKwFGC3ejr690Qv8pcYETEl
+	J2nsEMyuLsfXhTnF6+zNREb7QexN/n4Bo/v9ZyIhUi20pF6q6IVckZrg9pMPaPMiTBdfLvzGlMF
+	xKncU2dez+ABltahR6deIQcMsBoms7VUzYPYkIl19eSq/fFm+g1Sotj4D1KpWMmiUj47T9WTzag
+	ZrcHPLavsgF0KJipqOAmczEGTCHVhbZaS+4LgeN7qpcZfomf8roNI/TBfiMCUZaBrNyFPmSRJ1x
+	kR9UfVnPyej52oKFw==
+X-Received: by 2002:a05:7301:9f0c:b0:2b8:4c95:365d with SMTP id 5a478bee46e88-2c1095f54afmr757541eec.10.1773969902833;
+        Thu, 19 Mar 2026 18:25:02 -0700 (PDT)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b35116bsm1575407eec.30.2026.03.19.18.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2026 18:25:02 -0700 (PDT)
+From: Stanislav Fomichev <sdf@fomichev.me>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	andrew+netdev@lunn.ch,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	anthony.l.nguyen@intel.com,
+	przemyslaw.kitszel@intel.com,
+	saeedm@nvidia.com,
+	tariqt@nvidia.com,
+	mbloch@nvidia.com,
+	alexanderduyck@fb.com,
+	kernel-team@meta.com,
+	johannes@sipsolutions.net,
+	sd@queasysnail.net,
+	jianbol@nvidia.com,
+	dtatulea@nvidia.com,
+	sdf@fomichev.me,
+	mohsin.bashr@gmail.com,
+	jacob.e.keller@intel.com,
+	willemb@google.com,
+	skhawaja@google.com,
+	bestswngs@gmail.com,
+	aleksandr.loktionov@intel.com,
+	kees@kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	yi1.lai@intel.com
-Subject: [PATCH v2] vfio: selftests: Support DMR and GNR-D DSA devices
-Date: Fri, 20 Mar 2026 09:09:29 +0800
-Message-ID: <20260320010930.481380-1-yi1.lai@intel.com>
-X-Mailer: git-send-email 2.43.0
+	intel-wired-lan@lists.osuosl.org,
+	linux-rdma@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	leon@kernel.org
+Subject: [PATCH net-next v3 00/13] net: sleepable ndo_set_rx_mode
+Date: Thu, 19 Mar 2026 18:24:48 -0700
+Message-ID: <20260320012501.2033548-1-sdf@fomichev.me>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,50 +94,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, the VFIO DSA driver test only supports the SPR DSA device ID.
-Attempting to run the test on newer platforms like DMR or GNR-D results
-in a "No driver found" error, causing the test to be skipped.
+This series adds a new ndo_set_rx_mode_async callback that enables
+drivers to handle address list updates in a sleepable context. The
+current ndo_set_rx_mode is called under the netif_addr_lock spinlock
+with BHs disabled, which prevents drivers from sleeping. This is
+problematic for ops-locked drivers that need to sleep.
 
-Refactor dsa_probe() to use a switch statement for checking device IDs.
-This improves maintainability and makes it easier to add new device IDs
-in the future.
+The approach:
+1. Add snapshot/reconcile infrastructure for address lists
+2. Introduce dev_rx_mode_work that takes snapshots under the lock,
+   drops the lock, calls the driver, then reconciles changes back
+3. Move promiscuity handling into the scheduled work as well
+4. Convert existing ops-locked drivers to ndo_set_rx_mode_async
+5. Add a warning for ops-locked drivers still using ndo_set_rx_mode
+6. Add a selftest exercising the team+bridge+macvlan topology that
+   triggers the addr_lock -> ops_lock ordering issue
 
-Add the following DSA device IDs to the supported list:
-PCI_DEVICE_ID_INTEL_DSA_DMR  (0x1212)
-PCI_DEVICE_ID_INTEL_DSA_GNRD (0x11fb)
+v3:
+- module_export(__rtnl_unlock) (nipa)
+- s/netdev_uc_count/netdev_hw_addr_list_count/ in bnxt (Aleksandr)
 
-Signed-off-by: Yi Lai <yi1.lai@intel.com>
----
- .../testing/selftests/vfio/lib/drivers/dsa/dsa.c  | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+v2:
+- wifi: cfg80211: use __rtnl_unlock in nl80211_pre_doit (syzbot)
+- simplify mlx5e_sync_netdev_addr for !uc (Cosmin)
+- switch to snapshot in bnxt_cfg_rx_mode (Michael)
+- add team to net/config (Jakub)
 
-diff --git a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-index c75045bcab79..19d9630b24c2 100644
---- a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-+++ b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-@@ -65,9 +65,20 @@ static bool dsa_int_handle_request_required(struct vfio_pci_device *device)
- 
- static int dsa_probe(struct vfio_pci_device *device)
- {
--	if (!vfio_pci_device_match(device, PCI_VENDOR_ID_INTEL,
--				   PCI_DEVICE_ID_INTEL_DSA_SPR0))
-+	const u16 vendor_id = vfio_pci_config_readw(device, PCI_VENDOR_ID);
-+	const u16 device_id = vfio_pci_config_readw(device, PCI_DEVICE_ID);
-+
-+	if (vendor_id != PCI_VENDOR_ID_INTEL)
-+		return -EINVAL;
-+
-+	switch (device_id) {
-+	case PCI_DEVICE_ID_INTEL_DSA_SPR0:
-+	case PCI_DEVICE_ID_INTEL_DSA_DMR:
-+	case PCI_DEVICE_ID_INTEL_DSA_GNRD:
-+		break;
-+	default:
- 		return -EINVAL;
-+	}
- 
- 	if (dsa_int_handle_request_required(device)) {
- 		dev_err(device, "Device requires requesting interrupt handles\n");
+Stanislav Fomichev (13):
+  net: add address list snapshot and reconciliation infrastructure
+  wifi: cfg80211: use __rtnl_unlock in nl80211_pre_doit
+  net: introduce ndo_set_rx_mode_async and dev_rx_mode_work
+  net: move promiscuity handling into dev_rx_mode_work
+  fbnic: convert to ndo_set_rx_mode_async
+  mlx5: convert to ndo_set_rx_mode_async
+  bnxt: convert to ndo_set_rx_mode_async
+  bnxt: use snapshot in bnxt_cfg_rx_mode
+  iavf: convert to ndo_set_rx_mode_async
+  netdevsim: convert to ndo_set_rx_mode_async
+  dummy: convert to ndo_set_rx_mode_async
+  net: warn ops-locked drivers still using ndo_set_rx_mode
+  selftests: net: add team_bridge_macvlan rx_mode test
+
+ Documentation/networking/netdevices.rst       |  12 +
+ drivers/net/dummy.c                           |   6 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  55 +--
+ drivers/net/ethernet/intel/iavf/iavf_main.c   |  14 +-
+ .../net/ethernet/mellanox/mlx5/core/en/fs.h   |   5 +-
+ .../net/ethernet/mellanox/mlx5/core/en_fs.c   |  30 +-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  16 +-
+ .../net/ethernet/meta/fbnic/fbnic_netdev.c    |  20 +-
+ .../net/ethernet/meta/fbnic/fbnic_netdev.h    |   4 +-
+ drivers/net/ethernet/meta/fbnic/fbnic_pci.c   |   4 +-
+ drivers/net/ethernet/meta/fbnic/fbnic_rpc.c   |   2 +-
+ drivers/net/netdevsim/netdev.c                |   8 +-
+ include/linux/netdevice.h                     |  26 ++
+ net/core/dev.c                                | 176 ++++++++--
+ net/core/dev.h                                |   1 +
+ net/core/dev_addr_lists.c                     | 110 +++++-
+ net/core/dev_addr_lists_test.c                | 321 +++++++++++++++++-
+ net/core/rtnetlink.c                          |   1 +
+ net/wireless/core.c                           |   1 +
+ net/wireless/nl80211.c                        |   2 +-
+ tools/testing/selftests/net/config            |   1 +
+ tools/testing/selftests/net/rtnetlink.sh      |  44 +++
+ 22 files changed, 765 insertions(+), 94 deletions(-)
+
 -- 
-2.43.0
+2.53.0
 
