@@ -1,121 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359E63BE14C;
-	Fri, 20 Mar 2026 13:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E0328003A;
+	Fri, 20 Mar 2026 13:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774014226; cv=none; b=WAcVwv7ughwUJxR9UOZGxzpGHoI7dSc7OccROXhttOGyG9gujyejD+2GiS67W7ED+keADcsH2ILED59uIZnyO7xqqkfl0IuH8JR4/vQ5xZtC9zpEk6Hb4qv4/9B70r5789F5b8G/8YPf1U9PJPFCdSuUG6yEwY/DPbzPpJq0now=
+	t=1774014472; cv=none; b=gMLn2jp/3HzxCjqEmG1ZFMziSBzHkQQ1sqxIr5xyoIci27WGcthkdI2GM1alBVgT5C2vdwget2eolGb2/gbP0vl8n6/DBvNK88XKeJZkSYEglOCqVLc2rKiGUGYDthVOxQCF9RIN9CL/IsPEDHUCYtyjYDrzvY3OaWtJNivuh1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774014226; c=relaxed/simple;
-	bh=REdsHyTaW8dT1fc7fefZKHjbQODkQcLjcxpu1UnGYck=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cUPnEnmYJMZ7mVFlgf8STr4KzjUx1ePDlNJhikF+N6ObH9740lhs+tzUEAAzsGom9o3HkrED4ELzleNHHIrPjtnJ/6x/x2gQwSfy6Dbc1Jmz+H6khH4bLFTOJhS0v7QSxMvboNZM4Lfaf1OYIes3F92SIq90ucHgDDRQsIx5V/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kfjxitld; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774014472; c=relaxed/simple;
+	bh=1yj3+8JgkDHlZE7ywicfVi+R3aRnk7415/Uk3keT3Vk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JAyjNlhScuaS/4gpDVKDfq8eI2zyDe4M6qo2PTncMT6EK56DTF/NH/yO3UFlF18ViS+dgmgJGFovb5b679dxbYz/VQlivGEOf5VgX+UhDGHy2oqYFcWEFKJL7ngh89FMm8l7Y9wIAq/WHxLVkYfoHAhwy80DvzAcnItvBHQ0s8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NmvzAFql; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kfjxitld"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18E6C4CEF7;
-	Fri, 20 Mar 2026 13:43:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NmvzAFql"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F59C4CEF7;
+	Fri, 20 Mar 2026 13:47:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774014225;
-	bh=REdsHyTaW8dT1fc7fefZKHjbQODkQcLjcxpu1UnGYck=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Kfjxitldh1RDpbKQynIQqf4B3nWNfmOIjM+QRv2m9sK/38emcCrGlv88MAiBacv2Y
-	 88o8WM/dYf110MbVffMNs29TIfE9dBTy/GFjNFHotOtauPXt1gIpaVC/jB+xXbizjf
-	 +HjkEMsGgAw8Y3mp8pSF/zjSHEK2h8LCFWmcylrq4yjGXQHV7KtKR5j1j/8tVlzzMT
-	 iRe9TcndIKUHcErBilBxBKgyJleZNgZVqHhC3XUJQWCWgjboYkoU9g+eNvEzI+9UYU
-	 zqAubJdri4pPgL9ll3KgkoSjuaaVsLFoDRAFSMyRsGfvtF3+fYiapZLJT3H+SlPMsU
-	 PYLu6Dkveuntg==
-Date: Fri, 20 Mar 2026 14:43:40 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Christian Bruel <christian.bruel@foss.st.com>
-Cc: Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Koichiro Den <den@valinux.co.jp>, fabrice.gasnier@foss.st.com,
-	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] misc: pci_endpoint_test: Handle -ENOSPC in subrange
- mapping test case
-Message-ID: <ab1PDA1QBMXF_50E@ryzen>
-References: <20260318-skip-bar_subrange-tests-if-enospc-v1-0-f1a49534ebea@foss.st.com>
- <20260318-skip-bar_subrange-tests-if-enospc-v1-3-f1a49534ebea@foss.st.com>
- <abrM0Jvo_sdWSTLc@ryzen>
- <28a71759-1095-4403-b356-d291a828daba@foss.st.com>
- <ab0seD_G4ER7R_9N@ryzen>
- <e6b385b5-f61c-4b0d-82ed-4018db76538f@foss.st.com>
+	s=k20201202; t=1774014472;
+	bh=1yj3+8JgkDHlZE7ywicfVi+R3aRnk7415/Uk3keT3Vk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=NmvzAFqlIF1Sd2XV6mXt4Pno+pDkhmq1oWPGDeuUIhUSBsW2XE0vWcp9ZB4tOkdj3
+	 bLl4RsR0KwwNepoNGRnJuDs67bGOos+dE5N7lLPsoilCBKEJkUzHWQlJce274btbjp
+	 iUK2GJ0Jt3bNQ8YmNS4Xar8NdnlwAVIbN776zHIJJRnvI7SI+oW72LH6i/4CiUfpvl
+	 NYHa85yZo4xMJR2v5tgZu4gdLmmIqnCPxDrTf+GlGJ4U9hz9Db9BKZ5qKZRo77Y3oP
+	 qA7levsoBLBWpLMkAHedaD1hdLFhI5/pOKNw5PwcfTJm10mv9rCG4SGzLOy7Qs4yMk
+	 K+AyxVJRpz75A==
+From: Christian Brauner <brauner@kernel.org>
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Jan Kara <jack@suse.cz>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Andrei Vagin <avagin@google.com>,
+	Kirill Tkhai <tkhai@ya.ru>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Adrian Reber <areber@redhat.com>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] pid_namespace: make init creation more flexible
+Date: Fri, 20 Mar 2026 14:47:34 +0100
+Message-ID: <20260320-abend-kauen-5279c838c15e@brauner>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260318122157.280595-1-ptikhomirov@virtuozzo.com>
+References: <20260318122157.280595-1-ptikhomirov@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6b385b5-f61c-4b0d-82ed-4018db76538f@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1677; i=brauner@kernel.org; h=from:subject:message-id; bh=1yj3+8JgkDHlZE7ywicfVi+R3aRnk7415/Uk3keT3Vk=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTu9f8x7fPlWKEKRqPy7FSe6WxneNayK6jat6yYoKLQq r6bqba9o5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCKLfjIyHAyt0Y/2vHFyef3W 1pNJTx9vLXtu5vC1ZkNS3HeP0vviUgx/BScf/mamosYoX/1vf5bOho6mT6UHyy7Le4pnODxntHz IAAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 20, 2026 at 02:25:10PM +0100, Christian Bruel wrote:
-> On 3/20/26 12:16, Niklas Cassel wrote:
-> > 
-> > FWIW, I think an even better solution is to introduce a new register,
-> > named e.g. errno in struct pci_epf_test_reg;
-> > 
-> > That way, we don't need to take a new bit, e.g.:
-> > +#define STATUS_BAR_SUBRANGE_SETUP_NOSPC          BIT(18)
-> > 
-> > For every unique error code a command can return.
-> > 
-> > We would simply return STATUS_BAR_SUBRANGE_CLEAR_FAIL, and then the host
-> > side driver looks at the errno register to see the specific error code.
-> > 
-> > This way, all other _FAIL commands could also return a more specific error
-> > in case of failure.
-
-(snip)
-
-> But it is not consistent with other tests that use the status field to carry
-> error information. For example, pci_epf_test_read/write/copy, set the
-> STATUS_SRC/DTS_ADDR_INVALID bit to distinguish these errors from other
-> -EINVAL.
+On Wed, 18 Mar 2026 13:21:48 +0100, Pavel Tikhomirov wrote:
+> The first patch properly annotates accesses to ->child_reaper with
+> _ONCE macroses, to protect unlocked accesses from possible cpu/compiler
+> optimization problems.
 > 
-> Introducing a new errno field would result in having two different APIs for
-> returning failure status.
+> The second patch makes sure that the init is always a first process in
+> the pid namespace, previously this was only checked for set_tid case.
 > 
-> In light of the STATUS_SRC/DST_ADDR_INVALID usage, I wonder if my initial
-> proposal to set a status bit along with the FAIL bit might actually be
-> simpler and more consistent what is already done here.
+> [...]
 
-You are right that the read/write/copy tests actually set two bits in the
-status register.
+Applied to the kernel-7.1.misc branch of the vfs/vfs.git tree.
+Patches in the kernel-7.1.misc branch should appear in linux-next soon.
 
-With:
-#define STATUS_SRC_ADDR_INVALID         BIT(7)
-#define STATUS_DST_ADDR_INVALID         BIT(8)
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-Potentially being reused by the write/copy/read tests.
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-At least these bits are reuse for more than one test case.
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-So, perhaps to keep things in line with the existing design
-perhaps just name the new bit something like:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: kernel-7.1.misc
 
-#define STATUS_SKIP_INSUFFICIENT_RESOURCES	BIT(18)
-
-or something like that.
-
-At least then, other test cases will be able to reuse this status bit,
-just like multiple test cases can use the STATUS_SRC_ADDR_INVALID status
-bits.
-
-
-And yes, I agree that, like you do in your initial proposal, having this
-new STATUS_SKIP_INSUFFICIENT_RESOURCES bit set in addition to the
-STATUS_BAR_SUBRANGE_CLEAR_FAIL bit, is probably the best way forward that
-is in line with the current design.
-
-
-Kind regards,
-Niklas
+[1/5] pid_namespace: avoid optimization of accesses to ->child_reaper
+      https://git.kernel.org/vfs/vfs/c/d9c857aee2eb
+[2/5] pid: check init is created first after idr alloc
+      https://git.kernel.org/vfs/vfs/c/39c8806e2d88
+[3/5] pid_namespace: allow opening pid_for_children before init was created
+      https://git.kernel.org/vfs/vfs/c/a3bdc23ba8ea
+[4/5] selftests: Add tests for creating pidns init via setns
+      https://git.kernel.org/vfs/vfs/c/7c5219e1a606
+[5/5] MAINTAINERS: add a new entry for testing pidns init creation via setns
+      https://git.kernel.org/vfs/vfs/c/2b46715fd9ec
