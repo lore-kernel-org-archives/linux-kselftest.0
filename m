@@ -1,135 +1,164 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AF93A5425
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E253A3E9D
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 11:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774005516; cv=none; b=fOD/0SCygDQTrxk4prSgKMJ10iIR4nG+nvF3JrcLkLKOUAr/p2AnuWXRaG8vW5ZrG0p6H8XYr8AOB37IEflTWlJMoJeThmBjmVTFxsmRGb0H+lt3z5gg4nlur0qNcWKHb3ukJUu/Wse58Ya/wSm+LGDP8ygzcBwt4LaaOCP8DMw=
+	t=1774005980; cv=none; b=kJLi1rPYUtpLaj4rRkYH6xUaA4a568LJ5xj/w9CwoNUI4ADFPEjWn1/YLlNZ7FjoBZtBp1efpsRtllV8npoaYuHFSjgvlOA4pgvjCvjJxtt7dLYyc505+te7mCHV+k0dPJJgIaorkXxrJCXj+FbHzqQcwd/H8oXcRbHs9R0XiA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774005516; c=relaxed/simple;
-	bh=gwdkwNw1aCvfhHjq2xoOr/jQl/jvktxMB15tf+L9W7c=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=KPjbDm+NY0t19/NyTeOH/US54veVlFF6ThLvGTLUI6Pz9sq335pxiBJmTyULxqPp7Fd7ThOycEPJLwDE1OmLFduwgJ7aoje9myinG7H3qpbKqg0d64SGzPay5v0wbSB0k9OBi6rtW7lb/UGqJuUkzUcqPwdvsgWzPhiOLXWuzY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kgRuvsT9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JacdX4NA; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kgRuvsT9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JacdX4NA; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1774005980; c=relaxed/simple;
+	bh=sVlyVgj1KXRZy8BJPRwp5H/YcmC353Rz62nfZh184lw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kKrsCJ/EeIimN8abaia1iVqESo1NZiK5sN9SQKJXK9ZPrH3TdzsxKcdQSYGdX4hnOOGQqtv6FQBlAzYsZevh+hYzJ2XgWhLIT8zyr6De50oAfwYJDn3LofS9AqN/Wt+CSrj8ZuvgCR2y7PZr5IWwNYp9I2+m7v1NTNp1Q2YLCRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X/VPIP/u; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=G5r4rnYm; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kgRuvsT9";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JacdX4NA";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kgRuvsT9";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JacdX4NA"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 4F4684D257;
-	Fri, 20 Mar 2026 11:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1774005513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X/VPIP/u";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="G5r4rnYm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774005977;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OEKzWlRteGURu5UFh1+Dmq/KxX/rb8EkALXBIWobc1Y=;
-	b=kgRuvsT9YXCHTi1Wsrn+gTu69NEMWsgwpWzK/JDK86hy9BVrbpHIx/dy6oQa0aYwQo7nAv
-	KfDLLVLYuVLgYtA71VvmMQKMddVBr7z2aDek93OPif4hl8ehJB+7HUV0cKE6bw1ZEV0768
-	e/XC4QcQqcTg9+2FwOBTJmalhc0Ko5E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1774005513;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OEKzWlRteGURu5UFh1+Dmq/KxX/rb8EkALXBIWobc1Y=;
-	b=JacdX4NAREjXR/xmQZOlii4IFZ6lmo17g6a6b5GYzCJGCWEY7j1h6cyBM8iE3aklo70PUZ
-	o3g+C8AxRcBWmEBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1774005513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OEKzWlRteGURu5UFh1+Dmq/KxX/rb8EkALXBIWobc1Y=;
-	b=kgRuvsT9YXCHTi1Wsrn+gTu69NEMWsgwpWzK/JDK86hy9BVrbpHIx/dy6oQa0aYwQo7nAv
-	KfDLLVLYuVLgYtA71VvmMQKMddVBr7z2aDek93OPif4hl8ehJB+7HUV0cKE6bw1ZEV0768
-	e/XC4QcQqcTg9+2FwOBTJmalhc0Ko5E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1774005513;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OEKzWlRteGURu5UFh1+Dmq/KxX/rb8EkALXBIWobc1Y=;
-	b=JacdX4NAREjXR/xmQZOlii4IFZ6lmo17g6a6b5GYzCJGCWEY7j1h6cyBM8iE3aklo70PUZ
-	o3g+C8AxRcBWmEBQ==
-Date: Fri, 20 Mar 2026 12:18:33 +0100 (CET)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
-    Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org, 
-    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] selftests: livepatch: test-kprobe: Replace true/false
- mod param by 1/0
-In-Reply-To: <a57eb2eb73eb8bd817196b8505ab59d5c3bc187b.camel@suse.com>
-Message-ID: <alpine.LSU.2.21.2603201213400.12616@pobox.suse.cz>
-References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>  <20260313-lp-tests-old-fixes-v1-2-71ac6dfb3253@suse.com>  <alpine.LSU.2.21.2603191401380.22987@pobox.suse.cz> <a57eb2eb73eb8bd817196b8505ab59d5c3bc187b.camel@suse.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	bh=Sw/BFdoRDz/kwV1Lq1g5a7lIWwY3pXrRBNNHoMNS1Eg=;
+	b=X/VPIP/u9egaypO4Utn3+J9obhHKXZPvb7h1IVLeSPUM0MY226ovRkot2RjjlAUwFF1JYV
+	LyS38Nu94qUkVpnv5ZD3cTK8UGk+X5Y7C+y/0Kt8A+qIlK9GPoDIfFauIqdp18gSNshCWY
+	xKXyTX2J7N/Xd51u4oS2rWjA+8zapdA=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-602-25YgRniJPk6e4zp0YlgflQ-1; Fri, 20 Mar 2026 07:26:14 -0400
+X-MC-Unique: 25YgRniJPk6e4zp0YlgflQ-1
+X-Mimecast-MFC-AGG-ID: 25YgRniJPk6e4zp0YlgflQ_1774005974
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-354bc535546so507869a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 04:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1774005973; x=1774610773; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sw/BFdoRDz/kwV1Lq1g5a7lIWwY3pXrRBNNHoMNS1Eg=;
+        b=G5r4rnYmbXWoZe1/t8PoeipN9dAkg6G/64ngerxrLCYuIPg6ccs6Y4IQGVHfbrmEOK
+         1/biGDsPAeVf7z9jPKezFIAQkVNi0n+N53AlhVsAjHoa+e8XXyRyH5fhunPz800ogx5L
+         hHK3hpSdWhAUvA2t3/ms8y+opUKVs/xSErXIBRiBBcy0O+b/bM5XrBTeMfTb/gtDoKuR
+         9X63IiIIQ2+dddX9yl1PDIODYgCOtH4BIlAsF1+BHVcyaFsPhny+EG1d8/ACj3lOgIJr
+         sRbBvdC+D2MjGaejpyd65EcdKt4ROQ0DommQiAKXVofILqksHgyDI16tkbBjCfXv1G07
+         XmUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774005973; x=1774610773;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sw/BFdoRDz/kwV1Lq1g5a7lIWwY3pXrRBNNHoMNS1Eg=;
+        b=NsbpKBKEbfWIlJ1KevMSw4/1Aqwh73qteM3XrVwJx+qa3WAZ/uWvTULot/TQKBMQDe
+         ygU6tczEqQqmlxQ8pYT8eCS6epuFGJvj88mt1WXusd1jkF/2KXYPcsLYTVOC6RKR2iWp
+         m7A0IhnhyfpNuJqOt2m/7sK70JIRTh14mHrxIfGqdPUkdUf5Y7CuG4D8/SA+qLeSfqX8
+         blovE3sEHSArmT7cKmNifsOehiRWTRO4+QSHOovx+0R53YjJ3cKZ0/GEdlZQTJZXahBz
+         2DcSiBRFGM7SnXRu+l85cZadyyh9UTtXIM6DEcfwPiF6vBTq9ARQ013Xi54rr/Lhm4ia
+         1UMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUUyI/4dvDSzestefXH7xBesbfiuBwv2vyRRJOeBmOCyczFi8F8KmLIYf9EHUHJNS8h7Za14Qun1VgXCMSFThA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+YCRL8b3Rbbj34/Vm3XDUmNItTVjJm2xyB1u3xKHJJvIsIJjm
+	7O2h6YfPp2hmT5Xffc6Ow6CWIMb+NVlU6UU+i4U57eKIYVi/6UiKdrYm+boFPrxwnkMi/eUjNxp
+	v4HHAE7MooCNbynBY17cEMaAnil1MMB8IKDm2Pre5ZniJXhzWoXOCFispeAXDKStrHvEUhg==
+X-Gm-Gg: ATEYQzw1N2zCRVxjofc2TvL2mc9LRO4YQrS8GTe1g+jb41PRbd5BFO8HEIWpL+hmu+D
+	9TFQVd9OQTE9RP4wMtdZjRfknDIyLPxSfI0JrqDzIrvkUNQHn35tYu94GtCeX3M3szCmBdbEEmS
+	vU4Jn3V6HOEBKej4cngbcOz7j8mNHN4f+0J0GKcWecIj5hDAKOgPJ+gSd2znNmgr2wbv4P+MNqL
+	3k7clmOCa1IRcW8LZZoqRR+vfOptaa51nVYMPk4/piN2k5VKtdDODBBLtRyTtCY9d0vFVdKSgV2
+	xf670EJPQ3ZSbhSp6i6EKsNNNWjAN2dGpnEtLyEOL8xTzFlf22RSqWYLU622N0elbA6G+De2sea
+	xDTCtjlkCf2HySFFtQg==
+X-Received: by 2002:a17:90b:4a50:b0:359:fc88:fa99 with SMTP id 98e67ed59e1d1-35bd2d39c11mr2043994a91.26.1774005973518;
+        Fri, 20 Mar 2026 04:26:13 -0700 (PDT)
+X-Received: by 2002:a17:90b:4a50:b0:359:fc88:fa99 with SMTP id 98e67ed59e1d1-35bd2d39c11mr2043977a91.26.1774005973145;
+        Fri, 20 Mar 2026 04:26:13 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bd40e4bf2sm1655907a91.11.2026.03.20.04.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2026 04:26:12 -0700 (PDT)
+Date: Fri, 20 Mar 2026 19:26:09 +0800
+From: Li Wang <liwang@redhat.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tejun Heo <tj@kernel.org>,
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	James Houghton <jthoughton@google.com>,
+	Sebastian Chlad <sebastianchlad@gmail.com>,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
+Subject: Re: [PATCH 2/7] memcg: Scale down MEMCG_CHARGE_BATCH with increase
+ in PAGE_SIZE
+Message-ID: <ab0u0XCi9xBefrhJ@redhat.com>
+References: <20260319173752.1472864-1-longman@redhat.com>
+ <20260319173752.1472864-3-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -4.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.992];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_ZERO(0.00)[0];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	URIBL_BLOCKED(0.00)[pobox.suse.cz:helo,pobox.suse.cz:mid];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:helo,pobox.suse.cz:mid]
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260319173752.1472864-3-longman@redhat.com>
 
-On Thu, 19 Mar 2026, Marcos Paulo de Souza wrote:
+Waiman Long wrote:
 
-> On Thu, 2026-03-19 at 14:03 +0100, Miroslav Benes wrote:
-> > A nit but I think that "test-kprobe: " is unnecessary noise in the
-> > subject 
-> > and can be dropped. It applies to all patches in the series.
-> 
-> Ok, I'll drop it in the v2.
-> 
-> > 
-> > On Fri, 13 Mar 2026, Marcos Paulo de Souza wrote:
-> > 
-> > > Older kernels don't support true/false for boolean module
-> > > parameters
-> > > because they lack commit 0d6ea3ac94ca
-> > > ("lib/kstrtox.c: add "false"/"true" support to kstrtobool()").
-> > > Replace
-> > > true/false by 1/0 so the test module can be loaded on older
-> > > kernels.
-> > > 
-> > > No functional changes.
-> > 
-> > We also define a bool module parameter in 
-> > test_modules/test_klp_callbacks_busy.c. Does it have a similar
-> > problem?
-> 
-> No, because n/N was accepted as false already on 4.12 (SLE12-SP5). I'm
-> not sure about older versions tough.
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -328,8 +328,14 @@ struct mem_cgroup {
+>   * size of first charge trial.
+>   * TODO: maybe necessary to use big numbers in big irons or dynamic based of the
+>   * workload.
+> + *
+> + * There are 3 common base page sizes - 4k, 16k & 64k. In order to limit the
+> + * amount of memory that can be hidden in each percpu memcg_stock for a given
+> + * memcg, we scale down MEMCG_CHARGE_BATCH by 2 for 16k and 4 for 64k.
+>   */
+> -#define MEMCG_CHARGE_BATCH 64U
+> +#define MEMCG_CHARGE_BATCH_BASE  64U
+> +#define MEMCG_CHARGE_BATCH_SHIFT ((PAGE_SHIFT <= 16) ? (PAGE_SHIFT - 12)/2 : 2)
+> +#define MEMCG_CHARGE_BATCH	 (MEMCG_CHARGE_BATCH_BASE >> MEMCG_CHARGE_BATCH_SHIFT)
 
-strtobool() (predecessor of kstrtobool()) has it from the beginning and 
-that is ~2010 which predates the kernel live patching itself so I think we 
-are good.
+This is a good complement to the first patch. With this change,
+I got a chart to compare the three methods (linear, log2, sqrt)
+in the count threshold:
 
-Miroslav
+4k page size (BATCH=64):
+  
+  CPUs    linear    log2     sqrt
+  --------------------------------
+  1       256KB     256KB    256KB
+  8       2MB       1MB      512KB
+  128     32MB      2MB      2.75MB
+  1024    256MB     2.75MB   8MB
+	
+64k page size (BATCH=16):
+
+  CPUs    linear    log2     sqrt
+  -------------------------------
+  1       1MB       1MB      1MB
+  8       8MB       4MB      2MB
+  128     128MB     8MB      11MB
+  1024    1GB       11MB     32MB
+
+
+Both are huge improvements.
+
+log2 flushes more aggressively on large systems, which gives more accurate
+stats but at the cost of more frequent synchronous flushes.
+
+sqrt is more conservative, still a massive reduction from linear but gives
+more breathing room on large systems, which may be better for performance.
+
+I would leave this choice to you, Waiman, and the data is for reference.
+
+-- 
+Regards,
+Li Wang
+
