@@ -1,207 +1,137 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A15289E17
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 02:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F99117A2EA;
+	Sat, 21 Mar 2026 04:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774061111; cv=none; b=sJj3tOB0aDs+GhTq5GmkWAC6jcapnQ1kDXOWgT2wYGnTFi8+mOdjmtPHZZIpHlWUelVU94kwUVhHFFyZldXfIGWZrfgdZZVZd3ySC6wCPBpngrqmpYYKVrx9C87JeQs/LbnFy8V9P6yrX9bwCB52qi5O3xSyqSPwZNifUDQWppg=
+	t=1774067193; cv=none; b=G3nW6C+3v6nxMgIWKZIwG+h7oB+ZWX4buryB3vTisY2PdvwEt2v7T0m1Big9EJ/237fKeXpQRN4kQhCBnKgxHfEGg5af/29a3sksJw69RxFr5V0u0fEEVXRzOaPfPNVKyr+npDMHGRyPciAx6rNxmI53/3RIsy4ro74uDpqsHBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774061111; c=relaxed/simple;
-	bh=IE8ESQrrOG30m9JyKzjk5inKck/ANVzJrrC5HisxLfE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=mPjpx9JhFzEdhP7kS/XBX5ec/hzd1GCPwdnv2DcS11sSJxgAPYuItrytEt+chmsq5bt3IHGKtk3QSAuu5xWsP4yYPvWsrSJDDL7fB1WQrDTxIrBV4NiuiEFYXcDIYBDZs8wf+Jf2Gs1qxYPhJIcaNKVy+4es/E85X32ASNUKqqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=rFY0F3IS; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="rFY0F3IS"
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-89c43c4c383so15458836d6.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 19:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774061106; x=1774665906; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=enDHMlp2If8foK9V1nsRwFYENcpB3nXX+k6e8kROXpU=;
-        b=rFY0F3ISxD59gYVeo3gQtTQW7+cCM/QVhA7WNXE9cprTYYHbOEIBqCCm6Av0iS5StP
-         1g4AM41GOVWBxwPXUv+bP+0DT6LxOXmibntfv5hGSrz826z6+XM+diamqPTMTcCrg6xs
-         Dl9bSjEJNC6JjvA3QFW1H7Qn37XN33zIMlwRDAhkuHewmljzmd5qx/4kbqo0FnW+MjCM
-         lVSda1emoGRy15038IV3RQ8gRUVGYc6U/p0s+V0/btdcXt7/vTSFHZT6K3oLwx1Fy9TP
-         salx7ET9Xeq8ypVvwkgAAqY7GY87NbFNqKmtxn/lpgPW+jiixPIq+sQZ42xmPHORNPKl
-         kM2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774061106; x=1774665906;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=enDHMlp2If8foK9V1nsRwFYENcpB3nXX+k6e8kROXpU=;
-        b=Y9AKZs6rP+709RMW33qYAlMA76zw7BF1TWS6FXfLq9kdirPEjmslnfDIL13ZbYabXY
-         plxUvIdoma7CKcWkbtrqwUbyAPjWUHQ80JlX+/MSaRPZbc1602R+BlotVnXAx2kAFedU
-         x9DUocHByHJUuctF+aOq616xlOJdrPbcpiiNOZK+pRbnjVBxJ222srmw6VHdNeeMuz2E
-         NVxq8XxH44lsejl1fas7WZpMe1jHZS79Cd8mKQPAJSZlKhEX3nGX73X16dW2MwMI/xoV
-         rbNl3jKQ3XJMUiiOAFG2/hKA7FrTZIlwR/pjTVzg2t3Gr2OKjeNdNNtSb2orRGAjRkPE
-         4s5A==
-X-Forwarded-Encrypted: i=1; AJvYcCWh2gqjCT+b7teKkU9IcjtTfNZzgRlRFcC5KxTpOUb97y9xNoxPB2ksQLziCnYM2389vPnLMjY/3BNiMxKPTVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaOSXJM+o20DN0CEC3EkbZ8I9qdAkNvnbvnw/QVlMaGoIJ6dOR
-	stKXmiplP0lrSEzSwMGrJN/xO2q4wv/vaILaOa8v6dKs9kPBnrO/AZssIscj+o5/6Js=
-X-Gm-Gg: ATEYQzwTaglGBq2xY9ZOEPyQoK4qR9x8ckHB/UYL7a4G4+XErA2LhjVeLP6BTQRn7Bs
-	4ZUxpizdCnnxcbI3m1lklPR0lOMt/8Mwmd3WOF/GTlshc+mzn/u3ixIrq7qzGYyCmq4y+vffSfq
-	KCwTviqGRI8SCzIXHL3RsM5fGg6YbAPG0FCM8M5v28rqP43gkjC+E8wCDM+lMpwhVBB8+NtGCa3
-	g0NTCup+mxxBbNFZ5u2WlDeX5v7bfG1alD3qnt2T1W0I8kZj7r9dNMhKLd/+mIc2EXYUADQVVuI
-	2ZnUBis8X43AcxCIfqbzEzBOLiEHkXiLgc1wICYGIlGvASdtKg3KHFQh7XaUOBsjr3PYjWNk3Ks
-	M/Bx3B79EuVUHkEheQN1QkhEv2gK0FsLeBQpz27/9upgM2xQ1YOl4ero3Uxbva27sibeqpGvTow
-	74D7ab3VE72pUzdTADiWYHje8=
-X-Received: by 2002:ad4:5e85:0:b0:89a:258:c1d1 with SMTP id 6a1803df08f44-89c85a5f98emr89899696d6.42.1774061106102;
-        Fri, 20 Mar 2026 19:45:06 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c85335771sm32090036d6.30.2026.03.20.19.45.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Mar 2026 19:45:05 -0700 (PDT)
+	s=arc-20240116; t=1774067193; c=relaxed/simple;
+	bh=+EaH7bM1rUEv3ESc2TQyVCS/eG5JcGcKIpE5GWWja9Y=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kB52WCWbGAT7NCOnaUJK2qBkUm3oqF5SSV0TN96mVy04Oz5zIkRrc8ORNIXEBVms/9jc77HigX4O1Yr+Dse+0gjVDX/WJN70j8qlx15oop2UQJNODXbU5mzrKpVzvHm+5+wUPfxWpn19ax0YzBEsUHYtYo5LfR7dER5HDJ9lD90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
+Received: from local
+	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	 (Exim 4.99)
+	(envelope-from <daniel@makrotopia.org>)
+	id 1w3nuh-000000006pW-181d;
+	Sat, 21 Mar 2026 04:26:15 +0000
+Date: Sat, 21 Mar 2026 04:26:11 +0000
+From: Daniel Golle <daniel@makrotopia.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Daniel Golle <daniel@makrotopia.org>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net] selftests: forwarding: local_termination: fix PTP UDP
+ cksums
+Message-ID: <651c3decb80023e4395ec149fd81110afa3869a1.1774067006.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 20 Mar 2026 22:45:03 -0400
-Message-Id: <DH846C0P88QU.16YT12I1LXBZM@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v8 3/8] bpf: Introduce the bpf_list_del kfunc.
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Chengkaitao" <pilgrimtao@gmail.com>, <martin.lau@linux.dev>,
- <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
- <haoluo@google.com>, <jolsa@kernel.org>, <shuah@kernel.org>,
- <chengkaitao@kylinos.cn>, <linux-kselftest@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20260316112843.78657-1-pilgrimtao@gmail.com>
- <20260316112843.78657-4-pilgrimtao@gmail.com>
-In-Reply-To: <20260316112843.78657-4-pilgrimtao@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->
-> If a user holds ownership of a node in the middle of a list, they
-> can directly remove it from the list without strictly adhering to
-> deletion rules from the head or tail.
->
+All six PTP-over-IP test frames (3x IPv4 + 3x IPv6) contain incorrect
+UDP checksums. The stored values are the ones-complement sums of just
+the pseudo-headers, not the complete UDP checksums over pseudo-header +
+UDP header + payload. This is characteristic of frames captured on the
+sender before TX checksum offload completion.
 
-Not sure what you mean by this, would saying "remove any node from a
-linked list" work:
+For example, the IPv4 Sync and Follow-Up frames both store checksum
+0xa3c8 despite having different UDP payloads and port numbers - 0xa3c8
+is their shared pseudo-header sum (same src/dst IP, same protocol and
+UDP length).
 
-> We have added an additional parameter bpf_list_head *head to
-> bpf_list_del, as the verifier requires the head parameter to
-> check whether the lock is being held.
->
-> This is typically paired with bpf_refcount. After calling
-> bpf_list_del, it is generally necessary to drop the reference to
-> the list node twice to prevent reference count leaks.
->
+While most L2 switches forward frames without verifying transport
+checksums, hardware that performs deep packet inspection or has PTP
+awareness may validate UDP checksums and drop frames that fail
+verification. This causes the 1588v2 over IPv4/IPv6 tests to fail on
+such hardware even though L2 PTP (which has no UDP checksum) passes
+fine.
 
-This is pretty confusing as a convention, and it's obvious in patch
-8/8. Is it possible to hide this complexity from the user?
+Replace all six pseudo-header partial sums with the correctly computed
+full UDP checksums:
 
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> ---
->  kernel/bpf/helpers.c  | 11 +++++++++++
->  kernel/bpf/verifier.c |  4 ++++
->  2 files changed, 15 insertions(+)
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index e87b263c5fe6..dac346eb1e2f 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2437,6 +2437,8 @@ static struct bpf_list_node *__bpf_list_del(struct =
-bpf_list_head *head,
->  	 */
->  	if (unlikely(!h->next))
->  		INIT_LIST_HEAD(h);
-> +
-> +	/* verifier to guarantee n is a list node rather than the head */
+  IPv4 Sync:           0xa3c8 -> 0x9f41
+  IPv4 Follow-Up:      0xa3c8 -> 0xeb8a
+  IPv4 Peer Delay Req: 0xa2bc -> 0x9ab9
+  IPv6 Sync:           0x2e92 -> 0x1476
+  IPv6 Follow-Up:      0x2e92 -> 0xf047
+  IPv6 Peer Delay Req: 0xb454 -> 0x891f
 
-Why add this comment here? At the very least you'd need to add this in
-the previous patch, but I think it's not particularly useful in general.
-It definitely doesn't work here because it's for existing code.
+Fixes: 2379795042649 ("selftests: net: local_termination: add PTP frames to the mix")
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ .../selftests/net/forwarding/local_termination.sh    | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-
->  	if (list_empty(h))
->  		return NULL;
-> =20
-> @@ -2463,6 +2465,14 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_bac=
-k(struct bpf_list_head *head)
->  	return __bpf_list_del(head, h->prev);
->  }
-> =20
-> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *hea=
-d,
-> +					       struct bpf_list_node *node)
-> +{
-> +	struct bpf_list_node_kern *kn =3D (void *)node;
-> +
-> +	return __bpf_list_del(head, &kn->list_head);
-
-See the Sashiko review: https://sashiko.dev/#/patchset/20260316112843.78657=
--1-pilgrimtao%40gmail.com
-
-1) The WARN_ON() issue is real, you'd need to adjust the warning.
-2) The more important problem is the reuse bug. You need to make sure
-any elements in a list that don't get freed by during
-bpf_list_head_free() have NULL'ed left/right and owner fields.
-
-> +}
-> +
->  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *h=
-ead)
->  {
->  	struct list_head *h =3D (struct list_head *)head;
-> @@ -4549,6 +4559,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
->  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
->  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
-> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 64c1f8343dfa..e928ad4290c7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -12508,6 +12508,7 @@ enum special_kfunc_type {
->  	KF_bpf_list_push_back_impl,
->  	KF_bpf_list_pop_front,
->  	KF_bpf_list_pop_back,
-> +	KF_bpf_list_del,
->  	KF_bpf_list_front,
->  	KF_bpf_list_back,
->  	KF_bpf_cast_to_kern_ctx,
-> @@ -12568,6 +12569,7 @@ BTF_ID(func, bpf_list_push_front_impl)
->  BTF_ID(func, bpf_list_push_back_impl)
->  BTF_ID(func, bpf_list_pop_front)
->  BTF_ID(func, bpf_list_pop_back)
-> +BTF_ID(func, bpf_list_del)
->  BTF_ID(func, bpf_list_front)
->  BTF_ID(func, bpf_list_back)
->  BTF_ID(func, bpf_cast_to_kern_ctx)
-> @@ -12644,6 +12646,7 @@ static const enum special_kfunc_type bpf_list_api=
-_kfuncs[] =3D {
->  	KF_bpf_list_push_back_impl,
->  	KF_bpf_list_pop_front,
->  	KF_bpf_list_pop_back,
-> +	KF_bpf_list_del,
->  	KF_bpf_list_front,
->  	KF_bpf_list_back,
->  };
-> @@ -12652,6 +12655,7 @@ static const enum special_kfunc_type bpf_list_api=
-_kfuncs[] =3D {
->  static const enum special_kfunc_type bpf_list_node_api_kfuncs[] =3D {
->  	KF_bpf_list_push_front_impl,
->  	KF_bpf_list_push_back_impl,
-> +	KF_bpf_list_del,
->  };
-> =20
->  /* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
-
+diff --git a/tools/testing/selftests/net/forwarding/local_termination.sh b/tools/testing/selftests/net/forwarding/local_termination.sh
+index 9bc9d25e71368..15b1a1255a41f 100755
+--- a/tools/testing/selftests/net/forwarding/local_termination.sh
++++ b/tools/testing/selftests/net/forwarding/local_termination.sh
+@@ -57,21 +57,21 @@ PTP_1588_L2_PDELAY_REQ=" \
+ PTP_1588_IPV4_SYNC=" \
+ 01:00:5e:00:01:81 00:00:de:ad:be:ef 08:00 45 00 \
+ 00 48 0a 9a 40 00 01 11 cb 88 c0 00 02 01 e0 00 \
+-01 81 01 3f 01 3f 00 34 a3 c8 00 02 00 2c 00 00 \
++01 81 01 3f 01 3f 00 34 9f 41 00 02 00 2c 00 00 \
+ 02 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
+ 63 ff fe cf 17 0e 00 01 00 00 00 00 00 00 00 00 \
+ 00 00 00 00 00 00"
+ PTP_1588_IPV4_FOLLOW_UP="
+ 01:00:5e:00:01:81 00:00:de:ad:be:ef 08:00 45 00 \
+ 00 48 0a 9b 40 00 01 11 cb 87 c0 00 02 01 e0 00 \
+-01 81 01 40 01 40 00 34 a3 c8 08 02 00 2c 00 00 \
++01 81 01 40 01 40 00 34 eb 8a 08 02 00 2c 00 00 \
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
+ 63 ff fe cf 17 0e 00 01 00 00 02 00 00 00 66 83 \
+ c6 0f 1d 9a 61 87"
+ PTP_1588_IPV4_PDELAY_REQ=" \
+ 01:00:5e:00:00:6b 00:00:de:ad:be:ef 08:00 45 00 \
+ 00 52 35 a9 40 00 01 11 a1 85 c0 00 02 01 e0 00 \
+-00 6b 01 3f 01 3f 00 3e a2 bc 02 02 00 36 00 00 \
++00 6b 01 3f 01 3f 00 3e 9a b9 02 02 00 36 00 00 \
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
+ 63 ff fe cf 17 0e 00 01 00 01 05 7f 00 00 00 00 \
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+@@ -79,7 +79,7 @@ PTP_1588_IPV6_SYNC=" \
+ 33:33:00:00:01:81 00:00:de:ad:be:ef 86:dd 60 06 \
+ 7c 2f 00 36 11 01 20 01 0d b8 00 01 00 00 00 00 \
+ 00 00 00 00 00 01 ff 0e 00 00 00 00 00 00 00 00 \
+-00 00 00 00 01 81 01 3f 01 3f 00 36 2e 92 00 02 \
++00 00 00 00 01 81 01 3f 01 3f 00 36 14 76 00 02 \
+ 00 2c 00 00 02 00 00 00 00 00 00 00 00 00 00 00 \
+ 00 00 3e 37 63 ff fe cf 17 0e 00 01 00 00 00 00 \
+ 00 00 00 00 00 00 00 00 00 00 00 00"
+@@ -87,7 +87,7 @@ PTP_1588_IPV6_FOLLOW_UP=" \
+ 33:33:00:00:01:81 00:00:de:ad:be:ef 86:dd 60 0a \
+ 00 bc 00 36 11 01 20 01 0d b8 00 01 00 00 00 00 \
+ 00 00 00 00 00 01 ff 0e 00 00 00 00 00 00 00 00 \
+-00 00 00 00 01 81 01 40 01 40 00 36 2e 92 08 02 \
++00 00 00 00 01 81 01 40 01 40 00 36 f0 47 08 02 \
+ 00 2c 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
+ 00 00 3e 37 63 ff fe cf 17 0e 00 01 00 00 02 00 \
+ 00 00 66 83 c6 2a 32 09 bd 74 00 00"
+@@ -95,7 +95,7 @@ PTP_1588_IPV6_PDELAY_REQ=" \
+ 33:33:00:00:00:6b 00:00:de:ad:be:ef 86:dd 60 0c \
+ 5c fd 00 40 11 01 fe 80 00 00 00 00 00 00 3c 37 \
+ 63 ff fe cf 17 0e ff 02 00 00 00 00 00 00 00 00 \
+-00 00 00 00 00 6b 01 3f 01 3f 00 40 b4 54 02 02 \
++00 00 00 00 00 6b 01 3f 01 3f 00 40 89 1f 02 02 \
+ 00 36 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
+ 00 00 3e 37 63 ff fe cf 17 0e 00 01 00 01 05 7f \
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
+-- 
+2.53.0
