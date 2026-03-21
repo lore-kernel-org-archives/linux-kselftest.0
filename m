@@ -1,42 +1,41 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D267312819;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221D7307AE3;
 	Sat, 21 Mar 2026 21:59:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774130374; cv=none; b=ZpaQoVR6DIW3jyOdCWzF8ex3PR5QAko9XZVrqgmhPZFRnmFSkuhQpp5fI0szuG2JKb3Rlv/sNncMsw4b7q0bb6KlvxRPOWi6XXrxmAEDsyQ8OnLqOmayVT9OHXzgG/ZbAN1PbHEtC76K3xaYhyEuT06o8OlCcS+KbvqkYnfFqog=
+	t=1774130374; cv=none; b=ri5bN779kt9NWPbPPlmoRCuHG1SJtkkRaSrhyez4tK8gxNZdYCj0W72MCWWN+w8BvdMZpCTCsP+eMjetsCKmNd80qXjkdvhZAuZOVRCH++oVWFgcgK5UKdXl3+NRb0cumedOu2CEvSqeNUuo2/MpMgGoEbeMwbA/qJFSRPoJ8ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774130374; c=relaxed/simple;
-	bh=h4SpN64FqvVFNc522ovC5+ZOYQUqCVKhFX8TykzZNsA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q2XwY1tkuVKX3KHLkBM7HA+6T3SObeEGuP/BVjoHOsNi0t+GhSNQQHth8xaE+4l774YP7K7BUUrmdpfWZ7aTfZMdKV5gS7ARKzro65wOVd80N8CnhYL8ux7AW0RsRv1GZkdRTFb3hFen1RzP/QAdf6kIhhCQ5LHyb3cji0txR9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=MpdmNRCn; arc=none smtp.client-ip=130.117.225.111
+	bh=BUbB4pM9SOWbVKAqdWi01xLmiYXU4EkqkFp4dppQPkU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UFv9boPH+CZn6hgEIH48s6EtzxcakzLgVe3f/F95WNU+JnyAGYv09nvvMvLKxAEuPESObQvb+9jOkjepEvHnInF1XoPZyZ5uhrc19IpRVwttCj2RUaLEHsogszMXmmYNDHUqp8kkEp6hu+SSKKexX/fYZE2w7jNVK8W2DQbdjnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=Nc+7kW0I; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="MpdmNRCn"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="Nc+7kW0I"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=g9dpOH5uNn1g7NlIWt1IfNFaEx5t1yGTMxCQaSA8U4I=; b=MpdmNRCnhe3u
-	ws6A0c0b0MRQisZBdjuYemFrZOByYriReqRnIjvxselkrd5BDX/4Z6vZogRi3fH9bW6Z8dP/edeTc
-	RWtM42FQlVSI/PskeZkurTqfX1NPAn2v8FAxGl9FNTToORripOiabYAttQe63jZzKR0VNB90KBmhV
-	11a8pAbpDcTjJ34zA0TEQsSe/xvR+t73n4AAZhgZ6FQyxqhau8epbjHY5Y2akV9jDzSfqmElTdFe0
-	glOPGzIXXQziYmENEK3qqnxu7HsHj1zdGMKc3OfABi1AhSuMFV4jk/KZqTFj+WrqSiD6xeTfrzKrs
-	fdG1MWjo5ySRopNH6srdIQ==;
+	Content-Type; bh=J1zGNOWt9SusoSqUv+knriB/jDxlsOa1nJwVKNGQK84=; b=Nc+7kW0IRBth
+	Q4sFCZ59Mgb6Dg35+gKRA7D07cfE6NTsHb8RuQZhziQfh2jgxED3U4cbasY2Xq+H0UT59y20+Bzzn
+	dKqpYqpnp5WDgwJQmmM4bVpznDzjoRVa78/kWX6q9B18DYcbfSsTFEPfbUUTvNSrReaEvYyFBJx4b
+	0WLyZf4nBQEq1CbHSm7NhAiRPI1XJS9Jty03a6vXS16g/rtcVmtrsvUcfZ5t/7+jxr2XBOwGZ5LBG
+	hkihQE/8Yd+k9NYahOvLNe+RLTpGNJ9oZNPHOk81lGQqRMetjmEemTcPDVsryTrkFJcDx6HVqz/7p
+	lPe/r+G1SqGOoIFfmJ/DjQ==;
 Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
 	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1w44Jr-001ijN-1z;
-	Sat, 21 Mar 2026 22:59:11 +0100
+	id 1w44Jn-001hil-27;
+	Sat, 21 Mar 2026 22:59:07 +0100
 Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 62LLxGZk175496
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 62LLxCE0175484
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Sat, 21 Mar 2026 21:59:16 GMT
+	Sat, 21 Mar 2026 21:59:12 GMT
 Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 62LLxFnW175495;
-	Sat, 21 Mar 2026 21:59:15 GMT
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 62LLx9FM175483;
+	Sat, 21 Mar 2026 21:59:09 GMT
 From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
 To: "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
@@ -47,14 +46,11 @@ To: "David S . Miller" <davem@davemloft.net>,
         Stefano Brivio <sbrivio@redhat.com>
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, dev@openvswitch.org,
-        Konstantin Khorenko <khorenko@virtuozzo.com>,
         Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH net-next v6 3/4] selftests: net: run pmtu.sh in netns to avoid host firewall interference
-Date: Sat, 21 Mar 2026 21:59:07 +0000
-Message-ID: <20260321215908.175465-4-aleksey.oladko@virtuozzo.com>
+Subject: [PATCH net-next v6 0/4] selftests: net: fix false failures due to missing features and host interference
+Date: Sat, 21 Mar 2026 21:59:04 +0000
+Message-ID: <20260321215908.175465-1-aleksey.oladko@virtuozzo.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260321215908.175465-1-aleksey.oladko@virtuozzo.com>
-References: <20260321215908.175465-1-aleksey.oladko@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,79 +59,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Konstantin Khorenko <khorenko@virtuozzo.com>
+Hi,
 
-The pmtu.sh kselftest sets up a multi-namespace test topology where the
-host network itself is part of the test setup. Test packets originating
-from the created namespace are expected to reach test interface created
-in the host. When firewall rules are present on the host, this traffic
-may be blocked, causing the test to fail.
+This series addresses several issues in the networking kselftests
+that cause false-positive failures depending on the host environment,
+kernel configuration, or library versions.
 
-Run the test in an isolated network namespace to avoid interference
-from host firewall rules.
+The main focus of these changes is to isolate tests from the host
+environment (using namespaces) and to ensure proper fallback or
+skipping when dependencies are missing.
 
-Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
+Summary of changes:
+1. Fixes ovs-dpctl.py to return a non-zero exit code when pyroute2
+   is too old. This allows pmtu.sh to correctly fall back to ovs-vsctl
+   instead of assuming the configuration was successful.
+2-4. Move reuseport test into dedicated network namespaces. This prevents
+   failures caused by port conflicts with host processes or interference
+   from host firewall rules.
+5. Ensures io_uring is enabled via sysctl before running io_uring_zerocopy
+   test, preventing failures on systems where kernel.io_uring_disabled
+   is set.
+
 Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
----
- tools/testing/selftests/net/Makefile     | 3 ++-
- tools/testing/selftests/net/pmtu-test.sh | 4 ++--
- tools/testing/selftests/net/pmtu.sh      | 4 ++++
- 3 files changed, 8 insertions(+), 3 deletions(-)
- create mode 100755 tools/testing/selftests/net/pmtu.sh
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index f18d28775c80..fedbe24a1e64 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -66,7 +66,7 @@ TEST_PROGS := \
- 	netns-sysctl.sh \
- 	nl_netdev.py \
- 	nl_nlctrl.py \
--	pmtu-test.sh \
-+	pmtu.sh \
- 	psock_snd.sh \
- 	reuseaddr_ports_exhausted.sh \
- 	reuseport_addr_any.sh \
-@@ -194,6 +194,7 @@ TEST_FILES := \
- 	fcnal-test.sh \
- 	in_netns.sh \
- 	lib.sh \
-+	pmtu-test.sh \
- 	settings \
- # end of TEST_FILES
- 
-diff --git a/tools/testing/selftests/net/pmtu-test.sh b/tools/testing/selftests/net/pmtu-test.sh
-index a3323c21f001..2ba6bc0252f0 100755
---- a/tools/testing/selftests/net/pmtu-test.sh
-+++ b/tools/testing/selftests/net/pmtu-test.sh
-@@ -976,7 +976,7 @@ setup_ovs_bridge() {
- 	run_cmd ip link set ovs_br0 up
- 
- 	run_cmd ${ns_c} ip link add veth_C-A type veth peer name veth_A-C
--	run_cmd ${ns_c} ip link set veth_A-C netns 1
-+	run_cmd ${ns_c} ip link set veth_A-C netns $$
- 
- 	run_cmd         ip link set veth_A-C up
- 	run_cmd ${ns_c} ip link set veth_C-A up
-@@ -985,7 +985,7 @@ setup_ovs_bridge() {
- 	setup_ovs_add_if veth_A-C
- 
- 	# Move veth_A-R1 to init
--	run_cmd ${ns_a} ip link set veth_A-R1 netns 1
-+	run_cmd ${ns_a} ip link set veth_A-R1 netns $$
- 	run_cmd ip addr add ${prefix4}.${a_r1}.1/${veth4_mask} dev veth_A-R1
- 	run_cmd ip addr add ${prefix6}:${a_r1}::1/${veth6_mask} dev veth_A-R1
- 	run_cmd ip link set veth_A-R1 up
-diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-new file mode 100755
-index 000000000000..1805fa44a2de
---- /dev/null
-+++ b/tools/testing/selftests/net/pmtu.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+./in_netns.sh ./pmtu-test.sh "$@"
+Changes in v2:
+- Fixed a typo by adding the missing backslash in Makefile
+- Added a Fixes: tag to the appropriate commit as requested
+- Link to v1: https://lore.kernel.org/linux-kselftest/20260120230558.328423-1-aleksey.oladko@virtuozzo.com
+
+Changes in v3:
+- renamed pmtu.sh to pmtu-test.sh and used pmtu.sh as the name
+  of the wrapper. 
+- since the test now runs in a dedicated netns, updates the ovs
+  test case to correctly move network interfaces into the target
+  namespace.
+- Link to v2: https://lore.kernel.org/linux-kselftest/f7t1pj9v8h7.fsf@redhat.com/T/#t
+
+Changes in v4:
+- dropped the patch "selftests: net: fib_tests: skip rp_filter test if
+  cls_basic is unavailable" since the test environment is expected to
+  have all mandatory config options enabled.
+- moved isolation logic from in_netns.sh wrapper to unshare() call in
+  reuseport_ tests
+- Link to v3: https://lore.kernel.org/linux-kselftest/20260306000127.519064-1-aleksey.oladko@virtuozzo.com/T/#t
+
+Changes in v5:
+- changed patch prefix/tag from "net" to "net-next"
+- Link to v4: https://lore.kernel.org/linux-kselftest/20260309152013.565216-1-aleksey.oladko@virtuozzo.com/T/#t
+
+Changes in v6:
+- rebased on "net-next"
+- Link to v5: https://lore.kernel.org/linux-kselftest/20260319103123.146112-1-aleksey.oladko@virtuozzo.com/T/#t
+
+Aleksei Oladko (3):
+  selftests: net: run reuseport in an isolated netns
+  selftests: net: rename pmtu.sh to pmtu-test.sh
+  selftests: net: io_uring_zerocopy: enable io_uring for the test
+
+Konstantin Khorenko (1):
+  selftests: net: run pmtu.sh in netns to avoid host firewall
+    interference
+
+ tools/testing/selftests/net/Makefile          |    1 +
+ .../selftests/net/io_uring_zerocopy_tx.sh     |    9 +
+ tools/testing/selftests/net/pmtu-test.sh      | 2492 +++++++++++++++++
+ tools/testing/selftests/net/pmtu.sh           | 2492 +----------------
+ tools/testing/selftests/net/reuseport_bpf.c   |   11 +
+ .../testing/selftests/net/reuseport_bpf_cpu.c |   10 +
+ .../selftests/net/reuseport_bpf_numa.c        |   10 +
+ .../selftests/net/reuseport_dualstack.c       |   11 +
+ 8 files changed, 2546 insertions(+), 2490 deletions(-)
+ create mode 100755 tools/testing/selftests/net/pmtu-test.sh
+
 -- 
 2.43.0
 
