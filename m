@@ -1,72 +1,134 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20C5283FD4;
-	Sat, 21 Mar 2026 06:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EBD2D592D
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 07:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774074614; cv=none; b=TP8QubCzmH1oPVFBJeZjqZGfjXXWEaVH/4Xuq0iUbSaueNQu5VKid0V9IInCW5WS2mz2bfi5DDGJc4zn5kyBlk32HElkcPifaSXkXvXeuF87Hf5u1ws0jIX5+W1vaChcyWlAapyvO19k4DVLvHfNl3dVJQC5n1grJTNaZmDxYSw=
+	t=1774078648; cv=none; b=Fi9mLnYwpOb1BV8As4CMPC/kLOWCXkDmJl26gjSA1a1l9zT2wNRp6aAowuxHZv0vYVBtIxiTAwC+mtjS3hk1R3iaPfwSYltHzKgd3DumHGPwsqyelZXdKePrKwPKHQ8opipK1qJCBnsjZoDwCRKCl8pQCeNuIZMGvpnOC4BWJdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774074614; c=relaxed/simple;
-	bh=9MvAYMoIZEEjk8GHBm4yxtzTz7MoHSnIjmv3D7Jefk4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i+Dt1WIyBc5GG4elsONzfLEiPmsF0ovGWCdN+m541+GfAxjR8QmyLgEV9CS+FYzi4yNxochHroyDMnjuNo2//Gi5G5KxALNh7sUyY923trtYivZvBD1YqUduMzoLGmjlAoafbXcrB31IMfqlqyFwSRGrr8H70c+26Jmss6rqvPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=njWwmqRp; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1774078648; c=relaxed/simple;
+	bh=tQQGzYTax5ANp/HbiUvTvtRKu+lhynv+KLzdFrVjROo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XgXR8BD42nnP4T/YS6tKrgl+8rjYyRyijOQGiVMpu2uVRGN+PX0hWggGffkaw24PXiltCeg+GaiSVTas8tgM3XV0MnJFhWF7bjqnYXc08PKG20iiDasokgiLsXzgScyvR5xMI0oNw46WUmB1RSdOZ0GayCbOM93qnl+L2TfP5Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VoOMwkJw; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="njWwmqRp"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1774074608; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=gM+fv1OX3vBODJfoWDYk+AU+Hzbvk2rJwSdiRSKHo7w=;
-	b=njWwmqRpegNRx8UuwwgBdm1iJ0RDx8ClRs1p30NIXcYiLdcBffyAVWofpjT+1Jcu3gSJoL9+CAsx0fybz/oK/0LhQooJxlGV8Z8VMsKIPF4srWE3y+KGjwQqy7a0Wit2yTMfrAyKl9tYaNbSoER71MbmF6mvwMA3yf37O+3OWbc=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=26;SR=0;TI=SMTPD_---0X.O7cqx_1774074604;
-Received: from 30.42.98.36(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X.O7cqx_1774074604 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Sat, 21 Mar 2026 14:30:06 +0800
-Message-ID: <78a855da-8fc2-4e85-90a0-6bf9af030c02@linux.alibaba.com>
-Date: Sat, 21 Mar 2026 14:30:04 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VoOMwkJw"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774078644;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mFkAgABbL8wpYRqzhI8hIlxFLHN6DztVsz0LC9nkrp4=;
+	b=VoOMwkJwUw594J90DYXmIKvhLi+7+iafCY+yETpgww75sBt0m7OTarDz+Abcb91Y854+ZT
+	ZEb3HT1Mg1RQqf74ysBAHWTFGgVbHu5fdSoRJftoNsDZ6yfLyfXJrYNIT2Y6H4BuKW9yyK
+	tK1lu9NyJgBlfEUEveCVOyT9nzq5N1Y=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Menglong Dong <menglong8.dong@gmail.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH bpf-next] selftests/bpf: test access to ringbuf position with map
+ pointer
+Date: Sat, 21 Mar 2026 15:37:12 +0800
+Message-ID: <2839892.mvXUDI8C0e@7950hx>
+In-Reply-To: <ab1AUyefoWABRs0T@krava>
+References:
+ <20260320084155.288417-1-dongml2@chinatelecom.cn> <ab1AUyefoWABRs0T@krava>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 5/7] mm: selftests: Add shmem memory failure test
-To: Lisa Wang <wyihan@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
- Naoya Horiguchi <nao.horiguchi@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Hugh Dickins <hughd@google.com>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: rientjes@google.com, seanjc@google.com, ackerleytng@google.com,
- vannapurve@google.com, michael.roth@amd.com, jiaqiyan@google.com,
- tabba@google.com, dave.hansen@linux.intel.com
-References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
- <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-5-92c596402a7a@google.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-5-92c596402a7a@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-
-
-On 3/20/26 7:30 AM, Lisa Wang wrote:
-> Add a shmem memory failure selftest to test the shmem memory failure is
-> correct after modifying shmem return value.
+On 2026/3/20 20:40, Jiri Olsa wrote:
+> On Fri, Mar 20, 2026 at 04:41:55PM +0800, Menglong Dong wrote:
+> > Add the testing to access the bpf_ringbuf with the map pointer.
+> > "consumer_pos" and "producer_pos" is accessed in this testing. We reserve
+> > 128 bytes in the ringbuf to test the producer_pos, which should be
+> > "128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
+> > 
+> > It will be helpful if we want to evaluate the usage of the ringbuf in bpf
+> > prog with the consumer and producer position.
+> > 
+> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > ---
+> >  .../testing/selftests/bpf/progs/map_ptr_kern.c | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> > index efaf622c28dd..c3fa57ec430b 100644
+> > --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> > +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> > @@ -647,21 +647,39 @@ static inline int check_devmap_hash(void)
+> >  	return 1;
+> >  }
+> >  
+> > +struct bpf_ringbuf {
+> > +	unsigned long consumer_pos;
+> > +	unsigned long producer_pos;
+> > +} __attribute__((preserve_access_index));
+> > +
+> >  struct bpf_ringbuf_map {
+> >  	struct bpf_map map;
+> > +	struct bpf_ringbuf *rb;
+> >  } __attribute__((preserve_access_index));
+> >  
+> >  struct {
+> >  	__uint(type, BPF_MAP_TYPE_RINGBUF);
+> > +	__uint(max_entries, 1 << 10);
 > 
-> Test that
-> + madvise() call returns 0 at the first time
-> + trigger a SIGBUS when the poisoned shmem page is fault-in again.
-> 
-> Signed-off-by: Lisa Wang <wyihan@google.com>
-> ---
+> do you need to set max_entries? there's already check below
+> making sure it's 4096
 
-Why not move the shmem memory failure test into memory-failure.c?
+Hi, Jiri. Thanks for the reviewing. You are right, we don't
+need to set the max_entries here, as it will be set in the
+test_map_ptr(). I'll remove this part in V2.
+
+Thanks!
+Menglong Dong
+
+> 
+> jirka
+> 
+> 
+> >  } m_ringbuf SEC(".maps");
+> >  
+> >  static inline int check_ringbuf(void)
+> >  {
+> >  	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
+> >  	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
+> > +	struct bpf_ringbuf *rb;
+> > +	void *ptr;
+> >  
+> >  	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
+> >  
+> > +	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
+> > +	VERIFY(ptr);
+> > +
+> > +	bpf_ringbuf_discard(ptr, 0);
+> > +	rb = ringbuf->rb;
+> > +	VERIFY(rb);
+> > +	VERIFY(rb->consumer_pos == 0);
+> > +	VERIFY(rb->producer_pos == 128 + 8);
+> > +
+> >  	return 1;
+> >  }
+> >  
+> 
+> 
+
+
+
+
