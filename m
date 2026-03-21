@@ -1,43 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A122550AF;
-	Sat, 21 Mar 2026 08:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7402BD11;
+	Sat, 21 Mar 2026 10:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774083506; cv=none; b=VAhb2f7wGcbezFlwnqEMkeVUt7cz+kVcaLhuTvn/9agiCRFgsV+BwGlX29CrjzcEh9GHs3m5PdfXPwkl994Z2VxbFsALTDvl4fUugSl3GuawhzR7QXwNKgr21HijhIjvZyS6yVV608R/23szXeEh5Jqp4NwGJuVNv+qpkaSMDEQ=
+	t=1774089372; cv=none; b=J6mX7wy69t5sZyTXWd08qeG9qGKddMAcpTzyO0e6lPOGeNjLTuGTFERag+La8yjog9KcrMWn1+x0TjPdpSoVwOKmOjeqOrkHxkq6mHvyNkut9hbpmhqwTIF4GVmP4EMe7FhW0N3KRRwJw4MUN2z/XDNBvxXWJpaGMB6WzJbhKwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774083506; c=relaxed/simple;
-	bh=X0l86Q/FsTDOlq3OiuWxtwnJacrqKs2tW0wtjaEiE9s=;
+	s=arc-20240116; t=1774089372; c=relaxed/simple;
+	bh=/6eOLTSivq+etcgwBsYg5Tg2Jeg74Hgv+HHyl+MfzjA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cSI6JibciBuidUwreDCP9N/51NUvhTdA+0AyXRnuI8skUyoxl0HLH7yxdXlm8F4vh7GwS+HPoLMS3nxqz2BgciPbiYqb+eiL2/zJtyPyggmc2IK/tkvVW87JjSwk6Q7Aj87c36nIKaUoFXr2g6P8uZf4HK0luE5Od77ohIgFK/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S4gZV1CA; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=V6OBKwRWfcAShTESWFyuEJ5Y2EzYWjTwhYSMQGG/04KuHMZ2FQY3mJTOdaCf3A0xBvKGW6p9RInvArNPuC/JeQgd2BP4GVi26+mIGhxz7ugD0y4DL7QBV+lWledomxrkGtIhCcjwv9XFZXRxYNDt3bvC7McbTv+95LuGfoAjigg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k+CHKcvc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4gZV1CA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59663C19421;
-	Sat, 21 Mar 2026 08:58:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k+CHKcvc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4DDC19421;
+	Sat, 21 Mar 2026 10:36:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774083505;
-	bh=X0l86Q/FsTDOlq3OiuWxtwnJacrqKs2tW0wtjaEiE9s=;
+	s=k20201202; t=1774089371;
+	bh=/6eOLTSivq+etcgwBsYg5Tg2Jeg74Hgv+HHyl+MfzjA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S4gZV1CAp6hr8I1eFdbVQzStMcXlScsBtWun0XPrHz2JVxbvmFfgoch+AUgEJLrbs
-	 LC/GzY5FpMaLj4QjkXpl50/TOlt+/hTC/gAKJGxWlQ2fhNRJd6wVXXtxvPHSueGIC/
-	 LI1jkilThsMLIW92GhDjMoUAEFh9sGNYbbhiKK/Cot86OV0u+lzdfSaK2jSDNTowWW
-	 eVjC4l1vi9cODbzRArMHUO4oHr+eT65TzmhD97QZ9BT5mohkkLJ34mhcCuMHaj6e4J
-	 brVgfFB/lEMiG08OlFr5UabDkYrPjMrDlZq954O2UDbKVIdwCQ05zGgQMWsj4uybtw
-	 REpLHFyOb1EOw==
-Date: Sat, 21 Mar 2026 08:58:20 +0000
+	b=k+CHKcvcxzfZXTvWuk0btSostGs112cEL/nkkDN4RiAwIvySyaTSS7YRsryeBytZp
+	 10g2tQXRu0OXpBta3VDu6MBlQ8Ew22DDIC3NfZ7CTERkyAQRo7HXHDFps4/JeXaJEv
+	 2sq/uoqovyZxLwpJ+R91aa/yZSMj1hieIS0/y/LTHuyDR+WhFP4OelAwex0A9Oblxc
+	 d56sQMILsSzD63KAApDx90MN9HblHBgkmlSw7Zwgc/QmwD1ljixQkTfxzqyO/VAw3H
+	 KLZEzYyO0Q/xtvjImgUVxY1MDJqVJRTQahkUm5ZF2HRhdjUHSuBqD5anUwKGk3Ob3G
+	 M5MZu5Wf6P5zg==
+Date: Sat, 21 Mar 2026 10:36:07 +0000
 From: Simon Horman <horms@kernel.org>
-To: Qingfang Deng <dqfext@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
-	Paul Mackerras <paulus@ozlabs.org>
-Subject: Re: [PATCH net-next] selftests: net: add tests for PPP
-Message-ID: <20260321085820.GO74886@horms.kernel.org>
-References: <20260320071755.483733-1-dqfext@gmail.com>
+	Shuah Khan <shuah@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, David Wei <dw@davidwei.uk>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net] selftests: drv-net: add missing tc config options
+ for netkit tests
+Message-ID: <20260321103607.GA74886@horms.kernel.org>
+References: <20260320-config-fixes-for-nk-tests-v1-1-1e20ec6ddc7e@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,63 +50,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260320071755.483733-1-dqfext@gmail.com>
+In-Reply-To: <20260320-config-fixes-for-nk-tests-v1-1-1e20ec6ddc7e@meta.com>
 
-On Fri, Mar 20, 2026 at 03:17:54PM +0800, Qingfang Deng wrote:
-> Add ping and iperf3 tests for ppp_async.c and pppoe.c.
+On Fri, Mar 20, 2026 at 11:08:35AM -0700, Bobby Eshleman wrote:
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
 > 
-> Signed-off-by: Qingfang Deng <dqfext@gmail.com>
-> ---
->  MAINTAINERS                                   |  1 +
->  tools/testing/selftests/Makefile              |  1 +
->  tools/testing/selftests/net/ppp/Makefile      | 15 +++++++
->  tools/testing/selftests/net/ppp/config        |  8 ++++
->  tools/testing/selftests/net/ppp/ppp_async.sh  | 37 +++++++++++++++++
->  tools/testing/selftests/net/ppp/ppp_common.sh | 40 +++++++++++++++++++
+> The NetDrvContEnv env context uses tc clsact qdiscs and BPF tc filters
+> for traffic redirection, but the kernel config options are missing from
+> the selftests config.
+> 
+> Without them, the tc qdisc installation trips on:
+> 
+>   CMD: tc qdisc add dev enp1s0 clsact
+>     EXIT: 2
+>     STDERR: Error: Specified qdisc kind is unknown.
+> 
+>   net.lib.py.utils.CmdExitFailure: Command failed
+> 
+> Add CONFIG_NET_CLS_ACT and CONFIG_NET_SCH_INGRESS to enable these tc
+> options.
+> 
+> Fixes: 3f74d5bb807e ("selftests/net: Add env for container based tests")
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Shellcheck flags two issues in ppp_common.sh. As we are aiming
-for new tests to be shellcheck-clean I'd appreciate it if you could
-look into this.
+Hi Bobby,
 
-My suggestion is that SC2148 can be addressed by adding #!/bin/bash
-to the top of the file.
+Unfortunately this does not apply cleanly to net.
+Which breaks CI.
 
-And SC2153 can be suppressed using # shellcheck disable=SC2153 
+Please rebase and repost.
 
-For reference
-+  https://www.shellcheck.net/wiki/SC2148
-+  https://www.shellcheck.net/wiki/SC2153
-
-...
-
-> diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
-> new file mode 100644
-> index 000000000000..d2cbd6099255
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ppp/Makefile
-> @@ -0,0 +1,15 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +top_srcdir = ../../../../..
-> +
-> +TEST_PROGS := \
-> +	ppp_async.sh \
-> +	pppoe.sh
-
-Please add a trailing " \" to the line above,
-so it won't need to be modified if another item
-is added after it on a new line.
-
-> +# end of TEST_PROGS
-> +
-> +TEST_FILES := \
-> +	ppp_common.sh \
-> +	pppoe-server-options
-
-Here too.
-
-> +# end of TEST_FILES
-> +
-> +include ../../lib.mk
-
-...
+-- 
+pw-bot: cr
