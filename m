@@ -1,80 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615A23271EA;
-	Sat, 21 Mar 2026 01:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A15289E17
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 02:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774057230; cv=none; b=B6o4z2mAPUZGfsvBKy7wb5D/hSQ/MAGH0cIuBBQt2LT/fX9eVvnX1F5S9Z8rGfBVegfc3sqLqwmE5E2rNrX9Cs/Heu1gAqAbVwUMcQQDHjmuwrqKrS2bAFj0yc8ZbqdTAPSodrfqLIaT8OXLVM7nOc0jF7YZXlC7JCYkuvcTfgI=
+	t=1774061111; cv=none; b=sJj3tOB0aDs+GhTq5GmkWAC6jcapnQ1kDXOWgT2wYGnTFi8+mOdjmtPHZZIpHlWUelVU94kwUVhHFFyZldXfIGWZrfgdZZVZd3ySC6wCPBpngrqmpYYKVrx9C87JeQs/LbnFy8V9P6yrX9bwCB52qi5O3xSyqSPwZNifUDQWppg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774057230; c=relaxed/simple;
-	bh=oszz2+luIcotaI3mDHP5rRr89zad9VHBjN4UEAMPzNQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Ww06l2qieizEI00Y7OKGHWi9jeek+0LmYHTckT+4a8iCyUsy6VzLX83bntl8lqrnFWU41sqqQIgllGsgE0fq1YpZfy0nCKjjC5HSUoDpNnI1U+EOyafDrOA0pQjuU3bWLJOEBmzl4udPxxifFjJunHJBuhgg8YaKq7DN9SvHl6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XV1/noDW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774061111; c=relaxed/simple;
+	bh=IE8ESQrrOG30m9JyKzjk5inKck/ANVzJrrC5HisxLfE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=mPjpx9JhFzEdhP7kS/XBX5ec/hzd1GCPwdnv2DcS11sSJxgAPYuItrytEt+chmsq5bt3IHGKtk3QSAuu5xWsP4yYPvWsrSJDDL7fB1WQrDTxIrBV4NiuiEFYXcDIYBDZs8wf+Jf2Gs1qxYPhJIcaNKVy+4es/E85X32ASNUKqqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=rFY0F3IS; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XV1/noDW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44105C4CEF7;
-	Sat, 21 Mar 2026 01:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774057230;
-	bh=oszz2+luIcotaI3mDHP5rRr89zad9VHBjN4UEAMPzNQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=XV1/noDW/goeAfgw/yhJIK3yCt0S3+lkil8nQSb+rlGYQEU7VXcXtj6kt5Rjnb9uy
-	 kERCZHtuMkKvxImf1X5H0sl5METevwQSY+Qm/ly8jVOk4R+F6Z7ayx1BgCZCbRmfxX
-	 +x5CX7LjM4g8+tWlJIQLkTGUVic7Iq5aetgXu5Xmz/Z50iNJzqWdLbmn1S9LtXh235
-	 D8k5byyYhTbWUbkpzt5qqJnbXXqhguGSohc/9+RbYisoWlmaAjrkf6EAT914QBZpem
-	 V83BUEzw3wdUODeSsYRpvcFfhPZGe/PK+SphHJw4sUAtTHHMd5sqS2Z13InNGpzfIF
-	 6v9jtGCGWW4wQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CD6B3808200;
-	Sat, 21 Mar 2026 01:40:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="rFY0F3IS"
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-89c43c4c383so15458836d6.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Mar 2026 19:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774061106; x=1774665906; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=enDHMlp2If8foK9V1nsRwFYENcpB3nXX+k6e8kROXpU=;
+        b=rFY0F3ISxD59gYVeo3gQtTQW7+cCM/QVhA7WNXE9cprTYYHbOEIBqCCm6Av0iS5StP
+         1g4AM41GOVWBxwPXUv+bP+0DT6LxOXmibntfv5hGSrz826z6+XM+diamqPTMTcCrg6xs
+         Dl9bSjEJNC6JjvA3QFW1H7Qn37XN33zIMlwRDAhkuHewmljzmd5qx/4kbqo0FnW+MjCM
+         lVSda1emoGRy15038IV3RQ8gRUVGYc6U/p0s+V0/btdcXt7/vTSFHZT6K3oLwx1Fy9TP
+         salx7ET9Xeq8ypVvwkgAAqY7GY87NbFNqKmtxn/lpgPW+jiixPIq+sQZ42xmPHORNPKl
+         kM2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774061106; x=1774665906;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=enDHMlp2If8foK9V1nsRwFYENcpB3nXX+k6e8kROXpU=;
+        b=Y9AKZs6rP+709RMW33qYAlMA76zw7BF1TWS6FXfLq9kdirPEjmslnfDIL13ZbYabXY
+         plxUvIdoma7CKcWkbtrqwUbyAPjWUHQ80JlX+/MSaRPZbc1602R+BlotVnXAx2kAFedU
+         x9DUocHByHJUuctF+aOq616xlOJdrPbcpiiNOZK+pRbnjVBxJ222srmw6VHdNeeMuz2E
+         NVxq8XxH44lsejl1fas7WZpMe1jHZS79Cd8mKQPAJSZlKhEX3nGX73X16dW2MwMI/xoV
+         rbNl3jKQ3XJMUiiOAFG2/hKA7FrTZIlwR/pjTVzg2t3Gr2OKjeNdNNtSb2orRGAjRkPE
+         4s5A==
+X-Forwarded-Encrypted: i=1; AJvYcCWh2gqjCT+b7teKkU9IcjtTfNZzgRlRFcC5KxTpOUb97y9xNoxPB2ksQLziCnYM2389vPnLMjY/3BNiMxKPTVI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaOSXJM+o20DN0CEC3EkbZ8I9qdAkNvnbvnw/QVlMaGoIJ6dOR
+	stKXmiplP0lrSEzSwMGrJN/xO2q4wv/vaILaOa8v6dKs9kPBnrO/AZssIscj+o5/6Js=
+X-Gm-Gg: ATEYQzwTaglGBq2xY9ZOEPyQoK4qR9x8ckHB/UYL7a4G4+XErA2LhjVeLP6BTQRn7Bs
+	4ZUxpizdCnnxcbI3m1lklPR0lOMt/8Mwmd3WOF/GTlshc+mzn/u3ixIrq7qzGYyCmq4y+vffSfq
+	KCwTviqGRI8SCzIXHL3RsM5fGg6YbAPG0FCM8M5v28rqP43gkjC+E8wCDM+lMpwhVBB8+NtGCa3
+	g0NTCup+mxxBbNFZ5u2WlDeX5v7bfG1alD3qnt2T1W0I8kZj7r9dNMhKLd/+mIc2EXYUADQVVuI
+	2ZnUBis8X43AcxCIfqbzEzBOLiEHkXiLgc1wICYGIlGvASdtKg3KHFQh7XaUOBsjr3PYjWNk3Ks
+	M/Bx3B79EuVUHkEheQN1QkhEv2gK0FsLeBQpz27/9upgM2xQ1YOl4ero3Uxbva27sibeqpGvTow
+	74D7ab3VE72pUzdTADiWYHje8=
+X-Received: by 2002:ad4:5e85:0:b0:89a:258:c1d1 with SMTP id 6a1803df08f44-89c85a5f98emr89899696d6.42.1774061106102;
+        Fri, 20 Mar 2026 19:45:06 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c85335771sm32090036d6.30.2026.03.20.19.45.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Mar 2026 19:45:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/2] selftests/vsock: support nested VM runner
- for vmtest.sh
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177405722003.2718727.10487979147167709266.git-patchwork-notify@kernel.org>
-Date: Sat, 21 Mar 2026 01:40:20 +0000
-References: <20260317-vsock-vmtest-nested-fixes-v2-0-0b3f53b80a0f@meta.com>
-In-Reply-To: <20260317-vsock-vmtest-nested-fixes-v2-0-0b3f53b80a0f@meta.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: sgarzare@redhat.com, shuah@kernel.org, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kuba@kernel.org, bobbyeshleman@meta.com
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 20 Mar 2026 22:45:03 -0400
+Message-Id: <DH846C0P88QU.16YT12I1LXBZM@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v8 3/8] bpf: Introduce the bpf_list_del kfunc.
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Chengkaitao" <pilgrimtao@gmail.com>, <martin.lau@linux.dev>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
+ <haoluo@google.com>, <jolsa@kernel.org>, <shuah@kernel.org>,
+ <chengkaitao@kylinos.cn>, <linux-kselftest@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260316112843.78657-1-pilgrimtao@gmail.com>
+ <20260316112843.78657-4-pilgrimtao@gmail.com>
+In-Reply-To: <20260316112843.78657-4-pilgrimtao@gmail.com>
 
-Hello:
+On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>
+> If a user holds ownership of a node in the middle of a list, they
+> can directly remove it from the list without strictly adhering to
+> deletion rules from the head or tail.
+>
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Not sure what you mean by this, would saying "remove any node from a
+linked list" work:
 
-On Tue, 17 Mar 2026 15:09:34 -0700 you wrote:
-> This series fixes a few issues trying to launch vmtest.sh in a nested VM
-> environment and were discovered when trying to prepare the tests for
-> netdev CI/CD.
-> 
-> When taken together these patches make vmtest.sh work both on bare metal
-> and in nested VMs, regardless of the outer VM's user, coincidental path
-> overlaps, or filesystem settings.
-> 
-> [...]
+> We have added an additional parameter bpf_list_head *head to
+> bpf_list_del, as the verifier requires the head parameter to
+> check whether the lock is being held.
+>
+> This is typically paired with bpf_refcount. After calling
+> bpf_list_del, it is generally necessary to drop the reference to
+> the list node twice to prevent reference count leaks.
+>
 
-Here is the summary with links:
-  - [net-next,v2,1/2] selftests/vsock: fix vmtest.sh for read-only nested VM runners
-    https://git.kernel.org/netdev/net-next/c/865926e26e05
-  - [net-next,v2,2/2] selftests/vsock: fix vsock_test path shadowing in nested VMs
-    https://git.kernel.org/netdev/net-next/c/0c3893d37892
+This is pretty confusing as a convention, and it's obvious in patch
+8/8. Is it possible to hide this complexity from the user?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
+>  kernel/bpf/helpers.c  | 11 +++++++++++
+>  kernel/bpf/verifier.c |  4 ++++
+>  2 files changed, 15 insertions(+)
+>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index e87b263c5fe6..dac346eb1e2f 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2437,6 +2437,8 @@ static struct bpf_list_node *__bpf_list_del(struct =
+bpf_list_head *head,
+>  	 */
+>  	if (unlikely(!h->next))
+>  		INIT_LIST_HEAD(h);
+> +
+> +	/* verifier to guarantee n is a list node rather than the head */
 
+Why add this comment here? At the very least you'd need to add this in
+the previous patch, but I think it's not particularly useful in general.
+It definitely doesn't work here because it's for existing code.
+
+
+>  	if (list_empty(h))
+>  		return NULL;
+> =20
+> @@ -2463,6 +2465,14 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_bac=
+k(struct bpf_list_head *head)
+>  	return __bpf_list_del(head, h->prev);
+>  }
+> =20
+> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *hea=
+d,
+> +					       struct bpf_list_node *node)
+> +{
+> +	struct bpf_list_node_kern *kn =3D (void *)node;
+> +
+> +	return __bpf_list_del(head, &kn->list_head);
+
+See the Sashiko review: https://sashiko.dev/#/patchset/20260316112843.78657=
+-1-pilgrimtao%40gmail.com
+
+1) The WARN_ON() issue is real, you'd need to adjust the warning.
+2) The more important problem is the reuse bug. You need to make sure
+any elements in a list that don't get freed by during
+bpf_list_head_free() have NULL'ed left/right and owner fields.
+
+> +}
+> +
+>  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *h=
+ead)
+>  {
+>  	struct list_head *h =3D (struct list_head *)head;
+> @@ -4549,6 +4559,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 64c1f8343dfa..e928ad4290c7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12508,6 +12508,7 @@ enum special_kfunc_type {
+>  	KF_bpf_list_push_back_impl,
+>  	KF_bpf_list_pop_front,
+>  	KF_bpf_list_pop_back,
+> +	KF_bpf_list_del,
+>  	KF_bpf_list_front,
+>  	KF_bpf_list_back,
+>  	KF_bpf_cast_to_kern_ctx,
+> @@ -12568,6 +12569,7 @@ BTF_ID(func, bpf_list_push_front_impl)
+>  BTF_ID(func, bpf_list_push_back_impl)
+>  BTF_ID(func, bpf_list_pop_front)
+>  BTF_ID(func, bpf_list_pop_back)
+> +BTF_ID(func, bpf_list_del)
+>  BTF_ID(func, bpf_list_front)
+>  BTF_ID(func, bpf_list_back)
+>  BTF_ID(func, bpf_cast_to_kern_ctx)
+> @@ -12644,6 +12646,7 @@ static const enum special_kfunc_type bpf_list_api=
+_kfuncs[] =3D {
+>  	KF_bpf_list_push_back_impl,
+>  	KF_bpf_list_pop_front,
+>  	KF_bpf_list_pop_back,
+> +	KF_bpf_list_del,
+>  	KF_bpf_list_front,
+>  	KF_bpf_list_back,
+>  };
+> @@ -12652,6 +12655,7 @@ static const enum special_kfunc_type bpf_list_api=
+_kfuncs[] =3D {
+>  static const enum special_kfunc_type bpf_list_node_api_kfuncs[] =3D {
+>  	KF_bpf_list_push_front_impl,
+>  	KF_bpf_list_push_back_impl,
+> +	KF_bpf_list_del,
+>  };
+> =20
+>  /* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
 
