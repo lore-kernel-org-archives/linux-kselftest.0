@@ -1,84 +1,55 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E1734751A
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 17:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536FA31280C;
+	Sat, 21 Mar 2026 18:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774115896; cv=none; b=OTYbEhBI5Jt/N954cwJ+rhxIxRXK6LMv9YFo7Dj5/THwaQKMklXJSJL7G9VwvwTTNbkYFgc+K3/dv4Fj6207yqLTth7I+utSblCB4Pc4yM7SAtOWQwxQBL2kzuzxvnk30linzs2XIPSG4DLt4LUxYpI9LjnQG/g1vgKHSc+l3/Q=
+	t=1774116833; cv=none; b=iCvgUgThLQofQ/oD4dgY1IlmQ2nXfZ5u6hTU6FBz8uQTcW3dvxQ4ks4jcLIw5acRmIPwt1J44wD8FddV3+MbcFxsXhxeg8cmX1MtmbUcJ3CVLdc68MUW9YhNM93PcEg8M241FxlEYwiv9zd4SjEr3MV3aqIevLKzGFHWeY4mkJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774115896; c=relaxed/simple;
-	bh=LI3SMXsnBn5nSeznTWFsUVVpxVDKbB9pJnDUUCkPN10=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gz6T7GPS9935L3fadAl8PXs2KochuPC7RvTYIbOLd1xGC/+/ONdf4pcaZLSghw3+UFLSgEKwLqR3PBjBTdx6E/TyLCAvSE4ee57Ier9ACWPnacqd+uv649squIhyuTaP6PGJpG0jU0TqmWxjriiWSAHdHLeO//0CnQk/bEkeMcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Dz+r8qj7; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1774116833; c=relaxed/simple;
+	bh=gpeakB74+j4Crr+URqLOqlQGJ5CoOZSUHpFIvyVoo5k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Oc+TXo17pqI2U0IiZ7aFUFGqJUSsHC5tKdHk9s1ls6dlz+bucIyvvpB6abui13LbDVCWLCqXsSQjOwSir78YUCZz1VP4jtzLCB+O5xlnVeOSn4l6i4h5H/AJJj2f/9v2Nd3BMTX47jIZimyITkQrTS9OHnJC7YWusVCVw1DEiu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TCcQsQ3Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Dz+r8qj7"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8cb20bcff5aso252689285a.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 10:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1774115893; x=1774720693; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ob8Y//wo6MRj/M0Dz67mgrBX7aDHTN1F2suUDWyFSyU=;
-        b=Dz+r8qj7MM/VFJu+GfI+Ha9dNj+jry+e9m7vzd1y4ZgEEqbSWeqS6cVq1orp5u+efD
-         8Zv42dZDNsvF2Ej6rJnPULMJgCKVqwNSMZa1B9E3EyMIUEqrz+v8MeuFmJxCtH/x1ny3
-         w62Dte4tlaW2+j+Qk5wPWS3AEjbZMnJROiB2BkxKGp/UkVclDOdPodfHQ5ah7rRRGyxY
-         yrgMfUHAd4Ii+pTMg/lkNe+PGpJwOhPGGMBgkdYHbH5MECgWW2jlR2THUJwZYJyKQhlL
-         8RqgUfaEHfXgOUyrZ8GQuFAPqmTpBw6FiP9rp8xhnxWRWZzXJn1bRmFuJBs8g8HTJd12
-         S94g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774115893; x=1774720693;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ob8Y//wo6MRj/M0Dz67mgrBX7aDHTN1F2suUDWyFSyU=;
-        b=bYs1kYkt/VNQO/mO+BZJIaYRnWGoheJb+lFdyVwxvJyvw5AbHAwxNHmN8atA+1tHrH
-         5yjZrxxFWrd586KZ4927mcJ3yYsF6yKJovXaMnyPWydioFafZ2dnqecqXOuOmb9dChnX
-         bOuy616yuJHKMRTEjMN84mHzE2tHkjxltuL676qC+ykr12YL7VP9vp7vsZe4H5AJEB7m
-         5mIz2K1BZC6XwNvDnYQThEls72u5Ej3ZWZZOCVYqI3FrKEbwJM+umaanh2u990lCruxy
-         pXnOyV4TRObNa+QZyw4ZiXboOQJTyjJsRPUIPOwOsGaPf3myfQ9MMa6X4dxX9P82tZpv
-         +uSw==
-X-Forwarded-Encrypted: i=1; AJvYcCWpupofUZMzypNpG9K7w/GSR2a6YmNTXV22oVyDCN+QrU7Hebz4W9ANdyFBTf4TdBNOm962bb9nDALr/uAc37A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkhR5z531DBuaQ6zERBEz0uYCUcyIAK9NSsVibZ26uACw9S2ic
-	EvImAAQGwkjC0BqI1owl+1E4JfQXXRmR19YtpTLg2lsnWxSXjSj8dkUusmn8Xktmbu4=
-X-Gm-Gg: ATEYQzwKGup+sYSdjYT3iNmNwyWVx+6pgsxmbh/wsHRvnAy2lNtGUDnsi5bx4mQrFZB
-	ZW5m83a+aRnktVUHF3pez8FsnfGa1bbu12gd1HqmtKtFwKuCugRbrRMrEA4fUNLyQhP/O8n+cYz
-	ynRPdnG0nMcOj1gUE5IY0kBgPdzK+auiI3pWmIIGPvAkf4NMflDJABM9KyCU8dJg4F7Wf/5H8AL
-	mN+IcGmsRvXc3G3o3+9TAOrmrdwMelTLc5wtbScyRNMngQnTHBP7sAP/drZycXgIi3vdUpqmXv3
-	wCFkASm434jCM+nJD89FDW+hiHlz9eyfXyNwd6mZjVF3pkcHLd5dwW04IZb7WqMRMopvi/GKAYF
-	4HlnZLbIwDqNt7vKfDxi/hyD+m+PVrh/D3LsHw8Add0pT17HzN3degRGr5B4NO7Scb2lUS3RPtD
-	ZFFy89xXuNK2o/7YEvi5u263c1HdZDB+S1+/Udp7u27efB9/73HtDBkO1dxuYpsMcbwQ==
-X-Received: by 2002:a05:620a:aa03:b0:8cf:cf2c:e021 with SMTP id af79cd13be357-8cfcf2ce4d1mr751287185a.7.1774115893390;
-        Sat, 21 Mar 2026 10:58:13 -0700 (PDT)
-Received: from plex.localdomain ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc9089ca9sm426515985a.24.2026.03.21.10.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Mar 2026 10:58:12 -0700 (PDT)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: brauner@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	rppt@kernel.org,
-	jack@suse.cz,
-	shuah@kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	akpm@linux-foundation.org,
-	linux-mm@kvack.org,
-	viro@zeniv.linux.org.uk,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TCcQsQ3Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9899CC19421;
+	Sat, 21 Mar 2026 18:13:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774116833;
+	bh=gpeakB74+j4Crr+URqLOqlQGJ5CoOZSUHpFIvyVoo5k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TCcQsQ3QUMVcLJ9hsN3wbMqnDeQjjcDA/kssGNPkKGrsDaElXfzton47LVduAQBqW
+	 hWj9a33Scp3iXtfTz4roCwTrpw2UkfQ+JPRGl7rbhgxmZU9X83MZ8+MhvKZGUF3E2b
+	 n1svEBEUpYHHa59NJ7mITMExn5JlX/v6+cS/vY0HvqFPqZdCt+E/axAyf8JVUSjL+R
+	 af3d7NHRvHAm/8LPBzmLOBvsRlZbc/fhRjvyttoT8qFdtk22LmGErmzMfcD2UII9Hx
+	 ET5noIUGDbHaMnVonnrl5JQxVUpsa+NssDMkl3OAK4R+e9CoGgZ480Ypysq39SCnYE
+	 Sp5q8FJ//jWZQ==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	pasha.tatashin@soleen.com,
-	dmatlack@google.com,
-	pratyush@kernel.org,
-	skhawaja@google.com
-Subject: [PATCH 2/2] selftests: liveupdate: add test for double preservation
-Date: Sat, 21 Mar 2026 17:58:08 +0000
-Message-ID: <20260321175808.57942-3-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260321175808.57942-1-pasha.tatashin@soleen.com>
-References: <20260321175808.57942-1-pasha.tatashin@soleen.com>
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 00/10] mm/damon: let DAMON be paused and resumed
+Date: Sat, 21 Mar 2026 11:13:30 -0700
+Message-ID: <20260321181343.93971-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,65 +58,126 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Verify that a file can only be preserved once across all active
-sessions. Attempting to preserve it a second time, whether in the same
-or a different session, should fail with EBUSY.
+DAMON utilizes a few mechanisms that enhance itself over time. Adaptive
+regions adjustment, goal-based DAMOS quota auto-tuning and monitoring
+intervals auto-tuning like self-training mechanisms are such examples.
+It also adds access frequency stability information (age) to the
+monitoring results, which makes it enhanced over time.
 
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- .../testing/selftests/liveupdate/liveupdate.c | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
+Sometimes users have to stop DAMON.  In this case, DAMON internal state
+that enhanced over the time of the last execution simply goes away.
+Restarted DAMON have to train itself and enhance its output from the
+scratch.  This makes DAMON less useful in such cases.  Introducing three
+such use cases below.
 
-diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
-index c2878e3d5ef9..37c808fbe1e9 100644
---- a/tools/testing/selftests/liveupdate/liveupdate.c
-+++ b/tools/testing/selftests/liveupdate/liveupdate.c
-@@ -345,4 +345,45 @@ TEST_F(liveupdate_device, preserve_unsupported_fd)
- 	ASSERT_EQ(close(session_fd), 0);
- }
- 
-+/*
-+ * Test Case: Prevent Double Preservation
-+ *
-+ * Verifies that a file (memfd) can only be preserved once across all active
-+ * sessions. Attempting to preserve it a second time, whether in the same or
-+ * a different session, should fail with EBUSY.
-+ */
-+TEST_F(liveupdate_device, prevent_double_preservation)
-+{
-+	int session_fd1, session_fd2, mem_fd;
-+	int ret;
-+
-+	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
-+	if (self->fd1 < 0 && errno == ENOENT)
-+		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
-+	ASSERT_GE(self->fd1, 0);
-+
-+	session_fd1 = create_session(self->fd1, "double-preserve-session-1");
-+	ASSERT_GE(session_fd1, 0);
-+	session_fd2 = create_session(self->fd1, "double-preserve-session-2");
-+	ASSERT_GE(session_fd2, 0);
-+
-+	mem_fd = memfd_create("test-memfd", 0);
-+	ASSERT_GE(mem_fd, 0);
-+
-+	/* First preservation should succeed */
-+	ASSERT_EQ(preserve_fd(session_fd1, mem_fd, 0x1111), 0);
-+
-+	/* Second preservation in a different session should fail with EBUSY */
-+	ret = preserve_fd(session_fd2, mem_fd, 0x2222);
-+	EXPECT_EQ(ret, -EBUSY);
-+
-+	/* Second preservation in the same session (different token) should fail with EBUSY */
-+	ret = preserve_fd(session_fd1, mem_fd, 0x3333);
-+	EXPECT_EQ(ret, -EBUSY);
-+
-+	ASSERT_EQ(close(mem_fd), 0);
-+	ASSERT_EQ(close(session_fd1), 0);
-+	ASSERT_EQ(close(session_fd2), 0);
-+}
-+
- TEST_HARNESS_MAIN
+Investigation of DAMON.  It is best to do the investigation online,
+especially when it is a production environment.  DAMON therefore
+provides features for such online investigations, including DAMOS stats,
+monitoring result snapshot exposure, and multiple tracepoints.  When
+those are insufficient, and there are additional clues that could be
+interfered by DAMON, users have to temporarily stop DAMON to collect the
+additional clues.  It is not very useful since many of DAMON internal
+clues are gone when DAMON is stopped.  The loss of the monitoring
+results that improved over time is also problematic, especially in
+production environments.
+
+Monitoring of workloads that have different user-known phases.  For
+example, in Android, applications are known to have very different
+access patterns and behaviors when they are running on the foreground
+and the background.  It can therefore be useful to separate monitoring
+of apps based on whether they are running on the foreground and on the
+background.  Having two DAMON threads per application that paused and
+resumed for the apps foreground/background switches can be useful for
+the purpose.  But such pause/resume of the execution is not supported.
+
+Tests of DAMON.  A few DAMON selftests are using drgn to dump the
+internal DAMON status.  The tests show if the dumped status is the same
+as what the test code expected.  Because DAMON keeps running and
+modifying its internal status, there are chances of data races that can
+cause false test results.  Stopping DAMON can avoid the race.  But,
+since the internal state of DAMON is dropped, the test coverage will be
+limited.
+
+Let DAMON execution be paused and resumed without loss of the internal
+state, to overhaul the limitations.  For this, introduce a new DAMON
+context parameter, namely 'pause'.  API callers can update it while the
+context is running, using the online parameters update functions
+(damon_commit_ctx() and damon_call()).  Once it is set, kdamond_fn()
+main loop will do only limited works excluding the monitoring and DAMOS
+works, while sleeping sampling intervals per the work.  The limited
+works include handling of the online parameters update.  Hence users can
+unset the 'pause' parameter again.  Once it is unset, kdamond_fn() main
+loop will do all the work again (resumed).  Under the paused state, it
+also does stop condition checks and handling of it, so that paused DAMON
+can also be stopped if needed.  Expose the feature to the user space via
+DAMON sysfs interface.  Also, update existing drgn-based tests to test
+and use the feature.
+
+Tests
+=====
+
+I confirmed the feature functionality using real time tracing ('perf
+trace' or 'trace-cmd stream') of damon:damon_aggregated DAMON
+tracepoint.  By pausing and resuming the DAMON execution, I was able to
+see the trace stops and continued as expected.  Note that the pause
+feature support is added to DAMON user-space tool (damo) after v3.1.9.
+Users can use '--pause_ctx' command line option of damo for that, and I
+actually used it for my test.  The extended drgn-based selftests are
+also testing a part of the functionality.
+
+Patches Sequence
+================
+
+Patch 1 introduces the new core API for the pause feature.  Patch 2
+extend DAMON sysfs interface for the new parameter.  Patches 3-5 update
+design, usage and ABI documents for the new sysfs file, respectively.
+The following five patches are for tests.  Patch 6 implements a new
+kunit test for the pause parameter online commitment.  Patches 7 and 8
+extend DAMON selftest helpers to support the new feature.  Patch 9
+extends selftest to test the commitment of the feature.  Finally, patch
+10 updates existing selftest to be safe from the race condition using
+the pause/resume feature.
+
+Changelog
+=========
+
+Changes from RFC v2
+(https://lore.kernel.org/20260319052157.99433-1-sj@kernel.org)
+- Move damon_ctx->pause to public fields section.
+- Wordsmith design doc change.
+- Fix unintended resume of contexts in multiple contexts use case.
+- Rebase to latest mm-new.
+Changes from RFC v1
+(https://lore.kernel.org/20260315210012.94846-1-sj@kernel.org)
+- Continuously cancel new damos_walk() requests when paused.
+- Initialize damon_sysfs_context->pause.
+- Make sysfs.py dump-purpose pausing to work for all contexts.
+
+SeongJae Park (10):
+  mm/damon/core: introduce damon_ctx->paused
+  mm/damon/sysfs: add pause file under context dir
+  Docs/mm/damon/design: update for context pause/resume feature
+  Docs/admin-guide/mm/damon/usage: update for pause file
+  Docs/ABI/damon: update for pause sysfs file
+  mm/damon/tests/core-kunit: test pause commitment
+  selftests/damon/_damon_sysfs: support pause file staging
+  selftests/damon/drgn_dump_damon_status: dump pause
+  selftests/damon/sysfs.py: check pause on assert_ctx_committed()
+  selftets/damon/sysfs.py: pause DAMON before dumping status
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  7 ++++
+ Documentation/admin-guide/mm/damon/usage.rst  | 12 ++++--
+ Documentation/mm/damon/design.rst             |  7 ++++
+ include/linux/damon.h                         |  2 +
+ mm/damon/core.c                               |  9 +++++
+ mm/damon/sysfs.c                              | 31 ++++++++++++++++
+ mm/damon/tests/core-kunit.h                   |  4 ++
+ tools/testing/selftests/damon/_damon_sysfs.py | 10 ++++-
+ .../selftests/damon/drgn_dump_damon_status.py |  1 +
+ tools/testing/selftests/damon/sysfs.py        | 37 +++++++++++++++++++
+ 10 files changed, 115 insertions(+), 5 deletions(-)
+
+
+base-commit: 7580a23dc3d9af23b4911f9cc1d9da2f519d63a5
 -- 
-2.43.0
-
+2.47.3
