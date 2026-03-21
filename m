@@ -1,137 +1,85 @@
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F99117A2EA;
-	Sat, 21 Mar 2026 04:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EF1286415;
+	Sat, 21 Mar 2026 05:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774067193; cv=none; b=G3nW6C+3v6nxMgIWKZIwG+h7oB+ZWX4buryB3vTisY2PdvwEt2v7T0m1Big9EJ/237fKeXpQRN4kQhCBnKgxHfEGg5af/29a3sksJw69RxFr5V0u0fEEVXRzOaPfPNVKyr+npDMHGRyPciAx6rNxmI53/3RIsy4ro74uDpqsHBI=
+	t=1774070427; cv=none; b=oWpMndXMF+UwTl89+J9clk9CU/zrA1i6p7kgx7HblSnaZc/YGwo7leT3SHSsCYO0OIUqLhGH49ETnclE4owX3j0VDtfnTkJN4J7RgBFcd7wgtD0IaXg5KO4MOVDw1sn+Ndt9nqdaAHGEdPjWyJuru/2PyHlBEbCBf7rLQ0qgWA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774067193; c=relaxed/simple;
-	bh=+EaH7bM1rUEv3ESc2TQyVCS/eG5JcGcKIpE5GWWja9Y=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kB52WCWbGAT7NCOnaUJK2qBkUm3oqF5SSV0TN96mVy04Oz5zIkRrc8ORNIXEBVms/9jc77HigX4O1Yr+Dse+0gjVDX/WJN70j8qlx15oop2UQJNODXbU5mzrKpVzvHm+5+wUPfxWpn19ax0YzBEsUHYtYo5LfR7dER5HDJ9lD90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
-Received: from local
-	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-	 (Exim 4.99)
-	(envelope-from <daniel@makrotopia.org>)
-	id 1w3nuh-000000006pW-181d;
-	Sat, 21 Mar 2026 04:26:15 +0000
-Date: Sat, 21 Mar 2026 04:26:11 +0000
-From: Daniel Golle <daniel@makrotopia.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Daniel Golle <daniel@makrotopia.org>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net] selftests: forwarding: local_termination: fix PTP UDP
- cksums
-Message-ID: <651c3decb80023e4395ec149fd81110afa3869a1.1774067006.git.daniel@makrotopia.org>
+	s=arc-20240116; t=1774070427; c=relaxed/simple;
+	bh=AgNhP8YlvpxDri8kLMZnKIYSzwh6Atbnsw047hhQ7kQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=mf6G7le1Ymek9vRJ6mer06BD/DMkwLUo20cyp/wcVtSBRyyoFcp0vX7kGzV5z2Dj3FGVB86Uhg8SDQ3zBGlPqLaAnKJQbVZAZItGqp4GNdT3bx67sW9XChVRfGBXBFvVGow9C+dLf0P/PUW+dEWMLbr4SCJgdL/LA9qSD0YHWYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LhS7mv5r; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LhS7mv5r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9796C19421;
+	Sat, 21 Mar 2026 05:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774070426;
+	bh=AgNhP8YlvpxDri8kLMZnKIYSzwh6Atbnsw047hhQ7kQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=LhS7mv5r4EsagSdYSn3Pf/WkCaES9YPpujqBaf2B+QNzzMkP/xmJP8SYS2rx2PADA
+	 rgbuzZ4pXPJI3WOg9PlCSR/XXaoNLIOrPz4p3ty31MAXD9vXI3LpTLLAZeb31h4mQO
+	 AqxhTrSwHAXDJmwByQFIEHWnfh9mnCtR3HJPcSx7Hto4l6HxiU6ELTkWyCB4JoQjja
+	 DC90d1RrrdiO9YidUKYJRVovVKYc0DtFRJaqY4M9RR2nF1pl5lUsRLgjUS3oSCXkEF
+	 /26DngztyXazzavTKdap3oXHFDT6L/Vmxn+TqCojfO/QAoiSStrsOlNTeI7zbN9I2n
+	 2UOzgohjrRBzQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02DBC3808200;
+	Sat, 21 Mar 2026 05:20:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/4] selftests: riscv: Fix compilation issues for
+ v_ptrace and cfi
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <177407041680.2771302.15564937503592221226.git-patchwork-notify@kernel.org>
+Date: Sat, 21 Mar 2026 05:20:16 +0000
+References: <20260309-fix_selftests-v2-0-9d5a553a531e@gmail.com>
+In-Reply-To: <20260309-fix_selftests-v2-0-9d5a553a531e@gmail.com>
+To: Charlie Jenkins <thecharlesjenkins@gmail.com>
+Cc: linux-riscv@lists.infradead.org, shuah@kernel.org, pjw@kernel.org,
+ palmer@dabbelt.com, geomatsi@gmail.com, andybnac@gmail.com,
+ debug@rivosinc.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-All six PTP-over-IP test frames (3x IPv4 + 3x IPv6) contain incorrect
-UDP checksums. The stored values are the ones-complement sums of just
-the pseudo-headers, not the complete UDP checksums over pseudo-header +
-UDP header + payload. This is characteristic of frames captured on the
-sender before TX checksum offload completion.
+Hello:
 
-For example, the IPv4 Sync and Follow-Up frames both store checksum
-0xa3c8 despite having different UDP payloads and port numbers - 0xa3c8
-is their shared pseudo-header sum (same src/dst IP, same protocol and
-UDP length).
+This series was applied to riscv/linux.git (fixes)
+by Paul Walmsley <pjw@kernel.org>:
 
-While most L2 switches forward frames without verifying transport
-checksums, hardware that performs deep packet inspection or has PTP
-awareness may validate UDP checksums and drop frames that fail
-verification. This causes the 1588v2 over IPv4/IPv6 tests to fail on
-such hardware even though L2 PTP (which has no UDP checksum) passes
-fine.
+On Mon, 09 Mar 2026 18:52:09 -0700 you wrote:
+> There are a couple of compilation issues of the riscv selftests.
+> Coincidentally two of the issues are independent problems with not
+> including the header that includes the BIT() macro and the other issue
+> is from checkpatch incorrectly suggesting to remove non-redundant
+> braces.
+> 
+> Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+> 
+> [...]
 
-Replace all six pseudo-header partial sums with the correctly computed
-full UDP checksums:
+Here is the summary with links:
+  - [v2,1/4] selftests: riscv: Add definition of BIT() macro
+    https://git.kernel.org/riscv/c/e93c2978c9db
+  - [v2,2/4] selftests: riscv: Add braces around EXPECT_EQ()
+    (no matching commit)
+  - [v2,3/4] riscv: ptrace: Fix BIT() compilation issues
+    https://git.kernel.org/riscv/c/b1b59c40962e
+  - [v2,4/4] selftests: riscv: Add license to cfi selftest
+    https://git.kernel.org/riscv/c/5ccc568075c9
 
-  IPv4 Sync:           0xa3c8 -> 0x9f41
-  IPv4 Follow-Up:      0xa3c8 -> 0xeb8a
-  IPv4 Peer Delay Req: 0xa2bc -> 0x9ab9
-  IPv6 Sync:           0x2e92 -> 0x1476
-  IPv6 Follow-Up:      0x2e92 -> 0xf047
-  IPv6 Peer Delay Req: 0xb454 -> 0x891f
-
-Fixes: 2379795042649 ("selftests: net: local_termination: add PTP frames to the mix")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- .../selftests/net/forwarding/local_termination.sh    | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/net/forwarding/local_termination.sh b/tools/testing/selftests/net/forwarding/local_termination.sh
-index 9bc9d25e71368..15b1a1255a41f 100755
---- a/tools/testing/selftests/net/forwarding/local_termination.sh
-+++ b/tools/testing/selftests/net/forwarding/local_termination.sh
-@@ -57,21 +57,21 @@ PTP_1588_L2_PDELAY_REQ=" \
- PTP_1588_IPV4_SYNC=" \
- 01:00:5e:00:01:81 00:00:de:ad:be:ef 08:00 45 00 \
- 00 48 0a 9a 40 00 01 11 cb 88 c0 00 02 01 e0 00 \
--01 81 01 3f 01 3f 00 34 a3 c8 00 02 00 2c 00 00 \
-+01 81 01 3f 01 3f 00 34 9f 41 00 02 00 2c 00 00 \
- 02 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
- 63 ff fe cf 17 0e 00 01 00 00 00 00 00 00 00 00 \
- 00 00 00 00 00 00"
- PTP_1588_IPV4_FOLLOW_UP="
- 01:00:5e:00:01:81 00:00:de:ad:be:ef 08:00 45 00 \
- 00 48 0a 9b 40 00 01 11 cb 87 c0 00 02 01 e0 00 \
--01 81 01 40 01 40 00 34 a3 c8 08 02 00 2c 00 00 \
-+01 81 01 40 01 40 00 34 eb 8a 08 02 00 2c 00 00 \
- 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
- 63 ff fe cf 17 0e 00 01 00 00 02 00 00 00 66 83 \
- c6 0f 1d 9a 61 87"
- PTP_1588_IPV4_PDELAY_REQ=" \
- 01:00:5e:00:00:6b 00:00:de:ad:be:ef 08:00 45 00 \
- 00 52 35 a9 40 00 01 11 a1 85 c0 00 02 01 e0 00 \
--00 6b 01 3f 01 3f 00 3e a2 bc 02 02 00 36 00 00 \
-+00 6b 01 3f 01 3f 00 3e 9a b9 02 02 00 36 00 00 \
- 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
- 63 ff fe cf 17 0e 00 01 00 01 05 7f 00 00 00 00 \
- 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
-@@ -79,7 +79,7 @@ PTP_1588_IPV6_SYNC=" \
- 33:33:00:00:01:81 00:00:de:ad:be:ef 86:dd 60 06 \
- 7c 2f 00 36 11 01 20 01 0d b8 00 01 00 00 00 00 \
- 00 00 00 00 00 01 ff 0e 00 00 00 00 00 00 00 00 \
--00 00 00 00 01 81 01 3f 01 3f 00 36 2e 92 00 02 \
-+00 00 00 00 01 81 01 3f 01 3f 00 36 14 76 00 02 \
- 00 2c 00 00 02 00 00 00 00 00 00 00 00 00 00 00 \
- 00 00 3e 37 63 ff fe cf 17 0e 00 01 00 00 00 00 \
- 00 00 00 00 00 00 00 00 00 00 00 00"
-@@ -87,7 +87,7 @@ PTP_1588_IPV6_FOLLOW_UP=" \
- 33:33:00:00:01:81 00:00:de:ad:be:ef 86:dd 60 0a \
- 00 bc 00 36 11 01 20 01 0d b8 00 01 00 00 00 00 \
- 00 00 00 00 00 01 ff 0e 00 00 00 00 00 00 00 00 \
--00 00 00 00 01 81 01 40 01 40 00 36 2e 92 08 02 \
-+00 00 00 00 01 81 01 40 01 40 00 36 f0 47 08 02 \
- 00 2c 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
- 00 00 3e 37 63 ff fe cf 17 0e 00 01 00 00 02 00 \
- 00 00 66 83 c6 2a 32 09 bd 74 00 00"
-@@ -95,7 +95,7 @@ PTP_1588_IPV6_PDELAY_REQ=" \
- 33:33:00:00:00:6b 00:00:de:ad:be:ef 86:dd 60 0c \
- 5c fd 00 40 11 01 fe 80 00 00 00 00 00 00 3c 37 \
- 63 ff fe cf 17 0e ff 02 00 00 00 00 00 00 00 00 \
--00 00 00 00 00 6b 01 3f 01 3f 00 40 b4 54 02 02 \
-+00 00 00 00 00 6b 01 3f 01 3f 00 40 89 1f 02 02 \
- 00 36 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
- 00 00 3e 37 63 ff fe cf 17 0e 00 01 00 01 05 7f \
- 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
+You are awesome, thank you!
 -- 
-2.53.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
