@@ -1,45 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8392C0261;
-	Sat, 21 Mar 2026 20:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9165B253B42;
+	Sat, 21 Mar 2026 21:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774126046; cv=none; b=m25vebtQcfYTyct15UH4l5kw/6c/LJU1crDfoVPTqzdBDtmQEByEgFntXdewiqZWQLxyWK2Lv2evFgrJsmMhJveIkq1X7g2LQkqSSlY4ejoP64mvIu97bbW6Nm6+5zLFOdwFoyT2Q3LuPiYkcFlPA+wmcFGJnAjCb22WbItYryQ=
+	t=1774130374; cv=none; b=qRQFG9c6zJ9qG/hUrKu1ArF12PM3w7L4U2ZsDmh4lGvYuP+DrAdDW3Ia1SvVEpB65ed6Wo2wpt3LzvRegoxytNzObX5T9CwaNWvoB74cVHuOfk2F8jUMN71tk4srdMYyD2Hu81CZJvPh2RPJHE1zSc1xzaOAF+K9RhfGXJ3zm84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774126046; c=relaxed/simple;
-	bh=RBNX+2Z4AQoEE8CopXAPjDqi8wnLBhXwutOSqIaoAjs=;
+	s=arc-20240116; t=1774130374; c=relaxed/simple;
+	bh=NYNrIM47vI2S3OfQPKB2PMvGfWBajJF++gQu1ycl6YI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GKEzZa9tpoApyEfO2KaqzXgxZf2mciYee4Z5PQ0SbPWyWWWEgyagh4FeT9N+8+xMzqNEXVHSbbH5puWHgqIFw7aozemyr2jUY0RchJ+fgY2YwtweuT9almo4yaqBc86lo9gDeC8P3xBa8L/olHxtoFSJO4vq2cfc2IBvAVYGQ08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKyPy7Jt; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=XzK9VY18fIRuIO890TMk0dbX/uIwmR2O0F7ZPf+v+FgiXb38ndWJs2Xpmxq/HOZQoY+A38z4pqzcT62WsIHNP/PL1dHF+WZrDENbslU461hdHKhaEFBZ7VytkHlNvsqQeAePEPELusvajQW/L6rtPCFnM/4iUMaxmvtewB+2FQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=aDx9xy7y; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKyPy7Jt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F87C19421;
-	Sat, 21 Mar 2026 20:47:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774126046;
-	bh=RBNX+2Z4AQoEE8CopXAPjDqi8wnLBhXwutOSqIaoAjs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fKyPy7JtllSfPx3H6nNERtnh0R2fNDmdVVqCLCAHHRf72hw3dTlCtowh+zpEhaA0o
-	 j1A9weHFbXBpEbUrJf7rPSJnBKIj+I4PkrgYm1uKZrBfmoZdZr2JZ+RCU7ZNtk8HC4
-	 Xnj0kr3LyklOqw6oA2nZ78XG7TawP3JsL2wbtGeBdgS7e6mHcYI3ExkhXo6zbENnre
-	 ZFtLtw+mcHCpwXZOro4zTNYG3dTBcplqaxABXmkhUTirzRSUquPYWrcoDwZXIhW6Hw
-	 7Z6lEp+w9raGrebjRIpC2rCh04GfoxXnjllkMipUyj7Kh33MxmG7s/1ylrY4YlxRKH
-	 kQZMA9lWs5SRQ==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: (sashiko) [PATCH 10/10] selftets/damon/sysfs.py: pause DAMON before dumping status
-Date: Sat, 21 Mar 2026 13:47:17 -0700
-Message-ID: <20260321204717.98765-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260321201250.95873-1-sj@kernel.org>
-References: 
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="aDx9xy7y"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
+	Content-Type; bh=KUlpielPZ4G3PXX4tBLiW1wz4LZTdTz/YOWsJyRcMfA=; b=aDx9xy7yZggj
+	wimig9yHCnGq8I5HVm28RbiAIKMWd16S7/xonim9QJ61PoGOo6doyYJE+uNbf08lobi9HofCcAzMz
+	2eh5/5Tv+H+j/nrx4smnvGs3nBk/0YQGDX/QbigyLsW61KR4db//sAuL7v1tyTVhUDNGV+QQZvFQF
+	AlltZeoEUlVfj0D7hQE37gh6ZXwzKHxYgUo4SkBABsxSIeaA1f9bVY6h1eI8c2dJitt/DHxMmYS1o
+	3slJEWwIR30NrpO9QBq9u1lAQBcs2f2UFn/kcx64EFLMM9IifZVzQrsRky5XulEjCMURr5+D2Wope
+	8HnMIscExouzRc8EX0y5sA==;
+Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
+	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aleksey.oladko@virtuozzo.com>)
+	id 1w44Jq-001ibR-14;
+	Sat, 21 Mar 2026 22:59:10 +0100
+Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 62LLxEh6175492
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Sat, 21 Mar 2026 21:59:15 GMT
+Received: (from root@localhost)
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 62LLxEs7175491;
+	Sat, 21 Mar 2026 21:59:14 GMT
+From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+To: "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Aaron Conole <aconole@redhat.com>,
+        Ilya Maximets <imaximet@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Stefano Brivio <sbrivio@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dev@openvswitch.org,
+        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Subject: [PATCH net-next v6 2/4] selftests: net: rename pmtu.sh to pmtu-test.sh
+Date: Sat, 21 Mar 2026 21:59:06 +0000
+Message-ID: <20260321215908.175465-3-aleksey.oladko@virtuozzo.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260321215908.175465-1-aleksey.oladko@virtuozzo.com>
+References: <20260321215908.175465-1-aleksey.oladko@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,225 +62,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-TL; DR: need to add below attaching fixup.  Unless Andrew pick it together with
-this, I will post v2 tomorrow.
+Rename the pmtu.sh test script to pmtu-test.sh. No functional
+changes are made, only the file name is updated.
 
-On Sat, 21 Mar 2026 13:12:49 -0700 SeongJae Park <sj@kernel.org> wrote:
-
-> Forwarding Sashiko review for doing discussions via mails.
-> 
-> # review url: https://sashiko.dev/#/patchset/20260321181343.93971-11-sj@kernel.org
-> # start of sashiko.dev inline review
-> commit 019bf04e4448bbce4f6d092792a1b959f718f39a
-> Author: SeongJae Park <sj@kernel.org>
-> 
-> selftets/damon/sysfs.py: pause DAMON before dumping status
-> 
-> This isn't a bug, but there is a typo (selftets) in the subject line.
-
-Good eye!  Unless Andrew fixes this up, I will post v2 with the fix tomorrow.
-
-> 
-> This commit updates the DAMON sysfs selftest to pause DAMON execution
-> during state dumping. This prevents potential races caused by internal
-> DAMON changes, such as the addition or removal of regions, while the
-> dump is ongoing.
-> 
-> > diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-> > --- a/tools/testing/selftests/damon/sysfs.py
-> > +++ b/tools/testing/selftests/damon/sysfs.py
-> > @@ -193,18 +193,53 @@ def assert_ctx_committed(ctx, dump):
-> >      assert_true(dump['pause'] == ctx.pause, 'pause', dump)
-> >  
-> >  def assert_ctxs_committed(kdamonds):
-> > +    ctxs_paused_for_dump = []
-> > +    # pause for safe state dumping
-> > +    for kd in kdamonds.kdamonds:
-> > +        for ctx in kd.contexts:
-> > +            if ctx.pause is False:
-> > +                ctx.pause = True
-> > +                ctxs_paused_for_dump.append(ctx)
-> > +        if len(ctxs_paused_for_dump) > 0:
-> > +            err = kd.commit()
-> 
-> Since ctxs_paused_for_dump is initialized outside the outer loop, if the
-> first kdamond appends a context to this list, won't len(ctxs_paused_for_dump)
-> > 0 evaluate to true for all subsequent kdamonds?
-> 
-> This seems like it would trigger kd.commit() on every subsequent kdamond
-> even if none of its contexts were actually modified.
-
-Good eye.  There is no multiple kdamonds use case here, but why not make the
-code more complete?  I will fix this, like below.
-
-'''
-@@ -201,13 +201,16 @@ def assert_ctx_committed(ctx, dump):
-
- def assert_ctxs_committed(kdamonds):
-     ctxs_paused_for_dump = []
-+    kdamonds_paused_for_dump = []
-     # pause for safe state dumping
-     for kd in kdamonds.kdamonds:
-         for ctx in kd.contexts:
-             if ctx.pause is False:
-                 ctx.pause = True
-                 ctxs_paused_for_dump.append(ctx)
--        if len(ctxs_paused_for_dump) > 0:
-+                if not kd in kdamonds_paused_for_dump:
-+                    kdamonds_paused_for_dump.append(kd)
-+        if kd in kdamonds_paused_for_dump:
-             err = kd.commit()
-             if err is not None:
-                 print('pause fail (%s)' % err)
-'''
-
-Note that this is not a complete fix.  Similar change will be needed to be made
-to later part of this file, too.
-
-
-> 
-> [ ... ]
-> 
-> > +    # resume contexts paused for safe state dumping
-> > +    for kd in kdamonds.kdamonds:
-> > +        for ctx in ctxs_paused_for_dump:
-> > +            ctx.pause = False
-> > +        if len(ctxs_paused_for_dump) > 0:
-> > +            err = kd.commit()
-> 
-> Does this inner loop repeatedly modify contexts across all kdamonds on
-> every outer iteration?
-> 
-> Because ctxs_paused_for_dump is shared across all kdamonds, this appears
-> to redundantly modify and commit contexts for every kdamond instance.
-> Could ctxs_paused_for_dump be scoped per-kdamond instead to avoid this?
-
-Good eye!  I will fix this like below.
-
-'''
-@@ -221,15 +224,14 @@ def assert_ctxs_committed(kdamonds):
-         exit(1)
-
-     # resume contexts paused for safe state dumping
--    for kd in kdamonds.kdamonds:
--        for ctx in ctxs_paused_for_dump:
--            ctx.pause = False
--        if len(ctxs_paused_for_dump) > 0:
--            err = kd.commit()
--            if err is not None:
--                print('resume fail (%s)' % err)
--                kdamonds.stop()
--                exit(1)
-+    for ctx in ctxs_paused_for_dump:
-+        ctx.pause = False
-+    if kd in kdamonds_paused_for_dump:
-+        err = kd.commit()
-+        if err is not None:
-+            print('resume fail (%s)' % err)
-+            kdamonds.stop()
-+            exit(1)
-
-     # restore for comparison
-     for ctx in ctxs_paused_for_dump:
-'''
-
-> 
-> [ ... ]
-> 
-> > +    # restore for comparison
-> > +    for ctx in ctxs_paused_for_dump:
-> > +        ctx.pause = True
-> 
-> Since the context was forced to pause before the status dump, and the
-> python object is forced to pause right here before the comparison,
-> doesn't this mean the test only ever asserts that True == True?
-> 
-> It appears this entirely skips verifying whether the originally requested
-> unpaused state was successfully committed to the kernel before the dump
-> procedure began. Any kernel bug where the pause parameter is stuck as
-> True might silently pass this test now.
-> 
-> Should the original state be verified by reading the specific sysfs file
-> before overriding it?
-
-I agree there is the room to improve.  But, there is no good way to test the
-feature for making the test safe, at the moment.  We have kunit test for the
-pause commit feature, though.  So, I'd not add change for this to this patch.
-
-> 
-> [ ... ]
-> 
-> 
-> # end of sashiko.dev inline review
-> # review url: https://sashiko.dev/#/patchset/20260321181343.93971-11-sj@kernel.org
-
-So, below attaching fixup is needed for this patch.  Unless Andrew pick it
-together with this patch, I will post v2 tomorrow.
-
-
-Thanks,
-SJ
-
-=== >8 ===
-From 90acf3dacea715790622c0dd6cf97c6ed97d1105 Mon Sep 17 00:00:00 2001
-From: SeongJae Park <sj@kernel.org>
-Date: Sat, 21 Mar 2026 13:43:50 -0700
-Subject: [PATCH] selftests/damon/sysfs.py: fixup: avoid unnecessary commit()
- and resume setup
-
-As Sashiko suggested and I agreed.
-
-Signed-off-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
 ---
- tools/testing/selftests/damon/sysfs.py | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ tools/testing/selftests/net/Makefile                  | 2 +-
+ tools/testing/selftests/net/{pmtu.sh => pmtu-test.sh} | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename tools/testing/selftests/net/{pmtu.sh => pmtu-test.sh} (100%)
 
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index 7a4cd915d5bc9..5f00e97f019f4 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -194,13 +194,16 @@ def assert_ctx_committed(ctx, dump):
- 
- def assert_ctxs_committed(kdamonds):
-     ctxs_paused_for_dump = []
-+    kdamonds_paused_for_dump = []
-     # pause for safe state dumping
-     for kd in kdamonds.kdamonds:
-         for ctx in kd.contexts:
-             if ctx.pause is False:
-                 ctx.pause = True
-                 ctxs_paused_for_dump.append(ctx)
--        if len(ctxs_paused_for_dump) > 0:
-+                if not kd in kdamonds_paused_for_dump:
-+                    kdamonds_paused_for_dump.append(kd)
-+        if kd in kdamonds_paused_for_dump:
-             err = kd.commit()
-             if err is not None:
-                 print('pause fail (%s)' % err)
-@@ -214,15 +217,14 @@ def assert_ctxs_committed(kdamonds):
-         exit(1)
- 
-     # resume contexts paused for safe state dumping
--    for kd in kdamonds.kdamonds:
--        for ctx in ctxs_paused_for_dump:
--            ctx.pause = False
--        if len(ctxs_paused_for_dump) > 0:
--            err = kd.commit()
--            if err is not None:
--                print('resume fail (%s)' % err)
--                kdamonds.stop()
--                exit(1)
-+    for ctx in ctxs_paused_for_dump:
-+        ctx.pause = False
-+    if kd in kdamonds_paused_for_dump:
-+        err = kd.commit()
-+        if err is not None:
-+            print('resume fail (%s)' % err)
-+            kdamonds.stop()
-+            exit(1)
- 
-     # restore for comparison
-     for ctx in ctxs_paused_for_dump:
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 6bced3ed798b..f18d28775c80 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -66,7 +66,7 @@ TEST_PROGS := \
+ 	netns-sysctl.sh \
+ 	nl_netdev.py \
+ 	nl_nlctrl.py \
+-	pmtu.sh \
++	pmtu-test.sh \
+ 	psock_snd.sh \
+ 	reuseaddr_ports_exhausted.sh \
+ 	reuseport_addr_any.sh \
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu-test.sh
+similarity index 100%
+rename from tools/testing/selftests/net/pmtu.sh
+rename to tools/testing/selftests/net/pmtu-test.sh
 -- 
-2.47.3
+2.43.0
 
