@@ -1,187 +1,119 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C2A26ED3C
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 12:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774095515; cv=none; b=X8oU6yiKoL837327Ek2AXoTJA2jtN9JU0IVkeCB3q3v6HdghSgMDsbODn1W9jcvO3uUl6MW0yYd9k1CldcDtKCnNyjmHn6ldyoZTf53s58ve6NP1PI4VKFOTakRLLO5m1X0Wf4dkZEayjQO0yCgWeTIUGEaRRJ/UIJ4lah/yiVg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774095515; c=relaxed/simple;
-	bh=Y75XoYqKXvJELNiUFoBpV1yJXIJ4ij7GQ1MqArWPTFI=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=W2MaxJqwQym8mQexqvKsmcERPEWs9AIIf2GRxjuUAPTL5JcfLIXZ3YvoAqcYAPCs/uxT1PhKFXJGMICkon/8+DmeTwbb4KK6eUY2spzNqyeqUeN5zOCKfZbksPybzEcwQo7byRJEB7yx6IZFt2WCWZaBixeEgvyCk/9Hxm9StiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UFuanRLu; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CAB1D416C
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 12:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774096462; cv=pass; b=HWRc2vUusI6V1tXLQX5sHGT89Wu4bWyFUqSFs88X19Sd9jtG5MSi9wg1xP5pwpV3lSMmAK2efuvAq1DKpCCAsD07Sja1y4GwB4SCJjumCh2ZGFwue1F+eMhs4hwjmjIWOJljk/UFI4IzY1vmPciTVbvu8RmoPlDKeGLdSUaQxE4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774096462; c=relaxed/simple;
+	bh=vAOxLc/iYSbulqsSrn9p0RF47QF7jBTSEff5apcZ5J8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=doLyn+/MVujAcdp5pCZ0ki0bH6bVXwi2LlSSLT7CV1vQGgdVtKmULlRpCVZ8NyjM59gfHLneabFR8tnJxEijriryDnHzxIfc3VSEOJcCMsEz6zomN8L5Rgyjqgg5y3ystRxotWHcqP/BjtBxXNIgMfxlAoxHPDGkG6vRTcY1kBg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bRDQmd9Y; arc=pass smtp.client-ip=209.85.128.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UFuanRLu"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-486fb439299so20903395e9.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 05:18:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bRDQmd9Y"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7982c3b7dfcso25796907b3.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 05:34:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774096460; cv=none;
+        d=google.com; s=arc-20240605;
+        b=g9bsHMtg40acu3E7LOuhC/ff60I6T047NXPxgCmnZd4ytrz5NXXBSbita36lQ807/u
+         2P00Q4bKzNsS5SGVOZhZ5Kj6W/Iy6kQ88Yr8YokcCnkeNJ+ycbq47XDDTGUg0v5BvYPj
+         Fk3wG4wVApAGwZbhYFaaY6itMEFHkkEynn0uuNPf3oiNYq5Uz0eu3mU4IyXvobrPJorB
+         8AJBlw4CW4G2HGHbc9QBnnsUHGV1oR/1687XN//qGYNMrkLk0T9MQq78GEb25vc8Y4uL
+         6WpIctffZAHVP7gf8BGRVB/sUUglu5kGkyjIj/jsi8qG1RhNcSZFKRYIEZDdnMYs4kPg
+         1yAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rNCB/fNUc/FK23+8KOYdAudgq7bzv4Aj6mVALRVzF8U=;
+        fh=8IxpjvLrwdbZnMxkT9vClvcAtzQ9t7R7DVmjOf7IwA4=;
+        b=c0NeXW6CxTWAnWT37Srxlo5e4oAETtwzdqkxan7nB+G09uOcugdKXnw+R1+TtOo5BQ
+         KQ7GtZNlX7eWmVMGduvWRoUv8Wjz3ws4AvGlBkN0vkCw6GT6ag3pIpQ2maBrTqwWIbjl
+         eOMuHZpp6hcn8sfSkNdqthboE2bUuGFJUcziTnUlUzVaK0ZQHV+uvIeKkDTJP0tjUd8V
+         7pNtYpGbML1nkOizorbm1Zt6EIUrIt/inEQGQtZCIQI9Ub8Ojh1aAtLLRHErNmftVR5L
+         ++Xcilz8Yj25R656uDJu/xFyksP3/35ZBg2P/QL7OShqx8XIttxo0/kMzLOko4oAH+Cs
+         WDww==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774095511; x=1774700311; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1774096460; x=1774701260; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y75XoYqKXvJELNiUFoBpV1yJXIJ4ij7GQ1MqArWPTFI=;
-        b=UFuanRLu7gNAH2E9O4fsqe9AS1Z2gO2NvDudhdxWFY7LKDzOWAAVzSN8yA1rjoa2T9
-         a2S4lObS5B8JWEEYouuCACf7tSx60bNHEi1vSW/pDJafF4QAKICUZU5gb1FjEbe5C++z
-         MVCw/hWOZzs3xSNRwjZp7O7K6tOIXJ8GNLHQp/GDaN+jylijMONRrVnV7rM2G/rqCpDB
-         /vGS2C97Gx9raJHuiOVO96qiRZafFzd1jIg/b/T+JxvDHe6jm9c3DMjAEyc+hNpwXMim
-         RmGrcxZU1x8y7WUsdoVOsUJYlFSJ4W70LTBZFewUmUyt3Cel/CHtI3PcKA8fJicJOZOr
-         0JPw==
+        bh=rNCB/fNUc/FK23+8KOYdAudgq7bzv4Aj6mVALRVzF8U=;
+        b=bRDQmd9YnCxRcgOmFCMYSRtZpUAiAcjJdog4xBtuXRZn6QoVWo9HjflJwUiBQ3akxZ
+         RQRXh1k7Z5OG+PTByTdvIyET/twQSBB5VixOyH67/21boqg/ZV+DPa+9SsjCLguUnseD
+         rMltPTg2tSXTUBTANgLmeSFxMbg3wQx13iN/ZlsgUekY5jgPdK++fNtU5w22MVBfjB4X
+         y3vyH5bHOIMudoVDzm09apmuU2lK4nAK95BGm+wQqF1sGeJAzFz5kL9sPJUxFU85wKzC
+         Z5013IHkzoNG3md2N/BCtMLXAlwPnJafsPfgtmHoQP5cVRYCaWn6Wbh6xUvAymHoMk33
+         DzdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774095511; x=1774700311;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y75XoYqKXvJELNiUFoBpV1yJXIJ4ij7GQ1MqArWPTFI=;
-        b=MIMNFsV5SpTXCf/ET9LjYOVoKZLh4eZklOyNmG/E+TmyINX9oaLj/82I5BolnQK/+n
-         c57SdqVI1lwmt8l86zSpIqV0rBGivMGTCh6bDeGFMjExGAQseEQt7B5L9Y53FCKXe4PV
-         5kdTZ9Izujkhw0iHIhJcqTdzNZnKLMJ8FQp7HB7rLSlLmCPtazl+Nb/gD8+zg4ccRePW
-         DxcQ1sDWAcheU2s2UuYO/KYbDHOoo6q1OXzgMGV8rKn4RQILQfcCareStNSHVU5eLuz2
-         qHrZywonuRTFNX06bQeVdJ4hcG8gLjyGSDPfWkdVPu2b3AbHzNSPctQudmuMsynwLQXd
-         rsxg==
-X-Forwarded-Encrypted: i=1; AJvYcCVwG8RUV0zzUEGsHq6qwGNoOuf8+siZFxLy2EyfQL5yAUKBb6/Iyb5gmXfcwSyyj/+/p36n/2EYcPZYMB1zIVE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz71V63lraRsFo9x22JhpJ38/JvPZfSJJEpY6hwXvhMKIKpUoPw
-	UDotf7JzpbWyQs9SOAlZAzePX/RGESMN0Y69PFVA6dh5BlUhB3fYRDvx
-X-Gm-Gg: ATEYQzxISrHgkTifOE8AY/3Mujl1aHYgWIvCfTGsTOx4xLP/XxHBYm444XTc9doO63I
-	8YI0Hci6HKU4KTEWJ5M6VbpY3Ci0lXZ7XtoGWRDXHY3TMC5m4LtqR4SItHZfeWjjhU4g8UsGf2T
-	sjhYcm25i8a7HRWekCRZ0qTzJfEYDfiOJI0pOThrm0h3Cw9q9MaphmLXxZI5PLsYyq8Mki5gNDP
-	567sBMw5sLt3p2LClW9U4hRrgMQa78fvZFHPj+2HruB9SKYv8/fCMSgbPDE+1tAJxfxQ8YAkcfD
-	8NZrBiPeRPaGrscQgXc1zND0IocP/DmidRFUZuMMcvNuABc9Nt1wNfojoCmxsY+D3KwrBWjgpst
-	Z6t2tUse7Lq8rYo/fAMcd73HN0Bcyu51j6uINN44adIx01OWOkF9jtyhozBSk4HbqUfEQ4nhYFB
-	JkTqS8pVmWYv7G4s0V4+IxaeWcgiVgzPYKK0qmobb6Q9uDP7welgDk6PGaEkBgMygLB9vXevg3F
-	vQyZW8=
-X-Received: by 2002:a05:600c:a55:b0:485:6bcc:87dc with SMTP id 5b1f17b1804b1-486fedc3db0mr86713255e9.14.1774095511033;
-        Sat, 21 Mar 2026 05:18:31 -0700 (PDT)
-Received: from 0.1.2.1.2.0.a.2.dynamic.cust.swisscom.net ([2a02:1210:8642:2b00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe7dc4a2sm151991685e9.5.2026.03.21.05.18.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Mar 2026 05:18:30 -0700 (PDT)
-Message-ID: <149f484b425573185a783cb6ed7a93fcb755fa78.camel@gmail.com>
-Subject: Re: [PATCH net] selftests: forwarding: local_termination: fix PTP
- UDP cksums
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Sat, 21 Mar 2026 13:19:03 +0100
-In-Reply-To: <651c3decb80023e4395ec149fd81110afa3869a1.1774067006.git.daniel@makrotopia.org>
-References: 
-	<651c3decb80023e4395ec149fd81110afa3869a1.1774067006.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 
+        d=1e100.net; s=20251104; t=1774096460; x=1774701260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=rNCB/fNUc/FK23+8KOYdAudgq7bzv4Aj6mVALRVzF8U=;
+        b=CpC/S05B57OnWFF75r7vhUoJduNOS5M1tR8NVU61LQ5uI/qlpDLWB35sOeQIZQ0/gh
+         IfdrSWvoaUjeh0SovbUXwhaSa55ToRhrR905QooupvO5LV5AxuLLdzRUUbMAFPGTfcGz
+         na3rtH2/P4kAaeBQmLg1Q62HF9NHNBmq0eLUxMRcd4YshPc8gU2hINszOPV/Y3fNUUWD
+         2CDJ9QtTV2jzDn2roxD3kT0pzWmbdbse1XmRymQxmgcA/FipgS9XyCZmJ8x/mAxg4nxn
+         0GtPxeBbefvnPN/C/GEEORNFNyHmHaLPBkKLSWyMpaJojD+p4U5lnSKSKhnnot/Ah2Re
+         1vXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUV9GJbXE/8hPM1x8TbAB2Xql0zXovu3uFnwvP3pQcUQTRw+cmcx/yLD7C8hB6ctw4taLQI6QJECYNg4iN6R0I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+Mx5/W01h8TVpHB3NlCUY60+UF2+bv9w3NVhrZ6Y2i/rRHao8
+	5RSQSCkIZ/KMyaxcBfAvi2zu2niW6hBOBhqAEl6ueIlaCrE/ltLATvrSzjaiU24ZefpDaJddpeh
+	QBmjoR5nfGTKfaXZYapEs+1FT6zm0Bl4=
+X-Gm-Gg: ATEYQzyUAj7vPrB+lym0gYygUlbc0Cb3Fidav6FGS6nPfOLqU39dExwZp3z6lXog0PV
+	rIXXTyUG6e/XkjDx90uyKdoKM3/wJZ6cG4TGx0ZHoiGkiB63Y9CORl/3CfV+a5eUX4IeS22yomi
+	p6oglbBNPm+7qLMob3oaCN5bVW51f/y/xBgKvRf3l6aTSTuzPDnj+h4i3YOXT7s6Sbhz9shTiGX
+	t1/AiSvxskHXXn8DAl8Gn7foT73WuLvCAqClkSGSzt5hZeLJaCw5cPfMw/bLA9yG4Q2BdxiOFFj
+	TO2Ahgc+WbKmCS7NU+tJzBevQB13VksuBi40PERHdaNsHb8=
+X-Received: by 2002:a05:690c:e688:b0:79a:8dd1:53bd with SMTP id
+ 00721157ae682-79a90ac1347mr44295527b3.7.1774096460153; Sat, 21 Mar 2026
+ 05:34:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260320071755.483733-1-dqfext@gmail.com> <20260321085820.GO74886@horms.kernel.org>
+In-Reply-To: <20260321085820.GO74886@horms.kernel.org>
+From: Qingfang Deng <dqfext@gmail.com>
+Date: Sat, 21 Mar 2026 20:34:09 +0800
+X-Gm-Features: AaiRm50ubEYsiJ8QdUgGTYRZ9K8nu7fagVUr9fv4mGrb8iGhNnEk2zwf6BQK5rQ
+Message-ID: <CALW65jajTpzKPAfc3nNpKeBOLbqqP7LZjaNaq6Eji1G17ZzKkw@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftests: net: add tests for PPP
+To: Simon Horman <horms@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-ppp@vger.kernel.org, netdev@vger.kernel.org, 
+	Paul Mackerras <paulus@ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+On Sat, Mar 21, 2026 at 4:58=E2=80=AFPM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> On Fri, Mar 20, 2026 at 03:17:54PM +0800, Qingfang Deng wrote:
+> > Add ping and iperf3 tests for ppp_async.c and pppoe.c.
+> >
+> > Signed-off-by: Qingfang Deng <dqfext@gmail.com>
+> > ---
+> >  MAINTAINERS                                   |  1 +
+> >  tools/testing/selftests/Makefile              |  1 +
+> >  tools/testing/selftests/net/ppp/Makefile      | 15 +++++++
+> >  tools/testing/selftests/net/ppp/config        |  8 ++++
+> >  tools/testing/selftests/net/ppp/ppp_async.sh  | 37 +++++++++++++++++
+> >  tools/testing/selftests/net/ppp/ppp_common.sh | 40 +++++++++++++++++++
+>
+> Shellcheck flags two issues in ppp_common.sh. As we are aiming
+> for new tests to be shellcheck-clean I'd appreciate it if you could
+> look into this.
 
-On Sat, 2026-03-21 at 04:26 +0000, Daniel Golle wrote:
-> All six PTP-over-IP test frames (3x IPv4 + 3x IPv6) contain incorrect
-> UDP checksums. The stored values are the ones-complement sums of just
-> the pseudo-headers, not the complete UDP checksums over pseudo-header +
-> UDP header + payload. This is characteristic of frames captured on the
-> sender before TX checksum offload completion.
->=20
-> For example, the IPv4 Sync and Follow-Up frames both store checksum
-> 0xa3c8 despite having different UDP payloads and port numbers - 0xa3c8
-> is their shared pseudo-header sum (same src/dst IP, same protocol and
-> UDP length).
->=20
-> While most L2 switches forward frames without verifying transport
-> checksums, hardware that performs deep packet inspection or has PTP
-> awareness may validate UDP checksums and drop frames that fail
-> verification. This causes the 1588v2 over IPv4/IPv6 tests to fail on
-> such hardware even though L2 PTP (which has no UDP checksum) passes
-> fine.
->=20
-> Replace all six pseudo-header partial sums with the correctly computed
-> full UDP checksums:
->=20
-> =C2=A0 IPv4 Sync:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 0xa3c8 -> 0x9f41
-> =C2=A0 IPv4 Follow-Up:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0xa3c8 -> 0xeb8a
-> =C2=A0 IPv4 Peer Delay Req: 0xa2bc -> 0x9ab9
-> =C2=A0 IPv6 Sync:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 0x2e92 -> 0x1476
-> =C2=A0 IPv6 Follow-Up:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x2e92 -> 0xf047
-> =C2=A0 IPv6 Peer Delay Req: 0xb454 -> 0x891f
->=20
-> Fixes: 2379795042649 ("selftests: net: local_termination: add PTP frames =
-to the mix")
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-
-wireshark agrees,
-
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-
-> ---
-> =C2=A0.../selftests/net/forwarding/local_termination.sh=C2=A0=C2=A0=C2=A0=
- | 12 ++++++------
-> =C2=A01 file changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/net/forwarding/local_termination.sh =
-b/tools/testing/selftests/net/forwarding/local_termination.sh
-> index 9bc9d25e71368..15b1a1255a41f 100755
-> --- a/tools/testing/selftests/net/forwarding/local_termination.sh
-> +++ b/tools/testing/selftests/net/forwarding/local_termination.sh
-> @@ -57,21 +57,21 @@ PTP_1588_L2_PDELAY_REQ=3D" \
-> =C2=A0PTP_1588_IPV4_SYNC=3D" \
-> =C2=A001:00:5e:00:01:81 00:00:de:ad:be:ef 08:00 45 00 \
-> =C2=A000 48 0a 9a 40 00 01 11 cb 88 c0 00 02 01 e0 00 \
-> -01 81 01 3f 01 3f 00 34 a3 c8 00 02 00 2c 00 00 \
-> +01 81 01 3f 01 3f 00 34 9f 41 00 02 00 2c 00 00 \
-> =C2=A002 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
-> =C2=A063 ff fe cf 17 0e 00 01 00 00 00 00 00 00 00 00 \
-> =C2=A000 00 00 00 00 00"
-> =C2=A0PTP_1588_IPV4_FOLLOW_UP=3D"
-> =C2=A001:00:5e:00:01:81 00:00:de:ad:be:ef 08:00 45 00 \
-> =C2=A000 48 0a 9b 40 00 01 11 cb 87 c0 00 02 01 e0 00 \
-> -01 81 01 40 01 40 00 34 a3 c8 08 02 00 2c 00 00 \
-> +01 81 01 40 01 40 00 34 eb 8a 08 02 00 2c 00 00 \
-> =C2=A000 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
-> =C2=A063 ff fe cf 17 0e 00 01 00 00 02 00 00 00 66 83 \
-> =C2=A0c6 0f 1d 9a 61 87"
-> =C2=A0PTP_1588_IPV4_PDELAY_REQ=3D" \
-> =C2=A001:00:5e:00:00:6b 00:00:de:ad:be:ef 08:00 45 00 \
-> =C2=A000 52 35 a9 40 00 01 11 a1 85 c0 00 02 01 e0 00 \
-> -00 6b 01 3f 01 3f 00 3e a2 bc 02 02 00 36 00 00 \
-> +00 6b 01 3f 01 3f 00 3e 9a b9 02 02 00 36 00 00 \
-> =C2=A000 00 00 00 00 00 00 00 00 00 00 00 00 00 3e 37 \
-> =C2=A063 ff fe cf 17 0e 00 01 00 01 05 7f 00 00 00 00 \
-> =C2=A000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
-> @@ -79,7 +79,7 @@ PTP_1588_IPV6_SYNC=3D" \
-> =C2=A033:33:00:00:01:81 00:00:de:ad:be:ef 86:dd 60 06 \
-> =C2=A07c 2f 00 36 11 01 20 01 0d b8 00 01 00 00 00 00 \
-> =C2=A000 00 00 00 00 01 ff 0e 00 00 00 00 00 00 00 00 \
-> -00 00 00 00 01 81 01 3f 01 3f 00 36 2e 92 00 02 \
-> +00 00 00 00 01 81 01 3f 01 3f 00 36 14 76 00 02 \
-> =C2=A000 2c 00 00 02 00 00 00 00 00 00 00 00 00 00 00 \
-> =C2=A000 00 3e 37 63 ff fe cf 17 0e 00 01 00 00 00 00 \
-> =C2=A000 00 00 00 00 00 00 00 00 00 00 00"
-> @@ -87,7 +87,7 @@ PTP_1588_IPV6_FOLLOW_UP=3D" \
-> =C2=A033:33:00:00:01:81 00:00:de:ad:be:ef 86:dd 60 0a \
-> =C2=A000 bc 00 36 11 01 20 01 0d b8 00 01 00 00 00 00 \
-> =C2=A000 00 00 00 00 01 ff 0e 00 00 00 00 00 00 00 00 \
-> -00 00 00 00 01 81 01 40 01 40 00 36 2e 92 08 02 \
-> +00 00 00 00 01 81 01 40 01 40 00 36 f0 47 08 02 \
-> =C2=A000 2c 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
-> =C2=A000 00 3e 37 63 ff fe cf 17 0e 00 01 00 00 02 00 \
-> =C2=A000 00 66 83 c6 2a 32 09 bd 74 00 00"
-> @@ -95,7 +95,7 @@ PTP_1588_IPV6_PDELAY_REQ=3D" \
-> =C2=A033:33:00:00:00:6b 00:00:de:ad:be:ef 86:dd 60 0c \
-> =C2=A05c fd 00 40 11 01 fe 80 00 00 00 00 00 00 3c 37 \
-> =C2=A063 ff fe cf 17 0e ff 02 00 00 00 00 00 00 00 00 \
-> -00 00 00 00 00 6b 01 3f 01 3f 00 40 b4 54 02 02 \
-> +00 00 00 00 00 6b 01 3f 01 3f 00 40 89 1f 02 02 \
-> =C2=A000 36 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
-> =C2=A000 00 3e 37 63 ff fe cf 17 0e 00 01 00 01 05 7f \
-> =C2=A000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
-
---=20
-Alexander Sverdlin.
+Okay, I'll fix the shellcheck issues and the trailing backslashes in v2.
