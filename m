@@ -1,287 +1,231 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800E42FD1A1
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2026 01:05:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774141532; cv=pass; b=Nos7BJzVJYaainDMLQ2BH50IJtNk/tgmn7ehKY8HgDlVukNHPPTgADZrAMnNQ+My/B4mdrY5QQZBZ2kuf01S0+viONoj3Dgk/Ld1zVoRoYRgpI5UZfhW7DUIYun+zVpZyKB4ugWgxtC0Ag5VVq6TP+Xk10eVwFZPWRZSXync+7A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774141532; c=relaxed/simple;
-	bh=11mgqqe7SKhI5UFGsfbHm/kovDNRlUSdS9YbtwLN2as=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=j6pUdPoj34XgueCRSCDmxd8E9aASX2lK5X5JN00UW6asAbYe3edq+pm0OkTCJtQcKlsoRl2Gp9qEJ23PLKTpfKxmvo3ShPEQ2vMmK4prYeFSXhgJM+OSZR/QZx00qbfPlBYl46sdrPAUBINmnHVFKPr5A0FNQLsVWllHidMCebg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Mb4qqQVV; arc=pass smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F4B2ED84C
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2026 01:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774142443; cv=none; b=GIjapfdwCt8krjVACt3vGhyNHeoc7DybjO0YwDsnQ9p+gGA6ZUIOnjOfvMB++8hZY18eBWNQyopdJ5Tnc5un5yz+TNF8UqM4cZOqwEeYICWi1UxyXaZOP4lLIRyf+tRpQXBbHeAqQsG3qiDLpqYVwlM5JHwaLkhJK+tSqL0MfPQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774142443; c=relaxed/simple;
+	bh=YC7qUvr1E4ECRZ6uECeSY381mj4OkAUb+a4ih53vA8A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=FGbPFvw6mYMKCw9hNzF45XaZEuzRXQgv/ZIrBkUeAAJBb4hnr/XxRnCx1FU6Monnt2XXv6ndsUzndd2uU/AASf9XZbpR54XXGEobQbS1uEMIDSPnr+HDL9X1o7dFdmb/O4cBvuizh/c17ljTuG2ngLmSlQBFS24KVbzdVTwbKPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=11DtnhF1; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Mb4qqQVV"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-669462b0fecso1638262a12.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 18:05:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774141529; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VAw6VX/unBzXFSV21JEiS0XaDyOS+qhB22cG1Q0LW9II8NKe5NWBrAHj3fvrIzvAek
-         cqz1mdQO95d8ob0AL35Vc/SnlOdlIdvB2Z+EyoEMTTmCQ+eHOBuuyVsxf3MUaNiao+Q1
-         gnWLKsDz0Et4nmJGCGgBqUCO1/CrRvl6qzD/cFvynzxsMBYJf1k4puY3AEjusPtU6+Ev
-         XMwDaGV29fjXJ9Y2rlkSka/yGgP+eemFQ3MFyWCNX7skOZWecBOTHgUdNIPV6Qqks1p/
-         dWasRUSdJMQuvdh1eVHug+D0eRPT4aNF9teTpPa1y/5UxFkGwCL9Zht4nhLMiJVeBT1m
-         FAHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Z71A4A/9WIsYeL7CrSvLjwvAwzNvfNtlpf1MFBL4KRA=;
-        fh=jfWAcPtiShZpB77VQQfn1wzcqsx55mZo4EczTjh/wKU=;
-        b=I+CxIGWSFZfDs7AfAYuRcbUTnN4Zo1uxWwkFSzRczca+wDhoNSJotNBOviKtoJ6wCU
-         AOoBO6Vnw0JbO+cRVNmKmonuEuOGZpsT2dP9QwH7AmOXeK+JoMqRTcWYmr2emKvhveSv
-         jZPzUVrne3joVANjI3hak0cBcUaOe96BbBZVKT228yOb9r4Lw60DZptQq+N78Mj61rac
-         GcoYvrUNJAudQd0h8Dfzv1PU7/hbCsaa10ItVytWFgMZkgTe46jW+a7feXbv0QRyt+bS
-         q188D7G74fVcsgBkUcA9qtKDBXabxtXkf7wFZHuzgiD5q7sAaYnvbgmKacD0WgeV4b1f
-         lCCQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="11DtnhF1"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-50b2b2aa276so23972191cf.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 18:20:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1774141529; x=1774746329; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774142440; x=1774747240; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z71A4A/9WIsYeL7CrSvLjwvAwzNvfNtlpf1MFBL4KRA=;
-        b=Mb4qqQVVDJB1jbdJIbTFZnSuM2KwOnFoNIDPaQGelz8XWQLuvPvwS37HxV3gg0xRyg
-         HmYSp3W6N0/WPgfIRcA19cR9TWJWZSdAhwI2onGgT/d+LuYPKSq8h/sS+agl0ZnJIrD+
-         2l07dWyT3YjoUdXuEYywOq8k+9RQlHFEeI1Fkv8/FaeiJ/bFNTTznQQGl+UjuJn0KaN/
-         YPtBCTVG0/SzEISu97Y4nRFv6/DNhwJpJljRZtHRHZr8/8Y2VXrxxtWd8SSeFg6MDc8p
-         9Dmw2EKJNiE8lGAJIp6nZRm5Y1/h1BnDCh1L0a+T9xxN5tXSkojL/QnbWkR81ht+6X6h
-         3ydA==
+        bh=D2lYegb3d1WlAShOCbB85z2jt2u6c/ceLqqA07OncCc=;
+        b=11DtnhF1ixQ+H7b/48zMaeNtR4DqdGo4QkLQ3T45oZ3RVV7C0Gusx4Chz7+uX+eKvj
+         PAwb8qY0exECiYEEcGieYuwD8StM5QJckeBUkzf89irj71vHi1uQG/LGT7IMZe0AZOkB
+         40B87I+WsQe7MfJPQUxSJJEyargUkfPMlrA/l53TlyXiv4X4JF1IhuWun9MI+oX0jliq
+         VtTCZYmN19VOzFkG0x31gLNeJ0sHrrA5izJ1vErk/jvyp20Z46AgfGBAyTO5umSzaoaN
+         qVEeKsQ7ihDpJccs4riY2vABEKU8dzzaC85CKygSRfAFeLrC+gSqcxwojUJy/3Pzvff9
+         i9yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774141529; x=1774746329;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Z71A4A/9WIsYeL7CrSvLjwvAwzNvfNtlpf1MFBL4KRA=;
-        b=CgrOoZRfFxttr6CXLnqL2pHRZg3ya0rYtSmqk810KWnTbciwNZU/M322eUndsOkLCc
-         GqxtRlcMo0WrratnJrAlP1u6hFf9qkmToTufR50Oz5cgg99/z2QwW2Me7JCUuD/2PqDY
-         KIpP+lKe3U2MF//FKumWWcYsT6JxETfs8iuJ/1TvLhJZYVnm4wmeSbOLJmAuEQcqAuQ0
-         VKEPH5iIE1BfuFXQwB1nZAyPOJO5M3DEjAhacAPLLiJVM8j2lJKPFRPxEZTSjxdYUeyO
-         V8QGSDHWRaxtDJVGYNUdX5/lxk2IBXK/lidjD3cHx9Ifv6djJCOZdnj4vr8DffcC2v/2
-         q25Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWl6HpKG98j4WzE5Xxdq77kw+Rjb2v9bFXqpLiCB01rc890PpqV8yX9ocqADcfR7eVM0mUb5RT9GyOTQDFbpw0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSEdSdMGnjjbMkkGDybUwfepFhV66P5o4BAk8wUPQ9tB7uBJC8
-	uxtkF8H8TVbGgtfyB/jSg/7sisJ/l+14R12rjz/OxtwZ31cqQzpuxUeM/T2RbztXGiltEml0yIy
-	mWo+WAxYkmuXNUmyRjPuQpDPJ8KMWw0gFWREYAT0tUQ==
-X-Gm-Gg: ATEYQzzr3aYQO45DfZz490/n6pSBJ+Frjb6IAfnwfT0sYOBTIejQqIJJICoHvExzQGM
-	0RDVXBw7R79hLvY09ffG9CGJnt0mlOjRpQbQZBV35Epr/KTva6vWMlAcOv2RUIxEa8vMWSd3hyh
-	TBIi28HKVn7fSkpPsLFOhdCODvKY8UyuMT5luDxDjbGcW4UGEIn+0yux2l3ANoqrglapUvHFhFu
-	DWJSn92y1S4VU7j+Hw39+l2AEw39lFcA5JNK1XWyeMUmZ1XVtTfahxNLt/yVl8mL5qivcfJtnnT
-	JuwfN0ApjEJTxNDycTnnVhcGpKlRmui5X/qzLw==
-X-Received: by 2002:a05:6402:3513:b0:667:df35:8739 with SMTP id
- 4fb4d7f45d1cf-668c9119018mr5809668a12.11.1774141528777; Sat, 21 Mar 2026
- 18:05:28 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774142440; x=1774747240;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D2lYegb3d1WlAShOCbB85z2jt2u6c/ceLqqA07OncCc=;
+        b=KuByeAcnk/H108wWn/6vaniVYOsMSCv17KntDS8qdteuaCFx0YJoJxEqUntEepRo12
+         E/TC6BWbNhT2yZKd/V5VVjq3HWjuNy4c2s98PpyWYzMlJMe3JQtwYJtaOmVhifAcvOHu
+         fPV90ubd+C7aAcISxsND4h4h9tJvjw3KJwZBquime7Fd43xUycvXo3EmQuAiraRQ5P9M
+         mB7DPhvI48TYlxMIInFp46Y3wZqwAoCqNusDH99TdMz/HzcuQybuZuY2rUwpZd3fMkHK
+         M+sUrZo9BWh83GHCOCy4bwI9iLf7dFxzsmH3zVSt6uxjVrK9wiG4LkYrxXN+fqiDtwpF
+         wu7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWu4PZMEHJP2TOk9KTArXD1nZmRO4DAugIM5zVuO4z9keymVrojuFUdv9hPEXbyC6c7GId0gym9rlVhGTlNdYw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziYiA8GgHYpd4zaskCGX1G0mhXLd3My0AMQ7RjbNQr5agk+TRa
+	iprdLAvg50zbE/rgzsj9+bUl2KiVyHSoROuqEdpognQy5myMUKNoZapTt3OfE4M5mDg=
+X-Gm-Gg: ATEYQzyyl4tX4K4fY537CtDhgRVTi67HKCh94Nm1b3JARidjMn3DtmpiL5dwQxQifIT
+	8WRzwPf+l1pFvD7FMoO5rQL/VTkc3VSFwE+Fmxg4D3SdLoPOuOJrvzXkRABZxODYMNPy8N2GM8u
+	eDexx809+v8p3sNXb23NbstKdoDY6hSGtlsMpBvA7z/bY/v2O9NyJmaFm1xebGyAZYPlOmbl8/8
+	3ERyRm4mJAJjr6quT7LZFZrRqmY6Kf4OwsUpQS8tlpQZPPzP1EVN8d5XoGYOhhO03/QzmF3Dno/
+	N9kqaov0Xgz5c64pQkCIvupWnaWKXHAt68iRq4m/U7l1uR+lCJJwKVBIxKGtwVsReFo1/f6RuK7
+	TR1HqKvUyqEtfuzkCZVybONkCjrJUvjaN969kexfLWUuIeW+zrjGGv0niL59sLkFpgd2RhyrIe0
+	gIbvRQ7BYrbxEj+GkI26ImomsGa+qzSgt62w==
+X-Received: by 2002:a05:622a:6097:b0:509:1ee2:69e4 with SMTP id d75a77b69052e-50b3739fe9fmr124931621cf.11.1774142439962;
+        Sat, 21 Mar 2026 18:20:39 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b36eb54cfsm53223781cf.30.2026.03.21.18.20.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Mar 2026 18:20:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260321175808.57942-1-pasha.tatashin@soleen.com> <20260321175808.57942-2-pasha.tatashin@soleen.com>
-In-Reply-To: <20260321175808.57942-2-pasha.tatashin@soleen.com>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Sat, 21 Mar 2026 21:04:53 -0400
-X-Gm-Features: AaiRm52fD9VvtuC5_UHR4ptbTaHmC_PzXcfxEAIOVyW6x1v9oh_L8TjB8925SVE
-Message-ID: <CA+CK2bD2aNu-NByET4KkBP0n2j8WQE2zjxb4g-1cv2hYfjaRZQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] liveupdate: prevent double management of files
-To: brauner@kernel.org, linux-kselftest@vger.kernel.org, rppt@kernel.org, 
-	jack@suse.cz, shuah@kernel.org, linux-fsdevel@vger.kernel.org, 
-	akpm@linux-foundation.org, linux-mm@kvack.org, viro@zeniv.linux.org.uk, 
-	linux-kernel@vger.kernel.org, pasha.tatashin@soleen.com, dmatlack@google.com, 
-	pratyush@kernel.org, skhawaja@google.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 21 Mar 2026 21:20:37 -0400
+Message-Id: <DH8X08EB6T7J.2IA6WKFSZ8XGF@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v8 7/8] bpf: add bpf_list_is_first/last/empty
+ kfuncs
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Emil Tsalapatis" <emil@etsalapatis.com>, "Chengkaitao"
+ <pilgrimtao@gmail.com>, <martin.lau@linux.dev>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+ <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+ <jolsa@kernel.org>, <shuah@kernel.org>, <chengkaitao@kylinos.cn>,
+ <linux-kselftest@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260316112843.78657-1-pilgrimtao@gmail.com>
+ <20260316112843.78657-8-pilgrimtao@gmail.com>
+ <DH8WLC5587BJ.30X22578QBN3C@etsalapatis.com>
+In-Reply-To: <DH8WLC5587BJ.30X22578QBN3C@etsalapatis.com>
 
-On Sat, Mar 21, 2026 at 1:58=E2=80=AFPM Pasha Tatashin
-<pasha.tatashin@soleen.com> wrote:
+On Sat Mar 21, 2026 at 9:01 PM EDT, Emil Tsalapatis wrote:
+> On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
+>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>
+>> Add three kfuncs for BPF linked list queries:
+>> - bpf_list_is_first(head, node): true if node is the first in the list.
+>> - bpf_list_is_last(head, node): true if node is the last in the list.
+>> - bpf_list_empty(head): true if the list has no entries.
+>>
+>> Currently, without these kfuncs, to implement the above functionality
+>> it is necessary to first call bpf_list_pop_front/back to retrieve the
+>> first or last node before checking whether the passed-in node was the
+>> first or last one. After the check, the node had to be pushed back into
+>> the list using bpf_list_push_front/back, which was very inefficient.
+>>
+>> Now, with the bpf_list_is_first/last/empty kfuncs, we can directly
+>> check whether a node is the first, last, or whether the list is empty,
+>> without having to first retrieve the node.
 >
-> Currently, LUO does not prevent the same file from being managed twice
-> across different active sessions.
->
-> Add a new i_state flag I_LUO_MANAGED and update luo_preserve_file()
-> to check and set this flag when a file is preserved, and clear it in
-> luo_file_unpreserve_files() when it is released.
->
-> Additionally, set this flag in luo_retrieve_file() after a file is
-> successfully restored in the new kernel, and clear it in
-> luo_file_finish() when the LUO session is finalized.
->
-> This ensures that the same file (inode) cannot be managed by multiple
-> sessions. If another session attempts to preserve an already managed
-> file, it will now fail with -EBUSY.
->
-> Acked-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-> Acked-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  include/linux/fs.h           |  5 ++++-
->  kernel/liveupdate/luo_file.c | 27 ++++++++++++++++++++++++---
->  2 files changed, 28 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 23f36a2613a3..692a8be56f3c 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -712,6 +712,8 @@ is_uncached_acl(struct posix_acl *acl)
->   * I_LRU_ISOLATING     Inode is pinned being isolated from LRU without h=
-olding
->   *                     i_count.
->   *
-> + * I_LUO_MANAGED       Inode is being managed by a live update session.
-> + *
->   * Q: What is the difference between I_WILL_FREE and I_FREEING?
->   *
->   * __I_{SYNC,NEW,LRU_ISOLATING} are used to derive unique addresses to w=
-ait
-> @@ -744,7 +746,8 @@ enum inode_state_flags_enum {
->         I_CREATING              =3D (1U << 15),
->         I_DONTCACHE             =3D (1U << 16),
->         I_SYNC_QUEUED           =3D (1U << 17),
-> -       I_PINNING_NETFS_WB      =3D (1U << 18)
-> +       I_PINNING_NETFS_WB      =3D (1U << 18),
-> +       I_LUO_MANAGED           =3D (1U << 19),
->  };
->
->  #define I_DIRTY_INODE (I_DIRTY_SYNC | I_DIRTY_DATASYNC)
-> diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
-> index 5acee4174bf0..86911beeff71 100644
-> --- a/kernel/liveupdate/luo_file.c
-> +++ b/kernel/liveupdate/luo_file.c
-> @@ -248,6 +248,7 @@ static bool luo_token_is_used(struct luo_file_set *fi=
-le_set, u64 token)
->   * Context: Can be called from an ioctl handler during normal system ope=
-ration.
->   * Return: 0 on success. Returns a negative errno on failure:
->   *         -EEXIST if the token is already used.
-> + *         -EBUSY if the file descriptor is already preserved by another=
- session.
->   *         -EBADF if the file descriptor is invalid.
->   *         -ENOSPC if the file_set is full.
->   *         -ENOENT if no compatible handler is found.
-> @@ -276,6 +277,14 @@ int luo_preserve_file(struct luo_file_set *file_set,=
- u64 token, int fd)
->         if (err)
->                 goto  err_fput;
->
-> +       scoped_guard(spinlock, &file_inode(file)->i_lock) {
-> +               if (inode_state_read(file_inode(file)) & I_LUO_MANAGED) {
-> +                       err =3D -EBUSY;
-> +                       goto err_free_files_mem;
-> +               }
-> +               inode_state_set(file_inode(file), I_LUO_MANAGED);
-> +       }
-> +
->         err =3D -ENOENT;
->         list_private_for_each_entry(fh, &luo_file_handler_list, list) {
->                 if (fh->ops->can_preserve(fh, file)) {
-> @@ -286,11 +295,11 @@ int luo_preserve_file(struct luo_file_set *file_set=
-, u64 token, int fd)
->
->         /* err is still -ENOENT if no handler was found */
->         if (err)
-> -               goto err_free_files_mem;
-> +               goto err_unpreserve_inode;
->
->         err =3D luo_flb_file_preserve(fh);
->         if (err)
-> -               goto err_free_files_mem;
-> +               goto err_unpreserve_inode;
->
->         luo_file =3D kzalloc_obj(*luo_file);
->         if (!luo_file) {
-> @@ -320,6 +329,9 @@ int luo_preserve_file(struct luo_file_set *file_set, =
-u64 token, int fd)
->         kfree(luo_file);
->  err_flb_unpreserve:
->         luo_flb_file_unpreserve(fh);
-> +err_unpreserve_inode:
-> +       scoped_guard(spinlock, &file_inode(file)->i_lock)
-> +               inode_state_clear(file_inode(file), I_LUO_MANAGED);
->  err_free_files_mem:
->         luo_free_files_mem(file_set);
->  err_fput:
-> @@ -363,6 +375,9 @@ void luo_file_unpreserve_files(struct luo_file_set *f=
-ile_set)
->                 luo_file->fh->ops->unpreserve(&args);
->                 luo_flb_file_unpreserve(luo_file->fh);
->
-> +               scoped_guard(spinlock, &file_inode(luo_file->file)->i_loc=
-k)
-> +                       inode_state_clear(file_inode(luo_file->file), I_L=
-UO_MANAGED);
-> +
->                 list_del(&luo_file->list);
->                 file_set->count--;
->
-> @@ -609,6 +624,9 @@ int luo_retrieve_file(struct luo_file_set *file_set, =
-u64 token,
->         *filep =3D luo_file->file;
->         luo_file->retrieve_status =3D 1;
->
-> +       scoped_guard(spinlock, &file_inode(luo_file->file)->i_lock)
-> +               inode_state_set(file_inode(luo_file->file), I_LUO_MANAGED=
-);
-> +
->         return 0;
->  }
->
-> @@ -701,8 +719,11 @@ int luo_file_finish(struct luo_file_set *file_set)
->
->                 luo_file_finish_one(file_set, luo_file);
->
-> -               if (luo_file->file)
-> +               if (luo_file->file) {
-> +                       scoped_guard(spinlock, &file_inode(luo_file->file=
-)->i_lock)
-> +                               inode_state_clear(file_inode(luo_file->fi=
-le), I_LUO_MANAGED);
->                         fput(luo_file->file);
-> +               }
->                 list_del(&luo_file->list);
->                 file_set->count--;
->                 mutex_destroy(&luo_file->mutex);
-> --
-> 2.43.0
+> Do you need to expand the exceptions you added in patch 5 for non-owning
+> reference arguments to also hold for this? Checking the selftests, we
+> don't have one where either bpf_list_is_last or bpf_list_is_first
+> return true, can you add one?
 >
 
-> Sashiko: https://sashiko.dev/#/patchset/20260321175808.57942-1-pasha.tata=
-shin@soleen.com
+I misread the selftests, my bad. The tests pass fine, and we just have
+to keep an owning reference of the nodes around to pass to the helpers.
 
-Sashiko reported two problems:
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-1. Are there any issues with mixing goto-based error handling and scope-bas=
-ed
-cleanups like scoped_guard() in the same function?
+>>
+>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+>> ---
+>>  kernel/bpf/helpers.c  | 38 ++++++++++++++++++++++++++++++++++++++
+>>  kernel/bpf/verifier.c | 11 +++++++++++
+>>  2 files changed, 49 insertions(+)
+>>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index dc4f8b4eec01..da70dcff4ba8 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -2518,6 +2518,41 @@ __bpf_kfunc struct bpf_list_node *bpf_list_back(s=
+truct bpf_list_head *head)
+>>  	return (struct bpf_list_node *)h->prev;
+>>  }
+>> =20
+>> +__bpf_kfunc bool bpf_list_is_first(struct bpf_list_head *head, struct b=
+pf_list_node *node)
+>> +{
+>> +	struct list_head *h =3D (struct list_head *)head;
+>> +	struct bpf_list_node_kern *kn =3D (struct bpf_list_node_kern *)node;
+>> +
+>> +	if (READ_ONCE(kn->owner) !=3D head)
+>> +		return false;
+>> +
+>> +	return list_is_first(&kn->list_head, h);
+>> +}
+>> +
+>> +__bpf_kfunc bool bpf_list_is_last(struct bpf_list_head *head, struct bp=
+f_list_node *node)
+>> +{
+>> +	struct list_head *h =3D (struct list_head *)head;
+>> +	struct bpf_list_node_kern *kn =3D (struct bpf_list_node_kern *)node;
+>> +
+>> +	if (READ_ONCE(kn->owner) !=3D head)
+>> +		return false;
+>> +
+>> +	return list_is_last(&kn->list_head, h);
+>> +}
+>> +
+>> +__bpf_kfunc bool bpf_list_empty(struct bpf_list_head *head)
+>> +{
+>> +	struct list_head *h =3D (struct list_head *)head;
+>> +
+>> +	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+>> +	 * called on its fields, so init here
+>> +	 */
+>> +	if (unlikely(!h->next))
+>> +		INIT_LIST_HEAD(h);
+>> +
+>> +	return list_empty(h);
+>> +}
+>> +
+>>  __bpf_kfunc struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *r=
+oot,
+>>  						  struct bpf_rb_node *node)
+>>  {
+>> @@ -4588,6 +4623,9 @@ BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_R=
+ET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_add_impl)
+>> +BTF_ID_FLAGS(func, bpf_list_is_first)
+>> +BTF_ID_FLAGS(func, bpf_list_is_last)
+>> +BTF_ID_FLAGS(func, bpf_list_empty)
+>>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
+>>  BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL)
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 0a6f2e6a5d28..c2cc622bb3a1 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -12512,6 +12512,9 @@ enum special_kfunc_type {
+>>  	KF_bpf_list_del,
+>>  	KF_bpf_list_front,
+>>  	KF_bpf_list_back,
+>> +	KF_bpf_list_is_first,
+>> +	KF_bpf_list_is_last,
+>> +	KF_bpf_list_empty,
+>>  	KF_bpf_cast_to_kern_ctx,
+>>  	KF_bpf_rdonly_cast,
+>>  	KF_bpf_rcu_read_lock,
+>> @@ -12574,6 +12577,9 @@ BTF_ID(func, bpf_list_pop_back)
+>>  BTF_ID(func, bpf_list_del)
+>>  BTF_ID(func, bpf_list_front)
+>>  BTF_ID(func, bpf_list_back)
+>> +BTF_ID(func, bpf_list_is_first)
+>> +BTF_ID(func, bpf_list_is_last)
+>> +BTF_ID(func, bpf_list_empty)
+>>  BTF_ID(func, bpf_cast_to_kern_ctx)
+>>  BTF_ID(func, bpf_rdonly_cast)
+>>  BTF_ID(func, bpf_rcu_read_lock)
+>> @@ -12652,6 +12658,9 @@ static const enum special_kfunc_type bpf_list_ap=
+i_kfuncs[] =3D {
+>>  	KF_bpf_list_del,
+>>  	KF_bpf_list_front,
+>>  	KF_bpf_list_back,
+>> +	KF_bpf_list_is_first,
+>> +	KF_bpf_list_is_last,
+>> +	KF_bpf_list_empty,
+>>  };
+>> =20
+>>  /* Kfuncs that take a list node argument (bpf_list_node *). */
+>> @@ -12660,6 +12669,8 @@ static const enum special_kfunc_type bpf_list_no=
+de_api_kfuncs[] =3D {
+>>  	KF_bpf_list_push_back_impl,
+>>  	KF_bpf_list_add_impl,
+>>  	KF_bpf_list_del,
+>> +	KF_bpf_list_is_first,
+>> +	KF_bpf_list_is_last,
+>>  };
+>> =20
+>>  /* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
 
-Initially, I thought that there should not be any problems, however,
-after looking this up  I found in include/linux/cleanup.h the
-following comment:
-
- * Lastly, given that the benefit of cleanup helpers is removal of
- * "goto", and that the "goto" statement can jump between scopes, the
- * expectation is that usage of "goto" and cleanup helpers is never
- * mixed in the same function.
-
-Well, good to know, will not use goto inside scoped_guards.
-
-2. Additionally, does setting I_LUO_MANAGED on the inode break the preserva=
-tion
-of anonymous inodes? Many file types (like eventfd, epoll, timerfd,
-signalfd)
-
-This is actually a very good point. It looks like everyone who uses
-anon_inode_getfd() has one shared inode. This is not a problem for the
-existing LUO user memfd, or for the upcoming vfiofd and memfd, but
-kvm-vmfd and kvm-cpufd also use it, and that might be a problem in the
-future once we add support for Orphaned VMs.
-
-Therefore, we have two choices: either use a hash table, which adds
-performance and memory overhead, or delegate this double-check to the
-LUO file handlers, as they can use a private context to know if the FD
-is already preserved.
-
-Pasha
