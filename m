@@ -1,123 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E920F34253B;
-	Sun, 22 Mar 2026 03:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE882BDC0E
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2026 06:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774149975; cv=none; b=N4fBXlcvKbRProla08LRD85cn5qTfDsaHZTpkBJKT40V3RLRRs3jpK2+AXscD+8ewfWFnLTNWeJ6gMmVKz+2RbZdnbxtwTd1B6VQU3wVLTYy3S7a3eBy14MIhFUXhkahpOgJDm0wU45HxXMDcxVEHTXJwzvFSbcXwMqES3bCtFk=
+	t=1774159860; cv=none; b=PyILM+bMasCrLRDmXFO6kgXVNK5CXI/iwXj9fcK0lhMIvWt61PPigk6zzhUzF4XgdM7hQ7g5FhGs5li31acUwxTVj4ccN8YshD00YMc06SyHmYqxtk7HPD4i969gK0Yz3+6hzmcWspM5EY530mAh7gRlNaHgyKeK/fMkwWoBh8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774149975; c=relaxed/simple;
-	bh=+BiopDhJNcSEnMguLN0qdQX1rIFAdTnVHGsgkJ98n4Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZEXEwvQrYDHY/t2gxdxcoRHlCz0DKJ+qE28Sp9v61mVCKh/gX670O6LZpH7HfPErtKKsT44kkffZbAJRrFh8kwoQKmDoRKwIKHnhlmH3AKSeUiY0/P4JydTiNm4aomOmrPsMNrHZvOUbblOWGGocjW0xqjFu4ZMM8PThuIt1lgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZmqPNdFZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774159860; c=relaxed/simple;
+	bh=5wUxuld6iWSD1xd8TXKoDsmcJblZd+dUHg6WMJSeO/A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=e8TJNYj+JmATcuda3Nsq0SWCQTCroozaodNIzIn8zdQBVK+E8dT9WCQJ070V7XSTDhFyBgYQ59oI7DYmLXlrsR4wmQaGO47QxUZyM25nDwtWumfmFgi786bwSQ5HioAbBHlx/9UewpODKItxU0F2QBT9rktlRTd5tQs6oTY57uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bcB9Frvv; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZmqPNdFZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39AE5C2BCB0;
-	Sun, 22 Mar 2026 03:26:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774149974;
-	bh=+BiopDhJNcSEnMguLN0qdQX1rIFAdTnVHGsgkJ98n4Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ZmqPNdFZF2CGRgr5ewNg2Qdmmg0/nKu77Iw1IhLXgXvjbLG5a1IBsZP0pJ6Fx5iIy
-	 frvOWgujsWKpXLINaoChcrzKPqWXlKXFbYeyeja1EQZglHpmk79/lM1odMt0hM/Rnk
-	 LjHmeB9Cs6d46Qto0iMtGCkd6kQTv6+0nfxGfJQv3f7jGWRMJ/FH/I6zZD3IZ3DNyx
-	 ODx6uEO4BYskApdMIjZSyO4H+u2NpAK8WpStkGeFjcJ9QBxXkI9x9T/biTHZv/j3oT
-	 u4rk1XHNdZSzFaFFIbXV135bWZFZIqTztvf8G+FmC5+o7cRKYu2r2LJLzpv+R3Yfk2
-	 k2kibVpKlJMZw==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	kunit-dev@googlegroups.com,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bcB9Frvv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774159856;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=mmx1uB1Uw/n7cvvAu9S/82zt328oIJIEVRjtJB16IPI=;
+	b=bcB9FrvvErT1N1cmI5dfKSucIp/cwPS3cups0HZ6vNqf4U+8wBMx2sbZkMoONk89aB4Ho7
+	GK+ycSOWmjLvWUUDbQY8OGM7/CK1jdU8X2GhFAgwvlgtrBxQBw5c9yjJRq7S+u1Kkm+BAX
+	PK5/femP4wwS+wz7DWQVq4q1wUEQ9bw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-637-ZOPxiDD-MBaUoeesfdrK9Q-1; Sun,
+ 22 Mar 2026 02:10:53 -0400
+X-MC-Unique: ZOPxiDD-MBaUoeesfdrK9Q-1
+X-Mimecast-MFC-AGG-ID: ZOPxiDD-MBaUoeesfdrK9Q_1774159851
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6AFEA180044D;
+	Sun, 22 Mar 2026 06:10:50 +0000 (UTC)
+Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.34])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 01C161955F21;
+	Sun, 22 Mar 2026 06:10:42 +0000 (UTC)
+From: Li Wang <liwang@redhat.com>
+To: akpm@linux-foundation.org,
+	yosry@kernel.org,
+	yosryahmed@google.com,
+	nphamcs@gmail.com,
+	hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	mkoutny@suse.com,
+	muchun.song@linux.dev,
+	tj@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev
+Cc: longman@redhat.com,
+	liwang@redhat.com,
 	linux-kselftest@vger.kernel.org,
-	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH] lib: Move crypto library tests to Runtime Testing menu
-Date: Sat, 21 Mar 2026 20:24:38 -0700
-Message-ID: <20260322032438.286296-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v4 0/7] selftests/cgroup: improve zswap tests robustness and support large page sizes
+Date: Sun, 22 Mar 2026 14:10:31 +0800
+Message-ID: <20260322061038.156146-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Currently the kconfig options for the crypto library KUnit tests appear
-in the menu:
+This patchset aims to fix various spurious failures and improve the overall
+robustness of the cgroup zswap selftests.
 
-    -> Library routines
-      -> Crypto library routines
+The primary motivation is to make the tests compatible with architectures
+that use non-4K page sizes (such as 64K on ppc64le and arm64). Currently,
+the tests rely heavily on hardcoded 4K page sizes and fixed memory limits.
+On 64K page size systems, these hardcoded values lead to sub-page granularity
+accesses, incorrect page count calculations, and insufficient memory pressure
+to trigger zswap writeback, ultimately causing the tests to fail.
 
-However, this is the only content of "Crypto library routines".  I.e.,
-it is empty when CONFIG_KUNIT=n.  This is because the crypto library
-routines themselves don't have (or need to have) prompts.
+Additionally, this series addresses OOM kills occurring in test_swapin_nozswap
+by dynamically scaling memory limits, and prevents spurious test failures
+when zswap is built into the kernel but globally disabled.
 
-Since this usually ends up as an unnecessary empty menu, let's remove
-this menu and instead source the lib/crypto/tests/Kconfig file from
-lib/Kconfig.debug inside the "Runtime Testing" menu:
+Changes in v4:
+  Patch 2: Use %zu format specifier when printing pagesize.
+  Patch 4: Use page_size instead of BUF_SIZE in test_memcontrol.c.
+  Patch 6: Print the expected swap amount in KB instead of MB.
 
-    -> Kernel hacking
-      -> Kernel Testing and Coverage
-        -> Runtime Testing
+Tested on v6.12:
+  across x86_64, aarch64, ppc64le archs.
 
-This puts the prompts alongside the ones for most of the other lib/
-KUnit tests.  This seems to be a much better match to how the kconfig
-menus are organized.
+Li Wang (7):
+  selftests/cgroup: skip test_zswap if zswap is globally disabled
+  selftests/cgroup: avoid OOM in test_swapin_nozswap
+  selftests/cgroup: use runtime page size for zswpin check
+  selftests/cgroup: rename PAGE_SIZE to BUF_SIZE in cgroup_util
+  selftests/cgroup: replace hardcoded page size values in test_zswap
+  selftest/cgroup: fix zswap test_no_invasive_cgroup_shrink on large
+    pagesize system
+  selftest/cgroup: fix zswap attempt_writeback() on 64K pagesize system
 
-Signed-off-by: Eric Biggers <ebiggers@kernel.org>
----
+ .../selftests/cgroup/lib/cgroup_util.c        | 18 ++---
+ .../cgroup/lib/include/cgroup_util.h          |  4 +-
+ tools/testing/selftests/cgroup/test_core.c    |  2 +-
+ tools/testing/selftests/cgroup/test_freezer.c |  2 +-
+ .../selftests/cgroup/test_memcontrol.c        | 15 ++--
+ tools/testing/selftests/cgroup/test_zswap.c   | 79 +++++++++++++------
+ 6 files changed, 74 insertions(+), 46 deletions(-)
 
-This patch is targeting the libcrypto-next tree
-
- lib/Kconfig.debug  | 2 ++
- lib/crypto/Kconfig | 6 ------
- 2 files changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 93f356d2b3d9..146358530010 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -3056,10 +3056,12 @@ config HW_BREAKPOINT_KUNIT_TEST
- 	help
- 	  Tests for hw_breakpoint constraints accounting.
- 
- 	  If unsure, say N.
- 
-+source "lib/crypto/tests/Kconfig"
-+
- config SIPHASH_KUNIT_TEST
- 	tristate "Perform selftest on siphash functions" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
- 	default KUNIT_ALL_TESTS
- 	help
-diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 4910fe20e42a..f7a21d20e470 100644
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -1,9 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--menu "Crypto library routines"
--
- config CRYPTO_HASH_INFO
- 	bool
- 
- config CRYPTO_LIB_UTILS
- 	tristate
-@@ -265,9 +263,5 @@ config CRYPTO_LIB_SHA3_ARCH
- 	default y if ARM64
- 	default y if S390
- 
- config CRYPTO_LIB_SM3
- 	tristate
--
--source "lib/crypto/tests/Kconfig"
--
--endmenu
 -- 
 2.53.0
 
