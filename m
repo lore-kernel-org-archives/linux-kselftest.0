@@ -1,120 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06164371893;
-	Sun, 22 Mar 2026 17:48:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7751435958;
+	Sun, 22 Mar 2026 20:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774201682; cv=none; b=qNDYCAFPcdmz4ELMt0CvdA7uK7PDNXJTJwlqJb5C4aRcwlhm69eMoR4xNrzqktAHMFnfv3jTsdIafDiFeK9JGaMYJsvZMEeR0dWK+6vIKUY4sF8CLh13ssmj/GNLT2XSCPIhgam4eLwnONXwHvRve7O6G/blf7KFSL3/QpcKAWA=
+	t=1774210085; cv=none; b=AWpKLTojmXm5onzmeiYLOXQ8AmgD61l507cd88/RO6IyzSLIz/pWWFE+VKzlXPRqyxlkjeEmpfltZfDM+xyiHCgSbFaWQruFYhQYAf6oLGyCr98vaKlflpkfbGqGxTmXU46mBevZ6TYkG6ze1uy/Dzlblu7yo3k5Rcf22DQvsHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774201682; c=relaxed/simple;
-	bh=zi3o3A260ASJFdf+1Gp2lU6cqFj7MS9SWJuu1snHJdM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DIMa94jPfQkv51ogKv0loGpG5lhg+nSYmJANX1GwiKToEfwLenwsJpQzVXF7PMvqYVqesb8vX2LaSjdJL0z+gCSY5rJ6qF+XUiDwi2mVvJYyPKL5q9vDIYoFKn2Cv1GhQu1DtRNssIMj3+uuFFrsu9VsND+W2p/Mf4mNltnIghU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u+Gc/NZd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774210085; c=relaxed/simple;
+	bh=etzGaZDOBI/LvsGIvyod3j6hR633ROO6BrUYIQqIqxM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UGjBS6RRn+3I9Z4lmXs3v+gDpCKaj6ETl1Zjdk3ZR9fBbHZ3V8ovwu5w+LJFA+rIyakdrgTFGLXcKnwYrKJLDwbfNBIBameO5E6OxpZfRCywyt48VsrPt/6bIz6p7r8EuL4e+zgorwtWlDNOf/X/Xqvypz+T/3YJDLD20u68FCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=COejGBS2; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u+Gc/NZd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7906DC19424;
-	Sun, 22 Mar 2026 17:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774201681;
-	bh=zi3o3A260ASJFdf+1Gp2lU6cqFj7MS9SWJuu1snHJdM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u+Gc/NZdkBJCF0cxaFYphh8WKAL1S9TP1n6tKc/WY0IXEU2ApipB8DRMs36wMSTux
-	 u2WDazdplVo1gqG865TFto3CjqY7YDphPYq6D9zCop+VMaoKSD+7e5miZi98vI1+jJ
-	 bU3hkpmEarDbts0j6t5NFaCPD/8c5MwCNIThZOCYM70ltK+JwPv868JzeUZKA+Wgy8
-	 xfSvV2Y2iSn1+7cSUVP5N2xFfeJbaU2nUx3klPhIGHddrCvNth2piIyrG6lwaG9u5s
-	 u8z91nif8wtU1urGowZM7c7QDOZSlS/67x/Bi8lfillLJBwIPrvUYXmAiVjIs1AgUd
-	 CqMICrC1hCOuQ==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: (sashiko review) [RFC PATCH v4 10/10] selftets/damon/sysfs.py: pause DAMON before dumping status
-Date: Sun, 22 Mar 2026 10:47:57 -0700
-Message-ID: <20260322174757.84332-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260322171534.83470-1-sj@kernel.org>
-References: 
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="COejGBS2"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=ejFZ3rN0lLbdKwV9umW51UZDg0IATpp9eBORcXXmZdo=; b=COejGBS2L/v8hAz/AJBlWUe+R0
+	APZN/V8q3ReKK3zZuAHpsm06XNj5bvTVPvNWykHLX1/1TcSliLqpqKEJaREsBHurrSoDgrqWNGVKd
+	/lM1vEhgTkwZW8rQPJs3B5oPzCxZwMxiKJciHEMo7Xhzr5TvFSZL9sAl6cEeYgIgUGHtP10ajIUWP
+	pYJBNRNYAibr1UvjEMVAhs5wS9QB4OyL33jI3A70r1jTRNigoc+qIZZl8A8b8HXmNamcO00NSEsLD
+	6d8CmeduaOW3DqCNcwRF+vH/ioAJ+eg6SSg6+EqEXLT6nZgzFutx4inSscaJ/XpIf24u4p5/g9Hus
+	TesvY7Zg==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w4P5e-0000000Fcfl-0ZQU;
+	Sun, 22 Mar 2026 20:08:03 +0000
+Message-ID: <d0fc3b93-2535-473b-9f60-bd7854ba0b34@infradead.org>
+Date: Sun, 22 Mar 2026 13:08:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
-On Sun, 22 Mar 2026 10:15:33 -0700 SeongJae Park <sj@kernel.org> wrote:
-
-> Forwarding Sashiko review for doing discussions via mails.
-> 
-> # review url: https://sashiko.dev/#/patchset/20260322155728.81434-11-sj@kernel.org
-> # start of sashiko.dev inline review
-> commit 67adf8e7b8416252faf583e176f0e8424fd4fb95
-> Author: SeongJae Park <sj@kernel.org>
-> 
-> selftets/damon/sysfs.py: pause DAMON before dumping status
-> 
-> The sysfs.py test commits DAMON parameters, dumps the internal DAMON
-> state, and verifies the parameters. This commit pauses DAMON execution
-> during the state dumping to avoid races that can result in false test
-> results.
-> 
-> > selftets/damon/sysfs.py: pause DAMON before dumping status
-> 
-> This isn't a bug, but there's a typo (selftets) in the subject line.
-
-Oops, Sashiko mentioned this in the previous one, but I forgot fixing this.
-I will fix this in the next spin.
-
-> 
-> > diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-> > --- a/tools/testing/selftests/damon/sysfs.py
-> > +++ b/tools/testing/selftests/damon/sysfs.py
-> [ ... ]
-> > @@ -193,18 +193,55 @@ def assert_ctx_committed(ctx, dump):
-> >  def assert_ctxs_committed(kdamonds):
-> > +    ctxs_paused_for_dump = []
-> > +    kdamonds_paused_for_dump = []
-> > +    # pause for safe state dumping
-> > +    for kd in kdamonds.kdamonds:
-> [ ... ]
-> > +    # resume contexts paused for safe state dumping
-> > +    for ctx in ctxs_paused_for_dump:
-> > +        ctx.pause = False
-> > +    if kd in kdamonds_paused_for_dump:
-> > +        err = kd.commit()
-> 
-> Is this if statement intended to be a for loop?
-> 
-> Since kd is just retaining the value from the last iteration of the earlier
-> loop, using an if statement here means that if there are multiple kdamonds,
-> only the last one might have its state committed. 
-> 
-> Could this leave other kdamonds un-resumed in the kernel?
-
-Ah, correct...  There is no multiple kdamonds use case, but let's make it
-complete.  I will fix this in the next spin, like below.
-
-'''
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -226,7 +226,7 @@ def assert_ctxs_committed(kdamonds):
-     # resume contexts paused for safe state dumping
-     for ctx in ctxs_paused_for_dump:
-         ctx.pause = False
--    if kd in kdamonds_paused_for_dump:
-+    for kd in kdamonds_paused_for_dump:
-         err = kd.commit()
-         if err is not None:
-             print('resume fail (%s)' % err)
-'''
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] lib: Move crypto library tests to Runtime Testing menu
+To: Eric Biggers <ebiggers@kernel.org>, linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, kunit-dev@googlegroups.com,
+ linux-kselftest@vger.kernel.org
+References: <20260322032438.286296-1-ebiggers@kernel.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260322032438.286296-1-ebiggers@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-Thanks,
-SJ
 
-[...]
+On 3/21/26 8:24 PM, Eric Biggers wrote:
+> Currently the kconfig options for the crypto library KUnit tests appear
+> in the menu:
+> 
+>     -> Library routines
+>       -> Crypto library routines
+> 
+> However, this is the only content of "Crypto library routines".  I.e.,
+> it is empty when CONFIG_KUNIT=n.  This is because the crypto library
+> routines themselves don't have (or need to have) prompts.
+> 
+> Since this usually ends up as an unnecessary empty menu, let's remove
+> this menu and instead source the lib/crypto/tests/Kconfig file from
+> lib/Kconfig.debug inside the "Runtime Testing" menu:
+> 
+>     -> Kernel hacking
+>       -> Kernel Testing and Coverage
+>         -> Runtime Testing
+> 
+> This puts the prompts alongside the ones for most of the other lib/
+> KUnit tests.  This seems to be a much better match to how the kconfig
+> menus are organized.
+
+Ack.
+
+> 
+> Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+
+> ---
+> 
+> This patch is targeting the libcrypto-next tree
+> 
+>  lib/Kconfig.debug  | 2 ++
+>  lib/crypto/Kconfig | 6 ------
+>  2 files changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 93f356d2b3d9..146358530010 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -3056,10 +3056,12 @@ config HW_BREAKPOINT_KUNIT_TEST
+>  	help
+>  	  Tests for hw_breakpoint constraints accounting.
+>  
+>  	  If unsure, say N.
+>  
+> +source "lib/crypto/tests/Kconfig"
+> +
+>  config SIPHASH_KUNIT_TEST
+>  	tristate "Perform selftest on siphash functions" if !KUNIT_ALL_TESTS
+>  	depends on KUNIT
+>  	default KUNIT_ALL_TESTS
+>  	help
+> diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+> index 4910fe20e42a..f7a21d20e470 100644
+> --- a/lib/crypto/Kconfig
+> +++ b/lib/crypto/Kconfig
+> @@ -1,9 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -menu "Crypto library routines"
+> -
+
+Ah, I see, no menus or user prompts remaining there.
+
+>  config CRYPTO_HASH_INFO
+>  	bool
+>  
+>  config CRYPTO_LIB_UTILS
+>  	tristate
+> @@ -265,9 +263,5 @@ config CRYPTO_LIB_SHA3_ARCH
+>  	default y if ARM64
+>  	default y if S390
+>  
+>  config CRYPTO_LIB_SM3
+>  	tristate
+> -
+> -source "lib/crypto/tests/Kconfig"
+> -
+> -endmenu
+
+-- 
+~Randy
