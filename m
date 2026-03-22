@@ -1,148 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from terminus.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE4031716D
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2026 06:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D00E126F0A;
+	Sun, 22 Mar 2026 06:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774159910; cv=none; b=G4awmg8DoZ+OjslUerOB6hWnba0QEc7Y3/5hm0cgrQhWYNSDzR1b18uKhreCTnZHG5xp5roBhM/LQSPFyqyEmfLmfgfUYxtu/KYjDA7kf+TU5m5BFp4jYtTd/Jj50vd0JUVxBjbJk7/VF3UDE1fNKttAzqFGslmTCZkJOIXVmpE=
+	t=1774162155; cv=none; b=nPlHVvp5DrW9dMqzHOPIHj8nrRRz0aEBWpHtnQHoUGnpM0y/IvfELtByCkHF9dOXqzqfMRVFzKhdS+uWB8x1R2nHSd21Dy+y7JRnUbrBklBJOUDU6mHSoRkCXfiWgmX4s7xuiDO3P1E2NbnDQkwDMRIJ6ab6GOfhKeKL+o/1Rjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774159910; c=relaxed/simple;
-	bh=fBwQcNCGckBbW5StnisPOyP/m96IC/Xzo0HrgVS5BoU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SVoW001bgSFYUYQcOHdjUVw7Int9Jvg9rH0yiL6Wei3OAlEH3RgBAsvlzTtV2bxynp3eLyZt943n0xGwMITAm3GGFOewIi+g+MQDup+ec0o7QSk8eALsxw0X1Spe3cptPL8jiHGpzZ3STB53fPNe6V+XuUXFLNUqd158seu5dmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U2hBDHk9; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774162155; c=relaxed/simple;
+	bh=bizCZbi0OVovpEnf9armCj9nReAL8eXX8LofR1yr1q0=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=DDG+MddgXy94jt5pOfUXqYSuqhpKlo3HJEzuK3qtHMk0HVRE+sNHVYqwoX+bncqsZiTm8rw2Sb6ZBHtWRmSzrXUd4cezlTXK1l5T8YzMheR6ZdCvooV0CZi9HD8/nQbj8dM910AyyOOev6f5MriRLGM/MlYqyoBjJZu7YjC8bto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=KzOjtry/; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U2hBDHk9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774159908;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lu5jwEEecEkDiX7ux2A/sS85AyKDVmY0PIrDjssqoFY=;
-	b=U2hBDHk9OqCRi1Cuyb4WEwCxuRbJyRk4TovFJwtBzwd9AIBMSc4MFRbiFqLDKfFrTfB5hM
-	H08sIFI48jKHtzovad3gTjFD1qwVRNVWDNf0CSRS3nxhfOObEqwL7ax5kBS+A2sSa5jZEx
-	cyIX9Hy6SRJ++PW66JL6ArJum6M90VM=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-524-CPQcHYE-NIm0Lz_NxNd6ow-1; Sun,
- 22 Mar 2026 02:11:42 -0400
-X-MC-Unique: CPQcHYE-NIm0Lz_NxNd6ow-1
-X-Mimecast-MFC-AGG-ID: CPQcHYE-NIm0Lz_NxNd6ow_1774159900
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 55590180044D;
-	Sun, 22 Mar 2026 06:11:40 +0000 (UTC)
-Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.34])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 10C271955F21;
-	Sun, 22 Mar 2026 06:11:33 +0000 (UTC)
-From: Li Wang <liwang@redhat.com>
-To: akpm@linux-foundation.org,
-	yosry@kernel.org,
-	yosryahmed@google.com,
-	nphamcs@gmail.com,
-	hannes@cmpxchg.org,
-	mhocko@kernel.org,
-	mkoutny@suse.com,
-	muchun.song@linux.dev,
-	tj@kernel.org,
-	roman.gushchin@linux.dev,
-	shakeel.butt@linux.dev
-Cc: longman@redhat.com,
-	liwang@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v4 7/7] selftest/cgroup: fix zswap attempt_writeback() on 64K pagesize system
-Date: Sun, 22 Mar 2026 14:10:38 +0800
-Message-ID: <20260322061038.156146-8-liwang@redhat.com>
-In-Reply-To: <20260322061038.156146-1-liwang@redhat.com>
-References: <20260322061038.156146-1-liwang@redhat.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="KzOjtry/"
+Received: from smtpclient.apple (c-24-130-165-117.hsd1.ca.comcast.net [24.130.165.117])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 62M6DdB93697582
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Sat, 21 Mar 2026 23:13:40 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 62M6DdB93697582
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026022301; t=1774160021;
+	bh=bizCZbi0OVovpEnf9armCj9nReAL8eXX8LofR1yr1q0=;
+	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+	b=KzOjtry/DG4t8K8k2/qVagmh+E8onU86komMxX89mqwxCpbUq8liIUGnAUUuf6FBL
+	 dJfJwFn+XuyQ5rZmxKc29f05DWrKZSSDUMjKAwK3I+DMvD1kngHpkE341t/d5uTS5R
+	 bN0BjZdRVw/SdGLAf+/hgCLbT3oihrFksHxyko1a+5S1Q1+8u/abL5Kkkgjxn5+xFt
+	 3fjFZNu9MNlT8khtfRbiBlbRKdKtJaO35F9rZN+B9d/N1uUMcR40O7G4ryVh8Z205y
+	 BYnysx/JJlbc0YVdvAto7MQhaMuXfyd0FaGMXWTm6FrUDEoyqSTybtlpC8rlhmu/2A
+	 xr32KF1UfSk0g==
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.400.21\))
+Subject: Re: [PATCH] selftests/x86: Fix sysret_rip assertion failure on FRED
+ systems
+From: Xin Li <xin@zytor.com>
+In-Reply-To: <568aa6c4-6802-4eb5-b412-e3aa93ed9b29@intel.com>
+Date: Sat, 21 Mar 2026 23:13:29 -0700
+Cc: Andrew Cooper <andrew.cooper3@citrix.com>, yi1.lai@intel.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, shuah@kernel.org, tglx@kernel.org,
+        x86@kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <91590BC4-A54E-40F4-A223-A07FBA386A9A@zytor.com>
+References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com>
+ <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com>
+ <568aa6c4-6802-4eb5-b412-e3aa93ed9b29@intel.com>
+To: Dave Hansen <dave.hansen@intel.com>
+X-Mailer: Apple Mail (2.3864.400.21)
 
-In attempt_writeback(), a memsize of 4M only covers 64 pages on 64K
-page size systems. When memory.reclaim is called, the kernel prefers
-reclaiming clean file pages (binary, libc, linker, etc.) over swapping
-anonymous pages. With only 64 pages of anonymous memory, the reclaim
-target can be largely or entirely satisfied by dropping file pages,
-resulting in very few or zero anonymous pages being pushed into zswap.
 
-This causes zswap_usage to be extremely small or zero, making
-zswap_usage/2 insufficient to create meaningful writeback pressure.
-The test then fails because no writeback is triggered.
 
-On 4K page size systems this is not an issue because 4M covers 1024
-pages, and file pages are a small fraction of the reclaim target.
+> On Mar 20, 2026, at 8:50=E2=80=AFAM, Dave Hansen =
+<dave.hansen@intel.com> wrote:
+>=20
+> On 3/20/26 08:47, Andrew Cooper wrote:
+>>> First, CPUID doesn't tell you if FRED is in use. Is it even on by
+>>> default yet? There might not be a better way to do this than =
+checking
+>>> CPUID, but checking CPUID is imprecise at best.
+>> A reliable way to distinguish IDT and FRED mode is to:
+>>=20
+>> 1) Load $3 into %fs (x86_64) or %gs (i386) (i.e. whichever isn't =
+thread
+>> local stoage)
+>> 2) execute a breakpoint, ignore the signal
+>> 3) Look to see whether %fs/%gs holds 3 or 0
+>>=20
+>> IRET has a fun behaviour where it zeroes NULL selectors even if they =
+had
+>> a non-zero RPL.
+>>=20
+>> ERETU doesn't do this; Andy Luto and I asked for this minor =
+information
+>> leak to be removed, and Intel agreed as it served no purpose anyone
+>> could identify.
+>>=20
+>> As a consequence, you can use it to determine whether the kernel used
+>> IRET or ERET to return back to userspace.
+>=20
+> I was thinking of just grepping /proc/cpuinfo for "fred", but that
+> sounds much more fun! :)
 
-Fix this by always allocating 1024 pages regardless of page size.
-This ensures enough anonymous pages to reliably populate zswap and
-trigger writeback, while keeping the original 4M allocation on 4K
-page size systems.
++1 :)
 
-=== Error Log ===
-  # uname -rm
-  6.12.0-211.el10.ppc64le ppc64le
+This serves as a key architectural differentiator between FRED and the =
+legacy
+IDT framework.
 
-  # getconf PAGESIZE
-  65536
+For additional context, here is a fix to user segment selector values:
+=
+https://lore.kernel.org/all/174069328263.10177.6796873487608898067.tip-bot=
+2@tip-bot2/
 
-  # ./test_zswap
-  TAP version 13
-  1..7
-  ok 1 test_zswap_usage
-  ok 2 test_swapin_nozswap
-  ok 3 test_zswapin
-  not ok 4 test_zswap_writeback_enabled
-  ...
+It=E2=80=99s worth noting that there was an attempt to fix this bug =
+roughly three years
+ago:
+=
+https://lore.kernel.org/lkml/20230220030959.119222-1-ammarfaizi2@gnuweeb.o=
+rg/
 
-Signed-off-by: Li Wang <liwang@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Michal Koutný <mkoutny@suse.com>
-Cc: Muchun Song <muchun.song@linux.dev>
-Cc: Nhat Pham <nphamcs@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>
-Acked-by: Yosry Ahmed <yosry@kernel.org>
----
 
-Notes:
-    v4, v3:
-    	- No changes.
-    v2:
-    	- use pagesize * 1024 which clearly shows the page numbers.
 
- tools/testing/selftests/cgroup/test_zswap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index ec7f0bd515e1..107b20db2fec 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -269,7 +269,7 @@ static int test_zswapin(const char *root)
-  */
- static int attempt_writeback(const char *cgroup, void *arg)
- {
--	size_t memsize = MB(4);
-+	size_t memsize = pagesize * 1024;
- 	char buf[pagesize];
- 	long zswap_usage;
- 	bool wb_enabled = *(bool *) arg;
--- 
-2.53.0
 
