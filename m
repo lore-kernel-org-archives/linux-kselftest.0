@@ -1,132 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C345336AB61;
-	Sun, 22 Mar 2026 15:57:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8A1255F57;
+	Sun, 22 Mar 2026 16:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774195060; cv=none; b=dy/LPtm5nxfFt5y+YHg6K2hmLk0urIzGxtiuys6CkTMlHfpPgs9uUN8YCVHcR2AZmlRUuOWMG0eQ+MgCkoZuTnAVQBz+eE6rug6EX85HgTRFaUAqWYY9X+ZWfbxA8A7fthzdzT6VTXPjvInMB1HTZ5vIFkBKUt5Pj9cQ7iE+md8=
+	t=1774196333; cv=none; b=uCqgb3eooWG8J4vdIceL+UA9fymW3SK/JvQgFmBkwrh//e/T/9FeA+gmyo+hHvGw2ozgOSHTnYnibTWTxfuyX1WL9Q7njXg1yu+FBqmnVkc8QOecGNjwyQaCdflxr7pVTIscdz4FZoqjj3afWbQ1Rf+nnG1G7vGFOAu3JIT6cnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774195060; c=relaxed/simple;
-	bh=dT0Co/dTQSMuQWLCRwci5Vw0M3Z0t6s+AmNwdu4waoM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Oahyl73N3/Sa57FCDpn4BwDrVCcafcZvb3BothS4eL9X5VFOMl/KpDfKRhSROdEZQ1G8mZ4v9m1V5SIyez5HhzD9+G4s6+RyGFufuu1pthkp/Dv8Yw+8fonGy/6ONO3+trTVE5bF/MQCoacwgt1F1jtkKLQz5bHrkCt9iZujljY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQRMJZzA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774196333; c=relaxed/simple;
+	bh=pP5uNcSCgG45MH4/HYNrgZLlyFOBkKviWCQd4I+JIkE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=KMmhAWSr0TM8PAIJZDxM7V1SiSHuHTS0vegx5bK1EPMA7+sB6gfZbPJJk2wq9XmuP76QymHHAdY5MCz7Rc2GiTqaOJve7sqt0y+Xm/ZP+ehEffTEocJJ784fEXRB4Sjv8noosCGv/0hig5jp48ijXBJpLP3imvt0cjVS1E7deDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=fLv/fglc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQRMJZzA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C550C2BCC4;
-	Sun, 22 Mar 2026 15:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774195060;
-	bh=dT0Co/dTQSMuQWLCRwci5Vw0M3Z0t6s+AmNwdu4waoM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CQRMJZzAgy5OgtrWB6C6XjwLHceTrAXQUqzUppUpdMEfG2oSL//F9gE4sFVPETCwo
-	 wN1trbWGzeNMRD5Mw4+ex1fMDCn9SeDSP2Vh49gb3yAtuRmWkM+qZD5BjnuxpseAcB
-	 43n+HtbZDDBSVXWeh3oZEzWCLy58ld0+8hX2ybPAAn47tw1YbPRXHDjPqQO5mBQO81
-	 k9auOr/SF6gKBbjyq55E0y9i8mLUAbN5hLBiWMd7JJmLAuGuoM9/ywtWolInx7yhaK
-	 Bq3LB6hl0Dom9/8AFF5KM7i6LVj7bTBBujloM32/UPP56cO/lrv92FE9BtgNt3ukQS
-	 09cuQUksGreAQ==
-From: SeongJae Park <sj@kernel.org>
-To: 
-Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH v4 10/10] selftets/damon/sysfs.py: pause DAMON before dumping status
-Date: Sun, 22 Mar 2026 08:57:24 -0700
-Message-ID: <20260322155728.81434-11-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260322155728.81434-1-sj@kernel.org>
-References: <20260322155728.81434-1-sj@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="fLv/fglc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A1AC19424;
+	Sun, 22 Mar 2026 16:18:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1774196332;
+	bh=pP5uNcSCgG45MH4/HYNrgZLlyFOBkKviWCQd4I+JIkE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fLv/fglctIByfcRHnORg/XrxwdIv0B/kVJnimOKezsybG+/3MrwU937EbpZ3tijLv
+	 AyMmCWWqOc7/dvDj0XN/Vg4lom/rQRMQ4xBMhtNDWNcW5MFQOHmBLPk8yClDDSL1K+
+	 X/2WfOlQJvR5TRZuCJizMs3MfxHsnT5HlmX87yaQ=
+Date: Sun, 22 Mar 2026 09:18:51 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Li Wang <liwang@redhat.com>
+Cc: yosry@kernel.org, yosryahmed@google.com, nphamcs@gmail.com,
+ hannes@cmpxchg.org, mhocko@kernel.org, mkoutny@suse.com,
+ muchun.song@linux.dev, tj@kernel.org, roman.gushchin@linux.dev,
+ shakeel.butt@linux.dev, longman@redhat.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org
+Subject: Re: [PATCH v4 0/7] selftests/cgroup: improve zswap tests robustness
+ and support large page sizes
+Message-Id: <20260322091851.e965d3a2f0d6af5bd985407f@linux-foundation.org>
+In-Reply-To: <20260322061038.156146-1-liwang@redhat.com>
+References: <20260322061038.156146-1-liwang@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The sysfs.py test commits DAMON parameters, dump the internal DAMON
-state, and show if the parameters are committed as expected using the
-dumped state.  While the dumping is ongoing, DAMON is alive.  It can
-make internal changes including addition and removal of regions.  It can
-therefore make a race that can result in false test results.  Pause
-DAMON execution during the state dumping to avoid such races.
+On Sun, 22 Mar 2026 14:10:31 +0800 Li Wang <liwang@redhat.com> wrote:
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.py | 38 ++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+> This patchset aims to fix various spurious failures and improve the overall
+> robustness of the cgroup zswap selftests.
 
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index e6d34ba05893f..5f00e97f019f4 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -193,18 +193,55 @@ def assert_ctx_committed(ctx, dump):
-     assert_true(dump['pause'] == ctx.pause, 'pause', dump)
- 
- def assert_ctxs_committed(kdamonds):
-+    ctxs_paused_for_dump = []
-+    kdamonds_paused_for_dump = []
-+    # pause for safe state dumping
-+    for kd in kdamonds.kdamonds:
-+        for ctx in kd.contexts:
-+            if ctx.pause is False:
-+                ctx.pause = True
-+                ctxs_paused_for_dump.append(ctx)
-+                if not kd in kdamonds_paused_for_dump:
-+                    kdamonds_paused_for_dump.append(kd)
-+        if kd in kdamonds_paused_for_dump:
-+            err = kd.commit()
-+            if err is not None:
-+                print('pause fail (%s)' % err)
-+                kdamonds.stop()
-+                exit(1)
-+
-     status, err = dump_damon_status_dict(kdamonds.kdamonds[0].pid)
-     if err is not None:
-         print(err)
-         kdamonds.stop()
-         exit(1)
- 
-+    # resume contexts paused for safe state dumping
-+    for ctx in ctxs_paused_for_dump:
-+        ctx.pause = False
-+    if kd in kdamonds_paused_for_dump:
-+        err = kd.commit()
-+        if err is not None:
-+            print('resume fail (%s)' % err)
-+            kdamonds.stop()
-+            exit(1)
-+
-+    # restore for comparison
-+    for ctx in ctxs_paused_for_dump:
-+        ctx.pause = True
-+
-     ctxs = kdamonds.kdamonds[0].contexts
-     dump = status['contexts']
-     assert_true(len(ctxs) == len(dump), 'ctxs length', dump)
-     for idx, ctx in enumerate(ctxs):
-         assert_ctx_committed(ctx, dump[idx])
- 
-+    # restore for the caller
-+    for kd in kdamonds.kdamonds:
-+        for ctx in kd.contexts:
-+            if ctx in ctxs_paused_for_dump:
-+                ctx.pause = False
-+
- def main():
-     kdamonds = _damon_sysfs.Kdamonds(
-             [_damon_sysfs.Kdamond(
-@@ -302,6 +339,7 @@ def main():
-         print('kdamond start failed: %s' % err)
-         exit(1)
-     kdamonds.kdamonds[0].contexts[0].targets[1].obsolete = True
-+    kdamonds.kdamonds[0].contexts[0].pause = True
-     kdamonds.kdamonds[0].commit()
-     del kdamonds.kdamonds[0].contexts[0].targets[1]
-     assert_ctxs_committed(kdamonds)
--- 
-2.47.3
+AI review has questions:
+	https://sashiko.dev/#/patchset/20260322061038.156146-1-liwang@redhat.com
