@@ -1,157 +1,219 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1754EACD
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2026 01:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C6752F8B
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2026 03:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774144282; cv=none; b=CoGrbNKZFfNbWQ4omJwA3D+sZfgpyQJXLC1gsQnE9HzhSMJPCzhDAmQ1/S6U5oQSfwZ+mi7HRhEhZSClCz1iVZ22UoaVy0A+6wu9cap1iznFH74DaKpwg3wutZtyI4RdjkN7Akyv+V0uY9PVn//SqbRUCbq/fZUxQK4WHFyiVOg=
+	t=1774148908; cv=none; b=OgRdKg4O5MCKVcJBpuwIbsomrZEotz1uQ7BpbmJ535SgLrskGlvLVKOyywsuTW0KnTXd+BToou/XpD96IPTB03gaNaq9QQ3JoWkUmNE1r8lbnPXk6ThmdsLrW85u/hb7jOJAL2jM3v0eh5Lg7I8ryeGj9xOthKZ+vqwiDIFcegc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774144282; c=relaxed/simple;
-	bh=3wV6qzVpAsYqJwaSyznGfPODWqEYhsWXQFQvbz/io+Q=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=U0apmBQ4t27BgFMP3RyUj8pkeoQXUfo7gNlgPdks32hC7E2xwsjGejUoR0AdbLcJfdMmHm9N0iWqaUb0rht+7ffC2Bpa0b45dL8Dw/+fz2Nq5wgxr2GS1rp/wO8O+T7egb2r7UyOSBgypRECOIBVMP0hqsbNaKd3iXV4RmVcYE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=yxfpjZlN; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1774148908; c=relaxed/simple;
+	bh=T9uG2e66egssCJaArUODs8UN0bWL7XGy8UlGtEUtsd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gEilHOwM7rbp7jJIXRNcO5gD9V1OstsLJY7aqrsa5uXlvLOXfJKtxxn8dOahzjGAmvhZyXjjF+C7Bs1xc0IvabqzEg49uMqdeM/4xGHh10DP9qzvDIy0a81mHkLHAFAF2zAw0fa0HKAyaxHfigMOZjtDSr3T6uvMX8Vf9vWEQ9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H1+uBwRG; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=NMYXiBRc; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="yxfpjZlN"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-50917e02472so21499081cf.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 18:51:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H1+uBwRG";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="NMYXiBRc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774148905;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=to1VE5KCZRkEhvhMb90xNxfk6LIxqdvQwXLJtGlmLy0=;
+	b=H1+uBwRGkpfDSpcuLPIVon0M71zN3e5W32UKF314QStmxYHUXvOm3j90bGfPknJOurWUiA
+	JeXEwID9M6SYotuNjKT25ifK/QzJjsjBvzYvTx216basmmP3ytz9oYVPnPkAU+rVsRdpyF
+	cnw+PJF5ouIhdebzWlugk+FRKlLLN/8=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-284-Nr305tRXM_u4nUKCZV3klw-1; Sat, 21 Mar 2026 23:08:24 -0400
+X-MC-Unique: Nr305tRXM_u4nUKCZV3klw-1
+X-Mimecast-MFC-AGG-ID: Nr305tRXM_u4nUKCZV3klw_1774148903
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-35ba4bf54beso2678370a91.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2026 20:08:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774144280; x=1774749080; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PspDfyNJnO+7FZv30/IIcadDyXG1kBEYdchAYPVdXh4=;
-        b=yxfpjZlNT2/o1/+xxVx9eP8H9SBIS8E+R50spOGBtVgAOGniiafvSg6V0932RF8FGG
-         soA6pEHS58GRoEq1zPqZbyObVxzFtJ+7Pp3itqtaYsrGNGT48RaNAB3BEeKh1DzUI6xy
-         /eIMdPxAPE1+8WfIK7KO0F4OXkU/diNAAVzen29pjoYq8ihxUVD8FLgga/vJdsdpErdZ
-         Lxdl8w8nEKX50y/418DfSOFSeYwh2AtEXxRBNkaptOPpml9RyC+qQ5ZcBrCkTXoNu5GQ
-         kE/EVQNrY8OdTRsrzfpmacStVKmL6bmc3qsNr+E3FPExIPusjto9jfrl6BlVkeMESlix
-         GIUA==
+        d=redhat.com; s=google; t=1774148903; x=1774753703; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=to1VE5KCZRkEhvhMb90xNxfk6LIxqdvQwXLJtGlmLy0=;
+        b=NMYXiBRcfH385qFOrSBSsF/5EIl15UhU+z9iWmxIUu7rIit3BkN5U02O6UBGIWTna2
+         TYTvzX7UfZVaGBIF5GMGjrL/KjToWntFYGd/K47fz6Q1RXbm5x4kK4yK6zq6Nk67xN6q
+         ZOiLG5zk8meh4VfK5HDI0mUVty3g55H4/AzAp2KOMVVneQwYuVVlRqWkuqi2Hzlz/7J4
+         vS1xDD6Q8jGQDHY+Ul6aQtzMPPy3qNP3HWWAOANabJ00emh2Hycy4Hv5j2iQjnWEe0GZ
+         TbaqBkExAhtL5CuYZhMj+IKDYh+Q9gqUzeoSpkLUEKHeLDlKxRq7qiUNG9QNGB9h0esS
+         VjlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774144280; x=1774749080;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PspDfyNJnO+7FZv30/IIcadDyXG1kBEYdchAYPVdXh4=;
-        b=BBjokSMaJYp3N32u4cJO7G4fdhOz/i2SZKDoikrPDKMMt8HrZIS0ww6xtWEXv13tdd
-         zfd60HM1rdHJx/mEsAazAFTWYnsKuk2i1hRbmVQcuaE5zEIn2JaHh7Y5cB+a0dq2jxUa
-         b14DSoSxpJpCTI37XQiL+h/YdxnZwGl0J5eI6car8rBrMSmneenquUCIVRqwwSLZa2y8
-         Osp7r8WqF0yoja0aEbIGUI0swPjKk33snJji01Ab/uJPaL4abmc5Ja1pYO9LkJuOQmHJ
-         bdQLUar4DQt0VyGZJf2l+hwSAqxGgwxmHPh4nJCetdSxue4UGrRCiOF4IdPy+lfHPl+d
-         4RWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXiCYEv0iuTZ+EfVelyI2uaDAfpXsJBMd64weOhChexzJBaeBvOsKyN8jINrVXVb7bZqDwZFw/gKZD+eFEgZeA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMLKmA1L8T7cYyBbBFkV2wUHSsn/enm93iT9YdF0+vWitAH+4p
-	BrF0wgDeW30uAedFd22AAvqWo2ECQvNwdjsWM7cRus+bX4O67fETRfzDz0E38sKzyoIancXehyt
-	0efrnN6s=
-X-Gm-Gg: ATEYQzy4L5RU881+RIcH2qXdMy8uAhqZvD7nyiCJ733FCo7Ie6a+6UMZ7VnlqnYc9v4
-	auwSoYw80QnATCUnOhjeUVQK3DIZDeO713fsSuDKkeUBsQvcQUueIzCIdZ9m+rrVTohysrmTAhM
-	8OXY6aRN4kgbCPOWEiy4KHlBnta62CFYUR4sjmnhr/cefwzrFtCG/G02zXW8wNThHZGSusgFTar
-	1Se73B3q7rrwsslq569eTy6EqD7HHFgA9A3OUNe81//3Uk1oR40UUq53At3lL/0rn3tXsJoB1MK
-	7e1RGKnaVD6/8WJARmWOf1gBuk2Pj+4kdkwJ2kMQte4E0ZBshGhVLp817dmv3rkWGe3xUEQhQwJ
-	vyznd5VWCNggvv3BZHvjNXWyAkOe596y4VGIy3qEuXOCEom2Mze7KiwpLRlQsZ9ixcxA9FOsa7h
-	ek57bm2UgCAoAfbigaVuFWNNM=
-X-Received: by 2002:ac8:5d4e:0:b0:509:26f4:64f5 with SMTP id d75a77b69052e-50b37512ed6mr129658601cf.48.1774144279741;
-        Sat, 21 Mar 2026 18:51:19 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b36cb3c91sm54518171cf.4.2026.03.21.18.51.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Mar 2026 18:51:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774148903; x=1774753703;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=to1VE5KCZRkEhvhMb90xNxfk6LIxqdvQwXLJtGlmLy0=;
+        b=SoIOyRw1j8rukzkGVfAJM+gcFIAKdAgtubYkTRC502/KSILgi4+ReoouPd9UasCiBZ
+         gdh8hH8Op4W4F3b4xvHZdctHB19k1zM49EnUlM8QuqJXelWXbfl9jQEG00oUzy8Gtip/
+         4Kw9tmPIuBsMEj3NznBZdLT9EL0o8rL7BTD8ZpOjSUAtrozo7UnzBlmY+GfAKvUu5V5l
+         iCebLdd7DOc2m41aBTee5UYiJw2BbrbCTT3GuNUh3OiozSG0trpTn6JzAqsusrjUndM9
+         QUD55SevE4G++9g7lijTwV6U/0KWE1j0e8uCahvOyIuKs1D7+lp7EypIp3YLgTF3vJNw
+         b/zQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUvUauGpIM8wzBmMurSkDVVM0Zohe4zVwKWD6HC7AN/UF/verEOFrAYM7t6jI/LOAueBX8b9pWC6Ooa/tsy+to=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt4MD9M40hE926hbKrreaS/kjA8gNrN6VguX0VuFLZd2/kjIKB
+	J8vkPK6Yofk5mFitZBKdL4UFzWd+3VKID4/F7aFqaQcVEDr7oqvf09XjfPAqxX0fwrsijEupezm
+	91BUtoQdf44G9Q6PTuAOWCmUXvRaMIdpgJmq8+gzg8W8dtUJTkJNZeimgimsZmr6//X919A==
+X-Gm-Gg: ATEYQzy2b4lPN9J2ueiyNS0anNC+Py3yqNqgyYGt0V47nSwfHNcMfkqpun7jPwNFz8a
+	V2fJOtQNA7rJ75qMv4nodltTtflwKS+4GCvaFO6PtB7aWwVEKKlLVLla8wcLi5Dq0giSZSineu8
+	pUdP0ce0bAbeBSA7GIjd0+zjDylptHoXjKj9wMKj0SGzPrzmYovfUmM1rE6k/qZP3DexJW5RlWL
+	RK7kG2hlORN/OGsL3BRPeDwnMNznFv+PFfwo2ATCSAH9PMuvnYGAIWKVWqXNTS12udoZfNMlm3Z
+	xnHu8NcpJtyrqQuIXo8Ery4fgGXS5zjzHcJbwomFzo7RHYMrGDIFuJQZ8mROsxLeuJ5XCQ00i+W
+	rA5dk3bhcucc+Ea09Og==
+X-Received: by 2002:a17:90b:4cc9:b0:35a:329:73c6 with SMTP id 98e67ed59e1d1-35bd2b97774mr6439627a91.3.1774148903267;
+        Sat, 21 Mar 2026 20:08:23 -0700 (PDT)
+X-Received: by 2002:a17:90b:4cc9:b0:35a:329:73c6 with SMTP id 98e67ed59e1d1-35bd2b97774mr6439609a91.3.1774148902855;
+        Sat, 21 Mar 2026 20:08:22 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bc610c232sm8435153a91.13.2026.03.21.20.08.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Mar 2026 20:08:22 -0700 (PDT)
+Date: Sun, 22 Mar 2026 11:08:19 +0800
+From: Li Wang <liwang@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Yosry Ahmed <yosry@kernel.org>, yosryahmed@google.com,
+	nphamcs@gmail.com, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>
+Subject: Re: [PATCH v3 1/7] selftests/cgroup: skip test_zswap if zswap is
+ globally disabled
+Message-ID: <ab9dIzALKPQLb-SX@redhat.com>
+References: <20260313043532.103987-1-liwang@redhat.com>
+ <CAO9r8zMsbVHKnCzfQcdtomRMWTNFgTGY4XALxwm+i9m1SUPPvg@mail.gmail.com>
+ <abPEALhYmtBnEULi@redhat.com>
+ <CAO9r8zMciNGa1ei-pSvx+ndrCJtZguGj12R3sa8PkDHYwsvGzw@mail.gmail.com>
+ <CAEemH2cQSoTEVb+8NxZpc=qQVrd5DBhj7HmJA5o9GZFke3zj0Q@mail.gmail.com>
+ <20260320123520.616900ef63996ba448bcd91f@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 21 Mar 2026 21:51:17 -0400
-Message-Id: <DH8XNPJ8LC2K.5SQUBA8FZ9YW@etsalapatis.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: test access to ringbuf position
- with map pointer
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Menglong Dong" <menglong8.dong@gmail.com>, <ast@kernel.org>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
- <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
- <haoluo@google.com>, <jolsa@kernel.org>, <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20260320084155.288417-1-dongml2@chinatelecom.cn>
-In-Reply-To: <20260320084155.288417-1-dongml2@chinatelecom.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320123520.616900ef63996ba448bcd91f@linux-foundation.org>
 
-On Fri Mar 20, 2026 at 4:41 AM EDT, Menglong Dong wrote:
-> Add the testing to access the bpf_ringbuf with the map pointer.
-> "consumer_pos" and "producer_pos" is accessed in this testing. We reserve
-> 128 bytes in the ringbuf to test the producer_pos, which should be
-> "128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
->
-> It will be helpful if we want to evaluate the usage of the ringbuf in bpf
-> prog with the consumer and producer position.
->
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+Andrew Morton wrote:
 
-Once Jiri's feedback is addressed feel free to add:
+> Meanwhile, AI review has a lot of things to say:
+> 	https://sashiko.dev/#/patchset/20260313043532.103987-1-liwang@redhat.com
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> [Sashiko comment in patch 2/7]
+> ...
+> Could this diagnostic message be updated to print the expected swap amount
+> in KB or bytes to avoid confusion?
 
-One nit below.
+Yes, good point, will modify it in v4.
 
-> ---
->  .../testing/selftests/bpf/progs/map_ptr_kern.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/tes=
-ting/selftests/bpf/progs/map_ptr_kern.c
-> index efaf622c28dd..c3fa57ec430b 100644
-> --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> @@ -647,21 +647,39 @@ static inline int check_devmap_hash(void)
->  	return 1;
->  }
-> =20
-> +struct bpf_ringbuf {
-> +	unsigned long consumer_pos;
-> +	unsigned long producer_pos;
-> +} __attribute__((preserve_access_index));
-> +
->  struct bpf_ringbuf_map {
->  	struct bpf_map map;
-> +	struct bpf_ringbuf *rb;
->  } __attribute__((preserve_access_index));
-> =20
->  struct {
->  	__uint(type, BPF_MAP_TYPE_RINGBUF);
-> +	__uint(max_entries, 1 << 10);
->  } m_ringbuf SEC(".maps");
-> =20
->  static inline int check_ringbuf(void)
->  {
->  	struct bpf_ringbuf_map *ringbuf =3D (struct bpf_ringbuf_map *)&m_ringbu=
-f;
->  	struct bpf_map *map =3D (struct bpf_map *)&m_ringbuf;
-> +	struct bpf_ringbuf *rb;
-> +	void *ptr;
-> =20
->  	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
-> =20
-> +	ptr =3D bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
-> +	VERIFY(ptr);
-> +
-> +	bpf_ringbuf_discard(ptr, 0);
-> +	rb =3D ringbuf->rb;
-> +	VERIFY(rb);
-> +	VERIFY(rb->consumer_pos =3D=3D 0);
+> [Sashiko comments in patch 4/7]
+> ...
+> Is this description accurate?
+> Looking at tools/testing/selftests/cgroup/test_memcontrol.c, the macro is
+> also used as a memory stride to trigger page faults:
+>     for (ptr = buf; ptr < buf + size; ptr += BUF_SIZE)
+>         *ptr = 0;
+> Could renaming this to BUF_SIZE obscure the original intent of touching
+> each memory page once to force it to be resident?
 
-Nit: Can you repeat here the explanation from the cover letter=20
-as to why this is 128 + 8?
+Well, maybe yes, we can use page_size for this one.
 
-> +	VERIFY(rb->producer_pos =3D=3D 128 + 8);
-> +
->  	return 1;
->  }
+> Could this lead to truncation of /proc/self/mounts on architectures like
+> arm64?
+> Since BUF_SIZE is strictly 4096, this reduces the buffer size from 640KB
+> (when PAGE_SIZE was 64K from system headers) to 40KB. If the mounts file
+> exceeds this limit, the buffer is cleanly null-terminated but the last line
+> is truncated.
+> Later in this function, strtok() extracts tokens without checking for NULL:
+>     type = strtok(NULL, delim);
+>     options = strtok(NULL, delim);
+>     ...
+>     if (strcmp(type, "cgroup") == 0) {
+>         if (!controller || !strstr(options, controller))
+> Will passing a NULL type or options pointer directly to string comparison
+> functions cause a segmentation fault?
 
-> =20
+Theoretically, you're right. But in real situation we haven't observe such
+failure so we can just add NULL checks on the strtok() return values.
+
+    options = strtok(NULL, delim);
+    if (!type || !options)
+        continue;
+
+> Does this code evaluate its exit condition correctly when waiting for a
+> cgroup to become empty?
+> When test code wants to wait for a cgroup to become empty by passing count
+> = 0 (e.g., in test_cgfreezer_forkbomb()), the loop exit condition is:
+>     if (nr >= count)
+>         return 0;
+> Doesn't nr >= 0 evaluate to true on the very first iteration, returning
+> immediately and bypassing the intended wait intervals? Could this cause
+> subsequent cg_destroy() calls to fail with EBUSY because the processes have
+> not yet fully terminated?
+
+Okay, this smeems a problem, but not blong to this patchset.
+I would sugguest fixing it in another series.
+
+> Is it safe to ignore the return value of read() here?
+> If the read() fails, the loop will continue incrementing the offset without
+> instantiating the data into the page cache:
+>     for (i = 0; i < size; i += sizeof(buf))
+>         read(fd, buf, sizeof(buf));
+> Can this silently fail to establish the required memory conditions for the
+> tests?
+
+This also can be improved in another series. Shouldn't resolve in
+this one.
+
+> Can this dereference a NULL pointer under memory pressure?
+
+Theoretically, you're right. But I think NULL pointer checks can
+be added in another series.
+
+> [Sashiko comments in patch 5/7]
+> ...
+> If malloc() fails and returns NULL, does this loop dereference a NULL pointer
+> when writing to control_allocation[i]? Other allocations in this file seem to
+> check for NULL before proceeding.
+
+Theoretically, you're right. But I think NULL pointer checks can
+be added in another series.
+
+> [Sashiko comment in patch 6/7]
+> ...
+> Does this larger allocation size require a NULL check on the malloc return
+> value later in this function?
+
+Theoretically, you're right. But I think NULL pointer checks can
+be added in another series.
+
+>> +	snprintf(zswap_max_buf, sizeof(zswap_max_buf), "%ld", pagesize);
+> This isn't a bug, but since pagesize is a size_t, should this use the %zu
+> format specifier instead of %ld to avoid compiler warnings on 32-bit
+> platforms where size_t is an unsigned int?
+
+Good point, let's use %zu in patch v4.
+
+> Will this new limit consistently trigger zswap writeback on systems with
+> efficient memory compression?
+
+At least based on my testing, (whether on 4k or 64k systems), everything
+runs smoothly; this change has indeed reduced instances of false failures
+in real-world.
+
+-- 
+Regards,
+Li Wang
+
