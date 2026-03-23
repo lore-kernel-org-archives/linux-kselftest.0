@@ -1,162 +1,248 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11022122.outbound.protection.outlook.com [52.101.66.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398BA387566
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 09:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774259139; cv=none; b=K+XjNwszVRpr55QeHRxh35hcYfKRcizoZKVElM1535ovsu6q3vEEseiDj0kxnunT7MQF9m++t7Lews82EJ/v6jZHrolq5RFWVu+3rCfCqDyXP5xHuMBcrYLUZQ8G0nTm6DqTH1ldmSj5b35a64lFoU3ZW+n1zUgQ5VarUjeH3Ig=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774259139; c=relaxed/simple;
-	bh=XYhbbjpDV0ET9lpzrkJgS6mYpcOgfUEU7VTc6kLP4UA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m0Ll1S9v4t4ZN5fHCiK7t6zulp1mpy1RxYy/IJo0qSHp81bby2hGhJd8BbDqU/zKpD7l714Ec9yJte0JLWsKbRX8I7pwUlcnUtAjFlkDom/duT8bVLbTS+uhkU3n69vQBD63xnPcMzNDqcsAeo+SomWy5Ufo5fGikewn7KtO2wU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D0dxsm3A; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=jnN4XEa/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEAF387585;
+	Mon, 23 Mar 2026 09:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.122
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774259352; cv=fail; b=gQjKt1fC/IV0oQljbgpO43BC2DI1l41+IKXB/y07ULKeFP0PZB1wmtsUCTqQN0dvzlmgiWXOrLVDJC+HS5vvFcAjEewNJtwPRKyvTojSv5leB/RqWncGqlTvlhAM44YqbBRocr3dNt3AIj/wwYe6CZFT7En94+0iQQDB51KTPMQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774259352; c=relaxed/simple;
+	bh=anQbNvHpwyAgC0H/KkkK/2144rs3m26+WhoFwAcEbDE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=lOoePMWamMo/In10ejn6mFF/K5l6EQRUQgKm+GpxgTioIkuv8yub2BR7j8rT33IGhE/xnAsnvvS+IX1kEikH1kJDQcnd4iOWtzmz5Tq8BsX3nE4Hn0bZ9jrCsck86yGxniUVQ2A4NazEqoODMzhPKwtpAYApUBsuNBPTGZiyNHw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=svDVrV9X; arc=fail smtp.client-ip=52.101.66.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D0dxsm3A";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="jnN4XEa/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774259136;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2LcMB5gIX03eono8rt37+6BTZoTufylHEu17I/eh9tE=;
-	b=D0dxsm3AoEaS2UxwI67ytvQFlctdGS/zNr1L+c9FYFBx7B2HCcnmseAsTDNhCLMrS+yyas
-	sWewg6N4QJSnRW/Lvb8ZSh9Yfn/ZuVsc81VNitmx4uwJgTW9DUH8A77hs8AhdhGHPoo8/1
-	GT6KXEaG9KrkhZhRxx2xrlqw2n6+tsM=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-29-07DWVg9_NgOj6N_JHlskDw-1; Mon, 23 Mar 2026 05:45:34 -0400
-X-MC-Unique: 07DWVg9_NgOj6N_JHlskDw-1
-X-Mimecast-MFC-AGG-ID: 07DWVg9_NgOj6N_JHlskDw_1774259133
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-829ad972df6so2557848b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 02:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774259073; x=1774863873; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2LcMB5gIX03eono8rt37+6BTZoTufylHEu17I/eh9tE=;
-        b=jnN4XEa/YmZZveP6wlU5CqkVv47uZboQ6OYTGQo2VaLeb8VXabDo6ErzIUKpT3TVb1
-         5y4tAf2hS7eYvgvr7M2TEB8r7KsgEfC2SuVWq3NT9dPnBzFsSqSS6DPs5apfCnaIzdKA
-         VU0Q/n/OO/xnHIQi5VzrcEIVblZrGjzPgWjBK452cVjPilmN4axnih4a/rBbh9H2RGto
-         ZvA7hcyJBr+Yu1UmWg/knavHtZ9D0sHzHTQp1IR2F3wVx22FCYmf52BBWrNXQkg73Kgq
-         vZzsKMxkGD4TCFKUriqFopLka2QiROj61ZTiWNTTnPZbHFq7u9MSZ2j/Q/OXD/O9mqf8
-         UbSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774259073; x=1774863873;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2LcMB5gIX03eono8rt37+6BTZoTufylHEu17I/eh9tE=;
-        b=nTRWiKCHXRm0fUTPEQEiC7tu1GI03kj3TCdN0Cbx3fxkjN99YJh1GTqj4O8/Vlwrup
-         uB0/KpVyGustfFaYpbQXKspiKhUy1E0MOaicQIoBqD0rirNCHATQuZmdznQF3+qDsuh+
-         MxSNNUVgd1VSmwVfIZ5QOZ8vp88U+i+Ln1yVq2zGKtvHcnuMX7JnwuKh9xaSFT4XR2rv
-         XSv+Fomk69p7oTip0NpfvTKuMIp1TbI0Lwi/hfqjEErabFiosBfA/gr8AaGW2/s+kmS3
-         uiiZ6DcbA1CwqG1Z9QrViisxlojouBJTiCxp30vENGXbmJQjlqgZuxzUO0zQci5uAAZ0
-         LRVg==
-X-Forwarded-Encrypted: i=1; AJvYcCXcIZk4lmwfLDF4wTqF6hFpYD5idbnAnX505DVTTUptnD+2B9Q10ynfWn8KQGEPshrDE7SRUqwg/Xkbp7+s9RU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7oJsGS369nlHaoSZjOoT4xmDEz3zdGW/zxUebveJz3VkTRvOd
-	SXlyKB+Lzm7FMOu8alekLqnbEnBB4W/CI6m3Jw2dawrDgzTAWtf2cl4N/SH+gZk8mZWYzZfHcfO
-	kDb99tSTONG6MTjyrnJn3ZZE4PrWneB/q/mnA5LXDd4RFeO84lfJjyrpyzg9+yruR6VrLfg==
-X-Gm-Gg: ATEYQzw8OgY588ZPZDanybP/fOKlPUIJ8xm5FDmsCaXA+bapRTLIzpwI468IhucXv1v
-	6ZaZ4MuBqo4BiJEsVupd8xf3McIG2PB8eepfSh7JJBTsCg3/ARU+ylR0RP8vXpEWuoC3DCLPVYW
-	n4XYytMPCShfgf+M4RllYDOP0zEq512YKAWHdKm/n0aHuR3e+iQJePTpWq29ZatQLyl6RJ93UG8
-	faid1b546gsTw/POSQx6H9SYOVT6Y24WR4JJl6ejGm2SMoVLWXvTyyKoGKyWMKA7MBsq4b7SfVv
-	YAW2LDz1fkCeJHmLuZ5lpxtLqX8uXYMxloxXzA1cpA3tFzOdRPNAebIZNtzmotw3GVIwC/uDHeY
-	OaBadv1407xrjdbz2jQ==
-X-Received: by 2002:a05:6a00:12e2:b0:82a:7dfd:9757 with SMTP id d2e1a72fcca58-82a8c2525d6mr10198875b3a.4.1774259073588;
-        Mon, 23 Mar 2026 02:44:33 -0700 (PDT)
-X-Received: by 2002:a05:6a00:12e2:b0:82a:7dfd:9757 with SMTP id d2e1a72fcca58-82a8c2525d6mr10198855b3a.4.1774259073192;
-        Mon, 23 Mar 2026 02:44:33 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0409c681sm10471814b3a.37.2026.03.23.02.44.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 02:44:32 -0700 (PDT)
-Date: Mon, 23 Mar 2026 17:44:29 +0800
-From: Li Wang <liwang@redhat.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	James Houghton <jthoughton@google.com>,
-	Sebastian Chlad <sebastianchlad@gmail.com>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
-Subject: Re: [PATCH v2 7/7] selftests: memcg: Treat failure for zeroing sock
- in test_memcg_sock as XFAIL
-Message-ID: <acELfUqXlKVWFcDT@redhat.com>
-References: <20260320204241.1613861-1-longman@redhat.com>
- <20260320204241.1613861-8-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="svDVrV9X"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GBvRSqF+S9FstxFTzkT7S9m7blpwz07km6b8uIuk4I8udRcp8wVtLdaV6w0fm3+xsKgl+neAoMtpOs1H8+kah/t2ixOaICd9LZcLq8xPNb9IsOAwsB7CktTidHGAc4xmWKls4xtj7ahR1HY1utTcL3e+DzU3H3/NKVsay1OT8N3Qoi7K4dpaPPp8j+ZHZM6T0l6Uop8mTtYFuNhdMDigs3hb5qxRCloZANo+5HWSL9APIkdjneAUT42ZQzdR0yAo4mqxKgxfNPDqtUtYDB19wfTR6uSJyQPJVnhw62YCktIADfJllqSCfS00OtGzhJVoqo/N28q9aTB2YAzPrnuy8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZfKe0xMAkQIPYyK1AQ7tGnsl1nU5mQRjmzEe/ckJfRs=;
+ b=jdO1Wg4l/Hun6UDZWcarJi/LNqBhB2QRfL6N69Z0W+TYbIRanlhh+giAuJ5s241YDPkIWSfx+SKkNDuLMpeIOgsWjrpuwPcEb3Fn1SL+Cuhzcfe3OYnWIcRlN+M6WUgiHQGTPytrpI2Dz16neFavmtLBckoYpN43m10Cj5GcnTMvT7nRpFz+6Ddotal20il6v0SxHPRbEz+gy3x3fEYvAIVenxOyBixgIEW1duxJLGnA/Yy5iUnvCI7iKIvZVHPkkWQUnPkbDyTC2Jc47OWSFYjBnmUnr9XRRQwfeyryKnj+fAtB15KL7k+A0e9lMi7eRfHBd3TAbQ2VLY/NBOKjFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZfKe0xMAkQIPYyK1AQ7tGnsl1nU5mQRjmzEe/ckJfRs=;
+ b=svDVrV9XaTcO6chVkH7iClGhJEYkZnBw9/LWBJC3/Fk6SKjQiPcVxjpNPYFpnWNOQhzvbRUSBa56v4kytelCX4zKS12KulAC7TvSBJikmc6No4D8NC8b3nbjWujTJf1u6wwRIIbA2UgOhHs0tQ06fMEQ2lsGlVqj9hh74EAWItdsRuGB8+K02B3XsZ7uhuExcDqEpf29pUmJYPPKBGCjt4PpIszoTCzLOG1LjEnJGeW3qc/JRbSdgCqDNYIyO3HglZwINMkJf8Qe0Jz4mMO1PHHu1fOYWTPvA4XyVKUh9Yw4/dNn3eRvn1GIKXnrC/tOOnwa/QUpubT6FQ13pQdU8w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
+ by VI1PR08MB9960.eurprd08.prod.outlook.com (2603:10a6:800:1c3::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Mon, 23 Mar
+ 2026 09:49:04 +0000
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9723.028; Mon, 23 Mar 2026
+ 09:49:04 +0000
+Message-ID: <c1c8b30a-ae46-458a-a896-ecb9f25e2df0@virtuozzo.com>
+Date: Mon, 23 Mar 2026 10:49:02 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests: x86: test_shadow_stack: return KSFT_SKIP
+ when test is skipped
+To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, Shuah Khan <shuah@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>, Edgecombe@dev004.aci.vzint.dev,
+ Rick P <rick.p.edgecombe@intel.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260322233938.190526-1-aleksey.oladko@virtuozzo.com>
+Content-Language: en-US
+From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+In-Reply-To: <20260322233938.190526-1-aleksey.oladko@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BE1P281CA0058.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:23::14) To DU0PR08MB9003.eurprd08.prod.outlook.com
+ (2603:10a6:10:471::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260320204241.1613861-8-longman@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|VI1PR08MB9960:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53e1414a-f6d6-49b2-19b3-08de88c16b42
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|366016|1800799024|376014|7416014|921020|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	6MXibbK1sfn29Dh/85jb8wLIZFM3z4bs+yfgP0K7EESroCdQcs5lVIUutRaevp2+1UhxumAbB2+sp7K3f80Wpn4L4XTg6LbdOtjnd7P83P+uEInlJPmOuO87IV+StWiFKVbaFT1BijV9LgVF3GILj4a9TJAqHrVmc6pds8ALPqxxl4VV8E6EWQ5g2g9T9Gk2DAjx9UzgPovxUT413d8ggCKRxKwPQyNgJH3X4RkBR07R/VLmK7HGtUIhc8UqTDFAKRoXwnN1G1hzK8htFUvIJhMgVOH28ttVM1uxclzsTPQVlrz/CiC4OijdeuJo09RebCEPfBoxPUYrobmvrLr2Mds0hL5Mk6lwRElpfy9zgRBEX70sSDChpssdzRE8EsxxQzC8OAtMMKVtePLJUMfppm4hvVXGPpQ6s3mt1yTkdWC06pAgXzoSpBwcDl3AE9OyWkQeTGCtdVpAvtQV69GLDk41XlY/vJMO0CIJ3PZTLprL6E0H/C6nxzDUJ1Shwc1IymBcE9MAM+/AN6M0q6m2f3fI3L5k+Gfs+kTb3jgIgrgtO/lCLh2eWXVGdlP60jxj2hxHYWIba8tqSGQLuo0B6lM83xr3hTskMMopOd9ECBUubgRiJxfSFIl9VDZM2pDAwO2FwwfU4dccpSvKihHMTf+NjSqDpD402g6shcoWParEiZGpt/vSQR4aXMVQPaTDM38TM3IJU5nrVldGGUAZc6Fc6QDz0x5/Ft85unnJ8H8=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(376014)(7416014)(921020)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?STBMTjd2TjFKMU11TEpDVm5GVmdPRHRqTlh4MmxXN3RKenFRZGUvSTVQa2dt?=
+ =?utf-8?B?VGFqS2NYdy80UlBMWWRTMytybWcxcGtrQjVTeWMvRjkxZWV2OTdVSkhqMFB2?=
+ =?utf-8?B?d3paY2J6dFhvcTI4b1lnL1Z4R1h2K3RybGdsekphRGFHajdlYWhFbXNTTGJQ?=
+ =?utf-8?B?T0lzUkEwNmx1N2ZCVjRDTlhFSlllSG1jS3hQaFp4VWxvUHdVVWwrc3JVRnIw?=
+ =?utf-8?B?VFZrN3hCeXB1MmpQck9CS2pkSGVjZTBZbXhYNHV6Si8xQU53bEJHWVIyM3Bu?=
+ =?utf-8?B?U0V1emN0aXFVOEx2RCtzMk5lZnVHYzJoUm85YTk0WXRRWlcrdHNLUjY2QTlh?=
+ =?utf-8?B?TkFGZzBjYXRJOHVUUmhDQW5nUFZ4dFEwOVNmNy91dld2dnc0S21pQk01ZEh6?=
+ =?utf-8?B?K3JhZitDeHpyYUx5dXdNby9DU0I3d2o0ZnVaUnJIRGlmUzdRSkNseWVDOWY2?=
+ =?utf-8?B?ekRwZXhLOWFuL1Y2S24yZmxyLzNvMUJmS2MzWlpmMzdDenpuMFJjTlVESEVO?=
+ =?utf-8?B?REYrRlhRVkIveS9FOUdtRFErbDd6ZU13VFhhcWthQ0o2V2JObkp3OVQrTHRK?=
+ =?utf-8?B?YnFkUytVTVByaWQ0Qk5talVIZytJdWkwWVpKbGVFbzdaR0hna2VVMkM0TGNv?=
+ =?utf-8?B?STIxTU9OMHFZUUpVNFhadHJvQUJJeGVzUVVXbTVGTUtXSkcxZGJUdGVPUUtW?=
+ =?utf-8?B?SGEwWmxLRzR4OFhtaWtKbUVkU3JMbTc4WXhNRHNuaTYwMzhaOGJ5MitmZnJW?=
+ =?utf-8?B?eXZBV2RXcU9LZlpFOFVodGE1QU1FMmJDODNHekpneTZnVW5wd29rZXIvcFpL?=
+ =?utf-8?B?VGdFN0VDSkI1M3psTXNGNG5GNW9TYUsyM3JmN2Y5enlOMGFBU0xuRldPdkx3?=
+ =?utf-8?B?MmlNNy85Mkd0OFdHNzcxNlM4cW1jcDIrL3BVaDBpRXU0TE14enFxTXVKSUxp?=
+ =?utf-8?B?cXZHVzBuZDdEQm1KMDQ4RzJxeVRJUkk4T3J5M1RNQkE4Znk4NEg4V0lTVGZz?=
+ =?utf-8?B?ZkhTOEgveG5QSVdrb3pEcTNhNCtMMDlPd2xXVGdLdkRUOC9GRnhqQmhOa2Vs?=
+ =?utf-8?B?RzRlbGFwaHVpUmdXNW1LcG4yV01QVDNIYnRNSnhkckRZYXRSWHlROG8wMHZv?=
+ =?utf-8?B?Y2R1K0dPSUZwMTBZMWJPdUVZVThadzFHMHFSeUpsMjJ4TTJ0alAwRzVCdy8z?=
+ =?utf-8?B?K0hwSVYrd1RvbU9yakVCOUZ3RzBKSDFQVzNhUEhuNEV4anJmR1pzcXRoMWxZ?=
+ =?utf-8?B?UVBvNytPbVFMYXIxbmM2ZDVTYlMxWnZoQ2E5RmljMVAreWRIMmcxQktUZndC?=
+ =?utf-8?B?OUJ4MzNaK1lIYWNvVzNYcEFvZkU1RWxBL3dyYmhKWnJPdmFVUytsWVY2bEQ2?=
+ =?utf-8?B?eFB3OXlQYjZ1amtCK1JvL2NnR0RTMzhvS0Z3TFhkK2lPTjV0N1V4L2poMUgv?=
+ =?utf-8?B?OXI1R2lLb0JXd0dzNmNyNElCMUhQcFpKeVlTajNEQ3VnTGZUejZnREljMlVF?=
+ =?utf-8?B?ZlRoR3E1YlJTY0tLV0VYelJ3NEVldWN4YVNOQnJMNjJZdjdTOW5aTzdTUFVH?=
+ =?utf-8?B?RHZ5V2tMRTBMMTBIa3o3UCtxOUUyaXFDcThBMGlkMlZoSVd5V1g4elVIRGVC?=
+ =?utf-8?B?TFlJV0ttaytTWDNvemM3dkhGeTNLVEZlQktMc0FLeHRnRS9zZXI4QjlkVlg2?=
+ =?utf-8?B?QUVBZjh0QklvTnl3OWZqc25pVVVCMllwbTM0VzR4RzkyMWszMVpDSnRuZkpu?=
+ =?utf-8?B?U3J3b1FVRTVDZmhZWHErS3dxVlphR1k3S2tQdnNCUFE0cVJjOUhzaFpzKyto?=
+ =?utf-8?B?QXl3Y044M1gyVG5lZUp2b0p5RVljekZOVDJ2VUFORDVhUU1TVy9hUGUyeXpY?=
+ =?utf-8?B?S21TbjZFMEtrbjNiM1lqRGQrRHFzQ0M0ZGdYb09hVWtLdXZIamp2R28wNmtE?=
+ =?utf-8?B?TWc5SkMrTnpFZVNKWGZkeEZGYlBCblArR3I2RnpGcytacXF3eUNtM3NXZVRv?=
+ =?utf-8?B?MUFYQk8yNFQxSWlEaFJjbWJWVEJ4QWQzSTFteDk2UU9yUVVVS0x3Q2RQRmxQ?=
+ =?utf-8?B?aDUzNDc4WmxmNldSNjdUZlM4UUxWY0xRMDBxeERJQ0Y0ZmhocXVSQzJlVjlh?=
+ =?utf-8?B?bFdCWlNJMC8wTXpRTTh3WWk0eDJEVjhRUklYYU1mTlBZV1VDeUpNRXA0aTRm?=
+ =?utf-8?B?VzcveHhWVllFYzgydE1heURMaE5KQ0tweng0RDZtUHRNa0p5d25EOVc3RGta?=
+ =?utf-8?B?b3BFanBMRHhPNTJmdUxtcTJ6M1hzeVlXSElTaVZUeW5ML3A2S3BLbEx6S04v?=
+ =?utf-8?B?TXVycURqSkIwSFNvY0V0WUNGTGZBaDV6bEJmNEU2b3FJZzZnSUZ1MHJHQ2Jn?=
+ =?utf-8?Q?aOFg5ml/bY/8zof/07601+p+DdBBerupdnvjEPBRSNEDB?=
+X-MS-Exchange-AntiSpam-MessageData-1: cwaUhQpT4T8m1dA8gsBpegaGpPlY18lL/iQ=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53e1414a-f6d6-49b2-19b3-08de88c16b42
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 09:49:04.4398
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6monvcjH2iYr6sPhEEeLqHUIuAndrFeG/dj6HMroDFwoUXSqUwQEpBCwf7i+bZN7KXnZZLGWeXx5BjB/V7V03KbD8a3vRLxuwaEkPgF0WQM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB9960
 
-On Fri, Mar 20, 2026 at 04:42:41PM -0400, Waiman Long wrote:
-> Although there is supposed to be a periodic and asynchronous flush of
-> stats every 2 seconds, the actual time lag between succesive runs can
-> actually vary quite a bit. In fact, I have seen time lag of up to 10s
-> of seconds in some cases.
+Please don't forget to CC me on the next version.
+
+On 3/23/26 00:39, Aleksei Oladko wrote:
+> test_shadow_stack prints a message indicating that the test is
+> skipped in some cases, but still returns 1. This causes the test
+> to be reported as failed instead of skipped.
 > 
-> At the end of test_memcg_sock, it waits up to 3 seconds for the
-> "sock" attribute of memory.stat to go back down to 0. Obviously it
-> may occasionally fail especially when the kernel has large page size
-> (e.g. 64k). Treat this failure as an expected failure (XFAIL) to
-> distinguish it from the other failure cases.
+> Return KSFT_SKIP in the skip path so the result is reported
+> correctly.
 > 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+> 
 > ---
->  tools/testing/selftests/cgroup/test_memcontrol.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
+> v2:
+> - return SKIP only for "Could not enable Shadow stack" case
+> - Changed message from SKIP to FAIL for remaining cases
+> ---
+>  .../testing/selftests/x86/test_shadow_stack.c | 20 +++++++++++--------
+>  1 file changed, 12 insertions(+), 8 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index 5336be5ed2f5..af3e8fe4e50e 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -1486,12 +1486,21 @@ static int test_memcg_sock(const char *root)
->  	 * Poll memory.stat for up to 3 seconds (~FLUSH_TIME plus some
->  	 * scheduling slack) and require that the "sock " counter
->  	 * eventually drops to zero.
-> +	 *
-> +	 * The actual run-to-run elapse time between consecutive run
-> +	 * of asynchronous memcg rstat flush may varies quite a bit.
-> +	 * So the 3 seconds wait time may not be enough for the "sock"
-> +	 * counter to go down to 0. Treat it as a XFAIL instead of
-> +	 * a FAIL.
->  	 */
->  	sock_post = cg_read_key_long_poll(memcg, "memory.stat", "sock ", 0,
->  					 MEMCG_SOCKSTAT_WAIT_RETRIES,
->  					 DEFAULT_WAIT_INTERVAL_US);
-> -	if (sock_post)
-> +	if (sock_post) {
-> +		if (sock_post > 0)
-> +			ret = KSFT_XFAIL;
+> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
+> index 21af54d5f4ea..4c5437846d26 100644
+> --- a/tools/testing/selftests/x86/test_shadow_stack.c
+> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
+> @@ -35,6 +35,7 @@
+>  #include <sys/signal.h>
+>  #include <linux/elf.h>
+>  #include <linux/perf_event.h>
+> +#include "kselftest.h"
+>  
+>  /*
+>   * Define the ABI defines if needed, so people can run the tests
+> @@ -64,7 +65,7 @@
+>  int main(int argc, char *argv[])
+>  {
+>  	printf("[SKIP]\tCompiler does not support CET.\n");
+> -	return 0;
+> +	return KSFT_SKIP;
+>  }
+>  #else
+>  void write_shstk(unsigned long *addr, unsigned long val)
+> @@ -496,7 +497,7 @@ int test_userfaultfd(void)
+>  	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+>  	if (uffd < 0) {
+>  		printf("[SKIP]\tUserfaultfd unavailable.\n");
+> -		return 0;
+> +		return KSFT_SKIP;
 
-XFAIL means "expected failure" and is intended for known kernel bugs or
-unsupported features. A timing issue where the test simply doesn't wait
-long enough probably not an expected failure, it's a test that needs a
-longer timeout.
+This is incorrect and will lead to fail instead of skip.
 
-I'm wondering can we just enlarge the MEMCG_SOCKSTAT_WAIT_RETRIES value?
-e.g. from 30 to 150
+>  	}
+>  
+>  	reset_test_shstk(0);
+> @@ -820,9 +821,11 @@ static int test_uretprobe(void)
+>  
+>  	type = determine_uprobe_perf_type();
+>  	if (type < 0) {
+> -		if (type == -ENOENT)
+> +		if (type == -ENOENT) {
+>  			printf("[SKIP]\tUretprobe test, uprobes are not available\n");
+> -		return 0;
+> +			return KSFT_SKIP;
 
+same here.
+
+Can you please stick to https://lore.kernel.org/all/3205f6e7-bf02-4fb4-ab03-278447c17f70@virtuozzo.com/ more closely.
+
+> +		}
+> +		return 1;
+>  	}
+>  
+>  	offset = get_uprobe_offset(uretprobe_trigger);
+> @@ -981,21 +984,21 @@ int main(int argc, char *argv[])
+>  
+>  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
+>  		printf("[SKIP]\tCould not enable Shadow stack\n");
+> -		return 1;
+> +		return KSFT_SKIP;
+>  	}
+>  
+>  	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
+> -		ret = 1;
+>  		printf("[FAIL]\tDisabling shadow stack failed\n");
+> +		return 1;
+>  	}
+>  
+>  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
+> -		printf("[SKIP]\tCould not re-enable Shadow stack\n");
+> +		printf("[FAIL]\tCould not re-enable Shadow stack\n");
+>  		return 1;
+>  	}
+>  
+>  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
+> -		printf("[SKIP]\tCould not enable WRSS\n");
+> +		printf("[FAIL]\tCould not enable WRSS\n");
+>  		ret = 1;
+>  		goto out;
+>  	}
+> @@ -1057,6 +1060,7 @@ int main(int argc, char *argv[])
+>  	if (test_ptrace()) {
+>  		ret = 1;
+>  		printf("[FAIL]\tptrace test\n");
+> +		goto out;
+>  	}
+>  
+>  	if (test_32bit()) {
 
 -- 
-Regards,
-Li Wang
+Best regards, Pavel Tikhomirov
+Senior Software Developer, Virtuozzo.
 
