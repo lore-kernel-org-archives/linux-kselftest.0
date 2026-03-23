@@ -1,155 +1,146 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013036.outbound.protection.outlook.com [40.107.159.36])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCB226F2AF;
-	Mon, 23 Mar 2026 17:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774285431; cv=fail; b=Fs9NWSM3atYR1FElPFnsnScJVEuObNXcHXadhcBcxwtthArwDlCqKfNaochMLHobH+dCzxEXAOvGdxgQfw45x/apCKq465BnEDip8DNQv5iHdXRLksoaCm0Nq+xTFpUOyEZJSkIjs8fTIV0S8251aWYp2r8RrcV6TwTTygZeQS8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774285431; c=relaxed/simple;
-	bh=ljYPRTSk20S5xHpv3Z8VAkfh+TrfPwPq/NtYxy2yaaA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EQul9Ft1TvPtczK2odTLM+pxlNOtPNQoraBATcYF+OnMQalVK5YgDmmUT6bUAk1PHIWAuuqN9MXnXOq+gqYKSTfem0/OpbMgjG6x5Rew5tTOTbJbRVMfFdVxEk06oMltt4oxv+g4J2pMFo6ZlNn12+FW/TfvdJ2l+FPd1t/UPDo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=GSR8jqdV; arc=fail smtp.client-ip=40.107.159.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097493C279E;
+	Mon, 23 Mar 2026 17:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774286230; cv=none; b=kyHr0v7vjPgv/qt3dQfHUr0Bmyalqe+tx4RarlBVmgH06R05JJ1XhqsZXpOgS48/wVzIAXYNugI5GD22Q15Unrts+aMAm+C3Zh/NL/sYOxXkxd3C7EtGcaK3DmT71Q6Mo/eqdEvnlJmnJaOnhX6STPegxVTsoXoyrIQG5RHiNEI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774286230; c=relaxed/simple;
+	bh=MFrZYJpprDoL0spYqxHqSFMH4VKZZi/mvJOw56ruEi4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sPid03bQrzba6xm12jwRCmY4NR8H+tTfRAP/pHicoVEK1pg67tVWXtIOwURNqZEQEk+w9I2D9vQyczEc/ojsdjOl3EsTEfMLx+8x6ZN+7GHd9fMmxL3jUzjpIKO3svxSremA+Z8ZsqwVYlADZR3v9hcQB5v5DwU+wzHDJkxc0/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=ZK+Xnnov; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MpSTdqOp; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="GSR8jqdV"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Hm3kEe7dJuRQf37PFm6UKYLmiumG6Q78WPvPkb4+obmEZ/i6SQbpCZ7J846Ou3xVTctn6cG+LAqrIiIhoepA0MKRK6rBp4YuZN5jT/qwfMok68KxLiv3SKHXGMEe7jJE/25qwdfzw1+LKjUvz+Cy95KRTbe6g+7NJJJfe+b/uXc8I1FXHElSV2BZp79F1kFnxNP4JccGGHsSzX5g3LGzaybSqs7K2o3040LIoMyakPwzH/yD70LI+QMcztIngkKkAT71y572X/v2DIo+Iw3eSncqfQQIo4UR3GjiQ56gEaVIk4a/eZRHdXSrdHvL43vhUDc6n1o1y91WOEYrhEWJmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z8AdHYodac3gG9Nzw7ng0cZerdFj5MrX3BXqehhQvG4=;
- b=kg4EfMK6suLZpWKI8y2QI1Fx4KRRo3RDUGPElPzt2pZgLRT+9/Wua5ouSOprdezkvm+mlwb7oTYemiGzMf0evb1egZrU8pONdJNzPNPT2l4QsjsfRNFh/j0nb9wwfkdq5HbT4J1SqGWQlKKrlm3WltINoyyBkhkS0vxedVIbhMr5PjrZuzZAtnGf3kGEkwisd0lXPZels01+g1yO6763YXQfCnysnqUNKNurxb1FsMo5tb+ClVNIdmW8umLUE//P3vfedDnCklzmC4rdMgz0hUTTD3qSSNLyZqLNQ+1wtaY9joUyvByoG81fAnyEV5PMv+y9TbG7Up4RYflwFHTbfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z8AdHYodac3gG9Nzw7ng0cZerdFj5MrX3BXqehhQvG4=;
- b=GSR8jqdVkDibK/rKtaPH2NRZuL3yWpvhrgxubHSwOFEhZQG0ReLVSeJ7Xsb27lctfahfZTJA1UI3+NeiQcfmSrLYTdZKK/fEgXy34VZQMaghKSyKgFXyqQjB9Qmf9R02GHe4xl4cb6tn+Bf9eE0emg/Ukxk0ZDhvq26RiU1natWDdz+9fPfm0ZkiD1vTKrAzPvUEP8QnTJouwGOSDgYPQhIFIAIgzIjWmdjCWenq8bFcgFo3FS85drcJcE9dMlPOY/gGWK+7suEj3Spcz9/HsDj4gd1FLC3VtOrViMWLRN2ngObBqYsqQSG7noiR2TbxtixiE1RhUy77NlfEfQmIBw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
- by PAWPR04MB10053.eurprd04.prod.outlook.com (2603:10a6:102:387::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.29; Mon, 23 Mar
- 2026 17:03:41 +0000
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9723.030; Mon, 23 Mar 2026
- 17:03:40 +0000
-Date: Mon, 23 Mar 2026 13:03:40 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Christian Bruel <christian.bruel@foss.st.com>
-Cc: Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Koichiro Den <den@valinux.co.jp>, Niklas Cassel <cassel@kernel.org>,
-	fabrice.gasnier@foss.st.com, linux-pci@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] selftests: pci_endpoint: Skip BAR subrange test
- on -ENOSPC
-Message-ID: <acFybL8PxlvTeCZP@lizhi-Precision-Tower-5810>
-References: <20260323-skip-bar_subrange-tests-if-enospc-v3-0-4780f296a5b4@foss.st.com>
- <20260323-skip-bar_subrange-tests-if-enospc-v3-3-4780f296a5b4@foss.st.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260323-skip-bar_subrange-tests-if-enospc-v3-3-4780f296a5b4@foss.st.com>
-X-ClientProxiedBy: PH8PR07CA0026.namprd07.prod.outlook.com
- (2603:10b6:510:2cf::21) To PA4PR04MB9366.eurprd04.prod.outlook.com
- (2603:10a6:102:2a9::8)
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="ZK+Xnnov";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MpSTdqOp"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 8F36B7A022D;
+	Mon, 23 Mar 2026 13:17:04 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Mon, 23 Mar 2026 13:17:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1774286224; x=
+	1774372624; bh=CEUxeZYmAiHA8QMMvhe5S1fWFkCW3pXVm0T9S/tFENM=; b=Z
+	K+Xnnov7oq0u0ERuJExW4bWxmaVds3AXxZRSx+wL0da1I6lrSkd30r+/x+B/VhOK
+	kDK88mKMEAGsIFxGH+mn3/gjAuQtPoDP2Zl6IxLilNtRu5y5e9xceGcrjAblXah+
+	YqrvRroDk0QTqtnMn1s/vCqMvA2SKEmK+kbDLruVG7She3eKF838iELq1QaD+QpT
+	/mOicFyzaMjeLiIpgF7vuJyt1kUsLNFl6ly8/Q8piF1jvIB/nhtoSw2RDGosYVVX
+	aNKMg0W+lhWd1WKBenjvzdyvTUl0i+eKfLpDXlNplDKp5HkdeMXVE5fi3AOqpVWW
+	TteZia4X5KaBmc+iakeZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1774286224; x=1774372624; bh=CEUxeZYmAiHA8QMMvhe5S1fWFkCW3pXVm0T
+	9S/tFENM=; b=MpSTdqOpjxL6BN83BdQ8nWWxejoQudn8DkuaSoWiIL973fHYr/I
+	a83OQjhDXSAQ7IWrqI2OgXXrdtYw4RmlhjcCqEB0vf3ype0u9XHmzM4NmkrP9ac3
+	EV/Du8LTHvu9SeNZkw0d3tirtIehzIBuq3smZRTaRbqi1TDzhwp0/f24E6zVvufG
+	jfecRYAb0F2YeuPfb4z21ExuxnPGKg4iuf09TpNkHy+RZmvBwp5/u5YYei+f12Bw
+	UDWpgKGrrhbjGTc9nbw4EsifeNSuwyNWTqVFxr3Qt4UgkI7LTWDSfYa+Deq0BSFf
+	+YDaPsYOm9W/M7s58bUGHohuUTMYiR3CEAw==
+X-ME-Sender: <xms:j3XBaWAJAkqkCA0bGDLeQ0uSrFbWVN0LpRB1YafIqDE5QekA-x_GfQ>
+    <xme:j3XBaTk_P2yH6y6wHujNw6vPWsAFQcnedD8ECXrhZPa_IU_N_XxUOpKitJiXOfsYs
+    -K9_KpXr4pvkyx56cfZoaOuZP8C8-a-sD188Modte4L6OnjSDVD>
+X-ME-Received: <xmr:j3XBaUP5ZPzI9i2y0EZI2a97ITRi_QVscccqE0UEEzrHFiIDOx2KNDiHS5No>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudelvdekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
+    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedutddpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopegtrhgrthhiuhesnhhvihguihgrrdgtohhmpdhrtghpthhtoheprghnughr
+    vgifodhnvghtuggvvheslhhunhhnrdgthhdprhgtphhtthhopegurghvvghmsegurghvvg
+    hmlhhofhhtrdhnvghtpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhg
+    vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeguthgrthhulhgvrgesnhhvihguih
+    grrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthht
+    ohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopegvughumhgriigvth
+    esghhoohhglhgvrdgtohhm
+X-ME-Proxy: <xmx:j3XBaQ_LtuuCLsL8HUr7tfN9zqTEROtuw2WkJDluta4rtXH_noPkXA>
+    <xmx:j3XBaWFY2F5K9LdHy_lHl6mQkEoFu_iX5_NQkT1RigM3khHsEPhyFQ>
+    <xmx:j3XBafjXYhtCmPOY0oJZk2xvdzyB6DPMgvbweooDsmyai7hEklbWJQ>
+    <xmx:j3XBabuGOSm3C6oPAynkSXuY6cQyCXuDE-sGsLbWkFNJsr03rZ03hg>
+    <xmx:kHXBaXrDAwklWbA_tkmIC2rzO7b7hPzdzFhz3Puu69SlUEoc5ioy5aaW>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 23 Mar 2026 13:17:03 -0400 (EDT)
+Date: Mon, 23 Mar 2026 18:17:01 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Cosmin Ratiu <cratiu@nvidia.com>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Dragos Tatulea <dtatulea@nvidia.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net v5 0/3] macsec: Add support for VLAN filtering in
+ offload mode
+Message-ID: <acF1jeGLpq7qDKgY@krikkit>
+References: <20260323123633.756163-1-cratiu@nvidia.com>
+ <acFODtfaa8LCKX4r@krikkit>
+ <5ae5d08d578fce1a01a548fad8552a14df8c5679.camel@nvidia.com>
+ <acFWIxzM-GxpAhjH@krikkit>
+ <20260323093243.17c14edb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|PAWPR04MB10053:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d397bf7-cde3-412c-f099-08de88fe21ca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|19092799006|376014|7416014|52116014|38350700014|18002099003|22082099003|7053199007|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	X+YidmmOGugmmO//vfD91DhskZmqsROAds+qR9zYyqgao9MtVx2EvEVQvgzEftPwWI1Zk58ZFMbtK9O44v4YywBlSwfnb9PBDSumFUcaxLK086nr6/4uvNeJ9rkqLjN6rV8DKKWDcv1h1TUn/1C3SpAZK//aJhvD79KzcIMIdDGsfu14lFL3+ZBrWV/Vr4khx6nOHKVxhge6LoBdZaW1+KVlSETKi89TB5ks/iSqIHARLiQfiJjUVLxmGi9fb7DAEtpNN2pR92jw1I+GFA4nVUp7vSq7ft2/kKZtHTfldwfJ5v2C6+2ET0jSGC6gWCvWiUoW2hzx6CM5sOmzZ5mPHRjs+K08UAhFKpjlUYLF69z3njIjYFQwP9rJgWTpXg1ELvh+TZDmOQJKgvvaWemAgPoDaaukJfN5JFwUhCHzpIobVIA9WOejfKG812746dKz+nsSW1EP9zykuXMqslc5vzbOLfOICsKSkuiQlFKBdyY06sE/a8VpCwkwibT0R4tTZtXwGvCRr2plcPy7VmT71iJupf4LI20IVbjCVxI8qfxYalDiYP6h6OroTsWel4o18418p0+tDD8siPV7TWP/l6zm52RydUFK5olGJR15QkJ6THXD//Mc9mguzzE1KecQAGeFQzI1AiLG77gqB78/b9MBNOonlN5Ga5UvO0h8pBufm/sp7QESebffUXCA3pvcpAeUkBY5+H60ynTt4JO1QeFn7XS/I8Cbc6OjhzSi/GrWJCl7Otkc+wHdeW53y35in4AD2+XFZNpBDhYS9jyIpisGn3Em2VpQ8EQ9aW7gRIM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(376014)(7416014)(52116014)(38350700014)(18002099003)(22082099003)(7053199007)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?MrNv6xEipBUS3prU+PlmfmRjWRp5NSkL4pfb65Q6slxLBJ4N8ZOx5kM5Tx1I?=
- =?us-ascii?Q?GCQbOEsvXa9ZZTrs75pxYKd9NIAp5zGRx7oJWgMluArBFFJsXB/9vURsJN9P?=
- =?us-ascii?Q?betikLV1SN3irjAeBR5diRsJOwHp57zxsAK6A1GFXvROMfeIErgOgcSog+ZC?=
- =?us-ascii?Q?O5ilKcuV8wDg7XoKFORgEfuuVgvqofGDToqH2tHVsyzq1s1uXPt1eEHAarOc?=
- =?us-ascii?Q?IGHTB9a9gJUrX4LVzA9f1EJIw8/1NdtGiTtkQOcpDtp1UbUbiE/CBRR9J4Hv?=
- =?us-ascii?Q?ynF6SHqdBNgb1uD9Q/IsaHanhF4hBEgtDSF+EsihCMFZ4CUniMVx8QzGbr5P?=
- =?us-ascii?Q?klmIm3McpdAkt7HURRYjcGiJojtdtEwlGKlp0MSKTkpr7SR4Fe35L9hiqFkM?=
- =?us-ascii?Q?3Qt9bRLnFUnNFrrJCk/W8+KbmDo7bmFZX12t8ha908EtMPazUFv2gijlA62M?=
- =?us-ascii?Q?AOYwPJRtXvcQDcqaANZwb3poa/4rzF/ojszhuz5KgXlMCAII/BO2hEYs/ZZ5?=
- =?us-ascii?Q?P3Z6Px5OzC23UZll50XT/SoUd+oJactjAZSZMpSxj8hvgEuHc54a2nCvlrw1?=
- =?us-ascii?Q?jxi/92siCD3W8kHv8p4rj7/kY35q5fkW2uHlzyNbvouXsFH2OlZOyPRQzjAa?=
- =?us-ascii?Q?MlFXGrqbdX4Xj2wYsjGk2yc3Nr/Mi3OWNYaHPyLhHAUzbfmbETzaBi80c9Ll?=
- =?us-ascii?Q?nFjx197mi9ZC5Thy2JZ5k9+PUyZSqGt4ZICQVsneQm1gxLKhAlAgd8h0noZQ?=
- =?us-ascii?Q?NIfj8EHLISn1EF2EORCDuRYkWFisUx4ehVx6Gjm9qD7Ap0qDXTN/02xpmv11?=
- =?us-ascii?Q?iZPd1nTdiX5WqI7W8x23T9n5jbmUSoDtEGIWS3iRDfaXUMDxUYe5bjllEjrO?=
- =?us-ascii?Q?CTAkQbyf4KbTIBUnfMRwHmpB+5lsr2UTW3xnx9sriShCdICZ6EKJS2fMbzcq?=
- =?us-ascii?Q?aZDdC81Etq+DDrnSAvCY7KYk3XVWgsoGwfkgDQTSTrU7j9YJhQcRgcZbewk7?=
- =?us-ascii?Q?shPsCd816nMXpemIynZ0s9xTQD1oGzUyJ9a0coQ2us5Nu7yWgnvdoPvh//Jf?=
- =?us-ascii?Q?7yfu/AOa5be2D0A9WnNNVA3x9v+O/oLDa1Z/t+ZzYcqS5ZmPdNUMwVR5q8Rm?=
- =?us-ascii?Q?NP/1NjQP45e+FNz57+xKQTfMiRuxd6ev4Ev6GBsVagZ2lx8ih7rPsMqyza2y?=
- =?us-ascii?Q?fM/GDJWOXIhUKQPvHvDs+X3SmHCRu4otbdlO07DfeNpGupp246xsY0zMQ+GP?=
- =?us-ascii?Q?IkPaABNbWKrVWMTyFMkMMQV4sZ9V6rineTvSNUMSBNpAFSvSZL0myKNnMOZ3?=
- =?us-ascii?Q?T58xJP1H+bIeuTymtUseqxHra6tK829Ay7pZwuoWAKsWho2Ckg+DRHasstLa?=
- =?us-ascii?Q?A5Ib5Th/wFdNTAHNfnGDiAFHQl451xMB4WpcO1gDaXgSqfndKg60BjyVkgx4?=
- =?us-ascii?Q?bNOaPJ07ffReZXTZj5xxm7lmc+MeDNf4E2tCmB7cj9dPprYsExxMHpA9lIiL?=
- =?us-ascii?Q?U9kVHNMjwmKf0NUy2zAx+3ZyK6KQlgtkSkxMI+1L1XyKc9IsM4UlXw1mGOmC?=
- =?us-ascii?Q?cxbN/g8t0q+v6AncWN3R+QABCfoVj846/OkJdkGzMmxSpBPwHGRH9HRnpeuC?=
- =?us-ascii?Q?3VhYoXgtsXWeix04TigpHAJB2g71M87PkjqB21uLejel2kDlNnX/9gBlpuoU?=
- =?us-ascii?Q?oYUDabTNJ5+GaqIHnY7YuxT4IdOnhdhk3cq+ySPnKZpgUs0W?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d397bf7-cde3-412c-f099-08de88fe21ca
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 17:03:40.5141
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T+XNPlY9s9zHTjGUj5JFKOC/7MnFx6PTtjxQJm5vHIuUI1nPmV4jr5RtfvoEY3+EIkS1dg8ihXjBzGbsgkpzOg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB10053
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260323093243.17c14edb@kernel.org>
 
-On Mon, Mar 23, 2026 at 12:59:29PM +0100, Christian Bruel wrote:
-> Handle -ENOSPC error. Skip the test if the number of available inbound
-> windows is insufficient to map the subrange.
+2026-03-23, 09:32:43 -0700, Jakub Kicinski wrote:
+> On Mon, 23 Mar 2026 16:02:59 +0100 Sabrina Dubroca wrote:
+> > 2026-03-23, 14:42:00 +0000, Cosmin Ratiu wrote:
+> > > On Mon, 2026-03-23 at 15:28 +0100, Sabrina Dubroca wrote:  
+> > > > Why not? Being able to test without accessing real HW is still
+> > > > useful.
+> > > >   
+> > > The tests now send macsec traffic over VLANs and nsim, it's just that
+> > > nsim doesn't deal with VLAN filters at all and there are no stubbed
+> > > vlan filters in debugfs, since real hw doesn't have that interface.  
+> > 
+> > Since netdevsim doesn't deal with VLAN filters at all, the "tests
+> > should be written so that they can run both against ``netdevsim`` and
+> > a real device" bit of the docs doesn't fully apply here?
+> > 
+> > Anyway, I think the original tests had value, even if they're more
+> > limited in some ways than traffic tests. HW/driver behavior could be
+> > hiding problems in the stack with VLAN propagation, those simpler
+> > tests don't have that risk.
+> 
+> To be clear running the HW test without NETIF= should provide
+> similar functionality to what the old tests could do. It's entirely
+> okay to add netdevsim-specific subtests/test cases or asserts.
 >
-> Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
-> Reviewed-by: Niklas Cassel <cassel@kernel.org>
-> ---
+> Is there anything specific that you'd like to be tested?
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
->  tools/testing/selftests/pci_endpoint/pci_endpoint_test.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> index c417fb3a198b2d92c3060938c23807cc8bea5573..588d75c97ad181d2f8e84c9b86b865439152e20d 100644
-> --- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> +++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> @@ -88,6 +88,8 @@ TEST_F(pci_ep_bar, BAR_SUBRANGE_TEST)
->  		SKIP(return, "Subrange map is not supported");
->  	if (ret == -ENOBUFS)
->  		SKIP(return, "BAR is reserved");
-> +	if (ret == -ENOSPC)
-> +		SKIP(return, "Not enough inbound windows");
->  	EXPECT_FALSE(ret) TH_LOG("Test failed for BAR%d", variant->barno);
->  }
->
->
-> --
-> 2.34.1
->
+In v2/v3, nsim was exposing a debugfs file that contained the list of
+VLAN filters on that interface, and the selftest was grepping through
+that file to check if the correct entry was added/removed after each
+operation. I see that as testing the actual propagation of filters,
+while the traffic tests check the visible behavior of stack+driver+HW,
+which may not be correlated to actual propagation.
+
+> Let's not make this about HW tests vs nsim-only tests.
+
+That was not my intention. But since nsim doesn't currently implement
+VLAN filters, it seems running the HW test on nsim doesn't test
+anything at all.
+
+-- 
+Sabrina
