@@ -1,230 +1,198 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010042.outbound.protection.outlook.com [40.93.198.42])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1EE93A381D;
-	Mon, 23 Mar 2026 12:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774269449; cv=fail; b=I0ai/3i6HqswvQ+aWlGLWxcADzhtYjiQsCzDde0FdKVGswBOau2oQ39wRjyaN2ym+VO8IPB/XXtyF1vZLCMN2Ij8TI09h5di0tJt9eGdy1iv4P9SCuhWuFWW1tn93Jzu2WfNlUX2UEbaZhGFx/KY50tPj32pGcF/KiW8py6NnYA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774269449; c=relaxed/simple;
-	bh=0+w+mKfppGDv6ipd1BREBrf0ZmulJyz5Cv2IVo0TFbw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g7AWtfBDOUBKe4eb4/ZMh/EiJ+kWQThXAPDt/1JGyJvvdHto3YmOi1NK8iBMup5x2cWKuhDD4d3Mdbxz66x0EgumVK7Vjml+mOqZ0aewSGDFq0UCAkywvM5QHNvAf0PGFTbGsvOxR90F7GUFn0bNDQUO38N0h+vhY8vhSYWMrX4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JiJL+1s1; arc=fail smtp.client-ip=40.93.198.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825AF39C658
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 12:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774270012; cv=none; b=N+ehXnVGy+kcHpeZ8sf9ZBZ+NwOMerWA/prnZwAKbxQSicsneebiHyvkZNm+88NKlm3oy/dl0lQD3p/Db50wYfKdDhS/3ImDWTSR5AYidpp3/tgknmodZ3/cRGFGGTRG1bXTgHn4fkF+eZLSrkzB4ufWakZlLSBJS/vlKOA15Rs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774270012; c=relaxed/simple;
+	bh=XnysLVfVXj++X3qYmTmEaUUk366ZaIjwcFzBQj0b448=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U6T2GqKVdY7nysUJ7PwXRxMoATOoSlRRqGCdSsXRAaupaDODB9ckLlLnboCLPkFjpTVEipYpMtHk3HEjYgxDbxmJs4c408w/7wPv6kaJDmTmkbuQ9ym1w4PUE3CJkk/Xv4xReTDNIpy6zs5qWvVWmbht3CSt3JDGdUV71uP5irw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GpDFlzck; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=au8/bzNr; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JiJL+1s1"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EA3lv688l4mbflGW7AaYnXILjMKARheqSSGQZFkJyBOz4FvCPSswTTrH8wYMTEkCgYLt2T0VqidtG1WE+JKFvfxtSEQCuo1670bTMUym+46QVN6WohNIbDTwB5NZgI4slh0knNILjeMQv35MCYFztyb7+FTzT1OvVL4s93eQiZmgvjeU2Zf04XN8/2WybwpFLRa2inln8tv0KuYg4PBu2JJHBnwhvAPpCc6MS47ZJqkq7z0A1FvSga1jDmP64BYT//7/uleDSdHK5Lmzdv3L7ULByvhjMahm1WlTYGacCWcu3GXwVStqI4odhq91CoLgfBMWdTRd904Nl7458A6CMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0OWmlrf1TGJftWtmZd98DPJjWAHnMnlG7DeSY6L/Zyo=;
- b=VITeSSi2HkJqiSB6m+xttbyAua6JVe3Mk22rH36XuaJ1KSa84l/R3KUoBCKB/BFTOKM9MsP/iujo1Ybk/271cXWjYYdHe7MmnC5U2UWE1uvVOzQk6D8UxgBcigpYpJKY1HdnBlcEq12LLIgLl0Jga8G5Dei2uxbC9mJoKvrJDV2sqoI4b4bjG7PPEf4lCjZMrcMgIlEbHdeUXazbgyrYCs3d05iNupclYVPpYDUJTcMt8wCgNVk0/9/5kpS9JHDb9D0i3ws53+Re2F0xvusW4tX+OeqILRfUEyySZYt/Uwn6eM/YIDq6SfrQ+7A3E5AM3GjuDnekc8UINm69SStHcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0OWmlrf1TGJftWtmZd98DPJjWAHnMnlG7DeSY6L/Zyo=;
- b=JiJL+1s1u/wXU1ZE7+hEQHEj+9jAg+4xdr7WEzz2xDAK5rxQUOpRqxu4ehZqby5s9nBxem/+xMrlOdDqmoBZHwWqx58eF9XtOYvhd6uUJEmNSm/T/ROXU0aPBDvgJOfjsiHJ8d9BDQKul2xgDKMqeirxeYLgXsS5T2+dZQm+R50ustO8FPZq2gKWvLGi2ownoYKNJRznYXcOpSapx8PMeJbxXKsBAZWFo9+itmv0pWkkJlKXdufgM9FXEWyBRWJOZRkfoJEzyudAhLkapZQ7SHtW1Mkodf1PR+1ew4V/4VsuCSoVpzDR5VyuwafcpRBBfZ/MeHuiYGBdGR0Ob7ZJ0w==
-Received: from SJ0PR05CA0026.namprd05.prod.outlook.com (2603:10b6:a03:33b::31)
- by DS0PR12MB8343.namprd12.prod.outlook.com (2603:10b6:8:fd::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.9; Mon, 23 Mar 2026 12:37:23 +0000
-Received: from SJ1PEPF000026CA.namprd04.prod.outlook.com
- (2603:10b6:a03:33b:cafe::e0) by SJ0PR05CA0026.outlook.office365.com
- (2603:10b6:a03:33b::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend Transport; Mon,
- 23 Mar 2026 12:37:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ1PEPF000026CA.mail.protection.outlook.com (10.167.244.107) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9723.19 via Frontend Transport; Mon, 23 Mar 2026 12:37:22 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 23 Mar
- 2026 05:37:06 -0700
-Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.231.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Mon, 23 Mar 2026 05:37:02 -0700
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: <netdev@vger.kernel.org>
-CC: Sabrina Dubroca <sd@queasysnail.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, Cosmin Ratiu
-	<cratiu@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>
-Subject: [PATCH net v5 3/3] macsec: Support VLAN-filtering lower devices
-Date: Mon, 23 Mar 2026 14:36:33 +0200
-Message-ID: <20260323123633.756163-4-cratiu@nvidia.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260323123633.756163-1-cratiu@nvidia.com>
-References: <20260323123633.756163-1-cratiu@nvidia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GpDFlzck";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="au8/bzNr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774270008;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zj+HJ3NHVe31Ua9iuOX+I5shCryiTmPAEr1rzKm60IA=;
+	b=GpDFlzckhDJYw0kBL7A5QlcyrB+YaOEYEswf4or1TWT+mxM8Web6z5Ujr0Qd92gyknZ9uy
+	JalQM7zO4Atj76iqh6i63K8qTZAgBrbMYzjuNNbdV92RX6dHOYBGPkJRFKrm7Lf2Rd65jZ
+	QHCUQEFJ8jZ6Q8iraZROCmTJLmqG6VM=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-248-s3qcrVrxNW2tLz-Zo5Q09g-1; Mon, 23 Mar 2026 08:46:47 -0400
+X-MC-Unique: s3qcrVrxNW2tLz-Zo5Q09g-1
+X-Mimecast-MFC-AGG-ID: s3qcrVrxNW2tLz-Zo5Q09g_1774270006
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-c7656dba76aso240810a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 05:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1774270006; x=1774874806; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zj+HJ3NHVe31Ua9iuOX+I5shCryiTmPAEr1rzKm60IA=;
+        b=au8/bzNrqamLX3SGu2LgcicHx8MX+vBqijgNMz9k00Lv/5bZSzH3aIuq0FPRJ6sbmp
+         P1mkb95uCowdmCVSuuXs5caqXysmcw/as/dt7odJszh3MXwU0rk6G2L88G6yaBY8G50b
+         Bzw4Eb7+ZOG/c9qL1U3sUNm3pVtJdxOv5jpr2FUYQu2VigeNoF5EhMZFgkabW9vASATq
+         eV35XobF3NjFxA6a0djNtjZdAiZewqSr1ZydQGRFbUw4F+2v+SyyC4BNhz7wPKILKzM+
+         mA0GcVQgz8k5J89Nzx1Af5yDEa4MRpzi+ALLu6v4Hv5Evn8wyCtcMQ0+VIOAfkeLUEe4
+         h/Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774270006; x=1774874806;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zj+HJ3NHVe31Ua9iuOX+I5shCryiTmPAEr1rzKm60IA=;
+        b=eZML99B9Du1Uv/SWfMKmG3bYK/TDxoH73tL2P6gUxkydKcxFgAdsLZZnj1T+PEvIdP
+         CRouN3HE81XTUPa7gj5V6KGKL+bnoowj7WEF/tDbFLQYnJNyZQimcJgOJdgfEb0UT543
+         7LYCLVVF7Gcm1U7GCR51MEfix6PIBf1OFQoXRu4kNwpsEn4Fb82+uT2Q+upz1kuAGQgg
+         uZfsBdMFWMycx9DAliVnKcjekhFDe/3qqbe0jOVogvNPA+oVfzI68R0L0PvvM9MQr8gm
+         xXhhVbiA8diA6rNd5+lIi06pKuZcs1Pa8qtAKPGSVHmFop72fXVNf5jS8jMm75k+ZrTT
+         Sg8w==
+X-Forwarded-Encrypted: i=1; AJvYcCX1YpT2l0jLDOhtT9THq3a30JxURVy8BtB3YRvmxXCW4dF2DrisF0LCnAI2L/oda7/5ULz9BlaWzSeOYZ2vBBs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyb4+aZY32/0TT7KRCmuEWtBs/tsacUClXiXk2dByAkQvzdCMCt
+	MNNl8O9zo6iktCcdigDAkD+1z8K+dw0C/MYpq3/6GwF9BAfigzbgG7GwPyCP+YMYsq+nVuD/Ibj
+	LhQzg/eAINO9qUXTJ3DVOZXZqbwqjFEbvtIujlnnNrsnknmbEfciH3EZrITt/OSrVmu8aZg==
+X-Gm-Gg: ATEYQzwhK+imhZNGTk+5gGnmWvPANZN2VwdZ2u7RK1ja4ZXg91I04wxrwXaSXCNO0/b
+	CBIVpUQOogSA8iM8Vy97meBQopeGqKepbxVKXc2xOOyUvnM2ixZbPc/Ul7xwvsHOaO4jZnD1qcV
+	YyzQgQj0a65j2Vg8HAyS8HBkH8vAuqm4jGk2mk1pWXwKQbnE6ebIQegsA/bnxxopfIuS+48BeJt
+	r+omxOPTvlBv9uj90GMDoFC7SKIEhYMJmPvTdZHJuiDn3UOpmJty+OhPLAXdNpxxuhPYkFVunxB
+	tnj6Fuw/MuaURWL3eOOX36OS3JvKHWCkNMzSunhar3nEDE+VoiiS1LQzKZLisDsoUhwQPHgAyOM
+	kQ6eFetrVzXzR+BOTHg==
+X-Received: by 2002:a05:6a00:2d1d:b0:829:7efc:fe20 with SMTP id d2e1a72fcca58-82a8c325f74mr10131665b3a.40.1774270006172;
+        Mon, 23 Mar 2026 05:46:46 -0700 (PDT)
+X-Received: by 2002:a05:6a00:2d1d:b0:829:7efc:fe20 with SMTP id d2e1a72fcca58-82a8c325f74mr10131638b3a.40.1774270005733;
+        Mon, 23 Mar 2026 05:46:45 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b03aa5a9bsm9609699b3a.8.2026.03.23.05.46.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 05:46:44 -0700 (PDT)
+Date: Mon, 23 Mar 2026 20:46:42 +0800
+From: Li Wang <liwang@redhat.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tejun Heo <tj@kernel.org>,
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	James Houghton <jthoughton@google.com>,
+	Sebastian Chlad <sebastianchlad@gmail.com>,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
+Subject: Re: [PATCH v2 1/7] memcg: Scale up vmstats flush threshold with
+ int_sqrt(nr_cpus+2)
+Message-ID: <acE2MoIZ0pl7U7PX@redhat.com>
+References: <20260320204241.1613861-1-longman@redhat.com>
+ <20260320204241.1613861-2-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000026CA:EE_|DS0PR12MB8343:EE_
-X-MS-Office365-Filtering-Correlation-Id: 341d9324-ffab-40ec-097d-08de88d8ee5f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700016|1800799024|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	8V/y1nb0W6sZ5cV5G7C48PRe2DXtlcAdKDzHIiBdVVwToIosBKhXaIZBAoQd1pR79m9YULsri9fu/iV+3rJN+FiLv3RZn5/cLNctgAUpawLIrMVrC3LesYzz6oEEcB15IBCqeynaeGC5vVa7aM/YAO/Twqw6fXIcW4OWKTGqIxptosU8Q1Cp7qzalM/AxZcly6x6RKOyPa0/lCCFFsJyuFk3B+IMCsskQ2jajHVvT0omUpX58jpCQiQyT7nPFF8OOi5vho0TwG1MTE/5ynA/1Z7x3t5QSGWi0i+4I02/wMuRc3wclYO+Zepd2gkj9aa2837CA+hwMTzsDcA11Hn2d97Z3AhuQe2cchk+iJBVtOj5A/BdgD7287O8i/P+AL0WfKR2G6OKcqB8Bbt8i7LnLe4l0g0JYSwHQ1bNi+lj0rQc0ihgDMNZnGo8Zw6lTOOOaywU0GWdySpB7Cid9eUaJ6DX2/PEf7/rUq1fFQXij4Qgm92cuYAd8mfE7sfnBQTuCX8L3vzxFc1tEfVSXr0VOilJCo7+9TvaB5Q4IDG2xu3eLOTMGA9v71vXrmX7tUmHPJvE0Nk/TXXkSeMiNe0eIHLy+keIid6BNCfw5PBXKT1Q9B2MmvNLs9F+mm9Jtcy8FQwF/0XS+cSE6My/2+1ZCw+FEFvzIzt8mvcROuuXj3PA3vsLLy6b11/M4Flz7lAg9N7A4J5nJubrYfSccDYNjltjiEOShxo07/Ug1pvQIbRMp13eVwBpSgFt6JMQsSLwqhJ8549McsyIV/oUb9X2jg==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700016)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	7LJXZAZWNree7ka3vlJ2XPKRr8EcsukNOvEjjhAvxDnmeRd7C22kga1P/kDSMEFTf7JfVyBQqD2q5sCnE4QL+64Cv19Yfh2OB3ZYxAtO9eKqkQdY9IYCHNyBwrXsvaxDot3Vw4x4sV6crbxxGBrILycKjKLk33a5xvxUom3ARy6hnzJ4uL7CH3KPTStsV3S0jawRy7wN0vm5he2L3+QhoWUG9x1t9m7eyBKZHQbMVPg5a8pMR7d91Kr2Z5RfTcIrwx0WChX2EdaDIzJFHmsyIhyaFyigXIOvH1vlaaW/8I4vaGUSGFW3abS5RMBq0XtWiQIfwi45CtFeXJ+bZyeqfdIPr6zFvtlFl9M3WdGGgCExPns/Bgxwve8rt1cRZmeeQvQJJc6ZGsSJvlXJIGPjGEqgU5x4Ag6q/QmvKed03xL/X8OljTuudu+b3HnV6ha1
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 12:37:22.4104
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 341d9324-ffab-40ec-097d-08de88d8ee5f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000026CA.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8343
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320204241.1613861-2-longman@redhat.com>
 
-VLAN-filtering is done through two netdev features
-(NETIF_F_HW_VLAN_CTAG_FILTER and NETIF_F_HW_VLAN_STAG_FILTER) and two
-netdev ops (ndo_vlan_rx_add_vid and ndo_vlan_rx_kill_vid).
+On Fri, Mar 20, 2026 at 04:42:35PM -0400, Waiman Long wrote:
+> The vmstats flush threshold currently increases linearly with the
+> number of online CPUs. As the number of CPUs increases over time, it
+> will become increasingly difficult to meet the threshold and update the
+> vmstats data in a timely manner. These days, systems with hundreds of
+> CPUs or even thousands of them are becoming more common.
+> 
+> For example, the test_memcg_sock test of test_memcontrol always fails
+> when running on an arm64 system with 128 CPUs. It is because the
+> threshold is now 64*128 = 8192. With 4k page size, it needs changes in
+> 32 MB of memory. It will be even worse with larger page size like 64k.
+> 
+> To make the output of memory.stat more correct, it is better to scale
+> up the threshold slower than linearly with the number of CPUs. The
+> int_sqrt() function is a good compromise as suggested by Li Wang [1].
+> An extra 2 is added to make sure that we will double the threshold for
+> a 2-core system. The increase will be slower after that.
+> 
+> With the int_sqrt() scale, we can use the possibly larger
+> num_possible_cpus() instead of num_online_cpus() which may change at
+> run time.
+> 
+> Although there is supposed to be a periodic and asynchronous flush of
+> vmstats every 2 seconds, the actual time lag between succesive runs
+> can actually vary quite a bit. In fact, I have seen time lags of up
+> to 10s of seconds in some cases. So we couldn't too rely on the hope
+> that there will be an asynchronous vmstats flush every 2 seconds. This
+> may be something we need to look into.
+> 
+> [1] https://lore.kernel.org/lkml/ab0kAE7mJkEL9kWb@redhat.com/
+> 
+> Suggested-by: Li Wang <liwang@redhat.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  mm/memcontrol.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 772bac21d155..cc1fc0f5aeea 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -548,20 +548,20 @@ struct memcg_vmstats {
+>   *    rstat update tree grow unbounded.
+>   *
+>   * 2) Flush the stats synchronously on reader side only when there are more than
+> - *    (MEMCG_CHARGE_BATCH * nr_cpus) update events. Though this optimization
+> - *    will let stats be out of sync by atmost (MEMCG_CHARGE_BATCH * nr_cpus) but
+> - *    only for 2 seconds due to (1).
+> + *    (MEMCG_CHARGE_BATCH * int_sqrt(nr_cpus+2)) update events. Though this
+> + *    optimization will let stats be out of sync by up to that amount. This is
+> + *    supposed to last for up to 2 seconds due to (1).
+>   */
+>  static void flush_memcg_stats_dwork(struct work_struct *w);
+>  static DECLARE_DEFERRABLE_WORK(stats_flush_dwork, flush_memcg_stats_dwork);
+>  static u64 flush_last_time;
+> +static int vmstats_flush_threshold __ro_after_init;
+>  
+>  #define FLUSH_TIME (2UL*HZ)
+>  
+>  static bool memcg_vmstats_needs_flush(struct memcg_vmstats *vmstats)
+>  {
+> -	return atomic_read(&vmstats->stats_updates) >
+> -		MEMCG_CHARGE_BATCH * num_online_cpus();
+> +	return atomic_read(&vmstats->stats_updates) > vmstats_flush_threshold;
+>  }
+>  
+>  static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val,
+> @@ -5191,6 +5191,14 @@ int __init mem_cgroup_init(void)
+>  
+>  	memcg_pn_cachep = KMEM_CACHE(mem_cgroup_per_node,
+>  				     SLAB_PANIC | SLAB_HWCACHE_ALIGN);
+> +	/*
+> +	 * Scale up vmstats flush threshold with int_sqrt(nr_cpus+2). The extra
+> +	 * 2 constant is to make sure that the threshold is double for a 2-core
+> +	 * system. After that, it will increase by MEMCG_CHARGE_BATCH when the
+> +	 * number of the CPUs reaches the next (2^n - 2) value.
+> +	 */
+> +	vmstats_flush_threshold = MEMCG_CHARGE_BATCH *
+> +				  (int_sqrt(num_possible_cpus() + 2));
+>  
+>  	return 0;
+>  }
 
-Implement these and advertise the features if the lower device supports
-them. This allows proper VLAN filtering to work on top of macsec
-devices, when the lower device is capable of VLAN filtering.
-As a concrete example, having this chain of interfaces now works:
-vlan_filtering_capable_dev(1) -> macsec_dev(2) -> macsec_vlan_dev(3)
+Reviewed-by: Li Wang <liwang@redhat.com>
 
-Before the mentioned commit this used to accidentally work because the
-macsec device (and thus the lower device) was put in promiscuous mode
-and the VLAN filter was not used. But after commit [1] correctly made
-the macsec driver expose the IFF_UNICAST_FLT flag, promiscuous mode was
-no longer used and VLAN filters on dev 1 kicked in. Without support in
-dev 2 for propagating VLAN filters down, the register_vlan_dev ->
-vlan_vid_add -> __vlan_vid_add -> vlan_add_rx_filter_info call from dev
-3 is silently eaten (because vlan_hw_filter_capable returns false and
-vlan_add_rx_filter_info silently succeeds).
-
-For macsec, VLAN filters are only relevant for offload, otherwise
-the VLANs are encrypted and the lower devices don't care about them. So
-VLAN filters are only passed on to lower devices in offload mode.
-Flipping between offload modes now needs to offload/unoffload the
-filters with vlan_{get,drop}_rx_*_filter_info().
-
-To avoid the back-and-forth filter updating during rollback, the setting
-of macsec->offload is moved after the add/del secy ops. This is safe
-since none of the code called from those requires macsec->offload.
-
-Fixes: 0349659fd72f ("macsec: set IFF_UNICAST_FLT priv flag")
-Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
----
- drivers/net/macsec.c | 44 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-index f6cad0746a02..3bdb6f3fae8e 100644
---- a/drivers/net/macsec.c
-+++ b/drivers/net/macsec.c
-@@ -2616,14 +2616,22 @@ static int macsec_update_offload(struct net_device *dev, enum macsec_offload off
- 	if (!ops)
- 		return -EOPNOTSUPP;
- 
--	macsec->offload = offload;
--
- 	ctx.secy = &macsec->secy;
- 	ret = offload == MACSEC_OFFLOAD_OFF ? macsec_offload(ops->mdo_del_secy, &ctx)
- 					    : macsec_offload(ops->mdo_add_secy, &ctx);
--	if (ret) {
--		macsec->offload = prev_offload;
-+	if (ret)
- 		return ret;
-+
-+	/* Remove VLAN filters when disabling offload. */
-+	if (offload == MACSEC_OFFLOAD_OFF) {
-+		vlan_drop_rx_ctag_filter_info(dev);
-+		vlan_drop_rx_stag_filter_info(dev);
-+	}
-+	macsec->offload = offload;
-+	/* Add VLAN filters when enabling offload. */
-+	if (prev_offload == MACSEC_OFFLOAD_OFF) {
-+		vlan_get_rx_ctag_filter_info(dev);
-+		vlan_get_rx_stag_filter_info(dev);
- 	}
- 
- 	macsec_set_head_tail_room(dev);
-@@ -3486,7 +3494,8 @@ static netdev_tx_t macsec_start_xmit(struct sk_buff *skb,
- }
- 
- #define MACSEC_FEATURES \
--	(NETIF_F_SG | NETIF_F_HIGHDMA | NETIF_F_FRAGLIST)
-+	(NETIF_F_SG | NETIF_F_HIGHDMA | NETIF_F_FRAGLIST | \
-+	 NETIF_F_HW_VLAN_STAG_FILTER | NETIF_F_HW_VLAN_CTAG_FILTER)
- 
- #define MACSEC_OFFLOAD_FEATURES \
- 	(MACSEC_FEATURES | NETIF_F_GSO_SOFTWARE | NETIF_F_SOFT_FEATURES | \
-@@ -3707,6 +3716,29 @@ static int macsec_set_mac_address(struct net_device *dev, void *p)
- 	return err;
- }
- 
-+static int macsec_vlan_rx_add_vid(struct net_device *dev,
-+				  __be16 proto, u16 vid)
-+{
-+	struct macsec_dev *macsec = netdev_priv(dev);
-+
-+	if (!macsec_is_offloaded(macsec))
-+		return 0;
-+
-+	return vlan_vid_add(macsec->real_dev, proto, vid);
-+}
-+
-+static int macsec_vlan_rx_kill_vid(struct net_device *dev,
-+				   __be16 proto, u16 vid)
-+{
-+	struct macsec_dev *macsec = netdev_priv(dev);
-+
-+	if (!macsec_is_offloaded(macsec))
-+		return 0;
-+
-+	vlan_vid_del(macsec->real_dev, proto, vid);
-+	return 0;
-+}
-+
- static int macsec_change_mtu(struct net_device *dev, int new_mtu)
- {
- 	struct macsec_dev *macsec = macsec_priv(dev);
-@@ -3748,6 +3780,8 @@ static const struct net_device_ops macsec_netdev_ops = {
- 	.ndo_set_rx_mode	= macsec_dev_set_rx_mode,
- 	.ndo_change_rx_flags	= macsec_dev_change_rx_flags,
- 	.ndo_set_mac_address	= macsec_set_mac_address,
-+	.ndo_vlan_rx_add_vid	= macsec_vlan_rx_add_vid,
-+	.ndo_vlan_rx_kill_vid	= macsec_vlan_rx_kill_vid,
- 	.ndo_start_xmit		= macsec_start_xmit,
- 	.ndo_get_stats64	= macsec_get_stats64,
- 	.ndo_get_iflink		= macsec_get_iflink,
 -- 
-2.53.0
+Regards,
+Li Wang
 
