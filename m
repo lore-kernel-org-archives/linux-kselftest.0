@@ -1,261 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064E02E2665;
-	Mon, 23 Mar 2026 18:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E783D47C7
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 18:39:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774290731; cv=none; b=T/CU2yIOCismrWQApPVZBSYFr50BkhvFWnh5v5O9XGl4e+HQYOoUs9oWSu8QI7EvCx25PFzdFB0d41Y5AienWPdnYl1MIp0oXMFr57KW8UX37IrXatl0yH/qYlj1RMzRe0kbfh09WxXg44Q4k7WHHRJzx45/bALGR7Ot4Iq7EKk=
+	t=1774291169; cv=none; b=uiL9zc8PQOMmX8W5sa+ByEUuMfaPE4j9L4wDix0sZSCVU925lJyeL7O5dcM2Kx10wubZuWLwQWOkNzHHF4JMYh98bJOLSrIZCvnUWDtzJkI4ytH05Fk+FTeptKl1fcImLFKpxRuQaBw+0xi27L3F14mDgJkgfSzzHGVJgWjCdu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774290731; c=relaxed/simple;
-	bh=sotfvo0nesaSqmF8KoCTyd8MGYvSoQDCsni9TVbHztU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tdErb1C+AGel0gVFHqGr3m3BnfavdY+7UINS3FH+o6Pxukmpj9U7pi08FrxQW57LHevg9SmvP4NVvK0sqQVag+xnq1+eDtiCerydtglSTVfGIMIQyKT7+zLSv0KJMt2652fzFg+lXwUFcA9zA7If8iNpJ6FBARJrbcjcUVNeBRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vRRWBHBL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774291169; c=relaxed/simple;
+	bh=S62nqp/L7oaBVz+l0EkYVc7w8PWzqc5mHLXWWDxhwe8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PSuADbVWWHSMe+t0D4DHR/iYbElWDeB80w4FBHeeSt+wGC8fmI0kkUAwalyzCSONBgdOPjk5TDEz627ShGr5OiLdUgkJz5/cfZoBg8Yxh3W6T+tOVh9M5t+edUCBbXceJuDusJ2LzY7xOQZe4o87dAusB1WH1kjq/1vq8RVDq1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=xppXZ4ua; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vRRWBHBL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 103D0C4CEF7;
-	Mon, 23 Mar 2026 18:31:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774290730;
-	bh=sotfvo0nesaSqmF8KoCTyd8MGYvSoQDCsni9TVbHztU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vRRWBHBLoOcTBUkF+rhoE7Rq4ConSk0Rgcrmkzw4YpeHsu7GHVxSU+9xzFXPbOY5i
-	 u0bAdR1IYL2lSje2Hro7d5AOekw2HXFGZ5LaJSQpGRh2R/vbkvzdqgL+J47uDWMz/+
-	 KFn7D0EB1cQxfFTDPfXur1Gjb858d3o0L8cWM3fNwCDKgzKWrqC0rplNwEmksAbSPu
-	 ZS/lz7HhEE979x/coOh2lXPJitq0izgvM2ECa5Pxhd4/XspzBs6aGxUsjVWxPxxi5n
-	 PNI8xSolmqCXpQMOQFSD2aRJO2mcLziuJFRjSC8Ugh6XmqXhU8DPyrveb+XFeCxWhL
-	 VUfOOfL58/8fg==
-Message-ID: <76f14d3e-c8fb-4380-9d12-2375f199b53f@kernel.org>
-Date: Mon, 23 Mar 2026 19:31:36 +0100
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="xppXZ4ua"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2b04d051664so38882015ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 11:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1774291162; x=1774895962; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r9OKWh4GFeDrs3iW8vGT1OneAtu45dtpNVuW7lfnaEs=;
+        b=xppXZ4ua4pxk8tMDyUkC3S54I/nOd1N/VghTIbTBuj01dRaqzm+Ihm84NQviGM7Qul
+         MvwIDizEeJnshNWkJ+L2Uo7IQtgrn12dYUdoynJrIiRndZVZZvPppHQY5jCphGpqZxAj
+         Txn9fiJjJw3g4sC4u93RaOPOo5o8qH4bG8hGTrtAEaV6OHqRnweoIEkKBk46bKcgdl1j
+         thAPEvR3Nih/IId/T7NbIwJnRQ5Vx61LsGxsdZa3bfTa2IxSOf35d5l4gHTG/ESbW1Vm
+         Jr6vK3War8+7cXoH8/UbzKGc7FOxHix3lcxCntOwIApG+RCW3UVtGNU8yyA5+n/UFzPW
+         OKWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774291162; x=1774895962;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=r9OKWh4GFeDrs3iW8vGT1OneAtu45dtpNVuW7lfnaEs=;
+        b=gGDQBS8qieX70w4mELyfca8cX/ISnH9sIf9s7PtDlg5tE6UxBzGzW5LaUnMQ8bXDOx
+         6cVULJf921UXJlFjBqPIpJDeJtCpHPH4I93QT6A15pj0w1eFZH0cn9xQv/iFxbxWsNO0
+         4yDsoAPjlTa/8/HaU3G/whgOSC0N6wbAUOW0BVs+VJRxhqUm+/oliuSYl+aQLzD/+hj/
+         WWotSK/9rgIgAZtkCzlwxQ+28fk91DJaizUT2IgJTFl3MagQa0OqA9ubjrfEdlv1jEBH
+         5qlQgVq6tqcwEIo/bybeSjboYmjYnZH0TIfGMS9K3OpynRbazUXjRGSabJ9BO7exadak
+         VxaA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAmHtRh1mOVA0NMx3sEO4hx/aNKqX/Cgg5wkYEIAWNmuF2tB+RJatO2+l+xbIx3aimDU5CTp53WLYAdsG+twQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx18LiIuFYVDUXTND/3MAhznByf3rK/sGD894DBbp0xNcUXg+hm
+	8BausPRcNiZ2I5GSK6v9VUqhYyZoiYNAEPaUSCUvUEtj91zweDxBVQ9pZURbZUT8Eh8=
+X-Gm-Gg: ATEYQzw0X1giQT8kPBxkYAmf3/yfcBazgKAvNqllFKUsCNmRSkEbZlgSVABMgG2S8K5
+	hAY0f1uPowJJtnza+3LpmMhFmVqf5b+MnuseaYh63TN1T+4unAGTYbz2yn6CdN7ZPYOFYDjiu8h
+	7FWkke3qK5/3Ej5COUBFjse7YTEXcFTRGLJ1lXnfOY8azRvkYFj6jRoyBCeBR/KO17L9W41o8QY
+	3HZNn3BZyNH0ifbsoc7dKQavCPfjfYf4Wgu+95nol0ujGhVVJQmvw84U45W4dJrmP9FrZo3nH5c
+	wEMlfzCqCBD69ABUJrAj6IyuaT+4t6dJp8aMhCcwuzk9XF8mZa2UkEtH2xVdhz8ihjHX2zKyENj
+	ZA+L15D3nUJabrmCKzRByggrZ+KrBingCAfRCudTonA2zch5c89w9mxYxa5iHAYhJzIbVDWlv+p
+	ImPJA=
+X-Received: by 2002:a17:902:f548:b0:2ae:c529:a13f with SMTP id d9443c01a7336-2b0826f5528mr122156715ad.14.1774291162408;
+        Mon, 23 Mar 2026 11:39:22 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:1::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b083516908sm149199255ad.1.2026.03.23.11.39.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 11:39:22 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: horms@kernel.org,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	linux-kernel@vger.kernel.org,
+	leon@kernel.org,
+	Joe Damato <joe@dama.to>,
+	linux-kselftest@vger.kernel.org
+Subject: [net-next v5 12/12] selftests: drv-net: Add USO test
+Date: Mon, 23 Mar 2026 11:38:37 -0700
+Message-ID: <20260323183844.3146982-13-joe@dama.to>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260323183844.3146982-1-joe@dama.to>
+References: <20260323183844.3146982-1-joe@dama.to>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 04/16] mm/gup: drop secretmem optimization from
- gup_fast_folio_allowed
-To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "kernel@xen0n.name" <kernel@xen0n.name>,
- "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
- "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
- "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
- "oupton@kernel.org" <oupton@kernel.org>,
- "joey.gouly@arm.com" <joey.gouly@arm.com>,
- "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
- "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "seanjc@google.com"
- <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>,
- "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "luto@kernel.org" <luto@kernel.org>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "willy@infradead.org" <willy@infradead.org>,
- "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
- "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
- "vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org"
- <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
- "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>,
- "andrii@kernel.org" <andrii@kernel.org>,
- "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
- <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
- "kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
- <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
- "jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
- "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
- "peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
- <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
- "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
- "riel@surriel.com" <riel@surriel.com>,
- "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
- "jgross@suse.com" <jgross@suse.com>,
- "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
- "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
- "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>,
- "yosry@kernel.org" <yosry@kernel.org>,
- "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
- "maobibo@loongson.cn" <maobibo@loongson.cn>,
- "tabba@google.com" <tabba@google.com>, "prsampat@amd.com"
- <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
- "mlevitsk@redhat.com" <mlevitsk@redhat.com>,
- "jmattson@google.com" <jmattson@google.com>,
- "jthoughton@google.com" <jthoughton@google.com>,
- "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
- "alex@ghiti.fr" <alex@ghiti.fr>,
- "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
- "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
- "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
- "dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
- <gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
- "palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org"
- <pjw@kernel.org>,
- "shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
- "svens@linux.ibm.com" <svens@linux.ibm.com>,
- "thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com"
- <wyihan@google.com>,
- "yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
- "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
- "urezki@gmail.com" <urezki@gmail.com>,
- "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
- "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
- "jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>,
- "lenb@kernel.org" <lenb@kernel.org>, "osalvador@suse.de"
- <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>,
- "rafael@kernel.org" <rafael@kernel.org>,
- "vannapurve@google.com" <vannapurve@google.com>,
- "jackmanb@google.com" <jackmanb@google.com>,
- "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
- "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
- "Thomson, Jack" <jackabt@amazon.co.uk>,
- "Itazuri, Takahiro" <itazur@amazon.co.uk>,
- "Manwaring, Derek" <derekmn@amazon.com>, Vlastimil Babka <vbabka@suse.cz>,
- Dan Williams <dan.j.williams@intel.com>, Alistair Popple <apopple@nvidia.com>
-References: <20260317141031.514-1-kalyazin@amazon.com>
- <20260317141031.514-5-kalyazin@amazon.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260317141031.514-5-kalyazin@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/17/26 15:11, Kalyazin, Nikita wrote:
-> From: Patrick Roy <patrick.roy@linux.dev>
-> 
-> This drops an optimization in gup_fast_folio_allowed() where
-> secretmem_mapping() was only called if CONFIG_SECRETMEM=y. secretmem is
-> enabled by default since commit b758fe6df50d ("mm/secretmem: make it on
-> by default"), so the secretmem check did not actually end up elided in
-> most cases anymore anyway.
-> 
-> This is in preparation of the generalization of handling mappings where
-> direct map entries of folios are set to not present.  Currently,
-> mappings that match this description are secretmem mappings
-> (memfd_secret()).  Later, some guest_memfd configurations will also fall
-> into this category.
-> 
-> Signed-off-by: Patrick Roy <patrick.roy@linux.dev>
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
-> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-> ---
->  mm/gup.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 8e7dc2c6ee73..5856d35be385 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2739,7 +2739,6 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
->  {
->  	bool reject_file_backed = false;
->  	struct address_space *mapping;
-> -	bool check_secretmem = false;
->  	unsigned long mapping_flags;
->  
->  	/*
-> @@ -2751,14 +2750,6 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
->  		reject_file_backed = true;
->  
->  	/* We hold a folio reference, so we can safely access folio fields. */
-> -
-> -	/* secretmem folios are always order-0 folios. */
-> -	if (IS_ENABLED(CONFIG_SECRETMEM) && !folio_test_large(folio))
-> -		check_secretmem = true;
-> -
-> -	if (!reject_file_backed && !check_secretmem)
-> -		return true;
-> -
+Add a simple test for USO. Can be used with netdevsim or real hardware.
+Tests both ipv4 and ipv6 with several full segments and a partial
+segment.
 
-The AI review says that this will force all small folios through the
-mapping check (which we obviously need later :) ).
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ v5:
+   - Added Pavan's Reviewed-by. No functional changes.
 
-It brings up two cases where page->mapping is not set up:
+ v4:
+   - Fix python linter issues (unused imports, docstring, etc).
 
-1) ZONE_DEVICE pages (like Device DAX and PCI P2PDMA)
+ rfcv2:
+   - new in rfcv2
 
-2) large shmem folios in the swap cache
+ tools/testing/selftests/drivers/net/Makefile |  1 +
+ tools/testing/selftests/drivers/net/uso.py   | 96 ++++++++++++++++++++
+ 2 files changed, 97 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/uso.py
 
-
-2) doesn't make sense, because the folio cannot be mapped in user space
-when that happens.
-
-I am also skeptical about 1), especially as large folios are also
-supported for device dax and would be problematic here.
-__dev_dax_pte_fault() clearly sets folio->mapping through dax_set_mapping().
-
-
-If 1) is ever a case we could allow them by checking for
-folio_is_zone_device(). But I am not sure if that is really required.
-Sounds weird.
-
-
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index 7c7fa75b80c2..335c2ce4b9ab 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -21,6 +21,7 @@ TEST_PROGS := \
+ 	ring_reconfig.py \
+ 	shaper.py \
+ 	stats.py \
++	uso.py \
+ 	xdp.py \
+ # end of TEST_PROGS
+ 
+diff --git a/tools/testing/selftests/drivers/net/uso.py b/tools/testing/selftests/drivers/net/uso.py
+new file mode 100755
+index 000000000000..2ddeae99b4d6
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/uso.py
+@@ -0,0 +1,96 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""Test USO
++
++Sends large UDP datagrams with UDP_SEGMENT and verifies that the peer
++receives the correct number of individual segments with correct sizes.
++"""
++import socket
++import time
++
++from lib.py import ksft_run, ksft_exit, KsftSkipEx
++from lib.py import ksft_ge
++from lib.py import NetDrvEpEnv
++from lib.py import defer, ethtool, ip, rand_port
++
++# python doesn't expose this constant, so we need to hardcode it to enable UDP
++# segmentation for large payloads
++UDP_SEGMENT = 103
++
++
++def _send_uso(cfg, ipver, mss, total_payload, port):
++    if ipver == "4":
++        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++        dst = (cfg.remote_addr_v["4"], port)
++    else:
++        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
++        dst = (cfg.remote_addr_v["6"], port)
++
++    sock.setsockopt(socket.IPPROTO_UDP, UDP_SEGMENT, mss)
++    payload = bytes(range(256)) * ((total_payload // 256) + 1)
++    payload = payload[:total_payload]
++    sock.sendto(payload, dst)
++    sock.close()
++    return payload
++
++
++def _get_rx_packets(cfg):
++    stats = ip(f"-s link show dev {cfg.remote_ifname}",
++               json=True, host=cfg.remote)[0]
++    return stats['stats64']['rx']['packets']
++
++
++def _test_uso(cfg, ipver, mss, total_payload):
++    cfg.require_ipver(ipver)
++
++    try:
++        ethtool(f"-K {cfg.ifname} tx-udp-segmentation on")
++    except Exception as exc:
++        raise KsftSkipEx(
++            "Device does not support tx-udp-segmentation") from exc
++    defer(ethtool, f"-K {cfg.ifname} tx-udp-segmentation off")
++
++    expected_segs = (total_payload + mss - 1) // mss
++
++    rx_before = _get_rx_packets(cfg)
++
++    port = rand_port(stype=socket.SOCK_DGRAM)
++    _send_uso(cfg, ipver, mss, total_payload, port)
++
++    time.sleep(0.5)
++
++    rx_after = _get_rx_packets(cfg)
++    rx_delta = rx_after - rx_before
++
++    ksft_ge(rx_delta, expected_segs,
++            comment=f"Expected >= {expected_segs} rx packets, got {rx_delta}")
++
++
++def test_uso_v4(cfg):
++    """USO IPv4: 11 segments (10 full + 1 partial)."""
++    _test_uso(cfg, "4", 1400, 1400 * 10 + 500)
++
++
++def test_uso_v6(cfg):
++    """USO IPv6: 11 segments (10 full + 1 partial)."""
++    _test_uso(cfg, "6", 1400, 1400 * 10 + 500)
++
++
++def test_uso_v4_exact(cfg):
++    """USO IPv4: exact multiple of MSS (5 full segments)."""
++    _test_uso(cfg, "4", 1400, 1400 * 5)
++
++
++def main() -> None:
++    """Run USO tests."""
++    with NetDrvEpEnv(__file__) as cfg:
++        ksft_run([test_uso_v4,
++                  test_uso_v6,
++                  test_uso_v4_exact],
++                 args=(cfg, ))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
-Cheers,
+2.52.0
 
-David
