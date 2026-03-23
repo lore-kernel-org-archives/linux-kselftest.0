@@ -1,156 +1,91 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E405C14A;
-	Sun, 22 Mar 2026 23:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAA540DFD5;
+	Mon, 23 Mar 2026 00:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774222810; cv=none; b=iPPYK69fFmEiaQWZsG+R27l5rUNbWv5KDvPbDANoO/JI14vmLY43SvSRu2/wWpNBiCna3ysIUi5rkTMxXUmGrhENGuYiKviv+RFGypzeFfw2jXfwuxFBY6mZdu5TS5QRob5yoCfnmj4GsVvmj7pNFBNRuAPBJ45p3j1t/zuy9wQ=
+	t=1774226270; cv=none; b=GXsW34HeMDljFyrsA+gLEBCBsD/AK9NFM/+ZenyDOUtjRMPmxYkXtsj5SDr3LyI1HV/LsE1RkH0KJuYOQ6ROMRoDdANm/Np18mOc4lN/b2QVPvBprpmQrm4b5pXy5XcmZX5efP1e5S5l7vaZtLtToWwbNusITxKDse5nmO6Mzeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774222810; c=relaxed/simple;
-	bh=YY0WnJpl9efQsesPTLITDM5ipSbgubyFbN3IYd2HlvY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JgA0prc6yU0z0ZKd12EYBkwjP/sMtDKvh3RZLzLPznVKQ5aBQal8aENFkdvYOl31OGq9499tZGqwdoXmrOtifJC22FlzHDI5LJuBdVmjnVI3gJgLJi/XLbSKGi24RmmMfIpBt1npqNXSYZNPZMUQr+68++ZDv+AMCI01UpCThog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=By1MIVdi; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1774226270; c=relaxed/simple;
+	bh=T1wXjwFJ6EPw2lxeonXsway4t6B4x+Ls7EDi3ELuspk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GWMmu/ljYwR6bodgEQjACOzcdt6Qu3T8lrga0HCy7EvjFRiE4MT1gLSX2x/eRnDlb7wKAPlJs/ygIaoKmqVNGpYkQIZoWDDEhP/lsTX1Dey0COCC3JJxdl/FNxAv4B094An73ranabFOFeQ41YpJbqc6v+suDgNezn8phchXuxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SQpLLk9O; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="By1MIVdi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=aRpSU/sj+SpBgYPHzOc3KxAO0LfrxvPpZ7/TLnsSX9E=; b=By1MIVdiu/jZ
-	o/DSqfq/3/4rwCwr6+5y8LGxEeL+sgz2gumsTILvguBAbCAOqA0ugR7tnMcOurgGKLSsSJFAuZj5V
-	x+L3F1GDnCisRnxLtTdsHmkDkASP7UDZ3dore+IvsLcRxuOm9ohG89NDWPy7vC3HY4qSoYs7Muy4v
-	RWIGf/koSv/PF7BwUK8fiY5e4iIT8C0cIkvpl9mEaapLCtGHsdoxnLFlccQLJFT46oUo/JNNQ8Tec
-	/HlrqZaecl3yj3RPLWknoPjxrNTwMeemkPCZx04FOSmmGFDg0zjiMCFDgiwbxJQijezuk2jfmWtqL
-	9bSASehaFNplUtg/AE+CTg==;
-Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
-	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1w4SMa-006Xfv-2t;
-	Mon, 23 Mar 2026 00:39:36 +0100
-Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 62MNdgih190537
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Sun, 22 Mar 2026 23:39:42 GMT
-Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 62MNddQL190536;
-	Sun, 22 Mar 2026 23:39:39 GMT
-From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Edgecombe@dev004.aci.vzint.dev, Rick P <rick.p.edgecombe@intel.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH v2] selftests: x86: test_shadow_stack: return KSFT_SKIP when test is skipped
-Date: Sun, 22 Mar 2026 23:39:38 +0000
-Message-ID: <20260322233938.190526-1-aleksey.oladko@virtuozzo.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SQpLLk9O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774226269; x=1805762269;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=T1wXjwFJ6EPw2lxeonXsway4t6B4x+Ls7EDi3ELuspk=;
+  b=SQpLLk9OI1cnqrbNgMRUIrx+fnfOlplcNCnTEFzC+TEbPRvmFDcLuaUR
+   /lQtJexnSSd9Z+MhsotyR+Yl90QosgA7kO9xCcmJyKyHNXmFf1D0fCzHt
+   hUgpvEWQxRVRkTuCwsvFjTI1icOKH8bCz9imP61kNQWCUXa/8Wo1Jk0wF
+   rLC23vHaA3fO0mQhuX1iMKiI+Q8CUBZ2PGhXmaRUj7kZiJ3/gx05uyJm4
+   O3entePJzC/7c5eJKgtglAP5078e1CbPhJDYv5wJVRQpZ238BToZ81sMm
+   0KyR1J0g5QKxz2UldLgIe174Srt6uyGTJLw/1LIu7gaRRKax7GM8whduT
+   Q==;
+X-CSE-ConnectionGUID: Ahn3K1GSSzSgHC6qyYTNsw==
+X-CSE-MsgGUID: A2z02wd7SASU+EOp6+Wjdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="74404280"
+X-IronPort-AV: E=Sophos;i="6.23,136,1770624000"; 
+   d="scan'208";a="74404280"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 17:37:48 -0700
+X-CSE-ConnectionGUID: hNLso/mySB255Be9DTSd3g==
+X-CSE-MsgGUID: yfhaF/OjQQS4/KvARcTBXg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,136,1770624000"; 
+   d="scan'208";a="223890385"
+Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 17:37:45 -0700
+Date: Mon, 23 Mar 2026 08:37:41 +0800
+From: "Lai, Yi" <yi1.lai@linux.intel.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Yi Lai <yi1.lai@intel.com>, Alex Williamson <alex@shazbot.org>,
+	Shuah Khan <shuah@kernel.org>, Baolu Lu <baolu.lu@linux.intel.com>,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Alex Mastro <amastro@fb.com>
+Subject: Re: [PATCH 0/2] vfio: selftests: Fix MMIO test failures in iommufd
+ compat mode
+Message-ID: <acCLVWggK3wru6aF@ly-workstation>
+References: <20260320040322.487429-1-yi1.lai@intel.com>
+ <CALzav=c5Sgv-x4LoCbJGdwuuQBr_4DQyZV=0vvnzG_16T3HtzA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALzav=c5Sgv-x4LoCbJGdwuuQBr_4DQyZV=0vvnzG_16T3HtzA@mail.gmail.com>
 
-test_shadow_stack prints a message indicating that the test is
-skipped in some cases, but still returns 1. This causes the test
-to be reported as failed instead of skipped.
+On Fri, Mar 20, 2026 at 10:43:54AM -0700, David Matlack wrote:
+> On Thu, Mar 19, 2026 at 9:03 PM Yi Lai <yi1.lai@intel.com> wrote:
+> >
+> > This series fixes two issues in the vfio_dma_mapping_mmio_test selftest when
+> > running in iommufd compat mode.
+> >
+> > The first patch fixes a segmentation fault caused by an uninitialized list head
+> > when __iommu_map() fails (as expected for MMIO regions in iommufd).
+> >
+> > The second patch fixes a test assertion failure by aligning the check for the
+> > __iommu_unmap() return value based on the iommufd mode (native vs. compat).
+> 
+> Alex Mastro also sent a fix for these issues here:
+> 
+>   https://lore.kernel.org/kvm/20260303-fix-mmio-test-v1-1-78b4a9e46a4e@fb.com/
+> 
+> Can you take a look and see if it looks ok to you? I think I prefer
+> Alex's fix. We shouldn't even be calling __iommu_unmap() after
+> __iommu_map() fails.
 
-Return KSFT_SKIP in the skip path so the result is reported
-correctly.
-
-Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-
----
-v2:
-- return SKIP only for "Could not enable Shadow stack" case
-- Changed message from SKIP to FAIL for remaining cases
----
- .../testing/selftests/x86/test_shadow_stack.c | 20 +++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-index 21af54d5f4ea..4c5437846d26 100644
---- a/tools/testing/selftests/x86/test_shadow_stack.c
-+++ b/tools/testing/selftests/x86/test_shadow_stack.c
-@@ -35,6 +35,7 @@
- #include <sys/signal.h>
- #include <linux/elf.h>
- #include <linux/perf_event.h>
-+#include "kselftest.h"
- 
- /*
-  * Define the ABI defines if needed, so people can run the tests
-@@ -64,7 +65,7 @@
- int main(int argc, char *argv[])
- {
- 	printf("[SKIP]\tCompiler does not support CET.\n");
--	return 0;
-+	return KSFT_SKIP;
- }
- #else
- void write_shstk(unsigned long *addr, unsigned long val)
-@@ -496,7 +497,7 @@ int test_userfaultfd(void)
- 	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
- 	if (uffd < 0) {
- 		printf("[SKIP]\tUserfaultfd unavailable.\n");
--		return 0;
-+		return KSFT_SKIP;
- 	}
- 
- 	reset_test_shstk(0);
-@@ -820,9 +821,11 @@ static int test_uretprobe(void)
- 
- 	type = determine_uprobe_perf_type();
- 	if (type < 0) {
--		if (type == -ENOENT)
-+		if (type == -ENOENT) {
- 			printf("[SKIP]\tUretprobe test, uprobes are not available\n");
--		return 0;
-+			return KSFT_SKIP;
-+		}
-+		return 1;
- 	}
- 
- 	offset = get_uprobe_offset(uretprobe_trigger);
-@@ -981,21 +984,21 @@ int main(int argc, char *argv[])
- 
- 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
- 		printf("[SKIP]\tCould not enable Shadow stack\n");
--		return 1;
-+		return KSFT_SKIP;
- 	}
- 
- 	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
--		ret = 1;
- 		printf("[FAIL]\tDisabling shadow stack failed\n");
-+		return 1;
- 	}
- 
- 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
--		printf("[SKIP]\tCould not re-enable Shadow stack\n");
-+		printf("[FAIL]\tCould not re-enable Shadow stack\n");
- 		return 1;
- 	}
- 
- 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
--		printf("[SKIP]\tCould not enable WRSS\n");
-+		printf("[FAIL]\tCould not enable WRSS\n");
- 		ret = 1;
- 		goto out;
- 	}
-@@ -1057,6 +1060,7 @@ int main(int argc, char *argv[])
- 	if (test_ptrace()) {
- 		ret = 1;
- 		printf("[FAIL]\tptrace test\n");
-+		goto out;
- 	}
- 
- 	if (test_32bit()) {
--- 
-2.43.0
+Yes, just remove calling __iommu_unmap() is a more direct fix for the
+two issues I encoutered. Agree with the fix.
 
