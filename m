@@ -1,91 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAA540DFD5;
-	Mon, 23 Mar 2026 00:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECDA15746F
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 02:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774226270; cv=none; b=GXsW34HeMDljFyrsA+gLEBCBsD/AK9NFM/+ZenyDOUtjRMPmxYkXtsj5SDr3LyI1HV/LsE1RkH0KJuYOQ6ROMRoDdANm/Np18mOc4lN/b2QVPvBprpmQrm4b5pXy5XcmZX5efP1e5S5l7vaZtLtToWwbNusITxKDse5nmO6Mzeo=
+	t=1774231598; cv=none; b=SePI+8ddEGQpkyrz3Uy9f27T210PbvqzOetO3E1Y++qDjI+VRQ3SzW5hK+8VXY6eDQ5jDjclizAZakeWDk6gerPCa5rTXCg+Hgkw0T7OjdRZMME2NhxeG+MvuytdnoQMTzEStJMn73r7OH+U3wSHjqghg/EXGPddkyfg4vODgHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774226270; c=relaxed/simple;
-	bh=T1wXjwFJ6EPw2lxeonXsway4t6B4x+Ls7EDi3ELuspk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GWMmu/ljYwR6bodgEQjACOzcdt6Qu3T8lrga0HCy7EvjFRiE4MT1gLSX2x/eRnDlb7wKAPlJs/ygIaoKmqVNGpYkQIZoWDDEhP/lsTX1Dey0COCC3JJxdl/FNxAv4B094An73ranabFOFeQ41YpJbqc6v+suDgNezn8phchXuxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SQpLLk9O; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1774231598; c=relaxed/simple;
+	bh=JgipJT2wx4m+Ha9Dm9Bsg/W/X+SWmJ9xG/f6L2BmBIE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XsMVjQaPRn1BaXBcH7pbMmTakF5B4l9wyUjVDKpcv0qyBHSOaN9EWjLI9k+fWuKHZ++xtRLxbHhX6YdvqLrv+E8SOAj4YXkzmKXaRDg6TeqiVKRTLlUxaYhPLp5x/ruI/mVO0KiswZqpWwchIUtjlGxm9jrZ9KpbhV3GFWPVRvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Brl7SlZ3; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SQpLLk9O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774226269; x=1805762269;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=T1wXjwFJ6EPw2lxeonXsway4t6B4x+Ls7EDi3ELuspk=;
-  b=SQpLLk9OI1cnqrbNgMRUIrx+fnfOlplcNCnTEFzC+TEbPRvmFDcLuaUR
-   /lQtJexnSSd9Z+MhsotyR+Yl90QosgA7kO9xCcmJyKyHNXmFf1D0fCzHt
-   hUgpvEWQxRVRkTuCwsvFjTI1icOKH8bCz9imP61kNQWCUXa/8Wo1Jk0wF
-   rLC23vHaA3fO0mQhuX1iMKiI+Q8CUBZ2PGhXmaRUj7kZiJ3/gx05uyJm4
-   O3entePJzC/7c5eJKgtglAP5078e1CbPhJDYv5wJVRQpZ238BToZ81sMm
-   0KyR1J0g5QKxz2UldLgIe174Srt6uyGTJLw/1LIu7gaRRKax7GM8whduT
-   Q==;
-X-CSE-ConnectionGUID: Ahn3K1GSSzSgHC6qyYTNsw==
-X-CSE-MsgGUID: A2z02wd7SASU+EOp6+Wjdg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="74404280"
-X-IronPort-AV: E=Sophos;i="6.23,136,1770624000"; 
-   d="scan'208";a="74404280"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 17:37:48 -0700
-X-CSE-ConnectionGUID: hNLso/mySB255Be9DTSd3g==
-X-CSE-MsgGUID: yfhaF/OjQQS4/KvARcTBXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,136,1770624000"; 
-   d="scan'208";a="223890385"
-Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 17:37:45 -0700
-Date: Mon, 23 Mar 2026 08:37:41 +0800
-From: "Lai, Yi" <yi1.lai@linux.intel.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Yi Lai <yi1.lai@intel.com>, Alex Williamson <alex@shazbot.org>,
-	Shuah Khan <shuah@kernel.org>, Baolu Lu <baolu.lu@linux.intel.com>,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Alex Mastro <amastro@fb.com>
-Subject: Re: [PATCH 0/2] vfio: selftests: Fix MMIO test failures in iommufd
- compat mode
-Message-ID: <acCLVWggK3wru6aF@ly-workstation>
-References: <20260320040322.487429-1-yi1.lai@intel.com>
- <CALzav=c5Sgv-x4LoCbJGdwuuQBr_4DQyZV=0vvnzG_16T3HtzA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Brl7SlZ3"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774231585;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vV+bsjg64uKmvJ+/65HD4Kt5UvpIk0GGJfXLlviVtig=;
+	b=Brl7SlZ3i6y0LCQZ4Y1WYpowsb+0VJIQZXWz9qpngS77bzin7C7c1QBMbAvNvRszaVMV3H
+	2Cg1kfEbOS9MfiwuZH6KQ9DOFvF+YPFg0OBjXqe4AQVy5MkIcdBe6KrZzIk8lv85lbeivz
+	aEuwxIXV6bJwpcMsYBpNzNBxIGKbs7E=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH bpf-next] selftests/bpf: test access to ringbuf position with map
+ pointer
+Date: Mon, 23 Mar 2026 10:06:00 +0800
+Message-ID: <12859070.O9o76ZdvQC@7940hx>
+In-Reply-To: <DH8XNPJ8LC2K.5SQUBA8FZ9YW@etsalapatis.com>
+References:
+ <20260320084155.288417-1-dongml2@chinatelecom.cn>
+ <DH8XNPJ8LC2K.5SQUBA8FZ9YW@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALzav=c5Sgv-x4LoCbJGdwuuQBr_4DQyZV=0vvnzG_16T3HtzA@mail.gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Mar 20, 2026 at 10:43:54AM -0700, David Matlack wrote:
-> On Thu, Mar 19, 2026 at 9:03 PM Yi Lai <yi1.lai@intel.com> wrote:
+On 2026/3/22 09:51 Emil Tsalapatis <emil@etsalapatis.com> write:
+> On Fri Mar 20, 2026 at 4:41 AM EDT, Menglong Dong wrote:
+> > Add the testing to access the bpf_ringbuf with the map pointer.
+> > "consumer_pos" and "producer_pos" is accessed in this testing. We reserve
+> > 128 bytes in the ringbuf to test the producer_pos, which should be
+> > "128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
 > >
-> > This series fixes two issues in the vfio_dma_mapping_mmio_test selftest when
-> > running in iommufd compat mode.
+> > It will be helpful if we want to evaluate the usage of the ringbuf in bpf
+> > prog with the consumer and producer position.
 > >
-> > The first patch fixes a segmentation fault caused by an uninitialized list head
-> > when __iommu_map() fails (as expected for MMIO regions in iommufd).
-> >
-> > The second patch fixes a test assertion failure by aligning the check for the
-> > __iommu_unmap() return value based on the iommufd mode (native vs. compat).
+> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 > 
-> Alex Mastro also sent a fix for these issues here:
+> Once Jiri's feedback is addressed feel free to add:
 > 
->   https://lore.kernel.org/kvm/20260303-fix-mmio-test-v1-1-78b4a9e46a4e@fb.com/
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 > 
-> Can you take a look and see if it looks ok to you? I think I prefer
-> Alex's fix. We shouldn't even be calling __iommu_unmap() after
-> __iommu_map() fails.
+> One nit below.
+[...]
+> > +	VERIFY(rb->consumer_pos == 0);
+> 
+> Nit: Can you repeat here the explanation from the cover letter 
+> as to why this is 128 + 8?
 
-Yes, just remove calling __iommu_unmap() is a more direct fix for the
-two issues I encoutered. Agree with the fix.
+OK, I'll add a comment here.
+
+Thanks!
+Menglong Dong
+
+> 
+> > +	VERIFY(rb->producer_pos == 128 + 8);
+> > +
+> >  	return 1;
+> >  }
+> 
+> >  
+> 
+
+
+
 
