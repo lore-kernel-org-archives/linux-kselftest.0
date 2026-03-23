@@ -1,149 +1,84 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C783B388C
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 15:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529B23B0AE2;
+	Mon, 23 Mar 2026 15:28:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774279150; cv=none; b=t4wr7n8Tpop8Q6ZNkhcBiHdWePOsFZmlVYKCqd7Fvl43hDp1lk1g1xvzkUYL5RNPYSUKm5MflklZWN5AX8K+yRl96jL495PsOaJd7vK+UB2AzFg2K20cTCRNjYIu9w6ga7mGCZRQrrIhz6OU5zbqpJyHj3HfD2+eCku0dX8hiEs=
+	t=1774279687; cv=none; b=q/mJxK2Lm0XhNGSv+OK8dg2D1EqMHY9NaVXa5Pzq+k8105LJ7JWq5Xjff6PRLaUOurBEx/i6rzoYL7DTnoBG0m64kzbCOr6D6U+XK+gFZaO41lG7js5qcQj0BCp4ZHyoBiLx/WpqmPRK4Nz49IIZc2ziFucY99W2OSg7ejgLPwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774279150; c=relaxed/simple;
-	bh=0ZNjKjARdZvcdL31QoVs+UqP+O/z4+0bO2/UPGbm13o=;
+	s=arc-20240116; t=1774279687; c=relaxed/simple;
+	bh=0inbW287jRPXssblfcXdWvIf+BmJcrXcK4SdIvnEjnI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B88eW/KiWZufPSktiybC/xzTmm8ROzuf5Dv2lxh38u4pqgo8SHQ0g55zMWb/d0IB26VBLQEgXJem3m9GwmRcABgVmK1uwwzs/hIkIIDUBLUr8+vlqT2MUE3ZbXmrZM3U+6xD4CLLe5KL/vPb4WGRSXq9b9XdlW6h3ioYosBcm7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C0E/Hc27; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 MIME-Version:Content-Type; b=c1Dn2/dIrMkRTYEYbgYPUC87whv3npoDa3HRVIuNnCHU9J7GUZxgXgIDf4M3ZzHGaXsbCdnXzE2T+aMhdn10UkCi5vUR8994kzWXceTSfnpwToBfNSLHFTfNegKHMGbIFywtrb9M+rOI+BToF2YLi0xfiIeNWaTBDqcdJfJZWgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wa8en8ye; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C0E/Hc27"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774279148;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z5cQUZey16cto7EAHb0l8lICJnDidIXEapbKPGxTzr4=;
-	b=C0E/Hc275Fk1U4MvS8amI0f9VwQ2sUzK0C5uf2T624tdRJuwULDFPWybvBp/JbnPidrLFC
-	YANzOQmHRHaekSfwmLsISUF2j6ItBxvqXK2QJ7WlUjcqaMPcIL2ORAqGLFUEJuDU9es8Zx
-	R8o3XaFv9RKuo8B0XrVnG3VMsz4o+vc=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-160-ZWzrsvwjNu6mzhFNQTtqkQ-1; Mon,
- 23 Mar 2026 11:19:02 -0400
-X-MC-Unique: ZWzrsvwjNu6mzhFNQTtqkQ-1
-X-Mimecast-MFC-AGG-ID: ZWzrsvwjNu6mzhFNQTtqkQ_1774279140
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5B52518002D0;
-	Mon, 23 Mar 2026 15:19:00 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1B93E1955D71;
-	Mon, 23 Mar 2026 15:18:51 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com,
-	Li Wang <liwang@redhat.com>
-Subject: [PATCH v5 6/6] selftests/mm: transhuge_stress: skip the test when thp not available
-Date: Mon, 23 Mar 2026 23:17:53 +0800
-Message-ID: <20260323151753.2576137-7-chuhu@redhat.com>
-In-Reply-To: <20260323151753.2576137-1-chuhu@redhat.com>
-References: <20260323151753.2576137-1-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wa8en8ye"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3156FC4CEF7;
+	Mon, 23 Mar 2026 15:28:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774279687;
+	bh=0inbW287jRPXssblfcXdWvIf+BmJcrXcK4SdIvnEjnI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Wa8en8yeBm23obTEKj3Q+7IOIBEUSObj8rxBwTrHNrmGMBwjlwnDS2vp8r6iMax5S
+	 y0Ddhq8XMNN3LciqynxtbcoFtI+OBsOxm0x5olSdgJz6/nPR486AtgdiEP9ezmTITe
+	 pAZ8kqQuEzzr9ZZdjGhPHGme3KCIZI+5QgLMh4q2K/OzprctNYeBPNe6SlT5N9+KSw
+	 +cuyD6xgnaIx046r2vcwvm1S80SpKQq9sY7x/wbSyNVF0gcbFqVDdof6K5yP/gtM4i
+	 rbOUZ75sL8eTrAOjfRCi8+mBR308nxiim1BZw+fuPnMcfPDDbyTEy23S/ceNUnVon9
+	 bhABx0Vc2U0jA==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	Emanuele Rocca <emanuele.rocca@arm.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Clint George <clintbgeorge@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] kselftest/coredump: reintroduce null pointer dereference
+Date: Mon, 23 Mar 2026 16:27:58 +0100
+Message-ID: <20260323-idolisieren-bereuen-17430ffe5208@brauner>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <ab2kI0PI_Vk6bU88@NH27D9T0LF>
+References: <ab2kI0PI_Vk6bU88@NH27D9T0LF>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1576; i=brauner@kernel.org; h=from:subject:message-id; bh=0inbW287jRPXssblfcXdWvIf+BmJcrXcK4SdIvnEjnI=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQejGGabG3c6RdbN1kyM33hCb6lwdY2vtNeLrvwrT3b+ /W5B19vdZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzk0B9Ghocdfvz7DkZ3s4gH cyzfmna3s73r5o7qBYtaV35Lt3PsqGf4p9MXk615l8lT1rr1fDF/f6bErq6Q+e+KOyRP+G8JjMx nAgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-The test requires thp, skip the test when thp is not available to avoid
-false positive.
+On Fri, 20 Mar 2026 20:46:43 +0100, Emanuele Rocca wrote:
+> Commit 673a55cc49da replaced the null pointer dereference used in
+> crashing_child() with __builtin_trap to address the following LLVM warnings:
+> 
+>  coredump_test_helpers.c:59:6: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+>  coredump_test_helpers.c:59:6: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+> 
+> All coredump tests expect crashing_child() to result in a SIGSEGV. However, the
+> behavior of __builtin_trap is architecture-dependent. On x86 it yields SIGILL,
+> on aarch64 SIGTRAP. Given that neither of those signals are SIGSEGV, both
+> coredump_socket_test and coredump_socket_protocol_test are currently failing:
+> 
+> [...]
 
-Tested with thp disabled kernel.
-Before the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..1
-  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 60 transhuge-stress -d 20 # exit=1
+Applied to the vfs-7.1.pidfs branch of the vfs/vfs.git tree.
+Patches in the vfs-7.1.pidfs branch should appear in linux-next soon.
 
-After the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..0 # SKIP Transparent Hugepages not available
-  # [SKIP]
-  ok 5 transhuge-stress -d 20 # SKIP
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-CC: Li Wang <liwang@redhat.com>
-Signed-off-by: Chunyu Hu <chuhu@redhat.com>
----
-V3 changes:
-  - Add review by from Mike
-  - Add acked-by from David
-V2 changes:
-  - Move the exit chunk to the front of ksft_print_headers() as suggested
-    by David.
-  - Add reviewed by from Zi and Lorenzo
----
- tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
- 1 file changed, 4 insertions(+)
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index bcad47c09518..7a9f1035099b 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include "vm_util.h"
- #include "kselftest.h"
-+#include "thp_settings.h"
- 
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -37,6 +38,9 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 
-+	if (!thp_is_enabled())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / psize() / 4)
- 		ram = SIZE_MAX / 4;
--- 
-2.53.0
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.1.pidfs
+
+[1/1] kselftest/coredump: reintroduce null pointer dereference
+      https://git.kernel.org/vfs/vfs/c/3fc66a103395
