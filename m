@@ -1,172 +1,82 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E5C2BD00C
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 20:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2152437F01B;
+	Mon, 23 Mar 2026 20:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774298629; cv=none; b=P7gSoYjJtRFhFmwx1ADTU4h/pjddVovKwv6TbAffElNl6WED2mM3EYmkeAGw02GQmVdUpNQbpy9B81qVC0LZ+P4duI8T1f+3Bmcs4tO4jOmzVeN4bBCvzxFkQd8LlY2736X5ZapJZU/6sO2bu5LnShQJXdLdn1qYKa8MRqSPk3s=
+	t=1774298644; cv=none; b=L9YR6uD4UDXG1prMTEwAcgnpt9j+ZpQ4vDmquyLgSDp89kGQbvFCuk1Ca50LSRN3cSJUXF0ruPePDwNpOxGXkBfV9EmoOvHDmbakZEGYn+f+PderIDKmELl/PVOq52ed+jA6HeIlMNAwmY0IKpeOTeYOIiHW0ERsSIffiPKyxnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774298629; c=relaxed/simple;
-	bh=yAD2ucoLlY3NeatOfUyKvy6VOnV5067pVR+1CqISHzI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MH++8BiAh2w8mMtsBl2Dnb+Krnh0JaMAnyGrqgG4rOOjzOMRqBq5oIJgMDzQWY8C63m3QNTKP4WswhvKXU/9hL2oDGZAkMV7gft1JTH5abNHzBnI6YwBcmghKhwDVMofsh3vNndSZ9F14/xQbtnNS0MzQOcmOoOTbqzLE2IDa4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FcWaCfRA; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1774298644; c=relaxed/simple;
+	bh=vXqcipqgH0S3NtrVzXRwJpgdgKtE+evTaBXC41Pu2Fs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kKA6T9Hb+LD41oQBV951+SvX5ulokVvxke0Slr932MG5dQb6ykD3uSJ2in9M1KIVsO+Cxb4tQzIz+3VaVgo/RF0BKeJX5wWPkTXVGMvJ1V86iRUZJflGBfci9uc5Y7F+BP5oR+VdKZkyJBg8VVlzDMfQA4Ntm9rPwwoyFOe1THQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=i+qODxGq; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FcWaCfRA"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2b052ec7176so7005ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 13:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774298628; x=1774903428; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jv+paj/zuCW/4wO6DwQaFbEbko5bvaSd+BgnRg2Mnpk=;
-        b=FcWaCfRABhevnlEeiblIA/nvVZdWwSSULv11Hw8ZNr7Kang8XzjCwMDrMRxOJ5xvQ3
-         v+URfnLqpRyt0YSuZoMgpLzCQdHl0O8UTW4YkyeKy5C5UIVQgkQq4YlhIQgGBVCiufIW
-         k8qfishvIze3Ct/89grLCxyvBPi2Coc+qN34eXJJ23ZT/uKk7UlwzlJ3v2fZw3UFZkUg
-         5Drp1i8VuyHfNwwJTHI7ZrQoRtWhePoiHdBOCz1Im1gIZWDAwOX9wjJA0RlJ+iPtH6kp
-         XWnPlYr/TuaVBfhOhOojgK9uU1TGc4q4Nl9WXjQogW2LFvf3JxdaAHSsePYhb3oTUWzv
-         UUzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774298628; x=1774903428;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jv+paj/zuCW/4wO6DwQaFbEbko5bvaSd+BgnRg2Mnpk=;
-        b=iHkrb3EmDndESJJqjW2I02WcVfWXJ5zvQbf3vIOvzGyk80wkmpmdLDMH0N8BcVbZxB
-         zwRcaOb8ElgYgzN0+EHaRVl+Fg1fpfbgkZzknQMertbMZO6MZZRAERSOhQSxpLyKduMp
-         6ugGdxpQ0TW4450ODzipxrtSTn/AuTlP/uQb8zWPIBUjJAQxx3fD4JANW9uqeVkzqoJi
-         TuNYhekc29CWL5pjzIjcA/dtF2O+blstuBUbRSmllNrm4JShNMy7ZUKOtZNiq/wZfZWp
-         SKCQ5Eg1akG5rTb2Q264ZUYP0GCcJRyEvwoi5SqdKJpR+7Fp133hVIqtcyQvAjV1Z2DG
-         IrzA==
-X-Gm-Message-State: AOJu0YxzZlWvrhCAgc6m3ArjaWEbYpbotV0EDQ7ge8zi2MvrUv6qjdr5
-	/VnhcBdOMKxgexBKIOJ3j4zHvpVIwWLSwlT6B/L2Ed7l5nDtusMBsfqFcCa7YGoF+w==
-X-Gm-Gg: ATEYQzzVZxiX6oXLJFwT3RaAt1y2h1IUAGoC0DW3ZlQJm2sO0ZHeI6+4fz9naDa7ziN
-	u3IkxBK7X/jn6zA2RO4ojVXTna24Noqc4jHwQm2HnjR7KJjcHNUlYvKX+pqFNX573Vq6vd/sdCz
-	J7z7HrZL8Vd5vYrSdoLjd1HbJ4DLiGOak8gYv389Dg2yvQp2ojkX6ZyYciMoATo4VIbFo7ehmaF
-	h24XmqweaVHP8XIVOmN/r61rb/n6NeRm1puEfYxsOVpStceSSiiso8NGFxhraJcNj9CRX31midy
-	1Z5amA25bplNMjEpQ3W7ygi9duaUTmfEmwy4akqBpGuZ951yWhc+b3cUU3KT3Osp/+ioUuu0Muu
-	p2T1t3qv7T1XAYbusMUKvkRyWTUk6/Qpu8fxCnowUKPj9O4Q3LTKgtuLYvc0C1uyL0PnIQ/1vZR
-	3NDGREX5S7mL2h7ZlwRTjmBxs3nMmVICAOlwt2yk/sKt9w4OE30lQVP2/MLL/H9w==
-X-Received: by 2002:a17:903:22d1:b0:2ae:c566:bd99 with SMTP id d9443c01a7336-2b0a54f45e4mr765685ad.22.1774298627093;
-        Mon, 23 Mar 2026 13:43:47 -0700 (PDT)
-Received: from google.com (168.136.83.34.bc.googleusercontent.com. [34.83.136.168])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b04108a1dsm10366461b3a.54.2026.03.23.13.43.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 13:43:46 -0700 (PDT)
-Date: Mon, 23 Mar 2026 20:43:42 +0000
-From: Samiullah Khawaja <skhawaja@google.com>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, 
-	akpm@linux-foundation.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	dmatlack@google.com, pratyush@kernel.org
-Subject: Re: [PATCH v2 1/2] liveupdate: prevent double management of files
-Message-ID: <acGl9KqueRpnbpQY@google.com>
-References: <20260323203145.148057-1-pasha.tatashin@soleen.com>
- <20260323203145.148057-2-pasha.tatashin@soleen.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="i+qODxGq"
+Received: from [172.27.2.41] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 62NKRjba3137652
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 23 Mar 2026 13:27:46 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 62NKRjba3137652
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026022301; t=1774297667;
+	bh=BWtD0ju6ZbiaJZB565d+DPNEOTfQ40hzPlXd4Ui8O/s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=i+qODxGqOKlYHHLnBrfAmILbKuj9Cbkp5WLvTAoLs+KhUxpK8AUtstaLw2auSnXFW
+	 J0GGSE1FyD7uCwTgqOxFoHwv81c1bWnnURD8u2+byhMRcz0OABTxJs8Yng7NIL3VkT
+	 GlPxX6zi1bBGmPLfcz22ETJG7sxRawV8b+aIX5VcYADay55+vhLBOh3Y1+6P20Ro74
+	 QSX9VIUjDQzzB2FW1sPYXyte3AL/su1ZrXy64cnoKox82vfWOZ7VxGygqAtvEK0wcq
+	 UfqAY6R68M/ZRijcDlXQlfVhybUfnl013V1b4Z/TiQdJUawWpmQ2FlyREK4B/19D9s
+	 bofyJO5F1Xgtw==
+Message-ID: <0200a8d8-6871-4ff2-8c6a-968c2cb39a4f@zytor.com>
+Date: Mon, 23 Mar 2026 13:27:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260323203145.148057-2-pasha.tatashin@soleen.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/x86: Fix sysret_rip assertion failure on FRED
+ systems
+To: Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Lai, Yi" <yi1.lai@linux.intel.com>, Xin Li <xin@zytor.com>
+Cc: Dave Hansen <dave.hansen@intel.com>, yi1.lai@intel.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        shuah@kernel.org, tglx@kernel.org, x86@kernel.org
+References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com>
+ <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com>
+ <568aa6c4-6802-4eb5-b412-e3aa93ed9b29@intel.com>
+ <91590BC4-A54E-40F4-A223-A07FBA386A9A@zytor.com>
+ <acDYXtVgSKbbAuGs@ly-workstation>
+ <ce764071-6670-41a2-923a-88f1cd04b238@zytor.com>
+ <c2979413-62f4-4a35-ad64-be2b8f55ea04@citrix.com>
+Content-Language: en-US, sv-SE
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <c2979413-62f4-4a35-ad64-be2b8f55ea04@citrix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 23, 2026 at 08:31:44PM +0000, Pasha Tatashin wrote:
->Currently, LUO does not prevent the same file from being managed twice
->across different active sessions.
->
->Use a global xarray `luo_preserved_files_xa` to keep track of file
->pointers being preserved by LUO. Update luo_preserve_file() to check and
->insert the file pointer into this xarray when it is preserved, and
->erase it in luo_file_unpreserve_files() when it is released.
->
->This ensures that the same file (struct file) cannot be managed by
->multiple sessions. If another session attempts to preserve an already
->managed file, it will now fail with -EBUSY.
->
->Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
->---
-> kernel/liveupdate/luo_file.c | 17 +++++++++++++++--
-> 1 file changed, 15 insertions(+), 2 deletions(-)
->
->diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
->index a38ea4975824..5f48c3c8c561 100644
->--- a/kernel/liveupdate/luo_file.c
->+++ b/kernel/liveupdate/luo_file.c
->@@ -110,11 +110,15 @@
-> #include <linux/sizes.h>
-> #include <linux/slab.h>
-> #include <linux/string.h>
->+#include <linux/xarray.h>
-> #include "luo_internal.h"
->
-> static DECLARE_RWSEM(luo_file_handler_lock);
-> static LIST_HEAD(luo_file_handler_list);
->
->+/* Keep track of files being preserved by LUO */
->+static DEFINE_XARRAY(luo_preserved_files_xa);
->+
-> /* 2 4K pages, give space for 128 files per file_set */
-> #define LUO_FILE_PGCNT		2ul
-> #define LUO_FILE_MAX							\
->@@ -249,6 +253,7 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
->  * Context: Can be called from an ioctl handler during normal system operation.
->  * Return: 0 on success. Returns a negative errno on failure:
->  *         -EEXIST if the token is already used.
->+ *         -EBUSY if the file descriptor is already preserved by another session.
->  *         -EBADF if the file descriptor is invalid.
->  *         -ENOSPC if the file_set is full.
->  *         -ENOENT if no compatible handler is found.
->@@ -277,6 +282,11 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
-> 	if (err)
-> 		goto  err_fput;
->
->+	err = xa_insert(&luo_preserved_files_xa, (unsigned long)file,
->+			file, GFP_KERNEL);
->+	if (err)
->+		goto err_free_files_mem;
->+
-> 	err = -ENOENT;
-> 	scoped_guard(rwsem_read, &luo_file_handler_lock) {
-> 		list_private_for_each_entry(fh, &luo_file_handler_list, list) {
->@@ -289,11 +299,11 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
->
-> 	/* err is still -ENOENT if no handler was found */
-> 	if (err)
->-		goto err_free_files_mem;
->+		goto err_erase_xa;
->
-> 	err = luo_flb_file_preserve(fh);
-> 	if (err)
->-		goto err_free_files_mem;
->+		goto err_erase_xa;
->
-> 	luo_file = kzalloc_obj(*luo_file);
-> 	if (!luo_file) {
->@@ -323,6 +333,8 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
-> 	kfree(luo_file);
-> err_flb_unpreserve:
-> 	luo_flb_file_unpreserve(fh);
->+err_erase_xa:
->+	xa_erase(&luo_preserved_files_xa, (unsigned long)file);
-> err_free_files_mem:
-> 	luo_free_files_mem(file_set);
-> err_fput:
->@@ -366,6 +378,7 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
-> 		luo_file->fh->ops->unpreserve(&args);
-> 		luo_flb_file_unpreserve(luo_file->fh);
->
->+		xa_erase(&luo_preserved_files_xa, (unsigned long)luo_file->file);
-> 		list_del(&luo_file->list);
-> 		file_set->count--;
->
->-- 
->2.43.0
->
+On 2026-03-23 12:17, Andrew Cooper wrote:
+> 
+> This doesn't really test whether FRED is active.  It tests whether the
+> OS is not providing strict backwards compatibility, and I think will
+> malfunction when there's a hypervisor above Linux providing strict
+> backwards compatibility.
+> 
 
-Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
+But that applies equally to IRET, no? If the hypervisor clobbers the segment
+selector like IRET would in the interest of compatibility then you have the
+same issue.
+
+If the guest is running a FRED kernel and the hypervisor goes in and mucks
+with the state after ERETU behind the kernel's back I think you have a much,
+much bigger problem.
+
+	-hpa
+
