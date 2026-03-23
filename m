@@ -1,239 +1,244 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11022093.outbound.protection.outlook.com [52.101.66.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6BB2E8E09;
-	Mon, 23 Mar 2026 11:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.93
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774264514; cv=fail; b=tXkbyn4rST2LYli8pkW0SQeQXa/+2aesxEGw0Rr6GmU3tx2R0T9zPVPTvPNe1eWwaUJpEW9xc3CvdykBOGcjYkR5PI72ZlgLamA6qLHLXd5PwHEqa5XZ7mzIJrUxmcgVjCjdKJTb9Hjmz7P6NWEywoYjMbYJpYb4aD9znVGRdTI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774264514; c=relaxed/simple;
-	bh=EqImOyYxlTo54DMHvq6sgJJIXAiJQb9BWQYDkBGn704=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=FfRtQ3xWPbDbqcKrhwDNnfJxJCFgUxO/u8vh1opHzuJ6JNNTrElNO4KnZCehNlHVJ47nXL+byhdw43nF8U6gWlgzCY2ghvnkkWqD42dyRpXidUlPODkqnakZwhZmSC1H32rohVD0OPS2Ir0sf6f1fMf4MTzjxRXA6B+DrDVr3Tg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=ldnIUkcM; arc=fail smtp.client-ip=52.101.66.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2443947BD
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 11:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774264653; cv=none; b=TiASoXYWO0PTBUEfSAvXBLn013HPrGlzjil7zdt3wVyzAf77Q0D0rl5IflpplVIIRWyi6D0omN7JUMJbhc+W8A0RSQNbddt0TxVN6Z9VJSN10QBK/gQBmZ6JLh/E1CMQSSHV0LtlHh3gYC52gmj+xdh1lIvygBDZTWAF8HVZFNo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774264653; c=relaxed/simple;
+	bh=BT6NNaAoOShDb1u2LciS7e+GmnloPrpqRug8bySgVkc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kI+2MNTytB48bYXXc25MY+0EY3rJ2XIOK0Ya5c+GEcWAwSQNYHSj7Jwy+0dMJyumcgYhX1u7aWXRmnkCHZQnR+C2I14dFzryOZbL4bhgiI+GfBWmyRoIiAvM2rZNQBRX+F90+S+MjP1BW+wM9Pj/OCJKmgLc40VFM2EsyRHEHKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JDT5tncJ; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="ldnIUkcM"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BpcBmwaOZ/luSdB7NJGKK1Rns4ez4Xgy2wufcaPplpgNo0Uy/juEOXJEORXr4fjvPFtE6RvyVHtxeMx693mMlOBIGSsBNcFPg+MGJiPztF0HoCPyoKSifWpNSF1qMlkvmxGI24tySIpo/boITusNobub3AKqTDk+kSyOUvoLRcyo/3U888eJBcSwwmkymDHQPjkU9ZF298Kw9NNuZ/JXPBVmYRs46Iuogp00l/p5qtFd/ywSaSqGTAlivPKlEF14L277VFTEBpU7r7ku8kj29xBK23MOwrlVp0mgiXM5uagWzIUxW/8EWgL+xEVJ2lQ1QitvbmGL+9KVr6uXEltQug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qN13Fy7RSuy3oxpYBHOiZ6u7OP8P5igd4jIjX9e0X0U=;
- b=ixQqLlB3sKsLMMI+AGPDpeMDm1KbHi6wqcV5o7oXo7lm/pbOsrflQllR0KxH8ltp9tLSGfcbJmTBKTwBy99DlNDkB97hK93gvWj7yFLx0O3HW02pMiUvqzI8P9Wl57QnXVnrU3uPCWVqlGtlq+sb0/HMWuSWViJuzNLTbBDNaXmgIxzqtzZu3vSZu50wBs6c2+Ok3rcALmAKjqq9Fs8ziGTcvLBTKfQKbe1EH/ec1IM9+vAJeZV36Ix+VgpYBybnfoAJkkLAxaoSjpFoRM1SRf8d5u9Fa5Cw1VeMMMqQw+Bf2JrG9XdGQLGNMOrBAnBpP3RB/RpGwGUbfkTy4NGlag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qN13Fy7RSuy3oxpYBHOiZ6u7OP8P5igd4jIjX9e0X0U=;
- b=ldnIUkcMnS7N2bvbrg9f/S6/OOnq6NUU6Dux9M73WZTsi8EOuhx0RPayUc+mJhg2ZAaLU9VZ/Mv2rftxw33vYj7TifRiP7ZN0f9m9SY+QYEQChyxO3yDwyzOOJaP7XrK5mfU7vxKxTx2qyhuzfUBfwtB3xZSXO7nGMtNudXzuBgpCKoPY+aQ+rhBzfOtS1qLUi6eLFwNwhckBLvJZ8UT1e09aHiFfb3Q9Jfm5YLxUoK85FRD4oZ1RvUtDxwwpHkri6DmpLt2ZJghrvoL/ZwaXljnCk3RI0XpvlF3ThJOtazFZztEfDQ2RtckcAdg4oV5zAOYaSW+tsWlXfVx8awVNQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
- by GV1PR08MB10732.eurprd08.prod.outlook.com (2603:10a6:150:160::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.25; Mon, 23 Mar
- 2026 11:15:06 +0000
-Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
- ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
- ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9723.028; Mon, 23 Mar 2026
- 11:15:06 +0000
-Message-ID: <75496499-9ceb-449c-8a73-30d9ea1cc452@virtuozzo.com>
-Date: Mon, 23 Mar 2026 12:15:04 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] selftests: x86: test_shadow_stack: return KSFT_SKIP
- when test is skipped
-To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, Shuah Khan <shuah@kernel.org>,
- "H . Peter Anvin" <hpa@zytor.com>, Edgecombe@dev004.aci.vzint.dev,
- Rick P <rick.p.edgecombe@intel.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260323104536.198738-1-aleksey.oladko@virtuozzo.com>
-Content-Language: en-US
-From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-In-Reply-To: <20260323104536.198738-1-aleksey.oladko@virtuozzo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BE1P281CA0444.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:81::29) To DU0PR08MB9003.eurprd08.prod.outlook.com
- (2603:10a6:10:471::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JDT5tncJ"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-486ff3a0fc1so22267105e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 04:17:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774264649; x=1774869449; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ho18lJBj7LSd/yPU0XL87x0gbx/dLwi70W/auWqoB3U=;
+        b=JDT5tncJojVHoUgisPtZf1DrguTYOtjoS2o5W2j4x3JAoQ16HLbfWypWCNBFwKkqNM
+         vTh5mQG/qm8OInPd7JNLbMlegvUOhYoC+te0dmjeSVAlzU0Hng5kYEFF3r9jEhUpwGQ6
+         F3/KxL5IcUGTKnH6e2l1YYLA9CwYHJ276Xjw/nEcTDcj55wjzbmcj6W9I6y5w+P7+ltB
+         uSg8DE/TYCPBg+RYAd2WaEGc9wJ+B/QuyIIdTBBIBlBsFYOn53vx0imCARIWMTKiXvDY
+         j2hIsd1AH/huYy1QiKcWvyzzjd0AtT8B7+je9J3hyAleFN6f9nUfT/g8govzDPoeu/Qc
+         M85A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774264649; x=1774869449;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ho18lJBj7LSd/yPU0XL87x0gbx/dLwi70W/auWqoB3U=;
+        b=j7LAni5wavHsAEZ42LxvvD+b3M+O4A6x2L6oZjwd+jFQa/KjJE13KUhPz6P9uan/Kr
+         dFT1iEf886Yk4PRqFeXBPbWrToAQigTxdLkTeObFICmvKtJ2py4l5mxcgaPM8Kl6hXx7
+         avwHdvB1X1wOLbTer/fC+DI08c8k/3Ng4iiIDI8gvbVn97oNt6JAkNPXnmauMRzzA0JI
+         9J8SVxtasX0q3zd2fqUgh8stC3Gm69hKckyd9iM9v/3PR/oYoGVf5FFAHvaFkGZlbuGO
+         kaCZEgpXXQR6Mbn1yiVHSMHBTg5s5KxaIzlmD3V4y4IAhcozAoNSY8KAlTUbOGd5+JG4
+         zm+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVSpAxYEYWCJ32kqGcQUfeA3dB8W7Xg0XaiNbDxiTHwQ6kkCq+GzOdNwKfJi5G7dQQ0jGZ62oMRu3QqDEzzQIw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrDp7IP6ZOjCuNUVMGDIRH9gJcn/eFBKNbn2Qim4xssa4lpCdM
+	EyVZlx/q8iuWuHyI/rrkClpARfm2Cxw2cuj/IuOV0CRo+gEsY37i+/K6
+X-Gm-Gg: ATEYQzw3LArlmR6/fctfQxBa9Reo1/w3yONoAXcHP/2E0o5zPmVD66NGpAZOh20vy03
+	9K73PbVywNe1je0oexJrhzAUwLg2kLApmt/GTtNnhL938HHiwqpfO0VMJq7kzInmKYW+QC5x/E3
+	kRBH8CsHcAp7J8X/pzCCL5lPB1U5niq/nQCz3kzp/Och1RxGFlUhF2rkE0lVwidA0hZb433gM2N
+	FTVVu+QssFzYW3SeI/npEJO9FFEmJEZCAhKPqYujWLuQet/cLW7QfnwY7WmSkuFYJ/niTbF5DMv
+	3dqGkA4LLyAGNiAeIF3+SkC9y2KqbHBkWQWMwskgH7PWW1GRfHTo7DAPGdoRTjxfWXoa+sjDuVU
+	NNU1583Z2wkfTM7ptPg8QQx+t3vR4TbDh8dGSfyQ9cVLN63OPVKTojUem9fUQCGAfkTHKrg6qgp
+	yvxNvw48Ss55f7WHwP
+X-Received: by 2002:a05:600c:c09c:b0:485:4bd1:4c64 with SMTP id 5b1f17b1804b1-486ff01ca98mr131743975e9.31.1774264648800;
+        Mon, 23 Mar 2026 04:17:28 -0700 (PDT)
+Received: from krava ([2a00:102a:502b:faa8:f878:ffa9:3b65:76be])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe868cb1sm77733365e9.5.2026.03.23.04.17.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 04:17:28 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 23 Mar 2026 12:17:26 +0100
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, shuah@kernel.org, martin.lau@kernel.org,
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, paul.chaignon@gmail.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] selftests/bpf: move trampoline_count to dedicated
+ bpf_testmod target
+Message-ID: <acEhRhymOUw78d3_@krava>
+References: <20260320074150.628094-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|GV1PR08MB10732:EE_
-X-MS-Office365-Filtering-Correlation-Id: fdc7e2cf-691a-4e9b-566e-08de88cd6fb2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|366016|376014|7416014|1800799024|13003099007|921020|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	UHcpgK1WKiMcHES0kQAuAkBd95zeTuTcIu91CH2zCVUkCKRBNlRX18/dTvw60BJ+3bcpapoV7YxGE8EcWF72jBfS5qzvordv7LZf2NSOjF5m5K38mn5IqFE02lRZaxVQXdVshGfSWkYUCO4y71wuYvYxyISxIOMsJBQmPjwA6Ke70uvQr+SCubX6yFqH6ZIFeHDDDyW5vqUFq2mjU3z0FjPUwGRiLs0jwqwM57lD1X5iKEl9xklrCnK006LtOhh0QbP29yifvAGoIFKXxMvBZ4OyNWFqA8MfZbY5zwGitc21xH/eG7AtEh85rJ62AofdC+IsQIfk2557bCm07PDuO9DB82GVQsA3WmP6+kW1izC0c0u0qFLwRqwtYj5Salts8fGG3Tuh4+rtCa5ytjmUNFzb9swOw1pG2vBYqqvuW4B8VCzmWxlcPaPXKXngjSMlo3uvZQPlEXkcY9rtcL5/+I5jRt7+ISZegwnFWskI59Ag9aPBVMHVdp+YVIMOaCU00tplVRI9YeKgCMgF6VRCKp98iv0G1mv01EEXv1t8cNN/j1KCEIC1xi/dLJIqWNX4DzcLEFTOFxxEPzlakSYyMKK1mWCzE0IBxpY4SBHdV/HLd7pV2qbLThoK1EnAkAcRcotvwBS+MGikl/chOIPkcSb8ZfNpHTR3mtLGPD1pyLsjJFtTIWVptSB+nePrMGKT9fmYlX3wU3rjRCInw5NqWhpvZUirjlQdNHI0187CjqWez19wjWQedyNvMMi9Zz0c2Y5OmcAuwzP/UWO7K/gdpNS/s2hs7m3G2DkfkhF+z3I=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(376014)(7416014)(1800799024)(13003099007)(921020)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WE0ycWN4UXpFdzJTZmlsR0ZyYlRyY2RWT3REamFtam5hTVY0TktTV2Nuajls?=
- =?utf-8?B?TklVNmU0dTVad3pDbFZ6VFJtVWdjT1FZcVp0Y2hlMnRCT0hvTmNxa1d1ZEdT?=
- =?utf-8?B?SWJVT2Rnd1Juc2tUcE1KOGVWR2d5OFk1b04xTHN6VC9iaE15TFQ0ZmdZcTVh?=
- =?utf-8?B?cko1d3VHZ29WTjkxZHYrQTVlSW9QWk0rbFV1QTZxRlRMeWNGQjQvZ2lkQWp3?=
- =?utf-8?B?RGRhTXNXcnJUU2c0RURVbzB1MGo4OVRab2NtTlFhRko1UVdnb2o3R3pad281?=
- =?utf-8?B?VWRuZ2FoTE1GZ1pXOEVqZUl0VlI0M1FjOFo2N2J3c3llUjdvSEh2ZUIvN3Rv?=
- =?utf-8?B?WTFNdVg2Q3lVVnREbFkzYmJaSE5VR3ZicG5raWRWR2U4bFNjWXhYd0EwK3M1?=
- =?utf-8?B?c3QyNFhiSHNlb1V3a25JUUJDV0xjMWxsS2kwdnNKL0VsVkRNVXdOL2cvbGlJ?=
- =?utf-8?B?WE9Td1hmNDNheWYzamY3STl1bkpGZ3BqcGNCNE5mT2RjU0d6MlpGV0lCOEZ2?=
- =?utf-8?B?djV5MWlLdHNObkJLTTJja0tNRzhoakFCM04zeER6WHQwbmUzOHNTQlNnKzRP?=
- =?utf-8?B?V1l5YnMwYlp5dmNyMXdKYUpTZDZlb0xBS091dmxWZGE2RGxOTCsremY0RkV1?=
- =?utf-8?B?alB5Rk44ZXZ5NlV1b205ZEovZHV5ZTRZR1U1aVRHZkEvNjJHQ1lTS2ZKcEhR?=
- =?utf-8?B?MkhhWjhpK1I2Y2RCS0RZc3l4Si9EN3B3V1Zqb0ZXcDVTUVZ1RmV6ZVNJVUlQ?=
- =?utf-8?B?ckVGMGcrdXVJTTFoT2RvejdyemxVWDBlQ1JweU9ZQmMvWGlMY0tKajQ5dTdx?=
- =?utf-8?B?RkRpYU1nUWhsTEJzem80aVZWbGZYWm43L3ZSZ2svK3BvT3RvL3pGNlNsZi9H?=
- =?utf-8?B?S2FuR2JKZ0VXY0RoOUZtTy90a0VvYjRSbU8zTWNGdXFZVUNJMjN2c0ZXeWUx?=
- =?utf-8?B?SWgyYitDZ2IvcFZ1UU92dDd4Q0xENWlyemhiSkYvV0tFL0JTSkN3VGRDWWZq?=
- =?utf-8?B?VFFIUWxDOU5VWW8yeFNNcHRhVDI5ZnZxZDExZEZNaS9ISnV6WDFDTFJqbndn?=
- =?utf-8?B?alpkbWw4Q1UrNmQyb2xTYnI4U3R0UXZKTkkvNVM4djJoemVUUm1OQ1h2NXZZ?=
- =?utf-8?B?OXJJVVU5VnVYVE1DVW1ObVFuTzhFQzBnN0s3ckY0aXZwUjVqYlNjVFZNS0FN?=
- =?utf-8?B?am1PVmZYOXBOUk1kdWxJbjVsbVFXVFMrenJIMGxXazlGSTJsMHhOcTRQaHVZ?=
- =?utf-8?B?c3FSNGFEeStDNDMyUWJwZFlLQXN5N01KbDl1Q3VCSThFUmE0ZmttWndDbVNa?=
- =?utf-8?B?MXE1elZQeUNMRGRnQ2tOL0p5RVovZzFNUUtlaHdCMGIzVmFVeERhc1FscHUr?=
- =?utf-8?B?NzFPb1J0bDFab1FNeGQ0dE1wK0EyVlhVS041bjc4ejJsTUlScERXaXowZTNU?=
- =?utf-8?B?dmdWdXc1cUtXTFNuM0hBTjBXTFErMDZFZmliOHREMU9xQlVSZ09qZ1I3OTBV?=
- =?utf-8?B?RDJDNko2b2N1ay9ia1ozeUxVdmxYWTZwTEFJaFVmd0x4TVoxYW8wbGdDbmU5?=
- =?utf-8?B?eUdYeEdNTml3dkwzSk5pQUZCdjMwV01kOHFGbDNWKzZYUnJMeGY0M21iWEhV?=
- =?utf-8?B?Q2lsSElwdk1JaTZSbXBFN0Rnbzd4TTJyMlVPVDNzZ3Y1UFcrZXJHSElacGI5?=
- =?utf-8?B?UFlxNWZzazIxSGlCQ2dZc2lxZXBaSEVucTZtNjl5cjZTOFR2N3kwZnEzWGZp?=
- =?utf-8?B?UWV5LzIyR25EM2M5dWQ3Rjl1emcrZ2NWSUdrcnd4WkxucHRSdWthQ05uMTVE?=
- =?utf-8?B?OVh5NEUwOVlpMVg2eTkvNFBjV1RuK0I0V2xZVGszQlhtemx0akt0LzhUS3Nu?=
- =?utf-8?B?U1g5MSs0SjZmMGlhVThuTGpVRWVDTHZQOFEvT2NUUzR4WE1YeWFPWFRBZSta?=
- =?utf-8?B?Z01DVG8yODJKQ3VGTEpGak16SlE1NjJqMXJ0SXF2MkFVazNoNXloQVVrWTNJ?=
- =?utf-8?B?cHYyQXAvY0FsV0gwYjNJU3hPVDhHWC9VMVg1bFZ2NWZBSVljaFFnZ29VUlUz?=
- =?utf-8?B?a2thU0lIMlltSVJaclpLZU9rZVE4eXc1Z01lWHdtcHRWWlhLL08wM0t1NlFa?=
- =?utf-8?B?T3p3eXhzMFdHeDhJemszZzdTVmtvbFpjMjloSFIyTTM5TmdwV2tmM1RuMmRK?=
- =?utf-8?B?dnltQllZbmlZSmlLRS9zM3hyM0hPSGJGNmlrV1AzcjdqaFVFb2VQUzhpQnRp?=
- =?utf-8?B?Sk93RmRrSFRXQjlURHRNTWxBU3JuRDFkeEZZQXJmS2xtVWFIYnhZYTZ2Skda?=
- =?utf-8?B?NjJwWUw5WEdnSThxYXNqbkVGdWVod29LcmVBbk9DUUNleWNWSGx5UkVaYWhX?=
- =?utf-8?Q?NMMjwm5Wm9rhahdfeqKvUYk6B+ieL3O5KwTewNUrsKJOz?=
-X-MS-Exchange-AntiSpam-MessageData-1: 91RCqlsOv/9uS2lN0v6dPp4ZjuF6Ebo20SI=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdc7e2cf-691a-4e9b-566e-08de88cd6fb2
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 11:15:05.8703
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QxrTg2cCa3H2FjVJ+PUF5PekMpwxwLViFClbdEjpM+AaI3XBo6Tx8+ghLYNZKSQL/qUmu+wERTwOkhucBrCAZ6PuEj7q28eQUrGRlvJy4Nk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB10732
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320074150.628094-1-sun.jian.kdev@gmail.com>
 
-On 3/23/26 11:45, Aleksei Oladko wrote:
-> test_shadow_stack prints a message indicating that the test is
-> skipped in some cases, but still returns 1. This causes the test
-> to be reported as failed instead of skipped.
+On Fri, Mar 20, 2026 at 03:41:50PM +0800, Sun Jian wrote:
+> trampoline_count fills all trampoline attachment slots for a single
+> target function and verifies that one extra attach fails with -E2BIG.
 > 
-> Return KSFT_SKIP in the skip path so the result is reported
-> correctly.
+> It currently targets bpf_modify_return_test, which is also used by
+> other selftests such as modify_return, get_func_ip_test, and
+> get_func_args_test. When such tests run in parallel, they can contend
+> for the same per-function trampoline quota and cause unexpected attach
+> failures. This issue is currently masked by harness serialization.
 > 
+> Move trampoline_count to a dedicated bpf_testmod target and register it
+> for fmod_ret attachment. Also route the final trigger through
+> trigger_module_test_read, so the execution path exercises the  same
+> dedicated target.
+> 
+> This keeps the test semantics unchanged while isolating it from other
+> selftests, so it no longer needs to run in serial mode. Remove the
+> TODO comment as well.
+> 
+> Tested:
+>   ./test_progs -t trampoline_count -vv
+>   ./test_progs -t modify_return -vv
+>   ./test_progs -t get_func_ip_test -vv
+>   ./test_progs -t get_func_args_test -vv
+>   ./test_progs -j$(nproc) -t trampoline_count -vv
+>   ./test_progs -j$(nproc) -t
+>     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
+> kprobe_multi_test -vv
+>   20 runs of:
+>     ./test_progs -j$(nproc) -t
+>     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
+> kprobe_multi_test
+> 
+> Suggested-by: Jiri Olsa <jolsa@kernel.org>
 
-Reviewed-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+I only suggested change as part of review, not the change itself ;-)
+you can drop the tag
 
-> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-> 
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 > ---
-> Changes in v3:
-> - Fixed incorrect return values in test_userfaultfd and test_uretprobe
-> - Link to v1: https://lore.kernel.org/linux-kselftest/20260322233938.190526-1-aleksey.oladko@virtuozzo.com/T/
+> Link:https://lore.kernel.org/bpf/abicUI4YQ5KkQ_Ro@mail.gmail.com/T/#m6253b7fe96fe1a4df65b274c95aac786598a9857
 > 
-> Changes in v2:
-> - return SKIP only for "Could not enable Shadow stack" case
-> - Changed message from SKIP to FAIL for remaining cases
-> - Link to v1: https://lore.kernel.org/linux-kselftest/20260301014733.454260-1-aleksey.oladko@virtuozzo.com/T/
+> v3:
+> - route the final trigger through trigger_module_test_read() and make
+>   bpf_testmod_test_read() call the dedicated trampoline_count target,
+>   as suggested by Jiri
 > 
-> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-> ---
->  .../testing/selftests/x86/test_shadow_stack.c  | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
+> v2:
+> - rewrite the subject to describe the change
+> - resend with the correct patch content
 > 
-> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-> index 21af54d5f4ea..d52c8c2f7800 100644
-> --- a/tools/testing/selftests/x86/test_shadow_stack.c
-> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
-> @@ -35,6 +35,7 @@
->  #include <sys/signal.h>
->  #include <linux/elf.h>
->  #include <linux/perf_event.h>
-> +#include "kselftest.h"
->  
->  /*
->   * Define the ABI defines if needed, so people can run the tests
-> @@ -64,7 +65,7 @@
->  int main(int argc, char *argv[])
->  {
->  	printf("[SKIP]\tCompiler does not support CET.\n");
-> -	return 0;
-> +	return KSFT_SKIP;
+>  .../bpf/prog_tests/trampoline_count.c         | 17 ++++----------
+>  .../bpf/progs/test_trampoline_count.c         |  6 ++---
+>  .../selftests/bpf/test_kmods/bpf_testmod.c    | 23 +++++++++++++++++++
+>  3 files changed, 30 insertions(+), 16 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+> index 6cd7349d4a2b..dd2e5c84a4b5 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+> @@ -30,16 +30,14 @@ static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
+>  	return prog;
 >  }
->  #else
->  void write_shstk(unsigned long *addr, unsigned long val)
-> @@ -820,9 +821,11 @@ static int test_uretprobe(void)
 >  
->  	type = determine_uprobe_perf_type();
->  	if (type < 0) {
-> -		if (type == -ENOENT)
-> +		if (type == -ENOENT) {
->  			printf("[SKIP]\tUretprobe test, uprobes are not available\n");
-> -		return 0;
-> +			return 0;
-> +		}
-> +		return 1;
->  	}
+> -/* TODO: use different target function to run in concurrent mode */
+> -void serial_test_trampoline_count(void)
+> +void test_trampoline_count(void)
+>  {
+>  	char *file = "test_trampoline_count.bpf.o";
+>  	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
+> -	int bpf_max_tramp_links, err, i, prog_fd;
+> +	int bpf_max_tramp_links, i;
+>  	struct bpf_program *prog;
+>  	struct bpf_link *link;
+>  	struct inst *inst;
+> -	LIBBPF_OPTS(bpf_test_run_opts, opts);
 >  
->  	offset = get_uprobe_offset(uretprobe_trigger);
-> @@ -981,21 +984,21 @@ int main(int argc, char *argv[])
+>  	bpf_max_tramp_links = get_bpf_max_tramp_links();
+>  	if (!ASSERT_GE(bpf_max_tramp_links, 1, "bpf_max_tramp_links"))
+> @@ -80,17 +78,10 @@ void serial_test_trampoline_count(void)
+>  		goto cleanup;
 >  
->  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
->  		printf("[SKIP]\tCould not enable Shadow stack\n");
-> -		return 1;
-> +		return KSFT_SKIP;
->  	}
+>  	/* and finally execute the probe */
+> -	prog_fd = bpf_program__fd(prog);
+> -	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
+> +	if (!ASSERT_OK(trigger_module_test_read(256),
+> +		       "trigger_module_test_read"))
+
+could be just single line, also no need for the condition and
+goto cleanup, just this will do:
+
+     ASSERT_OK(trigger_module_test_read....)
+
+>  		goto cleanup;
 >  
->  	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
-> -		ret = 1;
->  		printf("[FAIL]\tDisabling shadow stack failed\n");
-> +		return 1;
->  	}
+> -	err = bpf_prog_test_run_opts(prog_fd, &opts);
+> -	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
+> -		goto cleanup;
+> -
+> -	ASSERT_EQ(opts.retval & 0xffff, 33, "bpf_modify_return_test.result");
+> -	ASSERT_EQ(opts.retval >> 16, 2, "bpf_modify_return_test.side_effect");
+> -
+>  cleanup:
+>  	for (; i >= 0; i--) {
+>  		bpf_link__destroy(inst[i].link);
+> diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+> index 7765720da7d5..14ad2f53cf33 100644
+> --- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+> +++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+> @@ -3,19 +3,19 @@
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_tracing.h>
 >  
->  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
-> -		printf("[SKIP]\tCould not re-enable Shadow stack\n");
-> +		printf("[FAIL]\tCould not re-enable Shadow stack\n");
->  		return 1;
->  	}
+> -SEC("fentry/bpf_modify_return_test")
+> +SEC("fentry/bpf_testmod_trampoline_count_test")
+>  int BPF_PROG(fentry_test, int a, int *b)
+>  {
+>  	return 0;
+>  }
 >  
->  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
-> -		printf("[SKIP]\tCould not enable WRSS\n");
-> +		printf("[FAIL]\tCould not enable WRSS\n");
->  		ret = 1;
+> -SEC("fmod_ret/bpf_modify_return_test")
+> +SEC("fmod_ret/bpf_testmod_trampoline_count_test")
+>  int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
+>  {
+>  	return 0;
+>  }
+>  
+> -SEC("fexit/bpf_modify_return_test")
+> +SEC("fexit/bpf_testmod_trampoline_count_test")
+>  int BPF_PROG(fexit_test, int a, int *b, int ret)
+>  {
+>  	return 0;
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> index e62c6b78657f..47583577e021 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> @@ -470,6 +470,8 @@ noinline void bpf_testmod_stacktrace_test_1(void)
+>  
+>  int bpf_testmod_fentry_ok;
+>  
+> +noinline int bpf_testmod_trampoline_count_test(int a, int *b);
+
+we could define bpf_testmod_trampoline_count_test in here,
+so we would go without the declaration
+
+> +
+>  noinline ssize_t
+>  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+>  		      const struct bin_attribute *bin_attr,
+> @@ -548,6 +550,10 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+>  			21, 22, 23, 24, 25, 26) != 231)
 >  		goto out;
->  	}
-> @@ -1057,6 +1060,7 @@ int main(int argc, char *argv[])
->  	if (test_ptrace()) {
->  		ret = 1;
->  		printf("[FAIL]\tptrace test\n");
-> +		goto out;
->  	}
 >  
->  	if (test_32bit()) {
+> +	i = 2;
+> +	if (bpf_testmod_trampoline_count_test(1, &i) != 4 || i != 3)
+> +		goto out;
 
--- 
-Best regards, Pavel Tikhomirov
-Senior Software Developer, Virtuozzo.
+do we need all those arguments? progs don't do anything with them..
+I'd stick with just simple module function used by trampoline_count test
 
+jirka
