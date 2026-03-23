@@ -1,155 +1,239 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11022093.outbound.protection.outlook.com [52.101.66.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0119C37E319
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 10:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774263581; cv=none; b=VXOohUFrMLjMAJ6DnIy+qsQShQYk94Sc7iuiFEaaoJhW1TlwDF96h/MoDm/2Hl1Lk1uQXtyQymEdLpMVc8F9yUOdkYa//T4sBLEMF5WanRZqr3XcbOC0pIBS4RQ/lf/pn464mhUvbk8QK47T7PMpApVUSO2jHYs1sESZ7z1sUFg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774263581; c=relaxed/simple;
-	bh=V3qIVBeIYZc6o6LUFDbfme/F0QW48dL8M3JlrifxMCo=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g93SEufCgv+IVgQPa8ja1OTgvboaYA2GduMwcYyWuv96cgkh93VJFLP/8RdLwH5lWlzpVCfjDPk08C18Kvjifb6QXysj8mjkYC8eCsa6UZFplztBIFirA5f6rgyMtWVL9XybzVP+LTsPUpiZQG7uzKe4jlSO3VVKaybjJiPspjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LWseFFTw; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6BB2E8E09;
+	Mon, 23 Mar 2026 11:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774264514; cv=fail; b=tXkbyn4rST2LYli8pkW0SQeQXa/+2aesxEGw0Rr6GmU3tx2R0T9zPVPTvPNe1eWwaUJpEW9xc3CvdykBOGcjYkR5PI72ZlgLamA6qLHLXd5PwHEqa5XZ7mzIJrUxmcgVjCjdKJTb9Hjmz7P6NWEywoYjMbYJpYb4aD9znVGRdTI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774264514; c=relaxed/simple;
+	bh=EqImOyYxlTo54DMHvq6sgJJIXAiJQb9BWQYDkBGn704=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=FfRtQ3xWPbDbqcKrhwDNnfJxJCFgUxO/u8vh1opHzuJ6JNNTrElNO4KnZCehNlHVJ47nXL+byhdw43nF8U6gWlgzCY2ghvnkkWqD42dyRpXidUlPODkqnakZwhZmSC1H32rohVD0OPS2Ir0sf6f1fMf4MTzjxRXA6B+DrDVr3Tg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=ldnIUkcM; arc=fail smtp.client-ip=52.101.66.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWseFFTw"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43b3d9d0695so3742730f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 03:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774263577; x=1774868377; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PdHGJawNgmz3Mnxlo8DQZ2ezVhQNMuS/IKfPtN1AcXY=;
-        b=LWseFFTwOjloZ2wNHPfiGJwDkZNrtVdTGAqR9geD3yoY6TrT/zQMTS03ZAqLle6Jvy
-         w5vwEwYIsfXWlPqDk9B56vTZJBhvGnd7baMAICJ+zY7R1rWBBz44AZ/crpRkaVyA0zZY
-         UE8Lp4LuH5X0QRKPxkfRBrg/2dnK9pvd96T6ICX2P3aNQehcOI29ElPVhpPYPHAwlXFy
-         Klv9wRuCR64bS52jwkhT8hH3SA5SBIoZdVDAlt945MHloUYyQ1A3qu2vzHpLs7XrcWBs
-         mq0Kqlzy7tXgR8gk9s62mZ6Qc0ZyFufoffOvF2u868pNmh9Sj548IM6Rhw7/4pNjPP4h
-         yygQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774263577; x=1774868377;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PdHGJawNgmz3Mnxlo8DQZ2ezVhQNMuS/IKfPtN1AcXY=;
-        b=oT8FTKrEJjnvG8c7hISzqXeHHkmtNkT8TTNDQ1WF76yrJ7vMjKFX9FjYycYuX6cjq5
-         5Rt8TkIwFhuXF0Dp+TeM885vRf5zh+UYhK7wKqMlvfmGNbWbTuBSwbasNAqz/t5CfUCo
-         qi4k33t/0vhKy/ZpiOGrdL4JaCWt2dqvSFPk02ktz9wpLgrSAGsgEjk1Vph+3nJo5aR4
-         JwM+wKvv0kAXwFJVZN4R7jNvNLFGUwN17XikX1fMZ5OGTVRn8uAWwXAbMh2j27cMK77u
-         bbVzKYhayrM1hguzmUXTJdpZsHcqWE505twJOE5v/gpNb5P7sGu+iGvAJDcAMVMyxuN/
-         oUjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXcNPeeMAmd5pDuAnMUYkyqdZt5ACN9kpIwUeltLmsd0FWEfzkWgx+01x3pDZogt3JlJwna+lF+QyJhO/8otIw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp0YXl0QbpL4XtlMpPdZAWpIGxBEHOsiC2H3nhiUwVfExACV76
-	plCl/8DmZRgA5NOIbaZxI8GANIuA/4jEXzThvX2bYY2R42m+AqFpnsZ5
-X-Gm-Gg: ATEYQzzwA0X2zBkyGxP+Xxw+m9wXmBF5uDixtdyQuhrR+UTE/bT8to0HKID5rLV4r3U
-	KCfeE8KN4984EkOvNnVDkxufjNwlPO2n7zx7jJULNRLIjhWkf2hZkuTg8KkAc5TuARZI4CpRiJT
-	RY3c2b486sZIz3BbFzm5yHsuXO5ONXsRoa+flZXyen0PQQ4FXcnlQKxK5zs8zRy/0Kd6Roj9UiK
-	NL8/miX24n3YFqTOKB1n8B6fusaNxcXR3iikCIG9+RBvOj0D/LOP94aOHJ3iH5tOQhqHotSFFYY
-	RvBKbheuf9DWecYJCmx27C4zzppDXswMUAWQvYzui32fuJxHWcXh9wxZtInqXjvanh/k9yOUsW4
-	RWtwyn06A9Klg+AqIVNDuKSTOD2mFfpkZT4DLGNuNxJJqP9eID+w1Oesm8I5uvjPxS0BzGWVdFI
-	g7V0DCMf/3NykQ4uhnIlPwR8jofzA=
-X-Received: by 2002:a05:6000:220f:b0:43b:7481:f899 with SMTP id ffacd0b85a97d-43b7481fabfmr6744251f8f.7.1774263577027;
-        Mon, 23 Mar 2026 03:59:37 -0700 (PDT)
-Received: from krava ([2a00:102a:502b:faa8:f878:ffa9:3b65:76be])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b646b0b0csm27307584f8f.15.2026.03.23.03.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 03:59:36 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 23 Mar 2026 11:59:34 +0100
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: ast@kernel.org, olsajiri@gmail.com, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	shuah@kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: test access to ringbuf
- position with map pointer
-Message-ID: <acEdFlYd4UHmknEU@krava>
-References: <20260323021839.101316-1-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="ldnIUkcM"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BpcBmwaOZ/luSdB7NJGKK1Rns4ez4Xgy2wufcaPplpgNo0Uy/juEOXJEORXr4fjvPFtE6RvyVHtxeMx693mMlOBIGSsBNcFPg+MGJiPztF0HoCPyoKSifWpNSF1qMlkvmxGI24tySIpo/boITusNobub3AKqTDk+kSyOUvoLRcyo/3U888eJBcSwwmkymDHQPjkU9ZF298Kw9NNuZ/JXPBVmYRs46Iuogp00l/p5qtFd/ywSaSqGTAlivPKlEF14L277VFTEBpU7r7ku8kj29xBK23MOwrlVp0mgiXM5uagWzIUxW/8EWgL+xEVJ2lQ1QitvbmGL+9KVr6uXEltQug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qN13Fy7RSuy3oxpYBHOiZ6u7OP8P5igd4jIjX9e0X0U=;
+ b=ixQqLlB3sKsLMMI+AGPDpeMDm1KbHi6wqcV5o7oXo7lm/pbOsrflQllR0KxH8ltp9tLSGfcbJmTBKTwBy99DlNDkB97hK93gvWj7yFLx0O3HW02pMiUvqzI8P9Wl57QnXVnrU3uPCWVqlGtlq+sb0/HMWuSWViJuzNLTbBDNaXmgIxzqtzZu3vSZu50wBs6c2+Ok3rcALmAKjqq9Fs8ziGTcvLBTKfQKbe1EH/ec1IM9+vAJeZV36Ix+VgpYBybnfoAJkkLAxaoSjpFoRM1SRf8d5u9Fa5Cw1VeMMMqQw+Bf2JrG9XdGQLGNMOrBAnBpP3RB/RpGwGUbfkTy4NGlag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qN13Fy7RSuy3oxpYBHOiZ6u7OP8P5igd4jIjX9e0X0U=;
+ b=ldnIUkcMnS7N2bvbrg9f/S6/OOnq6NUU6Dux9M73WZTsi8EOuhx0RPayUc+mJhg2ZAaLU9VZ/Mv2rftxw33vYj7TifRiP7ZN0f9m9SY+QYEQChyxO3yDwyzOOJaP7XrK5mfU7vxKxTx2qyhuzfUBfwtB3xZSXO7nGMtNudXzuBgpCKoPY+aQ+rhBzfOtS1qLUi6eLFwNwhckBLvJZ8UT1e09aHiFfb3Q9Jfm5YLxUoK85FRD4oZ1RvUtDxwwpHkri6DmpLt2ZJghrvoL/ZwaXljnCk3RI0XpvlF3ThJOtazFZztEfDQ2RtckcAdg4oV5zAOYaSW+tsWlXfVx8awVNQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
+ by GV1PR08MB10732.eurprd08.prod.outlook.com (2603:10a6:150:160::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.25; Mon, 23 Mar
+ 2026 11:15:06 +0000
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9723.028; Mon, 23 Mar 2026
+ 11:15:06 +0000
+Message-ID: <75496499-9ceb-449c-8a73-30d9ea1cc452@virtuozzo.com>
+Date: Mon, 23 Mar 2026 12:15:04 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] selftests: x86: test_shadow_stack: return KSFT_SKIP
+ when test is skipped
+To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, Shuah Khan <shuah@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>, Edgecombe@dev004.aci.vzint.dev,
+ Rick P <rick.p.edgecombe@intel.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260323104536.198738-1-aleksey.oladko@virtuozzo.com>
+Content-Language: en-US
+From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+In-Reply-To: <20260323104536.198738-1-aleksey.oladko@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BE1P281CA0444.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:81::29) To DU0PR08MB9003.eurprd08.prod.outlook.com
+ (2603:10a6:10:471::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260323021839.101316-1-dongml2@chinatelecom.cn>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|GV1PR08MB10732:EE_
+X-MS-Office365-Filtering-Correlation-Id: fdc7e2cf-691a-4e9b-566e-08de88cd6fb2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|366016|376014|7416014|1800799024|13003099007|921020|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	UHcpgK1WKiMcHES0kQAuAkBd95zeTuTcIu91CH2zCVUkCKRBNlRX18/dTvw60BJ+3bcpapoV7YxGE8EcWF72jBfS5qzvordv7LZf2NSOjF5m5K38mn5IqFE02lRZaxVQXdVshGfSWkYUCO4y71wuYvYxyISxIOMsJBQmPjwA6Ke70uvQr+SCubX6yFqH6ZIFeHDDDyW5vqUFq2mjU3z0FjPUwGRiLs0jwqwM57lD1X5iKEl9xklrCnK006LtOhh0QbP29yifvAGoIFKXxMvBZ4OyNWFqA8MfZbY5zwGitc21xH/eG7AtEh85rJ62AofdC+IsQIfk2557bCm07PDuO9DB82GVQsA3WmP6+kW1izC0c0u0qFLwRqwtYj5Salts8fGG3Tuh4+rtCa5ytjmUNFzb9swOw1pG2vBYqqvuW4B8VCzmWxlcPaPXKXngjSMlo3uvZQPlEXkcY9rtcL5/+I5jRt7+ISZegwnFWskI59Ag9aPBVMHVdp+YVIMOaCU00tplVRI9YeKgCMgF6VRCKp98iv0G1mv01EEXv1t8cNN/j1KCEIC1xi/dLJIqWNX4DzcLEFTOFxxEPzlakSYyMKK1mWCzE0IBxpY4SBHdV/HLd7pV2qbLThoK1EnAkAcRcotvwBS+MGikl/chOIPkcSb8ZfNpHTR3mtLGPD1pyLsjJFtTIWVptSB+nePrMGKT9fmYlX3wU3rjRCInw5NqWhpvZUirjlQdNHI0187CjqWez19wjWQedyNvMMi9Zz0c2Y5OmcAuwzP/UWO7K/gdpNS/s2hs7m3G2DkfkhF+z3I=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(376014)(7416014)(1800799024)(13003099007)(921020)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WE0ycWN4UXpFdzJTZmlsR0ZyYlRyY2RWT3REamFtam5hTVY0TktTV2Nuajls?=
+ =?utf-8?B?TklVNmU0dTVad3pDbFZ6VFJtVWdjT1FZcVp0Y2hlMnRCT0hvTmNxa1d1ZEdT?=
+ =?utf-8?B?SWJVT2Rnd1Juc2tUcE1KOGVWR2d5OFk1b04xTHN6VC9iaE15TFQ0ZmdZcTVh?=
+ =?utf-8?B?cko1d3VHZ29WTjkxZHYrQTVlSW9QWk0rbFV1QTZxRlRMeWNGQjQvZ2lkQWp3?=
+ =?utf-8?B?RGRhTXNXcnJUU2c0RURVbzB1MGo4OVRab2NtTlFhRko1UVdnb2o3R3pad281?=
+ =?utf-8?B?VWRuZ2FoTE1GZ1pXOEVqZUl0VlI0M1FjOFo2N2J3c3llUjdvSEh2ZUIvN3Rv?=
+ =?utf-8?B?WTFNdVg2Q3lVVnREbFkzYmJaSE5VR3ZicG5raWRWR2U4bFNjWXhYd0EwK3M1?=
+ =?utf-8?B?c3QyNFhiSHNlb1V3a25JUUJDV0xjMWxsS2kwdnNKL0VsVkRNVXdOL2cvbGlJ?=
+ =?utf-8?B?WE9Td1hmNDNheWYzamY3STl1bkpGZ3BqcGNCNE5mT2RjU0d6MlpGV0lCOEZ2?=
+ =?utf-8?B?djV5MWlLdHNObkJLTTJja0tNRzhoakFCM04zeER6WHQwbmUzOHNTQlNnKzRP?=
+ =?utf-8?B?V1l5YnMwYlp5dmNyMXdKYUpTZDZlb0xBS091dmxWZGE2RGxOTCsremY0RkV1?=
+ =?utf-8?B?alB5Rk44ZXZ5NlV1b205ZEovZHV5ZTRZR1U1aVRHZkEvNjJHQ1lTS2ZKcEhR?=
+ =?utf-8?B?MkhhWjhpK1I2Y2RCS0RZc3l4Si9EN3B3V1Zqb0ZXcDVTUVZ1RmV6ZVNJVUlQ?=
+ =?utf-8?B?ckVGMGcrdXVJTTFoT2RvejdyemxVWDBlQ1JweU9ZQmMvWGlMY0tKajQ5dTdx?=
+ =?utf-8?B?RkRpYU1nUWhsTEJzem80aVZWbGZYWm43L3ZSZ2svK3BvT3RvL3pGNlNsZi9H?=
+ =?utf-8?B?S2FuR2JKZ0VXY0RoOUZtTy90a0VvYjRSbU8zTWNGdXFZVUNJMjN2c0ZXeWUx?=
+ =?utf-8?B?SWgyYitDZ2IvcFZ1UU92dDd4Q0xENWlyemhiSkYvV0tFL0JTSkN3VGRDWWZq?=
+ =?utf-8?B?VFFIUWxDOU5VWW8yeFNNcHRhVDI5ZnZxZDExZEZNaS9ISnV6WDFDTFJqbndn?=
+ =?utf-8?B?alpkbWw4Q1UrNmQyb2xTYnI4U3R0UXZKTkkvNVM4djJoemVUUm1OQ1h2NXZZ?=
+ =?utf-8?B?OXJJVVU5VnVYVE1DVW1ObVFuTzhFQzBnN0s3ckY0aXZwUjVqYlNjVFZNS0FN?=
+ =?utf-8?B?am1PVmZYOXBOUk1kdWxJbjVsbVFXVFMrenJIMGxXazlGSTJsMHhOcTRQaHVZ?=
+ =?utf-8?B?c3FSNGFEeStDNDMyUWJwZFlLQXN5N01KbDl1Q3VCSThFUmE0ZmttWndDbVNa?=
+ =?utf-8?B?MXE1elZQeUNMRGRnQ2tOL0p5RVovZzFNUUtlaHdCMGIzVmFVeERhc1FscHUr?=
+ =?utf-8?B?NzFPb1J0bDFab1FNeGQ0dE1wK0EyVlhVS041bjc4ejJsTUlScERXaXowZTNU?=
+ =?utf-8?B?dmdWdXc1cUtXTFNuM0hBTjBXTFErMDZFZmliOHREMU9xQlVSZ09qZ1I3OTBV?=
+ =?utf-8?B?RDJDNko2b2N1ay9ia1ozeUxVdmxYWTZwTEFJaFVmd0x4TVoxYW8wbGdDbmU5?=
+ =?utf-8?B?eUdYeEdNTml3dkwzSk5pQUZCdjMwV01kOHFGbDNWKzZYUnJMeGY0M21iWEhV?=
+ =?utf-8?B?Q2lsSElwdk1JaTZSbXBFN0Rnbzd4TTJyMlVPVDNzZ3Y1UFcrZXJHSElacGI5?=
+ =?utf-8?B?UFlxNWZzazIxSGlCQ2dZc2lxZXBaSEVucTZtNjl5cjZTOFR2N3kwZnEzWGZp?=
+ =?utf-8?B?UWV5LzIyR25EM2M5dWQ3Rjl1emcrZ2NWSUdrcnd4WkxucHRSdWthQ05uMTVE?=
+ =?utf-8?B?OVh5NEUwOVlpMVg2eTkvNFBjV1RuK0I0V2xZVGszQlhtemx0akt0LzhUS3Nu?=
+ =?utf-8?B?U1g5MSs0SjZmMGlhVThuTGpVRWVDTHZQOFEvT2NUUzR4WE1YeWFPWFRBZSta?=
+ =?utf-8?B?Z01DVG8yODJKQ3VGTEpGak16SlE1NjJqMXJ0SXF2MkFVazNoNXloQVVrWTNJ?=
+ =?utf-8?B?cHYyQXAvY0FsV0gwYjNJU3hPVDhHWC9VMVg1bFZ2NWZBSVljaFFnZ29VUlUz?=
+ =?utf-8?B?a2thU0lIMlltSVJaclpLZU9rZVE4eXc1Z01lWHdtcHRWWlhLL08wM0t1NlFa?=
+ =?utf-8?B?T3p3eXhzMFdHeDhJemszZzdTVmtvbFpjMjloSFIyTTM5TmdwV2tmM1RuMmRK?=
+ =?utf-8?B?dnltQllZbmlZSmlLRS9zM3hyM0hPSGJGNmlrV1AzcjdqaFVFb2VQUzhpQnRp?=
+ =?utf-8?B?Sk93RmRrSFRXQjlURHRNTWxBU3JuRDFkeEZZQXJmS2xtVWFIYnhZYTZ2Skda?=
+ =?utf-8?B?NjJwWUw5WEdnSThxYXNqbkVGdWVod29LcmVBbk9DUUNleWNWSGx5UkVaYWhX?=
+ =?utf-8?Q?NMMjwm5Wm9rhahdfeqKvUYk6B+ieL3O5KwTewNUrsKJOz?=
+X-MS-Exchange-AntiSpam-MessageData-1: 91RCqlsOv/9uS2lN0v6dPp4ZjuF6Ebo20SI=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdc7e2cf-691a-4e9b-566e-08de88cd6fb2
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 11:15:05.8703
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QxrTg2cCa3H2FjVJ+PUF5PekMpwxwLViFClbdEjpM+AaI3XBo6Tx8+ghLYNZKSQL/qUmu+wERTwOkhucBrCAZ6PuEj7q28eQUrGRlvJy4Nk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB10732
 
-On Mon, Mar 23, 2026 at 10:18:39AM +0800, Menglong Dong wrote:
-> Add the testing to access the bpf_ringbuf with the map pointer.
-> "consumer_pos" and "producer_pos" is accessed in this testing. We reserve
-> 128 bytes in the ringbuf to test the producer_pos, which should be
-> "128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
+On 3/23/26 11:45, Aleksei Oladko wrote:
+> test_shadow_stack prints a message indicating that the test is
+> skipped in some cases, but still returns 1. This causes the test
+> to be reported as failed instead of skipped.
 > 
-> It will be helpful if we want to evaluate the usage of the ringbuf in bpf
-> prog with the consumer and producer position.
-
-lgtm, question though.. is this related to some kernel change or
-some ongoing work? looks like basic operation that's already
-tested indirectly by existing tests
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
+> Return KSFT_SKIP in the skip path so the result is reported
+> correctly.
 > 
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+Reviewed-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+
+> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+> 
 > ---
-> v2:
-> - don't set the max_entries for the ringbuf map
-> - add comment for the producer_pos
-> ---
->  .../testing/selftests/bpf/progs/map_ptr_kern.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+> Changes in v3:
+> - Fixed incorrect return values in test_userfaultfd and test_uretprobe
+> - Link to v1: https://lore.kernel.org/linux-kselftest/20260322233938.190526-1-aleksey.oladko@virtuozzo.com/T/
 > 
-> diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> index efaf622c28dd..d7611e7018ca 100644
-> --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> @@ -647,8 +647,14 @@ static inline int check_devmap_hash(void)
->  	return 1;
->  }
+> Changes in v2:
+> - return SKIP only for "Could not enable Shadow stack" case
+> - Changed message from SKIP to FAIL for remaining cases
+> - Link to v1: https://lore.kernel.org/linux-kselftest/20260301014733.454260-1-aleksey.oladko@virtuozzo.com/T/
+> 
+> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+> ---
+>  .../testing/selftests/x86/test_shadow_stack.c  | 18 +++++++++++-------
+>  1 file changed, 11 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
+> index 21af54d5f4ea..d52c8c2f7800 100644
+> --- a/tools/testing/selftests/x86/test_shadow_stack.c
+> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
+> @@ -35,6 +35,7 @@
+>  #include <sys/signal.h>
+>  #include <linux/elf.h>
+>  #include <linux/perf_event.h>
+> +#include "kselftest.h"
 >  
-> +struct bpf_ringbuf {
-> +	unsigned long consumer_pos;
-> +	unsigned long producer_pos;
-> +} __attribute__((preserve_access_index));
-> +
->  struct bpf_ringbuf_map {
->  	struct bpf_map map;
-> +	struct bpf_ringbuf *rb;
->  } __attribute__((preserve_access_index));
->  
->  struct {
-> @@ -659,9 +665,21 @@ static inline int check_ringbuf(void)
+>  /*
+>   * Define the ABI defines if needed, so people can run the tests
+> @@ -64,7 +65,7 @@
+>  int main(int argc, char *argv[])
 >  {
->  	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
->  	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
-> +	struct bpf_ringbuf *rb;
-> +	void *ptr;
->  
->  	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
->  
-> +	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
-> +	VERIFY(ptr);
-> +
-> +	bpf_ringbuf_discard(ptr, 0);
-> +	rb = ringbuf->rb;
-> +	VERIFY(rb);
-> +	VERIFY(rb->consumer_pos == 0);
-> +	/* The "8" here is BPF_RINGBUF_HDR_SZ */
-> +	VERIFY(rb->producer_pos == 128 + 8);
-> +
->  	return 1;
+>  	printf("[SKIP]\tCompiler does not support CET.\n");
+> -	return 0;
+> +	return KSFT_SKIP;
 >  }
+>  #else
+>  void write_shstk(unsigned long *addr, unsigned long val)
+> @@ -820,9 +821,11 @@ static int test_uretprobe(void)
 >  
-> -- 
-> 2.53.0
-> 
+>  	type = determine_uprobe_perf_type();
+>  	if (type < 0) {
+> -		if (type == -ENOENT)
+> +		if (type == -ENOENT) {
+>  			printf("[SKIP]\tUretprobe test, uprobes are not available\n");
+> -		return 0;
+> +			return 0;
+> +		}
+> +		return 1;
+>  	}
+>  
+>  	offset = get_uprobe_offset(uretprobe_trigger);
+> @@ -981,21 +984,21 @@ int main(int argc, char *argv[])
+>  
+>  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
+>  		printf("[SKIP]\tCould not enable Shadow stack\n");
+> -		return 1;
+> +		return KSFT_SKIP;
+>  	}
+>  
+>  	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
+> -		ret = 1;
+>  		printf("[FAIL]\tDisabling shadow stack failed\n");
+> +		return 1;
+>  	}
+>  
+>  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
+> -		printf("[SKIP]\tCould not re-enable Shadow stack\n");
+> +		printf("[FAIL]\tCould not re-enable Shadow stack\n");
+>  		return 1;
+>  	}
+>  
+>  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
+> -		printf("[SKIP]\tCould not enable WRSS\n");
+> +		printf("[FAIL]\tCould not enable WRSS\n");
+>  		ret = 1;
+>  		goto out;
+>  	}
+> @@ -1057,6 +1060,7 @@ int main(int argc, char *argv[])
+>  	if (test_ptrace()) {
+>  		ret = 1;
+>  		printf("[FAIL]\tptrace test\n");
+> +		goto out;
+>  	}
+>  
+>  	if (test_32bit()) {
+
+-- 
+Best regards, Pavel Tikhomirov
+Senior Software Developer, Virtuozzo.
+
