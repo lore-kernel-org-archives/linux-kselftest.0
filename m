@@ -1,222 +1,98 @@
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD343E3D9C
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 20:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774298840; cv=pass; b=IrN3/CKG01OCfcAW9cq5bBp4k1/vpPS10ozNaVEDROFX+BAlsAgtTtyfMq7jTN6i28LuBhm2CXE5P5SMBpVfiZdaGPpMYzE4P8lKW5VqvcbWg9lr3HRXiHE/BOvjg6t7q2EHCvEVRR1hImRvk1oXHhKOksbYbz/WhXECgr4eR94=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774298840; c=relaxed/simple;
-	bh=ng8E7qGgSHJkqBGRw/Py1ZjqtkBoNDU8zfEyX/fQOz4=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rezbojhmSv81BLI1FmeEbvt0T7DAazv2Y1YIuQuuu9U4kw88Y6V3wWo963UTFbEzbaMVKMALH8So0eHTq1cBWV7X8J/EJ3Tf40NOKMpzlIAbbjbHgVr/D6pTDUH9WRY6M/2sySLB4Xdf8uUitph1JPidsrzw9nmTRJT81JziHw0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E1Qx3iXY; arc=pass smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01D4373BE0;
+	Mon, 23 Mar 2026 21:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774299771; cv=none; b=GqlOQ6V8I+RHi4MyeyX2dn+DoG3d7yxN1YG7D8MNFhQ5y5OmLo/O2pTtVHGGwNPdwk/SAuXbxoXooMPcGZ06v1/QXvWSjZTmGcl6/sS82lFYLmUQVpcsbBZMXbCVsFhj3TUqP7kyK2qmyJZ7Rrlnp4Zfn7/mKEjsPKXSyWYt91M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774299771; c=relaxed/simple;
+	bh=gxAcHrsgrKbfz3TCdlmAFAjObaKlzuQOhvmQdjK9DnY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=owh6qyzfe2KVtvTKwSWF5iqmQJAeDbzAXZ7M9FN4IIGg/XopV6pQhMP6JGea5qg1HtgD9Wp9qsiN2pRTPyoUwJ0s3n0JRWCvzYvj5VCodWoIdywvtvBQMdQkSYJPkiE8Wkl336Zfs57jcy2J/+gHzZolua/NcAYT5Jm71dJgWzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hMFNFZka; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E1Qx3iXY"
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-94acf9ce1b7so323063241.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 13:47:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774298837; cv=none;
-        d=google.com; s=arc-20240605;
-        b=j8qt/dKWynRP4DIJJ+2WILmgrkot/5ftcD0CJh43Q356XFqUpv4zi6uTzek3oCKHbj
-         dIUiXxJoaz7Pnc5XFh/AJd90InZ2C2xa1aMz5NOD8qkSclToKMWfw6q1nmny53GPu5x0
-         gLuvVv14KpB9pPlhskIu40CJNaNAbyulkpxXnIeL05Z/CpPFvbOZtqaHovDWBIPz9VEp
-         C2/mE+XYfL08wode+FYO4C8C3Go4KPNYSM81sy0kHLybX5Z+LrSlRqec15qMVL5hxNkb
-         9ErhSBCCZIbS5dNzBxtgCsUMZXX2Vk94BnYV6XByEof4fqkURmQ1mhBSP6a0gg/Oe3ph
-         WVbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=yac1rrBqJSF3O+e4IwcngZ2ptSQxNGOfPE9KG9sOce8=;
-        fh=rHwL2w0MCXsJncckntQ/Uq/8jkk8b0w0JuUjLW8LLfc=;
-        b=Vt3dS3T6Jrp8cJ4MzM13DrsZpTskaCOVVaelzTxGsxtYBPF6lct5O2m/JgPWCUU/rP
-         5ZQ8BOZNNDXPMX2FLm/VNfr0ccmUyQqI6/aWeEqvUKn+cZbLKOd+7RDoWrHD1g0p+I73
-         LPbLXIwMb8RzZiDNx5b9tcPm8DlyyTy4Daf+gmx/DrOHYNPMoJy3TXH8yw8JwhuLmgmC
-         YDv6ZtwC1ndkSbykCqDznhcm2pB3D1ErfzxgKDKLDdEOs1K5hat9BcNp/s3gLNaZ6819
-         nMrOFezrEms/bDQgE/BCQ+jZwqmaUOQjCcIGzK7JF/gH5aeJyTmkhv/HPTCXz2MZjAg4
-         QMWQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774298837; x=1774903637; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yac1rrBqJSF3O+e4IwcngZ2ptSQxNGOfPE9KG9sOce8=;
-        b=E1Qx3iXYbuupJnhq0qmrXOl7xt+HGwZNfjstgxkLHfdyrCo56F2W1QOU+bkULeFtnS
-         mZauXctACK+epA2LTP0W/PJM5VIH0WgdMtO5ECotn7uX8U9322NLx89gBnpVxEtqTPkT
-         gNORVJmcQgMN7jMlaRWbTr5b2UutJroR2HV64bR2inaJgq4H4ZOOFRsAsV1zO9tX0N9T
-         ryaOxYjm8R4VaU87SJuclOeIz9mU75ow6GpAn4wrEG81ftM6GfQNsn0JrX7tSYEvvF3l
-         UZWkVEwCPpk26oroiFl1EZbcHqw2YV8uEVKl+PSDW2bHEEJNL7fvUL/LGywspaPKJb6t
-         k5KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774298837; x=1774903637;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yac1rrBqJSF3O+e4IwcngZ2ptSQxNGOfPE9KG9sOce8=;
-        b=ksV5YCkHAQ9cnHU9DmYZj/vlamOCkvNQmWu7gOIjxZHzKSCHpoeLrg8C6Zn56qD3QH
-         0MmgLi8Ay1mz+7xB7uSzOfPJQqCpoYLK8eRfa3rPxBdrAZcMSpqSEnqfuPIkw2CU4XO1
-         p0b8MDPwqOk2iS5tY8SD+9t6iYaj43B3Das7YL0DrJ7656PFZSKz8wtiIGM6Slwb+X4S
-         chPCWSoLvRcGM4D97+Elcb9Nc9xxMmkDLfgoac3r8LaeDSQfERkn5FJECOBQ7eEX4KSK
-         ExZgg975k5mEVmH4P2nc4W7QjSFnp8lVbrAbkWzdwE5cSiSMLC+0Mw7lbtf1mcV3/wFC
-         N8rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVcDbb52Fg6sK/U6BI/Lq3xzg9EUltIPXMc/4vHiiFvAhQb76dV1YYDyyyQLw0gLRfI7gHKlZLEKF5lL8VqkDc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuPuHsbNJ+hcOeN9eL0BvMuoYLKkgWQehcsMlW4GD48dM/KVxr
-	g6WxhdvliohzWEDO1xcMWNxP5PHUEEhFlIh+THxpTyvC64+edQo+IVNjmfVahwZBMU1FvqWS7EA
-	s7kYY+aU9eTEwNOioDv+SW5aus2R4Nk++cMTPw8/G
-X-Gm-Gg: ATEYQzz7+W89TpuCU09ktsVvJ4LCEvkJmcpGNWxArg6DlH8/Ih+Nwuj/QIIShwXkwqZ
-	mYeJdBhiy31cLLV6bcZe73at5BAB5kP8h+hwNkzZp2OamUw1CClOIxyj+TIW5oCCSqbkCzI0o7g
-	sxfL/Ws9Ev9KvBWI6063bXYVWcCtRbNKq7nNtTPYuK8ZkpXdivHRY1tN+P+d7Qm0yAFo/+C+Rap
-	nZRGk4IVu1ZzferB5SBn6a1dT8mK0a92Wn0liMAUjVxr9eYm8gh11nchYXpj43Cd4WGMqlszauE
-	q3LcfiQsHm4q3xtD1j2usxX0SvqVvt5Xv/wVZqteBD8ZtwwmLAIC+uT4ch6ntfSp98VhSw==
-X-Received: by 2002:a05:6102:4a86:b0:5ef:ac78:3c77 with SMTP id
- ada2fe7eead31-602aecd2a05mr6404753137.18.1774298836454; Mon, 23 Mar 2026
- 13:47:16 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 23 Mar 2026 13:47:15 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 23 Mar 2026 13:47:15 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <50bfaeb5-551e-403f-bd00-a7d8b6bbf6e2@kernel.org>
-References: <20260317141031.514-1-kalyazin@amazon.com> <20260317141031.514-11-kalyazin@amazon.com>
- <50bfaeb5-551e-403f-bd00-a7d8b6bbf6e2@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hMFNFZka"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=3AOsenzNPAeVFjUaTF+EAsvLlXdttCRQbifAIz71hTA=; b=hMFNFZka51FeDea+aaAXkA2sMF
+	Xw1RTmW14PACkldpXstX1oEG7V17NRMgrH1Qhur8aqWusYInZoN03g2Z6340NcVy2mw4TpwjSBezp
+	WaNtfFjPeEzZsvs7EvK7QeT5a9JJUOI92MC9ntRqcpID+pqBqOGJIdR10b0nYjZyqHAQiusU/oenP
+	J2Jp2DwPzXYy1NYC5ZruGx2qP6kHRhpGbcb3oMRJ+g6uzyWnMs79pAWiFeLP1v7l4/1O4wtoq0CZs
+	h6eg3GZYjQsVZBVlAvJfHnW1SitoXoTr3Ri9pJLyzCIhAOKJOBWXY/5xfXaOMqSG3p0ynbuZzSNbF
+	YTSxQfbQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w4mQ1-0000000CsDl-3RRd;
+	Mon, 23 Mar 2026 21:02:37 +0000
+Date: Mon, 23 Mar 2026 21:02:37 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Zi Yan <ziy@nvidia.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
+	Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 02/11] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
+ code in collapse_file()
+Message-ID: <acGqbeSjktT4biku@casper.infradead.org>
+References: <20260323190644.1714379-1-ziy@nvidia.com>
+ <20260323190644.1714379-3-ziy@nvidia.com>
+ <7382046f-7c58-4a3e-ab34-b2704355b7d5@kernel.org>
+ <E8D52134-B63E-44E9-BBBC-258DF74B8597@nvidia.com>
+ <c20b7dbe-473d-4dca-a10b-b9f5267ad6da@kernel.org>
+ <AF9011D6-8EA4-4134-B175-BD2DAB748419@nvidia.com>
+ <71148f2e-cceb-418e-b762-c8dbd7a7eb1f@kernel.org>
+ <FDC4C393-FB38-4422-9217-DAE95131C696@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 23 Mar 2026 13:47:15 -0700
-X-Gm-Features: AQROBzB7NM0e-Hubu0XRJL2ihJNatUocmuhRQlqLx8a7dgTL41taW0scozymRvQ
-Message-ID: <CAEvNRgEXp6busURR20cazeG2DQWdU5=ZaJv21OcSq+mhVKwJ4g@mail.gmail.com>
-Subject: Re: [PATCH v11 10/16] KVM: guest_memfd: Add flag to remove from
- direct map
-To: "David Hildenbrand (Arm)" <david@kernel.org>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>, 
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "kernel@xen0n.name" <kernel@xen0n.name>, 
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net" <corbet@lwn.net>, 
-	"maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>, 
-	"joey.gouly@arm.com" <joey.gouly@arm.com>, "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, 
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>, 
-	"mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>, 
-	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org" <willy@infradead.org>, 
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, 
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "vbabka@kernel.org" <vbabka@kernel.org>, 
-	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, 
-	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
-	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>, 
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
-	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>, 
-	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>, 
-	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>, 
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>, 
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>, 
-	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org" <kas@kernel.org>, 
-	"coxu@redhat.com" <coxu@redhat.com>, "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, 
-	"yosry@kernel.org" <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>, 
-	"maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com" <tabba@google.com>, 
-	"prsampat@amd.com" <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>, 
-	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>, 
-	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, 
-	"alex@ghiti.fr" <alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, 
-	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>, 
-	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>, 
-	"hca@linux.ibm.com" <hca@linux.ibm.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>, 
-	"pjw@kernel.org" <pjw@kernel.org>, 
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
-	"thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>, 
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>, 
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>, 
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com" <urezki@gmail.com>, 
-	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>, 
-	"gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>, 
-	"jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>, 
-	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>, 
-	"rafael@kernel.org" <rafael@kernel.org>, "vannapurve@google.com" <vannapurve@google.com>, 
-	"jackmanb@google.com" <jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, 
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack" <jackabt@amazon.co.uk>, 
-	"Itazuri, Takahiro" <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <FDC4C393-FB38-4422-9217-DAE95131C696@nvidia.com>
 
-"David Hildenbrand (Arm)" <david@kernel.org> writes:
+On Mon, Mar 23, 2026 at 04:24:26PM -0400, Zi Yan wrote:
+> On 23 Mar 2026, at 16:13, David Hildenbrand (Arm) wrote:
+> > I assume so, because for executables you would have to be lucky to get a
+> > PMD THP? So I don't see the non-khugepaged large folio support on par
+> > with khugepaged support.
 
->
-> [...snip...]
->
->> +static int kvm_gmem_folio_zap_direct_map(struct folio *folio)
->> +{
->> +	u64 gmem_flags = GMEM_I(folio_inode(folio))->flags;
->> +	int r = 0;
->> +
->> +	if (kvm_gmem_folio_no_direct_map(folio) || !(gmem_flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP))
->
-> The function is only called when
->
-> 	kvm_gmem_no_direct_map(folio_inode(folio))
->
-> Does it really make sense to check for GUEST_MEMFD_FLAG_NO_DIRECT_MAP again?
->
+Not necessarily that lucky; if you set VM_HUGEPAGE,
+do_sync_mmap_readahead() will allocate PMD-sized folios automatically.
+On busy database servers (and is there any other kind?), khugepaged
+takes too long to run and find opportunities to collapse text pages.
+Like, days.
 
-Good point that GUEST_MEMFD_FLAG_NO_DIRECT_MAP was already checked in
-the caller. I think we can drop this second check.
+> It is more like turning on READ_ONLY_THP_FOR_FS by default for
+> FS with large folio support instead of removing it.
+> 
+> OK, I will give it another try.
 
-> If, at all, it should be a warning if GUEST_MEMFD_FLAG_NO_DIRECT_MAP is
-> not set?
->
-> Further, kvm_gmem_folio_zap_direct_map() uses the folio lock to
-> synchronize, right? Might be worth pointing that out somehow (e.g.,
-> lockdep check if possible).
->
->> +		goto out;
->> +
->> +	r = folio_zap_direct_map(folio);
->> +	if (!r)
->> +		folio->private = (void *)((u64)folio->private | KVM_GMEM_FOLIO_NO_DIRECT_MAP);
->> +
->> +out:
->> +	return r;
->> +}
->> +
->> +static void kvm_gmem_folio_restore_direct_map(struct folio *folio)
->> +{
->
-> kvm_gmem_folio_zap_direct_map() is allowed to be called on folios that
-> already have the directmap remove, kvm_gmem_folio_restore_direct_map()
-> cannot be called if the directmap was already restored.
->
+I think the test needs to be:
 
-This inconsistency was probably introduced by my comments [1] (sorry!)
+	if (mapping_max_folio_order(mapping) >= PMD_ORDER)
 
-I think the inconsistency here is mostly because
-kvm_gmem_folio_zap_direct_map() is called from two places but restore is
-only called from one place :P
-
-[1] https://lore.kernel.org/all/CAEvNRgEzVhEzr-3GWTsE7GSBsPdvVLq7WFEeLHzcmMe=R9S51w@mail.gmail.com/
-
-> Should we make that more consistent?
->
->
-> Hoping Sean can find some time to review
->
-> --
-> Cheers,
->
-> David
+as there can be cases of filesystems which support up to, say, 64KiB,
+but not all the way up to 2MiB.  I disapprove of this situation, but
+this is where we are right now.
