@@ -1,244 +1,233 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2443947BD
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 11:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141D839A051;
+	Mon, 23 Mar 2026 11:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774264653; cv=none; b=TiASoXYWO0PTBUEfSAvXBLn013HPrGlzjil7zdt3wVyzAf77Q0D0rl5IflpplVIIRWyi6D0omN7JUMJbhc+W8A0RSQNbddt0TxVN6Z9VJSN10QBK/gQBmZ6JLh/E1CMQSSHV0LtlHh3gYC52gmj+xdh1lIvygBDZTWAF8HVZFNo=
+	t=1774266925; cv=none; b=H6BTmSytG/TZMSJFMm9d0KV/tqkvcoDZBKf1Ro6U66HjRD3CcIdJbsJ47c9m8ltlkmYYEW0Odxvegfv/5jUmxce2Lg0CCsoYOlaeU7957sfwe6R1FtIhfbshIuuW9bKOZhAuOWXchxIRdSqKJ3CKpqZKHQ06OrPo4PdBimr65oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774264653; c=relaxed/simple;
-	bh=BT6NNaAoOShDb1u2LciS7e+GmnloPrpqRug8bySgVkc=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kI+2MNTytB48bYXXc25MY+0EY3rJ2XIOK0Ya5c+GEcWAwSQNYHSj7Jwy+0dMJyumcgYhX1u7aWXRmnkCHZQnR+C2I14dFzryOZbL4bhgiI+GfBWmyRoIiAvM2rZNQBRX+F90+S+MjP1BW+wM9Pj/OCJKmgLc40VFM2EsyRHEHKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JDT5tncJ; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774266925; c=relaxed/simple;
+	bh=bahApTubTticio0sVoZJb/hsbDwoUtqdY4Hts04ODXU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fhLyflS/qBq8ZghIVaQ4bDLqyuu7RlDHsY5LH3KybfFbHGuFiBg+2PJGyeAsuxDVPSU6htxRYHm+y/XviVED1CFzJjU3d/BDY3jaEtuFOP/ZveTS88Uqg3jfqJIUw8skpcByy2qUrPR7WnnpRzL30J/dhlla81XfG0G+l+XgYlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P2CHj8I3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JDT5tncJ"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-486ff3a0fc1so22267105e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 04:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774264649; x=1774869449; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ho18lJBj7LSd/yPU0XL87x0gbx/dLwi70W/auWqoB3U=;
-        b=JDT5tncJojVHoUgisPtZf1DrguTYOtjoS2o5W2j4x3JAoQ16HLbfWypWCNBFwKkqNM
-         vTh5mQG/qm8OInPd7JNLbMlegvUOhYoC+te0dmjeSVAlzU0Hng5kYEFF3r9jEhUpwGQ6
-         F3/KxL5IcUGTKnH6e2l1YYLA9CwYHJ276Xjw/nEcTDcj55wjzbmcj6W9I6y5w+P7+ltB
-         uSg8DE/TYCPBg+RYAd2WaEGc9wJ+B/QuyIIdTBBIBlBsFYOn53vx0imCARIWMTKiXvDY
-         j2hIsd1AH/huYy1QiKcWvyzzjd0AtT8B7+je9J3hyAleFN6f9nUfT/g8govzDPoeu/Qc
-         M85A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774264649; x=1774869449;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ho18lJBj7LSd/yPU0XL87x0gbx/dLwi70W/auWqoB3U=;
-        b=j7LAni5wavHsAEZ42LxvvD+b3M+O4A6x2L6oZjwd+jFQa/KjJE13KUhPz6P9uan/Kr
-         dFT1iEf886Yk4PRqFeXBPbWrToAQigTxdLkTeObFICmvKtJ2py4l5mxcgaPM8Kl6hXx7
-         avwHdvB1X1wOLbTer/fC+DI08c8k/3Ng4iiIDI8gvbVn97oNt6JAkNPXnmauMRzzA0JI
-         9J8SVxtasX0q3zd2fqUgh8stC3Gm69hKckyd9iM9v/3PR/oYoGVf5FFAHvaFkGZlbuGO
-         kaCZEgpXXQR6Mbn1yiVHSMHBTg5s5KxaIzlmD3V4y4IAhcozAoNSY8KAlTUbOGd5+JG4
-         zm+A==
-X-Forwarded-Encrypted: i=1; AJvYcCVSpAxYEYWCJ32kqGcQUfeA3dB8W7Xg0XaiNbDxiTHwQ6kkCq+GzOdNwKfJi5G7dQQ0jGZ62oMRu3QqDEzzQIw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrDp7IP6ZOjCuNUVMGDIRH9gJcn/eFBKNbn2Qim4xssa4lpCdM
-	EyVZlx/q8iuWuHyI/rrkClpARfm2Cxw2cuj/IuOV0CRo+gEsY37i+/K6
-X-Gm-Gg: ATEYQzw3LArlmR6/fctfQxBa9Reo1/w3yONoAXcHP/2E0o5zPmVD66NGpAZOh20vy03
-	9K73PbVywNe1je0oexJrhzAUwLg2kLApmt/GTtNnhL938HHiwqpfO0VMJq7kzInmKYW+QC5x/E3
-	kRBH8CsHcAp7J8X/pzCCL5lPB1U5niq/nQCz3kzp/Och1RxGFlUhF2rkE0lVwidA0hZb433gM2N
-	FTVVu+QssFzYW3SeI/npEJO9FFEmJEZCAhKPqYujWLuQet/cLW7QfnwY7WmSkuFYJ/niTbF5DMv
-	3dqGkA4LLyAGNiAeIF3+SkC9y2KqbHBkWQWMwskgH7PWW1GRfHTo7DAPGdoRTjxfWXoa+sjDuVU
-	NNU1583Z2wkfTM7ptPg8QQx+t3vR4TbDh8dGSfyQ9cVLN63OPVKTojUem9fUQCGAfkTHKrg6qgp
-	yvxNvw48Ss55f7WHwP
-X-Received: by 2002:a05:600c:c09c:b0:485:4bd1:4c64 with SMTP id 5b1f17b1804b1-486ff01ca98mr131743975e9.31.1774264648800;
-        Mon, 23 Mar 2026 04:17:28 -0700 (PDT)
-Received: from krava ([2a00:102a:502b:faa8:f878:ffa9:3b65:76be])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe868cb1sm77733365e9.5.2026.03.23.04.17.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 04:17:28 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 23 Mar 2026 12:17:26 +0100
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, shuah@kernel.org, martin.lau@kernel.org,
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-	haoluo@google.com, paul.chaignon@gmail.com,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/bpf: move trampoline_count to dedicated
- bpf_testmod target
-Message-ID: <acEhRhymOUw78d3_@krava>
-References: <20260320074150.628094-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P2CHj8I3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A836EC2BC87;
+	Mon, 23 Mar 2026 11:55:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774266924;
+	bh=bahApTubTticio0sVoZJb/hsbDwoUtqdY4Hts04ODXU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P2CHj8I3muInS7y71I3yS3gwqHMY0uIqERIm59nw/er97JTRza3uuynKvKtF+r5n5
+	 VeGTzHoWdLBnhGtbi9efO9UV9ybgiBKN/AAk1Vp6lMmaRSEq/ZL2D9MTLH4g2gQ2hh
+	 u+F0glNrLepJJI2DxEHhbSGb7FxJUsxXqrGgpygPv+TrbKGhyX2q1T13l3a6zTWC0i
+	 GTuiU4JXVmwTjYKPz2ZONnAPZ+i2mWvxhiAIaDWKA/02eCcuD5k7MPvXPQw587uTG3
+	 WxMrKveh4d37l48vppTcTSgJseXXSnvOFc+Vn7rQu+sRHekx5M43mQOPnX1fDandM7
+	 sL5WLjVHl6uxg==
+Date: Mon, 23 Mar 2026 12:55:18 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, jack@suse.cz, 
+	shuah@kernel.org, linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org, 
+	linux-mm@kvack.org, viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org, 
+	dmatlack@google.com, pratyush@kernel.org, skhawaja@google.com
+Subject: Re: [PATCH 1/2] liveupdate: prevent double management of files
+Message-ID: <20260323-leibhaftig-blasinstrument-58ec408b3c40@brauner>
+References: <20260321175808.57942-1-pasha.tatashin@soleen.com>
+ <20260321175808.57942-2-pasha.tatashin@soleen.com>
+ <CA+CK2bD2aNu-NByET4KkBP0n2j8WQE2zjxb4g-1cv2hYfjaRZQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260320074150.628094-1-sun.jian.kdev@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+CK2bD2aNu-NByET4KkBP0n2j8WQE2zjxb4g-1cv2hYfjaRZQ@mail.gmail.com>
 
-On Fri, Mar 20, 2026 at 03:41:50PM +0800, Sun Jian wrote:
-> trampoline_count fills all trampoline attachment slots for a single
-> target function and verifies that one extra attach fails with -E2BIG.
+On Sat, Mar 21, 2026 at 09:04:53PM -0400, Pasha Tatashin wrote:
+> On Sat, Mar 21, 2026 at 1:58 PM Pasha Tatashin
+> <pasha.tatashin@soleen.com> wrote:
+> >
+> > Currently, LUO does not prevent the same file from being managed twice
+> > across different active sessions.
+> >
+> > Add a new i_state flag I_LUO_MANAGED and update luo_preserve_file()
+> > to check and set this flag when a file is preserved, and clear it in
+> > luo_file_unpreserve_files() when it is released.
+> >
+> > Additionally, set this flag in luo_retrieve_file() after a file is
+> > successfully restored in the new kernel, and clear it in
+> > luo_file_finish() when the LUO session is finalized.
+> >
+> > This ensures that the same file (inode) cannot be managed by multiple
+> > sessions. If another session attempts to preserve an already managed
+> > file, it will now fail with -EBUSY.
+> >
+> > Acked-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+> > Acked-by: Jan Kara <jack@suse.cz>
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > ---
+> >  include/linux/fs.h           |  5 ++++-
+> >  kernel/liveupdate/luo_file.c | 27 ++++++++++++++++++++++++---
+> >  2 files changed, 28 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > index 23f36a2613a3..692a8be56f3c 100644
+> > --- a/include/linux/fs.h
+> > +++ b/include/linux/fs.h
+> > @@ -712,6 +712,8 @@ is_uncached_acl(struct posix_acl *acl)
+> >   * I_LRU_ISOLATING     Inode is pinned being isolated from LRU without holding
+> >   *                     i_count.
+> >   *
+> > + * I_LUO_MANAGED       Inode is being managed by a live update session.
+> > + *
+> >   * Q: What is the difference between I_WILL_FREE and I_FREEING?
+> >   *
+> >   * __I_{SYNC,NEW,LRU_ISOLATING} are used to derive unique addresses to wait
+> > @@ -744,7 +746,8 @@ enum inode_state_flags_enum {
+> >         I_CREATING              = (1U << 15),
+> >         I_DONTCACHE             = (1U << 16),
+> >         I_SYNC_QUEUED           = (1U << 17),
+> > -       I_PINNING_NETFS_WB      = (1U << 18)
+> > +       I_PINNING_NETFS_WB      = (1U << 18),
+> > +       I_LUO_MANAGED           = (1U << 19),
+> >  };
+> >
+> >  #define I_DIRTY_INODE (I_DIRTY_SYNC | I_DIRTY_DATASYNC)
+> > diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+> > index 5acee4174bf0..86911beeff71 100644
+> > --- a/kernel/liveupdate/luo_file.c
+> > +++ b/kernel/liveupdate/luo_file.c
+> > @@ -248,6 +248,7 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
+> >   * Context: Can be called from an ioctl handler during normal system operation.
+> >   * Return: 0 on success. Returns a negative errno on failure:
+> >   *         -EEXIST if the token is already used.
+> > + *         -EBUSY if the file descriptor is already preserved by another session.
+> >   *         -EBADF if the file descriptor is invalid.
+> >   *         -ENOSPC if the file_set is full.
+> >   *         -ENOENT if no compatible handler is found.
+> > @@ -276,6 +277,14 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+> >         if (err)
+> >                 goto  err_fput;
+> >
+> > +       scoped_guard(spinlock, &file_inode(file)->i_lock) {
+> > +               if (inode_state_read(file_inode(file)) & I_LUO_MANAGED) {
+> > +                       err = -EBUSY;
+> > +                       goto err_free_files_mem;
+> > +               }
+> > +               inode_state_set(file_inode(file), I_LUO_MANAGED);
+> > +       }
+> > +
+> >         err = -ENOENT;
+> >         list_private_for_each_entry(fh, &luo_file_handler_list, list) {
+> >                 if (fh->ops->can_preserve(fh, file)) {
+> > @@ -286,11 +295,11 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+> >
+> >         /* err is still -ENOENT if no handler was found */
+> >         if (err)
+> > -               goto err_free_files_mem;
+> > +               goto err_unpreserve_inode;
+> >
+> >         err = luo_flb_file_preserve(fh);
+> >         if (err)
+> > -               goto err_free_files_mem;
+> > +               goto err_unpreserve_inode;
+> >
+> >         luo_file = kzalloc_obj(*luo_file);
+> >         if (!luo_file) {
+> > @@ -320,6 +329,9 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+> >         kfree(luo_file);
+> >  err_flb_unpreserve:
+> >         luo_flb_file_unpreserve(fh);
+> > +err_unpreserve_inode:
+> > +       scoped_guard(spinlock, &file_inode(file)->i_lock)
+> > +               inode_state_clear(file_inode(file), I_LUO_MANAGED);
+> >  err_free_files_mem:
+> >         luo_free_files_mem(file_set);
+> >  err_fput:
+> > @@ -363,6 +375,9 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
+> >                 luo_file->fh->ops->unpreserve(&args);
+> >                 luo_flb_file_unpreserve(luo_file->fh);
+> >
+> > +               scoped_guard(spinlock, &file_inode(luo_file->file)->i_lock)
+> > +                       inode_state_clear(file_inode(luo_file->file), I_LUO_MANAGED);
+> > +
+> >                 list_del(&luo_file->list);
+> >                 file_set->count--;
+> >
+> > @@ -609,6 +624,9 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+> >         *filep = luo_file->file;
+> >         luo_file->retrieve_status = 1;
+> >
+> > +       scoped_guard(spinlock, &file_inode(luo_file->file)->i_lock)
+> > +               inode_state_set(file_inode(luo_file->file), I_LUO_MANAGED);
+> > +
+> >         return 0;
+> >  }
+> >
+> > @@ -701,8 +719,11 @@ int luo_file_finish(struct luo_file_set *file_set)
+> >
+> >                 luo_file_finish_one(file_set, luo_file);
+> >
+> > -               if (luo_file->file)
+> > +               if (luo_file->file) {
+> > +                       scoped_guard(spinlock, &file_inode(luo_file->file)->i_lock)
+> > +                               inode_state_clear(file_inode(luo_file->file), I_LUO_MANAGED);
+> >                         fput(luo_file->file);
+> > +               }
+> >                 list_del(&luo_file->list);
+> >                 file_set->count--;
+> >                 mutex_destroy(&luo_file->mutex);
+> > --
+> > 2.43.0
+> >
 > 
-> It currently targets bpf_modify_return_test, which is also used by
-> other selftests such as modify_return, get_func_ip_test, and
-> get_func_args_test. When such tests run in parallel, they can contend
-> for the same per-function trampoline quota and cause unexpected attach
-> failures. This issue is currently masked by harness serialization.
+> > Sashiko: https://sashiko.dev/#/patchset/20260321175808.57942-1-pasha.tatashin@soleen.com
 > 
-> Move trampoline_count to a dedicated bpf_testmod target and register it
-> for fmod_ret attachment. Also route the final trigger through
-> trigger_module_test_read, so the execution path exercises the  same
-> dedicated target.
+> Sashiko reported two problems:
 > 
-> This keeps the test semantics unchanged while isolating it from other
-> selftests, so it no longer needs to run in serial mode. Remove the
-> TODO comment as well.
+> 1. Are there any issues with mixing goto-based error handling and scope-based
+> cleanups like scoped_guard() in the same function?
 > 
-> Tested:
->   ./test_progs -t trampoline_count -vv
->   ./test_progs -t modify_return -vv
->   ./test_progs -t get_func_ip_test -vv
->   ./test_progs -t get_func_args_test -vv
->   ./test_progs -j$(nproc) -t trampoline_count -vv
->   ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test -vv
->   20 runs of:
->     ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test
+> Initially, I thought that there should not be any problems, however,
+> after looking this up  I found in include/linux/cleanup.h the
+> following comment:
 > 
-> Suggested-by: Jiri Olsa <jolsa@kernel.org>
+>  * Lastly, given that the benefit of cleanup helpers is removal of
+>  * "goto", and that the "goto" statement can jump between scopes, the
+>  * expectation is that usage of "goto" and cleanup helpers is never
+>  * mixed in the same function.
 
-I only suggested change as part of review, not the change itself ;-)
-you can drop the tag
+There's a compile-time switch you might want to turn on when
+test-compiling code like this. I forget exactly what it is. Something
+like jump-over-uninit or something.
 
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
-> Link:https://lore.kernel.org/bpf/abicUI4YQ5KkQ_Ro@mail.gmail.com/T/#m6253b7fe96fe1a4df65b274c95aac786598a9857
 > 
-> v3:
-> - route the final trigger through trigger_module_test_read() and make
->   bpf_testmod_test_read() call the dedicated trampoline_count target,
->   as suggested by Jiri
+> Well, good to know, will not use goto inside scoped_guards.
 > 
-> v2:
-> - rewrite the subject to describe the change
-> - resend with the correct patch content
+> 2. Additionally, does setting I_LUO_MANAGED on the inode break the preservation
+> of anonymous inodes? Many file types (like eventfd, epoll, timerfd,
+> signalfd)
 > 
->  .../bpf/prog_tests/trampoline_count.c         | 17 ++++----------
->  .../bpf/progs/test_trampoline_count.c         |  6 ++---
->  .../selftests/bpf/test_kmods/bpf_testmod.c    | 23 +++++++++++++++++++
->  3 files changed, 30 insertions(+), 16 deletions(-)
+> This is actually a very good point. It looks like everyone who uses
+> anon_inode_getfd() has one shared inode. This is not a problem for the
+> existing LUO user memfd, or for the upcoming vfiofd and memfd, but
+> kvm-vmfd and kvm-cpufd also use it, and that might be a problem in the
+> future once we add support for Orphaned VMs.
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> index 6cd7349d4a2b..dd2e5c84a4b5 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> @@ -30,16 +30,14 @@ static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
->  	return prog;
->  }
->  
-> -/* TODO: use different target function to run in concurrent mode */
-> -void serial_test_trampoline_count(void)
-> +void test_trampoline_count(void)
->  {
->  	char *file = "test_trampoline_count.bpf.o";
->  	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
-> -	int bpf_max_tramp_links, err, i, prog_fd;
-> +	int bpf_max_tramp_links, i;
->  	struct bpf_program *prog;
->  	struct bpf_link *link;
->  	struct inst *inst;
-> -	LIBBPF_OPTS(bpf_test_run_opts, opts);
->  
->  	bpf_max_tramp_links = get_bpf_max_tramp_links();
->  	if (!ASSERT_GE(bpf_max_tramp_links, 1, "bpf_max_tramp_links"))
-> @@ -80,17 +78,10 @@ void serial_test_trampoline_count(void)
->  		goto cleanup;
->  
->  	/* and finally execute the probe */
-> -	prog_fd = bpf_program__fd(prog);
-> -	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
-> +	if (!ASSERT_OK(trigger_module_test_read(256),
-> +		       "trigger_module_test_read"))
+> Therefore, we have two choices: either use a hash table, which adds
+> performance and memory overhead, or delegate this double-check to the
+> LUO file handlers, as they can use a private context to know if the FD
+> is already preserved.
 
-could be just single line, also no need for the condition and
-goto cleanup, just this will do:
-
-     ASSERT_OK(trigger_module_test_read....)
-
->  		goto cleanup;
->  
-> -	err = bpf_prog_test_run_opts(prog_fd, &opts);
-> -	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-> -		goto cleanup;
-> -
-> -	ASSERT_EQ(opts.retval & 0xffff, 33, "bpf_modify_return_test.result");
-> -	ASSERT_EQ(opts.retval >> 16, 2, "bpf_modify_return_test.side_effect");
-> -
->  cleanup:
->  	for (; i >= 0; i--) {
->  		bpf_link__destroy(inst[i].link);
-> diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> index 7765720da7d5..14ad2f53cf33 100644
-> --- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> @@ -3,19 +3,19 @@
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
->  
-> -SEC("fentry/bpf_modify_return_test")
-> +SEC("fentry/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fentry_test, int a, int *b)
->  {
->  	return 0;
->  }
->  
-> -SEC("fmod_ret/bpf_modify_return_test")
-> +SEC("fmod_ret/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
->  {
->  	return 0;
->  }
->  
-> -SEC("fexit/bpf_modify_return_test")
-> +SEC("fexit/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fexit_test, int a, int *b, int ret)
->  {
->  	return 0;
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index e62c6b78657f..47583577e021 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -470,6 +470,8 @@ noinline void bpf_testmod_stacktrace_test_1(void)
->  
->  int bpf_testmod_fentry_ok;
->  
-> +noinline int bpf_testmod_trampoline_count_test(int a, int *b);
-
-we could define bpf_testmod_trampoline_count_test in here,
-so we would go without the declaration
-
-> +
->  noinline ssize_t
->  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->  		      const struct bin_attribute *bin_attr,
-> @@ -548,6 +550,10 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->  			21, 22, 23, 24, 25, 26) != 231)
->  		goto out;
->  
-> +	i = 2;
-> +	if (bpf_testmod_trampoline_count_test(1, &i) != 4 || i != 3)
-> +		goto out;
-
-do we need all those arguments? progs don't do anything with them..
-I'd stick with just simple module function used by trampoline_count test
-
-jirka
+So, I'm not happy about I_LUO_MANAGED. I don't think we need driver
+specific stuff in struct inode and not in i_state. Track this in the
+driver please. I don't want this precedent and I'd rather have you get
+used to implementing such things in the driver right away rather than
+offloading this on general infrastructure. If we let this slide struct
+inode will be 2MB 1 in year.
