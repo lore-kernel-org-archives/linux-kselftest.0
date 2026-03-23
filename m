@@ -1,81 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825AF39C658
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 12:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2619388E42
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 12:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774270012; cv=none; b=N+ehXnVGy+kcHpeZ8sf9ZBZ+NwOMerWA/prnZwAKbxQSicsneebiHyvkZNm+88NKlm3oy/dl0lQD3p/Db50wYfKdDhS/3ImDWTSR5AYidpp3/tgknmodZ3/cRGFGGTRG1bXTgHn4fkF+eZLSrkzB4ufWakZlLSBJS/vlKOA15Rs=
+	t=1774270047; cv=none; b=SFI5sSEGZMvoUzQqvV8bP6ddvw1w5RbhhFYGIevXYpQZHEJpxe87bvkw8wd02FxruEIgjlXB7nbs//9xgGvLIRfnBBVMJZ+8YBO/pLzqdHfEJc/I29Q5reEyuHqSWR9nAlKZX35CNVMeIAWcELWQmsrIpSGSvtRbDt2kXBWTlCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774270012; c=relaxed/simple;
-	bh=XnysLVfVXj++X3qYmTmEaUUk366ZaIjwcFzBQj0b448=;
+	s=arc-20240116; t=1774270047; c=relaxed/simple;
+	bh=MM2fN5GdnEJYHW9MITbLdhoSmIAOoGWsDFQGNHwaPQw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U6T2GqKVdY7nysUJ7PwXRxMoATOoSlRRqGCdSsXRAaupaDODB9ckLlLnboCLPkFjpTVEipYpMtHk3HEjYgxDbxmJs4c408w/7wPv6kaJDmTmkbuQ9ym1w4PUE3CJkk/Xv4xReTDNIpy6zs5qWvVWmbht3CSt3JDGdUV71uP5irw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GpDFlzck; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=au8/bzNr; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZLOddv7wvSJO4ymg20ifCzRg7uHWXoky+n6wmOSSaLY35lbLbR3aXB6yGEnUdnEsT6Axp7EAqO1fDLeA6ToOgpkNwXBBCToOFhGRXhlBLvEKC+1YRaKVS4cDjQtXT5BmPX0MuU8NsfZMNndCR3uolfnvJxy8Wi99iDo7skn3HnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bnYGIcN7; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ECtEj5Zr; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GpDFlzck";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="au8/bzNr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bnYGIcN7";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ECtEj5Zr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774270008;
+	s=mimecast20190719; t=1774270045;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zj+HJ3NHVe31Ua9iuOX+I5shCryiTmPAEr1rzKm60IA=;
-	b=GpDFlzckhDJYw0kBL7A5QlcyrB+YaOEYEswf4or1TWT+mxM8Web6z5Ujr0Qd92gyknZ9uy
-	JalQM7zO4Atj76iqh6i63K8qTZAgBrbMYzjuNNbdV92RX6dHOYBGPkJRFKrm7Lf2Rd65jZ
-	QHCUQEFJ8jZ6Q8iraZROCmTJLmqG6VM=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=0u4DoGQ4lmcA23oqYqC/015Lk/NUWNVl1j8NoB4BI6w=;
+	b=bnYGIcN7gtT92p2SQKDP4JjCTxItSkv8rsPEdyM9/rh0xqVQLRqYE5E/Msn2WHU7z6cpIz
+	uVSa9IWVx9k+4wHIoiFUGx3MD8n3SC4HWLF8MlapSEuj0PjxuWHp6PuHy3dMZ4rqBlFeFa
+	UZuR2meNwEbtqeEuQSLxjx422bZqB7E=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-248-s3qcrVrxNW2tLz-Zo5Q09g-1; Mon, 23 Mar 2026 08:46:47 -0400
-X-MC-Unique: s3qcrVrxNW2tLz-Zo5Q09g-1
-X-Mimecast-MFC-AGG-ID: s3qcrVrxNW2tLz-Zo5Q09g_1774270006
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-c7656dba76aso240810a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 05:46:47 -0700 (PDT)
+ us-mta-611-xWyOYOhCO9OLqdzMeyVfew-1; Mon, 23 Mar 2026 08:47:24 -0400
+X-MC-Unique: xWyOYOhCO9OLqdzMeyVfew-1
+X-Mimecast-MFC-AGG-ID: xWyOYOhCO9OLqdzMeyVfew_1774270043
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-358e425c261so4928692a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 05:47:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774270006; x=1774874806; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1774270043; x=1774874843; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zj+HJ3NHVe31Ua9iuOX+I5shCryiTmPAEr1rzKm60IA=;
-        b=au8/bzNrqamLX3SGu2LgcicHx8MX+vBqijgNMz9k00Lv/5bZSzH3aIuq0FPRJ6sbmp
-         P1mkb95uCowdmCVSuuXs5caqXysmcw/as/dt7odJszh3MXwU0rk6G2L88G6yaBY8G50b
-         Bzw4Eb7+ZOG/c9qL1U3sUNm3pVtJdxOv5jpr2FUYQu2VigeNoF5EhMZFgkabW9vASATq
-         eV35XobF3NjFxA6a0djNtjZdAiZewqSr1ZydQGRFbUw4F+2v+SyyC4BNhz7wPKILKzM+
-         mA0GcVQgz8k5J89Nzx1Af5yDEa4MRpzi+ALLu6v4Hv5Evn8wyCtcMQ0+VIOAfkeLUEe4
-         h/Ow==
+        bh=0u4DoGQ4lmcA23oqYqC/015Lk/NUWNVl1j8NoB4BI6w=;
+        b=ECtEj5ZrLYPHGLb6FNYy9GQIJRSsJu5atQ1K12zR7GX7bOnCb+g4jMlBiXd7zydgRN
+         nNzoY3ryQ8bhyU1CB6eEeFGSPCUiHSyMo795XhY0xWZ/E0Svf3PiE79piQRxC3ofmD4y
+         N3fS3N2yWs3lzonczkFCt+xkJWbF7TVtBTsglAwYjIy6MSl49SfFXosXCgV7I3Cd8fUE
+         ah+DJCn1V8rw8tuhbzV0pPW4ArWpOf6+CcdVk/EyLajoc3ZTKzwnqKp83PcMe4VapQDM
+         1xUEUvvID7LGdm5BGflR7LODM1VWJzuUPZmXahDypSrNKuyKYb7GauMw1XEm8Y1l4SLc
+         5LBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774270006; x=1774874806;
+        d=1e100.net; s=20251104; t=1774270043; x=1774874843;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zj+HJ3NHVe31Ua9iuOX+I5shCryiTmPAEr1rzKm60IA=;
-        b=eZML99B9Du1Uv/SWfMKmG3bYK/TDxoH73tL2P6gUxkydKcxFgAdsLZZnj1T+PEvIdP
-         CRouN3HE81XTUPa7gj5V6KGKL+bnoowj7WEF/tDbFLQYnJNyZQimcJgOJdgfEb0UT543
-         7LYCLVVF7Gcm1U7GCR51MEfix6PIBf1OFQoXRu4kNwpsEn4Fb82+uT2Q+upz1kuAGQgg
-         uZfsBdMFWMycx9DAliVnKcjekhFDe/3qqbe0jOVogvNPA+oVfzI68R0L0PvvM9MQr8gm
-         xXhhVbiA8diA6rNd5+lIi06pKuZcs1Pa8qtAKPGSVHmFop72fXVNf5jS8jMm75k+ZrTT
-         Sg8w==
-X-Forwarded-Encrypted: i=1; AJvYcCX1YpT2l0jLDOhtT9THq3a30JxURVy8BtB3YRvmxXCW4dF2DrisF0LCnAI2L/oda7/5ULz9BlaWzSeOYZ2vBBs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb4+aZY32/0TT7KRCmuEWtBs/tsacUClXiXk2dByAkQvzdCMCt
-	MNNl8O9zo6iktCcdigDAkD+1z8K+dw0C/MYpq3/6GwF9BAfigzbgG7GwPyCP+YMYsq+nVuD/Ibj
-	LhQzg/eAINO9qUXTJ3DVOZXZqbwqjFEbvtIujlnnNrsnknmbEfciH3EZrITt/OSrVmu8aZg==
-X-Gm-Gg: ATEYQzwhK+imhZNGTk+5gGnmWvPANZN2VwdZ2u7RK1ja4ZXg91I04wxrwXaSXCNO0/b
-	CBIVpUQOogSA8iM8Vy97meBQopeGqKepbxVKXc2xOOyUvnM2ixZbPc/Ul7xwvsHOaO4jZnD1qcV
-	YyzQgQj0a65j2Vg8HAyS8HBkH8vAuqm4jGk2mk1pWXwKQbnE6ebIQegsA/bnxxopfIuS+48BeJt
-	r+omxOPTvlBv9uj90GMDoFC7SKIEhYMJmPvTdZHJuiDn3UOpmJty+OhPLAXdNpxxuhPYkFVunxB
-	tnj6Fuw/MuaURWL3eOOX36OS3JvKHWCkNMzSunhar3nEDE+VoiiS1LQzKZLisDsoUhwQPHgAyOM
-	kQ6eFetrVzXzR+BOTHg==
-X-Received: by 2002:a05:6a00:2d1d:b0:829:7efc:fe20 with SMTP id d2e1a72fcca58-82a8c325f74mr10131665b3a.40.1774270006172;
-        Mon, 23 Mar 2026 05:46:46 -0700 (PDT)
-X-Received: by 2002:a05:6a00:2d1d:b0:829:7efc:fe20 with SMTP id d2e1a72fcca58-82a8c325f74mr10131638b3a.40.1774270005733;
-        Mon, 23 Mar 2026 05:46:45 -0700 (PDT)
+        bh=0u4DoGQ4lmcA23oqYqC/015Lk/NUWNVl1j8NoB4BI6w=;
+        b=bASJV6VOR1qX8drUWPww3OZ51VE14x4FfJ09dAZhMpphLn4fX7QI4lydKXA2Sl51GT
+         L4S1+zDMRh729fdyQWXQqKcWu0olkVbrebEMwRmbpIIeW61cXPGQTkZBUJzkvOg6lreq
+         1FvlMLQ2CwwNBo0X4hUhBUSPihtHI2u8FU/ECGSc7waySF2XaRtkzkDyWXT2F4pBBlO4
+         ndtGMi5dvBvMeGsnNuds2ocZV6LLQbY/fxuC/Es+jSf/8Mw488yxkVlen+Bo1y2zzloN
+         aJJqduxSDuBBDO/khIC7nz/f3dgYN4pJEUuwIjuLTOSt0NkGorwRdvBEETkLfiYubJnA
+         RvOA==
+X-Forwarded-Encrypted: i=1; AJvYcCULt0XL8oCGXPfb+V5GFLNtowWxuvkaYcec1ZYb3SEZYSlsKUaCcLN3XGf63i4TG2uHI8m7ZfAEh0XpqrtwwU8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWnkz73tLdgjxA4IeGYIGGmk1kekT7bTO43dtbzjl6UuW96lPe
+	zlJZYHVF00ZL8E34hP9ca5HncU/2aVvOuo2SOCThPs6/kauB2nw2Of2j0WhI+RoYHDjO1MayTd8
+	qX1Fo3JOBW3kBZERPcLUSa48kCzDTT/MtZe4xgryV4VobXCT/Xt5dW7DK8OI5iMSKbMbgag==
+X-Gm-Gg: ATEYQzzur/GGZPmarZU5nwShArfOAfi7HOInaV8giYJCdTuXY5lT72+vQ7N9tv+HOG8
+	+8NGR8DM3oUyLtk00DZx4q0X9eFSHcFV/l3RAAe7qnIDrMQrMaAgvsKDiJ1LU5RPHQFblQ9pFuM
+	z/8r88KYPJFEABl7ZyKJbyrOWSjOSmeCHFBtKu7Pzthp99twm2gDJqzMWCAyo5Uj/GELHdIvdr4
+	bXBKDTztRs2U6YfheWTGViZBskZvEgvn3R0f6P/1NuQRG+pg5qQ8f8C6wWBB+ByZcAW07R2lMnM
+	sAVXu4nBCurJonETLBmfqIvlH7RICzwOS7ZoOKU1PZPi1fl3GBIwv9OHaA0KUJNERjFZ1jWkpk5
+	O24YkMI0c9rPek8ZWCg==
+X-Received: by 2002:a17:90a:1c0f:b0:35b:e4d8:bb10 with SMTP id 98e67ed59e1d1-35be4d8bc7fmr3116819a91.14.1774270043239;
+        Mon, 23 Mar 2026 05:47:23 -0700 (PDT)
+X-Received: by 2002:a17:90a:1c0f:b0:35b:e4d8:bb10 with SMTP id 98e67ed59e1d1-35be4d8bc7fmr3116793a91.14.1774270042836;
+        Mon, 23 Mar 2026 05:47:22 -0700 (PDT)
 Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b03aa5a9bsm9609699b3a.8.2026.03.23.05.46.44
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08366b9aesm141494025ad.58.2026.03.23.05.47.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 05:46:44 -0700 (PDT)
-Date: Mon, 23 Mar 2026 20:46:42 +0800
+        Mon, 23 Mar 2026 05:47:22 -0700 (PDT)
+Date: Mon, 23 Mar 2026 20:47:20 +0800
 From: Li Wang <liwang@redhat.com>
 To: Waiman Long <longman@redhat.com>
 Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
@@ -92,11 +92,11 @@ Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
 	James Houghton <jthoughton@google.com>,
 	Sebastian Chlad <sebastianchlad@gmail.com>,
 	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
-Subject: Re: [PATCH v2 1/7] memcg: Scale up vmstats flush threshold with
- int_sqrt(nr_cpus+2)
-Message-ID: <acE2MoIZ0pl7U7PX@redhat.com>
+Subject: Re: [PATCH v2 2/7] memcg: Scale down MEMCG_CHARGE_BATCH with
+ increase in PAGE_SIZE
+Message-ID: <acE2WDuto9cdp5Lx@redhat.com>
 References: <20260320204241.1613861-1-longman@redhat.com>
- <20260320204241.1613861-2-longman@redhat.com>
+ <20260320204241.1613861-3-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,90 +105,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260320204241.1613861-2-longman@redhat.com>
+In-Reply-To: <20260320204241.1613861-3-longman@redhat.com>
 
-On Fri, Mar 20, 2026 at 04:42:35PM -0400, Waiman Long wrote:
-> The vmstats flush threshold currently increases linearly with the
-> number of online CPUs. As the number of CPUs increases over time, it
-> will become increasingly difficult to meet the threshold and update the
-> vmstats data in a timely manner. These days, systems with hundreds of
-> CPUs or even thousands of them are becoming more common.
+On Fri, Mar 20, 2026 at 04:42:36PM -0400, Waiman Long wrote:
+> For a system with 4k page size, each percpu memcg_stock can hide up
+> to 256 kbytes of memory with the current MEMCG_CHARGE_BATCH value of
+> 64. For another system with 64k page size, that becomes 4 Mbytes. This
+> hidden charges will affect the accurary of the memory.current value.
 > 
-> For example, the test_memcg_sock test of test_memcontrol always fails
-> when running on an arm64 system with 128 CPUs. It is because the
-> threshold is now 64*128 = 8192. With 4k page size, it needs changes in
-> 32 MB of memory. It will be even worse with larger page size like 64k.
+> This MEMCG_CHARGE_BATCH value also controls how often should the
+> memcg vmstat values need flushing. As a result, the values reported
+> in memory.stat cgroup control files are less indicative of the actual
+> memory consumption of a particular memory cgroup when the page size
+> increases from 4k.
 > 
-> To make the output of memory.stat more correct, it is better to scale
-> up the threshold slower than linearly with the number of CPUs. The
-> int_sqrt() function is a good compromise as suggested by Li Wang [1].
-> An extra 2 is added to make sure that we will double the threshold for
-> a 2-core system. The increase will be slower after that.
+> This problem can be illustrated by running the test_memcontrol
+> selftest. Running a 4k page size kernel on a 128-core arm64 system,
+> the test_memcg_current_peak test which allocates a 50M anonymous memory
+> passed. With a 64k page size kernel on the same system, however, the
+> same test failed because the "anon" attribute of memory.stat file might
+> report a size of 0 depending on the number of CPUs the system has.
 > 
-> With the int_sqrt() scale, we can use the possibly larger
-> num_possible_cpus() instead of num_online_cpus() which may change at
-> run time.
+> To solve this inaccurate memory stats problem, we need to scale down
+> the amount of memory that can be hidden by reducing MEMCG_CHARGE_BATCH
+> when the page size increases. The same user application will likely
+> consume more memory on systems with larger page size and it is also
+> less efficient if we scale down MEMCG_CHARGE_BATCH by too much.  So I
+> believe a good compromise is to scale down MEMCG_CHARGE_BATCH by 2 for
+> 16k page size and by 4 with 64k page size.
 > 
-> Although there is supposed to be a periodic and asynchronous flush of
-> vmstats every 2 seconds, the actual time lag between succesive runs
-> can actually vary quite a bit. In fact, I have seen time lags of up
-> to 10s of seconds in some cases. So we couldn't too rely on the hope
-> that there will be an asynchronous vmstats flush every 2 seconds. This
-> may be something we need to look into.
+> With that change, the test_memcg_current_peak test passed again with
+> the modified 64k page size kernel.
 > 
-> [1] https://lore.kernel.org/lkml/ab0kAE7mJkEL9kWb@redhat.com/
-> 
-> Suggested-by: Li Wang <liwang@redhat.com>
 > Signed-off-by: Waiman Long <longman@redhat.com>
 > ---
->  mm/memcontrol.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
+>  include/linux/memcontrol.h | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 772bac21d155..cc1fc0f5aeea 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -548,20 +548,20 @@ struct memcg_vmstats {
->   *    rstat update tree grow unbounded.
->   *
->   * 2) Flush the stats synchronously on reader side only when there are more than
-> - *    (MEMCG_CHARGE_BATCH * nr_cpus) update events. Though this optimization
-> - *    will let stats be out of sync by atmost (MEMCG_CHARGE_BATCH * nr_cpus) but
-> - *    only for 2 seconds due to (1).
-> + *    (MEMCG_CHARGE_BATCH * int_sqrt(nr_cpus+2)) update events. Though this
-> + *    optimization will let stats be out of sync by up to that amount. This is
-> + *    supposed to last for up to 2 seconds due to (1).
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 70b685a85bf4..748cfd75d998 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -328,8 +328,14 @@ struct mem_cgroup {
+>   * size of first charge trial.
+>   * TODO: maybe necessary to use big numbers in big irons or dynamic based of the
+>   * workload.
+> + *
+> + * There are 3 common base page sizes - 4k, 16k & 64k. In order to limit the
+> + * amount of memory that can be hidden in each percpu memcg_stock for a given
+> + * memcg, we scale down MEMCG_CHARGE_BATCH by 2 for 16k and 4 for 64k.
 >   */
->  static void flush_memcg_stats_dwork(struct work_struct *w);
->  static DECLARE_DEFERRABLE_WORK(stats_flush_dwork, flush_memcg_stats_dwork);
->  static u64 flush_last_time;
-> +static int vmstats_flush_threshold __ro_after_init;
+> -#define MEMCG_CHARGE_BATCH 64U
+> +#define MEMCG_CHARGE_BATCH_BASE  64U
+> +#define MEMCG_CHARGE_BATCH_SHIFT ((PAGE_SHIFT <= 16) ? (PAGE_SHIFT - 12)/2 : 2)
+> +#define MEMCG_CHARGE_BATCH	 (MEMCG_CHARGE_BATCH_BASE >> MEMCG_CHARGE_BATCH_SHIFT)
 >  
->  #define FLUSH_TIME (2UL*HZ)
->  
->  static bool memcg_vmstats_needs_flush(struct memcg_vmstats *vmstats)
->  {
-> -	return atomic_read(&vmstats->stats_updates) >
-> -		MEMCG_CHARGE_BATCH * num_online_cpus();
-> +	return atomic_read(&vmstats->stats_updates) > vmstats_flush_threshold;
->  }
->  
->  static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val,
-> @@ -5191,6 +5191,14 @@ int __init mem_cgroup_init(void)
->  
->  	memcg_pn_cachep = KMEM_CACHE(mem_cgroup_per_node,
->  				     SLAB_PANIC | SLAB_HWCACHE_ALIGN);
-> +	/*
-> +	 * Scale up vmstats flush threshold with int_sqrt(nr_cpus+2). The extra
-> +	 * 2 constant is to make sure that the threshold is double for a 2-core
-> +	 * system. After that, it will increase by MEMCG_CHARGE_BATCH when the
-> +	 * number of the CPUs reaches the next (2^n - 2) value.
-> +	 */
-> +	vmstats_flush_threshold = MEMCG_CHARGE_BATCH *
-> +				  (int_sqrt(num_possible_cpus() + 2));
->  
->  	return 0;
->  }
+>  extern struct mem_cgroup *root_mem_cgroup;
 
 Reviewed-by: Li Wang <liwang@redhat.com>
 
