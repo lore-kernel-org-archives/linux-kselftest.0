@@ -1,45 +1,27 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529B23B0AE2;
-	Mon, 23 Mar 2026 15:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA553ACF03;
+	Mon, 23 Mar 2026 15:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774279687; cv=none; b=q/mJxK2Lm0XhNGSv+OK8dg2D1EqMHY9NaVXa5Pzq+k8105LJ7JWq5Xjff6PRLaUOurBEx/i6rzoYL7DTnoBG0m64kzbCOr6D6U+XK+gFZaO41lG7js5qcQj0BCp4ZHyoBiLx/WpqmPRK4Nz49IIZc2ziFucY99W2OSg7ejgLPwE=
+	t=1774280427; cv=none; b=dKKUgj74I3jaMgIpVvglsv5gYZPdJ1xdthuOCkZ53oFHI7AEv+d4mYuKIFxI6+zNX036qMaN1oi7MtRz9n7W9Rsck+l+3drtQfqTKOeXcN4lFGoxumUAc7ULP75XH8SOPDMcNjuwCLzB6OUshNdFA7En9HZVR3MAyF3Fwa+W8lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774279687; c=relaxed/simple;
-	bh=0inbW287jRPXssblfcXdWvIf+BmJcrXcK4SdIvnEjnI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c1Dn2/dIrMkRTYEYbgYPUC87whv3npoDa3HRVIuNnCHU9J7GUZxgXgIDf4M3ZzHGaXsbCdnXzE2T+aMhdn10UkCi5vUR8994kzWXceTSfnpwToBfNSLHFTfNegKHMGbIFywtrb9M+rOI+BToF2YLi0xfiIeNWaTBDqcdJfJZWgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wa8en8ye; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wa8en8ye"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3156FC4CEF7;
-	Mon, 23 Mar 2026 15:28:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774279687;
-	bh=0inbW287jRPXssblfcXdWvIf+BmJcrXcK4SdIvnEjnI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Wa8en8yeBm23obTEKj3Q+7IOIBEUSObj8rxBwTrHNrmGMBwjlwnDS2vp8r6iMax5S
-	 y0Ddhq8XMNN3LciqynxtbcoFtI+OBsOxm0x5olSdgJz6/nPR486AtgdiEP9ezmTITe
-	 pAZ8kqQuEzzr9ZZdjGhPHGme3KCIZI+5QgLMh4q2K/OzprctNYeBPNe6SlT5N9+KSw
-	 +cuyD6xgnaIx046r2vcwvm1S80SpKQq9sY7x/wbSyNVF0gcbFqVDdof6K5yP/gtM4i
-	 rbOUZ75sL8eTrAOjfRCi8+mBR308nxiim1BZw+fuPnMcfPDDbyTEy23S/ceNUnVon9
-	 bhABx0Vc2U0jA==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	Emanuele Rocca <emanuele.rocca@arm.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Clint George <clintbgeorge@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH] kselftest/coredump: reintroduce null pointer dereference
-Date: Mon, 23 Mar 2026 16:27:58 +0100
-Message-ID: <20260323-idolisieren-bereuen-17430ffe5208@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <ab2kI0PI_Vk6bU88@NH27D9T0LF>
-References: <ab2kI0PI_Vk6bU88@NH27D9T0LF>
+	s=arc-20240116; t=1774280427; c=relaxed/simple;
+	bh=dmJtugznhbCVBxfks7NXmKAW85qMgx0JwEiyM2WXk1M=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dFkHlM0DLMknrJvBZNK7zFGacMAXm+rF4p2yUZDnWRIvZBKTm08QJu47qUtLe9G4Do7qqUdtLhcYIdvZ6dHNQhnSA3RDAu0172DXM+iiHEf1+8uN21bio76NxtyYGt/4cyS9Clota0ZLjSg+qPEhfQlsJ+2WIhHnarvsLV5wY40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B718714BF;
+	Mon, 23 Mar 2026 08:40:19 -0700 (PDT)
+Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC5DD3F694;
+	Mon, 23 Mar 2026 08:40:21 -0700 (PDT)
+From: Leo Yan <leo.yan@arm.com>
+Subject: [PATCH 0/6] tools build: bpf: Append EXTRA_CFLAGS and
+ HOST_EXTRACFLAGS
+Date: Mon, 23 Mar 2026 15:40:01 +0000
+Message-Id: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,38 +29,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1576; i=brauner@kernel.org; h=from:subject:message-id; bh=0inbW287jRPXssblfcXdWvIf+BmJcrXcK4SdIvnEjnI=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQejGGabG3c6RdbN1kyM33hCb6lwdY2vtNeLrvwrT3b+ /W5B19vdZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzk0B9Ghocdfvz7DkZ3s4gH cyzfmna3s73r5o7qBYtaV35Lt3PsqGf4p9MXk615l8lT1rr1fDF/f6bErq6Q+e+KOyRP+G8JjMx nAgA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANFewWkC/x2N0QqDMAwAf0XyvIJLUcFfGSOsM9kCpZHWjan47
+ ys+Hhx3OxTOygXGZofMXy1qqcL10sDz/UgvdjpVBmyxbz16t5jFQuGjcSLRH22cjTTpQmEWshR
+ X1yF6lB4lDAI1NGeu5jm53Y/jD2DunYx0AAAA
+X-Change-ID: 20260323-tools_build_fix_zero_init_bpf_only-52232f62fb7f
+To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+ Leo Yan <leo.yan@arm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774280421; l=1746;
+ i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
+ bh=dmJtugznhbCVBxfks7NXmKAW85qMgx0JwEiyM2WXk1M=;
+ b=pDk+t/gZoGl0LBFFRSGG43Xc/hBFWqXeTrVVzAClNhU8kWi8VmLGhVLQ3S0WrAE0rpkfm3QeV
+ ToRSQjY5ZnGBkY614IsqMTJ5S8YAz5ZviEMcdjPPEVUTEIoITR7oyj+
+X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
+ pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-On Fri, 20 Mar 2026 20:46:43 +0100, Emanuele Rocca wrote:
-> Commit 673a55cc49da replaced the null pointer dereference used in
-> crashing_child() with __builtin_trap to address the following LLVM warnings:
-> 
->  coredump_test_helpers.c:59:6: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
->  coredump_test_helpers.c:59:6: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
-> 
-> All coredump tests expect crashing_child() to result in a SIGSEGV. However, the
-> behavior of __builtin_trap is architecture-dependent. On x86 it yields SIGILL,
-> on aarch64 SIGTRAP. Given that neither of those signals are SIGSEGV, both
-> coredump_socket_test and coredump_socket_protocol_test are currently failing:
-> 
-> [...]
+Append EXTRA_CFLAGS and HOST_EXTRACFLAGS to the BPF build.
 
-Applied to the vfs-7.1.pidfs branch of the vfs/vfs.git tree.
-Patches in the vfs-7.1.pidfs branch should appear in linux-next soon.
+This mitigates an issue introduced in GCC 15, where a {0} initializer
+does not guarantee zeroing the entire union [1].
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+The common changes under tools to support EXTRA_CFLAGS and
+HOST_EXTRACFLAGS are sent separately [2].  As suggested, BPF patches
+would be picked up via the bpf tree, so this series only includes BPF
+related changes.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+Verification (bpf-ci):
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+Test 1: With full tools changes applied
+  https://github.com/kernel-patches/bpf/actions/runs/23439834394
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.1.pidfs
+Test 2: Only BPF changes
+  https://github.com/kernel-patches/bpf/actions/runs/23440507945
 
-[1/1] kselftest/coredump: reintroduce null pointer dereference
-      https://git.kernel.org/vfs/vfs/c/3fc66a103395
+[1] https://gcc.gnu.org/gcc-15/changes.html
+[2] https://lore.kernel.org/linux-perf-users/20260323-tools_build_fix_zero_init-v6-0-235858c51af9@arm.com/T/#t
+
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+Leo Yan (6):
+      bpftool: Avoid adding EXTRA_CFLAGS to HOST_CFLAGS
+      bpftool: Append extra host flags
+      libbpf: Initialize CFLAGS before including Makefile.include
+      tools/bpf: build: Append extra cflags
+      selftests/bpf: Initialize operation name before use
+      selftests/bpf: Append extra cflags
+
+ tools/bpf/Makefile                                    |  1 +
+ tools/bpf/bpftool/Makefile                            |  9 +++++++--
+ tools/lib/bpf/Makefile                                | 17 +++++++++--------
+ tools/testing/selftests/bpf/Makefile                  | 10 ++++++++--
+ tools/testing/selftests/bpf/prog_tests/verifier_log.c |  1 +
+ 5 files changed, 26 insertions(+), 12 deletions(-)
+---
+base-commit: bfec8e88ff6022b056615ec71506703e7e54de82
+change-id: 20260323-tools_build_fix_zero_init_bpf_only-52232f62fb7f
+
+Best regards,
+-- 
+Leo Yan <leo.yan@arm.com>
+
