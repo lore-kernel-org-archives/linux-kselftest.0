@@ -1,108 +1,111 @@
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF9E37F75A;
-	Mon, 23 Mar 2026 14:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102243B27CE;
+	Mon, 23 Mar 2026 14:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774276115; cv=none; b=X3tBQRuf5pPsJWZBiWQAGqvK+qAU1SLzxbdyAxvrfNXXOwu6POJ5ri1F4wGxvC+7eRSrWbw22TfBL4+Q4fSvZxDZBqtz1gXHnFIL9sSEmKYoJluuTR6e5JK35Obt2EKkz1j/+ou37wQACxriUpzc6dr55Q7MHix8vjiHyRshs7I=
+	t=1774276786; cv=none; b=IVZpkytzf1bH/WxDL+Ua4UqllDMxEYPWQKo9ewSCaBOrOcUrp6ndSRqy5Hi6kIuVbAcovsRTJB0ar8DPP9+Fc78xDecIElt0QshOXeMxmAC+KCbfxmHzOOD2uKgU8A41qBqISAjdpsQEHKf8OmEHBvELUCvD6GLufIVCmwNCBqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774276115; c=relaxed/simple;
-	bh=0vS3co51JvhHMZBfEHnnG7z168k2+9rr9N0ZDGNA9vM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uCGhUE3Fb5pKFoeQC6+UGN0c//rBEkRC0fpT2PrBKHxRCqbfUsRycfLFYNG1w5NzI4OL1CFzHpPi+dr95uPESjiCjxLhHOywgt2XI+hK3cJRdMQcWK1om0d6Z/mciTegxnd7bvYibkMdMcRglxCuWzV2dIOxVMZujed/v0MC3Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=pv2KIZWa; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=f4HVXWGo; arc=none smtp.client-ip=202.12.124.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1774276786; c=relaxed/simple;
+	bh=WjpyIImVOdHQP0Dp+E2Ymz04BmYIyHTzmlYl/9ZX7Eo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=N7YXrxF2FWgXRfyiY7hrckJZApe0XMBWaTxqHbM1ILM0jC7KuqFBs4NmflNylnvyGJuomAFA17ljjxIgUGA1ytGbQam6YlkAG722XK/5roF8r3KYfrCVUK9bD3AhczVLPKZIMhRZJ3f+nJKUB9xzDSo/VeZ5dFOcHlYB8YAS8po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s0XbqDc7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="pv2KIZWa";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="f4HVXWGo"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id AED0A7A0196;
-	Mon, 23 Mar 2026 10:28:32 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Mon, 23 Mar 2026 10:28:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1774276112; x=
-	1774362512; bh=SUMCS0C+SXCsiLX4wy4a/yPyeK+2xR3NytQxbpD70iI=; b=p
-	v2KIZWatDbmN6fZOOJ2/4FXFEFvQk/afU1zxBPDuObqtQK4gdzNHmaDwnbu8dYqj
-	e9noAYJ+aKKNMiLGFWJoCmQH5z4nqDnPIc6NUgA2Nnc6s1xtBXYVlNMCRZRDxQAH
-	f5Fs3WyANPfALv3JbQa0ypsXJfEeLYSKaeNVWr1ZwvMl6SzlF1XcvyJn89tUUUNT
-	xqW1xkyj/i1c5ttKqd30ytqvfWStBwqPWcBx7BiwbU91G3GZiTLvwAUG1lzeyeho
-	QO2HkFWsuAISAcyoO6OYk0a+EOKZNpymw4dPUO4hQG5AVFDeu814R3VAGoAbTZ+L
-	ua5AD+vo0feOhzlxo0pUA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1774276112; x=1774362512; bh=SUMCS0C+SXCsiLX4wy4a/yPyeK+2xR3NytQ
-	xbpD70iI=; b=f4HVXWGoNvbPbX+AV4tPy7uJx8gH1yIY3i1lsynDxM0XOZuZRdx
-	XZljkv1/JOnl/8oHTfKXOMYDYpw0avENPo/Bc07uGEEUqnWkI/1HdWzrIUsveB/m
-	eJ/02wdVvw1Oi5KknLfThevSoSIxhqukBa2jNu/NxlJJ5nOPISdjfDlV6JiTL7qb
-	gSdszMqx+xcIEqd6uCW2jkQ+lMtNAAmAsjnG5DDcYrQRJm/gOBOpzR8U2MXKHf+a
-	8MPSOIXv6/H2cDO1HVAlGj4gjKXStARSivCzwCF/dEQxG6OTI2wti42Tya16bqgw
-	8UI2kAenRpN7IzGz1/oHGT123OLYa0DbSuA==
-X-ME-Sender: <xms:D07BaaLDxK2ISgWZ6Qs5fMnLLS8W__5I9iFUJD1h6OZuQMgF0vMk2Q>
-    <xme:D07BaVPZV8quSxAvr8roy8fXXRPVSPLkKETyDynNH4I6f-AsUGudkje0Uqi7a3wS9
-    4JZIbdKpaeoLhD0-QfpJcptsISycXiZncIQUL2h3cyRxLIoNcl2HY4>
-X-ME-Received: <xmr:D07BaVXyScNBZcMuZQAdiZ9imSnt65F7h_IoyqZ52-u2yCFOYwP31XLPtYoV>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudekleehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
-    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedutddpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtoheptghrrghtihhusehnvhhiughirgdrtghomh
-    dprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
-    thhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvh
-    gvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghho
-    ohhglhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepshhhuhgrhhes
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvh
-    hgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:D07BabkDk4vOTAlwfzN-Ta5lhqcoOd1Cdz8qr6UGBiZ0hTH5D9_sOg>
-    <xmx:EE7BacM0PfMHo8ZpYEaSPjq2yRprZp6ahrMfSkdMpHDx2OaobxFW5w>
-    <xmx:EE7BabK5rA4vHcOBBK8t4sV77bTKTnaIH2uMIEEUut3KEiN2vACNqw>
-    <xmx:EE7Bae2-84N-EpFLX001NSS09D3Pl88I1rd10Aylrf6xpo_WqFbItw>
-    <xmx:EE7BaZzoitutENQfUPR264SnrCPVJF1t7Ad33PnDaryzYQYVKXWvNAHm>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 Mar 2026 10:28:31 -0400 (EDT)
-Date: Mon, 23 Mar 2026 15:28:30 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	Dragos Tatulea <dtatulea@nvidia.com>
-Subject: Re: [PATCH net v5 0/3] macsec: Add support for VLAN filtering in
- offload mode
-Message-ID: <acFODtfaa8LCKX4r@krikkit>
-References: <20260323123633.756163-1-cratiu@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s0XbqDc7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A12CC4CEF7;
+	Mon, 23 Mar 2026 14:39:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774276785;
+	bh=WjpyIImVOdHQP0Dp+E2Ymz04BmYIyHTzmlYl/9ZX7Eo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=s0XbqDc7XviCD2Md3dJZojCWQjlGtXGNO8iRWeA0PRbezrzQyIcWSXQMDiq3VQAPL
+	 2o6XnIOrR5rmdPybttqC1+InHnKg+KrUuNO1uhcMWezz+8QnRavKMk0RKuV5OWpC8c
+	 jh9mae0JbTR9awm8NO7giSG0GSF/7oOcuUpAQhMmR2EC5nrox9DIHPilbRi1e06o06
+	 WsLlv+GfTURlvJapfdo0FO3tNvpjyK0vg/y52vegjU9oavvma4sOrlSpmBLUUAmowe
+	 XiNBtEJtH+QKnxalT/J+EHfngX4lEUE1q8HxG4ZX56Gb8Kw45vOXS+xowSE72T0A4y
+	 JnWSPo8NpdSnQ==
+From: Jeff Layton <jlayton@kernel.org>
+Subject: [PATCH v5 0/2] firmware_loader: allow firmware_class.path to take
+ multiple paths
+Date: Mon, 23 Mar 2026 10:39:29 -0400
+Message-Id: <20260323-fw-path-v5-0-e88b2fe145f3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260323123633.756163-1-cratiu@nvidia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WOywqDMBBFf6Vk3ZRJTDR21f8oXSQ60dCikohtE
+ f+9UegLcXkvc87ckQT0DgM57kbicXDBtU0Mcr8jRa2bCqkrYyYceAoJy6i90073NdWQiyIBLnM
+ tSbzuPFr3WEznS8y1C33rn4t4YHP7dqiPY2CU0UwpUebGpkzZ0xV9g7dD6ysySwa+AfIIKs0gR
+ ZMzNGIFJhtgEkGdAdOgTBHXr0DxA3L4gmKeKkWG3EJZpP8fp2l6AeHjrLNKAQAA
+X-Change-ID: 20260317-fw-path-a094c30259a5
+To: Luis Chamberlain <mcgrof@kernel.org>, 
+ Russ Weight <russ.weight@linux.dev>, Danilo Krummrich <dakr@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Michal Grzedzicki <mge@meta.com>, driver-core@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Jeff Layton <jlayton@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1574; i=jlayton@kernel.org;
+ h=from:subject:message-id; bh=WjpyIImVOdHQP0Dp+E2Ymz04BmYIyHTzmlYl/9ZX7Eo=;
+ b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpwVCrXGiCF8c0nqBwd+MereNgitCudLrRl08KZ
+ ZuplYBccQmJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCacFQqwAKCRAADmhBGVaC
+ Fc2uEACNQlOzy3kFGAyK0MaKH/dB9hjxotc1ZjC3sxCM0smJbr0NQV0lla4yfege4UJfYPHGBQY
+ ht2lYo11BrvYTSZ0IuG2U7heOPGo0hgabfJz9P64dlHY8QmFjohFs65zf9cYmFnyivtPCERNxcd
+ nv1U6DO5FZZJBmLMpGO0mD3jvIljZYYNQC3ZqftUOx02h51CLv0aLLREWhI8MKaRr6mOHUKpt0Q
+ 4XHFbbaqO5WtfcH7/jkHD4rfK45LFXJiIGWvsrq0nZPcCgb+lZByaHWci+vMBX1lFY4OxcWnCx6
+ MecqeJHHDDRgNlKGK21ZtNptwZaob0rgwY0/yHliIX8WDG87fzjkKR0M8W+wd+CKbRZseCurJm/
+ s9LtD4tdZyxRmr0lcIyP6AOm/WKMx6CaxVLsTH+dB/Y9BsqXy7lSNHyUE/LwQPdj54sJL5nvYYQ
+ I0hBo3XmrOgK11gcx2vtpXUmkzXOle9OC1QTsVUF82j5FRHcJ2L8fzJMDLsi/g0ZG53pd5rNwTc
+ m0CF36L9VUu6Es5kAFmB6oMi3wGMWfpc8DiYwGDZlsccH2/diRfRNwwFEmlZoY2DyKVINYie3p6
+ qwtgkpMZHfTQzMjYBiPVNcas1z8BjAKScJ8xw9OfCPtcJPAf3uomX+vTI0N3LWXPevJNryIeNTW
+ g92XTue6R8DzWEQ==
+X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
+ fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
 
-2026-03-23, 14:36:30 +0200, Cosmin Ratiu wrote:
-> V4:
-> - Migrated nsim-only macsec tests to Python, usable against real hw.
-> - Ran these tests against both nsim and mlx5.
-> - Gave up on nsim patches since the tests no longer use them.
+This is something Michal had asked for last year, and I just got around
+to implementing. This version also adds some selftests for this
+functionality.
 
-Why not? Being able to test without accessing real HW is still useful.
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+Changes in v5:
+- Increase search= string length from 256 to 4096
+- Preprocess search= path when it's set rather than on every firmware load
+- Add selftests for search= functionality
+- Link to v4: https://lore.kernel.org/r/20260320-fw-path-v4-1-7547e2f0dc64@kernel.org
 
+Changes in v4:
+- Move search path to new search= option that is tried after path=
+- Link to v3: https://lore.kernel.org/r/20260318-fw-path-v3-1-a701a08bc025@kernel.org
+
+Changes in v3:
+- Allow '\' to escape a literal ':' or '\' in the string
+- Link to v2: https://lore.kernel.org/r/20260318-fw-path-v2-1-8a106eb91eb4@kernel.org
+
+Changes in v2:
+- switch to using ':' as path delimiter
+- Link to v1: https://lore.kernel.org/r/20260318-fw-path-v1-1-7884d9bf618f@kernel.org
+
+---
+Jeff Layton (2):
+      firmware_loader: add search= module option for multi-path firmware lookup
+      selftests/firmware: add search path test for firmware_class.search=
+
+ drivers/base/firmware_loader/main.c           | 273 +++++++++++++++++++-------
+ tools/testing/selftests/firmware/Makefile     |   2 +-
+ tools/testing/selftests/firmware/fw_search.sh | 222 +++++++++++++++++++++
+ 3 files changed, 420 insertions(+), 77 deletions(-)
+---
+base-commit: c369299895a591d96745d6492d4888259b004a9e
+change-id: 20260317-fw-path-a094c30259a5
+
+Best regards,
 -- 
-Sabrina
+Jeff Layton <jlayton@kernel.org>
+
