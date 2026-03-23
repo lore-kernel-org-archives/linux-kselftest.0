@@ -1,170 +1,316 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2619388E42
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 12:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774270047; cv=none; b=SFI5sSEGZMvoUzQqvV8bP6ddvw1w5RbhhFYGIevXYpQZHEJpxe87bvkw8wd02FxruEIgjlXB7nbs//9xgGvLIRfnBBVMJZ+8YBO/pLzqdHfEJc/I29Q5reEyuHqSWR9nAlKZX35CNVMeIAWcELWQmsrIpSGSvtRbDt2kXBWTlCY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774270047; c=relaxed/simple;
-	bh=MM2fN5GdnEJYHW9MITbLdhoSmIAOoGWsDFQGNHwaPQw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZLOddv7wvSJO4ymg20ifCzRg7uHWXoky+n6wmOSSaLY35lbLbR3aXB6yGEnUdnEsT6Axp7EAqO1fDLeA6ToOgpkNwXBBCToOFhGRXhlBLvEKC+1YRaKVS4cDjQtXT5BmPX0MuU8NsfZMNndCR3uolfnvJxy8Wi99iDo7skn3HnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bnYGIcN7; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ECtEj5Zr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D381C39C01D
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 13:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774271923; cv=pass; b=aTQFyz+w6KEEuDa6NyCmaHAvoDD0/vVOgZdrOJjfkLnvJ6X/g6cvoVFoGP8B3aB0D8mn9bDin0QkdP766fanfHbZxI+yBDAFjne6N36ZOc+SWCKlY51T3jvsUrICYcNZapmVSPX7WwIbsN7Mh0kBZp3swu+44e+8Sh5CpMuQ0cQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774271923; c=relaxed/simple;
+	bh=7bdy91hL1ZYEEHcEGwZGrniGtxDQRHjnP93e5hnATNw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=McrknlUjztm+LoTP8zsezT0OkedcOZVeNvu0sDQbrLbE/82gq0UbTmS3fwjgZM6wAkSWJiEoBPkiGw9nInymvWreT7efH342Gjctt6SJghIR0gg31itWWXircSlPkyDOkqkdF84W8RNma0jnFhV6Mk+0qAtAZxQKV2fiw+unFkM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=astOx9TF; arc=pass smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bnYGIcN7";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ECtEj5Zr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774270045;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0u4DoGQ4lmcA23oqYqC/015Lk/NUWNVl1j8NoB4BI6w=;
-	b=bnYGIcN7gtT92p2SQKDP4JjCTxItSkv8rsPEdyM9/rh0xqVQLRqYE5E/Msn2WHU7z6cpIz
-	uVSa9IWVx9k+4wHIoiFUGx3MD8n3SC4HWLF8MlapSEuj0PjxuWHp6PuHy3dMZ4rqBlFeFa
-	UZuR2meNwEbtqeEuQSLxjx422bZqB7E=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-611-xWyOYOhCO9OLqdzMeyVfew-1; Mon, 23 Mar 2026 08:47:24 -0400
-X-MC-Unique: xWyOYOhCO9OLqdzMeyVfew-1
-X-Mimecast-MFC-AGG-ID: xWyOYOhCO9OLqdzMeyVfew_1774270043
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-358e425c261so4928692a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 05:47:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="astOx9TF"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-661d20c9787so201325a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 06:18:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774271920; cv=none;
+        d=google.com; s=arc-20240605;
+        b=bUKPBn8hqPN0jR4VVTvk4borqXPH9ZuHw5LHDoJEPY9qPv+nsCAIfF8dNYSxhG1DWW
+         PicpmHq9KZSjsPJjyDBo8ciLMCgf/U6op0R6P8L5svtjFCQ1cl/c8VYE8FPJkU3L5Jc6
+         FETfUrjilQ7U7o4SL+0RfWGKvGha0eY4D8Sq23H2dyR0kGrD37NjALNzfV0Is5mEQGpB
+         ZtH5QMRckh5plxGqhhYZWI3Pow7IdrVQRH6WKXrgx/hWQDOZdr7cymM/L5dgHWz8Myzs
+         ofWKNXLRxi2In2ZsHY0ac6iLgMTC0thhZBb9R5pHui9zQi/Xn9/1L59qYSFnFMl7vE5t
+         jqhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9HAMwL3qwoKn2S7VcNBMq+3HfyX9a7ga1yd+4iK0YxU=;
+        fh=2kTqBUdVrPKBaCpG57qbVFw+QUa1Q8NZnfAxJAlTdOc=;
+        b=Zpz9Z5PkdzJuBPdE3527LyLsxbrN0lwM5rbvFnDobqPaUb7aQLHmQ7+hXNHOXfFiKu
+         Yvxk5/DWi32SlY21SHaZN7Y90jjikm4OEw1C4+AKaQR/qNaiOrf11k+fDS5j+ugTR2w2
+         DD+x+dy4cC5Tat4xYS2W+akhGrjsVf0sfRItamQy60a6yb65W9pX5mdpQQR+8JT9m8S9
+         jgYJvYdxjaAsj+NuwyvuWXpGbjBP7OWlKWotXL4mEKDhD0CO4BOlV7aPMwDEhFBg/xwc
+         oLESQluzzG7B0qEORUU8ObHOj9mSVoOhCbntMN3rUlTsYFFfpQ2QKWauhP46f/GwzZNE
+         nXOw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774270043; x=1774874843; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0u4DoGQ4lmcA23oqYqC/015Lk/NUWNVl1j8NoB4BI6w=;
-        b=ECtEj5ZrLYPHGLb6FNYy9GQIJRSsJu5atQ1K12zR7GX7bOnCb+g4jMlBiXd7zydgRN
-         nNzoY3ryQ8bhyU1CB6eEeFGSPCUiHSyMo795XhY0xWZ/E0Svf3PiE79piQRxC3ofmD4y
-         N3fS3N2yWs3lzonczkFCt+xkJWbF7TVtBTsglAwYjIy6MSl49SfFXosXCgV7I3Cd8fUE
-         ah+DJCn1V8rw8tuhbzV0pPW4ArWpOf6+CcdVk/EyLajoc3ZTKzwnqKp83PcMe4VapQDM
-         1xUEUvvID7LGdm5BGflR7LODM1VWJzuUPZmXahDypSrNKuyKYb7GauMw1XEm8Y1l4SLc
-         5LBA==
+        d=soleen.com; s=google; t=1774271920; x=1774876720; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9HAMwL3qwoKn2S7VcNBMq+3HfyX9a7ga1yd+4iK0YxU=;
+        b=astOx9TFk32XX+SxVcNoeM68tXEJwgTPuMVTMetcNQlavl/zHAt5W6dZypBYJVPtAa
+         vlNUtFgs/HzI03MAgb578iTNaYtXEfg3dcD2ktcwYPLWzZTdnCwPCuaxok8TZJHp/dgr
+         KkYbgkaZWpZIgDi13qje1DoA16ApbjPguFiRCVFgyzbojHv6JCOxYRGDgdSXgWwj+8KG
+         9x2484OTuH98NYh9xC9v3xH4ZIOk6E5JNBehdFOo96N2AFT7nOJi4TiOPVSxFKaFXEjr
+         rn4SkB3rPhH8jvcLoPuQUR9xYYOVQcB5VslT7hpghUa7d+X/1uIqw59EWD2kyKJ+8PfC
+         yXEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774270043; x=1774874843;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0u4DoGQ4lmcA23oqYqC/015Lk/NUWNVl1j8NoB4BI6w=;
-        b=bASJV6VOR1qX8drUWPww3OZ51VE14x4FfJ09dAZhMpphLn4fX7QI4lydKXA2Sl51GT
-         L4S1+zDMRh729fdyQWXQqKcWu0olkVbrebEMwRmbpIIeW61cXPGQTkZBUJzkvOg6lreq
-         1FvlMLQ2CwwNBo0X4hUhBUSPihtHI2u8FU/ECGSc7waySF2XaRtkzkDyWXT2F4pBBlO4
-         ndtGMi5dvBvMeGsnNuds2ocZV6LLQbY/fxuC/Es+jSf/8Mw488yxkVlen+Bo1y2zzloN
-         aJJqduxSDuBBDO/khIC7nz/f3dgYN4pJEUuwIjuLTOSt0NkGorwRdvBEETkLfiYubJnA
-         RvOA==
-X-Forwarded-Encrypted: i=1; AJvYcCULt0XL8oCGXPfb+V5GFLNtowWxuvkaYcec1ZYb3SEZYSlsKUaCcLN3XGf63i4TG2uHI8m7ZfAEh0XpqrtwwU8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWnkz73tLdgjxA4IeGYIGGmk1kekT7bTO43dtbzjl6UuW96lPe
-	zlJZYHVF00ZL8E34hP9ca5HncU/2aVvOuo2SOCThPs6/kauB2nw2Of2j0WhI+RoYHDjO1MayTd8
-	qX1Fo3JOBW3kBZERPcLUSa48kCzDTT/MtZe4xgryV4VobXCT/Xt5dW7DK8OI5iMSKbMbgag==
-X-Gm-Gg: ATEYQzzur/GGZPmarZU5nwShArfOAfi7HOInaV8giYJCdTuXY5lT72+vQ7N9tv+HOG8
-	+8NGR8DM3oUyLtk00DZx4q0X9eFSHcFV/l3RAAe7qnIDrMQrMaAgvsKDiJ1LU5RPHQFblQ9pFuM
-	z/8r88KYPJFEABl7ZyKJbyrOWSjOSmeCHFBtKu7Pzthp99twm2gDJqzMWCAyo5Uj/GELHdIvdr4
-	bXBKDTztRs2U6YfheWTGViZBskZvEgvn3R0f6P/1NuQRG+pg5qQ8f8C6wWBB+ByZcAW07R2lMnM
-	sAVXu4nBCurJonETLBmfqIvlH7RICzwOS7ZoOKU1PZPi1fl3GBIwv9OHaA0KUJNERjFZ1jWkpk5
-	O24YkMI0c9rPek8ZWCg==
-X-Received: by 2002:a17:90a:1c0f:b0:35b:e4d8:bb10 with SMTP id 98e67ed59e1d1-35be4d8bc7fmr3116819a91.14.1774270043239;
-        Mon, 23 Mar 2026 05:47:23 -0700 (PDT)
-X-Received: by 2002:a17:90a:1c0f:b0:35b:e4d8:bb10 with SMTP id 98e67ed59e1d1-35be4d8bc7fmr3116793a91.14.1774270042836;
-        Mon, 23 Mar 2026 05:47:22 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08366b9aesm141494025ad.58.2026.03.23.05.47.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 05:47:22 -0700 (PDT)
-Date: Mon, 23 Mar 2026 20:47:20 +0800
-From: Li Wang <liwang@redhat.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	James Houghton <jthoughton@google.com>,
-	Sebastian Chlad <sebastianchlad@gmail.com>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
-Subject: Re: [PATCH v2 2/7] memcg: Scale down MEMCG_CHARGE_BATCH with
- increase in PAGE_SIZE
-Message-ID: <acE2WDuto9cdp5Lx@redhat.com>
-References: <20260320204241.1613861-1-longman@redhat.com>
- <20260320204241.1613861-3-longman@redhat.com>
+        d=1e100.net; s=20251104; t=1774271920; x=1774876720;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9HAMwL3qwoKn2S7VcNBMq+3HfyX9a7ga1yd+4iK0YxU=;
+        b=PaFot2q9cl4cqXyBZAUoIJ+sakTVf8CVRIUbUyTTcEitKb1SwPrvxZkMUk8PSfKXod
+         VNOMJYFIxsBTRK3/r1LwJO2IX5aqmjBaY66Ha5OdGX0ogfwPfkUuNwTeQeB8ZVCLGazh
+         ydJvkIru8vzZlkcQfvVSVV4lVtixqBzIHpbSah4X+jQVcjhLyXMWV4AOx47iBXNCQTWn
+         89DkGnbj5k+wUUim4Z0aSBDwOVCMnaG65Uanuf4/BCu+52t9EaZNwhCkeIOui8FdJ4py
+         f0aFi75L2l2o/UsVAtGnMJMtBG7MPspHgyu7YNelu1+TyuAo2FI3m8VzEM5Nig7Nf70z
+         rDLg==
+X-Gm-Message-State: AOJu0YzqTE89AWiD1awVIRG08QV6FcrrCayYskk9mwAuDH+vZ/54Vr7m
+	AGlCdMZsFR+Ov3Nzl2km8ywkRqPaXzJX88pU4Z942CmJllh7576rpgjmMHiGrfncE34i80fPXsH
+	MLYJHQacHRPz3PjWr0O+5fE/CDplp/7NVau6JmVKOpQ==
+X-Gm-Gg: ATEYQzyqBXq2v5vPK+RU/COk+2l5b6KI5nAszIpIHwa1Srlf0sgfrgqM4U3ytmjSVUs
+	+FYBlw8q1+GVV6K+ZYBMrfowZDxrG2hrjseFHl+zncFz0zZwtRluQ+AhkayZXNSQeSje8hR2Rt7
+	39c1jWeFp7FxVg5bFXeERYzM6sxqqiPGMiIzy+X9LXY0Zqj2ZrRE6x5vYRI0v4dzzQQbLJrvo3g
+	0cI2Tw+ljNkXdx6hhuOJJ7/+jpuG/DuNZkc9RxB3ClN82+1I+Tur7tlrTLTmiOXiGY2kl3eQivj
+	M43SClfWfLLWTCnLlHDKJBzfc6sCX7Eos8BQUw==
+X-Received: by 2002:a05:6402:5287:b0:668:58b6:505c with SMTP id
+ 4fb4d7f45d1cf-668c9b3b2famr8334029a12.30.1774271919886; Mon, 23 Mar 2026
+ 06:18:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260320204241.1613861-3-longman@redhat.com>
+References: <20260321175808.57942-1-pasha.tatashin@soleen.com>
+ <20260321175808.57942-2-pasha.tatashin@soleen.com> <CA+CK2bD2aNu-NByET4KkBP0n2j8WQE2zjxb4g-1cv2hYfjaRZQ@mail.gmail.com>
+ <20260323-leibhaftig-blasinstrument-58ec408b3c40@brauner>
+In-Reply-To: <20260323-leibhaftig-blasinstrument-58ec408b3c40@brauner>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Mon, 23 Mar 2026 09:18:03 -0400
+X-Gm-Features: AQROBzAqhjlsVN_c2OBjl5062LhFhC93S4akUrZBBBRdg0y4aoik88cM1Nzn6lE
+Message-ID: <CA+CK2bC6S7pFCYR0XS1ZPxw9HKjWgxy=0DkszYNjMUi735o_1Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] liveupdate: prevent double management of files
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, jack@suse.cz, 
+	shuah@kernel.org, linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org, 
+	linux-mm@kvack.org, viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org, 
+	dmatlack@google.com, pratyush@kernel.org, skhawaja@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 20, 2026 at 04:42:36PM -0400, Waiman Long wrote:
-> For a system with 4k page size, each percpu memcg_stock can hide up
-> to 256 kbytes of memory with the current MEMCG_CHARGE_BATCH value of
-> 64. For another system with 64k page size, that becomes 4 Mbytes. This
-> hidden charges will affect the accurary of the memory.current value.
-> 
-> This MEMCG_CHARGE_BATCH value also controls how often should the
-> memcg vmstat values need flushing. As a result, the values reported
-> in memory.stat cgroup control files are less indicative of the actual
-> memory consumption of a particular memory cgroup when the page size
-> increases from 4k.
-> 
-> This problem can be illustrated by running the test_memcontrol
-> selftest. Running a 4k page size kernel on a 128-core arm64 system,
-> the test_memcg_current_peak test which allocates a 50M anonymous memory
-> passed. With a 64k page size kernel on the same system, however, the
-> same test failed because the "anon" attribute of memory.stat file might
-> report a size of 0 depending on the number of CPUs the system has.
-> 
-> To solve this inaccurate memory stats problem, we need to scale down
-> the amount of memory that can be hidden by reducing MEMCG_CHARGE_BATCH
-> when the page size increases. The same user application will likely
-> consume more memory on systems with larger page size and it is also
-> less efficient if we scale down MEMCG_CHARGE_BATCH by too much.  So I
-> believe a good compromise is to scale down MEMCG_CHARGE_BATCH by 2 for
-> 16k page size and by 4 with 64k page size.
-> 
-> With that change, the test_memcg_current_peak test passed again with
-> the modified 64k page size kernel.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  include/linux/memcontrol.h | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index 70b685a85bf4..748cfd75d998 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -328,8 +328,14 @@ struct mem_cgroup {
->   * size of first charge trial.
->   * TODO: maybe necessary to use big numbers in big irons or dynamic based of the
->   * workload.
-> + *
-> + * There are 3 common base page sizes - 4k, 16k & 64k. In order to limit the
-> + * amount of memory that can be hidden in each percpu memcg_stock for a given
-> + * memcg, we scale down MEMCG_CHARGE_BATCH by 2 for 16k and 4 for 64k.
->   */
-> -#define MEMCG_CHARGE_BATCH 64U
-> +#define MEMCG_CHARGE_BATCH_BASE  64U
-> +#define MEMCG_CHARGE_BATCH_SHIFT ((PAGE_SHIFT <= 16) ? (PAGE_SHIFT - 12)/2 : 2)
-> +#define MEMCG_CHARGE_BATCH	 (MEMCG_CHARGE_BATCH_BASE >> MEMCG_CHARGE_BATCH_SHIFT)
->  
->  extern struct mem_cgroup *root_mem_cgroup;
+On Mon, Mar 23, 2026 at 7:55=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> On Sat, Mar 21, 2026 at 09:04:53PM -0400, Pasha Tatashin wrote:
+> > On Sat, Mar 21, 2026 at 1:58=E2=80=AFPM Pasha Tatashin
+> > <pasha.tatashin@soleen.com> wrote:
+> > >
+> > > Currently, LUO does not prevent the same file from being managed twic=
+e
+> > > across different active sessions.
+> > >
+> > > Add a new i_state flag I_LUO_MANAGED and update luo_preserve_file()
+> > > to check and set this flag when a file is preserved, and clear it in
+> > > luo_file_unpreserve_files() when it is released.
+> > >
+> > > Additionally, set this flag in luo_retrieve_file() after a file is
+> > > successfully restored in the new kernel, and clear it in
+> > > luo_file_finish() when the LUO session is finalized.
+> > >
+> > > This ensures that the same file (inode) cannot be managed by multiple
+> > > sessions. If another session attempts to preserve an already managed
+> > > file, it will now fail with -EBUSY.
+> > >
+> > > Acked-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+> > > Acked-by: Jan Kara <jack@suse.cz>
+> > > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > > ---
+> > >  include/linux/fs.h           |  5 ++++-
+> > >  kernel/liveupdate/luo_file.c | 27 ++++++++++++++++++++++++---
+> > >  2 files changed, 28 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > > index 23f36a2613a3..692a8be56f3c 100644
+> > > --- a/include/linux/fs.h
+> > > +++ b/include/linux/fs.h
+> > > @@ -712,6 +712,8 @@ is_uncached_acl(struct posix_acl *acl)
+> > >   * I_LRU_ISOLATING     Inode is pinned being isolated from LRU witho=
+ut holding
+> > >   *                     i_count.
+> > >   *
+> > > + * I_LUO_MANAGED       Inode is being managed by a live update sessi=
+on.
+> > > + *
+> > >   * Q: What is the difference between I_WILL_FREE and I_FREEING?
+> > >   *
+> > >   * __I_{SYNC,NEW,LRU_ISOLATING} are used to derive unique addresses =
+to wait
+> > > @@ -744,7 +746,8 @@ enum inode_state_flags_enum {
+> > >         I_CREATING              =3D (1U << 15),
+> > >         I_DONTCACHE             =3D (1U << 16),
+> > >         I_SYNC_QUEUED           =3D (1U << 17),
+> > > -       I_PINNING_NETFS_WB      =3D (1U << 18)
+> > > +       I_PINNING_NETFS_WB      =3D (1U << 18),
+> > > +       I_LUO_MANAGED           =3D (1U << 19),
+> > >  };
+> > >
+> > >  #define I_DIRTY_INODE (I_DIRTY_SYNC | I_DIRTY_DATASYNC)
+> > > diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_fil=
+e.c
+> > > index 5acee4174bf0..86911beeff71 100644
+> > > --- a/kernel/liveupdate/luo_file.c
+> > > +++ b/kernel/liveupdate/luo_file.c
+> > > @@ -248,6 +248,7 @@ static bool luo_token_is_used(struct luo_file_set=
+ *file_set, u64 token)
+> > >   * Context: Can be called from an ioctl handler during normal system=
+ operation.
+> > >   * Return: 0 on success. Returns a negative errno on failure:
+> > >   *         -EEXIST if the token is already used.
+> > > + *         -EBUSY if the file descriptor is already preserved by ano=
+ther session.
+> > >   *         -EBADF if the file descriptor is invalid.
+> > >   *         -ENOSPC if the file_set is full.
+> > >   *         -ENOENT if no compatible handler is found.
+> > > @@ -276,6 +277,14 @@ int luo_preserve_file(struct luo_file_set *file_=
+set, u64 token, int fd)
+> > >         if (err)
+> > >                 goto  err_fput;
+> > >
+> > > +       scoped_guard(spinlock, &file_inode(file)->i_lock) {
+> > > +               if (inode_state_read(file_inode(file)) & I_LUO_MANAGE=
+D) {
+> > > +                       err =3D -EBUSY;
+> > > +                       goto err_free_files_mem;
+> > > +               }
+> > > +               inode_state_set(file_inode(file), I_LUO_MANAGED);
+> > > +       }
+> > > +
+> > >         err =3D -ENOENT;
+> > >         list_private_for_each_entry(fh, &luo_file_handler_list, list)=
+ {
+> > >                 if (fh->ops->can_preserve(fh, file)) {
+> > > @@ -286,11 +295,11 @@ int luo_preserve_file(struct luo_file_set *file=
+_set, u64 token, int fd)
+> > >
+> > >         /* err is still -ENOENT if no handler was found */
+> > >         if (err)
+> > > -               goto err_free_files_mem;
+> > > +               goto err_unpreserve_inode;
+> > >
+> > >         err =3D luo_flb_file_preserve(fh);
+> > >         if (err)
+> > > -               goto err_free_files_mem;
+> > > +               goto err_unpreserve_inode;
+> > >
+> > >         luo_file =3D kzalloc_obj(*luo_file);
+> > >         if (!luo_file) {
+> > > @@ -320,6 +329,9 @@ int luo_preserve_file(struct luo_file_set *file_s=
+et, u64 token, int fd)
+> > >         kfree(luo_file);
+> > >  err_flb_unpreserve:
+> > >         luo_flb_file_unpreserve(fh);
+> > > +err_unpreserve_inode:
+> > > +       scoped_guard(spinlock, &file_inode(file)->i_lock)
+> > > +               inode_state_clear(file_inode(file), I_LUO_MANAGED);
+> > >  err_free_files_mem:
+> > >         luo_free_files_mem(file_set);
+> > >  err_fput:
+> > > @@ -363,6 +375,9 @@ void luo_file_unpreserve_files(struct luo_file_se=
+t *file_set)
+> > >                 luo_file->fh->ops->unpreserve(&args);
+> > >                 luo_flb_file_unpreserve(luo_file->fh);
+> > >
+> > > +               scoped_guard(spinlock, &file_inode(luo_file->file)->i=
+_lock)
+> > > +                       inode_state_clear(file_inode(luo_file->file),=
+ I_LUO_MANAGED);
+> > > +
+> > >                 list_del(&luo_file->list);
+> > >                 file_set->count--;
+> > >
+> > > @@ -609,6 +624,9 @@ int luo_retrieve_file(struct luo_file_set *file_s=
+et, u64 token,
+> > >         *filep =3D luo_file->file;
+> > >         luo_file->retrieve_status =3D 1;
+> > >
+> > > +       scoped_guard(spinlock, &file_inode(luo_file->file)->i_lock)
+> > > +               inode_state_set(file_inode(luo_file->file), I_LUO_MAN=
+AGED);
+> > > +
+> > >         return 0;
+> > >  }
+> > >
+> > > @@ -701,8 +719,11 @@ int luo_file_finish(struct luo_file_set *file_se=
+t)
+> > >
+> > >                 luo_file_finish_one(file_set, luo_file);
+> > >
+> > > -               if (luo_file->file)
+> > > +               if (luo_file->file) {
+> > > +                       scoped_guard(spinlock, &file_inode(luo_file->=
+file)->i_lock)
+> > > +                               inode_state_clear(file_inode(luo_file=
+->file), I_LUO_MANAGED);
+> > >                         fput(luo_file->file);
+> > > +               }
+> > >                 list_del(&luo_file->list);
+> > >                 file_set->count--;
+> > >                 mutex_destroy(&luo_file->mutex);
+> > > --
+> > > 2.43.0
+> > >
+> >
+> > > Sashiko: https://sashiko.dev/#/patchset/20260321175808.57942-1-pasha.=
+tatashin@soleen.com
+> >
+> > Sashiko reported two problems:
+> >
+> > 1. Are there any issues with mixing goto-based error handling and scope=
+-based
+> > cleanups like scoped_guard() in the same function?
+> >
+> > Initially, I thought that there should not be any problems, however,
+> > after looking this up  I found in include/linux/cleanup.h the
+> > following comment:
+> >
+> >  * Lastly, given that the benefit of cleanup helpers is removal of
+> >  * "goto", and that the "goto" statement can jump between scopes, the
+> >  * expectation is that usage of "goto" and cleanup helpers is never
+> >  * mixed in the same function.
+>
+> There's a compile-time switch you might want to turn on when
+> test-compiling code like this. I forget exactly what it is. Something
+> like jump-over-uninit or something.
+>
+> >
+> > Well, good to know, will not use goto inside scoped_guards.
+> >
+> > 2. Additionally, does setting I_LUO_MANAGED on the inode break the pres=
+ervation
+> > of anonymous inodes? Many file types (like eventfd, epoll, timerfd,
+> > signalfd)
+> >
+> > This is actually a very good point. It looks like everyone who uses
+> > anon_inode_getfd() has one shared inode. This is not a problem for the
+> > existing LUO user memfd, or for the upcoming vfiofd and memfd, but
+> > kvm-vmfd and kvm-cpufd also use it, and that might be a problem in the
+> > future once we add support for Orphaned VMs.
+> >
+> > Therefore, we have two choices: either use a hash table, which adds
+> > performance and memory overhead, or delegate this double-check to the
+> > LUO file handlers, as they can use a private context to know if the FD
+> > is already preserved.
+>
+> So, I'm not happy about I_LUO_MANAGED. I don't think we need driver
+> specific stuff in struct inode and not in i_state. Track this in the
+> driver please. I don't want this precedent and I'd rather have you get
 
-Reviewed-by: Li Wang <liwang@redhat.com>
+I am planning to use an xarray in the next version.
 
--- 
-Regards,
-Li Wang
+> used to implementing such things in the driver right away rather than
+> offloading this on general infrastructure. If we let this slide struct
+> inode will be 2MB 1 in year.
 
+Claiming that a single flag bit precedent would cause the overall
+struct to grow by 2MB in a year is a slight exaggeration. :-)
+
+Pasha
