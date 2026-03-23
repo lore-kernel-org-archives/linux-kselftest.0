@@ -1,228 +1,275 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E783D47C7
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 18:39:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774291169; cv=none; b=uiL9zc8PQOMmX8W5sa+ByEUuMfaPE4j9L4wDix0sZSCVU925lJyeL7O5dcM2Kx10wubZuWLwQWOkNzHHF4JMYh98bJOLSrIZCvnUWDtzJkI4ytH05Fk+FTeptKl1fcImLFKpxRuQaBw+0xi27L3F14mDgJkgfSzzHGVJgWjCdu0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774291169; c=relaxed/simple;
-	bh=S62nqp/L7oaBVz+l0EkYVc7w8PWzqc5mHLXWWDxhwe8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PSuADbVWWHSMe+t0D4DHR/iYbElWDeB80w4FBHeeSt+wGC8fmI0kkUAwalyzCSONBgdOPjk5TDEz627ShGr5OiLdUgkJz5/cfZoBg8Yxh3W6T+tOVh9M5t+edUCBbXceJuDusJ2LzY7xOQZe4o87dAusB1WH1kjq/1vq8RVDq1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=xppXZ4ua; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A6E2F747A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 18:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774291416; cv=pass; b=fSXHkGNK/U1Rl9OYAWevd2kgQOcbYVDWdFi0DhKtyoMA1QcmwX97xcCcdJ2oMl4h0LuIwKQPFi/5X4Ewf14ns73cVPrcfcLZHYu9j/CltWAvr+14kQ9ctyddfd4a0A94oCLRa6xIiiq5jzI+2fB/+HrGl/G0Fz1u0j+Kva+uX6A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774291416; c=relaxed/simple;
+	bh=8iR09lTQ4Edfh1UQkmolcFNIjMuLzSLKVF5JEj/9nwQ=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XkYUhvRKChiCZzaAvBqKA3Ka05geBJgnCZGGvmIbxer6y3qOxbmjfOEuyC108Ha8NlprujmYBPjtt0G6NvGWXBA05ysF/GTuK/yDXr2xphVOAPco3C3UFJASza14Nm2ZPnHuPSwb9T59/r2+muVjDpzXG2Z67q4dhY66k9jVSzw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BFE/MqnH; arc=pass smtp.client-ip=209.85.221.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="xppXZ4ua"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2b04d051664so38882015ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 11:39:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BFE/MqnH"
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-56cc6fe8815so1895965e0c.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 11:43:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774291413; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UPKHSV85FB6HDSLIjOGlQc53pOw46ZoDqxiUW5bL9eQHveuXAwytV0vGT4E5GvqLUe
+         E7+aYf9axpZqyf1kpZPhr/Vx/qQtQ6cgWoVaoiHFlEo3N2PKFdYeVXoLlgagWvMpFnyY
+         LFFtRsDCcJbKhQ8eD5+ktWZYMiQieDjGWAWve18korAc3RIZVXaNsoaFgn9C0jd3swXb
+         YUyPGKCVghvehkm/VI0yjVWXDjf07/JfqkuqD1ABFMHMgRkVi22npGEdyQpOv2dK7P8s
+         5ipjdZRBl/6N7CmQ2tANStmg2xbETRSYFzIbpE2KfQC4F04yS3025kJxXIPjVxRb6rrb
+         zb3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=jJ1uKbr2A9AcnUKDcibCUYQIsuprIaoAVD4N5Jh2tIQ=;
+        fh=2O0r4m6vwUsESZhyJOaPKsWwieTLfKWzcBMuJtQiUEI=;
+        b=PzNzAnQ/HbB9r/vNax1pkIKLOPLQ+eFPLC4V8LP9CscWx9DHVPZ/ZTV7LHLp600OPC
+         GqOrNS2gq77jZ+dF4VaQwsKIPHRXnl7fQmIukQNQi/q6qNC4ReD4EtYcUbuxDMz3PBab
+         D+u5F8NoaN1criZMyXnzYPCPZArBI6DzUE8r8syLxfP0Z3CaPEYfsQykd9UikQ1x7S+C
+         KuzW6t3XtTTPKi1KEvgy7/o8rMkEg1aHoZNO+iRixPU9jsrkRj5+V/uFSl4RdPhPzz5n
+         hntfdkXCtmnsG2ZwKn7n327QEoPdtZUt1jE4pihb25a/RdEAnyZWfwbsPdX36itC9ObY
+         yqFQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1774291162; x=1774895962; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r9OKWh4GFeDrs3iW8vGT1OneAtu45dtpNVuW7lfnaEs=;
-        b=xppXZ4ua4pxk8tMDyUkC3S54I/nOd1N/VghTIbTBuj01dRaqzm+Ihm84NQviGM7Qul
-         MvwIDizEeJnshNWkJ+L2Uo7IQtgrn12dYUdoynJrIiRndZVZZvPppHQY5jCphGpqZxAj
-         Txn9fiJjJw3g4sC4u93RaOPOo5o8qH4bG8hGTrtAEaV6OHqRnweoIEkKBk46bKcgdl1j
-         thAPEvR3Nih/IId/T7NbIwJnRQ5Vx61LsGxsdZa3bfTa2IxSOf35d5l4gHTG/ESbW1Vm
-         Jr6vK3War8+7cXoH8/UbzKGc7FOxHix3lcxCntOwIApG+RCW3UVtGNU8yyA5+n/UFzPW
-         OKWQ==
+        d=google.com; s=20251104; t=1774291413; x=1774896213; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJ1uKbr2A9AcnUKDcibCUYQIsuprIaoAVD4N5Jh2tIQ=;
+        b=BFE/MqnHyJEb2bXhOAAC42up0lIIBMrfoEaUX8sgL/fCQ+OsWy9jEUrxjg9bcJmPoy
+         fFh8bXLK5ID3vOGVhKEVc7GAF51PL1t9OKV3RWP9X5s8vEosDUsRJlD3uvkHsm8gQJq2
+         yLHP8cRadcr3bXcEbThsxn/zkicUhrGIYaE6OdJ72LqX74hGBAw25CKruf7r9f4qNORH
+         sjBANVlN4x99JT3IOFRxsfjxUDwhL7j/ysJO/DTg5EQHHCWh0q2njy/Tk2gB0a9h0PTK
+         0OzzbUqBAFPI16UIfWf3j6fxHMwr0c5rjIDHEfL9KU6Ipera8Z+VPiV3ARshGnuLrl83
+         3Plw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774291162; x=1774895962;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=r9OKWh4GFeDrs3iW8vGT1OneAtu45dtpNVuW7lfnaEs=;
-        b=gGDQBS8qieX70w4mELyfca8cX/ISnH9sIf9s7PtDlg5tE6UxBzGzW5LaUnMQ8bXDOx
-         6cVULJf921UXJlFjBqPIpJDeJtCpHPH4I93QT6A15pj0w1eFZH0cn9xQv/iFxbxWsNO0
-         4yDsoAPjlTa/8/HaU3G/whgOSC0N6wbAUOW0BVs+VJRxhqUm+/oliuSYl+aQLzD/+hj/
-         WWotSK/9rgIgAZtkCzlwxQ+28fk91DJaizUT2IgJTFl3MagQa0OqA9ubjrfEdlv1jEBH
-         5qlQgVq6tqcwEIo/bybeSjboYmjYnZH0TIfGMS9K3OpynRbazUXjRGSabJ9BO7exadak
-         VxaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAmHtRh1mOVA0NMx3sEO4hx/aNKqX/Cgg5wkYEIAWNmuF2tB+RJatO2+l+xbIx3aimDU5CTp53WLYAdsG+twQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx18LiIuFYVDUXTND/3MAhznByf3rK/sGD894DBbp0xNcUXg+hm
-	8BausPRcNiZ2I5GSK6v9VUqhYyZoiYNAEPaUSCUvUEtj91zweDxBVQ9pZURbZUT8Eh8=
-X-Gm-Gg: ATEYQzw0X1giQT8kPBxkYAmf3/yfcBazgKAvNqllFKUsCNmRSkEbZlgSVABMgG2S8K5
-	hAY0f1uPowJJtnza+3LpmMhFmVqf5b+MnuseaYh63TN1T+4unAGTYbz2yn6CdN7ZPYOFYDjiu8h
-	7FWkke3qK5/3Ej5COUBFjse7YTEXcFTRGLJ1lXnfOY8azRvkYFj6jRoyBCeBR/KO17L9W41o8QY
-	3HZNn3BZyNH0ifbsoc7dKQavCPfjfYf4Wgu+95nol0ujGhVVJQmvw84U45W4dJrmP9FrZo3nH5c
-	wEMlfzCqCBD69ABUJrAj6IyuaT+4t6dJp8aMhCcwuzk9XF8mZa2UkEtH2xVdhz8ihjHX2zKyENj
-	ZA+L15D3nUJabrmCKzRByggrZ+KrBingCAfRCudTonA2zch5c89w9mxYxa5iHAYhJzIbVDWlv+p
-	ImPJA=
-X-Received: by 2002:a17:902:f548:b0:2ae:c529:a13f with SMTP id d9443c01a7336-2b0826f5528mr122156715ad.14.1774291162408;
-        Mon, 23 Mar 2026 11:39:22 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:1::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b083516908sm149199255ad.1.2026.03.23.11.39.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 11:39:22 -0700 (PDT)
-From: Joe Damato <joe@dama.to>
-To: netdev@vger.kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: horms@kernel.org,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	linux-kernel@vger.kernel.org,
-	leon@kernel.org,
-	Joe Damato <joe@dama.to>,
-	linux-kselftest@vger.kernel.org
-Subject: [net-next v5 12/12] selftests: drv-net: Add USO test
-Date: Mon, 23 Mar 2026 11:38:37 -0700
-Message-ID: <20260323183844.3146982-13-joe@dama.to>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260323183844.3146982-1-joe@dama.to>
-References: <20260323183844.3146982-1-joe@dama.to>
+        d=1e100.net; s=20251104; t=1774291413; x=1774896213;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jJ1uKbr2A9AcnUKDcibCUYQIsuprIaoAVD4N5Jh2tIQ=;
+        b=HM1Cfu0zLQDND39hT+VgJ44VdjyocmWTAiOB6umFyS8122nNZCFGavLg18n2yxOsTZ
+         fxAUUx0zz60cm80/3z1xn2zTJaJrnt68zO6TsObMzEfO4V9mT281us7bW8F6lqhPYMDt
+         M0gAKGjl0dRug9uVBRTMZF2m1m2vAHL3qV08kvarTefGV7PZSqNr6ibRmXXeKV1VKsVa
+         28rEgq7OJeiIi+uFmc8koZSsoO0nnQevJ5yLBdFz6ooAG6S5IletnPjI+C2OL+C1G0We
+         1KD+acLMR8RLI0wGJdewxVosD+pCWuz2Q9Dtd+DnMhq/oG02vMpt/RnKvPaN7LHxRqo1
+         4K9w==
+X-Forwarded-Encrypted: i=1; AJvYcCU1d9Xef+SShHJOdp3QHIVbwWGPPLD+RRoEv6bikHTRVHUxda7f9TXcS9HjAflqhi56NAB2nUW0nSS/Ifts5JU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykWDW+uXNDofI1KU62dsOCnerQzxcVK+LGJnix33eaXxbyh1LK
+	PkgPUrh7+AHV0nqsUCk3BWp0zR66tnCgXuzDX/HB1FndS3+Jub3qNI2/t5cvNiyMD3h4wTUSH9s
+	sZVa9iOSzyHDJliNX8uA7B6vnhOLGqxMGK427irfC
+X-Gm-Gg: ATEYQzyZe/9W2KEw6K7f5HUQUgmQoCPferpBCbTrexkNmY1GlqiVcMp9E2N5ClAq+Jt
+	ckI0mVZIj2cq3I8G+nLba8w4zHpjPFDQqzJfgAHzyJpoNnkrteT1TssVbuYfB96u0gxIYgvVVdh
+	3vXBa2+24VRjvVfIehJyl7VVwHkW/0zeyvdGHEPk3hdj/Z/3WQ+uFdcqR5fA0dSKqqTwIMmKerQ
+	GYGEBeYU+cyOjawwNYsk/eqMLVRNs6okm8ueBOF1qvN8UPeoX0iti+XF6yOOVxB9yNh+XAh5fR9
+	gSm0g+bCyig3ZGt22vTSjnCkfNoLoKU+NfWCv3t1kppVoipT93Awxs4rK7utdNRp7Og+Ag==
+X-Received: by 2002:a05:6122:3c54:b0:566:2711:d8ab with SMTP id
+ 71dfb90a1353d-56cde344094mr6273796e0c.6.1774291412097; Mon, 23 Mar 2026
+ 11:43:32 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 23 Mar 2026 11:43:31 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 23 Mar 2026 11:43:31 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20260317141031.514-3-kalyazin@amazon.com>
+References: <20260317141031.514-1-kalyazin@amazon.com> <20260317141031.514-3-kalyazin@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Mon, 23 Mar 2026 11:43:31 -0700
+X-Gm-Features: AQROBzAKG1Xpk4hVDWY3sqqSXNvIKws3qrAExzeSImrnNlU_ii0wYSbiIV_SQDw
+Message-ID: <CAEvNRgEFBexkZCjOMFHJRQFHOpiUezD2jbfDVFrGhYXODdpMjg@mail.gmail.com>
+Subject: Re: [PATCH v11 02/16] set_memory: add folio_{zap,restore}_direct_map helpers
+To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "kernel@xen0n.name" <kernel@xen0n.name>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>, 
+	"joey.gouly@arm.com" <joey.gouly@arm.com>, "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, 
+	"yuzenghui@huawei.com" <yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>, 
+	"mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>, 
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org" <willy@infradead.org>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>, 
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "vbabka@kernel.org" <vbabka@kernel.org>, 
+	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, 
+	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
+	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
+	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>, 
+	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
+	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>, 
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>, 
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>, 
+	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>, 
+	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org" <kas@kernel.org>, 
+	"coxu@redhat.com" <coxu@redhat.com>, "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, 
+	"yosry@kernel.org" <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>, 
+	"maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com" <tabba@google.com>, 
+	"prsampat@amd.com" <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>, 
+	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>, 
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, 
+	"alex@ghiti.fr" <alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, 
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>, 
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>, 
+	"hca@linux.ibm.com" <hca@linux.ibm.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>, 
+	"pjw@kernel.org" <pjw@kernel.org>, 
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
+	"thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>, 
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>, 
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>, 
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com" <urezki@gmail.com>, 
+	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>, 
+	"gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>, 
+	"jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>, 
+	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>, 
+	"rafael@kernel.org" <rafael@kernel.org>, "vannapurve@google.com" <vannapurve@google.com>, 
+	"jackmanb@google.com" <jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, 
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack" <jackabt@amazon.co.uk>, 
+	"Itazuri, Takahiro" <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Add a simple test for USO. Can be used with netdevsim or real hardware.
-Tests both ipv4 and ipv6 with several full segments and a partial
-segment.
+"Kalyazin, Nikita" <kalyazin@amazon.co.uk> writes:
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
-Signed-off-by: Joe Damato <joe@dama.to>
----
- v5:
-   - Added Pavan's Reviewed-by. No functional changes.
+> From: Nikita Kalyazin <kalyazin@amazon.com>
+>
+> Let's provide folio_{zap,restore}_direct_map helpers as preparation for
+> supporting removal of the direct map for guest_memfd folios.
+> In folio_zap_direct_map(), flush TLB to make sure the data is not
+> accessible.
+>
+> The new helpers need to be accessible to KVM on architectures that
+> support guest_memfd (x86 and arm64).
+>
+> Direct map removal gives guest_memfd the same protection that
+> memfd_secret does, such as hardening against Spectre-like attacks
+> through in-kernel gadgets.
+>
+> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+> ---
+>  include/linux/set_memory.h | 13 ++++++++++++
+>  mm/memory.c                | 42 ++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 55 insertions(+)
+>
+> diff --git a/include/linux/set_memory.h b/include/linux/set_memory.h
+> index 1a2563f525fc..24caea2931f9 100644
+> --- a/include/linux/set_memory.h
+> +++ b/include/linux/set_memory.h
+> @@ -41,6 +41,15 @@ static inline int set_direct_map_valid_noflush(const void *addr,
+>  	return 0;
+>  }
+>
+> +static inline int folio_zap_direct_map(struct folio *folio)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void folio_restore_direct_map(struct folio *folio)
+> +{
+> +}
+> +
+>  static inline bool kernel_page_present(struct page *page)
+>  {
+>  	return true;
+> @@ -57,6 +66,10 @@ static inline bool can_set_direct_map(void)
+>  }
+>  #define can_set_direct_map can_set_direct_map
+>  #endif
+> +
+> +int folio_zap_direct_map(struct folio *folio);
+> +void folio_restore_direct_map(struct folio *folio);
+> +
+>  #endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
+>
+>  #ifdef CONFIG_X86_64
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 07778814b4a8..cab6bb237fc0 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -78,6 +78,7 @@
+>  #include <linux/sched/sysctl.h>
+>  #include <linux/pgalloc.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/set_memory.h>
+>
+>  #include <trace/events/kmem.h>
+>
+> @@ -7478,3 +7479,44 @@ void vma_pgtable_walk_end(struct vm_area_struct *vma)
+>  	if (is_vm_hugetlb_page(vma))
+>  		hugetlb_vma_unlock_read(vma);
+>  }
+> +
+> +#ifdef CONFIG_ARCH_HAS_SET_DIRECT_MAP
+> +/**
+> + * folio_zap_direct_map - remove a folio from the kernel direct map
+> + * @folio: folio to remove from the direct map
+> + *
+> + * Removes the folio from the kernel direct map and flushes the TLB.  This may
+> + * require splitting huge pages in the direct map, which can fail due to memory
+> + * allocation.
+> + *
+> + * Return: 0 on success, or a negative error code on failure.
+> + */
+> +int folio_zap_direct_map(struct folio *folio)
+> +{
+> +	const void *addr = folio_address(folio);
+> +	int ret;
+> +
+> +	ret = set_direct_map_valid_noflush(addr, folio_nr_pages(folio), false);
+> +	flush_tlb_kernel_range((unsigned long)addr,
+> +			       (unsigned long)addr + folio_size(folio));
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_FOR_MODULES(folio_zap_direct_map, "kvm");
+> +
+> +/**
+> + * folio_restore_direct_map - restore the kernel direct map entry for a folio
+> + * @folio: folio whose direct map entry is to be restored
+> + *
+> + * This may only be called after a prior successful folio_zap_direct_map() on
+> + * the same folio.  Because the zap will have already split any huge pages in
+> + * the direct map, restoration here only updates protection bits and cannot
+> + * fail.
+> + */
+> +void folio_restore_direct_map(struct folio *folio)
+> +{
+> +	WARN_ON_ONCE(set_direct_map_valid_noflush(folio_address(folio),
+> +						  folio_nr_pages(folio), true));
+> +}
+> +EXPORT_SYMBOL_FOR_MODULES(folio_restore_direct_map, "kvm");
+> +#endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
+> --
+> 2.50.1
 
- v4:
-   - Fix python linter issues (unused imports, docstring, etc).
+Reviewed-by: Ackerley Tng <ackerleytng@google.com>
 
- rfcv2:
-   - new in rfcv2
+I also took a look at Sashiko's [1] comments and I think that the
+highmem folio issues should be the responsibility of the caller to
+check.
 
- tools/testing/selftests/drivers/net/Makefile |  1 +
- tools/testing/selftests/drivers/net/uso.py   | 96 ++++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/uso.py
-
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 7c7fa75b80c2..335c2ce4b9ab 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -21,6 +21,7 @@ TEST_PROGS := \
- 	ring_reconfig.py \
- 	shaper.py \
- 	stats.py \
-+	uso.py \
- 	xdp.py \
- # end of TEST_PROGS
- 
-diff --git a/tools/testing/selftests/drivers/net/uso.py b/tools/testing/selftests/drivers/net/uso.py
-new file mode 100755
-index 000000000000..2ddeae99b4d6
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/uso.py
-@@ -0,0 +1,96 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""Test USO
-+
-+Sends large UDP datagrams with UDP_SEGMENT and verifies that the peer
-+receives the correct number of individual segments with correct sizes.
-+"""
-+import socket
-+import time
-+
-+from lib.py import ksft_run, ksft_exit, KsftSkipEx
-+from lib.py import ksft_ge
-+from lib.py import NetDrvEpEnv
-+from lib.py import defer, ethtool, ip, rand_port
-+
-+# python doesn't expose this constant, so we need to hardcode it to enable UDP
-+# segmentation for large payloads
-+UDP_SEGMENT = 103
-+
-+
-+def _send_uso(cfg, ipver, mss, total_payload, port):
-+    if ipver == "4":
-+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-+        dst = (cfg.remote_addr_v["4"], port)
-+    else:
-+        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-+        dst = (cfg.remote_addr_v["6"], port)
-+
-+    sock.setsockopt(socket.IPPROTO_UDP, UDP_SEGMENT, mss)
-+    payload = bytes(range(256)) * ((total_payload // 256) + 1)
-+    payload = payload[:total_payload]
-+    sock.sendto(payload, dst)
-+    sock.close()
-+    return payload
-+
-+
-+def _get_rx_packets(cfg):
-+    stats = ip(f"-s link show dev {cfg.remote_ifname}",
-+               json=True, host=cfg.remote)[0]
-+    return stats['stats64']['rx']['packets']
-+
-+
-+def _test_uso(cfg, ipver, mss, total_payload):
-+    cfg.require_ipver(ipver)
-+
-+    try:
-+        ethtool(f"-K {cfg.ifname} tx-udp-segmentation on")
-+    except Exception as exc:
-+        raise KsftSkipEx(
-+            "Device does not support tx-udp-segmentation") from exc
-+    defer(ethtool, f"-K {cfg.ifname} tx-udp-segmentation off")
-+
-+    expected_segs = (total_payload + mss - 1) // mss
-+
-+    rx_before = _get_rx_packets(cfg)
-+
-+    port = rand_port(stype=socket.SOCK_DGRAM)
-+    _send_uso(cfg, ipver, mss, total_payload, port)
-+
-+    time.sleep(0.5)
-+
-+    rx_after = _get_rx_packets(cfg)
-+    rx_delta = rx_after - rx_before
-+
-+    ksft_ge(rx_delta, expected_segs,
-+            comment=f"Expected >= {expected_segs} rx packets, got {rx_delta}")
-+
-+
-+def test_uso_v4(cfg):
-+    """USO IPv4: 11 segments (10 full + 1 partial)."""
-+    _test_uso(cfg, "4", 1400, 1400 * 10 + 500)
-+
-+
-+def test_uso_v6(cfg):
-+    """USO IPv6: 11 segments (10 full + 1 partial)."""
-+    _test_uso(cfg, "6", 1400, 1400 * 10 + 500)
-+
-+
-+def test_uso_v4_exact(cfg):
-+    """USO IPv4: exact multiple of MSS (5 full segments)."""
-+    _test_uso(cfg, "4", 1400, 1400 * 5)
-+
-+
-+def main() -> None:
-+    """Run USO tests."""
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run([test_uso_v4,
-+                  test_uso_v6,
-+                  test_uso_v4_exact],
-+                 args=(cfg, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.52.0
-
+[1] https://sashiko.dev/#/patchset/20260317141031.514-1-kalyazin%40amazon.com
