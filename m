@@ -1,45 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530E13BE63F;
-	Mon, 23 Mar 2026 16:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89AC258CD9;
+	Mon, 23 Mar 2026 16:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774283216; cv=none; b=Sp7DvINyvCs2wMfUFzYrZyQM+oTBcvHvjJViAUln21Or1xHJpTsudnLwO0DjhOORbox3yGX1E/mNBEv25AMsczyvSzZp79E66GWiTRfhNrwBFY8p7CqWshspjOfBrcQhujL/f1OzN0TB8VoQHzfMAl2aRT3E4O1nhRW+gFWvNS8=
+	t=1774283565; cv=none; b=E1zk6BmBgXp9Jkcxc6Mfn1RsGU6bO6D7oVrevd/Yxbb+8EAlzbj4C0uBkYEh6Kpj6ZzOfg5XrE5AjcPUz2giwr7lcIK69pyZwfsygGUEiP5ni/bhjzWY6FUAInhEA/csN6qqOjFS7DBMaISUAKHbQ0BZ+pFMMmDjMs3ngZvBprs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774283216; c=relaxed/simple;
-	bh=yvvnk8L0cI2hlcKK9JJuYOByfrm/Vw6Bgw9bTa2StmI=;
+	s=arc-20240116; t=1774283565; c=relaxed/simple;
+	bh=pqu6HRZCgaWB8u/BeO6buPj6Q4iTFosPVH5QVXX3XQo=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J/UzXSG09/Sz7p+FJe1UnCYbw8zEv/VxLCsfIEXEOqpfRdKBdeRiZ9QdvYZntEfYA6lXDb6j2aYylUBynFS076R7M8zj3Cy0F+8Zg3LDZYTJ+ATvDB/IFCwdtfa0u0ejtXkv9VB4g0OqRGAMPnFxKeLbzoZx0NzqIY04PrWYwNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UFA+rLkV; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=kxMtJL0I6rRv8S8QH5mm3iXK1zCpVLX9Lxu2aCwATN7a7iFwONpglaMpkxhDLeicfJ2XDNF60z+cgNUuduPJ4QxpkkoimePsW5w2gVKdTcRV0yd3/ivtqw7GJTUmC6ggi3Rpb6QI9gxIcQ7rSeRix/2S6utx6aXwKy7kl9ZO9f4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5lyDj06; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UFA+rLkV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF8CC4CEF7;
-	Mon, 23 Mar 2026 16:26:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5lyDj06"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B45C2C4CEF7;
+	Mon, 23 Mar 2026 16:32:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774283216;
-	bh=yvvnk8L0cI2hlcKK9JJuYOByfrm/Vw6Bgw9bTa2StmI=;
+	s=k20201202; t=1774283565;
+	bh=pqu6HRZCgaWB8u/BeO6buPj6Q4iTFosPVH5QVXX3XQo=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UFA+rLkVyf1DBRjVyHsPafKbt0kPko9jZSKOWidKNXiKnS/MKoiCdayFijUomdfk8
-	 aEaVGjeY4qxDaQcBAb6HRBkg3E4/V2z7VeMXqH27FdbP05xhb3qvx5Y0gyfSgk1Nnp
-	 m3gDq6RWw9ouOCrI6epPjo02pdgOxoX2kzKr/gkyYeCNvMGMM8J3uUUjGFTa9u9NBe
-	 Jz2709JhHURsIJ9gpQt6cuMIt5rXpqjq9UGawLFhhju8v1z4vq7QWU2XQfURMsEWVK
-	 dmyJH5L9zBVkFvpIMHtN9q+KXCX6PqHOm2MthPo9E0eLPXqy7Th3XWrHFImLGJ2Mdg
-	 Ok/ZhlKzCZb1g==
-Date: Mon, 23 Mar 2026 09:26:52 -0700
+	b=Q5lyDj06CJp3pBtC3gnfCravA4a6NnF0TQFXLR8ixXbnA3+LMLI4dfmuw+3Ljv/CJ
+	 XJ7CbCTNH2DdNrJisdNjVRLt7HjGBW1MrNK3tH6KH8YcDq9/ZlrOZiDbhACNU9TXIb
+	 58wMaDWQt/DHIgkwULVcO1+TNulkYPr7l3KqPF599OK1sBI15T+uRsmTh6ikcLW0bc
+	 ZsdX7UNJIvu/Td5RI3OBMPhbRgEQZ9bk/Iuhy8NczlzJMbaXkqKU8ISuFrqFQCIOLi
+	 2I003J2jDd8ByTMKg4Vl7ezjHKz7uO2uBACdH4Me+9dePLoyH15KWV5ehao/IBDw2l
+	 wa+0xZEQs62Lw==
+Date: Mon, 23 Mar 2026 09:32:43 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: <netdev@vger.kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, Andrew
- Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah
- Khan <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, Dragos Tatulea
- <dtatulea@nvidia.com>
-Subject: Re: [PATCH net v5 2/3] selftests: Add MACsec VLAN propagation
- traffic test
-Message-ID: <20260323092652.417b1bc8@kernel.org>
-In-Reply-To: <20260323123633.756163-3-cratiu@nvidia.com>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Cosmin Ratiu <cratiu@nvidia.com>, "andrew+netdev@lunn.ch"
+ <andrew+netdev@lunn.ch>, "davem@davemloft.net" <davem@davemloft.net>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, Dragos
+ Tatulea <dtatulea@nvidia.com>, "shuah@kernel.org" <shuah@kernel.org>,
+ "pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
+ <edumazet@google.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net v5 0/3] macsec: Add support for VLAN filtering in
+ offload mode
+Message-ID: <20260323093243.17c14edb@kernel.org>
+In-Reply-To: <acFWIxzM-GxpAhjH@krikkit>
 References: <20260323123633.756163-1-cratiu@nvidia.com>
-	<20260323123633.756163-3-cratiu@nvidia.com>
+	<acFODtfaa8LCKX4r@krikkit>
+	<5ae5d08d578fce1a01a548fad8552a14df8c5679.camel@nvidia.com>
+	<acFWIxzM-GxpAhjH@krikkit>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,21 +52,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 23 Mar 2026 14:36:32 +0200 Cosmin Ratiu wrote:
-> Add macsec_traffic.py using NetDrvEpEnv to verify VLAN filter
-> propagation through offloaded macsec devices via actual traffic.
+On Mon, 23 Mar 2026 16:02:59 +0100 Sabrina Dubroca wrote:
+> 2026-03-23, 14:42:00 +0000, Cosmin Ratiu wrote:
+> > On Mon, 2026-03-23 at 15:28 +0100, Sabrina Dubroca wrote:  
+> > > Why not? Being able to test without accessing real HW is still
+> > > useful.
+> > >   
+> > The tests now send macsec traffic over VLANs and nsim, it's just that
+> > nsim doesn't deal with VLAN filters at all and there are no stubbed
+> > vlan filters in debugfs, since real hw doesn't have that interface.  
 > 
-> Test creates macsec tunnels with matching SAs on both endpoints,
-> stacks VLANs on top, and verifies connectivity with ping. Covers:
-> - Offloaded macsec with VLAN (filters propagate to HW)
-> - Software macsec with VLAN (no HW filter propagation)
-> - Toggle offload on/off and verify traffic still works
+> Since netdevsim doesn't deal with VLAN filters at all, the "tests
+> should be written so that they can run both against ``netdevsim`` and
+> a real device" bit of the docs doesn't fully apply here?
 > 
-> On netdevsim this is a smoke test (stub offload, no real encryption).
-> On real hardware this validates actual VLAN filter propagation.
+> Anyway, I think the original tests had value, even if they're more
+> limited in some ways than traffic tests. HW/driver behavior could be
+> hiding problems in the stack with VLAN propagation, those simpler
+> tests don't have that risk.
 
-CONFIG_VLAN_8021Q (and possibly other things) are missing from
- tools/testing/selftests/drivers/net/config
--- 
-pw-bot: cr
+To be clear running the HW test without NETIF= should provide
+similar functionality to what the old tests could do. It's entirely
+okay to add netdevsim-specific subtests/test cases or asserts.
 
+Is there anything specific that you'd like to be tested?
+Let's not make this about HW tests vs nsim-only tests.
