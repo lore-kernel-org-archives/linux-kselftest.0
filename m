@@ -1,154 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FFF23B62B;
-	Mon, 23 Mar 2026 20:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AEFC38656D
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 20:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774297710; cv=none; b=LBLweTzRrVZRFQYuSmXC9vglCLLfVaCv4Q+Gh4/vJBwSeyuqaidYEUaIX4ipjiVXd91+Uc68IG3xiHV9wkQPlKNuER/1xHkvN7KYQQ/tm+bMGIqFiS5wCllxHxOXwuE6DhmdzCJQjaghICd7wWvGfB2LoaHeAdKWwRs/rsIghhU=
+	t=1774297909; cv=none; b=ire5pXvdBTk3Y5QT1ONQJ9j8ygZ3o3ehamtus1UgMPiHOVCN35b/M+j1XDsBnE1ZuleARjgpv2SedI9bMCCmAKBR9xUsfSImRFi35mKCm3O74ve0K+4MxwCfHnvEwBi4MQMaiDE0Fqy+fAKl8IFkWUDBGDQia7bnimJbulPuWvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774297710; c=relaxed/simple;
-	bh=4HmpqGCnc/JeGi5fqb9LLF+uG4EQxB9xOBgK4+WfF/Q=;
-	h=Date:Message-ID:From:To:Cc:Subject; b=Q2FTqcYXEim5/s9j4DOpcWMA68JK8fKj5BLQwk/Vo8wcA9DjcohSFq/AnaYW30Xn+36nhh/+qEdOjIPBFFS4n8NWgzZlfcr4ss5V2KosrBEDZugnVW1mBqToTsVivtnRM1cZ6LLN/VnXD2JCmYC1xHoZKD/1biqIJSv9eeNavTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jbO8WRc5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774297909; c=relaxed/simple;
+	bh=D6zWtIloBtEXh+4W8DrijEEo4mR9tdS9bxfOwltnv1M=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=n53F9OP/idiip057phPC3NhJDuXpcb9S7K2+dK1C8EjjzYIjXNIocQYVlM4IlN6wlKxGbZFGfISkRxsAm/KEpTXguo5qSnlgLpNSx5ismH4t81aoRiTZBhCQQDSq9kuDRAR7m7+MQ5ES1tD2wZ5F9kBswXHXuTnvygrIVxQ18io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=QP2Mo3zk; arc=none smtp.client-ip=74.125.224.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jbO8WRc5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB64C4CEF7;
-	Mon, 23 Mar 2026 20:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774297710;
-	bh=4HmpqGCnc/JeGi5fqb9LLF+uG4EQxB9xOBgK4+WfF/Q=;
-	h=Date:From:To:Cc:Subject:From;
-	b=jbO8WRc5iz9Eo5OTfuqyOljM7W6kP6Mk/j12QzvCor9p18ZUCweZ2PfRvPAZ8hF6P
-	 d815C2G8YJhQoQUdKf/f4f7U7BiZDwcpkWGXoCC5OCuhR0K4hQ2B0fuzsoVZnk8Yfn
-	 PCghewzpikBWv8HzumKtmAWnrxM23acdFjvtaKW3m6gIguDmZyLEjLRTQLzh87Njq3
-	 pNNkXxK5mSUzA1icj53Y1hLA4nUPYL2luwMRXOW6dgy9oPR7eORHLGiBTXwHEbQ3t0
-	 Lf+2fXhBykBmBhn7sg4Q16o82vNecUQm2xn7OI7iujZ8arcqZnepTSdFoCdpIJsyRG
-	 NYpL3fZrUbcSg==
-Date: Mon, 23 Mar 2026 10:28:29 -1000
-Message-ID: <49dca9aa15c6c46de60f1ba4ef2b25d0@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Christian Brauner <brauner@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>,
- Michal Koutny <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-Subject: [PATCH cgroup/for-7.0-fixes] selftests/cgroup: Don't test populated
- synchrony against task exit
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="QP2Mo3zk"
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-64c9a6d7f81so2809540d50.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 13:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1774297907; x=1774902707; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lwhk6av2PkVV2YHn7RPTrkcAgzWJduOS9hmc2v1dRNM=;
+        b=QP2Mo3zku7KVnFxLzsBfZxVFDFRIoD1Y7o29eVOAO5MkxuOZY+bc0dx8ndbtbnfsIu
+         nFfle35qkmdRLO7BmV+/bn70iNgTenGgCh5Gj05vwJ1k7pTtqRbnybseDu/tw9ukWj8G
+         NpbGL9cZ+FQwUXp5fwKT9Hv1j0DvuS6eRX/bhpyezY0E9ezQoa4gylno/9yf0Z5soNFn
+         Rwdh/J7Eqki5isGHNSoygVo+ltJtLc1WlSANchWCGKy8viTcZFhvYEWgxCgYm+bj45su
+         TEkAZ/tlp0cCDmhUR/ZIn1XmvUreDnwrAEEZ0F/r7krJziox9rvyu63sEYV4cbwMwEni
+         /JVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774297907; x=1774902707;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lwhk6av2PkVV2YHn7RPTrkcAgzWJduOS9hmc2v1dRNM=;
+        b=pEBmRrl/+gIFMJtU1VLl5oi2egDA6KwOUjFQsf14Z9AD1l/qyRu6VH1mi7g5kiusaQ
+         G9JLx1iAf7XQTivdMifxiIAZcxenvm2uQ6zzHK7V26G2Vo1GYp53iYkhT0jS40c4D5uL
+         jCTod5/ei/UOtdHtk/bb1Q8gc8GpLcdsmXV3JP2ZKYMjJ3UyBy7L+mPWk9f6zbT6QqcQ
+         nDaXVecVnYO0XoGPK9WEMRSPQu29g7tsMWY2Cefz+YHzNq9IkY4kmJUrO+Bu0aC3wbV6
+         p/i+g2VG+MX61tt6jMQi4S7FUHtPXZjfoT3TxCt+wf6I4wA6HKTvSCJ+WwLiIKv7AaYV
+         Y+gQ==
+X-Gm-Message-State: AOJu0Yw5UyP/eePBYLI58NwhiLQ6hnHGlXtATaja4zOGKoUXVZrpEzDE
+	yA/PRfwzUU1dsJ/An/uXZAy74xBFCEvnCz3UNozEp0+gt5tIp56lFo1lQpsZ6vqhsPgsUtumoaB
+	Ha2EX
+X-Gm-Gg: ATEYQzzjdkiHD3QhQWYImfqZDOS7Iw0NJaeH9KK9UlTnHopOALo8pqXkMRvaaxQP3Zn
+	u3icnI6fDaxRPcX1MJrPDHCulXpwa7lcbiiim0p8jwIeuiRFOpY672+uecr8jGR8+AxtM6/XRjB
+	5msumA7KAxp7eSbmWve0is9VCeFU2uaAqfZLiws3aWus9Igz0P/QaiUGTx0RVLteefTe0Ot9237
+	D8FkmNmN97h8QeZdHDP9Ne9RhajPNjJ5AevVWd32vmqJPHASPq35TKS5EhCAx7dSIn5tgNJ04Bw
+	0nYNayiBByjpEInkX78OSk5i9zTQ5WJrQBr1VyKVUp5G31rkUXGum56OeZ454DnhX7ji+SpqTqJ
+	TMGqdcva1+OSVuSQpJebzUJoctBoBzSMKs16vqZJrzvx59WDIVKYfTLOvFKzlsOvNexRiuHI7IV
+	zM5N056sD+9izF5EzT5qNIvy/UjkYWh67VyCAxZPT8f1NJCcmWC1JDgFi36ZgAu3TToA==
+X-Received: by 2002:a05:690c:e3c6:b0:798:2629:85d7 with SMTP id 00721157ae682-79a90aae42emr128303507b3.9.1774297907010;
+        Mon, 23 Mar 2026 13:31:47 -0700 (PDT)
+Received: from plex.localdomain ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc8fb9c10sm1014271785a.19.2026.03.23.13.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 13:31:46 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	akpm@linux-foundation.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	pasha.tatashin@soleen.com,
+	dmatlack@google.com,
+	pratyush@kernel.org,
+	skhawaja@google.com
+Subject: [PATCH v2 0/2] liveupdate: prevent double preservation
+Date: Mon, 23 Mar 2026 20:31:43 +0000
+Message-ID: <20260323203145.148057-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-test_cgcore_populated (test_core) and test_cgkill_{simple,tree,forkbomb}
-(test_kill) check cgroup.events "populated 0" immediately after reaping
-child tasks with waitpid(). This used to work because cgroup_task_exit() in
-do_exit() unlinked tasks from css_sets before exit_notify() woke up
-waitpid().
+Currently, LUO does not prevent the same file from being preserved twice
+across different active sessions.
 
-d245698d727a ("cgroup: Defer task cgroup unlink until after the task is done
-switching out") moved the unlink to cgroup_task_dead() in
-finish_task_switch(), which runs after exit_notify(). The populated counter
-is now decremented after the parent's waitpid() can return, so there is no
-longer a synchronous ordering guarantee. On PREEMPT_RT, where
-cgroup_task_dead() is further deferred through lazy irq_work, the race
-window is even larger.
+Because LUO preserves files of absolutely different types: memfd, and
+upcoming vfiofd [1], iommufd [2], guestmefd (and possible kvmfd/cpufd).
+There is no common private data or guarantee on how to prevent that the
+same file is not preserved twice beside using inode or some slower and
+expensive method like hashtables.
 
-The synchronous populated transition was never part of the cgroup interface
-contract - it was an implementation artifact. Use cg_read_strcmp_wait() which
-retries for up to 1 second, matching what these tests actually need to
-verify: that the cgroup eventually becomes unpopulated after all tasks exit.
+[1] https://lore.kernel.org/all/20260129212510.967611-1-dmatlack@google.com
+[2] https://lore.kernel.org/all/20260203220948.2176157-1-skhawaja@google.com
 
-Fixes: d245698d727a ("cgroup: Defer task cgroup unlink until after the task is done switching out")
-Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: cgroups@vger.kernel.org
----
- tools/testing/selftests/cgroup/lib/cgroup_util.c         | 15 +++++++++++++++
- tools/testing/selftests/cgroup/lib/include/cgroup_util.h |  2 ++
- tools/testing/selftests/cgroup/test_core.c               |  3 ++-
- tools/testing/selftests/cgroup/test_kill.c               |  7 ++++---
- 4 files changed, 23 insertions(+), 4 deletions(-)
+Changelog:
+v2:
+ - Because inodes of preserved files can be shared, we cannot rely on a
+   flag in the inode. Therefore, use an xarray to prevent preserving
+   duplicated files.
 
---- a/tools/testing/selftests/cgroup/lib/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/lib/cgroup_util.c
-@@ -123,6 +123,21 @@ int cg_read_strcmp(const char *cgroup, c
- 	return ret;
- }
+Pasha Tatashin (2):
+  liveupdate: prevent double management of files
+  selftests: liveupdate: add test for double preservation
 
-+int cg_read_strcmp_wait(const char *cgroup, const char *control,
-+			    const char *expected)
-+{
-+	int i, ret;
-+
-+	for (i = 0; i < 100; i++) {
-+		ret = cg_read_strcmp(cgroup, control, expected);
-+		if (!ret)
-+			return ret;
-+		usleep(10000);
-+	}
-+
-+	return ret;
-+}
-+
- int cg_read_strstr(const char *cgroup, const char *control, const char *needle)
- {
- 	char buf[PAGE_SIZE];
---- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-@@ -61,6 +61,8 @@ extern int cg_read(const char *cgroup, c
- 		   char *buf, size_t len);
- extern int cg_read_strcmp(const char *cgroup, const char *control,
- 			  const char *expected);
-+extern int cg_read_strcmp_wait(const char *cgroup, const char *control,
-+				   const char *expected);
- extern int cg_read_strstr(const char *cgroup, const char *control,
- 			  const char *needle);
- extern long cg_read_long(const char *cgroup, const char *control);
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -233,7 +233,8 @@ static int test_cgcore_populated(const c
- 	if (err)
- 		goto cleanup;
+ kernel/liveupdate/luo_file.c                  | 17 +++++++-
+ .../testing/selftests/liveupdate/liveupdate.c | 41 +++++++++++++++++++
+ 2 files changed, 56 insertions(+), 2 deletions(-)
 
--	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
-+	if (cg_read_strcmp_wait(cg_test_d, "cgroup.events",
-+				   "populated 0\n"))
- 		goto cleanup;
-
- 	/* Remove cgroup. */
---- a/tools/testing/selftests/cgroup/test_kill.c
-+++ b/tools/testing/selftests/cgroup/test_kill.c
-@@ -86,7 +86,7 @@ cleanup:
- 		wait_for_pid(pids[i]);
-
- 	if (ret == KSFT_PASS &&
--	    cg_read_strcmp(cgroup, "cgroup.events", "populated 0\n"))
-+	    cg_read_strcmp_wait(cgroup, "cgroup.events", "populated 0\n"))
- 		ret = KSFT_FAIL;
-
- 	if (cgroup)
-@@ -190,7 +190,8 @@ cleanup:
- 		wait_for_pid(pids[i]);
-
- 	if (ret == KSFT_PASS &&
--	    cg_read_strcmp(cgroup[0], "cgroup.events", "populated 0\n"))
-+	    cg_read_strcmp_wait(cgroup[0], "cgroup.events",
-+				   "populated 0\n"))
- 		ret = KSFT_FAIL;
-
- 	for (i = 9; i >= 0 && cgroup[i]; i--) {
-@@ -251,7 +252,7 @@ cleanup:
- 		wait_for_pid(pid);
-
- 	if (ret == KSFT_PASS &&
--	    cg_read_strcmp(cgroup, "cgroup.events", "populated 0\n"))
-+	    cg_read_strcmp_wait(cgroup, "cgroup.events", "populated 0\n"))
- 		ret = KSFT_FAIL;
-
- 	if (cgroup)
+-- 
+2.43.0
