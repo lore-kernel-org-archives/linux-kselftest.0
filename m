@@ -1,109 +1,358 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BA3389DED;
-	Mon, 23 Mar 2026 23:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11789389116
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 23:58:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774310333; cv=none; b=UvlVG1xKCQAx5X7qSqkOW1+a+z7nFyFSwnZOaWAhLsg301cXu0KOq2K3PTt+zE20/mJ+AgTm/c7pO3WeIUbBSIBNbEPpL3uu8QVqBIHuPVgXWbon9SZ5ghd/seOunP2rujNPa5ZE1w0juI2jb+TbPXZskikBYlkfV22w/1769U0=
+	t=1774310334; cv=none; b=tmdDdF5XMlXi5wqlg1XcUyPCPMTrAGYH21ANfYFjbopFhkFLyxG5xaPk2Ow3Mlv7IXSvW0+oTDsxEGTfsVmQsfc5t6AfePUqtvhLjoylIn1s/gAswRqW2B2xefJQ8pyYn0PqUiTFZtiozWr8NLvS0pj2RgRH1GjoEwkMI93c4bA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774310333; c=relaxed/simple;
-	bh=09tSdPc4KE+Wrg/3IyzHyq6uHIuy+tsDuWBUHfhcgjg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qVvAaeK6PImMCYzCpn70eTuhyy+4LLqYHIFnIXXxz9M676Q1QTChxyGf4wQEHhKX7j5g+q7lM0puPh4iNeZBy1Gxx96jP8pdTtSV9vEL343NhE+7hOu9fjuP2Y6BXz0hrJMeNGoT52U1B6HWLUv1G0v7LJE0u05DjqPiWM5qG8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X09WVTvq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774310334; c=relaxed/simple;
+	bh=hpHWwpCyWNYJavxcdBciCVs72hFwampWkekPO66znUs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=m2v3o+VtUktAUSOEvo+uLZ35OW4Vsy/YK9fWQg8xLxvEo/Rb3j1dmJKwRWZgzj0eNwp/Xm4TIp5PyQvc6ykAIuuPCHPKPqbIEQsYIqC5N54w8CA1UQRO/J3162hat7674APjDhIqbSP1ZrzkgkxicTLP+U26zukLSxJr9IkNOHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Aqd6XXCz; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X09WVTvq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F0ABC4AF0D;
-	Mon, 23 Mar 2026 23:58:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774310332;
-	bh=09tSdPc4KE+Wrg/3IyzHyq6uHIuy+tsDuWBUHfhcgjg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X09WVTvqUzVe6286hdc2QsmRNSrbRb/vw8cWztfvWQ/PsFia8VsgYRjUvi7fytYj+
-	 g77WCldW1KRYfVbqbGvEI953LKcCNiEpqhig+r7z9IXJDtjpbYODlu/5zeqtRPqTGl
-	 WGFYbpUlPhvB4Y75BfaWj+EOwtbx6eoAbzTVsqSmc+la018UkNZJRWX2ZIKWR59p4/
-	 dEHJmDDGskDJimUR5GDykm4AHl27pHnJCuPITXKXDVOD1RFmz/XTClYe9AUIzQX61T
-	 LFm1pUBIv7zc90cEmkak7xQ5+RDcJVj8E2QhFGQqd9DX4R+o5OgtdCSZKMirZgEL8o
-	 3doxRZ3Z7A/XA==
-Date: Mon, 23 Mar 2026 19:58:50 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Askar Safin <safinaskar@zohomail.com>,
-	Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v2 3/9] kernel/api: add debugfs interface for kernel API
- specifications
-Message-ID: <acHTupVGxJR3gmFT@laps>
-References: <20260322121026.869758-1-sashal@kernel.org>
- <20260322121026.869758-4-sashal@kernel.org>
- <2026032309-jargon-stalling-28c2@gregkh>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Aqd6XXCz"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-358f058973fso1103380a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 16:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774310331; x=1774915131; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kmzYNzW0+Ct+eXaBxLnJaomUJdCksoGs2CQSxI1y3bk=;
+        b=Aqd6XXCzQEqQ+JMYsEMeKF8bxKs7kJa+7EfSfX6pMR6ef3N1JzIbSLGACB9zgw42vu
+         9Rw4mPWDe4Sd8iNutrPnb1etpj+vhMBuxtI5u+gokIIDaiVJqk1sq6rbMaZumvDxoyyy
+         MxRfXEQK1HHinl+z0vI8Or2n4NX1Bowkjm3pTNO0uWtTMzrabD4wQreGP0QvhL1r8zFn
+         WVAVF6bSgDs9HjFnYyJxTnsyKx0hA68CMCiEFaxD7G3qrsxtw/WQGpmIfwCcHSkGjXpt
+         hEvon4owwTAI+TztBdDpBsco+D6PMUQoFxaJ5t+5pR9KGaoy8afelk0xYDOsBxMWw2Ic
+         m5UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774310331; x=1774915131;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kmzYNzW0+Ct+eXaBxLnJaomUJdCksoGs2CQSxI1y3bk=;
+        b=BG2nbaSkYlTnOb8jwgDNbYeK9G49CNJtaskVNxZ9HcmMgjk4sFDMt9ppC1yBBmKd+d
+         wFsn7ZZsDEamFdJA9EEWXFCYZdeP7l57HHQGof+1YXYYgUWCqRL2OcNJl4nq9HDW4hwi
+         FqDtbgx4Vxv6fdb/NRFbuZUdG+sIvpYbY0RgTlG5Hx9mBYybccRtlXPyVUYCam/6Lgwo
+         M3cczEbuwHEUtqIlKwFpGgXuMHxOaV2lP5Ps3hVY+SLupr6ewIvm/EZKs9hk+VSlTfls
+         szhxl0sdTNmDtz05UB/sQmMf34AtcaDEokeCjY2F/38lhyEenbTJI3v8X5Ccrshdks1F
+         hW4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX7GgGPuMjeniN4Ar8xc/Awq0TbCNeu9F/4I+yWSKweJrrLG4k1ZsPiyEuGUaDv82fd+ldv+JaO3rwOGm80XW8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweqPTJWyygOG4O1bLrMeb3qMJH7bbCyHcI7iR/8C6IBpB75PMG
+	qW6t/jY9N4ZAG+5rFbrui7k0NwQIdpX9WsN2X1dYHhUCM+uJ9jy/O7o7GZCqr7dr+tgTyoA+RsZ
+	oTLuX3Lohnlc/qg==
+X-Received: from pjbfv10.prod.google.com ([2002:a17:90b:e8a:b0:35b:939b:1e33])
+ (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90a:a82:b0:35b:e4d6:73cd with SMTP id 98e67ed59e1d1-35be4d6748bmr4279808a91.31.1774310331243;
+ Mon, 23 Mar 2026 16:58:51 -0700 (PDT)
+Date: Mon, 23 Mar 2026 23:58:00 +0000
+In-Reply-To: <20260323235817.1960573-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <2026032309-jargon-stalling-28c2@gregkh>
+Mime-Version: 1.0
+References: <20260323235817.1960573-1-dmatlack@google.com>
+X-Mailer: git-send-email 2.53.0.983.g0bb29b3bc5-goog
+Message-ID: <20260323235817.1960573-9-dmatlack@google.com>
+Subject: [PATCH v3 08/24] vfio/pci: Retrieve preserved device files after Live Update
+From: David Matlack <dmatlack@google.com>
+To: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, 
+	Alex Mastro <amastro@fb.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>, Askar Safin <safinaskar@gmail.com>, 
+	"Borislav Petkov (AMD)" <bp@alien8.de>, Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
+	David Matlack <dmatlack@google.com>, David Rientjes <rientjes@google.com>, 
+	Feng Tang <feng.tang@linux.alibaba.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Hilke <jrhilke@google.com>, Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>, 
+	kexec@lists.infradead.org, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-pci@vger.kernel.org, 
+	Li RongQing <lirongqing@baidu.com>, Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
+	"=?UTF-8?q?Micha=C5=82=20Winiarski?=" <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>, 
+	Parav Pandit <parav@nvidia.com>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 23, 2026 at 02:52:58PM +0100, Greg Kroah-Hartman wrote:
->On Sun, Mar 22, 2026 at 08:10:17AM -0400, Sasha Levin wrote:
->> Add a debugfs interface to expose kernel API specifications at runtime.
->> This allows tools and users to query the complete API specifications
->> through the debugfs filesystem.
->>
->> The interface provides:
->> - /sys/kernel/debug/kapi/list - lists all available API specifications
->> - /sys/kernel/debug/kapi/specs/<name> - detailed info for each API
->>
->> Each specification file includes:
->> - Function name, version, and descriptions
->> - Execution context requirements and flags
->> - Parameter details with types, flags, and constraints
->> - Return value specifications and success conditions
->> - Error codes with descriptions and conditions
->> - Locking requirements and constraints
->> - Signal handling specifications
->> - Examples, notes, and deprecation status
->>
->> This enables runtime introspection of kernel APIs for documentation
->> tools, static analyzers, and debugging purposes.
->>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->Debugfs logic looks sane, nice.
+From: Vipin Sharma <vipinsh@google.com>
 
-Thanks!
+Enable userspace to retrieve preserved VFIO device files from VFIO after
+a Live Update by implementing the retrieve() and finish() file handler
+callbacks.
 
->But this only works if the kabi stuff is built into the kernel image,
->right?  This doesn't work if any of these abi sections are in a module
->or am I missing that logic here?
+Use an anonymous inode when creating the file, since the retrieved
+device file is not opened through any particular cdev inode, and the
+cdev inode does not matter in practice.
 
-That is correct, for now.
+For now the retrieved file is functionally equivalent a opening the
+corresponding VFIO cdev file. Subsequent commits will leverage the
+preserved state associated with the retrieved file to preserve bits of
+the device across Live Update.
 
-I'm only trying to tackle syscalls to begin with, and since no syscalls live in
-modules, we have no need for module support.
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+Co-developed-by: David Matlack <dmatlack@google.com>
+Signed-off-by: David Matlack <dmatlack@google.com>
+---
+ drivers/vfio/device_cdev.c             | 59 ++++++++++++++++++++++----
+ drivers/vfio/pci/vfio_pci_liveupdate.c | 52 ++++++++++++++++++++++-
+ drivers/vfio/vfio_main.c               | 13 ++++++
+ include/linux/vfio.h                   | 11 +++++
+ 4 files changed, 124 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
+index 8ceca24ac136..edf322315a41 100644
+--- a/drivers/vfio/device_cdev.c
++++ b/drivers/vfio/device_cdev.c
+@@ -2,6 +2,7 @@
+ /*
+  * Copyright (c) 2023 Intel Corporation.
+  */
++#include <linux/anon_inodes.h>
+ #include <linux/vfio.h>
+ #include <linux/iommufd.h>
+ 
+@@ -16,15 +17,10 @@ void vfio_init_device_cdev(struct vfio_device *device)
+ 	device->cdev.owner = THIS_MODULE;
+ }
+ 
+-/*
+- * device access via the fd opened by this function is blocked until
+- * .open_device() is called successfully during BIND_IOMMUFD.
+- */
+-int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
++static int vfio_device_cdev_open(struct vfio_device *device, struct file **filep)
+ {
+-	struct vfio_device *device = container_of(inode->i_cdev,
+-						  struct vfio_device, cdev);
+ 	struct vfio_device_file *df;
++	struct file *file = *filep;
+ 	int ret;
+ 
+ 	/* Paired with the put in vfio_device_fops_release() */
+@@ -37,22 +33,67 @@ int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
+ 		goto err_put_registration;
+ 	}
+ 
+-	filep->private_data = df;
++	/*
++	 * Simulate opening the character device using an anonymous inode. The
++	 * returned file has the same properties as a cdev file (e.g. operations
++	 * are blocked until BIND_IOMMUFD is called).
++	 */
++	if (!file) {
++		file = anon_inode_getfile_fmode("[vfio-device-liveupdate]",
++						&vfio_device_fops, NULL,
++						O_RDWR, FMODE_PREAD | FMODE_PWRITE);
++
++		if (IS_ERR(file)) {
++			ret = PTR_ERR(file);
++			goto err_free_device_file;
++		}
++
++		*filep = file;
++	}
++
++	file->private_data = df;
+ 
+ 	/*
+ 	 * Use the pseudo fs inode on the device to link all mmaps
+ 	 * to the same address space, allowing us to unmap all vmas
+ 	 * associated to this device using unmap_mapping_range().
+ 	 */
+-	filep->f_mapping = device->inode->i_mapping;
++	file->f_mapping = device->inode->i_mapping;
+ 
+ 	return 0;
+ 
++err_free_device_file:
++	kvfree(df);
+ err_put_registration:
+ 	vfio_device_put_registration(device);
+ 	return ret;
+ }
+ 
++struct file *vfio_device_liveupdate_cdev_open(struct vfio_device *device)
++{
++	struct file *file = NULL;
++	int ret;
++
++	ret = vfio_device_cdev_open(device, &file);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return file;
++}
++EXPORT_SYMBOL_GPL(vfio_device_liveupdate_cdev_open);
++
++/*
++ * device access via the fd opened by this function is blocked until
++ * .open_device() is called successfully during BIND_IOMMUFD.
++ */
++int vfio_device_fops_cdev_open(struct inode *inode, struct file *file)
++{
++	struct vfio_device *device = container_of(inode->i_cdev,
++						  struct vfio_device, cdev);
++
++	return vfio_device_cdev_open(device, &file);
++}
++
+ static void vfio_df_get_kvm_safe(struct vfio_device_file *df)
+ {
+ 	spin_lock(&df->kvm_ref_lock);
+diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
+index c4ebc7c486e5..4b83a02401aa 100644
+--- a/drivers/vfio/pci/vfio_pci_liveupdate.c
++++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
+@@ -39,7 +39,13 @@
+  *    preserved, so there is no way for the file to be destroyed or the device
+  *    to be unbound from the vfio-pci driver while it is preserved.
+  *
+- * Retrieving the file after kexec is not yet supported.
++ * After kexec, the preserved VFIO device file can be retrieved from the session
++ * just like any other preserved file::
++ *
++ *   ioctl(session_fd, LIVEUPDATE_SESSION_RETRIEVE_FD, &arg);
++ *   device_fd = arg.fd;
++ *   ...
++ *   ioctl(session_fd, LIVEUPDATE_SESSION_FINISH, ...);
+  *
+  * Restrictions
+  * ============
+@@ -85,6 +91,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <linux/file.h>
+ #include <linux/kexec_handover.h>
+ #include <linux/kho/abi/vfio_pci.h>
+ #include <linux/liveupdate.h>
+@@ -180,13 +187,53 @@ static int vfio_pci_liveupdate_freeze(struct liveupdate_file_op_args *args)
+ 	return 0;
+ }
+ 
++static int match_device(struct device *dev, const void *arg)
++{
++	struct vfio_device *device = container_of(dev, struct vfio_device, device);
++	const struct vfio_pci_core_device_ser *ser = arg;
++	struct pci_dev *pdev;
++
++	pdev = dev_is_pci(device->dev) ? to_pci_dev(device->dev) : NULL;
++	if (!pdev)
++		return false;
++
++	return ser->bdf == pci_dev_id(pdev) && ser->domain == pci_domain_nr(pdev->bus);
++}
++
+ static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
+ {
+-	return -EOPNOTSUPP;
++	struct vfio_pci_core_device_ser *ser;
++	struct vfio_device *device;
++	struct file *file;
++	int ret = 0;
++
++	ser = phys_to_virt(args->serialized_data);
++
++	device = vfio_find_device(ser, match_device);
++	if (!device)
++		return -ENODEV;
++
++	file = vfio_device_liveupdate_cdev_open(device);
++	if (IS_ERR(file)) {
++		ret = PTR_ERR(file);
++		goto out;
++	}
++
++	args->file = file;
++out:
++	/* Drop the reference from vfio_find_device() */
++	put_device(&device->device);
++	return ret;
++}
++
++static bool vfio_pci_liveupdate_can_finish(struct liveupdate_file_op_args *args)
++{
++	return args->retrieve_status > 0;
+ }
+ 
+ static void vfio_pci_liveupdate_finish(struct liveupdate_file_op_args *args)
+ {
++	kho_restore_free(phys_to_virt(args->serialized_data));
+ }
+ 
+ static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
+@@ -195,6 +242,7 @@ static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
+ 	.unpreserve = vfio_pci_liveupdate_unpreserve,
+ 	.freeze = vfio_pci_liveupdate_freeze,
+ 	.retrieve = vfio_pci_liveupdate_retrieve,
++	.can_finish = vfio_pci_liveupdate_can_finish,
+ 	.finish = vfio_pci_liveupdate_finish,
+ 	.owner = THIS_MODULE,
+ };
+diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+index 8b222f71bbab..e5886235cad4 100644
+--- a/drivers/vfio/vfio_main.c
++++ b/drivers/vfio/vfio_main.c
+@@ -13,6 +13,7 @@
+ #include <linux/cdev.h>
+ #include <linux/compat.h>
+ #include <linux/device.h>
++#include <linux/device/class.h>
+ #include <linux/fs.h>
+ #include <linux/idr.h>
+ #include <linux/iommu.h>
+@@ -1766,6 +1767,18 @@ int vfio_dma_rw(struct vfio_device *device, dma_addr_t iova, void *data,
+ }
+ EXPORT_SYMBOL(vfio_dma_rw);
+ 
++struct vfio_device *vfio_find_device(const void *data, device_match_t match)
++{
++	struct device *device;
++
++	device = class_find_device(vfio.device_class, NULL, data, match);
++	if (!device)
++		return NULL;
++
++	return container_of(device, struct vfio_device, device);
++}
++EXPORT_SYMBOL_GPL(vfio_find_device);
++
+ /*
+  * Module/class support
+  */
+diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+index e9d3ddb715c5..7384965d15d7 100644
+--- a/include/linux/vfio.h
++++ b/include/linux/vfio.h
+@@ -393,4 +393,15 @@ int vfio_virqfd_enable(void *opaque, int (*handler)(void *, void *),
+ void vfio_virqfd_disable(struct virqfd **pvirqfd);
+ void vfio_virqfd_flush_thread(struct virqfd **pvirqfd);
+ 
++#if IS_ENABLED(CONFIG_VFIO_DEVICE_CDEV)
++struct file *vfio_device_liveupdate_cdev_open(struct vfio_device *device);
++#else
++static inline struct file *vfio_device_liveupdate_cdev_open(struct vfio_device *device)
++{
++	return ERR_PTR(-EOPNOTSUPP);
++}
++#endif /* IS_ENABLED(CONFIG_VFIO_DEVICE_CDEV) */
++
++struct vfio_device *vfio_find_device(const void *data, device_match_t match);
++
+ #endif /* VFIO_H */
 -- 
-Thanks,
-Sasha
+2.53.0.983.g0bb29b3bc5-goog
+
