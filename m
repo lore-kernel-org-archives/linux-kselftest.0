@@ -1,333 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011058.outbound.protection.outlook.com [52.101.52.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5073B2FD2;
-	Mon, 23 Mar 2026 14:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774276788; cv=none; b=NpfnnAACSOLtjf/Pl5HcAdBoqvHXC5SUcEngZO8LhH5OdMzWXEebDPkapYMmPKJgMAq2ZYw5vcg7RDN21RP742ptbYtIBW18QCTbDxR44Q8BgVtIv61Hi4BvSWlMSwty/y4VkIdC+yanvdqdBK0L/B7jWjrA/jexE0gIQxjd98A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774276788; c=relaxed/simple;
-	bh=n5PwD28reFcmNKZbHa+WcDYNkJJFYigMLc9GUuNvQoo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LDOSzbRgnmA2O7KyF1/vnsINQadHOx7EJqjt1n7WC7gaGhhFPix2sO58DZV7zQkJJMnwKkSdbj9xEKyT1y4LpgSEU4KSTql1g+aLUHpkEgF98ArFeNogz3HvTH3gngWJxlT3VeabLmULFOq5ETkIN44tnEgyK61ESXMjjDKrIH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KHdi+yDP; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8B13B0AE5;
+	Mon, 23 Mar 2026 14:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774276928; cv=fail; b=TwXET6r4ByF2+aD4dldXbvFtuKniOce9+HXN9iRMgc5zpP2HlQyXhTIrLnisSKuSo00k6Xl1YsUYXnGM4IeRWtZE3pJhYDBtIegUX9cX5TY/4CXX4mqFEMm7/FNpdhxlmy8QVdgz5PGdIO/5L0HdlhFwgJ2sPek5hyEWpox7Bq4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774276928; c=relaxed/simple;
+	bh=jI2rKGKvcyg9cdm7amv4ZiuhmHYfAexbU7SAX2rwRcc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=KpMwZHcGFAI0c7HdLf1cDCRMaLwKFT2Yn7IbRFvD6MucaNpxMaSjy4MKGwmvPG/Gh1BXYxt3d9qa+ugb8zx/o/pyKrDBdU9Z19DZYaZ13SBMTEMNxfRgqT1Aj+0CmCSKlwF7y8yyYN9KlVnaWQf/x41x1Nkq3Rqwg0V3PUmZe84=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=N1bAk2ET; arc=fail smtp.client-ip=52.101.52.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KHdi+yDP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11551C2BCB3;
-	Mon, 23 Mar 2026 14:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774276788;
-	bh=n5PwD28reFcmNKZbHa+WcDYNkJJFYigMLc9GUuNvQoo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KHdi+yDPZPtjtdi0FXUi5t8TmmndezAl94iseM5S9KbjW+5zaxuX4iLc/yHhkYe3c
-	 he4h7LoOCv+2R1spJTagYTzgitExfSTFTrereoeWQudGbHiMW5WhRnYIh4qP5frc5T
-	 QP/aUmEZ0dCbbhhZFvhXR6/n1ZxW2/G8NDzrQ/4s6p+cwx5kJGlPXfAkkft350BfJd
-	 A8lKftExnUJzUX18h+D6TWjLC6/DHvGApiM9UTbEAcGxP6VBCtOMze6IAWFM13g03W
-	 InXocLrRDfHxQkiKTKxy6Y7tK617gAgAifIN9j+9LhPRh/ETSNSOJR7vfaOlU46FIn
-	 H16IRNlDnE8MA==
-From: Jeff Layton <jlayton@kernel.org>
-Date: Mon, 23 Mar 2026 10:39:31 -0400
-Subject: [PATCH v5 2/2] selftests/firmware: add search path test for
- firmware_class.search=
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="N1bAk2ET"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SqF3sFwT5emO+RowEGq61FeNAcMCcfAnhANFqg8NNPrtYwSVD7bq5GqCK3atwEm3dfVVBQjTglNkHlkb2BRE+6Lv/IUj9KD5++ELDQ0bzBLnFrncmup/PF+Jj5NOhjGH5+wNvHKVpo+i4GaTMPEAZuqqzHRz5vkL+WPMxV51Fpg1fLvdx9zIga9OS9Ls6u4Ce8Z8j6QqF5GjQWgDyHExNWVdZvliyvVhdjpZPBTF5DRhigM/SbZ5jlHEQ6E6JTJNcorfwM+CIzzKVxsFbQ1ju8fn+JT/517bIMDS3zHTluVhLAfVN7CNaHIW9K4z7QYqmjw9R7Rz+niySDwwYOh0eA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jI2rKGKvcyg9cdm7amv4ZiuhmHYfAexbU7SAX2rwRcc=;
+ b=iM115RUDqoi9PzFOUl+dNbOB9461PDNf7cA5QAf6JVNYcjhFNrDZfvubXZaWUZqGA/+jVPgKPLmzXNJwpFRXog3+baxkoV13HoZweHR9Xj7R91707dL/LOFGMFe7+oJKbncc6iBwQkaCf9eZegt3tfYlV0Ivy+3psdtOa9tPOOSGNtxgfTqabRom6JoZS+9tspj6NuYiFcDUYvi86KZE8tvREfi063FB/NvUkJ2j61Ginj8R8t/9Nb4M4KdlEpOdtrhS9yD0zGlTXnqtYTbKD+se2eyuuFZxsfCmZuBT2MnNrZhJKnLgxHUqVuUQQ1TYKCevLerMCjskOuDrIDyzbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jI2rKGKvcyg9cdm7amv4ZiuhmHYfAexbU7SAX2rwRcc=;
+ b=N1bAk2ETUBIcXhBHQmLDFgcl0VAAC5x4u2fVSBmiOupSrH6HPaa7Haqyx2IUdZdp288q74F/C0mdqJ+SWb2TTopEZdBSyzbzbxkvgklA5u5OQjA9SXa8yrT4uQvNr9lQRbq9Ws9I03unkCrnjod9B89WSC9VSpP2QsR0N6Rpj146hzTQJJraEROA9pTzFPjxlSIyZpTmPIf6gVsokwPL0FodXVvbko/SZS0KE1pvCQbX4ecPqJnCo0+9O621yuV0xqe7I7p4H1LwCjJawnn57lsDk34mP3keb4AOQjgDqmaZm9hkF8A10QbqL7ui13w/7dNQ8HOI54u2dhE4Zpl1aQ==
+Received: from DS5PPF266051432.namprd12.prod.outlook.com
+ (2603:10b6:f:fc00::648) by PH7PR12MB7872.namprd12.prod.outlook.com
+ (2603:10b6:510:27c::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Mon, 23 Mar
+ 2026 14:42:01 +0000
+Received: from DS5PPF266051432.namprd12.prod.outlook.com
+ ([fe80::40ba:2995:ae48:aaeb]) by DS5PPF266051432.namprd12.prod.outlook.com
+ ([fe80::40ba:2995:ae48:aaeb%4]) with mapi id 15.20.9723.008; Mon, 23 Mar 2026
+ 14:42:01 +0000
+From: Cosmin Ratiu <cratiu@nvidia.com>
+To: "sd@queasysnail.net" <sd@queasysnail.net>
+CC: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "davem@davemloft.net"
+	<davem@davemloft.net>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, Dragos Tatulea <dtatulea@nvidia.com>,
+	"shuah@kernel.org" <shuah@kernel.org>, "pabeni@redhat.com"
+	<pabeni@redhat.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"edumazet@google.com" <edumazet@google.com>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>
+Subject: Re: [PATCH net v5 0/3] macsec: Add support for VLAN filtering in
+ offload mode
+Thread-Topic: [PATCH net v5 0/3] macsec: Add support for VLAN filtering in
+ offload mode
+Thread-Index: AQHcusHFtVV4nTuLykGR5FK+1e+FhrW8LSAAgAADwoA=
+Date: Mon, 23 Mar 2026 14:42:00 +0000
+Message-ID: <5ae5d08d578fce1a01a548fad8552a14df8c5679.camel@nvidia.com>
+References: <20260323123633.756163-1-cratiu@nvidia.com>
+	 <acFODtfaa8LCKX4r@krikkit>
+In-Reply-To: <acFODtfaa8LCKX4r@krikkit>
+Reply-To: Cosmin Ratiu <cratiu@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS5PPF266051432:EE_|PH7PR12MB7872:EE_
+x-ms-office365-filtering-correlation-id: e86ec53e-bae9-4d66-efc3-08de88ea57bf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|1800799024|366016|38070700021|18002099003|22082099003|56012099003;
+x-microsoft-antispam-message-info:
+ DuYeOVVk03JgfqRlLvcQ1L0jlAVBrq5m+PmdGzgX0MHZWS30Zcj6L9rLH3k+dyDiGoiF6CCVQitOrbfIiLlSuWtpe3j3rSnQ5FT1hpIFWfGovv+ybfn8/ezUWzrSw+kJ/7wOBLhEKn+rnnJTUi9sdGY85NzF8tIC9jXAlkSsfy3yM5oWEy2bN3IggfkSCNmnqlgjfUloZqhBXXDtD0lLxxuv5v383VYlTd15DApuMRK0XA9UuJN6x3vhNsS81w5giBpl1mzAWwyHpM8t18WX7XcT7kChvZU67R6SVb7TDfeYCAjyA2PBfITPQ5usmA/ss8kUpQGJP40BtNaxGATACPo5GqX4+rfccmtIIO0qwOjDeD9CyeRUObFM7Jrm5b7Iyp4ec0TMIjRKgtitDxt8a45A+JPnxS/5VRZL+U7PAxA89NHf16DQqmoRrMVdrI78jphKE+zo61QpcyqDO8/6x3rr6kp8kis0p3R1RFHjMoZiF4XvbaE2yIEeuaRlX9lf8pSKduz0P094MBp1NOyLBRU97GgU50fOdacpb8MlT1JsaM0m87iHqyCxZfO+utNO2AKCfMs/K7SDGXgu4OEhhhhCiaeMc+PavPOKyJdQkPCFmvWFYcEMXCyI3Rhgbu/4QgUMA7zAR3H5KeWKrVKv/ikh6tdyE6r3zuSQTbPet3s5P1Jz5wCRWUibkgaeuy1dXxSlK764nxpQJms12Gpl0IczLQTD2lcrX52O9EJg6EIPr1le8InLTzMrnvmdof/IfyHlCDUCzcb1NGE6GsOam9LEbbVeU+Uq77QAiXy8gBM=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS5PPF266051432.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700021)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?T3NZVHNzeWdGdVVJbnNmSHJMRU9sOS9XYnpRZEcrMDNnWXBYL2xxdStEYW93?=
+ =?utf-8?B?bG9ld0Z2Yk42TDFwL3l4aVF2SGlPYm5RSWNvZVhoMmtaTzJSK1FYaktzRjBY?=
+ =?utf-8?B?eDJHSVBGSGNMdHI4S0N6S2VBRktkbWladlFYZGhnT3VOMjRoZVFnb2w5NzNW?=
+ =?utf-8?B?QWdzNFdWQ2Y3dytwTVRqOXpWbVBaeWpOTzZKVjVIbmpXa3gvb3ltYnRadkNF?=
+ =?utf-8?B?ZWs4eXVLUUVMU3lrbEdFWVNLWnQ0anNCQ0pXdGVlMnBKeEl4ZHhBTko4K2RZ?=
+ =?utf-8?B?aVI4SjZCTm5JVzdNT0pnRXpXRGR0RHFsVkw5U1R0ZHp1TDcyd0Rma21Ma1Yy?=
+ =?utf-8?B?ZFdpb1o0U3hHUmU1ZzRYZFpack5EWjNSM1FQK3UvVHMvd1lkM1JGNUVKUXN3?=
+ =?utf-8?B?YU5PNjArUzF2cEdCYnp2RSszbXlRWUlVakZ0K3NJTHY2dWd4cGlIZ3g3NHBv?=
+ =?utf-8?B?NlZyaEk4UExTR2JhRFRVd0MzSDJqSnJvZEdKOHJkMlllRm9EdzBHUjR2aExN?=
+ =?utf-8?B?NlhSWEFRZHo1emhrdjNnY21xdCtCa0pab0Z0WTZuK0U3Y3EwOEtMSDNXRUJ3?=
+ =?utf-8?B?L1hWYWlqd3A5dzRJbzZHMlVHYzFRVDVhSVlJVTZFbkNxOENOT1VJQVVvcnhx?=
+ =?utf-8?B?MGdYVGtEUmtOZmFvRmVwR0pBVXdoS2pUT0xBQ0pWOVFsdlAySTZ1VFprNlNa?=
+ =?utf-8?B?S211UCt1VmRYZXVvRy9JS1VYc3RWRWZ3bXgxKzNXWmppbXZUYy84Si9RWDJY?=
+ =?utf-8?B?VWZGSU14QWs5c3dJdW93dVlNMzN0cVhMR09Vam1wUkFHeWI5aFh0SUdVUWI5?=
+ =?utf-8?B?dlBVMHRtRGJnalhyRDltbHcrcTBYSlgzT0NocUtjaWlHVlppQ2FaYWQzWmZ6?=
+ =?utf-8?B?R3NQL3FRbnNyWGxHck9JRzZFSTBKV0JmYWJSMXovcC9paHE4WndJNkpKU3RN?=
+ =?utf-8?B?dFlnbXhoK2k1RlZTaGptbE5qZHdNckMvbTVsY2YrQnJzdFZYUHFkMTQ5aEhm?=
+ =?utf-8?B?RlpwMGlaUWdmMm15VVFWWnN1MHl4ak0yRTlNTFVZbnJjL3FUSktvUnFPM2lC?=
+ =?utf-8?B?ZTRKZGFFLzR1TnVuajA4R2p3VkRtMjNURFR1OFF6UUk2aFRQb1o0OGZxeHdR?=
+ =?utf-8?B?YWJSSFRDMVgyUWtDTWxubnlZZE8wS0lPNUdVYW1XSUJvU0IyTGRMRWJTdk1G?=
+ =?utf-8?B?a28zMFpUNmJ4Y21jRVNFYmk2eFhhVmdQVkFDZk01WlZJK2dVUStTSXQ5Zm5l?=
+ =?utf-8?B?MHZWcVU4aG1zSStTZGVEZkpDNFY3SENTbm9zUTdmbkpiVHRacFpkZGpYeUVH?=
+ =?utf-8?B?ZXgyYS8zRmFiQVFoRHFGK1ZUdVBnUEdvVHpydklnTU9KNzhjc21rT21uOWhm?=
+ =?utf-8?B?QWswNDJIanRDQnNUWDIvNitkVEFLNFlodlhzYzdOdFVKWlVOTWFVZUEzNFVN?=
+ =?utf-8?B?T3NqRHFOTUVoOVE1UHBDWnN4WDFqNzE3cXpjOEVjRitoL1BBYW9qT0ovajJp?=
+ =?utf-8?B?WWw0Tld6TXlqS3NJM1E5bWFSczJIWk5UeXpTRi9HcjQ1NWdjb1dPM0c2a2lG?=
+ =?utf-8?B?SWE1UzYzTDdXdjVLV0JZR3I1bFRSVVZ0VXdpSVJTRElKbytOZ0MwSWRTb25F?=
+ =?utf-8?B?S1JhTS83b0Ruc1djbmgyTUJHTEYzWGhEbXpSdTA1alVUUUQ4SlIxVGFSVG5p?=
+ =?utf-8?B?bGhNT2lYeE9QclJ3cFJBcVZWelA0Mlhjdlg3NmJrN1hLd28xaVpwMGF2RkVC?=
+ =?utf-8?B?UFN3NTFmVFpPRHNjOXpCWTNkMCtuaTZ1UnBEa29pdy9XQk9TdXlXaFdoNFJ0?=
+ =?utf-8?B?N0hYa0xPT2VHYlU1ZUtMV1ZKc2d4LzV0MmF6dEFzVlYvRkNuNnlTVS9weXhq?=
+ =?utf-8?B?TWZoWHQ5bmZyMFhxYm42Q2dTNGd4U3NCQkZjN25pYUc5TEd2R0xvcGdSL1Fo?=
+ =?utf-8?B?SU9PWklDaXpaeDVoOWZLMHN1bURTeGx6eVRKVDRibWNFcWdrUXRIc0ZQeUtD?=
+ =?utf-8?B?NWo3cVVRc1ZhS0JMSzJDS2JzblUxd3pabk5JQU94UHhkbVN2c3N0ZER4S3hD?=
+ =?utf-8?B?d1FjRlMrSWNycUhjMTFaYld1WndtZENWcjR5a1NYMkM3QUtpSnpwVnY2bm5v?=
+ =?utf-8?B?Z0lWUld5cGxSRENjMzRFMktaWExPMXBITXhDbFJXbGJLdGVuaENpVUpoZDVR?=
+ =?utf-8?B?RUwxRlhXbHEvUmJwVjdFMStpWTdwYzF1azI3RFVXZ0d4RFBJQjdTYmphanhQ?=
+ =?utf-8?B?VjdOajZkYUtGTWMvUHh2eEFQVEdjNlByY21YcHlpOGtCQVp6WDlncU8vVlN5?=
+ =?utf-8?B?NTRUbmdjVHBLRmVjdldWNGNMbElVTkpkMzRZWitwQTl6NG11Vkhydz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <660E28A070CD9C4D96E4D57909DB71B6@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260323-fw-path-v5-2-e88b2fe145f3@kernel.org>
-References: <20260323-fw-path-v5-0-e88b2fe145f3@kernel.org>
-In-Reply-To: <20260323-fw-path-v5-0-e88b2fe145f3@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>, 
- Russ Weight <russ.weight@linux.dev>, Danilo Krummrich <dakr@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Michal Grzedzicki <mge@meta.com>, driver-core@lists.linux.dev, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Jeff Layton <jlayton@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8673; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=n5PwD28reFcmNKZbHa+WcDYNkJJFYigMLc9GUuNvQoo=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpwVCw0z/5NmzSwuIaro5cjgT/gp3IrKZovUXg2
- KuWBdfCRX+JAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCacFQsAAKCRAADmhBGVaC
- FbzqD/wIzKybdMPw/v1PTnI5rKcO+zEn60Hu5dJW2WpTGvULkVh3UVjPlW5PCDjxLlCRgjSNuWb
- F4rQ9NsVJIOOJ0HkxY8apCJnrctDhaOG1VVUqbxCc5u/JSYRZ/gBY8QjOQhf13wQAnLLRVCwl2Y
- gFxZvO6ZDxx3sv0HYaa4skQs+gd0+mRUoX8J8/ADvN11U23D7zszdJVD5O3vOBG5KG1Led7qX3k
- zgOwHD6eWRnadGp7KmQyVImZnRelLLc5M5bWVAMDvrN30xeq02UYEcM+phiVkc6yhZkqZRNpode
- KfZAsL6DOzCbAlmt5cyiV7cSqcKM4+3eB7n2LcK6i46C7uv3bL0vpS9pEm1KCnXtxjbvzpao6Se
- SedM5oNmmQzk2MNaTpNa5+6TeOnHlai68Hh1JFgRHI94Ui/qZWC22hvGwFMBUmOyH7AWS3UgMGZ
- SqEfjgVEIXD1ergrZVJ2qEWGwzAheVH0ZnYfYo/JnauQD76mMrqEfjYM1NK+/cnExP4B+CBICKM
- IvhaJ3LqDwFIb8W+RlieMG9GPc1JlmPhuFkJsPMSoZVCbBMbJM+cRQUgHv3frd2S93MeM4oOuVC
- cCg0CBAO/evHd7q8FQWjUDEGT+b+L1+x6wbhdMFcqVvp4HeYmmwElNiWWYOWOy5CJ6bV+OszhLh
- pfpBLu7AJ8l1vGQ==
-X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
- fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS5PPF266051432.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e86ec53e-bae9-4d66-efc3-08de88ea57bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2026 14:42:00.8897
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6fMYpno1ApLyk2sD9vNnDte0uYCv30ehF0r2pKPW0P/u/mPvh95pH+B6bhBzqJSsaP9qxSZyLlvfBM9NLTxsRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7872
 
-Add fw_search.sh, a new selftest that validates the firmware_class.search=
-module parameter using the existing test_firmware module's sysfs trigger
-interface.
-
-The test covers:
-  - Firmware found in first/second/third search directory
-  - Firmware not found in any search path
-  - path= takes priority over search=
-  - Empty search= does not break firmware loading
-  - Sysfs readback matches what was written
-  - Escaped colon (\:) in directory name
-  - Escaped backslash (\\) in directory name
-  - Escaped colon combined with multiple search paths
-
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- tools/testing/selftests/firmware/Makefile     |   2 +-
- tools/testing/selftests/firmware/fw_search.sh | 222 ++++++++++++++++++++++++++
- 2 files changed, 223 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/firmware/Makefile b/tools/testing/selftests/firmware/Makefile
-index 7992969deaa2737ff2a033ffe60136b84ea2f3f0..42e5bd72886b3cd8f62ae42d53c1554e8a1b331c 100644
---- a/tools/testing/selftests/firmware/Makefile
-+++ b/tools/testing/selftests/firmware/Makefile
-@@ -3,7 +3,7 @@
- CFLAGS = -Wall \
-          -O2
- 
--TEST_PROGS := fw_run_tests.sh
-+TEST_PROGS := fw_run_tests.sh fw_search.sh
- TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_upload.sh fw_lib.sh
- TEST_GEN_FILES := fw_namespace
- 
-diff --git a/tools/testing/selftests/firmware/fw_search.sh b/tools/testing/selftests/firmware/fw_search.sh
-new file mode 100755
-index 0000000000000000000000000000000000000000..ec6873e54a4cc381771311be11203083b2531bf6
---- /dev/null
-+++ b/tools/testing/selftests/firmware/fw_search.sh
-@@ -0,0 +1,222 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test the firmware_class.search= module parameter, which allows
-+# specifying multiple colon-separated firmware search directories.
-+
-+set -e
-+
-+TEST_REQS_FW_SYSFS_FALLBACK="no"
-+TEST_REQS_FW_SET_CUSTOM_PATH="no"
-+TEST_DIR=$(dirname $0)
-+source $TEST_DIR/fw_lib.sh
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+SEARCH_SYSFS="/sys/module/firmware_class/parameters/search"
-+PATH_SYSFS="/sys/module/firmware_class/parameters/path"
-+
-+check_mods
-+check_setup
-+verify_reqs
-+
-+if [ ! -f "$SEARCH_SYSFS" ]; then
-+	echo "$0: search= parameter not available, skipping"
-+	exit $ksft_skip
-+fi
-+
-+# Save original values
-+OLD_SEARCH="$(cat $SEARCH_SYSFS)"
-+OLD_PATH="$(cat $PATH_SYSFS)"
-+
-+# Create temp directories for firmware
-+FWDIR1=$(mktemp -d)
-+FWDIR2=$(mktemp -d)
-+FWDIR3=$(mktemp -d)
-+
-+FW_NAME="test-search-fw.bin"
-+FW_CONTENT1="SEARCH_PATH_1"
-+FW_CONTENT2="SEARCH_PATH_2"
-+FW_CONTENT3="SEARCH_PATH_3"
-+
-+DIR=/sys/devices/virtual/misc/test_firmware
-+
-+cleanup()
-+{
-+	# Restore original values
-+	if [ "$OLD_PATH" = "" ]; then
-+		printf '\000' >$PATH_SYSFS
-+	else
-+		echo -n "$OLD_PATH" >$PATH_SYSFS
-+	fi
-+	if [ "$OLD_SEARCH" = "" ]; then
-+		printf '\000' >$SEARCH_SYSFS
-+	else
-+		echo -n "$OLD_SEARCH" >$SEARCH_SYSFS
-+	fi
-+	rm -rf "$FWDIR1" "$FWDIR2" "$FWDIR3"
-+}
-+trap cleanup EXIT
-+
-+# Clear path= so search= is consulted
-+printf '\000' >$PATH_SYSFS
-+
-+# Test 1: firmware found in first search path
-+echo -n "$FW_CONTENT1" >"$FWDIR1/$FW_NAME"
-+echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 1" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR1/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 1" >&2
-+	exit 1
-+fi
-+echo "$0: search path - first directory: OK"
-+
-+# Test 2: firmware found in second search path (not in first)
-+rm -f "$FWDIR1/$FW_NAME"
-+echo -n "$FW_CONTENT2" >"$FWDIR2/$FW_NAME"
-+echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 2" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR2/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 2" >&2
-+	exit 1
-+fi
-+echo "$0: search path - second directory: OK"
-+
-+# Test 3: firmware not found in any search path
-+rm -f "$FWDIR2/$FW_NAME"
-+echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
-+
-+if echo -n "nonexistent-$FW_NAME" >$DIR/trigger_request 2>/dev/null; then
-+	echo "$0: FAIL - firmware should not have been found in test 3" >&2
-+	exit 1
-+fi
-+echo "$0: search path - not found: OK"
-+
-+# Test 4: path= takes priority over search=
-+echo -n "$FW_CONTENT1" >"$FWDIR1/$FW_NAME"
-+echo -n "$FW_CONTENT2" >"$FWDIR2/$FW_NAME"
-+echo -n "$FWDIR1" >$PATH_SYSFS
-+echo -n "$FWDIR2" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 4" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR1/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - path= should take priority over search= in test 4" >&2
-+	exit 1
-+fi
-+echo "$0: search path - path= priority over search=: OK"
-+
-+# Clear path= again for remaining tests
-+printf '\000' >$PATH_SYSFS
-+
-+# Test 5: three search paths, firmware in third
-+rm -f "$FWDIR1/$FW_NAME" "$FWDIR2/$FW_NAME"
-+echo -n "$FW_CONTENT3" >"$FWDIR3/$FW_NAME"
-+echo -n "$FWDIR1:$FWDIR2:$FWDIR3" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 5" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR3/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 5" >&2
-+	exit 1
-+fi
-+echo "$0: search path - third directory: OK"
-+
-+# Test 6: empty search= should not break anything
-+rm -f "$FWDIR3/$FW_NAME"
-+printf '\000' >$SEARCH_SYSFS
-+
-+if echo -n "nonexistent-$FW_NAME" >$DIR/trigger_request 2>/dev/null; then
-+	echo "$0: FAIL - empty search= should not find firmware" >&2
-+	exit 1
-+fi
-+echo "$0: search path - empty search=: OK"
-+
-+# Test 7: verify sysfs readback matches what was written
-+echo -n "$FWDIR1:$FWDIR2:$FWDIR3" >$SEARCH_SYSFS
-+READBACK="$(cat $SEARCH_SYSFS)"
-+EXPECTED="$FWDIR1:$FWDIR2:$FWDIR3"
-+if [ "$READBACK" != "$EXPECTED" ]; then
-+	echo "$0: FAIL - sysfs readback mismatch: '$READBACK' != '$EXPECTED'" >&2
-+	exit 1
-+fi
-+echo "$0: search path - sysfs readback: OK"
-+
-+# Test 8: escaped colon in directory name (\: -> literal ':')
-+FWDIR_COLON=$(mktemp -d)/fw:dir
-+mkdir -p "$FWDIR_COLON"
-+echo -n "$FW_CONTENT1" >"$FWDIR_COLON/$FW_NAME"
-+# Write the path with the colon escaped as \:
-+ESCAPED_COLON="${FWDIR_COLON//:/\\:}"
-+echo -n "$ESCAPED_COLON" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 8" >&2
-+	rm -rf "$(dirname "$FWDIR_COLON")"
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR_COLON/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 8" >&2
-+	rm -rf "$(dirname "$FWDIR_COLON")"
-+	exit 1
-+fi
-+rm -rf "$(dirname "$FWDIR_COLON")"
-+echo "$0: search path - escaped colon in directory: OK"
-+
-+# Test 9: escaped backslash in directory name (\\ -> literal '\')
-+FWDIR_BS=$(mktemp -d)/fw\\dir
-+mkdir -p "$FWDIR_BS"
-+echo -n "$FW_CONTENT2" >"$FWDIR_BS/$FW_NAME"
-+# Write the path with backslashes escaped as \\
-+ESCAPED_BS="${FWDIR_BS//\\/\\\\}"
-+echo -n "$ESCAPED_BS" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 9" >&2
-+	rm -rf "$(dirname "$FWDIR_BS")"
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR_BS/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 9" >&2
-+	rm -rf "$(dirname "$FWDIR_BS")"
-+	exit 1
-+fi
-+rm -rf "$(dirname "$FWDIR_BS")"
-+echo "$0: search path - escaped backslash in directory: OK"
-+
-+# Test 10: escaped colon with multiple search paths
-+FWDIR_COLON2=$(mktemp -d)/has:colon
-+mkdir -p "$FWDIR_COLON2"
-+echo -n "$FW_CONTENT3" >"$FWDIR_COLON2/$FW_NAME"
-+ESCAPED_COLON2="${FWDIR_COLON2//:/\\:}"
-+# First path is normal (no firmware), second has escaped colon (has firmware)
-+echo -n "$FWDIR1:$ESCAPED_COLON2" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 10" >&2
-+	rm -rf "$(dirname "$FWDIR_COLON2")"
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR_COLON2/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 10" >&2
-+	rm -rf "$(dirname "$FWDIR_COLON2")"
-+	exit 1
-+fi
-+rm -rf "$(dirname "$FWDIR_COLON2")"
-+echo "$0: search path - escaped colon with multiple paths: OK"
-+
-+echo "$0: all search path tests passed"
-+exit 0
-
--- 
-2.53.0
-
+T24gTW9uLCAyMDI2LTAzLTIzIGF0IDE1OjI4ICswMTAwLCBTYWJyaW5hIER1YnJvY2Egd3JvdGU6
+DQo+IDIwMjYtMDMtMjMsIDE0OjM2OjMwICswMjAwLCBDb3NtaW4gUmF0aXUgd3JvdGU6DQo+ID4g
+VjQ6DQo+ID4gLSBNaWdyYXRlZCBuc2ltLW9ubHkgbWFjc2VjIHRlc3RzIHRvIFB5dGhvbiwgdXNh
+YmxlIGFnYWluc3QgcmVhbA0KPiA+IGh3Lg0KPiA+IC0gUmFuIHRoZXNlIHRlc3RzIGFnYWluc3Qg
+Ym90aCBuc2ltIGFuZCBtbHg1Lg0KPiA+IC0gR2F2ZSB1cCBvbiBuc2ltIHBhdGNoZXMgc2luY2Ug
+dGhlIHRlc3RzIG5vIGxvbmdlciB1c2UgdGhlbS4NCj4gDQo+IFdoeSBub3Q/IEJlaW5nIGFibGUg
+dG8gdGVzdCB3aXRob3V0IGFjY2Vzc2luZyByZWFsIEhXIGlzIHN0aWxsDQo+IHVzZWZ1bC4NCj4g
+DQpUaGUgdGVzdHMgbm93IHNlbmQgbWFjc2VjIHRyYWZmaWMgb3ZlciBWTEFOcyBhbmQgbnNpbSwg
+aXQncyBqdXN0IHRoYXQNCm5zaW0gZG9lc24ndCBkZWFsIHdpdGggVkxBTiBmaWx0ZXJzIGF0IGFs
+bCBhbmQgdGhlcmUgYXJlIG5vIHN0dWJiZWQNCnZsYW4gZmlsdGVycyBpbiBkZWJ1Z2ZzLCBzaW5j
+ZSByZWFsIGh3IGRvZXNuJ3QgaGF2ZSB0aGF0IGludGVyZmFjZS4NCg0KQ29zbWluLg0K
