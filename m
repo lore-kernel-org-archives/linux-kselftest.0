@@ -1,61 +1,93 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD7714A8B
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 03:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8EE1E0B9C
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 03:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774236093; cv=none; b=MolDhNINpW7tTxX7fVf/jFmFrzdftPAKu1ghVljbJ5o5M2gG23hyuoEt8U1lmjnRKV/hfOjaEHxYtita5aYY/PycxdK3pqxWw+hj+a7xeAchff0nxT91OQav5xYQxh2pFev2Z70TA4z1jEUa0ONUD+LZSCDS9BRh9foxQTcz9ug=
+	t=1774236229; cv=none; b=WCQCIF8wcSLKF82ZboUNKlzXJlgp+CKi3paQDPt2veK1jsi4a2esRwvxmkJ1mWkOklRlNcuZ6KJRYP0TNYZInLUHJdNsEOrJSztTSoJT8MpvW5sXKf6qNugbnFOeUu3jtASuNWXWVo6NmXTknOXfwYmZN9Boiyk8l42WPt1LC7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774236093; c=relaxed/simple;
-	bh=7mHbfImAVtI+SDrjtpBEQZ0paPAK0FURZZbYA0FiaM0=;
+	s=arc-20240116; t=1774236229; c=relaxed/simple;
+	bh=dvdkF/UsKfSpzISBzg+hQVtnBMhk/G6USXEJ2GRrMBM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mfo1dghhlanlgQkWHP5TisvMetyyOYjURMY63PxNGED7ks/z3tZfvlH/HCWmnc09mzaO1isd05cwzMjzIp8aYk+A0PCE5utwvJI1hoaRezvnezj9SzaBlzE8tz5Jf0SVvS5eBdTv9MPnTT1KOrSs5ez/uE7R4sWwm261ISp+mh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hcJSZNDZ; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y+544dH9kcCvg1N6sX7XssRmBO3qir8DfDu5tQGVhnvErLKhtR5ewEMDN9ZRPfRY58ybFuXgpwCEzi0jZBsX9YTE2YfuilI9UcUBCOMG+lc64azBUPr+gh1orBMs17i5dhG+e34zWhzAGp7W1I2v011fFYyiqv2jtO2lYNYIksY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gAxva1fr; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y6iD4Nsi; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hcJSZNDZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gAxva1fr";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y6iD4Nsi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774236091;
+	s=mimecast20190719; t=1774236227;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aRwkYLYyO8q6WWNTg48brkFByTgN0JR6z4WTvpCGOMc=;
-	b=hcJSZNDZY6aQGKXAX2E0retCON44ndUJlf76wKVY5VhUwAnVlrWgMMjhlWWenG0NJp+EZu
-	Mr3UzyTChh8ImzuMAHFbu9t7AXQzg+KJxDPNgweqAR99r7N/et/xR0SeWIV6lIFhtBu9gO
-	x7S/z9oCAnHuYj7GLJqd0NND6Cbm5qQ=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-116-jiOunJ4JP1yFOLulXAHucg-1; Sun,
- 22 Mar 2026 23:21:26 -0400
-X-MC-Unique: jiOunJ4JP1yFOLulXAHucg-1
-X-Mimecast-MFC-AGG-ID: jiOunJ4JP1yFOLulXAHucg_1774236083
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7F1B119560AA;
-	Mon, 23 Mar 2026 03:21:23 +0000 (UTC)
-Received: from gmail.com (unknown [10.72.112.175])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 42154300019F;
-	Mon, 23 Mar 2026 03:21:13 +0000 (UTC)
-Date: Mon, 23 Mar 2026 11:21:08 +0800
-From: Chunyu Hu <chuhu@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com, npache@redhat.com,
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
-	lance.yang@linux.dev
-Subject: Re: [PATCH v4 0/5] selftests/mm: skip several tests when thp is not
- available
-Message-ID: <acCxpF5l_lveG2MD@gmail.com>
-References: <20260319160656.1480279-1-chuhu@redhat.com>
- <20260319194604.0a9a733f521caf2dc2bf18c8@linux-foundation.org>
+	bh=WuN4IVRpe2UV4/L8jmgWKZsUdAcN2rX2txKuBjApf3Y=;
+	b=gAxva1frmV9XD7G/MBT4ymYEsLourcdtcD/mCBe7npDfWmALp5WQ2dLcdehLDEwx7B28As
+	hIz2Dvahdnxejhq/spPiCjczLeV0BPRo8vC+gVendWKLgk0echQW8GlYoYgcfVkfJFG28c
+	ysQwKFKBckC+EJpyOQ1oKTD1V9dAFc0=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-567-s5hBaZYXP5OgS4ibV9H10g-1; Sun, 22 Mar 2026 23:23:45 -0400
+X-MC-Unique: s5hBaZYXP5OgS4ibV9H10g-1
+X-Mimecast-MFC-AGG-ID: s5hBaZYXP5OgS4ibV9H10g_1774236224
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-c73a4983fc0so2742226a12.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2026 20:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1774236224; x=1774841024; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WuN4IVRpe2UV4/L8jmgWKZsUdAcN2rX2txKuBjApf3Y=;
+        b=Y6iD4Nsivrf1/SDZLRKO19Fxh4xhA5Tkxzob5rTQXDEplS4gsquyUjOvbblqsx1adI
+         EQhWWzQqoQzL7L7kOZoc4Vqn/1r9Te8Yhxgt9xJSgB3A3Fq1mY/fZGulsflFmUDJd05W
+         jHCApMS//dfOQztL0USL8/V6dA84J9m7dScCvO151sVJQIpNiSUQhE9UXlavPiP9uuV+
+         wv0eUQzS01g+CmVC1SJuJWnPplcpuDsI1Zy5cv+i1Dh/y7CtBpAKn+eWM//G/N9PafNc
+         mbavrjCYzUs2xLAcJBEra7+5xQ20bFJvtDiVL/4nw2rECcjQIEzudmP0SRdvNDcf6YXb
+         eWEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774236224; x=1774841024;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WuN4IVRpe2UV4/L8jmgWKZsUdAcN2rX2txKuBjApf3Y=;
+        b=dVpHsOBV5OUKmKMuIIvtfujba/U8sJR25sUoaxGOupOtWGwqnwS/l7izUkjgLe0IDD
+         RjvXuaVrOaJt3dCHXzlEmdG/vgYs0TVN2imXGjn8ecr9WhalYSmf53CeUpKuOFeOdgKa
+         YwfQEdb/iBxsvQxI/W9ojk7eV3coAYQRuFb/qjdC17QZOE2bvCTLXbj7kOZbmMjnWKAt
+         62nlFLbk2iPKkgP2bQCOO+cSIfHlDdVa6aJJoTq2gxS47RRTsxAluZ8yqGMg7MfjEhHx
+         d++T1qOqgShu3Ucmr5/qVuQW/pCmLHIvO+J9OFhFtgu/4A+v/TH4xQ9XYZIea5TIVJiv
+         8oGA==
+X-Forwarded-Encrypted: i=1; AJvYcCXVwMoIq5P1xqrtxkye3OfocArT+fV9K8tQ2SB0im/GUMD1ntaLaiP//NJFbW5HzwZlLWt5/YuHFnLrx6WRk9Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxs3jQG9GVLywSmS1eWOpXCij3XhlmAJvAbM+kFm4bgSzQgmKOD
+	jDH+DkIqqtPdf+y7q2gwVXKEae9Ly9E+Cj/F/3geUN4prUje1h2EcicnIjs3qfJlJnYSM3abwgj
+	9Fx8LxYjSi2ejH14yTuh5tt0X+v+EnpWslQZqunvUVwtE1R2SJ3yNJWvvawDXRMfHL/iM6Q==
+X-Gm-Gg: ATEYQzzqye9tJmng0VXE/9ZpLW65hX8TwskYp6r6Hs0F1bQgToE6EzcUwrsT8XP3Fd5
+	ov/3J2WVleGJFVfpsl2cpHpNLmbu7NyqWHhsWEpccvUKtx+90EslLjr7u9VZn+WrFvQZsY/TjmW
+	DqgYPZrDKNoNuTbVWrodyt7p5qXEsKjx4w25A1s8aFymqupsVfBVwEvUi+7R2O564g4neGB5e60
+	SyiQ9LRzdN8UoU5CIiGH7umELItt2MS7U03jnYjFAOKNu3dAkirfUIZ2+dogizGS2z5LhAT2iwC
+	dF4tPV19hkO4xUhSkJZruP2Ui2ai0wms1fGNFGRlWBNK1TyU9QlPobvsGe5nuKvIm8+B3N6PAp7
+	TR2auICPRikjHEi5d7g==
+X-Received: by 2002:a05:6a20:94cb:b0:398:d82c:ae6 with SMTP id adf61e73a8af0-39bceb427a6mr9147196637.31.1774236224292;
+        Sun, 22 Mar 2026 20:23:44 -0700 (PDT)
+X-Received: by 2002:a05:6a20:94cb:b0:398:d82c:ae6 with SMTP id adf61e73a8af0-39bceb427a6mr9147173637.31.1774236223867;
+        Sun, 22 Mar 2026 20:23:43 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c74443ccbe4sm6215654a12.22.2026.03.22.20.23.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Mar 2026 20:23:43 -0700 (PDT)
+Date: Mon, 23 Mar 2026 11:23:40 +0800
+From: Li Wang <liwang@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>, longman@redhat.com
+Cc: yosry@kernel.org, yosryahmed@google.com, nphamcs@gmail.com,
+	hannes@cmpxchg.org, mhocko@kernel.org, mkoutny@suse.com,
+	muchun.song@linux.dev, tj@kernel.org, roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 0/7] selftests/cgroup: improve zswap tests robustness
+ and support large page sizes
+Message-ID: <acCyPNCBoTGAJjfs@redhat.com>
+References: <20260322061038.156146-1-liwang@redhat.com>
+ <20260322091851.e965d3a2f0d6af5bd985407f@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,62 +96,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260319194604.0a9a733f521caf2dc2bf18c8@linux-foundation.org>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <20260322091851.e965d3a2f0d6af5bd985407f@linux-foundation.org>
 
-On Thu, Mar 19, 2026 at 07:46:04PM -0700, Andrew Morton wrote:
-> On Fri, 20 Mar 2026 00:06:51 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
+On Sun, Mar 22, 2026 at 09:18:51AM -0700, Andrew Morton wrote:
+> On Sun, 22 Mar 2026 14:10:31 +0800 Li Wang <liwang@redhat.com> wrote:
 > 
-> > There are several tests requires transprarent hugepages, when run on thp
-> > disabled kernel such as realtime kernel, there will be false negative.
-> > Mark those tests as skip when thp is not available.
+> > This patchset aims to fix various spurious failures and improve the overall
+> > robustness of the cgroup zswap selftests.
 > 
-> A couple of questions from Sashiko:
-> 	https://sashiko.dev/#/patchset/20260319160656.1480279-1-chuhu%40redhat.com
-> 
+> AI review has questions:
+> 	https://sashiko.dev/#/patchset/20260322061038.156146-1-liwang@redhat.com
 
-AI question one:
-```
-> +void write_file(const char *path, const char *buf, size_t buflen)
-> +{
-> +	int fd;
-> +	ssize_t numwritten;
-> +
-> +	fd = open(path, O_WRONLY);
-> +	if (fd == -1)
-> +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-> +
-> +	numwritten = write(fd, buf, buflen - 1);
-Is it safe to keep the buflen - 1 behavior in a shared generic utility?
-Since this is now a generic API in vm_util, callers passing the exact buffer
-size (like sizeof(buf) or strlen(buf)) will suffer a 1-byte data truncation.
-Additionally, if a caller passes buflen = 0, buflen - 1 will underflow,
-causing write() to attempt writing an invalid size.
-```
+> [Sashiko comments in patch 4/7]
+> ...
+> Could we update this loop, along with the identical loops in
+> alloc_anon_noexit() and alloc_anon_50M_check_swap() shown below, to use
+> sysconf(_SC_PAGESIZE) instead?
 
-Here I think there's no single anwser. We can use buflen, but if user don't
-provide a '\0' in the end of buffer, out of boundary access could happen
-when such as printf(). We called it buflen, then we expect it's a '\0'
-ended buffer as I undersand. So maye we can just leave as it is and user
-should be awared of the requiremnt of the helper here.
+I found that Waiman submit another patch that do same thing like this
+suggestion. I'd consider to merge that one into my patch 4/7.
+
+So, let me talk to Waiman first.
 
 
-AI question two:
-```
-> +	close(fd);
-> +	if (numwritten < 1)
-> +		ksft_exit_fail_msg("Write failed\n");
+> [Sashiko comments in patch 5/7]
+> ..
+> if (zswpin < MB(24) / sysconf(_SC_PAGESIZE)) {
+> Should these also be updated to use the new global pagesize variable for
+> consistency? Subsequent patches in the series do not seem to correct this
+> omission.
 
-Does this drop useful debugging context compared to the previous version
-in thp_settings.c?
-The old implementation printed the buffer contents on failure. With this
-generic message, if a test fails to write, it will only print "Write failed"
-without indicating which file path failed, what data was being written, or
-the underlying errno.
-```
+Good catch, that remainds should be corrected too.
 
-That makes sense, indeed we dropped the printing of the buffer content
-compared with the version in the thp_settings.c. I can append a new
-patch in v5 to improve this, together with other safety checks.
+> If control_allocation is NULL, wouldn't the loop immediately dereference it
+> and cause an unhandled segmentation fault rather than a graceful test
+> failure?
 
+That's right, but better to be resolved in another series, not this one.
+
+> However, there does not appear to be a corresponding munmap() call in the
+> test's cleanup path. Although the OS reclaims this memory when the test
+> process exits, should this explicit unmap be added for a balanced resource
+> lifecycle within the test?
+
+That's right, but better to be resolved in another series, not this one.
+
+
+> [Sashiko comments in patch 6/7]
+> ...
+> If malloc returns a null pointer in a memory-constrained environment, the
+> loop will unconditionally dereference it. Should there be a null check
+> before the loop?
+
+That's right, but better to be resolved in another series, not this one.
+
+> The test data is generated by writing a single 'a' character per page, leaving
+> the rest zero-filled:
+
+> 	for (int i = 0; i < control_allocation_size; i += pagesize)
+> 		control_allocation[i] = 'a';
+
+> This makes the data highly compressible. Because memory.max is set to half of
+> control_allocation_size, 512 pages are pushed into zswap.
+
+> 512 pages of mostly zeros can compress down to roughly 11 to 15 kilobytes
+> using compressors like zstd, which is well below the 65536 byte (64k)
+> zswap.max limit on a 64k page system.
+
+> Since the limit might not be reached, writeback might never trigger,
+> causing the test to falsely fail. Should the test use incompressible data
+> or a lower fixed limit?
+
+If Sashiko suggests reducing compressibility, we'd need to fill a significant
+fraction of each page with varied data, but that would work against the test:
+
+zswap would reject poorly compressing pages and send them straight to swap,
+and memory.stat:zswapped might never reach the threshold the test checks
+with cg_read_key_long(..., "zswapped") < 1.
+
+So, at most I'd keep the data highly compressible and just ensure non-zero,
+unique-per-page markers.
+
+i.e.
+
+  control_allocation[i] = (char)((i / pagesize) + 1);
+
+-- 
+Regards,
+Li Wang
 
