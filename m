@@ -1,130 +1,227 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F91F38239E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 08:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12F12DB7BB;
+	Mon, 23 Mar 2026 09:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774256041; cv=none; b=CAjzaBNqVsjKdSoH72f2crVTTR3dYvqfX6SyomiVJjBqjwUaLmlJNbP30adEkd1lZwTC5oCtB2dtlfAp4jY9mS7B6W2r9y+PNxmu2z/5H/Ty1oX5dXg46sVb+I9TJc6fOdaNds4G3SynCd+FIvAr+yxf5CwAqWrVU8uEWgax1x8=
+	t=1774257522; cv=none; b=j1g45vPZbJij8gBjrkWhBRK5kAm4V/XHn2c4Jedr8eYWQdxZOfvy/9SKqWj7jHRS0VbrAr/ux5cwCLY/I1O6EDCaTfHeb3fgkm7WTH8/JGfgnnKwhiT3Ca3pNVUdd6pVHEN0Cv3nMp6dySkML2Fft3q1N4Vdt7OouUwuQnb9u9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774256041; c=relaxed/simple;
-	bh=hThO1A1C8Xur/ZEGkwiOiLhsaE2lKnkvWmC7Eh4azQY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KMxcnfBfhJyMupteMrM2gy5Dy3310MrPqN9/6igGKJLslRO/dCYusplg3ea35Eit344i+boaPAc9Z4xt2Rfnc7KUgiZrGFN2mYHyaQooK948M6FLcPMzixWF9RPohiXiYg0lBGCKibo/ThORF5m1fCDEcDGagasUFlYKflANKQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VrRxfKj5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=mPCSK96q; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774257522; c=relaxed/simple;
+	bh=frafN1uiAyM2gSV3q3uMq3Nr3rRXHRok0GvuYyzizFQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=CTEu5Zn+RDww418iTd4hb74AVxFY1mIEl0pfv+AcftMm8vdg5AkdfeEJYHZhvTVSUx8d2xRf26mRWacrmSe1eHRyMmLesv6r0Du608eTMd5lFDhWFVAHB5kdqNrr+eVv2bGKttAkUXBvzNMkC3uc0NL/2x9it8g86NRuvs47tZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FT0XodMs; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VrRxfKj5";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="mPCSK96q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774256039;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ogcl2ZAquuYNoAzauwvXFFTaynrHJWtFRV3iycnT4gM=;
-	b=VrRxfKj5UFbJU/dhj/ZQwQN/Ec9FnakNUXBcNCibgDRmjzgq03kdXSQ/TZmC0Fx76dSIp0
-	gdrMV9HSBqy6zOqtQ77xpMrIPezLX5UP3QMXjEPi50KrwS6Us9XYgeVDLE2+AJjTQzk2bc
-	PvlFHfjREawMfCwjvGBWtf/XymGen/g=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-194-Vi2OAp-9NSKffzB0-HKfNQ-1; Mon, 23 Mar 2026 04:53:58 -0400
-X-MC-Unique: Vi2OAp-9NSKffzB0-HKfNQ-1
-X-Mimecast-MFC-AGG-ID: Vi2OAp-9NSKffzB0-HKfNQ_1774256037
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-358f058973fso5707967a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 01:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774256037; x=1774860837; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ogcl2ZAquuYNoAzauwvXFFTaynrHJWtFRV3iycnT4gM=;
-        b=mPCSK96qYFs307uVXfmXc2YWal8UYRqhCsgm780ZuH+wG749Ke6GcOs+vG4NwMXzyn
-         j8/s22LJqxVdN9xrPIrwoCjpmOeZvHma6n4xk8Eha20A1mx4Zxl5WYN64tCO6Julgdfr
-         VwsXRcBwN0gmjNNeknBgMwFzjgLYnSBSxxbamExjTCXvcCJEBI17snT7HsPYWjSQp9dw
-         h84pIPYi6rd0fRhmYeUlaRjyoO0LevwyOXUU/4B6AOrXmT28Orj2vWv13TfdlbqurV/P
-         MFYovqwBJSlhFzPppUiwySvxE9CTZgQ3ooUMIeBJ1KnljisHjWLHzLe+Bq+YMAO3OIOA
-         RQVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774256037; x=1774860837;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ogcl2ZAquuYNoAzauwvXFFTaynrHJWtFRV3iycnT4gM=;
-        b=AdwWVBH2YkiVA3svdNULpWPLSU+e+uMvqo4b0eI/pEjXp+O0J5UOp4i32FvbEYmB4c
-         tg8cxt+UufUUFJVQtklFfC7Kk5Dbyfffydykfw4AWOeMwl0mox2sZ8NLRc33NEA1FXRt
-         DdwMeTdXAFdjlsOxxSEx8N4U3/t2bOzJ/HGshyXEU7Sg8j0eLi29KU43DZ5lKRk8AE7v
-         DrHmXdnKS5CAbUM2sv0n5qLr7prCOFgrs9XvT2QLxpqncs1kB0ilAHqvHsgNtW34DCk1
-         48hAiEbqL92870qCdgYgBQpKXfAEa15Ivq7l6RikYTGHI5r/v1bS1L338oMKBjUzYuHZ
-         KBlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWWxSdyOE+pa8pL4Vfl65KodKU3kIO8QcqFbVLbZZQZtSTbTgVpV4fq7xyFbrRwaJsPkEBS87RZrhsT7FxOHmc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwePOU1UZQFm70vtQ0hYo9s+NJtjrAgyjvvhqn96NtvaJUjU1Z5
-	MbDh4uCHiKkMbVi6iMnMAp38kEu3j6k6xX0vmBkp4dVDAqvwRM7Js8Kh+Q9vFqXHcYA+geMbTNP
-	4wbeyyzmo28PDyvQikAZTkg7EgxahEaK3KCbZSqbzL8qXQzReTo2yrteyrq+rbjNeASLAvg==
-X-Gm-Gg: ATEYQzxTjFEnXohvnygmb5TIBeCDIfMwAoaGpqSUrxIFN59iPoud8nkDbep37WJgx12
-	516X5W+ptjJk+Y8hdLgue7RfrIIcumK1m0H+j5nWmjGr2wmRnigYt+sluWfecwtsDLyIpkvSwiA
-	6uOMOfri7zPHtp7WCUTvJfwhEOpVyBplEXI1+2dB4wfKbNysg6unLgEtpE22Mr2H3eAf6v1BC9/
-	itEXLeAjkdqcxco1bmZra7Jay3ghbFhu8qj+JEtizPVovykEc8AWNl83f7X/cRsMwqdOlNwponn
-	c6TsPC2N4mPxeT9NVCYPY9N4w5ZC2zKi8mKrQARow5+kosUH6oLb5EN9hGbOa1V73YDVJQFEq6N
-	I4u4GN4Sl/AVkn6Nk0g==
-X-Received: by 2002:a17:90b:28c8:b0:340:4abf:391d with SMTP id 98e67ed59e1d1-35bd2cb1ea5mr8848388a91.16.1774256037064;
-        Mon, 23 Mar 2026 01:53:57 -0700 (PDT)
-X-Received: by 2002:a17:90b:28c8:b0:340:4abf:391d with SMTP id 98e67ed59e1d1-35bd2cb1ea5mr8848368a91.16.1774256036672;
-        Mon, 23 Mar 2026 01:53:56 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c743a7ff529sm7219812a12.2.2026.03.23.01.53.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 01:53:56 -0700 (PDT)
-Date: Mon, 23 Mar 2026 16:53:53 +0800
-From: Li Wang <liwang@redhat.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	James Houghton <jthoughton@google.com>,
-	Sebastian Chlad <sebastianchlad@gmail.com>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
-Subject: Re: [PATCH v2 6/7] selftests: memcg: Don't call reclaim_until() if
- already in target
-Message-ID: <acD_oR9CmOkQFBZL@redhat.com>
-References: <20260320204241.1613861-1-longman@redhat.com>
- <20260320204241.1613861-7-longman@redhat.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FT0XodMs"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=HRpfkon01fXZerM9f0oDAjGQYFsh+lno7ysvy+gZQfE=;
+	b=FT0XodMsuHQhxMnfOLpu4iF+2ZEWCWYNaeoyTtSVuec7tYj8fMsqZ2u8B0SXFEhYP9l1j7NfO
+	ZHJOwowzIjTMPFL7ObOna0gJrfSMVf0wejCAjtNcaATAPGoW+g2Wi87EbXOnZib8qCSi9QKbPlg
+	IBeQEZejAjAaz+FQuFnSd/Y=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4ffSBQ6TgBz1T4JY;
+	Mon, 23 Mar 2026 17:13:02 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2987740567;
+	Mon, 23 Mar 2026 17:18:31 +0800 (CST)
+Received: from [10.67.120.222] (10.67.120.222) by
+ kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 23 Mar 2026 17:18:30 +0800
+Message-ID: <076199c7-265a-4c24-9e8b-964af10931e2@huawei.com>
+Date: Mon, 23 Mar 2026 17:18:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260320204241.1613861-7-longman@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC patch 1/9] selftests/resctrl: Move CPU affinity and resctrl
+ FS setup to child process
+To: Reinette Chatre <reinette.chatre@intel.com>, <tony.luck@intel.com>,
+	<Dave.Martin@arm.com>, <james.morse@arm.com>, <babu.moger@amd.com>,
+	<shuah@kernel.org>, <tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>,
+	<ben.horgan@arm.com>, <jonathan.cameron@huawei.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>
+CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
+	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
+	<wangzhou1@hisilicon.com>
+References: <20260304040334.765860-1-wuyifan50@huawei.com>
+ <20260304040334.765860-2-wuyifan50@huawei.com>
+ <33a9c54d-565b-4de9-b525-1390bfd50593@intel.com>
+From: wuyifan <wuyifan50@huawei.com>
+In-Reply-To: <33a9c54d-565b-4de9-b525-1390bfd50593@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
-On Fri, Mar 20, 2026 at 04:42:40PM -0400, Waiman Long wrote:
-> Near the end of test_memcg_protection(), reclaim_until() is called
-> to reduce memory.current of children[0] to 10M. It was found that
-> with larger page size (e.g. 64k) the various memory cgroups in
-> test_memcg_protection() would deviate further from the expected values
-> especially for the test_memcg_low test. As a result, children[0] might
-> have reached the target already without reclamation. The will cause the
-> reclaim_until() function to report failure as no reclamation is needed.
-> 
-> Avoid this unexpected failure by skipping the reclaim_until() call if
-> memory.current of children[0] has already reached the target size for
-> kernel with non-4k page size.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+Hi Reinette,
 
-Reviewed-by: Li Wang <liwang@redhat.com>
+On 3/13/2026 4:53 AM, Reinette Chatre wrote:
+> Hi Yifan,
+>
+> On 3/3/26 8:03 PM, Yifan Wu wrote:
+>> 3. Since only the child process is monitored, the CPU affinity should
+>> also be set only on the child process to ensure that the PMU (Performance
+>> Monitoring Unit) can count memory bandwidth from the benchmark process.
+> A child process inherits its parent's CPU affinity mask, no?
+>
+>> 4. When the parent and child processes are scheduled on the same CPU,
+>> the parent process's activity may interfere with the monitoring of
+>> the child process. This is particularly problematic in some ARM MPAM
+> Which tests are encountering issues? For MBM and MBA I do not think this
+> matters since the tests just compare perf and resctrl numbers and perf
+> will already contain all bandwidth associated with the PMU so isolation here
+> may require to potentially take all traffic off a socket.
+> CMT tests may see some impact since it compares cache occupancy to the
+> size of the buffer being read. I do have a pending series that aims to
+> address some issues with the CMT test:
+> https://lore.kernel.org/linux-patches/cover.1772582958.git.reinette.chatre@intel.com/
+>
+>> implementations, where memory bandwidth monitoring real-time values. When
+>> the child process is preempted off the CPU, this results in inaccurate
+>> monitoring.
+> This motivation is not clear to me. Could you please elaborate how inaccurate
+> this monitoring gets? The child process may be preempted but it should not be
+> moved from the CPU in its affinity mask.
+The bandwidth monitoring feature on certain systems only ensures
+that tasks currently scheduled to the CPU are correctly counted by the
+hardware. The counters for tasks that have been scheduled out of the CPU
+will be out of date. Therefore, separating parent and child processes
+to run on different CPUs can ensure that bandwidth monitoring correctly
+counts the real-time bandwidth. This approach also works on other systems.
+>> This commit moves the CPU affinity and resctrl FS setup to the child
+>> process after fork(), ensuring these settings only affect the benchmark
+>> process, thereby maintaining measurement accuracy and making the
+>> implementation more portable across platforms.
+>>
+>> Signed-off-by: Yifan Wu <wuyifan50@huawei.com>
+>> ---
+>>   tools/testing/selftests/resctrl/resctrl_val.c | 68 +++++++++++--------
+>>   1 file changed, 39 insertions(+), 29 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+>> index 7c08e936572d..85ac96c7cb8f 100644
+>> --- a/tools/testing/selftests/resctrl/resctrl_val.c
+>> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
+>> @@ -545,7 +545,6 @@ int resctrl_val(const struct resctrl_test *test,
+>>   	cpu_set_t old_affinity;
+>>   	int domain_id;
+>>   	int ret = 0;
+>> -	pid_t ppid;
+>>   
+>>   	if (strcmp(param->filename, "") == 0)
+>>   		sprintf(param->filename, "stdio");
+>> @@ -556,22 +555,10 @@ int resctrl_val(const struct resctrl_test *test,
+>>   		return ret;
+>>   	}
+>>   
+>> -	ppid = getpid();
+>> -
+>> -	/* Taskset test to specified CPU. */
+>> -	ret = taskset_benchmark(ppid, uparams->cpu, &old_affinity);
+>> -	if (ret)
+>> -		return ret;
+>> -
+>> -	/* Write test to specified control & monitoring group in resctrl FS. */
+>> -	ret = write_bm_pid_to_resctrl(ppid, param->ctrlgrp, param->mongrp);
+>> -	if (ret)
+>> -		goto reset_affinity;
+>> -
+>>   	if (param->init) {
+>>   		ret = param->init(param, domain_id);
+> write_bm_pid_to_resctrl() does more than just write the task ID to the tasks file,
+> it also creates the resource groups in its parameters. By moving it after the
+> param->init() callback it prevents any test specific initialization from
+> being done in the test's resource groups.
+>
+I see. Since mbm_total_path, which is used in the parent process during
+param->measure(), is initialized in initialize_mem_bw_resctrl(), we
+cannot move param->init() to the child process. However, we can perform
+the test-specific resource group configuration in param->setup(), as we
+did in mba_setup().
 
--- 
+>>   		if (ret)
+>> -			goto reset_affinity;
+>> +			return ret;
+>>   	}
+>>   
+>>   	/*
+>> @@ -586,10 +573,8 @@ int resctrl_val(const struct resctrl_test *test,
+>>   	if (param->fill_buf) {
+>>   		buf = alloc_buffer(param->fill_buf->buf_size,
+>>   				   param->fill_buf->memflush);
+> This is the buffer on which the workload will operate and by having
+> different CPU affinity between parent and child the buffer may be created in a
+> separate domain.
+>
+> Consider for example if I apply just this patch on a test system and try out the
+> MBM test it now fails:
+> 1..1
+> # Starting MBM test ...
+> # Mounting resctrl to "/sys/fs/resctrl"
+> # Benchmark PID: 6127
+> # Writing benchmark parameters to resctrl FS
+> # Write schema "MB:0=100" to resctrl FS
+> # Checking for pass/fail
+> # Fail: Check MBM diff within 15%
+> # avg_diff_per: 100%
+> # Span (MB): 1280
+> # avg_bw_imc: 50
+> # avg_bw_resc: 0
+> not ok 1 MBM: test
+>
+> What happened here is that the buffer was created by the parent in one domain but
+> the child's affinity was set to another domain. The test assumes that it can
+> count local memory and all of those counts are zero for resctrl since the memory
+> is not local. Similarly low numbers from perf for same reason.
+Yeah, if the CPU affinity setting is moved to the child process, it will
+also be necessary to move the memory allocation to the child process. In
+addition, what about setting the mempolicy to the local domain when
+setting the CPU affinity? Like this:
+         if (param->fill_buf) {
+                 buf = alloc_buffer(param->fill_buf->buf_size,
+param->fill_buf->memflush);
+                 if (!buf)
+                         exit(-ENOMEM);
+
+                 fill_cache_read(buf, param->fill_buf->buf_size, false);
+
+@@ -559,7 +564,8 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no, 
+cpu_set_t *old_affinity)
+         CPU_ZERO(&my_set);
+         CPU_SET(cpu_no, &my_set);
+
+-       if (sched_setaffinity(bm_pid, sizeof(cpu_set_t), &my_set)) {
++       if (sched_setaffinity(bm_pid, sizeof(cpu_set_t), &my_set) ||
++           set_mempolicy(MPOL_LOCAL, NULL, NULL)) {
+
+>> -		if (!buf) {
+>> -			ret = -ENOMEM;
+>> -			goto reset_affinity;
+>> -		}
+>> +		if (!buf)
+>> +			return -ENOMEM;
+>>   	}
+>>   
+> While isolating just the workload to its own resource group may be reasonable it is
+> not clear to me what problem this patch aims to solve.
+>
+> Reinette
+>
+Isolating the parent and child processes on different CPUs is done to
+ensure that the parent process can monitor the real-time memory bandwidth
+of the child process in parallel, and to ensure the correct monitoring of
+the child process's bandwidth on a specific platform.
+
 Regards,
-Li Wang
+Yifan Wu
 
