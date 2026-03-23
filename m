@@ -1,81 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A0536F413
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 08:24:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F91F38239E
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 08:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774254277; cv=none; b=HokwhOFJvuu//mJnheXIupsz8FNnQuHo2bB5yucluKnEhIygiKlJbHTJiDJY9Gy6QommJ6jVUCznyNnLMCKoOY7ckYPgOgT5kYGbelMgFNdntFd9SBpOE076130oCNCRnZoQvLxYoQrQ2ERv3w7hKf0onfUlyfmNDU/CyoRChic=
+	t=1774256041; cv=none; b=CAjzaBNqVsjKdSoH72f2crVTTR3dYvqfX6SyomiVJjBqjwUaLmlJNbP30adEkd1lZwTC5oCtB2dtlfAp4jY9mS7B6W2r9y+PNxmu2z/5H/Ty1oX5dXg46sVb+I9TJc6fOdaNds4G3SynCd+FIvAr+yxf5CwAqWrVU8uEWgax1x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774254277; c=relaxed/simple;
-	bh=df45W3b6valvoQMlkMLb0VHRpJX8Uz+L2ySSMYD4XXk=;
+	s=arc-20240116; t=1774256041; c=relaxed/simple;
+	bh=hThO1A1C8Xur/ZEGkwiOiLhsaE2lKnkvWmC7Eh4azQY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JI+IpbSDOGEO643Qn1NQPf1hWra44F6l8bmnzUwMi1CNlflKRq7uHOzsqHFB2uzwA65rEre2PC4kNmgGmMMvnTjkkKZyHMVgf9EtAswMzkNb1AOpKtUobmrwRBewrZAc3pFzfbY0MNIOBuJSxNsSxbm6fTg7ayREok598XrNB48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PK0Z+1AC; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=c9FYhFWW; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=KMxcnfBfhJyMupteMrM2gy5Dy3310MrPqN9/6igGKJLslRO/dCYusplg3ea35Eit344i+boaPAc9Z4xt2Rfnc7KUgiZrGFN2mYHyaQooK948M6FLcPMzixWF9RPohiXiYg0lBGCKibo/ThORF5m1fCDEcDGagasUFlYKflANKQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VrRxfKj5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=mPCSK96q; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PK0Z+1AC";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="c9FYhFWW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VrRxfKj5";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="mPCSK96q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774254273;
+	s=mimecast20190719; t=1774256039;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=l4FYRZcJce0iqsefU7RH85JSFRG+Uej7mvnkE77jdLA=;
-	b=PK0Z+1ACDmH9j7VFdO7z4ZSvKB+27PG4nToCwjcTC2cACQj7OLhgiTzrHZBYTAgwHx2Bif
-	belFffgdOLXm82jZV91JoFt0T6SWbDF5hvhosFPQ0iAuGjJmjMLrp8lu9glgkFJ6g7/Ojy
-	EpR3Uln6MkR/3KaPV91zQflBrYXwDIQ=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Ogcl2ZAquuYNoAzauwvXFFTaynrHJWtFRV3iycnT4gM=;
+	b=VrRxfKj5UFbJU/dhj/ZQwQN/Ec9FnakNUXBcNCibgDRmjzgq03kdXSQ/TZmC0Fx76dSIp0
+	gdrMV9HSBqy6zOqtQ77xpMrIPezLX5UP3QMXjEPi50KrwS6Us9XYgeVDLE2+AJjTQzk2bc
+	PvlFHfjREawMfCwjvGBWtf/XymGen/g=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-505-gT6MNGsHNGa_aOYy7S1Qwg-1; Mon, 23 Mar 2026 04:24:32 -0400
-X-MC-Unique: gT6MNGsHNGa_aOYy7S1Qwg-1
-X-Mimecast-MFC-AGG-ID: gT6MNGsHNGa_aOYy7S1Qwg_1774254271
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2b059ab124dso32847865ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 01:24:32 -0700 (PDT)
+ us-mta-194-Vi2OAp-9NSKffzB0-HKfNQ-1; Mon, 23 Mar 2026 04:53:58 -0400
+X-MC-Unique: Vi2OAp-9NSKffzB0-HKfNQ-1
+X-Mimecast-MFC-AGG-ID: Vi2OAp-9NSKffzB0-HKfNQ_1774256037
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-358f058973fso5707967a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 01:53:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774254271; x=1774859071; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1774256037; x=1774860837; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4FYRZcJce0iqsefU7RH85JSFRG+Uej7mvnkE77jdLA=;
-        b=c9FYhFWWRi2AaYoVWUfTGwqs/GLD2qRipVQK3OCa2/MIGQQWusjRbYuR5XdMYueUjV
-         UwvMsWav3yfYMo4N03Q7rqcoCqKwGImrHzb9pK0x1mYPewE8x2p85YOFWnLU3NIP/177
-         KD1NW2Buqb9i8ymifPtr/2KXuAYlBLatqKJt8VAgINXQNVPSYXx8jof/otWW9bwtEJ/C
-         YyNuAlOotLCl+Sxq929n0Wg4xeqKJrvilfiB2CQObpvZbikBm38kI72TzdiVOGhH2FLa
-         xZWakjeO8zKWgb32e/Lh3EQni1WKxq/xUeaIhhb0ev/XOWneML6vPxi+VB+aAlKgyTWi
-         ATcw==
+        bh=Ogcl2ZAquuYNoAzauwvXFFTaynrHJWtFRV3iycnT4gM=;
+        b=mPCSK96qYFs307uVXfmXc2YWal8UYRqhCsgm780ZuH+wG749Ke6GcOs+vG4NwMXzyn
+         j8/s22LJqxVdN9xrPIrwoCjpmOeZvHma6n4xk8Eha20A1mx4Zxl5WYN64tCO6Julgdfr
+         VwsXRcBwN0gmjNNeknBgMwFzjgLYnSBSxxbamExjTCXvcCJEBI17snT7HsPYWjSQp9dw
+         h84pIPYi6rd0fRhmYeUlaRjyoO0LevwyOXUU/4B6AOrXmT28Orj2vWv13TfdlbqurV/P
+         MFYovqwBJSlhFzPppUiwySvxE9CTZgQ3ooUMIeBJ1KnljisHjWLHzLe+Bq+YMAO3OIOA
+         RQVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774254271; x=1774859071;
+        d=1e100.net; s=20251104; t=1774256037; x=1774860837;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l4FYRZcJce0iqsefU7RH85JSFRG+Uej7mvnkE77jdLA=;
-        b=qrMGFXqm2voPdC9wDLzcIj+CId/omUshKmetu2ZSTklUolOFuiy6P/UkJf/TB+kSkb
-         Z/8QNsbBoEYb25VcV6WeVJZflW5WxWiBT20GMKH7eZhvVBh1Bel3E6Awr8hun4ON7K8n
-         MM/fHPxR23C6YpxNgxduzwKEia7PclXG9eqRtP9w+6kaQS2px/qI14Ca/qM8sTAnWHuJ
-         wc4JaPlxVnDwtI/oEsOpdNInkyQNNYgtiUDgVi/m/oqGM3eRZ5civ8XC0DPFlKp9xmrw
-         yNrCYf7qtTNSLV1ohNQc/nvNyVpCMxKyw/fxYxDrgiUL+33rW3ZVO7g6J/9bP30rNeVI
-         jEfw==
-X-Forwarded-Encrypted: i=1; AJvYcCWmqicGJW2pnm88zxSplqNJY4TZXp/ih1XC7A8oSGpForL/VR+i0HgpZBGTM9PrqyAMxUtjv+FSvSnoMnHoQ2g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlTTNd74hnBy91WXM+4o466Fz7DKNZDkODtjHLLTcM2eIbYqd/
-	gsZHuseM5Sr1lHKEedvOlHHtmmuNPARGDmovg9xFByqO7yKBgaqk+wt7auiDx8Zz0T5QDxK0bRf
-	ChzrIfL/BEKE96av1lAdjGo4oFXgzEc2JculfOykH7A2YowMbQyo7n5oA+dWWVgdUInQCCA==
-X-Gm-Gg: ATEYQzwDWa6MZPf6JHEqRvIhcV0drkYGU3jynFnOeZbLBXqjEZNb59mSTZXZSbXsdLA
-	ab27TeT39qq7wx3KqV9BnQbZl+ltyajHQssrDS3eO9BkZv2Du6XkM/ZzyYF4ZPQkihrLz4ZgutO
-	V4wFSGNwvGYbLuB43vJdtZ5zksLQOlaDiuEzIMcg4K6FDfXNqEvg+UMmzmvWv7orZE95A1qD/3u
-	Ra5fLMmpn0nDkmaN5xTupL0NVkJuAyWtm0XhZDIfQkx7YBGzMZ4WdcDR4fQVajbL7KzgJKz+Oar
-	DLy4J/bPU2qGNxzoPjkdWvmJyW6bjIsFNGY5FFya28RVUwd+hwIlo96VYWTUaRE6dS1Jknf+dcZ
-	+U0+zjGeP3WkJ6/2rIA==
-X-Received: by 2002:a17:902:ccd2:b0:2b0:5682:6973 with SMTP id d9443c01a7336-2b08273d0d4mr101278585ad.19.1774254271402;
-        Mon, 23 Mar 2026 01:24:31 -0700 (PDT)
-X-Received: by 2002:a17:902:ccd2:b0:2b0:5682:6973 with SMTP id d9443c01a7336-2b08273d0d4mr101278345ad.19.1774254270964;
-        Mon, 23 Mar 2026 01:24:30 -0700 (PDT)
+        bh=Ogcl2ZAquuYNoAzauwvXFFTaynrHJWtFRV3iycnT4gM=;
+        b=AdwWVBH2YkiVA3svdNULpWPLSU+e+uMvqo4b0eI/pEjXp+O0J5UOp4i32FvbEYmB4c
+         tg8cxt+UufUUFJVQtklFfC7Kk5Dbyfffydykfw4AWOeMwl0mox2sZ8NLRc33NEA1FXRt
+         DdwMeTdXAFdjlsOxxSEx8N4U3/t2bOzJ/HGshyXEU7Sg8j0eLi29KU43DZ5lKRk8AE7v
+         DrHmXdnKS5CAbUM2sv0n5qLr7prCOFgrs9XvT2QLxpqncs1kB0ilAHqvHsgNtW34DCk1
+         48hAiEbqL92870qCdgYgBQpKXfAEa15Ivq7l6RikYTGHI5r/v1bS1L338oMKBjUzYuHZ
+         KBlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWxSdyOE+pa8pL4Vfl65KodKU3kIO8QcqFbVLbZZQZtSTbTgVpV4fq7xyFbrRwaJsPkEBS87RZrhsT7FxOHmc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwePOU1UZQFm70vtQ0hYo9s+NJtjrAgyjvvhqn96NtvaJUjU1Z5
+	MbDh4uCHiKkMbVi6iMnMAp38kEu3j6k6xX0vmBkp4dVDAqvwRM7Js8Kh+Q9vFqXHcYA+geMbTNP
+	4wbeyyzmo28PDyvQikAZTkg7EgxahEaK3KCbZSqbzL8qXQzReTo2yrteyrq+rbjNeASLAvg==
+X-Gm-Gg: ATEYQzxTjFEnXohvnygmb5TIBeCDIfMwAoaGpqSUrxIFN59iPoud8nkDbep37WJgx12
+	516X5W+ptjJk+Y8hdLgue7RfrIIcumK1m0H+j5nWmjGr2wmRnigYt+sluWfecwtsDLyIpkvSwiA
+	6uOMOfri7zPHtp7WCUTvJfwhEOpVyBplEXI1+2dB4wfKbNysg6unLgEtpE22Mr2H3eAf6v1BC9/
+	itEXLeAjkdqcxco1bmZra7Jay3ghbFhu8qj+JEtizPVovykEc8AWNl83f7X/cRsMwqdOlNwponn
+	c6TsPC2N4mPxeT9NVCYPY9N4w5ZC2zKi8mKrQARow5+kosUH6oLb5EN9hGbOa1V73YDVJQFEq6N
+	I4u4GN4Sl/AVkn6Nk0g==
+X-Received: by 2002:a17:90b:28c8:b0:340:4abf:391d with SMTP id 98e67ed59e1d1-35bd2cb1ea5mr8848388a91.16.1774256037064;
+        Mon, 23 Mar 2026 01:53:57 -0700 (PDT)
+X-Received: by 2002:a17:90b:28c8:b0:340:4abf:391d with SMTP id 98e67ed59e1d1-35bd2cb1ea5mr8848368a91.16.1774256036672;
+        Mon, 23 Mar 2026 01:53:56 -0700 (PDT)
 Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08365a62bsm136181655ad.46.2026.03.23.01.24.29
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c743a7ff529sm7219812a12.2.2026.03.23.01.53.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 01:24:30 -0700 (PDT)
-Date: Mon, 23 Mar 2026 16:24:28 +0800
+        Mon, 23 Mar 2026 01:53:56 -0700 (PDT)
+Date: Mon, 23 Mar 2026 16:53:53 +0800
 From: Li Wang <liwang@redhat.com>
 To: Waiman Long <longman@redhat.com>
 Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
@@ -92,11 +92,11 @@ Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
 	James Houghton <jthoughton@google.com>,
 	Sebastian Chlad <sebastianchlad@gmail.com>,
 	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
-Subject: Re: [PATCH v2 5/7] selftests: memcg: Reduce the expected swap.peak
- with larger page size
-Message-ID: <acD4vGZKveXJ4GuW@redhat.com>
+Subject: Re: [PATCH v2 6/7] selftests: memcg: Don't call reclaim_until() if
+ already in target
+Message-ID: <acD_oR9CmOkQFBZL@redhat.com>
 References: <20260320204241.1613861-1-longman@redhat.com>
- <20260320204241.1613861-6-longman@redhat.com>
+ <20260320204241.1613861-7-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,61 +105,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260320204241.1613861-6-longman@redhat.com>
+In-Reply-To: <20260320204241.1613861-7-longman@redhat.com>
 
-On Fri, Mar 20, 2026 at 04:42:39PM -0400, Waiman Long wrote:
-> When running the test_memcg_swap_max_peak test which sets swap.max
-> to 30M on an arm64 system with 64k page size, the test failed as the
-> swap.peak could only reach up only to 27,328,512 bytes (about 25.45
-> MB which is lower than the expected 29M) before the allocating task
-> got oom-killed.
+On Fri, Mar 20, 2026 at 04:42:40PM -0400, Waiman Long wrote:
+> Near the end of test_memcg_protection(), reclaim_until() is called
+> to reduce memory.current of children[0] to 10M. It was found that
+> with larger page size (e.g. 64k) the various memory cgroups in
+> test_memcg_protection() would deviate further from the expected values
+> especially for the test_memcg_low test. As a result, children[0] might
+> have reached the target already without reclamation. The will cause the
+> reclaim_until() function to report failure as no reclamation is needed.
 > 
-> It is likely due to the fact that it takes longer to write out a larger
-> page to swap and hence a lower swap.peak is being reached. Setting
-> memory.high to 29M to throttle memory allocation when nearing memory.max
-> helps, but it still could only reach up to 29,032,448 bytes (about
-> 27.04M). As a result, we have to reduce the expected swap.peak with
-> larger page size. Now swap.peak is expected to reach only 27M with 64k
-> page, 29M with 4k page and 28M with 16k page.
+> Avoid this unexpected failure by skipping the reclaim_until() call if
+> memory.current of children[0] has already reached the target size for
+> kernel with non-4k page size.
 > 
 > Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  .../selftests/cgroup/test_memcontrol.c        | 26 ++++++++++++++++---
->  1 file changed, 22 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index c078fc458def..3832ded1e47b 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -1032,6 +1032,7 @@ static int test_memcg_swap_max_peak(const char *root)
->  	char *memcg;
->  	long max, peak;
->  	struct stat ss;
-> +	long swap_peak;
->  	int swap_peak_fd = -1, mem_peak_fd = -1;
->  
->  	/* any non-empty string resets */
-> @@ -1119,6 +1120,23 @@ static int test_memcg_swap_max_peak(const char *root)
->  	if (cg_write(memcg, "memory.max", "30M"))
->  		goto cleanup;
->  
-> +	/*
-> +	 * The swap.peak that can be reached will depend on the system page
-> +	 * size. With larger page size (e.g. 64k), it takes more time to write
-> +	 * the anonymous memory page to swap and so the peak reached will be
-> +	 * lower before the memory allocation process get oom-killed. One way
-> +	 * to allow the swap.peak to go higher is to throttle memory allocation
-> +	 * by setting memory.high to, say, 29M to give more time to swap out the
-> +	 * memory before oom-kill. This is still not enough for it to reach
-> +	 * 29M reachable with 4k page. So we still need to reduce the expected
-> +	 * swap.peak accordingly.
-> +	 */
-> +	swap_peak = (page_size == KB(4)) ? MB(29) :
-> +		   ((page_size <= KB(16)) ? MB(28) : MB(27));
 
-Or, go with a dynamic adjustment based on page size?
-
-    swap_peak = MB(29) - ilog2(page_size / KB(4)) * MB(1);
+Reviewed-by: Li Wang <liwang@redhat.com>
 
 -- 
 Regards,
