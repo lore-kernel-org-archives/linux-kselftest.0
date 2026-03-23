@@ -1,185 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437D83AF663;
-	Mon, 23 Mar 2026 14:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06773B2FE9;
+	Mon, 23 Mar 2026 15:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774277104; cv=none; b=ujjJSD3ZJ+6mB2s/TfhjkV+lLNUPqSu7wCr+/xa2VypPVKpK237xeOQWzkG5HXgdZlRTekH7Zm7U6wPa/SfEBE8bTBBhHlXxIRRnGHkjxFB6jkkEWQ5N1E276+fsfWpoBMo5R00Eh6iQwnbPEVe94IpgtzVigy6YLmJ0Z0mIs9c=
+	t=1774278186; cv=none; b=F72CnjNMDnwnsCoBSguf1HrSh3JqonbbLv5A1W2BC02G1QwDG7xLLrrk8ifIiiKK6kPk2P+6JNMlXBWUEd6wFkFLNerFe2xwIzkK2bgDT5fKSZdi/nBq9AIry75416GChPkbr70ZA8nfN8NG4xc4dWuUOzPj8wGLonGNS+yjATg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774277104; c=relaxed/simple;
-	bh=mJSZMwarIHlQUOiJdUZbpPJelkhY+uQ76WW2nt/Aol8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JQodQwBPmccccPWoBtODzB++rhvkgeOu7PrMDmrpol5cNX3rdISYDLNbZsysRAS2QwNfMY546wJbUScLPFLabppa9EO3FmXS8UJLaIwXcKZOG6X0arUpYlpMa3qeqnZI4xMuAtpcUvtNjphAFpECA028FHhL3dnagpnx5DBZqHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LgbY1zWZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774278186; c=relaxed/simple;
+	bh=SNxjJzUyfHQgpxL3kdLhE0O7BoNK4M784+ioh0vuBqc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kiv7qiaSIE37XTluJkcIGeYC+0w1QMRhvdHp7Vav2+RjecN60bwalJNofUQ9z68TfI3mzttseBGP0gGhqLD4AKXX/AvVl1QRJrlgF1GywnzzDMxrSlxTTTON0EpuwCuBUkO3R00oSIX7JUrIG4JPyWZWai3yFO07G9DWyrygLuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=PbwFVq1H; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KpERMpnD; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LgbY1zWZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29741C2BC9E;
-	Mon, 23 Mar 2026 14:45:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774277104;
-	bh=mJSZMwarIHlQUOiJdUZbpPJelkhY+uQ76WW2nt/Aol8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=LgbY1zWZLD37KMkixoMfyiuWkIZbFE95AdDcqUhAfT51rJsMbHOTinsNx5eLPp6Ys
-	 JJ+GYIDEqBMO/hig1WujlNJOsWlrs2gcmgo5zRXW3Iwxql123fLzrxqJOeGXAcbZk1
-	 jWiZ/Pei3N2c/1PQ+Ss2PMJf3uBsIN422FqdVTmWmn6u4RJh+Me1FxiXnh4ueqg2W/
-	 N9mAN/uz3K8iwvPNSC8pgkG5xKpc+87pImCeOVlFjGjZynRSTDdHDjj83rHv6QXTOY
-	 PR73bzpcB8HNbXi9ZmyaCwXCaaqolYVRc5zi7n3+cUS/GXgDryhHqIHuVZv5J5DpN9
-	 6x6GcXNMLeVMA==
-Message-ID: <ab54ccd1948046e67bb60aec9c9bd0c988d11b36.camel@kernel.org>
-Subject: Re: [PATCH v5 0/2] firmware_loader: allow firmware_class.path to
- take multiple paths
-From: Jeff Layton <jlayton@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>, Russ Weight
- <russ.weight@linux.dev>,  Danilo Krummrich	 <dakr@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Michal Grzedzicki <mge@meta.com>, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 23 Mar 2026 10:45:00 -0400
-In-Reply-To: <20260323-fw-path-v5-0-e88b2fe145f3@kernel.org>
-References: <20260323-fw-path-v5-0-e88b2fe145f3@kernel.org>
-Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
- keydata=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
- QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="PbwFVq1H";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KpERMpnD"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 8CD657A0155;
+	Mon, 23 Mar 2026 11:03:02 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Mon, 23 Mar 2026 11:03:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1774278182; x=
+	1774364582; bh=vESA2oSpUNFHbIqfotmrsVSC4q455gUCfyI47AdUjAw=; b=P
+	bwFVq1Hy66fqP9vyav2dVyMIImak0u42gPNggfnQU+0uLchLHxaWXjSKId0gXfvd
+	uQpUGgoUxOx8zaN6epkLj+oldp2DmyMzikB1j7nVOyeY1SXLvt1tlS1ty+B06gRj
+	4sRDKWrzvLvAac3JpfuBZesWcdbufQcFKggcVFcBXm/F126oeEaZaJzjVSElyACH
+	ZQxhgw2e1SdYBpFsRWysFjkITlHxJci11Zsju+6qV6sFvUvzansSUZGXHmixnOAH
+	1PiKdFORujbBi/Da0C80oEz2KTt61BSZKmy3L/tc1grylA7D1HZ9kLj1wA7ddATN
+	YALrjgLQh3j0JoF12DVNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1774278182; x=1774364582; bh=vESA2oSpUNFHbIqfotmrsVSC4q455gUCfyI
+	47AdUjAw=; b=KpERMpnD/knU/22KWQIaWUNj3r5esijnuBgvk/i9A9IEowcTb0s
+	TdFXZDThSa+blMO2X4oMpwToFfqbaGCMoBkxKxsF5ZSPDkozjmqouBy8o37FGhjP
+	NhRtqM4B3TXvKZ3E3oXPVIEeBr3vQI9k7ktgZEVkKfVph8QUQ4gnEeRT5k5S2VGd
+	STR+eolTrAFdO6OSaK8INJA7zXNmvpMzz0WjHiVT2cEroB/sm8fAAasf/Rf3D6pe
+	/KrxUloZU3k/cRRGAEE/9Okyv4e9BYNRlKCS/CB/RDx6BbUiiETzai5Xu60Qa3lY
+	Jm09dceue03WAxbTnwnPtlcwaMdk0IGhTrw==
+X-ME-Sender: <xms:JVbBaSEwV2onQoJAXAeEm9jq9k_HKuLNMRr4whiijx_vX5Y9OgtU8Q>
+    <xme:JVbBaWYlPsklN8_394Et3zC8eGczJJlX8Vi-89ZCHZTgrw0pr-gZt66gXEZxYLOt3
+    vS1pPzElHkZ4KJQfyyixIROF11BZZIwthXL9AFdbWfONmpcZtO5t-0>
+X-ME-Received: <xmr:JVbBaWxoNc8ekzkz1R82WUacnb4WRZDw91lmWRHBm-pYYBB326NBu1WWDEeW>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudeltddvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
+    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedutddpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtoheptghrrghtihhusehnvhhiughirgdrtghomh
+    dprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpthht
+    ohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehlihhnuhigqd
+    hkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepught
+    rghtuhhlvggrsehnvhhiughirgdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghp
+    thhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvth
+    esghhoohhglhgvrdgtohhm
+X-ME-Proxy: <xmx:JVbBaYT1IPrTziuQSRKTiz8Be2TfNtkLA51R4p0SIj_IGbmp9iMaSA>
+    <xmx:JVbBaTKKDX5BiVKmKBP95erYBQCKJlE7ztutit9Ezbav9kIb_6xm6g>
+    <xmx:JVbBafXTdlqvh4z94Pi9mCUlsrnJtTzIVpYtYegJJkCXG2JMri8CWQ>
+    <xmx:JVbBaXQfXazEXX4POSOjcgoYUmLs6oaGmYjFVB1G18Di_YVCBzEqqw>
+    <xmx:JlbBaau1MN9q0L70DrX7xOgb_oEwuvopuvUsv9QuDNB_eUFBhFIdkkck>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 23 Mar 2026 11:03:01 -0400 (EDT)
+Date: Mon, 23 Mar 2026 16:02:59 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Dragos Tatulea <dtatulea@nvidia.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net v5 0/3] macsec: Add support for VLAN filtering in
+ offload mode
+Message-ID: <acFWIxzM-GxpAhjH@krikkit>
+References: <20260323123633.756163-1-cratiu@nvidia.com>
+ <acFODtfaa8LCKX4r@krikkit>
+ <5ae5d08d578fce1a01a548fad8552a14df8c5679.camel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5ae5d08d578fce1a01a548fad8552a14df8c5679.camel@nvidia.com>
 
-Erm, obviously I forgot to update the subject line on the b4 cover
-letter. Just pretend it says:
+2026-03-23, 14:42:00 +0000, Cosmin Ratiu wrote:
+> On Mon, 2026-03-23 at 15:28 +0100, Sabrina Dubroca wrote:
+> > 2026-03-23, 14:36:30 +0200, Cosmin Ratiu wrote:
+> > > V4:
+> > > - Migrated nsim-only macsec tests to Python, usable against real
+> > > hw.
+> > > - Ran these tests against both nsim and mlx5.
+> > > - Gave up on nsim patches since the tests no longer use them.
+> > 
+> > Why not? Being able to test without accessing real HW is still
+> > useful.
+> > 
+> The tests now send macsec traffic over VLANs and nsim, it's just that
+> nsim doesn't deal with VLAN filters at all and there are no stubbed
+> vlan filters in debugfs, since real hw doesn't have that interface.
 
-    "firmware_loader: add search=3D module option for multi-path firmware
-lookup"
+Since netdevsim doesn't deal with VLAN filters at all, the "tests
+should be written so that they can run both against ``netdevsim`` and
+a real device" bit of the docs doesn't fully apply here?
 
-Thanks,
-Jeff
+Anyway, I think the original tests had value, even if they're more
+limited in some ways than traffic tests. HW/driver behavior could be
+hiding problems in the stack with VLAN propagation, those simpler
+tests don't have that risk.
 
-On Mon, 2026-03-23 at 10:39 -0400, Jeff Layton wrote:
-> This is something Michal had asked for last year, and I just got around
-> to implementing. This version also adds some selftests for this
-> functionality.
->=20
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
-> Changes in v5:
-> - Increase search=3D string length from 256 to 4096
-> - Preprocess search=3D path when it's set rather than on every firmware l=
-oad
-> - Add selftests for search=3D functionality
-> - Link to v4: https://lore.kernel.org/r/20260320-fw-path-v4-1-7547e2f0dc6=
-4@kernel.org
->=20
-> Changes in v4:
-> - Move search path to new search=3D option that is tried after path=3D
-> - Link to v3: https://lore.kernel.org/r/20260318-fw-path-v3-1-a701a08bc02=
-5@kernel.org
->=20
-> Changes in v3:
-> - Allow '\' to escape a literal ':' or '\' in the string
-> - Link to v2: https://lore.kernel.org/r/20260318-fw-path-v2-1-8a106eb91eb=
-4@kernel.org
->=20
-> Changes in v2:
-> - switch to using ':' as path delimiter
-> - Link to v1: https://lore.kernel.org/r/20260318-fw-path-v1-1-7884d9bf618=
-f@kernel.org
->=20
-> ---
-> Jeff Layton (2):
->       firmware_loader: add search=3D module option for multi-path firmwar=
-e lookup
->       selftests/firmware: add search path test for firmware_class.search=
-=3D
->=20
->  drivers/base/firmware_loader/main.c           | 273 +++++++++++++++++++-=
-------
->  tools/testing/selftests/firmware/Makefile     |   2 +-
->  tools/testing/selftests/firmware/fw_search.sh | 222 ++++++++++++++++++++=
-+
->  3 files changed, 420 insertions(+), 77 deletions(-)
-> ---
-> base-commit: c369299895a591d96745d6492d4888259b004a9e
-> change-id: 20260317-fw-path-a094c30259a5
->=20
-> Best regards,
-
---=20
-Jeff Layton <jlayton@kernel.org>
+-- 
+Sabrina
