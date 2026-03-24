@@ -1,138 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB6439B948;
-	Tue, 24 Mar 2026 04:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F174A381B12;
+	Tue, 24 Mar 2026 04:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774325277; cv=none; b=Ff+RzMGpAInNVMSzT9ibvbooPHWM56aYsCWyucFOewsKtv3fkwi/lJB0xQ2Bt1ZSVK/Ofn0ZggA/xwCohUuZTukaibPiCzjnnokxnhMs8F4xkpoRcyggbWcCl7C7OL8m/fEhoVtlC9HxcaE7u6xIgTK6szFTBxfOWTTYkTmJ1yw=
+	t=1774325333; cv=none; b=k9lziJkFZdjwOHQNqqjysNkhtzLq5qnKCpfVWO68CsolQwH36wQhjC+AoVUczeOkrm/vYp1Kx5q16ewIKYuZDUuA8ZCOtb3Um9+RhwvyL67SiJvzTi2csk2f1749Y9vRssgsx+Dv0J+2FArLLtjSmloAGCVqZkaR9nFeeIZoy2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774325277; c=relaxed/simple;
-	bh=g0uP+ITUU1U67ATUiHynyJwxJvS1YFKGjeahZR3lWeQ=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=c4r9XVAeqCeSphjMvGPi3Jm0LjSZj9Dd3j2QDOduNttLOeCQCg4ndsT7FLCQuLTK6pALiYx411LQHQrCxoVr//gDYAEaIHPdkDuaxdGBtV0Yqk/AlwrpM+GuU4VcinFvp1y2jNPOf145eBwjryzsOp3EMNtnBBHQ7Z/K/psNPHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nt+dhWq3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774325333; c=relaxed/simple;
+	bh=79XuQrnsihtiEE5YsTLFUzqNzacWkJMn2AsEJnnaw2c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qJL2W8SLBT4hRWD6MPDXbQ9ffh1lUGUIIEW6k3QN0zjHGQpzAZWkm1AsDp2wHDDASZ6mSAR0QIE5FU70mREglJjv9jOEZpp10yhDS21xWzrg8muXXvb2dCcNGZi7zWoINgDpfXZyov3jkLq6iQDSnYYM8dxiafBEP4B4Ni3wEJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=swMnSffl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nt+dhWq3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E44DC19424;
-	Tue, 24 Mar 2026 04:07:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="swMnSffl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84331C19424;
+	Tue, 24 Mar 2026 04:08:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774325276;
-	bh=g0uP+ITUU1U67ATUiHynyJwxJvS1YFKGjeahZR3lWeQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nt+dhWq3euDYS8fV2Aswubqi8csvQu0xsIg4u+IH47GrvVxUDf9LIJl/viyNwYWbI
-	 RhtrgKDKSn+qaJKww3clTHknPH53YZAFWu1VLNRTdyBsl+PjLN/IsCHYIIZIwiWaFB
-	 SSWdIAE6oVnUnQHI8sRfTWcI3a5axv1mea6A2m+kG0ljQOD4LtglO0ptE2DiRM6BUr
-	 IplJh2qkf88woxu0LWJVYEhStMw8+qH7PR7J+j8Ee9KqJh9PhoW7Zs+gLwRWfxwrO6
-	 5iSAPaiQYvaXj6HgeU749qcTIBGn1DyG9ETp9kjdRpHnp0EnhNv6GmA/dpeRKInfjU
-	 TSA8t8vncx05A==
-Date: Tue, 24 Mar 2026 13:07:54 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
-Cc: rostedt@goodmis.org, corbet@lwn.net, shuah@kernel.org,
- mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 3/4] docs: tracing/fprobe: Document list filters and
- :entry/:exit
-Message-Id: <20260324130754.c3f266811e2ec5ace8bcb689@kernel.org>
-In-Reply-To: <20260205135842.20517-4-seokwoo.chung130@gmail.com>
-References: <20260205135842.20517-1-seokwoo.chung130@gmail.com>
-	<20260205135842.20517-4-seokwoo.chung130@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1774325332;
+	bh=79XuQrnsihtiEE5YsTLFUzqNzacWkJMn2AsEJnnaw2c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=swMnSffllabeTV0erKbu1hhgJnFGHRfKchRAuKRvXLKdhmk8mN19fbj28cniILeVx
+	 I+kmKmAb7NEeLYJRkW0LN6hjIhptKz73DbZHYj85ENNKxg6PfNkBOcaTek5oJVl0Mv
+	 lBfxfOteItCXB+GA4rM8Iotpa9HeBk2sQeHeq3tikwL6qNEfAMrxbpYg7VIpckHsh7
+	 qR3wGfE9+9DQYKltNXogOuD4Q2sj41K2WJFOjXrm1zV9dfmAa2Q9glq3qS8r11mPg+
+	 uTlRoAMbVyqNcYSF/g9XDhXJtlFVoxYgdy2m/oaXya6bBFWPTgTnuJu+mU/bhmol1g
+	 m3HIxBMR0djOg==
+From: SeongJae Park <sj@kernel.org>
+To: SeongJae Park <sj@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: (sashiko review) [RFC PATCH v5 07/10] selftests/damon/_damon_sysfs: support pause file staging
+Date: Mon, 23 Mar 2026 21:08:41 -0700
+Message-ID: <20260324040842.58055-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260324012825.46899-1-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu,  5 Feb 2026 08:58:41 -0500
-"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com> wrote:
+On Mon, 23 Mar 2026 18:28:24 -0700 SeongJae Park <sj@kernel.org> wrote:
 
-> Update fprobe event documentation to describe comma-separated symbol lists,
-> exclusions, and explicit suffixes.
+> Forwarding Sashiko review for doing discussions via mails.
 > 
-> Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
-> ---
->  Documentation/trace/fprobetrace.rst | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
+> # review url: https://sashiko.dev/#/patchset/20260323231538.84452-8-sj@kernel.org
+> # start of sashiko.dev inline review
+> commit d9ca6c4a33fc4d613982730edda6f4b67ae30a67
+> Author: SeongJae Park <sj@kernel.org>
+> selftests/damon/_damon_sysfs: support pause file staging
 > 
-> diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
-> index b4c2ca3d02c1..bbcfd57f0005 100644
-> --- a/Documentation/trace/fprobetrace.rst
-> +++ b/Documentation/trace/fprobetrace.rst
-> @@ -25,14 +25,18 @@ Synopsis of fprobe-events
->  -------------------------
->  ::
->  
-> -  f[:[GRP1/][EVENT1]] SYM [FETCHARGS]                       : Probe on function entry
-> -  f[MAXACTIVE][:[GRP1/][EVENT1]] SYM%return [FETCHARGS]     : Probe on function exit
-> +  f[:[GRP1/][EVENT1]] SYM[%return] [FETCHARGS]		    : Single function
-
-We also accept wildcard pattern instead of SYM.
-
-  f[:[GRP1/][EVENT1]] (SYM|PATTERN)[%return] [FETCHARGS]	 : Single target
-
-> +  f[:[GRP1/][EVENT1]] SYM[,[!]SYM[,...]][:entry|:exit] [FETCHARGS] :Multiple
-
-Hmm if this is for multiple function, we can not omit event name, so
-
-  f:[GRP1/]EVNET1 SYM[,[!]SYM[,...]][:entry|:exit] [FETCHARGS]   : Multiple function
-
-> +  function
-
-Also, if you put this in the next line, please indent it.
-
->    t[:[GRP2/][EVENT2]] TRACEPOINT [FETCHARGS]                : Probe on tracepoint
->  
->   GRP1           : Group name for fprobe. If omitted, use "fprobes" for it.
->   GRP2           : Group name for tprobe. If omitted, use "tracepoints" for it.
->   EVENT1         : Event name for fprobe. If omitted, the event name is
-> -                  "SYM__entry" or "SYM__exit".
-> +		  - For a single literal symbol, the event name is
-> +		    "SYM__entry" or "SYM__exit".
-> +		  - For a *list or any wildcard*, an explicit [GRP1/][EVENT1] is
-
-an explicit EVENT1 is required. (group name can be omitted)
-
-> +		    required; otherwise the parser rejects it.
->   EVENT2         : Event name for tprobe. If omitted, the event name is
->                    the same as "TRACEPOINT", but if the "TRACEPOINT" starts
->                    with a digit character, "_TRACEPOINT" is used.
-> @@ -40,6 +44,13 @@ Synopsis of fprobe-events
->                    can be probed simultaneously, or 0 for the default value
->                    as defined in Documentation/trace/fprobe.rst
->  
-> + SYM		: Function name or comma-separated list of symbols.
-
-Doesn't SYM still be a function name? In above synopsis, SYM is an entry of
-comma-separated list.
-
-> +		  - SYM prefixed with "!" are exclusions.
-> +		  - ":entry" suffix means it probes entry of given symbols
-> +		    (default)
-> +		  - ":exit" suffix means it probes exit of given symbols.
-> +		  - "%return" suffix means it probes exit of SYM (single
-> +		    symbol).
-
-
-And we need PATTERN here.
-
-  PATTERN     : Function name pattern with wildcards (You can use "*" or "?").
-
-Thank you,
-
->   FETCHARGS      : Arguments. Each probe can have up to 128 args.
->    ARG           : Fetch "ARG" function argument using BTF (only for function
->                    entry or tracepoint.) (\*1)
-> -- 
-> 2.43.0
+> This commit adds support for the newly added pause file to the DAMON
+> test-purpose sysfs interface control Python module.
 > 
+> > diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
+> > --- a/tools/testing/selftests/damon/_damon_sysfs.py
+> > +++ b/tools/testing/selftests/damon/_damon_sysfs.py
+> [ ... ]
+> >  class DamonCtx:
+> >      targets = None
+> >      schemes = None
+> >      kdamond = None
+> > +    pause = None
+> >      idx = None
+> >  
+> >      def __init__(self, ops='paddr', monitoring_attrs=DamonAttrs(), targets=[],
+> > -            schemes=[]):
+> > +            schemes=[], pause=False):
 > 
+> This isn't a bug introduced by this patch, but since the function signature
+> is being modified here, is it a good time to address the mutable default
+> arguments?
+> 
+> In Python, default arguments are evaluated exactly once at function
+> definition time. This means any instances of DamonCtx created without
+> explicitly providing targets, schemes, or monitoring_attrs will share
+> the same list structures and DamonAttrs instance in memory.
+> 
+> For example, self.monitoring_attrs.context = self overwrites the context
+> attribute of the shared DamonAttrs object for all default contexts.
+> 
+> Would it be better to change these defaults to None and instantiate them
+> within the method body to avoid unexpected state sharing across instances?
+
+I agree changing the defaults to None is a good idea.  But that would better to
+be another patch, not this one.
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+SJ
+
+[...]
