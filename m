@@ -1,75 +1,35 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096E42C325C
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 01:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B371D48CFC;
+	Tue, 24 Mar 2026 01:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774316073; cv=none; b=Bv+wS3j0ck95vzH5g8123rEe6iGO6WhEGZvJXM3fj4F35PEVFbB3zLTsGXqclA2if3T8ilwwDVwzNBtG9OqU8r6N8PQOtyMAsdi8VkFanZ2xf+OR33POtXzbDKo4bRRlYUGlvaLbyTD9FxLp4arEO+qEMz293OfIfy4lVZg32Gc=
+	t=1774317022; cv=none; b=swhjTG3u5bwZZaptZFkZrpa4LQ7rpmPhqdil11kDctuD/PaiEE+es82o4dSC7OZw0ZGBkxtULjBg8pwoyrwOjt3SZ1wlv3P7K5vi9mO2bqIdmoO2YJQqpzUv4DvFisc0csZ3gDTugrQ0NJArcrlQEcoqwTILiuELQy5JzRd4rrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774316073; c=relaxed/simple;
-	bh=0ZNjKjARdZvcdL31QoVs+UqP+O/z4+0bO2/UPGbm13o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LD6KuzzMebfF/TFEtLt+vo0RkN2k73GHAVU3P48maE3yIX6TGelywhnWbXlIEI3APnkKhwNkJbAYc7QWMJxQa3voJpk5UratJnv8WFElCZt6iEQRVccO8v/g3Jy7cdxkU1yUgkfdMsuoSmQnD9m4A0QrPw2mb8akrythkxG9WUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ciAgH/Xr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774317022; c=relaxed/simple;
+	bh=n70GUlRlc+3qXd/85B78ellg6YqUJK50jpgsp5FOUqk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=e9faEP+vX0NWBOR9T05RvWqk7yWjc4aDEADTrjLRxciMr9bzTKeszXNFe4Ngeg/Ke3yQndT4eFyPIRY9G8AyKg8gUGZi7wSymCEeUPGf29GLIFLjyO3mFRTSDY2lHjkqvKVRkNc8+tUnowabdi2BKaB2ZvgEuQ9DWmjzpUGD1Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMKVc+jY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ciAgH/Xr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774316071;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z5cQUZey16cto7EAHb0l8lICJnDidIXEapbKPGxTzr4=;
-	b=ciAgH/XrG9PZWK4wseBBCguY+q5qsmH4T2DESDAbxpJ6nnmuo04RXBBZkNNdKOMPDLq6FB
-	LxoecGXmalCzb5YMC/zNja9yVsjEKAqpX0FoQltCZ1YfnFFnEn3b1NqGcXSexIRyNLuxey
-	/G83UdT2vtEam2U70B53mgoUNMSDxcM=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-675-hsgMjuCTOcy5mAVb2IZLbA-1; Mon,
- 23 Mar 2026 21:34:26 -0400
-X-MC-Unique: hsgMjuCTOcy5mAVb2IZLbA-1
-X-Mimecast-MFC-AGG-ID: hsgMjuCTOcy5mAVb2IZLbA_1774316063
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 715F719560A1;
-	Tue, 24 Mar 2026 01:34:23 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6FBA0180058C;
-	Tue, 24 Mar 2026 01:34:15 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com,
-	Li Wang <liwang@redhat.com>
-Subject: [PATCH v6 6/6] selftests/mm: transhuge_stress: skip the test when thp not available
-Date: Tue, 24 Mar 2026 09:33:16 +0800
-Message-ID: <20260324013316.2590422-7-chuhu@redhat.com>
-In-Reply-To: <20260324013316.2590422-1-chuhu@redhat.com>
-References: <20260324013316.2590422-1-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMKVc+jY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A34C4CEF7;
+	Tue, 24 Mar 2026 01:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774317022;
+	bh=n70GUlRlc+3qXd/85B78ellg6YqUJK50jpgsp5FOUqk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=iMKVc+jYGW5tHNuJ6iGQ5H0065y6hvM5o9s9f/e46zuzGh5yRQG95IQ36XcMCj4Hr
+	 NbHzzGbKlH6PMqCP062RY2eIHa5BlglKq9Iow/rPUofUY2iNLqRR7n+9H0Vm7dAy0f
+	 SPht9F6IvYXMVNj25DfnJt/7zVPWN/6pdbmXpLKbPifDBi1va2vHoUSVy3lTgfYGcW
+	 4Cg2Xfxt63tvbv/R275qSdlQniGAtezK3so8IGYhIYmZFzVfB4UdJkLx94Rs3zeAbY
+	 wL3JAETM7KjjWoqvPrw+qwkhAVhmeqsS+8TGOG2wdkk9AWyXEAIZ2DKJL9cfk3cL/L
+	 54ppN/OFiU3tw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA1F83808200;
+	Tue, 24 Mar 2026 01:50:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,73 +37,51 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Subject: Re: [PATCH net-next v7 0/4] ethtool: Dynamic RSS context indirection
+ table resizing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177431701054.413704.17760247587470177196.git-patchwork-notify@kernel.org>
+Date: Tue, 24 Mar 2026 01:50:10 +0000
+References: <20260320085826.1957255-1-bjorn@kernel.org>
+In-Reply-To: <20260320085826.1957255-1-bjorn@kernel.org>
+To: =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, saeedm@nvidia.com, tariqt@nvidia.com,
+ mbloch@nvidia.com, leon@kernel.org, horms@kernel.org, shuah@kernel.org,
+ netdev@vger.kernel.org, maxime.chevallier@bootlin.com, gal@nvidia.com,
+ willemb@google.com, linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-The test requires thp, skip the test when thp is not available to avoid
-false positive.
+Hello:
 
-Tested with thp disabled kernel.
-Before the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..1
-  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 60 transhuge-stress -d 20 # exit=1
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-After the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..0 # SKIP Transparent Hugepages not available
-  # [SKIP]
-  ok 5 transhuge-stress -d 20 # SKIP
+On Fri, 20 Mar 2026 09:58:20 +0100 you wrote:
+> Hi!
+> 
+> Some NICs (e.g. bnxt) change their RSS indirection table size based on
+> the queue count, because the hardware table is a shared resource. The
+> ethtool core locks ctx->indir_size at context creation, so drivers
+> have to reject channel changes when RSS contexts exist.
+> 
+> [...]
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-CC: Li Wang <liwang@redhat.com>
-Signed-off-by: Chunyu Hu <chuhu@redhat.com>
----
-V3 changes:
-  - Add review by from Mike
-  - Add acked-by from David
-V2 changes:
-  - Move the exit chunk to the front of ksft_print_headers() as suggested
-    by David.
-  - Add reviewed by from Zi and Lorenzo
----
- tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Here is the summary with links:
+  - [net-next,v7,1/4] ethtool: Track user-provided RSS indirection table size
+    https://git.kernel.org/netdev/net-next/c/0475f9e779b4
+  - [net-next,v7,2/4] ethtool: Add RSS indirection table resize helpers
+    https://git.kernel.org/netdev/net-next/c/02bcb20083b2
+  - [net-next,v7,3/4] bnxt_en: Resize RSS contexts on channel count change
+    https://git.kernel.org/netdev/net-next/c/57cdfe0dc70b
+  - [net-next,v7,4/4] selftests: rss_drv: Add RSS indirection table resize tests
+    https://git.kernel.org/netdev/net-next/c/10329ce49285
 
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index bcad47c09518..7a9f1035099b 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include "vm_util.h"
- #include "kselftest.h"
-+#include "thp_settings.h"
- 
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -37,6 +38,9 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 
-+	if (!thp_is_enabled())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / psize() / 4)
- 		ram = SIZE_MAX / 4;
+You are awesome, thank you!
 -- 
-2.53.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
