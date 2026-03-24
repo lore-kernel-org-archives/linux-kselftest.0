@@ -1,114 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010068.outbound.protection.outlook.com [52.101.85.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C74736C0CB
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 14:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774363527; cv=none; b=Pu4aQkqy1wZIfw/zPCnNz8kf2ZZctIzaXeKVt+Cjzq6wEABWYjJkdlkU92QQWypMOXTdbIcNlI900vF3AgcbXhFGknjMZNBPBZh57c3H2eSB4q9N+ugOjveh5Lbu7WuCUIt2+kZavam3cRrvpB3yC0eKIgdPg+LcDbALtO5wcdo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774363527; c=relaxed/simple;
-	bh=vZTTPEIYuiOXV35Y1qrnUhKegm4CjyqZBzMLEa3WqGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UvuMVcvjM0W8AxEOczoIeg3vEQIlQNoGTmM+pxR4i3diPSSscMp2EyrWjJgtcF8sJEzRGjzH/iZSu2ChE0MVR/M0CGA4Q0rEa96QWJ995L7SQmGcSSC4b/LSX5FB6vvGupYSVs+NSCN1KwMeJEqqJBnl3mjHtWLUubejhZsHJAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L8YV7tde; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D82C37DEB6;
+	Tue, 24 Mar 2026 14:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774363595; cv=fail; b=BIxjdRykw1osCqd7BE1TliJb51dbG8ov1vGt7N6pwrLoZlwj0Jvqfdco3MLHcaFGk7hKy5kCY54pL67KnIqGbK8bVfIMtE2eKJE5Edk2KtK+MsL9mQdwnvU9gLXytWrElGSLZSCN8PCUbRp/c98O/Z/p0NmirrJRWPB1RSDxBQ8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774363595; c=relaxed/simple;
+	bh=qjoN744UfWBrW71a/+kAUIzEJmTykY/khzvou/uLaLM=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=P1DU68M5V664pWVWxByS0MrWh14n24hQ8AXyc1hV3IpTjC9YPo9nlKa51Io8HMWJ7paPxO2EYLVfewxH3aA9JapjAwue2fEa1djHQhmQN8kdwq4ENTubKwYkyAeq2Q0hpZst9yNMWe9f47PLDzxBb9udxA77nOsfkXX5sqL5emU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=citrix.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=zyIIOYPN; arc=fail smtp.client-ip=52.101.85.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=citrix.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L8YV7tde"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774363524;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7zExN/z3Izup7m2aGhIzPxY/KEcJ3LRPb1fPMVoA6wg=;
-	b=L8YV7tde7mLerhvNwYrosIvrVWfS6J0zaU44I/lz7xX2tN55+/P1aqusVXj4Mc5p/gMoR/
-	Lvcyw200omJXWfE+fgcRQd/adAUB7D3FKSmfC8ZN0txcLhWqtvP/bgwwkjOzbtaOuxggT0
-	ubkbbaRGfLSkVNQv4A62ORI1l3OWjjE=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-122-i-ME23UrMY-z1CO1Rqd8gw-1; Tue,
- 24 Mar 2026 10:45:21 -0400
-X-MC-Unique: i-ME23UrMY-z1CO1Rqd8gw-1
-X-Mimecast-MFC-AGG-ID: i-ME23UrMY-z1CO1Rqd8gw_1774363519
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8C48C1944EB8;
-	Tue, 24 Mar 2026 14:45:19 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.64.124])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ACF5E1800107;
-	Tue, 24 Mar 2026 14:45:17 +0000 (UTC)
-Date: Tue, 24 Mar 2026 10:45:15 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Pablo Hugen <phugen@redhat.com>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com,
-	shuah@kernel.org
-Subject: Re: [PATCH] selftests/livepatch: add test for module function
- patching
-Message-ID: <acKje1XMQMQQYBIL@redhat.com>
-References: <20260320201135.1203992-1-phugen@redhat.com>
- <177436214729.62466.7977538958560300344.b4-review@b4>
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="zyIIOYPN"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XqVN8rrKmfxDdGbkAyDVf8i8IhdVO2hkllrtoEOOZcFmDU8V9G/d0TCqTBSmG973YqQpYhOYoQapPYiG84GxtnuYE2iqPiw41XpnO4OIYJH6BuGxqZA8ExlDqnOJWjnjj3yvwVuv8fFz1ZqFv/e8XC7lfzMf9lN3lAFPKfDM7WsH5TsxzpGmRQuIgXXK9H6to6JtlDkI6zCwhI3qwOne7o9rUKycIccrjjo5V3GT/ua1eYcr+NdW0VORY8+ffkw0GsOBqcj9EPo0Q19TMaH+wCRVpvMgLCwH35EEI7lyBcz431fA8YZWe3vv6YDKQMzDklo5EyqJj5T1XmuSFjxDdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qjoN744UfWBrW71a/+kAUIzEJmTykY/khzvou/uLaLM=;
+ b=mt4KVKFjVXrMwMtKtuBy8c52wR/ru9z9vo36bLYv6vSnOvM/N134HR/LM796Vf7eif49qrfu4RJUDw+BY9Rp+8qFrDUfW3IzZxf08P7RoT5yelDsr19wmErtlU7vMP7wWZEdZoHqAq0LhMkv9MtgwGdCZqmfjmXW1K+9K0w3mtFNgmg9XENK1P7flCQTJkApxSbQ9u7JdSvuBKm8dnjssnlDUyKoYnO6ncdFn80RiWZR4UfzSMQcaLU+Fvu4dFny7yZZzZzaQhnECAZDj7t/FyrvKWkcTiWO1YJBVdj59bbQzbmrpAU+X9t1mbUnqUIke4bDEi+jMDzdrThVor2GGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
+ dkim=pass header.d=citrix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=citrix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qjoN744UfWBrW71a/+kAUIzEJmTykY/khzvou/uLaLM=;
+ b=zyIIOYPNPB136HDU753ioXQUzrN4B7SBmLOS/unNZyCk4ahkMnBQnpc8BI0ZHDPR/SJYRWcR3mDnsbfBfNfDGQ61Jx1RHc0DKwVg3F8xdG0DXTRLxSXBDa/D5UcF2WimNGVLoznWYVruMOg5TNBL8qU5VgfxFrxoFNKEDLjEYo8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=citrix.com;
+Received: from CH8PR03MB8275.namprd03.prod.outlook.com (2603:10b6:610:2b9::7)
+ by DS1PR03MB7992.namprd03.prod.outlook.com (2603:10b6:8:21b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Tue, 24 Mar
+ 2026 14:46:13 +0000
+Received: from CH8PR03MB8275.namprd03.prod.outlook.com
+ ([fe80::a70d:dc32:bba8:ce37]) by CH8PR03MB8275.namprd03.prod.outlook.com
+ ([fe80::a70d:dc32:bba8:ce37%6]) with mapi id 15.20.9723.030; Tue, 24 Mar 2026
+ 14:46:21 +0000
+Message-ID: <098e3877-5681-499a-b8ce-dbf5c78847fb@citrix.com>
+Date: Tue, 24 Mar 2026 14:46:26 +0000
+User-Agent: Mozilla Thunderbird
+Cc: Andrew Cooper <andrew.cooper3@citrix.com>,
+ Dave Hansen <dave.hansen@intel.com>, yi1.lai@intel.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+ shuah@kernel.org, tglx@kernel.org, x86@kernel.org
+Subject: Re: [PATCH] selftests/x86: Fix sysret_rip assertion failure on FRED
+ systems
+To: "H. Peter Anvin" <hpa@zytor.com>, "Lai, Yi" <yi1.lai@linux.intel.com>,
+ Xin Li <xin@zytor.com>
+References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com>
+ <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com>
+ <568aa6c4-6802-4eb5-b412-e3aa93ed9b29@intel.com>
+ <91590BC4-A54E-40F4-A223-A07FBA386A9A@zytor.com>
+ <acDYXtVgSKbbAuGs@ly-workstation>
+ <ce764071-6670-41a2-923a-88f1cd04b238@zytor.com>
+ <c2979413-62f4-4a35-ad64-be2b8f55ea04@citrix.com>
+ <0200a8d8-6871-4ff2-8c6a-968c2cb39a4f@zytor.com>
+ <f55dd646-c728-4b0e-ab3e-18da8ac9e6e2@citrix.com>
+ <760478B2-AED7-44F5-A22E-1730A9A0ED63@zytor.com>
+Content-Language: en-GB
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+In-Reply-To: <760478B2-AED7-44F5-A22E-1730A9A0ED63@zytor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P123CA0285.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:195::20) To CH8PR03MB8275.namprd03.prod.outlook.com
+ (2603:10b6:610:2b9::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <177436214729.62466.7977538958560300344.b4-review@b4>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH8PR03MB8275:EE_|DS1PR03MB7992:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ce1c5bf-3e71-4d05-911b-08de89b41d2b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	MBSbyyfaCX3+8P4+XyeF2L8BCYdczyG+MAA9Y5/C0XeKTjaveAxcW/BKNH0zKNXdT4V0NC6/ci+W9aCW85Y8UDI7dtilhU2e3yUp38aGvvzDH8b7cpvH488OnQdNqUFtgHWCQ5ezFmMiy0NEBM4bFyLBO9c1FQ+zEHPdR+jZd6XJEQxdSrbUDsr0gfVs/Aq97GavQIBy8ptxegrRvFvTCfubFKB5xr9Eh5fHDKrp3rbAtaPd6VowEuvHh+mkDuQ+9qLpK+jJGoEJn38QZUSvfjTbyQmel96hByGnjV4gUYk5MEAo4tcT80Z/oZnN3LTVD66qIDdnbGxGV4bFHINfG9ymw+LmR9F9xRRKcsVQMSMh/BMNS2FFxtkBL7xmzRor/kt3iDzuzn5fhHHJRnf4T94YyVAkzQJeTvQ97lGEPOQmLv7Mxl+0oGZcNqExkB+OZmEn3ibVgJx6OredfXUrtEU4NdVOxryGwiUKG9GM2z4aN/AibbO3MVKzhIAkGt8d/1y9SiEYbte3piP6F6Ia5poZrJJI4H7UJa7K3UXBubvjDAQGd7SQZCUwaMZbH4dUK51mjnpqi49k9R9SnwTvhNoD5nC6/whKNeMYKvTJPP2gPIS3Gq3Nvus+WGLHvAmNnPKcUPM0bR0QKZO1K7WcH1T2BcyJY36xrRBkLyBNC7iggo6binb/uwpXjfTHQ72rpCJgXwcxaNv4+JAKGxas1Ewpkgs5rVb0ufQtAI9aFtc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH8PR03MB8275.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NWRBTzZEMHpqU1pmcnV4enE5c3BjWFo3K0dWTGt0OHdJKzkvNXZRZVhGQUdj?=
+ =?utf-8?B?aVl6R1pVQS9mR013RlhMazRCVithOE5hZFZia3lqeDBHRzVTa2R1czdxeDg2?=
+ =?utf-8?B?MWU4bTgyZUwvL1llTEFLU3l0WlBOZlMzSXlUR09yM0NnVlV6MW5MSWlmMFlZ?=
+ =?utf-8?B?UnN6UWpxdnhYNWJUelQ2djdYdkU2UmVWaUttcDZYd21ydm5uVW9YdjdHL0tJ?=
+ =?utf-8?B?eG9yMFZ2a25SRjh3SCt0RjZaVSthZTFLVXE3RXlpNndpR0hYZzhUVjhHbUdh?=
+ =?utf-8?B?U1VxcXp1d1ovMk1NK3dHVks2aXNSTVlUbjhYQ2p3OEdLcXM1UUlKekowNHhy?=
+ =?utf-8?B?aExZVitzRW5LTi9DWUxuc1lKTEJmTmZ0WCtSOUZQbWVuVUpLTXlPR0hxZUVG?=
+ =?utf-8?B?YU82bDlDSXhOMzdEeTA0QnF3ZithbGl1ZWhBeWF5b0tIbjJQNVZFdTdoUC83?=
+ =?utf-8?B?RzlYbGppaVRKb2MzUUoza1h3czd3UGY4TDViekQxQ2xaVVF6bFNBcVh4SXdp?=
+ =?utf-8?B?bFVVN2JxOWlJdXdTMmVhUjBCb2pkNFB2NlFIb2l4SHltTUJjS0VZbURYeStZ?=
+ =?utf-8?B?Y3NKQzUwR1JFUFJCM3RVWFh2SGlkNmV5N3lTVkQxQkVIYmFiaEx0RnFhZzZx?=
+ =?utf-8?B?RlJmaEtjRmhBNWozYkIxYnJNTjhSZHcyNkVFOXlUaXVpZXByOWdKcGRpTjJ6?=
+ =?utf-8?B?T2lRUFY0dTRRRndCaEhrMnBQREVWb05hT3F1UGNsdml3ZjV5QnZmcUpJbjd3?=
+ =?utf-8?B?enBaU0xYMXdSSW8vbEhXMURSbi9XbkRVNE5ieU9GVndhMkxJRFkwUnpsbmxD?=
+ =?utf-8?B?TkhpYlI4d0s1azhUYjVrT1NPWlUxYXFyU2FCQ3krZGdXa1REblVIakhqWkgw?=
+ =?utf-8?B?SDNBMUZXOWdtTWU2UVpTb0hOUzFJV1ZXMi9TaTE2MjBUOUxsdlc1WXBrQ3VF?=
+ =?utf-8?B?S3RJRU81SGNLNVJ5UU4yOTJBK1dvS3RYNkZQWlFtdlJJaWJGR2huMDl0elBv?=
+ =?utf-8?B?WUZoaXBCRXNEYmdDSVVnZ1JkbzRPYXlqcjJYbE5oMGpkSVZpYURvMms5SmhZ?=
+ =?utf-8?B?YlhhMWlGbWRaQ0lCVG9qL0JlREpkMGVleEFCcDArRVRId091TDUwSTFycUh1?=
+ =?utf-8?B?K0VjRjA5U3MvOWRDTTl6MFd3dXZqYWExU29CeC9kcENFZE9BK3dEUk44bEQ4?=
+ =?utf-8?B?RzNBdWxCM21BcDRwQ3RsWG1xTUlVV3JkR3ptR2pxNmpad2NHWU1EUFg1Sk0y?=
+ =?utf-8?B?eFl5dU1rYy9yYXp4cnhabWEwc2dOR0RFYk02Y2oxalFWaFpmSEgxMXdxdlFz?=
+ =?utf-8?B?KzN1MFRwVzAzS1FhWFpvU2tUYlNTdUdwQ005SzJVRWlDRndyeFM5VDIzQ2Rs?=
+ =?utf-8?B?cmNOZ2pGSFZ1S2Y0ZCs5TitVVThqS1NyRjZFOWg4eHU3SlRMSDJCM1Q0Rm9S?=
+ =?utf-8?B?U3Y3ZDhBTTlQZ2QyektCWTdJenQxSUFsQjJZM2lWWkRCblBjdnlxSGhnQi9a?=
+ =?utf-8?B?MVJyeEU0aXJVTGhRN29leGRva05BQ25xbzlmOUh4a28zdkRxZ1NHcnh2dEhy?=
+ =?utf-8?B?SHZvVllDNEx2OVNRdHFJN1lKaEtXQmVKQUwrdDdZZFo5UVU3cy9qYk9TdHBz?=
+ =?utf-8?B?RFVqeGZDcU4xQS8wMEpBZG11WXBpOXV4N2xGUDltODJrRzVTV3JXK0VFOTFh?=
+ =?utf-8?B?MTlvOG43NWF6dFZGUWcvVjV3WW4vcDVVVEc2WCt4d0xpM0Jvb3NtZEViVFJR?=
+ =?utf-8?B?Z3VKOHBJS0JWSzYwRU1sRzBNQlBsMUsvYUdPeGtiekZsZVhNbnlPV1Nyd0l5?=
+ =?utf-8?B?NmhsV0FmUjhjSmVPSHE1SUIzYTR2ZWNsbFkzL0hJQXZOckZmdk80dDc5ekpa?=
+ =?utf-8?B?QXUzbHF5L3BNNjNGcmp1ZW02ZlJUSU04Zm1GZHpEVVB2c0tNZlpiallEZVpv?=
+ =?utf-8?B?aWdlMjVGdzRWMVJVL2VCRnhzZHc1b3RNK3haWXFIV3dNT3VOb2VDaU44TWxG?=
+ =?utf-8?B?Zmk5WXBXQjFYZ3k5WVBvRE5BdmxFLzhPRHV0dWsyMm5TV294Zkx0WXRwZ0RQ?=
+ =?utf-8?B?K2RSMjlKSXg1bnBpaUZyVGVialBqZUlNbTVOZExYUlF5dmVNTzZ1UW9iRnRx?=
+ =?utf-8?B?bG5hajhPYmNQQzNjL0grUzZnY2FLUkFqMDJMRitvZ3NhQmRtOFVHWTJZZWpx?=
+ =?utf-8?B?TjNBNVBtdzNQbyttV0EydWIvc2ptQWRlZXFGUkZZUzNPd1hJNlNtOCtoWC8x?=
+ =?utf-8?B?RU92SVdDR2xsNXZ3ODdONGUzZWlScUozQkEwcU1wZ29IaWVPNmx4b3RIK2xr?=
+ =?utf-8?B?RTBJMXhhbmFtTFhNenJqeFhWNTg3T3pVZjAvSGxmYzA2d09kMlZPais4SzBX?=
+ =?utf-8?Q?40b3cOlr2nvEutCY=3D?=
+X-OriginatorOrg: citrix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ce1c5bf-3e71-4d05-911b-08de89b41d2b
+X-MS-Exchange-CrossTenant-AuthSource: CH8PR03MB8275.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2026 14:46:21.2117
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: L1xgkiWKzGCqLJfF+opDZF6qrA9E2+XbIoWkSEIJvs1AQlyU+6Gfx/TDszezlfnu/JJV68Qtm9wgltZsL28AVK+xxbL2ujbBzRip5pmwnSc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS1PR03MB7992
 
-On Tue, Mar 24, 2026 at 03:22:27PM +0100, Miroslav Benes wrote:
-> On Fri, 20 Mar 2026 17:11:17 -0300, Pablo Hugen <phugen@redhat.com> wrote:
-> > Add a target module and livepatch pair that verify module function
-> > patching via a proc entry. Two test cases cover both the
-> > klp_enable_patch path (target loaded before livepatch) and the
-> > klp_module_coming path (livepatch loaded before target).
-> 
-> We sort of test the same in test-callbacks.sh. Just using different
-> means. I think I would not mind having this as well.
-> 
-> Petr, Joe, what do you think?
-> 
+On 24/03/2026 2:33 pm, H. Peter Anvin wrote:
+> On March 24, 2026 7:08:14 AM PDT, Andrew Cooper <andrew.cooper3@citrix.com> wrote:
+>> On 23/03/2026 8:27 pm, H. Peter Anvin wrote:
+>>> On 2026-03-23 12:17, Andrew Cooper wrote:
+>>>> This doesn't really test whether FRED is active.  It tests whether the
+>>>> OS is not providing strict backwards compatibility, and I think will
+>>>> malfunction when there's a hypervisor above Linux providing strict
+>>>> backwards compatibility.
+>>>>
+>>> But that applies equally to IRET, no? If the hypervisor clobbers the segment
+>>> selector like IRET would in the interest of compatibility then you have the
+>>> same issue.
+>> I suppose.  I for one don't care to provide that level of compatibility.
+>>
+>> But for SYSCALL, what are Linux's plans for CRIU or RR ?  I had to fix
+>> SYSCALL legacy behaviour in Xen for the following case:
+>>
+>> * PV guest issues SYSCALL on FRED system.  %rcx/%r11 not clobbered
+>> * Migrate to a non-FRED system
+>> * Xen uses a real SYSRET instruction to resume execution
+>>
+>>
+>> Here, the guest continues executing at whichever dead variable is in %rcx.
+>>
+>> CRIU/RR won't be exactly the same, but will suffer the same class of
+>> problem when moving between FRED and non-FRED systems.
+>>
+>> ~Andrew
+> "Doctor, it hurts when I PV?"
 
-I was *just* in the middle of replying to the patch when yours came in,
-so I'll just move over here.  I had noticed the same thing re:
-test-callbacks.sh despite originally suggested writing this test to
-Pablo (and forgot about the callbacks test module).  With that, I agree
-that it's a nice basic sanity check that's obvious about what it's
-testing.
+I'm asking straight up, what is Linux doing to fix this same issue for
+CRIU/RR?
 
-> >
-> >
-> > diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_mod_target.c b/tools/testing/selftests/livepatch/test_modules/test_klp_mod_target.c
-> > new file mode 100644
-> > index 000000000000..9643984d2402
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_mod_target.c
-> > @@ -0,0 +1,39 @@
-> > [ ... skip 11 lines ... ]
-> > +
-> > +static noinline int test_klp_mod_target_show(struct seq_file *m, void *v)
-> > +{
-> > +	seq_printf(m, "%s: %s\n", THIS_MODULE->name, "original output");
-> > +	return 0;
-> > +}
-> 
-> A nit but is 'noinline' keyword needed here? proc_create_single() below
-> takes a function pointer so hopefully test_klp_mod_target_show() stays
-> even without it?
-> 
+~Andrew
 
-No strong preference either way.  I won't fault a livepatch developer
-for being paranoid w/respect to the compiler :D
-
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
---
-Joe
-
+P.S.  It's rhetorical, seeing as it's taken between Linux 6.9 and now (2
+whole years) for anyone to even run the x86 selftests on a FRED system.
