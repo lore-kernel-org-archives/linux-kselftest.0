@@ -1,192 +1,111 @@
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C029C30C60D;
-	Tue, 24 Mar 2026 15:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86432313E29;
+	Tue, 24 Mar 2026 15:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774365518; cv=none; b=HSoKfxOnzTu8zELHbhZTQ4Sj4l8/t1/HgzyEMI+9g8Chu2lWxD3boQ6bpEXNQ9OOJPT/22Lpsy3aUhJ2MPVOT0nicWprn2g+6GDr6GUlaikIOsz8mxJc2jvDHGhUZ6uNubgHKAY5yNWrjWptGI5nm3vpO+XuISREML5UkKmPNp4=
+	t=1774367305; cv=none; b=GAJ5sXZ27LAHXSp9u9KyQ/0ygavghObm6D5waFt8VLPDExxkTPHNnMfyJ0yj8Vn1wI6R93j8KY+XhYftGwBSxb/uYv1ruUhxsEbf/5iXU5hMH+7zMAMlXp/it1rQPQRWaW+s4otbYHfFEEpQFsbL7hdrjCZeN3PCNlAyZzQy7f0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774365518; c=relaxed/simple;
-	bh=/3qMzl/kZ/3/MVIJaJoHytPt7GaNFhIrkE6OT1EEc34=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KM1COHohqT1aLpAV+xXNMi625gkEPWR1ABkZJVVV6DYM+VdYo/skTYWrJag0nya8a77jIO3+dFHsx/kYCFZGMRaja8fbtVhEcLSa/jVljfM5ERXl8I2xoS1snQ94d4lrv1SrsQ/4D0dMYJqWUNWfpKYMMKww8ka9z4P06d6yhFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=NobIAK46; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RkcFpcaZ; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1774367305; c=relaxed/simple;
+	bh=gTpmcN2spsGA1JJt5Rk56bbdXNRB9aMPTaKPb2ATdko=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=ecDac2MHWKxJXB6TXxXmB8kaWtO9hUqEH47ovAjTWzJCSamMrdJ+z/0/3Z4+hlbcVMegGUumeVh8f0TN2FFQ+g1oP2fgE/Di7c/MPyRSTQfEyyP80qDpflAmWnyZWsJBBM0SzwZ3/BatXIvt9E8sSUaAo4dko91+5+vDmeh3XOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=nIaHoy8K; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="NobIAK46";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RkcFpcaZ"
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailfout.phl.internal (Postfix) with ESMTP id D8604EC00F2;
-	Tue, 24 Mar 2026 11:18:33 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-12.internal (MEProxy); Tue, 24 Mar 2026 11:18:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
-	 t=1774365513; x=1774451913; bh=ErBmFVYHUC5AXjJ+G+Rf0z7n5tVs9tAz
-	GlgWab9PfFY=; b=NobIAK46k3w1MAU6sXxLqwLg0CIkB1kpjVy9bDgGFq8+OwXA
-	XND5h/ba5pxolewDr0RWWw6q/ARbWHYJpkft6KAiMYbX9ZcLwCPxFfxOSUM3IVGV
-	Y9OCYzFagIMk14IGQTMKxS5Q+FvTepYJ6wShLfdfcdMoh4pijdaYXTiFuUceQpf7
-	dIx+hnPxcMAfxeTfxI/Z4rQ8fzJbqaftocI6WftK6MdVfVhZPrxYzMlAXnYZOj1V
-	COKCZCRvhV2SZwFtJcnHhnGr0PoSHyLuuhfo0CTV/QL9fCvAfNNNjn56sfJOp59f
-	mhMNy0ZwvgABi5Ol3oPfWx4jzTbU6TxG22Y39g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774365513; x=
-	1774451913; bh=ErBmFVYHUC5AXjJ+G+Rf0z7n5tVs9tAzGlgWab9PfFY=; b=R
-	kcFpcaZgZanoFt/iOYDWVZW31nTBUpeCLlp1m25jOU3Qt1MAzkpSi8jjW2NO6Suy
-	bKnD7OLwlDllsnxDpLQZaCWyAjSlmSoDTP7Wm7gBaLR6fdiyewf8XIAcGHR1iUgT
-	oVmCBX/r2wg31z/aRJSv02Dx3ZvC5iIr16m8kZG27eKBxN84aj27/3wP7CcLGNkU
-	VjcllUujsoA8AUxGHKGXDxlfPS8Ap8wuAOqzuxeEHWqJwd9HVD5mGJE2IUYBnohx
-	edW1V4ipDB929RkaBTdN3GIjnEeXlLeOKqiQUErfujyaM76/6EZ5oFqM5yLAEGE0
-	hqnLF1DLCa5E6sLRgXbig==
-X-ME-Sender: <xms:SavCaQttukMMb4yhj8MfcYd4ChKZJlMsJKw0qGuWO2QmVndp_AxNOA>
-    <xme:SavCaQhR8ZSN2asOCzX00THBIKv-kiqObZn00641gRxZ9m7h0oV8LYtiZv_TrYljR
-    mxRK0WIL6CbllaYtfdGaOqs-CTGWqD3tLSGVI_A0XBq8CYz59zVyw>
-X-ME-Received: <xmr:SavCaWaICjk_Cn-AP4If2So1M0DBONuAAtu2Z4LR5T8RcSGUK5zX1ZMKHcPW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvdduledvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefurggsrhhi
-    nhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrdhnvghtqeenucggtf
-    frrghtthgvrhhnpefgvdegieetffefvdfguddtleegiefhgeeuheetveevgeevjeduleef
-    ffeiheelvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepuddtpdhm
-    ohguvgepshhmthhpohhuthdprhgtphhtthhopegtrhgrthhiuhesnhhvihguihgrrdgtoh
-    hmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgu
-    rhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvh
-    gvmhhlohhfthdrnhgvthdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehv
-    ghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepughtrghtuhhlvggrsehnvhhiug
-    hirgdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehprg
-    gsvghnihesrhgvughhrghtrdgtohhm
-X-ME-Proxy: <xmx:SavCafYuEst8soI7cHGORGjRp0PUhqM4ipxJF4f1iTsZ6di79WscQw>
-    <xmx:SavCabxrd_8k8x6ucTSQXEHS1eYIfseMaRvd0Yvq3kgl_zQcinQsMA>
-    <xmx:SavCabfXZSz7e7DUzhPfOCM5fmQ_3mQr_gtJjTJ2FE5N4bP8LBDJmw>
-    <xmx:SavCaQ4FWn9ukjd04ggKGfvng4fg7ENOxb_riXrI5CRvJBR0Bg2WwQ>
-    <xmx:SavCafWeWtHmzHJj4ZAE1s8BYytQxbIc8pGUJ4ASyD5oxOkFl-4ukrzy>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 24 Mar 2026 11:18:32 -0400 (EDT)
-Date: Tue, 24 Mar 2026 16:18:30 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: "kuba@kernel.org" <kuba@kernel.org>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"edumazet@google.com" <edumazet@google.com>
-Subject: Re: [PATCH net v5 0/3] macsec: Add support for VLAN filtering in
- offload mode
-Message-ID: <acKrRrOG0v9KDk_J@krikkit>
-References: <20260323123633.756163-1-cratiu@nvidia.com>
- <acFODtfaa8LCKX4r@krikkit>
- <5ae5d08d578fce1a01a548fad8552a14df8c5679.camel@nvidia.com>
- <acFWIxzM-GxpAhjH@krikkit>
- <20260323093243.17c14edb@kernel.org>
- <acF1jeGLpq7qDKgY@krikkit>
- <62b3b47291879328a868aa15fb7319b5ff13a20e.camel@nvidia.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="nIaHoy8K"
+Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 62OFG9f1754165
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 24 Mar 2026 08:16:09 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 62OFG9f1754165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026022301; t=1774365370;
+	bh=gTpmcN2spsGA1JJt5Rk56bbdXNRB9aMPTaKPb2ATdko=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=nIaHoy8K34d27ip37NmjnN9YZ/SILCk3yZwx8Ezx7O4hCwGBRRxvpH9xc+wz2mClV
+	 qZevuzC6KhRxpLBu2wjMXE/bTG4unih7zhsafyxxqQrTvZV9euMKIkxLoUFtTwoYrO
+	 rjaZSdacb8BE/S+tm8NgmX3ATnhoAHgJ2Tx9AGBYoS/z/smoJWx1sUUfNiiTDE+93J
+	 Nnz4AKpYchcQFddnA/RVoK3Nyql10Ymmw3dcxd85FJP4pX/4NJmgkFSv7QJ7Akp8A5
+	 wGzrBfFwhn8fiNAZsTIzfk1H2Ss9GjzCvEuqqY5lf6L9kC2wR0FKKJGo9jBrR1e85X
+	 RmlGrAP2meDxg==
+Date: Tue, 24 Mar 2026 08:16:02 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Lai, Yi" <yi1.lai@linux.intel.com>, Xin Li <xin@zytor.com>
+CC: Dave Hansen <dave.hansen@intel.com>, yi1.lai@intel.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        shuah@kernel.org, tglx@kernel.org, x86@kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_selftests/x86=3A_Fix_sysret?=
+ =?US-ASCII?Q?=5Frip_assertion_failure_on_FRED_systems?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <098e3877-5681-499a-b8ce-dbf5c78847fb@citrix.com>
+References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com> <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com> <568aa6c4-6802-4eb5-b412-e3aa93ed9b29@intel.com> <91590BC4-A54E-40F4-A223-A07FBA386A9A@zytor.com> <acDYXtVgSKbbAuGs@ly-workstation> <ce764071-6670-41a2-923a-88f1cd04b238@zytor.com> <c2979413-62f4-4a35-ad64-be2b8f55ea04@citrix.com> <0200a8d8-6871-4ff2-8c6a-968c2cb39a4f@zytor.com> <f55dd646-c728-4b0e-ab3e-18da8ac9e6e2@citrix.com> <760478B2-AED7-44F5-A22E-1730A9A0ED63@zytor.com> <098e3877-5681-499a-b8ce-dbf5c78847fb@citrix.com>
+Message-ID: <CEB24B01-3C92-4C5C-A3E2-D4A265370559@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <62b3b47291879328a868aa15fb7319b5ff13a20e.camel@nvidia.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-2026-03-24, 14:27:12 +0000, Cosmin Ratiu wrote:
-> On Mon, 2026-03-23 at 18:17 +0100, Sabrina Dubroca wrote:
-> > 2026-03-23, 09:32:43 -0700, Jakub Kicinski wrote:
-> > > On Mon, 23 Mar 2026 16:02:59 +0100 Sabrina Dubroca wrote:
-> > > > 2026-03-23, 14:42:00 +0000, Cosmin Ratiu wrote:
-> > > > > On Mon, 2026-03-23 at 15:28 +0100, Sabrina Dubroca wrote:  
-> > > > > > Why not? Being able to test without accessing real HW is
-> > > > > > still
-> > > > > > useful.
-> > > > > >   
-> > > > > The tests now send macsec traffic over VLANs and nsim, it's
-> > > > > just that
-> > > > > nsim doesn't deal with VLAN filters at all and there are no
-> > > > > stubbed
-> > > > > vlan filters in debugfs, since real hw doesn't have that
-> > > > > interface.  
-> > > > 
-> > > > Since netdevsim doesn't deal with VLAN filters at all, the "tests
-> > > > should be written so that they can run both against ``netdevsim``
-> > > > and
-> > > > a real device" bit of the docs doesn't fully apply here?
-> > > > 
-> > > > Anyway, I think the original tests had value, even if they're
-> > > > more
-> > > > limited in some ways than traffic tests. HW/driver behavior could
-> > > > be
-> > > > hiding problems in the stack with VLAN propagation, those simpler
-> > > > tests don't have that risk.
-> > > 
-> > > To be clear running the HW test without NETIF= should provide
-> > > similar functionality to what the old tests could do. It's entirely
-> > > okay to add netdevsim-specific subtests/test cases or asserts.
-> > > 
-> > > Is there anything specific that you'd like to be tested?
-> > 
-> > In v2/v3, nsim was exposing a debugfs file that contained the list of
-> > VLAN filters on that interface, and the selftest was grepping through
-> > that file to check if the correct entry was added/removed after each
-> > operation. I see that as testing the actual propagation of filters,
-> > while the traffic tests check the visible behavior of
-> > stack+driver+HW,
-> > which may not be correlated to actual propagation.
-> > 
-> > > Let's not make this about HW tests vs nsim-only tests.
-> > 
-> > That was not my intention. But since nsim doesn't currently implement
-> > VLAN filters, it seems running the HW test on nsim doesn't test
-> > anything at all.
-> > 
-> 
-> The problem with using the nsim-only VLAN filter debugfs is that it's a
-> test-only interface for figuring out a property of the stack.
+On March 24, 2026 7:46:26 AM PDT, Andrew Cooper <andrew=2Ecooper3@citrix=2E=
+com> wrote:
+>On 24/03/2026 2:33 pm, H=2E Peter Anvin wrote:
+>> On March 24, 2026 7:08:14 AM PDT, Andrew Cooper <andrew=2Ecooper3@citri=
+x=2Ecom> wrote:
+>>> On 23/03/2026 8:27 pm, H=2E Peter Anvin wrote:
+>>>> On 2026-03-23 12:17, Andrew Cooper wrote:
+>>>>> This doesn't really test whether FRED is active=2E=C2=A0 It tests wh=
+ether the
+>>>>> OS is not providing strict backwards compatibility, and I think will
+>>>>> malfunction when there's a hypervisor above Linux providing strict
+>>>>> backwards compatibility=2E
+>>>>>
+>>>> But that applies equally to IRET, no? If the hypervisor clobbers the =
+segment
+>>>> selector like IRET would in the interest of compatibility then you ha=
+ve the
+>>>> same issue=2E
+>>> I suppose=2E=C2=A0 I for one don't care to provide that level of compa=
+tibility=2E
+>>>
+>>> But for SYSCALL, what are Linux's plans for CRIU or RR ?=C2=A0 I had t=
+o fix
+>>> SYSCALL legacy behaviour in Xen for the following case:
+>>>
+>>> * PV guest issues SYSCALL on FRED system=2E=C2=A0 %rcx/%r11 not clobbe=
+red
+>>> * Migrate to a non-FRED system
+>>> * Xen uses a real SYSRET instruction to resume execution
+>>>
+>>>
+>>> Here, the guest continues executing at whichever dead variable is in %=
+rcx=2E
+>>>
+>>> CRIU/RR won't be exactly the same, but will suffer the same class of
+>>> problem when moving between FRED and non-FRED systems=2E
+>>>
+>>> ~Andrew
+>> "Doctor, it hurts when I PV?"
+>
+>I'm asking straight up, what is Linux doing to fix this same issue for
+>CRIU/RR?
+>
+>~Andrew
+>
+>P=2ES=2E=C2=A0 It's rhetorical, seeing as it's taken between Linux 6=2E9 =
+and now (2
+>whole years) for anyone to even run the x86 selftests on a FRED system=2E
 
-That's the whole point of netdevsim.
+That's not true, and in fact *this exact bug was fixed once already*; appa=
+rently someone "fixed the fix?"
 
-> Real HW
-> doesn't have that interface and thus the tests actually have to
-> generate traffic to ensure VLANs are propagated.
-> 
-> The new VLAN tests don't actually ensure anything on nsim, given that
-> it doesn't support VLANs. But on real HW they do - without the last
-> patch, the new tests fail on any hw supporting VLANs and MACsec.
-
-Well, they ensure that something in the stack+driver+HW combination is
-doing something that lets traffic go through. It's useful, but we can
-learn something extra from netdevsim.
-
-> Adding back the nsim debugfs file and test assertions guarded by "if
-> cfg._ns" would ensure filter propagation correctness, but would feel
-> non-Pythonic and a little hacky given that the same assertion can't
-> work on real HW.
-
-I think that's fine. The tests are anyway python wrappers around
-iproute commands, it's neither "Pythonic" nor pretty.
-Jakub, any objection?
-
-> So what would you like to happen? Bring back nsim patches + nsim-
-> specific test assertions?
-
-Yes, IMO that would be best.
-
--- 
-Sabrina
+I'm well and truly confused by it=2E
