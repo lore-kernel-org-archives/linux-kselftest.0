@@ -1,95 +1,133 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561A837BE64;
-	Tue, 24 Mar 2026 01:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C490934DB6B;
+	Tue, 24 Mar 2026 01:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774317160; cv=none; b=UZAZP6uk1I2xuyKNm1MVnHK+DIkEQp4oRLdk2ngwiJwP8I+xEMu4UVQcwEYEwCe9cB5XGpHMET2wjqdPjJPIBQUwrtd7xTcG4TQ9sinf32Xf7EuFDGoEO5gPLFSL1F+qRrNgC1i0zh4rhw9/4SUHGHsadt+2R+JWQ7NjA22YtgA=
+	t=1774317556; cv=none; b=W4DpeG0x3qnakYeigA/QjQe6jN/uZz8Q+zVR/P0pfRW4NKRyFaLFa+NrLRo51aUWRakAFiAtp9KsN60v5xsxnRy5DUDI+BgnBYaGygV9eQAs03D8tHylaCSOZwb8Qj/lxknukRfJsVLjdLz1KELqYKconPJb1JKbxCToZsM4rsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774317160; c=relaxed/simple;
-	bh=5/roqlaxdiFnJGWNHZnkt15qiKJnl2bsx2ss6szTsrY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=HfbhtAIE3KY4v4Mgrfmc59d1Qt5Fjgx1xATSvMTPNwWzPFz7rHUmlAYwEIgTGCDWmhZNR1FtzK5stx0PPc1Vs3lJMcvjzWor2im6pmYxo50nJRMYAWoQNlFJTmlNPeQgbgefWtpcDY9Osey3GwsyMrGyPzEAY+hFl39NMie3+kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=uD8lDVgT; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1774317556; c=relaxed/simple;
+	bh=PccirS4JhA9bCP6y7wgabbI+7yDxHnCsp1XLhQsjskI=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=UAdhGNZ4AW6I94h5DDJePUgxvQO2uzGUWOfkxlN62FwVZDSARYzs92W59DX52fN1y78WfiY2+M4yTwe7AyE3E6zJeT9DrRFJQP0v8/aYLO6w1XsuMfBjzd8FzDm03bs6pOvvnuBFziHsOdfhDMdACZtRpoUtP/bi3/L35CMMrRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IUfqQ+U+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="uD8lDVgT"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=5/roqlaxdiFnJGWNHZnkt15qiKJnl2bsx2ss6szTsrY=;
-	b=uD8lDVgTvzVReoD0EYD3G6BcGUCdQoytjSExmxjAF40Bi2Q89TSdr6jAwqzCCe04+NWnlTpHK
-	F3kXoEpup5dn9dycnblIIi3NI//7OOzBjPPIOEpl9AfYkwRC41ApKu0H1FlWczMuf4X6dCqNlQq
-	eQ+lS2Gl0MufGCRbq7WdOtc=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4fftFP6xLNz12LDY;
-	Tue, 24 Mar 2026 09:47:05 +0800 (CST)
-Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
-	by mail.maildlp.com (Postfix) with ESMTPS id 11C654056B;
-	Tue, 24 Mar 2026 09:52:34 +0800 (CST)
-Received: from [10.67.120.222] (10.67.120.222) by
- kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 24 Mar 2026 09:52:33 +0800
-Message-ID: <64f498fe-a109-482b-bb49-339a4bc6210d@huawei.com>
-Date: Tue, 24 Mar 2026 09:52:32 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IUfqQ+U+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1877AC2BCB1;
+	Tue, 24 Mar 2026 01:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774317556;
+	bh=PccirS4JhA9bCP6y7wgabbI+7yDxHnCsp1XLhQsjskI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IUfqQ+U+ZE0GXNjv2mDtMdFAD2z8ZA9O0SUsNNR0X3WRGGJ/vUlq519nNCba7cZgc
+	 whmRXNJPEfACtppszNGE86/Zjjf1Aaz1u2I5VdDbzKeSGZ+YC+sLjv2ZKYDp8uzoJ1
+	 wKL3ym1sBvZ0O3FrLsAmNllh+rULdBwM4EW4ppItNKWzMepiQJrxffyy0mbc5jodn3
+	 rAUEBUIkny+HuGKnAZwoQi8Fiv0hAxPLFIdUgyWLvBsFv8us9n/gtMLHwJC7PvXwjN
+	 5xTGuH1uNaDEAYPWaEFfGjQ/F9KK/QUgd3/5d81juu0vnnNTHqMLFXzBNEB/HoHoBM
+	 w2/HLJQVcHjMw==
+Date: Tue, 24 Mar 2026 10:59:13 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Cc: rostedt@goodmis.org, corbet@lwn.net, shuah@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 2/4] fprobe: Support comma-separated filters in
+ register_fprobe()
+Message-Id: <20260324105913.cf60a2f2fcc64afbe30bd22e@kernel.org>
+In-Reply-To: <20260205135842.20517-3-seokwoo.chung130@gmail.com>
+References: <20260205135842.20517-1-seokwoo.chung130@gmail.com>
+	<20260205135842.20517-3-seokwoo.chung130@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC patch 8/9] selftests/resctrl: Add support for HiSilicon
- MBM/MBA test
-To: Reinette Chatre <reinette.chatre@intel.com>, <tony.luck@intel.com>,
-	<Dave.Martin@arm.com>, <james.morse@arm.com>, <babu.moger@amd.com>,
-	<shuah@kernel.org>, <tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>,
-	<ben.horgan@arm.com>, <jonathan.cameron@huawei.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>
-CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
-	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
-	<wangzhou1@hisilicon.com>
-References: <20260304040334.765860-1-wuyifan50@huawei.com>
- <20260304040334.765860-9-wuyifan50@huawei.com>
- <c0bf5728-55b5-46e5-aced-4f856144f746@intel.com>
- <76186614-aa16-4a73-8fa9-059bb0a70486@huawei.com>
- <27737fa5-0f32-48df-b9e4-cce8e7cdd18e@intel.com>
-From: wuyifan <wuyifan50@huawei.com>
-In-Reply-To: <27737fa5-0f32-48df-b9e4-cce8e7cdd18e@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemk500005.china.huawei.com (7.202.194.90)
 
-Hi Reinette,
+On Thu,  5 Feb 2026 08:58:40 -0500
+"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com> wrote:
 
-On 3/23/2026 11:52 PM, Reinette Chatre wrote:
-> Hi Yifan,
->
-> On 3/23/26 2:19 AM, wuyifan wrote:
->> Hi Reinette,
->>
->> On 3/13/2026 5:01 AM, Reinette Chatre wrote:
->>> Which baseline exposes MB_MON in resctrl?
->>>
->>> Reinette
->> In the MPAM architecture reference manual, the memory-system component
->> includes the cache and memory channel controller, among others. The memory
->> channel controller can implement a memory bandwidth usage monitor.
->> I noticed that arm_mpam maps other classes to l3 in the resctrl glue code,
->> so I will fix this in the next version.
-> Were these tests written against a spec as opposed to the actual MPAM enabling
-> code? How could it have been tested?
->
-> Reinette
-Oh, I should add that the current Linux arm_mpam resctrl glue code is
-still under review and has not been merged. Therefore, this RFC is based
-on the Linux distribution OS test, so please ignore this issue. I will
-remove this in the next version.
+> register_fprobe() passes its filter and notfilter strings directly to
+> glob_match(), which only understands shell-style globs (*, ?, [...]).
+> Comma-separated symbol lists such as "vfs_read,vfs_open" never match
+> any symbol because no kernel symbol contains a comma.
+> 
+> Add glob_match_comma_list() that splits the filter on commas and
+> checks each entry individually with glob_match().  The existing
+> single-pattern fast path is preserved (no commas means the loop
+> executes exactly once).
+> 
+> This is required by the comma-separated fprobe list syntax introduced
+> in the preceding patch; without it, enabling a list-mode fprobe event
+> fails with "Could not enable event".
 
-Regards,
-Yifan Wu
+OK, in this case, you should reorder patch this as the first one.
+Please make this [1/4] and remove this requirement explanation paragraph.
+The patch itself looks good to me.
+
+Thank you,
+
+> 
+> Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
+> ---
+>  kernel/trace/fprobe.c | 30 ++++++++++++++++++++++++++++--
+>  1 file changed, 28 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 1188eefef07c..2acd24b80d04 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -672,12 +672,38 @@ struct filter_match_data {
+>  	struct module **mods;
+>  };
+>  
+> +/*
+> + * Check if @name matches any comma-separated glob pattern in @list.
+> + * If @list contains no commas, this is equivalent to glob_match().
+> + */
+> +static bool glob_match_comma_list(const char *list, const char *name)
+> +{
+> +	const char *cur = list;
+> +
+> +	while (*cur) {
+> +		const char *sep = strchr(cur, ',');
+> +		int len = sep ? sep - cur : strlen(cur);
+> +		char pat[KSYM_NAME_LEN];
+> +
+> +		if (len > 0 && len < KSYM_NAME_LEN) {
+> +			memcpy(pat, cur, len);
+> +			pat[len] = '\0';
+> +			if (glob_match(pat, name))
+> +				return true;
+> +		}
+> +		if (!sep)
+> +			break;
+> +		cur = sep + 1;
+> +	}
+> +	return false;
+> +}
+> +
+>  static int filter_match_callback(void *data, const char *name, unsigned long addr)
+>  {
+>  	struct filter_match_data *match = data;
+>  
+> -	if (!glob_match(match->filter, name) ||
+> -	    (match->notfilter && glob_match(match->notfilter, name)))
+> +	if (!glob_match_comma_list(match->filter, name) ||
+> +	    (match->notfilter && glob_match_comma_list(match->notfilter, name)))
+>  		return 0;
+>  
+>  	if (!ftrace_location(addr))
+> -- 
+> 2.43.0
+> 
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
