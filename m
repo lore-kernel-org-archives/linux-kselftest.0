@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73A536F40D
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 01:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096E42C325C
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 01:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774316063; cv=none; b=WWKizB2dRUG4zp8kGvTKgVh0T5NgNDChRhkRqwt6LwbEpbVG33C6v8g3Pk17Ojz/i6XseHn7KtBpniiaMGTwTZh4VEcARb9G64vCzn2V+eeLRQa3vxDKgB5jPk4MiKCNtAYLDNMaAzp4V47z1RsONQDXqEFEWqWLFBjckvP31Y0=
+	t=1774316073; cv=none; b=Bv+wS3j0ck95vzH5g8123rEe6iGO6WhEGZvJXM3fj4F35PEVFbB3zLTsGXqclA2if3T8ilwwDVwzNBtG9OqU8r6N8PQOtyMAsdi8VkFanZ2xf+OR33POtXzbDKo4bRRlYUGlvaLbyTD9FxLp4arEO+qEMz293OfIfy4lVZg32Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774316063; c=relaxed/simple;
-	bh=8kcSjbIIEeXJAGXv7dzdKrrWxBbWF0Q3ow1gEe2ds6c=;
+	s=arc-20240116; t=1774316073; c=relaxed/simple;
+	bh=0ZNjKjARdZvcdL31QoVs+UqP+O/z4+0bO2/UPGbm13o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ANtBabJ40Ahx0a26duw3qd9ZjjWQpqbr8rKq7EcHMhiAwR25v2uVYG1R8vuAFtHToVfj5RdzTn2rUnQuQi8+pkkI8mLgqwl/aXkQFgGZ9V1lU6eh2c/LGG8RUQIIGZpluy51+/+86uKq9VzemGrHb9wQkGtd2ViUQtzoape56e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CYmpOgi9; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=LD6KuzzMebfF/TFEtLt+vo0RkN2k73GHAVU3P48maE3yIX6TGelywhnWbXlIEI3APnkKhwNkJbAYc7QWMJxQa3voJpk5UratJnv8WFElCZt6iEQRVccO8v/g3Jy7cdxkU1yUgkfdMsuoSmQnD9m4A0QrPw2mb8akrythkxG9WUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ciAgH/Xr; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CYmpOgi9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ciAgH/Xr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774316060;
+	s=mimecast20190719; t=1774316071;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cP9CaaUU0YGWeU606cF4HfEnHjH3cqBLv/sm6TUkYWs=;
-	b=CYmpOgi9xszZxAYBpL05bZR/LpxHnHccAI0Nem3GfSmRlDg4YjrmNABz37JXGQFpTX8KED
-	lgMfTkj7tIqPAidw0PzMT64CRrfpFoYl4w8Lhpdzu6ZJPe9f+VYPhXxPUdq2tBmxNMX6fF
-	9GnAj+PpXlAb7nDSDgsKGercDMwlYqU=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=Z5cQUZey16cto7EAHb0l8lICJnDidIXEapbKPGxTzr4=;
+	b=ciAgH/XrG9PZWK4wseBBCguY+q5qsmH4T2DESDAbxpJ6nnmuo04RXBBZkNNdKOMPDLq6FB
+	LxoecGXmalCzb5YMC/zNja9yVsjEKAqpX0FoQltCZ1YfnFFnEn3b1NqGcXSexIRyNLuxey
+	/G83UdT2vtEam2U70B53mgoUNMSDxcM=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-653-MFMT0aBONquvRkjdt7tu8w-1; Mon,
- 23 Mar 2026 21:34:17 -0400
-X-MC-Unique: MFMT0aBONquvRkjdt7tu8w-1
-X-Mimecast-MFC-AGG-ID: MFMT0aBONquvRkjdt7tu8w_1774316054
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-675-hsgMjuCTOcy5mAVb2IZLbA-1; Mon,
+ 23 Mar 2026 21:34:26 -0400
+X-MC-Unique: hsgMjuCTOcy5mAVb2IZLbA-1
+X-Mimecast-MFC-AGG-ID: hsgMjuCTOcy5mAVb2IZLbA_1774316063
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B4B9618002CB;
-	Tue, 24 Mar 2026 01:34:14 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 715F719560A1;
+	Tue, 24 Mar 2026 01:34:23 +0000 (UTC)
 Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A0CA3180058C;
-	Tue, 24 Mar 2026 01:34:06 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6FBA0180058C;
+	Tue, 24 Mar 2026 01:34:15 +0000 (UTC)
 From: Chunyu Hu <chuhu@redhat.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -65,9 +65,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	lance.yang@linux.dev,
 	chuhu@redhat.com,
 	Li Wang <liwang@redhat.com>
-Subject: [PATCH v6 5/6] selftests/mm: split_huge_page_test: skip the test when thp is not available
-Date: Tue, 24 Mar 2026 09:33:15 +0800
-Message-ID: <20260324013316.2590422-6-chuhu@redhat.com>
+Subject: [PATCH v6 6/6] selftests/mm: transhuge_stress: skip the test when thp not available
+Date: Tue, 24 Mar 2026 09:33:16 +0800
+Message-ID: <20260324013316.2590422-7-chuhu@redhat.com>
 In-Reply-To: <20260324013316.2590422-1-chuhu@redhat.com>
 References: <20260324013316.2590422-1-chuhu@redhat.com>
 Precedence: bulk
@@ -79,29 +79,30 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-When thp is not enabled on some kernel config such as realtime kernel, the
-test will report failure. Fix the false positive by skipping the test
-directly when thp is not enabled.
+The test requires thp, skip the test when thp is not available to avoid
+false positive.
 
-Tested with thp disabled kernel:
-Before The fix:
-  # --------------------------------------------------
-  # running ./split_huge_page_test /tmp/xfs_dir_Ywup9p
-  # --------------------------------------------------
+Tested with thp disabled kernel.
+Before the fix:
+  # --------------------------------
+  # running ./transhuge-stress -d 20
+  # --------------------------------
   # TAP version 13
-  # Bail out! Reading PMD pagesize failed
+  # 1..1
+  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
+  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
   # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
   # [FAIL]
-  not ok 61 split_huge_page_test /tmp/xfs_dir_Ywup9p # exit=1
+  not ok 60 transhuge-stress -d 20 # exit=1
 
 After the fix:
-  # --------------------------------------------------
-  # running ./split_huge_page_test /tmp/xfs_dir_YHPUPl
-  # --------------------------------------------------
+  # --------------------------------
+  # running ./transhuge-stress -d 20
+  # --------------------------------
   # TAP version 13
   # 1..0 # SKIP Transparent Hugepages not available
   # [SKIP]
-  ok 6 split_huge_page_test /tmp/xfs_dir_YHPUPl # SKIP
+  ok 5 transhuge-stress -d 20 # SKIP
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
@@ -110,40 +111,39 @@ Reviewed-by: Zi Yan <ziy@nvidia.com>
 CC: Li Wang <liwang@redhat.com>
 Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 ---
-V3 chagnes:
-  - add acked-by from David
-  - add reviewed by from Mike
+V3 changes:
+  - Add review by from Mike
+  - Add acked-by from David
 V2 changes:
-  - removed the {} in if block
-  - removed the write_file helper rename chunk, as there's a new patch 3 to
-    resolve the conflict with thp_settings.h by moving it to vm_util.
+  - Move the exit chunk to the front of ksft_print_headers() as suggested
+    by David.
   - Add reviewed by from Zi and Lorenzo
 ---
- tools/testing/selftests/mm/split_huge_page_test.c | 4 ++++
+ tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index 93f205327b84..500d07c4938b 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -21,6 +21,7 @@
- #include <time.h>
+diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
+index bcad47c09518..7a9f1035099b 100644
+--- a/tools/testing/selftests/mm/transhuge-stress.c
++++ b/tools/testing/selftests/mm/transhuge-stress.c
+@@ -17,6 +17,7 @@
+ #include <sys/mman.h>
  #include "vm_util.h"
  #include "kselftest.h"
 +#include "thp_settings.h"
  
- uint64_t pagesize;
- unsigned int pageshift;
-@@ -757,6 +758,9 @@ int main(int argc, char **argv)
- 		ksft_finished();
- 	}
+ int backing_fd = -1;
+ int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
+@@ -37,6 +38,9 @@ int main(int argc, char **argv)
+ 
+ 	ksft_print_header();
  
 +	if (!thp_is_enabled())
 +		ksft_exit_skip("Transparent Hugepages not available\n");
 +
- 	if (argc > 1)
- 		optional_xfs_path = argv[1];
- 
+ 	ram = sysconf(_SC_PHYS_PAGES);
+ 	if (ram > SIZE_MAX / psize() / 4)
+ 		ram = SIZE_MAX / 4;
 -- 
 2.53.0
 
