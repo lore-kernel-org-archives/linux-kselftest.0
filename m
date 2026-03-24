@@ -1,133 +1,58 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAED5384235
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 02:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E95388394;
+	Tue, 24 Mar 2026 02:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774320853; cv=none; b=rIRLWH42IQua+WV2DQUxV1Al0gAesyskyTkEouGPcF+JQywNWMSM5SY/v52xZcRjnj/Y/gunSc6YCp+QzC3GU7DEioI9aAR0uZXOLVVzUGlfTJ9PjiW44lc0LG/6UYBSTm2Bl5IOc6UUF9SLcFUAbYMw4+/qRRQR7mBAVyG3arM=
+	t=1774321096; cv=none; b=Ndyp06Wsj0xFFwSYb8H9SjLxP2q3Hv05LL0MBAMq/FLiFv4P7Mn1Dpt1fdn4+qSPCO3N04Go8LfM8Og8W96uZp/X+QZiyC+cJRYGyIE1Hcadr6+yS7G6iXOF3QyzrXmDyoCCxm21T8rLTcaBqE/PxMKxjKhz3UTQEBiMRMBmkVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774320853; c=relaxed/simple;
-	bh=EDKMe4sPIv6tDaMJTfs6stvxZwxbh9egPlNbC5+n06c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JVnvqRIla5XAm6e9gjm0h718xDUUU+CrKRvhHLg2NAQolf7yhjebPojJMnvHTc/BRyS7VxIf54JBtsZZmUHx7FANdH3YmG9Ffr62w0S3iJuTInXxt4immpO9d4/IRvi9J4lXp2Igyo3K7wIQz5nP6gTzJZabhHJ+ihpnsqqdd7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rtXfJZs/; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774321096; c=relaxed/simple;
+	bh=MuSo6Nwc8wpuYTdHUl9jVCTWnPNwm8gfgGx2pvV/oBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BOEykHYcvMahBQD3qgoKPxbDa84+WMVJsVNk7NI9Kcif5+0oQfx3AFwCzreCGewquyh55msKNu3s8Z4BebPSWyTZr9iRgh6lxlr0l7Zwaumgtz6j3gxDOep4AKOWiQlWcgIV5WZV4TFrn3dpbG2+oB06tZksDY2FKZ8nNWBx1Hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cZ/HZiuH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rtXfJZs/"
-Message-ID: <d749228d-15b8-4487-8c2f-604b9d5d4316@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774320850;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tApYWEiNxZyjFXtpR2YuCIAPW0T7R5T38Mpwssdvk4A=;
-	b=rtXfJZs/4IvB9AdsBuUj4FX2WZMbuBrwFUuuDL/2oRN+Wbacsj8i6M+lnf2pIc35vlnyah
-	fHbLg5Ns6K25SguuxIzr/Gp/KgdBXeW6pcbTlTtD+4eIeivmKIbR4YX3LCid4YeJq53i1L
-	YIDX/3lvcQafGzoGTghQMQAcU6Jg5Dg=
-Date: Tue, 24 Mar 2026 10:53:59 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cZ/HZiuH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 619D5C4CEF7;
+	Tue, 24 Mar 2026 02:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774321096;
+	bh=MuSo6Nwc8wpuYTdHUl9jVCTWnPNwm8gfgGx2pvV/oBE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cZ/HZiuHF2wrJ4cm3D9neXjwaR+pWoAF849HcrGiIs8J/6qq+5HRvBflWe06nOixp
+	 ZKFJ+pHi3C+QAlYYESycmgKIujcEF1MT5KfxgqdTrFV50fQtHfqKA4uakIlM0Vsilw
+	 SaphnV4syt7HwkVd1kq4gHlBSh16LqGTVWtc+VG2e0p6GQt4bRgtryjOMjL17PES88
+	 eDh8FpVzdRSCOSZ64ysigQaCx+9Is1SrUm3ilZIfW9mP4bQeNjOeCQ4RVCXSi+QL0h
+	 /EJk5Yzl+tVtMuFImTR4n0wxpIJJ8i6KYSOpzPej7fsz3HGNkSmC1pE8DdjF8N5oJD
+	 SlMrjb9MK8Elg==
+Date: Mon, 23 Mar 2026 19:58:13 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Aaron Conole
+ <aconole@redhat.com>, Ilya Maximets <imaximet@redhat.com>, Eelco Chaudron
+ <echaudro@redhat.com>, Stefano Brivio <sbrivio@redhat.com>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, dev@openvswitch.org
+Subject: Re: [PATCH net-next v6 0/4] selftests: net: fix false failures due
+ to missing features and host interference
+Message-ID: <20260323195813.7ebccd88@kernel.org>
+In-Reply-To: <20260321215908.175465-1-aleksey.oladko@virtuozzo.com>
+References: <20260321215908.175465-1-aleksey.oladko@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: test access to ringbuf
- position with map pointer
-Content-Language: en-US
-To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org,
- olsajiri@gmail.com
-Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260323021839.101316-1-dongml2@chinatelecom.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260323021839.101316-1-dongml2@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 23/3/26 10:18, Menglong Dong wrote:
-> Add the testing to access the bpf_ringbuf with the map pointer.
-> "consumer_pos" and "producer_pos" is accessed in this testing. We reserve
-> 128 bytes in the ringbuf to test the producer_pos, which should be
-> "128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
-> 
-> It will be helpful if we want to evaluate the usage of the ringbuf in bpf
-> prog with the consumer and producer position.
-> 
+On Sat, 21 Mar 2026 21:59:04 +0000 Aleksei Oladko wrote:
+>  tools/testing/selftests/net/pmtu-test.sh      | 2492 +++++++++++++++++
+>  tools/testing/selftests/net/pmtu.sh           | 2492 +----------------
 
-128 is a plain test for ringbuf, like those in
-ringbuf_overwrite_mode_subtest().
-
-The reserved size can be 0; however, a test for it is missing. It would
-be better to add a test against 0-size here or there.
-
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
-
-One nit below.
-
-> ---
-> v2:
-> - don't set the max_entries for the ringbuf map
-> - add comment for the producer_pos
-> ---
->  .../testing/selftests/bpf/progs/map_ptr_kern.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> index efaf622c28dd..d7611e7018ca 100644
-> --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> @@ -647,8 +647,14 @@ static inline int check_devmap_hash(void)
->  	return 1;
->  }
->  
-> +struct bpf_ringbuf {
-> +	unsigned long consumer_pos;
-> +	unsigned long producer_pos;
-> +} __attribute__((preserve_access_index));
-> +
->  struct bpf_ringbuf_map {
->  	struct bpf_map map;
-> +	struct bpf_ringbuf *rb;
->  } __attribute__((preserve_access_index));
->  
->  struct {
-> @@ -659,9 +665,21 @@ static inline int check_ringbuf(void)
->  {
->  	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
->  	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
-> +	struct bpf_ringbuf *rb;
-> +	void *ptr;
->  
->  	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
->  
-> +	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
-> +	VERIFY(ptr);
-> +
-> +	bpf_ringbuf_discard(ptr, 0);
-> +	rb = ringbuf->rb;
-> +	VERIFY(rb);
-> +	VERIFY(rb->consumer_pos == 0);
-> +	/* The "8" here is BPF_RINGBUF_HDR_SZ */
-> +	VERIFY(rb->producer_pos == 128 + 8);
-> +
-
-NIT: Use BPF_RINGBUF_HDR_SZ directly. Is it missing in vmlinux.h?
-
-Thanks,
-Leon
-
->  	return 1;
->  }
->  
-
+I think I asked twice already to fix the test instead of wrapping it in
+another helper.
