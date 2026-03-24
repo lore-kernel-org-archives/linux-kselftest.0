@@ -1,109 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183F1391E55;
-	Tue, 24 Mar 2026 17:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FB8313E01
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 18:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774373977; cv=none; b=GocLAR4s4m1YMMj/FLQpgtq1G9Gysora5lGpq3WIU0e8NFOjKfIP3R+Dr0t/IQdBN65bRnrp+AwdHz6a8bI9SUyt/wrhRXUyyiRM6iYqKuU+gpKDAhLFdF2U90Y/8y2ivP7ScmKGGIKlOXpGeJB8nfxDJNTUK/mrThPfKgoBHnQ=
+	t=1774375208; cv=none; b=AH5k0gRLpJP3OBc3DSjPVh9RY7s1pMXpnQsr/Ye35Kx9TTCGD0shjY6l/HhEwZDjaSQJtkRNSRVvo2ZFi8C10T/nbn8qW4k7Tv8m9W7gWb+AIYZTv9WDozB3ORkdH21lDfbfxMFtJ6+WZeA1DqsLirzmXPiAws0iFd7c9SZrIhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774373977; c=relaxed/simple;
-	bh=ZaI9P4HdmB3KMrbR4xZJNOkfWyry+qYtmIIIXLbqdhI=;
+	s=arc-20240116; t=1774375208; c=relaxed/simple;
+	bh=CNHXMSmAUOWH+d0jWI2bXIfdmawcgqh7aZ6RTG+xo5U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YVAN+c8iFjNvTX5PplC0NVGGTklWVBQqtLce2wMwD5wPBG6fZhwe5x8r2jhg7vsB+sjH+tuJFqLXdNbUXn8Ymd3iZSglxXOv51KHlqy7Yb/bqyOHffQWjSaG0Gb5B2DIW28ii51Nf7rflzhr4ZvuYIdfBXT5KRgUnHD1ZL5unVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vdxmtj4F; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=gAdjq/lVsKLjN5O67WkQJnx3skV05DJwjjc5ZsYUkFb3QQVlZf7GHsof26q8z6CfBR5uJ8DbfAWvw5ML20ljxaPYHk8DKK9iIfm0e+wTCVhCKhx8VIhuFxa4wyiD6d4mkgCEF6T6onranucbFlXhyYqnNN1N8YRzCTbR+2va7sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r7wVIEoC; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vdxmtj4F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67DD3C2BC87;
-	Tue, 24 Mar 2026 17:39:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774373976;
-	bh=ZaI9P4HdmB3KMrbR4xZJNOkfWyry+qYtmIIIXLbqdhI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Vdxmtj4Fccv1fMIcMIq7MCmAm1ig+TX/gx3la5VFAMBYZLsELxlJqtDnhi8s0B4fZ
-	 FLtzNrkiYwLvR/VlBNRdm2g4ZrtmG0X0TZr2TyVuxc8x6k76h5ZsOIUyEILG7t+znD
-	 HsssQ29vRLe6cli6lWTOv6jdQ1HJqAj1DZnBHNcQkAKIKL+LKRwHPk0VvTdxe3r1dy
-	 LEVtjW6e7jllH/rriv3XSz9sPLVUaGTznEFwLuTrrX2lRLBtxHH9g9PTDJ/Yi9h+jS
-	 q0bGnG85JuFtt7z9RHDVdsl+TNuDQqI503+4QYEqi63536yH4BA3zYFqgfTGF5gQ57
-	 BJwrDkjNYBm8w==
-Date: Tue, 24 Mar 2026 17:39:31 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/5] KVM: selftests: arm64: Skip all 32 bit IDs when
- set_id_regs is aarch64 only
-Message-ID: <d5759443-ffc2-43b3-93f5-99ec55492a81@sirena.org.uk>
-References: <20260317-kvm-arm64-set-id-regs-aarch64-v5-0-a60f2b956e22@kernel.org>
- <20260317-kvm-arm64-set-id-regs-aarch64-v5-4-a60f2b956e22@kernel.org>
- <86pl4t41kc.wl-maz@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r7wVIEoC"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-829a9d08644so2404174b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 11:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774375206; x=1774980006; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oR1oDysYc7m3zFicPQmc7IfOCoKYgQXwHXDPwXVzCPk=;
+        b=r7wVIEoCOuRMjg1YrOzsLz4l2c5jl76GG92F5jwCa8nLslFfASSUz+Zp+tQORELJnb
+         +JKEqTMgU6RIZc2ixU4SqFBjyf6+NC353uFIuey58jHxgZbEf4n2ycQXYkNnJntauxdT
+         GSLXNuKaPV6l3lxJBc3oEHl+1hiXvt3LiAwT4RU/GBDZ6r9qJ/ZG+A0mWUZXfi6Bce+4
+         1Yns8tDTQ1DQerp1zMZ/Tovj64NHaipROFcTrB/PfG3XD98BcK/AsSPR7k7eFamZhIs3
+         Eq52zG9yGOt8bcUobEwBIYZkH3+elTz+R0uwRqcpgrtVonqfQ8xmnV04mXasMFPM4r9t
+         d0JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774375206; x=1774980006;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oR1oDysYc7m3zFicPQmc7IfOCoKYgQXwHXDPwXVzCPk=;
+        b=i9Yv3fdoIAvo1AdqM8yBO1doRpAP1Uikcd3ymx8uAQoloAyziuoIx7/2VG/Zjsab/t
+         FJiGXc/9pmew+SFkV8Be2qBL+ZxnUPPnCnX+WsGtyK9Nfo109RDXM/Wp03yBjRV+djwF
+         +umlvx4VNd6GQCaJGR8XBoCb62JC1fUlv1z/NIE3r2wMm3c5fy0P86OcEae09kxnrHkp
+         kuJt0AB6Ae0WwpeFsjDQNarAZG5mtt7oZiQqqG9HyljLoGGolW+7Zi6g3FKgT6PWAWdX
+         hzC/DmjOuZybZQQDByqb2cELO+hZRI9tTfbGiaFqJ5vbPa+tox4lLS+4ujgWoX7u6JVs
+         q5Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCWHubg0E4PMOSxBr7oCHf5y7e6PEdI6eIz4rMoCNpSfXz8FvN/DY4ojvHWWwIcnY5WajoF/Hb3ke8YuvAt29VY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmyrkTd3iKLMaKsfVuBPaEvu1Is7lbdoXL99imLZTf95SIFuDF
+	KXzSaSFIjTa977InZSjqlk93KrxdoKQtk248nsEQtS4CD2dAxCRPk6dIpzyk9pZSyA==
+X-Gm-Gg: ATEYQzwegPR/GvABLKgE080NmeeFDXyFaIxXYnLhkrzmJSUlKkb58282668ML8bUO/E
+	gdfLb4hSxRkKRW0zTtzaTrHqWcr8QgCR2wM5n2D9sBBKvN33b4yRoK1z0TMxbmA2UKxF2ZDpErd
+	hY5nbAj8j5efJaiKk+F/Wn6WEJfwi6OcMUXUh+ri8TrZYj6QuUv2qKFat9ha4XOJ5F35pAg3BN5
+	Vii6TUaAJDgJQV9J1afmF6gynO9logzppIuvDbPBOZBObSqKWK/Uc+Aq2FXksj8RxtPhklrImdf
+	cfjZWSEWrHNA3jFGLD76pKSbCVl8qSOimj0cSPFQ/la17lnBwGnLWM4vPXCq2j81aTPxOZU3spp
+	3yDbUnVvs6Zw0PHi6XAwdwEpPxAONWR8LnhYWvHnzPxc8gSjU2yiU0U/PN0BElTCXj318DKq+WZ
+	IsXLVW3KWEvhcUow+HJhP6/DPcBFFKIvtvCot67AXOcCZzl6owjXSYvE/JACyoww==
+X-Received: by 2002:a05:6a00:2da7:b0:827:3e19:574b with SMTP id d2e1a72fcca58-82c6e0bf7bamr488776b3a.43.1774375205765;
+        Tue, 24 Mar 2026 11:00:05 -0700 (PDT)
+Received: from google.com (239.23.105.34.bc.googleusercontent.com. [34.105.23.239])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0421df0esm15901970b3a.58.2026.03.24.11.00.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2026 11:00:04 -0700 (PDT)
+Date: Tue, 24 Mar 2026 18:00:00 +0000
+From: David Matlack <dmatlack@google.com>
+To: Yi Liu <yi.l.liu@intel.com>
+Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+	Askar Safin <safinaskar@gmail.com>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Chris Li <chrisl@kernel.org>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	David Rientjes <rientjes@google.com>,
+	Feng Tang <feng.tang@linux.alibaba.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
+	kexec@lists.infradead.org, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Li RongQing <lirongqing@baidu.com>, Lukas Wunner <lukas@wunner.de>,
+	Marco Elver <elver@google.com>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Pranjal Shrivastava <praan@google.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v3 03/24] PCI: Require Live Update preserved devices are
+ in singleton iommu_groups
+Message-ID: <acLRICLAP5Ccqt9I@google.com>
+References: <20260323235817.1960573-1-dmatlack@google.com>
+ <20260323235817.1960573-4-dmatlack@google.com>
+ <376910fa-4232-4e58-bf87-0504202866a5@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="H1nc6A8dHTsws8fc"
-Content-Disposition: inline
-In-Reply-To: <86pl4t41kc.wl-maz@kernel.org>
-X-Cookie: Forest fires cause Smokey Bears.
-
-
---H1nc6A8dHTsws8fc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <376910fa-4232-4e58-bf87-0504202866a5@intel.com>
 
-On Tue, Mar 24, 2026 at 04:47:15PM +0000, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+On 2026-03-24 09:07 PM, Yi Liu wrote:
+> On 3/24/26 07:57, David Matlack wrote:
+> > Require that Live Update preserved devices are in singleton iommu_groups
+> > during preservation (outgoing kernel) and retrieval (incoming kernel).
+> > 
+> > PCI devices preserved across Live Update will be allowed to perform
+> > memory transactions throughout the Live Update. Thus IOMMU groups for
+> > preserved devices must remain fixed. Since all current use cases for
+> > Live Update are for PCI devices in singleton iommu_groups, require that
+> > as a starting point. This avoids the complexity of needing to enforce
+> > arbitrary iommu_group topologies while still allowing all current use
+> > cases.
+> > 
+> > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> > Signed-off-by: David Matlack <dmatlack@google.com>
+> > ---
+> >   drivers/pci/liveupdate.c | 34 +++++++++++++++++++++++++++++++++-
+> >   1 file changed, 33 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
+> > index bec7b3500057..a3dbe06650ff 100644
+> > --- a/drivers/pci/liveupdate.c
+> > +++ b/drivers/pci/liveupdate.c
+> > @@ -75,6 +75,8 @@
+> >    *
+> >    *  * The device must not be a Physical Function (PF).
+> >    *
+> > + *  * The device must be the only device in its IOMMU group.
+> > + *
+> >    * Preservation Behavior
+> >    * =====================
+> >    *
+> > @@ -105,6 +107,7 @@
+> >   #include <linux/bsearch.h>
+> >   #include <linux/io.h>
+> > +#include <linux/iommu.h>
+> >   #include <linux/kexec_handover.h>
+> >   #include <linux/kho/abi/pci.h>
+> >   #include <linux/liveupdate.h>
+> > @@ -222,6 +225,31 @@ static void pci_ser_delete(struct pci_ser *ser, struct pci_dev *dev)
+> >   	ser->nr_devices--;
+> >   }
+> > +static int count_devices(struct device *dev, void *__nr_devices)
+> > +{
+> > +	(*(int *)__nr_devices)++;
+> > +	return 0;
+> > +}
+> > +
+> 
+> there was a related discussion on the singleton group check. have you
+> considered the device_group_immutable_singleton() in below link?
+> 
+> https://lore.kernel.org/linux-iommu/20220421052121.3464100-4-baolu.lu@linux.intel.com/
 
-> > On an aarch64 only system the 32 bit ID registers have UNDEFINED values.
-> > As a result set_id_regs skips tests for setting fields in these registers
-> > when testing an aarch64 only guest. This has the side effect of meaning
-> > that we don't record an expected value for these registers, meaning that
-> > when the subsequent tests for values being visible in guests and preserved
-> > over reset check the value they can spuriously fail. This can be seen by
-> > running on an emulated system with both NV and 32 bit enabled, NV will
-> > result in the guests created by the test program being 64 bit only but
-> > the 32 bit ID registers will have values.
+Thanks for the link.
 
-> I don't think papering over this problem is the right thing to do.
+Based on the discussion in the follow-up threads, I think the only check
+in that function that is needed on top of what is in this patch to
+ensure group immutability is this one:
 
-> If the issue is that you have HW that has both NV and AArch32, then
-> KVM needs to be fixed to make the 32bit IDregs RAZ when NV is present
-> because that's not a configuration we support.
+	/*
+	 * The device could be considered to be fully isolated if
+	 * all devices on the path from the device to the host-PCI
+	 * bridge are protected from peer-to-peer DMA by ACS.
+	 */
+	if (!pci_acs_path_enabled(pdev, NULL, REQ_ACS_FLAGS))
+		return false;
 
-Yes, I'm seeing this in practice - it hits by default with qemu which is
-rather more readily accessible than actual hardware with NV at this
-point and I was concerned that since these registers are explicitly
-UNKNOWN (sorry, a mistake in the commit log above there) rather than RAZ
-if FEAT_AA32 is not implemented there might be gotchas.  I do see that
-there's some forcing for the case where the host doesn't support
-FEAT_AA32, I figured there must be some reason why it wasn't done based
-on the guest configuration.
+However, this would restrict Live Update support to only device
+topologies that have these flags enabled. I am not yet sure if this
+would be overly restrictive for the scenarios we care about supporting.
 
-I'll add something to kvm_finalize_sys_regs(), it'll still need updates
-in set_id_regs since that'd make the 32 bit ID registers change value
-when the guest is run.
-
---H1nc6A8dHTsws8fc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnCzFIACgkQJNaLcl1U
-h9DDYwf9Em0WcSM2aylb1zHYADTr7YnIzBQqP/o86zuktEp0HrunQTiCzDnl3NMQ
-14RDXaHemX5VrVrYw29JutWLjEl1YI96rmMC8p6qBGSbo3V4DuV6pgoNwDta713e
-EJot0soFFT+bQk/N89VCWySOmyeWQKOBG93JVNiVBQ95+dcEFst5EmnfCGrpIan4
-yolB+GbbZ3SO3T6e3qg/ySgwrREbwCHLb+WAdKfV7NsT3AhXVrbaomdmlxIN056L
-foTiPS0xYSRj34dNUUnAamoZkgH/W+8+1J+sfufT4xjezwviTr4WlkHTxIsL0UPx
-2UJZqwfH8yGafVp75qoAFoGBj/kXZQ==
-=krAn
------END PGP SIGNATURE-----
-
---H1nc6A8dHTsws8fc--
+An alternative way to ensure immutability would be to block adding
+devices at probe time. i.e. Fail pci_device_group() if the device being
+added has liveupdate_incoming=True, or if the group already contains a
+device with liveupdate_{incoming,outgoing}=True. We would still need the
+check in pci_liveupdate_preserve() to pretect against setting
+liveupdate_outgoing=True on a device in a multi-device group.
