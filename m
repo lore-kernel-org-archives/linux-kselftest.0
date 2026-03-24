@@ -1,132 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C4635C18C;
-	Tue, 24 Mar 2026 21:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C079F35295C
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 21:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774387277; cv=none; b=PqyjDFW4Rtm7/yXnPznoHjgOpkun8nnnznD+hyI3l/G2Pl3AEmDlFy8L6jgwQb3pVrx78YL5hRo+0sTjCllzYucqsKkuUDGPpctPBfthLF8msPQKxj2YIUZ7Q5aG0ldgh4vao27JUJ35PvOxEVt+fw22hFAf7gqCm3SIwnonupM=
+	t=1774388281; cv=none; b=Jj9n/lqVoLjpNm07/jXk9BJqWyhIZLSojPdBdo/2rILUM6Vyr6+p9CpVvEvNfOWMGcTXRjljSrVpvzyxrEiuhMgzYZY7K7YVVa0OsihQJzT8pbvFnHgMccA5VibMOv1262AK/ySMWm3IGmDEwhvVj/yuNC+2VLu56h5XFy3mBow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774387277; c=relaxed/simple;
-	bh=bN+zpILDmRdAJyoSgSd6M94WASWO6vtvLneiqPi/Tak=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nnJ1ttKaJogW/36+HpqlaDMquirYW8T7ejU/uVuoIKYYAHftAoBTm7tiYjPeSyxfY1gA6Gw343vV6SICd/TzYIWyY6iPXeMQmlXoxGdES6WEp96Z2IPfe/24I443pmXCowQA8YFSvaU62TIFSO0cLup3TP6bzHSloOSOcwwVVW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GPxpDeHT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774388281; c=relaxed/simple;
+	bh=fZSRNNKfUg8R6FueMiY52/uF1W6PTwInbFVyB67OiG4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sd+uSqorhCrS86rdwg4EmpNlqYPvrqHm4yKEZtVTBFxX0KcIg7ySzz8/RnNJ0pIOoXCBKhbpelYAzzhJxneOEJn2Qzs19Vs2nGiLvkIyBD87KkzYfh3237aR32IC+fiTOifQg0Pxawt4c4vlu5A4JasI/EXXEyuH9+DFvc1v1k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fSH+lIXu; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GPxpDeHT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467E9C19424;
-	Tue, 24 Mar 2026 21:21:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774387276;
-	bh=bN+zpILDmRdAJyoSgSd6M94WASWO6vtvLneiqPi/Tak=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GPxpDeHTRLLHKaMrMRhB7HRNMR0vz+D407bx9zvLOnTJbqqZwfjcVWSbRqeltmaXk
-	 U/jc0OvHw29QxROpi7/KR2iQfy/gTs99qOAsWHMNeSNW7mXTytQfOeJ0JePeYl8+9Y
-	 GCQH2vtDTDe2fFdbFORXB7fmH9UwxKQz+2+rkstQ76DtCwx8tGXeTwO6ll7Vhv3WP/
-	 PiD5yKwuyY3uLecx7KaywivjQshWNbFzJTYidBNzpT0X1/j9v+mpkubUwomd5VxAyV
-	 i1ek+xmL0NpeY5k6srstmCNWYqifsJse7cXPJHy5VEo72hxrqBILALL0I1HJo7XGsI
-	 esc9q6V430cAQ==
-Date: Tue, 24 Mar 2026 14:21:14 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
- andrew+netdev@lunn.ch, michael.chan@broadcom.com,
- pavan.chebbi@broadcom.com, anthony.l.nguyen@intel.com,
- przemyslaw.kitszel@intel.com, saeedm@nvidia.com, tariqt@nvidia.com,
- mbloch@nvidia.com, alexanderduyck@fb.com, kernel-team@meta.com,
- johannes@sipsolutions.net, sd@queasysnail.net, jianbol@nvidia.com,
- dtatulea@nvidia.com, mohsin.bashr@gmail.com, jacob.e.keller@intel.com,
- willemb@google.com, skhawaja@google.com, bestswngs@gmail.com,
- aleksandr.loktionov@intel.com, kees@kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-kselftest@vger.kernel.org, leon@kernel.org
-Subject: Re: [PATCH net-next v3 03/13] net: introduce ndo_set_rx_mode_async
- and dev_rx_mode_work
-Message-ID: <20260324142114.216fcb01@kernel.org>
-In-Reply-To: <acLUMN1BYkIVyOk8@mini-arch>
-References: <20260320012501.2033548-1-sdf@fomichev.me>
-	<20260320012501.2033548-4-sdf@fomichev.me>
-	<20260323162003.0d155055@kernel.org>
-	<acLUMN1BYkIVyOk8@mini-arch>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fSH+lIXu"
+Message-ID: <57592605-2283-40fd-9324-fc55f46747b2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774388277;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C57VcUZWi6qx2uJk1wElbBhHJxEE088EH2+hB/Wy/VQ=;
+	b=fSH+lIXu2p2RGaA6dclWGkiSc3Un9BcjMgMZIkZdtyn58/haThGKGXuDlxfg0D7m3+AtpL
+	S7VNA8uf2QsYiS4oz4nECvdSRYUy4r58W8amIcNyjg/SsWtlMtEWgNc+/gQyHes3G2FU3B
+	GMf8jeVa/i50ES1V1LcVevvUyQ43nn0=
+Date: Tue, 24 Mar 2026 14:37:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH bpf v1 1/2] bpf: tcp: Reject non-TCP skb in
+ bpf_sk_assign_tcp_reqsk()
+To: Jiayuan Chen <jiayuan.chen@linux.dev>,
+ Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260323105510.51990-1-jiayuan.chen@linux.dev>
+ <20260323105510.51990-2-jiayuan.chen@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260323105510.51990-2-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 24 Mar 2026 11:13:04 -0700 Stanislav Fomichev wrote:
-> > > +		netif_addr_lock_bh(dev);
-> > > +
-> > > +		err = __hw_addr_list_snapshot(&uc_snap, &dev->uc,
-> > > +					      dev->addr_len);
-> > > +		if (!err)
-> > > +			err = __hw_addr_list_snapshot(&uc_ref, &dev->uc,
-> > > +						      dev->addr_len);
-> > > +		if (!err)
-> > > +			err = __hw_addr_list_snapshot(&mc_snap, &dev->mc,
-> > > +						      dev->addr_len);
-> > > +		if (!err)
-> > > +			err = __hw_addr_list_snapshot(&mc_ref, &dev->mc,
-> > > +						      dev->addr_len);  
-> > 
-> > This doesn't get slow with a few thousands of addresses?  
-> 
-> I can add kunit benchmark and attach the output? Although not sure where
-> to go from that. The alternative to this is allocating an array of entries.
-> I started with that initially but __hw_addr_sync_dev wants to kfree the
-> individual entries and I decided not to have a separate helpers to
-> manage the snapshots.
+On 3/23/26 3:54 AM, Jiayuan Chen wrote:
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 78b548158fb0..fb975bcce804 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -12248,11 +12248,17 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
+>   
+>   	switch (skb->protocol) {
+>   	case htons(ETH_P_IP):
+> +		if (ip_hdr(skb)->protocol != IPPROTO_TCP)
+> +			return -EINVAL;
+> +
+>   		ops = &tcp_request_sock_ops;
+>   		min_mss = 536;
+>   		break;
+>   #if IS_BUILTIN(CONFIG_IPV6)
+>   	case htons(ETH_P_IPV6):
+> +		if (ipv6_hdr(skb)->nexthdr != IPPROTO_TCP)
+> +			return -EINVAL;
+> +
 
-Let's see what the benchmark says. Hopefully it's fast enough and 
-we don't have to worry. Is keeping these lists around between the
-invocations of the work tricky?
+lgtm.
 
-> > Can we give the work a reference on the netdev (at init time) and
-> > cancel + release it here instead of flushing / waiting?  
-> 
-> Not sure why cancel+release, maybe you're thinking about the unregister
-> path? This is rtnl_unlock -> netdev_run_todo -> __rtnl_unlock + some
-> extras.
-> 
-> And the flush is here to plumb the addresses to the real devices
-> before we return to the callers. Mostly because of the following
-> things we have in the tests:
-> 
-> # TEST: team cleanup mode lacp                                        [FAIL]
-> #       macvlan unicast address not found on a slave
-> 
-> Can you explain a bit more on the suggestion?
-
-Oh, I thought it's here for unregister! Feels like it'd be cleaner to
-add the flush in dev_*c_add() and friends? How hard would it be to
-identify the callers in atomic context?
-
-> > >  	/* Wait for rcu callbacks to finish before next phase */
-> > >  	if (!list_empty(&list))
-> > >  		rcu_barrier();
-> > > @@ -12099,6 +12173,7 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
-> > >  #endif
-> > >  
-> > >  	mutex_init(&dev->lock);
-> > > +	INIT_WORK(&dev->rx_mode_work, dev_rx_mode_work);
-> > >  
-> > >  	dev->priv_flags = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
-> > >  	setup(dev);
-> > > @@ -12203,6 +12278,8 @@ void free_netdev(struct net_device *dev)
-> > >  
-> > >  	kfree(rcu_dereference_protected(dev->ingress_queue, 1));
-> > >  
-> > > +	cancel_work_sync(&dev->rx_mode_work);  
-> > 
-> > Should never happen so maybe wrap it in a WARN ?  
-> 
-> Or maybe just flush_workqueue here as well? To signal the intent that we
-> are mostly waiting for the wq entry to be unused to be able to kfree it?
-> 
+Kuniyuki, please take a look and ack if it looks good to you also. Thanks.
 
