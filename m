@@ -1,100 +1,193 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F174A381B12;
-	Tue, 24 Mar 2026 04:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5501A9FBC;
+	Tue, 24 Mar 2026 04:12:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774325333; cv=none; b=k9lziJkFZdjwOHQNqqjysNkhtzLq5qnKCpfVWO68CsolQwH36wQhjC+AoVUczeOkrm/vYp1Kx5q16ewIKYuZDUuA8ZCOtb3Um9+RhwvyL67SiJvzTi2csk2f1749Y9vRssgsx+Dv0J+2FArLLtjSmloAGCVqZkaR9nFeeIZoy2k=
+	t=1774325527; cv=none; b=JOHPRpTOSvvYz1UJtVBXRWWKnCe1LeEDM7ri0wA2XJRLYk1vITbXOENlNZPG1t76iQN0JsxJ1yEJo+NnWfXtI+n3kOxmlgapZHMi08OdxnV5kW9sniCUMr5/GgrnZt9vwZ0H07G8Ms1HZBjsSqJesYA3ECZsghahNcDzbUWbNUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774325333; c=relaxed/simple;
-	bh=79XuQrnsihtiEE5YsTLFUzqNzacWkJMn2AsEJnnaw2c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qJL2W8SLBT4hRWD6MPDXbQ9ffh1lUGUIIEW6k3QN0zjHGQpzAZWkm1AsDp2wHDDASZ6mSAR0QIE5FU70mREglJjv9jOEZpp10yhDS21xWzrg8muXXvb2dCcNGZi7zWoINgDpfXZyov3jkLq6iQDSnYYM8dxiafBEP4B4Ni3wEJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=swMnSffl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774325527; c=relaxed/simple;
+	bh=GrpbaYNebG9Sp27pZAaVyfegWQ2nxuyNsHVi5DboqZo=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Db/AZbjOnz9Zj7mIuEWu8ZZ2aYubZAke6uH2G/G9EtcuCTYkMAccg82Sgy26RrI0oVr7e7cU77Df40nOGSbqHlF4GcRPkmsMibeTp8SjnSCyjKhVlRnsa68pWpEixbumpV70YFWqp7E7gQwf1FodZbkfemBLBdQwq4V+Yd/V2nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+aR3CYf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="swMnSffl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84331C19424;
-	Tue, 24 Mar 2026 04:08:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+aR3CYf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B70C2C19424;
+	Tue, 24 Mar 2026 04:12:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774325332;
-	bh=79XuQrnsihtiEE5YsTLFUzqNzacWkJMn2AsEJnnaw2c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=swMnSffllabeTV0erKbu1hhgJnFGHRfKchRAuKRvXLKdhmk8mN19fbj28cniILeVx
-	 I+kmKmAb7NEeLYJRkW0LN6hjIhptKz73DbZHYj85ENNKxg6PfNkBOcaTek5oJVl0Mv
-	 lBfxfOteItCXB+GA4rM8Iotpa9HeBk2sQeHeq3tikwL6qNEfAMrxbpYg7VIpckHsh7
-	 qR3wGfE9+9DQYKltNXogOuD4Q2sj41K2WJFOjXrm1zV9dfmAa2Q9glq3qS8r11mPg+
-	 uTlRoAMbVyqNcYSF/g9XDhXJtlFVoxYgdy2m/oaXya6bBFWPTgTnuJu+mU/bhmol1g
-	 m3HIxBMR0djOg==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: (sashiko review) [RFC PATCH v5 07/10] selftests/damon/_damon_sysfs: support pause file staging
-Date: Mon, 23 Mar 2026 21:08:41 -0700
-Message-ID: <20260324040842.58055-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260324012825.46899-1-sj@kernel.org>
-References: 
+	s=k20201202; t=1774325527;
+	bh=GrpbaYNebG9Sp27pZAaVyfegWQ2nxuyNsHVi5DboqZo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=M+aR3CYfaXTQYiTT++ukVf+zs6odq1Gpx8IEQ1NJuHmzy/2dj+75yhZGgG1/fOSSK
+	 fc13zmIxmeVm9tKGQaa6oxM+PXK8SlmNhuS4NaAPuQy+KSNESNahFXnB+W0Z8+RJOe
+	 9tDgX3gTxhu2zN3xcf2nO+jX7nCAZNaHhTTlwWfMpm0jOzoeBo7C20YHzDYKQZ6njG
+	 FxMNNOwCLPvmyRvTcrshrbiMCnX21vqeGPDZgR1VcM2BZEW9xMSDZCoRN/HsPnH0a6
+	 E7wHOXgH0G9SCAr3cirxpvv9X/5ftulQcdAfTPOfQpfupdDQCmkfifqdRuyIGpiiLw
+	 WTyFh0Em20buw==
+Date: Tue, 24 Mar 2026 13:12:04 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Cc: rostedt@goodmis.org, corbet@lwn.net, shuah@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] selftests/ftrace: Add accept cases for fprobe
+ list syntax
+Message-Id: <20260324131204.735c60133288e94718f20d31@kernel.org>
+In-Reply-To: <20260205135842.20517-5-seokwoo.chung130@gmail.com>
+References: <20260205135842.20517-1-seokwoo.chung130@gmail.com>
+	<20260205135842.20517-5-seokwoo.chung130@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, 23 Mar 2026 18:28:24 -0700 SeongJae Park <sj@kernel.org> wrote:
+On Thu,  5 Feb 2026 08:58:42 -0500
+"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com> wrote:
 
-> Forwarding Sashiko review for doing discussions via mails.
+> Add fprobe_list.tc to test the comma-separated symbol list syntax
+> with :entry/:exit suffixes.  Three scenarios are covered:
 > 
-> # review url: https://sashiko.dev/#/patchset/20260323231538.84452-8-sj@kernel.org
-> # start of sashiko.dev inline review
-> commit d9ca6c4a33fc4d613982730edda6f4b67ae30a67
-> Author: SeongJae Park <sj@kernel.org>
-> selftests/damon/_damon_sysfs: support pause file staging
-> 
-> This commit adds support for the newly added pause file to the DAMON
-> test-purpose sysfs interface control Python module.
-> 
-> > diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
-> > --- a/tools/testing/selftests/damon/_damon_sysfs.py
-> > +++ b/tools/testing/selftests/damon/_damon_sysfs.py
-> [ ... ]
-> >  class DamonCtx:
-> >      targets = None
-> >      schemes = None
-> >      kdamond = None
-> > +    pause = None
-> >      idx = None
-> >  
-> >      def __init__(self, ops='paddr', monitoring_attrs=DamonAttrs(), targets=[],
-> > -            schemes=[]):
-> > +            schemes=[], pause=False):
-> 
-> This isn't a bug introduced by this patch, but since the function signature
-> is being modified here, is it a good time to address the mutable default
-> arguments?
-> 
-> In Python, default arguments are evaluated exactly once at function
-> definition time. This means any instances of DamonCtx created without
-> explicitly providing targets, schemes, or monitoring_attrs will share
-> the same list structures and DamonAttrs instance in memory.
-> 
-> For example, self.monitoring_attrs.context = self overwrites the context
-> attribute of the shared DamonAttrs object for all default contexts.
-> 
-> Would it be better to change these defaults to None and instantiate them
-> within the method body to avoid unexpected state sharing across instances?
-
-I agree changing the defaults to None is a good idea.  But that would better to
-be another patch, not this one.
+>   1. List with default (entry) behavior and ! exclusion
+>   2. List with explicit :entry suffix
+>   3. List with :exit suffix for return probes
 
 
-Thanks,
-SJ
+Could you also add wildcard pattern test?
 
-[...]
+> 
+> Each test verifies that the correct functions appear in
+> enabled_functions and that excluded (!) symbols are absent.
+> 
+> Note: The existing tests add_remove_fprobe.tc, fprobe_syntax_errors.tc,
+> and add_remove_fprobe_repeat.tc check their "requires" line against the
+> tracefs README for the old "%return" syntax pattern.  Since the README
+> now documents ":entry|:exit" instead, these tests report UNSUPPORTED.
+> Their "requires" lines need updating in a follow-up patch.
+
+This means you'll break the selftest. please fix those test first.
+(This fix must be done before "tracing/fprobe: Support comma-separated 
+symbols and :entry/:exit" so that we can safely bisect it.)
+
+Thank you,
+
+
+> 
+> Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
+> ---
+>  .../ftrace/test.d/dynevent/fprobe_list.tc     | 92 +++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc
+> new file mode 100644
+> index 000000000000..45e57c6f487d
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc
+> @@ -0,0 +1,92 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: Fprobe event list syntax and :entry/:exit suffixes
+> +# requires: dynamic_events "f[:[<group>/][<event>]] <func-name>[:entry|:exit] [<args>]":README
+> +
+> +# Setup symbols to test. These are common kernel functions.
+> +PLACE=vfs_read
+> +PLACE2=vfs_write
+> +PLACE3=vfs_open
+> +
+> +echo 0 > events/enable
+> +echo > dynamic_events
+> +
+> +# Get baseline count of enabled functions (should be 0 if clean, but be safe)
+> +if [ -f enabled_functions ]; then
+> +	ocnt=`cat enabled_functions | wc -l`
+> +else
+> +	ocnt=0
+> +fi
+> +
+> +# Test 1: List default (entry) with exclusion
+> +# Target: Trace vfs_read and vfs_open, but EXCLUDE vfs_write
+> +echo "f:test/list_entry $PLACE,!$PLACE2,$PLACE3" >> dynamic_events
+> +grep -q "test/list_entry" dynamic_events
+> +test -d events/test/list_entry
+> +
+> +echo 1 > events/test/list_entry/enable
+> +
+> +grep -q "$PLACE" enabled_functions
+> +grep -q "$PLACE3" enabled_functions
+> +! grep -q "$PLACE2" enabled_functions
+> +
+> +# Check count (Baseline + 2 new functions)
+> +cnt=`cat enabled_functions | wc -l`
+> +if [ $cnt -ne $((ocnt + 2)) ]; then
+> +	exit_fail
+> +fi
+> +
+> +# Cleanup Test 1
+> +echo 0 > events/test/list_entry/enable
+> +echo "-:test/list_entry" >> dynamic_events
+> +! grep -q "test/list_entry" dynamic_events
+> +
+> +# Count should return to baseline
+> +cnt=`cat enabled_functions | wc -l`
+> +if [ $cnt -ne $ocnt ]; then
+> +	exit_fail
+> +fi
+> +
+> +# Test 2: List with explicit :entry suffix
+> +# (Should behave exactly like Test 1)
+> +echo "f:test/list_entry_exp $PLACE,!$PLACE2,$PLACE3:entry" >> dynamic_events
+> +grep -q "test/list_entry_exp" dynamic_events
+> +test -d events/test/list_entry_exp
+> +
+> +echo 1 > events/test/list_entry_exp/enable
+> +
+> +grep -q "$PLACE" enabled_functions
+> +grep -q "$PLACE3" enabled_functions
+> +! grep -q "$PLACE2" enabled_functions
+> +
+> +cnt=`cat enabled_functions | wc -l`
+> +if [ $cnt -ne $((ocnt + 2)) ]; then
+> +	exit_fail
+> +fi
+> +
+> +# Cleanup Test 2
+> +echo 0 > events/test/list_entry_exp/enable
+> +echo "-:test/list_entry_exp" >> dynamic_events
+> +
+> +# Test 3: List with :exit suffix
+> +echo "f:test/list_exit $PLACE,!$PLACE2,$PLACE3:exit" >> dynamic_events
+> +grep -q "test/list_exit" dynamic_events
+> +test -d events/test/list_exit
+> +
+> +echo 1 > events/test/list_exit/enable
+> +
+> +# Even for return probes, enabled_functions lists the attached symbols
+> +grep -q "$PLACE" enabled_functions
+> +grep -q "$PLACE3" enabled_functions
+> +! grep -q "$PLACE2" enabled_functions
+> +
+> +cnt=`cat enabled_functions | wc -l`
+> +if [ $cnt -ne $((ocnt + 2)) ]; then
+> +	exit_fail
+> +fi
+> +
+> +# Cleanup Test 3
+> +echo 0 > events/test/list_exit/enable
+> +echo "-:test/list_exit" >> dynamic_events
+> +
+> +clear_trace
+> -- 
+> 2.43.0
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
