@@ -1,162 +1,255 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3A33D9046;
-	Tue, 24 Mar 2026 08:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EB73D88E6;
+	Tue, 24 Mar 2026 08:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774342271; cv=none; b=EAV0eMNUidQNEN5Bx402D0jMr7FmaEKcngtUio/SmrS18sqeX6k8QEqhyxXhNI5Fhw3Jj2GWg9LaqVNjLSxxD9UgiUVefggXA9uabFlP2u21VjSpgSsBDbQyWQd/tVt7FhpXhfcL3wfhchmCmwOQJ+hkRZvVjSy4Gp418V5pcDY=
+	t=1774342301; cv=none; b=TYepLdcR275+YVLVeKVCUV9Z6YYSGrTtL6il+auAijtZWzFTFwP0puaNBg4yjDp+oB1muzKCHdvgwm0Bc/JaWSbOtaAwOQ2OJDe3Tlee1JndKYvD39R8mZxVbkXI8x0cgmBMBPZka834W9PEjr6nXuju2/kNXVeEd42+x/IjAy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774342271; c=relaxed/simple;
-	bh=cpnXr1xT1qpyoOjVdZqnOpbXCUGoRLavKreAY1nLko0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Qx5oZowV//Is+HTq81sadU1yRPfmKxL5nK7uA4lXbscesi1/PDTkNJzdTIAcSMne8REH9TWkVvEVisxgAitGz7bsp4eVhreHEfnF5oSZY3RKbhX1xTLP1TowqyPy6y8pzc2d5YzUYuU128fwYa3mR/7MRPs9aHwLAGk5Cr2zNPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f7weq0Og; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774342301; c=relaxed/simple;
+	bh=MCVEK7Uy7kSgqvx88xO+6jxwJM48WzBfVnlulZ4Y5GU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O2KMn/Ce2+7f1yHJ6LH2VNvhyy6YeMFWdm4kMbA/SI0VVd+hPD7lk4KKakroZvoNMa5iViQcF9iNtqtpFUGIDngrj2QzXrEcRtlUPhVcxCzyZ0ULdmn1j9Pe8XT2B4kfL3ibTSYOBE8ipXBfj6RE1GGrH6sQkHccYfQdVyIX6Vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V5pA00vr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f7weq0Og"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774342269; x=1805878269;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cpnXr1xT1qpyoOjVdZqnOpbXCUGoRLavKreAY1nLko0=;
-  b=f7weq0Og6onn+dkhkkip6RLuzoxF7b49Ei3SNDRMx24Kxg+wenWYTeFC
-   jaTiTomgnKlGwPLV6zqPC4ugnDruu7kN0DYaJbYxlbjQTGUSg9r1ZyrRU
-   CtxyWFMeAs/R0wswImyVSNGgx9m7u6hile1DlTn3pWMlCP7xLWKx9ZAqQ
-   Xb4Gt/KDqWjtyaxMlKpU0jyPCiKem0vjcgirTp6fVoaBO4HsQoui00XxX
-   3TUfqw0fiOqCvR4w2t2xBMgLHdoCkTqwU2sWJsKbByVo48Erxk55t/5Hb
-   vQRGu9Y1pXAMrPsrHirWEe2M/wFy3piakWjPb77+FgaCozm5owdggNkt+
-   Q==;
-X-CSE-ConnectionGUID: fVyqDOm+R7uEwRbRMMe49w==
-X-CSE-MsgGUID: JFuecWdbQ6yiIQ7pgriR2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="78949258"
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="78949258"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 01:51:09 -0700
-X-CSE-ConnectionGUID: NHitNXdCTYSkQtT43fP6qA==
-X-CSE-MsgGUID: Of/yQm1NQqWoL5zt6g2eXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="262209436"
-Received: from ly-workstation.sh.intel.com ([10.239.182.64])
-  by orviesa001.jf.intel.com with ESMTP; 24 Mar 2026 01:51:05 -0700
-From: Yi Lai <yi1.lai@intel.com>
-To: Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	Xin Li <xin@zytor.com>,
-	x86@kernel.org,
-	hpa@zytor.com,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yi1.lai@linux.intel.com,
-	yi1.lai@intel.com
-Subject: [PATCH v2] selftests/x86: Fix sysret_rip assertion failure on FRED systems
-Date: Tue, 24 Mar 2026 16:51:02 +0800
-Message-ID: <20260324085102.688490-1-yi1.lai@intel.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V5pA00vr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F86DC19424;
+	Tue, 24 Mar 2026 08:51:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774342300;
+	bh=MCVEK7Uy7kSgqvx88xO+6jxwJM48WzBfVnlulZ4Y5GU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V5pA00vrKH1i6oryi7GAHi0gW0eV3NAk1n5gRsgixc4E3kw8aGUwWWIbqmVnYwNl0
+	 yqCHvkeu3cdvhJq18BCkmneulFmq4n6EXIWcs/cbp5jVyJ4bn8TLp0S+q59CYf79+5
+	 1bxhjAn/+flkbvLD68WAZEa4/P4dm+2tD/ZyMTtZ3xX1P/cdqeu+GenYrQT7lTcSQk
+	 XeXzwmRii7IENAyPcRcxW9Lhgj41Lhj4eL82nwKun6N7FbEaa1Hxe1SmEYRrRzdt3t
+	 MhSD9/P4q7qSwDwLb6AjALk7kJN3MEB9ynRSLHCYjVK07IyZkBc8/mueVACtsf2EZp
+	 za3qldnDkMDOw==
+Date: Tue, 24 Mar 2026 09:51:34 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, jack@suse.cz, 
+	shuah@kernel.org, linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org, 
+	linux-mm@kvack.org, viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org, 
+	dmatlack@google.com, pratyush@kernel.org, skhawaja@google.com
+Subject: Re: [PATCH 1/2] liveupdate: prevent double management of files
+Message-ID: <20260324-langzeitfolgen-altgedienten-ccef17d19349@brauner>
+References: <20260321175808.57942-1-pasha.tatashin@soleen.com>
+ <20260321175808.57942-2-pasha.tatashin@soleen.com>
+ <CA+CK2bD2aNu-NByET4KkBP0n2j8WQE2zjxb4g-1cv2hYfjaRZQ@mail.gmail.com>
+ <20260323-leibhaftig-blasinstrument-58ec408b3c40@brauner>
+ <CA+CK2bC6S7pFCYR0XS1ZPxw9HKjWgxy=0DkszYNjMUi735o_1Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+CK2bC6S7pFCYR0XS1ZPxw9HKjWgxy=0DkszYNjMUi735o_1Q@mail.gmail.com>
 
-The existing 'sysret_rip' selftest asserts that 'regs->r11 ==
-regs->flags'. This check relies on the behavior of the SYSCALL
-instruction on legacy x86_64, which saves 'RFLAGS' into 'R11'.
+On Mon, Mar 23, 2026 at 09:18:03AM -0400, Pasha Tatashin wrote:
+> On Mon, Mar 23, 2026 at 7:55 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Sat, Mar 21, 2026 at 09:04:53PM -0400, Pasha Tatashin wrote:
+> > > On Sat, Mar 21, 2026 at 1:58 PM Pasha Tatashin
+> > > <pasha.tatashin@soleen.com> wrote:
+> > > >
+> > > > Currently, LUO does not prevent the same file from being managed twice
+> > > > across different active sessions.
+> > > >
+> > > > Add a new i_state flag I_LUO_MANAGED and update luo_preserve_file()
+> > > > to check and set this flag when a file is preserved, and clear it in
+> > > > luo_file_unpreserve_files() when it is released.
+> > > >
+> > > > Additionally, set this flag in luo_retrieve_file() after a file is
+> > > > successfully restored in the new kernel, and clear it in
+> > > > luo_file_finish() when the LUO session is finalized.
+> > > >
+> > > > This ensures that the same file (inode) cannot be managed by multiple
+> > > > sessions. If another session attempts to preserve an already managed
+> > > > file, it will now fail with -EBUSY.
+> > > >
+> > > > Acked-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+> > > > Acked-by: Jan Kara <jack@suse.cz>
+> > > > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > > > ---
+> > > >  include/linux/fs.h           |  5 ++++-
+> > > >  kernel/liveupdate/luo_file.c | 27 ++++++++++++++++++++++++---
+> > > >  2 files changed, 28 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > > > index 23f36a2613a3..692a8be56f3c 100644
+> > > > --- a/include/linux/fs.h
+> > > > +++ b/include/linux/fs.h
+> > > > @@ -712,6 +712,8 @@ is_uncached_acl(struct posix_acl *acl)
+> > > >   * I_LRU_ISOLATING     Inode is pinned being isolated from LRU without holding
+> > > >   *                     i_count.
+> > > >   *
+> > > > + * I_LUO_MANAGED       Inode is being managed by a live update session.
+> > > > + *
+> > > >   * Q: What is the difference between I_WILL_FREE and I_FREEING?
+> > > >   *
+> > > >   * __I_{SYNC,NEW,LRU_ISOLATING} are used to derive unique addresses to wait
+> > > > @@ -744,7 +746,8 @@ enum inode_state_flags_enum {
+> > > >         I_CREATING              = (1U << 15),
+> > > >         I_DONTCACHE             = (1U << 16),
+> > > >         I_SYNC_QUEUED           = (1U << 17),
+> > > > -       I_PINNING_NETFS_WB      = (1U << 18)
+> > > > +       I_PINNING_NETFS_WB      = (1U << 18),
+> > > > +       I_LUO_MANAGED           = (1U << 19),
+> > > >  };
+> > > >
+> > > >  #define I_DIRTY_INODE (I_DIRTY_SYNC | I_DIRTY_DATASYNC)
+> > > > diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+> > > > index 5acee4174bf0..86911beeff71 100644
+> > > > --- a/kernel/liveupdate/luo_file.c
+> > > > +++ b/kernel/liveupdate/luo_file.c
+> > > > @@ -248,6 +248,7 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
+> > > >   * Context: Can be called from an ioctl handler during normal system operation.
+> > > >   * Return: 0 on success. Returns a negative errno on failure:
+> > > >   *         -EEXIST if the token is already used.
+> > > > + *         -EBUSY if the file descriptor is already preserved by another session.
+> > > >   *         -EBADF if the file descriptor is invalid.
+> > > >   *         -ENOSPC if the file_set is full.
+> > > >   *         -ENOENT if no compatible handler is found.
+> > > > @@ -276,6 +277,14 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+> > > >         if (err)
+> > > >                 goto  err_fput;
+> > > >
+> > > > +       scoped_guard(spinlock, &file_inode(file)->i_lock) {
+> > > > +               if (inode_state_read(file_inode(file)) & I_LUO_MANAGED) {
+> > > > +                       err = -EBUSY;
+> > > > +                       goto err_free_files_mem;
+> > > > +               }
+> > > > +               inode_state_set(file_inode(file), I_LUO_MANAGED);
+> > > > +       }
+> > > > +
+> > > >         err = -ENOENT;
+> > > >         list_private_for_each_entry(fh, &luo_file_handler_list, list) {
+> > > >                 if (fh->ops->can_preserve(fh, file)) {
+> > > > @@ -286,11 +295,11 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+> > > >
+> > > >         /* err is still -ENOENT if no handler was found */
+> > > >         if (err)
+> > > > -               goto err_free_files_mem;
+> > > > +               goto err_unpreserve_inode;
+> > > >
+> > > >         err = luo_flb_file_preserve(fh);
+> > > >         if (err)
+> > > > -               goto err_free_files_mem;
+> > > > +               goto err_unpreserve_inode;
+> > > >
+> > > >         luo_file = kzalloc_obj(*luo_file);
+> > > >         if (!luo_file) {
+> > > > @@ -320,6 +329,9 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+> > > >         kfree(luo_file);
+> > > >  err_flb_unpreserve:
+> > > >         luo_flb_file_unpreserve(fh);
+> > > > +err_unpreserve_inode:
+> > > > +       scoped_guard(spinlock, &file_inode(file)->i_lock)
+> > > > +               inode_state_clear(file_inode(file), I_LUO_MANAGED);
+> > > >  err_free_files_mem:
+> > > >         luo_free_files_mem(file_set);
+> > > >  err_fput:
+> > > > @@ -363,6 +375,9 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
+> > > >                 luo_file->fh->ops->unpreserve(&args);
+> > > >                 luo_flb_file_unpreserve(luo_file->fh);
+> > > >
+> > > > +               scoped_guard(spinlock, &file_inode(luo_file->file)->i_lock)
+> > > > +                       inode_state_clear(file_inode(luo_file->file), I_LUO_MANAGED);
+> > > > +
+> > > >                 list_del(&luo_file->list);
+> > > >                 file_set->count--;
+> > > >
+> > > > @@ -609,6 +624,9 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+> > > >         *filep = luo_file->file;
+> > > >         luo_file->retrieve_status = 1;
+> > > >
+> > > > +       scoped_guard(spinlock, &file_inode(luo_file->file)->i_lock)
+> > > > +               inode_state_set(file_inode(luo_file->file), I_LUO_MANAGED);
+> > > > +
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > @@ -701,8 +719,11 @@ int luo_file_finish(struct luo_file_set *file_set)
+> > > >
+> > > >                 luo_file_finish_one(file_set, luo_file);
+> > > >
+> > > > -               if (luo_file->file)
+> > > > +               if (luo_file->file) {
+> > > > +                       scoped_guard(spinlock, &file_inode(luo_file->file)->i_lock)
+> > > > +                               inode_state_clear(file_inode(luo_file->file), I_LUO_MANAGED);
+> > > >                         fput(luo_file->file);
+> > > > +               }
+> > > >                 list_del(&luo_file->list);
+> > > >                 file_set->count--;
+> > > >                 mutex_destroy(&luo_file->mutex);
+> > > > --
+> > > > 2.43.0
+> > > >
+> > >
+> > > > Sashiko: https://sashiko.dev/#/patchset/20260321175808.57942-1-pasha.tatashin@soleen.com
+> > >
+> > > Sashiko reported two problems:
+> > >
+> > > 1. Are there any issues with mixing goto-based error handling and scope-based
+> > > cleanups like scoped_guard() in the same function?
+> > >
+> > > Initially, I thought that there should not be any problems, however,
+> > > after looking this up  I found in include/linux/cleanup.h the
+> > > following comment:
+> > >
+> > >  * Lastly, given that the benefit of cleanup helpers is removal of
+> > >  * "goto", and that the "goto" statement can jump between scopes, the
+> > >  * expectation is that usage of "goto" and cleanup helpers is never
+> > >  * mixed in the same function.
+> >
+> > There's a compile-time switch you might want to turn on when
+> > test-compiling code like this. I forget exactly what it is. Something
+> > like jump-over-uninit or something.
+> >
+> > >
+> > > Well, good to know, will not use goto inside scoped_guards.
+> > >
+> > > 2. Additionally, does setting I_LUO_MANAGED on the inode break the preservation
+> > > of anonymous inodes? Many file types (like eventfd, epoll, timerfd,
+> > > signalfd)
+> > >
+> > > This is actually a very good point. It looks like everyone who uses
+> > > anon_inode_getfd() has one shared inode. This is not a problem for the
+> > > existing LUO user memfd, or for the upcoming vfiofd and memfd, but
+> > > kvm-vmfd and kvm-cpufd also use it, and that might be a problem in the
+> > > future once we add support for Orphaned VMs.
+> > >
+> > > Therefore, we have two choices: either use a hash table, which adds
+> > > performance and memory overhead, or delegate this double-check to the
+> > > LUO file handlers, as they can use a private context to know if the FD
+> > > is already preserved.
+> >
+> > So, I'm not happy about I_LUO_MANAGED. I don't think we need driver
+> > specific stuff in struct inode and not in i_state. Track this in the
+> > driver please. I don't want this precedent and I'd rather have you get
+> 
+> I am planning to use an xarray in the next version.
+> 
+> > used to implementing such things in the driver right away rather than
+> > offloading this on general infrastructure. If we let this slide struct
+> > inode will be 2MB 1 in year.
+> 
+> Claiming that a single flag bit precedent would cause the overall
+> struct to grow by 2MB in a year is a slight exaggeration. :-)
 
-However, on systems with FRED (Flexible Return and Event Delivery)
-enabled, instead of using registers, all state is saved onto the stack.
-Consequently, 'R11' retains its userspace value, causing the assertion
-to fail.
+Hm, you say that. But then you don't get ~5-10 patches a year that "just
+add a new member into struct inode with 4-8 bytes"... I'm just making an
+exaggerated point ofc. :)
 
-Fix this by detecting if FRED is enabled and skipping the register
-assertion in that case. The detection is done by checking if the RPL
-bits of the GS selector are preserved after a hardware exception.
-IDT (via IRET) clears the RPL bits of NULL selectors, while FRED (via
-ERETU) preserves them.
+But struct inode is used everywhere and I want it contained and small
+and whatever lands in it - even flags - better be VFS generic stuff.
 
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Yi Lai <yi1.lai@intel.com>
----
-v2:
- - Replaced CPUID check with a runtime probe using INT3 and GS RPL
-   preservation to robustly detect active FRED usage (Suggested by
-   Andrew Cooper).
-
- tools/testing/selftests/x86/sysret_rip.c | 45 ++++++++++++++++++++++--
- 1 file changed, 42 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 2e423a335e1c..af63b04eccbe 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -33,6 +33,39 @@ extern const char test_page[];
- 
- static const void *current_test_page_addr = test_page;
- 
-+static void empty_handler(int sig, siginfo_t *info, void *ctx_void)
-+{
-+}
-+
-+static bool is_fred_enabled(void)
-+{
-+	unsigned short gs_val;
-+
-+	sethandler(SIGTRAP, empty_handler, 0);
-+
-+	/*
-+	 * Distinguish IDT and FRED mode by loading GS with a non-zero RPL and
-+	 * triggering an exception:
-+	 * IDT (IRET) clears RPL bits of NULL selectors.
-+	 * FRED (ERETU) preserves them.
-+	 *
-+	 * If GS is loaded with 3 (Index=0, RPL=3), trigger an exception:
-+	 * IDT should restore GS as 0.
-+	 * FRED should preserve GS as 3.
-+	 */
-+	asm volatile (
-+		"mov %[rpl3], %%gs\n\t"
-+		"int3\n\t"
-+		"mov %%gs, %[res]"
-+		: [res] "=r" (gs_val)
-+		: [rpl3] "r" (3)
-+	);
-+
-+	clearhandler(SIGTRAP);
-+
-+	return gs_val == 3;
-+}
-+
- /* State used by our signal handlers. */
- static gregset_t initial_regs;
- 
-@@ -64,9 +97,15 @@ static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
- 	ctx->uc_mcontext.gregs[REG_RIP] = rip;
- 	ctx->uc_mcontext.gregs[REG_RCX] = rip;
- 
--	/* R11 and EFLAGS should already match. */
--	assert(ctx->uc_mcontext.gregs[REG_EFL] ==
--	       ctx->uc_mcontext.gregs[REG_R11]);
-+	/*
-+	 * SYSCALL works differently on FRED, it does not save RIP and RFLAGS
-+	 * to RCX and R11.
-+	 */
-+	if (!is_fred_enabled()) {
-+		/* R11 and EFLAGS should already match. */
-+		assert(ctx->uc_mcontext.gregs[REG_EFL] ==
-+		       ctx->uc_mcontext.gregs[REG_R11]);
-+	}
- 
- 	sethandler(SIGSEGV, sigsegv_for_sigreturn_test, SA_RESETHAND);
- }
--- 
-2.43.0
-
+We sometimes do carve out exceptions for _filesystem drivers_ where no
+other way is possible ofc. But I don't think this should extend to
+drivers/.
