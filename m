@@ -1,126 +1,95 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20CA40627D
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 15:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6854070EF;
+	Tue, 24 Mar 2026 15:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774364746; cv=none; b=BlaxV1T8/G71bZXYgERzgUSJV/P6aAUfMeVoM6VhtNTS4TAAA+OYTO3GgAMh9ZE8iQwYuWU3Ba2ZBSxmgQnJjxx22bJBFe4GucBmfKoVn8KGJSRgjRqtVACELGvpJfz6xTopp5A8hhoRCJrE4nqW+NHH6xsGWk6ronQEh5qWhYI=
+	t=1774364749; cv=none; b=jDZpRIu7lQ8YIx45nIdgJZPE3EzeJ6DZ2c8fqT24FufdZFhoUDbBOc4Ws/jWpA9dK3HksuN8AEDq861k3mHbMZruDF32yD7apRClZ91IydZC98kvmRY+GQYCrr0uE1kt9Ju7LuDqRBS5hk5pNVfhwZ5R0ujZzO9D2Bj2BQlx+gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774364746; c=relaxed/simple;
-	bh=72MWYsOl5EJ7p0vRG75z7FYU25LgvlWXSOQQdyfu3Pk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m0j0Z0VGerV7xd9tdb8ELEP9qFUhL1z5/HUlQhfXUB7iqal2SsVp1XtzhDCLLB+OxvYy6w33NjOKLdhcMCvY6ZQEMS+ornV1XswhjoaOmTCUdItsNiseh9ZsX8Mpko5SCjS5rR5GelfMOzNWCiqWcm6HutnLtv/SBdWBXcK8a3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uM25/9ju; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774364749; c=relaxed/simple;
+	bh=oaawKMHS4yQ07uRj7uRLxv1tEjcJRIf3ObIYsc+emOc=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=s1tKu/VDhCBCRo5SyGheux42bCKOFGgWsbcMTE6vL0wGts8qwdwKgMqOEKUB9p//iD+RwYWTQ1uyJthoFi+vQX8/1Ajzyx49Nf0Qrh7dI53uY+K7SuekLG7xsMMQ49YiyE5X50KM+rk6XwWlVu20bD053Hr53KSAiQkwXhm64RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=JpGs6IEi; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uM25/9ju"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774364742;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z/gKO34+ktu/oc3xYij758qT5edGTskb/0z/xbIb/yQ=;
-	b=uM25/9ju5n7ZYSfnHVP0zMNtRl7pjgMO24m7PVMIvee07Yb3GjteQyLaOByPmJNlo0oWWa
-	ubxyTshQ7TTKv8hbqthIYrHkn+oPfkVLQVOYIFBP2ermB789dh8iwwrpb6K0WfLIcLjAwM
-	iw3FUb0h5qFCJQ35JQR/cOSnigmDlz4=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 2/3] bpf: Disallow freplace on kprobe with mismatched kprobe_write_ctx values
-Date: Tue, 24 Mar 2026 23:04:43 +0800
-Message-ID: <20260324150444.68166-3-leon.hwang@linux.dev>
-In-Reply-To: <20260324150444.68166-1-leon.hwang@linux.dev>
-References: <20260324150444.68166-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="JpGs6IEi"
+Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 62OEXebm683280
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 24 Mar 2026 07:33:40 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 62OEXebm683280
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026022301; t=1774362821;
+	bh=oaawKMHS4yQ07uRj7uRLxv1tEjcJRIf3ObIYsc+emOc=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=JpGs6IEi62lUiE7xIP4TAzytTtgbYyuCfd0BZUjwo3hphD+WiVLC1Cqw4jBDXrs2O
+	 7PLGdfDEW5FlmcMZVrrc6kRbV8woSWONc0GwDBnUr9V0L5eptXDYUGv4eO/cK2o93m
+	 TrM3tYembQQFdenLkpzVkmcRbytK5QQJlgucFpo5mW7h9Lb2xKRqN9+Hyh75cKfU9y
+	 3+bkkUGiK+sAUPRjrXG1JgoHvmbN5UN32R9IbqpZtGqXJtnQosQmwMgP+NEJU9P1y5
+	 logGwE9g0e6at7e0SCkMWKYuZOFpYXHb8Cye0U0oRSFBG1cTxpx8vm5g+a74iJcTFC
+	 Lr9Lwrd2Y0NnQ==
+Date: Tue, 24 Mar 2026 07:33:34 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Lai, Yi" <yi1.lai@linux.intel.com>, Xin Li <xin@zytor.com>
+CC: Dave Hansen <dave.hansen@intel.com>, yi1.lai@intel.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        shuah@kernel.org, tglx@kernel.org, x86@kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_selftests/x86=3A_Fix_sysret?=
+ =?US-ASCII?Q?=5Frip_assertion_failure_on_FRED_systems?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <f55dd646-c728-4b0e-ab3e-18da8ac9e6e2@citrix.com>
+References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com> <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com> <568aa6c4-6802-4eb5-b412-e3aa93ed9b29@intel.com> <91590BC4-A54E-40F4-A223-A07FBA386A9A@zytor.com> <acDYXtVgSKbbAuGs@ly-workstation> <ce764071-6670-41a2-923a-88f1cd04b238@zytor.com> <c2979413-62f4-4a35-ad64-be2b8f55ea04@citrix.com> <0200a8d8-6871-4ff2-8c6a-968c2cb39a4f@zytor.com> <f55dd646-c728-4b0e-ab3e-18da8ac9e6e2@citrix.com>
+Message-ID: <760478B2-AED7-44F5-A22E-1730A9A0ED63@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-uprobe programs are allowed to modify struct pt_regs.
+On March 24, 2026 7:08:14 AM PDT, Andrew Cooper <andrew=2Ecooper3@citrix=2E=
+com> wrote:
+>On 23/03/2026 8:27 pm, H=2E Peter Anvin wrote:
+>> On 2026-03-23 12:17, Andrew Cooper wrote:
+>>> This doesn't really test whether FRED is active=2E=C2=A0 It tests whet=
+her the
+>>> OS is not providing strict backwards compatibility, and I think will
+>>> malfunction when there's a hypervisor above Linux providing strict
+>>> backwards compatibility=2E
+>>>
+>> But that applies equally to IRET, no? If the hypervisor clobbers the se=
+gment
+>> selector like IRET would in the interest of compatibility then you have=
+ the
+>> same issue=2E
+>
+>I suppose=2E=C2=A0 I for one don't care to provide that level of compatib=
+ility=2E
+>
+>But for SYSCALL, what are Linux's plans for CRIU or RR ?=C2=A0 I had to f=
+ix
+>SYSCALL legacy behaviour in Xen for the following case:
+>
+>* PV guest issues SYSCALL on FRED system=2E=C2=A0 %rcx/%r11 not clobbered
+>* Migrate to a non-FRED system
+>* Xen uses a real SYSRET instruction to resume execution
+>
+>
+>Here, the guest continues executing at whichever dead variable is in %rcx=
+=2E
+>
+>CRIU/RR won't be exactly the same, but will suffer the same class of
+>problem when moving between FRED and non-FRED systems=2E
+>
+>~Andrew
 
-Since the actual program type of uprobe is KPROBE, it can be abused to
-modify struct pt_regs via kprobe+freplace when the kprobe attaches to
-kernel functions.
-
-For example,
-
-SEC("?kprobe")
-int kprobe(struct pt_regs *regs)
-{
-	return 0;
-}
-
-SEC("?freplace")
-int freplace_kprobe(struct pt_regs *regs)
-{
-	regs->di = 0;
-	return 0;
-}
-
-freplace_kprobe prog will attach to kprobe prog.
-kprobe prog will attach to a kernel function.
-
-Without this patch, when the kernel function runs, its first arg will
-always be set as 0 via the freplace_kprobe prog.
-
-To avoid the abuse of kprobe_write_ctx=true via kprobe+freplace, disallow
-freplace on kprobe programs with mismatched kprobe_write_ctx values.
-
-Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- kernel/bpf/verifier.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 12330466d58b..f8257bae6081 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6404,6 +6404,14 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off,
- 		/* remember the offset of last byte accessed in ctx */
- 		if (env->prog->aux->max_ctx_offset < off + size)
- 			env->prog->aux->max_ctx_offset = off + size;
-+		if (env->prog->type == BPF_PROG_TYPE_EXT) {
-+			struct bpf_prog *dst_prog = env->prog->aux->dst_prog;
-+
-+			if (env->prog->aux->kprobe_write_ctx != dst_prog->aux->kprobe_write_ctx) {
-+				verbose(env, "Extension program cannot have different kprobe_write_ctx value with target prog\n");
-+				return -EINVAL;
-+			}
-+		}
- 		return 0;
- 	}
- 
--- 
-2.53.0
-
+"Doctor, it hurts when I PV?"
