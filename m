@@ -1,111 +1,153 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86432313E29;
-	Tue, 24 Mar 2026 15:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774367305; cv=none; b=GAJ5sXZ27LAHXSp9u9KyQ/0ygavghObm6D5waFt8VLPDExxkTPHNnMfyJ0yj8Vn1wI6R93j8KY+XhYftGwBSxb/uYv1ruUhxsEbf/5iXU5hMH+7zMAMlXp/it1rQPQRWaW+s4otbYHfFEEpQFsbL7hdrjCZeN3PCNlAyZzQy7f0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774367305; c=relaxed/simple;
-	bh=gTpmcN2spsGA1JJt5Rk56bbdXNRB9aMPTaKPb2ATdko=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=ecDac2MHWKxJXB6TXxXmB8kaWtO9hUqEH47ovAjTWzJCSamMrdJ+z/0/3Z4+hlbcVMegGUumeVh8f0TN2FFQ+g1oP2fgE/Di7c/MPyRSTQfEyyP80qDpflAmWnyZWsJBBM0SzwZ3/BatXIvt9E8sSUaAo4dko91+5+vDmeh3XOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=nIaHoy8K; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECF737F733
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 15:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774367737; cv=pass; b=isiNDd2W01P7NeCP528d64NYu/VP9p4hx0VPd7ht2pu2BGdqfSpTAP98BRh7+QvYGKJDdhqhER3nmer7ZF1cCoi5iqltkdneqO7I8gw78MxPtxHlNmmF58YcZ1Qbx3PeE4s35HAZ9KgiZ0h0k3ss0AL1kOSnJwSIXBvGsCufL+Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774367737; c=relaxed/simple;
+	bh=agkUattKYKS6hTX3T/qy79TAvmS3mkdNShYWcGbK5XY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=As5TKoT3EiPGrhhEYNSGUt0xXVe4Jyz3Cm6s2uBavkqB+kWkWGi269WHIu3iZBofyfNKJn8A59jSvooorKexfbDQ0eeMrLEp5ab1Pg7HE4cBvVsniGejAaQOYXuV6Yn+1q5QFGO01cobRgHiSt6uCAujacUow7mXkAtBT7GOxnA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rjIQeho8; arc=pass smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="nIaHoy8K"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 62OFG9f1754165
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 24 Mar 2026 08:16:09 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 62OFG9f1754165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026022301; t=1774365370;
-	bh=gTpmcN2spsGA1JJt5Rk56bbdXNRB9aMPTaKPb2ATdko=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=nIaHoy8K34d27ip37NmjnN9YZ/SILCk3yZwx8Ezx7O4hCwGBRRxvpH9xc+wz2mClV
-	 qZevuzC6KhRxpLBu2wjMXE/bTG4unih7zhsafyxxqQrTvZV9euMKIkxLoUFtTwoYrO
-	 rjaZSdacb8BE/S+tm8NgmX3ATnhoAHgJ2Tx9AGBYoS/z/smoJWx1sUUfNiiTDE+93J
-	 Nnz4AKpYchcQFddnA/RVoK3Nyql10Ymmw3dcxd85FJP4pX/4NJmgkFSv7QJ7Akp8A5
-	 wGzrBfFwhn8fiNAZsTIzfk1H2Ss9GjzCvEuqqY5lf6L9kC2wR0FKKJGo9jBrR1e85X
-	 RmlGrAP2meDxg==
-Date: Tue, 24 Mar 2026 08:16:02 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Lai, Yi" <yi1.lai@linux.intel.com>, Xin Li <xin@zytor.com>
-CC: Dave Hansen <dave.hansen@intel.com>, yi1.lai@intel.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        shuah@kernel.org, tglx@kernel.org, x86@kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_selftests/x86=3A_Fix_sysret?=
- =?US-ASCII?Q?=5Frip_assertion_failure_on_FRED_systems?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <098e3877-5681-499a-b8ce-dbf5c78847fb@citrix.com>
-References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com> <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com> <568aa6c4-6802-4eb5-b412-e3aa93ed9b29@intel.com> <91590BC4-A54E-40F4-A223-A07FBA386A9A@zytor.com> <acDYXtVgSKbbAuGs@ly-workstation> <ce764071-6670-41a2-923a-88f1cd04b238@zytor.com> <c2979413-62f4-4a35-ad64-be2b8f55ea04@citrix.com> <0200a8d8-6871-4ff2-8c6a-968c2cb39a4f@zytor.com> <f55dd646-c728-4b0e-ab3e-18da8ac9e6e2@citrix.com> <760478B2-AED7-44F5-A22E-1730A9A0ED63@zytor.com> <098e3877-5681-499a-b8ce-dbf5c78847fb@citrix.com>
-Message-ID: <CEB24B01-3C92-4C5C-A3E2-D4A265370559@zytor.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rjIQeho8"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-439fe4985efso3641474f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 08:55:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774367735; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MVuEmHPpRt90Te8BOlOEsJtBOeWn+ts5hl0YhumI7eiRJUfyfEhQt51xqxFUnSPDEN
+         qWNcSGGP6eOUy93yxgkJQJUxBYO5i8d3YVSCGmLDxkb4RUTSg2l3+rgA6rBxQSNYlA+r
+         t6aTNdszSktTjc74YlD7IRbJKWrjjJrN/rSl1YCr3qdr88Hls6NWbPnlyyFLeE3uPmGy
+         AWjvKzHkNcGKHr4xHD1kE1JCCTVgfW26zWzgHwlqMSyn6iDi9Bo7CBVVT2sJdDm05/O4
+         FQ+nKTYRgCVL5dghD2wpg+dNB7MCs2iEPV9DlnFDYVEkFhlVLP9jCyuTa+7w8X91hQyY
+         tvlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
+        fh=AfHHSBFP1wHwOfH9ZiqQjdPuSkkKqEe9y3rwscyJYKA=;
+        b=hhdnnTnbnGPXYJYRWX4GyiYBDLAxlE8TBf9vX7mhitYvTZ5F2EywVo6saHV2X29qoa
+         tGLCEX7uaAFzSE60EW3ddgBtayZTwSm+d74bTUgiMsQzpm461UkHijmG32KlruAMA/rv
+         4uNPaT9LlrjjKSSs1v83s4KgypKpNi6VFBuW/pMbA1ziF2OJ5ODrpIq3oOvF3PXNS0iO
+         ZO5dHB70KZAvwLe389f/IHEmSj3zH7BimuPPtSzIFpFAk5qeZWhliHp4/bQPh1Z0R3F4
+         8i8tcIvJMDxkTgguDl4xN49RY3ammV3UfHSyNO+FMCiKBP05Tjt/j+ct/OGTbhEVCqIk
+         1EsQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774367735; x=1774972535; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
+        b=rjIQeho8/atppzNRRSqIlisNezrQeKUf/MrYc6A4Lsnj0K7MnAW7uHHPBs+6t8gnyM
+         KLpSgkfD/NbB3ZfyIjC3Sc1CaeaIC9Xsp93yDSMDwJQa8NAuKdkYIaFer4T1sGh7dhGd
+         6kpZ7eoyo5Qu2rehY4cy6Zg4MyN+57lhl7rIrz7jQuD7pxPfE0jPEt4rYVpasAziDXb9
+         I+H8QHXVLvpCIr8ijzYZ17hS2PYkOXuifLf+fvSJ9/xd83OhIyMORfFaYzV6qaaMVYFw
+         uqpYNjZHYyOQVZPQ7DPoYD4dSn61O3e5wDvgl9PRZtDwjpB/81JAY3rXjK3TElv3ULDb
+         H6ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774367735; x=1774972535;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
+        b=obuT1W9EQnFxDuJfs7VeeIhwd1oxoKehCfmNfoDw4AWGibsDSj7zs8IZddQ3W5i9Qt
+         CciB0hRh4MxiWec8a0lp3xmL9XY/7lxSMYlXpESK/9GmniQFv2o734x4iyo+fzcbTnZ6
+         rF34AdW+mbzDKctDsQCa5sYYg5uIgqO8iHkU6Oc6KEz8dRUiL9v1yOgEwN+RZRAKiiO5
+         v3CtWIN76Z+UnoN0TzPcBncjQPfJfNsUYIQqBmamzbXj5NBva3W2nWa0hj0aBEaM3oaq
+         G8yq3YCPEY5jZk2P/RBg0YCMK0sSdog3G5/SdztBwFZjDimiAXT+xIF0U10yEmZDGkpM
+         zOZA==
+X-Forwarded-Encrypted: i=1; AJvYcCXEyKDPLvlJo0T/HS9V+6KaZWINWwMZENTy5wQ1mArwc/YTqd08ZUU/0I+dFHjXDqAja+JonHweUXUsTF+zkFM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8M08twZFvIF4GHEWZUwLUXhuDmu7fJg8nkeGN01KGlwhFbvN3
+	IxSfnanW63lKNqLf7+jzywAbWoml4PYtFssynXm5e4w7wA2k17vRG93eLfhtGs07xHS3C9vOxKJ
+	KhXfzUxnWYu58VZ87j+Xx3GOOPnF8AMk=
+X-Gm-Gg: ATEYQzy2QpMpIOFbPNJjdEpoKv6lfmn+NY/V4P9lUbVPHl3xs/bTH04J4uygDz1ASQx
+	3p1rpa3+7IKpjUpErG/aDVMKM2Fn1Ju1BJcxJxCauIDgUKv+oFCuIFw+N3/1RGBNFJ5cMJ3GcXq
+	so83NQz85MN8Y6v58z51q5ZlfGk4DaCFao6OZ+CT0MmIsRtRqUxYfBb6/cZ1mXfGQ+WjSZOzO7S
+	MwqAru983+ZUaF6DevhsynK7+2j6kOL0sxnD89R1b4DdGJTI1Ca+XI2/GEjwIxzYpYSwusy9yg5
+	9ZOWIpZ6dL5SjbtX1hliwAVfbFKn78uhJ8fASQJMqGKA+fGrf6J4YPnWUHha/0jZHrBjIEpWiZB
+	LgomUA2gdwGmjwhtEVQN5wl5pcLbrnlloetyD
+X-Received: by 2002:a5d:5d0b:0:b0:43b:447a:11b8 with SMTP id
+ ffacd0b85a97d-43b8899533cmr19587f8f.6.1774367734362; Tue, 24 Mar 2026
+ 08:55:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
+ <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
+ <31243215-918a-4f03-917b-de869b7b7bf1@linux.dev> <20260324065820.GC43072@e132581.arm.com>
+In-Reply-To: <20260324065820.GC43072@e132581.arm.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 24 Mar 2026 08:55:23 -0700
+X-Gm-Features: AQROBzC5IXAEUJFbmA8caaR_jFD39ZGF7akzX-go1yOK6QjtBXhXNQ_zLdejUkM
+Message-ID: <CAADnVQKJLO+7NnbPvmTraZr8hq8ENSh2f85a21b717ye=NgpUg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] selftests/bpf: Initialize operation name before use
+To: Leo Yan <leo.yan@arm.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Lorenz Bauer <lmb@isovalent.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On March 24, 2026 7:46:26 AM PDT, Andrew Cooper <andrew=2Ecooper3@citrix=2E=
-com> wrote:
->On 24/03/2026 2:33 pm, H=2E Peter Anvin wrote:
->> On March 24, 2026 7:08:14 AM PDT, Andrew Cooper <andrew=2Ecooper3@citri=
-x=2Ecom> wrote:
->>> On 23/03/2026 8:27 pm, H=2E Peter Anvin wrote:
->>>> On 2026-03-23 12:17, Andrew Cooper wrote:
->>>>> This doesn't really test whether FRED is active=2E=C2=A0 It tests wh=
-ether the
->>>>> OS is not providing strict backwards compatibility, and I think will
->>>>> malfunction when there's a hypervisor above Linux providing strict
->>>>> backwards compatibility=2E
->>>>>
->>>> But that applies equally to IRET, no? If the hypervisor clobbers the =
-segment
->>>> selector like IRET would in the interest of compatibility then you ha=
-ve the
->>>> same issue=2E
->>> I suppose=2E=C2=A0 I for one don't care to provide that level of compa=
-tibility=2E
->>>
->>> But for SYSCALL, what are Linux's plans for CRIU or RR ?=C2=A0 I had t=
-o fix
->>> SYSCALL legacy behaviour in Xen for the following case:
->>>
->>> * PV guest issues SYSCALL on FRED system=2E=C2=A0 %rcx/%r11 not clobbe=
-red
->>> * Migrate to a non-FRED system
->>> * Xen uses a real SYSRET instruction to resume execution
->>>
->>>
->>> Here, the guest continues executing at whichever dead variable is in %=
-rcx=2E
->>>
->>> CRIU/RR won't be exactly the same, but will suffer the same class of
->>> problem when moving between FRED and non-FRED systems=2E
->>>
->>> ~Andrew
->> "Doctor, it hurts when I PV?"
+On Mon, Mar 23, 2026 at 11:58=E2=80=AFPM Leo Yan <leo.yan@arm.com> wrote:
 >
->I'm asking straight up, what is Linux doing to fix this same issue for
->CRIU/RR?
+> On Mon, Mar 23, 2026 at 03:52:38PM -0700, Ihor Solodrai wrote:
+> > On 3/23/26 8:40 AM, Leo Yan wrote:
+> > > ASAN reports stack-buffer-overflow due to the uninitialized op_name.
+> > >
+> > > Initialize it to fix the issue.
+> > >
+> > > Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_B=
+TF_LOAD command")
+> > > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> > > ---
+> > >  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/=
+tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> > > index aaa2854974c0a91cbbb9fc13ae0f966de1bcc818..dcbe2ef995c5b211c2b86=
+b9555c02144e11ee7d6 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> > > @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
+> > >     res =3D load_btf(&opts, true);
+> > >     ASSERT_EQ(res, -ENOSPC, "half_log_fd");
+> > >     ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
+> > > +   snprintf(op_name, sizeof(op_name), "log_fixed");
+> >
+> > You should use strscpy() here.
 >
->~Andrew
+> Sure, I will change to :
 >
->P=2ES=2E=C2=A0 It's rhetorical, seeing as it's taken between Linux 6=2E9 =
-and now (2
->whole years) for anyone to even run the x86 selftests on a FRED system=2E
+>   strscpy(op_name, "log_fixed", sizeof(op_name));
+>
+> > This patch looks very unrelated.
+> > Did this surface only after the changes in the makefiles?
+>
+> Yes.  This change fixes ASAN error reported by BPF CI:
+>
+>   https://github.com/kernel-patches/bpf/actions/runs/23239705647/job/6755=
+4431963
 
-That's not true, and in fact *this exact bug was fixed once already*; appa=
-rently someone "fixed the fix?"
-
-I'm well and truly confused by it=2E
+When you respin please use [PATHC bpf-next v2] subject.
+Otherwise CI doesn't run all tests.
