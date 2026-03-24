@@ -1,45 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF8334D3B9
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 01:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D275B3750A2
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 01:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774316020; cv=none; b=gPjyAiP8LLianEbITP15Gp4GoK2GHZlE4vxZXOKSc6MKvNQ9eY8HYXRccwbj+x+DLEUnoWb+53DDqwQfGDKkw4QVNNIBvTB4relwSsc4TXKYQL/5h9Le0TIK6caNMLhk4JJ3ha7jQhaR1zwzXd2LYMxUOOqXw2C9rQGI2GflPuc=
+	t=1774316029; cv=none; b=dHpKZhDxqIht5UbGgyFP1pWvBf+GfqlrYMSLDzwnm7q9AjeM9zn8RTm4snUIJq1smHcmgSTPUknyONmVTv8BqAUfcg8zpe5MFZ+9Jle83C1Z7wMXH2dVDGiIvOphxjUhVsqLP9852hpi3cgB3+8WXDZ6iRwboByZugrRU9joWVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774316020; c=relaxed/simple;
-	bh=cpHCqngFWhg0DNpb+2wOSeiBSP9rJNAurKAddwwLyJM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X/8wi5wnKQOqAC0PxM0r4chcfMIp35SxAdzyrWOtGYDnx/NP9BbPND3M4hPmgORYHOJMs0HDaX7jHihq7nTBYT/svwiewDSPgGIvAyRO6h1+XacgCw8HX/WwVng+KYjYOMFfarj8JFwE9XuTp6xkBhSbvnBNOswmJKoAJt0Cv/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SBJW2Vor; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1774316029; c=relaxed/simple;
+	bh=W5dYcH/iQTNFl6VborxQnHT3ItvYntHt05DBFgc9IL4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qJ5ZArtpFhzG7Pvs2hRbKhYp7woPPu2dV9hh/IqSb8e1xF5exnUUeoHhKrpsdl2fvwR3C57MiXy1NN1J0lXzxbHbXTm8/btEbN+mVkk9HKjBtp/sJijkehPoI/orp4tQZVI+9QSjmXoZmW4RkhDS8KIIcQbd+8REoZ0F3i1upBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QwKItf8d; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SBJW2Vor"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QwKItf8d"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774316016;
+	s=mimecast20190719; t=1774316027;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jPLmLxdc2dJpdMM6wOMnhCWJMGlUkfungjDjfJ+bmBI=;
-	b=SBJW2VormCPQjRO8+Qq0nt/eSZ8QEBIxZLE/7oTnwkoqsgVK4TiWLjlgs5MOVVCHhAlxsW
-	IwReMgy+MCKbyByyN5ZuOWda/DBQ5Oreh3FbhPy/BV7k57oRj28Pdz6SotXhDfxZ3DBOUP
-	/W0UeIzgX+QxJAsE0VVmIrWXeRwQKW8=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tIhrDdzZ3tBw5GbRB95XiBB10RCe72TOzM2l9ayovpQ=;
+	b=QwKItf8dLzpdRsQVj5jM42nKnaKxPYkn7GHONv2UUtt+X53FJQWYOsngJz2X1b03AgHg1d
+	WnOAWqrH8dXHspteCZpQDkRoOTplGeM1T8+r1eOvmz1VtuN99P5Vyk1Kp/HfVA+q/1LOR9
+	AvMcGzQVGCTuzPCe3askaskl8kPn5Pc=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-17-7C3jhnUrPYeJDF0kgluDvw-1; Mon,
- 23 Mar 2026 21:33:33 -0400
-X-MC-Unique: 7C3jhnUrPYeJDF0kgluDvw-1
-X-Mimecast-MFC-AGG-ID: 7C3jhnUrPYeJDF0kgluDvw_1774316011
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-195-iNX3zPmIOISUJyTcM04kvQ-1; Mon,
+ 23 Mar 2026 21:33:42 -0400
+X-MC-Unique: iNX3zPmIOISUJyTcM04kvQ-1
+X-Mimecast-MFC-AGG-ID: iNX3zPmIOISUJyTcM04kvQ_1774316020
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5ED27180035D;
-	Tue, 24 Mar 2026 01:33:30 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D96BE195608E;
+	Tue, 24 Mar 2026 01:33:39 +0000 (UTC)
 Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 080ED180035F;
-	Tue, 24 Mar 2026 01:33:21 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 19D691800756;
+	Tue, 24 Mar 2026 01:33:30 +0000 (UTC)
 From: Chunyu Hu <chuhu@redhat.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -61,10 +63,13 @@ Cc: linux-kselftest@vger.kernel.org,
 	dev.jain@arm.com,
 	baohua@kernel.org,
 	lance.yang@linux.dev,
-	chuhu@redhat.com
-Subject: [PATCH v6 0/6] selftests/mm: skip several tests when thp is not available
-Date: Tue, 24 Mar 2026 09:33:10 +0800
-Message-ID: <20260324013316.2590422-1-chuhu@redhat.com>
+	chuhu@redhat.com,
+	Li Wang <liwang@redhat.com>
+Subject: [PATCH v6 1/6] selftests/mm/guard-regions: skip collapse test when thp not enabled
+Date: Tue, 24 Mar 2026 09:33:11 +0800
+Message-ID: <20260324013316.2590422-2-chuhu@redhat.com>
+In-Reply-To: <20260324013316.2590422-1-chuhu@redhat.com>
+References: <20260324013316.2590422-1-chuhu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,61 +79,105 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-There are several tests requires transprarent hugepages, when run on thp
-disabled kernel such as realtime kernel, there will be false negative.
-Mark those tests as skip when thp is not available.
+When thp is not available, just skip the collape tests to avoid the false
+negative.
 
-Chagnes in v6:
-  - patch 3 add reviewed-by from Lorenzo
-  - patch 4 handle the errno before and after close(), suggested by AI
+Without the change, run with a thp disabled kernel:
+  ./run_vmtests.sh -t madv_guard -n 1
+  <snip/>
+  #  RUN           guard_regions.anon.collapse ...
+  # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
+  # collapse: Test terminated by assertion
+  #          FAIL  guard_regions.anon.collapse
+  not ok 2 guard_regions.anon.collapse
+  <snip/>
+  #  RUN           guard_regions.shmem.collapse ...
+  # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
+  # collapse: Test terminated by assertion
+  #          FAIL  guard_regions.shmem.collapse
+  not ok 32 guard_regions.shmem.collapse
+  <snip/>
+  #  RUN           guard_regions.file.collapse ...
+  # guard-regions.c:2217:collapse:Expected madvise(ptr, size, MADV_NOHUGEPAGE) (-1) == 0 (0)
+  # collapse: Test terminated by assertion
+  #          FAIL  guard_regions.file.collapse
+  not ok 62 guard_regions.file.collapse
+  <snip/>
+  # FAILED: 87 / 90 tests passed.
+  # 17 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+  # Totals: pass:70 fail:3 xfail:0 xpass:0 skip:17 error:0
 
+With this change, run with thp disabled kernel:
+  ./run_vmtests.sh -t madv_guard -n 1
+  <snip/>
+  #  RUN           guard_regions.anon.collapse ...
+  #      SKIP      Transparent Hugepages not available
+  #            OK  guard_regions.anon.collapse
+  ok 2 guard_regions.anon.collapse # SKIP Transparent Hugepages not available
+  <snip/>
+  #  RUN           guard_regions.file.collapse ...
+  #      SKIP      Transparent Hugepages not available
+  #            OK  guard_regions.file.collapse
+  ok 62 guard_regions.file.collapse # SKIP Transparent Hugepages not available
+  <snip/>
+  #  RUN           guard_regions.shmem.collapse ...
+  #      SKIP      Transparent Hugepages not available
+  #            OK  guard_regions.shmem.collapse
+  ok 32 guard_regions.shmem.collapse # SKIP Transparent Hugepages not available
+  <snip/>
+  # PASSED: 90 / 90 tests passed.
+  # 20 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+  # Totals: pass:70 fail:0 xfail:0 xpass:0 skip:20 error:0
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+CC: Li Wang <liwang@redhat.com>
+Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+---
 Changes in v5:
-  - patch 1, patch 3 updated reviwed-by and acked-by
-  - patch 4 adds new patch for robust write_file()
-
+  - updated reviewed-by and acked-by
 Changes in v4:
-  - patch 1 update to use thp_available instead of thp_is_enabled,
-    suggested by ai review
-  - removed reviewed-by and acked-by
-
+  - use thp_available instead of thp_is_enabled() as when thp is set to
+    never, madvise(MADV_COLLAPSE) will still succeed by design. So a
+    failure in madvise(MADV_COLLAPSE) on guard region will verify guard
+    region denies it. This is suggested from AI.
+  - removed the 'Reviewed-by' and 'Acked-by' as the code changes. Sorry for
+    that but it seems the changes is a little huge? (1 out of 2 lines)..
 Changes in v3:
-  - patch 1 update commit message to show the log snippet with where the
-    fail happens, change the 'false positive' to 'false negative'.
-    Update reviwed by
-  - patch 2 update reviewed-by
-  - patch 3 make write_file to void return
-  - patch 4 and patch 5 updated reviewed-by/acked-by
-
+  - commit message: update the log snippet with where the fail happens and
+    add the '-n1' to the command.
+  - fix the 'false positive' to 'false negative'
+  - add reviwed by from Mike
 Changes in v2:
-  - replace 'false postive' with 'false negative' in cover letter
-  - patch 1 and patch 2 add reviewed-by/acked-by
-  - new patch 3 to add write_file() in vm_util as a common helper
-  - patch 4 removed the {} in if block, removed the write_file helper
-    rename chunk in v1. Add reviewed-by
-  - patch 5 move the exit chunk to the front of ksft_print_headers() as
-    suggested by David.  Add review by.
+  - add reviewed by from Zi and Lorenzo
+  - add acked-by from David
+---
+ tools/testing/selftests/mm/guard-regions.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Chunyu Hu (6):
-  selftests/mm/guard-regions: skip collapse test when thp not enabled
-  selftests/mm: soft-dirty: skip two tests when thp is not available
-  selftests/mm: move write_file helper to vm_util
-  selftests/mm/vm_util: robust write_file()
-  selftests/mm: split_huge_page_test: skip the test when thp is not
-    available
-  selftests/mm: transhuge_stress: skip the test when thp not available
-
- tools/testing/selftests/mm/guard-regions.c    |  4 +++
- tools/testing/selftests/mm/soft-dirty.c       |  4 ++-
- .../selftests/mm/split_huge_page_test.c       | 19 +++-------
- tools/testing/selftests/mm/thp_settings.c     | 35 ++-----------------
- tools/testing/selftests/mm/thp_settings.h     |  1 -
- tools/testing/selftests/mm/transhuge-stress.c |  4 +++
- tools/testing/selftests/mm/vm_util.c          | 23 ++++++++++++
- tools/testing/selftests/mm/vm_util.h          |  2 ++
- 8 files changed, 43 insertions(+), 49 deletions(-)
-
-
-base-commit: c369299895a591d96745d6492d4888259b004a9e
+diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+index dbd21d66d383..48e8b1539be3 100644
+--- a/tools/testing/selftests/mm/guard-regions.c
++++ b/tools/testing/selftests/mm/guard-regions.c
+@@ -21,6 +21,7 @@
+ #include <sys/uio.h>
+ #include <unistd.h>
+ #include "vm_util.h"
++#include "thp_settings.h"
+ 
+ #include "../pidfd/pidfd.h"
+ 
+@@ -2195,6 +2196,9 @@ TEST_F(guard_regions, collapse)
+ 	char *ptr;
+ 	int i;
+ 
++	if (!thp_available())
++		SKIP(return, "Transparent Hugepages not available\n");
++
+ 	/* Need file to be correct size for tests for non-anon. */
+ 	if (variant->backing != ANON_BACKED)
+ 		ASSERT_EQ(ftruncate(self->fd, size), 0);
 -- 
 2.53.0
 
