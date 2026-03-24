@@ -1,95 +1,278 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6854070EF;
-	Tue, 24 Mar 2026 15:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5004035CB
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 15:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774364749; cv=none; b=jDZpRIu7lQ8YIx45nIdgJZPE3EzeJ6DZ2c8fqT24FufdZFhoUDbBOc4Ws/jWpA9dK3HksuN8AEDq861k3mHbMZruDF32yD7apRClZ91IydZC98kvmRY+GQYCrr0uE1kt9Ju7LuDqRBS5hk5pNVfhwZ5R0ujZzO9D2Bj2BQlx+gE=
+	t=1774364756; cv=none; b=GdVwR6K+InI/KZVIqXcKNMfeRCb/zIW8tcah94qZoe8V5dZPjccdJp/UIHi/5a6oN3gi0hZ2f/b0YAQuoyznc+1EQZ4AMj6TcNkYZAPgEPD/35xB6hKtYxRUGFQb05mHW1kKZ7kmtlqx5C6Q9yA+KXQecHyCxZqNkz8kewdHDdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774364749; c=relaxed/simple;
-	bh=oaawKMHS4yQ07uRj7uRLxv1tEjcJRIf3ObIYsc+emOc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=s1tKu/VDhCBCRo5SyGheux42bCKOFGgWsbcMTE6vL0wGts8qwdwKgMqOEKUB9p//iD+RwYWTQ1uyJthoFi+vQX8/1Ajzyx49Nf0Qrh7dI53uY+K7SuekLG7xsMMQ49YiyE5X50KM+rk6XwWlVu20bD053Hr53KSAiQkwXhm64RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=JpGs6IEi; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1774364756; c=relaxed/simple;
+	bh=WpqSBwwF7aTsP4Iam39AX17BQ0WaTx8bICKzwcui9Bw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eHYJK7XEK1O4z5+530KhD8R6ihrphbIVc9NjWCsRzdMf4eikN4fGZZTBUQAsA2L+/fjLB6jb7AIB+afVknXTNGUZ6koW6ZAf5AredZUD4Jw7W1k2U5gyUKj6xHblALskdYp4Yyr8WxS4P0Ff9Tw/TFLy/wRPUiJ3O1b3OEsqT3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PstxDbUC; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="JpGs6IEi"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 62OEXebm683280
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 24 Mar 2026 07:33:40 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 62OEXebm683280
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026022301; t=1774362821;
-	bh=oaawKMHS4yQ07uRj7uRLxv1tEjcJRIf3ObIYsc+emOc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=JpGs6IEi62lUiE7xIP4TAzytTtgbYyuCfd0BZUjwo3hphD+WiVLC1Cqw4jBDXrs2O
-	 7PLGdfDEW5FlmcMZVrrc6kRbV8woSWONc0GwDBnUr9V0L5eptXDYUGv4eO/cK2o93m
-	 TrM3tYembQQFdenLkpzVkmcRbytK5QQJlgucFpo5mW7h9Lb2xKRqN9+Hyh75cKfU9y
-	 3+bkkUGiK+sAUPRjrXG1JgoHvmbN5UN32R9IbqpZtGqXJtnQosQmwMgP+NEJU9P1y5
-	 logGwE9g0e6at7e0SCkMWKYuZOFpYXHb8Cye0U0oRSFBG1cTxpx8vm5g+a74iJcTFC
-	 Lr9Lwrd2Y0NnQ==
-Date: Tue, 24 Mar 2026 07:33:34 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Lai, Yi" <yi1.lai@linux.intel.com>, Xin Li <xin@zytor.com>
-CC: Dave Hansen <dave.hansen@intel.com>, yi1.lai@intel.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        shuah@kernel.org, tglx@kernel.org, x86@kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_selftests/x86=3A_Fix_sysret?=
- =?US-ASCII?Q?=5Frip_assertion_failure_on_FRED_systems?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <f55dd646-c728-4b0e-ab3e-18da8ac9e6e2@citrix.com>
-References: <c6c2ad7c-c307-4e8b-b2de-55e807f2c41f@intel.com> <43f2c5c2-6327-4546-b204-5c66b704042e@citrix.com> <568aa6c4-6802-4eb5-b412-e3aa93ed9b29@intel.com> <91590BC4-A54E-40F4-A223-A07FBA386A9A@zytor.com> <acDYXtVgSKbbAuGs@ly-workstation> <ce764071-6670-41a2-923a-88f1cd04b238@zytor.com> <c2979413-62f4-4a35-ad64-be2b8f55ea04@citrix.com> <0200a8d8-6871-4ff2-8c6a-968c2cb39a4f@zytor.com> <f55dd646-c728-4b0e-ab3e-18da8ac9e6e2@citrix.com>
-Message-ID: <760478B2-AED7-44F5-A22E-1730A9A0ED63@zytor.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PstxDbUC"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774364753;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1pwjzUaoLKRQGRwW5/62J5f/rc6uv0cMUcHFUjKNYB4=;
+	b=PstxDbUClb3pwXjZ5bGeV4kDIZQr/cECrUYdrG0sIy+q8IHeRTWQwSHRJzJWJyxzS+LCUr
+	WZyHV9vFhHu/k8MUFJDfZ/EhHthGwKbU5WYlNiKVTbeNFE1c6c9TcAUDdsYKZ0t2rPw0bk
+	Lqt0FXUXHL22aXapbXPEd4IZGbuD1jc=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Toke Hoiland-Jorgensen <toke@redhat.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add tests to verify freplace compatibility
+Date: Tue, 24 Mar 2026 23:04:44 +0800
+Message-ID: <20260324150444.68166-4-leon.hwang@linux.dev>
+In-Reply-To: <20260324150444.68166-1-leon.hwang@linux.dev>
+References: <20260324150444.68166-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On March 24, 2026 7:08:14 AM PDT, Andrew Cooper <andrew=2Ecooper3@citrix=2E=
-com> wrote:
->On 23/03/2026 8:27 pm, H=2E Peter Anvin wrote:
->> On 2026-03-23 12:17, Andrew Cooper wrote:
->>> This doesn't really test whether FRED is active=2E=C2=A0 It tests whet=
-her the
->>> OS is not providing strict backwards compatibility, and I think will
->>> malfunction when there's a hypervisor above Linux providing strict
->>> backwards compatibility=2E
->>>
->> But that applies equally to IRET, no? If the hypervisor clobbers the se=
-gment
->> selector like IRET would in the interest of compatibility then you have=
- the
->> same issue=2E
->
->I suppose=2E=C2=A0 I for one don't care to provide that level of compatib=
-ility=2E
->
->But for SYSCALL, what are Linux's plans for CRIU or RR ?=C2=A0 I had to f=
-ix
->SYSCALL legacy behaviour in Xen for the following case:
->
->* PV guest issues SYSCALL on FRED system=2E=C2=A0 %rcx/%r11 not clobbered
->* Migrate to a non-FRED system
->* Xen uses a real SYSRET instruction to resume execution
->
->
->Here, the guest continues executing at whichever dead variable is in %rcx=
-=2E
->
->CRIU/RR won't be exactly the same, but will suffer the same class of
->problem when moving between FRED and non-FRED systems=2E
->
->~Andrew
+Add tests to verify the issues:
 
-"Doctor, it hurts when I PV?"
+* xdp_has_frags: The backwards compatibility can be broken via freplace.
+* kprobe_write_ctx: It can be abused to modify struct pt_regs of kernel
+  functions via kprobe_write_ctx=true freplace progs.
+
+Without the fixes, the issues are verified:
+
+xdp_has_frags=true freplace prog is allowed to attach to
+xdp_has_frags=false XDP prog.
+
+kprobe_write_ctx=true freplace prog is allowed to attach to
+kprobe_write_ctx=false kprobe prog. Then, the first arg of
+bpf_fentry_test1 will be set as 0, and bpf_prog_test_run_opts() gets
+-EFAULT instead of 0.
+
+With the fixes, the issues are rejected by verifier:
+
+ Extension program cannot have different xdp_has_frags value with target prog
+ #134/1   freplace_compatible/xdp_has_frags:OK
+ Extension program cannot have different kprobe_write_ctx value with target prog
+ #134/2   freplace_compatible/kprobe_write_ctx:OK
+
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ .../bpf/prog_tests/freplace_compatible.c      | 124 ++++++++++++++++++
+ .../selftests/bpf/progs/freplace_compatible.c |  40 ++++++
+ 2 files changed, 164 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/freplace_compatible.c
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_compatible.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/freplace_compatible.c b/tools/testing/selftests/bpf/prog_tests/freplace_compatible.c
+new file mode 100644
+index 000000000000..251e17ef4e52
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/freplace_compatible.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "freplace_compatible.skel.h"
++
++static void test_xdp_has_frags(void)
++{
++	struct freplace_compatible *skel_xdp, *skel_ext = NULL;
++	struct bpf_program *prog_xdp, *prog_ext;
++	struct bpf_link *link = NULL;
++	char buff[128] = {};
++	int err, prog_fd;
++	__u32 flags;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in = buff,
++		.data_size_in = sizeof(buff),
++		.repeat = 1,
++	);
++
++	skel_xdp = freplace_compatible__open();
++	if (!ASSERT_OK_PTR(skel_xdp, "freplace_compatible__open xdp"))
++		return;
++
++	prog_xdp = skel_xdp->progs.xdp;
++	bpf_program__set_autoload(prog_xdp, true);
++
++	err = freplace_compatible__load(skel_xdp);
++	if (!ASSERT_OK(err, "freplace_compatible__load xdp"))
++		goto out;
++
++	skel_ext = freplace_compatible__open();
++	if (!ASSERT_OK_PTR(skel_ext, "freplace_compatible__open ext"))
++		goto out;
++
++	prog_ext = skel_ext->progs.freplace_xdp;
++	bpf_program__set_autoload(prog_ext, true);
++
++	flags = bpf_program__flags(prog_ext) | BPF_F_XDP_HAS_FRAGS;
++	bpf_program__set_flags(prog_ext, flags);
++
++	prog_fd = bpf_program__fd(prog_xdp);
++	bpf_program__set_attach_target(prog_ext, prog_fd, "xdp");
++
++	err = freplace_compatible__load(skel_ext);
++	ASSERT_ERR(err, "freplace_compatible__load ext");
++
++	link = bpf_program__attach_freplace(prog_ext, prog_fd, "xdp");
++	ASSERT_ERR_PTR(link, "bpf_program__attach_freplace");
++
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
++		goto out;
++
++	ASSERT_EQ(topts.retval, XDP_PASS, "xdp retval");
++
++out:
++	bpf_link__destroy(link);
++	freplace_compatible__destroy(skel_ext);
++	freplace_compatible__destroy(skel_xdp);
++}
++
++#ifdef __x86_64__
++static void test_kprobe_write_ctx(void)
++{
++	struct freplace_compatible *skel_kprobe, *skel_ext = NULL;
++	struct bpf_program *prog_kprobe, *prog_ext, *prog_fentry;
++	struct bpf_link *link_kprobe = NULL, *link_ext = NULL;
++	int err;
++	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++
++	skel_kprobe = freplace_compatible__open();
++	if (!ASSERT_OK_PTR(skel_kprobe, "freplace_compatible__open kprobe"))
++		return;
++
++	prog_kprobe = skel_kprobe->progs.kprobe;
++	bpf_program__set_autoload(prog_kprobe, true);
++
++	prog_fentry = skel_kprobe->progs.fentry;
++	bpf_program__set_autoload(prog_fentry, true);
++
++	err = freplace_compatible__load(skel_kprobe);
++	if (!ASSERT_OK(err, "freplace_compatible__load kprobe"))
++		goto out;
++
++	skel_ext = freplace_compatible__open();
++	if (!ASSERT_OK_PTR(skel_ext, "freplace_compatible__open ext"))
++		goto out;
++
++	prog_ext = skel_ext->progs.freplace_kprobe;
++	bpf_program__set_autoload(prog_ext, true);
++
++	bpf_program__set_attach_target(prog_ext, bpf_program__fd(prog_kprobe), "kprobe");
++
++	err = freplace_compatible__load(skel_ext);
++	ASSERT_ERR(err, "freplace_compatible__load ext");
++
++	link_ext = bpf_program__attach_freplace(prog_ext, 0, NULL);
++	ASSERT_ERR_PTR(link_ext, "bpf_program__attach_freplace");
++
++	link_kprobe = bpf_program__attach_kprobe_opts(prog_kprobe, "bpf_fentry_test1",
++						      &kprobe_opts);
++	if (!ASSERT_OK_PTR(link_kprobe, "bpf_program__attach_kprobe_opts"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog_fentry), &topts);
++	ASSERT_OK(err, "bpf_prog_test_run_opts");
++
++out:
++	bpf_link__destroy(link_ext);
++	bpf_link__destroy(link_kprobe);
++	freplace_compatible__destroy(skel_ext);
++	freplace_compatible__destroy(skel_kprobe);
++}
++#endif
++
++void test_freplace_compatible(void)
++{
++	if (test__start_subtest("xdp_has_frags"))
++		test_xdp_has_frags();
++#ifdef __x86_64__
++	if (test__start_subtest("kprobe_write_ctx"))
++		test_kprobe_write_ctx();
++#endif
++}
+diff --git a/tools/testing/selftests/bpf/progs/freplace_compatible.c b/tools/testing/selftests/bpf/progs/freplace_compatible.c
+new file mode 100644
+index 000000000000..f13b4878268b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/freplace_compatible.c
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++SEC("?xdp")
++int xdp(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
++SEC("?freplace")
++int freplace_xdp(struct xdp_md *ctx)
++{
++	return 0xFF;
++}
++
++#if defined(__TARGET_ARCH_x86)
++SEC("?kprobe")
++int kprobe(struct pt_regs *regs)
++{
++	return 0;
++}
++
++SEC("?freplace")
++int freplace_kprobe(struct pt_regs *regs)
++{
++	regs->di = 0;
++	return 0;
++}
++
++SEC("?fentry/bpf_fentry_test1")
++int BPF_PROG(fentry)
++{
++	return 0;
++}
++#endif
++
++char _license[] SEC("license") = "GPL";
++
+-- 
+2.53.0
+
