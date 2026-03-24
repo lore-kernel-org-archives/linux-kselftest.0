@@ -1,87 +1,470 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B371D48CFC;
-	Tue, 24 Mar 2026 01:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99B648CFC;
+	Tue, 24 Mar 2026 01:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774317022; cv=none; b=swhjTG3u5bwZZaptZFkZrpa4LQ7rpmPhqdil11kDctuD/PaiEE+es82o4dSC7OZw0ZGBkxtULjBg8pwoyrwOjt3SZ1wlv3P7K5vi9mO2bqIdmoO2YJQqpzUv4DvFisc0csZ3gDTugrQ0NJArcrlQEcoqwTILiuELQy5JzRd4rrY=
+	t=1774317052; cv=none; b=Rp3NcaVV1gFdTFghPhGY+uvfeU377rgcepx5Ta+tEfyEKn0BoD0l04rx+mgX1gYAwLq+TRslARM7z+bimLsJzL1jO3gHXg3WvVK6D2fHmri76o/dlDCBXIYXukLpbToZkhoFj11nfkm2iLHkMCsMQgXbRAQtOzxZUoGVMTP/ttU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774317022; c=relaxed/simple;
-	bh=n70GUlRlc+3qXd/85B78ellg6YqUJK50jpgsp5FOUqk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=e9faEP+vX0NWBOR9T05RvWqk7yWjc4aDEADTrjLRxciMr9bzTKeszXNFe4Ngeg/Ke3yQndT4eFyPIRY9G8AyKg8gUGZi7wSymCEeUPGf29GLIFLjyO3mFRTSDY2lHjkqvKVRkNc8+tUnowabdi2BKaB2ZvgEuQ9DWmjzpUGD1Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMKVc+jY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774317052; c=relaxed/simple;
+	bh=uiXTrEe0WT3A0e0OuP1/yJhc+tEm+zxpTEP+gOz/v48=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=LSgNiHis6aWkJzU/zRoFkkIc8EAbZfXc1C10fxvVVCU7Kul5AxTksR1aTw4M5XXIePgiggKjA3CeXz7or+x5hKvBkuHNoCWcrIfBbE9/Iqp5+jlhHW6G8rxHa2lk7NhYurLki4WgQ+B2TEj2JFPFXmUvzQcRKRnaruPfLsFYaGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pnps9zKX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMKVc+jY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A34C4CEF7;
-	Tue, 24 Mar 2026 01:50:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pnps9zKX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF55C4CEF7;
+	Tue, 24 Mar 2026 01:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774317022;
-	bh=n70GUlRlc+3qXd/85B78ellg6YqUJK50jpgsp5FOUqk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=iMKVc+jYGW5tHNuJ6iGQ5H0065y6hvM5o9s9f/e46zuzGh5yRQG95IQ36XcMCj4Hr
-	 NbHzzGbKlH6PMqCP062RY2eIHa5BlglKq9Iow/rPUofUY2iNLqRR7n+9H0Vm7dAy0f
-	 SPht9F6IvYXMVNj25DfnJt/7zVPWN/6pdbmXpLKbPifDBi1va2vHoUSVy3lTgfYGcW
-	 4Cg2Xfxt63tvbv/R275qSdlQniGAtezK3so8IGYhIYmZFzVfB4UdJkLx94Rs3zeAbY
-	 wL3JAETM7KjjWoqvPrw+qwkhAVhmeqsS+8TGOG2wdkk9AWyXEAIZ2DKJL9cfk3cL/L
-	 54ppN/OFiU3tw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA1F83808200;
-	Tue, 24 Mar 2026 01:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1774317051;
+	bh=uiXTrEe0WT3A0e0OuP1/yJhc+tEm+zxpTEP+gOz/v48=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Pnps9zKXGXRMGjPhgKvJV1CJoRd9dWZLa9GXrbra/piBcRTl3S6Zl1N/7LVVdOGZE
+	 zgWc75WS2y9V7s69bwP/iiP6tV4IDeM6sdt6kW1tqQA7QmYL0TfDTnCfrbp1w3E8OC
+	 u9VT/Tdwj926vMpG8bsbK1xyBg7zvPcp4qDGwDocZddggoJGOm9WMs3iuLDIEQ0wjt
+	 9B5gkTqr0tJztUi3mUcmVjLGjzacRiQ1WubbxbZjqtoFey6nDH9xQeKisv5K42lIDX
+	 ueSo3+3q8r3zvgCx7k9aK69x9OOEJt3ufuSlnWdmo9CDWn2mRuBJadMLz5FVF1mTlN
+	 mRTNV/M8hLSFQ==
+Date: Tue, 24 Mar 2026 10:50:48 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Cc: rostedt@goodmis.org, corbet@lwn.net, shuah@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] tracing/fprobe: Support comma-separated symbols
+ and :entry/:exit
+Message-Id: <20260324105048.f9bf2de0f8b8c44f8dee7fcb@kernel.org>
+In-Reply-To: <20260205135842.20517-2-seokwoo.chung130@gmail.com>
+References: <20260205135842.20517-1-seokwoo.chung130@gmail.com>
+	<20260205135842.20517-2-seokwoo.chung130@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7 0/4] ethtool: Dynamic RSS context indirection
- table resizing
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177431701054.413704.17760247587470177196.git-patchwork-notify@kernel.org>
-Date: Tue, 24 Mar 2026 01:50:10 +0000
-References: <20260320085826.1957255-1-bjorn@kernel.org>
-In-Reply-To: <20260320085826.1957255-1-bjorn@kernel.org>
-To: =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, saeedm@nvidia.com, tariqt@nvidia.com,
- mbloch@nvidia.com, leon@kernel.org, horms@kernel.org, shuah@kernel.org,
- netdev@vger.kernel.org, maxime.chevallier@bootlin.com, gal@nvidia.com,
- willemb@google.com, linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Thu,  5 Feb 2026 08:58:39 -0500
+"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com> wrote:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 20 Mar 2026 09:58:20 +0100 you wrote:
-> Hi!
+> Extend the fprobe event interface to support:
+>   - Comma-separated symbol lists: "func1,func2,func3"
+>   - Exclusion prefix: "func1,!func2,func3"
+>   - Explicit :entry and :exit suffixes (replacing %return for lists)
 > 
-> Some NICs (e.g. bnxt) change their RSS indirection table size based on
-> the queue count, because the hardware table is a shared resource. The
-> ethtool core locks ctx->indir_size at context creation, so drivers
-> have to reject channel changes when RSS contexts exist.
+> Single-symbol probes retain backward compatibility with %return.
 > 
-> [...]
+> The list parsing is factored into a dedicated parse_fprobe_list()
+> helper that splits comma-separated input into filter (included) and
+> nofilter (excluded) strings.  Tracepoint validation now reports the
+> error position via trace_probe_log_err() so users can see what went
+> wrong in tracefs/error_log.
+> 
+> Changes since v5:
+>   - Fix missing closing brace in the empty-token check that caused a
+>     build error.
+>   - Remove redundant strchr/strstr checks for tracepoint validation
+>     (the character validation loop already rejects ',', ':', and '%').
+>   - Add trace_probe_log_err() to the tracepoint character validation
+>     loop per reviewer feedback.
+>   - Remove unnecessary braces around single-statement if per kernel
+>     coding style.
+>   - Extract list parsing into parse_fprobe_list() per reviewer feedback
+>     to keep parse_fprobe_spec() focused.
 
-Here is the summary with links:
-  - [net-next,v7,1/4] ethtool: Track user-provided RSS indirection table size
-    https://git.kernel.org/netdev/net-next/c/0475f9e779b4
-  - [net-next,v7,2/4] ethtool: Add RSS indirection table resize helpers
-    https://git.kernel.org/netdev/net-next/c/02bcb20083b2
-  - [net-next,v7,3/4] bnxt_en: Resize RSS contexts on channel count change
-    https://git.kernel.org/netdev/net-next/c/57cdfe0dc70b
-  - [net-next,v7,4/4] selftests: rss_drv: Add RSS indirection table resize tests
-    https://git.kernel.org/netdev/net-next/c/10329ce49285
 
-You are awesome, thank you!
+Thanks for updating! I have some comments below.
+
+> 
+> Update tracefs/README to reflect the new syntax.
+> 
+> Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
+> ---
+>  kernel/trace/trace.c        |   3 +-
+>  kernel/trace/trace_fprobe.c | 219 ++++++++++++++++++++++++++++--------
+>  2 files changed, 174 insertions(+), 48 deletions(-)
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 8bd4ec08fb36..649a6e6021b4 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -5578,7 +5578,8 @@ static const char readme_msg[] =
+>  	"\t           r[maxactive][:[<group>/][<event>]] <place> [<args>]\n"
+>  #endif
+>  #ifdef CONFIG_FPROBE_EVENTS
+> -	"\t           f[:[<group>/][<event>]] <func-name>[%return] [<args>]\n"
+> +	"\t           f[:[<group>/][<event>]] <func-name>[:entry|:exit] [<args>]\n"
+> +	"\t		(single symbols still accept %return)\n"
+>  	"\t           t[:[<group>/][<event>]] <tracepoint> [<args>]\n"
+>  #endif
+>  #ifdef CONFIG_HIST_TRIGGERS
+> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+> index 262c0556e4af..f8846cd1d020 100644
+> --- a/kernel/trace/trace_fprobe.c
+> +++ b/kernel/trace/trace_fprobe.c
+> @@ -187,11 +187,14 @@ DEFINE_FREE(tuser_put, struct tracepoint_user *,
+>   */
+>  struct trace_fprobe {
+>  	struct dyn_event	devent;
+> +	char			*filter;
+
+Could you move this filter to the previous line of nofilter?
+
+>  	struct fprobe		fp;
+> +	bool			list_mode;
+
+
+This list_mode seems an alias of (filter || nofilter). In this case, 
+we don't need trace_fprobe::list_mode. Please remove this field.
+
+
+> +	char			*nofilter;
+
+>  	const char		*symbol;
+> +	struct trace_probe	tp;
+
+tp must be the last field. Please do not move.
+
+>  	bool			tprobe;
+>  	struct tracepoint_user	*tuser;
+> -	struct trace_probe	tp;
+>  };
+>  
+>  static bool is_trace_fprobe(struct dyn_event *ev)
+> @@ -559,6 +562,8 @@ static void free_trace_fprobe(struct trace_fprobe *tf)
+>  		trace_probe_cleanup(&tf->tp);
+>  		if (tf->tuser)
+>  			tracepoint_user_put(tf->tuser);
+> +		kfree(tf->filter);
+> +		kfree(tf->nofilter);
+>  		kfree(tf->symbol);
+>  		kfree(tf);
+>  	}
+> @@ -838,7 +843,12 @@ static int __register_trace_fprobe(struct trace_fprobe *tf)
+>  	if (trace_fprobe_is_tracepoint(tf))
+>  		return __regsiter_tracepoint_fprobe(tf);
+>  
+> -	/* TODO: handle filter, nofilter or symbol list */
+> +	/* Registration path:
+> +	 * - list_mode: pass filter/nofilter
+> +	 * - single: pass symbol only (legacy)
+> +	 */
+> +	if (tf->list_mode)
+> +		return register_fprobe(&tf->fp, tf->filter, tf->nofilter);
+>  	return register_fprobe(&tf->fp, tf->symbol, NULL);
+>  }
+>  
+> @@ -1154,60 +1164,131 @@ static struct notifier_block tprobe_event_module_nb = {
+>  };
+>  #endif /* CONFIG_MODULES */
+>  
+> -static int parse_symbol_and_return(int argc, const char *argv[],
+> -				   char **symbol, bool *is_return,
+> -				   bool is_tracepoint)
+> +static bool has_wildcard(const char *s)
+>  {
+> -	char *tmp = strchr(argv[1], '%');
+> -	int i;
+> +	return s && (strchr(s, '*') || strchr(s, '?'));
+> +}
+>  
+> -	if (tmp) {
+> -		int len = tmp - argv[1];
+> +static int parse_fprobe_list(char *b, char **filter, char **nofilter)
+> +{
+> +	char *f __free(kfree) = NULL;
+> +	char *nf __free(kfree) = NULL;
+> +	char *tmp = b, *tok;
+> +	size_t sz;
+>  
+> -		if (!is_tracepoint && !strcmp(tmp, "%return")) {
+> -			*is_return = true;
+> -		} else {
+> -			trace_probe_log_err(len, BAD_ADDR_SUFFIX);
+> -			return -EINVAL;
+> -		}
+> -		*symbol = kmemdup_nul(argv[1], len, GFP_KERNEL);
+> -	} else
+> -		*symbol = kstrdup(argv[1], GFP_KERNEL);
+> -	if (!*symbol)
+> +	sz = strlen(b) + 1;
+> +
+> +	f = kzalloc(sz, GFP_KERNEL);
+> +	nf = kzalloc(sz, GFP_KERNEL);
+> +	if (!f || !nf)
+>  		return -ENOMEM;
+>  
+> -	if (*is_return)
+> -		return 0;
+> +	while ((tok = strsep(&tmp, ",")) != NULL) {
+> +		char *dst;
+> +		bool neg = (*tok == '!');
+>  
+> -	if (is_tracepoint) {
+> -		tmp = *symbol;
+> -		while (*tmp && (isalnum(*tmp) || *tmp == '_'))
+> -			tmp++;
+> -		if (*tmp) {
+> -			/* find a wrong character. */
+> -			trace_probe_log_err(tmp - *symbol, BAD_TP_NAME);
+> -			kfree(*symbol);
+> -			*symbol = NULL;
+> +		if (*tok == '\0') {
+> +			trace_probe_log_err(tmp - b - 1, BAD_TP_NAME);
+>  			return -EINVAL;
+>  		}
+> +
+> +		if (neg)
+> +			tok++;
+> +		dst = neg ? nf : f;
+> +		if (dst[0] != '\0')
+> +			strcat(dst, ",");
+> +		strcat(dst, tok);
+>  	}
+>  
+> -	/* If there is $retval, this should be a return fprobe. */
+> -	for (i = 2; i < argc; i++) {
+> -		tmp = strstr(argv[i], "$retval");
+> -		if (tmp && !isalnum(tmp[7]) && tmp[7] != '_') {
+> -			if (is_tracepoint) {
+> -				trace_probe_log_set_index(i);
+> -				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
+> -				kfree(*symbol);
+> -				*symbol = NULL;
+> +	*filter = no_free_ptr(f);
+> +	*nofilter = no_free_ptr(nf);
+> +
+> +	return 0;
+> +}
+> +
+> +static int parse_fprobe_spec(const char *in, bool is_tracepoint,
+> +		char **base, bool *is_return, bool *list_mode,
+> +		char **filter, char **nofilter)
+> +{
+> +	char *work __free(kfree) = NULL;
+> +	char *b __free(kfree) = NULL;
+> +	char *f __free(kfree) = NULL;
+> +	char *nf __free(kfree) = NULL;
+> +	bool legacy_ret = false;
+> +	bool list = false;
+> +	const char *p;
+> +	int ret = 0;
+> +
+> +	if (!in || !base || !is_return || !list_mode || !filter || !nofilter)
+> +		return -EINVAL;
+> +
+> +	*base = NULL; *filter = NULL; *nofilter = NULL;
+> +	*is_return = false; *list_mode = false;
+> +
+> +	if (is_tracepoint) {
+> +		for (p = in; *p; p++)
+> +			if (!isalnum(*p) && *p != '_') {
+> +				trace_probe_log_err(p - in, BAD_TP_NAME);
+> +				return -EINVAL;
+> +			}
+> +		b = kstrdup(in, GFP_KERNEL);
+> +		if (!b)
+> +			return -ENOMEM;
+> +		*base = no_free_ptr(b);
+> +		return 0;
+> +	}
+> +
+> +	work = kstrdup(in, GFP_KERNEL);
+> +	if (!work)
+> +		return -ENOMEM;
+> +
+> +	p = strstr(work, "%return");
+> +	if (p && p[7] == '\0') {
+> +		*is_return = true;
+> +		legacy_ret = true;
+> +		*(char *)p = '\0';
+> +	} else {
+> +		/*
+> +		 * If "symbol:entry" or "symbol:exit" is given, it is new
+> +		 * style probe.
+> +		 */
+> +		p = strrchr(work, ':');
+> +		if (p) {
+> +			if (!strcmp(p, ":exit")) {
+> +				*is_return = true;
+> +				*(char *)p = '\0';
+> +			} else if (!strcmp(p, ":entry")) {
+> +				*(char *)p = '\0';
+> +			} else {
+>  				return -EINVAL;
+>  			}
+> -			*is_return = true;
+> -			break;
+>  		}
+>  	}
+> -	return 0;
+> +
+> +	list = !!strchr(work, ',');
+> +	
+
+Here is a needless whitespace (tab) above line.
+
+> +	if (list && legacy_ret)
+> +		return -EINVAL;
+> +
+> +	if (legacy_ret)
+> +		*is_return = true;
+> +
+> +	b = kstrdup(work, GFP_KERNEL);
+> +	if (!b)
+> +		return -ENOMEM;
+> +
+> +	if (list) {
+> +		ret = parse_fprobe_list(b, &f, &nf);
+> +		if (ret)
+> +			return ret;
+> +		*list_mode = true;
+> +	}
+> +
+> +	*base = no_free_ptr(b);
+> +	*filter = no_free_ptr(f);
+> +	*nofilter = no_free_ptr(nf);
+> +
+> +	return ret;
+>  }
+>  
+>  static int trace_fprobe_create_internal(int argc, const char *argv[],
+> @@ -1241,6 +1322,8 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  	const char *event = NULL, *group = FPROBE_EVENT_SYSTEM;
+>  	struct module *mod __free(module_put) = NULL;
+>  	const char **new_argv __free(kfree) = NULL;
+> +	char *parsed_nofilter __free(kfree) = NULL;
+> +	char *parsed_filter __free(kfree) = NULL;
+
+nit: we should make those as filter/nofilter simply.
+
+>  	char *symbol __free(kfree) = NULL;
+>  	char *ebuf __free(kfree) = NULL;
+>  	char *gbuf __free(kfree) = NULL;
+> @@ -1249,6 +1332,7 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  	char *dbuf __free(kfree) = NULL;
+>  	int i, new_argc = 0, ret = 0;
+>  	bool is_tracepoint = false;
+> +	bool list_mode = false;
+
+Then, we don't need this list_mode. we can replace it with "(filter || nofilter)".
+
+>  	bool is_return = false;
+>  
+>  	if ((argv[0][0] != 'f' && argv[0][0] != 't') || argc < 2)
+> @@ -1270,11 +1354,26 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  
+>  	trace_probe_log_set_index(1);
+>  
+> -	/* a symbol(or tracepoint) must be specified */
+> -	ret = parse_symbol_and_return(argc, argv, &symbol, &is_return, is_tracepoint);
+> +	/* Parse spec early (single vs list, suffix, base symbol) */
+> +	ret = parse_fprobe_spec(argv[1], is_tracepoint, &symbol, &is_return,
+> +			&list_mode, &parsed_filter, &parsed_nofilter);
+>  	if (ret < 0)
+>  		return -EINVAL;
+>  
+> +	for (i = 2; i < argc; i++) {
+> +		char *tmp = strstr(argv[i], "$retval");
+> +
+> +		if (tmp && !isalnum(tmp[7]) && tmp[7] != '_') {
+> +			if (is_tracepoint) {
+> +				trace_probe_log_set_index(i);
+> +				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
+> +				return -EINVAL;
+> +			}
+> +			is_return = true;
+> +			break;
+> +		}
+> +	}
+
+Please do this $retval check in parse_fprobe_spec() as parse_symbol_and_return() did.
+
+> +
+>  	trace_probe_log_set_index(0);
+>  	if (event) {
+>  		gbuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
+> @@ -1287,6 +1386,15 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  	}
+>  
+>  	if (!event) {
+> +		/*
+> +		 * Event name rules:
+> +		 * - For list/wildcard: require explicit [GROUP/]EVENT
+> +		 * - For single literal: autogenerate symbol__entry/symbol__exit
+> +		 */
+> +		if (list_mode || has_wildcard(symbol)) {
+> +			trace_probe_log_err(0, NO_GROUP_NAME);
+
+ NO_EVENT_NAME error?
+
+> +			return -EINVAL;
+> +		}
+>  		ebuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
+>  		if (!ebuf)
+>  			return -ENOMEM;
+> @@ -1322,7 +1430,8 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  							NULL, NULL, NULL, sbuf);
+>  		}
+>  	}
+> -	if (!ctx->funcname)
+> +
+> +	if (!list_mode && !has_wildcard(symbol) && !is_tracepoint)
+>  		ctx->funcname = symbol;
+>  
+>  	abuf = kmalloc(MAX_BTF_ARGS_LEN, GFP_KERNEL);
+> @@ -1356,6 +1465,21 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  		return ret;
+>  	}
+>  
+> +	/* carry list parsing result into tf */
+> +	if (!is_tracepoint) {
+> +		tf->list_mode = list_mode;
+> +		if (parsed_filter) {
+> +			tf->filter = kstrdup(parsed_filter, GFP_KERNEL);
+> +			if (!tf->filter)
+> +				return -ENOMEM;
+> +		}
+> +		if (parsed_nofilter) {
+> +			tf->nofilter = kstrdup(parsed_nofilter, GFP_KERNEL);
+> +			if (!tf->nofilter)
+> +				return -ENOMEM;
+> +		}
+> +	}
+
+Also, it is natural to do this inside alloc_trace_fprobe(). Can you pass
+filter and nofilter to alloc_trace_fprobe()?
+(and just make those NULL instead of using kstrdup()?)
+
+Thank you,
+
+
+> +
+>  	/* parse arguments */
+>  	for (i = 0; i < argc; i++) {
+>  		trace_probe_log_set_index(i + 2);
+> @@ -1442,8 +1566,9 @@ static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
+>  	seq_printf(m, ":%s/%s", trace_probe_group_name(&tf->tp),
+>  				trace_probe_name(&tf->tp));
+>  
+> -	seq_printf(m, " %s%s", trace_fprobe_symbol(tf),
+> -			       trace_fprobe_is_return(tf) ? "%return" : "");
+> +	seq_printf(m, " %s", trace_fprobe_symbol(tf));
+> +	if (!trace_fprobe_is_tracepoint(tf) && trace_fprobe_is_return(tf))
+> +		seq_puts(m, ":exit");
+>  
+>  	for (i = 0; i < tf->tp.nr_args; i++)
+>  		seq_printf(m, " %s=%s", tf->tp.args[i].name, tf->tp.args[i].comm);
+> -- 
+> 2.43.0
+> 
+> 
+
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
