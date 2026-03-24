@@ -1,62 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22006227BB9
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 00:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D1E1A681A
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 00:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774311804; cv=none; b=l44riMJbECOCdJ52Dzm0yiOdrLZ8rWe+RQOG0yO0thE6+ZblZpcoRD2Ty5nmhjYVCuDGyC3AQfx6/i/w9b+gvq2gLgiXyIF8CPV6WkcTPO0JFuEmQa/3n1NHYeINqrqIJykY7tE8jRQpezLpXBBBA9hFGnm/NWzLSrOP1SunZOE=
+	t=1774313012; cv=none; b=im7w2pWXddMiCtMjyaVqFs43gKGZDqdFY9iH1tmSdgPQpJzmAT0DbIDtdE+A4Y90Ro7GSsjiSo23KkeRldcnKz1qbgL+qqWvsCzJbL0db7oYq762EiXcgTPosLVsSJ+mZy4S9zIqtNuGZGWyHfXxsB+OaybrKe2ff/82WqxKEN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774311804; c=relaxed/simple;
-	bh=udYdjfrFrFFI/zxEKozpCwu+YTlMNqXMZNJfv83vg5Y=;
+	s=arc-20240116; t=1774313012; c=relaxed/simple;
+	bh=Ste15H68ky2srs+pxlgivQ7lOAwgK8ZcuTuVNMeNonM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t5wwkwtzkWcEQVWPwmQ6d915YVS1T1lM0LrnOvqVg5cLPmm1HqX4j1foDNyTuWPABY1TNwQLIDZnj25ZZRF9A20jr6EEpr6BvnpTmB1IJvOZYygH++eZO+9FQZ9nr8Ow0EWyU+zsETxtw75IoHWq3P5lQ9Ti73mDa5hoX3a7CFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Dcaq6Kwz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=BZOgQP2BIdclKWD7SOP8hMTFrKw/twst+TKhMSgn9FpsbWerxxyxkpCQngsEpvidjUsFGL4TYXoK4Ge7IyD52H3XSA+WrywwbiDodT5Aqzvk11ZOyIpGsE9RumLu3f8UCNMNRdsVLd4C37/XOySdqkeiMt45SH3kHHPJ429PPH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OX6spqsc; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dcaq6Kwz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774311802;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NEN/hgRPrpeTdflpPR82SCQrcTa0brUyqsEDdo7uAbU=;
-	b=Dcaq6KwzJ8LlGt4q//eaHlS7mAk/AVfyg7+eTKXF2jOL8RKzW7aYqwYdQ3qWrip8DSV8Ht
-	QMlVjRaeSe5kgMi3gOvar/875vWytznIh+yS9VqnIvxIKS7XyD7753vcPeoaoWPx3MtlKA
-	KOD9IRMNTnhpfMBG//xfvTpRHPLexkU=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-486-vstC6UL_MOuRp4ndn0wrMA-1; Mon,
- 23 Mar 2026 20:23:18 -0400
-X-MC-Unique: vstC6UL_MOuRp4ndn0wrMA-1
-X-Mimecast-MFC-AGG-ID: vstC6UL_MOuRp4ndn0wrMA_1774311795
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 224B4195609E;
-	Tue, 24 Mar 2026 00:23:15 +0000 (UTC)
-Received: from gmail.com (unknown [10.72.112.53])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 13DDF1800361;
-	Tue, 24 Mar 2026 00:23:04 +0000 (UTC)
-Date: Tue, 24 Mar 2026 08:23:00 +0800
-From: Chunyu Hu <chuhu@redhat.com>
-To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
-	surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com, npache@redhat.com,
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
-	lance.yang@linux.dev
-Subject: Re: [PATCH v5 3/6] selftests/mm: move write_file helper to vm_util
-Message-ID: <acHZZMLl2IaBZmTx@gmail.com>
-References: <20260323151753.2576137-1-chuhu@redhat.com>
- <20260323151753.2576137-4-chuhu@redhat.com>
- <b992bd2d-f811-407e-835f-30d9c9d707ad@lucifer.local>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OX6spqsc"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2b052ec7176so23785ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 17:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774313009; x=1774917809; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tP4PkIA/dAss1SYdem97AuKhuaCH6Uwc8eZQpSWtLFc=;
+        b=OX6spqsc8zEzdZTScN6XzmhqW18eIY4YaB5188BdmSFmnztPwCfDm2cQg6O4FIvb6i
+         CRcsijlJdCNK8dHL1uZJOzViHUyJHUFuXe9DgQFtQCAGYZhzVYYfHzCTtMki18vCjgta
+         vgF6kpLClXsrguNCn4OmqCqWg/z4m5zee8GuoXV0CRUtA+Og/pidUJV+Ydf4jBUS+YjJ
+         kmR6hpQidpb2gzOs8NkyJsZUPXTCsGTDdRIG42JkAO3zERdde9riyqaYop5m4goo0rSH
+         qe4+vrAvV4p3IU6x2kriLDeVJxrtHg0BzamVwBVCdiB+J0qFCeQTylIcTymQCLRi/cLa
+         opYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774313009; x=1774917809;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tP4PkIA/dAss1SYdem97AuKhuaCH6Uwc8eZQpSWtLFc=;
+        b=G6MPlyUueHoc/2LdZop9fYV7pwPp0sFACREhesCLc+ZQFwuyaa7lZR3Sb22EVlF0Ra
+         OKiuQiyDex5y8Q8bzA4P7uqW8neWFtXexEPPqfjRWoQEOJyRsVARONg8Rj+qYSk//CuV
+         NIl/JXxsmV8Nyd2MbBQBCPBoQLsucI3Od68yPX0nyazkTjU/Mgk8WZfTDvoKEZhJiJps
+         CBy53kNDU7R9QdJzqli7h9Ol1vQrZ1mN9xqTApp5HLIA/sh+mSq/yidTd+VgZrH5TL39
+         5sp2UA9tuPIXGxZN/cwJHwqMomGvOWRVO5HcqeJELh/3XXtOzqWIRbYCpR31Ak6EOJQf
+         d5TA==
+X-Forwarded-Encrypted: i=1; AJvYcCWAXYuxUViwsS0jdVmmhg2oxsD9FccHBAzYNkGhkCMneTbmNGCHaUjzYELV7Jc9qZ7jmkiqpSm3hmoahM0GHnc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1T8axs65Kp3sjwt9g2bjj+n7l4Ee0lNDXGAtVJ+OJkLS4IUWY
+	JVvntjQuq2lxMKO+iZAr5HCt9wj7e7pFMGEplMU0B7vbz6fHgMMpLpy3OdLsAdnZCw==
+X-Gm-Gg: ATEYQzw19p8R5Ekaoi8yA++xwKIJh12LxmoSfc05j2l5z8jBqcJlKTwGuZi1Q9lW7ZE
+	YXWVRqANu2/qHJ4/xgg2io6bxm7Enl6DI3/ZfCR547FNLA1dgP7/TQgNivkikg3ldLNXSIHkvbP
+	Dm3XPv5j1rTDM8VbJXS0i0462aw9fWtHKGdDRlQmSSZB47Kku8mUoWV70Sp64gKinnol/hlKbMP
+	3R1/q1pxFBonqtM11hEuZDbh3wwzZdFfHjhDGsuwMU2/PkNHS/cD7i70v+ATG6+vkIW3tsPuWya
+	VhtY082zGonXrUHmkGieXM6C+613fx1mxfW4PL7LF7aOrwm7cX+XUVnkrrml2GinaiBnZe1CvEi
+	+tbpnZsfzhCDV1cUUya4O8+uhy5v7uX9naw45oF9L3FrNWV82asiFrpCpTM/Mf+vZ0HxXFTBuBG
+	4++EQPq/RrBbtW50zJULokqZaRbx4bcKEL55KsWxlxx1v4bcjOZswOJT2qrxA=
+X-Received: by 2002:a17:902:f54b:b0:2b0:5b4c:a439 with SMTP id d9443c01a7336-2b0a5405594mr1757525ad.2.1774313008753;
+        Mon, 23 Mar 2026 17:43:28 -0700 (PDT)
+Received: from google.com (249.53.168.34.bc.googleusercontent.com. [34.168.53.249])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0409c6besm12352073b3a.32.2026.03.23.17.43.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 17:43:28 -0700 (PDT)
+Date: Tue, 24 Mar 2026 00:43:24 +0000
+From: Lisa Wang <wyihan@google.com>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>,
+	Naoya Horiguchi <nao.horiguchi@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Hugh Dickins <hughd@google.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, rientjes@google.com,
+	seanjc@google.com, ackerleytng@google.com, vannapurve@google.com,
+	michael.roth@amd.com, jiaqiyan@google.com, tabba@google.com,
+	dave.hansen@linux.intel.com
+Subject: Re: [PATCH RFC v2 5/7] mm: selftests: Add shmem memory failure test
+Message-ID: <acHeLL0l948jRchK@google.com>
+References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
+ <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-5-92c596402a7a@google.com>
+ <78a855da-8fc2-4e85-90a0-6bf9af030c02@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,208 +90,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b992bd2d-f811-407e-835f-30d9c9d707ad@lucifer.local>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+In-Reply-To: <78a855da-8fc2-4e85-90a0-6bf9af030c02@linux.alibaba.com>
 
-On Mon, Mar 23, 2026 at 03:48:58PM +0000, Lorenzo Stoakes (Oracle) wrote:
-> On Mon, Mar 23, 2026 at 11:17:50PM +0800, Chunyu Hu wrote:
-> > thp_settings provides write_file() helper for safely writing to a file and
-> > exit when write failure happens. It's a very low level helper and many sub
-> > tests need such a helper, not only thp tests.
-> >
-> > split_huge_page_test also defines a write_file locally. The two have minior
-> > differences in return type and used exit api. And there would be conflicts
-> > if split_huge_page_test wanted to include thp_settings.h because of
-> > different prototype, making it less convenient.
-> >
-> > It's possisble to merge the two, although some tests don't use the
-> > kselftest infrastrucutre for testing. It would also work when using the
-> > ksft_exit_msg() to exit in my test, as the counters are all zero. Output
-> > will be like:
-> >
-> >   TAP version 13
-> >   1..62
-> >   Bail out! /proc/sys/vm/drop_caches1 open failed: No such file or directory
-> >   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >
-> > So here we just keep the version in split_huge_page_test, and move it into
-> > the vm_util. This makes it easy to maitain and user could just include one
-> > vm_util.h when they don't need thp setting helpers. Keep the prototype of
-> > void return as the function will exit on any error, return value is not
-> > necessary, and will simply the callers like write_num() and write_string().
-> >
-> > Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> > Reviewed-by: Zi Yan <ziy@nvidia.com>
-> > Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > Suggested-by: Mike Rapoport <rppt@kernel.org>
-> > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+On Sat, Mar 21, 2026 at 02:30:04PM +0800, Baolin Wang wrote:
 > 
-> I already reviewed this :) but easy to accidentally forget to propagate
-> tags. Anyway, as before:
 > 
-> Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-
-Sorry I forgot adding your review in my last version. I'll add in v6. Thanks
-for your review!
-
-> 
-> Cheers, Lorenzo
-> 
+> On 3/20/26 7:30 AM, Lisa Wang wrote:
+> > Add a shmem memory failure selftest to test the shmem memory failure is
+> > correct after modifying shmem return value.
+> > 
+> > Test that
+> > + madvise() call returns 0 at the first time
+> > + trigger a SIGBUS when the poisoned shmem page is fault-in again.
+> > 
+> > Signed-off-by: Lisa Wang <wyihan@google.com>
 > > ---
-> > Changes in v5:
-> >   - updated acked-by and reviewed-by
-> > Changes in v3:
-> >   - make the write_file void return
-> > Changes in v2:
-> >   new patch from v2
-> > ---
-> >  .../selftests/mm/split_huge_page_test.c       | 15 --------
-> >  tools/testing/selftests/mm/thp_settings.c     | 35 ++-----------------
-> >  tools/testing/selftests/mm/thp_settings.h     |  1 -
-> >  tools/testing/selftests/mm/vm_util.c          | 15 ++++++++
-> >  tools/testing/selftests/mm/vm_util.h          |  2 ++
-> >  5 files changed, 20 insertions(+), 48 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> > index e0167111bdd1..93f205327b84 100644
-> > --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> > +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> > @@ -255,21 +255,6 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
-> >  	return status;
-> >  }
-> >
-> > -static void write_file(const char *path, const char *buf, size_t buflen)
-> > -{
-> > -	int fd;
-> > -	ssize_t numwritten;
-> > -
-> > -	fd = open(path, O_WRONLY);
-> > -	if (fd == -1)
-> > -		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-> > -
-> > -	numwritten = write(fd, buf, buflen - 1);
-> > -	close(fd);
-> > -	if (numwritten < 1)
-> > -		ksft_exit_fail_msg("Write failed\n");
-> > -}
-> > -
-> >  static void write_debugfs(const char *fmt, ...)
-> >  {
-> >  	char input[INPUT_MAX];
-> > diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
-> > index 574bd0f8ae48..e748ebfb3d4e 100644
-> > --- a/tools/testing/selftests/mm/thp_settings.c
-> > +++ b/tools/testing/selftests/mm/thp_settings.c
-> > @@ -6,6 +6,7 @@
-> >  #include <string.h>
-> >  #include <unistd.h>
-> >
-> > +#include "vm_util.h"
-> >  #include "thp_settings.h"
-> >
-> >  #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
-> > @@ -64,29 +65,6 @@ int read_file(const char *path, char *buf, size_t buflen)
-> >  	return (unsigned int) numread;
-> >  }
-> >
-> > -int write_file(const char *path, const char *buf, size_t buflen)
-> > -{
-> > -	int fd;
-> > -	ssize_t numwritten;
-> > -
-> > -	fd = open(path, O_WRONLY);
-> > -	if (fd == -1) {
-> > -		printf("open(%s)\n", path);
-> > -		exit(EXIT_FAILURE);
-> > -		return 0;
-> > -	}
-> > -
-> > -	numwritten = write(fd, buf, buflen - 1);
-> > -	close(fd);
-> > -	if (numwritten < 1) {
-> > -		printf("write(%s)\n", buf);
-> > -		exit(EXIT_FAILURE);
-> > -		return 0;
-> > -	}
-> > -
-> > -	return (unsigned int) numwritten;
-> > -}
-> > -
-> >  unsigned long read_num(const char *path)
-> >  {
-> >  	char buf[21];
-> > @@ -104,10 +82,7 @@ void write_num(const char *path, unsigned long num)
-> >  	char buf[21];
-> >
-> >  	sprintf(buf, "%ld", num);
-> > -	if (!write_file(path, buf, strlen(buf) + 1)) {
-> > -		perror(path);
-> > -		exit(EXIT_FAILURE);
-> > -	}
-> > +	write_file(path, buf, strlen(buf) + 1);
-> >  }
-> >
-> >  int thp_read_string(const char *name, const char * const strings[])
-> > @@ -165,11 +140,7 @@ void thp_write_string(const char *name, const char *val)
-> >  		printf("%s: Pathname is too long\n", __func__);
-> >  		exit(EXIT_FAILURE);
-> >  	}
-> > -
-> > -	if (!write_file(path, val, strlen(val) + 1)) {
-> > -		perror(path);
-> > -		exit(EXIT_FAILURE);
-> > -	}
-> > +	write_file(path, val, strlen(val) + 1);
-> >  }
-> >
-> >  unsigned long thp_read_num(const char *name)
-> > diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
-> > index 76eeb712e5f1..7748a9009191 100644
-> > --- a/tools/testing/selftests/mm/thp_settings.h
-> > +++ b/tools/testing/selftests/mm/thp_settings.h
-> > @@ -63,7 +63,6 @@ struct thp_settings {
-> >  };
-> >
-> >  int read_file(const char *path, char *buf, size_t buflen);
-> > -int write_file(const char *path, const char *buf, size_t buflen);
-> >  unsigned long read_num(const char *path);
-> >  void write_num(const char *path, unsigned long num);
-> >
-> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> > index a6d4ff7dfdc0..ad96d19d1b85 100644
-> > --- a/tools/testing/selftests/mm/vm_util.c
-> > +++ b/tools/testing/selftests/mm/vm_util.c
-> > @@ -764,3 +764,18 @@ int unpoison_memory(unsigned long pfn)
-> >
-> >  	return ret > 0 ? 0 : -errno;
-> >  }
-> > +
-> > +void write_file(const char *path, const char *buf, size_t buflen)
-> > +{
-> > +	int fd;
-> > +	ssize_t numwritten;
-> > +
-> > +	fd = open(path, O_WRONLY);
-> > +	if (fd == -1)
-> > +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-> > +
-> > +	numwritten = write(fd, buf, buflen - 1);
-> > +	close(fd);
-> > +	if (numwritten < 1)
-> > +		ksft_exit_fail_msg("Write failed\n");
-> > +}
-> > diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> > index e9c4e24769c1..1a07305ceff4 100644
-> > --- a/tools/testing/selftests/mm/vm_util.h
-> > +++ b/tools/testing/selftests/mm/vm_util.h
-> > @@ -166,3 +166,5 @@ int unpoison_memory(unsigned long pfn);
-> >
-> >  #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
-> >  #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
-> > +
-> > +void write_file(const char *path, const char *buf, size_t buflen);
-> > --
-> > 2.53.0
-> >
 > 
+> Why not move the shmem memory failure test into memory-failure.c?
 
+Do you mean let memory-failure.c kernel code check by itself?
+The reason I write the selftest instead of combining in memory-failure.c
+is because
++ do not need extra checking code in kernel code
++ make it easier to trace the entire execution flow, starting from the
+  madvise() down through shmem_error_remove_folio() and into the
+  truncate_error_folio() logic.
+
+Pleas let me know if I've missed something. Thanks!
