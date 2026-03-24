@@ -1,95 +1,95 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A0B39DBDE
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 16:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CE83D5258
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 16:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774370024; cv=pass; b=srt9DhX+Mjl+u50eljdCBq09GqfsqgCIKfvqPtmYEGku9F5bU+mPCwJaS68GO+pJIW0jv5Yknchpw6zcpzCMe5YotAaEkvGBEqvMorkt3O3LB4AII0wNeM4T5r53ogHIZyElWqlHIPIvnlYp9NfX9IzqbpcG+Lv5o/DDErQhSSk=
+	t=1774370796; cv=pass; b=l8s8lRBlw0skgFngvlvQc34SrOluBb4Fz9NReOyveQoSLkaVDX8LIPG4MMP5YE804dTfxLiwuopE1ruq4+SMpM7iz9Xx4jTF0E84ZoL5U746ZmNewU9o68hlKI4HbUEa/esX4OOvr/JkDtwP0u9YWp4np3P7lTa97HzSR0RGuao=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774370024; c=relaxed/simple;
-	bh=KyZccWfRZPRCXyH3JPYtLHqoTnA1c/Yv1X7rEaPg17A=;
+	s=arc-20240116; t=1774370796; c=relaxed/simple;
+	bh=kRBNZYBXvdyd0G3IRhmHcdN/BFg2bxldCxeHP1r/m7A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=scG0rkuU5+7Ug5NTM4GVxeubutWP2pljURM9I2UjFwozXV4Rp3RHamQuGow6l2fY0r1fClpfNODJcEbUU9wx8Un+zik5+8g3vkFH7lRFgtYUGwujAFafOuEIUZKhWEJOJh8N1bW7ufq1umifRIlu2RZVcc5QlmLaKhbql0cGhwk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HW6Q9NWL; arc=pass smtp.client-ip=209.85.167.52
+	 To:Cc:Content-Type; b=fYy5KtfrQjPuZNNhSLzWecIZ8aFpyscRAufHy90eoFU2fY6fvDXt17WhdvWo5zDm95svi2Af7CQD8l0JybqEvXAps/wS7om0hnSln1eZ9hADrcFctGGnDjFUokvTFcy4/hafSilm9lpgqkbFUpA7WtQ3Y4yzviogbgFDbHxAW8s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H4sO8PKp; arc=pass smtp.client-ip=209.85.208.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HW6Q9NWL"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5a126c8aab9so4759652e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 09:33:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774370021; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H4sO8PKp"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-389f9895c81so14422231fa.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 09:46:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774370793; cv=none;
         d=google.com; s=arc-20240605;
-        b=E6dhoMtCLUMwgYDaE3+7KItqq8k4IOAH21g9I4eqnjcA8BgNai58dcgnNNwbd/rsWG
-         Ij6P0LlvuwH87JBACiVYi15FiIg0QOnb65NPeHHbOpsa+dH/41BAPbElw4lW+YYOeVlQ
-         ie8edbkLLPaQto1OypI7DjDRBucxFOy9UMdbdLL5CPzwQ3PwtGsgcPbfaav8iOv3od3+
-         ZB5ffn3CUtecAo0VHPuH3WNUPtGX6SwW2wPHGSQwtiTjXf5urQAmafcA04vdLOiO7zFu
-         KR6Jy0BNJkOO9EEQLBJATj06aQH3np++ct3vG0XSq4wCLTUvzCOtcBYVNG3tL3OLCvfd
-         WkrQ==
+        b=XMi/5b+6upGvQc4isKRdBu9PTzW0mjdOFqJtwJq1KjGsZayHFuJzInTNfTh4qdqjFn
+         pAen38I1BYlE8z9Vw9VQlLo5mKz2mv3pUYmSIdrp+S5oAtH+ROCppCkXqC3XNdQB41Q6
+         c730HJ8joyiCqgkBW502rMABSYbQZJh4nW5OMTR3tDTWRKV8mfs8Cbqiy5Puj3csSUAJ
+         ZnGVHeUAEGqMG2sEreGhYGDFkaQtvKW+ByFKpy3Pi9Hoesj6RAT/wg1DTgvOh8erSyY6
+         oTHB6kl0hFjTQJ2GfKuC1HvxUuwqt6kGx9uEMJp8nFq0oyf09x4i+QfODnH1PkqIV0Zb
+         QBIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=f++PU3wwkpbB0N6cii11zfED2xylkHlgqhKc/U2ncVo=;
-        fh=/J6F2h0JVedun5pk6KkjrO8I7g0twBOnoH4MwhOrbIg=;
-        b=DiKRcAI5ziHR+supGWQDKWTItkpYep6xt9DpdNLqg3bzXy+rBhuT3FmxgxdLfCD3Rf
-         7rl5NbwmgjRTaDWF9lzSddOCmbqwu1/OLQdVLciqMo5cUtXTvTciKjO5UgDDQcZGp2MQ
-         SDBRlYBWPYzC0N77hcRu0ZOJTUtULIqFatDVk4lHNxC+iAWatcokyAO8se59+SPFHh+u
-         pwUBknnTKsGGJHe2RT9Ldq/0podXXc7+X36vhGOFuNMAEX9btyOCadTNF8Uf9mz1BqJm
-         xm9osd5iapDZjJT0ZjE5MJ73lJskKJYJ9REl6pEZC8vDwVS8nSjR28mBcRSJlqVxPEJ3
-         LkyQ==;
+        bh=UCikAyXiicm5k2VXyH9xrW1vWINN0uWZrBsYrIEp9jQ=;
+        fh=kOUHKO6XjR6h5sqOqOeXUcrGxrlnt3WrUTFyYkCEbzA=;
+        b=TiAIWeRZQ4ha4aoY069tzIMP2sWYoBdjlFT7kMhubG20fyIUf+XdKPmHTh2CxxGzaW
+         oodbODN5ilyAw/iS4UtKXnLClULTmrVWVAaxukBAOv5ZkAtNY29h/7ylcBSkUqZOwGQp
+         Ss1gXU5Pu/B2DPFmeIteKnRKaNMbcJQeTv2EBakZEk+/wXkyxqykAKMDUws4OipAKlgN
+         sG5TrJO7hJE1gBZzun4LlG+vwBcwnb9wI5+18P0W1oQkEBtp21ikDMgg8/iXQuqBdRWZ
+         cq8o1IBupOSgzFaNILVu67IvFa4XPfK2y05kZiulL+VopXbS+K4c1TPZLyaqW26MyYAA
+         16jA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774370021; x=1774974821; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774370793; x=1774975593; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=f++PU3wwkpbB0N6cii11zfED2xylkHlgqhKc/U2ncVo=;
-        b=HW6Q9NWLycxYs8C8OOQKDxwRZAuJuQI9wdKwP6+z6AcgPywU01ml6PpY55p34Zdi1z
-         xwwbe9uS568Mz3uM+ZUTpdl4x8sIZV3+5Xq0wiiZtI5mlflMpQLOP4d7CtoB6BPuukiU
-         fZxn4j+WFmsZRFNUGas7J47gd9YQNXgYlZ97JH6kk3lVfdGiEiH4CygTGrkkB/ngLfRH
-         q7muSWLsaGO2EqKJDYVHsVSl52GjCMhUbRNY2Xbd1qDKLL8/vESy4wESEkqSxtf5oL3w
-         ibHgdDgJWGH8NY7mxCGKFzII/YX2lS3BAQFV/j9ZoJKuXTnRttyweZrCBuf7uekiLjUm
-         FIcg==
+        bh=UCikAyXiicm5k2VXyH9xrW1vWINN0uWZrBsYrIEp9jQ=;
+        b=H4sO8PKp9fcAPhpWTxNV+tFmYJ/sEMYatbvIzld2dPiEOMw9aGpQ+WGNGjATEm+51/
+         YbUcXFrcz97hbxrzxsEftuOqLKQiOSrFXG8T8HXyVGKMdQx0HKHJye0LmCsymPDZPSvG
+         M/CHqF2rcTta7qW3KZgb2NMHPAsk5WrMBrhk43stRUaU83lXDhrC0HIe/9Bl1cZQ4HWb
+         MFIwP/f7Wk9f1aXFttOJmUlBwtLno++Ijt//Yg+3pVY62V59rXXtcCnbpzbyAluM8rv4
+         cpGGN572WnyszDNQd0dUYDT9JLIypM2+/qb1F2bL6BWSOgFP/9k2jDhbbXODCuJNqqJx
+         AsOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774370021; x=1774974821;
+        d=1e100.net; s=20251104; t=1774370793; x=1774975593;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=f++PU3wwkpbB0N6cii11zfED2xylkHlgqhKc/U2ncVo=;
-        b=rlLYbW0wWQoePtJROgqz5DYE0m8ZKIORdyRfO45Uv0G8FqFonj8tyWoNIUr634Bqwf
-         /DFKaMoFYvnfs8GFDnokti3O6HBGjatU+s1gYqiwXBv27S3opNQSck1mX4KdqHPgEcbb
-         gsN3vw4e89lnS3KMQEi5axugqplrTOoea8PYe2sqmeHlHi5diSS6+LKuTlXVuEHnaFX2
-         7UJfwHK94vHOmHJXKx5rfrkdga3gGmbrpzeCxxWfHnFHd1xi/ZwulQx/fW0zL8LrQ8D0
-         jzE76wY1vLYiuJeDX1JFUWHgl2aSd1fNu5hS+ZGjnVG9rAaoYedLT9+qiGUuvSXbsliG
-         0gMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXwA1zhfqIeGnM0hKg9rWKQ/3cbFLVlgeRVZCYrOUwkF+k6YCw4Stg2i/mEDF5JHeBgltY0zkzxeGtTzuDZjbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3MvaEMVAxnH1rfc1BIXMwVwxlQdmk0+sxMMuQolxTx9dwtuvV
-	u6bCMiP+0NiBwSQfTMwh/0gu8kipG0RfSZpiG/za7NiHjImXRlSd/YmfcwthA8jLhR5gS8x5olU
-	WyRX2QCnm2nuM5fgZjzu7WTbQhMLtD68HOuxE7OqI
-X-Gm-Gg: ATEYQzxA3+qqJ9fdwqUloi1aRq+hj8tA8Rhsvtv7C0UA8rqLgYuCqBx2U1zTRh3XWmJ
-	m1c2n8YAv0iJqC1Iaffo4S0MxKJnUF6HjduJ1c3/4gQaFjW6PbgsJoWPioiWUXsZsFDKdxI5MWO
-	bEVKGevlpZpJ4Mwr/CMoX6byUwpmshpnZtHW7AaReGk2RbhrzWEdAuQ58/8W0Nd6o9/qY7f2S4r
-	ZKzJOmTMKVLPPrVJdotxXSQACGhgueihYMOhWqq5SAJVi3FcePzx957XspGLxFKuaNYAY1yTz4I
-	6g/rI89Z
-X-Received: by 2002:a05:6512:3044:b0:5a1:1899:a0cb with SMTP id
- 2adb3069b0e04-5a29b9a1efbmr55664e87.34.1774370018671; Tue, 24 Mar 2026
- 09:33:38 -0700 (PDT)
+        bh=UCikAyXiicm5k2VXyH9xrW1vWINN0uWZrBsYrIEp9jQ=;
+        b=mdjNYNp5uupNFp3sLBsOol+6/HMji76VGxTZlizc1JHw0Eh+dtlCkFBFg+a9w08KN9
+         Dss8CBrAtHOAn8ch7d4c3EMF07HLg/hnLJmTzJc52TV6TmyPGv1yQ1y7/MzDG4PmmVXo
+         dUe3WXFpDWcjYi8X0wPryLUPG6FPwTGS82nfZm03ih1NIyDG8fBq3dqxpUrnbqwfqo+K
+         GCFUN79UduHSZeZrSAkBminn54fakyrA/pV0yAeQhkoKZBga4kG3rgCtZqg0Bss3M/18
+         sHHpJ9ME5CHaL0BcmLs3XsdPJnggJfjM0BOuEJExIEo0JmTlWgTaF3Qqacnr5teQyklv
+         0BYg==
+X-Forwarded-Encrypted: i=1; AJvYcCWZkg+pJfoURiu7lqDlIh7gc2/WG+p2RzQFp1v38zsz5KAfMisGvmr0gVzddXuGDLcJwWAlgEqstOyh+6tTKlE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzszB7kHJLuVAfP80QPfBQou4h1bLOBjbmuYN8oYIeh26UR7qN8
+	paL5gR5pD4WMFyN+Ldkqpvo7qrAyygY660lOsW9oAub7Sewrw5cmNAEtFI0I7Z1ztKMEfvW1P28
+	XvLH+f6LPihBs7HDNxhdGSgIU9hxNek98O/UKETN+
+X-Gm-Gg: ATEYQzyDglhsXZ/gdSnPMqI1IVmR7I/YXuvGHl6PmfbMiUksr3rZWnXsk7ESECtNYbC
+	Vmol3Q1ptPVXOqfPAxBmmQAzjPFadK60j9oL/c1nef9od+mwRJ9iS7lQQB6KwHihXsgftqSwpN5
+	1/4rrYWYW8RPXlmbF4BHzRjh9c0PKtwl/3BqNFZPpRPQS51/oBeN8XF6+XEaGrxFkwlsfSJyYaf
+	lhPziDtFdS3GBBgSSMuflvAkwacY7lJQNkzSJKzWF97HgPBjyXTl/9eD4bSIhs8o+S4WPKY+K9n
+	xlfvJE9O
+X-Received: by 2002:a05:651c:198d:b0:38a:45d6:c246 with SMTP id
+ 38308e7fff4ca-38c4309f785mr403821fa.8.1774370792285; Tue, 24 Mar 2026
+ 09:46:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323235817.1960573-1-dmatlack@google.com> <20260323235817.1960573-7-dmatlack@google.com>
- <0d2eedec-01c1-41c9-bc74-0133ae6ebb04@intel.com>
-In-Reply-To: <0d2eedec-01c1-41c9-bc74-0133ae6ebb04@intel.com>
+References: <20260323235817.1960573-1-dmatlack@google.com> <20260323235817.1960573-8-dmatlack@google.com>
+ <df5dac48-8a54-49e2-acb8-9370b7078033@intel.com>
+In-Reply-To: <df5dac48-8a54-49e2-acb8-9370b7078033@intel.com>
 From: David Matlack <dmatlack@google.com>
-Date: Tue, 24 Mar 2026 09:33:10 -0700
-X-Gm-Features: AaiRm530aoKtDDdSXYb9CaNnVHDZa0HeKfsko4zWVykFU0w66CUzojlEOk9szPI
-Message-ID: <CALzav=d65Z1Va14rmoRcx5WrK1GfRvuHmrqK16wJJeTiq28eCA@mail.gmail.com>
-Subject: Re: [PATCH v3 06/24] vfio/pci: Register a file handler with Live
- Update Orchestrator
+Date: Tue, 24 Mar 2026 09:46:03 -0700
+X-Gm-Features: AaiRm53x8nRAyhq72BKXQ8vBk2jNU8cpC5QwT_5hu3qjlEbsk36YMzg6v1f1PaQ
+Message-ID: <CALzav=cGzzZTL-tyaaG_AhC3gP7ULiU6hWS=X6joLTjyoo-6sg@mail.gmail.com>
+Subject: Re: [PATCH v3 07/24] vfio/pci: Preserve vfio-pci device files across
+ Live Update
 To: Yi Liu <yi.l.liu@intel.com>
 Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>, 
 	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
@@ -119,30 +119,51 @@ Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 24, 2026 at 6:00=E2=80=AFAM Yi Liu <yi.l.liu@intel.com> wrote:
+On Tue, Mar 24, 2026 at 6:01=E2=80=AFAM Yi Liu <yi.l.liu@intel.com> wrote:
 > On 3/24/26 07:57, David Matlack wrote:
 
-> > --- a/drivers/vfio/pci/vfio_pci.c
-> > +++ b/drivers/vfio/pci/vfio_pci.c
-> > @@ -170,6 +170,7 @@ static int vfio_pci_probe(struct pci_dev *pdev, con=
-st struct pci_device_id *id)
-> >       ret =3D vfio_pci_core_register_device(vdev);
-> >       if (ret)
-> >               goto out_put_vdev;
-> > +
+> > + * Usage Example
+> > + * =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > + *
+> > + * VFIO PCI devices can be preserved across a kexec by preserving the =
+file
+> > + * associated with the device in a LUO session::
+> > + *
+> > + *   device_fd =3D open("/dev/vfio/devices/X");
 >
-> a meaningless line here.
+> /dev/vfio/devices/vfioX
 
-Will fix in v4, thanks.
+Will fix in v4.
 
-> > --- /dev/null
-> > +++ b/include/linux/kho/abi/vfio_pci.h
-> > @@ -0,0 +1,28 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +/*
-> > + * Copyright (c) 2025, Google LLC.
+> > + *  * The device file must have been acquired from the VFIO character =
+device,
+> > + *    not ``VFIO_GROUP_GET_DEVICE_FD``.
 >
-> would be nice to update 2025 to 2026 now. :)
+> how about "The device file descriptor must be obtained by opening the
+> VFIO device
+> character device (``/dev/vfio/devices/vfioX``), not via
+> ``VFIO_GROUP_GET_DEVICE_FD``."?
+>
+> just be aligned with the below words in vfio.rst.
+>
+> "Traditionally user acquires a device fd via VFIO_GROUP_GET_DEVICE_FD
+> user can now acquire a device fd by directly opening a character device
+> /dev/vfio/devices/vfioX"
 
-Oops, missed this one, thanks. Will fix in v4.
+Thanks for the suggestion. Here is the wording I have for v4:
+
+  *  * The device file being preserved must have been obtained by
+opening the
+  *    VFIO character device (``/dev/vfio/devices/vfioX``), not via
+  *    ``VFIO_GROUP_GET_DEVICE_FD``.
+
+> > +#include <linux/kexec_handover.h>
+> >   #include <linux/kho/abi/vfio_pci.h>
+> >   #include <linux/liveupdate.h>
+> >   #include <linux/errno.h>
+> > +#include <linux/vfio.h>
+>
+> maybe follow alphabet order. errno.h would be moved to the top first.
+
+I will reorder errno.h to be at the top in the previous patch (where
+the alphabetical ordering issue is introduced).
