@@ -1,152 +1,148 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F1938D69B
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 16:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774369141; cv=none; b=Aazngk6Rzi+aYKXNZIHoUAMPjEdtalnRRQnmadfPauuzGF21mgl4AFuA4djp44u7ujWu8gvD8x9ckTb/IljnqtRZ0/bbqTqI7EFUkWzA4wQshtywgbsxwVBz/kvB2Wj7VWnbEfSlMk6pxKz7GhL+fwD53DrdUlnRhCncwgx/Wls=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774369141; c=relaxed/simple;
-	bh=j2vmMAgZBEIHOIcyw/exgvoqxhaoAAncNtLEhyVK7V8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Z1naIY26aTR95VLyIfddJ+EUQjZGl5115z+NmPO8U3O9K0ch+FafTeiclzI5gGXpopqm3NsIM6mmDiO4o5njCVsjsLM96FE5QHdBWyiWAt2fTR2Ut17D2Q2EYeVeJ0Srp87echpBg6bgz/ysFSVRTRm+80tuvtzUk33ApqelgJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UvWNF0wg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rUmU6YOm; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A0B39DBDE
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 16:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774370024; cv=pass; b=srt9DhX+Mjl+u50eljdCBq09GqfsqgCIKfvqPtmYEGku9F5bU+mPCwJaS68GO+pJIW0jv5Yknchpw6zcpzCMe5YotAaEkvGBEqvMorkt3O3LB4AII0wNeM4T5r53ogHIZyElWqlHIPIvnlYp9NfX9IzqbpcG+Lv5o/DDErQhSSk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774370024; c=relaxed/simple;
+	bh=KyZccWfRZPRCXyH3JPYtLHqoTnA1c/Yv1X7rEaPg17A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=scG0rkuU5+7Ug5NTM4GVxeubutWP2pljURM9I2UjFwozXV4Rp3RHamQuGow6l2fY0r1fClpfNODJcEbUU9wx8Un+zik5+8g3vkFH7lRFgtYUGwujAFafOuEIUZKhWEJOJh8N1bW7ufq1umifRIlu2RZVcc5QlmLaKhbql0cGhwk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HW6Q9NWL; arc=pass smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UvWNF0wg";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rUmU6YOm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774369139;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0pLGEONAHfojUOfaOSp5cChM4XB6HpkP9CDLtETY2Zg=;
-	b=UvWNF0wgSnxfP19DhIuC8JjD76fiIkslCDX4/NMpmxQjVX4QBESwrbJJDbBDYIjiZM21/w
-	HtU27K8qMP0CfUO4RM7dbJrJaBEvfkSSEvjugzhh2QF09LhIyK8Aw8gQGls1GFxookIIMX
-	HlEicRAq+l6D/vQK/CpMRxgdEeGD4ew=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-26-TN82wwAjPlCqCQkKMvu1TQ-1; Tue, 24 Mar 2026 12:18:58 -0400
-X-MC-Unique: TN82wwAjPlCqCQkKMvu1TQ-1
-X-Mimecast-MFC-AGG-ID: TN82wwAjPlCqCQkKMvu1TQ_1774369137
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-43b3d3d2d22so4693443f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 09:18:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HW6Q9NWL"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5a126c8aab9so4759652e87.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 09:33:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774370021; cv=none;
+        d=google.com; s=arc-20240605;
+        b=E6dhoMtCLUMwgYDaE3+7KItqq8k4IOAH21g9I4eqnjcA8BgNai58dcgnNNwbd/rsWG
+         Ij6P0LlvuwH87JBACiVYi15FiIg0QOnb65NPeHHbOpsa+dH/41BAPbElw4lW+YYOeVlQ
+         ie8edbkLLPaQto1OypI7DjDRBucxFOy9UMdbdLL5CPzwQ3PwtGsgcPbfaav8iOv3od3+
+         ZB5ffn3CUtecAo0VHPuH3WNUPtGX6SwW2wPHGSQwtiTjXf5urQAmafcA04vdLOiO7zFu
+         KR6Jy0BNJkOO9EEQLBJATj06aQH3np++ct3vG0XSq4wCLTUvzCOtcBYVNG3tL3OLCvfd
+         WkrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=f++PU3wwkpbB0N6cii11zfED2xylkHlgqhKc/U2ncVo=;
+        fh=/J6F2h0JVedun5pk6KkjrO8I7g0twBOnoH4MwhOrbIg=;
+        b=DiKRcAI5ziHR+supGWQDKWTItkpYep6xt9DpdNLqg3bzXy+rBhuT3FmxgxdLfCD3Rf
+         7rl5NbwmgjRTaDWF9lzSddOCmbqwu1/OLQdVLciqMo5cUtXTvTciKjO5UgDDQcZGp2MQ
+         SDBRlYBWPYzC0N77hcRu0ZOJTUtULIqFatDVk4lHNxC+iAWatcokyAO8se59+SPFHh+u
+         pwUBknnTKsGGJHe2RT9Ldq/0podXXc7+X36vhGOFuNMAEX9btyOCadTNF8Uf9mz1BqJm
+         xm9osd5iapDZjJT0ZjE5MJ73lJskKJYJ9REl6pEZC8vDwVS8nSjR28mBcRSJlqVxPEJ3
+         LkyQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774369137; x=1774973937; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0pLGEONAHfojUOfaOSp5cChM4XB6HpkP9CDLtETY2Zg=;
-        b=rUmU6YOm3ZCZMZ7EHRgBKorXwzUWJWZyvVQK2SXrCg0xIYrY28uBtwIT4j0wrCZOIq
-         /GRGXn/UnVt5NfO3Mls1U1Ekx/w0M6seRDG+T4BTaurcKpQlnit7qfYnVBmmmmiJ6RDx
-         MFq8Rh+CQUgHb/CBoM0XKX1WtJo/4MZjkruQBBwW65VjtlhrhwOyaFhbmpF91R7iY3oW
-         SKcdCmb1T4EuAjfw0iq/pDCufgTmGFYA0Hx9fSo3VWjTx53FjxVCmuw3J/lwqQSp47kj
-         RtLHSvMECkQfCmVy8+D6FFworxn8+EsTstLaureeD9XjKhLU+/Ij1ugvz1QzeJyRAscF
-         h+IA==
+        d=google.com; s=20251104; t=1774370021; x=1774974821; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f++PU3wwkpbB0N6cii11zfED2xylkHlgqhKc/U2ncVo=;
+        b=HW6Q9NWLycxYs8C8OOQKDxwRZAuJuQI9wdKwP6+z6AcgPywU01ml6PpY55p34Zdi1z
+         xwwbe9uS568Mz3uM+ZUTpdl4x8sIZV3+5Xq0wiiZtI5mlflMpQLOP4d7CtoB6BPuukiU
+         fZxn4j+WFmsZRFNUGas7J47gd9YQNXgYlZ97JH6kk3lVfdGiEiH4CygTGrkkB/ngLfRH
+         q7muSWLsaGO2EqKJDYVHsVSl52GjCMhUbRNY2Xbd1qDKLL8/vESy4wESEkqSxtf5oL3w
+         ibHgdDgJWGH8NY7mxCGKFzII/YX2lS3BAQFV/j9ZoJKuXTnRttyweZrCBuf7uekiLjUm
+         FIcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774369137; x=1774973937;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0pLGEONAHfojUOfaOSp5cChM4XB6HpkP9CDLtETY2Zg=;
-        b=djgU5EjkpNd6pmZO/1zXdqt+SYDFcukQTkoWWpIy0CCEyby7/fDULT/IumZ8vNHlCR
-         ZMtpIVArUayVgSdPgu96wlXEOh8BXRf4GjobAN6aijrwQLQpP98xVETKhRbtv4oS+mKR
-         a6ZCOL5873b3DjIexl4GkU7Au6E97xLfPCX3b+mTsAT8VXJX/BFQ3HfRItKZ+9Qb2qYC
-         ef7snUDEcZWUGaw+SA9Z3QtneEqbRqsxKyCsPaF5QxRGJLazKsy1yOIxmmF/00gg4YqA
-         QY5/z0TytVtaeabxVeYT+1+3yA/c/3Z1OOH9iK6alCKZFYwHehK7/zA3+xtCmdpaP3jc
-         JoHg==
-X-Forwarded-Encrypted: i=1; AJvYcCWWQ28vRppS5Cc/g4DMc+00VOc3Gn3NiXxO+WDBY+RD2WPqHPvTXMyX+o9FHG6H5rBK3FUeDgE0c3Le/TPma8Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzh7AVNhtGzi/PmkvTIDYTie2cdlX7nDQwSeVIQkBFQe61JCKSv
-	26vPnYXS8QMBlkNgU+e1aTS/KrhPZawHtELDvIyfrJmUyd3trRcEaJbpcySeo9VD0WZQXO1pYMd
-	uz7wvS6jRcyLoALykTCQ1wUmbvV5zyRUvz6ZnDWicsHAkoRIVdRpxxsZS25pFebFwXRP12g==
-X-Gm-Gg: ATEYQzyeCVH2fl7SGAFxOzfLFHh1fhW4bzpGJD6DsMbRR4u6dxxonou5z1E/PMEA1Oa
-	58MrlRo6Idv6JMJPyFw/kFVgeHAvHaq9bVHzJj3oiZ4a8ILpqhJvEDrMhDuPb8XrWDSbfP6e7JC
-	N0h4c75EAh9e92gDftfU3n+tahEYQHYyZN2X2FpA77HGqRulgpZO3tNMByY8fLjQaErvx0WtuCd
-	AQRWjFJKsv+BCwsSVzJpON2QOceamZA+cDgLk+1meZRSiE2+oVGpjgZouSbe1AuMLmMBpYzT9sW
-	z3CFIa92JlvX4Mmq4jGZpRlVKMqtuLf9PzXCiGoQ9A/3gla65w3SLCe4Y6uCMA8DsdNSlylD0ye
-	mzUb7hwZchNwVGAMRT67keNJ/duOx4/Jnn0HwfHRnQmvoohJU
-X-Received: by 2002:a05:6000:2509:b0:43b:4920:56bb with SMTP id ffacd0b85a97d-43b88a0cfc1mr107786f8f.52.1774369136492;
-        Tue, 24 Mar 2026 09:18:56 -0700 (PDT)
-X-Received: by 2002:a05:6000:2509:b0:43b:4920:56bb with SMTP id ffacd0b85a97d-43b88a0cfc1mr107724f8f.52.1774369135946;
-        Tue, 24 Mar 2026 09:18:55 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b64717e97sm41173985f8f.35.2026.03.24.09.18.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 09:18:55 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 24AE35A470F; Tue, 24 Mar 2026 17:18:54 +0100 (CET)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
- Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, "David S . Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, Lorenzo
- Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- kernel-patches-bot@fb.com
-Subject: Re: [PATCH bpf-next 1/3] bpf: Disallow freplace on XDP with
- mismatched xdp_has_frags values
-In-Reply-To: <20260324150444.68166-2-leon.hwang@linux.dev>
-References: <20260324150444.68166-1-leon.hwang@linux.dev>
- <20260324150444.68166-2-leon.hwang@linux.dev>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 24 Mar 2026 17:18:54 +0100
-Message-ID: <87ecl9mc9d.fsf@toke.dk>
+        d=1e100.net; s=20251104; t=1774370021; x=1774974821;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=f++PU3wwkpbB0N6cii11zfED2xylkHlgqhKc/U2ncVo=;
+        b=rlLYbW0wWQoePtJROgqz5DYE0m8ZKIORdyRfO45Uv0G8FqFonj8tyWoNIUr634Bqwf
+         /DFKaMoFYvnfs8GFDnokti3O6HBGjatU+s1gYqiwXBv27S3opNQSck1mX4KdqHPgEcbb
+         gsN3vw4e89lnS3KMQEi5axugqplrTOoea8PYe2sqmeHlHi5diSS6+LKuTlXVuEHnaFX2
+         7UJfwHK94vHOmHJXKx5rfrkdga3gGmbrpzeCxxWfHnFHd1xi/ZwulQx/fW0zL8LrQ8D0
+         jzE76wY1vLYiuJeDX1JFUWHgl2aSd1fNu5hS+ZGjnVG9rAaoYedLT9+qiGUuvSXbsliG
+         0gMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXwA1zhfqIeGnM0hKg9rWKQ/3cbFLVlgeRVZCYrOUwkF+k6YCw4Stg2i/mEDF5JHeBgltY0zkzxeGtTzuDZjbg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3MvaEMVAxnH1rfc1BIXMwVwxlQdmk0+sxMMuQolxTx9dwtuvV
+	u6bCMiP+0NiBwSQfTMwh/0gu8kipG0RfSZpiG/za7NiHjImXRlSd/YmfcwthA8jLhR5gS8x5olU
+	WyRX2QCnm2nuM5fgZjzu7WTbQhMLtD68HOuxE7OqI
+X-Gm-Gg: ATEYQzxA3+qqJ9fdwqUloi1aRq+hj8tA8Rhsvtv7C0UA8rqLgYuCqBx2U1zTRh3XWmJ
+	m1c2n8YAv0iJqC1Iaffo4S0MxKJnUF6HjduJ1c3/4gQaFjW6PbgsJoWPioiWUXsZsFDKdxI5MWO
+	bEVKGevlpZpJ4Mwr/CMoX6byUwpmshpnZtHW7AaReGk2RbhrzWEdAuQ58/8W0Nd6o9/qY7f2S4r
+	ZKzJOmTMKVLPPrVJdotxXSQACGhgueihYMOhWqq5SAJVi3FcePzx957XspGLxFKuaNYAY1yTz4I
+	6g/rI89Z
+X-Received: by 2002:a05:6512:3044:b0:5a1:1899:a0cb with SMTP id
+ 2adb3069b0e04-5a29b9a1efbmr55664e87.34.1774370018671; Tue, 24 Mar 2026
+ 09:33:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260323235817.1960573-1-dmatlack@google.com> <20260323235817.1960573-7-dmatlack@google.com>
+ <0d2eedec-01c1-41c9-bc74-0133ae6ebb04@intel.com>
+In-Reply-To: <0d2eedec-01c1-41c9-bc74-0133ae6ebb04@intel.com>
+From: David Matlack <dmatlack@google.com>
+Date: Tue, 24 Mar 2026 09:33:10 -0700
+X-Gm-Features: AaiRm530aoKtDDdSXYb9CaNnVHDZa0HeKfsko4zWVykFU0w66CUzojlEOk9szPI
+Message-ID: <CALzav=d65Z1Va14rmoRcx5WrK1GfRvuHmrqK16wJJeTiq28eCA@mail.gmail.com>
+Subject: Re: [PATCH v3 06/24] vfio/pci: Register a file handler with Live
+ Update Orchestrator
+To: Yi Liu <yi.l.liu@intel.com>
+Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Askar Safin <safinaskar@gmail.com>, 
+	"Borislav Petkov (AMD)" <bp@alien8.de>, Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
+	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
+	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
+	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Leon Hwang <leon.hwang@linux.dev> writes:
+On Tue, Mar 24, 2026 at 6:00=E2=80=AFAM Yi Liu <yi.l.liu@intel.com> wrote:
+> On 3/24/26 07:57, David Matlack wrote:
 
-> xdp_has_frags was introduced by the commit
-> c2f2cdbeffda ("bpf: introduce BPF_F_XDP_HAS_FRAGS flag in prog_flags loading the ebpf program").
+> > --- a/drivers/vfio/pci/vfio_pci.c
+> > +++ b/drivers/vfio/pci/vfio_pci.c
+> > @@ -170,6 +170,7 @@ static int vfio_pci_probe(struct pci_dev *pdev, con=
+st struct pci_device_id *id)
+> >       ret =3D vfio_pci_core_register_device(vdev);
+> >       if (ret)
+> >               goto out_put_vdev;
+> > +
 >
-> The commit f45d5b6ce2e8 ("bpf: generalise tail call map compatibility check")
-> was to ensure backwards compatibility against tail calls. However, it
-> missed that XDP progs can be extended by freplace progs, which could break
-> the backwards compatibility, e.g. xdp_has_frags=true freplace progs are
-> allowed to attach to xdp_has_frags=false XDP progs.
+> a meaningless line here.
+
+Will fix in v4, thanks.
+
+> > --- /dev/null
+> > +++ b/include/linux/kho/abi/vfio_pci.h
+> > @@ -0,0 +1,28 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +/*
+> > + * Copyright (c) 2025, Google LLC.
 >
-> To avoid breaking the backwards compatibility via freplace, disallow
-> freplace on XDP programs with different xdp_has_frags values.
+> would be nice to update 2025 to 2026 now. :)
 
-The problem you describe is not actually a problem, though? A
-frags-aware program can run on a non-frags interface just fine.
-
-You're messing with long-standing behaviour (since 5.18!) to solve a
-non-existent problem. In a way that completely breaks the frags handling
-in libxdp[0]:
-
-    Running tests from ./test-libxdp.sh
-     [test_link_so]                PASS
-     [test_link_a]                 PASS
-     [test_old_dispatcher]         PASS
-     [test_xdp_devbound]           PASS
-     [test_xdp_frags]              FAIL
-          Kernel supports XDP programs with frags
-          check_load_frags:	FAILED
-          check_load_nofrags_success:	PASSED
-          check_load_nofrags_fail:	PASSED
-          check_load_frags_multi:	FAILED
-          check_load_mix_big:	FAILED
-          check_load_mix_small:	FAILED
-          Test test_xdp_frags exited with return code: 1
-
-
-Please don't do that.
-
--Toke
-
-[0] Run 'make test' here: https://github.com/xdp-project/xdp-tools
-
+Oops, missed this one, thanks. Will fix in v4.
