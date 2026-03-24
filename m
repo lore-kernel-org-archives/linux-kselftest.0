@@ -1,184 +1,95 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011007.outbound.protection.outlook.com [52.101.57.7])
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0283FF8A7;
-	Tue, 24 Mar 2026 12:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774355520; cv=fail; b=HA+faQqb0yRerxUjbjdHDla/D+salvEs64BGiT3WMVAAC+op++Vp7b0N1IJaYw6MHn8bm2J+a4VU1tgHHpvnAvh2wGdOP/fQav86RxBb5reRXDOSosfhwKShBCKtCpoNFUtpbslZBrDulo0hqUsvOoIvYVmwRoxU6zv72G/QAhs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774355520; c=relaxed/simple;
-	bh=4eeUc9RIHIgWXag318UGpUedrMXCEQ+cUkvCB4gfNTs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gfmx2IPWBXExIqGeOhIcYKx2eoPjhXwP/l7d5QYBSfglE5BlM/cMzIR/z4rWZRLaBF0HDhbZe6DgQGS7wKTm7diqI8WqLw9ov3KY/kijh//BLtn7QDFAg1yosjhM4Qrs6CLjcHmUFq55GSDOl09NwmvXN50n7gDFEJcmdBZoHVo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YK98mlM8; arc=fail smtp.client-ip=52.101.57.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9C43D47B3;
+	Tue, 24 Mar 2026 12:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774355805; cv=none; b=J0FrEvxlzGVjnYA9FKGuL3jKQqhkrg2F4yWimp0WrXit89NoiJYufLAD3MC9hmTc/ymhbsWuMnCitMYIjF+dVSEJ07c84FtMeUjeV5M99Dhl8yG6YIc0epk/YUO2cbZ30XqrBL6Xr73cLlnS+yTtw27B5SokX42c3U4LE33DTVE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774355805; c=relaxed/simple;
+	bh=6LAgfuE8PM3f0lc0stGjabRMCEBuAblH4igPBqp4HX8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M9s+j+tg/KcUoeAHxnmagIfGbtve3kV3kATziHlOrhb0TGmraeTpl0e+xlQoudKHW0g8nbQn83fAvso1t5b4abxZFjzSZOESoowmf7z75FbXGSEC/CxXs2SATckPzoeikkR5hlV+fxg/PIGcUbPbrIyXpPlKe/+1lt3Mv+Dx73Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=W8qWhQFB; arc=none smtp.client-ip=115.124.30.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YK98mlM8"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=may//gz0jxHyISvcygepgM9i94KRhZ0yyPCnm6qIMJPcZcHXIG6N+NZo/5eqS/vQhvRcnG2emix9BUvIbZJQQMDKpQrfmBQWncyWYsc7meHUwc5apUbEOizrnYKgLkm1NImvVlleUCc/iLu60NwJL2y0A0rMyYzvoR18XeWkOVQTN+FrP52oHqy1kZ7o9WPyCrz7DvDep+l2Qlf17JSIreDl8/xnqU+c4qo+n+Qe0eJsJNcrUinz4OhnUW0r4XInZ5AEZMAGIY2cOza/tZEemfqjCQgyZZU2fwpbrb6OHZX9o08zJLIWUR14FoUcr6CPxVFm8yM7HgdOO8M1WBsCxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2unoNL8G4Xxr5VtprXpzS1NFU/fJvHFzPSMcT54g87Y=;
- b=vFgQfJGoWi2A2CVkW3Rff0vTt6plkbXoETvwhosrKBz+orveSZjT+fGrDdGLcrvSbJR5mf8XnSSjAMd9E6VvTJvdAGkcMJtJEDkMlIOTrsG9JVU97luh23cOyuHByegK0qpF7xt9UtD8mk5qIFKSQO16KF+owEgUVpVFEREDJws2V7RH2F12dg6KKJ50M7ScaZnhgBPA3UjtkAMS5dhyJjWdMU03NulUYs4udZ93F5heIYS/adN/gNIfl1J9RBPFal1yJFc6GJiT6yHVNxbA3xUbyK6W/XRVSuHP09dHziBN/+jt2u90QZhQiWdxhgcw1IH9eXWwfTaabBdmwWsb1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2unoNL8G4Xxr5VtprXpzS1NFU/fJvHFzPSMcT54g87Y=;
- b=YK98mlM8wDnSfqf/0c+sLnDVYZqxjif4/V6xc5OMpLgN/alcApCF+fd4hh5vyswcoyPhZjfMc0BpN+RWy0kqVmLWjHPmDPVzRdCz8lSAwVP7jPqnyTCghWV7Mal4BvR1iHtDYiZX2Yv4RIFqsi6N8hrjBTHo+2W7dkjljZ9oOrbulF33dNJUItArMSa1Y9rXcdWPPxgq/+iSwl+DypHVLIdjJxfATXndDGt9iF7dTyunlGbU1xIUbgTEOuUbiCgkbe22ikF/oo7hQKyWd3ADYX4ZcX4QEwSTsIiGSllhL4vT9kN8WB02ZnnXz8ClYB/MxkoRHkZLGEkrL3G+9cugsQ==
-Received: from BL1P221CA0038.NAMP221.PROD.OUTLOOK.COM (2603:10b6:208:5b5::9)
- by LV2PR12MB5751.namprd12.prod.outlook.com (2603:10b6:408:17d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Tue, 24 Mar
- 2026 12:31:52 +0000
-Received: from MN1PEPF0000ECD9.namprd02.prod.outlook.com
- (2603:10b6:208:5b5:cafe::8b) by BL1P221CA0038.outlook.office365.com
- (2603:10b6:208:5b5::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend Transport; Tue,
- 24 Mar 2026 12:32:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MN1PEPF0000ECD9.mail.protection.outlook.com (10.167.242.138) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9723.19 via Frontend Transport; Tue, 24 Mar 2026 12:31:51 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Mar
- 2026 05:31:34 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Mar
- 2026 05:31:33 -0700
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Tue, 24
- Mar 2026 05:31:24 -0700
-From: Tariq Toukan <tariqt@nvidia.com>
-To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>
-CC: Donald Hunter <donald.hunter@gmail.com>, Simon Horman <horms@kernel.org>,
-	Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Saeed Mahameed <saeedm@nvidia.com>, "Leon
- Romanovsky" <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
-	<mbloch@nvidia.com>, Chuck Lever <chuck.lever@oracle.com>, "Matthieu Baerts
- (NGI0)" <matttbe@kernel.org>, Cosmin Ratiu <cratiu@nvidia.com>, "Carolina
- Jubran" <cjubran@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>, "Shay
- Drory" <shayd@nvidia.com>, Kees Cook <kees@kernel.org>, Daniel Jurgens
-	<danielj@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>, Adithya Jayachandran
-	<ajayachandra@nvidia.com>, Willem de Bruijn <willemb@google.com>, David Wei
-	<dw@davidwei.uk>, Petr Machata <petrm@nvidia.com>, Stanislav Fomichev
-	<sdf@fomichev.me>, Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, Gal Pressman <gal@nvidia.com>, Jiri Pirko
-	<jiri@nvidia.com>
-Subject: [PATCH net-next V8 14/14] net/mlx5: Document devlink rates
-Date: Tue, 24 Mar 2026 14:28:48 +0200
-Message-ID: <20260324122848.36731-15-tariqt@nvidia.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20260324122848.36731-1-tariqt@nvidia.com>
-References: <20260324122848.36731-1-tariqt@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="W8qWhQFB"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1774355799; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=gsbBTSXyjpjhQEZuCSqVwoWgeHUnKm4qEkYJLH/MHak=;
+	b=W8qWhQFB3hB4MQueuAre0jwk2hStSFwdVRWO66uQTzZFPLPceOs0ePpbyKDG9t/j5A75FRBz1EmBeGwm18tVYct/n5+cO/9WM+T1aZ8nnVq+VKBv3Ob+WFZDF/p7WtHz+In2RXhV/+wGXL5rnYKPfRmavuidUEaIhQan05zDH8Y=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=26;SR=0;TI=SMTPD_---0X.eWiee_1774355796;
+Received: from 30.42.98.36(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X.eWiee_1774355796 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 24 Mar 2026 20:36:37 +0800
+Message-ID: <52c26e05-5bbc-4f63-84bf-c4879a6de7d1@linux.alibaba.com>
+Date: Tue, 24 Mar 2026 20:36:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD9:EE_|LV2PR12MB5751:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5270c316-bc1d-48f4-6760-08de89a153c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700016|1800799024|22082099003|56012099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	kwS9lbK+r3gk9nxUpR5TbBUxvpOpGjEqQ0KNtmCvwIRCIMOjdmtPB0emx71wKH+tf5YNH+3gQtsXETYxoF6v6u/ulO0Ti7o8ghpT0hiux0rIAKWDQBGC3SnKKGGT/u5X3PNhZ5+jtFZ/DsRG6g1u3KQfRV3lkWjrpiEOZ8Jo8ehnpmpcfLUdMZY9LqaFl/n4TpQ58wtJXgfAtvn95pQCnOHI4jh5V2c3Ywd/PAe/TIkgBQMtUfCArPrP98gI0O+GFkzfAlsDPxnfi4yRJo6xSqNTkE+fsJDt+CFji3cr024+oIEVrYCeIiq7kt6aZrijItYmu21beeUoahI4lUZHpqiV7kPM9Pf3oM1D/o5r/za/XBhbFdpJIEFl+TKDcc/Z1U2eCcepevtRl5kYUjfiY96Neap9Plkv2Yw8ziPq+4vhp8rnFo0PZ4a+cdP2OEl6AsNTbfgryk4eymjXcYL6exnesVZ1Arh3SxnaF/KmCfuK+YT5PF2HuxqiKS3An2Pbi3g+YD6tHY4f2GHQNhJD6Nx5yGcHaQZEbMuEa+dOxzP0aHyAdXMI3HoTq7JApV9nvCxeB3OT69VabztohazKUZG8abwTn/YP3YVXz3blWRIcpYm7zllq4hWLTxMB4SwJjlYGRNxtA9xhOZBTChHSCgjjuKIT/G7tmqPTbl69evAG1N1CUEZS7dtgxyAAZ7vBSi6Ae2/2mL/a6B3mRVeCgmzfbLU57clH4LiUcGP32VuAS+csC4Bu+6cM77o1QYQYhX8Cg8M0GSe4WIeiBeoZew==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700016)(1800799024)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	3U53vmerjCxiqcHdhQQZcwBIjxDiawBOdtHZaZ6ykoY87NqHqh1Hzdm3x0FEKNXQfLPa9D3lmzt+P/mjiCl2XiwXk4ZDPvtrE5vPWYt2pr1zj36Bjq2VUbVZ22aFkX3ZpunmF23JnxV+2D0SY7kTn7EHcmdHh1sOdKJo7uaQzUjc6GeUCvnRwR+6OLmJmbMcNjb+z+FolXLtHRPZfupaBAXMtSEAFnd4HBNluG+jTx6CC0WowXzz7GWeZXKywZk42EF4hmsUdsuH0T6XEB4uNzrgpMXVqEsr9udKFpU2j2qeQmuO2pLXX/mCI7FyrkCp0YwRzTZMAXKilt4BSbEFD90v44Wl22sHRVvrWDutw5aCPcPsEMFNWDM0tXWCD2GUop67R47//SWfLaj/oW8hlUS+gmHzU6qOVwcy3i5D0DglEi06A/QEfDEOs6ql9nlX
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2026 12:31:51.9508
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5270c316-bc1d-48f4-6760-08de89a153c8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000ECD9.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5751
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v2 5/7] mm: selftests: Add shmem memory failure test
+To: Lisa Wang <wyihan@google.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>,
+ Naoya Horiguchi <nao.horiguchi@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Hugh Dickins <hughd@google.com>, David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, rientjes@google.com, seanjc@google.com,
+ ackerleytng@google.com, vannapurve@google.com, michael.roth@amd.com,
+ jiaqiyan@google.com, tabba@google.com, dave.hansen@linux.intel.com
+References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
+ <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-5-92c596402a7a@google.com>
+ <78a855da-8fc2-4e85-90a0-6bf9af030c02@linux.alibaba.com>
+ <acHeLL0l948jRchK@google.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <acHeLL0l948jRchK@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Cosmin Ratiu <cratiu@nvidia.com>
 
-It seems rates were not documented in the mlx5-specific file, so add
-examples on how to limit VFs and groups and also provide an example of
-the intended way to achieve cross-esw scheduling.
 
-Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
----
- Documentation/networking/devlink/mlx5.rst | 33 +++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+On 3/24/26 8:43 AM, Lisa Wang wrote:
+> On Sat, Mar 21, 2026 at 02:30:04PM +0800, Baolin Wang wrote:
+>>
+>>
+>> On 3/20/26 7:30 AM, Lisa Wang wrote:
+>>> Add a shmem memory failure selftest to test the shmem memory failure is
+>>> correct after modifying shmem return value.
+>>>
+>>> Test that
+>>> + madvise() call returns 0 at the first time
+>>> + trigger a SIGBUS when the poisoned shmem page is fault-in again.
+>>>
+>>> Signed-off-by: Lisa Wang <wyihan@google.com>
+>>> ---
+>>
+>> Why not move the shmem memory failure test into memory-failure.c?
+> 
+> Do you mean let memory-failure.c kernel code check by itself?
+> The reason I write the selftest instead of combining in memory-failure.c
+> is because
+> + do not need extra checking code in kernel code
+> + make it easier to trace the entire execution flow, starting from the
+>    madvise() down through shmem_error_remove_folio() and into the
+>    truncate_error_folio() logic.
+> 
+> Pleas let me know if I've missed something. Thanks!
 
-diff --git a/Documentation/networking/devlink/mlx5.rst b/Documentation/networking/devlink/mlx5.rst
-index 4bba4d780a4a..62c4d7bf0877 100644
---- a/Documentation/networking/devlink/mlx5.rst
-+++ b/Documentation/networking/devlink/mlx5.rst
-@@ -419,3 +419,36 @@ User commands examples:
- 
- .. note::
-    This command can run over all interfaces such as PF/VF and representor ports.
-+
-+Rates
-+=====
-+
-+mlx5 devices can limit transmission of individual VFs or a group of them via
-+the devlink-rate API in switchdev mode.
-+
-+User commands examples:
-+
-+- Print the existing rates::
-+
-+    $ devlink port function rate show
-+
-+- Set a max tx limit on traffic from VF0::
-+
-+    $ devlink port function rate set pci/0000:82:00.0/1 tx_max 10Gbit
-+
-+- Create a rate group with a max tx limit and adding two VFs to it::
-+
-+    $ devlink port function rate add pci/0000:82:00.0/group1 tx_max 10Gbit
-+    $ devlink port function rate set pci/0000:82:00.0/1 parent group1
-+    $ devlink port function rate set pci/0000:82:00.0/2 parent group1
-+
-+- Same scenario, with a min guarantee of 20% of the bandwidth for the first VFs::
-+
-+    $ devlink port function rate add pci/0000:82:00.0/group1 tx_max 10Gbit
-+    $ devlink port function rate set pci/0000:82:00.0/1 parent group1 tx_share 2Gbit
-+    $ devlink port function rate set pci/0000:82:00.0/2 parent group1
-+
-+- Cross-device scheduling::
-+
-+    $ devlink port function rate add pci/0000:82:00.0/group1 tx_max 10Gbit
-+    $ devlink port function rate set pci/0000:82:00.1/32769 parent pci/0000:82:00.0/group1
--- 
-2.44.0
+That's not quite what I meant. I mean, since there is already a 
+memory-failure.c in mm selftests (see [1]), I think we should move the 
+shmem memory failure test cases into that file.
 
+[1] 
+https://lore.kernel.org/all/20260206031639.2707102-1-linmiaohe@huawei.com/T/#m18e62ccb3e87316ec37dcde9389c1ba1c56d0951
