@@ -1,102 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43D81DEFE0
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 00:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8F3224B04
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 00:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774311442; cv=none; b=TDo+l05ue7FLZx1kULlhKwLh0eASHTcvXSA1d4GL3eBunAJYzQHZGqL4FPvileewPImirYZ6DfRQMUF+livR6+Jg5lTc4LNsFWFq1WpsuxYHxeRxlz4ycKsRFlvOaezG5Uz9AkL0DN0TnagpX5Sq4BrlOtCRMzdR0CEYueFdLn0=
+	t=1774311531; cv=none; b=Qy26xrARChtIUJCXTPwvWQieIocXuwQe1tQXTG18OJMajRH6PafXW3gA446b9Vh08w/FWya45POA9uee92jYTXmuCq7rPUVSYKAnImUjEtT5tP3yZFZFblGPvT5I9cLgerT16oOnDB1MqOFMMhQTr9NAhUES22ZSfK0ccwrE1p4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774311442; c=relaxed/simple;
-	bh=mkPMr+Ubw3gE/jNPJ4cFqrp/19KQd/EAePHNoJi1hak=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c8vFqskJ9hSLRY1C4A+kiz8/Pw8Y6AB83KTZItL6wRPmm2Gw8z+JZsw6KlZe8lFjdEDQa3OPf9YFu/w6O58VjOcsrbPU9XCENuOUnO/t66s5jpU6XzXF/Um5+Jgt1KmqBW6rpZHO6PYM9tSfhjRJLk672WIn+TCx6+k3Uqszi0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rsogh3ho; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774311531; c=relaxed/simple;
+	bh=yGy7Z8uzxyxPErpPsYIHwK2yeSQehWyyHFDQvdpmNi4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rrWzxlfx7VAqxpZrM+083g1b5SRpi1oFWbrsQM+bfZq7Kr8b2u2/gjCzPCmHi9PY2UVnBZqT1RKMSdgWrqef++j5DY7AqYRP1O6wwJrx3i1bvYIm2cbe4JfpvZ9dWX/EptwyCNut3b6oKyJmoJygaxhnPESH8SXsXEgRkexWxFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dWnHBod7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rsogh3ho"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56ED6C2BCB7
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 00:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774311442;
-	bh=mkPMr+Ubw3gE/jNPJ4cFqrp/19KQd/EAePHNoJi1hak=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Rsogh3hoyoYJmf99kdqKt6lBJDTP+1xdPyj5kVS2IlN8iHQ3wzE8MkGQ2vG/+vCIQ
-	 jglMKyhVHQJLdfMPDmwTBMOYPrv3+D+zxHavwso9XNlhtALMMJjzVyWn1cyTquak5J
-	 eYPMoo4H9FNyOu7lRZ4j9CFL0iSDN1ty/nOFJ4CcUJFJDOyfvelrs4EnK/wpc3lDi3
-	 vUn5cGfhk9lLEhPwXRKx6PF/rSZNgL8Nn4GVPiuqcdjrhzR7kqcTLKCBF6Lk5unZeU
-	 brDDMtaAqTyg+Z5imL12U3VK6iprVbhLo9pompG9YcNDMsaP1Af8EnYT7q/u04edCt
-	 eUEztT/Te8+ag==
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b936331786dso530410266b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2026 17:17:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWjAbNDc7uPziae861AgllaibOUsWTMna1wunrmJpbTsDUqHoQyuJVCAekOGI9MZdhSH1NpNdVHXyHGgG+M040=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/iuP2esl/Rb0XvPqpCqG86LhdaRNaj+l5UwxkSsTknvJgqFSw
-	YvNAMCD6AVHqkYNkOGWymRL84o5oEdqrgHbzUnhdxr/rc/upLCGZCcEFK0ZWY9xjgfFZkQqBy+Q
-	4wFH77dBXseO1QNqQc/lBclSqbBm43QI=
-X-Received: by 2002:a17:907:3f28:b0:b98:4e9b:7e49 with SMTP id
- a640c23a62f3a-b984e9b9366mr668007566b.33.1774311441088; Mon, 23 Mar 2026
- 17:17:21 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dWnHBod7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774311528;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vXzLmy9yBL+MosyDIkq8eObiDBonWwPvsZwMJQOiiLk=;
+	b=dWnHBod7kcsix+tqXG3QQpceFBJ+m8IOb8fLo9J7n1SnrG1B9Bhdk6da4F6ilCE9F/p7IJ
+	ON+Tocgd38zR8QTnLE8+ivvjxH2Fk4GaJCw+Ja1CKBKeoYR0R0/7irZXI+tOsd4ZwVuYpV
+	AyL0n++0c/yVePxKxWEazjNT3K3jOS4=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-482-wdIQRatmOOyip77YOmUoFg-1; Mon,
+ 23 Mar 2026 20:18:43 -0400
+X-MC-Unique: wdIQRatmOOyip77YOmUoFg-1
+X-Mimecast-MFC-AGG-ID: wdIQRatmOOyip77YOmUoFg_1774311520
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DEF5F19560AA;
+	Tue, 24 Mar 2026 00:18:39 +0000 (UTC)
+Received: from gmail.com (unknown [10.72.112.53])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6DF5419560AB;
+	Tue, 24 Mar 2026 00:18:30 +0000 (UTC)
+Date: Tue, 24 Mar 2026 08:18:24 +0800
+From: Chunyu Hu <chuhu@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com, npache@redhat.com,
+	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
+	lance.yang@linux.dev
+Subject: Re: [PATCH v5 4/6] selftests/mm/vm_util: robust write_file()
+Message-ID: <acHYUE1rn5TYyxgR@gmail.com>
+References: <20260323151753.2576137-1-chuhu@redhat.com>
+ <20260323151753.2576137-5-chuhu@redhat.com>
+ <20260323153941.289938dd9ced4dbb76ca7804@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260320204241.1613861-1-longman@redhat.com> <20260320204241.1613861-3-longman@redhat.com>
- <acE2WDuto9cdp5Lx@redhat.com>
-In-Reply-To: <acE2WDuto9cdp5Lx@redhat.com>
-From: Yosry Ahmed <yosry@kernel.org>
-Date: Mon, 23 Mar 2026 17:17:09 -0700
-X-Gmail-Original-Message-ID: <CAO9r8zNqHVCOYcun=WWwF3CROi-nLAsJUSJJtcsrQGUKF-CKQQ@mail.gmail.com>
-X-Gm-Features: AaiRm531iQ3S4jGCxOVHcyk6sudkGI-5HpMDYVgYjNPDeV0yeExZpsLA0GLu9_E
-Message-ID: <CAO9r8zNqHVCOYcun=WWwF3CROi-nLAsJUSJJtcsrQGUKF-CKQQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] memcg: Scale down MEMCG_CHARGE_BATCH with increase
- in PAGE_SIZE
-To: Li Wang <liwang@redhat.com>
-Cc: Waiman Long <longman@redhat.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	Sean Christopherson <seanjc@google.com>, James Houghton <jthoughton@google.com>, 
-	Sebastian Chlad <sebastianchlad@gmail.com>, Guopeng Zhang <zhangguopeng@kylinos.cn>, 
-	Li Wang <liwan@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323153941.289938dd9ced4dbb76ca7804@linux-foundation.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, Mar 23, 2026 at 5:47=E2=80=AFAM Li Wang <liwang@redhat.com> wrote:
->
-> On Fri, Mar 20, 2026 at 04:42:36PM -0400, Waiman Long wrote:
-> > For a system with 4k page size, each percpu memcg_stock can hide up
-> > to 256 kbytes of memory with the current MEMCG_CHARGE_BATCH value of
-> > 64. For another system with 64k page size, that becomes 4 Mbytes. This
-> > hidden charges will affect the accurary of the memory.current value.
+On Mon, Mar 23, 2026 at 03:39:41PM -0700, Andrew Morton wrote:
+> On Mon, 23 Mar 2026 23:17:51 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
+> 
+> > Add two more checks for buflen and numwritten. The buflen should be at
+> > least one, otherwise the 'buflen - 1' could underflow and cause trouble.
+> > The numwritten should be equal to 'buflen - 1'. The test will exit if
+> > any of these conditions aren't met.
+> > 
+> > Additionally, add more print information when a write failure occurs or
+> > a truncated write happens, providing clearer diagnostics.
+> > 
+> > ...
 > >
-> > This MEMCG_CHARGE_BATCH value also controls how often should the
-> > memcg vmstat values need flushing. As a result, the values reported
-> > in memory.stat cgroup control files are less indicative of the actual
-> > memory consumption of a particular memory cgroup when the page size
-> > increases from 4k.
-> >
-> > This problem can be illustrated by running the test_memcontrol
-> > selftest. Running a 4k page size kernel on a 128-core arm64 system,
-> > the test_memcg_current_peak test which allocates a 50M anonymous memory
-> > passed. With a 64k page size kernel on the same system, however, the
-> > same test failed because the "anon" attribute of memory.stat file might
-> > report a size of 0 depending on the number of CPUs the system has.
-> >
-> > To solve this inaccurate memory stats problem, we need to scale down
-> > the amount of memory that can be hidden by reducing MEMCG_CHARGE_BATCH
-> > when the page size increases. The same user application will likely
-> > consume more memory on systems with larger page size and it is also
-> > less efficient if we scale down MEMCG_CHARGE_BATCH by too much.  So I
-> > believe a good compromise is to scale down MEMCG_CHARGE_BATCH by 2 for
-> > 16k page size and by 4 with 64k page size.
-> >
-> > With that change, the test_memcg_current_peak test passed again with
-> > the modified 64k page size kernel.
-> >
-> > Signed-off-by: Waiman Long <longman@redhat.com>
+> > --- a/tools/testing/selftests/mm/vm_util.c
+> > +++ b/tools/testing/selftests/mm/vm_util.c
+> > @@ -769,6 +769,8 @@ void write_file(const char *path, const char *buf, size_t buflen)
+> >  {
+> >  	int fd;
+> >  	ssize_t numwritten;
+> > +	if (buflen < 1)
+> > +		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
+> >  
+> >  	fd = open(path, O_WRONLY);
+> >  	if (fd == -1)
+> > @@ -777,5 +779,9 @@ void write_file(const char *path, const char *buf, size_t buflen)
+> >  	numwritten = write(fd, buf, buflen - 1);
+> >  	close(fd);
+> >  	if (numwritten < 1)
+> > -		ksft_exit_fail_msg("Write failed\n");
+> > +		ksft_exit_fail_msg("%s write(%s) failed: %s\n", path, buf,
+> > +				strerror(errno));
+> 
+> AI review
+> (https://sashiko.dev/#/patchset/20260323151753.2576137-1-chuhu@redhat.com)
+> points out that `errno' was overwritten by the close().  Maybe.  Or
+> maybe a successful close() leaves errno alone, dunno.
 
-We need performance testing for this too.
+I'll address this errno part by adding a save and restore before/after
+the close().
+
+> 
+> Apart from that the comments appear fairly minor.  Please lmk if you
+> think we should proceed as-is.
+
+For the other two minor questions about buflen == 1 and non-null
+buffer, user should know a string buffer need to be '\0' ended. 
+Those are really minor, we can leave as it is. 
+
+
+AI's comment on patch 5 should be other topic, and minor. Let's 
+leave as it it.
+
+> 
+> (I'm really trying to slow things down now - we have a *lot* of
+> material and a few weeks of consolidation is needed.  But selftests/
+> tend to get a pass, for obvious reasons)
+> 
+
