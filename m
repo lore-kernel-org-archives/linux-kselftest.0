@@ -1,267 +1,324 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-ed1-f98.google.com (mail-ed1-f98.google.com [209.85.208.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9BF3DA5AF
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 09:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D2234678C
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 09:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774343296; cv=none; b=KPE6UvkYz/Hv43T+1qRSDrIHcb0wmDqUcvhfCwESPqi1QGxcRCXxSKjtiTd4mJvU5kSlx5/qIopcuznmEtZYzxA+uI8LGMKSPxujoN5v2fVj2k8DdRrTcRgBWhym5Oqr2xdXBL+OIMM75dd2e5L2DHl9uC6FifOLhAn2PN9XYvA=
+	t=1774343725; cv=none; b=O0DYM+MUnotryJSJtgAnX7A8do2UYniI8y97pqkI5Ahwkc+/PFRdIiKShNXLRR2Yk6jz6MFGhL+Yzae7NC4PUegK6qWDjRGmxdNFqAox5dxNrkqiLVJvq7yr0Zmb4RDwZ2UE25R1V+ti9uj3z1XWtqtNtmLmKYGmvuh35ZOs/Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774343296; c=relaxed/simple;
-	bh=e+gA50E2IBb9u8S3bLxNlVFF+W6SP0VGja3mMkQZ1yk=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kI6Fy8smI8VhZgzedI+JlJfSWuyad05vFY2kTt/jq8YxbCK9bpuFuLaZ0+Pwnhj9nqP2LBMcCGsnWECLOeu5NtsAk+5amG3tGlVcfZnhjQKagJiFp/rR2CDcmsWxaz9jvEUGTQhApEapP2TowyxjYat0sFyge5hoFcISeADbof0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gkDQu2Dc; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774343725; c=relaxed/simple;
+	bh=WvTodBSYGhJ9zcnSeSh7PqdQDKcu64SWFovudUmI9y4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=dT6AjuRXsuOIfzliTr/BtfOZby/CkroqrOsi1UA+b5D2FBkZbaHdAW/I/N3qO7KfOL4JRH4S2qv2cABEJjbx+wBNE5shOekXrbl7GIVrcsMiX5h3YPTSqba4FlqwtEutG8tf7WDBHddGrvly5EMnmlyspI3zM3PG6958RCH+Gms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=I5D50hE6; arc=none smtp.client-ip=209.85.208.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gkDQu2Dc"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-486ff3a0fc1so31091085e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 02:08:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="I5D50hE6"
+Received: by mail-ed1-f98.google.com with SMTP id 4fb4d7f45d1cf-66971ccfcabso1642770a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 02:15:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774343293; x=1774948093; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tOIaXalNJRsxZ2Q3yvQOO8yVa019WmjP8IC81VGJS5k=;
-        b=gkDQu2Dcd2KtlJNRRb1lVV8BgyGkFZr6aY0pFNTe26jT+FCHp9iKNiKyS3so3jS7DI
-         sjlT01maN3RuLs862lnLZR65f9p9737Pv0uoRQY8szQzXG+Z6AoWdhDhP/6+Bq646lM+
-         xtWh5HwednEgEJEZPyI9jnXtgAFqsFecdaLD7xKnACTpMvQA6nlgXtdsEms9jUzw9S8q
-         rgFmA7/oz1QJrJDiZlqhn8lMAMIhDkrBsPIxIEPnByty01i7DPyAK29ccUfURiIqYyTo
-         M+xtmIiieBmR9+8r44BzL7RKJRekP1FKHwTBxdBxWqJekhiq74d48M+VnoX4yVHB3oi0
-         daIg==
+        d=6wind.com; s=google; t=1774343715; x=1774948515; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FO5SS442aJosf9pm8N+OTooImSscKb80rw0TqiYVF5s=;
+        b=I5D50hE6CGyi/yVV18rRcxsVVHJEbx7c/DzT6lrScu7ggQJV84r6bVcAL6UHQGvGCJ
+         vmvcNn07YBpYdNNSwWk29upFI9KXWML04cGgrxMdObEjIdD/LctSR05kCdksbQuPkdcE
+         Y03llbDVkwbVx1kTok2kKZ/lHnL25G+HEGtOJCp4By1wJ74b2+0mrn0m6a+g6ot8aIvd
+         3F2r+l9tpv1Gk6F9r1GPGvPre5/StX3qOjOnmz4GcafvsTk7U0gEo0u4uTdPY4uct966
+         ttDFMvMZBC35yq5m6ae8XgsTmB5NV6m31UcpR1cAUIb1mXNaoQzTpBvj9PkDCzzD3DRz
+         Qq1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774343293; x=1774948093;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tOIaXalNJRsxZ2Q3yvQOO8yVa019WmjP8IC81VGJS5k=;
-        b=il+asNlysYxQAfyMu2oVhuDtE3qnUFLJsymRKhNDTm8PeVknaR9ICUbjSXzT6iENSt
-         BAGvJNAP9D07u4ej4N6rzkSZZnHc63OxZHWJgigYQc0QU3wpxP2Uhhh+lDOqcFq73pzo
-         FDdY73YBjbR+PSaG+AB4zCMlbJ1PUznSUdMoKaJoVDUKXvAfQ7/YMACmaC2ZI3eObg7q
-         lKC1dM1iRnLjVzVjARHCr5JrX0+AlS16Anl1yDF2nWjPMxvrmTxtDI4TpBmcC+YBTfzy
-         3RYycQID5T9KaTG3D+NL7H42dObg7v5ryPdjkhlnC05M4P+ChQUmBBOol3YqSNdHAk9b
-         Ahow==
-X-Forwarded-Encrypted: i=1; AJvYcCXyc7ZCtwSa7GqKt0reDj+Ii71d/IcA5kgAVjuPwFF5HW5hCZcX1Bn1otPAQjLvpkiVeZP7Gdnz+IJqWBbP59M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPOpl8LQK39VvEulpgSgfht0LmolpK5sGiFC565+zyfCzcdBy7
-	8T6tGp80rDVHnL9Vhkc5qUdOXq0ow5O/GhHwB0y8p8D6CrHSuv8dy6tM
-X-Gm-Gg: ATEYQzzz2/Oy34VjDDuFNjA9h9nNoozsK27jQ8MAZvPUOZpweUhffkhzoR3Onlk5wXk
-	JPkOZwTKBVliZlzDTbxPloYFmrOQklu1fX0uV5ad9POfBVQfM+e3JKwCU3IkR5IiDBH7VuT+R2L
-	9alnp4tsNSdp2gXKKlMgraoZ5MKjIJ4UuOZrlAcCb21uwdbRj7d/JQsHlxdEPFYksf+hhiiohj7
-	aR2KKndcHw1OXdhiwYotDzKcAvAZjvCP1CPz+DRwF/0+plHWVCVh/4WD6+noRhH1NEB2Z1P5/yh
-	D4vuUnsijTIsC4lMIM77C3AEQxzaJFNyMC1DRuXOkYM9ANgzDjCHWXEhu8WuhQbmAfJwWYWaDss
-	cjtzrW0F+DgMZxfCAGyV6REK4hMyb4RnYn41pBIaRjXnK9wH6a5lt1W4UtP9wwYwWApQGzpFn
-X-Received: by 2002:a05:600c:548e:b0:47e:e2ec:9947 with SMTP id 5b1f17b1804b1-486ff029336mr206230835e9.33.1774343293046;
-        Tue, 24 Mar 2026 02:08:13 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644ae37dsm37201900f8f.2.2026.03.24.02.08.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 02:08:12 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 24 Mar 2026 10:08:10 +0100
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	shuah@kernel.org, paul.chaignon@gmail.com,
-	mykyta.yatsenko5@gmail.com, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] selftests/bpf: move trampoline_count to dedicated
- bpf_testmod target
-Message-ID: <acJUehe8C0Sv1TmV@krava>
-References: <20260324044949.869801-1-sun.jian.kdev@gmail.com>
+        d=1e100.net; s=20251104; t=1774343715; x=1774948515;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=FO5SS442aJosf9pm8N+OTooImSscKb80rw0TqiYVF5s=;
+        b=ca+WNYDkGni7enpYo1mBEaQSUbWaWmth/ymMw0sVezdjco8/W9sQKguodpgGRxaIcn
+         6NQIALt2hQt+EbVkor1+naUDBhGZ4ZfPrZlpBb90sHWSMcim4kYIvIttio1SU0tKIuZg
+         a0rhKjQzgA4mgw//UrsPLL5KsPbY6FH5V+q9bv2mevCHwkfAiKl1V0QQCW2ZRnVlRbEb
+         GZ4GJ1r/Eavar43hwE1hUQU1bEr7c/CI07tzotrwPyutc9s6cijPzOv4hAX8oAStosy5
+         k0QLT8NwtAqMyT1D1wrng0EDJtqMDsOQ4przkL6KQKqlQ3Za8K5k4gGA4KQGWj6aW36n
+         JKAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUCyhDiVqODpio2vK5kdXY8kRgKT+MWP7MeF9JhYwKvIYcLDUwRbsK8FecTu65xA3m2V6S6AMPeiUslcf/kimY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yybqvg7mOO1dqn6JxgWXEVVTKK1P2NU9AyJDHhpQNwC18DHJFE7
+	bexbnWHIs0bQaG7gToegu9if6Evr/vFY+Isoslec1I/dUZPt84aiHnILA8Z6vtto2bFAb1L6o6l
+	onRg0+K5XAV3+LMm+9GkIZibbiQVieDcPG4uv
+X-Gm-Gg: ATEYQzwYiXcO5msYTxjFbqrboLQtOKzH8a6kk5UIT1HsJIYOPnSgtGOXkocsvdt74oW
+	1pn0vQbWYmYelMXdxVyxma/XYbubdufQKWvA6Y2mBj2xpiz24/WOvcAD+08wCS+/a6eT5L8DhCh
+	2LEobaFeu6nsWvbFiPoNdOetaOn/ABvEOHgPcBQJffXM+R+ovS0D8nv33tmFftBxsfL08zemWVN
+	Xk6gw/RusZ+4SJ/vCLrDNeUnkSpdDMu20VMoGKT1b72DygGNdLcJDw6pqCIqJTXeF1PoQ2KEx3J
+	iFaWLQnpujXADXHqkvBofacmOBq4jjeh510UdgZgUhgSWyKYArU3v4t9U9sW91sAFcQXFRa6pDM
+	vJCu6Q8Wgl5hJ/f12gYpxlTASjNusRbVYHp2zet38A+esh9pKMOh8c/RZBk3mB6BorBGyhA5IFg
+	==
+X-Received: by 2002:a17:906:59a8:b0:b98:411a:116f with SMTP id a640c23a62f3a-b98411a1ec9mr724824966b.2.1774343715054;
+        Tue, 24 Mar 2026 02:15:15 -0700 (PDT)
+Received: from smtpservice.6wind.com ([185.13.181.2])
+        by smtp-relay.gmail.com with ESMTP id a640c23a62f3a-b98332dc73esm97094266b.50.2026.03.24.02.15.14;
+        Tue, 24 Mar 2026 02:15:15 -0700 (PDT)
+X-Relaying-Domain: 6wind.com
+Received: from localhost (kadavar.dev.6wind.com [10.17.1.232])
+	by smtpservice.6wind.com (Postfix) with ESMTP id D9AEE1E281;
+	Tue, 24 Mar 2026 10:15:14 +0100 (CET)
+From: Justin Iurman <justin.iurman@6wind.com>
+To: netdev@vger.kernel.org
+Cc: andrea.mayer@uniroma2.it,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	justin.iurman@gmail.com,
+	nicolas.dichtel@6wind.com,
+	stefano.salsano@uniroma2.it,
+	Justin Iurman <justin.iurman@6wind.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v5 2/2] selftests: add check for seg6 tunsrc
+Date: Tue, 24 Mar 2026 10:14:34 +0100
+Message-Id: <20260324091434.359341-3-justin.iurman@6wind.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20260324091434.359341-1-justin.iurman@6wind.com>
+References: <20260324091434.359341-1-justin.iurman@6wind.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324044949.869801-1-sun.jian.kdev@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 24, 2026 at 12:49:49PM +0800, Sun Jian wrote:
-> trampoline_count fills all trampoline attachment slots for a single
-> target function and verifies that one extra attach fails with -E2BIG.
-> 
-> It currently targets bpf_modify_return_test, which is also used by
-> other selftests such as modify_return, get_func_ip_test, and
-> get_func_args_test. When such tests run in parallel, they can contend
-> for the same per-function trampoline quota and cause unexpected attach
-> failures. This issue is currently masked by harness serialization.
-> 
-> Move trampoline_count to a dedicated bpf_testmod target and register it
-> for fmod_ret attachment. Also route the final trigger through
-> trigger_module_test_read(), so the execution path exercises the same
-> dedicated target.
-> 
-> This keeps the test semantics unchanged while isolating it from other
-> selftests, so it no longer needs to run in serial mode. Remove the
-> TODO comment as well.
-> 
-> Tested:
->   ./test_progs -t trampoline_count -vv
->   ./test_progs -j$(nproc) -t trampoline_count -vv
->   ./test_progs -j$(nproc) -t \
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test -vv
->   20 runs of:
->     ./test_progs -j$(nproc) -t \
->       trampoline_count,modify_return,get_func_ip_test,get_func_args_test
-> 
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Extend srv6_hencap_red_l3vpn_test.sh to include checks for the new
+"tunsrc" feature. If there is no support for tunsrc, it silently
+falls back to the encap config without tunsrc.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Justin Iurman <justin.iurman@6wind.com>
+---
+ .../net/srv6_hencap_red_l3vpn_test.sh         | 109 +++++++++++++++---
+ 1 file changed, 96 insertions(+), 13 deletions(-)
 
-jirka
+diff --git a/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh b/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
+index 6a68c7eff1dc..cd7d061e21f8 100755
+--- a/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
+@@ -193,6 +193,8 @@ ret=${ksft_skip}
+ nsuccess=0
+ nfail=0
+ 
++HAS_TUNSRC=false
++
+ log_test()
+ {
+ 	local rc="$1"
+@@ -345,6 +347,17 @@ setup_rt_networking()
+ 		ip -netns "${nsname}" addr \
+ 			add "${net_prefix}::${rt}/64" dev "${devname}" nodad
+ 
++		# A dedicated ::dead:<rt> address (with preferred_lft 0, i.e.,
++		# deprecated) is added when there is support for tunsrc. Because
++		# it is deprecated, the kernel should never auto-select it as
++		# source with current config. Only an explicit tunsrc can place
++		# it in the outer header.
++		if $HAS_TUNSRC; then
++			ip -netns "${nsname}" addr \
++				add "${net_prefix}::dead:${rt}/64" \
++				dev "${devname}" nodad preferred_lft 0
++		fi
++
+ 		ip -netns "${nsname}" link set "${devname}" up
+ 	done
+ 
+@@ -420,6 +433,7 @@ setup_rt_local_sids()
+ #       to the destination host)
+ #  $5 - encap mode (full or red)
+ #  $6 - traffic type (IPv6 or IPv4)
++#  $7 - force tunsrc (true or false)
+ __setup_rt_policy()
+ {
+ 	local dst="$1"
+@@ -428,10 +442,46 @@ __setup_rt_policy()
+ 	local dec_rt="$4"
+ 	local mode="$5"
+ 	local traffic="$6"
++	local with_tunsrc="$7"
+ 	local nsname
+ 	local policy=''
++	local tunsrc=''
+ 	local n
+ 
++	# Verify the per-route tunnel source address ("tunsrc") feature.
++	# If it is not supported, fallback on encap config without tunsrc.
++	if $with_tunsrc && $HAS_TUNSRC; then
++		local net_prefix
++		local drule
++		local nxt
++
++		eval nsname=\${$(get_rtname "${dec_rt}")}
++
++		# Next SRv6 hop: first End router if any, or the decap router
++		[ -z "${end_rts}" ] && nxt="${dec_rt}" || nxt="${end_rts%% *}"
++
++		# Use the right prefix for tunsrc depending on the next SRv6 hop
++		net_prefix="$(get_network_prefix "${encap_rt}" "${nxt}")"
++		tunsrc="tunsrc ${net_prefix}::dead:${encap_rt}"
++
++		# To verify that the outer source address matches the one
++		# configured with tunsrc, the decap router discards packets
++		# with any other source address.
++		ip netns exec "${nsname}" ip6tables -t raw -I PREROUTING 1 \
++			-s "${net_prefix}::dead:${encap_rt}" \
++			-d "${VPN_LOCATOR_SERVICE}:${dec_rt}::${DT46_FUNC}" \
++			-j ACCEPT
++
++		drule="PREROUTING \
++		       -d ${VPN_LOCATOR_SERVICE}:${dec_rt}::${DT46_FUNC} \
++		       -j DROP"
++
++		if ! ip netns exec "${nsname}" \
++				ip6tables -t raw -C ${drule} &>/dev/null; then
++			ip netns exec "${nsname}" ip6tables -t raw -A ${drule}
++		fi
++	fi
++
+ 	eval nsname=\${$(get_rtname "${encap_rt}")}
+ 
+ 	for n in ${end_rts}; do
+@@ -444,7 +494,7 @@ __setup_rt_policy()
+ 	if [ "${traffic}" -eq 6 ]; then
+ 		ip -netns "${nsname}" -6 route \
+ 			add "${IPv6_HS_NETWORK}::${dst}" vrf "${VRF_DEVNAME}" \
+-			encap seg6 mode "${mode}" segs "${policy}" \
++			encap seg6 mode "${mode}" ${tunsrc} segs "${policy}" \
+ 			dev "${VRF_DEVNAME}"
+ 
+ 		ip -netns "${nsname}" -6 neigh \
+@@ -455,7 +505,7 @@ __setup_rt_policy()
+ 		# received, otherwise the proxy arp does not work.
+ 		ip -netns "${nsname}" -4 route \
+ 			add "${IPv4_HS_NETWORK}.${dst}" vrf "${VRF_DEVNAME}" \
+-			encap seg6 mode "${mode}" segs "${policy}" \
++			encap seg6 mode "${mode}" ${tunsrc} segs "${policy}" \
+ 			dev "${VRF_DEVNAME}"
+ 	fi
+ }
+@@ -463,13 +513,13 @@ __setup_rt_policy()
+ # see __setup_rt_policy
+ setup_rt_policy_ipv6()
+ {
+-	__setup_rt_policy "$1" "$2" "$3" "$4" "$5" 6
++	__setup_rt_policy "$1" "$2" "$3" "$4" "$5" 6 "$6"
+ }
+ 
+ #see __setup_rt_policy
+ setup_rt_policy_ipv4()
+ {
+-	__setup_rt_policy "$1" "$2" "$3" "$4" "$5" 4
++	__setup_rt_policy "$1" "$2" "$3" "$4" "$5" 4 "$6"
+ }
+ 
+ setup_hs()
+@@ -567,41 +617,41 @@ setup()
+ 	# the network path between hs-1 and hs-2 traverses several routers
+ 	# depending on the direction of traffic.
+ 	#
+-	# Direction hs-1 -> hs-2 (H.Encaps.Red)
++	# Direction hs-1 -> hs-2 (H.Encaps.Red + tunsrc)
+ 	#  - rt-3,rt-4 (SRv6 End behaviors)
+ 	#  - rt-2 (SRv6 End.DT46 behavior)
+ 	#
+ 	# Direction hs-2 -> hs-1 (H.Encaps.Red)
+ 	#  - rt-1 (SRv6 End.DT46 behavior)
+-	setup_rt_policy_ipv6 2 1 "3 4" 2 encap.red
+-	setup_rt_policy_ipv6 1 2 "" 1 encap.red
++	setup_rt_policy_ipv6 2 1 "3 4" 2 encap.red true
++	setup_rt_policy_ipv6 1 2 "" 1 encap.red false
+ 
+ 	# create an IPv4 VPN between hosts hs-1 and hs-2
+ 	# the network path between hs-1 and hs-2 traverses several routers
+ 	# depending on the direction of traffic.
+ 	#
+-	# Direction hs-1 -> hs-2 (H.Encaps.Red)
++	# Direction hs-1 -> hs-2 (H.Encaps.Red + tunsrc)
+ 	# - rt-2 (SRv6 End.DT46 behavior)
+ 	#
+ 	# Direction hs-2 -> hs-1 (H.Encaps.Red)
+ 	#  - rt-4,rt-3 (SRv6 End behaviors)
+ 	#  - rt-1 (SRv6 End.DT46 behavior)
+-	setup_rt_policy_ipv4 2 1 "" 2 encap.red
+-	setup_rt_policy_ipv4 1 2 "4 3" 1 encap.red
++	setup_rt_policy_ipv4 2 1 "" 2 encap.red true
++	setup_rt_policy_ipv4 1 2 "4 3" 1 encap.red false
+ 
+ 	# create an IPv6 VPN between hosts hs-3 and hs-4
+ 	# the network path between hs-3 and hs-4 traverses several routers
+ 	# depending on the direction of traffic.
+ 	#
+-	# Direction hs-3 -> hs-4 (H.Encaps.Red)
++	# Direction hs-3 -> hs-4 (H.Encaps.Red + tunsrc)
+ 	# - rt-2 (SRv6 End Behavior)
+ 	# - rt-4 (SRv6 End.DT46 behavior)
+ 	#
+ 	# Direction hs-4 -> hs-3 (H.Encaps.Red)
+ 	#  - rt-1 (SRv6 End behavior)
+ 	#  - rt-3 (SRv6 End.DT46 behavior)
+-	setup_rt_policy_ipv6 4 3 "2" 4 encap.red
+-	setup_rt_policy_ipv6 3 4 "1" 3 encap.red
++	setup_rt_policy_ipv6 4 3 "2" 4 encap.red true
++	setup_rt_policy_ipv6 3 4 "1" 3 encap.red false
+ 
+ 	# testing environment was set up successfully
+ 	SETUP_ERR=0
+@@ -809,6 +859,38 @@ test_vrf_or_ksft_skip()
+ 	fi
+ }
+ 
++# Before enabling tunsrc tests, make sure tunsrc and ip6tables are supported.
++check_tunsrc_support()
++{
++	setup_ns tunsrc_ns
++
++	ip -netns "${tunsrc_ns}" link add veth0 type veth \
++		peer name veth1 netns "${tunsrc_ns}"
++
++	ip -netns "${tunsrc_ns}" link set veth0 up
++
++	if ! ip -netns "${tunsrc_ns}" -6 route add fc00::dead:beef/128 \
++			encap seg6 mode encap.red tunsrc fc00::1 segs fc00::2 \
++			dev veth0 &>/dev/null; then
++		cleanup_ns "${tunsrc_ns}"
++		return
++	fi
++
++	if ! ip -netns "${tunsrc_ns}" -6 route show | grep -q "tunsrc"; then
++		cleanup_ns "${tunsrc_ns}"
++		return
++	fi
++
++	if ! ip netns exec "${tunsrc_ns}" ip6tables -t raw -A PREROUTING \
++			-d fc00::dead:beef -j DROP &>/dev/null; then
++		cleanup_ns "${tunsrc_ns}"
++		return
++	fi
++
++	cleanup_ns "${tunsrc_ns}"
++	HAS_TUNSRC=true
++}
++
+ if [ "$(id -u)" -ne 0 ]; then
+ 	echo "SKIP: Need root privileges"
+ 	exit "${ksft_skip}"
+@@ -826,6 +908,7 @@ test_vrf_or_ksft_skip
+ set -e
+ trap cleanup EXIT
+ 
++check_tunsrc_support
+ setup
+ set +e
+ 
+-- 
+2.39.2
 
-> ---
-> 
-> Link: https://lore.kernel.org/bpf/20260320074150.628094-1-sun.jian.kdev@gmail.com/
-> 
-> v4:
-> - simplify the dedicated trampoline_count target and its trigger path
-> - simplify the associated fentry/fmod_ret/fexit test program signatures
-> - reduce the final trigger to a plain ASSERT_OK()
-> - drop Suggested-by per Jiri
-> 
-> v3:
-> - route the final trigger through trigger_module_test_read() and make
->   bpf_testmod_test_read() call the dedicated trampoline_count target
-> 
-> v2:
-> - rewrite the subject to describe the change
-> - resend with the correct patch content
-> 
->  .../bpf/prog_tests/trampoline_count.c          | 17 +++--------------
->  .../bpf/progs/test_trampoline_count.c          | 12 ++++++------
->  .../selftests/bpf/test_kmods/bpf_testmod.c     | 18 ++++++++++++++++++
->  3 files changed, 27 insertions(+), 20 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> index 6cd7349d4a2b..7321850db75f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> @@ -30,16 +30,14 @@ static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
->  	return prog;
->  }
->  
-> -/* TODO: use different target function to run in concurrent mode */
-> -void serial_test_trampoline_count(void)
-> +void test_trampoline_count(void)
->  {
->  	char *file = "test_trampoline_count.bpf.o";
->  	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
-> -	int bpf_max_tramp_links, err, i, prog_fd;
-> +	int bpf_max_tramp_links, i;
->  	struct bpf_program *prog;
->  	struct bpf_link *link;
->  	struct inst *inst;
-> -	LIBBPF_OPTS(bpf_test_run_opts, opts);
->  
->  	bpf_max_tramp_links = get_bpf_max_tramp_links();
->  	if (!ASSERT_GE(bpf_max_tramp_links, 1, "bpf_max_tramp_links"))
-> @@ -80,16 +78,7 @@ void serial_test_trampoline_count(void)
->  		goto cleanup;
->  
->  	/* and finally execute the probe */
-> -	prog_fd = bpf_program__fd(prog);
-> -	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
-> -		goto cleanup;
-> -
-> -	err = bpf_prog_test_run_opts(prog_fd, &opts);
-> -	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-> -		goto cleanup;
-> -
-> -	ASSERT_EQ(opts.retval & 0xffff, 33, "bpf_modify_return_test.result");
-> -	ASSERT_EQ(opts.retval >> 16, 2, "bpf_modify_return_test.side_effect");
-> +	ASSERT_OK(trigger_module_test_read(256), "trigger_module_test_read");
->  
->  cleanup:
->  	for (; i >= 0; i--) {
-> diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> index 7765720da7d5..02f52806b1b2 100644
-> --- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> @@ -3,20 +3,20 @@
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
->  
-> -SEC("fentry/bpf_modify_return_test")
-> -int BPF_PROG(fentry_test, int a, int *b)
-> +SEC("fentry/bpf_testmod_trampoline_count_test")
-> +int BPF_PROG(fentry_test)
->  {
->  	return 0;
->  }
->  
-> -SEC("fmod_ret/bpf_modify_return_test")
-> -int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
-> +SEC("fmod_ret/bpf_testmod_trampoline_count_test")
-> +int BPF_PROG(fmod_ret_test, int ret)
->  {
->  	return 0;
->  }
->  
-> -SEC("fexit/bpf_modify_return_test")
-> -int BPF_PROG(fexit_test, int a, int *b, int ret)
-> +SEC("fexit/bpf_testmod_trampoline_count_test")
-> +int BPF_PROG(fexit_test, int ret)
->  {
->  	return 0;
->  }
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index e62c6b78657f..9caf9ffa1bb0 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -470,6 +470,11 @@ noinline void bpf_testmod_stacktrace_test_1(void)
->  
->  int bpf_testmod_fentry_ok;
->  
-> +noinline int bpf_testmod_trampoline_count_test(void)
-> +{
-> +	return 0;
-> +}
-> +
->  noinline ssize_t
->  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->  		      const struct bin_attribute *bin_attr,
-> @@ -548,6 +553,8 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->  			21, 22, 23, 24, 25, 26) != 231)
->  		goto out;
->  
-> +	bpf_testmod_trampoline_count_test();
-> +
->  	bpf_testmod_stacktrace_test_1();
->  
->  	bpf_testmod_fentry_ok = 1;
-> @@ -1843,6 +1850,16 @@ struct bpf_struct_ops testmod_multi_st_ops = {
->  
->  extern int bpf_fentry_test1(int a);
->  
-> +BTF_KFUNCS_START(bpf_testmod_trampoline_count_ids)
-> +BTF_ID_FLAGS(func, bpf_testmod_trampoline_count_test)
-> +BTF_KFUNCS_END(bpf_testmod_trampoline_count_ids)
-> +
-> +static const struct
-> +btf_kfunc_id_set bpf_testmod_trampoline_count_fmodret_set = {
-> +	.owner = THIS_MODULE,
-> +	.set = &bpf_testmod_trampoline_count_ids,
-> +};
-> +
->  static int bpf_testmod_init(void)
->  {
->  	const struct btf_id_dtor_kfunc bpf_testmod_dtors[] = {
-> @@ -1859,6 +1876,7 @@ static int bpf_testmod_init(void)
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmod_kfunc_set);
-> +	ret = ret ?: register_btf_fmodret_id_set(&bpf_testmod_trampoline_count_fmodret_set);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops, bpf_testmod_ops);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops2, bpf_testmod_ops2);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops3, bpf_testmod_ops3);
-> 
-> base-commit: 8a30aeb0d1b4e4aaf7f7bae72f20f2ae75385ccb
-> -- 
-> 2.43.0
-> 
