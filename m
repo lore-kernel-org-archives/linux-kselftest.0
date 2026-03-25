@@ -1,196 +1,108 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010012.outbound.protection.outlook.com [52.101.61.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBFEB1684B4;
-	Wed, 25 Mar 2026 20:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774469540; cv=fail; b=Ms0IeKvNOayx3Gmtt4oIj7LbspUr3fd/GRfzVwgC87Qb1mVzBLXaa8qvce43OS+dgp5q2BNQl6YQ0SX74LF/4xPTUV15JsYUzeGRDnlmAVSP9RXkwygacDdXJjCOq8XaFKoCtnQ4kwiCm/b8hazGNLLSGaPkgNNHyce5vwlLR9Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774469540; c=relaxed/simple;
-	bh=0IKWc0pGRuYkvXfQXiFYeyZJ2ZnnZYz7y83x7LevGcc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=MHf4Ihjn0BeRsabIzLOJAd9fSg9DMHRi6Ti0bpeJbw4CFxYiZUOBIl4jUAB2JugczoXnI41wYQnlDiW0IZkHzxLB38idBl3OLIsRO4JBXNh749D3c6X/d824+odT3wOMytqIYhtpXu690bQr5A6iXONpy3wOt6kAszsbWAn9eEI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=X6v4oAgx; arc=fail smtp.client-ip=52.101.61.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3589B3537E8;
+	Wed, 25 Mar 2026 20:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774470008; cv=none; b=Dg8WSUyALmx1oVa3mugOaVz1NmMhYG043bieXrvzB1VgyEAT+6vdDYUpfCJG3L24jpIdGXaiI0r8GdjlALewBRXCyVXwMPuLES/54SsqsnV5H5OZwZz6/ZWX9Rd+5RvcFzjhdJkIS72zO/4HmHLhEu/HQjR/zehB/CSmiX2qW3I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774470008; c=relaxed/simple;
+	bh=m2Fl41u9xLJTkmSNH5fjQam5qUXk4fYiC6RqiBkltaI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=BmTNTHA+41FRnl0RtRJ6CrpJjexwLMxPEEGDBb/EKmylqe3FSNWreUc1fhytDECZzsnTlV1+cXVi5WyckIaT6COVbhOUr32/ZQD5M0w3Kkv8sE7r2hzysFWb6iN/Rz8MpOFnpfkWNAQtdSTzyp5sYal5cg6EzNmFAz9gGSzjDvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GU+v1K7X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="X6v4oAgx"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Eon0PI4oU/FjKQvg6PaiTdoTet8P5AY6YJHoJH/TmKv0+lw4LvLs/kkYtbfOk0MujX4l+eeH6882tR2X5W5dMFJat9p1Dp8D1bJIBz1v6cSzHzDtcH7BbL46ACwoltfSL+XTmTS0xu+01ZvHW+KT+v85RkRHHMbytjzNQfdX7AHd7PsuPTfoBwtlAP+OUXSqTyL065+STF1i1RjKMvfyNZfkvSgQuxuVN4rxeSgzs8lLYy2gkmKDWJd/jpqBbLM/7+gfhVsjpLhP63paL19GSdtF7H0JuntSbLJz19KSbNqpGLp5VZYZ9k0xyK6EeyGNwPXLHDhFr54Xk1RxD2aXfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9U10/QdBDRPCFiOPeqx7zADIJQOp/bPtUOPfEq6rEv0=;
- b=ZjHwt4/rwGmj+5b42xRX8btmLnwdtPZwtWNkGBVcgWh0kcJs+pVX9Fb+ySVAHEo7W827ZILBqMRM5ULRHtalG+eYOgeGQZmn9moy/px6fn4hIAeJ1H0dCAr8Z7Lg7RXiSUiO2dYd4FEK37qbfGauAVNThLiY39FuOsfS+uWXEW/ZPN4E0QrjivytLOQsKkSsavC1qvMndY+WgemaBJBBoTp7Wt7toqh22d0VyqNiKnl4bApX6jOLIVBsl/Cv2wSNcB75gcwCHAR1i+mRBtvl7RrG/6g316yePUU7yGB+Cj/sQDObAtnxMQ1m03XX6G8DfLscvHdtCk4cyLhBBQXEyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9U10/QdBDRPCFiOPeqx7zADIJQOp/bPtUOPfEq6rEv0=;
- b=X6v4oAgxcqt9TAlaQpa+Rlji2nDzBTncQvqNWJMPoWbYPcjZS+Hf3OwWHSlZh0nSe7TWthPjZGRuI/S6ikwxomv6ZLjrTh21kgpTgPW6jluNZmuYBzpfwabAOtwk21FtHqgqHrRODXZBBjJIUAGNAlfDnAZz9siSz2o+TmagfQBr4leXtXz7iOwPpw3YCHgMfAF0CtievodhzZqCf0pX73yHPlZcYWqtgDsWLzu6KoxOv3u+/2lvqBgnbswC7SgOpjsvnVj2jRAh9cr28qWDbSoZw9pLS2dWCnnwWIvcb9Fyv3bw9SljBfy9rTeF/VBwXkRYDknlvNfWu7/KgqS2XA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB8202.namprd12.prod.outlook.com (2603:10b6:8:e1::13) by
- SA3PR12MB7924.namprd12.prod.outlook.com (2603:10b6:806:313::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.20; Wed, 25 Mar 2026 20:12:10 +0000
-Received: from DS7PR12MB8202.namprd12.prod.outlook.com
- ([fe80::38fd:4146:aea:639e]) by DS7PR12MB8202.namprd12.prod.outlook.com
- ([fe80::38fd:4146:aea:639e%6]) with mapi id 15.20.9745.019; Wed, 25 Mar 2026
- 20:12:10 +0000
-Message-ID: <27376c12-33d7-4da2-acc8-dd42aa347e64@nvidia.com>
-Date: Wed, 25 Mar 2026 13:12:08 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 0/3] net: bridge: add stp_mode attribute for STP
- mode selection
-To: Jonas Gorski <jonas.gorski@gmail.com>, netdev@vger.kernel.org
-Cc: bridge@lists.linux.dev, Nikolay Aleksandrov <razor@blackwall.org>,
- Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- Petr Machata <petrm@nvidia.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260324184942.2828691-1-aroulin@nvidia.com>
- <abb8a10c-571e-44f2-a15e-1d5da288963d@gmail.com>
-Content-Language: en-US
-From: Andy Roulin <aroulin@nvidia.com>
-In-Reply-To: <abb8a10c-571e-44f2-a15e-1d5da288963d@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0066.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::11) To DS7PR12MB8202.namprd12.prod.outlook.com
- (2603:10b6:8:e1::13)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GU+v1K7X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4FD9C4CEF7;
+	Wed, 25 Mar 2026 20:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774470007;
+	bh=m2Fl41u9xLJTkmSNH5fjQam5qUXk4fYiC6RqiBkltaI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=GU+v1K7XSxXX4E0yHH4tMzTYTOXjlrFI9KahS6lpnxCCUeiTcf8ArJuVLOxCdyXvU
+	 C0cEb4VlNmH8ejylJDPRcNn1sXYQwDEwZ1J99U0jrmVzN79RUGBmalzZl9Q46R6mwR
+	 IikMJprq4RaB7nTU5tFXRZIjTPC6wqEe9YIZSkjgLxxMsYY/fiKhAhT815DSCEBHs7
+	 jTmPHaKWKbddIS8Py883wleUllgGi44zHsC7Q3/g2Me9bH9vGqtCM9r0oC+uLTE0DD
+	 Rpa97eC+VEs4r+K8weLuQiKcb8nNglKntRrDUeFeL4s2SCO21lPuj4JG2Wgv7Jf/oP
+	 ZvqhaVC6dCfqg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
+  akpm@linux-foundation.org,  linux-mm@kvack.org,
+  linux-kernel@vger.kernel.org,  dmatlack@google.com,  pratyush@kernel.org,
+  skhawaja@google.com
+Subject: Re: [PATCH v3 1/2] liveupdate: prevent double management of files
+In-Reply-To: <20260325182026.467307-2-pasha.tatashin@soleen.com> (Pasha
+	Tatashin's message of "Wed, 25 Mar 2026 18:20:25 +0000")
+References: <20260325182026.467307-1-pasha.tatashin@soleen.com>
+	<20260325182026.467307-2-pasha.tatashin@soleen.com>
+Date: Wed, 25 Mar 2026 20:20:03 +0000
+Message-ID: <2vxzikajacgc.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8202:EE_|SA3PR12MB7924:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f60b1e6-5138-4872-474b-08de8aaacba6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	VqXOd0lpP3QnpFHJlSmMNfVhn/XzVfIerBQ32yg5QkAnSfu4ItLZQ9Qk0hyUr6URa1FgNNfFqln7nputETphwbc/uah2ceRG0f+7/5TYDOlY4b6XF4cUI9ZP/VmQv+zhTIOV8Txq9UNLhIlp0dXe0exkM2tj74bzvmV/tAJjniCkqWr5t3vdorEEVEYCfl7nZS00yNEqhlYEVM4Scl7ZC3BdTWdPQhrUVK+Gu6x4EjJvMsZ9apRYjZ6ekxMds1ttWTWI5qtDxDGwuMYSuhEmk9CUT5gJFJcR+BG+itvKSGig4KC47VQ1l6915DIxYUAwdtJQVQlvOE0ATcm+DCqERooe0kdEQkJzY2Ts5KDAWdzhEfT9KjheeiWk739M9UYngGrMumBvTobOuK/XoXMoPqsAvLRFeVeaAyRUs/NQGAcKdHfn88cLUV66ZSw5YVGBRO+3pCjAuQNj0wi1m3chzejdMnzvmMl6IWBF/tbpt7y8gp138S+gzmhtwP9HFep+xMhmZ35wV89qfQPehsKA/8E0ET3KYG5w4ArD3ZxB3RomCGseofMx1bR/ORjYlBtOFLXrrnk+lAalOijI2v5N+9tX2KFrYyTrs/cKHVkxxPWuLoHSxGTBF25Kfv2JOoAknjTB6O0mGsQk+Jr0IvaIeaL2wWWiqqJwlRpfkl2t38PrJGCP/haTn3ElVN4Bn5hAFJLp4nXwnmkxrWFAxEZmnBf+/wyJUuUvLyz8c/hYntg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8202.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MXBRY0VJbllIeVJacUROSFRSNmZDWmdjTThjNFltY2FQOGNnYzhUeG9udGpC?=
- =?utf-8?B?MzFLcWZGNllmbStzK1dvekZIWGcvcU5IaWNqU3E0eGpSQ1ZKV1BBWVZhTzJq?=
- =?utf-8?B?RS80WmZiOW42RlNuMytwRGlUMEpXa3RvU3B5NXlvS0xsWWFUVEpya0Q3b3c0?=
- =?utf-8?B?ZUZrZjJrNVd2ZDBYTFVvVEJIeXhpakh6L2lnSDhzU1BrdVZvSTAyQm5aVEgz?=
- =?utf-8?B?ZlgxMS9OWWw2a0gyMWlCSit1eFR6OXZPcFRuV05rMER6YXNTNjMwNTdadzBR?=
- =?utf-8?B?TWpyTVJlb2JJZWpTdFp2NFBNdXZEUUY4SFlVNkdOam5IYzdzaVp2YmM3M1lU?=
- =?utf-8?B?Y0JsREZIMDhBc3RYVlk1NFppeDlldDNuaUJnckQrdEhrR2RJR2gycDY1c1B1?=
- =?utf-8?B?L29jaC9DZ3ZDb3piMk81MkQxOGIrVnRpcndvU1VKQkRJNzliS0R6Yjh0SFNC?=
- =?utf-8?B?Nm4wZmcxaHYrbWxsU2tNRUFtdTFMdDBzWUNlSGhyaXNiQXJHN0hMSnp6dVNp?=
- =?utf-8?B?Rmk1Nmc3NEY1bEdIS1dpMWMrYmVESWQ2ZGZkYXVueG5BL013dkVXcWpUdnoz?=
- =?utf-8?B?QW41SVhoditKTEI3bXRKa2dnSUlFZVNlY2pSbjZsdkJVZjdjWjRJL08vZ1lT?=
- =?utf-8?B?clppYWZQSDByMk4vNnBrU2pkS3ZoUDhuL1E3YnNvYTVIZ3BXZUtOMjAra09i?=
- =?utf-8?B?S2dmTHA3WVMrNkpDWEhpZWFuQ1QxN0Jqa3lOM0piNVpMRmlHdUJEZkdNd2R0?=
- =?utf-8?B?dk9LM0NiY2drSDEzOUsrS1dlZ2RSQmthSmVzTlVFZDJnNFZvK28rVU5iSmx6?=
- =?utf-8?B?aitnTG0vWVZNQmRJUHBkU2ZOeWV2NFEwSDN4KzZKZTF1YVQ2aXRZYWRWMUVB?=
- =?utf-8?B?dGowYU0vZ05BZUg4Q0FlMEp1TFAwQ015a2REWEczSEF5UnZqMzc0bUhIMUpv?=
- =?utf-8?B?c0ordGR5SElKQ3M1Q3NUTE5mRmxyR1ViZ0hkNXBkZlByVlVFL2lVYjV2V3B4?=
- =?utf-8?B?ajE2TjhrQ3dRa3JvRXE5VHdPT2RIV1NqeG1Vb2owanJtUkR0Qy9lRGxYWXNx?=
- =?utf-8?B?c2hiOUJIOXBBRm5nZWI5VndKSktrMVNlLzBQNTdhdTJzVllqZExPV2pDRFJP?=
- =?utf-8?B?YUd6YUYycTV0M1VEV0krSTlEWEZVWE8xaXBsU1ZZZTRPL0kvRUsrTlQ3eHdJ?=
- =?utf-8?B?VjZzZEdHMHo5Z1RabmNnN3pXa0hTSXV0MThMNDBWaFFCaUlPMjJPUmJ0K2hi?=
- =?utf-8?B?NXVPNHRkeUlZQ2s0L3QxQ2ExVUFZL1gyNk9ZV1VhajlEd3NnUnc1NFpYT2pM?=
- =?utf-8?B?dG9pYVpyQ04zRENVdUd4RzFaRVdWTmxIYzd1MFZaajVhSHpQY04zczlWU1ZM?=
- =?utf-8?B?MTdlSTNHaUNaR1VacmdFdFBhb0gwcWNwNXJ0djZudjIzSEJpRHFWOGFxK3Nl?=
- =?utf-8?B?Nm0rbGhtc1d6OUJ2SmMrZ1FZT1ZLZ2EwYThEQkx2TkdreFY5UHNSanlEc0Fm?=
- =?utf-8?B?Vy9ocERoTmxkZWk2QmF2TDIzRUZFWnZIdkQza05jQ2tPS3ptQk1ESndjeSsw?=
- =?utf-8?B?VFN1bk5VbGFiT2JiQjkyRHZWWDNiK0lKelUwc3BxQ3BQQVBMeWNaWFFiZDNS?=
- =?utf-8?B?WFdNQTlZSnljRHAvWkFoNk10cU1zMTlUVG9telR5anoxSExyMXdKNjdKK0lZ?=
- =?utf-8?B?Nm9oTkRSMkw3WU1IbEpLTi9KM3N6WjJFSVlOa3d6d2lRN3M0TFdERkZwQmM5?=
- =?utf-8?B?SVBVTW15VGxpOU1vY1ViMGx2THhKQVcrTVVBTmp2QWluQ1NycjBUUXl4b3A2?=
- =?utf-8?B?VmlnUm5DekZGdXd2a3VjaTNOdy8yTHFiUmtwVlhoc3I4cnBtZEV1OHNTQzAw?=
- =?utf-8?B?QU5uQTZhRytmSEZBc0FZOGwzcHBhU2I2QTFZTzJlL0ZieWYzd2poSzJGenFs?=
- =?utf-8?B?NFdhYUFmQkYxVU5JL1J2TjdYb0g5N3hOT01EYkFYcVRHbVd4ZXJheVBDQlk0?=
- =?utf-8?B?WGNjVUxsZk5OUk91K0Jma2MwaG5mL3Mrb0FvSHdyTWNoRUtPTThWZWM0OEFh?=
- =?utf-8?B?RGhZSWc3d2wycy96bzlBNXZlemlwejEzYmZSeTYrRFhFQlFpOXB1MGdNNXEz?=
- =?utf-8?B?QUpnOEQ2RStTQ1FGTWE3Q3l4TnNtMTloSCtBRTh1VU00cXdyMTByVllKU2VH?=
- =?utf-8?B?a1BaVkVoNkpoempmWis0YmdIYjVsUm16MWNSNEVLV2t0R3BCTmVXcHRVc1Bh?=
- =?utf-8?B?bUxGTDRTMnhVUkx1ZG5rcSt0MjZMQlhFVnJTUC9NUlhOYTNSRHVrSjN4dCs5?=
- =?utf-8?B?NGtlZ1ZtZVFuMHFrbG5zbCtTN1pFWC9lMG1MWU9HeE10c2tOMFJZdz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f60b1e6-5138-4872-474b-08de8aaacba6
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8202.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 20:12:10.1746
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JpJnEZDmwhQdBJNqUaGnI6Kow5zGZSLQveWC6xEGFhZsPyCCyRVY+urzGCEN/PxV/3BQ+0mmT2QQOwGlOGUBhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7924
+Content-Type: text/plain
 
-On 3/25/26 00:28, Jonas Gorski wrote:
-> On 24/03/2026 19:49, Andy Roulin wrote:
->> The bridge-stp usermode helper is currently restricted to the initial
->> network namespace, preventing userspace STP daemons like mstpd from
->> operating on bridges in other namespaces. Since commit ff62198553e4
->> ("bridge: Only call /sbin/bridge-stp for the initial network
->> namespace"), bridges in non-init namespaces silently fall back to
->> kernel STP with no way to request userspace STP.
->>
->> This series adds a new IFLA_BR_STP_MODE bridge attribute that allows
->> explicit per-bridge control over STP mode selection. Three modes are
->> supported:
->>
->>    - auto (default): existing behavior, try /sbin/bridge-stp in
->>      init_net, fall back to kernel STP otherwise
->>    - user: directly enable BR_USER_STP without invoking the helper,
->>      works in any network namespace
->>    - kernel: directly enable BR_KERNEL_STP without invoking the helper
-> 
-> I like that very much! This will also allow selftests for
-> switchdev/dsa drivers for correct (mst) STP state (change) handling.
-> 
->> The user and kernel modes bypass call_usermodehelper() entirely,
->> addressing the security concerns discussed at [1]. The caller is
->> responsible for managing the userspace STP daemon directly, rather
->> than relying on the kernel to invoke /sbin/bridge-stp.
-> 
-> Should the caller directly manage the STP daemon, or could the STP
-> daemon also just automatically manage bridges with
-> IFLA_BR_STP_STATE=BR_STP_MODE_KERNEL (and IFLA_BR_STP_STATE != 0)?
-> 
-> The latter would require less changes for network managers, as they
-> wouldn't need to be aware of (individual) STP daemon
-> implementations.
-> 
-> But I guess either is fine, as long as the latter behavior
-> configurable.
+Hi Pasha,
 
-STP daemons can listen to netlink and automatically discover the bridges
-with IFLA_BR_STP_STATE=BR_STP_MODE_USER (or stp_state=BR_STP_USER).
+On Wed, Mar 25 2026, Pasha Tatashin wrote:
 
-Will change uapi doc in v2 from
+> Currently, LUO does not prevent the same file from being managed twice
+> across different active sessions.
+>
+> Use a global xarray luo_preserved_files to keep track of file
+> pointers being preserved by LUO. Update luo_preserve_file() to check and
+> insert the file pointer into this xarray when it is preserved, and
+> erase it in luo_file_unpreserve_files() when it is released.
+>
+> This ensures that the same file (struct file) cannot be managed by
+> multiple sessions. If another session attempts to preserve an already
+> managed file, it will now fail with -EBUSY.
+>
+> Acked-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+> Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-  The caller is responsible for registering the bridge with the 
-  
+For memfd and hugetlb at least, we serialize the _inode_ not the file.
+The inode has the contents that we care to preserve.
 
-   userspace STP daemon after enabling STP, and for deregistering it 
-  
+So if two FDs point to the same inode, this will break. You can do this
+by first creating a memfd and then by opening "/proc/self/fd/<fd>". Then
+you would be able to trigger the preservation twice, causing all sorts
+of problems. Same on the retrieve side.
 
-   before disabling STP. 
-  
+So I think you should be storing the inode here.
 
+Except... IOMMUFD and VFIO seem to be using different things for the
+state that needs to be preserved. I don't know either of the subsystems
+that well but from a quick look, I see that
+iommufd_liveupdate_preserve() [0] calls iommufd_ctx_from_file() (which
+stores the ictx in file->private_data) and does most of the preservation
+operations on the ictx.
 
-to
+Similarly, vfio_pci_liveupdate_preserve() [1] calls
+vfio_device_from_file(), which also uses file->private_data.
 
-   No /sbin/bridge-stp helper is invoked; userspace is responsible for 
-  
+So, there seems to be no single way to get the "target object" that can
+tell us whether it is already serialized or not. For memfd and hugetlb
+it is the inode, for IOMMUFD it is the iommufd_ctx and for VFIO it is
+the vfio_device.
 
-   ensuring an STP daemon manages the bridge.
+So unless I am missing something, I don't think this approach will work.
+As much as I hate to suggest it, I think we need to move this check to
+each caller so they can find out the object they need to serialize and
+check if it already is.
+
+[0] https://github.com/samikhawaja/linux/blob/iommu/phase1-v1/drivers/iommu/iommufd/liveupdate.c#L210
+[1] https://github.com/dmatlack/linux/blob/liveupdate/vfio/cdev/v3/drivers/vfio/pci/vfio_pci_liveupdate.c#L145
+
+[...]
+
+-- 
+Regards,
+Pratyush Yadav
