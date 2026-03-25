@@ -1,119 +1,128 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23E73F788E
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 17:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774459085; cv=pass; b=gXDxNAKLyn6c/z+BPznEp9a3ukSTsQkfQ8UrXvB/wZxiBgxcfMejNqh0Eh9eWoILL3sJ0YP8bHn/8XiNVOli/Nc/TSZvcwhEkp0NN+ibs9Ji8Y2xpbAsIwrb2PLqZLUFUAiklBvdCYGbg5NJPq2riN83/SduTsXTsH005rr8ueI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774459085; c=relaxed/simple;
-	bh=QKaRPYMdlNzJVsqj6JYa0b5bId1rUEMfyl8IBcSL9bU=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9414035DA
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 17:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774459412; cv=none; b=WY9Zu0aCR0unLjgiTDuEZbNxOQQB3+wY1K2k1SZJsnscqcqqLvCU3qO+kEUu7kuA8q+8oKcsqj62+hYHlrV0qMCk5EG89xjRcA4iRmqp/MdwuCfr8O3hhlArQwZCYsskrsUp3wku6I6+M7wv4nliSdeqMt77cC2vbCiC5rSeXNI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774459412; c=relaxed/simple;
+	bh=viTmep3Z4Zu/FWlG2Lc5vRj9CNEZGaZUQ/o6168TUEs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WTMyy7WVRn/dN9Syz0ngDwCZpbFD7YX+YL2l18yewKkvvheZE/q7GnDbLwTvR7qcxs4B13ekw06g3GIh+NWWI3YI7NWHv85A1Lhu01IWpVeLI8peR82iT0F9Yya87QmR/WyDadu75A8AVNLJ4NZhrMAJ/ZtDNwYKaxr5GW2lMsg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yez4qwMa; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=XXvwTUlIA0Qt6o9JX25caWOp9IVMu8lJ/O0Yt61g6wK4z0FfGnYUuS416B62th4NBpGal0neouMddRmQayfrWrylE9+Ypt2ooNjiIb2m+094+UqbAQoip2dvTV/EAh6qv0qdYcLQcE2WJRamf0rK/tzwKJbNFdvGAyoTMCqvrGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mA5CVrGh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yez4qwMa"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-12a74039dc6so68844c88.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 10:18:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774459083; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QJq4rEP1gXIdxjUCbTtVplaSk0HUqcSNuyajSFXv7LDo476rixZui0E6V0rLjS0/LV
-         nXa+CVnhSH/IjCJMSiz8U1AvFAVdf6/OyTXeun0F+X5gZNRqm+FegBbFTLZjQa0KpCsH
-         DMWrZ86JokW/ZFjZJ1m3NFjEL81z8mipovEzZV3nzi64TLkjyo4BLbILiuShZtDt3+mL
-         MXFqoTIXnLQBnfvZSvNF5y2H3pMtw7lMxxOohRx87lWN11Qf3c+ykFh3HMD85bvlqI9N
-         cl1NOT11uL/Tm0D35ZiysZEBhyhYptXiNagUNuY4Tgi8aSVW9AwkRVMWm8P/WU/43aAH
-         5eDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=QKaRPYMdlNzJVsqj6JYa0b5bId1rUEMfyl8IBcSL9bU=;
-        fh=9hp2hDmO1WwkhNBwDYJNFak1uW+Km0UxbYpj09w4+FU=;
-        b=QKfZ8LB0tEi8HZUzEUVFLcApMadRGBIK62lit1V4CucPK/9vvbkArYsIZyCg9gdvUc
-         mudXOkn0kTuZYEzi1wY9u/TXvOZqnqfQsfktwAUU1SYp4N64iVGRNLpVPzbSD7xAt/h3
-         7io0P6OwwZuTrzvE/dhndivn1h8Otlt5UTCDzMAscSKdRypFUVEffv8OckTtpmzXCnrz
-         tUQGjQ7t7x68kwku2orTj4yPTs54vc6i7rb4IRrBjrLClS81L+R8DvvcjNYbNxatWIoV
-         pGu3tUrK4brsGkGcz2pP5C8hPbjyvFZrB7bQ15+NdDf1WSpl5WxqFK9r7FzwmNUqjcz8
-         qe4g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774459083; x=1775063883; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QKaRPYMdlNzJVsqj6JYa0b5bId1rUEMfyl8IBcSL9bU=;
-        b=Yez4qwMarx0dKOqNDJ/+pZvuCs5vGMYy4fiYvcvSE9XygkZvkYhMPfRg5VXvGH7UyS
-         NXPKNr0qM+JyJlF1Qkr2qfpJz8QFq7LYYSvEuPt+9FMKZESOV4G1S8FtJS++cA/O1/qf
-         VfrT6ohWUQN2QleQG+Tt/tGa4pN7nHOdzbyLMFpZ6tvwHIUBBrjCzORlncxIsByLY84A
-         uCXkX8nF13Z1c3QRbNRHZO5+BVqT9uzjD9xoJw8PEB4t6CqGgfHI6IEIvJAZFQy59+0W
-         nL/uiNi3wEFpWrvmRSSVxKPPTPlIhkwyAv33R77upqoY0ZBe8bit5f5ocKui12QWCMJT
-         X/Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774459083; x=1775063883;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QKaRPYMdlNzJVsqj6JYa0b5bId1rUEMfyl8IBcSL9bU=;
-        b=dJl42vc9+CDDaoB883g8qZLtUhU38Nfd17RfyOPNUatQ5lKsUo11wBbg4tN/mOPrKq
-         s/e8EG0cOCG6nvWoHMVToRRrOSbXLQJuGJqwUssmndr5pUqsOt0PRnzqL426TNcwO5yu
-         JPnDyXhcIkNap4hYsP837vqBqhqHkWwXZCvG9kQRPajnR6cUIxPYuS3GIGUHDv4WwMYq
-         5tnnT5gOmue8hY7iVcZE4L6mWX+d+D9g/Z654KhFHoppLFWCEd4Ar5qoTjjBiTT7jy2F
-         lV5tEqnNRAIyD2RMSEMiHrScCZBgkEJkhklPnTAtZaG/YvIHwm9A4RVbhTy4HaCP1OFn
-         5heA==
-X-Forwarded-Encrypted: i=1; AJvYcCWkQHGLRWGtmyYflR+sjRGcifV8yXYpB62tiGtzSwVYd8QTRyO7J3ibQrNpkJ6qbWgBSvi1ev+Qsq0mMhmmDxM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZ23TlT3z5jpJFUdojOa2g3NUT9JIFy4fsTs9mJZ/0qe8qakO0
-	rjDZrBO80n/xX6A47xZnyqte1IajTJAloIC949+V4khivxnRWt6M8BuU9CsDN6OpY9y3OB6etUI
-	PUfqoKijMWdbAnQZu/1SKLCDvjq5qAsM=
-X-Gm-Gg: ATEYQzwn98xRHfhooa0MOFJnwsD5+SpMUeszKQxsHiNuEmbtEw2l9mT7x7rR3eTVqNZ
-	EXtJtoSHzjRw2BZ1YkpeuEBjwUKaZQZaP14PalyA3ycvagP2E3ZZBIwBcTO6UJsw1azbGsT8iMK
-	cHZXfH0YaJJDJYzdGVPZyf13JqRifoCUo4sZFI+hj2RpR+Q8LXK5Fn+V82bn5Cfp+R78CkwTs8W
-	Qzs9wOIXYJmWeZolLJLJHIx3fzz/MEpug4Xr/l42/FHs+st51mWSikThtVE/JGw5Ob1obtVZcl1
-	X41b15/UrAlq3483htN7UsdUh/Azc//1zVqWJ4A4
-X-Received: by 2002:a05:7022:620:b0:128:d39a:b141 with SMTP id
- a92af1059eb24-12a96e71260mr1904933c88.17.1774459082953; Wed, 25 Mar 2026
- 10:18:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mA5CVrGh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFDC6C2BCC4
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 17:23:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774459411;
+	bh=viTmep3Z4Zu/FWlG2Lc5vRj9CNEZGaZUQ/o6168TUEs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=mA5CVrGhDe93OQpR2h7epjyJnIZZc/FBNZ3ySFRVDimsYyr3MbqwRVHNCMzIIoqBF
+	 VcDXPnhXIXo0sUk6wb9wmNiPnCCBecwqaq+NCxurzSlWcEk+hSCrLdEP5hcxjXx3+s
+	 gKmlapIm5GzDo30ZCqqU0DUWp1sWotLmP3LVYYAgR8yMo+STfTfZA9xQoLLd3HJeQe
+	 UF1jFPqenUAuCg9l7zUSNpv9Xrh3PFotCNfkqVZaM1vqXxGI9WHerHWbg8rlQndwGw
+	 Ed6vLAA33dzo56TBo/S8kUMahOW9Ok9jQ8YQpeY6RaxPYe9kz4LnE2zA1kvNZHv3Y8
+	 7SqKO7xNGyy6g==
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b93698bb57aso2613466b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 10:23:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUhPwFE6rI6K3NOpA1WndgKloPRtB5xJwjLKxaUZ/Gmb0jaYj7oTupCNkmKpHi9J7g8i9tJixjeoEbvTtiPxXI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVjsY6c/V5Lj+DER38PmdUihf8OaUPPoKXGjhrw4Sbaj2d4dKb
+	CCocumZzqUFp8/y90D8dVK6h+c9oHUsZ1KxseFv+3TwWVXTPw7fQFT4XrbdPJ71anlCANIC2xNQ
+	pylTfrMYlqjnBUGIahPBPh1gfWCBj3rw=
+X-Received: by 2002:a17:907:3f8d:b0:b96:e1de:db04 with SMTP id
+ a640c23a62f3a-b98864026d5mr506266866b.18.1774459410572; Wed, 25 Mar 2026
+ 10:23:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324205301.1361608-1-atwellwea@gmail.com> <acOVlten_N_5evGX@gandalf.schnuecks.de>
- <CANn89iLJJ3EF2-qe4AWJN0teh05x0PPJjOAfB0uG9rNZuJUZUg@mail.gmail.com>
-In-Reply-To: <CANn89iLJJ3EF2-qe4AWJN0teh05x0PPJjOAfB0uG9rNZuJUZUg@mail.gmail.com>
-From: Wesley Atwell <atwellwea@gmail.com>
-Date: Wed, 25 Mar 2026 11:17:52 -0600
-X-Gm-Features: AaiRm50q0NC-_83d6Ruz-7T1f7PQXCUqvxlSqVnVeyorauR8lF6UhfNAetRcvxk
-Message-ID: <CAN=sVvztL+bc2So8F9x50yQypyLEmEm5bWHzkXOOgdPFLG0MNg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 0/3] tcp: fix scaled no-shrink rwnd
- quantization slack
-To: Eric Dumazet <edumazet@google.com>
-Cc: Simon Baatz <gmbnomis@gmail.com>, netdev@vger.kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260320204241.1613861-1-longman@redhat.com> <20260320204241.1613861-2-longman@redhat.com>
+ <acE2MoIZ0pl7U7PX@redhat.com> <CAO9r8zOTYPgqc_7TVWjQ=adn=pH1TLLX2cBNfa1Y-x=TOFJT1Q@mail.gmail.com>
+ <f7159388-c13f-408c-8cb5-02da8b474f57@redhat.com>
+In-Reply-To: <f7159388-c13f-408c-8cb5-02da8b474f57@redhat.com>
+From: Yosry Ahmed <yosry@kernel.org>
+Date: Wed, 25 Mar 2026 10:23:18 -0700
+X-Gmail-Original-Message-ID: <CAO9r8zNRQQDXcHHmgJEeKW=YUPmjaRy2pdYuuD-UOuZGyo29FQ@mail.gmail.com>
+X-Gm-Features: AQROBzBGJJDJNzfPNA6teoPhE-ZDBmh1D34LINWdlYk_6fWkscYzld8oyyC0Ym8
+Message-ID: <CAO9r8zNRQQDXcHHmgJEeKW=YUPmjaRy2pdYuuD-UOuZGyo29FQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] memcg: Scale up vmstats flush threshold with int_sqrt(nr_cpus+2)
+To: Waiman Long <longman@redhat.com>
+Cc: Li Wang <liwang@redhat.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	Sean Christopherson <seanjc@google.com>, James Houghton <jthoughton@google.com>, 
+	Sebastian Chlad <sebastianchlad@gmail.com>, Guopeng Zhang <zhangguopeng@kylinos.cn>, 
+	Li Wang <liwan@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Wed, Mar 25, 2026 at 9:47=E2=80=AFAM Waiman Long <longman@redhat.com> wr=
+ote:
+>
+> On 3/23/26 8:15 PM, Yosry Ahmed wrote:
+> > On Mon, Mar 23, 2026 at 5:46=E2=80=AFAM Li Wang <liwang@redhat.com> wro=
+te:
+> >> On Fri, Mar 20, 2026 at 04:42:35PM -0400, Waiman Long wrote:
+> >>> The vmstats flush threshold currently increases linearly with the
+> >>> number of online CPUs. As the number of CPUs increases over time, it
+> >>> will become increasingly difficult to meet the threshold and update t=
+he
+> >>> vmstats data in a timely manner. These days, systems with hundreds of
+> >>> CPUs or even thousands of them are becoming more common.
+> >>>
+> >>> For example, the test_memcg_sock test of test_memcontrol always fails
+> >>> when running on an arm64 system with 128 CPUs. It is because the
+> >>> threshold is now 64*128 =3D 8192. With 4k page size, it needs changes=
+ in
+> >>> 32 MB of memory. It will be even worse with larger page size like 64k=
+.
+> >>>
+> >>> To make the output of memory.stat more correct, it is better to scale
+> >>> up the threshold slower than linearly with the number of CPUs. The
+> >>> int_sqrt() function is a good compromise as suggested by Li Wang [1].
+> >>> An extra 2 is added to make sure that we will double the threshold fo=
+r
+> >>> a 2-core system. The increase will be slower after that.
+> >>>
+> >>> With the int_sqrt() scale, we can use the possibly larger
+> >>> num_possible_cpus() instead of num_online_cpus() which may change at
+> >>> run time.
+> >>>
+> >>> Although there is supposed to be a periodic and asynchronous flush of
+> >>> vmstats every 2 seconds, the actual time lag between succesive runs
+> >>> can actually vary quite a bit. In fact, I have seen time lags of up
+> >>> to 10s of seconds in some cases. So we couldn't too rely on the hope
+> >>> that there will be an asynchronous vmstats flush every 2 seconds. Thi=
+s
+> >>> may be something we need to look into.
+> >>>
+> >>> [1] https://lore.kernel.org/lkml/ab0kAE7mJkEL9kWb@redhat.com/
+> >>>
+> >>> Suggested-by: Li Wang <liwang@redhat.com>
+> >>> Signed-off-by: Waiman Long <longman@redhat.com>
+> > What's the motivation for this fix? Is it purely to make tests more
+> > reliable on systems with larger page sizes?
+> >
+> > We need some performance tests to make sure we're not flushing too
+> > eagerly with the sqrt scale imo. We need to make sure that when we
+> > have a lot of cgroups and a lot of flushers we don't end up performing
+> > worse.
+>
+> I will include some performance data in the next version. Do you have
+> any suggestion of which readily available tests that I can use for this
+> performance testing purpose.
 
-I still think 2/3 is a legitimate fix. To clarify, I was not trying to
-claim that 84 is some magic number in the abstract, and I agree the
-packetdrill is artificial.
-
-My point was only that, in the constructed case, the old code can
-preserve a scaled window that is larger than the currently backed
-receive space, while 2/3 keeps the stored window representable in
-scaled units.
-That said, I am probably missing the reason why that is not a problem
-according to the feedback you all have given.
-
-So I am going to drop it here.
-
-To be clear this has nothing to do with social engineering, just was
-trying to fix something that doesn't need fixed I suppose.
-
-Thanks,
-Wesley Atwell
+I am not sure what readily available tests can stress this. In the
+past, I wrote a synthetic workload that spawns a lot of readers in
+memory.stat in userspace as well as reclaimers to trigger flushing
+from both the kernel and userspace, with a large number of cgroups. I
+don't have that lying around unfortunately.
