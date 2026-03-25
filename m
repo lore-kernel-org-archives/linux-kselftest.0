@@ -1,134 +1,254 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3FF350D58
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 08:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8E63009EE;
+	Wed, 25 Mar 2026 09:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774428332; cv=none; b=aipss61wBP0ePAUSSMfQA93E5cFDKzA9UPsfVPx/j00l39Jsw3lK0f8zXXIOZOHrUJzKStTPL3k/tEUj1v2R3BO51eAPCxdj5H9KFjoowbruAKQ+Svqr8VAyJTp/tHj8SwmEU1QRpgDLeCHZg91hLv1XtOztFc9MWgvSVG2uQEs=
+	t=1774429430; cv=none; b=F3O5MD4B05+3UWs6Fky2xbC5XdkySeLqz8CyddLJF+xdk+Q0D7+/sFu4zfLvkzGlg6pP6qIpCtGyVC3l0oxqzGrBJHRa7m+WjMEUvz1UXCTGsP4ZSbK+lKBzdSzGMiKBbZ61Y1RCwTx/bcV6BCjhmSesafKdDPm0zxzNGDnVTYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774428332; c=relaxed/simple;
-	bh=QhXaExc/Bt3yphvMLVsbtwHlIuU9rXPjUDRmYorr7dA=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=kn0fbGpgB5w6CJ+80ylRkKftU8CABjhX37yVMSJ9B2HaRhkp2oJ0aAEWpDIbPaiO0UISfxX9/c6+R05FVyWA5CVn6C3CVTRddvEa4mxZ/Nu6mU0RTun+ZSOh5UIZRC7EiT5H6E2oFQ+4s8KDd/EKyKUqO7GVq6NYe5P4tuRGdpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=pXiulUZR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=z4PEeV0z; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=pXiulUZR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=z4PEeV0z; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1774429430; c=relaxed/simple;
+	bh=w/GTjS8YC8uH+Sy4A1EDV8UGyt/H8PZtAnk1cljNo8w=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V8m2+w1/2n/gLPP7U78UyRjRHp1p7mkDRl3UkWewqrJs9bc5DtbFXbA23Dttat/lXZByS+Rxl9AX8hP2fku8ezIaNlhJAaAVv/8L6Eu8QJqd77vfefMjNpECMAmQevVoy2PVmoWwtrwsHOb6ais2oLLocpwLB12w1Rka8x2iZTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLn3NICR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="pXiulUZR";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="z4PEeV0z";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="pXiulUZR";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="z4PEeV0z"
-Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
-	by smtp-out2.suse.de (Postfix) with ESMTP id 2F3875BD65;
-	Wed, 25 Mar 2026 08:45:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1774428323; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1FjS4CJNhWWiVr0cmpqhTyZSn3AUOzUvlMZSKv9MKwE=;
-	b=pXiulUZRJadcp0blD3G1CUD1+YaiQ0cpKYtyymyYuDGthAE/CwTsh53+6roEZUR/jFXwvN
-	71MmoE8SB6HzAGLydNLlSBAv+1GLyj+uqBSeSBv1lxwdqjMLuGXjmaD612VONePUwYDWE5
-	2jiYclxOydl+zYkhh3LU4oFy56k3aBI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1774428323;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1FjS4CJNhWWiVr0cmpqhTyZSn3AUOzUvlMZSKv9MKwE=;
-	b=z4PEeV0zB5Rt8lcC2FcOX6Evq7FV8ckwQ5U7RyBgWOiAWdz8r5QQ2nVB1LIl1BrOp2wEOf
-	2XaBfplHGBNC0EBA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=pXiulUZR;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=z4PEeV0z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1774428323; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1FjS4CJNhWWiVr0cmpqhTyZSn3AUOzUvlMZSKv9MKwE=;
-	b=pXiulUZRJadcp0blD3G1CUD1+YaiQ0cpKYtyymyYuDGthAE/CwTsh53+6roEZUR/jFXwvN
-	71MmoE8SB6HzAGLydNLlSBAv+1GLyj+uqBSeSBv1lxwdqjMLuGXjmaD612VONePUwYDWE5
-	2jiYclxOydl+zYkhh3LU4oFy56k3aBI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1774428323;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1FjS4CJNhWWiVr0cmpqhTyZSn3AUOzUvlMZSKv9MKwE=;
-	b=z4PEeV0zB5Rt8lcC2FcOX6Evq7FV8ckwQ5U7RyBgWOiAWdz8r5QQ2nVB1LIl1BrOp2wEOf
-	2XaBfplHGBNC0EBA==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLn3NICR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C50B2C4CEF7;
+	Wed, 25 Mar 2026 09:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774429430;
+	bh=w/GTjS8YC8uH+Sy4A1EDV8UGyt/H8PZtAnk1cljNo8w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fLn3NICRRfLAwA8fdLwt9a3S1jWOlTsyhgvm9TKxtZQRkOTPn8eHM0Xie9VDcCkZ/
+	 8GJrVhP3m4gxmWaHeYlqNHI+OKhIvY/oJIVcpXXModAzVFaBKxCcb5IdkMSHsXYcg8
+	 XO313s7oi20EAwUjxewUYW3Wta5AzC082RHyrjwFrm+YIr98GK8PK9KLX9+mDX3XC4
+	 vGyt6W2oHGh8pDpJDbHCyrvtvQTgvJx8WHlZqYIYMiRGk3+fPTmKI2yMJ3yNGO6Oj+
+	 NzaBbOgn605Hf2tAPp7Y+JBWc7/JLkhdGfhSc8tn0x/LKgFlIWJt4A7uE6w4llufPk
+	 RTldLE+GWj4pg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1w5K9T-00000005Trk-21XU;
+	Wed, 25 Mar 2026 09:03:47 +0000
+Date: Wed, 25 Mar 2026 09:03:47 +0000
+Message-ID: <86o6kc46x8.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Wei-Lin Chang <weilin.chang@arm.com>
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 1/3] KVM: arm64: selftests: Add library functions for NV
+In-Reply-To: <20260325003620.2214766-2-weilin.chang@arm.com>
+References: <20260325003620.2214766-1-weilin.chang@arm.com>
+	<20260325003620.2214766-2-weilin.chang@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] selftests/livepatch: add test for module function
- patching
-From: Miroslav Benes <mbenes@suse.cz>
-To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Miroslav Benes <mbenes@suse.cz>, Pablo Hugen <phugen@redhat.com>, 
- live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, jpoimboe@kernel.org, jikos@kernel.org, 
- pmladek@suse.com, shuah@kernel.org
-In-Reply-To: <acKje1XMQMQQYBIL@redhat.com>
-References: <20260320201135.1203992-1-phugen@redhat.com>
- <177436214729.62466.7977538958560300344.b4-review@b4>
- <acKje1XMQMQQYBIL@redhat.com>
-Date: Wed, 25 Mar 2026 09:45:22 +0100
-Message-Id: <177442832293.70541.15179138173140080388.b4-reply@b4>
-X-Mailer: b4 0.15.0
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [17.38 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_SPAM_SHORT(2.99)[0.997];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	DIRECT_TO_MX(0.00)[b4 0.15.0];
-	RCVD_COUNT_ZERO(0.00)[0];
-	URIBL_BLOCKED(0.00)[suse.cz:dkim,suse.cz:email,localhost.localdomain:helo];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spamd-Bar: +++++++++++++++++
-X-Rspamd-Queue-Id: 2F3875BD65
-X-Rspamd-Action: add header
-X-Spam-Flag: YES
-X-Spam-Score: 17.38
-X-Spam-Level: *****************
-X-Spam: Yes
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: weilin.chang@arm.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-> > A nit but is 'noinline' keyword needed here? proc_create_single() below
-> > takes a function pointer so hopefully test_klp_mod_target_show() stays
-> > even without it?
+On Wed, 25 Mar 2026 00:36:18 +0000,
+Wei-Lin Chang <weilin.chang@arm.com> wrote:
 > 
-> No strong preference either way.  I won't fault a livepatch developer
-> for being paranoid w/respect to the compiler :D
+> The API is designed for userspace to first call prepare_{l2_stack,
+> hyp_state, eret_destination, nested_sync_handler}, with a function
+> supplied to prepare_eret_destination() to be run in L2. Then run_l2()
+> can be called in L1 to run the given function in L2.
+> 
+> Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile.kvm      |  2 +
+>  .../selftests/kvm/include/arm64/nested.h      | 18 ++++++
+>  .../testing/selftests/kvm/lib/arm64/nested.c  | 61 +++++++++++++++++++
+>  .../selftests/kvm/lib/arm64/nested_asm.S      | 35 +++++++++++
+>  4 files changed, 116 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/include/arm64/nested.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/arm64/nested.c
+>  create mode 100644 tools/testing/selftests/kvm/lib/arm64/nested_asm.S
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index 98da9fa4b8b7..5e681e8e0cd7 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -34,6 +34,8 @@ LIBKVM_arm64 += lib/arm64/gic.c
+>  LIBKVM_arm64 += lib/arm64/gic_v3.c
+>  LIBKVM_arm64 += lib/arm64/gic_v3_its.c
+>  LIBKVM_arm64 += lib/arm64/handlers.S
+> +LIBKVM_arm64 += lib/arm64/nested.c
+> +LIBKVM_arm64 += lib/arm64/nested_asm.S
+>  LIBKVM_arm64 += lib/arm64/processor.c
+>  LIBKVM_arm64 += lib/arm64/spinlock.c
+>  LIBKVM_arm64 += lib/arm64/ucall.c
+> diff --git a/tools/testing/selftests/kvm/include/arm64/nested.h b/tools/testing/selftests/kvm/include/arm64/nested.h
+> new file mode 100644
+> index 000000000000..739ff2ee0161
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/arm64/nested.h
+> @@ -0,0 +1,18 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * ARM64 Nested virtualization defines
+> + */
+> +
+> +#ifndef SELFTEST_KVM_NESTED_H
+> +#define SELFTEST_KVM_NESTED_H
+> +
+> +void prepare_l2_stack(struct kvm_vm *vm, struct kvm_vcpu *vcpu);
+> +void prepare_hyp_state(struct kvm_vm *vm, struct kvm_vcpu *vcpu);
+> +void prepare_eret_destination(struct kvm_vm *vm, struct kvm_vcpu *vcpu, void *l2_pc);
+> +void prepare_nested_sync_handler(struct kvm_vm *vm, struct kvm_vcpu *vcpu);
+> +
+> +void run_l2(void);
+> +void after_hvc(void);
+> +void do_hvc(void);
+> +
+> +#endif /* SELFTEST_KVM_NESTED_H */
+> diff --git a/tools/testing/selftests/kvm/lib/arm64/nested.c b/tools/testing/selftests/kvm/lib/arm64/nested.c
+> new file mode 100644
+> index 000000000000..111d02f44cfe
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/arm64/nested.c
+> @@ -0,0 +1,61 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * ARM64 Nested virtualization helpers
+> + */
+> +
+> +#include "kvm_util.h"
+> +#include "nested.h"
+> +#include "processor.h"
+> +#include "test_util.h"
+> +
+> +#include <asm/sysreg.h>
+> +
+> +static void hvc_handler(struct ex_regs *regs)
+> +{
+> +	GUEST_ASSERT_EQ(get_current_el(), 2);
+> +	GUEST_PRINTF("hvc handler\n");
+> +	regs->pstate = PSR_MODE_EL2h | PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_F_BIT;
+> +	regs->pc = (u64)after_hvc;
+> +}
+> +
+> +void prepare_l2_stack(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	size_t l2_stack_size;
+> +	uint64_t l2_stack_paddr;
+> +
+> +	l2_stack_size = vm->page_size == 4096 ? DEFAULT_STACK_PGS * vm->page_size :
+> +					 vm->page_size;
 
-True :)
+Please use symbolic constants. Also, this looks wrong if the default
+stack size is 32k and the page size is 16k. You probably want to
+express a stack size directly, rather than a number of pages.
 
-Either way
+> +	l2_stack_paddr = __vm_phy_pages_alloc(vm, l2_stack_size / vm->page_size,
+> +					      0, 0, false);
+> +	vcpu_set_reg(vcpu, ARM64_CORE_REG(sp_el1), l2_stack_paddr + l2_stack_size);
+> +}
+> +
+> +void prepare_hyp_state(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2), HCR_EL2_RW);
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+Surely the E2H value matters. Or are you planning to only run this on
+configuration that hardcode E2H==0? That'd be pretty limiting.
 
+> +}
+> +
+> +void prepare_eret_destination(struct kvm_vm *vm, struct kvm_vcpu *vcpu, void *l2_pc)
+> +{
+> +	vm_paddr_t do_hvc_paddr = addr_gva2gpa(vm, (vm_vaddr_t)do_hvc);
+> +	vm_paddr_t l2_pc_paddr = addr_gva2gpa(vm, (vm_vaddr_t)l2_pc);
+> +
+> +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SPSR_EL2), PSR_MODE_EL1h |
+> +							    PSR_D_BIT     |
+> +							    PSR_A_BIT     |
+> +							    PSR_I_BIT     |
+> +							    PSR_F_BIT);
+> +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_ELR_EL2), l2_pc_paddr);
+> +	/* HACK: use TPIDR_EL2 to pass address, see run_l2() in nested_asm.S */
+> +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), do_hvc_paddr);
+> +}
+> +
+> +void prepare_nested_sync_handler(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	if (!vm->handlers) {
+> +		vm_init_descriptor_tables(vm);
+> +		vcpu_init_descriptor_tables(vcpu);
+> +	}
+> +	vm_install_sync_handler(vm, VECTOR_SYNC_LOWER_64,
+> +				ESR_ELx_EC_HVC64, hvc_handler);
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/arm64/nested_asm.S b/tools/testing/selftests/kvm/lib/arm64/nested_asm.S
+> new file mode 100644
+> index 000000000000..4ecf2d510a6f
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/arm64/nested_asm.S
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * ARM64 Nested virtualization assembly helpers
+> + */
+> +
+> +.globl run_l2
+> +.globl after_hvc
+> +.globl do_hvc
+> +run_l2:
+> +	/*
+> +	 * At this point TPIDR_EL2 will contain the gpa of do_hvc from
+> +	 * prepare_eret_destination(). gpa of do_hvc have to be passed in
+> +	 * because we want L2 to issue an hvc after it returns from the user
+> +	 * passed function. In order for that to happen the lr must be
+> +	 * controlled, which at this point holds the value of the address of
+> +	 * the next instruction after this run_l2() call, which is not useful
+> +	 * for L2. Additionally, L1 can't translate gva into gpa, so we can't
+> +	 * calculate it here.
+> +	 *
+> +	 * So first save lr, then move TPIDR_EL2 to lr so when the user supplied
+> +	 * L2 function returns, L2 jumps to do_hvc and let the L1 hvc handler
+> +	 * take control. This implies we expect the L2 code to preserve lr and
+> +	 * calls a regular ret in the end, which is true for normal C functions.
+> +	 * The hvc handler will jump back to after_hvc when finished, and lr
+> +	 * will be restored and we can return run_l2().
+> +	 */
+> +	stp	x29, lr, [sp, #-16]!
+> +	mrs	x0, tpidr_el2
+> +	mov	lr, x0
+> +	eret
+> +after_hvc:
+> +	ldp	x29, lr, [sp], #16
+> +	ret
+> +do_hvc:
+> +	hvc #0
+
+This probably works for a single instruction L2 guest, but not having
+any save/restore of the L2 context makes it hard to build anything on
+top of this.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
