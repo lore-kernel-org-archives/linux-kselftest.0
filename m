@@ -1,103 +1,218 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E3C3BADA3
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 16:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69892D8364
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 16:42:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774455835; cv=none; b=DpnE28UVqA+shRBEHzkK1KhAGiVZeekn8DpemxTHrmuUOWEKB8JOfLchDlmUo2syRBmB3K5HZ+9N6na+k1ZB2JKUCQg008kLIx7pYrLKS90nqn/cZ5WOUgpz17/H0acoAT9vFedAJlnL003vHxC7dnNcqVrtkG1Zovzi0Cl8iwo=
+	t=1774456951; cv=none; b=FdeOfzco2CVoKX6ve4TMLtLSRPoBf60ySrf9wBl8SZMuTPOZpJX7MW7pExpFz1Y44NIQJN4xbt2d2tIfo0xOYBbXT9Pvw0DsBDF1jGkHqqR3iLmBCmVUp3a+CYdbGgeI36OH+g7q+BDAD76G9QVo7yYhVH83lSlY35TW9AuN5cU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774455835; c=relaxed/simple;
-	bh=nbXezRXYLqx1BUyXtaEyqHSTcxbH5k5T6PAsOQkPaGw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mLlc6Mm+N2GJ6U9D//qDDQtD8+0CZ/XyrNsW10Ifzh4ba1PmmWcpjwbCSzIQrAeiKR0b2ds7lbwSL5/eTVHicqme9j2tYBLZb4fWVhgxic0A8PmDFpaUxKMU+XuoxEGAhZXz5SIH9aat7pzp0i57yp70uovxb3vgR/99myDMKKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A07nyL4y; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1774456951; c=relaxed/simple;
+	bh=wmWT127/HKvUC1X1eR0VtAOdbpq8A0sdI0eZra3FEW8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ojte6v4MgfBdl8DlkDYfX5oxJGq7xPb+uhLgIIAYQB5VsqIZ05epLOdts9ln4T3g5Wo7cskPZUnJzzZU4Bmx9k75I1mG69mRtu+gozzcEpQwsRIzSyj92SSuSqESbraUHsQ5KN2yQL/PtNooR8sF7F5twypM4lgfNp+dE+uIrZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M85FIDU6; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A07nyL4y"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M85FIDU6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774455832;
+	s=mimecast20190719; t=1774456948;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3wC6baJp6zL608VaSymAAbIsY7ajVAj3x88sWAoRz70=;
-	b=A07nyL4yuZBGJYnUckpMOfm2wQui8wWKEkywDKXBCC+f+d1laYecI7WbWS/++Www8MZwzf
-	fiRPh6v3eeEm34O/DgkRUa9UMqNF1v7Qw0x07WFN/mnhS09St0FMuUofqvUz/MrjRjAnzX
-	qmXZe8J0jpfXIGNALIrr4DKS613xiRw=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=k8Ejv58wPUbDLQJ+Tj4MdIi2shlj9vonZOVFSYDuwn8=;
+	b=M85FIDU6/l+oRzy1M5UNH395SWIXjgtQsxc5IAwrUgwUPClsngi/MnmE4jPf7BSReKXjn0
+	0DGbzXKCcz2+fqw+nZwKAhzF3OP6HAE7F0jh4VNoLw+DnqMrs4iBeeiZQTCwc4FpjEYfHp
+	C21KrPY3pH8OkOh1l3Mz4wW6NlWg/Sc=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-257-g4v1uGoEP_eWbXKoQ_7gpQ-1; Wed,
- 25 Mar 2026 12:23:50 -0400
-X-MC-Unique: g4v1uGoEP_eWbXKoQ_7gpQ-1
-X-Mimecast-MFC-AGG-ID: g4v1uGoEP_eWbXKoQ_7gpQ_1774455828
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-339-lcagNMoDMTGvBrvVXY_vqg-1; Wed,
+ 25 Mar 2026 12:42:23 -0400
+X-MC-Unique: lcagNMoDMTGvBrvVXY_vqg-1
+X-Mimecast-MFC-AGG-ID: lcagNMoDMTGvBrvVXY_vqg_1774456938
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 39DAF195608E;
-	Wed, 25 Mar 2026 16:23:48 +0000 (UTC)
-Received: from fedora (unknown [10.22.81.79])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 87790300019F;
-	Wed, 25 Mar 2026 16:23:44 +0000 (UTC)
-Date: Wed, 25 Mar 2026 12:23:41 -0400
-From: Audra Mitchell <audra@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, ljs@kernel.org,
-	Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
-	surenb@google.com, mhocko@suse.com, shuah@kernel.org,
-	usama.anjum@collabora.com, colin.i.king@gmail.com,
-	avagin@google.com, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: Fix soft-dirty kselftest supported check
-Message-ID: <acQMDW9qM2MtYpkT@fedora>
-References: <f7fef55d-4334-4d1d-b6c6-b409fea7e2a1@kernel.org>
- <20260320184010.759461-1-audra@redhat.com>
- <20260320184010.759461-2-audra@redhat.com>
- <a4fb1d56-8c10-46de-acf5-9a00ce0db4ad@kernel.org>
- <20260324162324.6efa49422d145afd4dd37dda@linux-foundation.org>
- <20260324162445.fb353f4d2c85d89bc25be03a@linux-foundation.org>
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 94F8618005B4;
+	Wed, 25 Mar 2026 16:42:17 +0000 (UTC)
+Received: from [10.22.90.27] (unknown [10.22.90.27])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9C8571800351;
+	Wed, 25 Mar 2026 16:42:13 +0000 (UTC)
+Message-ID: <82661a8e-256c-4cf4-96b2-98d52cf62cde@redhat.com>
+Date: Wed, 25 Mar 2026 12:42:12 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324162445.fb353f4d2c85d89bc25be03a@linux-foundation.org>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/7] selftests: memcg: Increase error tolerance in
+ accordance with page size
+To: Li Wang <liwang@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+ James Houghton <jthoughton@google.com>,
+ Sebastian Chlad <sebastianchlad@gmail.com>,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
+References: <20260320204241.1613861-1-longman@redhat.com>
+ <20260320204241.1613861-5-longman@redhat.com> <acDzaouBPCIpB7Ij@redhat.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <acDzaouBPCIpB7Ij@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Tue, Mar 24, 2026 at 04:24:45PM -0700, Andrew Morton wrote:
-> On Tue, 24 Mar 2026 16:23:24 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
-> 
-> > On Mon, 23 Mar 2026 12:56:33 +0100 "David Hildenbrand (Arm)" <david@kernel.org> wrote:
-> > 
-> > > > +		supported = __pagemap_scan_get_categories(fd, test_area, &r) >= 0;
-> > > 
-> > > You have to cast it to a (long) first before comparing, like we do in
-> > > pagemap_scan_get_categories().
-> > > 
-> > > 
-> > > Maybe best written as
-> > > 
-> > > 	long ret = __pagemap_scan_get_categories(fd, test_area, &r);
-> > > 
-> > > 	if (ret >= 0)
-> > > 		supported = 1;
-> > > 
-> > > > +		ksft_print_msg("errno: %d\n", errno);
-> > > 
-> > > I guess we should drop that, was mostly for testing.
+On 3/23/26 4:01 AM, Li Wang wrote:
+> On Fri, Mar 20, 2026 at 04:42:38PM -0400, Waiman Long wrote:
+>> It was found that some of the tests in test_memcontrol can fail more
+>> readily if system page size is larger than 4k. It is because the
+>> actual memory.current value deviates more from the expected value with
+>> larger page size. This is likely due to the fact there may be up to
+>> MEMCG_CHARGE_BATCH pages of charge hidden in each one of the percpu
+>> memcg_stock.
+>>
+>> To avoid this failure, the error tolerance is now increased in accordance
+>> to the current system page size value. The page size scale factor is
+>> set to 2 for 64k page and 1 for 16k page.
+>>
+>> Changes are made in alloc_pagecache_max_30M(), test_memcg_protection()
+>> and alloc_anon_50M_check_swap() to increase the error tolerance for
+>> memory.current for larger page size. The current set of values are
+>> chosen to ensure that the relevant test_memcontrol tests no longer
+>> have any test failure in a 100 repeated run of test_memcontrol with a
+>> 4k/16k/64k page size kernels on an arm64 system.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   .../cgroup/lib/include/cgroup_util.h          |  3 ++-
+>>   .../selftests/cgroup/test_memcontrol.c        | 23 ++++++++++++++-----
+>>   2 files changed, 19 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
+>> index 77f386dab5e8..2293e770e9b4 100644
+>> --- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
+>> +++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
+>> @@ -6,7 +6,8 @@
+>>   #define PAGE_SIZE 4096
+>>   #endif
+>>   
+>> -#define MB(x) (x << 20)
+>> +#define KB(x) ((x) << 10)
+>> +#define MB(x) ((x) << 20)
+>>   
+>>   #define USEC_PER_SEC	1000000L
+>>   #define NSEC_PER_SEC	1000000000L
+>> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+>> index babbfad10aaf..c078fc458def 100644
+>> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+>> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+>> @@ -26,6 +26,7 @@
+>>   static bool has_localevents;
+>>   static bool has_recursiveprot;
+>>   static int page_size;
+>> +static int pscale_factor;	/* Page size scale factor */
+>>   
+>>   int get_temp_fd(void)
+>>   {
+>> @@ -571,16 +572,17 @@ static int test_memcg_protection(const char *root, bool min)
+>>   	if (cg_run(parent[2], alloc_anon, (void *)MB(148)))
+>>   		goto cleanup;
+>>   
+>> -	if (!values_close(cg_read_long(parent[1], "memory.current"), MB(50), 3))
+>> +	if (!values_close(cg_read_long(parent[1], "memory.current"), MB(50),
+>> +				       3 + (min ? 0 : 4) * pscale_factor))
+>>   		goto cleanup;
+>>   
+>>   	for (i = 0; i < ARRAY_SIZE(children); i++)
+>>   		c[i] = cg_read_long(children[i], "memory.current");
+>>   
+>> -	if (!values_close(c[0], MB(29), 15))
+>> +	if (!values_close(c[0], MB(29), 15 + 3 * pscale_factor))
+>>   		goto cleanup;
+>>   
+>> -	if (!values_close(c[1], MB(21), 20))
+>> +	if (!values_close(c[1], MB(21), 20 + pscale_factor))
+>>   		goto cleanup;
+>>   
+>>   	if (c[3] != 0)
+>> @@ -596,7 +598,8 @@ static int test_memcg_protection(const char *root, bool min)
+>>   	}
+>>   
+>>   	current = min ? MB(50) : MB(30);
+>> -	if (!values_close(cg_read_long(parent[1], "memory.current"), current, 3))
+>> +	if (!values_close(cg_read_long(parent[1], "memory.current"), current,
+>> +				       9 + (min ? 0 : 6) * pscale_factor))
+>>   		goto cleanup;
+>>   
+>>   	if (!reclaim_until(children[0], MB(10)))
+>> @@ -684,7 +687,7 @@ static int alloc_pagecache_max_30M(const char *cgroup, void *arg)
+>>   		goto cleanup;
+>>   
+>>   	current = cg_read_long(cgroup, "memory.current");
+>> -	if (!values_close(current, MB(30), 5))
+>> +	if (!values_close(current, MB(30), 5 + (pscale_factor ? 2 : 0)))
+>>   		goto cleanup;
+>>   
+>>   	ret = 0;
+>> @@ -1004,7 +1007,7 @@ static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
+>>   		*ptr = 0;
+>>   
+>>   	mem_current = cg_read_long(cgroup, "memory.current");
+>> -	if (!mem_current || !values_close(mem_current, mem_max, 3))
+>> +	if (!mem_current || !values_close(mem_current, mem_max, 6 + pscale_factor))
+>>   		goto cleanup;
+>>   
+>>   	swap_current = cg_read_long(cgroup, "memory.swap.current");
+>> @@ -1684,6 +1687,14 @@ int main(int argc, char **argv)
+>>   	if (page_size <= 0)
+>>   		page_size = PAGE_SIZE;
+>>   
+>> +	/*
+>> +	 * It is found that the actual memory.current value can deviate more
+>> +	 * from the expected value with larger page size. So error tolerance
+>> +	 * will have to be increased a bit more for larger page size.
+>> +	 */
+>> +	if (page_size > KB(4))
+>> +		pscale_factor = (page_size >= KB(64)) ? 2 : 1;
+> This is a good improment but I still think the pscale_factor adjustments
+> are a bit fragile, each call site needs its own hand-tuned formula, and only
+> three page sizes (4K/16K/64K) are handled. If a new page size shows up,
+> every call site needs revisiting.
+>
+> How about centralizing the page size adjustment inside values_close()
+> itself? Something like:
+>
+>      static inline int values_close(long a, long b, int err)
+>      {
+>            ssize_t page_adjusted_err = ffs(page_size >> 13) + err;
+>      
+>            return 100 * labs(a - b) <= (a + b) * page_adjusted_err;
+>      }
+>
+> This adds one extra percent of tolerance per doubling above 4K, scales
+> continuously for any power-of-two page size, and also fixes an integer
+> truncation issue in the original: (a + b) / 100 * err loses precision
+> when (a + b) < 100.
+>
+> With this, the callers wouldn't need any changes at all.
+>
+> This method is inspired from LTP:
+>    https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/controllers/memcg/memcontrol_common.h#L27
 
-Wouldn't it be prudent to also update __pagemap_scan_get_categories
-return type to a long? Right now its uint64_t, but we expect a long
-to be returned from the ioctl:
+Good point. I will implement something like in the next version.
 
-	static long do_pagemap_cmd(struct file *file, unsigned int cmd,
-                           unsigned long arg)
-
-I've made the other changes, but I'll wait to push the next version after
-this feedback. Thanks!
+Cheers,
+Longman
 
