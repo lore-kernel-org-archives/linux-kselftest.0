@@ -1,314 +1,207 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54D534F479
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 09:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5323502A4;
+	Wed, 25 Mar 2026 09:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774429901; cv=none; b=YGVmWfnkOzAxTqRYuSvS/yWfFe9uWk5cEKEGL4/NuPrrADecpi4YMaznASe+kP9r0Jym3alitJrc+Z4JMiraM0PVT+5ylln5SXnZQDfGR6k2YA2DUO5Z2lnpwQS+LnZP1415FgBqzxs2s8oAlwjeIOsSmthL7nsoTyJGTCyJKPA=
+	t=1774430303; cv=none; b=CCYplBmCacgPkiDkqViv7Xttn9uFChhrgOHqZql86n+B7PMZ0mm9HodLhD+Guhle9FlSd6BAZh13dH8m/69IqP8gHfUie1974vYFUpy0vPUNJSdcrfihBQtXaGJrMpcW7uRmUz29wcoLy6/r4lnm5TzKDmBRDArGmq5wDoht7go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774429901; c=relaxed/simple;
-	bh=jh9HLmPM2nm8qmBrMQDKKIviyQT4DUG9kNN8lt6k1Ig=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=R7rreVG5q58GVQTTGthgpeZLm2XBK9dlgfuSZrYFAtJPAoxJOdrtD3B/9mvZ8TLXf+vL8TpRG8ouNviwuyNqEMg3VPKJlcKyKKu5BlUj1Nwnq+5TvRyfVEZ/qm+l0TPihJpH8XStTGE9wfycFeciBzpkHKYpI7NiTJmiOu0tMdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbo/oyKf; arc=none smtp.client-ip=74.125.82.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774430303; c=relaxed/simple;
+	bh=0i4abdRDleJm92gWlAzYDCiaX3cyuhdf9fdZTk6kWlI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M2Ri5iFBz8TZptumPpjb+kw/Ndf8q/LAjIYfCQfIP5jplDsZHYgj2D8TAkaWvIHahjBGugg4/g3fa44gpcV/hUBEbgQQr4S+Hc6DO31GoJ6RJGsrTpg8fckT0vmeNBJBVsJiqUzchw8eiExAMXqjXyPdxvg1IGjCMkTZB8eF2+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8bgt+aS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbo/oyKf"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2c1092cc08cso2898291eec.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 02:11:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774429899; x=1775034699; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5i4iFnlZOOrZJKAXSL28N68w+sPjuPG58XQHlTJ8bXg=;
-        b=cbo/oyKf+aV3sCxDo+8NiqFRkhFQai6Fz4SJaAbi7awp/J5twNEldDYkwQ2dzExy5L
-         66sViwuSL89VhdDQfcoJllCFu0bqB2lajII1xt9rTGhWECMbmurejJ7f0jscK9e3aemj
-         23J9UHOEoXcfYEDOf8L19tYHFWpuVxVPuayBDUWlgSUn89k3I3q5zSjnqNdvRsm9JOyV
-         ulHnDHxcKjQ2uHtBiTtPqk16S3z9YC+mWJg01hLzd+U3215QMazDsUvPPNQ05W4tXDoM
-         nfXyfZEXGa2pbmDL5YUzVl2cbte23uY8xdbPt17+LuSEw9/RUXMtecx3SblMRRZEfVS4
-         Y1Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774429899; x=1775034699;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5i4iFnlZOOrZJKAXSL28N68w+sPjuPG58XQHlTJ8bXg=;
-        b=D7Wck/EaVy/++6ZtYw1wT3x97OO5sqNkyq3BdYVR8r/g5UXztDAX4cZR5iAEfqS+Yj
-         whlhSKLZ9/XCrkeudlKJR/ftgW9ZmBYJVha/ApZhmUOhZsMYCxu+IXeKGT+3c5+CYcbU
-         5laQ9BY/wTrtMTR1LKQGcP9HFClAYWYLSMB6aSOdD+MDw3g11sIGV5L8KZHgxTTJfea0
-         KkHY1ZIWi0OvfUIY2c16mU2C9knS0aP//3tkLAYNMwASBOXiCMvfciTRfaWdc4yzsYm3
-         EkqKAUYSpBqdYYUALbrMErMxLugAfeaer4hUMbAnsDZoK3SM5w2A0ELIez39L1KagodD
-         goOg==
-X-Forwarded-Encrypted: i=1; AJvYcCWRjkjxSZ7T+F2vfvLvz/lCqT20YbCEWH4hlLwSFLpTXDDOlQOx36zr+yZW/GkX5eK08Fe7lGUnbUUPQrHYOWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw49U0+bQtLKEmNxbEaYL/9zEqiLZRuJFzA0/mYzMLKmBCuj2wZ
-	UlfSBQ4aJp71CQWy9nCwG5TbptqQr6gwOr/5GlNN2zO6BxQw8vTViany
-X-Gm-Gg: ATEYQzzKAObP+orQoMbFBa56F6SOlyWsnlUX3M275kwElpownbssXFH4Nrs8uAG9njA
-	UJheypd8jf2tu3mQ06qUvO50s50gRFnUHxlU2BzzrRJE2WfJvyayh6cj9wx6oCVlY3HbQMbeWgQ
-	duiY19eAodahpYXvK5tITT2BOEjEhpYCzVioPd1MTqrvf76bzzgl1jbOic2lCA3QxjOVpj/PpXN
-	XvUF1QrBZAcDDWgPlbTgEa+pgGOLNvWVlIBRfuoO8/s/Wb+PQntJL8FG5Z36v9qRP1/hv7jz1rG
-	oJUpfpjWdKml2GuU7pmQkD1oqxQlCmTcAhB134P0t2wb1+HXMns/j/RdoSrF63JjTy6yQo6wd05
-	1XjbMnOGrrYVHgiKmyJLrNqwmbwlsBsRD/7hepiXiEqnhYr84BtQ6SfujDAgUSPshTyQEAsUfkI
-	gbIt6ZDEj0/jOIqHAb
-X-Received: by 2002:a05:7300:148f:b0:2be:2cfe:68b7 with SMTP id 5a478bee46e88-2c15d36146dmr1280732eec.11.1774429898988;
-        Wed, 25 Mar 2026 02:11:38 -0700 (PDT)
-Received: from wujing. ([74.48.213.230])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c159e25dc7sm2786389eec.27.2026.03.25.02.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 02:11:38 -0700 (PDT)
-From: Qiliang Yuan <realwujing@gmail.com>
-Date: Wed, 25 Mar 2026 17:09:46 +0800
-Subject: [PATCH 15/15] selftests: dhei: Add functional tests for dynamic
- housekeeping
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8bgt+aS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2D2C4CEF7;
+	Wed, 25 Mar 2026 09:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774430302;
+	bh=0i4abdRDleJm92gWlAzYDCiaX3cyuhdf9fdZTk6kWlI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=C8bgt+aSaIBXurlz5x1xUUO0IvckVpM/oUBKrmOjwTSFa4Upl8Rl75127DwiSs34h
+	 ilQByYAjum0+9FBVmUCpYMER9HvMEMj/l8TuZEKFeEvLGtYiLyGpO/NvGeCtrk3lvK
+	 nBQ0de7bobdfILJK6idX5Qtsugmm5AdRNqsRjxdrov8goDeBdeAGQ7eT/KOc+914Gb
+	 Zm1uGMp1Qw3j7yTt8OY22nB+2l5bfvNPhGo5TVkka6vulOSM15QpPydA+D9BqAk2F/
+	 prdYYlP1tIgNzVPXy5Pk7N/UXjdOSYvj39EaUT1aYBH8FWOmFlIZywZjxG6jFxWFyZ
+	 ErPTweqjgwY0Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1w5KNY-00000005U8U-2Vxu;
+	Wed, 25 Mar 2026 09:18:20 +0000
+Date: Wed, 25 Mar 2026 09:18:20 +0000
+Message-ID: <86mrzw468z.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Wei-Lin Chang <weilin.chang@arm.com>
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 3/3] KVM: arm64: selftests: Enable stage-2 in NV preparation functions
+In-Reply-To: <20260325003620.2214766-4-weilin.chang@arm.com>
+References: <20260325003620.2214766-1-weilin.chang@arm.com>
+	<20260325003620.2214766-4-weilin.chang@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260325-dhei-v12-final-v1-15-919cca23cadf@gmail.com>
-References: <20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com>
-In-Reply-To: <20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com>
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- Thomas Gleixner <tglx@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
- Frederic Weisbecker <frederic@kernel.org>, 
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
- Joel Fernandes <joelagnelf@nvidia.com>, 
- Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>, 
- Uladzislau Rezki <urezki@gmail.com>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
- Tejun Heo <tj@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
- Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>, 
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
- Anna-Maria Behnsen <anna-maria@linutronix.de>, 
- Ingo Molnar <mingo@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, Qiliang Yuan <realwujing@gmail.com>
-X-Mailer: b4 0.13.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: weilin.chang@arm.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Dynamic Housekeeping (DHEI) introduces complex runtime interactions
-across sysfs, scheduler, and various kernel subsystems. There are
-currently no automated tests to verify the integrity of sysfs
-boundaries, safety guards, or SMT-aware isolation logic.
+On Wed, 25 Mar 2026 00:36:20 +0000,
+Wei-Lin Chang <weilin.chang@arm.com> wrote:
+> 
+> Introduce library functions for setting up guest stage-2 page tables,
+> then use that to give L2 an identity mapped stage-2 and enable it.
+> 
+> The translation and stage-2 page table built is simple, start level 0,
+> 4 levels, 4KB granules, normal cachable, 48-bit IA, 40-bit OA.
 
-Implement a kselftest suite for DHEI to ensure functional correctness.
-This includes a dedicated test script (dhei_test.sh) covering sysfs
-interface accessibility, safety guard enforcement, and SMT-aware grouping.
+That's a no go. The most common NV-capable out there can realistically
+only do 16kB at S2, and is limited to 36bit IPA. We can't really
+afford to say "too bad" and leave the main development platform behind.
 
-The suite also incorporates stress-ng based pressure testing to verify
-load-shedding efficiency on isolated CPUs, Tick suppression under active
-task load, and Workqueue restriction under competitive system pressure.
+> 
+> The nested page table code is adapted from lib/x86/vmx.c.
 
-Usage:
-  make -C tools/testing/selftests/dhei run_tests
+I guess this starting point is the main issue.
 
-Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
----
- tools/testing/selftests/Makefile          |   1 +
- tools/testing/selftests/dhei/Makefile     |   4 +
- tools/testing/selftests/dhei/dhei_test.sh | 160 ++++++++++++++++++++++++++++++
- 3 files changed, 165 insertions(+)
+> 
+> Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
+> ---
+>  .../selftests/kvm/include/arm64/nested.h      |  7 ++
+>  .../selftests/kvm/include/arm64/processor.h   |  9 ++
+>  .../testing/selftests/kvm/lib/arm64/nested.c  | 97 ++++++++++++++++++-
+>  3 files changed, 111 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/arm64/nested.h b/tools/testing/selftests/kvm/include/arm64/nested.h
+> index 739ff2ee0161..0be10a775e48 100644
+> --- a/tools/testing/selftests/kvm/include/arm64/nested.h
+> +++ b/tools/testing/selftests/kvm/include/arm64/nested.h
+> @@ -6,6 +6,13 @@
+>  #ifndef SELFTEST_KVM_NESTED_H
+>  #define SELFTEST_KVM_NESTED_H
+>  
+> +uint64_t get_l1_vtcr(void);
+> +
+> +void nested_map(struct kvm_vm *vm, vm_paddr_t guest_pgd,
+> +		uint64_t nested_paddr, uint64_t paddr, uint64_t size);
+> +void nested_map_memslot(struct kvm_vm *vm, vm_paddr_t guest_pgd,
+> +			uint32_t memslot);
+> +
+>  void prepare_l2_stack(struct kvm_vm *vm, struct kvm_vcpu *vcpu);
+>  void prepare_hyp_state(struct kvm_vm *vm, struct kvm_vcpu *vcpu);
+>  void prepare_eret_destination(struct kvm_vm *vm, struct kvm_vcpu *vcpu, void *l2_pc);
+> diff --git a/tools/testing/selftests/kvm/include/arm64/processor.h b/tools/testing/selftests/kvm/include/arm64/processor.h
+> index ac97a1c436fc..5de2e932d95a 100644
+> --- a/tools/testing/selftests/kvm/include/arm64/processor.h
+> +++ b/tools/testing/selftests/kvm/include/arm64/processor.h
+> @@ -104,6 +104,15 @@
+>  #define TCR_HA			(UL(1) << 39)
+>  #define TCR_DS			(UL(1) << 59)
+>  
+> +/* VTCR_EL2 specific flags */
+> +#define VTCR_EL2_T0SZ_BITS(x)	((UL(64) - (x)) << VTCR_EL2_T0SZ_SHIFT)
+> +
+> +#define VTCR_EL2_SL0_LV0_4K	(UL(2) << VTCR_EL2_SL0_SHIFT)
+> +#define VTCR_EL2_SL0_LV1_4K	(UL(1) << VTCR_EL2_SL0_SHIFT)
+> +#define VTCR_EL2_SL0_LV2_4K	(UL(0) << VTCR_EL2_SL0_SHIFT)
+> +
+> +#define VTCR_EL2_PS_40_BITS	(UL(2) << VTCR_EL2_PS_SHIFT)
+> +
+>  /*
+>   * AttrIndx[2:0] encoding (mapping attributes defined in the MAIR* registers).
+>   */
+> diff --git a/tools/testing/selftests/kvm/lib/arm64/nested.c b/tools/testing/selftests/kvm/lib/arm64/nested.c
+> index 111d02f44cfe..910f8cd30f96 100644
+> --- a/tools/testing/selftests/kvm/lib/arm64/nested.c
+> +++ b/tools/testing/selftests/kvm/lib/arm64/nested.c
+> @@ -1,8 +1,11 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * ARM64 Nested virtualization helpers
+> + * ARM64 Nested virtualization helpers, nested page table code adapted from
+> + * ../x86/vmx.c.
+>   */
+>  
+> +#include <linux/sizes.h>
+> +
+>  #include "kvm_util.h"
+>  #include "nested.h"
+>  #include "processor.h"
+> @@ -18,6 +21,87 @@ static void hvc_handler(struct ex_regs *regs)
+>  	regs->pc = (u64)after_hvc;
+>  }
+>  
+> +uint64_t get_l1_vtcr(void)
+> +{
+> +	return VTCR_EL2_PS_40_BITS | VTCR_EL2_TG0_4K | VTCR_EL2_ORGN0_WBWA |
+> +	       VTCR_EL2_IRGN0_WBWA | VTCR_EL2_SL0_LV0_4K | VTCR_EL2_T0SZ_BITS(48);
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 56e44a98d6a59..9d16b00623839 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -16,6 +16,7 @@ TARGETS += cpu-hotplug
- TARGETS += damon
- TARGETS += devices/error_logs
- TARGETS += devices/probe
-+TARGETS += dhei
- TARGETS += dmabuf-heaps
- TARGETS += drivers/dma-buf
- TARGETS += drivers/ntsync
-diff --git a/tools/testing/selftests/dhei/Makefile b/tools/testing/selftests/dhei/Makefile
-new file mode 100644
-index 0000000000000..a578691cc677c
---- /dev/null
-+++ b/tools/testing/selftests/dhei/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_PROGS := dhei_test.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/dhei/dhei_test.sh b/tools/testing/selftests/dhei/dhei_test.sh
-new file mode 100755
-index 0000000000000..a6137c52e7132
---- /dev/null
-+++ b/tools/testing/selftests/dhei/dhei_test.sh
-@@ -0,0 +1,160 @@
-+#!/bin/sh
-+# DHEI (Dynamic Housekeeping & Enhanced Isolation) Full-Coverage Verification Script
-+# Strict POSIX compliant version for reliability on all shells.
-+
-+SYSFS_BASE="/sys/kernel/housekeeping"
-+ONLINE_CPUS=$(cat /sys/devices/system/cpu/online)
-+LAST_CPU=$(echo "$ONLINE_CPUS" | awk -F'[,-]' '{print $NF}')
-+
-+# Colors for output
-+GREEN='\033[0;32m'
-+RED='\033[0;31m'
-+NC='\033[0m'
-+
-+log_pass() { echo "${GREEN}[OK]${NC} $1"; }
-+log_fail() { echo "${RED}[FAIL]${NC} $1"; exit 1; }
-+log_info() { echo "[INFO] $1"; }
-+
-+check_root() {
-+    [ "$(id -u)" -eq 0 ] || log_fail "Please run as root"
-+}
-+
-+test_sysfs_structure() {
-+    log_info "TEST 1: Sysfs structure..."
-+    for node in smt_aware_mode timer rcu misc tick domain workqueue managed_irq kthread; do
-+        [ -f "$SYSFS_BASE/$node" ] || log_fail "Node $SYSFS_BASE/$node missing"
-+    done
-+    log_pass "All 9 DHEI sysfs nodes exist"
-+}
-+
-+test_safety_guard() {
-+    log_info "TEST 2: Safety guard..."
-+    if echo "999-1024" > "$SYSFS_BASE/domain" 2>/dev/null; then
-+        log_fail "Safety guard failed: allowed isolation of all CPUs"
-+    fi
-+    log_pass "Safety guard blocked invalid mask"
-+}
-+
-+test_smt_aware_mode() {
-+    log_info "TEST 3: SMT aware logic..."
-+    [ -f /sys/devices/system/cpu/cpu0/topology/thread_siblings_list ] || { log_info "SMT not supported"; return; }
-+    SIBLINGS=$(cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list)
-+    FIRST=$(echo "$SIBLINGS" | cut -d',' -f1 | cut -d'-' -f1)
-+    echo 1 > "$SYSFS_BASE/smt_aware_mode"
-+    if echo "$FIRST" > "$SYSFS_BASE/timer" 2>/dev/null; then
-+         echo 0 > "$SYSFS_BASE/smt_aware_mode"
-+         log_fail "SMT mode failed: accepted partial core"
-+    else
-+         log_pass "SMT mode correctly rejected partial core"
-+    fi
-+    echo 0 > "$SYSFS_BASE/smt_aware_mode"
-+}
-+
-+get_tick_count() {
-+    grep "LOC:" /proc/interrupts | awk -v cpu="$LAST_CPU" '{print $(cpu+2)}'
-+}
-+
-+test_tick_dynamic() {
-+    log_info "TEST 4: Dynamic Tick toggle..."
-+    [ "$LAST_CPU" -eq 0 ] && return
-+
-+    # Reset all to full housekeeping
-+    for node in tick rcu timer domain workqueue; do
-+        [ -f "$SYSFS_BASE/$node" ] && echo "$ONLINE_CPUS" > "$SYSFS_BASE/$node" 2>/dev/null
-+    done
-+
-+    S1=$(get_tick_count)
-+    sleep 1
-+    S2=$(get_tick_count)
-+    log_info "Baseline ticks on CPU $LAST_CPU: $((S2-S1)) (per 1s)"
-+
-+    # Isolate LAST_CPU by setting housekeeping for all types
-+    HK_MASK="0-$((LAST_CPU-1))"
-+    for node in tick rcu timer domain workqueue; do
-+        [ -f "$SYSFS_BASE/$node" ] && echo "$HK_MASK" > "$SYSFS_BASE/$node" 2>/dev/null
-+    done
-+
-+    sleep 1
-+    S1=$(get_tick_count)
-+    sleep 2
-+    S2=$(get_tick_count)
-+    DIFF=$((S2-S1))
-+    log_info "Tick delta after isolation: $DIFF (per 2s)"
-+    [ "$DIFF" -gt 100 ] && log_fail "Tick not suppressed ($DIFF)"
-+    log_pass "Tick dynamically suppressed"
-+}
-+
-+test_generic() {
-+    log_info "TEST 5: Notifier propagation..."
-+    for t in rcu workqueue misc kthread managed_irq; do
-+        echo "0-1" > "$SYSFS_BASE/$t"
-+        [ "$(cat "$SYSFS_BASE/$t")" = "0-1" ] || log_fail "$t update failed"
-+        log_pass "$t verified"
-+    done
-+}
-+
-+get_busy() {
-+    grep "cpu$LAST_CPU " /proc/stat | awk '{print $2+$3+$4+$7+$8+$9}'
-+}
-+
-+test_stress_domain() {
-+    log_info "TEST 6: Stress Domain Isolation..."
-+    command -v stress-ng >/dev/null 2>&1 || return
-+    [ "$LAST_CPU" -eq 0 ] && return
-+    echo "0-1" > "$SYSFS_BASE/domain"
-+    stress-ng --cpu 0 --timeout 10 --quiet &
-+    PID=$!
-+    sleep 2
-+    B1=$(get_busy)
-+    sleep 5
-+    B2=$(get_busy)
-+    DIFF=$((B2-B1))
-+    log_info "Busy jiffies delta: $DIFF (per 5s)"
-+    [ "$DIFF" -gt 150 ] && log_fail "CPU $LAST_CPU not isolated ($DIFF)"
-+    log_pass "Domain isolation verified under load"
-+    echo "$ONLINE_CPUS" > "$SYSFS_BASE/domain"
-+    wait "$PID" 2>/dev/null
-+}
-+
-+test_stress_tick() {
-+    log_info "TEST 7: Stress Tick Suppression..."
-+    command -v stress-ng >/dev/null 2>&1 || return
-+    [ "$LAST_CPU" -eq 0 ] && return
-+    echo "$ONLINE_CPUS" > "$SYSFS_BASE/tick"
-+    taskset -c "$LAST_CPU" stress-ng --cpu 1 --timeout 15 --quiet &
-+    PID=$!
-+    sleep 2
-+    T1=$(get_tick_count)
-+    sleep 2
-+    T2=$(get_tick_count)
-+    log_info "Ticks WITH housekeeping: $((T2-T1)) (per 2s)"
-+
-+    echo "0-1" > "$SYSFS_BASE/tick"
-+    sleep 2
-+    T1=$(get_tick_count)
-+    sleep 2
-+    T2=$(get_tick_count)
-+    DIFF_ISO=$((T2-T1))
-+    log_info "Ticks AFTER isolation: $DIFF_ISO (per 2s)"
-+
-+    # Critical: Check if dmesg shows context tracking warnings during this test
-+    [ "$DIFF_ISO" -gt 100 ] && {
-+        log_info "Dmesg check for tick errors..."
-+        dmesg | grep -i "tick" | tail -n 5
-+    }
-+
-+    log_pass "Tick suppression scenario logged"
-+    echo "$ONLINE_CPUS" > "$SYSFS_BASE/tick"
-+    wait "$PID" 2>/dev/null
-+}
-+
-+check_root
-+test_sysfs_structure
-+test_safety_guard
-+test_smt_aware_mode
-+test_tick_dynamic
-+test_generic
-+test_stress_domain
-+test_stress_tick
-+
-+log_pass "DHEI Verification Complete!"
+Irk. See above.
+
+> +}
+> +
+> +static void __nested_pg_map(struct kvm_vm *vm, uint64_t guest_pgd,
+> +		     uint64_t nested_paddr, uint64_t paddr, uint64_t flags)
+> +{
+> +	uint8_t attr_idx = flags & (PTE_ATTRINDX_MASK >> PTE_ATTRINDX_SHIFT);
+> +	uint64_t pg_attr;
+> +	uint64_t *ptep;
+> +
+> +	TEST_ASSERT((nested_paddr % vm->page_size) == 0,
+> +		"L2 IPA not on page boundary,\n"
+> +		"  nested_paddr: 0x%lx vm->page_size: 0x%x", nested_paddr, vm->page_size);
+> +	TEST_ASSERT((paddr % vm->page_size) == 0,
+> +		"Guest physical address not on page boundary,\n"
+> +		"  paddr: 0x%lx vm->page_size: 0x%x", paddr, vm->page_size);
+> +	TEST_ASSERT((paddr >> vm->page_shift) <= vm->max_gfn,
+> +		"Physical address beyond maximum supported,\n"
+> +		"  paddr: 0x%lx vm->max_gfn: 0x%lx vm->page_size: 0x%x",
+> +		paddr, vm->max_gfn, vm->page_size);
+> +
+> +	ptep = addr_gpa2hva(vm, guest_pgd) + ((nested_paddr >> 39) & 0x1ffu) * 8;
+> +	if (!*ptep)
+> +		*ptep = (vm_alloc_page_table(vm) & GENMASK(47, 12)) | PGD_TYPE_TABLE | PTE_VALID;
+> +	ptep = addr_gpa2hva(vm, *ptep & GENMASK(47, 12)) + ((nested_paddr >> 30) & 0x1ffu) * 8;
+> +	if (!*ptep)
+> +		*ptep = (vm_alloc_page_table(vm) & GENMASK(47, 12)) | PUD_TYPE_TABLE | PTE_VALID;
+> +	ptep = addr_gpa2hva(vm, *ptep & GENMASK(47, 12)) + ((nested_paddr >> 21) & 0x1ffu) * 8;
+> +	if (!*ptep)
+> +		*ptep = (vm_alloc_page_table(vm) & GENMASK(47, 12)) | PMD_TYPE_TABLE | PTE_VALID;
+> +	ptep = addr_gpa2hva(vm, *ptep & GENMASK(47, 12)) + ((nested_paddr >> 12) & 0x1ffu) * 8;
+> +
+> +	pg_attr = PTE_AF | PTE_ATTRINDX(attr_idx) | PTE_TYPE_PAGE | PTE_VALID;
+> +	pg_attr |= PTE_SHARED;
+> +
+> +	*ptep = (paddr & GENMASK(47, 12)) | pg_attr;
+
+Please use named constants, and write a page table generator that is
+independent of page, IA and OA sizes, as advertised to the guest.
+
+Thanks,
+
+	M.
 
 -- 
-2.43.0
-
+Without deviation from the norm, progress is not possible.
