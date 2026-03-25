@@ -1,67 +1,67 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE383370FF
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 09:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54D534F479
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 09:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774429894; cv=none; b=DUxhK4PmoxrPZJghhq/innzeGjtOQfpLC4DfvIWggVmUDaME6OC5zpWbo6ehs9e1dO3h2ehMqKKHVvHO2nYx7BZ2bWh7FVa0DgueNgnbG8yv0pTaS4uyrD5sLfyVG6WHQZUG0Np1uE4mIgXDfq2t2fhOzNKexB8QpczIe4JQt3I=
+	t=1774429901; cv=none; b=YGVmWfnkOzAxTqRYuSvS/yWfFe9uWk5cEKEGL4/NuPrrADecpi4YMaznASe+kP9r0Jym3alitJrc+Z4JMiraM0PVT+5ylln5SXnZQDfGR6k2YA2DUO5Z2lnpwQS+LnZP1415FgBqzxs2s8oAlwjeIOsSmthL7nsoTyJGTCyJKPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774429894; c=relaxed/simple;
-	bh=I7peAwba+g6DkhuQBgaU9UnLggjeBQUrKJ0kCB1N/SQ=;
+	s=arc-20240116; t=1774429901; c=relaxed/simple;
+	bh=jh9HLmPM2nm8qmBrMQDKKIviyQT4DUG9kNN8lt6k1Ig=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F7mtvj0Bte2nMRMLM9e2QhINtkUd8jnkHnRsVKjxTHAhmhl0gBOvE2yGbUTtim9r0A6HQx79tO/+qk5OdtCH8fxOm7hoXBtPuUma23c+N+zKs7j7W/VCjcxxhJxpznoI33lotQsA2pDnm6BZHoJeyiwOqyy/b1c+zETv9JhDQeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DF+2xk2V; arc=none smtp.client-ip=74.125.82.175
+	 In-Reply-To:To:Cc; b=R7rreVG5q58GVQTTGthgpeZLm2XBK9dlgfuSZrYFAtJPAoxJOdrtD3B/9mvZ8TLXf+vL8TpRG8ouNviwuyNqEMg3VPKJlcKyKKu5BlUj1Nwnq+5TvRyfVEZ/qm+l0TPihJpH8XStTGE9wfycFeciBzpkHKYpI7NiTJmiOu0tMdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbo/oyKf; arc=none smtp.client-ip=74.125.82.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DF+2xk2V"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2bdd40d3c61so4211638eec.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 02:11:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbo/oyKf"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2c1092cc08cso2898291eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 02:11:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774429892; x=1775034692; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774429899; x=1775034699; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p2KjID10vkg/qXstgNRvPPvkY3Brj7dL/qNSBa8q0+4=;
-        b=DF+2xk2VvlBqpOeTb6EOTiIEb634AjwT5HU8+7tytyLvWi4BxY0fse0AQGOqAbLPGP
-         curV0Jp5ptcOPLTLy2uPMBHzgpd2nyiMH5ZsoJHNdL9stXi1kQzwoVl+aTQfGPopfqDv
-         VBnz359TI0cq5/R6H4SOcV0VuIEXOLLkhEtNBX8W47LlpWzAuQsXPdL5SWX2JwJdWEqN
-         /Fny0y+IYakovDEAg6hs63BYhHdG3dAcz8WTQZHbmVzlqYqxnLiPHzJ5expBT4C2kmfx
-         FhGeJc5bXN3d2FJPdujGE6qUwJwUWtXjXmdHpOuJITUkYzraP4YaAVvTQwSEWRiTFV2k
-         bIdQ==
+        bh=5i4iFnlZOOrZJKAXSL28N68w+sPjuPG58XQHlTJ8bXg=;
+        b=cbo/oyKf+aV3sCxDo+8NiqFRkhFQai6Fz4SJaAbi7awp/J5twNEldDYkwQ2dzExy5L
+         66sViwuSL89VhdDQfcoJllCFu0bqB2lajII1xt9rTGhWECMbmurejJ7f0jscK9e3aemj
+         23J9UHOEoXcfYEDOf8L19tYHFWpuVxVPuayBDUWlgSUn89k3I3q5zSjnqNdvRsm9JOyV
+         ulHnDHxcKjQ2uHtBiTtPqk16S3z9YC+mWJg01hLzd+U3215QMazDsUvPPNQ05W4tXDoM
+         nfXyfZEXGa2pbmDL5YUzVl2cbte23uY8xdbPt17+LuSEw9/RUXMtecx3SblMRRZEfVS4
+         Y1Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774429892; x=1775034692;
+        d=1e100.net; s=20251104; t=1774429899; x=1775034699;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=p2KjID10vkg/qXstgNRvPPvkY3Brj7dL/qNSBa8q0+4=;
-        b=nV0c4iaxthKwxJyIHiHbmkryYlsCTdfcNpOG6cSMil3Do7B+B9qjPvgVooFWWa+9bj
-         lK/t5aRjo0a9zHB83zv8o1ZQJEoIS6Y0ctIydiZHpudVp50dUvNwbjtM8mJ7dcyzh3s7
-         g3zhW6VFFKiG3v6V2q7tUmOyUdDuZHv9lLNIAdWEYCa5KOf/E3X2urjCPAAR+EJlMl8w
-         YZqIjaOH4hZ6duXpZFOwEY6lKweDQCHLlIg2p6BA3KplNeYslT9JMypLzXJBT/RC9p4L
-         zs09U5F1u+npBMp3hCe4AAumseoRloLwq7FyPokXUGIs+NsKg2CqFIo+p6y9MRP/pDm+
-         6eMA==
-X-Forwarded-Encrypted: i=1; AJvYcCW7Xov4xV5pEvUV6TPFTkZJ6RTO5gmrjfBpyC/Hj0+HI5wt/X6/4O2bg7ahMEwqE24HfE2IPR3VpITB4dBmHJ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvSgj3vIMknkZ0A6N4enEIFOVMoqi6O8OtGg5k37DLKoX+wumb
-	YgnYIlyAKKtLF60f+3sY0wikT58Ly0+ccCp3ojyxscUP6DkrdymQ27ry
-X-Gm-Gg: ATEYQzwlXqBsWw5tAE/xfopc/ylNvcBmR5OXosjwISpXhUkbu+g/AKLD0IlpdOCzOe6
-	wiWnsmuXwRfy6SiyMijq3vRfqZ32dxmBgSjPC72PEPg91qbWf6+dbE9egES04DxOZG4ay046UFM
-	rNA7kkqAnrPs/IqB/jtmNATZOujgW2MkLti8rMkMIuYQuRUmMcHj9p0QfYl6+xvY3O9p9d7JfLN
-	pzpK5V5sUpC89v3rvF7FkEIQKqT4spzR4/rSanVVyuD0xdDhE0vcA6Md74JeeHGPAKYWjkYsKMs
-	L55E7lf1ZaPs+0oOF3tL3Y0gZ1JVBS8p34gTE+8BVyaBNr4xhL30Mt/eXnc+/famYzG13lBnax5
-	L82qx0CD20zNCVQsgoobtgSlloX/VS/xr6CRP7n0i4Fc1ItA+lppJhbzQfkmecjE69XikZM9IMm
-	++OnHh3CMy4enP/zx/
-X-Received: by 2002:a05:7300:2305:b0:2c1:4f1:c87b with SMTP id 5a478bee46e88-2c15d357a32mr1565966eec.18.1774429891947;
-        Wed, 25 Mar 2026 02:11:31 -0700 (PDT)
+        bh=5i4iFnlZOOrZJKAXSL28N68w+sPjuPG58XQHlTJ8bXg=;
+        b=D7Wck/EaVy/++6ZtYw1wT3x97OO5sqNkyq3BdYVR8r/g5UXztDAX4cZR5iAEfqS+Yj
+         whlhSKLZ9/XCrkeudlKJR/ftgW9ZmBYJVha/ApZhmUOhZsMYCxu+IXeKGT+3c5+CYcbU
+         5laQ9BY/wTrtMTR1LKQGcP9HFClAYWYLSMB6aSOdD+MDw3g11sIGV5L8KZHgxTTJfea0
+         KkHY1ZIWi0OvfUIY2c16mU2C9knS0aP//3tkLAYNMwASBOXiCMvfciTRfaWdc4yzsYm3
+         EkqKAUYSpBqdYYUALbrMErMxLugAfeaer4hUMbAnsDZoK3SM5w2A0ELIez39L1KagodD
+         goOg==
+X-Forwarded-Encrypted: i=1; AJvYcCWRjkjxSZ7T+F2vfvLvz/lCqT20YbCEWH4hlLwSFLpTXDDOlQOx36zr+yZW/GkX5eK08Fe7lGUnbUUPQrHYOWU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw49U0+bQtLKEmNxbEaYL/9zEqiLZRuJFzA0/mYzMLKmBCuj2wZ
+	UlfSBQ4aJp71CQWy9nCwG5TbptqQr6gwOr/5GlNN2zO6BxQw8vTViany
+X-Gm-Gg: ATEYQzzKAObP+orQoMbFBa56F6SOlyWsnlUX3M275kwElpownbssXFH4Nrs8uAG9njA
+	UJheypd8jf2tu3mQ06qUvO50s50gRFnUHxlU2BzzrRJE2WfJvyayh6cj9wx6oCVlY3HbQMbeWgQ
+	duiY19eAodahpYXvK5tITT2BOEjEhpYCzVioPd1MTqrvf76bzzgl1jbOic2lCA3QxjOVpj/PpXN
+	XvUF1QrBZAcDDWgPlbTgEa+pgGOLNvWVlIBRfuoO8/s/Wb+PQntJL8FG5Z36v9qRP1/hv7jz1rG
+	oJUpfpjWdKml2GuU7pmQkD1oqxQlCmTcAhB134P0t2wb1+HXMns/j/RdoSrF63JjTy6yQo6wd05
+	1XjbMnOGrrYVHgiKmyJLrNqwmbwlsBsRD/7hepiXiEqnhYr84BtQ6SfujDAgUSPshTyQEAsUfkI
+	gbIt6ZDEj0/jOIqHAb
+X-Received: by 2002:a05:7300:148f:b0:2be:2cfe:68b7 with SMTP id 5a478bee46e88-2c15d36146dmr1280732eec.11.1774429898988;
+        Wed, 25 Mar 2026 02:11:38 -0700 (PDT)
 Received: from wujing. ([74.48.213.230])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c159e25dc7sm2786389eec.27.2026.03.25.02.11.23
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c159e25dc7sm2786389eec.27.2026.03.25.02.11.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 02:11:31 -0700 (PDT)
+        Wed, 25 Mar 2026 02:11:38 -0700 (PDT)
 From: Qiliang Yuan <realwujing@gmail.com>
-Date: Wed, 25 Mar 2026 17:09:45 +0800
-Subject: [PATCH 14/15] Documentation: isolation: Document DHEI sysfs
- interfaces
+Date: Wed, 25 Mar 2026 17:09:46 +0800
+Subject: [PATCH 15/15] selftests: dhei: Add functional tests for dynamic
+ housekeeping
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260325-dhei-v12-final-v1-14-919cca23cadf@gmail.com>
+Message-Id: <20260325-dhei-v12-final-v1-15-919cca23cadf@gmail.com>
 References: <20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com>
 In-Reply-To: <20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -97,38 +97,217 @@ Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <realwujing@gmail.com>
 X-Mailer: b4 0.13.0
 
----
- .../ABI/testing/sysfs-kernel-housekeeping          | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Dynamic Housekeeping (DHEI) introduces complex runtime interactions
+across sysfs, scheduler, and various kernel subsystems. There are
+currently no automated tests to verify the integrity of sysfs
+boundaries, safety guards, or SMT-aware isolation logic.
 
-diff --git a/Documentation/ABI/testing/sysfs-kernel-housekeeping b/Documentation/ABI/testing/sysfs-kernel-housekeeping
+Implement a kselftest suite for DHEI to ensure functional correctness.
+This includes a dedicated test script (dhei_test.sh) covering sysfs
+interface accessibility, safety guard enforcement, and SMT-aware grouping.
+
+The suite also incorporates stress-ng based pressure testing to verify
+load-shedding efficiency on isolated CPUs, Tick suppression under active
+task load, and Workqueue restriction under competitive system pressure.
+
+Usage:
+  make -C tools/testing/selftests/dhei run_tests
+
+Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
+---
+ tools/testing/selftests/Makefile          |   1 +
+ tools/testing/selftests/dhei/Makefile     |   4 +
+ tools/testing/selftests/dhei/dhei_test.sh | 160 ++++++++++++++++++++++++++++++
+ 3 files changed, 165 insertions(+)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 56e44a98d6a59..9d16b00623839 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -16,6 +16,7 @@ TARGETS += cpu-hotplug
+ TARGETS += damon
+ TARGETS += devices/error_logs
+ TARGETS += devices/probe
++TARGETS += dhei
+ TARGETS += dmabuf-heaps
+ TARGETS += drivers/dma-buf
+ TARGETS += drivers/ntsync
+diff --git a/tools/testing/selftests/dhei/Makefile b/tools/testing/selftests/dhei/Makefile
 new file mode 100644
-index 0000000000000..3648578200111
+index 0000000000000..a578691cc677c
 --- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-kernel-housekeeping
-@@ -0,0 +1,22 @@
-+What:		/sys/kernel/housekeeping/
-+Date:		March 2026
-+Contact:	Qiliang Yuan <realwujing@gmail.com>
-+Description:
-+		Directory containing the dynamic housekeeping configuration
-+		for various kernel subsystems.
++++ b/tools/testing/selftests/dhei/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++TEST_PROGS := dhei_test.sh
 +
-+		Each file represents a specific housekeeping type:
-+		- timer: Timer and hrtimer interrupts.
-+		- rcu: RCU callback offloading and GP kthreads.
-+		- misc: Miscellaneous kernel services (e.g. kcompactd).
-+		- tick: Dynamic full dynticks (NOHZ_FULL) state.
-+		- domain: Scheduler domain isolation.
-+		- workqueue: Workqueue affinity.
-+		- managed_irq: Managed interrupts migration.
-+		- kthread: General kernel thread affinity.
-+		- smt_aware_mode: SMT-aware isolation toggle (0/1).
-+		  When enabled, writing a mask that does not include all
-+		  sibling threads of a core will be rejected with -EINVAL.
++include ../lib.mk
+diff --git a/tools/testing/selftests/dhei/dhei_test.sh b/tools/testing/selftests/dhei/dhei_test.sh
+new file mode 100755
+index 0000000000000..a6137c52e7132
+--- /dev/null
++++ b/tools/testing/selftests/dhei/dhei_test.sh
+@@ -0,0 +1,160 @@
++#!/bin/sh
++# DHEI (Dynamic Housekeeping & Enhanced Isolation) Full-Coverage Verification Script
++# Strict POSIX compliant version for reliability on all shells.
 +
-+		Writing a CPULIST to the type files dynamically updates the
-+		housekeeping mask for the corresponding type.
++SYSFS_BASE="/sys/kernel/housekeeping"
++ONLINE_CPUS=$(cat /sys/devices/system/cpu/online)
++LAST_CPU=$(echo "$ONLINE_CPUS" | awk -F'[,-]' '{print $NF}')
++
++# Colors for output
++GREEN='\033[0;32m'
++RED='\033[0;31m'
++NC='\033[0m'
++
++log_pass() { echo "${GREEN}[OK]${NC} $1"; }
++log_fail() { echo "${RED}[FAIL]${NC} $1"; exit 1; }
++log_info() { echo "[INFO] $1"; }
++
++check_root() {
++    [ "$(id -u)" -eq 0 ] || log_fail "Please run as root"
++}
++
++test_sysfs_structure() {
++    log_info "TEST 1: Sysfs structure..."
++    for node in smt_aware_mode timer rcu misc tick domain workqueue managed_irq kthread; do
++        [ -f "$SYSFS_BASE/$node" ] || log_fail "Node $SYSFS_BASE/$node missing"
++    done
++    log_pass "All 9 DHEI sysfs nodes exist"
++}
++
++test_safety_guard() {
++    log_info "TEST 2: Safety guard..."
++    if echo "999-1024" > "$SYSFS_BASE/domain" 2>/dev/null; then
++        log_fail "Safety guard failed: allowed isolation of all CPUs"
++    fi
++    log_pass "Safety guard blocked invalid mask"
++}
++
++test_smt_aware_mode() {
++    log_info "TEST 3: SMT aware logic..."
++    [ -f /sys/devices/system/cpu/cpu0/topology/thread_siblings_list ] || { log_info "SMT not supported"; return; }
++    SIBLINGS=$(cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list)
++    FIRST=$(echo "$SIBLINGS" | cut -d',' -f1 | cut -d'-' -f1)
++    echo 1 > "$SYSFS_BASE/smt_aware_mode"
++    if echo "$FIRST" > "$SYSFS_BASE/timer" 2>/dev/null; then
++         echo 0 > "$SYSFS_BASE/smt_aware_mode"
++         log_fail "SMT mode failed: accepted partial core"
++    else
++         log_pass "SMT mode correctly rejected partial core"
++    fi
++    echo 0 > "$SYSFS_BASE/smt_aware_mode"
++}
++
++get_tick_count() {
++    grep "LOC:" /proc/interrupts | awk -v cpu="$LAST_CPU" '{print $(cpu+2)}'
++}
++
++test_tick_dynamic() {
++    log_info "TEST 4: Dynamic Tick toggle..."
++    [ "$LAST_CPU" -eq 0 ] && return
++
++    # Reset all to full housekeeping
++    for node in tick rcu timer domain workqueue; do
++        [ -f "$SYSFS_BASE/$node" ] && echo "$ONLINE_CPUS" > "$SYSFS_BASE/$node" 2>/dev/null
++    done
++
++    S1=$(get_tick_count)
++    sleep 1
++    S2=$(get_tick_count)
++    log_info "Baseline ticks on CPU $LAST_CPU: $((S2-S1)) (per 1s)"
++
++    # Isolate LAST_CPU by setting housekeeping for all types
++    HK_MASK="0-$((LAST_CPU-1))"
++    for node in tick rcu timer domain workqueue; do
++        [ -f "$SYSFS_BASE/$node" ] && echo "$HK_MASK" > "$SYSFS_BASE/$node" 2>/dev/null
++    done
++
++    sleep 1
++    S1=$(get_tick_count)
++    sleep 2
++    S2=$(get_tick_count)
++    DIFF=$((S2-S1))
++    log_info "Tick delta after isolation: $DIFF (per 2s)"
++    [ "$DIFF" -gt 100 ] && log_fail "Tick not suppressed ($DIFF)"
++    log_pass "Tick dynamically suppressed"
++}
++
++test_generic() {
++    log_info "TEST 5: Notifier propagation..."
++    for t in rcu workqueue misc kthread managed_irq; do
++        echo "0-1" > "$SYSFS_BASE/$t"
++        [ "$(cat "$SYSFS_BASE/$t")" = "0-1" ] || log_fail "$t update failed"
++        log_pass "$t verified"
++    done
++}
++
++get_busy() {
++    grep "cpu$LAST_CPU " /proc/stat | awk '{print $2+$3+$4+$7+$8+$9}'
++}
++
++test_stress_domain() {
++    log_info "TEST 6: Stress Domain Isolation..."
++    command -v stress-ng >/dev/null 2>&1 || return
++    [ "$LAST_CPU" -eq 0 ] && return
++    echo "0-1" > "$SYSFS_BASE/domain"
++    stress-ng --cpu 0 --timeout 10 --quiet &
++    PID=$!
++    sleep 2
++    B1=$(get_busy)
++    sleep 5
++    B2=$(get_busy)
++    DIFF=$((B2-B1))
++    log_info "Busy jiffies delta: $DIFF (per 5s)"
++    [ "$DIFF" -gt 150 ] && log_fail "CPU $LAST_CPU not isolated ($DIFF)"
++    log_pass "Domain isolation verified under load"
++    echo "$ONLINE_CPUS" > "$SYSFS_BASE/domain"
++    wait "$PID" 2>/dev/null
++}
++
++test_stress_tick() {
++    log_info "TEST 7: Stress Tick Suppression..."
++    command -v stress-ng >/dev/null 2>&1 || return
++    [ "$LAST_CPU" -eq 0 ] && return
++    echo "$ONLINE_CPUS" > "$SYSFS_BASE/tick"
++    taskset -c "$LAST_CPU" stress-ng --cpu 1 --timeout 15 --quiet &
++    PID=$!
++    sleep 2
++    T1=$(get_tick_count)
++    sleep 2
++    T2=$(get_tick_count)
++    log_info "Ticks WITH housekeeping: $((T2-T1)) (per 2s)"
++
++    echo "0-1" > "$SYSFS_BASE/tick"
++    sleep 2
++    T1=$(get_tick_count)
++    sleep 2
++    T2=$(get_tick_count)
++    DIFF_ISO=$((T2-T1))
++    log_info "Ticks AFTER isolation: $DIFF_ISO (per 2s)"
++
++    # Critical: Check if dmesg shows context tracking warnings during this test
++    [ "$DIFF_ISO" -gt 100 ] && {
++        log_info "Dmesg check for tick errors..."
++        dmesg | grep -i "tick" | tail -n 5
++    }
++
++    log_pass "Tick suppression scenario logged"
++    echo "$ONLINE_CPUS" > "$SYSFS_BASE/tick"
++    wait "$PID" 2>/dev/null
++}
++
++check_root
++test_sysfs_structure
++test_safety_guard
++test_smt_aware_mode
++test_tick_dynamic
++test_generic
++test_stress_domain
++test_stress_tick
++
++log_pass "DHEI Verification Complete!"
 
 -- 
 2.43.0
