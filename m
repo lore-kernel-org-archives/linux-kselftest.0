@@ -1,207 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5323502A4;
-	Wed, 25 Mar 2026 09:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4D23A3808
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 10:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774430303; cv=none; b=CCYplBmCacgPkiDkqViv7Xttn9uFChhrgOHqZql86n+B7PMZ0mm9HodLhD+Guhle9FlSd6BAZh13dH8m/69IqP8gHfUie1974vYFUpy0vPUNJSdcrfihBQtXaGJrMpcW7uRmUz29wcoLy6/r4lnm5TzKDmBRDArGmq5wDoht7go=
+	t=1774435140; cv=none; b=QH1gfg9y5W0xeYz40x98Zn3a/ABZtBJgXjgU7Frv7LvA2Z0pDEuOlqcte9S8mGXrGeL0+f+VmZtXojv9N+/DYYoDxDIBNfvHZZBnBwkZpof+0Qalwdx6aAIQseuWcgYB3JvHRTGrhry8ApQvicJ2DO+1xzU9Df12xYrS0IDLMwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774430303; c=relaxed/simple;
-	bh=0i4abdRDleJm92gWlAzYDCiaX3cyuhdf9fdZTk6kWlI=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M2Ri5iFBz8TZptumPpjb+kw/Ndf8q/LAjIYfCQfIP5jplDsZHYgj2D8TAkaWvIHahjBGugg4/g3fa44gpcV/hUBEbgQQr4S+Hc6DO31GoJ6RJGsrTpg8fckT0vmeNBJBVsJiqUzchw8eiExAMXqjXyPdxvg1IGjCMkTZB8eF2+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8bgt+aS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774435140; c=relaxed/simple;
+	bh=q/p70rTE9Tr9jRBWaqCRufUFYPNnysoMHcnbGBsmToE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=BhKawMMPjlK5bdwFeH8FSBsf+ZkRRs6je0MH2snEZFWwGTl8T9I0AuHded1RnBF9+o6DEBiDYoyozJA8UmT7hOpVmHPP9Xyv2ZUlxfIL6NTiduE7c9rqoeUhaWTC7qJ9MRL/Asgau3T5oNLIVaFDtSfSTUSmaQFQhkSZrqRtBDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JECRANR7; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tX1Yx76o; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8bgt+aS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2D2C4CEF7;
-	Wed, 25 Mar 2026 09:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774430302;
-	bh=0i4abdRDleJm92gWlAzYDCiaX3cyuhdf9fdZTk6kWlI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=C8bgt+aSaIBXurlz5x1xUUO0IvckVpM/oUBKrmOjwTSFa4Upl8Rl75127DwiSs34h
-	 ilQByYAjum0+9FBVmUCpYMER9HvMEMj/l8TuZEKFeEvLGtYiLyGpO/NvGeCtrk3lvK
-	 nBQ0de7bobdfILJK6idX5Qtsugmm5AdRNqsRjxdrov8goDeBdeAGQ7eT/KOc+914Gb
-	 Zm1uGMp1Qw3j7yTt8OY22nB+2l5bfvNPhGo5TVkka6vulOSM15QpPydA+D9BqAk2F/
-	 prdYYlP1tIgNzVPXy5Pk7N/UXjdOSYvj39EaUT1aYBH8FWOmFlIZywZjxG6jFxWFyZ
-	 ErPTweqjgwY0Q==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1w5KNY-00000005U8U-2Vxu;
-	Wed, 25 Mar 2026 09:18:20 +0000
-Date: Wed, 25 Mar 2026 09:18:20 +0000
-Message-ID: <86mrzw468z.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Wei-Lin Chang <weilin.chang@arm.com>
-Cc: kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 3/3] KVM: arm64: selftests: Enable stage-2 in NV preparation functions
-In-Reply-To: <20260325003620.2214766-4-weilin.chang@arm.com>
-References: <20260325003620.2214766-1-weilin.chang@arm.com>
-	<20260325003620.2214766-4-weilin.chang@arm.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JECRANR7";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tX1Yx76o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774435138;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=A/Si9+s7QxxoCBvO+kz7sMzfMBjgo1CChr0Lcp9Yhl0=;
+	b=JECRANR7LQ7u2eVo5bvLR+Femsn9xTzMv2tkgm5u+aYpmqDa694ovwyjJyEW2AEAIB0xDF
+	mRNCqey+qA2qHgvuKve2X3qSv7O3kmJ2wZH5vdDRn6rK/PK5jPcYRlXyIH4XDEHB/v6fj3
+	uKCfXzUcySPlm0mZuzhA8huAJtAho5k=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-628-yAwEnVj5PW6D7MFS1nmyKQ-1; Wed, 25 Mar 2026 06:38:56 -0400
+X-MC-Unique: yAwEnVj5PW6D7MFS1nmyKQ-1
+X-Mimecast-MFC-AGG-ID: yAwEnVj5PW6D7MFS1nmyKQ_1774435135
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4837bfcfe0dso52585725e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 03:38:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1774435135; x=1775039935; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A/Si9+s7QxxoCBvO+kz7sMzfMBjgo1CChr0Lcp9Yhl0=;
+        b=tX1Yx76o4hh+qmR6PRkMISJx551kneyHeKyzY9Ebz8VQTodyf2ZdgZsF1W6SQ+0VkC
+         kVEirBg3qt0Uc8KEBoVQ0zQgCtpTNMB9irF16uygKLtMPQzbhBvz0wV7hs82XD2WF0Sh
+         tcVwwnByJqVp2mz/Rx7TB306oiwQm97j518f/kOOn1RnWU4Sb9FDNS8uolYJt7x63rfc
+         Yp19PlrZWf0X6aM7Fvub5ltAjcvvq28fIk1dcbVsjXhDDQ4XI/tuhSqiOEw00rE0B2gC
+         C5i6Liq20iEae6pFGmDXdkJdAasqiqE7aavx56AirnURwq9Nuus68BKCo8dufEphpP0m
+         PZCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774435135; x=1775039935;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=A/Si9+s7QxxoCBvO+kz7sMzfMBjgo1CChr0Lcp9Yhl0=;
+        b=YFU9L0JylS1dL8pkbsRvrBAbQ4HWzqChCF/tRFbaNVe7X98Q8AdQChtb6fE2QoF9QP
+         sVLQmik/QUNtReJ4ra4nmVnukvVG5o/a1Vq6AUoIHBbTrx4P1knKHZxL7GMEcWOk8NMg
+         MIM+4Vvtu+rwXIZDcFjkC1ugs8ohsTlkAK0ffWiB5Os6smcH4DJzAOX5m1jVJHIZEr9Q
+         L7Xd+SD0igiIMSiM5OJ5tmEMlpnqb5f2WjBRAz1Bq5Fi1wF2/WJgkwDhSScJyC00q70B
+         KYd545BemnB3vKTHdccue41Nha1PCZdqnqawqTtpBTIfGUTzB7ejSzSCKcD6turaz7ZB
+         hr3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVh88VbgNfPZWZzT/MPScocXwb+4a9YwFh8MEUksZktkExpGJxVG2xvJ6xk3VdklKEezHT5tk9XVGQ5l5JXEh0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywtky2DfMbbArmvWsrrfDg0UXyex6FF73yvHW+u+AlQqH/Sk2JD
+	by7Y8Jkp47qx1rb5fkX77pxzUIxLeE4IZYHlP1AQIr0EiX1P0aaqK3aYcS/YmbUp8AolmLmGdAZ
+	ZWtB/b++IAgzcAw2A5tCwDhj0Lvt2w6ObsHBp0X68maLs65VZp02lHsMHtQa/FXRaQ9uDcA==
+X-Gm-Gg: ATEYQzzMp8PzR8JxLTP8ZaNXVbIpZjuc9tNiUxAckllnDnLmbo2lgqeqIXW4onrgRS6
+	vkFX1vT1YAzMgHjTCt6XbalbBxcsF8Ck7D760KUu+Ih2AjY7NrVBvJxn0c+lozzyKl6vxR1AHzB
+	yjmJo/GoK3/Y0U/GJc79DLmaVw6jDiNpBuVonP6AuIhxuSVTm8DT34lVh3btCZeXWFyUHeK20iI
+	HeJnrZcWHDFFmkw0+OpB0l+rIdYMsfPJOj6CHMHoMWzoAI/z/iO4eT5zj0gagEvV/P7xXRbvgpv
+	hVRkqazpZadMrHsQ3RMjmfwy4lzTDqpByGCsOxiEWCMvibuRiNE0fHZnjxPWrGRq37Y2xYgMipS
+	ieOcDjsc6XrIBbO1CaT78Q3XSJwzusXTSqhcgFugmzuoAIHq1
+X-Received: by 2002:a05:600c:3b22:b0:485:35a4:939c with SMTP id 5b1f17b1804b1-4871608dca6mr40636745e9.29.1774435135136;
+        Wed, 25 Mar 2026 03:38:55 -0700 (PDT)
+X-Received: by 2002:a05:600c:3b22:b0:485:35a4:939c with SMTP id 5b1f17b1804b1-4871608dca6mr40636315e9.29.1774435134601;
+        Wed, 25 Mar 2026 03:38:54 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4871174f2cesm122268625e9.10.2026.03.25.03.38.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 03:38:53 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 1A9015A4A85; Wed, 25 Mar 2026 11:38:53 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Andrii
+ Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
+ Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, "David S . Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org, kernel-patches-bot@fb.com
+Subject: Re: [PATCH bpf-next 1/3] bpf: Disallow freplace on XDP with
+ mismatched xdp_has_frags values
+In-Reply-To: <401134e3-2a2f-4c23-8ba0-3a4cc901d6a4@linux.dev>
+References: <20260324150444.68166-1-leon.hwang@linux.dev>
+ <20260324150444.68166-2-leon.hwang@linux.dev> <87ecl9mc9d.fsf@toke.dk>
+ <401134e3-2a2f-4c23-8ba0-3a4cc901d6a4@linux.dev>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Wed, 25 Mar 2026 11:38:52 +0100
+Message-ID: <878qbgmbwj.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: weilin.chang@arm.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 25 Mar 2026 00:36:20 +0000,
-Wei-Lin Chang <weilin.chang@arm.com> wrote:
-> 
-> Introduce library functions for setting up guest stage-2 page tables,
-> then use that to give L2 an identity mapped stage-2 and enable it.
-> 
-> The translation and stage-2 page table built is simple, start level 0,
-> 4 levels, 4KB granules, normal cachable, 48-bit IA, 40-bit OA.
+Leon Hwang <leon.hwang@linux.dev> writes:
 
-That's a no go. The most common NV-capable out there can realistically
-only do 16kB at S2, and is limited to 36bit IPA. We can't really
-afford to say "too bad" and leave the main development platform behind.
+> On 25/3/26 00:18, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Leon Hwang <leon.hwang@linux.dev> writes:
+>>=20
+>>> xdp_has_frags was introduced by the commit
+>>> c2f2cdbeffda ("bpf: introduce BPF_F_XDP_HAS_FRAGS flag in prog_flags lo=
+ading the ebpf program").
+>>>
+>>> The commit f45d5b6ce2e8 ("bpf: generalise tail call map compatibility c=
+heck")
+>>> was to ensure backwards compatibility against tail calls. However, it
+>>> missed that XDP progs can be extended by freplace progs, which could br=
+eak
+>>> the backwards compatibility, e.g. xdp_has_frags=3Dtrue freplace progs a=
+re
+>>> allowed to attach to xdp_has_frags=3Dfalse XDP progs.
+>>>
+>>> To avoid breaking the backwards compatibility via freplace, disallow
+>>> freplace on XDP programs with different xdp_has_frags values.
+>>=20
+>> The problem you describe is not actually a problem, though? A
+>> frags-aware program can run on a non-frags interface just fine.
+>>=20
+>> You're messing with long-standing behaviour (since 5.18!) to solve a
+>> non-existent problem. In a way that completely breaks the frags handling
+>> in libxdp[0]:
+>>=20
+>>     Running tests from ./test-libxdp.sh
+>>      [test_link_so]                PASS
+>>      [test_link_a]                 PASS
+>>      [test_old_dispatcher]         PASS
+>>      [test_xdp_devbound]           PASS
+>>      [test_xdp_frags]              FAIL
+>>           Kernel supports XDP programs with frags
+>>           check_load_frags:	FAILED
+>>           check_load_nofrags_success:	PASSED
+>>           check_load_nofrags_fail:	PASSED
+>>           check_load_frags_multi:	FAILED
+>>           check_load_mix_big:	FAILED
+>>           check_load_mix_small:	FAILED
+>>           Test test_xdp_frags exited with return code: 1
+>>=20
+>>=20
+>> Please don't do that.
+>>=20
+>> -Toke
+>>=20
+>> [0] Run 'make test' here: https://github.com/xdp-project/xdp-tools
+>>=20
+>
+> Indeed, it failed to 'make test'.
+>
+> Will drop this patch in v2, as it wasn't an issue.
 
-> 
-> The nested page table code is adapted from lib/x86/vmx.c.
+Great, thanks!
 
-I guess this starting point is the main issue.
+-Toke
 
-> 
-> Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
-> ---
->  .../selftests/kvm/include/arm64/nested.h      |  7 ++
->  .../selftests/kvm/include/arm64/processor.h   |  9 ++
->  .../testing/selftests/kvm/lib/arm64/nested.c  | 97 ++++++++++++++++++-
->  3 files changed, 111 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/arm64/nested.h b/tools/testing/selftests/kvm/include/arm64/nested.h
-> index 739ff2ee0161..0be10a775e48 100644
-> --- a/tools/testing/selftests/kvm/include/arm64/nested.h
-> +++ b/tools/testing/selftests/kvm/include/arm64/nested.h
-> @@ -6,6 +6,13 @@
->  #ifndef SELFTEST_KVM_NESTED_H
->  #define SELFTEST_KVM_NESTED_H
->  
-> +uint64_t get_l1_vtcr(void);
-> +
-> +void nested_map(struct kvm_vm *vm, vm_paddr_t guest_pgd,
-> +		uint64_t nested_paddr, uint64_t paddr, uint64_t size);
-> +void nested_map_memslot(struct kvm_vm *vm, vm_paddr_t guest_pgd,
-> +			uint32_t memslot);
-> +
->  void prepare_l2_stack(struct kvm_vm *vm, struct kvm_vcpu *vcpu);
->  void prepare_hyp_state(struct kvm_vm *vm, struct kvm_vcpu *vcpu);
->  void prepare_eret_destination(struct kvm_vm *vm, struct kvm_vcpu *vcpu, void *l2_pc);
-> diff --git a/tools/testing/selftests/kvm/include/arm64/processor.h b/tools/testing/selftests/kvm/include/arm64/processor.h
-> index ac97a1c436fc..5de2e932d95a 100644
-> --- a/tools/testing/selftests/kvm/include/arm64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/arm64/processor.h
-> @@ -104,6 +104,15 @@
->  #define TCR_HA			(UL(1) << 39)
->  #define TCR_DS			(UL(1) << 59)
->  
-> +/* VTCR_EL2 specific flags */
-> +#define VTCR_EL2_T0SZ_BITS(x)	((UL(64) - (x)) << VTCR_EL2_T0SZ_SHIFT)
-> +
-> +#define VTCR_EL2_SL0_LV0_4K	(UL(2) << VTCR_EL2_SL0_SHIFT)
-> +#define VTCR_EL2_SL0_LV1_4K	(UL(1) << VTCR_EL2_SL0_SHIFT)
-> +#define VTCR_EL2_SL0_LV2_4K	(UL(0) << VTCR_EL2_SL0_SHIFT)
-> +
-> +#define VTCR_EL2_PS_40_BITS	(UL(2) << VTCR_EL2_PS_SHIFT)
-> +
->  /*
->   * AttrIndx[2:0] encoding (mapping attributes defined in the MAIR* registers).
->   */
-> diff --git a/tools/testing/selftests/kvm/lib/arm64/nested.c b/tools/testing/selftests/kvm/lib/arm64/nested.c
-> index 111d02f44cfe..910f8cd30f96 100644
-> --- a/tools/testing/selftests/kvm/lib/arm64/nested.c
-> +++ b/tools/testing/selftests/kvm/lib/arm64/nested.c
-> @@ -1,8 +1,11 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * ARM64 Nested virtualization helpers
-> + * ARM64 Nested virtualization helpers, nested page table code adapted from
-> + * ../x86/vmx.c.
->   */
->  
-> +#include <linux/sizes.h>
-> +
->  #include "kvm_util.h"
->  #include "nested.h"
->  #include "processor.h"
-> @@ -18,6 +21,87 @@ static void hvc_handler(struct ex_regs *regs)
->  	regs->pc = (u64)after_hvc;
->  }
->  
-> +uint64_t get_l1_vtcr(void)
-> +{
-> +	return VTCR_EL2_PS_40_BITS | VTCR_EL2_TG0_4K | VTCR_EL2_ORGN0_WBWA |
-> +	       VTCR_EL2_IRGN0_WBWA | VTCR_EL2_SL0_LV0_4K | VTCR_EL2_T0SZ_BITS(48);
-
-Irk. See above.
-
-> +}
-> +
-> +static void __nested_pg_map(struct kvm_vm *vm, uint64_t guest_pgd,
-> +		     uint64_t nested_paddr, uint64_t paddr, uint64_t flags)
-> +{
-> +	uint8_t attr_idx = flags & (PTE_ATTRINDX_MASK >> PTE_ATTRINDX_SHIFT);
-> +	uint64_t pg_attr;
-> +	uint64_t *ptep;
-> +
-> +	TEST_ASSERT((nested_paddr % vm->page_size) == 0,
-> +		"L2 IPA not on page boundary,\n"
-> +		"  nested_paddr: 0x%lx vm->page_size: 0x%x", nested_paddr, vm->page_size);
-> +	TEST_ASSERT((paddr % vm->page_size) == 0,
-> +		"Guest physical address not on page boundary,\n"
-> +		"  paddr: 0x%lx vm->page_size: 0x%x", paddr, vm->page_size);
-> +	TEST_ASSERT((paddr >> vm->page_shift) <= vm->max_gfn,
-> +		"Physical address beyond maximum supported,\n"
-> +		"  paddr: 0x%lx vm->max_gfn: 0x%lx vm->page_size: 0x%x",
-> +		paddr, vm->max_gfn, vm->page_size);
-> +
-> +	ptep = addr_gpa2hva(vm, guest_pgd) + ((nested_paddr >> 39) & 0x1ffu) * 8;
-> +	if (!*ptep)
-> +		*ptep = (vm_alloc_page_table(vm) & GENMASK(47, 12)) | PGD_TYPE_TABLE | PTE_VALID;
-> +	ptep = addr_gpa2hva(vm, *ptep & GENMASK(47, 12)) + ((nested_paddr >> 30) & 0x1ffu) * 8;
-> +	if (!*ptep)
-> +		*ptep = (vm_alloc_page_table(vm) & GENMASK(47, 12)) | PUD_TYPE_TABLE | PTE_VALID;
-> +	ptep = addr_gpa2hva(vm, *ptep & GENMASK(47, 12)) + ((nested_paddr >> 21) & 0x1ffu) * 8;
-> +	if (!*ptep)
-> +		*ptep = (vm_alloc_page_table(vm) & GENMASK(47, 12)) | PMD_TYPE_TABLE | PTE_VALID;
-> +	ptep = addr_gpa2hva(vm, *ptep & GENMASK(47, 12)) + ((nested_paddr >> 12) & 0x1ffu) * 8;
-> +
-> +	pg_attr = PTE_AF | PTE_ATTRINDX(attr_idx) | PTE_TYPE_PAGE | PTE_VALID;
-> +	pg_attr |= PTE_SHARED;
-> +
-> +	*ptep = (paddr & GENMASK(47, 12)) | pg_attr;
-
-Please use named constants, and write a page table generator that is
-independent of page, IA and OA sizes, as advertised to the guest.
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
