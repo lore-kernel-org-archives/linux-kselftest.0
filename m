@@ -1,129 +1,223 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8093FBEA8
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 17:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774459714; cv=pass; b=Hdd501IJE4t5LpFZVmJvsCl+Dk5E26szN8H5kqpKrFaPyiJzUQFf++NaI7RviVH8PCVjLI9RYEK0pG8652fImVG8HZW13GYY5dBMK+JzlbLxp65NCNxRz8p9rMHUHzOo1hXePx1D+Bg15ZheSG41FUuLNS/1RW8sVNNf1cFmSfU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774459714; c=relaxed/simple;
-	bh=Rp8fxQCLwFBn0xp4OYUEop/+U+Xl4C79lXLfMQ92/H0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GBQ7IOXK1yP/3XxRUguAvMnjsOn9YXEelRUBI/NwT6HFiFmkOCKQotk8XT/UfI+HbYCG+N7klEaW92CFORKHv7Sl27zFVTwRDsU+jRZ6a7/r386xpTW86jbw5yVr+mkHNhE2ecy7LRunsCcEogEOfOob0wN68PWyIa4A188fNn0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rp7+E8kC; arc=pass smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AF1405AD7
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 17:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774459798; cv=none; b=rMGoY5HVdSYUtQkLc/I8G/WLFyffoO9GNr32qz02LETTfzh/qvWE8FiO1hfp2s0ndBITdLqG1r4AMfrLXpaAi1Y5pToAmBOqDBv1Ckpa0z3gbYf01TPFmjQuFK6V3a7dO4f5k+jIw85UzqRvnPcMKfVyQ0UZy2k70pMp+v8VB4Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774459798; c=relaxed/simple;
+	bh=Ge78tCqMrPenY4229b2DeTQfzrN0V80ePxURbyViTOg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X1OQgbAjDLxm5hZdBmTcW8lzMCUl209OiV+XlOfvh94FAHnXAyTq32V5/4LBCw9KJClsV8qqrcC07RESLSW/04XBy6PG0kS4sHVv1X7XpsiE8oz09SylHayL105R8jq8MvKfOGl1pbfjdsu2foDo9KXgW0Nr6Ng3s8sq5/KZzzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZcfVtINd; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rp7+E8kC"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50b2d6f9d00so1434021cf.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 10:28:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774459712; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bJOZcbX3d9Bkk8zLeqft66LbftWRC9Utt+wfbw0utmRAqTHfVN3BCQnNuc4/AHsFLe
-         8FGoa96pwE3SvMbI8NSy1TAJLslEx0CmTNTE8x0pWPo5CiUeuh66/IR1yOqylVmqkv7X
-         JZt4VChxe//WJ3jEzkAciNubglreiMT8MMLFs9hGUYsQInh5txcArfylwm0W2BdAlYZT
-         ywPSnoSVUMXdGlpVDKLXKDh5bU0Cz1OD2rMcSlUKbPH5iWIcMcEwaZ/zNGRihChhecvF
-         TTkkHEVLM73P2d84XzC3rHV4fSmgXTh2zGnf+ShNT6FNFc4iFitQfcUVHSi6J399N0FE
-         jk+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Rp8fxQCLwFBn0xp4OYUEop/+U+Xl4C79lXLfMQ92/H0=;
-        fh=T6oeGFjiO5ZPX9bJHIl4Az4JEb7LTzlXJDeoUw1iTew=;
-        b=OzbElwUMDRMJy7WiQpYlrVF2V3xiMFEfY9HPC0/p5aiv2qih4yUDGRlUOBq4XGpFK5
-         z2EKkwtWrFaOcHMEoJUiHoaaJoF2pzlXDN9iQgFVUFAIyB4iZcdhwSMQ4BuXTFcXGkPT
-         F4eXsQ4yXuE5GtnZIaqvtXttQP1sit87VBMrOQ4RoWjSPUZjhT4xeShyaoODtJzDpjhP
-         yKa9TE73cCiBqkCSyUbKBmCucXBfu0NZK0E1zB4e7cG+FVRjnhDGJX/L2minJBYfa5ai
-         3r4oVdbTpXIQTlS5JSWynPeKe/TNuIQOhAW/Z2I5dd33Yg1t2XR9y5rDiMgWMNC2l1Sh
-         nvJw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZcfVtINd"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-82ae379000fso1104b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 10:29:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774459712; x=1775064512; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rp8fxQCLwFBn0xp4OYUEop/+U+Xl4C79lXLfMQ92/H0=;
-        b=rp7+E8kCEuPUq0JBHlll9SFHWVtlbE8k4LeRN4BGvRGQJlWIkczw6mjh9E3omnNdc/
-         1SB7u3dO5PKUuulKetzTkgjBgeIibALTZue7TjoobnTpyVbe3/0IVOlc6hpCSG1i0NIy
-         YlzwmZAHSCri/2EcPE7IBcDdb2PXZtwfcfxCwQ+xZAGaoo+qKFF11DL31mMKavujMivY
-         gseSA3PKRf2OrzHaN6AIzTWXCzt/h2pu267si7G5s/RoZr1Zv666wUU1WEF5MWP7DKhU
-         TQNu090DonI+1JtC2LhNj5HwEK0Zg6dTy0ZWrCcpbNejcQGwmiyoNd4yJ+9KJ44NuHa9
-         RwVw==
+        d=google.com; s=20251104; t=1774459795; x=1775064595; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tqtdz49F1thS+8gpmqv2HF5sNOiFchZq7BXU6+8jf4U=;
+        b=ZcfVtINdY7rke7WeAEXjMFboeUlX11JyZVmeRInnH7z+UJ8w6B3ZPtQumB5LJc6ypQ
+         eTF74EFhlsXEhyyIt7ko5kvNShCpkSCArfnrA4pqHxi6u/bb0m2g5DngPv/t3zMEjsji
+         YvlxKFFijIaRXHaAM3P7NkkfbtD7SxjEcGfoZiH23j5Q9HvGJqnRRgmsPwsNMF1tbTtr
+         vh3TaKUKfv1+8fku9mK0VXEQ2/GjXtnITCBWRGG9/EfD0iNJu9pCoAfz3GU977Yik9q3
+         e/ZT86NIiP4rJW+QQNs52DI8aPfrSqTm5gvyOWXTMO3XR2m8KvA2nBmdsOvXLru6Db3X
+         UrTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774459712; x=1775064512;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Rp8fxQCLwFBn0xp4OYUEop/+U+Xl4C79lXLfMQ92/H0=;
-        b=UnSFZSneuWE2RMb8XrX+e5y3Dssy69vCQbPshpsT6KRNwnF5i1hqwabntx7Vkg7YgY
-         8EviBXhhAonzoQciO0S6SDtyeFJb4Wne99aACyfdvm1jk6E5F1e1vz8yRrN2yvMeH0IG
-         rAOe50tLqDraBT7LLAa8/NgLMYTOz7vonc1NZtQVDjBnpkcpicym9WcpKgwpzW2fBdyr
-         xDn7x7BpHDARs+6C4OLtjbjf7E2CYWyVUooXvK/6JNFCRvPX40vNXVRkUlOirwuMDAte
-         Gwyl3X888xBdDRFG8gmQrjGUEsQTb0IgjxIXUA6C0Iac46Dy+xUzfz+CAoD0XtvWIbPj
-         kRug==
-X-Forwarded-Encrypted: i=1; AJvYcCUw8tzdRKSzzttPRW43JLREc2+2NwtAfjAUNVIzS5AWawqs+NP59KweWdP5g1RzsWNcTGga5hV1ee4+aFPnSuQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0LipqGiQ8M7L2A+KyXbFLcPJwS2LxFy5+VPpiCxcZuPnuJAjp
-	WQWXjlUTKfi0p4cX2K0gg1aQigaQ/sywIJAKQET2H4tatMmncQW7zvjRoisB0xCbSpy/h7oxO5B
-	GgiA/whsiPLsL9dEhTGWFtA459xKucnpHnBXNph+T
-X-Gm-Gg: ATEYQzyhydsXj4oHXwUymFmnWY2DndexwJKu+N4Q3Pr08gVLycGWYcwvicQOR8yRK3b
-	c/GU0sivfvSGP5it63Eb5apqjFuonm15DeGRQMSJ4XmwmUPWMYyeF0vd9sNPglZs1ywVdC/xBmq
-	53q3GntN3jbXm6rM+Fz/n3+PSAM9/aAzjIwRDtZPUn4hwe5NKeK6zCcq45Uuj2U0Cmp+FFBkq2a
-	pc2caEmnAllqWNNlfyO/9+6gNBdxTH4ioBAgOAbciAvmCW3TqsA1bQFqIOQLPIQ2EaqSpe7x1ll
-	eZiCo3xyldUJCuxnLee1sVTRT0dvGmlZ3Xg=
-X-Received: by 2002:a05:622a:1896:b0:50b:567a:e91a with SMTP id
- d75a77b69052e-50b80e0cfdcmr65591631cf.33.1774459711578; Wed, 25 Mar 2026
- 10:28:31 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774459795; x=1775064595;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tqtdz49F1thS+8gpmqv2HF5sNOiFchZq7BXU6+8jf4U=;
+        b=dfx9e0kkZwgO7aELtmL1SGFn4A9yMtXNfN/XJXFF/39KLW6xWwCMUl1HD89aZWZPxi
+         Dtk5ruSm+LGI/XbrmwKnZQgPsVCodI0RGnPgD+a4Y1bwW/aYlSK1+0bIP6y+lvCMKcmN
+         y2ZBTVgph4Mg0/e7cXIINz+IA7nfV6kDmQL5i0SSr8LS7uvj0UJwLgX9Jbkxd7M9pKZW
+         oh/5Tm17k/ysruN5f8aJbtscAxWHJdysSnYh4XWqhYeqYYAj2283K8YjZNZUwqjhkI8I
+         RAeY8ccQ4F+co+yZIEU9dBUkSGqBJB5LEhCDPx4ltBtqXKKi/ItxUbAN2xKqmeU3dL23
+         1yrA==
+X-Forwarded-Encrypted: i=1; AJvYcCWroIt0lYEaZXOPMCrGrwfg0hwRK2T1dRF6tuuX1H5bITiB0wTsXHlr65bDDrKs3uOJ7iBtfoWIOGfpt/Ww1mo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxZNHKGfLDUgL1bADD+DEWmsHVS3vYraoQeHCQuWW8/HmpJQYU
+	Uot+SoICbRCYU2iI+QawRvKHvt6tslBe3ofRYSZodnEb1lmR1qc8DH5iHgZbqWCcbA==
+X-Gm-Gg: ATEYQzylHBPPqsBv4s143Lodyvv344r/+rIPTlZ4DHIHiFf1Vq6kAKezmzs41NKMApI
+	nV/wlFDkKFm+cAJDWt0JiGkV0BC02Lh56dKjSYAHqtB9ys8jm67g7f9gMnK1nkcLLWVroNqEd+i
+	lCDDUl6+clC9GDthDfxvcOKm5vGMABee5Sj1uUsCJE431h9sOGNvRxbx/knzeb/zWf4ddQ4zpfv
+	jzqVFJA6+zypvPWPa1cb3rt/u4v5+LkeydrcAuwC+MQel58tcJlqDlX/WZTz6GHyGo+70retWCZ
+	TLNkOM9clrp6mwvuvmaU5McTM5B6PWQlquDodJRW/eVkdrFCiI9VVJApVntMtQ1/WOBIYK13Og1
+	f03btq5ogej9dhvF0jkSjV6AM8Dq2hcuNTIaDTNMMIsGJc24CH+Omwi1fq/9n+2TalUe98YXGSe
+	TCvcUQcl2LXvxYRuD1rBpOkkKulgkKJcq0pD1dd3pkLWiX5Wtrf6wtpjmVD+WMJw==
+X-Received: by 2002:a05:6a00:1826:b0:827:2dff:7116 with SMTP id d2e1a72fcca58-82c6d99ac23mr4021492b3a.13.1774459794263;
+        Wed, 25 Mar 2026 10:29:54 -0700 (PDT)
+Received: from google.com (239.23.105.34.bc.googleusercontent.com. [34.105.23.239])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82c7d216a0esm312308b3a.17.2026.03.25.10.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 10:29:52 -0700 (PDT)
+Date: Wed, 25 Mar 2026 17:29:48 +0000
+From: David Matlack <dmatlack@google.com>
+To: Yi Liu <yi.l.liu@intel.com>
+Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+	Askar Safin <safinaskar@gmail.com>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Chris Li <chrisl@kernel.org>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	David Rientjes <rientjes@google.com>,
+	Feng Tang <feng.tang@linux.alibaba.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
+	kexec@lists.infradead.org, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Li RongQing <lirongqing@baidu.com>, Lukas Wunner <lukas@wunner.de>,
+	Marco Elver <elver@google.com>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Pranjal Shrivastava <praan@google.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v3 03/24] PCI: Require Live Update preserved devices are
+ in singleton iommu_groups
+Message-ID: <acQbjF53aIzv7Ieq@google.com>
+References: <20260323235817.1960573-1-dmatlack@google.com>
+ <20260323235817.1960573-4-dmatlack@google.com>
+ <376910fa-4232-4e58-bf87-0504202866a5@intel.com>
+ <acLRICLAP5Ccqt9I@google.com>
+ <b16f93af-1ec6-43f5-b4d0-b1d390e3c23c@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324205301.1361608-1-atwellwea@gmail.com> <acOVlten_N_5evGX@gandalf.schnuecks.de>
- <CANn89iLJJ3EF2-qe4AWJN0teh05x0PPJjOAfB0uG9rNZuJUZUg@mail.gmail.com> <CAN=sVvztL+bc2So8F9x50yQypyLEmEm5bWHzkXOOgdPFLG0MNg@mail.gmail.com>
-In-Reply-To: <CAN=sVvztL+bc2So8F9x50yQypyLEmEm5bWHzkXOOgdPFLG0MNg@mail.gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 25 Mar 2026 10:28:19 -0700
-X-Gm-Features: AaiRm50fdH06bEwfDDCcCnkrWJrbx95K5zRP_Pq7KPdPEhsnTZViwCSo52qmo54
-Message-ID: <CANn89i+gDhN-Zo8=WaAuhWGhDG-00tAuzE5XpGsPT+pOESX-ug@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 0/3] tcp: fix scaled no-shrink rwnd
- quantization slack
-To: Wesley Atwell <atwellwea@gmail.com>
-Cc: Simon Baatz <gmbnomis@gmail.com>, netdev@vger.kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b16f93af-1ec6-43f5-b4d0-b1d390e3c23c@intel.com>
 
-On Wed, Mar 25, 2026 at 10:18=E2=80=AFAM Wesley Atwell <atwellwea@gmail.com=
-> wrote:
->
-> Hi,
->
-> I still think 2/3 is a legitimate fix. To clarify, I was not trying to
-> claim that 84 is some magic number in the abstract, and I agree the
-> packetdrill is artificial.
->
-> My point was only that, in the constructed case, the old code can
-> preserve a scaled window that is larger than the currently backed
-> receive space, while 2/3 keeps the stored window representable in
-> scaled units.
-> That said, I am probably missing the reason why that is not a problem
-> according to the feedback you all have given.
->
-> So I am going to drop it here.
->
-> To be clear this has nothing to do with social engineering, just was
-> trying to fix something that doesn't need fixed I suppose.
+On 2026-03-25 07:12 PM, Yi Liu wrote:
+> 
+> 
+> On 3/25/26 02:00, David Matlack wrote:
+> > On 2026-03-24 09:07 PM, Yi Liu wrote:
+> > > On 3/24/26 07:57, David Matlack wrote:
+> > > > Require that Live Update preserved devices are in singleton iommu_groups
+> > > > during preservation (outgoing kernel) and retrieval (incoming kernel).
+> > > > 
+> > > > PCI devices preserved across Live Update will be allowed to perform
+> > > > memory transactions throughout the Live Update. Thus IOMMU groups for
+> > > > preserved devices must remain fixed. Since all current use cases for
+> > > > Live Update are for PCI devices in singleton iommu_groups, require that
+> > > > as a starting point. This avoids the complexity of needing to enforce
+> > > > arbitrary iommu_group topologies while still allowing all current use
+> > > > cases.
+> > > > 
+> > > > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> > > > Signed-off-by: David Matlack <dmatlack@google.com>
+> > > > ---
+> > > >    drivers/pci/liveupdate.c | 34 +++++++++++++++++++++++++++++++++-
+> > > >    1 file changed, 33 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
+> > > > index bec7b3500057..a3dbe06650ff 100644
+> > > > --- a/drivers/pci/liveupdate.c
+> > > > +++ b/drivers/pci/liveupdate.c
+> > > > @@ -75,6 +75,8 @@
+> > > >     *
+> > > >     *  * The device must not be a Physical Function (PF).
+> > > >     *
+> > > > + *  * The device must be the only device in its IOMMU group.
+> > > > + *
+> > > >     * Preservation Behavior
+> > > >     * =====================
+> > > >     *
+> > > > @@ -105,6 +107,7 @@
+> > > >    #include <linux/bsearch.h>
+> > > >    #include <linux/io.h>
+> > > > +#include <linux/iommu.h>
+> > > >    #include <linux/kexec_handover.h>
+> > > >    #include <linux/kho/abi/pci.h>
+> > > >    #include <linux/liveupdate.h>
+> > > > @@ -222,6 +225,31 @@ static void pci_ser_delete(struct pci_ser *ser, struct pci_dev *dev)
+> > > >    	ser->nr_devices--;
+> > > >    }
+> > > > +static int count_devices(struct device *dev, void *__nr_devices)
+> > > > +{
+> > > > +	(*(int *)__nr_devices)++;
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > 
+> > > there was a related discussion on the singleton group check. have you
+> > > considered the device_group_immutable_singleton() in below link?
+> > > 
+> > > https://lore.kernel.org/linux-iommu/20220421052121.3464100-4-baolu.lu@linux.intel.com/
+> > 
+> > Thanks for the link.
+> > 
+> > Based on the discussion in the follow-up threads, I think the only check
+> > in that function that is needed on top of what is in this patch to
+> > ensure group immutability is this one:
+> > 
+> > 	/*
+> > 	 * The device could be considered to be fully isolated if
+> > 	 * all devices on the path from the device to the host-PCI
+> > 	 * bridge are protected from peer-to-peer DMA by ACS.
+> > 	 */
+> > 	if (!pci_acs_path_enabled(pdev, NULL, REQ_ACS_FLAGS))
+> > 		return false;
+> > 
+> > However, this would restrict Live Update support to only device
+> > topologies that have these flags enabled. I am not yet sure if this
+> > would be overly restrictive for the scenarios we care about supporting.
+> 
+> yes. It's a bit different from that thread in which not only require
+> singleton group but also need to be immutable.
+> 
+> > An alternative way to ensure immutability would be to block adding
+> > devices at probe time. i.e. Fail pci_device_group() if the device being
+> > added has liveupdate_incoming=True, or if the group already contains a
+> > device with liveupdate_{incoming,outgoing}=True. We would still need the
+> > check in pci_liveupdate_preserve() to pretect against setting
+> > liveupdate_outgoing=True on a device in a multi-device group.
+> 
+> this looks good to me. But you'll disallow hotplug-in during liveupdate.
+> not sure about if any decision w.r.t. hotplug. is it acceptable?
 
-We have limited time and many bugs to review.
+Anyone doing hotplug during the middle of a Live Update is asking for
+trouble IMO. And it would only prevent a hot-plugged device from coming
+up if it were to be added to the iommu_group as an existing preserved
+device. I think that is reasonable.
 
-Your series really lacks the signal explaining why it's needed and why
-it's important.
-What real workload suffers from the current behavior.
+> BTW. A question not specific to this patch. If failure happens after
+> executing kexec, is there any chance to fallback to the prior kernel?
 
-Thanks.
+There are many failure paths during the reboot() syscall that can return
+back to userspace, and then userspace can figure out how to bring the
+system (e.g. VMs) back online on the current kernel.
+
+But otherwise, kexec is currently a one way door. Once you kexec, into
+the new kernel, you would have to do another Live Update to get back
+into the previous kernel.
