@@ -1,1332 +1,714 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013027.outbound.protection.outlook.com [40.107.201.27])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26357397692;
-	Wed, 25 Mar 2026 21:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774475024; cv=fail; b=ogsWPAxXlMGf4g7AuqH5geDZkkwK19194YlJM1TWcUoYVY8o1rU48VEwNU7Ba0nJ7mXcJ3UoOWpNAOkrpgW8mZ5vyAlPhGoeUtHyUi2f09N9vsLDNiZjheNIO8N2yMxmeaaENPBOfVtARnjuYD0S2RkxQaKoypk07m1Kw3YlwL0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774475024; c=relaxed/simple;
-	bh=M9KnE+Hl2S4F0ukqa0uLsklnenhvtt/Pno9i1Se06L4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bJfOlTS5urmZLUe4pociQE6mfXa+ZK1cj+HHSM3o/SyPNSscoPbDJFKiu2hpmvB9VzPRC8qZ3xWKrqT/iBuD7aXfgnxKxgQ6oNXIM6i5Ulw0iKVP9rUAn90sVXLB0sVoL5YGXNo/yCwQaD9BQoO9VcE9+ItxUDNa0yt6ezw3hLc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=TXri5ACK; arc=fail smtp.client-ip=40.107.201.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2BF3939DF;
+	Wed, 25 Mar 2026 23:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774480328; cv=none; b=s4MUhEeH4MgzwRs3b5mypQK2HeauPnUrESg4AYcwNV0GbAGGijVscmkwVvCTMKCrmomVKRYILtqzMYh8y9OLcqVlZVcYp5LBdefGGQS9CcdojubBvj6rFAmFh2KtAk1dYMjl/IRkTVjVnhI6ARlGXiCMtFFllzJmMtFmKI16mwg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774480328; c=relaxed/simple;
+	bh=Gw/bZ+ZhxB50horVj011SHxSz4iN0d250AG4e1a3Zpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=c0snQ3kc8aJsepyiGVgO22XuFUTXbRLHyRmFo368qY3Ut4Yu951caQj95F88/mr3jvx20MnMulRwdEDcJF15LWDXagVYA3I4xTcxLhxV//O2Xz22O09qEnOsNnoGW4pdgSZn/+kga7bzW9cUbDshby6Jk4OWOde5/xg1cX+lsuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EXmipsm5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="TXri5ACK"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CxhlBNpZ6sHD9ZbXbCeWwXA7qjVbwjAiyg0VfDZVzrBMoQA/TxNxLuOD9q2CO8YcU0kzEedwra0HbEDs4eDH/+uTPHrnqwaWD3MD6mu8OgsFMb2BCPazBKlS5wTzb2ykZ4cNQitldNBhGaL18KRVczxBhbpMxPAMARYkT/hAKRZF4LXs63n54BpIiz9uVJBwI7LUlXobbbrvYBKb9oXhwCErc0uyeouRhecNFweTup69BC9uw84VbaORXTPDJHN2kdAEZlg4jqPh0lxeLVPq3zOOOAn4SUmlgOQL2bEgeYoyGoniRDOuv9phw7Zlp0KJPUZnVA0iLA/JUeCL+Y+Taw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0SGQH1CIn5Fk2H7x2gmzGhCQ9ki2iwte5Hro8Rrb64Q=;
- b=KDPEwR5dlUyy+7ZMibPJB44HeuX/CFFlb0thQ0f0FSQLJQrsm9ksBE42pE3ejSv3EJ8kyYel1u7+z0dAIYbMk79PZtiP1DgyWsImzIDYiTbsbgrbqsMVRug7ZVaPlkhg8dNQe+K5MLSFeAPOk67xIFnTp4PeTDWkVrAh2AEycTOa8EhYpP6d6Olb25OkaA0al5+lqa/8X6MjSYbk/7qtffkQuiTvcTNDsa1rQylsOoD0fenUmW0sOWoPzxyL4yx72Cc00DxjEl1yAmCMQo6oBXwuXowMBdv8t3J34529w3ZH6THtdvhIQG4astKXG7uq0EmMmh4qG8QmK3IyOktJTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0SGQH1CIn5Fk2H7x2gmzGhCQ9ki2iwte5Hro8Rrb64Q=;
- b=TXri5ACKXlQG8FObHraxEz4w0RNH9azjlmON/gHtYdRM1vFmKg1+Fx+Rie3PqTC0QEay8jMb40hc9Cf/31ocWrNPKmzmgrs2KJi9bAyCixqeRCQwQCgDzHL67Va3hxUe2t6gOkGIV6meLAEMR9wRZdys+EegLFqXjBa+dDrvXJv2VpnFYNvaOoITXPS7tLXeKPGk84ylhhBLFbn42Leg4pwLiuwPMk6tst93iG3Crii9rlxQcPrOml37EVRzEas0WnLXxXY9XxqhU89CRw8o+132yZMp6mKqg7WFb0RdKdtiX7qjlQGrXuYkN+tV6E0Ce0NGPksZDr6/9qtV49zktA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA5PPF80B25317E.namprd12.prod.outlook.com
- (2603:10b6:80f:fc04::8d2) by MN0PR12MB5954.namprd12.prod.outlook.com
- (2603:10b6:208:37d::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Wed, 25 Mar
- 2026 21:43:33 +0000
-Received: from SA5PPF80B25317E.namprd12.prod.outlook.com
- ([fe80::e30:d7d3:95f0:78e7]) by SA5PPF80B25317E.namprd12.prod.outlook.com
- ([fe80::e30:d7d3:95f0:78e7%6]) with mapi id 15.20.9723.014; Wed, 25 Mar 2026
- 21:43:33 +0000
-From: Rubin Du <rubind@nvidia.com>
-To: Alex Williamson <alex@shazbot.org>,
-	David Matlack <dmatlack@google.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v10 2/2] selftests/vfio: Add NVIDIA Falcon driver for DMA testing
-Date: Wed, 25 Mar 2026 14:43:29 -0700
-Message-ID: <20260325214329.464727-3-rubind@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260325214329.464727-1-rubind@nvidia.com>
-References: <20260325214329.464727-1-rubind@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR07CA0040.namprd07.prod.outlook.com
- (2603:10b6:a03:60::17) To SA5PPF80B25317E.namprd12.prod.outlook.com
- (2603:10b6:80f:fc04::8d2)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EXmipsm5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DFAFC4CEF7;
+	Wed, 25 Mar 2026 23:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774480328;
+	bh=Gw/bZ+ZhxB50horVj011SHxSz4iN0d250AG4e1a3Zpo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=EXmipsm5nrnGwOesj66NjosrqMAR8uumvBJRDUYKAapbkohHsOgYGB47opQ8DGhJ8
+	 HQJeG+WPhDUSf0bnwEb3QkitroJhqUMxSAHeKOxIxahZ/PELwbLUFGWfhjipeXiXqh
+	 oJWPEPe7knxfgIbJ3kEIwH1nRSRDi3sijshD9fi5vyDOOAGnYpvfoaautdjcTrvRLq
+	 iPMbIpDRg7Lf4e0LMrzbhB4oVBlJawoOucc8dtxyFwUlzWbF6/GcGlZF3yLuFSbMsV
+	 gc+Nb28zxU8dPlbJl92pEUXNKhwsZdnwvUN/7MGAZDIX5r6qqqpjxpFeUgqAVq3p9V
+	 eDFu7u4Wd+Ogw==
+Date: Wed, 25 Mar 2026 18:12:07 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+	Askar Safin <safinaskar@gmail.com>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Chris Li <chrisl@kernel.org>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	David Rientjes <rientjes@google.com>,
+	Feng Tang <feng.tang@linux.alibaba.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
+	kexec@lists.infradead.org, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Li RongQing <lirongqing@baidu.com>, Lukas Wunner <lukas@wunner.de>,
+	Marco Elver <elver@google.com>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Pranjal Shrivastava <praan@google.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v3 02/24] PCI: Add API to track PCI devices preserved
+ across Live Update
+Message-ID: <20260325231207.GA1292813@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA5PPF80B25317E:EE_|MN0PR12MB5954:EE_
-X-MS-Office365-Filtering-Correlation-Id: 59eba08c-a3e3-495c-8223-08de8ab78fff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	CiNNvjHf0V9DMt1USUodoCUP8Bn8x4rqP7I4zFY5bnGJww1taACn33vXBb31GcGv/Ya8GrjzNthH56nGWnkcrl97tCuAIg9Th/linHlC/785UljIGIUkd2uYE0e/N/MplmAkIWlf4FceQ50QXI2S/W4dDew7MASOT76B3QD3Jh12n9GukDiIgGt5LchdltVfig4W3LKCUwaT6ZS653BesE4nWCznvryTrXl42UlFfObtyfLBMa1wDAsIN/0Kl6GcpDUtD7X+Kty+ER/RKsooV08aY0U9zp/2+ZQArED/fIyV5z/LeCt5/syCwu8z59yb4nOLIRWrKo2V3bW8ESnfElnOZvC3Ris0kFiQInag9ifb1/Kd5VzhMbMyepArjpfWjnHSizK4viKMlmuO42Ff/I8R83eIhKzPbAaAmEqG7iiwwebD0pD1JNAInv3PxvdvmUXmDF2Tr1hb2SWjHTHlMrUD//7IZ1IVNQ+0COd5I3jTjv/HVNLd9f4V8HLpsITKZRfTaBa1q2ZdbQdEmqRaUTh4Y8/HKvKhWyBfSSC9ThSwr6f3fb9L996wUtuKuVj0Z/x5aShRbWOEjbRx4E8yuP47+FqzcV6lJjzdrALINDREC3fqsApFno8AHq8uE/rlsJkVuqhsW0jL0CZFqSfP04cMxlp8BbpLHSS8CGF7eTjKUiSO3BFouW2TTuz30UOqzJWdc1PRORf+jSY/5giiLdk3pgY8Zi018AXG+VUyg/FD4X8hU8WyR38L0QftkS+J
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA5PPF80B25317E.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?a1ktpYiXq0Mat+n36E+tA3LnRRZp/ukeUPQXgJx08xfMO67cyVsA8uXBMCiL?=
- =?us-ascii?Q?Tf9ilcyqTDCnfgT04vcAWsSuofsp+OFppovsQyBMu05O3KigTuBroB87bPuE?=
- =?us-ascii?Q?EqWeBO9q9fjdjcaZAFt5Md9U4QFOcw63YR63qbgU3ITCK6I0jqEsB1I7Cbcu?=
- =?us-ascii?Q?NSl0AV/VORY6xYbIqlW1xzvL5HbF117TCBNFtXwH0zYpr/DLKbM1uQlJUc4V?=
- =?us-ascii?Q?DaXvX/27QTV1xS6x0AJnmOSQMB2i69IZi26X9Cszu/s0JGAHW+wMeS9M7U/M?=
- =?us-ascii?Q?RjAB/oad3TEkzhu5n/1soC3ZLg44+scnwMaKSh5IfP9dDQAX5EKLhkDtNpUl?=
- =?us-ascii?Q?baRCUMA+K86d1BP+irMkrgEt5TWZ7nNfs+NjoJZ/5m8u12mVfXBHWouf11e9?=
- =?us-ascii?Q?VvdVaOr2P+95FveUrOMl+9nIj+UZAEBPUoWWj/JkeghZVBQwYsSVRRXbjK1U?=
- =?us-ascii?Q?FoN8Olqterqj/T06lNp0QqxP7H0rriFuJ0KOXoQkFXSjXjMxdNOmRq2i5CaF?=
- =?us-ascii?Q?5YtATEaCXwvix1E3KLqQZrOy5LEMGY7dGKY2Fii/rmavz/ZWLoEX89vBAoVd?=
- =?us-ascii?Q?RNYM1CNlvUZ/gxj4QkdWCpC7xL8PB4f5yjSBuIzwoWfxS3JJUwtD/tKAHpFl?=
- =?us-ascii?Q?WLXn14750idWhoOqgGY63BnL8Lu3uBupWAZOnLOfuBTxq/PGZLM7x9d90Zz+?=
- =?us-ascii?Q?MR2ILUG3yzvaZ24pT39WV/RNzn3YIT2tKuqTov8Bc0srjFWEvUW4Yt09aV6h?=
- =?us-ascii?Q?okUENgp3EPlx9+3ctxkGLIWr1e+Pv8XM7tfjeipVpblvDB5eb3yP6fREFSFr?=
- =?us-ascii?Q?NYxgHnzeupdvTWDXVW7c26weMO0otoNOqBAEsbSPuFo9/WWiumVE6HUBaMjx?=
- =?us-ascii?Q?I7Pk8wQdVOLCslhUzkbPRe6gsg2//qcIjes7supTXsTfTSIlFBJ/cI519Iuj?=
- =?us-ascii?Q?9WzxHZIG1vNaHuD5x5t935FoLxSSVvvs5VAlpB+v7r3rLcirgLnXvL680JUc?=
- =?us-ascii?Q?8sVAhZxvJjr7hOcakfh8jh8LnBsJJmxSAd4V4Ur3uWnCiImQByIdK6PnO7Yh?=
- =?us-ascii?Q?JPVibpHHCk//Cly6txiLfc6yH07xI7aBBTLc+dKQ1sCQKnw0MvonuB9Flv0b?=
- =?us-ascii?Q?Jvrd3XS6gJPxlEMERgMcJr2GTrkYoDa+WzPKyArT2ez4Xl1INnccY9KHC5qS?=
- =?us-ascii?Q?qLGlPw/ijr2Eo9R7nTj9U1F3yZ2O168oOe8vV+Iw1SUqtHKMJqnm2uGAjvuS?=
- =?us-ascii?Q?NeP1aRBe5FVQ9+xqEr1NCC1sfMRKt8zmNlHqDcmguX0SiGWqy22tiYa/L+ni?=
- =?us-ascii?Q?1ShSgOkdOyZ3JDdJ55WH7CMAcXr4Abyoac2QcrSqbaq6GSVCy+S3xV5Sslg2?=
- =?us-ascii?Q?9xX537aUuZEWy1Mj62a0nDIwTYi2x1ebuELC+YVnE4wkbgVfZ1wrzdvrJS/n?=
- =?us-ascii?Q?vXUdhw85T1n+iSG7kDRX0fQUBFWIaWOm8TBC1mUeDnS+yYyLYmxNpNupfzNT?=
- =?us-ascii?Q?IoahknX01RR850l2igufiUcgFY5VZUicXc2XwtA/wbwCQ2eTq4z9TiD5HGF8?=
- =?us-ascii?Q?UvvexxjSlbycOUhe4o3sn+ZiSSHV5ixkoXuD1Ra1LJySHzrTtLaAhM/SeMWV?=
- =?us-ascii?Q?AFtLp2sWlurDUmSogjuxREqU/00guen4IKujGUGZIm/fwzuVku2VjT+NSW+g?=
- =?us-ascii?Q?iXmYjAmO1jK6DGoc8G/G6xtrnwnObG+sWXf3eLPrz+fktzfpZF1LfD2Jv52h?=
- =?us-ascii?Q?Z7qqv+D3UQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59eba08c-a3e3-495c-8223-08de8ab78fff
-X-MS-Exchange-CrossTenant-AuthSource: SA5PPF80B25317E.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 21:43:33.3978
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Fa2O3I6Jg/LeoKEKna2j9EeROWyamRkcMYZdNOjmOLvRaiRFlMII9AaZJcPDBQMqnVtCqpu9oAUYi57/oqAl2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5954
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323235817.1960573-3-dmatlack@google.com>
 
-Add a new VFIO PCI driver for NVIDIA GPUs that enables DMA testing
-via the Falcon (Fast Logic Controller) microcontrollers. This driver
-extracts and adapts the DMA test functionality from NVIDIA's
-gpu-admin-tools project and integrates it into the existing VFIO
-selftest framework.
+On Mon, Mar 23, 2026 at 11:57:54PM +0000, David Matlack wrote:
+> Add an API to enable the PCI subsystem to participate in a Live Update
+> and track all devices that are being preserved by drivers. Since this
+> support is still under development, hide it behind a new Kconfig
+> PCI_LIVEUPDATE that is marked experimental.
 
-Falcons are general-purpose microcontrollers present on NVIDIA GPUs
-that can perform DMA operations between system memory and device
-memory. By leveraging Falcon DMA, this driver allows NVIDIA GPUs to
-be tested alongside Intel IOAT and DSA devices using the same
-selftest infrastructure.
+Can you list the interfaces being added here, e.g.,
 
-Supported GPUs:
-- Kepler: K520, GTX660, K4000, K80, GT635
-- Maxwell Gen1: GTX750, GTX745
-- Maxwell Gen2: M60
-- Pascal: P100, P4, P40
-- Volta: V100
-- Turing: T4
-- Ampere: A16, A100, A10
-- Ada: L4, L40S
-- Hopper: H100
+  pci_liveupdate_register_flb() - register driver's liveupdate_file_handler
+  pci_liveupdate_unregister_flb()
+  pci_liveupdate_preserve() - preserve device across LU kexec
+  pci_liveupdate_unpreserve() - cancel device preservation
+  pci_liveupdate_retrieve() - not sure?
+  pci_liveupdate_finish()
 
-The PMU falcon on Kepler and Maxwell Gen1 GPUs uses legacy FBIF
-register offsets and requires enabling via PMC_ENABLE with the HUB
-bit set.
+I think it's nice to have an idea of what pieces to look for before
+reading the patch.
 
-Limitations and tradeoffs:
+> This API will be used in subsequent commits by the vfio-pci driver to
+> preserve VFIO devices across Live Update.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  drivers/pci/Kconfig         |  11 ++
+>  drivers/pci/Makefile        |   1 +
+>  drivers/pci/liveupdate.c    | 380 ++++++++++++++++++++++++++++++++++++
+>  drivers/pci/pci.h           |  14 ++
+>  drivers/pci/probe.c         |   2 +
+>  include/linux/kho/abi/pci.h |  62 ++++++
+>  include/linux/pci.h         |  41 ++++
+>  7 files changed, 511 insertions(+)
+>  create mode 100644 drivers/pci/liveupdate.c
+>  create mode 100644 include/linux/kho/abi/pci.h
+> 
+> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+> index e3f848ffb52a..05307d89c3f4 100644
+> --- a/drivers/pci/Kconfig
+> +++ b/drivers/pci/Kconfig
+> @@ -334,6 +334,17 @@ config VGA_ARB_MAX_GPUS
+>  	  Reserves space in the kernel to maintain resource locking for
+>  	  multiple GPUS.  The overhead for each GPU is very small.
+>  
+> +config PCI_LIVEUPDATE
+> +	bool "PCI Live Update Support (EXPERIMENTAL)"
+> +	depends on PCI && LIVEUPDATE
+> +	help
+> +	  Support for preserving PCI devices across a Live Update. This option
+> +	  should only be enabled by developers working on implementing this
+> +	  support. Once enough support as landed in the kernel, this option
+> +	  will no longer be marked EXPERIMENTAL.
 
-1. Architecture support:
-   Blackwell and newer architectures may require additional work
-   due to firmware.
+This would be a good place for a one-sentence explanation of what
+"preserving PCI devices" means.  Obviously the physical devices stay
+there; what's interesting is that the hardware continues operating
+without interruption across the update.
 
-2. DMA operations:
-   The Falcon DMA engine can only process one transfer at a time,
-   with a maximum of 256 bytes per transfer. Since the hardware
-   cannot perform truly asynchronous DMA, the driver emulates async
-   behavior: memcpy_start() stores the request parameters and
-   returns immediately; memcpy_wait() performs the actual DMA in
-   256-byte chunks.
+s/support as landed/support has landed/ (maybe no need for this
+sentence at all)
 
-The driver is named 'nv_falcon' to reflect that it specifically
-controls the Falcon microcontrollers for DMA operations, rather
-than exposing general GPU functionality.
+> +	  If unsure, say N.
+> +
+>  source "drivers/pci/hotplug/Kconfig"
+>  source "drivers/pci/controller/Kconfig"
+>  source "drivers/pci/endpoint/Kconfig"
+> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
+> index 41ebc3b9a518..e8d003cb6757 100644
+> --- a/drivers/pci/Makefile
+> +++ b/drivers/pci/Makefile
+> @@ -16,6 +16,7 @@ obj-$(CONFIG_PROC_FS)		+= proc.o
+>  obj-$(CONFIG_SYSFS)		+= pci-sysfs.o slot.o
+>  obj-$(CONFIG_ACPI)		+= pci-acpi.o
+>  obj-$(CONFIG_GENERIC_PCI_IOMAP) += iomap.o
+> +obj-$(CONFIG_PCI_LIVEUPDATE)	+= liveupdate.o
+>  endif
+>  
+>  obj-$(CONFIG_OF)		+= of.o
+> diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
+> new file mode 100644
+> index 000000000000..bec7b3500057
+> --- /dev/null
+> +++ b/drivers/pci/liveupdate.c
+> @@ -0,0 +1,380 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright (c) 2026, Google LLC.
+> + * David Matlack <dmatlack@google.com>
+> + */
+> +
+> +/**
+> + * DOC: PCI Live Update
+> + *
+> + * The PCI subsystem participates in the Live Update process to enable drivers
+> + * to preserve their PCI devices across kexec.
+> + *
+> + * Device preservation across Live Update is built on top of the Live Update
+> + * Orchestrator (LUO) support for file preservation across kexec. Userspace
+> + * indicates that a device should be preserved by preserving the file associated
+> + * with the device with ``ioctl(LIVEUPDATE_SESSION_PRESERVE_FD)``.
+> + *
+> + * .. note::
+> + *    The support for preserving PCI devices across Live Update is currently
+> + *    *partial* and should be considered *experimental*. It should only be
+> + *    used by developers working on the implementation for the time being.
+> + *
+> + *    To enable the support, enable ``CONFIG_PCI_LIVEUPDATE``.
+> + *
+> + * Driver API
+> + * ==========
+> + *
+> + * Drivers that support file-based device preservation must register their
+> + * ``liveupdate_file_handler`` with the PCI subsystem by calling
+> + * ``pci_liveupdate_register_flb()``. This ensures the PCI subsystem will be
+> + * notified whenever a device file is preserved so that ``struct pci_ser``
+> + * can be allocated to track all preserved devices. This struct is an ABI
+> + * and is eventually handed off to the next kernel via Kexec-Handover (KHO).
+> + *
+> + * In the "outgoing" kernel (before kexec), drivers should then notify the PCI
+> + * subsystem directly whenever the preservation status for a device changes:
+> + *
+> + *  * ``pci_liveupdate_preserve(pci_dev)``: The device is being preserved.
+> + *
+> + *  * ``pci_liveupdate_unpreserve(pci_dev)``: The device is no longer being
+> + *    preserved (preservation is cancelled).
+> + *
+> + * In the "incoming" kernel (after kexec), drivers should notify the PCI
+> + * subsystem with the following calls:
+> + *
+> + *  * ``pci_liveupdate_retrieve(pci_dev)``: The device file is being retrieved
+> + *    by userspace.
 
-Reference implementation:
-https://github.com/NVIDIA/gpu-admin-tools
+I'm not clear on what this means.  Is this telling the PCI core that
+somebody else (userspace?) is doing something?  Why does the PCI core
+care?  The name suggests that this interface would retrieve some data
+from the PCI core, but that doesn't seem to be what's happening.
 
-Signed-off-by: Rubin Du <rubind@nvidia.com>
----
- .../vfio/lib/drivers/nv_falcons/hw.h          | 365 +++++++++
- .../vfio/lib/drivers/nv_falcons/nv_falcons.c  | 739 ++++++++++++++++++
- tools/testing/selftests/vfio/lib/libvfio.mk   |   2 +
- .../selftests/vfio/lib/vfio_pci_driver.c      |   3 +
- 4 files changed, 1109 insertions(+)
- create mode 100644 tools/testing/selftests/vfio/lib/drivers/nv_falcons/hw.h
- create mode 100644 tools/testing/selftests/vfio/lib/drivers/nv_falcons/nv_falcons.c
+> + *
+> + *  * ``pci_liveupdate_finish(pci_dev)``: The device is done participating in
+> + *    Live Update. After this point the device may no longer be even associated
+> + *    with the same driver.
 
-diff --git a/tools/testing/selftests/vfio/lib/drivers/nv_falcons/hw.h b/tools/testing/selftests/vfio/lib/drivers/nv_falcons/hw.h
-new file mode 100644
-index 000000000000..a92cdcfec63f
---- /dev/null
-+++ b/tools/testing/selftests/vfio/lib/drivers/nv_falcons/hw.h
-@@ -0,0 +1,365 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
-+ */
-+#ifndef _NV_FALCONS_HW_H_
-+#define _NV_FALCONS_HW_H_
-+
-+/* PMC (Power Management Controller) Registers */
-+#define NV_PMC_BOOT_0							0x00000000
-+#define NV_PMC_ENABLE							0x00000200
-+#define NV_PMC_ENABLE_PWR						0x00002000
-+#define NV_PMC_ENABLE_HUB						0x20000000
-+
-+/* Falcon Base Pages for Different Engines */
-+#define NV_PPWR_FALCON_BASE						0x10a000
-+#define NV_PGSP_FALCON_BASE						0x110000
-+
-+/* Falcon Common Register Offsets (relative to base_page) */
-+#define NV_FALCON_DMACTL_OFFSET					0x010c
-+#define NV_FALCON_CPUCTL_OFFSET					0x0100
-+#define NV_FALCON_ENGINE_RESET_OFFSET			0x03c0
-+
-+/* DMEM Control Register Flags */
-+#define NV_PPWR_FALCON_DMEMC_AINCR_TRUE			0x01000000
-+#define NV_PPWR_FALCON_DMEMC_AINCW_TRUE			0x02000000
-+
-+/* Falcon DMEM port offsets (for port 0) */
-+#define NV_FALCON_DMEMC_OFFSET					0x1c0
-+#define NV_FALCON_DMEMD_OFFSET					0x1c4
-+
-+/* DMA Register Offsets (relative to base_page) */
-+#define NV_FALCON_DMA_ADDR_LOW_OFFSET			0x110
-+#define NV_FALCON_DMA_MEM_OFFSET				0x114
-+#define NV_FALCON_DMA_CMD_OFFSET				0x118
-+#define NV_FALCON_DMA_BLOCK_OFFSET				0x11c
-+#define NV_FALCON_DMA_ADDR_HIGH_OFFSET			0x128
-+
-+/* DMA Global Address Top Bits Register */
-+#define NV_GPU_DMA_ADDR_TOP_BITS_REG			0x100f04
-+
-+/* DMA Command Register Bit Definitions */
-+#define NV_FALCON_DMA_CMD_WRITE_BIT				0x20
-+#define NV_FALCON_DMA_CMD_SIZE_SHIFT			8
-+#define NV_FALCON_DMA_CMD_DONE_BIT				0x2
-+
-+/*
-+ * Falcon DMA is synchronous, so a transfer size and count larger than
-+ * its per-operation maximum adds no value.
-+ */
-+
-+/* DMA block size and alignment */
-+#define NV_FALCON_DMA_MAX_TRANSFER_SIZE			256
-+#define NV_FALCON_DMA_MAX_TRANSFER_COUNT		1
-+
-+/* DMACTL register bits */
-+#define NV_FALCON_DMACTL_DMEM_SCRUBBING			0x1
-+#define NV_FALCON_DMACTL_READY_MASK				0x6
-+
-+/* Falcon Core Selection Register */
-+#define NV_FALCON_CORE_SELECT_OFFSET			0x1668
-+#define NV_FALCON_CORE_SELECT_MASK				0x30
-+
-+/* Falcon mailbox register (for Ada+ reset check) */
-+#define NV_FALCON_MAILBOX_TEST_OFFSET			0x40c
-+#define NV_FALCON_MAILBOX_RESET_MAGIC			0xbadf5620
-+
-+/* Falcon Message Queue Register Offsets (relative to base_page) */
-+#define NV_FALCON_QUEUE_HEAD_BASE_OFFSET		0x2c00
-+#define NV_FALCON_QUEUE_TAIL_BASE_OFFSET		0x2c04
-+#define NV_FALCON_QUEUE_STRIDE					0x8
-+#define NV_FALCON_MSG_QUEUE_HEAD_BASE_OFFSET	0x2c80
-+#define NV_FALCON_MSG_QUEUE_TAIL_BASE_OFFSET	0x2c84
-+
-+/* FSP Falcon Base Pages */
-+#define NV_FSP_FALCON_BASE						0x8f0100
-+/* base_page = cpuctl & ~0xfff */
-+#define NV_FSP_FALCON_BASE_PAGE					0x8f0000
-+#define NV_FSP_EMEM_BASE						0x8f2000
-+
-+/* FSP EMEM Port Offsets (relative to FSP EMEM base) */
-+#define NV_FSP_EMEMC_OFFSET						0xac0
-+#define NV_FSP_EMEMD_OFFSET						0xac4
-+#define NV_FSP_EMEM_PORT_STRIDE					0x8
-+
-+/* EMEM Control Register Flags (same as DMEM) */
-+#define NV_FALCON_EMEMC_AINCR					0x01000000
-+#define NV_FALCON_EMEMC_AINCW					0x02000000
-+
-+/* FSP RPC channel configuration */
-+#define NV_FSP_RPC_CHANNEL_SIZE					1024
-+#define NV_FSP_RPC_MAX_PACKET_SIZE				1024
-+#define NV_FSP_RPC_CHANNEL_HOPPER				2
-+#define NV_FSP_RPC_EMEM_BASE					\
-+	(NV_FSP_RPC_CHANNEL_HOPPER * NV_FSP_RPC_CHANNEL_SIZE)
-+
-+/* FSP EMEM port 2 registers (pre-computed for Hopper channel 2) */
-+#define NV_FSP_EMEM_PORT2_CTRL		(NV_FSP_EMEM_BASE + NV_FSP_EMEMC_OFFSET + \
-+					 NV_FSP_RPC_CHANNEL_HOPPER * NV_FSP_EMEM_PORT_STRIDE)
-+#define NV_FSP_EMEM_PORT2_DATA		(NV_FSP_EMEM_BASE + NV_FSP_EMEMD_OFFSET + \
-+					 NV_FSP_RPC_CHANNEL_HOPPER * NV_FSP_EMEM_PORT_STRIDE)
-+
-+/* FSP queue register offsets (pre-computed for Hopper channel 2) */
-+#define NV_FSP_QUEUE_HEAD	\
-+	(NV_FSP_FALCON_BASE_PAGE + NV_FALCON_QUEUE_HEAD_BASE_OFFSET + \
-+	 NV_FSP_RPC_CHANNEL_HOPPER * NV_FALCON_QUEUE_STRIDE)
-+#define NV_FSP_QUEUE_TAIL	\
-+	(NV_FSP_FALCON_BASE_PAGE + NV_FALCON_QUEUE_TAIL_BASE_OFFSET + \
-+	 NV_FSP_RPC_CHANNEL_HOPPER * NV_FALCON_QUEUE_STRIDE)
-+#define NV_FSP_MSG_QUEUE_HEAD	\
-+	(NV_FSP_FALCON_BASE_PAGE + NV_FALCON_MSG_QUEUE_HEAD_BASE_OFFSET + \
-+	 NV_FSP_RPC_CHANNEL_HOPPER * NV_FALCON_QUEUE_STRIDE)
-+#define NV_FSP_MSG_QUEUE_TAIL	\
-+	(NV_FSP_FALCON_BASE_PAGE + NV_FALCON_MSG_QUEUE_TAIL_BASE_OFFSET + \
-+	 NV_FSP_RPC_CHANNEL_HOPPER * NV_FALCON_QUEUE_STRIDE)
-+
-+/* MCTP Header */
-+#define NV_MCTP_HDR_SEID_SHIFT					16
-+#define NV_MCTP_HDR_SEID_MASK					0xff
-+#define NV_MCTP_HDR_SEQ_SHIFT					28
-+#define NV_MCTP_HDR_SEQ_MASK					0x3
-+#define NV_MCTP_HDR_EOM_BIT						0x40000000
-+#define NV_MCTP_HDR_SOM_BIT						0x80000000
-+
-+/* MCTP Message Header */
-+#define NV_MCTP_MSG_TYPE_SHIFT					0
-+#define NV_MCTP_MSG_TYPE_MASK					0x7f
-+#define NV_MCTP_MSG_TYPE_VENDOR_DEFINED			0x7e
-+#define NV_MCTP_MSG_VENDOR_ID_SHIFT				8
-+#define NV_MCTP_MSG_VENDOR_ID_MASK				0xffff
-+#define NV_MCTP_MSG_VENDOR_ID_NVIDIA			0x10de
-+#define NV_MCTP_MSG_NVDM_TYPE_SHIFT				24
-+#define NV_MCTP_MSG_NVDM_TYPE_MASK				0xff
-+
-+/* NVDM response type */
-+#define NV_NVDM_TYPE_RESPONSE					0x15
-+
-+/* Minimum response size: mctp_hdr + msg_hdr + status_hdr + type + status */
-+#define NV_FSP_RPC_MIN_RESPONSE_WORDS			5
-+
-+/* FBIF (Frame Buffer Interface) Registers */
-+/* Legacy PMU FBIF offsets (Kepler, Maxwell Gen1) */
-+#define NV_PMU_LEGACY_FBIF_CTL_OFFSET			0x624
-+#define NV_PMU_LEGACY_FBIF_TRANSCFG_OFFSET		0x600
-+
-+/* PMU FBIF offsets */
-+#define NV_PMU_FBIF_CTL_OFFSET					0xe24
-+#define NV_PMU_FBIF_TRANSCFG_OFFSET				0xe00
-+
-+/* GSP FBIF offsets */
-+#define NV_GSP_FBIF_CTL_OFFSET					0x624
-+#define NV_GSP_FBIF_TRANSCFG_OFFSET				0x600
-+
-+/* OFA Falcon Base Page and FBIF offsets (used for Hopper+ DMA) */
-+#define NV_OFA_FALCON_BASE						0x844000
-+#define NV_OFA_FBIF_CTL_OFFSET					0x424
-+#define NV_OFA_FBIF_TRANSCFG_OFFSET				0x400
-+
-+/* OFA DMA support check register (Hopper+) */
-+#define NV_OFA_DMA_SUPPORT_CHECK_REG			0x8443c0
-+
-+/* FSP NVDM command types */
-+#define NV_NVDM_TYPE_FBDMA						0x22
-+#define NV_FBDMA_SUBCMD_ENABLE					0x1
-+
-+/* FBIF CTL2 offset (relative to fbif_ctl) */
-+#define NV_FBIF_CTL2_OFFSET						0x60
-+
-+/* FBIF TRANSCFG register bits */
-+#define NV_FBIF_TRANSCFG_TARGET_MASK			0x3
-+#define NV_FBIF_TRANSCFG_SYSMEM_DEFAULT			0x5
-+
-+/* FBIF CTL register bits */
-+#define NV_FBIF_CTL_ALLOW_PHYS_MODE				0x10
-+#define NV_FBIF_CTL_ALLOW_FULL_PHYS_MODE		0x80
-+
-+/* Memory clear register offsets */
-+#define NV_MEM_CLEAR_OFFSET						0x100b20
-+#define NV_BOOT_COMPLETE_OFFSET					0x118234
-+#define NV_BOOT_COMPLETE_MASK					0x3ff
-+
-+/* FSP boot complete register (Hopper+) */
-+#define NV_FSP_BOOT_COMPLETE_OFFSET				0x200bc
-+#define NV_FSP_BOOT_COMPLETE_MASK				0xff
-+
-+enum gpu_arch {
-+	GPU_ARCH_UNKNOWN = -1,
-+	GPU_ARCH_KEPLER = 0,
-+	GPU_ARCH_MAXWELL_GEN1,
-+	GPU_ARCH_MAXWELL_GEN2,
-+	GPU_ARCH_PASCAL,
-+	GPU_ARCH_PASCAL_10X,
-+	GPU_ARCH_VOLTA,
-+	GPU_ARCH_TURING,
-+	GPU_ARCH_AMPERE,
-+	GPU_ARCH_ADA,
-+	GPU_ARCH_HOPPER,
-+};
-+
-+enum falcon_type {
-+	FALCON_TYPE_PMU_LEGACY = 0,
-+	FALCON_TYPE_PMU,
-+	FALCON_TYPE_GSP,
-+	FALCON_TYPE_OFA,
-+};
-+
-+struct falcon {
-+	u32 base_page;
-+	u32 dmactl;
-+	u32 engine_reset;
-+	u32 fbif_ctl;
-+	u32 fbif_ctl2;
-+	u32 fbif_transcfg;
-+	u32 dmem_control_reg;
-+	u32 dmem_data_reg;
-+	bool no_outside_reset;
-+};
-+
-+struct gpu_properties {
-+	u32 pmc_enable_mask;
-+	bool memory_clear_supported;
-+	enum falcon_type falcon_type;
-+};
-+
-+struct gpu_device {
-+	enum gpu_arch arch;
-+	void *bar0;
-+	bool is_memory_clear_supported;
-+	const struct falcon *falcon;
-+	u32 pmc_enable_mask;
-+	bool fsp_dma_enabled;
-+
-+	/* Pending memcpy parameters, set by memcpy_start() */
-+	u64 memcpy_src;
-+	u64 memcpy_dst;
-+	u64 memcpy_size;
-+	u64 memcpy_count;
-+};
-+
-+static const u32 verified_gpu_map[] = {
-+	0x0e40a0a2,	/* K520 */
-+	0x0e6000a1,	/* GTX660 */
-+	0x0e63a0a1,	/* K4000 */
-+	0x0f22d0a1,	/* K80 */
-+	0x108000a1,	/* GT635 */
-+	0x117010a2,	/* GTX750 */
-+	0x117020a2,	/* GTX745 */
-+	0x124320a1,	/* M60 */
-+	0x130000a1,	/* P100 */
-+	0x134000a1,	/* P4 */
-+	0x132000a1,	/* P40 */
-+	0x140000a1,	/* V100 */
-+	0x164000a1,	/* T4 */
-+	0xb77000a1,	/* A16 */
-+	0x170000a1,	/* A100 */
-+	0xb72000a1,	/* A10 */
-+	0x180000a1,	/* H100 */
-+	0x194000a1,	/* L4 */
-+	0x192000a1,	/* L40S */
-+};
-+
-+#define VERIFIED_GPU_MAP_SIZE ARRAY_SIZE(verified_gpu_map)
-+
-+static const struct gpu_properties gpu_properties_map[] = {
-+	[GPU_ARCH_KEPLER] = {
-+		.pmc_enable_mask = NV_PMC_ENABLE_PWR | NV_PMC_ENABLE_HUB,
-+		.memory_clear_supported = false,
-+		.falcon_type = FALCON_TYPE_PMU_LEGACY,
-+	},
-+	[GPU_ARCH_MAXWELL_GEN1] = {
-+		.pmc_enable_mask = NV_PMC_ENABLE_PWR | NV_PMC_ENABLE_HUB,
-+		.memory_clear_supported = false,
-+		.falcon_type = FALCON_TYPE_PMU_LEGACY,
-+	},
-+	[GPU_ARCH_MAXWELL_GEN2] = {
-+		.pmc_enable_mask = NV_PMC_ENABLE_PWR,
-+		.memory_clear_supported = false,
-+		.falcon_type = FALCON_TYPE_PMU,
-+	},
-+	[GPU_ARCH_PASCAL] = {
-+		.pmc_enable_mask = NV_PMC_ENABLE_PWR,
-+		.memory_clear_supported = false,
-+		.falcon_type = FALCON_TYPE_PMU,
-+	},
-+	[GPU_ARCH_PASCAL_10X] = {
-+		.pmc_enable_mask = 0,
-+		.memory_clear_supported = false,
-+		.falcon_type = FALCON_TYPE_PMU,
-+	},
-+	[GPU_ARCH_VOLTA] = {
-+		.pmc_enable_mask = 0,
-+		.memory_clear_supported = false,
-+		.falcon_type = FALCON_TYPE_GSP,
-+	},
-+	[GPU_ARCH_TURING] = {
-+		.pmc_enable_mask = 0,
-+		.memory_clear_supported = true,
-+		.falcon_type = FALCON_TYPE_GSP,
-+	},
-+	[GPU_ARCH_AMPERE] = {
-+		.pmc_enable_mask = 0,
-+		.memory_clear_supported = true,
-+		.falcon_type = FALCON_TYPE_GSP,
-+	},
-+	[GPU_ARCH_ADA] = {
-+		.pmc_enable_mask = 0,
-+		.memory_clear_supported = true,
-+		.falcon_type = FALCON_TYPE_PMU,
-+	},
-+	[GPU_ARCH_HOPPER] = {
-+		.pmc_enable_mask = 0,
-+		.memory_clear_supported = true,
-+		.falcon_type = FALCON_TYPE_OFA,
-+	},
-+};
-+
-+static const struct falcon falcon_map[] = {
-+	[FALCON_TYPE_PMU_LEGACY] = {
-+		.base_page = NV_PPWR_FALCON_BASE,
-+		.dmactl = NV_PPWR_FALCON_BASE + NV_FALCON_DMACTL_OFFSET,
-+		.engine_reset = NV_PPWR_FALCON_BASE + NV_FALCON_ENGINE_RESET_OFFSET,
-+		.fbif_ctl = NV_PPWR_FALCON_BASE + NV_PMU_LEGACY_FBIF_CTL_OFFSET,
-+		.fbif_ctl2 = NV_PPWR_FALCON_BASE +
-+			     NV_PMU_LEGACY_FBIF_CTL_OFFSET + NV_FBIF_CTL2_OFFSET,
-+		.fbif_transcfg = NV_PPWR_FALCON_BASE + NV_PMU_LEGACY_FBIF_TRANSCFG_OFFSET,
-+		.dmem_control_reg = NV_PPWR_FALCON_BASE + NV_FALCON_DMEMC_OFFSET,
-+		.dmem_data_reg = NV_PPWR_FALCON_BASE + NV_FALCON_DMEMD_OFFSET,
-+		.no_outside_reset = false,
-+	},
-+	[FALCON_TYPE_PMU] = {
-+		.base_page = NV_PPWR_FALCON_BASE,
-+		.dmactl = NV_PPWR_FALCON_BASE + NV_FALCON_DMACTL_OFFSET,
-+		.engine_reset = NV_PPWR_FALCON_BASE + NV_FALCON_ENGINE_RESET_OFFSET,
-+		.fbif_ctl = NV_PPWR_FALCON_BASE + NV_PMU_FBIF_CTL_OFFSET,
-+		.fbif_ctl2 = NV_PPWR_FALCON_BASE + NV_PMU_FBIF_CTL_OFFSET + NV_FBIF_CTL2_OFFSET,
-+		.fbif_transcfg = NV_PPWR_FALCON_BASE + NV_PMU_FBIF_TRANSCFG_OFFSET,
-+		.dmem_control_reg = NV_PPWR_FALCON_BASE + NV_FALCON_DMEMC_OFFSET,
-+		.dmem_data_reg = NV_PPWR_FALCON_BASE + NV_FALCON_DMEMD_OFFSET,
-+		.no_outside_reset = false,
-+	},
-+	[FALCON_TYPE_GSP] = {
-+		.base_page = NV_PGSP_FALCON_BASE,
-+		.dmactl = NV_PGSP_FALCON_BASE + NV_FALCON_DMACTL_OFFSET,
-+		.engine_reset = NV_PGSP_FALCON_BASE + NV_FALCON_ENGINE_RESET_OFFSET,
-+		.fbif_ctl = NV_PGSP_FALCON_BASE + NV_GSP_FBIF_CTL_OFFSET,
-+		.fbif_ctl2 = NV_PGSP_FALCON_BASE + NV_GSP_FBIF_CTL_OFFSET + NV_FBIF_CTL2_OFFSET,
-+		.fbif_transcfg = NV_PGSP_FALCON_BASE + NV_GSP_FBIF_TRANSCFG_OFFSET,
-+		.dmem_control_reg = NV_PGSP_FALCON_BASE + NV_FALCON_DMEMC_OFFSET,
-+		.dmem_data_reg = NV_PGSP_FALCON_BASE + NV_FALCON_DMEMD_OFFSET,
-+		.no_outside_reset = false,
-+	},
-+	[FALCON_TYPE_OFA] = {
-+		.base_page = NV_OFA_FALCON_BASE,
-+		.dmactl = NV_OFA_FALCON_BASE + NV_FALCON_DMACTL_OFFSET,
-+		.engine_reset = NV_OFA_FALCON_BASE + NV_FALCON_ENGINE_RESET_OFFSET,
-+		.fbif_ctl = NV_OFA_FALCON_BASE + NV_OFA_FBIF_CTL_OFFSET,
-+		.fbif_ctl2 = NV_OFA_FALCON_BASE + NV_OFA_FBIF_CTL_OFFSET + NV_FBIF_CTL2_OFFSET,
-+		.fbif_transcfg = NV_OFA_FALCON_BASE + NV_OFA_FBIF_TRANSCFG_OFFSET,
-+		.dmem_control_reg = NV_OFA_FALCON_BASE + NV_FALCON_DMEMC_OFFSET,
-+		.dmem_data_reg = NV_OFA_FALCON_BASE + NV_FALCON_DMEMD_OFFSET,
-+		.no_outside_reset = true,
-+	},
-+};
-+
-+
-+#endif /* _NV_FALCONS_HW_H_ */
-diff --git a/tools/testing/selftests/vfio/lib/drivers/nv_falcons/nv_falcons.c b/tools/testing/selftests/vfio/lib/drivers/nv_falcons/nv_falcons.c
-new file mode 100644
-index 000000000000..4b62793570a2
---- /dev/null
-+++ b/tools/testing/selftests/vfio/lib/drivers/nv_falcons/nv_falcons.c
-@@ -0,0 +1,739 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
-+ */
-+#include <stdint.h>
-+#include <strings.h>
-+#include <unistd.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <time.h>
-+
-+#include <linux/errno.h>
-+#include <linux/io.h>
-+#include <linux/pci_ids.h>
-+
-+#include <libvfio.h>
-+
-+#include "hw.h"
-+
-+static inline struct gpu_device *to_nv_gpu(struct vfio_pci_device *device)
-+{
-+	return device->driver.region.vaddr;
-+}
-+
-+static enum gpu_arch nv_gpu_arch_lookup(u32 pmc_boot_0)
-+{
-+	u32 arch = (pmc_boot_0 >> 24) & 0x1f;
-+
-+	switch (arch) {
-+	case 0x0e:
-+	case 0x0f:
-+	case 0x10:
-+		return GPU_ARCH_KEPLER;
-+	case 0x11:
-+		return GPU_ARCH_MAXWELL_GEN1;
-+	case 0x12:
-+		return GPU_ARCH_MAXWELL_GEN2;
-+	case 0x13:
-+		/* P100 (impl 0) uses PMC reset; P4/P40 use engine reset */
-+		if (((pmc_boot_0 >> 20) & 0xf) == 0)
-+			return GPU_ARCH_PASCAL;
-+		return GPU_ARCH_PASCAL_10X;
-+	case 0x14:
-+		return GPU_ARCH_VOLTA;
-+	case 0x16:
-+		return GPU_ARCH_TURING;
-+	case 0x17:
-+		return GPU_ARCH_AMPERE;
-+	case 0x18:
-+		return GPU_ARCH_HOPPER;
-+	case 0x19:
-+		return GPU_ARCH_ADA;
-+	default:
-+		return GPU_ARCH_UNKNOWN;
-+	}
-+}
-+
-+static inline u32 gpu_read32(struct gpu_device *gpu, u32 offset)
-+{
-+	return readl(gpu->bar0 + offset);
-+}
-+
-+static inline void gpu_write32(struct gpu_device *gpu, u32 offset, u32 value)
-+{
-+	writel(value, gpu->bar0 + offset);
-+}
-+
-+static int gpu_poll_register(struct vfio_pci_device *device,
-+			     const char *name, u32 offset,
-+			     u32 expected, u32 mask, u32 timeout_ms)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	u32 value;
-+	struct timespec start, now;
-+	u64 elapsed_ms;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+
-+	for (;;) {
-+		value = gpu_read32(gpu, offset);
-+		if ((value & mask) == expected)
-+			return 0;
-+
-+		clock_gettime(CLOCK_MONOTONIC, &now);
-+		elapsed_ms = (now.tv_sec - start.tv_sec) * 1000
-+			     + (now.tv_nsec - start.tv_nsec) / 1000000;
-+
-+		if (elapsed_ms >= timeout_ms)
-+			break;
-+
-+		usleep(1000);
-+	}
-+
-+	dev_err(device,
-+		"Timeout polling %s (0x%x): value=0x%x expected=0x%x mask=0x%x after %llu ms\n",
-+		name, offset, value, expected, mask,
-+		(unsigned long long)elapsed_ms);
-+	return -ETIMEDOUT;
-+}
-+
-+static int fsp_poll_queue(struct gpu_device *gpu, u32 head_reg, u32 tail_reg,
-+			  bool wait_empty, u32 timeout_ms)
-+{
-+	struct timespec start, now;
-+	u64 elapsed_ms;
-+	u32 head, tail;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+
-+	for (;;) {
-+		head = gpu_read32(gpu, head_reg);
-+		tail = gpu_read32(gpu, tail_reg);
-+		if (wait_empty ? (head == tail) : (head != tail))
-+			return 0;
-+
-+		clock_gettime(CLOCK_MONOTONIC, &now);
-+		elapsed_ms = (now.tv_sec - start.tv_sec) * 1000
-+			     + (now.tv_nsec - start.tv_nsec) / 1000000;
-+
-+		if (elapsed_ms >= timeout_ms)
-+			return -ETIMEDOUT;
-+
-+		usleep(1000);
-+	}
-+}
-+
-+static void fsp_emem_write(struct gpu_device *gpu, u32 offset,
-+			   const u32 *data, u32 count)
-+{
-+	u32 i;
-+
-+	/* Configure port with auto-increment for read and write */
-+	gpu_write32(gpu, NV_FSP_EMEM_PORT2_CTRL,
-+		    offset | NV_FALCON_EMEMC_AINCR | NV_FALCON_EMEMC_AINCW);
-+
-+	for (i = 0; i < count; i++)
-+		gpu_write32(gpu, NV_FSP_EMEM_PORT2_DATA, data[i]);
-+}
-+
-+static void fsp_emem_read(struct gpu_device *gpu, u32 offset,
-+			  u32 *data, u32 count)
-+{
-+	u32 i;
-+
-+	/* Configure port with auto-increment for read and write */
-+	gpu_write32(gpu, NV_FSP_EMEM_PORT2_CTRL,
-+		    offset | NV_FALCON_EMEMC_AINCR | NV_FALCON_EMEMC_AINCW);
-+
-+	for (i = 0; i < count; i++)
-+		data[i] = gpu_read32(gpu, NV_FSP_EMEM_PORT2_DATA);
-+}
-+
-+static int fsp_rpc_send_data(struct gpu_device *gpu, const u32 *data, u32 count)
-+{
-+	int ret;
-+
-+	ret = fsp_poll_queue(gpu, NV_FSP_QUEUE_HEAD, NV_FSP_QUEUE_TAIL, true, 1000);
-+	if (ret)
-+		return ret;
-+
-+	fsp_emem_write(gpu, NV_FSP_RPC_EMEM_BASE, data, count);
-+
-+	/* Update queue head/tail to signal data is ready */
-+	gpu_write32(gpu, NV_FSP_QUEUE_TAIL,
-+		    NV_FSP_RPC_EMEM_BASE + (count - 1) * 4);
-+	gpu_write32(gpu, NV_FSP_QUEUE_HEAD, NV_FSP_RPC_EMEM_BASE);
-+
-+	return 0;
-+}
-+
-+static int fsp_rpc_receive_data(struct gpu_device *gpu, u32 *data,
-+				u32 max_count, u32 timeout_ms)
-+{
-+	u32 head, tail;
-+	u32 msg_size_words;
-+	int ret;
-+
-+	ret = fsp_poll_queue(gpu, NV_FSP_MSG_QUEUE_HEAD, NV_FSP_MSG_QUEUE_TAIL,
-+			     false, timeout_ms);
-+	if (ret)
-+		return ret;
-+
-+	head = gpu_read32(gpu, NV_FSP_MSG_QUEUE_HEAD);
-+	tail = gpu_read32(gpu, NV_FSP_MSG_QUEUE_TAIL);
-+
-+	msg_size_words = (tail - head + 4) / 4;
-+	if (msg_size_words > max_count)
-+		msg_size_words = max_count;
-+
-+	fsp_emem_read(gpu, NV_FSP_RPC_EMEM_BASE, data, msg_size_words);
-+
-+	/* Reset message queue tail to acknowledge receipt */
-+	gpu_write32(gpu, NV_FSP_MSG_QUEUE_TAIL, head);
-+
-+	return msg_size_words;
-+}
-+
-+static void fsp_reset_rpc_state(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	u32 head, tail;
-+
-+	head = gpu_read32(gpu, NV_FSP_QUEUE_HEAD);
-+	tail = gpu_read32(gpu, NV_FSP_QUEUE_TAIL);
-+
-+	if (head == tail) {
-+		head = gpu_read32(gpu, NV_FSP_MSG_QUEUE_HEAD);
-+		tail = gpu_read32(gpu, NV_FSP_MSG_QUEUE_TAIL);
-+		if (head == tail)
-+			return;
-+	}
-+
-+	fsp_poll_queue(gpu, NV_FSP_MSG_QUEUE_HEAD, NV_FSP_MSG_QUEUE_TAIL, false, 5000);
-+
-+	gpu_write32(gpu, NV_FSP_QUEUE_TAIL, NV_FSP_RPC_EMEM_BASE);
-+	gpu_write32(gpu, NV_FSP_QUEUE_HEAD, NV_FSP_RPC_EMEM_BASE);
-+	gpu_write32(gpu, NV_FSP_MSG_QUEUE_TAIL, NV_FSP_RPC_EMEM_BASE);
-+	gpu_write32(gpu, NV_FSP_MSG_QUEUE_HEAD, NV_FSP_RPC_EMEM_BASE);
-+}
-+
-+static inline u32 mctp_header_build(u8 seid, u8 seq, bool som, bool eom)
-+{
-+	u32 hdr = 0;
-+
-+	hdr |= (seid & NV_MCTP_HDR_SEID_MASK) << NV_MCTP_HDR_SEID_SHIFT;
-+	hdr |= (seq & NV_MCTP_HDR_SEQ_MASK) << NV_MCTP_HDR_SEQ_SHIFT;
-+	if (som)
-+		hdr |= NV_MCTP_HDR_SOM_BIT;
-+	if (eom)
-+		hdr |= NV_MCTP_HDR_EOM_BIT;
-+
-+	return hdr;
-+}
-+
-+static inline u32 mctp_msg_header_build(u8 nvdm_type)
-+{
-+	u32 hdr = 0;
-+
-+	hdr |= (NV_MCTP_MSG_TYPE_VENDOR_DEFINED & NV_MCTP_MSG_TYPE_MASK)
-+		<< NV_MCTP_MSG_TYPE_SHIFT;
-+	hdr |= (NV_MCTP_MSG_VENDOR_ID_NVIDIA & NV_MCTP_MSG_VENDOR_ID_MASK)
-+		<< NV_MCTP_MSG_VENDOR_ID_SHIFT;
-+	hdr |= (nvdm_type & NV_MCTP_MSG_NVDM_TYPE_MASK)
-+		<< NV_MCTP_MSG_NVDM_TYPE_SHIFT;
-+
-+	return hdr;
-+}
-+
-+static inline u8 mctp_msg_header_get_nvdm_type(u32 hdr)
-+{
-+	return (hdr >> NV_MCTP_MSG_NVDM_TYPE_SHIFT) & NV_MCTP_MSG_NVDM_TYPE_MASK;
-+}
-+
-+static int fsp_rpc_send_cmd(struct vfio_pci_device *device, u8 nvdm_type,
-+			    const u32 *data, u32 data_count, u32 timeout_ms)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	u32 max_packet_words = NV_FSP_RPC_MAX_PACKET_SIZE / 4;
-+	u32 packet[256];
-+	u32 resp_buf[256];
-+	u32 total_words;
-+	int resp_words;
-+	u8 resp_nvdm_type;
-+	int ret;
-+
-+	total_words = 2 + data_count;
-+	if (total_words > max_packet_words)
-+		return -EINVAL;
-+
-+	packet[0] = mctp_header_build(0, 0, true, true);
-+	packet[1] = mctp_msg_header_build(nvdm_type);
-+
-+	if (data_count > 0)
-+		memcpy(&packet[2], data, data_count * sizeof(u32));
-+
-+	ret = fsp_rpc_send_data(gpu, packet, total_words);
-+	if (ret)
-+		return ret;
-+
-+	resp_words = fsp_rpc_receive_data(gpu, resp_buf, 256, timeout_ms);
-+	if (resp_words < 0)
-+		return resp_words;
-+
-+	if (resp_words < NV_FSP_RPC_MIN_RESPONSE_WORDS)
-+		return -EPROTO;
-+
-+	resp_nvdm_type = mctp_msg_header_get_nvdm_type(resp_buf[1]);
-+	if (resp_nvdm_type != NV_NVDM_TYPE_RESPONSE)
-+		return -EPROTO;
-+
-+	if (resp_buf[3] != nvdm_type)
-+		return -EPROTO;
-+
-+	if (resp_buf[4] != 0)
-+		return -resp_buf[4];
-+
-+	return 0;
-+}
-+
-+static void fsp_init(struct vfio_pci_device *device)
-+{
-+	gpu_poll_register(device, "fsp_boot_complete", NV_FSP_BOOT_COMPLETE_OFFSET,
-+			  NV_FSP_BOOT_COMPLETE_MASK, 0xffffffff, 5000);
-+	fsp_reset_rpc_state(device);
-+}
-+
-+static int fsp_fbdma_enable(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	u32 cmd_data = NV_FBDMA_SUBCMD_ENABLE;
-+	int ret;
-+
-+	if (gpu->fsp_dma_enabled)
-+		return 0;
-+
-+	ret = fsp_rpc_send_cmd(device, NV_NVDM_TYPE_FBDMA, &cmd_data, 1, 5000);
-+	if (ret < 0)
-+		return ret;
-+
-+	gpu->fsp_dma_enabled = true;
-+	return 0;
-+}
-+
-+static bool fsp_check_ofa_dma_support(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	u32 val = gpu_read32(gpu, NV_OFA_DMA_SUPPORT_CHECK_REG);
-+
-+	return (val >> 16) != 0xbadf;
-+}
-+
-+static int size_to_dma_encoding(u64 size)
-+{
-+	size = min_t(u64, size, NV_FALCON_DMA_MAX_TRANSFER_SIZE);
-+
-+	if (!size || (size & 0x3))
-+		return -EINVAL;
-+
-+	return ffs(size) - 3;
-+}
-+
-+static void gpu_enable_bus_master(struct vfio_pci_device *device)
-+{
-+	u16 cmd;
-+
-+	cmd = vfio_pci_config_readw(device, PCI_COMMAND);
-+	vfio_pci_config_writew(device, PCI_COMMAND, cmd | PCI_COMMAND_MASTER);
-+}
-+
-+static void gpu_disable_bus_master(struct vfio_pci_device *device)
-+{
-+	u16 cmd;
-+
-+	cmd = vfio_pci_config_readw(device, PCI_COMMAND);
-+	vfio_pci_config_writew(device, PCI_COMMAND, cmd & ~PCI_COMMAND_MASTER);
-+}
-+
-+static void falcon_dmem_port_configure(struct vfio_pci_device *device,
-+				       u32 offset, bool auto_inc_read,
-+				       bool auto_inc_write)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	const struct falcon *falcon = gpu->falcon;
-+	u32 memc_value = offset;
-+
-+	/* Set auto-increment flags */
-+	if (auto_inc_read)
-+		memc_value |= NV_PPWR_FALCON_DMEMC_AINCR_TRUE;
-+	if (auto_inc_write)
-+		memc_value |= NV_PPWR_FALCON_DMEMC_AINCW_TRUE;
-+
-+	gpu_write32(gpu, falcon->dmem_control_reg, memc_value);
-+}
-+
-+static void falcon_select_core_falcon(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	const struct falcon *falcon = gpu->falcon;
-+	u32 core_select_reg = falcon->base_page + NV_FALCON_CORE_SELECT_OFFSET;
-+	u32 core_select;
-+
-+	/* Read current value */
-+	core_select = gpu_read32(gpu, core_select_reg);
-+
-+	/* Clear bits 4:5 to select falcon core (not RISCV) */
-+	core_select &= ~NV_FALCON_CORE_SELECT_MASK;
-+
-+	gpu_write32(gpu, core_select_reg, core_select);
-+}
-+
-+static void falcon_enable(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	const struct falcon *falcon = gpu->falcon;
-+	u32 mailbox_test_reg;
-+	u32 mailbox_val;
-+
-+	/* Ada-specific: Check if falcon needs reset before enable */
-+	if (gpu->arch == GPU_ARCH_ADA) {
-+		mailbox_test_reg = falcon->base_page + NV_FALCON_MAILBOX_TEST_OFFSET;
-+		mailbox_val = gpu_read32(gpu, mailbox_test_reg);
-+		if (mailbox_val == NV_FALCON_MAILBOX_RESET_MAGIC)
-+			gpu_write32(gpu, falcon->engine_reset, 1);
-+	}
-+
-+	/* Enable the falcon based on control method */
-+	if (!falcon->no_outside_reset) {
-+		if (gpu->pmc_enable_mask != 0) {
-+			u32 pmc_enable;
-+
-+			/* Enable via PMC_ENABLE register */
-+			pmc_enable = gpu_read32(gpu, NV_PMC_ENABLE);
-+			gpu_write32(gpu, NV_PMC_ENABLE, pmc_enable | gpu->pmc_enable_mask);
-+		} else {
-+			/* Enable by deasserting engine reset */
-+			gpu_write32(gpu, falcon->engine_reset, 0);
-+		}
-+	}
-+
-+	if (gpu->arch < GPU_ARCH_HOPPER) {
-+		falcon_select_core_falcon(device);
-+
-+		/* Wait for DMACTL to be ready (bits 1:2 should be 0) */
-+		gpu_poll_register(device, "falcon_dmactl", falcon->dmactl,
-+				  0, NV_FALCON_DMACTL_READY_MASK, 1000);
-+	}
-+}
-+
-+static void falcon_disable(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	const struct falcon *falcon = gpu->falcon;
-+	u32 pmc_enable;
-+
-+	if (falcon->no_outside_reset)
-+		return;
-+
-+	if (gpu->pmc_enable_mask != 0) {
-+		/* Disable via PMC_ENABLE */
-+		pmc_enable = gpu_read32(gpu, NV_PMC_ENABLE);
-+		gpu_write32(gpu, NV_PMC_ENABLE, pmc_enable & ~gpu->pmc_enable_mask);
-+	} else {
-+		/* Disable by asserting engine reset */
-+		gpu_write32(gpu, falcon->engine_reset, 1);
-+	}
-+}
-+
-+static void falcon_reset(struct vfio_pci_device *device)
-+{
-+	falcon_disable(device);
-+
-+	falcon_enable(device);
-+}
-+
-+static int nv_gpu_falcon_dma_init(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	const struct falcon *falcon;
-+	u32 transcfg;
-+	u32 dmactl;
-+	u32 ctl;
-+	int ret;
-+
-+	falcon = gpu->falcon;
-+
-+	gpu_enable_bus_master(device);
-+
-+	if (gpu->arch >= GPU_ARCH_HOPPER) {
-+		fsp_init(device);
-+
-+		ret = fsp_fbdma_enable(device);
-+		if (ret) {
-+			dev_err(device, "Failed to enable FSP FBDMA: %d\n", ret);
-+			return ret;
-+		}
-+
-+		if (!fsp_check_ofa_dma_support(device)) {
-+			dev_err(device, "OFA DMA not supported with current firmware\n");
-+			return -EOPNOTSUPP;
-+		}
-+	}
-+
-+	if (gpu->is_memory_clear_supported) {
-+		/* For Turing+, wait for boot to complete first */
-+		if (gpu->arch >= GPU_ARCH_TURING) {
-+			/* Wait for boot complete - Hopper+ uses FSP register */
-+			if (gpu->arch >= GPU_ARCH_HOPPER) {
-+				gpu_poll_register(device, "fsp_boot_complete",
-+					NV_FSP_BOOT_COMPLETE_OFFSET,
-+					NV_FSP_BOOT_COMPLETE_MASK, 0xffffffff, 5000);
-+			} else {
-+				gpu_poll_register(device, "boot_complete",
-+					NV_BOOT_COMPLETE_OFFSET,
-+					NV_BOOT_COMPLETE_MASK, 0xffffffff, 5000);
-+			}
-+			gpu_poll_register(device, "memory_clear_finished",
-+				NV_MEM_CLEAR_OFFSET, 0x1, 0xffffffff, 5000);
-+		}
-+	}
-+
-+	if (!falcon->no_outside_reset)
-+		falcon_reset(device);
-+
-+	falcon_dmem_port_configure(device, 0, false, false);
-+
-+	transcfg = gpu_read32(gpu, falcon->fbif_transcfg);
-+	transcfg &= ~NV_FBIF_TRANSCFG_TARGET_MASK;
-+	transcfg |= NV_FBIF_TRANSCFG_SYSMEM_DEFAULT;
-+	gpu_write32(gpu, falcon->fbif_transcfg, transcfg);
-+
-+	gpu_write32(gpu, falcon->fbif_ctl2, 0x1);
-+
-+	ctl = gpu_read32(gpu, falcon->fbif_ctl);
-+	ctl |= NV_FBIF_CTL_ALLOW_PHYS_MODE | NV_FBIF_CTL_ALLOW_FULL_PHYS_MODE;
-+	gpu_write32(gpu, falcon->fbif_ctl, ctl);
-+
-+	dmactl = gpu_read32(gpu, falcon->dmactl);
-+	dmactl &= ~NV_FALCON_DMACTL_DMEM_SCRUBBING;
-+	gpu_write32(gpu, falcon->dmactl, dmactl);
-+
-+	return 0;
-+}
-+
-+static int nv_gpu_falcon_dma(struct vfio_pci_device *device,
-+			     u64 address,
-+			     u32 size_encoding,
-+			     bool write)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	const struct falcon *falcon = gpu->falcon;
-+	u32 dma_cmd;
-+	int ret;
-+
-+	gpu_write32(gpu, NV_GPU_DMA_ADDR_TOP_BITS_REG,
-+		    (address >> 47) & 0x1ffff);
-+	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_ADDR_HIGH_OFFSET,
-+		    (address >> 40) & 0x7f);
-+	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_ADDR_LOW_OFFSET,
-+		    (address >> 8) & 0xffffffff);
-+	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_BLOCK_OFFSET,
-+		    address & 0xff);
-+	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_MEM_OFFSET, 0);
-+
-+	dma_cmd = (size_encoding << NV_FALCON_DMA_CMD_SIZE_SHIFT);
-+
-+	/* Set direction: write (DMEM->mem) or read (mem->DMEM) */
-+	if (write)
-+		dma_cmd |= NV_FALCON_DMA_CMD_WRITE_BIT;
-+
-+	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_CMD_OFFSET, dma_cmd);
-+
-+	ret = gpu_poll_register(device, "dma_done",
-+		falcon->base_page + NV_FALCON_DMA_CMD_OFFSET,
-+		NV_FALCON_DMA_CMD_DONE_BIT, NV_FALCON_DMA_CMD_DONE_BIT,
-+		1000);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int nv_gpu_memcpy_chunk(struct vfio_pci_device *device,
-+				iova_t src,
-+				iova_t dst,
-+				u32 size_encoding)
-+{
-+	int ret;
-+
-+	ret = nv_gpu_falcon_dma(device, src, size_encoding, false);
-+	if (ret) {
-+		dev_err(device, "Failed to queue DMA read (src=0x%llx, size=%u)\n",
-+			(unsigned long long)src, size_encoding);
-+		return ret;
-+	}
-+
-+	ret = nv_gpu_falcon_dma(device, dst, size_encoding, true);
-+	if (ret) {
-+		dev_err(device, "Failed to queue DMA write (dst=0x%llx, size=%u)\n",
-+			(unsigned long long)dst, size_encoding);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int nv_gpu_probe(struct vfio_pci_device *device)
-+{
-+	enum gpu_arch gpu_arch;
-+	u32 pmc_boot_0;
-+	void *bar0;
-+	int i;
-+
-+	if (vfio_pci_config_readw(device, PCI_VENDOR_ID) != PCI_VENDOR_ID_NVIDIA)
-+		return -ENODEV;
-+
-+	if (vfio_pci_config_readw(device, PCI_CLASS_DEVICE) >> 8 !=
-+	    PCI_BASE_CLASS_DISPLAY)
-+		return -ENODEV;
-+
-+	/* Get BAR0 pointer for reading GPU registers */
-+	bar0 = device->bars[0].vaddr;
-+	if (!bar0)
-+		return -ENODEV;
-+
-+	/* Read PMC_BOOT_0 register from BAR0 to identify GPU */
-+	pmc_boot_0 = readl(bar0 + NV_PMC_BOOT_0);
-+
-+	/* Look up GPU architecture to verify this is a supported GPU */
-+	gpu_arch = nv_gpu_arch_lookup(pmc_boot_0);
-+	if (gpu_arch == GPU_ARCH_UNKNOWN) {
-+		dev_err(device, "Unsupported GPU architecture for PMC_BOOT_0: 0x%x\n",
-+			pmc_boot_0);
-+		return -ENODEV;
-+	}
-+
-+	/* Check verified GPU map */
-+	for (i = 0; i < VERIFIED_GPU_MAP_SIZE; i++) {
-+		if (verified_gpu_map[i] == pmc_boot_0)
-+			return 0;
-+	}
-+
-+	dev_info(device, "Unvalidated GPU: PMC_BOOT_0: 0x%x, possibly not supported\n",
-+		pmc_boot_0);
-+
-+	return 0;
-+}
-+
-+static void nv_gpu_init(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	const struct gpu_properties *props;
-+	enum gpu_arch gpu_arch;
-+	u32 pmc_boot_0;
-+	int ret;
-+
-+	VFIO_ASSERT_GE(device->driver.region.size, sizeof(*gpu));
-+
-+	/* Read PMC_BOOT_0 register from BAR0 to identify GPU */
-+	pmc_boot_0 = readl(device->bars[0].vaddr + NV_PMC_BOOT_0);
-+
-+	/* Look up GPU architecture */
-+	gpu_arch = nv_gpu_arch_lookup(pmc_boot_0);
-+	if (gpu_arch == GPU_ARCH_UNKNOWN) {
-+		dev_err(device, "Unsupported GPU architecture\n");
-+		return;
-+	}
-+
-+	props = &gpu_properties_map[gpu_arch];
-+
-+	/* Populate GPU structure */
-+	gpu->arch = gpu_arch;
-+	gpu->bar0 = device->bars[0].vaddr;
-+	gpu->is_memory_clear_supported = props->memory_clear_supported;
-+	gpu->falcon = &falcon_map[props->falcon_type];
-+	gpu->pmc_enable_mask = props->pmc_enable_mask;
-+
-+	falcon_enable(device);
-+
-+	/* Initialize falcon for DMA */
-+	ret = nv_gpu_falcon_dma_init(device);
-+	VFIO_ASSERT_EQ(ret, 0, "Failed to initialize falcon DMA: %d\n", ret);
-+
-+	device->driver.features |= VFIO_PCI_DRIVER_F_NO_SEND_MSI;
-+	device->driver.max_memcpy_size = NV_FALCON_DMA_MAX_TRANSFER_SIZE;
-+	device->driver.max_memcpy_count = NV_FALCON_DMA_MAX_TRANSFER_COUNT;
-+}
-+
-+static void nv_gpu_remove(struct vfio_pci_device *device)
-+{
-+	falcon_disable(device);
-+	gpu_disable_bus_master(device);
-+}
-+
-+/*
-+ * Falcon DMA can only process one transfer at a time,
-+ * so the actual work is deferred to memcpy_wait() to conform to the
-+ * memcpy_start()/memcpy_wait() contract.
-+ */
-+static void nv_gpu_memcpy_start(struct vfio_pci_device *device,
-+				iova_t src, iova_t dst, u64 size, u64 count)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+
-+	VFIO_ASSERT_EQ(gpu->memcpy_count, 0);
-+
-+	gpu->memcpy_src = src;
-+	gpu->memcpy_dst = dst;
-+	gpu->memcpy_size = size;
-+	gpu->memcpy_count = count;
-+}
-+
-+static int nv_gpu_memcpy_wait(struct vfio_pci_device *device)
-+{
-+	struct gpu_device *gpu = to_nv_gpu(device);
-+	u64 iteration;
-+	u64 offset;
-+	int ret;
-+
-+	VFIO_ASSERT_NE(gpu->memcpy_count, 0);
-+
-+	for (iteration = 0; iteration < gpu->memcpy_count; iteration++) {
-+		offset = 0;
-+
-+		while (offset < gpu->memcpy_size) {
-+			int chunk_encoding;
-+
-+			chunk_encoding = size_to_dma_encoding(
-+						gpu->memcpy_size - offset);
-+			if (chunk_encoding < 0) {
-+				ret = -EINVAL;
-+				goto out;
-+			}
-+
-+			ret = nv_gpu_memcpy_chunk(device,
-+						  gpu->memcpy_src + offset,
-+						  gpu->memcpy_dst + offset,
-+						  chunk_encoding);
-+			if (ret)
-+				goto out;
-+
-+			offset += 0x4 << chunk_encoding;
-+		}
-+	}
-+
-+	ret = 0;
-+out:
-+	gpu->memcpy_count = 0;
-+
-+	return ret;
-+}
-+
-+const struct vfio_pci_driver_ops nv_falcon_ops = {
-+	.name = "nv_falcon",
-+	.probe = nv_gpu_probe,
-+	.init = nv_gpu_init,
-+	.remove = nv_gpu_remove,
-+	.memcpy_start = nv_gpu_memcpy_start,
-+	.memcpy_wait = nv_gpu_memcpy_wait,
-+};
-diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
-index 9f47bceed16f..ae690a248a1f 100644
---- a/tools/testing/selftests/vfio/lib/libvfio.mk
-+++ b/tools/testing/selftests/vfio/lib/libvfio.mk
-@@ -14,6 +14,8 @@ LIBVFIO_C += drivers/ioat/ioat.c
- LIBVFIO_C += drivers/dsa/dsa.c
- endif
- 
-+LIBVFIO_C += drivers/nv_falcons/nv_falcons.c
-+
- LIBVFIO_OUTPUT := $(OUTPUT)/libvfio
- 
- LIBVFIO_O := $(patsubst %.c, $(LIBVFIO_OUTPUT)/%.o, $(LIBVFIO_C))
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-index b72df578717a..98e610bf0d6d 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-@@ -7,11 +7,14 @@ extern struct vfio_pci_driver_ops dsa_ops;
- extern struct vfio_pci_driver_ops ioat_ops;
- #endif
- 
-+extern struct vfio_pci_driver_ops nv_falcon_ops;
-+
- static struct vfio_pci_driver_ops *driver_ops[] = {
- #ifdef __x86_64__
- 	&dsa_ops,
- 	&ioat_ops,
- #endif
-+	&nv_falcon_ops,
- };
- 
- void vfio_pci_driver_probe(struct vfio_pci_device *device)
--- 
-2.43.0
+This sets "dev->liveupdate_incoming = false", and the only place we
+check that is in pci_liveupdate_retrieve().  In particular, there's
+nothing in the driver bind/unbind paths that seems related.  I guess
+pci_liveupdate_finish() just means the driver can't call
+pci_liveupdate_retrieve() any more?
 
+> + *
+> + * Incoming/Outgoing
+> + * =================
+> + *
+> + * The state of each device's participation in Live Update is stored in
+> + * ``struct pci_dev``:
+> + *
+> + *  * ``liveupdate_outgoing``: True if the device is being preserved in the
+> + *    outgoing kernel. Set in ``pci_liveupdate_preserve()`` and cleared in
+> + *    ``pci_liveupdate_unpreserve()``.
+> + *
+> + *  * ``liveupdate_incoming``: True if the device is preserved in the incoming
+> + *    kernel. Set during probing when the device is first created and cleared
+> + *    in ``pci_liveupdate_finish()``.
+> + *
+> + * Restrictions
+> + * ============
+> + *
+> + * Preserved devices currently have the following restrictions. Each of these
+> + * may be relaxed in the future.
+> + *
+> + *  * The device must not be a Virtual Function (VF).
+> + *
+> + *  * The device must not be a Physical Function (PF).
+> + *
+> + * Preservation Behavior
+> + * =====================
+> + *
+> + * The kernel preserves the following state for devices preserved across a Live
+> + * Update:
+> + *
+> + *  * The PCI Segment, Bus, Device, and Function numbers assigned to the device
+> + *    are guaranteed to remain the same across Live Update.
+> + *
+> + * This list will be extended in the future as new support is added.
+> + *
+> + * Driver Binding
+> + * ==============
+> + *
+> + * It is the driver's responsibility for ensuring that preserved devices are not
+> + * released or bound to a different driver for as long as they are preserved. In
+> + * practice, this is enforced by LUO taking an extra referenced to the preserved
+
+s/responsibility for ensuring/responsibility to ensure/
+s/referenced/reference/
+
+> + * device file for as long as it is preserved.
+> + *
+> + * However, there is a window of time in the incoming kernel when a device is
+> + * first probed and when userspace retrieves the device file with
+> + * ``LIVEUPDATE_SESSION_RETRIEVE_FD`` when the device could be bound to any
+> + * driver.
+
+  ... window of time in the incoming kernel between a device being
+  probed and userspace retrieving the device file ... when the device
+  could be bound ...
+
+I'm not sure what it means to retrieve a device file.  It doesn't
+sound like the usual Unix "device file" or "special file" in /dev/,
+since those aren't "retrieved".
+
+> + * It is currently userspace's responsibility to ensure that the device is bound
+> + * to the correct driver in this window.
+> + */
+> +
+> +#include <linux/bsearch.h>
+> +#include <linux/io.h>
+> +#include <linux/kexec_handover.h>
+> +#include <linux/kho/abi/pci.h>
+> +#include <linux/liveupdate.h>
+> +#include <linux/mutex.h>
+> +#include <linux/mm.h>
+> +#include <linux/pci.h>
+> +#include <linux/sort.h>
+> +
+> +#include "pci.h"
+> +
+> +static DEFINE_MUTEX(pci_flb_outgoing_lock);
+
+It'd be handy if there were some excuse to mention "FLB" and expand it
+once in the doc above, since I have no idea what it means or where to
+look for it.  Maybe unfortunate that it will be pronounced "flub" ;)
+
+> +static int pci_flb_preserve(struct liveupdate_flb_op_args *args)
+> +{
+> +	struct pci_dev *dev = NULL;
+> +	int max_nr_devices = 0;
+> +	struct pci_ser *ser;
+> +	unsigned long size;
+> +
+> +	/*
+> +	 * Don't both accounting for VFs that could be created after this
+> +	 * since preserving VFs is not supported yet. Also don't account
+> +	 * for devices that could be hot-plugged after this since preserving
+> +	 * hot-plugged devices across Live Update is not yet an expected
+> +	 * use-case.
+
+s/Don't both accounting/Don't bother accounting/ ? not sure of intent
+
+I suspect the important thing here is that this allocates space for
+preserving X devices, and each subsequent pci_liveupdate_preserve()
+call from a driver uses up one of those slots.
+
+My guess is this is just an allocation issue and from that point of
+view there's no actual problem with enabling VFs or hot-adding devices
+after this point; it's just that pci_liveupdate_preserve() will fail
+after X calls.
+
+> +	 */
+> +	for_each_pci_dev(dev)
+> +		max_nr_devices++;
+> +
+> +	size = struct_size_t(struct pci_ser, devices, max_nr_devices);
+> +
+> +	ser = kho_alloc_preserve(size);
+> +	if (IS_ERR(ser))
+> +		return PTR_ERR(ser);
+> +
+> +	ser->max_nr_devices = max_nr_devices;
+> +
+> +	args->obj = ser;
+> +	args->data = virt_to_phys(ser);
+> +	return 0;
+> +}
+> +
+> +static void pci_flb_unpreserve(struct liveupdate_flb_op_args *args)
+> +{
+> +	struct pci_ser *ser = args->obj;
+> +
+> +	WARN_ON_ONCE(ser->nr_devices);
+
+I guess this means somebody (userspace?) called .unpreserve() before
+all the drivers that had called pci_liveupdate_preserve() have also
+called pci_liveupdate_unpreserve()?
+
+If this is userspace-triggerable, maybe it's worth a meaningful
+message including one or more of the device IDs from ser->devices[]?
+
+> +	kho_unpreserve_free(ser);
+> +}
+> +
+> +static int pci_flb_retrieve(struct liveupdate_flb_op_args *args)
+> +{
+> +	args->obj = phys_to_virt(args->data);
+> +	return 0;
+> +}
+> +
+> +static void pci_flb_finish(struct liveupdate_flb_op_args *args)
+> +{
+> +	kho_restore_free(args->obj);
+> +}
+> +
+> +static struct liveupdate_flb_ops pci_liveupdate_flb_ops = {
+> +	.preserve = pci_flb_preserve,
+> +	.unpreserve = pci_flb_unpreserve,
+> +	.retrieve = pci_flb_retrieve,
+> +	.finish = pci_flb_finish,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+> +static struct liveupdate_flb pci_liveupdate_flb = {
+> +	.ops = &pci_liveupdate_flb_ops,
+> +	.compatible = PCI_LUO_FLB_COMPATIBLE,
+> +};
+> +
+> +#define INIT_PCI_DEV_SER(_dev) {		\
+> +	.domain = pci_domain_nr((_dev)->bus),	\
+> +	.bdf = pci_dev_id(_dev),		\
+> +}
+> +
+> +static int pci_dev_ser_cmp(const void *__a, const void *__b)
+> +{
+> +	const struct pci_dev_ser *a = __a, *b = __b;
+> +
+> +	return cmp_int((u64)a->domain << 16 | a->bdf,
+> +		       (u64)b->domain << 16 | b->bdf);
+> +}
+> +
+> +static struct pci_dev_ser *pci_ser_find(struct pci_ser *ser,
+> +					struct pci_dev *dev)
+> +{
+> +	const struct pci_dev_ser key = INIT_PCI_DEV_SER(dev);
+> +
+> +	return bsearch(&key, ser->devices, ser->nr_devices,
+> +		       sizeof(key), pci_dev_ser_cmp);
+> +}
+> +
+> +static void pci_ser_delete(struct pci_ser *ser, struct pci_dev *dev)
+> +{
+> +	struct pci_dev_ser *dev_ser;
+> +	int i;
+> +
+> +	dev_ser = pci_ser_find(ser, dev);
+> +
+> +	/*
+> +	 * This should never happen unless there is a kernel bug or
+> +	 * corruption that causes the state in struct pci_ser to get
+> +	 * out of sync with struct pci_dev.
+
+Corruption can be a bug anywhere and isn't really worth mentioning,
+but the "out of sync" part sounds like it glosses over something
+important.
+
+I guess this happens if there was no successful
+pci_liveupdate_preserve(X) before calling
+pci_liveupdate_unpreserve(X)?  That does sound like a kernel bug (I
+suppose a VFIO or other driver bug?), and I would just say what
+happened directly instead of calling it "out of sync".
+
+> +	 */
+> +	if (pci_WARN_ONCE(dev, !dev_ser, "Cannot find preserved device!"))
+
+Seems like an every-time sort of message if this indicates a driver bug?
+
+It's enough of a hassle to convince myself that pci_WARN_ONCE()
+returns the value that caused the warning that I would prefer:
+
+  if (!dev_ser) {
+    pci_warn(...) or pci_WARN_ONCE(...)
+    return;
+  }
+
+> +		return;
+> +
+> +	for (i = dev_ser - ser->devices; i < ser->nr_devices - 1; i++)
+> +		ser->devices[i] = ser->devices[i + 1];
+> +
+> +	ser->nr_devices--;
+> +}
+> +
+> +int pci_liveupdate_preserve(struct pci_dev *dev)
+> +{
+> +	struct pci_dev_ser new = INIT_PCI_DEV_SER(dev);
+> +	struct pci_ser *ser;
+> +	int i, ret;
+> +
+> +	/* SR-IOV is not supported yet. */
+> +	if (dev->is_virtfn || dev->is_physfn)
+> +		return -EINVAL;
+> +
+> +	guard(mutex)(&pci_flb_outgoing_lock);
+> +
+> +	if (dev->liveupdate_outgoing)
+> +		return -EBUSY;
+> +
+> +	ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (ser->nr_devices == ser->max_nr_devices)
+> +		return -E2BIG;
+> +
+> +	for (i = ser->nr_devices; i > 0; i--) {
+> +		struct pci_dev_ser *prev = &ser->devices[i - 1];
+> +		int cmp = pci_dev_ser_cmp(&new, prev);
+> +
+> +		/*
+> +		 * This should never happen unless there is a kernel bug or
+> +		 * corruption that causes the state in struct pci_ser to get out
+> +		 * of sync with struct pci_dev.
+
+Huh.  Same comment as above.  I don't think this is telling me
+anything useful.  I guess what happened is we're trying to preserve X
+and X is already in "ser", but we should have returned -EBUSY above
+for that case.  If we're just saying memory corruption could cause
+bugs, I think that's pointless.
+
+Actually I'm not even sure we should check for this.
+
+> +		 */
+> +		if (WARN_ON_ONCE(!cmp))
+> +			return -EBUSY;
+> +
+> +		if (cmp > 0)
+> +			break;
+> +
+> +		ser->devices[i] = *prev;
+> +	}
+> +
+> +	ser->devices[i] = new;
+> +	ser->nr_devices++;
+> +	dev->liveupdate_outgoing = true;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_preserve);
+> +
+> +void pci_liveupdate_unpreserve(struct pci_dev *dev)
+> +{
+> +	struct pci_ser *ser;
+> +	int ret;
+> +
+> +	/* This should never happen unless the caller (driver) is buggy */
+> +	if (WARN_ON_ONCE(!dev->liveupdate_outgoing))
+
+Why once?  Is there some situation where we could get a flood?  Since
+we have a pci_dev, maybe a pci_warn() that would indicate the driver
+and device would be more useful?
+
+> +		return;
+> +
+> +	guard(mutex)(&pci_flb_outgoing_lock);
+> +
+> +	ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
+> +
+> +	/* This should never happen unless there is a bug in LUO */
+> +	if (WARN_ON_ONCE(ret))
+
+Is LUO completely in-kernel?  I think this warning message would be
+kind of obscure if this is something that could be triggered by a
+userspace bug.  Also, we do have the pci_dev, which a WARN_ON_ONCE()
+doesn't take advantage of at all.
+
+> +		return;
+> +
+> +	pci_ser_delete(ser, dev);
+> +	dev->liveupdate_outgoing = false;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_unpreserve);
+> +
+> +static int pci_liveupdate_flb_get_incoming(struct pci_ser **serp)
+> +{
+> +	int ret;
+> +
+> +	ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)serp);
+> +
+> +	/* Live Update is not enabled. */
+> +	if (ret == -EOPNOTSUPP)
+> +		return ret;
+> +
+> +	/* Live Update is enabled, but there is no incoming FLB data. */
+> +	if (ret == -ENODATA)
+> +		return ret;
+> +
+> +	/*
+> +	 * Live Update is enabled and there is incoming FLB data, but none of it
+> +	 * matches pci_liveupdate_flb.compatible.
+> +	 *
+> +	 * This could mean that no PCI FLB data was passed by the previous
+> +	 * kernel, but it could also mean the previous kernel used a different
+> +	 * compatibility string (i.e.a different ABI). The latter deserves at
+> +	 * least a WARN_ON_ONCE() but it cannot be distinguished from the
+> +	 * former.
+
+This says both "there is incoming FLB data" and "no PCI FLB data".  I
+guess maybe it's possible to have FLB data but no *PCI* FLB data?
+
+s/i.e.a/i.e., /
+
+> +	 */
+> +	if (ret == -ENOENT) {
+> +		pr_info_once("PCI: No incoming FLB data detected during Live Update");
+
+Not sure "FLB" will be meaningful to users here.  Maybe we could say
+something like ("no FLB data compatible with %s\n", pci_liveupdate_flb.compatible)?
+
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * There is incoming FLB data that matches pci_liveupdate_flb.compatible
+> +	 * but it cannot be retrieved. Proceed with standard initialization as
+> +	 * if there was not incoming PCI FLB data.
+
+s/if there was not/if there was no/
+
+> +	 */
+> +	WARN_ONCE(ret, "PCI: Failed to retrieve incoming FLB data during Live Update");
+> +	return ret;
+> +}
+> +
+> +u32 pci_liveupdate_incoming_nr_devices(void)
+> +{
+> +	struct pci_ser *ser;
+> +
+> +	if (pci_liveupdate_flb_get_incoming(&ser))
+> +		return 0;
+
+Seems slightly overcomplicated to return various error codes from
+pci_liveupdate_flb_get_incoming(), only to throw them away here and
+special-case the "return 0".  I think you *could* set
+"ser->nr_devices" to zero at entry to
+pci_liveupdate_flb_get_incoming() and make this just:
+
+  pci_liveupdate_flb_get_incoming(&ser);
+  return ser->nr_devices;
+
+> +	return ser->nr_devices;
+> +}
+> +
+> +void pci_liveupdate_setup_device(struct pci_dev *dev)
+> +{
+> +	struct pci_ser *ser;
+> +
+> +	if (pci_liveupdate_flb_get_incoming(&ser))
+> +		return;
+> +
+> +	if (!pci_ser_find(ser, dev))
+> +		return;
+
+If pci_liveupdate_flb_get_incoming() set ser->nr_devices to zero at
+entry, the bsearch() in pci_ser_find() would return NULL if there were
+no devices to search:
+
+  pci_liveupdate_flb_get_incoming(&ser);
+  if (!pci_ser_find(ser, dev))
+    return;
+
+> +	dev->liveupdate_incoming = true;
+> +}
+> +
+> +int pci_liveupdate_retrieve(struct pci_dev *dev)
+> +{
+> +	if (!dev->liveupdate_incoming)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_retrieve);
+> +
+> +void pci_liveupdate_finish(struct pci_dev *dev)
+> +{
+> +	dev->liveupdate_incoming = false;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_finish);
+> +
+> +int pci_liveupdate_register_flb(struct liveupdate_file_handler *fh)
+> +{
+> +	return liveupdate_register_flb(fh, &pci_liveupdate_flb);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_register_flb);
+> +
+> +void pci_liveupdate_unregister_flb(struct liveupdate_file_handler *fh)
+> +{
+> +	liveupdate_unregister_flb(fh, &pci_liveupdate_flb);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_unregister_flb);
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 13d998fbacce..979cb9921340 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -1434,4 +1434,18 @@ static inline int pci_msix_write_tph_tag(struct pci_dev *pdev, unsigned int inde
+>  	(PCI_CONF1_ADDRESS(bus, dev, func, reg) | \
+>  	 PCI_CONF1_EXT_REG(reg))
+>  
+> +#ifdef CONFIG_PCI_LIVEUPDATE
+> +void pci_liveupdate_setup_device(struct pci_dev *dev);
+> +u32 pci_liveupdate_incoming_nr_devices(void);
+> +#else
+> +static inline void pci_liveupdate_setup_device(struct pci_dev *dev)
+> +{
+> +}
+> +
+> +static inline u32 pci_liveupdate_incoming_nr_devices(void)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+>  #endif /* DRIVERS_PCI_H */
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index bccc7a4bdd79..c60222d45659 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -2064,6 +2064,8 @@ int pci_setup_device(struct pci_dev *dev)
+>  	if (pci_early_dump)
+>  		early_dump_pci_device(dev);
+>  
+> +	pci_liveupdate_setup_device(dev);
+> +
+>  	/* Need to have dev->class ready */
+>  	dev->cfg_size = pci_cfg_space_size(dev);
+>  
+> diff --git a/include/linux/kho/abi/pci.h b/include/linux/kho/abi/pci.h
+> new file mode 100644
+> index 000000000000..7764795f6818
+> --- /dev/null
+> +++ b/include/linux/kho/abi/pci.h
+
+It seems like most of include/linux/ is ABI, so does kho/abi/ need to
+be separated out in its own directory?
+
+It's kind of unusual for the hierarchy to be this deep, especially
+since abi/ is the only thing in include/linux/kho/.
