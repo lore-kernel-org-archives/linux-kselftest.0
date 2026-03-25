@@ -1,94 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293108248B;
-	Wed, 25 Mar 2026 03:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2140719E968
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 03:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774410283; cv=none; b=n/i6bC/UAjnfEsN9ocIB05dvDciTecGPs2q5YIcVoCwbpTifJTIIrm0iWigvI68Lt8xpxhqg1CoF/9S+EwghJyyORwMkeMvO2ZyKlm7D5iWYKVWsN+xCY2qQOLmd8GzCmph/tw0c6wMRIb/E6VAVvKE+HQfEePVnkQzqXd1homk=
+	t=1774410486; cv=none; b=g+/5sW7AoNcaUF8RglxzyL3Q5I8WUGVRSWJUYnNvmJBgBNcEm9WptBKE6ejJ8LpV2OaKBI36d0fLrRVX46H2fgQSKuvXMkveLVYh0AZcJ7W8d8NfmvoEwa7LuI0XyJpFA00wXF5JGWN3zh0DqDe4cvrNvx3GWPt3dqdEZRyECBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774410283; c=relaxed/simple;
-	bh=gQK6J5IvA9RmrkZN+cbxNmFla6H107ZP9bVcDvKPjRY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=apCwlfJMrUPwfK/yuMp3Wb3Gxt4MbnsEuZBrFl9i99bCAIlIfgtCh71bhSeARuoRkvP53eFkV4y1HRJUUShz1metvnxlpKvn2vRcBj3CFCi+8i53B0iVsx9mfBQGZWN2Xbgsjy8YrgMsvQTMaLjI7zXoj3Z09VV35cf4xAwlf0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZH5/BwS6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774410486; c=relaxed/simple;
+	bh=Yej5S8iXi8AbZgFW+ajB9NiRW2qyCJsWwCuW84ZFsW8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XaSpQ5ktTu1JVugcSlrJERx7nC1MX5jiE9d+RP9loG5QgvFUsYw3ho9dQakEKpVf90X12hlOdN38E0fbGP7Bpct4XN1umnG2EySopV9R8NVrpQmyc5x66Gj8I/dM0tZrIoQ4fbRpW3nS5L3pXGzn62C7aDurGrSBYcsZhvvVuSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b8zkYrCq; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZH5/BwS6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B295C2BCB0;
-	Wed, 25 Mar 2026 03:44:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774410282;
-	bh=gQK6J5IvA9RmrkZN+cbxNmFla6H107ZP9bVcDvKPjRY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZH5/BwS61g4MXioBvBtBh9BzuX2edP0Y5CNv8b7utbnLqKrt2Ig6FM1yb4aKlGtut
-	 H9/iJjjgJUKN+oYGIXfB106Cm4tMLptjuvkKcjmmeeMgI06minn5KC9OivyKstv8T/
-	 56u8jKtsopr7dN1CmbeRk9mGks61tQx6DNAZsG5vhWfD6vFFf5rPA0Fzb4+VxiSRwm
-	 ebUMaIeNpkbK7NRte7tgB1IjAyHiLu6z0CD/MOcfr0zRTopQ3iPJIaPkBeanBVXmTp
-	 /ahpZBDlBOHnGZrr7ICiuCAc6N7vajPt0ed93vZyxXubarOU6YqqqFSmQUkL6GJ0+A
-	 t4pIxs1A5yedg==
-Date: Tue, 24 Mar 2026 20:44:40 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
- andrew+netdev@lunn.ch, michael.chan@broadcom.com,
- pavan.chebbi@broadcom.com, anthony.l.nguyen@intel.com,
- przemyslaw.kitszel@intel.com, saeedm@nvidia.com, tariqt@nvidia.com,
- mbloch@nvidia.com, alexanderduyck@fb.com, kernel-team@meta.com,
- johannes@sipsolutions.net, sd@queasysnail.net, jianbol@nvidia.com,
- dtatulea@nvidia.com, mohsin.bashr@gmail.com, jacob.e.keller@intel.com,
- willemb@google.com, skhawaja@google.com, bestswngs@gmail.com,
- aleksandr.loktionov@intel.com, kees@kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-kselftest@vger.kernel.org, leon@kernel.org
-Subject: Re: [PATCH net-next v3 03/13] net: introduce ndo_set_rx_mode_async
- and dev_rx_mode_work
-Message-ID: <20260324204440.1752423d@kernel.org>
-In-Reply-To: <acMU93XN02PHmAGi@mini-arch>
-References: <20260320012501.2033548-1-sdf@fomichev.me>
-	<20260320012501.2033548-4-sdf@fomichev.me>
-	<20260323162003.0d155055@kernel.org>
-	<acLUMN1BYkIVyOk8@mini-arch>
-	<20260324142114.216fcb01@kernel.org>
-	<acMU93XN02PHmAGi@mini-arch>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b8zkYrCq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774410484;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fTWuW19SzsgMBofMGpQhLndrrAHyvaqK2jt4CAJhThs=;
+	b=b8zkYrCqW4mjZQGNRJyJ/q8tRCeDOOweSr4x0fzTVufXWyADNPXOOJBj2fIIi4o/rf8EW9
+	RJ4qjFp4tqjS8xJT1qQGHPP/2H8Ltde9AQjMRoAfER2pFwAzBQ7eNihQKhP+VZGnfhUTXr
+	f2LOrhp4u3/z8LdZfqYL9I0IHNsy7+w=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-194-9zpRRRgTOyyAahvbGz0crA-1; Tue,
+ 24 Mar 2026 23:47:56 -0400
+X-MC-Unique: 9zpRRRgTOyyAahvbGz0crA-1
+X-Mimecast-MFC-AGG-ID: 9zpRRRgTOyyAahvbGz0crA_1774410474
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 328D0195609E;
+	Wed, 25 Mar 2026 03:47:53 +0000 (UTC)
+Received: from [10.22.65.192] (unknown [10.22.65.192])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E51103000223;
+	Wed, 25 Mar 2026 03:47:48 +0000 (UTC)
+Message-ID: <ac21dea1-4fbd-4003-9723-1c02fdb5d03a@redhat.com>
+Date: Tue, 24 Mar 2026 23:47:47 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/7] selftests: memcg: Reduce the expected swap.peak
+ with larger page size
+To: Li Wang <liwang@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+ James Houghton <jthoughton@google.com>,
+ Sebastian Chlad <sebastianchlad@gmail.com>,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
+References: <20260320204241.1613861-1-longman@redhat.com>
+ <20260320204241.1613861-6-longman@redhat.com> <acD4vGZKveXJ4GuW@redhat.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <acD4vGZKveXJ4GuW@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Tue, 24 Mar 2026 15:49:27 -0700 Stanislav Fomichev wrote:
-> > > Not sure why cancel+release, maybe you're thinking about the unregister
-> > > path? This is rtnl_unlock -> netdev_run_todo -> __rtnl_unlock + some
-> > > extras.
-> > > 
-> > > And the flush is here to plumb the addresses to the real devices
-> > > before we return to the callers. Mostly because of the following
-> > > things we have in the tests:
-> > > 
-> > > # TEST: team cleanup mode lacp                                        [FAIL]
-> > > #       macvlan unicast address not found on a slave
-> > > 
-> > > Can you explain a bit more on the suggestion?  
-> > 
-> > Oh, I thought it's here for unregister! Feels like it'd be cleaner to
-> > add the flush in dev_*c_add() and friends? How hard would it be to
-> > identify the callers in atomic context?  
-> 
-> Not sure we can do it in dev_xc_add because it runs under rtnl :-(
-> I currently do flush in netdev_run_todo because that's the place that
-> doesn't hold rtnl. Otherwise flush will get stuck because the work
-> handler grabs it...
+On 3/23/26 4:24 AM, Li Wang wrote:
+> On Fri, Mar 20, 2026 at 04:42:39PM -0400, Waiman Long wrote:
+>> When running the test_memcg_swap_max_peak test which sets swap.max
+>> to 30M on an arm64 system with 64k page size, the test failed as the
+>> swap.peak could only reach up only to 27,328,512 bytes (about 25.45
+>> MB which is lower than the expected 29M) before the allocating task
+>> got oom-killed.
+>>
+>> It is likely due to the fact that it takes longer to write out a larger
+>> page to swap and hence a lower swap.peak is being reached. Setting
+>> memory.high to 29M to throttle memory allocation when nearing memory.max
+>> helps, but it still could only reach up to 29,032,448 bytes (about
+>> 27.04M). As a result, we have to reduce the expected swap.peak with
+>> larger page size. Now swap.peak is expected to reach only 27M with 64k
+>> page, 29M with 4k page and 28M with 16k page.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   .../selftests/cgroup/test_memcontrol.c        | 26 ++++++++++++++++---
+>>   1 file changed, 22 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+>> index c078fc458def..3832ded1e47b 100644
+>> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+>> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+>> @@ -1032,6 +1032,7 @@ static int test_memcg_swap_max_peak(const char *root)
+>>   	char *memcg;
+>>   	long max, peak;
+>>   	struct stat ss;
+>> +	long swap_peak;
+>>   	int swap_peak_fd = -1, mem_peak_fd = -1;
+>>   
+>>   	/* any non-empty string resets */
+>> @@ -1119,6 +1120,23 @@ static int test_memcg_swap_max_peak(const char *root)
+>>   	if (cg_write(memcg, "memory.max", "30M"))
+>>   		goto cleanup;
+>>   
+>> +	/*
+>> +	 * The swap.peak that can be reached will depend on the system page
+>> +	 * size. With larger page size (e.g. 64k), it takes more time to write
+>> +	 * the anonymous memory page to swap and so the peak reached will be
+>> +	 * lower before the memory allocation process get oom-killed. One way
+>> +	 * to allow the swap.peak to go higher is to throttle memory allocation
+>> +	 * by setting memory.high to, say, 29M to give more time to swap out the
+>> +	 * memory before oom-kill. This is still not enough for it to reach
+>> +	 * 29M reachable with 4k page. So we still need to reduce the expected
+>> +	 * swap.peak accordingly.
+>> +	 */
+>> +	swap_peak = (page_size == KB(4)) ? MB(29) :
+>> +		   ((page_size <= KB(16)) ? MB(28) : MB(27));
+> Or, go with a dynamic adjustment based on page size?
+>
+>      swap_peak = MB(29) - ilog2(page_size / KB(4)) * MB(1);
+>
+It is a good suggestion. I will adopt a dynamic base adjustment as 
+suggested.
 
-I was thinking of something a'la linkwatch. We can "steal" / "flush"
-the pending work inline. I guess linkwatch is a major source of races
-over the years...
+Cheers,
+Longman
 
-Does the macvlan + team problem still happens with the current
-implementation minus the flush? We are only flushing once so only
-pushing the addresses thru one layer of async callbacks.
