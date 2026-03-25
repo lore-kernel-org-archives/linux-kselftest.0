@@ -1,67 +1,67 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAF634C80D
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 09:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D7734D4DE
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 09:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774429823; cv=none; b=oJvoGo7NojnF3ojOi4Y/xN/ETVLe/hwBzp2WIRzh7FR1hZX6hGtEtjyDoD6pVOQjjTqa7tpwj9y+8w6t06M9yQ4juE8mMOt2GuojbFo4kpQmRSsgtRSYBmQvz57fNuZEzxeNWKq8Nd7irzlJYhoft3FDyFonluzTr/nv5KooDNI=
+	t=1774429830; cv=none; b=Rjx9MS/TuwrkNJ3hEK9ivt8S1OclADUuq4HhbaZEu0DvycqH+phU+bpoY1LC4GduZrVFueoSqWf0PjT3JF8zUF5/WmjAdxyjY1zRu7dj+B5LCae0W3yE3Mbik11wRrY0Gr/WHJOZJDnE0G5WZhMwA1mj2Fe33ZvRUaajPeS6yi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774429823; c=relaxed/simple;
-	bh=sfZVGU9Hj9stbtl4yUdeoH+u6jGA0FBjc9cEVMC+Gs4=;
+	s=arc-20240116; t=1774429830; c=relaxed/simple;
+	bh=t+n2wTHFkqljFya/mEg/ADCwcFPQysDFOOajjS40Mfc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Eqc/Ao6Tfp4eRl7rIGNgvIR+lDkLAdVq6liLbwx5DtreV4msVrZz37iP8BuQf7Io/c/9l7eLHNY23MGLLEYl6rDo5+BIdlu2tvgCKM1xJ9g4UCjKkKhxpTOA9PtfN9TGB+iSWJX04gBx/VSJJz7jdsQWhx09vRaBn4Z9f2mQNtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iCHeT2ge; arc=none smtp.client-ip=74.125.82.44
+	 In-Reply-To:To:Cc; b=lofFVsetVN6ZDmzxM0gMzVti4ERrhTim0i/UE2slGlohRa2YBgT4U6of2XfXbafrniFnbiH3HwazB+UkHN4/KPrkaaINmXSVuPDuXeotngOIYG+0bEVRjAxkEwXYpC0/JQwAxyzLObz1XP8Z07o9ZJSg5ZP0Fbx5ku1lgymwzYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nzalt8JS; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iCHeT2ge"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12a80c36350so3820737c88.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 02:10:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nzalt8JS"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2c0ea57fea7so7898687eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 02:10:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774429820; x=1775034620; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774429827; x=1775034627; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AZ4K3OH2k+TMiRs8uy+rQGZy9UvXhyZuqnAHChX5WtE=;
-        b=iCHeT2geEMkV71bph6Ahko0aktuqzgMISU++9blNi8antWORinKcmNQddnKKrIMtCe
-         BrnbySvS34ut9rpYvN4pt27NJyFiSmW+4gG/lcJdcsN98pq8l58AECqD++gJuAOcn/Wj
-         nOgkB+dpYZhruMFQ8yBMZhsCJIDbOiJjmJtf6pREmjyG6cDI75wVwQ33XXS+jAQ6uFjq
-         cOFrZ65wQK1WjDpqlDwgKQbpdsrOVcQi+ITrKxH5tuQBCvHTtGyLlqO2/MM84HJsP6FX
-         yKESJk5XLU3FiqbTefmwRwIV9bkg27BueRUpKD10zacMrUKcDD9WdxM7DtP663OX2uJU
-         xb7Q==
+        bh=cw+tpbsqbbsakcxSKodY3EwFB9EQzmLwAIJ3DaHGMD0=;
+        b=nzalt8JSKq8WgAhF3h8VTvFTeHyTYbTNL6hc2zTro/0BTNkAF3E5dVVBLM0MxHn1VB
+         3DqSP551b/GJLchDjqAJKMM14c7LHAEZc4P0i6eFGvyXjkusAg4ApDeXTuQDAe5qKgsU
+         nEqGrBecjWJOSyU7x6o1BmxRrN0+/drLu3GDmE+psilxIjCRTb8mMlo1J5D3Y+/0xraM
+         xqDOAIsHIqzwfb6YlPULWsA6L2RGUTS7h4HgGP0KT2bGo+F79XvPk7tOxLY92JjH4Sc0
+         iSvllnDgsvIJ6Tc/9VFhnIfUBWi8w73m+iYtOc6ZDL6LzSoEp9z8mS8lj7d3MqWh7nB9
+         qe5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774429820; x=1775034620;
+        d=1e100.net; s=20251104; t=1774429827; x=1775034627;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=AZ4K3OH2k+TMiRs8uy+rQGZy9UvXhyZuqnAHChX5WtE=;
-        b=h1Xxr0XoCSaejfciuYbpKBamwNdDlJlUyteCO8BveUG4Qed52234UtDehHa/2NVH3I
-         Tdm0XGhUaF6h/eTAoYcGjsvYLUp74kGAkFSk/07usR0FflLRoJkgB66gTZbnTclWIq6a
-         oeVGkMLGsHneCJF5htSBioItqF2v9F76ZVP+r6mG9mbw3erg2uifS+I/P1hjgspOIoLg
-         dTd9UR2Mkc2ShbXHgUjDhdQTivZxJNpPMdE6NcfaJlSotG8dI0PmvixLpe3VwLxw1W7E
-         zd07QsH6Ev/aa+CWF/cifrYI+GEIGTgKmE40vd6Hpiq9USmico1TS8YgBCvZG3HK8DO9
-         RtCg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcTfitCljyRcLjMw2Dz7IeLlMn4TzXC3MbAAjluSyuEVSpeZ2JqDd/91eEbzlU56a5L73Gjz4vBXcYX148EFE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydZWRzi083q3ypOSb33a2fOnQ0SIAgZb3gxefMijO/TpURtI1u
-	qka7qe3y18qNmp154gJKm4rs+1szFulJ0bTbHKvs2nNmKsNdaCQj4B9J
-X-Gm-Gg: ATEYQzycq8obsFwpNOEzPAQIqA8JeKen2n5MPDMf2dj0T+VtNzKMX6WjdrXhL/tMIXh
-	AZ/gx2gjsN5YpxG+kSL5xAw5vTnwRIce6wu5Pp/HT18eICLAbjLKO6+y418JhtlLHrJV/Ne4Vl1
-	BnyFMywNPrc+7b/tUSzFkNvfXBZKv/HnUaJ+TDhCSJfVp2HMyjyYoz9nmSAsAhjnDCwnCXu70yy
-	DTyda48Ye8kgkqj2XtX4IYQMPNIrFoE9iqhNFJzcF0V/PPPYPOub3hLN3A4/7MKj9Fu31aBLLwv
-	cIne+i9ihF/q9dkebJRwmEepA1DKgGYLdCg8faLtPntC5+tOG0w1ZxigSfhS2s7nt7g94oH0Bfg
-	E85qA2HGk5JRBTE5xPxCOiLIzW2ePYhY707fef/wpY+eHGR+b/2dBt1wG4tOJZjs8S0x3WQWZ7i
-	pJlr9xaFzn0GWtZqKs
-X-Received: by 2002:a05:7022:618b:b0:12a:6ab7:3f7c with SMTP id a92af1059eb24-12a96e5ee3emr1202993c88.5.1774429819632;
-        Wed, 25 Mar 2026 02:10:19 -0700 (PDT)
+        bh=cw+tpbsqbbsakcxSKodY3EwFB9EQzmLwAIJ3DaHGMD0=;
+        b=ahQL4yOxsdbgys8SZ8om19VGUBhOdh4H+0/FIYvUvCwihsNiX2RauW2qBkHU1fIRac
+         YUwecx7zX3X880t5FAvT0oFz4Fonuz1KOUqkh2KcYho4ZnwitK9XtRs6mNSFdgm69Gz0
+         KEtepw3pZPwKcv+8OUiR/idSjUegjYDxG7flblBHLrO+ZBhu4zrG3Ld6Ts5sdBqPd/2p
+         LFjDw/375Dh6Yae95e15YeXsaNKQLJnnHWqey64z3FIUZZUZ3ANGZ6K4WwL1uxCV3Kl1
+         aFBRwAW+4R1ClGSEXX/nwEQgPROJnc36AVrq1XJfofT19yLbxW06tnzrJH9yhnuHuf+K
+         6XlA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTbuk9OjzQSeMYuve28p3dIffet313bQVyuKSGCfWhyfczNmVE6f7ai2XWVjLyedFhh46bGSxR6yhhiDsLo5I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRCbDH5b9MpMdlAmqgecMGRmfC39OV8k/3CUNHKXZGhPshSJLx
+	REGXcJ1nX/TW20iPrQtFmd8NbfsCJO7wCHhmU9F065rEtV6yDTrR6Gmu
+X-Gm-Gg: ATEYQzxcRb5EiZwcb4a9Bf/NrRXaFrWBM0Cvkor1PrJ6OyN5u1gs4utK9ebzhssURCG
+	d66PfL3PeTXkSb4xlWo/xFP508fpqkBHqHP8MyHkX8KJPqTVQz3lycc7zHpo1MSQEXYGvVB3E46
+	mx5eKIdZMNbciZ/pd4PTpztstOoFhxURV1SNKoBCSH7EX+RTF0uw4bNYxkWs4P1cYFm394AnIx+
+	p13P9YN3s2r7JG0JZxMEGj/AmolePz6UZJtnQ58whTZvEHEKwaQDC3R6macRntmLwtNmKjh8UW2
+	33Ab7WakicD28gGEe+exLuADWj9quKyzdNfayziK9iS51yUnxaXbdNrHauUjuoXtsxDhM3VzNfr
+	VgeQiHGUYaSmtRGIvDvMloVAE7zwBsHdFydJruuP4v4+xxUhnoWfU9zRKHxbEP7MNu4IZAI+Fo5
+	2R2pN78l7lwo0b0LOF
+X-Received: by 2002:a05:7300:cb0e:b0:2be:e4b:60c2 with SMTP id 5a478bee46e88-2c15d291b93mr1336228eec.5.1774429827089;
+        Wed, 25 Mar 2026 02:10:27 -0700 (PDT)
 Received: from wujing. ([74.48.213.230])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c159e25dc7sm2786389eec.27.2026.03.25.02.10.12
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c159e25dc7sm2786389eec.27.2026.03.25.02.10.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 02:10:19 -0700 (PDT)
+        Wed, 25 Mar 2026 02:10:26 -0700 (PDT)
 From: Qiliang Yuan <realwujing@gmail.com>
-Date: Wed, 25 Mar 2026 17:09:36 +0800
-Subject: [PATCH 05/15] rcu: Support runtime NOCB initialization and dynamic
- offloading
+Date: Wed, 25 Mar 2026 17:09:37 +0800
+Subject: [PATCH 06/15] sched/core: Dynamically update scheduler domain
+ housekeeping mask
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260325-dhei-v12-final-v1-5-919cca23cadf@gmail.com>
+Message-Id: <20260325-dhei-v12-final-v1-6-919cca23cadf@gmail.com>
 References: <20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com>
 In-Reply-To: <20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -97,212 +97,58 @@ Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <realwujing@gmail.com>
 X-Mailer: b4 0.13.0
 
-Context:
-The RCU Non-Callback (NOCB) infrastructure traditionally requires
-boot-time parameters (e.g., rcu_nocbs) to allocate masks and spawn
-management kthreads (rcuog/rcuo). This prevents systems from activating
-offloading on-demand without a reboot.
+Scheduler domains rely on HK_TYPE_DOMAIN to identify which CPUs are
+isolated from general load balancing. Currently, these boundaries are
+static and determined only during boot-time domain initialization.
 
-Problem:
-Dynamic Housekeeping & Enhanced Isolation (DHEI) requires CPUs to
-transition to NOCB mode at runtime. Without boot-time setup, the
-NOCB masks are unallocated, and critical kthreads are missing,
-preventing effective tick suppression and isolation.
+Trigger a scheduler domain rebuild when the HK_TYPE_DOMAIN mask changes.
 
-Solution:
-Refactor RCU initialization to support dynamic on-demand setup.
-- Introduce rcu_init_nocb_dynamic() to allocate masks and organize
-  kthreads if the system wasn't initially configured for NOCB.
-- Update rcu_housekeeping_reconfigure() to iterate over CPUs and
-  perform safe offload/deoffload transitions via hotplug sequences
-  (cpu_down -> offload -> cpu_up).
-- Remove __init from rcu_organize_nocb_kthreads to allow runtime
-  reconfiguration of the callback management hierarchy.
+This ensures that scheduler isolation boundaries can be reconfigured
+at runtime via the DHEI sysfs interface.
 
-This enables a true "Zero-Conf" isolation experience where any CPU
-can be fully isolated at runtime regardless of boot parameters.
+Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
 ---
- kernel/rcu/rcu.h       |  4 +++
- kernel/rcu/tree.c      | 76 ++++++++++++++++++++++++++++++++++++++++++++++++++
- kernel/rcu/tree.h      |  2 +-
- kernel/rcu/tree_nocb.h | 27 ++++++++++++------
- 4 files changed, 99 insertions(+), 10 deletions(-)
+ kernel/sched/core.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 9cf01832a6c3d..fa9de9a3918b1 100644
---- a/kernel/rcu/rcu.h
-+++ b/kernel/rcu/rcu.h
-@@ -658,8 +658,12 @@ unsigned long srcu_batches_completed(struct srcu_struct *sp);
- #endif // #else // #ifdef CONFIG_TINY_SRCU
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 045f83ad261e2..ddf9951f1438c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -39,6 +39,7 @@
+ #include <linux/sched/nohz.h>
+ #include <linux/sched/rseq_api.h>
+ #include <linux/sched/rt.h>
++#include <linux/sched/topology.h>
  
- #ifdef CONFIG_RCU_NOCB_CPU
-+void rcu_init_nocb_dynamic(void);
-+void rcu_spawn_cpu_nocb_kthread(int cpu);
- void rcu_bind_current_to_nocb(void);
- #else
-+static inline void rcu_init_nocb_dynamic(void) { }
-+static inline void rcu_spawn_cpu_nocb_kthread(int cpu) { }
- static inline void rcu_bind_current_to_nocb(void) { }
- #endif
- 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 293bbd9ac3f4e..3fd12ac20957f 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -48,6 +48,7 @@
- #include <linux/delay.h>
- #include <linux/random.h>
- #include <linux/trace_events.h>
-+#include <linux/sched/isolation.h>
- #include <linux/suspend.h>
- #include <linux/ftrace.h>
- #include <linux/tick.h>
-@@ -4916,4 +4917,79 @@ void __init rcu_init(void)
- #include "tree_stall.h"
- #include "tree_exp.h"
- #include "tree_nocb.h"
+ #include <linux/blkdev.h>
+ #include <linux/context_tracking.h>
+@@ -10832,3 +10833,25 @@ void sched_change_end(struct sched_change_ctx *ctx)
+ 		p->sched_class->prio_changed(rq, p, ctx->prio);
+ 	}
+ }
 +
-+#ifdef CONFIG_SMP
-+static int rcu_housekeeping_reconfigure(struct notifier_block *nb,
-+					unsigned long action, void *data)
++static int sched_housekeeping_update(struct notifier_block *nb,
++				     unsigned long action, void *data)
 +{
-+	struct housekeeping_update *upd = data;
-+	struct task_struct *t;
-+	int cpu;
++	struct housekeeping_update *update = data;
 +
-+	if (action != HK_UPDATE_MASK || upd->type != HK_TYPE_RCU)
-+		return NOTIFY_OK;
-+
-+	rcu_init_nocb_dynamic();
-+
-+	for_each_possible_cpu(cpu) {
-+		struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-+		bool isolated = !cpumask_test_cpu(cpu, upd->new_mask);
-+		bool offloaded = rcu_rdp_is_offloaded(rdp);
-+
-+		if (isolated && !offloaded) {
-+			/* Transition to NOCB */
-+			pr_info("rcu: CPU %d transitioning to NOCB mode\n", cpu);
-+			if (cpu_online(cpu)) {
-+				remove_cpu(cpu);
-+				rcu_spawn_cpu_nocb_kthread(cpu);
-+				rcu_nocb_cpu_offload(cpu);
-+				add_cpu(cpu);
-+			} else {
-+				rcu_spawn_cpu_nocb_kthread(cpu);
-+				rcu_nocb_cpu_offload(cpu);
-+			}
-+		} else if (!isolated && offloaded) {
-+			/* Transition to CB */
-+			pr_info("rcu: CPU %d transitioning to CB mode\n", cpu);
-+			if (cpu_online(cpu)) {
-+				remove_cpu(cpu);
-+				rcu_nocb_cpu_deoffload(cpu);
-+				add_cpu(cpu);
-+			} else {
-+				rcu_nocb_cpu_deoffload(cpu);
-+			}
-+		}
-+	}
-+
-+	t = READ_ONCE(rcu_state.gp_kthread);
-+	if (t)
-+		housekeeping_affine(t, HK_TYPE_RCU);
-+
-+#ifdef CONFIG_TASKS_RCU
-+	t = get_rcu_tasks_gp_kthread();
-+	if (t)
-+		housekeeping_affine(t, HK_TYPE_RCU);
-+#endif
-+
-+#ifdef CONFIG_TASKS_RUDE_RCU
-+	t = get_rcu_tasks_rude_gp_kthread();
-+	if (t)
-+		housekeeping_affine(t, HK_TYPE_RCU);
-+#endif
++	if (action == HK_UPDATE_MASK && update->type == HK_TYPE_DOMAIN)
++		rebuild_sched_domains();
 +
 +	return NOTIFY_OK;
 +}
 +
-+static struct notifier_block rcu_housekeeping_nb = {
-+	.notifier_call = rcu_housekeeping_reconfigure,
++static struct notifier_block sched_housekeeping_nb = {
++	.notifier_call = sched_housekeeping_update,
 +};
 +
-+static int __init rcu_init_housekeeping_notifier(void)
++static int __init sched_housekeeping_init(void)
 +{
-+	housekeeping_register_notifier(&rcu_housekeeping_nb);
++	housekeeping_register_notifier(&sched_housekeeping_nb);
 +	return 0;
 +}
-+late_initcall(rcu_init_housekeeping_notifier);
-+#endif
-+
- #include "tree_plugin.h"
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index b8bbe7960cda7..5322656a5a359 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -518,7 +518,7 @@ static void rcu_nocb_unlock_irqrestore(struct rcu_data *rdp,
- 				       unsigned long flags);
- static void rcu_lockdep_assert_cblist_protected(struct rcu_data *rdp);
- #ifdef CONFIG_RCU_NOCB_CPU
--static void __init rcu_organize_nocb_kthreads(void);
-+static void rcu_organize_nocb_kthreads(void);
- 
- /*
-  * Disable IRQs before checking offloaded state so that local
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index e6cd56603cad4..9f5f446e70b3f 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1285,6 +1285,22 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
- }
- #endif // #ifdef CONFIG_RCU_LAZY
- 
-+void rcu_init_nocb_dynamic(void)
-+{
-+	if (rcu_state.nocb_is_setup)
-+		return;
-+
-+	if (!cpumask_available(rcu_nocb_mask)) {
-+		if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
-+			pr_info("rcu_nocb_mask allocation failed, dynamic offloading disabled.\n");
-+			return;
-+		}
-+	}
-+
-+	rcu_state.nocb_is_setup = true;
-+	rcu_organize_nocb_kthreads();
-+}
-+
- void __init rcu_init_nohz(void)
- {
- 	int cpu;
-@@ -1302,15 +1318,8 @@ void __init rcu_init_nohz(void)
- 		cpumask = cpu_possible_mask;
- 
- 	if (cpumask) {
--		if (!cpumask_available(rcu_nocb_mask)) {
--			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
--				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
--				return;
--			}
--		}
--
-+		rcu_init_nocb_dynamic();
- 		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
--		rcu_state.nocb_is_setup = true;
- 	}
- 
- 	if (!rcu_state.nocb_is_setup)
-@@ -1442,7 +1451,7 @@ module_param(rcu_nocb_gp_stride, int, 0444);
- /*
-  * Initialize GP-CB relationships for all no-CBs CPU.
-  */
--static void __init rcu_organize_nocb_kthreads(void)
-+static void rcu_organize_nocb_kthreads(void)
- {
- 	int cpu;
- 	bool firsttime = true;
++late_initcall(sched_housekeeping_init);
 
 -- 
 2.43.0
