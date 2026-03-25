@@ -1,143 +1,134 @@
-Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DE7390C84;
-	Wed, 25 Mar 2026 08:01:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3FF350D58
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 08:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774425720; cv=none; b=c5paGMXSchcyprUR5YsGwyZyDCKHWcfANHU9gV1IvBzse17+TSgZejoALssgk4zXp+MdQsgJ4oizvomw0cvbL4yeoSbLcek/+gkMHxdD1DJYMIvcQghnTLFXn1dEcz9i3fAF1D58bTL/qwxkbslNJkC+n2H7BmK2zfqotlzEPGM=
+	t=1774428332; cv=none; b=aipss61wBP0ePAUSSMfQA93E5cFDKzA9UPsfVPx/j00l39Jsw3lK0f8zXXIOZOHrUJzKStTPL3k/tEUj1v2R3BO51eAPCxdj5H9KFjoowbruAKQ+Svqr8VAyJTp/tHj8SwmEU1QRpgDLeCHZg91hLv1XtOztFc9MWgvSVG2uQEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774425720; c=relaxed/simple;
-	bh=VlBxR/SzYAHrqVgrVE6UN8eEpY06CR6hnRPY1BAcTpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yvue6IsG/+bDp9s3C/NZAbDozWOcvg7ZuxUtLLZaKhNLP7YDjTI+/asF2QG6OpZDNUdr+x5D89ZwNMVz7taBCSwbP3q9UZC8CAjzWHQVx1ybLRM2jNnNlb1AihdL1Zgnd+3CsNriO3krHvFvgtv7xs7QUeOJqnljLAV0qCisxSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=OuTs2/6S; arc=none smtp.client-ip=139.138.36.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+	s=arc-20240116; t=1774428332; c=relaxed/simple;
+	bh=QhXaExc/Bt3yphvMLVsbtwHlIuU9rXPjUDRmYorr7dA=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=kn0fbGpgB5w6CJ+80ylRkKftU8CABjhX37yVMSJ9B2HaRhkp2oJ0aAEWpDIbPaiO0UISfxX9/c6+R05FVyWA5CVn6C3CVTRddvEa4mxZ/Nu6mU0RTun+ZSOh5UIZRC7EiT5H6E2oFQ+4s8KDd/EKyKUqO7GVq6NYe5P4tuRGdpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=pXiulUZR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=z4PEeV0z; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=pXiulUZR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=z4PEeV0z; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="OuTs2/6S"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1774425718; x=1805961718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VlBxR/SzYAHrqVgrVE6UN8eEpY06CR6hnRPY1BAcTpo=;
-  b=OuTs2/6SJwi40/lAFrZmZ+9GlGq2CJaLFutAVgyOsF7WMMzW4NArG7gX
-   5OSsCT8NMWa7fNORAz5Dc5blcY3Wc4K3Dvtk3RdqePcwrgFHYDLXUfhn5
-   DD9KtMNPrznmTNipG6xNHkCOMBxje5qFolwgrpr2chi+YZy2i1mnpkQVx
-   1+HHbwDYRCgi0xCoyYnASfzIJeP9p5WN+NVLNAazIJNEVIXuofgsQyTWy
-   pcBSqvTDB/EQ3GlTFj832D7kpIcdGT6hD+NJChJV3F5bCxfJIHoSzsDzg
-   Ic19gyEYpH3Ah6jo8VCr7l17af5pQvPkGB2nA41vnmnnMmqRsYtCDozQh
-   A==;
-X-CSE-ConnectionGUID: 1hjaNhx8T6ujit8meVYY/g==
-X-CSE-MsgGUID: I97txnvWQUGOO2mn3myauA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="222015060"
-X-IronPort-AV: E=Sophos;i="6.23,139,1770562800"; 
-   d="scan'208";a="222015060"
-Received: from gmgwnl01.global.fujitsu.com (HELO mgmgwnl01.global.fujitsu.com) ([52.143.17.124])
-  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 17:00:47 +0900
-Received: from az2nlsmgm2.o.css.fujitsu.com (unknown [10.150.26.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mgmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id 66F8E455;
-	Wed, 25 Mar 2026 08:00:47 +0000 (UTC)
-Received: from az2nlsmom3.fujitsu.com (az2nlsmom3.o.css.fujitsu.com [10.150.26.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2nlsmgm2.o.css.fujitsu.com (Postfix) with ESMTPS id 12C681C17450;
-	Wed, 25 Mar 2026 08:00:47 +0000 (UTC)
-Received: from sm-arm-grace07 (sm-x86-stp01.soft.fujitsu.com [10.124.178.20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2nlsmom3.fujitsu.com (Postfix) with ESMTPS id 53168101BB54;
-	Wed, 25 Mar 2026 08:00:41 +0000 (UTC)
-Date: Wed, 25 Mar 2026 17:00:37 +0900
-From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-To: Wei-Lin Chang <weilin.chang@arm.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 0/3] KVM: arm64: selftests: Basic nested guest support
-Message-ID: <acOWJT39NGrmfSbQ@sm-arm-grace07>
-References: <20260325003620.2214766-1-weilin.chang@arm.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="pXiulUZR";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="z4PEeV0z";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="pXiulUZR";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="z4PEeV0z"
+Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 2F3875BD65;
+	Wed, 25 Mar 2026 08:45:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1774428323; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1FjS4CJNhWWiVr0cmpqhTyZSn3AUOzUvlMZSKv9MKwE=;
+	b=pXiulUZRJadcp0blD3G1CUD1+YaiQ0cpKYtyymyYuDGthAE/CwTsh53+6roEZUR/jFXwvN
+	71MmoE8SB6HzAGLydNLlSBAv+1GLyj+uqBSeSBv1lxwdqjMLuGXjmaD612VONePUwYDWE5
+	2jiYclxOydl+zYkhh3LU4oFy56k3aBI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1774428323;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1FjS4CJNhWWiVr0cmpqhTyZSn3AUOzUvlMZSKv9MKwE=;
+	b=z4PEeV0zB5Rt8lcC2FcOX6Evq7FV8ckwQ5U7RyBgWOiAWdz8r5QQ2nVB1LIl1BrOp2wEOf
+	2XaBfplHGBNC0EBA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=pXiulUZR;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=z4PEeV0z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1774428323; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1FjS4CJNhWWiVr0cmpqhTyZSn3AUOzUvlMZSKv9MKwE=;
+	b=pXiulUZRJadcp0blD3G1CUD1+YaiQ0cpKYtyymyYuDGthAE/CwTsh53+6roEZUR/jFXwvN
+	71MmoE8SB6HzAGLydNLlSBAv+1GLyj+uqBSeSBv1lxwdqjMLuGXjmaD612VONePUwYDWE5
+	2jiYclxOydl+zYkhh3LU4oFy56k3aBI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1774428323;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1FjS4CJNhWWiVr0cmpqhTyZSn3AUOzUvlMZSKv9MKwE=;
+	b=z4PEeV0zB5Rt8lcC2FcOX6Evq7FV8ckwQ5U7RyBgWOiAWdz8r5QQ2nVB1LIl1BrOp2wEOf
+	2XaBfplHGBNC0EBA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325003620.2214766-1-weilin.chang@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] selftests/livepatch: add test for module function
+ patching
+From: Miroslav Benes <mbenes@suse.cz>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Miroslav Benes <mbenes@suse.cz>, Pablo Hugen <phugen@redhat.com>, 
+ live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, jpoimboe@kernel.org, jikos@kernel.org, 
+ pmladek@suse.com, shuah@kernel.org
+In-Reply-To: <acKje1XMQMQQYBIL@redhat.com>
+References: <20260320201135.1203992-1-phugen@redhat.com>
+ <177436214729.62466.7977538958560300344.b4-review@b4>
+ <acKje1XMQMQQYBIL@redhat.com>
+Date: Wed, 25 Mar 2026 09:45:22 +0100
+Message-Id: <177442832293.70541.15179138173140080388.b4-reply@b4>
+X-Mailer: b4 0.15.0
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [17.38 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	HFILTER_HELO_5(3.00)[localhost.localdomain];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_SPAM_SHORT(2.99)[0.997];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	ONCE_RECEIVED(1.20)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_DN_SOME(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	DIRECT_TO_MX(0.00)[b4 0.15.0];
+	RCVD_COUNT_ZERO(0.00)[0];
+	URIBL_BLOCKED(0.00)[suse.cz:dkim,suse.cz:email,localhost.localdomain:helo];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_EQ_ENVFROM(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Spamd-Bar: +++++++++++++++++
+X-Rspamd-Queue-Id: 2F3875BD65
+X-Rspamd-Action: add header
+X-Spam-Flag: YES
+X-Spam-Score: 17.38
+X-Spam-Level: *****************
+X-Spam: Yes
 
-Hi Wei Lin,
+> > A nit but is 'noinline' keyword needed here? proc_create_single() below
+> > takes a function pointer so hopefully test_klp_mod_target_show() stays
+> > even without it?
+> 
+> No strong preference either way.  I won't fault a livepatch developer
+> for being paranoid w/respect to the compiler :D
 
-On Wed, Mar 25, 2026 at 12:36:17AM +0000, Wei-Lin Chang wrote:
-> Hi,
-> 
-> This series adds basic support for running nested guests (L2) in
-> kselftest. The first patch adds library functions. While designing the
-> APIs for userspace, I referenced Joey's approach for kvm-unit-tests [1].
-> In summary, four preparatory functions are provided for userspace to
-> set up state to run an L2 in EL1:
-> 
->  - prepare_l2_stack()            <- sets up stack for L2
->  - prepare_hyp_state()           <- sets up vEL2 registers
->  - prepare_eret_destination()    <- userspace passes a function pointer
->                                     for L2 to run
->  - prepare_nested_sync_handler() <- sets up hvc handler in order to
->                                     regain control after L2's hvc
-> 
-> After calling those functions, userspace can vcpu_run(), and when
-> run_l2() is called within the guest, the supplied function will be run
-> in L2, with the control flow managed by the library code in nested.c and
-> nested_asm.S. After running the L2 function, run_l2() will automatically
-> return. Note that the L2 function supplied by the user does not have to
-> call hvc.
-> 
-> Patch 2 demonstrates usage of the APIs introduced above, with a simple
-> L1 -> L2 -> L1 sequence, with an empty L2 function.
-> 
-> Patch 3 enhances the library functions by setting up L2 -> L1 stage-2
-> translation. Currently the translation is simple, with start level 0, 4
-> levels, 4KB granules, normal cachable, 48-bit IA, 40-bit OA.
-> 
-> [1]: https://lore.kernel.org/kvmarm/20260306142656.2775185-1-joey.gouly@arm.com/
+True :)
 
-Look like this selftest assumes nested guest's MMU is disabled (L2 IPA
-to L1 IPA to PA), but I couldn's find the explicit SCTLR.M bit operation in this
-series, how do you make sure it is always off?
+Either way
 
-Thanks,
-Itaru.
+Acked-by: Miroslav Benes <mbenes@suse.cz>
 
-> 
-> Wei-Lin Chang (3):
->   KVM: arm64: selftests: Add library functions for NV
->   KVM: arm64: sefltests: Add basic NV selftest
->   KVM: arm64: selftests: Enable stage-2 in NV preparation functions
-> 
->  tools/testing/selftests/kvm/Makefile.kvm      |   3 +
->  .../selftests/kvm/arm64/hello_nested.c        |  65 ++++++++
->  .../selftests/kvm/include/arm64/nested.h      |  25 +++
->  .../selftests/kvm/include/arm64/processor.h   |   9 +
->  .../testing/selftests/kvm/lib/arm64/nested.c  | 154 ++++++++++++++++++
->  .../selftests/kvm/lib/arm64/nested_asm.S      |  35 ++++
->  6 files changed, 291 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/arm64/hello_nested.c
->  create mode 100644 tools/testing/selftests/kvm/include/arm64/nested.h
->  create mode 100644 tools/testing/selftests/kvm/lib/arm64/nested.c
->  create mode 100644 tools/testing/selftests/kvm/lib/arm64/nested_asm.S
-> 
-> -- 
-> 2.43.0
-> 
