@@ -1,197 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4485A34DB6D;
-	Wed, 25 Mar 2026 23:13:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51033396585;
+	Wed, 25 Mar 2026 23:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774480426; cv=none; b=ez5kdRtmW53v5AT/0GfmOVffAX0kG39Jsegooau8zPtpyKpH1H7eFHm5lcNauGc8ODEHS6K5V6K/C4J0sTG+pksxANkCkw0rur82ZB7oyNJwVajTOUjC7RDVemligr+PG7uwEkyX6F1zkWBiafowq39an0ThVP9IPezw9GVoUi0=
+	t=1774480446; cv=none; b=AsxudanGHVumgImSPKD3MDF+V+VyyGt640kOK01By8yqkaLS8mg2CibP365hNuzMMXjqsqHPNrTvH2IWvsXL9iJA1TA+ZJtgBFmu0frkK+lrtxMCIhGhTr457QzSAX3L4t269/DVW4pIpNlQmeYo4JnwB72tO5y4Dd8oTDQ+8Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774480426; c=relaxed/simple;
-	bh=6HOi28c0aIsZQhT8sVNi8T1x2rw2HK7r7jexGLskZ5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=lpmXOAmA8uM5S5AiPkYjqBW1bjblUKFBpxJgYzGjGeljvoeo9lv/Xcqx8wW0g1nDk0KaAJuh+2z6LfU8AT2H5EdIagrBcABIvE66NYVMnxAfXZg+IWJ+csTlU7JHFmsE55Af2xQggXwW4LxJ5Le7kanHXZxQr8tczdx1i2FbgoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7j6QyFf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774480446; c=relaxed/simple;
+	bh=haZVXxeBGIxeTbMGR2l+K3ghTX1dn/WL8wdUhji0HaA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Stmf1zhhm2rXUa95V1gjtqpgzjNE73jfPHM77mxiVzKj78RXgi6TRq/+E1EHb5YFjO6P01BWTRYYCote2GluAATUoW3tKrbBPNk5KVcdTDTmF16ACS6Os6/T9+2UA/zbXRhehnEsO4Wo9lvtWlyGxEjs3dmoS/InaYvEu8gtXTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=DzPlWLZ1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7j6QyFf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD25EC4CEF7;
-	Wed, 25 Mar 2026 23:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774480425;
-	bh=6HOi28c0aIsZQhT8sVNi8T1x2rw2HK7r7jexGLskZ5Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=i7j6QyFfV4EDmQQsY0gJwgpsIW7ADhhYgGnyo8je+pZf/Yd1/B6CSVyfqsiGz5whw
-	 ffi5t6lwmD73ikTBg4EWjDEh8WdW0XprkdwnHJsz0VO6ETGA7mmy0gNFFDKvQlzplP
-	 mVeoq1VreB4lz1/RKR4DFbZJ8FyS3vZ1boOSmPiVM/bPleVXHxEEpInuJg5mP/MyFB
-	 F5htIIPnERsMGLVuolqa8UZcItUTh0ekV4PoSoKgsr96fDtqm2RVYvDPbDGGvEu42B
-	 tdjEKu5BUx7ahAJDO+rjjuyxNWMVkkWYRXpVaUgrelTRl7IvIJ6sVYrlkuTtugFytx
-	 5zvSEuGK+u7MQ==
-Date: Wed, 25 Mar 2026 18:13:44 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Adithya Jayachandran <ajayachandra@nvidia.com>,
-	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
-	Askar Safin <safinaskar@gmail.com>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Chris Li <chrisl@kernel.org>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	David Rientjes <rientjes@google.com>,
-	Feng Tang <feng.tang@linux.alibaba.com>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
-	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
-	kexec@lists.infradead.org, kvm@vger.kernel.org,
-	Leon Romanovsky <leon@kernel.org>,
-	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-pci@vger.kernel.org,
-	Li RongQing <lirongqing@baidu.com>, Lukas Wunner <lukas@wunner.de>,
-	Marco Elver <elver@google.com>,
-	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Pranjal Shrivastava <praan@google.com>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Vipin Sharma <vipinsh@google.com>,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: Re: [PATCH v3 03/24] PCI: Require Live Update preserved devices are
- in singleton iommu_groups
-Message-ID: <20260325231344.GA1293155@bhelgaas>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="DzPlWLZ1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EECCC4CEF7;
+	Wed, 25 Mar 2026 23:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1774480445;
+	bh=haZVXxeBGIxeTbMGR2l+K3ghTX1dn/WL8wdUhji0HaA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DzPlWLZ1jCtwp23rJXoQing7SVhZ2BAEcteSdO5u4bi/w0SRokpfrVIW08GObOv/V
+	 xJ6G3WOL84PORYN9lDn+Q8f7wJmOAwP+udoI5mryoNhLqR5oBTUtFqY+PqWOcMHKhq
+	 gbwKcCZqcJ6qaEgzuFwOhCqvCTBPEQ/c50zX9Yag=
+Date: Wed, 25 Mar 2026 16:14:05 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, dmatlack@google.com,
+ pratyush@kernel.org, skhawaja@google.com
+Subject: Re: [PATCH v3 0/2] liveupdate: prevent double preservation
+Message-Id: <20260325161405.0840dea1549b13c5a1653462@linux-foundation.org>
+In-Reply-To: <20260325182026.467307-1-pasha.tatashin@soleen.com>
+References: <20260325182026.467307-1-pasha.tatashin@soleen.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260323235817.1960573-4-dmatlack@google.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 23, 2026 at 11:57:55PM +0000, David Matlack wrote:
-> Require that Live Update preserved devices are in singleton iommu_groups
-> during preservation (outgoing kernel) and retrieval (incoming kernel).
+On Wed, 25 Mar 2026 18:20:24 +0000 Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+
+> Currently, LUO does not prevent the same file from being preserved twice
+> across different active sessions.
 > 
-> PCI devices preserved across Live Update will be allowed to perform
-> memory transactions throughout the Live Update. Thus IOMMU groups for
-> preserved devices must remain fixed. Since all current use cases for
-> Live Update are for PCI devices in singleton iommu_groups, require that
-> as a starting point. This avoids the complexity of needing to enforce
-> arbitrary iommu_group topologies while still allowing all current use
-> cases.
+> Because LUO preserves files of absolutely different types: memfd, and
+> upcoming vfiofd [1], iommufd [2], guestmefd (and possible kvmfd/cpufd).
+> There is no common private data or guarantee on how to prevent that the
+> same file is not preserved twice beside using inode or some slower and
+> expensive method like hashtables.
 > 
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
->  drivers/pci/liveupdate.c | 34 +++++++++++++++++++++++++++++++++-
->  1 file changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
-> index bec7b3500057..a3dbe06650ff 100644
-> --- a/drivers/pci/liveupdate.c
-> +++ b/drivers/pci/liveupdate.c
-> @@ -75,6 +75,8 @@
->   *
->   *  * The device must not be a Physical Function (PF).
->   *
-> + *  * The device must be the only device in its IOMMU group.
-> + *
->   * Preservation Behavior
->   * =====================
->   *
-> @@ -105,6 +107,7 @@
->  
->  #include <linux/bsearch.h>
->  #include <linux/io.h>
-> +#include <linux/iommu.h>
->  #include <linux/kexec_handover.h>
->  #include <linux/kho/abi/pci.h>
->  #include <linux/liveupdate.h>
-> @@ -222,6 +225,31 @@ static void pci_ser_delete(struct pci_ser *ser, struct pci_dev *dev)
->  	ser->nr_devices--;
->  }
->  
-> +static int count_devices(struct device *dev, void *__nr_devices)
-> +{
-> +	(*(int *)__nr_devices)++;
-> +	return 0;
-> +}
-> +
-> +static int pci_liveupdate_validate_iommu_group(struct pci_dev *dev)
-> +{
-> +	struct iommu_group *group;
-> +	int nr_devices = 0;
-> +
-> +	group = iommu_group_get(&dev->dev);
-> +	if (group) {
-> +		iommu_group_for_each_dev(group, &nr_devices, count_devices);
-> +		iommu_group_put(group);
-> +	}
-> +
-> +	if (nr_devices != 1) {
-> +		pci_warn(dev, "Live Update preserved devices must be in singleton iommu groups!");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
 
-I assume the requirement is that there *is* an iommu_group and also
-that dev is the only member.  If so, I think the intent would be a
-little clearer as:
+I updated mm.git's mm-new branch to this version.
 
-    group = iommu_group_get(&dev->dev);
-    if (!group)
-      goto no_group;
+> Changelog:
+> v3:
+>  - Renamed luo_preserved_files_xa to luo_preserved_files (Mike)
+>  - Added xa inserts during restoration, so a file that is not yet finished is
+>    not preserved at the same time. (Sashiko)
 
-    iommu_group_for_each_dev(group, &nr_devices, count_devices);
-    iommu_group_put(group);
+Below is how v3 altered mm.git.
 
-    if (nr_devices == 1) {
-      return 0;
+It appears that some significant changes are in the works.  Please lmk
+if there's actually value in keeping v3 under test, or should I just
+drop it?
 
-  no_group:
-    pci_warn(...);
-    return -EINVAL;
 
-> +}
-> +
->  int pci_liveupdate_preserve(struct pci_dev *dev)
->  {
->  	struct pci_dev_ser new = INIT_PCI_DEV_SER(dev);
-> @@ -232,6 +260,10 @@ int pci_liveupdate_preserve(struct pci_dev *dev)
->  	if (dev->is_virtfn || dev->is_physfn)
->  		return -EINVAL;
->  
-> +	ret = pci_liveupdate_validate_iommu_group(dev);
-> +	if (ret)
-> +		return ret;
-> +
->  	guard(mutex)(&pci_flb_outgoing_lock);
->  
->  	if (dev->liveupdate_outgoing)
-> @@ -357,7 +389,7 @@ int pci_liveupdate_retrieve(struct pci_dev *dev)
->  	if (!dev->liveupdate_incoming)
->  		return -EINVAL;
->  
-> -	return 0;
-> +	return pci_liveupdate_validate_iommu_group(dev);
->  }
->  EXPORT_SYMBOL_GPL(pci_liveupdate_retrieve);
->  
-> -- 
-> 2.53.0.983.g0bb29b3bc5-goog
-> 
+
+ kernel/liveupdate/luo_file.c |   17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+--- a/kernel/liveupdate/luo_file.c~b
++++ a/kernel/liveupdate/luo_file.c
+@@ -117,7 +117,7 @@ static DECLARE_RWSEM(luo_file_handler_lo
+ static LIST_HEAD(luo_file_handler_list);
+ 
+ /* Keep track of files being preserved by LUO */
+-static DEFINE_XARRAY(luo_preserved_files_xa);
++static DEFINE_XARRAY(luo_preserved_files);
+ 
+ /* 2 4K pages, give space for 128 files per file_set */
+ #define LUO_FILE_PGCNT		2ul
+@@ -282,7 +282,7 @@ int luo_preserve_file(struct luo_file_se
+ 	if (err)
+ 		goto  err_fput;
+ 
+-	err = xa_insert(&luo_preserved_files_xa, (unsigned long)file,
++	err = xa_insert(&luo_preserved_files, (unsigned long)file,
+ 			file, GFP_KERNEL);
+ 	if (err)
+ 		goto err_free_files_mem;
+@@ -334,7 +334,7 @@ err_kfree:
+ err_flb_unpreserve:
+ 	luo_flb_file_unpreserve(fh);
+ err_erase_xa:
+-	xa_erase(&luo_preserved_files_xa, (unsigned long)file);
++	xa_erase(&luo_preserved_files, (unsigned long)file);
+ err_free_files_mem:
+ 	luo_free_files_mem(file_set);
+ err_fput:
+@@ -378,7 +378,7 @@ void luo_file_unpreserve_files(struct lu
+ 		luo_file->fh->ops->unpreserve(&args);
+ 		luo_flb_file_unpreserve(luo_file->fh);
+ 
+-		xa_erase(&luo_preserved_files_xa, (unsigned long)luo_file->file);
++		xa_erase(&luo_preserved_files, (unsigned long)luo_file->file);
+ 		list_del(&luo_file->list);
+ 		file_set->count--;
+ 
+@@ -622,6 +622,10 @@ int luo_retrieve_file(struct luo_file_se
+ 	luo_file->file = args.file;
+ 	/* Get reference so we can keep this file in LUO until finish */
+ 	get_file(luo_file->file);
++
++	WARN_ON(xa_insert(&luo_preserved_files, (unsigned long)luo_file->file,
++			  luo_file->file, GFP_KERNEL));
++
+ 	*filep = luo_file->file;
+ 	luo_file->retrieve_status = 1;
+ 
+@@ -717,8 +721,11 @@ int luo_file_finish(struct luo_file_set
+ 
+ 		luo_file_finish_one(file_set, luo_file);
+ 
+-		if (luo_file->file)
++		if (luo_file->file) {
++			xa_erase(&luo_preserved_files,
++				 (unsigned long)luo_file->file);
+ 			fput(luo_file->file);
++		}
+ 		list_del(&luo_file->list);
+ 		file_set->count--;
+ 		mutex_destroy(&luo_file->mutex);
+_
+
