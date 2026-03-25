@@ -1,180 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C931283CBF
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 02:26:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774405617; cv=none; b=P6i8nfgT8DteBhArVNePwtAPSeuea8imYqTHc6eNdwGFHKZVtSuwoXSt34mXXJDe6i+Ambe4lVArzxXRs/b9t+24Wf27UDKWPTUzmkt4t+ga+EjzmR3GlWf9pBBP498VO1SJLCUXWrS+Xewytohc80a+az4kcQEtnakH+qFbKuE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774405617; c=relaxed/simple;
-	bh=uaOXi8+Uaz+CtoxjqhLmQyoQhmCYXQYtJirqEaqsTuY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n4Zm+l6ud9wqVRjdwN5mZwKH5c+wh2LplUBP25DMQNFweset3YxovJP+BSk3vTlYGxaY17najcGLOK+n7u4+swSKEDgOD50A2esOA5yvzn43KwkeQ5TKmYyw8iM2dUgRK4gEoXKQZEc6I0D68rrPL3ILhPZ4k+DB7+EdKtH9n9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M/z8VoD8; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=RWzVho1a; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355FA286425
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 02:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774406632; cv=pass; b=STBeWE39OOlGePz1ZY/dHVtKEo34W5/TlILOcfA1Y8rF4PaVH/Hh+nd2sKxcBABSSbIxVgHvoyCeruw8pW7nRtklX0MYCJuKed0puZI8yEFtD0YmYzsDFvv0ybexmoAunzaibq9ME4OIyXfPkdr6iIPJOqNPeElfJVRwGXwoS8U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774406632; c=relaxed/simple;
+	bh=fWvC2a/xqgh1OldCwgrsGXahk8JcrWhz5yP6DeSbVtc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dV7YqwnzQp2sF4SqxO+UA1zhkl5fSkJVNlIsB8D2ZqcfMtbWULhhCBmZntA5qAlYeD2YdZo9lWAooNGd1wUbjEbEE55mMnei0wcRr9oSrQHTenKPB5Tfr1nUd5QoyM0jkrVFTVDqDdmCLzJs/RJnXg2LHhS/oP6LR7NE7SCN0No=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=InrYOueA; arc=pass smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M/z8VoD8";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="RWzVho1a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774405615;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GGhwUXkV7JnIH35nWRgyF7GMpBr4atLQijvaTPOK50k=;
-	b=M/z8VoD8bBszzfEIbVp85fugR41Y/N3xZ04fI9EJEX5Sjb7rWadjUUNKCizW2Pq+giCAdY
-	ZA5nLEntUo4fVuqvQaUCDb+v5Gs9gpXv+AAGrwsbbbCG5ZA/3//4cmRZSxOEmKyh+nRoNE
-	uRMvqTPWGQmOsjjQsWSRA5NWBlfHoiA=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-364-2S29NuNAMkuFEkV4GPdtvw-1; Tue, 24 Mar 2026 22:26:53 -0400
-X-MC-Unique: 2S29NuNAMkuFEkV4GPdtvw-1
-X-Mimecast-MFC-AGG-ID: 2S29NuNAMkuFEkV4GPdtvw_1774405612
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-358df8fbd1cso2699315a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 19:26:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="InrYOueA"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-661cfb9f3aaso7953753a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2026 19:43:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774406629; cv=none;
+        d=google.com; s=arc-20240605;
+        b=AUvBERjPcOn+Af+FeWdLUxHIb3rrfOPUS78curLhmDKE8CUOZw+6AjK+UOWyKt0wXP
+         80IwElBRjQaAQwYBudCfV2ASB9DlP5cQ92uiJ2KL+ta3wtRrM8ZF03cLrdmZ0b6Qxpuy
+         SWzzP/egmyH9jsRpCtaqhjlNPsB9TNFcj5r7Z2+58isyqHGeWVA/IJS+gyl+U9ScAyJ2
+         mT3cFJpKUlBxw3AqbirJJJa0ZxMSQPZnX1oPxLLZZbCtUjzWBhSDb6hKGrd90Mk1bilR
+         2VRxcXpfsvwNbtS+Rz8ND7Zc9hdd7hbs6XpoRw0omGX+oBYQO1PnR+PufidQE+PEhXTS
+         bTVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=S49Ro2Awewt8DGHII5530iVBK0Fi/44fxcec5lAc15w=;
+        fh=0/xsFIZDK37x0BJK66i2/F9q9iIhkoYGSYqcjRmBsU4=;
+        b=kBCiumAufr7Yn9IjhgcsTkZaciHuVUMMlHS8bRW+9RZLsdrGJudCsx4qUlLGNqZh3p
+         cLJ2ZSnf/OSTgh7o5Xj9F9NLYNT+m7Fps91XAw1xP4vmD52Fg91Xq09E4YWLsL3x6Q4s
+         d8J0jSoDFPYdWaDHD0EyI3jvpx1pVstCCvUmQCr23unMUWUdxkxXBW7AG0FEZRjT5za6
+         obGE/Ic5v5FcveYJXxmg+EaeyR9t0AS/kMqVgHcA5XVYu8S6VSfdmCKXtKlKcO5RZ8+7
+         K47c3k5B42f7uxhadqe3K8XUaWcG7AGHrE36Zze5UVRotMUQfb24kQn2NoEELpQn7cjt
+         +uRA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774405612; x=1775010412; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GGhwUXkV7JnIH35nWRgyF7GMpBr4atLQijvaTPOK50k=;
-        b=RWzVho1aD8xLapD0FHj4+4PoHyL2xwQT1KIeH3NVfD1yvE7RaJs97+Mli7VYIMoYTA
-         YC8Ab/oYU99txqQXpOfQtR06yIiL5Emr441V11KdyVqmLQndax4l3dGMqHfWHsPNEtPL
-         0r3IziIogmFUidyXutfxWdMB92mHdOBcvbJ2atZvlr44I0HTy5SAJF0u2l8qnWaUoPDg
-         GdQmD7BeINRK0hAdVnNdH/9IISfzi12EbVVksxWzyUR6UDFA+an7xWG9nYuZaZV1vsth
-         age8rY1JcruSYcCLmDxNNoaB8zmn058w/s0f2rVP2ypPBCoGQjTioPYfCfvpPD7t6OE2
-         ukUw==
+        d=soleen.com; s=google; t=1774406629; x=1775011429; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S49Ro2Awewt8DGHII5530iVBK0Fi/44fxcec5lAc15w=;
+        b=InrYOueAM8rS8V9B9labB28oGnLc1ZWHbERKsc+q6TxNc/2ZFvRaEJClBav/bAqUlf
+         XWsMabUul7UubUDGMw2I86BGfnul3g+kmqQbyJYWXjVES7sOAXsiSGjaVlvu9iilNeR1
+         Vo1YHbASiKUwgPMpEA6GcqkxYZ9KLHHgXst6hQN9LkJd4A0/xetwnP3dPztSr+jxuChk
+         akn6H2lZ9OoxiPZ5mFG+H9fAjDpV7jUidzCqMmVxEk5eblGGkRetiLpCE6UtT2QRcIEd
+         EqTDcAnU9O4OIukDmf8rPXQqr1UMyn8/JSc41BIIFTlqt3j2Qne5srE+f2A1WpXVcgs8
+         QjwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774405612; x=1775010412;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GGhwUXkV7JnIH35nWRgyF7GMpBr4atLQijvaTPOK50k=;
-        b=OEfQZxGCrqXWL3Y2Hrtfh7gPOrQuOj6JbekK66tmiRXW5+TATTEl/66CfwWABxTZOC
-         ylK7MnO3yFHKBXYWVGdredSSGvMawesED3QLmjnsUMJ1fkz6JU2xBH1sUqvAtm9I9vWz
-         ZxI31CGkiHjMqwse3fZNVJ68+FLUeNBf3uxzwmsRK7DKg3o23kdFxfrov6R0XYfxkrK0
-         uP5j7tlu524HLl3zXjOyrdDgS4JtFXnWaBpIoyYIiK9i064lfidjHBJfj/hjwnCvGw7a
-         HPZX37xg8NZ9ZLSGs8OV36jCxqYZWBTHlMZxgTmrERlXluFdoDunDtUcBw81MpFkL3se
-         gq0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUxlnX7HIgzVBkr+NQgkTDi303Uhz+wT0D1vo+6/SpnXlDvp4WiubLP4P3Fp9hQsqZAGYgOiBzxcw8/Qi0AMC0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZyKeLObRkl7jcbo5yviIQWngJmIH/k6ORUrwcHpOwwITOvzIS
-	tXw5/jPTCUjR1hPbELEk7END19OQ23uX0Wux6Y62SGrf8fd7lEOOsZ0rt09lWnA5y+RYc69quK7
-	izqM0uXaVwHgA1RHP+9DnHJhrE+Y4K44JLHbHm+9zA/Uv9hmkPOGls/b2vxzw05wQaQDzdg==
-X-Gm-Gg: ATEYQzz4VEgMXmUvKfX+JgSZJm1lnr03Pz78q2nCN4i8yCUPwaakUYCf8ebj/606Dy7
-	X4NmprUUGSiY/RMJLcr7oE2YUhI5TDyosecgiG2/D4HAFC7purYQc7wxGPeH4hqHKMMXr1eHJ5u
-	E048u4fAkZQ9qa71YpU6vOoFFsJFvWhSFjhAOrjhNZpjhtQ1CY53V86EdPUWa6h/n1WeEzoV/YO
-	Kyecc+xhVodA4dAepyse6i1ogZaUSg0xcBaLqWr6aGdG8I6CtIKOgLsLFPHr2niEaPok/xocssV
-	E1TmWtQXsQci/uw9dJboB/IPUVSnZfuHnQyQqNe/PllVwgEtyz93XW2A5A3vEyL2isXwU8BPJ/E
-	AzMu6oA4jbddOOMl/cA==
-X-Received: by 2002:a17:90b:3fcd:b0:359:1821:b4d5 with SMTP id 98e67ed59e1d1-35c0dcb0d3cmr1536846a91.5.1774405612258;
-        Tue, 24 Mar 2026 19:26:52 -0700 (PDT)
-X-Received: by 2002:a17:90b:3fcd:b0:359:1821:b4d5 with SMTP id 98e67ed59e1d1-35c0dcb0d3cmr1536815a91.5.1774405611803;
-        Tue, 24 Mar 2026 19:26:51 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c0e95653csm245975a91.4.2026.03.24.19.26.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 19:26:51 -0700 (PDT)
-Date: Wed, 25 Mar 2026 10:26:48 +0800
-From: Li Wang <liwang@redhat.com>
-To: Yosry Ahmed <yosry@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, longman@redhat.com,
-	yosryahmed@google.com, nphamcs@gmail.com, hannes@cmpxchg.org,
-	mhocko@kernel.org, mkoutny@suse.com, muchun.song@linux.dev,
-	tj@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v4 0/7] selftests/cgroup: improve zswap tests robustness
- and support large page sizes
-Message-ID: <acNH6C6Ay7As4y60@redhat.com>
-References: <20260322061038.156146-1-liwang@redhat.com>
- <20260322091851.e965d3a2f0d6af5bd985407f@linux-foundation.org>
- <acCyPNCBoTGAJjfs@redhat.com>
- <CAO9r8zPxUv5V+VKEBuyacJUsc-UWh7hGc06yNQntY2GcUJLBPw@mail.gmail.com>
- <acKAr0TYzuYPxH4A@redhat.com>
- <CAO9r8zOCGWSX1+t8-5qe+04UZ6i4mChPJ8hkpiS5Z8pAPZ0sZg@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1774406629; x=1775011429;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=S49Ro2Awewt8DGHII5530iVBK0Fi/44fxcec5lAc15w=;
+        b=CSt1RMUR3DdbveT8R15JdkXHE2VUaqWtbCiY2NSMpZpSV3b+T1NaFV1ezl8+s43Eae
+         +TEdOzEn4rrEARvHAI38OyY5gy8A+pf0tKh8D8UamFkF+GmS4hZJQYTO3onxPVVYrHWa
+         SRJIhjum+7ZJugrMAH0BMzS7+cl65zYebkFLiMufDyNwZXsv6cYIGSX2T806ngNAVu0B
+         kgaAOTgDyrD7AndjuyLET1h/edVPBRoaOqrGhJ8qb6z84N1u0AWyo+3scbtJasJUgpIU
+         H9vZCN7hX/pcFJ3f0bfc6JOmpptbIRscha2VtPN5PxNsTVllGeTjdDK8qrFjYzn6K1u9
+         TaYw==
+X-Forwarded-Encrypted: i=1; AJvYcCUukzUntmCSLeVFjE4O5nQRPiXKwoKJ3BFIsSJPIDEyp+Qu7C+gh/se093zo1G/2a43L1NjR28bXtidke2H9Tk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAEHuP9qnYSCpgKfitjoWCg9kfYs4WcTPeDlb/+PmJ5F4dDufH
+	T9zVFqJGU7osY8IurwxF90NTj3x4ru0aZAYT+fFyuPxxaOsffucmw9llZOozAzGhBmc1HU9BBdT
+	7Jun1/9hg43rQnlhNb6Kpz2djVrGkPm/uAgibgxi3zg==
+X-Gm-Gg: ATEYQzz2jA09hxtSz8HMRUKLV/iMtoOueJjRUpyNpRBQfL+9EDAeZFmbNsA2Mcww7+R
+	Mo1zU+oGnhIuxwNGAKyRWWFRdsIt5n3nSsW2BqYYr1h2RJDHwADNiaI2LsGDDHN2NZ7CVVxbO8z
+	TfsDDmUkmmGxCi337ybhO2F8hCknrEV/QYXbjSarL2u640ZSUxEkeOCIm+ZlFNtBvyqUmNMoKQ8
+	b5uKnjwfW/+gda6eLHkBNMlaXIF5Hh4KSjXwOznTneg3vlcJYkCzETbvI41mXUEdtZ/RgkW5RJz
+	3F7RWAFD/P1h/2Fja0szu08i/dp3KFUIOo4pjQ==
+X-Received: by 2002:a17:907:6d19:b0:b97:98e9:1b17 with SMTP id
+ a640c23a62f3a-b9a54254cefmr104541966b.28.1774406629257; Tue, 24 Mar 2026
+ 19:43:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAO9r8zOCGWSX1+t8-5qe+04UZ6i4mChPJ8hkpiS5Z8pAPZ0sZg@mail.gmail.com>
+References: <20260321175808.57942-1-pasha.tatashin@soleen.com>
+ <20260321175808.57942-2-pasha.tatashin@soleen.com> <CA+CK2bD2aNu-NByET4KkBP0n2j8WQE2zjxb4g-1cv2hYfjaRZQ@mail.gmail.com>
+ <20260323-leibhaftig-blasinstrument-58ec408b3c40@brauner> <CA+CK2bC6S7pFCYR0XS1ZPxw9HKjWgxy=0DkszYNjMUi735o_1Q@mail.gmail.com>
+ <20260324-langzeitfolgen-altgedienten-ccef17d19349@brauner> <20260324114021.f5546d2de5b6a2b0490f63cf@linux-foundation.org>
+In-Reply-To: <20260324114021.f5546d2de5b6a2b0490f63cf@linux-foundation.org>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Tue, 24 Mar 2026 22:43:12 -0400
+X-Gm-Features: AQROBzDD_dN5K67m768ffew-lTTbV5PIJ8L5d861vCwJTCIzcd1-cpNV-0z3o_s
+Message-ID: <CA+CK2bCbgXHnZ0PhzfKE=NkykyqMKq6KBXW6JqMpq2R3k3RXDw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] liveupdate: prevent double management of files
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, rppt@kernel.org, 
+	jack@suse.cz, shuah@kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org, 
+	dmatlack@google.com, pratyush@kernel.org, skhawaja@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 24, 2026 at 01:28:12PM -0700, Yosry Ahmed wrote:
-> > > Sashiko claims that 512 pages will end up consuming 11K to 15K in
-> > > zswap with this setup, do you know what the actual number is?
-> >
-> > Not very sure, I guess each 64K page contains 1 byte of 'a' and 65535 bytes
-> > of zero. A single page like that compresses down to roughly 20–30 bytes
-> > (a short literal plus a very long zero run, plus frame/header overhead).
-> > So the estimate is roughly 512 × 25 bytes ≈ 12.8 KB, which is where the
-> > "11 to 15 kilobytes" ballpark comes from.
-> >
-> > > Especially with different compressors? If it's close to 64K, this
-> > > might be a problem.
-> >
-> > Yes, good point, when I swith to use 'zstd' compressor, it doesn't work.
-> >
-> > > Maybe we can fill half of each page with increasing values? It should
-> > > still be compressible but not too compressible.
-> >
-> > I tried, this method works on Lzo algorithm but not Zstd.
-> > Anyway, I am still investigating.
-> 
-> Do you mean the compressibility is still very high on zstd? I vaguely
-> remember filling a page with repeating patterns (e.g. alphabet
-> letters) seemed to produce a decent compression ratio, but I don't
-> remember the specifics.
-> 
-> I am pretty sure an LLM could figure out what values will work for
-> different compression algorithms :)
+On Tue, Mar 24, 2026 at 2:40=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Tue, 24 Mar 2026 09:51:34 +0100 Christian Brauner <brauner@kernel.org>=
+ wrote:
+>
+> > > > So, I'm not happy about I_LUO_MANAGED. I don't think we need driver
+> > > > specific stuff in struct inode and not in i_state. Track this in th=
+e
+> > > > driver please. I don't want this precedent and I'd rather have you =
+get
+>
+> Well dang, I just merged v2 but Christian wasn't cc'ed.
+>
+> > > I am planning to use an xarray in the next version.
+>
+> That's what v2 did, and I_LUO_MANAGED has gone away.
+>
+> Christian, does v2 look OK?  It's at
+> https://lkml.kernel.org/r/20260323203145.148057-1-pasha.tatashin@soleen.c=
+om
 
-Well, I have tried many ways for ditry each page of the total, but none
-works on zstd compreseor.
+Yes, v2 is fine. Here, we discussed about the previous approach, this
+is one of the reason why v2 exists: not to modify inode, and also not
+to rely on inode being different for every preserved file.
 
-e.g,.
+Thanks,
+Pasha
 
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -9,6 +9,7 @@
- #include <string.h>
- #include <sys/wait.h>
- #include <sys/mman.h>
-+#include <sys/random.h>
-
- #include "kselftest.h"
- #include "cgroup_util.h"
-@@ -473,8 +474,12 @@ static int test_no_invasive_cgroup_shrink(const char *root)
-        if (cg_enter_current(control_group))
-                goto out;
-        control_allocation = malloc(control_allocation_size);
--       for (int i = 0; i < control_allocation_size; i += page_size)
--               control_allocation[i] = (char)((i / page_size) + 1);
-+       unsigned int nr_pages = control_allocation_size/page_size;
-+       for (int i = 0; i < nr_pages; i++) {
-+               unsigned long off = (unsigned long)i * page_size;
-+               memset(&control_allocation[off], 0, page_size);
-+               getrandom(&control_allocation[off], nr_pages/2, 0);
-+       }
-        if (cg_read_key_long(control_group, "memory.stat", "zswapped") < 1)
-                goto out;
-
-Even I tried to set random data for all of the pages, they still not
-works (zstd). But it can be worked on lzo compressor, I don't know if
-the zstd have any addtional configures or I missed anything there.
-
-My current thought is just to satisfy the lzo (default) compressor in
-this patch series, and leave the zstd for additional work.
-
-What do you think? any better idea?
-
--- 
-Regards,
-Li Wang
-
+>
+>
