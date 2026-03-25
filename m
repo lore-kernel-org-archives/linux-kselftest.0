@@ -1,86 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A993CA4B1;
-	Tue, 24 Mar 2026 23:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF3C1C84DE;
+	Wed, 25 Mar 2026 00:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774396567; cv=none; b=LTQxrOjI71hJn131dfR07hrZW+Nh3aG7Qk7/tgQ0sIUWq5asgi5N1xz4fwFSGi/v5i53SxDNS8yVXX3ureVf8UTTJDJZALR/r7SAGvslUdJsz4g29oExMwSmtYgShT6vhYLRoL5ZZ9A/ewk0CJm74fN8bvxScJbjXlVR8ANOW8Q=
+	t=1774399063; cv=none; b=vDED/PeLlFs2Lc98qIGw/iEQOD/saahg4tWIfakoZgYxpMnhBE4Sb4r/34u4Dz6TeZUTcOXUyZsLuwHbzkaR6f4xIvtpZjNNSYOlPoDiB6lf/7cCj3ye91g+pYeONnXIkmQApR4xP2iYJrkPRPSvnM9eXXphlnJ/RtMbO6JJHAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774396567; c=relaxed/simple;
-	bh=4uNybzToUKp0EAa2ve7IC4o/Ki+L3VO4Pq1iJB1BAU8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Y9WFExIwYrLbMA14jbbjTxXTMfExgsyJIAxAHif540dNJUqvbT3gKd3tbmw2kpIgi2XIcI3gWbYbo1SRCC4gaV5uHwyfm0FzdXaNni5EfILdPpbqJLXZUPNJt/ONnCfKQk5HLUfUdl+6Vj7wgur4qt3TCyfseiG1vdrWjdLa4F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PBp9KCP+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774399063; c=relaxed/simple;
+	bh=Epyy7iecwoAn93JWXH+OSMxoxwAIEDRTjD5ZKKL3pZw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eOWn0PjlifY3OJ5Rnytp6uZb0zcXwOmEaaOWVlsn44s1iGOaAY4MGid+5yeVuuRpMysVBM3uU6uF2oWxhYGrbRoF6AwJ9lMtQ5W28/a1LrAF/7fsK53rQtmaJbZ5bYYsz10tVA+0MIf4F72TsHz0/08i8FangsrTlCZ0jMK93zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MnR3rorX; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PBp9KCP+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9C5FC19424;
-	Tue, 24 Mar 2026 23:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774396567;
-	bh=4uNybzToUKp0EAa2ve7IC4o/Ki+L3VO4Pq1iJB1BAU8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PBp9KCP+HTB22gb2kXON2RUvZihG+skEDsleFplTuA9hcaKXm0c7btgBY7E+je8tg
-	 NG+mNtn94cmgHl2PQb/6bKQe+GDc2rtIqwKbuAtwmQF4eWKkM2znUoOTCvCkChd8Kv
-	 KFtbZGAhe4u4GFoI17yLq9TIJObhfUfcF+yGHKds=
-Date: Tue, 24 Mar 2026 16:56:06 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Sayali Patil <sayalip@linux.ibm.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, Shuah Khan
- <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>, Zi
- Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, Oscar Salvador
- <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain
- <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 09/13] selftests/mm: skip uffd-wp-mremap if UFFD
- write-protect is unsupported
-Message-Id: <20260324165606.d75200ac0e5458a5ffb83d5d@linux-foundation.org>
-In-Reply-To: <0e9cea41-7c49-446a-b67b-256584960516@linux.ibm.com>
-References: <cover.1773305677.git.sayalip@linux.ibm.com>
-	<ed23ff57a80881c9d087d22709862af40addf49b.1773305678.git.sayalip@linux.ibm.com>
-	<457dddf1-04ec-4d1e-8640-b04997fac4f1@kernel.org>
-	<0e9cea41-7c49-446a-b67b-256584960516@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="MnR3rorX"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F5C516F2;
+	Tue, 24 Mar 2026 17:37:27 -0700 (PDT)
+Received: from workstation-e142269.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 130513FB90;
+	Tue, 24 Mar 2026 17:37:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1774399053; bh=Epyy7iecwoAn93JWXH+OSMxoxwAIEDRTjD5ZKKL3pZw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MnR3rorXkjxXLLNMQEvTUR+UbtwJDSGr3bzysj4xgUSLtTg7nEdk0wr7TiTqIHXe7
+	 nczxlFPNVf7GrasIcAdzyGlaMf5PpGc1+5Vf0yTZe8PgA9TiJKtM83zQFnX0o0ZWgF
+	 9CE6bxws/dv2PFOPeAnZzEWz6vAdHbu2gY1KFPuc=
+From: Wei-Lin Chang <weilin.chang@arm.com>
+To: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Subject: [PATCH 0/3] KVM: arm64: selftests: Basic nested guest support
+Date: Wed, 25 Mar 2026 00:36:17 +0000
+Message-ID: <20260325003620.2214766-1-weilin.chang@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 13 Mar 2026 19:56:01 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
+Hi,
 
-> >
-> > Because right now it reads as if it would be returning a bool.
-> >
-> > Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> >
-> Thanks for the review. I'll rename it to
-> "check_uffd_wp_feature_supported()" in the next version.
+This series adds basic support for running nested guests (L2) in
+kselftest. The first patch adds library functions. While designing the
+APIs for userspace, I referenced Joey's approach for kvm-unit-tests [1].
+In summary, four preparatory functions are provided for userspace to
+set up state to run an L2 in EL1:
 
-There was no next version.  I added this:
+ - prepare_l2_stack()            <- sets up stack for L2
+ - prepare_hyp_state()           <- sets up vEL2 registers
+ - prepare_eret_destination()    <- userspace passes a function pointer
+                                    for L2 to run
+ - prepare_nested_sync_handler() <- sets up hvc handler in order to
+                                    regain control after L2's hvc
 
---- a/tools/testing/selftests/mm/uffd-wp-mremap.c~selftests-mm-skip-uffd-wp-mremap-if-uffd-write-protect-is-unsupported-fix
-+++ a/tools/testing/selftests/mm/uffd-wp-mremap.c
-@@ -19,7 +19,7 @@ static size_t thpsizes[20];
- static int nr_hugetlbsizes;
- static size_t hugetlbsizes[10];
- 
--static void uffd_wp_feature_supported(void)
-+static void check_uffd_wp_feature_supported(void)
- {
- 	uint64_t features;
- 
-@@ -347,7 +347,7 @@ int main(int argc, char **argv)
- 	struct thp_settings settings;
- 	int i, j, plan = 0;
- 
--	uffd_wp_feature_supported();
-+	check_uffd_wp_feature_supported();
- 
- 	pagesize = getpagesize();
- 	nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
-_
+After calling those functions, userspace can vcpu_run(), and when
+run_l2() is called within the guest, the supplied function will be run
+in L2, with the control flow managed by the library code in nested.c and
+nested_asm.S. After running the L2 function, run_l2() will automatically
+return. Note that the L2 function supplied by the user does not have to
+call hvc.
+
+Patch 2 demonstrates usage of the APIs introduced above, with a simple
+L1 -> L2 -> L1 sequence, with an empty L2 function.
+
+Patch 3 enhances the library functions by setting up L2 -> L1 stage-2
+translation. Currently the translation is simple, with start level 0, 4
+levels, 4KB granules, normal cachable, 48-bit IA, 40-bit OA.
+
+[1]: https://lore.kernel.org/kvmarm/20260306142656.2775185-1-joey.gouly@arm.com/
+
+Wei-Lin Chang (3):
+  KVM: arm64: selftests: Add library functions for NV
+  KVM: arm64: sefltests: Add basic NV selftest
+  KVM: arm64: selftests: Enable stage-2 in NV preparation functions
+
+ tools/testing/selftests/kvm/Makefile.kvm      |   3 +
+ .../selftests/kvm/arm64/hello_nested.c        |  65 ++++++++
+ .../selftests/kvm/include/arm64/nested.h      |  25 +++
+ .../selftests/kvm/include/arm64/processor.h   |   9 +
+ .../testing/selftests/kvm/lib/arm64/nested.c  | 154 ++++++++++++++++++
+ .../selftests/kvm/lib/arm64/nested_asm.S      |  35 ++++
+ 6 files changed, 291 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/arm64/hello_nested.c
+ create mode 100644 tools/testing/selftests/kvm/include/arm64/nested.h
+ create mode 100644 tools/testing/selftests/kvm/lib/arm64/nested.c
+ create mode 100644 tools/testing/selftests/kvm/lib/arm64/nested_asm.S
+
+-- 
+2.43.0
 
