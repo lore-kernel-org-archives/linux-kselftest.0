@@ -1,161 +1,148 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C40318140
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 15:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774451675; cv=pass; b=RLdsO0SQFN2VuSCb9cgjczrZxhba7094ERLu46ek1Dxr7CDJYOSmxVtyY8vPDjkzq/YitTeaXHetIdphUE1sQijVnEXGVDP1ldHwYvNJcp1/PrlXPgh3WfTfgf6tRdGmsU8cJwLSusVuxg+d3N+V6QVAgLdPU8gSRMUoZ2GWF/Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774451675; c=relaxed/simple;
-	bh=nFXtsQYitzxNyDBIP91p1FAZ7YRHXcxqC5D2Yp0z+J4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N4DkxsC3fYm8WCG0PE2PhwQDau1Lqe3QSukY/XU+TMftzWZzy8ULg97Jx6v1vmsJHffqIQhRa1P5yl8xRl2/2uuPf/vjtRu37d12h5eQL7ct4uginu+BxOZfX9sj0y8mvKnh0yuaeqa5YnbaN3e2NimqkIUJcUcW/RTIou4FMAs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wzimcalo; arc=pass smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6504B3E022C;
+	Wed, 25 Mar 2026 15:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774452722; cv=none; b=oit4WJMiMfmApFf5BlChCMkFT8IYP9N9bp0jzINxYLDKuEirdOwHJ6fw4hYkiLECPOEwmZjcOTykH3yiqMD6zcNSR27G9EQ+iEFLPV7w8q+pPihYakfwcHh3HKKYRCZNgxkNelV2AZg7F6QcoxQrQtuwPt6ZV/F68Db3Jyuz8TA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774452722; c=relaxed/simple;
+	bh=zavK1MEnQ0juash2NLp1KSrYuJJR9QPka+RrrXclKds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mrH/B57dOnTf2VWesZ1S3yLjFmpkLxp+7/nCb5MnyAHKb8nmkNRK4RdMaFEcB6nmotOp06i9YNowlBBOZI5wTC79VrymZh15FczBYhTfvwe6e8Y4MFlzsBJz6mPPdRBIIBhxlhO6u1nK/I/mIxUZ5UbiNcNzw3Ph/mFN1mpf3WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZsZWKOkJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wzimcalo"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-64eb84d1e37so3842441d50.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 08:14:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774451673; cv=none;
-        d=google.com; s=arc-20240605;
-        b=L/Wn/TPggltOejZG3ywWSyYCBrwAKaRnn7VMU1YV/aBFyzURV3lecJtH3XuMvp8gzA
-         FngdUObcDRbYAXhjS8CLTQheADiLG8ICK+gOsilp/H2j72sRred1A3ff4hRubEDUvNaZ
-         z9ZQgmM9OwhCva746r6LQmq4IkkFNoXNfLcN74xX7xRgBOMcFwpvoEHtiH4vlgC0aIMi
-         5G+VGdR2prbBO0T6IdR3VrDuwwHmangQjriPVnlFxQhFm8yr0utYN6xGXDYtMJ85wLu+
-         r1oYcgtwwy862dnVDcHizwhcs4dWAlKLB6t3ohpMefztdqeuOcrMSBUGdBnSxaU0zq0g
-         Yhcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=O66S96rEOTvUqlZiCU3x9vYPPQp/Mje+bdzAnxQr6SY=;
-        fh=BevSBJA5qSz7/N+4s0evbA3tAgeqL0BVGj7wm1ClaEg=;
-        b=jG4S1Nf36stgaFrTkha30VztzvgWfR/zBBIUu8h7o+n8wWgVTzIi5EU5GE/dGG578j
-         4Y/RM9kumJD8JZ55b0ZX7yKfrp1HxV8M5RnAU0vjh4fkoSQsvfu8F7uwbs02128JWzcH
-         reixV9kkyToJBSbhPJKx/r8TwxMUX5NGdIsuoUf4oQOP1bDbyrWMX07dsB8e/ZuNK0Mf
-         00C47iMQxgLvcLZULnnMHzPGqZGUH5sRdvQwK7nRq1lW2FqOp3jOWpNCFKcCexME1YU3
-         hr4JLhKI6EjJMySCZsN95QB2mC8Cgtt/bFg2qjGRL9/+EQBTGgl0gp5cYjAKuMWrPKa2
-         frGg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774451673; x=1775056473; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O66S96rEOTvUqlZiCU3x9vYPPQp/Mje+bdzAnxQr6SY=;
-        b=WzimcaloQIGcJR9h7bWHg5NReDB5v0Bzx0hDSMiqCsUVm2gTvjzPdrceLMof4YdEFm
-         Wyu6CEnIxBjwGCPRVV6N5mlyi2P2BGQZYo0cYo/uM7yJjWGzLOb/0gypYmL0BeadSBAC
-         88HqA/56bAzTjI36SpgKIXCpcg/oT/iXsS+f8LzZft2h4ctDoHAVhBDoH0ZpGGKFapl8
-         P/GgiypsSZxI8zYbhS5ZFvhc37DI78FHTjNHXvgKdunAWl07yNd3dIn++Qca0OBEOP6A
-         id0N8VLQYvTgspsoummvTIXqX8XPuVyNJWToY9O1XxEiyPsEZxFWjH4Y161pq0FnR5qi
-         ZI5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774451673; x=1775056473;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=O66S96rEOTvUqlZiCU3x9vYPPQp/Mje+bdzAnxQr6SY=;
-        b=Q+4CE5gv1VnEY/tfcHI6bMu1tReEKRNIgYaeLQtNnvHb5/WU+gViXNbOiy5966wmmJ
-         Bc1TOAE1NTiWI6k5TujIMXtVCSTUVVfJOvOYSx0NEDXz5UUV/Cic75VPZ4RQWjJnF0U2
-         xBSgRdRZlSm4osNbQTOWp6DTAaPXJk07TSDqtTCcB2I4md559jy3R+w9jUXNbNgolEdh
-         yJC8KCswQowcK9YJuIX7rh29evzyk5BzmYGt3wg11+gwYMeMwYj4UGEWhOdH8WOytFZW
-         OYJwnYtP2pRUb8pKcd8aYx9FPS2Kh88irhtxLuD59Jx3D+3s7rRiUodFY1yoGTUK5C4O
-         RUsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCFCSDx9PyQW4RGPHG6c6Cxqrn8x4aqyGGY6WsL3zvSZE1fnilUONFyyoEe2aeeTdJ8t0HnS1Jw2nICSX5AKA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqSO2jNazlqRCeeHqz0NiHHpeQmwQJgoWoxbvFYwnHlp6JMz/d
-	cyXkrJt8+8JlK9UTVCrkqE+SBv4j5a8vUMvH84AukwcSghuFV/5lZU/AKaeeSCRhld0dk0K9VfO
-	EBwgGcukyOhoZ+TF1v8Ha5qMpz692qa8nph41u4Bx
-X-Gm-Gg: ATEYQzyunJocv8xQlNbs/VXk1zrHMKJNBe9CVNcCF0HOmprw+80mwzgV+FJ9IC3Ekyd
-	ezrcZyienzTenH6VZQ+cAJ1IuDLILqddb8MgQHc0cUCu/gFlWme8/xhHabWfi58kivsMtQUtQKs
-	2v+EiGDhslhlnqB5gurYGcMnfAyD9hv1IGmzyQF0Eo7q/+GRuw3fYHtuQnNPNKvEMB0Deh7mJU6
-	wNUwmXtKc7evaW5+N1Y5aFNVWegUTU+vtuCFwAuK32HvoMv7/ekDLfmNHejQlRGnx5HiesBJ12x
-	JgB7ud4W4Ai64lqLg87oxh/znbyVojrGYB2L
-X-Received: by 2002:a05:690c:6889:b0:79a:668a:b6e8 with SMTP id
- 00721157ae682-79acf6f01ffmr40430887b3.61.1774451673004; Wed, 25 Mar 2026
- 08:14:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZsZWKOkJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 400DEC4CEF7;
+	Wed, 25 Mar 2026 15:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774452722;
+	bh=zavK1MEnQ0juash2NLp1KSrYuJJR9QPka+RrrXclKds=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZsZWKOkJgJN6VqUXPGcISCukGP5honyevSk8AS/B+bWxtJFv7QZCDWQyCQsJHMc4U
+	 2eV1QrnfKEu/+7oU3156EpQ6OMQPkpLOzJs4xJHucP4axS6QiqmaHSt8v5kF4U9G2P
+	 EwWLmCyI1y1aIPv4tbkP2gMngzm1wnDi/wBedxOnDi7+shE+OFva9AcSYdHCzsCP+f
+	 UNuF5os36XDfZ8hQ3pH1+oaQCoPFY99PEac9WklN6EJYe/CjHgMLgq6ir83VuRSYJy
+	 xBFrAQtOrGFbqGhSPQTe3JALVvFMf98lgHfLzXqtRDTZwWKOwkQsbfdQtkbZ0rqyby
+	 HnXPG4xNsJ88A==
+Date: Wed, 25 Mar 2026 17:31:55 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org,
+	akpm@linux-foundation.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, dmatlack@google.com,
+	pratyush@kernel.org, skhawaja@google.com
+Subject: Re: [PATCH v2 1/2] liveupdate: prevent double management of files
+Message-ID: <acP_6wY_HVMyTLHk@kernel.org>
+References: <20260323203145.148057-1-pasha.tatashin@soleen.com>
+ <20260323203145.148057-2-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324205301.1361608-1-atwellwea@gmail.com> <acOVlten_N_5evGX@gandalf.schnuecks.de>
-In-Reply-To: <acOVlten_N_5evGX@gandalf.schnuecks.de>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 25 Mar 2026 08:14:21 -0700
-X-Gm-Features: AQROBzD8224Q9HN0xgDwAcBw7dcRtTDRPO2HLV_Z6A8nB6U0lDUy4pisitfdkEk
-Message-ID: <CANn89iLJJ3EF2-qe4AWJN0teh05x0PPJjOAfB0uG9rNZuJUZUg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 0/3] tcp: fix scaled no-shrink rwnd
- quantization slack
-To: Simon Baatz <gmbnomis@gmail.com>
-Cc: Wesley Atwell <atwellwea@gmail.com>, netdev@vger.kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323203145.148057-2-pasha.tatashin@soleen.com>
 
-On Wed, Mar 25, 2026 at 12:58=E2=80=AFAM Simon Baatz <gmbnomis@gmail.com> w=
-rote:
->
-> Hi Wesley,
->
-> On Tue, Mar 24, 2026 at 02:52:58PM -0600, Wesley Atwell wrote:
-> > Hi,
-> >
-> > This v3 addresses the follow-up review on v2.
-> >
-> > Eric pointed out that 1/3 does not need the added packetdrill comment
-> > and that 2/3 compared signed free_space against an unsigned
-> > granularity.
-> >
-> > This revision drops the extra in-file comment from 1/3 and keeps
-> > the scaled-window granularity in int space in 2/3 so the comparison
-> > stays type-safe. The overall approach and reproducer remain unchanged
-> > from v2.
-> >
-> > Simon was right that the original 3/3 only showed the explicit
-> > rcv_ssthresh-limited ALIGN-up behavior. For v2, 3/3 was replaced with
-> > an OOO-memory-based reproducer that first grows rcv_ssthresh with
-> > in-order data and then drives raw backed free_space below
-> > rcv_ssthresh without advancing rcv_nxt. In the instrumented
-> > old-behavior run that shaped this test, the critical ACK reached
-> > free_space=3D86190, rcv_ssthresh=3D86286, and still advertised 87040
-> > (85 << 10). With 2/3 applied, the same ACK stays at 84.
-> >
-> > That follow-up also clarified why the broader 2/3 change is required.
-> > A narrower variant that preserved the old rcv_ssthresh-limited ALIGN-up
-> > behavior was not sufficient: earlier ACKs still stored 85 in tp->rcv_wn=
-d,
-> > and tcp_select_window() later preserved that extra unit because shrinki=
-ng
-> > was disallowed. Keeping tp->rcv_wnd representable across the scaled
-> > no-shrink path is what lets later ACKs settle at the correct
-> > wire-visible edge.
->
-> So, you are saying that 84 defines the "correct
-> wire-visible edge"?  That's a strong claim.
->
-> The test in 3/3 adds OOO packets until the window calculated from
-> free_space is 84.  But why stop there?  If I added further OOO
-> packets until the calculated window drops to 83, I can claim, by the
-> same reasoning, that 83 is the correct value and the initial 84 is
-> wrong.
->
-> In other words, this is a very synthetic scenario that can be steered
-> to arbitrary values.  As stated in v1, I would really like to see a
-> packetdrill (or real-world scenario) where the old behavior actually
-> hurts (after all, this series claims that the current behavior needs
-> to be fixed).
->
+On Mon, Mar 23, 2026 at 08:31:44PM +0000, Pasha Tatashin wrote:
+> Currently, LUO does not prevent the same file from being managed twice
+> across different active sessions.
+> 
+> Use a global xarray `luo_preserved_files_xa` to keep track of file
 
-This series seems to be a social engineering experiment.
+Do we really need _xa suffix?
 
-Could we have the prompts that were fed to an AI agent ?
+> pointers being preserved by LUO. Update luo_preserve_file() to check and
+> insert the file pointer into this xarray when it is preserved, and
+> erase it in luo_file_unpreserve_files() when it is released.
+> 
+> This ensures that the same file (struct file) cannot be managed by
+> multiple sessions. If another session attempts to preserve an already
+> managed file, it will now fail with -EBUSY.
+> 
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>  kernel/liveupdate/luo_file.c | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+> index a38ea4975824..5f48c3c8c561 100644
+> --- a/kernel/liveupdate/luo_file.c
+> +++ b/kernel/liveupdate/luo_file.c
+> @@ -110,11 +110,15 @@
+>  #include <linux/sizes.h>
+>  #include <linux/slab.h>
+>  #include <linux/string.h>
+> +#include <linux/xarray.h>
+>  #include "luo_internal.h"
+>  
+>  static DECLARE_RWSEM(luo_file_handler_lock);
+>  static LIST_HEAD(luo_file_handler_list);
+>  
+> +/* Keep track of files being preserved by LUO */
+> +static DEFINE_XARRAY(luo_preserved_files_xa);
+> +
+>  /* 2 4K pages, give space for 128 files per file_set */
+>  #define LUO_FILE_PGCNT		2ul
+>  #define LUO_FILE_MAX							\
+> @@ -249,6 +253,7 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
+>   * Context: Can be called from an ioctl handler during normal system operation.
+>   * Return: 0 on success. Returns a negative errno on failure:
+>   *         -EEXIST if the token is already used.
+> + *         -EBUSY if the file descriptor is already preserved by another session.
+>   *         -EBADF if the file descriptor is invalid.
+>   *         -ENOSPC if the file_set is full.
+>   *         -ENOENT if no compatible handler is found.
+> @@ -277,6 +282,11 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+>  	if (err)
+>  		goto  err_fput;
+>  
+> +	err = xa_insert(&luo_preserved_files_xa, (unsigned long)file,
+> +			file, GFP_KERNEL);
+> +	if (err)
+> +		goto err_free_files_mem;
+> +
+>  	err = -ENOENT;
+>  	scoped_guard(rwsem_read, &luo_file_handler_lock) {
+>  		list_private_for_each_entry(fh, &luo_file_handler_list, list) {
+> @@ -289,11 +299,11 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+>  
+>  	/* err is still -ENOENT if no handler was found */
+>  	if (err)
+> -		goto err_free_files_mem;
+> +		goto err_erase_xa;
+>  
+>  	err = luo_flb_file_preserve(fh);
+>  	if (err)
+> -		goto err_free_files_mem;
+> +		goto err_erase_xa;
+>  
+>  	luo_file = kzalloc_obj(*luo_file);
+>  	if (!luo_file) {
+> @@ -323,6 +333,8 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+>  	kfree(luo_file);
+>  err_flb_unpreserve:
+>  	luo_flb_file_unpreserve(fh);
+> +err_erase_xa:
+> +	xa_erase(&luo_preserved_files_xa, (unsigned long)file);
+>  err_free_files_mem:
+>  	luo_free_files_mem(file_set);
+>  err_fput:
+> @@ -366,6 +378,7 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
+>  		luo_file->fh->ops->unpreserve(&args);
+>  		luo_flb_file_unpreserve(luo_file->fh);
+>  
+> +		xa_erase(&luo_preserved_files_xa, (unsigned long)luo_file->file);
+>  		list_del(&luo_file->list);
+>  		file_set->count--;
+>  
+> -- 
+> 2.43.0
+> 
 
-I really do not see the point. RWIN is by essence advisory, and TCP
-cannot accept
-arbitrary bloated (small skb->len / skb->truesize ratio) anyway.
+-- 
+Sincerely yours,
+Mike.
