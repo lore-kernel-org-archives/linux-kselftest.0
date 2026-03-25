@@ -1,95 +1,94 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC0F19E7F7
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2026 03:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293108248B;
+	Wed, 25 Mar 2026 03:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774409597; cv=none; b=rHFN+dnY17SmHeW83S2Qo+4aATir05rBlbeIdrXDD446GBwFhJ02P8bfkEXVCUzGy9NDvvsG7s660Nd4mbMAPctmhpNNI6FXXOWFOErJzBvj6i1KW7Fhf85Fk14Qxw+pwbFoICjIYI6WJ1h0QZwz787lWxyhe5FuXPdK9rOpxRI=
+	t=1774410283; cv=none; b=n/i6bC/UAjnfEsN9ocIB05dvDciTecGPs2q5YIcVoCwbpTifJTIIrm0iWigvI68Lt8xpxhqg1CoF/9S+EwghJyyORwMkeMvO2ZyKlm7D5iWYKVWsN+xCY2qQOLmd8GzCmph/tw0c6wMRIb/E6VAVvKE+HQfEePVnkQzqXd1homk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774409597; c=relaxed/simple;
-	bh=AnFNRlwct+JKKFysr9tCwmyAG+J8Rx9h6o3BWb5kgmk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h+daMdqT/jh94WkQfdjF8phh5xXiwI9mJxYn/LWQtPxIIirPanZrzZZsvMiZpwjMNDsgdyZPGAKYg+/81P/6PjjosakXeM7bZsPmBm8DVxPkRkd2Hv78v9k2w5H7uu5WOi51bu0aFerzcu2DOeFD/zYCoi5EhR/Mo3dIIevsEMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B/cDWk8W; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774410283; c=relaxed/simple;
+	bh=gQK6J5IvA9RmrkZN+cbxNmFla6H107ZP9bVcDvKPjRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=apCwlfJMrUPwfK/yuMp3Wb3Gxt4MbnsEuZBrFl9i99bCAIlIfgtCh71bhSeARuoRkvP53eFkV4y1HRJUUShz1metvnxlpKvn2vRcBj3CFCi+8i53B0iVsx9mfBQGZWN2Xbgsjy8YrgMsvQTMaLjI7zXoj3Z09VV35cf4xAwlf0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZH5/BwS6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B/cDWk8W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774409595;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pIqXsf7qQRyhZC/GxHM1lgBAlnhtV7VGCfnX70dQLZU=;
-	b=B/cDWk8WcJlhsgO/daKo4lRHnJywLI03ttVOfESSkzxAWv6BXb2NDY0xO+sRA5c+c0xOu8
-	4hwozA6dMesepwaUiSg/rNg6ciiQz77hFcZnoOkBWgn3JR8Dsqf5H2El0YCa6H1CPzGxxg
-	+jRgq9N1GhyrTikbBKcYF5R9F1vO1iI=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-361-e4auf-kGMv-Z8m6w-sMMkw-1; Tue,
- 24 Mar 2026 23:33:11 -0400
-X-MC-Unique: e4auf-kGMv-Z8m6w-sMMkw-1
-X-Mimecast-MFC-AGG-ID: e4auf-kGMv-Z8m6w-sMMkw_1774409588
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DB67319560AA;
-	Wed, 25 Mar 2026 03:33:07 +0000 (UTC)
-Received: from [10.22.65.192] (unknown [10.22.65.192])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 343DA1800361;
-	Wed, 25 Mar 2026 03:33:03 +0000 (UTC)
-Message-ID: <201249f4-d07d-4baf-a77c-d77543a9cd55@redhat.com>
-Date: Tue, 24 Mar 2026 23:33:03 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZH5/BwS6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B295C2BCB0;
+	Wed, 25 Mar 2026 03:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774410282;
+	bh=gQK6J5IvA9RmrkZN+cbxNmFla6H107ZP9bVcDvKPjRY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZH5/BwS61g4MXioBvBtBh9BzuX2edP0Y5CNv8b7utbnLqKrt2Ig6FM1yb4aKlGtut
+	 H9/iJjjgJUKN+oYGIXfB106Cm4tMLptjuvkKcjmmeeMgI06minn5KC9OivyKstv8T/
+	 56u8jKtsopr7dN1CmbeRk9mGks61tQx6DNAZsG5vhWfD6vFFf5rPA0Fzb4+VxiSRwm
+	 ebUMaIeNpkbK7NRte7tgB1IjAyHiLu6z0CD/MOcfr0zRTopQ3iPJIaPkBeanBVXmTp
+	 /ahpZBDlBOHnGZrr7ICiuCAc6N7vajPt0ed93vZyxXubarOU6YqqqFSmQUkL6GJ0+A
+	 t4pIxs1A5yedg==
+Date: Tue, 24 Mar 2026 20:44:40 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
+ andrew+netdev@lunn.ch, michael.chan@broadcom.com,
+ pavan.chebbi@broadcom.com, anthony.l.nguyen@intel.com,
+ przemyslaw.kitszel@intel.com, saeedm@nvidia.com, tariqt@nvidia.com,
+ mbloch@nvidia.com, alexanderduyck@fb.com, kernel-team@meta.com,
+ johannes@sipsolutions.net, sd@queasysnail.net, jianbol@nvidia.com,
+ dtatulea@nvidia.com, mohsin.bashr@gmail.com, jacob.e.keller@intel.com,
+ willemb@google.com, skhawaja@google.com, bestswngs@gmail.com,
+ aleksandr.loktionov@intel.com, kees@kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, leon@kernel.org
+Subject: Re: [PATCH net-next v3 03/13] net: introduce ndo_set_rx_mode_async
+ and dev_rx_mode_work
+Message-ID: <20260324204440.1752423d@kernel.org>
+In-Reply-To: <acMU93XN02PHmAGi@mini-arch>
+References: <20260320012501.2033548-1-sdf@fomichev.me>
+	<20260320012501.2033548-4-sdf@fomichev.me>
+	<20260323162003.0d155055@kernel.org>
+	<acLUMN1BYkIVyOk8@mini-arch>
+	<20260324142114.216fcb01@kernel.org>
+	<acMU93XN02PHmAGi@mini-arch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/7] selftests: memcg: Iterate pages based on the
- actual page size
-To: Li Wang <liwang@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
- James Houghton <jthoughton@google.com>,
- Sebastian Chlad <sebastianchlad@gmail.com>,
- Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20260320204241.1613861-1-longman@redhat.com>
- <20260320204241.1613861-4-longman@redhat.com>
- <CAEemH2cJeTWLCLnmHqQY+tAs8b8FM+AmQ3UYd8McM760cN_Atw@mail.gmail.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <CAEemH2cJeTWLCLnmHqQY+tAs8b8FM+AmQ3UYd8McM760cN_Atw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
+On Tue, 24 Mar 2026 15:49:27 -0700 Stanislav Fomichev wrote:
+> > > Not sure why cancel+release, maybe you're thinking about the unregister
+> > > path? This is rtnl_unlock -> netdev_run_todo -> __rtnl_unlock + some
+> > > extras.
+> > > 
+> > > And the flush is here to plumb the addresses to the real devices
+> > > before we return to the callers. Mostly because of the following
+> > > things we have in the tests:
+> > > 
+> > > # TEST: team cleanup mode lacp                                        [FAIL]
+> > > #       macvlan unicast address not found on a slave
+> > > 
+> > > Can you explain a bit more on the suggestion?  
+> > 
+> > Oh, I thought it's here for unregister! Feels like it'd be cleaner to
+> > add the flush in dev_*c_add() and friends? How hard would it be to
+> > identify the callers in atomic context?  
+> 
+> Not sure we can do it in dev_xc_add because it runs under rtnl :-(
+> I currently do flush in netdev_run_todo because that's the place that
+> doesn't hold rtnl. Otherwise flush will get stuck because the work
+> handler grabs it...
 
-On 3/22/26 10:53 PM, Li Wang wrote:
-> Hi Waiman,
->
-> I currently have another patch in hand that is functionally identical to
-> patch 3/7 here (requested by Sashiko).
->
-> May I go ahead and merge it directly into my patch series, while
-> retaining your authorship attribution?
+I was thinking of something a'la linkwatch. We can "steal" / "flush"
+the pending work inline. I guess linkwatch is a major source of races
+over the years...
 
-Sure. You can merge this patch into your series. I just need a page_size 
-global variable to show the system page size for the rests of my 
-memcontrol.c changes. I will then based my series on top of yours since 
-it is further along.
-
-Cheers,
-Longman
-
+Does the macvlan + team problem still happens with the current
+implementation minus the flush? We are only flushing once so only
+pushing the addresses thru one layer of async callbacks.
