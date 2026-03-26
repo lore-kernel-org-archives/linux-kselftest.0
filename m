@@ -1,132 +1,119 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2843246788
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 03:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5784B3921E0
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 03:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774495520; cv=none; b=iUJzazXoDCXcPT/5aISSHB0aO1gsvCYGhpGDkYQaNO/U8fa5oVakq4OFrgWCh3ioCemMtVwtyy6T+YaeB/YOKntnwX2F99s/J2JtLETLTVqtkLV6lqff1xdN0e4pvCS55LQRld30BPY89+7iSJL5714xB9+dD/vjV4RV2eahp6o=
+	t=1774495638; cv=none; b=EdczsURqZ3NBHY5BZntpoQ2mHhaII4c2w071qIAs9q44fFVxe6jjFffgLto+yh8bLz66ocv1xJi8nIuNUlOZEFmUUDE11KWlBvOJ3zb12+r5BA6vWmQQ+pcINxIEE8eg9WotSYHm3e2EqBwOUHqnbh0qMczPz6cERviyxxPWJjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774495520; c=relaxed/simple;
-	bh=PeO3Wn4eC2AsM7MoyTFPPR2RxQrGibPXKvXagwq9jD8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uGZNTuPIKALxNYzkBETFdRmtl15ba29Im2SHdMH22BGL5wvIX87fk+54UlUK+D1ZbMcREExvU1zuqAl4opmK/tv7mc+b00jYUypL4vgoewezb5YIuZ8/ePeaZFiSQt3sxXF4iidBhtd0QaBj6YkbP5j9Gvyqq9K3I2HiRTQYSAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=auY2R3sw; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774495638; c=relaxed/simple;
+	bh=WkF2h0IFgyFGH89heHwiOZQUs9YGiMKE4czvMttmDMo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D2zcvGhICFuKIBQtbNZrS06OBPV3xf1T1qZ6Br4OvugdKDUKC+PpCVfr1cd0a9z2eVjb0IlaHUkYThOjQF3vdmOZuCEd4KZb1v4K+GrHUf8xc+GkOcJzBj3xCADNhzAwjVHVQnq5kPWZ8YXoYJmZtb+oiTfARrabhNNXwgXEKEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SL6o6WWu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="auY2R3sw"
-Message-ID: <4c27a461-2714-4c27-8604-dedd506a09aa@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774495506;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SL6o6WWu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774495636;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wNdfjJHD6SMD9Xw8BJ+zCQWvHXfF4m3AH/8ikcFZoxY=;
-	b=auY2R3swKFmiQYJ62EhZeIZ6lJgq+hhn4f8D4apQgKw3hvmi8awSu9dy5bBPhVf1PseunR
-	Bf14bYgKDDOiMNz9HrgunVljUnXDZ/QWZHVfptyhd8vBoV8P/D+2pfg3Jzfk43UPDVM1Pm
-	JY1JwnQOPI2JXs2PC41PuCSNh9gyV2k=
-Date: Thu, 26 Mar 2026 11:24:39 +0800
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oMwBuaz6Iu14n6z5uHUzbEMEARV0sTaqUzLTjM5uB7w=;
+	b=SL6o6WWuFBvcfVOJ4zb5ypdKmNwiKeLk1qx2GUec5Rf9QlXhtKJqm96UgrzmdL/6YiDa2y
+	gH/YMyaK8dYYoUUykcn09HFoEryvcd2NzmyVZyy7sXhp5MD725mvt5DWRUQu8+lpX0x4tK
+	yJ+8seRHn+czl+QAfgFRBIm2b4TWJC0=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-179-ntm5MVGbMGCvlJZ59BK7TQ-1; Wed,
+ 25 Mar 2026 23:27:12 -0400
+X-MC-Unique: ntm5MVGbMGCvlJZ59BK7TQ-1
+X-Mimecast-MFC-AGG-ID: ntm5MVGbMGCvlJZ59BK7TQ_1774495630
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 095051944F05;
+	Thu, 26 Mar 2026 03:27:10 +0000 (UTC)
+Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.83])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 21DCB1955D84;
+	Thu, 26 Mar 2026 03:27:02 +0000 (UTC)
+From: Li Wang <liwang@redhat.com>
+To: akpm@linux-foundation.org,
+	yosry@kernel.org,
+	nphamcs@gmail.com,
+	hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	mkoutny@suse.com,
+	muchun.song@linux.dev,
+	tj@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev
+Cc: longman@redhat.com,
+	liwang@redhat.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v5 0/8] selftests/cgroup: improve zswap tests robustness and support large page sizes
+Date: Thu, 26 Mar 2026 11:26:50 +0800
+Message-ID: <20260326032658.96819-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: Add protocol check test for
- bpf_sk_assign_tcp_reqsk()
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260323105510.51990-1-jiayuan.chen@linux.dev>
- <20260323105510.51990-3-jiayuan.chen@linux.dev>
- <9adc3c2e-0d5a-4863-b3ed-194d8f9fd630@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <9adc3c2e-0d5a-4863-b3ed-194d8f9fd630@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
+This patchset aims to fix various spurious failures and improve the overall
+robustness of the cgroup zswap selftests.
 
-On 3/25/26 5:59 AM, Martin KaFai Lau wrote:
-> On 3/23/26 3:54 AM, Jiayuan Chen wrote:
->> +void test_tcp_custom_syncookie_protocol_check(void)
->> +{
->> +    struct test_tcp_custom_syncookie *skel;
->> +    struct sockaddr_in tcp_addr, udp_addr;
->> +    socklen_t addr_len = sizeof(tcp_addr);
->> +    int tcp_server = -1, udp_client = -1;
->> +    char buf[32] = "test";
->> +    int ret;
->> +
->> +    if (setup_netns())
->> +        return;
->> +
->> +    skel = test_tcp_custom_syncookie__open_and_load();
->> +    if (!ASSERT_OK_PTR(skel, "open_and_load"))
->> +        return;
->>   +    /* Create a TCP listener so the BPF can find a LISTEN socket */
->> +    tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
->> +    if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
->> +        goto destroy_skel;
->> +
->> +    ret = getsockname(tcp_server, (struct sockaddr *)&tcp_addr, 
->> &addr_len);
->> +    if (!ASSERT_OK(ret, "getsockname"))
->> +        goto close_tcp;
->> +
->> +    skel->bss->tcp_listener_port = ntohs(tcp_addr.sin_port);
->> +    skel->bss->udp_test_port = 9999;
->> +
->> +    ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
->> +    if (setup_tc(ret))
->> +        goto close_tcp;
->> +
->> +    udp_client = socket(AF_INET, SOCK_DGRAM, 0);
->> +    if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
->> +        goto cleanup_tc;
->> +
->> +    memset(&udp_addr, 0, sizeof(udp_addr));
->> +    udp_addr.sin_family = AF_INET;
->> +    udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
->> +    udp_addr.sin_port = htons(9999);
->> +
->> +    ret = sendto(udp_client, buf, sizeof(buf), 0,
->> +             (struct sockaddr *)&udp_addr, sizeof(udp_addr));
->> +    ASSERT_EQ(ret, sizeof(buf), "sendto udp");
->> +
->> +    /* Wait for TC ingress BPF to process the skb. */
->> +    kern_sync_rcu();
->
-> hmm... is it guaranteed to work? Regardless, it checks the error 
-> returned from bpf_sk_assign_tcp_reqsk(). Maybe bpf_prog_test_run is 
-> simpler?
->
-> pw-bot: cr
->
->> +
->>
-I looked into using bpf_prog_test_run, but it won't work here
-because bpf_sk_assign_tcp_reqsk() requires the skb to come from TC ingress
-— it checks skb_at_tc_ingress() internally and returns -EINVAL otherwise.
+The primary motivation is to make the tests compatible with architectures
+that use non-4K page sizes (such as 64K on ppc64le and arm64). Currently,
+the tests rely heavily on hardcoded 4K page sizes and fixed memory limits.
+On 64K page size systems, these hardcoded values lead to sub-page granularity
+accesses, incorrect page count calculations, and insufficient memory pressure
+to trigger zswap writeback, ultimately causing the tests to fail.
 
-For the synchronization concern, instead of kern_sync_rcu(), I now create
-a UDP server bound to the target port and recv() the packet after sendto().
-Since the BPF program returns TC_ACT_OK, the packet passes through TC 
-ingress
-and arrives at the UDP socket. The recv() naturally blocks until the BPF 
-program
-has finished processing, so no timing tricks are needed.
+Additionally, this series addresses OOM kills occurring in test_swapin_nozswap
+by dynamically scaling memory limits, and prevents spurious test failures
+when zswap is built into the kernel but globally disabled.
+
+Changes in v5:
+  Patch 1/8: Defined PATH_ZSWAP and PATH_ZSWAP_ENABLED macros.
+  Patch 4/8: Merge Waiman's work into this patch (use page_size).
+  Patch 5/8: Change pagesize by the global page_size.
+  Patch 6/8: Swap data patterns: use getrandom() for wb_group and simple
+             memset for zw_group to fix the reversed allocation logic.
+  Patch 7/8: Setting zswap.max to zswap_usage/4 to increase writeback pressure.
+  Patch 8/8: New added. Just add loops for read zswpwb more times.
+
+Test all passed on:
+  x86_64(4k), aarch64(4K, 64K), ppc64le(64K).
+
+Li Wang (8):
+  selftests/cgroup: skip test_zswap if zswap is globally disabled
+  selftests/cgroup: avoid OOM in test_swapin_nozswap
+  selftests/cgroup: use runtime page size for zswpin check
+  selftests/cgroup: rename PAGE_SIZE to BUF_SIZE in cgroup_util
+  selftests/cgroup: replace hardcoded page size values in test_zswap
+  selftest/cgroup: fix zswap test_no_invasive_cgroup_shrink on large
+    pagesize system
+  selftest/cgroup: fix zswap attempt_writeback() on 64K pagesize system
+  selftests/cgroup: test_zswap: wait for asynchronous writeback
+
+ .../selftests/cgroup/lib/cgroup_util.c        |  18 +-
+ .../cgroup/lib/include/cgroup_util.h          |   4 +-
+ tools/testing/selftests/cgroup/test_core.c    |   2 +-
+ tools/testing/selftests/cgroup/test_freezer.c |   2 +-
+ .../selftests/cgroup/test_memcontrol.c        |  19 +-
+ tools/testing/selftests/cgroup/test_zswap.c   | 174 +++++++++++++-----
+ 6 files changed, 148 insertions(+), 71 deletions(-)
+
+-- 
+2.53.0
 
