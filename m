@@ -1,64 +1,63 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB3D4070EB
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 16:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B4740F8F9
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 16:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774543189; cv=none; b=lzp59yghzyl8DSTCknjcC9zCdWhYwthXC3iWpoucJCgEwChOYC2fK2NRA0JQPe71/MPXbfORRf5fkHMPZBJcnu9tqlleYQ/js5xYlhrR9RUM32n7r2LmIbCmTplHvXqqP2zbk28TRUyDAbhreGcdBgni7AKnximzV5w4M8JAW3I=
+	t=1774543191; cv=none; b=jqga+T6mKbqUSwigF2tck/EFtSDdva+UAn0f8M4NI3nCVzdomczoHRt/TEgeaDZwKWhoGQC7mwMMn/9T6QWjak1FicHJYZQo+Kxq3V71DAlBca7v3DUK46q2DTdG3kLtq27dR7b1U5SeMnhF6ey55khuwuI8kIok65TSd1ookhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774543189; c=relaxed/simple;
-	bh=nMoVBvse899NPg8tpB9OKbPFwPjKBuBCeTp4KA60WEU=;
+	s=arc-20240116; t=1774543191; c=relaxed/simple;
+	bh=GBazXh/uUV+veTugAXj7FLLeItvlURuuxUNZwTmoUrY=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fAhgaCyhLj4ZitkJsHGSPCIU2qVOviqcW4kcfDntedQdg/hpATz+rK1zPlMKr0P9x6Sl33DD3wFCwpNqEj44YYAvItMv6cbVQZcvQX6gHAOCYh7cjhZY3+539m8uMJfjSoRIdOGNvoz1fMGIqdtN4kb5A/K4za8oZQaWfUWlmLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=aGnEnuH0; arc=none smtp.client-ip=209.85.160.178
+	 MIME-Version; b=dPNfNTmQmXPcjmAHPx5tZWslOo6a8y5czhyXbJ81VoqmOZo8/hLR8p8OZW694X8sHUTim6+fdiazip288Gx0/HLehcNbWo93OcEcVXX+6/crH4+mzNK5H7m+/ghn2RYupfSlHM0qu/9zD/KFAgdeIF+mfoovjYJeOMYEhK9CqLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Ds8KrWBO; arc=none smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="aGnEnuH0"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50b3488fb31so28804701cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 09:39:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Ds8KrWBO"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-50b29c4e554so14989011cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 09:39:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1774543186; x=1775147986; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1774543188; x=1775147988; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hIdUnvgvoju2sn6Qx2mGLJNfJ9th4UndCcaJvlrJfI0=;
-        b=aGnEnuH00aeslZWeM13KSRQjMeP+myxEwJInFTFq4KuPe/zYUJNi7j0nHe5zPF8BF6
-         ZyfNZjtaIWghtUTCOhAqwGz/SHoeemz/TK3KUpxov/Pcx6+PtBKT3R066hY7xCgl6lR1
-         1ZtY+fMcHFOVrC9hFx7d1dnujwi0Q3tPAx6dFT48pUn1LcrU2OzPzeZ2EOBoLXpqP25C
-         5BnL3mERx1XUJ+qFYv0XN3a0OQTvXIV4Ug4AQGCWqtfMboWSKd0Fdzy3z4HYLo3RO7Sf
-         gSv22mB1LbJg/IG83RUQEXiayW9q055IIA428ov3XwldYfaHHmJDE1k49TPBcDklT8ZN
-         XnUA==
+        bh=PHul+QGmCaYYH+cSj7r6hzl0Za0NZYfxsHk+JlDRO+k=;
+        b=Ds8KrWBOU9GXh5edQu2VDbmKEgosBYsKe79AxCi2LjUaRSKXQi4gn0D/Q3u8AcmN76
+         tcYB5FOpvfCHdyOXaDzLihUFY0WtyVf3inqKMmbXL694fuOdtDi0XnpSzbBqwJBxs7z4
+         v1RNieDVLtk5rXOH3MqrAHT/Dtxb/OCrCEOXQEaZK95MF/qolTN/yeRsPv6GX2HG3xtj
+         lv7Ti895wvUkXixdYs+kFpmH+UNHq/cNbTT5i0tTL42LslpsWJ00TCxw1pqbyex9bdp8
+         Y9e2yDHkEhLM6b/D0Ehi3II5YOU/HBAtACdQiLICheNtKYYb3QeatqibVn3L6FpNmp3X
+         /zUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774543186; x=1775147986;
+        d=1e100.net; s=20251104; t=1774543188; x=1775147988;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=hIdUnvgvoju2sn6Qx2mGLJNfJ9th4UndCcaJvlrJfI0=;
-        b=oikFgtmiK7rO1cGtqMCPuyHRpEr5UOz4BT0Wt0oQ002ZWA8Cd441uJk47lE6ahEvYO
-         djWzaup2QjyjzZ/auR6iRuoHD/qxnTePhoh/EMy0+EWnddDAVMGkrjtxwHpX/z0isM6h
-         TX2oD+1miv2SXBdMoQC5W1+NZCHgTys23MWtqE+7IVWrtklpp8LZ7Y2YnHuUFEftFl8L
-         flS1vz0zyqO370g8uz12GeW0n9+5Uf7voZriKhDo5fBLbP8f4sue12gozGDmEA70gcb3
-         NwM7nwJP9E7fm1JnYKgaXgoCoQ146wdjNbHV1rfw9nWmRhNi5DuxAYK9tHZqFajzHYX+
-         mcWw==
-X-Gm-Message-State: AOJu0YzPB4PqAZYydDe6dggANnIaQYjTPKZPHEm8bw1AikGfoM3QMDnw
-	BUbK3Cs7GGO4yStxK1FEy8cYrOyjG6Q125rUBM36YJbs/8R6ognIfEzeaD+sVgOL40/nFXHvEY/
-	tAamC
-X-Gm-Gg: ATEYQzzOCfy9kSZmwZ4u1+MaS+1pT+Iyy98m6d1ek3elFeld6rnY3k1tcpQkPmqYk0H
-	NXmtYECqjSFBf2rpzjTkTw1Jmz0FfwxOKJO01BruR3JUQLyb2LvoUEh8g7YYFwvxthCMByAEcG+
-	0YR5kAfJOZZCqwNH3YGQvz3nKfwAyJ/3wuOYcAldnQzk7WtvDxdHNiokoKKK70KiJrkNMABmNZj
-	UURm/rrm4tffRZkqy+W13sCFcJTFucwGBlXMC04ek6DSYG3EfqoPnktayqLC8kyccvsVMJAQM9Y
-	Z2ABfQMmVyCDAzU48htHh1G7XeHr54fpA4iMfgE5W1jCe4My0V5+OshzPe0i/47RK7XOFL/Y8Ce
-	Ex4xV7xrkKfN6RcsP1MbohwmLmzDhBjbTdJRr7DWF4Wci8z6FEJaeieKPzjIzA2/LMArdWF6/Ds
-	luD3idXmC02r0pKzhThwc2PHiAAe7nMjykJHAH9wSmrPHAwpr8NvZJ0q7I+YU5mFe31CvvFyUPy
-	72A
-X-Received: by 2002:a05:622a:8d17:b0:50b:4a3c:8917 with SMTP id d75a77b69052e-50b994a6c29mr24101061cf.24.1774543186042;
-        Thu, 26 Mar 2026 09:39:46 -0700 (PDT)
+        bh=PHul+QGmCaYYH+cSj7r6hzl0Za0NZYfxsHk+JlDRO+k=;
+        b=AhZ7TGfsnO0OBHUXuvggVRkQOVo9EIOGWpx17PVSKpSTWV+3VpwdbtdTJgGNcrXylq
+         UEAm+68/HQXPqPWoOr7o547qRB7f69+fjEt5M/eoV15hmuy0WC5yhRM9/QMOJlEy4SOe
+         YSfpZ0oylzE6Kgle8bh1XQi5QpAXTFo+a4S0dodIcd+12XCzkEmVM3aTVQqpBwnfWH5Q
+         EL1f5gCs61peQqJnxISptmz3iPszbZ4nBShXvto1HzXgfVVN87cXkVW3w2xaRY8JryjX
+         IMg1XxmJNbpMSWFdwwjN0Fkk7KG5ys2mIOPhg+0uf6TxaiH09KMEcjsAyJmyj8DumifX
+         Mwzw==
+X-Gm-Message-State: AOJu0Ywnh5qt8SKBUYq77LS3mBUlF4uywOncxtve64uRfeP8Bk6NagqY
+	Xvspnrzvc9sQ/UDTPB7OmzuGjVO+/UExLpNH6F1mF4Ilp7yEehD5UiShxVdUmLa2bzyb8nZWDO8
+	U7l85
+X-Gm-Gg: ATEYQzxKJh5y1YB37wgp5lCCQTT6W4x9/uffDSc5W8/MgUFB9eApFTY6xu9AT0eZOyT
+	g6KUedbIKGCa5YhT2ZoSYe2GFb+4WFo9um2hvagOzAitTa1brT9BGcMwgKShEpg3vjMHsjJ855X
+	cbgeWvMxCL670ebsY/FzFUe/wdPoIYLdJ/Le7rPVEanFNOW3XENxgwd12hNz50B54a0ltxdf1Gj
+	W5HY3pmX1slfZgwU/FzFDfpB7I+3+M7DZzd1LYR0opO6rXkk89a9/AJp5fQKP9lhqGU6bzKFhUJ
+	YwxIVMkLG3vo8NWDpMzkF5rW/hw3yGf4NW0LqgyU9la+kuFL/Bj14u8a6EyBQ7F+xZ0EGBiiNaa
+	/F6VqifIbpHkHsXcXQYOuADxLeboThsPdeLYEMZP8t7CsxlXGf4ZCJIAWlEKLLtyAye+rsDT58J
+	KIr+HexBd6IdnmUTPGA5NjiAnO53MYjSXYhEyFKK9TyizdIQtv2Hc88nigmaAbPefuKA==
+X-Received: by 2002:a05:622a:251a:b0:508:faa5:4512 with SMTP id d75a77b69052e-50b80e5418dmr113877081cf.50.1774543188330;
+        Thu, 26 Mar 2026 09:39:48 -0700 (PDT)
 Received: from plex.localdomain ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b920f77cfsm28238251cf.6.2026.03.26.09.39.44
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b920f77cfsm28238251cf.6.2026.03.26.09.39.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 09:39:45 -0700 (PDT)
+        Thu, 26 Mar 2026 09:39:47 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: linux-kselftest@vger.kernel.org,
 	rppt@kernel.org,
@@ -70,9 +69,9 @@ To: linux-kselftest@vger.kernel.org,
 	dmatlack@google.com,
 	pratyush@kernel.org,
 	skhawaja@google.com
-Subject: [PATCH v4 1/3] liveupdate: prevent double management of files
-Date: Thu, 26 Mar 2026 16:39:41 +0000
-Message-ID: <20260326163943.574070-2-pasha.tatashin@soleen.com>
+Subject: [PATCH v4 3/3] selftests: liveupdate: add test for double preservation
+Date: Thu, 26 Mar 2026 16:39:43 +0000
+Message-ID: <20260326163943.574070-4-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260326163943.574070-1-pasha.tatashin@soleen.com>
 References: <20260326163943.574070-1-pasha.tatashin@soleen.com>
@@ -84,152 +83,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, LUO does not prevent the same file from being managed twice
-across different active sessions.
+Verify that a file can only be preserved once across all active
+sessions. Attempting to preserve it a second time, whether in the same
+or a different session, should fail with EBUSY.
 
-Use a global xarray luo_preserved_files to keep track of file
-identifiers being preserved by LUO. Update luo_preserve_file() to
-check and insert the file identifier into this xarray when it is
-preserved, and erase it in luo_file_unpreserve_files() when it is
-released.
-
-To allow handlers to define what constitutes a "unique" file (e.g.,
-different struct file objects pointing to the same hardware resource),
-add a get_id() callback to struct liveupdate_file_ops. If not
-provided, the default identifier is the struct file pointer itself.
-
-This ensures that the same file (or resource) cannot be managed by
-multiple sessions. If another session attempts to preserve an already
-managed file, it will now fail with -EBUSY.
-
-Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
 Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- include/linux/liveupdate.h   |  2 ++
- kernel/liveupdate/luo_file.c | 32 ++++++++++++++++++++++++++++++--
- 2 files changed, 32 insertions(+), 2 deletions(-)
+ .../testing/selftests/liveupdate/liveupdate.c | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
-index dd11fdc76a5f..61325ad26526 100644
---- a/include/linux/liveupdate.h
-+++ b/include/linux/liveupdate.h
-@@ -63,6 +63,7 @@ struct liveupdate_file_op_args {
-  *                finish, in order to do successful finish calls for all
-  *                resources in the session.
-  * @finish:       Required. Final cleanup in the new kernel.
-+ * @get_id:       Optional. Returns a unique identifier for the file.
-  * @owner:        Module reference
-  *
-  * All operations (except can_preserve) receive a pointer to a
-@@ -78,6 +79,7 @@ struct liveupdate_file_ops {
- 	int (*retrieve)(struct liveupdate_file_op_args *args);
- 	bool (*can_finish)(struct liveupdate_file_op_args *args);
- 	void (*finish)(struct liveupdate_file_op_args *args);
-+	unsigned long (*get_id)(struct file *file);
- 	struct module *owner;
- };
- 
-diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
-index 5acee4174bf0..b02e2891cdb8 100644
---- a/kernel/liveupdate/luo_file.c
-+++ b/kernel/liveupdate/luo_file.c
-@@ -110,10 +110,14 @@
- #include <linux/sizes.h>
- #include <linux/slab.h>
- #include <linux/string.h>
-+#include <linux/xarray.h>
- #include "luo_internal.h"
- 
- static LIST_HEAD(luo_file_handler_list);
- 
-+/* Keep track of files being preserved by LUO */
-+static DEFINE_XARRAY(luo_preserved_files);
-+
- /* 2 4K pages, give space for 128 files per file_set */
- #define LUO_FILE_PGCNT		2ul
- #define LUO_FILE_MAX							\
-@@ -203,6 +207,12 @@ static void luo_free_files_mem(struct luo_file_set *file_set)
- 	file_set->files = NULL;
+diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
+index c2878e3d5ef9..37c808fbe1e9 100644
+--- a/tools/testing/selftests/liveupdate/liveupdate.c
++++ b/tools/testing/selftests/liveupdate/liveupdate.c
+@@ -345,4 +345,45 @@ TEST_F(liveupdate_device, preserve_unsupported_fd)
+ 	ASSERT_EQ(close(session_fd), 0);
  }
  
-+static unsigned long luo_get_id(struct liveupdate_file_handler *fh,
-+				struct file *file)
++/*
++ * Test Case: Prevent Double Preservation
++ *
++ * Verifies that a file (memfd) can only be preserved once across all active
++ * sessions. Attempting to preserve it a second time, whether in the same or
++ * a different session, should fail with EBUSY.
++ */
++TEST_F(liveupdate_device, prevent_double_preservation)
 +{
-+	return fh->ops->get_id ? fh->ops->get_id(file) : (unsigned long)file;
++	int session_fd1, session_fd2, mem_fd;
++	int ret;
++
++	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
++	if (self->fd1 < 0 && errno == ENOENT)
++		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
++	ASSERT_GE(self->fd1, 0);
++
++	session_fd1 = create_session(self->fd1, "double-preserve-session-1");
++	ASSERT_GE(session_fd1, 0);
++	session_fd2 = create_session(self->fd1, "double-preserve-session-2");
++	ASSERT_GE(session_fd2, 0);
++
++	mem_fd = memfd_create("test-memfd", 0);
++	ASSERT_GE(mem_fd, 0);
++
++	/* First preservation should succeed */
++	ASSERT_EQ(preserve_fd(session_fd1, mem_fd, 0x1111), 0);
++
++	/* Second preservation in a different session should fail with EBUSY */
++	ret = preserve_fd(session_fd2, mem_fd, 0x2222);
++	EXPECT_EQ(ret, -EBUSY);
++
++	/* Second preservation in the same session (different token) should fail with EBUSY */
++	ret = preserve_fd(session_fd1, mem_fd, 0x3333);
++	EXPECT_EQ(ret, -EBUSY);
++
++	ASSERT_EQ(close(mem_fd), 0);
++	ASSERT_EQ(close(session_fd1), 0);
++	ASSERT_EQ(close(session_fd2), 0);
 +}
 +
- static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
- {
- 	struct luo_file *iter;
-@@ -248,6 +258,7 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
-  * Context: Can be called from an ioctl handler during normal system operation.
-  * Return: 0 on success. Returns a negative errno on failure:
-  *         -EEXIST if the token is already used.
-+ *         -EBUSY if the file descriptor is already preserved by another session.
-  *         -EBADF if the file descriptor is invalid.
-  *         -ENOSPC if the file_set is full.
-  *         -ENOENT if no compatible handler is found.
-@@ -288,10 +299,15 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
- 	if (err)
- 		goto err_free_files_mem;
- 
--	err = luo_flb_file_preserve(fh);
-+	err = xa_insert(&luo_preserved_files, luo_get_id(fh, file),
-+			file, GFP_KERNEL);
- 	if (err)
- 		goto err_free_files_mem;
- 
-+	err = luo_flb_file_preserve(fh);
-+	if (err)
-+		goto err_erase_xa;
-+
- 	luo_file = kzalloc_obj(*luo_file);
- 	if (!luo_file) {
- 		err = -ENOMEM;
-@@ -320,6 +336,8 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
- 	kfree(luo_file);
- err_flb_unpreserve:
- 	luo_flb_file_unpreserve(fh);
-+err_erase_xa:
-+	xa_erase(&luo_preserved_files, luo_get_id(fh, file));
- err_free_files_mem:
- 	luo_free_files_mem(file_set);
- err_fput:
-@@ -363,6 +381,8 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
- 		luo_file->fh->ops->unpreserve(&args);
- 		luo_flb_file_unpreserve(luo_file->fh);
- 
-+		xa_erase(&luo_preserved_files,
-+			 luo_get_id(luo_file->fh, luo_file->file));
- 		list_del(&luo_file->list);
- 		file_set->count--;
- 
-@@ -606,6 +626,11 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
- 	luo_file->file = args.file;
- 	/* Get reference so we can keep this file in LUO until finish */
- 	get_file(luo_file->file);
-+
-+	WARN_ON(xa_insert(&luo_preserved_files,
-+			  luo_get_id(luo_file->fh, luo_file->file),
-+			  luo_file->file, GFP_KERNEL));
-+
- 	*filep = luo_file->file;
- 	luo_file->retrieve_status = 1;
- 
-@@ -701,8 +726,11 @@ int luo_file_finish(struct luo_file_set *file_set)
- 
- 		luo_file_finish_one(file_set, luo_file);
- 
--		if (luo_file->file)
-+		if (luo_file->file) {
-+			xa_erase(&luo_preserved_files,
-+				 luo_get_id(luo_file->fh, luo_file->file));
- 			fput(luo_file->file);
-+		}
- 		list_del(&luo_file->list);
- 		file_set->count--;
- 		mutex_destroy(&luo_file->mutex);
+ TEST_HARNESS_MAIN
 -- 
 2.43.0
 
