@@ -1,176 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F314A37B41A;
-	Thu, 26 Mar 2026 09:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0487B30C631
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 09:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774518272; cv=none; b=V4AYxx/E8uIOFUMvl6NW29uRClxa/aaXPtbGWBAWr8o/Hb941yVMdjJDr9Zwz6G8z8m2/DZuzPz1hHWPCgFsNXagpYenr8h8bawdoQ9816cTcN6uO7D5ZW4BDy40y+3seRFsjKjDiOwHQxm8JztHVYHE8KSIi1j/Hpcw4/U2Q20=
+	t=1774518297; cv=none; b=rd2PcimUQ1N+Az4qN1ocLDC27BzT/vaAqp7lEAMLH9C3UeQqQzDsn/Wtz9wD9UVqGFWiIn2iUyKofHAZjKbVVnfvdu2Vjo6EOsr253vG9BTjvTFty5N5XCy3AfuEwx5T0dxgZrPtAj1mtbT8m811XIYID4cOdV90/dH5WeTNV2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774518272; c=relaxed/simple;
-	bh=Xu6Szgn9q1oTaH2XbIihAcDWLQrstunVF90Bi7lhRPM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Pxn/92W1AuiNVWHTRei7nnIpojx1ToV88rhwKakDAresMp0rIQbl7FD16ggJSehwHxifLfBhRzu+Ww8Czl2p5mPwDAD7Ru26jxLcnJc5CfdBXhQPsR4rfEa5R43+izaGxfxy+buAHQCBdb2U/XkugBCbLndmKkeFxustwmRO4HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CfHNmAoT; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774518297; c=relaxed/simple;
+	bh=SwK+xrVkILMxAk+bQOoYhEd8oWiRnuLGcIQjwqqEHC8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z/iOCz1kTanOC5OPGcLFemjNLSLbbVnWDodf4VJgTlFAk20lxpZtH+krhBsqYapNhs1+sHXCAc6ohHFnaGnHpKBygPrvlyJIOr+SoFSu9vpdkAjYUPSs4oOUYY4fg2zitBC3dLwqYp//KCEwsALgydbEs9+PDo5oScb7BrFCtJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qk4SWL0B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CfHNmAoT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774518270; x=1806054270;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Xu6Szgn9q1oTaH2XbIihAcDWLQrstunVF90Bi7lhRPM=;
-  b=CfHNmAoTd8ohLxoesyaCmUT/JK0X81DI4aCRHEW5WmvEwSwpWGYqvFSJ
-   VOl91S8bmuEuKRpvSnbelolV6HzHTUAu1toFNIkPnBq2V658smZYG4VtE
-   BSqtHlLRX/ynIgS3jmfoA+oWmiVcDEBrwOBOhRKBaD1icoifq9ptmYu7J
-   fmGeVGoacDwBRKDAXsiY4TiN2xJAekH0eTh8aVoRGKRbg9nCK79hLJxwL
-   eT5H+euN2RQQLGGlD8+PVnjnYWYVfNM72EZTc2g8EmcaWdiP05d0PZvzb
-   /0nJNzhRxJhQsz7eV6KbmKcCRnTxdBelY0hnM2ErJusCHyd/aipTh5HMt
-   g==;
-X-CSE-ConnectionGUID: +kd6729ySVCsr6F8UN8amw==
-X-CSE-MsgGUID: jGUxio2iT/2we69rSSMqnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="74752999"
-X-IronPort-AV: E=Sophos;i="6.23,141,1770624000"; 
-   d="scan'208";a="74752999"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 02:44:29 -0700
-X-CSE-ConnectionGUID: /ExwPgE5RieyDbB8bW6PCA==
-X-CSE-MsgGUID: Pjwe+8yzTWyvT/Q8Meo46A==
-X-ExtLoop1: 1
-Received: from ly-workstation.sh.intel.com ([10.239.182.64])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Mar 2026 02:44:26 -0700
-From: Yi Lai <yi1.lai@intel.com>
-To: Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	Xin Li <xin@zytor.com>,
-	x86@kernel.org,
-	hpa@zytor.com,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yi1.lai@linux.intel.com,
-	yi1.lai@intel.com
-Subject: [PATCH v3] selftests/x86: Fix sysret_rip assertion failure on FRED systems
-Date: Thu, 26 Mar 2026 17:44:23 +0800
-Message-ID: <20260326094423.711724-1-yi1.lai@intel.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qk4SWL0B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667BCC2BCB8
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 09:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774518296;
+	bh=SwK+xrVkILMxAk+bQOoYhEd8oWiRnuLGcIQjwqqEHC8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qk4SWL0BS2oZHiDUvBW/bAxeHx1BXEOWfGKaMh4imMYuvXydMJQxKaiYS4vQGqpRA
+	 KJl5vGs3KFn0zqG0hGubfZQ+ieLSVRDmDy4ZSjU3fJsf8ou+XPp7UrwCZQjAx4+Fdu
+	 ZZAKnISxQ6mTuselNzsg55K0hHAUs+POyB9XWBxXtVgER803OVVJnlcmKnCqjdp2Yk
+	 UqDAEyiskT00D6jK1ygmtILaGQQsgpSA65xFiHQpIs2ARMLeNmYQHUHzujjwsiSvdM
+	 2RgAAohQUjLJ0+9FITXef3rwVKFdyy8oNfMnF589By3bfREuGCIqEb+lyyzZQ2U7dh
+	 bivJsHrC9DzCg==
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-505a1789a27so4395341cf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 02:44:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVYMfp+tQaNuKDyj6ffv0VK5a7QgVg3Elu2I4pKT1qgWaQyFr1QwLD9m/05nlEQmSBc92eHwbPGvX/s/FRjCk0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+G+6TQc/BlZYRpcmfTe7ARrNXjWtpyYYhLtkd/8wE4IaewMaq
+	A41J4eobQl+Uy9+dpbb2T7rEIrOWun4Lig7ZrQr4V/11p6KrVVUF1rZL6NpU5N8e/5pUhkDNffU
+	UEBAEiRRdXm/ZhdNT9AQLsOaBaEiEah0=
+X-Received: by 2002:ac8:5a8f:0:b0:50b:2d93:97b2 with SMTP id
+ d75a77b69052e-50b80d1aa89mr96117381cf.23.1774518295241; Thu, 26 Mar 2026
+ 02:44:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260325145022.2607545-1-bjorn@kernel.org> <20260325145022.2607545-10-bjorn@kernel.org>
+ <acT8O5vHc7gl6hzG@gmail.com>
+In-Reply-To: <acT8O5vHc7gl6hzG@gmail.com>
+From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Date: Thu, 26 Mar 2026 10:44:44 +0100
+X-Gmail-Original-Message-ID: <CAJ+HfNh0su+Ei+ET8YYNsZwNR+MuHCBakuof6akavQR0kLx0jg@mail.gmail.com>
+X-Gm-Features: AQROBzBqP5kFyddHgaLVB_TU1Jo_YEll9H_X4UmnFm7jfjc29GXNVciOBMmOjNg
+Message-ID: <CAJ+HfNh0su+Ei+ET8YYNsZwNR+MuHCBakuof6akavQR0kLx0jg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 09/12] selftests: drv-net: Add MAC loopback
+ netdevsim test
+To: Breno Leitao <leitao@debian.org>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Maxime Chevallier <maxime.chevallier@bootlin.com>, Naveen Mamindlapalli <naveenm@marvell.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Danielle Ratson <danieller@nvidia.com>, Hariprasad Kelam <hkelam@marvell.com>, 
+	Ido Schimmel <idosch@nvidia.com>, Kory Maincent <kory.maincent@bootlin.com>, 
+	Leon Romanovsky <leon@kernel.org>, Michael Chan <michael.chan@broadcom.com>, 
+	Oleksij Rempel <o.rempel@pengutronix.de>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, 
+	Willem de Bruijn <willemb@google.com>, Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The existing 'sysret_rip' selftest asserts that 'regs->r11 ==
-regs->flags'. This check relies on the behavior of the SYSCALL
-instruction on legacy x86_64, which saves 'RFLAGS' into 'R11'.
+Breno!
 
-However, on systems with FRED (Flexible Return and Event Delivery)
-enabled, instead of using registers, all state is saved onto the stack.
-Consequently, 'R11' retains its userspace value, causing the assertion
-to fail.
+On Thu, 26 Mar 2026 at 10:33, Breno Leitao <leitao@debian.org> wrote:
+>
+> On Wed, Mar 25, 2026 at 03:50:16PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
+>
+> > +def _dfs_write_u32(cfg, path, val):
+> > +    with open(os.path.join(_nsim_dfs_path(cfg), path), "w",
+> > +              encoding=3D"utf-8") as f:
+> > +        f.write(str(val))
+>
+> This function doesn't seem to be called, right?
 
-Fix this by detecting if FRED is enabled and skipping the register
-assertion in that case. The detection is done by checking if the RPL
-bits of the GS selector are preserved after a hardware exception.
-IDT (via IRET) clears the RPL bits of NULL selectors, while FRED (via
-ERETU) preserves them.
+Indeed -- another leftover! Thank you!
 
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Yi Lai <yi1.lai@intel.com>
----
-v3:
-- Move is_fred_enabled() to helpers.h for other x86 selftests to use.
-  Rename empty_handler to fred_handler to avoid symbol conflicts.
+> > +def main() -> None:
+> > +    """Run netdevsim loopback tests."""
+> > +    with NetDrvEnv(__file__) as cfg:
+> > +        cfg.ethnl =3D EthtoolFamily()
+>
+> Given some functions above assume this is nsim, should you call
+> cfg.require_nsim() ?
 
-v2:
-- Replaced CPUID check with a runtime probe using INT3 and GS RPL
-  preservation to robustly detect active FRED usage (Suggested by
-  Andrew Cooper).
+Yeah, or directly from NetDrvEnv() statement above! Good point! Will fix!
 
- tools/testing/selftests/x86/helpers.h    | 34 ++++++++++++++++++++++++
- tools/testing/selftests/x86/sysret_rip.c | 12 ++++++---
- 2 files changed, 43 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/helpers.h b/tools/testing/selftests/x86/helpers.h
-index 4c747a1278d9..4d09ed97aaac 100644
---- a/tools/testing/selftests/x86/helpers.h
-+++ b/tools/testing/selftests/x86/helpers.h
-@@ -4,6 +4,7 @@
- 
- #include <signal.h>
- #include <string.h>
-+#include <stdbool.h>
- 
- #include <asm/processor-flags.h>
- 
-@@ -50,4 +51,37 @@ static inline void clearhandler(int sig)
- 		ksft_exit_fail_msg("sigaction failed");
- }
- 
-+static inline void fred_handler(int sig, siginfo_t *info, void *ctx_void)
-+{
-+}
-+
-+static inline bool is_fred_enabled(void)
-+{
-+	unsigned short gs_val;
-+
-+	sethandler(SIGTRAP, fred_handler, 0);
-+
-+	/*
-+	 * Distinguish IDT and FRED mode by loading GS with a non-zero RPL and
-+	 * triggering an exception:
-+	 * IDT (IRET) clears RPL bits of NULL selectors.
-+	 * FRED (ERETU) preserves them.
-+	 *
-+	 * If GS is loaded with 3 (Index=0, RPL=3), trigger an exception:
-+	 * IDT should restore GS as 0.
-+	 * FRED should preserve GS as 3.
-+	 */
-+	asm volatile (
-+		"mov %[rpl3], %%gs\n\t"
-+		"int3\n\t"
-+		"mov %%gs, %[res]"
-+		: [res] "=r" (gs_val)
-+		: [rpl3] "r" (3)
-+	);
-+
-+	clearhandler(SIGTRAP);
-+
-+	return gs_val == 3;
-+}
-+
- #endif /* __SELFTESTS_X86_HELPERS_H */
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 2e423a335e1c..30b195266779 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -64,9 +64,15 @@ static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
- 	ctx->uc_mcontext.gregs[REG_RIP] = rip;
- 	ctx->uc_mcontext.gregs[REG_RCX] = rip;
- 
--	/* R11 and EFLAGS should already match. */
--	assert(ctx->uc_mcontext.gregs[REG_EFL] ==
--	       ctx->uc_mcontext.gregs[REG_R11]);
-+	/*
-+	 * SYSCALL works differently on FRED, it does not save RIP and RFLAGS
-+	 * to RCX and R11.
-+	 */
-+	if (!is_fred_enabled()) {
-+		/* R11 and EFLAGS should already match. */
-+		assert(ctx->uc_mcontext.gregs[REG_EFL] ==
-+		       ctx->uc_mcontext.gregs[REG_R11]);
-+	}
- 
- 	sethandler(SIGSEGV, sigsegv_for_sigreturn_test, SA_RESETHAND);
- }
--- 
-2.43.0
-
+Bj=C3=B6rn
