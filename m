@@ -1,102 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208E734F481
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 23:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D9E3A2560;
+	Thu, 26 Mar 2026 23:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774566655; cv=none; b=L6tdGpvK4fnwK7kXwfZ03Eru2aEbmr5hYgWunyBAV1aROD55Xui7tKMu4atVCgIQWDXsXkX8OwiaQGPF28Tx4gr69FuLMnIRkGzqg3MN+Kz4HU+gJGJoJxs3MSjFz1UQZZekmTvTFiAUPpuoh1yBr050VQ2NkYE7oS6VmtkfT/s=
+	t=1774567424; cv=none; b=Oal84bHtVMncgCDxZsTxxUe7jRlwRdBItg6jstacQsxAkP261PKuccsqu61YE+RBZ/tYOIGbEhgH/svbhms+Mx5QCD/M/Z+hpkfEPcaYKeGdhZ8nM3bgObDKfa3IR4MYC64Rikwb53VdRsPNNxJSuS+U73KPJYhZSPFCDdNXgr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774566655; c=relaxed/simple;
-	bh=HEabCAS3j7mMDHObZy/GRmEkWbvvgyE9mlPkTC/rKtw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PU0D7DsKxu39fqrPeqCFolKyUAN5JeS47JgnWA6GuL7tBxZwIMNzm1s0jRGFoge/K8+fYLtaKWiOu+BfDdZg/55KQ7amk0YHLPfd8R52JjVQKJ1b/nxEcawkAqCIdclrplYUct4JJh00nhzuGvluAicteAaWRjMsR9wDPvu4Yg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qnrICnDF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774567424; c=relaxed/simple;
+	bh=ywefAlrhCimBtUrBIPGiIi039tfFwchTq617Tcwm5Zg=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=okVHp/5FzVRAA8Ji4FbJYBg45DLtyRfKggn6BnZWqDxQpHIaDCO19p5mJFnsODiFj4cvy7bOFA8zw8MXlYwKAK6bKUW9PpCWxHWzBDHqDTpS3T670G/aF+PUy/4mFYkqZX5J6+wIA3DcGitc2rcELDsgX3a3Iw3dAewYaCDA8M8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=bXZehikS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qnrICnDF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D54C2BCB2
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 23:10:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774566654;
-	bh=HEabCAS3j7mMDHObZy/GRmEkWbvvgyE9mlPkTC/rKtw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qnrICnDF8v0HcsQijsGqRez19f5CS3Muzmxh1YWTHJKpxImprw1BtALFpZD0GAgft
-	 Sf5hOYxQzHAatwH2U32mus4XCVWRStfZN8hxrWctFJ7dCFW4Z1JN/DIcKb3hecevc+
-	 Ck6AFb2GSfYDIqeBXXYgTjMUir0EJ5u800H5BNP9PO3BbYgRn9Qqm4WnEfnergSv01
-	 AogoQFKvEI2cWQr07e6mdpvqTFRQGOotWV4AoOpYHaLdnUDKphGYfpBoRSHah3MPu8
-	 nmwjj8H2vWpTDcdc+BvFQWyhHYw1cofN5G/5aKBhfrdimRpxu58ATD/2RttoWCzmRb
-	 LUQF30CshAcsA==
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b9b1ffbb9f5so201708466b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 16:10:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX+jXMo2W6o4ToxFDMqOJUWY8s4ypnQt/Ru40T+6vO9Jc/Xfw3Jt7VUK9yl00LSMUMvInnsBM+AgPNq4rYe0SA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk4PLv3BA2AgOiDxSsgfqZCSpsWInkY78IXgHjt0th9MnhimmU
-	/GNy0FV3LSwRtddFvxxegLdAaRuECm6CpQN+ewQ7dp3UJCWHzewXypJjF9517Z8c7P8BlwkXvms
-	HIUrd64JO7m1xJ8H3Z7YpPdzDVbcZQWI=
-X-Received: by 2002:a17:907:a0d5:b0:b84:40d3:43e7 with SMTP id
- a640c23a62f3a-b9b502c082emr17431066b.6.1774566653369; Thu, 26 Mar 2026
- 16:10:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="bXZehikS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57D4C19424;
+	Thu, 26 Mar 2026 23:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1774567423;
+	bh=ywefAlrhCimBtUrBIPGiIi039tfFwchTq617Tcwm5Zg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=bXZehikSOnzJCjqTWi0vMkzNfGuZk/eIT/VwIhjH+YfQJA7FfwufOkVdraXZLMtit
+	 UFempOXqyIbWdgsdvIhVsdje87SqXt0LakogZA+AVEscO5nxcNvZivw0Js6Ko2SmCv
+	 WXz3MnsabMlyPLfXxSQ4Yi2IA2HAJPnOJ22/LWqk=
+Date: Thu, 26 Mar 2026 16:23:42 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrea Arcangeli <aarcange@redhat.com>, Axel Rasmussen
+ <axelrasmussen@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ David Hildenbrand <david@kernel.org>, Hugh Dickins <hughd@google.com>,
+ James Houghton <jthoughton@google.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Michal Hocko
+ <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>, Nikita Kalyazin
+ <kalyazin@amazon.com>, Oscar Salvador <osalvador@suse.de>, Paolo Bonzini
+ <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan
+ <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 00/15]  mm, kvm: allow uffd support in guest_memfd
+Message-Id: <20260326162342.b8178cb8940123324c1c9211@linux-foundation.org>
+In-Reply-To: <20260306171815.3160826-1-rppt@kernel.org>
+References: <20260306171815.3160826-1-rppt@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260326032658.96819-1-liwang@redhat.com> <acTSQFxTs4-t7P5t@redhat.com>
- <20260326160618.18a20227b606bc95f3c3cfa6@linux-foundation.org>
-In-Reply-To: <20260326160618.18a20227b606bc95f3c3cfa6@linux-foundation.org>
-From: Yosry Ahmed <yosry@kernel.org>
-Date: Thu, 26 Mar 2026 16:10:42 -0700
-X-Gmail-Original-Message-ID: <CAO9r8zPMtNaRuGSrHnfh6AX3DKVoR6d90X7O9UTjxbushssyuA@mail.gmail.com>
-X-Gm-Features: AQROBzBwjNh8DYJY5cdGsMAUqkIBhiDt_G1kN7qGVt8vQO-IEBhvuwlMiehhNfE
-Message-ID: <CAO9r8zPMtNaRuGSrHnfh6AX3DKVoR6d90X7O9UTjxbushssyuA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/8] selftests/cgroup: improve zswap tests robustness
- and support large page sizes
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Li Wang <liwang@redhat.com>, nphamcs@gmail.com, hannes@cmpxchg.org, 
-	mhocko@kernel.org, mkoutny@suse.com, muchun.song@linux.dev, tj@kernel.org, 
-	roman.gushchin@linux.dev, shakeel.butt@linux.dev, longman@redhat.com, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 26, 2026 at 4:06=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Thu, 26 Mar 2026 14:29:20 +0800 Li Wang <liwang@redhat.com> wrote:
->
-> > > Test all passed on:
-> > >   x86_64(4k), aarch64(4K, 64K), ppc64le(64K).
-> >
-> > Hi Andrew, All,
-> >
-> > I see that Sashiko still points out minor issues in this patchset,
-> > That seems very tiny in selftest programming.
-> >
-> > I can correct all that in a new version if you'd like a perfect patchse=
-t.
-> >
-> > Sashiko comments:
-> >   https://sashiko.dev/#/patchset/20260326032658.96819-1-liwang%40redhat=
-.com
->
-> Ah, OK, you already looked.
->
-> If you say they're too minor then I'm OK with that.  If there are any
-> you feel you'd like to address then go for it.  That's my opinion,
-> others might differ!
->
-> I suggest you leave things as-is for a while (a week?), give the memcg
-> maintainers time to take a look (please).
+On Fri,  6 Mar 2026 19:18:00 +0200 Mike Rapoport <rppt@kernel.org> wrote:
 
-I think some of the comments are worth addressing, especially:
+> These patches enable support for userfaultfd in guest_memfd.
 
-Patch 4:
-Using BUF_SIZE in the allocation helpers is wrong, we should use the
-actual page size.
+Review of this series is very thin at this time so can I please ask
+potential reviewers to spend some time with it?
 
-Patch 6:
-Zero initialization of zw_allocation.
+To create additional time for review I have relocated this series to
+the tail of the mm-unstable queue.  That probably means that movement
+into the mm-stable branch and upstreaming will occur in the second week
+of the upcoming (7.1-rc1) merge window.
 
-But yeah as Andrew said, it may be worth waiting for memcg maintainers
-to take a look before sending a new version.
+Thanks.
