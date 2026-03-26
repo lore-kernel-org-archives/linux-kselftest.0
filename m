@@ -1,89 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A7E28314C
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 08:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3071036B047;
+	Thu, 26 Mar 2026 09:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774515323; cv=none; b=dQY23tvQtV9MBIrFWYRuwAzzQwxNiMQlfNU08eX0Pjr3SuIZfcJuLnnfjzIXP7BTclgCoYGwfyz54CYraNHklhyHjuTb3t8lKapcy06sy6/IwGUJo6g0GEvAmofV5Qd9d5cOCBNUzSZ4fHR+0rhQJE7MbrqPjrYy4BT+d7KFfyQ=
+	t=1774515868; cv=none; b=TPcnDRjmAgdPnz27FoL9NUzZhD1QVtDJKeXBbd2FioOwwyDc+8dVqT1i7uZQh2qR6yhPLCBTuOyXGnnbmSfg3O+9xSqqA1EwwAVRk6nS9KLCv5rrp9kTfkihYBj4EfV+kSVVSONn8T8JCNSlWcwJ0w0f4EyewRXBvgmU0+GDQ7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774515323; c=relaxed/simple;
-	bh=WI3UlnZsJMZEs8+G2pLceqS01VbAn/Itdv+PDIf3JcU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NyFzOqH7lkdAF9+CsFJhHNJSNe3/gFcCkCBI4TQEVh1E7u9jo5AkMSJFzjzFQMbCjldTH7OKzxndlFlPRig3Y1Ck9hEE6YytOGYc7tW91ihmGUkbaRs7vS/qrNcLOsxvvz0OC/+G4Gn2w3UKjWPLpMm3p7aCli8J1JHscp1+suE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7YTlPpM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774515868; c=relaxed/simple;
+	bh=iYLe7tMvWLZ8XmOqZgsqZUuDbTn6c4gDSEIS+FTWtfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bjmdNwuTUyutzxJG56MTj2voDrnmIjR/0VO2jxgiOM4nEGA1DXBHqNmMqa/6FXITj18XYbzwzLItME7fJn+Y+eDN+HbQlnee8yl1LFGe6wN3D1DDar6nPGakodsnpSgMJ1PLReLD1FwBWqZ+izUCyx8Cbo4NIIORl+rSAD2tAEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l6tDDIjp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7YTlPpM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 240C7C2BCB1
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 08:55:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l6tDDIjp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CC30C116C6;
+	Thu, 26 Mar 2026 09:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774515323;
-	bh=WI3UlnZsJMZEs8+G2pLceqS01VbAn/Itdv+PDIf3JcU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=u7YTlPpMjTN7iL/AduRAAUQud+dshPKlqbtZ7hEFm6+60iV6+pJy+iixUd1bEChbs
-	 LnlkxCJY6bOG5jKN30uakTBo+SbRuf2iIJgwHhPZSFvbRzxbgPDXJTrc8G1fWnzGL3
-	 dkUtAq00d+DGPUAMS7xVvHcnlCQqm8hNMEXXmJUm+OaJRBICGJONnxkz/Rb9XMbOTf
-	 kEJBaje8ELBcDeIbc2sWmp5/txXyYUXYqY5em006Qo9oblL4yGLp2hFAZkiof8fOvp
-	 gspUZHPn/ivI9PDW5cs7NhXqAL5EzN0Z3sfY6g6k+JuLqaOrWE7AjaCqD52mkm34n3
-	 kmIS+MHsd9Kcw==
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8cfc795ca97so70500585a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 01:55:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXhO31UpnSFJUD/VFDdZOBIPiWBE+DFyxqcw9rWtzye2qGjQZH5UKd3a3KjtYFgdMbJ9K5Yxo6RbkFfketZm4Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6OC8sA2DkmX6kfWeFczzzrP0S7jii5a1bhkVtxRlmj3+F145O
-	tm+qbLuJ25KcquXiZaCsp7Zt23Fxv2w7oDfmAvQSSFr41hQirC1WqVIurxT1zuxBb/jKEBThOi2
-	yilKKoss0AnmWhWQJGb3uAXPPzXrFUXY=
-X-Received: by 2002:ac8:6906:0:b0:509:882:9e7a with SMTP id
- d75a77b69052e-50b80f2ba1fmr92779011cf.70.1774515322055; Thu, 26 Mar 2026
- 01:55:22 -0700 (PDT)
+	s=k20201202; t=1774515867;
+	bh=iYLe7tMvWLZ8XmOqZgsqZUuDbTn6c4gDSEIS+FTWtfY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=l6tDDIjppwo5iydJp05VoVjwZRJCeS0u5deC7cL3xssqdQ1abiZJ1cLIZfAwJvBCB
+	 E/8UsrVorkMtvAUmUDcbNaMFdwlhEwaa45Mv+qqh3VPSX2NmLKynBBXqeiOhaVdrZv
+	 BNlYhzHnP+GbVcVnoFcrJfQxqpM/RrBqpBe3GFx6qhenQmEnKUvcKcNlw0F9ml3vhv
+	 SBfi54HyjPFuH/HudwRZolrq0Z7VA/bXYdejOsCLtCG86As0ZknckLDGan5umB/OUm
+	 XMC06bGIvyNIvku+ex3Ii8wJqpZ3B7/QtBVLk0rCY4mhFWI7wdtjf2rdmQldpjjiLN
+	 VQw1jbLNwTRSQ==
+Date: Thu, 26 Mar 2026 11:04:21 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: David Matlack <dmatlack@google.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	linux-kselftest@vger.kernel.org, shuah@kernel.org,
+	akpm@linux-foundation.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, skhawaja@google.com
+Subject: Re: [PATCH v3 1/2] liveupdate: prevent double management of files
+Message-ID: <acT2lYJKdyXXzNPZ@kernel.org>
+References: <20260325182026.467307-1-pasha.tatashin@soleen.com>
+ <20260325182026.467307-2-pasha.tatashin@soleen.com>
+ <2vxzikajacgc.fsf@kernel.org>
+ <CALzav=eybgJwMQEtvSi2bUv8u7cic6d45r4wFZdZiKFFrrLJfQ@mail.gmail.com>
+ <CA+CK2bBpa8ZnxPdsPCRCAiPeHUbqQ3TNjHTGU2eN_BGqqX2Y1Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260325145022.2607545-1-bjorn@kernel.org> <20260325145022.2607545-4-bjorn@kernel.org>
- <2859dddf-a7b7-46f8-b97d-45d8be242cde@bootlin.com>
-In-Reply-To: <2859dddf-a7b7-46f8-b97d-45d8be242cde@bootlin.com>
-From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Date: Thu, 26 Mar 2026 09:55:11 +0100
-X-Gmail-Original-Message-ID: <CAJ+HfNiFrr4o1jp+9S7qwf0uLJSu1w0xuRp=vMTKy0h8k2jUcQ@mail.gmail.com>
-X-Gm-Features: AaiRm505r-8a43ZSTjoXwKs-G2S_sqNSyxyDaKUyDM3o9vh8L82fgoGyTVvP7VE
-Message-ID: <CAJ+HfNiFrr4o1jp+9S7qwf0uLJSu1w0xuRp=vMTKy0h8k2jUcQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 03/12] ethtool: Add loopback netlink UAPI definitions
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Naveen Mamindlapalli <naveenm@marvell.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Danielle Ratson <danieller@nvidia.com>, Hariprasad Kelam <hkelam@marvell.com>, 
-	Ido Schimmel <idosch@nvidia.com>, Kory Maincent <kory.maincent@bootlin.com>, 
-	Leon Romanovsky <leon@kernel.org>, Michael Chan <michael.chan@broadcom.com>, 
-	Oleksij Rempel <o.rempel@pengutronix.de>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
-	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, 
-	Willem de Bruijn <willemb@google.com>, Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+CK2bBpa8ZnxPdsPCRCAiPeHUbqQ3TNjHTGU2eN_BGqqX2Y1Q@mail.gmail.com>
 
-Maxime!
-
-On Thu, 26 Mar 2026 at 09:10, Maxime Chevallier
-<maxime.chevallier@bootlin.com> wrote:
->
-> Hi Bj=C3=B6rn,
->
-> On 25/03/2026 15:50, Bj=C3=B6rn T=C3=B6pel wrote:
-> > Add the netlink YAML spec and auto-generated UAPI header for a unified
-> > loopback interface covering MAC, PHY, and pluggable module components.
+On Wed, Mar 25, 2026 at 05:08:57PM -0400, Pasha Tatashin wrote:
+> On Wed, Mar 25, 2026 at 4:34 PM David Matlack <dmatlack@google.com> wrote:
 > >
-> > Each loopback point is described by a nested entry attribute
->
-> Is the nest actually needed ? if everything is under the nest, you might
-> as well just drop it and return all the attributes directly ?
+> > On Wed, Mar 25, 2026 at 1:20 PM Pratyush Yadav <pratyush@kernel.org> wrote:
+> >
+> > > For memfd and hugetlb at least, we serialize the _inode_ not the file.
+> > > The inode has the contents that we care to preserve.
+> > >
+> > > So if two FDs point to the same inode, this will break. You can do this
+> > > by first creating a memfd and then by opening "/proc/self/fd/<fd>". Then
+> > > you would be able to trigger the preservation twice, causing all sorts
+> > > of problems. Same on the retrieve side.
+> 
+> Hm.
+> 
+> >
+> > > So unless I am missing something, I don't think this approach will work.
+> > > As much as I hate to suggest it, I think we need to move this check to
+> > > each caller so they can find out the object they need to serialize and
+> > > check if it already is.
+> >
+> > I think LUO can still enforce that the file is not preserved twice.
+> > HugeTLB and memfd's preserve() functions just need to also check that
+> > the associated inode has not already been preserved?
+> 
+> For memfd/hugetlbs the true state is in inode
+> For vfio/kvm the shared anonymous inode is just a dummy wrapper, and
+> the true state is in file->private_data.
+> 
+> I wonder if we could use the XArray to track inodes for standard
+> files, but track the struct file itself for anonymous files (we would
+> need a new function from FS that allows us to determine if "struct
+> file" has anonymous inode or not).
 
-Hmm, you're right! This is a leftover pre the dumpit change. GET/SET
-never needs nesting. I'll fix that for the next round!
+Don't all files we preserve use anon inodes?
 
-Thanks!
-Bj=C3=B6rn
+How about we extend the fh->ops with a method that will return "unique"
+object? 
+
+	list_private_for_each_entry(fh, &luo_file_handler_list, list) {
+		if (fh->ops->can_preserve(fh, file)) {
+			unique_handle = fh->ops->unique_handle(fh, file);
+			err = 0;
+			break;
+		}
+	}
+
+	xa_insert(&luo_preserved_objects, unique_handle,
+		  (unsigned long)unique_handle, GFP_KERNEL);
+ 
+> Pasha
+
+-- 
+Sincerely yours,
+Mike.
