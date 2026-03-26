@@ -1,312 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC3B3A16A2
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 20:41:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774557675; cv=none; b=bESAAnqN0uImGenfJOXXMwc9H2QISkJZw7DzcUALoRY4gU+OL5py/YE8O4x30krs9FIaxI7IoMZooXzh1Wg3po8CxuXXqO0gX25YZg8v3TMp1D0axnvyd+WSPX1BI+TdokWrT/3zJf9K6JpDRTZAJrhLH7C47lTFKZKcUU5TWOs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774557675; c=relaxed/simple;
-	bh=9N1WeKjmcFuqf1iZ19U0oY77Qo9cvADC8/ho5Q5Jij0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BtNd2O0HUf3tf0jCTiQWIdjYzsi/t29LgbTpDSM2Sc7zn35OSN+0hGnkThIkvJwVnrEvz18aGhvxoqPiSgTHOp56Y8GiEKto3UH7IzHY6jPZrtbIPS9FBfAXZcdRSJcICbXE5B6MEKrvY6wssI1Nje4jF+IZIua15JguNdkaFi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jMV7ruQP; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699873A6EE1
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 20:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774557841; cv=pass; b=oNK5vgdsaKNERJTkoJnk7ZAgUqO/pUVCQHHFQBILxIjkCrnAny5PInBVTPq4chcXkG76qkAmRj++EhZGzNBotTSxfia/8vbZsVEkBCcOSuNLRY4vruKx85BPGl+RoW2HXqkcxpx9uRT3SOm1qqL3rl9t64KEnxTBI+p3BiBofZg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774557841; c=relaxed/simple;
+	bh=PeaSOVbGjvcbPrM1ej8GhDm0pQojiKvmqm8K/+z+B5I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bRfdsfWqkKPeoakbfWPJUkSkNHVIqSXApQm9BIakK79J1D1QiXGzvsWeMNlzhUoUqFK/yc7TAd6Tk0htopMS97XrKXwSP4DqP5oNmSLZo8tgcdGdqhiGFiamHLFdzOyqSVGTr6ZR+zwlKGe1cHuNMg/9lTgGYNZ6ImIZ6hJGh0A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=piX9Xtl3; arc=pass smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jMV7ruQP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774557672;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E4F0TZ4XCKGRv1yherfMIZtt5EFQi5A8XYq0m3tTV8E=;
-	b=jMV7ruQPzqSvybaJ15GULu8UykV5fP94FTeq9kW4IVYy/+zCvqx5hZ0HZcyR7m/oh2LbVf
-	/1pYrNr5Lio8d1Lcj7mLop9iFjzReTreeOwidi8xr17vaBv9Q3VRvSLhpnsZuyhtAYiNdX
-	K/zpI7sfhUggnVxFTo043PHKfJ5XUzE=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-347-4NfsOWdoPuet0a69NldMfg-1; Thu,
- 26 Mar 2026 16:41:08 -0400
-X-MC-Unique: 4NfsOWdoPuet0a69NldMfg-1
-X-Mimecast-MFC-AGG-ID: 4NfsOWdoPuet0a69NldMfg_1774557667
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 413071956056;
-	Thu, 26 Mar 2026 20:41:07 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.64.124])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1B77E18001FE;
-	Thu, 26 Mar 2026 20:41:04 +0000 (UTC)
-Date: Thu, 26 Mar 2026 16:41:02 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Pablo Hugen <phugen@redhat.com>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	shuah@kernel.org
-Subject: Re: [PATCH] selftests/livepatch: add test for module function
- patching
-Message-ID: <acWZ3r2CoSDy_NLf@redhat.com>
-References: <20260320201135.1203992-1-phugen@redhat.com>
- <acVD_NPu4JVRoaVK@pathway.suse.cz>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="piX9Xtl3"
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5a0ff30b240so1639849e87.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 13:43:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774557838; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FzbUSJHj/wpyY21DgQmKe8x7pAfkca+EFf4KQnWbY2Nz2c7LB1gXD/bb1Lc/NCGOtw
+         PX21seLW51jUy882kGlVjaKAn4UJXv0yN6im+MMzkfpdlPzIjEZJzPAGKbONwxYdzMuV
+         2812iGYHu4ZE/gn5byzBmrSktn70wpDP96xv4pKVoGAlDz/MHxgQs1Ur30J3N0qx+ZoS
+         UPLWobJ+LOmA3oPlDf0Hkq1OrQ2nqMCMTyeWFHKIez+SXFv+6QEptUolzYZETAxeKijH
+         zefxqd5ZCrUhXCIt+vWISJW+yKU0l8U40XEjAEFaboj12Gf4EOYnVDbI32oJfMbj9/IK
+         g1GQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=CnD4wGwZvJQvR/a6rbd+FFqGbZMJuBdhvv8TVCrH3ik=;
+        fh=o57e8bEgrpQlY6F6xywD5VM1jbPIuSz28YgFSwy5X5A=;
+        b=khccvpOZhKQbcyYGZeHV/CyyCmuc3XY+G136RdqebOzfsnaFWymq60wNz+7jPXpxqi
+         Ah1IxTIP1pw7kjTRl3G4djNwqlAwEPBQ+cpYhjg0toShkY8zTLQC943J/u31HHUKMfUY
+         OpQ4raBzwS2vH6grOwy4Mq6gS/O/Hga5YxllFpGk+0zYFBjvVTmzDyC50wFL6YRza4yq
+         5rqfgMlVGE1rv00b90f4ZXWQIETVFXoQB3oBNgQ6Vqqw6C1XFrMVQjYYZcbB8uZw83Ux
+         JucZgLSkCJBdNw+mJ0AIUHCKlBVWKy0zvTjOV2YsOH1TFLbRcU550aPib3WYOQigs/dP
+         BYKg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774557838; x=1775162638; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CnD4wGwZvJQvR/a6rbd+FFqGbZMJuBdhvv8TVCrH3ik=;
+        b=piX9Xtl3iaNv8uRfxNguwwZybMuQycDIDPJDH0KJMJLN8uO4MO9qljp+6Um2fxBy0W
+         DvbbxR72etHfe2JSvVkW43pq0jujJGTwdK6ZIn9fYJxI0JEyQIpzWNhFE+UPxqAXCFOx
+         muZ4ven/Q02Rnfe0TNN5n2BfIDJfc0qu7dlulBOX+4IMwpRmLZHE4SKf/IolDO2ZGwry
+         SzjXwCdA4gxJYubVTk+stqy1YCCmBeW+ZAgNmOUYeO3y2mXlphgmGYGEPOoUqpKw5HpR
+         Ie5nuyrjnlTAW7NHJdpmZrOjV/IfjDvFPmsknTUTQ/VJT8MbysYMuKN1aoCVotxvyED7
+         uSNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774557838; x=1775162638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=CnD4wGwZvJQvR/a6rbd+FFqGbZMJuBdhvv8TVCrH3ik=;
+        b=sAqExvEAnCkh7bo2wMMGO3dAzPWHHL7bVmtXOUPnMtO5wJjprdMx2VFgOxax0niGN9
+         UVcP9pCkyowYtcAMyNGBGAeIioWB1KUB457NMXOhUh5StlftHP0smHpbhGKLAy+z9npl
+         7yDSAgNa6Sx7XvQrNTKiM/us2GqpMk0As1C7JdQqKMhjhL9qX7Q4sl9FmdYrbrOxV8y3
+         9RDyjRVXEvSMuEf8JJAlAbNyzU7qTZHkO7VAW7kRRM6U2aFHdEQH71Q95VPP2FDMCoY4
+         2lPa5fs5U3m3fmRDqexbkiGI9qPasC7VRBP8t/FaafibiCETaRJ4VANM6Yny3Skxm+57
+         5bmg==
+X-Forwarded-Encrypted: i=1; AJvYcCXV8P3/2eVBl66F1G34Df8BbFylXEae/2QCTsPZLn0Q8b8VivJwCSFLyBxkbglhX0QolTblDWWhn2kaH8H9npM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhwFPMvi302uIsbDdqP6zt0Q7Le5T3g18CUum9KrxunaUODT2B
+	FWD4IBlQQscanhSt3wR/dNRP18Qi+nZGCT0qhJZeS+3FfYIodcRFt08iBE5dDJDZB/RKbfx6pYW
+	/ua0KChVAqh1FEzs74wRlMwC2ygR7F7v2yq0ycRGq
+X-Gm-Gg: ATEYQzzcxJRSOYyKnCTf9fC3/m3f9TFzjluGua+GIKpJCYXJXsTiGDayIoUfc5m9ACS
+	Z7gvEb6Z6jFGsdmK9HJWq4TypYPnl0/5eunn7moY+pI+mUosOPhmvAKyls6/QO84gyXHRea97BE
+	ijNQ2uSp3+raOWBWIVX32gJXhomMhDCzqcHYFUQSR+LRXUbXsueQJp5+X+KEl+njEEhNjJStTJZ
+	DPtsurjwQUvTuXrS+QSqu+Q/2qI4++SUNmywztaWzjsEZH3U0d3s7ZG9Ztj3Que1TXnemzB/RGD
+	YQPvy7LO
+X-Received: by 2002:a05:6512:10c6:b0:5a2:a5e0:2da2 with SMTP id
+ 2adb3069b0e04-5a2a5e02ec7mr1094413e87.8.1774557837156; Thu, 26 Mar 2026
+ 13:43:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acVD_NPu4JVRoaVK@pathway.suse.cz>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+References: <20260323235817.1960573-1-dmatlack@google.com>
+In-Reply-To: <20260323235817.1960573-1-dmatlack@google.com>
+From: David Matlack <dmatlack@google.com>
+Date: Thu, 26 Mar 2026 13:43:29 -0700
+X-Gm-Features: AQROBzDv95n65Jfr7km6DKOoUBuRrbrSOHrGu-gele9pXf1C5O1laHd_UCbivjU
+Message-ID: <CALzav=f4--Kp5vXz5zrxZR3WVsa9T1GF4NFFtuf_Q5ESMHmWwQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/24] vfio/pci: Base Live Update support for VFIO
+ device files
+To: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, 
+	Alex Mastro <amastro@fb.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>, Askar Safin <safinaskar@gmail.com>, 
+	"Borislav Petkov (AMD)" <bp@alien8.de>, Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
+	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
+	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
+	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2026 at 03:34:36PM +0100, Petr Mladek wrote:
-> On Fri 2026-03-20 17:11:17, Pablo Hugen wrote:
-> > From: Pablo Alessandro Santos Hugen <phugen@redhat.com>
-> > 
-> > Add a target module and livepatch pair that verify module function
-> > patching via a proc entry. Two test cases cover both the
-> > klp_enable_patch path (target loaded before livepatch) and the
-> > klp_module_coming path (livepatch loaded before target).
-> 
-> First, thanks for the test.
-> 
-> Second, I am a bit biased because I am working on a patchset which would
-> obsolete this patch, see
-> https://lore.kernel.org/all/20250115082431.5550-1-pmladek@suse.com/
-> 
-> That said, I have sent an RFC a year ago. I worked on v1 when time
-> permitted but it is still not ready. And it might take another
-> many months or year to finish it.
+On Mon, Mar 23, 2026 at 4:58=E2=80=AFPM David Matlack <dmatlack@google.com>=
+ wrote:
 >
+> This series can be found on GitHub:
+>
+>   https://github.com/dmatlack/linux/tree/liveupdate/vfio/cdev/v3
+>
+> This series adds the base support to preserve a VFIO device file across
+> a Live Update. "Base support" means that this allows userspace to
+> safely preserve a VFIO device file with LIVEUPDATE_SESSION_PRESERVE_FD
+> and retrieve it with  LIVEUPDATE_SESSION_RETRIEVE_FD, but the device
+> itself is not preserved in a fully running state across Live Update.
 
-Hi Petr,
-
-I remember that patch as a "grand, unified" theory for livepatching API
-and look forward to the next iteration when you find the time.
- 
-> Your test might be perfectly fine in the meantime. Just see few
-> notes below.
-> 
-> > --- a/tools/testing/selftests/livepatch/test-livepatch.sh
-> > +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-> > @@ -8,6 +8,8 @@ MOD_LIVEPATCH1=test_klp_livepatch
-> >  MOD_LIVEPATCH2=test_klp_syscall
-> >  MOD_LIVEPATCH3=test_klp_callbacks_demo
-> >  MOD_REPLACE=test_klp_atomic_replace
-> > +MOD_TARGET=test_klp_mod_target
-> > +MOD_TARGET_PATCH=test_klp_mod_patch
-> >  
-> >  setup_config
-> >  
-> > @@ -196,4 +198,102 @@ livepatch: '$MOD_REPLACE': unpatching complete
-> >  % rmmod $MOD_REPLACE"
-> >  
-> >  
-> > +# - load a target module that provides /proc/test_klp_mod_target with
-> > +#   original output
-> > +# - load a livepatch that patches the target module's show function
-> > +# - verify the proc entry returns livepatched output
-> > +# - disable and unload the livepatch
-> > +# - verify the proc entry returns original output again
-> > +# - unload the target module
-> > +
-> > +start_test "module function patching"
-> > +
-> > +load_mod $MOD_TARGET
-> > +
-> > +if [[ "$(cat /proc/$MOD_TARGET)" != "$MOD_TARGET: original output" ]] ; then
-> > +	echo -e "FAIL\n\n"
-> > +	die "livepatch kselftest(s) failed"
-> > +fi
-> 
-> This code is repeated several times. It might be worth creating a
-> helper function in tools/testing/selftests/livepatch/functions.sh.
-> 
-> > +load_lp $MOD_TARGET_PATCH
-> > +
-> > +if [[ "$(cat /proc/$MOD_TARGET)" != "$MOD_TARGET_PATCH: this has been live patched" ]] ; then
-> > +	echo -e "FAIL\n\n"
-> > +	die "livepatch kselftest(s) failed"
-> > +fi
-> 
-> When I was working on the above mentioned patchset, I realized that
-> "die" in the middle of the test was not practical because it
-> did not do any clean up.
-
-IIRC it was an original design intention so that if you were to run the
-test script directly, the system would be left in that state for
-debugging.  That said ...
-
->                          As a result, "make run_tests"
-> continued with other tests but they typically failed as well.
-> And I had to manually remove the test modules to be able to
-> try "fixed" tests again.
-
-... D'oh, that's pretty annoying behavior to wade through, like triaging
-compiler failures (i.e. the Nth error is probably just a result of the
-first N-1 error(s).)
-
-Since most people probably run via the run_tests target, my previous
-preference for a debuggable state probably isn't realistic anymore as
-the test car continues careening down the cliff, accumulating new,
-interesting damage with each subsequent test failure.
-
-> 
-> I thought about two solutions:
-> 
-> 1. Remember loaded modules and try to remove them in a clean up code.
-> 
-
-At the time of creating the selftests, I remember resisting this effort,
-afraid of the Pareto Principle and never getting that last 20% correct
-(is the livepatch transition stuck, broken, how I can cleanly unwind
-from a test gone rogue, etc.)
-
-> 2. Report the failure into the kernel log but keep the test
->    running so that they calls the disable_lp/unload_lp/unload_mod
->    functions. The test will do the clean up and will fail
->    later in check_result().
-> 
-> 
-> While the 1st approach might be easier in the end, I choose
-> the 2nd approach in my RFC, see below.
-> 
-> 
-> > +disable_lp $MOD_TARGET_PATCH
-> > +unload_lp $MOD_TARGET_PATCH
-> > +
-> > +if [[ "$(cat /proc/$MOD_TARGET)" != "$MOD_TARGET: original output" ]] ; then
-> > +	echo -e "FAIL\n\n"
-> > +	die "livepatch kselftest(s) failed"
-> > +fi
-> > +
-> > +unload_mod $MOD_TARGET
-> > +
-> > +check_result "% insmod test_modules/$MOD_TARGET.ko
-> > +$MOD_TARGET: test_klp_mod_target_init
-> > +% insmod test_modules/$MOD_TARGET_PATCH.ko
-> 
-
-So following this technique, all the other tests with command sequences
-would need to be re-written as '&&' chains, e.g. the "patch getpid
-syscall while being heavily hammered" one like:
-
-  pid_list=$(echo "${pids[@]}" | tr ' ' ',') && \
-    load_lp $MOD_SYSCALL klp_pids=$pid_list && \
-    loop_until "grep -q '^0$' $SYSFS_KERNEL_DIR/$MOD_SYSCALL/npids" && \
-    log "$MOD_SYSCALL: Remaining not livepatched processes: $(cat $SYSFS_KERNEL_DIR/$MOD_SYSCALL/npids)"
-
-so that we only continue down a particular test for as long as it's
-successful, then the cleanup code is unconditional:
-
-  pending_pids=$(cat $SYSFS_KERNEL_DIR/$MOD_SYSCALL/npids)
-  log "$MOD_SYSCALL: Remaining not livepatched processes: $pending_pids"
-
-  for pid in ${pids[@]}; do
-          kill $pid || true
-  done
-
-  disable_lp $MOD_SYSCALL
-  unload_lp $MOD_SYSCALL
-
-  check_result  <- flags a problem
-
-Yeah, may be that's not so bad.  The functions.sh helpers may need to be
-hardened a little (can they cancel / bust a transition?  it's been a
-while since I've looked.) 
-
-Or maybe ... ugh, bash is not a programming language ... each test is
-split into its own script, the die calls can remain as they are, but we
-move the cleanup logic into a trap EXIT handler so it always runs?
-
-Or test-code and test-cleanup-code are split into their own functions,
-so tests can exit early, but their cleanup is always called?
-
-(Just brainstorming here.)
-
-> Note that the existing helper functions log the userspace commands
-> in the kernel log. It helps to understand the kernel logs.
-> 
-> In my RFC, I created a helper module which implemented a person
-> (speaker) which would come on the stage and welcome the audience.
-> I am not sure if it was a good idea. But it became a bit confusing
-> when everything (module name, sysfs interface, function name, message)
-> included the same strings like (livepatch, callback, shadow_var).
-> 
-> Anyway, my tests produced messages like these:
-> 
-> +% cat $SYSFS_MODULE_DIR/$MOD_TARGET/parameters/welcome
-> +$MOD_TARGET: speaker_welcome: Hello, World!
-> 
-> , see https://lore.kernel.org/all/20250115082431.5550-9-pmladek@suse.com/
-> 
-> 
-> There were even tests which blocked the transition. They tested shadow
-> variables which added an applause to the message. They did something like:
-> 
-> <paste>
-> All four callbacks are used as follows:
-> 
->   + pre_patch() allocates a shadow variable with a string and fills
-> 		it with "[]".
->   + post_patch() fills the string with "[APPLAUSE]".
->   + pre_unpatch() reverts the string back to "[]".
->   + post_unpatch() releases the shadow variable.
-> 
-> The welcome message printed by the livepatched function allows us to
-> distinguish between the transition and the completed transition.
-> Specifically, the speaker's welcome message appears as:
-> 
->   + Not patched system:		 "Hello, World!"
->   + Transition (unpatched task): "[] Hello, World!"
->   + Transition (patched task):	 "[] Ladies and gentlemen, ..."
->   + Patched system:		 "[APPLAUSE] Ladies and gentlemen, ..."
-> </paste>
-> 
-> , see https://lore.kernel.org/all/20250115082431.5550-11-pmladek@suse.com/
-> 
-> Sigh, I have done many changes in the tests for v1. But they still
-> need some love (and rebasing) for sending.
-> 
-
-If these can be pulled out independently from the v1 patch, perhaps
-Pablo would want to hack on that in a follow up series?
-
-> > +livepatch: enabling patch '$MOD_TARGET_PATCH'
-> > +livepatch: '$MOD_TARGET_PATCH': initializing patching transition
-> > +livepatch: '$MOD_TARGET_PATCH': starting patching transition
-> > +livepatch: '$MOD_TARGET_PATCH': completing patching transition
-> > +livepatch: '$MOD_TARGET_PATCH': patching complete
-> > +% echo 0 > $SYSFS_KLP_DIR/$MOD_TARGET_PATCH/enabled
-> > +livepatch: '$MOD_TARGET_PATCH': initializing unpatching transition
-> > +livepatch: '$MOD_TARGET_PATCH': starting unpatching transition
-> > +livepatch: '$MOD_TARGET_PATCH': completing unpatching transition
-> > +livepatch: '$MOD_TARGET_PATCH': unpatching complete
-> > +% rmmod $MOD_TARGET_PATCH
-> > +% rmmod $MOD_TARGET
-> > +$MOD_TARGET: test_klp_mod_target_exit"
-> 
-> Summary:
-> 
-> IMHO, this patch is perfectly fine as is if we accept that it will get
-> eventually obsoleted by my patchset (hopefully in a year or two).
-> 
-> On the other hand, this patch would deserve some clean up,
-> (helper functions, don't die in the middle of the test) if
-> you planned to work on more tests. It would help to maintain
-> the tests.
-> 
-
-Right, I think this was a good intro patch for Pablo and that the
-revised execution flow would be a great follow on series, if he is
-interested.  How about that?
-
-Regards,
---
-Joe
-
+Apologies for the large number of people who got added to the CC list
+on this version of the patchset. The changes to
+Documentation/admin-guide/kernel-parameters.txt in patch 4 caused
+scripts/get_maintainer.pl to CC a number of additional people due to
+--git-fallback. I'll fix that in the next version.
