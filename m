@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CDF355F49
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 03:28:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F197393DF1
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 03:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774495682; cv=none; b=MhLAe7fqlVCb5IAKs73VzJlVUYB/O8aTKbI5rZw47P/odXBXifhLe0UFOlCcEJXpphezRtY6+tr0Ijcoeynp+qQ21AORwB+EXHIPn1zoqSy+VM8ty3+obsL8WAlLWjwyIYyc5zYOpRAQf35OhQYKLRSktxL7jhrk7qRDy+Iu87c=
+	t=1774495687; cv=none; b=A4Biuvi6Kowz03Ek3qdVfJcSFDXFuA+XYyqKuvLVz4QRhjQxB3PtiWIcNlnnubZ73gYVpc8T8HOgCggy6Tl0n4p/a6ALfa/yJF7zFWf/eY9kKgSczxm+tNVTSGhpNnakqUCyJQFzYhoYwkMIfPa0Wdds2suNN8BPL1In+KF7xlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774495682; c=relaxed/simple;
-	bh=pgUe2+vPeFtlGsxEtJR+FNgqz0DO3XioPWYd4OIw4bQ=;
+	s=arc-20240116; t=1774495687; c=relaxed/simple;
+	bh=o/w7TQliWDhKNWU6CNP5i3AA/k45gK0jKqDtWaqSPOs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zi33G6cPbcyMSm3F2sIqxMSP4DrrN5CArKwYceCr/kiZ0JO5OF2ERWi/xzyB3HgEVMgn2QQ3QYdF38VrHRnsqgz3ff/04kudO0HIuC2wbbkOB8gjNnQPmDorJUK3ECEFwx0vtgYcpLBtSXhQ3VJd+tIIi4mjrdOiyCAWuWLAc2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=blxMQXhC; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-Type; b=awOrqADC74XiCPFKOktV88nnu+4iHdkYOTlgzKfmXrZOwSIlo2kqxueIWpIYbWO0YksOPWoFHyUQ/Oe6aCfHLGbhx8Qi8gSGZyvJDeZdjng5d08mjDrl9hEmpzZUkl66PvWg8i61LIiI02j0oIwgZK+up+lNkuxQG7ql3ieCrHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cGw5IOnZ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="blxMQXhC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cGw5IOnZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774495680;
+	s=mimecast20190719; t=1774495685;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NkrZmV+ciJiAg2eJxu0EA95Ha45gXSvLLHXumh7zBiQ=;
-	b=blxMQXhC9rdvrU5l8tBTltH2SDfeWVWYCLxRvSk1uZvTAAxu3MNWJmTC+rXO3hfF8Az6CA
-	HR5j3khRtsK37U2RHYJbr0LrAQK5dW3QyJMwjdfx9Nxnz9+TKv6HCm7ZMUhrWjuTLbND0K
-	RZ16Rt2zOGBZEfzwpJOUrYYHixuuTy8=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=5FEF4PcMxcimzj0nghaejrMWC+mQHsYsFdwp2v61C34=;
+	b=cGw5IOnZ/tERwKcwRJezEssl54EXzMFAYjclUKBc1NOk0a804U85r/RVGF5I4auooIeFH+
+	CQnKelSLHFuG6ZE5YeVQvpR9EPCBGCUuGSaoQnr0O8cUNcDjM8Q01p6zJ2bYt2Im4Ux/ue
+	jl4qCfa8x5GMKGLQTTuzLPVKTsVJiwI=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-629-BtFk9MNAPCK8rq26DfrzFA-1; Wed,
- 25 Mar 2026 23:27:54 -0400
-X-MC-Unique: BtFk9MNAPCK8rq26DfrzFA-1
-X-Mimecast-MFC-AGG-ID: BtFk9MNAPCK8rq26DfrzFA_1774495672
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-318-Zk5XMdgqMyqNHJrO1O5hKg-1; Wed,
+ 25 Mar 2026 23:28:00 -0400
+X-MC-Unique: Zk5XMdgqMyqNHJrO1O5hKg-1
+X-Mimecast-MFC-AGG-ID: Zk5XMdgqMyqNHJrO1O5hKg_1774495679
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6A98C19560A6;
-	Thu, 26 Mar 2026 03:27:52 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF6DD1944EB8;
+	Thu, 26 Mar 2026 03:27:58 +0000 (UTC)
 Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.83])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 15A8E1955D84;
-	Thu, 26 Mar 2026 03:27:45 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 160451955D84;
+	Thu, 26 Mar 2026 03:27:52 +0000 (UTC)
 From: Li Wang <liwang@redhat.com>
 To: akpm@linux-foundation.org,
 	yosry@kernel.org,
@@ -57,11 +57,10 @@ Cc: longman@redhat.com,
 	liwang@redhat.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Yosry Ahmed <yosryahmed@google.com>
-Subject: [PATCH v5 6/8] selftest/cgroup: fix zswap test_no_invasive_cgroup_shrink on large pagesize system
-Date: Thu, 26 Mar 2026 11:26:56 +0800
-Message-ID: <20260326032658.96819-7-liwang@redhat.com>
+	linux-mm@kvack.org
+Subject: [PATCH v5 7/8] selftest/cgroup: fix zswap attempt_writeback() on 64K pagesize system
+Date: Thu, 26 Mar 2026 11:26:57 +0800
+Message-ID: <20260326032658.96819-8-liwang@redhat.com>
 In-Reply-To: <20260326032658.96819-1-liwang@redhat.com>
 References: <20260326032658.96819-1-liwang@redhat.com>
 Precedence: bulk
@@ -74,45 +73,43 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-test_no_invasive_cgroup_shrink sets up two cgroups: wb_group, which is
-expected to trigger zswap writeback, and a control group (renamed to
-zw_group), which should only have pages sitting in zswap without any
-writeback.
+In attempt_writeback(), a memsize of 4M only covers 64 pages on 64K
+page size systems. When memory.reclaim is called, the kernel prefers
+reclaiming clean file pages (binary, libc, linker, etc.) over swapping
+anonymous pages. With only 64 pages of anonymous memory, the reclaim
+target can be largely or entirely satisfied by dropping file pages,
+resulting in very few or zero anonymous pages being pushed into zswap.
 
-There are two problems with the current test:
+This causes zswap_usage to be extremely small or zero, making
+zswap_usage/2 insufficient to create meaningful writeback pressure.
+The test then fails because no writeback is triggered.
 
-1) The data patterns are reversed. wb_group uses allocate_bytes(), which
-   writes only a single byte per page — trivially compressible,
-   especially by zstd — so compressed pages fit within zswap.max and
-   writeback is never triggered. Meanwhile, the control group uses
-   getrandom() to produce hard-to-compress data, but it is the group
-   that does *not* need writeback.
+On 4K page size systems this is not an issue because 4M covers 1024
+pages, and file pages are a small fraction of the reclaim target.
 
-2) The test uses fixed sizes (10K zswap.max, 10MB allocation) that are
-   too small on systems with large PAGE_SIZE (e.g. 64K), failing to
-   build enough memory pressure to trigger writeback reliably.
-
-Fix both issues by:
-  - Swapping the data patterns: fill wb_group pages with partially
-    random data (getrandom for page_size/4 bytes) to resist compression
-    and trigger writeback, and fill zw_group pages with simple repeated
-    data to stay compressed in zswap.
-  - Making all size parameters PAGE_SIZE-aware: set allocation size to
-    PAGE_SIZE * 1024, memory.zswap.max to PAGE_SIZE, and memory.max to
-    allocation_size / 2 for both cgroups.
-  - Allocating memory inline instead of via cg_run() so the pages
-    remain resident throughout the test.
+Fix this by:
+- Always allocating 1024 pages regardless of page size. This ensures
+  enough anonymous pages to reliably populate zswap and trigger
+  writeback, while keeping the original 4M allocation on 4K systems.
+- Setting zswap.max to zswap_usage/4 instead of zswap_usage/2 to
+  create stronger writeback pressure, ensuring reclaim reliably
+  triggers writeback even on large page size systems.
 
 === Error Log ===
- # getconf PAGESIZE
- 65536
+  # uname -rm
+  6.12.0-211.el10.ppc64le ppc64le
 
- # ./test_zswap
- TAP version 13
- ...
- ok 5 test_zswap_writeback_disabled
- ok 6 # SKIP test_no_kmem_bypass
- not ok 7 test_no_invasive_cgroup_shrink
+  # getconf PAGESIZE
+  65536
+
+  # ./test_zswap
+  TAP version 13
+  1..7
+  ok 1 test_zswap_usage
+  ok 2 test_swapin_nozswap
+  ok 3 test_zswapin
+  not ok 4 test_zswap_writeback_enabled
+  ...
 
 Signed-off-by: Li Wang <liwang@redhat.com>
 Cc: Johannes Weiner <hannes@cmpxchg.org>
@@ -123,124 +120,42 @@ Cc: Nhat Pham <nphamcs@gmail.com>
 Cc: Tejun Heo <tj@kernel.org>
 Cc: Roman Gushchin <roman.gushchin@linux.dev>
 Cc: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Yosry Ahmed <yosryahmed@google.com>
+Acked-by: Yosry Ahmed <yosry@kernel.org>
 ---
 
 Notes:
     v5:
-        - Swap data patterns: use getrandom() for wb_group and simple
-          memset for zw_group to fix the reversed allocation logic.
-        - Rename control_group to zw_group for clarity.
-        - Allocate memory inline instead of via cg_run() so pages remain
-          resident throughout the test.
+    	- Setting zswap.max to zswap_usage/4 to create stronger writeback pressure.
+    v3-4:
+    	- No changes.
+    v2:
+    	- use pagesize * 1024 which clearly shows the page numbers.
 
- tools/testing/selftests/cgroup/test_zswap.c | 69 ++++++++++++++-------
- 1 file changed, 48 insertions(+), 21 deletions(-)
+ tools/testing/selftests/cgroup/test_zswap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index fc7a9aa27e27..72082e5d4725 100644
+index 72082e5d4725..e96e316f7c47 100644
 --- a/tools/testing/selftests/cgroup/test_zswap.c
 +++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -9,6 +9,7 @@
- #include <string.h>
- #include <sys/wait.h>
- #include <sys/mman.h>
-+#include <sys/random.h>
- 
- #include "kselftest.h"
- #include "cgroup_util.h"
-@@ -424,44 +425,70 @@ static int test_zswap_writeback_disabled(const char *root)
- static int test_no_invasive_cgroup_shrink(const char *root)
+@@ -273,7 +273,7 @@ static int test_zswapin(const char *root)
+  */
+ static int attempt_writeback(const char *cgroup, void *arg)
  {
- 	int ret = KSFT_FAIL;
--	size_t control_allocation_size = MB(10);
--	char *control_allocation = NULL, *wb_group = NULL, *control_group = NULL;
-+	unsigned int off;
-+	size_t allocation_size = page_size * 1024;
-+	unsigned int nr_pages = allocation_size / page_size;
-+	char zswap_max_buf[32], mem_max_buf[32];
-+	char *zw_allocation = NULL, *wb_allocation = NULL;
-+	char *zw_group = NULL, *wb_group = NULL;
-+
-+	snprintf(zswap_max_buf, sizeof(zswap_max_buf), "%zu", page_size);
-+	snprintf(mem_max_buf, sizeof(mem_max_buf), "%zu", allocation_size / 2);
- 
- 	wb_group = setup_test_group_1M(root, "per_memcg_wb_test1");
- 	if (!wb_group)
- 		return KSFT_FAIL;
--	if (cg_write(wb_group, "memory.zswap.max", "10K"))
-+	if (cg_write(wb_group, "memory.zswap.max", zswap_max_buf))
-+		goto out;
-+	if (cg_write(wb_group, "memory.max", mem_max_buf))
-+		goto out;
-+
-+	zw_group = setup_test_group_1M(root, "per_memcg_wb_test2");
-+	if (!zw_group)
- 		goto out;
--	control_group = setup_test_group_1M(root, "per_memcg_wb_test2");
--	if (!control_group)
-+	if (cg_write(zw_group, "memory.max", mem_max_buf))
- 		goto out;
- 
--	/* Push some test_group2 memory into zswap */
--	if (cg_enter_current(control_group))
-+	/* Push some zw_group memory into zswap (simple data, easy to compress) */
-+	if (cg_enter_current(zw_group))
- 		goto out;
--	control_allocation = malloc(control_allocation_size);
--	for (int i = 0; i < control_allocation_size; i += page_size)
--		control_allocation[i] = 'a';
--	if (cg_read_key_long(control_group, "memory.stat", "zswapped") < 1)
-+	zw_allocation = malloc(allocation_size);
-+	for (int i = 0; i < nr_pages; i++) {
-+		off = (unsigned long)i * page_size;
-+		memset(&zw_allocation[off], 'a', page_size/4);
-+	}
-+	if (cg_read_key_long(zw_group, "memory.stat", "zswapped") < 1)
- 		goto out;
- 
--	/* Allocate 10x memory.max to push wb_group memory into zswap and trigger wb */
--	if (cg_run(wb_group, allocate_bytes, (void *)MB(10)))
-+	/* Push wb_group memory into zswap with hard-to-compress data to trigger wb */
-+	if (cg_enter_current(wb_group))
-+		goto out;
-+	wb_allocation = malloc(allocation_size);
-+	if (!wb_allocation)
- 		goto out;
-+	for (int i = 0; i < nr_pages; i++) {
-+		off = (unsigned long)i * page_size;
-+		memset(&wb_allocation[off], 0, page_size);
-+		getrandom(&wb_allocation[off], page_size/4, 0);
-+	}
- 
- 	/* Verify that only zswapped memory from gwb_group has been written back */
--	if (get_cg_wb_count(wb_group) > 0 && get_cg_wb_count(control_group) == 0)
-+	if (get_cg_wb_count(wb_group) > 0 && get_cg_wb_count(zw_group) == 0)
- 		ret = KSFT_PASS;
- out:
- 	cg_enter_current(root);
--	if (control_group) {
--		cg_destroy(control_group);
--		free(control_group);
-+	if (zw_group) {
-+		cg_destroy(zw_group);
-+		free(zw_group);
-+	}
-+	if (wb_group) {
-+		cg_destroy(wb_group);
-+		free(wb_group);
+-	size_t memsize = MB(4);
++	size_t memsize = page_size * 1024;
+ 	char buf[page_size];
+ 	long zswap_usage;
+ 	bool wb_enabled = *(bool *) arg;
+@@ -311,7 +311,7 @@ static int attempt_writeback(const char *cgroup, void *arg)
+ 		}
  	}
--	cg_destroy(wb_group);
--	free(wb_group);
--	if (control_allocation)
--		free(control_allocation);
-+	if (zw_allocation)
-+		free(zw_allocation);
-+	if (wb_allocation)
-+		free(wb_allocation);
- 	return ret;
- }
  
+-	if (cg_write_numeric(cgroup, "memory.zswap.max", zswap_usage/2))
++	if (cg_write_numeric(cgroup, "memory.zswap.max", zswap_usage/4))
+ 		goto out;
+ 
+ 	/*
 -- 
 2.53.0
 
