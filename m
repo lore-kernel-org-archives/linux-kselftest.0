@@ -1,159 +1,220 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A04C2DCBF4;
-	Thu, 26 Mar 2026 18:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34C539FCCF
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 18:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774548112; cv=none; b=jy5xzDwJ+cH1kAE8OMTu2FK1RquylKW4etiGN8iegjFxUq10xvyynZJvI/uAwlBa8MZbrlMnheWaN5pqv3jOxfRerOVKXjwqHySIFJQ5e2iU5ZO4+dMv068IQkpKdaR3teoyK5OG2Y/sa6lX1cQ8Q0Ronk7vfXIdtAtEMpekDFg=
+	t=1774549058; cv=none; b=pt9PZ3YWLY8430cuaIZvYmdZZVdvDml7sH19cPIreI7fZ5KIt0AuFaLluwrgndh/RAMsH5I2iqr9ma2SumlHehhlZhNzBN/8gH6hOm84vMA1rbunLN0TZS9xvCfLvSavv+YSVYVPeReAKOHo+TVTysSlvG9ak2MmahTGDe9+OG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774548112; c=relaxed/simple;
-	bh=/8V01DbXwWd6M6Ti4Qe1bXptMULEJmtISxE42xrWh+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fa446gTbKbod1CN1zcn9ATiYkjktzirDIWq4pdx1d3+bLYq8YCH3nKUq52a6VTklwXdyIePHMCy7O1FxmU3EoVgTygqEJC/NV7MbYIYVomChcGEXxrkQpdPxg/WWSvdv2wgl5C/qkVTHosB1V93SyI8CiLXUv8nX29L2DuTBDnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EBeFYv+j; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1774549058; c=relaxed/simple;
+	bh=8MS4zQtV6FtWj/IUY9YaB2l6wuq7+k0MKb9PmXVy3Mk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cXQhXEb4tmmWNKN0FCWZk3f/hbCi96wSNkih7IzNMlnUJyrQk1iyG2miOeZUjlxEM58HX8qRukjtNmC5qgFsJ+c5x1MOt0eroLBor6uTsMBZvCQPcMTaoGQbiBki6+3fczlVoZVCW/t9H7hR7zpD3nm2hRcSyLpRi8d1BccMbnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=oEc6WKes; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EBeFYv+j"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62Q685vW3481709;
-	Thu, 26 Mar 2026 18:01:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=qSUnD1
-	397Zp9inDfLVskQJVGRWrzZd3vpYhC+uxeKwI=; b=EBeFYv+j/aODVnq9lrPG+8
-	aNOZT5Bm/Ezk0JS3MdTI0H/lP7+pHbnVwUMlRA5C2WOTtjuq/uO9fsPlEiaMSR1U
-	uMC4aU77pS63ldWAtbL98p0G36lqVUIG4oy+rVIQwpz0kgjYND8pNulejDrs+SyC
-	qJs+o7k8g9+xbpwCELqd/D8N/lPwdel+qR7pWUkf72wE6NznXdwGEE70AMl+ZD8E
-	3sYbK50hEpNPYPK+bUWuvY2h0FzdGNlC0J4UNLlvkJ5PEz4X+9Cty0cfDLo4SknD
-	JlGpLFo/yfIeqQZSL6XVt+BstHeyyve7Gn19LIFEKulwvhWejMaMuFiqbOsE8ZnA
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d1kxqpkcu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Mar 2026 18:01:19 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62QGw9vJ004407;
-	Thu, 26 Mar 2026 18:01:18 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d28c2buec-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Mar 2026 18:01:18 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62QI1H0c13042414
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 26 Mar 2026 18:01:17 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AC67058043;
-	Thu, 26 Mar 2026 18:01:17 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 93BE558055;
-	Thu, 26 Mar 2026 18:01:13 +0000 (GMT)
-Received: from [9.39.28.25] (unknown [9.39.28.25])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 26 Mar 2026 18:01:13 +0000 (GMT)
-Message-ID: <e6f03352-4f09-4238-a47a-6d4e84101a6c@linux.ibm.com>
-Date: Thu, 26 Mar 2026 23:31:10 +0530
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="oEc6WKes"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ab46931cf1so18203485ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 11:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1774549054; x=1775153854; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uRx7fHyBau0X1U+PMFN9nDLyGjIHEaCOQWYkJZdn+aM=;
+        b=oEc6WKesaeY06bOky/5Q1PiJTY8DWHOEIHM+1jTOV/OcSR0L7xig7s/2bzR445Fl2e
+         5H5R9IHXRT47vnhJiOOUopat6hH9lSudpgDsqWUbwDs1QF8wLtjx9ZFEBR7VdFFZ5bC5
+         4Cvu+iIsWtzSoCB4pVC0DAxw0EAQzjFj4dFHqNqzNTc33fsDzT6GrnWKfRVxpZER73Yi
+         /v6bQy4u8Lq8SYlnFGf+WtlXi1VRoF8HuPHKiV50x6bvfv6aibVVgusvk9zUkuofW4S8
+         fb0lKEJ63Whe3eSUR870R6WPX2XpVqrK6GeVOjlShZOV9WAYVjh8g/ylLO0X3Ab1YXeS
+         fFJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774549054; x=1775153854;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=uRx7fHyBau0X1U+PMFN9nDLyGjIHEaCOQWYkJZdn+aM=;
+        b=HKElf3qFgWJPZaT18qAzHCyO4IerjwoG03ExBKriNcnwWLBDLEpN9L8SBPnBbBdaim
+         F+HUBPTmrj04Kk1oN03IrHaR9QHUFTTQz2lQGo4zpgCPKmPEFRTJSYY3KGFkGqits+kN
+         wIOmn8dNYRzx8aGRl8icY9wdrchKp+WJXE6eMSxRfOIaDamq+LEadV7xUc1pvqg4z8WM
+         njda3eGrXPFntg5nP3tqPwkuo/D5NsIC3fdaRFAcy6bT5NKTPuR4K3dyvyMnPG/nHkbA
+         Yxd/4JbGjKel+7TrttUhvtKwJx8zxEcjJU9r8uf0opTfHBoQgqPIdApzUwO+ngNhDDPT
+         xMyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVzqDLlFlcnb4DvIxvYN5LVTmKQzoApGqhJRsPrN+TTwf0RTi7QH4bTihiWphT526QhmiWNO7EWbQ/zl/S/tHo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyld8M3JS36NzM7zq+/W2Llgw8vx12WX/sySlsp2KPUubGiIwfS
+	dI5UiAIJgHd6fb7CAvSJSwI36wy4E67/BJ96Ddy7b2Yz0bB4u3IksKjAmNY71YI3fmE=
+X-Gm-Gg: ATEYQzzgcU6uy0YWw048jtGuT5xaSrYJDlakovsO1E+n+UuN9jtIqcvzMVB6DhYGExx
+	uwStQuCVyCEMhHg4yqw+bmz3/8ZWjGaq0r07cv0X42ZRFluG3SlVR5VVUegq6mZggLgL0q2ANDh
+	ocOEuIuzFSHuAnITfnUW7rafoH3ZVlR1uhdliy+3WxlgqzGcKSOr00Dm6PtbZoxwiYjE//DoAVJ
+	G40mJeqb/9cs0KQDH2CMCFt5IwZIqoKIvl0wpLfcaQlMGa4rMc3MRwjIoBLf8PpZwfrG8QFHE7B
+	62vYqroaJCkdMRO2IhpWmjyyW3MdFodnOksq4PU2TVkhLY8JHeTwfXIcl8uiGH2OURjNTLtUAth
+	K7KumWrFJFsUINIrZa/LMn4f4i71XDqS7oeYOcrrrseKwNepUBgSrzi6nQEn3AjTjSUbJ9wU2qS
+	kH1JvL8bh1nTqI4yeHOIDqIBqmwph8kjCx
+X-Received: by 2002:a17:903:32c8:b0:2ae:4ad5:b76c with SMTP id d9443c01a7336-2b0c486bd45mr23970245ad.10.1774549053876;
+        Thu, 26 Mar 2026 11:17:33 -0700 (PDT)
+Received: from phoenix.lan ([104.202.29.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0bc8c4bd3sm38590245ad.63.2026.03.26.11.17.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 11:17:33 -0700 (PDT)
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: netdev@vger.kernel.org
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Shuah Khan <shuah@kernel.org>,
+	Victor Nogueira <victor@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	William Liu <will@willsroot.io>,
+	Xiang Mei <xmei5@asu.edu>,
+	Savino Dicanosa <savy@syst3mfailure.io>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 3/7] Revert "selftests/tc-testing: Add tests for restrictions on netem duplication"
+Date: Thu, 26 Mar 2026 11:01:02 -0700
+Message-ID: <20260326181701.308275-4-stephen@networkplumber.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260326181701.308275-1-stephen@networkplumber.org>
+References: <20260326181701.308275-1-stephen@networkplumber.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/13] selftests/mm: skip uffd-wp-mremap if UFFD
- write-protect is unsupported
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1773305677.git.sayalip@linux.ibm.com>
- <ed23ff57a80881c9d087d22709862af40addf49b.1773305678.git.sayalip@linux.ibm.com>
- <457dddf1-04ec-4d1e-8640-b04997fac4f1@kernel.org>
- <0e9cea41-7c49-446a-b67b-256584960516@linux.ibm.com>
- <20260324165606.d75200ac0e5458a5ffb83d5d@linux-foundation.org>
-Content-Language: en-IN
-From: Sayali Patil <sayalip@linux.ibm.com>
-In-Reply-To: <20260324165606.d75200ac0e5458a5ffb83d5d@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: Wgdjz0iWAZ5Gq1bxAzv-z7Cif8__vkRg
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI2MDEyNyBTYWx0ZWRfXz7fQB5fcglC2
- y2SxH0yxzQZaQ1eeQnvSdKaa5MALDMceEq0+fjCDLfsKUVIv7kCQNETwTzkAzldnQiu9WJaMsrU
- 8XEXbSdEUa9olxB/hGpFR01i8TtawRrDvSmJw1SU4ZbMSnePIMJdhQiznJKooVmx6o0INzPK91O
- euDSEoYCckKklrv1qf4D9vl33wHnmzJett7SpJshEWLjpFV4DdyQfpqJMxG63x8AFeTCgYGIc1n
- 3LyS1Afg6iTqpLd6sM2erF9ayWujv2FVX/PROyoPeZyH8Sxwa4LxlfJiJC2pk9pRX52Zd4gLiQ+
- uBQxgFeJRvOfijdyUsubvOceiWJTMwW4FczLPcd6lCldLpUiV0tRWI28c4nLU8DNjIgACcLGFiM
- KB9tv+q9RGkdl9Va3dFFEegEBNHVyZTMe6wHeyjNMG9zahfv67Cpz3IIJjElFVz0++pMDfS3QHa
- smS66mFC8CO0DISw/ag==
-X-Authority-Analysis: v=2.4 cv=bLEb4f+Z c=1 sm=1 tr=0 ts=69c5746f cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=YyDBODbz2JAAnCrYoEcA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: sD7t1P8T7SXxYhdPnjCwUf4tl7Jf37vN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-26_03,2026-03-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 clxscore=1015 phishscore=0 impostorscore=0
- malwarescore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603260127
+Content-Transfer-Encoding: 8bit
 
+From: Jamal Hadi Salim <jhs@mojatatu.com>
 
-On 25/03/26 05:26, Andrew Morton wrote:
-> On Fri, 13 Mar 2026 19:56:01 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
->
->>> Because right now it reads as if it would be returning a bool.
->>>
->>> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->>>
->> Thanks for the review. I'll rename it to
->> "check_uffd_wp_feature_supported()" in the next version.
-> There was no next version.  I added this:
->
-> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c~selftests-mm-skip-uffd-wp-mremap-if-uffd-write-protect-is-unsupported-fix
-> +++ a/tools/testing/selftests/mm/uffd-wp-mremap.c
-> @@ -19,7 +19,7 @@ static size_t thpsizes[20];
->   static int nr_hugetlbsizes;
->   static size_t hugetlbsizes[10];
->   
-> -static void uffd_wp_feature_supported(void)
-> +static void check_uffd_wp_feature_supported(void)
->   {
->   	uint64_t features;
->   
-> @@ -347,7 +347,7 @@ int main(int argc, char **argv)
->   	struct thp_settings settings;
->   	int i, j, plan = 0;
->   
-> -	uffd_wp_feature_supported();
-> +	check_uffd_wp_feature_supported();
->   
->   	pagesize = getpagesize();
->   	nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
-> _
->
-Hi Andrew,
-I have some updates to [PATCH v2 04/13] selftests/mm: fix cgroup task 
-placement and tolerance in hugetlb_reparenting_test.sh, as Venkat 
-reported failures with the current version.
+This reverts commit ecdec65ec78d67d3ebd17edc88b88312054abe0d.
 
-Should I send a v3 of the full series, or just a fixup patch for 
-hugetlb_reparenting_test.sh? Also, if you prefer a v3, should I include 
-above fix for 
-selftests-mm-skip-uffd-wp-mremap-if-uffd-write-protect-is-unsupported as 
-well?
+The tests added were related to check_netem_in_tree() which was
+just reverted in the previous patch.
 
-Thanks,
-Sayali
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Reviewed-by: Stephen Hemminger <stephen@networkplumber.org>
+---
+ .../tc-testing/tc-tests/infra/qdiscs.json     |  5 +-
+ .../tc-testing/tc-tests/qdiscs/netem.json     | 81 -------------------
+ 2 files changed, 3 insertions(+), 83 deletions(-)
+
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json b/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
+index 6a39640aa2a8..ceb993ed04b2 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
+@@ -702,6 +702,7 @@
+             "$TC qdisc add dev $DUMMY parent 1:1 handle 2:0 netem duplicate 100%",
+             "$TC filter add dev $DUMMY parent 1:0 protocol ip prio 1 u32 match ip dst 10.10.10.1/32 flowid 1:1",
+             "$TC class add dev $DUMMY parent 1:0 classid 1:2 hfsc ls m2 10Mbit",
++            "$TC qdisc add dev $DUMMY parent 1:2 handle 3:0 netem duplicate 100%",
+             "$TC filter add dev $DUMMY parent 1:0 protocol ip prio 2 u32 match ip dst 10.10.10.2/32 flowid 1:2",
+             "ping -c 1 10.10.10.1 -I$DUMMY > /dev/null || true",
+             "$TC filter del dev $DUMMY parent 1:0 protocol ip prio 1",
+@@ -714,8 +715,8 @@
+             {
+                 "kind": "hfsc",
+                 "handle": "1:",
+-                "bytes": 294,
+-                "packets": 3
++                "bytes": 392,
++                "packets": 4
+             }
+         ],
+         "matchCount": "1",
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
+index 718d2df2aafa..3c4444961488 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
+@@ -336,86 +336,5 @@
+         "teardown": [
+             "$TC qdisc del dev $DUMMY handle 1: root"
+         ]
+-    },
+-    {
+-        "id": "d34d",
+-        "name": "NETEM test qdisc duplication restriction in qdisc tree in netem_change root",
+-        "category": ["qdisc", "netem"],
+-        "plugins": {
+-            "requires": "nsPlugin"
+-        },
+-        "setup": [
+-            "$TC qdisc add dev $DUMMY root handle 1: netem limit 1",
+-            "$TC qdisc add dev $DUMMY parent 1: handle 2: netem limit 1"
+-        ],
+-        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: netem duplicate 50%",
+-        "expExitCode": "2",
+-        "verifyCmd": "$TC -s qdisc show dev $DUMMY",
+-        "matchPattern": "qdisc netem",
+-        "matchCount": "2",
+-        "teardown": [
+-            "$TC qdisc del dev $DUMMY handle 1:0 root"
+-        ]
+-    },
+-    {
+-        "id": "b33f",
+-        "name": "NETEM test qdisc duplication restriction in qdisc tree in netem_change non-root",
+-        "category": ["qdisc", "netem"],
+-        "plugins": {
+-            "requires": "nsPlugin"
+-        },
+-        "setup": [
+-            "$TC qdisc add dev $DUMMY root handle 1: netem limit 1",
+-            "$TC qdisc add dev $DUMMY parent 1: handle 2: netem limit 1"
+-        ],
+-        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 2: netem duplicate 50%",
+-        "expExitCode": "2",
+-        "verifyCmd": "$TC -s qdisc show dev $DUMMY",
+-        "matchPattern": "qdisc netem",
+-        "matchCount": "2",
+-        "teardown": [
+-            "$TC qdisc del dev $DUMMY handle 1:0 root"
+-        ]
+-    },
+-    {
+-        "id": "cafe",
+-        "name": "NETEM test qdisc duplication restriction in qdisc tree",
+-        "category": ["qdisc", "netem"],
+-        "plugins": {
+-            "requires": "nsPlugin"
+-        },
+-        "setup": [
+-            "$TC qdisc add dev $DUMMY root handle 1: netem limit 1 duplicate 100%"
+-        ],
+-        "cmdUnderTest": "$TC qdisc add dev $DUMMY parent 1: handle 2: netem duplicate 100%",
+-        "expExitCode": "2",
+-        "verifyCmd": "$TC -s qdisc show dev $DUMMY",
+-        "matchPattern": "qdisc netem",
+-        "matchCount": "1",
+-        "teardown": [
+-            "$TC qdisc del dev $DUMMY handle 1:0 root"
+-        ]
+-    },
+-    {
+-        "id": "1337",
+-        "name": "NETEM test qdisc duplication restriction in qdisc tree across branches",
+-        "category": ["qdisc", "netem"],
+-        "plugins": {
+-            "requires": "nsPlugin"
+-        },
+-        "setup": [
+-            "$TC qdisc add dev $DUMMY parent root handle 1:0 hfsc",
+-            "$TC class add dev $DUMMY parent 1:0 classid 1:1 hfsc rt m2 10Mbit",
+-            "$TC qdisc add dev $DUMMY parent 1:1 handle 2:0 netem",
+-            "$TC class add dev $DUMMY parent 1:0 classid 1:2 hfsc rt m2 10Mbit"
+-        ],
+-        "cmdUnderTest": "$TC qdisc add dev $DUMMY parent 1:2 handle 3:0 netem duplicate 100%",
+-        "expExitCode": "2",
+-        "verifyCmd": "$TC -s qdisc show dev $DUMMY",
+-        "matchPattern": "qdisc netem",
+-        "matchCount": "1",
+-        "teardown": [
+-            "$TC qdisc del dev $DUMMY handle 1:0 root"
+-        ]
+     }
+ ]
+-- 
+2.53.0
+
