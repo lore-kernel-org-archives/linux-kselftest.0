@@ -1,113 +1,312 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F4E391E4C
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 20:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC3B3A16A2
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 20:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774556321; cv=none; b=IDFXWlqSHtSNu1EHFlcwj7Ntf+U7nGBiX+1C1qfcXVivkrZFgmP6Y9CIs4f4TVfboiVFCvqUKYTyp7WLZaAM+yt5bs5UmGXGpYQO2sC8QOgtj48HJyX4krgG8EFR5Sr8yhk8WgdxjyWrSCrCZxXDXv6Kw6uDHxBPcnDYM4Tb1Io=
+	t=1774557675; cv=none; b=bESAAnqN0uImGenfJOXXMwc9H2QISkJZw7DzcUALoRY4gU+OL5py/YE8O4x30krs9FIaxI7IoMZooXzh1Wg3po8CxuXXqO0gX25YZg8v3TMp1D0axnvyd+WSPX1BI+TdokWrT/3zJf9K6JpDRTZAJrhLH7C47lTFKZKcUU5TWOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774556321; c=relaxed/simple;
-	bh=K5v5TTWH4F+mh+Qb1H4gG6uq2C0QCi+Bgcw9bKObD+A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SJ/X1A21mXcT/Nhkv/5W6nXt3QB/13oOTnwRGQCKRlfCwOkG7YROXGLsflCFPbAPwV6q6NVmwm0PuK0PhajcADukhLaRa3Y6+strWzgSqOIohGEPklKwQu3z1HgZ1zU1ntDnQKEAiDg3oyKEAsE2uaOSie67rIyBFcdyP2hvqUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X7LdI/I9; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774557675; c=relaxed/simple;
+	bh=9N1WeKjmcFuqf1iZ19U0oY77Qo9cvADC8/ho5Q5Jij0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BtNd2O0HUf3tf0jCTiQWIdjYzsi/t29LgbTpDSM2Sc7zn35OSN+0hGnkThIkvJwVnrEvz18aGhvxoqPiSgTHOp56Y8GiEKto3UH7IzHY6jPZrtbIPS9FBfAXZcdRSJcICbXE5B6MEKrvY6wssI1Nje4jF+IZIua15JguNdkaFi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jMV7ruQP; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X7LdI/I9"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso12840285e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 13:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774556318; x=1775161118; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xycnlm/h8VsaAluVGkMfR2izvoHRISt/YiMCwALMUO4=;
-        b=X7LdI/I9ozAE4Yw7QpZTVLe0TVjjbwjkLo4fu+3hGtce21mmaUdC4OIPhErpiiyGuP
-         bz0kNorxBGWvMMmzvyd3s/Xo5cWy5CBjYJoPSXvL29mJPE+/BZaiXMYaQd5DdeXOquqK
-         Iw8wSgfOZZbTQy6KXGyZl7p0UkmMJMRoe1xlLiW70VwJ1GerVbquxPOV35asHCvaL1Cz
-         LDRLoNfNgqhksj1zCBNXQyc7OAhRIF9dTzI3b7/rnzyZSUYli6u+eTRUri3eQ/D//Esd
-         rhykzrYRgLFZzF0mfaYReGEZ/mbl7E1ldobRHiCXUD8inSXqd6dEwCiZu6B+LqOVvKOv
-         SmjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774556318; x=1775161118;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xycnlm/h8VsaAluVGkMfR2izvoHRISt/YiMCwALMUO4=;
-        b=KNOGSPibVUq32NF8Ykkf1kdUbDgU8URyeqfWdQGMWQ0PwOgDZ2Jr3RdfvfXXniXcsD
-         MFqHSggn4m9i+Hos3q7mhwf/VTzJ+HiMlFWq/TnjiCIhZrJLMjqK2V6TE6a3SHKc4vFV
-         z9pauBIA6jbV8i5nD0kBRbII1S5Pk0mlQEpUnJLLSVaUfwLTeiYnHC2ERcsTsQcMYkDB
-         tK7KlP+5syIBQX5mgWDT8PREP3gCIM3eDG9dC5v9JK8EmNleE7nvMd9jt4Kl0vacDNIa
-         V3b08y1/rXrPrius0D6Rlul6xpoEQ1G4JHUT0SCJ8g8okyYLGfB+XWCFPjnUn0YHGVQb
-         7qHA==
-X-Forwarded-Encrypted: i=1; AJvYcCUDjVquCt0udH4fAqU7eHaRa4yotjFhmGx2k/bCo6vp1FXZeVR1v9YwtMD2vEqp/WOpD9vDtUARi0Xs2YOsxzE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylfHOMJjJBKuEJ2Jv8RqeOLiQuvCaKDnXtFrHpfs6XNFkFcETi
-	oW/KutGVhl7tLiaHrhc11DgufE6EETPaPIt1CoiA5jmzuHySQKOCdw8q
-X-Gm-Gg: ATEYQzxl6goWa6ASgAJkoMHXL7Nda3rgMWnqr8YM3Dj3VtRWSd3VQXAxjUeBNMCYY6s
-	I6CGrDJCHOZaQADXvBuIuOJ1pZfKUlKPiuSVd1G+e/m1REKD92RXIbYhzd+uPUEtWwofL4lNIfo
-	vqGFU05S08TQT7qQJN64JNVKywoxdFdqQjCw3Gnw5MbpPizJ9dZHfOG8fZa846o0AfQeF9AE9ze
-	IPbv29SkJOWKh9lhKTvy6/uJ89nfXS92lDDG+0wX1XJRi+qnhLB60vZdQuv+Eom9wUD6wyXzQ5T
-	gLfwE+qn7juv5m748q6wETiDfk3ic1UBez4KwImP/ntXTb8F0Jl1koNwoK6/O2kx1wdZQT45ypz
-	exycgNn7YalzVh6ZBuLl/IsPixjqJyA7/eQmtcIptkiKDS4g+mHQ0+XXYpaXMeJZdYhH1Q2ClAg
-	p/41WKuEL97rk0QXyBPN+DQB5ykGmomnxbUlNJIp2IkREJOdMmeAuItlhZ+yADlslZAvwCfGz3O
-	8x3Hvc0c/dI
-X-Received: by 2002:a05:600c:8708:b0:483:b505:9db7 with SMTP id 5b1f17b1804b1-48727f1b5f1mr442955e9.32.1774556317978;
-        Thu, 26 Mar 2026 13:18:37 -0700 (PDT)
-Received: from snowdrop.snailnet.com (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48725d9acb9sm3330475e9.1.2026.03.26.13.18.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 13:18:37 -0700 (PDT)
-From: david.laight.linux@gmail.com
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Shuah Khan <shuah@kernel.org>,
-	wireguard@lists.zx2c4.com,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: David Laight <david.laight.linux@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Petr Mladek <pmladek@suse.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH next] wireguard: selftests: Remove spurious precision from banner printf
-Date: Thu, 26 Mar 2026 20:18:36 +0000
-Message-Id: <20260326201836.3957-1-david.laight.linux@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jMV7ruQP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774557672;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E4F0TZ4XCKGRv1yherfMIZtt5EFQi5A8XYq0m3tTV8E=;
+	b=jMV7ruQPzqSvybaJ15GULu8UykV5fP94FTeq9kW4IVYy/+zCvqx5hZ0HZcyR7m/oh2LbVf
+	/1pYrNr5Lio8d1Lcj7mLop9iFjzReTreeOwidi8xr17vaBv9Q3VRvSLhpnsZuyhtAYiNdX
+	K/zpI7sfhUggnVxFTo043PHKfJ5XUzE=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-347-4NfsOWdoPuet0a69NldMfg-1; Thu,
+ 26 Mar 2026 16:41:08 -0400
+X-MC-Unique: 4NfsOWdoPuet0a69NldMfg-1
+X-Mimecast-MFC-AGG-ID: 4NfsOWdoPuet0a69NldMfg_1774557667
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 413071956056;
+	Thu, 26 Mar 2026 20:41:07 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.64.124])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1B77E18001FE;
+	Thu, 26 Mar 2026 20:41:04 +0000 (UTC)
+Date: Thu, 26 Mar 2026 16:41:02 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Pablo Hugen <phugen@redhat.com>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	shuah@kernel.org
+Subject: Re: [PATCH] selftests/livepatch: add test for module function
+ patching
+Message-ID: <acWZ3r2CoSDy_NLf@redhat.com>
+References: <20260320201135.1203992-1-phugen@redhat.com>
+ <acVD_NPu4JVRoaVK@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acVD_NPu4JVRoaVK@pathway.suse.cz>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-From: David Laight <david.laight.linux@gmail.com>
+On Thu, Mar 26, 2026 at 03:34:36PM +0100, Petr Mladek wrote:
+> On Fri 2026-03-20 17:11:17, Pablo Hugen wrote:
+> > From: Pablo Alessandro Santos Hugen <phugen@redhat.com>
+> > 
+> > Add a target module and livepatch pair that verify module function
+> > patching via a proc entry. Two test cases cover both the
+> > klp_enable_patch path (target loaded before livepatch) and the
+> > klp_module_coming path (livepatch loaded before target).
+> 
+> First, thanks for the test.
+> 
+> Second, I am a bit biased because I am working on a patchset which would
+> obsolete this patch, see
+> https://lore.kernel.org/all/20250115082431.5550-1-pmladek@suse.com/
+> 
+> That said, I have sent an RFC a year ago. I worked on v1 when time
+> permitted but it is still not ready. And it might take another
+> many months or year to finish it.
+>
 
-Change ("%*.s", len, "") to ("%*s", len, "").
-The former is equivalent to "%*.0s" but is really a typing mistake.
-No actual change to the output.
+Hi Petr,
 
-Signed-off-by: David Laight <david.laight.linux@gmail.com>
----
- tools/testing/selftests/wireguard/qemu/init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/wireguard/qemu/init.c b/tools/testing/selftests/wireguard/qemu/init.c
-index 3e49924dd77e..c87570494d30 100644
---- a/tools/testing/selftests/wireguard/qemu/init.c
-+++ b/tools/testing/selftests/wireguard/qemu/init.c
-@@ -53,7 +53,7 @@ static void print_banner(void)
- 		panic("uname");
+I remember that patch as a "grand, unified" theory for livepatching API
+and look forward to the next iteration when you find the time.
  
- 	len = strlen("    WireGuard Test Suite on       ") + strlen(utsname.sysname) + strlen(utsname.release) + strlen(utsname.machine);
--	printf("\x1b[45m\x1b[33m\x1b[1m%*.s\x1b[0m\n\x1b[45m\x1b[33m\x1b[1m    WireGuard Test Suite on %s %s %s    \x1b[0m\n\x1b[45m\x1b[33m\x1b[1m%*.s\x1b[0m\n\n", len, "", utsname.sysname, utsname.release, utsname.machine, len, "");
-+	printf("\x1b[45m\x1b[33m\x1b[1m%*s\x1b[0m\n\x1b[45m\x1b[33m\x1b[1m    WireGuard Test Suite on %s %s %s    \x1b[0m\n\x1b[45m\x1b[33m\x1b[1m%*s\x1b[0m\n\n", len, "", utsname.sysname, utsname.release, utsname.machine, len, "");
- }
- 
- static void seed_rng(void)
--- 
-2.39.5
+> Your test might be perfectly fine in the meantime. Just see few
+> notes below.
+> 
+> > --- a/tools/testing/selftests/livepatch/test-livepatch.sh
+> > +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+> > @@ -8,6 +8,8 @@ MOD_LIVEPATCH1=test_klp_livepatch
+> >  MOD_LIVEPATCH2=test_klp_syscall
+> >  MOD_LIVEPATCH3=test_klp_callbacks_demo
+> >  MOD_REPLACE=test_klp_atomic_replace
+> > +MOD_TARGET=test_klp_mod_target
+> > +MOD_TARGET_PATCH=test_klp_mod_patch
+> >  
+> >  setup_config
+> >  
+> > @@ -196,4 +198,102 @@ livepatch: '$MOD_REPLACE': unpatching complete
+> >  % rmmod $MOD_REPLACE"
+> >  
+> >  
+> > +# - load a target module that provides /proc/test_klp_mod_target with
+> > +#   original output
+> > +# - load a livepatch that patches the target module's show function
+> > +# - verify the proc entry returns livepatched output
+> > +# - disable and unload the livepatch
+> > +# - verify the proc entry returns original output again
+> > +# - unload the target module
+> > +
+> > +start_test "module function patching"
+> > +
+> > +load_mod $MOD_TARGET
+> > +
+> > +if [[ "$(cat /proc/$MOD_TARGET)" != "$MOD_TARGET: original output" ]] ; then
+> > +	echo -e "FAIL\n\n"
+> > +	die "livepatch kselftest(s) failed"
+> > +fi
+> 
+> This code is repeated several times. It might be worth creating a
+> helper function in tools/testing/selftests/livepatch/functions.sh.
+> 
+> > +load_lp $MOD_TARGET_PATCH
+> > +
+> > +if [[ "$(cat /proc/$MOD_TARGET)" != "$MOD_TARGET_PATCH: this has been live patched" ]] ; then
+> > +	echo -e "FAIL\n\n"
+> > +	die "livepatch kselftest(s) failed"
+> > +fi
+> 
+> When I was working on the above mentioned patchset, I realized that
+> "die" in the middle of the test was not practical because it
+> did not do any clean up.
+
+IIRC it was an original design intention so that if you were to run the
+test script directly, the system would be left in that state for
+debugging.  That said ...
+
+>                          As a result, "make run_tests"
+> continued with other tests but they typically failed as well.
+> And I had to manually remove the test modules to be able to
+> try "fixed" tests again.
+
+... D'oh, that's pretty annoying behavior to wade through, like triaging
+compiler failures (i.e. the Nth error is probably just a result of the
+first N-1 error(s).)
+
+Since most people probably run via the run_tests target, my previous
+preference for a debuggable state probably isn't realistic anymore as
+the test car continues careening down the cliff, accumulating new,
+interesting damage with each subsequent test failure.
+
+> 
+> I thought about two solutions:
+> 
+> 1. Remember loaded modules and try to remove them in a clean up code.
+> 
+
+At the time of creating the selftests, I remember resisting this effort,
+afraid of the Pareto Principle and never getting that last 20% correct
+(is the livepatch transition stuck, broken, how I can cleanly unwind
+from a test gone rogue, etc.)
+
+> 2. Report the failure into the kernel log but keep the test
+>    running so that they calls the disable_lp/unload_lp/unload_mod
+>    functions. The test will do the clean up and will fail
+>    later in check_result().
+> 
+> 
+> While the 1st approach might be easier in the end, I choose
+> the 2nd approach in my RFC, see below.
+> 
+> 
+> > +disable_lp $MOD_TARGET_PATCH
+> > +unload_lp $MOD_TARGET_PATCH
+> > +
+> > +if [[ "$(cat /proc/$MOD_TARGET)" != "$MOD_TARGET: original output" ]] ; then
+> > +	echo -e "FAIL\n\n"
+> > +	die "livepatch kselftest(s) failed"
+> > +fi
+> > +
+> > +unload_mod $MOD_TARGET
+> > +
+> > +check_result "% insmod test_modules/$MOD_TARGET.ko
+> > +$MOD_TARGET: test_klp_mod_target_init
+> > +% insmod test_modules/$MOD_TARGET_PATCH.ko
+> 
+
+So following this technique, all the other tests with command sequences
+would need to be re-written as '&&' chains, e.g. the "patch getpid
+syscall while being heavily hammered" one like:
+
+  pid_list=$(echo "${pids[@]}" | tr ' ' ',') && \
+    load_lp $MOD_SYSCALL klp_pids=$pid_list && \
+    loop_until "grep -q '^0$' $SYSFS_KERNEL_DIR/$MOD_SYSCALL/npids" && \
+    log "$MOD_SYSCALL: Remaining not livepatched processes: $(cat $SYSFS_KERNEL_DIR/$MOD_SYSCALL/npids)"
+
+so that we only continue down a particular test for as long as it's
+successful, then the cleanup code is unconditional:
+
+  pending_pids=$(cat $SYSFS_KERNEL_DIR/$MOD_SYSCALL/npids)
+  log "$MOD_SYSCALL: Remaining not livepatched processes: $pending_pids"
+
+  for pid in ${pids[@]}; do
+          kill $pid || true
+  done
+
+  disable_lp $MOD_SYSCALL
+  unload_lp $MOD_SYSCALL
+
+  check_result  <- flags a problem
+
+Yeah, may be that's not so bad.  The functions.sh helpers may need to be
+hardened a little (can they cancel / bust a transition?  it's been a
+while since I've looked.) 
+
+Or maybe ... ugh, bash is not a programming language ... each test is
+split into its own script, the die calls can remain as they are, but we
+move the cleanup logic into a trap EXIT handler so it always runs?
+
+Or test-code and test-cleanup-code are split into their own functions,
+so tests can exit early, but their cleanup is always called?
+
+(Just brainstorming here.)
+
+> Note that the existing helper functions log the userspace commands
+> in the kernel log. It helps to understand the kernel logs.
+> 
+> In my RFC, I created a helper module which implemented a person
+> (speaker) which would come on the stage and welcome the audience.
+> I am not sure if it was a good idea. But it became a bit confusing
+> when everything (module name, sysfs interface, function name, message)
+> included the same strings like (livepatch, callback, shadow_var).
+> 
+> Anyway, my tests produced messages like these:
+> 
+> +% cat $SYSFS_MODULE_DIR/$MOD_TARGET/parameters/welcome
+> +$MOD_TARGET: speaker_welcome: Hello, World!
+> 
+> , see https://lore.kernel.org/all/20250115082431.5550-9-pmladek@suse.com/
+> 
+> 
+> There were even tests which blocked the transition. They tested shadow
+> variables which added an applause to the message. They did something like:
+> 
+> <paste>
+> All four callbacks are used as follows:
+> 
+>   + pre_patch() allocates a shadow variable with a string and fills
+> 		it with "[]".
+>   + post_patch() fills the string with "[APPLAUSE]".
+>   + pre_unpatch() reverts the string back to "[]".
+>   + post_unpatch() releases the shadow variable.
+> 
+> The welcome message printed by the livepatched function allows us to
+> distinguish between the transition and the completed transition.
+> Specifically, the speaker's welcome message appears as:
+> 
+>   + Not patched system:		 "Hello, World!"
+>   + Transition (unpatched task): "[] Hello, World!"
+>   + Transition (patched task):	 "[] Ladies and gentlemen, ..."
+>   + Patched system:		 "[APPLAUSE] Ladies and gentlemen, ..."
+> </paste>
+> 
+> , see https://lore.kernel.org/all/20250115082431.5550-11-pmladek@suse.com/
+> 
+> Sigh, I have done many changes in the tests for v1. But they still
+> need some love (and rebasing) for sending.
+> 
+
+If these can be pulled out independently from the v1 patch, perhaps
+Pablo would want to hack on that in a follow up series?
+
+> > +livepatch: enabling patch '$MOD_TARGET_PATCH'
+> > +livepatch: '$MOD_TARGET_PATCH': initializing patching transition
+> > +livepatch: '$MOD_TARGET_PATCH': starting patching transition
+> > +livepatch: '$MOD_TARGET_PATCH': completing patching transition
+> > +livepatch: '$MOD_TARGET_PATCH': patching complete
+> > +% echo 0 > $SYSFS_KLP_DIR/$MOD_TARGET_PATCH/enabled
+> > +livepatch: '$MOD_TARGET_PATCH': initializing unpatching transition
+> > +livepatch: '$MOD_TARGET_PATCH': starting unpatching transition
+> > +livepatch: '$MOD_TARGET_PATCH': completing unpatching transition
+> > +livepatch: '$MOD_TARGET_PATCH': unpatching complete
+> > +% rmmod $MOD_TARGET_PATCH
+> > +% rmmod $MOD_TARGET
+> > +$MOD_TARGET: test_klp_mod_target_exit"
+> 
+> Summary:
+> 
+> IMHO, this patch is perfectly fine as is if we accept that it will get
+> eventually obsoleted by my patchset (hopefully in a year or two).
+> 
+> On the other hand, this patch would deserve some clean up,
+> (helper functions, don't die in the middle of the test) if
+> you planned to work on more tests. It would help to maintain
+> the tests.
+> 
+
+Right, I think this was a good intro patch for Pablo and that the
+revised execution flow would be a great follow on series, if he is
+interested.  How about that?
+
+Regards,
+--
+Joe
 
