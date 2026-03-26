@@ -1,152 +1,58 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5A63FF8B6
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 14:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774536853; cv=pass; b=lSfAxRa0Qp4o3f6XUriSoUHOaSeOjw/5Lrz7Uhu+e4ho7w/nCXDhAyuiwyxDTBjqXf2V/k59WYZQmIkV/nRKK95s32COeHrumqQNOvk69s+dH/BhlUmvFyR8/DhJ36ItIC3+ABL0L2gzzGdZzHWS3vb9786eQsI/qd+2Lpkfa/E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774536853; c=relaxed/simple;
-	bh=SEhU+8FyrhCQphBxGSGzxRvEz/UtCwkE8r71m2dkSA4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pdKDbVoC4Ur+ykTFu3vS8HHV/NlW6FIlVCaY0Tk9L/Ws/3B/oRgPP7LTFcipghfaBGcjvqaFA4ZqeBYiSTRbDMIFzYtZZM8tBI/jf1sydlvheMbp1i0TCIws2onU1qOhn97SRmguYPcsf04AvelKWFnFiEQVUkGYl8kVeUseM5E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ANTjrajT; arc=pass smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0929A37E2F8;
+	Thu, 26 Mar 2026 14:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774537083; cv=none; b=t6c8g/n6zIIWuudTpHNtF8fAf2jl0Id3qEti/I6R/xrlc9ddFlTq8ZjvFWhwuKtMX0nLtsgxPH4uFp7w6/wTG3njZgaLSjcTpMsN7R6jXECGYI1iKEfCXSPD0KcRanzjJHCZn/St2RbgIygj2gJSbmVXsJXRwTSxBuNtu58FAcA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774537083; c=relaxed/simple;
+	bh=QZUkNsCFhQFnDTTotpu6BkWZFLkXNgC1j5lp/RNUq8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mVmeCb11cfMma49LRCwclb6RJ/SSUsL9uLUhz0OtoEVL1ocFf27DSEY0Jqp75AVqyKNmpNgJOEBx0vfwP190jcXlSj0XhBG5F032afPQRtJxn1VWORhV5my+eCv5BMAOL+fWFUNOqu9oKFe186NuIc6lnQz6dsj+8O+gu8pANag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Equ3DaHw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ANTjrajT"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-439b9b190easo740811f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 07:54:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774536848; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Gy78moC3PLsGprC2mw6ldFLFWDmf6Fc0u0ty9uFmp5pqTxdwXUzHwru9Xehe1RcrPd
-         KaZA8couYylmhbsTmvckDpWTp1PEZ7R0axa34vb4HRwyr57ePHmGGwPozkGkheHcYRlv
-         rYwOWfO0K2+QyojhZormVAlHDnOqUdWmqavZZxHsOx3bW8pT3a0v0m/BZY4ktxAPtAv/
-         xl8R+IZ2njjPkmB54MSGu6KkbZjynZa8kgmJZ6qFKQTpRi1dVGQrP9nilkDxwVN4nAfI
-         2QNGJx/8alHjIPNKRMNRZvrr31Abk5MpJUWamNsAUycgVal/zAP5GFvv/gi9aduVRv6+
-         KBIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=FhuoiHNS8EWtKNqoBDqtr5VoGO7JWS8fa9w/yw4hw+U=;
-        fh=oazPCJiZtBK8/ZDgG6/sUdAcF/amRUpUfG3YqniqwQ8=;
-        b=bXWOit0WCDNQ8HaTz2ZiWBdhhucMxBoSMR7GLgiG4kG0zRm6FYiDxl4uLnB8FbgWHq
-         HnUj6SU11GkVdx9LwNgEfQ/9FNzZdzBJnxO7cs5InUnMRWcdOXNkjdiZ2CE1AfH0pdL1
-         F5lT3pDa1K6qnWwrSAEGN3B/Rp735xtzU9WDDZmupJuqmcT3PbieUzI2V5WoglrChdy0
-         WU+ot8hgYtTx9lVU+i6xPH2vBJDWh7byx9A4+D4ZgLOaEgnlvw9HZ9ieVDUDy7PlTwaU
-         7tJj3xdqP7cBqkE4JJEDQJQrwfugmPkeAgnOpjSk88Bwx39U76p4fF1NFa8hVONrf3n1
-         5oIg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774536848; x=1775141648; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FhuoiHNS8EWtKNqoBDqtr5VoGO7JWS8fa9w/yw4hw+U=;
-        b=ANTjrajTdtniA0nBU8OjHqIcldHr1GCIgWI/hsvwXRB5zfqpUMWfRp3nKH+PepEetO
-         olB1FaXbpRAx9YtsCcA1iVOgZvwNkX9DSlf99Ob2VeQRJObDby0uo67p0w3H/oX7tWhP
-         2prIYefx1ZoLBwURQht385ZSGEOEKjHH/uUQ3WAu3IIC0t5QYe11I8RiiPGzUWJsJ9D2
-         PcfzGX0qxfoICT/Td/re3agibSrwoANjQPaLZwuo6XsjaX4QFeGsIfwrf3jZ7JCIWhnJ
-         KoPQXwvRdo+Sqwm/8YHnh3r2o1qeTI8H4RtL/fncOZU6Orw6aE6SujmAaAZoj9mgZgb5
-         ARJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774536848; x=1775141648;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FhuoiHNS8EWtKNqoBDqtr5VoGO7JWS8fa9w/yw4hw+U=;
-        b=q0S0t7EejgND0L6X04Y7LhIedRvbvlsiRkJo1N7+2K0BGs4NQCTbgPpnwz4du1BLRv
-         mQNENaRMHWn8GA0H2doWv9gafJNqUoDKfIX2MbaRrlw2R1ZmEU2opW8DKuSGn3UMdF7d
-         XNOGSRBYfevHtRsHfG/PLNkpMLCt7+dwD4HfSb5dCL7s7/0D2W5O63r9o9aVGNITMP7V
-         Uv4cUGqArMmX3c7R3tHr1HqxRakZ1TIjRp/hI/CFoFb+nQ/RDtdKbc76cCBHOO0A07l8
-         Y75FxSrGG59DZyZigIbhRlc7xB0JhcKoE3cIhBv7dy1Ql2D2EsMhpSI9oaBM2IZCKnrL
-         qM8A==
-X-Forwarded-Encrypted: i=1; AJvYcCXRscnPXbCC28RAAvdrtpSYrd792+wn72oUNeXwPW9sJPdGYcc/mchOvYHNGAxcmZ0nr5a4ALZgVldPYFX7uCg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYcNG8wKJVgyrV7ULN1hCQmN9dCtbJI/q9Mj4b0i924oUDCtuH
-	BE6Rbt9oPrn2+Ku5P/V1Jf8DRkbLs5Ig5cIjWivldIlOsGjuLDiMYuURcMAekFOsP9owk2GD3Q+
-	ogTaf43158ltU46yQAJ3rZv3n4dgPSj0=
-X-Gm-Gg: ATEYQzyFftGMVb2AZxAy9d5WobOxc7dX+ISeuQv0/A7keLZs2fw1rQCiGTnPmZ4rLcP
-	Sf7nJqAfoFMGXGfLtcwWc33DTL0NfKDPY5F6syP3p4PSDrCpAX0Q/rE8Gd8NtF/sDdo2dZd7zEN
-	sKBU0QSB1YxEzmEiUua3QXRjeUzCansrx+u5w4rv+4qPq4UKUoePVSiCgoTXNUc0ZQ7FV+jdUPz
-	vo4QFD1jtaQ8X57vmOl9Va2hClS4ZfAQr81Hkbw+VjttwzbPIpv0E/R/swL73U8Ebp7FYGVV+jt
-	c266lT4r0D2Y6VlqQ9VQQ2XXhEaIKSNIapN1VVBROmfhNisH07Oyc6cGckbj
-X-Received: by 2002:a05:6000:310e:b0:439:ba57:5001 with SMTP id
- ffacd0b85a97d-43b88a29247mr12274420f8f.44.1774536847553; Thu, 26 Mar 2026
- 07:54:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Equ3DaHw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D06C116C6;
+	Thu, 26 Mar 2026 14:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774537082;
+	bh=QZUkNsCFhQFnDTTotpu6BkWZFLkXNgC1j5lp/RNUq8M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Equ3DaHwOobSxIcvn+xckDPPVRvPOsm1UYCVbju5b3bZqXnABkyKqs2+1U3M+f9df
+	 SqoU4ke2CwV2kQYgE9BuLxYyBbXx3rck7AF4Gxt8tgRPDuYiUgXt8XqkFCeNDleyDC
+	 jRYWSuno2JsG0+aQtYZJH+1Fxo4ba+j+ek3q82gcyoqw2n7BzudKxKK+XKsjhvPC6O
+	 KxM3M4fwCbLRlzaOZgDZzUOFNADPCCxatmBqZFjwdel2qNhNlWDITmmaXWTew24ylI
+	 aPMolxFB2cOc7/u+lKYy/7GLu2HdeXNQglN6DOnZAz0crOeC39g9Yau2ajsDa27yqh
+	 eRj4KWQX1w2Tg==
+Date: Thu, 26 Mar 2026 07:58:01 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: fffsqian@163.com
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Qingshuang
+ Fu <fuqingshuang@kylinos.cn>
+Subject: Re: [PATCH v2] selftests: net: broadcast_pmtu: Fix false failure
+ from incorrect ping exit code logic
+Message-ID: <20260326075801.41e83b35@kernel.org>
+In-Reply-To: <20260326094219.2160239-1-fffsqian@163.com>
+References: <20260326094219.2160239-1-fffsqian@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326112521.2827500-1-wusamuel@google.com> <m2v7eig4ue.fsf@kernel.org>
-In-Reply-To: <m2v7eig4ue.fsf@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 26 Mar 2026 15:53:31 +0100
-X-Gm-Features: AQROBzDA_uO1pF648ctMN48d4pwbfgoV5WCFXg2YqxbpVDNoGL1Ww4jiqtlSmvg
-Message-ID: <CAP01T74KNVT2SVRR+XPbFb1vy85W=Jkp4_yD6xvTSg2avQo8AQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Support BPF traversal of wakeup sources
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: Samuel Wu <wusamuel@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	driver-core@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 26 Mar 2026 at 13:20, Puranjay Mohan <puranjay@kernel.org> wrote:
->
-> Samuel Wu <wusamuel@google.com> writes:
->
-> > This patchset adds requisite kfuncs for BPF programs to safely traverse
-> > wakeup_sources, and puts a config flag around the sysfs interface.
-> >
-> > Currently, a traversal of wakeup sources require going through
-> > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to query
-> > sysfs is inefficient, as there can be hundreds of wakeup_sources, with each
-> > wakeup source also having multiple attributes. debugfs is unstable and
-> > insecure.
-> >
-> > Adding kfuncs to lock/unlock wakeup sources allows BPF program to safely
-> > traverse the wakeup sources list. The head address of wakeup_sources can
-> > safely be resolved through BPF helper functions or variable attributes.
-> >
-> > On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34x
-> > speedup (sampled 75 times in table below). For a device under load, the
-> > speedup is greater.
-> > +-------+----+----------+----------+
-> > |       | n  | AVG (ms) | STD (ms) |
-> > +-------+----+----------+----------+
-> > | sysfs | 75 | 44.9     | 12.6     |
-> > +-------+----+----------+----------+
-> > | BPF   | 75 | 1.3      | 0.7      |
-> > +-------+----+----------+----------+
-> >
-> > The initial attempts for BPF traversal of wakeup_sources was with BPF
-> > iterators [1]. However, BPF already allows for traversing of a simple list
-> > with bpf_for(), and this current patchset has the added benefit of being
-> > ~2-3x more performant than BPF iterators.
->
-> I left some inline comments on patch 1, but the high level concern is
-> that encoding the SRCU index into a fake pointer to get KF_ACQUIRE/
-> KF_RELEASE tracking is working against the verifier rather than with it.
-> Nothing actually prevents a BPF program from walking the list without
-> the lock, and the whole pointer encoding trick goes away if this is done
-> as an open-coded iterator instead.
+On Thu, 26 Mar 2026 17:42:19 +0800 fffsqian@163.com wrote:
+> The broadcast_pmtu.sh test verifies that broadcast route MTU is respected,
+> but it uses an incorrect criteria for test success: it relies solely on
+> the ping command's exit code, which leads to false failures.
 
-Which is fine, the critical section is only doing CO-RE accesses, and
-the SRCU lock is just to be able to read things in a valid state while
-walking the list. It is all best-effort.
-Open coded iterators was already explored as an option in earlier
-iterations of the series and discarded as no-go.
+Still failing, does it pass for you?
 
->
-> Thanks,
-> Puranjay
+Also please read this -
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#tl-dr
