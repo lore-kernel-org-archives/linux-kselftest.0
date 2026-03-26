@@ -1,46 +1,46 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011064.outbound.protection.outlook.com [52.101.70.64])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013053.outbound.protection.outlook.com [52.101.83.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD95332616;
-	Thu, 26 Mar 2026 13:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1D531F9A6;
+	Thu, 26 Mar 2026 13:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774531748; cv=fail; b=W0qtqh4aqOE0oae0O6mwIXt1uTZMspuUuCFYaGfKANhNavWhnZiRsCzel1q/rAEAN6dwv/ChUF+Qppt0BnOZd8F/C/PcV+TORXmjYXIJOsrdygwks1NMpBiYRuDnHeQ1cO93TCdkaDoc5iISZeDPoo/0FN/aAx1NwGtaZ+VeZEE=
+	t=1774531748; cv=fail; b=MKAEFdluxcrV8jIwL3sLvDFo89EtA4vzTKSH2iyl8vbOm04gvXghTTCnqCeThXWrCABvca+wuYiFfT+/uq5Wocvm/eKvYryR6lglgmr1eXwGw+qVXH5mxpBYF9CFMVZoZjI1LhIL5jrIg4wI5crwoDUksvJ5QQOplLh5mxGHCvk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774531748; c=relaxed/simple;
-	bh=OugFYMz4ui3xVZ/ssDJR+343REq4vZonhOEZVuTJvAM=;
+	bh=5GpL+gibiANSECCrzFOrVwcEmRHGmcOammCodPWQt5k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Uy52wyrhj3ssP3r8s/8XKk/hIq6OagLVfHhlGpXVg7ztMey72AYbiZvg4wfUxC/2jUQIescNPFdct32ACT/3UohxFhjZ6HQddixrfrW1uB+Aw3cU0euauTnB0pQj6WI5XMZc/L49VaKz87Jc5R7tTl6z8iSpKN8QM02OXbdXioI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=WkC9z6OZ; arc=fail smtp.client-ip=52.101.70.64
+	 Content-Type:MIME-Version; b=aDZ98Cj+qJzK3REkeHdvmeOzLHGXWbBkxMgs719J5O9LQ22hW9Do4oKIWe72Gglgtmu106800a7HJ4e2hk9EmGwZk2exi/LMtMbq1NmGPksEHXi5pFpm6bUrt6bkc7w2ZVGUc6wqGce5W+ScNb/GoWLCClTZmzmEe84Quf/eFNo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=lRMtMaNT; arc=fail smtp.client-ip=52.101.83.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="WkC9z6OZ"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="lRMtMaNT"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lgk3tlLcN0H/8JfJHS3rKUoTuIXx5L9fa0IpzGEMVH3chgy24twc9v1LAdN+yYaHjzfTfeV5AsXz8fb08aaD0oImYufz9SrpAkQTPLYpCdpaFk9B2Tn2Pda7BzYR7mK5Diy5Ex5dA1FbWmSTrt+9RMmWhXK7oBbzdehIbgppmNyTIjGa2bLYOeFffNov2XnxAs1wEbB2DbE3X1IdXM4FQS/w5Ra4CFbJL7nyugIbIt+sac47mekSdjBH6QYRHlw9qolRDO8EQErhwjH7F1kahjeifYAJc/rjGfLGbPa6NrQP4ljYLfE4vOyhvWbnBLDiP4Yhpf3g5xOoSg0G3QK9Ag==
+ b=dpa1fkUayle4QataJ3pLxLpGDLYS1vQ/jq6OHhgV0nHKqJDXrvrZJ9SEMSfWe7sIM0kkj4QyUuKahgn6w6zjxfNE2vBSYrCgDq6mPy6d3ByBMv090HXNWon9U066pA0aWOAUfaz7/NADdYSxTVMdE0l74iiMrITRw29umE/94LI5DbsOO8okIAN+UiFtr/HobHoUwLWtz4GcUemCeJE+jTz7ecRdHOyYxK9gcFgJ7HfpreztO+D55M3lGKL6GbTyXnKRvVhk6RimuimoG5PjiTSqnKVFXbJEAv9CN4Q4Ot8Li4ytFDz0uNZ/9K3towUnurNFRlwuhkZnt4+21oijfw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BPVo5Vg65GBJCoTTaYLYXcQDaCnV49AXiFe+cb1Cw90=;
- b=Xi7WvYsiaAv4tSQQIeZF4kD4HrUrfjg3hb8auxtSxIP5eMuImKF8Go6KRTcmbJGWFoFfxZZriHPRgpvku1AnBrO4wVsu3aESYdZ/q+2fPHvPkFOwDq+sXQyffzExhdIKkIxImK3qmqtYpiWt7SWQRU4ZxKFvVoPmdt37jZzLxZCqnHOvYwAWsbRvw0QB1u++RPenTILQtbjmK4y98NcgVWa0m06WuXek9H1sIE9kQghRZKmquubn1diwIXg8oYrKLvAxEByYnvETX+ao6fu+/SylJOKZ0wJpztUWb1ERz9bF9zP+q3gtu3JV7q4XoBp2U/jyRpb9HGP0gdJ6WU8abQ==
+ bh=2ao7gV1Ur9IhbHbwM57Jenkc0Nu0eObmZnj3lToZ96s=;
+ b=LwCeUuuZdD9N3MeG4N/YW1lY+PXhXC2eXZVoOJdJmIZ4CFqUuIKoPuw4aNrZsBaLvd6/083Fb4VqrBCkHzK7GER1N/vzHbfR0NDEjTL80yw9CqMOnvwD0swPcJLMw3OlgteSXKasDqI2dwQZmcHyKkqqGBUPddqtfsXoPFxJbAB+bpcl6S8gIMP00DiPDxk1NHK15v482PytFe+Qd3ds1sk+p33Nqn/1cEsxhMZrY1bXIyFehRbfo0ZpFYxTMQFxBlsPfMPA/X2Cg99yEDLQDqPFvu6o5Xy+pZXma02tMbcrcFlvKkgxf3629oJVqCpBvrWP6UAs7EX48jkhroa3Nw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BPVo5Vg65GBJCoTTaYLYXcQDaCnV49AXiFe+cb1Cw90=;
- b=WkC9z6OZAkEjxwaFtPr1JsLHdpKRN3Cf1rmRtnxLofNf7lC41AQYHUE2YHPH4bkd4aCm7DZF7HN2rJNVxo6GufwNe3fXssNFT6Oyr8WL3q2CaQj6lbCUQH62y91FC6UbVtOpiMwvklAvlm9oQSvozIKJXwe6g6D43UFU/vmZNhSIG1+M45PWYyGi2xejb9A5C31OJDDx0RNrJZC9aszpBK0Y2jM6u9p8ZtBpbmBadJ+RKRMVBwaC6Cjs+vBj2r0PY7BCuoBQY7NegGztQ1CVJ1Ish84aCakGBpk8YubCgkp+Pg2iErDuBtwmb8m01SvT8uIn+AONMNWJpitPJHEeuQ==
+ bh=2ao7gV1Ur9IhbHbwM57Jenkc0Nu0eObmZnj3lToZ96s=;
+ b=lRMtMaNT8W9tS9GhdY4DY4yWfi9zqu8WBNqaR4ujXuBegPAYlfR1m2c11K9FZAui/OSsWIICjH39io59fQCOnu8Ngt9yYnYZoOCeZ4aXDI6rsmmuuTzDUPKd1h5q0C3B4+J8gD4vUwBrC+ual7GOZE3VLuKpZZCv1kU8rMngCtPvB+5yxn+CdI9zQgJ1131PwG3+Tw6TNB5bDM6W9NMjzaiPC4pWnCfHZaBUuKNjPRHG5zTBNWhO6WJyvmURDLEDCwveHwmt0ifVDK3ufn4cfJheR5HxCStDnfaNEyeCBddDLl+GfS53zSe9YTZeBD48GLkqPaHdm+UCPns5Wzelmw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by AS5PR04MB11324.eurprd04.prod.outlook.com (2603:10a6:20b:6c6::20) with
+ by AM9PR04MB8337.eurprd04.prod.outlook.com (2603:10a6:20b:3e8::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Thu, 26 Mar
- 2026 13:28:54 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.22; Thu, 26 Mar
+ 2026 13:28:59 +0000
 Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
  ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
  ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9745.019; Thu, 26 Mar 2026
- 13:28:54 +0000
+ 13:28:58 +0000
 From: Ioana Ciornei <ioana.ciornei@nxp.com>
 To: netdev@vger.kernel.org
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -53,16 +53,16 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	petrm@nvidia.com,
 	willemb@google.com,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v4 05/10] selftests: drivers: hw: cleanup shellcheck warnings in the rmon test
-Date: Thu, 26 Mar 2026 15:28:23 +0200
-Message-Id: <20260326132828.805703-6-ioana.ciornei@nxp.com>
+Subject: [PATCH net-next v4 07/10] selftests: drivers: hw: replace counter upper limit with UINT32_MAX in rmon test
+Date: Thu, 26 Mar 2026 15:28:25 +0200
+Message-Id: <20260326132828.805703-8-ioana.ciornei@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260326132828.805703-1-ioana.ciornei@nxp.com>
 References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: FR4P281CA0371.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f8::7) To PAXPR04MB8253.eurprd04.prod.outlook.com
+X-ClientProxiedBy: FR4P281CA0212.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:e4::11) To PAXPR04MB8253.eurprd04.prod.outlook.com
  (2603:10a6:102:1bf::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -71,218 +71,104 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|AS5PR04MB11324:EE_
-X-MS-Office365-Filtering-Correlation-Id: 474441a4-a5d4-4bf9-b187-08de8b3ba021
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|AM9PR04MB8337:EE_
+X-MS-Office365-Filtering-Correlation-Id: de0cb714-4111-4c5c-7755-08de8b3ba2f7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|19092799006|366016|1800799024|18002099003|22082099003|56012099003;
+	BCL:0;ARA:13230040|366016|19092799006|1800799024|7416014|376014|18002099003|22082099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	TPN4NEsLnq5TySXknFSUpeaSv+KGb8LFizI8opMrDN28pxmoW6M1IQvF4IuEzPOfzP+09CKRb4dW6kGBrKFUtSCIbXruEZXLwh6n2E83+V34Jh2Feo3hcHR/6OyIi984a8z8lY0KWtzEYQwWsI/ElFsRCDnCvp4PyKlLFlvG0DkVDOKpX/re2oTZnBl4v4ITbLtoJLZf6lRc1em0rdLkw9cE/hisQkG2tng8+hIuAYdP0SO0b4SH6cC0GIR+1/zhSItiXUGPsN+PDjyM8DIUGroIJDcUVee4UdQyL3helHz6lFLAWky44mnF2T3LINSuDe8ESOmf+Fntr8rNRaWYNL2iHUj9zs71CEgMpT/aLM0t+LE2KY9TiHqOP9nyarTtjxT0HeOlq+tBCUKtCFZSkzgo7rjBSJo15kWno6UbKyK+dEZNyWl4ha/SrEkT9hZz25tdEkfu3tt7nkh2+nYGph8YQKb86FeJNylPty6WvXFOzW7zEoDrEJWAfjp3pylxZ3hKwOBZ0hR7onxje8AG9sn2lFSIxzrEnekV05HVyC7Gmh08ZyTwUF7nUEt1Tfbq1Becm4G8ZdjGk3gdpc7aPJlBYJ1kh111Ukbqme3tEGT5fMFRStXHosF+bBvGbf/Yzo5Y1uYydkGx3sOeVWS+N9aE/3EIRMMCGBX5BgYm7yVyqt3LMDYO9/pbgw+je++7shfDEDK1ehh4Kh8ibOoPf54Y95f+IGRoCpjCfda5Fqw=
+	J5IkDOHSYZGOU32Gq6U7wTHOTeVtFcCfhSN55XGaL3nHWPPq3WJq0XWfN3m7/DOTSxRUVw+i9zHReu4+g/4bf+Pk2ewI6WKNhPCcKfUnG471ZSz7U3+JDUkkWF0JUOQojVNaMAYQXGblq4mZ0fqG+KTcw51ctLtYjO5BI1KX0s2HM9C/QDMk3088QphOi8eYm6czNYnNE6c/y/QwiWFq/T6+Fyc5CBbC/CUf7iqw1wi3MHjCOn9zXh+uO9Kl/hSJU8mpJnKwxC0ZEvFSj+NVdlv0ViF3d4r9I/1gEJuqijBpIED8CXWBQtoIbZ7F5+zrKRESzjcw18exF24aU/v5pSzEvo7HYvJ4MjXQehDLVuA8IHWp2vESxgCfGxsbhqVfgYSclM6M8dlQjCExrpH0obZ0xnlyE5Znj9jag0iNWnLBC6o3WRzswbrfUEDZkprsSMvnGy/g2Oc3QkQNkaD5qP4efhhD0rRHWfGTMS9+gUm3BDvHH3ITPLF7x30iDdvRg42Y6bNjwfuboxptYP4nQ3ANeMtBR3sc8IwwCrvLb2bNW28jay8Omm2lBUB4v1w6xzL/gBqEeisxoMUfIfK/fq4uI7HOajLsmzDWuO1PGFIbwL/hC/+yAdd6RhtZLYBQJGV+Y3wIiYClP8ivnmrwwOrJrFSgL+sTEdQ1TF3X6rB2IuUoL1CBo79aZ6gs/4DdqDeD9vdEwokq4hWGcZLJAvBMYLKL3D+sTAX+V8XK3is=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(19092799006)(366016)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(1800799024)(7416014)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?gXZAvEssjiRn2ABSfFyEh+GLcC8XtO/EU6y7wmfiY5RHhKP0tsrG43j/u+Ie?=
- =?us-ascii?Q?SqNd2AZA3XUgwQNYuTDlMz6j6XkhN4WvpZ2NvKiR5yyMKmVasAVJa2YxwHur?=
- =?us-ascii?Q?kmgBypf+YwYlU1vWyGoMt7YWhdGdpiSLszAogrMGG/Cij0+oaIafW8HmwNiQ?=
- =?us-ascii?Q?4WC47lzwgX3McyP03ZLGM+h7Hd70Xtsjdw4TVFh4/WcCu3hbAKMnVmGAds5V?=
- =?us-ascii?Q?kN9FepYGfddBmIVnTq4SkAKXDE8qMwyleFcY8Etja4y0XXf8UWRYkLMPF4RT?=
- =?us-ascii?Q?zXGQxVxoXKeCC71j5TqHlS+IZhVbKIJzWVbCODsbYjnchxXXvSQgx4ghT1wI?=
- =?us-ascii?Q?9lAIXxqrhpHrpta3by7Wgiu+pT6hG95Iy/f0YZ14XEgKwuLFL5uaPJ0FvyG+?=
- =?us-ascii?Q?/SdVEn8tnVPqcki3ohb/lfWJ4w6graUXMMW6s2Yegw8bZN5hAAOzOudDKOi7?=
- =?us-ascii?Q?350fbU9TOplvdDnz1jzshn8NyoI6AudBzdbKBlk6vUCXK4U1UgLpWHQ3tbNt?=
- =?us-ascii?Q?EDeQHJ0oZfZ/t64bfQ+xhmsG19An/7iE4frT7u6mraw083ZyjVxYbhAGIGlB?=
- =?us-ascii?Q?6AYNnpxxNinDsc1p+x36vb/eVxiyeysT826QIsxf/IJajgi+qffoO3pIulwW?=
- =?us-ascii?Q?x1fT33ZPQeSTgTUq/iVMfJrMCDs3hjjIbUTK1diUuD1+gqy/ZCac+g2k9F1i?=
- =?us-ascii?Q?AK+X7MLrEom6GjoqgbegDqYdFXd5NRBUpcpjd6AED3GDvnBtGJX5xtDX2xtu?=
- =?us-ascii?Q?/gpKZDVVHniiWljhMxYGK2g/flMeEG7YPzi40IuReCYl2gu5FunkMuLRmTTh?=
- =?us-ascii?Q?uJsrk2CG0L+yVJWYUlTtPCbIqCO88XPbM8cHBxjTrkTTtesHIULK4+GuvRJ1?=
- =?us-ascii?Q?K0E0iwgc3AQRBhZsmTYJmBNMVx+Rnr8D2IZqKgDVGfsChkHLo7dPePZmppAH?=
- =?us-ascii?Q?eQ2wCi0wrvUEfpWiYb0P+4fxXrHf6jHTbV7k3n1xlagy2Y6VJZGNvC8cd0IO?=
- =?us-ascii?Q?V6r2lYkpykEclvOJ1Wx561CtJ/Ny7+2kcUaGaobmr5yRkQLA+cBoeZdmfRGT?=
- =?us-ascii?Q?zsgQqK2ekRrl0EKqbdrdGATdD11Eh1A118R8qqk5M4M9S+Z52fWbovCsgIye?=
- =?us-ascii?Q?JsY9Yb0YBItD80YuVoch7jZdzVPXLkZpF+9y8aslqZa2SLCk4vIDC76TTayA?=
- =?us-ascii?Q?bgmczzbPb20fgadRMsf+CGdEUIC6RqYOn/ihGYfPLKjG35ByBiRW7yF54Loe?=
- =?us-ascii?Q?7Hl3fHEOD8cDTAuyj08tMBZwCtOpDVdMErt4oQK9FMH6yi5y7MnIJgGPdhB4?=
- =?us-ascii?Q?QYYHayIOpiB6GHLOe01TUhQtqTni8mLKvJ7KsrdfsXDMFYdEISfqufshZQ96?=
- =?us-ascii?Q?o9j6JDypZEtfhVjWnbE91DQ2YMVeqmFG0UM4qziYcckjOguwz/7GcPqoCLrd?=
- =?us-ascii?Q?HeU2Vb8mDnuA44KopVUYLKGlLwK2Oo3teiyW54oCrpjj20XE4sP4Y45zLTkF?=
- =?us-ascii?Q?oSAL6vdgDU3RxAQeYmKEDY/JoQksaqujVrOL+WqEbhMlOeVlONu5qObNYb+r?=
- =?us-ascii?Q?hRLAgj3nnet9D1vY9601lOX/rKRch3N+U9WaOnQS+ko6gQDE89TPnvfFXZjS?=
- =?us-ascii?Q?qV7mSZykhjFz7gcK/N+tmL3u2R/ulFRuTJpqf73kC5pe6OR9W3fZyQFV8AkP?=
- =?us-ascii?Q?3jCmnmCRtxY1lGpXs2rN4+JQdB5L4aad0fsc5X+BD+2Hgw8RZ9nVQ3/9cm9I?=
- =?us-ascii?Q?+HCqKL209g=3D=3D?=
+	=?us-ascii?Q?ae6BiXJZ5eR+ZFvguw05l0af1QR1uXKNE8gxU4xwJWxa+bFngslRgHROllCg?=
+ =?us-ascii?Q?eb7ClCdU6uzlN9FZ4vbj8kIItt1wOUx5oxZFvPXlySOw8VGE3Z21U3ChFHOp?=
+ =?us-ascii?Q?BSUcJKC9c3y0G2NAc/6vdTe3bq3Iss80DhaPhxPTbzYU5+sjSP+XOkH4u3+d?=
+ =?us-ascii?Q?gd64Zd/jNUgcTTrm07M/tNhs+OxyK9vAQ0bamUiIhH3loDt8/JBGZrgYXAll?=
+ =?us-ascii?Q?5QOWNCQdLu6ckOGM6unvxR+evnZ+/IfVO61v/RvKqYkhMD0tRLuLlQZ6dquR?=
+ =?us-ascii?Q?2zp4mQLJBzGBYl/q6r+5+q+lq+ooxiCyQnaUB2S9s0yBZh+JC6g2Ai0CA74f?=
+ =?us-ascii?Q?tLyIS7ghEiQFuZ4WPJbXaiDM8kdyKNcAnYCRFoskmvzURBhPF6ip3US1BekL?=
+ =?us-ascii?Q?TJ75uweR++CKDXm0feSiK0t1t0Ah3Yd5MWD+Mn3cTKMkO1X+q8FeQxaAJ9XF?=
+ =?us-ascii?Q?ouYBJmU449tXaZNJEFkcVZ/pyGV3KEk1L+PZN8u+bAjQpDd7nF3jKU5+R6As?=
+ =?us-ascii?Q?w92Av2RMPXr+3OoySjBuuH9frulrQUCcKIrvdmKwDtDjfQPmH3Bm0wkLB0cu?=
+ =?us-ascii?Q?vtOqz3yKsoPcohguw9eYyjmSPEuHAxl11SRHGeGmrARkBDaBOt8X6/Hx8mth?=
+ =?us-ascii?Q?sm7rcbC0sMLzTfE6cDypI8ZvGzuo7dpU7r5/aQKFzpGZ8aUahWFUKi8J8ak5?=
+ =?us-ascii?Q?AUJ6gFFGmsc5y7U7IoEMXIT6vrgOkyZ2pbQ+n2uwaqwUT0LIArfJYXyobtIt?=
+ =?us-ascii?Q?HlOBmJbeNeHUN77cXyUr3221IIU+Ep5o8c6P2kPaMlwb1xvd1q9B+tZxjeAk?=
+ =?us-ascii?Q?6U1af57V8IdX6X2a1eOaCuWdhKNUBfwzx8qaawCheW3GlB2sHYtq7K3sS2DD?=
+ =?us-ascii?Q?2aK3QPgKH1ywU8iqDUIKdgyPGumf7lsO1DazBEAfBbhmNcUf963HJH8WiIsA?=
+ =?us-ascii?Q?qfkqWbo00eszZRejQSyRklYq95KNnF1cZRyNukGcN0sfMeX0NYsU1Vr/BoTn?=
+ =?us-ascii?Q?gsO/+hZkxIqZmdULg0eXrqt6/vGGWPjxGd78qBA+95hSlDGAxAsRLHhWbUtn?=
+ =?us-ascii?Q?cpMyQHTCcPqB0/SWphsu9il2quiztwJQxhtXkV65N4aXmZ4NE7J0eZDD4EWx?=
+ =?us-ascii?Q?J6fbZvT/Deri1SkAQhN0FDa/VzsEMqcz9W44fXCl3pkaQnEZoTe69Mkso9rn?=
+ =?us-ascii?Q?4FcSrLO9xOBCwJJ+TKfVEiLs7eUs4JkrYiKLaIq4lrlO5qwP4DnKowHEjLRC?=
+ =?us-ascii?Q?GSfcn97gckw96xaGcB9UkHEPW27Zxx8ENWJW2DwxIBUrIxJkSz3tVNsI/Av1?=
+ =?us-ascii?Q?w9mG36/r/3hg5wfZFoojkM6qVDEJbzT5dEkNioXDfFztTwIbR5ySNUGgLonl?=
+ =?us-ascii?Q?thEc5A3Lwqxin7wnFwQ2glb7I8YzGYa5/YPMtR+wignHzgirdUCISs2jT2v9?=
+ =?us-ascii?Q?AcYatxOLVOo9HCD96P93mTWiKQQiKwmmjg/gshgL1EIc+ohWASwhshXTkx88?=
+ =?us-ascii?Q?cE5WZGBnaMGSa6thtONAZOm8fHOuMklzZhG9pY7DQh441b3kwB/n4IJPEcAl?=
+ =?us-ascii?Q?8/lhLnMYL2jXJQy1UaC1l1SEMaolvcVzGkvFeOxEncuO2fchI6djODYgKIdG?=
+ =?us-ascii?Q?yNrwQtITCk0685bv2wRjHNrQl5n9p8Ty1IZovIQf2qcVbMb9S2VMcaEx1w/d?=
+ =?us-ascii?Q?9iy3/0UU5J0omiyIAKMGfQ4nJrriTmJb5rA8aTBVxsQHTVcrtVAL0reTlHR6?=
+ =?us-ascii?Q?Zs6wvebiRw=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 474441a4-a5d4-4bf9-b187-08de8b3ba021
+X-MS-Exchange-CrossTenant-Network-Message-Id: de0cb714-4111-4c5c-7755-08de8b3ba2f7
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2026 13:28:54.0711
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2026 13:28:58.7839
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BvcTQca2NLvbA2jFalPHzpWjTJBpF72BtnIUvGCveWEb+90nN3twBGSliILVjP3jahB3Mu3sQAaIIzrsDBbDoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB11324
+X-MS-Exchange-CrossTenant-UserPrincipalName: KL85/KMuknnah6vjgnYaz5e1fxjgWh6znZQPCGzLYxtlwjhfMGu0V1z9qP7fNd1raaRfpk8NsbY2pxwie2zqpw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8337
 
-If run on the ethtool_rmon.sh script, shellcheck generates a bunch of
-false positive errors. Suppress those checks that generate them.
+The ethtool_rmon.sh script checks that the number of packets sent /
+received during a test matches the expected value with a 1% tolerance.
 
-Also cleanup the remaining warnings by using double quoting around the
-used variables.
+Since in the next patches this test will gain the capability to also be
+run on systems with a single interface where the traffic generator is
+accesible through ssh, use the UINT32_MAX as the upper limit. This is
+necessary since the same interface will be used also for control traffic
+(the ssh commands) as well as the mausezahn generated one.
 
 Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
 Reviewed-by: Petr Machata <petrm@nvidia.com>
 ---
 Changes in v4:
-- split one line to 80 chars
+- none
 Changes in v3:
 - none
 Changes in v2:
 - patch is new
 
- .../selftests/drivers/net/hw/ethtool_rmon.sh  | 54 ++++++++++---------
- 1 file changed, 29 insertions(+), 25 deletions(-)
+ tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
-index 8f60c1685ad4..13b3760e3a40 100755
+index 80e75b9b40fd..f290ce1832f1 100755
 --- a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
 +++ b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
-@@ -1,5 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
-+#shellcheck disable=SC2034 # SC does not see the global variables
-+#shellcheck disable=SC2317,SC2329 # unused functions
+@@ -12,6 +12,7 @@ NUM_NETIFS=2
+ lib_dir=$(dirname "$0")
+ source "$lib_dir"/../../../net/forwarding/lib.sh
  
- ALL_TESTS="
- 	rmon_rx_histogram
-@@ -19,11 +21,12 @@ ensure_mtu()
- {
- 	local iface=$1; shift
- 	local len=$1; shift
--	local current=$(ip -j link show dev $iface | jq -r '.[0].mtu')
- 	local required=$((len - ETH_HLEN - ETH_FCS_LEN))
-+	local current
++UINT32_MAX=$((2**32 - 1))
+ ETH_FCS_LEN=4
+ ETH_HLEN=$((6+6+2))
  
--	if [ $current -lt $required ]; then
--		ip link set dev $iface mtu $required || return 1
-+	current=$(ip -j link show dev "$iface" | jq -r '.[0].mtu')
-+	if [ "$current" -lt "$required" ]; then
-+		ip link set dev "$iface" mtu "$required" || return 1
- 	fi
- }
+@@ -64,8 +65,7 @@ bucket_test()
  
-@@ -46,23 +49,23 @@ bucket_test()
- 	len=$((len - ETH_FCS_LEN))
- 	len=$((len > 0 ? len : 0))
+ 	expected=$([ "$set" = rx ] && echo "$num_rx" || echo "$num_tx")
  
--	before=$(ethtool --json -S $iface --groups rmon | \
-+	before=$(ethtool --json -S "$iface" --groups rmon | \
- 		jq -r ".[0].rmon[\"${set}-pktsNtoM\"][$bucket].val")
- 
- 	# Send 10k one way and 20k in the other, to detect counters
- 	# mapped to the wrong direction
--	$MZ $neigh -q -c $num_rx -p $len -a own -b bcast -d 10us
--	$MZ $iface -q -c $num_tx -p $len -a own -b bcast -d 10us
-+	"$MZ" "$neigh" -q -c "$num_rx" -p "$len" -a own -b bcast -d 10us
-+	"$MZ" "$iface" -q -c "$num_tx" -p "$len" -a own -b bcast -d 10us
- 
--	after=$(ethtool --json -S $iface --groups rmon | \
-+	after=$(ethtool --json -S "$iface" --groups rmon | \
- 		jq -r ".[0].rmon[\"${set}-pktsNtoM\"][$bucket].val")
- 
- 	delta=$((after - before))
- 
--	expected=$([ $set = rx ] && echo $num_rx || echo $num_tx)
-+	expected=$([ "$set" = rx ] && echo "$num_rx" || echo "$num_tx")
- 
- 	# Allow some extra tolerance for other packets sent by the stack
--	[ $delta -ge $expected ] && [ $delta -le $((expected + 100)) ]
-+	[ "$delta" -ge "$expected" ] && [ "$delta" -le $((expected + 100)) ]
+-	# Allow some extra tolerance for other packets sent by the stack
+-	[ "$delta" -ge "$expected" ] && [ "$delta" -le $((expected + 100)) ]
++	[ "$delta" -ge "$expected" ] && [ "$delta" -le "$UINT32_MAX" ]
  }
  
  rmon_histogram()
-@@ -78,23 +81,23 @@ rmon_histogram()
- 	while read -r -a bucket; do
- 		step="$set-pkts${bucket[0]}to${bucket[1]} on $iface"
- 
--		for if in $iface $neigh; do
--			if ! ensure_mtu $if ${bucket[0]}; then
-+		for if in "$iface" "$neigh"; do
-+			if ! ensure_mtu "$if" "${bucket[0]}"; then
- 				log_test_xfail "$if does not support the required MTU for $step"
- 				return
- 			fi
- 		done
- 
--		if ! bucket_test $iface $neigh $set $nbuckets ${bucket[0]}; then
-+		if ! bucket_test "$iface" "$neigh" "$set" "$nbuckets" "${bucket[0]}"; then
- 			check_err 1 "$step failed"
- 			return 1
- 		fi
- 		log_test "$step"
- 		nbuckets=$((nbuckets + 1))
--	done < <(ethtool --json -S $iface --groups rmon | \
-+	done < <(ethtool --json -S "$iface" --groups rmon | \
- 		jq -r ".[0].rmon[\"${set}-pktsNtoM\"][]|[.low, .high]|@tsv" 2>/dev/null)
- 
--	if [ $nbuckets -eq 0 ]; then
-+	if [ "$nbuckets" -eq 0 ]; then
- 		log_test_xfail "$iface does not support $set histogram counters"
- 		return
- 	fi
-@@ -102,14 +105,14 @@ rmon_histogram()
- 
- rmon_rx_histogram()
- {
--	rmon_histogram $h1 $h2 rx
--	rmon_histogram $h2 $h1 rx
-+	rmon_histogram "$h1" "$h2" rx
-+	rmon_histogram "$h2" "$h1" rx
- }
- 
- rmon_tx_histogram()
- {
--	rmon_histogram $h1 $h2 tx
--	rmon_histogram $h2 $h1 tx
-+	rmon_histogram "$h1" "$h2" tx
-+	rmon_histogram "$h2" "$h1" tx
- }
- 
- setup_prepare()
-@@ -117,9 +120,10 @@ setup_prepare()
- 	h1=${NETIFS[p1]}
- 	h2=${NETIFS[p2]}
- 
--	for iface in $h1 $h2; do
--		netif_mtu[$iface]=$(ip -j link show dev $iface | jq -r '.[0].mtu')
--		ip link set dev $iface up
-+	for iface in "$h1" "$h2"; do
-+		netif_mtu["$iface"]=$(ip -j link show dev "$iface" | \
-+			jq -r '.[0].mtu')
-+		ip link set dev "$iface" up
- 	done
- }
- 
-@@ -127,9 +131,9 @@ cleanup()
- {
- 	pre_cleanup
- 
--	for iface in $h2 $h1; do
--		ip link set dev $iface \
--			mtu ${netif_mtu[$iface]} \
-+	for iface in "$h2" "$h1"; do
-+		ip link set dev "$iface" \
-+			mtu "${netif_mtu[$iface]}" \
- 			down
- 	done
- }
-@@ -142,4 +146,4 @@ setup_wait
- 
- tests_run
- 
--exit $EXIT_STATUS
-+exit "$EXIT_STATUS"
 -- 
 2.25.1
 
