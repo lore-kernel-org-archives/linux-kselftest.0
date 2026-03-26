@@ -1,125 +1,113 @@
-Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A743624B0
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 20:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F4E391E4C
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 20:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774555615; cv=none; b=qSH2jxQpI7eK7Zpc2zJ6jQuK+lljuNgR7WzbgZ3q81V249zo7bOmkTgzZ0fiWe0Er0QKVTy1TizmRplvSin/0vvgc9HQEbVGlJfY5dCjK9oMFVSjHZ7kj22hBGWg8I4bp+VOfoW2hmdTLukWWCMp3qs3xatt/ABChcbNLhTLXEI=
+	t=1774556321; cv=none; b=IDFXWlqSHtSNu1EHFlcwj7Ntf+U7nGBiX+1C1qfcXVivkrZFgmP6Y9CIs4f4TVfboiVFCvqUKYTyp7WLZaAM+yt5bs5UmGXGpYQO2sC8QOgtj48HJyX4krgG8EFR5Sr8yhk8WgdxjyWrSCrCZxXDXv6Kw6uDHxBPcnDYM4Tb1Io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774555615; c=relaxed/simple;
-	bh=jj+yorpeEBxwk+7nym3Vu8xagBVeQ+tug3rKRqZFhbU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=io/GzTA2TGRfUMQDJ6RawJpdYbJnGz0JVfd29FGd5M0i2d2RIJelVtV9M2oZXZi5dOrnAEjHGQUzWiqItN8t8BokzrWQT1q38frSZ2XbHDmJk5CkExcnuUugPmuuxeN72oob49/SqxhZQCNkwcVy3Racz1HMTeMIDp6IBGtXWGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lZiTYQ6K; arc=none smtp.client-ip=74.125.82.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1774556321; c=relaxed/simple;
+	bh=K5v5TTWH4F+mh+Qb1H4gG6uq2C0QCi+Bgcw9bKObD+A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SJ/X1A21mXcT/Nhkv/5W6nXt3QB/13oOTnwRGQCKRlfCwOkG7YROXGLsflCFPbAPwV6q6NVmwm0PuK0PhajcADukhLaRa3Y6+strWzgSqOIohGEPklKwQu3z1HgZ1zU1ntDnQKEAiDg3oyKEAsE2uaOSie67rIyBFcdyP2hvqUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X7LdI/I9; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lZiTYQ6K"
-Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-127337c8e52so1019890c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 13:06:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X7LdI/I9"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso12840285e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 13:18:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774555613; x=1775160413; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q39vkXCHwVXHxLZOMIlHqDW4HE8OruDbuf0XK+bdxP4=;
-        b=lZiTYQ6Kyz0T/yPpRU+2Ues0ncOW+GZ8GrSdz9B5oe/4TO36d9Ev8LUF8ozT8UsAHd
-         2bjYRDZ3tiFtL7tXngPxVo8KHGLnfj9Aj3pVdD/+Xcc8IQ95oRsE7B8xRrgyQowML9dw
-         qHSTkk5cAotTvdMS4d7EOVfKI1ZcKPyReHPbSanRuWfrxB/Dedsb7i+hStuMvIV3BEE1
-         uE1LfztRPH3kETgM/+rYr2JyHnGu+ig1uWp2hjgJ3tYF4HUnE5XV5xlClzEO+7B3nJEA
-         UlfD7isuxSZXtc6vWE7NEVDt6oCIbop+EGUh/HTcGHPuVP15IcqVfi33sCVcfIqtjh/R
-         uSXg==
+        d=gmail.com; s=20251104; t=1774556318; x=1775161118; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xycnlm/h8VsaAluVGkMfR2izvoHRISt/YiMCwALMUO4=;
+        b=X7LdI/I9ozAE4Yw7QpZTVLe0TVjjbwjkLo4fu+3hGtce21mmaUdC4OIPhErpiiyGuP
+         bz0kNorxBGWvMMmzvyd3s/Xo5cWy5CBjYJoPSXvL29mJPE+/BZaiXMYaQd5DdeXOquqK
+         Iw8wSgfOZZbTQy6KXGyZl7p0UkmMJMRoe1xlLiW70VwJ1GerVbquxPOV35asHCvaL1Cz
+         LDRLoNfNgqhksj1zCBNXQyc7OAhRIF9dTzI3b7/rnzyZSUYli6u+eTRUri3eQ/D//Esd
+         rhykzrYRgLFZzF0mfaYReGEZ/mbl7E1ldobRHiCXUD8inSXqd6dEwCiZu6B+LqOVvKOv
+         SmjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774555613; x=1775160413;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Q39vkXCHwVXHxLZOMIlHqDW4HE8OruDbuf0XK+bdxP4=;
-        b=F9dPJvX6VohCOlpua9KecV2FMEC3aX+r4KYYHhHtjh8KEutEnzwd3XFT7wv68iBn4g
-         /cJTimT1FbYqQtpklztfPbLSnUgHxK+LL7lrTrG6GMNdWuBY6dxD//h9WxHS9/BiJTH+
-         ZfM1bzb7Fxs1KxD+m87UwXrpiT+0sKviPNl3qZnfed2uXP7ZXZ6/0uQ/nmdlo3s0PONo
-         8m2Hm3Ul/kwgrTapJuCUsAqbiCs6esv1Jz/t+FSjDke+wekb40YP0dpDSDNVY24S6F9g
-         mNPtTbuG1nIubMHuJ04JKgSwtcou3/kqN5hZV618K4JhRQPCOratcux9YT9qtKhoDEiq
-         XP3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWc3axyupGrJGobI1iX8BMy4CmYR4fvkPk/OLvjTBfNbOJRtXfwj2kVo5oL3FMN2PRLEtzflbTuvC8GconDOQo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhRYJXipslsyhrLcOGd7uRZG5lNOIkCfLQ+LDXMyQNBiCBvUEL
-	ozHPDe6hWmORakkUsv/murzATfBuO1QYGEjUw5I4tl7CD7e+83WgM43FdaKumZ6ugwTVcQQfaKt
-	u1aILxaPoSS4cGYO/YvoV6f02L8y4IQ==
-X-Received: from dleb3-n1.prod.google.com ([2002:a05:701b:4243:10b0:12a:86e5:44de])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:125:b0:128:cf5c:5362 with SMTP id a92af1059eb24-12a96e5cde5mr5257574c88.12.1774555612457;
- Thu, 26 Mar 2026 13:06:52 -0700 (PDT)
-Date: Thu, 26 Mar 2026 20:06:51 +0000
-In-Reply-To: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
+        d=1e100.net; s=20251104; t=1774556318; x=1775161118;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xycnlm/h8VsaAluVGkMfR2izvoHRISt/YiMCwALMUO4=;
+        b=KNOGSPibVUq32NF8Ykkf1kdUbDgU8URyeqfWdQGMWQ0PwOgDZ2Jr3RdfvfXXniXcsD
+         MFqHSggn4m9i+Hos3q7mhwf/VTzJ+HiMlFWq/TnjiCIhZrJLMjqK2V6TE6a3SHKc4vFV
+         z9pauBIA6jbV8i5nD0kBRbII1S5Pk0mlQEpUnJLLSVaUfwLTeiYnHC2ERcsTsQcMYkDB
+         tK7KlP+5syIBQX5mgWDT8PREP3gCIM3eDG9dC5v9JK8EmNleE7nvMd9jt4Kl0vacDNIa
+         V3b08y1/rXrPrius0D6Rlul6xpoEQ1G4JHUT0SCJ8g8okyYLGfB+XWCFPjnUn0YHGVQb
+         7qHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUDjVquCt0udH4fAqU7eHaRa4yotjFhmGx2k/bCo6vp1FXZeVR1v9YwtMD2vEqp/WOpD9vDtUARi0Xs2YOsxzE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylfHOMJjJBKuEJ2Jv8RqeOLiQuvCaKDnXtFrHpfs6XNFkFcETi
+	oW/KutGVhl7tLiaHrhc11DgufE6EETPaPIt1CoiA5jmzuHySQKOCdw8q
+X-Gm-Gg: ATEYQzxl6goWa6ASgAJkoMHXL7Nda3rgMWnqr8YM3Dj3VtRWSd3VQXAxjUeBNMCYY6s
+	I6CGrDJCHOZaQADXvBuIuOJ1pZfKUlKPiuSVd1G+e/m1REKD92RXIbYhzd+uPUEtWwofL4lNIfo
+	vqGFU05S08TQT7qQJN64JNVKywoxdFdqQjCw3Gnw5MbpPizJ9dZHfOG8fZa846o0AfQeF9AE9ze
+	IPbv29SkJOWKh9lhKTvy6/uJ89nfXS92lDDG+0wX1XJRi+qnhLB60vZdQuv+Eom9wUD6wyXzQ5T
+	gLfwE+qn7juv5m748q6wETiDfk3ic1UBez4KwImP/ntXTb8F0Jl1koNwoK6/O2kx1wdZQT45ypz
+	exycgNn7YalzVh6ZBuLl/IsPixjqJyA7/eQmtcIptkiKDS4g+mHQ0+XXYpaXMeJZdYhH1Q2ClAg
+	p/41WKuEL97rk0QXyBPN+DQB5ykGmomnxbUlNJIp2IkREJOdMmeAuItlhZ+yADlslZAvwCfGz3O
+	8x3Hvc0c/dI
+X-Received: by 2002:a05:600c:8708:b0:483:b505:9db7 with SMTP id 5b1f17b1804b1-48727f1b5f1mr442955e9.32.1774556317978;
+        Thu, 26 Mar 2026 13:18:37 -0700 (PDT)
+Received: from snowdrop.snailnet.com (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48725d9acb9sm3330475e9.1.2026.03.26.13.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 13:18:37 -0700 (PDT)
+From: david.laight.linux@gmail.com
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Shuah Khan <shuah@kernel.org>,
+	wireguard@lists.zx2c4.com,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: David Laight <david.laight.linux@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH next] wireguard: selftests: Remove spurious precision from banner printf
+Date: Thu, 26 Mar 2026 20:18:36 +0000
+Message-Id: <20260326201836.3957-1-david.laight.linux@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
-X-Mailer: b4 0.14.3
-Message-ID: <177455561121.2009594.1781899946157697823.b4-ty@google.com>
-Subject: Re: [PATCH v3 0/8] module: Move 'struct module_signature' to UAPI
-From: Sami Tolvanen <samitolvanen@google.com>
-To: David Howells <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"=?utf-8?q?Thomas_Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>
-Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, 05 Mar 2026 10:31:36 +0100, Thomas Wei=C3=9Fschuh wrote:
-> This structure definition is used outside the kernel proper.
-> For example in kmod and the kernel build environment.
->=20
-> To allow reuse, move it to a new UAPI header.
->=20
-> While it is not a true UAPI, it is a common practice to have
-> non-UAPI interface definitions in the kernel's UAPI headers.
->=20
-> [...]
+From: David Laight <david.laight.linux@gmail.com>
 
-Applied to modules-next, thanks!
+Change ("%*.s", len, "") to ("%*s", len, "").
+The former is equivalent to "%*.0s" but is really a typing mistake.
+No actual change to the output.
 
-[1/8] extract-cert: drop unused definition of PKEY_ID_PKCS7
-      commit: 137676d4482d8b8d755890b4ed29fe8223661d20
-[2/8] module: Drop unused signature types
-      commit: 8988913aacee82e5401bf3b96839731982dcbde7
-[3/8] module: Give 'enum pkey_id_type' a more specific name
-      commit: acd87264af525dba6e9355310e8acdf066a5f6b5
-[4/8] module: Give MODULE_SIG_STRING a more descriptive name
-      commit: 2ae4ea2d9aaf25cb74fbc23450b1b8f0a5b7aa89
-[5/8] module: Move 'struct module_signature' to UAPI
-      commit: f9909cf0a2dcc9e99377f3fcc965ccd93e518e34
-[6/8] tools uapi headers: add linux/module_signature.h
-      commit: d2d7561dc656748f592cc34d34bf5db8d5c67f7b
-[7/8] sign-file: use 'struct module_signature' from the UAPI headers
-      commit: e340db306c3bb85877490f33a78eb80549ac43a7
-[8/8] selftests/bpf: verify_pkcs7_sig: Use 'struct module_signature' from t=
-he UAPI headers
-      commit: 55722b3f80377103bac6ac748554129108c75651
+Signed-off-by: David Laight <david.laight.linux@gmail.com>
+---
+ tools/testing/selftests/wireguard/qemu/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-	Sami
-
+diff --git a/tools/testing/selftests/wireguard/qemu/init.c b/tools/testing/selftests/wireguard/qemu/init.c
+index 3e49924dd77e..c87570494d30 100644
+--- a/tools/testing/selftests/wireguard/qemu/init.c
++++ b/tools/testing/selftests/wireguard/qemu/init.c
+@@ -53,7 +53,7 @@ static void print_banner(void)
+ 		panic("uname");
+ 
+ 	len = strlen("    WireGuard Test Suite on       ") + strlen(utsname.sysname) + strlen(utsname.release) + strlen(utsname.machine);
+-	printf("\x1b[45m\x1b[33m\x1b[1m%*.s\x1b[0m\n\x1b[45m\x1b[33m\x1b[1m    WireGuard Test Suite on %s %s %s    \x1b[0m\n\x1b[45m\x1b[33m\x1b[1m%*.s\x1b[0m\n\n", len, "", utsname.sysname, utsname.release, utsname.machine, len, "");
++	printf("\x1b[45m\x1b[33m\x1b[1m%*s\x1b[0m\n\x1b[45m\x1b[33m\x1b[1m    WireGuard Test Suite on %s %s %s    \x1b[0m\n\x1b[45m\x1b[33m\x1b[1m%*s\x1b[0m\n\n", len, "", utsname.sysname, utsname.release, utsname.machine, len, "");
+ }
+ 
+ static void seed_rng(void)
+-- 
+2.39.5
 
