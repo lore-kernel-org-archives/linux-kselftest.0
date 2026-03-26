@@ -1,46 +1,46 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011064.outbound.protection.outlook.com [52.101.70.64])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013053.outbound.protection.outlook.com [52.101.83.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8B62D8379;
-	Thu, 26 Mar 2026 13:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049C42FC037;
+	Thu, 26 Mar 2026 13:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774531738; cv=fail; b=DRfyOYa7RWtekS5wvD06hcOvmvNISae3+ydFXNYk+7VX6Ya1S6kRbCrcttycpVBEq1w/DS5c9xs9U07cv6K5Tqw8urs5hYoMlgEEtLQbTMWyiD7U0m3ZE2Pj2wVSR87xxEzx8e99DRB91uJb/5uD3vYNZDjkZWZ/lkmxoNyNZ84=
+	t=1774531747; cv=fail; b=Gb2PIBOF+4BLcplR49p6XjlMa7fr4c5IbWXPnV07hR8i3Ax0g2cc1mcveI6a0QnUhklex81DMdAzvG/9WWn/78dnbXfLnQBMAi57g+sWGmjQDnr11XCFRMCTfgEmg/yPRKSotUl/BPSK+HpQDFGAx/o9oXTAmTuTg0tlB6DENo0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774531738; c=relaxed/simple;
-	bh=IXINDd6fjpTrocx0lFdGRmT4dauv2tthBMDnOceT8os=;
+	s=arc-20240116; t=1774531747; c=relaxed/simple;
+	bh=sX+/91dOguqHHU720x8cq6zsva6UbadCTA55LMcsJ+s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JX2l5HTtdj0d6EeTw1U+pJFgU3UyX/7hY7SWMfFWB7bt28aeQvd8PSslT498mYwxFM2yNaLBLfY01AbqhMXtTdkv+uTje4tY/jcznTbbLhe1xppdDyMwMAKsPm7EbavNX32np8NNutz2EyAfg4j+wejnz7cjWvmHQW+SfXB33Bg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=QItkl+k1; arc=fail smtp.client-ip=52.101.70.64
+	 Content-Type:MIME-Version; b=I6y1lrE+YKy6iHi3d7kcvRQi6A+D6zwJrZ4Ww35MOADpK9IQkQnUWuFHlSb0ICcQSe1gwtVIPwJRR/gJ3ysQ0S1UvhpOmlYW8xTejzvQqb20FzwNkTPLesJoMtkONPXXJzYSlxT5wYV6Nia4vyIDy9yMLfE4nbqxKn5ohNG2WCA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=TJJr2Hk0; arc=fail smtp.client-ip=52.101.83.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="QItkl+k1"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="TJJr2Hk0"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MCTShFaWue5CO4kRIIBFyVuNpdRgPG49r3mgwZkFqzLTO78783LEJCK8190q01FlWolFzUWoYvQy0FjQNs+gojP2Mr6uSUXXbZMquc2Dj0nWI+q49Brxne18SdNzDL5wcw68gogvy4NNg2CvlbisxYMuVCxU9Lw3mgqpk/KD/uVLbSQMs6s0FJLm+GcJEQBE5vK6HkrXXLvkAY3NYS2CxcLI6/90yuCsVll5w7ZgJqYjP/3kfJJNz022bPejkiplFeuTTce8CL+bhxL0ZSywolzKJPWi+Bt+XQ6ke7L9G9T72Ls9xP2Sb8RslYHLWk7mpUS56Rddwm+ku7AQ/pUpdg==
+ b=cdmNVinnB2vsvjCnNclEWaKmY+M0ViH+wlDrcfJ461TwPh6vG7AAYp7O4ulDR7a/0ZDhlEbAlMRbxL/CAAo5xlZ54zgZkdf7zXk4sQ3/6xE5aspQMfZkScsD/1p6TUHKKWVktx3Cl1+T+NUtUnf3S3RbaXIdTiFBudZXIoVUU2+qO8RxovS2PHM3m2QC38Ev5j0cAyDuTmouTrgr+Hw2AvrKy/l64nph+iWCsDykNbGM3a4yv0WZv87mC+qZedZFRH0umG7NwqL2cb4JOk8By/lifyRHrVET/gqiBR7t7xEB0Jfmx6zqd4eQhZ5TmmoNvA/RL/isgAyvfqzz93ew5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bHkc70sgKT6fFqi9rEnCd4fH4opyMK+6aUKpwt2EevQ=;
- b=iYWrq2bKYGkRyHXo4YQJQap+MqsQ9nlQ6lMoli265nk3UlqkawtGDYiEuvB7hKf2K+RGth6YNdeHAjz9RaOaR1d/t6xoshy3+u0XSV40XHUcmD+3mg9IKinZgYiUc1Ff6umRTcD+ZgjeOM5UtVMnE7v6pnMEDlMFwMajNJxMeCyvrQoBA4+KrBms9Rq1HF/hPDD/XWMQkmRvioUSEbT9kUdlABl+clgdhHV9vHUzPsHqsdElmYZDxGVdggx3nCVe3kLS9l2UIogRuoFyQY/0MQNh9UWxp9gANZNhW3sMZZgcfuZCJosI73RIiU5tUj++zHBsl1N1gSv6TRONjamBXg==
+ bh=8UcYc/wvZ+z6XxiY1PGz4zhS+dsjIIk2EVMeRD9nMuA=;
+ b=ItpLUYpc4HBMlbsixJx1etQAQR+310CjaGq+75IWB58nBhQWv5Cp7mZjC1aTSTpi9eoHMRPdMV2VKifs40lYPQEdZGgAsHakMnGIlpmE/m7pTUIgFKHrp/S0sBiLxuXuHWHkO82sDjLNPh5xYu3oo9Sm+dntJfv7o/r8BxBbhDYISwqzVSg8btQ8oXMFKEJ/hEkp7xDBb1uOsuehfBq/sqe3/B7rDMRvTOXCJFqduhqqFivwuGurkGASmdwslrQffnls5umE9LKbIn/75g5b0TF4h4gd8xUpAoMyDnauPWVpV537uhQqT7XJvNd3yX5Im4VEswcdqWVvdcJk0aefYQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bHkc70sgKT6fFqi9rEnCd4fH4opyMK+6aUKpwt2EevQ=;
- b=QItkl+k1wAtfmGCULwnbpvhCHtUhn1rKrOCWBG57q2x3sIxHqdAtr++NvhLciB8NdQHGunF+UwFjrO/Qe4MfwFYIfWNx1mVWnH2VRLLnSRxlJtjw/9m4j94DeE/5l0/jZSsLqCnU9kOZOEgRc6cr7QYU8uduHWWgtRZwVqfs/CiCt0RsTo18OIadAW9fq2gJnknIRcQM7e2kzzncRY9J+bag/iiBag4KVKcCfLStrDwTz96XbAxYmsRat4WrJ7Sf3kaySMQHj2wfUS4EZnz+hdxHAQqn2qwKa32jXHHNahdwkKMjZVTL408UanQGtfb7NkKhIfvmpwTtjtp5kIi8EA==
+ bh=8UcYc/wvZ+z6XxiY1PGz4zhS+dsjIIk2EVMeRD9nMuA=;
+ b=TJJr2Hk0lhij9r0NeWw9a0YJufIv79RRm8OEW2Hl2kT4f+eWuXpPmSnj+a4CQOQfOqelf/sS3UNTYIHOQ53/DCYVlVoa1MyqTMB8OskV0w2+RZlp/ZSOVeCSRpTftTF3sZdv4W79Io+GwwxnxPPVShvmIwWXUgO/FBpgUlXfwCyQjSVECY6f7pWSVDnXaiorK4e2o3cZKt2mliQm/TfhDGq85Wnm87UjqMNPFfdJD0SaHWl0u7wwKXsQTtW9nul7LWECWSIkQfKZxkJE789T4hKLNRp/FHzGn/0A+ZZ2LOxRfjldPk+/Zj754nX40h93rh4AkmuXVJEShIbF0aTH0w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by AS5PR04MB11324.eurprd04.prod.outlook.com (2603:10a6:20b:6c6::20) with
+ by AM9PR04MB8337.eurprd04.prod.outlook.com (2603:10a6:20b:3e8::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Thu, 26 Mar
- 2026 13:28:51 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.22; Thu, 26 Mar
+ 2026 13:28:56 +0000
 Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
  ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
  ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9745.019; Thu, 26 Mar 2026
- 13:28:51 +0000
+ 13:28:56 +0000
 From: Ioana Ciornei <ioana.ciornei@nxp.com>
 To: netdev@vger.kernel.org
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -53,16 +53,16 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	petrm@nvidia.com,
 	willemb@google.com,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v4 04/10] selftests: net: update some helpers to use run_on
-Date: Thu, 26 Mar 2026 15:28:22 +0200
-Message-Id: <20260326132828.805703-5-ioana.ciornei@nxp.com>
+Subject: [PATCH net-next v4 06/10] selftests: drivers: hw: test rmon counters only on first interface
+Date: Thu, 26 Mar 2026 15:28:24 +0200
+Message-Id: <20260326132828.805703-7-ioana.ciornei@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260326132828.805703-1-ioana.ciornei@nxp.com>
 References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: FR4P281CA0363.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f8::19) To PAXPR04MB8253.eurprd04.prod.outlook.com
+X-ClientProxiedBy: FR4P281CA0370.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:f8::16) To PAXPR04MB8253.eurprd04.prod.outlook.com
  (2603:10a6:102:1bf::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -71,164 +71,101 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|AS5PR04MB11324:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63ebd0cf-a965-4fca-2157-08de8b3b9ea6
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|AM9PR04MB8337:EE_
+X-MS-Office365-Filtering-Correlation-Id: 381a46f4-65c6-488b-5c30-08de8b3ba190
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|19092799006|366016|1800799024|18002099003|22082099003|56012099003;
+	BCL:0;ARA:13230040|366016|19092799006|1800799024|7416014|376014|18002099003|22082099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	GSrRzVQp1GI/Wb8UvcuC3N8M7dzU+vFnqQmp8zCgZhJuSn8flDiUjqrep5V1bJn8O3DZCTYC+yq8iF2WKmUIzjs8Ix834oMsv2uhmzbp/W9bzLMTb3+QvmhwwXchz3J7ipy8yS2wcca6FYKz0RoByZuYPxXb3kEgh067PdF/emBjKgtJTDQicQVk4BFjY5TtiArjpJIEY3On7ZV5+oq9W5/PYUpoXwi2k/a0TLGpm2mlM87rhUQEEYW2CBeb6VtQQVLzP736HvZr8CezSzSm6H1FDRJeVkjuQw8D4ez7TN2vsUmNDJcJMeO6CYuiwfeoIXf/DyaJakabuq5RAR8L7HMxIKK2R/dM43GmscPpu6W7ZIYcG1HkbgH7uFQJdXICuui2pEzWlONQSDaqDEv3P2nHkRLrLAm/CX8jVgWg7/gvyXYtEGMS13P0FckpjGc5yv2tZguMwBTlxnwOZZxkK8mxqjLWUoM0zUxPiCXTuD07rZuO9f2tu7RQ7KKiaGjhmXTX2XE50v88PNLPO/rZB+OQl7gRSHn0IEIH2oCu8v1Vrv6HwnqZtwMdmcjsastGNfrfJ1vgjtWw2RbLFw/HpWNYAB64ecR5eyLCDSKqVegJcsjDX8pM4xln6awcs9iJFwQeC20SzcNkaIInm4IwZPYt+73z97UjYBS3cWYLXHeQSui4XnY1Pe9Tx5KTlkVpNhRcegaSnpKWBAnSeKXvW6FeCL1ey2JVHmkFvjVCBHE=
+	wyX1bPrM/WW8jC1k+ryxSS7gMCkNYu+y/QyTzR39mWG4L4MIt0B+1GuZQXescqRSOGA0XN/DFFnuaX8x2E8n/nMvHiLnbrPowLN8l7EDXwSnBirfOaaiIcL4hvtcaldOU7GTBkWOKuJQr2r7xXXIv67y9JdtFXy75r7pD9VOjbCsbxSnVL6QRABByJ6u8fkqj+IC56D5kweZUPEDUPXpK8oDuxZRS4++FhjSJJdQ9k/BYZ8K53QvY6vwl339+jtzYEvzOypPbw3baNPJBspxh0Eaz76v6KL+XmJr/6mkxCAnwOokzIdP8s7iHzc2vYe/KzN8JKY9VbsZ6K4Pzb3PpnyWaN41KD1elf+WtAmhVB+Agi/whhUw2F82jFR9n0mT15/JWXthD3flvyHDO/QJ9pZfDiFub7TLGYnhftgh9Mqid/3hsDrg+6KTeUG445SUvuOzwJa64UqxF7j6v9SOMfdK/0NuDlKS9yRTTUvYLf/cR1TnRx6OBJlPwA+qSq+oGuT3Aj+BvIhMlZQ1vtPFJntK4pUYcHE4+cwB9JC+gYgBng0ycYgag/uNJer779n1yKpeh0hpu2tw3XngttNH5/gi4jvoPqKpX44+0Gu5AanqB29ApYF75GdigdQcEqMW4fQiNUeYbXkEnZ4iPr0H8L/hPKeZOw4NmnvNeAx6+nSiF3+RgEG53J1a6Dyigle/hpb8cVWjKrX/wmxAlxewAgkA5ln4YDL9bIByHPcnViE=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(19092799006)(366016)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(1800799024)(7416014)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?dhx5hfIaX8NNA9jkYnvXMxBPPuc8uPUMh0OO7G3Z+b7p7oMrAdlMfT3a50SX?=
- =?us-ascii?Q?ft7I3mz0IxoqIQHv4MDgUm4AVPyCXHyrw9gy4KfMeQl0EfHhaWTJ+XoPg4B9?=
- =?us-ascii?Q?EA0Z4BQwqtZECZzamEQ1LH+q/aPhyYp0oCAB/nBGMb3MAiE3zr4xdykOnCR7?=
- =?us-ascii?Q?k1Rt7D86KpQGO6cXJfb0OFLWtDM/1kMcWlApw0XSxmyKjusQt9nYWhHK4V6q?=
- =?us-ascii?Q?D9hAoh4WNeYF67gs3c9BAFGRxP0y/ChR6wUsw0R4/HPNp2JWFUAAu0+FgWTV?=
- =?us-ascii?Q?4/nrCky0Qygjn+zRF0DObEJD4jSW5GahjNYl8EbwVFBwAIu3axqp0lCmF18R?=
- =?us-ascii?Q?NkP/Xo8wrh4ewPLpyDi2xdyBElRWubaNuG8LRdleGi3RunjbL+pJn/8rIMeQ?=
- =?us-ascii?Q?S8ymg+SWrzOUGzrB11wxWuYmQZTLpH35/m/o9DZ0z91/ddFmbX8uBCjEW3Vn?=
- =?us-ascii?Q?67FKnM6G6gcXkx5SxeJlXiAinJKWJcL9fdtxTJzG3ZD79X7NU5QW9/WcORd0?=
- =?us-ascii?Q?LEcwb49WEvjncP6XPZ+r+2Lygyi/cwIAe9dBv24q+eJO3CXrg8nD3++Cnz00?=
- =?us-ascii?Q?hloo31BjhTVD1RLTQt3C2RUp7tzHBzgzjgSpFJcI3deQ4Y6Rt1gZIyFxk/N9?=
- =?us-ascii?Q?YjDdski5gLv6hTdFZtP6m/8BVJ8cqoT3mwXoo+oZLCMaWAJyAArjXS9UKMph?=
- =?us-ascii?Q?YsBazP4lM3TD1uQu+0rg4isvza/9VPPmwgMgceYm/9nrw3zjBqy8q+N5xyQW?=
- =?us-ascii?Q?/sgcOnNmAyr/E6ZYWTI4QivlOi0WtzDnRqd94bQnPu4wYPgAklpi/zj/qnlH?=
- =?us-ascii?Q?LllmRGDLbmQMwPmfoVO5Be3/6DO8Emt4NsQ/6QaMJXkEIzXkcdG1W0zkyQi8?=
- =?us-ascii?Q?mf29Mfwb34BPPUmk1S8Tiz3MaODT9WNKeaty0H++k97bDaWY832OC7zSvavr?=
- =?us-ascii?Q?/AjbX4FRK2MVCdqbVQs8u11+TxJHp19uuj81AO9C/K4caii+1ZrO7JPODYSe?=
- =?us-ascii?Q?/IGXTfBYiO+06MhUYh3Qp8OglIFxMEIih8w/m64zQ3jc+zh8dZEl/1P4Ozid?=
- =?us-ascii?Q?XTHdEQUw+n3BOWMJ0p3QqoszKAJpBzy/37b7IxNDqhecs/IACcDFhWZRlptA?=
- =?us-ascii?Q?/8/wDuoyVVRlleK4bFHyQ3eooVfKegjBmXJiK8zXbj9DSSzv7FYsrIOYy76U?=
- =?us-ascii?Q?Na2gywU6C+JsTpQ67N41A3vxPjSqVkMz0/R1Cnpgyr2vcYH02+bm+q1QhSt5?=
- =?us-ascii?Q?cyeORjU7PKt1kxEb7LyvuBQqBUpCFsI8B77GLWm3IiKn9uJCvp8kKkFOSvwn?=
- =?us-ascii?Q?qMwotegT9o+ABOfvXeFNPkWEnVV7SsC/zJ6wih22X3xxFLwNN8U+Zwuvgbta?=
- =?us-ascii?Q?Li5EkxIfVD2prJb3LQLpH6qgprx/mrSHHomruE8a8nQ7Ya3ttyJ+TVj5mTHB?=
- =?us-ascii?Q?DKppgdDqjRR4zl5twq8cYj+bETduBZWY2hp9n6mLbORIunT+MQk1greIjmQi?=
- =?us-ascii?Q?UBywSXB4pvEAkRnj8mZ0DRtFaPnnTcPrCstQO0nKLC+bqYoCO5qNT/zFXkut?=
- =?us-ascii?Q?65R6SkUS4GUs4K8YtbFJPYpjH5uR9GJoYPV6O1admDSTIbAXId6kCdBEiVO1?=
- =?us-ascii?Q?2neZk2R4ixhCi8m+ZUlwy+bDN3y7rBnpMjFENEyV7W64nOm6yB/wb6+V3/kE?=
- =?us-ascii?Q?SgclUVdz/LvSJUh+lleKVuRVtVZuZFuSe6JFYf8xw1hI88EhsZKwPCDSPj/n?=
- =?us-ascii?Q?3WzK/ShPUQ=3D=3D?=
+	=?us-ascii?Q?UDOkj7PxzamMalG23hhzzaQLwbiKs6ryClT+2bkiSC+4bcs2AR25QFIOh8pN?=
+ =?us-ascii?Q?jV262l+A6G/hboy91IZloYTmwNLCbBXlMJVrECAnfAlEiHW/8c+eo8AZt6SP?=
+ =?us-ascii?Q?9kpUa/bECcxFPeiSDP/yKtx7CKkOWo7kVvIeTusM5PYMZzzbF8gRrttDjqNr?=
+ =?us-ascii?Q?cd1kkOAr00EBCUxKub3VsLPBXBAqCsN0wyHGSr3TeQbQFrpiW6dBgaqnLUIQ?=
+ =?us-ascii?Q?aRG62Zq7RGwPO2ezFYMFTbiqovdYKqE06x4QbMVWThhO9Z9yTC/6ixmIm+9I?=
+ =?us-ascii?Q?lXwkF9zCqOwM8iTZw1H81zee8pAFF3yVbLFCVVYO3doc3N1jIosEMUXw9OLJ?=
+ =?us-ascii?Q?K+l47BvT7QVebXQJXdROBsBvRTpfIed68lcY9Qm84qWzoqr0uDES1MeW26Je?=
+ =?us-ascii?Q?1oHCeZHKJ4fBw8EFqOBg7YTfTO6RVvWifT+gFooK72DERdPdPp5m9YT298nr?=
+ =?us-ascii?Q?mMXeqaCUhAC7CIWAWdy1XUL2zZWQYlyk8jc08uM2zV5ZfKqFrUSwPfTKPVrt?=
+ =?us-ascii?Q?AkUwGnlKpZNkS4ST4j9QzelpLZnO4DgonvLHvsXlA3rL8UWwpLyi3foq12U2?=
+ =?us-ascii?Q?Njs/NWQwRgqlLE7y/fCqGfbDhpX/TuZx2Lejzye/Yw7aDwIY5u55Bd0H8omc?=
+ =?us-ascii?Q?x8idPXWTpS2X4TF+U4VxHRexthbygWrqUMf9xtXxJ3obAd1oX7GaJTNDg0or?=
+ =?us-ascii?Q?PlLVSgjxZ+9Epatw5lC+cld12yRvzYj752Ep+4f6u97pWzEYnZ1yRwn0l0ny?=
+ =?us-ascii?Q?PsT7KJ6s9WjcVWui/7nfoZ1/nAENDM+kTzuACNulOxL4cQJ22+w3THu6oNqd?=
+ =?us-ascii?Q?5Fa8daLzzAG6J6pAiJ1O57YXRbnbHQxSjmbVZA9Rz+CfDgW9eY4LxBlgQ/ET?=
+ =?us-ascii?Q?pckhJAC9KDKCcgQtVhnV29RJkjpEzVi2N/8JuEnz2Q/VtQT376NhxJGx3m83?=
+ =?us-ascii?Q?56Sy6QHyBasTD8AiZa0LGTiq1vWm9t+M4R1SG32kHxqCoTSzgjPnPos9k+Rn?=
+ =?us-ascii?Q?I02Ua4HUjFeVK76oqfIaSnuC0B+SGgdJiRoQTwDxv7GWwnxsjdEoWvVntXma?=
+ =?us-ascii?Q?QRgm64Wf6vScmYOI1GewLMM1fpr/NpryllssatJoHdAOHgSGaWTCrdESmyko?=
+ =?us-ascii?Q?EUufLyFBRkNAsxJzPS/lf0xJKiaSw93QYIoeqRLLboZ6oefcnYajh3mYRxNx?=
+ =?us-ascii?Q?j0SsMdN9Al5Dfme+WP8DBVIwIpt4M2tIGicvjhGI8UXAZVrtUUGa4F0VBw2y?=
+ =?us-ascii?Q?O7+v+ygdD8uW1yBXb3FHrL8b4IoFGuIQ6hgoytD+MVgO8ZtEV3mQNYtFACGg?=
+ =?us-ascii?Q?uQJttEeiHhB6oy8pqhwhDrfDHKbsydR85a7Ue6NKca4X/kVUyRZ1DEFdLd69?=
+ =?us-ascii?Q?NZzTxoH9Dn30YWXo/aKh/EPSXMjLZKwbWXbFhTj0AiAcN1vkrG4NKLyF2T1S?=
+ =?us-ascii?Q?H9/PCVjs3lw6zmQPzLHkOHQZTZnxzmiqjJvZARZwjFgnT8Lu6pNbhlz8o6fM?=
+ =?us-ascii?Q?AqyPqALIBGYFBA52GnN9B0rul7UnVsRgcX+/7haiV+SLxDMcwEWwBN11D+Ov?=
+ =?us-ascii?Q?UNXSHQY+UWmfnzcL9vcsuWadkLsTttmPL30Dh9LCcaOiPSsAjXqoJDvEfcgu?=
+ =?us-ascii?Q?rO1E7iX29ewAz1umLhF7izDwrnR91vOuI/nY5OY8uubhU1y6t1T8Y77qNLpt?=
+ =?us-ascii?Q?xcStw5NvYvups0C3jJr0CYniZwmonBgQ9YBEXKL89641NRiYlfE29neVmJPN?=
+ =?us-ascii?Q?6+TqtuFl/Q=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63ebd0cf-a965-4fca-2157-08de8b3b9ea6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 381a46f4-65c6-488b-5c30-08de8b3ba190
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2026 13:28:51.5070
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2026 13:28:56.3972
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3AKZ7OyhtDHl+ZiuaJX8+jjPo1P/OgFqHObOMgbHdYiUZjosVt8z+eTiuTGhAZL3Ukq0Mo2dzluCzZAwcbWXRw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB11324
+X-MS-Exchange-CrossTenant-UserPrincipalName: UGCbSbv91Gz6t4aheZZQQO5+268pkBamPWJZeyvzC6fESRuBsJ8LqFD+uVmqsiOAe7gue9ZxW14ytQmkP2mRQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8337
 
-Update some helpers so that they are capable to run commands on
-different targets than the local one. This patch makes the necesasy
-modification for those helpers / sections of code which are needed for
-the ethtool_rmon.sh test that will be converted in the next patches.
+The selftests in drivers/net are slowly transitioning to being able to
+be used on systems with a single network interface. The first step for the
+ethtool_rmon.sh test is to only validate that the rmon counters are
+properly exported on the first interface supplied as an argument.
 
-For example, mac_addr_prepare() and mac_addr_restore() used when
-STABLE_MAC_ADDRS=yes need to ensure stable MAC addresses on interfaces
-located even in other namespaces. In order to do that, append the 'ip
-link' commands with a 'run_on $dev' tag.
-
-The same run_on is necessary also when verifying if all the interfaces
-listed in NETIFS are indeed available.
+Remove the rmon_histogram calls which intend to test also the rmon
+counters on the 2nd interface. This also removes the need for the remote
+system, which should be used only to inject traffic, to also support
+rmon counters.
 
 Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+Reviewed-by: Petr Machata <petrm@nvidia.com>
 ---
 Changes in v4:
-- split some lines to 80 chars
+- none
 Changes in v3:
-- added some more double quotes
+- none
 Changes in v2:
 - patch is new
 
- tools/testing/selftests/net/forwarding/lib.sh | 19 ++++++++++++-------
- tools/testing/selftests/net/lib.sh            |  3 ++-
- 2 files changed, 14 insertions(+), 8 deletions(-)
+ tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 93b865681840..98434da6e36b 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -506,10 +506,11 @@ mac_addr_prepare()
- 		dev=${NETIFS[p$i]}
- 		new_addr=$(printf "00:01:02:03:04:%02x" $i)
- 
--		MAC_ADDR_ORIG["$dev"]=$(ip -j link show dev $dev | jq -e '.[].address')
-+		MAC_ADDR_ORIG["$dev"]=$(run_on "$dev" \
-+			ip -j link show dev "$dev" | jq -e '.[].address')
- 		# Strip quotes
- 		MAC_ADDR_ORIG["$dev"]=${MAC_ADDR_ORIG["$dev"]//\"/}
--		ip link set dev $dev address $new_addr
-+		run_on "$dev" ip link set dev "$dev" address $new_addr
- 	done
- }
- 
-@@ -519,7 +520,8 @@ mac_addr_restore()
- 
- 	for ((i = 1; i <= NUM_NETIFS; ++i)); do
- 		dev=${NETIFS[p$i]}
--		ip link set dev $dev address ${MAC_ADDR_ORIG["$dev"]}
-+		run_on "$dev" \
-+			ip link set dev "$dev" address ${MAC_ADDR_ORIG["$dev"]}
- 	done
- }
- 
-@@ -532,7 +534,9 @@ if [[ "$STABLE_MAC_ADDRS" = "yes" ]]; then
- fi
- 
- for ((i = 1; i <= NUM_NETIFS; ++i)); do
--	ip link show dev ${NETIFS[p$i]} &> /dev/null
-+	int="${NETIFS[p$i]}"
-+
-+	run_on "$int" ip link show dev "$int" &> /dev/null
- 	if [[ $? -ne 0 ]]; then
- 		echo "SKIP: could not find all required interfaces"
- 		exit $ksft_skip
-@@ -615,7 +619,7 @@ setup_wait_dev_with_timeout()
- 	local i
- 
- 	for ((i = 1; i <= $max_iterations; ++i)); do
--		ip link show dev $dev up \
-+		run_on "$dev" ip link show dev "$dev" up \
- 			| grep 'state UP' &> /dev/null
- 		if [[ $? -ne 0 ]]; then
- 			sleep 1
-@@ -920,12 +924,13 @@ ethtool_std_stats_get()
- 	local src=$1; shift
- 
- 	if [[ "$grp" == "pause" ]]; then
--		ethtool -I --json -a "$dev" --src "$src" | \
-+		run_on "$dev" ethtool -I --json -a "$dev" --src "$src" | \
- 			jq --arg name "$name" '.[].statistics[$name]'
- 		return
- 	fi
- 
--	ethtool --json -S "$dev" --groups "$grp" -- --src "$src" | \
-+	run_on "$dev" \
-+		ethtool --json -S "$dev" --groups "$grp" -- --src "$src" | \
- 		jq --arg grp "$grp" --arg name "$name" '.[][$grp][$name]'
- }
- 
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index 6c0d613a4de5..ed2291588a67 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -514,7 +514,8 @@ mac_get()
+diff --git a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
+index 13b3760e3a40..80e75b9b40fd 100755
+--- a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
++++ b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
+@@ -106,13 +106,11 @@ rmon_histogram()
+ rmon_rx_histogram()
  {
- 	local if_name=$1
- 
--	ip -j link show dev $if_name | jq -r '.[]["address"]'
-+	run_on "$if_name" \
-+		ip -j link show dev "$if_name" | jq -r '.[]["address"]'
+ 	rmon_histogram "$h1" "$h2" rx
+-	rmon_histogram "$h2" "$h1" rx
  }
  
- kill_process()
+ rmon_tx_histogram()
+ {
+ 	rmon_histogram "$h1" "$h2" tx
+-	rmon_histogram "$h2" "$h1" tx
+ }
+ 
+ setup_prepare()
 -- 
 2.25.1
 
