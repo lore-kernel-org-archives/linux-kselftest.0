@@ -1,74 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48C934BA5A;
-	Thu, 26 Mar 2026 19:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A743624B0
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 20:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774554127; cv=none; b=uzl18tYPPcKGHyHzEcRpabzvbO7qh/rGO0qXXwyGf/aGG9qDoE5d5C517iEYw5oOkPZjuvN4Z4E7p/YU+0zSLjkkhEqGzaGnoi6qe6U7HAjcgMB2eFK8sCyY07aiS8S73Aa0UsrHYutd7tDHbBidPOL/cxkpUj80iwfxB1xOCaI=
+	t=1774555615; cv=none; b=qSH2jxQpI7eK7Zpc2zJ6jQuK+lljuNgR7WzbgZ3q81V249zo7bOmkTgzZ0fiWe0Er0QKVTy1TizmRplvSin/0vvgc9HQEbVGlJfY5dCjK9oMFVSjHZ7kj22hBGWg8I4bp+VOfoW2hmdTLukWWCMp3qs3xatt/ABChcbNLhTLXEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774554127; c=relaxed/simple;
-	bh=2c0nPF3JcBZBuucJxsAUZUSdm1t3EasoLZEnpiiV6GI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o1YzO4y6k/rH5Z6elH/O+LtNq9vsi3Rxrl9CSCodh4QdXcawoC3eAj0A3TcIrksZj8ds3VhDtPkvJ3zmLSqWw00vZRDh3hPAjcPcZWEUTK+bq5dhj1yMcTubfTK4FonMiMeJBQ2u1i/U2CssKsR7z94yuzqIwP6P4sBktbb8Uas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2+AIPKx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774555615; c=relaxed/simple;
+	bh=jj+yorpeEBxwk+7nym3Vu8xagBVeQ+tug3rKRqZFhbU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=io/GzTA2TGRfUMQDJ6RawJpdYbJnGz0JVfd29FGd5M0i2d2RIJelVtV9M2oZXZi5dOrnAEjHGQUzWiqItN8t8BokzrWQT1q38frSZ2XbHDmJk5CkExcnuUugPmuuxeN72oob49/SqxhZQCNkwcVy3Racz1HMTeMIDp6IBGtXWGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lZiTYQ6K; arc=none smtp.client-ip=74.125.82.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2+AIPKx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648C6C116C6;
-	Thu, 26 Mar 2026 19:42:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774554127;
-	bh=2c0nPF3JcBZBuucJxsAUZUSdm1t3EasoLZEnpiiV6GI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Z2+AIPKxhFJSmMevO5N+1hoPO2EsnUrs8aLgabfyPdBD+QAAHosy/hnFPG8eL1yZn
-	 lCeKD1AhktlKKHTM105xkMd2JPEM8w3Vs3zm5MHOswPMXpb+mnFAN11hdkzMbwloQv
-	 Stm7AV6g6IycJBtilbKqwQ34mRN+CVdnFU5J2s9A7a2WwR7HFhridzOlBbVO1FUdN8
-	 Ch6lK4Hxk/Pu9wA5Ed2O1F4V6yop8rNfgbYd4mPJAHZO8IbeOjtlAmFU4Isn72yhKq
-	 cvjzGg58LDdBymtZRnsNARPcYqsUtWZHvnvTpOIprp/QVZx05NsbIffwI/yYVJYk/6
-	 OzBBv2fmKOcpg==
-Date: Thu, 26 Mar 2026 12:42:05 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
- <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, Toke Hoiland-Jorgensen
- <toke@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, kernel-patches-bot@fb.com
-Subject: Re: [PATCH bpf-next 1/3] bpf: Disallow freplace on XDP with
- mismatched xdp_has_frags values
-Message-ID: <20260326124205.1a3bb825@kernel.org>
-In-Reply-To: <20260324150444.68166-2-leon.hwang@linux.dev>
-References: <20260324150444.68166-1-leon.hwang@linux.dev>
-	<20260324150444.68166-2-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lZiTYQ6K"
+Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-127337c8e52so1019890c88.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 13:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774555613; x=1775160413; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q39vkXCHwVXHxLZOMIlHqDW4HE8OruDbuf0XK+bdxP4=;
+        b=lZiTYQ6Kyz0T/yPpRU+2Ues0ncOW+GZ8GrSdz9B5oe/4TO36d9Ev8LUF8ozT8UsAHd
+         2bjYRDZ3tiFtL7tXngPxVo8KHGLnfj9Aj3pVdD/+Xcc8IQ95oRsE7B8xRrgyQowML9dw
+         qHSTkk5cAotTvdMS4d7EOVfKI1ZcKPyReHPbSanRuWfrxB/Dedsb7i+hStuMvIV3BEE1
+         uE1LfztRPH3kETgM/+rYr2JyHnGu+ig1uWp2hjgJ3tYF4HUnE5XV5xlClzEO+7B3nJEA
+         UlfD7isuxSZXtc6vWE7NEVDt6oCIbop+EGUh/HTcGHPuVP15IcqVfi33sCVcfIqtjh/R
+         uSXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774555613; x=1775160413;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Q39vkXCHwVXHxLZOMIlHqDW4HE8OruDbuf0XK+bdxP4=;
+        b=F9dPJvX6VohCOlpua9KecV2FMEC3aX+r4KYYHhHtjh8KEutEnzwd3XFT7wv68iBn4g
+         /cJTimT1FbYqQtpklztfPbLSnUgHxK+LL7lrTrG6GMNdWuBY6dxD//h9WxHS9/BiJTH+
+         ZfM1bzb7Fxs1KxD+m87UwXrpiT+0sKviPNl3qZnfed2uXP7ZXZ6/0uQ/nmdlo3s0PONo
+         8m2Hm3Ul/kwgrTapJuCUsAqbiCs6esv1Jz/t+FSjDke+wekb40YP0dpDSDNVY24S6F9g
+         mNPtTbuG1nIubMHuJ04JKgSwtcou3/kqN5hZV618K4JhRQPCOratcux9YT9qtKhoDEiq
+         XP3A==
+X-Forwarded-Encrypted: i=1; AJvYcCWc3axyupGrJGobI1iX8BMy4CmYR4fvkPk/OLvjTBfNbOJRtXfwj2kVo5oL3FMN2PRLEtzflbTuvC8GconDOQo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhRYJXipslsyhrLcOGd7uRZG5lNOIkCfLQ+LDXMyQNBiCBvUEL
+	ozHPDe6hWmORakkUsv/murzATfBuO1QYGEjUw5I4tl7CD7e+83WgM43FdaKumZ6ugwTVcQQfaKt
+	u1aILxaPoSS4cGYO/YvoV6f02L8y4IQ==
+X-Received: from dleb3-n1.prod.google.com ([2002:a05:701b:4243:10b0:12a:86e5:44de])
+ (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7022:125:b0:128:cf5c:5362 with SMTP id a92af1059eb24-12a96e5cde5mr5257574c88.12.1774555612457;
+ Thu, 26 Mar 2026 13:06:52 -0700 (PDT)
+Date: Thu, 26 Mar 2026 20:06:51 +0000
+In-Reply-To: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
+X-Mailer: b4 0.14.3
+Message-ID: <177455561121.2009594.1781899946157697823.b4-ty@google.com>
+Subject: Re: [PATCH v3 0/8] module: Move 'struct module_signature' to UAPI
+From: Sami Tolvanen <samitolvanen@google.com>
+To: David Howells <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	"=?utf-8?q?Thomas_Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>
+Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 24 Mar 2026 23:04:42 +0800 Leon Hwang wrote:
-> The commit f45d5b6ce2e8 ("bpf: generalise tail call map compatibility check")
-> was to ensure backwards compatibility against tail calls. However, it
-> missed that XDP progs can be extended by freplace progs, which could break
-> the backwards compatibility, e.g. xdp_has_frags=true freplace progs are
-> allowed to attach to xdp_has_frags=false XDP progs.
-> 
-> To avoid breaking the backwards compatibility via freplace, disallow
-> freplace on XDP programs with different xdp_has_frags values.
+On Thu, 05 Mar 2026 10:31:36 +0100, Thomas Wei=C3=9Fschuh wrote:
+> This structure definition is used outside the kernel proper.
+> For example in kmod and the kernel build environment.
+>=20
+> To allow reuse, move it to a new UAPI header.
+>=20
+> While it is not a true UAPI, it is a common practice to have
+> non-UAPI interface definitions in the kernel's UAPI headers.
+>=20
+> [...]
 
-It may be worth adding a selftest to
-tools/testing/selftests/drivers/net/xdp.py
-which sets MTU to 9k, tries to attach a non-frag-capable prog
-if that fails attaches a frag-capable prog and then checks if
-replacing the capable prog with non-capable fails.
-Drivers may be buggy in this regard.
+Applied to modules-next, thanks!
+
+[1/8] extract-cert: drop unused definition of PKEY_ID_PKCS7
+      commit: 137676d4482d8b8d755890b4ed29fe8223661d20
+[2/8] module: Drop unused signature types
+      commit: 8988913aacee82e5401bf3b96839731982dcbde7
+[3/8] module: Give 'enum pkey_id_type' a more specific name
+      commit: acd87264af525dba6e9355310e8acdf066a5f6b5
+[4/8] module: Give MODULE_SIG_STRING a more descriptive name
+      commit: 2ae4ea2d9aaf25cb74fbc23450b1b8f0a5b7aa89
+[5/8] module: Move 'struct module_signature' to UAPI
+      commit: f9909cf0a2dcc9e99377f3fcc965ccd93e518e34
+[6/8] tools uapi headers: add linux/module_signature.h
+      commit: d2d7561dc656748f592cc34d34bf5db8d5c67f7b
+[7/8] sign-file: use 'struct module_signature' from the UAPI headers
+      commit: e340db306c3bb85877490f33a78eb80549ac43a7
+[8/8] selftests/bpf: verify_pkcs7_sig: Use 'struct module_signature' from t=
+he UAPI headers
+      commit: 55722b3f80377103bac6ac748554129108c75651
+
+Best regards,
+
+	Sami
+
+
