@@ -1,188 +1,141 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4896540629D
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 16:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774542365; cv=pass; b=diPiM5Ky5lJ1lv/n3NjzBw1MgcIvYOtEJ+/R8m1yTtoHI8GseshtD+rTbDp3lBI/tM6fPFC00TeKU6hfft93lmRxoNQUKQyUiKIV9I6m8SiCfkIyTAquOu/RAUvBeGX4ZqUuE7Ej2Wrv8sH2F65/TwNlb98EyMzXKS/3yJzhlPU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774542365; c=relaxed/simple;
-	bh=+1VIbwYlD5P6U8aunjd8muf/Soz0/OQ+HB4vCQY8XcE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bFxenCoFNcBQya1VFtLpNKrgkAK5ftk5Z+RcCRinDL/WnGGxRDl+do1NdU0PZYRbKQZsRVXIKxgnSykbReyi1U6ZlW8pa7Npf6fxR6NZ6y83+Qlz1OMe3xz3EgjCjQnlDw5bY6ge9gOTgMXgbXyuMG7PNv5OTnAcjVvmKHmyvqQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OIjt7dM2; arc=pass smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48FC402BAD
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 16:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774542551; cv=none; b=f/EONvRQDPJtSB0xZO402+lc+I1cbhrUIDAv7DTxjhhVDE3cyFmuw5UqXo7hL4OP5fGOpB4f3bwPewhZyYg7Rb4uuXP3sXw09QNk8qwY7oPafYjQ/kFfAzu43uamvT7kshHPt3H4v7NF1AWEpYQtssSJ/Z3ZNBt76uzxsz6fRwU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774542551; c=relaxed/simple;
+	bh=z6GMWOCYmwQPpclwbRHQ3L8tkjcwK1pnli6GFBfiIKE=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=ZiDcTDD9rAIrr2qnlYZDbf2LXgDqUptl6VWIresqMmi8yCGQ6F19nJkiXlkoyzo2heLQtruYql9HJUULNkS2r2mdWohqbxStWhYo2MBrshQQ6nifO9uph/BjV88WUD+i2YQJ/Qspp+p/VY3475aZXCHDc5LxVrs4dnqJodHH0SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jb5+RN/w; arc=none smtp.client-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OIjt7dM2"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b932fe2e1a7so146153866b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 09:26:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774542362; cv=none;
-        d=google.com; s=arc-20240605;
-        b=k6lTehUHGSvZBDqUnov/4mzmbhIsY2Cx5nrDVN9gEb85biRmYFzZ84gl/UzbnN0JYB
-         TFcIF4wr+PZNSnLaZzTw7pB1KcLuo7dYv6HrJOmP7hl4XSYmeRGnSyi+7y5zonr5qyih
-         Ub4Il+X6ojypv+3+zqmcaaxHxvyHdhkQsmN6lcgIEgQQhhWIHh4t8dKj/jir2WbQ9/eA
-         KLODYNIPVc1FypJplQGKBjOJ2cvrklKr8Rtn9jUlZhQCEt9ammabzziBSjgb8e4YWe9L
-         banbPTjb75MQLgGmWyg2bN2L61y/2rJqlVlZZAFPmePfpfX5UaYDMNJIJFQz39uoj6J2
-         6DHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8weEZ4/v1Q8ThZTOa9v3bW52mEvoKROcLFNZAFrpZyo=;
-        fh=kCv0GmNUkG2hzzBcK1/gEl8xTTWWYvt8L8UBg7CNTLQ=;
-        b=LKVVY5Dt+wOLVJJe1bZPAh2QIndTfgJQ1d2REjWMcRttyo4Pc5IuG6mjnCk6cnVrZj
-         a7V4YQQUc8cZP0+9JR3t+ufZU7jIEx72nYlbZrLkt/Nnmlm3dUKAITNtRu8cptw9zqgE
-         yVQff0SLEqPO1JeowiS0Kye2e82XAP8dbYxIqtXFf0Zoo13IEOA/jvwMNTz9JcjWfAh2
-         n/AIwAfEQ0Us5MhSAcNsPgHtisG52kSa9FvSAL6lfj+FxJ+1qI22LAcrmhyzLk+1V2L2
-         X0uyH4/V/X3sUJM3d1+rpgO617KCvUj/q5GiIW3d7878SR0hpFtySVoVtUJw8AwNF0BH
-         z1JQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jb5+RN/w"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-64ae222d978so1287808d50.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 09:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774542362; x=1775147162; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774542549; x=1775147349; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8weEZ4/v1Q8ThZTOa9v3bW52mEvoKROcLFNZAFrpZyo=;
-        b=OIjt7dM2avcxdHSAQ9t138PAS4680+gwMh4oq+ttpJq06GscL6Hj5ZxCqs0rvwikVD
-         lRKFmk0RhoYhrI096cqjRerqFOot+rS5fzsefHv8ZXKzV0WWMG3pnxpgW8prnybYA7C+
-         h8ZR1mVSqPI8LGF9/XpxOR45W1XWNGlV54NHKRr1oIIoDGQ58TDtp+eDwoy+Bi+DfEug
-         /8Th7EkiVqW8aemVeqPk77wcHJYoOx5xoIawqM3Vrdo+IctFiNmzDxC5KHPiGwQ+brNF
-         y8+S8OSYlzGjfrdwEo86jLIYRWY8F4qdE0ECqV7lBjmbPaPEY0rRWOffB29SgWfgm4HL
-         VcfA==
+        bh=CDlf2p6914NjJVCVaq2Q/Nq8XSjjhMKVxHPhxp+UG88=;
+        b=Jb5+RN/wcmRrbnOKzgXeeDbTGMsRT1cr+jjEF+HdsswaqYWH9wBOTKkHp3MQ/Z/0iG
+         KmcOQuVStTRWRh0vCysHuGOHtd7tkfUTHzXpIUJtP8Nc0TGmwrBw5QbsPEjO8FjoEA8N
+         W+rcytTfs9K3Atk3eZ+dxwE4dSlAVOga9QOyBv2/nv0uJVivXhzLlHiMmxF/TNdC0xE4
+         JjO5xiuz27vdWX9zno1Z6blJ30yXzLfRg9w1k5uY36O0j1wH4gBpXo093g2jlfAL4xyX
+         ztXKRS5NRfJs+LJtPPdmiHMX+rRWk5adv0vl7IrYPg8b0XeYNMUcE4ZXivkmf40VCnav
+         WsvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774542362; x=1775147162;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8weEZ4/v1Q8ThZTOa9v3bW52mEvoKROcLFNZAFrpZyo=;
-        b=gusfIx9ZW4p2V/G9JmqRSt0zj0w0Lf7Ex3HWFurgyZiiSXr/HN98KHLRgaRkrfAAsE
-         C0715NX8FphxN701mvad8cdcjJtZnYTU4kjROfNpwO4TzTmv/+lWTw7diZgYvquxspFW
-         KctRhWj5tCdvZI3uyiQOR19HtsY1ka/XFt9TRZPoJOYsLSVqokHpsFqe+CEaEBdFpOPu
-         ZQv0rLbyctkXUsrrk3wktrcAY0QvT109SoHJuMhUpC2IF4x0EomGbfRN5b6/bJ80rsHi
-         pDt+IzjZOQBsIxbm63MSLHyBL8YRtiOwzDT8htOXxwE4PJoWWMOvv1yJq/Sb7HMHsD4C
-         bS1A==
-X-Forwarded-Encrypted: i=1; AJvYcCUHtmloh1KocX97Yw6vk29qFjmEqfLbVf5leJERXgq2N7iTpzVp2ro2Q8hJ3SgblBl1UX6GVcK23D4E8Bz/R+8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyr8RvZXqQviIpCf9XFhQYJuFcnSHsjZ2W0wa4uKx3LnhDcRt4e
-	hAmoFChRaDaJrS4XjfYLOXDy7CliSQf0KY+zIlwwl37RTbRvCB0x/CdEgAkzpIjJZqV9/bAzkoo
-	aeP88FLZYvtUcL7D1Zc7/YnLf/rnUWaGUYSSS5P5C
-X-Gm-Gg: ATEYQzyYP4tHATdX9PABZkhk+b/li2hqVs5BNhiWfVSp/TUrrWFQKZG4TCbQwHYC0mJ
-	BVi1TDljyjM1PPQ2QLagUap1crsJrNVMGkpYQRj0SwyyBdxoaJ/VCfxVdJ1i5966K9Zo3L7X8sT
-	svWYBNbb5Dgo9cmwopYuBnJoStFPBUbb5htsYz7Mh3QuuJMUNuaSqJfJ0PUWckiSIDb/562uQiI
-	2Zc0bFV9YP3TjWrpC8/OBPFPUSv63KjoqSRjK+j/O5yEUMW/0gTtZVwJzAPvhJsdZvZj0r7eUVu
-	Byj/EdIQ1vCZwwHdAGDr2+l96KMwT8cwJF7+
-X-Received: by 2002:a17:907:7fa9:b0:b87:173f:61b with SMTP id
- a640c23a62f3a-b9b348a060emr151018566b.9.1774542361098; Thu, 26 Mar 2026
- 09:26:01 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774542549; x=1775147349;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CDlf2p6914NjJVCVaq2Q/Nq8XSjjhMKVxHPhxp+UG88=;
+        b=mZ602vVNSJTf+y4HSUsMnjBnxx11upAD4e28GbBObbgHCwVQ+anQuu4Onpn4HB5Lj5
+         cHYmApfleEcwarU59PN2ziVlstPtew5nxQYsZVCH/jHk/0rOVtcxg7M1XHxIhsxvHeqY
+         vLfseNgDabH+KrDdGPzqsa0EO8bC2gZDLffnnL52pS0clWgNGdASlvL56YWyR+PZZb3d
+         2sF4cg4vgvhhXoj2WO8sVUmH+gZLb6OT1tVOdBi+qefDBarjs1sU9sewTutWK60ICpyn
+         RI1JmUK2F+KthZUTUOZe10rM/qk0SZ2zg6tJZAZ1zMp9wKkn3fmD/0xuWBNvIYIDQYFs
+         +4Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCW3wGG2NZZ2Hi2P4KnZbIlqi7xlJyxFSyT7hnpzS8qE01lVD71QPtJR/muDnUG4d3ehgiJk1olm/hr1hjlBaUI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrWrPQghFwBLr75E/4NJcvjYYoDWjKjlYFBnKNI9HpBpfgckZT
+	xvpEbXmQ7J3L5+fQCB8RrMqYHCgHfMTct4QTct7uHLtnHD+uueP3ibVh
+X-Gm-Gg: ATEYQzyGs60yTLyc/4a0RSLaAIFE6ZsWgizEcWRU+BRna2wU8Qg3yybM4kEUgSeH3eI
+	+c72aAFUS1PEH8LbgN8iQv+NUcY9J6Jl4F+iedT4yu0cib3Ci2pfC6hNFwPYmJRxjO7k+ggmcrg
+	hmXNvatC0ar5kxcJ0FIHbHfL+ZcZNJiwK4m37Eeb6sXdQbgmMTw4qjckEYBSicGYImgS7ukEjvO
+	iJrauPmK2LPue85SD9fvDmVeCx4flwwDjezsSiWlKH4PBkpP46RQqM+NpFeenlBK5jybtWvZ7m2
+	9DUEy/LWpKkKaSfCmZLR3AqIYCj4rPS9bCqI8JfceU3VJgM2DES93s4giKbFXILoJrmB/XshapZ
+	GQkEoRYBk+CLjq5Jk4ivVjAang3M6+japHB09G0IsWILbZQsiv/7rk3rpqIbjgSVJ+CTbiEayux
+	DfzW+8mHSeKwr8UMiqHbUJINDcpkDeTT2WZr/2vHP5/bpe6iAzh3KRcbseEhNL2d/i1NmZ7Og4d
+	7C+JKKoDXvZSjw=
+X-Received: by 2002:a53:e105:0:b0:64e:ba77:8412 with SMTP id 956f58d0204a3-64ee6185ff2mr5998843d50.73.1774542548777;
+        Thu, 26 Mar 2026 09:29:08 -0700 (PDT)
+Received: from gmail.com (180.134.85.34.bc.googleusercontent.com. [34.85.134.180])
+        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-64ef58ca09csm1662948d50.5.2026.03.26.09.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 09:29:08 -0700 (PDT)
+Date: Thu, 26 Mar 2026 12:29:07 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Qingfang Deng <dqfext@gmail.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Simon Horman <horms@kernel.org>, 
+ Willem de Bruijn <willemb@google.com>, 
+ Petr Machata <petrm@nvidia.com>, 
+ Richard Gobert <richardbgobert@gmail.com>, 
+ Anubhav Singh <anubhavsinggh@google.com>, 
+ Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+Cc: linux-ppp@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.29bf4e0691478@gmail.com>
+In-Reply-To: <20260326081127.61229-2-dqfext@gmail.com>
+References: <20260326081127.61229-1-dqfext@gmail.com>
+ <20260326081127.61229-2-dqfext@gmail.com>
+Subject: Re: [RFC PATCH net-next v6 2/2] selftests: net: test PPPoE packets in
+ gro.sh
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260326112521.2827500-1-wusamuel@google.com> <m2v7eig4ue.fsf@kernel.org>
- <CAP01T74KNVT2SVRR+XPbFb1vy85W=Jkp4_yD6xvTSg2avQo8AQ@mail.gmail.com> <CAADnVQK252XxmxM3enS4wPREshTEawQKbChgN-teX3+wmxgdBQ@mail.gmail.com>
-In-Reply-To: <CAADnVQK252XxmxM3enS4wPREshTEawQKbChgN-teX3+wmxgdBQ@mail.gmail.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Thu, 26 Mar 2026 09:25:49 -0700
-X-Gm-Features: AQROBzDpxR80sNDZIp7I-1jwQ56Npkte6GZeWCLG3T-hio_UtCQbkOqHje_ZuUg
-Message-ID: <CAG2Kctqd4p4pJtH=tSfKT57qfecQrpcoYu3SsAzJ-zGEiYVSQA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Support BPF traversal of wakeup sources
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Android Kernel Team <kernel-team@android.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux Power Management <linux-pm@vger.kernel.org>, driver-core@lists.linux.dev, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 26, 2026 at 8:02=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Mar 26, 2026 at 7:54=E2=80=AFAM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > On Thu, 26 Mar 2026 at 13:20, Puranjay Mohan <puranjay@kernel.org> wrot=
-e:
-> > >
-> > > Samuel Wu <wusamuel@google.com> writes:
-> > >
-> > > > This patchset adds requisite kfuncs for BPF programs to safely trav=
-erse
-> > > > wakeup_sources, and puts a config flag around the sysfs interface.
-> > > >
-> > > > Currently, a traversal of wakeup sources require going through
-> > > > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls t=
-o query
-> > > > sysfs is inefficient, as there can be hundreds of wakeup_sources, w=
-ith each
-> > > > wakeup source also having multiple attributes. debugfs is unstable =
-and
-> > > > insecure.
-> > > >
-> > > > Adding kfuncs to lock/unlock wakeup sources allows BPF program to s=
-afely
-> > > > traverse the wakeup sources list. The head address of wakeup_source=
-s can
-> > > > safely be resolved through BPF helper functions or variable attribu=
-tes.
-> > > >
-> > > > On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~=
-34x
-> > > > speedup (sampled 75 times in table below). For a device under load,=
- the
-> > > > speedup is greater.
-> > > > +-------+----+----------+----------+
-> > > > |       | n  | AVG (ms) | STD (ms) |
-> > > > +-------+----+----------+----------+
-> > > > | sysfs | 75 | 44.9     | 12.6     |
-> > > > +-------+----+----------+----------+
-> > > > | BPF   | 75 | 1.3      | 0.7      |
-> > > > +-------+----+----------+----------+
-> > > >
-> > > > The initial attempts for BPF traversal of wakeup_sources was with B=
-PF
-> > > > iterators [1]. However, BPF already allows for traversing of a simp=
-le list
-> > > > with bpf_for(), and this current patchset has the added benefit of =
-being
-> > > > ~2-3x more performant than BPF iterators.
-> > >
-> > > I left some inline comments on patch 1, but the high level concern is
-> > > that encoding the SRCU index into a fake pointer to get KF_ACQUIRE/
-> > > KF_RELEASE tracking is working against the verifier rather than with =
-it.
-> > > Nothing actually prevents a BPF program from walking the list without
-> > > the lock, and the whole pointer encoding trick goes away if this is d=
-one
-> > > as an open-coded iterator instead.
-> >
-> > Which is fine, the critical section is only doing CO-RE accesses, and
-> > the SRCU lock is just to be able to read things in a valid state while
-> > walking the list. It is all best-effort.
-> > Open coded iterators was already explored as an option in earlier
-> > iterations of the series and discarded as no-go.
->
-> kinda best-effort...
-> the way it's written bpf_wakeup_sources_get_head() returns
-> trusted list_head. It's then core-read-ed anyway.
-> Ideally it should be trusted only within that srcu CS
-> and invalidated by the verifier similar to KF_RCU_PROTECTED,
-> but that's bigger task.
-> Instead let's make bpf_wakeup_sources_get_head() return 'void *',
-> so it's clearly untrusted.
+Qingfang Deng wrote:
+> Add PPPoE test-cases to the GRO selftest.
+> 
+> Signed-off-by: Qingfang Deng <dqfext@gmail.com>
+> ---
+> v6: new patch
+> 
+> I'm not sure if I should include all the existing IPv4/v6 tests for
+> PPPoE. There are tests that hardcode ETH_HLEN as the NH offset, which
+> are meant to test the L3 protocol, not the underlying protocol, and
+> changing all of them seems too invasive.
 
-Thanks all for the fruitful discussion; this is more rigorous. I'll
-update v3 so that `bpf_wakeup_sources_get_head()`'s return type is
-`void *` and I can add a corresponding selftest that directly
-dereferences the head and expects a verifier failure.
+Overall this change looks good to me. But indeed all the churn of
+
+    (pppoe ? PPPOE_SES_HLEN : 0)
+ 
+is a bit annoying. Left a few representative snippets below.
+I think that could be avoided similar to MAX_HDR_LEN by having a
+global definition and using that everywhere. Still a lot of churn, but
+at least no repeated open-coded logic.
+
+Also consider whether running all these tests again in PPPoE adds
+value, if not, then indeed trim the tests to those that truly add
+code coverage. 
+
+> @@ -745,7 +777,7 @@ static void add_ipv4_ts_option(void *buf, void *optpkt)
+>  	memcpy(optpkt + tcp_offset + optlen, buf + tcp_offset,
+>  	       sizeof(struct tcphdr) + PAYLOAD_LEN);
+>  
+> -	iph = (struct iphdr *)(optpkt + ETH_HLEN);
+> +	iph = (struct iphdr *)(optpkt + ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0));
+>  	iph->ihl = 5 + (optlen / 4);
+>  	iph->tot_len = htons(ntohs(iph->tot_len) + optlen);
+>  	iph->check = 0;
+> @@ -755,7 +787,7 @@ static void add_ipv4_ts_option(void *buf, void *optpkt)
+>  static void add_ipv6_exthdr(void *buf, void *optpkt, __u8 exthdr_type, char *ext_payload)
+>  {
+>  	struct ipv6_opt_hdr *exthdr = (struct ipv6_opt_hdr *)(optpkt + tcp_offset);
+> -	struct ipv6hdr *iph = (struct ipv6hdr *)(optpkt + ETH_HLEN);
+> +	struct ipv6hdr *iph = (struct ipv6hdr *)(optpkt + ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0));
+>  	char *exthdr_payload_start = (char *)(exthdr + 1);
+>  
+>  	exthdr->hdrlen = 0;
+
+
