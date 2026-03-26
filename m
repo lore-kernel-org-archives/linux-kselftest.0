@@ -1,93 +1,181 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53B73A3831;
-	Thu, 26 Mar 2026 18:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714B1330B07
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 19:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774550318; cv=none; b=OoCArNfGKB70qVLhdpr6NsKrpOqKLJJu15QMj3ftyUCj5lZgqSvA9g2OknLnvE+igfevDTlWPJh8a/G/4C8hH2G6HRv9pyKWjlKEsOPLIwFb2OFDqn4SmAqyA8ppOrI9jJ1qVCJDaJFF87DUfeOaVVaQ2DLAAtTV3hiz6fCukDo=
+	t=1774551813; cv=none; b=JldkbEVZ6d/awtVLBBVoW7Z3tGd9vMYJHGxyqthSZSAQ/PLxrZI2aC+Ev1QkJViDM5Ii004ZAUTe3vdAU0EhXNWdnaU1412sX5opuchxGV1CWeBFiuIDW28tBPjji9PtuVXgXofnu0jaxSCPbxb+FgNDnUbPytfzzhSQT+eVUlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774550318; c=relaxed/simple;
-	bh=ndiHyXCoO5k7Iqu/6caxL41+ed9KFd/MkCx3xUWmsEc=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=IkXBSwwfOOH/hf45onRhxfEr831C8pjo3B5U9uCxGuq6S3MmyMfBKQWWFuK5sgblCkLRCRnpZo3zZyL65A6Hl3I2Y+K36Vs0kH4XHOU5dxwfIc2kkaOxpa+Fy1kv8Y1zfJdWOaMfXC+dBeTyHmYn3z0GdfV7G8x5GHk5DLW1BGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=taNmqBfM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774551813; c=relaxed/simple;
+	bh=H3ZANKprj/TgNWGd+SUawc9wkwCTzwy1BeR8pADdSwI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kVbsQd2JAJYLIOonRRHsgXQzmal2L25qmwq4yul3zWFDvG71RDxuxBYCj9gddDzogSt5rXDUNr9vZLHZaJSKVDmHy+TfQlETzDo3IJONv7gdqItvwjbfiFe5P/dfC+6V0yygvXSVIErl6AnFeuS80KfVdqzb+KM1YveSAeawg2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u97SDTgX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="taNmqBfM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A040BC116C6;
-	Thu, 26 Mar 2026 18:38:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774550318;
-	bh=ndiHyXCoO5k7Iqu/6caxL41+ed9KFd/MkCx3xUWmsEc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=taNmqBfM3BLswhWl/RJJAoUFuCiAqubMPHWGGMR3UdxU5KJrs8LMM7qcXQRrWVVpw
-	 gJFt3VEicxOzMPC1XI2z5MNJGEAaclq1nCkD/zc1lZ5QXVXtp5hg6xhnKLTJn3wcS9
-	 elOgQXcAU4TsAUSpKtEoqf8YzI3FpzELGjqsW4ls=
-Date: Thu, 26 Mar 2026 11:38:37 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Sayali Patil <sayalip@linux.ibm.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, Shuah Khan
- <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>, Zi
- Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, Oscar Salvador
- <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain
- <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 09/13] selftests/mm: skip uffd-wp-mremap if UFFD
- write-protect is unsupported
-Message-Id: <20260326113837.b2a030330adb7dead8acfeff@linux-foundation.org>
-In-Reply-To: <e6f03352-4f09-4238-a47a-6d4e84101a6c@linux.ibm.com>
-References: <cover.1773305677.git.sayalip@linux.ibm.com>
-	<ed23ff57a80881c9d087d22709862af40addf49b.1773305678.git.sayalip@linux.ibm.com>
-	<457dddf1-04ec-4d1e-8640-b04997fac4f1@kernel.org>
-	<0e9cea41-7c49-446a-b67b-256584960516@linux.ibm.com>
-	<20260324165606.d75200ac0e5458a5ffb83d5d@linux-foundation.org>
-	<e6f03352-4f09-4238-a47a-6d4e84101a6c@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u97SDTgX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33016C2BCB1
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 19:03:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774551813;
+	bh=H3ZANKprj/TgNWGd+SUawc9wkwCTzwy1BeR8pADdSwI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=u97SDTgXTlzOMF+8m1DUlWk5+B5s05tTe7VXmdb8L06wfedBUbsvunVUdI1pLXAzP
+	 u/5gAQ51s8CvSpqkgsWM+xtJvxJqtCelDJpqQPqlGIVbfigHsQGzSE8DyRKaZdEEic
+	 MqAWh97TXPg85OTGbFuiYiJM4Fg09HdJKyHbj3yiX9OFwyEUX61+oCHbMkPhbWejzn
+	 97Nm3UXaYQweEB92yACV3iJEajEF0rsOrDA6bYKpau5O74ICgPCb78frC1dlO7gWjj
+	 NwbwBn3AzOuDAV/K270aDl+DHRcr32J2redoGF5me47guJvt+kff4HN+ctYAK64HR7
+	 TEvk2bhrf6E1A==
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b97c44417ffso134204766b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 12:03:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUquzHcAY8/OY6cpV9R72+G/AV5RzDBNv3xBrGfBOS7fxzc2wLF+68QTkpZst6vJGctdFfwWfJ9p0nvx4yuthw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9efeRptUsBVH8DofsIDsOfEF4PymXGNfAp1h2GY19lYm0fGiv
+	xpwzzAiYbIYEQQHCSfErgR/NW/pqKTL3RD0q6E7PKyXB21oAdeLa45RuiqCU9ytLhpk6HN1JLAk
+	8dWroWTLW26BCZGH2WAzAfL5buhYB+xM=
+X-Received: by 2002:a17:906:eecd:b0:b98:36cd:7e0e with SMTP id
+ a640c23a62f3a-b9a542737camr610146966b.45.1774551811888; Thu, 26 Mar 2026
+ 12:03:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20260326174944.3820245-1-jmattson@google.com> <20260326174944.3820245-2-jmattson@google.com>
+In-Reply-To: <20260326174944.3820245-2-jmattson@google.com>
+From: Yosry Ahmed <yosry@kernel.org>
+Date: Thu, 26 Mar 2026 12:03:20 -0700
+X-Gmail-Original-Message-ID: <CAO9r8zMYdLjH8BuN_GWsS_BNrdE+Kbz=d6Y-Cxt3GTXMpdEM+w@mail.gmail.com>
+X-Gm-Features: AQROBzDXNpZkaYQ2rFx8prlIgRpDL-u1SWDMIRceFjxW53ZNgIHOU49tyDb09oo
+Message-ID: <CAO9r8zMYdLjH8BuN_GWsS_BNrdE+Kbz=d6Y-Cxt3GTXMpdEM+w@mail.gmail.com>
+Subject: Re: [PATCH v6 01/10] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 26 Mar 2026 23:31:10 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
+On Thu, Mar 26, 2026 at 10:50=E2=80=AFAM Jim Mattson <jmattson@google.com> =
+wrote:
+>
+> Define a quirk to control whether nested SVM shares L1's PAT with L2
+> (legacy behavior) or gives L2 its own independent gPAT (correct behavior
+> per the APM).
+>
+> When the quirk is enabled (default), L2 shares L1's PAT, preserving the
+> legacy KVM behavior. When userspace disables the quirk, KVM correctly
+> virtualizes the PAT for nested SVM guests, giving L2 a separate gPAT as
+> specified in the AMD architecture.
+>
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>  Documentation/virt/kvm/api.rst  | 14 ++++++++++++++
+>  arch/x86/include/asm/kvm_host.h |  3 ++-
+>  arch/x86/include/uapi/asm/kvm.h |  1 +
+>  arch/x86/kvm/svm/svm.h          |  7 +++++++
+>  4 files changed, 24 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.=
+rst
+> index 032516783e96..2d56f17e3760 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8551,6 +8551,20 @@ KVM_X86_QUIRK_VMCS12_ALLOW_FREEZE_IN_SMM   By defa=
+ult, KVM relaxes the consisten
+>                                             bit to be cleared.  Note that=
+ the vmcs02
+>                                             bit is still completely contr=
+olled by the
+>                                             host, regardless of the quirk=
+ setting.
+> +
+> +KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT        By default, KVM for nested SV=
+M guests
+> +                                           shares the IA32_PAT MSR betwe=
+en L1 and
+> +                                           L2. This is legacy behavior a=
+nd does
+> +                                           not match the AMD architectur=
+e
+> +                                           specification. When this quir=
+k is
+> +                                           disabled and nested paging (N=
+PT) is
+> +                                           enabled for L2, KVM correctly
+> +                                           virtualizes a separate guest =
+PAT
+> +                                           register for L2, using the g_=
+pat
+> +                                           field in the VMCB. When NPT i=
+s
+> +                                           disabled for L2, L1 and L2 co=
+ntinue
+> +                                           to share the IA32_PAT MSR reg=
+ardless
+> +                                           of the quirk setting.
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  7.32 KVM_CAP_MAX_VCPU_ID
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
+ost.h
+> index d3bdc9828133..0809d8f28208 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -2511,7 +2511,8 @@ int memslot_rmap_alloc(struct kvm_memory_slot *slot=
+, unsigned long npages);
+>          KVM_X86_QUIRK_SLOT_ZAP_ALL |           \
+>          KVM_X86_QUIRK_STUFF_FEATURE_MSRS |     \
+>          KVM_X86_QUIRK_IGNORE_GUEST_PAT |       \
+> -        KVM_X86_QUIRK_VMCS12_ALLOW_FREEZE_IN_SMM)
+> +        KVM_X86_QUIRK_VMCS12_ALLOW_FREEZE_IN_SMM       \
 
-> >   	pagesize = getpagesize();
-> >   	nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
-> > _
-> >
-> Hi Andrew,
-> I have some updates to [PATCH v2 04/13] selftests/mm: fix cgroup task 
-> placement and tolerance in hugetlb_reparenting_test.sh, as Venkat 
-> reported failures with the current version.
-> 
-> Should I send a v3 of the full series, or just a fixup patch for 
-> hugetlb_reparenting_test.sh?
+There is a missing "|" here, it's fixed in patch 3, but I think it
+should be fixed up here (maybe when applied).
 
-A full resend is fine, thanks.  I'll prepare a diff showing all the
-changes since v2 for you to double-check and for people who already
-reviewed v2.
-
-> Also, if you prefer a v3, should I include 
-> above fix for 
-> selftests-mm-skip-uffd-wp-mremap-if-uffd-write-protect-is-unsupported as 
-> well?
-
-Yes please, integrate all fixups.  
-
-You may choose to track those fixups the way I do:
-
-[avagin@google.com: fix lock leak in mfill_get_vma()]
-  Link: https://lkml.kernel.org/r/20260316173829.1126728-1-avagin@google.com
-[akpm@linux-foundation.org: update mfill_copy_folio_retry()]
-  Link: https://lkml.kernel.org/r/20260316173829.1126728-1-avagin@google.com
-Link: https://lkml.kernel.org/r/20260306171815.3160826-6-rppt@kernel.org
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Andrei Vagin <avagin@google.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-...
-
-Other people also do this sometimes, usually not.
+> +        KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT)
+>
+>  #define KVM_X86_CONDITIONAL_QUIRKS             \
+>         (KVM_X86_QUIRK_CD_NW_CLEARED |          \
+> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/=
+kvm.h
+> index 5f2b30d0405c..3ada2fa9ca86 100644
+> --- a/arch/x86/include/uapi/asm/kvm.h
+> +++ b/arch/x86/include/uapi/asm/kvm.h
+> @@ -477,6 +477,7 @@ struct kvm_sync_regs {
+>  #define KVM_X86_QUIRK_STUFF_FEATURE_MSRS       (1 << 8)
+>  #define KVM_X86_QUIRK_IGNORE_GUEST_PAT         (1 << 9)
+>  #define KVM_X86_QUIRK_VMCS12_ALLOW_FREEZE_IN_SMM (1 << 10)
+> +#define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT    (1 << 11)
+>
+>  #define KVM_STATE_NESTED_FORMAT_VMX    0
+>  #define KVM_STATE_NESTED_FORMAT_SVM    1
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index ff1e4b4dc998..67aa5d34332e 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -616,6 +616,13 @@ static inline bool nested_npt_enabled(struct vcpu_sv=
+m *svm)
+>         return svm->nested.ctl.misc_ctl & SVM_MISC_ENABLE_NP;
+>  }
+>
+> +static inline bool l2_has_separate_pat(struct vcpu_svm *svm)
+> +{
+> +       return nested_npt_enabled(svm) &&
+> +               !kvm_check_has_quirk(svm->vcpu.kvm,
+> +                                    KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT)=
+;
+> +}
+> +
+>  static inline bool nested_vnmi_enabled(struct vcpu_svm *svm)
+>  {
+>         return guest_cpu_cap_has(&svm->vcpu, X86_FEATURE_VNMI) &&
+> --
+> 2.53.0.1018.g2bb0e51243-goog
+>
