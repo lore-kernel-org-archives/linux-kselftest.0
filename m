@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F197393DF1
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 03:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9533921E0
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 03:28:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774495687; cv=none; b=A4Biuvi6Kowz03Ek3qdVfJcSFDXFuA+XYyqKuvLVz4QRhjQxB3PtiWIcNlnnubZ73gYVpc8T8HOgCggy6Tl0n4p/a6ALfa/yJF7zFWf/eY9kKgSczxm+tNVTSGhpNnakqUCyJQFzYhoYwkMIfPa0Wdds2suNN8BPL1In+KF7xlw=
+	t=1774495697; cv=none; b=easrtxW6xVARGrLvYGBKiA9BzMk7xGWzg6okfPPKv3S4wnSu1D7opJ8zw5z4N8ighJdw511Y/jNnRNyqj1UtF11A2gwM/iptDqFm1Bg43EHUb1ayPNyP1HDLWqZc5DPD3ZYEsnZlmX7JbkkKWuBgEAjzTPK3kamR+I9fHCSm0GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774495687; c=relaxed/simple;
-	bh=o/w7TQliWDhKNWU6CNP5i3AA/k45gK0jKqDtWaqSPOs=;
+	s=arc-20240116; t=1774495697; c=relaxed/simple;
+	bh=Db9FpGjMEsnfOujo+Rx3taOhK7m8n2Zf3BPQRSbWgPE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=awOrqADC74XiCPFKOktV88nnu+4iHdkYOTlgzKfmXrZOwSIlo2kqxueIWpIYbWO0YksOPWoFHyUQ/Oe6aCfHLGbhx8Qi8gSGZyvJDeZdjng5d08mjDrl9hEmpzZUkl66PvWg8i61LIiI02j0oIwgZK+up+lNkuxQG7ql3ieCrHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cGw5IOnZ; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=s+MMxXJFMLzbiK+QAYaoWyshIE+myFwQjWM6AGqkHsOmj9IJINwGNouxLSnzgffB5GKI63YXJzHxQOP2euzHHaqVDP4HFrNVO3K6VVOGsBQYddUtDXRIn0x2SaRgydfg1aF0QE4K91kqHSoURkrWqbYQzRTadxz83WFLiBMaEvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RhXcB9NE; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cGw5IOnZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RhXcB9NE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774495685;
+	s=mimecast20190719; t=1774495693;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5FEF4PcMxcimzj0nghaejrMWC+mQHsYsFdwp2v61C34=;
-	b=cGw5IOnZ/tERwKcwRJezEssl54EXzMFAYjclUKBc1NOk0a804U85r/RVGF5I4auooIeFH+
-	CQnKelSLHFuG6ZE5YeVQvpR9EPCBGCUuGSaoQnr0O8cUNcDjM8Q01p6zJ2bYt2Im4Ux/ue
-	jl4qCfa8x5GMKGLQTTuzLPVKTsVJiwI=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=z7qTVQy4P3P+tWAwnSkI8eaROMeV/uij3L4ybuXlnco=;
+	b=RhXcB9NEEOFahXwNrC+BhowL2bgISWiEXa6J4G1p5DlvwujkKZu59a9bLdHGn8fUeucTB1
+	fmGa1e7RgGI87nUVOLnQgi2Xwl43eSdu3dUsio4V7l+FhcUdhcIb6/BD6BQemDJx3iftTz
+	MYSQ2Xf8lS9CZ+eRgxA6i6aQleGMiL8=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-318-Zk5XMdgqMyqNHJrO1O5hKg-1; Wed,
- 25 Mar 2026 23:28:00 -0400
-X-MC-Unique: Zk5XMdgqMyqNHJrO1O5hKg-1
-X-Mimecast-MFC-AGG-ID: Zk5XMdgqMyqNHJrO1O5hKg_1774495679
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-390-g6BzXI2gPqOlcblx0mevOA-1; Wed,
+ 25 Mar 2026 23:28:08 -0400
+X-MC-Unique: g6BzXI2gPqOlcblx0mevOA-1
+X-Mimecast-MFC-AGG-ID: g6BzXI2gPqOlcblx0mevOA_1774495685
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF6DD1944EB8;
-	Thu, 26 Mar 2026 03:27:58 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C8BD819560A7;
+	Thu, 26 Mar 2026 03:28:05 +0000 (UTC)
 Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.83])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 160451955D84;
-	Thu, 26 Mar 2026 03:27:52 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7C0731955D84;
+	Thu, 26 Mar 2026 03:27:59 +0000 (UTC)
 From: Li Wang <liwang@redhat.com>
 To: akpm@linux-foundation.org,
 	yosry@kernel.org,
@@ -57,10 +57,11 @@ Cc: longman@redhat.com,
 	liwang@redhat.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v5 7/8] selftest/cgroup: fix zswap attempt_writeback() on 64K pagesize system
-Date: Thu, 26 Mar 2026 11:26:57 +0800
-Message-ID: <20260326032658.96819-8-liwang@redhat.com>
+	linux-mm@kvack.org,
+	Yosry Ahmed <yosryahmed@google.com>
+Subject: [PATCH v5 8/8] selftests/cgroup: test_zswap: wait for asynchronous writeback
+Date: Thu, 26 Mar 2026 11:26:58 +0800
+Message-ID: <20260326032658.96819-9-liwang@redhat.com>
 In-Reply-To: <20260326032658.96819-1-liwang@redhat.com>
 References: <20260326032658.96819-1-liwang@redhat.com>
 Precedence: bulk
@@ -73,43 +74,21 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-In attempt_writeback(), a memsize of 4M only covers 64 pages on 64K
-page size systems. When memory.reclaim is called, the kernel prefers
-reclaiming clean file pages (binary, libc, linker, etc.) over swapping
-anonymous pages. With only 64 pages of anonymous memory, the reclaim
-target can be largely or entirely satisfied by dropping file pages,
-resulting in very few or zero anonymous pages being pushed into zswap.
+zswap writeback is asynchronous, but test_zswap.c checks writeback
+counters immediately after reclaim/trigger paths. On some platforms
+(e.g. ppc64le), this can race with background writeback and cause
+spurious failures even when behavior is correct.
 
-This causes zswap_usage to be extremely small or zero, making
-zswap_usage/2 insufficient to create meaningful writeback pressure.
-The test then fails because no writeback is triggered.
+Add wait_for_writeback() to poll get_cg_wb_count() with a bounded
+timeout, and use it in:
 
-On 4K page size systems this is not an issue because 4M covers 1024
-pages, and file pages are a small fraction of the reclaim target.
+  test_zswap_writeback_one() when writeback is expected
+  test_no_invasive_cgroup_shrink() for the wb_group check
 
-Fix this by:
-- Always allocating 1024 pages regardless of page size. This ensures
-  enough anonymous pages to reliably populate zswap and trigger
-  writeback, while keeping the original 4M allocation on 4K systems.
-- Setting zswap.max to zswap_usage/4 instead of zswap_usage/2 to
-  create stronger writeback pressure, ensuring reclaim reliably
-  triggers writeback even on large page size systems.
+This keeps the original before/after assertion style while making the
+tests robust against writeback completion latency.
 
-=== Error Log ===
-  # uname -rm
-  6.12.0-211.el10.ppc64le ppc64le
-
-  # getconf PAGESIZE
-  65536
-
-  # ./test_zswap
-  TAP version 13
-  1..7
-  ok 1 test_zswap_usage
-  ok 2 test_swapin_nozswap
-  ok 3 test_zswapin
-  not ok 4 test_zswap_writeback_enabled
-  ...
+No test behavior change, selftest stability improvement only.
 
 Signed-off-by: Li Wang <liwang@redhat.com>
 Cc: Johannes Weiner <hannes@cmpxchg.org>
@@ -120,42 +99,64 @@ Cc: Nhat Pham <nphamcs@gmail.com>
 Cc: Tejun Heo <tj@kernel.org>
 Cc: Roman Gushchin <roman.gushchin@linux.dev>
 Cc: Shakeel Butt <shakeel.butt@linux.dev>
-Acked-by: Yosry Ahmed <yosry@kernel.org>
+Cc: Yosry Ahmed <yosryahmed@google.com>
 ---
-
-Notes:
-    v5:
-    	- Setting zswap.max to zswap_usage/4 to create stronger writeback pressure.
-    v3-4:
-    	- No changes.
-    v2:
-    	- use pagesize * 1024 which clearly shows the page numbers.
-
- tools/testing/selftests/cgroup/test_zswap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/cgroup/test_zswap.c | 28 +++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 72082e5d4725..e96e316f7c47 100644
+index e96e316f7c47..e7d5dbc1ef7f 100644
 --- a/tools/testing/selftests/cgroup/test_zswap.c
 +++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -273,7 +273,7 @@ static int test_zswapin(const char *root)
+@@ -118,6 +118,27 @@ static char *setup_test_group_1M(const char *root, const char *name)
+ 	return NULL;
+ }
+ 
++/*
++ * Writeback is asynchronous; poll until at least one writeback has
++ * been recorded for @cg, or until @timeout_ms has elapsed.
++ */
++static long wait_for_writeback(const char *cg, int timeout_ms)
++{
++	int elapsed, count;
++	for (elapsed = 0; elapsed < timeout_ms; elapsed += 100) {
++		count = get_cg_wb_count(cg);
++
++		if (count < 0)
++			return -1;
++		if (count > 0)
++			return count;
++
++		usleep(100000);
++	}
++
++	return 0;
++}
++
+ /*
+  * Sanity test to check that pages are written into zswap.
   */
- static int attempt_writeback(const char *cgroup, void *arg)
- {
--	size_t memsize = MB(4);
-+	size_t memsize = page_size * 1024;
- 	char buf[page_size];
- 	long zswap_usage;
- 	bool wb_enabled = *(bool *) arg;
-@@ -311,7 +311,7 @@ static int attempt_writeback(const char *cgroup, void *arg)
- 		}
+@@ -343,7 +364,10 @@ static int test_zswap_writeback_one(const char *cgroup, bool wb)
+ 		return -1;
+ 
+ 	/* Verify that zswap writeback occurred only if writeback was enabled */
+-	zswpwb_after = get_cg_wb_count(cgroup);
++	if (wb)
++		zswpwb_after = wait_for_writeback(cgroup, 5000);
++	else
++		zswpwb_after = get_cg_wb_count(cgroup);
+ 	if (zswpwb_after < 0)
+ 		return -1;
+ 
+@@ -473,7 +497,7 @@ static int test_no_invasive_cgroup_shrink(const char *root)
  	}
  
--	if (cg_write_numeric(cgroup, "memory.zswap.max", zswap_usage/2))
-+	if (cg_write_numeric(cgroup, "memory.zswap.max", zswap_usage/4))
- 		goto out;
- 
- 	/*
+ 	/* Verify that only zswapped memory from gwb_group has been written back */
+-	if (get_cg_wb_count(wb_group) > 0 && get_cg_wb_count(zw_group) == 0)
++	if (wait_for_writeback(wb_group, 5000) > 0 && get_cg_wb_count(zw_group) == 0)
+ 		ret = KSFT_PASS;
+ out:
+ 	cg_enter_current(root);
 -- 
 2.53.0
 
