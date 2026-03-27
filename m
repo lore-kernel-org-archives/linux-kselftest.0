@@ -1,157 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF47D311C38;
-	Fri, 27 Mar 2026 11:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40B4332634;
+	Fri, 27 Mar 2026 12:02:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774612071; cv=none; b=XiBBML+wfoYOEwMzchMd2pmOI/Vqq6DuNjwATylzhU0drFsvot8G/APBiS6W0u0Z0DCKJnp7Q/NeO/r3bmaQ0wvi6D/0yckOBZ+Lecr33XI8b4q8sx0S1WrCDng6WlQ3zTRuwePg+wYRiXW9lyoMa2qEeTzEtVSBh54myds31Zw=
+	t=1774612930; cv=none; b=gohs7BIDDfu3H805Sg1VY2uyHeQaw1zykA8fJEFevFEqxI06NZFa/9CAZBFdKSVFCAJyA11GlR0q9ZLDQhb2huONVXpRx7JdkkQ6Y7BH1NaG/jofDLETFMQt/Qr4UqGuxW7sR+yxQQbOybsVDT/d9hjbPdcppfChY4/n7cG/fdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774612071; c=relaxed/simple;
-	bh=UWqo7y+v96VP3ho6z6Rwh/7HEqf87P4hquLIZgzv6Dk=;
+	s=arc-20240116; t=1774612930; c=relaxed/simple;
+	bh=Ug6PXMZj5EM6WaHP8j75mffKH6tZAhlPhePI6D/ozn8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RCvogHZFJJExZXOAFjxHgK1YCv1I/TNVUdiUAhWYD5dyxM7XM861HJDM78EUXyXH1c9ALgQaxUaidWs2UaS7IX+KhnZWqyth0GxmndltxuT0E2yUwPZeg4IW7oEafrOvQPcjWcPPED5xcg9iwpvF1LA8QVw7W062XfY/Q1HysQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JVtPQC1Q; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=sBh6zY9gIuJ5W8skWlhmR1G0LrK+xUycu1lh6jZwNxPjEIwlqGBIV3CEpIwSONMzGPsSyHutdKnotGQC4Szm7+6RgyW402TRGO6pE9mDtVZaHqk0APgnsKLtXyB1gDZYF7dbbsexQpP+ozd7lzH5JQGDqwnpIkyF9UUUBZRRpQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=du98Vx8y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JVtPQC1Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 307D5C19423;
-	Fri, 27 Mar 2026 11:47:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="du98Vx8y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C5BC19423;
+	Fri, 27 Mar 2026 12:02:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774612070;
-	bh=UWqo7y+v96VP3ho6z6Rwh/7HEqf87P4hquLIZgzv6Dk=;
+	s=k20201202; t=1774612930;
+	bh=Ug6PXMZj5EM6WaHP8j75mffKH6tZAhlPhePI6D/ozn8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JVtPQC1QKmz6DnjLXtwlTrh2b0p+bEwQvHTZifkPYXVY/sul5MEIRGg0gtTzzhmIg
-	 SOGSODY42KxI6xrUOZWneQwo0/9fFNjxWkE0iVbvA6fq5vezKgPyEbTg0E+ho+FxCQ
-	 Ju7kEjh/hXS8KNnmOQF5JsaiLpwCeotJWliIg3fmEtBuDtZ6Bi4wuYNaHw1plsOYGk
-	 gaHo6F+0A96bzW5HbCtHSIeyk+hMcweQG1/EkAB/+41G0jGn/pXRA198KEdiR6PdaM
-	 ncKwKOZMVRHgjWWikiYYWKcmcRoZARR2HT3hEgLKKACDsECDeL+MWwTyuNLOkavVsV
-	 6r+o+bsgkDZrg==
-Date: Fri, 27 Mar 2026 14:47:39 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: James Houghton <jthoughton@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 13/15] KVM: guest_memfd: implement userfaultfd
- operations
-Message-ID: <acZuW7_7yBdVsJqK@kernel.org>
-References: <20260306171815.3160826-1-rppt@kernel.org>
- <20260306171815.3160826-14-rppt@kernel.org>
- <CADrL8HViJ_GaRUd-k9MyM0S8b7sz3whGJHNwvFfCk+pw0+kRgA@mail.gmail.com>
+	b=du98Vx8yCn1S+x77RS40l3PUv9m7U54a1BwLsWUzQ5x0o5lkD9sbNwm2BqD3vBJ2g
+	 4zGGHCojY9pjHPq8vsNhlThNLw74qSgYHIeQnd8TJCxibLmYCoi5bzObLOUjBAXIC0
+	 6yMLnMKEqtIOmooxZK5qyFWlLWFQkTl56n+LnDBuRci7Be1pQBZ9o13MsjLYRiLcIH
+	 Sbmx+to7Vw0rdUEu//tSfSYufDqE/N4VnQHoA/7wxiuz6FuWkk7ebV01GWnIx5To1z
+	 xd8F06ss8tLsfEbejMlZMvaIR3MpZtme2pumQcIVVkhGZ7kl2RLVv3PGYK61pFdqZv
+	 gby718h7/72gw==
+Date: Fri, 27 Mar 2026 12:02:07 +0000
+From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Zi Yan <ziy@nvidia.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>, 
+	David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 02/10] mm/khugepaged: remove READ_ONLY_THP_FOR_FS check
+Message-ID: <8f5119a1-9aa9-4a39-ac94-ca1631db26e1@lucifer.local>
+References: <20260327014255.2058916-1-ziy@nvidia.com>
+ <20260327014255.2058916-3-ziy@nvidia.com>
+ <7fd90f5e-65b5-4734-abb2-77b22c733af5@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADrL8HViJ_GaRUd-k9MyM0S8b7sz3whGJHNwvFfCk+pw0+kRgA@mail.gmail.com>
+In-Reply-To: <7fd90f5e-65b5-4734-abb2-77b22c733af5@linux.alibaba.com>
 
-On Thu, Mar 26, 2026 at 07:33:03PM -0700, James Houghton wrote:
-> On Fri, Mar 6, 2026 at 9:19 AM Mike Rapoport <rppt@kernel.org> wrote:
+On Fri, Mar 27, 2026 at 05:44:49PM +0800, Baolin Wang wrote:
+>
+>
+> On 3/27/26 9:42 AM, Zi Yan wrote:
+> > collapse_file() requires FSes supporting large folio with at least
+> > PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that. shmem with
+> > huge option turned on also sets large folio order on mapping, so the check
+> > also applies to shmem.
 > >
-> > From: Nikita Kalyazin <kalyazin@amazon.com>
+> > While at it, replace VM_BUG_ON with returning failure values.
 > >
-> > userfaultfd notifications about page faults used for live migration
-> > and snapshotting of VMs.
-> >
-> > MISSING mode allows post-copy live migration and MINOR mode allows
-> > optimization for post-copy live migration for VMs backed with shared
-> > hugetlbfs or tmpfs mappings as described in detail in commit
-> > 7677f7fd8be7 ("userfaultfd: add minor fault registration mode").
-> >
-> > To use the same mechanisms for VMs that use guest_memfd to map their
-> > memory, guest_memfd should support userfaultfd operations.
-> >
-> > Add implementation of vm_uffd_ops to guest_memfd.
-> >
-> > Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-> > Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> 
-> Overall looks fine to me, but I am slightly concerned about in-place
-> conversion[1], and I think you're going to want to implement a
-> kvm_gmem_folio_present() op or something (like I was saying on the
-> previous patch[2]).
-
-Let's solve each problem in it's time :)
- 
-> [1]: https://lore.kernel.org/kvm/20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com/
-> [2]: https://lore.kernel.org/linux-mm/CADrL8HVUJ5FL97d9ytxp2WXos6HS+U+ycpsi5VxffsW9vacr9Q@mail.gmail.com/
-> 
-> Some in-line comments below.
-> 
+> > Signed-off-by: Zi Yan <ziy@nvidia.com>
 > > ---
-> >  mm/filemap.c           |  1 +
-> >  virt/kvm/guest_memfd.c | 84 +++++++++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 83 insertions(+), 2 deletions(-)
+> >   mm/khugepaged.c | 7 +++++--
+> >   1 file changed, 5 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/mm/filemap.c b/mm/filemap.c
-> > index 6cd7974d4ada..19dfcebcd23f 100644
-> > --- a/mm/filemap.c
-> > +++ b/mm/filemap.c
-> > @@ -107,6 +108,12 @@ static int kvm_gmem_prepare_folio(struct kvm *kvm, struct kvm_memory_slot *slot,
-> >         return __kvm_gmem_prepare_folio(kvm, slot, index, folio);
-> >  }
-> >
-> > +static struct folio *kvm_gmem_get_folio_noalloc(struct inode *inode, pgoff_t pgoff)
-> > +{
-> > +       return __filemap_get_folio(inode->i_mapping, pgoff,
-> > +                                  FGP_LOCK | FGP_ACCESSED, 0);
-> > +}
-> 
-> When in-place conversion is supported, I wonder what the semantics
-> should be for when we get userfaults.
-> 
-> Upon a userspace access to a file offset that is populated but
-> private, should we get a userfault or a SIGBUS?
-> 
-> I guess getting a userfault is strictly more useful for userspace, but
-> I'm not sure which choice is more correct.
- 
-Me neither :)
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index d06d84219e1b..45b12ffb1550 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -1899,8 +1899,11 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
+> >   	int nr_none = 0;
+> >   	bool is_shmem = shmem_file(file);
+> > -	VM_BUG_ON(!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && !is_shmem);
+> > -	VM_BUG_ON(start & (HPAGE_PMD_NR - 1));
+> > +	/* "huge" shmem sets mapping folio order and passes the check below */
+> > +	if (mapping_max_folio_order(mapping) < PMD_ORDER)
+> > +		return SCAN_FAIL;
+>
+> This is not true for anonymous shmem, since its large order allocation logic
+> is similar to anonymous memory. That means it will not call
+> mapping_set_large_folios() for anonymous shmem.
+>
+> So I think the check should be:
+>
+> if (!is_shmem && mapping_max_folio_order(mapping) < PMD_ORDER)
+>      return SCAN_FAIL;
 
-We can deliver userfault, but just block UFFDIO_COPY, can't we?
+Hmm but in shmem_init() we have:
 
-> > +static int kvm_gmem_filemap_add(struct folio *folio,
-> > +                               struct vm_area_struct *vma,
-> > +                               unsigned long addr)
-> > +{
-> > +       struct inode *inode = file_inode(vma->vm_file);
-> > +       struct address_space *mapping = inode->i_mapping;
-> > +       pgoff_t pgoff = linear_page_index(vma, addr);
-> > +       int err;
-> > +
-> > +       __folio_set_locked(folio);
-> > +       err = filemap_add_folio(mapping, folio, pgoff, GFP_KERNEL);
-> 
-> This is going to get more interesting with in-place conversion. I'm
-> not really sure how to synchronize with it, but we'll probably need to
-> take the invalidate lock for reading. And then we'll need a separate
-> uffd_op to drop it after we install the PTE... I think.
+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+	if (has_transparent_hugepage() && shmem_huge > SHMEM_HUGE_DENY)
+		SHMEM_SB(shm_mnt->mnt_sb)->huge = shmem_huge;
+	else
+		shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
 
-I think we can start simple and then move on along with the in-place
-conversion work. If there will be a need for a new uffd_ops callback we can
-add it then.
- 
--- 
-Sincerely yours,
-Mike.
+	/*
+	 * Default to setting PMD-sized THP to inherit the global setting and
+	 * disable all other multi-size THPs.
+	 */
+	if (!shmem_orders_configured)
+		huge_shmem_orders_inherit = BIT(HPAGE_PMD_ORDER);
+#endif
+
+And shm_mnt->mnt_sb is the superblock used for anon shmem. Also
+shmem_enabled_store() updates that if necessary.
+
+So we're still fine right?
+
+__shmem_file_setup() (used for anon shmem) calls shmem_get_inode() ->
+__shmem_get_inode() which has:
+
+	if (sbinfo->huge)
+		mapping_set_large_folios(inode->i_mapping);
+
+Shared for both anon shmem and tmpfs-style shmem.
+
+So I think it's fine as-is.
+
+Cheers, Lorenzo
