@@ -1,119 +1,95 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CC6357A4A
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 03:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B1D23D2AB;
+	Fri, 27 Mar 2026 05:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774582500; cv=none; b=StxjYVrZsALH1iu0JbvpacFiHfhkFV1xvpg5nXadmM0VUJOVGygX5UtvnJGmmcBrlKQwVcgR3pkdocN40JrJ4E0Hc5oBbv4eOx9BDRq0S3hRBA3qWN8msXrjHLX2FbREsvaqJ965c0lGzNGdyJT4Mh+C8te/+K0UA0R4TQ7Cw10=
+	t=1774591177; cv=none; b=c3LHuaJXlDN8tJ0dcVD0mSE1fjI63XXaal6aLLBC3bnA2ApUNXG3qItHBcvV/Cx+i9pBHMkNCov4836znWVZRZ9hOImFaiLSt4EBCs90gmy6Tt8h2srJCVgh0eKI3O88LuA4hahVn5TofM6sqB+R+IfbTLV2ICthhlmtNLSPhVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774582500; c=relaxed/simple;
-	bh=rjU42GzsJ8D4He9RlZ1RusrcVlvGFOqA9ThQRr0yrls=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MbXi2pBdQz0g21OtwHbPMEqjO1bvahPS7S+d6LYaeyt2T5FjzrB4CQ+RMd2sojn3Irvqh8mKdcEWD0zaZzGjtJQkQPJEB6uUOcqzMU2hmJOn5ikAq4PgdVrqzRQ22nrmJ9dAZENUBeWbHXxb2ymtPkUt+Uqt3RqnodgKxDMuZ/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I/gT1eEe; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774591177; c=relaxed/simple;
+	bh=qN+XGd+aWZC44MrJ2njG2OhFIOijEHlX++1QQYyP5uk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=AKHL8qsXcHve8lQ9AYimZMA2nL/8ozEBpXyosCJaE1sBCWctuv+P8Kh2Bx0LERobnC78yqWCq9K6SDUpoUFuUSUPrbM8sC+1S+ehHFlhkxqHyjS5DERvURoLUh+VqiPZ7p/FuhR1+W3tYbWVdfJ7UlXvWtagU+CrRss+t5PGZyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=UptJYoNQ; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I/gT1eEe"
-Message-ID: <1dcba0ef-372a-474b-8d70-23459f0f6511@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774582487;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6TWDsxV9lU7FBIa32CWnztZa9knkN9tMw44cGL5HLts=;
-	b=I/gT1eEeSyEToxNlVnMH/CCJCSe05HzFNgWKQFUlGhY6scwL4X6yf7paHgq/7XyJO3SNPM
-	295kl4/TYQ1HT/bNr5evjmY0CbL2ZHx3LQvJ1UqEEUBKvShJ8GXELPnoHl9VJkxfs9m3WN
-	p1t7HX2dffY2d9jJKwB6QxSFpOXagm8=
-Date: Fri, 27 Mar 2026 11:33:43 +0800
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="UptJYoNQ"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=NRXLsnkWHpLD2U3HVcRv86U8YDyR3CzfpMUGFNv4ORU=;
+	b=UptJYoNQr/0I2Jzqdawje9po4fVSAQ3+f1ZKH3VqOUw9CsQotr2848QswnNfBwsXkk1Oj90hO
+	JiYZNM93J6xvCGx5cOcZOLFqe83AlDuFtN7MmfegoCSM+hO1PnVzz1HZ/AtbHi8AQOTqHq7Itn6
+	LB260z1Rh6ezAUM+h3O3b7s=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4fhqZs2wL9z1T4FZ;
+	Fri, 27 Mar 2026 13:53:57 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id 151F84056D;
+	Fri, 27 Mar 2026 13:59:31 +0800 (CST)
+Received: from [10.67.120.222] (10.67.120.222) by
+ kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 27 Mar 2026 13:59:30 +0800
+Message-ID: <92799aa5-9959-43e0-b993-2cbe29dff584@huawei.com>
+Date: Fri, 27 Mar 2026 13:59:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 07/10] mm/truncate: use folio_split() in
- truncate_inode_partial_folio()
-Content-Language: en-US
-To: Zi Yan <ziy@nvidia.com>
-Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Song Liu <songliubraving@fb.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260327014255.2058916-1-ziy@nvidia.com>
- <20260327014255.2058916-8-ziy@nvidia.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <20260327014255.2058916-8-ziy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] selftests/arm64: Fix sve2p1_sigill() and add
+ cmpbr_sigill() for hwcap test
+To: Will Deacon <will@kernel.org>, <catalin.marinas@arm.com>,
+	<shuah@kernel.org>, <broonie@kernel.org>, <yeoreum.yun@arm.com>,
+	<jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<linuxarm@huawei.com>
+CC: <kernel-team@android.com>, <xiaqinxin@huawei.com>,
+	<prime.zeng@hisilicon.com>, <wangyushan12@huawei.com>, <xuwei5@huawei.com>,
+	<fanghao11@huawei.com>, <wangzhou1@hisilicon.com>
+References: <20260305013638.992301-1-wuyifan50@huawei.com>
+ <177279809096.1376203.6124931515335372340.b4-ty@kernel.org>
+From: wuyifan <wuyifan50@huawei.com>
+In-Reply-To: <177279809096.1376203.6124931515335372340.b4-ty@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
+HiWill,
 
+Gentle ping on patch 2/2. I have received a Reviewed-by from Mark Brown
 
-On 2026/3/27 09:42, Zi Yan wrote:
-> After READ_ONLY_THP_FOR_FS is removed, FS either supports large folio or
-> not. folio_split() can be used on a FS with large folio support without
-> worrying about getting a THP on a FS without large folio support.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
->   include/linux/huge_mm.h | 25 ++-----------------------
->   mm/truncate.c           |  8 ++++----
->   2 files changed, 6 insertions(+), 27 deletions(-)
-> 
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index 1258fa37e85b..171de8138e98 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -389,27 +389,6 @@ static inline int split_huge_page_to_order(struct page *page, unsigned int new_o
->   	return split_huge_page_to_list_to_order(page, NULL, new_order);
->   }
->   
-> -/**
-> - * try_folio_split_to_order() - try to split a @folio at @page to @new_order
-> - * using non uniform split.
-> - * @folio: folio to be split
-> - * @page: split to @new_order at the given page
-> - * @new_order: the target split order
-> - *
-> - * Try to split a @folio at @page using non uniform split to @new_order, if
-> - * non uniform split is not supported, fall back to uniform split. After-split
-> - * folios are put back to LRU list. Use min_order_for_split() to get the lower
-> - * bound of @new_order.
-> - *
-> - * Return: 0 - split is successful, otherwise split failed.
-> - */
-> -static inline int try_folio_split_to_order(struct folio *folio,
-> -		struct page *page, unsigned int new_order)
-> -{
-> -	if (folio_check_splittable(folio, new_order, SPLIT_TYPE_NON_UNIFORM))
-> -		return split_huge_page_to_order(&folio->page, new_order);
-> -	return folio_split(folio, new_order, page, NULL);
-> -}
->   static inline int split_huge_page(struct page *page)
->   {
->   	return split_huge_page_to_list_to_order(page, NULL, 0);
-> @@ -641,8 +620,8 @@ static inline int split_folio_to_list(struct folio *folio, struct list_head *lis
->   	return -EINVAL;
->   }
->   
-> -static inline int try_folio_split_to_order(struct folio *folio,
-> -		struct page *page, unsigned int new_order)
-> +static inline int folio_split(struct folio *folio, unsigned int new_order,
-> +		struct page *page, struct list_head *list);
+and there have been no further review comments so far.
 
-Ouch, that ';' wasn't supposed to be there, right?
+Could you please consider applying it if everything looks good?
+
+On 3/6/2026 8:26 PM, Will Deacon wrote:
+> On Thu, 05 Mar 2026 09:36:36 +0800, Yifan Wu wrote:
+>> This patch series fixes and adds two selftests in the arm64 hwcap
+>> test suite.
+>>
+>> Patch 1/2 fixes the sve2p1_sigill() test to correctly detect the
+>> FEAT_SVE2p1 feature. Previously, the test incorrectly assumed that
+>> the presence of FEAT_SVE2.1 implied support for the BFADD
+>> instruction, which actually depends on the FEAT_SVE_B16B16 feature.
+>> The test is updated to use the LD1Q instruction, which is
+>> unambiguously implied by FEAT_SVE2p1.
+>>
+>> [...]
+> Applied first patch to arm64 (for-next/fixes), thanks!
+>
+> [1/2] selftest/arm64: Fix sve2p1_sigill() to hwcap test
+>        https://git.kernel.org/arm64/c/d87c828daa7e
+>
+> Cheers,
+
+Thanks,
+
+Yifan
+
