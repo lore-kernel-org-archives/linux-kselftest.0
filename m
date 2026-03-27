@@ -1,268 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A102F30AACB;
-	Fri, 27 Mar 2026 16:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774627702; cv=none; b=DthZ8TX8dHWwnKyM7KIggO/Glr0H4thv5T5hi7bDeMr8sVqYD5gNIHK8t4lj2awv8wm5rIxr/JcGAJP/FfoEi70ni+Aj8nXrwtzEXu4clOwR3RN5LS50j8vz5OscpIBOIgOfIw5xpUA91HE/N1z+agRUlLdjVxfndy7SqeHjrLQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774627702; c=relaxed/simple;
-	bh=Y5Pd/gbqGEKvddIcFhZ5V8JfJMsZGodNYjSQLfzxngo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ci3+k5A+OZdwZM8wx5E1kWItzn6DYtgWBy9rhQfScas+NiLx2k3pqc/B13ytex9JIyJIknkYSEFkKZ9c2KN2XSRxvfRYy4RD7ZFuIz3nqHjK/rJ4456dpa3WeomXihAoqmAISla4QpESqOGZQtI2ZUTBsQeZWXh3t2WcQ2jTypU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rMAx7SyZ; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30123317173
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 16:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774627806; cv=pass; b=M27r+d8d2r+YiIo6HMUXVxPO5Xd4l/YlS2sb+0dfRM5Hikwjh3GJJpi5F7UjgqJ6B7gUFYTtUXqhG+ZeFkjMVVeWPKbfsnGcIS1h0jOjoV6YSjRv3qO4lIb76KI8Oha+eVjT2SSaiKsLkEd1x/ZFjDpPgl+magfYwEs7oMnwQKs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774627806; c=relaxed/simple;
+	bh=Q6TmnOpeExcSP68v1WBPeIpo2KznzbDRRsuXO3vOiv0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FZAFGrpizoB1bxf0F1LTjy8YV8AjkLq5XD38NP4mla1pdWqDUiVsJKPuPlUK4XdQhljniNIFdJe1+k7GWpdXeZLRLfhLAGmFJdqqLj05gusReasFdC4UMkBpqqz+wpYDPoWbdsluGcHdYrb9DCJFW9+tcUUvyyX3qIeKVDV1tJQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kh/NSuIJ; arc=pass smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rMAx7SyZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACEB1C19423;
-	Fri, 27 Mar 2026 16:08:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774627702;
-	bh=Y5Pd/gbqGEKvddIcFhZ5V8JfJMsZGodNYjSQLfzxngo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rMAx7SyZ59sVnwpX2nQDt9UXL44MMBRBHqTRZlQHbacBLtN/aM6d+nxwUxopCyzFY
-	 404+v5iCL/0mcPGV/j6+GVooGUNTIxakPVHRrh+DLrnHKrbbBZYyjuQ1/7DRus6AmA
-	 itfAQ94fgY2+OOZPz7PKtC5OAfZd6ZfWqieMqdXzcUSntzhU0bwlU+3JcI/2tlU1+t
-	 et899fz5Zrxd+VBYlUQZlh6dZRyn+vSvhslG8H/eM5T5XSyGc5FdqRWympWhbuwfgP
-	 3dfBDxyhIvxnDheY858lbGkW3NdQxKkMS+/kzr+HU/Z+1xPiveQoLPQds6mhzfMSim
-	 rn3OME/5q3Xtg==
-Date: Fri, 27 Mar 2026 16:08:14 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 05/10] mm/huge_memory: remove READ_ONLY_THP_FOR_FS
- from file_thp_enabled()
-Message-ID: <10b04dc8-e155-4a31-84b6-17b302e65c7c@lucifer.local>
-References: <20260327014255.2058916-1-ziy@nvidia.com>
- <20260327014255.2058916-6-ziy@nvidia.com>
- <5ac47338-1954-43ce-9984-56d70f7c392f@lucifer.local>
- <075A4C69-B386-4557-BDAA-4038EB36370D@nvidia.com>
- <14af57ba-09bc-40ff-812a-b41dfb78a03c@lucifer.local>
- <59A91369-9BCB-4545-AEF8-083B52998CC3@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kh/NSuIJ"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b9358dd7f79so413821566b.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 09:10:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774627803; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lfnU5tSt2qlvBa8AGyc4Y4L0BH+EoU4KOI2W2Wt9dvxX2F9Af9p/t1UqZAh7S0U+nZ
+         P8MnQbdPvj5Y2Gzd/hEfmDyeCzzxC/JHgTBpauk0OA+NGyxSKSbm/EqJIH/6rweS+w5A
+         BwQPUpL2iw5U4OqUuFGLpYxGxpcJKp47vWVp+mmE1D/luywwDGtdGZzAV8/RdkGZufTP
+         Y9aby8lXD1asXreGQedUzB48y+vDsuxKT8/+BwOfYl5D+imC6uu6lbRyqJtuMXnb8vSl
+         YROyjizojrlod7T/5tm8EZR1tbO6+LKPAjaDcodixEIAKr/L/2h1b5WyJHxSmu2D+XSD
+         B2jQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Q6TmnOpeExcSP68v1WBPeIpo2KznzbDRRsuXO3vOiv0=;
+        fh=0zyWH/hfniX+F+8Zp0cAYzzWaE6tgAUu4e1bJ7WkQeU=;
+        b=PtDHBVsxJJ3arZiIfMqMFvVoGM+DOohvSK36ND46Wv/WaBJUDMV9SJytAQInLVoRG+
+         6n4HmlH1pxY2q5nmIRW1l5n8FZdG4Qw/yicdwFDuPNBs6TabqMESraXootghYXmnNPYC
+         ckFdRxhM21g/UZDjeSI2EUIB31htdAcpmXksZbAZAMoSIDDE3SKr4Uq6YF8odUrN+jIU
+         xhbTLMpn3LL/C6qZEqJTLsBdyRXp1iRMr1/gYQbbshLgGrypRMV8SLlmE6XDFOJBHdFW
+         +ByT8R7vyVYY2x18zVv4K9E+y1Mr1Q5q9XOhc7z/TAhDiSqdsgc6dU5k/UuDSDI1KPyo
+         Gfvg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774627803; x=1775232603; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q6TmnOpeExcSP68v1WBPeIpo2KznzbDRRsuXO3vOiv0=;
+        b=Kh/NSuIJF1TDloSkOyK1rUi5Uq7WuazEGTixR8EBquvk4Bv64flETq/iXOPEZSaHyM
+         tS0EPMtoBCXxPfSOe5yifaBYkM5R7TCX72DsgBnERXJY/I2evxlvhm0oJHEAoAjHTx/y
+         DfXdKpQBtfuW/8WkVFN+bzyFvdiH/8aPRLwySTRxvCoKwUqZCPF8TJdq9Imof+Qr3qLr
+         00t+7iajwW2tgFDFPSPH8r8SYsLfUHpdDGmBvtoE2UkK+3zJj8LYXvbQni2yD/ap/w1d
+         5cmp2pzj/crvIe2+ZUcDaAUYOOVFCE8D7pnfGuHvnTn/cXUbHJUQ2n92D9JYC0eLpGsg
+         lhHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774627803; x=1775232603;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q6TmnOpeExcSP68v1WBPeIpo2KznzbDRRsuXO3vOiv0=;
+        b=WyRvyWEVwAy6TzHtJ6mKjlWEziFBeSG/TQ+u7/JJRRMgo9+e6f6q8rt1MD0zE6HwHl
+         YuZa2RY/xUbqyv+uGHNpaXmAAHpCcUkU3h1swPwghyD5TKudZe2JJ2UJ6T3WlklD2eXO
+         1UjIJQRWmj+8iMxCsn+3t6cWRl1Fv5dzKsMiaf1WEFgsVCGKKVNa0imlW+snBi/Po0Uf
+         IJ2ZGnNcKOf8f8Knl8n/mN1z879OPcawmmW0g7YS3ijVEY2CRX5i0R9aiGiNawwZfwt2
+         f996xy5DQrAr+Jt1CHzmAqqNVCwhntm1bAuRf7Ujiyf2k7c0KssV3pvkfiOJ46l2+xqF
+         wyyw==
+X-Forwarded-Encrypted: i=1; AJvYcCXtukl1kOD8e3YRcyTkQzg5amq8BoECklX1I/9rYkH94pFd8vWPEVu9AVICBEZtPJbFUBNfUmd08sADk8uhIFs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNoHoPNF+fJkuUxw8wcgfA7fHqifsYvOxdZlTlVgEdfhErjDnV
+	EkjDUB+2XL3o4YWkrzoh3ngAsUHf81BR6WxeLFEu4M6d9bKEOqlTYb2ge3lRBIbjK7xJKpkWdll
+	jlCKGmRoDsbv8LfTEo0TloA80XauS6jU=
+X-Gm-Gg: ATEYQzxRKRMwfimwYxwL1FIYX117zqxpcn5ELg9mdd8X4a/6HwfedJTQQNBK5tjdo+a
+	JEFtme/yZ2amzP7+Jn7+Iynqn6YkiBv5tIyPVFFSC5+S7fmtcAkFHPSQGV3HHFRPe1F2M0HWWVl
+	6fVlkPQX6A65sH+oqQMyxrWHlh3bBMN1/KpAK9aw5I0yk7etLWAxqwEWZ593N6a0aiZA921Qfnq
+	47ddSMBSVzIDekcRaZ8L/Q2+rIJKc2djAEmHL5Y9LklX+aaOSP9ZmTcV2RD6GI8BCqQGGO+Payl
+	O3wrrB+2YVIYJHQEt1Twf6hoL5x6pxhXYQVyFO5MsW3gPHem37npGPV0+8F2+NyrDEqSDC513l2
+	jE+U7mPp5OGnj2nbW9+cmHEssxw==
+X-Received: by 2002:a17:907:3cc7:b0:b83:e7e:3732 with SMTP id
+ a640c23a62f3a-b9b507a5dd5mr212383266b.30.1774627803420; Fri, 27 Mar 2026
+ 09:10:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <59A91369-9BCB-4545-AEF8-083B52998CC3@nvidia.com>
+References: <20260327141616.1961457-1-hayatake396@gmail.com>
+ <20260327141616.1961457-2-hayatake396@gmail.com> <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
+ <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
+ <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
+ <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
+ <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com> <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
+In-Reply-To: <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 27 Mar 2026 09:09:52 -0700
+X-Gm-Features: AQROBzC83d7M3ywFEBHgpYKvreBOkrl4uhLAWBsTwhT1G3q975_gL7m2eQX0iKg
+Message-ID: <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
+ non-IBT JITs
+To: Takeru Hayasaka <hayatake396@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 27, 2026 at 11:43:57AM -0400, Zi Yan wrote:
-> On 27 Mar 2026, at 11:29, Lorenzo Stoakes (Oracle) wrote:
+On Fri, Mar 27, 2026 at 9:06=E2=80=AFAM Takeru Hayasaka <hayatake396@gmail.=
+com> wrote:
 >
-> > On Fri, Mar 27, 2026 at 11:12:46AM -0400, Zi Yan wrote:
-> >> On 27 Mar 2026, at 8:42, Lorenzo Stoakes (Oracle) wrote:
-> >>
-> >>> On Thu, Mar 26, 2026 at 09:42:50PM -0400, Zi Yan wrote:
-> >>>> Replace it with a check on the max folio order of the file's address space
-> >>>> mapping, making sure PMD_ORDER is supported.
-> >>>>
-> >>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> >>>> ---
-> >>>>  mm/huge_memory.c | 6 +++---
-> >>>>  1 file changed, 3 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> >>>> index c7873dbdc470..1da1467328a3 100644
-> >>>> --- a/mm/huge_memory.c
-> >>>> +++ b/mm/huge_memory.c
-> >>>> @@ -89,9 +89,6 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
-> >>>>  {
-> >>>>  	struct inode *inode;
-> >>>>
-> >>>> -	if (!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS))
-> >>>> -		return false;
-> >>>> -
-> >>>>  	if (!vma->vm_file)
-> >>>>  		return false;
-> >>>>
-> >>>> @@ -100,6 +97,9 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
-> >>>>  	if (IS_ANON_FILE(inode))
-> >>>>  		return false;
-> >>>>
-> >>>> +	if (mapping_max_folio_order(inode->i_mapping) < PMD_ORDER)
-> >>>> +		return false;
-> >>>> +
-> >>>
-> >>> At this point I think this should be a separate function quite honestly and
-> >>> share it with 2/10's use, and then you can put the comment in here re: anon
-> >>> shmem etc.
-> >>>
-> >>> Though that won't apply here of course as shmem_allowable_huge_orders() would
-> >>> have been invoked :)
-> >>>
-> >>> But no harm in refactoring it anyway, and the repetitive < PMD_ORDER stuff is
-> >>> unfortunate.
-> >>>
-> >>> Buuut having said that is this right actually?
-> >>>
-> >>> Because we have:
-> >>>
-> >>> 		if (((in_pf || smaps)) && vma->vm_ops->huge_fault)
-> >>> 			return orders;
-> >>>
-> >>> Above it, and now you're enabling huge folio file systems to do non-page fault
-> >>> THP and that's err... isn't that quite a big change?
-> >>
-> >> That is what READ_ONLY_THP_FOR_FS does, creating THPs after page faults, right?
-> >> This patchset changes the condition from all FSes to FSes with large folio
-> >> support.
-> >
-> > No, READ_ONLY_THP_FOR_FS operates differently.
-> >
-> > It explicitly _only_ is allowed for MADV_COLLAPSE and only if the file is
-> > mounted read-only.
-> >
-> > So due to:
-> >
-> > 		if (((in_pf || smaps)) && vma->vm_ops->huge_fault)
-> > 			return orders;
-> >
-> > 		if (((!in_pf || smaps)) && file_thp_enabled(vma))
-> > 			return orders;
-> >
-> >                       |    PF     | MADV_COLLAPSE | khugepaged |
-> > 		      |-----------|---------------|------------|
-> > large folio fs        |     ✓     |       x       |      x     |
-> > READ_ONLY_THP_FOR_FS  |     x     |       ✓       |      ✓     |
-> >
-> > After this change:
-> >
-> >                       |    PF     | MADV_COLLAPSE | khugepaged |
-> > 		      |-----------|---------------|------------|
-> > large folio fs        |     ✓     |       ✓       |      ?     |
-> >
-> > (I hope we're not enabling khugepaged for large folio fs - which shouldn't
-> > be necessary anyway as we try to give them folios on page fault and they
-> > use thp-friendly get_unused_area etc. :)
-> >
-> > We shouldn't be doing this.
-> >
-> > It should remain:
-> >
-> >                       |    PF     | MADV_COLLAPSE | khugepaged |
-> > 		      |-----------|---------------|------------|
-> > large folio fs        |     ✓     |       x       |      x     |
-> >
-> > If we're going to remove it, we should first _just remove it_, not
-> > simultaneously increase the scope of what all the MADV_COLLAPSE code is
-> > doing without any confidence in any of it working properly.
-> >
-> > And it makes the whole series misleading - you're actually _enabling_ a
-> > feature not (only) _removing_ one.
+> Sorry about the top-posting.
+
+yet you're still top posting :(
+
+> That makes sense, thanks. I agree perf can provide visibility into which
+> BPF programs are running, including tail-called ones.
 >
-> That is what my RFC patch does, but David and willy told me to do this. :)
-> IIUC, with READ_ONLY_THP_FOR_FS, FSes with large folio support will
-> get THP via MADV_COLLAPSE or khugepaged. So removing the code like I
-> did in RFC would cause regressions.
+> What I am still unsure about is packet-level / structured-data
+> observability. My use case is closer to xdpdump-style debugging, where I
+> want to inspect packet-related context from specific XDP leaf programs
+> in a live pipeline.
 
-OK I think we're dealing with a union of the two states here.
-
-READ_ONLY_THP_FOR_FS is separate from large folio support, as checked by
-file_thp_enabled():
-
-static inline bool file_thp_enabled(struct vm_area_struct *vma)
-{
-	struct inode *inode;
-
-	if (!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS))
-		return false;
-
-	if (!vma->vm_file)
-		return false;
-
-	inode = file_inode(vma->vm_file);
-
-	if (IS_ANON_FILE(inode))
-		return false;
-
-	return !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
-}
-
-So actually:
-
-                       |    PF     | MADV_COLLAPSE | khugepaged |
-		       |-----------|---------------|------------|
- large folio fs        |     ✓     |       x       |      x     |
- READ_ONLY_THP_FOR_FS  |     x     |       ✓       |      ✓     |
- both!                 |     ✓     |       ✓       |      ✓     |
-
-(Where it's impllied it's a read-only mapping obviously for the later two
-cases.)
-
-Now without READ_ONLY_THP_FOR_FS you're going to:
-
-                       |    PF     | MADV_COLLAPSE | khugepaged |
-		       |-----------|---------------|------------|
- large folio fs        |     ✓     |       x       |      x     |
- large folio + r/o     |     ✓     |       ✓       |      ✓     |
-
-And intentionally leaving behind the 'not large folio fs, r/o' case because
-those file systems need to implement large folio support.
-
-I guess we'll regress those users but we don't care?
-
-I do think all this needs to be spelled out in the commit message though as it's
-subtle.
-
-Turns out this PitA config option is going to kick and scream a bit first before
-it goes...
-
->
-> I guess I need to rename the series to avoid confusion. How about?
->
-> Remove read-only THP support for FSes without large folio support.
-
-Yup that'd be better :)
-
-Cheers, Lorenzo
-
->
-> [1] https://lore.kernel.org/all/7382046f-7c58-4a3e-ab34-b2704355b7d5@kernel.org/
->
-> >
-> > So let's focus as David suggested on one thing at a time, incrementally.
-> >
-> > And let's please try and sort some of this confusing mess out in the code
-> > if at all possible...
-> >
-> >>
-> >> Will add a helper, mapping_support_pmd_folio(), for
-> >> mapping_max_folio_order(inode->i_mapping) < PMD_ORDER.
-> >>
-> >>>
-> >>> So yeah probably no to this patch as is :) we should just drop
-> >>> file_thp_enabled()?
-> >>
-> >>
-> >>
-> >>>
-> >>>>  	return !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
-> >>>>  }
-> >>>>
-> >>>> --
-> >>>> 2.43.0
-> >>>>
-> >>
-> >>
-> >> Best Regards,
-> >> Yan, Zi
-> >
-> > Cheers, Lorenzo
->
->
-> Best Regards,
-> Yan, Zi
+see how cilium did it. with pwru tool, etc.
