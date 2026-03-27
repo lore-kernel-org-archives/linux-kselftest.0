@@ -1,95 +1,68 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B1D23D2AB;
-	Fri, 27 Mar 2026 05:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5235C2FF155;
+	Fri, 27 Mar 2026 06:03:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774591177; cv=none; b=c3LHuaJXlDN8tJ0dcVD0mSE1fjI63XXaal6aLLBC3bnA2ApUNXG3qItHBcvV/Cx+i9pBHMkNCov4836znWVZRZ9hOImFaiLSt4EBCs90gmy6Tt8h2srJCVgh0eKI3O88LuA4hahVn5TofM6sqB+R+IfbTLV2ICthhlmtNLSPhVI=
+	t=1774591431; cv=none; b=Ar25WsQmXhv9OmJPIpKFaxA4slxm2v3OJKJD5H2fia9vnKV0ris/MkNvc1v6qwB+ar6aZL0gNKpZPfXn/H0KdcEaYpK4DgLGkIYRYZd9JNURsd1mYERWaANgvecWwwxBVYpJ9sXTkYsNFSXOQvRyrzfJx2LzvclO3SA/tXAggl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774591177; c=relaxed/simple;
-	bh=qN+XGd+aWZC44MrJ2njG2OhFIOijEHlX++1QQYyP5uk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=AKHL8qsXcHve8lQ9AYimZMA2nL/8ozEBpXyosCJaE1sBCWctuv+P8Kh2Bx0LERobnC78yqWCq9K6SDUpoUFuUSUPrbM8sC+1S+ehHFlhkxqHyjS5DERvURoLUh+VqiPZ7p/FuhR1+W3tYbWVdfJ7UlXvWtagU+CrRss+t5PGZyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=UptJYoNQ; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1774591431; c=relaxed/simple;
+	bh=dIJgpW3rgNNkTB5QrRD+G5rTSR8uZZDY8VpAkWA7Li4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=pxnqjUUA0DEsyIoBwlOcpprEpm2NmChpjZbzihyW8rOlbBQldB6S3Jphmu8bWSrgRcfaty66wKsZtrD5stpnjlCqhU5zJ/hl3/1rcQwQsmNadQZp1HtBhdjaNNnE8Cg+NkWZQOtfOPuHz+8W2guwFP9i8BfqnJYhQEdztRDNOQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=lx6yiDrV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="UptJYoNQ"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=NRXLsnkWHpLD2U3HVcRv86U8YDyR3CzfpMUGFNv4ORU=;
-	b=UptJYoNQr/0I2Jzqdawje9po4fVSAQ3+f1ZKH3VqOUw9CsQotr2848QswnNfBwsXkk1Oj90hO
-	JiYZNM93J6xvCGx5cOcZOLFqe83AlDuFtN7MmfegoCSM+hO1PnVzz1HZ/AtbHi8AQOTqHq7Itn6
-	LB260z1Rh6ezAUM+h3O3b7s=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4fhqZs2wL9z1T4FZ;
-	Fri, 27 Mar 2026 13:53:57 +0800 (CST)
-Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
-	by mail.maildlp.com (Postfix) with ESMTPS id 151F84056D;
-	Fri, 27 Mar 2026 13:59:31 +0800 (CST)
-Received: from [10.67.120.222] (10.67.120.222) by
- kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 27 Mar 2026 13:59:30 +0800
-Message-ID: <92799aa5-9959-43e0-b993-2cbe29dff584@huawei.com>
-Date: Fri, 27 Mar 2026 13:59:29 +0800
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lx6yiDrV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E31C19423;
+	Fri, 27 Mar 2026 06:03:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1774591430;
+	bh=dIJgpW3rgNNkTB5QrRD+G5rTSR8uZZDY8VpAkWA7Li4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lx6yiDrV8sD2/KIpF7evwAgIzinKOstx6sQXxuKbm8EsgqO4aWCaVBBIzUbRtchFQ
+	 d/fW9dt5XmoaoFDD986TadMhjdCQoJAACrVFbgEX/mcMCw5sj8LBi44NhGs0VzNhrN
+	 kuw0XlIB3CKBg00bN2IKT9jdYon6yFveuep4wGCw=
+Date: Thu, 26 Mar 2026 23:03:49 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Chunyu Hu <chuhu@redhat.com>
+Cc: david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
+ baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
+Subject: Re: [PATCH v6 4/6] selftests/mm/vm_util: robust write_file()
+Message-Id: <20260326230349.dcd0b30030c7d460e8b0f319@linux-foundation.org>
+In-Reply-To: <20260324013316.2590422-5-chuhu@redhat.com>
+References: <20260324013316.2590422-1-chuhu@redhat.com>
+	<20260324013316.2590422-5-chuhu@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] selftests/arm64: Fix sve2p1_sigill() and add
- cmpbr_sigill() for hwcap test
-To: Will Deacon <will@kernel.org>, <catalin.marinas@arm.com>,
-	<shuah@kernel.org>, <broonie@kernel.org>, <yeoreum.yun@arm.com>,
-	<jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linuxarm@huawei.com>
-CC: <kernel-team@android.com>, <xiaqinxin@huawei.com>,
-	<prime.zeng@hisilicon.com>, <wangyushan12@huawei.com>, <xuwei5@huawei.com>,
-	<fanghao11@huawei.com>, <wangzhou1@hisilicon.com>
-References: <20260305013638.992301-1-wuyifan50@huawei.com>
- <177279809096.1376203.6124931515335372340.b4-ty@kernel.org>
-From: wuyifan <wuyifan50@huawei.com>
-In-Reply-To: <177279809096.1376203.6124931515335372340.b4-ty@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemk500005.china.huawei.com (7.202.194.90)
 
-HiWill,
+On Tue, 24 Mar 2026 09:33:14 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
 
-Gentle ping on patch 2/2. I have received a Reviewed-by from Mark Brown
+> Add two more checks for buflen and numwritten. The buflen should be at
+> least one, otherwise the 'buflen - 1' could underflow and cause trouble.
+> The numwritten should be equal to 'buflen - 1'. The test will exit if
+> any of these conditions aren't met.
+> 
+> Additionally, add more print information when a write failure occurs or
+> a truncated write happens, providing clearer diagnostics.
 
-and there have been no further review comments so far.
+This one has no review and AI review did identify a kinda-bug.  Maybe
+nobody calls write_file() with buflen==1, but still worth addressing I
+think.
 
-Could you please consider applying it if everything looks good?
+https://sashiko.dev/#/patchset/20260324013316.2590422-1-chuhu%40redhat.com
 
-On 3/6/2026 8:26 PM, Will Deacon wrote:
-> On Thu, 05 Mar 2026 09:36:36 +0800, Yifan Wu wrote:
->> This patch series fixes and adds two selftests in the arm64 hwcap
->> test suite.
->>
->> Patch 1/2 fixes the sve2p1_sigill() test to correctly detect the
->> FEAT_SVE2p1 feature. Previously, the test incorrectly assumed that
->> the presence of FEAT_SVE2.1 implied support for the BFADD
->> instruction, which actually depends on the FEAT_SVE_B16B16 feature.
->> The test is updated to use the LD1Q instruction, which is
->> unambiguously implied by FEAT_SVE2p1.
->>
->> [...]
-> Applied first patch to arm64 (for-next/fixes), thanks!
->
-> [1/2] selftest/arm64: Fix sve2p1_sigill() to hwcap test
->        https://git.kernel.org/arm64/c/d87c828daa7e
->
-> Cheers,
+Chunyu, could you please take a look?
 
-Thanks,
-
-Yifan
-
+Thanks.
