@@ -1,369 +1,227 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75EC3ED5D0
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 13:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716CF283C9D
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 13:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774618818; cv=none; b=YyoHUwyx3M/w8hCnsmdYk3Aj9At8Aq03H3DIaNUJxz7ybxZI1JQY9zEMgWD9oQiI/e/qbJM8WCM+4P8VAeMeocDgJlj7YLPUrnoheozG0nrLF4KbItRww+j5Y+xEsYktSYS4K030tucGFN1UEfA+fbBoQi+ePHdHsJ/GuyRqTQs=
+	t=1774619025; cv=none; b=ANBPztWqtJp2nuOOQGl6xfSuj4YQYlD+mXvD+U3PhrypMlyODW0rHNvvdFPnHU+YMRh8/0412n7tDW0FBcprK8saIQ8/4dTB9zk7oIWr9uync0pdqPAniNA4qxu+urK+ux851RzSkPnsCnvtvue5/qjh6OCuHIfmuVmV2dDQv9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774618818; c=relaxed/simple;
-	bh=JZd1mK0p5+QabibWdKKtoCltGtuHw/Kmq6+qqX/2Smw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pArrGd/W5Do6HxSwgxe2yurt8dBTYXaaTZewPQ9ID/Dr9p3s6P9Onj1L1U78RkgcdOcxnZpWbSyGpcySOvgg5MGTPPKMtHKQAofZzhbjwCXw9ln4B5Z7zsPGsV2txdka5OBeBnj2bVBr1G6rebpwtCZNTY5eV0iHJX2RzMYMFNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=feWtHBIu; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774619025; c=relaxed/simple;
+	bh=xnpOtbtAnF6ZHQ8pPCVM9kiHlVMfUfTM5ad6nkFx99I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=py5bPnXTO8ObPNVijPaSBG1kWTcz62GMQVUct4dveVwcy8zJy2bLU33Ov0N/Xq2qoDMhj1EsDzmOaziYTHVCzRT9vwRTkdgtycK89KMKxn91mrwJNEmzSUeQtoKB33qWy9T4fT41K/hdseKcam1ZQChdB82XRbFPib9Dh2+yDuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YFLlAehf; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="feWtHBIu"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774618808;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F/4+k9b7Q3tgRKzi3XuRHv/+yVksH1VF7viQHqEghJM=;
-	b=feWtHBIuDQlz/9i52UoT+zWTUAoYo5K1jtJsAZRtOdhn66xMTWG5y+OMWsy/S7pa/J5Xay
-	aM85Bx/AG6Ip+cAdya01DbRk3plLOf4CIO6wiMixNeCrHkCT9TQFRHS/6hpnSrwKvblsKv
-	94oj0hH9mRemJKIaM/b7Yqk60tmw/Aw=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
-Date: Fri, 27 Mar 2026 21:38:54 +0800
-Message-ID: <20260327133915.286037-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260327133915.286037-1-jiayuan.chen@linux.dev>
-References: <20260327133915.286037-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YFLlAehf"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48700b1ba53so20415395e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 06:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774619022; x=1775223822; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YKsHeKZ6OpS0YnJ+ugq57cVpBwIG5Py5vDHb5pEObDI=;
+        b=YFLlAehfqhLWrlDbgmz/3b4MFjgclYxL70mpBaZSAdYANAetUWX8ea9vC7YqLTUCmZ
+         sKyrywoFxcVBKMIvZSjn9CQgJaIU74y8pQ2RdNrN+BPn416X4dgusJP3VmfLekjLz6BL
+         1BqyLlAh11iW8UBoppmoNKeaFyhSFkbWCcbZwhEKKQn8WZ1TXWXWeRdiUQBxYHut2Q+Y
+         2VmDCL8OF3qRs5ZbhcCGv+uUu9WY305ExTs1ycUIXzPtPiN7YU05V9EasJT0fZwVQETk
+         KSdWntCYIF9ATFeVXE78W1du4MSJr6vWDcokdKaLIaAwLqlJYbzdaa5vbLiwDoq50wxc
+         ymUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774619022; x=1775223822;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YKsHeKZ6OpS0YnJ+ugq57cVpBwIG5Py5vDHb5pEObDI=;
+        b=IAU8cWVMk67rJszI9eCWGcSwEJYOJpH4PSrty9kGryRSluIFBQwimO4ZEoE9hdFFjP
+         XKWOhjKfef8GqwtWWDRx0C3sF1QuJe99OaJa6uuXL1LFT++N0OaUU2+inNzMu6lZsL7y
+         nsYqeIrCaH5MJ6DoIUDDvCGCtDkdBajxW5gMUGAb4iv3YknLzN2iDnYTrcaW5uJbru4E
+         ZDdZThwuAxtjAZGKDf3ANsBC5IzKib/T2Cenghai3kyxQj7qikMNtFzLXgAY62L5j98X
+         GImptRHTqf8mmu389RJIl9xpPOTiMFKENBGGckFdBSCE/GSTnQ8LhpS8Okosugg8J1ba
+         k9Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCX5A92dtQMMStv32WjZyYFfAsg7S7fAOBI9MRKLxnMxOe1g8T/iFsEqaVRVH2rZicQL68MnsSHYq/0cqp5pnZo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDoLNhtQrn8n12gqwjIh5ZgZtNA2ggaLh3TymuDnls6qC8mzQJ
+	E4vrXHACRaZSR9DHRVW8ttUHJzDgB5wXM7wR5ldjl6JcrlHACsgpwNDR0Tarf0ayNZY=
+X-Gm-Gg: ATEYQzxt0LGobfunnoex4m0pTJwVJTeV+VSMc82OaZK4IwTnlOV/sxbWV5US713OAm6
+	GKdym0m2tsauC72edK5PjzZn2ummEU09cIoNCozV9xywKouniVUDjpg3B2tnzRREK3Qd5G0ZTUI
+	iqBxXjo0vdlPKEgVhLvwihv0/q1arB7ElarMOHw70w6ITIzC+7E0ql9HNIuOnOM6o07ANIxlZgj
+	vmPUZn1G0j+Ef+Rtl8Ucvk2X4/2e7FzMzTD0G6/qGfe9Y84E5m1tCc1ni2SnL3NnfIXil9e2MuC
+	heS+vuvpLdUPlWSFpNmQuylOnQPw+rmgl/IxJuQZCTpAl27vTDLaMWa117GS3jMEX7YREe0FIsF
+	emb6jrfrGzZZJHIGNm+E9UAktpabC8MIQLo597I/D48APT75nrTOF1RfUaAcmsKrzkGnhKcadnK
+	2gB6Q19ocrnaODF3Q8mO1SzhEl/CmK8ln4Ooz/kItRqn5NvGpabKYgxVc2wAW0DSRoieXGgg==
+X-Received: by 2002:a05:600c:3510:b0:486:ffa3:593 with SMTP id 5b1f17b1804b1-487280abccdmr37007085e9.28.1774619021707;
+        Fri, 27 Mar 2026 06:43:41 -0700 (PDT)
+Received: from ?IPv6:2804:1bc4:224:7800:c8ca:fb24:208a:b63f? ([2804:1bc4:224:7800:c8ca:fb24:208a:b63f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487270c3393sm25085205e9.4.2026.03.27.06.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2026 06:43:40 -0700 (PDT)
+Message-ID: <47ef161f2574a49e591b87948ecaa635210c9b39.camel@suse.com>
+Subject: Re: [PATCH 3/8] selftests: livepatch: test-kprobe: Check if kprobes
+ can work with livepatches
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>,  Jiri Kosina <jikos@kernel.org>, Miroslav Benes
+ <mbenes@suse.cz>, Shuah Khan <shuah@kernel.org>, 
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Fri, 27 Mar 2026 10:43:35 -0300
+In-Reply-To: <ab0wiEuokqDwq5_v@pathway.suse.cz>
+References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
+	 <20260313-lp-tests-old-fixes-v1-3-71ac6dfb3253@suse.com>
+	 <abhqRTBtF1hLDmPq@redhat.com>
+	 <c4249fb8b36aba8649e4dcdac022f2d646413756.camel@suse.com>
+	 <ab0wiEuokqDwq5_v@pathway.suse.cz>
+Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
+ keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
+ Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
+ gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
+ GO8seNG8sYiP6JfRjl7Hyqca6YsE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
+On Fri, 2026-03-20 at 12:33 +0100, Petr Mladek wrote:
+> On Thu 2026-03-19 11:35:16, Marcos Paulo de Souza wrote:
+> > On Mon, 2026-03-16 at 16:38 -0400, Joe Lawrence wrote:
+> > > On Fri, Mar 13, 2026 at 05:58:34PM -0300, Marcos Paulo de Souza
+> > > wrote:
+> > > > Running the upstream selftests on older kernels can presente
+> > > > some
+> > > > issues
+> > > > regarding features being not present. One of such issues if the
+> > > > missing
+> > > > capability of having both kprobes and livepatches on the same
+> > > > function.
+> > > >=20
+> > >=20
+> > > nit picking, but slightly reworded for clarity and spelling:
+> > >=20
+> > > Running upstream selftests on older kernels can be problematic
+> > > when
+> > > features or fixes from newer versions are not present. For
+> > > example,
+> > > older kernels may lack the capability to support kprobes and
+> > > livepatches
+> > > on the same function simultaneously.
+> >=20
+> > Much better, I'll pick your description for v2.
+> >=20
+> > >=20
+> > > > The support was introduced in commit 0bc11ed5ab60c
+> > > > ("kprobes: Allow kprobes coexist with livepatch"), which means
+> > > > that
+> > > > older
+> > > > kernels may lack this change.
+> > > >=20
+> > > > The lack of this feature can be checked when a kprobe without a
+> > > > post_handler is loaded and checking that the enabled_function's
+> > > > file
+> > > > shows the flag "I". A kernel with the proper support for
+> > > > kprobes
+> > > > and
+> > > > livepatches would presente the flag only when a post_handler is
+> > >=20
+> > > nit: s/presente/present
+> >=20
+> > > > --- a/tools/testing/selftests/livepatch/test-kprobe.sh
+> > > > +++ b/tools/testing/selftests/livepatch/test-kprobe.sh
+> > > > @@ -16,30 +16,19 @@ setup_config
+> > > > =C2=A0# when it uses a post_handler since only one IPMODIFY maybe b=
+e
+> > > > registered
+> > > > =C2=A0# to any given function at a time.
+> > > > =C2=A0
+> > > > -start_test "livepatch interaction with kprobed function with
+> > > > post_handler"
+> > > > -
+> > > > -echo 1 > "$SYSFS_KPROBES_DIR/enabled"
+> > > > -
+> > > > -load_mod $MOD_KPROBE has_post_handler=3D1
+> > > > -load_failing_mod $MOD_LIVEPATCH
+> > > > -unload_mod $MOD_KPROBE
+> > > > -
+> > > > -check_result "% insmod test_modules/test_klp_kprobe.ko
+> > > > has_post_handler=3D1
+> > > > -% insmod test_modules/$MOD_LIVEPATCH.ko
+> > > > -livepatch: enabling patch '$MOD_LIVEPATCH'
+> > > > -livepatch: '$MOD_LIVEPATCH': initializing patching transition
+> > > > -livepatch: failed to register ftrace handler for function
+> > > > 'cmdline_proc_show' (-16)
+> > > > -livepatch: failed to patch object 'vmlinux'
+> > > > -livepatch: failed to enable patch '$MOD_LIVEPATCH'
+> > > > -livepatch: '$MOD_LIVEPATCH': canceling patching transition,
+> > > > going
+> > > > to unpatch
+> > > > -livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+> > > > -livepatch: '$MOD_LIVEPATCH': unpatching complete
+> > > > -insmod: ERROR: could not insert module
+> > > > test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
+> > > > -% rmmod test_klp_kprobe"
+> > > > -
+> > > > =C2=A0start_test "livepatch interaction with kprobed function
+> > > > without
+> > > > post_handler"
+> > > > =C2=A0
+> > > > =C2=A0load_mod $MOD_KPROBE has_post_handler=3D0
+> > > > +
+> > > > +# Check if commit 0bc11ed5ab60c ("kprobes: Allow kprobes
+> > > > coexist
+> > > > with livepatch")
+> > > > +# is missing, meaning that livepatches and kprobes can't be
+> > > > used
+> > > > together.
+> > > > +# When the commit is missing, kprobes always set IPMODIFY (the
+> > > > I
+> > > > flag), even
+> > > > +# when the post handler is missing.
+> > > > +if grep --quiet ") R I"
+> > > > "$SYSFS_DEBUG_DIR/tracing/enabled_functions"; then
+> > >=20
+> > > Will flags R I always be in this order?
+> >=20
+> > 		seq_printf(m, " (%ld)%s%s%s%s%s",
+> > 			=C2=A0=C2=A0 ftrace_rec_count(rec),
+> > 			=C2=A0=C2=A0 rec->flags & FTRACE_FL_REGS ? " R" : "=C2=A0
+> > ",
+> > 			=C2=A0=C2=A0 rec->flags & FTRACE_FL_IPMODIFY ? " I"
+> > : "=20
+> > ",
+> >=20
+> > So this is safe. I'll add a comment in the patch to explain why
+> > this is
+> > safe too. Thanks for the comment!
+>=20
+> I would personally check also "cmdline_proc_show" to make sure that
+> the line is about this function. Something like:
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0 grep --quiet ") "cmdline_proc_show.*([0-9]\+) R"
+>=20
+>=20
+> But I am afraid that this approach is not good. It breaks the test.
+> It won't longer be able to catch regressions when the kprobe
+> sets "FTRACE_FL_IPMODIFY" by mistake again.
+>=20
+> We could add a version check. But it would break users who backport
+> the fix into older kernels.
+>=20
+> IMHO, the best solution would be to keep the test as is.
+> Whoever is running the test with older kernels should mark it
+> as "failure-expected". The test is pointing out an existing problem
+> in the old kernel. IMHO, it should not hide it.
 
-Add test_tcp_custom_syncookie_protocol_check to verify that
-bpf_sk_assign_tcp_reqsk() rejects non-TCP skbs. The test sends a UDP
-packet through TC ingress where a BPF program calls
-bpf_sk_assign_tcp_reqsk() on it and checks that the kfunc returns an
-error. A UDP server recv() is used as synchronization to ensure the
-BPF program has finished processing before checking the result.
+Makes sense, thanks for your review Petr. I'll drop this patch from v2.
 
-Without the fix in bpf_sk_assign_tcp_reqsk(), the kfunc succeeds and
-attaches a TCP reqsk to the UDP skb, which causes a null pointer
-dereference panic when the kernel processes it through the UDP receive
-path.
-
-Test result:
-
-  ./test_progs -a tcp_custom_syncookie_protocol_check -v
-  setup_netns:PASS:create netns 0 nsec
-  setup_netns:PASS:ip 0 nsec
-  write_sysctl:PASS:open sysctl 0 nsec
-  write_sysctl:PASS:write sysctl 0 nsec
-  setup_netns:PASS:write_sysctl 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:open_and_load 0 nsec
-  setup_tc:PASS:qdisc add dev lo clsact 0 nsec
-  setup_tc:PASS:filter add dev lo ingress 0 nsec
-  run_protocol_check:PASS:start tcp_server 0 nsec
-  run_protocol_check:PASS:start udp_server 0 nsec
-  run_protocol_check:PASS:connect udp_client 0 nsec
-  run_protocol_check:PASS:send udp 0 nsec
-  run_protocol_check:PASS:recv udp 0 nsec
-  run_protocol_check:PASS:udp_intercepted 0 nsec
-  run_protocol_check:PASS:assign_ret 0 nsec
-  #471/1   tcp_custom_syncookie_protocol_check/IPv4 TCP:OK
-  run_protocol_check:PASS:start tcp_server 0 nsec
-  run_protocol_check:PASS:start udp_server 0 nsec
-  run_protocol_check:PASS:connect udp_client 0 nsec
-  run_protocol_check:PASS:send udp 0 nsec
-  run_protocol_check:PASS:recv udp 0 nsec
-  run_protocol_check:PASS:udp_intercepted 0 nsec
-  run_protocol_check:PASS:assign_ret 0 nsec
-  #471/2   tcp_custom_syncookie_protocol_check/IPv6 TCP:OK
-  #471     tcp_custom_syncookie_protocol_check:OK
-  Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
-
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
----
- .../bpf/prog_tests/tcp_custom_syncookie.c     |  94 ++++++++++++++-
- .../bpf/progs/test_tcp_custom_syncookie.c     | 109 ++++++++++++++++++
- 2 files changed, 199 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-index eaf441dc7e79..e46031d0786b 100644
---- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-@@ -5,6 +5,7 @@
- #include <sched.h>
- #include <stdlib.h>
- #include <net/if.h>
-+#include <netinet/in.h>
- 
- #include "test_progs.h"
- #include "cgroup_helpers.h"
-@@ -47,11 +48,10 @@ static int setup_netns(void)
- 	return -1;
- }
- 
--static int setup_tc(struct test_tcp_custom_syncookie *skel)
-+static int setup_tc(int prog_fd)
- {
- 	LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = BPF_TC_INGRESS);
--	LIBBPF_OPTS(bpf_tc_opts, tc_attach,
--		    .prog_fd = bpf_program__fd(skel->progs.tcp_custom_syncookie));
-+	LIBBPF_OPTS(bpf_tc_opts, tc_attach, .prog_fd = prog_fd);
- 
- 	qdisc_lo.ifindex = if_nametoindex("lo");
- 	if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo clsact"))
-@@ -127,7 +127,7 @@ void test_tcp_custom_syncookie(void)
- 	if (!ASSERT_OK_PTR(skel, "open_and_load"))
- 		return;
- 
--	if (setup_tc(skel))
-+	if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie)))
- 		goto destroy_skel;
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-@@ -145,6 +145,92 @@ void test_tcp_custom_syncookie(void)
- 
- destroy_skel:
- 	system("tc qdisc del dev lo clsact");
-+	test_tcp_custom_syncookie__destroy(skel);
-+}
-+
-+/* Test: bpf_sk_assign_tcp_reqsk() should reject non-TCP skb.
-+ *
-+ * Send a UDP packet through TC ingress where a BPF program calls
-+ * bpf_sk_assign_tcp_reqsk() on it. The kfunc should return an error
-+ * because the skb carries UDP, not TCP.
-+ *
-+ * TCP and UDP servers share the same port. The BPF program intercepts
-+ * the UDP packet, looks up the TCP listener via the dest port, and
-+ * attempts to assign a TCP reqsk to the UDP skb.
-+ */
-+static void run_protocol_check(struct test_tcp_custom_syncookie *skel,
-+			       int family, const char *addr)
-+{
-+	int tcp_server = -1, udp_server = -1, udp_client = -1;
-+	char buf[32] = "test";
-+	int port, ret;
-+
-+	tcp_server = start_server(family, SOCK_STREAM, addr, 0, 0);
-+	if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
-+		return;
-+
-+	port = ntohs(get_socket_local_port(tcp_server));
-+
-+	/* UDP server on same port for synchronization and port sharing */
-+	udp_server = start_server(family, SOCK_DGRAM, addr, port, 0);
-+	if (!ASSERT_NEQ(udp_server, -1, "start udp_server"))
-+		goto close_tcp;
-+
-+	skel->bss->udp_intercepted = false;
-+	skel->data->assign_ret = -1;
-+
-+	udp_client = connect_to_fd(udp_server, 0);
-+	if (!ASSERT_NEQ(udp_client, -1, "connect udp_client"))
-+		goto close_udp_server;
- 
-+	ret = send(udp_client, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(ret, sizeof(buf), "send udp"))
-+		goto close_udp_client;
-+
-+	/* recv() ensures TC ingress BPF has processed the skb */
-+	ret = recv(udp_server, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(ret, sizeof(buf), "recv udp"))
-+		goto close_udp_client;
-+
-+	ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
-+
-+	/* assign_ret == 0 means kfunc accepted UDP skb (bug).
-+	 * assign_ret < 0 means kfunc correctly rejected it (fixed).
-+	 */
-+	ASSERT_NEQ(skel->data->assign_ret, 0, "assign_ret");
-+
-+close_udp_client:
-+	close(udp_client);
-+close_udp_server:
-+	close(udp_server);
-+close_tcp:
-+	close(tcp_server);
-+}
-+
-+void test_tcp_custom_syncookie_protocol_check(void)
-+{
-+	struct test_tcp_custom_syncookie *skel;
-+	int i;
-+
-+	if (setup_netns())
-+		return;
-+
-+	skel = test_tcp_custom_syncookie__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto)))
-+		goto destroy_skel;
-+
-+	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-+		if (!test__start_subtest(test_cases[i].name))
-+			continue;
-+
-+		run_protocol_check(skel, test_cases[i].family,
-+				   test_cases[i].addr);
-+	}
-+
-+destroy_skel:
-+	system("tc qdisc del dev lo clsact");
- 	test_tcp_custom_syncookie__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-index 7d5293de1952..c4834abea9c5 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-@@ -588,4 +588,113 @@ int tcp_custom_syncookie(struct __sk_buff *skb)
- 	return tcp_handle_ack(&ctx);
- }
- 
-+/* Test: call bpf_sk_assign_tcp_reqsk() on a UDP skb.
-+ * The kfunc should reject it because the skb is not TCP.
-+ *
-+ * TCP and UDP servers share the same port. The BPF program intercepts
-+ * UDP packets, looks up the TCP listener on the same port, and tries
-+ * to assign a TCP reqsk to the UDP skb.
-+ */
-+int assign_ret = -1;
-+bool udp_intercepted = false;
-+
-+static int badproto_lookup_assign(struct __sk_buff *skb, struct udphdr *udp,
-+				  struct bpf_sock_tuple *tuple, u32 tuple_size)
-+{
-+	struct bpf_tcp_req_attrs attrs = {};
-+	struct bpf_sock *skc;
-+	struct sock *sk;
-+
-+	skc = bpf_skc_lookup_tcp(skb, tuple, tuple_size, -1, 0);
-+	if (!skc)
-+		return TC_ACT_OK;
-+
-+	if (skc->state != TCP_LISTEN) {
-+		bpf_sk_release(skc);
-+		return TC_ACT_OK;
-+	}
-+
-+	sk = (struct sock *)bpf_skc_to_tcp_sock(skc);
-+	if (!sk) {
-+		bpf_sk_release(skc);
-+		return TC_ACT_OK;
-+	}
-+
-+	attrs.mss = 1460;
-+	attrs.wscale_ok = 1;
-+	attrs.snd_wscale = 7;
-+	attrs.rcv_wscale = 7;
-+	attrs.sack_ok = 1;
-+
-+	assign_ret = bpf_sk_assign_tcp_reqsk(skb, sk, &attrs, sizeof(attrs));
-+
-+	bpf_sk_release(skc);
-+	return TC_ACT_OK;
-+}
-+
-+SEC("tc")
-+int tcp_custom_syncookie_badproto(struct __sk_buff *skb)
-+{
-+	void *data = (void *)(long)skb->data;
-+	void *data_end = (void *)(long)skb->data_end;
-+	struct bpf_sock_tuple tuple = {};
-+	struct ethhdr *eth;
-+	struct iphdr *iph;
-+	struct ipv6hdr *ip6h;
-+	struct udphdr *udp;
-+
-+	eth = (struct ethhdr *)data;
-+	if (eth + 1 > data_end)
-+		return TC_ACT_OK;
-+
-+	switch (bpf_ntohs(eth->h_proto)) {
-+	case ETH_P_IP:
-+		iph = (struct iphdr *)(eth + 1);
-+		if (iph + 1 > data_end)
-+			return TC_ACT_OK;
-+
-+		if (iph->protocol != IPPROTO_UDP)
-+			return TC_ACT_OK;
-+
-+		udp = (struct udphdr *)(iph + 1);
-+		if (udp + 1 > data_end)
-+			return TC_ACT_OK;
-+
-+		udp_intercepted = true;
-+
-+		tuple.ipv4.saddr = iph->saddr;
-+		tuple.ipv4.daddr = iph->daddr;
-+		tuple.ipv4.sport = udp->source;
-+		tuple.ipv4.dport = udp->dest;
-+
-+		return badproto_lookup_assign(skb, udp, &tuple,
-+					      sizeof(tuple.ipv4));
-+	case ETH_P_IPV6:
-+		ip6h = (struct ipv6hdr *)(eth + 1);
-+		if (ip6h + 1 > data_end)
-+			return TC_ACT_OK;
-+
-+		if (ip6h->nexthdr != IPPROTO_UDP)
-+			return TC_ACT_OK;
-+
-+		udp = (struct udphdr *)(ip6h + 1);
-+		if (udp + 1 > data_end)
-+			return TC_ACT_OK;
-+
-+		udp_intercepted = true;
-+
-+		__builtin_memcpy(tuple.ipv6.saddr, &ip6h->saddr,
-+				 sizeof(tuple.ipv6.saddr));
-+		__builtin_memcpy(tuple.ipv6.daddr, &ip6h->daddr,
-+				 sizeof(tuple.ipv6.daddr));
-+		tuple.ipv6.sport = udp->source;
-+		tuple.ipv6.dport = udp->dest;
-+
-+		return badproto_lookup_assign(skb, udp, &tuple,
-+					      sizeof(tuple.ipv6));
-+	default:
-+		return TC_ACT_OK;
-+	}
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+>=20
+> Best Regards,
+> Petr
