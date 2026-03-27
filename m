@@ -1,527 +1,135 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274EE2D8795
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 23:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92D733D6F0
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 23:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774654802; cv=none; b=g4aKeNi/mMvSxBcyOXzeZuIWiBaNTgCAG0gWUhFeDEbu+WEeRapNtjGvO7NGD3HnNRvLe2XfYuEPtonG7m/UDKFtu0e+16rOuwZDNjJYIo9ZMqk7dA4pOHt17VhhRr5sqnLocWM7XEOt1owFLxeqRRAhO3Me9OAc3eV2CnjB1bA=
+	t=1774654832; cv=none; b=E5srFuYtzUO6tMT/v0LdXKQJLAVChfHFo0jIp4LjJt4tNLZ0wQLrRetfYdC/yyFEveMvmeDbQQMbV3FHIQm0zHWTS8RIzmJYjO1WAQY3n87q8yfJ8u5Px6krib8e8BvWiyixn4YLQLnGMGQXjIp3Hy5xe0lI7M3/XbZ63JkHp/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774654802; c=relaxed/simple;
-	bh=4cm7WzVSbw3kYDpsJgHPvvqdoIZcW1uWb7ZBhdpMZ5s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J4kR3o0LSkwl/qjpTmaT5pImktv/O2nQYxEr3J+VD3612wMXNO5Hg2Q8h9qrsPuY8MLwiqUXDJIk0fcqb7+Gc39iDXd7ZXgelYtEgnNfJhyN4Q/6kbYfPf2TsqfR6ulAkDk6v91vgtwMul/ihPm8qBRJVtVOcrKgLvXcPYRz8F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZZlJMDlu; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1774654832; c=relaxed/simple;
+	bh=4FR8NkwjT4N9Cl38asxnaaMOmXx8zBcfHSm8Jt++OCA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=PgN0jqvH0vlr5Am36U7dKMDuXzXpz28WLr/69C6ARojXGPH9FuAuut7nioGN/r99vrbf+SX6b6hwAIuU04s+MWW/M6HxANmpwAh0l61bLZVOpTZjX+aFQq5udw4qXwLo29g/N8BYwT9WMMfEvtcZjmTV/Wcf/oSG62D/Q4gM2es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Dth4RtCG; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZZlJMDlu"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2b0c12be0ecso36545ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 16:39:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Dth4RtCG"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35d9467e85aso158058a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 16:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774654798; x=1775259598; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KJh+fSdSH5NQ/gboRRLrSOUWnglDImWXDS4hyVsChMM=;
-        b=ZZlJMDluyZQgTjicwJCMMbrGbA6BWkJFB0dl1uyxk1y+LuQu/sqK+HiPaWb/zphKBX
-         mis3L9JoZ6zwYtdVcFDlgqPcPxiEGrJswKH166B4lDaTEoXzbXBhJsS323nlK5Ew6ZsJ
-         DSfm4M7NuaKZJf6vh4cZuVKHc5lAHk+JbgYSx9RMs14aCR/SRBuBf+05X5hmncK7O2Vn
-         YWD/FSvYXO+/0pBMfKj4pZG+D7YFKaHQwhfvtigvUwnuzkiyDpMSQEDOyEZNpoqgikTi
-         0VSC/bm0EUDT25vJ2xqbE26ZciWcfn/K0G421leU2pMHYY9wYBZxuhJkaiQsaOmFJQoA
-         AKow==
+        d=google.com; s=20251104; t=1774654829; x=1775259629; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oDu+7PRubEqgxgBdgHEhM+ua34473fu/ZlwKYYpVU28=;
+        b=Dth4RtCGoxWwfxhPWh/oqSA8LiGeHud2rzlKCZ8ubXXV8C4gjIa+XI203Jxiv17ixD
+         6XP19hjyKKW5pZ1XX77b1H4Q6HXm+B3TkDTOSDExwCJBxEBDK8RQmjuxDgkP8utCmZAW
+         hAaF4qoZ0rHPjdP6HeDwGcHj9PspzDpZtwF9pxbIDFlh+ghPG+w4q6ga0k7nYSNuDsK4
+         Xek2CaKPILICouqurbDU5ELIKssQa4MAeJG1kK6dn578oXTzSc69cvzzAXdir2lo9dc/
+         5Jh3d+QaGr0ZFFQYKikr/Ps1gJ+XE6NUQ1unTmjpcMORZydqWMC8V/jqkxr7IZ9Kt/jZ
+         w13w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774654798; x=1775259598;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KJh+fSdSH5NQ/gboRRLrSOUWnglDImWXDS4hyVsChMM=;
-        b=VqpyR7XWtmpRIsd5g+hmJnXBPlgvE7DwEdueCdpq4f4q+9MhIoh4N1ODr4kn49VVIN
-         RRdZX0H/zYTuHMqLXMDMKpJ66FK7McgHj/B7FrOD8M6X8sHxA6Q7/pR7jT1EBFP/+nB7
-         RRxOF7zGgw37Gj+YFMxxi8r1EfWE+aiyOQsQCgF0QlwK2v8ZWIjLQm0/juJS6nei1sUU
-         jB+GNtaeuXpLothg3Z5fZJzgR1TJc8meaDIXqqv6hUgCJuyVSjXH8PZeqgWM2FsRFy/s
-         Sbual1ikvsyW6nlgi2SYzdkcypLVnfs4A6/l+iIOHkQ+AzAVZXa0pciwgXDaOqywA0eS
-         duUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXjUtmUD3dvgAPm5Miu2j07YKmRPMaPTqiRpfrO6G4RUdXivW0IuUim6Oa/8F/LpayU4VH7e44UGBpoemKb1oU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxxn1DKepss2E6m5fCY+Jb46GA1302XqpsOKFpbbDy3jqb34tcE
-	ToKoVsnW4YMmq+/2t6Jf1SD2duMxKsEIQt0MFvkugc4+Ei3r1UF1J4NRat0JAVfBnA==
-X-Gm-Gg: ATEYQzzioYkqrfNcOWhbt3zQMaZAWFcvMRhqmAOajSHRbL2W3kjKZMN53pVFEwWpPtf
-	oAU9w/B1gd28GqWJ23/5iJnQZLPuedEawp2c+5NzwajRFvKknCjC1RDHIbe9Z8obSuTAXFxtviP
-	s36jPF+SbG2dX8KKcRkura4GQU07iTdYvsAHFVjfXlonLb/EkJWYN4F9Cdfmg1DStO2xRH9rpXG
-	8SqN9tl5fsBG2BN16s6xP0RXpTCuEw/L9SMgbJ8/hKr2RYXchfI2c7vKM/W02JPVGzXjLqbx+JC
-	76SHH9h3MVYEc78TO/1dZVbAtqjrBhxYxA4j4NAcLOafqsQfmoGO+4Jruaf4DqPvSg32UgVZvEr
-	IZ+wFwdfepcUsMgEpmetEWrPftAx/cIcZ6uvJRbamjLiicZcoELmE8DcN7xKfuzXvURajBnA1Rp
-	UCdzksq1MkW3Lai+DuKVdxrcHlGd2N2Azo/tHKmEDhJn5UKGmoJ0+K2r4rJ7gR1Q==
-X-Received: by 2002:a17:902:e84c:b0:2ae:6755:a24f with SMTP id d9443c01a7336-2b241ba1a2amr1512495ad.0.1774654797569;
-        Fri, 27 Mar 2026 16:39:57 -0700 (PDT)
-Received: from google.com (168.136.83.34.bc.googleusercontent.com. [34.83.136.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242642b43sm5138615ad.9.2026.03.27.16.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 16:39:56 -0700 (PDT)
-Date: Fri, 27 Mar 2026 23:39:53 +0000
-From: Samiullah Khawaja <skhawaja@google.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
-	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Askar Safin <safinaskar@gmail.com>, "Borislav Petkov (AMD)" <bp@alien8.de>, 
-	Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
-	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, Kees Cook <kees@kernel.org>, 
-	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, kvm@vger.kernel.org, 
-	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
-	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
-	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Pranjal Shrivastava <praan@google.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: Re: [PATCH v3 07/24] vfio/pci: Preserve vfio-pci device files across
- Live Update
-Message-ID: <accS5UUyP8Qw1bUW@google.com>
-References: <20260323235817.1960573-1-dmatlack@google.com>
- <20260323235817.1960573-8-dmatlack@google.com>
+        d=1e100.net; s=20251104; t=1774654829; x=1775259629;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oDu+7PRubEqgxgBdgHEhM+ua34473fu/ZlwKYYpVU28=;
+        b=TiRJYmXflkQyjGGfuTRoF7MWcIsfqXBn14EN5dBR6wT0YSYvrhQPF+nmOGoPK68Dyg
+         tvSjh/BrKF5koecWbBRc07Kya5CQ46jAHEJEa5IhpkBMSMn6fd5PSFOPyrWOR32XROoD
+         47Dll297jJ3dy2jBEr8d7EmINuwH2ukt5Ni/0anMuTkQwxawMqktpWhQsRfIW2kNgaz6
+         GGHQ4OyhzxTUq6HZLWauds/lnRC92Cxgwa1/iCtzMnpdqvFf9s6OpQ/qpVv/ajq5mobk
+         Mjeun/tdWPTyUbGpw+L/15mqlMehTgDkUJINQtgiAR+yId7TvpPc0KMhMH5qmwRCcNOF
+         MmIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVVvoH01MxpWPjppu+MtH7Ef5f4DVv4+PATmkdCIKk6751Mbpz+CVdpwH5vxtdrGn9aZO5Ks+nFR6IZ5PPIGJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr5FwUuoLgLg3t16UDyVpLixcMgz3NJ4HGM6yufhy1oMFLwXOJ
+	yfbUpyel13/fM9C58bciqH9UAiMdplOTzAN4PGsK+B7t9lCcK2nwr5UwwWKNr7RTrBKwyZt+f/X
+	sCXjoFHM6klde8g==
+X-Received: from pjbfv14.prod.google.com ([2002:a17:90b:e8e:b0:35b:9a3b:1f36])
+ (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:1642:b0:359:fdc0:4621 with SMTP id 98e67ed59e1d1-35c2ffa8f44mr4438681a91.11.1774654828462;
+ Fri, 27 Mar 2026 16:40:28 -0700 (PDT)
+Date: Fri, 27 Mar 2026 16:40:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260323235817.1960573-8-dmatlack@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.1018.g2bb0e51243-goog
+Message-ID: <20260327234023.2659476-1-jmattson@google.com>
+Subject: [PATCH v7 0/9] KVM: x86: nSVM: Improve PAT virtualization
+From: Jim Mattson <jmattson@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yosry Ahmed <yosry@kernel.org>
+Cc: Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 23, 2026 at 11:57:59PM +0000, David Matlack wrote:
->From: Vipin Sharma <vipinsh@google.com>
->
->Implement the live update file handler callbacks to preserve a vfio-pci
->device across a Live Update. Subsequent commits will enable userspace to
->then retrieve this file after the Live Update.
->
->Live Update support is scoped only to cdev files (i.e. not
->VFIO_GROUP_GET_DEVICE_FD files).
->
->State about each device is serialized into a new ABI struct
->vfio_pci_core_device_ser. The contents of this struct are preserved
->across the Live Update to the next kernel using a combination of
->Kexec-Handover (KHO) to preserve the page(s) holding the struct and the
->Live Update Orchestrator (LUO) to preserve the physical address of the
->struct.
->
->For now the only contents of struct vfio_pci_core_device_ser the
->device's PCI segment number and BDF, so that the device can be uniquely
->identified after the Live Update.
->
->Require that userspace disables interrupts on the device prior to
->freeze() so that the device does not send any interrupts until new
->interrupt handlers have been set up by the next kernel.
->
->Reset the device and restore its state in the freeze() callback. This
->ensures the device can be received by the next kernel in a consistent
->state. Eventually this will be dropped and the device can be preserved
->across in a running state, but that requires further work in VFIO and
->the core PCI layer.
->
->Note that LUO holds a reference to this file when it is preserved. So
->VFIO is guaranteed that vfio_df_device_last_close() will not be called
->on this device no matter what userspace does.
+Currently, KVM's implementation of nested SVM treats the PAT MSR the same
+way whether or not nested NPT is enabled: L1 and L2 share a single
+PAT. However, the AMD APM specifies that when nested NPT is enabled, the host
+(L1) and the guest (L2) should have independent PATs: hPAT for L1 and gPAT
+for L2.
 
-LUO session holding the reference is also in userspace. Just to be
-accurate, maybe say something like that the LUO will hold a reference
-until the FD is preserved and vfio_df_device_last_close() will not be
-called until file is unpreserved.
->
->Signed-off-by: Vipin Sharma <vipinsh@google.com>
->Co-developed-by: David Matlack <dmatlack@google.com>
->Signed-off-by: David Matlack <dmatlack@google.com>
->---
-> drivers/vfio/pci/vfio_pci.c            |   2 +-
-> drivers/vfio/pci/vfio_pci_core.c       |  57 +++++----
-> drivers/vfio/pci/vfio_pci_liveupdate.c | 156 ++++++++++++++++++++++++-
-> drivers/vfio/pci/vfio_pci_priv.h       |   4 +
-> drivers/vfio/vfio_main.c               |   3 +-
-> include/linux/kho/abi/vfio_pci.h       |  15 +++
-> include/linux/vfio.h                   |   2 +
-> 7 files changed, 213 insertions(+), 26 deletions(-)
->
->diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
->index 41dcbe4ace67..351480d13f6e 100644
->--- a/drivers/vfio/pci/vfio_pci.c
->+++ b/drivers/vfio/pci/vfio_pci.c
->@@ -125,7 +125,7 @@ static int vfio_pci_open_device(struct vfio_device *core_vdev)
-> 	return 0;
-> }
->
->-static const struct vfio_device_ops vfio_pci_ops = {
->+const struct vfio_device_ops vfio_pci_ops = {
-> 	.name		= "vfio-pci",
-> 	.init		= vfio_pci_core_init_dev,
-> 	.release	= vfio_pci_core_release_dev,
->diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
->index d43745fe4c84..81f941323641 100644
->--- a/drivers/vfio/pci/vfio_pci_core.c
->+++ b/drivers/vfio/pci/vfio_pci_core.c
->@@ -585,9 +585,42 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
-> }
-> EXPORT_SYMBOL_GPL(vfio_pci_core_enable);
->
->+void vfio_pci_core_try_reset(struct vfio_pci_core_device *vdev)
->+{
->+	struct pci_dev *pdev = vdev->pdev;
->+	struct pci_dev *bridge = pci_upstream_bridge(pdev);
->+
->+	lockdep_assert_held(&vdev->vdev.dev_set->lock);
->+
->+	if (!vdev->reset_works)
->+		return;
->+
->+	/*
->+	 * Try to get the locks ourselves to prevent a deadlock. The
->+	 * success of this is dependent on being able to lock the device,
->+	 * which is not always possible.
->+	 *
->+	 * We cannot use the "try" reset interface here, since that will
->+	 * overwrite the previously restored configuration information.
->+	 */
->+	if (bridge && !pci_dev_trylock(bridge))
->+		return;
->+
->+	if (!pci_dev_trylock(pdev))
->+		goto out;
->+
->+	if (!__pci_reset_function_locked(pdev))
->+		vdev->needs_reset = false;
->+
->+	pci_dev_unlock(pdev);
->+out:
->+	if (bridge)
->+		pci_dev_unlock(bridge);
->+}
->+EXPORT_SYMBOL_GPL(vfio_pci_core_try_reset);
->+
-> void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
-> {
->-	struct pci_dev *bridge;
-> 	struct pci_dev *pdev = vdev->pdev;
-> 	struct vfio_pci_dummy_resource *dummy_res, *tmp;
-> 	struct vfio_pci_ioeventfd *ioeventfd, *ioeventfd_tmp;
->@@ -687,27 +720,7 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
-> 	 */
-> 	pci_write_config_word(pdev, PCI_COMMAND, PCI_COMMAND_INTX_DISABLE);
->
->-	/*
->-	 * Try to get the locks ourselves to prevent a deadlock. The
->-	 * success of this is dependent on being able to lock the device,
->-	 * which is not always possible.
->-	 * We can not use the "try" reset interface here, which will
->-	 * overwrite the previously restored configuration information.
->-	 */
->-	if (vdev->reset_works) {
->-		bridge = pci_upstream_bridge(pdev);
->-		if (bridge && !pci_dev_trylock(bridge))
->-			goto out_restore_state;
->-		if (pci_dev_trylock(pdev)) {
->-			if (!__pci_reset_function_locked(pdev))
->-				vdev->needs_reset = false;
->-			pci_dev_unlock(pdev);
->-		}
->-		if (bridge)
->-			pci_dev_unlock(bridge);
->-	}
->-
->-out_restore_state:
->+	vfio_pci_core_try_reset(vdev);
-> 	pci_restore_state(pdev);
-> out:
-> 	pci_disable_device(pdev);
->diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
->index 5ea5af46b159..c4ebc7c486e5 100644
->--- a/drivers/vfio/pci/vfio_pci_liveupdate.c
->+++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
->@@ -6,27 +6,178 @@
->  * David Matlack <dmatlack@google.com>
->  */
->
->+/**
->+ * DOC: VFIO PCI Preservation via LUO
->+ *
->+ * VFIO PCI devices can be preserved over a kexec using the Live Update
->+ * Orchestrator (LUO) file preservation. This allows userspace (such as a VMM)
->+ * to transfer an in-use device to the next kernel.
->+ *
->+ * .. note::
->+ *    The support for preserving VFIO PCI devices is currently *partial* and
->+ *    should be considered *experimental*. It should only be used by developers
->+ *    working on expanding the support for the time being.
->+ *
->+ *    To avoid accidental usage while the support is still experimental, this
->+ *    support is hidden behind a default-disable config option
->+ *    ``CONFIG_VFIO_PCI_LIVEUPDATE``. Once the kernel support has stabilized and
->+ *    become complete, this option will be enabled by default when
->+ *    ``CONFIG_VFIO_PCI`` and ``CONFIG_LIVEUPDATE`` are enabled.
->+ *
->+ * Usage Example
->+ * =============
->+ *
->+ * VFIO PCI devices can be preserved across a kexec by preserving the file
->+ * associated with the device in a LUO session::
->+ *
->+ *   device_fd = open("/dev/vfio/devices/X");
->+ *   ...
->+ *   ioctl(session_fd, LIVEUPDATE_SESSION_PRESERVE_FD, { ..., device_fd, ...});
->+ *
->+ * .. note::
->+ *    LUO will hold an extra reference to the device file for as long as it is
->+ *    preserved, so there is no way for the file to be destroyed or the device
->+ *    to be unbound from the vfio-pci driver while it is preserved.
->+ *
->+ * Retrieving the file after kexec is not yet supported.
->+ *
->+ * Restrictions
->+ * ============
->+ *
->+ * The kernel imposes the following restrictions when preserving VFIO devices:
->+ *
->+ *  * The device must be bound to the ``vfio-pci`` driver.
->+ *
->+ *  * ``CONFIG_VFIO_PCI_ZDEV_KVM`` must not be enabled. This may be relaxed in
->+ *    the future.
->+ *
->+ *  * The device not be an Intel display device. This may be relaxed in the
->+ *    future.
+This patch series implements independent PATs for L1 and L2 when nested NPT
+is enabled, but only when a new quirk, KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT,
+is disabled. By default, the quirk is enabled, preserving KVM's legacy
+behavior. When the quirk is disabled, KVM correctly virtualizes a separate
+PAT register for L2, using the g_pat field in the VMCB.
 
-Seems there is a typo. The device "may"/"must" not be?
->+ *
->+ *  * The device file must have been acquired from the VFIO character device,
->+ *    not ``VFIO_GROUP_GET_DEVICE_FD``.
->+ *
->+ *  * The device must have interrupt disable prior to kexec. Failure to disable
->+ *    interrupts on the device will cause the ``reboot(LINUX_REBOOT_CMD_KEXEC)``
->+ *    syscall (to initiate the kexec) to fail.
->+ *
->+ * Preservation Behavior
->+ * =====================
->+ *
->+ * The eventual goal of this support is to avoid disrupting the workload, state,
->+ * or configuration of each preserved device during a Live Update. This would
->+ * include allowing the device to perform DMA to preserved memory buffers and
->+ * perform P2P DMA to other preserved devices. However, there are many pieces
->+ * that still need to land in the kernel.
->+ *
->+ * For now, VFIO only preserves the following state for for devices:
->+ *
->+ *  * The PCI Segment, Bus, Device, and Function numbers of the device. The
->+ *    kernel guarantees the these will not change across a kexec when a device
->+ *    is preserved.
->+ *
->+ * Since the kernel is not yet prepared to preserve all parts of the device and
->+ * its dependencies (such as DMA mappings), VFIO currently resets and restores
->+ * preserved devices back into an idle state during kexec, before handing off
->+ * control to the next kernel. This will be relaxed in future versions of the
->+ * kernel once it is safe to allow the device to keep running across kexec.
->+ */
->+
-> #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->
->+#include <linux/kexec_handover.h>
-> #include <linux/kho/abi/vfio_pci.h>
-> #include <linux/liveupdate.h>
-> #include <linux/errno.h>
->+#include <linux/vfio.h>
->
-> #include "vfio_pci_priv.h"
->
-> static bool vfio_pci_liveupdate_can_preserve(struct liveupdate_file_handler *handler,
-> 					     struct file *file)
-> {
->-	return false;
->+	struct vfio_device *device = vfio_device_from_file(file);
->+	struct vfio_pci_core_device *vdev;
->+	struct pci_dev *pdev;
->+
->+	if (!device)
->+		return false;
->+
->+	/* Live Update support is limited to cdev files. */
->+	if (!vfio_device_cdev_opened(device))
->+		return false;
->+
->+	if (device->ops != &vfio_pci_ops)
->+		return false;
->+
->+	vdev = container_of(device, struct vfio_pci_core_device, vdev);
->+	pdev = vdev->pdev;
->+
->+	/*
->+	 * Don't support specialized vfio-pci devices for now since they haven't
->+	 * been tested.
->+	 */
->+	if (IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || vfio_pci_is_intel_display(pdev))
->+		return false;
->+
->+	return true;
-> }
->
-> static int vfio_pci_liveupdate_preserve(struct liveupdate_file_op_args *args)
-> {
->-	return -EOPNOTSUPP;
->+	struct vfio_device *device = vfio_device_from_file(args->file);
->+	struct vfio_pci_core_device_ser *ser;
->+	struct vfio_pci_core_device *vdev;
->+	struct pci_dev *pdev;
->+
->+	vdev = container_of(device, struct vfio_pci_core_device, vdev);
->+	pdev = vdev->pdev;
->+
->+	ser = kho_alloc_preserve(sizeof(*ser));
->+	if (IS_ERR(ser))
->+		return PTR_ERR(ser);
->+
->+	ser->bdf = pci_dev_id(pdev);
->+	ser->domain = pci_domain_nr(pdev->bus);
->+
->+	args->serialized_data = virt_to_phys(ser);
->+	return 0;
-> }
->
-> static void vfio_pci_liveupdate_unpreserve(struct liveupdate_file_op_args *args)
-> {
->+	kho_unpreserve_free(phys_to_virt(args->serialized_data));
->+}
->+
->+static int vfio_pci_liveupdate_freeze(struct liveupdate_file_op_args *args)
->+{
->+	struct vfio_device *device = vfio_device_from_file(args->file);
->+	struct vfio_pci_core_device *vdev;
->+	struct pci_dev *pdev;
->+	int ret;
->+
->+	vdev = container_of(device, struct vfio_pci_core_device, vdev);
->+	pdev = vdev->pdev;
->+
->+	guard(mutex)(&device->dev_set->lock);
->+
->+	/*
->+	 * Userspace must disable interrupts on the device prior to freeze so
->+	 * that the device does not send any interrupts until new interrupt
->+	 * handlers have been established by the next kernel.
->+	 */
->+	if (vdev->irq_type != VFIO_PCI_NUM_IRQS) {
->+		pci_err(pdev, "Freeze failed! Interrupts are still enabled.\n");
->+		return -EINVAL;
->+	}
->+
->+	ret = pci_load_saved_state(pdev, vdev->pci_saved_state);
->+	if (ret)
->+		return ret;
->+
->+	vfio_pci_core_try_reset(vdev);
+Guest accesses to the IA32_PAT MSR are redirected to either hPAT or gPAT
+depending on the current mode and whether nested NPT is enabled. All other
+accesses, including userspace accesses via KVM_{GET,SET}_MSRS, continue to
+reference hPAT. L2's gPAT is saved and restored via a new 'gpat' field in
+kvm_svm_nested_state_hdr, which is within the existing padding of the header
+to maintain ABI compatibility.
 
-nit: I see you have already added a comment earlier saying that device will
-be reset to a clean state as all the of the dependencies to preserve the
-state for continous DMA are not there. Maybe we can add a comment here
-to specify that this will go away once we have full preservation
-support.
->+	pci_restore_state(pdev);
->+	return 0;
-> }
->
-> static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
->@@ -42,6 +193,7 @@ static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
-> 	.can_preserve = vfio_pci_liveupdate_can_preserve,
-> 	.preserve = vfio_pci_liveupdate_preserve,
-> 	.unpreserve = vfio_pci_liveupdate_unpreserve,
->+	.freeze = vfio_pci_liveupdate_freeze,
-> 	.retrieve = vfio_pci_liveupdate_retrieve,
-> 	.finish = vfio_pci_liveupdate_finish,
-> 	.owner = THIS_MODULE,
->diff --git a/drivers/vfio/pci/vfio_pci_priv.h b/drivers/vfio/pci/vfio_pci_priv.h
->index cbf46e09da30..fa5c7f544f8a 100644
->--- a/drivers/vfio/pci/vfio_pci_priv.h
->+++ b/drivers/vfio/pci/vfio_pci_priv.h
->@@ -11,6 +11,10 @@
-> /* Cap maximum number of ioeventfds per device (arbitrary) */
-> #define VFIO_PCI_IOEVENTFD_MAX		1000
->
->+extern const struct vfio_device_ops vfio_pci_ops;
->+
->+void vfio_pci_core_try_reset(struct vfio_pci_core_device *vdev);
->+
-> struct vfio_pci_ioeventfd {
-> 	struct list_head	next;
-> 	struct vfio_pci_core_device	*vdev;
->diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
->index 742477546b15..8b222f71bbab 100644
->--- a/drivers/vfio/vfio_main.c
->+++ b/drivers/vfio/vfio_main.c
->@@ -1436,7 +1436,7 @@ const struct file_operations vfio_device_fops = {
-> #endif
-> };
->
->-static struct vfio_device *vfio_device_from_file(struct file *file)
->+struct vfio_device *vfio_device_from_file(struct file *file)
-> {
-> 	struct vfio_device_file *df = file->private_data;
->
->@@ -1444,6 +1444,7 @@ static struct vfio_device *vfio_device_from_file(struct file *file)
-> 		return NULL;
-> 	return df->device;
-> }
->+EXPORT_SYMBOL_GPL(vfio_device_from_file);
->
-> /**
->  * vfio_file_is_valid - True if the file is valid vfio file
->diff --git a/include/linux/kho/abi/vfio_pci.h b/include/linux/kho/abi/vfio_pci.h
->index e2412b455e61..876aaf81dd92 100644
->--- a/include/linux/kho/abi/vfio_pci.h
->+++ b/include/linux/kho/abi/vfio_pci.h
->@@ -9,6 +9,9 @@
-> #ifndef _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H
-> #define _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H
->
->+#include <linux/compiler.h>
->+#include <linux/types.h>
->+
-> /**
->  * DOC: VFIO PCI Live Update ABI
->  *
->@@ -25,4 +28,16 @@
->
-> #define VFIO_PCI_LUO_FH_COMPATIBLE "vfio-pci-v1"
->
->+/**
->+ * struct vfio_pci_core_device_ser - Serialized state of a single VFIO PCI
->+ * device.
->+ *
->+ * @domain: The device's PCI domain number (segment).
->+ * @bdf: The device's PCI bus, device, and function number.
->+ */
->+struct vfio_pci_core_device_ser {
->+	u32 domain;
->+	u16 bdf;
->+} __packed;
->+
-> #endif /* _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H */
->diff --git a/include/linux/vfio.h b/include/linux/vfio.h
->index e90859956514..e9d3ddb715c5 100644
->--- a/include/linux/vfio.h
->+++ b/include/linux/vfio.h
->@@ -81,6 +81,8 @@ struct vfio_device {
-> #endif
-> };
->
->+struct vfio_device *vfio_device_from_file(struct file *file);
->+
-> /**
->  * struct vfio_device_ops - VFIO bus driver device callbacks
->  *
->-- 
->2.53.0.983.g0bb29b3bc5-goog
->
+v1: https://lore.kernel.org/kvm/20260113003016.3511895-1-jmattson@google.com/
+v2: https://lore.kernel.org/kvm/20260115232154.3021475-1-jmattson@google.com/
+v3: https://lore.kernel.org/kvm/20260205214326.1029278-1-jmattson@google.com/
+v4: https://lore.kernel.org/kvm/20260212155905.3448571-1-jmattson@google.com/
+v5: https://lore.kernel.org/kvm/20260224005500.1471972-1-jmattson@google.com/
+v6: https://lore.kernel.org/kvm/20260326174944.3820245-1-jmattson@google.com/
+
+  v6 -> v7:
+  * Drop the patch "KVM: x86: Remove common handling of MSR_IA32_CR_PAT,"
+    because TDX still calls the common handler.
+  * Instead, add a warning to the common PAT handling code if it is
+    called by an SVM-capable vCPU
+  * Add comments about userspace disabling the  quirk while a vCPU is
+    running.
+  * Cache the value of use_separate_l2_pat in KVM_SET_NESTED_STATE, in
+    case the quirk is disabled concurrently with the execution of that
+    function.
+
+Jim Mattson (9):
+  KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+  KVM: x86: nSVM: Clear VMCB_NPT clean bit when updating hPAT from guest
+    mode
+  KVM: x86: nSVM: Cache and validate vmcb12 g_pat
+  KVM: x86: nSVM: Set vmcb02.g_pat correctly for nested NPT
+  KVM: x86: nSVM: Redirect IA32_PAT accesses to either hPAT or gPAT
+  KVM: x86: nSVM: Save gPAT to vmcb12.g_pat on VMEXIT
+  KVM: Documentation: document KVM_{GET,SET}_NESTED_STATE for SVM
+  KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
+  KVM: selftests: nSVM: Add svm_nested_pat test
+
+ Documentation/virt/kvm/api.rst                |  26 ++
+ arch/x86/include/asm/kvm_host.h               |   3 +-
+ arch/x86/include/uapi/asm/kvm.h               |   2 +
+ arch/x86/kvm/svm/nested.c                     |  65 +++-
+ arch/x86/kvm/svm/svm.c                        |  54 +++-
+ arch/x86/kvm/svm/svm.h                        |  19 +-
+ arch/x86/kvm/x86.c                            |   6 +
+ tools/arch/x86/include/uapi/asm/kvm.h         |   2 +
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/x86/svm_nested_pat_test.c   | 304 ++++++++++++++++++
+ 10 files changed, 457 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/svm_nested_pat_test.c
+
+base-commit: 3d6cdcc8883b5726513d245eef0e91cabfc397f7
+-- 
+2.53.0.1018.g2bb0e51243-goog
