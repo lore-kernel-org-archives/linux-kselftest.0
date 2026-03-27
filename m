@@ -1,305 +1,327 @@
 Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120F5219A8D
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 02:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774578824; cv=pass; b=o/4afhcKXmzJ8oO2peakY7TNCD4QcqDgalgKLJ17typ+Eu6IkQ4txT+R/ElrZ+H8TbAE/XlX3qJa683ngPjCii8KvVOjuPhbnPYr8zd+4SQGaEUueU2DH8lgdVJn7Bv4eZr7KeNggdAjUD+brcR1yasRj1DChjwcIUkojTTDLBQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774578824; c=relaxed/simple;
-	bh=V8VCXLly4w5+0+MPhojVHILnNZjHzCfdHzsAew3W6M0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mpwzLxCkFNYb56/TtxuT/tKW3b/xvn0x++l0jkbuQUrd2q9IxtTs/QL/BVLX6RNo50X2i1PWDOvENfXWWZkaWJXiQ6DOk8PDQT2YmrUHzd9tJropGn82pAb5Ndob13XU6XH+65I310UOevsOQqv11E/4plA5vKjF/CNUiYt7cjo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WNAez2j7; arc=pass smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55E629ACFC
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 02:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774579334; cv=none; b=Ek6FXZSzP9w6p2RUM0YNW+KpzPxeIg0aiMlMdBIutipJsJku7jvIVaJ/FxTPrVz/xYIHPS5jOcAuiwqiiPB+qsd1QdEA+cBCfOCggtxyV/SokWwY89vydVNKFTHKWMU4pvoKvryQSg2gTQ9hfuZnPfNTXRUqRqxUxel+8C93Fmo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774579334; c=relaxed/simple;
+	bh=xsj4Cs5IAwt7Pnl9ANDZ4ALej1e0ezWMGEcNvxQZ11M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cU0gOYLLRiASZOaCHFdHXYxMJzhqHmLkNxdJQLSA/ac5mhjcpSWTsFAdT/nlrg0miSpP92XwOQSO2XSRanz9PRw9h+1DPTu0uhG/VUzTqI+2hGng6aSGdUjqKMOylvWc52ufu3pMiS3vNydDT/QU1OAX7jZzqovKlqdNiAVSGO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lGYbQK2z; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WNAez2j7"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b979d16dd0cso286620066b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 19:33:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774578820; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RjK9oaucPAXf+STfjhF+I0N48BP/uAL2bCMUYWO1zjv2/XydFob9sabQWjbR4GM4MK
-         wE4/9Rw9IrOp1Skg9cZbrsZRjGbC+1o6z/jl6FOS9FDfOtjfHqcIuiFIuSZRxDujX7V4
-         USCg83QcMny1Nr3IKg86vbGXLbFtMhotNsJF57n+NqOyLSPC5fYfhf/FgwfL7rcTdCxU
-         gEIYVfZ2hTInmI0Vfv/76RB21GOsG7Y9HVn5Qh33h580leW8lns+KGQDFfrPdA+zRy/r
-         FUsLNSOgm/ahrOAD2TfHHHZYqLlFEubc4ewDRmjtaQI04SmncYJccj3GCla1gMdJ92N4
-         kUHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=J/j2LL2fzZ3HqKnkSg4Q11VeHoSjD2aRYX2gqfSMp8c=;
-        fh=TYeuxZdLr/pAuqlGew9FPspvR09/JfDn90tJSbEBSPA=;
-        b=FxuPcZHL7unmbEwtnBLJczRIF6F6O5e8/EEfVsc/tYZQG4ebx+hXh/8yqF9WFu70jT
-         QDnq8E7gPsRaF3Ejp4fdHqvQLPy8bQ3pxIT/Xio0Zui9LwqgEEFBkUgyQ0B95Ax05ZEJ
-         xA9tzI9Ax8mIGiW4bEFarZGmKww93HRUk9rYT+drbBYngjV2gpdC1uPZtA8RVWmxLwyi
-         93YOsKZYvjhlcfWhOCo0A0+WXcoSGwwkgEQimNLTpY+i/Qy6lQSxY0+Ru1a7SBnMOMZ9
-         xfHdS8iCArtiUMlJMzvjmW9Ix1fVYcV8e/7HLem+xUO5kZbeqiji89yxzPrPFPR6i2AI
-         1iGQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lGYbQK2z"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b79f8f7ea43so332133966b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 19:42:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774578820; x=1775183620; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J/j2LL2fzZ3HqKnkSg4Q11VeHoSjD2aRYX2gqfSMp8c=;
-        b=WNAez2j7Hs+E5z13vNZS8hdcy3gAlLN1o2gKpSHjUFWrW4ShBHkWJ+8oDxMR8qTXk9
-         mg5b+ZgXKwi6InYIVPzakcE6xOqmFAgai+JQ9xtT/+gYsg1g3c6XAOQh9Yb/iEscLT4X
-         09dUQFCbfpwd3AlzHpXl3ydIZBEu5VSbCEH6QAJcMWpmu5VyGZDecO2XpbabrBywJ7Fz
-         zFKDWRSnu46EBDzWBEhluHD4rJiDfE4DtPUUrHJsQUC/IBqzqshdvwWVgpDx6t11bW88
-         IQ2Skxlze1MA4TitpUDDxubgEYs0C6E9+PRvqHYcfUmjsr5eia0wf87c9ebwOHlAjLbu
-         +Clg==
+        d=gmail.com; s=20251104; t=1774579331; x=1775184131; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vf9WbBMwCT487nD1xvHoA4rs1KXwmIjjzAnpLhCamsQ=;
+        b=lGYbQK2zUuV2kPP/7f/W8hZi9IrgDAXNS2p+3Kxr8JJrd8PKnWlJDPlW02cJzTTG46
+         BUhV/uEnWT/KVJpUorv0FbiLUaYaMW0w2XrZRuN2HO0ijCLilRqPAv497yEv3RasX4PK
+         2k8zPJg9ggBaorUW/QDWDzO47/9Nl4mIRwMtbBEMXWh6/ngAlcq/vffZYh7zZBCITgr6
+         ePLB64vBzL+GFsvwir+qSrjImAqDn7mmgroYo5phOhiQlHFhd6SwV5MNp77iTwWJvAUa
+         67Zw4bA7ioZ22i7RWgbL0xv6AWOoF1iS83fvxPzDGShhH4HMnAq3OMrgZ0gwayXClLTH
+         7KEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774578820; x=1775183620;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=J/j2LL2fzZ3HqKnkSg4Q11VeHoSjD2aRYX2gqfSMp8c=;
-        b=SoqqFcl7U5RCWhyHBfoGggSfPf5PHlfWO8NtHwU1M5Zy5lA6UOQQU0TpUZJUWh6PZw
-         P9szUSUgNTWo/G7gxFOOX4X7FvfCNrMH/jwcVQn/H67Xy/yGz8bEed/E8F97nx2n/Zpd
-         ABQbh5VhdKeYnmsMQbBoCtq2PwJPcC/u6kIb16v+b+C9qhrhf/LDa9SdHrWXJy8/Qzz/
-         cTVRvSvx39ZVuvI9IKAu0yxCPdWzDG2ymZU4ZTeoW7QWTmGOj57ctCjky03Mvdcxppzm
-         2PnZCj3xEnOALYUhUWOjenAUDmqhA/dYSkD7S8pPv1/wPPhgUyQljMSrhZF9tal1EBeP
-         AXLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXqKv9Z7y/W+j7Bdts+umnKz36yYxYdZsQncRTmen+E5ZDAty2/Ct4e/XkGkBE5nDYcoDcDMJEW/PmEH/rekY0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWaS0MfMR50ZwHBH5vq13poH+Ex5nfQtX2Dn06OZY3Ao4DqSUB
-	NHtVoLuot0KF+OeukGTO4/VfB6jKASF0yXegd8AxAqcA8q5WHmj5zMJGkK28kyvv2wVjAnHiicQ
-	e/0kcwAQ9IcxIIwPpgPqqTTzmANrRp+VrAnnNqA2y
-X-Gm-Gg: ATEYQzzy7CKqvuXn2StFGKgjt0hXH0QdG8qCN5Mq3wHoAH547E7/9L10OcF7w3teMGG
-	ACD57nGf8jP2nxJ9NPfSLgGLC8nhZUjNJGcBQ0XxjWjO9ueXCcl3rvt1us28PbFPcSbgUVSNUGz
-	JMXBMsTzDNPZB0uAjWeK6v2Fv/RyCuFp1YwHwymnnSkncG6cpCXbKob2zUx+gxM6VGQxK52eH4N
-	CsoFinweQYECbMrzF45LIdSSP8nebvLsMgyE+QHdFasS8684AiXutNm4W/RGj6C/GUH7a+pBhtU
-	6JfAP4xKaSejRKssCY7OpRJQcBErYoEKqT+SDk6fPqyJHT16Zg773xSAlyzFVGMog/BHmQ==
-X-Received: by 2002:a17:907:7207:b0:b97:cebd:8273 with SMTP id
- a640c23a62f3a-b9b5032239amr41546366b.24.1774578819995; Thu, 26 Mar 2026
- 19:33:39 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774579331; x=1775184131;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vf9WbBMwCT487nD1xvHoA4rs1KXwmIjjzAnpLhCamsQ=;
+        b=X0R2bTQDPpqLF3JSXMGSygbs+hnZQD54+wnpXhN5YFF+AowSIouF0Y3Ra72kyd/wez
+         PDt37dckdPIvlquIH5cAJDY7twIWADcn0JYt8/WpY4HozrhrK8HrQQClcVeYQawVhLKa
+         Cjlr5pRHpScEv38vN70+qXN80AqgqLN+bYBab90KS0J+JR8ybLniLRqjXEIMtDtK2J0N
+         E0ZtV22fKbFo0ailHR+BpSWDTCTkCsivHcTCObfQIA1Qsi77hYBP3Sja69Dfa3PUfsx3
+         sPDDw7RJvYyqdPyuid+WTU9rJsEkI52JkKwv/JhWZqRjR9l8UAF3UmiBy+WobLP1CqbN
+         TFhw==
+X-Forwarded-Encrypted: i=1; AJvYcCVAWjU25347vnVd3QXAmjPke7Gn4YDMcCIyDQPUZQOysWbPkXH53A/2oYojYKx3O1Nl7IVm2Ce2QzVY1cxRR/0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDLM9B5mJyjD/4On1JHJ1qhbtuhPptHCQPIHTafLiI5IrRdfbp
+	aANlxOa+QvCOJi/wJtFa9LijtZi4t68uVmcW1153KCEjLAiP7ETlsH+1
+X-Gm-Gg: ATEYQzwXuo+tlxZdVWXdNM08uwXdPSfVyGKPqFVoEotVBmo31W6NpIAt+39WBM/5us5
+	LTtgNe983VQPzwWlFPrGjegcyN4k8pnQH5W14fb7N0Uj21FwRKKZLc6kbhcDjt7SyZeo5nfXRqs
+	560O5e+UefKriJxSjZFi2Vp0Pksxme5bwJjRoDwpaYGDAMRby8McdMX3i7ACq2CENAXnj3tW9LQ
+	a8yikkVLWoFK5dzEvYol2d1MVARb1ZvukDGinr8/bRifMfD9/Ya5Vi07W8umxaDhHeu/VyyPbKL
+	w1+dGp8sMFrZw4+q4skZAsuLO9Pvdgi89srUXs07o5KOEeqq+wF8e/+sUOqGcwx17SwZzbTHtLO
+	BZ0VuZef8szT6hPb6QX1fy1UBmfn5ia7YJJmn1oti0MAOnEynPS0u4dVc6hbGVXNyArOUM+3we3
+	3NidY=
+X-Received: by 2002:a17:907:9621:b0:b98:13a:c92e with SMTP id a640c23a62f3a-b9b502b5aa6mr43788566b.2.1774579330829;
+        Thu, 26 Mar 2026 19:42:10 -0700 (PDT)
+Received: from gmail.com ([2a09:bac5:4e22:270f::3e4:18])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b203ef450sm196663466b.47.2026.03.26.19.42.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 19:42:09 -0700 (PDT)
+From: Qingfang Deng <dqfext@gmail.com>
+To: Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Felix Maurer <fmaurer@redhat.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Petr Machata <petrm@nvidia.com>,
+	Allison Henderson <allison.henderson@oracle.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-ppp@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Paul Mackerras <paulus@ozlabs.org>
+Subject: [PATCH net-next v5] selftests: net: add tests for PPP
+Date: Fri, 27 Mar 2026 10:41:46 +0800
+Message-ID: <20260327024202.111655-1-dqfext@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306171815.3160826-1-rppt@kernel.org> <20260306171815.3160826-14-rppt@kernel.org>
-In-Reply-To: <20260306171815.3160826-14-rppt@kernel.org>
-From: James Houghton <jthoughton@google.com>
-Date: Thu, 26 Mar 2026 19:33:03 -0700
-X-Gm-Features: AQROBzBsDaVhxDLiM-NXiOxOeLuYc-OBfbNaKVq7AIOmeniABMQbpvif4NJ_3-8
-Message-ID: <CADrL8HViJ_GaRUd-k9MyM0S8b7sz3whGJHNwvFfCk+pw0+kRgA@mail.gmail.com>
-Subject: Re: [PATCH v2 13/15] KVM: guest_memfd: implement userfaultfd operations
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Andrea Arcangeli <aarcange@redhat.com>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	David Hildenbrand <david@kernel.org>, Hugh Dickins <hughd@google.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Michal Hocko <mhocko@suse.com>, 
-	Muchun Song <muchun.song@linux.dev>, Nikita Kalyazin <kalyazin@amazon.com>, 
-	Oscar Salvador <osalvador@suse.de>, Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 6, 2026 at 9:19=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
-e:
->
-> From: Nikita Kalyazin <kalyazin@amazon.com>
->
-> userfaultfd notifications about page faults used for live migration
-> and snapshotting of VMs.
->
-> MISSING mode allows post-copy live migration and MINOR mode allows
-> optimization for post-copy live migration for VMs backed with shared
-> hugetlbfs or tmpfs mappings as described in detail in commit
-> 7677f7fd8be7 ("userfaultfd: add minor fault registration mode").
->
-> To use the same mechanisms for VMs that use guest_memfd to map their
-> memory, guest_memfd should support userfaultfd operations.
->
-> Add implementation of vm_uffd_ops to guest_memfd.
->
-> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-> Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Add ping and iperf3 tests for ppp_async.c and pppoe.c.
 
-Overall looks fine to me, but I am slightly concerned about in-place
-conversion[1], and I think you're going to want to implement a
-kvm_gmem_folio_present() op or something (like I was saying on the
-previous patch[2]).
+Signed-off-by: Qingfang Deng <dqfext@gmail.com>
+---
+v5: suppress SC2329 warning (cleanup called indirectly via trap)
+ https://lore.kernel.org/netdev/20260326021642.29170-1-dqfext@gmail.com/
 
-[1]: https://lore.kernel.org/kvm/20260326-gmem-inplace-conversion-v4-0-e202=
-fe950ffd@google.com/
-[2]: https://lore.kernel.org/linux-mm/CADrL8HVUJ5FL97d9ytxp2WXos6HS+U+ycpsi=
-5VxffsW9vacr9Q@mail.gmail.com/
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/net/ppp/Makefile      | 15 +++++++
+ tools/testing/selftests/net/ppp/config        |  9 ++++
+ tools/testing/selftests/net/ppp/ppp_async.sh  | 44 +++++++++++++++++++
+ tools/testing/selftests/net/ppp/ppp_common.sh | 44 +++++++++++++++++++
+ .../selftests/net/ppp/pppoe-server-options    |  2 +
+ tools/testing/selftests/net/ppp/pppoe.sh      | 41 +++++++++++++++++
+ 8 files changed, 157 insertions(+)
+ create mode 100644 tools/testing/selftests/net/ppp/Makefile
+ create mode 100644 tools/testing/selftests/net/ppp/config
+ create mode 100755 tools/testing/selftests/net/ppp/ppp_async.sh
+ create mode 100644 tools/testing/selftests/net/ppp/ppp_common.sh
+ create mode 100644 tools/testing/selftests/net/ppp/pppoe-server-options
+ create mode 100755 tools/testing/selftests/net/ppp/pppoe.sh
 
-Some in-line comments below.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7a2ffd9d37d5..b922e154b9e7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21080,6 +21080,7 @@ PPP PROTOCOL DRIVERS AND COMPRESSORS
+ L:	linux-ppp@vger.kernel.org
+ S:	Orphan
+ F:	drivers/net/ppp/ppp_*
++F:	tools/testing/selftests/net/ppp/
+ 
+ PPS SUPPORT
+ M:	Rodolfo Giometti <giometti@enneenne.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 450f13ba4cca..65f84e8a0cf0 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -78,6 +78,7 @@ TARGETS += net/netfilter
+ TARGETS += net/openvswitch
+ TARGETS += net/ovpn
+ TARGETS += net/packetdrill
++TARGETS += net/ppp
+ TARGETS += net/rds
+ TARGETS += net/tcp_ao
+ TARGETS += nolibc
+diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
+new file mode 100644
+index 000000000000..b39b0abadde6
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/Makefile
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0
++
++top_srcdir = ../../../../..
++
++TEST_PROGS := \
++	ppp_async.sh \
++	pppoe.sh \
++# end of TEST_PROGS
++
++TEST_FILES := \
++	ppp_common.sh \
++	pppoe-server-options \
++# end of TEST_FILES
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
+new file mode 100644
+index 000000000000..b45d25c5b970
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/config
+@@ -0,0 +1,9 @@
++CONFIG_IPV6=y
++CONFIG_PACKET=y
++CONFIG_PPP=m
++CONFIG_PPP_ASYNC=m
++CONFIG_PPP_BSDCOMP=m
++CONFIG_PPP_DEFLATE=m
++CONFIG_PPPOE=m
++CONFIG_PPPOE_HASH_BITS_4=y
++CONFIG_VETH=y
+diff --git a/tools/testing/selftests/net/ppp/ppp_async.sh b/tools/testing/selftests/net/ppp/ppp_async.sh
+new file mode 100755
+index 000000000000..7ef98fe9d486
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/ppp_async.sh
+@@ -0,0 +1,44 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ppp_common.sh
++
++# Temporary files for PTY symlinks
++TTY_DIR=$(mktemp -d /tmp/ppp.XXXXXX)
++TTY_SERVER="$TTY_DIR"/server
++TTY_CLIENT="$TTY_DIR"/client
++
++cleanup() {
++	# shellcheck disable=SC2329
++	cleanup_all_ns
++	[ -n "$SOCAT_PID" ] && kill_process "$SOCAT_PID"
++	rm -fr "$TTY_DIR"
++}
++
++trap cleanup EXIT
++
++require_command socat
++ppp_common_init
++modprobe -q ppp_async
++
++# Create the virtual serial device
++socat -d PTY,link="$TTY_SERVER",rawer PTY,link="$TTY_CLIENT",rawer &
++SOCAT_PID=$!
++
++# Wait for symlinks to be created
++slowwait 5 [ -L "$TTY_SERVER" ]
++
++# Start the PPP Server
++ip netns exec "$NS_SERVER" pppd "$TTY_SERVER" 115200 \
++	"$IP_SERVER":"$IP_CLIENT" \
++	local noauth nodefaultroute debug
++
++# Start the PPP Client
++ip netns exec "$NS_CLIENT" pppd "$TTY_CLIENT" 115200 \
++	local noauth updetach nodefaultroute debug
++
++ppp_test_connectivity
++
++log_test "PPP async"
++
++exit "$EXIT_STATUS"
+diff --git a/tools/testing/selftests/net/ppp/ppp_common.sh b/tools/testing/selftests/net/ppp/ppp_common.sh
+new file mode 100644
+index 000000000000..c72218813f95
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/ppp_common.sh
+@@ -0,0 +1,44 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# shellcheck disable=SC2153
++
++source ../lib.sh
++
++IP_SERVER="192.168.200.1"
++IP_CLIENT="192.168.200.2"
++
++ppp_common_init() {
++	# Package requirements
++	require_command pppd
++	require_command iperf3
++
++	# Check for root privileges
++	if [ "$(id -u)" -ne 0 ];then
++		echo "SKIP: Need root privileges"
++		exit $ksft_skip
++	fi
++
++	# Namespaces
++	setup_ns NS_SERVER NS_CLIENT
++}
++
++ppp_check_addr() {
++	dev=$1
++	addr=$2
++	ns=$3
++	ip -netns "$ns" -4 addr show dev "$dev" 2>/dev/null | grep -q "$addr"
++	return $?
++}
++
++ppp_test_connectivity() {
++	slowwait 10 ppp_check_addr "ppp0" "$IP_CLIENT" "$NS_CLIENT"
++
++	ip netns exec "$NS_CLIENT" ping -c 3 "$IP_SERVER"
++	check_err $?
++
++	ip netns exec "$NS_SERVER" iperf3 -s -1 -D
++	wait_local_port_listen "$NS_SERVER" 5201 tcp
++
++	ip netns exec "$NS_CLIENT" iperf3 -c "$IP_SERVER" -Z -t 2
++	check_err $?
++}
+diff --git a/tools/testing/selftests/net/ppp/pppoe-server-options b/tools/testing/selftests/net/ppp/pppoe-server-options
+new file mode 100644
+index 000000000000..66c8c9d319e9
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/pppoe-server-options
+@@ -0,0 +1,2 @@
++noauth
++noipdefault
+diff --git a/tools/testing/selftests/net/ppp/pppoe.sh b/tools/testing/selftests/net/ppp/pppoe.sh
+new file mode 100755
+index 000000000000..a93bb7d4ee8f
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/pppoe.sh
+@@ -0,0 +1,41 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ppp_common.sh
++
++VETH_SERVER="veth-server"
++VETH_CLIENT="veth-client"
++
++cleanup() {
++	# shellcheck disable=SC2329
++	cleanup_all_ns
++}
++
++trap cleanup EXIT
++
++require_command pppoe-server
++ppp_common_init
++modprobe -q pppoe
++
++# Create the veth pair
++ip link add "$VETH_SERVER" type veth peer name "$VETH_CLIENT"
++ip link set "$VETH_SERVER" netns "$NS_SERVER"
++ip link set "$VETH_CLIENT" netns "$NS_CLIENT"
++ip -netns "$NS_SERVER" link set "$VETH_SERVER" up
++ip -netns "$NS_CLIENT" link set "$VETH_CLIENT" up
++
++# Start the PPP Server
++ip netns exec "$NS_SERVER" pppoe-server -I "$VETH_SERVER" \
++	-L "$IP_SERVER" -R "$IP_CLIENT" -N 1 -q "$(command -v pppd)" \
++	-k -O "$(pwd)/pppoe-server-options"
++
++# Start the PPP Client
++ip netns exec "$NS_CLIENT" pppd \
++	local debug updetach noipdefault noauth nodefaultroute \
++	plugin pppoe.so nic-"$VETH_CLIENT"
++
++ppp_test_connectivity
++
++log_test "PPPoE"
++
++exit "$EXIT_STATUS"
+-- 
+2.43.0
 
-> ---
->  mm/filemap.c           |  1 +
->  virt/kvm/guest_memfd.c | 84 +++++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 83 insertions(+), 2 deletions(-)
->
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 6cd7974d4ada..19dfcebcd23f 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -262,6 +262,7 @@ void filemap_remove_folio(struct folio *folio)
->
->         filemap_free_folio(mapping, folio);
->  }
-> +EXPORT_SYMBOL_FOR_MODULES(filemap_remove_folio, "kvm");
->
->  /*
->   * page_cache_delete_batch - delete several folios from page cache
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 017d84a7adf3..46582feeed75 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -7,6 +7,7 @@
->  #include <linux/mempolicy.h>
->  #include <linux/pseudo_fs.h>
->  #include <linux/pagemap.h>
-> +#include <linux/userfaultfd_k.h>
->
->  #include "kvm_mm.h"
->
-> @@ -107,6 +108,12 @@ static int kvm_gmem_prepare_folio(struct kvm *kvm, s=
-truct kvm_memory_slot *slot,
->         return __kvm_gmem_prepare_folio(kvm, slot, index, folio);
->  }
->
-> +static struct folio *kvm_gmem_get_folio_noalloc(struct inode *inode, pgo=
-ff_t pgoff)
-> +{
-> +       return __filemap_get_folio(inode->i_mapping, pgoff,
-> +                                  FGP_LOCK | FGP_ACCESSED, 0);
-> +}
-
-When in-place conversion is supported, I wonder what the semantics
-should be for when we get userfaults.
-
-Upon a userspace access to a file offset that is populated but
-private, should we get a userfault or a SIGBUS?
-
-I guess getting a userfault is strictly more useful for userspace, but
-I'm not sure which choice is more correct.
-
-> +
->  /*
->   * Returns a locked folio on success.  The caller is responsible for
->   * setting the up-to-date flag before the memory is mapped into the gues=
-t.
-> @@ -126,8 +133,7 @@ static struct folio *kvm_gmem_get_folio(struct inode =
-*inode, pgoff_t index)
->          * Fast-path: See if folio is already present in mapping to avoid
->          * policy_lookup.
->          */
-> -       folio =3D __filemap_get_folio(inode->i_mapping, index,
-> -                                   FGP_LOCK | FGP_ACCESSED, 0);
-> +       folio =3D kvm_gmem_get_folio_noalloc(inode, index);
->         if (!IS_ERR(folio))
->                 return folio;
->
-> @@ -457,12 +463,86 @@ static struct mempolicy *kvm_gmem_get_policy(struct=
- vm_area_struct *vma,
->  }
->  #endif /* CONFIG_NUMA */
->
-> +#ifdef CONFIG_USERFAULTFD
-> +static bool kvm_gmem_can_userfault(struct vm_area_struct *vma, vm_flags_=
-t vm_flags)
-> +{
-> +       struct inode *inode =3D file_inode(vma->vm_file);
-> +
-> +       /*
-> +        * Only support userfaultfd for guest_memfd with INIT_SHARED flag=
-.
-> +        * This ensures the memory can be mapped to userspace.
-> +        */
-> +       if (!(GMEM_I(inode)->flags & GUEST_MEMFD_FLAG_INIT_SHARED))
-> +               return false;
-> +
-> +       return true;
-> +}
-> +
-> +static struct folio *kvm_gmem_folio_alloc(struct vm_area_struct *vma,
-> +                                         unsigned long addr)
-> +{
-> +       struct inode *inode =3D file_inode(vma->vm_file);
-> +       pgoff_t pgoff =3D linear_page_index(vma, addr);
-> +       struct mempolicy *mpol;
-> +       struct folio *folio;
-> +       gfp_t gfp;
-> +
-> +       if (unlikely(pgoff >=3D (i_size_read(inode) >> PAGE_SHIFT)))
-> +               return NULL;
-> +
-> +       gfp =3D mapping_gfp_mask(inode->i_mapping);
-> +       mpol =3D mpol_shared_policy_lookup(&GMEM_I(inode)->policy, pgoff)=
-;
-> +       mpol =3D mpol ?: get_task_policy(current);
-> +       folio =3D filemap_alloc_folio(gfp, 0, mpol);
-> +       mpol_cond_put(mpol);
-> +
-> +       return folio;
-> +}
-> +
-> +static int kvm_gmem_filemap_add(struct folio *folio,
-> +                               struct vm_area_struct *vma,
-> +                               unsigned long addr)
-> +{
-> +       struct inode *inode =3D file_inode(vma->vm_file);
-> +       struct address_space *mapping =3D inode->i_mapping;
-> +       pgoff_t pgoff =3D linear_page_index(vma, addr);
-> +       int err;
-> +
-> +       __folio_set_locked(folio);
-> +       err =3D filemap_add_folio(mapping, folio, pgoff, GFP_KERNEL);
-
-This is going to get more interesting with in-place conversion. I'm
-not really sure how to synchronize with it, but we'll probably need to
-take the invalidate lock for reading. And then we'll need a separate
-uffd_op to drop it after we install the PTE... I think.
-
-> +       if (err) {
-> +               folio_unlock(folio);
-> +               return err;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static void kvm_gmem_filemap_remove(struct folio *folio,
-> +                                   struct vm_area_struct *vma)
-> +{
-> +       filemap_remove_folio(folio);
-> +       folio_unlock(folio);
-> +}
-> +
-> +static const struct vm_uffd_ops kvm_gmem_uffd_ops =3D {
-> +       .can_userfault     =3D kvm_gmem_can_userfault,
-> +       .get_folio_noalloc =3D kvm_gmem_get_folio_noalloc,
-> +       .alloc_folio       =3D kvm_gmem_folio_alloc,
-> +       .filemap_add       =3D kvm_gmem_filemap_add,
-> +       .filemap_remove    =3D kvm_gmem_filemap_remove,
-> +};
-> +#endif /* CONFIG_USERFAULTFD */
-> +
->  static const struct vm_operations_struct kvm_gmem_vm_ops =3D {
->         .fault          =3D kvm_gmem_fault_user_mapping,
->  #ifdef CONFIG_NUMA
->         .get_policy     =3D kvm_gmem_get_policy,
->         .set_policy     =3D kvm_gmem_set_policy,
->  #endif
-> +#ifdef CONFIG_USERFAULTFD
-> +       .uffd_ops       =3D &kvm_gmem_uffd_ops,
-> +#endif
->  };
->
->  static int kvm_gmem_mmap(struct file *file, struct vm_area_struct *vma)
-> --
-> 2.51.0
->
