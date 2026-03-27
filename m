@@ -1,165 +1,295 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9134C6D
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 01:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774576395; cv=none; b=l++/HzXoddGOzHA+rqR/h+LE1F25+Z3bG9Ny/meSYrRqIemZDoywhrc7+ZAJTBWm+YksB+WzcHydLZA2XcgWGCRnLNbQTxShNThYGAEx10jJ0hz70Umwgn+7U3uVzkylVH2G/k9MQADH1XoVQ98cfDC4bq1g1eg3CnUjeBJ0kP8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774576395; c=relaxed/simple;
-	bh=216TK3RDbNFux8Vz68QqIt77sULAYGcQPaXgVmlrCv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p2/fRvFFaL+cC9fJoTFpy8jncvdexi642qH/6GSSHBosCiZF0pEBW1hpsHWWIy8ynvJrhv3aFZdN3Cg7RGAuiyHymRkTnGRydJMcxEuAhbbussjiu0FIVcgjA5S0fK9A1GzDp6rFy8bUCLPnHFDytIEIc7lEFUOBwREmdD4yh2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QyhOXBcr; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C81318B9C
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 01:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774576556; cv=pass; b=FBru7hV30vEasI5R9C4bvdGVeHckpjrvwZDW76H73ketHTDrzeBJa27coVukeClz2ldm/Elo8ALxYIcxqn6WBtIMNytaozr3cYKxNveqXqyYDZuViNXfjEKKh2nNDQWTTXAlF41zfOYIO2vL8aG5n9WbRJhqlMzFCn6XWre71Bw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774576556; c=relaxed/simple;
+	bh=jPoZpmPhJCkyzRyXFyk7PzTJt0cFfh7Y5K5HjBkOV7M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TKM9oI8Lw7wWmYVr9n0F9CJZ/8/2V6qzw9o5Duqhdy8f1GCpWrUp5/gEKm3UKOQgD1irNv02cBlFCpYz+3FGszNVwy1+KArBpVl7TObl0kOj104LH/VrrI+ABa6YQvGMp1bPXaW5dvbS6Bh8COtK2e/LNlLpp8xSU41uXqtI5gg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k7yvhTJ0; arc=pass smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QyhOXBcr"
-Message-ID: <5ce664e8-8c65-4000-b73d-06a9423edb32@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774576381;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9PFHr0GiOHoG1p9wMnx0nkJpSabI/bYbM+Srr2peKG8=;
-	b=QyhOXBcrAJUMoShO9XQYWFJiIZpU3in5ABRAK7G6XsHM7uiknVTQ8anWMzQST41KCQE7uk
-	ZtaS2KmmFBIU5RDAvoFli6nZQm6TgDdZXvs5pMX18k6DEb3gDkfefOYsuF+8zm1INXr9ho
-	oQSWY2Zz9coe/MuQIuDWt/ZbPbNjXGQ=
-Date: Fri, 27 Mar 2026 09:52:50 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k7yvhTJ0"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b980785a0bfso218479266b.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2026 18:55:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774576552; cv=none;
+        d=google.com; s=arc-20240605;
+        b=IWYJM5dzjlnArFLhMCd+1NO4SRZG8+DBiSwM01KRFu3N/Tnk4nX61cotCjgJEtOsaC
+         IcvGA18GTCGOSOShB+i0dYIoyAhJClNaJkW834VPdyLkqH/IJUoilYzLfhzcp8EQn9JD
+         PDRmuN+D5SjHXmCCLAToKvkXgw/D6DqynvloRLNzy606B7Y+UMUC+WyhjVXTejp/Qzq9
+         KpzF2I91MQ1bFAcs0AomZkcPZXULbm2xx6jCRy4dUk2B492mSRmkIHIzcR91a0M2/jlh
+         9EBvs29cw8lhl/p4IksbyAvug3SDssB1E38zgUiqalPTzvCF9r5G812vXMc9rkFnsEB/
+         uPlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=v4/C6+dxmJ86MqBFYBzHKr+NUyGTfoaoGAJ7iveTtgs=;
+        fh=CShbZ1Re1RYVTHHnEfDTMQP6nrGKuxFdcS8YQ3YWpdc=;
+        b=KAaGnADx8Y8YM7TDYFrv/7nT15MglOxvJJpl6R46SX9tqbdRqib+OWdo/jVHEI4Am/
+         ce60gAcBBMh5fm98uldSvMwuIhruon4kbLkfBFFLttRu2jh4ulMWKR4S6BWB0CPFygVM
+         wxRnVg8WsmE/fn3OjYc65QCz29hIgA6EVdWxqlSMuxz1S5nYlWLz1LfsiReUKt8kl7Mc
+         9ips4gwZKPIT6W7Slv9b8dgsiG9h+L7PFSKXz/m9FpqbLlzCkHKkaaWCAwicaHwrDP3w
+         FGZPJHTe1S6LfSh4Iherz97oGFiIdksLjDHerW4wodxpN/oFux/IR1b/iipN0/Z77WPE
+         N0Tw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774576552; x=1775181352; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v4/C6+dxmJ86MqBFYBzHKr+NUyGTfoaoGAJ7iveTtgs=;
+        b=k7yvhTJ0xR1+At4yNERyllDfhZOEuCxo6999bLmOvz40tXMbgZx/n//Dkb8MH2OlkX
+         Mde1x8W82BQUm0SIM3CmYja1FQ+Ec+qGHxMN7BGCKWBu4tI3JjQaF4gkIgJBQ74hq7mm
+         3YsTHq0QtT+wZqjodDrbLoJORsqiftN348zmwTLPp45XwtkHQ9GAyViWWZ41zik7lzL7
+         kvJRFdK0w3jP5cLtlU/20/AysnSIHW5vPFq29RRUIE7pP+gkEGvkb4SRPhfrduoAPEgV
+         Cet6MHDrGgSTrRrPVY1PWCx4q946lzgzRP2KjRIHesJ34yBkoDxfnlx4vc2guOYYssnX
+         JoGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774576552; x=1775181352;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=v4/C6+dxmJ86MqBFYBzHKr+NUyGTfoaoGAJ7iveTtgs=;
+        b=gr+0DzzO4DFRuUw9+BqVgH2sNVNwAgof1rt2bW1+lh51/EO3eL7BzQ5K37GylOqd4w
+         Jy4zsYU0NRm3zQt1WtJpIRMpTCgQsWQM690MP5PTWjOTEQJmIlUIxgfJW8zr+bbOLljW
+         3/dwn1NyBRnE4kC8kbHx+Hqhtd7R6On2dj/7vlqoZgVTwxfAQgDP398aH1F5xbFDMDua
+         Ahn0vhmHxggiSfuUpu9OJqysb9HWmCHJsEfisBqHHQumsB+vPIzh0NOxpxSJATJOwbUR
+         4PKrIV2rjB8YquXTNwt9GtHNwJ3iv10tuSMCvMumLhZOWc2QlXkmGf+h5/qb2tdHHAH0
+         GT4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVQbJKLk+Wckc2vDNSaDiFhr7mv3+hETxkKsVgvQ7Dpw5WbijD2irAMGtRBUz2siW4jQxGi7neQ9zijrYfUJWE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB2JcW8YxFgqqmOz2WKCPt6shwD5NT99HLxwytDb6KViXofgmp
+	TBiiukzbgemZj+P6samyS+j/glGkvdMMSl44zg2RSsKCL73HJFgE9pesqmwWzK4ereYHZE3lHvi
+	+mc5tfpkU/u2bZ083TJNPoSX2Txh/JSxjMqTIeAoc
+X-Gm-Gg: ATEYQzw17pn4UBzzmP7rnTaCRjhCVZu9pUISKirT+2fERrBhMMmKjgYnx9v5D1Tr6dP
+	r49tdHkwrFUY8ReiBHhgfo2E76TMrYBvbBL6M4GN7g2LgLQItoZ+9bK526Y+2LIVllENwMwOm3Z
+	VsVsNIOJQsxchLNQyunPvX3kipU1/yolBP//6FFBMTpNkqhLeYLqGKucv/2ujP9CJtCvnpjmt//
+	iZK6bgXo2r8b5robiulUXuTkEMJEXKHrqB2lwWwyo5/DGFh1vgedanSoQ5VmTjWHYqE2Uq+44FX
+	ZYATmaDmwBG2aIN5Uo4SvfpF0TkS8fWQS1/3dgSIQh9NnfGs0w+DZA6XQMz6dFKHRfndkg==
+X-Received: by 2002:a17:907:e158:b0:b98:c69:f07d with SMTP id
+ a640c23a62f3a-b9b5090a9b8mr25881366b.34.1774576551262; Thu, 26 Mar 2026
+ 18:55:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add protocol check test for
- bpf_sk_assign_tcp_reqsk()
-To: Kuniyuki Iwashima <kuniyu@google.com>,
- Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Jiayuan Chen <jiayuan.chen@shopee.com>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260326062657.88446-1-jiayuan.chen@linux.dev>
- <20260326062657.88446-3-jiayuan.chen@linux.dev>
- <CAAVpQUAKAeU8SXpKQwcQS6P6aFJ_BxmevcrK=Hs+_rf_mnaLXA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CAAVpQUAKAeU8SXpKQwcQS6P6aFJ_BxmevcrK=Hs+_rf_mnaLXA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260306171815.3160826-1-rppt@kernel.org> <20260306171815.3160826-13-rppt@kernel.org>
+In-Reply-To: <20260306171815.3160826-13-rppt@kernel.org>
+From: James Houghton <jthoughton@google.com>
+Date: Thu, 26 Mar 2026 18:55:15 -0700
+X-Gm-Features: AQROBzDUg7nnPrShRG0yBUvJphXCQFgkh8YtYxeiIRK_yAgzpeQjdeV5p-bfc2o
+Message-ID: <CADrL8HVUJ5FL97d9ytxp2WXos6HS+U+ycpsi5VxffsW9vacr9Q@mail.gmail.com>
+Subject: Re: [PATCH v2 12/15] mm: generalize handling of userfaults in __do_fault()
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andrea Arcangeli <aarcange@redhat.com>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	David Hildenbrand <david@kernel.org>, Hugh Dickins <hughd@google.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Michal Hocko <mhocko@suse.com>, 
+	Muchun Song <muchun.song@linux.dev>, Nikita Kalyazin <kalyazin@amazon.com>, 
+	Oscar Salvador <osalvador@suse.de>, Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Mar 6, 2026 at 9:19=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
+e:
+>
+> From: Peter Xu <peterx@redhat.com>
+>
+> When a VMA is registered with userfaulfd, its ->fault()
+> method should check if a folio exists in the page cache and call
+> handle_userfault() with appropriate mode:
+>
+> - VM_UFFD_MINOR if VMA is registered in minor mode and the folio exists
+> - VM_UFFD_MISSING if VMA is registered in missing mode and the folio
+>   does not exist
+>
+> Instead of calling handle_userfault() directly from a specific ->fault()
+> handler, call __do_userfault() helper from the generic __do_fault().
+>
+> For VMAs registered with userfaultfd the new __do_userfault() helper
+> will check if the folio is found in the page cache using
+> vm_uffd_ops->get_folio_noalloc() and call handle_userfault() with the
+> appropriate mode.
+>
+> Make vm_uffd_ops->get_folio_noalloc() required method for non-anonymous
+> VMAs mapped at PTE level.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  mm/memory.c      | 43 +++++++++++++++++++++++++++++++++++++++++++
+>  mm/shmem.c       | 12 ------------
+>  mm/userfaultfd.c |  8 ++++++++
+>  3 files changed, 51 insertions(+), 12 deletions(-)
+>
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 07778814b4a8..e2183c44d70b 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -5328,6 +5328,41 @@ static vm_fault_t do_anonymous_page(struct vm_faul=
+t *vmf)
+>         return VM_FAULT_OOM;
+>  }
+>
+> +#ifdef CONFIG_USERFAULTFD
+> +static vm_fault_t __do_userfault(struct vm_fault *vmf)
+> +{
+> +       struct vm_area_struct *vma =3D vmf->vma;
+> +       struct inode *inode;
+> +       struct folio *folio;
+> +
+> +       if (!(userfaultfd_missing(vma) || userfaultfd_minor(vma)))
+> +               return 0;
+> +
+> +       inode =3D file_inode(vma->vm_file);
+> +       folio =3D vma->vm_ops->uffd_ops->get_folio_noalloc(inode, vmf->pg=
+off);
 
-On 3/27/26 1:33 AM, Kuniyuki Iwashima wrote:
-[...]
->>          for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
->> @@ -145,6 +145,82 @@ void test_tcp_custom_syncookie(void)
->>
->>   destroy_skel:
->>          system("tc qdisc del dev lo clsact");
->> +       test_tcp_custom_syncookie__destroy(skel);
->> +}
->>
->> +/* Test: bpf_sk_assign_tcp_reqsk() should reject non-TCP skb.
->> + *
->> + * Send a UDP packet through TC ingress where a BPF program calls
->> + * bpf_sk_assign_tcp_reqsk() on it. The kfunc should return an error
->> + * because the skb carries UDP, not TCP.
->> + */
->> +void test_tcp_custom_syncookie_protocol_check(void)
->> +{
->> +       int tcp_server = -1, udp_server = -1, udp_client = -1;
->> +       struct test_tcp_custom_syncookie *skel;
->> +       struct sockaddr_in udp_addr;
->> +       char buf[32] = "test";
->> +       int udp_port, ret;
->> +
->> +       if (setup_netns())
->> +               return;
->> +
->> +       skel = test_tcp_custom_syncookie__open_and_load();
->> +       if (!ASSERT_OK_PTR(skel, "open_and_load"))
->> +               return;
->> +
->> +       /* Create a TCP listener so the BPF can find a LISTEN socket */
->> +       tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-> Can you add IPv6 test as well ?
-> You can reuse test_tcp_custom_syncookie_case[].
->
->
->> +       if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
->> +               goto destroy_skel;
->> +
->> +       /* Create a UDP server to receive the packet as synchronization */
->> +       udp_server = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 0);
-> You can specify the port to get_socket_local_port(tcp_server),
->
->
->> +       if (!ASSERT_NEQ(udp_server, -1, "start udp_server"))
->> +               goto close_tcp;
->> +
->> +       skel->bss->tcp_listener_port = ntohs(get_socket_local_port(tcp_server));
->> +       udp_port = ntohs(get_socket_local_port(udp_server));
->> +       skel->bss->udp_test_port = udp_port;
-> then the 3 lines above will be unnecessary,
->
->
->> +
->> +       ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
->> +       if (setup_tc(ret))
->> +               goto close_udp_server;
->> +
->> +       udp_client = socket(AF_INET, SOCK_DGRAM, 0);
->> +       if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
->> +               goto cleanup_tc;
->> +
->> +       memset(&udp_addr, 0, sizeof(udp_addr));
->> +       udp_addr.sin_family = AF_INET;
->> +       udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
->> +       udp_addr.sin_port = htons(udp_port);
-> and you can reuse get_socket_local_port(tcp_server) here too.
->
->
->> +
->> [...]
->> +       iph = (struct iphdr *)(eth + 1);
->> +       if (iph + 1 > data_end)
->> +               return TC_ACT_OK;
->> +
->> +       if (iph->protocol != IPPROTO_UDP)
->> +               return TC_ACT_OK;
->> +
->> +       udp = (struct udphdr *)(iph + 1);
->> +       if (udp + 1 > data_end)
->> +               return TC_ACT_OK;
->> +
->> +       if (bpf_ntohs(udp->dest) != udp_test_port)
->> +               return TC_ACT_OK;
-> You don't need to worry about other program sending UDP
-> packets in this netns created by unshare().
->
->
->> +
->> +       udp_intercepted = true;
->> +
->> +       tuple.ipv4.saddr = iph->saddr;
->> +       tuple.ipv4.daddr = iph->daddr;
->> +       tuple.ipv4.sport = udp->source;
->> +       tuple.ipv4.dport = bpf_htons(tcp_listener_port);
-> and you can simply reuse dport here too.
->
+If you do away with the change you made to vma_can_userfault(), please
+add a WARN_ON_ONCE() here if uffd_ops or uffd_ops->get_folio_noalloc
+are not present.
 
-Thanks for the review. I'll update the code to address all these points.
+> +       if (!IS_ERR_OR_NULL(folio)) {
+> +               /*
+> +                * TODO: provide a flag for get_folio_noalloc() to avoid
+> +                * locking (or even the extra reference?)
+> +                */
 
+I think a whole new op is better than adding a flag. Something like
+uffd_ops->folio_present().
+
+> +               folio_unlock(folio);
+> +               folio_put(folio);
+> +               if (userfaultfd_minor(vma))
+> +                       return handle_userfault(vmf, VM_UFFD_MINOR);
+> +       } else {
+> +               if (userfaultfd_missing(vma))
+> +                       return handle_userfault(vmf, VM_UFFD_MISSING);
+> +       }
+> +
+> +       return 0;
+> +}
+> +#else
+> +static inline vm_fault_t __do_userfault(struct vm_fault *vmf)
+> +{
+> +       return 0;
+> +}
+> +#endif
+> +
+>  /*
+>   * The mmap_lock must have been held on entry, and may have been
+>   * released depending on flags and vma->vm_ops->fault() return value.
+> @@ -5360,6 +5395,14 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
+>                         return VM_FAULT_OOM;
+>         }
+>
+> +       /*
+> +        * If this is an userfaultfd trap, process it in advance before
+
+"If this is a userfault"
+
+> +        * triggering the genuine fault handler.
+> +        */
+> +       ret =3D __do_userfault(vmf);
+> +       if (ret)
+> +               return ret;
+> +
+>         ret =3D vma->vm_ops->fault(vmf);
+>         if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_R=
+ETRY |
+>                             VM_FAULT_DONE_COW)))
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 68620caaf75f..239545352cd2 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2489,13 +2489,6 @@ static int shmem_get_folio_gfp(struct inode *inode=
+, pgoff_t index,
+>         fault_mm =3D vma ? vma->vm_mm : NULL;
+>
+>         folio =3D filemap_get_entry(inode->i_mapping, index);
+> -       if (folio && vma && userfaultfd_minor(vma)) {
+> -               if (!xa_is_value(folio))
+> -                       folio_put(folio);
+> -               *fault_type =3D handle_userfault(vmf, VM_UFFD_MINOR);
+> -               return 0;
+> -       }
+> -
+>         if (xa_is_value(folio)) {
+>                 error =3D shmem_swapin_folio(inode, index, &folio,
+>                                            sgp, gfp, vma, fault_type);
+> @@ -2540,11 +2533,6 @@ static int shmem_get_folio_gfp(struct inode *inode=
+, pgoff_t index,
+>          * Fast cache lookup and swap lookup did not find it: allocate.
+>          */
+>
+> -       if (vma && userfaultfd_missing(vma)) {
+> -               *fault_type =3D handle_userfault(vmf, VM_UFFD_MISSING);
+> -               return 0;
+> -       }
+> -
+>         /* Find hugepage orders that are allowed for anonymous shmem and =
+tmpfs. */
+>         orders =3D shmem_allowable_huge_orders(inode, vma, index, write_e=
+nd, false);
+>         if (orders > 0) {
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index 7cd7c5d1ce84..2ac5fad0ed6c 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -2045,6 +2045,14 @@ bool vma_can_userfault(struct vm_area_struct *vma,=
+ vm_flags_t vm_flags,
+>             !vma_is_anonymous(vma))
+>                 return false;
+>
+> +       /*
+> +        * File backed memory with PTE level mappigns must implement
+
+"File-backed VMAs (except HugeTLB VMAs) must implement
+ops->get_folio_alloc() to support userfaults, as all userfaults in
+file-backed VMAs wlll call ops->get_folio_alloc() to determine the
+userfault type."
+
+> +        * ops->get_folio_noalloc()
+> +        */
+> +       if (!vma_is_anonymous(vma) && !is_vm_hugetlb_page(vma) &&
+> +           !ops->get_folio_noalloc)
+
+With the separate folio_present() (or whatever) op, this check becomes
+more obvious. (Looking at this right now, it looks like we're checking
+for UFFDIO_CONTINUE/minor fault support here, but that's not really
+what's going on.)
+
+Honestly I'm not 100% sure if this check should be here. If it's going
+to be here, then we should probably also have checks like these here:
+
+if (vm_flags & VM_UFFD_MINOR && !ops->get_folio_noalloc)
+
+and
+
+if (vm_flags & VM_UFFD_MISSING && !ops->alloc_folio)
+
+So, maybe we should just leave it up to ops->can_userfault() to make
+sure we're doing the right thing?
+
+> +               return false;
+> +
+>         return ops->can_userfault(vma, vm_flags);
+>  }
+>
+> --
+> 2.51.0
+>
