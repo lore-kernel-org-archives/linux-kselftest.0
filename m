@@ -1,54 +1,54 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EDF3A4513
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 23:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984373A3E78
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 23:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774654842; cv=none; b=cQe/TrDFuUjEQw0xxWx1d3YMb8VPVLdt/jjILWqXoRICa8KTTC77YlJXzXRvmWvQg+NzPgLPljwrfvba2KYXaHTJtAdF/+w1LpaocfjNg6+ryAMuv2eYxXwhjE2lI5F6Acijk5jq2vtuh5Asu0hW6rF+AGMPDcm6geVRpT5OVm8=
+	t=1774654843; cv=none; b=Qv1hlLfmOQaZxV9N6+qTlbNgiDIGqAf8QXagXFyQEs4uG19rVq/DSVJq/Yfp+iiiXDTz/F4ntxudHCueANIipquIUfdeGrahAzxIQOCOmkw/QTGHqZDot6h8BN4hiR3emyYP+Ie+22kL7jqIxKN1nqqirmLIe53UdoXz4Ha2e8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774654842; c=relaxed/simple;
-	bh=JZ6+GCnob6DoER6tsgVX1H+2aBiZ/Ru6GqazViOYorE=;
+	s=arc-20240116; t=1774654843; c=relaxed/simple;
+	bh=XLgtzGzP42ljoyiyAMkJfrzmvotKaPs/WCkAxsvyobc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tGzMU6oAK0+s4Wx+AuVpq/g0iCQ2lqcVuKrdKl2GuJc++ylt8SAFb0kjYE+xfvghMu7z+2xuR0GbC9K/58lXKR7lhT+JvbyGoVNTn1nQRxbsW1vu92nzvaxzC44Z92Y6kDLqqEjVnIFk15gVysaAlDe24Jccum4GGuhrs3V06Oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qpIhd2O2; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=TdP37IKzeJoNDjSyzoQ1tUeOf4jsRl+4WOBT4iK/vAgrivLvuIjQl0e16O+YM+ocTysvGLtMGh8aIqRxexsDfKGZrlcOz5AgC2+kk3nOReG8v38rXJr7+jm9c46LZqog4slUX0Ga4OLkFqOtYRuPmJi8V7w+j1GzxonNIrGBvvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bvnuhllz; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qpIhd2O2"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2b0b339b8dbso34560445ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 16:40:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bvnuhllz"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35a032cdd78so5249341a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 16:40:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774654839; x=1775259639; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774654841; x=1775259641; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/5S/h4cOpTQz2572kh2nJElR+n8F1U4MUPv9k7NHcKE=;
-        b=qpIhd2O2L0zS4SJogUKVUPAZmgD8tzPVNiNC+3yeI9nHH9s6V7izgeSmbBI6rmI3b0
-         SiyN0AQbkxmiohOC0qJc6FwRiBnGa6AQ0BOAuKcZWK7H998U/Uw1F7htI7DqTvvC7wkv
-         73t04DeGuEpszXB9Ja7g5WGf/DSAPqhe0X3BevdtS+8uv03kWkzTg8P6sUZIGaVJEQvr
-         cH/tRMPADU77jv9xtqJi9S49ekbzpfLQdFapSwob7A0OZihz6yTEPz7JOMs36hMJx9xh
-         xbg2m+kK9G6ljCOx9+eA5X6tajDUEVmDbY8Re+0MhO6L61kmRWXzsUJLnRapIde4BZsO
-         nWfg==
+        bh=fcHCPa7TDJvI9dVBUyhh6A4BV1v5Np3TWFrOmkOsocE=;
+        b=Bvnuhllz2ehGQX+RdVTSoGv3BpfjRGsZ/xyAPrtu3k1GTlmhStDM6+WIHOJmHlaafu
+         FJcohwPpcezZpzs/2alKmnJM0N06pQ2flMoUoGCBlJSy880uE7wh1sIC9sw0gXhGkm6V
+         g4Q9wqdPJbfStpyKz5YbUuMl6Q+sSrD7jDkJZ3Eq86yZE7Xje6O0d1qsl5RJHVPfi+xn
+         g80IwGVuCNe5g181E42ys+3J8NqgrZx+uvPcOkfruYEKyUjY2O7w2u6evvF7bie35gmY
+         4nzxdZYafHwaIzSrS9ivVSCZDY23LqsE9T+6EbGHZ34xXw4HIgnwkkU4TWh3lSlE3Q/u
+         gBfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774654839; x=1775259639;
+        d=1e100.net; s=20251104; t=1774654841; x=1775259641;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/5S/h4cOpTQz2572kh2nJElR+n8F1U4MUPv9k7NHcKE=;
-        b=aNsV+ru4HD0GFo+zo/sovpt+DbVdECGu2BcJFFPOxAnu7uWUASo04WbdzX1g5ndKnN
-         A8iD5RRxRI3pGbLqJ4VrLBNYfXmOeNi/oY9FKqu+WJZtdipHvCTx3KQsVh7GfTrM4FrX
-         w1UwIH4oAeRaQby3vOFJhZNsCdPHm1nKBmKHbUhuVTwv6YiDrluvHmIHw28v0rTM88k2
-         mX3TQbGA2viP4p/U6mU9NG2nA3qqGJ88aTclYjNREvZOShtkE3FoICyJXxv01hiYmWlz
-         JoJROTCo+WfnSyQK6QaojOdKwjfkaQErAUsbfatCqIlVm+nhVSfCwIgFI88pciGjhXW3
-         z61g==
-X-Forwarded-Encrypted: i=1; AJvYcCUzc9INEHn9sNgwzckxTpGiKixTGpzc3EIXvg02sKq2f9HFaudY5amIlUSZIpp9gel7Pi3j16X261LG+bI8bnQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2w/A7WDLYCQ8FzhpZvGeKcFsXzwO9eORVzJJdtSeF9GOm3m4E
-	YfdqWu84xbSeb9ugRWkGdRVKFOyaphUWCmFBAt4Lg+jUNWauPrHMN+CWPv2JawwVg6823EmlqcJ
-	Gf46qP4jGD1st+w==
-X-Received: from plge14.prod.google.com ([2002:a17:902:cf4e:b0:2b0:5cd7:c89a])
+        bh=fcHCPa7TDJvI9dVBUyhh6A4BV1v5Np3TWFrOmkOsocE=;
+        b=dnEjie5CviuFc/oOyf4imZtpaDdpf8MiYC0rKv/+B37m35P2+B29SKXsKI5tr7sx1K
+         umeG9RwxHLA+5JQpoyt632jMgYjnTepCkbBU2ttVHTl/fXfm8WZ7pYt6M6w3C7ZnXZll
+         DV8dA2EOMwzYBOBk7xEuoMJK9e2RsXaXSSmNiW6VyyAQAKUVF1rUgBerWDJ8Up2Xq3fU
+         mxjf5zW56v91GWA1Z8q7C2JkBpqT045YGImyJZGQj7WxxLXAPu/iKV58538Cg8Kzu0bs
+         Bk8wUyA7QbJBzy0D++uMDOgXmj1v5QIgacitjznrgEFds12q5KXmSwUfzjf23UJdqLCk
+         yTRw==
+X-Forwarded-Encrypted: i=1; AJvYcCVpEGa8FOc3liveLgMpRxvAdoVWfAIyc2+ACIJfLIkbedWOmWVLxjkxF8fiS9ka9utIzxEEH7r28FsqQUYq6VA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu+16H5Eg4qiXR5sLICseKG+j3DJGUmXBw+WzPhdLMqM4ptCxJ
+	KDINlp1ie7sM7mj4srmYHrrnD+LoQiC4nng7GtJjQgRLuiufAsuRpEcynbfRHi2Dg/VN1vgida8
+	DOe3zPJjo6VMc3w==
+X-Received: from pjub23.prod.google.com ([2002:a17:90a:cc17:b0:35d:94b3:bd6b])
  (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:2405:b0:2b0:ac1e:9737 with SMTP id d9443c01a7336-2b0cdc3dabcmr45964875ad.12.1774654838782;
- Fri, 27 Mar 2026 16:40:38 -0700 (PDT)
-Date: Fri, 27 Mar 2026 16:40:13 -0700
+ 2002:a17:90b:164a:b0:35b:8d89:7199 with SMTP id 98e67ed59e1d1-35c2ffb5174mr4008593a91.15.1774654840484;
+ Fri, 27 Mar 2026 16:40:40 -0700 (PDT)
+Date: Fri, 27 Mar 2026 16:40:14 -0700
 In-Reply-To: <20260327234023.2659476-1-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260327234023.2659476-1-jmattson@google.com>
 X-Mailer: git-send-email 2.53.0.1018.g2bb0e51243-goog
-Message-ID: <20260327234023.2659476-7-jmattson@google.com>
-Subject: [PATCH v7 6/9] KVM: x86: nSVM: Save gPAT to vmcb12.g_pat on VMEXIT
+Message-ID: <20260327234023.2659476-8-jmattson@google.com>
+Subject: [PATCH v7 7/9] KVM: Documentation: document KVM_{GET,SET}_NESTED_STATE
+ for SVM
 From: Jim Mattson <jmattson@google.com>
 To: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
 	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
@@ -71,34 +72,54 @@ To: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
 Cc: Jim Mattson <jmattson@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-According to the APM volume 3 pseudo-code for "VMRUN," when nested paging
-is enabled in the vmcb, the guest PAT register (gPAT) is saved to the vmcb
-on emulated VMEXIT.
+Document the nested state constants and structures for SVM that were
+added by commit cc440cdad5b7 ("KVM: nSVM: implement KVM_GET_NESTED_STATE
+and KVM_SET_NESTED_STATE").
 
-When KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT is disabled and the vCPU is in
-guest mode with nested NPT enabled, save the vmcb02 g_pat field to the
-vmcb12 g_pat field on emulated VMEXIT.
-
-Fixes: 15038e147247 ("KVM: SVM: obey guest PAT")
+Fixes: cc440cdad5b7 ("KVM: nSVM: implement KVM_GET_NESTED_STATE and KVM_SET_NESTED_STATE")
 Signed-off-by: Jim Mattson <jmattson@google.com>
 ---
- arch/x86/kvm/svm/nested.c | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/virt/kvm/api.rst | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index ccc556eb4d2f..add57f2a2d9f 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -1248,6 +1248,9 @@ static int nested_svm_vmexit_update_vmcb12(struct kvm_vcpu *vcpu)
- 	vmcb12->save.dr6    = svm->vcpu.arch.dr6;
- 	vmcb12->save.cpl    = vmcb02->save.cpl;
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 2d56f17e3760..0a2d873ca5a3 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -4942,10 +4942,13 @@ Errors:
+   #define KVM_STATE_NESTED_FORMAT_SVM		1
  
-+	if (l2_has_separate_pat(svm))
-+		vmcb12->save.g_pat = vmcb02->save.g_pat;
+   #define KVM_STATE_NESTED_VMX_VMCS_SIZE	0x1000
++  #define KVM_STATE_NESTED_SVM_VMCB_SIZE	0x1000
+ 
+   #define KVM_STATE_NESTED_VMX_SMM_GUEST_MODE	0x00000001
+   #define KVM_STATE_NESTED_VMX_SMM_VMXON	0x00000002
+ 
++  #define KVM_STATE_NESTED_GIF_SET		0x00000100
 +
- 	if (guest_cpu_cap_has(vcpu, X86_FEATURE_SHSTK)) {
- 		vmcb12->save.s_cet	= vmcb02->save.s_cet;
- 		vmcb12->save.isst_addr	= vmcb02->save.isst_addr;
+   #define KVM_STATE_VMX_PREEMPTION_TIMER_DEADLINE 0x00000001
+ 
+   struct kvm_vmx_nested_state_hdr {
+@@ -4960,11 +4963,19 @@ Errors:
+ 	__u64 preemption_timer_deadline;
+   };
+ 
++  struct kvm_svm_nested_state_hdr {
++	__u64 vmcb_pa;
++  };
++
+   struct kvm_vmx_nested_state_data {
+ 	__u8 vmcs12[KVM_STATE_NESTED_VMX_VMCS_SIZE];
+ 	__u8 shadow_vmcs12[KVM_STATE_NESTED_VMX_VMCS_SIZE];
+   };
+ 
++  struct kvm_svm_nested_state_data {
++	__u8 vmcb12[KVM_STATE_NESTED_SVM_VMCB_SIZE];
++  };
++
+ This ioctl copies the vcpu's nested virtualization state from the kernel to
+ userspace.
+ 
 -- 
 2.53.0.1018.g2bb0e51243-goog
 
