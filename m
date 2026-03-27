@@ -1,123 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410243FEB2A;
-	Fri, 27 Mar 2026 17:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5A633FE36;
+	Fri, 27 Mar 2026 18:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774633799; cv=none; b=H9p+qkAV7SW4Q37IyPtLi99qtknb6ALOvqH3ABN1UTmOKRf3+WpgqSGcx7jOFc9foBV+QIbIkYczBHVpcJqgtlgMAA7eDHvEqPTwCfhKrbljEuSWXPr/SgFjLK7NfNaj55g2/2UqEr8nQ0FklyoHSZjoLSBIeiD5taNHZSZ5vvI=
+	t=1774635065; cv=none; b=VWJgwUvP0VuFx78iGVRME5fYaODXNrf01NuTIc5OhtEN2VOA7V5cNsv9ljVoWxA0kc/jaWC8vkxvg8Av87KNIhZPhP7sRli8K+710rNqWwc11X9HnRg05huRmUe4FFZs87rFXaKiwHYrwDq9NZW60En2laQjingS+Ml880lqhjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774633799; c=relaxed/simple;
-	bh=9F+JwO9GwB+hbNoAofMWqhQyQzYejVy8kAdlUKIZeKg=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Og8idS8adVoLQf+rzOtUrSLu8BP8orxP0aUyo9QlKkCm5boCQLjNIoCuXLoXSA3rW8byYmzSaEovHGqbpTdYsMmiG96oFeOrlVYz/pzRlg11HCrRRNljrT74D9xxSRaMNkmfr4P/jc8rj1CBsgGy+5I2KnDqBIx5KwOcWaZRqb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WykhkTLw; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1774635065; c=relaxed/simple;
+	bh=D3tgGfmxSUuIKrF23B6dFn44AdNk1562eNoc2kIzF0g=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Cpk9EAreLtKJvXpe7YkJ3wNtSdg8z9SD5+5Dhn0pp/yyY8RCO8RxUl+todO6tKFtiuaqYUUfQh+3MHGYtH6zmhsvPDQhH6rNkLE7/NGUP6bn63E1RAWr1+TvUy+ENkqZsDGKk4sXhnlmztpqrRqLpCJPHQf8S0SlVT8AgGw9nfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cdYOayuP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WykhkTLw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774633799; x=1806169799;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=9F+JwO9GwB+hbNoAofMWqhQyQzYejVy8kAdlUKIZeKg=;
-  b=WykhkTLwU7vuY+zhemPWEvrLLBblJJVitX6VMY/p6SlmvTFOttEWuMMz
-   nC+V9iwaeMDVlDXEh5hY+L9e8kD5s+DKyjUcXhh9R7fog8ue6KK7fGwqy
-   PLLl9NsMlR2PfSgCLHjP7g67QkXRdRwOVaPZ36oKG9TpMeB91IDmWE6IS
-   yRxhBBZq/DSKxpJ52AMmRrC3ZSgTtiRY8uEKQ7rp3z6icNkn1g5CZMw8m
-   qIaYgaIWm3ub1guDwlqw3w5ws/ZlvI25boh/892kaPcMDzq+UebuoNSvf
-   ehu57uXIDeDhd+sRTVpQscZ7Z5cfLAQpOQtMGtvojE4I4yb7HNoLoumaI
-   w==;
-X-CSE-ConnectionGUID: 10lEJzryQMOiTVq/d7N05Q==
-X-CSE-MsgGUID: qYtgZjDiSZK4cfD6dbvdiA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="87100346"
-X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
-   d="scan'208";a="87100346"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 10:49:57 -0700
-X-CSE-ConnectionGUID: xGD/MJiCS4yuyggIWhEGCQ==
-X-CSE-MsgGUID: 23ly9QQTSBi9ddjKl19H+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
-   d="scan'208";a="224588013"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.186])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 10:49:50 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 27 Mar 2026 19:49:47 +0200 (EET)
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: shuah@kernel.org, Dave.Martin@arm.com, james.morse@arm.com, 
-    tony.luck@intel.com, babu.moger@amd.com, fenghuay@nvidia.com, 
-    peternewman@google.com, zide.chen@intel.com, dapeng1.mi@linux.intel.com, 
-    ben.horgan@arm.com, yu.c.chen@intel.com, jason.zeng@intel.com, 
-    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    patches@lists.linux.dev
-Subject: Re: [PATCH v3 10/10] selftests/resctrl: Reduce L2 impact on CAT
- test
-In-Reply-To: <d4e13dec81de69c7ab08638d3f928b7d4ee2b1ac.1773432891.git.reinette.chatre@intel.com>
-Message-ID: <afefcfb5-3f6a-6d6d-976e-c10dcaa61abb@linux.intel.com>
-References: <cover.1773432891.git.reinette.chatre@intel.com> <d4e13dec81de69c7ab08638d3f928b7d4ee2b1ac.1773432891.git.reinette.chatre@intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cdYOayuP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94449C2BC9E;
+	Fri, 27 Mar 2026 18:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1774635065;
+	bh=D3tgGfmxSUuIKrF23B6dFn44AdNk1562eNoc2kIzF0g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cdYOayuPJYi2aaxhAmAFgppjg5NFHZRBdYAYmVT0UcRjcTZjflLB/FGXTUb9V3lJx
+	 OgYT97I6nd+lwOsBPiBlUFP0OCrdat5FF+6ghCrli/AY5UhTyMpR/3xUnK2jyN4H6W
+	 38fwnTH1RNgXYVSZcfyBJ0jwwTiW+dxnu/XqmhNw=
+Date: Fri, 27 Mar 2026 11:11:04 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Sayali Patil <sayalip@linux.ibm.com>
+Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Ritesh
+ Harjani <ritesh.list@gmail.com>, David Hildenbrand <david@kernel.org>, Zi
+ Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, Oscar Salvador
+ <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain
+ <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v3 00/13] selftests/mm: fix failures and robustness
+ improvements
+Message-Id: <20260327111104.b8bc18be45172639f5b9226f@linux-foundation.org>
+In-Reply-To: <cover.1774591179.git.sayalip@linux.ibm.com>
+References: <cover.1774591179.git.sayalip@linux.ibm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1564639018-1774633787=:1037"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Fri, 27 Mar 2026 12:45:54 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
 
---8323328-1564639018-1774633787=:1037
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+> Powerpc systems with a 64K base page size exposed several issues while
+> running mm selftests. Some tests assume specific hugetlb configurations,
+> use incorrect interfaces, or fail instead of skipping when the required
+> kernel features are not available.
+> 
+> This series fixes these issues and improves test robustness.
+> 
+> Please review the patches and provide any feedback or suggestions for
+> improvement.
 
-On Fri, 13 Mar 2026, Reinette Chatre wrote:
+AI review asks many questions:
+https://sashiko.dev/#/patchset/cover.1774591179.git.sayalip@linux.ibm.com
 
-> The L3 CAT test loads a buffer into cache that is proportional to the L3
-> size allocated for the workload and measures cache misses when accessing
-> the buffer as a test of L3 occupancy. When loading the buffer it can be
-> assumed that a portion of the buffer will be loaded into the L2 cache and
-> depending on cache design may not be present in L3. It is thus possible
-> for data to not be in L3 but also not trigger an L3 cache miss when
-> accessed.
->=20
-> Reduce impact of L2 on the L3 CAT test by, if L2 allocation is supported,
-> minimizing the portion of L2 that the workload can allocate into. This
-> encourages most of buffer to be loaded into L3 and support better
-> comparison between buffer size, cache portion, and cache misses when
-> accessing the buffer.
->=20
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> Tested-by: Chen Yu <yu.c.chen@intel.com>
-> ---
-> Changes since v2:
-> - Add Chen Yu's tag.
-> ---
->  tools/testing/selftests/resctrl/cat_test.c | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/s=
-elftests/resctrl/cat_test.c
-> index 6aac03147d41..371a2f26dc47 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -157,6 +157,10 @@ static int cat_test(const struct resctrl_test *test,
->  =09if (ret)
->  =09=09goto reset_affinity;
-> =20
-> +=09ret =3D minimize_l2_occupancy(test, uparams, param);
-> +=09if (ret)
-> +=09=09goto reset_affinity;
-> +
->  =09perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
->  =09pe_fd =3D perf_open(&pea, bm_pid, uparams->cpu);
->  =09if (pe_fd < 0) {
->=20
 
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+I never knew about that bash line continuation thing.
 
---=20
- i.
+hp2:/home/akpm> cat t.sh
 
---8323328-1564639018-1774633787=:1037--
+foo=\
+	bar
+	
+echo $foo
+hp2:/home/akpm> bash t.sh
+t.sh: line 3: bar: command not found
+
+Huh.  But it presumably passed your testing so confused.
+
+
+I don't want to risk breaking selftests so I'll set v3 aside until
+you're confident we should proceed.
+
+Thanks.
