@@ -1,49 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E2838910D;
-	Fri, 27 Mar 2026 12:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2075419C542;
+	Fri, 27 Mar 2026 12:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774614553; cv=none; b=FlTzY2rfSuySEWygtJZMSSpSnDSjrpkV0WpjRlEtpK/YCOLo2LAMBDTf7ijvgZ+M5pYnbZDxvu4ubWgDG2qfnhZM0HMcFolLrOdk/uUD/IQ6GMlPDQg7+SS6+wJ0qvwWfxELeR9/xH8Dm4A+xQp/5y1Pa3dtQLw2vACmqkq1cDg=
+	t=1774614731; cv=none; b=ifRqYLK3YhtI/s9MrbYejC1MSLdYyfpJxPPtlN9t/K0SbIXNJoTiduXLWky1oBbz3pAzFiW68lrPzmuHnK9OyEMFvhifSgvXccTkZv8qz9Qx4fXmwDCAiyeFvqDMVvMV4yzazw/Drc3YPM/3BRd6ID55ckGaE74U0IkTiS97D78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774614553; c=relaxed/simple;
-	bh=YgZDlPiJvemYo/gf8s9JAb+1AiSwXPvayCb368ynG4I=;
+	s=arc-20240116; t=1774614731; c=relaxed/simple;
+	bh=Pl9DVulQW4wTm72CZ7Z0DlDl11UMwY/qQTHqQXd4fo0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V6l+Jh/IhL82MJYG9aEuHAMHJW3uB3FT94CPfDmjNfWeyLw3Qm2MboUTd7OC0HxqfSpMiGqVbo/SCSyiT4MoRvKbSnAC9guAih3mb8hgYz9nZjAQxPG5yPhjrrJUXG6eRYmev6vG9bjWiUTPZD3gazYU9Jn+RQ1NRWZmJ0npdTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P8nvaAV2; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=A+p+G7han6wgu35PsKuCSSjPyLhdaJZpzav1KWWo6PXcYSO92CwxC9k+YEO6D8in3cJR0REycnAz/lqWPqCjgBgj9g+8nHh02eKUbS+BwiDb2XQGWQhLpKgEZVpgE27cSLyMEzgwJMxqs0vOi8nDIXCP+i7+Tyk20XQSO53rN2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gG3JNHS2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P8nvaAV2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12598C19423;
-	Fri, 27 Mar 2026 12:29:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gG3JNHS2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9583DC19423;
+	Fri, 27 Mar 2026 12:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774614552;
-	bh=YgZDlPiJvemYo/gf8s9JAb+1AiSwXPvayCb368ynG4I=;
+	s=k20201202; t=1774614730;
+	bh=Pl9DVulQW4wTm72CZ7Z0DlDl11UMwY/qQTHqQXd4fo0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P8nvaAV26WoxCEiijKXxPz27X5f5WPVVmW50/Em6IcSbxbtwykC7Fq6FoJfjrvGnI
-	 mdZ/cUzccp77GfiTBOa3d3PVBkLRkZg5AKjVFZqeDnL/O8QAen1YstfoUyKmYl7J7Q
-	 KY82Qxxyf4i6TaQfHjikvgEUodvnNiCpAKHmWq5VjRJhchC5tLHP6gBukW6PTzKS8E
-	 y5e6gNLo8ZoGnjGJjOEa12iHG9PVrzf84AKevXj5aoTqRMFRriJGQKol8WvKP4HXT6
-	 7U2dnzTkl9gSGl59FU2c/W3e1eAbLDQAhnmfbFgYZFG1xAZuRR2z9ssCbwwbYQ9r0v
-	 Yg9yUPFoVsrqw==
-Date: Fri, 27 Mar 2026 12:29:10 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 04/10] fs: remove nr_thps from struct address_space
-Message-ID: <f98087e1-311b-4b8c-bfff-230cfbdbace5@lucifer.local>
-References: <20260327014255.2058916-1-ziy@nvidia.com>
- <20260327014255.2058916-5-ziy@nvidia.com>
+	b=gG3JNHS2r8tw4BAPgiCvkVDhREBhFMB72+fGe4fR9spd9APmORjZYd8Xb69ygI8JO
+	 4vEKHENnLe/BZ+47FfQXurrgYhUzorJ2IXP2e2n77JPaOB+ncMOcOZce0c3Zaxe7NF
+	 9VnkLGAdrbhEpLs5EwhyR5t2zLu7lNnKR1rbOEnAsrb6SVP6ZKWBBy3xy1ubR9xIF+
+	 rSUUUPvqW05hB3S2125JudhUuiWmvna3jyeSasYilQmyLoSoVAxy8kxroqq6g9u/Ls
+	 nFVz+dcgo1JHgg7NhZ9OvZ0A2tD0Nb383uOlmdgyXfg2UuOejuCQ/knrq6K5KTRx+k
+	 0yF06X7oAWONg==
+Date: Fri, 27 Mar 2026 15:32:01 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Chunyu Hu <chuhu@redhat.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
+	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
+	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+	baohua@kernel.org, lance.yang@linux.dev
+Subject: Re: [PATCH v6 4/6] selftests/mm/vm_util: robust write_file()
+Message-ID: <acZ4wTxSmPn_s_mn@kernel.org>
+References: <20260324013316.2590422-1-chuhu@redhat.com>
+ <20260324013316.2590422-5-chuhu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,61 +48,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260327014255.2058916-5-ziy@nvidia.com>
+In-Reply-To: <20260324013316.2590422-5-chuhu@redhat.com>
 
-On Thu, Mar 26, 2026 at 09:42:49PM -0400, Zi Yan wrote:
-> filemap_nr_thps*() are removed, the related field, address_space->nr_thps,
-> is no longer needed. Remove it.
->
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-
-I wonder if we shouldn't squash this into previous actually, but it's fine
-either way, so:
-
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-
+On Tue, Mar 24, 2026 at 09:33:14AM +0800, Chunyu Hu wrote:
+> Add two more checks for buflen and numwritten. The buflen should be at
+> least one, otherwise the 'buflen - 1' could underflow and cause trouble.
+> The numwritten should be equal to 'buflen - 1'. The test will exit if
+> any of these conditions aren't met.
+> 
+> Additionally, add more print information when a write failure occurs or
+> a truncated write happens, providing clearer diagnostics.
+> 
+> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 > ---
->  fs/inode.c         | 3 ---
->  include/linux/fs.h | 5 -----
->  2 files changed, 8 deletions(-)
->
-> diff --git a/fs/inode.c b/fs/inode.c
-> index cc12b68e021b..16ab0a345419 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -280,9 +280,6 @@ int inode_init_always_gfp(struct super_block *sb, struct inode *inode, gfp_t gfp
->  	mapping->flags = 0;
->  	mapping->wb_err = 0;
->  	atomic_set(&mapping->i_mmap_writable, 0);
-> -#ifdef CONFIG_READ_ONLY_THP_FOR_FS
-> -	atomic_set(&mapping->nr_thps, 0);
-> -#endif
->  	mapping_set_gfp_mask(mapping, GFP_HIGHUSER_MOVABLE);
->  	mapping->i_private_data = NULL;
->  	mapping->writeback_index = 0;
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 0bdccfa70b44..35875696fb4c 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -455,7 +455,6 @@ extern const struct address_space_operations empty_aops;
->   *   memory mappings.
->   * @gfp_mask: Memory allocation flags to use for allocating pages.
->   * @i_mmap_writable: Number of VM_SHARED, VM_MAYWRITE mappings.
-> - * @nr_thps: Number of THPs in the pagecache (non-shmem only).
->   * @i_mmap: Tree of private and shared mappings.
->   * @i_mmap_rwsem: Protects @i_mmap and @i_mmap_writable.
->   * @nrpages: Number of page entries, protected by the i_pages lock.
-> @@ -473,10 +472,6 @@ struct address_space {
->  	struct rw_semaphore	invalidate_lock;
->  	gfp_t			gfp_mask;
->  	atomic_t		i_mmap_writable;
-> -#ifdef CONFIG_READ_ONLY_THP_FOR_FS
-> -	/* number of thp, only for non-shmem files */
-> -	atomic_t		nr_thps;
-> -#endif
->  	struct rb_root_cached	i_mmap;
->  	unsigned long		nrpages;
->  	pgoff_t			writeback_index;
-> --
-> 2.43.0
->
+> Changes in v6:
+>   - save/restore errno before and after the close(), so the log could show
+>     the correct error info on failure. Suggested by AI.
+> Chagnes in v5:
+>   - new patch for making improve on write_file. Add more safety checks and
+>     diagnostics info in log
+> ---
+>  tools/testing/selftests/mm/vm_util.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index ad96d19d1b85..572ccb99de8e 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -767,15 +767,23 @@ int unpoison_memory(unsigned long pfn)
+>  
+>  void write_file(const char *path, const char *buf, size_t buflen)
+>  {
+> -	int fd;
+> +	int fd, saved_errno;
+>  	ssize_t numwritten;
+> +	if (buflen < 1)
+> +		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
+>  
+>  	fd = open(path, O_WRONLY);
+>  	if (fd == -1)
+>  		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+
+We have ksft_exit_fail_perror(), fits great here
+
+>  
+>  	numwritten = write(fd, buf, buflen - 1);
+> +	saved_errno = errno;
+>  	close(fd);
+> +	errno = saved_errno;
+>  	if (numwritten < 1)
+> -		ksft_exit_fail_msg("Write failed\n");
+> +		ksft_exit_fail_msg("%s write(%s) failed: %s\n", path, buf,
+> +				strerror(errno));
+
+and here.
+
+> +	if (numwritten != buflen - 1)
+> +		ksft_exit_fail_msg("%s write(%s) is truncated, expected %zu bytes, got %zd bytes\n",
+> +				path, buf, buflen - 1, numwritten);
+>  }
+> -- 
+> 2.53.0
+> 
+
+-- 
+Sincerely yours,
+Mike.
