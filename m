@@ -1,432 +1,188 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AC33806D9
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 22:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774651089; cv=none; b=AMH1A6QQlKG2naOqcRgRhIi1zOCOlZN0v793VAvrZGOVQJmIxRPJzLPm1PzoDGRFMi8hJn3hyogefiRvvgARcAYFYyywRp+zzvCkYhcmW1mAi8KrZC4sv3sMInmpvKX07mvbKbbEwK6Ode/S5luwgnBwMQttNRcPFT+veFZPf+g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774651089; c=relaxed/simple;
-	bh=D3prHlADKsKYNGWLMM0GNzmNCFP1LXx9zmEigGv2DSk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WnJQj6P4qjbZfr6dfUhqxRH3t4YxDilAtbYsnB+VF531tDxA3QdDcHrRizClnam0OaQkvmAtfGoCd50jGwFybxmdwwO3ziGw7xzqy/ZnmdvN/QWPkE6cmGZ61HYlV8o7FxH4sU/op1+72EJZ4s4AMSwXa2S2TycHjHUBHsMrlnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nfwmSz+V; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B5C32B9A9;
+	Fri, 27 Mar 2026 23:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774653630; cv=fail; b=io2bbQyashzGXXsyAsnWgNSmEzVYrRYXrE7dcxSYk5BKvDQywglHZPHMJBi5vrHPiRGGDhUAlLjWLt0pZP9X4fQWP56gXRDUWVgAbrmErOBCpePwoyOUy2H3hT2REVN05h67c8PVXfXKVIp6BlgdLlOy8o9RUe8je+8hJzNIt/Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774653630; c=relaxed/simple;
+	bh=r3Yj2gzSBGnPS+r/P51vN0QaYYmA++wjpdPHRiPE0hw=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=U5ZlAVv5/KCImTYFAcK16bZvcHDyCoOLjNtH6w2UBxiGGW2MNnBqkoDgAzxEFeRc8ZjPyveRypDW5F2pwEivBRPTulic6FRX31dVUoQlADL+n8czuc0BVU5FGV35pkBO3zVXKsSgLgc0Lq2/rLJbg+q9enKO7rD++wMXtm46IiE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dOIMCHw6; arc=fail smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nfwmSz+V"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-829afe24fb5so1863964b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 15:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774651086; x=1775255886; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wEHJkm4bUHYcdVXZ/JzKNQe+5dIZYRF3+nLXskZSPIc=;
-        b=nfwmSz+VmRp4fLDtgkvcnauXOEcsihUvr2vZizQ9VXBYGDUemwxdCDV3bRW+qiwrl6
-         9j+y2i3y/vlvizwmF3GPQR8QWPVmGV1hNG7ShUxMyfq5UiU4EyZ2aOndbkY48oagcusm
-         /J86rznMJhf6wKi6OYScnK4TD0ZpS++k53XXcuYyOFX6EDIuZwpF6xPgG0q71v+fHeTG
-         tmrqY6wc0Smp0hW4CIQDbp8udyZuK1jXALKC6p9Fu/aHCBu89BBlZB5DWtodubv5zTRq
-         tw6pQUVOoRc9SRXZ/SXMt4DNgZ7YyFi/UJHUIu8w3K9TAYI4O06E+Mek2Ve5JcRTor4a
-         KNrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774651086; x=1775255886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wEHJkm4bUHYcdVXZ/JzKNQe+5dIZYRF3+nLXskZSPIc=;
-        b=K/rftRNSS6rYt1X+JcLxKnA/hyLXeR2X9P9MwqZIhGIUosJHXgfbrM9U5CGp21kJ94
-         m6WBToFNPz480q4SOqrP8JKjMVeCwFW7uTxrI3cxIiVNpBDGjaCXDTDLTR6/JQ1D1RHQ
-         0IGMabBR9gJqc3VyAqjpn9XAxGWBTuNC6ydc7qA9VeJx9B0VPrAnA74/SvOy2TiP43AO
-         AAJxJrPR3AtYbZWHFSb6C3W1Q44PHJCkDSp0ZwpMKgxPBCTIk0NAuxAUoZIgSNg+2MEz
-         rRXJy/CCR3yak0vyWiuSONHYQVCalpZUnHflCFMZjQK1/uvD7gYfT9fqnLvj744fhXuT
-         G8pg==
-X-Forwarded-Encrypted: i=1; AJvYcCUW1jhBV6wbIZIqfop01pWTwoDJ9RorGDWMAgG0sxnB7uTVYsxyGgTL3RJj0I+WtYlqJ/kVQHjpMHjpOTA6W24=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyP3ppPV5oxoNcDh5AwYeloj04N7lex4yZ35iYzqZiamfjGfXBw
-	rgGtLsCDSELhpMGShFj3+dY5STzAa4lKmomKVplMsDIw6Dr4yCoiytanvouPpz1X8Q==
-X-Gm-Gg: ATEYQzyhZl2aeaEzT4lNta3UuQ87eurMaRi1xhDyhelFXd+cBzC3vPNaj+gl/Qh2K6Q
-	b36IwDMsKWzma5f5kiNmC3oQm+c/AJoYeiF7Uj9g4PF/tExLNb5720COLlb34BmreMaL+NWCPdd
-	cXr62BG0m9zOV57XPxZX0SnvsxGxRoyU95g5zjiOmY6FE8cKuUHavh8l25RNHQTJ7QaoWTyFO19
-	O6bpd4PkzGAEIZmseYzVSchyvgKLHKiCe7fPcu3UpHNFPklBO1zl8/u9VIAgf0KEAegxfFCeoYk
-	gyI0/jXpi18J5JVvDlGhI9+CwBGQsw8dS0YQUHb5H0OutN87o72aPo1wF0nkt5BG6QQ8rnly7rM
-	MFs31vHBazqpBzpAClAn75ngIVapZJqnh1NVWsjCVDVMWhtTpFig7wiqHwfW94KM976V/jjGOS1
-	o1Tsu6q53xitk9mpZ7WYgKHAmV6JNa0Wi9jELcsEQhJNXfEjnBffoa8mArqF6JbQ==
-X-Received: by 2002:a05:6a00:2884:b0:82a:65fa:cecf with SMTP id d2e1a72fcca58-82c95c19600mr3671016b3a.4.1774651085230;
-        Fri, 27 Mar 2026 15:38:05 -0700 (PDT)
-Received: from google.com (239.23.105.34.bc.googleusercontent.com. [34.105.23.239])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca84375e3sm279811b3a.2.2026.03.27.15.38.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 15:38:04 -0700 (PDT)
-Date: Fri, 27 Mar 2026 22:38:00 +0000
-From: David Matlack <dmatlack@google.com>
-To: Rubin Du <rubind@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 2/2] selftests/vfio: Add NVIDIA Falcon driver for DMA
- testing
-Message-ID: <accGyPMCOM_Y5VxK@google.com>
-References: <20260325214329.464727-1-rubind@nvidia.com>
- <20260325214329.464727-3-rubind@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dOIMCHw6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774653628; x=1806189628;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=r3Yj2gzSBGnPS+r/P51vN0QaYYmA++wjpdPHRiPE0hw=;
+  b=dOIMCHw6F9PxnI18u7goNAE6Pal5a6jOha9mg4TL5ZtxszRM+2bgmvPl
+   kW65ltmY0U9bi4mwRd4rmaf+l5FnjeGa+TWQGCQbW9/BS5hTqM5Ra/g1n
+   bNJ/GqmrI5Mr7egrqB8ly8U6Jj6WFIwkOGAMpPf8uJOF7ZrgEFFVQ/4Xu
+   7xVC9oYKS+q2aak6bDNAjoDAwwqU5NS63YAyv2u+wSzmH9aKdpufn0HEP
+   9P5QsQr58EsLlhWw2ED/R+FIRwt0oqGOcI2+M45lCPhLez8KJkkU6WoGW
+   uIucQnBdaBgnBkuvpuw+yCxBAXxaNi956vp+vuLx8vyarTpTrpbd1gyKN
+   w==;
+X-CSE-ConnectionGUID: EUGPYiQiQfWExncQTZ4S+w==
+X-CSE-MsgGUID: HsSBjX3GT8OzY+AZJ7w7qA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="79638259"
+X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
+   d="scan'208";a="79638259"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 16:20:27 -0700
+X-CSE-ConnectionGUID: Sk1/vRM9SCKDbwhkbAxy1Q==
+X-CSE-MsgGUID: vuVE5BN8RfCqHG0xIsHMSA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
+   d="scan'208";a="230374601"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 16:20:26 -0700
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Fri, 27 Mar 2026 16:20:25 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Fri, 27 Mar 2026 16:20:25 -0700
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.10)
+ by edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Fri, 27 Mar 2026 16:20:25 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=buoTuastwh+6tja6NbGTmi4GvGJdGoGbZrDAWJu0/AD2q7HtbOChrDywDzpCltasEqe0XXzP4aicJYnv+m/r0Hcbfyk/peleBzh3dMlIV8H2/4TJ1KAYuSJlLe6VXgrC1c+LoALqmYZ6G2sf/YZ4o3u0ma3xjkcB3byuZl/hKvwEm287O0EplHQJSWWxeoUkHT7Zr+5i1Rm9HilImQZOqJLKyIS6lZqv94VK9erFkUNFkEMKqUESxQYM7Mv6Eh6X1Njd5eUvEvKO973MvRmeUoiI0tmzuczUA3yFclaY6RtYRkGuq5Zn724XQgB8BDmOMBMUdWXrC+XwzExjBqsQrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Fkpm7tGr+hCJ8MFrWZqkab8C1vjxDrbZQO/JCRe+BU4=;
+ b=YGjftjKDYE7H1waWys34gFJdyudlzrvnwrdjexLIwCO2MZPbBj6pUrTV+Jo1QBoAB6k+bNvBDr2m2KWkl9f6fHALh09ItTfBa4c93OwJAJvmpobrjheURZ/nCf3wTFH9orPGB6q0MzcHdxnIUEUhsm6kvFAaNAElT+dLk/wmTfKpiTr+QwsyRrJg9qMEZzKvqykD4U2npzqJcNQHJcYWIN60NDF/2/TBBe6+6E4gbz09kiDvc6ody2E/UHRhX47OA/TZTBihTF2auIwb7TXsqakKbAVyywQ1DC5mKTtpFag05UdPLQksZMaHth9CJQJRiHhioyUaTwQe/+io2I3fqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by CYXPR11MB8711.namprd11.prod.outlook.com (2603:10b6:930:d7::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.8; Fri, 27 Mar
+ 2026 23:20:22 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::bfe:4ce1:556:4a9d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::bfe:4ce1:556:4a9d%5]) with mapi id 15.20.9769.006; Fri, 27 Mar 2026
+ 23:20:22 +0000
+Message-ID: <a7c3c571-abf8-43bb-8ab9-a248f4594519@intel.com>
+Date: Fri, 27 Mar 2026 16:19:47 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 07/10] selftests/resctrl: Raise threshold at which MBM
+ and PMU values are compared
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC: <shuah@kernel.org>, <Dave.Martin@arm.com>, <james.morse@arm.com>,
+	<tony.luck@intel.com>, <babu.moger@amd.com>, <fenghuay@nvidia.com>,
+	<peternewman@google.com>, <zide.chen@intel.com>,
+	<dapeng1.mi@linux.intel.com>, <ben.horgan@arm.com>, <yu.c.chen@intel.com>,
+	<jason.zeng@intel.com>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>
+References: <cover.1773432891.git.reinette.chatre@intel.com>
+ <1bdca244a899a605c1ddd701a09d6a9d0c242856.1773432891.git.reinette.chatre@intel.com>
+ <c5dd1a0f-ed9d-d5c0-8b7a-25992ae713ab@linux.intel.com>
+From: Reinette Chatre <reinette.chatre@intel.com>
+Content-Language: en-US
+In-Reply-To: <c5dd1a0f-ed9d-d5c0-8b7a-25992ae713ab@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MW4PR03CA0315.namprd03.prod.outlook.com
+ (2603:10b6:303:dd::20) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325214329.464727-3-rubind@nvidia.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|CYXPR11MB8711:EE_
+X-MS-Office365-Filtering-Correlation-Id: b2b16163-88d3-451e-2307-08de8c576afd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|376014|366016|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: Is5j6+HnAGYFCMybvX9txIHi32N3+/CQ8bNIOR9/DBVAXuk8KPAxd2UkGL7THTqEGrSllcSK88jtDX5AAllT5gplMnVa/1bJA5O9solOPqNxZF9jFl/VxPZLL3p8Z7owwpO6O3mbezUMx1T2WIvqdCGpEBJSuCSyLnLdMWJljUyTAav7lGD6wz+a3/nzJtDNjIRCAJNEnehgOuUHg+rzvJK9aUOT7kEk3YW3M5SPgILkYi5ZNdiGqRrN2GoHuW4rr8L29L3fwT2iW9mIQgz/qypn9gBZTWVsKTEYzTp5P7Hxg87wa6L396pSo7tUad+vconwJqfyUh4k5eQ3JCSJnlMeB8nP82W/Xi1Lh6NAdwrzaR0o0AZ20QGVoabnYbkOp3QsdBtwHHVrWi29MXb3XIkrdZEc4RUhTReRVaGH01kO3G2usEQHVuZwUVzBTW7xvy5wU7vJkBnCwU6/Y1URzCnl/Umm+YpCKcwUWEhEtSHT9mhgJZlOtbapdByo+wyEjVTslCUTbXDiJDJT0L1wZNJH/ztWCaxTnViTCVnNM7dhLMmHGoE9q8A+B5WiNhWprR+OC+Cm2jyhZcG7tOv2E7kWD+ef2atE/jWS52jKA8YFXckvDycPBHFpzKvIs17SB3bqat+V/lbnY5DVPMoYe8bbMRTDJHqkYFqg7LC4Do+4zHOeAx5FoSYFKqQE0FEHiWqj5Q/YCiIWQEwdCsxm8xlalI9jmZgBYR98Gxg18Z4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VTV3UWtuQ0lEWmNoMUk5WjVBT2VEYWRxc0NEM2szbERuT3hOSStVUHRUcVpX?=
+ =?utf-8?B?anBzdGpTUVRaN3FScFBHNHhxcng3UkdiR051TTBnbGtBOFRNeGpHbTZ2blRZ?=
+ =?utf-8?B?QlNQcG5Oc2tsdVVIemJ4R1huNlFjQ25DVnY4eE9hbEtmaDZlVEIzZzk1VklE?=
+ =?utf-8?B?YkpPY2xQU0VMUFZsMW1iYjh6T0xnZjJGWG1vaVJZTWNHSk5rVzlOUFFrVFZK?=
+ =?utf-8?B?eGNsUmwrTWlXQXdxaW1qNWsxOGRMdGw1ZmZLRVVkMHhhZkovR0lBL0VzZlNo?=
+ =?utf-8?B?ZFpGbzRvNkp6ZVZqb0ZLdGovYkNYLzFkWVBGV1ZLM0xmOHNrS1Y5MnRmVTA2?=
+ =?utf-8?B?ekoxOUR6T3hSbDUzb1N2VmY1ai9SU29rLzdPMmI3ajczVlJ6VitONXE0RDZ3?=
+ =?utf-8?B?ZS9zVUNwL3BGSTdGbWVhSXdzd3VmbW9OcUZYVW5SM3JJSFh3dnF2OUNRRDNr?=
+ =?utf-8?B?dXRTdlB6cmJidzRsaExHbnNwRml2eTc0TkpLT0pVTjE3eHlQOW92b0h5MG45?=
+ =?utf-8?B?WXZseU9LVEh0cm1aUmo3QnJmWG9SN0h0VEExcGNnNjMwV2ZUVGUwcUhKVUtX?=
+ =?utf-8?B?T05hL0FCS2RZZXd6dTBjVXIzVk1NT0hKZWVhT1RPOVRONFhlYmtFM3dvUEN1?=
+ =?utf-8?B?TU4zWm5jN2dhV3EwdHVwbnhuVUxVdzF5YkxMVE10dFU0Z2NYY2ViY0hYN3FV?=
+ =?utf-8?B?T1pyOFRVazNWU05sZkcrTCtHajRUbzBGTHo0d2pLalY4dmtMWmc4c2ZrQzFJ?=
+ =?utf-8?B?eVphR0dDR1dsRkR2akdLc0NOVExudDF0cVhTUDYwWkRPcXRZd3cwbmFiUXlu?=
+ =?utf-8?B?Vkx2dHNHVVBSb1NTeWJEZWNxZVNEKzJOZk94V3dINzdkVFNHMkhpVHg2dUV2?=
+ =?utf-8?B?bDVObkJUM2xFK1YrMG5Vcnc1VTZQNjEyRWxoeiszSzRaSWxFVUxlR0NsSUJS?=
+ =?utf-8?B?czcyaFZ1endOVXd2NU9Ickhua3JPNFkrZ0FObk9JMW5ESllNWmZmc0xnenNF?=
+ =?utf-8?B?VVpST3g4a1hVenh1SVppbjZRR250dExPWkNXekZRWVBLai9Xdlo0RGZTTW9G?=
+ =?utf-8?B?UEJjbHhYNHIyK0pGWjVmcXhWMmdjMWVwQXcwN0tEL21OeU01Y0tNc3BZdE5I?=
+ =?utf-8?B?WmZ2Ni9PaGh2eldXVXdrNlpHbXBDSVdTR2FuQWVIWkRNWmdaaUlKbTV1bFhy?=
+ =?utf-8?B?eU9wVXovTkRUbWROSWtPb3hwazVNRDM4L0gxdWgxaHdGMjhpVUlGdzc0WmpY?=
+ =?utf-8?B?ampwaEV0Z2YyRS9Uak54Sy9NMTUrbzkvd2ZSVS9MU2xpZ1ZBQmZTbTlncmF2?=
+ =?utf-8?B?d1VaOGgyVHAydGhQVHpEZXNNRTd6V2l1WHZWSGVKR1NCaHlNTlEwNy9Cb2hR?=
+ =?utf-8?B?ckF4LzE1UDhyZnVGZnJGUHpSQUpwTWJvQ2dEdmdMQ2tuWHcreHZjdTVWWWph?=
+ =?utf-8?B?a1FLVm9xSklXVHVCMFJEc3JNTjhQcUlqYkNGVHJyYWJNQ1M1NnlGTXhCUEps?=
+ =?utf-8?B?eVNNVGxBTkE5aVZrSGJiUVJoNkJ2aWRURUo1S3RlU2hzZVVhdERiRFFwSjFo?=
+ =?utf-8?B?aXB4NlZob3pMNFZDR0YzREVaenRuNnUra1MzaXFBT3pTR2dzSmF3VXN1ZlRu?=
+ =?utf-8?B?N3pwM2NOeXpVRlZjL092MkZsdGFrcXBHSGE1Vm90QXNHWVBIV0lsUTV5dVNj?=
+ =?utf-8?B?enEwTEVFb2lLcmZtYUR6SWplVGo4a1ZDWFhjVzFCQkQzVHBpT2laNlZKNVhi?=
+ =?utf-8?B?di85OCtVL2FHSFpoV2tXVVBQbjJMUmdpdW5hRGtoOUoyeTBqQWNucWxRV0VF?=
+ =?utf-8?B?MWZ6SFM1RXE4YTJhSms5ODhqUXdMN0lJWnZ6ZGZRRGhTMENNNVNWM05TMmNU?=
+ =?utf-8?B?V3B2THN2VWlwNjJGL210Q2VhUXlTQWNuYitqM01rUHU4Rjk1RFlPcEFHTHlI?=
+ =?utf-8?B?KzAxZEFwOTBaVEo0dXZ3cThRNnQ2cHRaQ0hkQk9mMWFWaUJEWXJmQUVDcmhr?=
+ =?utf-8?B?MWlzQ2lRSDNkZk5QNENaWFBTQlhueXBUblFQZjVNQ3hYTHQ0UXFRSEtLTjFo?=
+ =?utf-8?B?MWtaVlNOUkdWbHJZcE82S3lPLzQwSVRZam5jeFNVdWQ4RHNXck5IZVI2bGN4?=
+ =?utf-8?B?QmtnSmZZVFduWjY4M2pVckZtVC9KYlZ6Z1hCNTlrcTZFdDBrQ3AvaUExbkgv?=
+ =?utf-8?B?K0ExdXhYRGhDTU9pUmFrSmNicnlqQ0JIaDZ5Y1p5VUFRMnprRnRGdWVNUGpZ?=
+ =?utf-8?B?ODhaWXFNTlhBMm5YVFU4ZGtZNFBkbjh3NEZ2aVd4UnV2b2tIMUZaYWkvMmpN?=
+ =?utf-8?B?a0k5VTZnUDc4TzFRbmdTTlNBRjh2VHlhNnMrZXBhMFpCV2dZYU51YjJwUm9E?=
+ =?utf-8?Q?fcnvE8C1GZsjdfUw=3D?=
+X-Exchange-RoutingPolicyChecked: lJqb4Hpz51ClzNFZyX9gNxeO6df9K3EKiiOKyl/3i/97OUayUG0+qRLlSRrW8JFcdrxyB3Q+TL3686B/KOLgfXaZN/klx1qDUcq4Pz1DjgftegfeM03awZJOrwFa810jXg4fpMsPs6jQzFM0wrLDT7LNaOgvWQ+JFspHfXymqBNKWeIxQzY9YnucDn63vylg1W/FRIgKoexKiUBm5oF5QrhVh1tT3UfvgsnG64H2tfQBiZplco7Hpc5AgnusOK/gq5DG/jxuU39mEOoTJIu4+C+EwzZru3RQaYNVdT9pnWB8s7M4hQGw+4tCbFRxCLKEJTAt6wz+djRvAuNp989ijA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2b16163-88d3-451e-2307-08de8c576afd
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2026 23:20:21.9689
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0sBkMWyOVlfOubEpwRK0joYLe7u5tTZeqo6Jr76f7BkoNAZkpisNoh16kB2UQljBJMPUk8DFkZktElOECCNGs/N+tkbpttPa9jwlqXhtYJE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR11MB8711
+X-OriginatorOrg: intel.com
 
-On 2026-03-25 02:43 PM, Rubin Du wrote:
-> Add a new VFIO PCI driver for NVIDIA GPUs that enables DMA testing
-> via the Falcon (Fast Logic Controller) microcontrollers. This driver
-> extracts and adapts the DMA test functionality from NVIDIA's
-> gpu-admin-tools project and integrates it into the existing VFIO
-> selftest framework.
+Hi Ilpo,
+
+On 3/27/26 10:34 AM, Ilpo Järvinen wrote:
+> On Fri, 13 Mar 2026, Reinette Chatre wrote:
 > 
-> Falcons are general-purpose microcontrollers present on NVIDIA GPUs
-> that can perform DMA operations between system memory and device
-> memory. By leveraging Falcon DMA, this driver allows NVIDIA GPUs to
-> be tested alongside Intel IOAT and DSA devices using the same
-> selftest infrastructure.
-
-> The driver is named 'nv_falcon' to reflect that it specifically
-> controls the Falcon microcontrollers for DMA operations, rather
-> than exposing general GPU functionality.
-
-Do you forsee this driver ever expanding to utilize other functionality
-on the GPU  other than the Falcon microcontroller, e.g. to add
-send_msi() support in the future and/or support asynchronous memcpy?
-
-If so, the name "nv_falcon" could get out of date and maybe "nv_gpu"
-would be a better name for this driver?
-
-> Reference implementation:
-> https://github.com/NVIDIA/gpu-admin-tools
+>> commit 501cfdba0a40 ("selftests/resctrl: Do not compare performance
 > 
-> Signed-off-by: Rubin Du <rubind@nvidia.com>
-> ---
->  .../vfio/lib/drivers/nv_falcons/hw.h          | 365 +++++++++
->  .../vfio/lib/drivers/nv_falcons/nv_falcons.c  | 739 ++++++++++++++++++
+> Should start with a capital letter.
 
-Please make the directory and file names match the driver. i.e.
-s/nv_falcons/nv_falcon/.
+Will do.
 
-> diff --git a/tools/testing/selftests/vfio/lib/drivers/nv_falcons/hw.h b/tools/testing/selftests/vfio/lib/drivers/nv_falcons/hw.h
-> new file mode 100644
-> index 000000000000..a92cdcfec63f
-> --- /dev/null
-> +++ b/tools/testing/selftests/vfio/lib/drivers/nv_falcons/hw.h
-> @@ -0,0 +1,365 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
-> + */
-> +#ifndef _NV_FALCONS_HW_H_
-> +#define _NV_FALCONS_HW_H_
-> +
-> +/* PMC (Power Management Controller) Registers */
-> +#define NV_PMC_BOOT_0							0x00000000
-> +#define NV_PMC_ENABLE							0x00000200
-> +#define NV_PMC_ENABLE_PWR						0x00002000
-> +#define NV_PMC_ENABLE_HUB						0x20000000
+>>
+> 
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> 
 
-Please make the alignment of macro values consistent here and below.
+Thank you very much.
 
-> +
-> +/* Falcon Base Pages for Different Engines */
-> +#define NV_PPWR_FALCON_BASE						0x10a000
-> +#define NV_PGSP_FALCON_BASE						0x110000
-> +
-> +/* Falcon Common Register Offsets (relative to base_page) */
-> +#define NV_FALCON_DMACTL_OFFSET					0x010c
-> +#define NV_FALCON_CPUCTL_OFFSET					0x0100
-> +#define NV_FALCON_ENGINE_RESET_OFFSET			0x03c0
-> +
-> +/* DMEM Control Register Flags */
-> +#define NV_PPWR_FALCON_DMEMC_AINCR_TRUE			0x01000000
-> +#define NV_PPWR_FALCON_DMEMC_AINCW_TRUE			0x02000000
-> +
-> +/* Falcon DMEM port offsets (for port 0) */
-> +#define NV_FALCON_DMEMC_OFFSET					0x1c0
-> +#define NV_FALCON_DMEMD_OFFSET					0x1c4
-> +
-> +/* DMA Register Offsets (relative to base_page) */
-> +#define NV_FALCON_DMA_ADDR_LOW_OFFSET			0x110
-> +#define NV_FALCON_DMA_MEM_OFFSET				0x114
-> +#define NV_FALCON_DMA_CMD_OFFSET				0x118
-> +#define NV_FALCON_DMA_BLOCK_OFFSET				0x11c
-> +#define NV_FALCON_DMA_ADDR_HIGH_OFFSET			0x128
-
-> +struct gpu_device {
-> +	enum gpu_arch arch;
-> +	void *bar0;
-> +	bool is_memory_clear_supported;
-> +	const struct falcon *falcon;
-> +	u32 pmc_enable_mask;
-> +	bool fsp_dma_enabled;
-> +
-> +	/* Pending memcpy parameters, set by memcpy_start() */
-> +	u64 memcpy_src;
-> +	u64 memcpy_dst;
-> +	u64 memcpy_size;
-> +	u64 memcpy_count;
-> +};
-
-nit: I would move this to the driver .c file since that's where its used
-and this isn't a hardware definition. It will make the driver easier to
-read to have this struct definition in the same file.
-
-> diff --git a/tools/testing/selftests/vfio/lib/drivers/nv_falcons/nv_falcons.c b/tools/testing/selftests/vfio/lib/drivers/nv_falcons/nv_falcons.c
-> new file mode 100644
-> index 000000000000..4b62793570a2
-> --- /dev/null
-> +++ b/tools/testing/selftests/vfio/lib/drivers/nv_falcons/nv_falcons.c
-> @@ -0,0 +1,739 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
-> + */
-> +#include <stdint.h>
-> +#include <strings.h>
-> +#include <unistd.h>
-> +#include <stdbool.h>
-> +#include <string.h>
-> +#include <time.h>
-> +
-> +#include <linux/errno.h>
-> +#include <linux/io.h>
-> +#include <linux/pci_ids.h>
-> +
-> +#include <libvfio.h>
-> +
-> +#include "hw.h"
-> +
-> +static inline struct gpu_device *to_nv_gpu(struct vfio_pci_device *device)
-
-nit: Please align the naming here. i.e. rename this function to
-to_gpu_device() or rename struct gpu_device to struct nv_gpu.
-
-> +{
-> +	return device->driver.region.vaddr;
-> +}
-
-> +static int gpu_poll_register(struct vfio_pci_device *device,
-> +			     const char *name, u32 offset,
-> +			     u32 expected, u32 mask, u32 timeout_ms)
-> +{
-> +	struct gpu_device *gpu = to_nv_gpu(device);
-> +	u32 value;
-> +	struct timespec start, now;
-> +	u64 elapsed_ms;
-> +
-> +	clock_gettime(CLOCK_MONOTONIC, &start);
-> +
-> +	for (;;) {
-> +		value = gpu_read32(gpu, offset);
-> +		if ((value & mask) == expected)
-> +			return 0;
-> +
-> +		clock_gettime(CLOCK_MONOTONIC, &now);
-> +		elapsed_ms = (now.tv_sec - start.tv_sec) * 1000
-> +			     + (now.tv_nsec - start.tv_nsec) / 1000000;
-> +
-> +		if (elapsed_ms >= timeout_ms)
-> +			break;
-> +
-> +		usleep(1000);
-> +	}
-> +
-> +	dev_err(device,
-> +		"Timeout polling %s (0x%x): value=0x%x expected=0x%x mask=0x%x after %llu ms\n",
-> +		name, offset, value, expected, mask,
-> +		(unsigned long long)elapsed_ms);
-> +	return -ETIMEDOUT;
-
-Please fix all the callers of this function that ignore the return
-value. Presumably you should be using VFIO_ASSERT_EQ(ret, 0) to bail the
-test if something goes wrong (other than during memcpy_wait(), which has
-a way to return an error to the caller).
-
-> +static void gpu_enable_bus_master(struct vfio_pci_device *device)
-> +{
-> +	u16 cmd;
-> +
-> +	cmd = vfio_pci_config_readw(device, PCI_COMMAND);
-> +	vfio_pci_config_writew(device, PCI_COMMAND, cmd | PCI_COMMAND_MASTER);
-> +}
-> +
-> +static void gpu_disable_bus_master(struct vfio_pci_device *device)
-> +{
-> +	u16 cmd;
-> +
-> +	cmd = vfio_pci_config_readw(device, PCI_COMMAND);
-> +	vfio_pci_config_writew(device, PCI_COMMAND, cmd & ~PCI_COMMAND_MASTER);
-> +}
-
-These can be generic to any PCI device so please add them as static
-inline helpers in vfio_pci_device.h for other tests to use in the future
-(and rename them to something more generic like
-vfio_pci_disable_bus_master()).
-
-> +static int nv_gpu_falcon_dma(struct vfio_pci_device *device,
-> +			     u64 address,
-> +			     u32 size_encoding,
-> +			     bool write)
-> +{
-> +	struct gpu_device *gpu = to_nv_gpu(device);
-> +	const struct falcon *falcon = gpu->falcon;
-> +	u32 dma_cmd;
-> +	int ret;
-> +
-> +	gpu_write32(gpu, NV_GPU_DMA_ADDR_TOP_BITS_REG,
-> +		    (address >> 47) & 0x1ffff);
-> +	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_ADDR_HIGH_OFFSET,
-> +		    (address >> 40) & 0x7f);
-> +	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_ADDR_LOW_OFFSET,
-> +		    (address >> 8) & 0xffffffff);
-> +	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_BLOCK_OFFSET,
-> +		    address & 0xff);
-> +	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_MEM_OFFSET, 0);
-> +
-> +	dma_cmd = (size_encoding << NV_FALCON_DMA_CMD_SIZE_SHIFT);
-> +
-> +	/* Set direction: write (DMEM->mem) or read (mem->DMEM) */
-> +	if (write)
-> +		dma_cmd |= NV_FALCON_DMA_CMD_WRITE_BIT;
-> +
-> +	gpu_write32(gpu, falcon->base_page + NV_FALCON_DMA_CMD_OFFSET, dma_cmd);
-> +
-> +	ret = gpu_poll_register(device, "dma_done",
-> +		falcon->base_page + NV_FALCON_DMA_CMD_OFFSET,
-> +		NV_FALCON_DMA_CMD_DONE_BIT, NV_FALCON_DMA_CMD_DONE_BIT,
-> +		1000);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-
-
-nit: This can just be "return ret;" or "return gpu_poll_register(...);".
-
-> +static void nv_gpu_init(struct vfio_pci_device *device)
-> +{
-> +	struct gpu_device *gpu = to_nv_gpu(device);
-> +	const struct gpu_properties *props;
-> +	enum gpu_arch gpu_arch;
-> +	u32 pmc_boot_0;
-> +	int ret;
-> +
-> +	VFIO_ASSERT_GE(device->driver.region.size, sizeof(*gpu));
-> +
-> +	/* Read PMC_BOOT_0 register from BAR0 to identify GPU */
-> +	pmc_boot_0 = readl(device->bars[0].vaddr + NV_PMC_BOOT_0);
-> +
-> +	/* Look up GPU architecture */
-> +	gpu_arch = nv_gpu_arch_lookup(pmc_boot_0);
-> +	if (gpu_arch == GPU_ARCH_UNKNOWN) {
-> +		dev_err(device, "Unsupported GPU architecture\n");
-> +		return;
-> +	}
-> +
-> +	props = &gpu_properties_map[gpu_arch];
-> +
-> +	/* Populate GPU structure */
-> +	gpu->arch = gpu_arch;
-> +	gpu->bar0 = device->bars[0].vaddr;
-> +	gpu->is_memory_clear_supported = props->memory_clear_supported;
-> +	gpu->falcon = &falcon_map[props->falcon_type];
-> +	gpu->pmc_enable_mask = props->pmc_enable_mask;
-> +
-> +	falcon_enable(device);
-> +
-> +	/* Initialize falcon for DMA */
-> +	ret = nv_gpu_falcon_dma_init(device);
-> +	VFIO_ASSERT_EQ(ret, 0, "Failed to initialize falcon DMA: %d\n", ret);
-> +
-> +	device->driver.features |= VFIO_PCI_DRIVER_F_NO_SEND_MSI;
-> +	device->driver.max_memcpy_size = NV_FALCON_DMA_MAX_TRANSFER_SIZE;
-> +	device->driver.max_memcpy_count = NV_FALCON_DMA_MAX_TRANSFER_COUNT;
-
-The small memcpy size is going to be a problem tests that want to DMA to
-larger regions. They will have to do chunk up the memcpy in a loop.
-
-One option would be to have this driver expose a larger max_memcpy_size
-and implement the loop in the memcpy_start()/wait() callback, which is
-actually what you have below.
-
-But I think a better approach would be to just make the loop common
-across all drivers so that tests never have to care about
-max_memcpy_size when using vfio_pci_driver_memcpy().
-
-Can you add a precursor commit to this series that adds a loop to
-vfio_pci_driver_memcpy() so that it performs whatever sized memcpy the
-user asks for by chunking it up in to max_memcpy_size or smaller
-chunks? In that same commit, please update the vfio_pci_driver_test
-so we get coverage of the new chunking logic (get rid of the code that
-rounds down self->size fo max_memcpy_size, except for the memcpy_storm
-test).
-
-In other words:
-
- - vfio_pci_driver_memcpy() should allow any size memcpy and will chunk
-   it up as necessary depending on what the driver supports.
-
- - vfio_pci_driver_memcpy_start() semantics don't change. This still
-   gives tests direct access to the driver memcpy_start() op and thus
-   must obey max_memcpy_size.
-
-This should also allow you to greatly simplify the implementation of
-memcpy_wait() down below.
-
-> +static int nv_gpu_memcpy_wait(struct vfio_pci_device *device)
-> +{
-> +	struct gpu_device *gpu = to_nv_gpu(device);
-> +	u64 iteration;
-> +	u64 offset;
-> +	int ret;
-> +
-> +	VFIO_ASSERT_NE(gpu->memcpy_count, 0);
-> +
-> +	for (iteration = 0; iteration < gpu->memcpy_count; iteration++) {
-
-This loop is unnecessary. You set max_memcpy_count to
-NV_FALCON_DMA_MAX_TRANSFER_COUNT which is 1. So
-vfio_pci_driver_memcpy_start() will guarantee that memcpy_count is at
-most 1.
-
-> +		offset = 0;
-> +
-> +		while (offset < gpu->memcpy_size) {
-> +			int chunk_encoding;
-> +
-> +			chunk_encoding = size_to_dma_encoding(
-> +						gpu->memcpy_size - offset);
-
-This loop is also unnecessary. You set max_memcpy_size to
-NV_FALCON_DMA_MAX_TRANSFER_SIZE, so vfio_pci_driver_memcpy_start() will
-guarantee memcpy_size is at most that.
-
-> +			if (chunk_encoding < 0) {
-> +				ret = -EINVAL;
-> +				goto out;
-> +			}
-> +
-> +			ret = nv_gpu_memcpy_chunk(device,
-> +						  gpu->memcpy_src + offset,
-> +						  gpu->memcpy_dst + offset,
-> +						  chunk_encoding);
-> +			if (ret)
-> +				goto out;
-> +
-> +			offset += 0x4 << chunk_encoding;
-> +		}
-> +	}
-> +
-> +	ret = 0;
-> +out:
-> +	gpu->memcpy_count = 0;
-> +
-> +	return ret;
-> +}
+Reinette
