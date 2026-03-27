@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A987120B810;
-	Fri, 27 Mar 2026 13:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB9E359A87;
+	Fri, 27 Mar 2026 13:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774617905; cv=none; b=iiA2bZaDGHCi3Ep7iNbR9O/JW1P97dCyrwYII9kD/LO3Vb/BPIgwN+b5acuBCZOv8APMVj99b+J8YkznaYMHzGYEcbvcoPk0TTsuMqEBzcaAa1jn/51Aq3pefPVC0cH3ohGIx4/6a+d862MzWa0tIP1bqcK4PKpNxY2pV+PrO4M=
+	t=1774618409; cv=none; b=I/ecdj7ZsRUs8ose1LLaNXgPSa0xJSK2s9+WAs0IpWKYPQI87J9+21Duxan/2ss0VsyhnCeO5lk7h0u7oDq0B+ks9eyVVeyELkPyb4IAJqqcO10ORfCqer2tefDTrl8CTRIGpMFRRzI4MLh06Au8EqxxYhYfI0c7B+ZSB6UYAZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774617905; c=relaxed/simple;
-	bh=brXvhwyCKp5XwYJwondkNZofipJVw6dyyhnaVceck5I=;
+	s=arc-20240116; t=1774618409; c=relaxed/simple;
+	bh=xu8W7lqyzSXrcwxaklJNqkyZBDCnCyf4Es5zMCd5B2g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=baf8MNINXYtebE6td44AqS1w0GA3DFyE9EFzwLs0EPySpX3R+xnsx22RxZJBPkpcvqYOILNAmnHxRhlPi/3NQeXamJhS1ra/U5eK36faJ2gpOYitl7OQxXSKhwlr5HXU3hKuYk5HEtffJPUic7g1S81Z6csVKk5XRgiGjovyvAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HsriDbNK; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=CZOtwnTo6I9B9+1srbXVYyhBIYcKmoLVsDl455qScFPUhSII07GYFaSRaB31+/QbsUeRMv9zXG23TxXkCTzfonSr5iCcDu/+kvKHsx0ycbznHuiVjpdQApTgCp2Lx5mXuWjl0jwnbdBZr3NTaJ+XaFp0b4KWn5Gu/pyCQ2Tq7pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cc5BiYnK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HsriDbNK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E4DEC2BC87;
-	Fri, 27 Mar 2026 13:25:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cc5BiYnK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 100ACC19423;
+	Fri, 27 Mar 2026 13:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774617905;
-	bh=brXvhwyCKp5XwYJwondkNZofipJVw6dyyhnaVceck5I=;
+	s=k20201202; t=1774618408;
+	bh=xu8W7lqyzSXrcwxaklJNqkyZBDCnCyf4Es5zMCd5B2g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HsriDbNKQQIc9uLqKb3o3lGxNyauWEo1fFT0hzLpKbTb5nTniA1YcveZi7m5zizlf
-	 cqaSPiPne+kjrO0ePUeOhaYrmIVOTVVaMmqtDlpQFaaaLCYnD2Y0HtFqRGhqORFh3M
-	 +PafWd9fkkR7YtOnWOlqa1wmvmVRW9A8ysAi+in6csCEs/tw+tiKMYb930rZy4krrz
-	 JMpvZ2cGCS2cFZ+nR+KFq52hJjdPq4vhAnxfsDbnf80AxKbPC9RH0duuydCsxD4vcf
-	 W4oW1ac0IdcMzsiPfcM1+tjLTd9QS4yj5fzkTDdoRAcyZqV8+GgzPhGTYxzaNQdqZY
-	 6qqWH9RCEnU+g==
-Message-ID: <b28ebf0c-c10e-4e1a-9e8e-30e6925d0da8@kernel.org>
-Date: Fri, 27 Mar 2026 14:24:58 +0100
+	b=cc5BiYnKpzNO+MmAjurOqx/BIjaAxwwZH1CtxzXm7CpdboYZ7p1vv2AviJru2aiec
+	 2UBGwR4xERHRPSmHj4bbk0/t6qj1vJ42SsY0W3Q7mQho1A3CC2lo7G7ipEwuXw2iGB
+	 V8AXG9/X+1VNdsTSxorfle9MKc5u+58u0T71iWb8DvDJpbSImbVKilgG+0wgElMhBn
+	 cBzqK1+Lf8O9tfPM1IXa8jXwreMhNhVFRX/b5narvt7xRqCnSe34/PhWB4aH9MpOGY
+	 q8wuo83smG57Pmjw+13lB4SbakPAjCQhSgJ9iGrd+o2LBknQKIp8mlmSlINSLx+c6G
+	 8Letxru1FSJCA==
+Message-ID: <a7976968-3598-47d5-99bd-a144783c72f2@kernel.org>
+Date: Fri, 27 Mar 2026 14:33:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,17 +35,24 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/6] selftests/mm: skip several tests when thp is not
- available
-To: Andrew Morton <akpm@linux-foundation.org>, Chunyu Hu <chuhu@redhat.com>
-Cc: shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
- baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
-References: <20260324013316.2590422-1-chuhu@redhat.com>
- <20260324090927.eeacb7987d22ed8ba13fada2@linux-foundation.org>
+Subject: Re: [PATCH v1 01/10] mm: remove READ_ONLY_THP_FOR_FS Kconfig option
+To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>
+Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260327014255.2058916-1-ziy@nvidia.com>
+ <20260327014255.2058916-2-ziy@nvidia.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -92,43 +99,44 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260324090927.eeacb7987d22ed8ba13fada2@linux-foundation.org>
+In-Reply-To: <20260327014255.2058916-2-ziy@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/24/26 17:09, Andrew Morton wrote:
-> On Tue, 24 Mar 2026 09:33:10 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
+On 3/27/26 02:42, Zi Yan wrote:
+> No one will be able to use it, so the related code can be removed in the
+> coming commits.
 > 
->> There are several tests requires transprarent hugepages, when run on thp
->> disabled kernel such as realtime kernel, there will be false negative.
->> Mark those tests as skip when thp is not available.
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  mm/Kconfig | 11 -----------
+>  1 file changed, 11 deletions(-)
 > 
-> Thanks, I updated mm.git's mm-unstable branch to this version.
-> 
->> Chagnes in v6:
->>   - patch 3 add reviewed-by from Lorenzo
->>   - patch 4 handle the errno before and after close(), suggested by AI
-> 
-> Here's how v6 altered mm.git:
-> 
-> 
->  tools/testing/selftests/mm/vm_util.c |   12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> --- a/tools/testing/selftests/mm/vm_util.c~b
-> +++ a/tools/testing/selftests/mm/vm_util.c
-> @@ -785,15 +785,23 @@ int unpoison_memory(unsigned long pfn)
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index bd283958d675..408fc7b82233 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -937,17 +937,6 @@ config THP_SWAP
 >  
->  void write_file(const char *path, const char *buf, size_t buflen)
->  {
-> -	int fd;
-> +	int fd, saved_errno;
->  	ssize_t numwritten;
+>  	  For selection by architectures with reasonable THP sizes.
+>  
+> -config READ_ONLY_THP_FOR_FS
+> -	bool "Read-only THP for filesystems (EXPERIMENTAL)"
+> -	depends on TRANSPARENT_HUGEPAGE
+> -
+> -	help
+> -	  Allow khugepaged to put read-only file-backed pages in THP.
+> -
+> -	  This is marked experimental because it is a new feature. Write
+> -	  support of file THPs will be developed in the next few release
+> -	  cycles.
+> -
+>  config NO_PAGE_MAPCOUNT
+>  	bool "No per-page mapcount (EXPERIMENTAL)"
+>  	help
 
-Empty line? :)
-
-> +	if (buflen < 1)
-> +		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
+Isn't that usually what we do at the very end when we converted all the
+code?
 
 -- 
 Cheers,
