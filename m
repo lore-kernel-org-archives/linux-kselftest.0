@@ -1,42 +1,39 @@
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA2D381AE5;
-	Fri, 27 Mar 2026 06:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622A7388E67;
+	Fri, 27 Mar 2026 06:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774592478; cv=none; b=JGzK/FKQwb2hDwRFElqPXC20FonvcjbOovQB+ntVTVYOJ8lUgeXnlm66tco+1mNd2R4WgYVXD3QU6tBQ+5vMux6IPYSkmK3IhUNzREz2UbBFUqKHRd9v57WB5pcAyjvhP7F+n+27d2m4bSz92BHaMxdpL7osKuNwffXPV1aZmO4=
+	t=1774592801; cv=none; b=JPun+G59V5jJoTuXkuwVJ7p2CFSLu8NsaKCPVB4PZz+OQyOAHK7flMFGQBumGkmifU7p0A2LKw88YOitpPm9Mzl2CTv9qIp2Ra2mZwNMHjvfPD38n5zKa0O/FyZ47Zj8ANATEiX7l6TfRTDrFug0Vatkxq1aDXDAO3wUc/Bim6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774592478; c=relaxed/simple;
-	bh=B0CS6VMK6yu8SS3Ll3zB5+Ug5K3QTZMIWKcuUV3g2lg=;
+	s=arc-20240116; t=1774592801; c=relaxed/simple;
+	bh=vVF2X7X6xwhJNZwmWGhKrFPy1mXHUNZFruMxS0IbldE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H90Bou2qripgO4wNLW8covu5NUVXxWCjwuTxvTo4J43W6CdMjkSqCmpXrfXGQzkf2nZswNRwQLRDPD8sn02C2Wrsx1plVM5/OJpPNqwaAg+n4HhJT4swvN6uKcAq4X3mFS+tpB5mN1c/q3bvAfZrLiUnA/nEvcL5JEfpxNwi3Io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=j+Ujf1pR; arc=none smtp.client-ip=80.241.56.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=N2E6XFgD7gUl2c+TowsNyv3cayZREcgzT7p+uTspTQav81Dl9nJz6kCmpMTOvk1XgSr/OoDX04O+BY4vZFOKjC/yBtb4YnOcAVs0D31clHtyhegw7ancW+OGNh9/8E5L/SAmWNcEWJNMkXuEL/YRLL+wV8vCa8ALHE8tBsDDToA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=vN7A9DjT; arc=none smtp.client-ip=80.241.56.161
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="j+Ujf1pR"
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="vN7A9DjT"
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4fhrBC0vmfz9v34;
-	Fri, 27 Mar 2026 07:21:07 +0100 (CET)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4fhrJK3yBDz9tnZ;
+	Fri, 27 Mar 2026 07:26:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1774592467;
+	t=1774592785;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=74/MndzYv3zae0IzJiR8zEEmYnfy9ZzdY4+LCdZzxIQ=;
-	b=j+Ujf1pRvXqmgTEhY1Qwk23Z5zucsBdYiRE96RHxff2hmExTztRmuihXth7QLaUlHZcigi
-	GQ1ec/8GTrqrwcgxzakzeLldH4bbGYc60s0Vk8hHUaisVkEZgh1N3Un6FpnxNcrXDLMCrO
-	J8ZDHvuOJJGI+CXQMtItI86oWvaG2KVxMIo2qDjcF0CGCAe9h5DPalcsmwq8kjMcd/Bmvw
-	ukOmmyDy/FR9CZ42yHGrjO/ZVAXz02Jq6VRAKg3BVpwMX5cJQkbhKcksJQ8VINzFpFb4uB
-	KKD7idRUn7UyQtb9GogRJBTraref0ZV1FPiqxNrMJ+5oJU2VC74BwuVYBv/DFQ==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-Date: Fri, 27 Mar 2026 15:20:43 +0900
+	bh=/nVli7ZdjicMulZS13DL9My9zto95MiCpY5Nq27QLVo=;
+	b=vN7A9DjT5XPivWES0LfIIMu4OI9JshKvRsgaSC6aCkqFx/Sc+rjHLS+iWKt8UIOwdzSWOL
+	pw9hNteeHX6h+C8nvNmSUYWPd++A2RUcmHe9E4eqc+R5jKf7ERwgou0NYTdy4yCIcR79+D
+	sx708ixa+JSFhPaNKVdlSimCFtQ9IJbexDQh2KhNSnTSVk1+jCgqk37WC16tj6EJCxEPjG
+	E28IBDLZwk/5VWnigE23v0QfBdeQc/782HjA7aeHHnAWisKMBzKcLMY3nUh1It8DZ1ZFXl
+	LtKZZylCU29UvyEgGZgLIHcL64hRf8KsV4zBemRustoOzIWZpRVZU6i7hDC6AA==
+Date: Fri, 27 Mar 2026 15:26:06 +0900
 From: Aleksa Sarai <cyphar@cyphar.com>
 To: Jori Koolstra <jkoolstra@xs4all.nl>
 Cc: Jeff Layton <jlayton@kernel.org>, Chuck Lever <chuck.lever@oracle.com>, 
@@ -51,12 +48,11 @@ Cc: Jeff Layton <jlayton@kernel.org>, Chuck Lever <chuck.lever@oracle.com>,
 	Amir Goldstein <amir73il@gmail.com>, Namjae Jeon <linkinjeon@kernel.org>, 
 	Mateusz Guzik <mjguzik@gmail.com>, Wei Yang <richard.weiyang@gmail.com>, 
 	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	Andy Lutomirski <luto@kernel.org>, linux-kselftest@vger.kernel.org, 
-	wangzijie <wangzijie1@honor.com>
-Subject: Re: [RFC PATCH v2 2/3] vfs: transitive upgrade restrictions for fds
-Message-ID: <2026-03-27-tweed-frozen-omen-inventory-YVLIh6@cyphar.com>
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/3] vfs: add support for empty path to openat2(2)
+Message-ID: <2026-03-27-finicky-copper-turkey-process-LwZ9E1@cyphar.com>
 References: <20260326182033.1809567-1-jkoolstra@xs4all.nl>
- <20260326182033.1809567-3-jkoolstra@xs4all.nl>
+ <20260326182033.1809567-2-jkoolstra@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,201 +60,169 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="shyxwjfbequyutje"
+	protocol="application/pgp-signature"; boundary="emc4et2r2dugri3c"
 Content-Disposition: inline
-In-Reply-To: <20260326182033.1809567-3-jkoolstra@xs4all.nl>
-X-Rspamd-Queue-Id: 4fhrBC0vmfz9v34
+In-Reply-To: <20260326182033.1809567-2-jkoolstra@xs4all.nl>
 
 
---shyxwjfbequyutje
+--emc4et2r2dugri3c
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC PATCH v2 2/3] vfs: transitive upgrade restrictions for fds
+Subject: Re: [RFC PATCH v2 1/3] vfs: add support for empty path to openat2(2)
 MIME-Version: 1.0
 
 On 2026-03-26, Jori Koolstra <jkoolstra@xs4all.nl> wrote:
-> Add upgrade restrictions to openat2(). Extend struct open_how to allow
-> setting transitive restrictions on using file descriptors to open other
-> files. A use case for this feature is to block services or containers
-> from re-opening/upgrading an O_PATH file descriptor through e.g.
-> /proc/<pid>/fd/<nr> as O_WRONLY.
+> To get an operable version of an O_PATH file descriptor, it is possible
+> to use openat(fd, ".", O_DIRECTORY) for directories, but other files
+> currently require going through open("/proc/<pid>/fd/<nr>"), which
+> depends on a functioning procfs.
 >=20
-> The idea for this features comes form the UAPI group kernel feature idea
-> list [1].
+> This patch adds the OPENAT2_EMPTY_PATH flag to openat2(2). If passed,
+> LOOKUP_EMPTY is set at path resolve time.
 >=20
-> [1] https://github.com/uapi-group/kernel-features?tab=3Dreadme-ov-file#up=
-grade-masks-in-openat2
+> Note: This implies that you cannot rely anymore on disabling procfs from
+> being mounted (e.g. inside a container without procfs mounted and with
+> CAP_SYS_ADMIN dropped) to prevent O_PATH fds from being re-opened
+> read-write.
 
-I had a version of this in the original openat2(2) pull request many
-years ago[1].
+Actually, this flag doesn't need to be openat2(2) only -- all existing
+kernels will reject a pathname of "" with ENOENT. This means that
+O_EMPTYPATH being set acting as a no-op is fine for older kernels (no
+program will get an unexpected result from O_EMPTYPATH).
 
-Unfortunately there is a pretty big issue with doing it this way (which
-I mentioned in one of the changelogs back then[2]): There are lots of
-VFS operations that imply operations on a file (through a magic-link)
-that are not blocked. truncate(2) and mount(MS_BIND)/open_tree(2) are
-the most problematic examples, but this applies to basically any syscall
-that takes a path argument. If you don't block those then re-opening
-restrictions are functionally useless.
+In my view, adding it to openat(2) is preferable because it means that
+systemd et al. can use it (they currently block openat2(2) with
+seccomp). This is what I did in the original openat2(2) patchset[1].
 
-It also would be really nice if you could block more than just trailing
-component operations -- having a directory file descriptor that blocks
-lookups could be quite handy for a bunch of reasons.
+[1]: https://lore.kernel.org/lkml/20190930183316.10190-4-cyphar@cyphar.com/
 
-I think the only workable solution to block all of these issue entirely
-and in a comprehensive way is to have something akin to capsicum
-capabilities[3] tied to file descriptors and have all of the VFS
-operations check them (though I think that the way this was attempted in
-the past[4] was far from ideal).
-
-I have tried my hand at a few lighter-weight prototypes over the years
-(mainly trying to add the necessary checks to every generic_permission()
-call, and adding some more generic_permission() calls as well...). My
-last prototype was adding the restriction information to "struct path"
-but that would bloat too many structures to be merge-able. I was
-planning on looking at this again later this year, but if you can come
-up with a nice way of getting a minimal version of capsicum working,
-that'd be amazing. :D
-
-That being said, while my view at the time of openat2(2) was that we
-need to do this at the same time as O_EMPTYPATH (and my tests showed
-that this was a backwards-compatible change -- on modern desktops at
-least), at this point I think it'd be better to just merge O_EMPTYPATH
-by itself and we can work on this hardening separately and make it an
-opt-in sysctl (with individual file descriptors being opt-in-able as
-well).
-
-[1]: https://lore.kernel.org/lkml/20190930183316.10190-2-cyphar@cyphar.com/
-[2]: https://lore.kernel.org/lkml/20191026185700.10708-1-cyphar@cyphar.com/
-[3]: https://lwn.net/Articles/482858/
-[4]: https://lore.kernel.org/lkml/1404124096-21445-1-git-send-email-drysdal=
-e@google.com/
-
-> +const struct jump_how jump_how_unrestricted =3D {
-> +	.allowed_upgrades =3D VALID_UPGRADE_FLAGS
-> +};
-> +
->  /*
->   * Helper to directly jump to a known parsed path from ->get_link,
->   * caller must have taken a reference to path beforehand.
->   */
-> -int nd_jump_link(const struct path *path)
-> +int nd_jump_link_how(const struct path *path, const struct jump_how *how)
+> Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
+> ---
+>  fs/fcntl.c                   |  4 ++--
+>  fs/open.c                    | 11 +++++------
+>  include/linux/fcntl.h        |  5 ++++-
+>  include/uapi/linux/openat2.h |  4 ++++
+>  4 files changed, 15 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/fs/fcntl.c b/fs/fcntl.c
+> index beab8080badf..d9ae3c71edfe 100644
+> --- a/fs/fcntl.c
+> +++ b/fs/fcntl.c
+> @@ -1169,8 +1169,8 @@ static int __init fcntl_init(void)
+>  	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+>  	 * is defined as O_NONBLOCK on some platforms and not on others.
+>  	 */
+> -	BUILD_BUG_ON(20 - 1 /* for O_RDONLY being 0 */ !=3D
+> -		HWEIGHT32(
+> +	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=3D
+> +		HWEIGHT64(
+>  			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+>  			__FMODE_EXEC));
+> =20
+> diff --git a/fs/open.c b/fs/open.c
+> index 91f1139591ab..e019ddecc73c 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -1160,12 +1160,12 @@ struct file *kernel_file_open(const struct path *=
+path, int flags,
+>  EXPORT_SYMBOL_GPL(kernel_file_open);
+> =20
+>  #define WILL_CREATE(flags)	(flags & (O_CREAT | __O_TMPFILE))
+> -#define O_PATH_FLAGS		(O_DIRECTORY | O_NOFOLLOW | O_PATH | O_CLOEXEC)
+> +#define O_PATH_FLAGS		(O_DIRECTORY | O_NOFOLLOW | O_PATH | O_CLOEXEC | O=
+PENAT2_EMPTY_PATH)
+> =20
+>  inline struct open_how build_open_how(int flags, umode_t mode)
 >  {
->  	int error =3D -ELOOP;
->  	struct nameidata *nd =3D current->nameidata;
-> @@ -1181,6 +1187,7 @@ int nd_jump_link(const struct path *path)
->  	nd->path =3D *path;
->  	nd->inode =3D nd->path.dentry->d_inode;
->  	nd->state |=3D ND_JUMPED;
-> +	nd->allowed_upgrades &=3D how->allowed_upgrades;
->  	return 0;
-
-Way back then, Andy Lutomirski suggested that this be done via the
-magic-link modes. While it is kind of ugly and in my patchset this
-required adjusting some magic-link modes, it does provide a useful
-indication to userspace of two things:
-
- - What upgrade modes are available for a file (this is useful for
-   debugging but is also really necessary for the checkpoint-restore
-   folks' needs). I did this with fmode (and exposed fmode in fdinfo)
-   but I would not recommend that approach at all.
-
- - It indicates whether the kernel supports this feature, which will
-   allow certain programs to loosen their hardening logic since the
-   kernel implements the hardening for them.
-
-   For instance, most container runtimes now either make a copy of
-   /proc/self/exe as a sealed memfd or create a read-only overlayfs
-   mount to re-exec /proc/self/exe so that containers cannot overwrite
-   the host binary by doing a /proc/$pid/exe re-open. See CVE-2019-5736
-   for more details.
-
-   Indicating that the kernel blocks this attack would let container
-   runtimes disable this hardening on such kernels.
-
-Maybe we should at least change the modes even if they aren't used?
-
-> -static int proc_exe_link(struct dentry *dentry, struct path *exe_path)
-> +static int proc_exe_link(struct dentry *dentry, struct path *exe_path,
-> +			 struct jump_how *jump_how)
->  {
->  	struct task_struct *task;
->  	struct file *exe_file;
-> @@ -1789,6 +1794,7 @@ static int proc_exe_link(struct dentry *dentry, str=
-uct path *exe_path)
->  	put_task_struct(task);
->  	if (exe_file) {
->  		*exe_path =3D exe_file->f_path;
-> +		*jump_how =3D jump_how_unrestricted;
->  		path_get(&exe_file->f_path);
->  		fput(exe_file);
->  		return 0;
-
-This should restrict writes, for the reasons outlined above.
-
-> -static int map_files_get_link(struct dentry *dentry, struct path *path)
-> +static int map_files_get_link(struct dentry *dentry, struct path *path,
-> +			      struct jump_how *jump_how)
->  {
->  	unsigned long vm_start, vm_end;
->  	struct vm_area_struct *vma;
-> @@ -2279,6 +2288,7 @@ static int map_files_get_link(struct dentry *dentry=
-, struct path *path)
->  	rc =3D -ENOENT;
->  	vma =3D find_exact_vma(mm, vm_start, vm_end);
->  	if (vma && vma->vm_file) {
-> +		*jump_how =3D jump_how_unrestricted;
->  		*path =3D *file_user_path(vma->vm_file);
->  		path_get(path);
->  		rc =3D 0;
-
-This should also restrict writes (this is a similar issue to
-/proc/self/exe and is harder to harden against, the primary defense is
-just ASLR...).
-
+>  	struct open_how how =3D {
+> -		.flags =3D flags & VALID_OPEN_FLAGS,
+> +		.flags =3D ((unsigned int) flags) & VALID_OPEN_FLAGS,
+>  		.mode =3D mode & S_IALLUGO,
+>  	};
+> =20
+> @@ -1185,9 +1185,6 @@ inline int build_open_flags(const struct open_how *=
+how, struct open_flags *op)
+>  	int lookup_flags =3D 0;
+>  	int acc_mode =3D ACC_MODE(flags);
+> =20
+> -	BUILD_BUG_ON_MSG(upper_32_bits(VALID_OPEN_FLAGS),
+> -			 "struct open_flags doesn't yet handle flags > 32 bits");
+> -
+>  	/*
+>  	 * Strip flags that aren't relevant in determining struct open_flags.
+>  	 */
+> @@ -1281,6 +1278,8 @@ inline int build_open_flags(const struct open_how *=
+how, struct open_flags *op)
+>  		lookup_flags |=3D LOOKUP_DIRECTORY;
+>  	if (!(flags & O_NOFOLLOW))
+>  		lookup_flags |=3D LOOKUP_FOLLOW;
+> +	if (flags & OPENAT2_EMPTY_PATH)
+> +		lookup_flags |=3D LOOKUP_EMPTY;
+> =20
+>  	if (how->resolve & RESOLVE_NO_XDEV)
+>  		lookup_flags |=3D LOOKUP_NO_XDEV;
+> @@ -1362,7 +1361,7 @@ static int do_sys_openat2(int dfd, const char __use=
+r *filename,
+>  	if (unlikely(err))
+>  		return err;
+> =20
+> -	CLASS(filename, name)(filename);
+> +	CLASS(filename_flags, name)(filename, op.lookup_flags);
+>  	return FD_ADD(how->flags, do_file_open(dfd, name, &op));
+>  }
+> =20
+> diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+> index a332e79b3207..d1bb87ff70e3 100644
+> --- a/include/linux/fcntl.h
+> +++ b/include/linux/fcntl.h
+> @@ -7,10 +7,13 @@
+> =20
+>  /* List of all valid flags for the open/openat flags argument: */
+>  #define VALID_OPEN_FLAGS \
+> +	 /* lower 32-bit flags */ \
+>  	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC |=
+ \
+>  	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
+>  	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+> -	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
+> +	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | \
+> +	 /* upper 32-bit flags (openat2(2) only) */ \
+> +	 OPENAT2_EMPTY_PATH)
+> =20
+>  /* List of all valid flags for the how->resolve argument: */
+>  #define VALID_RESOLVE_FLAGS \
 > diff --git a/include/uapi/linux/openat2.h b/include/uapi/linux/openat2.h
-> index c34f32e6fa96..fc1147e6ce41 100644
+> index a5feb7604948..c34f32e6fa96 100644
 > --- a/include/uapi/linux/openat2.h
 > +++ b/include/uapi/linux/openat2.h
-> @@ -20,8 +20,14 @@ struct open_how {
->  	__u64 flags;
->  	__u64 mode;
->  	__u64 resolve;
-> +	__u64 allowed_upgrades;
->  };
+> @@ -40,4 +40,8 @@ struct open_how {
+>  					return -EAGAIN if that's not
+>  					possible. */
 > =20
-> +/* how->allowed_upgrades flags for openat2(2). */
-> +#define DENY_UPGRADES		0x01
-> +#define READ_UPGRADABLE		(0x02 | DENY_UPGRADES)
-> +#define WRITE_UPGRADABLE	(0x04 | DENY_UPGRADES)
-
-I'm not a huge fan of how this bitmask is set up, to be honest. I get
-that you did it this way to make it disable-by-default but given that we
-probably will want to add restrictions in the future that would break
-backward compatibility (imagine an execute restriction that blocks
-execve(2) -- adding the feature would break all existing programs if you
-follow this scheme).
-
-It probably makes more sense to do something more like statx(2) -- you
-pick the restrictions you want and get back information about which
-restrictions were supported. This is similar to what I did in the old
-patchset too, though it didn't give you information like statx(2) does.
+> +/* openat2(2) exclusive flags are defined in the upper 32 bits of
+> +   open_how->flags  */
+> +#define OPENAT2_EMPTY_PATH	0x100000000 /* (1ULL << 32) */
+> +
+>  #endif /* _UAPI_LINUX_OPENAT2_H */
+> --=20
+> 2.53.0
+>=20
 
 --=20
 Aleksa Sarai
 https://www.cyphar.com/
 
---shyxwjfbequyutje
+--emc4et2r2dugri3c
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCacYhuxsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG9lQQEA7f/4GrHExneRKFlkqckO
-DBuU40Iwi+6n61mFIie1168A/09bWoZVoRT4SIONO1EzPuwYQOKbd7kY0hZOuaqH
-FLkK
-=V4Mg
+iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCacYi/hsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG+X3wD/XokatdOzMfrsP9kislkN
+BeQ06sXT5Ynm1GGdtbQLPh4A/jPoOoKqzClSt/ClXi1bV3+00mleP87YrPoxEP9a
+kbIA
+=n2EA
 -----END PGP SIGNATURE-----
 
---shyxwjfbequyutje--
+--emc4et2r2dugri3c--
