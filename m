@@ -1,231 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7DA3C8715;
-	Fri, 27 Mar 2026 07:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A9D3D9049
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 08:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774597588; cv=none; b=cFyHkjOdvT89rpWgBkIstSivVtxcsHtNo4Eqw+CYyRsBPvJIpupUyuBDcsxEi0ilAJsvCJ42WM02usiWVJkh3YKZ3HeX03w/zGCwCapDD5G5zZeNVKVWiWllLau0nvUUhLaVrB1Q0PJ/Vwx5hFXTFbSY2u7n6JMJlua8uN95S6I=
+	t=1774601610; cv=none; b=YtH0K4L0RNxXEjDBJ8LgJIQce9VM5vzFAKtMeEVJzb/jRUnoW+YFj0jVZiTpfteqoncZ99dDpEnR5Zz/TYnxFQuyQ2NYh2GlQ0ps0wAm0eC6J6UHN3v4Z33R+2qjVKnvmImVGSbjqNs0hfmoRfIhjJEMVQRPuyNLRRDkIJbf1EI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774597588; c=relaxed/simple;
-	bh=YpYLgI0jbsF+A0nzcAUua2nUX4/yXL66W0C5PJTgXrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nq/N6Hk/W5ipTmTN2rKtHSpzQUrnzY/sVq4SFk4UqLQQbDIegPjFQuM216G1g8KAf+YK++fiZLbbUbsNpqNJGYP5K+qcOSTwnsg+MPONoL6ERs8z3A6i0zONISXQm/MBS8as5FaaFu8SrXmvXlNhylzz4ZaqzxdgpIXseBDRQ/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAnfdjN+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774601610; c=relaxed/simple;
+	bh=OkCEfuTkvZiaoB5N52knGFfxEgBkl/u/c3ItUbO0AfE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MvD78X6/ogoN2jsxEqJC85klwwpZExOPEDAdl4nLH0fdWBG6hPSjax6mBnOhOFCQxvVnxeDjWbQ8T97nB4QmB/cjGx/awhViGt2Bw4lhNhVZgfySD1+PmvQx+WUumibVaV3L/pMtxk6uYQWf4gChX2ib8B6orJ7RREL0ijlhFRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D4MW3Eoz; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAnfdjN+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39BD4C19423;
-	Fri, 27 Mar 2026 07:46:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774597587;
-	bh=YpYLgI0jbsF+A0nzcAUua2nUX4/yXL66W0C5PJTgXrY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JAnfdjN+EsvFi1j+dVGjzyHPyTGqTDMKTZrNVgQtgdS3xTJN/KeC6SXfA6DW6KjZ+
-	 aXiEtUM3bJ0ki+Z9akOlTunEzzX5U9ssu8zkRelLpjeQHa/HwmIwwj6h10u5dOEg0M
-	 EKBK/9ZwAoABVZvbLpHEF0ii0f6vV3ud6iWKWuUuKizQooRHUkahfT6Z9o8xP7UzAv
-	 V7Ey/wrGk7siZDOJ5MJ/BLtJ5l6cix8sJsH1OOi+2j3uqZx/SfPbQJnE1wX5So5cdI
-	 qTCscyLEFql+4cw/7JjIAf1/JD2WybgTQS/Y93nhclmXbb4rNjhVp/Hxc+mgKRvhwF
-	 qjAqgYGSU/bnA==
-Date: Fri, 27 Mar 2026 10:46:15 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: James Houghton <jthoughton@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 10/15] shmem, userfaultfd: implement shmem uffd
- operations using vm_uffd_ops
-Message-ID: <acY1x8M3y7xWLwBa@kernel.org>
-References: <20260306171815.3160826-1-rppt@kernel.org>
- <20260306171815.3160826-11-rppt@kernel.org>
- <CADrL8HXajnfE=WusxL=DeF7VcvrsX9z5XDC4mPt1JfMOd7J5DA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D4MW3Eoz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774601607;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6V2laN0jUZw3fzRi+brKYUCENSji4guAxKdpVKjyDX4=;
+	b=D4MW3EozcYieFhCxUFaohb137b34gYNZx7xVjH/xU9TqZDz6xwYxmzHCpdDfvWcvSY1cYY
+	wILqMY1UnX6gAetlUNgPs1pBMDZIwF5cg0j6Ehg+H45XmOFxrBLjko9Js6BsY7ktTjJ8Hs
+	80E0eOpmI9Zbm5d23KD1VG+h7hocwnU=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-1-q7tDOfw2N_uPSRtx19Z1oQ-1; Fri,
+ 27 Mar 2026 04:53:25 -0400
+X-MC-Unique: q7tDOfw2N_uPSRtx19Z1oQ-1
+X-Mimecast-MFC-AGG-ID: q7tDOfw2N_uPSRtx19Z1oQ_1774601604
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 54C3519560A1;
+	Fri, 27 Mar 2026 08:53:24 +0000 (UTC)
+Received: from [192.168.1.153] (unknown [10.44.32.245])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 27C5F1800673;
+	Fri, 27 Mar 2026 08:53:19 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH 0/3] cgroup: dmem: add selftest helper, coverage, and VM
+ runner
+Date: Fri, 27 Mar 2026 09:53:02 +0100
+Message-Id: <20260327-kunit_cgroups-v1-0-971b3c739a00@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADrL8HXajnfE=WusxL=DeF7VcvrsX9z5XDC4mPt1JfMOd7J5DA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDY0ML3ezSvMyS+OT0ovzSgmJd87QkgyTLVDMTA0NzJaCegqLUtMwKsHn
+ RsbW1APKEibdfAAAA
+X-Change-ID: 20260318-kunit_cgroups-7fb0b9e64017
+To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+ =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>, 
+ mripard@redhat.com, echanude@redhat.com
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774601599; l=1999;
+ i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
+ bh=OkCEfuTkvZiaoB5N52knGFfxEgBkl/u/c3ItUbO0AfE=;
+ b=8Eek/d8K+Zbv4bPGE+S6e1wGM/tJLQPH1//T0TQLCrIBUzAWbq4nJyU9chE64hbl9/Dkzyhr3
+ qtnSNtnu/vUCmOjQpJmMro5mIeU3xlawGUJhYFpQw6IMuz/Fh+yDMnm
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Thu, Mar 26, 2026 at 06:13:37PM -0700, James Houghton wrote:
-> On Fri, Mar 6, 2026 at 9:19 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> >
-> > Add filemap_add() and filemap_remove() methods to vm_uffd_ops and use
-> > them in __mfill_atomic_pte() to add shmem folios to page cache and
-> > remove them in case of error.
-> >
-> > Implement these methods in shmem along with vm_uffd_ops->alloc_folio()
-> > and drop shmem_mfill_atomic_pte().
-> >
-> > Since userfaultfd now does not reference any functions from shmem, drop
-> > include if linux/shmem_fs.h from mm/userfaultfd.c
-> >
-> > mfill_atomic_install_pte() is not used anywhere outside of
-> > mm/userfaultfd, make it static.
-> >
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > ---
-> >  include/linux/shmem_fs.h      |  14 ----
-> >  include/linux/userfaultfd_k.h |  21 +++--
-> >  mm/shmem.c                    | 148 ++++++++++++----------------------
-> >  mm/userfaultfd.c              |  79 +++++++++---------
-> >  4 files changed, 106 insertions(+), 156 deletions(-)
-> >
-> > diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-> > index a8273b32e041..1a345142af7d 100644
-> > --- a/include/linux/shmem_fs.h
-> > +++ b/include/linux/shmem_fs.h
-> > @@ -221,20 +221,6 @@ static inline pgoff_t shmem_fallocend(struct inode *inode, pgoff_t eof)
-> >
-> >  extern bool shmem_charge(struct inode *inode, long pages);
-> >
-> > -#ifdef CONFIG_USERFAULTFD
-> > -#ifdef CONFIG_SHMEM
-> > -extern int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
-> > -                                 struct vm_area_struct *dst_vma,
-> > -                                 unsigned long dst_addr,
-> > -                                 unsigned long src_addr,
-> > -                                 uffd_flags_t flags,
-> > -                                 struct folio **foliop);
-> > -#else /* !CONFIG_SHMEM */
-> > -#define shmem_mfill_atomic_pte(dst_pmd, dst_vma, dst_addr, \
-> > -                              src_addr, flags, foliop) ({ BUG(); 0; })
-> > -#endif /* CONFIG_SHMEM */
-> > -#endif /* CONFIG_USERFAULTFD */
-> > -
-> >  /*
-> >   * Used space is stored as unsigned 64-bit value in bytes but
-> >   * quota core supports only signed 64-bit values so use that
-> > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> > index 4d8b879eed91..bf4e595ac914 100644
-> > --- a/include/linux/userfaultfd_k.h
-> > +++ b/include/linux/userfaultfd_k.h
-> > @@ -93,10 +93,24 @@ struct vm_uffd_ops {
-> >         struct folio *(*get_folio_noalloc)(struct inode *inode, pgoff_t pgoff);
-> >         /*
-> >          * Called during resolution of UFFDIO_COPY request.
-> > -        * Should return allocate a and return folio or NULL if allocation fails.
-> > +        * Should allocate and return a folio or NULL if allocation
-> > +        * fails.
-> >          */
-> >         struct folio *(*alloc_folio)(struct vm_area_struct *vma,
-> >                                      unsigned long addr);
-> > +       /*
-> > +        * Called during resolution of UFFDIO_COPY request.
-> > +        * Should lock the folio and add it to VMA's page cache.
-> 
-> I don't think "should lock the folio" is accurate. That sounds like
-> "it will call folio_lock()" but it actually calls
-> __folio_set_locked(). Maybe this is better:
-> 
-> "Should only be called with a folio returned by alloc_folio() above.
-> The folio will set to locked."
+Hi all,
 
-Yeah, sounds good.
- 
-> > +        * Returns 0 on success, error code on failure.
-> > +        */
-> > +       int (*filemap_add)(struct folio *folio, struct vm_area_struct *vma,
-> > +                        unsigned long addr);
+This small series adds practical test coverage for the dmem
+cgroup controller.
 
-> > @@ -404,6 +400,9 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
-> >
-> >         set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-> >
-> > +       if (page_in_cache)
-> > +               folio_unlock(folio);
-> 
-> I don't really like doing the folio_unlock() *here*, I think it's
-> clearer if the callers (mfill_atomic_pte_continue() and
-> __mfill_atomic_pte()) unlocked the folio themselves. But that's just
-> my opinion.
+The motivation came from following the recent dmem API discussion in
+thread [1]. That discussion considered changing the dmem API and
+adding a new knob. Currently there are no dedicated tests covering
+dmem behaviour, which makes such changes riskier.
 
-We already have page_in_cache here, so I'd prefer to keep a single
-folio_unlock() rather than add additional if (page_in_cache) in
-__mfill_atomic_pte().
- 
-> > +
-> >         /* No need to invalidate - it was non-present before */
-> >         update_mmu_cache(dst_vma, dst_addr, dst_pte);
-> >         ret = 0;
-> > @@ -836,41 +856,18 @@ extern ssize_t mfill_atomic_hugetlb(struct userfaultfd_ctx *ctx,
-> >
-> >  static __always_inline ssize_t mfill_atomic_pte(struct mfill_state *state)
-> >  {
-> > -       struct vm_area_struct *dst_vma = state->vma;
-> > -       unsigned long src_addr = state->src_addr;
-> > -       unsigned long dst_addr = state->dst_addr;
-> > -       struct folio **foliop = &state->folio;
-> >         uffd_flags_t flags = state->flags;
-> > -       pmd_t *dst_pmd = state->pmd;
-> > -       ssize_t err;
-> >
-> >         if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
-> >                 return mfill_atomic_pte_continue(state);
-> >         if (uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON))
-> >                 return mfill_atomic_pte_poison(state);
-> > +       if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY))
-> > +               return mfill_atomic_pte_copy(state);
-> > +       if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE))
-> > +               return mfill_atomic_pte_zeropage(state);
-> 
-> Thanks for this cleanup. :)
-> 
-> >
-> > -       /*
-> > -        * The normal page fault path for a shmem will invoke the
-> > -        * fault, fill the hole in the file and COW it right away. The
-> > -        * result generates plain anonymous memory. So when we are
-> > -        * asked to fill an hole in a MAP_PRIVATE shmem mapping, we'll
-> > -        * generate anonymous memory directly without actually filling
-> > -        * the hole. For the MAP_PRIVATE case the robustness check
-> > -        * only happens in the pagetable (to verify it's still none)
-> > -        * and not in the radix tree.
-> > -        */
-> > -       if (!(dst_vma->vm_flags & VM_SHARED)) {
-> > -               if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY))
-> > -                       err = mfill_atomic_pte_copy(state);
-> > -               else
-> > -                       err = mfill_atomic_pte_zeropage(state);
-> > -       } else {
-> > -               err = shmem_mfill_atomic_pte(dst_pmd, dst_vma,
-> > -                                            dst_addr, src_addr,
-> > -                                            flags, foliop);
-> > -       }
-> > -
-> > -       return err;
-> > +       return -EOPNOTSUPP;
-> 
-> WARN_ONCE() here I think.
+Adding selftests has an additional challenge: dmem charging paths
+are driver-driven today, so regression testing harder unless a
+suitable driver is present in the test environment.
 
-I'll add VM_WARN_ONCE() here.
+This series addresses that by adding:
+- a kernel-side selftest helper module to trigger charge/uncharge
+  from userspace in a controlled way,
+- cgroup selftests covering dmem accounting and protection semantics
+  (including dmem.max enforcement and byte-granularity checks),
+- a virtme-based VM runner for repeatable execution of the dmem tests.
 
-> Feel free to add:
-> 
-> Reviewed-by: James Houghton <jthoughton@google.com>
+The goal is to make dmem behavior easier to validate when evolving the API
+and implementation, while keeping tests deterministic and driver-independent.
 
-Thanks!
+Thanks.
 
+[1] - https://lore.kernel.org/all/aZoHfloupKvF2oSu@fedora/
+
+Signed-off-by: Albert Esteve <aesteve@redhat.com>
+---
+Albert Esteve (3):
+      cgroup: Add dmem_selftest module
+      selftests: cgroup: Add dmem selftest coverage
+      selftests: cgroup: Add vmtest-dmem runner based on hid vmtest
+
+ init/Kconfig                                  |  12 +
+ kernel/cgroup/Makefile                        |   1 +
+ kernel/cgroup/dmem_selftest.c                 | 192 ++++++++++
+ tools/testing/selftests/cgroup/.gitignore     |   1 +
+ tools/testing/selftests/cgroup/Makefile       |   2 +
+ tools/testing/selftests/cgroup/test_dmem.c    | 487 ++++++++++++++++++++++++++
+ tools/testing/selftests/cgroup/vmtest-dmem.sh | 189 ++++++++++
+ 7 files changed, 884 insertions(+)
+---
+base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
+change-id: 20260318-kunit_cgroups-7fb0b9e64017
+
+Best regards,
 -- 
-Sincerely yours,
-Mike.
+Albert Esteve <aesteve@redhat.com>
+
