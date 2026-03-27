@@ -1,155 +1,136 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A262366801
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 13:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A987120B810;
+	Fri, 27 Mar 2026 13:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774617853; cv=none; b=ORU/6ekoVmKm8BJFXu2JzUXTi9VsHndgd9Y+mPTUCNQKa0cJ3iSONPuT8rt57lwBpG+3hdxxDMgz3z9hW+hhCJmHq7vsKX/yOUt9JDW3PdzcY7kuxIw/SrodXRt8RWzfvlJdrBNSA17DsIcTwKYqQ9UrOAMo3nIYBr8+KHTN23M=
+	t=1774617905; cv=none; b=iiA2bZaDGHCi3Ep7iNbR9O/JW1P97dCyrwYII9kD/LO3Vb/BPIgwN+b5acuBCZOv8APMVj99b+J8YkznaYMHzGYEcbvcoPk0TTsuMqEBzcaAa1jn/51Aq3pefPVC0cH3ohGIx4/6a+d862MzWa0tIP1bqcK4PKpNxY2pV+PrO4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774617853; c=relaxed/simple;
-	bh=ejXTOSKJ079hoJ09zoFLWAckjBH4CQ5r4z5w/ptDNg8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uge95mIO0JE27TLu8BDgUXvVUAg12n1lIV1Sj2L7PE7cMzYLXtXk4p2E74VNvP8CekrXGzT7d0HOgthiBqm8gkjm5JSVxW1Ni6z9zeCDe57Hc5DcwdxqWSvx8M8dSJk9q/aDhRbKLlVGD/fjFVkO86FOyD5mcebtTwppc+mErxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M2ab4atr; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1774617905; c=relaxed/simple;
+	bh=brXvhwyCKp5XwYJwondkNZofipJVw6dyyhnaVceck5I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=baf8MNINXYtebE6td44AqS1w0GA3DFyE9EFzwLs0EPySpX3R+xnsx22RxZJBPkpcvqYOILNAmnHxRhlPi/3NQeXamJhS1ra/U5eK36faJ2gpOYitl7OQxXSKhwlr5HXU3hKuYk5HEtffJPUic7g1S81Z6csVKk5XRgiGjovyvAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HsriDbNK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M2ab4atr"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-482f454be5bso29627825e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 06:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774617851; x=1775222651; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6TxywXtHWHy04GPoczvW/ll5a4fKqL9h3PQIZK9hKE8=;
-        b=M2ab4atrkhJnPVKZQm5tbkvLd0/8bz4Wq4qhdKxuo/HkUdHORElc+FIrvJu01vHzrk
-         N1gG45aci2L1GONnKU+C8PwijofpunRWrGERq4PoAFhZ9XGDgzM3BiyvkyD+ThatXMFT
-         9WifkhWwfTvZo+B+xreIzcnKh3bQZhJvt27W0B7XoxGclKeJSHg9P9wOEeOVIkFwApLM
-         nRc53LUbuNImLGdAf3rnPlJRIEItxcXw5k2YtSIBCn7DuMcNDxnhHiSHXI5FqbOqVelb
-         ujrKMiYxuXKIFfHNrEbU0tsED2lZA9XN18yXauUVdGsCHX+oCOSXzsDYP8s1nkngjQsl
-         GUUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774617851; x=1775222651;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6TxywXtHWHy04GPoczvW/ll5a4fKqL9h3PQIZK9hKE8=;
-        b=lzU56taYsqw49SZvET+X4EYA3Lg5cCAGHN8pCLA+a3wVvccvfAMNuEpL2gfYMYff5l
-         7oDxsWU58+aX9XnrPeQLTkZo0boxYmKsGCtUqUREsMN8zPeUtGNDTh5IHXi5iW27WcKB
-         Sk34QKntNYOI3PuAewQ43xGblnHsbarso+jZZU4P45ONSdVvVd/A3+YOv715Qo+V+JS2
-         /J5PWdV8sEYiNCEuqkWwwh9Ey55KI+ujpJ7QlCFakKW9b4q3yG5Z6auNYkHW1o7/xYLH
-         tUyWWFVBOSdTEZgKzLUQ2NR2RLT3ZdaY6diyKETI7fhz5jdM8rp2DzU18pWprqGkX6Le
-         u+Qw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbmzkExgcvz1odo0JJ1jr8kc8Zq+4b3ODs4lwz3/Ja34d1zFYI3ha84iIYZvPv5PXUYVGvc6xhUtkP1VZvrrA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYnxz8xCWexFqI7kklkCk+e3p+w06P89gG6L57Qiqrz7U9y2S4
-	hnU+9NfhGhfhv9h2lPObwo26eJFxTqrRYGtn5q0lSOXKmWiMoYkyQRdvE3osrSUIF9iVnnzgKBA
-	qWFYS548=
-X-Gm-Gg: ATEYQzwhKb5bfcy9GsP8FLXNeLRwDiN9w/gj6oGuu2kwrPFhIQTvQBCysA0/0kWi0Kt
-	QMmK8JGFbFahI+Eq+xEHERs5SPlLSZyPkHfHHV30jqrD4PyezBDptKy2vMrTqySYk8+Wi1acqmf
-	TUOWsLFedIoPFliZrpIOP78HafLgDzNFngsjECNVGyy6SO3rw4kdiQBwyKKsRutqpMkgPzkKsuA
-	GGJFhBqlABwy5DYWYUqMUsHCOfuBsHXJZlaI0Ay6+bp3BqqE717y6USCABtZHbWMoqy0QLJMX14
-	HAq6e5nHoL6VeicJqzmdRm70XsAVVH39FevTV1DA/A5e1D38zS1eO7p0gpIDVCWa774EvdcwnvH
-	YobhheqOepSsjazjlQqCyfnQJWXhC7sA6CQ+/qWtqTdmy3EHAsiS+WYYBkNKRlxAtG5Y6ewhUtv
-	589BFkcp2Ji9y8BFmvSdZzMe1+t24GJGaFz/i+C7fSvCyZeYxRTutGBAtYGWeWJWbPooYJvA==
-X-Received: by 2002:a05:600c:46ce:b0:477:9890:9ab8 with SMTP id 5b1f17b1804b1-487290a929fmr33140695e9.3.1774617850566;
-        Fri, 27 Mar 2026 06:24:10 -0700 (PDT)
-Received: from ?IPv6:2804:1bc4:224:7800:c8ca:fb24:208a:b63f? ([2804:1bc4:224:7800:c8ca:fb24:208a:b63f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48725d2abb8sm18514315e9.0.2026.03.27.06.24.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 06:24:10 -0700 (PDT)
-Message-ID: <9a72dbd0523254209a733ec9e89466e7f0dc3e00.camel@suse.com>
-Subject: Re: [PATCH 1/8] selftests: livepatch: test-syscall: Check for
- ARCH_HAS_SYSCALL_WRAPPER
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>, Josh Poimboeuf
- <jpoimboe@kernel.org>,  Jiri Kosina <jikos@kernel.org>, Petr Mladek
- <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Fri, 27 Mar 2026 10:24:05 -0300
-In-Reply-To: <alpine.LSU.2.21.2603201136401.12616@pobox.suse.cz>
-References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
-	  <20260313-lp-tests-old-fixes-v1-1-71ac6dfb3253@suse.com>
-	  <abhjYtyveer4niGM@redhat.com>
-	  <alpine.LSU.2.21.2603191349440.22987@pobox.suse.cz>
-	 <0d85d8d7533a7a78d1f8fcc1fff8ffc73b1cf225.camel@suse.com>
-	 <alpine.LSU.2.21.2603201136401.12616@pobox.suse.cz>
-Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
- keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
- Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
- gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
- GO8seNG8sYiP6JfRjl7Hyqca6YsE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (by Flathub.org) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HsriDbNK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E4DEC2BC87;
+	Fri, 27 Mar 2026 13:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774617905;
+	bh=brXvhwyCKp5XwYJwondkNZofipJVw6dyyhnaVceck5I=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HsriDbNKQQIc9uLqKb3o3lGxNyauWEo1fFT0hzLpKbTb5nTniA1YcveZi7m5zizlf
+	 cqaSPiPne+kjrO0ePUeOhaYrmIVOTVVaMmqtDlpQFaaaLCYnD2Y0HtFqRGhqORFh3M
+	 +PafWd9fkkR7YtOnWOlqa1wmvmVRW9A8ysAi+in6csCEs/tw+tiKMYb930rZy4krrz
+	 JMpvZ2cGCS2cFZ+nR+KFq52hJjdPq4vhAnxfsDbnf80AxKbPC9RH0duuydCsxD4vcf
+	 W4oW1ac0IdcMzsiPfcM1+tjLTd9QS4yj5fzkTDdoRAcyZqV8+GgzPhGTYxzaNQdqZY
+	 6qqWH9RCEnU+g==
+Message-ID: <b28ebf0c-c10e-4e1a-9e8e-30e6925d0da8@kernel.org>
+Date: Fri, 27 Mar 2026 14:24:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/6] selftests/mm: skip several tests when thp is not
+ available
+To: Andrew Morton <akpm@linux-foundation.org>, Chunyu Hu <chuhu@redhat.com>
+Cc: shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
+ baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev
+References: <20260324013316.2590422-1-chuhu@redhat.com>
+ <20260324090927.eeacb7987d22ed8ba13fada2@linux-foundation.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
+ ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
+ AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
+ 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
+ g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
+ ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
+ 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
+ /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
+ jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
+ DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
+ HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
+ 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
+ LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <20260324090927.eeacb7987d22ed8ba13fada2@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2026-03-20 at 11:45 +0100, Miroslav Benes wrote:
-> > > So I would perhaps prefer to stay with the logic that defines
-> > > FN_PREFIX=20
-> > > per architecture and has also #else branch for the rest. And more
-> > > comments=20
-> > > never hurt.
-> >=20
-> > Agreed.
->=20
-> Hm, so I thought about a bit more and I very likely misunderstood the
-> motivation behind the patch. I will speculate and correct me if I am=20
-> wrong, please. The idea behind the whole patch set is to make the=20
-> selftests run on older kernels which I think is something we should=20
-> support. The issue is that old kernels (like mentioned 4.12) do not
-> have=20
-> syscall wrappers at all. getpid() syscall is just plain old
-> sys_getpid=20
-> there and not the current __x64_sys_getpid on x86. The patch fixes it
-> by checking CONFIG_ARCH_HAS_SYSCALL_WRAPPER and defining FN_PREFIX=20
-> accordingly.
+On 3/24/26 17:09, Andrew Morton wrote:
+> On Tue, 24 Mar 2026 09:33:10 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
+> 
+>> There are several tests requires transprarent hugepages, when run on thp
+>> disabled kernel such as realtime kernel, there will be false negative.
+>> Mark those tests as skip when thp is not available.
+> 
+> Thanks, I updated mm.git's mm-unstable branch to this version.
+> 
+>> Chagnes in v6:
+>>   - patch 3 add reviewed-by from Lorenzo
+>>   - patch 4 handle the errno before and after close(), suggested by AI
+> 
+> Here's how v6 altered mm.git:
+> 
+> 
+>  tools/testing/selftests/mm/vm_util.c |   12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> --- a/tools/testing/selftests/mm/vm_util.c~b
+> +++ a/tools/testing/selftests/mm/vm_util.c
+> @@ -785,15 +785,23 @@ int unpoison_memory(unsigned long pfn)
+>  
+>  void write_file(const char *path, const char *buf, size_t buflen)
+>  {
+> -	int fd;
+> +	int fd, saved_errno;
+>  	ssize_t numwritten;
 
-Exactly. The definition was added on
+Empty line? :)
 
-  commit 1bd21c6c21e848996339508d3ffb106d505256a8
-  Author: Dominik Brodowski <linux@dominikbrodowski.net>
-  Date:   Thu Apr 5 11:53:01 2018 +0200
- =20
-      syscalls/core: Introduce CONFIG_ARCH_HAS_SYSCALL_WRAPPER=3Dy
+> +	if (buflen < 1)
+> +		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
 
->=20
-> So, if this is correct, I think it should be done differently. We
-> should=20
-> have something like syscall_wrapper.h which would define FN_PREFIX
-> for=20
-> the supported architectures and different kernel versions since the=20
-> wrappers may have changed a couple of times during the history. In
-> that=20
-> case there could then be an #else branch which might just error out
-> with=20
-> the message to add proper syscall wrapper naming.
+-- 
+Cheers,
 
-Well, it seems too much for a simple test to me, but I can do that, no
-problem.
-
->=20
-> The changelog then should explain it because it is not in fact tight
-> to=20
-> powerpc.
-
-Makes sense, I'll change it.
-
->=20
-> What do you think? Am I off again?
-
-I agree with everything, but adding another header file seems a little
-too much work for a simple test case, but it's doable. Let me work on
-it.
-
->=20
-> Miroslav
+David
