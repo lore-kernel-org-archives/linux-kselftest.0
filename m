@@ -1,95 +1,142 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A237A3BF685;
-	Fri, 27 Mar 2026 06:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C6C3C13E7;
+	Fri, 27 Mar 2026 07:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774593775; cv=none; b=CNOS8lLcWquVROKtXlY+a0QZTrpKTIYxJF/sYoG+vBS9r0cJGnyyax7YMTwacTHLyKZONKu8IhN3d7yPdIQ+IintY56+Ka87HfGw4Mc9DhJsNHCkXRIJEyc4TgXGIz2D9JAnUNiPkqNcH/jtbofc8SB/o1wW2FuxGnaZp5DwNNs=
+	t=1774595336; cv=none; b=noQSavUzYbxcz7bMzT/3O2LSkuuCUeUSbYXiN9T3qL25d6Jl0gPKeSwKGd26h26aAnXCowIsVAj+QlEnYCr0YKtz0mZfaAXaIjR54jeFrX8EN6WfRauhkb/710W/N7ucSbJjBy51MtXnN7gygSOchQKMUyqX7Q3W3TCiKgBGYUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774593775; c=relaxed/simple;
-	bh=wFXmO27wKvV6/Kr+vvz+qry41MFFNZPIOZqFd6mwDpk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LFjOjF6RJ/ohEf+V65cHTjIsMz3znY9PhDtPWqWRu3fZt2D+MPV0598O5d1qnlsaT4PY2AZpumpq0Co2z2FVYoqHqU087CCy2aIiHhCqbwvzhGw4QDlL7Z/mV4pWmuVkzerlieXF5AuMOWOhGdQUtfVDjRRF46SE5Ws8zrVoEVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BMHLiTTQ; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774595336; c=relaxed/simple;
+	bh=HUUMzFtQd95LWuOLKItXity1Tg4z0VrPVxPr5dhpgss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jf9cjQmXq3Q/+I4TYjLqkvbVesoZUWcfOqFjpK7XQ6ykGeEukQomTtPFcteGrQD4TLrgK+hVNd00fDQTtRVPJUoO47bt6pbYokauFb9U+tmZoaIAHKprqoBH1eFZWt+k8BXoI9oowNvxM/ID5ccLlyR71WUtndCPGUZfMrsgvQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HbFM/nt2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BMHLiTTQ"
-Message-ID: <785e0b04-91e4-457f-8d6c-e0a911c0fd88@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774593754;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b59W3l9WpyzX2iAsGdXQno8uo7jmzlLBBhaOtXWpNvk=;
-	b=BMHLiTTQOLBNNQJP1khgYmCgNFAUY7dhRkrLHCZixLoDngy+y9oGHvb+X/htRg5tAnrzYL
-	qjUTh78zj/13+gL/g6zuuaUcknueSbo/k9tL8No+U7yYTPc/n6xr65yrih1eE9EWSBHKov
-	kZH7LA0auDo3Rmb8p0JFYlNF0BYBsEM=
-Date: Fri, 27 Mar 2026 14:42:19 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HbFM/nt2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E83C19424;
+	Fri, 27 Mar 2026 07:08:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774595335;
+	bh=HUUMzFtQd95LWuOLKItXity1Tg4z0VrPVxPr5dhpgss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HbFM/nt2fcqw/rKPWsd2t1mhCyK2TqUqQUAHVFbe8GiwCTIMg0uPfcHg0T1i3D1ZX
+	 s9AxmNOnxBNhDa2CLdvKRfUPR6EHAodTdvO+w/pBVW9cLyUyh4FSFiOHPpnCHp+YNf
+	 +0iyExEAo+kDQgaWKsnEK0IleBpUKRWXO/OUBnXMnYR1SopujjauNQO/F4MgqNzFg0
+	 pVsc+0dfOnTL7UF4E3zgUOK54DSFYmg7jv4eWpVyr6l5ofx+mhpvg2RCKjCfpAMxYB
+	 mGKc9VFqyvg+CrD7Deb2pyQsRk/RvTpfAIWLRwvS6JoQwrkPwR2t2czzzmd1tfr9Zn
+	 7/M/kwh+y461w==
+Date: Fri, 27 Mar 2026 10:08:47 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Li Wang <liwang@redhat.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
+	Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
+	mhocko@suse.com, shuah@kernel.org, aubaker@redhat.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: skip hugetlb_dio tests when DIO alignment
+ is incompatible
+Message-ID: <acYs_-UOv72cmO-P@kernel.org>
+References: <20260327031243.15903-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/3] bpf: Disallow freplace on XDP with
- mismatched xdp_has_frags values
-Content-Language: en-US
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Toke Hoiland-Jorgensen <toke@redhat.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260324150444.68166-1-leon.hwang@linux.dev>
- <20260324150444.68166-2-leon.hwang@linux.dev>
- <20260326124205.1a3bb825@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260326124205.1a3bb825@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260327031243.15903-1-liwang@redhat.com>
 
-On 27/3/26 03:42, Jakub Kicinski wrote:
-> On Tue, 24 Mar 2026 23:04:42 +0800 Leon Hwang wrote:
->> The commit f45d5b6ce2e8 ("bpf: generalise tail call map compatibility check")
->> was to ensure backwards compatibility against tail calls. However, it
->> missed that XDP progs can be extended by freplace progs, which could break
->> the backwards compatibility, e.g. xdp_has_frags=true freplace progs are
->> allowed to attach to xdp_has_frags=false XDP progs.
->>
->> To avoid breaking the backwards compatibility via freplace, disallow
->> freplace on XDP programs with different xdp_has_frags values.
+On Fri, Mar 27, 2026 at 11:12:43AM +0800, Li Wang wrote:
+> hugetlb_dio test uses sub-page offsets (pagesize / 2) to verify that
+> hugepages used as DIO user buffers are correctly unpinned at completion.
 > 
-> It may be worth adding a selftest to
-> tools/testing/selftests/drivers/net/xdp.py
-> which sets MTU to 9k, tries to attach a non-frag-capable prog
-> if that fails attaches a frag-capable prog and then checks if
-> replacing the capable prog with non-capable fails.
-> Drivers may be buggy in this regard.
+> However, on filesystems with a logical block size larger than half the
+> page size (e.g., 4K-sector block devices), these unaligned DIO writes
+> are rejected with -EINVAL, causing the test to fail unexpectedly.
+> 
+> Add check_dio_alignment() which queries the filesystem's DIO alignment
+> requirement via statx(STATX_DIOALIGN) and skips the test early if the
+> sub-page offset used by the test is not compatible with the alignment
+> constraint.
+> 
+> === Reproduce Steps ===
+> 
+>   # dd if=/dev/zero of=/tmp/test.img bs=1M count=512
+>   # losetup --sector-size 4096 /dev/loop0 /tmp/test.img
+>   # mkfs.xfs /dev/loop0
+>   # mkdir -p /mnt/dio_test
+>   # mount /dev/loop0 /mnt/dio_test
+> 
+>   // Modify test to open /mnt/dio_test and rebuild it:
+>   -       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+>   +       fd = open("/mnt/dio_test", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+> 
+>   # getconf PAGESIZE
+>   4096
+> 
+>   # echo 100 >/proc/sys/vm/nr_hugepages
+> 
+>   # ./hugetlb_dio
+>   TAP version 13
+>   1..4
+>   # No. Free pages before allocation : 100
+>   # No. Free pages after munmap : 100
+>   ok 1 free huge pages from 0-12288
+>   Bail out! Error writing to file
+>   : Invalid argument (22)
+>   # Planned tests != run tests (4 != 1)
+>   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Signed-off-by: Li Wang <liwang@redhat.com>
+> ---
+>  tools/testing/selftests/mm/hugetlb_dio.c | 37 +++++++++++++++++-------
+>  1 file changed, 27 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+> index 9ac62eb4c97d..afcca50d190e 100644
+> --- a/tools/testing/selftests/mm/hugetlb_dio.c
+> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
+> @@ -20,6 +20,31 @@
+>  #include "vm_util.h"
+>  #include "kselftest.h"
+>  
+> +#ifndef STATX_DIOALIGN
+> +#define STATX_DIOALIGN		0x00002000U
+> +#endif
+> +
+> +void check_dio_alignment(size_t pagesize)
+> +{
+> +	int fd;
+> +	struct statx stx;
+> +	unsigned int dio_align = 1;
+> +
+> +	fd = open("/tmp", O_TMPFILE | O_RDWR, 0664);
+> +	if (fd < 0)
+> +		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
+> +
+> +	if (statx(fd, "", AT_EMPTY_PATH, STATX_DIOALIGN, &stx) == 0 &&
+> +				(stx.stx_mask & STATX_DIOALIGN))
+> +		dio_align = stx.stx_dio_offset_align;
+> +
+> +	close(fd);
+> +
+> +	if ((pagesize / 2) % dio_align != 0)
+> +		ksft_exit_skip("DIO alignment (%u) incompatible with sub-page offset %lu\n",
+> +				dio_align, pagesize / 2);
 
-Do you mean adding these two tests to xdp.py?
+This also needlessly skips the test with aligned offsets.
 
-1. Verify the failure of attaching non-frag-capable prog to mtu=9k
-   driver.
-2. Verify the failure of updating frag-capable prog with non-frag-
-   capable prog via libbpf.c::bpf_link__update_program().
+I'd suggest detecting dio_align here, passing it to run_dio_using_hugetlb()
+and moving the check that skips a test there.
 
-As for test #2, it may require a helper to attach prog then update prog
-using libbpf's APIs.
+> +}
+> +
+>  void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+>  {
+>  	int fd;
 
-Thanks,
-Leon
-
+-- 
+Sincerely yours,
+Mike.
