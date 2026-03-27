@@ -1,64 +1,64 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBB83F7A9A
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 14:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F563F87E3
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 14:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774620986; cv=none; b=MtZfbPh3gvA8gCazERgksL22v2BfU4HD2HTs3gQjRJZH/lUxoMmA/rihynMwljsraUNEZVi0vRMbNSmlmBbSrztKmjjfXSChMxjuyqmZJf/aeEQS0FUyc4hLceh6EFOFq9cyuDNcOf6fSTMUz5l7Tjz3nnGnTPzVGtDvKepHHWU=
+	t=1774620990; cv=none; b=dwaM+hXPGIudjEprbiaHtbrOZDpZl7yQmxPIdXdcuRTzF7qVJYlCEITpcCMQ/uBVDE87pyY51j+CAPKvZptIBZphbcq5G0+Nxnon1njz88o0Rp7/8ZhqOOORE2yUqSoBW9WkLSC7tA6kiiRZUnUtrVNGmKUJVNkaxveQm8y2GjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774620986; c=relaxed/simple;
-	bh=mCB+uW4a761n0d2aVwv1tBGBLpbO8o3tzqc2Q88DMSk=;
+	s=arc-20240116; t=1774620990; c=relaxed/simple;
+	bh=nk/5ZakMJ+t2bnACkG2W+99kDbR1MO4cQq0DjDs269o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=APt/6Wx7jk5OGzohK6WrPlotasLnEkPO7n2XCO2QIo7OjTgOWO9PpxkzW2oqSuVuS0obP1MryGKYSN5q3ajhdreaoUmKA3XTsYes2oAidE5jvizFFNBMBA1+tC2/Yai9rXIj2qax3vzNsasa84BOIqlr0A7PTWEy6USWAKtu5e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U7PXC/Ch; arc=none smtp.client-ip=209.85.214.179
+	 MIME-Version; b=pO8enveoeV496UMCGUuaZ2ia9tGovON/PaZ5FRSu3vbzHnN5xK0wrDhcID9pdlLeY0KdWOua3I4whUdPv5SMkUQsTL+3m4TU3XEMUyHDJfbwvsbEPDAZKIzhs6KnRH4C/vlY1hYSUhfpb6k3ImHZy9WVIpT2/3m+UbwhP3LXLLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bBVk2nHT; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U7PXC/Ch"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2b0c30b517aso7738865ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 07:16:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBVk2nHT"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c757a9251faso981321a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 07:16:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774620982; x=1775225782; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774620985; x=1775225785; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CI8/ynCoj9QXIX8q6/wyTK1N5QESD0qh826RNi2z3ds=;
-        b=U7PXC/Ch3zV8dvp/VxQPIvRhLHyFzL/oy+H9Aej02b05/i4Ye+anDKZN2SxcldSVRU
-         aleJIqVhpyr66fmWWxiRSVujS6r7hE4B8TQ6ifc6ZQhDzn7ueYIM/TEEM8HCyrVN6v4W
-         UI8l63ac1s/bxmIuuqTmcy6U8EfABI6k4fV15MFMaqvIzC1OkcI6RzQ+TmzjK7WAc2Zg
-         On3F83godTBHtduKMqrdCVSCV5a0lOE76BroXoLPHIfP2wH55lYKfoaNgxgms9YS3eEe
-         an5xjMqSvhEPCP9F4/JytFG3HtPBTXVAjrudTkDHrIxAI/O+ftDFocT0EwtTpY9kuKRJ
-         p3ZQ==
+        bh=6aupF+DuW1/DcLr6AsgbIe6z0Vi4ttYW8cK5LaEjq3w=;
+        b=bBVk2nHTC40dS0AyeaC0MCoeEtN5Bf+tnn3sfNcMhXGXO+XfJqN4Fn6KVL8sdrWkwC
+         gnnaYgu8oQomOxYvq4SaUXaCF81lut0Z3ewvBFNCR9QOEsoWc4bFbcZkc6AXV4GCeM7L
+         9HCOrLEk1gQOimME7WZbhZjWU7PbOkCTXwp5iqfK7P62rs+yFbeHHpNTC/d4/ZpYfrhq
+         OdnzUPmTOh+opu9hcBmCR+6NnMySZv4SwX77hB2xtwQAmeIjjUMmZd81DuhtZlYEzjhM
+         e2iwu0Ow3v53ROZbJ7vafnm89nTFBOspkLGHzHw+4kRXsOHanJqSPox+GqsJLqTtgr/C
+         0NIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774620982; x=1775225782;
+        d=1e100.net; s=20251104; t=1774620985; x=1775225785;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=CI8/ynCoj9QXIX8q6/wyTK1N5QESD0qh826RNi2z3ds=;
-        b=jrA6JBFuhQV8+NHs6j6ox6UiPhceGN1q1HAHgw9y7JsaSCIF+yEU9oCZgqcgAzd+m+
-         CZ77pNKjMVok9r4ZsXzU/Nkc1l1FMHljoYV0ao8Blj3jRH3UMjppjXz3aUJ4TtavSl3T
-         vuuJ7Fswnu0qaHVVuRA8DLN8ZgtL5o9bn/UKQkjaK9sbwtyupsFmueQEnGOnjmDw8iWZ
-         2O9UOxAogIAZSGAJPChkn6OqgLBv3P8td38q/Q6HiYQkdcWu4HlQVLyNISLXahypu1XI
-         QVx07jaR2VEYGDJGdCPlsMh+DZbWt0oSdmgzgGKZeyGezyyKRGl4VZG1wQ/869WfrOFB
-         vJ4g==
-X-Forwarded-Encrypted: i=1; AJvYcCV+TrJRYLu1/Rx2vXXcrWmGB2zt/tNy+X0flSq1RMvedl1Vor9Su06KXOCka/JreVSvSuFqujqMwACMPMowOxM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC877/tAdxIix4X16+v8Zfnz0eUvPW6DuYeTE7gO7LlyN71fFM
-	pq+oMDsmQzVetnGJb2h8lsNUaQJKfc9m73iyUJMvbxnNqpzIF4gJJmee
-X-Gm-Gg: ATEYQzwel+GyVPTdeqREyDd0j43cgATimbqn/JQ34h0AzsnCU1qxy2yNwXpN2mYHabl
-	Fc0pc7QuBMUSrJg7zxQeUm0CmKBi4wpXoiYJtv5IL862Kr7Vm8FdBiX062SWi4IHe8LvFLHBCA+
-	IlDMaQS75WwKtwbl/nuyRZokBoG1JS7ZTD7/lKzbJ3l6/CmrmnHl6VK3/c49my3BWSyfV27J9iY
-	9pRDhBx9eniP+PrTeBsl6ZSMY7w/3oQf/t4y04sozq7FwyRGAsq0MLXiAXgwzZ+4+XaAGTO3wNE
-	/08uqAnq1V2tvHj06qFbDSdu8Cs2D/hZkTe4oPhcMtN2s+WlLmTKDwgNqiNt9xwoHKwaiBHKoqf
-	Zy5syjZGokKcp4fv/SKXg+pdZ8a6531wffaFMfNQQ2wkvPOSKmySV/IScwfyKunOHXhjPUM8mis
-	p4EijuAiRPIRvMFPnjtPP6VOIClDaGRam+a/sjk57OihoplZwKtMRPMm9Hbt0/HvOxGSu9skXWO
-	s5OlnHVMwS2S5y7TKbwcjOayu+m4dvw+w==
-X-Received: by 2002:a17:902:ccc7:b0:2b0:615f:9c2b with SMTP id d9443c01a7336-2b0cdd3fb5amr29434635ad.24.1774620982187;
-        Fri, 27 Mar 2026 07:16:22 -0700 (PDT)
+        bh=6aupF+DuW1/DcLr6AsgbIe6z0Vi4ttYW8cK5LaEjq3w=;
+        b=UfJp6Wo7ItSysxqMVfFmYjIQ5Tb9R4pcHJ6hzUbRAfkIlAvnu6fSrjD3akZWZHKHuy
+         zV4305sujbtY26+WdaCPEErtG1k1RSo4izNcGRovPMDJJoOcxV7xZhi0ZHs2Ycx/6Z+k
+         a7xvFa4ZOOTkvXG5Ss4it6raUHhgtjEjMb+1pRfAH3cEAp+lIBDRyssLUZRxcVb7vs3d
+         ax5DuNEyt80v9i+oGyZj4J4YSuyYXLhD6/wTRu2/QZjoTDK8NPJfDNxmn9E1k9w2RWzE
+         Y5ph6yGD2MtcS/hk6gfJtXXOtV4EThHB9IZtCrBakLsAC62kUZrv1lNIFxCl15vNOR/R
+         mShg==
+X-Forwarded-Encrypted: i=1; AJvYcCVUy0UQfeG4t3lxUTPwsMXxFdp7BZjURgcNSu2Z6asBeZZMjf/k23WSwxHZLZEWcsa8kzkffHIXkqzcHutS1vc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCa/Kx/ITXuah9DOxJl2+Per5goQx4Sn8XjcSNqIa+CLrb+7MT
+	sDAdr4GJR7ZtlR592DNDB2a3vLkCaIRoKVixCBhHUbHrFw8WNK+ZIXGjo6IYFg==
+X-Gm-Gg: ATEYQzyHG5f42fXVgEydgKqmvHyKua3UY1FbfjZwS4t6CjuBz06A+M3BK51d3zDxdYm
+	2PpuWac/nELmyUpPaXazYqLKTXSeRKjyFepxRr0f/azu1CzuqGYj37UQyzudeOQgjiuKI/u/Nkm
+	92OwYZSzY0iAaxcS1FxQJpJF0C+Pi1pD29iXPAhl+wfPVLQ7V54bdnq+yXNTkCYEU1s41blEy1l
+	Ql6T+xlv4OMkAgE4P4LZfL7CaL6rF7An+MIwNsjcgokO37Su1Tt+1by5iusDDgp1NaYhLWPtXht
+	2zsSgnDc+BdTlJ42I6pzCx/YltbdsgNJD8wvIWsaPW5LBGrlfPTbo6kUy3GrYpHZteedpJlFecE
+	CE4PqQJk9amRcGsySjoE9AD4Sv8KjowFLJDTLP7SbZarhN24hoqgi35TfFfxHPmRoWzfgNq2tNi
+	nkyk1M1mKpWWoArPvoS7CnR4mFVN4KixskrdVtR3JXb6X4SeeUuKE1L2Kc38ZQKOceZNkRd0xMq
+	ay7Fha0WMVEPBA76I37oiCpQY+mtZe+MS0xvBP5sYQB
+X-Received: by 2002:a17:902:ce06:b0:2b0:5a4c:7266 with SMTP id d9443c01a7336-2b0cdc29022mr30209125ad.16.1774620984287;
+        Fri, 27 Mar 2026 07:16:24 -0700 (PDT)
 Received: from lab-kiba-ocxma-dut-01.. (191.68.231.218.rev.ocx2915.net. [218.231.68.191])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0bc8e958csm61371365ad.66.2026.03.27.07.16.20
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0bc8e958csm61371365ad.66.2026.03.27.07.16.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 07:16:21 -0700 (PDT)
+        Fri, 27 Mar 2026 07:16:23 -0700 (PDT)
 From: Takeru Hayasaka <hayatake396@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -67,9 +67,9 @@ Cc: bpf@vger.kernel.org,
 	x86@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on non-IBT JITs
-Date: Fri, 27 Mar 2026 14:16:01 +0000
-Message-ID: <20260327141616.1961457-2-hayatake396@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: cover fentry on tailcalled programs
+Date: Fri, 27 Mar 2026 14:16:02 +0000
+Message-ID: <20260327141616.1961457-3-hayatake396@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260327141616.1961457-1-hayatake396@gmail.com>
 References: <20260327141616.1961457-1-hayatake396@gmail.com>
@@ -81,112 +81,209 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-x86 tail-call fentry patching mirrors CALL text pokes to the tail-call
-landing slot.
+Add a small tailcall target/probe pair and a tailcalls subtest that
+attaches fentry to the callee program.
 
-The helper that locates that mirrored slot assumes an ENDBR-prefixed
-landing, which works on IBT JITs but fails on non-IBT JITs where the
-landing starts directly with the 5-byte patch slot.
+The test first runs the callee directly and checks that fentry fires
+exactly once, then runs the entry program, tail-calls into the callee
+and checks that the same fentry also fires exactly once on the tail-call
+path.
 
-As a result, the regular entry gets patched but the tail-call landing
-remains NOP5, so fentry never fires for tail-called programs on non-IBT
-kernels.
-
-Anchor the lookup on the landing address, verify the short-jump layout
-first, and only check ENDBR when one is actually emitted.
+This covers both sides of the x86 change: direct entry must not
+double-fire, while tail-called entry must now be observable.
 
 Signed-off-by: Takeru Hayasaka <hayatake396@gmail.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 47 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 44 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/tailcalls.c      | 110 ++++++++++++++++++
+ .../bpf/progs/tailcall_fentry_probe.c         |  16 +++
+ .../bpf/progs/tailcall_fentry_target.c        |  27 +++++
+ 3 files changed, 153 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_fentry_probe.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_fentry_target.c
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index e9b78040d703..fe5fd37f65d8 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -325,8 +325,10 @@ struct jit_context {
- 
- /* Number of bytes emit_patch() needs to generate instructions */
- #define X86_PATCH_SIZE		5
-+/* Number of bytes used by the short jump that skips the tail-call hook. */
-+#define X86_TAIL_CALL_SKIP_JMP_SIZE	2
- /* Number of bytes that will be skipped on tailcall */
--#define X86_TAIL_CALL_OFFSET	(12 + ENDBR_INSN_SIZE)
-+#define X86_TAIL_CALL_OFFSET	(12 + X86_TAIL_CALL_SKIP_JMP_SIZE + ENDBR_INSN_SIZE)
- 
- static void push_r9(u8 **pprog)
- {
-@@ -545,8 +547,15 @@ static void emit_prologue(u8 **pprog, u8 *ip, u32 stack_depth, bool ebpf_from_cb
- 		EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
- 	}
- 
-+	if (!is_subprog) {
-+		/* Normal entry skips the tail-call-only trampoline hook. */
-+		EMIT2(0xEB, ENDBR_INSN_SIZE + X86_PATCH_SIZE);
-+	}
-+
- 	/* X86_TAIL_CALL_OFFSET is here */
- 	EMIT_ENDBR();
-+	if (!is_subprog)
-+		emit_nops(&prog, X86_PATCH_SIZE);
- 
- 	/* sub rsp, rounded_stack_depth */
- 	if (stack_depth)
-@@ -632,12 +641,33 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 	return ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index 7d534fde0af9..ac05df65b666 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -1113,6 +1113,114 @@ static void test_tailcall_bpf2bpf_fentry_entry(void)
+ 	bpf_object__close(tgt_obj);
  }
  
-+static void *bpf_tail_call_fentry_ip(void *ip)
++static void test_tailcall_fentry_tailcallee(void)
 +{
-+	u8 *tail_ip = ip + X86_TAIL_CALL_OFFSET;
-+	u8 *landing = tail_ip - ENDBR_INSN_SIZE;
++	struct bpf_object *tgt_obj = NULL, *fentry_obj = NULL;
++	struct bpf_map *prog_array, *data_map;
++	struct bpf_link *fentry_link = NULL;
++	struct bpf_program *prog;
++	int err, map_fd, callee_fd, main_fd, data_fd, i, val;
++	char buff[128] = {};
 +
-+	/* ip points at the regular fentry slot after the entry ENDBR. */
-+	if (landing[-X86_TAIL_CALL_SKIP_JMP_SIZE] != 0xEB ||
-+	    landing[-X86_TAIL_CALL_SKIP_JMP_SIZE + 1] !=
-+		    ENDBR_INSN_SIZE + X86_PATCH_SIZE)
-+		return NULL;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		    .data_in = buff,
++		    .data_size_in = sizeof(buff),
++		    .repeat = 1,
++	);
 +
-+	if (ENDBR_INSN_SIZE && !is_endbr((u32 *)landing))
-+		return NULL;
++	err = bpf_prog_test_load("tailcall_fentry_target.bpf.o",
++				 BPF_PROG_TYPE_SCHED_CLS,
++				 &tgt_obj, &main_fd);
++	if (!ASSERT_OK(err, "load tgt_obj"))
++		return;
 +
-+	return tail_ip;
++	prog_array = bpf_object__find_map_by_name(tgt_obj, "jmp_table");
++	if (!ASSERT_OK_PTR(prog_array, "find jmp_table map"))
++		goto out;
++
++	map_fd = bpf_map__fd(prog_array);
++	if (!ASSERT_FALSE(map_fd < 0, "find jmp_table map fd"))
++		goto out;
++
++	prog = bpf_object__find_program_by_name(tgt_obj, "entry");
++	if (!ASSERT_OK_PTR(prog, "find entry prog"))
++		goto out;
++
++	main_fd = bpf_program__fd(prog);
++	if (!ASSERT_FALSE(main_fd < 0, "find entry prog fd"))
++		goto out;
++
++	prog = bpf_object__find_program_by_name(tgt_obj, "callee");
++	if (!ASSERT_OK_PTR(prog, "find callee prog"))
++		goto out;
++
++	callee_fd = bpf_program__fd(prog);
++	if (!ASSERT_FALSE(callee_fd < 0, "find callee prog fd"))
++		goto out;
++
++	i = 0;
++	err = bpf_map_update_elem(map_fd, &i, &callee_fd, BPF_ANY);
++	if (!ASSERT_OK(err, "update jmp_table"))
++		goto out;
++
++	fentry_obj = bpf_object__open_file("tailcall_fentry_probe.bpf.o", NULL);
++	if (!ASSERT_OK_PTR(fentry_obj, "open fentry_obj file"))
++		goto out;
++
++	prog = bpf_object__find_program_by_name(fentry_obj, "fentry_callee");
++	if (!ASSERT_OK_PTR(prog, "find fentry prog"))
++		goto out;
++
++	err = bpf_program__set_attach_target(prog, callee_fd, "callee");
++	if (!ASSERT_OK(err, "set_attach_target callee"))
++		goto out;
++
++	err = bpf_object__load(fentry_obj);
++	if (!ASSERT_OK(err, "load fentry_obj"))
++		goto out;
++
++	fentry_link = bpf_program__attach_trace(prog);
++	if (!ASSERT_OK_PTR(fentry_link, "attach_trace"))
++		goto out;
++
++	data_map = bpf_object__find_map_by_name(fentry_obj, ".bss");
++	if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
++			  "find tailcall_fentry_probe.bss map"))
++		goto out;
++
++	data_fd = bpf_map__fd(data_map);
++	if (!ASSERT_FALSE(data_fd < 0,
++			  "find tailcall_fentry_probe.bss map fd"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(callee_fd, &topts);
++	ASSERT_OK(err, "direct callee");
++	ASSERT_EQ(topts.retval, 7, "direct callee retval");
++
++	i = 0;
++	err = bpf_map_lookup_elem(data_fd, &i, &val);
++	ASSERT_OK(err, "direct fentry count");
++	ASSERT_EQ(val, 1, "direct fentry count");
++
++	val = 0;
++	err = bpf_map_update_elem(data_fd, &i, &val, BPF_ANY);
++	ASSERT_OK(err, "reset fentry count");
++
++	err = bpf_prog_test_run_opts(main_fd, &topts);
++	ASSERT_OK(err, "tailcall");
++	ASSERT_EQ(topts.retval, 7, "tailcall retval");
++
++	i = 0;
++	err = bpf_map_lookup_elem(data_fd, &i, &val);
++	ASSERT_OK(err, "fentry count");
++	ASSERT_EQ(val, 1, "fentry count");
++
++out:
++	bpf_link__destroy(fentry_link);
++	bpf_object__close(fentry_obj);
++	bpf_object__close(tgt_obj);
 +}
 +
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 		       enum bpf_text_poke_type new_t, void *old_addr,
- 		       void *new_addr)
- {
-+	void *tail_ip = NULL;
-+	bool is_bpf_text = is_bpf_text_address((long)ip);
-+	int ret, tail_ret;
-+
- 	if (!is_kernel_text((long)ip) &&
--	    !is_bpf_text_address((long)ip))
-+	    !is_bpf_text)
- 		/* BPF poking in modules is not supported */
- 		return -EINVAL;
+ #define JMP_TABLE "/sys/fs/bpf/jmp_table"
  
-@@ -648,7 +678,18 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 	if (is_endbr(ip))
- 		ip += ENDBR_INSN_SIZE;
- 
--	return __bpf_arch_text_poke(ip, old_t, new_t, old_addr, new_addr);
-+	if (is_bpf_text && (old_t == BPF_MOD_CALL || new_t == BPF_MOD_CALL))
-+		tail_ip = bpf_tail_call_fentry_ip(ip);
+ static int poke_thread_exit;
+@@ -1759,6 +1867,8 @@ void test_tailcalls(void)
+ 		test_tailcall_bpf2bpf_fentry_fexit();
+ 	if (test__start_subtest("tailcall_bpf2bpf_fentry_entry"))
+ 		test_tailcall_bpf2bpf_fentry_entry();
++	if (test__start_subtest("tailcall_fentry_tailcallee"))
++		test_tailcall_fentry_tailcallee();
+ 	if (test__start_subtest("tailcall_poke"))
+ 		test_tailcall_poke();
+ 	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_1"))
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_fentry_probe.c b/tools/testing/selftests/bpf/progs/tailcall_fentry_probe.c
+new file mode 100644
+index 000000000000..b784aeffb316
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall_fentry_probe.c
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
 +
-+	ret = __bpf_arch_text_poke(ip, old_t, new_t, old_addr, new_addr);
-+	if (ret < 0 || !tail_ip)
-+		return ret;
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
 +
-+	tail_ret = __bpf_arch_text_poke(tail_ip, old_t, new_t, old_addr, new_addr);
-+	if (tail_ret < 0)
-+		return tail_ret;
++int count = 0;
 +
-+	return ret && tail_ret;
- }
- 
- #define EMIT_LFENCE()	EMIT3(0x0F, 0xAE, 0xE8)
++SEC("fentry/callee")
++int BPF_PROG(fentry_callee, struct sk_buff *skb)
++{
++	count++;
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_fentry_target.c b/tools/testing/selftests/bpf/progs/tailcall_fentry_target.c
+new file mode 100644
+index 000000000000..46da06ce323c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall_fentry_target.c
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++
++#include <bpf/bpf_helpers.h>
++#include "bpf_legacy.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++SEC("tc")
++int callee(struct __sk_buff *skb)
++{
++	return 7;
++}
++
++SEC("tc")
++int entry(struct __sk_buff *skb)
++{
++	bpf_tail_call_static(skb, &jmp_table, 0);
++	return 0;
++}
++
++char __license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
