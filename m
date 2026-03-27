@@ -1,143 +1,122 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38B33FBEDB
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 16:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B98C35B65F
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 16:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774628633; cv=pass; b=rUryg0890hWvA7BMJbCjcjc/TUDcopPsKPlPqnlT/Om3g8d+pGZxYnNAgSPztDD1548KMEEeKgQ2+zkieGAeUWTjVq8Z0j4jQFy45bHm+NA13CgNf+58720HE8AOIXKPoN9LeW2cnKNaOz3GN5AZyAOA4LOl/dNJbmFW1rycVeI=
+	t=1774629022; cv=pass; b=Z03S7z6+egXYKWDK4xWTzGpxKK5w4cFj5SOIPAJkjjUiP0IRHbghdH30AeIyvXrSJvm+PtTe6F6P76RFb4w1al2iQfjfditGGYnoroGfkBD9/zqRHKTd2LXDlLeIjqT2TUS90ONr/+6VGYZ9gny0GzLGwjyAb1A40yBpLIkIrwc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774628633; c=relaxed/simple;
-	bh=N6rST9ZopQWUhJaBvDdEgyYVzdRlMkjbdWYlBGwnupg=;
+	s=arc-20240116; t=1774629022; c=relaxed/simple;
+	bh=FC3aGEn7yaFpmPR9w0yiTeAf7we4oOmunpak6tx0IxU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oVR7vGzVmnb0XcZ8+VBcW/rr+a/6uhFxW+TyDajxkvlQtrwZN2RaUMPp4vPGEcIO9L2JXtvBym3hLTd1RQp68GusRXgqQiG+Nz7Njdm8TIKdNGdvGvWxOcDALZ0y698acljMAg+HiWZ5+YRo+YRfjO4Nz9wJS1UBP3+OIRm97W0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=bg8yWW6F; arc=pass smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+	 To:Cc:Content-Type; b=mM1d9wo9Te04pyV5JxGUnLrdwwh7cVJJEJ2g/Cu5FXpdZnxDbpUFk+F5BKAaGdBSU0j5oXY8XZ/QjO3/0lJm1HLTEX+n265YewNWan+bVGktEg2nuCcvn9DNRKKJRZLfNQt2V5OrNfygUJmWee2kFiZoPHIvRCMKjDe/093FEho=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Od/DrxZO; arc=pass smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="bg8yWW6F"
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7d751ef36ccso1245969a34.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 09:23:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774628631; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Od/DrxZO"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b8f97c626aaso413935666b.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 09:30:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774629019; cv=none;
         d=google.com; s=arc-20240605;
-        b=Jpigm92HG868twoQwmORpIo0UlK1ZR1KnZBNmcps11N8eBWhJ+5eKBvkK8ZR5pBJH1
-         YKyqltgG2Ec2yhQXLWF0Yka1GOE9LTh4zskp6aH9EO8s2/MAj6TY88wGBhXL4WwrBaxm
-         /LFvUED47fS4AnqKlCxZ1Cj+jm4WgO91lZ4duhArRnqpYMiAtHBC/mgQJg/IpAJjp3wg
-         P90amaeRCeGffiFLkRuD12ct8tCSOLr1MJPQcUccfNpv2+FzDwRvO3Yy+5M8YkSNaMoL
-         cVN0L9f+EaxY95N1Q7QepwVbhfYVTb5E/Z8FPoef2eRJ6jwLVWOp06ubxkPU0T8BJDt/
-         b6Uw==
+        b=X0cPiHymeLFkwsPqw2oPFxCx969vu9V/zfTWsbwJmb5+ki3+5epBrtmIIQP6u6RYqx
+         3kR82G/pLthBWkbrvm/eMmKGMze03sV0OSskWB/heO1NW8RBvOXdMztBsvbDiiqptiXH
+         sJKsXJdlgXM99KZ8cWIZXV8UPHkxX502qqO9Jv8XGTH1vKvtaS3qf9QKqLtPEOQCFqUG
+         UnicZWsNxsC3hUBnI9zTXr6luVlua6LCKnG5yJrXQP38VnM+kHkzoI4x3iyyph3JM7/e
+         jbf5r24SQQP9SzHUZJxiZCWvQyOPQVel3XgQQhY1Q4ytQVBWtBUQjSmCL41T4MyaKx8q
+         MdbQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5i7AMnECXeGliuvzkSngvQOxbDfImYVhWzHk0/VD+K8=;
-        fh=+lZhHlkGGBqFcvB3n3tdvyNPxtw97AhlacTgC4i2EPA=;
-        b=fppuY70IgT4VD9tGFw6m8fIumcQnYgWMWDclY5qPMqnkKCVSSIvrrXiQoPjgBCMEgV
-         pNkY1+GAA3dyptVTnslY9+h7M9ol4ShcsPfC1rHAfGBWSuZU70kQSR6BuMpLCyo465GA
-         ircg7JAczg8eTFbMerOBxvoDDOMl6OK0UI+gxuTE+eeHZYL8LiXLVLhX3VmT4PHmbShV
-         niDIcL8nOGoh3LPGYPmG5cFPtEN2uJIaPWagvkX4qbhb6d+ZmUxSxv6LSGIqLIPdPIyF
-         abBmCUOeUnI+/akCasehTlAHO70EhJGk3Wg9mRwgwDmahEvce1CyoVYimTj4ofBHhFp1
-         W5IQ==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=FC3aGEn7yaFpmPR9w0yiTeAf7we4oOmunpak6tx0IxU=;
+        fh=v0vfsP+GAn8GyE3jUVJgbtRCAVW9l2tro3lAdF+cwDY=;
+        b=OqG2J5JuoC2dUR9Badic0+Y6Cj6Kppv9g24lJUTZuRbT23JwS0dhDwpGBYpekMca6n
+         1kdoglPR2SOERrvZhb9PF72WuXpgc6Ma+AWd1Zc/QJGJx32Y5ap/UqsONfWgUn5KnAAw
+         Nxl+2JqLrUM5dQNyjSroFfTHhFs1wX8oeiTYRtnnc5PRbo4QJgr2iJrG2CcEChL2elKY
+         ltmeu9B5bH5ZuT4JSSu6SfvLoZURq8thF3nstsQ17cgT+T0X0jPV9mi1u5aW6WHtnd4I
+         q0BzfDixqe7QJ+xILEYNNFyMQVL2mV/PNeFlEc42fKuNgcKGftYcvzlgI0D7k3McnhaT
+         776A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1774628631; x=1775233431; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5i7AMnECXeGliuvzkSngvQOxbDfImYVhWzHk0/VD+K8=;
-        b=bg8yWW6F0FlZMyZab8kY1wR3Qvk9S53JW4fQa70IrTsRCKln9fhMNk29oEldXnK+Vd
-         Jebliy51yFF1lrKDctJP0jPX99HXxV/+bcmUgqrwE3+AJ6IO3Ol8KpAOCqzdKFGGUlIl
-         2dkALgQNaB3kCIeS2wY3i9fdqcEOQ4PIUY90Jh3cI12ZNLood9QD3ktAouaPGnUXRTUd
-         kmRf+enY0HyniD2RMJOyOTCTS2xF1lxs/Y6Ky0zHudHZ0iRIIIYvmMnbiIGbGhtsW06B
-         BRGPz3OKDWJ+q6X0vonX4m36EodecYblRJte634CBBN7UhTbX7V00ZNmokN5TPPzctlb
-         Y+3g==
+        d=gmail.com; s=20251104; t=1774629019; x=1775233819; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FC3aGEn7yaFpmPR9w0yiTeAf7we4oOmunpak6tx0IxU=;
+        b=Od/DrxZObGIaVdSxQ2bSIsHGjb8vLQNHDWwSqHnDURK8rMUWLQ0p/SdEQuRzjIJ14c
+         Z7lXUIkzbWouxV/wfu1+5V0bMPzs5U0N0H7jQdcv+PBOWfvoHxI/ic7AR5N9nSTUZX7F
+         TfRi0qI4Nz1tQ23LXh2stlW7vFKbKU9xB7VYzsctT7G4fcMV1ODllniaRAZF3QEWGnpC
+         WowRbdFz9bjMo08oQOU+o8+kl04Uh/Z0izXHK9MJVTfGp8bwMHpdbZ0VHKYasL5iYlSN
+         sAJInd6OeuW5KUxN6+liEx3chYTAq3KT4D0/AHA8hGQkx7vR5K2TZjNB7Fr29Z69mYLA
+         QB4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774628631; x=1775233431;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5i7AMnECXeGliuvzkSngvQOxbDfImYVhWzHk0/VD+K8=;
-        b=QfQcAOPZ48Hgq5RujyrwgubwgcB2/SKrbfmc6GosiaFFLhUe3kxxHIkKzsHmo1Hkyo
-         EH302IbqZttKtMElWxjKPhe5kWVPKcJTbDfdmgou3HkP2VW0lKz1rccKVMcDX9wCwlwp
-         4uql8WHRSQitTBPse8mUuTwlHrbOlNvMTjiaGmOVFo36bMVVPxtG22g+mdMyQcgyAx4j
-         MZhvhraO/TzG4o3OafBgHUfQJZns2tuyTQdpXFxsJwik5kKJGaOz8wgUuXu+gYNzz8yQ
-         UVZ7UjJbgwn7j8fMEPS689MgiMbA+UO/T+1Bus/+FbUUScBPUVZ/aMX/4vbdCeMwGPCO
-         YiKA==
-X-Forwarded-Encrypted: i=1; AJvYcCWoes6K263b4H3D/HxUvNTD7DeZQ00oAY6zaSXIVHg1xLuiFh5zhIrr8GxzNCjLlVn1uXte0yvUKFhXSZKwG7c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+viKqPwUNXSrCLLeNmp2tSFl+lk3zR2t0zDJuOjHPHHT1Rs84
-	b8siDMQ1NWas2Bzl6eB210wgNCCS6cXxcQItuPLjSPNJr7PuswLFCP60PQ1pNFxcVUrG46UlKYP
-	pmwBMhu/RvrmfIVqZpAcwtU+QmILfW1lEbW/SUeUBHw==
-X-Gm-Gg: ATEYQzxJP5FOevmdL7PY8dSl0kNg3bolUsLQW//SV/rVbsT5CF4leMBtjKvNtvcfIQ5
-	J5CeE6jJyNKZeb1IoPAHXiJR3QM4GVgZkq86LT/+cH18rmoq8Js4WVIoQ3Y2kB4A3jOCRpq9qHl
-	wb8R8C5viM5AHDvge9IGBZ11qXp2SM8X6SjTnM1amaUEGJ7JdS0R+vvionAEzMYVQTFa+vgxeYT
-	0v484qxd7yqon04GXiQJv6VRo2j/+Jow8r9SBHmV54I3yTpidbDIYCJi4qL7xHK7OEmsNwVQ7w2
-	tdRXIPQHjG5o3aFnLJu2IyWdVK/CD8/rN6KbudyW+Y73Z2OkHlPnUz+yDJ8eWKWleQ5Y98scEyF
-	BE2uKF8Uc0r9wb3aRFhr0tryQ8v8=
-X-Received: by 2002:a05:6820:2916:b0:67d:2cb:2079 with SMTP id
- 006d021491bc7-67e1875bd34mr1529379eaf.58.1774628630795; Fri, 27 Mar 2026
- 09:23:50 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774629019; x=1775233819;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FC3aGEn7yaFpmPR9w0yiTeAf7we4oOmunpak6tx0IxU=;
+        b=tB3XXfyMJD8PA+YEIjkdinLEAjhUXKj6Ll/ioyTW6AVVO3HQqNDnJac2Hzlha2v9Eo
+         Hub1VMgkSaRFjtMaSBav8y/A9yVfusCjrfm6EdVObCq62GRUltahej3GA4jkbJxERCY3
+         Vp5jTGRYlbGUwZVPJ5w2OR+pVvQPXageUtLcjDX/0qiTpwX6oRGgcNemPJeCrqSrWQ8W
+         xI4EeExtc4cpJZF+FGNWbbK2jb//RF3ukmQL+B6jxLwEBFj2LWyACxuUKRo4nvw2MZQj
+         ZEv5cr0p3VGe7P0FTvCI6R8zuqW3+Tn0HfcAC6JG/TR5omTD7Sn3JSLofgtdDVko5yBm
+         hASg==
+X-Forwarded-Encrypted: i=1; AJvYcCXxpzFoqBBWwdOHWO3BVGdXy6Gl+nmXvxTMgn92uwQguoQChdPNzHFqCKJtM0iHTsIVpWcItwEWkPIf3LXQOrs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yydg1hDPNWoIOAXcHz99QRxLfn/JmrzCi0nod6OifpZWe6slDKN
+	gmyp9OgHMCgDEhLT9mS7km/aljntjxH8Noucgidk7Ftm7SLAStGP9+ky0SjjgnAY2HRt//y+C6A
+	9HtAodye5kMY8Yf4pjjlZqiqS8GNNJhQ=
+X-Gm-Gg: ATEYQzzJ7lF7ikAZnNI1VpWNXUQ53+pKXRiScFvkLy+zOnvp0rw/+6aGDYohfScT4TK
+	uBCltKzERX4XxhTRA6cBvqGheSa224LKojoFIM5BDJE9VpP5OJgPE5FSut36DK4ulrqW6LQxcxG
+	wlB0z+X+C4L8FK2tGo0uYj9+LbFbsGaaRASnEvcF6fIX1BlYTJA5do5iIRCmR7cyMt1AKldmrii
+	GostDNKec05ubVZK5+skAbr6AIr9pjndPmxEEl4NIWGlbFjluEvwf4Svh2FOPVwGlTzIGgeUHIE
+	57c3EWw4tyurl8V199+42M0MzOO5D0/uzAZTe0p/M2U4veWmfg==
+X-Received: by 2002:a17:906:9597:b0:b98:2732:3dd1 with SMTP id
+ a640c23a62f3a-b9b507cc370mr155133266b.42.1774629019174; Fri, 27 Mar 2026
+ 09:30:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260316014533.2312254-1-xujiakai2025@iscas.ac.cn>
-In-Reply-To: <20260316014533.2312254-1-xujiakai2025@iscas.ac.cn>
-From: Anup Patel <anup@brainfault.org>
-Date: Fri, 27 Mar 2026 21:53:38 +0530
-X-Gm-Features: AQROBzA9STNkwcnpYQkGGVqwDqCIWR_7nCDRTW55e5KIm3IP1CNA2fjdu_Yz16A
-Message-ID: <CAAhSdy0CeQOnLdsCqXVxZcP-mxMDqjSMhEnLVVYTr46jbj7iWQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] RISC-V: KVM: Fix array out-of-bounds in firmware
- counter reads
-To: Jiakai Xu <xujiakai2025@iscas.ac.cn>
-Cc: kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Andrew Jones <ajones@ventanamicro.com>, 
-	Atish Patra <atish.patra@linux.dev>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <pjw@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20260327141616.1961457-1-hayatake396@gmail.com>
+ <20260327141616.1961457-2-hayatake396@gmail.com> <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
+ <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
+ <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
+ <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
+ <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com>
+ <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com> <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+In-Reply-To: <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+From: Takeru Hayasaka <hayatake396@gmail.com>
+Date: Sat, 28 Mar 2026 01:30:07 +0900
+X-Gm-Features: AQROBzBzwb6fls0dn26HPvWeRnh5qPUOZ6CMbjvFarf6_LGZ-e-aYjW0CDjTnwE
+Message-ID: <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
+ non-IBT JITs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 16, 2026 at 7:15=E2=80=AFAM Jiakai Xu <xujiakai2025@iscas.ac.cn=
-> wrote:
->
-> When a guest reads a firmware PMU counter via
-> SBI_EXT_PMU_COUNTER_FW_READ or SBI_EXT_PMU_COUNTER_FW_READ_HI without
-> first configuring it with SBI_EXT_PMU_COUNTER_CFG_MATCH, the counter's
-> event_idx remains SBI_PMU_EVENT_IDX_INVALID (0xFFFFFFFF).
->
-> get_event_code() extracts the lower 16 bits from event_idx, yielding
-> 0xFFFF, which is then used to index into kvpmu->fw_event[]. Since the
-> fw_event array only contains RISCV_KVM_MAX_FW_CTRS entries, this results
-> in an out-of-bounds access that can be detected by UBSAN.
->
-> Patch 1 fixes the issue by validating the firmware event code before
-> accessing the fw_event array and returning -EINVAL for invalid values.
->
-> After fixing the kernel behavior, the existing KVM selftest
-> (sbi_pmu_test) fails because it attempts to read firmware counters
-> without configuring them first. Patch 2 updates the selftest to
-> configure a firmware event before reading the counter and adds a
-> negative test to ensure that reading an unconfigured firmware counter
-> fails gracefully.
->
-> Jiakai Xu (2):
->   RISC-V: KVM: Fix array out-of-bounds in pmu_ctr_read() and
->     pmu_fw_ctr_read_hi()
->   RISC-V: KVM: selftests: Fix firmware counter read in sbi_pmu_test
->
->  arch/riscv/kvm/vcpu_pmu.c                     | 14 +++++++
->  .../testing/selftests/kvm/include/riscv/sbi.h | 37 +++++++++++++++++++
->  .../selftests/kvm/riscv/sbi_pmu_test.c        | 20 +++++++++-
->  3 files changed, 70 insertions(+), 1 deletion(-)
->
-> --
-> 2.34.1
->
+> yet you're still top posting :(
 
-Queued this series for Linux-7.1
+Sorry about that. I misunderstood what top posting meant and ended up
+replying in the wrong style.
+I had not understood that it referred to quoting in that way, and I am
+embarrassed that I got it wrong....
 
-Thanks,
-Anup
+> see how cilium did it. with pwru tool, etc.
+
+Thank you for the suggestion.
+As for pwru, I had thought it was not able to capture packet data such as pcap,
+and understood it more as a tool to trace where a specific packet
+enters the processing path and how it is handled.
+
+For example, in an environment where systems are already
+interconnected and running, I sometimes want to capture the actual
+packets being sent for real processing.
+On the other hand, if the goal is simply to observe processing safely
+in a development environment, I think tools such as ipftrace2 or pwru
+can be very useful.
