@@ -1,32 +1,33 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA5D352C4E;
-	Fri, 27 Mar 2026 09:44:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7A73A9D9D;
+	Fri, 27 Mar 2026 10:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774604699; cv=none; b=i/LMgcApK8VEDGCcmb4ooA/LKWvNi1wSTK+HFbOFFNssk7WUyasrghh2oyCLA1/+FMmiDZEdO8U7KpZ8PeR/h7HDXHYn4pXAlnhTlM7rMSmiGGfyFznoS88Te9CQHGG8py/+YHhbS/fUa+6V9N2C6ULh22NeH72PZmsQLXynwe8=
+	t=1774606142; cv=none; b=hrpTCws7v7MVfvbBGqzv2aENGoJjoFydbvfEb14N80lvKd2jm2BKAmmLlcaDVsOtsJnWySoVjL65/g9WRCwX3RnOhUCiZTDvChHq5jrM8RrhN/aTNysbid9lTMtGq/2HAVzhUCKOR+vDNGCHKYfrA5UtwHrb9+I64lWLvj9j4So=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774604699; c=relaxed/simple;
-	bh=uwv/A6VDU71smC9cjCzHcWme2MW+RxTF5DCl65hyCZ8=;
+	s=arc-20240116; t=1774606142; c=relaxed/simple;
+	bh=XJl6davOB1UKhtP/CmtPqusFwBx0yuKoqZmBfBuhfho=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aktLQLG+Ru6H4mqA33FqLNd0CORzme+NIW6t5Ykm17cpCp9w1hvCm/3R8SZS+e2RBX2JIMp4HKxCA8pFUFhDNtsegWwoD3I/BV1W15RzAIuhC5g24MvqftzPUXt/EA0WUphaBUFQZHROrvd5ZRuMKHWhIqPQq/uFxBZwv/iA3Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=u5n847fF; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 In-Reply-To:Content-Type; b=tp7bO58TcS+zPag2W+cUfqiDtlX4Nb0zp/o04hjOcTmVLRcd6ZK1p4XKODSPKrd2tFQxSiwjPE7zTer4TEZlhJ4dyo+YZICyP+6L0OQRyd8aSIOBlv27sKNI9+cHtKmkbWlW95k9R+5mZGFEcpi9Ld8pn1mjcIjHktQMoazGJ6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FRO9T+jE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="u5n847fF"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1774604692; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=d0T3QbIX0f+LhSvEfVUQnp7VQm8nnkhkwzqmdsHsY0I=;
-	b=u5n847fFzODrKxFbvRndlqqg1iNbNPHkC53Mp3YUz8d4IdVmm8pGXmbjtVXY7vS7n0Hki6ovK37ln+vcl5nogfeMgtKuqm2XQY0oRn8DdqixEEb7m8GN4aFs1jg8zJjW6EhABlkLcSjDOjD5JZpjTuu4FOFUbdEiy0pEdEHRi1A=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X.o0Fj8_1774604690;
-Received: from 30.74.146.57(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X.o0Fj8_1774604690 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 27 Mar 2026 17:44:50 +0800
-Message-ID: <7fd90f5e-65b5-4734-abb2-77b22c733af5@linux.alibaba.com>
-Date: Fri, 27 Mar 2026 17:44:49 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FRO9T+jE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A77C19423;
+	Fri, 27 Mar 2026 10:08:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774606142;
+	bh=XJl6davOB1UKhtP/CmtPqusFwBx0yuKoqZmBfBuhfho=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FRO9T+jEUqFsA/stouSLI3/Ptj9m3UtKoM1ZkGEjDy0YQJS1cweK3u/ksADPcTTgI
+	 ZBvu5onbBsUmgErPC17EUpdVIjCY9XSDcYYt/GSqSDSPTKEMQDtsbbXvdo3HYgQvnx
+	 ZIqdPZ/OfiVcGLoO4dzECYvpqjOyVKwgGaWq81oR4tpPkF88DCs5sVxbnRqMO7y7ql
+	 7pcG5qYPAd5oJub4rp3Ze5Ua4q48p3xU85EmZudCWtJbk70Ew9bDrRZywDfIFf5VtU
+	 NDw+jqj9WjzJZRBSZEATBisszom5IiFGJyS8Q07UvOz06UqUNllZTUBSGXYv7/34Hj
+	 BAcvWqqFyEclw==
+Message-ID: <7d6b4401-e230-4ca7-b64f-c1277fa643b8@kernel.org>
+Date: Fri, 27 Mar 2026 11:08:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,63 +35,97 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 02/10] mm/khugepaged: remove READ_ONLY_THP_FOR_FS check
-To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Song Liu <songliubraving@fb.com>
-Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260327014255.2058916-1-ziy@nvidia.com>
- <20260327014255.2058916-3-ziy@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20260327014255.2058916-3-ziy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH] selftests/mm: Fix soft-dirty kselftest supported check
+To: Audra Mitchell <audra@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+ usama.anjum@collabora.com, colin.i.king@gmail.com, avagin@google.com,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org
+References: <f7fef55d-4334-4d1d-b6c6-b409fea7e2a1@kernel.org>
+ <20260320184010.759461-1-audra@redhat.com>
+ <20260320184010.759461-2-audra@redhat.com>
+ <a4fb1d56-8c10-46de-acf5-9a00ce0db4ad@kernel.org>
+ <20260324162324.6efa49422d145afd4dd37dda@linux-foundation.org>
+ <20260324162445.fb353f4d2c85d89bc25be03a@linux-foundation.org>
+ <acQMDW9qM2MtYpkT@fedora>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <acQMDW9qM2MtYpkT@fedora>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 3/27/26 9:42 AM, Zi Yan wrote:
-> collapse_file() requires FSes supporting large folio with at least
-> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that. shmem with
-> huge option turned on also sets large folio order on mapping, so the check
-> also applies to shmem.
+On 3/25/26 17:23, Audra Mitchell wrote:
+> On Tue, Mar 24, 2026 at 04:24:45PM -0700, Andrew Morton wrote:
+>> On Tue, 24 Mar 2026 16:23:24 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+>>
+>>>
 > 
-> While at it, replace VM_BUG_ON with returning failure values.
+> Wouldn't it be prudent to also update __pagemap_scan_get_categories
+> return type to a long? Right now its uint64_t, but we expect a long
+> to be returned from the ioctl:
 > 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
->   mm/khugepaged.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
+> 	static long do_pagemap_cmd(struct file *file, unsigned int cmd,
+>                            unsigned long arg)
 > 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index d06d84219e1b..45b12ffb1550 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1899,8 +1899,11 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
->   	int nr_none = 0;
->   	bool is_shmem = shmem_file(file);
->   
-> -	VM_BUG_ON(!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && !is_shmem);
-> -	VM_BUG_ON(start & (HPAGE_PMD_NR - 1));
-> +	/* "huge" shmem sets mapping folio order and passes the check below */
-> +	if (mapping_max_folio_order(mapping) < PMD_ORDER)
-> +		return SCAN_FAIL;
+> I've made the other changes, but I'll wait to push the next version after
+> this feedback. Thanks!
 
-This is not true for anonymous shmem, since its large order allocation 
-logic is similar to anonymous memory. That means it will not call 
-mapping_set_large_folios() for anonymous shmem.
+Yes, definitely.
 
-So I think the check should be:
+I was under the impression that __pagemap_scan_get_categories() could
+actually return some kind of a mask that would warrant the uint64_t. But
+we really just return the result from the ioctl().
 
-if (!is_shmem && mapping_max_folio_order(mapping) < PMD_ORDER)
-      return SCAN_FAIL;
+And ioctl() is defined to return an int. So you could just return an int
+there.
+
+-- 
+Cheers,
+
+David
