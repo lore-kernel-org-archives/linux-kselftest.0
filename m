@@ -1,122 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555452BE641;
-	Sat, 28 Mar 2026 04:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589872036E9;
+	Sat, 28 Mar 2026 09:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774670970; cv=none; b=qKxLlP83F2PHTWFhhkMFxW3hNwZEcZxWz9tAToZ29epHvy8PTGdRiC2w6wodzaf2vMTcxFc+uV1eGuIzQ5kxcIjcKoH1FbBbBRbGosGeyvrhh9MLuJsn9HeK9+8PSWgXQJoQxaXNSx7QW1WrFve0SqXT7pf+cgrp+usQ9w3ufhI=
+	t=1774691722; cv=none; b=J0ZwR6pCXdfjZbBH8LqBWrZ89CZWyjW4ypKaFjXWDeyuVSP6fKqRQERzsDq5I0/GWFnmz7fGEYkdUs2rwM2wg1l0lGNWAhL3apXO1BTzwYXhVd7I0vMstgIxDjbxyDPv+qkW5WklncLILqESyeF6LXA5HPfgxOtUHQgaDqqBa34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774670970; c=relaxed/simple;
-	bh=YbnAxwVquRkd0IPccdIqCrEKo9AdVwOXrSUh2GHxfA8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=EVr9fYSXqGD1bT0EmF5H2yQA3s4qrlq0Iw29TH5E1stEeM+b/ktXLMilYvv5QrKV240790R2xRKGxV4boj4kw7traw7YigjmgI/EGcKiW6zL6vMCa08ZLGFztqIMar2j47PFLnt5qpdnUwQXpE10+MZv+0uid0IinM9IK5g/0yY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XgyTBxDE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774691722; c=relaxed/simple;
+	bh=tGRNjEkmKkP55RyI36TLF24P2O39ClA0J2pu35ocaXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i1cHWh5IHTmTOfaFQ+z8a/UpVYrGQ6HvSafMM/GG7RE1FepfoOY9FGOeLsSyOpBX4DuE9RCejCnmw2K+HO/bihIdh+0PlZDm1ua+Fqqx8r/SNWfs7ZQQ/JT63P6z5zal0jyZo4ec9sXO5mY5rWFZcU5237ws52XBpzGkK0zDQoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Td77NANE; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XgyTBxDE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE3BCC4CEF7;
-	Sat, 28 Mar 2026 04:09:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774670969;
-	bh=YbnAxwVquRkd0IPccdIqCrEKo9AdVwOXrSUh2GHxfA8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XgyTBxDEoKO0SHxGTO6tEMwJrAUfm1cm6W0dez8ATPQ8E6BC5JHp9rSkE8AqL6VdK
-	 gjzCXES520ltPj0yzGcUsKCGXgXCzewsnHhsV8MF4Li/kEL95x+HqnX7egCwSvcaov
-	 m04k4dZCUy5xwOo6nXPl7bp2zJWA0tbQOJhlgbtc=
-Date: Fri, 27 Mar 2026 21:09:29 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Li Wang <liwang@redhat.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: tools/testing/selftests
-Message-Id: <20260327210929.f3a714186aed347f90f71246@linux-foundation.org>
-In-Reply-To: <acc49s7jbI9Q3a4f@redhat.com>
-References: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
-	<acc49s7jbI9Q3a4f@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Td77NANE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774691720; x=1806227720;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tGRNjEkmKkP55RyI36TLF24P2O39ClA0J2pu35ocaXQ=;
+  b=Td77NANE9E85rUskshjPxE+WliZPVu9phaaqu+WHFxlnlnMxJEmQEE9p
+   ZMRlQyE0MpRL87F/95nwzYQHClmBTmnM6mKS6o6BZJUbEvYNux/+taTeV
+   xXlIBJKcLVE2fY0eVcrGNn8O1YHdozx9QEsbEioJzu8c7xGIlP9i/Cn9m
+   ctyTyMlt9QA69Hv+kpl2Ulicg9+wsuKcdtN3NzkG9/Ua3Nbk27+VR0gi6
+   TSsBcQlRuoaqCJPE199FbUVy1scrIYvOKn0TXvFmxkClSzlVRAE11GWV5
+   kDDzSA+NSOG6vjkb9m3HG+ARacCu7/8bexJyDB1+7sJiOTyMXNhW8jOwn
+   g==;
+X-CSE-ConnectionGUID: MElUTVqtTAGzIGihEaFh3w==
+X-CSE-MsgGUID: B7iBwJZTSJeFciKc7vNhCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="75633807"
+X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
+   d="scan'208";a="75633807"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 02:55:19 -0700
+X-CSE-ConnectionGUID: v9BKKQRJS6W2wyd96Ksx5Q==
+X-CSE-MsgGUID: kuXnB5WIS620/P7LJwxCMw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
+   d="scan'208";a="248786208"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 28 Mar 2026 02:55:13 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w6QNp-00000000BI1-3ouf;
+	Sat, 28 Mar 2026 09:55:09 +0000
+Date: Sat, 28 Mar 2026 17:54:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zi Yan <ziy@nvidia.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Song Liu <songliubraving@fb.com>
+Cc: oe-kbuild-all@lists.linux.dev, Chris Mason <chris.mason@fusionio.com>,
+	David Sterba <dsterba@suse.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-btrfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 07/10] mm/truncate: use folio_split() in
+ truncate_inode_partial_folio()
+Message-ID: <202603281704.ILlsxaUM-lkp@intel.com>
+References: <20260327014255.2058916-8-ziy@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260327014255.2058916-8-ziy@nvidia.com>
 
-On Sat, 28 Mar 2026 10:12:06 +0800 Li Wang <liwang@redhat.com> wrote:
+Hi Zi,
 
-> On Fri, Mar 27, 2026 at 02:32:34PM -0700, Andrew Morton wrote:
-> > 
-> > whinges, perrmanits, maybe I'm doing it wrong, etc.
-> > 
-> > a)
-> > 
-> > At the top-level, neither `make mrproper' nor `make clean' remove the
-> > executables from tools/testing/selftests/mm/.  Seems wrong?
-> > 
-> > b)
-> > 
-> > Shouldn't I be able to run
-> > 
-> > 	make selftests
-> > 
-> > from the top level?
-> 
-> Should use:
-> 
->     make kselftest
->     make kselftest-clean
+kernel test robot noticed the following build errors:
 
-Thanks.
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on brauner-vfs/vfs.all kdave/for-next linus/master v7.0-rc5 next-20260327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Those two binaries (*_32 / *_64) are built by custom rules in mm/Makefile.
-> (Makefile: line #218, #226).
-> 
-> Other tests use shared rules from ../lib.mk, which are quieter (they hide
-> full commands and show short CC ... lines).
-> 
-> Maybe we need:
-> 
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -215,7 +215,8 @@ ifeq ($(CAN_BUILD_I386),1)
->  $(BINARIES_32): CFLAGS += -m32 -mxsave
->  $(BINARIES_32): LDLIBS += -lrt -ldl -lm
->  $(BINARIES_32): $(OUTPUT)/%_32: %.c
-> -       $(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-> +       $(call msg,CC,,$@)
-> +       $(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
->  $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
->  endif
-> 
-> @@ -223,7 +224,8 @@ ifeq ($(CAN_BUILD_X86_64),1)
->  $(BINARIES_64): CFLAGS += -m64 -mxsave
->  $(BINARIES_64): LDLIBS += -lrt -ldl
->  $(BINARIES_64): $(OUTPUT)/%_64: %.c
-> -       $(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-> +       $(call msg,CC,,$@)
-> +       $(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
->  $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
->  endif
+url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-remove-READ_ONLY_THP_FOR_FS-Kconfig-option/20260327-142622
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260327014255.2058916-8-ziy%40nvidia.com
+patch subject: [PATCH v1 07/10] mm/truncate: use folio_split() in truncate_inode_partial_folio()
+config: nios2-allnoconfig (https://download.01.org/0day-ci/archive/20260328/202603281704.ILlsxaUM-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260328/202603281704.ILlsxaUM-lkp@intel.com/reproduce)
 
-OK, minor thing of course.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603281704.ILlsxaUM-lkp@intel.com/
 
-> > d) within tools/testing/selftests/mm:
-> > 
-> > 	make clean
-> > 	make -j100
-> > 
-> >    compiles 3-4 things then ends.
-> > 
-> >    A subsequent `make -j1' compiles nothing.
-> 
-> Sorry, I wan't able to reproduce it.
-> Did you mean -j100 only build few source file but not the whole?
+All error/warnings (new ones prefixed by >>):
 
-Yes.
+   In file included from include/linux/mm.h:1746,
+                    from include/linux/pid_namespace.h:7,
+                    from include/linux/ptrace.h:10,
+                    from arch/nios2/kernel/asm-offsets.c:10:
+>> include/linux/huge_mm.h:625:1: error: expected identifier or '(' before '{' token
+     625 | {
+         | ^
+>> include/linux/huge_mm.h:623:19: warning: 'folio_split' declared 'static' but never defined [-Wunused-function]
+     623 | static inline int folio_split(struct folio *folio, unsigned int new_order,
+         |                   ^~~~~~~~~~~
+   make[3]: *** [scripts/Makefile.build:184: arch/nios2/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1337: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-On my 128 core machine everything up to -j50 works.  -j51 and higher do
-this.
 
-Another (32 core) machine runs -j100 successfully.
+vim +625 include/linux/huge_mm.h
 
-Weird.
+e220917fa50774 Luis Chamberlain 2024-08-22  622  
+9ee18d22957981 Zi Yan           2026-03-26 @623  static inline int folio_split(struct folio *folio, unsigned int new_order,
+9ee18d22957981 Zi Yan           2026-03-26  624  		struct page *page, struct list_head *list);
+7460b470a131f9 Zi Yan           2025-03-07 @625  {
+a488ba3124c82d Pankaj Raghav    2025-09-05  626  	VM_WARN_ON_ONCE_FOLIO(1, folio);
+a488ba3124c82d Pankaj Raghav    2025-09-05  627  	return -EINVAL;
+7460b470a131f9 Zi Yan           2025-03-07  628  }
+7460b470a131f9 Zi Yan           2025-03-07  629  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
