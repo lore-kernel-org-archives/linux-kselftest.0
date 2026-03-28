@@ -1,81 +1,108 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382C833D6D6
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 15:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B4D33F5BE
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 17:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774712228; cv=none; b=Z0cWNnfKMA/g7yZ0dsBXDRC3gz616zeZnddIWcC1aUEM6jIJcQhHWLXsfDH2jBo4OEN0Hpu+2xCmALprCH1pJ8M3Nr2jPeaiHGbssWTE+mHsIstcX3hf9ThOz82BOow8mOyRxayjocfxxKsfq95ZCnshTNP9dIzWlLid1K1bAjE=
+	t=1774718623; cv=none; b=jX/ccHrK8knxE/kfQT2QSukNz///3DMJhhJlAEekNgxX9Fd1t/mZ/f65BfRWa7yd4cGHGnTTI2KgVCulntngQ0WsLiTX1R67nh+Hju/Cz6p6A6RdzQrAAwaaXwyPNINGzqhbjlWNIkCvU2/Udyw2sjERp0/+3dLOCD2KuDspeZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774712228; c=relaxed/simple;
-	bh=RlOEpQFbLPEsoNk4ZVl9U5QrbBoIsEi83ZVcW6lMvc4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HQx0sjqGKUGDkDr2QEEOtoNShtIwg/cfXqTPKWESqdGBvTv6zh33no70iK4RxG/XHuQYqHd5cYPwcDHc9OvAQHbfCh9Nk7vkvNdzwUrdgg+WR2sVzn8lPdH9B2Q+uazeO5xQyhEkOSRSsySrrGkjoPkwat9gBIYeEx0c7/q8NJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Jcion7CD; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1774718623; c=relaxed/simple;
+	bh=WbXqvQhn4qwD4XjOM1f/RolmfvXydvP/QpIVZ5/s984=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mNqpo+M4q/edPKAKXgljF9v3ue2H1D81DRhBhj/GnDC8zT/d+oZbMVLCPpbuj5utoY8IvkzVD8zloGgyyxhjuHG4IMPvJMBdck/zmmsYV1De/YUcUlVsQWvMjnThyaxkxPharzUqmahjtI0g9p+zsPv8+MqS0AhcvdQB+lmzybo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=he2Tc3id; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Jcion7CD"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-38ad26e3992so24421191fa.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 08:37:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="he2Tc3id"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-35d90833cacso634348a91.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 10:23:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774712224; x=1775317024; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774718621; x=1775323421; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Z9nnBK0A0s0b0mb0vGDY9vi2MA+PChBVD8pdmgI/vI=;
-        b=Jcion7CDmwT2W5fxvlZDqEDazD/igWnZRG3R3v04eI39Qe18mW31J9hsHbVcaPWmzK
-         VbB5eMnREqATcAiP073ILmKZ1UjK5QkRex7kGaCOkH4/Ilshydlu1SjExJsNGqUN7JeW
-         wmwdzh+tqLurOl6OpTQ/JmUDO/ptUs9pxr+RTLHOozukxvhRWYX5gXIWFpmWkMkwmkSm
-         ecT29hc0pHDYh7rv+lh4lVN8phJJ48Zgjen48NnQ/lhR2+z3msIkNq0m0A0ZQoCmSxFn
-         iakwoQ+n2j9WWrRBW0kq6fbFGkSgOU0hTxnWX7JP18AEv5FDQwoij84oKemhxWmMTBr6
-         qpng==
+        bh=BNS/xpL/hsal7ModqBYJCvXhQFGlskOPOCno4hyw7aY=;
+        b=he2Tc3id36N/dNrImAB0FtQFWApWtJHTjZ72YR26i8lE+n/7H96TCzG9qYvHmqk+2e
+         uhIK/YFXplWVcKkPvGinoa+vojsICJPfJOCo90pDQcWKUw0bcf9YMhWHaGc6t3aDXzaz
+         J0ZN74GIXjZxZ1cHytdCxoivIZe9H2+5LHik+R0ySUgsb7V81/k2KYAcaoJxglkogLHt
+         itgBsuq/w5xhyhloX2BJw9loZpXt2izQxnRHpMpCU28qK6a3lsRUy1qiplwSVk2WBqXf
+         i+gHVslEVJre6VrlGsJP/g1RxCmDbsoFkhecX6fevPzYq0iINcrs9faBGCP9baFUrKFp
+         WCFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774712224; x=1775317024;
+        d=1e100.net; s=20251104; t=1774718621; x=1775323421;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5Z9nnBK0A0s0b0mb0vGDY9vi2MA+PChBVD8pdmgI/vI=;
-        b=d4mVgLIGV1XmyGAHVdo6HTxrHsYKgXSRQR9KfxW0Bzjr3HgXCPzrc6l4h6QDD6nnRh
-         LYTOIWraNL4Ir+0wDgWkRU3I/jS0endjSdt0cYtRsDREYS4FIykstcs8MXqZGkKB7ySJ
-         PWmAKbmn+bxCf4sBB9WuK9rqbCggIDnwcUal55p6SbYN/qX8lqjdB4HvS86A7wCPUJID
-         zQ558eJn6NL7XlccJdj9lIJM8BttEMhVJllVHnqLLE0qsviCM2rZ4cEkGxftSXhx5dIF
-         FJxkhLme4p1VEX/ue1vFUZhFGc2QIwQ3YWgcySaNpr2eZhPb6zgxyUJU8SVrnacEirr6
-         qfzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWEC5RveECZ6WPd9Z8M59fpNtvVaqclOh72XWTr76TwV3VsbfGIW3KufQXwdoYXIpNw8BbA/kl+CvKtnzZKtJs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXv+0UGQTBT/o1IeyllM6sXna7ktlsr7Re+epLVCrfgvSePSKC
-	VYcR2/xIW39Q1axs9lvI45nOCQJlthAKJBv0wIrECgKCYW1zlI5H9rzmG7IFp7EhAIe8F8sovlB
-	16rOjeTg=
-X-Gm-Gg: ATEYQzxyK3qkABslKUzb1PuH5Spy+dSvNtMkoo9lclrpJ5xiWYY9cB3J0dvAJckZAYF
-	HM4brc88hInE9swoxtu/hzKZ04m8Bbua4XWji8ASpBlMyZoI4V38+F6LIWPLL3CUupOFqbipUbD
-	LmeG4ESN1HzkJLt8Z4PccJO2XvN+cRMB6pTbNuXIGE4xSr5x+PpLl35PuULekLc40RbTb+kINHY
-	mi/MlGAbP1dV4ZKcEbLBIFgwrt8F6WO1T6wi7PZ48yVUcdC2PqimREi+yGScYUiNh277vUNGtMC
-	dkqNuNQVE6OkohjzUhCTZU0PwjC+PjdPW6J/wVzHUzRQQqojlqgGofuVNytwBGL8kl9OdlvT+5i
-	f7LV69vZXnt0n2pfieGxwB1oRUkCCrbTIefcaDlSDiRpnpJl5n1Be7IIqwlv5lnqcB/40IGGB49
-	T32wnuddEymdQrYhq9Y+fsH+Jo2GYoCUw+lQagIPrFMhLkhkTsRE89AU+3EoIZEQ==
-X-Received: by 2002:a05:600c:a06:b0:487:1108:48af with SMTP id 5b1f17b1804b1-48727d59ce3mr112021525e9.4.1774708008727;
-        Sat, 28 Mar 2026 07:26:48 -0700 (PDT)
-Received: from f16.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76916da892sm1874017a12.14.2026.03.28.07.26.45
+        bh=BNS/xpL/hsal7ModqBYJCvXhQFGlskOPOCno4hyw7aY=;
+        b=NcOyMsa9LveE6h4kWmprzSg8oHWdMvGX9iDEf9fK4qgd/hvl+MemqXMGstXAto8gJo
+         h7IanDmpiEpxNsCk02+Kq0ClwU/y2XnV2mabrK0H0bTMwcyRa8cYWtGeJhG88EDVYtRJ
+         i7eX2dbNdLe+7uinvlVwLbJTBeRxOPGu1A6XNWA2Q8wS/uwF5gW8dBXz2YY+GSVwv/k1
+         5gQJrYq/ivDzmY9Ma4oEmdY7q1T9UJZmnWi7BY3LdR5NyOfbYVOHyQua4Ud7FDZ144mY
+         ZhuWpacnl6dzX6HcSmIVV3affdpUQSNpmOnkGrlHly/nHpFkEHwFEoVv1ktENAJYUzxJ
+         JDSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF9kSD3weQlm6MXONvdNBHkSLkaBrnT1QqmADsXuWcS5ETv2jqg0QXbQZQce9FtF7mRO6VMa8AFaQR6UaOuwQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4Y7pWuKZnpRlnZwpuJFircgnoyjass5SmLsW1vse8MMpQOZ7y
+	RTnEuyEV/xg0esTy1NVXW11Qj+I52hMQV8urK9bkrOH3nCNNpunRIje6
+X-Gm-Gg: ATEYQzx5y8aAlG6LPHhNH80BXPR7OLMdy8iihtghI//qcRZDxxUq1mPVIJv4ZIgvFoK
+	xGzsYufvLi79hGQtrfzgsvWftLhjd5lJ+ARZKARbSeXW27b6KnYcI05fNmxOytpxjh0bxKFRohI
+	zcPuNlNr5UVIoRKT6fGc3C7oB9KfyFnZUTEfOKyRcm7j9EbAW5SdU3DNyq9MtDzm2z3kJ+lIyho
+	+wETf/5k2cacprlkzJaJDlqbjV6e356clks7KrfnW+wm1qvo66S4rH5cq6uBNhb0Ml7I/3v5m2X
+	65RotXAXGWTfLX7X6oz85jIhNkHgUNx9ofMzXUMTtTEtPK7K/8JcM4ZV03Nm7C9yLn6qIy2Gcs4
+	alo/AyI0VO6ZfWl2R3tPLDYxta+VZ4kua6q6BeX/3O8E085LacjFoNpQYi+pXkF8heDpjeROc0m
+	U2uyPMIxR5/I80uiHn82bUz/h8Rm5qdDJX0MrfD8SlduwFF22SJqCFozI=
+X-Received: by 2002:a17:90b:2744:b0:35b:e690:c5ad with SMTP id 98e67ed59e1d1-35c30094a5amr6635171a91.25.1774718620730;
+        Sat, 28 Mar 2026 10:23:40 -0700 (PDT)
+Received: from toolbx ([103.103.35.11])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c22a5570esm10513773a91.3.2026.03.28.10.23.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2026 07:26:47 -0700 (PDT)
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
+        Sat, 28 Mar 2026 10:23:40 -0700 (PDT)
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	ceph-devel@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-nfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	v9fs@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 0/2] libbpf: allow address-based single kprobe attach
-Date: Sat, 28 Mar 2026 23:26:07 +0900
-Message-ID: <20260328142643.627560-1-hoyeon.lee@suse.com>
-X-Mailer: git-send-email 2.52.0
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	jlayton@kernel.org,
+	chuck.lever@oracle.com,
+	alex.aring@gmail.com,
+	arnd@arndb.de,
+	adilger@dilger.ca,
+	mjguzik@gmail.com,
+	smfrench@gmail.com,
+	richard.henderson@linaro.org,
+	mattst88@gmail.com,
+	linmag7@gmail.com,
+	tsbogend@alpha.franken.de,
+	James.Bottomley@HansenPartnership.com,
+	deller@gmx.de,
+	davem@davemloft.net,
+	andreas@gaisler.com,
+	idryomov@gmail.com,
+	amarkuze@redhat.com,
+	slava@dubeyko.com,
+	agruenba@redhat.com,
+	trondmy@kernel.org,
+	anna@kernel.org,
+	sfrench@samba.org,
+	pc@manguebit.org,
+	ronniesahlberg@gmail.com,
+	sprasad@microsoft.com,
+	tom@talpey.com,
+	bharathsm@microsoft.com,
+	shuah@kernel.org,
+	miklos@szeredi.hu,
+	hansg@kernel.org
+Subject: [PATCH v6 0/4] OPENAT2_REGULAR flag support for openat2
+Date: Sat, 28 Mar 2026 23:22:21 +0600
+Message-ID: <20260328172314.45807-1-dorjoychy111@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,28 +111,89 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Today libbpf can attach a single kprobe only by function name, with an
-optional offset. But the kernel also supports attaching a single kprobe
-directly by raw kernel address, through both legacy tracefs/debugfs
-kprobes and PMU-based non-legacy kprobes. Since libbpf doesn't support
-this yet, callers that already have a target IP still have to drop down
-to perf_event_open() or direct tracefs writes.
+Hi,
 
-This patchset adds address-based single-kprobe attach support to
-bpf_program__attach_kprobe_opts() and covers it in selftests/bpf. The
-first commit adds bpf_kprobe_opts.addr so that libbpf can attach single
-kprobes by raw address through both legacy tracefs/debugfs and PMU-based
-non-legacy paths. The second commit extends attach_probe selftests/bpf
-with address-based kprobe attach subtests for these paths.
+I came upon this "Ability to only open regular files" uapi feature suggestion
+from https://uapi-group.org/kernel-features/#ability-to-only-open-regular-files
+and thought it would be something I could do as a first patch and get to
+know the kernel code a bit better.
 
-Hoyeon Lee (2):
-  libbpf: allow address-based single kprobe attach
-  selftests/bpf: add test for address-based single kprobe attach
+The following filesystems have been tested by building and booting the kernel
+x86 bzImage in a Fedora 43 VM in QEMU. I have tested with OPENAT2_REGULAR that
+regular files can be successfully opened and non-regular files (directory, fifo etc)
+return -EFTYPE.
+- btrfs
+- NFS (loopback)
+- SMB (loopback)
 
- tools/lib/bpf/libbpf.c                        | 77 +++++++++++++------
- tools/lib/bpf/libbpf.h                        |  5 +-
- .../selftests/bpf/prog_tests/attach_probe.c   | 49 ++++++++++++
- 3 files changed, 106 insertions(+), 25 deletions(-)
+Changes in v6:
+- OPENAT2_REGULAR stripped from file->f_flags in do_dentry_open so that it doesn't leak in fcntl(fd, F_GETFL)
+- BUILD_BUG_ON updated to use VALID_OPENAT2_FLAGS instead of VALID_OPEN_FLAGS in build_open_flags and in fcntl_init
+- v5 is at: https://lore.kernel.org/linux-fsdevel/20260307140726.70219-1-dorjoychy111@gmail.com/T/
+
+Changes in v5:
+- EFTYPE is already used in BSDs mentioned in commit message
+- consistently return -EFTYPE in all filesystems
+- v4 is at: https://lore.kernel.org/linux-fsdevel/20260221145915.81749-1-dorjoychy111@gmail.com/T/
+
+Changes in v4:
+- changed O_REGULAR to OPENAT2_REGULAR
+- OPENAT2_REGULAR does not affect O_PATH
+- atomic_open codepaths updated to work properly for OPENAT2_REGULAR
+- commit message includes the uapi-group URL
+- v3 is at: https://lore.kernel.org/linux-fsdevel/20260127180109.66691-1-dorjoychy111@gmail.com/T/
+
+Changes in v3:
+- included motivation about O_REGULAR flag in commit message e.g., programs not wanting to be tricked into opening device nodes
+- fixed commit message wrongly referencing ENOTREGULAR instead of ENOTREG
+- fixed the O_REGULAR flag in arch/parisc/include/uapi/asm/fcntl.h from 060000000 to 0100000000
+- added 2 commits converting arch/{mips,sparc}/include/uapi/asm/fcntl.h O_* macros from hex to octal
+- v2 is at: https://lore.kernel.org/linux-fsdevel/20260126154156.55723-1-dorjoychy111@gmail.com/T/
+
+Changes in v2:
+- rename ENOTREGULAR to ENOTREG
+- define ENOTREG in uapi/asm-generic/errno.h (instead of errno-base.h) and in arch/*/include/uapi/asm/errno.h files
+- override O_REGULAR in arch/{alpha,sparc,parisc}/include/uapi/asm/fcntl.h due to clash with include/uapi/asm-generic/fcntl.h
+- I have kept the kselftest but now that O_REGULAR and ENOTREG can have different value on different architectures I am not sure if it's right
+- v1 is at: https://lore.kernel.org/linux-fsdevel/20260125141518.59493-1-dorjoychy111@gmail.com/T/
+
+Thanks.
+
+Regards,
+Dorjoy
+
+Dorjoy Chowdhury (4):
+  openat2: new OPENAT2_REGULAR flag support
+  kselftest/openat2: test for OPENAT2_REGULAR flag
+  sparc/fcntl.h: convert O_* flag macros from hex to octal
+  mips/fcntl.h: convert O_* flag macros from hex to octal
+
+ arch/alpha/include/uapi/asm/errno.h           |  2 +
+ arch/alpha/include/uapi/asm/fcntl.h           |  1 +
+ arch/mips/include/uapi/asm/errno.h            |  2 +
+ arch/mips/include/uapi/asm/fcntl.h            | 22 +++++------
+ arch/parisc/include/uapi/asm/errno.h          |  2 +
+ arch/parisc/include/uapi/asm/fcntl.h          |  1 +
+ arch/sparc/include/uapi/asm/errno.h           |  2 +
+ arch/sparc/include/uapi/asm/fcntl.h           | 35 +++++++++---------
+ fs/ceph/file.c                                |  4 ++
+ fs/fcntl.c                                    |  4 +-
+ fs/gfs2/inode.c                               |  6 +++
+ fs/namei.c                                    |  4 ++
+ fs/nfs/dir.c                                  |  4 ++
+ fs/open.c                                     |  8 ++--
+ fs/smb/client/dir.c                           | 14 ++++++-
+ include/linux/fcntl.h                         |  2 +
+ include/uapi/asm-generic/errno.h              |  2 +
+ include/uapi/asm-generic/fcntl.h              |  4 ++
+ tools/arch/alpha/include/uapi/asm/errno.h     |  2 +
+ tools/arch/mips/include/uapi/asm/errno.h      |  2 +
+ tools/arch/parisc/include/uapi/asm/errno.h    |  2 +
+ tools/arch/sparc/include/uapi/asm/errno.h     |  2 +
+ tools/include/uapi/asm-generic/errno.h        |  2 +
+ .../testing/selftests/openat2/openat2_test.c  | 37 ++++++++++++++++++-
+ 24 files changed, 131 insertions(+), 35 deletions(-)
 
 -- 
-2.52.0
+2.53.0
+
