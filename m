@@ -1,54 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF66340DFA3;
-	Sat, 28 Mar 2026 00:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFECD40DFC9;
+	Sat, 28 Mar 2026 00:24:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774656742; cv=none; b=a4qNlQECKEN7V/WEuaoQnyCArMgePRgf5V1WZpz252tjQvn63FDfmGWDeDQ4G3XCJ71hgUAThgkfQXkLAyty18TQqZKoIGkirU8+Rd6SW+juMz7+gJQ7OMJSeVkZRutZiz5y9zRQ/Pozrp5vKzChcB+2uAsW5MsaQTEwfHapJ2U=
+	t=1774657499; cv=none; b=hPk6bDvJMNPQ747tg1PlTpLofws/+c+gUoZyBrWMrZtm7A+K+G8Ma6cBNbUvoO5qd6YGhiVydXfF/G7narDd5qp0Qk5xm5lHemzCSiC+kz4lVFaNRJw+XHhv11SxePEE8NU/RN72R66NTblwqOyCe9s/Ehp3WtIqJHYhjs7GT5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774656742; c=relaxed/simple;
-	bh=xI4UmJEnokRASbJcfMS56GK0lMPnJmKS4svstiEkqQ4=;
+	s=arc-20240116; t=1774657499; c=relaxed/simple;
+	bh=eTCuq4xez0vRuryl1L76sF2NU8W9lCO8PmiMdzIiDBQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a2UwDtvUktLwDZMbFxN8eHYpTqtN+rzRhCioVcsOVF9cU/6SqN7jUwZWSJBZ5eSxLl/YA8cOeKc62VLYbD3lOeBk7zvFTvOBPlowFX5zTTmJ6MELLMmKLY4PRMnhnjDbsbEmP4lJpr5q+oUNcXiHMpZXvE/02jQ48rXabIgZz+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YG6yyyT/; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=Hhe2ugqdG/3X7rs3RQO3vjMNOc5cU+xohnDyc5+gKHaca2iOXnFftHzjCcDBiob7FALigc7yBXKLTedktU0L9WwibwSe8wWcCzjH5mjLsGlnf5Ocdvcwc9mb9Oxzxsk2fhmwzTE7X7Nu3PO1chGpDbCszxvF8RtPbU5COSzYk98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEBdSegW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YG6yyyT/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97597C19423;
-	Sat, 28 Mar 2026 00:12:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEBdSegW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B26C19423;
+	Sat, 28 Mar 2026 00:24:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774656742;
-	bh=xI4UmJEnokRASbJcfMS56GK0lMPnJmKS4svstiEkqQ4=;
+	s=k20201202; t=1774657498;
+	bh=eTCuq4xez0vRuryl1L76sF2NU8W9lCO8PmiMdzIiDBQ=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YG6yyyT/teC+XVHylGg9uEGmj9oNdUXrQXFAxZkU134QrjTqNT6dcPvsxALiLiAjw
-	 sEDGzZImGyYamQ9V4erm/hxnYgLYNv+sra22wk/Kicxw4Y/sqBJK4HMIw79yRJUL4W
-	 flC0wEClK7JdJ4i1joKF3EiEmJkBM12BdLS9XSIYzyZDoXjihT8jn4pl045bhovY8n
-	 sb/Bpeo3qHlSDGLYVbvq9yj/EH1b22lad4kU7PbTGTIMVDmDG93wrycitv74Zoohxp
-	 YHCnGcAOu0dYJlXD1gOhlAwtNhDdM3qqq1ZcT/S+ms6BJ2Xsfl/FqzFFHwzb3ibcvp
-	 NTvju/PDEfw7w==
-Date: Fri, 27 Mar 2026 17:12:20 -0700
+	b=aEBdSegWlvIzxkGddNU4cuLR7KNEE8qw7KFyCV+XCSbjlJKtyWcmrXZhjn87Xa1is
+	 3jQsSumSCMyPH4bKcZqCWIMJqRbbs+no3tkcOtwKTCZI7A/qdmr3oTwbjdOLGG06Eo
+	 0HuYkmdaYUymjYR/gJ1koCwTAoUAJ0+dwYRRkQZkGouHqu0/2u8RStlmsbFmtt4JQm
+	 yneA/AKnljzIqoif7IPncCfh+z030qsGGGkZjZJKzotvPIl12VJFheqUwR5BnzTILt
+	 BAHAHI9c8v1nbFPGXUpxkmwCct350914tiiVRYWtbsOwQjVgoS8+0zKHdCbz4WuKv/
+	 GkqoC1VWPsjvg==
+Date: Fri, 27 Mar 2026 17:24:54 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
- <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, Toke Hoiland-Jorgensen
- <toke@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, kernel-patches-bot@fb.com
-Subject: Re: [PATCH bpf-next 1/3] bpf: Disallow freplace on XDP with
- mismatched xdp_has_frags values
-Message-ID: <20260327171220.6d10d710@kernel.org>
-In-Reply-To: <785e0b04-91e4-457f-8d6c-e0a911c0fd88@linux.dev>
-References: <20260324150444.68166-1-leon.hwang@linux.dev>
-	<20260324150444.68166-2-leon.hwang@linux.dev>
-	<20260326124205.1a3bb825@kernel.org>
-	<785e0b04-91e4-457f-8d6c-e0a911c0fd88@linux.dev>
+To: Ioana Ciornei <ioana.ciornei@nxp.com>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, petrm@nvidia.com, willemb@google.com,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 00/10] selftests: drivers: bash support for
+ remote traffic generators
+Message-ID: <20260327172454.6b9bc8f3@kernel.org>
+In-Reply-To: <5cuoazp2svgjja5h663zc34dafkuqa2grrm7lzpuunvrjogydf@43mryp77gq2q>
+References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
+	<20260326120342.6429fbdc@kernel.org>
+	<5cuoazp2svgjja5h663zc34dafkuqa2grrm7lzpuunvrjogydf@43mryp77gq2q>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,27 +50,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 27 Mar 2026 14:42:19 +0800 Leon Hwang wrote:
-> > It may be worth adding a selftest to
-> > tools/testing/selftests/drivers/net/xdp.py
-> > which sets MTU to 9k, tries to attach a non-frag-capable prog
-> > if that fails attaches a frag-capable prog and then checks if
-> > replacing the capable prog with non-capable fails.
-> > Drivers may be buggy in this regard.  
+On Fri, 27 Mar 2026 09:32:22 +0200 Ioana Ciornei wrote:
+> On Thu, Mar 26, 2026 at 12:03:42PM -0700, Jakub Kicinski wrote:
+> > On Thu, 26 Mar 2026 15:28:18 +0200 Ioana Ciornei wrote:  
+> > > This patch set aims to add the necessary support so that bash written
+> > > selftests are also able to easily run with a remote traffic generator
+> > > system, either be it in another netns or one accessible through ssh.
+> > > 
+> > > This patch set is a result of the discussion from v1:
+> > > https://lore.kernel.org/all/20260303084330.340b6459@kernel.org/
+> > > Even though the python infrastructure is already established, some
+> > > things are easier in bash and it would be a shame to leave behind the
+> > > bash tests that we already have.  
+> > 
+> > I think this introduces a bunch of regressions, eg:
+> > 
+> > https://netdev-ctrl.bots.linux.dev/logs/vmksft/forwarding/results/575622/4-local-termination-sh/stdout
+> > 
+> > https://netdev-ctrl.bots.linux.dev/logs/vmksft/netdevsim/results/575802/18-netcons-resume-sh/stdout  
 > 
-> Do you mean adding these two tests to xdp.py?
-> 
-> 1. Verify the failure of attaching non-frag-capable prog to mtu=9k
->    driver.
-> 2. Verify the failure of updating frag-capable prog with non-frag-
->    capable prog via libbpf.c::bpf_link__update_program().
+> I cannot reproduce this unfortunately. For example, local_termination.sh
+> gives me the following result with the exact patches that I submitted.
+> Any idea on what might be the difference?
 
-Not directly via libbpf just ip -f link, it uses libbpf internally
-but testing with  ip link is simpler. Also - there are already XDP
-progs which return XDP_PASS in frag-capable and non-capable mode,
-so just use those.
+Hm, the system that runs this on our end is:
 
-> As for test #2, it may require a helper to attach prog then update prog
-> using libbpf's APIs.
+# cat /etc/redhat-release 
+Fedora release 43 (Forty Three)
 
-See above.
+And it has this added on top of default install:
+
+# cat /etc/systemd/network/99-default.link
+[Match]
+OriginalName=*
+
+[Link]
+NamePolicy=keep kernel database onboard slot path
+AlternativeNamesPolicy=database onboard slot path mac
+MACAddressPolicy=none
