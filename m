@@ -1,147 +1,221 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7ACD378D68;
-	Sat, 28 Mar 2026 09:55:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B0737F752
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 10:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774691724; cv=none; b=EYmFo0wxdq+nwmuJydZXtUrj9WZVH8p9I94UJBh6YqzJrAC/swoStecSTIih273WDIMKfrs+OjQgXKz76WZxLqtqjSn4jwvrLjnxY3nZasHflRSmrpz0LuxTqDnHvijGQIiFPbw3QFuE/zib0UrNiKcXycJgnrJIBp3IOqx2vk8=
+	t=1774695509; cv=none; b=kSoh4sa1WWH1dow+ew4hRPn8OJaa4C44C8YI6UdV4h8PEt+czNhDoYvNTqtGmx4og0HnljaD4TRp6zygSOoHxPxrbElOE7/+Af+ZSnX7/PA148lgYbrxNAVBVJyo7VMl6QkoIqQ3O5rDAG9/y59N7HqL6zcq4JNYhipmsoEPysM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774691724; c=relaxed/simple;
-	bh=GAqpCsRCdatJLMn/LB4VPXAG5/+DxNvNB1DDK+7U/SA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l50HweUmOCu4yvSkPG/HEa+W5wh1ZRmkoou1zMy9dUJq9TeaV/aYCIR5x9fwKu+xCVJF7BdXxFQv5P3nEoUEHf8/yURaYn846Z17g0lVcO8ONLIGwGBmO2k0qdAJO4mkyC0TrCDPXELzcWig6rBCc8QjVXtGBNn3zbmAr5nRtvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCQf05mQ; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774695509; c=relaxed/simple;
+	bh=Qs9M2BFLj6JC0VgLyoL5/n3Xychtx+k20qIwK0szi+I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gFK9HPvkMY7IeT6J0PCIkFZT1dAeqyZJGy4ussK59kSuDUvmIxHNTxBy04CpNmz+imeq3h1XatVWHAR4IAW75PYTt7vfdXmiJvZxxYsvswgJfYZZDI/WPWT5oENOHi4OYyQ1TqWACgr25Ubt6OYEJn3KxNTMPnCUz7pG1CjHyg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=og/Sfe5O; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCQf05mQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774691723; x=1806227723;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GAqpCsRCdatJLMn/LB4VPXAG5/+DxNvNB1DDK+7U/SA=;
-  b=hCQf05mQyKUG/4yUibUBFYnfQjH2vwpwLGOwF3rAb9zeDUS90uO2aztN
-   GG79sKnjtoaq7UV/Agaj6dBGuq0bG/G44O93+jJtT86WkAn4AZ6W2893k
-   AXmrjwk68AgbCAH3FVs841a2L9sH+yfPw5ktjm4RNDrq3GCB+917MbYBx
-   QRq4aj0J8PiP8aJl7OJvO3Fz1GKzXCLX6a5rtqDIbSh1GrLKwPO1ifulh
-   lvUwqCsVel5MaUc0xArUBWXAEKY4Lji6nkofBed9DCxnkr5zSMVj2Gi8o
-   wAPkfYgecd1sT97nHikl/oWyA0++Y6sVgSOYpDOXIawGLadYCRIw1mn62
-   g==;
-X-CSE-ConnectionGUID: /vyV7dRkSUuVlpNPLQyYYg==
-X-CSE-MsgGUID: uGtkHkMqRJiOAj9g9D+spg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="75633832"
-X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
-   d="scan'208";a="75633832"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 02:55:19 -0700
-X-CSE-ConnectionGUID: mkBLqmVQQa+7lsX1dF1hXw==
-X-CSE-MsgGUID: nMNCMgLgQ7q8oZG85wWGBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
-   d="scan'208";a="248786209"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 28 Mar 2026 02:55:13 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w6QNp-00000000BI3-3sXI;
-	Sat, 28 Mar 2026 09:55:09 +0000
-Date: Sat, 28 Mar 2026 17:54:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zi Yan <ziy@nvidia.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Song Liu <songliubraving@fb.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chris Mason <chris.mason@fusionio.com>,
-	David Sterba <dsterba@suse.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 07/10] mm/truncate: use folio_split() in
- truncate_inode_partial_folio()
-Message-ID: <202603281736.bi9GWnsF-lkp@intel.com>
-References: <20260327014255.2058916-8-ziy@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="og/Sfe5O"
+Message-ID: <f33c5124-3865-455e-a048-73d87d020bec@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774695495;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z/Uad7Q/uVeLeJuuN70SgP1jYFdyTA6/FyYntF0Zjnw=;
+	b=og/Sfe5OCWfjtwrMY2tCj6D8BN2ilfqhEPxEIspem2epvDPllUFb5qJecntjgubCW9jadF
+	07c1jQyU+7SrflrNwSnJmiUlXAOB1P99bIwrpar8ZgINJytdI3ua2CQO91ppFwJxgFoZGn
+	GnjtBeZiEcgTpu75ecoPkDfG4V7pJCc=
+Date: Sat, 28 Mar 2026 18:58:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260327014255.2058916-8-ziy@nvidia.com>
-
-Hi Zi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on brauner-vfs/vfs.all kdave/for-next linus/master v7.0-rc5 next-20260327]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-remove-READ_ONLY_THP_FOR_FS-Kconfig-option/20260327-142622
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260327014255.2058916-8-ziy%40nvidia.com
-patch subject: [PATCH v1 07/10] mm/truncate: use folio_split() in truncate_inode_partial_folio()
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260328/202603281736.bi9GWnsF-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260328/202603281736.bi9GWnsF-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603281736.bi9GWnsF-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:1746:
->> include/linux/huge_mm.h:625:1: error: expected identifier or '('
-     625 | {
-         | ^
-   1 error generated.
-   make[3]: *** [scripts/Makefile.build:184: arch/x86/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1337: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Add protocol check test for
+ bpf_sk_assign_tcp_reqsk()
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260327133915.286037-1-jiayuan.chen@linux.dev>
+ <20260327133915.286037-3-jiayuan.chen@linux.dev>
+ <8d619537-cb9a-4fdb-a440-20b59b7f5088@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <8d619537-cb9a-4fdb-a440-20b59b7f5088@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-vim +625 include/linux/huge_mm.h
+On 3/28/26 3:53 AM, Martin KaFai Lau wrote:
+>> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+>>
+>> Add test_tcp_custom_syncookie_protocol_check to verify that
+>> bpf_sk_assign_tcp_reqsk() rejects non-TCP skbs. The test sends a UDP
+>> packet through TC ingress where a BPF program calls
+>> bpf_sk_assign_tcp_reqsk() on it and checks that the kfunc returns an
+>> error. A UDP server recv() is used as synchronization to ensure the
+>> BPF program has finished processing before checking the result.
+>>
+>> Without the fix in bpf_sk_assign_tcp_reqsk(), the kfunc succeeds and
+>> attaches a TCP reqsk to the UDP skb, which causes a null pointer
+>> dereference panic when the kernel processes it through the UDP receive
+>> path.
+>>
+>> Test result:
+>>
+>>    ./test_progs -a tcp_custom_syncookie_protocol_check -v
+>>    setup_netns:PASS:create netns 0 nsec
+>>    setup_netns:PASS:ip 0 nsec
+>>    write_sysctl:PASS:open sysctl 0 nsec
+>>    write_sysctl:PASS:write sysctl 0 nsec
+>>    setup_netns:PASS:write_sysctl 0 nsec
+>>    test_tcp_custom_syncookie_protocol_check:PASS:open_and_load 0 nsec
+>>    setup_tc:PASS:qdisc add dev lo clsact 0 nsec
+>>    setup_tc:PASS:filter add dev lo ingress 0 nsec
+>>    run_protocol_check:PASS:start tcp_server 0 nsec
+>>    run_protocol_check:PASS:start udp_server 0 nsec
+>>    run_protocol_check:PASS:connect udp_client 0 nsec
+>>    run_protocol_check:PASS:send udp 0 nsec
+>>    run_protocol_check:PASS:recv udp 0 nsec
+>>    run_protocol_check:PASS:udp_intercepted 0 nsec
+>>    run_protocol_check:PASS:assign_ret 0 nsec
+>>    #471/1   tcp_custom_syncookie_protocol_check/IPv4 TCP:OK
+>>    run_protocol_check:PASS:start tcp_server 0 nsec
+>>    run_protocol_check:PASS:start udp_server 0 nsec
+>>    run_protocol_check:PASS:connect udp_client 0 nsec
+>>    run_protocol_check:PASS:send udp 0 nsec
+>>    run_protocol_check:PASS:recv udp 0 nsec
+>>    run_protocol_check:PASS:udp_intercepted 0 nsec
+>>    run_protocol_check:PASS:assign_ret 0 nsec
+>>    #471/2   tcp_custom_syncookie_protocol_check/IPv6 TCP:OK
+>>    #471     tcp_custom_syncookie_protocol_check:OK
+>>    Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+>>
+>> Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+>> ---
+>>   .../bpf/prog_tests/tcp_custom_syncookie.c     |  94 ++++++++++++++-
+>>   .../bpf/progs/test_tcp_custom_syncookie.c     | 109 ++++++++++++++++++
+>>   2 files changed, 199 insertions(+), 4 deletions(-)
+>>
+>> diff --git 
+>> a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c 
+>> b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
+>> index eaf441dc7e79..e46031d0786b 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
+>> @@ -5,6 +5,7 @@
+>>   #include <sched.h>
+>>   #include <stdlib.h>
+>>   #include <net/if.h>
+>> +#include <netinet/in.h>
+>>     #include "test_progs.h"
+>>   #include "cgroup_helpers.h"
+>> @@ -47,11 +48,10 @@ static int setup_netns(void)
+>>       return -1;
+>>   }
+>>   -static int setup_tc(struct test_tcp_custom_syncookie *skel)
+>> +static int setup_tc(int prog_fd)
+>>   {
+>>       LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = 
+>> BPF_TC_INGRESS);
+>> -    LIBBPF_OPTS(bpf_tc_opts, tc_attach,
+>> -            .prog_fd = 
+>> bpf_program__fd(skel->progs.tcp_custom_syncookie));
+>> +    LIBBPF_OPTS(bpf_tc_opts, tc_attach, .prog_fd = prog_fd);
+>>         qdisc_lo.ifindex = if_nametoindex("lo");
+>>       if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo 
+>> clsact"))
+>> @@ -127,7 +127,7 @@ void test_tcp_custom_syncookie(void)
+>>       if (!ASSERT_OK_PTR(skel, "open_and_load"))
+>>           return;
+>>   -    if (setup_tc(skel))
+>> +    if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie)))
+>>           goto destroy_skel;
+>>         for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
+>> @@ -145,6 +145,92 @@ void test_tcp_custom_syncookie(void)
+>>     destroy_skel:
+>>       system("tc qdisc del dev lo clsact");
+>> +    test_tcp_custom_syncookie__destroy(skel);
+>> +}
+>> +
+>> +/* Test: bpf_sk_assign_tcp_reqsk() should reject non-TCP skb.
+>> + *
+>> + * Send a UDP packet through TC ingress where a BPF program calls
+>> + * bpf_sk_assign_tcp_reqsk() on it. The kfunc should return an error
+>> + * because the skb carries UDP, not TCP.
+>> + *
+>> + * TCP and UDP servers share the same port. The BPF program intercepts
+>> + * the UDP packet, looks up the TCP listener via the dest port, and
+>> + * attempts to assign a TCP reqsk to the UDP skb.
+>> + */
+>> +static void run_protocol_check(struct test_tcp_custom_syncookie *skel,
+>> +                   int family, const char *addr)
+>> +{
+>> +    int tcp_server = -1, udp_server = -1, udp_client = -1;
+>> +    char buf[32] = "test";
+>> +    int port, ret;
+>> +
+>> +    tcp_server = start_server(family, SOCK_STREAM, addr, 0, 0);
+>> +    if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
+>> +        return;
+>> +
+>> +    port = ntohs(get_socket_local_port(tcp_server));
+>> +
+>> +    /* UDP server on same port for synchronization and port sharing */
+>> +    udp_server = start_server(family, SOCK_DGRAM, addr, port, 0);
+>> +    if (!ASSERT_NEQ(udp_server, -1, "start udp_server"))
+>> +        goto close_tcp;
+>> +
+>> +    skel->bss->udp_intercepted = false;
+>> +    skel->data->assign_ret = -1;
+>
+> assign_ret is init to -1
+>
+>> +
+>> +    udp_client = connect_to_fd(udp_server, 0);
+>> +    if (!ASSERT_NEQ(udp_client, -1, "connect udp_client"))
+>> +        goto close_udp_server;
+>>   +    ret = send(udp_client, buf, sizeof(buf), 0);
+>> +    if (!ASSERT_EQ(ret, sizeof(buf), "send udp"))
+>> +        goto close_udp_client;
+>> +
+>> +    /* recv() ensures TC ingress BPF has processed the skb */
+>> +    ret = recv(udp_server, buf, sizeof(buf), 0);
+>> +    if (!ASSERT_EQ(ret, sizeof(buf), "recv udp"))
+>> +        goto close_udp_client;
+>> +
+>> +    ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
+>> +
+>> +    /* assign_ret == 0 means kfunc accepted UDP skb (bug).
+>> +     * assign_ret < 0 means kfunc correctly rejected it (fixed).
+>> +     */
+>> +    ASSERT_NEQ(skel->data->assign_ret, 0, "assign_ret");
+>
+> and here it checks NEQ 0....
+>
+> Maybe init assign_ret to 0?
+>
+> Also, why not specifically check for -EINVAL?
 
-e220917fa50774f Luis Chamberlain 2024-08-22  622  
-9ee18d22957981f Zi Yan           2026-03-26  623  static inline int folio_split(struct folio *folio, unsigned int new_order,
-9ee18d22957981f Zi Yan           2026-03-26  624  		struct page *page, struct list_head *list);
-7460b470a131f98 Zi Yan           2025-03-07 @625  {
-a488ba3124c82d7 Pankaj Raghav    2025-09-05  626  	VM_WARN_ON_ONCE_FOLIO(1, folio);
-a488ba3124c82d7 Pankaj Raghav    2025-09-05  627  	return -EINVAL;
-7460b470a131f98 Zi Yan           2025-03-07  628  }
-7460b470a131f98 Zi Yan           2025-03-07  629  
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You're right, checking for -EINVAL is more precise and avoids hiding a 
+silent failure in the lookup path.
+
+Will init assign_ret to 0 and check for -EINVAL instead.
+
