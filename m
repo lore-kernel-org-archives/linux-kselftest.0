@@ -1,191 +1,265 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F9A334C1B
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 02:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF6E35836F;
+	Sat, 28 Mar 2026 02:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774663936; cv=none; b=F7G/MY2QkHBrsGEjimEBh/jy2N7H7Afqb6q7VvdoFD15PO2ah5/WJu+3MX7JewhJTLITLmBzRePo9y6sBgnn6IKww0wZAvHl+fHB4PcbqXBpo6kh6enhQmcFmNZgFgfay3ZALmrKo2NbxP8M3vGZpDXu6uojoouWttde4YlDFeo=
+	t=1774664985; cv=none; b=P72em/hBPBIMrnzYoLDcAYHloHJ87Y3TqufC1HfcupdWPO26EygEHkAzyZWzRZ5bcJCs+SufsNYqN9n9GkZlQNGGp16ComeHsnEAf+CrUN7GySInhP8z/zRchAfnKcy9SlM3sdOK9YPeaDYky+SR3tnLfO/lM7SHSN051Nkgc5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774663936; c=relaxed/simple;
-	bh=R0hOUyUw1S43YOqTcBVweQ4HGlJUUJRlRmz8ISCMmVE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UWK4qJtbzD0P6z2HUCxgDrsY1zPCPQbqQVMth4QGCmZHxkBDGftKwIMXGw+EExUk9oZCiQkfOdxhShiSPxoinN/QZ/N6/dX4WQ4eGhneMf0c/tM0ViPf8nUQgZiTSjEqEdCRRDPhtMTAp40vKHHJWm2gch5K+UBQJc7G0oTNuv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TYGaado/; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZZlVgckk; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774664985; c=relaxed/simple;
+	bh=mWIpc0ba41sAxLpAfGPJTOOG0DhT7auhqMHW9Zatpe0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZmQOKLXa/khC1LTRtih28m8j3ZQlQCsAp6lpuU5UEmF8esZTnRKOWOvMP243LoCfqLVsYOhiDV1pz1vn632zDRZJjgzpGHrIaw1pT7em4i+3ZSoKhhy6am6Vf9OSKEvqlJXk5JLbRVd3LbRq3iMFGwu9cKCvXF10nUGF4xyhXLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=BXJ/uXLw; arc=none smtp.client-ip=115.124.30.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TYGaado/";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZZlVgckk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774663934;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=K5pAJhZCqE5oESJaENRwjHgVA6xECCslqT3Zf/bfI5M=;
-	b=TYGaado/F6Z6DqpNbYKoqQid/rF2JqNIW8GdUa5WVXXr6i1tQCiZC4jilagvyMEulnjF1k
-	3jF3MVq/qAD0Ctt6mUn7IL0u7qSqITL3grRd/4o9qV6M39Q0HJ35lyivz5VtZTkK3/sSK7
-	ttt7Nb4/55CQUzfWo01fjUQ2v1y06nA=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-434-1v4evlBHNa2QdJSH9TgLxQ-1; Fri, 27 Mar 2026 22:12:12 -0400
-X-MC-Unique: 1v4evlBHNa2QdJSH9TgLxQ-1
-X-Mimecast-MFC-AGG-ID: 1v4evlBHNa2QdJSH9TgLxQ_1774663932
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-35ba4bf54beso846782a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2026 19:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774663931; x=1775268731; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K5pAJhZCqE5oESJaENRwjHgVA6xECCslqT3Zf/bfI5M=;
-        b=ZZlVgckko9dzux7Z89by5maNgTYPVaSZkn2smtnMg7v5gBOJaxUU6OnE5FFeoAPRS4
-         OmdHIvCliWNk9sCjYyeo652O2EJwVoc62jD1UDhR7eIXpYj+0fLYNcjScEjxHZDwNHjk
-         O/ifjZH5cmuJZhKs2yDN9NXIh4MLyCcCwlsT3+hC0eXFJzYbU9m0BF6LuzktWB1Rb2kR
-         8gbasNg3J2V8mu1vM5h/fsOknNOvyUGdSXyCIMrPw5JS3rSTWm2XCAwtzk+Se0kBi6yn
-         wDLiTbm47rYmiK+Clk9NoKRgthUv5O5yTu5y/tYQ9L9gvK43uptq61ZI5QhfMdnL5ENq
-         gqMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774663931; x=1775268731;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K5pAJhZCqE5oESJaENRwjHgVA6xECCslqT3Zf/bfI5M=;
-        b=GWUMo4D0uYKd/7Ydmdy3c91NoHKdmCmYDWgiWioUquZVrs4JQyWlNvat1ljNassNZY
-         RNFJyeK0oQTz9jhd3Y26buuuJnNrCdAT7W9m+bkiXg/xrMaChuJZDBuZ/Am2x2fWSlqI
-         W6FjdmDM+S0iqzYVkT1LIPFFAdbPr54uzz/r97py8bPGb4jhnLjdFxQVljDqMl8PSJr2
-         6xzCUsTPlCIIfO90T0Uro5xEK5o2o5zWom425ySIkc405firU0/V4FAo1q9R6omf8KU5
-         ySu6AUzAEXrBUcK6pAx2o18pD5prOpPCJs1Y2K3x2jQVnTBbIvwCq2BxrEfkJHPirnEA
-         yx6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUL8xuiMOxR0af1jIzYxYc2ITlSkcddNd4d86pFUcsT80aaONv75QVkW1A2Npy/Wg5KIz7Oa4nZ6GEBJ9nLlmo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypwHRuSO3dOiZh4P5E0nwxU+2Va/iHaZHCohx8ExtpcOkB5PWK
-	KzdaHKjgxVZ4uVy1zXx1MtKJz+NAERylvGWFyeqtakNYVdly4VFWC1NK7SHRpi+M2yaypUzllNR
-	cIHbKjPVH5spJXm2YSLdrLRLHo7x7FeVHi8frOWNgPP91TkSeAzjzr+HXffN31IElCT/SDcX1RO
-	p9KQ==
-X-Gm-Gg: ATEYQzyPxzDpvfZaCef07j/mU5JCw7BeUbslvyE5aHUfAn512a4igCtJVZDwuOUU/gd
-	xyaIlXSgX//ogHtQBeLOBmBi0dCNq0fEwVfCeCFqlR4w05YbYjkqQTSNVfXRtAKT++JUqYD8tLF
-	55pAfdFrm7nlViU3Hjb8kgeetEDoGXZj1wTuBSAaPDMwpTKFlQwgXsAr4dYtjxmiAE9wgDC/0je
-	JkJJHnIYVc9o2wxXv15Nh/psUQWIndp+iytgUg9d86jBKACAEzWvDMwsgJ2Xht/2F2nPwkLjEwm
-	lWW4C6micdRKO82mhtmjBUzGpE7IAgumWDIm1ap74p8W6dWMK0G6xyVkZMtv2tayc5O9P99F+IN
-	wIvL5iR0LGBH29GlkRQ==
-X-Received: by 2002:a17:90b:2f87:b0:35c:d98:d685 with SMTP id 98e67ed59e1d1-35c2fd94735mr4735950a91.0.1774663931091;
-        Fri, 27 Mar 2026 19:12:11 -0700 (PDT)
-X-Received: by 2002:a17:90b:2f87:b0:35c:d98:d685 with SMTP id 98e67ed59e1d1-35c2fd94735mr4735923a91.0.1774663930573;
-        Fri, 27 Mar 2026 19:12:10 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c2eaf1dbfsm1622400a91.3.2026.03.27.19.12.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 19:12:09 -0700 (PDT)
-Date: Sat, 28 Mar 2026 10:12:06 +0800
-From: Li Wang <liwang@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: tools/testing/selftests
-Message-ID: <acc49s7jbI9Q3a4f@redhat.com>
-References: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="BXJ/uXLw"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1774664972; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=R12a3AlVnNxuV2juWEwgnbD/uqtxdGfbzuo7rBEpZ8o=;
+	b=BXJ/uXLwgzLjc2vAL82v76QsMuRELwKQm5p7SmFANdsh8Sg/ONJ3dexk+HoUlP6QzmSjj9y4IrE83q2i8kPlR0iqqKR7m44gt+ab1Sd190a19+Y9P3I7bF/fjVpnu6pmA++fUdGgbu/Y6RgQ+7ExQz3jsCMmqRthdzhWLVqr+DE=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X.phNqC_1774664969;
+Received: from 30.42.98.36(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X.phNqC_1774664969 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Sat, 28 Mar 2026 10:29:30 +0800
+Message-ID: <b7cd4127-d178-43aa-901e-039d937a8ad8@linux.alibaba.com>
+Date: Sat, 28 Mar 2026 10:29:27 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 02/10] mm/khugepaged: remove READ_ONLY_THP_FOR_FS check
+To: Zi Yan <ziy@nvidia.com>, Lance Yang <lance.yang@linux.dev>
+Cc: ljs@kernel.org, willy@infradead.org, songliubraving@fb.com, clm@fb.com,
+ dsterba@suse.com, viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+ akpm@linux-foundation.org, david@kernel.org, Liam.Howlett@oracle.com,
+ npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+ baohua@kernel.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <6FCC0430-C98D-4D7C-8C53-F7722F1BDC4A@nvidia.com>
+ <20260327162252.57553-1-lance.yang@linux.dev>
+ <79053B0F-8A40-41D0-8539-0CC30C903B48@nvidia.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <79053B0F-8A40-41D0-8539-0CC30C903B48@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Mar 27, 2026 at 02:32:34PM -0700, Andrew Morton wrote:
-> 
-> whinges, perrmanits, maybe I'm doing it wrong, etc.
-> 
-> a)
-> 
-> At the top-level, neither `make mrproper' nor `make clean' remove the
-> executables from tools/testing/selftests/mm/.  Seems wrong?
-> 
-> b)
-> 
-> Shouldn't I be able to run
-> 
-> 	make selftests
-> 
-> from the top level?
 
-Should use:
 
-    make kselftest
-    make kselftest-clean
-
+On 3/28/26 12:30 AM, Zi Yan wrote:
+> On 27 Mar 2026, at 12:22, Lance Yang wrote:
 > 
-> c)
-> 
-> tools/testing/selftests/mm
-> make clean
-> make
-> 
-> does:
-> 
->   CC       droppable
->   CC       guard-regions
->   CC       merge
->   CC       rmap
->   CC       soft-dirty
-> gcc -Wall -O2 -I /usr/src/25/tools/testing/selftests/../../..  -isystem /usr/src/25/tools/testing/selftests/../../../usr/include -isystem /usr/src/25/tools/testing/selftests/../../../tools/include/uapi -Wunreachable-code -U_FORTIFY_SOURCE -no-pie -D_GNU_SOURCE= -I/usr/src/25/tools/testing/selftests/../../../tools/testing/selftests  -m32 -mxsave  protection_keys.c vm_util.c thp_settings.c pkey_util.c -lrt -lpthread -lm -lrt -ldl -lm -o /usr/src/25/tools/testing/selftests/mm/protection_keys_32
-> gcc -Wall -O2 -I /usr/src/25/tools/testing/selftests/../../..  -isystem /usr/src/25/tools/testing/selftests/../../../usr/include -isystem /usr/src/25/tools/testing/selftests/../../../tools/include/uapi -Wunreachable-code -U_FORTIFY_SOURCE -no-pie -D_GNU_SOURCE= -I/usr/src/25/tools/testing/selftests/../../../tools/testing/selftests  -m32 -mxsave  pkey_sighandler_tests.c vm_util.c thp_settings.c pkey_util.c -lrt -lpthread -lm -lrt -ldl -lm -o /usr/src/25/tools/testing/selftests/mm/pkey_sighandler_tests_32
-> 
-> why did it start emitting the gcc command lines?
+>> On Fri, Mar 27, 2026 at 11:00:26AM -0400, Zi Yan wrote:
+>>> On 27 Mar 2026, at 10:31, Lorenzo Stoakes (Oracle) wrote:
+>>>
+>>>> On Fri, Mar 27, 2026 at 10:26:53PM +0800, Baolin Wang wrote:
+>>>>>
+>>>>>
+>>>>> On 3/27/26 10:12 PM, Lorenzo Stoakes (Oracle) wrote:
+>>>>>> On Fri, Mar 27, 2026 at 09:45:03PM +0800, Baolin Wang wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 3/27/26 8:02 PM, Lorenzo Stoakes (Oracle) wrote:
+>>>>>>>> On Fri, Mar 27, 2026 at 05:44:49PM +0800, Baolin Wang wrote:
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> On 3/27/26 9:42 AM, Zi Yan wrote:
+>>>>>>>>>> collapse_file() requires FSes supporting large folio with at least
+>>>>>>>>>> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that. shmem with
+>>>>>>>>>> huge option turned on also sets large folio order on mapping, so the check
+>>>>>>>>>> also applies to shmem.
+>>>>>>>>>>
+>>>>>>>>>> While at it, replace VM_BUG_ON with returning failure values.
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>>>>>>>>>> ---
+>>>>>>>>>>      mm/khugepaged.c | 7 +++++--
+>>>>>>>>>>      1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>>>>>>>>>> index d06d84219e1b..45b12ffb1550 100644
+>>>>>>>>>> --- a/mm/khugepaged.c
+>>>>>>>>>> +++ b/mm/khugepaged.c
+>>>>>>>>>> @@ -1899,8 +1899,11 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
+>>>>>>>>>>      	int nr_none = 0;
+>>>>>>>>>>      	bool is_shmem = shmem_file(file);
+>>>>>>>>>> -	VM_BUG_ON(!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && !is_shmem);
+>>>>>>>>>> -	VM_BUG_ON(start & (HPAGE_PMD_NR - 1));
+>>>>>>>>>> +	/* "huge" shmem sets mapping folio order and passes the check below */
+>>>>>>>>>> +	if (mapping_max_folio_order(mapping) < PMD_ORDER)
+>>>>>>>>>> +		return SCAN_FAIL;
+>>>>>>>>>
+>>>>>>>>> This is not true for anonymous shmem, since its large order allocation logic
+>>>>>>>>> is similar to anonymous memory. That means it will not call
+>>>>>>>>> mapping_set_large_folios() for anonymous shmem.
+>>>>>>>>>
+>>>>>>>>> So I think the check should be:
+>>>>>>>>>
+>>>>>>>>> if (!is_shmem && mapping_max_folio_order(mapping) < PMD_ORDER)
+>>>>>>>>>         return SCAN_FAIL;
+>>>>>>>>
+>>>>>>>> Hmm but in shmem_init() we have:
+>>>>>>>>
+>>>>>>>> #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>>>>>>>> 	if (has_transparent_hugepage() && shmem_huge > SHMEM_HUGE_DENY)
+>>>>>>>> 		SHMEM_SB(shm_mnt->mnt_sb)->huge = shmem_huge;
+>>>>>>>> 	else
+>>>>>>>> 		shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
+>>>>>>>>
+>>>>>>>> 	/*
+>>>>>>>> 	 * Default to setting PMD-sized THP to inherit the global setting and
+>>>>>>>> 	 * disable all other multi-size THPs.
+>>>>>>>> 	 */
+>>>>>>>> 	if (!shmem_orders_configured)
+>>>>>>>> 		huge_shmem_orders_inherit = BIT(HPAGE_PMD_ORDER);
+>>>>>>>> #endif
+>>>>>>>>
+>>>>>>>> And shm_mnt->mnt_sb is the superblock used for anon shmem. Also
+>>>>>>>> shmem_enabled_store() updates that if necessary.
+>>>>>>>>
+>>>>>>>> So we're still fine right?
+>>>>>>>>
+>>>>>>>> __shmem_file_setup() (used for anon shmem) calls shmem_get_inode() ->
+>>>>>>>> __shmem_get_inode() which has:
+>>>>>>>>
+>>>>>>>> 	if (sbinfo->huge)
+>>>>>>>> 		mapping_set_large_folios(inode->i_mapping);
+>>>>>>>>
+>>>>>>>> Shared for both anon shmem and tmpfs-style shmem.
+>>>>>>>>
+>>>>>>>> So I think it's fine as-is.
+>>>>>>>
+>>>>>>> I'm afraid not. Sorry, I should have been clearer.
+>>>>>>>
+>>>>>>> First, anonymous shmem large order allocation is dynamically controlled via
+>>>>>>> the global interface (/sys/kernel/mm/transparent_hugepage/shmem_enabled) and
+>>>>>>> the mTHP interfaces
+>>>>>>> (/sys/kernel/mm/transparent_hugepage/hugepages-*kB/shmem_enabled).
+>>>>>>>
+>>>>>>> This means that during anonymous shmem initialization, these interfaces
+>>>>>>> might be set to 'never'. so it will not call mapping_set_large_folios()
+>>>>>>> because sbinfo->huge is 'SHMEM_HUGE_NEVER'.
+>>>>>>>
+>>>>>>> Even if shmem large order allocation is subsequently enabled via the
+>>>>>>> interfaces, __shmem_file_setup -> mapping_set_large_folios() is not called
+>>>>>>> again.
+>>>>>>
+>>>>>> I see your point, oh this is all a bit of a mess...
+>>>>>>
+>>>>>> It feels like entirely the wrong abstraction anyway, since at best you're
+>>>>>> getting a global 'is enabled'.
+>>>>>>
+>>>>>> I guess what happened before was we'd never call into this with ! r/o thp for fs
+>>>>>> && ! is_shmem.
+>>>>>
+>>>>> Right.
+>>>>>
+>>>>>> But now we are allowing it, but should STILL be gating on !is_shmem so yeah your
+>>>>>> suggestion is correct I think actualyl.
+>>>>>>
+>>>>>> I do hate:
+>>>>>>
+>>>>>> 	if (!is_shmem && mapping_max_folio_order(mapping) < PMD_ORDER)
+>>>>>>
+>>>>>> As a bit of code though. It's horrible.
+>>>>>
+>>>>> Indeed.
+>>>>>
+>>>>>> Let's abstract that...
+>>>>>>
+>>>>>> It'd be nice if we could find a way to clean things up in the lead up to changes
+>>>>>> in series like this instead of sticking with the mess, but I guess since it
+>>>>>> mostly removes stuff that's ok for now.
+>>>>>
+>>>>> I think this check can be removed from this patch.
+>>>>>
+>>>>> During the khugepaged's scan, it will call thp_vma_allowable_order() to
+>>>>> check if the VMA is allowed to collapse into a PMD.
+>>>>>
+>>>>> Specifically, within the call chain thp_vma_allowable_order() ->
+>>>>> __thp_vma_allowable_orders(), shmem is checked via
+>>>>> shmem_allowable_huge_orders(), while other FSes are checked via
+>>>>> file_thp_enabled().
+>>>
+>>> But for madvise(MADV_COLLAPSE) case, IIRC, it ignores shmem huge config
+>>> and can perform collapse anyway. This means without !is_shmem the check
+>>> will break madvise(MADV_COLLAPSE). Let me know if I get it wrong, since
+>>
+>> Right. That will break MADV_COLLAPSE, IIUC.
+>>
+>> For MADV_COLLAPSE on anonymous shmem, eligibility is determined by the
+>> TVA_FORCED_COLLAPSE path via shmem_allowable_huge_orders(), not by
+>> whether the inode mapping got mapping_set_large_folios() at creation
+>> time.
+>>
+>> Using mmap(MAP_SHARED | MAP_ANONYMOUS):
+>> - create time: shmem_enabled=never, hugepages-2048kB/shmem_enabled=never
+>> - collapse time: shmem_enabled=never, hugepages-2048kB/shmem_enabled=always
+>>
+>> With the !is_shmem guard, collapse succeeds. Without it, the same setup
+>> fails with -EINVAL.
 
-Those two binaries (*_32 / *_64) are built by custom rules in mm/Makefile.
-(Makefile: line #218, #226).
+Right. So my suggestion is that the check should be:
 
-Other tests use shared rules from ../lib.mk, which are quieter (they hide
-full commands and show short CC ... lines).
+if (!is_shmem && mapping_max_folio_order(mapping) < PMD_ORDER)
 
-Maybe we need:
+or just keep a single VM_WARN_ONCE() here, becuase I hope the 
+thp_vma_allowable_order() will filter out  those FSes that do not 
+support large folios.
 
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -215,7 +215,8 @@ ifeq ($(CAN_BUILD_I386),1)
- $(BINARIES_32): CFLAGS += -m32 -mxsave
- $(BINARIES_32): LDLIBS += -lrt -ldl -lm
- $(BINARIES_32): $(OUTPUT)/%_32: %.c
--       $(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-+       $(call msg,CC,,$@)
-+       $(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
- $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
- endif
+>>> I was in that TVA_FORCED_COLLAPSE email thread but does not remember
+>>> everything there.
+>>>
+>>>
+>>>>
+>>>> It sucks not to have an assert. Maybe in that case make it a
+>>>> VM_WARN_ON_ONCE().
+>>>
+>>> Will do that as I replied to David already.
+>>>
+>>>>
+>>>> I hate that you're left tracing things back like that...
+>>>>
+>>>>>
+>>>>> For those other filesystems, Patch 5 has already added the following check,
+>>>>> which I think is sufficient to filter out those FSes that do not support
+>>>>> large folios:
+>>>>>
+>>>>> if (mapping_max_folio_order(inode->i_mapping) < PMD_ORDER)
+>>>>> 	return false;
+>>>>
+>>>> 2 < 5, we won't tolerate bisection hazards.
+>>>>
+>>>>>
+>>>>>
+>>>>>>> Anonymous shmem behaves similarly to anonymous pages: it is controlled by
+>>>>>>> the 'shmem_enabled' interfaces and uses shmem_allowable_huge_orders() to
+>>>>>>> check for allowed large orders, rather than relying on
+>>>>>>> mapping_max_folio_order().
+>>>>>>>
+>>>>>>> The mapping_max_folio_order() is intended to control large page allocation
+>>>>>>> only for tmpfs mounts. Therefore, I find the current code confusing and
+>>>>>>> think it needs to be fixed:
+>>>>>>>
+>>>>>>> /* Don't consider 'deny' for emergencies and 'force' for testing */
+>>>>>>> if (sb != shm_mnt->mnt_sb && sbinfo->huge)
+>>>>>>>          mapping_set_large_folios(inode->i_mapping);
+>>>>>>
+>>>
+>>> Hi Baolin,
+>>>
+>>> Do you want to send a fix for this?
+>>>
+>>> Also I wonder how I can distinguish between anonymous shmem code and tmpfs code.
+>>> I thought they are the same thing except that they have different user interface,
+>>> but it seems that I was wrong.
 
-@@ -223,7 +224,8 @@ ifeq ($(CAN_BUILD_X86_64),1)
- $(BINARIES_64): CFLAGS += -m64 -mxsave
- $(BINARIES_64): LDLIBS += -lrt -ldl
- $(BINARIES_64): $(OUTPUT)/%_64: %.c
--       $(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-+       $(call msg,CC,,$@)
-+       $(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
- $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
- endif
-
-> d) within tools/testing/selftests/mm:
-> 
-> 	make clean
-> 	make -j100
-> 
->    compiles 3-4 things then ends.
-> 
->    A subsequent `make -j1' compiles nothing.
-
-Sorry, I wan't able to reproduce it.
-Did you mean -j100 only build few source file but not the whole?
-
->    Whereas
-> 
-> 	make clean
-> 	make -j1
-> 
->    compiles everything.  Slowly.
-
-Both -j100 and -j1 works well from my test (vm: rhel-9.7, x86_64, gcc-11.5.0)
-
--- 
-Regards,
-Li Wang
-
+Sure. I can send a patch to make the code clear.
