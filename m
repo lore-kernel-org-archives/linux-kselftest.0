@@ -1,169 +1,71 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE8E3590CD
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 17:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F66149C6F;
+	Sat, 28 Mar 2026 21:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774718681; cv=none; b=nOrTe9b1grG59RMda4rOdYTWkD7Z/OgtwJruKA0oOusR+dHWwMNgj/4K1PfLMyzHAHXAnFYmH/j/rh3L/pha6E6GCFaxu7oohi3lTagi7PW2mYwgx4CflrusfIUu9Cifh7lmZURG1oY1g+fn4FXIHb75F8vbQfJdZhb8GWyyPXk=
+	t=1774731792; cv=none; b=sW6QorYBqN41G1D85xi68drUsxklBm9wzs/bD61dj03s27gSQMQYWHVBhS8u2LvBNGkzo0uDQMQQ2n+tbG3W9cuShrgU11SB7mq2MO22Zb1c3tuBCQKmyRlY9uIliJQh4hTPgMlBXXc1B6zjMwoR6fH6hfABONmmZRtkbJv/K60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774718681; c=relaxed/simple;
-	bh=EKC+gjybz5QCo3/A2SoLkAdJ9dHzP8glwvLLU31BmCA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SbZUoO+XTI2AeRtYfdsQ4iz1n1o3NE7mqcrMu3lruIDldoYo8rr/qjlTTXc8uY3LtLsZsf/v6A6VHzSf5uILpTyH7g1nlWs+oulRZPkKNMqG5+AG88hJPJgMqMGeoLRuXhhIMXt/2NhkBAiz6FzxMtgIuIlBIL7wF1F2u0cLNGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sy39ev+Y; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774731792; c=relaxed/simple;
+	bh=fASIccO/WUQzqpPRgf4C+i8dkWYgpGQO3RZFoS2eejc=;
+	h=Date:From:To:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=VHBSEgNgIBKfaYt/n72ErP5ioz550b/yruid+stWVmMVAqe+jo+6iIK7GtDN0mUw+uA+cusTVFpEpnnLHHHAhW6qwZycqHK5hZUli9TpzuYXdlRsBCnpZ5caNMzBksGSMstwT72w5Oao4g6sz2NaEJkiVGN82Eok4onsw3ki2BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=bFsA+8iz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sy39ev+Y"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35691a231a7so1909684a91.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 10:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774718679; x=1775323479; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cE+gTqS6Acm3OjdFoCwcpAog50aFpqNiNU85af164dY=;
-        b=Sy39ev+YkaB+KPsi1XAs4pyTqpWDmmoH72QwZXEGTQq1QlboeGJWmYKxoqtg6gn41k
-         YmK6kJvrsEL9BzLhgPWUUm0/ZZdVfkAD98gMPFCDaf4retCZzzOdlIb71Atq12Jx9fTd
-         jzDDdFCg6vTtCgauFJqsGyCF2zJUPWbmn4yjivFB43fgCk/BWGtOOgQuyhKh2+2oaOqf
-         mTzlitOp5a9pqYZu7J9vBOwBmFVVQA0TIuKNqe3Iv4K6/8bmw5B1L7xJLj/4MZOsqWhA
-         W1KjDh8CKcEgp5Cryqh+moIxfcFxsnCUQZys9Z8rb6YLeH39Jee1LOeRM05Yk0LqhHTI
-         GSiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774718679; x=1775323479;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cE+gTqS6Acm3OjdFoCwcpAog50aFpqNiNU85af164dY=;
-        b=loOQOZYYMqqHVl6CTuheShGGi1m46stuvxD57NmVpc12vWIAO9JPMCU13j2RoNIu8M
-         FGR5ifRa1MrV8of0czZvasmNGM+T4DlejyCgxBMJJ17OK/biqKsUOwHO+XHWfyEs9x3G
-         sYzKZS+m9XG3nrfokeLIPrhThBFqwGeSMvDvJ8SjDUL6Psp7Y6KJDVF7SJkkDnoJY3w5
-         fxhrsO0laoUO8KmyVxP2eDFeVHmor0pjX9Zghk5xJ8Twaz8B7WxRPEJkwdrg2t+mOcrl
-         dPOytxrGg4MyztzsVgH4sK4dcrNzVH50GGV5s/1ZnSD6b8KxtYXYnpqq2a2+C/lCmswp
-         5LuA==
-X-Forwarded-Encrypted: i=1; AJvYcCWHs5WhrkF+X4r47dyTLMo4uM756mNJSuBxZl2BUWyRfP7U5U5zpXM9wr2dfCDT07kJVkLx6m2lyw3CmaJ4RlE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKltMKRdY5ZsduY+P7NnW/hnUtNJY9TWex9seGBJbAp6XbQpNE
-	MtfVZp9VSl+1yDpdLHX+3QmBpskZf2Xk4ylpkKez5U7LuVeWr8or0EO6
-X-Gm-Gg: ATEYQzx2s6CFxHBu17MWXYELQk+7kyePtg+AwZPAFnct3xmDwaDjfvLVfBJerdO8wE7
-	b49bGQ7/uSKrAK05uqOy9G3MfBgWr5PxNy3nweemiuek0ouTrLAsfuddpTV6N6IdsJsDEjoLl5S
-	p50FuFe17NbQVhfKzXT1Z6lw/CQFUBEeXwV+GTPodvn1ldSETQH6gNktHWUZqdWUHR8MP/hDAje
-	EZIlzYLQbqy07XIW0cg+k1Sg7/olHnQ7SOsNnUVxiYpEb1fJWkAHb4zEIo5IeD8wQfQODHy+xke
-	pIr8ZkdZ6d4WrhjPaRMi69adlXL2WqCFBt9Sm+D9UIyGA4vTcG9U2oR94Cl9diGwXYwEwDvY3Pl
-	tU9ZH4sx3SN+U1JlkAkBuUe3014l7Tl+GLM42TL+MsGFuNNRiM+0B6hnvLQD4RgQdo+LWAd79Dy
-	SJ6Dkkq96j4GEfVUUpuFEzmGK/o5H4I6ZaX6eyvTjAYEd5+mQMuPOgW3A=
-X-Received: by 2002:a17:90a:da8d:b0:356:22ef:57ba with SMTP id 98e67ed59e1d1-35c2ff1be2cmr6736609a91.7.1774718678998;
-        Sat, 28 Mar 2026 10:24:38 -0700 (PDT)
-Received: from toolbx ([103.103.35.11])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c22a5570esm10513773a91.3.2026.03.28.10.24.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2026 10:24:38 -0700 (PDT)
-From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	ceph-devel@vger.kernel.org,
-	gfs2@lists.linux.dev,
-	linux-nfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org,
-	v9fs@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	jlayton@kernel.org,
-	chuck.lever@oracle.com,
-	alex.aring@gmail.com,
-	arnd@arndb.de,
-	adilger@dilger.ca,
-	mjguzik@gmail.com,
-	smfrench@gmail.com,
-	richard.henderson@linaro.org,
-	mattst88@gmail.com,
-	linmag7@gmail.com,
-	tsbogend@alpha.franken.de,
-	James.Bottomley@HansenPartnership.com,
-	deller@gmx.de,
-	davem@davemloft.net,
-	andreas@gaisler.com,
-	idryomov@gmail.com,
-	amarkuze@redhat.com,
-	slava@dubeyko.com,
-	agruenba@redhat.com,
-	trondmy@kernel.org,
-	anna@kernel.org,
-	sfrench@samba.org,
-	pc@manguebit.org,
-	ronniesahlberg@gmail.com,
-	sprasad@microsoft.com,
-	tom@talpey.com,
-	bharathsm@microsoft.com,
-	shuah@kernel.org,
-	miklos@szeredi.hu,
-	hansg@kernel.org
-Subject: [PATCH v6 4/4] mips/fcntl.h: convert O_* flag macros from hex to octal
-Date: Sat, 28 Mar 2026 23:22:25 +0600
-Message-ID: <20260328172314.45807-5-dorjoychy111@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260328172314.45807-1-dorjoychy111@gmail.com>
-References: <20260328172314.45807-1-dorjoychy111@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="bFsA+8iz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B24C4CEF7;
+	Sat, 28 Mar 2026 21:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1774731791;
+	bh=fASIccO/WUQzqpPRgf4C+i8dkWYgpGQO3RZFoS2eejc=;
+	h=Date:From:To:Subject:In-Reply-To:References:From;
+	b=bFsA+8izQRCwFFsAbpkIAI12l0+fZIKBanlnqUpFcy6XbQIkBLE3Sh48QAMFvRwki
+	 mLka7P/1zzsWx4qZnLUWwbvz4O5K9WlC3ufq8ktwxGjOZKxi3QFAorq9ls5PDHKabs
+	 RuoWsZGIUi1k/yIj1U/jJPbs1kYzFidKMMFbxajQ=
+Date: Sat, 28 Mar 2026 14:03:11 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Li Wang <liwang@redhat.com>, linux-kbuild@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: tools/testing/selftests
+Message-Id: <20260328140311.d6ce99302f93923b0cffb441@linux-foundation.org>
+In-Reply-To: <20260328135650.435b415f8c00835b2fa471e0@linux-foundation.org>
+References: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
+	<acc49s7jbI9Q3a4f@redhat.com>
+	<20260328135650.435b415f8c00835b2fa471e0@linux-foundation.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Following the convention in include/uapi/asm-generic/fcntl.h and other
-architecture specific arch/*/include/uapi/asm/fcntl.h files.
+On Sat, 28 Mar 2026 13:56:50 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
 
-Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
----
- arch/mips/include/uapi/asm/fcntl.h | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+> On Sat, 28 Mar 2026 10:12:06 +0800 Li Wang <liwang@redhat.com> wrote:
+> 
+> > > from the top level?
+> > 
+> > Should use:
+> > 
+> >     make kselftest
+> 
 
-diff --git a/arch/mips/include/uapi/asm/fcntl.h b/arch/mips/include/uapi/asm/fcntl.h
-index 0369a38e3d4f..6aa3f49df17e 100644
---- a/arch/mips/include/uapi/asm/fcntl.h
-+++ b/arch/mips/include/uapi/asm/fcntl.h
-@@ -11,15 +11,15 @@
- 
- #include <asm/sgidefs.h>
- 
--#define O_APPEND	0x0008
--#define O_DSYNC		0x0010	/* used to be O_SYNC, see below */
--#define O_NONBLOCK	0x0080
--#define O_CREAT		0x0100	/* not fcntl */
--#define O_TRUNC		0x0200	/* not fcntl */
--#define O_EXCL		0x0400	/* not fcntl */
--#define O_NOCTTY	0x0800	/* not fcntl */
--#define FASYNC		0x1000	/* fcntl, for BSD compatibility */
--#define O_LARGEFILE	0x2000	/* allow large file opens */
-+#define O_APPEND	0000010
-+#define O_DSYNC		0000020	/* used to be O_SYNC, see below */
-+#define O_NONBLOCK	0000200
-+#define O_CREAT		0000400	/* not fcntl */
-+#define O_TRUNC		0001000	/* not fcntl */
-+#define O_EXCL		0002000	/* not fcntl */
-+#define O_NOCTTY	0004000	/* not fcntl */
-+#define FASYNC		0010000	/* fcntl, for BSD compatibility */
-+#define O_LARGEFILE	0020000	/* allow large file opens */
- /*
-  * Before Linux 2.6.33 only O_DSYNC semantics were implemented, but using
-  * the O_SYNC flag.  We continue to use the existing numerical value
-@@ -33,9 +33,9 @@
-  *
-  * Note: __O_SYNC must never be used directly.
-  */
--#define __O_SYNC	0x4000
-+#define __O_SYNC	0040000
- #define O_SYNC		(__O_SYNC|O_DSYNC)
--#define O_DIRECT	0x8000	/* direct disk access hint */
-+#define O_DIRECT	0100000	/* direct disk access hint */
- 
- #define F_GETLK		14
- #define F_SETLK		6
--- 
-2.53.0
+I'm probably doing something wrong, but `make -j50 kselftest-all'
+appears to have scribbled on my top-level Makefile, so now I'm getting
 
+ts:/usr/src/25> make kselftest-all 
+/usr/src/25/Makefile:5: *** Too many open files.  Stop.
+
+ts:/usr/src/25> cat Makefile
+# Automatically generated by /usr/src/25/Makefile: don't edit
+export KBUILD_OUTPUT = .
+export KBUILD_EXTMOD = /usr/src/25
+export KBUILD_EXTMOD_OUTPUT = /usr/src/25
+include /usr/src/25/Makefile
+
+I've done this twice in succession now.  Any suggestions where I should
+look?
