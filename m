@@ -1,65 +1,241 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1DC52222C5;
-	Sun, 29 Mar 2026 17:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744C2386578;
+	Sun, 29 Mar 2026 18:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774805339; cv=none; b=tImilwltYO/kWuWslYBQmUP986dHwp1bfE8rA0k5fN98OEJ1ZZQUBEwanreivgE5TUnTBHPYZQ8nPq/7ERqbq906r24duUP+yHbd2sI32gT0dxO1MC4CO7Ufw5Rbn2TDkKjS/bN8RAN3L/3slo7jpRtWSbrPQTI+aC6I2PDazE4=
+	t=1774807480; cv=none; b=nflXGRU7BfdSJQagjlDtMLrS2h1x3oHOOkuVuC5YupBXGb9Mkc2/MfJaKrrbNtdcwU/nDQlDAp/7C/QZ63OViY8xOz+z2Nsna1GQca8BUm7uCZRyLFcNtC9O+NBNAyQwb8UCiKy6WT4aAoDmXRX3SGrN7qJfWbzSokbaeJ0A/mY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774805339; c=relaxed/simple;
-	bh=oZkNJFwRMBUJPUgRLYjcVEySOTzxsy6JnxlH6Js23T0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WqfRL96PJangbaNp6uftK7EYstaKajyiAJm7vLyI1urTUXHR41lB621FT1PNqp78WXck7cAnxH5MH74qdZ9+7H4CjhhKly69t6eQMNxjGXfuMaPjEu2lOFp/iPGUXW2NkkNg4ApuBR8rNS6ky9uJ4CBWZ9329m+DUhIRsKf1SZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XG0aBaRA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774807480; c=relaxed/simple;
+	bh=RQmJSTgeYlHzTm6YHQv+LZXZKDSGYerO9dS13cpXStY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Hc2MSFbmPHd73e1ZML25LpVOezynU84eg2lzKqhESF+sZD0TTZ0luywg/N79WEM5Dz06r4xcRg1b7teH4o/KnjzIMMKvGRCTtOScA24WNEYrxjfhuV3toUsKkOCf9S2Gtg3d+91FJY5tAqteeudNl743pDgNyzd9dswZMilwzC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwtRQY79; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XG0aBaRA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F1BC116C6;
-	Sun, 29 Mar 2026 17:28:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwtRQY79"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4148EC2BCB4;
+	Sun, 29 Mar 2026 18:04:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774805339;
-	bh=oZkNJFwRMBUJPUgRLYjcVEySOTzxsy6JnxlH6Js23T0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XG0aBaRAbsvpFIMFDRWYoB/lu4EWuZIjgsNcuOyvsXA/8b7dPbslnyihrOtTiCOyG
-	 Uw0Ta6bNt+gwXWb4rjnAWPusOyViXuID+1Cbk7sEZ2HGF/Fnss9BOXhGPu78wKoSfd
-	 upFSId4sVl8IWVnj0TWf2+slkKcNXyTVXI4sTc85i9C1CWn/KON8YRtfKID6haqPvx
-	 zBuodR9HS59IKhAP+WjI32K1B2jceU98q+SPZ5pWDiyP5H98EmOL6uZMlm2XBy7XB2
-	 QB6YdGQbeKZqbVw8qHYynLfl/tQaKXrN8z+RK1O4NNwfPqkSgr1Fo0jfTUKEo8KC7s
-	 1tVgRM2ONT+9A==
-Date: Sun, 29 Mar 2026 10:28:57 -0700
+	s=k20201202; t=1774807480;
+	bh=RQmJSTgeYlHzTm6YHQv+LZXZKDSGYerO9dS13cpXStY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=IwtRQY79J1cVcilTK8krJfV5OIFLSUQKrxlcu5IZUTHbJU7nrGabCGU4Yco0QgZ4d
+	 oZTw/EmkjzWTavPB2AAbU1TYnKeJxSxkrBFHYn4FEn7PzK61Xmf5cpPmQ8NblYdSD1
+	 XQQ0BthWbwdzV0poMovwrOhO4+toDINjIu4/LEs/EamcxcJZxnKmOK2+bX1I3NcVvl
+	 N4FxFxWBBLfDuPTHG4eeTXKPjBVvJLy3ApQdT0Ub9NJvFJY8sRNkaxgLaTVvs82Z4Q
+	 67FukvqIQxb/QY8xt0Lt0ZpyYh/OUMyXI3XYfFFpehpRt3XSiOEdhBBC3zBYcU9Kdl
+	 Fb0uy/+4Jz0pA==
 From: Jakub Kicinski <kuba@kernel.org>
-To: Andy Roulin <aroulin@nvidia.com>
-Cc: netdev@vger.kernel.org, bridge@lists.linux.dev, Nikolay Aleksandrov
- <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>, Donald Hunter
- <donald.hunter@gmail.com>, Jonas Gorski <jonas.gorski@gmail.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/3] net: bridge: add stp_mode attribute for
- STP mode selection
-Message-ID: <20260329102857.621a0c26@kernel.org>
-In-Reply-To: <20260329025858.330620-1-aroulin@nvidia.com>
-References: <20260329025858.330620-1-aroulin@nvidia.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: test that dst is cleared on same-protocol encap
+Date: Sun, 29 Mar 2026 11:04:28 -0700
+Message-ID: <20260329180428.2657785-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260329180428.2657785-1-kuba@kernel.org>
+References: <20260329180428.2657785-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Sat, 28 Mar 2026 19:58:55 -0700 Andy Roulin wrote:
-> The bridge-stp usermode helper is currently restricted to the initial
-> network namespace, preventing userspace STP daemons like mstpd from
-> operating on bridges in other namespaces. Since commit ff62198553e4
-> ("bridge: Only call /sbin/bridge-stp for the initial network
-> namespace"), bridges in non-init namespaces silently fall back to
-> kernel STP with no way to request userspace STP.
+Verify that bpf_skb_adjust_room() clears the routing dst even when
+the encap L3 protocol matches the original packet (e.g. IPIP).
+The dst selected for the inner packet is not valid for the
+encapsulated result; a stale dst could lead to misrouting.
 
-Does not build, try:
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: andrii@kernel.org
+CC: eddyz87@gmail.com
+CC: ast@kernel.org
+CC: daniel@iogearbox.net
+CC: martin.lau@linux.dev
+CC: song@kernel.org
+CC: yonghong.song@linux.dev
+CC: john.fastabend@gmail.com
+CC: kpsingh@kernel.org
+CC: sdf@fomichev.me
+CC: haoluo@google.com
+CC: jolsa@kernel.org
+CC: shuah@kernel.org
+CC: bpf@vger.kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ .../selftests/bpf/prog_tests/test_dst_clear.c | 75 +++++++++++++++++++
+ .../selftests/bpf/progs/test_dst_clear.c      | 57 ++++++++++++++
+ 2 files changed, 132 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_dst_clear.c
 
- make -C tools/net/ynl/
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
+new file mode 100644
+index 000000000000..8190c56556fb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <net/if.h>
++
++#include "test_progs.h"
++#include "network_helpers.h"
++#include "test_dst_clear.skel.h"
++
++#define NS_TEST "dst_clear_ns"
++#define IPV4_IFACE_ADDR "1.0.0.1"
++#define UDP_TEST_PORT 7777
++
++void test_dst_clear(void)
++{
++	LIBBPF_OPTS(bpf_tc_hook, qdisc_hook, .attach_point = BPF_TC_EGRESS);
++	LIBBPF_OPTS(bpf_tc_opts, tc_attach);
++	struct nstoken *nstoken = NULL;
++	struct test_dst_clear *skel;
++	struct sockaddr_in addr;
++	socklen_t addrlen;
++	char buf[128] = {};
++	int sockfd, err;
++
++	skel = test_dst_clear__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
++		return;
++
++	SYS(fail, "ip netns add %s", NS_TEST);
++	SYS(fail, "ip -net %s addr add %s/8 dev lo", NS_TEST, IPV4_IFACE_ADDR);
++	SYS(fail, "ip -net %s link set dev lo up", NS_TEST);
++
++	nstoken = open_netns(NS_TEST);
++	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
++		goto fail;
++
++	qdisc_hook.ifindex = if_nametoindex("lo");
++	if (!ASSERT_GT(qdisc_hook.ifindex, 0, "if_nametoindex lo"))
++		goto fail;
++
++	err = bpf_tc_hook_create(&qdisc_hook);
++	if (!ASSERT_OK(err, "create qdisc hook"))
++		goto fail;
++
++	tc_attach.prog_fd = bpf_program__fd(skel->progs.dst_clear);
++	err = bpf_tc_attach(&qdisc_hook, &tc_attach);
++	if (!ASSERT_OK(err, "attach filter"))
++		goto fail;
++
++	addrlen = sizeof(addr);
++	err = make_sockaddr(AF_INET, IPV4_IFACE_ADDR, UDP_TEST_PORT,
++			    (void *)&addr, &addrlen);
++	if (!ASSERT_OK(err, "make_sockaddr"))
++		goto fail;
++	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
++	if (!ASSERT_NEQ(sockfd, -1, "socket"))
++		goto fail;
++	err = sendto(sockfd, buf, sizeof(buf), 0, (void *)&addr, addrlen);
++	close(sockfd);
++	if (!ASSERT_EQ(err, sizeof(buf), "send"))
++		goto fail;
++
++	ASSERT_TRUE(skel->bss->had_dst, "had_dst");
++	ASSERT_TRUE(skel->bss->dst_cleared, "dst_cleared");
++
++fail:
++	if (nstoken) {
++		bpf_tc_hook_destroy(&qdisc_hook);
++		close_netns(nstoken);
++	}
++	SYS_NOFAIL("ip netns del " NS_TEST);
++	test_dst_clear__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_dst_clear.c b/tools/testing/selftests/bpf/progs/test_dst_clear.c
+new file mode 100644
+index 000000000000..7ac9604fd99c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_dst_clear.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include "vmlinux.h"
++#include "bpf_tracing_net.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++#define UDP_TEST_PORT 7777
++
++void *bpf_cast_to_kern_ctx(void *) __ksym;
++
++bool had_dst = false;
++bool dst_cleared = false;
++
++SEC("tc")
++int dst_clear(struct __sk_buff *skb)
++{
++	struct sk_buff *kskb;
++	struct iphdr iph;
++	struct udphdr udph;
++	int err;
++
++	if (skb->protocol != __bpf_constant_htons(ETH_P_IP))
++		return TC_ACT_OK;
++
++	if (bpf_skb_load_bytes(skb, ETH_HLEN, &iph, sizeof(iph)))
++		return TC_ACT_OK;
++
++	if (iph.protocol != IPPROTO_UDP)
++		return TC_ACT_OK;
++
++	if (bpf_skb_load_bytes(skb, ETH_HLEN + sizeof(iph), &udph, sizeof(udph)))
++		return TC_ACT_OK;
++
++	if (udph.dest != __bpf_constant_htons(UDP_TEST_PORT))
++		return TC_ACT_OK;
++
++	kskb = bpf_cast_to_kern_ctx(skb);
++	had_dst = (kskb->_skb_refdst != 0);
++
++	/* Same-protocol encap (IPIP): protocol stays IPv4, but the dst
++	 * from the original routing is no longer valid for the outer hdr.
++	 */
++	err = bpf_skb_adjust_room(skb, (s32)sizeof(struct iphdr),
++				  BPF_ADJ_ROOM_MAC,
++				  BPF_F_ADJ_ROOM_FIXED_GSO |
++				  BPF_F_ADJ_ROOM_ENCAP_L3_IPV4);
++	if (err)
++		return TC_ACT_SHOT;
++
++	dst_cleared = (kskb->_skb_refdst == 0);
++
++	return TC_ACT_SHOT;
++}
++
++char __license[] SEC("license") = "GPL";
+-- 
+2.53.0
+
