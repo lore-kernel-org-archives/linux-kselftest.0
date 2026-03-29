@@ -1,84 +1,83 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9303E36E46F
-	for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 12:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D6436EAA4
+	for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 14:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774788290; cv=none; b=MqkjMUehrNda3mDZlFQuSYLnRpYc8MQpk1fCKJmCK6OyHwlaNrn55SZSx6UHBlzvFYxOZB888M/ZmlulKx5rQddqr6Zk9NVPSXN3jb72Jnae9DnaYIubqQqT0KFQtM0+OLZaG/ciztUK3aioP0UwjwUTe2hAKRnAI+LAgrGLBDo=
+	t=1774793119; cv=none; b=c3N7V/0tvV+/DUO9S4onyr35Lqxf4F6AY3c+6kkF8vTChD5b4nBjfvz8Oj3A3MSUyznm94wkupmy8ub4k6kbj6VZ/NCPadpaTpymzFewMDqOgi2cG5N19VWrpYmHj9kuk7hsbRODZzYuLyqOKRzqRItlvwSBa3cp62x5Ksp5bo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774788290; c=relaxed/simple;
-	bh=yCgWS18J2giAmIBQJwNeZ4CV5RD/8KYMOj8QP1lNVww=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bfCILU6iAJa1PWNr1K9Cy5drBzC4MoCTleR65TX1nxFRZhjhNPzRZrSYm8y2awOzzIul7yC8lPTeQSQ+I/WtYXMVi/TTlTSMrA9jJ6I3fj4U/L1Hf351YwpCvcW9ebvgJGeCApZVx8+QSeV5ioRwunh4qCMNXxsGTQUBIXAFrOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZOROEA5u; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1774793119; c=relaxed/simple;
+	bh=+ne+0mmU+TH4johwejMARgSVXL4tRCNd1WonWRkY57I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dy4AETW+jVcZR7nSnmIKxFKvrkNQxKYIxjgObQ0F7fof8Du0gMlg/6UtYzH17i0Au81bX1vnPlA3B1vvmZbDc7VMl6r/7qtZjihAjuPUFIVsgo2XwRVk5kOk6RL4wCQEhCFg2EN+NDy+rN3WfXsC94aM0S6daXCd6arsvnCzqkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GD9XWZqj; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZOROEA5u"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-486fc4725f0so34481595e9.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 05:44:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GD9XWZqj"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35d90833cacso850636a91.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 07:05:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774788285; x=1775393085; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FIyVVbIGIEKVOI7GAfRAoypwiecz72p9gSCxjoyNoLk=;
-        b=ZOROEA5uTJXY4guSfQRL21SB2P+O2QpdlIneL13j8mCLzs1CZnMf+Ok3fSl8+fABrH
-         oE+WF9zy98g2gJAX2AT1FWPyr5q3CFq29sk94YVGI1mDd/EpEdEdLRcyGwcK8SF1hHza
-         vJVfFuvMetGrp2a6nZuhOBqP9zmtC1Lq/r0p781t3Ah9elKehGJi6DCGCeF8uoo1/Aal
-         pn2NIHaVmH/BcJ+WlVDl0yfXcKCCdpTyq+7AW0d+tE6iVHAt3VNGXpNdqvpf3AeUcN0P
-         rmkqyrh+Lpx+WoETNKKsRaR5wPpN+aXOZVbqRlLaLYfW+9CtLqMVJFIjrtuqs5LWRCVC
-         hSpQ==
+        d=gmail.com; s=20251104; t=1774793118; x=1775397918; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/P2cEhfTAZlAAcFjnHzMCawVs7idJ1YVuxYar8E7U3Y=;
+        b=GD9XWZqjbndriGL0qBI4hIC2Ey54fLsMVNXfUlkiT6DcIXzLR170m2rC3isLveFQyM
+         vmVDGjRM0YSURXdZCpcTo0K1ELjwA+Zud+UEdxBHjJ6zsEr/Epl4ViNqBzGbdT6HztMj
+         Eri/bniTE4NDykFqGVEEsjdeTmhfmhJ54nXltnsEU2s0M3Z/Nt9x5XME5+GwvlWeAIEF
+         ao6LYPUgD4oVf68upI1fRrQoRDxSWl3rYvycs8/EY72YefjrukcxpjUyWpAMCEAI79ss
+         z5fgNaj1egrvoH8fe00R7ShN57imepUNKpPl2TgCMy3KnNLItpLj+5ruhxH4PkcH4ru2
+         gaWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774788285; x=1775393085;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FIyVVbIGIEKVOI7GAfRAoypwiecz72p9gSCxjoyNoLk=;
-        b=sf5RGTZsop7Brusjcu7nvNam8TPUXRGrgdKwJsptVcFnt4QTPBmY0UMyV9maoThtAR
-         eijeFyDT2PZHrIEG7NvBIlGusoXdGFj+X8BCHqH2lVK8T3SBBLSCgWFZl0J1E0o7nyYT
-         98IX1T3RKna3MqpZGXmq8BMu9pRfVE+KyayE5ZZyLvs1NI9QGjqV3tuQ2IHiHWxZA+1Y
-         eOPliIxrqo+gb8os+XrcPu3zxiwy9YH3uDBIrGnx0QdtNen8dTRZn2Sd16Z+/VIRSvt0
-         4SgZWg0Fne/YsuhoamqPZlbMyaOfDxpG01ZdHHJIwrRGl1voq/EGhS3ABLjeMz2C1Iuu
-         8IGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWfBmFX7UslCrMiV0o7IQwyEkQ5WWN4fJiOx+5WqgfzPK8K4f2n6mz1Np+bM65VydFZfzc2YYw/DLQyCJKo6Ow=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywaemli5rQ7R6upbWHYsjghZ7xuOHkKI8eQrItH6e57aA9O/Dwc
-	V39ruR6S9F/UFxvL6gL0tmODMnYS7cXsP9Uvov53OoyKvxHp5iIEMNUxBgzzYLh3JxU=
-X-Gm-Gg: ATEYQzyVcnRuoD2OhoIOc4Vlw7bXoyXbaAvvnzmm3PA4lzLpu57Lasf+wDinYwS17Db
-	dW5lZA794kIN/dUVf2EEoCsVJzh1MvsBygh+YV7uqHtbi0CG7Z2kJN4k9HdUYvmmj3kEyRfnt5C
-	D92E6iNY4exOguhKtP5PXGq6+JQye4q2fm/NwjSnwhATaXmmHxvk0FoePxTkGzA7P3jo0usLAQ5
-	zWOIJS9teKVq/JE4gioWcUqNYFmNS1djqjdrLbPI5lszXV8mxCJo+YLy/tAZSkXC51aD9rGvb+o
-	qjvLxk9AWgFxUYAI48prxoDKwkeG9TmI70iTuH8qVa9rh6oSxdtrU7ra96OkBjfGQ/iPbm9zIZ5
-	ZBQ+iPZGrYFCpwAnHEGLcnrAyrp9vW5kp3n4lQzvMYqc4/oUiZD6qeDrl5rJRvEHQpDq8mpWG/B
-	YuXPkbyIIq5b28plH17m7hrVEQU+racS7BG2fa43gqkNCPiy1IaKQ8pPhSZQBPcA==
-X-Received: by 2002:a05:600c:2d82:b0:487:467:49e9 with SMTP id 5b1f17b1804b1-48722b92fcfmr118383365e9.7.1774788284911;
-        Sun, 29 Mar 2026 05:44:44 -0700 (PDT)
-Received: from f16.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76916da892sm3700321a12.14.2026.03.29.05.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 05:44:43 -0700 (PDT)
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	linux-kselftest@vger.kernel.org,
+        d=1e100.net; s=20251104; t=1774793118; x=1775397918;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/P2cEhfTAZlAAcFjnHzMCawVs7idJ1YVuxYar8E7U3Y=;
+        b=bMB6DAbCjfRTmNj+TZ2KZgoVddcpdZcY4v8eltKp7Z0X2Lok3cjdVchxLJhJGkL4HB
+         FTTUI2DF7shvVOxdT4X/TdWBudzGR06KyINIXaMwQEFzw/Khdgp779XmqkAbVL9Ri2J2
+         XVxAKVB/rmGWQ6Sd1QCZM9v3TewXFryqwq+YBmm8qo6it+M34ZnJW4vQwdlUkZlsaC+c
+         AZYfyAdvS6sRniglxsjEIictZrfJK096eIsN/vIboK6rIenFhMsVwqAHeElcE7LXsGIB
+         TBmtCuqmGX8W4utdNagoMuljR2H5nn0lc6Bc63liSEFLiUv/EqPkiZfHsOS1S8J3C0pR
+         unPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWvYA8FppXzrL0su4KqDchBC5TuysVsE3KVL+LDNIE+UdvVSm8CifpHiusUqG7bZIq4MQ0TZspHL6pb1hAf0Mk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOF9zTSVSjZgOQP3nhCySo9xHwYTd5dTGh9/80OV97mQTFfXI4
+	vF6Wg4ZIYJof3ohXKbAkViYgk4n6Daj1mckhd2CsaVjG8cKyjoBmLsj+
+X-Gm-Gg: ATEYQzyqw0wJSAvIxz5Qm1K6NEKtMZfsoZ3vwcbJciSxC1hpJwQb6ALs7A4U73qbD7s
+	CNiNse138GjzRTVayH603uHylQimziUeS9jLwMg5tm1C+pOarrFNkHO4L9JAlgj0APHL9nb7UVh
+	ryDmBE2V/X2DNkyf41P0lx2PH5KSyiAGL1kI6kUfe4QpEBnEs7eRobWzoCSwr90qGC1xlEtSe0j
+	7e+6WrG3V1+480vkHfP1Xthm0cWTK9FQ4yvBBXyDaZj2pXvPIk4tIMRizGml+yOest4/ny7TVQi
+	MOkWvAWT51qm0LjH9N88f3ooLPgrs8a8kbFYET7LAE+MxBU6O4OfQvZ2Pm3a2aH+eQFwOlIWIMZ
+	YzbFACnMrXhJx32tzxH8O8kA2Gufe5h9DWYDwKbjyYtLLH8VhOwftH1QquM0s2ot7pscV25tkCx
+	7hG+v5qzUThf95Cch+wD3BTIJEHudAb8ZXCqZ+L1JXMx3Cr0KsNy6MnJr1fyGEIcIW
+X-Received: by 2002:a17:90b:4c0c:b0:35b:e554:53a6 with SMTP id 98e67ed59e1d1-35c2ff8c23emr9330644a91.11.1774793117775;
+        Sun, 29 Mar 2026 07:05:17 -0700 (PDT)
+Received: from localhost.localdomain ([113.218.252.111])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35d950bd630sm4417454a91.16.2026.03.29.07.05.12
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 29 Mar 2026 07:05:17 -0700 (PDT)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add test for address-based single kprobe attach
-Date: Sun, 29 Mar 2026 21:43:39 +0900
-Message-ID: <20260329124429.689912-3-hoyeon.lee@suse.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260329124429.689912-1-hoyeon.lee@suse.com>
-References: <20260329124429.689912-1-hoyeon.lee@suse.com>
+Subject: [PATCH bpf-next v9 0/9] bpf: Extend the bpf_list family of APIs
+Date: Sun, 29 Mar 2026 22:04:57 +0800
+Message-ID: <20260329140506.9595-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,86 +86,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, attach_probe covers manual single-kprobe attaches by
-func_name, but not by raw address. This commit adds address-based
-single-kprobe attach subtests for the two underlying attach paths,
-legacy tracefs/debugfs and PMU-based non-legacy. The new subtests
-resolve SYS_NANOSLEEP_KPROBE_NAME through kallsyms, pass the result
-through bpf_kprobe_opts.addr, and verify that kprobe and kretprobe are
-still triggered.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
----
- .../selftests/bpf/prog_tests/attach_probe.c   | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported. The patches enhance the BPF list API, making it more
+list-like.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 9e77e5da7097..64f2ed75779d 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -123,6 +123,51 @@ static void test_attach_probe_manual(enum probe_attach_mode attach_mode)
- 	test_attach_probe_manual__destroy(skel);
- }
- 
-+/* manual attach address-based kprobe/kretprobe testings */
-+static void test_attach_kprobe_by_addr(enum probe_attach_mode attach_mode)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	struct bpf_link *kprobe_link, *kretprobe_link;
-+	struct test_attach_probe_manual *skel;
-+	unsigned long func_addr;
-+
-+	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
-+		return;
-+
-+	func_addr = ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
-+	if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
-+		return;
-+
-+	skel = test_attach_probe_manual__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
-+		return;
-+
-+	kprobe_opts.attach_mode = attach_mode;
-+	kprobe_opts.retprobe = false;
-+	kprobe_opts.addr = func_addr;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						      NULL, &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_by_addr"))
-+		goto cleanup;
-+	skel->links.handle_kprobe = kprobe_link;
-+
-+	kprobe_opts.retprobe = true;
-+	kretprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+							 NULL, &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe_by_addr"))
-+		goto cleanup;
-+	skel->links.handle_kretprobe = kretprobe_link;
-+
-+	/* trigger & validate kprobe && kretprobe */
-+	usleep(1);
-+
-+	ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_res");
-+	ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_res");
-+
-+cleanup:
-+	test_attach_probe_manual__destroy(skel);
-+}
-+
- /* attach uprobe/uretprobe long event name testings */
- static void test_attach_uprobe_long_event_name(void)
- {
-@@ -416,6 +461,10 @@ void test_attach_probe(void)
- 		test_attach_probe_manual(PROBE_ATTACH_MODE_PERF);
- 	if (test__start_subtest("manual-link"))
- 		test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
-+	if (test__start_subtest("kprobe-legacy-by-addr"))
-+		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_LEGACY);
-+	if (test__start_subtest("kprobe-perf-by-addr"))
-+		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_PERF);
- 
- 	if (test__start_subtest("auto"))
- 		test_attach_probe_auto(skel);
+Five new kfuncs have been added:
+bpf_list_del: remove a node from the list
+bpf_list_add_impl: insert a node after a given list node
+bpf_list_is_first: check if a node is the first in the list
+bpf_list_is_last: check if a node is the last in the list
+bpf_list_empty: check if the list is empty
+
+refactor kfunc checks to table-driven approach, and add test cases for
+the aforementioned kfuncs.
+
+Changes in v9:
+- Expand table-driven approach coverage
+- Clear list node owner and unlink before drop
+- Remove warnings caused by WARN_ON_ONCE()
+- Introduce the __nonown_allowed suffix
+
+Changes in v8:
+- Use [patch v7 5/5] as the start of the patch series
+- Introduce double pointer prev_ptr in __bpf_list_del
+- Extract refactored __bpf_list_del/add into separate patches
+- Allow bpf_list_front/back result as the prev argument of bpf_list_add
+- Split test cases
+
+Changes in v7:
+- Replace bpf_list_node_is_edge with bpf_list_is_first/is_last
+- Reimplement __bpf_list_del and __bpf_list_add
+- Simplify test cases
+
+Changes in v6:
+- Merge [patch v5 (2,4,6)/6] into [patch v6 4/5]
+- If list_head was 0-initialized, init it
+- refactor kfunc checks to table-driven approach
+
+Changes in v5:
+- Fix bpf_obj leak on bpf_list_add_impl error
+
+Changes in v4:
+- [patch v3 1/6] Revert to version v1
+- Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
+
+Changes in v3:
+- Add a new lock_rec member to struct bpf_reference_state for lock
+  holding detection.
+- Add test cases to verify that the verifier correctly restricts calls
+  to bpf_list_del when the spin_lock is not held.
+
+Changes in v2:
+- Remove the head parameter from bpf_list_del
+- Add bpf_list_add/is_first/is_last/empty to API and test cases
+
+Link to v8:
+https://lore.kernel.org/all/20260316112843.78657-1-pilgrimtao@gmail.com/
+
+Link to v7:
+https://lore.kernel.org/all/20260308134614.29711-1-pilgrimtao@gmail.com/
+
+Link to v6:
+https://lore.kernel.org/all/20260304143459.78059-1-pilgrimtao@gmail.com/
+
+Link to v5:
+https://lore.kernel.org/all/20260304031606.43884-1-pilgrimtao@gmail.com/
+
+Link to v4:
+https://lore.kernel.org/all/20260303135219.33726-1-pilgrimtao@gmail.com/
+
+Link to v3:
+https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
+
+Link to v2:
+https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
+
+Link to v1:
+https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (9):
+  bpf: refactor kfunc checks using table-driven approach in verifier
+  bpf: refactor __bpf_list_del to take list node pointer
+  bpf: clear list node owner and unlink before drop
+  bpf: Introduce the bpf_list_del kfunc.
+  bpf: refactor __bpf_list_add to take insertion point via **prev_ptr
+  bpf: Add bpf_list_add_impl to insert node after a given list node
+  bpf: allow bpf_list_front/back result as the prev argument of
+    bpf_list_add_impl
+  bpf: add bpf_list_is_first/last/empty kfuncs
+  selftests/bpf: Add test cases for
+    bpf_list_del/add/is_first/is_last/empty
+
+ Documentation/bpf/kfuncs.rst                  |  20 +-
+ kernel/bpf/helpers.c                          | 126 ++++++-
+ kernel/bpf/verifier.c                         | 301 ++++++++++-------
+ .../testing/selftests/bpf/bpf_experimental.h  |  16 +
+ .../selftests/bpf/progs/refcounted_kptr.c     | 311 ++++++++++++++++++
+ 5 files changed, 636 insertions(+), 138 deletions(-)
+
 -- 
-2.52.0
+2.50.1 (Apple Git-155)
 
