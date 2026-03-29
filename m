@@ -1,122 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B4B37646C;
-	Sun, 29 Mar 2026 14:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649591DF755;
+	Sun, 29 Mar 2026 17:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774795544; cv=none; b=FLqNiL53Z1zycPIXYvdtM5auipfMmZn6Ip+RAOScmi4JtV2d6CXVR5clnaYs0w+SXdlg0P5HtZh6yXjVi5lFDieKlyVFtxJsn/4jWS5U/0zurkTnoz8iprze+Senf2R1FdT4O7oQsGOQIe7EKOGbi1AhR79AGTS8o7LD+WCkvBU=
+	t=1774805245; cv=none; b=pC9rOVsQQ2xBPTU8xMHG6Ew4kXSG5oa6jPb0hK0bivB/4BFwX/fl3JPRuCLMDbnCId5IdW5Ug8QOct6gLDd/yn6ct3gsz6Kkbgy92g5PaFTwuRChfwhTdTfmIQIfIVfQ+x4b0WFIQJaimEitxqAspx6NThi+pZKzcdDfNcJ71qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774795544; c=relaxed/simple;
-	bh=RVkbp1JwoKFigRMkCrU2BJt/HtePGZ2WrmFEhalWXqY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=aSZ6xDcBdggnb4pfcVMTmSBDSYP6WmGWk2KG9DioQnx5HD8/Y8pJUIs+Hxy0JJxh6v93WmCV64K8Ly6hU41NaZWT1+eQFc7cT4RcGDlK8a5zBANellerjgXV7nYqXrSfHzv76bhCPNWQmFncoENoLaZ/bJxCUuw1APomOcL781Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVVm2xcB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774805245; c=relaxed/simple;
+	bh=oRo9AfWD0ibf1zkOrI0Ku+/mzW8yApTc/cIMV3R1Alk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RJ/OYCsV12pfARYDSVfNrGWE2mnM+zNWcfY8efnvSNWAtUWHURG/zWrSRSMoImw3PRp1kl6aI46e/iwgrUYC+/+u0A6jRLg33tswuTBEPD1mCJSnh0fKNrbktJN9uRoy350o4A6iLFCWkIkb0kBEag573m2Bdek2nqmQxUvEXhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mQPJH8Lc; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVVm2xcB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B625DC116C6;
-	Sun, 29 Mar 2026 14:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774795544;
-	bh=RVkbp1JwoKFigRMkCrU2BJt/HtePGZ2WrmFEhalWXqY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gVVm2xcBXi0PMWMA2b70frX2Y2Tknu/T+xqYVycoAAXFSdn0mxQ0oDF/Mu0W4UbYJ
-	 8xx+YHEaKYsCq8wUFC1d/Eluajr6AQxXi5Eg++hGZnscp05G2Lj/35rNSAsDkHU0JR
-	 T+IvTJ8n5SamyLfNWFEHoWza1w+xomUDFtgg+IlIMXTXOKdPTBYEmTJgKweJyV7D8F
-	 e1vkH54yfrlAVgRR/d8d4Z/yTHrRi+euCoq/pmjtZ62kEEQQvDm3g0fHPQ8ES0Yk+v
-	 bhAo1735Qv1/Lx5EzgHOBdlaspnDQHD5ji3OhBWSf4IOn+8+XA2v9BK/eEtaRvQVca
-	 owm2YbCLKu3yA==
-Content-Type: multipart/mixed; boundary="===============7307341392841228648=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mQPJH8Lc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774805244; x=1806341244;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oRo9AfWD0ibf1zkOrI0Ku+/mzW8yApTc/cIMV3R1Alk=;
+  b=mQPJH8LcovFKr24whCfLGae7jISzXzJAVO1kO6xAF4vLhr1//GEq8/us
+   tN03hmQIVX3j0u4zI/rm/6G2BL/LFi7yJVkEqatlgMx1yH6doPQTd/IKy
+   kztDJOHyzkmOApEwioFaSKkuqvGzeHc5jtts/TRt4VyAEe0qdvVAddKOx
+   GFEnDfinP3uDPp0YiM4QyGUEC1u8+XHbPDI8M6Rz8wyZe1SV6zjPmofDC
+   lfBoa3JimzL5MKTrVGWX+/6kRXSndqT2UBIEOJFiOejm/qH5lZbE08wdA
+   KBKcSmy0hJJpqDHReZ5lqdBvzBoqlrBqheExpMX9y+Yx46yaE4DXcsxqR
+   Q==;
+X-CSE-ConnectionGUID: naKGGsHmTZCLeDExmqRU5w==
+X-CSE-MsgGUID: 9C5CMSOjQi6swYAlnLn5rg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="78404906"
+X-IronPort-AV: E=Sophos;i="6.23,148,1770624000"; 
+   d="scan'208";a="78404906"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2026 10:27:24 -0700
+X-CSE-ConnectionGUID: xIstTLZTSVK5nsGGqHCrVA==
+X-CSE-MsgGUID: qIyfDA3HRYWSkvZBpAJ9bg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,148,1770624000"; 
+   d="scan'208";a="256342706"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa002.jf.intel.com with ESMTP; 29 Mar 2026 10:27:20 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w6tuu-000000007wf-2i8K;
+	Sun, 29 Mar 2026 17:27:16 +0000
+Date: Sun, 29 Mar 2026 19:26:20 +0200
+From: kernel test robot <lkp@intel.com>
+To: Andy Roulin <aroulin@nvidia.com>, netdev@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, bridge@lists.linux.dev,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Petr Machata <petrm@nvidia.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonas Gorski <jonas.gorski@gmail.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andy Roulin <aroulin@nvidia.com>
+Subject: Re: [PATCH net-next v2 1/3] net: bridge: add stp_mode attribute for
+ STP mode selection
+Message-ID: <202603291905.TUiTIocs-lkp@intel.com>
+References: <20260329025858.330620-2-aroulin@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <380d555cac33dac80adcd56735493f0afe0ea54360e454f8e7464a200bb5021e@mail.kernel.org>
-In-Reply-To: <20260329140506.9595-4-pilgrimtao@gmail.com>
-References: <20260329140506.9595-4-pilgrimtao@gmail.com>
-Subject: Re: [PATCH bpf-next v9 3/9] bpf: clear list node owner and unlink before drop
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 29 Mar 2026 14:45:43 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260329025858.330620-2-aroulin@nvidia.com>
 
---===============7307341392841228648==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Andy,
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 94fcd4ab39e9..8abb99712043 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2247,6 +2247,9 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->  	if (!head->next || list_empty(head))
->  		goto unlock;
->  	head = head->next;
-> +	/* Clear owner under spinlock to ensure the owner is always valid */
-> +	for (pos = head; pos != orig_head; pos = pos->next)
-> +		WRITE_ONCE(container_of(pos, struct bpf_list_node_kern, list_head)->owner, NULL);
->  unlock:
->  	INIT_LIST_HEAD(orig_head);
->  	__bpf_spin_unlock_irqrestore(spin_lock);
+kernel test robot noticed the following build errors:
 
-Setting owner to NULL under lock A is good for concurrent readers
-(bpf_list_front/back), but could it open a window for concurrent
-writers?
+[auto build test ERROR on net-next/main]
 
-After the lock is released, the drain loop below processes each node
-without holding any lock. Meanwhile, if a BPF program on another CPU
-holds a refcounted owning reference to one of these nodes (obtained
-earlier via bpf_refcount_acquire), it can attempt __bpf_list_add to
-a different list under a different lock B.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Roulin/net-bridge-add-stp_mode-attribute-for-STP-mode-selection/20260329-191152
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260329025858.330620-2-aroulin%40nvidia.com
+patch subject: [PATCH net-next v2 1/3] net: bridge: add stp_mode attribute for STP mode selection
+config: s390-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260329/202603291905.TUiTIocs-lkp@intel.com/config)
+compiler: s390x-linux-gnu-gcc (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603291905.TUiTIocs-lkp@intel.com/reproduce)
 
-In __bpf_list_add():
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603291905.TUiTIocs-lkp@intel.com/
 
-    if (cmpxchg(&node->owner, NULL, BPF_PTR_POISON)) {
-        ...
-    }
-    list_add(n, prev);
+All error/warnings (new ones prefixed by >>):
 
-Before this patch, owner pointed to the old list head (non-NULL), so
-the cmpxchg would fail and the add would be rejected. With owner
-cleared to NULL, the cmpxchg succeeds, and list_add() modifies the
-node's next/prev to point into list B.
+   In file included from rt-link-user.c:9:
+>> rt-link-user.h:38:42: warning: 'enum rt_link_br_stp_mode' declared inside parameter list will not be visible outside of this definition or declaration
+      38 | const char *rt_link_br_stp_mode_str(enum rt_link_br_stp_mode value);
+         |                                          ^~~~~~~~~~~~~~~~~~~
+>> rt-link-user.h:245:34: error: field 'stp_mode' has incomplete type
+     245 |         enum rt_link_br_stp_mode stp_mode;
+         |                                  ^~~~~~~~
+>> rt-link-user.h:2164:80: error: parameter 2 ('stp_mode') has incomplete type
+    2164 |                                                       enum rt_link_br_stp_mode stp_mode)
+         |                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+   rt-link-user.h:6234:85: error: parameter 2 ('stp_mode') has incomplete type
+    6234 |                                                            enum rt_link_br_stp_mode stp_mode)
+         |                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+   rt-link-user.h:10089:80: error: parameter 2 ('stp_mode') has incomplete type
+   10089 |                                                       enum rt_link_br_stp_mode stp_mode)
+         |                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+>> rt-link-user.c:352:62: error: parameter 1 ('value') has incomplete type
+     352 | const char *rt_link_br_stp_mode_str(enum rt_link_br_stp_mode value)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   rt-link-user.c: In function 'rt_link_br_stp_mode_str':
+>> rt-link-user.c:357:1: warning: control reaches end of non-void function [-Wreturn-type]
+     357 | }
+         | ^
 
-> @@ -2255,7 +2258,9 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->  		void *obj = head;
->
->  		obj -= field->graph_root.node_offset;
-> +		pos = head;
->  		head = head->next;
-> +		list_del_init(pos);
-
-If the concurrent list_add above has already modified head->next, does
-this drain loop then follow into list B's chain? The termination
-condition (head != orig_head) would never be satisfied by list B's
-nodes, and the loop would call __bpf_obj_drop_impl on list B's nodes
-without holding lock B.
-
-Would it be safer to also call list_del_init() under the spinlock
-(e.g., splicing into a local list), so that nodes are fully detached
-from the chain before the lock is released? The existing comment notes
-that draining outside the lock avoids deadlocks from tracing programs,
-but the list_del_init operations themselves should be inexpensive
-compared to __bpf_obj_drop_impl.
-
-This commit also appears to be a bug fix (addressing stale owner
-pointers after drain) but does not include a Fixes: tag. The concurrent
-reader issue was introduced when bpf_list_front/back was added.
-
-Suggested tag:
-
-    Fixes: fb5b480205ba ("bpf: Add bpf_list_{front,back} kfunc")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23710972607
---===============7307341392841228648==--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
