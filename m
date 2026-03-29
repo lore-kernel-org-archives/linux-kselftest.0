@@ -1,152 +1,113 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94992248893
-	for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 04:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 076AA2DA75A
+	for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 09:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774757313; cv=none; b=jlauXvBWlKhLnXojHByV9EzvwcPI3zVDb0V0nSdQZtdjw+eZw9yKBqzzK1/kVMcqgtlP1z8Npr6WK8pqPnyPfSH2aP69kf3gao13Ay3pFS15CYglL6HD3TqZ9K9io3oU8iufA7+XP+o8N+dxuAsea8aFG9JcS4+R7OtbucR93MU=
+	t=1774775166; cv=none; b=dWgJ8KX051iGrtcLkswxuwDgEZVulODWz1gFZC9U+HiTulDL9TXmQ342qNJ+O+ThSTwlVDITHBbVuWSHPh5z1bgVKCF1WNo7HPNcdIKiD0Ta9Jlfv9NRbOvBYNwJwtADh5KG+ua54ijQC4Zk2A0AHJPFpv6iIvTGvn68vw6dcZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774757313; c=relaxed/simple;
-	bh=ewrebA2GfSdT6QpVfkDrUS5CDGEm64zLO2fh0fmu2hQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qOjliDqspep8KMRsCr5iHllalXEd7eK8Mg2SCfjReYhGbtZY2ZrOo3g4+WlhIk9vGoZP5JrsHIqRYPaQo6fkdKCIXLhco/2/GWUNx1C8VDvtuAOcrzMyt5OjeRJId0EbBZ5/qRSEybiPltSu3YbCUHFajIoHZOK0uOqBSINK4vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hev.cc; spf=pass smtp.mailfrom=hev.cc; dkim=pass (2048-bit key) header.d=hev-cc.20230601.gappssmtp.com header.i=@hev-cc.20230601.gappssmtp.com header.b=1gDZECIn; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hev.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hev.cc
+	s=arc-20240116; t=1774775166; c=relaxed/simple;
+	bh=zhbWVNzCGwK4zrdIuFpmCSyTIu1bGBugMwjB2QxR4VM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ckoj3iW64F2ioQlgpRoAnDTHIDrfXT/lRd1MmNStx86/JGEKy03gKAdxG5yOwRUGfueWajAPduYqWDl2c6u/+mnF4LexCZrUmxG3tKsAYlkDMde8HLF1RkSLG6Jd5aYXolopIL0cg5GT5H+ru9QpwpUR8sVg/EN8NmnlXhyvQNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XCqQrXFR; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hev-cc.20230601.gappssmtp.com header.i=@hev-cc.20230601.gappssmtp.com header.b="1gDZECIn"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c648bc907ebso2362934a12.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2026 21:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hev-cc.20230601.gappssmtp.com; s=20230601; t=1774757312; x=1775362112; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fcMba91l4VHF9piAdu7w9FJqozouFzyx+yXZRyx5X4k=;
-        b=1gDZECInVa9/Dv29mdHI+HyhWocMDf5e567TLQdlY1Lj5u2o4QH8IWSxe1ZnyrzY0b
-         fIoDEOxUFKahBEUQajw2OmyeFXGJEHrGcKKDy2/w6QlbyjKn/BCE3ujK8kt+jOA8fcBT
-         yiG4BRq3UcRnb8FrgPInylc5hXY/FJ1OxshLtAq71t+HmXOeUJ7bOH48/JcSxFTzrTV5
-         UuVt+B8sP+G1CBp5vqVrfIqP7dTYrvrwnX4qZmHaEp0jZBU93Sldf/Q3zZvge8rw2Yap
-         QqAASZOJm331dbexWMryabh79JklSia/x273WIBaViUk/BPICqLglqv57dpl5KhsIb8k
-         Lx4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774757312; x=1775362112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fcMba91l4VHF9piAdu7w9FJqozouFzyx+yXZRyx5X4k=;
-        b=QOdXUdfRBr2FiqCNR0IbDB09V1k5IChaButW2LOxftpqrDJYk1isda52l/InzZ7bpQ
-         mwPjkL0RTHv4slmzRNhN4AGiiRqL/7UDv/MWJTomihFrn4gyvkWcfchQcL1yR+InFi92
-         WWQNm6uMNosxRm+cLW9XLza43ZyjgsjmKyis7o+Nh56kDHVsJ2KB/VGc3o0qmPLF0e3x
-         5xpz4yphq7RypFBZ9wA4TSAWUrDCMDLt9l57r+Ueab9GW/xciol0yhQxeeF1Yba8TdR6
-         Uf1ypSzdPqowJjVmv7jYSGbEbntt2I2XJ9PWO9PNUC4xnyI7jAsexNiR2cL9DucKPR7Z
-         7uMA==
-X-Forwarded-Encrypted: i=1; AJvYcCWwoZpkZ6CGqugywYVSDlB/TXL2WEY9Vx9A76Ofc6w7y+z7cl8fINzwfFmYxxj0ijcxTYDxwcv/22gP0AAl9Aw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB5Y5DHYNesdx8wrjFsMxirN8eMDWkZvWkVmeXY3GzcmahjjBV
-	tzSEGtL2Mc2TLPvteq86f/PNZe1o3ZHaLgp0rdn5/OVU3iuTp2o0PE4D3DXV9VsHK84=
-X-Gm-Gg: ATEYQzxnNtZKNZtCu0CZSo/P5ERg4U6K9u3dK67YFYMmgoNlPMxMpjZL9fcH+McuTj0
-	72dPZnJhT8TQauhdc6y3/ySPTxtNWt5KtRiRvX14vbynX20v/AqgemBqncqyfTowYG19a0YfFTC
-	2Rh74fHyHN0v/npV3zpoM18g0UBnsXgy+qLOHEXoRMmPHPSmHom+FiV99U9SHAIvuQkui1XUnjq
-	Oh4ozUVhp1iUp7Y+G5KA++Zz/DZhmkx9Wvd51rwU4fVe8B8lwnD/UyvDDtK51NNYKBWTSMiZpIL
-	WBeoUrNEH2vHsfs03sgYDW44SImrhkOs6vIdyjyxJenQOnNbVBDObAE/o6sgpYrJfPMzk3oqleT
-	LuB3//Kk0gz8IS2k4DZv14YkOA96c7SbF5+UAsxIe7fcH0XFIg1fq0WQWF20sTYFdnuABHanf0d
-	iF
-X-Received: by 2002:a17:902:ced0:b0:2b0:c2d9:270a with SMTP id d9443c01a7336-2b0cdcf0019mr88952725ad.42.1774757311794;
-        Sat, 28 Mar 2026 21:08:31 -0700 (PDT)
-Received: from gpc ([2400:8902:e002:ded5:78c1:8178:95c1:6ca3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24b3a82f8sm11038575ad.63.2026.03.28.21.08.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2026 21:08:31 -0700 (PDT)
-From: WANG Rui <r@hev.cc>
-To: ziy@nvidia.com
-Cc: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
-	baohua@kernel.org,
-	baolin.wang@linux.alibaba.com,
-	brauner@kernel.org,
-	clm@fb.com,
-	david@kernel.org,
-	dev.jain@arm.com,
-	dsterba@suse.com,
-	jack@suse.cz,
-	lance.yang@linux.dev,
-	linux-btrfs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org,
-	mhocko@suse.com,
-	npache@redhat.com,
-	rppt@kernel.org,
-	ryan.roberts@arm.com,
-	shuah@kernel.org,
-	songliubraving@fb.com,
-	surenb@google.com,
-	vbabka@kernel.org,
-	viro@zeniv.linux.org.uk,
-	willy@infradead.org,
-	WANG Rui <r@hev.cc>
-Subject: Re: [PATCH v1 05/10] mm/huge_memory: remove READ_ONLY_THP_FOR_FS from file_thp_enabled()
-Date: Sun, 29 Mar 2026 12:07:41 +0800
-Message-ID: <20260329040742.17269-1-r@hev.cc>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <52CACB9A-A782-4D11-8B6F-66DA8D345C78@nvidia.com>
-References: <52CACB9A-A782-4D11-8B6F-66DA8D345C78@nvidia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XCqQrXFR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774775163;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gm9WbX3aGbzz+xm7VEIAM/1LK2XfhplZSKMKkWgFnuo=;
+	b=XCqQrXFRFeVOtokHU6FIgcn0a6iboc1IBWhmEXSg8oVPLZSl7o8p/sW5T75zXaH+jtP1Rk
+	nVl3J+0tm/zmvEti1QY2NbXVIzCmt6PodS9sjbZJDDz+e1XUgd+Qt5f0nIK+zMYVkNAfgK
+	jaVD3aV2xmJJBsX/p8YeQC5jVbatbKY=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-83-jyU18zvWN16pE1pBORFRkQ-1; Sun,
+ 29 Mar 2026 05:06:00 -0400
+X-MC-Unique: jyU18zvWN16pE1pBORFRkQ-1
+X-Mimecast-MFC-AGG-ID: jyU18zvWN16pE1pBORFRkQ_1774775158
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8B011195608E;
+	Sun, 29 Mar 2026 09:05:57 +0000 (UTC)
+Received: from gmail.com (unknown [10.72.112.11])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 30ABC19560B1;
+	Sun, 29 Mar 2026 09:05:46 +0000 (UTC)
+Date: Sun, 29 Mar 2026 17:05:42 +0800
+From: Chunyu Hu <chuhu@redhat.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, shuah@kernel.org,
+	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com, npache@redhat.com,
+	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
+	lance.yang@linux.dev
+Subject: Re: [PATCH v6 0/6] selftests/mm: skip several tests when thp is not
+ available
+Message-ID: <acjrZtVxPr1uad8I@gmail.com>
+References: <20260324013316.2590422-1-chuhu@redhat.com>
+ <20260324090927.eeacb7987d22ed8ba13fada2@linux-foundation.org>
+ <b28ebf0c-c10e-4e1a-9e8e-30e6925d0da8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b28ebf0c-c10e-4e1a-9e8e-30e6925d0da8@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Hi Zi,
+On Fri, Mar 27, 2026 at 02:24:58PM +0100, David Hildenbrand (Arm) wrote:
+> On 3/24/26 17:09, Andrew Morton wrote:
+> > On Tue, 24 Mar 2026 09:33:10 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
+> > 
+> >> There are several tests requires transprarent hugepages, when run on thp
+> >> disabled kernel such as realtime kernel, there will be false negative.
+> >> Mark those tests as skip when thp is not available.
+> > 
+> > Thanks, I updated mm.git's mm-unstable branch to this version.
+> > 
+> >> Chagnes in v6:
+> >>   - patch 3 add reviewed-by from Lorenzo
+> >>   - patch 4 handle the errno before and after close(), suggested by AI
+> > 
+> > Here's how v6 altered mm.git:
+> > 
+> > 
+> >  tools/testing/selftests/mm/vm_util.c |   12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > 
+> > --- a/tools/testing/selftests/mm/vm_util.c~b
+> > +++ a/tools/testing/selftests/mm/vm_util.c
+> > @@ -785,15 +785,23 @@ int unpoison_memory(unsigned long pfn)
+> >  
+> >  void write_file(const char *path, const char *buf, size_t buflen)
+> >  {
+> > -	int fd;
+> > +	int fd, saved_errno;
+> >  	ssize_t numwritten;
+> 
+> Empty line? :)
 
->> Now without READ_ONLY_THP_FOR_FS you're going to:
->>
->>                        |    PF     | MADV_COLLAPSE | khugepaged |
->> 		       |-----------|---------------|------------|
->>  large folio fs        |     ✓     |       x       |      x     |
->>  large folio + r/o     |     ✓     |       ✓       |      ✓     |
->>
->> And intentionally leaving behind the 'not large folio fs, r/o' case because
->> those file systems need to implement large folio support.
->>
->> I guess we'll regress those users but we don't care?
->
-> Yes. This also motivates FSes without large folio support to add large folio
-> support instead of relying on READ_ONLY_THP_FOR_FS hack.
+Good catch. I will add one empty line in the next version. Thanks!
 
-Interesting, thanks for making this feature unconditional.
+> 
+> > +	if (buflen < 1)
+> > +		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
+> 
+> -- 
+> Cheers,
+> 
+> David
+> 
 
-From my experiments, this is going to be a performance regression.
-
-Before this patch, even when the filesystem (e.g. btrfs without experimental)
-didn't support large folios, READ_ONLY_THP_FOR_FS still allowed read-only
-file-backed code segments to be collapsed into huge page mappings via khugepaged.
-
-After this patch, FilePmdMapped will always be 0 unless the filesystem supports
-large folios up to PMD order, and it doesn't look like that support will arrive
-anytime soon [1].
-
-Is there a reason we can't keep this hack while continuing to push filesystems
-toward proper large folio support?
-
-I'm currently working on making the ELF loader more THP-friendly by adjusting
-the virtual address alignment of read-only code segments [2]. The data shows a
-noticeable drop in iTLB misses, especially for programs whose text size is just
-slightly larger than PMD_SIZE. That size profile is actually quite common for
-real-world binaries when using 2M huge pages. This optimization relies on
-READ_ONLY_THP_FOR_FS. If the availability of huge page mappings for code segments
-ends up depending on filesystem support, it will be much harder to take advantage
-of this in practice. [3]
-
-[1] https://lore.kernel.org/linux-fsdevel/ab2IIwKzmK9qwIlZ@casper.infradead.org/
-[2] https://lore.kernel.org/linux-fsdevel/20260313005211.882831-1-r@hev.cc/
-[3] https://lore.kernel.org/linux-fsdevel/20260320160519.80962-1-r@hev.cc/
-
-Thanks,
-Rui
