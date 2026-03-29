@@ -1,139 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6A72D1914
-	for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 10:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE93036D9E9
+	for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 12:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774778701; cv=none; b=R9iCfrIdOJlX5ITJD3Iwl0s8kdi+qxz5r6WsPnftP6X+vu9qy5INrXZhmIGajUBJHXs8yLsx1u64xCd5k2cRY4VJv4WOPyhG1k0mE4LUoENfw3XA8Cve7WNvteIx2XXodZUX7nDZEuNkHLQvXMVGH5jmUpk8puLi1dP64vmzbsQ=
+	t=1774788279; cv=none; b=XgjeCD0xJnVheUouuTCzCwcda8pkHvvwUviDASIF06TbXTOLZKx03mb2OG3ZTIjyFGTLatuynRlAskXMYDDWDNf91pRQ0mmjjNTnKpMC5ncxa0oRwd1zAC7hG6cPyhxXNsKWxk7dzXZcTYxhg6qVsc8jf4X7U/i7j7tUrm4t0Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774778701; c=relaxed/simple;
-	bh=gvGHC1vYZBsOAAWNUlWuTZOWh+DVU+X7VvCKIF8RYmo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tO7q6TL2bJMo/jjscLiaehZwWQ8anuBujJCX2GYYKxqoiGpE/tCwzlwin0is0Dk0tbBJEBZTQqCM/ez+MFx1g+9CBja0PUum0A64PIdkvMDmhvBZ2FEWCNGN686G0RUx0mhEG726iEi7GJTiKFCliDOi02T0cw3bvP1N/0RSEOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JzJs5c4P; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qQtcEWsW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774788279; c=relaxed/simple;
+	bh=Rmh3Y+JrArpJE7iqH6JLEcKEfdpuVbpvkJS7lyIHjzg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eDmDQ8KcK9j46I75b0GTtOadK7JJSgFKNIHjFpdzHoarahs1g0aCvPOUjryjytxEO4mFre8rjDHp+V58SA/3mkqy4vYNpU5SmUYI+FGATmKwVV73cfJ3rHi/CZAMSP21AwLTQkrNoOYKMGoe7IoV+PDSviQhwCWiLWJrEtfOY+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dnXMdCkV; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JzJs5c4P";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qQtcEWsW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774778699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=StPdatf65Kzl6nkGkBez3hMmnmGSSlFsSD2/9R1+ZUc=;
-	b=JzJs5c4PreLLfkew2f4GZWcyZkKt49TbU3vQLL7+0zOTcGDoa4N+p674PcD8KxCVhCO7dk
-	mMaExu2+2ENqDCKyEi86cqoRKigvX//mF0Yj5Qa7RsxD81Fqi5O3hO8s0CJbgaY1n9v5Ep
-	QkWcfp5/pO70S//5Q7fRKACi6NyDzw8=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-604-qzH-YiE5OmKccf1ni6yq5g-1; Sun, 29 Mar 2026 06:04:58 -0400
-X-MC-Unique: qzH-YiE5OmKccf1ni6yq5g-1
-X-Mimecast-MFC-AGG-ID: qzH-YiE5OmKccf1ni6yq5g_1774778697
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2b069bfa817so44055155ad.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 03:04:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dnXMdCkV"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-486fd5360d4so47612845e9.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 05:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774778696; x=1775383496; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=StPdatf65Kzl6nkGkBez3hMmnmGSSlFsSD2/9R1+ZUc=;
-        b=qQtcEWsW3CfhblaNrJCYRI3oR/tmg5Lhk6LwPO+/igBnQKje6jgos14qeQ1guF82gj
-         dfOWQs6xI/ZgghGfBOD1LWL745V8GcAFISZrlrrCn2dWN8jI5vZfoGmBXFDVEfSPOEd7
-         SVGbokeo11K0AnY1fExMBswz26XovKMeY0NVKuFf7N3WfwfDSeA1L0pHpHcLOyqPYvg3
-         vaxOinskOB/+dnf2JT/Bu4wOtwQNp+PDjIpr3Qxmuk7PcbSIOCmrrOFvP0q1zyJgdE+J
-         Z6WE7iymFrE5rRrs7Oo36eDMQA6lGNdzfUOYJ1iV/QgO/u2n+Ij8cWMVNjKWDUvl00X5
-         in8g==
+        d=suse.com; s=google; t=1774788276; x=1775393076; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CMhuHeD7KIQLmawFhIk+JJPpQUf9loVrwxnFpBfk5n8=;
+        b=dnXMdCkVm5madfRT6P0ezSg720NIs3rc3IdYHXtNSPo+e0ql0rLWCaDZUoR5zVWTnL
+         wTvwDXSJaquyL6hIkrUAk1m910HuxsnB78WwnT7+StVl5MZsudbD/x9adkquCwQd8BPm
+         XNDDurbSXXW9XOos05BJ/5Hv+gkEi3YwWujdsU0bLtR82tMc8D0ASfDhspiJmz6eiHHI
+         pHyJXOQ7Q7fPIk1ZC+OhPvpKxxPojDyfbi64aTXesM8pzRyVsXTOr9k0/HawTcF2KXFH
+         XDtLAG+hOeoQwt+Ac/GyN5+aAKMPAsix/EMT28zQC5G0sa3awuhh/zQ3nJQ40hK+XP9P
+         qspg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774778696; x=1775383496;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=StPdatf65Kzl6nkGkBez3hMmnmGSSlFsSD2/9R1+ZUc=;
-        b=SYQ3jU9zrxhyAg3hh69AP6j4zDhBqaYU1Q6B2cNgvecQ/yU102bb+myGJJexdRbDBr
-         IsPRcew+gkHxUfsRzTbDOnlO5hOXXawXbVqDdCgOcElYxN+b4HTJ742PZxothRuhPf/0
-         3hnMtyHzb6C/Kjym+5WPn4oYydpB07WeZqXY4o2h0XAGN0CvC+ZpJmOMph6rIYI7ubKo
-         vLFaxyaGdqJKm7KuYNP3ZuOAItCxzTXHzi4RoIQML23rxXtcpjWPYAhlbDbA63ZUzwrS
-         78cbOR4HJd9c/lyEPZ0942b0yoLCdQN+IhSjrtlCBNuT49OOZgwivwjJ3IrfdxoirN/w
-         jdOA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/x4mPM0d+RV+Wo8OchOP04EKGkJqi5XkCQS5svuikTFPGWd4Vo2O7zY32x7SHIckmStjxA6s05gLvdGybHk0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweVZFUtEZdwOQDpj5ioKt1sgjQTgt3nrYNY2nWCo/mWnN9p6Xe
-	Jw0VVYI2K+jFfXVnQxgIfeDBc9VUmTXZdvMyUMKhILl++rhzE9ECEIGHdSfG1bRsSOXjLYCx54z
-	p1smWqnwsU4uxZAOTYT+yx6SR6UEHcZLVnF2sKop2ZDZyKglknoDJ6M9Rp149f23tOrWmNf5Js2
-	9nng==
-X-Gm-Gg: ATEYQzy1dcw4W/BDj95IyVlw4YBGRQjfAU8/EvVR7BoZ+hIWOgSYQEB1kwg33hU/RU9
-	7sVtn511wugVRtt32CD+tSWEWsupk1mqWnA0nLv3HN9RPrK/r4rqArrKMx8/nEwflCIGBdPo6pQ
-	Yy1ghpqYsy8rI1t2njuFi3m1JXohLFygcRq7nePtsz9/XjwYvi6+tZqVhPklMzrcofTlMm58I4O
-	CZkGAvZLogcRV2pjnwj1YpjZmTaeZZQhrb4BJ5uXnRjV/ll4g6e7pLBvfUup9P1+//dylH4ndNy
-	H7D3JL13n5bYDQOvFjU9Mls2j/2EnUBS6b1gSTEV0WEbd8cTpcZAAQcT0WRpqOlvs1WNcjeoTM9
-	etQHgQWA5VtwWpWUNuA==
-X-Received: by 2002:a17:902:e885:b0:2b0:663f:6b53 with SMTP id d9443c01a7336-2b0cdc9b555mr90550935ad.13.1774778695930;
-        Sun, 29 Mar 2026 03:04:55 -0700 (PDT)
-X-Received: by 2002:a17:902:e885:b0:2b0:663f:6b53 with SMTP id d9443c01a7336-2b0cdc9b555mr90550785ad.13.1774778695455;
-        Sun, 29 Mar 2026 03:04:55 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242766219sm44817195ad.53.2026.03.29.03.04.54
+        d=1e100.net; s=20251104; t=1774788276; x=1775393076;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CMhuHeD7KIQLmawFhIk+JJPpQUf9loVrwxnFpBfk5n8=;
+        b=mSF5kxxA05ROvPTR4h239V0cIUZFGI4sricFRnwdAEgjF24H+7WFGFwULN2YiIhbBL
+         0YY0dWk13Bpy2XlDnYXrx4vRQHf7aV+tfv+JTvS8BNvRhlF9nkrBUjQq3PpdS14FyfT7
+         eKmwBCeBo5UVNjFEbXng2ra3VLvrAa1+dPARe95s74JYXAISFkNitFFuYwdjtb4sXxn9
+         obSD/jMCMIA9wek4MT/LRtNe2nb+cRwOrJY7FYLNaTRwDsfE4Iqkc5vcuSKLGkbRimzE
+         wqKimCHCjvS1TL0XIPr3egRTRfpvn7NEZepDrQ4xw8xSnq9VFxfJhUAHL2RY+xc9rUKq
+         njmw==
+X-Forwarded-Encrypted: i=1; AJvYcCUwHaRtPOt/L6IhqISIV97Hcp1eN7OS4yVZr1ky8005wKTpsNKV0Eho+ILn+QQ2Mt00j9LxTbn8yYSHOxJuKdg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjBc7497SsBeZEKjl/7DNoi4mwxAXlv8HhsiR/hG7ls3DczUi3
+	C27Kqwnx/1sbXqYqnb9w/6LSk/lkv+oKHZ8cVa7lPrvCn5Z+sFwF+2M5Chi8vdM5hnc=
+X-Gm-Gg: ATEYQzwiG2c0pL668dAp8Ws6BWKk8VUh7t/l+GU9lxH1nBMC8Wq9/8vwSIPdAYB1v35
+	PIX0lf36KGZGv3T78F44jP8nVioyNeAjaTzPPylei68vkdivec9aDToCH0Ow/SAgGUfAhQlFyc0
+	zb3hjvx18dwGV/oNTtd1x6CznCkEF2W/EUc6uu9UYS3NsHDKCbXp4MM5BBdtadLKqeRZ/uuqKHz
+	bR9qprlIInEc5sZRNJ/dh3tTeNqSjJmUf5G3pRQqg3EQ3uUJlqLWyGfow1LJ2kICM0CFAXyD5MI
+	T9KcKwsnj9jMQ2dSpKf+V/telaWsD/n4YayQEmS5KQjUgPgqgt32zRKmpZh7pedeKaiqWPomZeS
+	uStwOqfdbzlCwME2lvK2nY6k1fJymjqtfL+NCbIAu3fvw9YLrvJg/YlGZopZfqNLKlEpXJYaKC0
+	zBHYBrs2RlQgXNVp2xWHYoQxjYAwnWiKzG91wyEIcP61K8t336kAP3LP4rNWGx1w==
+X-Received: by 2002:a05:600c:524a:b0:486:f9a4:d487 with SMTP id 5b1f17b1804b1-48727c816e6mr142138465e9.0.1774788275973;
+        Sun, 29 Mar 2026 05:44:35 -0700 (PDT)
+Received: from f16.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76916da892sm3700321a12.14.2026.03.29.05.44.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 03:04:54 -0700 (PDT)
-Date: Sun, 29 Mar 2026 18:04:52 +0800
-From: Li Wang <liwang@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: tools/testing/selftests
-Message-ID: <acj5RK3lze7o704Y@redhat.com>
-References: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
- <acc49s7jbI9Q3a4f@redhat.com>
- <20260328135650.435b415f8c00835b2fa471e0@linux-foundation.org>
- <20260328140311.d6ce99302f93923b0cffb441@linux-foundation.org>
+        Sun, 29 Mar 2026 05:44:34 -0700 (PDT)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] libbpf: allow address-based single kprobe attach
+Date: Sun, 29 Mar 2026 21:43:37 +0900
+Message-ID: <20260329124429.689912-1-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260328140311.d6ce99302f93923b0cffb441@linux-foundation.org>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 28, 2026 at 02:03:11PM -0700, Andrew Morton wrote:
-> On Sat, 28 Mar 2026 13:56:50 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
-> 
-> > On Sat, 28 Mar 2026 10:12:06 +0800 Li Wang <liwang@redhat.com> wrote:
-> > 
-> > > > from the top level?
-> > > 
-> > > Should use:
-> > > 
-> > >     make kselftest
-> > 
-> 
-> I'm probably doing something wrong, but `make -j50 kselftest-all'
-> appears to have scribbled on my top-level Makefile, so now I'm getting
-> 
-> ts:/usr/src/25> make kselftest-all 
-> /usr/src/25/Makefile:5: *** Too many open files.  Stop.
-> 
-> ts:/usr/src/25> cat Makefile
-> # Automatically generated by /usr/src/25/Makefile: don't edit
-> export KBUILD_OUTPUT = .
-> export KBUILD_EXTMOD = /usr/src/25
-> export KBUILD_EXTMOD_OUTPUT = /usr/src/25
-> include /usr/src/25/Makefile
-> 
-> I've done this twice in succession now.  Any suggestions where I should
-> look?
+Today libbpf can attach a single kprobe only by function name, with an
+optional offset. But the kernel also supports attaching a single kprobe
+directly by raw kernel address, through both legacy tracefs/debugfs
+kprobes and PMU-based non-legacy kprobes. Since libbpf doesn't support
+this yet, callers that already have a target IP still have to drop down
+to perf_event_open() or direct tracefs writes.
 
-When build selftests from the top-level, sub-makes entered via `-C` may
-still inherit the caller's PWD from the environment.
+This patchset adds address-based single-kprobe attach support to
+bpf_program__attach_kprobe_opts() and covers it in selftests/bpf. The
+first commit adds bpf_kprobe_opts.addr so that libbpf can attach single
+kprobes by raw address through both legacy tracefs/debugfs and PMU-based
+non-legacy paths. The second commit extends attach_probe selftests/bpf
+with address-based kprobe attach subtests for these paths.
 
-Some selftests use $(PWD) in recursive kbuild invocations, which can
-then incorrectly resolve to the kernel top directory instead of the
-current test directory.
+---
+Changes in v2:
+- Fix line wrapping and indentation
 
-Maybe try export PWD in the ../selftests/lib.mk?
+Hoyeon Lee (2):
+  libbpf: allow address-based single kprobe attach
+  selftests/bpf: add test for address-based single kprobe attach
 
-  export PWD := $(CURDIR)
+ tools/lib/bpf/libbpf.c                        | 88 +++++++++++++------
+ tools/lib/bpf/libbpf.h                        |  5 +-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 49 +++++++++++
+ 3 files changed, 114 insertions(+), 28 deletions(-)
 
 -- 
-Regards,
-Li Wang
-
+2.52.0
