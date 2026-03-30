@@ -1,246 +1,148 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4873368B9
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 17:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9530A27CCE0
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 17:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774890314; cv=pass; b=BBgQML5rGVHTS5bBieMlHDFTrX14wOmUU8OEpO67ek0S13YApS+CfJsH0CJBHoZnhEUWEbmU+0Ju+xvZ8ANSdguJBr0zBXfkUGulJca1oaMq4ckZjhGOkNjXRMOstESf+fTA8mPLXwMCR0/2VAU1aSluvRd3vD0mn044m+li+Ak=
+	t=1774890569; cv=pass; b=OfxvCLr/zXhvIvPkjcExwA71Bwc7k3+TacTYdxRPNfpYktfWBh51+5ej4y3BUgTC+9/eqMeLOuXmhi4e9sBt6PSf+fw0ogHQQJJ8nnuHfQc3x0/NsnXpE2y1m6PIAerHM7r3EEIp7nagpius1Xd3iw7gkRPboj+XJU/AewqV1Mw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774890314; c=relaxed/simple;
-	bh=MxR6uUQzlU0L+1dtxBlkz4hJ9s/+L++FSIFIDeFs6Vo=;
+	s=arc-20240116; t=1774890569; c=relaxed/simple;
+	bh=BFemXMudycvhy7VKBn3rfxUxF9xbuD2nUdXBvRpTrK0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y8B75ogOYFXfQBR6X4s4E2lTol/k0LXobJLCQ3/d8fAshlJfBrUa2raGMwkqT+9iWttLpddnE4m5wFaQQaE4PVvfdc0s6LREsWoPjwcxlRSfOyHgzQSAVBCfWnJqMWYOEe6NhhsyZ6Yo4KMiiaKEmRiC6P+nygyeKRbMorGMcA0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rhBHb+PD; arc=pass smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=Wua4aoFQhzDSRj52Z3CQ0p6uoPEvgHRIYw1F2CzJsg7fYYgIf+pCO05JldGzehkTkmh6uL6/xFUCtDrDmWQJjRXofFgeT97Xb3HfyY4HZ758dDT9nRAumxH2ZWsiCOeJL790kRlB9ffXdXh8HniwKZ6v4C+txQ1VSXDmOhlTch8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WRgTeNjs; arc=pass smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rhBHb+PD"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43cfbd17589so1401657f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 10:05:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774890312; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WRgTeNjs"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-486b96760easo52138955e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 10:09:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774890567; cv=none;
         d=google.com; s=arc-20240605;
-        b=fDDFF8xBiEm8kipwNr4j2XSWpOXsxRBYX3Dz8MXG4Di6ST7yonDi7KKLSG27j/PJwg
-         Gd+a32lL53FMwMW/1XtlLzhlrfJZntur+L3CL08w9iUi5KSw1kqkcPyPQc12LvCPVnYl
-         C6YeLlRVpgf381MOD2/hdBfBRjflKqavtAWjMrWtdKjJOEAU4nHSljpQbqIuIXxVFW5B
-         kWd9BkWsAcRouXATSUK0wJfydXYM+ZEqN3pxVRaV97CV9OWXNLcYKchNxjjOp/XXHxMJ
-         E7kbHfsgpixKqAqMCXOiSt4fvrHkrHc1nnAQQa5oDn0KoEjnVNIywlf6pU+4yVzUy5jT
-         TjOg==
+        b=K9iK0+9xLX0m9ZZnIWzDjRtmZLE9emDw+SSDA3XB8kC3AAwFTPsXdfaGwST2V/4/SI
+         PDpcT6VVBQsOIGJJUfwUiA7f5vS+L/Zbf2YP2QyIwdWx6/e6mm/G07gjh8IUpax0aKKX
+         3QWkdxKQO9GxGCys+wp8Rin7ZHMGJw6swPwTYhjTrssN8NuUNsWh5PqSX4zu9UfmaWvw
+         doLU98EsGtxD10XyBQs7JBAeVBf/iBER0S3AHvpDgbBAu5APZIM5SlX8614DBh+pOShE
+         Xb2UBwnv7/Sv3ZJKG8wTPwx71v31cPKwg7DyvTNeBJfr1gmSXA0qA+FrtlMV0Gt+vx+g
+         mEpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=vcbw3WU+eCsstrggqb5GtyGeU7qDydEcN6TeUdnENQs=;
-        fh=ch4KlJged5tCvhzAPKNJ8nK23goztgOZqOGwbiEm7Xs=;
-        b=iCZE8HIiPNhZ2+5xXeVCzt4Z8kApwKS34h/jw6dP6+cGnA/Za4WSiRpEa7pGNzX0Qr
-         16wXDv0zkUFvsJ7Nk6GrZm+ebaziQSLgECxqlMJhP+9NO/MwlkaLj51a/K1Gw9PmlWtQ
-         QGzeWkIFlJyx80PrC1u3SBpjpddgWayRHBEGxA0T5A/nNmMp7kL63Me70HieGhTFCten
-         EmN5og/pBtWejrAEx35GmnT1PNaNbvsNCDYjfmUWAjNrjvx1UwSkwLaXUcWyf6G3fXVG
-         y0VIYy1CZ/ZctDGLJMeYovkihkGA9g39y9/UjuIfaqiZPb3s65AjegJKyLenjNlEZfm3
-         aTWg==;
+        bh=TwE8KztaklZBq9sKK33xBCWN9vot3XXFqQoYamj0MHI=;
+        fh=KJbr5iMuEvp5GGPSEyjXCVBuYlWNpIceSNJQSoVOLwA=;
+        b=gwTUwauH/pKm9OqR4TUp/tBqdyPfUhvNVPyEWE2rZJXrmWA+RHEQBDKylMsC0W3lB6
+         2TSlqzqhmUTF2WK7+MjVKDaujmYDeetMT2Ge3+xsJth1DroxR+YwQnUD889H6BAKs3dk
+         QJryW3EEpXfGzR58aAyzE+zR21aZR7S9rhzUuZyfckdJOZechOBfjeJBssL/AoEWHfjD
+         amrw3+56mbR0RUdK49fMeNc0Ex6LCkTvjX/xiYFPYIwNOLYpX5TGC2Eha3fkoqRH3Dp3
+         8wJcpFPzwx0BEASgiVTwNvRU4671hcId/NiiJ0XfiDa362sWlmwY0DjfzdP5IwU08QtC
+         CQNg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774890312; x=1775495112; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774890567; x=1775495367; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vcbw3WU+eCsstrggqb5GtyGeU7qDydEcN6TeUdnENQs=;
-        b=rhBHb+PDq9V5TlQVncDS2lfVoFRbf9nYCdRpptF4yzVzhR2im+od/fiLkENq9urUca
-         M7q08/5oiL7JVh7G0Xb+Z12AvU45QQ1GrGWHjjzPbeLaiRuZ9ieSA77ftsZmUK1wEu0K
-         PxCHDw6dr1vl/QRj0eHmQ60W/4rsu01Nh8Yyegp+nn//BCl2NeogcvOZ5NHQ9bFKDymX
-         ciboWeX6es47YWQJ7WZ26SHX5yn+CUzaN53xUXicPKE+ov0Kvp+5TOEw0QEyPPbTtV9W
-         /IZZMDyLkLelGJSP4fRShT9A5TYzQlTI6YZBBvCN4g+0s2EZGxgYSE2fXXZ9PPIhe3Dm
-         SBvw==
+        bh=TwE8KztaklZBq9sKK33xBCWN9vot3XXFqQoYamj0MHI=;
+        b=WRgTeNjsAHA+8MVJfnLv+cHjD4elhOZdP8PrYIQUniLEdhi5H8TFpOcfTs3RD+32SG
+         Bdnh1GGQdw160WSaSOtctRfUYm0SpiEykLHBEcAdR+4H19TxYp0VTvh+2ypiGVNSqmNY
+         vX+XDoAnKFl2OVugaTYTkc6R221xn5asfqa6UQisFVtW4iyS3P2lZBEln2mrnoUmuBay
+         fsQnRRKALyfbPDDcepxNf7t+HuJTJpc+Whsf879Jy8LdzoyUKLA9RWpnRNh15mQVN3zW
+         XcoMhT97zSwIa2oe0bTTgjsuzliGsOQG4ovH24dNYo6tTkIiYO8J9VCAyH4bysGY3MrV
+         2AxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774890312; x=1775495112;
+        d=1e100.net; s=20251104; t=1774890567; x=1775495367;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=vcbw3WU+eCsstrggqb5GtyGeU7qDydEcN6TeUdnENQs=;
-        b=AGuXXSjBSrjkOSYiJRxrwiERPzl+Sra6BnXvpbDqUIHhjlGMTxpGb9X+LQZgCMIDni
-         6orz8KgPQNUThPek1gzELULd5Lyc+5++ahuQZyP/FCCU0yjbi4epTWNN19vPZ2imxzkf
-         H0X2BkEtwFtznwIwoBl2Vsq7BaKIvWr0cv7qqaZySSFu+6JrC5y7aYESsO99o/ec/Js1
-         M27TeuIkky/54F1SbZcGEUmFrV/cQsEhwlM3o//rmWAbImUnM9bWKbXBXpkl6OWJIsTm
-         pBTizXYCqMKVCuB3i1hHMh8eC9n2q8AgPujbax9jNPDH8FZx3hCvjQ+xc7xuEhRNPtsC
-         y9NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUkXCdN7d4Zt8HYYkDMxAi5hLO/ghlQ2JZrChqvEQE3WkQHqK7PvSu8SJ+cfUZOG+3sxtlArQfC4rHoJsGX9/k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxy93yqp6c3Wqoh6NUvm02nWEWsKMImEDiKDNXTpwHaO6p5AoSG
-	B3AhLpWMZT4mnqlgsLcIcEDczqSYUwrzjxNOvJzFTbo6lSvHPfAY0CKMFEXKJKkUB/zjE9t68Zi
-	BMJl46H5vKkL2t2pYLDXTCmQkLFNS7Dk=
-X-Gm-Gg: ATEYQzxU8eAapTmz8wUwtQbKrOgnM15XpBL1UxnCqPMBH+6GAeBdMuoq9D0fRhSPx7X
-	GZQLXp0k5xXdKRExlOwFaDAdIrz6kug9d+7s6d/LCcuABYjfLbHeBsCA531eCx5PKxOV59T8D5s
-	76/bI9m2omJzt0+NUO5r+Jv0DzlwV1uNAKOCt957ohK0EDFPf5I1w4zOGsiuTA1MVlFf7H2Vm6M
-	2doMHSzRGiZiD0FOqHZkaf22hdlWBPE/rQ8ZwvqKZ/ZJ/ZDJYYBob65N1bGzVgRB5Jfj3uM62Bd
-	n8n+uFAHSFmX/Q6VcSa6wxQntrUOVDsmOBVurlbaK5KDjx/sMbr74mwhGN8wM1GJJ9I1g8jswtZ
-	8lIN2b2SMZHLzlQ6rizZLYkxnQR9bW9UBarnK
-X-Received: by 2002:a5d:4748:0:b0:43c:ef4f:79e4 with SMTP id
- ffacd0b85a97d-43cef4f7c0fmr13207151f8f.37.1774890311520; Mon, 30 Mar 2026
- 10:05:11 -0700 (PDT)
+        bh=TwE8KztaklZBq9sKK33xBCWN9vot3XXFqQoYamj0MHI=;
+        b=bZVJfignXS9QLXX00I5qWBAvKOlE9h7dkS59JJJha0n76iT9gIkClIFe9jI4Hj91Hk
+         fFY5nVYe+dF1bYV2FA2uN4xO15NvxXOY+rnMukqqS0AzR+DDcMcPmZkUYL8J+joT8kCY
+         M3444fTY3XhnmN6SQxh3ASesolNNySAlNHSrwFPzSq3dklRRrvkzREGckLOzsdh+OwPK
+         iKH+PDnHIcxqknpO20OrlCyWuG8eUswEd1d8zQwTnPkaA+YJTDIzJAqRGn6f0aE9mbEH
+         graF+AofgDEgxj1U24e+7fZnuWvQ0O5RB03I0/2uckvdxE5xSvjqely9BtQnLK49mfz6
+         rJoA==
+X-Forwarded-Encrypted: i=1; AJvYcCWCUg2dmMzcb1yGlQuasxft7uP3TXCYlHay4tX7pqeBEZ+nhhcgFsu9mX7/A9S/LXhygB1D7pq1IJa/LXCt4bA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzI2y6e9EmE6V7xBTfxDzawMkrsHchjOBKNhoY9wXz/vP4YInwd
+	TJ9KHZWHhYKuoHReQrHmmk1g2pRHEAyRURMo+3p33OEykzYYRZUB1DnUaKzH5zB3tZGls56HDO5
+	A5WmbasIMEhso4Ahu9VdEtHcljl64oBI=
+X-Gm-Gg: ATEYQzz59HLaeqTFohe2QVSga/aBZaJjXaZmKQecIn/pUdaSZS8GXqcQbQoB1S3DAIP
+	Aj7tTgppOhBKmx1XcivFBJXYqHS3mR9OiiBX2XQd3NHns6OCyS5pKv1lSCFOLuRO3jUb0Z2drcv
+	BnYCggFVx7dXXHSzMRy+AbrbCwEo947wKgyaXasj1R0c5cMcokVrd3ixTabSaJ326thtJoRrdHc
+	26klooQgzJZBb0xP6Fl4LgE2pg3YCBvEN1JZMwbFWqOlHYP3fsuzo0dqEQMeQUNVsT8NcFcZIiv
+	t6wkAtHoP8zcZYeRBXkm//dwWLP0vBO+GJ64RhkPHtNmO4mx52n3lS6SlDKSvm1Kq18QYHHzZdc
+	nTlCRpa75rDE4LVkdxr3mNhnXTw==
+X-Received: by 2002:a05:600c:64c3:b0:477:6d96:b3e5 with SMTP id
+ 5b1f17b1804b1-48727d59bb9mr221663405e9.7.1774890566910; Mon, 30 Mar 2026
+ 10:09:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260329140506.9595-1-pilgrimtao@gmail.com> <20260329140506.9595-2-pilgrimtao@gmail.com>
-In-Reply-To: <20260329140506.9595-2-pilgrimtao@gmail.com>
+References: <20260326141718.17731-1-leon.hwang@linux.dev> <20260326141718.17731-2-leon.hwang@linux.dev>
+ <CAPhsuW7vwp6pW5RntKC+Gbn5gTcVg3vsm6LVc-y2ssTeauZayA@mail.gmail.com>
+ <d19336f5-5373-483e-81e4-326aa9c7801a@linux.dev> <CAPhsuW5LKnuZ=wReS+_VtGOs2sefd73a=WUCdaZPho99JBaqJw@mail.gmail.com>
+In-Reply-To: <CAPhsuW5LKnuZ=wReS+_VtGOs2sefd73a=WUCdaZPho99JBaqJw@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 30 Mar 2026 10:05:00 -0700
-X-Gm-Features: AQROBzAfHCUSDXuIIL-jaIg2nAba48yfw0Wy23vmkt12STrtolsJ-ryxkM87QwY
-Message-ID: <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
- table-driven approach in verifier
-To: Chengkaitao <pilgrimtao@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
+Date: Mon, 30 Mar 2026 10:09:16 -0700
+X-Gm-Features: AQROBzDRpUwtx2yU1MijSbP7LENp4KbHkTJu9H9iib-WKuc4m0vP_JzIrbkUgx8
+Message-ID: <CAADnVQLVEoytOJT4kVAcnzKqEJk0AhGxPCK+tMTKwpK_DJ32sQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix abuse of kprobe_write_ctx via freplace
+To: Song Liu <song@kernel.org>
+Cc: Leon Hwang <leon.hwang@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
+	Toke Hoiland-Jorgensen <toke@redhat.com>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 29, 2026 at 7:05=E2=80=AFAM Chengkaitao <pilgrimtao@gmail.com> =
-wrote:
+On Mon, Mar 30, 2026 at 9:44=E2=80=AFAM Song Liu <song@kernel.org> wrote:
 >
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> On Sun, Mar 29, 2026 at 10:38=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev=
+> wrote:
+> >
+> > On 28/3/26 05:39, Song Liu wrote:
+> > > On Thu, Mar 26, 2026 at 7:17=E2=80=AFAM Leon Hwang <leon.hwang@linux.=
+dev> wrote:
+> > [...]
+> > >> @@ -3733,6 +3733,11 @@ static int bpf_tracing_prog_attach(struct bpf=
+_prog *prog,
+> > >>                 tr =3D prog->aux->dst_trampoline;
+> > >>                 tgt_prog =3D prog->aux->dst_prog;
+> > >>         }
+> > >> +       if (prog->type =3D=3D BPF_PROG_TYPE_EXT &&
+> > >> +           prog->aux->kprobe_write_ctx !=3D tgt_prog->aux->kprobe_w=
+rite_ctx) {
+> > >> +               err =3D -EINVAL;
+> > >> +               goto out_unlock;
+> > >> +       }
+> > >
+> > > This also blocks uprobe+freplace when prog and tgt_prog have differen=
+t
+> > > kprobe_write_ctx, right? Is this the expected behavior?
+> > >
+> >
+> > Intuitively, yes, this also blocks uprobe+freplace.
+> >
+> > However, how can we distinguish uprobe/kprobe here?
+> >
+> > At attach time, uprobe/kprobe is recognized by the target perf event
+> > flags instead of BPF prog's expected_attach_type. Thus, we cannot infer
+> > the use of prog by prog itself.
 >
-> Replace per-kfunc btf_id chains check with btf_id_in_kfunc_table() and
-> static kfunc tables for easier maintenance.
+> Maybe we should introduce an attach type BPF_TRACE_UPROBE in a
+> backward compatible way:
+> - expected_attach_type =3D 0, it could be either kprobe or uprobe.
+> - expected_attach_type =3D BPF_TRACE_UPROBE, it must be an uprobe.
 >
-> Prepare for future extensions to the bpf_list API family.
->
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> ---
->  kernel/bpf/verifier.c | 261 +++++++++++++++++++++++-------------------
->  1 file changed, 144 insertions(+), 117 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 4fbacd2149cd..f2d9863bb290 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -544,9 +544,6 @@ static bool is_async_callback_calling_kfunc(u32 btf_i=
-d);
->  static bool is_callback_calling_kfunc(u32 btf_id);
->  static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
->
-> -static bool is_bpf_wq_set_callback_kfunc(u32 btf_id);
-> -static bool is_task_work_add_kfunc(u32 func_id);
-> -
->  static bool is_sync_callback_calling_function(enum bpf_func_id func_id)
->  {
->         return func_id =3D=3D BPF_FUNC_for_each_map_elem ||
-> @@ -586,7 +583,7 @@ static bool is_async_cb_sleepable(struct bpf_verifier=
-_env *env, struct bpf_insn
->
->         /* bpf_wq and bpf_task_work callbacks are always sleepable. */
->         if (bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
-> -           (is_bpf_wq_set_callback_kfunc(insn->imm) || is_task_work_add_=
-kfunc(insn->imm)))
-> +           is_async_callback_calling_kfunc(insn->imm))
->                 return true;
->
->         verifier_bug(env, "unhandled async callback in is_async_cb_sleepa=
-ble");
-> @@ -11203,31 +11200,6 @@ static int set_task_work_schedule_callback_state=
-(struct bpf_verifier_env *env,
->         return 0;
->  }
->
-> -static bool is_rbtree_lock_required_kfunc(u32 btf_id);
-> -
-> -/* Are we currently verifying the callback for a rbtree helper that must
-> - * be called with lock held? If so, no need to complain about unreleased
-> - * lock
-> - */
-> -static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
-> -{
-> -       struct bpf_verifier_state *state =3D env->cur_state;
-> -       struct bpf_insn *insn =3D env->prog->insnsi;
-> -       struct bpf_func_state *callee;
-> -       int kfunc_btf_id;
-> -
-> -       if (!state->curframe)
-> -               return false;
-> -
-> -       callee =3D state->frame[state->curframe];
-> -
-> -       if (!callee->in_callback_fn)
-> -               return false;
-> -
-> -       kfunc_btf_id =3D insn[callee->callsite].imm;
-> -       return is_rbtree_lock_required_kfunc(kfunc_btf_id);
-> -}
-> -
->  static bool retval_range_within(struct bpf_retval_range range, const str=
-uct bpf_reg_state *reg)
->  {
->         if (range.return_32bit)
-> @@ -12639,11 +12611,103 @@ BTF_ID(func, bpf_session_is_return)
->  BTF_ID(func, bpf_stream_vprintk)
->  BTF_ID(func, bpf_stream_print_stack)
->
-> -static bool is_task_work_add_kfunc(u32 func_id)
-> -{
-> -       return func_id =3D=3D special_kfunc_list[KF_bpf_task_work_schedul=
-e_signal] ||
-> -              func_id =3D=3D special_kfunc_list[KF_bpf_task_work_schedul=
-e_resume];
-> -}
-> +/* Kfunc family related to list. */
-> +static const enum special_kfunc_type bpf_list_api_kfuncs[] =3D {
-> +       KF_bpf_list_push_front_impl,
-> +       KF_bpf_list_push_back_impl,
-> +       KF_bpf_list_pop_front,
-> +       KF_bpf_list_pop_back,
-> +       KF_bpf_list_front,
-> +       KF_bpf_list_back,
-> +};
-> +
-> +/* Kfuncs that take a list node argument (bpf_list_node *). */
-> +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] =3D {
-> +       KF_bpf_list_push_front_impl,
-> +       KF_bpf_list_push_back_impl,
-> +};
-> +
-> +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
-> +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] =3D {
-> +       KF_bpf_rbtree_remove,
-> +       KF_bpf_rbtree_add_impl,
-> +       KF_bpf_rbtree_left,
-> +       KF_bpf_rbtree_right,
-> +};
-> +
-> +/* Kfunc family related to rbtree. */
-> +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] =3D {
-> +       KF_bpf_rbtree_add_impl,
-> +       KF_bpf_rbtree_remove,
-> +       KF_bpf_rbtree_first,
-> +       KF_bpf_rbtree_root,
-> +       KF_bpf_rbtree_left,
-> +       KF_bpf_rbtree_right,
-> +};
-> +
-> +/* Kfunc family related to spin_lock. */
-> +static const enum special_kfunc_type bpf_res_spin_lock_api_kfuncs[] =3D =
-{
-> +       KF_bpf_res_spin_lock,
-> +       KF_bpf_res_spin_unlock,
-> +       KF_bpf_res_spin_lock_irqsave,
-> +       KF_bpf_res_spin_unlock_irqrestore,
-> +};
+> With this flag, we can allow uprobe+freplace when the user space sets
+> BPF_TRACE_UPROBE properly. WDYT?
 
-I think it's a step in the wrong direction.
-I'd wait for Ihor's BTF_ID_NAMED cleanup.
-
-Kaitao Cheng,
-
-also please start your part of code reviews.
-Your patches are not going to be landing if you don't code review.
-
-https://lore.kernel.org/bpf/CAADnVQ+TKKptnNB25V3=3Dbcdybh5G6c2DyW2sYtXvyRaV=
-nPN8MA@mail.gmail.com/
-
-pw-bot: cr
+New uapi just to fix a narrow bug? Not a good tradeoff.
