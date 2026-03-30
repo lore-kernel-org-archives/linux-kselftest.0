@@ -1,105 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FB1372EE1
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 16:44:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774889042; cv=none; b=EnARnYcZ7uSrFl8rhsvu/MOLMBWXme2kbnbAXUYRL76K+F94pXhqrwfPyy0rsAREFoCZaTpDAMGZ5QEKcuOJYSx7x0t5dDJF7fm/1t2NfjRlNpin5zmwDVUjazKPvj8MkQgR2Y8Mf9cAFfH2fYCzW6N5kmDCgvR97r8BpGRJD0I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774889042; c=relaxed/simple;
-	bh=ZrhF6h3mPSNJGy8KQqQkHtzKHIN+kooyg1QRQ9QjYrQ=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441A73DA7E9
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 16:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774889184; cv=pass; b=Re2Q4/CSrHj2oYPqDqzQoETlL8GgquQ35N7l9csIqVemB3iyaY8UpxuPpQJXiZraSzUkLSg/dlPA+OAwE87L2KKVdNB/PAkB64r4y2wNd3ymt+8Oc5GJZ5Z24nelvCZPQ2AqfQbJXdyl9dS+L/FpzROXvroY5fUSPt1N0Z292Ik=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774889184; c=relaxed/simple;
+	bh=4feyuDqrUmgHeKROraJQ/+XkjdShpl24vAeEH6ljdSo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SfWB/QYCbcKhLx0zjxZLDmtFsPQuQovCG5bl5Yll1Ss3qehnl6TF/s0QY+5OrDoMfqj2oh4r7OWnURzc4lCXjHU0GsKy1OlXvCKWv4/onKGs4vtHjKdJTKNTsxKVKfHaURqr0jmI/Raex/N6xtCRTpBaAozDX2aHyzAZyksPVfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M6x1fQqn; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=KQ1v6Af+ihBYacws/mF3djP+A7mvjCMybj0gdhFGtLTmLbJv4DJ6L6Xpcy3F6MkVt4R7a/JLptCiNs3eYKTEVOamiDmpY+QfpW87fCgtZB2oQjNZSyWmqaxVOXeCOnINiMLoFIgJO/XvcOUveGLIoXgwE76SeTh3Uwjl5c0etgM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qoSvMK+X; arc=pass smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M6x1fQqn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E8ACC2BCB2
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 16:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774889042;
-	bh=ZrhF6h3mPSNJGy8KQqQkHtzKHIN+kooyg1QRQ9QjYrQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=M6x1fQqnJGP9DGKBP/C/biqzcbZsd5KGHCIkXPbG+WwQaydHlQoAhWWLLpiN6Bo3M
-	 gYc32Vw5pjvYQcgfobGgwzT+U7lhjUiZl17NyrwfhLAkjPjeSM5tthRE+Js+X7lSLM
-	 kZ0OOvDjOLRmV6IUVYjEciqVw8iuXceTuo6/PAu5UbUhVmYvJlKjbB0pRPBbGUIdyC
-	 g+pap6eElQa4nstoz33aSyVUgfiWOu1j/cvrgBZ+LbzEjarUeO4cm8P7iD+UZQYblR
-	 wN72DFluAIcOcffMljdFlec/DoVvW3CsAEUwN1yLkM1bAmhSN17hHufCCqFkstG/UG
-	 /EuQEghxKgXvQ==
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-509061dab77so40390211cf.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 09:44:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXEpwZykufaiZpX80ABUwcYRS28MtPUbplFKOoHGn+zH5GbohwKFBwZY8rRoknz3G8ASYOr9qZ2d/2cJD3i8+4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCX5LtwV9wadZ0bPHBULYebG1d/5aFSDBJKzitHyN1A6xOo2un
-	f4krToQitzzt+AzfNjM9b7gxG4bwJu9GNAZZXMP9iReKTA/NNi5vckcMa6gr4VD+MwGfl0tW+i4
-	jpLo2h6DLeeiH28lLNZxCaDuZEEQ80YM=
-X-Received: by 2002:a05:622a:10b:b0:50b:4778:ac60 with SMTP id
- d75a77b69052e-50ba383f3efmr181618101cf.10.1774889041357; Mon, 30 Mar 2026
- 09:44:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qoSvMK+X"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-66ba9898ae8so2473882a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 09:46:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774889182; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TflmShpKSUvD+YMLyrZP5OWpWySTK+y6KGEIZEWYEb9JVQNKvMBY/Zc+a/JPO/4fen
+         mrVrBfcZd0DclLMJ69JTquQHjxNUL5ziUKazTKDnrzanfbbA9kRPX9BKZGvAXF/7ikr2
+         iJW6i270dPH6W3cKHwmw+d/pZK30xceYAxvsJ5fwS+03gnLtQdpUdUJCnOa8/TCEqE7h
+         Q+KO83FV6ogAmLRjqLDBtzZG62G1HecTaFLvcbW50fDTDGMt0kIX4ww4rs0ahE19JfRB
+         /P3EWubx1UWtqchjKdO+W5x0EcwXUJl0+xbmvr3KQDaOMp5a4vu/lu+YCgOqXaEeM7SU
+         LQZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=4feyuDqrUmgHeKROraJQ/+XkjdShpl24vAeEH6ljdSo=;
+        fh=66b+uhHMJnnCU9c0zdMfo+hdXC5RstXLhANX8Kt4mJo=;
+        b=Mdiw4u4QbVgugoo/utgUtANu+2q0qeym23kC2AcGF52KVRy6ghPBlg7RUyAAXeIW6N
+         T48M7yG4iS/Z768ncCgRDappoUqISLDucypJmHQDw2ToQmqDxYyrEA9DBWxmvjJtYtIy
+         YSb4LeKSuRgy45QYOf1xf+7HQK777dqk1PpP1rr+d6IMuFop3zd+HNKTg+wEVCZ2sj9K
+         mPiViOmlhjwT+RQ9YBGrqiUz26ujrXET5Moil5lSuD1fkM4UnMU/1ZeDaEGdlo+IPr++
+         yL04LgaKyabEXTa7kpCcyow9ZrLiiEn2SfPBDL7cREAHGekFuUaQ3Os6HfP/KVNXFE9p
+         IYnQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774889182; x=1775493982; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4feyuDqrUmgHeKROraJQ/+XkjdShpl24vAeEH6ljdSo=;
+        b=qoSvMK+XNKgfVyFNZd6tPDdaEAR3wx1K7boBb9miPG6p7aATYEp4D9idJtIzGMVrZS
+         jm+XmqNnDcydMEoJJVyEXqlWgvNQDMbJAlTOGA5LAuzhf1ProoNDo+R8tE+lUVbyNEZo
+         Jzx3KqxSrBmiCQhD6kbz0LZ10BRmFcZ0v+Dat+mcZUvxCkGwxIUAN0tToSW0+VLQvpua
+         dOm9ht0CC406u0iTWBnaC7U5cBzC5S9XmQiIIhxZcVl2XE9dTYtjPmOeZN7RlxCUQj/H
+         ebRTRfKIV20ZFHbpwh/25AiTt4SxDxLM9vn/mdjEAuKXchR5w1n+QbQBi+/hPdCWKoSi
+         yhjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774889182; x=1775493982;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4feyuDqrUmgHeKROraJQ/+XkjdShpl24vAeEH6ljdSo=;
+        b=jyErNZTSbRJWUQKzhsVwwofPMWVoCjo7tPvVN1seDqWRyuhGeOr7VWLgwSy/T8yTYH
+         oGupXhLfk2atMQ2GRclc0cGJEjb/NNLJNvrEuHjIdRBV/w06GPHvZbWeUCZ/tpm6p+o3
+         3tgjtaMCIp/OyhSCuU29dg/hAO/fzKzChfvlwsMFCWmPreRdDE9pGZpwiZRP1h/6FJt0
+         k/v8464w++6LkeyO5aclFxodsvD0ROU5HI897+fFdk9M3fp2l+Y7QvTcRS0OeGCa2R+7
+         dy+naLVuJyrScHlICOa9+Hu8iEg3QjvLfQ/SIObREuRTpzuybiKvmz68844xARJ77DU1
+         ESxA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3GXKW8X+d//2wFsOVPGMMHIzbUfzGJCX/JU5OwVv/WncSTNZXSX3bU0nG12LlVGP6lEW/AVTYgf+RnOj2Wno=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDYXJWSuCi97PVTuMlCTfBVmvIenv90EWiB+oqMugFC7Xxtqxs
+	m2CM/2NL/O7p6I822EzrTIqcnVMVsnWR5SeFEsOBTPc26LPDAn+CZoqbGr1/3Y5e0nOhMDSCWqz
+	qOKd5A50O/gAQsfNfkYM4puP6cH9rt0Q=
+X-Gm-Gg: ATEYQzxDH/giZMsGoTsruPCVqKD/amvPnCk4KyWzLo/t1qjXPpX109LEvlrci2aw5XD
+	lrNW06qZalFRNvme59iuCzL0+dTxBTg9h5qxRPNCV1LdX3ABr+nKi95xuE36eROZXVVnCKCqoo/
+	WG6HRbcgFJI3V6YgpT/cun8PncP/6mspHvjy1juh+WhbrgNB2pAp5R3doizr8Su90sJJbrnO1LK
+	ide8cQwGJOgZGkptF+IumiUA9MTD59bngytoo6CVfv1CKqZftAgEM3W+19DmRRBxmmgT96pMEQI
+	Wnwb6r9dv/QqwHp8q+EQTC6YU/KxOxWfBz+Nfq0=
+X-Received: by 2002:a17:907:1b09:b0:b8f:d2a0:c283 with SMTP id
+ a640c23a62f3a-b9be835abb3mr17283666b.1.1774889181445; Mon, 30 Mar 2026
+ 09:46:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326141718.17731-1-leon.hwang@linux.dev> <20260326141718.17731-2-leon.hwang@linux.dev>
- <CAPhsuW7vwp6pW5RntKC+Gbn5gTcVg3vsm6LVc-y2ssTeauZayA@mail.gmail.com> <d19336f5-5373-483e-81e4-326aa9c7801a@linux.dev>
-In-Reply-To: <d19336f5-5373-483e-81e4-326aa9c7801a@linux.dev>
-From: Song Liu <song@kernel.org>
-Date: Mon, 30 Mar 2026 09:43:49 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5LKnuZ=wReS+_VtGOs2sefd73a=WUCdaZPho99JBaqJw@mail.gmail.com>
-X-Gm-Features: AQROBzBKTLf4GmV83Z4vXPVmGocd0yrwcBrGb6XUFTSmyFGzvFRJfGlzmKPOtTA
-Message-ID: <CAPhsuW5LKnuZ=wReS+_VtGOs2sefd73a=WUCdaZPho99JBaqJw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix abuse of kprobe_write_ctx via freplace
+References: <20260327141616.1961457-1-hayatake396@gmail.com>
+ <20260327141616.1961457-2-hayatake396@gmail.com> <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
+ <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
+ <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
+ <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
+ <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com>
+ <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
+ <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+ <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com> <4b0e7341-f2e2-4ad2-8c9e-b482a1b1cbfb@linux.dev>
+In-Reply-To: <4b0e7341-f2e2-4ad2-8c9e-b482a1b1cbfb@linux.dev>
+From: Takeru Hayasaka <hayatake396@gmail.com>
+Date: Tue, 31 Mar 2026 01:46:10 +0900
+X-Gm-Features: AQROBzCbYsF_0cVVV3z8GVQf9gn5AjGulzxIUzgv5Xjg0GCGvjjDqN_6nyl63fg
+Message-ID: <CADFiAc+4hKQGSEo9XRvrNuTTK4LXwCfAqPMR3AMxiNBtZTc4mw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
+ non-IBT JITs
 To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
-	Toke Hoiland-Jorgensen <toke@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	X86 ML <x86@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 29, 2026 at 10:38=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
-wrote:
+> Sounds like you are developing/maintaining an XDP project.
 >
-> On 28/3/26 05:39, Song Liu wrote:
-> > On Thu, Mar 26, 2026 at 7:17=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
-v> wrote:
-> [...]
-> >> @@ -3733,6 +3733,11 @@ static int bpf_tracing_prog_attach(struct bpf_p=
-rog *prog,
-> >>                 tr =3D prog->aux->dst_trampoline;
-> >>                 tgt_prog =3D prog->aux->dst_prog;
-> >>         }
-> >> +       if (prog->type =3D=3D BPF_PROG_TYPE_EXT &&
-> >> +           prog->aux->kprobe_write_ctx !=3D tgt_prog->aux->kprobe_wri=
-te_ctx) {
-> >> +               err =3D -EINVAL;
-> >> +               goto out_unlock;
-> >> +       }
-> >
-> > This also blocks uprobe+freplace when prog and tgt_prog have different
-> > kprobe_write_ctx, right? Is this the expected behavior?
-> >
+> If so, and the kernel carries the patches in
+> https://lore.kernel.org/all/20230912150442.2009-1-hffilwlqm@gmail.com/,
+> recommend modifying the XDP project using dispatcher like libxdp [1].
+> Then, you are able to trace the subprogs which aim to run tail calls;
+> meanwhile, you are able to filter packets using pcap-filter, and to
+> output packets using bpf_xdp_output() helper.
 >
-> Intuitively, yes, this also blocks uprobe+freplace.
->
-> However, how can we distinguish uprobe/kprobe here?
->
-> At attach time, uprobe/kprobe is recognized by the target perf event
-> flags instead of BPF prog's expected_attach_type. Thus, we cannot infer
-> the use of prog by prog itself.
+> [1]
+> https://github.com/xdp-project/xdp-tools/blob/main/lib/libxdp/xdp-dispatcher.c.in
 
-Maybe we should introduce an attach type BPF_TRACE_UPROBE in a
-backward compatible way:
-- expected_attach_type =3D 0, it could be either kprobe or uprobe.
-- expected_attach_type =3D BPF_TRACE_UPROBE, it must be an uprobe.
+Thank you very much for your wonderful comment, Leon.
+This was the first time I learned that such a mechanism exists.
 
-With this flag, we can allow uprobe+freplace when the user space sets
-BPF_TRACE_UPROBE properly. WDYT?
+It is a very interesting ecosystem.
+If I understand correctly, the idea is to invoke a component that
+dumps pcap data as one of the tail-called components, right?
+Thank you very much for sharing this idea with me.
+If I have a chance to write a new XDP program in the future, I would
+definitely like to try it.
 
-Thanks,
-Song
+On the other hand, I feel that it is somewhat difficult to apply this
+idea directly to existing codebases, or to cases where the code is
+written in Go using something like cilium/ebpf.
+Also, when it comes to code running in production environments, making
+changes itself can be difficult.
+
+For that reason, I prototyped a tool like this.
+It is something like a middle ground between xdpdump and xdpcap.
+I built it so that only packets matched by cbpf are sent up through
+perf, and while testing it, I noticed that it does not work well for
+targets invoked via tail call.
+This is what motivated me to send the patch.
+
+https://github.com/takehaya/xdp-ninja
+
+Once again, thank you for sharing the idea.
+Takeru
