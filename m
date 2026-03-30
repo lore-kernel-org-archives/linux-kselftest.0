@@ -1,232 +1,287 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010022.outbound.protection.outlook.com [52.101.84.22])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96033CB2DC;
-	Mon, 30 Mar 2026 12:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.22
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774873728; cv=fail; b=d027fqRVn+2Vi6FHNs7DfWKbgFIs4eakM5Dr2MfZYsKlHmFtdnxlrEFCTf6JZUaYHV92Zp9YbLFvkJ6qtDQYjDZm2OpyMwYQGWV1Q+Zrc8ADZQOmog+HNZ94ShqAmKYbwYODmS1MkIqP7M5H4RAYtpDPGCmVUJIEG0Av9z1d2Ws=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774873728; c=relaxed/simple;
-	bh=ENeATLTfVN7US2xxJaqe3ZEyGuyicAsy3YvS9dO7t88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=kunpZXwRgpLTcJD91tMiG3TOHBLDJLV033AvQWDu2FgesMIXfMONVGv+iCw+rbodRvlWBaSYp25IXukW2OrDeq5TbJHGXdFvpVviH8RzTgEwl6CVcFh7toAlNlkCvEobEl8NkYYRcHWZBJfK0IzE6m8p1lSLOxQV6Jb9JQ6+qNY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Lg3NDHIA; arc=fail smtp.client-ip=52.101.84.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191213D1713
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 12:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774875211; cv=none; b=rI6gGwVFSN0XiesiTz0y9O+wFzJRtGoeon4rKL+Z7gxkehskHyHDUtWhfoJLxh6bsyGAPDmekMLUeV1yPbhtgPH7clyXx49it+Gn1G3bERWLFuTDGMmoq/EbpUTfgsw34GzW0MUHNICFiJ8Set9rctOHJ4Th6clkH/mdvz6r3qA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774875211; c=relaxed/simple;
+	bh=mE7a421+mR6aUe90SYOzNZOzGzVPWHAp6ts1tqQ7+i0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Mg9ScRzBvp4l5nS5gRuFSlK5IbsJ9N4776AkIp/WOB/1KDTbcpkuW9BhNMpLeC3kWR1ykOaqjGiYqDsKBPf+fi7e75KoMpNrfZciCOZ2s75tAyxGDmGm06GnGRQKWdp7rnDxBkp7UsJxgpTv7LinLGUkjmpTxz5OuH9h678VccM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cxJFuklw; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Lg3NDHIA"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oyJBEQ8oQEDsSxE/EEpZOO6XHspfz/S2AjCzqWK3gtO8XVeC9EzyOXNIE2iyeBc7q0qMnsksJfiz2OxeDCyDUXME+VoioEQjXWDrm2PRUp7o8Y+FYuMaqOfvcJy28Ui3xsX8/v/QGXLpO9Edlj3Cqv3XiONriwn690SbkLK1/Vt+A/EE1M6IIMGLWjtacvwf9LixrSHKkOvrj4PeRu02CZzq3k60o/zdiWIY4y3d8d2YLOOHaFF9kMgDcF3UuZ16CJAMwNiov2Kepf6bsMpM5QuhGnFPcnk+ttvesm9ekEBjT+3BbsDQwxoQEyDH8B/e0PHpikADYB45Sh+LHI616Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zsx5ABNqAI/Vd9Jl/6WgocPdhQuL8AmJswXxrY/9oUo=;
- b=VxjlcJj09RH0xZibp4qIbBitBF66XL+oK2XiWzC8HKHNTaXggZLFcQcKQm68mWu346jrUiOTqD4c1iWF+wYPaS4PoNadDpbit1BQ7JMOXcYHaTf3efzJG14f2piIGtvUZpjaZC3u2pAWVoZ5WxYTvDYf2g6owPG5QYcPzCIy04GRWgBCBWsR684hHLnaGKsVddnkKHJzEesxqIhPlkz3UA+ObrodkY9vCht8upcK3k5NO1gDwv8EjkIkWpmLp861szmdYfA6TSBu8CQw7/O4rS3u6yNKMrxR6sptE4/XJ6aLo7lh2S3QwrNi2HDn+ghDj5MHorNj/KwL/voV6XapZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zsx5ABNqAI/Vd9Jl/6WgocPdhQuL8AmJswXxrY/9oUo=;
- b=Lg3NDHIA3gqge2I/ZqAWd8nwKpI9JEhkJhgnZxOwDR3NNXqYpB1Mv+Uc3iEGbrIjrguoJWXqBGzr9Sc2yJVBqUTUPEpBhZH9V1B4HHh7/l1g+fjNZxsja/fvcZCZHy8Oo44dmfQ7UUykKZdFziP0bgvohokEV36yVqICSYVXKljF2ca2/QIwmFMYVqnmdhLijbtgE4usLHEy/wz4Vl5XBFXuOmqKEZD0mKv1ipLC/P5WJhqZ1p58MofupaB7S6/Viuo9PtU4TgPOVT/nkjd9RW956YMWu/z4eTZXdAnSe+BGYef3+jxPAM9dlxeyc4y9rvIzjDl6Q2UuYJ2bgbvkNw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by PAWPR04MB9911.eurprd04.prod.outlook.com (2603:10a6:102:38b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
- 2026 12:28:44 +0000
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
- 12:28:44 +0000
-Date: Mon, 30 Mar 2026 15:28:40 +0300
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: Petr Machata <petrm@nvidia.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	linux-kernel@vger.kernel.org, willemb@google.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 03/10] selftests: net: extend lib.sh to parse
- drivers/net/net.config
-Message-ID: <q6yqcidktv5qt6hy7pt4pgnofw6co37qxml6nq2vslixqjhuhk@jbdg6sebvowd>
-References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
- <20260326132828.805703-4-ioana.ciornei@nxp.com>
- <87wlyt4juu.fsf@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wlyt4juu.fsf@nvidia.com>
-X-ClientProxiedBy: AM4PR0302CA0018.eurprd03.prod.outlook.com
- (2603:10a6:205:2::31) To PAXPR04MB8253.eurprd04.prod.outlook.com
- (2603:10a6:102:1bf::7)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cxJFuklw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774875207;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wDzMvwa7hHQR0J91vvkERkkKwoQTKWjm2iHbf3ig1ak=;
+	b=cxJFuklwcp3NGu0xXZPyx+iDmPghKaq+QQ4rlZj2/gELtC/SJuksrrdxDuKNtq9DsPEHAU
+	t2Ga6/Y3b8YNVyAFHFgNZaW74upbvxc2q7we5WbjfFQCkdzQWIu62Xi41gWW75tGh+aCsh
+	M0xxcGJEF7zNbhcGr9wrfEfNw5INU0E=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-553-YP-4SDj_P5mGu4L44vaIfQ-1; Mon,
+ 30 Mar 2026 08:53:26 -0400
+X-MC-Unique: YP-4SDj_P5mGu4L44vaIfQ-1
+X-Mimecast-MFC-AGG-ID: YP-4SDj_P5mGu4L44vaIfQ_1774875204
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5B69C195396B;
+	Mon, 30 Mar 2026 12:53:18 +0000 (UTC)
+Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.10])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 80E5C1955D96;
+	Mon, 30 Mar 2026 12:53:12 +0000 (UTC)
+From: Li Wang <liwang@redhat.com>
+To: akpm@linux-foundation.org,
+	rppt@kernel.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	Liam.Howlett@oracle.com,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org
+Cc: aubaker@redhat.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: [PATCH v4] selftests/mm: skip hugetlb_dio tests when DIO alignment is incompatible
+Date: Mon, 30 Mar 2026 20:53:07 +0800
+Message-ID: <20260330125307.98581-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|PAWPR04MB9911:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6393e785-f2a5-4ed3-7755-08de8e57e212
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|19092799006|7416014|376014|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	JMwD6i7El3YZZqnMM+P1ctK4xfDVtFWeA7KJEEBL4FRp5qBEhauuhRrIZfRJIcyGps1qaPjcLjB84Zas6yQB1Kz5mgS6dsoJCwgGCatHfDTqyVrI1YSh4RS+qkN8g8VYgp4Vzu1jyyAM3I6kPAoElo/y1ugFOI5W5sl+wF1bCUZFlKeftf8cNQzHU+PkVBah0wE+2vx5V4BColO8+m0uJG5mJjJOsDdnTZM7tYI2AWZfjdxlx+FoY4O/r2tIT4ZOzJg3YQ9PrPNhRT/J5Nb1t52708ivPxYbPkCQdtdY7gpMEJYd8b1XsabJYuwKbRYNI4VT+hkZfQM+NUDP2s58hZGIGM9YucSdECI9XyCOVFIsN6x561FeOJY3Hpw5Qpj/zs02X+kQ8bngyw60kFzRPXMke+sx7UL8Og1MNkJFq3fAbF4/Hc7rCib8nYWk3Y1rkkKLKNmmagHatx41dd/m3CVOZnXpmaoftvDcseWX431HKy3hwLwU4RISRc6FSnZ3KT+V8jd8UPJUSiIzemD2A2C4Bh9qTkSzC+EPYjVn+00nzGgLcZZdTB+rJHRAa4+R7ZFgPugJJXjRZa9JP9GlexmeVfLpDNzG4S+euKZkDaGqKHAGLwkDLuWV0YJBlBQrbeczii30pd5S/6MuJW1wA2s9Clx+s6wersYKhPrINhtiQJZOKa0sT81VMLNukuod4Qq+EZ9FfbYQ57ZbF0hZJKwPoKjjOFyKXMwtehKMHlM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(7416014)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ivP1xWddOD8r/thizGP1l+yB3O5gse10aKWJOSl2Id3tXxmrPPqgoA1kV7Ri?=
- =?us-ascii?Q?ckU+X71VsdXiFo8AKNfwYSuEATXsIwCNUL/KkPAqDv9mOJu2u8NKMa3mQ5ez?=
- =?us-ascii?Q?YQyJF1DioJ6YDWf0RltO0IOWSiiY3zqlyL2hiXNGgEe+zcvSq1GY+5ar06bF?=
- =?us-ascii?Q?ZaH1Ei1YMKQ1Y+9uuWLQwlU8qFBbm6jVy0F4updNVxs5g9VUmxceCFCQwBtm?=
- =?us-ascii?Q?/8cq+3oR7BjhkTo8dXrslYRVUVa8UxuoM7X70/X9Sfw8bS7mewl0CFSGBeK2?=
- =?us-ascii?Q?Be4zOgbbtgTvkGF46tiBX5Fc+2PPUjd7R7hHS21Z5JDPNnga+9yi9A03Qj1q?=
- =?us-ascii?Q?MfO5mnKGDzlvcv3w1qrN3yg1bmDiO8KD1WnbibZNnhVkySAn0zIlp6fvw7pw?=
- =?us-ascii?Q?wHyL/OiLGdlWspsf+nFl66MpNhJexyz+HNZsNXgM4oVYmswQlvLCZd8v7Gov?=
- =?us-ascii?Q?3iNEEZKe5KAEphc6Gqhx3o86PcodE8i4qPQeE0Y4n2JETrCCVOQRAbm4oqmA?=
- =?us-ascii?Q?GX8vTNLqg5YusimFGv+0prDVdiog26ERPmDcxlO3/oOzSxuPViPoPsA6joEM?=
- =?us-ascii?Q?tWrCtWHIpYHJE2Yyfr7KYCTnGmLpPid+cj3vIJ+3q1N4BDUdwYmOOgAZoswC?=
- =?us-ascii?Q?pChTB36QCWGDrtTg0NU0hIRcGJPfGCJB3ZJskEVFAiWZy/NfDnXMUGONkjwo?=
- =?us-ascii?Q?msyp9CLy2CPlqEKI/PexVPDusk5CEUFHK+43n/tpdcwVCDFnm81MdHBSv3Og?=
- =?us-ascii?Q?Uul1loB1E+JD2JOlKRperPYsY6DuRAr9hjW2DydbtAMU5gLI20I5bUtzRIOY?=
- =?us-ascii?Q?qji65uH0K9qAjndgZD5/ePwfXSzH54QkQCc2VdUev+bfY/dVkA15viuCgg6V?=
- =?us-ascii?Q?ujTvWf/4zCHpgDqnFEj1wdUqJZYrZZzVm8tjDY6W23Q8Ov828W7aOLvkw49q?=
- =?us-ascii?Q?L7ArdR5JVLTGApnlLxxCw1uXGOQQxbv/o22vPkMQmWXpRcvul4uRvwhQSkNq?=
- =?us-ascii?Q?NwSjf0earKP4qBBaHA2qf6g5eqCcz3x2LLuOGPIjlZkOs47kzEA2u4BipDKG?=
- =?us-ascii?Q?HuDXtczJclK65OaKTsJ/6gvV9S9QxYVbp+a2nd8R66JR8liXtuszTAUcCr+T?=
- =?us-ascii?Q?507H/FeywB3REEXNN7rDcmX/gUia3NAfjC45Orxx20XBNKBUXp0FeOk3GP6c?=
- =?us-ascii?Q?gpx9Hq2PokBqFBOe8Gni/gZOI7Exabw7pZV3h9lN5TIW+GYTP8oG99ECFcjV?=
- =?us-ascii?Q?jdUxMxuDqLrtkRVb/Yblio87surF/DyUnbJzGPPPiyJQ4l8qnGKu+8jDsLvX?=
- =?us-ascii?Q?M+jBmG7TBP1vAKk64OLx5ymOfiw/6MzhRq4dqirWHk46J52AZ0rDA73R9R0V?=
- =?us-ascii?Q?89emkvdNBNty7iF5mvXCErGnh7V427CYVNr23ZQFtqIJ6m8bGt1OYQn+ePkF?=
- =?us-ascii?Q?wjldtsM2eL+uETqa4MJAtCHmvNilIc5m7UoyusFOqObFW4Dh2+yvx40H5RRv?=
- =?us-ascii?Q?aVtgs1Uj6Wik+z7L2tmxwJ6UJujI0zVoc8RhEsVhXa9bfrw4ENgmNEFSkdQg?=
- =?us-ascii?Q?QUN++j6SYpuYhnC5dsysNau0c6cbUwfeHZW5/8QdEI1AQVlETlpezssAxAZ2?=
- =?us-ascii?Q?QHA9YdtL42x0/VX2VIWzWnnPpGBGBkB5QRlUeICmSPyd7JAazJy92EHs5JbR?=
- =?us-ascii?Q?ijfSi1cOdoPhoMyUflcz1zM4fx+7VS0JmfaqAgR/EnO5EU0acYXajulOC/bz?=
- =?us-ascii?Q?TWjUOYpRYQ=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6393e785-f2a5-4ed3-7755-08de8e57e212
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 12:28:44.0547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PVOiUZBkwb9kFK9NCJMDJ2e4+G+f7RIq7a/l/IL33NodD5ogvuj4U6eEGEW2PxGhz5dgVc5crYylblBc1LIsZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB9911
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, Mar 30, 2026 at 01:28:49PM +0200, Petr Machata wrote:
-> 
-> Ioana Ciornei <ioana.ciornei@nxp.com> writes:
-> 
-> > Extend lib.sh so that it's able to parse driver/net/net.config and
-> > environment variables such as NETIF, REMOTE_TYPE, LOCAL_V4 etc described
-> > in drivers/net/README.rst.
-> >
-> > In order to make the transition towards running with a single local
-> > interface smoother for the bash networking driver tests, beside sourcing
-> > the net.config file also translate the new env variables into the old
-> > style based on the NETIFS array. Since the NETIFS array only holds the
-> > network interface names, also add a new array - TARGETS - which keeps
-> > track of the target on which a specific interfaces resides - local,
-> > netns or accesible through an ssh command.
-> >
-> > For example, a net.config which looks like below:
-> >
-> > 	NETIF=eth0
-> > 	LOCAL_V4=192.168.1.1
-> > 	REMOTE_V4=192.168.1.2
-> > 	REMOTE_TYPE=ssh
-> > 	REMOTE_ARGS=root@192.168.1.2
-> >
-> > will generate the NETIFS and TARGETS arrays with the following data.
-> >
-> > 	NETIFS[p1]="eth0"
-> > 	NETIFS[p2]="eth2"
-> >
-> > 	TARGETS[eth0]="local:"
-> > 	TARGETS[eth2]="ssh:root@192.168.1.2"
-> >
-> > The above will be true if on the remote target, the interface which has
-> > the 192.168.1.2 address is named eth2.
-> >
-> > Since the TARGETS array is indexed by the network interface name,
-> > document a new restriction README.rst which states that the remote
-> > interface cannot have the same name as the local one.
-> >
-> > Also keep the old way of populating the NETIFS variable based on the
-> > command line arguments. This will be invoked in case NETIF is not
-> > defined.
-> >
-> > Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-> > ---
-> > Changes in v4:
-> > - reword the entry in README.rst to mention that the different interface
-> >   names is only a bash restriction and the python infrastructure does
-> >   not have the same problem.
-> > - only declare the TARGETS array when necessary
-> 
-> I guess you mean at the point where it's necessary, instead of it being
-> a user API. Right now TARGETS is defined always, and I think that's
-> better than having it only defined sometimes.
+hugetlb_dio test uses sub-page offsets (pagesize / 2) to verify that
+hugepages used as DIO user buffers are correctly unpinned at completion.
 
-Yes.
+However, on filesystems with a logical block size larger than half the
+page size (e.g., 4K-sector block devices), these unaligned DIO writes
+are rejected with -EINVAL, causing the test to fail unexpectedly.
 
-(...)
+Add get_dio_alignment() to query the filesystem's required DIO alignment
+via statx(STATX_DIOALIGN) and skip individual test cases whose file
+offset or write size is not a multiple of that alignment. Aligned cases
+continue to run so the core coverage is preserved.
 
-> > diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-> > index 3009ce00c5dc..93b865681840 100644
-> > --- a/tools/testing/selftests/net/forwarding/lib.sh
-> > +++ b/tools/testing/selftests/net/forwarding/lib.sh
-> > @@ -3,6 +3,7 @@
-> >  
-> >  ##############################################################################
-> >  # Topology description. p1 looped back to p2, p3 to p4 and so on.
-> > +#shellcheck disable=SC2034 # SC doesn't see our uses of global variables
-> 
-> The shellcheck line should be moved elsewhere. The comment is related to
-> NETIFS, and it's weird there's a shellcheck declaration between a
-> comment and the thing it's commenting.
+While here, open the temporary file once in main() and share the fd
+across all test cases instead of reopening it in each invocation.
 
-Ok.
+=== Reproduce Steps ===
 
-> 
-> >  declare -A NETIFS=(
-> >      [p1]=veth0
-> > @@ -85,6 +86,9 @@ declare -A NETIFS=(
-> >  # e.g. a low-power board.
-> >  : "${KSFT_MACHINE_SLOW:=no}"
-> >  
-> > +# Whether the test is conforming to the requirements and usage described in
-> > +# drivers/net/README.rst.
-> > +: "${DRIVER_TEST_CONFORMANT:=no}"
-> 
-> Not sure this makes sense as user API either honestly. Given the
-> differences between requirements of the two test types I can't imagine a
-> non-conformant test would be runnable like that. The actual line is OK,
-> but it should be moved probably above the if check, so as not to
-> indicate it's usable as a user API.
+  # dd if=/dev/zero of=/tmp/test.img bs=1M count=512
+  # losetup --sector-size 4096 /dev/loop0 /tmp/test.img
+  # mkfs.xfs /dev/loop0
+  # mkdir -p /mnt/dio_test
+  # mount /dev/loop0 /mnt/dio_test
 
-Ok, will move it before the if statement.
+  // Modify test to open /mnt/dio_test and rebuild it:
+  -       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+  +       fd = open("/mnt/dio_test", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
 
-(...)
-> > +
-> > +	NETIFS[p2]="$remote_netif"
-> > +	TARGETS[$remote_netif]="$REMOTE_TYPE:$REMOTE_ARGS"
-> > +else
-> > +	count=0
-> 
-> This leg is missing declare -A TARGETS.
-> 
-> Since both legs need to declare it, why not move it up above the if?
+  # getconf PAGESIZE
+  4096
 
-Ok, will declare it above the if.
+  # echo 100 >/proc/sys/vm/nr_hugepages
 
-Thanks!
-Ioana
+  # ./hugetlb_dio
+  TAP version 13
+  1..4
+  # No. Free pages before allocation : 100
+  # No. Free pages after munmap : 100
+  ok 1 free huge pages from 0-12288
+  Bail out! Error writing to file
+  : Invalid argument (22)
+  # Planned tests != run tests (4 != 1)
+  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Signed-off-by: Li Wang <liwang@redhat.com>
+Suggested-by: Mike Rapoport <rppt@kernel.org>
+Suggested-by: David Hildenbrand <david@kernel.org>
+---
+
+Notes:
+    v4:
+    	- Open the file once and pass the fd to functions.
+    	- Add check_dio_alignment dedicated to alignment checking.
+    v3:
+    	- Adopt statx raw syscall to build on older glibc.
+    	- add buf offset alignment check as well.
+    v2:
+    	- Pass dio_align as a parameter to run_dio_using_hugetlb().
+    	  instead of generally page_size/2 alignment check.
+    	- Add O_DIRECT flag back to the first open().
+    	- Add stx_dio_offset_align zero check.
+
+ tools/testing/selftests/mm/hugetlb_dio.c | 97 ++++++++++++++++++------
+ 1 file changed, 75 insertions(+), 22 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+index 9ac62eb4c97d..1c673c6c685e 100644
+--- a/tools/testing/selftests/mm/hugetlb_dio.c
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -17,12 +17,57 @@
+ #include <unistd.h>
+ #include <string.h>
+ #include <sys/mman.h>
++#include <sys/syscall.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
+ 
+-void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
++#ifndef STATX_DIOALIGN
++#define STATX_DIOALIGN		0x00002000U
++#endif
++
++static int get_dio_alignment(int fd)
++{
++	struct statx stx;
++	int ret;
++
++	ret = syscall(__NR_statx, fd, "", AT_EMPTY_PATH, STATX_DIOALIGN, &stx);
++	if (ret < 0)
++		return -1;
++
++	/*
++	 * If STATX_DIOALIGN is unsupported, assume no alignment
++	 * constraint and let the test proceed.
++	 */
++	if (!(stx.stx_mask & STATX_DIOALIGN) || !stx.stx_dio_offset_align)
++		return 1;
++
++	return stx.stx_dio_offset_align;
++}
++
++static bool check_dio_alignment(unsigned int start_off,
++			        unsigned int end_off, unsigned int align)
++{
++	unsigned int writesize = end_off - start_off;
++
++	/*
++	 * The kernel's DIO path checks that file offset, length, and
++	 * buffer address are all multiples of dio_offset_align.  When
++	 * this test case's parameters don't satisfy that, the write
++	 * would fail with -EINVAL before exercising the hugetlb unpin
++	 * path, so skip.
++	 */
++	if (start_off % align != 0 || writesize % align != 0) {
++		ksft_test_result_skip("DIO align=%u incompatible with offset %u writesize %u\n",
++				align, start_off, writesize);
++		return false;
++	}
++
++	return true;
++}
++
++static void run_dio_using_hugetlb(int fd, unsigned int start_off,
++				  unsigned int end_off)
+ {
+-	int fd;
+ 	char *buffer =  NULL;
+ 	char *orig_buffer = NULL;
+ 	size_t h_pagesize = 0;
+@@ -39,10 +84,9 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+ 	if (!h_pagesize)
+ 		ksft_exit_fail_msg("Unable to determine huge page size\n");
+ 
+-	/* Open the file to DIO */
+-	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+-	if (fd < 0)
+-		ksft_exit_fail_perror("Error opening file\n");
++	/* Reset file position since fd is shared across tests */
++	if (lseek(fd, 0, SEEK_SET) < 0)
++		ksft_exit_fail_perror("lseek failed\n");
+ 
+ 	/* Get the free huge pages before allocation */
+ 	free_hpage_b = get_free_hugepages();
+@@ -71,7 +115,6 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+ 
+ 	/* unmap the huge page */
+ 	munmap(orig_buffer, h_pagesize);
+-	close(fd);
+ 
+ 	/* Get the free huge pages after unmap*/
+ 	free_hpage_a = get_free_hugepages();
+@@ -87,39 +130,49 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+ 			 "free huge pages from %u-%u\n", start_off, end_off);
+ }
+ 
++static void run_test(int fd, unsigned int start_off,
++		     unsigned int end_off, unsigned int align)
++{
++	if (!check_dio_alignment(start_off, end_off, align))
++		return;
++
++	run_dio_using_hugetlb(fd, start_off, end_off);
++}
++
+ int main(void)
+ {
+-	size_t pagesize = 0;
+-	int fd;
++	int fd, align;
++	const size_t pagesize = psize();
+ 
+ 	ksft_print_header();
+ 
+-	/* Open the file to DIO */
+-	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+-	if (fd < 0)
+-		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
+-	close(fd);
+-
+ 	/* Check if huge pages are free */
+ 	if (!get_free_hugepages())
+ 		ksft_exit_skip("No free hugepage, exiting\n");
+ 
+-	ksft_set_plan(4);
++	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
++	if (fd < 0)
++		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
+ 
+-	/* Get base page size */
+-	pagesize  = psize();
++	align = get_dio_alignment(fd);
++	if (align < 0)
++		ksft_exit_skip("Unable to obtain DIO alignment: %s\n",
++				strerror(errno));
++	ksft_set_plan(4);
+ 
+ 	/* start and end is aligned to pagesize */
+-	run_dio_using_hugetlb(0, (pagesize * 3));
++	run_test(fd, 0, (pagesize * 3), align);
+ 
+ 	/* start is aligned but end is not aligned */
+-	run_dio_using_hugetlb(0, (pagesize * 3) - (pagesize / 2));
++	run_test(fd, 0, (pagesize * 3) - (pagesize / 2), align);
+ 
+ 	/* start is unaligned and end is aligned */
+-	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3));
++	run_test(fd, pagesize / 2, (pagesize * 3), align);
+ 
+ 	/* both start and end are unaligned */
+-	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3) + (pagesize / 2));
++	run_test(fd, pagesize / 2, (pagesize * 3) + (pagesize / 2), align);
++
++	close(fd);
+ 
+ 	ksft_finished();
+ }
+-- 
+2.53.0
+
