@@ -1,96 +1,85 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752B33A382E
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 13:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527233D3CEA;
+	Mon, 30 Mar 2026 14:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774878940; cv=none; b=B7pHU/Od0jFRSp5ghCNtbFHES0XaOXaD8aREzO6AnZiFK1vYtJGGjnCOx6sKD7cMeEGFyyzOeFtkWwslZzy8oFsOT7F9Zh1qUvmuIZN1IbTvJGIxWHRJ3F1NLJiATQSC4bIcr3O/keE0ey+BYxjrz9lgkd6t4VJaU+hzRmL/15c=
+	t=1774879659; cv=none; b=gVXWKcYcRf9e/MxJ4DmWe6mNXlLJVfyo53VhjRU9cz49EblHcupVCqoJKzU6ob7y9wXU/3RHOxBCsoUtlRIAz+KTRofYRHWTNnhvaMQWBBf8vJkBcLfXVjqhzedSaeqoKEabI3mTK3U0ALO4gzncwTHGb9159UV5Hr5ZYHRHJyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774878940; c=relaxed/simple;
-	bh=JuzlJXEAHGcSiF6n+n3yInCM4todvtFnYHvB3lvFcrs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C+JwKXiTaTF8WnKtlMbhL4Rwl8yZhCNBLnUn9+IjhW2MNpjQ/Ck6inV6a2o4scCJWGTUwufAFO8V6z/D5EkyYjJGcna7viivevApWE83q0q/qzT28KfN1FjEwScg7K9oR7C1ixIRfthx0SbkzacnRTbKbXhwhfOWQBuctecSG/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qDWaEm9+; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774879659; c=relaxed/simple;
+	bh=MqhQRXiekbXYAnbDrF1Z48HnVe/n0wah/MTzk4wcG5M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YVaCuvO4kwWwYmNC3fNTulyPRDy1+u1UFTKgoL7unrtVABVNbdkBVTVdufRWZzidLBO5fZ1E4WqdytbS8b/UD4FsoZCUHP9QRN8EURQmmjfvAqyFgNsJsWxwsX9yxbHFpG+HIzOe49nkWFyLbCK5ZSsacgPYUJhyKZUeIi5CSrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gKZAwtRJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qDWaEm9+"
-Message-ID: <cd12a2fc-8fc4-40ab-a5bc-bf7b0f4ce766@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774878926;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8Oe2X5q/5SHXJHJJnjteGS61bN/fIuINUCylSG5ydx4=;
-	b=qDWaEm9+oGVVjbVmrl8Z31/SC85DF2KQ+is//Zhbm9jWFgjFDtcN1k5WYLoJYlAPCQ3nWX
-	FjngGBEVHXsZJJk8hrVEpcw/2nL8IKi0tGg1wWcwXzbP8VUYsjW8JLP4m+SYaV9rTJvA1s
-	Nx7DGI+a+0EJn9VyWvlIZTMOOxOwuSs=
-Date: Mon, 30 Mar 2026 21:55:02 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gKZAwtRJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95542C4CEF7;
+	Mon, 30 Mar 2026 14:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774879659;
+	bh=MqhQRXiekbXYAnbDrF1Z48HnVe/n0wah/MTzk4wcG5M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=gKZAwtRJaTlrV52BE9zrThokWXrJE2CpKfiKuLbJpjXacpX8NhgOhYNlsX8937COU
+	 yOgPih7ztHMhjJ9zNcZhygbustS3wot0UPBRAnmRruezRDoHNJ0NB9tEP9JprrH5Tb
+	 RWDfSiRfXugqHHh8t8u3vGFgwV6vpLDu+9/EndWkyKbF6TGPztWwJykakM4pp9mP4a
+	 3tVs/L0t8io3AnrOL46ypr1Q6/QFWKVzVv7l35w56f5zBp6SWN30SkznrxqqGBYXOp
+	 hu3iSCKk5IV1rqo6WjSGJoAc5C4NR5M0YxOaRaIfYE9wLd7rhhKk5WGty+ceV5MVMw
+	 RPMg1mX7k6gCA==
+Date: Mon, 30 Mar 2026 07:07:37 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Yi Chen <yiche@redhat.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal
+ <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, Long Xin <lxin@redhat.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, coreteam@netfilter.org,
+ netfilter-devel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] selftests: netfilter: conntrack_sctp_collision.sh:
+ Introduce SCTP INIT collision test
+Message-ID: <20260330070737.3efec19a@kernel.org>
+In-Reply-To: <20260330113509.23990-1-yiche@redhat.com>
+References: <20260330113509.23990-1-yiche@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add test to verify the fix
- of kprobe_write_ctx abuse
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Feng Yang <yangfeng@kylinos.cn>, Toke Hoiland-Jorgensen <toke@redhat.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260326141718.17731-1-leon.hwang@linux.dev>
- <20260326141718.17731-3-leon.hwang@linux.dev> <acpCWX6h-1IJtorN@krava>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <acpCWX6h-1IJtorN@krava>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/3/30 17:28, Jiri Olsa wrote:
-> On Thu, Mar 26, 2026 at 10:17:18PM +0800, Leon Hwang wrote:
+On Mon, 30 Mar 2026 19:35:09 +0800 Yi Chen wrote:
+> The existing test covered a scenario where a delayed INIT_ACK chunk
+> updates the vtag in conntrack after the association has already been
+> established.
 > 
-> SNIP
+> A similar issue can occur with a delayed SCTP INIT chunk.
 > 
->> +	prog_fd = bpf_program__fd(skel_kprobe->progs.kprobe_write_ctx);
->> +	bpf_program__set_attach_target(prog_ext, prog_fd, "kprobe_write_ctx");
->> +
->> +	err = kprobe_write_ctx__load(skel_ext);
->> +	if (!ASSERT_OK(err, "kprobe_write_ctx__load ext"))
->> +		goto out;
->> +
->> +	prog_fd = bpf_program__fd(prog_kprobe);
->> +	link_ext = bpf_program__attach_freplace(prog_ext, prog_fd, "kprobe_dummy");
->> +	ASSERT_ERR_PTR(link_ext, "bpf_program__attach_freplace link");
->> +	ASSERT_EQ(errno, EINVAL, "bpf_program__attach_freplace errno");
+> Add a new simultaneous-open test case where the client's INIT is
+> delayed, allowing conntrack to establish the association based on
+> the server-initiated handshake.
 > 
-> nit, I prefer libbpf_get_error call instead, because it's not obvious
-> that ASSERT_ERR_PTR sets errno, smth like:
+> When the stale INIT arrives later, it may overwirte the vtag in
+> conntrack, causing subsequent SCTP DATA chunks to be considered
+> as invalid and then dropped by nft rules matching on ct state invalid.
 > 
->         if (!ASSERT_EQ(libbpf_get_error(link_ext), -EINVAL, ..
-> 
+> This test verifies such stale INIT chunks do not corrupt conntrack
+> state.
 
-Yeah, libbpf_get_error() is better. Will use it.
+Now it fails in NIPA:
 
-> anyway lgtm
-> 
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> 
-
-Thanks for your review.
-
-Thanks,
-Leon
-
-[...]
-
+TAP version 13
+1..1
+# timeout set to 1800
+# selftests: net/netfilter: conntrack_sctp_collision.sh
+# Test for SCTP INIT_ACK Collision in nf_conntrack:
+# Client: rcvd! 6
+# Server: sent! 6
+# PASS: The delayed INIT_ACK chunk did not disrupt sctp ct tracking.
+# Test for SCTP INIT Collision in nf_conntrack:
+# Failed to recv msg -1
+# Failed to recv msg -1
+# FAIL: The delayed INIT chunk did not disrupt sctp ct tracking.
+not ok 1 selftests: net/netfilter: conntrack_sctp_collision.sh # exit=1
