@@ -1,241 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDE03806DC
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 05:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B16C1A6819
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 05:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774849176; cv=none; b=QspPhtRRl3qbaEjQelsq/4KWeStfIJk3NNkJhzp5u8uJAxi+DvBSyVd23wnOMOGtLOsHpoLCOQHXCJvNrdkMfjKHyi/r88NAIZhFPESq38pa/EzBr+7+kscZiPTYDODfp1ASx+TxSZG5kEwnDBqR4GqJPzkzjAehSGAS+/t117o=
+	t=1774849906; cv=none; b=q+FauzBZU+JEB29RtUJ2nscdNEDwt3FrOxnk15tLJSVYrNLW8qgMjhNuh2bacd/B1aENpsY35dwvksYjcCwPiDr0rnpil5CJyx2gZBcFSWqik4vQ5Upw+9OYV1QT80Y0j03/QoVmreYaaQAsp7NU6++Dtvfg8qEyHrA7gDdcH6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774849176; c=relaxed/simple;
-	bh=bMvndX1iyWMEKILVmOBlP2R8h1g5Nshc1RneWssyiLM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r7lw3oO2kLiHWCELmNY4MISR/ICTlCVEH7jgXeEJb+sFBJGvtPI7hdTGe3SDPry3G+o6iPXZ3aYeqxOXA6yrK6FS0CHMCNTKJ98vJX/7eHUTAVZ9LyYWssLBvMzcnSBgO0akr9Hb3dvEeoulPItxZig1gpXeMW1fqNsoxOFU9u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JEWSBfJh; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774849906; c=relaxed/simple;
+	bh=h69unk6IdGQcnGcEAbMDZVMrP7GK6c3oW9vGjsESLkQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ftd3m5Xuu/AVNINXQkSmHyM5OXdnEpCl/fyFqx/7mRya/n2L5UpjpIA2WEVJDIRWFeAvWocoRUzwQEr3qQHFV2leqPrtSK3zYxz/ePT+xsotfmvkqcl9oUF6n/lIShgnhhAr/RohiN3DijqGQf9wF4tVeGsHY9K7Nc47goABdYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CSFe3j4v; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JEWSBfJh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774849172;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CSFe3j4v"
+Message-ID: <964c4090-d939-4d0b-a0fc-156feb3c0c68@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774849901;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=g8MpXSBjxcDbsCgL0NjDYzsay2G5UIPAPIPiGXT17zc=;
-	b=JEWSBfJhcdnCtuQnOy6IFDuxcTo4GQWnzCm5V+wWDYNfM9GJmNwMprCDaT+jxgo21W1Ukc
-	79ngnnNeiycliWxXHxMdLmfwXPS/AzRBlLx2RCi0BJMf/B7WaN4/Ukb/UqiQWwXdqqSUgG
-	jMNAjYFKq7kNG5cyhXis6iIqYqtKn+E=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-605-JrK4ZgNOO2yHfjrVqeG6yw-1; Mon,
- 30 Mar 2026 01:39:28 -0400
-X-MC-Unique: JrK4ZgNOO2yHfjrVqeG6yw-1
-X-Mimecast-MFC-AGG-ID: JrK4ZgNOO2yHfjrVqeG6yw_1774849166
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4FAF71956094;
-	Mon, 30 Mar 2026 05:39:26 +0000 (UTC)
-Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.53])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 58F9B18001FE;
-	Mon, 30 Mar 2026 05:39:19 +0000 (UTC)
-From: Li Wang <liwang@redhat.com>
-To: akpm@linux-foundation.org,
-	rppt@kernel.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	Liam.Howlett@oracle.com,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org
-Cc: aubaker@redhat.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [PATCH v3] selftests/mm: skip hugetlb_dio tests when DIO alignment is incompatible
-Date: Mon, 30 Mar 2026 13:39:15 +0800
-Message-ID: <20260330053915.75442-1-liwang@redhat.com>
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hCV2Xx45S8pCgxzDwB3s2LIMPJDnbsciGgZ7CqnTIaM=;
+	b=CSFe3j4voYTNDqEEpPKqluWLTk+J3NFXow3aJ4jXqCVvqrmEFrJUTtTthn8f/AzprCXLQE
+	5w+GuGAB5Hghm/8bzU4hyuNjMfvI7/YidsRiv7fn0wJVfQinwcGR4XC6eq0V3dN3VgYkJ7
+	GD6VxxxfePe2LJZAIAw88ONWSGH1Z4A=
+Date: Mon, 30 Mar 2026 13:51:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Subject: Re: [PATCH bpf-next 2/3] bpf: Disallow freplace on kprobe with
+ mismatched kprobe_write_ctx values
+Content-Language: en-US
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
+ "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Toke Hoiland-Jorgensen <toke@redhat.com>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260324150444.68166-1-leon.hwang@linux.dev>
+ <20260324150444.68166-3-leon.hwang@linux.dev> <acbrlN_n4Z684h9e@krava>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <acbrlN_n4Z684h9e@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-hugetlb_dio test uses sub-page offsets (pagesize / 2) to verify that
-hugepages used as DIO user buffers are correctly unpinned at completion.
+On 28/3/26 04:41, Jiri Olsa wrote:
+> On Tue, Mar 24, 2026 at 11:04:43PM +0800, Leon Hwang wrote:
+[...]
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -6404,6 +6404,14 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off,
+>>  		/* remember the offset of last byte accessed in ctx */
+>>  		if (env->prog->aux->max_ctx_offset < off + size)
+>>  			env->prog->aux->max_ctx_offset = off + size;
+>> +		if (env->prog->type == BPF_PROG_TYPE_EXT) {
+>> +			struct bpf_prog *dst_prog = env->prog->aux->dst_prog;
+>> +
+>> +			if (env->prog->aux->kprobe_write_ctx != dst_prog->aux->kprobe_write_ctx) {
+>> +				verbose(env, "Extension program cannot have different kprobe_write_ctx value with target prog\n");
+>> +				return -EINVAL;
+>> +			}
+>> +		}
+> 
+> would it be more clear to check this in bpf_check_attach_target,
+> instead of depending on actual write to context
+> 
 
-However, on filesystems with a logical block size larger than half the
-page size (e.g., 4K-sector block devices), these unaligned DIO writes
-are rejected with -EINVAL, causing the test to fail unexpectedly.
+I've considered it.
 
-Add get_dio_alignment() to query the filesystem's required DIO alignment
-via statx(STATX_DIOALIGN) and pass it to run_dio_using_hugetlb(). Skip
-individual test cases whose writesize/buf-offset is not a multiple of the
-alignment, so that aligned cases are still tested.
+But we can't, because bpf_check_attach_target is before check_ctx_access
+at load time.
 
-=== Reproduce Steps ===
+Besides, sashiko has pointed out that this check in check_ctx_access can
+be bypassed when attaching to kprobe_write_ctx=false target [1].
 
-  # dd if=/dev/zero of=/tmp/test.img bs=1M count=512
-  # losetup --sector-size 4096 /dev/loop0 /tmp/test.img
-  # mkfs.xfs /dev/loop0
-  # mkdir -p /mnt/dio_test
-  # mount /dev/loop0 /mnt/dio_test
+So, I posted v2 to do the check in bpf_tracing_prog_attach at attach
+time [2].
 
-  // Modify test to open /mnt/dio_test and rebuild it:
-  -       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-  +       fd = open("/mnt/dio_test", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+[1]
+https://sashiko.dev/#/patchset/20260324150444.68166-1-leon.hwang%40linux.dev
+[2] https://lore.kernel.org/bpf/20260326141718.17731-1-leon.hwang@linux.dev/
 
-  # getconf PAGESIZE
-  4096
-
-  # echo 100 >/proc/sys/vm/nr_hugepages
-
-  # ./hugetlb_dio
-  TAP version 13
-  1..4
-  # No. Free pages before allocation : 100
-  # No. Free pages after munmap : 100
-  ok 1 free huge pages from 0-12288
-  Bail out! Error writing to file
-  : Invalid argument (22)
-  # Planned tests != run tests (4 != 1)
-  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Signed-off-by: Li Wang <liwang@redhat.com>
----
-
-Notes:
-    v3:
-    	- Adopt statx raw syscall to build on older glibc.
-    	- add buf offset alignment check as well
-    v2:
-    	- Pass dio_align as a parameter to run_dio_using_hugetlb()
-    	  instead of generally page_size/2 alignment check.
-    	- Add O_DIRECT flag back to the first open().
-    	- Add stx_dio_offset_align zero check.
-
- tools/testing/selftests/mm/hugetlb_dio.c | 62 +++++++++++++++++-------
- 1 file changed, 45 insertions(+), 17 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-index 9ac62eb4c97d..b125092fc6c1 100644
---- a/tools/testing/selftests/mm/hugetlb_dio.c
-+++ b/tools/testing/selftests/mm/hugetlb_dio.c
-@@ -17,10 +17,41 @@
- #include <unistd.h>
- #include <string.h>
- #include <sys/mman.h>
-+#include <sys/syscall.h>
- #include "vm_util.h"
- #include "kselftest.h"
- 
--void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
-+#define HP_DIO_TMPDIR "/tmp"
-+
-+#ifndef STATX_DIOALIGN
-+#define STATX_DIOALIGN		0x00002000U
-+#endif
-+
-+unsigned int get_dio_alignment(void)
-+{
-+	int fd, ret;
-+	struct statx stx;
-+	unsigned int dio_align = 1;
-+
-+	fd = open(HP_DIO_TMPDIR, O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-+	if (fd < 0)
-+		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
-+
-+	ret = syscall(__NR_statx, fd, "", AT_EMPTY_PATH, STATX_DIOALIGN, &stx);
-+	if (ret < 0) {
-+		ksft_perror("statx() failed");
-+	} else if ((stx.stx_mask & STATX_DIOALIGN) &&
-+			stx.stx_dio_offset_align) {
-+		dio_align = stx.stx_dio_offset_align;
-+	}
-+
-+	close(fd);
-+
-+	return dio_align;
-+}
-+
-+void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off,
-+			unsigned int dio_align)
- {
- 	int fd;
- 	char *buffer =  NULL;
-@@ -33,6 +64,12 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
- 	const int mmap_prot  = PROT_READ | PROT_WRITE;
- 
- 	writesize = end_off - start_off;
-+	if (start_off % dio_align != 0 || writesize % dio_align != 0) {
-+		ksft_test_result_skip("DIO alignment (%u) incompatible with "
-+				"buf offset %u and writesize %zu\n",
-+				dio_align, start_off, writesize);
-+		return;
-+	}
- 
- 	/* Get the default huge page size */
- 	h_pagesize = default_huge_page_size();
-@@ -40,7 +77,7 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
- 		ksft_exit_fail_msg("Unable to determine huge page size\n");
- 
- 	/* Open the file to DIO */
--	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-+	fd = open(HP_DIO_TMPDIR, O_TMPFILE | O_RDWR | O_DIRECT, 0664);
- 	if (fd < 0)
- 		ksft_exit_fail_perror("Error opening file\n");
- 
-@@ -89,37 +126,28 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
- 
- int main(void)
- {
--	size_t pagesize = 0;
--	int fd;
-+	size_t pagesize = psize();
-+	unsigned int dio_align = get_dio_alignment();
- 
- 	ksft_print_header();
- 
--	/* Open the file to DIO */
--	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
--	if (fd < 0)
--		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
--	close(fd);
--
- 	/* Check if huge pages are free */
- 	if (!get_free_hugepages())
- 		ksft_exit_skip("No free hugepage, exiting\n");
- 
- 	ksft_set_plan(4);
- 
--	/* Get base page size */
--	pagesize  = psize();
--
- 	/* start and end is aligned to pagesize */
--	run_dio_using_hugetlb(0, (pagesize * 3));
-+	run_dio_using_hugetlb(0, (pagesize * 3), dio_align);
- 
- 	/* start is aligned but end is not aligned */
--	run_dio_using_hugetlb(0, (pagesize * 3) - (pagesize / 2));
-+	run_dio_using_hugetlb(0, (pagesize * 3) - (pagesize / 2), dio_align);
- 
- 	/* start is unaligned and end is aligned */
--	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3));
-+	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3), dio_align);
- 
- 	/* both start and end are unaligned */
--	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3) + (pagesize / 2));
-+	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3) + (pagesize / 2), dio_align);
- 
- 	ksft_finished();
- }
--- 
-2.53.0
+Thanks,
+Leon
 
