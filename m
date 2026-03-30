@@ -1,73 +1,72 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EA63CF027
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 13:44:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A7E3CE488
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 13:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774878244; cv=none; b=ZlBD5GNaBj/RaP9E2iTkTBA/ryDMHvsHT7tryE3BiT9ZxWA2Imle71B19m0j8wX9FrddWE6veVNrf8QMWbnbGYkUQMJCNTVwK/k/Zp/6nvSmb43mDjGaghhOhrl16AZqpV+BygwHw2DS82Q3D007R+tSgFuOe5qW5TTC312Q2ss=
+	t=1774878543; cv=none; b=nmU4y9IJbULMZWIHpNIMedTejQDu8RTKwVchNbhsxNme5oizEBYOyaWRF3GaDXGCrD62gWD9J8P+1K3n3hiwJcmfgYW0pD/ZjqKrlG6vRgQdsx31pfz6Q5Ol9YnmeutQ7ETEiMn2+bykYubmAndb5Or1HZX7EkhAWJr0pW/KKLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774878244; c=relaxed/simple;
-	bh=xAkSICz3YbYbLRx33yS/PX4Q5TGmnFPmB+CxO/HhMQg=;
+	s=arc-20240116; t=1774878543; c=relaxed/simple;
+	bh=XkO1wPeal3Kc8w275PiOatPBzgWgLU7yfkQaxOpKYzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Au0ef7cOrrjJRz52OMbeLa4GWnXcDS6rV+moOSvFJB2Zj0Lt3CRJqaJBibu54MsuM5KL9GjcdPm3EdI9Q8G49ejzSn1iaBNl1vLQed+p0sX5a2Nr3ZEuFOmsB+oWeU2YIZ5OlHsMHmqcM55p33wdu8Ymtks/zMdNFQx4fLRSQC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ggQ/nLNz; arc=none smtp.client-ip=209.85.221.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=YkTo9dJzUI5Yr+P7jH9Ni3lFUfDjDmsT9N6aijeW8TrY+4ZL9vlE79kS9sX3A3vbSKzfAY7YEWQS6VcqqoNltL5OxjWE++pfZ98QOEaaUOY8+ErxWQsVpS3gp0yecYPnbt9/nvAyx8BzOcldHq2f1odpYe02R6SS37bvvb2gj1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TbpTuWxO; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ggQ/nLNz"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43cfbd17589so1180843f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 06:44:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TbpTuWxO"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4853c1ca73aso45198535e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 06:49:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774878240; x=1775483040; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1774878540; x=1775483340; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X3ZGzJVCnNmeNCqoUl4L/iCu0K897W7KXdQ1Y7sD5VE=;
-        b=ggQ/nLNz/QC5rGkzz6kNlzqhwiOa1yc880L9DRaJFWmXEjoX/cIg5JxKDinY1C8G4U
-         geP0HGQbZRb+091DObiY4kquf9Au+omFv0E9kuOQ5FPjgYA8CKmY7b0ISz1kEw+igbed
-         ofHN5Q74SCGQSmKW6Qfg2FQjIx8onHyCT5HE8nWKzuIz0FBbL7hbfy81kPufWyBY4FH6
-         6qtl9VBv9cMHRSSk4XJvTK05Az7cwh3DIKAmd3KCsdf9qWUKLb+OQXO547CccLhQIWYI
-         GQc+IaMlmKlcY/zBVT6U+sd5XEp8p0CvEF9TvXDS03bh2KzhUPBpOnN3HVdZ7fnsc103
-         H/3A==
+        bh=njb2j7pkbXogpjPTY38oH4qSs8U+jP8c+JG2E4esAKs=;
+        b=TbpTuWxOaP7Qwz4V808ahKSugVmVHWlAewXrKDlL9/zCSgoT1pwiw8jC2n7KQNEjkX
+         ps6dedA0Yh2KPCDci4Germ0jpWVGqhTsh5+Ut78tADMczfThh+LYUH6anHaX5ly0JAWK
+         E7ESwQmpQMav9kFpCXsAhSOOvBJ+eQweYwog0NKkpG6Dtx4/nHg080OUedMg+/jUkTMj
+         REhl3yJVgta6UmP8hCjYSosKrRwZy35i2UFFQ7UrroSSwqeJ9cz1w2XqYnhxqiSfone5
+         dRNqtpSyn9bGrI3P6jV6gjCCY11ZzhFSA9QRIqtjb0rs/xylnyhsN7IXWPxS+UmUFIsU
+         aKlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774878240; x=1775483040;
+        d=1e100.net; s=20251104; t=1774878540; x=1775483340;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=X3ZGzJVCnNmeNCqoUl4L/iCu0K897W7KXdQ1Y7sD5VE=;
-        b=EksRVPGMAV5qHYvq83/NOxfaQRPYMZvjec6k8mjN93yxyacKlFsGhgz3B8ToE0UCJ6
-         InveHW4peLQHXbfvzLpsFQ72vWSBEBm03CFVjx1Ubft4/gL5S79xiS1X252SZ67Jeynk
-         CX9NeIyXcs4MmRfiMAeybVFOk0HavaOIjN7+sIVj6EJvFSTXvWZ4UYUAeQA9SgZGBF9t
-         aCeNJSdgHMrSAaQ80JhBYSsD5dczOWuPAC2T6W1b3OHS9Az0IINojZsRwzaPxnae+Z7h
-         iIjhTw7tnvO/5vPu4uUoSWvgymvrV3+6HEkgYxH9Y02Ox4xlfyf1Kul70ukuAK2wqdQf
-         jg3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWIZ5k5MWf8lS7wpcXP8r3aUf377PQ7ACx2nH/cdXVjLS37AO+kTDPmpy0UIMTkq96hTZ8NLNHOy+sgjD2zVxo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdDAHeWnI4ReCRL8CnbbbKWdkEIh54MI/2iTadl8bdUssiYgoG
-	pB0nsXH2bXzM3W7fIvSprFDbQiwAiCiJe3PRX+qHoFX7/uziGEk6mOoVsNPG1yuk+91YuUY4hjF
-	g7YREPKQ=
-X-Gm-Gg: ATEYQzx0Og0gJGRinVuVwTNIem1zb2NPGB1SXW3tfKom2sTvLJz3VHcDFHsKx2X/KRf
-	ln9X8MNVZ7uPeLRnXfL6uCrT/i/oaDSLCyc9utTuQ6MEBdww8nGRjLsYILX6z5yKMx1+aQC95oP
-	yzaSEO5TUo/isMKCld2/9PYIu7KeuFT+0ciHQiGDbQbZgPt3nRQ0EPFcshGewtIW3N3EJJ8Yf0E
-	dSZ72x0F+XoaRpIwVQLaGpKJOyJ3geyE27a1TYE1by4AQmBnnTNldC+WAPqH5DxEe/3RRFrC30o
-	lSd8KtFzerZO/WpoS+mbj2DCpG3RBbXMILYEgWSEKQeE0I0WVTi3XpiL5XSCxWbYqjtrg60s+ts
-	ocF/GDPWBqcfU6VXsAZmC8WvlzAD8s8ufvqMphPdF5MldzOqSOps1rkZFdZuXfpFfGDYqfq06Tr
-	7tP9tPG/vWAJ51QnCA0ezaVqJxMA==
-X-Received: by 2002:a05:6000:2505:b0:43b:962b:5314 with SMTP id ffacd0b85a97d-43b9e9e8f39mr21060657f8f.19.1774878240171;
-        Mon, 30 Mar 2026 06:44:00 -0700 (PDT)
+        bh=njb2j7pkbXogpjPTY38oH4qSs8U+jP8c+JG2E4esAKs=;
+        b=YK3pw8rVS0vaehOGWSJuIFADsA8qigz0Gw50glvf/1Es9nHZ0ouHoeZXJgokyyqBOc
+         fAeQYsJiHZpW00gNXhmT8q3UhHllFbTD3iWDgbzlXViJQ1PMURHVJzyyBxOZeUODCsVq
+         c/96A1N1tm4+HCkNsjlhTCa6GRdjT3fLYRhPed+bGjpB+6htemhAaAL6GuoZwySDPlPg
+         Yg+Jb2IL6bHAnbL9gTdNQHa4tMNB9xE9rWNfDLANPnCAi/eMubqr1CcRsyK8+two97Ox
+         rpqyXC17KoPSXeb/hWGjFfJdSVSSTAVP0Ud4xeKaOO7TGLo+Nu9rLxbEFMSqy02/kArN
+         0eOA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGQwvBB/ILLp7gQnJCNoVQAOa8cLWuVeoetDS2eReC+1E8dTdtvMv0PcCl6kl6vWhY3KjXNX2ogFNJM3TM+IY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzW+HxdJbgMmFwD77LSRZaJmKt8Yh2mf2A1ZOnMtEApjw1tdQ3q
+	wQhkzypULjZwoXyhoF+z4OlLTqCYkcAphLtmS9hRvvhbf89UrN9zwRgzvlN20b0FBsM=
+X-Gm-Gg: ATEYQzxhqlkZPy4Muzqe2csuDDwRxGLGWzUy9KxVap0qZD8OHvG+NWKszDn80T3T/af
+	CB6jfJHU9NUP/XYikiVZLcPvezQFCyYFPC8q6jqpFr2Jf3LeKIPZhMfhf67w/h/e6qgysb41JJW
+	EKcUaGd8gEkGWVYqVv+ioHB3Mq/RKSHNKeBKozBKRxs3yLC3tcgBaxRH5HEHv4YknNjyxKaM4Ix
+	DRvZbDXfJiXdAC8y1TwLS9D5hZQ6PAup9sQPmZN7AezWnjFE/P+9aSHZ5tS9jSh5CxDKTsa/VuV
+	NRyuW6o3bKS2oh5lkbqcAugv38eOCAv5+nZS1AtI3VPa0EX9wgvYhQ0fItL1NqdbU0FPKtBEg0v
+	uq8C+JBF3WHBX1VHXQOkgM3EOSU24CCAXRysTj1E3tFL+Dd6p9vIZc47PZeXf+Z65gM0EvfezXw
+	dTTNV4RQZdrGTRUU8fYFOrxCHr/w==
+X-Received: by 2002:a05:600c:4744:b0:485:2a4b:7bc3 with SMTP id 5b1f17b1804b1-48727d5d6femr207566795e9.4.1774878540187;
+        Mon, 30 Mar 2026 06:49:00 -0700 (PDT)
 Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21ebef9sm20099592f8f.13.2026.03.30.06.43.59
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48730628efasm297363515e9.5.2026.03.30.06.48.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 06:43:59 -0700 (PDT)
-Date: Mon, 30 Mar 2026 15:43:57 +0200
+        Mon, 30 Mar 2026 06:48:59 -0700 (PDT)
+Date: Mon, 30 Mar 2026 15:48:57 +0200
 From: Petr Mladek <pmladek@suse.com>
 To: Joe Lawrence <joe.lawrence@redhat.com>
 Cc: Pablo Hugen <phugen@redhat.com>, live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
 	shuah@kernel.org
-Subject: Re: [PATCH] selftests/livepatch: add test for module function
- patching
-Message-ID: <acp-HYTmlaWYhS-h@pathway.suse.cz>
+Subject: speaker-test-module: Re: [PATCH] selftests/livepatch: add test for
+ module function patching
+Message-ID: <acp_Sa9iyGLdSN04@pathway.suse.cz>
 References: <20260320201135.1203992-1-phugen@redhat.com>
  <acVD_NPu4JVRoaVK@pathway.suse.cz>
  <acWZ3r2CoSDy_NLf@redhat.com>
@@ -85,29 +84,56 @@ On Thu 2026-03-26 16:41:02, Joe Lawrence wrote:
 > On Thu, Mar 26, 2026 at 03:34:36PM +0100, Petr Mladek wrote:
 > > On Fri 2026-03-20 17:11:17, Pablo Hugen wrote:
 > > > From: Pablo Alessandro Santos Hugen <phugen@redhat.com>
-> > > 
-> > > Add a target module and livepatch pair that verify module function
-> > > patching via a proc entry. Two test cases cover both the
-> > > klp_enable_patch path (target loaded before livepatch) and the
-> > > klp_module_coming path (livepatch loaded before target).
+> > In my RFC, I created a helper module which implemented a person
+> > (speaker) which would come on the stage and welcome the audience.
+> > I am not sure if it was a good idea. But it became a bit confusing
+> > when everything (module name, sysfs interface, function name, message)
+> > included the same strings like (livepatch, callback, shadow_var).
 > > 
-> > Summary:
+> > Anyway, my tests produced messages like these:
 > > 
-> > IMHO, this patch is perfectly fine as is if we accept that it will get
-> > eventually obsoleted by my patchset (hopefully in a year or two).
+> > +% cat $SYSFS_MODULE_DIR/$MOD_TARGET/parameters/welcome
+> > +$MOD_TARGET: speaker_welcome: Hello, World!
 > > 
-> > On the other hand, this patch would deserve some clean up,
-> > (helper functions, don't die in the middle of the test) if
-> > you planned to work on more tests. It would help to maintain
-> > the tests.
+> > , see https://lore.kernel.org/all/20250115082431.5550-9-pmladek@suse.com/
+> > 
+> > 
+> > There were even tests which blocked the transition. They tested shadow
+> > variables which added an applause to the message. They did something like:
+> > 
+> > <paste>
+> > All four callbacks are used as follows:
+> > 
+> >   + pre_patch() allocates a shadow variable with a string and fills
+> > 		it with "[]".
+> >   + post_patch() fills the string with "[APPLAUSE]".
+> >   + pre_unpatch() reverts the string back to "[]".
+> >   + post_unpatch() releases the shadow variable.
+> > 
+> > The welcome message printed by the livepatched function allows us to
+> > distinguish between the transition and the completed transition.
+> > Specifically, the speaker's welcome message appears as:
+> > 
+> >   + Not patched system:		 "Hello, World!"
+> >   + Transition (unpatched task): "[] Hello, World!"
+> >   + Transition (patched task):	 "[] Ladies and gentlemen, ..."
+> >   + Patched system:		 "[APPLAUSE] Ladies and gentlemen, ..."
+> > </paste>
+> > 
+> > , see https://lore.kernel.org/all/20250115082431.5550-11-pmladek@suse.com/
+> > 
+> > Sigh, I have done many changes in the tests for v1. But they still
+> > need some love (and rebasing) for sending.
 > > 
 > 
-> Right, I think this was a good intro patch for Pablo and that the
-> revised execution flow would be a great follow on series, if he is
-> interested.  How about that?
+> If these can be pulled out independently from the v1 patch, perhaps
+> Pablo would want to hack on that in a follow up series?
 
-JFYI, I have committed the patch into livepatching.git,
-branch for-7.1/module-function-test.
+Unfortunately, the selftest changes can't be pulled out easily.
+The new test module and related livepatches are implemented using
+the reworked livepatch API. :-/
+
+I hope that I'll find time to work on it rather sooner than later.
 
 Best Regards,
 Petr
