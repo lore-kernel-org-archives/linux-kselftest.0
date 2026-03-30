@@ -1,133 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C7B2C159A
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 08:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A193AC0FF
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 08:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774857976; cv=none; b=YfVewsFFyaVuHRZwByUAw8HrgMRx4/XTCLRgYUp/+pAbZHPcdGoAC9JEC/bArnNO7zxSV5uJU7LHRAt8rWvxwbq+DanesR1Y0NKd2DM2ZXDjwjOgdqy2j0RjGWrC0aep/7EkD7f3rHikh7q4VHndDzyCR5Qt6FVNwmk/lyz3tYc=
+	t=1774858092; cv=none; b=el1WAjyje8jksRmfRPmHl4fscYacbryUSiXVwXetGlsh1Njw95VbAaH1c4G7flWIJVbO32jEcXwZc1McEExienVpIn21iAnSptVZuyFOU36EWmORdJnz+jFQWrr1WdSAdT4Mc4+kL+zbKcWtGUeAHu6MkcjUSFEYyTYSAxY4OMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774857976; c=relaxed/simple;
-	bh=kkfD2P1hm0+ZubT4vEQkzecPsPm6oKT2oHVK9d+50Hs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=arbcnKOJPZO2vg1okEW8Atfumh1sKyHNytykGo7y5Ledp9hNawS225rTj92JpaiKHWn7WgyS2NZPrqZuYeegY22j3zUC5MmnE5DL7vdIxp1C40sApahmfaSxvTyJ/jCD5yBsFsSQrkrO2vuqFJag9G2DUZV5kJ8AqeK/swKsGY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BWtBrIu5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=TG8M4INq; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774858092; c=relaxed/simple;
+	bh=VYfo2JE7NvtABKnE9DEwIy/nZWzlK8oHOS54PxmISlY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KdAE8y8BQam3u33/S2O5s7HoRNg7O5Y/lFmcAyhfV3YbbsHxfibd+EqaCxZ7HBfJjdTQ63rKLvvj3vCAtPkNagJ2nS8NHkS5ocBqm1hhE9J2+X1JxqgFGca4NHzIWvOiMcx3NhC1xEQAesOtT9ZRzKE5Tl5bv1jyfziagTbOPTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R/O85a7x; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BWtBrIu5";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="TG8M4INq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774857973;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R/O85a7x"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774858079;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7T4GSdfs4U7ZrYueyx37xTT6R+FzPto57XBQfWOXzFU=;
-	b=BWtBrIu5WkVzmfeM8qQ9gUI5g1LRS17rfEryJovAo2A1TT4p/wrwCTxYXlz4HcYRhKBCXG
-	igbtkAMRG2e/gyMfJE2yhzilDbgFp7row8mfmpBT0SyRFpR11Bd0GKzQxh0xj71DmxC3wK
-	9mcQPywQ3EwIcP5aSYKkwAPIQMgb9Vk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-616-4jm6f-yhOMGQQeeBUoRtQA-1; Mon, 30 Mar 2026 04:06:12 -0400
-X-MC-Unique: 4jm6f-yhOMGQQeeBUoRtQA-1
-X-Mimecast-MFC-AGG-ID: 4jm6f-yhOMGQQeeBUoRtQA_1774857971
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-48544725bdeso56727335e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 01:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774857971; x=1775462771; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7T4GSdfs4U7ZrYueyx37xTT6R+FzPto57XBQfWOXzFU=;
-        b=TG8M4INqEZHAsE3RdcO+Vtn9yemH5EW201gyCulmGqzGATQIvjbVDIT0tESm9A9c0e
-         ftAMTsTWzPa1YakdzCPHWRQ07YTjOLqTEgqXtqutsnihv1sm2mc0DbXO6dSJh+KPelPB
-         Uw9zHgsOsIIjVzGFZW9IUVZAEPoCaJ49zssl9vRPMBGOAva6sB/7HKF/PSim1RYvtQnt
-         zJFJkypmHGdJnlu92cWfBksUbl2FiY7JYsbd7k7x3WmTpeohoDlIdUeNCnYy12WWgq4q
-         WxNV8S9q6KZDNSOmrzyCQ+TGc5S4g6z3oftUg5cJgpmQyx3OLQxKP/clcpHWgwRXxxP2
-         mfRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774857971; x=1775462771;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7T4GSdfs4U7ZrYueyx37xTT6R+FzPto57XBQfWOXzFU=;
-        b=mfi0/7Nzpzs5HAkUa5C/cNMd/t8zgGGo9vfAcTDlvOkAnGwK5PV0r2eqMcdjcIoBZC
-         ohm2Wu+TCYBdw35v+ybUwhAYbjs0zN91mPZNzt4+dko+R6NsA1Xl6MU737hhPsStpTEu
-         6G/mSd99BdXCXNpTnIQjOWi/fGoDQkyNDktI3jvcZ0ypOEU2BbBFCuIWwY6a1OHXSqNF
-         toour4tolgO5U+NeNaYD/j3YQAwfDryMr6RLHBuPqCR06GUcyB+pQwE+eIx4nMxfGPM7
-         fazAyFkGnPJCBeI7XYq3dYQ0bBx1wn4NWBO1RXifQ9Y+L4Lw9po+cfXeYY4y/myyhFge
-         1tVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUW248e9oEBeTDkit3X/0slRZVSZ/PA7S12R7pdYpE+G6IlExNio2PTV5WlzlQbTr3mwQRu7sQdvjQYemx/zTI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3xHCRgW9gzdvrgQ0SzRgwi1mWYdARSeBZ/TY7Qtn7NPQvjusW
-	6YKEhp6FC+03IXTFvBbdPtt6LgQf+GMcZs2/dCb5vzUA+JErK2FbKbYgVM0sCDKCKOcxeoEcsgt
-	KSDmUjSE6OaeQCxoiMjE8i9kdBLJtWWSGigfwaugnHOUpYRHXYIVxzcA8FR2vEMUUwQoLuw==
-X-Gm-Gg: ATEYQzxwGVkyXwQXlmndMnJYv/QuEb+QR906Z2AQFPz7WqK/pwCRJwnmsMxKkI2Hv9q
-	gSex/oZwTjKU//sHUH1eTgZwmtVXFzYPgGO0E4fKORr4s/YtHsf3Vwv+XKfvU8zDwaJlp4Z1VnR
-	zrb0pe+KefGVCEnVn6NgeY7Z+f9bRf5Y0CPZjcc9NGsTrtm0jC4e7TLN20eHa4QWRQtTIxkaCEn
-	M3AwTbRtvssLZMiSxxvCrTGdYZQh/+Ehr0ilSdwNEH3ukRr2qdxuCxozJRuec5f0t1Kimw9aM5K
-	mVDKaewXhnKKHHCRVWy0DOM/OnhPnVZCYJIuMBd+p93pq81lGUYZb/htXZmQOMEOAo+LANbk4Ce
-	iw1Jr/N9YfynN4oMYGUl51Zl8hb3F0OSR/E3VUsI4fc6FOIHNYVzSGnLC
-X-Received: by 2002:a05:600c:450a:b0:485:531d:28b9 with SMTP id 5b1f17b1804b1-48727d774e6mr200981555e9.14.1774857971183;
-        Mon, 30 Mar 2026 01:06:11 -0700 (PDT)
-X-Received: by 2002:a05:600c:450a:b0:485:531d:28b9 with SMTP id 5b1f17b1804b1-48727d774e6mr200980965e9.14.1774857970693;
-        Mon, 30 Mar 2026 01:06:10 -0700 (PDT)
-Received: from [192.168.88.32] ([216.128.11.222])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722be608bsm392031745e9.0.2026.03.30.01.06.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2026 01:06:10 -0700 (PDT)
-Message-ID: <cf7128a8-80f2-4d4c-8c68-2c9f386cedb2@redhat.com>
-Date: Mon, 30 Mar 2026 10:06:08 +0200
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EAKIwnjB5Oawmq89pgUvZeH/TVFj76rosWd2pW+3SXc=;
+	b=R/O85a7x/xGN1+2TpssGJvUqCmyRFAvzSQ7R4+op2aRaKPmXg4WhupfQVOncQEQ7pWeviI
+	Ksna5hWOmdGW8VfwzPYyV6JecLGumacZEFsXwb0O0n1F2d/qdSa47YTPSEPeKm9UPXmK49
+	ptCThBG/BpyY1rqLPA1J1MNu+bd7U1M=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v4 0/2] bpf: tcp: Fix null-ptr-deref in arbitrary SYN Cookie
+Date: Mon, 30 Mar 2026 16:07:24 +0800
+Message-ID: <20260330080746.319680-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 7/7] selftests/tc-testing: Add netem test case
- exercising loops
-To: Stephen Hemminger <stephen@networkplumber.org>, netdev@vger.kernel.org
-Cc: Victor Nogueira <victor@mojatatu.com>, Jamal Hadi Salim
- <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
- Shuah Khan <shuah@kernel.org>, William Liu <will@willsroot.io>,
- Jakub Kicinski <kuba@kernel.org>, Savino Dicanosa <savy@syst3mfailure.io>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-References: <20260326181701.308275-1-stephen@networkplumber.org>
- <20260326181701.308275-8-stephen@networkplumber.org>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260326181701.308275-8-stephen@networkplumber.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi,
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-On 3/26/26 7:01 PM, Stephen Hemminger wrote:
-> From: Victor Nogueira <victor@mojatatu.com>
-> 
-> Add a netem nested duplicate test case to validate that it won't
-> cause an infinite loop
-> 
-> Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> Acked-by: Stephen Hemminger <stephen@networkplumber.org>
-> Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+bpf_sk_assign_tcp_reqsk() does not validate the L4 protocol of the skb,
+only checking skb->protocol (L3). A BPF program that calls this kfunc on
+a non-TCP skb (e.g. UDP) will succeed, attaching a TCP reqsk to the skb.
 
-Apparently the new test does not pass on NIPA:
+When the skb enters the UDP receive path, skb_steal_sock() returns the
+TCP listener socket from the reqsk. The UDP code then casts this TCP
+socket to udp_sock and accesses UDP-specific fields at invalid offsets,
+causing a null pointer dereference:
 
-# not ok 364 8c17 - Test netem's recursive duplicate
-# Value doesn't match: bytes: 294 != 196
-# Matching against output: {'kind': 'netem', 'handle': '1:', 'root':
-True, 'refcnt': 2, 'options': {'limit': 1, 'duplicate': {'duplicate': 1,
-'correlation': 0}, 'seed': 6495514880116664183, 'ecn': False, 'gap': 0},
-'bytes': 196, 'packets': 2, 'drops': 1, 'overlimits': 0, 'requeues': 0,
-'backlog': 0, 'qlen': 0}
+  BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
+  Read of size 4 at addr 0000000000000008 by task test_progs/537
 
-It's not clear to me if the causes is this series or the follow-up. I'm
-tentatively dropping the latter from PW; let's see how/if TDC is impacted.
+  CPU: 1 UID: 0 PID: 537 Comm: test_progs Not tainted 7.0.0-rc4+ #46 PREEMPT
+  Call Trace:
+   <IRQ>
+   dump_stack_lvl (lib/dump_stack.c:123)
+   print_report (mm/kasan/report.c:487)
+   kasan_report (mm/kasan/report.c:597)
+   __kasan_check_read (mm/kasan/shadow.c:32)
+   __udp_enqueue_schedule_skb (net/ipv4/udp.c:1719)
+   udp_queue_rcv_one_skb (net/ipv4/udp.c:2370 net/ipv4/udp.c:2500)
+   udp_queue_rcv_skb (net/ipv4/udp.c:2532)
+   udp_unicast_rcv_skb (net/ipv4/udp.c:2684)
+   __udp4_lib_rcv (net/ipv4/udp.c:2742)
+   udp_rcv (net/ipv4/udp.c:2937)
+   ip_protocol_deliver_rcu (net/ipv4/ip_input.c:209)
+   ip_local_deliver_finish (./include/linux/rcupdate.h:879 net/ipv4/ip_input.c:242)
+   ip_local_deliver (net/ipv4/ip_input.c:265)
+   __netif_receive_skb_one_core (net/core/dev.c:6164 (discriminator 4))
+   __netif_receive_skb (net/core/dev.c:6280)
 
-/P
+Solution
+
+Patch 1: Add L4 protocol validation in bpf_sk_assign_tcp_reqsk(). Check
+ip_hdr(skb)->protocol (IPv4) and ipv6_hdr(skb)->nexthdr (IPv6) against
+IPPROTO_TCP, returning -EINVAL for non-TCP skbs.
+Patch 2: Add selftest that calls bpf_sk_assign_tcp_reqsk() on a UDP skb
+and verifies the kfunc rejects it.
+
+
+---
+v1: https://lore.kernel.org/bpf/20260323105510.51990-1-jiayuan.chen@linux.dev/
+v2: https://lore.kernel.org/bpf/20260326062657.88446-1-jiayuan.chen@linux.dev/
+v3: https://lore.kernel.org/bpf/20260327133915.286037-1-jiayuan.chen@linux.dev/
+
+Changes in v4:
+- Check if assign_ret is EINVAL instead of checking if it is 0. 
+  Suggested by Martin KaFai Lau
+
+Changes in v3:
+- Add IPv6 test coverage, reuse test_cases[] to iterate over both
+  address families
+- Share TCP/UDP port to simplify BPF program, remove unnecessary
+  global variables
+- Use connect_to_fd() + send()/recv() instead of manual sockaddr
+  construction
+- Suggested by Kuniyuki Iwashima
+
+Changes in v2:
+- Add Reviewed-by tag from Kuniyuki Iwashima for patch 1
+- Use UDP socket recv() instead of kern_sync_rcu() for synchronization
+  in selftest
+
+Jiayuan Chen (2):
+  bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
+  selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
+
+ net/core/filter.c                             |   6 +
+ .../bpf/prog_tests/tcp_custom_syncookie.c     |  91 ++++++++++++++-
+ .../bpf/progs/test_tcp_custom_syncookie.c     | 109 ++++++++++++++++++
+ 3 files changed, 202 insertions(+), 4 deletions(-)
+
+-- 
+2.43.0
 
