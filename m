@@ -1,145 +1,185 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012032.outbound.protection.outlook.com [52.101.48.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FEC3290A1
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 15:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774883647; cv=none; b=F5DktcALHilzv8wcjRHEDVOfbfQe70Nhf9oPOS66VCc4L7gDMcqNv1LLl14SaPH2D8zOHWHkTbh7BtsFdUzwi/J76aYWYgTQX1T98JqKDdvmDC8LORYUtC0ETsOTdrVHm82ZPZvcbZUA41gmM2NDaOJxooMOI+KDUkCoj4FXxp8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774883647; c=relaxed/simple;
-	bh=nnK3icqjfLKPYfJL0jsPSXKJbsLdWAeoPiBxi2oDmM4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EEyfNC1iII4LEuCBnXNSLsW3+DbIg1C394ZLwQeVCufWNHfQZjlLqUg6NuB1P2c1lPsOMxAO+kLiPzGHmWPmmS3o+nWL3gXJf5MtR4gOkSmgw0Zez+BseyXE9kJuG/YpLwneStBB2HB08PqyD3oDFUWZasC8lcWGLkAAi1qGpoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D4NcnvM5; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F159933A6E1;
+	Mon, 30 Mar 2026 15:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774883670; cv=fail; b=T0CmJz96GCA0ZrTq8X7LJBH179rzZ6Xl37q8G6rDEJIpLjNJ4kauI1AKhiIPgQ9Q/7sIG8YBuRx4Zwrs3oNW833fLXDjMT6zwnVJCndJP5LrBfvox7zJpb7Fl42sJXHGlNLpcUPaUcq+AWH2F/j0kWxxuOByn4iyL8fUt2sr9RI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774883670; c=relaxed/simple;
+	bh=nw2xqc9GcPmCEiCPDgTbdw8QY8lZbUcqO5Rr4z5U9NU=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=unfwS9n2vfOCK4NTu5myyKWPwY665J2WkUGyrIXjCxHdWldEDsgaSSEWTJtjSfJWu9jjfhhFwoHt/WmWTfflJg6gNa65X4LVyZ7F1MqOD4oTokeKEmYmj14SX3m+tN2vnhOM6433BHQSixoc5dtKJvms3Vi7ZRTp5FgfvMRdiTQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=PBMRZk1n; arc=fail smtp.client-ip=52.101.48.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D4NcnvM5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774883645;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xETw+8gpCdkjsgRzeD0pmJ+bgMxkAEpJAG9tRxYLZUM=;
-	b=D4NcnvM5ARP1hxPo2QQ0MCQjSjnDUIjUvzNraAqLliIn8mlU0V8jOOVurfhpCLvdHkUk5E
-	EqoD4hFL1fOKk4jf7Rzbl/73xWUjaLL2bGtsGIN0Rw9ODfCtc+pI4UoJfQDuj30pNimKFy
-	kIOXOX5YsLVCXWOMbUcxPI3p/Wy3Q54=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-615-zM3py8vJPpeXppRVtmLw2w-1; Mon,
- 30 Mar 2026 11:14:00 -0400
-X-MC-Unique: zM3py8vJPpeXppRVtmLw2w-1
-X-Mimecast-MFC-AGG-ID: zM3py8vJPpeXppRVtmLw2w_1774883637
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A885E1956096;
-	Mon, 30 Mar 2026 15:13:56 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C4AAE30001A1;
-	Mon, 30 Mar 2026 15:13:47 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com
-Subject: [PATCH v7 0/7] selftests/mm: skip several tests when thp is not available
-Date: Mon, 30 Mar 2026 23:13:36 +0800
-Message-ID: <20260330151343.670374-1-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="PBMRZk1n"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rHogezfAvuqkEsFAaSO55Uwoc/yMoHgLUjMUwfwH2uNZKmkKTZMlUNyrdLYqAj24pO3JGk7cDSo9nxqjpCyQyP48yOUfn+P9EADuRfW7ey9GVZNQNafY5yIAnmfs1+EmD49rXyA7vBTZS5zd0g5frSrnm5PN6qpJ9GFbShxZQl+lypTmUXstzymgZsJI28V+thb6M6sAgTbbGupx5PuTXs93dwykvukzAQBrfysskecTf+9RyVpQqYFVZTX0WytyPBe1ImW17P7vLjKDX8v6nSrX0nk2vkWIbJ7YMDbdVgEelrdwkHNVAWWZVhV4c0ko6l6I5U3amoh4bh1CnPiEUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+/u+gt8du4GreDjwn78BLz+bE4uGIkPlZPySJjINpvQ=;
+ b=CJslTwTvJcH05OH8aIAkHUoopaeRtMLSb621jqBoYGA9aLpDbq0CU8XQEpaL/yx9BBewa6qTfA1V6VrIGM74uVtd8DOzEObrDDF74Y673tSHxu9f2wDXoAW180L9eVkPtbG6pQ99fkmjLAgGdC2UKdaNdmu8WdQA0STy0zdNGFK20bUJGbjDlnC0jUQ31bpqmVgiJpYCKrdi67FtJMbCEtMqJ+DTaqkthBx6f1BxNuWr0TF9pAVz9sOBVJxoKXKEt0M1YlMEMHG8BAShBbpJG1yunki2dokQiLkWt2jZEwzZkElZ5PB4CQ9xbUzO/gY9Go733t9kCLcOVEtN4NtsQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+/u+gt8du4GreDjwn78BLz+bE4uGIkPlZPySJjINpvQ=;
+ b=PBMRZk1nBYxHjg59Gcxhd8vFu75QU6nLolhyge6EQ0/857SuCfcRur3BaqoEZMj0f8/0VsT+1UF4TrAJaFYGvMppVto678jtbB8SlSH2sBqyWq9MJFsm6DFenzT+oSRzqcc/R/oDe4HAbAxxl2HSTKsczf46oP3E1qhOBts9gQnvmIb9y0DJa4ja9i3r7KYvM9VXA05aZ1na2PPIP64Ehb+SoX3Tclxg5jzmvto4eCWIFlK7N0nwCrfHyrvP82Eb1XTZGUJS/Xr90GJoRUrFffAS87z6D+iQ0a9PRsEoCCvy9uF3j0ioGbD5HG1vhk56CxS5p2V9TS44M2dZ3RVCVw==
+Received: from PH2PEPF00003855.namprd17.prod.outlook.com (2603:10b6:518:1::75)
+ by IA1PR12MB6283.namprd12.prod.outlook.com (2603:10b6:208:3e5::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Mon, 30 Mar
+ 2026 15:14:21 +0000
+Received: from CY4PEPF0000E9DA.namprd05.prod.outlook.com
+ (2a01:111:f403:c936::) by PH2PEPF00003855.outlook.office365.com
+ (2603:1036:903:48::3) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.28 via Frontend Transport; Mon,
+ 30 Mar 2026 15:14:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000E9DA.mail.protection.outlook.com (10.167.241.73) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9745.21 via Frontend Transport; Mon, 30 Mar 2026 15:14:20 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 30 Mar
+ 2026 08:13:58 -0700
+Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 30 Mar
+ 2026 08:13:52 -0700
+References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
+ <20260326132828.805703-3-ioana.ciornei@nxp.com>
+ <871ph15zip.fsf@nvidia.com> <87se9h4juh.fsf@nvidia.com>
+ <mmr6xs4soark6ilc2xymgcvn3wij2yoaeokpuv5i62mxtddvpa@jdyswkdydpon>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Ioana Ciornei <ioana.ciornei@nxp.com>
+CC: Petr Machata <petrm@nvidia.com>, <netdev@vger.kernel.org>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S.   Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <willemb@google.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next v4 02/10] selftests: net: add helpers for
+ running a command on other targets
+Date: Mon, 30 Mar 2026 16:55:52 +0200
+In-Reply-To: <mmr6xs4soark6ilc2xymgcvn3wij2yoaeokpuv5i62mxtddvpa@jdyswkdydpon>
+Message-ID: <877bqt4afo.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-
-There are several tests requires transprarent hugepages, when run on thp
-disabled kernel such as realtime kernel, there will be false negative.
-Mark those tests as skip when thp is not available.
-
-Changes in v7:
-  - patch 1 add reviewed-by from Lorenzo
-  - patch 4 new patch to make ksft_exit_fail_perror variable length
-    arguments
-  - patch 5 change to use %.*s to print the buf when error happened
-    Limit the buflen arg as 2 minimum. Check the error path (numwritten
-	< 0).
-    And use the ksft_exit_fail_perror to print the logs in error path
-
-Chagnes in v6:
-  - patch 3 add reviewed-by from Lorenzo
-  - patch 4 handle the errno before and after close(), suggested by AI
-
-Changes in v5:
-  - patch 1, patch 3 updated reviwed-by and acked-by
-  - patch 4 adds new patch for robust write_file()
-
-Changes in v4:
-  - patch 1 update to use thp_available instead of thp_is_enabled,
-    suggested by ai review
-  - removed reviewed-by and acked-by
-
-Changes in v3:
-  - patch 1 update commit message to show the log snippet with where the
-    fail happens, change the 'false positive' to 'false negative'.
-    Update reviwed by
-  - patch 2 update reviewed-by
-  - patch 3 make write_file to void return
-  - patch 4 and patch 5 updated reviewed-by/acked-by
-
-Changes in v2:
-  - replace 'false postive' with 'false negative' in cover letter
-  - patch 1 and patch 2 add reviewed-by/acked-by
-  - new patch 3 to add write_file() in vm_util as a common helper
-  - patch 4 removed the {} in if block, removed the write_file helper
-    rename chunk in v1. Add reviewed-by
-  - patch 5 move the exit chunk to the front of ksft_print_headers() as
-    suggested by David.  Add review by.
-
-Chunyu Hu (7):
-  selftests/mm/guard-regions: skip collapse test when thp not enabled
-  selftests/mm: soft-dirty: skip two tests when thp is not available
-  selftests/mm: move write_file helper to vm_util
-  kselftest: make ksft_exit_fail_perror support va args
-  selftests/mm/vm_util: robust write_file()
-  selftests/mm: split_huge_page_test: skip the test when thp is not
-    available
-  selftests/mm: transhuge_stress: skip the test when thp not available
-
- tools/testing/selftests/kselftest.h           | 21 +++++++++--
- tools/testing/selftests/mm/guard-regions.c    |  4 +++
- tools/testing/selftests/mm/soft-dirty.c       |  4 ++-
- .../selftests/mm/split_huge_page_test.c       | 19 +++-------
- tools/testing/selftests/mm/thp_settings.c     | 35 ++-----------------
- tools/testing/selftests/mm/thp_settings.h     |  1 -
- tools/testing/selftests/mm/transhuge-stress.c |  4 +++
- tools/testing/selftests/mm/vm_util.c          | 24 +++++++++++++
- tools/testing/selftests/mm/vm_util.h          |  2 ++
- 9 files changed, 62 insertions(+), 52 deletions(-)
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9DA:EE_|IA1PR12MB6283:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0d12526e-51f7-4f05-f4e9-08de8e6f04b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700016|7416014|376014|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	yF7PqJKapShPl3Zjkgu1X0EP6iuv/mdC4HUxazePNHimMiKtN5Kfewbicx+h3Fodj61HqUwsVtEjXsaeEsVRKFz/oO9KX0+ZUc1Cklm6vNxGY7qf/IT5T1MD3xVHEEV+GyYifTYUUjqyg6sfLyzTLd963QULwXfTMDBjYHGShvNdiA/fTYwPgwjRxW8gJPtyKoqBSxFRAlKO3C+TNfVFg94e0KgB/rXXbPR/YesafaF6W02YBtoc6GSIX8Ozgx515T/T6U4C49V3ut0MGoS/K+R1y8OjeZXr6skmZbKe5u9o11hDXKOeeOhl5HQhYeTB9EdX7NNUU0R7//YneKokN31zxHV6vJDe8y3EQGdul98G17Fm+tGZs6ulRRaS9bcaLPg/prhyXF9cRptQ9m9lzbrUVuv3tASdVxYWgjzlEFzB6qXVH80cDMvH3ngDC7wqDO0re0neJFeWRpq/WYZylxSfq5sEA3sO7Ol9ecwW1ijUCyHW4eXdGdR1VqECqtdb9OJExaEm08eL+DUeP7jQYQO1hWoSMRnBpA7uaWMy77TIDR9LDytM7Zk0rmNd/KyzYbBHradTRa95yGkJ2h6UnqPFHcn2ehprhjm+TLIz1gjuxzPsttP9PZqDNPR+0wq9nz8HEx1wlazVdyBDGACczNPky34ts3yNhrm+iBqpj76Ns1qZndCZOuf05vqVd9QEK0QaXUlLnCmFg2XD+KQ7wFnsW0Vs+YmzsRuKDy6+xGM4LeCxyausbSmzlh1gSVPbjjfdTe0G9nInFgHw+XB8iQ==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700016)(7416014)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	FO4vk40hvjF3v9/TtW+fasvJ7cW3HrCEIIQ0CYQvF9wEsLVufaxnGbRgFI4idVGBaYGnGXDkVi3od9gIMIBWgVhIqzri5iLjRIIabYsYigmOhdpXGWUKx7Z0i5r2JvYGifioobPDsMNO6ujFGOcAI/f9+nvVxRPb+3U7gBos2Ntj343P+K2/scGpki8OVGSTxbCPfEEoc/lb9SBCnIQXHU9tIFfJIi1ZdQd1/nL8j5JDfrsuuLT8EA2nGjHuvS1J0I2UlAUyfbGa5o8IQo/6moVO8fYCijWPGvfI6NefEirmjxWgmQTBm5dt+DApGXwG6dFtyBIoqm/pBdT+2yortzYWF8n+6/ZfQFhf416qamU+I7jVJAJ1kiZqe7CNDA3oMNaDbvX1SKKgLBmEAdWVQLD1RuxT8x9Hu/KVKYJplbtCl69KUe7h5DewX5/M+XYA
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 15:14:20.3874
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d12526e-51f7-4f05-f4e9-08de8e6f04b9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9DA.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6283
 
 
-base-commit: 7aaa8047eafd0bd628065b15757d9b48c5f9c07d
--- 
-2.53.0
+Ioana Ciornei <ioana.ciornei@nxp.com> writes:
 
+> On Mon, Mar 30, 2026 at 01:32:41PM +0200, Petr Machata wrote:
+>> 
+>> Petr Machata <petrm@nvidia.com> writes:
+>> 
+>> > Ioana Ciornei <ioana.ciornei@nxp.com> writes:
+>> >
+>> >> +run_on()
+>> >> +{
+>> >> +	local iface=$1; shift
+>> >> +	local target="local:"
+>> >> +
+>> >> +	if declare -p TARGETS &>/dev/null; then
+>> >> +		target="${TARGETS[$iface]}"
+>> >
+>> > So I think Jakub's runs fail because there's a shell export somewhere
+>> > that gets inherited through make to the launched test. I guess it would
+>> > be enough for the test to validate that TARGETS is an array, because
+>> > those don't get inherited.
+>> >
+>> > Is there a reason not to reuse DRIVER_TEST_CONFORMANT as a tell though?
+>> >
+>> >> +	fi
+>> >> +
+>> >> +	__run_on "$target" "$@"
+>> >> +}
+>> >
+>> > Does the latter helper need to be in net/lib.sh? Since it uses TARGETS,
+>> > which are a forwarding/lib.sh concept, it seems misplaced there.
+>> 
+>> Oh, I see, there's an invocation from mac_get() in net/lib.sh itself.
+>> Hummm. Not sure how to tackle this.
+>> 
+>> I think lib.sh might unset TARGETS explicitly? Or declare -A, but leave
+>> empty? Since it's now an API, net/lib.sh needs to set it to a reasonable
+>> value (or erase). Then forwarding/lib.sh might in theory rely on
+>> existence of that variable and not have to declare it at all.
+>> 
+>> Or, maybe have a stub run_on() like this to satisfy the run_on() API:
+>> 
+>> run_on()
+>> {
+>> 	"$@"
+>
+>          shift; "$@"
+
+Indeed!
+
+>> }
+>> 
+>> And have the full-blown thing in forward/lib.sh. All the magic with
+>> TARGETS really belongs to forwarding/lib.sh. Bash allows function
+>> redefinition just fine, so a user importing just net/lib.sh would get
+>> the stub, and forwarding/lib.sh users would get the full thing.
+>
+> I really like the idea of the stub run_on() in net/lib.sh. This would
+> also give me the possibility to check for DRIVER_TEST_CONFORMANT = "yes"
+> in the full-blown run_on() without having to move its default
+> definition in net/lib.sh.
+>
+> I quickly changed to this approach and it seems to look good.
+
+Yeah, I like it best as well.
+
+Then I think you don't need to worry about the TARGETS export, because
+forwarding/lib.sh will add the "array-ness" to whatever comes from the
+outside, if anything, and the function will be able to use like that.
