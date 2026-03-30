@@ -1,84 +1,105 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAAC2F25F0;
-	Mon, 30 Mar 2026 16:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FB1372EE1
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 16:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774887598; cv=none; b=krQ7IKKpAid7vnwNDODoLZGU22fi/xdLmBHxvhXgrUKCe+XzogV862vedxKDeU8xq8tnv6GmcppD1dR29tcJxIU1p5oii0okrG61wQd5avRqcd8dENRBb3xDNQv1/KUkysO01IIl2KkvGDAo1wnbfvXV/DQHoDdSVOak9nAVxmY=
+	t=1774889042; cv=none; b=EnARnYcZ7uSrFl8rhsvu/MOLMBWXme2kbnbAXUYRL76K+F94pXhqrwfPyy0rsAREFoCZaTpDAMGZ5QEKcuOJYSx7x0t5dDJF7fm/1t2NfjRlNpin5zmwDVUjazKPvj8MkQgR2Y8Mf9cAFfH2fYCzW6N5kmDCgvR97r8BpGRJD0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774887598; c=relaxed/simple;
-	bh=fAEc2VEd4KBBBTYNlosneKYpVkGBGFqE2DSRAogh5Jg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dDngY0OOR9MisdkOq3WD5b9KLXuThU1M8Ml8K6yY+fRGpg7yQXSLJN03DBkQlQV7+qcyjOr7beHUNXVuVYhH2AwkMqG9ZIwVhnOxkMsmu8KqCRpgh7y7jM0O1HumHeNKZIrZEfIjXTgLsACPurmb4eRPRgMGkr+9Z9pZq3QixjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZdozrY14; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1774889042; c=relaxed/simple;
+	bh=ZrhF6h3mPSNJGy8KQqQkHtzKHIN+kooyg1QRQ9QjYrQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SfWB/QYCbcKhLx0zjxZLDmtFsPQuQovCG5bl5Yll1Ss3qehnl6TF/s0QY+5OrDoMfqj2oh4r7OWnURzc4lCXjHU0GsKy1OlXvCKWv4/onKGs4vtHjKdJTKNTsxKVKfHaURqr0jmI/Raex/N6xtCRTpBaAozDX2aHyzAZyksPVfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M6x1fQqn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZdozrY14"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=z7YLDVYxqF/+f1DCCJKbVAIzX4V8YvHeDqe3ffDzeSI=; b=ZdozrY14XCATmDIlNwlFmzEBwf
-	z/K5h87go5Bk2q/blH/hdo9V+pBArg3wPGmyDuHmF8uq/waJkppzeNH8Y45JHHAXDq0IWkHhCCggz
-	B8ACncOFhZP6rHi13nM5D3Y/NzwKbDJfwHj/oGAeLxXUv4FoslIrDe+ALSS28fL9hYULE9MgJeJRk
-	nd8T/a3GN0RzipUyfwxLfhvmzhSVaKkgq7Gvj8OnQRLkzr9k7V4tKomyIhhKCCiuglHJ5TvrctwId
-	CBfpXfmewANcXuQPzuQCftfN+xcZs4YrrvuPelV03TocJrCjQNLc5fnVbP+KbgNcADUZCWra+hNVe
-	wm7GzVZw==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w7FL4-00000006wOx-3GNU;
-	Mon, 30 Mar 2026 16:19:42 +0000
-Date: Mon, 30 Mar 2026 17:19:42 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: WANG Rui <r@hev.cc>
-Cc: ziy@nvidia.com, ljs@kernel.org, Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org, baohua@kernel.org,
-	baolin.wang@linux.alibaba.com, brauner@kernel.org, clm@fb.com,
-	david@kernel.org, dev.jain@arm.com, dsterba@suse.com, jack@suse.cz,
-	lance.yang@linux.dev, linux-btrfs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	mhocko@suse.com, npache@redhat.com, rppt@kernel.org,
-	ryan.roberts@arm.com, shuah@kernel.org, songliubraving@fb.com,
-	surenb@google.com, vbabka@kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v1 05/10] mm/huge_memory: remove READ_ONLY_THP_FOR_FS
- from file_thp_enabled()
-Message-ID: <acqinu8H5jo3Zw7b@casper.infradead.org>
-References: <DDFEC0C1-3ECF-41CC-9630-A4A742F2B842@nvidia.com>
- <20260330160942.173324-1-r@hev.cc>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M6x1fQqn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E8ACC2BCB2
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 16:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774889042;
+	bh=ZrhF6h3mPSNJGy8KQqQkHtzKHIN+kooyg1QRQ9QjYrQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=M6x1fQqnJGP9DGKBP/C/biqzcbZsd5KGHCIkXPbG+WwQaydHlQoAhWWLLpiN6Bo3M
+	 gYc32Vw5pjvYQcgfobGgwzT+U7lhjUiZl17NyrwfhLAkjPjeSM5tthRE+Js+X7lSLM
+	 kZ0OOvDjOLRmV6IUVYjEciqVw8iuXceTuo6/PAu5UbUhVmYvJlKjbB0pRPBbGUIdyC
+	 g+pap6eElQa4nstoz33aSyVUgfiWOu1j/cvrgBZ+LbzEjarUeO4cm8P7iD+UZQYblR
+	 wN72DFluAIcOcffMljdFlec/DoVvW3CsAEUwN1yLkM1bAmhSN17hHufCCqFkstG/UG
+	 /EuQEghxKgXvQ==
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-509061dab77so40390211cf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 09:44:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXEpwZykufaiZpX80ABUwcYRS28MtPUbplFKOoHGn+zH5GbohwKFBwZY8rRoknz3G8ASYOr9qZ2d/2cJD3i8+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCX5LtwV9wadZ0bPHBULYebG1d/5aFSDBJKzitHyN1A6xOo2un
+	f4krToQitzzt+AzfNjM9b7gxG4bwJu9GNAZZXMP9iReKTA/NNi5vckcMa6gr4VD+MwGfl0tW+i4
+	jpLo2h6DLeeiH28lLNZxCaDuZEEQ80YM=
+X-Received: by 2002:a05:622a:10b:b0:50b:4778:ac60 with SMTP id
+ d75a77b69052e-50ba383f3efmr181618101cf.10.1774889041357; Mon, 30 Mar 2026
+ 09:44:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260330160942.173324-1-r@hev.cc>
+References: <20260326141718.17731-1-leon.hwang@linux.dev> <20260326141718.17731-2-leon.hwang@linux.dev>
+ <CAPhsuW7vwp6pW5RntKC+Gbn5gTcVg3vsm6LVc-y2ssTeauZayA@mail.gmail.com> <d19336f5-5373-483e-81e4-326aa9c7801a@linux.dev>
+In-Reply-To: <d19336f5-5373-483e-81e4-326aa9c7801a@linux.dev>
+From: Song Liu <song@kernel.org>
+Date: Mon, 30 Mar 2026 09:43:49 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5LKnuZ=wReS+_VtGOs2sefd73a=WUCdaZPho99JBaqJw@mail.gmail.com>
+X-Gm-Features: AQROBzBKTLf4GmV83Z4vXPVmGocd0yrwcBrGb6XUFTSmyFGzvFRJfGlzmKPOtTA
+Message-ID: <CAPhsuW5LKnuZ=wReS+_VtGOs2sefd73a=WUCdaZPho99JBaqJw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix abuse of kprobe_write_ctx via freplace
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
+	Toke Hoiland-Jorgensen <toke@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 31, 2026 at 12:09:42AM +0800, WANG Rui wrote:
-> Given the diversity of filesystems in use, each one requires dedicated
-> engineering effort to implement and validate large folio support, and
-> that assumes both sufficient resources and prioritization on the
-> filesystem side. Even after support lands, coverage across different
-> base page sizes and configurations may take additional time to mature.
-> 
-> What I am really concerned about is the transition period: if filesystem
-> support is not yet broadly ready, while we have already removed the
-> fallback path, we may end up in a situation where PMD-sized mappings
-> become effectively unavailable on many systems for some time.
-> 
-> This is not about the long-term direction, but about the timing and
-> practical readiness.
+On Sun, Mar 29, 2026 at 10:38=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
+>
+> On 28/3/26 05:39, Song Liu wrote:
+> > On Thu, Mar 26, 2026 at 7:17=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
+> [...]
+> >> @@ -3733,6 +3733,11 @@ static int bpf_tracing_prog_attach(struct bpf_p=
+rog *prog,
+> >>                 tr =3D prog->aux->dst_trampoline;
+> >>                 tgt_prog =3D prog->aux->dst_prog;
+> >>         }
+> >> +       if (prog->type =3D=3D BPF_PROG_TYPE_EXT &&
+> >> +           prog->aux->kprobe_write_ctx !=3D tgt_prog->aux->kprobe_wri=
+te_ctx) {
+> >> +               err =3D -EINVAL;
+> >> +               goto out_unlock;
+> >> +       }
+> >
+> > This also blocks uprobe+freplace when prog and tgt_prog have different
+> > kprobe_write_ctx, right? Is this the expected behavior?
+> >
+>
+> Intuitively, yes, this also blocks uprobe+freplace.
+>
+> However, how can we distinguish uprobe/kprobe here?
+>
+> At attach time, uprobe/kprobe is recognized by the target perf event
+> flags instead of BPF prog's expected_attach_type. Thus, we cannot infer
+> the use of prog by prog itself.
 
-If we leave this fallback in place, we'll never get filesystems to move
-forward.  It's time to rip off this bandaid; they've got eight months
-before the next stable kernel.  I've talked to them about it for years
+Maybe we should introduce an attach type BPF_TRACE_UPROBE in a
+backward compatible way:
+- expected_attach_type =3D 0, it could be either kprobe or uprobe.
+- expected_attach_type =3D BPF_TRACE_UPROBE, it must be an uprobe.
 
-LSFMM 2022: https://lwn.net/Articles/893512/
-LSFMM 2023: https://lwn.net/Articles/931794/
-LSFMM 2024: https://lwn.net/Articles/973565/
-LSFMM 2025: https://lwn.net/Articles/1015320/
+With this flag, we can allow uprobe+freplace when the user space sets
+BPF_TRACE_UPROBE properly. WDYT?
 
-(and earlier, but I think I've made my point)
+Thanks,
+Song
