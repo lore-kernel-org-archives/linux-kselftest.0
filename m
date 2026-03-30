@@ -1,218 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F9C1E8320
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 05:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68491F30BB
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 05:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774847990; cv=none; b=IN/f0MHWP5OpZR3VjVMbqJfbrj23Q69tC+naLFCAKVODaf+BdOTFiaO6zCchzad5HW37oxuj6Hw0QIFlhUC9MgJ8zS/HFe+ZbXP30aJwljMW2OHBD+xk4BotET/rlzE9v0bC9m2gQPTcwTLyHXHQ6zPVYKs6ZeA+LMQMxii1POc=
+	t=1774848057; cv=none; b=Oz03nunvyBMMvGHXI5ODEHIv3SOiocAKoUNwXAOZtkZO5+pKht+nGCRgejMq7lA6GDYUYxFur7yO6AcokIsO3SPbQ1EN9LN05kwbnmi6y2FcPnsuPYtNpyvryFvKQCK+EmS2YOUq0/KseGNEq1KwdDl22xyPFPoxQwScUiyKuiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774847990; c=relaxed/simple;
-	bh=CMRlhF+XecOJLTjjdvxpNhvekD/7EJYbySUXD71PSD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hHX2okJexogXsPA2l/7/gaPdlN7IqDrdR2AjiQbHoLSMTuBav033Emj5tp3vdtTECSsXDI6AHmwsYOTN9sJ8J14seCm9h7RKtpV2fnTIeD5b+p8KavXPej5g1jMtfVL+5iQWCOcMR8jnb3R8Bisay75l3L1pTU7c0t2mNzhaLPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YrYQd2N6; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qs29ROAt; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774848057; c=relaxed/simple;
+	bh=0d0naRcIv9z63yxPLsdCSjk0pr783O3WgjjGnMocXio=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PBP3Mm7Aj4DgeUh6PxYrPUnhQQPSBU0xZN/iZ43g0dQufrRP5ZpgxL3VlGwBFVXV/94482pk7Nfx0ajwVXEsFJ/9ca5+hrATBvFwf7rzTdAbzXb8HzJ24/TiwW5Q1DJkMyXceF23CDMPS+MhzH/G43NwyyhNZ831B5CIHcwTkio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rm42e46/; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YrYQd2N6";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qs29ROAt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774847987;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rm42e46/"
+Message-ID: <f83308b6-305f-401d-8a81-ca18e1968b56@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774848053;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UfzanPImVBxUZYk0hGCed0rensFpBKfhyF013Y1fyMw=;
-	b=YrYQd2N6n7kr3FElBIa+enj4/vUnVXDrEHr/yx2m+LriQISmpKEbjezYSMHgrHZAncdK50
-	1XoKxoa1T2gPRiu9FdYYV6NdfWpTpgXWpdQ9KDlnruGuTqnzzmn7aST8D4MbrNgtVNxzW4
-	F4qvbasm4QbICDljdFb1cQ+c0tSFU3M=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-132-q0MbvOelNQKirxyE46kwBQ-1; Mon, 30 Mar 2026 01:19:46 -0400
-X-MC-Unique: q0MbvOelNQKirxyE46kwBQ-1
-X-Mimecast-MFC-AGG-ID: q0MbvOelNQKirxyE46kwBQ_1774847985
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-35da8eb0553so605946a91.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 22:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774847985; x=1775452785; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UfzanPImVBxUZYk0hGCed0rensFpBKfhyF013Y1fyMw=;
-        b=Qs29ROAtOCQeqaxnuKSqppfNzt+A9w3NKkK+rkH3RVsPvXB8X5SQ0RmExVMdzd/vg/
-         N0wF1383T3wDnfxavqHthamQIotR6soTGvxXeiRF8ZtjOy3Z9GbpolGkxQm9ZQCa904m
-         FpgDSC9UfUx/Kjvp6T6IZW1cniNcUPB3OdiE5hNM9hUDFhT8YemZoTT/KsUPOYGl6k72
-         +uv4AM451w0QmsnLsZGcNkGxIwybMpLk3VstiBPf7+qOYBKEB03N039/1hLujGAv1Xus
-         ws/8U36nhyi3kq0aosKPePw4o84wPGpTCz5nHAyC2Rf50vBrIWnOQe8zLgMmDo57f6fh
-         SFMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774847985; x=1775452785;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UfzanPImVBxUZYk0hGCed0rensFpBKfhyF013Y1fyMw=;
-        b=kq5aOFkwn3sUSymrH+29ZYYyLLJyXeIh9UQdAuMuvJMFX6SjUgjxnbRMQhFqHGyo13
-         iQH/b1UDtpk5j4WUdjYk/Lp+X/IWGCQ0pFvOVrdoi8X++SNCQa7MC46U3BHcTB9nFv0y
-         KPck4o9g0765VKSG3larSUwg6LU45JK85vCKbXNZ/VPVYvyCsD8yvKUfPf+sg1IVgqKi
-         kobEXyxrGUSj2i67TEZl916SS5m/2CBmKRzJu/6yoxIRlRvUxSzRCDUaSm8bGA+vMHgJ
-         m0JM2oEAaM+IWK3zjQy2KBMQV+txy5304Kho84Cm4VNx5hZQFDh9b5pBffmqnifKjudy
-         fVIw==
-X-Forwarded-Encrypted: i=1; AJvYcCWJXBnfn9MNPEGRgxdEZ0c6umcrHy2XeN6md8aM9GanUZGXHG5n51o5GP2wRTjeZOC6x7/wyOCOCm2m0RhdJdc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywl6Kn8vFreiSwtlmgYSSBH40hLMS9NG7or6cIWaGIojYBMzF5V
-	5jZDkVgOWFNFhY657BZYD3VjDwRkuPpFG80WI4gQSbhPO/oRITPPdlSjLOSjSX7IXbutASQfyyX
-	IQ/zDX6WjQdaWiYInNYqXnRcFQz8UoQxTFOHZB+sQLrhXaw3WjgwF/t5A9vU06MxTRUEGjw==
-X-Gm-Gg: ATEYQzwvqAUvAMEXY/IgJ/h64JcUziw/0vSXp5s4dfHoFJk1xzeC/pe5EvgzPKU73S3
-	2RKqvLNaVfNE5cHezTBGZcibwg8PvYEE2cUdhnWkb6OBNQ3z32YUy51eYaBPYx+LcnhB42WWkdR
-	7ZVjfUkjETsj8pOAnT85LEUdscTL5gXgh7FBon5eCdTBiIBKgaD48m9aAUlFeTv8Z1K+25cZ0th
-	JjysFNkrgU9MBppcP4p0b6aKSg8lRBvOwTCsDDHthmzZfGqRW4RSAbgVJxpcuUQKulB8a9/GibM
-	apesPawVfaF1+Y5KfE41t5NDn873tlN7q+rfiMMNtKnFAZJIOygq02VIkrI8btXfKmlrQ0NI3Qo
-	zsdyp/sEfogaPKKHx5A==
-X-Received: by 2002:a17:90b:528c:b0:35d:9d7b:85ef with SMTP id 98e67ed59e1d1-35d9d7b8852mr4628499a91.6.1774847985103;
-        Sun, 29 Mar 2026 22:19:45 -0700 (PDT)
-X-Received: by 2002:a17:90b:528c:b0:35d:9d7b:85ef with SMTP id 98e67ed59e1d1-35d9d7b8852mr4628484a91.6.1774847984601;
-        Sun, 29 Mar 2026 22:19:44 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35d9bb7cb11sm1720354a91.7.2026.03.29.22.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 22:19:43 -0700 (PDT)
-Date: Mon, 30 Mar 2026 13:19:41 +0800
-From: Li Wang <liwang@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	linux-fsdevel@vger.kernel.org
-Cc: rppt@kernel.org, david@kernel.org, ljs@kernel.org,
-	Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
-	mhocko@suse.com, shuah@kernel.org, aubaker@redhat.com,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/mm: skip hugetlb_dio tests when DIO
- alignment is incompatible
-Message-ID: <acoH7TALgBmBkk2h@redhat.com>
-References: <20260327120305.58653-1-liwang@redhat.com>
- <20260327121350.858a127fa49ed6e1eb4a40a7@linux-foundation.org>
+	bh=9fd68eY2O2CwKaCg9R2Y4ntn7WouQrswGFUmgrDBAqE=;
+	b=rm42e46/2efGwnTyy/Nk+aswrm4cugwEBxJF6HCKwNl0e0BvUV9EJq7hIsC2Pr6k1w3QM1
+	ntPjaA78xPcGapwBvb4Hez5TRgyQ3LklKOQltrR5754BM77QV6Tq+MquKKYb5n2wtGnK6x
+	JZUk16rHpsKNIyUYI0FG1pYo2wsHxoY=
+Date: Mon, 30 Mar 2026 13:20:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260327121350.858a127fa49ed6e1eb4a40a7@linux-foundation.org>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Disallow freplace on XDP with
+ mismatched xdp_has_frags values
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Toke Hoiland-Jorgensen <toke@redhat.com>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260324150444.68166-1-leon.hwang@linux.dev>
+ <20260324150444.68166-2-leon.hwang@linux.dev>
+ <20260326124205.1a3bb825@kernel.org>
+ <785e0b04-91e4-457f-8d6c-e0a911c0fd88@linux.dev>
+ <20260327171220.6d10d710@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260327171220.6d10d710@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Reply Sashiko comment:
+On 28/3/26 08:12, Jakub Kicinski wrote:
+> On Fri, 27 Mar 2026 14:42:19 +0800 Leon Hwang wrote:
+>>> It may be worth adding a selftest to
+>>> tools/testing/selftests/drivers/net/xdp.py
+>>> which sets MTU to 9k, tries to attach a non-frag-capable prog
+>>> if that fails attaches a frag-capable prog and then checks if
+>>> replacing the capable prog with non-capable fails.
+>>> Drivers may be buggy in this regard.  
+>>
+>> Do you mean adding these two tests to xdp.py?
+>>
+>> 1. Verify the failure of attaching non-frag-capable prog to mtu=9k
+>>    driver.
+>> 2. Verify the failure of updating frag-capable prog with non-frag-
+>>    capable prog via libbpf.c::bpf_link__update_program().
+> 
+> Not directly via libbpf just ip -f link, it uses libbpf internally
+> but testing with  ip link is simpler. Also - there are already XDP
+> progs which return XDP_PASS in frag-capable and non-capable mode,
+> so just use those.
+> 
 
-> https://sashiko.dev/#/patchset/20260327120305.58653-1-liwang@redhat.com
->
-> > +	if (writesize % dio_align != 0) {
-> +		ksft_test_result_skip("DIO alignment (%u) incompatible with offset %zu\n",
-> +				dio_align, writesize);
-> +		return;
-> +	}
->
-> Is this alignment check complete? 
->
-> Direct I/O requires both the transfer length and the memory buffer address
-> to be aligned. Later in this function, start_off is used as the buffer offset:
-> 	buffer = orig_buffer;
-> 	buffer += start_off;
-> If start_off is pagesize / 2 (e.g., 2048) and writesize is pagesize * 3
-> (e.g., 12288), writesize is a multiple of a 4096-byte alignment, so the test
-> is not skipped.
->
-> However, the memory buffer itself is only 2048-byte aligned. Will the
-> subsequent write() still fail with -EINVAL on 4K-sector devices?
+Yep, I see these XDP progs in xdp_dummy.bpf.c.
 
-TL;DR: Yes, we should do both buffer address and writesize alignment
-       checks to satisfy all FS types.
+I think the option of ip cmd to update XDP prog is -force.
 
-Looking at the kernel code: fs/iomap/direct-dio.c, the only alignment
-check there is at line#413, which checks file's pos and write length.
+# ip l set dev eth0 mtu 9000
+# ip l set dev eth0 xdpdrv obj xdp_dummy.bpf.o sec xdp.frags
+# ip l
+6: eth0: <BROADCAST,MULTICAST,SLAVE,UP,LOWER_UP> mtu 9000 xdp qdisc mq
+master bond0 state UP mode DEFAULT group default qlen 1000
+    link/ether 3a:39:5f:35:17:6c brd ff:ff:ff:ff:ff:ff permaddr
+e0:9d:73:c6:7a:d6
+    prog/xdp id 72 name xdp_dummy_prog_ tag 614b434cd8324ecc jited
+# ip -force l set dev eth0 xdpdrv obj xdp_dummy.bpf.o sec xdp.frags
+# ip l
+6: eth0: <BROADCAST,MULTICAST,SLAVE,UP,LOWER_UP> mtu 9000 xdp qdisc mq
+master bond0 state UP mode DEFAULT group default qlen 1000
+    link/ether 3a:39:5f:35:17:6c brd ff:ff:ff:ff:ff:ff permaddr
+e0:9d:73:c6:7a:d6
+    prog/xdp id 76 name xdp_dummy_prog_ tag 614b434cd8324ecc jited
+# ip l set dev eth0 mtu 1500 xdpdrv off
 
-EXT4:
+I'd like to post an RFC to net-next later.
 
-ext4_file_write_iter
-  ext4_dio_write_iter
-    iomap_dio_rw
-      __iomap_dio_rw
-        iomap_dio_iter
-          iomap_dio_bio_iter
-
-  390	static int iomap_dio_bio_iter(struct iomap_iter *iter, struct iomap_dio *dio)
-  391	{
-  		...
-  403
-  404		/*
-  405		 * File systems that write out of place and always allocate new blocks
-  406		 * need each bio to be block aligned as that's the unit of allocation.
-  407		 */
-  408		if (dio->flags & IOMAP_DIO_FSBLOCK_ALIGNED)
-  409			alignment = fs_block_size;
-  410		else
-  411			alignment = bdev_logical_block_size(iomap->bdev);
-  412
-  413		if ((pos | length) & (alignment - 1))
-  414			return -EINVAL;
-  415		...
-
-Sashiko points out the buffer-address should do alignment check as well,
-I firstly suspect it based on the FS extra check before the iomap_dio_rw:
-
-ext4_file_write_iter
-  ext4_dio_write_iter
-    ext4_should_use_dio
-       iov_iter_alignment <--- do buffer/writesize alignment check
-
-  842 unsigned long iov_iter_alignment(const struct iov_iter *i)
-  843 {
-  		...
-  853                 return iov_iter_alignment_iovec(i);
-  		...
-  865 }
-
-  799 static unsigned long iov_iter_alignment_iovec(const struct iov_iter *i)
-  800 {
-  		...
-  809                   res |= (unsigned long)iov->iov_base + skip;
-  812                   res |= len;
-		...
-  818         return res;
-  819 }
-
-But eventually I found that this is only fallback to the buffer I/O
-when the direct I/O is unsupported (go to: ext4_buffered_write_iter).
-This wouldn't happen in the test as it open with O_DIRECT flag.
-
-Then, I turned to look at Btrfs path:
-
-btrfs_file_write_iter
-  btrfs_do_write_iter
-    btrfs_direct_write
-      check_direct_IO <--- do buffer alignment check
-      ...
-      btrfs_dio_write
-        __iomap_dio_rw <--- do samething like ext4
-
-  778 static ssize_t check_direct_IO(struct btrfs_fs_info *fs_info,
-  779                                const struct iov_iter *iter, loff_t offset)
-  780 {
-  781         const u32 blocksize_mask = fs_info->sectorsize - 1;
-  782
-  783         if (offset & blocksize_mask)
-  784                 return -EINVAL;
-  785
-  786         if (iov_iter_alignment(iter) & blocksize_mask)
-  787                 return -EINVAL;
-  788         return 0;
-  789 }
-
-Yes, here I found the evendice that iov_iter_alignment(iter) & blocksize_mask)
-do the alignment check.
-
-Unlike ext4 which never reaches the check for normal files, btrfs always checks
-buffer alignment for every DIO operation. And it's a hard -EINVAL, not a silent
-fallback to buffered I/O.
-
--- 
-Regards,
-Li Wang
+Thanks,
+Leon
 
