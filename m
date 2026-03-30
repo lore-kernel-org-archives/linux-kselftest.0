@@ -1,132 +1,122 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3157342C80
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 15:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F5233FE12;
+	Mon, 30 Mar 2026 15:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774884063; cv=none; b=JdZRTcxYfHDtVDuAXr5Eukch+WmNls4actbhfojAqbP1oskqCAZ7i9Cz3fqTTodVaFDQTraxR6y1jr58306g3+n/7C2wQRBybpvd3YaK8sqKESoBSKO2LOuGaUnpCdVbIaE945KrM/Hyg5h4NHT9+LlDFjWZlLGPGZDS+aK82ck=
+	t=1774884069; cv=none; b=I0St4dApwMUPOwWxT3y9tRonHmIRXfn/YbAKbG3cpmFcIoMmRQrZqgfXPtIEjrB26xQ4Ml54QDnJitHNfa2qvK5+t2trfgC2pG1yAx1oKvDwlw4aGpiGfdLwldr7drx8Bl840Y9Y4raJptLREdQs+Qt0tx11V3wJgHiI/o6WqYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774884063; c=relaxed/simple;
-	bh=dDsO5uf2WRZSDWmo+4MqP6v9u8prPHyFuGugSzJiXms=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SOiq0M29OID21qnR0BEPi6gPudtRkd64HKTHEnFcY1yu56zNgtBNx0eH42qEKzr55Zzu3Qx/27YyD69TYmqYNo1VIFuhs/xWbTaBSm4+mlBK+f6CkjpS9wYOPzb8Th8rcWUgDHQNtg4oKU9nN7hfzuX83MpoexREHfsD497XtkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V4juGaDY; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774884069; c=relaxed/simple;
+	bh=8Mr8LmbAQHXIw91kkQv6DoQKiLML90z4qt/OEn+Vo/Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i9u09ccTWEt+n0yCEcPLBaEZFwMWjKDfAZlqqgQvFz0xBYp4HqxsnjuCEY0IKho9A4V8IjbUJZ0Xb7kk8FyZGveAGlJmY06NUZS1wjeJReNfUn7OSjieJ3LF4UCZtxw9Km+k/hvtsnOdQLDADe/hPyQose53p9BYhlW22rsDHOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hDSIuCfk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V4juGaDY"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43b9d3ebed5so3247115f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 08:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774884060; x=1775488860; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WlR8hdQRwntlpv8tuo2N0ezyr91wv9YgNBgco65NDoE=;
-        b=V4juGaDY3c7eljcojk+PgfK2bI9WmRrM5/Lim8rxp+VArI7upsgdL8TYqCPbNCD+I5
-         UtwDRNtb6+QoXLBHv+M97MOML7Zlau3IZm9dcHxtHmoSLDK0vlIq8A7GCEOCl3DajzoM
-         koGKi+kxsQpLa/y6VH50RyQ9HGHRahhhcY5G17oVe8D6kZ6RKcXPLBht0eopXuPHXROn
-         hFhABuhoN1w4fZkPY3v/iCYjWCS0xOlYZX86/DSSC9W0/Bay/8BwB/D2NcYiB/5dUbaA
-         ylHt13UuM7w1W3apABnig9whNtKy6UUo+lqMtmfkfFauqQeV78WswT59ncblH5bvx12V
-         t/hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774884060; x=1775488860;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WlR8hdQRwntlpv8tuo2N0ezyr91wv9YgNBgco65NDoE=;
-        b=gNJRcGOPDuHIhf5T5UGPtGzaKETNLp866hV/qCj3N4XPgA50akeej4VofSr/ArUpKx
-         QmUKrGYn7mGyAEyrhyNkkdo5rvTmivsaFGYb9Ed6ixUQnnhoEcptUJgo0nVjyccyNUNt
-         1PpMPem8XE4s3G92IAb1dH+zkwcoqnVqN/lQKXlkMFF9jh1i2E7XzzE7OKZdfISxVbWe
-         Qq0erj91DWx1rolUqSGuQ6A99k8X6ZcnqMLKdAPfDuC+TPvoFz4vI765PmddZv3qOYm/
-         N+laW3lduOcTslgq6HDI+75+sWLXWafLV7x0CUvoOGAeUf0+PcyYB/RNFaDjHYbRB6EM
-         1H0A==
-X-Forwarded-Encrypted: i=1; AJvYcCX48qs9OQzE4Enpy+rwfyGjyL7FsAMTFHQ09axCtf1jYnM2oYpFYNmP+NkqASyJIwwB+MomzraxmxbRkY8ul34=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2Q6i1zGpKN6w7tWG5s9IrUGGhI910OqhhVb9Tn3Cavw7t8jOp
-	xruzEvKPc2BzKqwdcJgxwJVx7i+TEGrRU9W+F2wvMdjCD5GiJNjyY1Ot
-X-Gm-Gg: ATEYQzwN4/R8+3msnQZ1fUL+WtxuW0LiupB5jzypA6UAGB/Mz9WDcy52+UK7R32NayM
-	ILUYKehsLXChooInEg5yQlEGAQJYQhCFRgg9y8nNQVuXt/5hTFN7G0g3iBqfKwF8x4GvNCTWNgC
-	a4MWwpflR1drxICy43zin7WZlXURnmxosb2S9mNGj+7K3ZDRnisBrmKGU9lAQV8jRHdndyYDOiW
-	D02V4etmiNVGsm2fdqkhZuK20V0NtOWYcsj9q4gmZIRlrNPO6Qz3sr7r9aeYeyh0U6L5hS1/ISt
-	e1S//A2vqA5QrL5Qhfic4ybjc+i5Vkm7pkBMDHVNljYFSXi4lLKPjTi0cd7WpCngFgJ3mhhZ4kz
-	xYcuEWz2nccYj/ZPd8NlGSihmKU4yqd57uID76OlRkJl3z+uOY3XTyAyEWskQDLbI3mvGf/Q9qA
-	r82RQ+EixMyXvWYWw=
-X-Received: by 2002:a5d:5d01:0:b0:43b:9c73:2933 with SMTP id ffacd0b85a97d-43b9ea34811mr22655564f8f.15.1774884056423;
-        Mon, 30 Mar 2026 08:20:56 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:500::4:4b08])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21e2487sm20593730f8f.5.2026.03.30.08.20.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 08:20:55 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
- table-driven approach in verifier
-In-Reply-To: <20260329140506.9595-2-pilgrimtao@gmail.com>
-References: <20260329140506.9595-1-pilgrimtao@gmail.com>
- <20260329140506.9595-2-pilgrimtao@gmail.com>
-Date: Mon, 30 Mar 2026 16:20:50 +0100
-Message-ID: <87ikadgx7x.fsf@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hDSIuCfk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0173C2BCB5;
+	Mon, 30 Mar 2026 15:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774884068;
+	bh=8Mr8LmbAQHXIw91kkQv6DoQKiLML90z4qt/OEn+Vo/Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=hDSIuCfkSqhjKhIj/dIr+M6EyMKTrX82OkMVJd7LReC5gL+tGgHmHlwQTNovr6VRO
+	 2HwJ9MoliLxoCjUXSfvX/91kp+lLD0bDAWT3m9HosmJNQgVALQSbbjR9WoPexRhJ1Z
+	 7+MAJFO4OH2aHy1msrMz80VqCiOLqhYcbx+1MaX+GWeskzcUL1kYFpInDf6wV5MvSk
+	 Eep/NXo6778WW7/AoV5viV/tthbWxGrcfYFjo6aodh2Dh/oXmQlqjCCPKjKbuwif4d
+	 dEyog/eUXkwJh/t1G3n92bLCZtAmtxBZytaKzDvwiItqQkP9aQeT0BfrzpAYOZtjWu
+	 7QbiMW/OAqrIA==
+Message-ID: <1ef9ed2a-ee3e-4b3e-9fa6-58875f96fb1d@kernel.org>
+Date: Mon, 30 Mar 2026 17:21:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/15] userfaultfd: introduce mfill_get_pmd() helper.
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Andrea Arcangeli <aarcange@redhat.com>,
+ Axel Rasmussen <axelrasmussen@google.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Hugh Dickins
+ <hughd@google.com>, James Houghton <jthoughton@google.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+ Nikita Kalyazin <kalyazin@amazon.com>, Oscar Salvador <osalvador@suse.de>,
+ Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>,
+ kvm@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20260306171815.3160826-1-rppt@kernel.org>
+ <20260306171815.3160826-4-rppt@kernel.org>
+ <ac39f02d-ed00-4b8d-8156-1e999f5b0af3@kernel.org>
+ <ab_C2enJ5DTIH5aH@kernel.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <ab_C2enJ5DTIH5aH@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Chengkaitao <pilgrimtao@gmail.com> writes:
+>>
+>> mfill_prepare_pte_table() or alternatively mfill_alloc_pte_table() /
+>> mfill_alloc_dst_pte_table()
+> 
+> As it actually allocates the pte table once in 512 times, I'd prefer
+> mfill_establish_pmd().
 
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->
-> Replace per-kfunc btf_id chains check with btf_id_in_kfunc_table() and
-> static kfunc tables for easier maintenance.
->
-> Prepare for future extensions to the bpf_list API family.
->
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> ---
+Replying only now (spotted v3 in my inbox)m sounds good to me.
 
-I think old is_bpf_rbtree_api_kfunc(kfunc_btf_id) is more readable than new
-btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_api_kfuncs);
-Not sure if this change should be bundled with this series, it looks
-quite orthogonal.
+-- 
+Cheers,
 
->  kernel/bpf/verifier.c | 261 +++++++++++++++++++++++-------------------
->  1 file changed, 144 insertions(+), 117 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 4fbacd2149cd..f2d9863bb290 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -544,9 +544,6 @@ static bool is_async_callback_calling_kfunc(u32 btf_id);
->  static bool is_callback_calling_kfunc(u32 btf_id);
->  static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
->  
-> -static bool is_bpf_wq_set_callback_kfunc(u32 btf_id);
-> -static bool is_task_work_add_kfunc(u32 func_id);
-> -
->  static bool is_sync_callback_calling_function(enum bpf_func_id func_id)
->  {
->  	return func_id == BPF_FUNC_for_each_map_elem ||
-> @@ -586,7 +583,7 @@ static bool is_async_cb_sleepable(struct bpf_verifier_env *env, struct bpf_insn
->  
->  	/* bpf_wq and bpf_task_work callbacks are always sleepable. */
->  	if (bpf_pseudo_kfunc_call(insn) && insn->off == 0 &&
-> -	    (is_bpf_wq_set_callback_kfunc(insn->imm) || is_task_work_add_kfunc(insn->imm)))
-> +	    is_async_callback_calling_kfunc(insn->imm))
->  		return true;
->  
->  	verifier_bug(env, "unhandled async callback in is_async_cb_sleepable");
-> @@ -11203,31 +11200,6 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
->  	return 0;
->  }
->  
-> ...
-> -- 
-> 2.50.1 (Apple Git-155)
+David
