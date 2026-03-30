@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC0333FE0D
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 15:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DA733FE27
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 15:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774883753; cv=none; b=LuonEyQdhfDqCLk2Hq9NhbvWHgLWV62XQM4zdw7oS9rEeEvOabiuk969lPQ30oBtjiAa8eJ7Rw0nvgQSNboJSE01xQJEMuf9xljOLrKcZHxepc2OO/IR7qjSXjv0aGPOYQO+0VA3if63o+nANgzCnRIbUPfyPygZJVIA+V7s1SU=
+	t=1774883764; cv=none; b=dYFfNXcb0ZbCSVjk2wiVTQgSNzrPYn0ngjCI0Vg/SYMMmJxwH7qjuGtOsnvBhMDLTA/xGQsTyNPzW0QjlVgAmMnmKrL9D4CpVXtJag3vqii/uP+pLRuogmBnV2uWgj2/SSmz4JDaLGwOkcZpb35SQVx9WOV8BxIpQ4WnQRWutDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774883753; c=relaxed/simple;
-	bh=v8gKI+PNCs7vEzGBzviHnReOhtiQ1Yf/5kZHPLYZtH4=;
+	s=arc-20240116; t=1774883764; c=relaxed/simple;
+	bh=w95nu1CM2flukevvyNPTVHpid/veCWwhw2TvXNKSSm0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kK3G7EtBthvOVYe1fpKON5/rsEKpQVAJlbc8+AlNdXmGjRYxUOm157Pbmv35Tzirp/ZX3HQnmnQ25eJGMwwCDQMuPAbyu+bwf5Qg4FBXeacLuY0gn6JXWl3NqoldtG1dW0J0IXSXvmPOx/PoSZALhfO6+/cY7twpNWzV7x+mMMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ceASVE1E; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=oxPBvMIyqCR7voO16PnWFbRlDZNRCB/tLyal34ryTNDNw+kvnrv8nTC8gbya/psCjk18vqr5TIhd0P4DPQr4Gp9IYroFbj+WvvSdkxPJuZz4g7N1l6Ay1QOGxce4hV8tAsMpuOZyddlZMBWUtl1sLJY3Uw+W58E0+dg/bNlzGRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=elP5L/Ez; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ceASVE1E"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="elP5L/Ez"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774883750;
+	s=mimecast20190719; t=1774883761;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9tZowJL8GjFLSw4sIge6Gujv1KBlMa1KFIvCe3PwXUI=;
-	b=ceASVE1EmWSiGj5bm1W7px9mQU6wiUFGFgMtNHiDtiayfunt9BaoLp/nXh7mDmoSESVH7L
-	kiaCfDj7hLyeyXYVB+ERkpj8py+aowYgf8dVb9/JtdC/+HEdCRHeP6VneHjA/ziSWyDjIS
-	IJ4Xf24wFYSI2xhq9mvB43p86rR2VBA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=ie9j02dRCYKPPj+cFCU+BtD494a7hZlu7MrIBbhAVwo=;
+	b=elP5L/Ez6s7zlJA+WTx9w5AsIcHdNNqlia/Xbyrg54RpOXG8HGo0jWJzZ+B5CGS1ZnFFP4
+	UqRuR9eARofpbLpzt+qFNdBxX7pyNBpj2lG3Zu/f9Wq3OvQHSC/+XRQUBDnhK8GSpuszhn
+	CT46xqy2etfBHiJiybjYoGIYHOpa3yo=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-259-WqB3mokyMN2jyXfg3LuyRQ-1; Mon,
- 30 Mar 2026 11:15:45 -0400
-X-MC-Unique: WqB3mokyMN2jyXfg3LuyRQ-1
-X-Mimecast-MFC-AGG-ID: WqB3mokyMN2jyXfg3LuyRQ_1774883743
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-661-Plyn5C7LNeaQvCTlucDj4Q-1; Mon,
+ 30 Mar 2026 11:15:54 -0400
+X-MC-Unique: Plyn5C7LNeaQvCTlucDj4Q-1
+X-Mimecast-MFC-AGG-ID: Plyn5C7LNeaQvCTlucDj4Q_1774883752
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4165A18005B3;
-	Mon, 30 Mar 2026 15:15:43 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E13B318002E9;
+	Mon, 30 Mar 2026 15:15:51 +0000 (UTC)
 Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 600BC19560AB;
-	Mon, 30 Mar 2026 15:15:34 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E440719560AB;
+	Mon, 30 Mar 2026 15:15:43 +0000 (UTC)
 From: Chunyu Hu <chuhu@redhat.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -64,9 +64,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	baohua@kernel.org,
 	lance.yang@linux.dev,
 	chuhu@redhat.com
-Subject: [PATCH v7 3/7] selftests/mm: move write_file helper to vm_util
-Date: Mon, 30 Mar 2026 23:14:59 +0800
-Message-ID: <20260330151503.670415-4-chuhu@redhat.com>
+Subject: [PATCH v7 4/7] selftests: ksft_exit_fail_perror: support printf style arguments
+Date: Mon, 30 Mar 2026 23:15:00 +0800
+Message-ID: <20260330151503.670415-5-chuhu@redhat.com>
 In-Reply-To: <20260330151503.670415-1-chuhu@redhat.com>
 References: <20260330151503.670415-1-chuhu@redhat.com>
 Precedence: bulk
@@ -78,192 +78,62 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-thp_settings provides write_file() helper for safely writing to a file and
-exit when write failure happens. It's a very low level helper and many sub
-tests need such a helper, not only thp tests.
+The ksft_exit_fail_perror function previously only accepted a single string
+argument, which limited its flexibility for providing specific context to
+failure messages.
 
-split_huge_page_test also defines a write_file locally. The two have minior
-differences in return type and used exit api. And there would be conflicts
-if split_huge_page_test wanted to include thp_settings.h because of
-different prototype, making it less convenient.
+This change updates ksft_exit_fail_perror to support variable arguments,
+similar to ksft_exit_fail_msg.  Adding the __printf(1, 2) attribute enables
+compile-time checking for format string correctness.
 
-It's possisble to merge the two, although some tests don't use the
-kselftest infrastrucutre for testing. It would also work when using the
-ksft_exit_msg() to exit in my test, as the counters are all zero. Output
-will be like:
-
-  TAP version 13
-  1..62
-  Bail out! /proc/sys/vm/drop_caches1 open failed: No such file or directory
-  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-So here we just keep the version in split_huge_page_test, and move it into
-the vm_util. This makes it easy to maitain and user could just include one
-vm_util.h when they don't need thp setting helpers. Keep the prototype of
-void return as the function will exit on any error, return value is not
-necessary, and will simply the callers like write_num() and write_string().
-
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Suggested-by: Mike Rapoport <rppt@kernel.org>
 Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 ---
-Changes in v6:
-  - add reviewed-by from Lorenzo
-Changes in v5:
-  - updated acked-by and reviewed-by
-Changes in v3:
-  - make the write_file void return
-Changes in v2:
-  new patch from v2
+Changes in v7:
+  - new patch to convert ksft_exit_fail_perror support variable arguments
 ---
- .../selftests/mm/split_huge_page_test.c       | 15 --------
- tools/testing/selftests/mm/thp_settings.c     | 35 ++-----------------
- tools/testing/selftests/mm/thp_settings.h     |  1 -
- tools/testing/selftests/mm/vm_util.c          | 15 ++++++++
- tools/testing/selftests/mm/vm_util.h          |  2 ++
- 5 files changed, 20 insertions(+), 48 deletions(-)
+ tools/testing/selftests/kselftest.h | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index e0167111bdd1..93f205327b84 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -255,21 +255,6 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
- 	return status;
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index afbcf8412ae5..11cabdabb3f6 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -43,7 +43,7 @@
+  * the program is aborting before finishing all tests):
+  *
+  *    ksft_exit_fail_msg(fmt, ...);
+- *    ksft_exit_fail_perror(msg);
++ *    ksft_exit_fail_perror(fmt, ...);
+  *
+  */
+ #ifndef __KSELFTEST_H
+@@ -417,9 +417,24 @@ static inline __noreturn __printf(1, 2) void ksft_exit_fail_msg(const char *msg,
+ 	exit(KSFT_FAIL);
  }
  
--static void write_file(const char *path, const char *buf, size_t buflen)
--{
--	int fd;
--	ssize_t numwritten;
--
--	fd = open(path, O_WRONLY);
--	if (fd == -1)
--		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
--
--	numwritten = write(fd, buf, buflen - 1);
--	close(fd);
--	if (numwritten < 1)
--		ksft_exit_fail_msg("Write failed\n");
--}
--
- static void write_debugfs(const char *fmt, ...)
+-static inline __noreturn void ksft_exit_fail_perror(const char *msg)
++static inline __noreturn __printf(1, 2) void ksft_exit_fail_perror(const char *msg, ...)
  {
- 	char input[INPUT_MAX];
-diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
-index 574bd0f8ae48..e748ebfb3d4e 100644
---- a/tools/testing/selftests/mm/thp_settings.c
-+++ b/tools/testing/selftests/mm/thp_settings.c
-@@ -6,6 +6,7 @@
- #include <string.h>
- #include <unistd.h>
- 
-+#include "vm_util.h"
- #include "thp_settings.h"
- 
- #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
-@@ -64,29 +65,6 @@ int read_file(const char *path, char *buf, size_t buflen)
- 	return (unsigned int) numread;
+-	ksft_exit_fail_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
++	va_list args;
++	char *buf = NULL;
++	int saved_errno = errno;
++
++	va_start(args, msg);
++	if (vasprintf(&buf, msg, args) == -1) {
++		va_end(args);
++		ksft_exit_fail_msg("vasprintf failed: %s (%d)\n", strerror(saved_errno),
++				saved_errno);
++	}
++	va_end(args);
++
++	errno = saved_errno;
++	ksft_exit_fail_msg("%s: %s (%d)\n", buf, strerror(errno), errno);
++
++	free(buf);
  }
  
--int write_file(const char *path, const char *buf, size_t buflen)
--{
--	int fd;
--	ssize_t numwritten;
--
--	fd = open(path, O_WRONLY);
--	if (fd == -1) {
--		printf("open(%s)\n", path);
--		exit(EXIT_FAILURE);
--		return 0;
--	}
--
--	numwritten = write(fd, buf, buflen - 1);
--	close(fd);
--	if (numwritten < 1) {
--		printf("write(%s)\n", buf);
--		exit(EXIT_FAILURE);
--		return 0;
--	}
--
--	return (unsigned int) numwritten;
--}
--
- unsigned long read_num(const char *path)
- {
- 	char buf[21];
-@@ -104,10 +82,7 @@ void write_num(const char *path, unsigned long num)
- 	char buf[21];
- 
- 	sprintf(buf, "%ld", num);
--	if (!write_file(path, buf, strlen(buf) + 1)) {
--		perror(path);
--		exit(EXIT_FAILURE);
--	}
-+	write_file(path, buf, strlen(buf) + 1);
- }
- 
- int thp_read_string(const char *name, const char * const strings[])
-@@ -165,11 +140,7 @@ void thp_write_string(const char *name, const char *val)
- 		printf("%s: Pathname is too long\n", __func__);
- 		exit(EXIT_FAILURE);
- 	}
--
--	if (!write_file(path, val, strlen(val) + 1)) {
--		perror(path);
--		exit(EXIT_FAILURE);
--	}
-+	write_file(path, val, strlen(val) + 1);
- }
- 
- unsigned long thp_read_num(const char *name)
-diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
-index 76eeb712e5f1..7748a9009191 100644
---- a/tools/testing/selftests/mm/thp_settings.h
-+++ b/tools/testing/selftests/mm/thp_settings.h
-@@ -63,7 +63,6 @@ struct thp_settings {
- };
- 
- int read_file(const char *path, char *buf, size_t buflen);
--int write_file(const char *path, const char *buf, size_t buflen);
- unsigned long read_num(const char *path);
- void write_num(const char *path, unsigned long num);
- 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index a6d4ff7dfdc0..ad96d19d1b85 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -764,3 +764,18 @@ int unpoison_memory(unsigned long pfn)
- 
- 	return ret > 0 ? 0 : -errno;
- }
-+
-+void write_file(const char *path, const char *buf, size_t buflen)
-+{
-+	int fd;
-+	ssize_t numwritten;
-+
-+	fd = open(path, O_WRONLY);
-+	if (fd == -1)
-+		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-+
-+	numwritten = write(fd, buf, buflen - 1);
-+	close(fd);
-+	if (numwritten < 1)
-+		ksft_exit_fail_msg("Write failed\n");
-+}
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index e9c4e24769c1..1a07305ceff4 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -166,3 +166,5 @@ int unpoison_memory(unsigned long pfn);
- 
- #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
-+
-+void write_file(const char *path, const char *buf, size_t buflen);
+ static inline __noreturn void ksft_exit_xfail(void)
 -- 
 2.53.0
 
