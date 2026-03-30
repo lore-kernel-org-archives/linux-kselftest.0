@@ -1,145 +1,202 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013025.outbound.protection.outlook.com [40.107.162.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CCD126C02;
-	Mon, 30 Mar 2026 10:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774867411; cv=none; b=Y3Ki0rRzMsl41ids7sRtZdJIy93IQnes69B7fFtUxcI1uHJ//cOhMMKJNDr3xsyVePccHVruQOHdpDkeGNbCQ0gv8pnpF5x0tyY5BI5QwNm0N7xJ+Hz4qdm2i4bJ/mrDMN09rRF9a94B4PsJQzbvuMQPgdwlopGO2xd9pGxd1UA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774867411; c=relaxed/simple;
-	bh=OoCOlj8/QWtY4FP0+BpV4Z00hRhh0v51w6ArBxXXuJU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nRgpafGvBCgsgDOMoDM21bxHdu9w3QvilIsmv1nPZMqkFxSnkRJSGyXGIlRpLFNHakJjaMKfrjzL7kYZsOHkSelEDChgUZhVYPnd2fhkbIxiKgAlCiQ1pW+T6PxsEnMyK8966S9fB+Y9vEM9NSI4y09+C/XBzq8xMtkBwRi0dRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=knaHqe2v; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D6A3C3440;
+	Mon, 30 Mar 2026 11:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774869128; cv=fail; b=Pc0pUHMOCWCL8bFiu6eS1iQ+2ULhaX1cdJCSKfxRLtpF0U1ten91laWB/sIrsQwsAJsTB+JDztHV0rXl90R5jEg/MTx4BpJNs3wcR0D2zhxPD4PXNv4pO4CdnKezujpGLVsDsmmoXHYjRBEEqiea4Bq83gKFimSoxPfYvisYdNo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774869128; c=relaxed/simple;
+	bh=kZ2Ka5IewB4d6tsyd0ujlTAD+UZKVUG0+6JmqE5c6cI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Ngf52tyW7V2i4VluXHyOeAgrFaCClPOcWZxASjNRlnjDe5Bqkncm1tILbleFgFb4J5bL5imeo4hG1XntEram1JF7ifUUjGnOyf5gjsN+91/kN/k6Yq3869I3Iiv1hoAhM8513QD3KLLPD4Y8rrM8P44jz/B3myPiXKChUNeuJ2s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=gNhGM1Xx; arc=fail smtp.client-ip=40.107.162.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="knaHqe2v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC57C4CEF7;
-	Mon, 30 Mar 2026 10:43:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774867411;
-	bh=OoCOlj8/QWtY4FP0+BpV4Z00hRhh0v51w6ArBxXXuJU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=knaHqe2vFBFBi4ruLZm0/3U5BnDMHk8cfOau66gS4mNWkgw643Xx/mGdespF7/8fF
-	 y9XSdWcQPDpFFhsMSbTcPS9qHYAaDO7DJC8zI5JUWQVHI4yMJSiBk4kimUGXggS1p0
-	 pXX0KX53j1wHbU1S+PPHBNiCWV69BIilFc+bp6wayxMilOX3FyHShnEGASQHwsC0v2
-	 myYp8PEnavb9Zgu9rfCBpx7qVmOX0cqHaHtWdIHKts3fZAn6Ec4oJem7yGKrl4FS7C
-	 7ZJKTcC1Sog7dG54+mV+homX1mzqaKaLTMOTct2RLl5UbkLyP/Rh4Z14ZPIPiNuOP7
-	 CeB6lBWb8j0vw==
-Message-ID: <a1054c28-b574-4fcc-afe9-5e902209a22c@kernel.org>
-Date: Mon, 30 Mar 2026 12:43:26 +0200
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="gNhGM1Xx"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=j3DlNd9gXcb7kyn+tdjFNgfwPVLBf+H8E2NwbCOuYqnxu5CTNJTOB/5J5MONVIG55Z1sPNZxH7ZnBVo1UiIb4TVSXYuWUnLS5gU5Q/jKYYzKcPdUtZubEbMGRLzbYAupHllcp++CXamJMSbXMXG30X3Xc3NSmES22SPzMK/26vhJCNDC29AdvCrjGn/2c0WA40A5ZJ9ZR1lSf+Ppw3oTb59KF70kjYyTBzCXYoKOglQXy2DMEqDItnf1FO1fUsipnjN8xzF0AVFuElCgeed0VVC2jvrx6btDnmQjglhOpiPfNjOfFafFUFGQS5AKTbP7ifuf4tLVqeIDOh68Pa65Lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YgUgB9xmTGBiP+2RpVgzYSYzzRnJtwcku6cOKIg0uhA=;
+ b=GlcsRu6OsRJ9Fhk2orCQ831YpoGYuCv/5Khazv56rarjps5sOP9ACbpierTaycoBKrASal/pam0i/PMArWrgCPJw8jYe0yk6ISGKVz9WUWeCyCDoGz2tYROi/JDNfetj2H2zxL7/kohAMZ0yG59xFftGkvvigKCgirrsm2iCYfKhrRggQWYtM0JoIh2KvH/MsotpkQgiVEwWV7RgM9uN2Nh0yEngxPkk8Ih1rwaNwlpQQ3oS1FpTMT/rBv/Hxq/mVub5lOrqYONiVsGkbuAR86lG85ruphM3wF9kLRXOlFf3Di8zQ4aF2eCOBUuvv5unTOc4yAOj9QkjRc9V2WTmzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YgUgB9xmTGBiP+2RpVgzYSYzzRnJtwcku6cOKIg0uhA=;
+ b=gNhGM1XxYYvEDGswiS+IBfVUtKUFf6oykfhKihzOjpXJyiR1rptjRz09G6oOwO4r7N3MmYJM9vZXxWo+wT4WP7Z2hme3dzek/kprmFXTxTUxQaca8aKs34OkN9gq2UgTVdwzjAV6iVhS+Cm8gn0M++sRrzSVaOfoNTDdf7iyjQfWcph4pJE+/7x9SEfeQYIs/y7tnyo+Wa8OC/I9p7jpVgepIEelu84ZnPUm0d4Z8aWQWOpFLNe5uqv83EB3i/EzFB/WFHAkcGdTdeeq6zTO/t82P0It5UTPSzbOmTDf4aAq0j0Kf+KB+z6Eh0qlt3JWYFBRBaqIPPe6L9oqFy/tdw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
+ by AM9PR04MB8778.eurprd04.prod.outlook.com (2603:10a6:20b:409::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
+ 2026 11:12:00 +0000
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
+ 11:12:00 +0000
+Date: Mon, 30 Mar 2026 14:11:43 +0300
+From: Ioana Ciornei <ioana.ciornei@nxp.com>
+To: Petr Machata <petrm@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S.  Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	linux-kernel@vger.kernel.org, willemb@google.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 00/10] selftests: drivers: bash support for
+ remote traffic generators
+Message-ID: <usxkovboo5jt6vu2jvbwpnsltvewjil27xizt3jjhggu5o4td3@2cgex6op4mzc>
+References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
+ <20260326120342.6429fbdc@kernel.org>
+ <5cuoazp2svgjja5h663zc34dafkuqa2grrm7lzpuunvrjogydf@43mryp77gq2q>
+ <20260327172454.6b9bc8f3@kernel.org>
+ <87a4vp61m4.fsf@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a4vp61m4.fsf@nvidia.com>
+X-ClientProxiedBy: AM8P191CA0017.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21a::22) To PAXPR04MB8253.eurprd04.prod.outlook.com
+ (2603:10a6:102:1bf::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] selftests/mm: skip hugetlb_dio tests when DIO
- alignment is incompatible
-To: Li Wang <liwang@redhat.com>
-Cc: akpm@linux-foundation.org, rppt@kernel.org, ljs@kernel.org,
- Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org, aubaker@redhat.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org
-References: <20260330053915.75442-1-liwang@redhat.com>
- <a5b7add7-0507-40c0-a324-81f243ffa261@kernel.org>
- <acok3JY66OcV0Qab@redhat.com> <acpMD8tRCJhgXHeg@redhat.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <acpMD8tRCJhgXHeg@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|AM9PR04MB8778:EE_
+X-MS-Office365-Filtering-Correlation-Id: e511083d-f4b7-4a7c-f85d-08de8e4d2a11
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|1800799024|376014|7416014|366016|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	gcZmtErnezOW8XdK8t+2nTb9MDWN3mPvv8A194UNQ2byzIkt0Q6lsAiHvNTtw16gUeX3PsCGQxnPm7RxUV+RBNfL0V7Q7/lynJ/5blHrr30yeGwhFK5djfSHiZBvNBbg4JG2izzFt+11JGcG9+m07J5QoTPhe7h2C2kWvQDtY+T1QETGwzpmwRW47AlAuq7ctnngBbHgYaxHrPzjXKO2QEETZ/J5eyrUUjUYEvq7JRkrqgHrR/hceycbKVjOAo2skKsGXONyJYLurRZl77CL//YSJtNOhh9hdi+46//wvX67BwLj7zCikCOxrpsO1zqm91q7nCF94wnesfXJYrNPcTMhsvLBHQaRLv0qGLjvAZyRhpXRW40iVmXMoIiHcoKLVYgRhat8c5Wf90VYfRwRdyh6tgvNonnk2cejWfYVo4IOMJy72By5eiCS55GK1KrnNjkwWbIJkGH3z4aYL0D57t1wZ3qQ2vjtAiYQzHt0iNXZDzIuUS+RuFnrzAC9Kn5pLmUzrjDBLrO7ZL6OSgkohqLcdk4aBKi6pTQpEbAqDfyYyxSIbzXZTTWyRf8gYlgNad+FOZ/TfkZ7l81z98mQ241QvGRLbh+wMneTWuVo37g9EAb9u5uUXh86HRmjoQowpVBNxKVmKiywqHDPMaVG5PtL3rBjyV+ALhwXwcQK2oozC5ZqWIygNn6VTFlqf2TX
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(376014)(7416014)(366016)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ryK50KatMq4q/FFADJ7+Mb+S2ia/L1raS+ZBEyjUsOPeLtmXEJHbq4HUkt4M?=
+ =?us-ascii?Q?KpXgjiiVJtP2EKitpdJMYBcpANbss7QwL9DoAdsA8lg8xvKK3uYFLOZkIJt3?=
+ =?us-ascii?Q?rNWRPAoi6IoNuXdqb7e/xyv3Bd+SE7vfDjqprlks8qDZoWRvvX5vVLHM16Ef?=
+ =?us-ascii?Q?KxJBw0hSXzJrXuvmf6PFn0AdL2itRVGqjwDZzAs6DtlhII+1kNvm9qUTid2b?=
+ =?us-ascii?Q?63pAN+sLlwj4Di64zC6YltjEzCojlaiKChuMs5XVhsIfVz9YthDFpaAuqH01?=
+ =?us-ascii?Q?1b+XVYT+d83PsFElRXAJNKCHJ32j7UgBvjx06L7PnMsDrHTpcxKU1Bs7EDva?=
+ =?us-ascii?Q?050BMhuR3M/82rIVTMaK/bTWJvc/OvNWPPIsQdxewMNguluSXzwEwgVaOdqD?=
+ =?us-ascii?Q?5nVSUsa0D5pdObNXrPaiQmk5AX74duRsIlvk0/i8C/7OwdOSMaofJYrkyhco?=
+ =?us-ascii?Q?tVDmkBsZX0qtkYf11qL380OiCccUK4890JZET0h8bbOt5KrQTj5s17qCu7tB?=
+ =?us-ascii?Q?hL4J3+Ct3AoNIxsroRNIH7Uvyz+OWrQHWs51k+ZB2HHP/P1ItSRv8LYPXJgI?=
+ =?us-ascii?Q?4h+wgR/oLWcK9dQdmgSFQoStnXVdMC/tb9yzUuLy06VJSXyMZRfwjHIDQ7a1?=
+ =?us-ascii?Q?g2HAbjmO5h3KPXVzZY6nJE851u50dzFKgodQje2qj8g6WuM7gZuBEutDyeTT?=
+ =?us-ascii?Q?ggNJLJvscTwardkqgyh1qyJaSSgPDQV8Ro3x+efgDR8UGvFqNo+bgb0HczL5?=
+ =?us-ascii?Q?GK7NHrLBmttSIWiXTJjLxEmNjkzL2VQ4Z7l6CHlYm+/T/s8CsvQK6NX0khe7?=
+ =?us-ascii?Q?/pekn6tGC2n8ykAshoLq/JD2JLnDzsxgDqy4F0Lz214oKtLyCUUGTpH55pgm?=
+ =?us-ascii?Q?3hYT50exWWZSEUF7feQSSc/wdDxH2uznuoUSe01i3MVt4WRascGguUGM4Qzf?=
+ =?us-ascii?Q?P4VuUsD11VLaZMXqU3h6Ppjgy6StY3SqJdYGt9Kf6HBIyvZwx2ZE7uxPwQPJ?=
+ =?us-ascii?Q?FldilQ9p0rTkACTgunURbESNd7SXdhQNVXbVmB8+Y+KvXLmj67MaNXFmAQj3?=
+ =?us-ascii?Q?7prfNre8T28D7QnLoVak60/Kkk3gy1ajEMxoi2T8F6FjPH/n1Z8m7B4Ob75z?=
+ =?us-ascii?Q?uxonL/PgG5LSCyWOYffCIPSTV4T7ldp6vRPJgDgtQS7NzUri61SlY6RCSxmn?=
+ =?us-ascii?Q?VuLVurrCcJoTuIU113eSH/HnpJZu1weUqqN+7WEiraopMVsuiL3Da06C8udq?=
+ =?us-ascii?Q?BMF7hHlO4/+2Tp8y7D9PPMt99OtdKQ7Z2DXQAWi8i1x2gRbnrpZpL/JAwKVf?=
+ =?us-ascii?Q?yAsVOrRhmNmiX6qhl9sOi3EHyms58D9zGeNR+tzvEWNKuUdPSy/SOvje+Hr2?=
+ =?us-ascii?Q?3b0IwYglRElfDMgtkVgD8bogveieyBAgngnA8hi0hzSV9T2eOHxnX1eP1ZkL?=
+ =?us-ascii?Q?CqQ6YWGN25b03bOEgi0D6+HNt2aXPvEJROvdO2UthPvhN5jeD0ACeyhvjHM8?=
+ =?us-ascii?Q?Ch//AkkxHmrdVb3EPhAmkLMYnw4/6GmhlOHroK5jpX+JiDZ4fEQho7++rZBc?=
+ =?us-ascii?Q?LmSMaCmHytE19YHkHpyO3KpD79F68ZQR3TsxiYY1Ed4pLUlatCIdOCvIHSzU?=
+ =?us-ascii?Q?zzGtEGkWWicZAKqkTvcNopU7aeLCRLsoVmB9z2gOztP40pg6gQaCflJNKhiA?=
+ =?us-ascii?Q?ycbC4GyrGX392OLeGX+f5FfPMhMq9AQu/HVcJTmFYS1aG4KlFB8sGEIexgMh?=
+ =?us-ascii?Q?/3RUuT0eiA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e511083d-f4b7-4a7c-f85d-08de8e4d2a11
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 11:12:00.4057
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SXRvyiw0o8gkqCSO8zlZpNB8ssuZbEHgSFCNVY911rVlwrD61iEiSx2BSsf+cwjhI/VADe3wQAaBFTxxy98VwA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8778
 
-On 3/30/26 12:10, Li Wang wrote:
->>> Why can't we simply open the file once and pass the fd to run_dio_using_hugetlb()?
->>>
->>> fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
->>> if (fd < 0)
->>> 	ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
->>> dio_align = get_dio_alignment(fd);
->>> if (dio_align <= 0)
->>> 	ksft_exit_skip("Unable to obtain DIO alignment: %s\n", strerror(errno));
->>
->> Yes, apparently this is a good suggestion. Thanks!
+On Mon, Mar 30, 2026 at 12:38:54PM +0200, Petr Machata wrote:
 > 
-> And, to make the test elegant, I'm going to add check_dio_alignment() dedicated
-> to alignment checking. Then we don't need to pass too many args.
+> Jakub Kicinski <kuba@kernel.org> writes:
 > 
-> Tell me your thoughts if you don't like this:
+> > On Fri, 27 Mar 2026 09:32:22 +0200 Ioana Ciornei wrote:
+> >> On Thu, Mar 26, 2026 at 12:03:42PM -0700, Jakub Kicinski wrote:
+> >> > On Thu, 26 Mar 2026 15:28:18 +0200 Ioana Ciornei wrote:  
+> >> > > This patch set aims to add the necessary support so that bash written
+> >> > > selftests are also able to easily run with a remote traffic generator
+> >> > > system, either be it in another netns or one accessible through ssh.
+> >> > > 
+> >> > > This patch set is a result of the discussion from v1:
+> >> > > https://lore.kernel.org/all/20260303084330.340b6459@kernel.org/
+> >> > > Even though the python infrastructure is already established, some
+> >> > > things are easier in bash and it would be a shame to leave behind the
+> >> > > bash tests that we already have.  
+> >> > 
+> >> > I think this introduces a bunch of regressions, eg:
+> >> > 
+> >> > https://netdev-ctrl.bots.linux.dev/logs/vmksft/forwarding/results/575622/4-local-termination-sh/stdout
+> >> > 
+> >> > https://netdev-ctrl.bots.linux.dev/logs/vmksft/netdevsim/results/575802/18-netcons-resume-sh/stdout  
+> >> 
+> >> I cannot reproduce this unfortunately. For example, local_termination.sh
+> >> gives me the following result with the exact patches that I submitted.
+> >> Any idea on what might be the difference?
+> >
+> > Hm, the system that runs this on our end is:
+> >
+> > # cat /etc/redhat-release 
+> > Fedora release 43 (Forty Three)
+> >
+> > And it has this added on top of default install:
+> >
+> > # cat /etc/systemd/network/99-default.link
+> > [Match]
+> > OriginalName=*
+> >
+> > [Link]
+> > NamePolicy=keep kernel database onboard slot path
+> > AlternativeNamesPolicy=database onboard slot path mac
+> > MACAddressPolicy=none
 > 
->   static int get_dio_alignment(int fd)
->   {...}
->   
->   static bool check_dio_alignment(unsigned int start_off, unsigned int end_off)
->   {...}
->   
->   static void run_test(int fd, unsigned int start_off, unsigned int end_off)
->   {
->       if (!check_dio_alignment(start_off, end_off))
->           return;
->   
->       run_dio_using_hugetlb(fd, start_off, end_off);
->   }
->   
->   int main(void)
->   {
->       ... 
->       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
->       if (fd < 0)
->           ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
->   
->       if (get_dio_alignment(fd) < 0)
+> The observed issues are consistent with TARGETS being defined, but not
+> an array:
+> 
+> $ declare -A T
+> $ T=([a.100]=b)
+> $ U=foo
+> $ if declare -p T &>/dev/null; then echo "${T[a.100]}"; else echo fail; fi
+> b
+> $ if declare -p U &>/dev/null; then echo "${U[a.100]}"; else echo fail; fi
+> bash: a.100: syntax error: invalid arithmetic operator (error token is ".100")
 
-I would suggest that you query the alignment only once, and forward it
-to the test.
+Totally agree, that's what it looks like.
 
--- 
-Cheers,
+On the other hand, I don't see any other use of the TARGETS variable in
+tools/testing/selftests. The only way I can trigger that kind of error
+is by setting and exporting TARGETS before running the test.
 
-David
+ root@localhost:~/ksft-net-drv# export TARGETS=test
+ root@localhost:~/ksft-net-drv# ./run_kselftest.sh -t drivers/net/netconsole:netcons_resume.sh
+ [ 1895.134633] kselftest: Running tests in drivers/net/netconsole
+ TAP version 13
+ 1..1
+ # timeout set to 45
+ # selftests: drivers/net/netconsole: netcons_resume.sh
+ # Running with bind mode: ifname
+ # /root/ksft-net-drv/drivers/net/lib/sh/../../../../net/lib.sh: line 707: eni497np1: unbound variable
+ not ok 1 selftests: drivers/net/netconsole: netcons_resume.sh # exit=1
+
+So this means that TARGETS is used by the netdev testing
+infrastructure, I presume.
+
+Anyhow, I can change the variable name to avoid this. Something like
+NETIF_TARGETS?
+
