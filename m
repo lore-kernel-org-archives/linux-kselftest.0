@@ -1,139 +1,97 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A7E3CE488
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 13:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566C53D6CBB
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 13:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774878543; cv=none; b=nmU4y9IJbULMZWIHpNIMedTejQDu8RTKwVchNbhsxNme5oizEBYOyaWRF3GaDXGCrD62gWD9J8P+1K3n3hiwJcmfgYW0pD/ZjqKrlG6vRgQdsx31pfz6Q5Ol9YnmeutQ7ETEiMn2+bykYubmAndb5Or1HZX7EkhAWJr0pW/KKLE=
+	t=1774878780; cv=none; b=mBGTRo+vkofoMdAcvmZWRMtoa1CurzgI4LJDSRcjWy0LiZCOoIIMGUUUSnfvA8RLEnvAVRrdtesaoeJyq+jSDKhEkgRoT5Skq6lUHJ/ATMnhU/BqL+V6HVKSjZzEOXeuwjvr/UErxYhdNDu5JCn5LVm0Z/K6Verp9wU6W4RobU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774878543; c=relaxed/simple;
-	bh=XkO1wPeal3Kc8w275PiOatPBzgWgLU7yfkQaxOpKYzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YkTo9dJzUI5Yr+P7jH9Ni3lFUfDjDmsT9N6aijeW8TrY+4ZL9vlE79kS9sX3A3vbSKzfAY7YEWQS6VcqqoNltL5OxjWE++pfZ98QOEaaUOY8+ErxWQsVpS3gp0yecYPnbt9/nvAyx8BzOcldHq2f1odpYe02R6SS37bvvb2gj1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TbpTuWxO; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1774878780; c=relaxed/simple;
+	bh=Gm2aosWWnsY0BfZjNyWIoXrhhDu7CTIsgRg9k/wfjHI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P6QOhz/Szf45aQbBL9l6mhcm67uWINr0VwXwSanqzS8smo2ZJB18Obl0nKAj3fW5LHwNkWvBHl/Phq1ChD3EiklYWYeGsK0KmKBUce5fVStbmld+GMZd5JXtgk46qcoAnxLNEMNCl8+t24Rb1v40kJtsEgPRNDsFui8K/1fWdDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G/9Tf8G9; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TbpTuWxO"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4853c1ca73aso45198535e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 06:49:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774878540; x=1775483340; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=njb2j7pkbXogpjPTY38oH4qSs8U+jP8c+JG2E4esAKs=;
-        b=TbpTuWxOaP7Qwz4V808ahKSugVmVHWlAewXrKDlL9/zCSgoT1pwiw8jC2n7KQNEjkX
-         ps6dedA0Yh2KPCDci4Germ0jpWVGqhTsh5+Ut78tADMczfThh+LYUH6anHaX5ly0JAWK
-         E7ESwQmpQMav9kFpCXsAhSOOvBJ+eQweYwog0NKkpG6Dtx4/nHg080OUedMg+/jUkTMj
-         REhl3yJVgta6UmP8hCjYSosKrRwZy35i2UFFQ7UrroSSwqeJ9cz1w2XqYnhxqiSfone5
-         dRNqtpSyn9bGrI3P6jV6gjCCY11ZzhFSA9QRIqtjb0rs/xylnyhsN7IXWPxS+UmUFIsU
-         aKlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774878540; x=1775483340;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=njb2j7pkbXogpjPTY38oH4qSs8U+jP8c+JG2E4esAKs=;
-        b=YK3pw8rVS0vaehOGWSJuIFADsA8qigz0Gw50glvf/1Es9nHZ0ouHoeZXJgokyyqBOc
-         fAeQYsJiHZpW00gNXhmT8q3UhHllFbTD3iWDgbzlXViJQ1PMURHVJzyyBxOZeUODCsVq
-         c/96A1N1tm4+HCkNsjlhTCa6GRdjT3fLYRhPed+bGjpB+6htemhAaAL6GuoZwySDPlPg
-         Yg+Jb2IL6bHAnbL9gTdNQHa4tMNB9xE9rWNfDLANPnCAi/eMubqr1CcRsyK8+two97Ox
-         rpqyXC17KoPSXeb/hWGjFfJdSVSSTAVP0Ud4xeKaOO7TGLo+Nu9rLxbEFMSqy02/kArN
-         0eOA==
-X-Forwarded-Encrypted: i=1; AJvYcCXGQwvBB/ILLp7gQnJCNoVQAOa8cLWuVeoetDS2eReC+1E8dTdtvMv0PcCl6kl6vWhY3KjXNX2ogFNJM3TM+IY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzW+HxdJbgMmFwD77LSRZaJmKt8Yh2mf2A1ZOnMtEApjw1tdQ3q
-	wQhkzypULjZwoXyhoF+z4OlLTqCYkcAphLtmS9hRvvhbf89UrN9zwRgzvlN20b0FBsM=
-X-Gm-Gg: ATEYQzxhqlkZPy4Muzqe2csuDDwRxGLGWzUy9KxVap0qZD8OHvG+NWKszDn80T3T/af
-	CB6jfJHU9NUP/XYikiVZLcPvezQFCyYFPC8q6jqpFr2Jf3LeKIPZhMfhf67w/h/e6qgysb41JJW
-	EKcUaGd8gEkGWVYqVv+ioHB3Mq/RKSHNKeBKozBKRxs3yLC3tcgBaxRH5HEHv4YknNjyxKaM4Ix
-	DRvZbDXfJiXdAC8y1TwLS9D5hZQ6PAup9sQPmZN7AezWnjFE/P+9aSHZ5tS9jSh5CxDKTsa/VuV
-	NRyuW6o3bKS2oh5lkbqcAugv38eOCAv5+nZS1AtI3VPa0EX9wgvYhQ0fItL1NqdbU0FPKtBEg0v
-	uq8C+JBF3WHBX1VHXQOkgM3EOSU24CCAXRysTj1E3tFL+Dd6p9vIZc47PZeXf+Z65gM0EvfezXw
-	dTTNV4RQZdrGTRUU8fYFOrxCHr/w==
-X-Received: by 2002:a05:600c:4744:b0:485:2a4b:7bc3 with SMTP id 5b1f17b1804b1-48727d5d6femr207566795e9.4.1774878540187;
-        Mon, 30 Mar 2026 06:49:00 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48730628efasm297363515e9.5.2026.03.30.06.48.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 06:48:59 -0700 (PDT)
-Date: Mon, 30 Mar 2026 15:48:57 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Pablo Hugen <phugen@redhat.com>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	shuah@kernel.org
-Subject: speaker-test-module: Re: [PATCH] selftests/livepatch: add test for
- module function patching
-Message-ID: <acp_Sa9iyGLdSN04@pathway.suse.cz>
-References: <20260320201135.1203992-1-phugen@redhat.com>
- <acVD_NPu4JVRoaVK@pathway.suse.cz>
- <acWZ3r2CoSDy_NLf@redhat.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G/9Tf8G9"
+Message-ID: <376fa765-5a01-42fa-bd8e-98e04b595665@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774878761;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tJr2Wa1zPLoOBSP14xPgfxrUNKyteWBbxfSVWNbjPqM=;
+	b=G/9Tf8G9CWSSeV0qyfmD+/VqcbHHjw32HBx1d9PxDls52ZqlmZCwFNUOlsPlOyNv8p9JPU
+	3pxyZkwreouJRWRWm1sPu2Is7fGQ8vG7iXmGohOpvOHhWGBNpTmFzUacnSOTteoe3iClIl
+	H/0AQz5nVfXME5XTs8dlVss6dAkWync=
+Date: Mon, 30 Mar 2026 21:52:24 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acWZ3r2CoSDy_NLf@redhat.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix abuse of kprobe_write_ctx via
+ freplace
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ Feng Yang <yangfeng@kylinos.cn>, Toke Hoiland-Jorgensen <toke@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260326141718.17731-1-leon.hwang@linux.dev>
+ <20260326141718.17731-2-leon.hwang@linux.dev> <acpCTrpd-hak9S0y@krava>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <acpCTrpd-hak9S0y@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu 2026-03-26 16:41:02, Joe Lawrence wrote:
-> On Thu, Mar 26, 2026 at 03:34:36PM +0100, Petr Mladek wrote:
-> > On Fri 2026-03-20 17:11:17, Pablo Hugen wrote:
-> > > From: Pablo Alessandro Santos Hugen <phugen@redhat.com>
-> > In my RFC, I created a helper module which implemented a person
-> > (speaker) which would come on the stage and welcome the audience.
-> > I am not sure if it was a good idea. But it became a bit confusing
-> > when everything (module name, sysfs interface, function name, message)
-> > included the same strings like (livepatch, callback, shadow_var).
-> > 
-> > Anyway, my tests produced messages like these:
-> > 
-> > +% cat $SYSFS_MODULE_DIR/$MOD_TARGET/parameters/welcome
-> > +$MOD_TARGET: speaker_welcome: Hello, World!
-> > 
-> > , see https://lore.kernel.org/all/20250115082431.5550-9-pmladek@suse.com/
-> > 
-> > 
-> > There were even tests which blocked the transition. They tested shadow
-> > variables which added an applause to the message. They did something like:
-> > 
-> > <paste>
-> > All four callbacks are used as follows:
-> > 
-> >   + pre_patch() allocates a shadow variable with a string and fills
-> > 		it with "[]".
-> >   + post_patch() fills the string with "[APPLAUSE]".
-> >   + pre_unpatch() reverts the string back to "[]".
-> >   + post_unpatch() releases the shadow variable.
-> > 
-> > The welcome message printed by the livepatched function allows us to
-> > distinguish between the transition and the completed transition.
-> > Specifically, the speaker's welcome message appears as:
-> > 
-> >   + Not patched system:		 "Hello, World!"
-> >   + Transition (unpatched task): "[] Hello, World!"
-> >   + Transition (patched task):	 "[] Ladies and gentlemen, ..."
-> >   + Patched system:		 "[APPLAUSE] Ladies and gentlemen, ..."
-> > </paste>
-> > 
-> > , see https://lore.kernel.org/all/20250115082431.5550-11-pmladek@suse.com/
-> > 
-> > Sigh, I have done many changes in the tests for v1. But they still
-> > need some love (and rebasing) for sending.
-> > 
+On 2026/3/30 17:28, Jiri Olsa wrote:
+> On Thu, Mar 26, 2026 at 10:17:17PM +0800, Leon Hwang wrote:
+[...]
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index 51ade3cde8bb..1dd2ea076d8b 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+>> @@ -3733,6 +3733,11 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+>>  		tr = prog->aux->dst_trampoline;
+>>  		tgt_prog = prog->aux->dst_prog;
+>>  	}
 > 
-> If these can be pulled out independently from the v1 patch, perhaps
-> Pablo would want to hack on that in a follow up series?
+> could you please put some comment in here explaining the check, with that
+> 
 
-Unfortunately, the selftest changes can't be pulled out easily.
-The new test module and related livepatches are implemented using
-the reworked livepatch API. :-/
+Sure, will add such comment:
 
-I hope that I'll find time to work on it rather sooner than later.
+	/*
+	 * It is to prevent modifying struct pt_regs via kprobe_write_ctx=true
+	 * freplace prog. Without this check, kprobe_write_ctx=true freplace
+	 * prog is allowed to attach to kprobe_write_ctx=false kprobe prog, and
+	 * then modify the registers of the kprobe prog's target kernel
+	 * function.
+	 *
+	 * This also blocks the combination of uprobe+freplace, because it is
+	 * unable to recognize the use of the tgt_prog as an uprobe or a kprobe
+	 * by tgt_prog itself. At attach time, uprobe/kprobe is recognized by
+	 * the target perf event flags in __perf_event_set_bpf_prog().
+	 */
 
-Best Regards,
-Petr
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> 
+
+Thanks for your review.
+
+Thanks,
+Leon
+
