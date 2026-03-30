@@ -1,263 +1,362 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010063.outbound.protection.outlook.com [52.101.193.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87A92E7BB6;
-	Mon, 30 Mar 2026 14:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14F533A039
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 15:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774881358; cv=fail; b=SsZmKa3HarrUNL2GYX2PC6b5Op+NsleFIhmGrSJ1HIuwrgUPsMjZPFJvtVx7wi1d5xN9VXlk3oo7Xyo6N5yR1rKKqhxNO1cJqG+HK2M2cwKPsdWLbFDFywZMaKwqZbqeGIWoS1pzG3Sx3eUlVRgoSlkYDnnYHCxPTG0I86kj5yM=
+	t=1774883261; cv=pass; b=ISaZU62IA9iKCYQc9J5mW4Aj3M6cgK/p+E1VplXSqn3IkrNFkWEa8ctroEDPIZzpW8EuwkeyCEjoesI5c0dEESCi23wwCyNUTTCWH1Q4DuT661bgOuFUx53OPwj3rkBXyv3Qdxwd0/3N8g9DjSvzVWJrHcyZ1t0LeNVV4fq/SSw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774881358; c=relaxed/simple;
-	bh=YTMkxkhbOUpq2VSzA4k+wBJJvJbEEyCqr3C4+zVC1cY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Nbu5qVV5QE7qccJFfU3i3chs8gelC/b+zFNI9lz142n8IXs/Dd+M7D2chd0CUNUkLbTRbrh8eXCY+DvOIEDr02QD1Mgm+DTRkHX5zR0U07gG9wiOn0dxmnojkGshRs6On6nq/S4gN7QE5L8anoO1laD++gBeypDZk+SvXUYzSLg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NnQ2V4cN; arc=fail smtp.client-ip=52.101.193.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1774883261; c=relaxed/simple;
+	bh=/x13DKtZaVDG7yiVUGXh9eKmBd78HM6nIK9Tv56z6jQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=msI4nDMCqv1UoyN52kBs8GF4LoGOksxt/Yr/T7CMnT26Jzb/afP/Zf6gTYncAmjD1oHQ1D+u7OE41K9oj5kllTNbuZV8cQ8HXGTyoDRmGXKQzzo/C5ZObNvvizOb4Uk30xi4u07tfaJ6TeNaIF7flYAComUwRKTOh2wpJJD68Uk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDVvAeY8; arc=pass smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NnQ2V4cN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IzAYBYXPFiyQul6qzykQzD3ADOcN3d9OkXDKMlk9uCCAeiw9XaIwtqBAOmIucvHUV0kTanq9jTOf7wGbmFYHUlt2VJFlUpRpz0xnhP6vLWLVONPtJskMNCqmlltM0hdaqdRIAmB6OyWplW5lhSMEGHulU4w0vRRczr8vBuSsnaJYd6dmeBAqZNQkYHhcZUv1H7HRoG6NWsufGtfW8LedQyeIdHaT6Hrrav0w0eDLAAICqYXsTXm20Jsns4a5oYlnd1T2gWzEI2M8CbF9jI052hEZPwlOH08Aa5WDtybHktz4nlCPWHu4TlqpgLXqBO8hYTjVJBx+tkW35q0XFqVkzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MTErkZp9JOLe2ljP6FkXRd3RM+smjuwhPvBXlr7H2AU=;
- b=HYnCxlI04fY066k3Cr6SGftla/hAz/Kt+qma5fcbLiiTYbyRVoZLGGl/4dGq6loNQKJ3OWVY2P5lU2A56o5hp42upoEE+GsetwNtbBCzxsK+N3yXRf1dCrZ0zfsIMyzmdKE+mXOK8lJFidnrMw3POKHQdXWCuuWn/OHTsU8IEWalSIzxHbCsGzLVCtckJg7PuNoIlZf50t0JKnusZhkKav62Sv8eBNkU1g7sMYJARVJhc9Jt+bRKnbYElD1+thP3nV+zCW/ApE6bGMnNzD/jBQGXJMW1Vx2pLg3behEObQ6RCg93iFZWjzYrGYv6Hvnpis0doAfMZJa9ZpiPEmGfiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MTErkZp9JOLe2ljP6FkXRd3RM+smjuwhPvBXlr7H2AU=;
- b=NnQ2V4cNxiMQpKG9DybsGd6B22GOnqPmFXWjncTzP962Po8EQlEDlaZunE0h89Z473zQyzRB8bjVxeQ3CtfWPFnOlJLIcVogIBK8zcEkVmeQ53Tv5bS3QK8sG74KM7tjSe3czmFECpXm/n1LRfFwsEVLZWNaRE9P9Voo5YHYgJoJjTBzGewziYeVI2gZBQ3FkyvWu58bSMYtHD1gKj1ex3gkRrtMpBPkp7fAHlyplOb2TYHhXwc3Zqgm2gFIM7jLn+Ogn3jzqG7UfLcOaQ+ydPu2kxQsBsgoV7CmE4ueJFRYFjYmkpdAY3K/1yb1eKn7brzwFttWaAl6n9Wb/xkLxQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- MN2PR12MB4047.namprd12.prod.outlook.com (2603:10b6:208:1de::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Mon, 30 Mar
- 2026 14:35:52 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9769.014; Mon, 30 Mar 2026
- 14:35:52 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: WANG Rui <r@hev.cc>, "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, baohua@kernel.org,
- baolin.wang@linux.alibaba.com, brauner@kernel.org, clm@fb.com,
- david@kernel.org, dev.jain@arm.com, dsterba@suse.com, jack@suse.cz,
- lance.yang@linux.dev, linux-btrfs@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mhocko@suse.com,
- npache@redhat.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org,
- songliubraving@fb.com, surenb@google.com, vbabka@kernel.org,
- viro@zeniv.linux.org.uk, willy@infradead.org
-Subject: Re: [PATCH v1 05/10] mm/huge_memory: remove READ_ONLY_THP_FOR_FS from
- file_thp_enabled()
-Date: Mon, 30 Mar 2026 10:35:49 -0400
-X-Mailer: MailMate (2.0r6290)
-Message-ID: <DDFEC0C1-3ECF-41CC-9630-A4A742F2B842@nvidia.com>
-In-Reply-To: <32679321-b2d3-44d7-be2e-f7a6a166a510@lucifer.local>
-References: <52CACB9A-A782-4D11-8B6F-66DA8D345C78@nvidia.com>
- <20260329040742.17269-1-r@hev.cc>
- <32679321-b2d3-44d7-be2e-f7a6a166a510@lucifer.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: BLAPR03CA0045.namprd03.prod.outlook.com
- (2603:10b6:208:32d::20) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDVvAeY8"
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-604d52b65f2so2357090137.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 08:07:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774883257; cv=none;
+        d=google.com; s=arc-20240605;
+        b=L4DicyMdJt3jLHNTTEwgF0rofEDCmRLWuttsaFp5qrb4PE2FdKGcuxrIg/B1UsQiFD
+         9RedBGhR+ZnkhneB0qUWFqwUpNLjulc0bGgxarw6iDnMWGTqf8811gz52JnEnAZN0PlU
+         GW1aoaJLrhkes+r+rYqo8vSv6eUxO0EYNVNYz0Vy1ybv07UT80Z50uv2AKaMq8myzPug
+         2ssL765cpxme1NOastH+rNq5TFpmz/a5xCWq9l45bGtAd11Ppb0BvMC7XnoRuvM7lJaD
+         +PrPhgeObt3WN0THuGjEMV9vueYnqN2SOSztUt07XfVAQsL+aWiPHoalw7KUCnOvycx4
+         vLYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=i27yBCASimAbh8aqvQTLYNbe/ak/AL7sQPeMVmtc+JI=;
+        fh=mgHq/sDMsO4+8tdyW2TVtq/wLLcw8KZK+kWiLupq7Ow=;
+        b=MHrJgOEJ/XsHduIlEYOr4P+8pEYExiwILnQWgS1GQfhZoawmfFmj0RC447cQ4OIFc+
+         t15IYwTIf83Don9+ep6vOgNqioJbJcom3P77KQMIU3dIxKHFFxYQssawcGjWXwGtOLzI
+         LZzoUprsvazvYIMSwC7KMmwkTzNGLj+0hIehHovCpiLUs88uhyFXt7Xvnc76W8mR3G5s
+         z0Nx15UDSptX3mB6cMM2X2uE4vu06Nn4DocK6jtwEAFfknV+pNUW2jS8uW1pXf8+bEHU
+         PqDzv947Fg23lftRRh9wsowgnqGBX5Aaa9Q4hdLQ0OhV8PR2zNcSSgysyjLO5FzLCQU+
+         qw9g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774883257; x=1775488057; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i27yBCASimAbh8aqvQTLYNbe/ak/AL7sQPeMVmtc+JI=;
+        b=UDVvAeY8m5wlbQOXPTgFfY11Cx7Haf5wzVUmS9lx2Eq6W3kP+ITkzBB9ePKeOWRF71
+         msdtytfI1S9rJ2obJVxx1TjFFj0AJkNDgnSxBqhC1+RHEaywuaEhQPQmYJDGeRUoTc7K
+         i2Pr07RnKRDwbY8Sk5aLQfmAKPtwMeY+90ZIq8YRRH1MkuhbEfjjJ2Kpp9okh7mInPpP
+         CuyUPk9vskQajhxEPcHWLREXJyMf4O52s9Nnkc1mgAr94HBZu65LLXDRv6G/VNFYiCnW
+         i13tFwiTAbVtn8NcPYwW1+NftkS64fkgc/zCH4YMAZ1kr6EjzEwb+TQP7crgO0uR+iug
+         HLsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774883257; x=1775488057;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=i27yBCASimAbh8aqvQTLYNbe/ak/AL7sQPeMVmtc+JI=;
+        b=cZJBB2KfwODqbsdmX+3x+wDF9+TxU4EY5xbIMSp3yUxt3H+xinpZkUpUQUcWEupCq1
+         EN51/uEhEpmQXqsjQ4NTpm4+LXqDlULdQVuNoHo6ZjB8uEV0MRmymJE8Z+gsS1AAX4i+
+         c4pdN4mwFgg+PLzv62PvT6L0RGsQEhkQIcQ/A4/Yc/nFC3FnE1rVnVngOc/14okloXvZ
+         T+g1Oc8pI7IytvnLMd9X6Q63KMPCYUK1cW3fWi3Cnzzaqii6xcdajuCkBZ6jTFIFckTq
+         kKOTsHhGppD9kH3quJU6QqZjq4+bv1jRjey9OVpmCVqi7Ugj3QlJsss+kx9gQMGXio6K
+         Qftw==
+X-Forwarded-Encrypted: i=1; AJvYcCUnVA4240fzndZNY/U1WxzzEtrHvqArU78P4nGGpUK1+gnq+x/SRFsfd/31zioUatoOGefZje6B+BdrfB+q3ao=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCwbSS+WCxA4gDIzzSGm+IalskBrQww8aGaVz/eB7nvdX0UMQJ
+	L/l/vAFICYcPpe3AQJPyfA4xfESF2E+Tijl/vbf28+4ndQHy3P/l/wAn7udDJB/+9faJ5LGSAnN
+	z0pR+z8YfqbEGYioHNsQWvtI9vRe4HhA=
+X-Gm-Gg: ATEYQzz39Cu3t0F5KVNEqtFWbVXn4jtt9va+dAZJywOo6Nahe0iPuOuVmYmzx8a768y
+	URp5Zy1HE0nv2gIAECC6OPv4gif1e+07jW8FM1H9g5bzqklWexTLKF6sr0/q4h0v0pMQxtA7PIV
+	ttlrb98iSESvQ7jbS1lrT/9FxLDfGyr6PQ/11FH+kkv96qcL0HyYO6Zh2NJpFt3WJ+T6dTKM3+v
+	2p2EdinIX+BVenW+LqwOi7+uEhjCz0e3V9b8xQ1cSd8HGTmIyvr/uvb1iPvr5Ii1YDU32dRUqBD
+	C8CVOL3r/3HYxnZsUqAfrdXB//e2TjCw72Xqu6N+eRY=
+X-Received: by 2002:a05:6102:84d1:b0:602:6ccd:7772 with SMTP id
+ ada2fe7eead31-604fbdd4504mr3414117137.2.1774883257420; Mon, 30 Mar 2026
+ 08:07:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|MN2PR12MB4047:EE_
-X-MS-Office365-Filtering-Correlation-Id: afc1af38-5677-4ef3-f058-08de8e69a4d0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	vO2UnCmXsZAZKs60p/m22LTpYYa823xp+EgCA+ZnHevXgrJjxr7ymMG68pkju0lNHHhyHmLxfj01qjUCaWRNqR8PUBX5lXBst2i8pb26ejrIDKsjh7kvhhGyrGPCSY4/h1/qo7OB5IxGSPszV3gJTU34rXK7gWrUYu/yu8h+P5InBVw5LYoTQusP3oSS803MNTeZTiHHdCpG7lL0DCPQd3X8NM8CBHePCiCv+JxZJNrS1AwgZSEWnIjWjl2wN12R0GkaCgWv10CzWkq9EBsYNh9A1tTRjyz65WIxGd/KE1pgtrNW1mAWG68gmOnnoDD9rvHjb2kQMjlOB27LAHlBH/GnwIK5WsTNwWFihF0VA1HdW0rkVJb3DfK1rwihQQTg60ynNTGe5KdLKyNrJ2JcaKWA1hCLL4HFKUvMJ/tQgrARx/JYXNf8FDt9CyCdJCtm+aWhFqSneBtnMqXdVLT72iRPFtOdcFV0jLWdPvIhuUAMHkmTm1hbOQZWdSY4jZ0gYy2JgyvEtWr0ysE20MUC/NamyIz111hAxKPtlfdKoF4ZccFOWovMGsDcUVTGlrPC9tVduNYxD+0Nltq0LR5flPSK+DzUYonL7ZDEBWynH6fw2vjsZXNWhU8VuLSJbStVyyy635uMYdzbw/AGoP/QBxJh4a3LUlmgd/IjRojAfB7VEjxAvb9zhY0QgtANeUvXOuOCc8xWetTZ4neeliVXX/idz8nyp8D/C2v/GfxIV6a3wKhLduVzvfhNWJp5IU9B
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VktjZ09tQjdDdGdRYitFLzFzZXZwY3FMaUlvMHkxT00xUlB4TnltRk5HOEFW?=
- =?utf-8?B?NityV29Pa1dZY2dTc2krSWdSWlN3M1p0cTNrYXVKZlgxazRyOEtpM3owT2Qy?=
- =?utf-8?B?ZmNSRHlNUlNlcVFtbGo3bk9tSTJHanRCaXg1SU1MYk5nRzRUVWpVejVsTGRF?=
- =?utf-8?B?N05HclVXb0pxMGN1RlF2d0t0a1o1Uyt3a09FU3NKRHVOMUlEaFRWZ1gzTi9K?=
- =?utf-8?B?b09SYTdPYXhFclhqbG80T1ZTdHQxdDNDRk1GT1c1VlczZTFKSSs4a1VzblU5?=
- =?utf-8?B?NjloZkIwamdOdkUrSFN3Qk0wbFljODIvVTY5R1IzZk9wN1U5Z1RkdTduK2Jt?=
- =?utf-8?B?TU1SaDc0NG9zWHZ6L2plMVVQQ3FqOHFaUDBpdGMyTExtbG84NTA4SGtWc1Uv?=
- =?utf-8?B?NzVjeVR3dmxuQ0tVVGlpelhicjB1c1RhcEMxVVFhOXBlVk5EMkFDWFB5Uzkv?=
- =?utf-8?B?UTNDQVB2WkdrNTRsR1hHZWdSSzdIUHRmbzBVVTJRL2hvaEFGejFKU2g3WFds?=
- =?utf-8?B?VUQzNmlNaXRKU1ZzNVp5OTN2TDE3Ynh2elhCMCt3cUxYRzNkSkQ2aTdPMjBl?=
- =?utf-8?B?dGJwNGNOeHlqSmRYU0NrWlRlNndGMUoySy94bU03V1NPNENmaW9rY20xME9y?=
- =?utf-8?B?V2F1ZGxUd2lyZ2U0MWtXWXg4bVorV0ZuRHNJRFBoNlZKcnJVdVhNUStsWVpl?=
- =?utf-8?B?aEU0RTJhYm1OZldIbnFBRmxJeE5RZFljSFROeER3SldSNGlUQVY1a0ovb0d5?=
- =?utf-8?B?YVNhQ2sxaWs5bjVkc0s4RWk3R2hzNnJkdmJ2MU9waGRLNmhTUDJoMU9ZZVpK?=
- =?utf-8?B?SDRIK1dUZ0ltU3lMS1d4cmowc0VEalVPME1udFROQ3lZSEtjSmM2c2V1TC9M?=
- =?utf-8?B?N25qbUlkK081b043SC9BRXJ0YVNOR0F1L2JQT3hZZkJvVTNpRDQxUlluU2VO?=
- =?utf-8?B?MjJnM0ZRcDlYaW9EQlQ4U1p1SElOSzVYMTFBbXFnSXR4aXQvSUNwU0JieE5M?=
- =?utf-8?B?THNLdTNSR2ZvSGtVaGoxRmdBTVlmSWRXNGJ4VERYbmZqWG1zWUhJTm16bVRx?=
- =?utf-8?B?SDBpanZXRmFQU2ZMR0xaM08rYzJ3blMyb1UrTTErMW9JQVVTNWdsR252ZGRt?=
- =?utf-8?B?SEpLa29nckVRcUpMU0R2YkhDK2FBV1FLU2NJSGRNQmxtSG1WSDU1N09md00v?=
- =?utf-8?B?a3ZRME1RejJhMTVDaVNQUWx3WTgvNEYvVTZ2YzNIRUlFNERrc0txYnZqNjE2?=
- =?utf-8?B?ZVRPR3NXZmdCNXRtbTRuTHVWVjNKTWRyUCs1eUpKMVZtSHRFVTFnODJWeHBH?=
- =?utf-8?B?NXhGSjhJNlh0cnpFbS9wbXE4d2dURjRJSVNpTEpmaUdFWkxLSTQxVkdUN0JB?=
- =?utf-8?B?UzArS3FaU2xYK1pYZkxvSDJIdkNYK2FPSVBUNThHaVhkSzA2Q2c0UEJiLzhy?=
- =?utf-8?B?NGhYa3JKbTFkRW5Pb1dUdnB3RktuRWlTSmEzUTZXVC9BQ0FpWFdUUnhma0lz?=
- =?utf-8?B?VWVpazU5bVhFQnkxZDVqWE5mcTJtOXpoaDZ6WHZIaVBSQmlWVktMMFVFc28y?=
- =?utf-8?B?TmdkTjFlaURMTXkzdmFQQWdBRWhrbVRSMFhqekdSZHFmTlVUUWpCN1UxU0g2?=
- =?utf-8?B?R0VDb2w1UytYMm83N1gwWkVvK1JPSklFTWxOQWgvaXRnMFZOWDJoR3k3Ukxx?=
- =?utf-8?B?b2cycDBHVktsZ2N0d081V0VCUkhNNUozM1FXdUlHL1htZWp2R3ZwYmVXZEZO?=
- =?utf-8?B?MG1jQytzbWIzVWQ0aUUyYUZHd09Ka0VxNXlEWHFNV2FBb2h6NS9BaU9mRHEy?=
- =?utf-8?B?OHBpSzdqQ3BEMTNXWUVMZUU4TVE4c2lGOWl4dWV3d3phRWZwSlVzNXR3aThn?=
- =?utf-8?B?NTdFK2g1WDRqbklkNVpPMDdsSlltSjBxUHRGZVlwbjUyL0xoZDlPVnQ0K1dx?=
- =?utf-8?B?Ri9xV053MDFNM09MT2tqSzFVdHlQb0NjNlZqMUV6VE1tanRpQWdpRkl0Z3Fs?=
- =?utf-8?B?RURGcFRBQWU4UzVkUDhOQVVDbkIzWXZvVHp3SjdzSFV5TDFNQ3RCUE53NzV3?=
- =?utf-8?B?eFJxeGdZdjN0NHRWUTNlQ1FzUXhjaFJpWlNWNnU5ZkF3UDFvSDBjZTVXcUJW?=
- =?utf-8?B?YnhwZ3hGNG1qN0ZScGdrenBkaWJGUGozMWxxVElZMkdvdzhNUWEvUVpRVkVp?=
- =?utf-8?B?WGppd2ttcXlHZ1p4NXpJTXY0M2E0ZzAyTE0ybi9DZDdrZ1Rkd1JBYURLSnZh?=
- =?utf-8?B?ZnFmdWlVZDlzMmdJUWNvK0VwZnk4MXNGa2Q3WjFPZzBWcXlkbnhYa3UvQlJy?=
- =?utf-8?Q?BBbXoj/jEsbhGV/dVn?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: afc1af38-5677-4ef3-f058-08de8e69a4d0
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 14:35:52.2854
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ftYMZYclWaWuLrKa4MTX84e1SXtvemjBguiWUzjfNtbxVA1XZjtI2Mznsu3qGGWz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4047
+References: <20260328172314.45807-1-dorjoychy111@gmail.com>
+ <20260328172314.45807-2-dorjoychy111@gmail.com> <e526fbdb450a593b575355c1c9ae21f286427275.camel@kernel.org>
+In-Reply-To: <e526fbdb450a593b575355c1c9ae21f286427275.camel@kernel.org>
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Date: Mon, 30 Mar 2026 21:07:25 +0600
+X-Gm-Features: AQROBzBiNZNQJDXYIA1g_QAQfKVpqrabu4vh65YgUWDTzh1Q_gvpOzHijv8ZYqQ
+Message-ID: <CAFfO_h75dF2s83VNtUaNuRmto1NVVcxo7kN6eAtNtN3ME8mPiQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] openat2: new OPENAT2_REGULAR flag support
+To: Jeff Layton <jlayton@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	jack@suse.cz, chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 30 Mar 2026, at 7:17, Lorenzo Stoakes (Oracle) wrote:
-
-> On Sun, Mar 29, 2026 at 12:07:41PM +0800, WANG Rui wrote:
->> Hi Zi,
->>
->>>> Now without READ_ONLY_THP_FOR_FS you're going to:
->>>>
->>>>                        |    PF     | MADV_COLLAPSE | khugepaged |
->>>> 		       |-----------|---------------|------------|
->>>>  large folio fs        |     =E2=9C=93     |       x       |      x   =
-  |
->>>>  large folio + r/o     |     =E2=9C=93     |       =E2=9C=93       |  =
-    =E2=9C=93     |
->>>>
->>>> And intentionally leaving behind the 'not large folio fs, r/o' case be=
-cause
->>>> those file systems need to implement large folio support.
->>>>
->>>> I guess we'll regress those users but we don't care?
->>>
->>> Yes. This also motivates FSes without large folio support to add large =
-folio
->>> support instead of relying on READ_ONLY_THP_FOR_FS hack.
->>
->> Interesting, thanks for making this feature unconditional.
->>
->> From my experiments, this is going to be a performance regression.
->>
->> Before this patch, even when the filesystem (e.g. btrfs without experime=
-ntal)
->> didn't support large folios, READ_ONLY_THP_FOR_FS still allowed read-onl=
-y
->> file-backed code segments to be collapsed into huge page mappings via kh=
-ugepaged.
->>
->> After this patch, FilePmdMapped will always be 0 unless the filesystem s=
-upports
->> large folios up to PMD order, and it doesn't look like that support will=
- arrive
->> anytime soon [1].
+On Mon, Mar 30, 2026 at 5:49=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wr=
+ote:
 >
-> I think Matthew was being a little sarcastic there ;) but I suppose it's
-> hinting at the fact they need to get a move on.
+> On Sat, 2026-03-28 at 23:22 +0600, Dorjoy Chowdhury wrote:
+> > This flag indicates the path should be opened if it's a regular file.
+> > This is useful to write secure programs that want to avoid being
+> > tricked into opening device nodes with special semantics while thinking
+> > they operate on regular files. This is a requested feature from the
+> > uapi-group[1].
+> >
+> > A corresponding error code EFTYPE has been introduced. For example, if
+> > openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
+> > param, it will return -EFTYPE. EFTYPE is already used in BSD systems
+> > like FreeBSD, macOS.
+> >
+> > When used in combination with O_CREAT, either the regular file is
+> > created, or if the path already exists, it is opened if it's a regular
+> > file. Otherwise, -EFTYPE is returned.
+> >
+> > When OPENAT2_REGULAR is combined with O_DIRECTORY, -EINVAL is returned
+> > as it doesn't make sense to open a path that is both a directory and a
+> > regular file.
+> >
+> > [1]: https://uapi-group.org/kernel-features/#ability-to-only-open-regul=
+ar-files
+> >
+> > Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+> > ---
+> >  arch/alpha/include/uapi/asm/errno.h        |  2 ++
+> >  arch/alpha/include/uapi/asm/fcntl.h        |  1 +
+> >  arch/mips/include/uapi/asm/errno.h         |  2 ++
+> >  arch/parisc/include/uapi/asm/errno.h       |  2 ++
+> >  arch/parisc/include/uapi/asm/fcntl.h       |  1 +
+> >  arch/sparc/include/uapi/asm/errno.h        |  2 ++
+> >  arch/sparc/include/uapi/asm/fcntl.h        |  1 +
+> >  fs/ceph/file.c                             |  4 ++++
+> >  fs/fcntl.c                                 |  4 ++--
+> >  fs/gfs2/inode.c                            |  6 ++++++
+> >  fs/namei.c                                 |  4 ++++
+> >  fs/nfs/dir.c                               |  4 ++++
+> >  fs/open.c                                  |  8 +++++---
+> >  fs/smb/client/dir.c                        | 14 +++++++++++++-
+> >  include/linux/fcntl.h                      |  2 ++
+> >  include/uapi/asm-generic/errno.h           |  2 ++
+> >  include/uapi/asm-generic/fcntl.h           |  4 ++++
+> >  tools/arch/alpha/include/uapi/asm/errno.h  |  2 ++
+> >  tools/arch/mips/include/uapi/asm/errno.h   |  2 ++
+> >  tools/arch/parisc/include/uapi/asm/errno.h |  2 ++
+> >  tools/arch/sparc/include/uapi/asm/errno.h  |  2 ++
+> >  tools/include/uapi/asm-generic/errno.h     |  2 ++
+> >  22 files changed, 67 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/arch/alpha/include/uapi/asm/errno.h b/arch/alpha/include/u=
+api/asm/errno.h
+> > index 6791f6508632..1a99f38813c7 100644
+> > --- a/arch/alpha/include/uapi/asm/errno.h
+> > +++ b/arch/alpha/include/uapi/asm/errno.h
+> > @@ -127,4 +127,6 @@
+> >
+> >  #define EHWPOISON    139     /* Memory page has hardware error */
+> >
+> > +#define EFTYPE               140     /* Wrong file type for the intend=
+ed operation */
+> > +
+> >  #endif
+> > diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/u=
+api/asm/fcntl.h
+> > index 50bdc8e8a271..fe488bf7c18e 100644
+> > --- a/arch/alpha/include/uapi/asm/fcntl.h
+> > +++ b/arch/alpha/include/uapi/asm/fcntl.h
+> > @@ -34,6 +34,7 @@
+> >
+> >  #define O_PATH               040000000
+> >  #define __O_TMPFILE  0100000000
+> > +#define OPENAT2_REGULAR      0200000000
+> >
+> >  #define F_GETLK              7
+> >  #define F_SETLK              8
+> > diff --git a/arch/mips/include/uapi/asm/errno.h b/arch/mips/include/uap=
+i/asm/errno.h
+> > index c01ed91b1ef4..1835a50b69ce 100644
+> > --- a/arch/mips/include/uapi/asm/errno.h
+> > +++ b/arch/mips/include/uapi/asm/errno.h
+> > @@ -126,6 +126,8 @@
+> >
+> >  #define EHWPOISON    168     /* Memory page has hardware error */
+> >
+> > +#define EFTYPE               169     /* Wrong file type for the intend=
+ed operation */
+> > +
+> >  #define EDQUOT               1133    /* Quota exceeded */
+> >
+> >
+> > diff --git a/arch/parisc/include/uapi/asm/errno.h b/arch/parisc/include=
+/uapi/asm/errno.h
+> > index 8cbc07c1903e..93194fbb0a80 100644
+> > --- a/arch/parisc/include/uapi/asm/errno.h
+> > +++ b/arch/parisc/include/uapi/asm/errno.h
+> > @@ -124,4 +124,6 @@
+> >
+> >  #define EHWPOISON    257     /* Memory page has hardware error */
+> >
+> > +#define EFTYPE               258     /* Wrong file type for the intend=
+ed operation */
+> > +
+> >  #endif
+> > diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include=
+/uapi/asm/fcntl.h
+> > index 03dee816cb13..d46812f2f0f4 100644
+> > --- a/arch/parisc/include/uapi/asm/fcntl.h
+> > +++ b/arch/parisc/include/uapi/asm/fcntl.h
+> > @@ -19,6 +19,7 @@
+> >
+> >  #define O_PATH               020000000
+> >  #define __O_TMPFILE  040000000
+> > +#define OPENAT2_REGULAR      0100000000
+> >
+> >  #define F_GETLK64    8
+> >  #define F_SETLK64    9
+> > diff --git a/arch/sparc/include/uapi/asm/errno.h b/arch/sparc/include/u=
+api/asm/errno.h
+> > index 4a41e7835fd5..71940ec9130b 100644
+> > --- a/arch/sparc/include/uapi/asm/errno.h
+> > +++ b/arch/sparc/include/uapi/asm/errno.h
+> > @@ -117,4 +117,6 @@
+> >
+> >  #define EHWPOISON    135     /* Memory page has hardware error */
+> >
+> > +#define EFTYPE               136     /* Wrong file type for the intend=
+ed operation */
+> > +
+> >  #endif
+> > diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/u=
+api/asm/fcntl.h
+> > index 67dae75e5274..bb6e9fa94bc9 100644
+> > --- a/arch/sparc/include/uapi/asm/fcntl.h
+> > +++ b/arch/sparc/include/uapi/asm/fcntl.h
+> > @@ -37,6 +37,7 @@
+> >
+> >  #define O_PATH               0x1000000
+> >  #define __O_TMPFILE  0x2000000
+> > +#define OPENAT2_REGULAR      0x4000000
+> >
+> >  #define F_GETOWN     5       /*  for sockets. */
+> >  #define F_SETOWN     6       /*  for sockets. */
+> > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> > index 66bbf6d517a9..6d8d4c7765e6 100644
+> > --- a/fs/ceph/file.c
+> > +++ b/fs/ceph/file.c
+> > @@ -977,6 +977,10 @@ int ceph_atomic_open(struct inode *dir, struct den=
+try *dentry,
+> >                       ceph_init_inode_acls(newino, &as_ctx);
+> >                       file->f_mode |=3D FMODE_CREATED;
+> >               }
+> > +             if ((flags & OPENAT2_REGULAR) && !d_is_reg(dentry)) {
+> > +                     err =3D -EFTYPE;
+> > +                     goto out_req;
+> > +             }
 >
->>
->> Is there a reason we can't keep this hack while continuing to push files=
-ystems
->> toward proper large folio support?
+> ^^^
+> This doesn't look quite right. Here's a larger chunk of the code:
 >
-> IMO - It's time for us to stop allowing filesystems to fail to implement =
-what
-> mm requires of them, while still providing a hack to improve performance.
+> -------------------------8<--------------------------
+>         if (d_in_lookup(dentry)) {
+>                 dn =3D ceph_finish_lookup(req, dentry, err);
+>                 if (IS_ERR(dn))
+>                         err =3D PTR_ERR(dn);
+>         } else {
+>                 /* we were given a hashed negative dentry */
+>                 dn =3D NULL;
+>         }
+>         if (err)
+>                 goto out_req;
+>         if (dn || d_really_is_negative(dentry) || d_is_symlink(dentry)) {
+>                 /* make vfs retry on splice, ENOENT, or symlink */
+>                 doutc(cl, "finish_no_open on dn %p\n", dn);
+>                 err =3D finish_no_open(file, dn);
+>         } else {
+>                 if (IS_ENCRYPTED(dir) &&
+>                     !fscrypt_has_permitted_context(dir, d_inode(dentry)))=
+ {
+>                         pr_warn_client(cl,
+>                                 "Inconsistent encryption context (parent =
+%llx:%llx child %llx:%llx)\n",
+>                                 ceph_vinop(dir), ceph_vinop(d_inode(dentr=
+y)));
+>                         goto out_req;
+>                 }
 >
-> Really this hack shouldn't have been there in the first place, but it was=
- a
-> 'putting on notice' that filesystems need to support large folios, which
-> has been made amply clear to them for some time.
+>                 doutc(cl, "finish_open on dn %p\n", dn);
+>                 if (req->r_op =3D=3D CEPH_MDS_OP_CREATE && req->r_reply_i=
+nfo.has_create_ino) {
+>                         struct inode *newino =3D d_inode(dentry);
 >
-> So yes there will be regressions for filesystems which _still_ do not
-> implement this, I'd suggest you focus on trying to convince them to do so
-> (or send patches :)
+>                         cache_file_layout(dir, newino);
+>                         ceph_init_inode_acls(newino, &as_ctx);
+>                         file->f_mode |=3D FMODE_CREATED;
+>                 }
+>                 err =3D finish_open(file, dentry, ceph_open);
+>         }
+> -------------------------8<--------------------------
+>
+> It looks like this won't handle it correctly if the pathwalk terminates
+> on a symlink (re: d_is_symlink() case). You should either set up a test
+> ceph cluster on your own, or reach out to the ceph community and ask
+> them to test this.
 >
 
-Thank Lorenzo for clarifying the intention of this patchset.
+Thanks for reviewing. The d_is_symlink() case seems to be calling
+finish_no_open so shouldn't this be okay?
 
-
-Hi Rui,
-
-READ_ONLY_THP_FOR_FS is an experimental feature since 2019 and that means t=
-he
-feature can go away at any time.
-
-In addition, Matthew has made a heads-up on its removal [1] several months =
-ago.
-We have not heard any objection since.
-
-It seems that you care about btrfs with large folio support. Have you
-talked to btrfs people on the timeline of moving the large folio support ou=
-t
-of the experimental state?
-
-
-[1] https://lore.kernel.org/all/aTJg9vOijOGVTnVt@casper.infradead.org/
-
-
->>
->> I'm currently working on making the ELF loader more THP-friendly by adju=
-sting
->> the virtual address alignment of read-only code segments [2]. The data s=
-hows a
->> noticeable drop in iTLB misses, especially for programs whose text size =
-is just
->> slightly larger than PMD_SIZE. That size profile is actually quite commo=
-n for
->> real-world binaries when using 2M huge pages. This optimization relies o=
-n
->> READ_ONLY_THP_FOR_FS. If the availability of huge page mappings for code=
- segments
->> ends up depending on filesystem support, it will be much harder to take =
-advantage
->> of this in practice. [3]
+> >               err =3D finish_open(file, dentry, ceph_open);
+> >       }
+> >  out_req:
+> > diff --git a/fs/fcntl.c b/fs/fcntl.c
+> > index beab8080badf..240bb511557a 100644
+> > --- a/fs/fcntl.c
+> > +++ b/fs/fcntl.c
+> > @@ -1169,9 +1169,9 @@ static int __init fcntl_init(void)
+> >        * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+> >        * is defined as O_NONBLOCK on some platforms and not on others.
+> >        */
+> > -     BUILD_BUG_ON(20 - 1 /* for O_RDONLY being 0 */ !=3D
+> > +     BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=3D
+> >               HWEIGHT32(
+> > -                     (VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+> > +                     (VALID_OPENAT2_FLAGS & ~(O_NONBLOCK | O_NDELAY)) =
+|
+> >                       __FMODE_EXEC));
+> >
+> >       fasync_cache =3D kmem_cache_create("fasync_cache",
+> > diff --git a/fs/gfs2/inode.c b/fs/gfs2/inode.c
+> > index 8344040ecaf7..4604e2e8a9cc 100644
+> > --- a/fs/gfs2/inode.c
+> > +++ b/fs/gfs2/inode.c
+> > @@ -738,6 +738,12 @@ static int gfs2_create_inode(struct inode *dir, st=
+ruct dentry *dentry,
+> >       inode =3D gfs2_dir_search(dir, &dentry->d_name, !S_ISREG(mode) ||=
+ excl);
+> >       error =3D PTR_ERR(inode);
+> >       if (!IS_ERR(inode)) {
+> > +             if (file && (file->f_flags & OPENAT2_REGULAR) && !S_ISREG=
+(inode->i_mode)) {
 >
-> Yeah, again IMO - sorry, but tough.
+> Isn't OPENAT2_REGULAR getting masked off in ->f_flags now?
 >
-> This is something filesystems need to implement, if they fail to do so,
-> that's on them.
->
->>
->> [1] https://lore.kernel.org/linux-fsdevel/ab2IIwKzmK9qwIlZ@casper.infrad=
-ead.org/
->> [2] https://lore.kernel.org/linux-fsdevel/20260313005211.882831-1-r@hev.=
-cc/
->> [3] https://lore.kernel.org/linux-fsdevel/20260320160519.80962-1-r@hev.c=
-c/
->>
->> Thanks,
->> Rui
->
-> Cheers, Lorenzo
+Yes, I thought the masking off was happening after this codepath got
+executed. Maybe it's better anyway to pass another flags param to this
+function and forward the flags from the gfs2_atomic_open function and
+in other call sites pass 0 ? What do you think?
 
-
---
-Best Regards,
-Yan, Zi
+Regards,
+Dorjoy
