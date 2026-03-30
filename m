@@ -1,82 +1,84 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013069.outbound.protection.outlook.com [40.107.201.69])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012004.outbound.protection.outlook.com [52.101.48.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4763C3C19;
-	Mon, 30 Mar 2026 11:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB513C943A;
+	Mon, 30 Mar 2026 11:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.4
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774871465; cv=fail; b=h686DA2sL+Lh27eHX7ehZuRqTspr48Y2NeatDQhVfbzRxtN4YlSRQ5+Ok96/s6XuFfc6zLlPCey0CF1keDIoxKwCyoeMEsiEs2tR1PTmBxXJM1OsctrKOC/jHENfNBfrDKYaHYm1E4OjMcfX2kaUg36cNAXp7b63XB+fix/Cnvs=
+	t=1774871739; cv=fail; b=eqGKC8/FlZMvaL7gGjJu+jyKN/RQ80pcmEWwOM5zd09QKF7UnwjFVJ5/QWqQ/wPNp7y1HMfmVRcFK5afGAOr7gGJ0tcTUsWxk9MVWbmRAwVR3x2ATY3eh7bupoKwaMrQTaHLgFaRc1QPl2pxC+AAV/Zqdw6hpIpz9uCstakFHZU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774871465; c=relaxed/simple;
-	bh=x+2grrcfEzBe6x1uziJ1++FAID39FMbvJxOEKKVcU6Y=;
+	s=arc-20240116; t=1774871739; c=relaxed/simple;
+	bh=OMhcETbCen3PG+TzWoFndJQ+AQBuJhIRHmK5cma8FO0=;
 	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=QFwzRAyjwh1jb0IW9XdaG2kS4QUgnNIh1zvCTI4nZ0nT4TFbZZ4BD35v2INGiIdh3eHT2Z2yNPD6E5gpcYDhjlMLlFJexxlkCzkIKLwabwn91tRvnU8ldx/9rEbneX4LaAp7XMqRPpHr6GAK3TGnA900eA4K0U0pRrR/g4qB9kM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=iRcEsjXc; arc=fail smtp.client-ip=40.107.201.69
+	 MIME-Version:Content-Type; b=GOojD8kd6B0WcGcLdq18RiGuf7+RLkuFk7qnioWQPCUrEy6k0xg7lHR3rfLhqj0icQ+4NLIMboR2hNDzuYsME7HLFyLy3wdyr8cCSCb3Dv0bIuvUE/asYNShARuliZ57zXlqaWxeuYZQJA4SSisWGw/uhxOxFUXAsFm3MmMfYts=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZbDAIP11; arc=fail smtp.client-ip=52.101.48.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="iRcEsjXc"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZbDAIP11"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EMgeJYB1qFVpmaDKvbxfOhHFi/lPTlplDqBfiPvzB0BrjoCgZ3LbLVbJDZG25LyQTzIxBLHNG8cphNB25JKtu5SoOBICADQXOq8epjecvRZ1eZX3u4hrk62JXgafU1ZwzN1JucBRgT8S8dCoJZtTqMVvqCJJsq+dlMkO27L5W94QPBs6wmUvqf+Fkz7FFJKZ/JpsluhX1jH+LRjOdIT9zc2mhMUlMrmw9f6UGjz5E9qzlbm/NYHAm0dZ7WofttiOOqn6huJUh4ng+R+nffGorjV+xNKfTftFV7d5GaimrLiHBFUPZU/Eh1eutC2nP0i/VqjYdTGr2zY7X83qV0jsnw==
+ b=jCYXL98jiDE+dRxKLYDFVQYiKhE4D1nWqhJDxeK+aPyQkQi4uarmlX9cuRfrSWDa+dVHKRIf6Gae9tPC5bJKGT0JfyC8xkpwtIiuTAbpp1XMFYLqK7ZUNqnUicAAmTs5PHJVKXmkxUiRuQskq99ofthdtDAUYH5Kpv4WGQ4zGhHS9nLSaLXtRcRvToVotbuHyev0cLPkXf5InsoKW1jklYeQVtj8jaubcTHo78oKDrDjKhz5Kw8/YjMc9gaz4aZ/aezm0GdX7WY1uU+P9/8vLaSQPqVV3YPQtTjnaQQ9tyINND4pw6DeXDP/WrV5U1D4AqxRv88cLphZYyi5xtI8EQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8owV15ME7ehGgqND5XAZ+0OL8/8nHFK2UEbyZgOtgjY=;
- b=HVCNs0vniuyGSab88clqgr2qNbHirPvLx6ZW55QDMZ+LAZkio/gNZbBHhYeP+ThumoUFXw//hoJCJbxHM05N2eB7A8kdZhmHdCj6M1s/PrSVAoYIKIraHC2AlKprdFXIpVjIcJN3ID4gMPnPsddUD6LIE0YccofC7EzFnXHRvWDwVbK4pSJLzT7I0qY9e55xAI+ucDfMsTFMGsaSAYFSJcBoglt4/4YkRFPwX0XWritFq2OAC5PKeqv7QGVRV3wnxX4EaX+ZoPLIBt++RVRF8R16wL0mvh6RG5Sr9gc0YS3k5RqsV0/ZzDxpzBCGLGXoxnVtkRGGjaRmE7V3vYRq7w==
+ bh=2x2F10Dsf181OIWZDQHiydsRVgzGuitS8vb5d5uW74c=;
+ b=E8vzhWvEqQxxZXIf3m1VmBNvTVwJXgMTrYAregcYYa9FuNDMQAbvtwF86qxqAebB85HLe802raa3+71cOeqC3vwbg3GkLgT2QAZZhGiad/gWZ+HPJySxwYgzGhWN12ZlWyKQ51bETuzxODva0BGnsS4FjMig5AKKeu+g9oCoeYTBST3OjNlbJU+udSQOhIVl9MM+WWDyuSdnRb2mwf2CE2QGCNOEsCRXfynoKefWURysLU0VS/pA4URiyDjQGlOkVzO6QBus1pelpFiCDN/OX28O9hs2n4IZ65ts+yUO/Ca/xFIrZxTjl604BnGoZ0SY09wWaSIB3J6keRmzD5moCg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8owV15ME7ehGgqND5XAZ+0OL8/8nHFK2UEbyZgOtgjY=;
- b=iRcEsjXcESGjjUSJ6zDfAvOFEQT99NpWxSUu/t3zfBH9OiX7QM52va45u30zdgOY3+DVfcIoi1ZBiGzhUOvRy1OffJZhB3V9BhZWXzR2fjmjJgtEL2edWfee2NZm44BvhUNOZrNj0DUx9d7PwJHjeUgpe61X4ZBioQp6rYO08H8ZdqMb/p7Q8Y4ybEA3s334sn5TR03REWbRAEke1jlepZkizPKOVQ3uthI1jy1YVWoxEsPqydZGOlXDWcrU5Qy68nIyH1kQsk8i0j2Ok0rTREwFWfxT6J6vp73ahmTN6xmOw3A7XS/7ojeAiX2fwVbKmMpm9s7loIwbFAqDq+K4Zg==
-Received: from CY5P221CA0069.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:4::32) by
- LV5PR12MB9828.namprd12.prod.outlook.com (2603:10b6:408:304::19) with
+ bh=2x2F10Dsf181OIWZDQHiydsRVgzGuitS8vb5d5uW74c=;
+ b=ZbDAIP11fofP7ZGB3dpiksZDUlNKpdPFyVuWUvQWGTcG6jlZZb4gCu/Zl13hWzdKi+LhRBVjDQBALVo5IVmFUjFlSekHckgUvpmduo+WgPsqyBPtJn6VsuOYGhGM/XxWJJK9liDd2d0Ww/oFDJxBEFslaJS7q1qJkn88GFe50WOoeHaJ5ql7i+A+CQtGb+NEFSb37Oxlhj28STJXAYN0N6PTeJZZXoyLvqp6QGPedLrQpXzI2t5uVfS5qIeWZVb8NxKTOWKgOFYDnlvwmaCmMQSrlG83HKVB8MBtASc9TuEmqbyeAzBwfjTbNYvF4PkDpgSsaNZUq6ACalGHTU8ESg==
+Received: from PH7P221CA0009.NAMP221.PROD.OUTLOOK.COM (2603:10b6:510:32a::28)
+ by DM4PR12MB6277.namprd12.prod.outlook.com (2603:10b6:8:a5::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Mon, 30 Mar
- 2026 11:51:00 +0000
-Received: from CY4PEPF0000E9D9.namprd05.prod.outlook.com
- (2603:10b6:930:4:cafe::99) by CY5P221CA0069.outlook.office365.com
- (2603:10b6:930:4::32) with Microsoft SMTP Server (version=TLS1_3,
+ 2026 11:55:33 +0000
+Received: from CY4PEPF0000E9D0.namprd03.prod.outlook.com
+ (2603:10b6:510:32a:cafe::a7) by PH7P221CA0009.outlook.office365.com
+ (2603:10b6:510:32a::28) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.28 via Frontend Transport; Mon,
- 30 Mar 2026 11:51:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ 30 Mar 2026 11:55:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000E9D9.mail.protection.outlook.com (10.167.241.72) with Microsoft
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000E9D0.mail.protection.outlook.com (10.167.241.135) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.21 via Frontend Transport; Mon, 30 Mar 2026 11:51:00 +0000
+ 15.20.9745.21 via Frontend Transport; Mon, 30 Mar 2026 11:55:32 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 30 Mar
- 2026 04:50:42 -0700
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ 2026 04:55:17 -0700
+Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 30 Mar
- 2026 04:50:36 -0700
+ 2026 04:55:11 -0700
 References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
- <20260326132828.805703-3-ioana.ciornei@nxp.com>
- <871ph15zip.fsf@nvidia.com>
+ <20260326120342.6429fbdc@kernel.org>
+ <5cuoazp2svgjja5h663zc34dafkuqa2grrm7lzpuunvrjogydf@43mryp77gq2q>
+ <20260327172454.6b9bc8f3@kernel.org> <87a4vp61m4.fsf@nvidia.com>
+ <usxkovboo5jt6vu2jvbwpnsltvewjil27xizt3jjhggu5o4td3@2cgex6op4mzc>
 User-agent: mu4e 1.8.14; emacs 30.2
 From: Petr Machata <petrm@nvidia.com>
-To: Petr Machata <petrm@nvidia.com>
-CC: Ioana Ciornei <ioana.ciornei@nxp.com>, <netdev@vger.kernel.org>, "Andrew
- Lunn" <andrew+netdev@lunn.ch>, "David S.  Miller" <davem@davemloft.net>,
-	"Eric Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	"Paolo Abeni" <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+To: Ioana Ciornei <ioana.ciornei@nxp.com>
+CC: Petr Machata <petrm@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
+	<netdev@vger.kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+  Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Paolo
+ Abeni" <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
 	<linux-kernel@vger.kernel.org>, <willemb@google.com>,
 	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v4 02/10] selftests: net: add helpers for
- running a command on other targets
-Date: Mon, 30 Mar 2026 13:32:41 +0200
-In-Reply-To: <871ph15zip.fsf@nvidia.com>
-Message-ID: <87se9h4juh.fsf@nvidia.com>
+Subject: Re: [PATCH net-next v4 00/10] selftests: drivers: bash support for
+ remote traffic generators
+Date: Mon, 30 Mar 2026 13:52:06 +0200
+In-Reply-To: <usxkovboo5jt6vu2jvbwpnsltvewjil27xizt3jjhggu5o4td3@2cgex6op4mzc>
+Message-ID: <87o6k54jms.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,134 +90,113 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D9:EE_|LV5PR12MB9828:EE_
-X-MS-Office365-Filtering-Correlation-Id: a8559dcc-13e9-4df3-362a-08de8e529ccb
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D0:EE_|DM4PR12MB6277:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9c9d10f6-7d3b-4d27-cffe-08de8e533f28
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700016|376014|7416014|56012099003|18002099003|22082099003;
+	BCL:0;ARA:13230040|376014|7416014|36860700016|1800799024|82310400026|22082099003|56012099003|18002099003|13003099007;
 X-Microsoft-Antispam-Message-Info:
-	1RoNM7XJQVB81dyxWsRwi+3O7VJb/HGqlmg//JrE4wjPqaJpW/MQCTnYinq1+xjJMbM3JHm/WAXZxqPQvDkFmmjkLsaOL9kVHhIVP9ROO9ROwejdIMmv/rbb6HnGYduKbbfJ8aw72DvEXtawy6lT9zeLfjrHzHq46rkdmRK7P+ts6kRXhTaHIXsYg+FqE1DCJMqVNf6+gBwxT3b2Mhmy2wDwNXRVJS4/nIakLddmcSpCcsbsBfcrP89TzYmLjn48ElhUfOB8464h2uv86Xmqihw3mCo9kwcBW23l2pWLYCnAVFjS4sI2JcvaWmwkbtri9Vh/XwHm8x944iEtGz7eb4xJf6RN/WdZCLS5wC39fw8zjv6zP39imgCzDw7PyQqdta/q2SsEqOK8Z3XmR5VzQ1v0esPYLLxAeQ7mT5J57G51zVx5zo/cehIFAlWwZQgVNtsDMfKNtKzvALa/E6VmZyfY79RxTi+EVuQJcisYqwQGK+d1w1gSxeeZZpKagy01CJrtqC2xurhNUzsjaQaur3zwe6TSDk8J6ZTLzhinvxVgA6pGdePA3TWB0mG0IsVwlNzQk9jxRW29Zbn2YDdcAb/6HVAlG7Jw+WcLk4DJ5B/49lNyFcjnsnL1zg4WsnI7SVywf1fAQCLkCxn28Ev2Tl5ECP3zk2V5IIJ+X2+ksA05rrn+n18oUozPubIxlvGGJvZhdU/st7HHYbbI+VDTh3wv69ugDKNX1GZ3Urf/sw/fQ1Gwa2Mkc4CK1aZKHWVtcEyFdRnpKkgY2sHQxc+q8g==
+	rtRc3N+OAm/wLp1/+6Y7USX0gJ7exeKY2l9Xtt4nn0+1T6FIjCRFH3k3+2WApUvO1tlkx0nehy9/RHmDEhquEw8lrgWt2nGl9pn6F20aqqndPa53yKtkHMjJtbWYoIXYNMqrSkPbJFyGhzxSLi6K1RtvhYWUHfC38ql4bhdagEnvDRfS+zeRYDT4G/6Vt+XhHzEuhJlzegfD54q5OpBoK6hG/5OYR6V81iGxM0rM9ESer2W9v9TtbXUadaYKbQkeJ4u+bIWm6wxbvGhKAmvUeIW9LejEcONtpBoWgFSKpVu932SR6DXAy6Hk15GsOYjXbVwJ/yVNgqseiu+BNC8U2nfpdtTj2lI5j3guzv9/Pbq19DXwmm/wRsHwUW+F3Wpr8FMGkeqEEfHybWSAQ5Eogmlw6oOd1ZiYYRpRwcEFnn+PvkstAQ3mcUW+1neAGHw432krxFJ/Grg2YKo5bwFungd6gIHL7brmkIKVg3TZe47mlxn5SarJUUYNydmcH+KcCoasGp93YbgpbJGJTXKU2TgamErQr39g/kBjlwbfIbWLv+hp07QUKNTGCmSV5rQBS0JltIZ0gpRBTydRpcmUcvO4WrCpaoLCHpihyGBs0CBRpBeDoLQj4/AHC9am3aXIDPBn4m2S/aNOqfegv4gS2iYn5gO1hveOHxQK5GE0pT3FRnt/4P5vs/BP/jYzVOWRX01RipA5nmr8WWDmZhI9dQU/xWhCwe1O3S75OlQ8m7IhF6QOzKQeAIbnf7Nz7Y1/KvwEoeD1dsEl/FUnyyGpiA==
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700016)(376014)(7416014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700016)(1800799024)(82310400026)(22082099003)(56012099003)(18002099003)(13003099007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	IfzAPPM3CfhF0I1X5lCQp8b0Fk3H+0aJCsYXe6/BEplKRob8qLNaSa+ZP/nDAs41d6YMsIciCQnCYpgkl8e9M8tOfAMl8Ur/3fRqRRA6RFM6YeHcG7oJHUKT1Bw+HzN6BkyxYrZjuYk2mDOpJ5iaQ3CsoW0yAFbMDPDND5lkHJNFcDKCoieMOvpju8Tdp2Ec6YbdNzlLuRTBgKTZPut1HTuldd55TGZ+V6E/lQlRLBO/QrAlEin8x+VtrboS7CIWwhFQh0AQiID1F/pLkA3uVnbw+DeAZwdIF84sw0L2+eDzYe7A4+SKa1IZj/rGooAWxIWNoJ9SGG78xryYwGq5f3mvG/lMUAs5cLyk2GyMqCIaQ4X6i1Z+qGKDrpy6isIH03qZCdeQkw63I5pk7UKSkS3j4sHJDkojhUNgpKyL5L+TWj5m6AQ4n52JWuh0Ngbt
+	+E+h4qLLVzmwn//D2XuP3V0y5XHkUUGFCKiJU+78h6rIlSK4VhSe9UBnnGrz9JD7XXDHM/grVs0bq7dB+pqLBW3FA9OPH4re539n3jwzSxZc7tFo6B0lRdqUW+p2s7LBdMkspsNWjfM5gZJc0ocEzRcmWvXDyBKKhlPdBQNCad4kYrHhhFcLazj/0XJRWgKv6JH41s7hWWvCl1YzF4ef+YbJUwlKA00hqvV4vk+k4HDOOxOFRLZvhC//CwHpMXhiEMIsP8Qe7aKl7U03WY/4bHoY6q8VFqof+IpZzdCkrj/cp430xFLxb7Ogg+XrMywjm/xOBYhDxJmbRc+31epDXSHTW3mlUtrxUvac7pnVIVDewq+XULK+iENtwJ88AMByESysla3B8vdjF/QTk7I09WDlSm44fTU35KZeTApYZG5md39IvrIVHpwSauwkH+Ja
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 11:51:00.1164
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 11:55:32.5148
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8559dcc-13e9-4df3-362a-08de8e529ccb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c9d10f6-7d3b-4d27-cffe-08de8e533f28
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D9.namprd05.prod.outlook.com
+	CY4PEPF0000E9D0.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV5PR12MB9828
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6277
 
 
-Petr Machata <petrm@nvidia.com> writes:
+Ioana Ciornei <ioana.ciornei@nxp.com> writes:
 
-> Ioana Ciornei <ioana.ciornei@nxp.com> writes:
+> On Mon, Mar 30, 2026 at 12:38:54PM +0200, Petr Machata wrote:
+>> 
+>> Jakub Kicinski <kuba@kernel.org> writes:
+>> 
+>> > On Fri, 27 Mar 2026 09:32:22 +0200 Ioana Ciornei wrote:
+>> >> On Thu, Mar 26, 2026 at 12:03:42PM -0700, Jakub Kicinski wrote:
+>> >> > On Thu, 26 Mar 2026 15:28:18 +0200 Ioana Ciornei wrote:  
+>> >> > > This patch set aims to add the necessary support so that bash written
+>> >> > > selftests are also able to easily run with a remote traffic generator
+>> >> > > system, either be it in another netns or one accessible through ssh.
+>> >> > > 
+>> >> > > This patch set is a result of the discussion from v1:
+>> >> > > https://lore.kernel.org/all/20260303084330.340b6459@kernel.org/
+>> >> > > Even though the python infrastructure is already established, some
+>> >> > > things are easier in bash and it would be a shame to leave behind the
+>> >> > > bash tests that we already have.  
+>> >> > 
+>> >> > I think this introduces a bunch of regressions, eg:
+>> >> > 
+>> >> > https://netdev-ctrl.bots.linux.dev/logs/vmksft/forwarding/results/575622/4-local-termination-sh/stdout
+>> >> > 
+>> >> > https://netdev-ctrl.bots.linux.dev/logs/vmksft/netdevsim/results/575802/18-netcons-resume-sh/stdout  
+>> >> 
+>> >> I cannot reproduce this unfortunately. For example, local_termination.sh
+>> >> gives me the following result with the exact patches that I submitted.
+>> >> Any idea on what might be the difference?
+>> >
+>> > Hm, the system that runs this on our end is:
+>> >
+>> > # cat /etc/redhat-release 
+>> > Fedora release 43 (Forty Three)
+>> >
+>> > And it has this added on top of default install:
+>> >
+>> > # cat /etc/systemd/network/99-default.link
+>> > [Match]
+>> > OriginalName=*
+>> >
+>> > [Link]
+>> > NamePolicy=keep kernel database onboard slot path
+>> > AlternativeNamesPolicy=database onboard slot path mac
+>> > MACAddressPolicy=none
+>> 
+>> The observed issues are consistent with TARGETS being defined, but not
+>> an array:
+>> 
+>> $ declare -A T
+>> $ T=([a.100]=b)
+>> $ U=foo
+>> $ if declare -p T &>/dev/null; then echo "${T[a.100]}"; else echo fail; fi
+>> b
+>> $ if declare -p U &>/dev/null; then echo "${U[a.100]}"; else echo fail; fi
+>> bash: a.100: syntax error: invalid arithmetic operator (error token is ".100")
 >
->> Add a couple of helpers which can be used by tests which need to run a
->> specific bash command on a different target than the local system, be it
->> either another netns or a remote system accessible through ssh.
->>
->> The __run_on() function is passed through $1 the target on which the
->> command should be executed while run_on() is passed the name of the
->> interface that is then used to retrieve the target from the TARGETS
->> array.
->>
->> Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
->> ---
->> Changes in v4:
->> - reworked the helpers so that no global variable is used and
->>   information is passed only through parameters
->> Changes in v3:
->> - s/TARGET/CUR_TARGET
->> - always fallback on running a command locally when either TARGETS is
->>   not declared or there is no entry for a specific interface
->> Changes in v2:
->> - patch is new
->>
->>  tools/testing/selftests/net/lib.sh | 38 ++++++++++++++++++++++++++++++
->>  1 file changed, 38 insertions(+)
->>
->> diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
->> index b40694573f4c..6c0d613a4de5 100644
->> --- a/tools/testing/selftests/net/lib.sh
->> +++ b/tools/testing/selftests/net/lib.sh
->> @@ -670,3 +670,41 @@ cmd_jq()
->>  	# return success only in case of non-empty output
->>  	[ ! -z "$output" ]
->>  }
->> +
->> +__run_on()
->> +{
->> +	local target=$1; shift
->> +	local type args
->> +
->> +	IFS=':' read -r type args <<< "$target"
->> +
->> +	case "$type" in
->> +	netns)
->> +		# Execute command in network namespace
->> +		# args contains the namespace name
->> +		ip netns exec "$args" "$@"
->> +		;;
->> +	ssh)
->> +		# Execute command via SSH args contains user@host
->> +		ssh -n "$args" "$@"
->> +		;;
->> +	local|*)
->> +		# Execute command locally. This is also the fallback
->> +		# case for when the interface's target is not found in
->> +		# the TARGETS array.
->> +		"$@"
->> +		;;
->> +	esac
->> +}
->> +
->> +run_on()
->> +{
->> +	local iface=$1; shift
->> +	local target="local:"
->> +
->> +	if declare -p TARGETS &>/dev/null; then
->> +		target="${TARGETS[$iface]}"
+> Totally agree, that's what it looks like.
 >
-> So I think Jakub's runs fail because there's a shell export somewhere
-> that gets inherited through make to the launched test. I guess it would
-> be enough for the test to validate that TARGETS is an array, because
-> those don't get inherited.
+> On the other hand, I don't see any other use of the TARGETS variable in
+> tools/testing/selftests. The only way I can trigger that kind of error
+> is by setting and exporting TARGETS before running the test.
 >
-> Is there a reason not to reuse DRIVER_TEST_CONFORMANT as a tell though?
+>  root@localhost:~/ksft-net-drv# export TARGETS=test
+>  root@localhost:~/ksft-net-drv# ./run_kselftest.sh -t drivers/net/netconsole:netcons_resume.sh
+>  [ 1895.134633] kselftest: Running tests in drivers/net/netconsole
+>  TAP version 13
+>  1..1
+>  # timeout set to 45
+>  # selftests: drivers/net/netconsole: netcons_resume.sh
+>  # Running with bind mode: ifname
+>  # /root/ksft-net-drv/drivers/net/lib/sh/../../../../net/lib.sh: line 707: eni497np1: unbound variable
+>  not ok 1 selftests: drivers/net/netconsole: netcons_resume.sh # exit=1
 >
->> +	fi
->> +
->> +	__run_on "$target" "$@"
->> +}
->
-> Does the latter helper need to be in net/lib.sh? Since it uses TARGETS,
-> which are a forwarding/lib.sh concept, it seems misplaced there.
+> So this means that TARGETS is used by the netdev testing
+> infrastructure, I presume.
 
-Oh, I see, there's an invocation from mac_get() in net/lib.sh itself.
-Hummm. Not sure how to tackle this.
+I think Jakub has the export for make to pick up, and then tests inherit
+it.
 
-I think lib.sh might unset TARGETS explicitly? Or declare -A, but leave
-empty? Since it's now an API, net/lib.sh needs to set it to a reasonable
-value (or erase). Then forwarding/lib.sh might in theory rely on
-existence of that variable and not have to declare it at all.
+> Anyhow, I can change the variable name to avoid this. Something like
+> NETIF_TARGETS?
 
-Or, maybe have a stub run_on() like this to satisfy the run_on() API:
-
-run_on()
-{
-	"$@"
-}
-
-And have the full-blown thing in forward/lib.sh. All the magic with
-TARGETS really belongs to forwarding/lib.sh. Bash allows function
-redefinition just fine, so a user importing just net/lib.sh would get
-the stub, and forwarding/lib.sh users would get the full thing.
+I sent some thoughts about how to fix the issue in my review of 02/10,
+so let's move the discussion there.
