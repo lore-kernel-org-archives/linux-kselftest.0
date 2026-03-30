@@ -1,202 +1,138 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012004.outbound.protection.outlook.com [52.101.48.4])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB513C943A;
-	Mon, 30 Mar 2026 11:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774871739; cv=fail; b=eqGKC8/FlZMvaL7gGjJu+jyKN/RQ80pcmEWwOM5zd09QKF7UnwjFVJ5/QWqQ/wPNp7y1HMfmVRcFK5afGAOr7gGJ0tcTUsWxk9MVWbmRAwVR3x2ATY3eh7bupoKwaMrQTaHLgFaRc1QPl2pxC+AAV/Zqdw6hpIpz9uCstakFHZU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774871739; c=relaxed/simple;
-	bh=OMhcETbCen3PG+TzWoFndJQ+AQBuJhIRHmK5cma8FO0=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=GOojD8kd6B0WcGcLdq18RiGuf7+RLkuFk7qnioWQPCUrEy6k0xg7lHR3rfLhqj0icQ+4NLIMboR2hNDzuYsME7HLFyLy3wdyr8cCSCb3Dv0bIuvUE/asYNShARuliZ57zXlqaWxeuYZQJA4SSisWGw/uhxOxFUXAsFm3MmMfYts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZbDAIP11; arc=fail smtp.client-ip=52.101.48.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB383CA485
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 11:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774871863; cv=none; b=NVk9LcctwALQ59YGg0MftJorw1lhrOex+kVY3U2obSdS8Uz9WkYQOEM1wJLhjD2NbTbotJFuY4SpReFyIWXO715MbD7juFSPYRoD8BXRediw5WIeTNU/c0N4YOeTi28MlBablRiwh4H4lotEaf3O55bqsOM2+m3wZ9s7Acuvj6c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774871863; c=relaxed/simple;
+	bh=G/MG5H6UuEW1K0dEZB2Eqb+2kb/bNUEKQCUCpEF9Ymw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uPbyoIHqxst1V/ywW9BrQVsfkzeus0Pu2RTlWTMx92sSa3saNMOMz15pnHa6JrT4wn2qaYyP2K9T86mld7AJZF/PJiZdfGEhHOu7z7W6/6xC916jZ6dTTs43Cq64r9T6kQ+lOUXVaJyzi6q69tmbSCDY11yCyBrSB2T5H3IXVNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fHA2SZlE; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=B39v5VbJ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZbDAIP11"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jCYXL98jiDE+dRxKLYDFVQYiKhE4D1nWqhJDxeK+aPyQkQi4uarmlX9cuRfrSWDa+dVHKRIf6Gae9tPC5bJKGT0JfyC8xkpwtIiuTAbpp1XMFYLqK7ZUNqnUicAAmTs5PHJVKXmkxUiRuQskq99ofthdtDAUYH5Kpv4WGQ4zGhHS9nLSaLXtRcRvToVotbuHyev0cLPkXf5InsoKW1jklYeQVtj8jaubcTHo78oKDrDjKhz5Kw8/YjMc9gaz4aZ/aezm0GdX7WY1uU+P9/8vLaSQPqVV3YPQtTjnaQQ9tyINND4pw6DeXDP/WrV5U1D4AqxRv88cLphZYyi5xtI8EQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2x2F10Dsf181OIWZDQHiydsRVgzGuitS8vb5d5uW74c=;
- b=E8vzhWvEqQxxZXIf3m1VmBNvTVwJXgMTrYAregcYYa9FuNDMQAbvtwF86qxqAebB85HLe802raa3+71cOeqC3vwbg3GkLgT2QAZZhGiad/gWZ+HPJySxwYgzGhWN12ZlWyKQ51bETuzxODva0BGnsS4FjMig5AKKeu+g9oCoeYTBST3OjNlbJU+udSQOhIVl9MM+WWDyuSdnRb2mwf2CE2QGCNOEsCRXfynoKefWURysLU0VS/pA4URiyDjQGlOkVzO6QBus1pelpFiCDN/OX28O9hs2n4IZ65ts+yUO/Ca/xFIrZxTjl604BnGoZ0SY09wWaSIB3J6keRmzD5moCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2x2F10Dsf181OIWZDQHiydsRVgzGuitS8vb5d5uW74c=;
- b=ZbDAIP11fofP7ZGB3dpiksZDUlNKpdPFyVuWUvQWGTcG6jlZZb4gCu/Zl13hWzdKi+LhRBVjDQBALVo5IVmFUjFlSekHckgUvpmduo+WgPsqyBPtJn6VsuOYGhGM/XxWJJK9liDd2d0Ww/oFDJxBEFslaJS7q1qJkn88GFe50WOoeHaJ5ql7i+A+CQtGb+NEFSb37Oxlhj28STJXAYN0N6PTeJZZXoyLvqp6QGPedLrQpXzI2t5uVfS5qIeWZVb8NxKTOWKgOFYDnlvwmaCmMQSrlG83HKVB8MBtASc9TuEmqbyeAzBwfjTbNYvF4PkDpgSsaNZUq6ACalGHTU8ESg==
-Received: from PH7P221CA0009.NAMP221.PROD.OUTLOOK.COM (2603:10b6:510:32a::28)
- by DM4PR12MB6277.namprd12.prod.outlook.com (2603:10b6:8:a5::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Mon, 30 Mar
- 2026 11:55:33 +0000
-Received: from CY4PEPF0000E9D0.namprd03.prod.outlook.com
- (2603:10b6:510:32a:cafe::a7) by PH7P221CA0009.outlook.office365.com
- (2603:10b6:510:32a::28) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.28 via Frontend Transport; Mon,
- 30 Mar 2026 11:55:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000E9D0.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.21 via Frontend Transport; Mon, 30 Mar 2026 11:55:32 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 30 Mar
- 2026 04:55:17 -0700
-Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 30 Mar
- 2026 04:55:11 -0700
-References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
- <20260326120342.6429fbdc@kernel.org>
- <5cuoazp2svgjja5h663zc34dafkuqa2grrm7lzpuunvrjogydf@43mryp77gq2q>
- <20260327172454.6b9bc8f3@kernel.org> <87a4vp61m4.fsf@nvidia.com>
- <usxkovboo5jt6vu2jvbwpnsltvewjil27xizt3jjhggu5o4td3@2cgex6op4mzc>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Ioana Ciornei <ioana.ciornei@nxp.com>
-CC: Petr Machata <petrm@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
-	<netdev@vger.kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
-  Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Paolo
- Abeni" <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <willemb@google.com>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v4 00/10] selftests: drivers: bash support for
- remote traffic generators
-Date: Mon, 30 Mar 2026 13:52:06 +0200
-In-Reply-To: <usxkovboo5jt6vu2jvbwpnsltvewjil27xizt3jjhggu5o4td3@2cgex6op4mzc>
-Message-ID: <87o6k54jms.fsf@nvidia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fHA2SZlE";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="B39v5VbJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774871861;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Uh1xNXHxs6tIJU6BgE1ANOu6D34D8WcIS3q00d1KgWo=;
+	b=fHA2SZlEJpwHtJMZrUDRjEw3+hcmzJfc0ELv32euewBlJzlK883MtAIbApCNxsgCpjhhAA
+	g4Re8rlTEazduaPTGE1IrinPI2BnXO8Y+s33rBBdxT3OP+jxSlc5F6MQrSaBXQ9WqWXrj3
+	Q4PZGh8bPNQbhTR0G+Gqc9TT4zaOg1A=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-467-hoMHtUxYNdi-Pd0tPykSMg-1; Mon, 30 Mar 2026 07:57:40 -0400
+X-MC-Unique: hoMHtUxYNdi-Pd0tPykSMg-1
+X-Mimecast-MFC-AGG-ID: hoMHtUxYNdi-Pd0tPykSMg_1774871859
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2b2471321dcso66424235ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 04:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1774871859; x=1775476659; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uh1xNXHxs6tIJU6BgE1ANOu6D34D8WcIS3q00d1KgWo=;
+        b=B39v5VbJPNsHpjH0rkY774c3ygZTxZj2NSy3YMSL54T3adPQ9cH+akHsMgP2n9XZ6G
+         x7rSDjiIquC98C2UZP6esTOTanplOGpHwe9C9dJH19JOp56h0yAmmNMwFmaxLF7xnL4z
+         Rs++TL5PSY1Z/AJmwe2D86zPtDfU0Yym35y2K6kTKrHjViy9Z+rWlKMkIMi63PyUxq5A
+         Ck9nlVFb0G02Stszlz2NNIucOeQBm/TF7b6w8lAU38I3oZX11+1yZgwgUDbabAAcplF3
+         kFFbsl/BSEvrNBF8ostUu97f+QI6FZZ6jcFr6trgUmNtp18lw2qPGzYMk9k5FUJm2pVi
+         07yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774871859; x=1775476659;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uh1xNXHxs6tIJU6BgE1ANOu6D34D8WcIS3q00d1KgWo=;
+        b=FOFyojyN7O7zSjyRmQfa26jjRAzAIneE+oZ+g9CjRhWa5uBm4hLxv6VGHQLtGiNRrn
+         cW2uOgR0uCD6wbgw5eKFLy2DxKlTQE2syS4reh94QZqu/tMmauOx7NwRnw32dcnF/oR0
+         E3u4F2XCB9wn3N3O1pNlYja7QVcb8ISpiJ2sIEB/tbQ5qtw+fFgZ7W47wkLhynpTF4Sm
+         oSiDKZvA7o+6jP8a1yETTa2hUgpb847/z/eLCSIR8gQvZMxOcP71oRJVaJKMj3rMe2xZ
+         t94CAZeDH6bp+2itW8pYbPsiXlaMNjTixieJ75+3Wv/pVVJZW60ofpuyhI9sP8miTrld
+         vhfg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ2z+HjvtxY6XeLB3esFQ7B4azlxGgfUgVdviq+EZ/bhpN3a9I4+MmS0eGgmYaskYEMxmHSQXPDJGlT53v8Y0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWN8Hz8PrCjx63rt8ZItFiftAzI2UmVf1vK8a50D9Uq2URCqtk
+	7e7kR/5H5J24ehbY7/ET8ncBOsuKtihiOVjmVaUSPSuNAQw+qnJGJQsnY5vJtj4eqLwU4RCw0oT
+	RYRhF3ds8U1IWGvwjruEJadxbZfImT0iUbzl/kXBTsnXd8b4DgK8rhjLs6UunYWvbSez7rQ==
+X-Gm-Gg: ATEYQzzGOmgTZnuPDOKDtwxiiOcDDfcjQT8jubqQSSj2k0v1gTN+92TVyYZZZunSfyk
+	lfiaKbelINQiHvXW/abIkT9Pv0aitXQMjgmXLs9X5GjfiFH5cO4MWhDkYVBM1J53IW2S1HsLwam
+	fmgbTQ22LVt/IZejPzrdLrdJTSvXLEjczCfv6gIhpDUf+DWmQWE1rHgpd86DBuMShb2zApySDkz
+	XfOYa7hNkzfeNk+oLm1Hy8q+Lk1OKYTrW+JVCds5I52F2bGw8AKGre3ZC3RohUG8Pyv7r3mgpp5
+	AtamD4nh3J8tYS3O7wJEAHo5u9srltFOJ/pIwBtX4FtY0xyALnuaqVJwjnn4Gwq2RroFTBiM3wt
+	F43yN9Qubl87uZc0gfQ==
+X-Received: by 2002:a17:902:e84d:b0:2b2:481b:de6c with SMTP id d9443c01a7336-2b2481be11emr68540915ad.10.1774871859275;
+        Mon, 30 Mar 2026 04:57:39 -0700 (PDT)
+X-Received: by 2002:a17:902:e84d:b0:2b2:481b:de6c with SMTP id d9443c01a7336-2b2481be11emr68540635ad.10.1774871858854;
+        Mon, 30 Mar 2026 04:57:38 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242765b9fsm94275665ad.43.2026.03.30.04.57.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 04:57:38 -0700 (PDT)
+Date: Mon, 30 Mar 2026 19:57:35 +0800
+From: Li Wang <liwang@redhat.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: akpm@linux-foundation.org, rppt@kernel.org, ljs@kernel.org,
+	Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
+	mhocko@suse.com, shuah@kernel.org, aubaker@redhat.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3] selftests/mm: skip hugetlb_dio tests when DIO
+ alignment is incompatible
+Message-ID: <acplL3cHWqp0-RMO@redhat.com>
+References: <20260330053915.75442-1-liwang@redhat.com>
+ <a5b7add7-0507-40c0-a324-81f243ffa261@kernel.org>
+ <acok3JY66OcV0Qab@redhat.com>
+ <acpMD8tRCJhgXHeg@redhat.com>
+ <a1054c28-b574-4fcc-afe9-5e902209a22c@kernel.org>
+ <acpgFlG4qj646hYp@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D0:EE_|DM4PR12MB6277:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9c9d10f6-7d3b-4d27-cffe-08de8e533f28
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|36860700016|1800799024|82310400026|22082099003|56012099003|18002099003|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	rtRc3N+OAm/wLp1/+6Y7USX0gJ7exeKY2l9Xtt4nn0+1T6FIjCRFH3k3+2WApUvO1tlkx0nehy9/RHmDEhquEw8lrgWt2nGl9pn6F20aqqndPa53yKtkHMjJtbWYoIXYNMqrSkPbJFyGhzxSLi6K1RtvhYWUHfC38ql4bhdagEnvDRfS+zeRYDT4G/6Vt+XhHzEuhJlzegfD54q5OpBoK6hG/5OYR6V81iGxM0rM9ESer2W9v9TtbXUadaYKbQkeJ4u+bIWm6wxbvGhKAmvUeIW9LejEcONtpBoWgFSKpVu932SR6DXAy6Hk15GsOYjXbVwJ/yVNgqseiu+BNC8U2nfpdtTj2lI5j3guzv9/Pbq19DXwmm/wRsHwUW+F3Wpr8FMGkeqEEfHybWSAQ5Eogmlw6oOd1ZiYYRpRwcEFnn+PvkstAQ3mcUW+1neAGHw432krxFJ/Grg2YKo5bwFungd6gIHL7brmkIKVg3TZe47mlxn5SarJUUYNydmcH+KcCoasGp93YbgpbJGJTXKU2TgamErQr39g/kBjlwbfIbWLv+hp07QUKNTGCmSV5rQBS0JltIZ0gpRBTydRpcmUcvO4WrCpaoLCHpihyGBs0CBRpBeDoLQj4/AHC9am3aXIDPBn4m2S/aNOqfegv4gS2iYn5gO1hveOHxQK5GE0pT3FRnt/4P5vs/BP/jYzVOWRX01RipA5nmr8WWDmZhI9dQU/xWhCwe1O3S75OlQ8m7IhF6QOzKQeAIbnf7Nz7Y1/KvwEoeD1dsEl/FUnyyGpiA==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700016)(1800799024)(82310400026)(22082099003)(56012099003)(18002099003)(13003099007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	+E+h4qLLVzmwn//D2XuP3V0y5XHkUUGFCKiJU+78h6rIlSK4VhSe9UBnnGrz9JD7XXDHM/grVs0bq7dB+pqLBW3FA9OPH4re539n3jwzSxZc7tFo6B0lRdqUW+p2s7LBdMkspsNWjfM5gZJc0ocEzRcmWvXDyBKKhlPdBQNCad4kYrHhhFcLazj/0XJRWgKv6JH41s7hWWvCl1YzF4ef+YbJUwlKA00hqvV4vk+k4HDOOxOFRLZvhC//CwHpMXhiEMIsP8Qe7aKl7U03WY/4bHoY6q8VFqof+IpZzdCkrj/cp430xFLxb7Ogg+XrMywjm/xOBYhDxJmbRc+31epDXSHTW3mlUtrxUvac7pnVIVDewq+XULK+iENtwJ88AMByESysla3B8vdjF/QTk7I09WDlSm44fTU35KZeTApYZG5md39IvrIVHpwSauwkH+Ja
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 11:55:32.5148
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c9d10f6-7d3b-4d27-cffe-08de8e533f28
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D0.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6277
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acpgFlG4qj646hYp@redhat.com>
+
+On Mon, Mar 30, 2026 at 07:35:50PM +0800, Li Wang wrote:
+> > >   int main(void)
+> > >   {
+> > >       ... 
+> > >       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+> > >       if (fd < 0)
+> > >           ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
+> > >   
+> > >       if (get_dio_alignment(fd) < 0)
+> > 
+> > I would suggest that you query the alignment only once, and forward it
+> > to the test.
+
+Oh, I suddenly realized that you meant to store it in a local and forward
+it through to check_dio_alignment() and run_test() as an explicit argument.  
+
+Sure, I'm ok with that minor change:
+
+int main(void)
+{
+        ...
+
+        alignment = get_dio_alignment(fd);
+        if (alignment < 0)
+                ksft_exit_skip(...);
+
+        run_test(fd, start_off, end_off, alignment);
+}
 
 
-Ioana Ciornei <ioana.ciornei@nxp.com> writes:
+-- 
+Regards,
+Li Wang
 
-> On Mon, Mar 30, 2026 at 12:38:54PM +0200, Petr Machata wrote:
->> 
->> Jakub Kicinski <kuba@kernel.org> writes:
->> 
->> > On Fri, 27 Mar 2026 09:32:22 +0200 Ioana Ciornei wrote:
->> >> On Thu, Mar 26, 2026 at 12:03:42PM -0700, Jakub Kicinski wrote:
->> >> > On Thu, 26 Mar 2026 15:28:18 +0200 Ioana Ciornei wrote:  
->> >> > > This patch set aims to add the necessary support so that bash written
->> >> > > selftests are also able to easily run with a remote traffic generator
->> >> > > system, either be it in another netns or one accessible through ssh.
->> >> > > 
->> >> > > This patch set is a result of the discussion from v1:
->> >> > > https://lore.kernel.org/all/20260303084330.340b6459@kernel.org/
->> >> > > Even though the python infrastructure is already established, some
->> >> > > things are easier in bash and it would be a shame to leave behind the
->> >> > > bash tests that we already have.  
->> >> > 
->> >> > I think this introduces a bunch of regressions, eg:
->> >> > 
->> >> > https://netdev-ctrl.bots.linux.dev/logs/vmksft/forwarding/results/575622/4-local-termination-sh/stdout
->> >> > 
->> >> > https://netdev-ctrl.bots.linux.dev/logs/vmksft/netdevsim/results/575802/18-netcons-resume-sh/stdout  
->> >> 
->> >> I cannot reproduce this unfortunately. For example, local_termination.sh
->> >> gives me the following result with the exact patches that I submitted.
->> >> Any idea on what might be the difference?
->> >
->> > Hm, the system that runs this on our end is:
->> >
->> > # cat /etc/redhat-release 
->> > Fedora release 43 (Forty Three)
->> >
->> > And it has this added on top of default install:
->> >
->> > # cat /etc/systemd/network/99-default.link
->> > [Match]
->> > OriginalName=*
->> >
->> > [Link]
->> > NamePolicy=keep kernel database onboard slot path
->> > AlternativeNamesPolicy=database onboard slot path mac
->> > MACAddressPolicy=none
->> 
->> The observed issues are consistent with TARGETS being defined, but not
->> an array:
->> 
->> $ declare -A T
->> $ T=([a.100]=b)
->> $ U=foo
->> $ if declare -p T &>/dev/null; then echo "${T[a.100]}"; else echo fail; fi
->> b
->> $ if declare -p U &>/dev/null; then echo "${U[a.100]}"; else echo fail; fi
->> bash: a.100: syntax error: invalid arithmetic operator (error token is ".100")
->
-> Totally agree, that's what it looks like.
->
-> On the other hand, I don't see any other use of the TARGETS variable in
-> tools/testing/selftests. The only way I can trigger that kind of error
-> is by setting and exporting TARGETS before running the test.
->
->  root@localhost:~/ksft-net-drv# export TARGETS=test
->  root@localhost:~/ksft-net-drv# ./run_kselftest.sh -t drivers/net/netconsole:netcons_resume.sh
->  [ 1895.134633] kselftest: Running tests in drivers/net/netconsole
->  TAP version 13
->  1..1
->  # timeout set to 45
->  # selftests: drivers/net/netconsole: netcons_resume.sh
->  # Running with bind mode: ifname
->  # /root/ksft-net-drv/drivers/net/lib/sh/../../../../net/lib.sh: line 707: eni497np1: unbound variable
->  not ok 1 selftests: drivers/net/netconsole: netcons_resume.sh # exit=1
->
-> So this means that TARGETS is used by the netdev testing
-> infrastructure, I presume.
-
-I think Jakub has the export for make to pick up, and then tests inherit
-it.
-
-> Anyhow, I can change the variable name to avoid this. Something like
-> NETIF_TARGETS?
-
-I sent some thoughts about how to fix the issue in my review of 02/10,
-so let's move the discussion there.
