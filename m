@@ -1,197 +1,213 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010001.outbound.protection.outlook.com [52.101.193.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E4C277C9D;
-	Mon, 30 Mar 2026 11:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.1
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774870030; cv=fail; b=WpwVqeCl+4gwSwgNqOjbgQBMajCszTvXJRggH833utVVYBLY6srsdRR4n8T5RkJHinW+bONZ6RHixBfom8ZT7503FNqmdhVuqiKZIfuDyTXSTVTB5vLVTHeUMMgM1RL0atOiAfFK1bHLmooxdK/0qu8UxY7GynMRFJ1uhjCJiow=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774870030; c=relaxed/simple;
-	bh=bI6p2o0I2WuW2s4NganUt/EbOC1yFCMXtZTEPK5E7jc=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=erEu88iumDbdBbg41bRLhSTY5KdSocznfF26BCnsIbBgkszJdzyEz43d8CffAkatIQKh9R/hE7hR/ZxKSd8PhGubLY47vh+8yW3D+3mH4nUoL9fpzo1H1TduXIh0NsAXBHPv6SK6Z1LjdX2cyT0Fv6k7cz45PJ+KugIJBYwGUws=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ND+PfICy; arc=fail smtp.client-ip=52.101.193.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC862C028C
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 11:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774870529; cv=none; b=NTywKUixItFAYBQUQ5iS/iughhU3NFZSwPUMdsvWqAWmPOctUQog2udIXI/PN3SosIVH2QKuQ6V2VhIKwroCYDdC2WFPo/aJT2qN0QcQ2aXlVJxgdzE56+8CKHgnR3OgfvJQDau7i/nOgiZcvfcQoTKNZ1L1s6PEk6+cpdiqM/Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774870529; c=relaxed/simple;
+	bh=s0GYGHG3bHHnLSUpuw3XwU4YANaEchmaJvsIJazD/8g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wvgz/I5ZQgjHaC2/Eh+rG60krPbAPPlDXeK7ItE6tZRUXLfB4pefEvIffSwvenjo9yWzHWqOoPVmAKrZe2nuU6qAmlXl8bJ+ET8Wcgkt6R5fqhnXRg5LiQD+m+2oDrOg6SPvSfYVfCoSpr8jZPazfNyFMxGrgyRL99L8/ShY2DE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cQk38LQU; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ND+PfICy"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JmlnkYUuBseEsu0J3brAaMHiV4jMYn97waREcwvXz6wf2YYnARbE7KJw2rsBGtouqTU22B7ERwDxnqWNLNUqj1gsqOwC5k7fSpfD2o7jZscaTonKH9+afrgDo4QcRSddRwxvkybvuB+S9S5AxYD1n+ZkhyT0d3Dq3dlxmvmQAzoxIa6o37UwndAXp2j9ns07lJEKBlBD2a5Ydnxr3/Tp8VdaEMd+V/faFc/TPN5o7mORGvhrvUvnXUxd+jQUt2WapHy5nasbniFzhKxLf4d4uhPU5+EwmMG4rWdNPSiMIlGynQxI8bsA9GSTqhqg/4Hfz6e8/zSo/rw5J7b/CBsOvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DtNn+nwHHEqexHQyhEH3PVbRRi0/Ch4LrXVRNYwVExk=;
- b=uegla/IDSQRrltGGtalBjZ4xdXl1u8MRPP1hWWF7yvkCjoWTTmsBFr985YxdM3XkXvNDFfoL8TZXnn8ZYgjs1aBgwJaQeoIwIE0c7zSC7Ogv5LszAoq1BaszpdGgPQpJ2/8mdaehUQMs8muIWWMSRf0Nxl196aQUxCRDXiHJzrDQyJCmtEEcw0+2GycANJLF/kGo5AU4/Nn143lL0kX/tjdwEFQZJvvjAWJSV6AHukywjtPq1Bth7YuYmgpUpqZKVsN4WyJzcK1DzfNG+9sgQwXZEY+YOAzJR1RTFSrOTpMUhffNeqYx+LH4SxA5BQ5osqL1VvZvvDyaIQxUwIaXyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DtNn+nwHHEqexHQyhEH3PVbRRi0/Ch4LrXVRNYwVExk=;
- b=ND+PfICygUFUZdEPDteeTxPFdeYqaunyC+WAN3sqnFcdPaa2wmjIZ/8ZwpX0PCb/EL8tXwMUkuPry1Mw2a44zbMHEgi9TpbBDJm3q1rANeOstEOQdQKHlt8/NUaa3IraXAE/eLwoVNQaaP6wxOvOaAbbVMtEYTBWTNfSa2aDTMb4k7v1Fh3fLbCDZqPQads4TaZPMkn+sxa+zcV2+G8DGag78mv6dXVRJn5dlQf/QsI01Aus8pv6FZ+/BHh3Q1nWTFWsdXqxLoXcF2yosBZASCgOyADMAZV1GT9Bi6+fp4YQDoFHUoNAAhAde44v6KCsnyw8poerfAEV0EYKtrK/YA==
-Received: from CH2PR18CA0028.namprd18.prod.outlook.com (2603:10b6:610:4f::38)
- by MN2PR12MB4176.namprd12.prod.outlook.com (2603:10b6:208:1d5::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Mon, 30 Mar
- 2026 11:27:03 +0000
-Received: from CH2PEPF0000009F.namprd02.prod.outlook.com
- (2603:10b6:610:4f:cafe::53) by CH2PR18CA0028.outlook.office365.com
- (2603:10b6:610:4f::38) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.28 via Frontend Transport; Mon,
- 30 Mar 2026 11:26:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH2PEPF0000009F.mail.protection.outlook.com (10.167.244.21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.21 via Frontend Transport; Mon, 30 Mar 2026 11:27:03 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 30 Mar
- 2026 04:26:48 -0700
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 30 Mar
- 2026 04:26:43 -0700
-References: <20260326132828.805703-1-ioana.ciornei@nxp.com>
- <20260326132828.805703-3-ioana.ciornei@nxp.com>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Ioana Ciornei <ioana.ciornei@nxp.com>
-CC: <netdev@vger.kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
-	<horms@kernel.org>, <linux-kernel@vger.kernel.org>, <petrm@nvidia.com>,
-	<willemb@google.com>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v4 02/10] selftests: net: add helpers for
- running a command on other targets
-Date: Mon, 30 Mar 2026 13:02:12 +0200
-In-Reply-To: <20260326132828.805703-3-ioana.ciornei@nxp.com>
-Message-ID: <871ph15zip.fsf@nvidia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cQk38LQU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774870527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FiZviYo8L2f9R9HpzuBCyEjwLeRZJHeIjS+87uHF2Oc=;
+	b=cQk38LQUlNGLWwD3RM9MIZgdHvrjmmcU7Al2pVPTeYHn5eKoK1uzcdfkysOIL48C8zTnth
+	k7+etG2n/mdTkAvOfpqVDIi88YjQHFaFbsIHy6huTv2EJF9oLliK+ympgHER8jkOG0DAsz
+	lg0D0YkOxveKyVdD9r9i4x1g0gCnLyI=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-128-oMNhOeO0MPygyrTPLK-6HQ-1; Mon,
+ 30 Mar 2026 07:35:23 -0400
+X-MC-Unique: oMNhOeO0MPygyrTPLK-6HQ-1
+X-Mimecast-MFC-AGG-ID: oMNhOeO0MPygyrTPLK-6HQ_1774870521
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5EDEC19560B1;
+	Mon, 30 Mar 2026 11:35:20 +0000 (UTC)
+Received: from yiche-laptop.redhat.com (unknown [10.72.112.165])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 627951955D84;
+	Mon, 30 Mar 2026 11:35:12 +0000 (UTC)
+From: Yi Chen <yiche@redhat.com>
+To: Chen Yi <yiche@redhat.com>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	Long Xin <lxin@redhat.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: coreteam@netfilter.org,
+	netfilter-devel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH] selftests: netfilter: conntrack_sctp_collision.sh: Introduce SCTP INIT collision test
+Date: Mon, 30 Mar 2026 19:35:09 +0800
+Message-ID: <20260330113509.23990-1-yiche@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000009F:EE_|MN2PR12MB4176:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f58ec1d-4647-452b-8e91-08de8e4f44ab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700016|7416014|1800799024|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	A49Ves1P6d3/qWYS/9VI5XUJzLbs9oTZWdKqbLtMteQX5qkkQP1ZlMReFDNX2TUXg3DrdWaQsJuP87pcmKH7Isp4nQvOq8UOlS3+ee6Qbgl270j0y4X5nFUMY1CoSQYKEaWm6pjUtnkc0UsV2d2OomGLmbxsI5fpKyrzLkcNS79JRpavVeJiUq6uMRy6Evxv6uIAYBjVb2nL4o72gtGX0FVaaZjd1UFKPxaOlCcBy+E5DEpp7fl6iIsu9WEsxs4+LI+OU9k9ll8LY34bqr0WpTAwyUqbeo8k+lv8pFyF5waUcpRkErxGImAnDVjFrf85r18QHzSJREQmx0ZI7KwhNsaMt4AXmWB2oTpP6o47TTBxHAi7avDDlAzdaokoNzjpN0MFJCXQMao/cEhnhRgmdGPUPnKD+c4SqwWHPi6JYa+PvczJU9xMZsLr0qPnAici9eqyhCn/r/Klzr9lURFxkEcziRqwUz2jbkgfzVcrn9fA1czRRQLt1CAdCFP7uWm8dcX3vk1E4o2ejWcC1RqAgE70lPw4cU89VbnMQWB7Vtyj3WKs6YKJpuWhouSRiWXN1r3oUtJksWmbQsHh3kbBdto3DBxWv+X4lf+uyceYXWGzzCS8tLBgkAWXTdKs0shrU7YohnomaXRgEqI1BXV7k98LE95AUsYIWit86Zxm+43moQhrXBH1vUhmWXo5B3DMUpiFLwHulIdM0S4IXE7AWAMhMDVI9hc2Ze8anEkqFz3+2PftDImBPpRfvEDPQU58E0TyFLPOfpRmQxKAbGUiKw==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700016)(7416014)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	sL703S5rRl+jQh30Wogt+kZNrgnrmaVmIeaDvsH2jX9bYyHlzaWErWdFeIAq3JuEnL4hvkMViKpdWX3PRJfa4EF/kC/zTnINhD/+VtNDZY8B1rShG+hWWT8TCIVSItyx1sF8u6sx3ko3/WjXRjLI8o5MBd3AVu+FrVyYgXgkq7WK2ahYINPixDqJRC+bHjvoUnWf1/k/lzGtSfq5HN+PlXIAmWVnWO6/4thW9f/9qpnZU44zug2N882NHyZOng8271y5V+YTQnjOVOIAfTH8Ikx05Z+8jT19WmmU/9zT/d7q2cK2+aK1u63LBDpfiljwkpmbJscJFJnjacZNLSQiYBd0mpP1cn5vwSMxsqyka7OSADQjyl/mPLSU1WXV09EQBUxDFinDDkG2Y+2Klc8WvIK/OTLG2uQDZ4DJlCEyXSHY8jE9v0NQuGoiPqWkNMzd
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 11:27:03.7100
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f58ec1d-4647-452b-8e91-08de8e4f44ab
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000009F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4176
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
+The existing test covered a scenario where a delayed INIT_ACK chunk
+updates the vtag in conntrack after the association has already been
+established.
 
-Ioana Ciornei <ioana.ciornei@nxp.com> writes:
+A similar issue can occur with a delayed SCTP INIT chunk.
 
-> Add a couple of helpers which can be used by tests which need to run a
-> specific bash command on a different target than the local system, be it
-> either another netns or a remote system accessible through ssh.
->
-> The __run_on() function is passed through $1 the target on which the
-> command should be executed while run_on() is passed the name of the
-> interface that is then used to retrieve the target from the TARGETS
-> array.
->
-> Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-> ---
-> Changes in v4:
-> - reworked the helpers so that no global variable is used and
->   information is passed only through parameters
-> Changes in v3:
-> - s/TARGET/CUR_TARGET
-> - always fallback on running a command locally when either TARGETS is
->   not declared or there is no entry for a specific interface
-> Changes in v2:
-> - patch is new
->
->  tools/testing/selftests/net/lib.sh | 38 ++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->
-> diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-> index b40694573f4c..6c0d613a4de5 100644
-> --- a/tools/testing/selftests/net/lib.sh
-> +++ b/tools/testing/selftests/net/lib.sh
-> @@ -670,3 +670,41 @@ cmd_jq()
->  	# return success only in case of non-empty output
->  	[ ! -z "$output" ]
->  }
-> +
-> +__run_on()
-> +{
-> +	local target=$1; shift
-> +	local type args
-> +
-> +	IFS=':' read -r type args <<< "$target"
-> +
-> +	case "$type" in
-> +	netns)
-> +		# Execute command in network namespace
-> +		# args contains the namespace name
-> +		ip netns exec "$args" "$@"
-> +		;;
-> +	ssh)
-> +		# Execute command via SSH args contains user@host
-> +		ssh -n "$args" "$@"
-> +		;;
-> +	local|*)
-> +		# Execute command locally. This is also the fallback
-> +		# case for when the interface's target is not found in
-> +		# the TARGETS array.
-> +		"$@"
-> +		;;
-> +	esac
-> +}
-> +
-> +run_on()
-> +{
-> +	local iface=$1; shift
-> +	local target="local:"
-> +
-> +	if declare -p TARGETS &>/dev/null; then
-> +		target="${TARGETS[$iface]}"
+Add a new simultaneous-open test case where the client's INIT is
+delayed, allowing conntrack to establish the association based on
+the server-initiated handshake.
 
-So I think Jakub's runs fail because there's a shell export somewhere
-that gets inherited through make to the launched test. I guess it would
-be enough for the test to validate that TARGETS is an array, because
-those don't get inherited.
+When the stale INIT arrives later, it may overwirte the vtag in
+conntrack, causing subsequent SCTP DATA chunks to be considered
+as invalid and then dropped by nft rules matching on ct state invalid.
 
-Is there a reason not to reuse DRIVER_TEST_CONFORMANT as a tell though?
+This test verifies such stale INIT chunks do not corrupt conntrack
+state.
 
-> +	fi
-> +
-> +	__run_on "$target" "$@"
-> +}
+Signed-off-by: Yi Chen <yiche@redhat.com>
+---
+ .../net/netfilter/conntrack_sctp_collision.sh | 84 ++++++++++++++-----
+ 1 file changed, 65 insertions(+), 19 deletions(-)
 
-Does the latter helper need to be in net/lib.sh? Since it uses TARGETS,
-which are a forwarding/lib.sh concept, it seems misplaced there.
+diff --git a/tools/testing/selftests/net/netfilter/conntrack_sctp_collision.sh b/tools/testing/selftests/net/netfilter/conntrack_sctp_collision.sh
+index d860f7d9744b..7f8f1b6b746a 100755
+--- a/tools/testing/selftests/net/netfilter/conntrack_sctp_collision.sh
++++ b/tools/testing/selftests/net/netfilter/conntrack_sctp_collision.sh
+@@ -23,8 +23,19 @@ SERVER_PORT=1234
+ CLIENT_GW="198.51.200.2"
+ SERVER_GW="198.51.100.2"
+ 
++assert_pass()
++{
++	local ret=$?
++	if [ $ret != 0 ]; then
++		echo "FAIL: ${@}"
++		exit $ksft_fail
++	else
++		echo "PASS: ${@}"
++	fi
++}
++
+ # setup the topo
+-setup() {
++topo_setup() {
+ 	setup_ns CLIENT_NS SERVER_NS ROUTER_NS
+ 	ip -n "$SERVER_NS" link add link0 type veth peer name link1 netns "$ROUTER_NS"
+ 	ip -n "$CLIENT_NS" link add link3 type veth peer name link2 netns "$ROUTER_NS"
+@@ -42,21 +53,51 @@ setup() {
+ 	ip -n "$CLIENT_NS" link set link3 up
+ 	ip -n "$CLIENT_NS" addr add $CLIENT_IP/24 dev link3
+ 	ip -n "$CLIENT_NS" route add $SERVER_IP dev link3 via $CLIENT_GW
++}
+ 
+-	# simulate the delay on OVS upcall by setting up a delay for INIT_ACK with
+-	# tc on $SERVER_NS side
+-	tc -n "$SERVER_NS" qdisc add dev link0 root handle 1: htb r2q 64
+-	tc -n "$SERVER_NS" class add dev link0 parent 1: classid 1:1 htb rate 100mbit
+-	tc -n "$SERVER_NS" filter add dev link0 parent 1: protocol ip u32 match ip protocol 132 \
+-		0xff match u8 2 0xff at 32 flowid 1:1
+-	if ! tc -n "$SERVER_NS" qdisc add dev link0 parent 1:1 handle 10: netem delay 1200ms; then
+-		echo "SKIP: Cannot add netem qdisc"
+-		exit $ksft_skip
+-	fi
++conf_delay()
++{
++	# simulate the delay on OVS upcall by setting up a delay for INIT_ACK/INIT with
++	case $1 in
++	"INIT") chunk_type=1
++		# tc on $CLIENT_NS side
++		tc -n "$CLIENT_NS" qdisc add dev link3 root handle 1: htb r2q 64
++		tc -n "$CLIENT_NS" class add dev link3 parent 1: classid 1:1 htb rate 100mbit
++		tc -n "$CLIENT_NS" filter add dev link3 parent 1: protocol ip \
++			u32 match ip protocol 132 0xff match u8 $chunk_type 0xff at 32 flowid 1:1
++		if ! tc -n "$CLIENT_NS" qdisc add dev link3 parent 1:1 handle 10: \
++			netem delay 1200ms; then
++			echo "SKIP: Cannot add netem qdisc"
++			exit $ksft_skip
++		fi
++		;;
++	"INIT_ACK") chunk_type=2
++		# tc on $SERVER_NS side
++		tc -n "$SERVER_NS" qdisc add dev link0 root handle 1: htb r2q 64
++		tc -n "$SERVER_NS" class add dev link0 parent 1: classid 1:1 htb rate 100mbit
++		tc -n "$SERVER_NS" filter add dev link0 parent 1: protocol ip \
++			u32 match ip protocol 132 0xff match u8 $chunk_type 0xff at 32 flowid 1:1
++		if ! tc -n "$SERVER_NS" qdisc add dev link0 parent 1:1 handle 10: \
++			netem delay 1200ms; then
++			echo "SKIP: Cannot add netem qdisc"
++			exit $ksft_skip
++		fi
++		;;
++	esac
+ 
+ 	# simulate the ctstate check on OVS nf_conntrack
+-	ip net exec "$ROUTER_NS" iptables -A FORWARD -m state --state INVALID,UNTRACKED -j DROP
+-	ip net exec "$ROUTER_NS" iptables -A INPUT -p sctp -j DROP
++	ip net exec "$ROUTER_NS" nft -f - <<-EOF
++	table ip t {
++	        chain forward {
++	                type filter hook forward priority filter; policy accept;
++	                meta l4proto { icmp, icmpv6 } accept
++	                ct state new counter accept
++	                ct state established,related counter accept
++	                ct state invalid log flags all counter drop
++	                counter
++	        }
++	}
++	EOF
+ 
+ 	# use a smaller number for assoc's max_retrans to reproduce the issue
+ 	modprobe -q sctp
+@@ -64,8 +105,6 @@ setup() {
+ }
+ 
+ cleanup() {
+-	ip net exec "$CLIENT_NS" pkill sctp_collision >/dev/null 2>&1
+-	ip net exec "$SERVER_NS" pkill sctp_collision >/dev/null 2>&1
+ 	cleanup_all_ns
+ }
+ 
+@@ -81,7 +120,14 @@ do_test() {
+ 
+ # run the test case
+ trap cleanup EXIT
+-setup && \
+-echo "Test for SCTP Collision in nf_conntrack:" && \
+-do_test && echo "PASS!"
+-exit $?
++
++echo "Test for SCTP INIT_ACK Collision in nf_conntrack:"
++topo_setup && conf_delay INIT_ACK
++do_test
++assert_pass "The delayed INIT_ACK chunk did not disrupt sctp ct tracking."
++
++echo "Test for SCTP INIT Collision in nf_conntrack:"
++
++topo_setup && conf_delay INIT
++do_test
++assert_pass "The delayed INIT chunk did not disrupt sctp ct tracking."
+-- 
+2.53.0
+
