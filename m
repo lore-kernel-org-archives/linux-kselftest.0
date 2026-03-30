@@ -1,325 +1,218 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D232D0C89
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 03:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F9C1E8320
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 05:19:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774842976; cv=none; b=frGInUsok1pGqD4ItXlnGpZwMVORTCDdSxaJ/+qds8SKCP+vgY/5/WY70tS1/Q0xt1olLtgkKuOknFIar2L8W7IvWK0xlW3ibhUdFhqmaDQGYl5uWm0YYxmsQD0vhQGI4cshd9qtfgk+ALEC8bLOMHI88YvS3K33VemYOQwFW90=
+	t=1774847990; cv=none; b=IN/f0MHWP5OpZR3VjVMbqJfbrj23Q69tC+naLFCAKVODaf+BdOTFiaO6zCchzad5HW37oxuj6Hw0QIFlhUC9MgJ8zS/HFe+ZbXP30aJwljMW2OHBD+xk4BotET/rlzE9v0bC9m2gQPTcwTLyHXHQ6zPVYKs6ZeA+LMQMxii1POc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774842976; c=relaxed/simple;
-	bh=QDIJJBY/JWaSIdHAzqKdKC9gI44fzZWMWKs3oo+oNFk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KqzYGYijHzQYEuAqVONlZNI+xYWo9TKRvIROPcSEbG7d+TwV3s/eTQRg5sV83Odya44buMFZlNNkzRItaNv2cOMli0VtHXeGdCqySb2LYJjbtpofeAveW4f6dejdB/12aOTs0UPvQz23Bwa0DWh6Fkm5yPdK7DhWgERzJWUcW3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U0z7bYz6; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774847990; c=relaxed/simple;
+	bh=CMRlhF+XecOJLTjjdvxpNhvekD/7EJYbySUXD71PSD8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hHX2okJexogXsPA2l/7/gaPdlN7IqDrdR2AjiQbHoLSMTuBav033Emj5tp3vdtTECSsXDI6AHmwsYOTN9sJ8J14seCm9h7RKtpV2fnTIeD5b+p8KavXPej5g1jMtfVL+5iQWCOcMR8jnb3R8Bisay75l3L1pTU7c0t2mNzhaLPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YrYQd2N6; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qs29ROAt; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0z7bYz6"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b93698bb57aso731681266b.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 20:56:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YrYQd2N6";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qs29ROAt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774847987;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UfzanPImVBxUZYk0hGCed0rensFpBKfhyF013Y1fyMw=;
+	b=YrYQd2N6n7kr3FElBIa+enj4/vUnVXDrEHr/yx2m+LriQISmpKEbjezYSMHgrHZAncdK50
+	1XoKxoa1T2gPRiu9FdYYV6NdfWpTpgXWpdQ9KDlnruGuTqnzzmn7aST8D4MbrNgtVNxzW4
+	F4qvbasm4QbICDljdFb1cQ+c0tSFU3M=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-132-q0MbvOelNQKirxyE46kwBQ-1; Mon, 30 Mar 2026 01:19:46 -0400
+X-MC-Unique: q0MbvOelNQKirxyE46kwBQ-1
+X-Mimecast-MFC-AGG-ID: q0MbvOelNQKirxyE46kwBQ_1774847985
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-35da8eb0553so605946a91.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 22:19:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774842973; x=1775447773; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=E+nQ7slQsK1jiNDcJbDBuWrHyOZmLZbY078gwz1yFBw=;
-        b=U0z7bYz6wLH3+5zuZApoq4ExvxgwYc3WIrX2ciPaWVHgN6tECVu+FgZ5KGFzwaaFhh
-         WM3Z+CgpV17GDDUJ/6zY1EMSjrdqS7xsBQVSxeFg1Sz0qp8o0YMl9xsytlyRy2ezkr9H
-         mBFIub12f+tSTpVNlHi/kDm8NvZ7Jf4qderG323opX0ZJdtAZ/7unmDnGUW6Blr6f8u8
-         rA6xDRIRpJsbNK+zoTaImYC4mXad9PMMrHeaveY1YsKaFvR2TqO6ZkwynaBTANIsh4us
-         W8+v0tcvLVMp1NFNCvWofoxADMSd2gmGw2UtuLKTuJW0BpmPds1TlN5dLtZf7y/IvvSi
-         PPaA==
+        d=redhat.com; s=google; t=1774847985; x=1775452785; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UfzanPImVBxUZYk0hGCed0rensFpBKfhyF013Y1fyMw=;
+        b=Qs29ROAtOCQeqaxnuKSqppfNzt+A9w3NKkK+rkH3RVsPvXB8X5SQ0RmExVMdzd/vg/
+         N0wF1383T3wDnfxavqHthamQIotR6soTGvxXeiRF8ZtjOy3Z9GbpolGkxQm9ZQCa904m
+         FpgDSC9UfUx/Kjvp6T6IZW1cniNcUPB3OdiE5hNM9hUDFhT8YemZoTT/KsUPOYGl6k72
+         +uv4AM451w0QmsnLsZGcNkGxIwybMpLk3VstiBPf7+qOYBKEB03N039/1hLujGAv1Xus
+         ws/8U36nhyi3kq0aosKPePw4o84wPGpTCz5nHAyC2Rf50vBrIWnOQe8zLgMmDo57f6fh
+         SFMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774842973; x=1775447773;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E+nQ7slQsK1jiNDcJbDBuWrHyOZmLZbY078gwz1yFBw=;
-        b=QINW8DThKn70HPuE9XoS+02qpj10JjtZB2tSnlTFn/D+kS93BVNDiybgSgAP6IncOv
-         A8MhRPaPAeDG6vUfyN4h9X1SeBbrP8VNC6uYoTvvCb1xnp8FrrMJRciL2eSejCbEDIVo
-         mTQ/rfo8p3jpY/WnaDtXQfqt12a+u7qh2NejDT/CP+RKzOsMh4aIcjiWz6QiLouSeJ9W
-         PN6unsd5v+d8PdYztAlmVcRe7WecAdSwmsdPlEFhDZ+kSig5UmkCc6RdVRS02xLxTFMA
-         MDu+aS7bfxajUTpyNzjjWrtCRAu2QVAZd4rbuk/Pr12ijacEw756FQLZedeUiDrNqNJm
-         oR7w==
-X-Forwarded-Encrypted: i=1; AJvYcCV6Wm6B1kXQl+kDFwCN1u24iM3QLBUEoFUrHA9zCv03SRLQMssfrVa/mBL5v4YjkQaeCEbNPHdG8do1E34kASw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywH5pwwZwZp5Sw121ZF3qk1FkMeE0qFa2gVFgfdY9oiSOHzexF
-	DtdiamLmA+cUBFlthzohipJQbzqhSUo6lpRfzeAh0Xm0RI8T0Mbf00M6
-X-Gm-Gg: ATEYQzzbKI0GM4uTyDOGVQmIdYJaqfCV2Ns3WIx2F+ZaEiaifT9M3yZdMUeTM9JlHut
-	Ubyy6ZihERDFG4+3o8x1LLJDGqri1ojm2fdWcNft63bQgQcmfCTB3geWOXj3i1iNHYgjMm8b9f8
-	tbYq7pzzzVJcxNkoiNtJbbfMOWYOdAzzybnWNbrDazgcQMc2X+SFVK3tQh62vnCe8/sKbWpXdRD
-	5pQWFgvwMN5W8sUjfxjhdzzv+VKRgHm2ZD1i0RIMMyLHn8nuvD3PBLs8JpB7GEbgsMRIiwSGzub
-	gUCPHe/3r4EdsCx5aWW4lCcw0+eXxzzImXoWrX8TXFdRDvrEfwm1I7t+9H1MpYWSrvWshLZ3uJQ
-	Z+0nRs0xHkjyvZKsaYgXJCA6XUzKQTv12CgBJdITKwFBZieVdevxUKczH3jfgjkY9C1OQZEP0
-X-Received: by 2002:a17:907:980f:b0:b97:81a1:9f38 with SMTP id a640c23a62f3a-b9b51f2240cmr556273766b.16.1774842972643;
-        Sun, 29 Mar 2026 20:56:12 -0700 (PDT)
-Received: from gmail.com ([2a09:bac1:5500::3e5:12])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7b1a5924sm234030566b.32.2026.03.29.20.56.07
+        d=1e100.net; s=20251104; t=1774847985; x=1775452785;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UfzanPImVBxUZYk0hGCed0rensFpBKfhyF013Y1fyMw=;
+        b=kq5aOFkwn3sUSymrH+29ZYYyLLJyXeIh9UQdAuMuvJMFX6SjUgjxnbRMQhFqHGyo13
+         iQH/b1UDtpk5j4WUdjYk/Lp+X/IWGCQ0pFvOVrdoi8X++SNCQa7MC46U3BHcTB9nFv0y
+         KPck4o9g0765VKSG3larSUwg6LU45JK85vCKbXNZ/VPVYvyCsD8yvKUfPf+sg1IVgqKi
+         kobEXyxrGUSj2i67TEZl916SS5m/2CBmKRzJu/6yoxIRlRvUxSzRCDUaSm8bGA+vMHgJ
+         m0JM2oEAaM+IWK3zjQy2KBMQV+txy5304Kho84Cm4VNx5hZQFDh9b5pBffmqnifKjudy
+         fVIw==
+X-Forwarded-Encrypted: i=1; AJvYcCWJXBnfn9MNPEGRgxdEZ0c6umcrHy2XeN6md8aM9GanUZGXHG5n51o5GP2wRTjeZOC6x7/wyOCOCm2m0RhdJdc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywl6Kn8vFreiSwtlmgYSSBH40hLMS9NG7or6cIWaGIojYBMzF5V
+	5jZDkVgOWFNFhY657BZYD3VjDwRkuPpFG80WI4gQSbhPO/oRITPPdlSjLOSjSX7IXbutASQfyyX
+	IQ/zDX6WjQdaWiYInNYqXnRcFQz8UoQxTFOHZB+sQLrhXaw3WjgwF/t5A9vU06MxTRUEGjw==
+X-Gm-Gg: ATEYQzwvqAUvAMEXY/IgJ/h64JcUziw/0vSXp5s4dfHoFJk1xzeC/pe5EvgzPKU73S3
+	2RKqvLNaVfNE5cHezTBGZcibwg8PvYEE2cUdhnWkb6OBNQ3z32YUy51eYaBPYx+LcnhB42WWkdR
+	7ZVjfUkjETsj8pOAnT85LEUdscTL5gXgh7FBon5eCdTBiIBKgaD48m9aAUlFeTv8Z1K+25cZ0th
+	JjysFNkrgU9MBppcP4p0b6aKSg8lRBvOwTCsDDHthmzZfGqRW4RSAbgVJxpcuUQKulB8a9/GibM
+	apesPawVfaF1+Y5KfE41t5NDn873tlN7q+rfiMMNtKnFAZJIOygq02VIkrI8btXfKmlrQ0NI3Qo
+	zsdyp/sEfogaPKKHx5A==
+X-Received: by 2002:a17:90b:528c:b0:35d:9d7b:85ef with SMTP id 98e67ed59e1d1-35d9d7b8852mr4628499a91.6.1774847985103;
+        Sun, 29 Mar 2026 22:19:45 -0700 (PDT)
+X-Received: by 2002:a17:90b:528c:b0:35d:9d7b:85ef with SMTP id 98e67ed59e1d1-35d9d7b8852mr4628484a91.6.1774847984601;
+        Sun, 29 Mar 2026 22:19:44 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35d9bb7cb11sm1720354a91.7.2026.03.29.22.19.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 20:56:11 -0700 (PDT)
-From: Qingfang Deng <dqfext@gmail.com>
-To: Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Felix Maurer <fmaurer@redhat.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-ppp@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Paul Mackerras <paulus@ozlabs.org>
-Subject: [PATCH net-next v7] selftests: net: add tests for PPP
-Date: Mon, 30 Mar 2026 11:55:44 +0800
-Message-ID: <20260330035604.133073-1-dqfext@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Sun, 29 Mar 2026 22:19:43 -0700 (PDT)
+Date: Mon, 30 Mar 2026 13:19:41 +0800
+From: Li Wang <liwang@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	linux-fsdevel@vger.kernel.org
+Cc: rppt@kernel.org, david@kernel.org, ljs@kernel.org,
+	Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
+	mhocko@suse.com, shuah@kernel.org, aubaker@redhat.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/mm: skip hugetlb_dio tests when DIO
+ alignment is incompatible
+Message-ID: <acoH7TALgBmBkk2h@redhat.com>
+References: <20260327120305.58653-1-liwang@redhat.com>
+ <20260327121350.858a127fa49ed6e1eb4a40a7@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260327121350.858a127fa49ed6e1eb4a40a7@linux-foundation.org>
 
-Add ping and iperf3 tests for ppp_async.c and pppoe.c.
+Reply Sashiko comment:
 
-Signed-off-by: Qingfang Deng <dqfext@gmail.com>
----
-v7: repost after 24h
- https://lore.kernel.org/netdev/20260327033438.125135-1-dqfext@gmail.com/
+> https://sashiko.dev/#/patchset/20260327120305.58653-1-liwang@redhat.com
+>
+> > +	if (writesize % dio_align != 0) {
+> +		ksft_test_result_skip("DIO alignment (%u) incompatible with offset %zu\n",
+> +				dio_align, writesize);
+> +		return;
+> +	}
+>
+> Is this alignment check complete? 
+>
+> Direct I/O requires both the transfer length and the memory buffer address
+> to be aligned. Later in this function, start_off is used as the buffer offset:
+> 	buffer = orig_buffer;
+> 	buffer += start_off;
+> If start_off is pagesize / 2 (e.g., 2048) and writesize is pagesize * 3
+> (e.g., 12288), writesize is a multiple of a 4096-byte alignment, so the test
+> is not skipped.
+>
+> However, the memory buffer itself is only 2048-byte aligned. Will the
+> subsequent write() still fail with -EINVAL on 4K-sector devices?
 
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/net/ppp/Makefile      | 15 +++++++
- tools/testing/selftests/net/ppp/config        |  9 ++++
- tools/testing/selftests/net/ppp/ppp_async.sh  | 44 +++++++++++++++++++
- tools/testing/selftests/net/ppp/ppp_common.sh | 44 +++++++++++++++++++
- .../selftests/net/ppp/pppoe-server-options    |  2 +
- tools/testing/selftests/net/ppp/pppoe.sh      | 41 +++++++++++++++++
- 8 files changed, 157 insertions(+)
- create mode 100644 tools/testing/selftests/net/ppp/Makefile
- create mode 100644 tools/testing/selftests/net/ppp/config
- create mode 100755 tools/testing/selftests/net/ppp/ppp_async.sh
- create mode 100644 tools/testing/selftests/net/ppp/ppp_common.sh
- create mode 100644 tools/testing/selftests/net/ppp/pppoe-server-options
- create mode 100755 tools/testing/selftests/net/ppp/pppoe.sh
+TL;DR: Yes, we should do both buffer address and writesize alignment
+       checks to satisfy all FS types.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2ffd9d37d5..b922e154b9e7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21080,6 +21080,7 @@ PPP PROTOCOL DRIVERS AND COMPRESSORS
- L:	linux-ppp@vger.kernel.org
- S:	Orphan
- F:	drivers/net/ppp/ppp_*
-+F:	tools/testing/selftests/net/ppp/
- 
- PPS SUPPORT
- M:	Rodolfo Giometti <giometti@enneenne.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 450f13ba4cca..65f84e8a0cf0 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -78,6 +78,7 @@ TARGETS += net/netfilter
- TARGETS += net/openvswitch
- TARGETS += net/ovpn
- TARGETS += net/packetdrill
-+TARGETS += net/ppp
- TARGETS += net/rds
- TARGETS += net/tcp_ao
- TARGETS += nolibc
-diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
-new file mode 100644
-index 000000000000..b39b0abadde6
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/Makefile
-@@ -0,0 +1,15 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+top_srcdir = ../../../../..
-+
-+TEST_PROGS := \
-+	ppp_async.sh \
-+	pppoe.sh \
-+# end of TEST_PROGS
-+
-+TEST_FILES := \
-+	ppp_common.sh \
-+	pppoe-server-options \
-+# end of TEST_FILES
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
-new file mode 100644
-index 000000000000..b45d25c5b970
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/config
-@@ -0,0 +1,9 @@
-+CONFIG_IPV6=y
-+CONFIG_PACKET=y
-+CONFIG_PPP=m
-+CONFIG_PPP_ASYNC=m
-+CONFIG_PPP_BSDCOMP=m
-+CONFIG_PPP_DEFLATE=m
-+CONFIG_PPPOE=m
-+CONFIG_PPPOE_HASH_BITS_4=y
-+CONFIG_VETH=y
-diff --git a/tools/testing/selftests/net/ppp/ppp_async.sh b/tools/testing/selftests/net/ppp/ppp_async.sh
-new file mode 100755
-index 000000000000..9233dc656678
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/ppp_async.sh
-@@ -0,0 +1,44 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ppp_common.sh
-+
-+# Temporary files for PTY symlinks
-+TTY_DIR=$(mktemp -d /tmp/ppp.XXXXXX)
-+TTY_SERVER="$TTY_DIR"/server
-+TTY_CLIENT="$TTY_DIR"/client
-+
-+# shellcheck disable=SC2329
-+cleanup() {
-+	cleanup_all_ns
-+	[ -n "$SOCAT_PID" ] && kill_process "$SOCAT_PID"
-+	rm -fr "$TTY_DIR"
-+}
-+
-+trap cleanup EXIT
-+
-+require_command socat
-+ppp_common_init
-+modprobe -q ppp_async
-+
-+# Create the virtual serial device
-+socat -d PTY,link="$TTY_SERVER",rawer PTY,link="$TTY_CLIENT",rawer &
-+SOCAT_PID=$!
-+
-+# Wait for symlinks to be created
-+slowwait 5 [ -L "$TTY_SERVER" ]
-+
-+# Start the PPP Server
-+ip netns exec "$NS_SERVER" pppd "$TTY_SERVER" 115200 \
-+	"$IP_SERVER":"$IP_CLIENT" \
-+	local noauth nodefaultroute debug
-+
-+# Start the PPP Client
-+ip netns exec "$NS_CLIENT" pppd "$TTY_CLIENT" 115200 \
-+	local noauth updetach nodefaultroute debug
-+
-+ppp_test_connectivity
-+
-+log_test "PPP async"
-+
-+exit "$EXIT_STATUS"
-diff --git a/tools/testing/selftests/net/ppp/ppp_common.sh b/tools/testing/selftests/net/ppp/ppp_common.sh
-new file mode 100644
-index 000000000000..c72218813f95
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/ppp_common.sh
-@@ -0,0 +1,44 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# shellcheck disable=SC2153
-+
-+source ../lib.sh
-+
-+IP_SERVER="192.168.200.1"
-+IP_CLIENT="192.168.200.2"
-+
-+ppp_common_init() {
-+	# Package requirements
-+	require_command pppd
-+	require_command iperf3
-+
-+	# Check for root privileges
-+	if [ "$(id -u)" -ne 0 ];then
-+		echo "SKIP: Need root privileges"
-+		exit $ksft_skip
-+	fi
-+
-+	# Namespaces
-+	setup_ns NS_SERVER NS_CLIENT
-+}
-+
-+ppp_check_addr() {
-+	dev=$1
-+	addr=$2
-+	ns=$3
-+	ip -netns "$ns" -4 addr show dev "$dev" 2>/dev/null | grep -q "$addr"
-+	return $?
-+}
-+
-+ppp_test_connectivity() {
-+	slowwait 10 ppp_check_addr "ppp0" "$IP_CLIENT" "$NS_CLIENT"
-+
-+	ip netns exec "$NS_CLIENT" ping -c 3 "$IP_SERVER"
-+	check_err $?
-+
-+	ip netns exec "$NS_SERVER" iperf3 -s -1 -D
-+	wait_local_port_listen "$NS_SERVER" 5201 tcp
-+
-+	ip netns exec "$NS_CLIENT" iperf3 -c "$IP_SERVER" -Z -t 2
-+	check_err $?
-+}
-diff --git a/tools/testing/selftests/net/ppp/pppoe-server-options b/tools/testing/selftests/net/ppp/pppoe-server-options
-new file mode 100644
-index 000000000000..66c8c9d319e9
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/pppoe-server-options
-@@ -0,0 +1,2 @@
-+noauth
-+noipdefault
-diff --git a/tools/testing/selftests/net/ppp/pppoe.sh b/tools/testing/selftests/net/ppp/pppoe.sh
-new file mode 100755
-index 000000000000..73e4ea957b43
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/pppoe.sh
-@@ -0,0 +1,41 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ppp_common.sh
-+
-+VETH_SERVER="veth-server"
-+VETH_CLIENT="veth-client"
-+
-+# shellcheck disable=SC2329
-+cleanup() {
-+	cleanup_all_ns
-+}
-+
-+trap cleanup EXIT
-+
-+require_command pppoe-server
-+ppp_common_init
-+modprobe -q pppoe
-+
-+# Create the veth pair
-+ip link add "$VETH_SERVER" type veth peer name "$VETH_CLIENT"
-+ip link set "$VETH_SERVER" netns "$NS_SERVER"
-+ip link set "$VETH_CLIENT" netns "$NS_CLIENT"
-+ip -netns "$NS_SERVER" link set "$VETH_SERVER" up
-+ip -netns "$NS_CLIENT" link set "$VETH_CLIENT" up
-+
-+# Start the PPP Server
-+ip netns exec "$NS_SERVER" pppoe-server -I "$VETH_SERVER" \
-+	-L "$IP_SERVER" -R "$IP_CLIENT" -N 1 -q "$(command -v pppd)" \
-+	-k -O "$(pwd)/pppoe-server-options"
-+
-+# Start the PPP Client
-+ip netns exec "$NS_CLIENT" pppd \
-+	local debug updetach noipdefault noauth nodefaultroute \
-+	plugin pppoe.so nic-"$VETH_CLIENT"
-+
-+ppp_test_connectivity
-+
-+log_test "PPPoE"
-+
-+exit "$EXIT_STATUS"
+Looking at the kernel code: fs/iomap/direct-dio.c, the only alignment
+check there is at line#413, which checks file's pos and write length.
+
+EXT4:
+
+ext4_file_write_iter
+  ext4_dio_write_iter
+    iomap_dio_rw
+      __iomap_dio_rw
+        iomap_dio_iter
+          iomap_dio_bio_iter
+
+  390	static int iomap_dio_bio_iter(struct iomap_iter *iter, struct iomap_dio *dio)
+  391	{
+  		...
+  403
+  404		/*
+  405		 * File systems that write out of place and always allocate new blocks
+  406		 * need each bio to be block aligned as that's the unit of allocation.
+  407		 */
+  408		if (dio->flags & IOMAP_DIO_FSBLOCK_ALIGNED)
+  409			alignment = fs_block_size;
+  410		else
+  411			alignment = bdev_logical_block_size(iomap->bdev);
+  412
+  413		if ((pos | length) & (alignment - 1))
+  414			return -EINVAL;
+  415		...
+
+Sashiko points out the buffer-address should do alignment check as well,
+I firstly suspect it based on the FS extra check before the iomap_dio_rw:
+
+ext4_file_write_iter
+  ext4_dio_write_iter
+    ext4_should_use_dio
+       iov_iter_alignment <--- do buffer/writesize alignment check
+
+  842 unsigned long iov_iter_alignment(const struct iov_iter *i)
+  843 {
+  		...
+  853                 return iov_iter_alignment_iovec(i);
+  		...
+  865 }
+
+  799 static unsigned long iov_iter_alignment_iovec(const struct iov_iter *i)
+  800 {
+  		...
+  809                   res |= (unsigned long)iov->iov_base + skip;
+  812                   res |= len;
+		...
+  818         return res;
+  819 }
+
+But eventually I found that this is only fallback to the buffer I/O
+when the direct I/O is unsupported (go to: ext4_buffered_write_iter).
+This wouldn't happen in the test as it open with O_DIRECT flag.
+
+Then, I turned to look at Btrfs path:
+
+btrfs_file_write_iter
+  btrfs_do_write_iter
+    btrfs_direct_write
+      check_direct_IO <--- do buffer alignment check
+      ...
+      btrfs_dio_write
+        __iomap_dio_rw <--- do samething like ext4
+
+  778 static ssize_t check_direct_IO(struct btrfs_fs_info *fs_info,
+  779                                const struct iov_iter *iter, loff_t offset)
+  780 {
+  781         const u32 blocksize_mask = fs_info->sectorsize - 1;
+  782
+  783         if (offset & blocksize_mask)
+  784                 return -EINVAL;
+  785
+  786         if (iov_iter_alignment(iter) & blocksize_mask)
+  787                 return -EINVAL;
+  788         return 0;
+  789 }
+
+Yes, here I found the evendice that iov_iter_alignment(iter) & blocksize_mask)
+do the alignment check.
+
+Unlike ext4 which never reaches the check for normal files, btrfs always checks
+buffer alignment for every DIO operation. And it's a hard -EINVAL, not a silent
+fallback to buffered I/O.
+
 -- 
-2.43.0
+Regards,
+Li Wang
 
