@@ -1,163 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011063.outbound.protection.outlook.com [52.101.62.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DEA346766;
-	Mon, 30 Mar 2026 19:54:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774900465; cv=none; b=gJEqLAwb0VI//+7PSA9O7XL270ZQEk3WnswsAhzalSoQqlgQYJ7mg2nnAD8vxvqclUH43XQF/3m+9XALXF5H9N7aMZmqerJhpYrwXflNhyPoodTNCx1BEk8v7zPgNwjgVGv0ybuDL/R1fPMGLrNuvi85SDraalTDm1B/bxgXOrY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774900465; c=relaxed/simple;
-	bh=PVggmHFroeTCysyxMzuB1gpR33ZPKG+IwSLIbZBkreE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=NtdJmi9cLT+qJ4CGTTp6h98mokn3Etkn6vCsq9VRc8zypEkJp4iBhPMEtGlmLB/g1cxkE+1rwW7MDJK8R0XDiMKjGFG23kZEuKd5ZuC3pcNN0RQ0qls6ViZMatFv/bB5nCskOdcDdOik0iqP5vqB59+8J0xp8agzBZVEJeJF98Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=mmH6caD6; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A09375F73;
+	Mon, 30 Mar 2026 20:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774901721; cv=fail; b=Z2ZVHbTQItDs18iGdYmYTofJqBe+ErC+14JHqRnAzzZJKA8Gnfmqkeup99VBJHcbz5bqEoNDCI5vC54PvFZGBOwB7pHcFFe70Ysl5xbFB9c171wHinvli3+pmRQx7rWy8OWm+cvhpoGycUgZylU1dIe+ztPBGLfx2Sw69MxVUUw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774901721; c=relaxed/simple;
+	bh=F8VvRIa61ySn53QN4ryRxPf8ipaP5WOXFvDiRiWytsA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KHFRpvVubfqtzWHKVb1aNQ2hnB5EsJ3+Uh5+/khnXCyIxecJaRZY6Ag0234Gp8mL8VqXvhfwDiyVFbfDYMKKI/8HnH4cvyOCzXp8H52g+4af3JT3d/daUJVv6nX3o837IWEMfZnsF96IBJ6zOFzU1Px7JF1SGeDy1XqXALsXFnM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=l+L/EG4M; arc=fail smtp.client-ip=52.101.62.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="mmH6caD6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19772C4CEF7;
-	Mon, 30 Mar 2026 19:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774900464;
-	bh=PVggmHFroeTCysyxMzuB1gpR33ZPKG+IwSLIbZBkreE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mmH6caD6cf5ZzhC0rQz1KMrVf2wx+yEwqntoWzM87S8JUIu+KlW5rT2ui/qXnKvz5
-	 GGCdaqeYY+TcWZ7rJNCO7bjpaNo8naiq2FqdOn63pssh5xZlFSNEP0PUjY8dVIZd9b
-	 ZInP9Szdi2A1JQQXjXLO2fJ1oCYmTHfcC/voVBJQ=
-Date: Mon, 30 Mar 2026 12:54:23 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrea Arcangeli <aarcange@redhat.com>, Andrei Vagin
- <avagin@google.com>, Axel Rasmussen <axelrasmussen@google.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>,
- Harry Yoo <harry.yoo@oracle.com>, Hugh Dickins <hughd@google.com>, James
- Houghton <jthoughton@google.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Michal Hocko
- <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>, Nikita Kalyazin
- <kalyazin@amazon.com>, Oscar Salvador <osalvador@suse.de>, Paolo Bonzini
- <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 00/15] mm, kvm: allow uffd support in guest_memfd
-Message-Id: <20260330125423.90bc3c6b0e9164d19e8a3995@linux-foundation.org>
-In-Reply-To: <20260330101116.1117699-1-rppt@kernel.org>
-References: <20260330101116.1117699-1-rppt@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="l+L/EG4M"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=F2Gc4mHbjYpPoBQcnPKCiaCI6vOXZdf/g4TL6A/SeCZhan5e8/fk6yi1MHDpFCumTzYd/Z7a3A3I2FpjoVIe/SKpqU2+YcKouFxfl24aVcNR9OleEl/Nkf41yrWAKk9fBCYRX2kWSf7YRPgCtfbz/KIXHGBkHA50jnarel+XyjXvtUyTK8a1Tyhm0bADI1vjET4JYA3BHjejR6J+tKamz36lXKa/z/EkM5yOsiDaNzrO+xUkR27qwAEz3+n8BDMyni9hK6IKPx3vZM0sarpBLOkvfYl2o2NWI2PLyOTjX3EbFkoiUWErLX15FZGxtwaUCHGFSbcMV84gh1sUzlDU4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F8VvRIa61ySn53QN4ryRxPf8ipaP5WOXFvDiRiWytsA=;
+ b=lavlHhEXtBa5oijpdOTaRnAvDjRjvKzMM70uzOU5hphHPLoUlqWicju0a0LiV5GSC7Zz8VPSFouUkXNepKwkg/RvCOOtnpqRPJDBzeX8oA9sJ215Iq5FWIb/fFoUfkHR5mz4YtHM1+U9nuqiWeGY5P63Gce6T10YUanvvvUERpDsWU1JhMwX3X7kz/z8yKEOpm5bF1DTYWKEuCTTvYXcOSjDeiELU+2bDCY+Gz6MNk6i0MoiI27oVn1R+L0dizpGmxLXTWOtNQjI66JBzCsZ6EHzHh7XobQeWFvVGEWn1lAM0w8YGXVloygUwHm+xemRDgj2Mfl5x6SqsgCvpLM6+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F8VvRIa61ySn53QN4ryRxPf8ipaP5WOXFvDiRiWytsA=;
+ b=l+L/EG4MFNf2fy2+aEbI1w0Jcni90Yf0R0oTv29+RDCsoBfiYXnwYD4CB9b+6n4CGkNeOmVOh7OPa3w7QoZ5fGkFxaq+zFrWFMyU7/llCohR0+lh0kBUeh/88N+KITbVrQajy8pjBG7+r3FGYKIqRye8A+qVwZ/yoPgCfbAXtjncGpyzNI6+kQjo4gQP21FmK7z+dL5FoW8ENtACL/OrchSuNLykexAGaGtleChUIalvx1MccAxzf0QrYrTtNlDdwjHyh9x9hiSc4taXE/T/kL1j6Z1W7VqHoUqgv6lgjIswBlwRWYI896Wk4tUCr30rrayaV5MKdjrorNCjfNg7Ug==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA5PPF80B25317E.namprd12.prod.outlook.com
+ (2603:10b6:80f:fc04::8d2) by BL1PR12MB5706.namprd12.prod.outlook.com
+ (2603:10b6:208:385::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Mon, 30 Mar
+ 2026 20:15:11 +0000
+Received: from SA5PPF80B25317E.namprd12.prod.outlook.com
+ ([fe80::e30:d7d3:95f0:78e7]) by SA5PPF80B25317E.namprd12.prod.outlook.com
+ ([fe80::e30:d7d3:95f0:78e7%6]) with mapi id 15.20.9769.014; Mon, 30 Mar 2026
+ 20:15:11 +0000
+From: Rubin Du <rubind@nvidia.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>,
+	Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v10 1/2] selftests/vfio: Add NO_SEND_MSI feature flag and MSI helper macros
+Date: Mon, 30 Mar 2026 13:15:09 -0700
+Message-ID: <20260330201509.598220-1-rubind@nvidia.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <acb-9VOaA6Ld9BdY@google.com>
+References: <acb-9VOaA6Ld9BdY@google.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0218.namprd03.prod.outlook.com
+ (2603:10b6:a03:39f::13) To SA5PPF80B25317E.namprd12.prod.outlook.com
+ (2603:10b6:80f:fc04::8d2)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA5PPF80B25317E:EE_|BL1PR12MB5706:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5490674e-12f2-49c9-8197-08de8e990b93
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	NrHlCRSZg7RxT0bNXt5rOxqZeU9TXf/+4uuz60XIhl5H+c7qVmuRfrAEt6aLSUXiT/NztRCbXrYazo6hiZuEURzQTZJbdP8OIC8RuY9N/g7/xmvrMb9GAb5P+qQLcM4LyfCj2DtM68VzGP0k/7VmagsU9D3Aw71UgrLUxwmmgGSvpnG+pf51a6Ul8H9DMrqa7IpJZMH3Hn6SyRzCZuKqoMjZ0TXa/k3TGKWSyfRcbg/hk7+Id9yI6KKvUlWRTu4f/sx8knpsXyM0OM4V2p0RaDZOUi57jkWdIv+BmP3KlQdxannTZmbHjS3VuAZoQltORb2B2JvZFBBSj2swvIXwmuQ6t8Zs4pre4FkLCggi5FE+vXdOEC/MIotq7eP1oLRQII9nOe5ZSet38Il4UeKfeKHF3JWJZ4OQLVag8zBxWiH8wTV0mBV3hIgPsRdx3GmL4Wvdfu4GazX4bQ5vHyRlCCob67UAMLbWoFjNfacqtDqH9oxy6E/0R7dAi7uL54cdbUp+jQYY8l6VTkk84ey7Ff5pdVj2eg1DTMXvf2LWbDjKHUW4enVVdd4tEjkdYoOpqRvnHtP/k4F2UQhaSdfDTe0FD1bxqDfMLmBRnkzqhdid+n1ruWvNL6AynWyQkG8Do8oLSToSXxzIZSftbJQZcD0W22moujOZ4NPXUDSkpjx5nYVVgm8rG24dQFwsDgKO0pj+Qtofye6rxjBOFBINV4e506OL8rRXFVdktEEczgo=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA5PPF80B25317E.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?CqyzwlYun+TN7+QL4r4vZsXA6wUEmzApz02ykSgq24vkXv+44KBS85opJxuE?=
+ =?us-ascii?Q?Lvu/EOalEcBmapUye/boLQSLhCCpjDtN1Q2fLdtshdkxHyF/puE2VJt7t/fV?=
+ =?us-ascii?Q?GXc8BltRjhnTTy1koqJD6Dzx2D++Dz9/MoILsaVpm5WzRqlBjznWI4auGxUp?=
+ =?us-ascii?Q?xfsSYZYM8dcmxs0D4vYglxoB5RQK79EOrUnaJh15S0LuVCwmnRWjpUUMvIe5?=
+ =?us-ascii?Q?JuPwjyDFI4uHgRpz4gC4+rrELXPJcDtgB26rij98FRdC84jibFfpPj4iGwwK?=
+ =?us-ascii?Q?O1YO9r4ks+49m+pwwN+p0bJuhOikcTxc1qmUDI5XH/O5o/N9cFj/0sqZWiK7?=
+ =?us-ascii?Q?WxXkeIZx3ozE2FgzPq/oQmmj9wVmoVCOBRr4JKFeCvfC4Y5G2ZnKwjp7DNWA?=
+ =?us-ascii?Q?E9W6xputHn2C/ov+HTJcdA37UQ5DuoV7CTzEDw239et6ndVAKVyeowj/ww+Y?=
+ =?us-ascii?Q?bRFI41nVTJ0M8XYizuojDqYFUA13l8wed5sz3pCUkY7dr/JnenoHJsbzV5G/?=
+ =?us-ascii?Q?AaGxTi3Vlll5beJTI1AFC1gfDQgU7PXLBcob7P4yOjDj2hmdKv7+vTz2ZXuS?=
+ =?us-ascii?Q?Y8T1jIjUnXO/3NPbLX7VvYQ5M562TBjz6necho+YdIt5DEvksVTJ1l6f6w9J?=
+ =?us-ascii?Q?51/YENkhmry9/rhCCGJKAywUWoHAiE8xCshv1nMazs7a99SFJvhmcAgYbcfP?=
+ =?us-ascii?Q?dOB4N58Opijcsm7DZC+pMw/t4AJjajfIc3QRB4IDJchol5qfDJvxwf6nY8NQ?=
+ =?us-ascii?Q?1wsx3r9q3msh/jeVhksn8IUwENhfKx7c2sjmWbD5k9R2zHsp5NuXoPcLZdht?=
+ =?us-ascii?Q?Ee+oz7SgoQaJMxyf5vIjHRvsB5nOiIL1z8M8vXBAtudJHQ1ON9u+w1r/tVMD?=
+ =?us-ascii?Q?VZ0BcCh5o83/RpnF6PLTus96AQucJTQnGI2lPgUKi0FdsVRXWL89u7IsLP6H?=
+ =?us-ascii?Q?GnlcDXH84PrDcR6A6hc0P8NRcUzSJgC9N+mlK4/OMtfn5mqZR+E0r+pvv3km?=
+ =?us-ascii?Q?KnRHpG1ALnyuWoT4rFtaOr0H7JU2T1gD/jGVnkCTHjE16/eQius8rVKQsYum?=
+ =?us-ascii?Q?USJz7bDg2Qj2mAIw/Aek3/ljKRFYH85I5U4giCx3PKcpNFdGnkLq844TA9XA?=
+ =?us-ascii?Q?mnwlRYJmp2UsWpVX2O9XupV8N8Cg4fzuDLBLU/RlSmw5/l3l+kLdNZIlzjGq?=
+ =?us-ascii?Q?aiF71PcncxxcYyFbB0yOG9k2sYCr17w0ev3Z9wzpu6NjQK/qXzOVw1SsAIZ1?=
+ =?us-ascii?Q?y1nhHSfSbKIkIf/Kdi0M65MKBiDb3O3lbshu2BBC+ooAucxfh4eVgnQjJ4Xc?=
+ =?us-ascii?Q?iZEY3qDWqRxYQVfFTEaLV3RX8hQyHxvMCtijuczjaRPuQX12klcwX+Lo39ax?=
+ =?us-ascii?Q?DFUrkff2wAVc62wEVs88tWgmhUUkMPKYcMOdleypkH5R/iBGIGOyS9CIE6hk?=
+ =?us-ascii?Q?XLnrftls0DOGTJXMs2MafC/ZzgrzvJxaj0ZITX14GoSIisBez2+EKPAQhevn?=
+ =?us-ascii?Q?RHLPNfn3I8DExdgI3PPj42IlscumPf6tss99eEnus6M4QzgPqxhOW0PO5Qyx?=
+ =?us-ascii?Q?qO69aw2QbcWf536p4aIOoHIGPgug1dTy5JwsLCcJYlZax1Oi2LLt59lFnT/2?=
+ =?us-ascii?Q?OK5f+1RaIHavG3vPxhHygw5eolGRFrATxHnSyNxPBXiyH2WXqo5XREPt2S3I?=
+ =?us-ascii?Q?K+PS9jZXgsXVFAeaviRrsjLdJOqG7FuNE5dnf+DxwMGpGtnldoKIO5ci1D8E?=
+ =?us-ascii?Q?jLjWgZnfPw=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5490674e-12f2-49c9-8197-08de8e990b93
+X-MS-Exchange-CrossTenant-AuthSource: SA5PPF80B25317E.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 20:15:11.0450
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RiUSH34WDOaVLUOcv0V0oijcONtERZR50ol4k/Uhl5ouzEvJbk5hnanqmDXLtGh6CjE0Oj3iLzSvTcfk3i+1Vw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5706
 
-On Mon, 30 Mar 2026 13:11:01 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+On Fri, 27 Mar 2026, David Matlack wrote:
+> I think it may be worthwhile to have the nv_falcon driver still enable
+> at least one MSI or MSI-x vector on the device and set driver->msi.
 
-> These patches enable support for userfaultfd in guest_memfd.
+Enabling MSI/MSI-x on the GPU would require bringing up additional
+GPU components beyond the Falcon microcontroller. I'd prefer to keep
+the driver minimal and avoid pulling in complexity that isn't related
+to exercising the DMA path.
 
-Thanks, I've updated mm.git's mm-unstable branch to this version.  I
-added a little note-to-self to keep tabs on willy's [07/15] comment.
-
-The series seems to be converging nicely.  Several of the patches
-aren't showing R-b/A-b at this time.
-
-I've moved this series even further down-queue, so it's definitely in
-the second-week-of-merge-window batch.  So I'll be looking to move it
-into mm-stable around Monday of that week (Apr 27?).  Four weeks for
-testing, review and little touchups.
-
-> v3 changes:
-> * add fixes from Harry and Andrei
-> * fix handling of WP-only mode for WP_ASYNC contexts in vma_can_userfault()
-> * address David's comments about mfill_get_pmd() and rename it to
->   mfill_establish_pmd()
-> * add VM_WARN()s for unsupported operations (James)
-> * update comments using James' suggestions
-
-Here's how v3 altered mm.git:
-
-
- include/linux/userfaultfd_k.h |    6 +++---
- mm/memory.c                   |    2 +-
- mm/userfaultfd.c              |   12 ++++++++----
- 3 files changed, 12 insertions(+), 8 deletions(-)
-
---- a/include/linux/userfaultfd_k.h~b
-+++ a/include/linux/userfaultfd_k.h
-@@ -96,14 +96,14 @@ struct vm_uffd_ops {
- 	struct folio *(*get_folio_noalloc)(struct inode *inode, pgoff_t pgoff);
- 	/*
- 	 * Called during resolution of UFFDIO_COPY request.
--	 * Should allocate and return a folio or NULL if allocation
--	 * fails.
-+	 * Should allocate and return a folio or NULL if allocation fails.
- 	 */
- 	struct folio *(*alloc_folio)(struct vm_area_struct *vma,
- 				     unsigned long addr);
- 	/*
- 	 * Called during resolution of UFFDIO_COPY request.
--	 * Should lock the folio and add it to VMA's page cache.
-+	 * Should only be called with a folio returned by alloc_folio() above.
-+	 * The folio will be set to locked.
- 	 * Returns 0 on success, error code on failure.
- 	 */
- 	int (*filemap_add)(struct folio *folio, struct vm_area_struct *vma,
---- a/mm/memory.c~b
-+++ a/mm/memory.c
-@@ -5493,7 +5493,7 @@ static vm_fault_t __do_fault(struct vm_f
- 	}
- 
- 	/*
--	 * If this is an userfaultfd trap, process it in advance before
-+	 * If this is a userfault trap, process it in advance before
- 	 * triggering the genuine fault handler.
- 	 */
- 	ret = __do_userfault(vmf);
---- a/mm/userfaultfd.c~b
-+++ a/mm/userfaultfd.c
-@@ -502,7 +502,7 @@ static int __mfill_atomic_pte(struct mfi
- 	} else if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
- 		clear_user_highpage(&folio->page, state->dst_addr);
- 	} else {
--		VM_WARN_ONCE(1, "unknown UFFDIO operation");
-+		VM_WARN_ONCE(1, "Unknown UFFDIO operation, flags: %x", flags);
- 	}
- 
- 	/*
-@@ -612,8 +612,10 @@ static int mfill_atomic_pte_continue(str
- 	struct page *page;
- 	int ret;
- 
--	if (!ops)
-+	if (!ops) {
-+		VM_WARN_ONCE(1, "UFFDIO_CONTINUE for unsupported VMA");
- 		return -EOPNOTSUPP;
-+	}
- 
- 	folio = ops->get_folio_noalloc(inode, pgoff);
- 	/* Our caller expects us to return -EFAULT if we failed to find folio */
-@@ -864,6 +866,7 @@ static __always_inline ssize_t mfill_ato
- 	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE))
- 		return mfill_atomic_pte_zeropage(state);
- 
-+	VM_WARN_ONCE(1, "Unknown UFFDIO operation, flags: %x", flags);
- 	return -EOPNOTSUPP;
- }
- 
-@@ -2044,8 +2047,9 @@ bool vma_can_userfault(struct vm_area_st
- 		return false;
- 
- 	/*
--	 * File backed memory with PTE level mappigns must implement
--	 * ops->get_folio_noalloc()
-+	 * File backed VMAs (except HugeTLB) must implement
-+	 * ops->get_folio_noalloc() because it's required by __do_userfault()
-+	 * in page fault handling.
- 	 */
- 	if (!vma_is_anonymous(vma) && !is_vm_hugetlb_page(vma) &&
- 	    !ops->get_folio_noalloc)
-_
-
+Rubin Du
