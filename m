@@ -1,93 +1,69 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3AF387352
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 07:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9493A7F74;
+	Mon, 30 Mar 2026 07:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774855397; cv=none; b=s5uJnODrYS1Hk82qQw65jkVbD0TWFytj1Mve2zWmFxBPaZZPfmCkBg3ql6vAneeQcJZKFZBDjRN+JishhMFgvEj7vh1Se6qMBa48TacJrX9ujJ0EZdWuUBKCG+SOXD+gk/Uq7/IRF+bPA5AEBZ6UQelrWAb/9HZBZ7cF8ugotxs=
+	t=1774857042; cv=none; b=L4Dx3jLQCInqYWu2r4iG1xVwHe7Vj5m5HSAnpH7FhQ+D5DFqrVAymrfvZXGfhAhBMO9UYzD/HR/r0Ue1apBsoo/ioEpVas4nnbkq2SMe+hEq01Y3UoPCPT562EZqU5azBwo9Uw7mA+urHfeY+3BOhauETy1DNGagxYTaAWrAFGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774855397; c=relaxed/simple;
-	bh=BdSusAkF/oQFRNlMBbzmWyLxgLq1gUDuAB+K4Y2gWQU=;
+	s=arc-20240116; t=1774857042; c=relaxed/simple;
+	bh=PiqY889LgWIFkgy64QEXf0fNl10xIm5k8j8z4gckHog=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mtD/Kpxk1CaScvw0j7R+z+NxyadvvIG3GqXXx8xpv1uVrur604mCMlykRkD/E43dcLPlrcOrBNZelwb9Crl0GKEhKlV8cfmkriGbClqeUmaQee/DiRumXYjuh9PwKd6cC+Zq7kadqoHikPLGfSohLM8IpHlPs+wRAFpvpipCE+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SoRw3OdR; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=o/t8v9A8; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=XSZsND132PrfHodL9y/ta1vYs/ABsD4YDAB0zMPoU1FAEMsmBfPpTqmyJbIeEWLgczRcWme+1ztcpRILO5O5N/E/c0KMb2p05x3l/2uHpkuRv9b9L2Pa+XJuDbroxeFkGymi5OpEGn8J2Jr4FBsK1f/EuauB12KFtzyXCkQ3MJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KPK+V+ee; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SoRw3OdR";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="o/t8v9A8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774855395;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NZ0LQnOR95aHR/QhroiVMVa82mQ7m1GAsbziC8rzFfs=;
-	b=SoRw3OdRKd4H+luoKMfHN3lW90JeoBPlfMgJHUh9TNft2YX+bccmRHA+Bl8lJOgzIeZxUf
-	+ac7roifXB2K0QlM8YMdi3Zes8wBwoKHmLkoNzNdwHc4JwlWUEGexFnzRUisYEgXX9ryyl
-	C/qVVS3ejFADlS5a5A89tfDWWaxyXDs=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-498-1ZKKwLNzN-yp4soB0umNQA-1; Mon, 30 Mar 2026 03:23:13 -0400
-X-MC-Unique: 1ZKKwLNzN-yp4soB0umNQA-1
-X-Mimecast-MFC-AGG-ID: 1ZKKwLNzN-yp4soB0umNQA_1774855393
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-82c38b85c25so7870196b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 00:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774855392; x=1775460192; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZ0LQnOR95aHR/QhroiVMVa82mQ7m1GAsbziC8rzFfs=;
-        b=o/t8v9A8KR68HcG5x2EwxpvqoBw6yf9EgNBwUNc531APA9cqkRPhD3bRfTPQvLPbS9
-         PMAdlZyy1zBQZmIkX5Q9vHpykExjqy4uOd/coc2xESyFP46Wde91mzIx3mFi2+S+aGSq
-         65PGdIcvmIkQeEhjdXfiZs9SCLls2lRt6IQAIbKF2900mo7Flbvw8XowAFfSfNWuMr7X
-         eJo927pNbKcvT/mWjgMdb6nWff5Qjda3vWadtud82EQH4pu+Mg/gOtoiPWPj6V6xiGhf
-         KU+HAzLP7tV4TL5OSh4RtdjDlu8An1DpFSS6YvQSIVe5tDO977l7ZelJObX41GASGmj3
-         J7EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774855392; x=1775460192;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NZ0LQnOR95aHR/QhroiVMVa82mQ7m1GAsbziC8rzFfs=;
-        b=m4Vfqb0+KvXX3yolxNGCpdbY2nVAHu1Iph8Cj+EKJG/ulZHKFh6FDDQTsqlBWnPLBe
-         nU1pFU42XJ6N0vkkjrbI0IfF8h0wnXxzCJXOBXjY3PT6vINO+dwvaKIhy+2xu1En/Emi
-         MBYvq5JF/wwGrP7xG8VHPSWZTLnUFCKomqChEumkycf8T8z+X05zvjhJzLFZrSKTU/G+
-         vJq7gyrVr5DmwYazI9CS0r6G5nYTvCZn2sB4gz55gyQVuTptLPUjR+OBFtTfjsvpR2U+
-         2XNr6SKK83Vu/LqxXfIfC13M9S/8epLVc1cSHqmLsWilQbRZLsvIUh4J18D7mMFCW/0C
-         cklw==
-X-Forwarded-Encrypted: i=1; AJvYcCXMD4eLQaYqLrneJnKncKAze8itkN2sl7IlIwW3xlroGM6XguJhXvB5hUSOSuOwp9jjSCbxYitPcCD5cKrWuPM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywrn/F6XtLFiqa01fHJ330Ra13thmFiSTTMVPXdKZyQcYpx7wK4
-	Jjtyww9K0vrROwJGprrkXgjYL+ZgFfsDZeNIdNhnTBKDoSFDE+00fZmTCyq1r66qhg4gjuC60tS
-	5OrmjUY05eYe7S4VESKJpnqF4TiRJICxDxAHlEW46fyDyMyn7r3EF31Xt+/w0rR/sjXtFSw==
-X-Gm-Gg: ATEYQzyU34+fBW+20+6k27w/mZJxo9hX+kxeQXSUbFdwMVksqGJfdttX8/HZdOsYlLg
-	SnULIztigYJQFJbQjoNUFja7ukNUXJ5UiYJw0i2107pZ0vmB0OeOR9qLNvnjzBZ0gXodIpiYrN7
-	Zvg5JRod5TLbi9EwXoOh4oxIvTwsYkoe4c08uoHNKen9+DZ/By7E8RCFoK3bWZzjL1JSnBsth0+
-	V94MnecEyQkXddJ56n7kFeMTT1o6dDj/LdFqGW1EO2xAt2EwuS4TlN34V+DFPJqGY0ChiDTG0A6
-	ScTDB0UlD1is6N+6Oi4l7m/VQNx3/yTGQKP7nnLP+hLtv+irXzwBhO3wPQuwcNE/+ladataxXsb
-	uQ8nUN8serGKP7sgkiw==
-X-Received: by 2002:a05:6a00:2d01:b0:82a:79b8:2049 with SMTP id d2e1a72fcca58-82c95c21e4fmr10957435b3a.25.1774855392509;
-        Mon, 30 Mar 2026 00:23:12 -0700 (PDT)
-X-Received: by 2002:a05:6a00:2d01:b0:82a:79b8:2049 with SMTP id d2e1a72fcca58-82c95c21e4fmr10957402b3a.25.1774855392034;
-        Mon, 30 Mar 2026 00:23:12 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca85d3a71sm7217393b3a.30.2026.03.30.00.23.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 00:23:11 -0700 (PDT)
-Date: Mon, 30 Mar 2026 15:23:08 +0800
-From: Li Wang <liwang@redhat.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org, rppt@kernel.org, ljs@kernel.org,
-	Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
-	mhocko@suse.com, shuah@kernel.org, aubaker@redhat.com,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/mm: skip hugetlb_dio tests when DIO
- alignment is incompatible
-Message-ID: <acok3JY66OcV0Qab@redhat.com>
-References: <20260330053915.75442-1-liwang@redhat.com>
- <a5b7add7-0507-40c0-a324-81f243ffa261@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KPK+V+ee"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774857040; x=1806393040;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PiqY889LgWIFkgy64QEXf0fNl10xIm5k8j8z4gckHog=;
+  b=KPK+V+ee4XD39KoTlzjnkP8DYv7aTkcJzIsEq1GfpvoMNQJdclOLx8Xx
+   GMaF9IdTHqGcCJcD/Uku6ZCG5CUbq1skFor/wC+q6Mxr4339TboXPhNPf
+   y3X1Z39oh62wk3UKy9wz3429KEyyzm+nMy+MqF8JRmBH7URqKQcS3NGZy
+   IzYTBR/BRV/C7mbdKKWf49GPwcVbUhp4cEecz6hwlnmZS9z2XYgvVbxAf
+   SQYYWLy+TJNZG5leui0co9K6uh5FJgnJwbNsVKjb2vpS7LwGdnJXlPUgR
+   CTudDE8JJjLIc/f4QStsK49j8zR05MRyU+anAp8a1GnB+z0e4kAWef5FV
+   w==;
+X-CSE-ConnectionGUID: r0+1M4wARfCEXk01WAplVw==
+X-CSE-MsgGUID: SdaLfyDbRT2YqQBOBiygdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="86535292"
+X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
+   d="scan'208";a="86535292"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 00:50:40 -0700
+X-CSE-ConnectionGUID: bKF/FAIKQWWW1FZgYCMAFQ==
+X-CSE-MsgGUID: siJjBhNRTiWlFjG6FstUpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
+   d="scan'208";a="263912729"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 30 Mar 2026 00:50:36 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w77OK-000000000pd-3V3D;
+	Mon, 30 Mar 2026 07:50:32 +0000
+Date: Mon, 30 Mar 2026 15:49:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Yosry Ahmed <yosry@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v7 1/9] KVM: x86: Define
+ KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+Message-ID: <202603301501.N2sdlIQ9-lkp@intel.com>
+References: <20260327234023.2659476-2-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,40 +72,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a5b7add7-0507-40c0-a324-81f243ffa261@kernel.org>
+In-Reply-To: <20260327234023.2659476-2-jmattson@google.com>
 
-On Mon, Mar 30, 2026 at 08:02:01AM +0200, David Hildenbrand (Arm) wrote:
+Hi Jim,
 
-> >  	/* Open the file to DIO */
-> 
-> This comment is misleading as we are not opening "the" file, but we create a new one.
-> See below, maybe we should clean that up.
+kernel test robot noticed the following build errors:
 
-+1
+[auto build test ERROR on 3d6cdcc8883b5726513d245eef0e91cabfc397f7]
 
-> >  int main(void)
-> >  {
-> > -	size_t pagesize = 0;
-> > -	int fd;
-> > +	size_t pagesize = psize();
-> > +	unsigned int dio_align = get_dio_alignment();
-> 
-> Both could be const.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jim-Mattson/KVM-x86-Define-KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT/20260328-110805
+base:   3d6cdcc8883b5726513d245eef0e91cabfc397f7
+patch link:    https://lore.kernel.org/r/20260327234023.2659476-2-jmattson%40google.com
+patch subject: [PATCH v7 1/9] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+config: x86_64-randconfig-016-20260330 (https://download.01.org/0day-ci/archive/20260330/202603301501.N2sdlIQ9-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260330/202603301501.N2sdlIQ9-lkp@intel.com/reproduce)
 
-+1
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603301501.N2sdlIQ9-lkp@intel.com/
 
-> Why can't we simply open the file once and pass the fd to run_dio_using_hugetlb()?
-> 
-> fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-> if (fd < 0)
-> 	ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
-> dio_align = get_dio_alignment(fd);
-> if (dio_align <= 0)
-> 	ksft_exit_skip("Unable to obtain DIO alignment: %s\n", strerror(errno));
+All errors (new ones prefixed by >>):
 
-Yes, apparently this is a good suggestion. Thanks!
+   In file included from arch/x86/kvm/svm/svm_onhyperv.c:11:
+   arch/x86/kvm/svm/svm.h: In function 'l2_has_separate_pat':
+>> arch/x86/kvm/svm/svm.h:626:18: error: implicit declaration of function 'kvm_check_has_quirk'; did you mean 'kvm_check_request'? [-Wimplicit-function-declaration]
+     626 |                 !kvm_check_has_quirk(svm->vcpu.kvm,
+         |                  ^~~~~~~~~~~~~~~~~~~
+         |                  kvm_check_request
+   In file included from arch/x86/kvm/svm/svm_ops.h:7,
+                    from arch/x86/kvm/svm/svm_onhyperv.c:12:
+   arch/x86/kvm/x86.h: At top level:
+>> arch/x86/kvm/x86.h:429:20: error: conflicting types for 'kvm_check_has_quirk'; have 'bool(struct kvm *, u64)' {aka '_Bool(struct kvm *, long long unsigned int)'}
+     429 | static inline bool kvm_check_has_quirk(struct kvm *kvm, u64 quirk)
+         |                    ^~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/svm/svm.h:626:18: note: previous implicit declaration of 'kvm_check_has_quirk' with type 'int()'
+     626 |                 !kvm_check_has_quirk(svm->vcpu.kvm,
+         |                  ^~~~~~~~~~~~~~~~~~~
+--
+   In file included from kvm/svm/svm_onhyperv.c:11:
+   kvm/svm/svm.h: In function 'l2_has_separate_pat':
+   kvm/svm/svm.h:626:18: error: implicit declaration of function 'kvm_check_has_quirk'; did you mean 'kvm_check_request'? [-Wimplicit-function-declaration]
+     626 |                 !kvm_check_has_quirk(svm->vcpu.kvm,
+         |                  ^~~~~~~~~~~~~~~~~~~
+         |                  kvm_check_request
+   In file included from kvm/svm/svm_ops.h:7,
+                    from kvm/svm/svm_onhyperv.c:12:
+   arch/x86/kvm/x86.h: At top level:
+>> arch/x86/kvm/x86.h:429:20: error: conflicting types for 'kvm_check_has_quirk'; have 'bool(struct kvm *, u64)' {aka '_Bool(struct kvm *, long long unsigned int)'}
+     429 | static inline bool kvm_check_has_quirk(struct kvm *kvm, u64 quirk)
+         |                    ^~~~~~~~~~~~~~~~~~~
+   kvm/svm/svm.h:626:18: note: previous implicit declaration of 'kvm_check_has_quirk' with type 'int()'
+     626 |                 !kvm_check_has_quirk(svm->vcpu.kvm,
+         |                  ^~~~~~~~~~~~~~~~~~~
+
+
+vim +626 arch/x86/kvm/svm/svm.h
+
+   618	
+   619	static inline bool l2_has_separate_pat(struct vcpu_svm *svm)
+   620	{
+   621		/*
+   622		 * If KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT is disabled while a vCPU
+   623		 * is running, the L2 IA32_PAT semantics for that vCPU are undefined.
+   624		 */
+   625		return nested_npt_enabled(svm) &&
+ > 626			!kvm_check_has_quirk(svm->vcpu.kvm,
+   627					     KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT);
+   628	}
+   629	
 
 -- 
-Regards,
-Li Wang
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
