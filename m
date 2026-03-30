@@ -1,83 +1,325 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E91F1F09A5
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 03:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D232D0C89
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 03:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774840029; cv=none; b=Ieg9JBGj+zFCCeZOtBTV0yNtfGeQoqQ7tr4akP2ra+0KmXJwPXeFXNzxCTWmLG245fe0D+Gay56nAmFLc0EYvdvX3d0JBpkoPdg0YAsXn7BXiRCOQeKF0EeYa2KeNHLKk5Wab/mK3UD3yCo/NIhof4U1yQJhPArngT7YVlmRUNk=
+	t=1774842976; cv=none; b=frGInUsok1pGqD4ItXlnGpZwMVORTCDdSxaJ/+qds8SKCP+vgY/5/WY70tS1/Q0xt1olLtgkKuOknFIar2L8W7IvWK0xlW3ibhUdFhqmaDQGYl5uWm0YYxmsQD0vhQGI4cshd9qtfgk+ALEC8bLOMHI88YvS3K33VemYOQwFW90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774840029; c=relaxed/simple;
-	bh=UalHkVycX+NXGkiL0MweP9opAxL7gDSEqcLiRlLhSqM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UYzuWhKAn84EFGmbNr/7IsIeTGgKx9D/IQ9UOunEl6YOxcmBDqN5411RSNjuT7URseUqC71vMbyfL4LC7liAIF/AL6eD8xBplYlJf4YLfBbiEmjGE9ZTKbYtlZY5MokE14cejgSbWveUhEj0y7KsyTtIEMr9QaCYB3SC0lHlB7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XDyvwwml; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774842976; c=relaxed/simple;
+	bh=QDIJJBY/JWaSIdHAzqKdKC9gI44fzZWMWKs3oo+oNFk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KqzYGYijHzQYEuAqVONlZNI+xYWo9TKRvIROPcSEbG7d+TwV3s/eTQRg5sV83Odya44buMFZlNNkzRItaNv2cOMli0VtHXeGdCqySb2LYJjbtpofeAveW4f6dejdB/12aOTs0UPvQz23Bwa0DWh6Fkm5yPdK7DhWgERzJWUcW3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U0z7bYz6; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XDyvwwml"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774840026;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UalHkVycX+NXGkiL0MweP9opAxL7gDSEqcLiRlLhSqM=;
-	b=XDyvwwmlZfGPBfumFMNR2CVyXrjtyNVgJFVMtJnq3L0aFHSuQh+LuuUZN2TDg03dwa8Exm
-	1Tdez0OnntjgvTkKHubNbH9ehZlReMkFpLHO3+TDcG2oliblem1NJnlEGABA32ODhbc0C/
-	SQ2D9YKkJ70TxxnDFRDoH2ohboq3yLY=
-From: Lance Yang <lance.yang@linux.dev>
-To: ziy@nvidia.com
-Cc: willy@infradead.org,
-	songliubraving@fb.com,
-	clm@fb.com,
-	dsterba@suse.com,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	baolin.wang@linux.alibaba.com,
-	Liam.Howlett@oracle.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	linux-btrfs@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0z7bYz6"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b93698bb57aso731681266b.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Mar 2026 20:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774842973; x=1775447773; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E+nQ7slQsK1jiNDcJbDBuWrHyOZmLZbY078gwz1yFBw=;
+        b=U0z7bYz6wLH3+5zuZApoq4ExvxgwYc3WIrX2ciPaWVHgN6tECVu+FgZ5KGFzwaaFhh
+         WM3Z+CgpV17GDDUJ/6zY1EMSjrdqS7xsBQVSxeFg1Sz0qp8o0YMl9xsytlyRy2ezkr9H
+         mBFIub12f+tSTpVNlHi/kDm8NvZ7Jf4qderG323opX0ZJdtAZ/7unmDnGUW6Blr6f8u8
+         rA6xDRIRpJsbNK+zoTaImYC4mXad9PMMrHeaveY1YsKaFvR2TqO6ZkwynaBTANIsh4us
+         W8+v0tcvLVMp1NFNCvWofoxADMSd2gmGw2UtuLKTuJW0BpmPds1TlN5dLtZf7y/IvvSi
+         PPaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774842973; x=1775447773;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E+nQ7slQsK1jiNDcJbDBuWrHyOZmLZbY078gwz1yFBw=;
+        b=QINW8DThKn70HPuE9XoS+02qpj10JjtZB2tSnlTFn/D+kS93BVNDiybgSgAP6IncOv
+         A8MhRPaPAeDG6vUfyN4h9X1SeBbrP8VNC6uYoTvvCb1xnp8FrrMJRciL2eSejCbEDIVo
+         mTQ/rfo8p3jpY/WnaDtXQfqt12a+u7qh2NejDT/CP+RKzOsMh4aIcjiWz6QiLouSeJ9W
+         PN6unsd5v+d8PdYztAlmVcRe7WecAdSwmsdPlEFhDZ+kSig5UmkCc6RdVRS02xLxTFMA
+         MDu+aS7bfxajUTpyNzjjWrtCRAu2QVAZd4rbuk/Pr12ijacEw756FQLZedeUiDrNqNJm
+         oR7w==
+X-Forwarded-Encrypted: i=1; AJvYcCV6Wm6B1kXQl+kDFwCN1u24iM3QLBUEoFUrHA9zCv03SRLQMssfrVa/mBL5v4YjkQaeCEbNPHdG8do1E34kASw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywH5pwwZwZp5Sw121ZF3qk1FkMeE0qFa2gVFgfdY9oiSOHzexF
+	DtdiamLmA+cUBFlthzohipJQbzqhSUo6lpRfzeAh0Xm0RI8T0Mbf00M6
+X-Gm-Gg: ATEYQzzbKI0GM4uTyDOGVQmIdYJaqfCV2Ns3WIx2F+ZaEiaifT9M3yZdMUeTM9JlHut
+	Ubyy6ZihERDFG4+3o8x1LLJDGqri1ojm2fdWcNft63bQgQcmfCTB3geWOXj3i1iNHYgjMm8b9f8
+	tbYq7pzzzVJcxNkoiNtJbbfMOWYOdAzzybnWNbrDazgcQMc2X+SFVK3tQh62vnCe8/sKbWpXdRD
+	5pQWFgvwMN5W8sUjfxjhdzzv+VKRgHm2ZD1i0RIMMyLHn8nuvD3PBLs8JpB7GEbgsMRIiwSGzub
+	gUCPHe/3r4EdsCx5aWW4lCcw0+eXxzzImXoWrX8TXFdRDvrEfwm1I7t+9H1MpYWSrvWshLZ3uJQ
+	Z+0nRs0xHkjyvZKsaYgXJCA6XUzKQTv12CgBJdITKwFBZieVdevxUKczH3jfgjkY9C1OQZEP0
+X-Received: by 2002:a17:907:980f:b0:b97:81a1:9f38 with SMTP id a640c23a62f3a-b9b51f2240cmr556273766b.16.1774842972643;
+        Sun, 29 Mar 2026 20:56:12 -0700 (PDT)
+Received: from gmail.com ([2a09:bac1:5500::3e5:12])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7b1a5924sm234030566b.32.2026.03.29.20.56.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2026 20:56:11 -0700 (PDT)
+From: Qingfang Deng <dqfext@gmail.com>
+To: Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Felix Maurer <fmaurer@redhat.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 04/10] fs: remove nr_thps from struct address_space
-Date: Mon, 30 Mar 2026 11:06:42 +0800
-Message-Id: <20260330030642.46972-1-lance.yang@linux.dev>
-In-Reply-To: <20260327014255.2058916-5-ziy@nvidia.com>
-References: <20260327014255.2058916-5-ziy@nvidia.com>
+	linux-kselftest@vger.kernel.org,
+	linux-ppp@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Paul Mackerras <paulus@ozlabs.org>
+Subject: [PATCH net-next v7] selftests: net: add tests for PPP
+Date: Mon, 30 Mar 2026 11:55:44 +0800
+Message-ID: <20260330035604.133073-1-dqfext@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+Add ping and iperf3 tests for ppp_async.c and pppoe.c.
 
-On Thu, Mar 26, 2026 at 09:42:49PM -0400, Zi Yan wrote:
->filemap_nr_thps*() are removed, the related field, address_space->nr_thps,
->is no longer needed. Remove it.
->
->Signed-off-by: Zi Yan <ziy@nvidia.com>
->---
+Signed-off-by: Qingfang Deng <dqfext@gmail.com>
+---
+v7: repost after 24h
+ https://lore.kernel.org/netdev/20260327033438.125135-1-dqfext@gmail.com/
 
-LGTM.
-Reviewed-by: Lance Yang <lance.yang@linux.dev>
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/net/ppp/Makefile      | 15 +++++++
+ tools/testing/selftests/net/ppp/config        |  9 ++++
+ tools/testing/selftests/net/ppp/ppp_async.sh  | 44 +++++++++++++++++++
+ tools/testing/selftests/net/ppp/ppp_common.sh | 44 +++++++++++++++++++
+ .../selftests/net/ppp/pppoe-server-options    |  2 +
+ tools/testing/selftests/net/ppp/pppoe.sh      | 41 +++++++++++++++++
+ 8 files changed, 157 insertions(+)
+ create mode 100644 tools/testing/selftests/net/ppp/Makefile
+ create mode 100644 tools/testing/selftests/net/ppp/config
+ create mode 100755 tools/testing/selftests/net/ppp/ppp_async.sh
+ create mode 100644 tools/testing/selftests/net/ppp/ppp_common.sh
+ create mode 100644 tools/testing/selftests/net/ppp/pppoe-server-options
+ create mode 100755 tools/testing/selftests/net/ppp/pppoe.sh
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7a2ffd9d37d5..b922e154b9e7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21080,6 +21080,7 @@ PPP PROTOCOL DRIVERS AND COMPRESSORS
+ L:	linux-ppp@vger.kernel.org
+ S:	Orphan
+ F:	drivers/net/ppp/ppp_*
++F:	tools/testing/selftests/net/ppp/
+ 
+ PPS SUPPORT
+ M:	Rodolfo Giometti <giometti@enneenne.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 450f13ba4cca..65f84e8a0cf0 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -78,6 +78,7 @@ TARGETS += net/netfilter
+ TARGETS += net/openvswitch
+ TARGETS += net/ovpn
+ TARGETS += net/packetdrill
++TARGETS += net/ppp
+ TARGETS += net/rds
+ TARGETS += net/tcp_ao
+ TARGETS += nolibc
+diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
+new file mode 100644
+index 000000000000..b39b0abadde6
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/Makefile
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0
++
++top_srcdir = ../../../../..
++
++TEST_PROGS := \
++	ppp_async.sh \
++	pppoe.sh \
++# end of TEST_PROGS
++
++TEST_FILES := \
++	ppp_common.sh \
++	pppoe-server-options \
++# end of TEST_FILES
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
+new file mode 100644
+index 000000000000..b45d25c5b970
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/config
+@@ -0,0 +1,9 @@
++CONFIG_IPV6=y
++CONFIG_PACKET=y
++CONFIG_PPP=m
++CONFIG_PPP_ASYNC=m
++CONFIG_PPP_BSDCOMP=m
++CONFIG_PPP_DEFLATE=m
++CONFIG_PPPOE=m
++CONFIG_PPPOE_HASH_BITS_4=y
++CONFIG_VETH=y
+diff --git a/tools/testing/selftests/net/ppp/ppp_async.sh b/tools/testing/selftests/net/ppp/ppp_async.sh
+new file mode 100755
+index 000000000000..9233dc656678
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/ppp_async.sh
+@@ -0,0 +1,44 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ppp_common.sh
++
++# Temporary files for PTY symlinks
++TTY_DIR=$(mktemp -d /tmp/ppp.XXXXXX)
++TTY_SERVER="$TTY_DIR"/server
++TTY_CLIENT="$TTY_DIR"/client
++
++# shellcheck disable=SC2329
++cleanup() {
++	cleanup_all_ns
++	[ -n "$SOCAT_PID" ] && kill_process "$SOCAT_PID"
++	rm -fr "$TTY_DIR"
++}
++
++trap cleanup EXIT
++
++require_command socat
++ppp_common_init
++modprobe -q ppp_async
++
++# Create the virtual serial device
++socat -d PTY,link="$TTY_SERVER",rawer PTY,link="$TTY_CLIENT",rawer &
++SOCAT_PID=$!
++
++# Wait for symlinks to be created
++slowwait 5 [ -L "$TTY_SERVER" ]
++
++# Start the PPP Server
++ip netns exec "$NS_SERVER" pppd "$TTY_SERVER" 115200 \
++	"$IP_SERVER":"$IP_CLIENT" \
++	local noauth nodefaultroute debug
++
++# Start the PPP Client
++ip netns exec "$NS_CLIENT" pppd "$TTY_CLIENT" 115200 \
++	local noauth updetach nodefaultroute debug
++
++ppp_test_connectivity
++
++log_test "PPP async"
++
++exit "$EXIT_STATUS"
+diff --git a/tools/testing/selftests/net/ppp/ppp_common.sh b/tools/testing/selftests/net/ppp/ppp_common.sh
+new file mode 100644
+index 000000000000..c72218813f95
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/ppp_common.sh
+@@ -0,0 +1,44 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# shellcheck disable=SC2153
++
++source ../lib.sh
++
++IP_SERVER="192.168.200.1"
++IP_CLIENT="192.168.200.2"
++
++ppp_common_init() {
++	# Package requirements
++	require_command pppd
++	require_command iperf3
++
++	# Check for root privileges
++	if [ "$(id -u)" -ne 0 ];then
++		echo "SKIP: Need root privileges"
++		exit $ksft_skip
++	fi
++
++	# Namespaces
++	setup_ns NS_SERVER NS_CLIENT
++}
++
++ppp_check_addr() {
++	dev=$1
++	addr=$2
++	ns=$3
++	ip -netns "$ns" -4 addr show dev "$dev" 2>/dev/null | grep -q "$addr"
++	return $?
++}
++
++ppp_test_connectivity() {
++	slowwait 10 ppp_check_addr "ppp0" "$IP_CLIENT" "$NS_CLIENT"
++
++	ip netns exec "$NS_CLIENT" ping -c 3 "$IP_SERVER"
++	check_err $?
++
++	ip netns exec "$NS_SERVER" iperf3 -s -1 -D
++	wait_local_port_listen "$NS_SERVER" 5201 tcp
++
++	ip netns exec "$NS_CLIENT" iperf3 -c "$IP_SERVER" -Z -t 2
++	check_err $?
++}
+diff --git a/tools/testing/selftests/net/ppp/pppoe-server-options b/tools/testing/selftests/net/ppp/pppoe-server-options
+new file mode 100644
+index 000000000000..66c8c9d319e9
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/pppoe-server-options
+@@ -0,0 +1,2 @@
++noauth
++noipdefault
+diff --git a/tools/testing/selftests/net/ppp/pppoe.sh b/tools/testing/selftests/net/ppp/pppoe.sh
+new file mode 100755
+index 000000000000..73e4ea957b43
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/pppoe.sh
+@@ -0,0 +1,41 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ppp_common.sh
++
++VETH_SERVER="veth-server"
++VETH_CLIENT="veth-client"
++
++# shellcheck disable=SC2329
++cleanup() {
++	cleanup_all_ns
++}
++
++trap cleanup EXIT
++
++require_command pppoe-server
++ppp_common_init
++modprobe -q pppoe
++
++# Create the veth pair
++ip link add "$VETH_SERVER" type veth peer name "$VETH_CLIENT"
++ip link set "$VETH_SERVER" netns "$NS_SERVER"
++ip link set "$VETH_CLIENT" netns "$NS_CLIENT"
++ip -netns "$NS_SERVER" link set "$VETH_SERVER" up
++ip -netns "$NS_CLIENT" link set "$VETH_CLIENT" up
++
++# Start the PPP Server
++ip netns exec "$NS_SERVER" pppoe-server -I "$VETH_SERVER" \
++	-L "$IP_SERVER" -R "$IP_CLIENT" -N 1 -q "$(command -v pppd)" \
++	-k -O "$(pwd)/pppoe-server-options"
++
++# Start the PPP Client
++ip netns exec "$NS_CLIENT" pppd \
++	local debug updetach noipdefault noauth nodefaultroute \
++	plugin pppoe.so nic-"$VETH_CLIENT"
++
++ppp_test_connectivity
++
++log_test "PPPoE"
++
++exit "$EXIT_STATUS"
+-- 
+2.43.0
+
