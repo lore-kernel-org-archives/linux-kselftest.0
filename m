@@ -1,63 +1,63 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D967C3C870C
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 11:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFF93C8728
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 11:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774871118; cv=none; b=uS9MRNmClgMw8meW1Yd+I2mDrvruWSMkzZdOpE8pniGrA/P0RXE6+QbWy58bsTLnem3RCTNvnH3diVzpKBhbAZXlTp4Q8bGRi1fTfwW/ySsqT1HEvBHGjlGejerNyWVsjTuiFJEi+CyEdv5yC5wrTNbV2Dszi9ZrlhINdZKAca8=
+	t=1774871147; cv=none; b=J4a2cQKiJ0rJk4VOvL1YRte4vUb40PYvgwPD36Wen7bvZa9G5DGJLHw2cGnAwhicd2dB35xQDCBQWQ/j3gEfU5oS7SiS7v/Eal7utdaAoNfvP+zRNK/OSoFzRGWe1TElLUXMQk4GnuERocHKKPM1Ej9o71n4MkYM+NI2xtTs8p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774871118; c=relaxed/simple;
-	bh=kycga9i6Vn45DHzFTlgg9Oku8LYokhcIRIuU+jvkYqc=;
+	s=arc-20240116; t=1774871147; c=relaxed/simple;
+	bh=ENYJkWvXLcVtI7Jk9TnX7QADJtn30XJLoRyTZBf96yo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qTby4/D9EyGbIeCl5AWUTM/wiD5DpMnf/erFdI3LJBFEK0KJBAaOItCwNMDCqR27HK9slnVA2Njb3oranw3uFvTOUv02fRQgnf4vJ/hMpM4pc3HFsJ0leJqMqcbWUX89hDkCQ98LgDD5G7k7rDCGIyyhw3WPUS10MElCOtE77/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q9hIlR57; arc=none smtp.client-ip=74.125.82.172
+	 MIME-Version; b=oCVGAFOqu80bzlO9lPns1ITXMKl2hHLlWP9XGIEpXCKHeukggrSqBko9K5UlDvuU2RLt62f6F9Z45yPv735spa2l50qw6UAuzD51lAApyzPB00fN+FaQQzIfLXDSkWICHjss+UWU3b4oQuL5CbnqnJi+zL3lAwwuD2bmnyLrT7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=csz2Yapg; arc=none smtp.client-ip=74.125.82.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q9hIlR57"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2c0c955a481so723461eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 04:45:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="csz2Yapg"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-12a747e7b2fso2019279c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 04:45:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774871116; x=1775475916; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774871145; x=1775475945; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kTACHKzRTTQTHv2BeEVVc+PV7wXJkipQOVm/vndnvSM=;
-        b=Q9hIlR57opwLzxLoGOaNh4LiKBiKNdV44IqEoRdMuyK9MmIv58Tlbr8fxcoXZA8KHk
-         cTh5YniRvEhyEhHgtyetXW+QyAoOGRvX6pTJ66pgIhshkYwyM86yke5foR6ecdMuDCOE
-         CnkSMQnOn4wg9+pgvJg5hoc01+1FtDML7C+9gssrI/vEYkrM8Y30byoq0Z4mBIoMOsnX
-         KtXHRLTwQS7PtLIaa2QGsuOSof5hQ4boXtV5QP/wXRfo6URzKh1oWugkvJ9QzILD4RzM
-         FnZa7hBMLLfI3YUmk6MBfAKXNC0jE6j/VWK/mb9uky91MnvZRPuAP+T9Kk31xczm18ao
-         hZ+Q==
+        bh=MnDbxuScG9Rm/YGh2qPYK61S3SeIJ/p/OHYJTOIzac4=;
+        b=csz2YapgXBdCd1QSpBVbPiyh1Z8pcOHOAezCYSwazGTtMUNhPAGpgezRcwV7WrUbAk
+         1ffqvlWFZ9Le3E126zVCMIkrzIRaKbvN1S/8NLyts1QlQIbp0DSPR10SnirxQ5plA7Q3
+         XOHSwleO+0y36mQf6b8XOvdM5Sl4EdMvWGfkilgZAADybQXBBgaUTLwyjWk+842K1eGE
+         1Pw6ygco4yfpDBCuU4DU7/xUZFzrGeu2k+KWJ+IiHABHtpVxEyAIcsCExnQrfr79cXXD
+         77H/3UumUSmRB3z3QxWbJ9oeCdr+FCWeVIp8dg1Bi8zl/Mb5ZcwqVPE6qebiX0m7qcOE
+         UYvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774871116; x=1775475916;
+        d=1e100.net; s=20251104; t=1774871145; x=1775475945;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=kTACHKzRTTQTHv2BeEVVc+PV7wXJkipQOVm/vndnvSM=;
-        b=RRwfuyZjfBEtYn3F2iHk/xy+VOIpb0tr/Fe16E4AQafis6Gxp1ewK+YUhnK+XWr0Kd
-         /rFvO+/C+NqYsowRqZi40zTh29XLFDo+EkSp223M+LyXXhxHTekXI89VrGyPszy9j3Ld
-         EuCQpTaUL8O3FYbYZzizLeQpYIV+0cQ79jWH7zJ4nZPmyCQ1bWL2P1sOiju434OXJOzu
-         98IxA0std9NlDQ+3vWgDQeQzKnD4v40TK0D9I/ywxapH1DJVnYAMX+sACTDz+S3eRoy0
-         Q4d4pga42zDAteVSPz6NzEm1trlZdaExo4Um5V5uFlc1EX0c+3ZNl1zs7o3JqzmhS8Fd
-         IGrA==
-X-Forwarded-Encrypted: i=1; AJvYcCXw93K7NuR3UTp4DhVwAc9JR+kBcwRfX5HrL+CIOtZM+VTdxSSO0r6CqHFq0dg5cdVCHieABusVcxEyo3dfBc8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPmemocEcQGtWAhY/Y946WyZvYuT7IUHm8rCRs5lwwwpoI0xED
-	SRxF7FiKD5RnLwxV0UWaoLblGIGegIWWwYipYf5/Su9mGZ5eG6iXhldv
-X-Gm-Gg: ATEYQzzbNRSuUkGWaJ3ZQ/CUVuNcDtpvO4B1z3l/EaIhp26KgTqYJCR75tsXH3Nn85i
-	/2h+v5y1Y1LYcw3N9MGt88Fu4YaQ0OBmWL9OJbqRrIXwUkOWTtE0E4c6RvY03XypobkoEA8ctAd
-	aitIFStOKBwX4Kl5BzO5iZ4ESDBpM1Ug5Sn/feUydpJRrGWBGr/CpA0Ucski0/NehYaRfqPk/tO
-	AxeKj8OgfftDXKGLmUbeCLz9qoEW4lD30g491CpdwMPXVBLZuUBOU2H4RnhuV8ETzXTjfYxZegD
-	Qfdwa5ns4C9E7wkC5VdfZ18P9KQK6SJLxBxsBfzHArcpN9R5jv8JsIaeOKHWNg74p8lioAocBFw
-	cf+UJEB1y9Ec4udj77LWw77kp8OR2kspbNYM1+vzqkGWcV56nYONwlG/Rk8T6imthObF/YlM2Z4
-	7OTAyixDuybrgyrUJApHC1Qe27lgFyDVXNVEI=
-X-Received: by 2002:a05:7300:dc90:b0:2c5:a6ce:e534 with SMTP id 5a478bee46e88-2c5a6cef339mr2202718eec.8.1774871115888;
-        Mon, 30 Mar 2026 04:45:15 -0700 (PDT)
+        bh=MnDbxuScG9Rm/YGh2qPYK61S3SeIJ/p/OHYJTOIzac4=;
+        b=Uv90zF2Kh+Wt97Hc3EonLLE+eZPrZpXCboqvfm56PDuXJ9k7EsnYZ6x9nfjmE1lcEP
+         MdMNyDMarb700nWiBfdyk+cDWA2qzgTnrvdMi1oj5RGPDy2L2VgshWS8PnvQcLfD4wue
+         Hllx+zXwRZwWJ8OJk7em+g4tLc0/ISV5Q3SASoSE0+MIdvdavFPBGGCTyiO+Ny5dO0sh
+         UPmHVvgkrxPlwlOfQnt+5AWTULzANqYXn2/mb8cNiTYD36hSwCSHeBqcKomeKZ8Bz5Fd
+         rr5iBGZX2OA6mrRMb0y5mWDe40l44NQNrpBEXRbghtdvckeH4w/RaJkZrb+aUu7ztXOU
+         OpMg==
+X-Forwarded-Encrypted: i=1; AJvYcCWkNaL2CjiDaeVfskqkEOZvfPHl0i1p/G82ju3y8cXnVeRuBqy4hOUDvHKxWpbjbNs10GraSdY2Mi7+uwbkgfM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySWxjCOtUPT3/lDaibqoIhAcZDkFHYRmtMQo4UXFjfjKG1MiRm
+	sS2Al3o0qJqz0rigQ/8xV+SQ+Iklk/LHuQzvw7vaeYTT2F1hfQA0KCRX
+X-Gm-Gg: ATEYQzwboNlPtUr8KCtQR2V8+3zmaDpjHlE0a1Mee7p0zY6b4dfiWjcb4uvgd/+0vhs
+	RJkPDYWpf+U9B4w4t/LoGufK4WZyL71gihi8XbWbqqnE64KqHO93noKMiB6i1HM8dOw+R4El6UB
+	xrJTY39ImnscwvwbUJiAa8UrEro0RXvbqOK2V/QVbRnTma/ukW6cdDfXlkHh+hNsYHTOiwS/O+9
+	iDY4ppkDewnaaOKT6g/iyaeJoO8pl+sREifUx4YsjyWZKCRo/Kx0NN0xu+oi0Htmtd6EMmE9cLL
+	3sI5JhuXGW+uBU2/ITsRa//75FEcCvYfr1eMB4qN20Aq4Jo58CQcDUoxTn74eCPjuewG1yEK4uH
+	R6G2KTqSsNWQz/rA7m2HCwIfa06+Yd5T/U88uoZO45DW1kUhDpPpJKG2m2VXZfvy3uHNZ9GN2w+
+	HrTu1cvY1hzenBRWJZZ2zJdQrz+864JZSMXac=
+X-Received: by 2002:a05:7022:b91:b0:128:e0dc:6428 with SMTP id a92af1059eb24-12ab2897c4emr6271373c88.17.1774871144768;
+        Mon, 30 Mar 2026 04:45:44 -0700 (PDT)
 Received: from localhost.localdomain ([74.48.213.230])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c41c1513sm7056897eec.8.2026.03.30.04.45.09
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12ab97e7a57sm9176288c88.6.2026.03.30.04.45.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 04:45:15 -0700 (PDT)
+        Mon, 30 Mar 2026 04:45:44 -0700 (PDT)
 From: Qiliang Yuan <realwujing@gmail.com>
 To: peterz@infradead.org
 Cc: longman@redhat.com,
@@ -97,12 +97,12 @@ Cc: longman@redhat.com,
 	vincent.guittot@linaro.org,
 	vschneid@redhat.com,
 	ziy@nvidia.com
-Subject: Re: [PATCH 03/15] sched/isolation: Separate housekeeping types in enum hk_type
-Date: Mon, 30 Mar 2026 19:44:48 +0800
-Message-ID: <20260330114448.103086-1-realwujing@gmail.com>
+Subject: Re: [PATCH 06/15] sched/core: Dynamically update scheduler domain housekeeping mask
+Date: Mon, 30 Mar 2026 19:45:16 +0800
+Message-ID: <20260330114516.103451-1-realwujing@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260325135904.GB3738786@noisy.programming.kicks-ass.net>
-References: <20260325135904.GB3738786@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260325140053.GC3738786@noisy.programming.kicks-ass.net>
+References: <20260325140053.GC3738786@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -111,14 +111,16 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 25, 2026 at 02:59:04PM +0100, Peter Zijlstra wrote:
-> What the hell for?
+On Wed, Mar 25, 2026 at 03:00:53PM +0100, Peter Zijlstra wrote:
+> Sched domain boundaries are not static, they are easily changed by 
+> cpuset partition (v1 and v2 both support this).
 
-Direct and to the point. The original intent was to allow for asymmetric 
-isolation (e.g. offloading RCU callbacks while keeping specific timers 
-local for very specialized real-time monitoring).
+You're absolutely right. My description was imprecise. The goal of this 
+patch was to ensure that the housekeeping mask for scheduler domains 
+follows the partition boundaries dynamically as they are resized.
 
-However, I agree that for 99% of use cases, this is unnecessary 
-complexity. In V13, I will consolidate these independent enum types 
-into a unified housekeeping mask to simplify the configuration and 
-reduce the "insane configuration space" you mentioned earlier.
+In V13, I will explicitly integrate the housekeeping update logic 
+directly with `cpuset.cpus.partition` transitions. This way, any change 
+to the isolation level of a partition will automatically update 
+the kernel-internal housekeeping state, avoiding any parallel management 
+logic.
