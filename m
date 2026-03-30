@@ -1,443 +1,138 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013045.outbound.protection.outlook.com [52.101.72.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA304371896;
-	Mon, 30 Mar 2026 15:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D4E40DFC2
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 16:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774884660; cv=fail; b=mrjIobCmRdohv6q3PQzJri8BY4sgiWNNk6YyMAk4dhUwQXLKZ/ni/SamrU3PluE2LcSHFDf0uvuNN8o5+NracaBsIZa3ekMQV2hGUwDNDxkb+NETIoUoyTiEQKj9pdg14by+rggTIXSRhlPm1sHk/AfWMu6F4z9oftQS+Ox0Nd4=
+	t=1774886488; cv=pass; b=s3mrf37/mjl2QfiZMsvFCGeFxWC/FiYGyBV8Q5QDxzmNNDkIhRImBdK3sQJF7vxgp6aM2uiR2pVXu7WcvoBXhkBqE9fYva/iUntcKJbPgjQ4YXLYnuDRCukQSR6c+eMsK3tvIYYYX84tnOLw4bkbvi4AO+eusGKMualwtvvetAU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774884660; c=relaxed/simple;
-	bh=dpq6Kh8S0mv5H6JFaPIDPgOLdiI2iPgNDF8Sf8FQOb0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=J30m4MMdJitD8fusWYN8tTEKtdoEY5c1EYa4r/mgYi1uX8zPhCoK73Q0IrAcIS1PfOmhbydQoSpdqiZqKtt4yuXww7lm5xjV6PvM6h0s0uP0+9CGgYtsEiu37eVWUAP/9ge7cQU1T+8EtWCLu6q7YSJoSDnUQe8VxETQXxfz9so=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=AzaADlpX; arc=fail smtp.client-ip=52.101.72.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1774886488; c=relaxed/simple;
+	bh=SA1vNAl0SIiwT1XVeWiojHnZ7WyhntStWscaAacrolc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SDcr6DwSiq2B14wg/LDfW7A1oEjES1xupBLWYc/CHqxK99ifB6E3NM8k/jOvCgrTup3zIxUYPynUAe1PH6N/dic54kipzvuzeqjiAo++TePqM8PLJUVcSEpNBF/osX0hkmdHkvpU0+BQvwc7W3dcWo5Sd1eVVtsbazwPgZayD2c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=BD80Oi6S; arc=pass smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="AzaADlpX"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iuP985bAZFKQ+0oaJxYaion4xTmhokLM8JPaX6/ZLhwTNpYnShR+j4znRvkDvhYZzQ9i4FKVYYt+dvFk+8NqBhdc9b40Qb8qkBHgX2zIvth34s0EE971G6qqpmpp5algAlNbiQQk5pLEJc199VJhICrP2U5A89P+jOSQ6DZLOPLjOu7+dYyovL/R6pSa7LNDi7ZPgDJ9/rSTA0o4JlmeeGbyzD2mLr6+7JC2knrYxS7KXrNgylWuTSGHfmZjOG739fv86K+SCivduxIEJDSpAKS0DaDuXiPC6Y0ZYysjHuok3q2CVn+1RdyhgKTwhwhlm3nlmRHZ1kcu0rPJJhLDbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bOkJ1OUCnJ9p3wRhlrh3+3UW+GOVlc8PEY7/k3Y2/8g=;
- b=j+K4Hi4aU61rH/NaZYrFKf36dYv3g3TIZxRZ/rNcIztaMvc+OcmtSp02w1yHGUoZfxOnuITTdrl3H4RGZjtKs3BnLCsnrtbbPh44fAo1sk6y/11F93Rt2U4aQipWMqcVAzrE6RtWqpjQgegfdN2pRqiK7exm7rKIuZwyuDSyPqu06lzn3Tl4KLd2AOxVi9rLGUNYmMUEqc8zXywwDuij6zdpKvvthbPcSF6u4/3BLpByF7vGfR93If67A7PvsXskYrEL5iVKhgGo+zT/s4wKJFFQGjhzj9mQybFDpY6EG16Z+NO9zD3OmlD3/dYUqVyJ/cTRSd7UnnPxtTLTfGg0Ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bOkJ1OUCnJ9p3wRhlrh3+3UW+GOVlc8PEY7/k3Y2/8g=;
- b=AzaADlpXrIkeWYFDGd7FXHonJZZiZDWhEr+a5Y372+hv1YmhQ1lfc+FZD7tXotBx6ZFOJlohE3h/MrkVi3MxYEihwDbMJDK6zNzQdcNzEy0PO9yk3ZNuUQkSEYj4q0AEYqQxblTDH3NMgcNCcdfAORphISRLi/dCA3bjwh5obpoy954taPpseaO/UcVLvEb4L2CVBt14wtTlD2J922sbx85+hiMM+f5d2PRoCd4OHg8ME+XbJoolquEvj/DJE1huCta2csL8BI+2V/OWA5Jw8W/0R91pY37O4H0CeiJPpYZ+vVTFtcOeVjaKlLeHEaracLFWik0nbPqxbNWQOsPouw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by VI1PR04MB6975.eurprd04.prod.outlook.com (2603:10a6:803:138::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
- 2026 15:30:55 +0000
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
- 15:30:55 +0000
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	petrm@nvidia.com,
-	willemb@google.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v5 9/9] selftests: drivers: hw: add test for the ethtool standard counters
-Date: Mon, 30 Mar 2026 18:29:33 +0300
-Message-Id: <20260330152933.2195885-10-ioana.ciornei@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260330152933.2195885-1-ioana.ciornei@nxp.com>
-References: <20260330152933.2195885-1-ioana.ciornei@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM0P190CA0005.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:208:190::15) To PAXPR04MB8253.eurprd04.prod.outlook.com
- (2603:10a6:102:1bf::7)
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="BD80Oi6S"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82a7539851fso2105731b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 09:01:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774886486; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZfA8IosFwPXh4kVfZB5Z1/Ka/j0DNfjj5PDS0wBxFDPgd2BexAJ3ipLext1UGn9eUZ
+         IRzRwHL2R+ne+AkGhImwFJ0AZhNxrigEZBHXSxVSWpKlVwYX8ZrGfNKkdZccIgUHI7Z2
+         Gvw81aruDZZTGMCUQSJejSDAh9caB8krzEAJvlfl4dFXDFRnhNZwDjv7oGgSiOP8yon9
+         LsX3JVLbcGW+14ysYs36kRY4mjD82GWwyIIV152UjIl3HxLDu4A/wbf42vncTnxKSzrh
+         ajBXwLlVKE4vLeufdKlgp5Bu75IM/KkQbjQ3Eh/mcnXMmK/+e+A8upq7Z4yrKNQKCdC9
+         vtbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SA1vNAl0SIiwT1XVeWiojHnZ7WyhntStWscaAacrolc=;
+        fh=jkvWqNMK3tgI2i4fADQUVQ7hlklQgQD/9/ew2QRoN50=;
+        b=egddSE0ZRpZ3sAdsMg4zFbuDbAhSYLLRPppzQ7jtMok00sDhR5tIubDsJUn74evmD6
+         peSqXTpjzp6+ki8dznNWTwLCcQVsHcC7jhORBj53eagPbv4V1tjjYvoNATbZgmZ4AYne
+         8RITAeKTREmhgbRz0ivpPeREf22DlgI1TjshAAbuKvP5DKKOhhHDRpJM+I6P91dge0FU
+         t5mAC/H4tadwnh1jXS1p4AUALidKHoSHwVnKZJiGgofpfr6r+3/hZXlURl/Xjdu0SD77
+         WwE0IBzPyNqAwhPvALfCAO/1UYGWo4l8Fp3FW9DRSKrfEjDdSh6ypTPogtqYGVTRZKAv
+         K0Mg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1774886486; x=1775491286; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SA1vNAl0SIiwT1XVeWiojHnZ7WyhntStWscaAacrolc=;
+        b=BD80Oi6SP5173LeDOnYYa1qbXT/P6UXLdu9ixzlIPNQ7QqS6QCXw2ZZ7INhhU3PTZe
+         MhCiJ8YZYOOhnyVeCXK2jY7cYAHZOea5LHTX2BBWbU2VY//gECtzLc8GuwuNpoux9sLR
+         z1AyUN9ry965VA5q5u/Keh0GdzvlnPhhist2O3DwUtHZ5bRMmXV9pDirvwtP2bmKPaGZ
+         WqMtdWw81bBqeSH0SoRUYBRszgCHFy+iKtFnOokpc0AVK03wUepIAO7wj2ElZi73nowv
+         CRGhh5vyH18ffiPSlk7ZRUT2iwkVDXTQ8553NprMlODhdBLi0Z+6Jn1C/WinnaWU1fcK
+         0uTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774886486; x=1775491286;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SA1vNAl0SIiwT1XVeWiojHnZ7WyhntStWscaAacrolc=;
+        b=M74YBFOXxtkf+miWw8xvjBRk4iZnIoVoWrPZLhvjn2UlAH4dkoKvGeC5cGbYbVVV9N
+         LpyJjaaUBvPT1rky86aHJUomnzPxwtHBKJ/pZSw7O1vsOti8RHUE4CKUtHoWTMAZoQIM
+         dNq0KFzXqyERtWrb/fRBJ4fxDn+m1WZFeqEIlVGiUNz7iBbwJM6RRRdc78aqx0eV2UAu
+         JlVsCLW5RqT/JWZhSM0HZ9+Gz7Io4axZfX9PYfwlbeSGibsngl/NDu7WDozo4vQPWXbh
+         BFTAn05YwOuAo5cVt6EfRitlfho7LZVINGlB5kQZSQxVVMrP89Y3VcN8VqaiQnf7SFqx
+         HIKA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsDT2WOQkBsBmdN9wq5dsL64bAr1nvZWjufiNTTpGDrdySLOkjpvpAFO+uZS/bx1PrL+4gVdHeT6r7G2bp03I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQ6LTeAHptlRnHgrUvlSZB74R7IdBBRIbW4HCas5bG3PuADSjx
+	wVbzaW0NJIhEtCPOSegybqL1Gca59cwUnSEnVuneRNAf+1WHa6k2vzOgBGLfb7C7gGVP+faPDQ3
+	wzK1HtrJTzco0N2lD41DJz/oJkp+yaQxGilXIp/QF
+X-Gm-Gg: ATEYQzxCVlGY+6nKkDKIWWdU5QobEJOm0164BCWRdr8Di6wzupyF8VxSh7nXVz0udm5
+	KjkJ/8OwBkueVqYjflrN13WfCg+RmjQaP02aiR1h8U2J4dua5AOYfQ7a7+jIsqOLgDgUMjkPIlO
+	+FE9S+MicopC67JC6K6M6ppTPjCSX2lyDY9M38PCubeb7m1rXu53G5S1xwnXVZz8ifPj/NxhwOM
+	OFW9+Kqox7XW5LiYBQsJyWnXs2pJgs/eJJpGAztvhsBQDWubWyA6GL1PBZSp+MkGA5wJ+Kgb4YI
+	mKmCcj1DuUPAgAfxg8Y=
+X-Received: by 2002:a05:6a00:6c8d:b0:82a:6d7b:cd3e with SMTP id
+ d2e1a72fcca58-82c95e43ea3mr12467518b3a.19.1774886486266; Mon, 30 Mar 2026
+ 09:01:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|VI1PR04MB6975:EE_
-X-MS-Office365-Filtering-Correlation-Id: 330f7c97-71e2-462b-4819-08de8e71557e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|19092799006|376014|7416014|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	VPmza1gZSi5F6XO94eurxBE6WBd3ASejzZTYS4Bj7HQhPTgJyr/ZXPvbnH7kX7d6TcrK+Qxg7dgdeJQRYGdv3hzY/W3wL0Jy8G7+12tUXi4NSLMKH8bKYEQlkx6auUpnF4zqf3GDlDggF0aVVQis1+CpSiwi2yopGcxssCQmvNLTFIMbBHqkKbTuNeDn52GQ0OG9ZVgy+2Bvih2V2u+X/Vf8FVEEqNT007sC3pFM9dBBznCQyeBlt0DGeQhsct8TdaegyYbEJS3S3OfFjIwSeLHe+nNVsBQfhbe2yOTIszy8SY0VdSisgLX1izMctRISqldweq71mhhPdovdySTndt/WMTmLOy3gA5DGwUPv79ordZFvH2d1AiiediD9KkUDwAE46swr6BjARtuI4aUOdcJ515RWdtvUEvhXOOapPUjlxxWyw6nzhG8+ZAv5KTMYHDnEr7kCEVd4Npd7IPjUMzPFlvjqKHs2iptO+aEL93ayq1+EoApBfunBl2m8fQIxDKXtQFvGDAI4hhKDNsBsaVw38rCZEQOPowalXMLAeDKeKofvzvXQOszxiobrLHlUzzMJuOFm+wMu7SrmshzihowrKIu1s56tVIGgBbaYcIkHjYTZiiUY6b3LkPVtqNwnKTidadt+amKzAzoV6DpmlSaZd9oG4sWgrUtjNTgg3VnJ3sYz6VgZDD8ek0/eLwqBq9Y/5Da8J1nuMVF19s+oK7HokJQ7cg39MpwkmZUpNmk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(376014)(7416014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ERsIh66+rE5yWFdWWM5o6xI6Cz1Txy29AewhrFMTHwDaSwHfV37s59zKUNL7?=
- =?us-ascii?Q?cGpHMH7jtMaWofg+Ist5P5SQev0ZGAhM3TGrVEpIVI/TerYvayzghD+3YtG1?=
- =?us-ascii?Q?p0NVCWB6J2j/K+/Hg6hJATOUw+75q3DgsMie4rFc5Gh5CeIVzk+5pZNo3NBx?=
- =?us-ascii?Q?Z9WzExeRBIDk+uAhBp6fO2wk8kheSYsuFdAeZdgM8jEhPAv+ARqG1bKRsczd?=
- =?us-ascii?Q?2dwmHkKHlydbfzYdHUlc9XlwE1ljPHsTA8kYz/FEUEXyrWDQhCiuIa0a0X4a?=
- =?us-ascii?Q?KbcJvFZ2NT8C/XTH/Epr8IUDR9im8loXAUrWXi2FEJvionQkjyJHwV3urPH3?=
- =?us-ascii?Q?PRD6HCDZ8hhDjsLqFnPWcbNh0kx/BKiD2Irz01Xeq22MVHVcGit2d8b7S655?=
- =?us-ascii?Q?wf56a+9nS3AQN2aw2A1K8X16FnjuWVhgrz0xsW7KFlVyedQT/eLyNB7Pg2qq?=
- =?us-ascii?Q?0v7r8x0A2VnprF1d9pC5T603RhzLBow1kYh3mghg5SYYSEvmqHvHe/9Da0g7?=
- =?us-ascii?Q?Ehe5KQqm8c8yVSXRgfB2uTD+V+r6lVBRkL/IWzbHZ4FAZHVvZ0D1+njxqd9R?=
- =?us-ascii?Q?DTbPhqayum6Nb0LLi7/K+Mq8S6eatFM6YOBoM2Ip1nML5sPbbD/C/cR+2IFk?=
- =?us-ascii?Q?KRT4iMqx8V5Up2Zg3J7fBM4MHdOReAqhgUxZmw4QATL0bpUGRU9VDWqmy7+o?=
- =?us-ascii?Q?tz8+fgj8/KqKJdRbhmjer37TZJxTgcI6n+TMWBegwk6votbXhlvWwLyVOWu4?=
- =?us-ascii?Q?ydFXqqtpvw2YRg8w7/uMT9s3+Yr/oWEa6D5ngs/YnIre3ot5uG8Nt3Ag2vl0?=
- =?us-ascii?Q?UYbRTW500Z20GBzwI0jzQKojCk7fMS1kVm658XCPXcsJ6by5a829D88Go5Hj?=
- =?us-ascii?Q?ZUmIk72xK3UganCHeIfEmW2Rcm9qncTc3ZwJbUF+z+2MWXGyfku2zGCO3nCv?=
- =?us-ascii?Q?dZFMRg1b4jdObGXaaqQpHnH/ttdFarLvH9kQ612toNKDSALAHN+BTmHslbnB?=
- =?us-ascii?Q?DQqgqS2mgPCusYjTEFXCU21DIHlFFAMh6LAhiK+WMEJrwk9ecPNXqd/C1TsS?=
- =?us-ascii?Q?OONl1aKJrTAS7itOSU/iD3E0Ipy1KggSll8lEX0xE20b/hfvhlFgbfAPSOAT?=
- =?us-ascii?Q?OyXZMty5U7fxajreK6BrFuBTZRq+TvmMOqVz5zuUmmCTE2hKADhOMypGbifb?=
- =?us-ascii?Q?3/JJulV4I5DwAla/azqEHhK8JxNFi+ptCRK4RvMiP+EHgz3PLG4QTxYaSTHe?=
- =?us-ascii?Q?5NWrzkeV0V0XIEFAL1yaNNQHWlHrWuDqIDpJ9h7uPvg6jx+lfBSoqJVwCgW+?=
- =?us-ascii?Q?PWrJlZZcaFJRy54LKIK9BMcometuwmKFLeQ2hlO+45MJg6UubRTiacuFMRYQ?=
- =?us-ascii?Q?MpX7Tu9Bp/WGbeGyGLxIr7yW1wHAsCK9ZKRqKFV3H49h9NIk+2of1MbZf8Rd?=
- =?us-ascii?Q?2PBm3X74iPNuvUIMlIi8RZF42Tz1QRCe1FzD5yjwQnP0UbdV2FzzP7kf7hJo?=
- =?us-ascii?Q?BMdgMzbTJVKaxxro+iYClT4uhJBvE9Y7h4354nRwSFIxJsTrc3lhgGMVY1km?=
- =?us-ascii?Q?ZeEWl+FrpEb1yhY+MO3tRZ9KV4iseupoSgFgzBK1/Ih5ckb7CoJEBK4nEQYr?=
- =?us-ascii?Q?yBlMyPvlYf+7mBq/Yj3GQbM2A/fk14iyUAVPkjHZtERmlJ7sVisbNDDjOL7B?=
- =?us-ascii?Q?3yDOpIHQSUB0qG9LIdDBnD9a0vcmI8XF0WOpQdNlll/7QcXBUxalDqUpXMUL?=
- =?us-ascii?Q?QiXjp84S1Q=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 330f7c97-71e2-462b-4819-08de8e71557e
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 15:30:55.1194
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: D0KBL9OFMX7l7l56uxjlOoEUhUBC7F2X3jxmjlFaQfAezxMpYbPkCxmBa6TVfyqTsJdtvlF7gMS1CdW2WTQs9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6975
+References: <20260326181701.308275-1-stephen@networkplumber.org>
+ <20260326181701.308275-8-stephen@networkplumber.org> <cf7128a8-80f2-4d4c-8c68-2c9f386cedb2@redhat.com>
+In-Reply-To: <cf7128a8-80f2-4d4c-8c68-2c9f386cedb2@redhat.com>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Mon, 30 Mar 2026 12:01:14 -0400
+X-Gm-Features: AQROBzCnwG59BIciIlocIyIEGszWFfU0bDPY6qm0X28Xi0JW_3MFhh45-jLdDfc
+Message-ID: <CAM0EoMn126L20y4Pw2=6TNOE=Yy0mRPA4TfOC_fGyxJNQTbX+g@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] selftests/tc-testing: Add netem test case
+ exercising loops
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Stephen Hemminger <stephen@networkplumber.org>, netdev@vger.kernel.org, 
+	Victor Nogueira <victor@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, Shuah Khan <shuah@kernel.org>, 
+	William Liu <will@willsroot.io>, Jakub Kicinski <kuba@kernel.org>, 
+	Savino Dicanosa <savy@syst3mfailure.io>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a new selftest - ethtool_std_stats.sh - which validates the
-eth-ctrl, eth-mac and pause standard statistics exported by an
-interface. Collision related eth-mac counters as well as the error ones
-will be checked against zero since that is the most likely correct
-scenario.
+On Mon, Mar 30, 2026 at 4:06=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
+te:
+>
+> Hi,
+>
+> On 3/26/26 7:01 PM, Stephen Hemminger wrote:
+> > From: Victor Nogueira <victor@mojatatu.com>
+> >
+> > Add a netem nested duplicate test case to validate that it won't
+> > cause an infinite loop
+> >
+> > Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> > Acked-by: Stephen Hemminger <stephen@networkplumber.org>
+> > Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+>
+> Apparently the new test does not pass on NIPA:
+>
+> # not ok 364 8c17 - Test netem's recursive duplicate
+> # Value doesn't match: bytes: 294 !=3D 196
+> # Matching against output: {'kind': 'netem', 'handle': '1:', 'root':
+> True, 'refcnt': 2, 'options': {'limit': 1, 'duplicate': {'duplicate': 1,
+> 'correlation': 0}, 'seed': 6495514880116664183, 'ecn': False, 'gap': 0},
+> 'bytes': 196, 'packets': 2, 'drops': 1, 'overlimits': 0, 'requeues': 0,
+> 'backlog': 0, 'qlen': 0}
+>
+> It's not clear to me if the causes is this series or the follow-up. I'm
+> tentatively dropping the latter from PW; let's see how/if TDC is impacted=
+.
 
-The central part of this patch is the traffic_test() function which
-gathers the 'before' counter values, sends a batch of traffic and then
-interrogates again the same counters in order to determine if the delta
-is on target. The function receives an array through which the caller
-can request what counters to be interrogated and, for each of them, what
-is their target delta value.
+We should hold on to Stephen's two patches until the skb bits one goes
+in and settles.
+Stephen's patches change the queue expectation which explains the
+accounting mismatch. Stephen run the tdc tests and fix any changes in
+the accounting...
 
-The output from this selftest looks as follows on a LX2160ARDB board:
-
- $ ./run_kselftest.sh -t drivers/net/hw:ethtool_std_stats.sh
- TAP version 13
- 1..1
- # timeout set to 0
- # selftests: drivers/net/hw: ethtool_std_stats.sh
- # TAP version 13
- # 1..26
- # ok 1 ethtool_std_stats.eth-ctrl-MACControlFramesTransmitted
- # ok 2 ethtool_std_stats.eth-ctrl-MACControlFramesReceived
- # ok 3 ethtool_std_stats.eth-mac-FrameCheckSequenceErrors
- # ok 4 ethtool_std_stats.eth-mac-AlignmentErrors
- # ok 5 ethtool_std_stats.eth-mac-FramesLostDueToIntMACXmitError
- # ok 6 ethtool_std_stats.eth-mac-CarrierSenseErrors # SKIP
- # ok 7 ethtool_std_stats.eth-mac-FramesLostDueToIntMACRcvError
- # ok 8 ethtool_std_stats.eth-mac-InRangeLengthErrors # SKIP
- # ok 9 ethtool_std_stats.eth-mac-OutOfRangeLengthField # SKIP
- # ok 10 ethtool_std_stats.eth-mac-FrameTooLongErrors # SKIP
- # ok 11 ethtool_std_stats.eth-mac-FramesAbortedDueToXSColls # SKIP
- # ok 12 ethtool_std_stats.eth-mac-SingleCollisionFrames # SKIP
- # ok 13 ethtool_std_stats.eth-mac-MultipleCollisionFrames # SKIP
- # ok 14 ethtool_std_stats.eth-mac-FramesWithDeferredXmissions # SKIP
- # ok 15 ethtool_std_stats.eth-mac-LateCollisions # SKIP
- # ok 16 ethtool_std_stats.eth-mac-FramesWithExcessiveDeferral # SKIP
- # ok 17 ethtool_std_stats.eth-mac-BroadcastFramesXmittedOK
- # ok 18 ethtool_std_stats.eth-mac-OctetsTransmittedOK
- # ok 19 ethtool_std_stats.eth-mac-BroadcastFramesReceivedOK
- # ok 20 ethtool_std_stats.eth-mac-OctetsReceivedOK
- # ok 21 ethtool_std_stats.eth-mac-FramesTransmittedOK
- # ok 22 ethtool_std_stats.eth-mac-MulticastFramesXmittedOK
- # ok 23 ethtool_std_stats.eth-mac-FramesReceivedOK
- # ok 24 ethtool_std_stats.eth-mac-MulticastFramesReceivedOK
- # ok 25 ethtool_std_stats.pause-tx_pause_frames
- # ok 26 ethtool_std_stats.pause-rx_pause_frames
- # # 10 skipped test(s) detected.  Consider enabling relevant config options to improve coverage.
- # # Totals: pass:16 fail:0 xfail:0 xpass:0 skip:10 error:0
- ok 1 selftests: drivers/net/hw: ethtool_std_stats.sh
-
-Please note that not all MACs are counting the software injected pause
-frames as real Tx pause. For example, on a LS1028ARDB the selftest
-output will reflect the fact that neither the ENETC MAC, nor the Felix
-switch MAC are able to detect Tx pause frames injected by software.
-
- $ ./run_kselftest.sh -t drivers/net/hw:ethtool_std_stats.sh
- (...)
- # # software sent pause frames not detected
- # ok 25 ethtool_std_stats.pause-tx_pause_frames # XFAIL
- # ok 26 ethtool_std_stats.pause-rx_pause_frames
-
-Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-Acked-by: Petr Machata <petrm@nvidia.com>
----
-Changes in v5:
-- none
-Changes in v4:
-- move to a the KTAP format output by using ktap_helpers.sh
-- update commit message to reflect the current output
-- use DRIVER_TEST_CONFORMANT
-Changes in v3:
-- none
-Changes in v2:
-- Use the new run_on helper
-- No longer checking that each counter has a 1% tolerance against the
-  target. The only upper limit is UINT32_MAX.
-- Check that both the error counters and the collision related ones are
-  zero since this is the most probable scenario (we don't expect errors
-  with the traffic that we are sending).
-- Removed any checks performed on the remot interface counters since
-  that is being used only as a traffic generator.
-
- .../testing/selftests/drivers/net/hw/Makefile |   1 +
- .../drivers/net/hw/ethtool_std_stats.sh       | 206 ++++++++++++++++++
- 2 files changed, 207 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/hw/ethtool_std_stats.sh
-
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 884cc77daeaa..deeca3f8d080 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -26,6 +26,7 @@ TEST_PROGS = \
- 	ethtool_extended_state.sh \
- 	ethtool_mm.sh \
- 	ethtool_rmon.sh \
-+	ethtool_std_stats.sh \
- 	gro_hw.py \
- 	hw_stats_l3.sh \
- 	hw_stats_l3_gre.sh \
-diff --git a/tools/testing/selftests/drivers/net/hw/ethtool_std_stats.sh b/tools/testing/selftests/drivers/net/hw/ethtool_std_stats.sh
-new file mode 100755
-index 000000000000..c085d2a4c989
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/ethtool_std_stats.sh
-@@ -0,0 +1,206 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#shellcheck disable=SC2034 # SC does not see the global variables
-+#shellcheck disable=SC2317,SC2329 # unused functions
-+
-+ALL_TESTS="
-+	test_eth_ctrl_stats
-+	test_eth_mac_stats
-+	test_pause_stats
-+"
-+: "${DRIVER_TEST_CONFORMANT:=yes}"
-+STABLE_MAC_ADDRS=yes
-+NUM_NETIFS=2
-+lib_dir=$(dirname "$0")
-+# shellcheck source=./../../../net/forwarding/lib.sh
-+source "$lib_dir"/../../../net/forwarding/lib.sh
-+# shellcheck source=./../../../kselftest/ktap_helpers.sh
-+source "$lib_dir"/../../../kselftest/ktap_helpers.sh
-+
-+UINT32_MAX=$((2**32 - 1))
-+SUBTESTS=0
-+TEST_NAME=$(basename "$0" .sh)
-+
-+traffic_test()
-+{
-+	local iface=$1; shift
-+	local neigh=$1; shift
-+	local num_tx=$1; shift
-+	local pkt_format="$1"; shift
-+	local -a counters=("$@")
-+	local int grp cnt target exact_check
-+	local before after delta
-+	local num_rx=$((num_tx * 2))
-+	local xfail_message
-+	local src="aggregate"
-+	local i
-+
-+	for i in "${!counters[@]}"; do
-+		read -r int grp cnt target exact_check xfail_message \
-+			<<< "${counters[$i]}"
-+
-+		before[i]=$(ethtool_std_stats_get "$int" "$grp" "$cnt" "$src")
-+	done
-+
-+	# shellcheck disable=SC2086 # needs split options
-+	run_on "$iface" "$MZ" "$iface" -q -c "$num_tx" $pkt_format
-+
-+	# shellcheck disable=SC2086 # needs split options
-+	run_on "$neigh" "$MZ" "$neigh" -q -c "$num_rx" $pkt_format
-+
-+	for i in "${!counters[@]}"; do
-+		read -r int grp cnt target exact_check xfail_message \
-+			<<< "${counters[$i]}"
-+
-+		after[i]=$(ethtool_std_stats_get "$int" "$grp" "$cnt" "$src")
-+		if [[ "${after[$i]}" == "null" ]]; then
-+			ktap_test_skip "$TEST_NAME.$grp-$cnt"
-+			continue;
-+		fi
-+
-+		delta=$((after[i] - before[i]))
-+
-+		if [ "$exact_check" -ne 0 ]; then
-+			[ "$delta" -eq "$target" ]
-+		else
-+			[ "$delta" -ge "$target" ] && \
-+			[ "$delta" -le "$UINT32_MAX" ]
-+		fi
-+		err="$?"
-+
-+		if [[ $err != 0  ]] && [[ -n $xfail_message ]]; then
-+			ktap_print_msg "$xfail_message"
-+			ktap_test_xfail "$TEST_NAME.$grp-$cnt"
-+			continue;
-+		fi
-+
-+		if [[ $err != 0 ]]; then
-+			ktap_print_msg "$grp-$cnt is not valid on $int (expected $target, got $delta)"
-+			ktap_test_fail "$TEST_NAME.$grp-$cnt"
-+		else
-+			ktap_test_pass "$TEST_NAME.$grp-$cnt"
-+		fi
-+	done
-+}
-+
-+test_eth_ctrl_stats()
-+{
-+	local pkt_format="-a own -b bcast 88:08 -p 64"
-+	local num_pkts=1000
-+	local -a counters
-+
-+	counters=("$h1 eth-ctrl MACControlFramesTransmitted $num_pkts 0")
-+	traffic_test "$h1" "$h2" "$num_pkts" "$pkt_format" \
-+		"${counters[@]}"
-+
-+	counters=("$h1 eth-ctrl MACControlFramesReceived $num_pkts 0")
-+	traffic_test "$h2" "$h1" "$num_pkts" "$pkt_format" \
-+		"${counters[@]}"
-+}
-+SUBTESTS=$((SUBTESTS + 2))
-+
-+test_eth_mac_stats()
-+{
-+	local pkt_size=100
-+	local pkt_size_fcs=$((pkt_size + 4))
-+	local bcast_pkt_format="-a own -b bcast -p $pkt_size"
-+	local mcast_pkt_format="-a own -b 01:00:5E:00:00:01 -p $pkt_size"
-+	local num_pkts=2000
-+	local octets=$((pkt_size_fcs * num_pkts))
-+	local -a counters error_cnt collision_cnt
-+
-+	# Error counters should be exactly zero
-+	counters=("$h1 eth-mac FrameCheckSequenceErrors 0 1"
-+		  "$h1 eth-mac AlignmentErrors 0 1"
-+		  "$h1 eth-mac FramesLostDueToIntMACXmitError 0 1"
-+		  "$h1 eth-mac CarrierSenseErrors 0 1"
-+		  "$h1 eth-mac FramesLostDueToIntMACRcvError 0 1"
-+		  "$h1 eth-mac InRangeLengthErrors 0 1"
-+		  "$h1 eth-mac OutOfRangeLengthField 0 1"
-+		  "$h1 eth-mac FrameTooLongErrors 0 1"
-+		  "$h1 eth-mac FramesAbortedDueToXSColls 0 1")
-+	traffic_test "$h1" "$h2" "$num_pkts" "$bcast_pkt_format" \
-+		"${counters[@]}"
-+
-+	# Collision related counters should also be zero
-+	counters=("$h1 eth-mac SingleCollisionFrames 0 1"
-+		  "$h1 eth-mac MultipleCollisionFrames 0 1"
-+		  "$h1 eth-mac FramesWithDeferredXmissions 0 1"
-+		  "$h1 eth-mac LateCollisions 0 1"
-+		  "$h1 eth-mac FramesWithExcessiveDeferral 0 1")
-+	traffic_test "$h1" "$h2" "$num_pkts" "$bcast_pkt_format" \
-+		"${counters[@]}"
-+
-+	counters=("$h1 eth-mac BroadcastFramesXmittedOK $num_pkts 0"
-+		  "$h1 eth-mac OctetsTransmittedOK $octets 0")
-+	traffic_test "$h1" "$h2" "$num_pkts" "$bcast_pkt_format" \
-+		"${counters[@]}"
-+
-+	counters=("$h1 eth-mac BroadcastFramesReceivedOK $num_pkts 0"
-+		  "$h1 eth-mac OctetsReceivedOK $octets 0")
-+	traffic_test "$h2" "$h1" "$num_pkts" "$bcast_pkt_format" \
-+		"${counters[@]}"
-+
-+	counters=("$h1 eth-mac FramesTransmittedOK $num_pkts 0"
-+		  "$h1 eth-mac MulticastFramesXmittedOK $num_pkts 0")
-+	traffic_test "$h1" "$h2" "$num_pkts" "$mcast_pkt_format" \
-+		"${counters[@]}"
-+
-+	counters=("$h1 eth-mac FramesReceivedOK $num_pkts 0"
-+		  "$h1 eth-mac MulticastFramesReceivedOK $num_pkts 0")
-+	traffic_test "$h2" "$h1" "$num_pkts" "$mcast_pkt_format" \
-+		"${counters[@]}"
-+}
-+SUBTESTS=$((SUBTESTS + 22))
-+
-+test_pause_stats()
-+{
-+	local pkt_format="-a own -b 01:80:c2:00:00:01 88:08:00:01:00:01"
-+	local xfail_message="software sent pause frames not detected"
-+	local num_pkts=2000
-+	local -a counters
-+	local int
-+	local i
-+
-+	# Check that there is pause frame support
-+	for ((i = 1; i <= NUM_NETIFS; ++i)); do
-+		int="${NETIFS[p$i]}"
-+		if ! run_on "$int" ethtool -I --json -a "$int" > /dev/null 2>&1; then
-+			ktap_test_skip "$TEST_NAME.tx_pause_frames"
-+			ktap_test_skip "$TEST_NAME.rx_pause_frames"
-+			return
-+		fi
-+	done
-+
-+	counters=("$h1 pause tx_pause_frames $num_pkts 0 $xfail_message")
-+	traffic_test "$h1" "$h2" "$num_pkts" "$pkt_format" \
-+		"${counters[@]}"
-+
-+	counters=("$h1 pause rx_pause_frames $num_pkts 0")
-+	traffic_test "$h2" "$h1" "$num_pkts" "$pkt_format" \
-+		"${counters[@]}"
-+}
-+SUBTESTS=$((SUBTESTS + 2))
-+
-+setup_prepare()
-+{
-+	local iface
-+
-+	h1=${NETIFS[p1]}
-+	h2=${NETIFS[p2]}
-+
-+	h2_mac=$(mac_get "$h2")
-+}
-+
-+ktap_print_header
-+ktap_set_plan $SUBTESTS
-+
-+check_ethtool_counter_group_support
-+trap cleanup EXIT
-+
-+setup_prepare
-+setup_wait
-+
-+tests_run
-+
-+ktap_finished
--- 
-2.25.1
-
+cheers,
+jamal
