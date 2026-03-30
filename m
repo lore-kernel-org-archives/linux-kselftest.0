@@ -1,95 +1,129 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9603B3C01
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 09:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1B23B27FD
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 09:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774861676; cv=none; b=IzS1ktK87gob8LUpIjkC+v+XLLl8x81NPDlPm0gPr562K8rGDJyJuTNdzWzBtWsb1D2aAAGRzQTAV0oAQrh/Ir6Jg344KRO5aS2TnYBuXxUQ2IHI8ZRo5oeYHZZpm+9U0PkVYdqQl03cv/C9dI2MboNQBfRRo8vLlsr2pRv8veo=
+	t=1774862157; cv=none; b=EYQHgZXO7XHwuIEkgVtRyLv0q/4YfDMQB9L5/0X6YWDvhO1HEvXINiWEtqtkZtV5Rgr2f+lCVTouH4TVcv8pOXrGTqCe9rJnVZsG8LLpiH8HV5sNh+rfn24iWlIOC9Smr8c9OkG+AnddOjLjk+QGkoqghuSmrdI5jFTd3lqSmHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774861676; c=relaxed/simple;
-	bh=B6PZfVeG7snpqwW2Dj2BcofsI5G8BWCMHmjYcpSMZ8I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MkZrzxOzj5K65eM2M7RwipdD09LEDmmhytJ4wPJbKyJPldvXAoJO4KkJPZ0CnPMZQLMH+eCvaDxI1OckHhIqSbW4glcrpBDKO8serf4ghD1X6VFtfxg/aSwt+dvItLPqXWG4s8vQqT0koaG6ULiHv03382cO43i/LvtVFt4G+5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wKcebj5x; arc=none smtp.client-ip=91.218.175.180
+	s=arc-20240116; t=1774862157; c=relaxed/simple;
+	bh=AzAa6DQjayThxteHcqdm/tmqzwVZZPl7N5KBVY2xBVM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fAc2dEmWWTNzIw5I7DMB+OhPSktSInGNA58ydH7GaCloStUmYe/0W1Rg+o6nsJam5kH8a6ZLnLIPTgH3L2rimvl1yi63agbKbyNQRgODseQ9hM5/gFO6l8oIfqsUJddlmTLnNxxrdo9jsnq3Hf8hrDpyAkSfH381kupMF63/hz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JlEVi6V9; arc=none smtp.client-ip=91.218.175.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wKcebj5x"
-Message-ID: <4b0e7341-f2e2-4ad2-8c9e-b482a1b1cbfb@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JlEVi6V9"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774861662;
+	t=1774862153;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=eedqsRaw3mwJSZ/9l+mCaxc+9OYTIiN/zRg8cpwfdus=;
-	b=wKcebj5xfXxM1Fw495xOyB2jzCiJKB9ou6uzKzTaLVi9/bz6ODPm2dfB2gI90j2p/qzLPv
-	6BHDPN/DWoFGuFswV1e/BU/ctuwpx5ObQtV/ktCTdan0S29tEqbOFV/B6Eo06i9McyJQB8
-	TE4AWlgw0sHXvx7QGwN9qFajMww6L0Y=
-Date: Mon, 30 Mar 2026 17:07:34 +0800
+	bh=LSCJ0gl8vSa6PI9GtiEGiz02O1vonLLeMqbuDT2/pT0=;
+	b=JlEVi6V9Dvb4mKdK823yLSF2UnR/iHJ0WcmyNTy0zY2Vi0Iw/QhfgPYo49r/guOUtqs07o
+	2wEfzceNfeC0ZghYSXatqvUiQtxgYTkFjR+fQdkCMeaKASv6tP9fKcmehrrBDbe60u65DD
+	rd2PAY99ZUhzsT3Xo99AG1Jk0KJicfE=
+From: Lance Yang <lance.yang@linux.dev>
+To: ziy@nvidia.com
+Cc: willy@infradead.org,
+	songliubraving@fb.com,
+	clm@fb.com,
+	dsterba@suse.com,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	Liam.Howlett@oracle.com,
+	npache@redhat.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	baohua@kernel.org,
+	lance.yang@linux.dev,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 06/10] mm/huge_memory: remove folio split check for READ_ONLY_THP_FOR_FS
+Date: Mon, 30 Mar 2026 17:15:36 +0800
+Message-Id: <20260330091536.20015-1-lance.yang@linux.dev>
+In-Reply-To: <20260327014255.2058916-7-ziy@nvidia.com>
+References: <20260327014255.2058916-7-ziy@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
- non-IBT JITs
-Content-Language: en-US
-To: Takeru Hayasaka <hayatake396@gmail.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>
-References: <20260327141616.1961457-1-hayatake396@gmail.com>
- <20260327141616.1961457-2-hayatake396@gmail.com>
- <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
- <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
- <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
- <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
- <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com>
- <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
- <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
- <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 28/3/26 00:30, Takeru Hayasaka wrote:
->> see how cilium did it. with pwru tool, etc.
+
+On Thu, Mar 26, 2026 at 09:42:51PM -0400, Zi Yan wrote:
+>Without READ_ONLY_THP_FOR_FS, large file-backed folios cannot be created by
+>a FS without large folio support. The check is no longer needed.
+>
+>Signed-off-by: Zi Yan <ziy@nvidia.com>
+>---
+> mm/huge_memory.c | 22 ----------------------
+> 1 file changed, 22 deletions(-)
+>
+>diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>index 1da1467328a3..30eddcbf86f1 100644
+>--- a/mm/huge_memory.c
+>+++ b/mm/huge_memory.c
+>@@ -3732,28 +3732,6 @@ int folio_check_splittable(struct folio *folio, unsigned int new_order,
+> 		/* order-1 is not supported for anonymous THP. */
+> 		if (new_order == 1)
+> 			return -EINVAL;
+
+While you're at it, could we also collapse this block above into a
+single condition:
+
+	/* order-1 is not supported for anonymous THP. */
+	if (folio_test_anon(folio) && new_order == 1)
+		return -EINVAL;
+
+Just saying. LGTM.
+
+Reviewed-by: Lance Yang <lance.yang@linux.dev>
+
+
+>-	} else if (split_type == SPLIT_TYPE_NON_UNIFORM || new_order) {
+>-		if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
+>-		    !mapping_large_folio_support(folio->mapping)) {
+>-			/*
+>-			 * We can always split a folio down to a single page
+>-			 * (new_order == 0) uniformly.
+>-			 *
+>-			 * For any other scenario
+>-			 *   a) uniform split targeting a large folio
+>-			 *      (new_order > 0)
+>-			 *   b) any non-uniform split
+>-			 * we must confirm that the file system supports large
+>-			 * folios.
+>-			 *
+>-			 * Note that we might still have THPs in such
+>-			 * mappings, which is created from khugepaged when
+>-			 * CONFIG_READ_ONLY_THP_FOR_FS is enabled. But in that
+>-			 * case, the mapping does not actually support large
+>-			 * folios properly.
+>-			 */
+>-			return -EINVAL;
+>-		}
+> 	}
 > 
-> Thank you for the suggestion.
-> As for pwru, I had thought it was not able to capture packet data such as pcap,
-> and understood it more as a tool to trace where a specific packet
-> enters the processing path and how it is handled.
-> 
-> For example, in an environment where systems are already
-> interconnected and running, I sometimes want to capture the actual
-> packets being sent for real processing.
-> On the other hand, if the goal is simply to observe processing safely
-> in a development environment, I think tools such as ipftrace2 or pwru
-> can be very useful.
-> 
-
-Sounds like you are developing/maintaining an XDP project.
-
-If so, and the kernel carries the patches in
-https://lore.kernel.org/all/20230912150442.2009-1-hffilwlqm@gmail.com/,
-recommend modifying the XDP project using dispatcher like libxdp [1].
-Then, you are able to trace the subprogs which aim to run tail calls;
-meanwhile, you are able to filter packets using pcap-filter, and to
-output packets using bpf_xdp_output() helper.
-
-[1]
-https://github.com/xdp-project/xdp-tools/blob/main/lib/libxdp/xdp-dispatcher.c.in
-
-
-Thanks,
-Leon
-
+> 	/*
