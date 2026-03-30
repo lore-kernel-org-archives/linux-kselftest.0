@@ -1,67 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0911D3BD24D;
-	Mon, 30 Mar 2026 10:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720CD3BB9EE;
+	Mon, 30 Mar 2026 10:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774865494; cv=none; b=dp40z3j7jTlZjoG58LiXndDRsU0TIupl5n2n+MiSpnOl570e97gCsfD8+oh86qixabFW6fk9dPkkVcdDdlDngfbfeeyLKKkHbn4DHWdRHQyWeQTjM6rNP5Jl31D/6h8QYCseYx7MHEKCYtuJe2nHJFrvf+AcRSVq5J8DmTo3F0E=
+	t=1774865500; cv=none; b=Cxz2ylP9OYkNkHuWjZjGdvxMYzYvDJvkWsUwGyHRzqBCHtPN1FTR4KFehtzetNuDrMS+G41r3UJk9rLqy0UT1wSbZi7qFte3OfED11IJs55rHrR3+vo2FG3sGDr7Z/XmjV+sAACCXYVy9ZCrFQaoQCYjpsn8/UZ+tiDaFyGPIAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774865494; c=relaxed/simple;
-	bh=2Qwo3uvG4BlcBg2j7lWvEfKP/WdTuzKegEOP6jT7zlA=;
+	s=arc-20240116; t=1774865500; c=relaxed/simple;
+	bh=VgyPdwYS7n+S8efxkXU85aJ9D+6gFYcP8W3h39W+MKU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r+g5c/MKz/m+yXVoc9a9VWaDvOZzRciPH+I4EJ32F90xhUqACk7Iw7yU2TDLr8oI4vWn65FVyOPemoVNd6rb7jgPLuJ+4bRw9ItwtZm7gd8kgyc+JuFet/cbyigLujXYwBm8KXgmUAPHrLeNLTND3BZd0D8yL0wllp1VBEkBBr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m7mfUpN/; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 MIME-Version; b=IMgWQ9gOHzSXq1vB4RpTYnvziQ8Ucel33q+m1lFvmpYl4g+E6NzuGVnzTcYwuAIA9whUIp6zfgABJtH9WQ+v/2iG6TOu0vIfYu+YRkDnOaKdORMkdfcv1Aca30Wxjj7n38aw0+kJiRRXXHLTGmlGo/0ZKGVF/qssxKC00eRn35M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jcCVqb+T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m7mfUpN/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774865493; x=1806401493;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2Qwo3uvG4BlcBg2j7lWvEfKP/WdTuzKegEOP6jT7zlA=;
-  b=m7mfUpN/o4Nu3aNdb6RK86SA4pcsKcbM7hjch4hsUDW4p9HGRF7+yxME
-   oxZvWzUHsb41z5TXt3M2vHYxe0tLJxJBMxgAXJDuqnC+ggwO/1OFct4yy
-   0F/Ro8ASgVCxelQblNAq4q8gVSToaXnam4TnghsJT4A/QBZY6qc13PX2N
-   +KLwaN7RIx3/Hj9Mjfcukd3MkHmtP4GOXsv+cxMQZiWQjkmvD1MDvhOgV
-   9TSOvzUbRx4fVOVh2aqjRlNO2pMoqNk3nmhRcSmovxxps82QuQ2dUJh2j
-   jxEfAuXbyo6osGIH/Q2Z12/eQOU5u81DbkOuHnORAdCfd+uWATxI66viO
-   Q==;
-X-CSE-ConnectionGUID: C8+s+giSTLu5TXFFSZ5F5w==
-X-CSE-MsgGUID: zfuEydHiQQ2kAME1/DFzRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="75921189"
-X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
-   d="scan'208";a="75921189"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 03:11:32 -0700
-X-CSE-ConnectionGUID: QUjg63azR2qn4fFKmRPPaw==
-X-CSE-MsgGUID: DERAIapcTVGHpQMHZco16A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
-   d="scan'208";a="225913477"
-Received: from spr-duan.bj.intel.com ([172.16.114.123])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 03:11:29 -0700
-From: Zhenzhong Duan <zhenzhong.duan@intel.com>
-To: iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: dwmw2@infradead.org,
-	jgg@ziepe.ca,
-	kevin.tian@intel.com,
-	joro@8bytes.org,
-	will@kernel.org,
-	robin.murphy@arm.com,
-	baolu.lu@linux.intel.com,
-	yi.l.liu@intel.com,
-	Zhenzhong Duan <zhenzhong.duan@intel.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 4/4] iommufd/selftest: Test dirty tracking on PASID
-Date: Mon, 30 Mar 2026 06:11:07 -0400
-Message-ID: <20260330101108.12594-5-zhenzhong.duan@intel.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260330101108.12594-1-zhenzhong.duan@intel.com>
-References: <20260330101108.12594-1-zhenzhong.duan@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcCVqb+T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21855C2BC9E;
+	Mon, 30 Mar 2026 10:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774865500;
+	bh=VgyPdwYS7n+S8efxkXU85aJ9D+6gFYcP8W3h39W+MKU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jcCVqb+Tsz0hlTedYH/gRbksM5Nnphpr0EBdRysH97H/K1awvTX42WX08fkB/ZdZO
+	 Fl0oogUIPE/hdfNGf90ubnBkxN9D6x/Js+vYqmKcd7mHRyROgzTrCkldyaJ8je/xI+
+	 JotXbysOX7USgkkYYzRKgtF2PssPsnlN3x/qihhjReNcJwv5HiEG8zh9xYXEnOQSCw
+	 jdu85w2T5ulnlhIS8yksjVGSRpE6X/q3CZiSiAtYR4vaxgXK4ye27RcnyTMQK2X3dQ
+	 Y+XeHPqiYJCSwDl3L6CKxEU4AF7ssC2Cps7ADIUxZdtvTgHphc0t0epHlHUByKePe4
+	 yWiQWxBFFlZUw==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andrea Arcangeli <aarcange@redhat.com>,
+	Andrei Vagin <avagin@google.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@kernel.org>,
+	Harry Yoo <harry.yoo@oracle.com>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Peter Xu <peterx@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	kvm@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v3 02/15] userfaultfd: introduce struct mfill_state
+Date: Mon, 30 Mar 2026 13:11:03 +0300
+Message-ID: <20260330101116.1117699-3-rppt@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260330101116.1117699-1-rppt@kernel.org>
+References: <20260330101116.1117699-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,54 +69,317 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add test case for dirty tracking on a domain attached to PASID, also
-confirm attachment to PASID fail if device doesn't support dirty tracking.
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
-Reviewed-by: Yi Liu <yi.l.liu@intel.com>
+mfill_atomic() passes a lot of parameters down to its callees.
+
+Aggregate them all into mfill_state structure and pass this structure to
+functions that implement various UFFDIO_ commands.
+
+Tracking the state in a structure will allow moving the code that retries
+copying of data for UFFDIO_COPY into mfill_atomic_pte_copy() and make the
+loop in mfill_atomic() identical for all UFFDIO operations on PTE-mapped
+memory.
+
+The mfill_state definition is deliberately local to mm/userfaultfd.c,
+hence shmem_mfill_atomic_pte() is not updated.
+
+[harry.yoo@oracle.com: properly initialize mfill_state.len to fix
+                       folio_add_new_anon_rmap() WARN]
+Link: https://lkml.kernel.org/r/abehBY7QakYF9bK4@hyeyoo
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Signed-off-by: Harry Yoo <harry.yoo@oracle.com>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 ---
- tools/testing/selftests/iommu/iommufd.c | 27 +++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ mm/userfaultfd.c | 148 ++++++++++++++++++++++++++---------------------
+ 1 file changed, 82 insertions(+), 66 deletions(-)
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index dadad277f4eb..d1fe5dbc2813 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -2275,6 +2275,33 @@ TEST_F(iommufd_dirty_tracking, set_dirty_tracking)
- 	test_ioctl_destroy(hwpt_id);
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 32637d557c95..fa9622ec7279 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -20,6 +20,20 @@
+ #include "internal.h"
+ #include "swap.h"
+ 
++struct mfill_state {
++	struct userfaultfd_ctx *ctx;
++	unsigned long src_start;
++	unsigned long dst_start;
++	unsigned long len;
++	uffd_flags_t flags;
++
++	struct vm_area_struct *vma;
++	unsigned long src_addr;
++	unsigned long dst_addr;
++	struct folio *folio;
++	pmd_t *pmd;
++};
++
+ static __always_inline
+ bool validate_dst_vma(struct vm_area_struct *dst_vma, unsigned long dst_end)
+ {
+@@ -272,17 +286,17 @@ static int mfill_copy_folio_locked(struct folio *folio, unsigned long src_addr)
+ 	return ret;
  }
  
-+TEST_F(iommufd_dirty_tracking, pasid_set_dirty_tracking)
-+{
-+	uint32_t stddev_id, ioas_id, hwpt_id, pasid = 100;
-+	uint32_t dev_flags = MOCK_FLAGS_DEVICE_PASID;
-+
-+	/* Regular case */
-+	test_cmd_hwpt_alloc(self->idev_id, self->ioas_id,
-+			    IOMMU_HWPT_ALLOC_PASID | IOMMU_HWPT_ALLOC_DIRTY_TRACKING,
-+			    &hwpt_id);
-+	test_cmd_mock_domain_flags(hwpt_id, dev_flags, &stddev_id, NULL, NULL);
-+	ASSERT_EQ(0, _test_cmd_pasid_attach(self->fd, stddev_id, pasid, hwpt_id));
-+	test_cmd_set_dirty_tracking(hwpt_id, true);
-+	test_cmd_set_dirty_tracking(hwpt_id, false);
-+	ASSERT_EQ(0, _test_cmd_pasid_detach(self->fd, stddev_id, pasid));
-+
-+	test_ioctl_destroy(stddev_id);
-+
-+	/* IOMMU device does not support dirty tracking */
-+	dev_flags |= MOCK_FLAGS_DEVICE_NO_DIRTY;
-+	test_ioctl_ioas_alloc(&ioas_id);
-+	test_cmd_mock_domain_flags(ioas_id, dev_flags, &stddev_id, NULL, NULL);
-+	EXPECT_ERRNO(EINVAL, _test_cmd_pasid_attach(self->fd, stddev_id, pasid, hwpt_id));
-+
-+	test_ioctl_destroy(stddev_id);
-+	test_ioctl_destroy(hwpt_id);
-+}
-+
- TEST_F(iommufd_dirty_tracking, device_dirty_capability)
+-static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
+-				 struct vm_area_struct *dst_vma,
+-				 unsigned long dst_addr,
+-				 unsigned long src_addr,
+-				 uffd_flags_t flags,
+-				 struct folio **foliop)
++static int mfill_atomic_pte_copy(struct mfill_state *state)
  {
- 	uint32_t caps = 0;
+-	int ret;
++	struct vm_area_struct *dst_vma = state->vma;
++	unsigned long dst_addr = state->dst_addr;
++	unsigned long src_addr = state->src_addr;
++	uffd_flags_t flags = state->flags;
++	pmd_t *dst_pmd = state->pmd;
+ 	struct folio *folio;
++	int ret;
+ 
+-	if (!*foliop) {
++	if (!state->folio) {
+ 		ret = -ENOMEM;
+ 		folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, dst_vma,
+ 					dst_addr);
+@@ -294,13 +308,13 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
+ 		/* fallback to copy_from_user outside mmap_lock */
+ 		if (unlikely(ret)) {
+ 			ret = -ENOENT;
+-			*foliop = folio;
++			state->folio = folio;
+ 			/* don't free the page */
+ 			goto out;
+ 		}
+ 	} else {
+-		folio = *foliop;
+-		*foliop = NULL;
++		folio = state->folio;
++		state->folio = NULL;
+ 	}
+ 
+ 	/*
+@@ -357,10 +371,11 @@ static int mfill_atomic_pte_zeroed_folio(pmd_t *dst_pmd,
+ 	return ret;
+ }
+ 
+-static int mfill_atomic_pte_zeropage(pmd_t *dst_pmd,
+-				     struct vm_area_struct *dst_vma,
+-				     unsigned long dst_addr)
++static int mfill_atomic_pte_zeropage(struct mfill_state *state)
+ {
++	struct vm_area_struct *dst_vma = state->vma;
++	unsigned long dst_addr = state->dst_addr;
++	pmd_t *dst_pmd = state->pmd;
+ 	pte_t _dst_pte, *dst_pte;
+ 	spinlock_t *ptl;
+ 	int ret;
+@@ -392,13 +407,14 @@ static int mfill_atomic_pte_zeropage(pmd_t *dst_pmd,
+ }
+ 
+ /* Handles UFFDIO_CONTINUE for all shmem VMAs (shared or private). */
+-static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
+-				     struct vm_area_struct *dst_vma,
+-				     unsigned long dst_addr,
+-				     uffd_flags_t flags)
++static int mfill_atomic_pte_continue(struct mfill_state *state)
+ {
+-	struct inode *inode = file_inode(dst_vma->vm_file);
++	struct vm_area_struct *dst_vma = state->vma;
++	unsigned long dst_addr = state->dst_addr;
+ 	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
++	struct inode *inode = file_inode(dst_vma->vm_file);
++	uffd_flags_t flags = state->flags;
++	pmd_t *dst_pmd = state->pmd;
+ 	struct folio *folio;
+ 	struct page *page;
+ 	int ret;
+@@ -436,15 +452,15 @@ static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
+ }
+ 
+ /* Handles UFFDIO_POISON for all non-hugetlb VMAs. */
+-static int mfill_atomic_pte_poison(pmd_t *dst_pmd,
+-				   struct vm_area_struct *dst_vma,
+-				   unsigned long dst_addr,
+-				   uffd_flags_t flags)
++static int mfill_atomic_pte_poison(struct mfill_state *state)
+ {
+-	int ret;
++	struct vm_area_struct *dst_vma = state->vma;
+ 	struct mm_struct *dst_mm = dst_vma->vm_mm;
++	unsigned long dst_addr = state->dst_addr;
++	pmd_t *dst_pmd = state->pmd;
+ 	pte_t _dst_pte, *dst_pte;
+ 	spinlock_t *ptl;
++	int ret;
+ 
+ 	_dst_pte = make_pte_marker(PTE_MARKER_POISONED);
+ 	ret = -EAGAIN;
+@@ -668,22 +684,20 @@ extern ssize_t mfill_atomic_hugetlb(struct userfaultfd_ctx *ctx,
+ 				    uffd_flags_t flags);
+ #endif /* CONFIG_HUGETLB_PAGE */
+ 
+-static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
+-						struct vm_area_struct *dst_vma,
+-						unsigned long dst_addr,
+-						unsigned long src_addr,
+-						uffd_flags_t flags,
+-						struct folio **foliop)
++static __always_inline ssize_t mfill_atomic_pte(struct mfill_state *state)
+ {
++	struct vm_area_struct *dst_vma = state->vma;
++	unsigned long src_addr = state->src_addr;
++	unsigned long dst_addr = state->dst_addr;
++	struct folio **foliop = &state->folio;
++	uffd_flags_t flags = state->flags;
++	pmd_t *dst_pmd = state->pmd;
+ 	ssize_t err;
+ 
+-	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE)) {
+-		return mfill_atomic_pte_continue(dst_pmd, dst_vma,
+-						 dst_addr, flags);
+-	} else if (uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON)) {
+-		return mfill_atomic_pte_poison(dst_pmd, dst_vma,
+-					       dst_addr, flags);
+-	}
++	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
++		return mfill_atomic_pte_continue(state);
++	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON))
++		return mfill_atomic_pte_poison(state);
+ 
+ 	/*
+ 	 * The normal page fault path for a shmem will invoke the
+@@ -697,12 +711,9 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
+ 	 */
+ 	if (!(dst_vma->vm_flags & VM_SHARED)) {
+ 		if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY))
+-			err = mfill_atomic_pte_copy(dst_pmd, dst_vma,
+-						    dst_addr, src_addr,
+-						    flags, foliop);
++			err = mfill_atomic_pte_copy(state);
+ 		else
+-			err = mfill_atomic_pte_zeropage(dst_pmd,
+-						 dst_vma, dst_addr);
++			err = mfill_atomic_pte_zeropage(state);
+ 	} else {
+ 		err = shmem_mfill_atomic_pte(dst_pmd, dst_vma,
+ 					     dst_addr, src_addr,
+@@ -718,13 +729,20 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+ 					    unsigned long len,
+ 					    uffd_flags_t flags)
+ {
++	struct mfill_state state = (struct mfill_state){
++		.ctx = ctx,
++		.dst_start = dst_start,
++		.src_start = src_start,
++		.flags = flags,
++		.len = len,
++		.src_addr = src_start,
++		.dst_addr = dst_start,
++	};
+ 	struct mm_struct *dst_mm = ctx->mm;
+ 	struct vm_area_struct *dst_vma;
++	long copied = 0;
+ 	ssize_t err;
+ 	pmd_t *dst_pmd;
+-	unsigned long src_addr, dst_addr;
+-	long copied;
+-	struct folio *folio;
+ 
+ 	/*
+ 	 * Sanitize the command parameters:
+@@ -736,10 +754,6 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+ 	VM_WARN_ON_ONCE(src_start + len <= src_start);
+ 	VM_WARN_ON_ONCE(dst_start + len <= dst_start);
+ 
+-	src_addr = src_start;
+-	dst_addr = dst_start;
+-	copied = 0;
+-	folio = NULL;
+ retry:
+ 	/*
+ 	 * Make sure the vma is not shared, that the dst range is
+@@ -790,12 +804,14 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+ 	    uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
+ 		goto out_unlock;
+ 
+-	while (src_addr < src_start + len) {
+-		pmd_t dst_pmdval;
++	state.vma = dst_vma;
+ 
+-		VM_WARN_ON_ONCE(dst_addr >= dst_start + len);
++	while (state.src_addr < src_start + len) {
++		VM_WARN_ON_ONCE(state.dst_addr >= dst_start + len);
++
++		pmd_t dst_pmdval;
+ 
+-		dst_pmd = mm_alloc_pmd(dst_mm, dst_addr);
++		dst_pmd = mm_alloc_pmd(dst_mm, state.dst_addr);
+ 		if (unlikely(!dst_pmd)) {
+ 			err = -ENOMEM;
+ 			break;
+@@ -827,34 +843,34 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+ 		 * tables under us; pte_offset_map_lock() will deal with that.
+ 		 */
+ 
+-		err = mfill_atomic_pte(dst_pmd, dst_vma, dst_addr,
+-				       src_addr, flags, &folio);
++		state.pmd = dst_pmd;
++		err = mfill_atomic_pte(&state);
+ 		cond_resched();
+ 
+ 		if (unlikely(err == -ENOENT)) {
+ 			void *kaddr;
+ 
+ 			up_read(&ctx->map_changing_lock);
+-			uffd_mfill_unlock(dst_vma);
+-			VM_WARN_ON_ONCE(!folio);
++			uffd_mfill_unlock(state.vma);
++			VM_WARN_ON_ONCE(!state.folio);
+ 
+-			kaddr = kmap_local_folio(folio, 0);
++			kaddr = kmap_local_folio(state.folio, 0);
+ 			err = copy_from_user(kaddr,
+-					     (const void __user *) src_addr,
++					     (const void __user *)state.src_addr,
+ 					     PAGE_SIZE);
+ 			kunmap_local(kaddr);
+ 			if (unlikely(err)) {
+ 				err = -EFAULT;
+ 				goto out;
+ 			}
+-			flush_dcache_folio(folio);
++			flush_dcache_folio(state.folio);
+ 			goto retry;
+ 		} else
+-			VM_WARN_ON_ONCE(folio);
++			VM_WARN_ON_ONCE(state.folio);
+ 
+ 		if (!err) {
+-			dst_addr += PAGE_SIZE;
+-			src_addr += PAGE_SIZE;
++			state.dst_addr += PAGE_SIZE;
++			state.src_addr += PAGE_SIZE;
+ 			copied += PAGE_SIZE;
+ 
+ 			if (fatal_signal_pending(current))
+@@ -866,10 +882,10 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+ 
+ out_unlock:
+ 	up_read(&ctx->map_changing_lock);
+-	uffd_mfill_unlock(dst_vma);
++	uffd_mfill_unlock(state.vma);
+ out:
+-	if (folio)
+-		folio_put(folio);
++	if (state.folio)
++		folio_put(state.folio);
+ 	VM_WARN_ON_ONCE(copied < 0);
+ 	VM_WARN_ON_ONCE(err > 0);
+ 	VM_WARN_ON_ONCE(!copied && !err);
 -- 
-2.47.3
+2.53.0
 
