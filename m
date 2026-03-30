@@ -1,149 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CDC33F5B3
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 15:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3157342C80
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 15:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774883788; cv=none; b=C7XJhUKLp2Ivo8PJKxY+OKg5hBY5kHPFX5m62UaoZRL44iCMww1YTD4r3u7NcIOc02swP+I4jc2re1ep2m/aAuz+4tTwjaHLHP43UBRpNAsW+6onssOL1dnv43HPGLMEmVEsR5RIJFZFU/POkjiNFuEk7u6tcKj9vGVH/kqjz/g=
+	t=1774884063; cv=none; b=JdZRTcxYfHDtVDuAXr5Eukch+WmNls4actbhfojAqbP1oskqCAZ7i9Cz3fqTTodVaFDQTraxR6y1jr58306g3+n/7C2wQRBybpvd3YaK8sqKESoBSKO2LOuGaUnpCdVbIaE945KrM/Hyg5h4NHT9+LlDFjWZlLGPGZDS+aK82ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774883788; c=relaxed/simple;
-	bh=0ZNjKjARdZvcdL31QoVs+UqP+O/z4+0bO2/UPGbm13o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M06PnF/B3iz8j9mFgKt7ZDXhWBASAE2//Gwn91JHGTLrrmoB362jfB3vOGe/4eZewq0R2DbIwoVMd5O+Yjc+neqH1mLSsHbDNe3H/KhIIgVcO6wOTG5iyhe/W7rY0w9WbDkE+u/FXTR0Ln243RfeUwkL67YXbbkiBlnr8tflPZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G2dy0oOz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774884063; c=relaxed/simple;
+	bh=dDsO5uf2WRZSDWmo+4MqP6v9u8prPHyFuGugSzJiXms=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=SOiq0M29OID21qnR0BEPi6gPudtRkd64HKTHEnFcY1yu56zNgtBNx0eH42qEKzr55Zzu3Qx/27YyD69TYmqYNo1VIFuhs/xWbTaBSm4+mlBK+f6CkjpS9wYOPzb8Th8rcWUgDHQNtg4oKU9nN7hfzuX83MpoexREHfsD497XtkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V4juGaDY; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G2dy0oOz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774883785;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z5cQUZey16cto7EAHb0l8lICJnDidIXEapbKPGxTzr4=;
-	b=G2dy0oOzrCYasLoDJG5IjcpNnEsWqGHtjlgbKUFW5FFq0bG14Oc0Fm5qESEWkemQEwMtoS
-	mKBgiwN49JVeNKnvhmHt6MdxDUv5M5bb003D/KyS/0fEuTJqyr+/Hih7IaMYwYsxYjFaLL
-	vPOBn1Er37wYSSQSGQe/BtcdYdKjsD4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-62-qA_E6RabNDW0a_EPyd5sZg-1; Mon,
- 30 Mar 2026 11:16:21 -0400
-X-MC-Unique: qA_E6RabNDW0a_EPyd5sZg-1
-X-Mimecast-MFC-AGG-ID: qA_E6RabNDW0a_EPyd5sZg_1774883779
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D4B301800623;
-	Mon, 30 Mar 2026 15:16:18 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 88E8F19560AB;
-	Mon, 30 Mar 2026 15:16:09 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com,
-	Li Wang <liwang@redhat.com>
-Subject: [PATCH v7 7/7] selftests/mm: transhuge_stress: skip the test when thp not available
-Date: Mon, 30 Mar 2026 23:15:03 +0800
-Message-ID: <20260330151503.670415-8-chuhu@redhat.com>
-In-Reply-To: <20260330151503.670415-1-chuhu@redhat.com>
-References: <20260330151503.670415-1-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V4juGaDY"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43b9d3ebed5so3247115f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 08:21:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774884060; x=1775488860; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WlR8hdQRwntlpv8tuo2N0ezyr91wv9YgNBgco65NDoE=;
+        b=V4juGaDY3c7eljcojk+PgfK2bI9WmRrM5/Lim8rxp+VArI7upsgdL8TYqCPbNCD+I5
+         UtwDRNtb6+QoXLBHv+M97MOML7Zlau3IZm9dcHxtHmoSLDK0vlIq8A7GCEOCl3DajzoM
+         koGKi+kxsQpLa/y6VH50RyQ9HGHRahhhcY5G17oVe8D6kZ6RKcXPLBht0eopXuPHXROn
+         hFhABuhoN1w4fZkPY3v/iCYjWCS0xOlYZX86/DSSC9W0/Bay/8BwB/D2NcYiB/5dUbaA
+         ylHt13UuM7w1W3apABnig9whNtKy6UUo+lqMtmfkfFauqQeV78WswT59ncblH5bvx12V
+         t/hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774884060; x=1775488860;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WlR8hdQRwntlpv8tuo2N0ezyr91wv9YgNBgco65NDoE=;
+        b=gNJRcGOPDuHIhf5T5UGPtGzaKETNLp866hV/qCj3N4XPgA50akeej4VofSr/ArUpKx
+         QmUKrGYn7mGyAEyrhyNkkdo5rvTmivsaFGYb9Ed6ixUQnnhoEcptUJgo0nVjyccyNUNt
+         1PpMPem8XE4s3G92IAb1dH+zkwcoqnVqN/lQKXlkMFF9jh1i2E7XzzE7OKZdfISxVbWe
+         Qq0erj91DWx1rolUqSGuQ6A99k8X6ZcnqMLKdAPfDuC+TPvoFz4vI765PmddZv3qOYm/
+         N+laW3lduOcTslgq6HDI+75+sWLXWafLV7x0CUvoOGAeUf0+PcyYB/RNFaDjHYbRB6EM
+         1H0A==
+X-Forwarded-Encrypted: i=1; AJvYcCX48qs9OQzE4Enpy+rwfyGjyL7FsAMTFHQ09axCtf1jYnM2oYpFYNmP+NkqASyJIwwB+MomzraxmxbRkY8ul34=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2Q6i1zGpKN6w7tWG5s9IrUGGhI910OqhhVb9Tn3Cavw7t8jOp
+	xruzEvKPc2BzKqwdcJgxwJVx7i+TEGrRU9W+F2wvMdjCD5GiJNjyY1Ot
+X-Gm-Gg: ATEYQzwN4/R8+3msnQZ1fUL+WtxuW0LiupB5jzypA6UAGB/Mz9WDcy52+UK7R32NayM
+	ILUYKehsLXChooInEg5yQlEGAQJYQhCFRgg9y8nNQVuXt/5hTFN7G0g3iBqfKwF8x4GvNCTWNgC
+	a4MWwpflR1drxICy43zin7WZlXURnmxosb2S9mNGj+7K3ZDRnisBrmKGU9lAQV8jRHdndyYDOiW
+	D02V4etmiNVGsm2fdqkhZuK20V0NtOWYcsj9q4gmZIRlrNPO6Qz3sr7r9aeYeyh0U6L5hS1/ISt
+	e1S//A2vqA5QrL5Qhfic4ybjc+i5Vkm7pkBMDHVNljYFSXi4lLKPjTi0cd7WpCngFgJ3mhhZ4kz
+	xYcuEWz2nccYj/ZPd8NlGSihmKU4yqd57uID76OlRkJl3z+uOY3XTyAyEWskQDLbI3mvGf/Q9qA
+	r82RQ+EixMyXvWYWw=
+X-Received: by 2002:a5d:5d01:0:b0:43b:9c73:2933 with SMTP id ffacd0b85a97d-43b9ea34811mr22655564f8f.15.1774884056423;
+        Mon, 30 Mar 2026 08:20:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:500::4:4b08])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21e2487sm20593730f8f.5.2026.03.30.08.20.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 08:20:55 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+In-Reply-To: <20260329140506.9595-2-pilgrimtao@gmail.com>
+References: <20260329140506.9595-1-pilgrimtao@gmail.com>
+ <20260329140506.9595-2-pilgrimtao@gmail.com>
+Date: Mon, 30 Mar 2026 16:20:50 +0100
+Message-ID: <87ikadgx7x.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain
 
-The test requires thp, skip the test when thp is not available to avoid
-false positive.
+Chengkaitao <pilgrimtao@gmail.com> writes:
 
-Tested with thp disabled kernel.
-Before the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..1
-  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 60 transhuge-stress -d 20 # exit=1
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>
+> Replace per-kfunc btf_id chains check with btf_id_in_kfunc_table() and
+> static kfunc tables for easier maintenance.
+>
+> Prepare for future extensions to the bpf_list API family.
+>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
 
-After the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..0 # SKIP Transparent Hugepages not available
-  # [SKIP]
-  ok 5 transhuge-stress -d 20 # SKIP
+I think old is_bpf_rbtree_api_kfunc(kfunc_btf_id) is more readable than new
+btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_api_kfuncs);
+Not sure if this change should be bundled with this series, it looks
+quite orthogonal.
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-CC: Li Wang <liwang@redhat.com>
-Signed-off-by: Chunyu Hu <chuhu@redhat.com>
----
-V3 changes:
-  - Add review by from Mike
-  - Add acked-by from David
-V2 changes:
-  - Move the exit chunk to the front of ksft_print_headers() as suggested
-    by David.
-  - Add reviewed by from Zi and Lorenzo
----
- tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index bcad47c09518..7a9f1035099b 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include "vm_util.h"
- #include "kselftest.h"
-+#include "thp_settings.h"
- 
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -37,6 +38,9 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 
-+	if (!thp_is_enabled())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / psize() / 4)
- 		ram = SIZE_MAX / 4;
--- 
-2.53.0
-
+>  kernel/bpf/verifier.c | 261 +++++++++++++++++++++++-------------------
+>  1 file changed, 144 insertions(+), 117 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 4fbacd2149cd..f2d9863bb290 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -544,9 +544,6 @@ static bool is_async_callback_calling_kfunc(u32 btf_id);
+>  static bool is_callback_calling_kfunc(u32 btf_id);
+>  static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
+>  
+> -static bool is_bpf_wq_set_callback_kfunc(u32 btf_id);
+> -static bool is_task_work_add_kfunc(u32 func_id);
+> -
+>  static bool is_sync_callback_calling_function(enum bpf_func_id func_id)
+>  {
+>  	return func_id == BPF_FUNC_for_each_map_elem ||
+> @@ -586,7 +583,7 @@ static bool is_async_cb_sleepable(struct bpf_verifier_env *env, struct bpf_insn
+>  
+>  	/* bpf_wq and bpf_task_work callbacks are always sleepable. */
+>  	if (bpf_pseudo_kfunc_call(insn) && insn->off == 0 &&
+> -	    (is_bpf_wq_set_callback_kfunc(insn->imm) || is_task_work_add_kfunc(insn->imm)))
+> +	    is_async_callback_calling_kfunc(insn->imm))
+>  		return true;
+>  
+>  	verifier_bug(env, "unhandled async callback in is_async_cb_sleepable");
+> @@ -11203,31 +11200,6 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
+>  	return 0;
+>  }
+>  
+> ...
+> -- 
+> 2.50.1 (Apple Git-155)
