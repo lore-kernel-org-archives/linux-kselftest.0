@@ -1,45 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9796F3EDAAF
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 09:44:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC64620B810
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 09:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774950262; cv=none; b=N1UKiAJ+5KjIDU4EGb0lVKeFW3LTi0AW1CsP5qUdM10U+v4N9IQifSaKVc3b2isvfBIdyAllEJ2bPXy5wTZX3dwj3NBUI58E0XcQWr3DL/eVyw0yyEoL+Or0mOoYX4JEBypEGJf1eyhbyEPya+IUaQMlKmNoeRRQ5yiKlmYlFFA=
+	t=1774950277; cv=none; b=nPF+fZdXOx+sVWT2X5VZ5DPuaB+iUrpN9wylSQUyvdXwpWEC8Ry8IKVz1+lMwVLDXI0J2kLXYvjNMUGrVDTuxsCn51lYGNipURYndb1pK8xOmF+fPDlWED6crxbProcf3iApTHj4/auOedlrJm8XOVxrw1OsgHhgq30XMdfcMdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774950262; c=relaxed/simple;
-	bh=Y5HYmfo2hrjkYl2etfmR6FyOxfYHNvPpo+PR8dGDbSs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m49yevTEYIa03kXp3qwQQEZWohr/6ZrwAF4PMvLrTbDP1Z7VfucykHd0mtcENGBEQWAs3qBcLKswQi0Kv4xh2TH9EeaoeuMlZf12A6bFR634JR7ccZQ39jQxN1LTWCoV9M6fABAhxZrGCYCDO/wG2hxycFcOtsx3YvoGzWFRvhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a7ZGkGa8; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1774950277; c=relaxed/simple;
+	bh=LuaLH82C8VFNeHuhNYFLbCMO+j5piSLkQ0JuEiRjpSI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g8KdedWVpJJji5wrdmqUom07weW/p+8+0uxn2tWd6ZR/nOppehJgFInmdBywneCXdBh6+WKYWXCcM2LdtN0x9ZCHPM/CEKb9XN0B1CV52vGniwSmgqUDwrRVevLA0RbpgPAET7BRabV0aMRp4X6AuetfEGB83iV8ivQpkODq7Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CKXobV+h; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a7ZGkGa8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CKXobV+h"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774950260;
+	s=mimecast20190719; t=1774950274;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HApNsJMnQkGjRCw1G9QlTLRX0WXwGT8mBK0arH4RiRo=;
-	b=a7ZGkGa8MEc/j9gOh63Kae7qeNDMwyEdrk2CwtDFM1xkB4w8ao3qaPq437hPvfMUKapWsO
-	uBMHFTZinjwpxm7uxyOZhzhqlEbjDyWtK28gHDGBiK9ypkqKli0XqxzwMLzFjpHfBM84Kn
-	6J4iWC+ZaotXdanLKEDWIk2Ynj1/bUQ=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NbIbNiX+eqkEdr0SMcNuiwraBoTf68pP2H/YvQLprqw=;
+	b=CKXobV+hGhe4v5C0o6itJ6Hsxwg1pSgtdySmkIHjLdHe1I+vX9FDlxDRIY7teRW8BeQx8L
+	XSjCx5zkKhntU0DnwmRKeqz9mZpLKVTVhyURt4WTMOFdqIjyyad7zAZIOIRPEacOfvRNWn
+	LcewBzJQmjRjX8YsjHjzx6mE+WGe0hE=
 Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-638-9FjosW1CPO2exaI7I-bw2A-1; Tue,
- 31 Mar 2026 05:44:15 -0400
-X-MC-Unique: 9FjosW1CPO2exaI7I-bw2A-1
-X-Mimecast-MFC-AGG-ID: 9FjosW1CPO2exaI7I-bw2A_1774950253
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-338-K4IZLIOxNGq32mAcJSMVoA-1; Tue,
+ 31 Mar 2026 05:44:28 -0400
+X-MC-Unique: K4IZLIOxNGq32mAcJSMVoA-1
+X-Mimecast-MFC-AGG-ID: K4IZLIOxNGq32mAcJSMVoA_1774950266
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0CBBF195608B;
-	Tue, 31 Mar 2026 09:44:13 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 90E5F1955EA1;
+	Tue, 31 Mar 2026 09:44:26 +0000 (UTC)
 Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.121])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9E08B30001A1;
-	Tue, 31 Mar 2026 09:44:06 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9392030002C3;
+	Tue, 31 Mar 2026 09:44:20 +0000 (UTC)
 From: Li Wang <liwang@redhat.com>
 To: nathan@kernel.org,
 	nsc@kernel.org,
@@ -56,9 +58,11 @@ Cc: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kbuild@vger.kernel.org
-Subject: [PATCH v2 0/2] selftests/mm: clean up build output and verbosity
-Date: Tue, 31 Mar 2026 17:44:00 +0800
-Message-ID: <20260331094402.144131-1-liwang@redhat.com>
+Subject: [PATCH v2 2/2] selftests/mm: suppress compiler error in liburing check
+Date: Tue, 31 Mar 2026 17:44:02 +0800
+Message-ID: <20260331094402.144131-3-liwang@redhat.com>
+In-Reply-To: <20260331094402.144131-1-liwang@redhat.com>
+References: <20260331094402.144131-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,36 +72,61 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Currently, the mm selftests build process can be quite noisy.
+When building the mm selftests on a system without liburing development
+headers, check_config.sh leaks a raw compiler error:
 
-First, it leaks raw compiler errors during the liburing feature probe if
-the headers are missing, which is confusing since the build system already
-handles this gracefully with a clear warning.
+  /tmp/tmp.kIIOIqwe3n.c:2:10: fatal error: liburing.h: No such file or directory
+      2 | #include <liburing.h>
+        |          ^~~~~~~~~~~~
 
-Second, the specific 32-bit and 64-bit compilation targets ignore the
-standard kbuild verbosity settings, always printing their full compiler
-commands even during a default quiet build.
+Since this is an expected failure during the configuration probe,
+redirect the compiler output to /dev/null to hide it.
 
-Notes:
-  Andrew mentioned he hopes this patch merge into kbuild tree, so I resend
-  to linux-kbuild@vger.kernel.org.
+And the build system prints a clear warning when this occurs:
 
-V2:
+  Warning: missing liburing support. Some tests will be skipped.
 
- - Drop 2/4, 3/4 from v1 to v2, since Andrew wasn't able to confirm the
-   patch works for the rarely happening issue now, so I decided to just
-   hand on the process of the parallel issue.
+Because the user is properly notified about the missing dependency, the
+raw compiler error is redundant and only confuse users.
 
- - Refine the 4/4 patch only to hide compiler errors when missing liburing.
+Additionally, update the Makefile to use $(Q) and $(call msg,...) for
+the check_config.sh execution. This aligns the probe with standard
+kbuild output formatting, providing a clean "CHK" message instead of
+printing the raw command during the build.
 
-Li Wang (2):
-  selftests/mm: respect build verbosity settings for 32/64-bit targets
-  selftests/mm: suppress compiler error in liburing check
-
- tools/testing/selftests/mm/Makefile        | 9 ++++++---
+Signed-off-by: Li Wang <liwang@redhat.com>
+---
+ tools/testing/selftests/mm/Makefile        | 3 ++-
  tools/testing/selftests/mm/check_config.sh | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 3b222cd6a048..2f6d2a207a0c 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -262,7 +262,8 @@ $(OUTPUT)/migration: LDLIBS += -lnuma
+ $(OUTPUT)/rmap: LDLIBS += -lnuma
+ 
+ local_config.mk local_config.h: check_config.sh
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" ./check_config.sh
++	$(call msg,CHK,config,$@)
++	$(Q)CC="$(CC)" CFLAGS="$(CFLAGS)" ./check_config.sh
+ 
+ EXTRA_CLEAN += local_config.mk local_config.h
+ 
+diff --git a/tools/testing/selftests/mm/check_config.sh b/tools/testing/selftests/mm/check_config.sh
+index b84c82bbf875..32beaefe279e 100755
+--- a/tools/testing/selftests/mm/check_config.sh
++++ b/tools/testing/selftests/mm/check_config.sh
+@@ -16,7 +16,7 @@ echo "#include <sys/types.h>"        > $tmpfile_c
+ echo "#include <liburing.h>"        >> $tmpfile_c
+ echo "int func(void) { return 0; }" >> $tmpfile_c
+ 
+-$CC $CFLAGS -c $tmpfile_c -o $tmpfile_o
++$CC $CFLAGS -c $tmpfile_c -o $tmpfile_o >/dev/null 2>&1
+ 
+ if [ -f $tmpfile_o ]; then
+     echo "#define LOCAL_CONFIG_HAVE_LIBURING 1"  > $OUTPUT_H_FILE
 -- 
 2.53.0
 
