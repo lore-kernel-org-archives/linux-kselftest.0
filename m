@@ -1,109 +1,89 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AE01A6814
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 03:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EFB2417D1;
+	Tue, 31 Mar 2026 03:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774927134; cv=none; b=MXEEY2N2cVIVUZzSqwiGkF3OHB1vpiAeUApAhGYDUFbwAyAfi4Jc9d+sMnrbcTyV2UW7bNCyNsS/AKIAgdH2ApGiQ0L9qM2k8Vm2guKd88qo/oIZTN5GIhwCeOcjc9KmaU4nIqaU6DBiLDEg6TKnmf7NnKUaoY/SLaZ/Ok7wUaw=
+	t=1774928000; cv=none; b=WpJa9X6fozRmgVEql+nIJhZrcCna0AaNwzILBqWMutrK3+25W13M2DwfMBuU1XXZSuKQpqTF9npzJASi8VGl3y13RM0amiUczHi1nO9aUKFZEPqAYQ6imPZ0mniSx+yPF0ZUrvNO8nYRsR+dwwOJrE9PtOALhOsfJ7Blbw/EIac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774927134; c=relaxed/simple;
-	bh=Z7lW49Bjo8TiedKHPp1+w/stGzyGL2KI5EW5Cqvh/LM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kvjp+2Yllfhk+ggIBLnyGDlEyXffcPF2LE7GAmcXpRmIY7nCwwc2Fhu3102wiZjDvUqI7ILntlSefqObxd4sNEDSKW3EZqUbTj5YhIiISRBTfHKIuJy411kkppo9rtfAhnaRhqYr85vW/cwM23F+XU1M/R5jz5aDPXjtnajsfNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QUtmu283; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774928000; c=relaxed/simple;
+	bh=GJTZklG1sKmF/WrfX8qINx8zDJviAcgKqqdK+YrWwGQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YBnAmdWxvTI7B0WUdAD43ohFNMgNXSp0kOQXjDu+YhxUwHMmISfFEmwuMHCYhMOgf41nLwpdm1iz7HktohdN94PK7uT20ebOX3Zd8FKHAgjeaIy3S8SIwjKic0YE6AK4mYeNNXLMWl/5yXJFAEW166LsrfwFh2jG0bUizi7vO8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sanwzxU3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QUtmu283"
-Message-ID: <79805496-9996-40b6-8cbf-0beaf7dd5473@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774927129;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F51B4RKJm1crpeWlG2F4ZvuF8sUulbOmrWGId7sfBqo=;
-	b=QUtmu283nK3yW4rIZldw9qbVYQ2MPdfxU7l1FlPCoxhAji0KPxiOtbh68BwutO2DPtRNmU
-	4KsJMcz6Lszbfr8i+rWBpsGZn5x51L9Tj+zJ51w9c+eEVzLJTyX9Lcnj/bIVB8KPXA/F7O
-	AXynNVz/094JlHs6fv9uyR52AlHFgME=
-Date: Mon, 30 Mar 2026 20:18:36 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sanwzxU3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB6BC19424;
+	Tue, 31 Mar 2026 03:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774928000;
+	bh=GJTZklG1sKmF/WrfX8qINx8zDJviAcgKqqdK+YrWwGQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sanwzxU3DS9SwZaOPuydSXSU9Pk16mt7rrDRoYhsMp9Okbj/gYJPVBAfRWia9b9Mi
+	 wCGflSfwtRHBB4zKWEHDat5VETvwzfrA8NwQB25Mrqwlz9JVqdnfANXwyJVprS05QF
+	 EGB0S/NYVdt2FSbX3VB8UAYTq8U/8kZSJPbKuH0Vwsbo8EkWliF0blYzIPH124vaSh
+	 g6sNUyYvpHrPFrkS2sCfReyXu/FimdZjvsgJ6DHaBsnV74g7aBJIWUCdhHvWjs0Ddz
+	 5GeJbcT7uXRrAE93lS59cdUtV0ne2sus6eFYwPAzEbfjnebtsbRZa4jwBRqU24HLBJ
+	 kxfaTlEGYJe0Q==
+Date: Tue, 31 Mar 2026 12:33:18 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andrea Arcangeli <aarcange@redhat.com>,
+	Andrei Vagin <avagin@google.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@kernel.org>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3 01/15] userfaultfd: introduce
+ mfill_copy_folio_locked() helper
+Message-ID: <actAfiUYvUjUNiZM@hyeyoo>
+References: <20260330101116.1117699-1-rppt@kernel.org>
+ <20260330101116.1117699-2-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v4 1/2] bpf: tcp: Reject non-TCP skb in
- bpf_sk_assign_tcp_reqsk()
-To: Kuniyuki Iwashima <kuniyu@google.com>,
- Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, clm@meta.com,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, haoluo@google.com,
- jolsa@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org,
- ihor.solodrai@linux.dev
-References: <20260330080746.319680-2-jiayuan.chen@linux.dev>
- <6ee24770a2b014219d86839b2243e1b7bad4dc4f520457269d5e8ca2b21c2cb8@mail.kernel.org>
- <d1a739d2-c4ea-4fae-aeaf-f49e75dac0f3@linux.dev>
- <CAAVpQUD1n7L6LkP32H_Ct71RLNpJ2RQWFc8w08+c8h=U_tDjpQ@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAAVpQUD1n7L6LkP32H_Ct71RLNpJ2RQWFc8w08+c8h=U_tDjpQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260330101116.1117699-2-rppt@kernel.org>
 
-On 3/30/26 6:35 PM, Kuniyuki Iwashima wrote:
-> On Mon, Mar 30, 2026 at 2:26 AM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
->>
->>
->> On 3/30/26 5:00 PM, bot+bpf-ci@kernel.org wrote:
->>>> #if IS_BUILTIN(CONFIG_IPV6)
->>>>       case htons(ETH_P_IPV6):
->>>> +            if (ipv6_hdr(skb)->nexthdr != IPPROTO_TCP)
->>>> +                    return -EINVAL;
->>>> +
->>>>               ops = &tcp6_request_sock_ops;
->>> For IPv6, ipv6_hdr(skb)->nexthdr gives the type of the header
->>> immediately following the base IPv6 header. If extension headers
->>> are present (hop-by-hop options, routing, etc.), nexthdr would be
->>> the extension header type rather than IPPROTO_TCP, even when the
->>> packet is a valid TCP segment.
->>>
->>> Would it be worth using ipv6_find_hdr() here, similar to
->>> bpf_update_srh_state() in the same file, to walk past any extension
->>> headers? The IPv4 check above is fine since ip_hdr(skb)->protocol
->>> always identifies the transport protocol directly.
->>>
->>> In practice this is very unlikely to matter since TCP SYN packets
->>> with IPv6 extension headers are essentially non-existent, but the
->>> check as written would reject them.
->>>
->>>
->>> ---
->>> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
->>> See:https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->>>
->>> CI run summary:https://github.com/kernel-patches/bpf/actions/runs/23735111188
->>
->>
->> Thanks for the analysis.
->>
->> There are many places in the kernel that check nexthdr directly without
->> walking extension headers.
->>
->> I'd prefer to keep it simple for now and leave ipv6_find_hdr() as a
->> potential future improvement if needed.
+On Mon, Mar 30, 2026 at 01:11:02PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> +1.
+> Split copying of data when locks held from mfill_atomic_pte_copy() into a
+> helper function mfill_copy_folio_locked().
 > 
-> Given this feature is to create a reqsk to process on this running
-> host, it does not make sense to support such ext options.
+> This makes improves code readability and makes complex
+> mfill_atomic_pte_copy() function easier to comprehend.
+> 
+> No functional change.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Acked-by: Peter Xu <peterx@redhat.com>
+> Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
+> ---
 
-While at header reading, does it need a pskb_may_pull() before reading?
+Looks good to me,
+Reviewed-by: Harry Yoo (Oracle) <harry@kernel.org>
+
+-- 
+Cheers,
+Harry / Hyeonggon
