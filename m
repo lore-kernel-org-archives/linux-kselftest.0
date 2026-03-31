@@ -1,719 +1,214 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FC3436348
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 17:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774978417; cv=none; b=sPFt6BGmsJSfhlaoubk9wdcSt6lhq5s5h9OD30RUS8DISzk7C6bmiuQaG/d3GvxE1KBXQQo0YL8P0e7YHbCfxSQQZBX2bvLAPK1fm3IQaTuovsfO1Hc2L0p/bzUm36XmGMiRJkylkmEujRgkHfqyAF3AwpPzGIScsEBWpqxjtKM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774978417; c=relaxed/simple;
-	bh=vpe6QlEjHvNqSZDFN7eHVvqUDFVap6lSEUu9iNEgxcY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uEQ6b22oIahLNpM+9udh9Fxi6SDc+FCWHGcdCMkRIVa052jrqK+aQLspwNGQvqBz9u9c08Zo0Zjn4y32WEvoslX9aciJN8vJHXlQ2Q5hqdcpjyP1y5Vv9PzQ6TyE8WBSfjZvlFISTSvce4m3pHwQemE3M467sLbw7W2uRN0UeNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oMCP9q1R; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95153176E0;
+	Tue, 31 Mar 2026 17:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774978789; cv=fail; b=dOK4UaCpuqksoSw59I6P4KRIlUJNea0RddYuWrBEWb0MWbdT02sUZfCP77S2wIh5MTx0mOw9QVdFmwOOJNNlvqtB+p4P/4xgps0HEVSbGLX8dWo97SjDmYgHicik+wMCpvTPnXIB2jzzQCdzr6QjhxcLdYk2KhlEH8byoUXMUPE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774978789; c=relaxed/simple;
+	bh=wo3FdPTGuGBuScEDe6CyvUCo6kYH9sfPpEsZEkHwFLQ=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=iBLLHvJcOyIWGAXNvNskdMJsJSaDH31PxwGLrdEoq9LVQ7VYDm7SLdB9SNEKljgLuv5VVZ2/dwuUekYqA7dNfsOonofc1NAX9gjv7qHhI5veibsscwEXPjBIaHj8LKs0tX9ACV99MviMv7ny9gIAvprfyDK849PO9Nl8fe8/MPg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BmxMsYkX; arc=fail smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oMCP9q1R"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b0b260d309so95075ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 10:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774978415; x=1775583215; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QH40r46yvNyKpZfiIfskbaEYQxt02aHGlisfMow3fdk=;
-        b=oMCP9q1RKrDiBXPRIdIVKqWtgKR6FBM4zR+RGK2w8Vf2lIZ6pJ2Mug2vY03EQIc4mu
-         8Oj/3j/x4/h6g5m6S+4oUQby+k67MszsZAgYiJrZLZYybkpD21vq19HQgOlRMTUcb+WY
-         foZ1liCXPb+P2iGvmtm7gE7Zo7bAU8E5MsHvEuSlDWx8ZhiE/LRpyxrhPK5mSafP1qYW
-         6N66faRIZtAcXUAmHnGTHj15xsO/Sw/KvQNwM4mG09OORAtjVoIgs5mBBzLFqjt6u5qv
-         qKTUS19oPCixwMWVhBxQgMHOb6+Ud7jzmbUcCPHBqq1qkXHcdfeewq4o9DRU7WX5gg7h
-         9YJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774978415; x=1775583215;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QH40r46yvNyKpZfiIfskbaEYQxt02aHGlisfMow3fdk=;
-        b=Z2vP6d9UjOzVM1xpN6lDFw3LT/pZiWcgtI5DyiQZR9zPO9hR4/KKBsqw0w1H5nbjpR
-         el2fO13NB/bqgyhEE4nLGzP+jBnCQBJkHAaR3HN6yzlPMrjF/tv1Tfe2v0QSs6mlU52/
-         cUVZXGh++0vAz494ULqe426FWOso43zgki0wT5YlNLA2bJbmYjKVwHzyPXg5f77NkKIX
-         34cpUrRKh8MZIK2LQ1P39Q6Dbne7aTEJnvx4qUadC7DpSBtpZbBV/CqjqU/8tL/lqGVo
-         7SDZL5sjaVVUllJRCA0MFfYExoOA/jymFiKOCf9ZnbIIkx7eXZ1y81Q+Z3keLiN7dhR8
-         R8CQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXMqUyN2E7zE8UuEWtG8NpfuPIsxDAEGuabrfoXNZgckSP2W5AwqkpDa8pdQk0mRxdMqbloAGEbx8q3mRlIR1U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIzHvaOyIvREACOXRCh1phd3/Nu4acjDXb9Wvb0f9wVY+ugi/q
-	CBAGU67HeQAKMPGXOvyGAMznifntTj1t5yFIWeb0J7ku5u/dVQRuMq6KYGVYxb5FXA==
-X-Gm-Gg: ATEYQzxglhEPDXHvDF65hs5wk9QrRFqeek1PLem2Ktcmm9JzBnfSms03rzoejgmDBQh
-	VX/vLwo0qOzIPA2q9rB6iHP8dqxHzj4SoMXfzT4+T+hOMwb7TY3Bu0xPXX6bAM2DXolfR5Myglg
-	Ps7ByRMUiVbSixZYzYaCDcqIRQU6xiPkUokGWh/XlI+WYxFv1iyCLCnc+UajngbuEh5LPkymJYa
-	VYj2B9CUye2NaxVFhokcB8UsESGC+lxA405gM4La39M2ZG4rE6Sl/RmrHfcYtSbPpTTX4p0fcRm
-	afT2t4aFi3XCr8Q7+stQwxJq/2NyCCQI2iCfrD0oUCYdYEaUHvFtw7Hy/3FXUe5/+VvTD4NoliX
-	Qud6muk5h8hFQ2C8WZhoHd7+Qyg5YrwIXxC86BfcG+nMVqr0J4LsSVmad5jjkdirw+geNKBHYqd
-	TMHelYAC9D9TAA9J50ZysiSfwv6S2Q9SjO2dGhno63uylI2dTTRkPYp+1SOtMY0w==
-X-Received: by 2002:a17:903:907:b0:2ae:ca87:b1c2 with SMTP id d9443c01a7336-2b268dcc4f0mr525705ad.8.1774978414532;
-        Tue, 31 Mar 2026 10:33:34 -0700 (PDT)
-Received: from google.com (168.136.83.34.bc.googleusercontent.com. [34.83.136.168])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76916baab6sm9360457a12.2.2026.03.31.10.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 10:33:33 -0700 (PDT)
-Date: Tue, 31 Mar 2026 17:33:29 +0000
-From: Samiullah Khawaja <skhawaja@google.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
-	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Askar Safin <safinaskar@gmail.com>, "Borislav Petkov (AMD)" <bp@alien8.de>, 
-	Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
-	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, Kees Cook <kees@kernel.org>, 
-	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, kvm@vger.kernel.org, 
-	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
-	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
-	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Pranjal Shrivastava <praan@google.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: Re: [PATCH v3 02/24] PCI: Add API to track PCI devices preserved
- across Live Update
-Message-ID: <acwEMNUIj3IfTpPG@google.com>
-References: <20260323235817.1960573-1-dmatlack@google.com>
- <20260323235817.1960573-3-dmatlack@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BmxMsYkX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774978788; x=1806514788;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=wo3FdPTGuGBuScEDe6CyvUCo6kYH9sfPpEsZEkHwFLQ=;
+  b=BmxMsYkXkZeSjmrYvOiKnYEWIC/TJDB4BPeuf+gUF8hUSRNTXYdBOODo
+   2/4vkCS7Vug2LnImbwEb4uCqJAXUpZU0za1fX+DIjdjpixVj2dQwnjbad
+   LdVUlkQ4hyjMgw6WxUtCF74Fkejua0OSkwzz2GimoVdFs6wzmR4D1fX/K
+   nnsEA9rAIEOmoigSKtbCoPc54hKpZkTYjN8efYGbBYQJdovLXyuHEY0Cf
+   uBHcA57Cuv+kjafL99J1k9gYafSPenbkEohimhTMw7t+AYjjdJAsXlvkE
+   JG27OJwjZK2Q9jN6TzmIk54h+LFoaa0SKnNzlYoo3qnrLQtKEI1WGvhSe
+   w==;
+X-CSE-ConnectionGUID: anXPxymCTB+Texj3lI4Kiw==
+X-CSE-MsgGUID: PMBmMGa6SrSZf3eesO21dw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="76116434"
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="76116434"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 10:39:47 -0700
+X-CSE-ConnectionGUID: k+xEUv2rRViB3K6BXhzXow==
+X-CSE-MsgGUID: bb+sv9CFTSyDGCM4JY6D8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="264365224"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 10:39:46 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 31 Mar 2026 10:39:45 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Tue, 31 Mar 2026 10:39:45 -0700
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.36)
+ by edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 31 Mar 2026 10:39:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZM5w/zcHBi+fRUkE7WbRSF6DnpcJnU+nPTpNX6MTAvbPL6htWNgnW71TLuOSt2R07thM+CoGI38VBmlz9eIumY5cL+2GpKWP04aEAyOq4ml00O+fAR5YjmJ8cRL9uUBPRBnPEjseVgEnYFumPYNNQsMj9oKVL8KOHjeh5UqEH7bL133t8tu1n2pio1llyKd+9CW3To4BAfgo7YEkQkbMDwQUy3cXESrdHJdbj1+eQbuV/DPkClM9tmru4Utr8dHf3Yzx9EoFTrTmk3nIinzajYM0gniUIDDLLI+vs8lvWyZCuAx1zzODFe9SNgDoPCPiJS8Lgr0kYfYBjdOx4B271Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wTu1b20JwnS12NUhf2W9DU7JYk6JC9PATuoP8neq0pU=;
+ b=hAR25Q0lkar5FLYiI3kQAfzC2HfBKGtMMGT/Dqadv4kuC2iBDhxx5FtxedBhQMwMfX6/wIKIzBZjYBH8FU39Xxm8DQ169sWvPSW84EGxJZFmvm+w9cJ/TmY93MDbCsjFpWbX4ZnwNdXt8DEj/mSir/acMToAZ6cwss01htkDUz25mGd9NHMnBJx2Ue5ZTN0+NzrwrknqCwgqr/DsrzFb+7s9yKoV1UkGjYPW5tz2gPrwVkD9/872cPUXZmKdShqnupJ16tMUSirzPJ6Dzk9z9QHsFzgw0pPGYImebKRhnYcgnRQdOjUf49MP0zEfQMf6Ln6s7jBxk8hzIg90PLeYEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by IA1PR11MB9494.namprd11.prod.outlook.com (2603:10b6:208:59c::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Tue, 31 Mar
+ 2026 17:39:44 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::bfe:4ce1:556:4a9d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::bfe:4ce1:556:4a9d%5]) with mapi id 15.20.9769.014; Tue, 31 Mar 2026
+ 17:39:43 +0000
+Message-ID: <8012ca3b-e2e5-4bdb-93f6-e8a70c775df2@intel.com>
+Date: Tue, 31 Mar 2026 10:39:40 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 08/10] selftests/resctrl: Remove requirement on cache
+ miss rate
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC: <shuah@kernel.org>, <Dave.Martin@arm.com>, <james.morse@arm.com>,
+	<tony.luck@intel.com>, <babu.moger@amd.com>, <fenghuay@nvidia.com>,
+	<peternewman@google.com>, <zide.chen@intel.com>,
+	<dapeng1.mi@linux.intel.com>, <ben.horgan@arm.com>, <yu.c.chen@intel.com>,
+	<jason.zeng@intel.com>, <linux-kselftest@vger.kernel.org>, LKML
+	<linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>
+References: <cover.1773432891.git.reinette.chatre@intel.com>
+ <1fc79420f76d585231252e59d4fcf19b3e704ee3.1773432891.git.reinette.chatre@intel.com>
+ <4e3b5362-e751-03a4-f98c-a760ad274d02@linux.intel.com>
+ <ef8bb064-f562-4237-ac72-fc2c00a5708e@intel.com>
+ <42de2e76-5962-caf5-3b8d-453784b43af2@linux.intel.com>
+From: Reinette Chatre <reinette.chatre@intel.com>
+Content-Language: en-US
+In-Reply-To: <42de2e76-5962-caf5-3b8d-453784b43af2@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MW4PR03CA0298.namprd03.prod.outlook.com
+ (2603:10b6:303:b5::33) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260323235817.1960573-3-dmatlack@google.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|IA1PR11MB9494:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8515d4d1-7b66-4616-5f6b-08de8f4c7e9b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info: DumJPVZc9pHAnsddkxvur/MpWn32KnaOgmxXU5URHiUBEygmJL23b5SxFBlCiTXEKHPilIxbWXKTTnd6hyugQmKLldIbRJJtFZYISzg03vibjDyBtfgUmS5JqvEcpJsOiz71xKsxp3GKSnsVoiwnqLCgvAC9DvJiAh36uHu2uKNWjbydwnfax1nUE6+dD1IzcS5Atv7xmMcBDA+/KlffMEYWpgrcgPCLoeeh+o3QJppoaPdw41er7Ft0cB3RE4kSvRrOszo9Ecw8SDlIuMtrFWnVugfp6zDTJm4nYQ0OBmNzQjPmb3gRl3O9sO6OiB0PXmkagysBMg35KSXfFSdtgtlKUgf7UbwajKi8l81jsDHroanyac7kfsNk9xlUZyywbAkKZKLJkSizH2MYr8S+wM3yo8/pMC8g7Zz6dqVt/AlC2IMNr1sc9l0vEgWZ3u3q8NXgy+kbpx5NtndTkF8J+SKgWAQtgV2KLUSVWUb1XanXPPy1TGkJ3ZCsnMCxcO1S0SJAEfqJdHwVAp9GGtAQgi2DmXYteKlqVyDEuKFq23M5B/TSvKlnP/VIHCLqA0rWFDJ+lf1imvqh7a4UibfCy2ycEL74nP5KggNWLuXG4LTaYyL8T7L7wWa1MDggTXmlcr6TiJ7QbpWdqOB9S17lke+0Pl9I6xgxrWzHtVQl3vvcPdVprP2h0T48oZ09eugGC+KzC6Ob0i0Xb/28i2LLrxbGnHxSwG1L8mdpORYOunc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RlZOa0ppYVkzZmdvUXYrZHYwOFVNMjBERU00bS9Db29TUmdUSlN3aCtGMENp?=
+ =?utf-8?B?bkE5aDZ0bmZvU0NGdG9BbzduM25selVXOC9mQUJLU0ZBMG1SMm1GTndCeE1C?=
+ =?utf-8?B?N1lBc0lyR2RBQ1dxcXlOSDdUbWJsemtNL3VpVHpWZXBuQlMrU3ZqRlVDZnhY?=
+ =?utf-8?B?ZmNVK3p0SFVyTmQ2RndEMWphUlduTlJqdTF6d1ZLb082ZVE2azFoSEdPZVJH?=
+ =?utf-8?B?Y2I3MkZBRVdURjBIL0lkQ3BsU05uaFcvWmt1VWhWd0RqWXlpWkl2bWJrMGN5?=
+ =?utf-8?B?R2tTRW5GU2NRV2s2c2Voc25DLzhteXIyNzI1a3NvQWlJT2F5eEs4bnVsdm1Z?=
+ =?utf-8?B?bElpUUtOYjFkaUUxVUhDbTlwL3JYUmxVUElsMzI1aTVzdGNndU8yb2dnb0tN?=
+ =?utf-8?B?QmpGbkVMYUs1N0NXdWNBNlNWVGJJTGRBZ0VMbWJndllIOUc3aVQ3NXNFcVRp?=
+ =?utf-8?B?bSsydkYvR3NFQllJYzVOVjlaT2xaY0NvcytWZVdHYW1CazJDclRBZzJ6SW81?=
+ =?utf-8?B?NXN4L2NTQzIwZXRmUElqOExnSlErazUvSUFRTlZqN1lTWGFtdmVLODVMOEF4?=
+ =?utf-8?B?OSt2ckorYkdPREh1V0REMTB3NnFFclJjWjZwNEptVWZSM21OMGZmaWZIRXpv?=
+ =?utf-8?B?Ujl1RzVCcm1qMG1KZEFqbUVPMkZlNmU2ZzRvSDgyUHF4Uk5nYTVvbXAxVWtB?=
+ =?utf-8?B?VWZRclZyKzlGSmJYS1lscTBOQzFMZFVtUEViQ1dJYXJOY0VIN1cwZ0t5WG9u?=
+ =?utf-8?B?YWpyOVdnbUdlTzc4RkJpNll5MDR1L1hjeER1T2NGakhNeUtqaVJtVHBXSkd0?=
+ =?utf-8?B?ZG9FVFpyZnBTVnc1WTFlVnl2ckV6UFo2MnRjbzJnL1lPU2thV3JwemxaWHMx?=
+ =?utf-8?B?VGQ1dUtDQmYySUFhTUYvSHNWaDdXbkxvK1Z3UzAxWk1oaW1vTWdKOUp5R1U5?=
+ =?utf-8?B?U1ZrZWRlTXFCRWdGRjdKSEMyRlIxUHc5enpKdkt1QVNMdlJ0ekhOOHdZMERV?=
+ =?utf-8?B?V2hFMWFyU1Q0M2cyTEVQM3NnRHNwWTZCMWlwQ3pQOEJROElSalRrM080dFVZ?=
+ =?utf-8?B?ek1JTGp6WHBCVHRYYkZHNFNCTXcyb01Qa0sweWQ4bTNKZ1JYTlU2dmozTnor?=
+ =?utf-8?B?K1RIQjMyVXlOVEVOcGxqVmJWZXlOM2Z0YWNrTm93R2dDcjlUTWpBb3g0eGRv?=
+ =?utf-8?B?dng2VE0vdlBibkZiZE1SWlN0SVB3VFpCWUhqRlZQYmc0NEZ2V0h1bVI4dFEy?=
+ =?utf-8?B?dzdmK1dUTU5pZmIzbzFZQVZadk5wTUVzY1BkeUl4Y1JSYURDRnhtUTVDQVpT?=
+ =?utf-8?B?ZWl4ak5VMEFKeUR5MUR1MFVRbFZuZDRaUHJRY3llWEE0WFZ4YWplSUt5UzZy?=
+ =?utf-8?B?WGFYaE11ZHhYc212YlJVdzVOM0ZmczI2MTViYjIrNGZGaEEwemRzeSt4Uktl?=
+ =?utf-8?B?U251SWo3STV3TDhtQ285MnUxYjlEN3Q2dUZBOGYvalMxZ0h6MUh5NXdML1Qy?=
+ =?utf-8?B?K2ZGUlNlUHRDZm12SUVRb2pId2VJYW5keVdzREZGeXByajE5Rm4rVXQ0OXJ6?=
+ =?utf-8?B?MlkyVEJxbzY2Mk55L0YzVGJ2bjhGaWlCK011VGMrQ3VQMWVzNE1PVzhmazFl?=
+ =?utf-8?B?SHBLNUkvOW04L2tWcktTOUF5T05tV2orWjBpRzQyeDI1b3hHWkR2c2ZrdHMw?=
+ =?utf-8?B?VWlwMFlpUGdOUFhHK0h1T25CVSs5NEZ2RjlMQjdldTgwYTUzUVl3MUQzNlQ2?=
+ =?utf-8?B?aFI5V0VrQVZHWGk3SkJzQmpWc1dLYnc5WWhIcjJZS0NjZnRrcVQyOHhWd1pm?=
+ =?utf-8?B?eDlENTNaRTBObGxaenB5SitKV2VNYzFZK3ZCOWk5QUxHUFE3aTNTV0FJcGdL?=
+ =?utf-8?B?YmxRU2Rjd0NSSDE0Z3o3cFdsLzNBb0Y2QVdGajZvdFlJcWVkYlVLVWNwd0F6?=
+ =?utf-8?B?alhUZ3Q3Q25LM2Rha0ZKSXBFVUFvU0ZmOTBmU2drajlrekZFNjBIOUlocHlS?=
+ =?utf-8?B?cUErb1RhcE5xR1lmNTB2VzQ4SStNZkhGb2xoaHlVb3ZBcUZZT2RuVXpQRHpB?=
+ =?utf-8?B?SEVFQ0hKb1ZEdkdzVUE5ZUhiQWQ2WHZGVW9vV08zT1l2RHloMlZLellQRERa?=
+ =?utf-8?B?dVArTEZ3bEtGbGRWZUhxNFFpUk1OR3NEbzV4QTRpUGxocE5JVEJxTDVyZVNG?=
+ =?utf-8?B?bmk1Z21PclhWOE8vdGo1NmJLUmZGa2dnRjBBNWFzME55b2Fjak44Wnl3WW9T?=
+ =?utf-8?B?RjRMRUd5akFoNnRwSGpqREFtcW03TEVUS0x5eWlYblcvMGhxck12Zm1Sa0l2?=
+ =?utf-8?B?VG0zRjNLTkZ1TGhLOC9Mc1J0RU1peWV5KzU1T1lqak9idDYrRC85UGVvVE5t?=
+ =?utf-8?Q?aTjOrD2lw4gyjVrE=3D?=
+X-Exchange-RoutingPolicyChecked: ACY7dh8n3ecPJNsSJhgBBnrU6Y4BY00IX0iKROWuZYm7vC7eY8IUot/CpobwhCrsv+Hjpn3pEOZruOsq73gVZI3cu5TKHjloU5Er1vn1rrnxRk7WXC6z/ltjuAu2ncvxSzBuO8h6v/tJitFx7/VYqNds7E0e6x4LXzE8sSluIlM7MG8tkVp70C07anfiZFL+cnj11ahpcgTH1fEsbi3WZf2PKBL2eVRrdWy5ziBeF6oKOkC50jl3DP6ZHlU/DLtZPr/WA7bmCqL2wGd/A+LHBnhzSkn9eLiZV4e4Za1Vk+Ti7+09yNe4iohPZIerzc6wgoTxYTk7wSYS6Z3b5s4pVQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8515d4d1-7b66-4616-5f6b-08de8f4c7e9b
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 17:39:43.9092
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +rL2O7J9B8/0mU1pl76glCqH7+qZ0QkOoAk+v34ACAjKs8bd2d8typaJJehHSX3L9ttbBENd70V9PGJgNU29BAxVvhQoOlAS2gj5w9B5u44=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB9494
+X-OriginatorOrg: intel.com
 
-On Mon, Mar 23, 2026 at 11:57:54PM +0000, David Matlack wrote:
->Add an API to enable the PCI subsystem to participate in a Live Update
->and track all devices that are being preserved by drivers. Since this
->support is still under development, hide it behind a new Kconfig
->PCI_LIVEUPDATE that is marked experimental.
->
->This API will be used in subsequent commits by the vfio-pci driver to
->preserve VFIO devices across Live Update.
->
->Signed-off-by: David Matlack <dmatlack@google.com>
->---
-> drivers/pci/Kconfig         |  11 ++
-> drivers/pci/Makefile        |   1 +
-> drivers/pci/liveupdate.c    | 380 ++++++++++++++++++++++++++++++++++++
-> drivers/pci/pci.h           |  14 ++
-> drivers/pci/probe.c         |   2 +
-> include/linux/kho/abi/pci.h |  62 ++++++
-> include/linux/pci.h         |  41 ++++
-> 7 files changed, 511 insertions(+)
-> create mode 100644 drivers/pci/liveupdate.c
-> create mode 100644 include/linux/kho/abi/pci.h
->
->diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
->index e3f848ffb52a..05307d89c3f4 100644
->--- a/drivers/pci/Kconfig
->+++ b/drivers/pci/Kconfig
->@@ -334,6 +334,17 @@ config VGA_ARB_MAX_GPUS
-> 	  Reserves space in the kernel to maintain resource locking for
-> 	  multiple GPUS.  The overhead for each GPU is very small.
->
->+config PCI_LIVEUPDATE
->+	bool "PCI Live Update Support (EXPERIMENTAL)"
->+	depends on PCI && LIVEUPDATE
->+	help
->+	  Support for preserving PCI devices across a Live Update. This option
->+	  should only be enabled by developers working on implementing this
->+	  support. Once enough support as landed in the kernel, this option
->+	  will no longer be marked EXPERIMENTAL.
->+
->+	  If unsure, say N.
->+
-> source "drivers/pci/hotplug/Kconfig"
-> source "drivers/pci/controller/Kconfig"
-> source "drivers/pci/endpoint/Kconfig"
->diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
->index 41ebc3b9a518..e8d003cb6757 100644
->--- a/drivers/pci/Makefile
->+++ b/drivers/pci/Makefile
->@@ -16,6 +16,7 @@ obj-$(CONFIG_PROC_FS)		+= proc.o
-> obj-$(CONFIG_SYSFS)		+= pci-sysfs.o slot.o
-> obj-$(CONFIG_ACPI)		+= pci-acpi.o
-> obj-$(CONFIG_GENERIC_PCI_IOMAP) += iomap.o
->+obj-$(CONFIG_PCI_LIVEUPDATE)	+= liveupdate.o
-> endif
->
-> obj-$(CONFIG_OF)		+= of.o
->diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
->new file mode 100644
->index 000000000000..bec7b3500057
->--- /dev/null
->+++ b/drivers/pci/liveupdate.c
->@@ -0,0 +1,380 @@
->+// SPDX-License-Identifier: GPL-2.0
->+
->+/*
->+ * Copyright (c) 2026, Google LLC.
->+ * David Matlack <dmatlack@google.com>
->+ */
->+
->+/**
->+ * DOC: PCI Live Update
->+ *
->+ * The PCI subsystem participates in the Live Update process to enable drivers
->+ * to preserve their PCI devices across kexec.
->+ *
->+ * Device preservation across Live Update is built on top of the Live Update
->+ * Orchestrator (LUO) support for file preservation across kexec. Userspace
->+ * indicates that a device should be preserved by preserving the file associated
->+ * with the device with ``ioctl(LIVEUPDATE_SESSION_PRESERVE_FD)``.
->+ *
->+ * .. note::
->+ *    The support for preserving PCI devices across Live Update is currently
->+ *    *partial* and should be considered *experimental*. It should only be
->+ *    used by developers working on the implementation for the time being.
->+ *
->+ *    To enable the support, enable ``CONFIG_PCI_LIVEUPDATE``.
->+ *
->+ * Driver API
->+ * ==========
->+ *
->+ * Drivers that support file-based device preservation must register their
->+ * ``liveupdate_file_handler`` with the PCI subsystem by calling
->+ * ``pci_liveupdate_register_flb()``. This ensures the PCI subsystem will be
->+ * notified whenever a device file is preserved so that ``struct pci_ser``
->+ * can be allocated to track all preserved devices. This struct is an ABI
->+ * and is eventually handed off to the next kernel via Kexec-Handover (KHO).
->+ *
->+ * In the "outgoing" kernel (before kexec), drivers should then notify the PCI
->+ * subsystem directly whenever the preservation status for a device changes:
->+ *
->+ *  * ``pci_liveupdate_preserve(pci_dev)``: The device is being preserved.
->+ *
->+ *  * ``pci_liveupdate_unpreserve(pci_dev)``: The device is no longer being
->+ *    preserved (preservation is cancelled).
->+ *
->+ * In the "incoming" kernel (after kexec), drivers should notify the PCI
->+ * subsystem with the following calls:
->+ *
->+ *  * ``pci_liveupdate_retrieve(pci_dev)``: The device file is being retrieved
->+ *    by userspace.
->+ *
->+ *  * ``pci_liveupdate_finish(pci_dev)``: The device is done participating in
->+ *    Live Update. After this point the device may no longer be even associated
->+ *    with the same driver.
->+ *
->+ * Incoming/Outgoing
->+ * =================
->+ *
->+ * The state of each device's participation in Live Update is stored in
->+ * ``struct pci_dev``:
->+ *
->+ *  * ``liveupdate_outgoing``: True if the device is being preserved in the
->+ *    outgoing kernel. Set in ``pci_liveupdate_preserve()`` and cleared in
->+ *    ``pci_liveupdate_unpreserve()``.
->+ *
->+ *  * ``liveupdate_incoming``: True if the device is preserved in the incoming
->+ *    kernel. Set during probing when the device is first created and cleared
->+ *    in ``pci_liveupdate_finish()``.
->+ *
->+ * Restrictions
->+ * ============
->+ *
->+ * Preserved devices currently have the following restrictions. Each of these
->+ * may be relaxed in the future.
->+ *
->+ *  * The device must not be a Virtual Function (VF).
->+ *
->+ *  * The device must not be a Physical Function (PF).
->+ *
->+ * Preservation Behavior
->+ * =====================
->+ *
->+ * The kernel preserves the following state for devices preserved across a Live
->+ * Update:
->+ *
->+ *  * The PCI Segment, Bus, Device, and Function numbers assigned to the device
->+ *    are guaranteed to remain the same across Live Update.
->+ *
->+ * This list will be extended in the future as new support is added.
->+ *
->+ * Driver Binding
->+ * ==============
->+ *
->+ * It is the driver's responsibility for ensuring that preserved devices are not
->+ * released or bound to a different driver for as long as they are preserved. In
->+ * practice, this is enforced by LUO taking an extra referenced to the preserved
->+ * device file for as long as it is preserved.
->+ *
->+ * However, there is a window of time in the incoming kernel when a device is
->+ * first probed and when userspace retrieves the device file with
->+ * ``LIVEUPDATE_SESSION_RETRIEVE_FD`` when the device could be bound to any
->+ * driver.
->+ *
->+ * It is currently userspace's responsibility to ensure that the device is bound
->+ * to the correct driver in this window.
->+ */
->+
->+#include <linux/bsearch.h>
->+#include <linux/io.h>
->+#include <linux/kexec_handover.h>
->+#include <linux/kho/abi/pci.h>
->+#include <linux/liveupdate.h>
->+#include <linux/mutex.h>
->+#include <linux/mm.h>
->+#include <linux/pci.h>
->+#include <linux/sort.h>
->+
->+#include "pci.h"
->+
->+static DEFINE_MUTEX(pci_flb_outgoing_lock);
->+
->+static int pci_flb_preserve(struct liveupdate_flb_op_args *args)
->+{
->+	struct pci_dev *dev = NULL;
->+	int max_nr_devices = 0;
->+	struct pci_ser *ser;
->+	unsigned long size;
->+
->+	/*
->+	 * Don't both accounting for VFs that could be created after this
->+	 * since preserving VFs is not supported yet. Also don't account
->+	 * for devices that could be hot-plugged after this since preserving
->+	 * hot-plugged devices across Live Update is not yet an expected
->+	 * use-case.
->+	 */
->+	for_each_pci_dev(dev)
->+		max_nr_devices++;
->+
->+	size = struct_size_t(struct pci_ser, devices, max_nr_devices);
->+
->+	ser = kho_alloc_preserve(size);
->+	if (IS_ERR(ser))
->+		return PTR_ERR(ser);
->+
->+	ser->max_nr_devices = max_nr_devices;
->+
->+	args->obj = ser;
->+	args->data = virt_to_phys(ser);
->+	return 0;
->+}
->+
->+static void pci_flb_unpreserve(struct liveupdate_flb_op_args *args)
->+{
->+	struct pci_ser *ser = args->obj;
->+
->+	WARN_ON_ONCE(ser->nr_devices);
->+	kho_unpreserve_free(ser);
->+}
->+
->+static int pci_flb_retrieve(struct liveupdate_flb_op_args *args)
->+{
->+	args->obj = phys_to_virt(args->data);
->+	return 0;
->+}
->+
->+static void pci_flb_finish(struct liveupdate_flb_op_args *args)
->+{
->+	kho_restore_free(args->obj);
->+}
->+
->+static struct liveupdate_flb_ops pci_liveupdate_flb_ops = {
->+	.preserve = pci_flb_preserve,
->+	.unpreserve = pci_flb_unpreserve,
->+	.retrieve = pci_flb_retrieve,
->+	.finish = pci_flb_finish,
->+	.owner = THIS_MODULE,
->+};
->+
->+static struct liveupdate_flb pci_liveupdate_flb = {
->+	.ops = &pci_liveupdate_flb_ops,
->+	.compatible = PCI_LUO_FLB_COMPATIBLE,
->+};
->+
->+#define INIT_PCI_DEV_SER(_dev) {		\
->+	.domain = pci_domain_nr((_dev)->bus),	\
->+	.bdf = pci_dev_id(_dev),		\
->+}
->+
->+static int pci_dev_ser_cmp(const void *__a, const void *__b)
->+{
->+	const struct pci_dev_ser *a = __a, *b = __b;
->+
->+	return cmp_int((u64)a->domain << 16 | a->bdf,
->+		       (u64)b->domain << 16 | b->bdf);
->+}
->+
->+static struct pci_dev_ser *pci_ser_find(struct pci_ser *ser,
->+					struct pci_dev *dev)
->+{
->+	const struct pci_dev_ser key = INIT_PCI_DEV_SER(dev);
->+
->+	return bsearch(&key, ser->devices, ser->nr_devices,
->+		       sizeof(key), pci_dev_ser_cmp);
->+}
->+
->+static void pci_ser_delete(struct pci_ser *ser, struct pci_dev *dev)
->+{
->+	struct pci_dev_ser *dev_ser;
->+	int i;
->+
->+	dev_ser = pci_ser_find(ser, dev);
->+
->+	/*
->+	 * This should never happen unless there is a kernel bug or
->+	 * corruption that causes the state in struct pci_ser to get
->+	 * out of sync with struct pci_dev.
->+	 */
->+	if (pci_WARN_ONCE(dev, !dev_ser, "Cannot find preserved device!"))
->+		return;
->+
->+	for (i = dev_ser - ser->devices; i < ser->nr_devices - 1; i++)
->+		ser->devices[i] = ser->devices[i + 1];
->+
->+	ser->nr_devices--;
->+}
->+
->+int pci_liveupdate_preserve(struct pci_dev *dev)
->+{
->+	struct pci_dev_ser new = INIT_PCI_DEV_SER(dev);
->+	struct pci_ser *ser;
->+	int i, ret;
->+
->+	/* SR-IOV is not supported yet. */
->+	if (dev->is_virtfn || dev->is_physfn)
->+		return -EINVAL;
 
-This check for "is_physfn" is new in this version of the series,
-previously it was only checking for is_virtfn. If I understand
-correctly, this means a PF device that has SRIOV capability will not be
-presereved. Shouldn't we be able to preserve such PFs without preserving
-the underlying VFs and SRIOV bits?
->+
->+	guard(mutex)(&pci_flb_outgoing_lock);
->+
->+	if (dev->liveupdate_outgoing)
->+		return -EBUSY;
->+
->+	ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
->+	if (ret)
->+		return ret;
->+
->+	if (ser->nr_devices == ser->max_nr_devices)
->+		return -E2BIG;
->+
->+	for (i = ser->nr_devices; i > 0; i--) {
->+		struct pci_dev_ser *prev = &ser->devices[i - 1];
->+		int cmp = pci_dev_ser_cmp(&new, prev);
->+
->+		/*
->+		 * This should never happen unless there is a kernel bug or
->+		 * corruption that causes the state in struct pci_ser to get out
->+		 * of sync with struct pci_dev.
->+		 */
->+		if (WARN_ON_ONCE(!cmp))
->+			return -EBUSY;
->+
->+		if (cmp > 0)
->+			break;
->+
->+		ser->devices[i] = *prev;
->+	}
->+
->+	ser->devices[i] = new;
->+	ser->nr_devices++;
->+	dev->liveupdate_outgoing = true;
->+	return 0;
->+}
->+EXPORT_SYMBOL_GPL(pci_liveupdate_preserve);
->+
->+void pci_liveupdate_unpreserve(struct pci_dev *dev)
->+{
->+	struct pci_ser *ser;
->+	int ret;
->+
->+	/* This should never happen unless the caller (driver) is buggy */
->+	if (WARN_ON_ONCE(!dev->liveupdate_outgoing))
->+		return;
->+
->+	guard(mutex)(&pci_flb_outgoing_lock);
->+
->+	ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
->+
->+	/* This should never happen unless there is a bug in LUO */
->+	if (WARN_ON_ONCE(ret))
->+		return;
->+
->+	pci_ser_delete(ser, dev);
->+	dev->liveupdate_outgoing = false;
->+}
->+EXPORT_SYMBOL_GPL(pci_liveupdate_unpreserve);
->+
->+static int pci_liveupdate_flb_get_incoming(struct pci_ser **serp)
->+{
->+	int ret;
->+
->+	ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)serp);
->+
->+	/* Live Update is not enabled. */
->+	if (ret == -EOPNOTSUPP)
->+		return ret;
->+
->+	/* Live Update is enabled, but there is no incoming FLB data. */
->+	if (ret == -ENODATA)
->+		return ret;
->+
->+	/*
->+	 * Live Update is enabled and there is incoming FLB data, but none of it
->+	 * matches pci_liveupdate_flb.compatible.
->+	 *
->+	 * This could mean that no PCI FLB data was passed by the previous
->+	 * kernel, but it could also mean the previous kernel used a different
->+	 * compatibility string (i.e.a different ABI). The latter deserves at
->+	 * least a WARN_ON_ONCE() but it cannot be distinguished from the
->+	 * former.
->+	 */
->+	if (ret == -ENOENT) {
->+		pr_info_once("PCI: No incoming FLB data detected during Live Update");
->+		return ret;
->+	}
->+
->+	/*
->+	 * There is incoming FLB data that matches pci_liveupdate_flb.compatible
->+	 * but it cannot be retrieved. Proceed with standard initialization as
->+	 * if there was not incoming PCI FLB data.
->+	 */
->+	WARN_ONCE(ret, "PCI: Failed to retrieve incoming FLB data during Live Update");
->+	return ret;
->+}
->+
->+u32 pci_liveupdate_incoming_nr_devices(void)
->+{
->+	struct pci_ser *ser;
->+
->+	if (pci_liveupdate_flb_get_incoming(&ser))
->+		return 0;
->+
->+	return ser->nr_devices;
->+}
->+
->+void pci_liveupdate_setup_device(struct pci_dev *dev)
->+{
->+	struct pci_ser *ser;
->+
->+	if (pci_liveupdate_flb_get_incoming(&ser))
->+		return;
->+
->+	if (!pci_ser_find(ser, dev))
->+		return;
->+
->+	dev->liveupdate_incoming = true;
->+}
->+
->+int pci_liveupdate_retrieve(struct pci_dev *dev)
->+{
->+	if (!dev->liveupdate_incoming)
->+		return -EINVAL;
->+
->+	return 0;
->+}
->+EXPORT_SYMBOL_GPL(pci_liveupdate_retrieve);
->+
->+void pci_liveupdate_finish(struct pci_dev *dev)
->+{
->+	dev->liveupdate_incoming = false;
->+}
->+EXPORT_SYMBOL_GPL(pci_liveupdate_finish);
->+
->+int pci_liveupdate_register_flb(struct liveupdate_file_handler *fh)
->+{
->+	return liveupdate_register_flb(fh, &pci_liveupdate_flb);
->+}
->+EXPORT_SYMBOL_GPL(pci_liveupdate_register_flb);
->+
->+void pci_liveupdate_unregister_flb(struct liveupdate_file_handler *fh)
->+{
->+	liveupdate_unregister_flb(fh, &pci_liveupdate_flb);
->+}
->+EXPORT_SYMBOL_GPL(pci_liveupdate_unregister_flb);
->diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
->index 13d998fbacce..979cb9921340 100644
->--- a/drivers/pci/pci.h
->+++ b/drivers/pci/pci.h
->@@ -1434,4 +1434,18 @@ static inline int pci_msix_write_tph_tag(struct pci_dev *pdev, unsigned int inde
-> 	(PCI_CONF1_ADDRESS(bus, dev, func, reg) | \
-> 	 PCI_CONF1_EXT_REG(reg))
->
->+#ifdef CONFIG_PCI_LIVEUPDATE
->+void pci_liveupdate_setup_device(struct pci_dev *dev);
->+u32 pci_liveupdate_incoming_nr_devices(void);
->+#else
->+static inline void pci_liveupdate_setup_device(struct pci_dev *dev)
->+{
->+}
->+
->+static inline u32 pci_liveupdate_incoming_nr_devices(void)
->+{
->+	return 0;
->+}
->+#endif
->+
-> #endif /* DRIVERS_PCI_H */
->diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
->index bccc7a4bdd79..c60222d45659 100644
->--- a/drivers/pci/probe.c
->+++ b/drivers/pci/probe.c
->@@ -2064,6 +2064,8 @@ int pci_setup_device(struct pci_dev *dev)
-> 	if (pci_early_dump)
-> 		early_dump_pci_device(dev);
->
->+	pci_liveupdate_setup_device(dev);
->+
-> 	/* Need to have dev->class ready */
-> 	dev->cfg_size = pci_cfg_space_size(dev);
->
->diff --git a/include/linux/kho/abi/pci.h b/include/linux/kho/abi/pci.h
->new file mode 100644
->index 000000000000..7764795f6818
->--- /dev/null
->+++ b/include/linux/kho/abi/pci.h
->@@ -0,0 +1,62 @@
->+/* SPDX-License-Identifier: GPL-2.0 */
->+
->+/*
->+ * Copyright (c) 2025, Google LLC.
->+ * David Matlack <dmatlack@google.com>
->+ */
->+
->+#ifndef _LINUX_KHO_ABI_PCI_H
->+#define _LINUX_KHO_ABI_PCI_H
->+
->+#include <linux/bug.h>
->+#include <linux/compiler.h>
->+#include <linux/types.h>
->+
->+/**
->+ * DOC: PCI File-Lifecycle Bound (FLB) Live Update ABI
->+ *
->+ * This header defines the ABI for preserving core PCI state across kexec using
->+ * Live Update File-Lifecycle Bound (FLB) data.
->+ *
->+ * This interface is a contract. Any modification to any of the serialization
->+ * structs defined here constitutes a breaking change. Such changes require
->+ * incrementing the version number in the PCI_LUO_FLB_COMPATIBLE string.
->+ */
->+
->+#define PCI_LUO_FLB_COMPATIBLE "pci-v1"
->+
->+/**
->+ * struct pci_dev_ser - Serialized state about a single PCI device.
->+ *
->+ * @domain: The device's PCI domain number (segment).
->+ * @bdf: The device's PCI bus, device, and function number.
->+ * @reserved: Reserved (to naturally align struct pci_dev_ser).
->+ */
->+struct pci_dev_ser {
->+	u32 domain;
->+	u16 bdf;
->+	u16 reserved;
->+} __packed;
->+
->+/**
->+ * struct pci_ser - PCI Subsystem Live Update State
->+ *
->+ * This struct tracks state about all devices that are being preserved across
->+ * a Live Update for the next kernel.
->+ *
->+ * @max_nr_devices: The length of the devices[] flexible array.
->+ * @nr_devices: The number of devices that were preserved.
->+ * @devices: Flexible array of pci_dev_ser structs for each device. Guaranteed
->+ *           to be sorted ascending by domain and bdf.
->+ */
->+struct pci_ser {
->+	u64 max_nr_devices;
->+	u64 nr_devices;
->+	struct pci_dev_ser devices[];
->+} __packed;
->+
->+/* Ensure all elements of devices[] are naturally aligned. */
->+static_assert(offsetof(struct pci_ser, devices) % sizeof(unsigned long) == 0);
->+static_assert(sizeof(struct pci_dev_ser) % sizeof(unsigned long) == 0);
->+
->+#endif /* _LINUX_KHO_ABI_PCI_H */
->diff --git a/include/linux/pci.h b/include/linux/pci.h
->index 1c270f1d5123..27ee9846a2fd 100644
->--- a/include/linux/pci.h
->+++ b/include/linux/pci.h
->@@ -40,6 +40,7 @@
-> #include <linux/resource_ext.h>
-> #include <linux/msi_api.h>
-> #include <uapi/linux/pci.h>
->+#include <linux/liveupdate.h>
->
-> #include <linux/pci_ids.h>
->
->@@ -591,6 +592,10 @@ struct pci_dev {
-> 	u8		tph_mode;	/* TPH mode */
-> 	u8		tph_req_type;	/* TPH requester type */
-> #endif
->+#ifdef CONFIG_PCI_LIVEUPDATE
->+	unsigned int	liveupdate_incoming:1;	/* Preserved by previous kernel */
->+	unsigned int	liveupdate_outgoing:1;	/* Preserved for next kernel */
->+#endif
-> };
->
-> static inline struct pci_dev *pci_physfn(struct pci_dev *dev)
->@@ -2871,4 +2876,40 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
-> 	WARN_ONCE(condition, "%s %s: " fmt, \
-> 		  dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
->
->+#ifdef CONFIG_PCI_LIVEUPDATE
->+int pci_liveupdate_preserve(struct pci_dev *dev);
->+void pci_liveupdate_unpreserve(struct pci_dev *dev);
->+int pci_liveupdate_retrieve(struct pci_dev *dev);
->+void pci_liveupdate_finish(struct pci_dev *dev);
->+int pci_liveupdate_register_flb(struct liveupdate_file_handler *fh);
->+void pci_liveupdate_unregister_flb(struct liveupdate_file_handler *fh);
->+#else
->+static inline int pci_liveupdate_preserve(struct pci_dev *dev)
->+{
->+	return -EOPNOTSUPP;
->+}
->+
->+static inline void pci_liveupdate_unpreserve(struct pci_dev *dev)
->+{
->+}
->+
->+static inline int pci_liveupdate_retrieve(struct pci_dev *dev)
->+{
->+	return -EOPNOTSUPP;
->+}
->+
->+static inline void pci_liveupdate_finish(struct pci_dev *dev)
->+{
->+}
->+
->+static inline int pci_liveupdate_register_flb(struct liveupdate_file_handler *fh)
->+{
->+	return -EOPNOTSUPP;
->+}
->+
->+static inline void pci_liveupdate_unregister_flb(struct liveupdate_file_handler *fh)
->+{
->+}
->+#endif
->+
-> #endif /* LINUX_PCI_H */
->-- 
->2.53.0.983.g0bb29b3bc5-goog
->
+
+On 3/31/26 1:07 AM, Ilpo Järvinen wrote:
+> On Fri, 27 Mar 2026, Reinette Chatre wrote:
+
+>> Below is an example of what a user running the CAT test will see after these changes.
+>> Since show_cache_info() always prints avg_llc_val the user can obtain insight into failure
+>> by considering it and its previous measurement.
+>>
+>> # Starting L3_CAT test ...
+>> # Mounting resctrl to "/sys/fs/resctrl"
+>> # Cache size :117964800
+>> # Writing benchmark parameters to resctrl FS
+>> # Write schema "L2:1=0x1" to resctrl FS
+>> # Write schema "L3:0=1fc0" to resctrl FS
+>> # Write schema "L3:0=3f" to resctrl FS
+>> # Write schema "L3:0=1ff0" to resctrl FS
+>> # Write schema "L3:0=f" to resctrl FS
+>> # Write schema "L3:0=1ffc" to resctrl FS
+>> # Write schema "L3:0=3" to resctrl FS
+>> # Checking for pass/fail
+>> # Number of bits: 6
+>> # Average LLC val: 445092
+>> # Cache span (lines): 737280
+>> # Pass: Check cache miss rate increased
+>> # Number of bits: 4
+>> # Average LLC val: 724472
+>> # Cache span (lines): 491520
+>> # Pass: Check cache miss rate increased
+>> # Number of bits: 2
+>> # Average LLC val: 1085470
+>> # Cache span (lines): 245760
+>> ok 4 L3_CAT: test
+> 
+> Okay, I didn't remember there was another place printing the numbers.
+> No problem with this then,
+> 
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> 
+
+Thank you very much Ilpo.
+
+Reinette
