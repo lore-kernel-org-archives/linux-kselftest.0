@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074DB28003A
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 04:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B40B266581
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 04:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774929741; cv=none; b=Q6oSFIYo9jAAw87YOHiiLs50XXb1sWLqEHwEicCgNTlpmTbJv+9h4X5Syxj76Jqbayi6446S1atMKsvnObD8KYJ8iMd1J0mYfDPH2JtJYSvLfmJxVKnolSOB9ynSzX4Beqqaue9x6yx621TtS0RegP5EjrhDfOTk17K2DxiTN0o=
+	t=1774929749; cv=none; b=BStMuxzIzRNnKfVedvxo3w2jTIipPXt0mXDtcWBacWe2CcWrXJqYrGSEE75eJiNCaUQZeW2lBveUYQLHEN5xxHiqfY1X2uskGTYa8kQxqQgCPINm0shDfxzKrJe6uep8sO0vGQxphoK3+ahtZirZizUlXKy9KjacaKetsL0pGXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774929741; c=relaxed/simple;
-	bh=COp6XN9SPW07LDJbcP5E9OZSYfLuXueUQFuAux/M89I=;
+	s=arc-20240116; t=1774929749; c=relaxed/simple;
+	bh=abpbiRA6WBdykLPq1TztL3YkOiJcLRxo/NUnQtu4Btg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WZFus1Mtz3mzXy0HYjMWv4ZBN/pp/yZvyC0fjzd87MExcTeCKOne+zFZsM0nuyCLP/8AHzn0lNozA3WOelYZFKgzO/QiY6EdHocQnT1nUPklMaN5LIT1uyWbb9/7+HLNVx/1p42neQxg7Ku7ymQ25Dq+nlr7IpQXe9OzkyrJoks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=isYTxNhM; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=ce78SvmdYinFiFSaSNR9WJabB2ncQ7vwZgObqQpeDvvbeE/vH+dWpTt2iS7oVkZc3vG91GpCI7vX8PzTJ2T/cwL7u6fIrpxVDw0uLFg2rhslv4aH78vCkCBEObvPtAEc+v+tmm8+d5P258u+OBIYGCZ9BtMMUw4zr3V50TOh3HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TndkNMZB; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="isYTxNhM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TndkNMZB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774929739;
+	s=mimecast20190719; t=1774929747;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VvrYLvc4bheXY6nHh3gvx/fU9nd8/iSIX4Lotedv4lg=;
-	b=isYTxNhMkIsTC7T+g1eDTc60QdVDra8NXgXKkRbtbKvG8ffnIW10kTcrtDluys3jAUj/6A
-	M/QceICHillliJ46RCPwwQo9bTLQn2vOK8/Gs59n0jQOWnCwr8sLcWi8SN2WGD18SHxg1I
-	OA/lGHDfAifyumUnoKl9CGtlm9XjV8s=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=6DLWLzQsoTlruy6dZYJmzr//ur1QVX1gW6lYgZn98iI=;
+	b=TndkNMZB9lUjIpHB4ZM+Fh5hffUt+PQsMAkL0/TBvmNPv10S9ivzRB858kyEBCMwIeonX/
+	vd7tkSltErlUvyUSpjqfKwodOwvXdmV15j5xwZXl5SudvOqdxSdtK2w6nTRwuAPbEs3ghN
+	GfP/BHr0XcqUBrnqBn/4LFvK8t5SCG0=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-613-2sKpac99N2CcFOHSra_RFA-1; Tue,
- 31 Mar 2026 00:02:14 -0400
-X-MC-Unique: 2sKpac99N2CcFOHSra_RFA-1
-X-Mimecast-MFC-AGG-ID: 2sKpac99N2CcFOHSra_RFA_1774929732
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-173-kZ2gZjV7OFK3kiiuA2eVcw-1; Tue,
+ 31 Mar 2026 00:02:20 -0400
+X-MC-Unique: kZ2gZjV7OFK3kiiuA2eVcw-1
+X-Mimecast-MFC-AGG-ID: kZ2gZjV7OFK3kiiuA2eVcw_1774929738
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A4405180034E;
-	Tue, 31 Mar 2026 04:02:12 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 63E2118002E8;
+	Tue, 31 Mar 2026 04:02:18 +0000 (UTC)
 Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.121])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 892DF30001A1;
-	Tue, 31 Mar 2026 04:02:07 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 56EEC30001A1;
+	Tue, 31 Mar 2026 04:02:13 +0000 (UTC)
 From: Li Wang <liwang@redhat.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -55,9 +55,9 @@ To: akpm@linux-foundation.org,
 Cc: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] selftests/mm: serialize local_config generation for parallel builds
-Date: Tue, 31 Mar 2026 12:01:54 +0800
-Message-ID: <20260331040156.119158-2-liwang@redhat.com>
+Subject: [PATCH 3/4] selftests/lib.mk: set PWD from CURDIR to avoid wrong extmod path
+Date: Tue, 31 Mar 2026 12:01:55 +0800
+Message-ID: <20260331040156.119158-3-liwang@redhat.com>
 In-Reply-To: <20260331040156.119158-1-liwang@redhat.com>
 References: <20260331040156.119158-1-liwang@redhat.com>
 Precedence: bulk
@@ -69,53 +69,44 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-The mm selftests generate both local_config.mk and local_config.h from
-check_config.sh. With high parallelism (-jN), this can race and lead to
-incomplete target builds (e.g. only a few binaries get built after
-'make -j100', while 'make -j1' builds everything).
+When running selftests from the kernel top-level (e.g. make kselftest-all),
+sub-makes might still inherit the caller's PWD from the environment.
 
-Switch to a stamp-based dependency:
+Some selftests use $(PWD) in recursive kbuild invocations, which can
+then incorrectly resolve to the kernel top directory instead of the
+current test directory.
 
-  local_config.stamp: check_config.sh
-        ... run check_config.sh ...
-        touch local_config.stamp
+In that case, kbuild may generate an external-module wrapper Makefile in
+the wrong location, potentially clobbering the top-level Makefile and
+causing recursive include failures ("Too many open files").
 
-and make local_config.mk/local_config.h depend on the stamp.
-
-This ensures check_config.sh is executed once per update decision and
-removes the parallel race window. Also hook local_config.stamp into
-EXTRA_CLEAN.
-
-No functional change intended for non-parallel builds.
+Export PWD := $(CURDIR) in selftests/lib.mk so $(PWD) always matches the
+actual current selftest directory.
 
 Reported-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Li Wang <liwang@redhat.com>
 ---
- tools/testing/selftests/mm/Makefile | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ tools/testing/selftests/lib.mk                | 2 ++
+ tools/testing/selftests/mm/local_config.stamp | 0
+ 2 files changed, 2 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/local_config.stamp
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 3b222cd6a048..78496f705386 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -261,10 +261,14 @@ $(OUTPUT)/migration: LDLIBS += -lnuma
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index f02cc8a2e4ae..2840e98c225c 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -60,6 +60,8 @@ endif
+ selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
+ top_srcdir = $(selfdir)/../../..
  
- $(OUTPUT)/rmap: LDLIBS += -lnuma
- 
--local_config.mk local_config.h: check_config.sh
--	CC="$(CC)" CFLAGS="$(CFLAGS)" ./check_config.sh
-+local_config.stamp: check_config.sh
-+	$(call msg,CHK,config,$@)
-+	$(Q)CC="$(CC)" CFLAGS="$(CFLAGS)" ./check_config.sh
-+	$(Q)touch $@
- 
--EXTRA_CLEAN += local_config.mk local_config.h
-+local_config.mk local_config.h: local_config.stamp
++export PWD := $(CURDIR)
 +
-+EXTRA_CLEAN += local_config.mk local_config.h local_config.stamp
- 
- ifeq ($(IOURING_EXTRA_LIBS),)
- all: warn_missing_liburing
+ # msg: emit succinct information message describing current building step
+ # $1 - generic step name (e.g., CC, LINK, etc);
+ # $2 - optional "flavor" specifier; if provided, will be emitted as [flavor];
+diff --git a/tools/testing/selftests/mm/local_config.stamp b/tools/testing/selftests/mm/local_config.stamp
+new file mode 100644
+index 000000000000..e69de29bb2d1
 -- 
 2.53.0
 
