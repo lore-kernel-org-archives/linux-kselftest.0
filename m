@@ -1,158 +1,109 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E6AD19D074
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 02:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AE01A6814
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 03:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774923866; cv=none; b=tca5xQPWTZsXa+MpAGVC+sTCYjFH+jXE5qdab11dhGhv6f+JReji1X3rAmcyB9Tx4mriMaV7w9loQoks8mpsVjUF8PnRG4DL6HW6osXoGnGS46or+5ydvpF69GjccjucWWHyiJNC8MRyWx82GAwbArMNMlon/ovmnL0cbmHwOpU=
+	t=1774927134; cv=none; b=MXEEY2N2cVIVUZzSqwiGkF3OHB1vpiAeUApAhGYDUFbwAyAfi4Jc9d+sMnrbcTyV2UW7bNCyNsS/AKIAgdH2ApGiQ0L9qM2k8Vm2guKd88qo/oIZTN5GIhwCeOcjc9KmaU4nIqaU6DBiLDEg6TKnmf7NnKUaoY/SLaZ/Ok7wUaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774923866; c=relaxed/simple;
-	bh=kky3wGi3/UmHx17R0H3hiz+A2PJpZg/5dbV6If8bbX4=;
+	s=arc-20240116; t=1774927134; c=relaxed/simple;
+	bh=Z7lW49Bjo8TiedKHPp1+w/stGzyGL2KI5EW5Cqvh/LM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IhtrvUx8ke+8fl9jVC4kU4OordAvk0jUJLrAO9cRRXWepTmVlIWakUk6SDHLda3KijUeKAMRwr7cFhAV3LTKYu7vjC+p8qwIBzpguTHVrvzvxBe764jaoCQZU7PKFfNLW0T4yUDsOYTaSNh5pVKYQ2N4AlVbXft39XWonvfELok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vEfMfzoz; arc=none smtp.client-ip=91.218.175.183
+	 In-Reply-To:Content-Type; b=kvjp+2Yllfhk+ggIBLnyGDlEyXffcPF2LE7GAmcXpRmIY7nCwwc2Fhu3102wiZjDvUqI7ILntlSefqObxd4sNEDSKW3EZqUbTj5YhIiISRBTfHKIuJy411kkppo9rtfAhnaRhqYr85vW/cwM23F+XU1M/R5jz5aDPXjtnajsfNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QUtmu283; arc=none smtp.client-ip=91.218.175.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vEfMfzoz"
-Message-ID: <f28c4e9f-eb44-4db8-844c-400bf66e88c1@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QUtmu283"
+Message-ID: <79805496-9996-40b6-8cbf-0beaf7dd5473@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774923862;
+	t=1774927129;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=86re5MfwmJbAP59tH1WEF6f9JvbkHObE5R0FqbUZR48=;
-	b=vEfMfzozsgSoKHhCKacyfXjCZa6oyDqGWmAQeQyyFRLzDS+bEsWJ55PesiYvJ2+5e5ANOA
-	5IgrCsccoYX1HzygZTnZc7uOt0aMNwv0VigYB1poEejOZgJDI273YqeR2b1vIrtRs6c8jJ
-	DH3sztrBdwhXvblE8jDDeSH8PPrvxKo=
-Date: Tue, 31 Mar 2026 10:24:14 +0800
+	bh=F51B4RKJm1crpeWlG2F4ZvuF8sUulbOmrWGId7sfBqo=;
+	b=QUtmu283nK3yW4rIZldw9qbVYQ2MPdfxU7l1FlPCoxhAji0KPxiOtbh68BwutO2DPtRNmU
+	4KsJMcz6Lszbfr8i+rWBpsGZn5x51L9Tj+zJ51w9c+eEVzLJTyX9Lcnj/bIVB8KPXA/F7O
+	AXynNVz/094JlHs6fv9uyR52AlHFgME=
+Date: Mon, 30 Mar 2026 20:18:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
- non-IBT JITs
+Subject: Re: [PATCH bpf v4 1/2] bpf: tcp: Reject non-TCP skb in
+ bpf_sk_assign_tcp_reqsk()
+To: Kuniyuki Iwashima <kuniyu@google.com>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, clm@meta.com,
+ daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
+ ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, haoluo@google.com,
+ jolsa@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org,
+ ihor.solodrai@linux.dev
+References: <20260330080746.319680-2-jiayuan.chen@linux.dev>
+ <6ee24770a2b014219d86839b2243e1b7bad4dc4f520457269d5e8ca2b21c2cb8@mail.kernel.org>
+ <d1a739d2-c4ea-4fae-aeaf-f49e75dac0f3@linux.dev>
+ <CAAVpQUD1n7L6LkP32H_Ct71RLNpJ2RQWFc8w08+c8h=U_tDjpQ@mail.gmail.com>
 Content-Language: en-US
-To: Takeru Hayasaka <hayatake396@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
- X86 ML <x86@kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>
-References: <20260327141616.1961457-1-hayatake396@gmail.com>
- <20260327141616.1961457-2-hayatake396@gmail.com>
- <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
- <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
- <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
- <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
- <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com>
- <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
- <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
- <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com>
- <4b0e7341-f2e2-4ad2-8c9e-b482a1b1cbfb@linux.dev>
- <CADFiAc+4hKQGSEo9XRvrNuTTK4LXwCfAqPMR3AMxiNBtZTc4mw@mail.gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CADFiAc+4hKQGSEo9XRvrNuTTK4LXwCfAqPMR3AMxiNBtZTc4mw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAAVpQUD1n7L6LkP32H_Ct71RLNpJ2RQWFc8w08+c8h=U_tDjpQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 31/3/26 00:46, Takeru Hayasaka wrote:
->> Sounds like you are developing/maintaining an XDP project.
+On 3/30/26 6:35 PM, Kuniyuki Iwashima wrote:
+> On Mon, Mar 30, 2026 at 2:26 AM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
 >>
->> If so, and the kernel carries the patches in
->> https://lore.kernel.org/all/20230912150442.2009-1-hffilwlqm@gmail.com/,
->> recommend modifying the XDP project using dispatcher like libxdp [1].
->> Then, you are able to trace the subprogs which aim to run tail calls;
->> meanwhile, you are able to filter packets using pcap-filter, and to
->> output packets using bpf_xdp_output() helper.
 >>
->> [1]
->> https://github.com/xdp-project/xdp-tools/blob/main/lib/libxdp/xdp-dispatcher.c.in
+>> On 3/30/26 5:00 PM, bot+bpf-ci@kernel.org wrote:
+>>>> #if IS_BUILTIN(CONFIG_IPV6)
+>>>>       case htons(ETH_P_IPV6):
+>>>> +            if (ipv6_hdr(skb)->nexthdr != IPPROTO_TCP)
+>>>> +                    return -EINVAL;
+>>>> +
+>>>>               ops = &tcp6_request_sock_ops;
+>>> For IPv6, ipv6_hdr(skb)->nexthdr gives the type of the header
+>>> immediately following the base IPv6 header. If extension headers
+>>> are present (hop-by-hop options, routing, etc.), nexthdr would be
+>>> the extension header type rather than IPPROTO_TCP, even when the
+>>> packet is a valid TCP segment.
+>>>
+>>> Would it be worth using ipv6_find_hdr() here, similar to
+>>> bpf_update_srh_state() in the same file, to walk past any extension
+>>> headers? The IPv4 check above is fine since ip_hdr(skb)->protocol
+>>> always identifies the transport protocol directly.
+>>>
+>>> In practice this is very unlikely to matter since TCP SYN packets
+>>> with IPv6 extension headers are essentially non-existent, but the
+>>> check as written would reject them.
+>>>
+>>>
+>>> ---
+>>> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+>>> See:https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>>>
+>>> CI run summary:https://github.com/kernel-patches/bpf/actions/runs/23735111188
+>>
+>>
+>> Thanks for the analysis.
+>>
+>> There are many places in the kernel that check nexthdr directly without
+>> walking extension headers.
+>>
+>> I'd prefer to keep it simple for now and leave ipv6_find_hdr() as a
+>> potential future improvement if needed.
 > 
-> Thank you very much for your wonderful comment, Leon.
-> This was the first time I learned that such a mechanism exists.
+> +1.
 > 
-> It is a very interesting ecosystem.
-> If I understand correctly, the idea is to invoke a component that
-> dumps pcap data as one of the tail-called components, right?
+> Given this feature is to create a reqsk to process on this running
+> host, it does not make sense to support such ext options.
 
-It is similar to xdp-ninja/xdp-dump.
-
-However, this idea has one more step forward: it is to trace the
-subprogs instead of only the main prog.
-
-For example,
-
-__noinline int subprog0(struct xdp_md *xdp) { bpf_tail_call_static(xdp,
-&m, 0); }
-__noinline int subprog1(struct xdp_md *xdp) { bpf_tail_call_static(xdp,
-&m, 1); }
-__noinline int subprog2(struct xdp_md *xdp) { bpf_tail_call_static(xdp,
-&m, 2); }
-SEC("xdp") int main(struct xdp_md *xdp)
-{
-	subprog0(xdp);
-	subprog1(xdp);
-	subprog2(xdp);
-	return XDP_PASS;
-}
-
-All of them, subprog{0,1,2} and main, will be traced.
-
-In this idea, it is to inject pcap-filter expression, the cbpf, using
-elibpcap [1], and to output packets like your xdp-ninja.
-
-It works well during the time I maintained an XDP project.
-
-[1] https://github.com/jschwinger233/elibpcap
-
-> Thank you very much for sharing this idea with me.
-> If I have a chance to write a new XDP program in the future, I would
-> definitely like to try it.
-> 
-> On the other hand, I feel that it is somewhat difficult to apply this
-> idea directly to existing codebases, or to cases where the code is> written in Go using something like cilium/ebpf.
-> Also, when it comes to code running in production environments, making
-> changes itself can be difficult.
-
-Correct. If cannot modify the code, and the tail calls are not called
-inner subprogs, the aforementioned idea is helpless to trace the tail
-callees.
-
-> 
-> For that reason, I prototyped a tool like this.
-> It is something like a middle ground between xdpdump and xdpcap.
-> I built it so that only packets matched by cbpf are sent up through
-> perf, and while testing it, I noticed that it does not work well for
-> targets invoked via tail call.
-> This is what motivated me to send the patch.
-> 
-
-I have similar idea years ago, a more generic tracer for tail calls.
-However, as Alexei's concern, I won't post it.
-
-> https://github.com/takehaya/xdp-ninja
-> 
-
-It looks wonderful.
-
-I developed a similar tool, bpfsnoop [1], to trace BPF progs/subprogs
-and kernel functions with filtering packets/arguments and outputting
-packets/arguments info. However, it lacks the ability of outputting
-packets to pcap file.
-
-[1] https://github.com/bpfsnoop/bpfsnoop
-
-Thanks,
-Leon
-
-> Once again, thank you for sharing the idea.
-> Takeru
-
+While at header reading, does it need a pskb_may_pull() before reading?
