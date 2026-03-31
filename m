@@ -1,99 +1,121 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0E119992C
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 20:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3545389DF3
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 20:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774990182; cv=none; b=J2gQSagfrnHNknltdgqYL3zsvcbLEUUGGrSLn0P7uK66hHUoW7bPXrHEvxNqvLox5O5/2+srxJ0gCpy9S0jT9Ar22G8WWwS/GrwgBSxj0QTiIoLVE1U1BpTa7oyylaCFu+Fc85V5ALt2oSfDDnVNXJCqjP5xffvVfVTn9bDoJbk=
+	t=1774990312; cv=none; b=mhyf2n/+tQ6ByMLigo6AuoVY4a4A+Yn8M/lEbJZ5linO+p50c1dCzaqSuViuO9M0pWhdmmf2KGC9R29j8Vughx8rc7pf6DiEn/kRHu8VrbW4dhDkPMycc6nF4jikBIU5xCVv68tkRRQYdGT2lc6KIghSWEESa2UKQmkqLC+d9yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774990182; c=relaxed/simple;
-	bh=q05KO6AWrjG/PgJFYBIJXv518zshm1joyl8stcuBMMU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p+k1bf/raIAYcDyaG6EJrkCwC6llYJ5MKbityO1UxmdlQi+Wrw1IHzWjFvqh8V9WA1R0wTv1OY2QZi+metk5sZblqZigG3/EspqjIaguxIyIdRXAoPVbJJyBKQFH1O+hixej9Iso++nhSUEHuzv+wLpwGJ3OHTeXkqGmNbRn0EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=B398pkOb; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1774990312; c=relaxed/simple;
+	bh=BCBKSZPgsnAvDjCkRqWar0h4C1Ove21C+k5VGe7NiAM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=InchDpvlItnDNHE0qRB0CJGQ6O8KWlFM/r7iD5g0sNfEDbw+e8257i6w1A/BrqwbJD4FnI7PcyqEfapYO19oYf0wSf9Giv4EyTEhvpe43oItcVXN394j+G1y2v3K65ghAg02bn9k80Om9eiUKhR1RczwJTkvhepboYCMcQJF1SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AVi788HZ; arc=none smtp.client-ip=209.85.160.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="B398pkOb"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82a07738118so3478564b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 13:49:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AVi788HZ"
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-4042fe53946so2440358fac.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 13:51:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1774990180; x=1775594980; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5A5EjfwtiNR9PDlV9xKftKv8ZO5lHwwX8xQnpG4je7U=;
-        b=B398pkObkhSZdWcSJjhwg5Nto9BUX/LWI/4vtIGb2G/mX+6g7sVdHR1DV0NDPmhsGJ
-         pUOxjMaqMzcb/YIdXHd259GhM3FCX5SeFZ+yWbNIQ+pLuUsUrfHQ5uDsyBApnrPJ3+YV
-         FC+kcEYlkzxyz6dZhlnFrjQL9JSjRtZPPhCWMSPOxISJk42Hc0GrXmrYiIvy32us0s8o
-         7wE44ePYFPfaAxpD+qmt6Y/JH10V0y1W2rARlOYx1HHypZQ75gxDOLtx0ybvUUIFpO3A
-         IQ6iRmo9z3xhiN/O+jzrtOgbclSaiBj0uDEMulZKxSk5oh020jysXML3NC2CnECe/NQv
-         W99g==
+        d=linuxfoundation.org; s=google; t=1774990310; x=1775595110; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VPxujRuDJNBuq85g1+QT32s/1EHULkgoYUEENR2udqE=;
+        b=AVi788HZmEjtpsq1GAzi+q7nB8LFJHTAAFPe1QmA89KPzlVLXcwBRfKM6ZVzuuOMe+
+         L2BrWiNfeVV5m+qmhjnC+stDrArbDAs299HrSLeT3AkcLzeo6qRyuLv1X5eB8Eu7HhI+
+         TBWvi2C5O/ICnFWqlN+4EzU9ZM0tFKpX6VDBU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774990180; x=1775594980;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5A5EjfwtiNR9PDlV9xKftKv8ZO5lHwwX8xQnpG4je7U=;
-        b=Bzysmt1zIEfVym8n+WkCeiC92KahTJNfm2KRQCqTkcvWRio48T65w0fpA8RwV6YjHz
-         daBgqKpya34I+6Rna8fsTvyEYfJJmxlUKaAO/j+8371bBxXdW7QOChxCGKXF/BEc2SFg
-         1Xkg+GEuAdUF1BRpXDWY6s1q1fOdQWMIwjtuMI7O9sIQd7gj6LM49KqL+bUDT5XFYO7R
-         dMi9SO7Ip9xYLIXwfjXkltfMWGrQjibrasegpgTzdOW/ME55LMV4zQnM2Y13qcI/cWHI
-         aM/OOpT9GhcZEjIUPagfpUf8ZhQKHQAf4M2YsKQAI1/tqQh1Og9vVYoMnGp3NlvEF8ki
-         8Upg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0DQ6gcC+iTN80mw+RyZqT/MNSHFag+QRNhEHhujXQ4d/4LyKyLIox771jVmHqUyske6uKDFDhvlXuBSPGwH4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0hYBiH8pSlkUlrbXP4Xwnx2u5oMyVrJQjUkwssO8M0z8vJsLt
-	/UvlRrnrTcutv3NsCeECIgzS7Ta9P2GEaTSBwqcr04RfYS5JRyeWSETbUTyWEk6go1g=
-X-Gm-Gg: ATEYQzxIvPmu0IdPzBrn41PHRzF6n8AnKJ4/NWt7tOu+UaXb9XSyLco+TVDnmd+wssc
-	xpIeksVQkk0d59jEMhixXbAQI1uhwzgabyK/E2k5jHDuYvvJepQWge7dCtaK/+bA5UcgR0udJiX
-	wqA+P5jhNVQDbw8aS4hMUhpX/atwPtFfOkhWYVyZ/nEhGeEMEIEd5SQN6PsrvO0upPzY49RMo2m
-	g87JnfyM1R0Hn1Y7x1k7MTDSqbmb3hNwDZ84uQTxtp8lX8JiHZG3NFmzn+fqhRzVNSY/wVio7iK
-	gjGUBNCZ8BWEEcMNujiufPDiNT6Po0ZWisc90cHavPsF5oNLVN5nqKhdKWMZs8jgjxPk8V+RLEW
-	+cQjpCQDgVSD27B71+zeqWZnJwEr6dFbsua54EBIE27frMGt2htSz2qt1coCE5rndOTmZJHL+y4
-	YYQKI=
-X-Received: by 2002:a05:6a00:600e:b0:829:7d31:dd99 with SMTP id d2e1a72fcca58-82ce8ad166cmr912616b3a.38.1774990180603;
-        Tue, 31 Mar 2026 13:49:40 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:1::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cdaa4c3basm3171819b3a.37.2026.03.31.13.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 13:49:40 -0700 (PDT)
-Date: Tue, 31 Mar 2026 13:49:39 -0700
-From: Joe Damato <joe@dama.to>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: drv-net: update the README with
- variants
-Message-ID: <acwzYzMoKSoDqnaf@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-References: <20260331001930.3411279-1-kuba@kernel.org>
+        d=1e100.net; s=20251104; t=1774990310; x=1775595110;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VPxujRuDJNBuq85g1+QT32s/1EHULkgoYUEENR2udqE=;
+        b=PoFTn6MKQpuV4xGI4hacv/6cMPAr80txFdj61IeQLTlBe6ARInqlvDK33Q1+1NaZEZ
+         qZXwoKs47zYeK6nGSLEOwhCk7Rj3rf4a649LuOsD7/YFL/opEPzbxpw82CS08lM9Z5IR
+         B7ACok/CTbuFPdndwOzRqIX6eaau+F6lfuRhcKr+9cS2oIo8W8hR/MwYsyG78Afwuk7i
+         OoDe/3HDck3c9s2iZd1Oar4yM/MLz2/mWqgeeLPrIarMBgOBIdLtCWnjBDfsPrXP+hUO
+         Xv4F3Q2LgJ3PDrTklB+1fiq1ajBWYpTZpgSmvV9IUpixabCxrTP1Rg59Tm/Mpm+o4fjx
+         utOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWo7uL9Xv29AcVZpx1LbZpYI/9qdEbjn3hwQfZgcwuSD+fud3ruWLrsyXDy5uHWqX4Rh+V1PPr1X1dljR3BT+w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDFJINprZyXviT2eQjh+kjjhzTsLOjFfSwyfkwd29/NeXQSoE/
+	B/X9LkUF+2z57yphw4HDac3+srBPaWwj7x5zFk/dx8AjFVJ1M9/ZzwEeaEMftJinbN8=
+X-Gm-Gg: ATEYQzzK8F82EydU2VFGmcmGcprN62Qm5K0FxYBbq5iJ3Z3vB/0Kpy71VnH7luVLTK7
+	Sf/khyjrVbNhIWmeQe9m3Uu8n5Dtao/Puz/4MSSa5RENgi0LM4b5ImQbiRUlvxdsjHtMqJUK5XG
+	uftHdRKR4tfC2Hdn5dN39d0q6KdxUwv0FHXJICJL0EM5wE8DChZgkWXRIq3qgqd3rY0z+ZGvIEO
+	syeP/kFdemrEDjIcuc0JcUWk9SfiaUG0IH66ufVJnrRPYG2WGqb6J+nO266VGCBgzSUsN/FfISN
+	lb8IS+AaO9oviJm80phUPNrFj4r5RP2mhPomg8GbaehtsQtiBpXIqNoKkbICNF2JF3KGEFGBchq
+	9f2qA15Hg2UGj1rYwNCRcvkIy9XOq12P6SJlzneAkHP+uvRK9Cgw/aXYnWIJj0mVIJKgb7F8hJ9
+	xW0hrsigaLoWPWmoPilKoe+xVSAWRWYtW747s=
+X-Received: by 2002:a05:6870:9e85:b0:417:2a17:285 with SMTP id 586e51a60fabf-422cfeb90d6mr707537fac.30.1774990309601;
+        Tue, 31 Mar 2026 13:51:49 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d04c88da4sm7412825fac.12.2026.03.31.13.51.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2026 13:51:49 -0700 (PDT)
+Message-ID: <014b54f0-c4a6-40f2-afd0-0ea3e2f796e4@linuxfoundation.org>
+Date: Tue, 31 Mar 2026 14:51:48 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260331001930.3411279-1-kuba@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv3] selftests: Use ktap helpers for runner.sh
+To: Hangbin Liu <liuhangbin@gmail.com>, linux-kselftest@vger.kernel.org
+Cc: Shuah Khan <shuah@kernel.org>, Brendan Jackman <jackmanb@google.com>,
+ netdev@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20260225010833.11301-1-liuhangbin@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260225010833.11301-1-liuhangbin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 30, 2026 at 05:19:30PM -0700, Jakub Kicinski wrote:
-> Test authors need to know about variants, existing tests don't use
-> them because variants are relatively recent.
+On 2/24/26 18:08, Hangbin Liu wrote:
+> Instead of manually writing ktap messages, we should use the formal
+> ktap helpers in runner.sh. Brendan did some work in d9e6269e3303
+> ("selftests/run_kselftest.sh: exit with error if tests fail") to make
+> run_kselftest.sh exit with the correct return value. However, the output
+> does not include the total results, such as how many tests passed or failed.
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Let’s convert all manually printed messages in runner.sh to use the
+> formal ktap helpers. Here are what I changed:
+> 
+>    1. Move TAP header from runner.sh to run_kselftest.sh, since run_kselftest.sh
+>       is the only caller of run_many().
+>    2. In run_kselftest.sh, call run_many() in main process to count the
+>       pass/fail numbers.
+>    3. In run_kselftest.sh, do not generate kselftest_failures_file. Just
+>       use ktap_print_totals to report the result.
+>    4. In runner.sh run_one(), get the return value and use ktap helpers for
+>       all pass/fail reporting. This allows counting pass/fail numbers in the
+>       main process.
+>    5. In runner.sh run_in_netns(), also return the correct rc, so we can
+>       count results during wait.
+> 
+> After the change, the printed result looks like:
+> 
+>    not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=1
+>    # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+> 
+>    ]# echo $?
+>    1
+> 
+> Tested-by: Brendan Jackman <jackmanb@google.com>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 > ---
-> CC: joe@dama.to
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  .../testing/selftests/drivers/net/README.rst  | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
+> 
 
-Reviewed-by: Joe Damato <joe@dama.to>
+Applied to linux-kselftest next for Linux 7.1-rc1
+
+I had to fix commit description and long lines in change log.
+In the future make sure to run checkpatch to catch errors
+related to commit descriptions.
+
+thanks,
+-- Shuah
