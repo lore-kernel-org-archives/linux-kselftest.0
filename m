@@ -1,142 +1,99 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD2738A709;
-	Tue, 31 Mar 2026 20:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0E119992C
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 20:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774989871; cv=none; b=pUNSbjwY9zUN/TpZ3n+fDvzMeDhXN/7eocoL7sxyaDdsx3g52mBRilV6l+5efeiY2NhBiHMYev/XPnnqVhupsSTOvwQeFaMSV4OwOxchuK/Y1FOLh0KFznT3E8XRv59PylCRbU8Slv71+FilQLSf6Pdpi1shreUtuHN1JUwBoVU=
+	t=1774990182; cv=none; b=J2gQSagfrnHNknltdgqYL3zsvcbLEUUGGrSLn0P7uK66hHUoW7bPXrHEvxNqvLox5O5/2+srxJ0gCpy9S0jT9Ar22G8WWwS/GrwgBSxj0QTiIoLVE1U1BpTa7oyylaCFu+Fc85V5ALt2oSfDDnVNXJCqjP5xffvVfVTn9bDoJbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774989871; c=relaxed/simple;
-	bh=y983+/rjkzf6M53UM1IDDXq0eYkSrQwapz5bFCkeWJU=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=cKHjMwpXU87p0HFD3P6PNK6zdSbJqFM63CS4b03HocGkcsoaM2q3lg4/UnLyW2fWLAnW+oPduS5sbfZJYPB+WQ1unbuz54hItGlgxk+6LWmjijrnADrzphqt0NxIKGV2ejOvDjVE3LsuEvRJwCOrFcZHAeoXKoKpabxSiQAbWpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=iEciUOTL; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1774990182; c=relaxed/simple;
+	bh=q05KO6AWrjG/PgJFYBIJXv518zshm1joyl8stcuBMMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p+k1bf/raIAYcDyaG6EJrkCwC6llYJ5MKbityO1UxmdlQi+Wrw1IHzWjFvqh8V9WA1R0wTv1OY2QZi+metk5sZblqZigG3/EspqjIaguxIyIdRXAoPVbJJyBKQFH1O+hixej9Iso++nhSUEHuzv+wLpwGJ3OHTeXkqGmNbRn0EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=B398pkOb; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="iEciUOTL"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 62VKh4FL755405
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 31 Mar 2026 13:43:05 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 62VKh4FL755405
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026032601; t=1774989786;
-	bh=V0/g33lgizl2oNCDPM0m5RDMcESYn9Y1acfjoIK2Gh0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=iEciUOTL4ETUqQQo6wr5ofRzrfEOfRyTMLcRqbW8kB7ua8qvmOLjTwd+MnFLUMMAj
-	 9Yj2BKa3F1A6M+1e/cPaQQmSZqFwWLAMJ6g1QPg453Wzu/dYiF7ZymiJLu2c+enFQ4
-	 1ByItX+dqt/V8rOF9S1y4fYF8Phwon9UVj2NvQsWA04KYdp97aWjdGNxPQYZMxZuZw
-	 WlKQzHIDXIw0an/WBiuaFXtxsLscM7vTrlvDFN8V14b/474JJUB8Wp9VgiK4GUmNIE
-	 an3dyDvlC3yhcqy3oC5rHfpCrX6HmhjdPoVEhyaeYpzVLuqLlSWCW7LG4EGaZFp87i
-	 qJdtolklv5Wgg==
-Date: Tue, 31 Mar 2026 13:42:57 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Yann Droneaud <yann@droneaud.fr>, Jori Koolstra <jkoolstra@xs4all.nl>,
-        Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>, Chuck Lever <chuck.lever@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jan Kara <jack@suse.cz>, Alexander Aring <alex.aring@gmail.com>
-CC: Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
-        Andrey Albershteyn <aalbersh@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        =?ISO-8859-1?Q?Thomas_Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Aleksa Sarai <cyphar@cyphar.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        cmirabil@redhat.com, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
-User-Agent: K-9 Mail for Android
-In-Reply-To: <df5a6fec-ca67-4196-9e7b-cd129c79578e@droneaud.fr>
-References: <20260331172011.3512876-1-jkoolstra@xs4all.nl> <20260331172011.3512876-2-jkoolstra@xs4all.nl> <df5a6fec-ca67-4196-9e7b-cd129c79578e@droneaud.fr>
-Message-ID: <6BF21DE6-F88D-4E59-91BE-568C67ABAE89@zytor.com>
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="B398pkOb"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82a07738118so3478564b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 13:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1774990180; x=1775594980; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5A5EjfwtiNR9PDlV9xKftKv8ZO5lHwwX8xQnpG4je7U=;
+        b=B398pkObkhSZdWcSJjhwg5Nto9BUX/LWI/4vtIGb2G/mX+6g7sVdHR1DV0NDPmhsGJ
+         pUOxjMaqMzcb/YIdXHd259GhM3FCX5SeFZ+yWbNIQ+pLuUsUrfHQ5uDsyBApnrPJ3+YV
+         FC+kcEYlkzxyz6dZhlnFrjQL9JSjRtZPPhCWMSPOxISJk42Hc0GrXmrYiIvy32us0s8o
+         7wE44ePYFPfaAxpD+qmt6Y/JH10V0y1W2rARlOYx1HHypZQ75gxDOLtx0ybvUUIFpO3A
+         IQ6iRmo9z3xhiN/O+jzrtOgbclSaiBj0uDEMulZKxSk5oh020jysXML3NC2CnECe/NQv
+         W99g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774990180; x=1775594980;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5A5EjfwtiNR9PDlV9xKftKv8ZO5lHwwX8xQnpG4je7U=;
+        b=Bzysmt1zIEfVym8n+WkCeiC92KahTJNfm2KRQCqTkcvWRio48T65w0fpA8RwV6YjHz
+         daBgqKpya34I+6Rna8fsTvyEYfJJmxlUKaAO/j+8371bBxXdW7QOChxCGKXF/BEc2SFg
+         1Xkg+GEuAdUF1BRpXDWY6s1q1fOdQWMIwjtuMI7O9sIQd7gj6LM49KqL+bUDT5XFYO7R
+         dMi9SO7Ip9xYLIXwfjXkltfMWGrQjibrasegpgTzdOW/ME55LMV4zQnM2Y13qcI/cWHI
+         aM/OOpT9GhcZEjIUPagfpUf8ZhQKHQAf4M2YsKQAI1/tqQh1Og9vVYoMnGp3NlvEF8ki
+         8Upg==
+X-Forwarded-Encrypted: i=1; AJvYcCV0DQ6gcC+iTN80mw+RyZqT/MNSHFag+QRNhEHhujXQ4d/4LyKyLIox771jVmHqUyske6uKDFDhvlXuBSPGwH4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0hYBiH8pSlkUlrbXP4Xwnx2u5oMyVrJQjUkwssO8M0z8vJsLt
+	/UvlRrnrTcutv3NsCeECIgzS7Ta9P2GEaTSBwqcr04RfYS5JRyeWSETbUTyWEk6go1g=
+X-Gm-Gg: ATEYQzxIvPmu0IdPzBrn41PHRzF6n8AnKJ4/NWt7tOu+UaXb9XSyLco+TVDnmd+wssc
+	xpIeksVQkk0d59jEMhixXbAQI1uhwzgabyK/E2k5jHDuYvvJepQWge7dCtaK/+bA5UcgR0udJiX
+	wqA+P5jhNVQDbw8aS4hMUhpX/atwPtFfOkhWYVyZ/nEhGeEMEIEd5SQN6PsrvO0upPzY49RMo2m
+	g87JnfyM1R0Hn1Y7x1k7MTDSqbmb3hNwDZ84uQTxtp8lX8JiHZG3NFmzn+fqhRzVNSY/wVio7iK
+	gjGUBNCZ8BWEEcMNujiufPDiNT6Po0ZWisc90cHavPsF5oNLVN5nqKhdKWMZs8jgjxPk8V+RLEW
+	+cQjpCQDgVSD27B71+zeqWZnJwEr6dFbsua54EBIE27frMGt2htSz2qt1coCE5rndOTmZJHL+y4
+	YYQKI=
+X-Received: by 2002:a05:6a00:600e:b0:829:7d31:dd99 with SMTP id d2e1a72fcca58-82ce8ad166cmr912616b3a.38.1774990180603;
+        Tue, 31 Mar 2026 13:49:40 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:1::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cdaa4c3basm3171819b3a.37.2026.03.31.13.49.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 13:49:40 -0700 (PDT)
+Date: Tue, 31 Mar 2026 13:49:39 -0700
+From: Joe Damato <joe@dama.to>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: drv-net: update the README with
+ variants
+Message-ID: <acwzYzMoKSoDqnaf@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+	andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+References: <20260331001930.3411279-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260331001930.3411279-1-kuba@kernel.org>
 
-On March 31, 2026 1:25:03 PM PDT, Yann Droneaud <yann@droneaud=2Efr> wrote:
->Hi,
->
->Le 31/03/2026 =C3=A0 19:19, Jori Koolstra a =C3=A9crit=C2=A0:
->> Currently there is no way to race-freely create and open a directory=2E
->> For regular files we have open(O_CREAT) for creating a new file inode,
->> and returning a pinning fd to it=2E The lack of such functionality for
->> directories means that when populating a directory tree there's always
->> a race involved: the inodes first need to be created, and then opened
->> to adjust their permissions/ownership/labels/timestamps/acls/xattrs/=2E=
-=2E=2E,
->> but in the time window between the creation and the opening they might
->> be replaced by something else=2E
->>=20
->> Addressing this race without proper APIs is possible (by immediately
->> fstat()ing what was opened, to verify that it has the right inode type)=
-,
->> but difficult to get right=2E Hence, mkdirat_fd() that creates a direct=
-ory
->> and returns an O_DIRECTORY fd is useful=2E
->>=20
->> This feature idea (and description) is taken from the UAPI group:
->> https://github=2Ecom/uapi-group/kernel-features?tab=3Dreadme-ov-file#ra=
-ce-free-creation-and-opening-of-non-file-inodes
->>=20
->> Signed-off-by: Jori Koolstra <jkoolstra@xs4all=2Enl>
->> ---
->>   arch/x86/entry/syscalls/syscall_64=2Etbl |  1 +
->>   fs/internal=2Eh                          |  1 +
->>   fs/namei=2Ec                             | 26 +++++++++++++++++++++++=
-+--
->>   include/linux/fcntl=2Eh                  |  2 ++
->>   include/linux/syscalls=2Eh               |  2 ++
->>   include/uapi/asm-generic/fcntl=2Eh       |  3 +++
->>   include/uapi/asm-generic/unistd=2Eh      |  5 ++++-
->>   scripts/syscall=2Etbl                    |  1 +
->>   8 files changed, 38 insertions(+), 3 deletions(-)
->
->> diff --git a/include/linux/fcntl=2Eh b/include/linux/fcntl=2Eh
->> index a332e79b3207=2E=2Ed2f0fdb82847 100644
->> --- a/include/linux/fcntl=2Eh
->> +++ b/include/linux/fcntl=2Eh
->> @@ -25,6 +25,8 @@
->>   #define force_o_largefile() (!IS_ENABLED(CONFIG_ARCH_32BIT_OFF_T))
->>   #endif
->>   +#define VALID_MKDIRAT_FD_FLAGS	(MKDIRAT_FD_NEED_FD)
->> +
->
->I don't see support for O_CLOEXEC-ish flag, is the file descriptor in clo=
-se-on-exec mode by default ? If yes, it should be mentioned=2E
->
->
->> diff --git a/include/uapi/asm-generic/fcntl=2Eh b/include/uapi/asm-gene=
-ric/fcntl=2Eh
->> index 613475285643=2E=2E621458bf1fbf 100644
->> --- a/include/uapi/asm-generic/fcntl=2Eh
->> +++ b/include/uapi/asm-generic/fcntl=2Eh
->> @@ -95,6 +95,9 @@
->>   #define O_NDELAY	O_NONBLOCK
->>   #endif
->>   +/* Flags for mkdirat_fd */
->> +#define MKDIRAT_FD_NEED_FD	0x01
->> +
->
->
->Regards=2E
->
->
+On Mon, Mar 30, 2026 at 05:19:30PM -0700, Jakub Kicinski wrote:
+> Test authors need to know about variants, existing tests don't use
+> them because variants are relatively recent.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: joe@dama.to
+> CC: shuah@kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  .../testing/selftests/drivers/net/README.rst  | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
 
-And even if it is, POSIX already has O_CLOFORK and we should expect that t=
-hat will be needed, too=2E
+Reviewed-by: Joe Damato <joe@dama.to>
