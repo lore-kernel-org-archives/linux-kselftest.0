@@ -1,428 +1,149 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209403016F1
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 01:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774921838; cv=pass; b=vD7Oeg1vy/l3a6ihrw9wxSTG331cKIUl7B2YUYVha3dWH9JzUtdgfYUCHa9Dxfn8p45ST9pMcIqeW59C/tH8mfFDOosRHP90GaSn7gl2WNapvVXVhHk79EPuOgc1o7O+YKtf/hT46eknX285MZJnL1oJIZ8uY4yd2YgfMpynW8k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774921838; c=relaxed/simple;
-	bh=8gYmI+YOdsaMkFuEayCBQbVk/v3bRpvOLfsbM+msETo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nxKVOXrBaGaYwA1+ayNUUHSCCjHNXObdP2B/f7OXGHpsEWTkX7g9nB0VUXrxO2aDpWq5v6bEdQLOlpKMTI1BQHwfMy1sZP4Y1MWBCLVlMQmqkyX+Q53AULre005IP11yIlFgE0jJb5gGCam/PIdLsi/IelFbBJVhAbsjSRoG4+c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wL7q1DXt; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDDB54763
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 01:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774921964; cv=none; b=LXu3cbt4mSeHdepTQ6Cwjjdu8LFumq1mv8yGHXdq/h1/mjSuJAxzmz0/PIoU6TaR2Xgo7vJ8r6l06qye+mNEfYqy2e9ZTFOWTupw5l0VUSaEboxicOJFNLDioiP6Gw+/BHNKZ/eDKUc4/z22KAdWg9UeZG8l9GGesz+TeJ+TjQ4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774921964; c=relaxed/simple;
+	bh=95rFrOHvCv7v/K+6MKBLyHqB0RhvY533VlWoYA3J5DI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KCUcux1kCSzQaM06rutSyJ340Utaodj8Leh0eWih3Nx8PkGQpHFCaQn4FUvgXVAwFWGOeftx6LcCiuEgKmhkbNjYcZtR5GPTSas1khmwrNBp0jXkELsJqzk5nKxWwWZbRE6nC9MunUZ/F0daM2hPKah/sqLJBMrZJUA7dCJO4tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f+6gSsM9; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=bw8Jei/2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wL7q1DXt"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-127380532eeso1280321c88.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 18:50:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774921836; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ac172r1jBBi0jYWl4OENui9nSVX5t0r+Sqgx255PlswPQkOX1D2fI/cixijMasMul0
-         pqcrzxgm4DmzT4SMiT/Yqdcl8gd3UjEq8wfkOMh+Lq8oRsBMq0WC+Fd422OKQ7Xrfb1G
-         NqiM5BOxSPUcg7C4afW15w7G95beI6JaUszvpBMKodnBLhuAJnYw10skkYFVpaS3Tbun
-         46oeSlTHxlRkukx6ogblz+h1EfULIXNNjU0AnBFJhlin6SYfuUaGrV3DdXvw9IdU5zEG
-         8M6v7xbYjYcQUawd3Txscq4u6TT/qBk2IB+6IVQsu24yTwBLgFxqsEzmBtIbmsy4EhVg
-         uGCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6f292/btZn8ISsDnTBi4fWU5y3QaKwgLkJGaHERz/GA=;
-        fh=3EKlh3tq0rEbGdxsG11148uO7i0DdRAWNRnsZvN0e0I=;
-        b=TFBUsIKfUYVkpMMTJaN/sEAsh76u66yXS2O9igwpMjOnVUhgs3bKXdWrVxTD1WK8S3
-         QKMjBDVhzdvqjAbtcQynKS4ECF7xZEhM6Guz6vanPLV5Gtn3FaQ2hSpKE5sB8oRbMd/t
-         QTn185rykh/ojTtDv/o7m0OYY5e5DqppgFdAMysiK35tiOYM+DkOI5RODsQJgFfQ5BK/
-         MwmFdyHumuHD1fbA3TGlAXoVHXqO7hey8/S0dYmbSWuvxLh6x04lVKUr7EkAKtSV0Bqb
-         u1jzUScOJTBpzErVOrhHK4shTXGWI8O8lU90dl8GmZl2zYA+HXU6u4UIqShuOzsVOiGR
-         /E0w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f+6gSsM9";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="bw8Jei/2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774921962;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qE5Yi1PlmOFr6JMHkA02+Lnj7FFZQyWGNZvCfi3+DU=;
+	b=f+6gSsM9yGzjkY18U1svJI9x69FZO2Fiz0YCr9XmW81+tYhW+lYEntK7VTbjXdbT15ZMvL
+	d0bDdCmForSUJlVerB/2ip8/7f+m2hvs86FpKnR4iuASPgcLm1K9oF0K2xqb8PGBW03CR7
+	b4hmWRW2pGwKe9Kuj2c9TDKnVm9+x7c=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-387-qjUSLarsNCimXt_tb2yooQ-1; Mon, 30 Mar 2026 21:52:41 -0400
+X-MC-Unique: qjUSLarsNCimXt_tb2yooQ-1
+X-Mimecast-MFC-AGG-ID: qjUSLarsNCimXt_tb2yooQ_1774921960
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2b24e9b4d82so24335015ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 18:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774921836; x=1775526636; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6f292/btZn8ISsDnTBi4fWU5y3QaKwgLkJGaHERz/GA=;
-        b=wL7q1DXttVRMShI/54+X0HIyNm27HysiHL/kCP/4eRKtQX9b6j33uMZEms/aNUfg9X
-         nzh9uFAT/jxftP19ICnr+jIcyFJ+Qx8sOzLDlJAz94TkVm7Cs1Bc8ETm9CoY6m5JyiCY
-         sZhhIsffCmkUnHLxGtn7g4vDNmTjXLeQLbb4e/Ogjx3o9W0uwjoOilsXyJDDXid76CFD
-         PbDD1R3caHI+FeLQdcFo931UGcVjvM9KtU+HnZK3GvSyRqcGS4/6gfeyRIfMz4Yf1xiG
-         8OUpAAgbmL9sLQQ+GX9tfCs/a+AYNSe2tlKvt5InqD2RQUVepduL7fCkoT6zrQROVEj5
-         FDBw==
+        d=redhat.com; s=google; t=1774921959; x=1775526759; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5qE5Yi1PlmOFr6JMHkA02+Lnj7FFZQyWGNZvCfi3+DU=;
+        b=bw8Jei/2aDiVHY7mCzcVehd1A3hfiw07IkMi2aCp3R65VVeCgxRvUQ8Sg0cLAvflBY
+         TcvVTSyk8/9bO7Ms0IccJzqV3GdAsava68C82p0IEz3pXDDsxYw2urOSjyTbDZkZ6Wfp
+         p/R6Kb9nXU8lwPMzmishYFc25RhUjvixuu4+qeLMGu3guiuWyf1APZqAHBDcQ+G5CoQv
+         7krmZ1xaSl5YeIhN5rIfzmEQAb9OaGO7yRkv7/wCJooFemyhJrFmSPpqNKEc3iz1WRE+
+         b9waE4/wQNVxKzHkqUK77f12UrVDgQO5bIzQMgh+7VDs14vK4oJI/veLXWMTUi4AKRwh
+         gjRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774921836; x=1775526636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6f292/btZn8ISsDnTBi4fWU5y3QaKwgLkJGaHERz/GA=;
-        b=MeuqxbhD2HoFj5v3aireqNW9BuRV3mo5jO/UAWFgtbEuYQfwC4CsGOGFJSOWnEHxMG
-         0yZO07tQFbhpsyBFlYWQv3HuS1x0Ok/6AKlcpYcz3OiaqQD4/ZBqOOwpsiRu4Li1Pydi
-         rnTiFjYkS4TadzbvoEwHFPiTQrte1Irf5omXpBsr5igJGI7m6ZxKJIecOVIojel5CtUC
-         U8eRsl318ykctGaUGws8mCtq1aQHA0IY8OlvqXiNeYjTDRXka5jUddGmoEfydQmzf/Um
-         0vINqVYIs94vNWc3ojIlDz/RzoIWEhbm6GdAk1fGAmD5tLPqs4tLRtAkSWExNolsDI3j
-         nadA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXUQYIykptw+BRJXiFpVXoawvgNHEFys6aY2k1vOJgpC/dFLkkI9JfVTGHvVTuo9dEOWj5iCyzIkzwUtWfZII=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyO4rTTB1GxucVUehlNVY3blXXv5EwhTZJLsZbILa6KqP8AHFMc
-	e6xhKMs5sCWiE+u+0VS5K1Ti3mt36ZfuT/Dh5+v9lgWVzbmC9F55NgezDAGfHupjF9sRDv1OLFu
-	ccCXxqr8V319cD0RDjF6RD/2xXBlCIPNDiGSrTNSi
-X-Gm-Gg: ATEYQzyDAfINrfwPgdNpPsyVQpW2PvN6uUYajCOZw6qheuFVWbSb433fGeOM62Tw+gW
-	Cu8CKeQOoOLZ1IECfCEXi64CWE6SSkyaGC3xpbXTzWcQpz/yTJk7cr7qZLjMN1Mtxpi/loB+tMB
-	DsCGVqPsih+lrrlNfRWurVCncnn0qaCo5lgY1b270QC23GPfLTbZhIZvjCEc8fOhCshm6jG+huf
-	cup8ShNHrEdd4xbPnQ9QyGkVKnNwOgyMALbjkkQB90DJsXWIGwxHQNy2AqpRF81vYVEj+zhY2yl
-	PoJ+bu88Ag7wDCVDc5zuAXTozK3uf++1j4TLDTw0hg0oblbpen3GX3ya/cS9w+8qVealWXQB
-X-Received: by 2002:a05:7022:b8a:b0:11f:3483:bba6 with SMTP id
- a92af1059eb24-12ab2877032mr8903559c88.13.1774921835563; Mon, 30 Mar 2026
- 18:50:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774921959; x=1775526759;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5qE5Yi1PlmOFr6JMHkA02+Lnj7FFZQyWGNZvCfi3+DU=;
+        b=Jb7Sg86CZ+GxpkO7Bfq+/t8GTw9SCm9/B8vRuAOnhvE1coAuV9bIm5KpXS9Bf32WfR
+         WzDir52TtiaHfh4PhHj/vAqz7jqKOLh7L4lMb3trMlz4vep7u47YB5lsPOcS2k5csrOz
+         4uip1Jw6ky+E5Dpa8IfXhhQaEIp4igPOky8GMy52q/LQTgSZ5HxenAl0kA9kC8pRcvDB
+         SNeNV2P99OoxlytAB4apTqT1us2jr0LKkOGUbrZBlf393PtaJoHGSg+brEGEOnEeAt2y
+         8aqR4wEl207OwTaEWciCzqDfSAJ43GhJ4InhRv2DvQRKnmpM6GYJAXIxPDOXDtWZ4DnH
+         3xAA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfNqlpf2Hp/izUJWzX8Rkk9kkU0fy4OnWhibc59ung0JPMuSlkR7kIEoUHVgE04s/zrBCAbTFprUHxH8I0OFA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6Vmwa6Ovhfh3HR3S6CZ4cgxPL9d22knwtVbKRb4p8deFigfKI
+	EX4jrmEgEB0kIVlQOupbFYsxF/6mE1++yEeHRxXxqnb1uOyKZQkp5vuJpQTA+nWsFunvRF5Ewr2
+	0LtlroT83o27sKDssiEOG/UsbEu8Zu4QcePDonmNI5Kp4LnLxv9VxOoEBVdkO844UKvKIUrnxi0
+	5b7g==
+X-Gm-Gg: ATEYQzzYexAhd0bp75+sW7xcWNERHVWYklY6qR7Dbj3HjXZl3qlp5Rn5HhD1/+3m8WM
+	BuwxTVBjY4g+M2ikLpXWRS4WIlHMD+het/38+bVzBcWsquUR6i2yRkaWoail4fYImWm1j8ycZhe
+	jY8I6RuwlVCWlHA5TReNmQyqt4sPJb3wGe9iC8BAaIsTHdZrFeV1W1DTZ+hjB63M2vSsJOjpPis
+	/W3bs2T2lVnFvR9gdKNteRdFbMEMZz0VGK7FGxVj6l/1rZWbSSi0tXU5MdWyHufFAgSFjGBPppx
+	VYgcgTlPMZ6Ean1mTgSQCYkuP2zass7J2bbmKxvcH+dCbCC5IUSfpWeSR+1L7EpTmYXXHj3F/L/
+	MgO4Iu9/B8WTtTpGDhw==
+X-Received: by 2002:a17:902:da8f:b0:2b0:51be:f9d7 with SMTP id d9443c01a7336-2b25ef347c4mr15587655ad.18.1774921958970;
+        Mon, 30 Mar 2026 18:52:38 -0700 (PDT)
+X-Received: by 2002:a17:902:da8f:b0:2b0:51be:f9d7 with SMTP id d9443c01a7336-2b25ef347c4mr15587375ad.18.1774921958436;
+        Mon, 30 Mar 2026 18:52:38 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24b3a82f8sm64351325ad.63.2026.03.30.18.52.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 18:52:37 -0700 (PDT)
+Date: Tue, 31 Mar 2026 09:52:35 +0800
+From: Li Wang <liwang@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: tools/testing/selftests
+Message-ID: <acso4-02tZhFBnKI@redhat.com>
+References: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
+ <acc49s7jbI9Q3a4f@redhat.com>
+ <20260328135650.435b415f8c00835b2fa471e0@linux-foundation.org>
+ <20260328140311.d6ce99302f93923b0cffb441@linux-foundation.org>
+ <acj5RK3lze7o704Y@redhat.com>
+ <20260330170954.47dfef29063afe9ea502505a@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330080746.319680-1-jiayuan.chen@linux.dev> <20260330080746.319680-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260330080746.319680-3-jiayuan.chen@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 30 Mar 2026 18:50:24 -0700
-X-Gm-Features: AQROBzCq4WwavAHbnWGH3R8xHzPtillBgY_yUz44-mHnTtUOFzp1taa1gZwbEhs
-Message-ID: <CAAVpQUA0kxiQVevVpty8V54HJw+=CR_GqDV2+Hg7OF8pZVTtVg@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260330170954.47dfef29063afe9ea502505a@linux-foundation.org>
 
-On Mon, Mar 30, 2026 at 1:08=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
-v> wrote:
->
-> Add test_tcp_custom_syncookie_protocol_check to verify that
-> bpf_sk_assign_tcp_reqsk() rejects non-TCP skbs. The test sends a UDP
-> packet through TC ingress where a BPF program calls
-> bpf_sk_assign_tcp_reqsk() on it and checks that the kfunc returns an
-> error. A UDP server recv() is used as synchronization to ensure the
-> BPF program has finished processing before checking the result.
->
-> Without the fix in bpf_sk_assign_tcp_reqsk(), the kfunc succeeds and
-> attaches a TCP reqsk to the UDP skb, which causes a null pointer
-> dereference panic when the kernel processes it through the UDP receive
-> path.
->
-> Test result:
->
->   ./test_progs -a tcp_custom_syncookie_protocol_check -v
->   setup_netns:PASS:create netns 0 nsec
->   setup_netns:PASS:ip 0 nsec
->   write_sysctl:PASS:open sysctl 0 nsec
->   write_sysctl:PASS:write sysctl 0 nsec
->   setup_netns:PASS:write_sysctl 0 nsec
->   test_tcp_custom_syncookie_protocol_check:PASS:open_and_load 0 nsec
->   setup_tc:PASS:qdisc add dev lo clsact 0 nsec
->   setup_tc:PASS:filter add dev lo ingress 0 nsec
->   run_protocol_check:PASS:start tcp_server 0 nsec
->   run_protocol_check:PASS:start udp_server 0 nsec
->   run_protocol_check:PASS:connect udp_client 0 nsec
->   run_protocol_check:PASS:send udp 0 nsec
->   run_protocol_check:PASS:recv udp 0 nsec
->   run_protocol_check:PASS:udp_intercepted 0 nsec
->   run_protocol_check:PASS:assign_ret 0 nsec
->   #471/1   tcp_custom_syncookie_protocol_check/IPv4 TCP:OK
->   run_protocol_check:PASS:start tcp_server 0 nsec
->   run_protocol_check:PASS:start udp_server 0 nsec
->   run_protocol_check:PASS:connect udp_client 0 nsec
->   run_protocol_check:PASS:send udp 0 nsec
->   run_protocol_check:PASS:recv udp 0 nsec
->   run_protocol_check:PASS:udp_intercepted 0 nsec
->   run_protocol_check:PASS:assign_ret 0 nsec
->   #471/2   tcp_custom_syncookie_protocol_check/IPv6 TCP:OK
->   #471     tcp_custom_syncookie_protocol_check:OK
->   Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
->
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  .../bpf/prog_tests/tcp_custom_syncookie.c     |  91 ++++++++++++++-
->  .../bpf/progs/test_tcp_custom_syncookie.c     | 109 ++++++++++++++++++
->  2 files changed, 196 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.=
-c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-> index eaf441dc7e79..6e29402c4c59 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-> @@ -5,6 +5,7 @@
->  #include <sched.h>
->  #include <stdlib.h>
->  #include <net/if.h>
-> +#include <netinet/in.h>
->
->  #include "test_progs.h"
->  #include "cgroup_helpers.h"
-> @@ -47,11 +48,10 @@ static int setup_netns(void)
->         return -1;
->  }
->
-> -static int setup_tc(struct test_tcp_custom_syncookie *skel)
-> +static int setup_tc(int prog_fd)
->  {
->         LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point =3D BPF_TC_INGRE=
-SS);
-> -       LIBBPF_OPTS(bpf_tc_opts, tc_attach,
-> -                   .prog_fd =3D bpf_program__fd(skel->progs.tcp_custom_s=
-yncookie));
-> +       LIBBPF_OPTS(bpf_tc_opts, tc_attach, .prog_fd =3D prog_fd);
->
->         qdisc_lo.ifindex =3D if_nametoindex("lo");
->         if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo c=
-lsact"))
-> @@ -127,7 +127,7 @@ void test_tcp_custom_syncookie(void)
->         if (!ASSERT_OK_PTR(skel, "open_and_load"))
->                 return;
->
-> -       if (setup_tc(skel))
-> +       if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie)))
->                 goto destroy_skel;
->
->         for (i =3D 0; i < ARRAY_SIZE(test_cases); i++) {
-> @@ -145,6 +145,89 @@ void test_tcp_custom_syncookie(void)
->
->  destroy_skel:
->         system("tc qdisc del dev lo clsact");
-> +       test_tcp_custom_syncookie__destroy(skel);
-> +}
-> +
-> +/* Test: bpf_sk_assign_tcp_reqsk() should reject non-TCP skb.
-> + *
-> + * Send a UDP packet through TC ingress where a BPF program calls
-> + * bpf_sk_assign_tcp_reqsk() on it. The kfunc should return an error
-> + * because the skb carries UDP, not TCP.
-> + *
-> + * TCP and UDP servers share the same port. The BPF program intercepts
-> + * the UDP packet, looks up the TCP listener via the dest port, and
-> + * attempts to assign a TCP reqsk to the UDP skb.
-> + */
-> +static void run_protocol_check(struct test_tcp_custom_syncookie *skel,
-> +                              int family, const char *addr)
-> +{
-> +       int tcp_server =3D -1, udp_server =3D -1, udp_client =3D -1;
+On Mon, Mar 30, 2026 at 05:09:54PM -0700, Andrew Morton wrote:
+> On Sun, 29 Mar 2026 18:04:52 +0800 Li Wang <liwang@redhat.com> wrote:
+> 
+> > > ts:/usr/src/25> cat Makefile
+> > > # Automatically generated by /usr/src/25/Makefile: don't edit
+> > > export KBUILD_OUTPUT = .
+> > > export KBUILD_EXTMOD = /usr/src/25
+> > > export KBUILD_EXTMOD_OUTPUT = /usr/src/25
+> > > include /usr/src/25/Makefile
+> > > 
+> > > I've done this twice in succession now.  Any suggestions where I should
+> > > look?
+> > 
+> > When build selftests from the top-level, sub-makes entered via `-C` may
+> > still inherit the caller's PWD from the environment.
+> > 
+> > Some selftests use $(PWD) in recursive kbuild invocations, which can
+> > then incorrectly resolve to the kernel top directory instead of the
+> > current test directory.
+> > 
+> > Maybe try export PWD in the ../selftests/lib.mk?
+> > 
+> >   export PWD := $(CURDIR)
+> 
+> Thanks, I'll get onto this stuff soon.
+ 
+I have created a patchset for those build tiny issues,
+let me send out to you to have a early try?
 
-nit: no need to init.
+> Meanwhile, shouldn't this work?
+> 
+> ts:/usr/src/25/tools/testing/selftests/mm> make merge.i
+> make: *** No rule to make target 'merge.i'.  Stop.
 
-> +       char buf[32] =3D "test";
+That's probably because Makefile explicitly disables the implicit .c to .i rule.
 
-should be buf[] =3D "test" since you send data of sizeof(buf) below.
+In line#43 of Makefile:
 
+    MAKEFLAGS += --no-builtin-rules
 
-> +       int port, ret;
-> +
-> +       tcp_server =3D start_server(family, SOCK_STREAM, addr, 0, 0);
-> +       if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
-> +               return;
-> +
-> +       port =3D ntohs(get_socket_local_port(tcp_server));
-> +
-> +       /* UDP server on same port for synchronization and port sharing *=
-/
-> +       udp_server =3D start_server(family, SOCK_DGRAM, addr, port, 0);
-> +       if (!ASSERT_NEQ(udp_server, -1, "start udp_server"))
-> +               goto close_tcp;
-> +
-> +       skel->bss->udp_intercepted =3D false;
-> +       skel->bss->assign_ret =3D 0;
-> +
-> +       udp_client =3D connect_to_fd(udp_server, 0);
-> +       if (!ASSERT_NEQ(udp_client, -1, "connect udp_client"))
-> +               goto close_udp_server;
->
-> +       ret =3D send(udp_client, buf, sizeof(buf), 0);
-> +       if (!ASSERT_EQ(ret, sizeof(buf), "send udp"))
-> +               goto close_udp_client;
+I doubt do we really need to add back the 'gcc -E' approach? 
+The selftests build system intentionally kills built-in rules to prevent
+half-broken implicit builds.
+(the comment line# 33~42 in the Makefile explains why)
 
-memset(buf, 0, sizeof(buf)) here and
+-- 
+Regards,
+Li Wang
 
-> +
-> +       /* recv() ensures TC ingress BPF has processed the skb */
-> +       ret =3D recv(udp_server, buf, sizeof(buf), 0);
-> +       if (!ASSERT_EQ(ret, sizeof(buf), "recv udp"))
-
-check ASSERT_STREQ() here ?
-
-> +               goto close_udp_client;
-> +
-> +       ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
-> +
-> +       ASSERT_EQ(skel->bss->assign_ret, -EINVAL, "assign_ret");
-> +
-> +close_udp_client:
-> +       close(udp_client);
-> +close_udp_server:
-> +       close(udp_server);
-> +close_tcp:
-> +       close(tcp_server);
-> +}
-> +
-> +void test_tcp_custom_syncookie_protocol_check(void)
-> +{
-> +       struct test_tcp_custom_syncookie *skel;
-> +       int i;
-> +
-> +       if (setup_netns())
-> +               return;
-> +
-> +       skel =3D test_tcp_custom_syncookie__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +               return;
-> +
-> +       if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie_bad=
-proto)))
-> +               goto destroy_skel;
-> +
-> +       for (i =3D 0; i < ARRAY_SIZE(test_cases); i++) {
-> +               if (!test__start_subtest(test_cases[i].name))
-> +                       continue;
-> +
-> +               run_protocol_check(skel, test_cases[i].family,
-> +                                  test_cases[i].addr);
-> +       }
-> +
-> +destroy_skel:
-> +       system("tc qdisc del dev lo clsact");
->         test_tcp_custom_syncookie__destroy(skel);
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.=
-c b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-> index 7d5293de1952..bd3fad3dd503 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-> @@ -588,4 +588,113 @@ int tcp_custom_syncookie(struct __sk_buff *skb)
->         return tcp_handle_ack(&ctx);
->  }
->
-> +/* Test: call bpf_sk_assign_tcp_reqsk() on a UDP skb.
-> + * The kfunc should reject it because the skb is not TCP.
-> + *
-> + * TCP and UDP servers share the same port. The BPF program intercepts
-> + * UDP packets, looks up the TCP listener on the same port, and tries
-> + * to assign a TCP reqsk to the UDP skb.
-> + */
-> +int assign_ret =3D 0;
-> +bool udp_intercepted =3D false;
-
-No need to init var on bss w/ 0 here.
-(init in run_protocol_check() is necessary)
-
-
-> +
-> +static int badproto_lookup_assign(struct __sk_buff *skb, struct udphdr *=
-udp,
-> +                                 struct bpf_sock_tuple *tuple, u32 tuple=
-_size)
-> +{
-> +       struct bpf_tcp_req_attrs attrs =3D {};
-> +       struct bpf_sock *skc;
-> +       struct sock *sk;
-> +
-> +       skc =3D bpf_skc_lookup_tcp(skb, tuple, tuple_size, -1, 0);
-> +       if (!skc)
-> +               return TC_ACT_OK;
-> +
-> +       if (skc->state !=3D TCP_LISTEN) {
-> +               bpf_sk_release(skc);
-> +               return TC_ACT_OK;
-> +       }
-> +
-> +       sk =3D (struct sock *)bpf_skc_to_tcp_sock(skc);
-> +       if (!sk) {
-> +               bpf_sk_release(skc);
-> +               return TC_ACT_OK;
-> +       }
-> +
-> +       attrs.mss =3D 1460;
-> +       attrs.wscale_ok =3D 1;
-> +       attrs.snd_wscale =3D 7;
-> +       attrs.rcv_wscale =3D 7;
-> +       attrs.sack_ok =3D 1;
-> +
-> +       assign_ret =3D bpf_sk_assign_tcp_reqsk(skb, sk, &attrs, sizeof(at=
-trs));
-> +
-> +       bpf_sk_release(skc);
-> +       return TC_ACT_OK;
-> +}
-> +
-> +SEC("tc")
-> +int tcp_custom_syncookie_badproto(struct __sk_buff *skb)
-> +{
-> +       void *data =3D (void *)(long)skb->data;
-> +       void *data_end =3D (void *)(long)skb->data_end;
-> +       struct bpf_sock_tuple tuple =3D {};
-> +       struct ethhdr *eth;
-> +       struct iphdr *iph;
-> +       struct ipv6hdr *ip6h;
-> +       struct udphdr *udp;
-> +
-> +       eth =3D (struct ethhdr *)data;
-> +       if (eth + 1 > data_end)
-> +               return TC_ACT_OK;
-> +
-> +       switch (bpf_ntohs(eth->h_proto)) {
-> +       case ETH_P_IP:
-> +               iph =3D (struct iphdr *)(eth + 1);
-> +               if (iph + 1 > data_end)
-> +                       return TC_ACT_OK;
-> +
-> +               if (iph->protocol !=3D IPPROTO_UDP)
-> +                       return TC_ACT_OK;
-> +
-> +               udp =3D (struct udphdr *)(iph + 1);
-> +               if (udp + 1 > data_end)
-> +                       return TC_ACT_OK;
-> +
-> +               udp_intercepted =3D true;
-> +
-> +               tuple.ipv4.saddr =3D iph->saddr;
-> +               tuple.ipv4.daddr =3D iph->daddr;
-> +               tuple.ipv4.sport =3D udp->source;
-> +               tuple.ipv4.dport =3D udp->dest;
-> +
-> +               return badproto_lookup_assign(skb, udp, &tuple,
-> +                                             sizeof(tuple.ipv4));
-> +       case ETH_P_IPV6:
-> +               ip6h =3D (struct ipv6hdr *)(eth + 1);
-> +               if (ip6h + 1 > data_end)
-> +                       return TC_ACT_OK;
-> +
-> +               if (ip6h->nexthdr !=3D IPPROTO_UDP)
-> +                       return TC_ACT_OK;
-> +
-> +               udp =3D (struct udphdr *)(ip6h + 1);
-> +               if (udp + 1 > data_end)
-> +                       return TC_ACT_OK;
-> +
-> +               udp_intercepted =3D true;
-> +
-> +               __builtin_memcpy(tuple.ipv6.saddr, &ip6h->saddr,
-> +                                sizeof(tuple.ipv6.saddr));
-> +               __builtin_memcpy(tuple.ipv6.daddr, &ip6h->daddr,
-> +                                sizeof(tuple.ipv6.daddr));
-> +               tuple.ipv6.sport =3D udp->source;
-> +               tuple.ipv6.dport =3D udp->dest;
-> +
-> +               return badproto_lookup_assign(skb, udp, &tuple,
-> +                                             sizeof(tuple.ipv6));
-> +       default:
-> +               return TC_ACT_OK;
-> +       }
-> +}
-> +
->  char _license[] SEC("license") =3D "GPL";
-> --
-> 2.43.0
->
