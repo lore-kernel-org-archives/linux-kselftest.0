@@ -1,199 +1,98 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BAB31197B;
-	Tue, 31 Mar 2026 14:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BA43E3DA7;
+	Tue, 31 Mar 2026 15:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774968886; cv=none; b=c64W/JUMCFqfc/8HBeZQBtxI/T7+FNV+mLkiOp5KEPst9SkXXVmrNAY5Z13NpXOxQ4JmthtRo748osvi4gy2EuZh39zOXR6Sixd8Nb/vT6L5xhYoOgU+TG1Gf0sCjYLRJkBZsL8jN7dBxbjf4VQ8H/HzFQEHUOrIl9LcYi3bNuQ=
+	t=1774969848; cv=none; b=dUwjLruvfwiQWr80fFfAvi1PkO+F6W0J7vRmIydB4PK84ApNI4e0WrG169Zv4Hh+P6Gm5e5O7EtD8kbg99g2W6RQzuPFN/7x0MM4sQggotHETdGbhkSib/SY+eZ538ZUYlpWEtJx68XGwZIx5aGWMKH6yFTtEdCQkvvDJrKu6r0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774968886; c=relaxed/simple;
-	bh=x27V+IEw1MBBIM1+TXEfu6ygBI0xSx84AHvLZ+62gd4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h5wedZVlPEUWFPEYQB0yCYOuHXqSyVwMncaY8iVs/xdIhg8rwSM82RZvqBMpWpnVubF3qIltcR87kY4r7G5FnZ5gQKOsCenboqupqtScQLOiVOehPryaUmhonBY5mG2ol4MRo9GG5psNKK9Dvskz8aaRVzP76BjaWnvZ0apZN4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vGSBbDxM; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774969848; c=relaxed/simple;
+	bh=E41XlfhVFOeVRcSNGVLW5pCNWoAqqMLGKUlas2wiqg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qoU6Ch5BfYZeMJbT5u2ikrixMXyaTudV3sVmWPNNodlyxRX2RWBpl6+1xP/Hqh4/K0EzOIGXIHrMM35N8PwiD3NTcpKFuO3lRNJs4dqHi+6wau4YOUB1swRjlGc1a98FjYtsDnBbdGLgge2GrvGuVDrqpFMnIyLlxg7O44Zle2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=fail (0-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=oRvu81Lu reason="key not found in DNS"; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vGSBbDxM"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774968883;
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="oRvu81Lu"
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4flWlB2mLrz9v7Y;
+	Tue, 31 Mar 2026 17:10:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1774969830;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SM+QVdZlIbNSt11DNnuXfk71/Inw0TohdIdeU6+Lf4A=;
-	b=vGSBbDxM7oqt8qD6RQde/FOMv/QvHJqz9gony6PWjXtWWzkEUS5LCiBTzbjsag5TGDyrrj
-	loZ+PoF79Gm2gFjl2i4ezhqRjqY60bOox9kQuhOa9/XJccVQtfJ4ci71TNYMbSU2SjixAt
-	AONSrzKd9n1sZslaS3VGcK29A6x+Kqw=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add test to verify the fix of kprobe_write_ctx abuse
-Date: Tue, 31 Mar 2026 22:53:53 +0800
-Message-ID: <20260331145353.87606-3-leon.hwang@linux.dev>
-In-Reply-To: <20260331145353.87606-1-leon.hwang@linux.dev>
-References: <20260331145353.87606-1-leon.hwang@linux.dev>
+	bh=E41XlfhVFOeVRcSNGVLW5pCNWoAqqMLGKUlas2wiqg8=;
+	b=oRvu81LuMS3XfrHmJKnwx3YKiDLc9OBsU5ONI3o+3hTYZdHsn8wvt/IZgGjlmcsvg0loQA
+	H1tHkyR327Q96RQADXDkLAiByWQsu4DBzH1+ca+IvVP2IerwpqucDU3Jy5fLr9Yd+i3Zhc
+	pNAMqknxKEMGWhdiylbIpq9//eL2Vdcji5P82IlDoB820+fARq0VVsRhTCJgu5Sb63L8qU
+	ZR3nh1h4wsox2sLNrbxi0xhWlUzjTrQyALmNueD/FDpBnOYWObVt3BoJRte/DGn7o9mnGO
+	Kb2dAdjbHgzPpxHL9dGuwaDw9Jh+iXbIkrga1z/wbdvbcno5BBAs1bX4aRpEPA==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
+Date: Wed, 1 Apr 2026 02:10:16 +1100
+From: Aleksa Sarai <cyphar@cyphar.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Aleksa Sarai <aleksa@amutable.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/3] selftests: openat2: migrate to kselftests harness
+Message-ID: <2026-03-31-somber-private-crew-movie-exaY9q@cyphar.com>
+References: <20260401-openat2-selftests-kunit-v1-0-5819ac6cadf5@amutable.com>
+ <20260331-irrgarten-decken-b589936aed85@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="olcskqu5kr2f4yyg"
+Content-Disposition: inline
+In-Reply-To: <20260331-irrgarten-decken-b589936aed85@brauner>
+X-Rspamd-Queue-Id: 4flWlB2mLrz9v7Y
 
-Add a test to verify the issue: kprobe_write_ctx can be abused to modify
-struct pt_regs of kernel functions via kprobe_write_ctx=true freplace
-progs.
 
-Without the fix, the issue is verified:
+--olcskqu5kr2f4yyg
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 0/3] selftests: openat2: migrate to kselftests harness
+MIME-Version: 1.0
 
-kprobe_write_ctx=true freplace prog is allowed to attach to
-kprobe_write_ctx=false kprobe prog. Then, the first arg of
-bpf_fentry_test1 will be set as 0, and bpf_prog_test_run_opts() gets
--EFAULT instead of 0.
+On 2026-03-31, Christian Brauner <brauner@kernel.org> wrote:
+> On Wed, Apr 01, 2026 at 12:43:30AM +1100, Aleksa Sarai wrote:
+> > These tests were written in the early days of selftests' TAP support,
+> > the more modern kselftest harness is much easier to follow and maintain.
+> > The actual contents of the tests are unchanged by this change.
+> >=20
+> > Signed-off-by: Aleksa Sarai <aleksa@amutable.com>
+> > ---
+>=20
+> Looks all good to me. Do you want to maybe migrate the tests to the
+> filesystems/ subfolder as well?
 
-With the fix, the issue is rejected at attach time.
+Good point, I'll move it over in v2.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/attach_probe.c   | 64 +++++++++++++++++++
- .../selftests/bpf/progs/kprobe_write_ctx.c    | 19 ++++++
- 2 files changed, 83 insertions(+)
+--=20
+Aleksa Sarai
+https://www.cyphar.com/
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 9e77e5da7097..38852df70c0d 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -220,11 +220,73 @@ static void test_attach_kprobe_write_ctx(void)
- 
- 	kprobe_write_ctx__destroy(skel);
- }
-+
-+static void test_freplace_kprobe_write_ctx(void)
-+{
-+	struct bpf_program *prog_kprobe, *prog_ext, *prog_fentry;
-+	struct kprobe_write_ctx *skel_kprobe, *skel_ext = NULL;
-+	struct bpf_link *link_kprobe = NULL, *link_ext = NULL;
-+	int err, prog_fd;
-+	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel_kprobe = kprobe_write_ctx__open();
-+	if (!ASSERT_OK_PTR(skel_kprobe, "kprobe_write_ctx__open kprobe"))
-+		return;
-+
-+	prog_kprobe = skel_kprobe->progs.kprobe_dummy;
-+	bpf_program__set_autoload(prog_kprobe, true);
-+
-+	prog_fentry = skel_kprobe->progs.fentry;
-+	bpf_program__set_autoload(prog_fentry, true);
-+
-+	err = kprobe_write_ctx__load(skel_kprobe);
-+	if (!ASSERT_OK(err, "kprobe_write_ctx__load kprobe"))
-+		goto out;
-+
-+	skel_ext = kprobe_write_ctx__open();
-+	if (!ASSERT_OK_PTR(skel_ext, "kprobe_write_ctx__open ext"))
-+		goto out;
-+
-+	prog_ext = skel_ext->progs.freplace_kprobe;
-+	bpf_program__set_autoload(prog_ext, true);
-+
-+	prog_fd = bpf_program__fd(skel_kprobe->progs.kprobe_write_ctx);
-+	bpf_program__set_attach_target(prog_ext, prog_fd, "kprobe_write_ctx");
-+
-+	err = kprobe_write_ctx__load(skel_ext);
-+	if (!ASSERT_OK(err, "kprobe_write_ctx__load ext"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(prog_kprobe);
-+	link_ext = bpf_program__attach_freplace(prog_ext, prog_fd, "kprobe_dummy");
-+	ASSERT_ERR_PTR(link_ext, "bpf_program__attach_freplace link");
-+	ASSERT_EQ(libbpf_get_error(link_ext), -EINVAL, "bpf_program__attach_freplace error");
-+
-+	link_kprobe = bpf_program__attach_kprobe_opts(prog_kprobe, "bpf_fentry_test1",
-+						      &kprobe_opts);
-+	if (!ASSERT_OK_PTR(link_kprobe, "bpf_program__attach_kprobe_opts"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog_fentry), &topts);
-+	ASSERT_OK(err, "bpf_prog_test_run_opts");
-+
-+out:
-+	bpf_link__destroy(link_ext);
-+	bpf_link__destroy(link_kprobe);
-+	kprobe_write_ctx__destroy(skel_ext);
-+	kprobe_write_ctx__destroy(skel_kprobe);
-+}
- #else
- static void test_attach_kprobe_write_ctx(void)
- {
- 	test__skip();
- }
-+
-+static void test_freplace_kprobe_write_ctx(void)
-+{
-+	test__skip();
-+}
- #endif
- 
- static void test_attach_probe_auto(struct test_attach_probe *skel)
-@@ -434,6 +496,8 @@ void test_attach_probe(void)
- 		test_attach_kprobe_long_event_name();
- 	if (test__start_subtest("kprobe-write-ctx"))
- 		test_attach_kprobe_write_ctx();
-+	if (test__start_subtest("freplace-kprobe-write-ctx"))
-+		test_freplace_kprobe_write_ctx();
- 
- cleanup:
- 	test_attach_probe__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c b/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-index f77aef0474d3..adbf52afe490 100644
---- a/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-+++ b/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-@@ -19,4 +19,23 @@ int kprobe_multi_write_ctx(struct pt_regs *ctx)
- 	ctx->ax = 0;
- 	return 0;
- }
-+
-+SEC("?kprobe")
-+int kprobe_dummy(struct pt_regs *regs)
-+{
-+	return 0;
-+}
-+
-+SEC("?freplace")
-+int freplace_kprobe(struct pt_regs *regs)
-+{
-+	regs->di = 0;
-+	return 0;
-+}
-+
-+SEC("?fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry)
-+{
-+	return 0;
-+}
- #endif
--- 
-2.53.0
+--olcskqu5kr2f4yyg
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCacvj2BsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG8dQQEAmdUQr8b2gfRzRkPbHjAh
+42g+nEzUl1RDNN0OFzh8SEYA/3cFgt22a/WmxvJFXv2lS0/6zWvHCiEx6jWukZ4P
+WWYB
+=KP7I
+-----END PGP SIGNATURE-----
+
+--olcskqu5kr2f4yyg--
