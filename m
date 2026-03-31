@@ -1,105 +1,102 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B2B3DFC69
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 14:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9CB3D88E4
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 14:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774967919; cv=none; b=XKmD2OMzbJA3mh/TSrWqf0BWt3ayr9csry4h81NbqR9vAKD9mKBwvxxr1dqCP7a+utUw/tY0eZsKfX8OIM53vCniq9th9jjNlx+J60VDzd0fgB3wTiKeJtn1G5DIoMkwtzbaAhmdMtD7AvEgnWCYs+6FzoQ5uOoEQeIeILXjirE=
+	t=1774968879; cv=none; b=kaCfXXZVN6y+AgsURaOCMVtt5vYOGUp6qIaTkp1VI7bN3OjmLbAMk9G0+1/ts8YVVyphRVLmVdrUeBFQi/zP/H3pVtzboFjvi0lhfSUKPD1/PfmlpsYpUFwToTxGRdN28CmVg7rsq7B0S/NaZ7/fGDvVhnJQtxvyEktU4J663lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774967919; c=relaxed/simple;
-	bh=XPgKCAQXXpgypZ8fa7/mk1K1DLkFu5crzaxLGv5rCmM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aPMK0sHsl2Mt64SSZSuhE+6FtvejbnqW9ZMf3vhljWQ4KZ6HM1AjGI74utkUVTTA9VWDoIjUJGEXVqbeJQ4zlWX9ClvZ21AgW4JCStJnRs6DsjNSp8O4B8038fnsnICzwyYXHFY/q7AbGqaDVZTsK0j8DakTk7mtVprfFyluMAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Wv1cbtad; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774968879; c=relaxed/simple;
+	bh=wmGctNvJm+LUvdvzxLmUY+Cdst0Fdd5k4gFWggYhe1w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ouCt/MHqZvpHiL5ifDjiC5m3p9rFlBdGMnIDCZsNf2X80cGXKmhHuhLpCYQDgOmLyhtv21iHAnqy9sG5zG/SEHziDIxHYHpH5/aeDqYWPAUMlTrCLeDVwgXjvUGjaVrfvISpDE9aVgreyhylWJqtM4RZBn1WHJ56bxxO2hnVCY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QhpSbKGN; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wv1cbtad"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774967916;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QhpSbKGN"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774968864;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SHBK5RTcHGLUApVZiHj/Q/LEldgau7IiSnUjcS1LBic=;
-	b=Wv1cbtad7x3HjFQzQcrGo7knI/9yeJyuQ8dFMCCXXnxNnYEW3H7fTqfD4qvMiuh6FyTGQZ
-	M0mPzYLRa5j3Gdz7K15rN4wbmoWfI4t27iqXbqGgNWoMZX0tbSIPQAZflIzhApe59S9Yk/
-	8DduwNt9rM1kv8VABt8EzdQv8ImZS84=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-193-eVd53RCqMKiPhEyAHC9y8g-1; Tue,
- 31 Mar 2026 10:38:33 -0400
-X-MC-Unique: eVd53RCqMKiPhEyAHC9y8g-1
-X-Mimecast-MFC-AGG-ID: eVd53RCqMKiPhEyAHC9y8g_1774967909
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 14F8F1956065;
-	Tue, 31 Mar 2026 14:38:28 +0000 (UTC)
-Received: from [10.22.80.26] (unknown [10.22.80.26])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1756030001A2;
-	Tue, 31 Mar 2026 14:38:20 +0000 (UTC)
-Message-ID: <f24641b7-a177-467c-9554-e2ff188ca23e@redhat.com>
-Date: Tue, 31 Mar 2026 10:38:20 -0400
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=X3jet/uB7C0ONYzapS8AJ6DXNKMgEBrk+xtIraylg5Y=;
+	b=QhpSbKGN3pESpZD2lYAg/gutJ/TIfyZESs6nwfaD4BIEzDmS73m91hLEKrdoO/WEd5dDvr
+	3nSBsMdoqYxm3zw3DjydzKEKXukRScy1jMIeR4vepktnwb3NFGnqGqKxDVK2nL+nrJ2bxp
+	6GGtzidI0i9bxzcw2zIuRFZmTDGbAKw=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v3 0/2] bpf: Fix abuse of kprobe_write_ctx via freplace
+Date: Tue, 31 Mar 2026 22:53:51 +0800
+Message-ID: <20260331145353.87606-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/15] sched/isolation: Implement sysfs interface for
- dynamic housekeeping
-To: Qiliang Yuan <realwujing@gmail.com>, peterz@infradead.org
-Cc: cgroups@vger.kernel.org, akpm@linux-foundation.org,
- anna-maria@linutronix.de, boqun.feng@gmail.com, bsegall@google.com,
- dietmar.eggemann@arm.com, frederic@kernel.org, hannes@cmpxchg.org,
- jackmanb@google.com, jiangshanlai@gmail.com, joelagnelf@nvidia.com,
- josh@joshtriplett.org, juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- mathieu.desnoyers@efficios.com, mgorman@suse.de, mhocko@suse.com,
- mingo@kernel.org, mingo@redhat.com, neeraj.upadhyay@kernel.org,
- paulmck@kernel.org, qiang.zhang@linux.dev, rcu@vger.kernel.org,
- rostedt@goodmis.org, shuah@kernel.org, surenb@google.com, tglx@kernel.org,
- tj@kernel.org, urezki@gmail.com, vbabka@suse.cz, vincent.guittot@linaro.org,
- vschneid@redhat.com, ziy@nvidia.com
-References: <20260325140432.GE3738786@noisy.programming.kicks-ass.net>
- <20260330114620.104027-1-realwujing@gmail.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260330114620.104027-1-realwujing@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+The potential issue of kprobe_write_ctx+freplace was mentioned in
+"bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs" [1].
 
-On 3/30/26 7:46 AM, Qiliang Yuan wrote:
-> On Wed, Mar 25, 2026 at 03:04:32PM +0100, Peter Zijlstra wrote:
->> Why? What was wrong with cpusets?
-> This is the central point of the architecture. The distinction I was
-> trying to address is:
->
-> 1. Task Isolation (Current CPUSets):
->     The `cpuset` subsystem (especially `cpuset.cpus.partition = isolated`)
->     is excellent at managing task placement and load balancing. It
->     ensures no user tasks are pushed to isolated CPUs.
->
-> 2. Kernel Overhead Isolation (Housekeeping):
->     Currently, `cpusets` do not manage kernel-internal overhead like RCU
->     callbacks, timers, or unbound workqueues. These are managed by the
->     global `housekeeping_cpumask`, which is settled at boot via
->     `isolcpus`/`nohz_full` and is static.
+It is true issue, that the test in patch #2 verifies that kprobe_write_ctx=false
+kprobe progs can be abused to modify struct pt_regs via kprobe_write_ctx=true
+freplace progs.
 
-My plan is to extend the cpuset isolated partition mechanism to isolate 
-other kernel noise currently covered by the nohz_full and manged_irq 
-boot command line. That will makes the HK_TYPE_KERNEL_NOISE cpumask 
-modifiable at run time. It is not a direct modification of the HK 
-cpumasks as advocated by this patch series but an indirect one via the 
-creation of the appropriate isolated cpuset partitions.
+When struct pt_regs is modified, bpf_prog_test_run_opts() gets -EFAULT instead
+of 0.
 
-Cheers,
-Longman
+test_freplace_kprobe_write_ctx:FAIL:bpf_prog_test_run_opts unexpected error: -14 (errno 14)
+
+We will disallow attaching freplace programs on kprobe programs with different
+kprobe_write_ctx values.
+
+Links:
+[1] https://lore.kernel.org/bpf/CAP01T74w4KVMn9bEwpQXrk+bqcUxzb6VW1SQ_QvNy0A4EY-9Jg@mail.gmail.com/
+
+Changes:
+v2 -> v3:
+* Add comment to the rejection of kprobe_write_ctx (per Jiri).
+* Use libbpf_get_error() instead of errno in test (per Jiri).
+* Collect Acked-by tags from Jiri and Song, thanks.
+v2: https://lore.kernel.org/bpf/20260326141718.17731-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+* Drop patch #1 in v1, as it wasn't an issue (per Toke).
+* Check kprobe_write_ctx value at attach time instead of at load time, to
+  prevent attaching kprobe_write_ctx=true freplace progs on
+  kprobe_write_ctx=false kprobe progs (per Gemini/sashiko).
+* Move kprobe_write_ctx test code to attach_probe.c and kprobe_write_ctx.c.
+v1: https://lore.kernel.org/bpf/20260324150444.68166-1-leon.hwang@linux.dev/
+
+Leon Hwang (2):
+  bpf: Fix abuse of kprobe_write_ctx via freplace
+  selftests/bpf: Add test to verify the fix of kprobe_write_ctx abuse
+
+ kernel/bpf/syscall.c                          | 17 +++++
+ .../selftests/bpf/prog_tests/attach_probe.c   | 64 +++++++++++++++++++
+ .../selftests/bpf/progs/kprobe_write_ctx.c    | 19 ++++++
+ 3 files changed, 100 insertions(+)
+
+-- 
+2.53.0
 
