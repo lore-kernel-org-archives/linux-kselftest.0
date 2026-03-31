@@ -1,99 +1,177 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9C02417D1
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 04:03:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774929824; cv=none; b=afLYdOwPw+sj3YKVKGQqq3e7tA75nEsnK/yTR2yTBWJT+jswD4K2T47ZdxDi3LX20AfEXu255z5D5KMd5cIQ8rPqj3QLnj52eoMtgxLYF3EpualDI4185dZ7fDca1+Z+XDA7qtHATpCtnZyy/8jZfVZj/6dvFd4jQdrqzYEz6mo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774929824; c=relaxed/simple;
-	bh=eAN/fccFaJenwEg+PtIQALNm5CkfOqgLimU4u71+Eu4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BO+fSCgzI6dVY9vPPscLOG48mgwgzHcdeC9Edg6dAVcNDxELsKzLSkMW1BPjI2yNM86hR26QnXrzl7Icjzn5S+BkoOTC26BwVveBVCw6iKBYao6frMCUcIs51nQYKiMUuoV0ltPX933j1qov2gdZRBr44++8fRasJrbkqZX/A8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i7BBrGlO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F1028CF4A
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 05:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774933513; cv=pass; b=TG2wOOTm808ASiQU2mUiO0LnMiVWyz0OfWET29yrdUA1+C+AgRb8kJUN4LO7uPCZ14B7fhUaX5owLfNQoAzSM5rMHArEKhxoSob7Oc7E+GFI0e1m0rd2l/kA5OFhTAMiDIntt79u36pZyXwatpX4w0l4+O/iWk/MqkkfcmguA0E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774933513; c=relaxed/simple;
+	bh=Qwn+l80LXVGqXDK/Gg6LNCZ9W/+jw296C/myB+yUKto=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=se+uEAvcFuP1ARqxG9u3+5kOt8vV+0T94M/ztEVxEouap61ywq3XUqp7E9Wh+OCJTpEuqnqBOCsL/4fVpqdftXEWVsNsXgTBjL80MPyU28SqLd2TQJXtGrK0cflVhwOd/xQlXLL7az1TNuJoxIn3CICWzTLGRwW00hbBhrSMEdE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ssbrr19T; arc=pass smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i7BBrGlO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774929822;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OhQhsVlHkUdp1u8lVh/yc5BWf65vNXkGXbfUATcYfMM=;
-	b=i7BBrGlOrMFpvnf8uvKTv6T2jW4Z7gliglM3slMLaiu7rI/vGcewvPowre0DqbrANLF7bI
-	f2+fInOm3xVW0IpSOTb9fJc72UvMpyF6u32h0qIKMG8Gh9uMHj9RnBCwAcGpSyo91WT0ph
-	7HDY2dVhU95xR86zO+BXbC5liJUVcY4=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-638-5dWhUe2xNV-3EvUixeNarg-1; Tue,
- 31 Mar 2026 00:03:38 -0400
-X-MC-Unique: 5dWhUe2xNV-3EvUixeNarg-1
-X-Mimecast-MFC-AGG-ID: 5dWhUe2xNV-3EvUixeNarg_1774929814
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9322E195605E;
-	Tue, 31 Mar 2026 04:03:33 +0000 (UTC)
-Received: from [10.22.64.128] (unknown [10.22.64.128])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 21F9E19560AB;
-	Tue, 31 Mar 2026 04:03:27 +0000 (UTC)
-Message-ID: <18473552-2a97-4da9-9f44-ac49d4131004@redhat.com>
-Date: Tue, 31 Mar 2026 00:03:26 -0400
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ssbrr19T"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-66bd3d05e03so2380401a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 22:05:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774933510; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WKJu9BxzF2vdJTMdVchAXyxSZUxqt6BHz99VXaiq+F01gQTzZGqnRPX+xKxnSMo04M
+         CxgW860FeoBlLz3A2WUgMgITJPq7TqTsBTxkwg2hdFBr+Zh2XQQzVJR93LLTuNYbjmKl
+         y55niKWqv9qWSugdNYOw8epcw8lH4/A2w55xq0DtRmC9C24da/+U6GSZcDFzaMGEKxsi
+         MBagptuXGzBAAsGkUZBC2IR5ifqvw9T3s0Atv5S/bqu5ZUom0GrciAGRYIe/ugQSpBbM
+         USaZSZFuYUU6/MDxQfqY2/XN+9mld5RZXyYvcQVi/HZeH9Ylz1J3Nj+FWDx/4XUSFAsU
+         nmlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=/q7nGaPvwDkPU9QIsHyO4ascwOjZnc/hpPdTloEKMHw=;
+        fh=VNR0dc/Fd0h0260NzaJ0SID60b/uYBTySDdOsJN/XMs=;
+        b=Dz5sCyvDsSPizDR/hFc6naZtlDznlgVnn1q2lHbJrA8b8HbplZ+XhpOEurxiDGC1SE
+         XgbjAh69ooYIN80kCBu/GgDbqT+Fcbcy+XTHphFZIw667xaoEeSWRZ59DuxaUs53ztyx
+         tyZ3ENJTlImRmaFyjr4PTTtS9OXbq8CkqgPJMflhMJUwEWLcDBGa3OWUQWGv+xocbd+E
+         BzqTkSJCeLOM6PZ9lAepspUfOYciYXjpXUGXfZUZuq/vRVQsTMsyYDbN9UvG9uHo7VYa
+         htJb49cdo8SiJrlHpipX/ubvr9vcpXmU1Hlu88KOPwll3Mcto+NpZADWa7i3GMBq3Ye+
+         NGfQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774933510; x=1775538310; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/q7nGaPvwDkPU9QIsHyO4ascwOjZnc/hpPdTloEKMHw=;
+        b=Ssbrr19TsVmLXjWQ7P2AWY/CgYOM8lw5F30z+19cwYV9w3FR4uGEnRQCzDQTRndD1m
+         XhsLGO2sKfPKrkZXoBnhKUcflXwSTCEL9+r2z5NnazbTZ7Fozc311HMSo07kJJdc4eOd
+         5CRxP6NojYH0+UroXY5NurZ2ynWzDkz5ppnlH43kwaJgugNjovZ/RNJgY7H1qNe2WUJr
+         D6jiX+gt49Xm6HlPlsy1o681qMWhC26ji5Uq2r4gilAX8e5yYxjImYpZU3BQ42aXb9Px
+         iCeQf2yEn0pQN8ozT1/jq5KYui00xlAy7QMjvU28zNS6bcKu0z3rXDAs8I7oC0lGyO1j
+         +eWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774933510; x=1775538310;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/q7nGaPvwDkPU9QIsHyO4ascwOjZnc/hpPdTloEKMHw=;
+        b=c4l/R/6Tzf5SYLVWRT+fmr4UGKrOyj3U9CxlSOgCXmuAANom/SbtuIndFlD0WexEK6
+         rkZKHB5hef3v/Q2OvHAvAEZQLM2pddnbpYq0NMegHIfukxWMf4HPezvtVPFUugGgPJkn
+         LnKUmlFkUiUExEjJm68ESrMFUJKokEUYtQoPJNaefXhxPG6X7Ne1KoatKkhmDlAWt26V
+         OiTsDz77bVzw+rBZF6to3jmKLQ49vo5mq6GteW9MZldF+s7DLNi+v/Ll9NtAaZiPyi1/
+         IwBdPuGyBkjvgfo1dxOE/AJ3C0ncdm1Fp2uwPP/5pixWDI/Io7gextgSkHOLy8ci085/
+         8zZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMOIsQYLyROWEa0azvqd7ARGUFXvpoBfheGfwcAzc1OVwkg4cGVWVofvb08YEOMUYB+gOsjFqkGylBajnkDGo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygQEBTmgEWxOszC8+Pd0fQwyR3qnLJPo2d/XAJaoQhZn7cLlU1
+	oqZCI5bjYd0QwL+vU6NG8JXLzrcsna6mvp+LJV0YaCMS3oDZGvdjYl4wWhJJmS2DPgZGQ07aDgy
+	yD9fpOeOB8Rpd8yFZSdT7YBxH6xVuaeU=
+X-Gm-Gg: ATEYQzwcZD16uBHECa+jp7xLV5ctc/woCMB+BBOZYXhJX/bzdXudev8jvSBJOiZoCnd
+	e9s5pWd7/Hyo7Ooz5CNkyWgjOs1NGtXkD920nMyxGXY3Gns5B4k35PqZEzRAC4Kyk9h9YVWpxbI
+	sNsOrO7jtgAvW31byUNi5gTuiZoBXrhqeNvLIYUMZ0SNAmfgZCrCUg4UOH/rDw4bfvnA03Ryu4S
+	KtDGb4DqmzYconj9Y7jNmg+HCv9buWNH5Yo6GdW127rO8ABoHzWI9ceGQ10ebHSrob8S7oTdqT+
+	rW4jHZtjLUq5P3uyZCJn1wqSJwrzsiOliJXXqIY=
+X-Received: by 2002:a17:907:e107:b0:b98:6c41:a758 with SMTP id
+ a640c23a62f3a-b9b503580edmr703170666b.19.1774933510101; Mon, 30 Mar 2026
+ 22:05:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/15] sched/core: Dynamically update scheduler domain
- housekeeping mask
-To: Qiliang Yuan <realwujing@gmail.com>, peterz@infradead.org
-Cc: cgroups@vger.kernel.org, akpm@linux-foundation.org,
- anna-maria@linutronix.de, boqun.feng@gmail.com, bsegall@google.com,
- dietmar.eggemann@arm.com, frederic@kernel.org, hannes@cmpxchg.org,
- jackmanb@google.com, jiangshanlai@gmail.com, joelagnelf@nvidia.com,
- josh@joshtriplett.org, juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- mathieu.desnoyers@efficios.com, mgorman@suse.de, mhocko@suse.com,
- mingo@kernel.org, mingo@redhat.com, neeraj.upadhyay@kernel.org,
- paulmck@kernel.org, qiang.zhang@linux.dev, rcu@vger.kernel.org,
- rostedt@goodmis.org, shuah@kernel.org, surenb@google.com, tglx@kernel.org,
- tj@kernel.org, urezki@gmail.com, vbabka@suse.cz, vincent.guittot@linaro.org,
- vschneid@redhat.com, ziy@nvidia.com
-References: <20260325140053.GC3738786@noisy.programming.kicks-ass.net>
- <20260330114516.103451-1-realwujing@gmail.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260330114516.103451-1-realwujing@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <20260327141616.1961457-1-hayatake396@gmail.com>
+ <20260327141616.1961457-2-hayatake396@gmail.com> <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
+ <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
+ <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
+ <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
+ <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com>
+ <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
+ <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+ <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com>
+ <4b0e7341-f2e2-4ad2-8c9e-b482a1b1cbfb@linux.dev> <CADFiAc+4hKQGSEo9XRvrNuTTK4LXwCfAqPMR3AMxiNBtZTc4mw@mail.gmail.com>
+ <f28c4e9f-eb44-4db8-844c-400bf66e88c1@linux.dev>
+In-Reply-To: <f28c4e9f-eb44-4db8-844c-400bf66e88c1@linux.dev>
+From: Takeru Hayasaka <hayatake396@gmail.com>
+Date: Tue, 31 Mar 2026 13:53:04 +0900
+X-Gm-Features: AQROBzCo7EIfOPufrpoSMfBrCh8LtY87PMnpb5yyak4LI061krwDb9xLbbB0Xak
+Message-ID: <CADFiAc+2aTWQbw9ZueJkP2qYxFNtTiLS+uFizBvX6jXq6PPeGw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
+ non-IBT JITs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	X86 ML <x86@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/30/26 7:45 AM, Qiliang Yuan wrote:
-> On Wed, Mar 25, 2026 at 03:00:53PM +0100, Peter Zijlstra wrote:
->> Sched domain boundaries are not static, they are easily changed by
->> cpuset partition (v1 and v2 both support this).
-> You're absolutely right. My description was imprecise. The goal of this
-> patch was to ensure that the housekeeping mask for scheduler domains
-> follows the partition boundaries dynamically as they are resized.
+> It is similar to xdp-ninja/xdp-dump.
 >
-> In V13, I will explicitly integrate the housekeeping update logic
-> directly with `cpuset.cpus.partition` transitions. This way, any change
-> to the isolation level of a partition will automatically update
-> the kernel-internal housekeeping state, avoiding any parallel management
-> logic.
+> However, this idea has one more step forward: it is to trace the
+> subprogs instead of only the main prog.
+>
+> For example,
+>
+> __noinline int subprog0(struct xdp_md *xdp) { bpf_tail_call_static(xdp,
+> &m, 0); }
+> __noinline int subprog1(struct xdp_md *xdp) { bpf_tail_call_static(xdp,
+> &m, 1); }
+> __noinline int subprog2(struct xdp_md *xdp) { bpf_tail_call_static(xdp,
+> &m, 2); }
+> SEC("xdp") int main(struct xdp_md *xdp)
+> {
+>         subprog0(xdp);
+>         subprog1(xdp);
+>         subprog2(xdp);
+>         return XDP_PASS;
+> }
+>
+> All of them, subprog{0,1,2} and main, will be traced.
+>
+> In this idea, it is to inject pcap-filter expression, the cbpf, using
+> elibpcap [1], and to output packets like your xdp-ninja.
+>
+> It works well during the time I maintained an XDP project.
+>
+> [1] https://github.com/jschwinger233/elibpcap
 
-It looks like your patch series isn't based on the latest v7.0 kernel. 
-With the latest upstream kernel, the HK_TYPE_DOMAIN cpumask has been 
-updated to dynamically follow changes made in the cpuset isolated 
-partition setting.
+Thank you very much for your kind reply.
+elibpcap is a very interesting idea as well.
 
-Cheers,
-Longman
+I had also considered whether making it __noinline might leave the
+function prologue intact, so that it could be hooked via trampoline. I
+actually tried that idea myself, but I had not yet been able to get it
+working. I had not investigated it in enough detail, but I was
+suspecting that it might already be expanded by JIT, which could make
+that approach difficult.
 
+That is why I thought it was excellent that you realized it by taking
+the approach of inserting the logic there in the first place, rather
+than trying to hook it afterward.
+
+I had also been thinking about supporting use cases where packets need
+to be captured only after some packet-related decision has already
+been made in the program. For example, there are cases where the value
+to match depends on runtime state, such as a Session ID that changes
+whenever a tunnel is established. I think this kind of approach is
+very helpful for such cases.
+
+So, I was very happy to learn that someone else had been thinking
+about a similar technique.
+
+> It looks wonderful.
+>
+> I developed a similar tool, bpfsnoop [1], to trace BPF progs/subprogs
+> and kernel functions with filtering packets/arguments and outputting
+> packets/arguments info. However, it lacks the ability of outputting
+> packets to pcap file.
+>
+> [1] https://github.com/bpfsnoop/bpfsnoop
+
+Also, bpfsnoop looks like a very nice tool. I starred it on GitHub:)
+
+Thank you very much again. I am very grateful that you shared such an
+excellent idea with me.
+
+Thanks,
+Takeru
