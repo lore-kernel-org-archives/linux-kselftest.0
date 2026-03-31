@@ -1,54 +1,54 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C498436C0D2
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 05:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7872736F42C
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 05:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774935314; cv=none; b=aZyoqc2Be29af89+nr3ts5qAfUa/UPRa2JD5+xbwIxCFsBue6CJMzE1oF4VtuuaHfetRHG+0/1JSuf9Grm34Ogt6pMBKw7ta+TmG6lGILQaDBXDjJWjqjbg13mFYOwZuFYRf20NOdNaXrdLLHfFX3ys/JXa7JufiMP6Y0/QdQOU=
+	t=1774935319; cv=none; b=rcKaAHq68zP6MmV6Tr7D/nZ71cKhygKdvq9gqrBYeNrtfleoKQaM04bDZ5NwG0du1aDEHbEqdjRp76rvAHTsOJu+MQVaKVWLpb9KkTF1A5TxrZTFXmkDW0O2+UUqv9DYUVxThM3ax9EGtd8sTIZ8sZj7Wh+wfrfRc1IxGnsF+Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774935314; c=relaxed/simple;
-	bh=chdFTHKEEe/9F4/B8MGB3L/HILSYzORxwlzzmVDZxKc=;
+	s=arc-20240116; t=1774935319; c=relaxed/simple;
+	bh=pKiWRihRvlGks0okyOYyPDEPFKjjOVCsUvAnhjoRKI4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dEEi3f0KAwJLtvW2SCkQiMoSWNwy/xe9dV61Z8RMuYZobwHZOzIK8jziy/2xlhjOMBRNs1WqJC2IRaUvg1+P1D3dz1OTU7QjnRW4lNaorQZ0AuiP3JpkMBliTq6audmcB6EEP3Eyb5WIJlJ77xsllOvDvk/wK9kGomH8P+Z0ChI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H3Nxfywk; arc=none smtp.client-ip=74.125.82.201
+	 To:Cc:Content-Type; b=qYu1NJSe2kmRy1JEc0SDaLQdTvv9xQJHoPTW7QuIEVXCb596FLMSeuwjcgL+4K3NYhPJjZ76V6MFz2UonWoTnt2rj0dXtdCK0g6q1Blzkb3uozs+p8vxM/v0OMyzgF9YXA7KeHfjQh4zRCkCQGlQnnGAhrkQtQl/wMotmhsKDpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k2AtBQIR; arc=none smtp.client-ip=74.125.82.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H3Nxfywk"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2c7130f88e3so10545879eec.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 22:35:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k2AtBQIR"
+Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-127133794b6so5434841c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 22:35:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774935312; x=1775540112; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774935316; x=1775540116; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5K3D1TSwbxWRr5iGihbbJ5mwJr2DA+XfuVE8T4+Ht5c=;
-        b=H3NxfywkQdfpUPZNvU9p6tePfTn+4FpCOTJYS3Zrd8T5Jr7OBauYgL6JrndbJi5Pnv
-         yHSiyIspPUAEPvLCc9IGEmwKaxdEMQ8qokd0UJawLvWGJ9ffMgE3T804Y1cshDniWVAB
-         1jl7xitFsbbQOhEpwP6tCr+iie9CQDAkaVoOYh+A8CK6irfMA4JTodlRYRnZ0lH5F0zE
-         TmDUcOblv1G8xIkMXFwkhpVVzQyr4DNICX783rhJmh6NFzuG/L+gFOUpSqDlauXcucXg
-         LNFwux/wXyoxzA3DS6BcPl0ZAlR65P/kigngQIR4uWfvkoCTv4NdEoxDNKVP2iII2m7V
-         a8TA==
+        bh=Mfd2knNOulbBWCcxPt2oZiiLITuqrl5bDnBg0/N3ctQ=;
+        b=k2AtBQIRgRQDBZ18FMOAvKVWgZpQeco1qd8Oix/q25jCNGfBdEVWRmSpzDvSojU3MK
+         I8b6nNN/zE7FUQaWmeTAEQZ4htCTwkFEh9zcsHhzdnibXMSt7y61BSLGz4lZvyr/9838
+         7fPbCAWD8iHEWr2ELYT+qOmeHrGavAaxOuiHk0nvoY7IRAOJ1EdRgUzTXDVolW9cvHIQ
+         sTjDIy8YR+2T0kIMJEzakuohHmcN3VVrYNyI0C6TxkH9apV5qjF8hYl1QogtPjmMfo95
+         VemGDeOm81rB7SqcANkUxq2vWqp71Ud7YqyneUhn9FvhQ9LLICG0CXzh10ddZ1pzODSw
+         KddQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774935312; x=1775540112;
+        d=1e100.net; s=20251104; t=1774935316; x=1775540116;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5K3D1TSwbxWRr5iGihbbJ5mwJr2DA+XfuVE8T4+Ht5c=;
-        b=ShBWEq7p8IWGnP+G1yfuiPILIfAusq4z6AjWECvRwbaKXUDLoZtjQzXUWVk0YlRjjm
-         UPW2/H3Ot+0IQ5hS2PCCouiN1+rhmUKNxSS0Vd76l4FzJ3UqPT2dibj2RoFz37N87nv3
-         TzGyrFijzWILrj9vGkHi2Q032EoUNrydiUdr9ZOgzo1u2Lv3EWQhOxo00Y8EOc+i7nPM
-         7cyT1pIbc5+tGoheXNdEkpvdEhpMHpITbnVri6lzRhU15uPGVQjJPdcgmik+9tk2QGjC
-         KbD7KPvNoIVYNv/bRAmBGQt314TGhIxYrcQi3fiCOU17aA/fQBSjayyLZbPqi21SfqPA
-         399w==
-X-Forwarded-Encrypted: i=1; AJvYcCVFlr3x1utqgZQnQBO/3qwr7+VNlxLfHBnG2ypFm2NoK8finDvcghfpIPUz5GGgvrNxcwsEkg6haKTF0T0ypBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfdiKgAFwTMWdCGJpgJyp+AQvY+PVyTN6nPk6pUMNmxsYj8GtO
-	vRXoD6LrXtCKzHutfy98OGY72K7JyKjsoDOiw0GdxjLbqbA2A4gLZ8vLYt2nuYhcGr2wEcjTob+
-	QanWSp8vpL3p49YI4t4Ulfg==
-X-Received: from dycnh15.prod.google.com ([2002:a05:7300:ce8f:b0:2c6:89f3:efa9])
+        bh=Mfd2knNOulbBWCcxPt2oZiiLITuqrl5bDnBg0/N3ctQ=;
+        b=hGNyqp7AoozqZGzmz/NorMHc8/GhTlrF3Ys33Cr1En1upvQK6Cv9ikPWBj/9C23i6x
+         FnI7LDXmmEQog4vTPDj0upiofacelx2JJvdTvxSA0qkYWQZiyTvp8QzW4Yx4NreM3G2w
+         gjTsxE9IPJ9ptqzi5d+g/uuihxu5pIepmpLStuY0shf0iw2kjB9KgY2t8+nISYpKu6rW
+         zfiMQgMtKssNLzsj239Y7RcbgcqpKFCPrCqW8bcmNtdTBedqTCRioNqPyjp/Rp5rcKMv
+         Y0ver+UT0qvxbiGY/X8O6WA7/JA1BIbF5z0icnYkJi7GHec6wBeFNsTVKnmNCNpJFpdx
+         oP8A==
+X-Forwarded-Encrypted: i=1; AJvYcCVA2HSUDL3/qWyLntsNyJSPFNl/9UpnublAnIj18MexjtVPcB8v6+zNE+hNvHpUCfWBSaKdG8ivd6IEvhAE8Jc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhvMy5/0rwdtGT3+9RGNt5MvHxB4Ovb9QIrd1Za7b+NhqGnA+y
+	j4NVQt6d69KV9krurVejOoAVLzZpUVC//k8fElAp1B07VeSmhCDE4tC9zNOZfmJvcQoPCGEtbaf
+	xND1gr/aI9fYNywXLl8EU6A==
+X-Received: from dlae2.prod.google.com ([2002:a05:701b:2302:b0:128:f2cd:cb37])
  (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:693c:248c:b0:2c4:8d51:f983 with SMTP id 5a478bee46e88-2c48d5205e3mr4167947eec.11.1774935311608;
- Mon, 30 Mar 2026 22:35:11 -0700 (PDT)
-Date: Tue, 31 Mar 2026 05:33:50 +0000
+ 2002:a05:7022:6281:b0:11b:9b98:aa4b with SMTP id a92af1059eb24-12ab2857c82mr8746040c88.6.1774935315403;
+ Mon, 30 Mar 2026 22:35:15 -0700 (PDT)
+Date: Tue, 31 Mar 2026 05:33:51 +0000
 In-Reply-To: <20260331053353.2504254-1-marcharvey@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,208 +58,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260331053353.2504254-1-marcharvey@google.com>
 X-Mailer: git-send-email 2.53.0.1018.g2bb0e51243-goog
-Message-ID: <20260331053353.2504254-5-marcharvey@google.com>
-Subject: [PATCH net-next 4/7] selftests: net: Add tests for failover of
- team-aggregated ports
+Message-ID: <20260331053353.2504254-6-marcharvey@google.com>
+Subject: [PATCH net-next 5/7] selftests: net: Add test for enablement of ports
+ with teamd
 From: Marc Harvey <marcharvey@google.com>
 To: jiri@resnulli.us, andrew+netdev@lunn.ch
 Cc: willemb@google.com, maheshb@google.com, netdev@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, Marc Harvey <marcharvey@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-There are currently no kernel tests that verify the effect of setting
-the enabled team driver option. In a followup patch, there will be
-changes to this option, so it will be important to make sure it still
-behaves as it does now.
+There are no tests that verify enablement and disablement of team driver
+ports with teamd. This should work even with changes to the enablement
+option, so it is important to test.
 
-The test verifies that tcp continues to work across two different team
-devices in separate network namespaces, even when member links are
-manually disabled.
+This test sets up an active-backup network configuration across two
+network namespaces, and tries to send traffic while changing which
+link is the active one.
 
 Signed-off-by: Marc Harvey <marcharvey@google.com>
 ---
  .../selftests/drivers/net/team/Makefile       |   1 +
- .../testing/selftests/drivers/net/team/config |   4 +
- .../selftests/drivers/net/team/team_lib.sh    | 129 +++++++++++++++
- .../drivers/net/team/transmit_failover.sh     | 155 ++++++++++++++++++
- tools/testing/selftests/net/forwarding/lib.sh |  13 +-
- 5 files changed, 300 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/drivers/net/team/team_lib.sh
- create mode 100755 tools/testing/selftests/drivers/net/team/transmit_failover.sh
+ .../drivers/net/team/teamd_activebackup.sh    | 208 ++++++++++++++++++
+ tools/testing/selftests/net/lib.sh            |  13 ++
+ 3 files changed, 222 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/team/teamd_activebackup.sh
 
 diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/testing/selftests/drivers/net/team/Makefile
-index 02d6f51d5a06..ed11edf07655 100644
+index ed11edf07655..621c8eba2c32 100644
 --- a/tools/testing/selftests/drivers/net/team/Makefile
 +++ b/tools/testing/selftests/drivers/net/team/Makefile
 @@ -7,6 +7,7 @@ TEST_PROGS := \
  	options.sh \
  	propagation.sh \
  	refleak.sh \
-+	transmit_failover.sh \
++	teamd_activebackup.sh \
+ 	transmit_failover.sh \
  # end of TEST_PROGS
  
- TEST_INCLUDES := \
-diff --git a/tools/testing/selftests/drivers/net/team/config b/tools/testing/selftests/drivers/net/team/config
-index 5d36a22ef080..8f04ae419c53 100644
---- a/tools/testing/selftests/drivers/net/team/config
-+++ b/tools/testing/selftests/drivers/net/team/config
-@@ -6,4 +6,8 @@ CONFIG_NETDEVSIM=m
- CONFIG_NET_IPGRE=y
- CONFIG_NET_TEAM=y
- CONFIG_NET_TEAM_MODE_ACTIVEBACKUP=y
-+CONFIG_NET_TEAM_MODE_BROADCAST=y
- CONFIG_NET_TEAM_MODE_LOADBALANCE=y
-+CONFIG_NET_TEAM_MODE_RANDOM=y
-+CONFIG_NET_TEAM_MODE_ROUNDROBIN=y
-+CONFIG_VETH=y
-diff --git a/tools/testing/selftests/drivers/net/team/team_lib.sh b/tools/testing/selftests/drivers/net/team/team_lib.sh
-new file mode 100644
-index 000000000000..94fdb07edc30
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/team/team_lib.sh
-@@ -0,0 +1,129 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+REQUIRE_MZ=no
-+NUM_NETIFS=0
-+source "${test_dir}/../../../net/forwarding/lib.sh"
-+
-+# Create a team interface inside of a given network namespace with a given
-+# mode, members, and IP address.
-+# Arguments:
-+#  namespace - Network namespace to put the team interface into.
-+#  team - The name of the team interface to setup.
-+#  mode - The team mode of the interface.
-+#  ip_address - The IP address to assign to the team interface.
-+#  prefix_length - The prefix length for the IP address subnet.
-+#  $@ - members - The member interfaces of the aggregation.
-+setup_team()
-+{
-+	local namespace=$1
-+	local team=$2
-+	local mode=$3
-+	local ip_address=$4
-+	local prefix_length=$5
-+	shift 5
-+	local members=("$@")
-+
-+	# Prerequisite: team must have no members
-+	for member in "${members[@]}"; do
-+		ip -n "${namespace}" link set "${member}" nomaster
-+	done
-+
-+	# Prerequisite: team must have no address in order to set it
-+	ip -n "${namespace}" addr del "${ip_address}/${prefix_length}" \
-+			${NODAD} dev "${team}"
-+
-+	echo "Setting team in ${namespace} to mode ${mode}"
-+
-+	if ! ip -n "${namespace}" link set "${team}" down; then
-+		echo "Failed to bring team device down"
-+		return 1
-+	fi
-+	if ! ip netns exec "${namespace}" teamnl "${team}" setoption mode \
-+			"${mode}"; then
-+		echo "Failed to set ${team} mode to '${mode}'"
-+		return 1
-+	fi
-+
-+	# Aggregate the members into teams.
-+	for member in "${members[@]}"; do
-+		ip -n "${namespace}" link set ${member} master "${team}"
-+	done
-+
-+	# Bring team devices up and give them addresses.
-+	if ! ip -n "${namespace}" link set "${team}" up; then
-+		echo "Failed to set ${team} up"
-+		return 1
-+	fi
-+
-+	if ! ip -n ${namespace} addr add "${ip_address}/${prefix_length}" \
-+			${NODAD} dev "${team}"; then
-+		echo "Failed to give ${team} IP address in ${namespace}"
-+		return 1
-+	fi
-+}
-+
-+# This is global used to keep track of the sender's netcat process, so that it
-+# can be terminated.
-+declare sender_pid
-+
-+# Start sending and receiving TCP traffic with netcat.
-+# Globals:
-+#  sender_pid - The process ID of the netcat sender process. Used to kill it
-+#  later.
-+start_listening_and_sending()
-+{
-+	ip netns exec "${NS2}" nc -l "${NS2_IP}" 1234 > /dev/null &
-+	ip netns exec "${NS1}" /bin/bash -c "cat /dev/urandom | pv -q -L 1m | \
-+			nc ${NS2_IP} 1234 &"
-+	sender_pid=$!
-+}
-+
-+# Stop sending TCP traffic with netcat.
-+# Globals:
-+#   sender_pid - The process IF of the netcat sender process.
-+stop_sending_and_listening()
-+{
-+	kill "${sender_pid}" && wait "${sender_pid}"
-+}
-+
-+# Monitor for TCP traffic with Tcpdump, save results to temp files.
-+# Arguments:
-+#   namespace - The network namespace to run tcpdump inside of.
-+#   $@ - interfaces - The interfaces to listen to.
-+save_tcpdump_outputs()
-+{
-+	local namespace=$1
-+	shift 1
-+	local interfaces=("$@")
-+
-+	for interface in "${interfaces[@]}"; do
-+		tcpdump_start_nosleep "${interface}" "${namespace}"
-+	done
-+
-+	sleep 1
-+
-+	for interface in "${interfaces[@]}"; do
-+		tcpdump_stop_nosleep "${interface}"
-+	done
-+}
-+
-+# Read Tcpdump output, determine packet counts.
-+# Arguments:
-+#   interface - The name of the interface to count packets for.
-+#   ip_address - The destination IP address.
-+did_interface_receive()
-+{
-+	local interface="$1"
-+	local ip_address="$2"
-+
-+	local packet_count=$(tcpdump_show "$interface" | grep \
-+			"> ${ip_address}.1234" | wc -l)
-+	echo "Packet count for ${interface} was ${packet_count}"
-+
-+	if [[ "${packet_count}" -gt 0 ]]; then
-+		true
-+	else
-+		false
-+	fi
-+}
-diff --git a/tools/testing/selftests/drivers/net/team/transmit_failover.sh b/tools/testing/selftests/drivers/net/team/transmit_failover.sh
+diff --git a/tools/testing/selftests/drivers/net/team/teamd_activebackup.sh b/tools/testing/selftests/drivers/net/team/teamd_activebackup.sh
 new file mode 100755
-index 000000000000..c53743e26c24
+index 000000000000..fe8a30a8d5e6
 --- /dev/null
-+++ b/tools/testing/selftests/drivers/net/team/transmit_failover.sh
-@@ -0,0 +1,155 @@
++++ b/tools/testing/selftests/drivers/net/team/teamd_activebackup.sh
+@@ -0,0 +1,208 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +
-+# These tests verify the basic failover capability of the team driver via the
-+# `enabled` team driver option across different team driver modes. This does not
-+# rely on teamd, and instead just uses teamnl to set the `enabled` option
-+# directly.
++# These tests verify that teamd is able to enable and disable ports via the
++# active backup runner.
 +#
 +# Topology:
 +#
@@ -279,7 +125,7 @@ index 000000000000..c53743e26c24
 +#  |        test_team2       |
 +#  +-------------------------+
 +
-+ALL_TESTS="team_test_failover"
++ALL_TESTS="teamd_test_active_backup"
 +
 +test_dir="$(dirname "$0")"
 +source "${test_dir}/../../../net/lib.sh"
@@ -293,6 +139,8 @@ index 000000000000..c53743e26c24
 +NS1_IP4="192.168.0.1"
 +NS2_IP4="192.168.0.2"
 +MEMBERS=("eth0" "eth1")
++NS1_TEAMD_CONF=""
++NS2_TEAMD_CONF=""
 +
 +while getopts "4" opt; do
 +	case $opt in
@@ -304,7 +152,7 @@ index 000000000000..c53743e26c24
 +			NS2_IP="${NS2_IP4}"
 +			;;
 +		\?)
-+			echo "Invalid option: -$OPTARG" >&2
++			echo "Invalid option: -${OPTARG}" >&2
 +			exit 1
 +			;;
 +	esac
@@ -314,61 +162,127 @@ index 000000000000..c53743e26c24
 +# lib)
 +source "${test_dir}/team_lib.sh"
 +
++teamd_config_create()
++{
++	local runner=$1
++	local dev=$2
++	local conf
++
++	conf=$(mktemp)
++
++	cat > $conf <<-EOF
++	{
++		"device": "${dev}",
++		"runner": {"name": "${runner}"},
++		"ports": {
++			"eth0": {},
++			"eth1": {}
++		}
++	}
++	EOF
++	echo $conf
++}
++
 +# Create the network namespaces, veth pair, and team devices in the specified
-+# mode.
++# runner.
 +# Globals:
 +#   RET - Used by test infra, set by `check_err` functions.
 +# Arguments:
-+#   mode - The team driver mode to use for the team devices.
++#   runner - The Teamd runner to use for the Team devices.
 +environment_create()
 +{
-+	trap cleanup_all_ns EXIT
++	local runner=$1
++
++	echo "Setting up two-link aggregation for runner ${runner}"
++	trap environment_destroy EXIT
++
 +	setup_ns ns1 ns2
 +	NS1="${NS_LIST[0]}"
 +	NS2="${NS_LIST[1]}"
 +
-+	# Create the interfaces.
-+	ip -n "${NS1}" link add eth0 type veth peer name eth0 netns "${NS2}"
-+	ip -n "${NS1}" link add eth1 type veth peer name eth1 netns "${NS2}"
-+	ip -n "${NS1}" link add test_team1 type team
-+	ip -n "${NS2}" link add test_team2 type team
++	for link in $(seq 0 1); do
++		ip -n "${NS1}" link add "eth${link}" type veth peer name \
++				"eth${link}" netns "${NS2}"
++		check_err $? "Failed to create veth pair"
++	done
 +
-+	# Set up the receiving network namespace's team interface.
-+	setup_team "${NS2}" test_team2 roundrobin "${NS2_IP}" \
-+			"${PREFIX_LENGTH}" "${MEMBERS[@]}"
++	NS1_TEAMD_CONF=$(teamd_config_create "${runner}" "test_team1")
++	NS2_TEAMD_CONF=$(teamd_config_create "${runner}" "test_team2")
++	echo "Conf files are ${NS1_TEAMD_CONF} and ${NS2_TEAMD_CONF}"
++
++	ip netns exec "${NS1}" teamd -d -f "${NS1_TEAMD_CONF}"
++	check_err $? "Failed to create team device in ${NS1}"
++	ip netns exec "${NS2}" teamd -d -f "${NS2_TEAMD_CONF}"
++	check_err $? "Failed to create team device in ${NS2}"
++	echo "Created team devices"
++
++	rm "${NS1_TEAMD_CONF}"
++	rm "${NS2_TEAMD_CONF}"
++	NS1_TEAMD_CONF=""
++	NS2_TEAMD_CONF=""
++
++	for link in $(seq 0 1); do
++		in_all_ns "ip link set eth${link} up"
++		check_err $? "Failed to set eth${link} up"
++	done
++
++	ip -n "${NS1}" link set test_team1 up
++	check_err $? "Failed to set test_team1 up in ${NS1}"
++	ip -n "${NS2}" link set test_team2 up
++	check_err $? "Failed to set test_team2 up in ${NS2}"
++
++	ip -n "${NS1}" addr add "${NS1_IP}/${PREFIX_LENGTH}" dev test_team1
++	check_err $? "Failed to add address to team device in ${NS1}"
++	ip -n "${NS2}" addr add "${NS2_IP}/${PREFIX_LENGTH}" dev test_team2
++	check_err $? "Failed to add address to team device in ${NS2}"
++
++	slowwait 2 timeout 0.5 ip netns exec "${NS1}" ping -W 1 -c 1 "${NS2_IP}"
 +}
 +
++# Tear down the environment: kill teamd and delete network namespaces.
++environment_destroy()
++{
++	echo "Tearing down two-link aggregation"
++	ip netns exec "${NS1}" teamd -k -t test_team1
++	ip netns exec "${NS2}" teamd -k -t test_team2
++	cleanup_all_ns
++}
 +
-+# Check that failover works for a specific team driver mode.
++# Change the active port for an active-backup mode team.
++# Arguments:
++#   namespace - The network namespace that the team is in.
++#   team - The name of the team.
++#   active_port - The port to make active.
++set_active_port()
++{
++	local namespace=$1
++	local team=$2
++	local active_port=$3
++
++	ip netns exec "${namespace}" teamdctl "${team}" state item set \
++			runner.active_port "${active_port}"
++	slowwait 2 bash -c "ip netns exec ${namespace} teamdctl ${team} state \
++			item get runner.active_port | grep -q ${active_port}"
++}
++
++# Test that active backup runner can change active ports.
 +# Globals:
 +#   RET - Used by test infra, set by `check_err` functions.
-+# Arguments:
-+#   mode - The mode to set the team interfaces to.
-+team_test_mode_failover()
++teamd_test_active_backup()
 +{
-+	local mode="$1"
 +	RET=0
-+
-+	# Set up the sender team with the correct mode.
-+	echo "Members: ${MEMBERS[@]}"
-+	setup_team "${NS1}" test_team1 "${mode}" "${NS1_IP}" \
-+			"${PREFIX_LENGTH}" "${MEMBERS[@]}"
-+	check_err $? "Failed to set up sender team"
 +
 +	start_listening_and_sending
 +
-+	### Scenario 1: All interfaces initially enabled.
-+	save_tcpdump_outputs "${NS2}" "${MEMBERS[@]}"
-+	did_interface_receive eth0 "${NS2_IP}"
-+	check_err $? "eth0 not transmitting when both links enabled"
-+	did_interface_receive eth1 "${NS2_IP}"
-+	check_err $? "eth1 not transmitting when both links enabled"
++	### Scenario 1: Don't manually set active port, just make sure team
++	# works.
++	save_tcpdump_outputs "${NS2}" test_team2
++	did_interface_receive test_team2 "${NS2_IP}"
++	check_err $? "Traffic did not reach team interface in NS2."
 +
-+	### Scenario 2: One tx-side interface disabled.
-+	ip netns exec "${NS1}" teamnl test_team1 setoption enabled false \
-+			--port=eth0
-+	slowwait 2 bash -c "ip netns exec ${NS1} teamnl test_team1 getoption \
-+			enabled --port=eth0 | grep -q false"
++	### Scenario 2: Choose active port.
++	set_active_port "${NS1}" test_team1 eth1
++	set_active_port "${NS2}" test_team2 eth1
 +	save_tcpdump_outputs "${NS2}" "${MEMBERS[@]}"
 +
 +	did_interface_receive eth0 "${NS2_IP}"
@@ -376,78 +290,49 @@ index 000000000000..c53743e26c24
 +	did_interface_receive eth1 "${NS2_IP}"
 +	check_err $? "eth1 not transmitting when enabled"
 +
-+	### Scenario 3: The interface is re-enabled.
-+	ip netns exec "${NS1}" teamnl test_team1 setoption enabled true \
-+			--port=eth0
-+	slowwait 2 bash -c "ip netns exec ${NS1} teamnl test_team1 getoption \
-+			enabled --port=eth0 | grep -q true"
++	### Scenario 3: Change active port.
++	set_active_port "${NS1}" test_team1 eth0
++	set_active_port "${NS2}" test_team2 eth0
 +	save_tcpdump_outputs "${NS2}" "${MEMBERS[@]}"
 +
 +	did_interface_receive eth0 "${NS2_IP}"
-+	check_err $? "eth0 not transmitting when both links enabled"
++	check_err $? "eth0 not transmitting when enabled"
 +	did_interface_receive eth1 "${NS2_IP}"
-+	check_err $? "eth1 not transmitting when both links enabled"
++	check_fail $? "eth1 IS transmitting when disabled"
 +
-+	log_test "Failover of '${mode}' test"
++	log_test "teamd active backup runner test"
 +
-+	# Clean up
 +	stop_sending_and_listening
 +}
 +
-+team_test_failover()
-+{
-+	team_test_mode_failover broadcast
-+	team_test_mode_failover roundrobin
-+	team_test_mode_failover random
-+	# Don't test `activebackup` or `loadbalance` modes, since they are too
-+	# complicated for just setting `enabled` to work. They use more than
-+	# the `enabled` option for transmit.
-+}
-+
-+require_command teamnl nc pv
-+environment_create
++require_command teamd teamdctl nc pv
++environment_create activebackup
 +tests_run
 +exit "${EXIT_STATUS}"
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index a9034f0bb58b..5733f9437521 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -1582,7 +1582,7 @@ declare -A cappid
- declare -A capfile
- declare -A capout
- 
--tcpdump_start()
-+tcpdump_start_nosleep()
- {
- 	local if_name=$1; shift
- 	local ns=$1; shift
-@@ -1606,16 +1606,25 @@ tcpdump_start()
- 		-s 65535 -B 32768 $capuser -w ${capfile[$if_name]} \
- 		> "${capout[$if_name]}" 2>&1 &
- 	cappid[$if_name]=$!
-+}
- 
-+tcpdump_start()
-+{
-+	tcpdump_start_nosleep $1 $2
- 	sleep 1
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index b40694573f4c..992342b1dd7c 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -224,6 +224,19 @@ setup_ns()
+ 	NS_LIST+=("${ns_list[@]}")
  }
  
--tcpdump_stop()
-+tcpdump_stop_nosleep()
- {
- 	local if_name=$1
- 	local pid=${cappid[$if_name]}
- 
- 	$ns_cmd kill "$pid" && wait "$pid"
++in_all_ns()
++{
++	local ret=0
++	local ns_list=("${NS_LIST[@]}")
++
++	for ns in "${ns_list[@]}"; do
++		ip netns exec "${ns}" bash -c "$@"
++		(( ret = ret || $? ))
++	done
++
++	return "${ret}"
 +}
 +
-+tcpdump_stop()
-+{
-+	tcpdump_stop_nosleep $1
- 	sleep 1
- }
- 
+ # Create netdevsim with given id and net namespace.
+ create_netdevsim() {
+     local id="$1"
 -- 
 2.53.0.1018.g2bb0e51243-goog
 
