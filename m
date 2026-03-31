@@ -1,157 +1,93 @@
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB093A4F5D;
-	Tue, 31 Mar 2026 19:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EDA371D04
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 19:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774984459; cv=none; b=vFtaTat5jHZpACTqfTDWxLtKejWo9nN9Apru91nFvlydsYuFIoXZCctUYiBCan2ftZihcNIj4TNnhVi3pasqOEAgX/JWvOb+BLJEGPRKSa9y/Nm8Rx4HDe1AdwIVdxl9obq6N5gRug2KDQKuSxFEsCNZoZRlirZGz+j+9A+m4UA=
+	t=1774986611; cv=none; b=lp6tEy7xzuNM8SeqqdyjlM+8zS/+o70ZwyJmvmRE1tlji5OEaCbc46EjPSwHTnuG0Xg+DV4CLoYoV3qsw6xC+p8M6CjMfVNYd1xaoVeWfhF71HKjN0SRw5q3mx4DtKly//0Wr3R+2JHmg7HA4oquG2b/2JY/VBcgGPPF/wcpoG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774984459; c=relaxed/simple;
-	bh=6UfukQtBmWKYp02VBb+8KF+mHtOfziVMOpzDUst/kuY=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=V9nRJOf3vTVJFmso333jmlyzMd0TR/WK9QxnUKJBqbNErxgHWOP6YuDeGtCJPDXlqkgpIkiMLxf5GUDSj6bFCPaJC11uEb+53P5wpdQLo+wI1z4+I3osuww/B7mIgWTxjulTW+pUXGvVOVcw7JuH1xjgYkZp/jN999vDuhwcPU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GbCrd7S/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UXUZA9Om; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1774986611; c=relaxed/simple;
+	bh=3R4yA1zUfO+Sm87KeaqFWvMmwUvTrOTH2w1m7Behrk0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B0wuaCW/E+T4US0Djppsdc9nyaAhp9DzK85B7j8LnW/8Rl5CuxRrO4uJSpLw8xynDERDWORAzn02jUEj2zj3mza21qXkUm6fskCZonTxrdllcXQtXidq3c5tv/h/njUXYxvRuMZ48t7ONx5G9+gJK2Dgy9z2UXjgNnit1FPH2Zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bomqY+gf; arc=none smtp.client-ip=209.85.210.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GbCrd7S/";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UXUZA9Om"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 800E51400050;
-	Tue, 31 Mar 2026 15:14:16 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Tue, 31 Mar 2026 15:14:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1774984456;
-	 x=1775070856; bh=2qDuSoZzFYhBvW0zARX8aWcBYydHA20yyvvWr3QXkMg=; b=
-	GbCrd7S/Hz7kuAczlaApsolK/1cCYgSFtN3DKf5x8jls+WqX1vgAMLjQsChwgJ2c
-	ReIc3wjun+nOwci6NBX7pL/43IcVUQAIfijbzf/P3UKePZl3u5oMV2G90Z4GKEIa
-	AYcux/qD4OGLbBww2FkDZEs8+6QxCFKVeEyqfk2GDletx4XlV/+Smp/wQubOdNcJ
-	PIb7/IpCg1510CapjvpLz/Vj/2LjQ3pLOp8BWsCOup1hicZnCoPK7u7m32guXZh5
-	gmM12hVg7Po83jJlA5bUur1sxfzl7GLof/RZORBs3ttHu2g9IwxP8uGzwWirmz9X
-	4bCD461wMP3DwOni3oeOvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1774984456; x=
-	1775070856; bh=2qDuSoZzFYhBvW0zARX8aWcBYydHA20yyvvWr3QXkMg=; b=U
-	XUZA9OmLKQwHTrupNOy1AOBmSGJPjq6d4bTs6eDLJOPbhynRy58J7oo8os41/EtN
-	hkfmDLgoFpkBVOyMeVxjhSNBvbcJ2MY2+yw22JQ+iZy/uKCvnHtzYGI53/ZBtI1x
-	CAbw89NOFat996CHOzhaRZUCDqGshBBZ14xw3JZEr6PmcsGqu9lPCf0URmtbYxbs
-	gETAA2hkQMWG58BvJliCqBpSkcPJvqCP1Yf+C40g4LAw85brtJ8NmKFAMHoJVMPY
-	ux6UZ4E8m4CB3JXnECgHYFO04vaD1DgYJ4EWi4eyDipi21wZ71RR9f5DwyPEjkVj
-	zt8Te35C8WZlIVRwzugIA==
-X-ME-Sender: <xms:Bh3Macrfgd-X-NLeHlo1iaUf1K0mo8uxsNHckkhlhluT95DtperVbA>
-    <xme:Bh3MadeYIi-pUfmy4VY8xjiN5B_4JFTltAzCj80PkYeChy3nqOipoyJ6k5L40HWTA
-    518izZ1nxP0Vdh-JNvRQGrOa8dfr1pGuvCWkiJlUUVwKEQ8R5DUqmQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddutdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
-    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
-    epjefhudekueettedtffetvefhjeegteekhfehueeliefhhfegveehffehhedvjeffnecu
-    ffhomhgrihhnpehgihhthhhusgdrtghomhdplhifnhdrnhgvthenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-    pdhnsggprhgtphhtthhopeefvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsg
-    hpsegrlhhivghnkedruggvpdhrtghpthhtoheptgihphhhrghrsegthihphhgrrhdrtgho
-    mhdprhgtphhtthhopehmrghthhhivghurdguvghsnhhohigvrhhssegvfhhfihgtihhosh
-    drtghomhdprhgtphhtthhopegrlhgvgidrrghrihhnghesghhmrghilhdrtghomhdprhgt
-    phhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegsrh
-    gruhhnvghrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjlhgrhihtohhnsehkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopehjohhlshgrsehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopehluhhtoheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:Bh3MaR-M2RqFepVSC2_SnxCbkIyTGO5lbGJocl0F1oiBSBqD2wnXmg>
-    <xmx:Bh3MaQFriY_pALQxMNfea6Av6q_Fo2x1zh3wj8Gwm7_h2Va7NjlMkw>
-    <xmx:Bh3Maan2arLgExdBizqPD2xsQV-7y-SaatYOjxegUIYX_b8E4GnwUQ>
-    <xmx:Bh3MafeWklBtKOIJWYwmtjPWTdfuBgsAzcWGvu7mV3N0Et7wO2slcA>
-    <xmx:CB3MaUX2w-QSEjNNZC5v7N-hvAUFEGiBpjHwY5yqrmM9UCL984NfRG5f>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C3FFE700065; Tue, 31 Mar 2026 15:14:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bomqY+gf"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7d556c1a79eso6265228a34.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 12:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1774986609; x=1775591409; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V3dPLdQohdTWPR2gzU0owdfCQTRKoKdLV10a0T4tVhA=;
+        b=bomqY+gfZqvzIh7HNhx047VPrYanuF4D5fKNIPkOXgyPQko8AnumKkZe7lSwB7gJWu
+         nkZ7JjSC3xJ9/rEM64TVuS6KBI39/HkGNdfFOHVOwAplCojNM12nHB9lK6Oqpz27jPe/
+         eKotMjdbT6IHH+r5nhZJgWvI/wwONx/xPdgl4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774986609; x=1775591409;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V3dPLdQohdTWPR2gzU0owdfCQTRKoKdLV10a0T4tVhA=;
+        b=RW97ExmHjFg2Ow1F+3ndY29zwkzcRwgdPUEtgqmtKsyOhytCeu29AMDO4w0HhZx81Z
+         7annRTe8dagpnfXAuHrQFZT1aGAD2itDH17o3XWyOGhoHnrvRyKO0/kjrUksaT6w7YAx
+         j0G3lrUfyMTQorgC5ZE7z+qzzeY+BfHduhOz2c62+GXXhk2Us+aP8c3ddSYNLt0BMsp4
+         PDSJsNPLsWkpPTVPYLxVJgk4hp0/jgnM2S/wxgCPqjwkFgYCLQi76WKONwhmAGpuRdnV
+         xV1csWswTH0OJJcSZp2MND/c0BKRohhg8FquH7H3PFWzJ0oirbd4DNFe4fOxicEeA6tl
+         eY6g==
+X-Gm-Message-State: AOJu0YxCEj1yVz5lGvp9wrbK2n7aAjk1R7J75IXqdrhskI27AuwnsVnJ
+	K2c7MoC4XFzhvfD4oPkHwGolINpN2FSg4k189QYn7hXcVD2S5taV0ZS0A82MClOICgo=
+X-Gm-Gg: ATEYQzwiw+X0S7OwflH5EyQ4yep29pUSMeoolXxdORrYU5ODkZSApDFbHjvf4IW6xtf
+	BrqcVECO6w4ntLcWjbnZ2QxS1DdDhghMJGwUQDMaRj43jBZqX5+M2LP5IlNRnSG+AOQneG6xMQQ
+	3MZq95dBIgbhn3q69PSpv8a611CrwkPwxE7Z/ZuygLw3lfQa3zD776xPH0F8xblJ1iRkQ/2CK2Y
+	678IJKJjuVHpjDvOCVCzeWHe69KEeGj/sPMCUIigSvmeCL1lim2hDBwGrV7k/MgX3pciJaipqXM
+	0eBgsKhrelacpa4tZzzLLIg6SxqEMXUI8U3amT8nUpwx+QEGHgyfPRLQ6T01RkaDLC5xSnKbWzh
+	z22upuXUk5Y6mxscDhJ2i7nWZDw2a0xwRbCiGqHUeHFaay/p0HuPm/n96JDJWrma2y4NkiBvTF5
+	4yMZ8KUcI+2BAYAro99voLR97iECy75rl4UsT5R/OO5wr8SA==
+X-Received: by 2002:a05:6830:368b:b0:7d7:e045:b489 with SMTP id 46e09a7af769-7db9923f3e4mr687777a34.12.1774986608698;
+        Tue, 31 Mar 2026 12:50:08 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7da0a3b9bfbsm8822374a34.11.2026.03.31.12.50.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2026 12:50:08 -0700 (PDT)
+Message-ID: <0d513cae-e928-454c-9629-a798fb08e2cd@linuxfoundation.org>
+Date: Tue, 31 Mar 2026 13:50:07 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: ALL_5dcvP_Dc
-Date: Tue, 31 Mar 2026 21:13:34 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jori Koolstra" <jkoolstra@xs4all.nl>,
- "Andy Lutomirski" <luto@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Christian Brauner" <brauner@kernel.org>, "Jeff Layton" <jlayton@kernel.org>,
- "Chuck Lever" <chuck.lever@oracle.com>, shuah <shuah@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "H. Peter Anvin" <hpa@zytor.com>, "Jan Kara" <jack@suse.cz>,
- "Alexander Aring" <alex.aring@gmail.com>
-Cc: "Peter Zijlstra" <peterz@infradead.org>,
- "Oleg Nesterov" <oleg@redhat.com>,
- "Andrey Albershteyn" <aalbersh@redhat.com>, "Jiri Olsa" <jolsa@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- "Namhyung Kim" <namhyung@kernel.org>,
- "Arnaldo Carvalho de Melo" <acme@redhat.com>,
- "Aleksa Sarai" <cyphar@cyphar.com>, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kselftest@vger.kernel.org,
- cmirabil@redhat.com, "Masami Hiramatsu" <mhiramat@kernel.org>
-Message-Id: <c2ea52f2-b232-404b-9ec6-75d8efae6bea@app.fastmail.com>
-In-Reply-To: <20260331172011.3512876-2-jkoolstra@xs4all.nl>
-References: <20260331172011.3512876-1-jkoolstra@xs4all.nl>
- <20260331172011.3512876-2-jkoolstra@xs4all.nl>
-Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] selftests: harness: Detect illegal mixing of
+ kselftest and harness functionality
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
+ Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Yuwen Chen <ywen.chen@foxmail.com>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20260302-kselftest-harness-v2-0-3143aa41d989@linutronix.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260302-kselftest-harness-v2-0-3143aa41d989@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 31, 2026, at 19:19, Jori Koolstra wrote:
-> Currently there is no way to race-freely create and open a directory.
-> For regular files we have open(O_CREAT) for creating a new file inode,
-> and returning a pinning fd to it. The lack of such functionality for
-> directories means that when populating a directory tree there's always
-> a race involved: the inodes first need to be created, and then opened
-> to adjust their permissions/ownership/labels/timestamps/acls/xattrs/...,
-> but in the time window between the creation and the opening they might
-> be replaced by something else.
->
-> Addressing this race without proper APIs is possible (by immediately
-> fstat()ing what was opened, to verify that it has the right inode type),
-> but difficult to get right. Hence, mkdirat_fd() that creates a directory
-> and returns an O_DIRECTORY fd is useful.
->
-> This feature idea (and description) is taken from the UAPI group:
-> https://github.com/uapi-group/kernel-features?tab=readme-ov-file#race-free-creation-and-opening-of-non-file-inodes
->
-> Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
+On 3/2/26 07:13, Thomas Weißschuh wrote:
+> Users may accidentally use the kselftest_test_result_*() functions in
+> their harness tests. If ksft_finished() is not used, the results
+> reported in this way are silently ignored.
+> 
+> Detect such cases and fail the test.
+> 
+> This should probably only go in during the next cycle.
+> 
+Applied to linux-kselftest next for Linux 7.1-rc1
 
-I checked that the calling conventions are fine, i.e. this will work
-as expected across all architectures. I assume you are also aware
-that the non-RFC patch will need to add the syscall number to all
-.tbl files.
-
-The hardest problem here does seem to be the naming of the
-new syscall, and I'm sorry to not be able to offer any solution
-either, just two observations:
-
-- mkdirat/mkdirat_fd sounds similar to the existing
-  quotactl/quotactl_fd pair, but quotactl_fd() takes a file
-  descriptor argument rather than returning it, which makes
-  this addition quite confusing.
-
-- the nicest interface IMO would have been a variation of
-  openat(dfd, filename, O_CREAT | O_DIRECTORY, mode)
-  but that is a minefield of incompatible implementations[1],
-  so we can't do that without changing the behavior for
-  existing callers that currently run into an error.
-
-       Arnd
-
-[1] https://lwn.net/Articles/926782/
+thanks,
+-- Shuah
