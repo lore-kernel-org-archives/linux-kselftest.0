@@ -1,1187 +1,153 @@
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013046.outbound.protection.outlook.com [40.93.196.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872FC3EE1C9
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 13:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774964658; cv=none; b=RcEW0zKvo4pNgrzTRkNz1hn6tY8n/GNNG1s9FgxjIMAU+wjIz3pzvvQosbo2xhMyE3KvCrD7NLx0TbThxChFmDnj4TC5XDiVhb1W3XSqkb9iyrUyxFyf/O/LxgMoUAof3KKRMMPa5eR4WmyFhoGa8PhkHq02DZmtb0xEsYOnLvM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774964658; c=relaxed/simple;
-	bh=CsfNhvq9iQUOY39Rf/H9E9ourg0Q3+Kn+GjgHyOLoVo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P0/wZ76P6LAojHLeYlUl4SWgS2e+/3N0i75jNum6AwzMTsSNy/JHRGVqL27p+MPctWeRJFs3oN6VHmRIeYPGtBgwNvLRLzbA0CLoV/WpBQmiDxPvHMETAO6vrCDs+Y+CZ7vsRrqlE01tgiIMJE7h072iOS299HR1JK7c+edPy7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com; spf=pass smtp.mailfrom=amutable.com; dkim=pass (2048-bit key) header.d=amutable-com.20230601.gappssmtp.com header.i=@amutable-com.20230601.gappssmtp.com header.b=GgV/xFU3; arc=none smtp.client-ip=209.85.160.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F067364949;
+	Tue, 31 Mar 2026 14:14:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774966445; cv=fail; b=tp6WHC4AdABPfC5hudLr37hVk7AAr41T1hDzoXBK98HWtukUKQlONB4zOtsLNLBk8gFLJFePqEWF4wC6LpUUOq+SO2pYce6MaBFJcXgF+hMYyF9nbEyjj5oN5r1en12jm8pqGEZnhF20qeSDuvTim5d1/FscXBSFa7McCueBNyc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774966445; c=relaxed/simple;
+	bh=XF/KGoVyGQVRui0MTFFCwiS6DDXOyXt5cNJbBcNSCXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=gsucWwDyDXwu1QPxhfzs8uTuNmXp5fU0nW/ofQAPxBP95PZ1spZ+lVDJXVF2JpOLCtSjpwzn+Fl8wlFAyGHoh2G39M61WtmeVQdk7+nFktQDKq8kY49p7hvjKZHffgHB9toW/yHRHEiX+hCq2vgniRX2ubRaeYQRMwluG86Vn/E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bqkS9zi4; arc=fail smtp.client-ip=40.93.196.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amutable-com.20230601.gappssmtp.com header.i=@amutable-com.20230601.gappssmtp.com header.b="GgV/xFU3"
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-41c5a81d4b1so4434751fac.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 06:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20230601.gappssmtp.com; s=20230601; t=1774964649; x=1775569449; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E6Ps+0kKQqKZuuy2teEmtG32Rt1+FQXMRykORYM0/0M=;
-        b=GgV/xFU344TRumPwdfPaCSAXjA7uUnvblo3ZZZEFiwEJAkiLlMrGjiCAXmZUrBrpNl
-         sJm5PDBd7Hvg0HrGoYW9HcGAc4ysazzHuuJ7gTnF7lsfySv0z8AqjvhR7kYfqPH4WFJd
-         cMhbdiJpwewOZ1EoPuw6O0OiruLPSwcsVKgYfVP9/Odugw0z3ZrdjN7A2hm9Oe22iLPr
-         NiKp7tH72kux1DoHw5YHwgaJAtc+spVoZ7u6iZ9KoYEvELCULPTEq1IN+xDihZaCEgWQ
-         u5dVH8OmtzszmHH9kuD9a5nXcIFLBWy08A1COFO8b+dqPxAxRatDvXHbK1u9FMt3bL0/
-         gSEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774964649; x=1775569449;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=E6Ps+0kKQqKZuuy2teEmtG32Rt1+FQXMRykORYM0/0M=;
-        b=tGRneZKC70hjGGsZwTCOndS5O6iWi/O6PCdFjoak7fHBNMA/i7pDhxaLAw+eWP8x7W
-         /NbrZxJCVbiTnDKSypmyLEzC6uM/26RRc+4ZRWdkaF+CpBKHdu/WqNFDC8U+Or8Ootwo
-         lOE+E2jHl/A7EQc1IIhLIt08aiLr0bLpORmTOrChOp2qImt3nLcrkxIo9Ls0y9gg5+E/
-         UZuhSG9GmjSZo7ZhySlwTHgQYLi1U/6z5WM8+hcJE488qkoBZt6cQLdcC/D4bphd2CFp
-         VqW3nDrC79UrQ2HBFa5sNUv/qk6vwnWLUXt2eV3D5BIe7+vzowkfglNOboDuCDIkceXa
-         0tVw==
-X-Forwarded-Encrypted: i=1; AJvYcCXR7eOq/na2EbR4Xhbib4l43ARBElAe+mtDN73mOr94ZMHNdlXEXMwq5iniaVoJaOB8fGTZkrST3Bz8zyCHzeg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykGSWhsdM9qQelXYrks4pZQCUhqJwcNT968esI5DyEBTzu98FT
-	Z2cV5SPToLRj245o4CLWwGqlHHZIJKHKtJDHgM1B4zh8KSz+07l4tIHYJlFYAtPQtGOUdiRCQYC
-	4MFaEjQ==
-X-Gm-Gg: ATEYQzzGlkg8gFskskrlAOrX0JtIVunmhxGApkpid7OzbbsKngDVF9aDY+jP3bwJyrX
-	F1I6BaNY9IzqPGfGwk21heTnn3u9/vObrioeybn4373f5QyPD8S/bwr4PwuFxXv2KF8kaRuWkbf
-	TRqCQrV/ioP0h4WmcWy6Noa+xq1E1ZQA9sBCcsh2MWKy6He64Qyj4q3/fh87XIZ6P0Ckzkzrl47
-	HF1ZUmoyeKw+JUfJaKfurx3bkDxLlkkt8AF+YcXtfs5/eHJr8ds/dt0ICFmNOstAtxfl2RAaFbi
-	i1TvmLn/cMv5ai3SbsyiALswpIFpSNCTp08r0UsXhDBXhOgSgs8JUgAV9nKxtWP6ICHPo45WYln
-	1WWQwU0yC7S2XXHhHnLtoAL+q1TS1aplssfaUpdqQbKBEV3qYb8ubcfVu+fo+7vR+MRaXjIfBIN
-	5Z/ziPx9wHgQbY0yDP84QatJeJeunZDKZjuXmaoMfhn/zhSL4pWMBMfPFPkDyxfTJqGb5n0YVJw
-	0JXJvVBRtG0pv3X7B0usji0
-X-Received: by 2002:a05:6870:2246:b0:41c:56c5:7ca2 with SMTP id 586e51a60fabf-422a2258372mr2054680fac.0.1774964649088;
-        Tue, 31 Mar 2026 06:44:09 -0700 (PDT)
-Received: from thesius.dot.cyphar.com (2403-5809-a2fc-2-a90-9fd7-aedd-d405.ip6.aussiebb.net. [2403:5809:a2fc:2:a90:9fd7:aedd:d405])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d04d95bcasm7470456fac.17.2026.03.31.06.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 06:44:08 -0700 (PDT)
-From: Aleksa Sarai <aleksa@amutable.com>
-Date: Wed, 01 Apr 2026 00:43:33 +1100
-Subject: [PATCH 3/3] selftests: openat2: migrate to kselftest harness
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bqkS9zi4"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jZ3ydG46EvchaUtaL3M+w5ZS/GGegiDiNAHZYzbFiCm2Yk9j1NjeBtEu9E6f8W+qyQCwgkvS4rFBGjimCa/te3I2T8bdLazALSYzSzUshSTH3UQNvHrMMhdz7NCjFM7mjU7UmXE3qIE6TilImF5C81vUsVh8TV8fOt6LjFm4SaU2gC512JMjRpeHHDnKZQZpTr4vrRVGTVamPXewgHkorMOtS7D22MpLylN4FHkCuKHDsoBChtYSL1jIijizH1bKdVhJatMSwJZyCazB3wON2UFSqDkCPAhF1+dgnNA0sx4Sf8J4J3hrvCeabbw1VVRA44CVgoRIpg+vS6WWzsxSFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7WDBCBL2B9ujEAw9T5YMZRiN7wm6VZvvB3NwewFFiSA=;
+ b=heF9HFDZ8j7iajTmlYJ/FSwNjacFuQaoX4yokCbQnTiN4G4wUTh/gxQcKWC6vWpAWMbof2buVN7ujJVlCuJRy1aMJMlJ8jVqEtYITnreHdolIuTkcpUbHWBmXNBZ66Fvt/HZ86SuzcRYllQR9ele8JtPr1uKXoYe9N6LSQLi4771RiPSf6a26j6NqQc2GKCtLPNEV6EAQ4tzeoRuHvej0HJAGrpxtAA+6gIxD+h8is4/DJCwky72X1riLW/icPvctdrF3EfqMbfNgxtqhqKJLp8hFZEO6onpL3pFayWhwEAE0F8m61Y5aE7sTp8mJ+XinYWYNejTzd1YjgrOUMJlzw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7WDBCBL2B9ujEAw9T5YMZRiN7wm6VZvvB3NwewFFiSA=;
+ b=bqkS9zi48elBXJNsw0AJWqjFsPzrLNGwNsf4GouwWM/qC7ylczvwg/oOAjCV8PUelQAuvkzyboxnagemn0hGDv+5YzJWFyTC0wapLN1PKSfRM7Xagoq0LKj9XD6PhZ/CfvncWvWfCDWwpq1ngM3t5FK4isJTK+lvKlLXMFPtzE6lMunTewCC0teN35bIpqS8YCO5hBNUsi50cNpMHIdmMzlAbv7hiYS1kyXGca0E51OKXZ5CCKdZqix6eyvmga4gN4t/tr+2AST/Bi/z06IMOHyH3XCbjNYBd0hZfiVzCHNWsPqi59OvX6hQIy+EXIELy/2RpF0XsXCl0trnBYNkbw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by IA1PR12MB6625.namprd12.prod.outlook.com (2603:10b6:208:3a3::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Tue, 31 Mar
+ 2026 14:13:57 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9769.014; Tue, 31 Mar 2026
+ 14:13:56 +0000
+Date: Tue, 31 Mar 2026 17:13:47 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Ujjal Roy <royujjal@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>,
+	bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 5/5] selftests: net: bridge: add tests for
+ igmpv3 MRC and QQIC validation
+Message-ID: <20260331141347.GA1637150@shredder>
+References: <f23ed1b3-6321-4e6d-9cda-ec5d34304f3b@blackwall.org>
+ <20260330191611.16929-1-royujjal@gmail.com>
+ <20260330191611.16929-6-royujjal@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260330191611.16929-6-royujjal@gmail.com>
+X-ClientProxiedBy: TL2P290CA0012.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:2::16) To SA3PR12MB7901.namprd12.prod.outlook.com
+ (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260401-openat2-selftests-kunit-v1-3-5819ac6cadf5@amutable.com>
-References: <20260401-openat2-selftests-kunit-v1-0-5819ac6cadf5@amutable.com>
-In-Reply-To: <20260401-openat2-selftests-kunit-v1-0-5819ac6cadf5@amutable.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Aleksa Sarai <aleksa@amutable.com>, Aleksa Sarai <cyphar@cyphar.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=33391; i=aleksa@amutable.com;
- h=from:subject:message-id; bh=CsfNhvq9iQUOY39Rf/H9E9ourg0Q3+Kn+GjgHyOLoVo=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMWSePj89pWbSRsXza0L3HP3nfOT5/Q8qLBfb9rAwmIncu
- agwb7vn+46JLAxiXAyWYoos2/w8QzfNX3wl+dNKNpg5rEwgQ6RFGhgYGBhYGPhyE/NKjXSM9Ey1
- DfUMjXSMdIwYuDgFYKp9axgZrl09rjcp9Ip0wjO3x7fvb5Gbs2r13bczxB88asnq3ztrqycjwzS
- Jvvgt046mO/a+1Xp+0WqxyaH1yccVQwVP6k+TuyGexAkA
-X-Developer-Key: i=aleksa@amutable.com; a=openpgp;
- fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|IA1PR12MB6625:EE_
+X-MS-Office365-Filtering-Correlation-Id: 26b1fa18-8acb-4a07-1fd8-08de8f2fbeea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	f4PQNAJ/h/A9z8I9mRj6EjJMwoEvKAAjFy0U6gKYF3r+WqERdt95Jux7DNHdjOLB7XFMz4k3a9pCEvhgiQZYYICR2GcIZjHUo8NeNEG5+/L88zqty9YaOaUdf9/bhy92SfvJ/XeNIdbldEhdR/tFe2HcY+DAUE0VjaFF3SvF6HcTkx89GGWuU4N1yWEdKEcMpZQwbbowMA93RpibQUu1W/LXRDqVZVdEBmESOmte4OR9YhoFO9qAX2+37lAhc5Z8IumQqVOwv8RA5LiSrou6pX2sqKyqxohzynIqCpJ2hPlpL4HFS4YxhWIj3wC8s+liEwSNeEPcGmz1FMXMR0E710zy18wtG/MHxj/jJ91cDUdhZLYEfcFBaL5lgtOwYgcOWuGA2CNM/2eqrlkqlc5dzA4GqImDUBrd7UDSHp7H2aSUNTgN5v58LyCDJBrqgc4e7EL/FTc4PljgOQtHhJmnXBWBMSqDOgROee1WJ2KEZ2A0/wdhSG71V5t1F+yznw2mzL1Q5Q3+LCJ8WVJGAb5tZ4Za+q9XxgjBZ4IGR2UEOvJh9gzNzlX8WCf5pRfnKD2akcf4PvCgpWs+83M+21tinXtpjX+pZ58t11KIsY3kmMA2dnljSHku7WQ7Z3XcZwzEqftBmZXUcw80OhEYlM9t/U2BhxkRC9lN6O5FH+bgpqmC/KZlq9cLCLzQX3xPRrudQ+OMMM29nwdst7BJkiZ1aeJY5v0RF5TZnYeYc+C/PFw=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+B1/p2M6orujSncEdj/RddeyZznLJK5YhDoyS+ahflBU0ObAxk61B1LdmAPm?=
+ =?us-ascii?Q?Lnc4g0LZqXYiJIhP6SsRNddCbLZxC9xBU7fLZ7Hpfmk2tnB3KpgLizjXE0u8?=
+ =?us-ascii?Q?yGjXn/Lxjxzt2pTN4gRsLsdL25rEJxdy7WK1IzJRA9xLfQqnLG/+Zg9Oaq8j?=
+ =?us-ascii?Q?fKRBjI2n0pIy2m6J/4nsn7LGu8UHlysZ0Q93FaQeys+qq6RSrFChbdHtWqjy?=
+ =?us-ascii?Q?mMil7GPa1pliLkZ0bRvmo9SzoWimxVTctKyKVMZXG+yVx7cTWlIinDrvnhCZ?=
+ =?us-ascii?Q?Te8heHU//1Ggf5ByUm/pd/7J5xuByl/aKFoPgl9xvyeV4Fmi0h2ZVFOyaDzB?=
+ =?us-ascii?Q?Qns/Ao8Q4jc9Jz3OFS0V0y/whvBfPNp7rjdG7itMVdo+hx60XCFrIQ23papn?=
+ =?us-ascii?Q?IEpVupNA36eB2ERwHfs1okHKss/dfCctKTzxDfbqniBzJO0v3IH2ozQ/7DTz?=
+ =?us-ascii?Q?HzGos6sDeosauq0ZFxlfEbxsNDcT/czqg9uaCJ0Rd1Np6mMJiml5AhaH4BFo?=
+ =?us-ascii?Q?kXNqOSFOmHe8a7tKvUQvkqxgDwoj1In5+qjAMFbp823VOxW9JMUY2WaNOboy?=
+ =?us-ascii?Q?5WvuAjgaRSDGEgQRKff43x1zq8lvWIxAnPvqjINE+VLVjjGXFOOq5Rcy7Srv?=
+ =?us-ascii?Q?008bKw+IAg69UGjn8mRlroAk4wlB+nXJ90H4dt+nhoZIo9Gowf7Zh4998Qiu?=
+ =?us-ascii?Q?VncjTOc0z4pGDF36PNmda179YcDtDdWzYtyaYwZWt8mot0mN7l7AUeYuzMwW?=
+ =?us-ascii?Q?nJZdU8yohnCeVET/WJAP6wqJQGDmZaIQO4alVuclOUf5fC7VbYVVMYWv1kmC?=
+ =?us-ascii?Q?i9NODNXkQ2vCNFYwacq1IbFG0g5ve9U95ZsZb9UajKoRKxNdr83p7PeGSt8T?=
+ =?us-ascii?Q?7qGAoWhn5KLTUiz9N58861NV0po2bKulPSAUW53KG02y1BnXMYNoactBn8AV?=
+ =?us-ascii?Q?1gDxEjczmEw0jZj7SkqDrmrUmUii496/0eUymlOp7Rs/JGdpOz06N0urqoDG?=
+ =?us-ascii?Q?y4VZKJAq9DIr0TYAXZYMZcrZ9DPDW4ZGZzO1JoJIcv/LATLhqOe3Qb/DUDTR?=
+ =?us-ascii?Q?l+hPeF8kvtttPPBKlrP4hETz9MtGzqrKL/SGOoqt61jVoVnGQALD/G2G67OY?=
+ =?us-ascii?Q?rTjtKZRIfN5Crfe7Mpc1GTfGL9cCrlOLMwAngcGVkSro903wcUf0bJpXfW9J?=
+ =?us-ascii?Q?f+RnfDqgIR+w759UWWnMrCMHW6gJLpyzGaOyj033yPK997hPQsWiK+PdYogp?=
+ =?us-ascii?Q?UB9oTBMxFGGCEJsu+Wu1jGzlEgU9+EsezCJHJzwuT2IEg8wCQ5u20yq68s5y?=
+ =?us-ascii?Q?4PBG73vtSofSLWVYjN61OBnJrcG2nzCsiz+B8GEMvQffSVjAUW3T0vxh71A2?=
+ =?us-ascii?Q?w7yuBOrOv3iSwid17cGlODmqaJujeES8nLMuUEHOgOv4lsldnp3aPqK8402j?=
+ =?us-ascii?Q?d34jNsGGUyWDLJeIRxJKvTbrqrGr3NKPgN6SjoO3HBXgs7KBD0JhsVKOmhhX?=
+ =?us-ascii?Q?opWVG3jECQ/R0qkQngJPzFeKAqU0DRE1h14TZ02Ss7182dVex1sXHqaCduzv?=
+ =?us-ascii?Q?S5QIPmGiG8wStxUtqg5N2/D5G4IQbS85IMNkf7XTa79OXXPLD3kvGNksAStp?=
+ =?us-ascii?Q?RfuP6bQ55yqmt7NQrrwqGIV3D5kkWVIvvOdQXe5ZDR6Ds7LLJ/EebYFcCVVV?=
+ =?us-ascii?Q?fO96ZHzv07DY9OFhhcAKUooyOh732m7Vx9a6lLqyof1/35FOgxouzVknFOCS?=
+ =?us-ascii?Q?qzkwE4OgCA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26b1fa18-8acb-4a07-1fd8-08de8f2fbeea
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 14:13:56.4840
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5C05CcFiQL0yQ/icbsPvbX6AArNZFx+8okeWE8vyziah8EG5zVCpC1wnrdD/r32pv/08tLcwcI1p5Nc0LRemzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6625
 
-These tests were written in the early days of selftests' TAP support,
-the more modern kselftest harness is much easier to follow and maintain.
-The actual contents of the tests are unchanged by this change. Most of
-the diff involves switching from the E_* syscall wrappers we previously
-used to ASSERT_EQ(fn(...), 0) in tests and helper functions.
+On Mon, Mar 30, 2026 at 07:16:11PM +0000, Ujjal Roy wrote:
+> Add bridge selftests that configure IGMPv3 parameters and validate the
+> resulting Query packet fields for Max Resp Code (MRC) and Querier Query
+> Interval Code (QQIC).
+> 
+> This also adds helper binary to encode floating-point exponential fields.
+> 
+> Future extensions may cover corresponding IPv6 cases.
 
-The first pass of the migration was done using Claude, followed by a
-manual rework and review.
+Please cover both IGMPv3 and MLDv2 since the patchset touches both. You
+can add the MLDv2 tests in bridge_mld.sh.
 
-Assisted-by: Claude:claude-4.6-opus
-Signed-off-by: Aleksa Sarai <aleksa@amutable.com>
----
- tools/testing/selftests/openat2/helpers.h          |  62 +---
- tools/testing/selftests/openat2/openat2_test.c     | 217 ++++++------
- .../testing/selftests/openat2/rename_attack_test.c | 161 +++++----
- tools/testing/selftests/openat2/resolve_test.c     | 368 ++++++++++++---------
- 4 files changed, 396 insertions(+), 412 deletions(-)
+Also, I think you can simplify the test by simply matching on the
+expected values of MRC and QQIC using tc-u32.
 
-diff --git a/tools/testing/selftests/openat2/helpers.h b/tools/testing/selftests/openat2/helpers.h
-index f56c0c6e3ad1..7ca54c718c45 100644
---- a/tools/testing/selftests/openat2/helpers.h
-+++ b/tools/testing/selftests/openat2/helpers.h
-@@ -15,7 +15,7 @@
- #include <limits.h>
- #include <linux/types.h>
- #include <linux/unistd.h>
--#include "kselftest.h"
-+#include "kselftest_harness.h"
- 
- #define BUILD_BUG_ON(e) ((void)(sizeof(struct { int:(-!!(e)); })))
- 
-@@ -56,36 +56,6 @@ struct open_how {
- 					(similar to chroot(2)). */
- #endif /* RESOLVE_IN_ROOT */
- 
--#define E_func(func, ...)						      \
--	do {								      \
--		errno = 0;						      \
--		if (func(__VA_ARGS__) < 0)				      \
--			ksft_exit_fail_msg("%s:%d %s failed - errno:%d\n",    \
--					   __FILE__, __LINE__, #func, errno); \
--	} while (0)
--
--#define E_asprintf(...)		E_func(asprintf,	__VA_ARGS__)
--#define E_chmod(...)		E_func(chmod,		__VA_ARGS__)
--#define E_dup2(...)		E_func(dup2,		__VA_ARGS__)
--#define E_fchdir(...)		E_func(fchdir,		__VA_ARGS__)
--#define E_fstatat(...)		E_func(fstatat,		__VA_ARGS__)
--#define E_kill(...)		E_func(kill,		__VA_ARGS__)
--#define E_mkdirat(...)		E_func(mkdirat,		__VA_ARGS__)
--#define E_mount(...)		E_func(mount,		__VA_ARGS__)
--#define E_prctl(...)		E_func(prctl,		__VA_ARGS__)
--#define E_readlink(...)		E_func(readlink,	__VA_ARGS__)
--#define E_setresuid(...)	E_func(setresuid,	__VA_ARGS__)
--#define E_symlinkat(...)	E_func(symlinkat,	__VA_ARGS__)
--#define E_touchat(...)		E_func(touchat,		__VA_ARGS__)
--#define E_unshare(...)		E_func(unshare,		__VA_ARGS__)
--
--#define E_assert(expr, msg, ...)					\
--	do {								\
--		if (!(expr))						\
--			ksft_exit_fail_msg("ASSERT(%s:%d) failed (%s): " msg "\n", \
--					   __FILE__, __LINE__, #expr, ##__VA_ARGS__); \
--	} while (0)
--
- __maybe_unused
- static bool needs_openat2(const struct open_how *how)
- {
-@@ -135,37 +105,39 @@ static int touchat(int dfd, const char *path)
- }
- 
- __maybe_unused
--static char *fdreadlink(int fd)
-+static char *fdreadlink(struct __test_metadata *_metadata, int fd)
- {
- 	char *target, *tmp;
- 
--	E_asprintf(&tmp, "/proc/self/fd/%d", fd);
-+	ASSERT_GT(asprintf(&tmp, "/proc/self/fd/%d", fd), 0);
- 
- 	target = malloc(PATH_MAX);
--	if (!target)
--		ksft_exit_fail_msg("fdreadlink: malloc failed\n");
-+	ASSERT_NE(target, NULL);
- 	memset(target, 0, PATH_MAX);
- 
--	E_readlink(tmp, target, PATH_MAX);
-+	ASSERT_GT(readlink(tmp, target, PATH_MAX), 0);
-+
- 	free(tmp);
- 	return target;
- }
- 
- __maybe_unused
--static bool fdequal(int fd, int dfd, const char *path)
-+static bool fdequal(struct __test_metadata *_metadata, int fd,
-+		    int dfd, const char *path)
- {
- 	char *fdpath, *dfdpath, *other;
- 	bool cmp;
- 
--	fdpath = fdreadlink(fd);
--	dfdpath = fdreadlink(dfd);
-+	fdpath = fdreadlink(_metadata, fd);
-+	dfdpath = fdreadlink(_metadata, dfd);
- 
--	if (!path)
--		E_asprintf(&other, "%s", dfdpath);
--	else if (*path == '/')
--		E_asprintf(&other, "%s", path);
--	else
--		E_asprintf(&other, "%s/%s", dfdpath, path);
-+	if (!path) {
-+		ASSERT_GT(asprintf(&other, "%s", dfdpath), 0);
-+	} else if (*path == '/') {
-+		ASSERT_GT(asprintf(&other, "%s", path), 0);
-+	} else {
-+		ASSERT_GT(asprintf(&other, "%s/%s", dfdpath, path), 0);
-+	}
- 
- 	cmp = !strcmp(fdpath, other);
- 
-diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
-index c6c26652ac1b..5ea3eebb7b59 100644
---- a/tools/testing/selftests/openat2/openat2_test.c
-+++ b/tools/testing/selftests/openat2/openat2_test.c
-@@ -15,8 +15,8 @@
- #include <stdbool.h>
- #include <string.h>
- 
--#include "kselftest.h"
- #include "helpers.h"
-+#include "kselftest_harness.h"
- 
- /*
-  * O_LARGEFILE is set to 0 by glibc.
-@@ -45,13 +45,29 @@ struct struct_test {
- 	int err;
- };
- 
--#define NUM_OPENAT2_STRUCT_TESTS 7
--#define NUM_OPENAT2_STRUCT_VARIATIONS 13
-+struct flag_test {
-+	const char *name;
-+	struct open_how how;
-+	int err;
-+};
-+
-+FIXTURE(openat2) {};
- 
--void test_openat2_struct(void)
-+FIXTURE_SETUP(openat2)
- {
--	int misalignments[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 17, 87 };
-+	if (!openat2_supported)
-+		SKIP(return, "openat2(2) not supported");
-+}
-+
-+FIXTURE_TEARDOWN(openat2) {}
- 
-+/*
-+ * Verify that the struct size and misalignment handling for openat2(2) is
-+ * correct, including that is_zeroed_user() works.
-+ */
-+TEST_F(openat2, struct_argument_sizes)
-+{
-+	int misalignments[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 17, 87 };
- 	struct struct_test tests[] = {
- 		/* Normal struct. */
- 		{ .name = "normal struct",
-@@ -83,26 +99,14 @@ void test_openat2_struct(void)
- 		  .size = sizeof(struct open_how_ext), .err = -E2BIG },
- 	};
- 
--	BUILD_BUG_ON(ARRAY_SIZE(misalignments) != NUM_OPENAT2_STRUCT_VARIATIONS);
--	BUILD_BUG_ON(ARRAY_SIZE(tests) != NUM_OPENAT2_STRUCT_TESTS);
--
- 	for (int i = 0; i < ARRAY_SIZE(tests); i++) {
- 		struct struct_test *test = &tests[i];
- 		struct open_how_ext how_ext = test->arg;
- 
- 		for (int j = 0; j < ARRAY_SIZE(misalignments); j++) {
- 			int fd, misalign = misalignments[j];
--			char *fdpath = NULL;
--			bool failed;
--			void (*resultfn)(const char *msg, ...) = ksft_test_result_pass;
--
- 			void *copy = NULL, *how_copy = &how_ext;
--
--			if (!openat2_supported) {
--				ksft_print_msg("openat2(2) unsupported\n");
--				resultfn = ksft_test_result_skip;
--				goto skip;
--			}
-+			char *fdpath = NULL;
- 
- 			if (misalign) {
- 				/*
-@@ -119,50 +123,42 @@ void test_openat2_struct(void)
- 			}
- 
- 			fd = raw_openat2(AT_FDCWD, ".", how_copy, test->size);
--			if (test->err >= 0)
--				failed = (fd < 0);
--			else
--				failed = (fd != test->err);
- 			if (fd >= 0) {
--				fdpath = fdreadlink(fd);
-+				fdpath = fdreadlink(_metadata, fd);
- 				close(fd);
- 			}
- 
--			if (failed) {
--				resultfn = ksft_test_result_fail;
--
--				ksft_print_msg("openat2 unexpectedly returned ");
--				if (fdpath)
--					ksft_print_msg("%d['%s']\n", fd, fdpath);
--				else
--					ksft_print_msg("%d (%s)\n", fd, strerror(-fd));
-+			if (test->err >= 0) {
-+				EXPECT_GE(fd, 0) {
-+					TH_LOG("openat2 with %s [misalign=%d] should succeed, got %d (%s)",
-+					       test->name, misalign,
-+					       fd, strerror(-fd));
-+				}
-+			} else {
-+				EXPECT_EQ(test->err, fd) {
-+					if (fdpath)
-+						TH_LOG("openat2 with %s [misalign=%d] should fail with %d (%s), got %d['%s']",
-+						       test->name, misalign,
-+						       test->err,
-+						       strerror(-test->err),
-+						       fd, fdpath);
-+					else
-+						TH_LOG("openat2 with %s [misalign=%d] should fail with %d (%s), got %d (%s)",
-+						       test->name, misalign,
-+						       test->err,
-+						       strerror(-test->err),
-+						       fd, strerror(-fd));
-+				}
- 			}
- 
--skip:
--			if (test->err >= 0)
--				resultfn("openat2 with %s argument [misalign=%d] succeeds\n",
--					 test->name, misalign);
--			else
--				resultfn("openat2 with %s argument [misalign=%d] fails with %d (%s)\n",
--					 test->name, misalign, test->err,
--					 strerror(-test->err));
--
- 			free(copy);
- 			free(fdpath);
--			fflush(stdout);
- 		}
- 	}
- }
- 
--struct flag_test {
--	const char *name;
--	struct open_how how;
--	int err;
--};
--
--#define NUM_OPENAT2_FLAG_TESTS 25
--
--void test_openat2_flags(void)
-+/* Verify openat2(2) flag and mode validation. */
-+TEST_F(openat2, flag_validation)
- {
- 	struct flag_test tests[] = {
- 		/* O_TMPFILE is incompatible with O_PATH and O_CREAT. */
-@@ -241,20 +237,10 @@ void test_openat2_flags(void)
- 		  .how.resolve = 0, .err = -EINVAL },
- 	};
- 
--	BUILD_BUG_ON(ARRAY_SIZE(tests) != NUM_OPENAT2_FLAG_TESTS);
--
- 	for (int i = 0; i < ARRAY_SIZE(tests); i++) {
- 		int fd, fdflags = -1;
- 		char *path, *fdpath = NULL;
--		bool failed = false;
- 		struct flag_test *test = &tests[i];
--		void (*resultfn)(const char *msg, ...) = ksft_test_result_pass;
--
--		if (!openat2_supported) {
--			ksft_print_msg("openat2(2) unsupported\n");
--			resultfn = ksft_test_result_skip;
--			goto skip;
--		}
- 
- 		path = (test->how.flags & O_CREAT) ? "/tmp/ksft.openat2_tmpfile" : ".";
- 		unlink(path);
-@@ -265,74 +251,63 @@ void test_openat2_flags(void)
- 			 * Skip the testcase if it failed because not supported
- 			 * by FS. (e.g. a valid O_TMPFILE combination on NFS)
- 			 */
--			ksft_test_result_skip("openat2 with %s fails with %d (%s)\n",
--					      test->name, fd, strerror(-fd));
--			goto next;
-+			TH_LOG("openat2 with %s not supported by FS -- skipping",
-+			       test->name);
-+			continue;
- 		}
- 
--		if (test->err >= 0)
--			failed = (fd < 0);
--		else
--			failed = (fd != test->err);
--		if (fd >= 0) {
--			int otherflags;
--
--			fdpath = fdreadlink(fd);
--			fdflags = fcntl(fd, F_GETFL);
--			otherflags = fcntl(fd, F_GETFD);
--			close(fd);
--
--			E_assert(fdflags >= 0, "fcntl F_GETFL of new fd");
--			E_assert(otherflags >= 0, "fcntl F_GETFD of new fd");
--
--			/* O_CLOEXEC isn't shown in F_GETFL. */
--			if (otherflags & FD_CLOEXEC)
--				fdflags |= O_CLOEXEC;
--			/* O_CREAT is hidden from F_GETFL. */
--			if (test->how.flags & O_CREAT)
--				fdflags |= O_CREAT;
--			if (!(test->how.flags & O_LARGEFILE))
--				fdflags &= ~O_LARGEFILE;
--			failed |= (fdflags != test->how.flags);
--		}
-+		if (test->err >= 0) {
-+			EXPECT_GE(fd, 0) {
-+				TH_LOG("openat2 with %s should succeed, got %d (%s)",
-+				       test->name, fd, strerror(-fd));
-+			}
-+			if (fd >= 0) {
-+				int otherflags;
- 
--		if (failed) {
--			resultfn = ksft_test_result_fail;
-+				fdpath = fdreadlink(_metadata, fd);
-+				fdflags = fcntl(fd, F_GETFL);
-+				otherflags = fcntl(fd, F_GETFD);
-+				close(fd);
- 
--			ksft_print_msg("openat2 unexpectedly returned ");
--			if (fdpath)
--				ksft_print_msg("%d['%s'] with %X (!= %llX)\n",
--					       fd, fdpath, fdflags,
--					       test->how.flags);
--			else
--				ksft_print_msg("%d (%s)\n", fd, strerror(-fd));
-+				ASSERT_GE(fdflags, 0);
-+				ASSERT_GE(otherflags, 0);
-+
-+				/* O_CLOEXEC isn't shown in F_GETFL. */
-+				if (otherflags & FD_CLOEXEC)
-+					fdflags |= O_CLOEXEC;
-+				/* O_CREAT is hidden from F_GETFL. */
-+				if (test->how.flags & O_CREAT)
-+					fdflags |= O_CREAT;
-+				if (!(test->how.flags & O_LARGEFILE))
-+					fdflags &= ~O_LARGEFILE;
-+
-+				EXPECT_EQ(fdflags, (int)test->how.flags) {
-+					TH_LOG("openat2 with %s: flags mismatch %X != %llX",
-+					       test->name, fdflags,
-+					       (unsigned long long)test->how.flags);
-+				}
-+			}
-+		} else {
-+			EXPECT_EQ(test->err, fd) {
-+				if (fd >= 0) {
-+					fdpath = fdreadlink(_metadata, fd);
-+					TH_LOG("openat2 with %s should fail with %d (%s), got %d['%s']",
-+					       test->name, test->err,
-+					       strerror(-test->err),
-+					       fd, fdpath);
-+				} else {
-+					TH_LOG("openat2 with %s should fail with %d (%s), got %d (%s)",
-+					       test->name, test->err,
-+					       strerror(-test->err),
-+					       fd, strerror(-fd));
-+				}
-+			}
-+			if (fd >= 0)
-+				close(fd);
- 		}
- 
--skip:
--		if (test->err >= 0)
--			resultfn("openat2 with %s succeeds\n", test->name);
--		else
--			resultfn("openat2 with %s fails with %d (%s)\n",
--				 test->name, test->err, strerror(-test->err));
--next:
- 		free(fdpath);
--		fflush(stdout);
- 	}
- }
- 
--#define NUM_TESTS (NUM_OPENAT2_STRUCT_VARIATIONS * NUM_OPENAT2_STRUCT_TESTS + \
--		   NUM_OPENAT2_FLAG_TESTS)
--
--int main(int argc, char **argv)
--{
--	ksft_print_header();
--	ksft_set_plan(NUM_TESTS);
--
--	test_openat2_struct();
--	test_openat2_flags();
--
--	if (ksft_get_fail_cnt() + ksft_get_error_cnt() > 0)
--		ksft_exit_fail();
--	else
--		ksft_exit_pass();
--}
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/openat2/rename_attack_test.c b/tools/testing/selftests/openat2/rename_attack_test.c
-index aa5699e45729..1f33c34f56be 100644
---- a/tools/testing/selftests/openat2/rename_attack_test.c
-+++ b/tools/testing/selftests/openat2/rename_attack_test.c
-@@ -22,44 +22,21 @@
- #include <limits.h>
- #include <unistd.h>
- 
--#include "kselftest.h"
- #include "helpers.h"
-+#include "kselftest_harness.h"
- 
--/* Construct a test directory with the following structure:
-- *
-- * root/
-- * |-- a/
-- * |   `-- c/
-- * `-- b/
-- */
--int setup_testdir(void)
--{
--	int dfd;
--	char dirname[] = "/tmp/ksft-openat2-rename-attack.XXXXXX";
--
--	/* Make the top-level directory. */
--	if (!mkdtemp(dirname))
--		ksft_exit_fail_msg("setup_testdir: failed to create tmpdir\n");
--	dfd = open(dirname, O_PATH | O_DIRECTORY);
--	if (dfd < 0)
--		ksft_exit_fail_msg("setup_testdir: failed to open tmpdir\n");
--
--	E_mkdirat(dfd, "a", 0755);
--	E_mkdirat(dfd, "b", 0755);
--	E_mkdirat(dfd, "a/c", 0755);
--
--	return dfd;
--}
-+#define ROUNDS 400000
- 
- /* Swap @dirfd/@a and @dirfd/@b constantly. Parent must kill this process. */
--pid_t spawn_attack(int dirfd, char *a, char *b)
-+pid_t spawn_attack(struct __test_metadata *_metadata,
-+		   int dirfd, char *a, char *b)
- {
- 	pid_t child = fork();
- 	if (child != 0)
- 		return child;
- 
- 	/* If the parent (the test process) dies, kill ourselves too. */
--	E_prctl(PR_SET_PDEATHSIG, SIGKILL);
-+	ASSERT_EQ(prctl(PR_SET_PDEATHSIG, SIGKILL), 0);
- 
- 	/* Swap @a and @b. */
- 	for (;;)
-@@ -67,52 +44,90 @@ pid_t spawn_attack(int dirfd, char *a, char *b)
- 	exit(1);
- }
- 
--#define NUM_RENAME_TESTS 2
--#define ROUNDS 400000
-+/*
-+ * Construct a test directory with the following structure:
-+ *
-+ * root/
-+ * |-- a/
-+ * |   `-- c/
-+ * `-- b/
-+ */
-+FIXTURE(rename_attack) {
-+	int dfd;
-+	int afd;
-+	pid_t child;
-+};
- 
--const char *flagname(int resolve)
-+FIXTURE_SETUP(rename_attack)
- {
--	switch (resolve) {
--	case RESOLVE_IN_ROOT:
--		return "RESOLVE_IN_ROOT";
--	case RESOLVE_BENEATH:
--		return "RESOLVE_BENEATH";
--	}
--	return "(unknown)";
-+	char dirname[] = "/tmp/ksft-openat2-rename-attack.XXXXXX";
-+
-+	self->dfd = -1;
-+	self->afd = -1;
-+	self->child = 0;
-+
-+	/* Make the top-level directory. */
-+	ASSERT_NE(mkdtemp(dirname), NULL);
-+	self->dfd = open(dirname, O_PATH | O_DIRECTORY);
-+	ASSERT_GE(self->dfd, 0);
-+
-+	ASSERT_EQ(mkdirat(self->dfd, "a", 0755), 0);
-+	ASSERT_EQ(mkdirat(self->dfd, "b", 0755), 0);
-+	ASSERT_EQ(mkdirat(self->dfd, "a/c", 0755), 0);
-+
-+	self->afd = openat(self->dfd, "a", O_PATH);
-+	ASSERT_GE(self->afd, 0);
-+
-+	self->child = spawn_attack(_metadata, self->dfd, "a/c", "b");
-+	ASSERT_GT(self->child, 0);
- }
- 
--void test_rename_attack(int resolve)
-+FIXTURE_TEARDOWN(rename_attack)
- {
--	int dfd, afd;
--	pid_t child;
--	void (*resultfn)(const char *msg, ...) = ksft_test_result_pass;
--	int escapes = 0, other_errs = 0, exdevs = 0, eagains = 0, successes = 0;
-+	if (self->child > 0)
-+		kill(self->child, SIGKILL);
-+	if (self->afd >= 0)
-+		close(self->afd);
-+	if (self->dfd >= 0)
-+		close(self->dfd);
-+}
-+
-+FIXTURE_VARIANT(rename_attack) {
-+	int resolve;
-+	const char *name;
-+};
- 
-+FIXTURE_VARIANT_ADD(rename_attack, resolve_beneath) {
-+	.resolve = RESOLVE_BENEATH,
-+	.name = "RESOLVE_BENEATH",
-+};
-+
-+FIXTURE_VARIANT_ADD(rename_attack, resolve_in_root) {
-+	.resolve = RESOLVE_IN_ROOT,
-+	.name = "RESOLVE_IN_ROOT",
-+};
-+
-+TEST_F_TIMEOUT(rename_attack, test, 120)
-+{
-+	int escapes = 0, successes = 0, other_errs = 0, exdevs = 0, eagains = 0;
-+	char *victim_path = "c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../..";
- 	struct open_how how = {
- 		.flags = O_PATH,
--		.resolve = resolve,
-+		.resolve = variant->resolve,
- 	};
- 
- 	if (!openat2_supported) {
- 		how.resolve = 0;
--		ksft_print_msg("openat2(2) unsupported -- using openat(2) instead\n");
-+		TH_LOG("openat2(2) unsupported -- using openat(2) instead");
- 	}
- 
--	dfd = setup_testdir();
--	afd = openat(dfd, "a", O_PATH);
--	if (afd < 0)
--		ksft_exit_fail_msg("test_rename_attack: failed to open 'a'\n");
--
--	child = spawn_attack(dfd, "a/c", "b");
--
- 	for (int i = 0; i < ROUNDS; i++) {
- 		int fd;
--		char *victim_path = "c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../../c/../..";
- 
- 		if (openat2_supported)
--			fd = sys_openat2(afd, victim_path, &how);
-+			fd = sys_openat2(self->afd, victim_path, &how);
- 		else
--			fd = sys_openat(afd, victim_path, &how);
-+			fd = sys_openat(self->afd, victim_path, &how);
- 
- 		if (fd < 0) {
- 			if (fd == -EAGAIN)
-@@ -124,37 +139,21 @@ void test_rename_attack(int resolve)
- 			else
- 				other_errs++; /* unexpected error */
- 		} else {
--			if (fdequal(fd, afd, NULL))
-+			if (fdequal(_metadata, fd, self->afd, NULL))
- 				successes++;
- 			else
- 				escapes++; /* we got an unexpected fd */
- 		}
--		close(fd);
-+		if (fd >= 0)
-+			close(fd);
- 	}
- 
--	if (escapes > 0)
--		resultfn = ksft_test_result_fail;
--	ksft_print_msg("non-escapes: EAGAIN=%d EXDEV=%d E<other>=%d success=%d\n",
--		       eagains, exdevs, other_errs, successes);
--	resultfn("rename attack with %s (%d runs, got %d escapes)\n",
--		 flagname(resolve), ROUNDS, escapes);
--
--	/* Should be killed anyway, but might as well make sure. */
--	E_kill(child, SIGKILL);
-+	TH_LOG("non-escapes: EAGAIN=%d EXDEV=%d E<other>=%d success=%d",
-+	       eagains, exdevs, other_errs, successes);
-+	ASSERT_EQ(escapes, 0) {
-+		TH_LOG("rename attack with %s (%d runs, got %d escapes)",
-+		       variant->name, ROUNDS, escapes);
-+	}
- }
- 
--#define NUM_TESTS NUM_RENAME_TESTS
--
--int main(int argc, char **argv)
--{
--	ksft_print_header();
--	ksft_set_plan(NUM_TESTS);
--
--	test_rename_attack(RESOLVE_BENEATH);
--	test_rename_attack(RESOLVE_IN_ROOT);
--
--	if (ksft_get_fail_cnt() + ksft_get_error_cnt() > 0)
--		ksft_exit_fail();
--	else
--		ksft_exit_pass();
--}
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/openat2/resolve_test.c b/tools/testing/selftests/openat2/resolve_test.c
-index f7acb4300641..eacde59ce158 100644
---- a/tools/testing/selftests/openat2/resolve_test.c
-+++ b/tools/testing/selftests/openat2/resolve_test.c
-@@ -14,8 +14,81 @@
- #include <stdbool.h>
- #include <string.h>
- 
--#include "kselftest.h"
- #include "helpers.h"
-+#include "kselftest_harness.h"
-+
-+struct resolve_test {
-+	const char *name;
-+	const char *dir;
-+	const char *path;
-+	struct open_how how;
-+	bool pass;
-+	union {
-+		int err;
-+		const char *path;
-+	} out;
-+};
-+
-+/*
-+ * Verify a single resolve test case. This must be called from within a TEST_F
-+ * function with _metadata in scope.
-+ */
-+static void verify_resolve_test(struct __test_metadata *_metadata,
-+				int rootfd, int hardcoded_fd,
-+				const struct resolve_test *test)
-+{
-+	struct open_how how = test->how;
-+	int dfd, fd;
-+	char *fdpath = NULL;
-+
-+	/* Auto-set O_PATH. */
-+	if (!(how.flags & O_CREAT))
-+		how.flags |= O_PATH;
-+
-+	if (test->dir)
-+		dfd = openat(rootfd, test->dir, O_PATH | O_DIRECTORY);
-+	else
-+		dfd = dup(rootfd);
-+	ASSERT_GE(dfd, 0) TH_LOG("failed to open dir '%s': %m", test->dir ?: ".");
-+	ASSERT_EQ(dup2(dfd, hardcoded_fd), hardcoded_fd);
-+
-+	fd = sys_openat2(dfd, test->path, &how);
-+
-+	if (test->pass) {
-+		EXPECT_GE(fd, 0) {
-+			TH_LOG("%s: expected success, got %d (%s)",
-+			       test->name, fd, strerror(-fd));
-+		}
-+		if (fd >= 0) {
-+			EXPECT_TRUE(fdequal(_metadata, fd, rootfd, test->out.path)) {
-+				fdpath = fdreadlink(_metadata, fd);
-+				TH_LOG("%s: wrong path '%s', expected '%s'",
-+				       test->name, fdpath,
-+				       test->out.path ?: ".");
-+				free(fdpath);
-+			}
-+		}
-+	} else {
-+		EXPECT_EQ(test->out.err, fd) {
-+			if (fd >= 0) {
-+				fdpath = fdreadlink(_metadata, fd);
-+				TH_LOG("%s: expected %d (%s), got %d['%s']",
-+				       test->name, test->out.err,
-+				       strerror(-test->out.err), fd, fdpath);
-+				free(fdpath);
-+			} else {
-+				TH_LOG("%s: expected %d (%s), got %d (%s)",
-+				       test->name, test->out.err,
-+				       strerror(-test->out.err),
-+				       fd, strerror(-fd));
-+			}
-+		}
-+	}
-+
-+	if (fd >= 0)
-+		close(fd);
-+	close(dfd);
-+}
- 
- /*
-  * Construct a test directory with the following structure:
-@@ -39,101 +112,110 @@
-  *     |-- absself -> /
-  *     |-- self -> ../../root/
-  *     |-- garbageself -> /../../root/
-- *     |-- passwd -> ../cheeky/../cheeky/../etc/../etc/passwd
-- *     |-- abspasswd -> /../cheeky/../cheeky/../etc/../etc/passwd
-+ *     |-- passwd -> ../cheeky/../etc/../etc/passwd
-+ *     |-- abspasswd -> /../cheeky/../etc/../etc/passwd
-  *     |-- dotdotlink -> ../../../../../../../../../../../../../../etc/passwd
-  *     `-- garbagelink -> /../../../../../../../../../../../../../../etc/passwd
-  */
--int setup_testdir(void)
-+FIXTURE(openat2_resolve) {
-+	int rootfd;
-+	int hardcoded_fd;
-+	char *hardcoded_fdpath;
-+	char *procselfexe;
-+};
-+
-+FIXTURE_SETUP(openat2_resolve)
- {
--	int dfd, tmpfd;
- 	char dirname[] = "/tmp/ksft-openat2-testdir.XXXXXX";
-+	int dfd, tmpfd;
-+
-+	self->rootfd = -1;
-+	self->hardcoded_fd = -1;
-+	self->hardcoded_fdpath = NULL;
-+	self->procselfexe = NULL;
-+
-+	/* NOTE: We should be checking for CAP_SYS_ADMIN here... */
-+	if (geteuid() != 0)
-+		SKIP(return, "all tests require euid == 0");
-+	if (!openat2_supported)
-+		SKIP(return, "openat2(2) not supported");
- 
- 	/* Unshare and make /tmp a new directory. */
--	E_unshare(CLONE_NEWNS);
--	E_mount("", "/tmp", "", MS_PRIVATE, "");
-+	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
-+	ASSERT_EQ(mount("", "/tmp", "", MS_PRIVATE, ""), 0);
- 
- 	/* Make the top-level directory. */
--	if (!mkdtemp(dirname))
--		ksft_exit_fail_msg("setup_testdir: failed to create tmpdir\n");
-+	ASSERT_NE(mkdtemp(dirname), NULL);
- 	dfd = open(dirname, O_PATH | O_DIRECTORY);
--	if (dfd < 0)
--		ksft_exit_fail_msg("setup_testdir: failed to open tmpdir\n");
-+	ASSERT_GE(dfd, 0);
- 
- 	/* A sub-directory which is actually used for tests. */
--	E_mkdirat(dfd, "root", 0755);
-+	ASSERT_EQ(mkdirat(dfd, "root", 0755), 0);
- 	tmpfd = openat(dfd, "root", O_PATH | O_DIRECTORY);
--	if (tmpfd < 0)
--		ksft_exit_fail_msg("setup_testdir: failed to open tmpdir\n");
-+	ASSERT_GE(tmpfd, 0);
- 	close(dfd);
- 	dfd = tmpfd;
- 
--	E_symlinkat("/proc/self/exe", dfd, "procexe");
--	E_symlinkat("/proc/self/root", dfd, "procroot");
--	E_mkdirat(dfd, "root", 0755);
-+	ASSERT_EQ(symlinkat("/proc/self/exe", dfd, "procexe"), 0);
-+	ASSERT_EQ(symlinkat("/proc/self/root", dfd, "procroot"), 0);
-+	ASSERT_EQ(mkdirat(dfd, "root", 0755), 0);
- 
- 	/* There is no mountat(2), so use chdir. */
--	E_mkdirat(dfd, "mnt", 0755);
--	E_fchdir(dfd);
--	E_mount("tmpfs", "./mnt", "tmpfs", MS_NOSUID | MS_NODEV, "");
--	E_symlinkat("../mnt/", dfd, "mnt/self");
--	E_symlinkat("/mnt/", dfd, "mnt/absself");
--
--	E_mkdirat(dfd, "etc", 0755);
--	E_touchat(dfd, "etc/passwd");
--
--	E_symlinkat("/newfile3", dfd, "creatlink");
--	E_symlinkat("etc/", dfd, "reletc");
--	E_symlinkat("etc/passwd", dfd, "relsym");
--	E_symlinkat("/etc/", dfd, "absetc");
--	E_symlinkat("/etc/passwd", dfd, "abssym");
--	E_symlinkat("/cheeky", dfd, "abscheeky");
--
--	E_mkdirat(dfd, "cheeky", 0755);
--
--	E_symlinkat("/", dfd, "cheeky/absself");
--	E_symlinkat("../../root/", dfd, "cheeky/self");
--	E_symlinkat("/../../root/", dfd, "cheeky/garbageself");
--
--	E_symlinkat("../cheeky/../etc/../etc/passwd", dfd, "cheeky/passwd");
--	E_symlinkat("/../cheeky/../etc/../etc/passwd", dfd, "cheeky/abspasswd");
--
--	E_symlinkat("../../../../../../../../../../../../../../etc/passwd",
--		    dfd, "cheeky/dotdotlink");
--	E_symlinkat("/../../../../../../../../../../../../../../etc/passwd",
--		    dfd, "cheeky/garbagelink");
--
--	return dfd;
-+	ASSERT_EQ(mkdirat(dfd, "mnt", 0755), 0);
-+	ASSERT_EQ(fchdir(dfd), 0);
-+	ASSERT_EQ(mount("tmpfs", "./mnt", "tmpfs", MS_NOSUID | MS_NODEV, ""), 0);
-+	ASSERT_EQ(symlinkat("../mnt/", dfd, "mnt/self"), 0);
-+	ASSERT_EQ(symlinkat("/mnt/", dfd, "mnt/absself"), 0);
-+
-+	ASSERT_EQ(mkdirat(dfd, "etc", 0755), 0);
-+	ASSERT_GE(touchat(dfd, "etc/passwd"), 0);
-+
-+	ASSERT_EQ(symlinkat("/newfile3", dfd, "creatlink"), 0);
-+	ASSERT_EQ(symlinkat("etc/", dfd, "reletc"), 0);
-+	ASSERT_EQ(symlinkat("etc/passwd", dfd, "relsym"), 0);
-+	ASSERT_EQ(symlinkat("/etc/", dfd, "absetc"), 0);
-+	ASSERT_EQ(symlinkat("/etc/passwd", dfd, "abssym"), 0);
-+	ASSERT_EQ(symlinkat("/cheeky", dfd, "abscheeky"), 0);
-+
-+	ASSERT_EQ(mkdirat(dfd, "cheeky", 0755), 0);
-+
-+	ASSERT_EQ(symlinkat("/", dfd, "cheeky/absself"), 0);
-+	ASSERT_EQ(symlinkat("../../root/", dfd, "cheeky/self"), 0);
-+	ASSERT_EQ(symlinkat("/../../root/", dfd, "cheeky/garbageself"), 0);
-+
-+	ASSERT_EQ(symlinkat("../cheeky/../etc/../etc/passwd",
-+			    dfd, "cheeky/passwd"), 0);
-+	ASSERT_EQ(symlinkat("/../cheeky/../etc/../etc/passwd",
-+			    dfd, "cheeky/abspasswd"), 0);
-+
-+	ASSERT_EQ(symlinkat("../../../../../../../../../../../../../../etc/passwd",
-+			    dfd, "cheeky/dotdotlink"), 0);
-+	ASSERT_EQ(symlinkat("/../../../../../../../../../../../../../../etc/passwd",
-+			    dfd, "cheeky/garbagelink"), 0);
-+
-+	self->rootfd = dfd;
-+
-+	self->hardcoded_fd = open("/dev/null", O_RDONLY);
-+	ASSERT_GE(self->hardcoded_fd, 0);
-+	ASSERT_GE(asprintf(&self->hardcoded_fdpath, "self/fd/%d",
-+			   self->hardcoded_fd), 0);
-+	ASSERT_GE(asprintf(&self->procselfexe, "/proc/%d/exe", getpid()), 0);
- }
- 
--struct basic_test {
--	const char *name;
--	const char *dir;
--	const char *path;
--	struct open_how how;
--	bool pass;
--	union {
--		int err;
--		const char *path;
--	} out;
--};
--
--#define NUM_OPENAT2_OPATH_TESTS 88
--
--void test_openat2_opath_tests(void)
-+FIXTURE_TEARDOWN(openat2_resolve)
- {
--	int rootfd, hardcoded_fd;
--	char *procselfexe, *hardcoded_fdpath;
--
--	E_asprintf(&procselfexe, "/proc/%d/exe", getpid());
--	rootfd = setup_testdir();
--
--	hardcoded_fd = open("/dev/null", O_RDONLY);
--	E_assert(hardcoded_fd >= 0, "open fd to hardcode");
--	E_asprintf(&hardcoded_fdpath, "self/fd/%d", hardcoded_fd);
-+	free(self->procselfexe);
-+	free(self->hardcoded_fdpath);
-+	if (self->hardcoded_fd >= 0)
-+		close(self->hardcoded_fd);
-+	if (self->rootfd >= 0)
-+		close(self->rootfd);
-+}
- 
--	struct basic_test tests[] = {
--		/** RESOLVE_BENEATH **/
-+/* Attempts to cross the dirfd should be blocked with -EXDEV. */
-+TEST_F(openat2_resolve, resolve_beneath)
-+{
-+	struct resolve_test tests[] = {
- 		/* Attempts to cross dirfd should be blocked. */
- 		{ .name = "[beneath] jump to /",
- 		  .path = "/",			.how.resolve = RESOLVE_BENEATH,
-@@ -206,9 +288,17 @@ void test_openat2_opath_tests(void)
- 		{ .name = "[beneath] tricky absolute + garbage link outside $root",
- 		  .path = "abscheeky/garbagelink", .how.resolve = RESOLVE_BENEATH,
- 		  .out.err = -EXDEV,		.pass = false },
-+	};
-+
-+	for (int i = 0; i < ARRAY_SIZE(tests); i++)
-+		verify_resolve_test(_metadata, self->rootfd,
-+				    self->hardcoded_fd, &tests[i]);
-+}
- 
--		/** RESOLVE_IN_ROOT **/
--		/* All attempts to cross the dirfd will be scoped-to-root. */
-+/* All attempts to cross the dirfd will be scoped-to-root. */
-+TEST_F(openat2_resolve, resolve_in_root)
-+{
-+	struct resolve_test tests[] = {
- 		{ .name = "[in_root] jump to /",
- 		  .path = "/",			.how.resolve = RESOLVE_IN_ROOT,
- 		  .out.path = NULL,		.pass = true },
-@@ -297,8 +387,17 @@ void test_openat2_opath_tests(void)
- 						.how.mode = 0700,
- 						.how.resolve = RESOLVE_IN_ROOT,
- 		  .out.path = "newfile3",	.pass = true },
-+	};
- 
--		/** RESOLVE_NO_XDEV **/
-+	for (int i = 0; i < ARRAY_SIZE(tests); i++)
-+		verify_resolve_test(_metadata, self->rootfd,
-+				    self->hardcoded_fd, &tests[i]);
-+}
-+
-+/* Crossing mount boundaries should be blocked. */
-+TEST_F(openat2_resolve, resolve_no_xdev)
-+{
-+	struct resolve_test tests[] = {
- 		/* Crossing *down* into a mountpoint is disallowed. */
- 		{ .name = "[no_xdev] cross into $mnt",
- 		  .path = "mnt",		.how.resolve = RESOLVE_NO_XDEV,
-@@ -347,10 +446,19 @@ void test_openat2_opath_tests(void)
- 		  .out.err = -EXDEV,			.pass = false },
- 		/* Except magic-link jumps inside the same vfsmount. */
- 		{ .name = "[no_xdev] jump through magic-link to same procfs",
--		  .dir = "/proc", .path = hardcoded_fdpath, .how.resolve = RESOLVE_NO_XDEV,
--		  .out.path = "/proc",			    .pass = true, },
-+		  .dir = "/proc", .path = self->hardcoded_fdpath, .how.resolve = RESOLVE_NO_XDEV,
-+		  .out.path = "/proc",				  .pass = true, },
-+	};
-+
-+	for (int i = 0; i < ARRAY_SIZE(tests); i++)
-+		verify_resolve_test(_metadata, self->rootfd,
-+				    self->hardcoded_fd, &tests[i]);
-+}
- 
--		/** RESOLVE_NO_MAGICLINKS **/
-+/* Procfs-style magic-link resolution should be blocked. */
-+TEST_F(openat2_resolve, resolve_no_magiclinks)
-+{
-+	struct resolve_test tests[] = {
- 		/* Regular symlinks should work. */
- 		{ .name = "[no_magiclinks] ordinary relative symlink",
- 		  .path = "relsym",		.how.resolve = RESOLVE_NO_MAGICLINKS,
-@@ -365,7 +473,7 @@ void test_openat2_opath_tests(void)
- 		{ .name = "[no_magiclinks] normal path to magic-link with O_NOFOLLOW",
- 		  .path = "/proc/self/exe",	.how.flags = O_NOFOLLOW,
- 						.how.resolve = RESOLVE_NO_MAGICLINKS,
--		  .out.path = procselfexe,	.pass = true },
-+		  .out.path = self->procselfexe, .pass = true },
- 		{ .name = "[no_magiclinks] symlink to magic-link path component",
- 		  .path = "procroot/etc",	.how.resolve = RESOLVE_NO_MAGICLINKS,
- 		  .out.err = -ELOOP,		.pass = false },
-@@ -376,8 +484,17 @@ void test_openat2_opath_tests(void)
- 		  .path = "/proc/self/root/etc", .how.flags = O_NOFOLLOW,
- 						 .how.resolve = RESOLVE_NO_MAGICLINKS,
- 		  .out.err = -ELOOP,		.pass = false },
-+	};
-+
-+	for (int i = 0; i < ARRAY_SIZE(tests); i++)
-+		verify_resolve_test(_metadata, self->rootfd,
-+				    self->hardcoded_fd, &tests[i]);
-+}
- 
--		/** RESOLVE_NO_SYMLINKS **/
-+/* All symlink resolution should be blocked. */
-+TEST_F(openat2_resolve, resolve_no_symlinks)
-+{
-+	struct resolve_test tests[] = {
- 		/* Normal paths should work. */
- 		{ .name = "[no_symlinks] ordinary path to '.'",
- 		  .path = ".",			.how.resolve = RESOLVE_NO_SYMLINKS,
-@@ -436,88 +553,9 @@ void test_openat2_opath_tests(void)
- 		  .out.err = -ELOOP,		.pass = false },
- 	};
- 
--	BUILD_BUG_ON(ARRAY_SIZE(tests) != NUM_OPENAT2_OPATH_TESTS);
--
--	for (int i = 0; i < ARRAY_SIZE(tests); i++) {
--		int dfd, fd;
--		char *fdpath = NULL;
--		bool failed;
--		void (*resultfn)(const char *msg, ...) = ksft_test_result_pass;
--		struct basic_test *test = &tests[i];
--
--		if (!openat2_supported) {
--			ksft_print_msg("openat2(2) unsupported\n");
--			resultfn = ksft_test_result_skip;
--			goto skip;
--		}
--
--		/* Auto-set O_PATH. */
--		if (!(test->how.flags & O_CREAT))
--			test->how.flags |= O_PATH;
--
--		if (test->dir)
--			dfd = openat(rootfd, test->dir, O_PATH | O_DIRECTORY);
--		else
--			dfd = dup(rootfd);
--		E_assert(dfd, "failed to openat root '%s': %m", test->dir);
--
--		E_dup2(dfd, hardcoded_fd);
--
--		fd = sys_openat2(dfd, test->path, &test->how);
--		if (test->pass)
--			failed = (fd < 0 || !fdequal(fd, rootfd, test->out.path));
--		else
--			failed = (fd != test->out.err);
--		if (fd >= 0) {
--			fdpath = fdreadlink(fd);
--			close(fd);
--		}
--		close(dfd);
--
--		if (failed) {
--			resultfn = ksft_test_result_fail;
--
--			ksft_print_msg("openat2 unexpectedly returned ");
--			if (fdpath)
--				ksft_print_msg("%d['%s']\n", fd, fdpath);
--			else
--				ksft_print_msg("%d (%s)\n", fd, strerror(-fd));
--		}
--
--skip:
--		if (test->pass)
--			resultfn("%s gives path '%s'\n", test->name,
--				 test->out.path ?: ".");
--		else
--			resultfn("%s fails with %d (%s)\n", test->name,
--				 test->out.err, strerror(-test->out.err));
--
--		fflush(stdout);
--		free(fdpath);
--	}
--
--	free(procselfexe);
--	close(rootfd);
--
--	free(hardcoded_fdpath);
--	close(hardcoded_fd);
-+	for (int i = 0; i < ARRAY_SIZE(tests); i++)
-+		verify_resolve_test(_metadata, self->rootfd,
-+				    self->hardcoded_fd, &tests[i]);
- }
- 
--#define NUM_TESTS NUM_OPENAT2_OPATH_TESTS
--
--int main(int argc, char **argv)
--{
--	ksft_print_header();
--	ksft_set_plan(NUM_TESTS);
--
--	/* NOTE: We should be checking for CAP_SYS_ADMIN here... */
--	if (geteuid() != 0)
--		ksft_exit_skip("all tests require euid == 0\n");
--
--	test_openat2_opath_tests();
--
--	if (ksft_get_fail_cnt() + ksft_get_error_cnt() > 0)
--		ksft_exit_fail();
--	else
--		ksft_exit_pass();
--}
-+TEST_HARNESS_MAIN
+For both IGMPv3 and MLDv2 please test both:
 
--- 
-2.53.0
+* MRC and QQIC in linear range.
+* MRC and QQIC in non-linear range.
 
+And please make sure the new test cases don't add new shellcheck
+warnings / errors or it will fail in the CI. You can ignore existing
+ones.
