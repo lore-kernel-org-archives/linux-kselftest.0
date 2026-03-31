@@ -1,62 +1,44 @@
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA1F4611C6
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 22:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACBE4611C6;
+	Tue, 31 Mar 2026 22:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774997032; cv=none; b=NBuK41hVt/KLRMyuV8Cv2MAOLsRN+4KdRh4vGRvlLrAe/ee5w5KobyCqV2ImdYIAOsy4to3ZIM2ltGLzo69ex+MI10y9pXLjRTfS2Dd/7rrAV1xmgP3Jwc0AcFxH1ebBytj5FAG2s27Ey27JtvkYHqGzqxERFJQpFrOUjAkNVmQ=
+	t=1774997068; cv=none; b=JDWeD/lLypfQfYKB0zYvWh476siPv3733lMFdHdlBeG0R/TbJ4cuGHzM3Lb/NyGgQHCFsIoNoUO0Hc36n1bsWISdGIwEniv0SQg0wCbOJBSJppZ5TargWbjd7EaLhzypFUkrQ8G7cit2fm9HFtQQ5EfvE/FYbGcsY0psDMqRp+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774997032; c=relaxed/simple;
-	bh=S+ES5LZ7FQDM+VkrFKzMsHCH8Fyi24/km08w7v9MYHA=;
+	s=arc-20240116; t=1774997068; c=relaxed/simple;
+	bh=St4cHU3bWuFU+5Jlkj/utNPywjdOMP+RdZhMfsrLM1s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fss7Brg22RhcKnivgCjwlu/pIoSqlPyK7JlNdo7ALW1F3APAc+Z4DzTZ/T/SMAQKFY1uGC46KZPIaNjr0M4OR1A0WWR4Y6hPgRayOj2h52UKVDFlNS8lw566D7j84PBr/BJEIIpOFv6bbqV/QIQoArrtbfTANi9ZqLlNPWpr0pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EJ8Uw6Wn; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 In-Reply-To:Content-Type; b=g4yYC6AwTBXBvN5AhDo6OjELkyvfdDECbStsTJDHdbslcPRyRQLNXlRsX3lzN7m1JDYl4tFS4LPY0WyVLr4+4QWUN4kiLGg5+x+cFqNBeBK/DsoDCMX3T+9Gq5nHYdXFUqqXkkjriLrv2MVgvbPSwi8oi13i6h3pxpBJyl2ncrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=TVqz7eiE; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EJ8Uw6Wn"
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-40423dbe98bso2446609fac.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 15:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1774997027; x=1775601827; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y0zFm/wafzYDhWoYf0yG73YRDkA8Xiy0LAp1YWtwYV0=;
-        b=EJ8Uw6Wn8rfyYfwSqcJTDAUZa6jlUq5bJZCL3LipSFRbp4v1tozf9pjRs/4/+UllM8
-         Q5Scg2YdtqIL2SyoH9zguFcrzNj7JA7vbChGFKzfWM1418QAorYTR0Fu5i2tInGwHqvo
-         igDzcTbLrUGfLOsp3QcUIcNuVuEM6xTLhD3tQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774997027; x=1775601827;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y0zFm/wafzYDhWoYf0yG73YRDkA8Xiy0LAp1YWtwYV0=;
-        b=ra4nz7RwO7WrLmdrXxSXBlyTilsOK/dSQgjjlTzsPzKlgI4Cei7un3N95g6xXWC25M
-         Vi/TTQ7+WWLwuyqwLTV44jprubG+BekLUD2EgW7eEsDAUdymwNvObmZW8X6u9voh1hJd
-         v5oV04qMEQvIoDB+bbjJ+C6fxpN97hlgFcTIlMvBB1RBVFhPYE57fMt2/A06YRA13T4p
-         sskeo4AxqBkYV8FW54vRM4R2+0DSQQmDrAh3REQUmHrUicfbHTWU+HojY78OdkUx8xm3
-         Xj8W54RxePehjPT1He3goJYzihdCkEVQ8BfEmAHv9OnSRefmlwB7KTtjEqEx4KQnu9rX
-         n+5Q==
-X-Gm-Message-State: AOJu0Yy6xna07ElUAuGCU2hkeuXID2+Ro5Qjt08ssySDkEELoN4Nk/Ol
-	b7GcyIawPhfXCCgysuIGGXYbR5YwxF4PYP1rFS5NNB10PsKutu5NZu5kay9QT8vj62k=
-X-Gm-Gg: ATEYQzxdkhUHAJhmLCEJcV/JPrmhUmQ2siDZRJZIr1hxJnp0d/u0HFg38JHEG0qL/+c
-	ahzrT/jSU0dBh7AZbpXRT50kaiWr3+n/XEmjlvRGssT/5YsPn62qr/QC44ncvuGId9s9bR4merJ
-	uPQpJgC5TzWmvWuM55OB2aZbKoJbfMqaw3nN6Er5oRTdIZwKazjBvWqWfr7cA71cVdxMx1cjOVy
-	PbcvvkM6geqpQjmgTlb/j/moCABukfJg5t3DM1R9vLWCLuhwPWETvXNll1KZOiXMe3Q8NAZn4IE
-	VzsEPjYB3fCOWxkuYLvFhYzUWFbdR7h74o93fEF6obGxfv9ECIFclKa1Lt3oXTjxcRa8Y1VJILh
-	SLd70hyZFEuQ7xE13J8QTfIIW74cK2hZyvj2AYY/M9UE5aOb2vS8Vyat/y/uxmMmyeCJVWfdwoW
-	ERq++19QUAZEMVcngnnvwvH+dja13W/Eqq/gs3yh+ON/milg==
-X-Received: by 2002:a05:6871:823:b0:417:2daf:6aa1 with SMTP id 586e51a60fabf-422cff4ad74mr935250fac.37.1774997026944;
-        Tue, 31 Mar 2026 15:43:46 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d04d95bcasm8422610fac.17.2026.03.31.15.43.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 15:43:46 -0700 (PDT)
-Message-ID: <b01d1156-2213-4051-9f98-60e74d18e2a6@linuxfoundation.org>
-Date: Tue, 31 Mar 2026 16:43:45 -0600
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="TVqz7eiE"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1w7hoV-005wSh-7w; Wed, 01 Apr 2026 00:43:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=S1+U+BnbfMCceEAbBDU0ejWzpWEUlFAjYsO7Uz8lf/o=; b=TVqz7eiErR7KPljQp11mVvNhBO
+	JJBqMqeWLPo3NIRFQfwupc0SqrE4JCe45+fhBuD6VU0dTK9G9qx4S+sQoZB1MUwoP5RI6le2DmlIo
+	G97Smo7II5lt7BizyWUpHBEesospl5+uxugDZYAIaAtM08jkj/Pivi0l6CRAWfwsCl5NYSaUJqldW
+	7l31PxhMazoNIylVysOcsPe5zcIDJH1evixQ9p9jixs8zPclfU5IBB+c46F/PCD8+nAkGEo4fp6X3
+	TC2iGxY8RrHyBjCaoylcWGClMfAdTkoPXOPNCV32ywyRflF8JIH+VLODHUSYCxAcCX8VOaPj3udU0
+	EZ3h68MQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1w7hoP-0000ns-1y; Wed, 01 Apr 2026 00:43:53 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1w7hoM-00AH1Q-FZ; Wed, 01 Apr 2026 00:43:50 +0200
+Message-ID: <48bad987-a130-4fb0-b4de-e39deac80ab9@rbox.co>
+Date: Wed, 1 Apr 2026 00:43:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,52 +46,96 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] selftests: run_kselftest.sh cleanup and fixes
-To: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Jiayuan Chen <mrpre@163.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
+ <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
+ <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+ <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+ <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
+ <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
+ <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
+ <CAAVpQUAtF29CPDAdEUchYOP=oy8D2-B3GH3fWs2pwTmnYoTu=w@mail.gmail.com>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <CAAVpQUAtF29CPDAdEUchYOP=oy8D2-B3GH3fWs2pwTmnYoTu=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 3/20/26 12:29, Ricardo B. Marlière wrote:
-> Hi Shuah,
+On 3/31/26 01:27, Kuniyuki Iwashima wrote:
+> On Mon, Mar 30, 2026 at 4:04 PM Michal Luczaj <mhal@rbox.co> wrote:
+>> On 3/26/26 07:26, Martin KaFai Lau wrote:
+>>> On 3/15/26 4:58 PM, Michal Luczaj wrote:
+>>>>> Beside, from looking at the may_update_sockmap(), I don't know if it is
+>>>>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
+>>>>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
+>>>>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
+>>>>> when the bpf_map_update_elem(sockmap) support was added iirc.
+>>>>
+>>>> What about a situation when unix_sk is stored in a sockmap, then tc prog
+>>>> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
+>>>> useful, but seems doable.
+>>>
+>>> [ Sorry for the late reply ]
+>>>
+>>> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible
+>>> from tc :(
+>>>
+>>> Then unix_state_lock() in its current form cannot be safely acquired in
+>>> sock_map_update_elem(). It is currently a spin_lock() instead of
+>>> spin_lock_bh().
+>>
+>> Is there a specific deadlock you have in your mind?
 > 
-> Please consider merging the following patches. They are mostly small fixes
-> to run_kselftest.sh, plus one feature: adding the option of passing a
-> directory to the "-p --per-test-log" argument.
+> lockdep would complain if we used the same lock from
+> different contexts.
 > 
-> There is a small corner case spotted in tools/testing/selftests/Makefile
-> regarding failing sub-targets, and also the removal of the default install
-> directory for out of tree builds in the top-level Makefile.
-> 
-> Thank you!
-> 
-> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
-> ---
-> Ricardo B. Marlière (6):
->        selftests/run_kselftest.sh: Remove unused $ROOT
->        selftests/run_kselftest.sh: Add missing quotes
->        selftests/run_kselftest.sh: Resolve BASE_DIR with pwd -P
->        selftests/run_kselftest.sh: Allow choosing per-test log directory
->        selftests: Preserve subtarget failures in all/install
->        kbuild: remove kselftest output in mrproper
-> 
->   Makefile                                    |  1 +
->   tools/testing/selftests/Makefile            |  8 ++---
->   tools/testing/selftests/kselftest/runner.sh |  3 +-
->   tools/testing/selftests/run_kselftest.sh    | 46 +++++++++++++++++++++--------
->   4 files changed, 40 insertions(+), 18 deletions(-)
+> e.g.)
+> Process context holding unix_state_lock() with the normal spin_lock()
+> -> BH interrupt
+> -> tc prog trying to hold the same lock with spin_lock(). (_bh())
+> -> deadlock
 
-Thank you Ricardo. I applied the series to linux_kselftest next
+OK, I get it, thanks.
 
-I had to fix a minor merge conflict when I applied patch v2.
-Please check to see if everything looks sane.
+So here's one more idea: the null-ptr-deref issue is connect() racing
+against sock_map_update_elem_*SYS*() coming from user-space, not the
+can-be-called-from-BH sock_map_update_elem() variant. So can't we assume
+that for any sock_map_update_elem(unix_sk) invoked by a tc prog, unix_sk
+will always be "stable", i.e. in a state that cannot lead to that
+null-ptr-deref?
 
-thanks,
--- Shuah
+IOW, if for a tc prog the only way to get hold of unix_sk is look it up in
+a sockmap, then (by the fact that unix_sk _is_ in the sockmap) unix_sk will
+be already safe to use by sock_map_update_elem() without taking the af_unix
+state lock.
+
+Long story short: take the unix state lock in sock_map_update_elem_sys(),
+don't bother in sock_map_update_elem()?
+
+>> ...
+>> And sock_{map,hash}_seq_show() (being a part of bpf iter machinery) needs
+>> to take lock_sock() just as well? Would that require a special-casing
+>> (unix_state_lock()) for af_unix?
+> 
+> Right, lock_sock() + unix_state_lock() + SOCK_DEAD check
+> should be best.
+
+OK, got it.
+
