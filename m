@@ -1,261 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA9B31717F;
-	Tue, 31 Mar 2026 15:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B15405AA0
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 15:25:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774970643; cv=none; b=J2zQm1m8f0mP+JDsZK+gIdHHdrCKE6mEpND1Q5TZNpFuwCW+5oRZdOMX9czrmaRfv9+/EqB6xt/Wbi/ooZ87JNhqUWrGsb5BiSX6MzZ6xYNU+clz6gCC/lQhc+8GLzgoJtRpm7v08zuHBR7+E2ydGGT9BvUlaVknehQ83SsaIz0=
+	t=1774970721; cv=none; b=pS9gjv4S0o+R16odxm3vKynZJfOTSCWWjA8QPMs0ZKhv6lqQ7Sy2FuXzHcmepISDdes/ZMpM0JYDSjcbQ1KGgMRZENEJnonEOWpkYa8mB4j3iuia8hfVicVC8RAoPmZdn2cdhN8VewOTvGW+QZ7FCBUkNcnIlR0uwrjVsOhiKuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774970643; c=relaxed/simple;
-	bh=3mA8yhmwSAY4oxzzAbFQyFqOh6xAwsxwgZjjBw72kWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m+ydJzjurX4pDhp8LsHqw91v0WlgG7KMRNoRLMID6sJpSMPTJUupGELRVLIqwLb197U8ZmV49BGQ5lzmYMGiCIpzaHMmd9DBFA4Pe6m+hr9eIxit/2BjqDm7pvh/kFo+x9Z2SSjBcYI9BxMf7p+3wyPfJO5mSGv6rfWOHscO2hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKqiA6JX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774970721; c=relaxed/simple;
+	bh=mdj+JZHtkLBhk+fcPzmcDizZkZVrlPDkUqbVOyoytxY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CZNtH+lKUAE2VgLqHnYtzj5Hr0g+pjulDe+VvUY8tz9iPxckWHeAV0DTFJf1XKLRi4DufdBEyd6djIKhQNNWj7WI+oB4Zksyy0w2/0gnDVZE0bvbbagmNJWe60kMywgZnRkDr7HNE+5Eit8ls8S9u7iMjJFCbLFNB8uTLushbLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TNDazeUQ; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKqiA6JX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 925D4C19423;
-	Tue, 31 Mar 2026 15:24:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774970642;
-	bh=3mA8yhmwSAY4oxzzAbFQyFqOh6xAwsxwgZjjBw72kWw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YKqiA6JXJp8cZOzS0sGVZ37Nc19QkYMmlautv+TkliDyiVF4PeV3zMHiNLwUI4RK/
-	 vuWX6IwSC+JpiWxF9sDdC+Rknar2iLWvFVMr216e5uKXpDJfqlRHSh0ta6rLRFbcsf
-	 7x4HHDlGp64qAgFz+icMggzhUz45aVTmLjG5bukEVsMCsNdEocNsM2Bf4FT8xAnK7j
-	 pYl891rWsuPwvkqM5G8WhKYxoV9vI7bQWZq07rcrh6tLx3TiqZ7TkIrU8odYJo5Ybe
-	 NUWAWRKrHOD//+MV22oUMi4aPYxtvImourkUYscAFQtxeC19vapANRluBjwes0uwf3
-	 BkBzpSX8Kjucw==
-Date: Wed, 1 Apr 2026 00:24:01 +0900
-From: "Harry Yoo (Oracle)" <harry@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Andrei Vagin <avagin@google.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TNDazeUQ"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-661d20c9787so7809613a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 08:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774970715; x=1775575515; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Ro62eebBDFoVJdcd3sYnIMKDqKbb3O6Im7sU1GaKrA=;
+        b=TNDazeUQ/rTX/qyE2C7OACicq2evhj4gvT7V3j00yWf0zX1YT9JlmLpYSp0iPWij3F
+         Ay0vSjHyzrRmYMrBcsla2OftrpcP+J27bNbBbeZ+ytHAXmNtnBJEwOQmWZh4M0MmydgB
+         8pWXj4tfVkSF83hOqgbtyg4o2Ej2JDO2/0j81x+E2lghwhKm748QODOCt6XteZYlcbjz
+         BxWs6rrlDWfSpln4GGPXkZT9aAc2cM7qCmnb4n2EFBFq/3Q8UlDL1u0aF+/gyld3g264
+         ISPCURl6H6CvOvOrJn5nneODXZp2yrOb7Zz54gzt15GZnb2OajTpCwJKh0eBNaz7U4DQ
+         qpJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774970715; x=1775575515;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Ro62eebBDFoVJdcd3sYnIMKDqKbb3O6Im7sU1GaKrA=;
+        b=eerwwLoAGZ5ZYdKdTBGDd9bPNB+4S4XI1sjy0yO2lEQsrnbaxijI8+rn1ml7ntKRsZ
+         xOSdRS/XtPUTqicCuDKvGwxAKhXVMPGHjMnuPGpv1rXlYcDpUL74M0f/H6+hbDGAFfzJ
+         Q1GPaO+TPvpb8SnktNgxYbivKS5UPUp/QUkgzZrO+OPRitBTpnDkL4vIvkEzl7VC1N08
+         aV2UR7xXN3KHsX9ycPh21RGsOr5sC8sTLtAunf9PBSxkLL6MSxul4mM1eK8SQrrfZaV3
+         wXuGC/ybdEHllWU8zsEIY6YY+JQkDzr3qrVY3s8BZOcE8ePi4iT43Mdzb694d83HW/1D
+         bQOw==
+X-Forwarded-Encrypted: i=1; AJvYcCVLWga2TnKHYoOhe07I5BEVj5uw9tunM1J65qfhPa5Z8w9rZ57saI88kKcU6vanNwKxvGtb5052JHQdZcsU6kk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfJ6su6KDF306r7DhHNJlNswDas1SEWpRrDhzYz6g7BW4EQytI
+	vLHJNTi3z9Qp0YqR5cF5Cg7wZPptRL5tGWcdCDnkNbCFaQUTJRfuvpdeYeCiGKY8zwc=
+X-Gm-Gg: ATEYQzyJ7InxY4BYw1IOPTtYFgH+rg0M3S2qpm2lL921q+WLsJTPsD8qcZ7oPYQghcN
+	y58X9c/TcM2+mIFxR2D1dlIiRQ6NjD97iXfQWghCNvVM8PLMsweOFQA6j+cFNFRqXcX+a6yPVEO
+	XTglFseaoWViFRiO4lUlS3SyKc0KYKGtS5vcm2J5pKvz8ARCKhrvVU+D9rfFCor7H1BJg17P3n0
+	SExjczyqIqTl13zcGgYfNejVl0rxSI64Ed88BrgQLQkZ+QzCrD7eZPUCKR15EjRfynGjcmFsfEs
+	tLqJ2uscYvfr7nwh0MfFFpIKaPxnTtcBWUJvRkx9a3LBfzpz2PdatJ5RxOF2iUeBx3P3MdRluFC
+	QNb+hu2YPvqrjYR4BMpxnh4mt8GEgEdI0SXKorZGYiSGS0H5xyhEVGvMN7HTc/1nz7OS15/F5l6
+	x8od3qq+UbfdJTmZyIcz/vvT4Dq1YaXm8ai99U/nryrdg3btgpOsKlncpblJ6MJg==
+X-Received: by 2002:a05:6402:50c8:b0:66c:36a2:73be with SMTP id 4fb4d7f45d1cf-66c36a2742dmr1829709a12.8.1774970715241;
+        Tue, 31 Mar 2026 08:25:15 -0700 (PDT)
+Received: from f16.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dba558226sm1264003a91.2.2026.03.31.08.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 08:25:14 -0700 (PDT)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 02/15] userfaultfd: introduce struct mfill_state
-Message-ID: <acvnEd3-s6XI26vb@hyeyoo>
-References: <20260330101116.1117699-1-rppt@kernel.org>
- <20260330101116.1117699-3-rppt@kernel.org>
- <actxscYZGFiyvUcs@hyeyoo>
- <acva_NKf7T5rbIC8@kernel.org>
+	Feng Yang <yangfeng@kylinos.cn>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/2] libbpf: clarify raw-address single kprobe attach behavior
+Date: Wed,  1 Apr 2026 00:24:34 +0900
+Message-ID: <20260331152509.70468-1-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acva_NKf7T5rbIC8@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 31, 2026 at 05:32:28PM +0300, Mike Rapoport wrote:
-> Hi Harry,
-> 
-> On Tue, Mar 31, 2026 at 04:03:13PM +0900, Harry Yoo (Oracle) wrote:
-> > On Mon, Mar 30, 2026 at 01:11:03PM +0300, Mike Rapoport wrote:
-> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > > 
-> > > mfill_atomic() passes a lot of parameters down to its callees.
-> > > 
-> > > Aggregate them all into mfill_state structure and pass this structure to
-> > > functions that implement various UFFDIO_ commands.
-> > > 
-> > > Tracking the state in a structure will allow moving the code that retries
-> > > copying of data for UFFDIO_COPY into mfill_atomic_pte_copy() and make the
-> > > loop in mfill_atomic() identical for all UFFDIO operations on PTE-mapped
-> > > memory.
-> > > 
-> > > The mfill_state definition is deliberately local to mm/userfaultfd.c,
-> > > hence shmem_mfill_atomic_pte() is not updated.
-> > > 
-> > > [harry.yoo@oracle.com: properly initialize mfill_state.len to fix
-> > >                        folio_add_new_anon_rmap() WARN]
-> > > Link: https://lkml.kernel.org/r/abehBY7QakYF9bK4@hyeyoo
-> > > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > > Signed-off-by: Harry Yoo <harry.yoo@oracle.com>
-> > > Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> > > ---
-> > >  mm/userfaultfd.c | 148 ++++++++++++++++++++++++++---------------------
-> > >  1 file changed, 82 insertions(+), 66 deletions(-)
-> > > 
-> > > @@ -790,12 +804,14 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
-> > >  	    uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
-> > >  		goto out_unlock;
-> > >  
-> > > -	while (src_addr < src_start + len) {
-> > > -		pmd_t dst_pmdval;
-> > > +	state.vma = dst_vma;
-> > 
-> > Oh wait, the lock leak was introduced in patch 2.
-> 
-> Lock leak was introduced in patch 4 that moved getting the vma.
+Today libbpf documents single-kprobe attach through func_name, with an
+optional offset. For the PMU-based non-legacy path, func_name = NULL
+with an absolute address in offset already works as well, but that is
+not described in the API.
 
-Still not sure what I could possibly be missing, so let me try again.
-when I check out to this commit "userfaultfd: introduce struct mfill_state" I see:
-| static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
-|                                             unsigned long dst_start,
-|                                             unsigned long src_start,
-|                                             unsigned long len,
-|                                             uffd_flags_t flags)
-| {
-|         struct mfill_state state = (struct mfill_state){
-|                 .ctx = ctx,
-|                 .dst_start = dst_start,
-|                 .src_start = src_start, .flags = flags,
-|                 .len = len,
-|                 .src_addr = src_start,
-|                 .dst_addr = dst_start,
-|         };
-|
+This patchset clarifies this behavior. The first commit clarifies that,
+for the PMU-based path, callers can use func_name = NULL with an
+absolute address in offset for raw-address attach, and makes legacy
+tracefs/debugfs kprobes reject that form. The second commit adds PERF
+and LINK selftests for the raw-address form, and checks that LEGACY
+rejects it.
 
-[ ...snip...]
+---
+Changes in v4:
+- Inline raw-address error formatting and remove the probe_target buffer
 
-| retry:
-|         /*
-|          * Make sure the vma is not shared, that the dst range is
-|          * both valid and fully within a single existing vma.
-|          */
-|         dst_vma = uffd_mfill_lock(dst_mm, dst_start, len);
+Changes in v3:
+- Drop bpf_kprobe_opts.addr and reuse offset when func_name is NULL
+- Make legacy tracefs/debugfs kprobes reject the raw-address form
+- Update selftests to cover PERF/LINK raw-address attach and LEGACY reject
 
-It acquires the vma lock (or mmap_lock) here, but doesn't set state.vma.
+Changes in v2:
+- Fix line wrapping and indentation
 
-|         if (IS_ERR(dst_vma)) {
-|                 err = PTR_ERR(dst_vma);
-|                 goto out;
-|         }
-| 
-|         /*
-|          * If memory mappings are changing because of non-cooperative
-|          * operation (e.g. mremap) running in parallel, bail out and
-|          * request the user to retry later
-|          */
-|         down_read(&ctx->map_changing_lock);
-|         err = -EAGAIN;
-|         if (atomic_read(&ctx->mmap_changing))
-|                 goto out_unlock;
-| 
-|         err = -EINVAL;
-|         /*
-|          * shmem_zero_setup is invoked in mmap for MAP_ANONYMOUS|MAP_SHARED but
-|          * it will overwrite vm_ops, so vma_is_anonymous must return false.
-|          */
-|         if (WARN_ON_ONCE(vma_is_anonymous(dst_vma) &&
-|             dst_vma->vm_flags & VM_SHARED))
-| 
-|         /*
-|          * validate 'mode' now that we know the dst_vma: don't allow
-|          * a wrprotect copy if the userfaultfd didn't register as WP.
-|          */
-|         if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM_UFFD_WP))
-|                 goto out_unlock;
-|
-|         /*
-|          * If this is a HUGETLB vma, pass off to appropriate routine
-|          */
-|         if (is_vm_hugetlb_page(dst_vma))
-|                 return  mfill_atomic_hugetlb(ctx, dst_vma, dst_start,
-|                                              src_start, len, flags);
-|
-|         if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
-|                 goto out_unlock;
-|         if (!vma_is_shmem(dst_vma) &&
-|             uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
-|                 goto out_unlock;
-|
-|         state.vma = dst_vma;
+Hoyeon Lee (2):
+  libbpf: clarify raw-address single kprobe attach behavior
+  selftests/bpf: add test for raw-address single kprobe attach
 
-It is set here. So if anything before this jumps to `out_unlock`
-label due to a sanity check,
-
-[...]
-
-|         while (state.src_addr < src_start + len) {                              
-|                 VM_WARN_ON_ONCE(state.dst_addr >= dst_start + len);             
-|                                                                                 
-|                 pmd_t dst_pmdval;         
-| [...]
-| 
-| out_unlock:
-|         up_read(&ctx->map_changing_lock);
-|         uffd_mfill_unlock(state.vma);
-
-the `vma` parameter will be NULL?
-
-If I'm not missing something this is introduced in patch 2 and
-fixed in patch 4.
-
-| out:
-|         if (state.folio)
-|                 folio_put(state.folio);
-|         VM_WARN_ON_ONCE(copied < 0);
-|         VM_WARN_ON_ONCE(err > 0);
-|         VM_WARN_ON_ONCE(!copied && !err);
-|         return copied ? copied : err;
-| }
-
-> > > @@ -866,10 +882,10 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
-> > >  
-> > >  out_unlock:
-> > >  	up_read(&ctx->map_changing_lock);
-> > > -	uffd_mfill_unlock(dst_vma);
-> > > +	uffd_mfill_unlock(state.vma);
-> > >  out:
-> > > -	if (folio)
-> > > -		folio_put(folio);
-> > > +	if (state.folio)
-> > > +		folio_put(state.folio);
-> > 
-> > Sashiko raised a concern [2] that it the VMA might be unmapped and
-> > a new mapping created as a uffd hugetlb vma and leak the folio by
-> > going through
-> > 
-> > `if (is_vm_hugetlb_page(dst_vma))
-> >         return mfill_atomic_hugetlb(ctx, dst_vma, dst_start,
-> >                                     src_start, len, flags);`
-> > 
-> > but it appears to be a false positive (to me) because
-> > 
-> > `if (atomic_read(&ctx->mmap_changing))` check should have detected unmapping
-> > and free the folio?
-> 
-> I think it's real, and it's there more or less from the beginning, although
-> nobody hit it yet :)
-> 
-> Before retrying the copy we drop all the locks, so if the copy is really
-> long the old mapping can be wiped and a new mapping can be created instead.
-
-Oops, perhaps I should have imagined harder :)
-
-> There's already a v4 of a patch that attempts to solve this:
-> 
-> https://lore.kernel.org/all/20260331134158.622084-1-devnexen@gmail.com
-
-Thanks for the pointer!
-
-> > [2] https://sashiko.dev/#/patchset/20260330101116.1117699-1-rppt%40kernel.org?patch=13671
-> > 
-> > >  	VM_WARN_ON_ONCE(copied < 0);
-> > >  	VM_WARN_ON_ONCE(err > 0);
-> > >  	VM_WARN_ON_ONCE(!copied && !err);
+ tools/lib/bpf/libbpf.c                        | 21 +++--
+ tools/lib/bpf/libbpf.h                        |  3 +-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 82 +++++++++++++++++++
+ 3 files changed, 96 insertions(+), 10 deletions(-)
 
 -- 
-Cheers,
-Harry / Hyeonggon
+2.52.0
