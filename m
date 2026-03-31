@@ -1,154 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07982BF3D7;
-	Tue, 31 Mar 2026 07:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75593B4EB5
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 07:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774940595; cv=none; b=aXfIFN5cKcYq73Ms9RebcyIm2ZUNCK1RWa7F6M4Sfy47wuzFTuwgJMBol5EVMy9Ch5OJGTKOEgnehAapruKNdCAJGZvKK4JT1C9vh2qqFlAOUAAI9oRd+hUN7xK4lqZiGVDZGk1LeU2D3pF/wHrPQYfR61Q+dJGw9tfGqS9YnLo=
+	t=1774940697; cv=none; b=T+2t+XAneY3B7CN55/HhLg3dvQCVx9oGJVvf8Pct/kIYUWXcn/pJHK60sYsWskS4BlxrS+OBy81+yglOfEv5QNVsCNQWmUt5sF/VR4QTBLhAPlB64bO4t5vjBm7f7P3EFeCapUTR2Rdd/1rcJjCVlay59gxaA3qT7gV7EVTuAqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774940595; c=relaxed/simple;
-	bh=ic+S5YIOVZVio0bt8w8FKUddY4R5LxfMt3J8CL3Z2pY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nS4jf73YXOnsYrdZFkupmt1phWF7BVJkWMv02A+fjWGe6MF4yNzVpkdtvCwVN4OY0Bpquxmr9rPNXxpshd3NvhSoeVlpbyAgtuc2R8hgsQkyzHjqCri0q7tNGN8t344xTOTHvMo2ZsP9gS/WvbA6fRJFNrYCkh7AWTp7zZY+6qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7BkWakY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774940697; c=relaxed/simple;
+	bh=Ig4osFGayyTKiUDrdhynu9gUM5VDbzOye01+8vxPoP0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DxP6Ptmpk5dwZnGN2dJnGzlcmV2HU/fC0z8F82Cz3dDDzZzZW+b1VvXBdfhQg5UhqCihGZIcaZljB/icNmJxlQAjHO9Cq9005yjc79whhn2CrEait9UkkuegOl20Dd3B7VwVwdsjvZngC8v+0KlujFK8lXTpPPwKaJRprU52GR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjBMfmUN; arc=none smtp.client-ip=209.85.210.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7BkWakY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEBFBC19423;
-	Tue, 31 Mar 2026 07:03:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774940595;
-	bh=ic+S5YIOVZVio0bt8w8FKUddY4R5LxfMt3J8CL3Z2pY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z7BkWakYWogd1+dlacH+q+UQNww+wVXoAME49WY2cx7GjFabSYL49wrASs3mSyhuS
-	 kohcpBLMxpJ5WYqZwsAj0+9fWIxhRXPfU9U9VuLRPS4gKM75uM3teIQ0Zu/kZU+ABC
-	 4v9e//T8Mwif3OEvRMtktAYV3OgKazSPdCbPR5UmugDNGQa5WzOgd34W0Et+ie4AXp
-	 hghn6Ww/zX7tgwUWfWXUGQCNcGRd3VD3++E6xV5ic0jzFd/qGOgPIotcfrq2jpmUcq
-	 GEEnFWYaoiTh2dhBX+JEWgWG2JPNWGk0qGJ7GV3jBhIF2ijo3nwaUzhNvHgHp3vH0W
-	 UIcnlpKA4zy3w==
-Date: Tue, 31 Mar 2026 16:03:13 +0900
-From: "Harry Yoo (Oracle)" <harry@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Andrei Vagin <avagin@google.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 02/15] userfaultfd: introduce struct mfill_state
-Message-ID: <actxscYZGFiyvUcs@hyeyoo>
-References: <20260330101116.1117699-1-rppt@kernel.org>
- <20260330101116.1117699-3-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjBMfmUN"
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-829a9d08644so2816863b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 00:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774940695; x=1775545495; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6lbWXtnbhC1yTNbE69i6SmEZlVhDlB2Axaw0Jgrh2l8=;
+        b=XjBMfmUNPI4q+3Ewm7D1ZxWRm+6EmkOf/XHJEHk2nDdP4f1vAw45xRDslQBGhWUo90
+         0SYj/W+JrPMeAI9IVA/eprWoEm3D5UtQ9as+YUS5nqEyF0tYjUSiDsQmbuRLoNIKkDnj
+         dk7s6o9WcRwKdLICU/FczxrkPdRkdU+Y9ezL5TNcug4Ri8U/y6/+5N8DEgw3tbOHwlYj
+         3p2X4flkHyk/UceEB4S8bzeOjbdi3vlNOayzjnmSevqK5E5zzmO2HInvDJErKhrNIHaJ
+         21OT2/HbZfVdPpuXkD3Wo4ng1CFb1GGMe4FwBI38OcXNfoNZABslR90rXYojrIe88iTd
+         8aqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774940695; x=1775545495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6lbWXtnbhC1yTNbE69i6SmEZlVhDlB2Axaw0Jgrh2l8=;
+        b=QCnjew5ltpBOzD0xJw+5X7yyuyL87UZbPhtAcPmVvsPP/8nZJ2kH2rUXKS82qoxaqZ
+         gAJuEYfOxjXDH7BhTFc413aPgX+kFVuwZlzZWnoudU6OjljudaIPEitU5p3RTI49YWe0
+         NnVHzfaNJPgw5xsouWxYnz42Q/XSE/SAs1TF8/GEXddZmsLKLDJm8zHQU3lbpZR+29zK
+         r6Y5PtfJQ63WZ+mX5XqFoOjjb4PS23aQChW9vtZ6tucwnHQ3ZDQmCQbm/L6l86tWexwA
+         lJTTBg9+hMrFp5iiKOh5mJ67A5Q50FCtd9cvyRlRWXa5qFX/NbwL9E9T3X/hjAitimED
+         UYvw==
+X-Forwarded-Encrypted: i=1; AJvYcCUENMnPOeJhLKByb9YybvjW57lOFGiEfydvLgL8l9aKZfZnK0H6cea3G3UZysTMlZJCRqRdXT4f+9rqQSnj+Ho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ+DqimJtkkecBYEopiR90+iLJH9Zwp/DE/CsAGhRXXuRymlxP
+	3aPDK/XvEteN94RJjtzDUu+UUuKPgCOXRmtWyxichTbOxN8pfkrYmlWS
+X-Gm-Gg: ATEYQzwEqWwQi6LVD4idKuGes4SLumVFj9fQKakJ4Uqv+qDTHfr44nv3yjvVGH4z0l3
+	tEguuEE75W3Aq/l9aJpyYUQpuZ4e+M+NXYopwGdecLugNj7gNMEqeLzXuH3TejxnbpSLAnv2/kf
+	KkTRd5zt2GIRAlbj04Y8R7K8RGCP5NkIGUQxrr08OAyBkcg9jtjP68rnsCWOAA+70J5U0RAo4+O
+	90n8cz/aEk2UO1GVfeMAd7xs14aGYPxLKdlL968wAlvaLu8XA8qXWcS62hUzFRz0Sp1m7lfDEh+
+	ZASPJXlBEHLJQuoMk1u+OLV9MFuznQbeRu1/5fhoeiaMj3dr9E6+fPOG/m8jX7/FQ8kjoY5cTdM
+	ZDe5QR8zL/p0n+VJl2Z8rGNRZwX4Q7ouNPArtBjnG/6OsPKo/UobG8tf5pYvxMALk+PKs6anpO1
+	JAvKYE+C4Yye84unbqeFLb
+X-Received: by 2002:a05:6a20:7f8d:b0:39b:c9ca:9736 with SMTP id adf61e73a8af0-39c87aea4d3mr15490809637.46.1774940695284;
+        Tue, 31 Mar 2026 00:04:55 -0700 (PDT)
+Received: from 7940hx ([103.173.155.241])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76b78de2a7sm226149a12.13.2026.03.31.00.04.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 00:04:54 -0700 (PDT)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: ast@kernel.org,
+	olsajiri@gmail.com
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3] selftests/bpf: test access to ringbuf position with map pointer
+Date: Tue, 31 Mar 2026 15:04:34 +0800
+Message-ID: <20260331070434.10037-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260330101116.1117699-3-rppt@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 30, 2026 at 01:11:03PM +0300, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> mfill_atomic() passes a lot of parameters down to its callees.
-> 
-> Aggregate them all into mfill_state structure and pass this structure to
-> functions that implement various UFFDIO_ commands.
-> 
-> Tracking the state in a structure will allow moving the code that retries
-> copying of data for UFFDIO_COPY into mfill_atomic_pte_copy() and make the
-> loop in mfill_atomic() identical for all UFFDIO operations on PTE-mapped
-> memory.
-> 
-> The mfill_state definition is deliberately local to mm/userfaultfd.c,
-> hence shmem_mfill_atomic_pte() is not updated.
-> 
-> [harry.yoo@oracle.com: properly initialize mfill_state.len to fix
->                        folio_add_new_anon_rmap() WARN]
-> Link: https://lkml.kernel.org/r/abehBY7QakYF9bK4@hyeyoo
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Signed-off-by: Harry Yoo <harry.yoo@oracle.com>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> ---
->  mm/userfaultfd.c | 148 ++++++++++++++++++++++++++---------------------
->  1 file changed, 82 insertions(+), 66 deletions(-)
-> 
-> @@ -790,12 +804,14 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
->  	    uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
->  		goto out_unlock;
->  
-> -	while (src_addr < src_start + len) {
-> -		pmd_t dst_pmdval;
-> +	state.vma = dst_vma;
+Add the testing to access the bpf_ringbuf with the map pointer.
+"consumer_pos" and "producer_pos" is accessed in this testing. We reserve
+128 bytes in the ringbuf to test the producer_pos, which should be
+"128 + BPF_RINGBUF_HDR_SZ".
 
-Oh wait, the lock leak was introduced in patch 2.
-If there's an error between uffd_mfill_lock() and `state.vma = dst_vma`,
-it remains unlocked.
+It will be helpful if we want to evaluate the usage of the ringbuf in bpf
+prog with the consumer and producer position.
 
-Probably should have been fixed in 2, not patch 4...
-Sorry didn't realize it earlier.
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+---
+v3:
+- use BPF_RINGBUF_HDR_SZ instead of 8 in check_ringbuf()
 
-> -		VM_WARN_ON_ONCE(dst_addr >= dst_start + len);
-> +	while (state.src_addr < src_start + len) {
-> +		VM_WARN_ON_ONCE(state.dst_addr >= dst_start + len);
-> +
-> +		pmd_t dst_pmdval;
->  
-> -		dst_pmd = mm_alloc_pmd(dst_mm, dst_addr);
-> +		dst_pmd = mm_alloc_pmd(dst_mm, state.dst_addr);
->  		if (unlikely(!dst_pmd)) {
->  			err = -ENOMEM;
->  			break;
-> @@ -866,10 +882,10 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
->  
->  out_unlock:
->  	up_read(&ctx->map_changing_lock);
-> -	uffd_mfill_unlock(dst_vma);
-> +	uffd_mfill_unlock(state.vma);
->  out:
-> -	if (folio)
-> -		folio_put(folio);
-> +	if (state.folio)
-> +		folio_put(state.folio);
+v2:
+- don't set the max_entries for the ringbuf map
+- add comment for the producer_pos
+---
+ .../testing/selftests/bpf/progs/map_ptr_kern.c  | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Sashiko raised a concern [2] that it the VMA might be unmapped and
-a new mapping created as a uffd hugetlb vma and leak the folio by
-going through
-
-`if (is_vm_hugetlb_page(dst_vma))
-        return mfill_atomic_hugetlb(ctx, dst_vma, dst_start,
-                                    src_start, len, flags);`
-
-but it appears to be a false positive (to me) because
-
-`if (atomic_read(&ctx->mmap_changing))` check should have detected unmapping
-and free the folio?
-
-[2] https://sashiko.dev/#/patchset/20260330101116.1117699-1-rppt%40kernel.org?patch=13671
-
->  	VM_WARN_ON_ONCE(copied < 0);
->  	VM_WARN_ON_ONCE(err > 0);
->  	VM_WARN_ON_ONCE(!copied && !err);
-
-Otherwise looks correct to me.
-
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+index efaf622c28dd..373c8d17ea55 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -647,8 +647,14 @@ static inline int check_devmap_hash(void)
+ 	return 1;
+ }
+ 
++struct bpf_ringbuf {
++	unsigned long consumer_pos;
++	unsigned long producer_pos;
++} __attribute__((preserve_access_index));
++
+ struct bpf_ringbuf_map {
+ 	struct bpf_map map;
++	struct bpf_ringbuf *rb;
+ } __attribute__((preserve_access_index));
+ 
+ struct {
+@@ -659,9 +665,20 @@ static inline int check_ringbuf(void)
+ {
+ 	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
+ 	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
++	struct bpf_ringbuf *rb;
++	void *ptr;
+ 
+ 	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
+ 
++	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
++	VERIFY(ptr);
++
++	bpf_ringbuf_discard(ptr, 0);
++	rb = ringbuf->rb;
++	VERIFY(rb);
++	VERIFY(rb->consumer_pos == 0);
++	VERIFY(rb->producer_pos == 128 + BPF_RINGBUF_HDR_SZ);
++
+ 	return 1;
+ }
+ 
 -- 
-Cheers,
-Harry / Hyeonggon
+2.53.0
+
