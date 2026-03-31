@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7ABF3F7E85;
-	Tue, 31 Mar 2026 21:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8121241323C;
+	Tue, 31 Mar 2026 21:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774991294; cv=none; b=vDSrhqpLqKm4xPu4tMn6R3G0/gTsseUMRG/fvonm+KfyfSOJBj29H90JNCc6h+ZoLIZZRUFJ/urwnYpnD+kdNfrTrq7vNulwW21VzpUfarjv6ChImjNSVZ8eC94eJsjr6z/V3b3Xd6uwIkl42Z1FA+RTd6SheElkHHvD3YqfoMg=
+	t=1774991297; cv=none; b=pePK+ZjRzcuTGEYLfEaw7ih620JvIegfaeGR0JUDp/fymEnDSh+5IHaHbvJ7kgWsVCN/GQvH5UPDYOiZPGN1+R4lCPNeSWmjZpw5LgT2agRtFUrBcaprTBujpkE67v6oAAwE6Njxis3iprwnxYVEu/o8PsYzu0sjADxijWBppFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774991294; c=relaxed/simple;
-	bh=JdBj+HtDMVC42XbqSpihFgQM2SrH7WKTCtHvC61tAU8=;
+	s=arc-20240116; t=1774991297; c=relaxed/simple;
+	bh=Cyg0OgS3jjG2kLGWNtFAfuJOGcQ0Gbkr6O2xIRnNmS0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WzbC5D2k0Zx9Am/taR2l7Bayd6xvVxcVQFtrGqqxfxnBYB+YlaGn/sCmIaVFb63MPJzZZxeAOhNvM6wLrCKEVrm98Nz6C+4hSgY611ouyfqZXt17lYZVqPc7m/alaz9McWrVyyAp6Ql9zOZn18FuYjeLKkg+kM6NXR2+y+RLjkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEKV47/O; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=uGD9j102m3RwZJHR7asPlPdyYj1t2FClS/1CpOEwo8lATs20V+NK5CneMYs3+K+oJOhdz3du9+kgu9SCVUb1L1A0YaGhYtieiwIt8pfSSz8+hgTP2NUsKdU/XpZAQn+FOxH15uTghCrR9SO7z6q8F9z3NixTMoKw3saIm3hiUOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khGugw4J; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEKV47/O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD90BC19423;
-	Tue, 31 Mar 2026 21:08:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khGugw4J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47EFC2BC9E;
+	Tue, 31 Mar 2026 21:08:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774991294;
-	bh=JdBj+HtDMVC42XbqSpihFgQM2SrH7WKTCtHvC61tAU8=;
+	s=k20201202; t=1774991297;
+	bh=Cyg0OgS3jjG2kLGWNtFAfuJOGcQ0Gbkr6O2xIRnNmS0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BEKV47/OeccX0pCIeAJET1rM8GcFyMFpdLlhu1bq+rLQDwddZ3kfIAEmuzNB1hZpm
-	 FmEKAFj10pTghwtW8cuIr749BGpLvj+cpMi2x++8FJIdTJCgqeCsbLjT2Ytklr5//l
-	 ihIcW0nPspOufmnpxeDB9OAIzU50+8qRuwy0H0dD/ooLx1CNnWWftRpr00bNhCU7Ih
-	 Z7STgi/q0Gu/Ub21g7/sVWhO5ZF9zIiAGOdaaCz0Rrsrk9XHLa/i1rSOn0D+yBKlrc
-	 WGnHFSyn2xhWe/SGtZ2d0Svj0dK7vW6psu2o/BDSsikj59e3z8+6bNjyqcfHj46wiu
-	 0v4bBxBJkP7uQ==
+	b=khGugw4J1U+G1A4fMZWUWMmTVJzu3BfpMeUzM15FknZIAQqK7tm10avMOUzQXwjl/
+	 /aVOn1AQm+PvLucyB2dX2DIyq8hJpm9BDs2O8hYl/7uvDHgRN+MMj2IG+SPFVrpDsi
+	 ul7khj5juWoPfPj0I7BGunVjEwxmXe0iYO1yTDxs12wTVM4u17W0p4zz/nzcEkDABn
+	 uvpJkqti6psOBuX5Qqkt6+eJfR2/nGPklGFrppqd+ThlflGGC/iM/ysqGev0kvwHpk
+	 IvdVzXIi2WNzGxThXpJREsZUqTmMiUdniT6uVxzMMH/aCC0zsKWuagQ5xrh89Ny3v1
+	 Biy5+bFfC7oqA==
 From: hawk@kernel.org
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -39,9 +39,9 @@ Cc: davem@davemloft.net,
 	hawk@kernel.org,
 	ivan@cloudflare.com,
 	kernel-team@cloudflare.com
-Subject: [RFC PATCH net-next 1/4] ipv4: make inet_addr_lst hash table size configurable
-Date: Tue, 31 Mar 2026 23:07:36 +0200
-Message-ID: <20260331210739.3998753-2-hawk@kernel.org>
+Subject: [RFC PATCH net-next 2/4] ipv6: make inet6_addr_lst hash table size configurable
+Date: Tue, 31 Mar 2026 23:07:37 +0200
+Message-ID: <20260331210739.3998753-3-hawk@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260331210739.3998753-1-hawk@kernel.org>
 References: <20260331210739.3998753-1-hawk@kernel.org>
@@ -55,20 +55,21 @@ Content-Transfer-Encoding: 8bit
 
 From: Jesper Dangaard Brouer <hawk@kernel.org>
 
-On servers with many IPv4 addresses, __ip_dev_find() becomes visible in
-perf profiles on the unconnected UDP sendmsg path. The call chain is:
+Similar to the IPv4 inet_addr_lst hash table, IPv6 also uses a fixed
+256-bucket hash table for address lookups. On hosts with many IPv6
+addresses, this results in long hash chains walked under RCU.
 
-  udpv6_sendmsg / udp_sendmsg
-    ip_route_output_flow
-      ip_route_output_key_hash_rcu
-        __ip_dev_find              <-- source address validation
+The inet6_addr_lst table is used in the route lookup path when no
+output interface is specified (oif == 0):
 
-__ip_dev_find() calls inet_lookup_ifaddr_rcu() which walks a hash chain
-in inet_addr_lst. With the current fixed table size of 256 buckets, a
-host with ~700 IPv4 addresses averages ~2.8 entries per chain, adding
-unnecessary cache misses under RCU on every unconnected send.
+  udpv6_sendmsg
+    ip6_sk_dst_lookup_flow
+      ip6_dst_lookup_tail
+        ip6_route_output -> fib6 lookup
+          __rt6_device_match
+            ipv6_chk_addr              <-- walks inet6_addr_lst
 
-Add CONFIG_INET_ADDR_HASH_BUCKETS (default 256, range 64-16384, EXPERT)
+Add CONFIG_INET6_ADDR_HASH_BUCKETS (default 256, range 64-16384, EXPERT)
 so hosts with many addresses can size the table appropriately. The value
 is rounded up to the nearest power of 2 at compile time via
 order_base_2(). Memory cost is one hlist_head pointer per bucket per net
@@ -77,50 +78,49 @@ namespace.
 Reported-by: Ivan Babrou <ivan@cloudflare.com>
 Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
 ---
- net/ipv4/Kconfig   | 16 ++++++++++++++++
- net/ipv4/devinet.c |  2 +-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ net/ipv6/Kconfig    | 15 +++++++++++++++
+ net/ipv6/addrconf.c |  2 +-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/Kconfig b/net/ipv4/Kconfig
-index df922f9f5289..3c5e5e74b3e4 100644
---- a/net/ipv4/Kconfig
-+++ b/net/ipv4/Kconfig
-@@ -402,6 +402,22 @@ config INET_IPCOMP
+diff --git a/net/ipv6/Kconfig b/net/ipv6/Kconfig
+index b8f9a8c0302e..963fa0e1a014 100644
+--- a/net/ipv6/Kconfig
++++ b/net/ipv6/Kconfig
+@@ -238,6 +238,21 @@ config IPV6_FOU_TUNNEL
+ 	default NET_FOU_IP_TUNNELS && IPV6_FOU
+ 	select IPV6_TUNNEL
  
- 	  If unsure, say Y.
- 
-+config INET_ADDR_HASH_BUCKETS
-+	int "IPv4 address hash table size" if EXPERT
++config INET6_ADDR_HASH_BUCKETS
++	int "IPv6 address hash table size" if EXPERT
 +	range 64 16384
 +	default 256
 +	help
-+	  Number of hash buckets for looking up local IPv4 addresses,
-+	  e.g. during route output to validate the source address via
-+	  __ip_dev_find().  Rounded up to the nearest power of 2.
++	  Number of hash buckets for looking up local IPv6 addresses,
++	  e.g. in ipv6_chk_addr() and related callers.  Rounded up to
++	  the nearest power of 2.
 +
-+	  Hosts with many IPv4 addresses benefit from a larger table to reduce
-+	  hash chain lengths. This is particularly relevant when sending using
-+	  unconnected UDP sockets.
++	  Hosts with many IPv6 addresses benefit from a larger table to
++	  reduce hash chain lengths.
 +
 +	  The default of 256 is fine for most systems.  A value of 1024
 +	  suits hosts with ~500+ addresses.
 +
- config INET_TABLE_PERTURB_ORDER
- 	int "INET: Source port perturbation table size (as power of 2)" if EXPERT
- 	default 16
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index 58fe7cb69545..9e3da06fb618 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -108,7 +108,7 @@ static const struct nla_policy ifa_ipv4_policy[IFA_MAX+1] = {
- 	[IFA_PROTO]		= { .type = NLA_U8 },
- };
+ config IPV6_MULTIPLE_TABLES
+ 	bool "IPv6: Multiple Routing Tables"
+ 	select FIB_RULES
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 0e55f139e05d..dad08f0733ef 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -144,7 +144,7 @@ static int ipv6_generate_stable_address(struct in6_addr *addr,
+ 					u8 dad_count,
+ 					const struct inet6_dev *idev);
  
--#define IN4_ADDR_HSIZE_SHIFT	8
-+#define IN4_ADDR_HSIZE_SHIFT	order_base_2(CONFIG_INET_ADDR_HASH_BUCKETS)
- #define IN4_ADDR_HSIZE		(1U << IN4_ADDR_HSIZE_SHIFT)
+-#define IN6_ADDR_HSIZE_SHIFT	8
++#define IN6_ADDR_HSIZE_SHIFT	order_base_2(CONFIG_INET6_ADDR_HASH_BUCKETS)
+ #define IN6_ADDR_HSIZE		(1 << IN6_ADDR_HSIZE_SHIFT)
  
- static u32 inet_addr_hash(const struct net *net, __be32 addr)
+ static void addrconf_verify(struct net *net);
 -- 
 2.43.0
 
