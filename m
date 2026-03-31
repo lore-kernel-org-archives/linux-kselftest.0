@@ -1,77 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC37F40DFA6;
-	Tue, 31 Mar 2026 00:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F50128395;
+	Tue, 31 Mar 2026 00:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774915795; cv=none; b=sDcpFOlZ08sDRQU3Hs/lU7R0w/G7jR+baIY/lwyi57e5Rarrr+oWUkTmY6hDGm6qU+NVI7vJ0k63GS24t6WZ2EnQKdfUvHsMTfhMOdcB8afSMzed6EtJCMJ7C95Lg3yCLgg/iLKp3RqqWitdefpIP3KaygB3Fm6pYxnEhnnmP9w=
+	t=1774916373; cv=none; b=iXXDOJQ4S4Oh3H5AklXOwc9cYRygWSwnxEFtJQHovz4gzfwDtwxGhdCmPaZxZFkfdLQTU4yL0gXrbS/eE/SaTojyE57a3cKAXGHxyhREkbPdV/6O1+gCe6uoIFZvgSwQHiP6ZDAd0afMs8fktPS5VHATdgagyIQGiVt6kaHJiT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774915795; c=relaxed/simple;
-	bh=PcaDCU2JDyQM9eQ+xrbtwstL2Fn7RGIMSwfj615kpbc=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Uh6cOdTfazBRM3noySvxfhfoMhTGAJbxTn/3ufVlsOm/FCpYnlKVf67TRrzfQWnqzg+iKO20c94tjv/lZuAJBVukbAIbCDFelQmPrLF9btTH2JvftK02kyKDiCTAJ3QSxRy7O8eoQb94WVjVAhOfNT+z3vjhq5VmSD4WLCtvUVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=xsK3jEld; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774916373; c=relaxed/simple;
+	bh=BXULtmlXkPYdMHmg4h32Ezg59yLkkE8iXQE0hVo0x60=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fcerh7bv0jgJT8ieRQ4R1zfrutPR+MCL/Qyaj17LzX6jxnkAStpnkYigFQQrcCg0VFueq1KShetyGww6LVd6cSzLwbjIw9La6XDwYGJq8HovjmoEdsijVe9zuRmcZXPURHZhjHGQnwTSi23F56uTr82tbue6wYmYs9cy2gqhFrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RmOUjJsm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="xsK3jEld"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44596C4CEF7;
-	Tue, 31 Mar 2026 00:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774915795;
-	bh=PcaDCU2JDyQM9eQ+xrbtwstL2Fn7RGIMSwfj615kpbc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=xsK3jEldpS8Km7fVin/zYc0Mtz/Wed9V/eGxqP1DQWoa++YAwubJImGElBImyGmtc
-	 lekMbgnFPLo2XAPNGlWYTPKaY3b9vKOXjY4J6+MpB2sewptqJR0pWR2+ljowy5iFu0
-	 5S81aqqXZAn4CMSxf3u6fBBbKo0NF3Um0KtW6rBA=
-Date: Mon, 30 Mar 2026 17:09:54 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Li Wang <liwang@redhat.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: tools/testing/selftests
-Message-Id: <20260330170954.47dfef29063afe9ea502505a@linux-foundation.org>
-In-Reply-To: <acj5RK3lze7o704Y@redhat.com>
-References: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
-	<acc49s7jbI9Q3a4f@redhat.com>
-	<20260328135650.435b415f8c00835b2fa471e0@linux-foundation.org>
-	<20260328140311.d6ce99302f93923b0cffb441@linux-foundation.org>
-	<acj5RK3lze7o704Y@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RmOUjJsm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68690C4CEF7;
+	Tue, 31 Mar 2026 00:19:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774916372;
+	bh=BXULtmlXkPYdMHmg4h32Ezg59yLkkE8iXQE0hVo0x60=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RmOUjJsm7ylo1XGZVHxCyons2BJtD+XT7PqZ7CJKhRe+Jko66Y+SoU8FESgk60k5N
+	 2O2j8uQmdlJbdE2dFrrekZvgtr6at8KPaF58uLJB8SRvhT2f0iFpXA/fyKgEvdkaAs
+	 mXyGW4jRK33XU3oPhL0HTOzYIgJE6NASoaatAiMnmj35xlsxL6AWnGs1OoRyHBl3ij
+	 B9n6wTN4j3kMcm0qktxUxuSigT3qnTS98ABvzd2AG6xuEdyyazP82UWDPzNR8fm2KL
+	 3nbnsJLk56TKvTj1uKCzkM82PaLELe6s7nGASWzQFMZ+vDujbCkrqxS0ZAWVKpEWtn
+	 rimIuWQzzXuIg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	joe@dama.to,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drv-net: update the README with variants
+Date: Mon, 30 Mar 2026 17:19:30 -0700
+Message-ID: <20260331001930.3411279-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun, 29 Mar 2026 18:04:52 +0800 Li Wang <liwang@redhat.com> wrote:
+Test authors need to know about variants, existing tests don't use
+them because variants are relatively recent.
 
-> > ts:/usr/src/25> cat Makefile
-> > # Automatically generated by /usr/src/25/Makefile: don't edit
-> > export KBUILD_OUTPUT = .
-> > export KBUILD_EXTMOD = /usr/src/25
-> > export KBUILD_EXTMOD_OUTPUT = /usr/src/25
-> > include /usr/src/25/Makefile
-> > 
-> > I've done this twice in succession now.  Any suggestions where I should
-> > look?
-> 
-> When build selftests from the top-level, sub-makes entered via `-C` may
-> still inherit the caller's PWD from the environment.
-> 
-> Some selftests use $(PWD) in recursive kbuild invocations, which can
-> then incorrectly resolve to the kernel top directory instead of the
-> current test directory.
-> 
-> Maybe try export PWD in the ../selftests/lib.mk?
-> 
->   export PWD := $(CURDIR)
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: joe@dama.to
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ .../testing/selftests/drivers/net/README.rst  | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-Thanks, I'll get onto this stuff soon.
-
-Meanwhile, shouldn't this work?
-
-ts:/usr/src/25/tools/testing/selftests/mm> make merge.i
-make: *** No rule to make target 'merge.i'.  Stop.
+diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
+index c94992acf10b..b26b364be534 100644
+--- a/tools/testing/selftests/drivers/net/README.rst
++++ b/tools/testing/selftests/drivers/net/README.rst
+@@ -253,6 +253,39 @@ By default the tests are expected to be able to run on
+ single-interface systems. All tests which may disconnect ``NETIF``
+ must be annotated with ``@ksft_disruptive``.
+ 
++ksft_variants
++~~~~~~~~~~~~~
++
++Use the ``@ksft_variants`` decorator to run a test with multiple sets
++of inputs as separate test cases. This avoids duplicating test functions
++that only differ in parameters.
++
++Parameters can be a single value, a tuple, or a ``KsftNamedVariant``
++(which gives an explicit name to the sub-case). The argument to the
++decorator can be a list or a generator.
++
++Example::
++
++  @ksft_variants([
++      KsftNamedVariant("main", False),
++      KsftNamedVariant("ctx", True),
++  ])
++  def resize_periodic(cfg, create_context):
++      # test body receives (cfg, create_context) where create_context
++      # is False for the "main" variant and True for "ctx"
++      pass
++
++or::
++
++  def _gro_variants():
++      for mode in ["sw", "hw"]:
++          for protocol in ["tcp4", "tcp6"]:
++              yield (mode, protocol)
++
++  @ksft_variants(_gro_variants())
++  def test(cfg, mode, protocol):
++      pass
++
+ Running tests CI-style
+ ======================
+ 
+-- 
+2.53.0
 
