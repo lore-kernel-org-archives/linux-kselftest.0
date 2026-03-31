@@ -1,223 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C591B28002B;
-	Tue, 31 Mar 2026 05:57:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B89378822;
+	Tue, 31 Mar 2026 06:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774936621; cv=none; b=MBcdqDyJXbdbfZgWTy2c+FbBSSCBBMkphi9hFKooGpkMCM1dqRq+85QBc4uAqFZAlq167joTr6UT0oY4xzGVjl1UlYDLYdDNgPKJKmNyxVGq9NsMKegGka4rVXilXvZJ/05NR09YwjjTrohEvlsGdjWk2eQd7jlwBljBIGgjHLw=
+	t=1774937101; cv=none; b=tK1qWuA4Vw0VOmHTPnDDZSdtt1e3EREkPGRPIs572kQnwfEuS3Zx7U9stFwoydKhfACn96/1lC/huaVvZKPDt19kI1WV7fEda2oK8GyOPJr7XY68e7WfCJanSIGzJZynEp4hTwoX3yepQybrex4cxjjSXB5WzvDMkjB/CW64maQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774936621; c=relaxed/simple;
-	bh=2sUVXWm6gNzbVe8kaPMIgxN7RRU36ux1iye5UqtO5zY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iCeiQ23xA60bBzs7eblNRcSjI7ZhTakfXCBOHhIk2wJZUn6KFaW7Hynlk6m4fEOVHDMIxwUOhxKIt5T5gIj4u5gnyoJpxU0n8FyQHGpJbROAjAqSLSVVS6kxQNCmPlYQT0zBXXx9tBtWQAfK+3TnTDyUWYHwm5UfHZ7X0yW4Bf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b8H84but; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774937101; c=relaxed/simple;
+	bh=yieOS0k2djfAv01aH9Q1i/xZ4IX0V976zgehEXcGCMU=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=fYPZOHHshKTG6+NAizVi9ZQqMSvRhKW9kWbcz2y+duJ30ABv69RI0ODoYgMTL7nlMK/IEb8Zf+w+OHwwJKoRMxQfmgd+AGhFHgxepIMePfwQBtoDbO/Y14KCgNeFK0Omfk5WFQ3MLBn0aXG5n7gKntpbIJBgR2lTpLRgCyLG3m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=QbiOYo0j; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8H84but"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21EFC2BCB2;
-	Tue, 31 Mar 2026 05:57:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774936621;
-	bh=2sUVXWm6gNzbVe8kaPMIgxN7RRU36ux1iye5UqtO5zY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=b8H84butCoPCRLEFvp8G0bCPS9e/YZqXvfcgpLlYxU8v0Q2hb9g2cQrGUEBxjOoQK
-	 v6kqvevV2I22huT1MSDikjrDpi5lN2aUjU6u8nXblALEoExcZ6ZHZQzm/hhkJP0v8a
-	 SHIncaR3H+a0IZAhk5WMueCzUUAbmG7xxZWDhoUQM0tUMF1/O6B1voDl5ozOnX0yJW
-	 xWj4mIK/thjVdMF2aOVCQBZ2DrXI+hDa/CKniLrY9v6PDuasX8RlU6vwC1XjOiCSc/
-	 /YkcC7XHb+oMDBNtxMkpyh6MuutaDDJn7rcsh2BKn8cX6N5A1pWheExXoiLMujfqBX
-	 Y27YV0xzQmHWg==
-From: Leon Romanovsky <leon@kernel.org>
-To: KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Romanovsky <leon@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>
-Subject: [PATCH v2 3/4] RDMA/mlx5: Externally validate FW commands supplied in DEVX interface
-Date: Tue, 31 Mar 2026 08:56:35 +0300
-Message-ID: <20260331-fw-lsm-hook-v2-3-78504703df1f@nvidia.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="QbiOYo0j"
+Received: from smtpclient.apple (c-24-130-165-117.hsd1.ca.comcast.net [24.130.165.117])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 62V63xq83475334
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Mon, 30 Mar 2026 23:04:00 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 62V63xq83475334
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026032601; t=1774937041;
+	bh=aBiYTGEqqS1+7td8ZOgGnRu3NJ59mkLEnx3ehgXg5pA=;
+	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+	b=QbiOYo0jIsgY9o+S9vvm1s3kIBz3C8DBNg42pQw9B8Lt+UPW8WpQwnOTj7XSc+6fk
+	 8BHU2GKsZCPJ8rBLzSqxNNZkg/kFO5pRO/k6pBVbLXN5WfoJRX6GHu4dTnwi8AbUC6
+	 r1HzNNpLSbZDnRAfpr/IJyoDdSRccnaaCJ6KXN07P1Oyfm5FIldijCnqzVTT44GVnp
+	 QMdE0WLdYFWnHY29acj6qLkkrMhmd4auZVEXfdUW35W6cxjr1wEO8vn3mkQxK5hs4D
+	 azLKt84D9oq+5sTkRhMpXchh1oiHqVugJ6EzkO0IxQ4eu9jKKKf9icppxAXgLEhlT0
+	 JTbRZU+irqwlw==
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.15-dev-18f8f
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.500.181\))
+Subject: Re: [PATCH v3] selftests/x86: Fix sysret_rip assertion failure on
+ FRED systems
+From: Xin Li <xin@zytor.com>
+In-Reply-To: <acsvrv0gCwTI9rWI@ly-workstation>
+Date: Mon, 30 Mar 2026 23:03:49 -0700
+Cc: Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, yi1.lai@linux.intel.com
+Content-Transfer-Encoding: 7bit
+Message-Id: <EFD7015E-E7B1-4BF1-81A1-1627E1D3DE31@zytor.com>
+References: <20260326094423.711724-1-yi1.lai@intel.com>
+ <d0560111-a999-4024-aadd-f0d468d3744c@app.fastmail.com>
+ <20260327123315.GR2872@noisy.programming.kicks-ass.net>
+ <acsvrv0gCwTI9rWI@ly-workstation>
+To: "Lai, Yi" <yi1.lai@intel.com>
+X-Mailer: Apple Mail (2.3864.500.181)
 
-From: Chiara Meiohas <cmeiohas@nvidia.com>
 
-DEVX is an RDMA uverbs extension that allows userspace to submit
-firmware command buffers. The driver inspects the command and then
-passes the buffer through for firmware execution.
+>>>> The existing 'sysret_rip' selftest asserts that 'regs->r11 ==
+>>>> regs->flags'. This check relies on the behavior of the SYSCALL
+>>>> instruction on legacy x86_64, which saves 'RFLAGS' into 'R11'.
+>>>> 
+>>>> However, on systems with FRED (Flexible Return and Event Delivery)
+>>>> enabled, instead of using registers, all state is saved onto the stack.
+>>>> Consequently, 'R11' retains its userspace value, causing the assertion
+>>>> to fail.
+>>>> 
+>>>> Fix this by detecting if FRED is enabled and skipping the register
+>>>> assertion in that case. The detection is done by checking if the RPL
+>>>> bits of the GS selector are preserved after a hardware exception.
+>>>> IDT (via IRET) clears the RPL bits of NULL selectors, while FRED (via
+>>>> ERETU) preserves them.
+>>>> 
+>>> 
+>>> I don't really like this.  I think we have two credible choices:
+>>> 
+>>> 1. Define the Linux ABI to be that, on FRED systems, SYSCALL preserves
+>>> R11 and RCX on entry and exit.  And update the test to actually test
+>>> this.
+>>> 
+>>> 2. Define the Linux ABI to be what it has been for quite a few years:
+>>> SYSCALL entry copies RFLAGS to R11 and RIP to RCX and SYSCALL exit
+>>> preserves all registers.
+>>> 
+>>> I'm in favor of #2.  People love making new programming languages and
+>>> runtimes and inline asm and, these days, vibe coded crap.  And it's
+>>> *easier* to emit a SYSCALL and forget to tell the compiler / code
+>>> generator that RCX and R11 are clobbered than it is to remember that
+>>> they're clobbered.  And it's easy to test on FRED (well, not really,
+>>> but it hopefully will be some day) and it's easy to publish one's
+>>> code, and then everyone is a bit screwed when the resulting program
+>>> crashes sometimes on non-FRED systems.  And it will be miserable to
+>>> debug.
+>>> 
+>>> (It's *really* *really* easy to screw this up in a way that sort of
+>>> works even on non-FRED: RCX and R11 are usually clobbered across
+>>> function calls, so one can get into a situation in which one's
+>>> generated code usually doesn't require that SYSCALL preserve one of
+>>> these registers until an inlining decision changes or some code gets
+>>> reordered, and then it will start failing.  And making the failure
+>>> depend on hardware details is just nasty.
+>>> 
+>>> So I think we should add the ~2 lines of code to fix the SYSCALL entry
+>>> on FRED to match non-FRED.
+>> 
+>> Yes; I'm afraid I have to concur. Preserving the clobber on entry for
+>> FRED systems is by far the safest choice. 
+>> 
+>> Aside from this selftest, fancy debuggers and anything that can transfer
+>> userspace state between machines might be 'surprised'.
+> 
+> Thanks Andy and Peter.
+> 
+> Indeed, making the selftest branch on FRED vs. non-FRED behavior
+> is not a good practice. The selftest should validate ABI consistency.
+> 
+> I agree with Andy's option #2, so this should be fixed in the FRED
+> syscall entry implementation.
+> 
+> Li Xin, does this direction look right to you? I can assit with
+> validation and keep the selftest aligned with the agreed ABI.
+> 
 
-Call bpf_lsm_fw_validate_cmd() before dispatching firmware commands
-through DEVX.
+Yes, consistency should take precedence over hardware-specific variations.
 
-This allows BPF programs to implement custom policies and enforce
-per-command security policy on user-triggered firmware commands.
-For example, a BPF program could restrict specific firmware
-operations to privileged users.
-
-Signed-off-by: Chiara Meiohas <cmeiohas@nvidia.com>
-Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/infiniband/hw/mlx5/devx.c | 49 +++++++++++++++++++++++++++++----------
- 1 file changed, 37 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/infiniband/hw/mlx5/devx.c b/drivers/infiniband/hw/mlx5/devx.c
-index 0066b2738ac89..b7a2e19987018 100644
---- a/drivers/infiniband/hw/mlx5/devx.c
-+++ b/drivers/infiniband/hw/mlx5/devx.c
-@@ -18,6 +18,7 @@
- #include "devx.h"
- #include "qp.h"
- #include <linux/xarray.h>
-+#include <linux/bpf_lsm.h>
- 
- #define UVERBS_MODULE_NAME mlx5_ib
- #include <rdma/uverbs_named_ioctl.h>
-@@ -1111,6 +1112,8 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OTHER)(
- 	struct mlx5_ib_dev *dev;
- 	void *cmd_in = uverbs_attr_get_alloced_ptr(
- 		attrs, MLX5_IB_ATTR_DEVX_OTHER_CMD_IN);
-+	int cmd_in_len = uverbs_attr_get_len(attrs,
-+					MLX5_IB_ATTR_DEVX_OTHER_CMD_IN);
- 	int cmd_out_len = uverbs_attr_get_len(attrs,
- 					MLX5_IB_ATTR_DEVX_OTHER_CMD_OUT);
- 	void *cmd_out;
-@@ -1135,9 +1138,12 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OTHER)(
- 		return PTR_ERR(cmd_out);
- 
- 	MLX5_SET(general_obj_in_cmd_hdr, cmd_in, uid, uid);
--	err = mlx5_cmd_do(dev->mdev, cmd_in,
--			  uverbs_attr_get_len(attrs, MLX5_IB_ATTR_DEVX_OTHER_CMD_IN),
--			  cmd_out, cmd_out_len);
-+	err = bpf_lsm_fw_validate_cmd(cmd_in, cmd_in_len, &dev->ib_dev.dev,
-+				      FW_CMD_CLASS_UVERBS, RDMA_DRIVER_MLX5);
-+	if (err)
-+		return err;
-+
-+	err = mlx5_cmd_do(dev->mdev, cmd_in, cmd_in_len, cmd_out, cmd_out_len);
- 	if (err && err != -EREMOTEIO)
- 		return err;
- 
-@@ -1570,6 +1576,11 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OBJ_CREATE)(
- 		devx_set_umem_valid(cmd_in);
- 	}
- 
-+	err = bpf_lsm_fw_validate_cmd(cmd_in, cmd_in_len, &dev->ib_dev.dev,
-+				      FW_CMD_CLASS_UVERBS, RDMA_DRIVER_MLX5);
-+	if (err)
-+		goto obj_free;
-+
- 	if (opcode == MLX5_CMD_OP_CREATE_DCT) {
- 		obj->flags |= DEVX_OBJ_FLAGS_DCT;
- 		err = mlx5_core_create_dct(dev, &obj->core_dct, cmd_in,
-@@ -1646,6 +1657,8 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OBJ_MODIFY)(
- 	struct uverbs_attr_bundle *attrs)
- {
- 	void *cmd_in = uverbs_attr_get_alloced_ptr(attrs, MLX5_IB_ATTR_DEVX_OBJ_MODIFY_CMD_IN);
-+	int cmd_in_len = uverbs_attr_get_len(attrs,
-+					MLX5_IB_ATTR_DEVX_OBJ_MODIFY_CMD_IN);
- 	int cmd_out_len = uverbs_attr_get_len(attrs,
- 					MLX5_IB_ATTR_DEVX_OBJ_MODIFY_CMD_OUT);
- 	struct ib_uobject *uobj = uverbs_attr_get_uobject(attrs,
-@@ -1676,10 +1689,12 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OBJ_MODIFY)(
- 
- 	MLX5_SET(general_obj_in_cmd_hdr, cmd_in, uid, uid);
- 	devx_set_umem_valid(cmd_in);
-+	err = bpf_lsm_fw_validate_cmd(cmd_in, cmd_in_len, &mdev->ib_dev.dev,
-+				      FW_CMD_CLASS_UVERBS, RDMA_DRIVER_MLX5);
-+	if (err)
-+		return err;
- 
--	err = mlx5_cmd_do(mdev->mdev, cmd_in,
--			  uverbs_attr_get_len(attrs, MLX5_IB_ATTR_DEVX_OBJ_MODIFY_CMD_IN),
--			  cmd_out, cmd_out_len);
-+	err = mlx5_cmd_do(mdev->mdev, cmd_in, cmd_in_len, cmd_out, cmd_out_len);
- 	if (err && err != -EREMOTEIO)
- 		return err;
- 
-@@ -1693,6 +1708,8 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OBJ_QUERY)(
- 	struct uverbs_attr_bundle *attrs)
- {
- 	void *cmd_in = uverbs_attr_get_alloced_ptr(attrs, MLX5_IB_ATTR_DEVX_OBJ_QUERY_CMD_IN);
-+	int cmd_in_len = uverbs_attr_get_len(attrs,
-+					     MLX5_IB_ATTR_DEVX_OBJ_QUERY_CMD_IN);
- 	int cmd_out_len = uverbs_attr_get_len(attrs,
- 					      MLX5_IB_ATTR_DEVX_OBJ_QUERY_CMD_OUT);
- 	struct ib_uobject *uobj = uverbs_attr_get_uobject(attrs,
-@@ -1722,9 +1739,12 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OBJ_QUERY)(
- 		return PTR_ERR(cmd_out);
- 
- 	MLX5_SET(general_obj_in_cmd_hdr, cmd_in, uid, uid);
--	err = mlx5_cmd_do(mdev->mdev, cmd_in,
--			  uverbs_attr_get_len(attrs, MLX5_IB_ATTR_DEVX_OBJ_QUERY_CMD_IN),
--			  cmd_out, cmd_out_len);
-+	err = bpf_lsm_fw_validate_cmd(cmd_in, cmd_in_len, &mdev->ib_dev.dev,
-+				      FW_CMD_CLASS_UVERBS, RDMA_DRIVER_MLX5);
-+	if (err)
-+		return err;
-+
-+	err = mlx5_cmd_do(mdev->mdev, cmd_in, cmd_in_len, cmd_out, cmd_out_len);
- 	if (err && err != -EREMOTEIO)
- 		return err;
- 
-@@ -1832,6 +1852,8 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OBJ_ASYNC_QUERY)(
- {
- 	void *cmd_in = uverbs_attr_get_alloced_ptr(attrs,
- 				MLX5_IB_ATTR_DEVX_OBJ_QUERY_ASYNC_CMD_IN);
-+	int cmd_in_len = uverbs_attr_get_len(attrs,
-+				MLX5_IB_ATTR_DEVX_OBJ_QUERY_ASYNC_CMD_IN);
- 	struct ib_uobject *uobj = uverbs_attr_get_uobject(
- 				attrs,
- 				MLX5_IB_ATTR_DEVX_OBJ_QUERY_ASYNC_HANDLE);
-@@ -1894,9 +1916,12 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_OBJ_ASYNC_QUERY)(
- 	async_data->ev_file = ev_file;
- 
- 	MLX5_SET(general_obj_in_cmd_hdr, cmd_in, uid, uid);
--	err = mlx5_cmd_exec_cb(&ev_file->async_ctx, cmd_in,
--		    uverbs_attr_get_len(attrs,
--				MLX5_IB_ATTR_DEVX_OBJ_QUERY_ASYNC_CMD_IN),
-+	err = bpf_lsm_fw_validate_cmd(cmd_in, cmd_in_len, &mdev->ib_dev.dev,
-+				      FW_CMD_CLASS_UVERBS, RDMA_DRIVER_MLX5);
-+	if (err)
-+		goto free_async;
-+
-+	err = mlx5_cmd_exec_cb(&ev_file->async_ctx, cmd_in, cmd_in_len,
- 		    async_data->hdr.out_data,
- 		    async_data->cmd_out_len,
- 		    devx_query_callback, &async_data->cb_work);
-
--- 
-2.53.0
-
+I would like to hear from Andrew Cooper and hpa before we do it.
