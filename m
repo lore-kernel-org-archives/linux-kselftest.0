@@ -1,94 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1096D351C22;
-	Tue, 31 Mar 2026 09:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8D23E0C5E
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 09:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774950035; cv=none; b=kaM5VkK4WwMaEpdwBrDywzBYRTg9ko4+rsaAqJFWDJ6Uwvp6mjR8EAijm/bwc55wRWF4OOdX7nZ522hE4tyZuVHrlyK5Izwcq/eq+hUBgiU2rUgETftz3Bsc/85mDwY5g3Ti0+e5E/Zsv+Xypkb65tW4iXSwPgEe65ROPdm+Hkc=
+	t=1774950068; cv=none; b=Xy5NpXfISJaFHbnsJlH060G7XDg7W525FCdAna6WpLspxxpFB+bTxjMYgvb3qQ6TECT5yagFgBOJbiDrFu4jJgWo26PQNfdosYA0PqUwHeaA9LPe+70aJSBZ5XVv1IwdGgwRZ1Bdi4UzyZWhj//haqNI0sFMdlXe8tUKnn+4WZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774950035; c=relaxed/simple;
-	bh=uJMOWgINMXub8AP/Kf/qJSBe/DsTYp4xy6LyAUAYweU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zys3/ZyqtyhPxoGzYSxtvg7w8K3di1sIccdrVu4iKrHPAwot0E+xpQTKHg4wxNb6WtZlbTHAme1zW51mvQdj9KMDkObMBFCt8SeT/+wKfJU6pmqCBvBZSRVxmWePcAXY5p0Ell6ywzaPBFXywCPYMNjmLyHyEQFDnQY+OGCjAbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vi8vFZls; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774950068; c=relaxed/simple;
+	bh=TCDZXjqVtoY2KHfHv6iZ3WPVq39f3rhpWlgoNJz3sxg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b0Zmiug5+CpieSTuUzedZPl/6HcYJ8eTGK2UfL92uD+7uygydK9be1pTA0Mty8RnqZxdgtyodoQ7B+FErmjMRLHFfSPZPASo/OhJ2ipwLn8luPGZgFy8hcYUt5wJqRiaCiCN6NLp+fwDyXqLjzPrKoEZSfIsv1oJXRFPRTqagJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cxFdiCT8; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vi8vFZls"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C4AC19423;
-	Tue, 31 Mar 2026 09:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774950034;
-	bh=uJMOWgINMXub8AP/Kf/qJSBe/DsTYp4xy6LyAUAYweU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Vi8vFZlsgoCOH/wPS5qHFh+9FlxjtYdO3E6n4rykwKM/RFhjQSAm2r0FAcCfmxanX
-	 8cDLuK9RMpqSLWUMKTYfvECTFdHSJ0adVPlDrHbPx18NGRCvaHyN65bWIGcLnoIfVY
-	 0C4giDsiuFPLuJ/vb4OkMsYv4rOxn15A8xHyWPVgoneACXn7syXg2Wm1YWElxFnNSW
-	 8lxDHaY7Q9beZxlUPgtPs67a4ginIchALCbX8EkYz6uBIYr3k805VD1JadWExZQR9B
-	 obrhXR5VgZKWF1oYiRiT1wHxL/MTXg+JqgNaWWaTwUnQM3/bAnX3LoJQPWCzmCJjEj
-	 oCogtt1sZFE1w==
-Date: Tue, 31 Mar 2026 11:40:32 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Qiliang Yuan <realwujing@gmail.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 09/15] mm/compaction: Support dynamic housekeeping mask
- updates for kcompactd
-Message-ID: <acuWkL9QHEUG7Olp@pavilion.home>
-References: <20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com>
- <20260325-dhei-v12-final-v1-9-919cca23cadf@gmail.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cxFdiCT8"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4887f49ec5aso4895025e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 02:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774950064; x=1775554864; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nElztS2A7qJnb4rGn//Egowv7jR4mCwF4gH95YG4Lg8=;
+        b=cxFdiCT8n0DnkvtxMe//I1ZrG42wM1tOhdgFZppeeN3Isn7xx+h1Jt6uNTsNkalZYT
+         mqqoGXd1S+f1xTBhD/P1hJEbeyGIvX7a3WwJysfs0oYIHxeDnyi4N5ASuUrwG5lh3t8k
+         0/X9ulK/b/7akohOfO34UX04G8xT/BEf7X9x5jzXQw0bQAjca1qeNpup4Vb8NRr6tb95
+         yMeSlX9kOGwT4vT75g9TTRQD4FyOJKgs1pVep9Hv56iqowdMTUcfPejd0U2C1QiwOlD/
+         eIvfOkHFxsSG1x6aHxVhNhF9B7rVk8bo5DITdxbJEzJHW8KZYzEigzZfi2w50lOZoXnt
+         dDBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774950064; x=1775554864;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nElztS2A7qJnb4rGn//Egowv7jR4mCwF4gH95YG4Lg8=;
+        b=DSTU39SAH/BZfAGizLwYW6JM4S/vDrlGtJ7Q4cEa9A/7Fo1JVhq8/NSad43GvgYDon
+         df+Ji9T9X06yM8cwKdx4/bRcsAHz169P6aihMx2IXiYBoillSsKiR+lOU01XT1z9PPHc
+         pL28s3jTcRtTDFtCEOLO5eL7OjKWOyUIQByptzLbstQaaKWf0BMvE8KX/dzsij+VgDSU
+         jpC0mIcorZO24IxzontxgFTkF97Li4i0gZRVRbjwzhx3bDkSjfVSWKl0nKZByqGnpO42
+         7QGHXgww3YW7PYQ6I7JtxueWnIch7n6BqdMKsqx+V0243a+CXvrfYEXRX1vX4HyUZq+J
+         d9CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU0nvtPAXdObZjhs9DcyPTKFkxZq/+1cHqtHOFmsQd9VWouZwq3qXO0IoOc+1HJpzlfN3eBcvwFL++N200QxQs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMfzgiTEzUHcarit24UPGYoxOmSD8RIzS934rLYLhUB2WjdNEp
+	pjs+yPEIy2Fit/d7DosRaaSq/h/53Mn+50nk2iSP2TSdvGVPP5rKYc5SvoousQo7ZXo=
+X-Gm-Gg: ATEYQzzklxZBPc/NXNyFeg5OPYuAck+z5TL8A9vu+p5MEkgNBPh4+KNUA10hANTC7MS
+	9HFdyET3Pj93tpvfGSAEu+YsjZbo0elvnnK4l/SbsPX8/eNmg4VWnVX/NFlQe+z8JrV50HsHLjy
+	oUsefp88De6kZy4mILMrll2k6zM58DRn7jYhtJWHVPXSkzEMhXfd13Y1KCwqMGcTym4/urUG0/W
+	8cStC/QwasrSsan+bk0r+xOAPb5V6VpTJQ+yQOGdhY/pMG37oGrdpBAJ/PxsBF8ikOXiPJnP+j7
+	6VTTTVEU1KrXJ70a9mVF5sSDeo689Asm2bVCedsE5iNIwvlGbE8iBL5JadN+mgypBtaLpDEGLlk
+	h24B9WFQBtKSoDKF2OHAvWZ62Xwf5ZTDO2mSWiu/C3I83pwUBityrXJHuGpPHxswcRY1XEG1DUY
+	FVsIkGu8+g8+U0aYxd60+ekZ/MWHjWDD1xtIAnrOkHJ3h4xYG+48OoRBa/lDFOHQ==
+X-Received: by 2002:a05:600c:a06:b0:487:1108:48af with SMTP id 5b1f17b1804b1-48727d59ce3mr282261525e9.4.1774950064024;
+        Tue, 31 Mar 2026 02:41:04 -0700 (PDT)
+Received: from f16.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427afbe0sm130079565ad.72.2026.03.31.02.41.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 02:41:03 -0700 (PDT)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/2] libbpf: clarify raw-address single kprobe attach behavior
+Date: Tue, 31 Mar 2026 18:37:45 +0900
+Message-ID: <20260331094058.49229-1-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260325-dhei-v12-final-v1-9-919cca23cadf@gmail.com>
 
-Le Wed, Mar 25, 2026 at 05:09:40PM +0800, Qiliang Yuan a écrit :
-> The kcompactd threads are affined to housekeeping CPUs (HK_TYPE_DOMAIN)
-> at boot to avoid interference with isolated workloads. Currently,
-> these threads do not migrate when the housekeeping boundaries are
-> reconfigured at runtime.
-> 
-> Implement a housekeeping notifier to synchronize kcompactd affinity.
-> 
-> This ensures that background compaction threads honor the dynamic
-> isolation boundaries configured via the DHEI sysfs interface.
-> 
-> Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
+Today libbpf documents single-kprobe attach through func_name, with an
+optional offset. For the PMU-based non-legacy path, func_name = NULL
+with an absolute address in offset already works as well, but that is
+not described in the API.
 
-Unbound kthreads are now handled by HK_TYPE_DOMAIN dynamically.
+This patchset clarifies this behavior. The first commit clarifies that,
+for the PMU-based path, callers can use func_name = NULL with an
+absolute address in offset for raw-address attach, and makes legacy
+tracefs/debugfs kprobes reject that form. The second commit adds PERF
+and LINK selftests for the raw-address form, and checks that LEGACY
+rejects it.
 
-Thanks.
+---
+Changes in v3:
+- Drop bpf_kprobe_opts.addr and reuse offset when func_name is NULL
+- Make legacy tracefs/debugfs kprobes reject the raw-address form
+- Update selftests to cover PERF/LINK raw-address attach and LEGACY reject
+
+Changes in v2:
+- Fix line wrapping and indentation
+
+Hoyeon Lee (2):
+  libbpf: clarify raw-address single kprobe attach behavior
+  selftests/bpf: add test for raw-address single kprobe attach
+
+ tools/lib/bpf/libbpf.c                        | 33 ++++++--
+ tools/lib/bpf/libbpf.h                        |  3 +-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 82 +++++++++++++++++++
+ 3 files changed, 108 insertions(+), 10 deletions(-)
 
 -- 
-Frederic Weisbecker
-SUSE Labs
+2.52.0
