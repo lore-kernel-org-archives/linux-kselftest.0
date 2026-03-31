@@ -1,160 +1,144 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C626D2ECE93
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 02:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774923351; cv=pass; b=rLOKZ3Ed2l87zCq5pX/yBORSRoq0+uH4yQYgJ17sBPzA19CYTTAsaQcGVrW8G6FN5oGc3xvxHOtkcanXrRAnmAWGfcHW2rrrt4UkNqrwCyVFzZVS/h7YFSj2RqRUEPQTV1v8dfAQ9Q81HAIlGgfXY0452YvQrr/Cdo4TcA2ZKf8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774923351; c=relaxed/simple;
-	bh=e0taOFPk9pRrZOMXMg5pNgX6/KZMkL5Kiz5hCRQwDlE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MXF+lS51ElCJoTzh0v0WWpWj9L3EcY8LlvK1tpmSlwi1VrvzZtBZB2l2s0/pChj7c7OUxBzMaRocSA2uqmoO4d5FBKy1sIB3qgEwvCI7WIBcV9WDGnQgG3gKKn2OcBQseShhlhGVUC3OZ1Z7jjkW/KbBfdT9ih1g5pu4IEGX9Vo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P8Qv4mpM; arc=pass smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24EF19D074;
+	Tue, 31 Mar 2026 02:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774923702; cv=none; b=rXcVl7LDs/PMgWX4k+rCIjrhVIQ6HdigfoxletjWBB3HMI00gLdbJXyL8ejj5b/TSZ3ATMEcy3Vl5FbxO7/Ko/uyAvdL2CWX55X0vqzNDNSCDFUpJdW1Co7ktFmodw5q8EPvd3Z8+g4B42fB/EdAIgMoPBDYxnQTm5S15eT7Li4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774923702; c=relaxed/simple;
+	bh=e1m6vWk1m2aKMZH0Le1k3ZuPwFUB7ZzhyRujP3MtaW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P7JTb88Ennys23Hni+YAsapfLglQmAssddsspAtAsWciNCQGaU+4IpfrAvD7VCRkq+uIWT1DMtP92xV5cph5n+b8eU/vGuCm68jH3TyNBTG9WxQGzizsWjRdstmWAGa8oWuXTgASBv1Z2rADrmxoeQxS31/+pbPQm2cj2N0P3Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CUlKRmjv; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P8Qv4mpM"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4887ca8e529so948175e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 19:15:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774923348; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kc6qCC/66W7jTvxjFap24zmkI5Ob/tQteolqVqMbQ/B1AWC0T7+OFTDAmv0B3jKZp3
-         WX1xkyj2zXgWGzN2rpwNHq4fCFjGijD+SqV8CQM0EpZYsK/Em3JasQb84eDwtdyH66I+
-         Vz8N/E9KaKdkaekZ5QEohogpOxXfj1pJVkhCi1UP2oPoLY1URfPHoMHvLxAu2tfVgIw2
-         HR66KhSrKDNBTzRgK60mJ6UGgtjJzTm2PKkyL0ufO1D6KMXQ+Zzu5pYMPyOrQMr4lRAs
-         hn35iJH3MfdEmhE4LiRr62c/olR7RkzXvGz0okvXhu9NDlDLFl+Uk+EsrHsGUayLpBHp
-         Ca8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NGbcj7/O32XC9B0n0P8wfIZz2fpYJ0S+OYxZ8TZMqEk=;
-        fh=qJ0y2W/b4pId078I0c+CiTZ3h4CZwENqljt2ONIme9A=;
-        b=lU5C+MFrSOVGT09azMPS3cc/BopT1SKFA2wprzCC3Ai/7IQy65bzl+xJ1MvpqJ4S7v
-         7AtHL7svVhUi2FW0zRqLhP5+jMOOHsUBL87HbPMBXHGcAcncqAehccqo49y0g65Pbarx
-         JliL4EaNNPvwpDZSM3GF45zidK2ldNcactnBV0h+dPV9mgMrtylqlnWNZ8fIZ8tTkZVL
-         nOehH5J1EXfJgyXBBedDTGax9lAjOdM9IkHp76aN4bqC05gUPDLO9UgL2ON+2boR3vPW
-         IwrjcYSIMhnVr4tAEkmIGCVPN766jQmmfss0lUhihuacT79YKl4WYt4J8jiNlS3M+sFU
-         vauw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774923348; x=1775528148; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NGbcj7/O32XC9B0n0P8wfIZz2fpYJ0S+OYxZ8TZMqEk=;
-        b=P8Qv4mpM3dPhZtDP1AMVJVXUOxTgiTiFpTgjr773e9+Qc4jbGBKPHirXmaokZJRNNA
-         HklSvmE+A6D76M7vTlISqfRxt4onFNBdKyETvC5KoEhGSKX603KKO4QlZEnh+acThrIw
-         xu8zOWGlywVUap+WUklULc5yQNHt5XFa8pmCN9Qr2qP7MNuyIIm2UWzxA0UcYWa3w1Aw
-         XCahaIZf0xC69IfitHGatN1Dyr6w4BAzVzQsHcnCZZYm9LABKU59+SxmA/NndYb2YuFk
-         8S7g5boyS6CB6tFgEUjTEk0ie7GCVr8guMWXuRiMrC0O0c1MJdp3vFwa165e8SzD4ce+
-         81NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774923348; x=1775528148;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NGbcj7/O32XC9B0n0P8wfIZz2fpYJ0S+OYxZ8TZMqEk=;
-        b=jaBN69L2O9SS/TseKn6qWirsznt7SFYHpMkziXX/QHud4XX1hxGyMWLmdJEPHlAbt4
-         in9ojTr0CFesrlnpufF0d0EI7UVmOq54pCli2l6RiIV4wcvWVnLp+vJw92fK5WaKKCwK
-         JuzWOSS2JFGv1NPRgDe6YjAjk0SgxPQ/fwb+l11Z56t5mZ7CcJdjZt4+rs1A3Rw7fcJj
-         GDRy3i5aazinTbBk05QVMpvgfiqESeoqHIYOZ8jqU1WiIuV+WE5AWDZMY/5jONPBhwGl
-         DcppCOlH+h5GBWgdGwqcqr5e8UBICT6UdhLAy+K4xKFS5iS3eNKKe5pLtBl5T5pNPFJL
-         fZdg==
-X-Forwarded-Encrypted: i=1; AJvYcCV7OnTFbovyo0FwWqijTNKT9/cZo1UXotZM8QQ8vD9yF4DoJ6CYz2MJK3qW/8QMcZS9fp0uhVgFyExKrV7t9Os=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuA75FbszjBMUZYpcCeMfErc8+67SvLEuzEM7wRz9cD1EtlSdK
-	IyBP+KUs+EW98A8c/YU4n3ADRZjDC9i808M8i19a5JjBl0yGZvi7ylhICtlB1Fu90jzX8Ku6dWT
-	tVImVZk894yUv4fi3ObPuurOVnqsQp3k=
-X-Gm-Gg: ATEYQzzHxddKcmoK8tkwma1jEnZdvx66KMketYHxMRykOLb7OnhPKBl2/a9wkQagl3J
-	e6iNvq27MsH6avGrzbBX+Cjldc/hM7DsylrR1YUWGstWgqSpqw6/X5EJj2UKLltdbXW8A9RWWXh
-	tyKzJ0KjM2SoTdExxkoDYNmQ32Z4yDeibB7QSkhlUD+e+xPBw/Z6BshMHabne1L4Hli8DwIbb6A
-	CCf9ezlTjDJm1zcIp6dmNphjW5qtLRdJnjFIp6FRza8g2/U3qrGUWbAfa0WHhqhxei1UGDX8iWO
-	xii0njoo07Gb5IOymqIN8N7nUc/MvXhDECMEMYvZ4IxOdDeeazXe11417sMttHMLo7SGJIbSu1T
-	0s7CY7DBq3Mg/bSsDydO+kaZ9fg==
-X-Received: by 2002:a05:600c:45ce:b0:486:fbc4:8fe2 with SMTP id
- 5b1f17b1804b1-488783d259bmr24422685e9.15.1774923347961; Mon, 30 Mar 2026
- 19:15:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CUlKRmjv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774923702; x=1806459702;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e1m6vWk1m2aKMZH0Le1k3ZuPwFUB7ZzhyRujP3MtaW4=;
+  b=CUlKRmjv5thMvZARGSc3kuxuGWodMZh9AgNIFCC2WwHKSSV4rsznf1Fy
+   qbU0bYkaQh5cKfUEeKM+Se62nGv1Lkop85AqYVpFnJfIMscB49QGM912Z
+   CApjyUoURHywFKURxn7N66WCCmTSh0xiD6B9uoBk2zThXovJh5UA+OFfp
+   nmRBJN5NbQ+xzexdkWX5yjpcknUpZQTSb/NxTl/v+KU0/2L2cr6/1hxY2
+   AtZ/HMwmb7pOy+/q+l8Nf4uNvJS92Zi0iIftcedT+vSnxjoWUDvYeJD3d
+   P9E5kW8aDJEZy+Ea9P7Cq0KFIC5YaseAQwiITjiF6F2ICH72iilHoXKfW
+   g==;
+X-CSE-ConnectionGUID: eYHqamZjSnu1ciNHwrqiVw==
+X-CSE-MsgGUID: A2pOd3fPRb2k8Fifhml43A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11744"; a="86544504"
+X-IronPort-AV: E=Sophos;i="6.23,151,1770624000"; 
+   d="scan'208";a="86544504"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 19:21:41 -0700
+X-CSE-ConnectionGUID: ga2Zp/juS7eB8hcL4eSymw==
+X-CSE-MsgGUID: +ZuDTakHQyqZr0ZN+76mHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,151,1770624000"; 
+   d="scan'208";a="226481039"
+Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 19:21:37 -0700
+Date: Tue, 31 Mar 2026 10:21:34 +0800
+From: "Lai, Yi" <yi1.lai@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>, Xin Li <xin@zytor.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>, Xin Li <xin@zytor.com>,
+	the arch/x86 maintainers <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, yi1.lai@linux.intel.com
+Subject: Re: [PATCH v3] selftests/x86: Fix sysret_rip assertion failure on
+ FRED systems
+Message-ID: <acsvrv0gCwTI9rWI@ly-workstation>
+References: <20260326094423.711724-1-yi1.lai@intel.com>
+ <d0560111-a999-4024-aadd-f0d468d3744c@app.fastmail.com>
+ <20260327123315.GR2872@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260329124429.689912-1-hoyeon.lee@suse.com> <20260329124429.689912-2-hoyeon.lee@suse.com>
- <CAEf4BzbA=drhPq9tsD1Dj1wt_P0q4LNtuNSM96CWVuAVBrKrvg@mail.gmail.com> <CAK7-dKZMjW0t=CSkRYuUudnAY--BviwVBJCGH11g6csTKBwRNw@mail.gmail.com>
-In-Reply-To: <CAK7-dKZMjW0t=CSkRYuUudnAY--BviwVBJCGH11g6csTKBwRNw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 30 Mar 2026 19:15:36 -0700
-X-Gm-Features: AQROBzBItDozKecjsmVbqQiv5J8kLw0iEL8T8k3hPxJs3zMBJYDlbcgxGILNxoM
-Message-ID: <CAADnVQLN4mNZWMsf0+1999JuzRgjAV19CoC0Wd638v+qhPUy0g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] libbpf: allow address-based single kprobe attach
-To: Hoyeon Lee <hoyeon.lee@suse.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260327123315.GR2872@noisy.programming.kicks-ass.net>
 
-On Mon, Mar 30, 2026 at 6:49=E2=80=AFPM Hoyeon Lee <hoyeon.lee@suse.com> wr=
-ote:
->
-> On Tue, Mar 31, 2026 at 9:33=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Sun, Mar 29, 2026 at 5:44=E2=80=AFAM Hoyeon Lee <hoyeon.lee@suse.com=
-> wrote:
+On Fri, Mar 27, 2026 at 01:33:15PM +0100, Peter Zijlstra wrote:
+> On Thu, Mar 26, 2026 at 03:06:05PM -0700, Andy Lutomirski wrote:
+> > 
+> > 
+> > On Thu, Mar 26, 2026, at 2:44 AM, Yi Lai wrote:
+> > > The existing 'sysret_rip' selftest asserts that 'regs->r11 ==
+> > > regs->flags'. This check relies on the behavior of the SYSCALL
+> > > instruction on legacy x86_64, which saves 'RFLAGS' into 'R11'.
 > > >
-> > > bpf_program__attach_kprobe_opts() currently attaches a single kprobe =
-only
-> > > by func_name, with an optional offset. This covers only the symbol-
-> >
-> > have you tried passing NULL for func_name and specifying absolute
-> > address in opts.offset? Looking at the code I don't see why that won't
-> > work, we don't enforce func_name to be non-NULL
-> >
-> > This NULL will turn into config1 =3D 0, and offset will be config 2,
-> > which I think is what you want to attach by address, according to
-> > perf_event_open documentation
-> >
-> >                union {
-> >                    __u64 bp_addr;          /* breakpoint address */
-> >                    __u64 kprobe_func;      /* for perf_kprobe */
-> >                    __u64 uprobe_path;      /* for perf_uprobe */
-> >                    __u64 config1;          /* extension of config */
-> >                };
-> >
-> >                union {
-> >                    __u64 bp_len;           /* breakpoint size */
-> >                    __u64 kprobe_addr;      /* with kprobe_func =3D=3D N=
-ULL */
-> >                    __u64 probe_offset;     /* for perf_[k,u]probe */
-> >                    __u64 config2;          /* extension of config1 */
-> >                };
-> >
-> > This is the same approach as with uprobes, btw.
-> >
-> >
->
-> I tested this after your comment, and you are right. For PMU-based
-> non-legacy attach, func_name =3D NULL with opts.offset =3D <raw-address>
-> already works today.
->
-> However, this does not work for legacy tracefs/debugfs kprobes, because
-> the tracefs event string formatting still expects symbol-based input.
->
-> So for v3, instead of adding new field to bpf_kprobe_opts(), I'll documen=
-t
-> that offset can be treated as an absolute address when func_name =3D NULL=
-,
+> > > However, on systems with FRED (Flexible Return and Event Delivery)
+> > > enabled, instead of using registers, all state is saved onto the stack.
+> > > Consequently, 'R11' retains its userspace value, causing the assertion
+> > > to fail.
+> > >
+> > > Fix this by detecting if FRED is enabled and skipping the register
+> > > assertion in that case. The detection is done by checking if the RPL
+> > > bits of the GS selector are preserved after a hardware exception.
+> > > IDT (via IRET) clears the RPL bits of NULL selectors, while FRED (via
+> > > ERETU) preserves them.
+> > >
+> > 
+> > I don't really like this.  I think we have two credible choices:
+> > 
+> > 1. Define the Linux ABI to be that, on FRED systems, SYSCALL preserves
+> > R11 and RCX on entry and exit.  And update the test to actually test
+> > this.
+> > 
+> > 2. Define the Linux ABI to be what it has been for quite a few years:
+> > SYSCALL entry copies RFLAGS to R11 and RIP to RCX and SYSCALL exit
+> > preserves all registers.
+> > 
+> > I'm in favor of #2.  People love making new programming languages and
+> > runtimes and inline asm and, these days, vibe coded crap.  And it's
+> > *easier* to emit a SYSCALL and forget to tell the compiler / code
+> > generator that RCX and R11 are clobbered than it is to remember that
+> > they're clobbered.  And it's easy to test on FRED (well, not really,
+> > but it hopefully will be some day) and it's easy to publish one's
+> > code, and then everyone is a bit screwed when the resulting program
+> > crashes sometimes on non-FRED systems.  And it will be miserable to
+> > debug.
+> > 
+> > (It's *really* *really* easy to screw this up in a way that sort of
+> > works even on non-FRED: RCX and R11 are usually clobbered across
+> > function calls, so one can get into a situation in which one's
+> > generated code usually doesn't require that SYSCALL preserve one of
+> > these registers until an inlining decision changes or some code gets
+> > reordered, and then it will start failing.  And making the failure
+> > depend on hardware details is just nasty.
+> > 
+> > So I think we should add the ~2 lines of code to fix the SYSCALL entry
+> > on FRED to match non-FRED.
+> 
+> Yes; I'm afraid I have to concur. Preserving the clobber on entry for
+> FRED systems is by far the safest choice. 
+> 
+> Aside from this selftest, fancy debuggers and anything that can transfer
+> userspace state between machines might be 'surprised'.
 
-This is fine.
+Thanks Andy and Peter.
 
-> and make legacy path support the same raw-address form as well.
+Indeed, making the selftest branch on FRED vs. non-FRED behavior
+is not a good practice. The selftest should validate ABI consistency.
 
-but not this. libbpf doesn't need to support legacy interfaces.
+I agree with Andy's option #2, so this should be fixed in the FRED
+syscall entry implementation.
+
+Li Xin, does this direction look right to you? I can assit with
+validation and keep the selftest aligned with the agreed ABI.
+
+Regards,
+Yi Lai
+
