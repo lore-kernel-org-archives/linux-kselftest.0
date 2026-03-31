@@ -1,214 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95153176E0;
-	Tue, 31 Mar 2026 17:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774978789; cv=fail; b=dOK4UaCpuqksoSw59I6P4KRIlUJNea0RddYuWrBEWb0MWbdT02sUZfCP77S2wIh5MTx0mOw9QVdFmwOOJNNlvqtB+p4P/4xgps0HEVSbGLX8dWo97SjDmYgHicik+wMCpvTPnXIB2jzzQCdzr6QjhxcLdYk2KhlEH8byoUXMUPE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774978789; c=relaxed/simple;
-	bh=wo3FdPTGuGBuScEDe6CyvUCo6kYH9sfPpEsZEkHwFLQ=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=iBLLHvJcOyIWGAXNvNskdMJsJSaDH31PxwGLrdEoq9LVQ7VYDm7SLdB9SNEKljgLuv5VVZ2/dwuUekYqA7dNfsOonofc1NAX9gjv7qHhI5veibsscwEXPjBIaHj8LKs0tX9ACV99MviMv7ny9gIAvprfyDK849PO9Nl8fe8/MPg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BmxMsYkX; arc=fail smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5793A5440
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 18:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774983275; cv=none; b=oaXcXQm5UbT+TtvQVLsBNpboeU/yjQIvIbQ9UeOllk2ZqUlV2LN21WmTZrzt9HDU4A5p/GLRiIuuR4JpbQ4P9jmj3T6VXoLnoJtAusfuFW0VDNA7r0Ux2NS+Wj68NNhhmqfkQs7HcJRepBHwxBevgkOJ5LzXpMMwJ96+0cYvtfM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774983275; c=relaxed/simple;
+	bh=C8cbePc9rCnWFEp1scCgZP+x5olpD01MB2YflmlISyQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sM7jls8U3KdHZLKIrk4S9IaJZbbbtzRBtEq30xGr04z8KSipiI45jRkFIa2AoD5TPdmODHZ7RxUel12wUCqjV0dA8sxkwJbi/iu4/Dl1Yf0MBwSqocUAxE2Xuu5MSec0Pb5oJ/U3MCRCBMz5dpKNg8bui4qMEatSoseCfelBsyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SSuGq70K; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BmxMsYkX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774978788; x=1806514788;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=wo3FdPTGuGBuScEDe6CyvUCo6kYH9sfPpEsZEkHwFLQ=;
-  b=BmxMsYkXkZeSjmrYvOiKnYEWIC/TJDB4BPeuf+gUF8hUSRNTXYdBOODo
-   2/4vkCS7Vug2LnImbwEb4uCqJAXUpZU0za1fX+DIjdjpixVj2dQwnjbad
-   LdVUlkQ4hyjMgw6WxUtCF74Fkejua0OSkwzz2GimoVdFs6wzmR4D1fX/K
-   nnsEA9rAIEOmoigSKtbCoPc54hKpZkTYjN8efYGbBYQJdovLXyuHEY0Cf
-   uBHcA57Cuv+kjafL99J1k9gYafSPenbkEohimhTMw7t+AYjjdJAsXlvkE
-   JG27OJwjZK2Q9jN6TzmIk54h+LFoaa0SKnNzlYoo3qnrLQtKEI1WGvhSe
-   w==;
-X-CSE-ConnectionGUID: anXPxymCTB+Texj3lI4Kiw==
-X-CSE-MsgGUID: PMBmMGa6SrSZf3eesO21dw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="76116434"
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="76116434"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 10:39:47 -0700
-X-CSE-ConnectionGUID: k+xEUv2rRViB3K6BXhzXow==
-X-CSE-MsgGUID: bb+sv9CFTSyDGCM4JY6D8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="264365224"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 10:39:46 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 31 Mar 2026 10:39:45 -0700
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Tue, 31 Mar 2026 10:39:45 -0700
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.36)
- by edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 31 Mar 2026 10:39:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZM5w/zcHBi+fRUkE7WbRSF6DnpcJnU+nPTpNX6MTAvbPL6htWNgnW71TLuOSt2R07thM+CoGI38VBmlz9eIumY5cL+2GpKWP04aEAyOq4ml00O+fAR5YjmJ8cRL9uUBPRBnPEjseVgEnYFumPYNNQsMj9oKVL8KOHjeh5UqEH7bL133t8tu1n2pio1llyKd+9CW3To4BAfgo7YEkQkbMDwQUy3cXESrdHJdbj1+eQbuV/DPkClM9tmru4Utr8dHf3Yzx9EoFTrTmk3nIinzajYM0gniUIDDLLI+vs8lvWyZCuAx1zzODFe9SNgDoPCPiJS8Lgr0kYfYBjdOx4B271Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wTu1b20JwnS12NUhf2W9DU7JYk6JC9PATuoP8neq0pU=;
- b=hAR25Q0lkar5FLYiI3kQAfzC2HfBKGtMMGT/Dqadv4kuC2iBDhxx5FtxedBhQMwMfX6/wIKIzBZjYBH8FU39Xxm8DQ169sWvPSW84EGxJZFmvm+w9cJ/TmY93MDbCsjFpWbX4ZnwNdXt8DEj/mSir/acMToAZ6cwss01htkDUz25mGd9NHMnBJx2Ue5ZTN0+NzrwrknqCwgqr/DsrzFb+7s9yKoV1UkGjYPW5tz2gPrwVkD9/872cPUXZmKdShqnupJ16tMUSirzPJ6Dzk9z9QHsFzgw0pPGYImebKRhnYcgnRQdOjUf49MP0zEfQMf6Ln6s7jBxk8hzIg90PLeYEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by IA1PR11MB9494.namprd11.prod.outlook.com (2603:10b6:208:59c::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Tue, 31 Mar
- 2026 17:39:44 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::bfe:4ce1:556:4a9d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::bfe:4ce1:556:4a9d%5]) with mapi id 15.20.9769.014; Tue, 31 Mar 2026
- 17:39:43 +0000
-Message-ID: <8012ca3b-e2e5-4bdb-93f6-e8a70c775df2@intel.com>
-Date: Tue, 31 Mar 2026 10:39:40 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/10] selftests/resctrl: Remove requirement on cache
- miss rate
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-CC: <shuah@kernel.org>, <Dave.Martin@arm.com>, <james.morse@arm.com>,
-	<tony.luck@intel.com>, <babu.moger@amd.com>, <fenghuay@nvidia.com>,
-	<peternewman@google.com>, <zide.chen@intel.com>,
-	<dapeng1.mi@linux.intel.com>, <ben.horgan@arm.com>, <yu.c.chen@intel.com>,
-	<jason.zeng@intel.com>, <linux-kselftest@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>
-References: <cover.1773432891.git.reinette.chatre@intel.com>
- <1fc79420f76d585231252e59d4fcf19b3e704ee3.1773432891.git.reinette.chatre@intel.com>
- <4e3b5362-e751-03a4-f98c-a760ad274d02@linux.intel.com>
- <ef8bb064-f562-4237-ac72-fc2c00a5708e@intel.com>
- <42de2e76-5962-caf5-3b8d-453784b43af2@linux.intel.com>
-From: Reinette Chatre <reinette.chatre@intel.com>
-Content-Language: en-US
-In-Reply-To: <42de2e76-5962-caf5-3b8d-453784b43af2@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SSuGq70K"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4887d4c6234so12083955e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 11:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774983272; x=1775588072; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=C8cbePc9rCnWFEp1scCgZP+x5olpD01MB2YflmlISyQ=;
+        b=SSuGq70KZnGHFbWU3l2vAxU3MexztERT14KXnStsFXFEfosZXNhctQSiuD0Bg+EFhI
+         zH7y21a/+Kq42pFrnt+0RDxjCpHVZscUuuG5dCBi6QP6a1fjs1WhzmsLCbS/0MQSmIYu
+         OXiaHj8AwoBtTlNrkjyHXIXhyq18UO8nv2agNQRGcv4oxIVK9hpcDN/aYojnNVU61ChY
+         4k+YLA+DrsAcRJ0GQpa6mjy3My53xMuZD6MgUjBSULa2vr2LG2U18ZIoOx8MazQD4vZL
+         2vyN9p8jnPooea+YMBEpBzLmoeRCm7q7OAbgBFi3drz5aLK/9kIl0Cfc7L+HCVObpA4z
+         mnAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774983272; x=1775588072;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C8cbePc9rCnWFEp1scCgZP+x5olpD01MB2YflmlISyQ=;
+        b=inHi212wTdYb/5/6gGgulyLBc4pf57F4QaL7k7NaU90pHSX31/+vbFEAaldFhHDQ5O
+         M0I4icWkoEOS1xdiuFm6nGerjNvdBYOBxLnnJwQYBVsk1Yynnq89GQEusdckhp0U6a4p
+         vzQqudT9Y9YefHuAtzm9nSYIJqaBeNpPVsTRTFYey8lynXJxZf6MV2GofQhJdzCFQo54
+         j4PeZtOqgBvJiBLpWWsnqCXfez+NYHjXcPwT2wb4NGYqB6NaZTKIVDKoS7dL+XyG4IQE
+         rOygTadNlXMXtJ68NxTUyivYHVeEMVkfoY6NuOlQTU7zKiyKC+SFpy4WEurfgT5Y4SPu
+         j3GA==
+X-Forwarded-Encrypted: i=1; AJvYcCXpklnYPMMj4P+jBInO0yK88i5edkppGf/YMey9tykcDRMSknxX+K0sZEUwHtDp7+ipt/5i2jROMc8G6GMVbaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3saXn374NQrj79fqixEHv8ba4C5pYAwHETnvZJgHwyAWBf3zo
+	y2Zj50hvGH0zeyAE9JUa+DrqLjF4AbofGuljjmUMUh55SgnL7nnFfuO29WJTp1lZdgc=
+X-Gm-Gg: ATEYQzxAOetEbgEPzf+O0Jq/rdZCbK2Ht7uPzbLB+VEuzRD855go0MFA0mkxJ9+f1Gb
+	EXfxFpHn+low3DLyjaqINWenOZlkFcCKyWn6QJLuRJvx68itEmpp4mMsCsdiyQCEM7oJQ8mZKQV
+	CrwCumjxwjIm4sNWaekUZuWI4QEcxuoRkl84PM9C2kp0aO4dTlsbv9GD4jS/ZwdwRf7DN91t5mu
+	vrneSGfYsBN0Ktc9PT+6T7DCtIr4F3mvj0vScl64hja05mLYMulGg5UCHyc02C0P4p0ezhkXnl1
+	D/vPCbtbrnZR0WeT4axVyCVy1WAE9NV1UFkb1L2Kr0+lrGI7Kp0plAM7rRyuussxeYnKZCsZKx6
+	EkbKg6LA9RurrH9AV3PfQZHb299YSuf8h/Gq1y01idK78YwyD5clda5/peIYNyhfF8zhtlv5eCB
+	eXf2HuMZqzA/xdp8dvbJG98PztD8DqEHqIfTFr0h7H5lF+5PUUYzE3NoZuA3eJNI8VqTc=
+X-Received: by 2002:a05:600c:45d0:b0:488:80b6:872e with SMTP id 5b1f17b1804b1-4888355ec8emr8407915e9.2.1774983271652;
+        Tue, 31 Mar 2026 11:54:31 -0700 (PDT)
+Received: from ?IPv6:2804:1bc4:224:7800:585c:db3a:fcb:e21f? ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e80148csm59006435e9.5.2026.03.31.11.54.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 11:54:31 -0700 (PDT)
+Message-ID: <a23f00ad4a454cbb3379cdf512e8c61ce7499194.camel@suse.com>
+Subject: Re: [PATCH 1/8] selftests: livepatch: test-syscall: Check for
+ ARCH_HAS_SYSCALL_WRAPPER
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes	 <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Shuah
+ Khan <shuah@kernel.org>, 	live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
+Date: Tue, 31 Mar 2026 15:54:25 -0300
+In-Reply-To: <abhjYtyveer4niGM@redhat.com>
+References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>
+	 <20260313-lp-tests-old-fixes-v1-1-71ac6dfb3253@suse.com>
+	 <abhjYtyveer4niGM@redhat.com>
+Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
+ keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
+ Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
+ gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
+ GO8seNG8sYiP6JfRjl7Hyqca6YsE
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR03CA0298.namprd03.prod.outlook.com
- (2603:10b6:303:b5::33) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.0 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|IA1PR11MB9494:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8515d4d1-7b66-4616-5f6b-08de8f4c7e9b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info: DumJPVZc9pHAnsddkxvur/MpWn32KnaOgmxXU5URHiUBEygmJL23b5SxFBlCiTXEKHPilIxbWXKTTnd6hyugQmKLldIbRJJtFZYISzg03vibjDyBtfgUmS5JqvEcpJsOiz71xKsxp3GKSnsVoiwnqLCgvAC9DvJiAh36uHu2uKNWjbydwnfax1nUE6+dD1IzcS5Atv7xmMcBDA+/KlffMEYWpgrcgPCLoeeh+o3QJppoaPdw41er7Ft0cB3RE4kSvRrOszo9Ecw8SDlIuMtrFWnVugfp6zDTJm4nYQ0OBmNzQjPmb3gRl3O9sO6OiB0PXmkagysBMg35KSXfFSdtgtlKUgf7UbwajKi8l81jsDHroanyac7kfsNk9xlUZyywbAkKZKLJkSizH2MYr8S+wM3yo8/pMC8g7Zz6dqVt/AlC2IMNr1sc9l0vEgWZ3u3q8NXgy+kbpx5NtndTkF8J+SKgWAQtgV2KLUSVWUb1XanXPPy1TGkJ3ZCsnMCxcO1S0SJAEfqJdHwVAp9GGtAQgi2DmXYteKlqVyDEuKFq23M5B/TSvKlnP/VIHCLqA0rWFDJ+lf1imvqh7a4UibfCy2ycEL74nP5KggNWLuXG4LTaYyL8T7L7wWa1MDggTXmlcr6TiJ7QbpWdqOB9S17lke+0Pl9I6xgxrWzHtVQl3vvcPdVprP2h0T48oZ09eugGC+KzC6Ob0i0Xb/28i2LLrxbGnHxSwG1L8mdpORYOunc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RlZOa0ppYVkzZmdvUXYrZHYwOFVNMjBERU00bS9Db29TUmdUSlN3aCtGMENp?=
- =?utf-8?B?bkE5aDZ0bmZvU0NGdG9BbzduM25selVXOC9mQUJLU0ZBMG1SMm1GTndCeE1C?=
- =?utf-8?B?N1lBc0lyR2RBQ1dxcXlOSDdUbWJsemtNL3VpVHpWZXBuQlMrU3ZqRlVDZnhY?=
- =?utf-8?B?ZmNVK3p0SFVyTmQ2RndEMWphUlduTlJqdTF6d1ZLb082ZVE2azFoSEdPZVJH?=
- =?utf-8?B?Y2I3MkZBRVdURjBIL0lkQ3BsU05uaFcvWmt1VWhWd0RqWXlpWkl2bWJrMGN5?=
- =?utf-8?B?R2tTRW5GU2NRV2s2c2Voc25DLzhteXIyNzI1a3NvQWlJT2F5eEs4bnVsdm1Z?=
- =?utf-8?B?bElpUUtOYjFkaUUxVUhDbTlwL3JYUmxVUElsMzI1aTVzdGNndU8yb2dnb0tN?=
- =?utf-8?B?QmpGbkVMYUs1N0NXdWNBNlNWVGJJTGRBZ0VMbWJndllIOUc3aVQ3NXNFcVRp?=
- =?utf-8?B?bSsydkYvR3NFQllJYzVOVjlaT2xaY0NvcytWZVdHYW1CazJDclRBZzJ6SW81?=
- =?utf-8?B?NXN4L2NTQzIwZXRmUElqOExnSlErazUvSUFRTlZqN1lTWGFtdmVLODVMOEF4?=
- =?utf-8?B?OSt2ckorYkdPREh1V0REMTB3NnFFclJjWjZwNEptVWZSM21OMGZmaWZIRXpv?=
- =?utf-8?B?Ujl1RzVCcm1qMG1KZEFqbUVPMkZlNmU2ZzRvSDgyUHF4Uk5nYTVvbXAxVWtB?=
- =?utf-8?B?VWZRclZyKzlGSmJYS1lscTBOQzFMZFVtUEViQ1dJYXJOY0VIN1cwZ0t5WG9u?=
- =?utf-8?B?YWpyOVdnbUdlTzc4RkJpNll5MDR1L1hjeER1T2NGakhNeUtqaVJtVHBXSkd0?=
- =?utf-8?B?ZG9FVFpyZnBTVnc1WTFlVnl2ckV6UFo2MnRjbzJnL1lPU2thV3JwemxaWHMx?=
- =?utf-8?B?VGQ1dUtDQmYySUFhTUYvSHNWaDdXbkxvK1Z3UzAxWk1oaW1vTWdKOUp5R1U5?=
- =?utf-8?B?U1ZrZWRlTXFCRWdGRjdKSEMyRlIxUHc5enpKdkt1QVNMdlJ0ekhOOHdZMERV?=
- =?utf-8?B?V2hFMWFyU1Q0M2cyTEVQM3NnRHNwWTZCMWlwQ3pQOEJROElSalRrM080dFVZ?=
- =?utf-8?B?ek1JTGp6WHBCVHRYYkZHNFNCTXcyb01Qa0sweWQ4bTNKZ1JYTlU2dmozTnor?=
- =?utf-8?B?K1RIQjMyVXlOVEVOcGxqVmJWZXlOM2Z0YWNrTm93R2dDcjlUTWpBb3g0eGRv?=
- =?utf-8?B?dng2VE0vdlBibkZiZE1SWlN0SVB3VFpCWUhqRlZQYmc0NEZ2V0h1bVI4dFEy?=
- =?utf-8?B?dzdmK1dUTU5pZmIzbzFZQVZadk5wTUVzY1BkeUl4Y1JSYURDRnhtUTVDQVpT?=
- =?utf-8?B?ZWl4ak5VMEFKeUR5MUR1MFVRbFZuZDRaUHJRY3llWEE0WFZ4YWplSUt5UzZy?=
- =?utf-8?B?WGFYaE11ZHhYc212YlJVdzVOM0ZmczI2MTViYjIrNGZGaEEwemRzeSt4Uktl?=
- =?utf-8?B?U251SWo3STV3TDhtQ285MnUxYjlEN3Q2dUZBOGYvalMxZ0h6MUh5NXdML1Qy?=
- =?utf-8?B?K2ZGUlNlUHRDZm12SUVRb2pId2VJYW5keVdzREZGeXByajE5Rm4rVXQ0OXJ6?=
- =?utf-8?B?MlkyVEJxbzY2Mk55L0YzVGJ2bjhGaWlCK011VGMrQ3VQMWVzNE1PVzhmazFl?=
- =?utf-8?B?SHBLNUkvOW04L2tWcktTOUF5T05tV2orWjBpRzQyeDI1b3hHWkR2c2ZrdHMw?=
- =?utf-8?B?VWlwMFlpUGdOUFhHK0h1T25CVSs5NEZ2RjlMQjdldTgwYTUzUVl3MUQzNlQ2?=
- =?utf-8?B?aFI5V0VrQVZHWGk3SkJzQmpWc1dLYnc5WWhIcjJZS0NjZnRrcVQyOHhWd1pm?=
- =?utf-8?B?eDlENTNaRTBObGxaenB5SitKV2VNYzFZK3ZCOWk5QUxHUFE3aTNTV0FJcGdL?=
- =?utf-8?B?YmxRU2Rjd0NSSDE0Z3o3cFdsLzNBb0Y2QVdGajZvdFlJcWVkYlVLVWNwd0F6?=
- =?utf-8?B?alhUZ3Q3Q25LM2Rha0ZKSXBFVUFvU0ZmOTBmU2drajlrekZFNjBIOUlocHlS?=
- =?utf-8?B?cUErb1RhcE5xR1lmNTB2VzQ4SStNZkhGb2xoaHlVb3ZBcUZZT2RuVXpQRHpB?=
- =?utf-8?B?SEVFQ0hKb1ZEdkdzVUE5ZUhiQWQ2WHZGVW9vV08zT1l2RHloMlZLellQRERa?=
- =?utf-8?B?dVArTEZ3bEtGbGRWZUhxNFFpUk1OR3NEbzV4QTRpUGxocE5JVEJxTDVyZVNG?=
- =?utf-8?B?bmk1Z21PclhWOE8vdGo1NmJLUmZGa2dnRjBBNWFzME55b2Fjak44Wnl3WW9T?=
- =?utf-8?B?RjRMRUd5akFoNnRwSGpqREFtcW03TEVUS0x5eWlYblcvMGhxck12Zm1Sa0l2?=
- =?utf-8?B?VG0zRjNLTkZ1TGhLOC9Mc1J0RU1peWV5KzU1T1lqak9idDYrRC85UGVvVE5t?=
- =?utf-8?Q?aTjOrD2lw4gyjVrE=3D?=
-X-Exchange-RoutingPolicyChecked: ACY7dh8n3ecPJNsSJhgBBnrU6Y4BY00IX0iKROWuZYm7vC7eY8IUot/CpobwhCrsv+Hjpn3pEOZruOsq73gVZI3cu5TKHjloU5Er1vn1rrnxRk7WXC6z/ltjuAu2ncvxSzBuO8h6v/tJitFx7/VYqNds7E0e6x4LXzE8sSluIlM7MG8tkVp70C07anfiZFL+cnj11ahpcgTH1fEsbi3WZf2PKBL2eVRrdWy5ziBeF6oKOkC50jl3DP6ZHlU/DLtZPr/WA7bmCqL2wGd/A+LHBnhzSkn9eLiZV4e4Za1Vk+Ti7+09yNe4iohPZIerzc6wgoTxYTk7wSYS6Z3b5s4pVQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8515d4d1-7b66-4616-5f6b-08de8f4c7e9b
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 17:39:43.9092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +rL2O7J9B8/0mU1pl76glCqH7+qZ0QkOoAk+v34ACAjKs8bd2d8typaJJehHSX3L9ttbBENd70V9PGJgNU29BAxVvhQoOlAS2gj5w9B5u44=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB9494
-X-OriginatorOrg: intel.com
+
+On Mon, 2026-03-16 at 16:12 -0400, Joe Lawrence wrote:
+> On Fri, Mar 13, 2026 at 05:58:32PM -0300, Marcos Paulo de Souza
+> wrote:
+> > Instead of checking if the architecture running the test was
+> > powerpc,
+> > check if CONF_ARCH_HAS_SYSCALL_WRAPPER is defined or not.
+> >=20
+> > No functional changes.
+> >=20
+> > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> > ---
+> > =C2=A0tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > | 7 +++----
+> > =C2=A01 file changed, 3 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git
+> > a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > index dd802783ea849..c01a586866304 100644
+> > ---
+> > a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > +++
+> > b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > @@ -12,15 +12,14 @@
+> > =C2=A0#include <linux/slab.h>
+> > =C2=A0#include <linux/livepatch.h>
+> > =C2=A0
+> > -#if defined(__x86_64__)
+> > +#if !defined(CONFIG_ARCH_HAS_SYSCALL_WRAPPER)
+> > +#define FN_PREFIX
+> > +#elif defined(__x86_64__)
+> > =C2=A0#define FN_PREFIX __x64_
+> > =C2=A0#elif defined(__s390x__)
+> > =C2=A0#define FN_PREFIX __s390x_
+> > =C2=A0#elif defined(__aarch64__)
+> > =C2=A0#define FN_PREFIX __arm64_
+> > -#else
+> > -/* powerpc does not select ARCH_HAS_SYSCALL_WRAPPER */
+> > -#define FN_PREFIX
+>=20
+> The patch does maintain the previous behavior, but I'm wondering if
+> the
+> original assertion about ARCH_HAS_SYSCALL_WRAPPER on Power was
+> correct:
+>=20
+> =C2=A0 $ grep ARCH_HAS_SYSCALL_WRAPPER arch/powerpc/Kconfig
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select ARCH_HAS_SY=
+SCALL_WRAPPER=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if !SPU_BASE =
+&&
+> !COMPAT
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 depends on PPC64 &=
+& ARCH_HAS_SYSCALL_WRAPPER
+>=20
+> Perhaps I just forgot what that additional piece of information that
+> explains the comment (highly probable these days), and if so, might
+> be
+> nice to add to this commit since I don't see it in 6a71770442b5
+> ("selftests: livepatch: Test livepatching a heavily called syscall").
+
+Looking again at the code and at the symbols for SLE for ppc64le, I can
+say that, even with ARCH_HAS_SYSCALL_WRAPPER being set, the syscall
+names are not changed for ppc64le. Looking at
+arch/powerpc/kernel/systbl.c:
+
+#ifdef CONFIG_ARCH_HAS_SYSCALL_WRAPPER
+#define __SYSCALL(nr, entry) [nr] =3D entry,
+#else
+/*
+ * Coerce syscall handlers with arbitrary parameters to common type
+ * requires cast to void* to avoid -Wcast-function-type.
+ */
+#define __SYSCALL(nr, entry) [nr] =3D (void *) entry,
+#endif
 
 
+Differently from x86 and other already covered archs, the syscall name
+remains the same on ppc. I will add a comment about it in the next
+version, adding a case for ppc and an #else clause with an error, so
+future architectures that support livepatching can add a patch here to
+fix it for them.
 
-On 3/31/26 1:07 AM, Ilpo Järvinen wrote:
-> On Fri, 27 Mar 2026, Reinette Chatre wrote:
-
->> Below is an example of what a user running the CAT test will see after these changes.
->> Since show_cache_info() always prints avg_llc_val the user can obtain insight into failure
->> by considering it and its previous measurement.
->>
->> # Starting L3_CAT test ...
->> # Mounting resctrl to "/sys/fs/resctrl"
->> # Cache size :117964800
->> # Writing benchmark parameters to resctrl FS
->> # Write schema "L2:1=0x1" to resctrl FS
->> # Write schema "L3:0=1fc0" to resctrl FS
->> # Write schema "L3:0=3f" to resctrl FS
->> # Write schema "L3:0=1ff0" to resctrl FS
->> # Write schema "L3:0=f" to resctrl FS
->> # Write schema "L3:0=1ffc" to resctrl FS
->> # Write schema "L3:0=3" to resctrl FS
->> # Checking for pass/fail
->> # Number of bits: 6
->> # Average LLC val: 445092
->> # Cache span (lines): 737280
->> # Pass: Check cache miss rate increased
->> # Number of bits: 4
->> # Average LLC val: 724472
->> # Cache span (lines): 491520
->> # Pass: Check cache miss rate increased
->> # Number of bits: 2
->> # Average LLC val: 1085470
->> # Cache span (lines): 245760
->> ok 4 L3_CAT: test
-> 
-> Okay, I didn't remember there was another place printing the numbers.
-> No problem with this then,
-> 
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> 
-
-Thank you very much Ilpo.
-
-Reinette
+>=20
+> Thanks,
+> --
+> Joe
