@@ -1,168 +1,428 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A0A2C027C
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 01:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209403016F1
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 01:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774921753; cv=pass; b=V8hqWp/GdJQppAF50eN5FKUz4c62IiT7Cg2sUXVugb8/Z6RvPFSEUKCcJXGf6Bip40q6bZ4Lu/F7+PROl2LGrRL3p9KwCOn70hXio5MnGw+pT4V4r3HvK4x8GJn9+XCk3WMO0NXsEBycBPWye8Viur6FoTAspuKFcj8YmV3kESc=
+	t=1774921838; cv=pass; b=vD7Oeg1vy/l3a6ihrw9wxSTG331cKIUl7B2YUYVha3dWH9JzUtdgfYUCHa9Dxfn8p45ST9pMcIqeW59C/tH8mfFDOosRHP90GaSn7gl2WNapvVXVhHk79EPuOgc1o7O+YKtf/hT46eknX285MZJnL1oJIZ8uY4yd2YgfMpynW8k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774921753; c=relaxed/simple;
-	bh=7mR/FEIdKpPoOSaAjFMxtsc2cy77evN8pkvL1lLQ1Ng=;
+	s=arc-20240116; t=1774921838; c=relaxed/simple;
+	bh=8gYmI+YOdsaMkFuEayCBQbVk/v3bRpvOLfsbM+msETo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TrSMOV6QMZaXIWIss8vUKHs4GJyHZdI6yVdcavVEpWY91Vihd7CZvupcgk8McHd5v7aWfqGSgjraFfO0Dh+dSI/RMuOyzFNTLBmSn+I13QlOr9AYGSOD1x3hGjpWtLnhVT68JXURpiItE8pz+pGKSMYVU2EvL4EPFgzutUe2n6A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DfPphiYZ; arc=pass smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 To:Cc:Content-Type; b=nxKVOXrBaGaYwA1+ayNUUHSCCjHNXObdP2B/f7OXGHpsEWTkX7g9nB0VUXrxO2aDpWq5v6bEdQLOlpKMTI1BQHwfMy1sZP4Y1MWBCLVlMQmqkyX+Q53AULre005IP11yIlFgE0jJb5gGCam/PIdLsi/IelFbBJVhAbsjSRoG4+c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wL7q1DXt; arc=pass smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DfPphiYZ"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-38a42a0d7f7so49243221fa.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 18:49:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774921750; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wL7q1DXt"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-127380532eeso1280321c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2026 18:50:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774921836; cv=none;
         d=google.com; s=arc-20240605;
-        b=IAuHU1UYUSsipZ39Xb27dBp7Ql+NZBgXd9PPhqJ81xmq0sxaRuIxUqLCvi1RKI79Hp
-         av1xM7fK/gDP2sVFS9UkxFxeNwekozUZJvCnAH30eqZ8u0PqhUnz3IcpYh4hrVhQR0u5
-         AhpcMnBixaM9q0uKSj9x1FQBagEv1nltceGGHkmNTJKV61VpzII/BNdEAIYcAXJKq3i2
-         1q8T/A43119yIVRs+SCtNj1p5tRehrCYYcPBMQ9duZBbPRy7GV0k9JHKhKF0ph1IwGjV
-         wk9VgH4Zj6BDFPW+t/SzEqp3k0tnAPUhEbe+/CjdBkGKYloxmeOoYzsgG/doiWM47YBe
-         QOsw==
+        b=ac172r1jBBi0jYWl4OENui9nSVX5t0r+Sqgx255PlswPQkOX1D2fI/cixijMasMul0
+         pqcrzxgm4DmzT4SMiT/Yqdcl8gd3UjEq8wfkOMh+Lq8oRsBMq0WC+Fd422OKQ7Xrfb1G
+         NqiM5BOxSPUcg7C4afW15w7G95beI6JaUszvpBMKodnBLhuAJnYw10skkYFVpaS3Tbun
+         46oeSlTHxlRkukx6ogblz+h1EfULIXNNjU0AnBFJhlin6SYfuUaGrV3DdXvw9IdU5zEG
+         8M6v7xbYjYcQUawd3Txscq4u6TT/qBk2IB+6IVQsu24yTwBLgFxqsEzmBtIbmsy4EhVg
+         uGCw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=AUGtOhZOkkF5yLpH0AKa3aJ1gvm9fmOUPIXTqcmi7t8=;
-        fh=jIFpFq3VhPzK0yxogQIQa9r0mYM8GSYvoisUnbXu1N0=;
-        b=RUL0/Fi6ebkLprOlRYNoDFtyOYpZl+q18R1kPe3vaEV3uXt4op/C8B8b/s4l/ZPcfx
-         Bb8e7PsF2Js90znlIwj6P3eBfAD/sA1LPXLsBCEmBQ3B6lWRkl0UBnm5CqMDhhHDARUy
-         o+Dt3gzzh36xh7WuWyrk6H05RrvWbmKqQITTtB8HEpSFAVlf+2vlUFR7mdBpoG0Ezs0N
-         rYjID/4hs0EV0TRcwTa6FG7bV3HBF0oaBf86dLbUqzI/nOO5jAOpGS2vTb0LxWCMeur+
-         VREPIxk9dFxppbxbeFCb30R4j7pTO7kckXgIUf72IaxS/xlSu/1EmXNESJnC0cmF6Kia
-         7hyQ==;
+        bh=6f292/btZn8ISsDnTBi4fWU5y3QaKwgLkJGaHERz/GA=;
+        fh=3EKlh3tq0rEbGdxsG11148uO7i0DdRAWNRnsZvN0e0I=;
+        b=TFBUsIKfUYVkpMMTJaN/sEAsh76u66yXS2O9igwpMjOnVUhgs3bKXdWrVxTD1WK8S3
+         QKMjBDVhzdvqjAbtcQynKS4ECF7xZEhM6Guz6vanPLV5Gtn3FaQ2hSpKE5sB8oRbMd/t
+         QTn185rykh/ojTtDv/o7m0OYY5e5DqppgFdAMysiK35tiOYM+DkOI5RODsQJgFfQ5BK/
+         MwmFdyHumuHD1fbA3TGlAXoVHXqO7hey8/S0dYmbSWuvxLh6x04lVKUr7EkAKtSV0Bqb
+         u1jzUScOJTBpzErVOrhHK4shTXGWI8O8lU90dl8GmZl2zYA+HXU6u4UIqShuOzsVOiGR
+         /E0w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774921750; x=1775526550; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774921836; x=1775526636; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AUGtOhZOkkF5yLpH0AKa3aJ1gvm9fmOUPIXTqcmi7t8=;
-        b=DfPphiYZb/JwEcGivLxq3r1DPsB8Nlxp/PygkywQHzhGSxeU0dRdNyx5b90kpReTPI
-         lIbCo+j0yQcPu3dv+/NZW5AzrY7JLPakmd2555HxFA6UuyiOiRNREtwqPg+855ZRFGYe
-         NKoRFhsPj6PH3cPup9FnEeA7yJR6+LnZOJLGK10tbE+v0BZQ58IoxUurw04yt5+5chSV
-         t7HHnLadzctnTkIYBdQ9DjR6E3UWfoZu/Z5WQTvdGgKS49DGAvMup9tVp0g4sNSZqU9X
-         3UtAUVbszkyXlvHSdfBBulTR42GJO7E++qZM5uGYzL09U5fGjxHGWndKa+wiz7nQYnmR
-         Z46Q==
+        bh=6f292/btZn8ISsDnTBi4fWU5y3QaKwgLkJGaHERz/GA=;
+        b=wL7q1DXttVRMShI/54+X0HIyNm27HysiHL/kCP/4eRKtQX9b6j33uMZEms/aNUfg9X
+         nzh9uFAT/jxftP19ICnr+jIcyFJ+Qx8sOzLDlJAz94TkVm7Cs1Bc8ETm9CoY6m5JyiCY
+         sZhhIsffCmkUnHLxGtn7g4vDNmTjXLeQLbb4e/Ogjx3o9W0uwjoOilsXyJDDXid76CFD
+         PbDD1R3caHI+FeLQdcFo931UGcVjvM9KtU+HnZK3GvSyRqcGS4/6gfeyRIfMz4Yf1xiG
+         8OUpAAgbmL9sLQQ+GX9tfCs/a+AYNSe2tlKvt5InqD2RQUVepduL7fCkoT6zrQROVEj5
+         FDBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774921750; x=1775526550;
+        d=1e100.net; s=20251104; t=1774921836; x=1775526636;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=AUGtOhZOkkF5yLpH0AKa3aJ1gvm9fmOUPIXTqcmi7t8=;
-        b=SrfruKdeSWYYST2ez2+GLe4mzZM4w+yjtlqA0WxAHN+5Qr1JgqQ/f3j+H3/9eYNWhB
-         gf98yKEQBYtzHT0NbmBeI09wTFmmz7D14HwJtll3v+GVNLQs2H8+PazLLFoSBMojtzqH
-         wvxfXzu6x69hY8+05emvEtEBNUxh/UF13R3qCkUtYEmkA/h4kPUswxrSGpxfPFZKcrbf
-         GSDbYK1V4c6JshFEG107joS1pXZJSoz0SqZ5eH8Hpkb9+YFZPd58OdHf0CKZUdlUO5CB
-         snOBFmXWjc42Yh2b1HhMgp2IKjs0hCZeCZ/NGpKXZ38NbDFeMZtP1y9hSFbq7367H+yu
-         DQ8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXNo4aL5uft1Tui1hMPFWKZk9xPnTH9n3gwbjIFTicm9/HAUHv1WE5uNJGDktHAkGO1OSqCGnVrR1nTfcSNwlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTP/WIdwCZ/F0P8aF8wOEcXi8N1ZYiDfd+ojkAsi0ejpkDuBW6
-	UW58piZRtpvJBT+e84zyfkfWBjjWgCp+q8QKBSRVUTfwtAlW3xhhPx/WGpeQiyOwbPYbty7E6OU
-	m1LXdpX0fVXoWFJVppW6T8HuluTMyhpy8ajUPYhr5pQ==
-X-Gm-Gg: ATEYQzyGqyONeFbD/6NLgcdK/J96rea9B8oauj0fHvVL48JxPXMO1TQefGi7yQLcSL3
-	wK+0eSC+MjHkxnQix9vtTH16x3+o9jKzNwDyzjf5XfgVM1C58jlJgzUUHfNwjrwvDtj4TxBbl4l
-	xETnA8GbHBCPx+cbvH7UB0tWMORjt/ZUarw3Qtx9KhSxMgyzakvnNIVkynr49mFi6BzClvRAshh
-	78quZ/K7O6Hlf64HmkK+9E2qdbedDmmtmaMs0MFytoBdwJpn/dUpvE2hDxyKtkZWmWGM7+BPpFh
-	82C7qMSdTCCgOkpzAyQTnpXjvzlp0sa1e5C/u6lypg==
-X-Received: by 2002:a05:6512:39c3:b0:5a1:3308:2a16 with SMTP id
- 2adb3069b0e04-5a2baacc22dmr568745e87.1.1774921750496; Mon, 30 Mar 2026
- 18:49:10 -0700 (PDT)
+        bh=6f292/btZn8ISsDnTBi4fWU5y3QaKwgLkJGaHERz/GA=;
+        b=MeuqxbhD2HoFj5v3aireqNW9BuRV3mo5jO/UAWFgtbEuYQfwC4CsGOGFJSOWnEHxMG
+         0yZO07tQFbhpsyBFlYWQv3HuS1x0Ok/6AKlcpYcz3OiaqQD4/ZBqOOwpsiRu4Li1Pydi
+         rnTiFjYkS4TadzbvoEwHFPiTQrte1Irf5omXpBsr5igJGI7m6ZxKJIecOVIojel5CtUC
+         U8eRsl318ykctGaUGws8mCtq1aQHA0IY8OlvqXiNeYjTDRXka5jUddGmoEfydQmzf/Um
+         0vINqVYIs94vNWc3ojIlDz/RzoIWEhbm6GdAk1fGAmD5tLPqs4tLRtAkSWExNolsDI3j
+         nadA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXUQYIykptw+BRJXiFpVXoawvgNHEFys6aY2k1vOJgpC/dFLkkI9JfVTGHvVTuo9dEOWj5iCyzIkzwUtWfZII=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO4rTTB1GxucVUehlNVY3blXXv5EwhTZJLsZbILa6KqP8AHFMc
+	e6xhKMs5sCWiE+u+0VS5K1Ti3mt36ZfuT/Dh5+v9lgWVzbmC9F55NgezDAGfHupjF9sRDv1OLFu
+	ccCXxqr8V319cD0RDjF6RD/2xXBlCIPNDiGSrTNSi
+X-Gm-Gg: ATEYQzyDAfINrfwPgdNpPsyVQpW2PvN6uUYajCOZw6qheuFVWbSb433fGeOM62Tw+gW
+	Cu8CKeQOoOLZ1IECfCEXi64CWE6SSkyaGC3xpbXTzWcQpz/yTJk7cr7qZLjMN1Mtxpi/loB+tMB
+	DsCGVqPsih+lrrlNfRWurVCncnn0qaCo5lgY1b270QC23GPfLTbZhIZvjCEc8fOhCshm6jG+huf
+	cup8ShNHrEdd4xbPnQ9QyGkVKnNwOgyMALbjkkQB90DJsXWIGwxHQNy2AqpRF81vYVEj+zhY2yl
+	PoJ+bu88Ag7wDCVDc5zuAXTozK3uf++1j4TLDTw0hg0oblbpen3GX3ya/cS9w+8qVealWXQB
+X-Received: by 2002:a05:7022:b8a:b0:11f:3483:bba6 with SMTP id
+ a92af1059eb24-12ab2877032mr8903559c88.13.1774921835563; Mon, 30 Mar 2026
+ 18:50:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260329124429.689912-1-hoyeon.lee@suse.com> <20260329124429.689912-2-hoyeon.lee@suse.com>
- <CAEf4BzbA=drhPq9tsD1Dj1wt_P0q4LNtuNSM96CWVuAVBrKrvg@mail.gmail.com>
-In-Reply-To: <CAEf4BzbA=drhPq9tsD1Dj1wt_P0q4LNtuNSM96CWVuAVBrKrvg@mail.gmail.com>
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-Date: Tue, 31 Mar 2026 10:48:54 +0900
-X-Gm-Features: AQROBzDigsL7IRQLglmAi0nGJYVWiLB_I2NXsLdUS9C4uuHL8iG0rgEEhOuBIgA
-Message-ID: <CAK7-dKZMjW0t=CSkRYuUudnAY--BviwVBJCGH11g6csTKBwRNw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] libbpf: allow address-based single kprobe attach
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <20260330080746.319680-1-jiayuan.chen@linux.dev> <20260330080746.319680-3-jiayuan.chen@linux.dev>
+In-Reply-To: <20260330080746.319680-3-jiayuan.chen@linux.dev>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Mon, 30 Mar 2026 18:50:24 -0700
+X-Gm-Features: AQROBzCq4WwavAHbnWGH3R8xHzPtillBgY_yUz44-mHnTtUOFzp1taa1gZwbEhs
+Message-ID: <CAAVpQUA0kxiQVevVpty8V54HJw+=CR_GqDV2+Hg7OF8pZVTtVg@mail.gmail.com>
+Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 31, 2026 at 9:33=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Mon, Mar 30, 2026 at 1:08=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
 >
-> On Sun, Mar 29, 2026 at 5:44=E2=80=AFAM Hoyeon Lee <hoyeon.lee@suse.com> =
-wrote:
-> >
-> > bpf_program__attach_kprobe_opts() currently attaches a single kprobe on=
-ly
-> > by func_name, with an optional offset. This covers only the symbol-
+> Add test_tcp_custom_syncookie_protocol_check to verify that
+> bpf_sk_assign_tcp_reqsk() rejects non-TCP skbs. The test sends a UDP
+> packet through TC ingress where a BPF program calls
+> bpf_sk_assign_tcp_reqsk() on it and checks that the kfunc returns an
+> error. A UDP server recv() is used as synchronization to ensure the
+> BPF program has finished processing before checking the result.
 >
-> have you tried passing NULL for func_name and specifying absolute
-> address in opts.offset? Looking at the code I don't see why that won't
-> work, we don't enforce func_name to be non-NULL
+> Without the fix in bpf_sk_assign_tcp_reqsk(), the kfunc succeeds and
+> attaches a TCP reqsk to the UDP skb, which causes a null pointer
+> dereference panic when the kernel processes it through the UDP receive
+> path.
 >
-> This NULL will turn into config1 =3D 0, and offset will be config 2,
-> which I think is what you want to attach by address, according to
-> perf_event_open documentation
+> Test result:
 >
->                union {
->                    __u64 bp_addr;          /* breakpoint address */
->                    __u64 kprobe_func;      /* for perf_kprobe */
->                    __u64 uprobe_path;      /* for perf_uprobe */
->                    __u64 config1;          /* extension of config */
->                };
+>   ./test_progs -a tcp_custom_syncookie_protocol_check -v
+>   setup_netns:PASS:create netns 0 nsec
+>   setup_netns:PASS:ip 0 nsec
+>   write_sysctl:PASS:open sysctl 0 nsec
+>   write_sysctl:PASS:write sysctl 0 nsec
+>   setup_netns:PASS:write_sysctl 0 nsec
+>   test_tcp_custom_syncookie_protocol_check:PASS:open_and_load 0 nsec
+>   setup_tc:PASS:qdisc add dev lo clsact 0 nsec
+>   setup_tc:PASS:filter add dev lo ingress 0 nsec
+>   run_protocol_check:PASS:start tcp_server 0 nsec
+>   run_protocol_check:PASS:start udp_server 0 nsec
+>   run_protocol_check:PASS:connect udp_client 0 nsec
+>   run_protocol_check:PASS:send udp 0 nsec
+>   run_protocol_check:PASS:recv udp 0 nsec
+>   run_protocol_check:PASS:udp_intercepted 0 nsec
+>   run_protocol_check:PASS:assign_ret 0 nsec
+>   #471/1   tcp_custom_syncookie_protocol_check/IPv4 TCP:OK
+>   run_protocol_check:PASS:start tcp_server 0 nsec
+>   run_protocol_check:PASS:start udp_server 0 nsec
+>   run_protocol_check:PASS:connect udp_client 0 nsec
+>   run_protocol_check:PASS:send udp 0 nsec
+>   run_protocol_check:PASS:recv udp 0 nsec
+>   run_protocol_check:PASS:udp_intercepted 0 nsec
+>   run_protocol_check:PASS:assign_ret 0 nsec
+>   #471/2   tcp_custom_syncookie_protocol_check/IPv6 TCP:OK
+>   #471     tcp_custom_syncookie_protocol_check:OK
+>   Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
 >
->                union {
->                    __u64 bp_len;           /* breakpoint size */
->                    __u64 kprobe_addr;      /* with kprobe_func =3D=3D NUL=
-L */
->                    __u64 probe_offset;     /* for perf_[k,u]probe */
->                    __u64 config2;          /* extension of config1 */
->                };
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>  .../bpf/prog_tests/tcp_custom_syncookie.c     |  91 ++++++++++++++-
+>  .../bpf/progs/test_tcp_custom_syncookie.c     | 109 ++++++++++++++++++
+>  2 files changed, 196 insertions(+), 4 deletions(-)
 >
-> This is the same approach as with uprobes, btw.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.=
+c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
+> index eaf441dc7e79..6e29402c4c59 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
+> @@ -5,6 +5,7 @@
+>  #include <sched.h>
+>  #include <stdlib.h>
+>  #include <net/if.h>
+> +#include <netinet/in.h>
 >
+>  #include "test_progs.h"
+>  #include "cgroup_helpers.h"
+> @@ -47,11 +48,10 @@ static int setup_netns(void)
+>         return -1;
+>  }
 >
+> -static int setup_tc(struct test_tcp_custom_syncookie *skel)
+> +static int setup_tc(int prog_fd)
+>  {
+>         LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point =3D BPF_TC_INGRE=
+SS);
+> -       LIBBPF_OPTS(bpf_tc_opts, tc_attach,
+> -                   .prog_fd =3D bpf_program__fd(skel->progs.tcp_custom_s=
+yncookie));
+> +       LIBBPF_OPTS(bpf_tc_opts, tc_attach, .prog_fd =3D prog_fd);
+>
+>         qdisc_lo.ifindex =3D if_nametoindex("lo");
+>         if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo c=
+lsact"))
+> @@ -127,7 +127,7 @@ void test_tcp_custom_syncookie(void)
+>         if (!ASSERT_OK_PTR(skel, "open_and_load"))
+>                 return;
+>
+> -       if (setup_tc(skel))
+> +       if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie)))
+>                 goto destroy_skel;
+>
+>         for (i =3D 0; i < ARRAY_SIZE(test_cases); i++) {
+> @@ -145,6 +145,89 @@ void test_tcp_custom_syncookie(void)
+>
+>  destroy_skel:
+>         system("tc qdisc del dev lo clsact");
+> +       test_tcp_custom_syncookie__destroy(skel);
+> +}
+> +
+> +/* Test: bpf_sk_assign_tcp_reqsk() should reject non-TCP skb.
+> + *
+> + * Send a UDP packet through TC ingress where a BPF program calls
+> + * bpf_sk_assign_tcp_reqsk() on it. The kfunc should return an error
+> + * because the skb carries UDP, not TCP.
+> + *
+> + * TCP and UDP servers share the same port. The BPF program intercepts
+> + * the UDP packet, looks up the TCP listener via the dest port, and
+> + * attempts to assign a TCP reqsk to the UDP skb.
+> + */
+> +static void run_protocol_check(struct test_tcp_custom_syncookie *skel,
+> +                              int family, const char *addr)
+> +{
+> +       int tcp_server =3D -1, udp_server =3D -1, udp_client =3D -1;
 
-I tested this after your comment, and you are right. For PMU-based
-non-legacy attach, func_name =3D NULL with opts.offset =3D <raw-address>
-already works today.
+nit: no need to init.
 
-However, this does not work for legacy tracefs/debugfs kprobes, because
-the tracefs event string formatting still expects symbol-based input.
+> +       char buf[32] =3D "test";
 
-So for v3, instead of adding new field to bpf_kprobe_opts(), I'll document
-that offset can be treated as an absolute address when func_name =3D NULL,
-and make legacy path support the same raw-address form as well.
+should be buf[] =3D "test" since you send data of sizeof(buf) below.
 
-> > based form, not the raw-address form that the kernel already supports
-> > for both kprobe PMU events and legacy tracefs/debugfs kprobes. Callers
-> > that already have a target IP still have to drop down to
-> > perf_event_open() or direct tracefs writes.
-> >
-> > libbpf already exposes address-based attach for kprobe_multi through
-> > bpf_kprobe_multi_opts.addrs. This commit adds bpf_kprobe_opts.addr so
-> > that single kprobes can be attached either by func_name + offset or by
-> > raw address.
-> >
-> > Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 88 +++++++++++++++++++++++++++++-------------
-> >  tools/lib/bpf/libbpf.h |  5 ++-
-> >  2 files changed, 65 insertions(+), 28 deletions(-)
-> >
+
+> +       int port, ret;
+> +
+> +       tcp_server =3D start_server(family, SOCK_STREAM, addr, 0, 0);
+> +       if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
+> +               return;
+> +
+> +       port =3D ntohs(get_socket_local_port(tcp_server));
+> +
+> +       /* UDP server on same port for synchronization and port sharing *=
+/
+> +       udp_server =3D start_server(family, SOCK_DGRAM, addr, port, 0);
+> +       if (!ASSERT_NEQ(udp_server, -1, "start udp_server"))
+> +               goto close_tcp;
+> +
+> +       skel->bss->udp_intercepted =3D false;
+> +       skel->bss->assign_ret =3D 0;
+> +
+> +       udp_client =3D connect_to_fd(udp_server, 0);
+> +       if (!ASSERT_NEQ(udp_client, -1, "connect udp_client"))
+> +               goto close_udp_server;
 >
-> [...]
+> +       ret =3D send(udp_client, buf, sizeof(buf), 0);
+> +       if (!ASSERT_EQ(ret, sizeof(buf), "send udp"))
+> +               goto close_udp_client;
+
+memset(buf, 0, sizeof(buf)) here and
+
+> +
+> +       /* recv() ensures TC ingress BPF has processed the skb */
+> +       ret =3D recv(udp_server, buf, sizeof(buf), 0);
+> +       if (!ASSERT_EQ(ret, sizeof(buf), "recv udp"))
+
+check ASSERT_STREQ() here ?
+
+> +               goto close_udp_client;
+> +
+> +       ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
+> +
+> +       ASSERT_EQ(skel->bss->assign_ret, -EINVAL, "assign_ret");
+> +
+> +close_udp_client:
+> +       close(udp_client);
+> +close_udp_server:
+> +       close(udp_server);
+> +close_tcp:
+> +       close(tcp_server);
+> +}
+> +
+> +void test_tcp_custom_syncookie_protocol_check(void)
+> +{
+> +       struct test_tcp_custom_syncookie *skel;
+> +       int i;
+> +
+> +       if (setup_netns())
+> +               return;
+> +
+> +       skel =3D test_tcp_custom_syncookie__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +               return;
+> +
+> +       if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie_bad=
+proto)))
+> +               goto destroy_skel;
+> +
+> +       for (i =3D 0; i < ARRAY_SIZE(test_cases); i++) {
+> +               if (!test__start_subtest(test_cases[i].name))
+> +                       continue;
+> +
+> +               run_protocol_check(skel, test_cases[i].family,
+> +                                  test_cases[i].addr);
+> +       }
+> +
+> +destroy_skel:
+> +       system("tc qdisc del dev lo clsact");
+>         test_tcp_custom_syncookie__destroy(skel);
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.=
+c b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
+> index 7d5293de1952..bd3fad3dd503 100644
+> --- a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
+> +++ b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
+> @@ -588,4 +588,113 @@ int tcp_custom_syncookie(struct __sk_buff *skb)
+>         return tcp_handle_ack(&ctx);
+>  }
+>
+> +/* Test: call bpf_sk_assign_tcp_reqsk() on a UDP skb.
+> + * The kfunc should reject it because the skb is not TCP.
+> + *
+> + * TCP and UDP servers share the same port. The BPF program intercepts
+> + * UDP packets, looks up the TCP listener on the same port, and tries
+> + * to assign a TCP reqsk to the UDP skb.
+> + */
+> +int assign_ret =3D 0;
+> +bool udp_intercepted =3D false;
+
+No need to init var on bss w/ 0 here.
+(init in run_protocol_check() is necessary)
+
+
+> +
+> +static int badproto_lookup_assign(struct __sk_buff *skb, struct udphdr *=
+udp,
+> +                                 struct bpf_sock_tuple *tuple, u32 tuple=
+_size)
+> +{
+> +       struct bpf_tcp_req_attrs attrs =3D {};
+> +       struct bpf_sock *skc;
+> +       struct sock *sk;
+> +
+> +       skc =3D bpf_skc_lookup_tcp(skb, tuple, tuple_size, -1, 0);
+> +       if (!skc)
+> +               return TC_ACT_OK;
+> +
+> +       if (skc->state !=3D TCP_LISTEN) {
+> +               bpf_sk_release(skc);
+> +               return TC_ACT_OK;
+> +       }
+> +
+> +       sk =3D (struct sock *)bpf_skc_to_tcp_sock(skc);
+> +       if (!sk) {
+> +               bpf_sk_release(skc);
+> +               return TC_ACT_OK;
+> +       }
+> +
+> +       attrs.mss =3D 1460;
+> +       attrs.wscale_ok =3D 1;
+> +       attrs.snd_wscale =3D 7;
+> +       attrs.rcv_wscale =3D 7;
+> +       attrs.sack_ok =3D 1;
+> +
+> +       assign_ret =3D bpf_sk_assign_tcp_reqsk(skb, sk, &attrs, sizeof(at=
+trs));
+> +
+> +       bpf_sk_release(skc);
+> +       return TC_ACT_OK;
+> +}
+> +
+> +SEC("tc")
+> +int tcp_custom_syncookie_badproto(struct __sk_buff *skb)
+> +{
+> +       void *data =3D (void *)(long)skb->data;
+> +       void *data_end =3D (void *)(long)skb->data_end;
+> +       struct bpf_sock_tuple tuple =3D {};
+> +       struct ethhdr *eth;
+> +       struct iphdr *iph;
+> +       struct ipv6hdr *ip6h;
+> +       struct udphdr *udp;
+> +
+> +       eth =3D (struct ethhdr *)data;
+> +       if (eth + 1 > data_end)
+> +               return TC_ACT_OK;
+> +
+> +       switch (bpf_ntohs(eth->h_proto)) {
+> +       case ETH_P_IP:
+> +               iph =3D (struct iphdr *)(eth + 1);
+> +               if (iph + 1 > data_end)
+> +                       return TC_ACT_OK;
+> +
+> +               if (iph->protocol !=3D IPPROTO_UDP)
+> +                       return TC_ACT_OK;
+> +
+> +               udp =3D (struct udphdr *)(iph + 1);
+> +               if (udp + 1 > data_end)
+> +                       return TC_ACT_OK;
+> +
+> +               udp_intercepted =3D true;
+> +
+> +               tuple.ipv4.saddr =3D iph->saddr;
+> +               tuple.ipv4.daddr =3D iph->daddr;
+> +               tuple.ipv4.sport =3D udp->source;
+> +               tuple.ipv4.dport =3D udp->dest;
+> +
+> +               return badproto_lookup_assign(skb, udp, &tuple,
+> +                                             sizeof(tuple.ipv4));
+> +       case ETH_P_IPV6:
+> +               ip6h =3D (struct ipv6hdr *)(eth + 1);
+> +               if (ip6h + 1 > data_end)
+> +                       return TC_ACT_OK;
+> +
+> +               if (ip6h->nexthdr !=3D IPPROTO_UDP)
+> +                       return TC_ACT_OK;
+> +
+> +               udp =3D (struct udphdr *)(ip6h + 1);
+> +               if (udp + 1 > data_end)
+> +                       return TC_ACT_OK;
+> +
+> +               udp_intercepted =3D true;
+> +
+> +               __builtin_memcpy(tuple.ipv6.saddr, &ip6h->saddr,
+> +                                sizeof(tuple.ipv6.saddr));
+> +               __builtin_memcpy(tuple.ipv6.daddr, &ip6h->daddr,
+> +                                sizeof(tuple.ipv6.daddr));
+> +               tuple.ipv6.sport =3D udp->source;
+> +               tuple.ipv6.dport =3D udp->dest;
+> +
+> +               return badproto_lookup_assign(skb, udp, &tuple,
+> +                                             sizeof(tuple.ipv6));
+> +       default:
+> +               return TC_ACT_OK;
+> +       }
+> +}
+> +
+>  char _license[] SEC("license") =3D "GPL";
+> --
+> 2.43.0
+>
