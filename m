@@ -1,140 +1,95 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8D23ED10A
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 09:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EE93ED5A2;
+	Tue, 31 Mar 2026 09:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774948594; cv=none; b=YozcRIqqvdmCg5GWDHELJrN0shRmgzn3IjhucJNIagu6SkTqJvrcobyihFveA7dDKlQn+n28jNuScZ1dhvEOkeoYL9bR1YuEVizRBYnXN8lB9NZZJ/qbjaJmi2FeB/2LaWIOpmeqc892C5ywQj7UW18u4wifBeLOd/dlv8N9lak=
+	t=1774949013; cv=none; b=EgywzwxfqBrUVN8njvL6ZCKK469yZPfPyA7KdQv0DzOw6jbhzOn9h7MvHO8oTaf2vckgS/NuwuzE8iJq4WvLIjzTdL5ZWf4TRo0bL345P6oniQpOjRTcWgiAOrMdVj3i7YoYeo7EwzujkJ7b7bDpPisoJO8AsuTU07/qCceMhTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774948594; c=relaxed/simple;
-	bh=/8qNCRSA3xWFGi2tA+AaQuz7a35g3bxVg90Ij6HEJKU=;
+	s=arc-20240116; t=1774949013; c=relaxed/simple;
+	bh=DZoalaXDsEVeM0Ax8G7Y4p1iyVXciubggMHPstxJdjM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SybLLiUi5YP/H5/PZb/ma3l98MC6OtPxLlAWjFCq+iYzCgaAkn3+7vNopgF0519DzfhizYWCdabDo6oGzJDe84sa2I/5CdFjpkOgQIcRCiUdR59XCm4yL2WVeK/9JDUD84lH59UYTDt1YjGPmdbcHpYbr5+oupEBX22u2I3CfYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g0afj+Tf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rhv4zFbS; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=E53QGCyCQzBNM4HbO3+XgRKQN/HY0Rjy1xSLug4EyFoa/+fdfb17Lt5o3B/m1FEwpAz/sq2h/c/W8CqO81rS5F+XLZpNOIjad8otYrZVn1M98QbsMpOFw1qwpfF3XAh+LH4snNTwibe9cztUlHqISl6Vp8dE+IJSXDIuWnUs3Yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWXHPvWT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g0afj+Tf";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rhv4zFbS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774948591;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YW7ru+MxIsYT4TWFYD0hCF8kOfP+CTkDbU7PkOx95xg=;
-	b=g0afj+TfE48ibcKkPPvokxk+Mln/mCWRFfQKQF680OtGshvBCOkkMk+2o87Qa71RBPUigJ
-	NIzwFq2WF1bR9fwyLE1idzv0JbD/yCMOPORIfrLWd7YXaEfMAzssZSt8yXlPxzDv5RNmsZ
-	XCMiy1SlXL1au3T26ZiLJ3Dr6FklhwE=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-599-5duG04baM5mW8B_LZvK3tQ-1; Tue, 31 Mar 2026 05:16:28 -0400
-X-MC-Unique: 5duG04baM5mW8B_LZvK3tQ-1
-X-Mimecast-MFC-AGG-ID: 5duG04baM5mW8B_LZvK3tQ_1774948587
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3594620fe97so18433032a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 02:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774948587; x=1775553387; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YW7ru+MxIsYT4TWFYD0hCF8kOfP+CTkDbU7PkOx95xg=;
-        b=rhv4zFbStJMf06uC7LcoNfd6FX9X6YC/W/jhEG5xm9awwoKXkdmy0/XCxEjGl6Hy92
-         cNByMBoBs0/CpG5CqpGnoKpaNiamdI55QRCj/PtqSdZGfLJqvWXs5Wa8mEaAt81T19wO
-         EyiNwnsNq85OJVg/1RDTP8swrF79uS2Ir7O+mqWFNYtBjMJ7jU0SLHY/MFzu49pmzQFU
-         AWgKrq2kwsQKQIMz+iaydChNdfh6cIF8uraR9eLjG4yruQf+0ARJVSG+33JwUyY3zWEf
-         GAQjzb32mjfYu+azL4vOq1K+JkdFO1GL/4ezt+wxOHJpnikDUNwiHmpvtcq+vJGU1Fts
-         H7zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774948587; x=1775553387;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YW7ru+MxIsYT4TWFYD0hCF8kOfP+CTkDbU7PkOx95xg=;
-        b=UTWLPCsKbi1t4FufswyztMPKattM3iOFTqnE2QGs2wQmst3AmU+soEAv1yE8vL7S8T
-         eaI8IyBxTuqzWfiW3vJ0gGBItaDO97SIy2y658keifuq2wjiEUq709wcsq78354vKtEj
-         biM0gUvQubO+0tpztSQvu9FQUWcmjpQQTYatoijFi0N6WU8mEnRmfAf4bWorufFX72OK
-         /WFYjoaBxIm/Im6DofSqxkwVwaQh/kHTW7FiOhK/e3h6dCbipayp2CJ2Zi7V2WARzTDl
-         +D3ckZ7++zB3AkjcLVCGrb94nSbGIbk4HnTdbbZ7MpQ6ynL7jA4x0IN8YDViRirz5Zsz
-         6Kbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUZF4mjdLkdMJDRDCeqs7udMN39YUK5ovWoy+8XGd673Ay9H7zkamLEUBIYMkWulL02npcni/6MX/eM57UpALo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3WOrUZ+zkSRAeZJRCZI7FaroVKI/rtO2pIWK73Fb4c0/k1vA9
-	I4R3RwUNQ+i9FQrQGLQp3py2a7uA97UcHNBH+83ZW7geW00Ya9RP2TRL8+YAbiGV/J6+3du2ehY
-	t1/c3fXF+nQNOlPBPTqXlmcmiL/9BMkWYpxfBM4rmnSPPJvGxO2ba1jCxPUlYeZTa9W3y5A==
-X-Gm-Gg: ATEYQzxg8iqYXUgU586nFrOKAvnyrmfVmceApmYw/Y7GDZak5PLYBhR0Xl/7lHBkefB
-	IBh6AaTZieutt3/oQdMiU1FAFCPtWwMEITITT7IVNSj/xWdj0JCgZxmmIpRM9cZnsyF/RpjV82c
-	myWQ3osHtpxURoYmfIlJSYGsnShz9TAtxODb0Y4MOIUdgtUSfuxioOwEMNKcvtQuQSdVpHcibMg
-	uiJLkpsVnJlWPkWYQ2O75e8Pq0RyWKAIl1XOUBS7w2EeBDDsra0Zx5XPYFtwmh9Qi0umn8/n6tj
-	ED2JESDVDxQPyJHGLAMQzO68dbzvCM45TsHh6QWcoIvy2SSyvnUNajYmPiCLtFvGI3GiFkvn0i0
-	zPYt3MbOfdQSJrR+l7w==
-X-Received: by 2002:a17:90b:1850:b0:35b:b52d:f34d with SMTP id 98e67ed59e1d1-35c2ffaffdcmr15364776a91.5.1774948586980;
-        Tue, 31 Mar 2026 02:16:26 -0700 (PDT)
-X-Received: by 2002:a17:90b:1850:b0:35b:b52d:f34d with SMTP id 98e67ed59e1d1-35c2ffaffdcmr15364761a91.5.1774948586559;
-        Tue, 31 Mar 2026 02:16:26 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe6fcea1sm998457a91.16.2026.03.31.02.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 02:16:25 -0700 (PDT)
-Date: Tue, 31 Mar 2026 17:16:23 +0800
-From: Li Wang <liwang@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: david@kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com,
-	vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
-	mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] selftests/mm: serialize local_config generation for
- parallel builds
-Message-ID: <acuQ51e_qd6yfa46@redhat.com>
-References: <20260331040156.119158-1-liwang@redhat.com>
- <20260331040156.119158-2-liwang@redhat.com>
- <20260330222948.c2cc6544492e68ded355abca@linux-foundation.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWXHPvWT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B8EC2BCB0;
+	Tue, 31 Mar 2026 09:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774949013;
+	bh=DZoalaXDsEVeM0Ax8G7Y4p1iyVXciubggMHPstxJdjM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VWXHPvWTOsXVqPgKgqy/3aAuIYHbb34PxPrQWaDkov23mCpqJs6NlSRh+dph649hd
+	 e+8MWiREWOuaVmDH4IiVTzViJCfMWPn0vRaCHcVLhNyd71rWE+oGzmtHxpndEjfaGJ
+	 ib94XthMSGL/K9/f45oGTA0BJ+CZilG4W+CMBVhmEqpWYD7iyt+Z8znthOg9rQQtBi
+	 PwBkYAMs0fKRCgPUiACMThrOPBUCtLx+NLZhBExu8TG+DLqi3NZKaTLn2wJN+rsQJ0
+	 /oeXzSpdaZsbKUZSOX7GNIEkw6ZnazXlfbZ/+YIHyb+weE4txyZ4HZ6DOrzJi5x33I
+	 g1n84rD80/QTA==
+Date: Tue, 31 Mar 2026 11:23:30 +0200
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Qiliang Yuan <realwujing@gmail.com>
+Cc: peterz@infradead.org, longman@redhat.com, cgroups@vger.kernel.org,
+	akpm@linux-foundation.org, anna-maria@linutronix.de,
+	boqun.feng@gmail.com, bsegall@google.com, dietmar.eggemann@arm.com,
+	hannes@cmpxchg.org, jackmanb@google.com, jiangshanlai@gmail.com,
+	joelagnelf@nvidia.com, josh@joshtriplett.org, juri.lelli@redhat.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, mathieu.desnoyers@efficios.com, mgorman@suse.de,
+	mhocko@suse.com, mingo@kernel.org, mingo@redhat.com,
+	neeraj.upadhyay@kernel.org, paulmck@kernel.org,
+	qiang.zhang@linux.dev, rcu@vger.kernel.org, rostedt@goodmis.org,
+	shuah@kernel.org, surenb@google.com, tglx@kernel.org, tj@kernel.org,
+	urezki@gmail.com, vbabka@suse.cz, vincent.guittot@linaro.org,
+	vschneid@redhat.com, ziy@nvidia.com
+Subject: Re: [PATCH 01/15] sched/isolation: Support dynamic allocation for
+ housekeeping masks
+Message-ID: <acuSklmoiS6veo-i@pavilion.home>
+References: <20260325135707.GZ3738786@noisy.programming.kicks-ass.net>
+ <20260330114348.102265-1-realwujing@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260330222948.c2cc6544492e68ded355abca@linux-foundation.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260330114348.102265-1-realwujing@gmail.com>
 
-On Mon, Mar 30, 2026 at 10:29:48PM -0700, Andrew Morton wrote:
-> On Tue, 31 Mar 2026 12:01:54 +0800 Li Wang <liwang@redhat.com> wrote:
+Le Mon, Mar 30, 2026 at 07:43:21PM +0800, Qiliang Yuan a écrit :
+11;rgb:2e2e/3434/3636> Hi Peter,
 > 
-> > The mm selftests generate both local_config.mk and local_config.h from
-> > check_config.sh. With high parallelism (-jN), this can race and lead to
-> > incomplete target builds (e.g. only a few binaries get built after
-> > 'make -j100', while 'make -j1' builds everything).
-> > 
-> > Switch to a stamp-based dependency:
-> > 
-> >   local_config.stamp: check_config.sh
-> >         ... run check_config.sh ...
-> >         touch local_config.stamp
-> > 
-> > and make local_config.mk/local_config.h depend on the stamp.
-> > 
-> > This ensures check_config.sh is executed once per update decision and
-> > removes the parallel race window. Also hook local_config.stamp into
-> > EXTRA_CLEAN.
-> > 
-> > No functional change intended for non-parallel builds.
-> > 
-> > Reported-by: Andrew Morton <akpm@linux-foundation.org>
+> On Wed, Mar 25, 2026 at 02:57:07PM +0100, Peter Zijlstra wrote:
+> > I think I asked this a while ago; why do we have more than one mask? 
+> > What is the actual purpose of being able to separate RCU from Timers?
 > 
-> Well, the wind changed direction.  I saw this race a single time today
-> but now I'm trying to produce a reliable before-and-after report, it
-> isn't cooperating - everything is now building with -j100 with and
-> without this patch.
+> That's a fair point. For the vast majority of use cases (like NOHZ_FULL), 
+> these masks are indeed identical and should be updated as a single unit. 
 > 
-> So not very helpful, sorry.
+> The original motivation for separation was to allow extreme fine-tuning in 
+> HFT environments—for example, offloading RCU callbacks to keep a core 
+> mostly clean but allowing pinned timers for specific localized 
+> telemetry/monitoring. 
+> 
+> However, I acknowledge this adds significant complexity. In V13, I will 
+> unify these into a single "Global Housekeeping Mask" by default to 
+> simplify the configuration space, while keeping the underlying notifier 
+> infrastructure flexible enough for future specialized needs.
 
-No worries, we can hang this one as well.
+More precisely we only need four flags:
 
-Let me send to kbuild ML with the two valid fix (1/4, 4/4),
-I will reformat them.
+HK_TYPE_DOMAIN_BOOT (isolcpus=)
+HK_TYPE_DOMAIN (cgroup v2 isolated partition + isolcpus=)
+HK_TYPE_KERNEL_NOISE (nohz_full=)
+HK_TYPE_MANAGED_IRQ (isolcpus=managed_irq)
+
+All the aliases of HK_TYPE_KERNEL_NOISE need to be renamed to
+HK_TYPE_KERNEL_NOISE.
+
+Thanks.
 
 -- 
-Regards,
-Li Wang
-
+Frederic Weisbecker
+SUSE Labs
