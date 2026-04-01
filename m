@@ -1,94 +1,198 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9806E26E706;
-	Wed,  1 Apr 2026 12:08:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05321DF256;
+	Wed,  1 Apr 2026 12:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775045337; cv=none; b=J4cdeNCp+iAcX7/MJUSyLK/0MNZLlLSixUdlLNQ15j2B+iPnSi7SHFNhIfLTU/L2dVwijv4wgtYhsPLrIiXwTCMMIObFwEk6fYdunwnab0VCtKXhkVLhoyxX5M7GBp1hGBMk2+fB8Z7VzB9KThslMz6EbbDu9RlUMzVM4JtCpD8=
+	t=1775045371; cv=none; b=JcufM5Ox/vm0/pAcYT3XUV8z2kpzzVaUF0+7r9WJ8k0HWDmC3eZUNWsOesU/p4mddfh+CTt2DjEnU2T9e+jsIgJcRlcqpQidTJ2MMpbiCYfGyQzAsRtSVvwyWhh0XgHPXt3qdBE9xvkEhaR0r3qwKomKPq9dj2ImtqiobdhOiO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775045337; c=relaxed/simple;
-	bh=Zsz1KWW88aqJcvMBUIOh0Ys1zgAR7pErU1ze+icLZtI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ij3DjlbIpmMjgkKlvKluH6EqqLHUfh9h4Y+l/zwPR1aVxnlJt6LM0XMdBVRe7e2PnOE/hKy4lI6HNkP3EWGy/kTq5rqhBYu3aB2gzZtpl09dpzvq3NEw5af+gnc079mK5iwddsnbnTF4ZHAx5c8TSXW/7Sw0oUxwH1fcmwjYcK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=qVhrNEMw; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1775045371; c=relaxed/simple;
+	bh=h6RuYjPCTSK+k6TRtUf8A8BwYZv8fWV1b8javHIUIK8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=knQg3D9nubAM8A91Vy6hF62TfBDhb4qE8X9uXbk4q/fHabeFfTaKWZD9/EEoJDOAqGvbjeDl15je41WLbLVy4gkVjL9sKqFz22xSnKIvXLGWvfwLWNa4UTMfU1V19sNABH/q1Q1l5qEhvGZgv564KKQlAvjkdDqCoozsx2P6RJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=NCOOOrgz; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="qVhrNEMw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1775045333;
-	bh=Zsz1KWW88aqJcvMBUIOh0Ys1zgAR7pErU1ze+icLZtI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qVhrNEMwQvEty5OInor3o7jjNTKDrf5eYOiqax+m5k49pdAI5GZ6b1wJkU7mc33Fa
-	 fO2ZARKw/2fimxKOoitqgAPMASC6pyrF9j8Ta1FEZxMHbhTIXY83YPeG1dLmxVissW
-	 rmmPtGiPAv26FsohpFsoWNZ5ZcCQFWPBPJ3rvl54=
-Date: Wed, 1 Apr 2026 14:08:53 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Mark Brown <broonie@kernel.org>
-Cc: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org, 
-	david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev, 
-	Willy Tarreau <w@1wt.eu>
-Subject: Re: [PATCH v7 4/7] selftests: ksft_exit_fail_perror: support printf
- style arguments
-Message-ID: <c6976e34-54b7-42a8-968e-9ae967c52968@t-8ch.de>
-References: <20260330151503.670415-1-chuhu@redhat.com>
- <20260330151503.670415-5-chuhu@redhat.com>
- <efbad6c5-8d5e-4774-8d0a-d455e6e2c182@sirena.org.uk>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NCOOOrgz"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631Bm9Fx354949;
+	Wed, 1 Apr 2026 12:09:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=bLaKYg
+	7cW+DfVdy+wjH9OPaOx5lGM/QWJwUacRZzvWU=; b=NCOOOrgztQaRVMlZSD3qfi
+	PJLBYE1HzSeC13aXjz+3q2UaUr6CrZKyKuXRhxE9hAKvWqkXDShFrpaIL1THrwdT
+	w1NfBi6xVLjkKi0jIRh1b8Uo9k9Q18HUgAuuuMHm0Lbc8oyEMRbQ8iPp9mwZivdA
+	P722n6uHS/1PM3Uf5LtiN+bNUG7ThLviJtQ8SwRDVYtfwVex3qL2owJKVrbuSXed
+	KiM6WWVJED+DNHGpJ4cOI5AtjZJ1Bo6hHYPXgacSmYRN+m2JDU0tMDBSEiD7hnqb
+	TPZ9W926Phuls59PzRbGE9kiNG3Kds5DCSd9LHmQyCvY4OF6lVa5fZdu7ndHA7Cg
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d64dgqe15-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 12:09:14 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 631B6lpw006362;
+	Wed, 1 Apr 2026 12:09:13 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6spy5hjc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 12:09:13 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631C99jj12059134
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 1 Apr 2026 12:09:09 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B36062005A;
+	Wed,  1 Apr 2026 12:09:09 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D663A20040;
+	Wed,  1 Apr 2026 12:09:07 +0000 (GMT)
+Received: from [9.39.18.157] (unknown [9.39.18.157])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  1 Apr 2026 12:09:07 +0000 (GMT)
+Message-ID: <c7a0e88f-3d12-44db-8078-f14c0a7554b6@linux.ibm.com>
+Date: Wed, 1 Apr 2026 17:39:06 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <efbad6c5-8d5e-4774-8d0a-d455e6e2c182@sirena.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] powerpc32/bpf: Add fsession support
+To: adubey@linux.ibm.com, linuxppc-dev@lists.ozlabs.org
+Cc: bpf@vger.kernel.org, maddy@linux.ibm.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20260401141043.41513-1-adubey@linux.ibm.com>
+ <20260401141043.41513-2-adubey@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20260401141043.41513-2-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDEwOCBTYWx0ZWRfX5zDOnCeQEKLC
+ /0Bk/Sp1+UEQQK7sM7FjBuOtPI2TOQKLDozc9huVgu3e/RhhRhpGNTigfjXY9a7teib4XhtHxRQ
+ StPQjVazcyrI4ACkmM2dl0VK9CU88jg9Ry4exJsnWMvf4MzoLdtHU4xg0N/I/R8eHDR9Kqso9By
+ ar2/m8zOD/rOgP11oLjGt+399hhH+YNlftb1lk+U7zp93Ee51L3QN1rrzMa0rxiVedfq8NzaGo0
+ EKgW4+yr5xsHZTGRadiTOj6jVw8Zd00jU/Sc3NZAmnLhe55HDkA0KQWdBYQbk8EevlRe7509GEO
+ vQuiEzYC+v50kpOnTJCP4grzGkmq10itxoLgeKnKa0zC91G8yftrB0xzlyS7Piz3UsOmuCpXyqY
+ yz4a0GK0oBZURidGBOfKlQWZ8FFhXgaWid2jpYjaNT1YH5/TVXoto1nXbtwp3o0H8zEacBTrpct
+ X7JzBzOg/zfk62eo20g==
+X-Authority-Analysis: v=2.4 cv=QKZlhwLL c=1 sm=1 tr=0 ts=69cd0aea cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=ehXamiNm_enUqQWXja4A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: iCBLQED9R6sepAnVz6kdAdrcG-MbC_m4
+X-Proofpoint-ORIG-GUID: iCBLQED9R6sepAnVz6kdAdrcG-MbC_m4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_03,2026-04-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0 clxscore=1015
+ spamscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010108
 
-On 2026-04-01 12:03:09+0100, Mark Brown wrote:
-> On Mon, Mar 30, 2026 at 11:15:00PM +0800, Chunyu Hu wrote:
+
+
+On 01/04/26 7:40 pm, adubey@linux.ibm.com wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
 > 
-> > The ksft_exit_fail_perror function previously only accepted a single string
-> > argument, which limited its flexibility for providing specific context to
-> > failure messages.
+> Extend JIT support of fsession in powerpc64 trampoline, since
+> ppc64 and ppc32 shares common trampoline implementation.
+> Arch specific helpers handle 64-bit data copy using 32 bit regs.
 > 
-> > This change updates ksft_exit_fail_perror to support variable arguments,
-> > similar to ksft_exit_fail_msg.  Adding the __printf(1, 2) attribute enables
-> > compile-time checking for format string correctness.
+> Need to validate fsession support along with trampoline support.
 > 
-> This is causing build regressions on the arm64 selftests:
+
+LGTM.
+
+Acked-by: Hari Bathini <hbathini@linux.ibm.com>
+
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
 > 
-> /arm64/fp/za-fork-asm.o -o /build/stage/build-work/kselftest/arm64/fp/za-fork
-> In file included from za-fork.c:12:
-> ../../kselftest.h: In function ‘ksft_exit_fail_perror’:
-> ../../kselftest.h:427:13: error: implicit declaration of function ‘vasprintf’; d
-> id you mean ‘vsprintf’? [-Wimplicit-function-declaration]
->   427 |         if (vasprintf(&buf, msg, args) == -1) {
->       |             ^~~~~~~~~
->       |             vsprintf
+> v2->v3:
+>    Address comments around PPC_LI32
+> v1->v2:
+>    No change since v1
+>      
+> [v2]: https://lore.kernel.org/bpf/20260226041217.18059-1-adubey@linux.ibm.com
+> [v1]: https://lore.kernel.org/bpf/20260216155310.38457-1-adubey@linux.ibm.com
 > 
-> This is because za-fork uses nolibc which does not implement
-> vasprintf().
+>   arch/powerpc/net/bpf_jit_comp.c   |  8 ++++++-
+>   arch/powerpc/net/bpf_jit_comp32.c | 35 +++++++++++++++++++++++++++++++
+>   2 files changed, 42 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 16d15ff3145a..b2fdf8ff9c60 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -542,7 +542,13 @@ bool bpf_jit_supports_private_stack(void)
+>   
+>   bool bpf_jit_supports_fsession(void)
+>   {
+> -	return IS_ENABLED(CONFIG_PPC64);
+> +	/*
+> +	 * TODO: Remove after validating support
+> +	 * for fsession and trampoline on ppc32.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_PPC32))
+> +		return -EOPNOTSUPP;
+> +	return true;
+>   }
+>   
+>   bool bpf_jit_supports_arena(void)
+> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+> index 3087e744fb25..f3ae89e1d1d0 100644
+> --- a/arch/powerpc/net/bpf_jit_comp32.c
+> +++ b/arch/powerpc/net/bpf_jit_comp32.c
+> @@ -123,6 +123,41 @@ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+>   	}
+>   }
+>   
+> +void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
+> +						int cookie_off, int retval_off)
+> +{
+> +	/*
+> +	 * Set session cookies value
+> +	 * Clear cookies field on stack
+> +	 * Ensure retval to be cleared on fentry
+> +	 */
+> +	EMIT(PPC_RAW_LI(bpf_to_ppc(TMP_REG), 0));
+> +
+> +	for (int i = 0; i < cookie_cnt; i++) {
+> +		EMIT(PPC_RAW_STW(bpf_to_ppc(TMP_REG), _R1, cookie_off + 4 * i));
+> +		EMIT(PPC_RAW_STW(bpf_to_ppc(TMP_REG), _R1, cookie_off + 4 * i + 4));
+> +	}
+> +
+> +	EMIT(PPC_RAW_STW(bpf_to_ppc(TMP_REG), _R1, retval_off));
+> +	EMIT(PPC_RAW_STW(bpf_to_ppc(TMP_REG), _R1, retval_off + 4));
+> +}
+> +
+> +void store_func_meta(u32 *image, struct codegen_context *ctx,
+> +					u64 func_meta, int func_meta_off)
+> +{
+> +	/*
+> +	 * Store func_meta to stack: [R1 + func_meta_off] = func_meta
+> +	 * func_meta := argument count in first byte + cookie value
+> +	 */
+> +	/* Store lower word */
+> +	EMIT(PPC_RAW_LI32(bpf_to_ppc(TMP_REG), (u32)func_meta));
+> +	EMIT(PPC_RAW_STW(bpf_to_ppc(TMP_REG), _R1, func_meta_off));
+> +
+> +	/* Store upper word */
+> +	EMIT(PPC_RAW_LI32(bpf_to_ppc(TMP_REG), (u32)(func_meta >> 32)));
+> +	EMIT(PPC_RAW_STW(bpf_to_ppc(TMP_REG), _R1, func_meta_off + 4));
+> +}
+> +
+>   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>   {
+>   	int i;
 
-We can add vasprintf() to nolibc, I'll send a patch later today.
-But it will be fairly inefficient, as our malloc() implementation
-is *very* simple. Not that it would matter here.
-
-That said, I am not a fan of the new ksft_exit_fail_perror().
-What about this:
-
-#define ksft_exit_fail_perror(msg, ...)	\
-	ksft_exit_fail_msg(msg ": %s (%d)\n" __VA_OPT__(,) __VA_ARGS__, strerror(errno), errno);
-
-A similar treatment might be done to ksft_exit_fail_msg().
-
-> I need to look at why this managed to pass the build testing I do in
-> -next...
-
-
-Thomas
