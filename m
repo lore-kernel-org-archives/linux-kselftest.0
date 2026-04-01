@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD16E2FD1B3;
-	Wed,  1 Apr 2026 14:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7199F2DB7BB;
+	Wed,  1 Apr 2026 14:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775054311; cv=none; b=iALtiRL6bzNfAn0Paqs1tMNV7qti73zoaQ8Jnuva0d5InqpD1I8f90EH4pro6wFky1eX6tV93FMPCLU/VY6ipAkHJvnWlSznd70J70MHxoBSRJ4kDRox5uQYD/bPVFRuOIEKoiRHDhKXdLp2rivuk5ztDeAtOC45r6iN7FsM0Eg=
+	t=1775054391; cv=none; b=seaY7ux2iwE84kgIiasJyoSfTLcEiCRH8SzdxN0Yrv7pylxvMOnOiFqVR+U7V+7EiAcdYmYPL94bevcY4bBtjcAZ3t8Omilnjov3IjNvZ14GlUmebxNW/SKqMcXHExSPvgAaWYy7TilNA60FqKinGNT+2Me70HKG1blxzo5NkaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775054311; c=relaxed/simple;
-	bh=IYpu66gqA4awdKDYhB4MiwLR+Zk0dYRc4YHZqrv0M9Y=;
+	s=arc-20240116; t=1775054391; c=relaxed/simple;
+	bh=Bin3h0MVBuLpZNOozDl0N5IbBmgJsj/6z8avaWy2Ems=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T/LPcm5UfpzO6qJveupPBPHOsMNNbPbwaJmwF3aH4pSAyN8XohXjNaw+b85girH+M0CImyKKAlVkmryjR+zaC9QYyYWDuTUnc4fg6gfwtZHuYqbvHiVWIVKMCo1XenUFC+sXP/3HsvmLgDHaAvleGEOzWK8TJhdWOnRlin59PjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I1JeGroo; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=HQRppUfJtLwn8WtINnAO432SAzh9/gCmaAQxO8GSO0fqpbdih5dSMHi+cCdFCCZ1kvV9SbJfRN/EKGRtHnxBVFhJZs8ne+aKZ3F+IZUBW4yfuqocmLg+DhewM2cu+XIBpjQLjtGmr9mFFapbdIJO8VJ34zlhHE/IFSoM2Xd4SWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fq45RAyf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I1JeGroo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 784FBC2BCB0;
-	Wed,  1 Apr 2026 14:38:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fq45RAyf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64474C19423;
+	Wed,  1 Apr 2026 14:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775054310;
-	bh=IYpu66gqA4awdKDYhB4MiwLR+Zk0dYRc4YHZqrv0M9Y=;
+	s=k20201202; t=1775054391;
+	bh=Bin3h0MVBuLpZNOozDl0N5IbBmgJsj/6z8avaWy2Ems=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=I1JeGroo5hMIqTqxRa9QFMgft/zZ2PWbwIK+GJHof+NucF9RGKXu06QCYnxZ1izgD
-	 VbwCrk+dYOlxJQLJ7HhTThd5XmYRA9pg6KNyqX7+95qIhlwTJJ8M86rc2IxOuqjTMS
-	 KzKMutpZYR7A+bH/IliIGo1NS7jSKG/R+lOCJQA/gk64/YG7XBFSmThGeTBsoBBVJ/
-	 9rg3ENyOIFI7CMS5xIou2ziewdT8gGkHb1w7VE0BSiMN17MSCaOw4q4oskKNy5vw+o
-	 0kAj6gGT8+ghznlOpAUxMyAe2wE7zZmz+lvg99mMqQSGEnsqW9sIhedMARplbaKD1i
-	 O8nkVwtBTCcUg==
-Message-ID: <b6596c2c-94de-43f4-b30c-c9361d55e3b8@kernel.org>
-Date: Wed, 1 Apr 2026 16:38:21 +0200
+	b=Fq45RAyfqPyZhSNjubD5Vk0QTJAji108yWWmRtTHXhBeBGa6SNTNhSQfa/8ImIA5t
+	 PBbwVa0LSavhZMqUNLMp6HxVMCoN3UPaxbLk6lZn0HwvyQ2KyC95N9kTxeTLAHthg+
+	 wVfMR2v0jA4jXxMDSar8TIz74Q8xSFRAil/h3g523HQ/JC0PhJxRGKAp3/Th2ocn7V
+	 zpWDIsOR/NH4nJhehVMK1x2osOI+N4vj4skpuO0lVLF6XOdeYs08ieKPBBA0VrfWXt
+	 YGu/Ao9/N00IOwjfDwDSTGmJNn3ZB4M7VSO6153nvheEa7+3Irz6X55p3gAO/kxNb7
+	 VKjwk9lyc3CUg==
+Message-ID: <5684cab6-d5a6-4de9-9545-f8cae775d825@kernel.org>
+Date: Wed, 1 Apr 2026 16:39:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,20 +35,20 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 05/10] mm/huge_memory: remove READ_ONLY_THP_FOR_FS from
- file_thp_enabled()
-To: Matthew Wilcox <willy@infradead.org>, WANG Rui <r@hev.cc>
-Cc: ziy@nvidia.com, ljs@kernel.org, Liam.Howlett@oracle.com,
- akpm@linux-foundation.org, baohua@kernel.org, baolin.wang@linux.alibaba.com,
- brauner@kernel.org, clm@fb.com, dev.jain@arm.com, dsterba@suse.com,
- jack@suse.cz, lance.yang@linux.dev, linux-btrfs@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mhocko@suse.com,
- npache@redhat.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org,
- songliubraving@fb.com, surenb@google.com, vbabka@kernel.org,
- viro@zeniv.linux.org.uk
-References: <DDFEC0C1-3ECF-41CC-9630-A4A742F2B842@nvidia.com>
- <20260330160942.173324-1-r@hev.cc> <acqinu8H5jo3Zw7b@casper.infradead.org>
+Subject: Re: [PATCH v3 11/13] selftests/mm: fix double increment in linked
+ list cleanup in compaction_test
+To: Sayali Patil <sayalip@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
+ Oscar Salvador <osalvador@suse.de>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
+ Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
+ Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+References: <cover.1774591179.git.sayalip@linux.ibm.com>
+ <4c47a2ebbc41f90c7a0cb3f8b34106b2b64296f6.1774591179.git.sayalip@linux.ibm.com>
+ <b6d211e1-233e-4079-a8b9-6682e12077ba@linux.ibm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -95,32 +95,64 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <acqinu8H5jo3Zw7b@casper.infradead.org>
+In-Reply-To: <b6d211e1-233e-4079-a8b9-6682e12077ba@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/30/26 18:19, Matthew Wilcox wrote:
-> On Tue, Mar 31, 2026 at 12:09:42AM +0800, WANG Rui wrote:
->> Given the diversity of filesystems in use, each one requires dedicated
->> engineering effort to implement and validate large folio support, and
->> that assumes both sufficient resources and prioritization on the
->> filesystem side. Even after support lands, coverage across different
->> base page sizes and configurations may take additional time to mature.
->>
->> What I am really concerned about is the transition period: if filesystem
->> support is not yet broadly ready, while we have already removed the
->> fallback path, we may end up in a situation where PMD-sized mappings
->> become effectively unavailable on many systems for some time.
->>
->> This is not about the long-term direction, but about the timing and
->> practical readiness.
+On 4/1/26 16:32, Sayali Patil wrote:
 > 
-> If we leave this fallback in place, we'll never get filesystems to move
-> forward.  It's time to rip off this bandaid; they've got eight months
-> before the next stable kernel.
+> On 27/03/26 12:46, Sayali Patil wrote:
+>> The cleanup loop of allocated memory currently uses:
+>>
+>>      for (entry = list; entry != NULL; entry = entry->next) {
+>>          munmap(entry->map, MAP_SIZE);
+>>          if (!entry->next)
+>>              break;
+>>          entry = entry->next;
+>>      }
+>>
+>> The inner entry = entry->next causes the loop to skip every
+>> other node, resulting in only half of the mapped regions being
+>> unmapped.
+>>
+>> Remove the redundant increment to ensure every entry is visited
+>> and unmapped during cleanup.
+>>
+>> Fixes: bd67d5c15cc1 ("Test compaction of mlocked memory")
+>> Reviewed-by: Zi Yan <ziy@nvidia.com>
+>> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+>> ---
+>>   tools/testing/selftests/mm/compaction_test.c | 3 ---
+>>   1 file changed, 3 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/
+>> testing/selftests/mm/compaction_test.c
+>> index 30209c40b697..f73930706bd0 100644
+>> --- a/tools/testing/selftests/mm/compaction_test.c
+>> +++ b/tools/testing/selftests/mm/compaction_test.c
+>> @@ -263,9 +263,6 @@ int main(int argc, char **argv)
+>>         for (entry = list; entry != NULL; entry = entry->next) {
+>>           munmap(entry->map, MAP_SIZE);
+>> -        if (!entry->next)
+>> -            break;
+>> -        entry = entry->next;
+>>       }
+>>         if (check_compaction(mem_free, hugepage_size,
+> 
+> Sorry, this change is not valid.
+> 
+> The goal of this test is to verify the kernel’s ability to compact
+> unevictable (MAP_LOCKED) pages. The loop is intentionally written to
+> unmap every other chunk, thereby creating fragmentation with locked pages
+> before check_compaction() is invoked.
+> 
+> With the proposed change (removing the double increment), the loop ends up
+> unmapping all allocated locked pages instead of leaving a fragmented
+> pattern. This results in memory being effectively unfragmented.
 
-I guess if we don't force them to work on it I guess this will never
-happen. They shouldn't be holding our THP hacks we want to remove hostage.
+Ahhh, we should really make that clearer in a comment. I missed it myself :(
 
 -- 
 Cheers,
