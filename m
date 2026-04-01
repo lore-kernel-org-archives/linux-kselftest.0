@@ -1,113 +1,127 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7800F1A680C
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 00:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAACA40DFD5
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 00:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775001622; cv=none; b=PtKL4YHnyI8bZT4+4uW1VulNGzP8uWljSieojcQkw826AdbxZoTyimzLk/xgHMYN8mFXiwyvIFUj4GA4BuYULTzZ6up7lrtjvBWdulncH2fjv+ZMgPIpankDvY4K7u+rv2E+xjjQzuFUm1MxiGpBgK5yDA14rIP122lQQtI0Asc=
+	t=1775003307; cv=none; b=R+pQEWScJ4fxtNd+DuPaQFaCgcAqCtTM4qPC2oiauMviuLFn43rVLnf1Vjj1+AYgm+MwnDOMqxTNbyw6de6GtLVT8P09E4fQfFpwS/YtLX4u19/pt3AKUoCWOOFUFLE9mMWUU0GBThj95G6DuJlG3SpvELk+EcU9DFhy8lzMgoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775001622; c=relaxed/simple;
-	bh=6QqvLzfD3TWdX+qJ8LK3qe7rjEasacBys3QoxoGWt80=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=a77i4fdaYZW/oAe08qWqXO8heC+dD01oftpU63IkASsaiSXHSz+r0wgRieBB0ON53pLzGOA2Vzq3D2d7Qy7IEuOJO+FBJREtoNbGDDerIO6iRO3CwB1ARn7IGQU2wJjRLQJz7KEKg0Q/pCI+s8OligAxfQVW3uRseqBgyHmBD/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cU/qMJoa; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1775003307; c=relaxed/simple;
+	bh=Wl9nT3Slu0gQkDLZ2qg4Yy+5qnZ3izUvhAj0Tp1r6So=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KmW/ZQ3p10Pogl2mg2uauGSXPOXBzFmRo5tWCDiggVAxy+d+4jSLfIBvtuJl+mqqw9bfcTVKtzi1v4Kqp5l6/ez2nxEN81eux5PYQ+0NAF5vnqgf0WcFlVMomi4/RnzaSGF054QMyulGUzCM82GykVWQ4mT8/8jDXpQfCfdM/QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com; spf=pass smtp.mailfrom=amutable.com; dkim=pass (2048-bit key) header.d=amutable-com.20230601.gappssmtp.com header.i=@amutable-com.20230601.gappssmtp.com header.b=c3lRmXQw; arc=none smtp.client-ip=209.85.216.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cU/qMJoa"
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7d9c98e437cso5220006a34.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 17:00:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amutable-com.20230601.gappssmtp.com header.i=@amutable-com.20230601.gappssmtp.com header.b="c3lRmXQw"
+Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-3585ec417f6so148816a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 17:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1775001620; x=1775606420; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UvZzRjhIJ24B8/MDQ+5FBw9nmKdExc+6X6xQmVNVp/E=;
-        b=cU/qMJoaBSw35D56JZvsbpqDDtcEDkzfeOF1g06j50dT3ApCiH+GP8yQ+GCdbehxnU
-         CeSWGPoXBb1FEamaR+cOwyb9w/EAAtSwQYzVGx0LuW95X1BiExk/UwNlDgDkO5Eb12iP
-         q/5c57nj5DJnj78z09kk0oPt/e8bU01pYdGYY=
+        d=amutable-com.20230601.gappssmtp.com; s=20230601; t=1775003304; x=1775608104; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xPpyfxqvRvwQENUgIjXbp0AKupBdomDsmgEJ79biurs=;
+        b=c3lRmXQwowsp5C3+U3taIdpzj1o+D5RYzWUXN7frq5C/4pbdv4n1k3nOTpx8/xkN98
+         nfEPxeNuKI8D1RfivBTD2VqbPuF9PSeN4RUc7dOEVtAKWmCoY/Bv1LpJmuKPXf9JaNUf
+         ZXb+ByTcQLsHX9Dsl0eq7ZEaG3WbbTwtisxBPFdiWOxkgck1v5rSieHASjZWk/kd/XgH
+         3wLjjb1TEKlo/lrBZygCzNJimj69ByEb+aNLgP9IuKVqOwHbAa0VK/nyTi40GSMblc63
+         PS4ZfC9P8pyEiyV1EntcYy3vGsUpsSzJ2pVmbdkv2gB6xwU+yiDbAcf2drnBsioYGmYq
+         K0GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775001620; x=1775606420;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UvZzRjhIJ24B8/MDQ+5FBw9nmKdExc+6X6xQmVNVp/E=;
-        b=nFGKcvgEq5xe/nv9okDo6e/WD1foc9xuXBVQCTIbrkIAzxFNz1kbYM+VfKcxW0kh1/
-         Yw+qJ6WAzg/vGohsth3blVdMM71I2XAYfFDmvKafg48FqjdY/H/gkOu0L81eLXu1xBVe
-         iE3N59nAo/agbw+DFFGpcYkxnjnuxkpq4RqGSWBdDjXlBm0fZ9B/c80yUa1WMuiIFkMq
-         jiIie05T7P6S+0sarBye0FlYyk6G0LkI+u6fmmwrDopZ+sV6AaRC+6E44t3tLMY6jsyo
-         q62qhgnaCgryvp6ajSzdr+3RnAxMlBBgXivx1OFOgjsq9LvjOIEgyBTg8dOK4fnlvDjz
-         xogw==
-X-Forwarded-Encrypted: i=1; AJvYcCUGeUU01wyIn6jY+Rkrsrf9JxXTIpTtiMsFTIQrgxTAGU4eHh+RsUalbBTonIFVBNiAkpA0SA/exk+4uNo32Vs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC4mNo0PNSHdorBoJAlmnJd4v9YlZCxYdJYgGsV/E+KlNahONB
-	Aw7BUQwMGuYN5wrgWdw/5ZKBeQijIUWls8WyrF/vQxxlQD1t29tpXto1BphvFbea4katPWXyl9s
-	5mnXeeVg=
-X-Gm-Gg: ATEYQzwc0H1t3o6FB0D3gATMZoHCMX+BsySO/tKNc0CqCerWRoYDMC87MC1Fw+g6eCT
-	fVnKZPR3o+0LLQIgdYzRZVvGj/QnyVJzei82ogAy6SURHW8QrQD5nIC4BMFvw/6rjkhcICzdzPW
-	nfKA+30Mt+w/+FJaDpMhOa+XypJqg/BnVbaguZqoIgqlTUQul1mcDTL2ec+9nnhOgoaA/20xUrP
-	/gnNTSj2zw2cZq77h2rGYYMJd6bB44Dxy2Ce3Gc07/HH9payQ2MQgvZkulE1R+DiMbRoARTeHfk
-	yCvCaSk3ESqM8M0AyKALDzTR6MpxLUDiMOfMbvD1x5Y+ItWZHr9/5FqTGkNMb+0U01tXPYA27vT
-	o16N0UxkWFT37bgQdt/TZWuPsnYfKP6mdzuJUBU9+w+Ff5Po/NcYh7OMCtKkKR48x1GBFZhuVBM
-	R9JSA3Ql9xT5NqccY1uMF6I8pxI4STx08TXpg=
-X-Received: by 2002:a05:6830:6690:b0:7d9:b0d2:dabf with SMTP id 46e09a7af769-7db99393681mr1064455a34.22.1775001620178;
-        Tue, 31 Mar 2026 17:00:20 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7da0a336353sm9308937a34.2.2026.03.31.17.00.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 17:00:19 -0700 (PDT)
-Message-ID: <c88cc374-4c06-4567-823f-74dcb92ab90a@linuxfoundation.org>
-Date: Tue, 31 Mar 2026 18:00:18 -0600
+        d=1e100.net; s=20251104; t=1775003304; x=1775608104;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xPpyfxqvRvwQENUgIjXbp0AKupBdomDsmgEJ79biurs=;
+        b=bdFgkYJp9FGvc/S8ByhBUAzBh6k12DkIIJrTZfDx5wG0MCkKG4Z3WO3nd0syQ8hV3J
+         a2tseAn/gcglssqPSwegsu5vmCY8j9OjiiAdTgXagfC5gnVBClQNiOfcWYI8Z0L96Ned
+         pgoS18j03xZLlOpU1ETMdnvtk4fVl+8VdHZrKpKgwcgtRagbVevULaKfSDcvuwbBZjuf
+         7Fb2gJa/H+PIWj1AWWRisbyQ0sWTQijI72FydXSS4dJNH8sGoruQvQq2Wnpv9u5KTZUW
+         nSr/VVPqM6JorYyc9oSJl4/AWaIMpGWBStqKFZvQi6pznPC5e4hUfh0u3VJQdDUVN8iW
+         DS+A==
+X-Forwarded-Encrypted: i=1; AJvYcCX+OYu5DiF37Vzj9224hDmF/XGTLxYUIfGI55utl9d+jDUMJJaXHRi3bYdhSRV5dA29Dz7qkOIOKZwb+4wCB1w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbF/xkiCOSDF2MqH3EsRQqYjVGm00ZqbWXCqFxHVn2Yr3BATzp
+	IjUCE/yi2TxvnZX+u3W9mxk2uXzk6zcPIqhvx214aDIwe46Kwi0UlR2dZjblEAjUuK/8
+X-Gm-Gg: ATEYQzyCZJmkCL3cjJW0VF4Ml2SxgGolI1rdW6s2iHjN7pas2/2Ye/Ib8AONz92XXt+
+	bb/R2ZOmcc2t8pq0nCP4OZOSj+SBiHL3+5ZD1tcaDfQu6AT6JCyugefJ3C71f6Np15BQDv8kKVG
+	kF3vPIcNW6ID0qCUTqCmPy+5PUn9A0zsW6cqczorb8mpR1elXO9bAkAoGCb4BV/dr19Zka8ArT6
+	Z0ApFoU+vljwjtb4dqLwCkMdunD1vepgb1rWTWVIIn6eu1FJG8GzpmFOTzwxo0LHABPjgOPjGY5
+	4eLc4i8MEfcGsEZXfgEcXoGDNAK6TTBUR2S5b6MloEFufMymT9NY7KQfi4CTNtgoPYF0TygT8o8
+	ugid8yopeqBmhpR/NPcRW0i1MsCvrK7uL2rtXcMWdVj2mDuvbZ3K0Tb+hj6ntKbfEavxkV+JOVp
+	W6mp+R72tIm/4weGbKyiV09rPw/UlOVdO+4Po9gLgOsluwFLA/rSB0B8hSXguEqTVX78dTg6Uv0
+	qAmc7BwnmSI4qFn6h+LOblxFg==
+X-Received: by 2002:a17:902:e947:b0:2b0:be79:e521 with SMTP id d9443c01a7336-2b25efa95bamr46558825ad.26.1775003304156;
+        Tue, 31 Mar 2026 17:28:24 -0700 (PDT)
+Received: from thesius.dot.cyphar.com (2403-5809-a2fc-2-a90-9fd7-aedd-d405.ip6.aussiebb.net. [2403:5809:a2fc:2:a90:9fd7:aedd:d405])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24264264fsm157057825ad.2.2026.03.31.17.28.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 17:28:23 -0700 (PDT)
+From: Aleksa Sarai <aleksa@amutable.com>
+Subject: [PATCH v2 0/4] selftests: openat2: migrate to kselftest harness
+Date: Wed, 01 Apr 2026 11:28:01 +1100
+Message-Id: <20260401-openat2-selftests-kunit-v2-0-ad153a07da0c@amutable.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: tools/testing/selftests
-To: Andrew Morton <akpm@linux-foundation.org>, linux-kbuild@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
-Content-Language: en-US
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260327143234.40bb8a0119bd55670ddfeec6@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJFmzGkC/3WNwQ6CMBAFf4X07Jq2CIgn/8NwqGUrG6ElbSEa0
+ n+34tnjTPLmbSygJwzsUmzM40qBnM0gDwXTg7IPBOozM8llzUvRgJvRqigh4GgihhjguViKULd
+ lq4wsEWXD8nr2aOi1l29d5oFCdP69H63ia3/NExd/m6sADtVZtErXWvWmuqppieo+4lG7iXUpp
+ Q8AcjDEwQAAAA==
+X-Change-ID: 20260317-openat2-selftests-kunit-6939af23ee27
+To: Shuah Khan <shuah@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Aleksa Sarai <cyphar@cyphar.com>, Aleksa Sarai <aleksa@amutable.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1559; i=aleksa@amutable.com;
+ h=from:subject:message-id; bh=Wl9nT3Slu0gQkDLZ2qg4Yy+5qnZ3izUvhAj0Tp1r6So=;
+ b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMWSeSVscKSFd4d/nMUn75/fVk87onTC3blpWJMW3ot/AP
+ DrLU9qvYyILgxgXg6WYIss2P8/QTfMXX0n+tJINZg4rE8gQaZEGBgYGBhYGvtzEvFIjHSM9U21D
+ PUMjHSMdIwYuTgGY6m93GRm+Z148efecwTmuwjIm/46IJqtr4npCVwquTpQUTZ8VHrSY4Z/VqcM
+ Hnvz4K7iSaUMt12zh2XH/C71jwrYFiEpcW8J4sYYBAA==
+X-Developer-Key: i=aleksa@amutable.com; a=openpgp;
+ fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
 
-On 3/27/26 15:32, Andrew Morton wrote:
-> 
-> whinges, perrmanits, maybe I'm doing it wrong, etc.
-> 
-> a)
-> 
-> At the top-level, neither `make mrproper' nor `make clean' remove the
-> executables from tools/testing/selftests/mm/.  Seems wrong?
+These tests were written in the early days of selftests' TAP support,
+the more modern kselftest harness is much easier to follow and maintain.
+The actual contents of the tests are unchanged by this change.
 
-make kselftest-all from top level builds the tests
-make kselftest builds and runs the default tests.
-make kselftest-clean from top level does this.
+Signed-off-by: Aleksa Sarai <aleksa@amutable.com>
+---
+Changes in v2:
+- move openat2 tests to selftests/filesystems [Christian]
+- v1: <https://lore.kernel.org/r/20260401-openat2-selftests-kunit-v1-0-5819ac6cadf5@amutable.com>
 
-Also you can run,
+---
+Aleksa Sarai (4):
+      selftests: move openat2 tests to selftests/filesystems/
+      selftests: openat2: move helpers to header
+      selftests: openat2: switch from custom ARRAY_LEN to ARRAY_SIZE
+      selftests: openat2: migrate to kselftest harness
 
-make -C tools/testing/selftests/mm clean
+ .../selftests/{ => filesystems}/openat2/.gitignore |   0
+ .../selftests/{ => filesystems}/openat2/Makefile   |   5 +-
+ .../selftests/filesystems/openat2/helpers.h        | 168 ++++++++++
+ .../{ => filesystems}/openat2/openat2_test.c       | 223 ++++++-------
+ .../filesystems/openat2/rename_attack_test.c       | 159 +++++++++
+ .../{ => filesystems}/openat2/resolve_test.c       | 368 ++++++++++++---------
+ tools/testing/selftests/openat2/helpers.c          | 109 ------
+ tools/testing/selftests/openat2/helpers.h          | 108 ------
+ .../testing/selftests/openat2/rename_attack_test.c | 160 ---------
+ 9 files changed, 631 insertions(+), 669 deletions(-)
+---
+base-commit: 84f524dca4b8bc9e9aca8ea1dbbd2aa3a239d998
+change-id: 20260317-openat2-selftests-kunit-6939af23ee27
 
-As for mrproper support, I just applied a patch that adds kselftest
-test to mrproper cleanup to linux kelftest next.
 
-> 
-> b)
-> 
-> Shouldn't I be able to run
-> 
-> 	make selftests
+Kind regards,
+-- 
+Aleksa Sarai
+https://www.cyphar.com/
 
-make kselftest is the one that does that.
-
-Documentation/dev-tools/kselftest.rst documents different ways to
-run the tests.
-
-thanks,
--- Shuah
