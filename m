@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238222E266C;
-	Wed,  1 Apr 2026 14:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9A32DEA64;
+	Wed,  1 Apr 2026 14:08:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775052419; cv=none; b=Iyqxdm+cU1KMug0vwV+mFF7oWVtOBpwLh6w8YZzPwD78X2he2vYSqmkCxKZqnGaasKlf2ssrfn+KeOiw0ODHGKWVkvTHhtXdqBG4W13NzaIZqAiaH/b/w/Dph9aC9zK+rE8vBcmzzY3T/phofk/W0o8SeIhm60GS9xkXbtPqc6o=
+	t=1775052486; cv=none; b=GuzY8cLrBnu0r32a63XgaXnU96KS1kt5BsnhX4kRBP1Up0JmOgUnmeZT9g/aTPpI78THJ5VchWnApLeud8bNLD7XoigXnYVSoNG430zSkdKHDcrvSEylipWjOhwwxsyYDgMLIEpdCAe4FeBI2iDn4K6i34Abf7dQ/HP7Ptj9tzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775052419; c=relaxed/simple;
-	bh=GCQU01a5ZNsuOCEJYuG5sSvpFncIhytdteUSQSLtuig=;
+	s=arc-20240116; t=1775052486; c=relaxed/simple;
+	bh=bVa8O4fwTG1tjCVclLBS4//gcP3cU/KztS+qU9zJiIU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D3FbbDSaGcaNlk9Gk0uyj/yfRo0HFj/SRAqHL5QqxPIu9C3cjGJjksLP6aWgmWUDoKUdknA0QUJIway0PIuk36Ud6iG+ZfcP6LIk+H5A3moM0ktPNJEZ1moz9VA6ZkrlIM+BYugfeWwMRsZEYu8gWfwrZWopIFnZPTF32ZZMWvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U61ulmMY; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=Jv4NK9Vu21rZ4Lj0TNWGoCdsLksmwGGRSm9SQKGKt3gdbiX1qwCpF/wRleXj/+PAmUhlsgkDw1RDhGqHHYJYPkEWVXq3rqyGG6zY/cPi9MhAjAXuQFhbiY0oaX+e8Gn18UoK+4fXEeewJH9nERA1gFSHz0pqS0EYX1SiRTVXV4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J76Ug42E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U61ulmMY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5E5FC4CEF7;
-	Wed,  1 Apr 2026 14:06:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J76Ug42E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7361FC4CEF7;
+	Wed,  1 Apr 2026 14:08:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775052418;
-	bh=GCQU01a5ZNsuOCEJYuG5sSvpFncIhytdteUSQSLtuig=;
+	s=k20201202; t=1775052485;
+	bh=bVa8O4fwTG1tjCVclLBS4//gcP3cU/KztS+qU9zJiIU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U61ulmMYXO/Yxw0dI+GfTeGBv3vu/sR2an67Crxc3iRUCR8cQLH+y1P0zuQot2jbJ
-	 71RWDV9K+xygQo5j2djepYA2QGko7NLMwLUaCOiBzpbJKOdz9tcaZdq75lQO1/BRqo
-	 tsuVxCIwA748CsNNZZPWkZqi/Zxs88VP5BABlslc+UpF5wbqSDH4adQNPfNPgUyqCi
-	 2dUVJH8d4shCVNmVeGYRDOYtAQudo+Z5b4EBMzedTMoTphcqByUw7S/O1JUpMAbG19
-	 OpsW9K4XJBhdosrhTJCKhB6bA15+agZ/07fGKRvbkVDAFqux4pahx7Uk7MXV8/J0Hm
-	 N2x+Lo1QPCj4A==
-Message-ID: <fcead016-04a2-46f7-b667-c8feeaec9a13@kernel.org>
-Date: Wed, 1 Apr 2026 16:06:52 +0200
+	b=J76Ug42E+fQObk7s9g8QR0SUmtCwVlz3vosaqR92/k9ma26Whbo+9/s7UKl/KV6QN
+	 iAmWdjQAmjwejHm4+4BD4x2j2hiWa8mxr+GnywY/itHAigaanX4Ps/zJdLwZEaA54O
+	 dDnZarHpco6Ua9OAj7i3OXebtVUd4jCvbMKZjtTx1y2HgBY3k6pl1e8rgbJ6xtkSyT
+	 B3JHJ/b/e1XEx9q9oh0zi3ESYg13hZ3ZH5W6prmZV+gpBsZl2B7DKLoCWXFO3JXKfG
+	 MG+3eWARiCMWThrcEVv1W30SVPkgQg8w8hFnFMVPCbsZXfgPeAjn4NgPcuGk5A3+lj
+	 fMa7I6BGXFMLQ==
+Message-ID: <7dadb91c-745d-4fde-8a2b-c141b26823a7@kernel.org>
+Date: Wed, 1 Apr 2026 16:08:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/13] selftests/mm: fix hugetlb pathname construction
- in hugetlb_reparenting_test.sh
+Subject: Re: [PATCH v3 04/13] selftest/mm: fix cgroup task placement and drop
+ memory.current checks in hugetlb_reparenting_test.sh
 To: Sayali Patil <sayalip@linux.ibm.com>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -44,10 +44,9 @@ To: Sayali Patil <sayalip@linux.ibm.com>,
 Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
  Oscar Salvador <osalvador@suse.de>,
  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
- Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+ Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org
 References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <05459b5038595a3a673507e707402839cdcc2955.1774591179.git.sayalip@linux.ibm.com>
+ <1ac1cac332a692e8d2dd70922bb09c0582340143.1774591179.git.sayalip@linux.ibm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -94,34 +93,22 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <05459b5038595a3a673507e707402839cdcc2955.1774591179.git.sayalip@linux.ibm.com>
+In-Reply-To: <1ac1cac332a692e8d2dd70922bb09c0582340143.1774591179.git.sayalip@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 3/27/26 08:15, Sayali Patil wrote:
-> The hugetlb_reparenting_test.sh script constructs hugetlb cgroup
-> memory interface file names based on the configured huge page size. The
-> script formats the size only in MB units, which causes mismatches on
-> systems using larger huge pages where the kernel exposes normalized
-> units (e.g. "1GB" instead of "1024MB").
+> Launch write_to_hugetlbfs as a separate process and move only its PID
+> into the target cgroup before waiting for completion. This avoids moving
+> the test shell itself, prevents unintended charging to the shell, and
+> ensures hugetlb and memcg accounting is attributed only to the intended
+> workload.
 > 
-> As a result, the test fails to locate the corresponding cgroup files
-> when 1GB huge pages are configured.
-> 
-> Update the script to detect the huge page size and select the
-> appropriate unit (MB or GB) so that the constructed paths match the
-> kernel's hugetlb controller naming.
-> 
-> Also print an explicit "Fail" message when a test failure occurs to
-> improve result visibility.
-> 
-> Fixes: e487a5d513cb ("selftest/mm: make hugetlb_reparenting_test tolerant to async reparenting")
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> ---
+> Add a short delay before the hugetlb allocation to avoid a race where
+> memory may be charged before the task migration takes effect, which
+> can lead to incorrect accounting and intermittent test failures.
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Isn't there still a chance for a race, for example, when running in a VM?
 
 -- 
 Cheers,
