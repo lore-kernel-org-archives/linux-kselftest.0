@@ -1,111 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C1A3FD155;
-	Wed,  1 Apr 2026 11:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582C6377009
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 11:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775041397; cv=none; b=jNufSywmjei7P72FuMhiO2KyRWo9/H2FoOzyyi31bozJcbKl0WJ/ca+p1F74ugPBXJnDITM3dJzUSCh+GJL+1Q6nlfHVND+iEg4VJE2Jw+lX4T6s8AzAargdtY+hUZ/XYJjCe28SV6o+SwOzDfhE7va7ZAt504tkayfADkIbOps=
+	t=1775041548; cv=none; b=JUG0CMxpMYSgs5RLRLs/yr5YMQap4c19ZT5wszKkFt3GHmVGnCJ/1zkhsJUWHdZVWr+Q9jap93aBWT8aLhKngbCJYDdOFpV2kQChlZL8z4nIfh1vSP9LaruHqYoBD/M0EJnQlKJEg7u4QDG94n4iVAATQvrWWNsKEJT6CubMrj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775041397; c=relaxed/simple;
-	bh=RH/XYoy0u1GXxuioMWBp+5tj4HkPtd9OVS7rZ8jnj3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cw3Xifjk8pr2FgncjsTt1stpjqOgWUeaDNog+mR6Y3UTi/SSuLKvyZaWK7v4i2mJLLfHe85Z3TjuD2CiZXC88ntwtN12aNYtDp5r9eBiTjAcyQvG8e8W80iG/9AeeHQ0PE4x6K+LEfWoHGgkqaYH2ubhtVhEX6y6zE97jtQExfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aL0b4Yew; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775041548; c=relaxed/simple;
+	bh=QX6YcIS8aDtWOlo3nRiP3ADhmeIP9kM1kSmfsZ36zGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DQUD686THmmQPKgB/d6ioUHvvOC9yhCx0dP4bOqTHvCAQSo9pDGH1Lfzg4Lc1E+Pqn2NnRQvOtqAI8qZsaVbKQRMNpE9Wkbe+Hee0rGAlTA1g2eDeKiMWYRIQ/RzRSiXh0pYPy9Cx7JNLPXb1VhzzBn7b2udFrJbWe7KAFqRYUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nWUFtDZ0; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aL0b4Yew"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503AEC2BC9E;
-	Wed,  1 Apr 2026 11:03:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775041396;
-	bh=RH/XYoy0u1GXxuioMWBp+5tj4HkPtd9OVS7rZ8jnj3o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aL0b4YewS9hzxKIWWcxGghBZ3HN/cCZSjanrVtgvlJnUT97WpPDMbDKAHUq+C0NXs
-	 g+ZioF+/oNv5M4DuW4ATayCcgkynj3WLHv8UBeNdhzBxM7x4F7Ie/0avlygPhWhPfZ
-	 IYIowM15pgSBEFAjHjp37HOhMGdpPuOWEdvALeM4QGttnedLuBvMbF6om9+6RIAaWp
-	 aZ4BsckZdUURf/oE1Tqg57dEFEczBoA6wUwVvJa30XjAzXhojNz+2MHORCYlSpXlFw
-	 oAwTrTNGRq14AEuKy4I3DbhJd5Gbo59PwXm2+UJsRgooPh9jkTMyhHlteRdLbzPPyo
-	 oLdnFyv6xgRmA==
-Date: Wed, 1 Apr 2026 12:03:09 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Chunyu Hu <chuhu@redhat.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
-	linux-mm@kvack.org, ljs@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
-	surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com, npache@redhat.com,
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
-	lance.yang@linux.dev,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Willy Tarreau <w@1wt.eu>
-Subject: Re: [PATCH v7 4/7] selftests: ksft_exit_fail_perror: support printf
- style arguments
-Message-ID: <efbad6c5-8d5e-4774-8d0a-d455e6e2c182@sirena.org.uk>
-References: <20260330151503.670415-1-chuhu@redhat.com>
- <20260330151503.670415-5-chuhu@redhat.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nWUFtDZ0"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775041533;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=awnZxp/u7WMTZ1nHWIvAJbHaDUNgRFNmp2rxXHzr9ZM=;
+	b=nWUFtDZ0inpwwANY7t9NH3zzcZy082lPqJffG3i4D0YFe9DbO9YIPUMKrg4pW4Z4hEeCZq
+	u5goBt3tcq08TrKgsu9+juK5EM2T62h6eqOPTIG+Cre0y8YQbbVLac3KJRqQuTEbbVs844
+	uJ7iMq0zmop90zZTldYOXaDLT8lf3fQ=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v5 0/2] bpf: tcp: Fix null-ptr-deref in arbitrary SYN Cookie
+Date: Wed,  1 Apr 2026 19:04:48 +0800
+Message-ID: <20260401110511.73355-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xo4ND846i3VDr5Tk"
-Content-Disposition: inline
-In-Reply-To: <20260330151503.670415-5-chuhu@redhat.com>
-X-Cookie: You will be divorced within a year.
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
+
+bpf_sk_assign_tcp_reqsk() does not validate the L4 protocol of the skb,
+only checking skb->protocol (L3). A BPF program that calls this kfunc on
+a non-TCP skb (e.g. UDP) will succeed, attaching a TCP reqsk to the skb.
+
+When the skb enters the UDP receive path, skb_steal_sock() returns the
+TCP listener socket from the reqsk. The UDP code then casts this TCP
+socket to udp_sock and accesses UDP-specific fields at invalid offsets,
+causing a null pointer dereference:
+
+  BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
+  Read of size 4 at addr 0000000000000008 by task test_progs/537
+
+  CPU: 1 UID: 0 PID: 537 Comm: test_progs Not tainted 7.0.0-rc4+ #46 PREEMPT
+  Call Trace:
+   <IRQ>
+   dump_stack_lvl (lib/dump_stack.c:123)
+   print_report (mm/kasan/report.c:487)
+   kasan_report (mm/kasan/report.c:597)
+   __kasan_check_read (mm/kasan/shadow.c:32)
+   __udp_enqueue_schedule_skb (net/ipv4/udp.c:1719)
+   udp_queue_rcv_one_skb (net/ipv4/udp.c:2370 net/ipv4/udp.c:2500)
+   udp_queue_rcv_skb (net/ipv4/udp.c:2532)
+   udp_unicast_rcv_skb (net/ipv4/udp.c:2684)
+   __udp4_lib_rcv (net/ipv4/udp.c:2742)
+   udp_rcv (net/ipv4/udp.c:2937)
+   ip_protocol_deliver_rcu (net/ipv4/ip_input.c:209)
+   ip_local_deliver_finish (./include/linux/rcupdate.h:879 net/ipv4/ip_input.c:242)
+   ip_local_deliver (net/ipv4/ip_input.c:265)
+   __netif_receive_skb_one_core (net/core/dev.c:6164 (discriminator 4))
+   __netif_receive_skb (net/core/dev.c:6280)
+
+Solution
+
+Patch 1: Add L4 protocol validation in bpf_sk_assign_tcp_reqsk(). Check
+ip_hdr(skb)->protocol (IPv4) and ipv6_hdr(skb)->nexthdr (IPv6) against
+IPPROTO_TCP, returning -EINVAL for non-TCP skbs.
+Patch 2: Add selftest that calls bpf_sk_assign_tcp_reqsk() on a UDP skb
+and verifies the kfunc rejects it.
 
 
---xo4ND846i3VDr5Tk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+---
+v1: https://lore.kernel.org/bpf/20260323105510.51990-1-jiayuan.chen@linux.dev/
+v2: https://lore.kernel.org/bpf/20260326062657.88446-1-jiayuan.chen@linux.dev/
+v3: https://lore.kernel.org/bpf/20260327133915.286037-1-jiayuan.chen@linux.dev/
+v4: https://lore.kernel.org/bpf/20260330080746.319680-1-jiayuan.chen@linux.dev/
 
-On Mon, Mar 30, 2026 at 11:15:00PM +0800, Chunyu Hu wrote:
+Changes in v5:
+- Add pskb_may_pull before accessing IP/IPv6 headers in kfunc
+- Use buf[] instead of buf[32], verify recv data with ASSERT_STREQ
+- Remove unnecessary variable initializations in selftest and BPF
 
-> The ksft_exit_fail_perror function previously only accepted a single stri=
-ng
-> argument, which limited its flexibility for providing specific context to
-> failure messages.
+Changes in v4:
+- Check if assign_ret is EINVAL instead of checking if it is 0
 
-> This change updates ksft_exit_fail_perror to support variable arguments,
-> similar to ksft_exit_fail_msg.  Adding the __printf(1, 2) attribute enabl=
-es
-> compile-time checking for format string correctness.
+Changes in v3:
+- Add IPv6 test coverage, reuse test_cases[] to iterate over both
+  address families
+- Share TCP/UDP port to simplify BPF program, remove unnecessary
+  global variables
+- Use connect_to_fd() + send()/recv() instead of manual sockaddr
+  construction
+- Suggested by Kuniyuki Iwashima
 
-This is causing build regressions on the arm64 selftests:
+Changes in v2:
+- Add Reviewed-by tag from Kuniyuki Iwashima for patch 1
+- Use UDP socket recv() instead of kern_sync_rcu() for synchronization
+  in selftest
 
-/arm64/fp/za-fork-asm.o -o /build/stage/build-work/kselftest/arm64/fp/za-fo=
-rk
-In file included from za-fork.c:12:
-=2E./../kselftest.h: In function =E2=80=98ksft_exit_fail_perror=E2=80=99:
-=2E./../kselftest.h:427:13: error: implicit declaration of function =E2=80=
-=98vasprintf=E2=80=99; d
-id you mean =E2=80=98vsprintf=E2=80=99? [-Wimplicit-function-declaration]
-  427 |         if (vasprintf(&buf, msg, args) =3D=3D -1) {
-      |             ^~~~~~~~~
-      |             vsprintf
+Jiayuan Chen (2):
+  bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
+  selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
 
-This is because za-fork uses nolibc which does not implement
-vasprintf().
+ net/core/filter.c                             |  12 ++
+ .../bpf/prog_tests/tcp_custom_syncookie.c     |  93 ++++++++++++++-
+ .../bpf/progs/test_tcp_custom_syncookie.c     | 109 ++++++++++++++++++
+ 3 files changed, 210 insertions(+), 4 deletions(-)
 
-I need to look at why this managed to pass the build testing I do in
--next...
+-- 
+2.43.0
 
---xo4ND846i3VDr5Tk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnM+2wACgkQJNaLcl1U
-h9DE3gf8CyPPY0cS+fjVRrHslaPRCSHlXcW6VZnznjdKtRRFlBifghOePoiIZseN
-By2f9+ZvZfElAWGMr2QgC+2AUkCgAzFJDJsjQNgxqy8yScuJ4zrp+qa49YUFVwiP
-cgd8uDlzCskr9Uaqoo7dRegP7st74Kr2ZPVtGi+yaOh/aDZ9CD9L7pHG3cU2Olcd
-lmRbjWNYIa7k471RVQTxC8FPWj2X0kY6X8DCB44BeqkWKnw1XgFZF8Y7HlboK5VM
-RIS+ggqHuTJ3zOJiGmAalwCcNL9Pdj83axrLHW2EX2x1EEaVxV9spK1cdVDA8J6x
-P2wbQfL9yT2Awy/9KJDfVxAfeQTuIA==
-=Z1lx
------END PGP SIGNATURE-----
-
---xo4ND846i3VDr5Tk--
