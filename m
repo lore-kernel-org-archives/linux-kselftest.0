@@ -1,163 +1,330 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED7D3B27C4
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 09:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD113390C81;
+	Wed,  1 Apr 2026 10:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775036683; cv=none; b=Xc6p3HL/pDSyPItsDqESHa93YmtBkUDIod1PS3Gt0YCx9Bmj9xGi4dkm9S9m7/IZULRNLv5rNTMcwnotS/A9St6spyC3HSFfi8vsU69WVBNLGgjN0C8Cg4/VjipQaTdS8GCAIkbq4WSqQg2uDSwgs1Qb/KK6B86/zz5xptN0vrM=
+	t=1775038310; cv=none; b=QQcJRaeUMQNEBOb6FkHEMfM/S6iuTdbpO1u7wttlmVtcsKzVB+rgncDsq6WVA6+Jvf5dJyPUClfw+FR3XgLWj45+Yv7svetHM+gsfjG8kZqOWJXz1EeUmu9RwWTRGxyhJUGHEkY6FS/Ipy3lfOg2PREiRjW3g0GSkYBw9NG1uJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775036683; c=relaxed/simple;
-	bh=FoWgwIPII31w9IloJ01wrIjQh4siWeW3ph18YCi9JGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YgW0s+/uMbkUpOfRma4CkpvJM9kE4wBMdC3p29qhmngrpPGA5CWtwEfb245ouFfXJvm7jd0QWrXYDWczUxkP8BKqZQ5NSg5mVRJN79U507rYWTTWuNgF64ohRhiOvv+/sev8jc2wNVcu3K3ZQnfpyO6zJqZtnkfKjFpUiUj/gXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mzlfg+53; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=pGu61XIF; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Gknx2IGg; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=hVhZh1rP; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1775038310; c=relaxed/simple;
+	bh=EYB5toQ+a2gPT3p/vk/rLp+xwEczgs4V7hDyvgvQIcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P+X+1txSiXQfJ/S5godbJ00fofDrTH59Ltk7X5sbNY5e+ReJMEtYGHeGiIUV7A1j3U0QE+gyaTaQECcer7gXb+oiN7qr73jm/p/jLhxRGgNTNybNZZokr+RDe2y2ZlFORtbDfCbJnRIWEKNLD8wONgF6melEQ4GPkDDJ0i5B1QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mnLkOP4v; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mzlfg+53";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="pGu61XIF";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Gknx2IGg";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="hVhZh1rP"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0AA054D2CA;
-	Wed,  1 Apr 2026 09:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1775036680; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rZvktBZcpJDhL07WKyupr1O/mQs6dyCJ+xGrltnKO60=;
-	b=mzlfg+53zJ+6CU0l+KzBTOFAAIA2n8yVD19k2u+/tlgpfK9/KoEkUQWJHs54Wj+Ge4dtuL
-	oE4ta+cCIpvXlxvtlWzFOjAYC2e6HalHAokVsaQFCSeiwVxmD3/EcsKAxV37t6JozvCZot
-	88yziSiDPlNZMdUdpEmrav1l1iDXtbk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1775036680;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rZvktBZcpJDhL07WKyupr1O/mQs6dyCJ+xGrltnKO60=;
-	b=pGu61XIFhzy7d6C0FtwZCC5T6p8l2SCCNvbLD2OblwCp9nHddY9JWHCXP0OK2vXAWVd5LA
-	R1++6YJi2rXdcuCw==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Gknx2IGg;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=hVhZh1rP
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1775036679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rZvktBZcpJDhL07WKyupr1O/mQs6dyCJ+xGrltnKO60=;
-	b=Gknx2IGgBCgC9M/i4cykkUhPrlLdIent4K7Gn7h9dhzAZLF2wvYFqOnFAQWSw11qrUaVWz
-	SBzdO9D4zDZ3/cj6BfGNFdluS4vjotCpooKmR9mmLbgluTtpYJygHYfjOnmd1fgZ4yBhER
-	2RG2I8lB7/k1oiutp/Y0zUybvh7pzG0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1775036679;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rZvktBZcpJDhL07WKyupr1O/mQs6dyCJ+xGrltnKO60=;
-	b=hVhZh1rPS6dE2FDgo2OhXFUX7e1eT7yrFlhBFDuzRxVmEM4rnUTad+1Sr43KgSrbQUwxr6
-	TP8YHxzRg3/ML+CA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E8CE54A0B0;
-	Wed,  1 Apr 2026 09:44:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id B1efOAbpzGleVwAAD6G6ig
-	(envelope-from <chrubis@suse.cz>); Wed, 01 Apr 2026 09:44:38 +0000
-Date: Wed, 1 Apr 2026 11:44:42 +0200
-From: Cyril Hrubis <chrubis@suse.cz>
-To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Jori Koolstra <jkoolstra@xs4all.nl>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>, Arnd Bergmann <arnd@arndb.de>,
-	Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Aleksa Sarai <cyphar@cyphar.com>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	cmirabil@redhat.com,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
-Message-ID: <aczpCi_6lm7GQCNY@yuki.lan>
-References: <20260331172011.3512876-1-jkoolstra@xs4all.nl>
- <20260331172011.3512876-2-jkoolstra@xs4all.nl>
- <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mnLkOP4v"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62VIV9Js201661;
+	Wed, 1 Apr 2026 10:11:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=3mUbcxbKwm7xaMSKR/4qBN3+wZHiqAb74ixt34rZC
+	pY=; b=mnLkOP4vD7nndw6VtV+l4PBrfu4VT747tNdPt/bs3T7hdCwDAIUzzuqkq
+	tB1x76w/8dtc54jILHK04tgz8Y1rS2iu931SObDhwvcRmAg+c5hwTvYddFhXvi+o
+	g6Ql17N1f6nONsfwnKECGW8GbZwPjOhKI0ABlIwA7wxOrNnkyii5NUFknjmu+lVX
+	Uc8JykD6e4Yfm8Xz7y6lru2mPi8H0N8RBfvKLmD4pPRYdBCiP/NxFOpRG5VBm0+f
+	mjkeA3WqT4tsesG3LgL3ipcSeDdlnDDd10s4R3ckhd3fJXtfnHFH5xFb64TVUtMR
+	8SzYJCinkeywYAEm0FceixUuVqQcA==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d65dcew7w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 10:11:29 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6317Qwlq014339;
+	Wed, 1 Apr 2026 10:11:28 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6ttkmyrh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 10:11:28 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631ABODQ49152472
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 1 Apr 2026 10:11:24 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2EF1D2004B;
+	Wed,  1 Apr 2026 10:11:24 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 264162004D;
+	Wed,  1 Apr 2026 10:11:22 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  1 Apr 2026 10:11:21 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Abhishek Dubey <adubey@linux.ibm.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: [PATCH v3 1/2] powerpc64/bpf: Implement fsession support
+Date: Wed,  1 Apr 2026 10:10:42 -0400
+Message-ID: <20260401141043.41513-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,xs4all.nl];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_TWELVE(0.00)[34];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_CC(0.00)[xs4all.nl,kernel.org,redhat.com,alien8.de,linux.intel.com,zeniv.linux.org.uk,oracle.com,arndb.de,linuxfoundation.org,zytor.com,suse.cz,gmail.com,infradead.org,efficios.com,linutronix.de,cyphar.com,vger.kernel.org];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
-	TAGGED_RCPT(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLm9gkzykbo3gasup6o9qgcqqe)];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Queue-Id: 0AA054D2CA
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=RsjI7SmK c=1 sm=1 tr=0 ts=69ccef51 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=p8F4Ghc8BiBnGImhoNcA:9
+X-Proofpoint-GUID: 1SAEDdbf5vHIk4kktIS0UPI61OTR8Bj4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDA4OSBTYWx0ZWRfXyyRbNbQ8O/9d
+ wMGZtWZQzwAy6odR4ylaKrplDbmlPeY8xMJd9isszxtDJ2srY7d5s2yBOJqf/6cIU51AcowCgsh
+ UL0bh5eElLZAWUNQNigUi26Oz5111qckwXTplGzWIoUseX2SJyWUbFV1bJA6h5MwCuLCBd3FgsA
+ ff5wxfeweq9jOTrBWJULdC+OEjdz0jhDVpaIv7YVxvWwdqWy9tbXZTY6gbJNo/gt7+di3yAWlZb
+ DLa5Eo1tu41weN0fjtPTCPymk0wme7l46DSENhBc4GPY9C6+Mk6KacgDA3vpvFxAODlrlJroqzG
+ Jj03rfd/dU5n1/6XcialGyjasVTLx3lucpvhdSJfymRzTSpUs7itbeaUIn8UFJLwtrrVVPguEYr
+ Ht63BXLDl7rmbYX/4ZR80uPzE8eokSGjPJu7Ug0SKEcEdwEVEF92p/YNnWxjvWvCbfxvf0x+rtS
+ une/hykPhvKZcJ9SxkQ==
+X-Proofpoint-ORIG-GUID: 1SAEDdbf5vHIk4kktIS0UPI61OTR8Bj4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_03,2026-04-01_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 clxscore=1015 phishscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2604010089
 
-Hi!
-> I tend to agree mkdirat_fd is not a good name for the syscall either,
-> but I don't have a suggestion I'm happy with. I think least bad name
-> would follow the existing stuff and be mkdirat2 or similar.
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-Why not mkdirat_open() as it does combine these two syscalls into one?
+Implement JIT support for fsession in powerpc64 trampoline.
+The trampoline stack now accommodate session cookies and
+function metadata in place of function argument. fentry/fexit
+programs consume corresponding function metadata. This mirrors
+existing x86 behavior and enable session cookies on powerpc64.
 
+# ./test_progs -t fsession
+#135/1   fsession_test/fsession_test:OK
+#135/2   fsession_test/fsession_reattach:OK
+#135/3   fsession_test/fsession_cookie:OK
+#135     fsession_test:OK
+Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+---
+
+This patch is rebased over https://lore.kernel.org/bpf/20260401103215.104438-1-adubey@linux.ibm.com
+
+v2->v3:
+  Rebased over latest changes
+  Collected Tested-by tag
+v1->v2:
+  No change since v1
+
+[v2]: https://lore.kernel.org/bpf/20260226041217.18059-1-adubey@linux.ibm.com
+[v1]: https://lore.kernel.org/bpf/20260216155310.38457-1-adubey@linux.ibm.com
+
+ arch/powerpc/net/bpf_jit.h        |  4 +-
+ arch/powerpc/net/bpf_jit_comp.c   | 69 ++++++++++++++++++++++++++-----
+ arch/powerpc/net/bpf_jit_comp64.c | 25 +++++++++++
+ 3 files changed, 87 insertions(+), 11 deletions(-)
+
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index a232f3fb73be..f32de8704d4d 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -218,7 +218,9 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+ void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
+ void bpf_jit_realloc_regs(struct codegen_context *ctx);
+ int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
+-
++void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
++								int cookie_off, int retval_off);
++void store_func_meta(u32 *image, struct codegen_context *ctx, u64 func_meta, int func_meta_off);
+ int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass,
+ 			  struct codegen_context *ctx, int insn_idx,
+ 			  int jmp_off, int dst_reg, u32 code);
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 2018260f56c6..16d15ff3145a 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -540,6 +540,11 @@ bool bpf_jit_supports_private_stack(void)
+ 	return IS_ENABLED(CONFIG_PPC64);
+ }
+ 
++bool bpf_jit_supports_fsession(void)
++{
++	return IS_ENABLED(CONFIG_PPC64);
++}
++
+ bool bpf_jit_supports_arena(void)
+ {
+ 	return IS_ENABLED(CONFIG_PPC64);
+@@ -812,12 +817,16 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 					 struct bpf_tramp_links *tlinks,
+ 					 void *func_addr)
+ {
+-	int regs_off, nregs_off, ip_off, run_ctx_off, retval_off, nvr_off, alt_lr_off, r4_off = 0;
++	int regs_off, func_meta_off, ip_off, run_ctx_off, retval_off;
++	int nvr_off, alt_lr_off, r4_off = 0;
+ 	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+ 	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+ 	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+ 	int i, ret, nr_regs, retaddr_off, bpf_frame_size = 0;
+ 	struct codegen_context codegen_ctx, *ctx;
++	int cookie_off, cookie_cnt, cookie_ctx_off;
++	int fsession_cnt = bpf_fsession_cnt(tlinks);
++	u64 func_meta;
+ 	u32 *image = (u32 *)rw_image;
+ 	ppc_inst_t branch_insn;
+ 	u32 *branches = NULL;
+@@ -853,9 +862,11 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	 *                              [ reg argN          ]
+ 	 *                              [ ...               ]
+ 	 *       regs_off               [ reg_arg1          ] prog_ctx
+-	 *       nregs_off              [ args count        ] ((u64 *)prog_ctx)[-1]
++	 *       func_meta_off          [ args count        ] ((u64 *)prog_ctx)[-1]
+ 	 *       ip_off                 [ traced function   ] ((u64 *)prog_ctx)[-2]
++	 *                              [ stack cookieN     ]
+ 	 *                              [ ...               ]
++	 *       cookie_off             [ stack cookie1     ]
+ 	 *       run_ctx_off            [ bpf_tramp_run_ctx ]
+ 	 *                              [ reg argN          ]
+ 	 *                              [ ...               ]
+@@ -887,16 +898,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	run_ctx_off = bpf_frame_size;
+ 	bpf_frame_size += round_up(sizeof(struct bpf_tramp_run_ctx), SZL);
+ 
++	/* room for session cookies */
++	cookie_off = bpf_frame_size;
++	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
++	bpf_frame_size += cookie_cnt * 8;
++
+ 	/* Room for IP address argument */
+ 	ip_off = bpf_frame_size;
+ 	if (flags & BPF_TRAMP_F_IP_ARG)
+ 		bpf_frame_size += SZL;
+ 
+-	/* Room for args count */
+-	nregs_off = bpf_frame_size;
++	/* Room for function metadata, arg regs count */
++	func_meta_off = bpf_frame_size;
+ 	bpf_frame_size += SZL;
+ 
+-	/* Room for args */
++	/* Room for arg regs */
+ 	regs_off = bpf_frame_size;
+ 	bpf_frame_size += nr_regs * SZL;
+ 
+@@ -995,9 +1011,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 		EMIT(PPC_RAW_STL(_R3, _R1, retaddr_off));
+ 	}
+ 
+-	/* Save function arg count -- see bpf_get_func_arg_cnt() */
+-	EMIT(PPC_RAW_LI(_R3, nr_regs));
+-	EMIT(PPC_RAW_STL(_R3, _R1, nregs_off));
++	/* Save function arg regs count -- see bpf_get_func_arg_cnt() */
++	func_meta = nr_regs;
++	store_func_meta(image, ctx, func_meta, func_meta_off);
+ 
+ 	/* Save nv regs */
+ 	EMIT(PPC_RAW_STL(_R25, _R1, nvr_off));
+@@ -1011,10 +1027,28 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 			return ret;
+ 	}
+ 
+-	for (i = 0; i < fentry->nr_links; i++)
++	if (fsession_cnt) {
++		/*
++		 * Clear all the session cookies' values
++		 * Clear the return value to make sure fentry always get 0
++		 */
++		prepare_for_fsession_fentry(image, ctx, cookie_cnt, cookie_off, retval_off);
++	}
++
++	cookie_ctx_off = (regs_off - cookie_off) / 8;
++
++	for (i = 0; i < fentry->nr_links; i++) {
++		if (bpf_prog_calls_session_cookie(fentry->links[i])) {
++			u64 meta = func_meta | (cookie_ctx_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
++
++			store_func_meta(image, ctx, meta, func_meta_off);
++			cookie_ctx_off--;
++		}
++
+ 		if (invoke_bpf_prog(image, ro_image, ctx, fentry->links[i], regs_off, retval_off,
+ 				    run_ctx_off, flags & BPF_TRAMP_F_RET_FENTRY_RET))
+ 			return -EINVAL;
++	}
+ 
+ 	if (fmod_ret->nr_links) {
+ 		branches = kcalloc(fmod_ret->nr_links, sizeof(u32), GFP_KERNEL);
+@@ -1076,12 +1110,27 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 		image[branches[i]] = ppc_inst_val(branch_insn);
+ 	}
+ 
+-	for (i = 0; i < fexit->nr_links; i++)
++	/* set the "is_return" flag for fsession */
++	func_meta |= (1ULL << BPF_TRAMP_IS_RETURN_SHIFT);
++	if (fsession_cnt)
++		store_func_meta(image, ctx, func_meta, func_meta_off);
++
++	cookie_ctx_off = (regs_off - cookie_off) / 8;
++
++	for (i = 0; i < fexit->nr_links; i++) {
++		if (bpf_prog_calls_session_cookie(fexit->links[i])) {
++			u64 meta = func_meta | (cookie_ctx_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
++
++			store_func_meta(image, ctx, meta, func_meta_off);
++			cookie_ctx_off--;
++		}
++
+ 		if (invoke_bpf_prog(image, ro_image, ctx, fexit->links[i], regs_off, retval_off,
+ 				    run_ctx_off, false)) {
+ 			ret = -EINVAL;
+ 			goto cleanup;
+ 		}
++	}
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+ 		if (ro_image) /* image is NULL for dummy pass */
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 6670d8c69ade..d9038c468af6 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -179,6 +179,31 @@ static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
+ 	BUG();
+ }
+ 
++void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
++				int cookie_off, int retval_off)
++{
++	EMIT(PPC_RAW_LI(bpf_to_ppc(TMP_REG_1), 0));
++
++	for (int i = 0; i < cookie_cnt; i++)
++		EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, cookie_off + 8 * i));
++	EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, retval_off));
++}
++
++void store_func_meta(u32 *image, struct codegen_context *ctx,
++					u64 func_meta, int func_meta_off)
++{
++	/*
++	 * Store func_meta to stack at [R1 + func_meta_off] = func_meta
++	 *
++	 * func_meta :
++	 *	bit[63]: is_return flag
++	 *	byte[1]: cookie offset from ctx
++	 *	byte[0]: args count
++	 */
++	PPC_LI64(bpf_to_ppc(TMP_REG_1), func_meta);
++	EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, func_meta_off));
++}
++
+ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+ {
+ }
 -- 
-Cyril Hrubis
-chrubis@suse.cz
+2.52.0
+
