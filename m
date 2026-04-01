@@ -1,127 +1,172 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887FB47B425
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 17:01:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775062865; cv=pass; b=UtqKNRTWk1V0CnLiyPXc/ooy4r8PPfxveEj0rOB5wkck0zQvE9uKavh7RbkLI0TC+BpKf6qv2uwf8ogkG46iltd6BOLyd4OVD8gqOAEEv5XJHr3cAmtiPRdXJEA/Pxq0CPxEbvmB4JegMN4/7JzsyeinIPDZL1CsJQVIgOQlbBY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775062865; c=relaxed/simple;
-	bh=HMh3BmfgmzdgimyYYoM6Rn1fwSBCsNHDQSYfQwRc9+E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TSLPY/4i420mjYtG5ubgXwajQe+54vSkBGdj7vNjIJdJx3vUZKgcbF1LtfwTEoqJB9vezaNj9C7EbOsDhLoyFnvHAwhhzagpj4oVYwCztVkvc7Ay2eMEDDQv6SU3Mhq8onfZPK7qOQ8j4hgaYOx6DnAE51So1UgJtANuBlinIes=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dvQBlLs+; arc=pass smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70AC30C368;
+	Wed,  1 Apr 2026 17:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775064853; cv=none; b=lS6aFVgYtOeUViWmhknvXV439NtIH4IXm5YgikfKdXNRAdhOm+ReWPpkLXFmF0fsUZhx4B5O3gKcu81LbGbA1z+BKEV5xs60duF2gkFm2Z3pCd9nRO5TpN+IkvO/B5qkcZhqyoAe1UkvDirbnxm/nI+8j4hff1y+kzj3uI5hgqM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775064853; c=relaxed/simple;
+	bh=g1j1g0ZBdCP+Yz7la4BltnErbiZJ/DiY4OuntowfNJA=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XojUUeqUhCNeL4LkEmh46HcvPQyCytFS52CElMjIctCQqX27dbe5QqKL+UkrLbbL7fpsuGQvLxXPpe5OLolN+MsHZBVEipkCnIA7AjO2mIShgAMNIHKw8VXjRdHkaScBFqWt4UkL26K8FiyIyacOpFD09GIvxa9LdGETQYVCmvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=o1DVKJC0; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dvQBlLs+"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-66ba6d3dab3so349a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 10:01:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775062862; cv=none;
-        d=google.com; s=arc-20240605;
-        b=axTGmFKButTEw+ay0dCs5W/mJN0XGl0N9PcjQZS/s7GsyoO6f06GXoIedN7sjDIi8a
-         rXQRRvdtTXcD2EUfPT8OpVlewhAeXxIRhaBg9PHZTeMp7ok6HOMNnJqcP1TLbhPFCQbq
-         mP6k91DV8XXZuaZfOuZg3gvpDjCQk0GIXxrXWHT6T24W6/mKOODdzQUffH3MhbNJRePg
-         H/aAkFKXC+DZVm8nvGzPWqAQhfs+3CWtZ21FzEZaGrJFptZ7jqRSw6hYvw5zvhSE7cNb
-         4QtbO2RvcoT6N/HKpJ/j2lsbc5Yu/ehlurEQZ+9EM5S+Qy2ZDEsaTNKaH4biKz6J1MVu
-         vKJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=HMh3BmfgmzdgimyYYoM6Rn1fwSBCsNHDQSYfQwRc9+E=;
-        fh=2gDJ1i98XeJVw87MP41PWH/q5eAtOVCnwxg7hfMlyBk=;
-        b=c09TpPjfJKT2X2H8ct5W8USSNeBqTiRXbGwJzygTDWeHA6eoVyDw47dnOI/geV/juk
-         4O640mR6Aw3ccaxGE+ftB0Ud4ajlLz6i7Z0xWPXmdYJI+10XAczoAVVEiyYKWxKBLYCC
-         tM2oYwjVQ05AqiVDwlIsk9aW622/NSxWYptXiUp89vNVMbc/UXSZAy+ZNnyuJ7ufXczK
-         JhPAlUpDI5PDxK8y16HwqT4RdmT+xJbnSB2eS6wAxS71QHbxsm/nA/nRVFLxHzItqO8c
-         Zt1JUhgasoQ8+LMlTw3QqOEJRk86y+23mJcjFvruTzuJmpmFZ3PeXSHcieMYFrH1EFmr
-         eqUA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775062862; x=1775667662; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HMh3BmfgmzdgimyYYoM6Rn1fwSBCsNHDQSYfQwRc9+E=;
-        b=dvQBlLs+a1mlA59kQDDucXKd+evLi5uR8v4xBe8WJq5qqx4RWVaooOo8k8aXcsdAG3
-         AO+2DMisWBw3GMYfVttTj+g/8McDxDEPxRuF/Jn+CQzHi4BxW5/YgVWKKBEIKhVx+Ays
-         4L7HDUptNlUzZKOQG82sLxYB5Q7Nqk9APNG69mhUqmWONdphMBSkJwSadgq1wS3SVkbo
-         UDamTJvFLnYBZxCE4/nm3tLTPhNypdVgtECr39Kz8y0Wy8pTWEP+3uMJMLcUJJnfH3F/
-         GJ/USZAiY1Mg7oRme75r6nkSrqdMxgbz983QnSVPIRsXtNYYnRe622je61whaDF5qe4M
-         /XLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775062862; x=1775667662;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HMh3BmfgmzdgimyYYoM6Rn1fwSBCsNHDQSYfQwRc9+E=;
-        b=Pty85TrWiz5o01mBrDiZR13UpkUgKc5AA19lwltcD/rEsuD1H5QxFdwyw9n+tncVA4
-         JrpovO68QJUo8ypNBJYbHT+flC7tkNGFx6aoTlpK+5GuOUAH1eWk/cwUOaYIrlc7FZZm
-         T8uV8ga/9Cb+54xiMxJfk9SFg2eSLmaLdrZO9yIQHjVyloVNCFnC0WqY6Q4rWTUbhU4j
-         nSOlCyPbTbY/pVuYS1YuRGIlWmwnm476jjxSoSeWmQUsRqGkdcnC6tudRnhJVXwBITbo
-         5k5KY/ZDcqvQ7CR4/L40G+4ogJPSNyfz6VpQFagwi9S1Huj+BxEBN8LehE8DjTcSVsqn
-         hkeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVucxpk3uSIDR5eW80dirL7FjaqTs/pRZfkpfj2JwBlFg3snJd1u/ni6NzG6GSxrnR8WXh2PfYU43qq/UHRKdk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwG03Vou+DXqSy2Mu7K5wZhFPyseWpLSt6clts3IE8Hekdh57fX
-	JJQ7FIEjhXqHWDz/a6qfy4u6Id/BuC2S3xd+uwICq7jeSkgTsH6khWfxkthgcmkCFV0m2CX8JeE
-	MbbsdRYig3OQ3qZop6UF3JrsCL3jmoa6ojfnU2GkE7b28B//BNFs4aemQ
-X-Gm-Gg: ATEYQzw+L9BSm+fto6JDdTzXknpTzV/eLQj/ZYuortvbBpKGm7MtVxc0xxlq2gA1LTv
-	29C3jZ0mCCwPXbB7GW99PeHajMXzwdt1Y7Ujdcg2BYfOwvm62iOvCZVOx4lNQbB1LSdgUZU3po0
-	xjNLL2YmRj8vwem05PuEn6jzEyT9YrOkBVjiK8X8puDzL3MCWEpWkDV51f4GYW75NE0NWu8vyVC
-	TWNnDgKk2XzyYV399Ecgk2GC/e4sMjP55k7qQlAXRz/al0fEqF76o8wwwpW/V+wf8958tyn11Q9
-	Gk/+09ulsEhqZxQ24fmIGq8NUFMneqLZsWCasVvXdhwZQ3x/duifcOBduoWlOZYuANtVpg==
-X-Received: by 2002:aa7:c58b:0:b0:66b:eb42:be7 with SMTP id
- 4fb4d7f45d1cf-66e033bcbe5mr2565a12.13.1775062861460; Wed, 01 Apr 2026
- 10:01:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="o1DVKJC0"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631AVPX0505649;
+	Wed, 1 Apr 2026 17:33:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=rSqaC2
+	HS6F3jm0Ha+Zxiv2wIM9/dauwd7UVnyK3ZjbE=; b=o1DVKJC04XxVqWAtIzvm4Q
+	LvBKhissxWZgbfjOMM41uOIN40Vbf7jf8rD5RxfPQpQ8rxnwmMJCTWMrjuTec8f4
+	O+LXOFaX5MtNt9OwkYdW8m5/6Tlsy7A6TacUJeiTkHJtHOmepgg79JpyRxZTRkq7
+	22pxvXhguFyk2/LGs0FlKOYyGjBQAG75lFktzcBkT0rVrvhXrU/5NgrEGB9s+np1
+	YtSPbsKbjeZaQHj3bQ1K5izuMlXdtOlQP6iru4ZV7/lJbr2hksjo5YyawNOt3rud
+	Ux2zjYfchNL/r75AR4k3CvwZBrqhXbNZ/YjQ8/6tx+1qqoA3TibcvbJ+gjo8d+hA
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66g21fg6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 17:33:44 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 631FYUVo022165;
+	Wed, 1 Apr 2026 17:33:43 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6tan6pjp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 17:33:43 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631HXhgG26673892
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 1 Apr 2026 17:33:43 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1C00458052;
+	Wed,  1 Apr 2026 17:33:43 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 36C5558056;
+	Wed,  1 Apr 2026 17:33:38 +0000 (GMT)
+Received: from [9.39.18.42] (unknown [9.39.18.42])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  1 Apr 2026 17:33:37 +0000 (GMT)
+Message-ID: <f8934e88-5b88-456d-affd-e29e2f78b6cf@linux.ibm.com>
+Date: Wed, 1 Apr 2026 23:03:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260401-teaming-driver-internal-v2-0-f80c1291727b@google.com> <20260401075720.7976a1da@kernel.org>
-In-Reply-To: <20260401075720.7976a1da@kernel.org>
-From: Marc Harvey <marcharvey@google.com>
-Date: Wed, 1 Apr 2026 10:00:50 -0700
-X-Gm-Features: AQROBzBsblDbpWXSnvlD0rrlndtlTFYB_FDROw_4NMEeJP_41nBpXwToL4b7S54
-Message-ID: <CANkEMg=sCEMGdyL5qOU-nSGCk2Tartiqvk1yQkg+3PMm46VdaQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 0/7] Decouple receive and transmit enablement
- in team driver
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Sayali Patil <sayalip@linux.ibm.com>
+Subject: Re: [PATCH v3 11/13] selftests/mm: fix double increment in linked
+ list cleanup in compaction_test
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+References: <cover.1774591179.git.sayalip@linux.ibm.com>
+ <4c47a2ebbc41f90c7a0cb3f8b34106b2b64296f6.1774591179.git.sayalip@linux.ibm.com>
+ <b6d211e1-233e-4079-a8b9-6682e12077ba@linux.ibm.com>
+ <5684cab6-d5a6-4de9-9545-f8cae775d825@kernel.org>
+Content-Language: en-IN
+In-Reply-To: <5684cab6-d5a6-4de9-9545-f8cae775d825@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=Fdo6BZ+6 c=1 sm=1 tr=0 ts=69cd56f9 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=Ikd4Dj_1AAAA:8
+ a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=T6nULJMaX99D9d00DIAA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: Bxer0GwKb5xpt3tAX3oiBerSsEtjsxnZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDE2MiBTYWx0ZWRfXzEISyrtqStlA
+ hNkcbo7yzW2GQIQlG/T++H5n5nbP9R4jBNPLST6vVhS0DrgKsrqn9FT6HkVY/ip1FchAa3/SLMl
+ KtPoBJcHbTL157FOIpjzDMq0ytao+4spNvl9bCbLTdzKwtVyL4VgqLI2+WScV1BTmtyMjS9L6Vj
+ kwe44k4cuZ4BTzzlv2FQdD9ytLMhoDWFzrc5nqQyHpXhEEN2Gyih5VhWoe26aHMR36iVWy6dsVQ
+ zZiWJpH/ckXojBJZwOoLcpOYp2QLtRj3IYONhTkJ+8olYpEUpFpFaO85uHSBxLD9MDiRtPze2oP
+ uR9WdL9QrlU+cSU0/fLvpR5MDQpt1kl9Puyp10hbaLabexZqJYewwFd4GzE9Hlj4Z0QdAONKp9k
+ FZOHRpiRtOXRbJZ7TZtr3cxKjuDHfHv2/mJD3kY3SJTbAtJxbPEpBj67f66RlDs6/2VUSQ+P/CB
+ V4OX2hHq/vbPwVps/jg==
+X-Proofpoint-GUID: aqf5EXqq0VS2xdQNbf1Bhqhvgccm-WRq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_04,2026-04-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 bulkscore=0 suspectscore=0 priorityscore=1501
+ adultscore=0 malwarescore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010162
 
-On Wed, Apr 1, 2026 at 7:57=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> On Wed, 01 Apr 2026 06:05:24 +0000 Marc Harvey wrote:
-> > Allow independent control over receive and transmit enablement states
-> > for aggregated ports in the team driver.
-> >
-> > The motivation is that IEE 802.3ad LACP "independent control" can't
-> > be implemented for the team driver currently. This was added to the
-> > bonding driver in commit 240fd405528b ("bonding: Add independent
-> > control state machine").
-> >
-> > This series also has a few patches that add tests to show that the old
-> > coupled enablement still works and that the new decoupled enablement
-> > works as intended (4, 5, and 7).
-> >
-> > There are three patches with small fixes as well, with the goal of
-> > making the final decouplement patch clearer (1, 2, and 3).
->
-> Closer but the activebackup test times out (45sec is the default ksft
-> timeout, I think). How long does it take when you run it?
 
-Very strange, for me the script finishes in seconds (even with the
-netdev CI recreation steps). It seems like the teardown, specifically
-the graceful killing the teamd daemon, is timing out in your
-environment. I don't think we need a graceful teardown, so I can just
-replace this with pkill in v3.
+
+On 01/04/26 20:09, David Hildenbrand (Arm) wrote:
+> On 4/1/26 16:32, Sayali Patil wrote:
+>>
+>> On 27/03/26 12:46, Sayali Patil wrote:
+>>> The cleanup loop of allocated memory currently uses:
+>>>
+>>>       for (entry = list; entry != NULL; entry = entry->next) {
+>>>           munmap(entry->map, MAP_SIZE);
+>>>           if (!entry->next)
+>>>               break;
+>>>           entry = entry->next;
+>>>       }
+>>>
+>>> The inner entry = entry->next causes the loop to skip every
+>>> other node, resulting in only half of the mapped regions being
+>>> unmapped.
+>>>
+>>> Remove the redundant increment to ensure every entry is visited
+>>> and unmapped during cleanup.
+>>>
+>>> Fixes: bd67d5c15cc1 ("Test compaction of mlocked memory")
+>>> Reviewed-by: Zi Yan <ziy@nvidia.com>
+>>> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>>> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+>>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+>>> ---
+>>>    tools/testing/selftests/mm/compaction_test.c | 3 ---
+>>>    1 file changed, 3 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/
+>>> testing/selftests/mm/compaction_test.c
+>>> index 30209c40b697..f73930706bd0 100644
+>>> --- a/tools/testing/selftests/mm/compaction_test.c
+>>> +++ b/tools/testing/selftests/mm/compaction_test.c
+>>> @@ -263,9 +263,6 @@ int main(int argc, char **argv)
+>>>          for (entry = list; entry != NULL; entry = entry->next) {
+>>>            munmap(entry->map, MAP_SIZE);
+>>> -        if (!entry->next)
+>>> -            break;
+>>> -        entry = entry->next;
+>>>        }
+>>>          if (check_compaction(mem_free, hugepage_size,
+>>
+>> Sorry, this change is not valid.
+>>
+>> The goal of this test is to verify the kernel’s ability to compact
+>> unevictable (MAP_LOCKED) pages. The loop is intentionally written to
+>> unmap every other chunk, thereby creating fragmentation with locked pages
+>> before check_compaction() is invoked.
+>>
+>> With the proposed change (removing the double increment), the loop ends up
+>> unmapping all allocated locked pages instead of leaving a fragmented
+>> pattern. This results in memory being effectively unfragmented.
+> 
+> Ahhh, we should really make that clearer in a comment. I missed it myself :(
+> 
+yes, let me add a comment to clarify this and send it in v4.
