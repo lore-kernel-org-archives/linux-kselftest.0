@@ -1,234 +1,203 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012025.outbound.protection.outlook.com [40.107.209.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B773090D9
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 18:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775068916; cv=none; b=Nks0ZPeHETwG3x/fOfIVPo3gmzRLO0juHkBUkcMhwzd2pk7e5KJTyqslCtUdg0+Nt7Ozv17l65okRJDQMEECYln2aGOER5X1RvGxYOG4iKk1HhxJXhTXxEd1tEyQR52pH62tpT4J9TwXWhYC+WM4AnEEtSbXWV1xOOjQKN9orLY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775068916; c=relaxed/simple;
-	bh=1CG3RDIiwIsMcQ/1sYaFthugLh62zYQvURXEfTxg7As=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TVgd4iyYl/C9yZQd38kHqpXp3oezlJdWCKgfJyg5YG8npAQ+nZFrBIzMwJ3EsS0v2Dor+xYJpeMkfPpYBi0BYtapztu7G3Vl6fRK9UTFNCZNs4HiUaBhBMefBaO9UBtX48Y8gyYRCIq7Dv58An8zL9eei9DDysfLDf0A6wUH7K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=c01dqKlQ; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B653F217F33;
+	Wed,  1 Apr 2026 18:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775069451; cv=fail; b=A8D0QN6P2FrLVxrl1wF9Q3AgL2KqIEV6Am2H+F6coPhkgtOhBXdqUgVHXJpWawlVL1WXzhbVPFvz+gr6vq9dnLUawbJf9962JYquQl1tMUFmFkUTtXLfjEjhHoKZGbrg3GViYEDF6J2StijSHX/WfVK+DJOOczaASROLL472eRQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775069451; c=relaxed/simple;
+	bh=q9zlwXKHVuYc9OEoq/eIWBU45QR4Xw5ERj+6tbq3tE8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P3Xr26QgUtAekI6Tdw5RBdRZkE7d59OPVjRdRuyBHUSyGNFPr6Oas+RlD9hCRDn7h+riTkf/Bwe4CRQ7FGzOiFRy5EQzQzpFntLBNuodaSegAvmD5ge6CjW+xC+/UDJKMVCtokLGGhYekvJngmnVAdw1IXSUuaq3t0nZ39brJcA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=V0336ok/; arc=fail smtp.client-ip=40.107.209.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="c01dqKlQ"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-486b96760easo261975e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 11:41:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775068912; x=1775673712; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=diWyiF5CM6MLfjiGHibL/eUp1W0TNuRh03hTNEA1N0U=;
-        b=c01dqKlQBSVef1OSnX68UYM6w0G5VmILr7oLQIJFQ/vd6Xfmt7UZv29PCRxEBii5Oy
-         OCc1uruZzQM8OfcL1/9rR/1PdTSn2jWA6MdU6Ra3yJsF4rcDiEqkgiDJRgrUyF7mAciL
-         6UdzO8Ym9LbtLHtskn9Ifl29WBDTcGCBYlFUoPh4V36724RXXlc0JLb5Phhs70cos9Vd
-         /0D4sfCjn6DvWpgWkB4id6QjOyqXOGUAyzVGq00YHxakpH/WkKP42/hacxq/ObmbnVjn
-         vT2NiflR0bwN2iaMcIkkTha3xwZHCBDsC4+XRQIKBkVauDtiLkuhtn3lJGuLalC++2H0
-         KCwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775068912; x=1775673712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=diWyiF5CM6MLfjiGHibL/eUp1W0TNuRh03hTNEA1N0U=;
-        b=sYB5zWcSZ9DuW75+FvOUQwee3dSxMB9/aIw3Ps0WOgAm1oQhX9vAzRKfum6bxqB0tZ
-         EJEoZ30NsA+dn6ncUZPA2pHbFnwO8+xT7Zb5piZG6i0Hy8AC8p4t9cAy+rYOm1D9r6A+
-         4DT1n7VfZysa6IUrgr6dWo7T3sAJ3qeF3M1emB5ZLvWz6vi3K2Jzxnlw2GSBXROOIsWB
-         WMvdQMRb609LTMzA3dfq7CHXLIb4uzP5AELoiKT++Yfa9B+Kn+voW4RjhshaYPKx7DF/
-         9AUhzELCGhQsMGDVmRqmp/ugPGQKVptf9+erVxbxsy+mEPsTkXgy9c3PiSPRSP0WQ6nk
-         PsEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVuGgxGlbhSqUWG85MqcB2dJyk7Q43IztOqZVdpzD/+1dyl3+iS9OmJblGEYS0juM8B39NwJ3STNAxScOLgaeE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywcxj8kFp/TqXJujEnjX6xWenkrdMcVniSNStySWe4IM+QNxm45
-	sNAAYrXHB0+oWxU2ES0rRD4tkT2K4n/3I+DEixBwRtjlbUfaP7UVboKnqsRQvpDZTjI=
-X-Gm-Gg: ATEYQzzqReuVAnG9pz7QKWDOduCq5pL4WI6LK4Ajtu3xwddd1+qaNsrtEFSCnif69/C
-	TminoRh20juX+rl/1Pn/+yUyNeGjRytWd6J1GDMTbmSrBk3GjBScwJQ8e1D46LUXaIcUzVwmTqh
-	NX3BlM77K+H1dm1hL3MW40zcBhsO2LHaUqH1z6yBzJXheHm//ApBSzSt7Q4Vl/jqgPqdjk8Nb94
-	Emm0K7a9gVRgLsNWjqPcX08Uy7zK5RnxQAxDEr/eypfHv2N8EnAHZEk4tmXlun2MyTGpu7ToMuR
-	Rf6h5bQ3GkaTQRSnScxFWPQRb5WUkF5AuvNxPCiPDIV3CySWaFLcvb6uS9vxM3q2DZYXi7LejJY
-	9uMFloSgql+bBNoXyxBu5k1cF3TywnMbnzE4HWHxBEzleEqusQMNMTc5jDr4TtmrqvY5NUQuMqe
-	1s3tfQfFu+O9ArImr24XKTf8uiacA1yb7u/Z7rq2GmyOA=
-X-Received: by 2002:a05:600c:1798:b0:488:8bdd:cfde with SMTP id 5b1f17b1804b1-4888bddd1bemr1447595e9.7.1775068911853;
-        Wed, 01 Apr 2026 11:41:51 -0700 (PDT)
-Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887c9250afsm49170605e9.36.2026.04.01.11.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 11:41:51 -0700 (PDT)
-Date: Wed, 1 Apr 2026 20:41:49 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, Sean Christopherson <seanjc@google.com>, 
-	James Houghton <jthoughton@google.com>, Sebastian Chlad <sebastianchlad@gmail.com>, 
-	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>, Li Wang <liwang@redhat.com>
-Subject: Re: [PATCH v2 1/7] memcg: Scale up vmstats flush threshold with
- int_sqrt(nr_cpus+2)
-Message-ID: <n6mhkjsxsami3qmczkdh57eep4lmcgbtyl7ox3ajzveke44yf6@m4bjevvsr47k>
-References: <20260320204241.1613861-1-longman@redhat.com>
- <20260320204241.1613861-2-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="V0336ok/"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Jl2lXX6Tx1+w2oJF8yTEqwO6ukRijLVmvTW6enWJJ/r4db/KTed4fgwBYfyz6PIoxFlhNtNwXCx5Pwz9oQaPTX1QqqqHLRJ88PQz6nsrTBjBhjm3hr9UccQmD3ZCBKzFLEdZgYdPnIKMRvGOsAkg8FdiKw0bg44ktDk5CcEL+wc2g/2AZe69+/tWdZyPQABv/Rj7bbZ1vv41+6fJezv5mpSjUsm0+GqTjXOeNODLDdiUI4IM732X13PwEK1kFMk4GxWuOm15F+vMaNkCPOxqVaxwRPo2WBBaFzShcm58ObhnAtaOHBdGO8m/yI6SISFpmQao12p0bM0QEirPmKMFsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hsT4Ckp2gcVbXUtF+Y6kztgrnG4ZWjW5l6Mx5+I6Jio=;
+ b=csyQMYmo3725/uD4sQFWwceYPlotAZbtOSRkZo/SsELQAog3eY1+c/kBo0nt6iF2/GNuUPzq5yaMW99IedV3AM5OUSCka4GhUX+w3YN/n5MX48bRQTstD5e8LijjGE/DSY6fN+yHaFSzpAVxDDAwtLon7YeczGdUcyYmZX00ovCyMJm0Uly9rNZmfFmHxIJHDoMJL/5gd1iodrd9KPoC88eiefH7Mh7ZsrVooc32MDL2bdMaG0mlKa0YqJgCXn6LF8xLymCD2U4uJnJ0ev6KV9BSsg3scmbjGIRksAf1pindACFL+fNi/huO3ZU73DFVJ5oXq9gZ/4v9MrctLxV7CA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hsT4Ckp2gcVbXUtF+Y6kztgrnG4ZWjW5l6Mx5+I6Jio=;
+ b=V0336ok/R/xziAsH7XB9xfHWXOloCDBzpEWXtOpcIP388C9XR5BfxFY6S0d/XOKGxZ+bkQXW+GegkJQ1IXF+gAyk4UUuKeMLrTtrJrDoVdqcW62oxrCkf3Cy13DacdACCZ8MjCPn4y8CbsxdfQ4gRRFKJEQKSmMjYrHYe4vSjiF+VtQqxx7MjzmWFZ211YzwbRGomVE3T9rxvW92UgBjayLs2/HCGUlw2kOFivjGZKCj0+styqHbF42Hyyp4CkD9AkUW5MxHJSHjhCwne3Y1UMkyqGDUhpG0cRX2kCJOHne+jM9Y3HCAcQLKhXi8t2OHTeD0bbO/JAsbBbokqA6a7A==
+Received: from SJ0PR03CA0226.namprd03.prod.outlook.com (2603:10b6:a03:39f::21)
+ by IA1PR12MB8077.namprd12.prod.outlook.com (2603:10b6:208:3f4::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Wed, 1 Apr
+ 2026 18:50:43 +0000
+Received: from SJ1PEPF00001CDE.namprd05.prod.outlook.com
+ (2603:10b6:a03:39f:cafe::89) by SJ0PR03CA0226.outlook.office365.com
+ (2603:10b6:a03:39f::21) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.29 via Frontend Transport; Wed,
+ 1 Apr 2026 18:50:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ1PEPF00001CDE.mail.protection.outlook.com (10.167.242.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.17 via Frontend Transport; Wed, 1 Apr 2026 18:50:42 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Apr
+ 2026 11:50:21 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Apr
+ 2026 11:50:20 -0700
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Wed, 1 Apr
+ 2026 11:50:12 -0700
+From: Tariq Toukan <tariqt@nvidia.com>
+To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>
+CC: Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
+	Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, Saeed Mahameed <saeedm@nvidia.com>, "Leon
+ Romanovsky" <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
+	<mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, Chuck Lever
+	<chuck.lever@oracle.com>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+	Carolina Jubran <cjubran@nvidia.com>, Or Har-Toov <ohartoov@nvidia.com>,
+	Moshe Shemesh <moshe@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
+	Shahar Shitrit <shshitrit@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>,
+	Jacob Keller <jacob.e.keller@intel.com>, Cosmin Ratiu <cratiu@nvidia.com>,
+	Parav Pandit <parav@nvidia.com>, Shay Drori <shayd@nvidia.com>, "Adithya
+ Jayachandran" <ajayachandra@nvidia.com>, Kees Cook <kees@kernel.org>, "Daniel
+ Jurgens" <danielj@nvidia.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-rdma@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, Gal Pressman
+	<gal@nvidia.com>
+Subject: [PATCH net-next V4 00/12] devlink: add per-port resource support
+Date: Wed, 1 Apr 2026 21:49:35 +0300
+Message-ID: <20260401184947.135205-1-tariqt@nvidia.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="isa3i4d4tepb4cvo"
-Content-Disposition: inline
-In-Reply-To: <20260320204241.1613861-2-longman@redhat.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CDE:EE_|IA1PR12MB8077:EE_
+X-MS-Office365-Filtering-Correlation-Id: 74ec6932-dc5a-4d26-dc57-08de901f93cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|36860700016|1800799024|82310400026|13003099007|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	7ia2RkSV+wYncwRIYXqwYInzd7x8KC7ghuJ+2/DuhDFdEQV+y79bOvaL7BjY7NlVMoZ/8vwl+GeKR5in9gNUXZm3QAYX35m9dsG+YOi+6bvvnWnnqp3QX+ERbrDR13tjCq+3iksrUEIQZREoQWTaKMoJpAdZJqu9ijfHLEdy7b6plw0N5WtIdtt/9RC2ToHw4VzZNJUf+2PteQQbXcYW8VAF9OrSkGbkv0oCOGy1Z6IWp5B6zrpDMbHmpAjUWk7If1wURAJxWnjVgsd4frJpY3vY3FXnImuzlwvnXFnXUnVH5SBmWs0SgXW4YQ7hRszBBYJ0OFpZgt370wWIeIrqniDPPfkcQ4K0piau5B6i50dn72D8otpkev+NdbP4RZElWrJv0LFpcawg0+5yGRioBHks5iFR+piCzVE7Be0B5eLDtE0Jt9dALCPFRoqgxuft0XBLM3UiIfFUSLJPK09GEwMCqcX/ntEGVKMF7x4769DdCmfdSFhUOKUY3oDHIiqrXhW9QMcgBTajPUQ3p+GIJ7jwJtkVMXmmS7htNm6Pt6x9gAvhya9qZnT/2lEV4dOfNpwuQKAhTZK8yas2HUdEL/HmWtYYOzCdAtpSEEips6sKiY+j0JVhQ3htxON3AqcSeSzey7YGaaQHjZPVb+lBGITKdDZYFvPYmWQjNCelSe+1AZH4kiqhwGbvE0WsNp1GOoTyl/nwdWbrsMIF61Ul9vOD0id08oX2QECoELELxcvIEB+c55e9pqnFndLOneLMH8mYKGNCNyrTzJZ5bY612w==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700016)(1800799024)(82310400026)(13003099007)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	veIYdyiSm43UBdntzmAl6hL/n5ZD4ewbLYH449QHeaoAqWCY59NAxwgMPIzWXvHwLLEbb2xr1UZvWIkEuM3/WM+nY23piGgm7tBgFYozPKP/CCz6g5xxehVUwRp0yPgnq8pW5BI+/DNjv2SgTZBsw+qvOIoJA70r7t9BeQkSBVAVzJ1gioUU92UXE/m8C6Jfh9kbITkRB0q1Ahr1DGxLvLrAv62IIgR42L8qJAiCSoxso8NHywfYLZ6BrV8UimJq7JNpw6Xx9mzArqMSXWSoRXeY5NSN1yj63EgKqxzxJ1PT8+1abg0b38F1M8dcFrGZ5+PiUJDuaB77kP1xrefIgJr/jnrX0XujWSirQtezfWnQV+bu8RPkXWMIDxr+XeoORU0HHyqElzSQrr7rh/ZWTlYCfBrsCM0IC/iWNR/BKcaAl/Yq83huT9suQtWUbd4d
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 18:50:42.9861
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 74ec6932-dc5a-4d26-dc57-08de901f93cc
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CDE.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8077
+
+Hi,
+
+This series by Or adds devlink per-port resource support.
+See detailed description by Or below [1].
+
+Regards,
+Tariq
+
+[1]
+Currently, devlink resources are only available at the device level.
+However, some resources are inherently per-port, such as the maximum
+number of subfunctions (SFs) that can be created on a specific PF port.
+This limitation prevents user space from obtaining accurate per-port
+capacity information.
+This series adds infrastructure for per-port resources in devlink core
+and implements it in the mlx5 driver to expose the max_SFs resource
+on PF devlink ports.
+
+Patch #1  refactors resource functions to be generic
+Patch #2  adds port-level resource registration infrastructure
+Patch #3  registers SF resource on PF port representor in mlx5
+Patch #4  adds devlink port resource registration to netdevsim for testing
+Patch #5  adds dump support for device-level resources
+Patch #6  includes port resources in the resource dump dumpit path
+Patch #7  adds port-specific option to resource dump doit path
+Patch #8  adds selftest for devlink port resource doit
+Patch #9  documents port-level resources and full dump
+Patch #10 adds resource scope filtering to resource dump
+Patch #11 adds selftest for resource dump and scope filter
+Patch #12 documents resource scope filtering
+
+Userspace patches for iproute2:
+https://github.com/ohartoov/iproute2/tree/port_resources
+
+V4:
+- Link to V3:
+  https://lore.kernel.org/all/20260226221916.1800227-1-tariqt@nvidia.com/
+- Remove new devlink port resource command
+- Add devlink resource show for all resources (devices + ports) via
+  dumpit
+- Add scope parameter to dump (scope dev / scope port)
+- Extend the doit command with port handle option while preserving the
+  legacy dev doit path
+
+Or Har-Toov (12):
+  devlink: Refactor resource functions to be generic
+  devlink: Add port-level resource registration infrastructure
+  net/mlx5: Register SF resource on PF port representor
+  netdevsim: Add devlink port resource registration
+  devlink: Add dump support for device-level resources
+  devlink: Include port resources in resource dump dumpit
+  devlink: Add port-specific option to resource dump doit
+  selftest: netdevsim: Add devlink port resource doit test
+  devlink: Document port-level resources and full dump
+  devlink: Add resource scope filtering to resource dump
+  selftest: netdevsim: Add resource dump and scope filter test
+  devlink: Document resource scope filtering
+
+ Documentation/netlink/specs/devlink.yaml      |  32 +-
+ .../networking/devlink/devlink-resource.rst   |  70 ++++
+ .../net/ethernet/mellanox/mlx5/core/devlink.h |   4 +
+ .../mellanox/mlx5/core/esw/devlink_port.c     |  37 ++
+ drivers/net/netdevsim/dev.c                   |  23 +-
+ drivers/net/netdevsim/netdevsim.h             |   4 +
+ include/net/devlink.h                         |  10 +-
+ include/uapi/linux/devlink.h                  |  17 +
+ net/devlink/devl_internal.h                   |   4 +
+ net/devlink/netlink_gen.c                     |  24 +-
+ net/devlink/netlink_gen.h                     |   8 +-
+ net/devlink/port.c                            |   2 +
+ net/devlink/resource.c                        | 319 +++++++++++++++---
+ .../drivers/net/netdevsim/devlink.sh          |  79 ++++-
+ 14 files changed, 576 insertions(+), 57 deletions(-)
 
 
---isa3i4d4tepb4cvo
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/7] memcg: Scale up vmstats flush threshold with
- int_sqrt(nr_cpus+2)
-MIME-Version: 1.0
+base-commit: f1359c240191e686614847905fc861cbda480b47
+-- 
+2.44.0
 
-Hello Waiman and Li.
-
-On Fri, Mar 20, 2026 at 04:42:35PM -0400, Waiman Long <longman@redhat.com> =
-wrote:
-> The vmstats flush threshold currently increases linearly with the
-> number of online CPUs. As the number of CPUs increases over time, it
-> will become increasingly difficult to meet the threshold and update the
-> vmstats data in a timely manner. These days, systems with hundreds of
-> CPUs or even thousands of them are becoming more common.
->=20
-> For example, the test_memcg_sock test of test_memcontrol always fails
-> when running on an arm64 system with 128 CPUs. It is because the
-> threshold is now 64*128 =3D 8192. With 4k page size, it needs changes in
-> 32 MB of memory. It will be even worse with larger page size like 64k.
->=20
-> To make the output of memory.stat more correct, it is better to scale
-> up the threshold slower than linearly with the number of CPUs. The
-> int_sqrt() function is a good compromise as suggested by Li Wang [1].
-> An extra 2 is added to make sure that we will double the threshold for
-> a 2-core system. The increase will be slower after that.
-
-The explanation seems [1] to just pick a function because log seemed too
-slow.
-
-(We should add a BPF hook to calculate the threshold. Haha, Date:)
-
-The threshold has twofold role: to bound error and to preserve some
-performance thanks to laziness and these two go against each other when
-determining the threshold. The reasoning for linear scaling is that
-_each_ CPU contributes some updates so that preserves the laziness.
-Whereas error capping would hint to no dependency on nr_cpus.
-
-My idea is that a job associated to a selected memcg doesn't necessarily
-run on _all_ CPUs of (such big) machines but effectively cause updates
-on J CPUs. (Either they're artificially constrained or they simply are
-not-so-parallel jobs.)=20
-Hence the threshold should be based on that J and not actual nr_cpus.
-
-Now the question is what is expected (CPU) size of a job and for that
-I'd would consider a distribution like:
-- 1 job of size nr_cpus, // you'd overcommit your machine with bigger job
-- 2 jobs of size nr_cpus/2,
-- 3 jobs of size nr_cpus/3,
-- ...
-- nr_cpus jobs of size 1. // you'd underutilize the machine with fewer
-
-Note this is quite na=EFve and arbitrary deliberation of mine but it
-results in something like Pareto distribution which is IMO quite
-reasonable. With (only) that assumption, I can estimate the average size
-of jobs like
-	nr_cpus / (log(nr_cpus) + 1)
-(it's natural logarithm from harmonic series and +1 is from that
-approximation too, it comes handy also on UP)
-
-	log(x) =3D ilog2(x) * log(2)/log(e) ~ ilog2(x) * 0.69
-	log(x) ~ 45426 * ilog2(x) / 65536
-
-or=20
-	65536*nr_cpus / (45426 * ilog2(nr_cpus) + 65536)
-
-
-with kernel functions:
-	var1 =3D 65536*nr_cpus / (45426 * ilog2(nr_cpus) + 65536)
-	var2 =3D DIV_ROUND_UP(65536*nr_cpus, 45426 * ilog2(nr_cpus) + 65536)
-	var3 =3D roundup_pow_of_two(var2)
-
-I hope I don't need to present any more numbers at this moment because
-the parameter derivation is backed by solid theory ;-) [*]
-
-
-> With the int_sqrt() scale, we can use the possibly larger
-> num_possible_cpus() instead of num_online_cpus() which may change at
-> run time.
-
-Hm, the inverted log turns this into dilemma whether to support hotplug
-or keep performance at threshold comparisons. But it wouldn't be first
-place where static initialization with possible count is used.
-
-
-> Although there is supposed to be a periodic and asynchronous flush of
-> vmstats every 2 seconds, the actual time lag between succesive runs
-> can actually vary quite a bit. In fact, I have seen time lags of up
-> to 10s of seconds in some cases. So we couldn't too rely on the hope
-> that there will be an asynchronous vmstats flush every 2 seconds. This
-> may be something we need to look into.
-
-Yes, this sounds like a separate issue. I wouldn't mention it in this
-commit unless you mean it's particularly related to the large nr_cpus.
-
-> @@ -5191,6 +5191,14 @@ int __init mem_cgroup_init(void)
-> =20
->  	memcg_pn_cachep =3D KMEM_CACHE(mem_cgroup_per_node,
->  				     SLAB_PANIC | SLAB_HWCACHE_ALIGN);
-> +	/*
-> +	 * Scale up vmstats flush threshold with int_sqrt(nr_cpus+2). The extra
-> +	 * 2 constant is to make sure that the threshold is double for a 2-core
-> +	 * system. After that, it will increase by MEMCG_CHARGE_BATCH when the
-> +	 * number of the CPUs reaches the next (2^n - 2) value.
-
-when you switched to sqrt, the comment should read n^2
-
-> +	 */
-> +	vmstats_flush_threshold =3D MEMCG_CHARGE_BATCH *
-> +				  (int_sqrt(num_possible_cpus() + 2));
-> =20
->  	return 0;
->  }
-> --=20
-> 2.53.0
-
-(I will look at the rest of the series later. It looks interesting.)
-
-[*]
-nr_cpus	var1	var2	var3
-1       1       1       1
-2       1       2       2
-4       1       2       2
-8       2       3       4
-16      4       5       8
-32      7       8       8
-64      12      13      16
-128     21      22      32
-256     39      40      64
-512     70      71      128
-1024    129     130     256
-
---isa3i4d4tepb4cvo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCac1m6BsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AhqDgD/ZH5FdNATX0Dm9ldZMHyS
-oV/8qO6gLgjmu8goJGbY7NgA/Av2MbsmiWijOj+3I3XEmPfOtsPxWjctyieoz9ut
-LtMB
-=Nhw7
------END PGP SIGNATURE-----
-
---isa3i4d4tepb4cvo--
