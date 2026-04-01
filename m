@@ -1,179 +1,171 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77069375F8B;
-	Wed,  1 Apr 2026 15:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A202846AF29
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 16:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775058673; cv=none; b=oBKmS2QsfOQOU+22SxZuWbpRypH3ftxjiwEMCKTMPQntPZoWN6/r9pCpthRovZmf+cWuPgisFfudVRR85t0AAexYjYFrirWi48KRIPLE0G5eMCplJpVFyORfroxPQ5pgtZv3k3wHXpQkv+CNYdy/lNLtHw7iWGhN12zgIHNAsMA=
+	t=1775060137; cv=none; b=nNOsnBmoiTcmUeixI7O89zeUUEFnjp8S/Sv0M0RXoucWOzqzzgnsKQGMiYMBDLfpa9INoE21kZl36TjJZ7HTj0Xc01Om4u1xf1zba90zJKW+OFH7S8HzfGqOI5zgIgEkSiYYfj8H0bFk2ZjrLgTJ+CGXUq0m3cuFT1yzAl7dRtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775058673; c=relaxed/simple;
-	bh=EQU7CULakEXXH7jofkY9RKIz7e670h1NnE9Tv2TEOmY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Dh1nM2mwHUhOEgr1RkFUQAO3lntx5kS76JML1tHhA1FmUkuvj1/2DiMVkw8G9NZb35D1+urCroWehJLi54VVR+IT93KtorYEHQeuQsR5QfTlFMr/Z9lhCoBNGfmJqJWLtCAmmMNqLfK/XE8r04h49hYyPYwH/C/FLVnmAjFB0MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=d4J+eTQb; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1775060137; c=relaxed/simple;
+	bh=39Oa2loJA7hp7uvZHKhwdxu0ZLV6qyUTOt1cn55M7w0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DLV2mIjag9LB/3IJHmEF+nMwIhBkY6RWa3Om5MVybOU8BZ62EnjXSHWqVTP3WvW6FG3/YC0i6v3K4P/ioeoV9Mn1eeAuhDDf3Vw2P+mxE+uD+msQOS/XXCRwLaNX4kjrXRg4F9NeyfCLBNJXpze7x0SD4wWM967KBhaU9Lz3lRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RnmoBVEM; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="d4J+eTQb"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 631FIx8H2589291
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 1 Apr 2026 08:19:00 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 631FIx8H2589291
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026032601; t=1775056741;
-	bh=mofNgt6G7Tg/JG+BRVm7QC480r4gFG2au0hN5PJUl8k=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=d4J+eTQbJDdnmPR97Ji7+nCe/fJRnSIA9NwyIy2J0CkVuI39KQWSD5JVTLun7jBvV
-	 Fs1zuMQycLKUnsW3gQfj0tZ0PsVBZZD3h1qPdKdH4nTnZj54Al4eW2VDZVJdm3tD43
-	 mC1N2VIrW31u6N7gO5bBx2QINP9RTLuGuvfR3DCzeZq23NpOnVK5b80Gdk4SY5m1d8
-	 dBl7JkVRIf0Tn21pKFfd9H09cFYUahsRsRwQDbJnpk9BI0PrsXgetKjTj0B4ef0ZH9
-	 iG4xK7sXuBUoXztShGGCDZyXB4rTN/Q5BOaNHgDUUWXpnKdGuAFOhqcr3RJ4+AGlCv
-	 5HZe0bB3tuhjg==
-Date: Wed, 01 Apr 2026 08:18:52 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Xin Li <xin@zytor.com>
-CC: Yi Lai <yi1.lai@intel.com>, Zijlstra Peter <peterz@infradead.org>,
-        Lutomirski Andy <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-        Molnar Ingo <mingo@redhat.com>, Petkov Borislav <bp@alien8.de>,
-        Hansen Dave <dave.hansen@linux.intel.com>,
-        Cooper Andrew <andrew.cooper3@citrix.com>,
-        x86 maintainers the arch <x86@kernel.org>,
-        Khan Shuah <shuah@kernel.org>,
-        Kernel Mailing List Linux <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, yi1.lai@linux.intel.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3=5D_selftests/x86=3A_Fix_sysre?=
- =?US-ASCII?Q?t=5Frip_assertion_failure_on_FRED_systems?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <77CAB11A-0F99-445E-AD2D-2F2D9F7F5E78@zytor.com>
-References: <77CAB11A-0F99-445E-AD2D-2F2D9F7F5E78@zytor.com>
-Message-ID: <3F5E4280-C16A-4A3F-BFB8-593639243207@zytor.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RnmoBVEM"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-48700b1ba53so65709695e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 09:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775060133; x=1775664933; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PVrOnlJE4y/6fgO3OqR7CiW+cGL6Q90xMJNV21DISQY=;
+        b=RnmoBVEMwwZTTltuUDCol53d87HnI8mC56oYXW+kEfwt1UEKdEbz4XP9Wi4V4Gd0hm
+         2saboE2rNXBAmTDNWOit2m84j+r4gIp+Vns0uQla5amoH8NUYsbCSMsQu372Fr9kQd2R
+         z/X9oKXz/ALNexYZs8xR7U+ap8N0K7sd0DIDO8xoNXeL1Dy8Kr+mMADd0pa2OPiSUkQt
+         EpvObWuvWKgHRbfU1AeK3wSOwpe4J+K1qmT+4p5B4+bUhEezFVIxUzl0X1K5gHUpAbgH
+         GZ8iCzS0jbYPUXnd7JkppZgL9W7l/8i7C5Xria2TUhrH3Inqxp4pa9slMvUrw+bltJPk
+         i+qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775060133; x=1775664933;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PVrOnlJE4y/6fgO3OqR7CiW+cGL6Q90xMJNV21DISQY=;
+        b=kOiJROlpcYZMci8TTpQLl2XZr5sG0+vQQRj3Q6vNx8dwr0GwMMR5hA0oQPB5lqhPQP
+         QPOg3Wx/f+oqK6uRC2ZVo1wX7Cjp3ahVoZJgfZ+drE48Zv0i2XZqZdWHVT0Ab4UdBXtY
+         cwGDJOkJbWMiLJmw/JU3jaOTI3d65sMHq+a5lpapUFMfVv6zCqdAkEsyF7/z1pK01dTW
+         rF3PVjblLgywxBHpIP691+mTiIt9Svz7L9W/pz8oIlOYYOCZQg1KqVIO0M8p41jtkdL/
+         TmQ8ve+vSK2fUUvSFJUQzI63q7Ea/dq2oXyV5CoJXPmfnLgR8nUNDBj9+WMOrdySRg1i
+         TijA==
+X-Forwarded-Encrypted: i=1; AJvYcCXQP7oaopUpDYLvnxahpBr41oqbUCzjK5jn8cAkJp3HZfZxYgFOAmQTPtPEkGeY1k7k8Ap/cwkHR2KnUvEVHMA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2fnflm1dTZJgyA/ogCpL83dF+lNDoYZz4Jb/bEoCG3W3/U8a/
+	1e2uXUyqzdiJozemHMR/tsPW0t1/Vt9RpiEXkKlWunEssDyuqtAvtlj6PaErIcneYwk=
+X-Gm-Gg: ATEYQzwVjrYXMB7aFBWvwUqMWKy/4P181mM7TSOpU0+zao2C/RTjyw6dwlSxnf0txUB
+	2ZwXFlSel6hvZlVCc8ZNTkCDMpJkGubblSGsebXT5RborkZCxTMcOYoJcoPi/czXz0qTpv5QoYI
+	x8vMbe97rxdaCF2+b8WianekcjfZ68+LzL7jv5Cr7JXE3dELMjuhnmoWTjDlTA6WZqxJxAGJUea
+	9lfRe+jZ2pQUTOVEdyLD7bF8HvfwhDv1gJpzOD53Z8nlCt+p/CGH+MV8s97vlnbEYVMax+O4uqK
+	0E4rlnMhJT5+fH/jFjEcw1whzNRWbysgYufTzpbxculW3WhYSPHaBxMB8casV94XSU0C8gfJEIE
+	0JgYs2Gm12zNhXsWcCXDCtVrS5J3HZ9NSBAWmgQCfuKC4Yha8q+uB/k87zuPg98HWNVb+5OiGOx
+	Jpu2XEB68P
+X-Received: by 2002:a05:600c:8b08:b0:485:3f1c:d897 with SMTP id 5b1f17b1804b1-48883572159mr70556245e9.9.1775060132990;
+        Wed, 01 Apr 2026 09:15:32 -0700 (PDT)
+Received: from localhost ([189.99.238.3])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56d9ba81b53sm13782e0c.4.2026.04.01.09.15.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 09:15:31 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Subject: [PATCH 00/10] selftests/bpf: Tolerate partial builds across kernel
+ configs
+Date: Wed, 01 Apr 2026 13:15:07 -0300
+Message-Id: <20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAItEzWkC/yWMSw6DMAwFr4K8rtXwXfQqVYUS44CrElCcVkiIu
+ ze0y3l6MzsoR2GFW7FD5I+oLCFDeSmAJhtGRhkyQ2WqzjSmROWXT6xJ0a2+n0VpCV5GbKiu2bf
+ UdoOFbK+RvWy/8v3xZ327J1M6c+fDWWV00QaazinnMPCWrrPVxBGO4ws6B3YEnQAAAA==
+X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=openssh-sha256; t=1775060128; l=3207;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=39Oa2loJA7hp7uvZHKhwdxu0ZLV6qyUTOt1cn55M7w0=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QE5dIUSreOCoDYxhzPTEq3DJLb2+vGdSKNAVzISqlkYZVoHLRq6mwXKx0oQ44AaKNqx2hIvqJzb
+ LJUWjO0NHigw=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-On April 1, 2026 7:59:17 AM PDT, Xin Li <xin@zytor=2Ecom> wrote:
->=EF=BB=BF
->>>>>>>> The existing 'sysret_rip' selftest asserts that 'regs->r11 =3D=3D
->>>>>>>> regs->flags'=2E This check relies on the behavior of the SYSCALL
->>>>>>>> instruction on legacy x86_64, which saves 'RFLAGS' into 'R11'=2E
->>>>>>>> However, on systems with FRED (Flexible Return and Event Delivery=
-)
->>>>>>>> enabled, instead of using registers, all state is saved onto the =
-stack=2E
->>>>>>>> Consequently, 'R11' retains its userspace value, causing the asse=
-rtion
->>>>>>>> to fail=2E
->>>>>>>> Fix this by detecting if FRED is enabled and skipping the registe=
-r
->>>>>>>> assertion in that case=2E The detection is done by checking if th=
-e RPL
->>>>>>>> bits of the GS selector are preserved after a hardware exception=
-=2E
->>>>>>>> IDT (via IRET) clears the RPL bits of NULL selectors, while FRED =
-(via
->>>>>>>> ERETU) preserves them=2E
->>>>>>> I don't really like this=2E  I think we have two credible choices:
->>>>>>> 1=2E Define the Linux ABI to be that, on FRED systems, SYSCALL pre=
-serves
->>>>>>> R11 and RCX on entry and exit=2E  And update the test to actually =
-test
->>>>>>> this=2E
->>>>>>> 2=2E Define the Linux ABI to be what it has been for quite a few y=
-ears:
->>>>>>> SYSCALL entry copies RFLAGS to R11 and RIP to RCX and SYSCALL exit
->>>>>>> preserves all registers=2E
->>>>>>> I'm in favor of #2=2E  People love making new programming language=
-s and
->>>>>>> runtimes and inline asm and, these days, vibe coded crap=2E  And i=
-t's
->>>>>>> *easier* to emit a SYSCALL and forget to tell the compiler / code
->>>>>>> generator that RCX and R11 are clobbered than it is to remember th=
-at
->>>>>>> they're clobbered=2E  And it's easy to test on FRED (well, not rea=
-lly,
->>>>>>> but it hopefully will be some day) and it's easy to publish one's
->>>>>>> code, and then everyone is a bit screwed when the resulting progra=
-m
->>>>>>> crashes sometimes on non-FRED systems=2E  And it will be miserable=
- to
->>>>>>> debug=2E
->>>>>>> (It's *really* *really* easy to screw this up in a way that sort o=
-f
->>>>>>> works even on non-FRED: RCX and R11 are usually clobbered across
->>>>>>> function calls, so one can get into a situation in which one's
->>>>>>> generated code usually doesn't require that SYSCALL preserve one o=
-f
->>>>>>> these registers until an inlining decision changes or some code ge=
-ts
->>>>>>> reordered, and then it will start failing=2E  And making the failu=
-re
->>>>>>> depend on hardware details is just nasty=2E
->>>>>>> So I think we should add the ~2 lines of code to fix the SYSCALL e=
-ntry
->>>>>>> on FRED to match non-FRED=2E
->>>>>> Yes; I'm afraid I have to concur=2E Preserving the clobber on entry=
- for
->>>>>> FRED systems is by far the safest choice=2E
->>>>>> Aside from this selftest, fancy debuggers and anything that can tra=
-nsfer
->>>>>> userspace state between machines might be 'surprised'=2E
->>>>> Thanks Andy and Peter=2E
->>>>> Indeed, making the selftest branch on FRED vs=2E non-FRED behavior
->>>>> is not a good practice=2E The selftest should validate ABI consisten=
-cy=2E
->>>>> I agree with Andy's option #2, so this should be fixed in the FRED
->>>>> syscall entry implementation=2E
->>>>> Li Xin, does this direction look right to you? I can assit with
->>>>> validation and keep the selftest aligned with the agreed ABI=2E
->>>> Yes, consistency should take precedence over hardware-specific variat=
-ions=2E
->>>> I would like to hear from Andrew Cooper and hpa before we do it=2E
->>> Per Andy=E2=80=99s suggestion, the change would be:
->>> diff --git a/arch/x86/entry/entry_fred=2Ec b/arch/x86/entry/entry_fred=
-=2Ec
->>> index 88c757ac8ccd=2E=2Ea19898747a2c 100644
->>> --- a/arch/x86/entry/entry_fred=2Ec
->>> +++ b/arch/x86/entry/entry_fred=2Ec
->>> @@ -79,6 +79,9 @@ static __always_inline void fred_other(struct pt_reg=
-s *regs)
->>> {
->>> /* The compiler can fold these conditions into a single test */
->>> if (likely(regs->fred_ss=2Evector =3D=3D FRED_SYSCALL && regs->fred_ss=
-=2El)) {
->>> +        regs->cx =3D regs->ip;
->>> +        regs->r11 =3D regs->flags;
->>> +
->>>    regs->orig_ax =3D regs->ax;
->>>    regs->ax =3D -ENOSYS;
->>>    do_syscall_64(regs, regs->orig_ax);
->>> It adds 4 extra MOVs on this hot path, but I don=E2=80=99t see it's a =
-problem here=2E
->>=20
->> We discussed this over a year ago, and at that point agreed that reserv=
-ing the register was the desired behavior=2E Why has this changed now?
->
->Yes, that is technically simpler and cleaner=2E
->
->The question brought up by Andy is, is the RCX/R11 clobbering behavior an=
- established architectural contract, or is it an implementation detail that=
- software ignores?
->
->But both are hard to prove=2E
->
->I think Andy and PeterZ want to be on the safer side, i=2Ee=2E, this clob=
-bering behavior is established=2E
->
+Currently the BPF selftests can only be built by using the minimum kernel
+configuration defined in tools/testing/selftests/bpf/config*. This poses a
+problem in distribution kernels that may have some of the flags disabled or
+set as module. For example, we have been running the tests regularly in
+openSUSE Tumbleweed [1] [2] but to work around this fact we created a
+special package [3] that build the tests against an auxiliary vmlinux with
+the BPF Kconfig. We keep a list of known issues that may happen due to,
+amongst other things, configuration mismatches [4] [5].
 
-I do see the point especially by the time developers will be mostly on FRE=
-D-capable hardware and their programs end up failing on legacy=2E=20
+The maintenance of this package is far from ideal, especially for
+enterprise kernels. The goal of this series is to enable the common usecase
+of running the following in any system:
 
-I'm more annoyed because we actually had this discussion once already=2E
+```sh
+make -C tools/testing/selftests install \
+        SKIP_TARGETS= \
+        TARGETS=bpf \
+        O=/lib/modules/$(uname -r)/build
+```
+
+As an example, the following script targeting a minimal config can be used
+for testing:
+
+```sh
+make defconfig
+scripts/config --file .config \
+               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+               --enable DEBUG_INFO_BTF \
+               --enable BPF_SYSCALL \
+               --enable BPF_JIT
+make olddefconfig
+make -j$(nproc)
+make -j$(nproc) -C tools/testing/selftests SKIP_TARGETS= TARGETS=bpf install
+```
+
+This produces a test_progs binary with 579 subtests, against the total of
+708. Many of them will still fail or be skipped at runtime due to lack of
+symbols, but at least there will be a clear way of building the tests.
+
+[1]: https://openqa.opensuse.org/tests/5811715
+[2]: https://openqa.opensuse.org/tests/5811730
+[3]: https://src.opensuse.org/rmarliere/kselftests
+[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
+[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
+
+Assisted-by: {codex,claude}
+Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+---
+Ricardo B. Marlière (10):
+      selftests/bpf: Fall back to distro build directory for test_kmods
+      selftests/bpf: Tolerate BPF and skeleton generation failures
+      selftests/bpf: Avoid rebuilds when running emit_tests
+      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
+      selftests/bpf: Tolerate test file compilation failures
+      selftests/bpf: Allow test_progs to link with a partial object set
+      selftests/bpf: Tolerate benchmark build failures
+      selftests/bpf: Provide weak definitions for cross-test uprobe functions
+      selftests/bpf: Skip tests whose objects were not built
+      selftests/bpf: Tolerate missing files during install
+
+ tools/testing/selftests/bpf/Makefile               | 107 ++++++++++++++-------
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  11 ++-
+ tools/testing/selftests/bpf/test_kmods/Makefile    |   6 +-
+ tools/testing/selftests/bpf/test_progs.c           |   7 +-
+ 4 files changed, 88 insertions(+), 43 deletions(-)
+---
+base-commit: 0eeb0094ba0321f0927806857b5f01c1577bc245
+change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
+
