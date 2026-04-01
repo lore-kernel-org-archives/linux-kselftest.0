@@ -1,185 +1,179 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021129.outbound.protection.outlook.com [52.101.100.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4678333FE1F;
-	Wed,  1 Apr 2026 15:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775055905; cv=none; b=DyndXrbix0d80vu6kDxYTznL05M6zIUIIe3cuKE+RIU8dBHSlS/T03J732UV3qz08BXFEux2KZ06pj7KvCwj0fiHPorjdLRBB8VHqtRPh5j+6R2RcOujzzhVjagFCuhzW8R3SRVtOVxKPbdm3Mo+alHFg7kUtPlgPrFYuteHAKY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775055905; c=relaxed/simple;
-	bh=Gj4nYmiE5QGl6Bcerec5KGvNnAP6gh8kkRSYgdtOASw=;
-	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
-	 Cc:In-Reply-To:To; b=OtrgFDiuAf3vbQUujVTrwOw33zORLF1A2mLusyCgkhW/Ic2ik4n28vROUi4980QNZjQpePXWyYr/iFTbn8VTO+gIrz0KIL/0QM4YasYNMYRMHqnCyUZny++cLG4yIW6hQrLcB9244Gr8pTXwY5GzqferbeSTfzoqQy7YGHE3g0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=BxfsulqA; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F1935FF75;
+	Wed,  1 Apr 2026 15:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.129
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775055930; cv=fail; b=KAgx4rQZ1bMOz7fCya6ScUzO1UlpHikipq4L9P2V8cDNhHE9y9IZCD5DfJUfYfMwLCylqFoCyZWv8tGHTPq5gwhwaV9xr9bEPPnjG6cbRIe5B+OAiydLMwv2FELQYVIcgqQdFNm9eA/JFIWazvpObdWvCYzhTz6ElHDHB3hgWHw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775055930; c=relaxed/simple;
+	bh=dTNRIewjuXWANgv+hysRsiF/lUNMirNuGewkJLZmkhM=;
+	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:References:
+	 In-Reply-To:MIME-Version; b=SMuAzjn0VWCvhQM1ubW6rCLhuiKkY6DWVVOfzoMXOAMJKt9myixaPcqNQmTWSsQZN3LgDXpmQTkBBV/QWBh7bzoCr/lfXfPwU7cITbvH9BO0skmUEWZymCLusXmrqoAX0ujT07dnc4RfkITHQnu5nsD9PwoWBi5wGdE5wBO2BiQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=fin1S7WZ; arc=fail smtp.client-ip=52.101.100.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="BxfsulqA"
-Received: from smtpclient.apple ([192.19.50.250])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 631EmZkx2538037
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Wed, 1 Apr 2026 07:48:36 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 631EmZkx2538037
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026032601; t=1775054916;
-	bh=jMfLpN8THsCl36dLPaHeTAdSjI8rKpQDChwXYCJmOis=;
-	h=From:Subject:Date:References:Cc:In-Reply-To:To:From;
-	b=BxfsulqAruY1oOqaPonaxLRV3m6+bOjfE91RS6siAXbOynXL+ydJsagerGENz6aq3
-	 tFuG/2ZNvn1R8TsFq4Ajj/ODyQM+llkxvQpBw2Lm78gaP/2hOvCVS+n5g9/2RKd3eL
-	 ih3uQ1fcPJYxj7Atoawt1XumHXVkhbKlpaxYAIqkiu2R1EGYgp4ODELvheJeK3cSZt
-	 0ZcEURXWmYf7Wfa/hMAjK32P/E+hNtjcYw8AKwISC7++asEVraq6TviHQttSL7ErD4
-	 VdwM7GIC0uxz36zUTLeJRg+dAmm9dIhcDzaK7ZnPOpAUNywktgVtHLcLSpHjNtm301
-	 iAdyKICsfwqAQ==
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="fin1S7WZ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VtC7v+l8XDFaqGllLgTUtu7JUGxvgLi0blljg7BaC1NnxV02faGt0C2MO0VkIqF4nr4vY/j2Aa5rXmAfWGOKKrajGgsujjbLvbaAXPqusa5FlPxEh9DfsgM9DNJApGDB7bJQF2EDJ/nBzVaoJShzoLdKIVFBKNcQqYW50IQiM8qh7LlJPZVETsilsvRUMXMXd5RrlzKSkIxdwEOpnXOrkuLMei9VR8Y+32mMYZyL167UzWPspkrDpYE/51/kxbK1zI3CXpOzTFb/BrS9vU4igBRP9zmAikSOgDhNAQxaPaNC71uWHsbp/FmmSgikNDZtV/XzZnwOq+nWEyQfr8y4lA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/epdbXMFdVsrIkMTz5VPvg/77n+qUmcD9hca/TXFCKc=;
+ b=dYNVZ1mlBPq499ldIPyv/f+3fo6wh2b8TmiXMHQRwNwLgkDO/7kPN2Brc+AkFIIkRB9g4S3qTmlFoMbc0ZuZW31vJGKh47yar0rHrziN5PCiZcXFBzIrDBRNLo1FHywi+jRFlQiZg5kXsWluWUNHEtRROz3Wittbw9M+Qc56qJJtZfvvC2MScqOb+PCiY1DZZ+tJnx7ZXm9naZh1cwNXrHKCcWSdmJTxWoMWCBDg+fHiogih9b0G8E9FCGTB3wfgBAIINMiy2kP2nTj72qNbRTyRk6h/kJx46VRsfAmuBcnQvtuCQq2NNUbj5RwbOgozEhs+1K5kN1k2TvT42t8bQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/epdbXMFdVsrIkMTz5VPvg/77n+qUmcD9hca/TXFCKc=;
+ b=fin1S7WZ7N2TDHJAReejaqpgW0ONVdrEQjabYoE+lylKEu3kSD7Uwyz3nPGk7m5BNSgTDEE4K+zi+jO9ux6J3lVYmfr4lflbCzkth2+zQgxV1dzzCNb2UB/4IoFa6JGV+NbiR15HMG5zwOiLLIxNWd8Q9xXixk7mSZx+9ihCBuA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by LO6P265MB6112.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2b0::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Wed, 1 Apr
+ 2026 15:05:25 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9769.014; Wed, 1 Apr 2026
+ 15:05:25 +0000
 Content-Transfer-Encoding: quoted-printable
-From: Xin Li <xin@zytor.com>
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 01 Apr 2026 16:05:23 +0100
+Message-Id: <DHHWT5V20WEB.287E608FVAGLR@garyguo.net>
+To: "Miguel Ojeda" <ojeda@kernel.org>, "Nathan Chancellor"
+ <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Danilo Krummrich"
+ <dakr@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Paul
+ Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
+ Ou" <aou@eecs.berkeley.edu>, "Alexandre Courbot" <acourbot@nvidia.com>,
+ "David Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>,
+ "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
+ <david@davidgow.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, "Todd Kjos"
+ <tkjos@android.com>, "Christian Brauner" <christian@brauner.io>, "Carlos
+ Llamas" <cmllamas@google.com>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Jonathan Corbet" <corbet@lwn.net>
+Cc: "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
+ <rust-for-linux@vger.kernel.org>, <linux-kbuild@vger.kernel.org>, "Lorenzo
+ Stoakes" <lorenzo.stoakes@oracle.com>, "Vlastimil Babka"
+ <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ "Uladzislau Rezki" <urezki@gmail.com>, <linux-block@vger.kernel.org>,
+ "moderated for non-subscribers" <linux-arm-kernel@lists.infradead.org>,
+ "Alexandre Ghiti" <alex@ghiti.fr>, <linux-riscv@lists.infradead.org>,
+ <nouveau@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>, "Rae
+ Moar" <raemoar63@gmail.com>, <linux-kselftest@vger.kernel.org>,
+ <kunit-dev@googlegroups.com>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, <llvm@lists.linux.dev>,
+ <linux-kernel@vger.kernel.org>, "Shuah Khan" <skhan@linuxfoundation.org>,
+ <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH 17/33] rust: kbuild: update `bindgen --rust-target`
+ version and replace comment
+From: "Gary Guo" <gary@garyguo.net>
+X-Mailer: aerc 0.21.0
+References: <20260401114540.30108-1-ojeda@kernel.org>
+ <20260401114540.30108-18-ojeda@kernel.org>
+In-Reply-To: <20260401114540.30108-18-ojeda@kernel.org>
+X-ClientProxiedBy: LO4P265CA0136.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c4::12) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3] selftests/x86: Fix sysret_rip assertion failure on FRED systems
-Date: Wed, 1 Apr 2026 07:36:48 -0700
-Message-Id: <B916BEC6-D778-46FF-8271-D6BE6EBD042B@zytor.com>
-References: <1D8D9EE4-D652-4E09-86C2-2D3FAB151100@zytor.com>
-Cc: Lai Yi <yi1.lai@intel.com>, Zijlstra Peter <peterz@infradead.org>,
-        Lutomirski Andy <luto@kernel.org>, Gleixner Thomas <tglx@kernel.org>,
-        Molnar Ingo <mingo@redhat.com>, Petkov Borislav <bp@alien8.de>,
-        Hansen Dave <dave.hansen@linux.intel.com>,
-        Cooper Andrew <andrew.cooper3@citrix.com>,
-        the arch x86 maintainers <x86@kernel.org>,
-        Khan Shuah <shuah@kernel.org>,
-        Kernel Mailing List Linux <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, yi1.lai@linux.intel.com
-In-Reply-To: <1D8D9EE4-D652-4E09-86C2-2D3FAB151100@zytor.com>
-To: "Anvin H. Peter" <hpa@zytor.com>
-X-Mailer: iPhone Mail (23E246)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|LO6P265MB6112:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ac42ab0-eba5-4a9e-e0a2-08de90001a43
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|10070799003|366016|1800799024|22082099003|921020|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	YhjC0FtcXTS85KUzTebdBbqDZ1NP3xQ2T+Z8V3jkCcUBw7bfKKn4aUnqcCe1W0T9adIoUjqLqIcmS1Wu1H28rxuUEIRBcsS8EtWW79Pz3H+Wf6WBg4QVKS5CFEK/KsCBYtHQmf6gJsD0HKYdSeJlhuUGBmSBybHKG7uiHVLmyEyabn8vwpdY2oaX0a7QoV3m4nYMM7IHHvuuo6b4B51RdVIEVuSjhdxgh6bvu8WZkwEHseDzYzNE6Tqf/rdHeAd+LoJfCFKOUSsrXrrF6XjhQv1cppeXTPbLl0nwMML4+/YlXXOTSV4Qz6rCwJ0JcUN9VzlWZxsOAKAg4GB+xpXa8E/pm33dWa7stiSIHL5d3ROnvcbarDU/hfoDeUmY1Jw7Y48aTHAgBaQApabnvD8Y568tXqMSTWHLYXFoV5+i8U265La3hR3hrOkZLOrsVUnIsWH8No9aaHBzZUz7fnhEULqs9J41m80zU4TkTENpi++0UMX06Z8B1WnuKEOcM8zJpf4+PJHs1fx5A9zER5Sm1GzPFNcLbrgC2qcd6gMhsH2d0k9WSWaU2hcgj9nE9MLYvX4DnMHPy4QTgV9HGyiroXWCCQjRVWMimNLo90EIcZxWpL/bc9FSbMkclzYnFS7MjAxPkQs/dLp3CmtIuaOCYxbv9J6VVxXPpBksl7GsPD4iHkhV6G8neF6VKmDicGxLFYYyxNDbXp2yA4h0QB7NVTXCzF7Myv/1P66Iq76uJs3ZpoXs7ox/h+VrTnvJzY0gACsuTn53fX2P0QdLIC6vZg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(366016)(1800799024)(22082099003)(921020)(18002099003)(56012099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NmJ2MWxkeXIwTk80UXh0UnA3SldWWEV0RzVyMWNnc3Z0K3dMNVlDOXJsVjY3?=
+ =?utf-8?B?REpQNU5sV0RwWHFhenl5em4zc0J4a2l3Q3VDSWZXZkxQaHd4NExsVXYza2Vo?=
+ =?utf-8?B?OUw0cjNPcXdyZkswTnJsTXBQa3dnR3ZqT3FJRDcrSFp5di9YbTdVYlJ0RTBD?=
+ =?utf-8?B?YUNPdTJ2Z0dtU2o3bXpoWGNpajVKempxaDBNZG9YZ2pSRkFDMHRtUTROOEps?=
+ =?utf-8?B?RmJEbDFNS2s1L3FtenhpclhCcURDaW1LMUhIZm95TG1PT3d3eVdhZ0wweC90?=
+ =?utf-8?B?cGFpZ2JmNWVUdG1kd0YvbU4vdkJYRjRMR3BwVnJjQmJBSG1wR0pzRmw2UWdM?=
+ =?utf-8?B?czhIZkVHUmFWTE00azRlcG9hWGJXc3BRU1NJVGIxWTI3RnpBVnlyVlgxbWFk?=
+ =?utf-8?B?ZlRCbEM1RVNsV05YSGw1alVkTGFLTTUwdXJXMDNjVWwvOTVGYlF0MDJqMmpC?=
+ =?utf-8?B?dENiVUtGbE90bkJpNGRoMjg3LzQra0NlZzZCR1g5K1F5dWNudWVFTVFtNnJv?=
+ =?utf-8?B?L3BRU3RTMnI5M1IxcGFwRmpYUDJpU3ZMbXhSMlZRU1dRRHRZazhOWEY5K1d5?=
+ =?utf-8?B?WjA4Q01QdmRvU0JBVUF3ajFSRXBxejhpZDFzWFB2NTQ2Ky8vM2JrYVJ0Z0NJ?=
+ =?utf-8?B?THJWcXJGNnZsRDhlUnVXVzFqaTZLOW1UZXB2Zm8reUlad1ljNjVvbC9LdFk3?=
+ =?utf-8?B?V0svZ2dkdlFwcHZ4UkZCYWRkV09xNTE1MjNHYm1OdS9OVXpVQ1UwbDhpMFI2?=
+ =?utf-8?B?VHBnakZGeEhjQkxHWmRXWWxIb291WXhFUjIxemFmbzVXWHZTZDN5b3ZlVTJU?=
+ =?utf-8?B?ejVtT0NKcnRUR2crVk1tY2Vrd1ZyR29rbEU5cXE3RnZ3VUtjdWdjMTU0ZlRk?=
+ =?utf-8?B?anQ0OWtHZGxCWndYMVdwZTgzc1ZEVWlMbU5nSnBkdEFtY1pMUjVJb3FGR09w?=
+ =?utf-8?B?S0ovZ1JhSnd0WU0xWVJhenJadUNNZ0M0NDg0YlJUcCtQV3BlMkMwVTdyN2xm?=
+ =?utf-8?B?TWh1TFhnSHVHYlM3aFIrdnlRREcrMnRUbHVGRXNLSDMxUjRhM250MmlRcWRU?=
+ =?utf-8?B?YU5pOUJEZUhVOUtIZlQ3MlFEaFdpT09yc1lwR01DbnpER2oyK1I4SDRoUEpn?=
+ =?utf-8?B?TjJxcXBDeC9EdUdwQ0J4Y0ZZeVhIMnIxWEczT2F4bWF0Tzc2MlFueHRYUVRq?=
+ =?utf-8?B?cmxYRlZXRWo3Z1pZQkt1cVRtSFMwOHNZbnd0NUVYbzlsVzRvVVYwTDFqd0tk?=
+ =?utf-8?B?YkZBemxKWW1PUG1yVnBYMHRLTHVjUU1aenJwYzlnSC9RNG1oaWRQUVFISDRB?=
+ =?utf-8?B?ZFFLVmdSSmwxU3ZjUFhsRFJuUzQ3TGFkMEdqRVlhYmRnMjZwaDArb1JvRFZi?=
+ =?utf-8?B?c2ZlanpLQjRQWkRnbVBnVlNDSFJtYWVHVlJWb3lSNlMyeFlzVDJ2RGlzUVVY?=
+ =?utf-8?B?QWNmbm5aWWNGb3pKMzRGV0tzMkpkR1FtcHZUYnJzVk51VytTNEw5czdFVzNR?=
+ =?utf-8?B?MEJFVE5NUVVBUUVnbW1XSHFjMlp1RlN2dWRmRFhxMUs0TmZmTFJ3TllKNjBs?=
+ =?utf-8?B?YlRaQnBob0lERVhpL1J2L2lyTzFNRUIvYjlnaFo0OVJYSGNVc2hZQjRNeFVp?=
+ =?utf-8?B?aUpxVm91TklWU3U2QzlTckx0VElQdXhRU0w1N3BpczZrcjNnVGhjZnFEb0NV?=
+ =?utf-8?B?dndOMFkxZHRlR3k5RXNyalBuWXVtYUF4am9mZVRHUE1kT010ZUNZWG1YUGlC?=
+ =?utf-8?B?cTZVcTlra0ZjeEFWRVIrZWRkRjZ4TnBYR3VwZVlySGJ3QllTZ0o4MWpPQVl1?=
+ =?utf-8?B?VFA3Z080K3VFZE96WjlBM1ZZQzhtS2RDbjh3dCtDWUdxNTZKd0JqK3pMVjFS?=
+ =?utf-8?B?bVBUU1VGV0h6TWU2Q2xtaW1KL0Z2TzFtV1ZKaWNDOVp1SWsxQTRlVTBzb29N?=
+ =?utf-8?B?WGVkTEtUam5tT3NMRWhpcGh1aUxIaXpaZi8wZnRjNXZQOTZ2K0s0a2kySGdG?=
+ =?utf-8?B?aU4xZHZiSFFEK2RVYzN2VmxwUHNOVnJrWHgxZmwzQ0RSK3kwdjRlRzFLb2pZ?=
+ =?utf-8?B?YzFBaDIrMjY1azhVakFFcVNKcG54c0ZJc0NoK2hpMWFhRWptNElIcS9MTUs2?=
+ =?utf-8?B?Ry9CKzRSSGNtc3NkZXZEaFRKYmhRRjdKZzlBTjhTVjQxV1FhQlV1UEpmMUdZ?=
+ =?utf-8?B?U1BKcG5jd2QrNWhFT2JuVUMzOEF4VlR1UWY2RE5UMXlQbE9tMzdyTHIxSzIv?=
+ =?utf-8?B?OUhoVmlNUk9CWGk0eE5vaThlbEoyS1B3VWpUQjFFR29oUiszd0VtRjJXTzQ1?=
+ =?utf-8?B?NnY1QklVY3BEdHVDS21SczY1czBrYThlK0x2SStIajFZd3poK0JwQT09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ac42ab0-eba5-4a9e-e0a2-08de90001a43
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 15:05:24.9151
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y7wolcEQhuXf2Igk8921H6d8xSkmjPmpTfU+ewikEsjzW2gGmx1n115ICu5fFZ6aPSTpXDSFjqXgwXIQ/sy7XA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB6112
 
-
-Thanks!
-Xin
-
-> On Mar 31, 2026, at 8:15=E2=80=AFPM, H. Peter Anvin <hpa@zytor.com> wrote:=
-
+On Wed Apr 1, 2026 at 12:45 PM BST, Miguel Ojeda wrote:
+> As the comment in the `Makefile` explains, previously, we needed to
+> limit ourselves to the list of Rust versions known by `bindgen` for its
+> `--rust-target` option.
 >=20
-> =EF=BB=BFOn March 31, 2026 6:59:06 PM PDT, Xin Li <xin@zytor.com> wrote:
->>=20
->>=20
->>>> On Mar 30, 2026, at 11:03=E2=80=AFPM, Xin Li <xin@zytor.com> wrote:
->>>=20
->>>=20
->>>>>>> The existing 'sysret_rip' selftest asserts that 'regs->r11 =3D=3D
->>>>>>> regs->flags'. This check relies on the behavior of the SYSCALL
->>>>>>> instruction on legacy x86_64, which saves 'RFLAGS' into 'R11'.
->>>>>>>=20
->>>>>>> However, on systems with FRED (Flexible Return and Event Delivery)
->>>>>>> enabled, instead of using registers, all state is saved onto the sta=
-ck.
->>>>>>> Consequently, 'R11' retains its userspace value, causing the asserti=
-on
->>>>>>> to fail.
->>>>>>>=20
->>>>>>> Fix this by detecting if FRED is enabled and skipping the register
->>>>>>> assertion in that case. The detection is done by checking if the RPL=
-
->>>>>>> bits of the GS selector are preserved after a hardware exception.
->>>>>>> IDT (via IRET) clears the RPL bits of NULL selectors, while FRED (vi=
-a
->>>>>>> ERETU) preserves them.
->>>>>>>=20
->>>>>>=20
->>>>>> I don't really like this.  I think we have two credible choices:
->>>>>>=20
->>>>>> 1. Define the Linux ABI to be that, on FRED systems, SYSCALL preserve=
-s
->>>>>> R11 and RCX on entry and exit.  And update the test to actually test
->>>>>> this.
->>>>>>=20
->>>>>> 2. Define the Linux ABI to be what it has been for quite a few years:=
-
->>>>>> SYSCALL entry copies RFLAGS to R11 and RIP to RCX and SYSCALL exit
->>>>>> preserves all registers.
->>>>>>=20
->>>>>> I'm in favor of #2.  People love making new programming languages and=
-
->>>>>> runtimes and inline asm and, these days, vibe coded crap.  And it's
->>>>>> *easier* to emit a SYSCALL and forget to tell the compiler / code
->>>>>> generator that RCX and R11 are clobbered than it is to remember that
->>>>>> they're clobbered.  And it's easy to test on FRED (well, not really,
->>>>>> but it hopefully will be some day) and it's easy to publish one's
->>>>>> code, and then everyone is a bit screwed when the resulting program
->>>>>> crashes sometimes on non-FRED systems.  And it will be miserable to
->>>>>> debug.
->>>>>>=20
->>>>>> (It's *really* *really* easy to screw this up in a way that sort of
->>>>>> works even on non-FRED: RCX and R11 are usually clobbered across
->>>>>> function calls, so one can get into a situation in which one's
->>>>>> generated code usually doesn't require that SYSCALL preserve one of
->>>>>> these registers until an inlining decision changes or some code gets
->>>>>> reordered, and then it will start failing.  And making the failure
->>>>>> depend on hardware details is just nasty.
->>>>>>=20
->>>>>> So I think we should add the ~2 lines of code to fix the SYSCALL entr=
-y
->>>>>> on FRED to match non-FRED.
->>>>>=20
->>>>> Yes; I'm afraid I have to concur. Preserving the clobber on entry for
->>>>> FRED systems is by far the safest choice.
->>>>>=20
->>>>> Aside from this selftest, fancy debuggers and anything that can transf=
-er
->>>>> userspace state between machines might be 'surprised'.
->>>>=20
->>>> Thanks Andy and Peter.
->>>>=20
->>>> Indeed, making the selftest branch on FRED vs. non-FRED behavior
->>>> is not a good practice. The selftest should validate ABI consistency.
->>>>=20
->>>> I agree with Andy's option #2, so this should be fixed in the FRED
->>>> syscall entry implementation.
->>>>=20
->>>> Li Xin, does this direction look right to you? I can assit with
->>>> validation and keep the selftest aligned with the agreed ABI.
->>>>=20
->>>=20
->>> Yes, consistency should take precedence over hardware-specific variation=
-s.
->>>=20
->>> I would like to hear from Andrew Cooper and hpa before we do it.
->>=20
->> Per Andy=E2=80=99s suggestion, the change would be:
->>=20
->> diff --git a/arch/x86/entry/entry_fred.c b/arch/x86/entry/entry_fred.c
->> index 88c757ac8ccd..a19898747a2c 100644
->> --- a/arch/x86/entry/entry_fred.c
->> +++ b/arch/x86/entry/entry_fred.c
->> @@ -79,6 +79,9 @@ static __always_inline void fred_other(struct pt_regs *=
-regs)
->> {
->>    /* The compiler can fold these conditions into a single test */
->>    if (likely(regs->fred_ss.vector =3D=3D FRED_SYSCALL && regs->fred_ss.l=
-)) {
->> +        regs->cx =3D regs->ip;
->> +        regs->r11 =3D regs->flags;
->> +
->>        regs->orig_ax =3D regs->ax;
->>        regs->ax =3D -ENOSYS;
->>        do_syscall_64(regs, regs->orig_ax);
->>=20
->> It adds 4 extra MOVs on this hot path, but I don=E2=80=99t see it's a pro=
-blem here.
+> In other words, we needed to consult the versions known by the minimum
+> version of `bindgen` that we supported.
 >=20
-> We discussed this over a year ago, and at that point agreed that reserving=
- the register was the desired behavior. Why has this changed now?
+> Now that we bumped the minimum version of `bindgen`, that limitation
+> does not apply anymore.
+>=20
+> Thus replace the comment and simply write our minimum supported Rust
+> version there, which is much simpler.
+>=20
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Yes, that is technically cleaner.
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-The question is, is the RCX/R11 clobbering behavior an established architect=
-ural contract, or is it an implementation detail that software ignores?
-
-I think Andy and Peter want to be on the safer side, which kind of assumes t=
-hat this is established.=
+> ---
+>  rust/Makefile | 16 ++--------------
+>  1 file changed, 2 insertions(+), 14 deletions(-)
 
