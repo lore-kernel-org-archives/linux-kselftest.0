@@ -1,96 +1,96 @@
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07E23E6395
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 22:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671193E95A5
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 22:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775083099; cv=pass; b=JGFSZqzkS89rfZyXlBEmIldwVATfOouWhld5v33puCKB1eCC0Cos5B+zGuYy4syf1TbliXVUsxKZmGqBFYvJ1cJjkbxOA1H3+xtwyXfOFwEUVpZEIY1opG0uq/nXQ0YzJ1vq/Vhn49w7TWP/S825T1RyHh0MkaqyLgJ0CrYLljc=
+	t=1775083611; cv=pass; b=Oolx5sH97c5w8nfcy8ZiUM3p+8WYOWqELZJXgjDagaBLkXblGXkBBFm+TQjN4xo9JxLYDeB0NTkSIsOAF9EYB/nI8V6+zZr8L4B6e/YtoyBTDGs8v5C2Uhj0lPPtVQJ6kp0vv4HLUmaDu+ia3sRayq8blQePvP6JJtdy1OwKscs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775083099; c=relaxed/simple;
-	bh=jXO8gD8XlEA3fjQ8sPVJzY/ZhuFjBKDxDVzAsc0vY6I=;
+	s=arc-20240116; t=1775083611; c=relaxed/simple;
+	bh=/6bWyUqm+9eDut6ccU8wAGvXDqzMH1T9XonO28gZlms=;
 	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mn0XyQIgT3hUrnzVKsdt5zzdB+CH+9+aZmH/I7rVDmgI+04jTDNWhFsJWJ8QARsC+r5AHB8hqDFryYZtfpfeGgzUY9LFCbrJyRUaU5ZEtzkmeA0ChiOA26Wrrp5pdJCMTe97Hy06Q8AiZqgcaIIXet6+DjwY2ULobwiZZygOQRc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uCxpQvvc; arc=pass smtp.client-ip=209.85.217.54
+	 To:Cc:Content-Type; b=EQa3IGqlc0okY96Jue+eL38NGglJ/G3PcPhKRjIUfYvxtaT+ZImOQ40bcGGSlaD675oOLdVhhyQt1WcVKN1+RHtM15JyYz132ucEKwbaSIIsPfDY+g8LUxLQ3eY0NpKkyhG9gdrDHbM/IKfEB2D9Dj2ei88/AB2WbOwCwGiZCeM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g7QYe+TP; arc=pass smtp.client-ip=209.85.217.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uCxpQvvc"
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-604f327bafcso89401137.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 15:38:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775083094; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g7QYe+TP"
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-6058a955e04so32300137.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 15:46:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775083605; cv=none;
         d=google.com; s=arc-20240605;
-        b=JZvh+5+3WfWwT/mFRdPUDIjhuIP52Iqa8puV0BNvKIVan10xeIkzQUCnCthIJ66TYx
-         ol8xwuG536s6JB0gV/hYJ9yKbx78mixykuGVluQusOfPL2fe1AVb2mtGbUWgPTGS9TqW
-         4pOQx4hyBIbZM7PFXS4wqEZYgGDmEAnCzQNXFYFWhn+FmxTVtC/X2v4VTOxpThUO0eL+
-         m9fTjUtBEynDx8I+NT8ErXeAXYujVQl7q1NtmDY2YsMoePADNZQBkbBDUlO/dlekBM0r
-         JUQOet4aSjQvnFYUmn3HlFYgFlqIa2GQWkZDf6203VbMFxpO8bZYclJwJ5E5GFENu9xo
-         wOLw==
+        b=C4loTE25m0kKxeAmLZtYQ+g6xDj0nF6s/CfGu4QLl01QlnK9PPPgz02DVhpNBVaKS2
+         kZAPD+an+lp5BO49DW/m4DNvosX8sAxga8Nqu6nRwKwpI5AlFg7wkYJdaYhgo+IGpfVH
+         zTAkK1aPknF6RpQ3aeEamVog1q4VZ85uPuSjAWRhzlQiuPZb3ng7Z3W/AJjr7jltAuFz
+         db9U00GtraMt44HrEW55kLnIA5aVMr4nDyOGvMqMI1MVObCDykmrArT1PfNrU69eQHcy
+         ytQqO1sHPrZE4HW446bn/V/iL9S9et14TNEKDqdCi9+Z72OChnaH6Sq4Nei8h2qoM7xt
+         TZeQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
          :from:dkim-signature;
-        bh=euITMSp/xJeCQhYA18f4lx9pM8JTP5ZhaaxCuXCtMTI=;
-        fh=AkPfZ6gyOgRgede+ReR5PpHlFEHjFjhI+5IcQqZwURk=;
-        b=DEOCftM3flsaey6pRoT+6WaWpufyvX6dME1eFX0RBdFU/2YEsYWoMU26lTOsttkSbu
-         Rca2GNlvaqQw5ZgSd7EBhF/hjkM4qfnojyaYUuxgVZkEkKHZIMpJPPtxZ1kLrJoyQWTR
-         NSZ1B1hlGmbl9/NOK6EcCwcgN5Ps/FZ8w5qipku2CCWB1o2MFmzsLg7t00Iel/Xnk3wD
-         XblKQXvq6pCPCFs8E2axA+ARvVuCwp+oQuMOCuLL3LfpMFRuYsm68QP36GZI3kHVxxwd
-         odsNN1DHbN91WnkJ7DjnVekK2ok8Q6+23g6AaPrtk5PrOKZKzx0BeRwUHst4gvDo2I22
-         wUhQ==;
+        bh=9YPPgluH5dfl2SzGDQZmCOiPT4mFW9I+aoMhSywEtUQ=;
+        fh=hS31miEL0C4il9ooMjEjLIcw7J5E3ICggVfBEExos50=;
+        b=Vx9ZGM4oxQ4MUUQIuU0cJe8DcVX9SsYeREfLi3oIRk32F2nXDCGyoysP4UBmJhgVCP
+         nudWyOVZ4yYhZuy2QJPScxzFcWH3RzzUjjmW2/WKczsfWG+z6lUttP3qXlfT8Lr3YWjJ
+         4Lx5seRcZzOGpj0bLPX7+R8JE/79tKjHjyCdC8subjA7iwJVwUJjyeSE/rXT3T+z3F1J
+         u+T0idcVwnzq+7ADSwXMAIcLNi377KqxBHWVDX/O3cM5OlF5mLZjmB1OHiS9lXnahvDO
+         mq5zDI0a+kBFZwL/FskHfyzUoE94a7o41mgAu3PbShQ++/bfHIJMQ2i8UU/LWTUpkiOl
+         z9eg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775083094; x=1775687894; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775083605; x=1775688405; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=euITMSp/xJeCQhYA18f4lx9pM8JTP5ZhaaxCuXCtMTI=;
-        b=uCxpQvvc+0hcjsMUN671rmbWXMrSyqwrqTf3/sro5V11OwUvG8Ux4E7yRNXL9y3nJk
-         P674tn4VbUHGQDn44atPoT2jydRhB5IKXGuziuL7PcdPXutGk8rTART8+nyy1xOkCswY
-         uprTVCuySafYSktTyvOuvbxK9+b+nWdPwTNcykQ3dvt4mi41f2SF8JyWJ8BkIVKzuLE6
-         +RJ9QZDZqSaNO3+p4G1aEXqgWLTf0gPd3Ts/BdmJ06GG61NVX3kmAs9JqE77rtNi8RjO
-         UDguyXscnRr21wcD1M/+qN1h1vtswv+mekWziGIOBSxPkCgsRGMaFTkZQeIbH74JCJAd
-         pTlQ==
+        bh=9YPPgluH5dfl2SzGDQZmCOiPT4mFW9I+aoMhSywEtUQ=;
+        b=g7QYe+TP/Cr/+gKuTi2qxvH96+wG0sEY6sCZ8l7nib6kRQYysPP5n/KtiNHUlAde79
+         KzrvGGiLJo8s+9nvELRNkZmvwgeBpBmYKVfEBkhYCyJLyDn/HCIs4HLZc/ycdW9km3jT
+         y45DCGgnNT2iuH2+hQ2xyvHpKFI/VBkxSKaVWQ0NcngNHtxfgOgQA4k4S/CxYw9T8PXs
+         Z6Ewkzv2gTHoL20KQYEaIhxHXa7clvdCcFB6+cY38ZQ4Ub7EARvQodfDpeyB2ZBo1OZf
+         SuvylT2RBua1KAmjS6AvqECBjXmTLZrQD5ElWen3gGEXBW8tVa+cEkREEyND6/HueRuf
+         jzJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775083094; x=1775687894;
+        d=1e100.net; s=20251104; t=1775083605; x=1775688405;
         h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
          :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=euITMSp/xJeCQhYA18f4lx9pM8JTP5ZhaaxCuXCtMTI=;
-        b=KqIVkeaHr6HiBFVA1GEsA9SEWqLRaKTArh6eT+e1rgwGf2viWq9cejSLyLEfMa9670
-         5JzQnFG6jpAe8BwMvHW8AI+FyCAM9xoWcPbKq4otIgNdjC6+a5zu5UuS1BN1w1Xm/n/l
-         vk5/bfKloEOOpgpQ6D67RU5ce8dUosbsRsP3Gb9ggrmjVswuXdHlY63i+MNvglhvmkZC
-         V2nAVTuTHrkQ9yODkcquGoK5fdw/gxWueMtpBJoY1xxxAK+S7Jk7kAuAE/tGlq0bqboz
-         A3aMIRa29qjXHtqyZW1x4KSq0tr5tSAqDvPPE+cikHNGqILmstLr30I7dlQpvFL3UxL8
-         PyUg==
-X-Forwarded-Encrypted: i=1; AJvYcCWphC/feTHR5z/PDED7LFsov8UJW+t1EFQsOyakTs+O7YJWw5HzFaob/u2x3miMB4/xbyEypRGRX4x+lWRLP7E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsIUF+iflHIdfR5/62bsK/CtL4xD2e0FWsTeZWjRu64itMALP5
-	YJ5iAIVDsnHtOMXG8/QHWL+yVPQgZ9WwRsI0Nvc1ujVEXOyiKagl1149z8wylPJQZhoW5RGmOI7
-	OT9nHC4NC4HtGXH/g0KX7wVJ15C6cNojjHAeLUz+L
-X-Gm-Gg: ATEYQzxhfuw3v+Gp1kaeoW+KHzdVCJm0UtV+SN9VXh0kDiPveOfIUnLFowRII+YrXXg
-	WcHSJufkIRVQ2O5x90jZJVdcrAYT5jFY2kVquGobLv8q9246rbXbYQ4QHLlD9eWKDvrFDrumRf/
-	S3MFrreZXq4mMenynb9k1kVKVVURrog5lJKm/q/Ap2D/M78oSY1tliJnm1Vf0E9dGmL7JrOjewT
-	2E4rshtj+LpMFax/Y4dbEFIs6OFEX7BNVjIJbMdfqDpA9nJ9/euRxIdpO/jXKaojbtPL78VNGHl
-	xtvKCoZxLpwSa86T2Eu/PMkTIOkXr/hfUCiBcFXlWSxxSx0OZTaUlnxMfJG92nYXNTsblg==
-X-Received: by 2002:a05:6102:cd0:b0:5f5:40ab:2d65 with SMTP id
- ada2fe7eead31-60583fb718fmr487325137.22.1775083093776; Wed, 01 Apr 2026
- 15:38:13 -0700 (PDT)
+        bh=9YPPgluH5dfl2SzGDQZmCOiPT4mFW9I+aoMhSywEtUQ=;
+        b=rt1nqb7VB4eiCOLFKHK2V1Y13OWOzI8sGL29XWYyhgKUY8rzlpNS8jTlML+2b+4ZaG
+         jLyngqI/2puOEMx910YeOROcEXieXP6qEpBPy3kxWvmE8wMp3cTSTyvGSXxhwGz1W0SH
+         Tk07uanZIeqvolRRvw2hwxD5bsZLdiC14YGObW2/wLF3IyfUQl52qvixPGjLrvoimZ9R
+         zX2LSWCouDw2+zAwg3NPLMDw7OV5IZKAYmJ5YLOmTr4cMPbF7o8dVd9fRhsu5Dxf5pR7
+         Q4kDJDrLuofrNWduf7KCAfUCTsm39uRE3hQmsq/H75yDALE0MSNgdWnQN0nzacSGGqhc
+         cqZg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+ejF/O8wxK0V90ruVHiH0vaw9a/iBwOba/QzfPw5d01IzcxnsFbdVBXb+PhvJGx+eUWJQRtfoeoJojyZ1rQk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIdp4ieyfQHMKSKstHyY7U6hOa8RkJ1EzYO026KLIxiqOrS/P5
+	ML9TVeL/Y/uGVUAOPm8ZyJn56iCSFoh+0FW85G1QWO59zG6P4M1/AeSLoAVy0v5pD8uccockq8x
+	6IhyzMqtzJvW5dRJUvXkP9bZNZIsaHeVkZSoa4xOn
+X-Gm-Gg: ATEYQzyMEBVoaNnrRkmBEOtgI9kFmxTFiBPwxeL8PqO14NEYBGuiD29q/ekaOsKJ7R2
+	lb7bIlGpTwQtnSvHvzuUsrb0oWOWD+rjm5HHcnmKXeZk/bru8QzKW3RwFtMNA4sSnHQPPRIZxa6
+	9VwfkYcVB+vdfl8Oca5UcGeB+1ZozBEdaHKhDyZiiIpNS3y+PKMt/9iy6FrgDIS05rEDN4Wtbya
+	6tJVvB4472I89Fai8z37Of/25F4HBehM6/GIQYAAvI3nOhb+VIzViLx7GAhlGAf3SrQR4d8QA+A
+	zBmYGzeXnDth24DQK51ygqIs3PvzZxeHF/0eGL5glhl+283fYQxj4lyodYFLAYFPRqBTXg==
+X-Received: by 2002:a05:6102:3e19:b0:602:70ca:64ff with SMTP id
+ ada2fe7eead31-6058a9eb523mr70227137.20.1775083604142; Wed, 01 Apr 2026
+ 15:46:44 -0700 (PDT)
 Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 1 Apr 2026 15:38:13 -0700
+ HTTPREST; Wed, 1 Apr 2026 15:46:43 -0700
 Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 1 Apr 2026 15:38:12 -0700
+ HTTPREST; Wed, 1 Apr 2026 15:46:43 -0700
 From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
+In-Reply-To: <cqkyz4zxosmev6lnbasa32ed5jjfljrx3gr6plyjfhrtbysuwr@rg5noy6y6ayu>
 References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
- <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com> <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
+ <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com> <cqkyz4zxosmev6lnbasa32ed5jjfljrx3gr6plyjfhrtbysuwr@rg5noy6y6ayu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 1 Apr 2026 15:38:12 -0700
-X-Gm-Features: AQROBzCNhmfEK8q5oXqVxD-E8d6K5nvB8FmwqZKQD4ACNG80cfTfNWvs3WVsxNc
-Message-ID: <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com>
+Date: Wed, 1 Apr 2026 15:46:43 -0700
+X-Gm-Features: AQROBzDDCz2wIjIVmNQ0-ajdRi4I1p90A0stJRrbKBWGRj169blHjivIVN8AGHc
+Message-ID: <CAEvNRgFgOJj1_WKGrmFfXe8Kg9BrrX7Shmu_cjsEfiq2RP79zQ@mail.gmail.com>
 Subject: Re: [PATCH RFC v4 10/44] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
 To: Michael Roth <michael.roth@amd.com>
 Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -120,95 +120,101 @@ Content-Type: text/plain; charset="UTF-8"
 
 Michael Roth <michael.roth@amd.com> writes:
 
+> On Thu, Mar 26, 2026 at 03:24:19PM -0700, Ackerley Tng wrote:
+>> For shared to private conversions, if refcounts on any of the folios
+>> within the range are elevated, fail the conversion with -EAGAIN.
+>>
+>> At the point of shared to private conversion, all folios in range are
+>> also unmapped. The filemap_invalidate_lock() is held, so no faulting
+>> can occur. Hence, from that point on, only transient refcounts can be
+>> taken on the folios associated with that guest_memfd.
+>>
+>> Hence, it is safe to do the conversion from shared to private.
+>>
+>> After conversion is complete, refcounts may become elevated, but that
+>> is fine since users of transient refcounts don't actually access
+>> memory.
+>>
+>> For private to shared conversions, there are no refcount checks, since
+>> the guest is the only user of private pages, and guest_memfd will be the
+>> only holder of refcounts on private pages.
 >
-> [...snip...]
+> I think KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES deserves some mention in
+> the commit log.
 >
->>  static unsigned long kvm_get_vm_memory_attributes(struct kvm *kvm, gfn_t gfn)
->>  {
->> @@ -2635,6 +2625,8 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
->>  		return -EINVAL;
->>  	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
->>  		return -EINVAL;
->> +	if (attrs->error_offset)
->> +		return -EINVAL;
->>  	for (i = 0; i < ARRAY_SIZE(attrs->reserved); i++) {
->>  		if (attrs->reserved[i])
->>  			return -EINVAL;
->> @@ -4983,6 +4975,11 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->>  		return 1;
->>  	case KVM_CAP_GUEST_MEMFD_FLAGS:
->>  		return kvm_gmem_get_supported_flags(kvm);
->> +	case KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES:
->> +		if (vm_memory_attributes)
->> +			return 0;
+
+Will update this in the next revision. Thanks!
+
+>>
+>>
+>> [...snip...]
+>>
+>>
+>> +Set attributes for a range of offsets within a guest_memfd to
+>> +KVM_MEMORY_ATTRIBUTE_PRIVATE to limit the specified guest_memfd backed
+>> +memory range for guest_use. Even if KVM_CAP_GUEST_MEMFD_MMAP is
+>> +supported, after a successful call to set
+>> +KVM_MEMORY_ATTRIBUTE_PRIVATE, the requested range will not be mappable
+>> +into host userspace and will only be mappable by the guest.
 >> +
->> +		return kvm_supported_mem_attributes(kvm);
+>> +To allow the range to be mappable into host userspace again, call
+>> +KVM_SET_MEMORY_ATTRIBUTES2 on the guest_memfd again with
+>> +KVM_MEMORY_ATTRIBUTE_PRIVATE unset.
+>> +
+>> +If this ioctl returns -EAGAIN, the offset of the page with unexpected
+>> +refcounts will be returned in `error_offset`. This can occur if there
+>> +are transient refcounts on the pages, taken by other parts of the
+>> +kernel.
 >
-> Based on the discussion from the PUCK call this morning,
-
-Thanks for copying the discussion here, I'll start attending PUCK to
-catch those discussions too :)
-
-> it sounds like it
-> would be a good idea to limit kvm_supported_mem_attributes() to only
-> reporting KVM_MEMORY_ATTRIBUTE_PRIVATE if the underlying CoCo
-> implementation has all the necessary enablement to support in-place
-> conversion via guest_memfd. In the case of SNP, there is a
-> documentation/parameter check in snp_launch_update() that needs to be
-> relaxed in order for userspace to be able to pass in a NULL 'src'
-> parameter (since, for in-place conversion, it would be initialized in place
-> as shared memory prior to the call, since by the time kvm_gmem_poulate()
-> it will have been set to private and therefore cannot be faulted in via
-> GUP (and if it could, we'd be unecessarily copying the src back on top
-> of itself since src/dst are the same).
-
-Could this be a separate thing? If I'm understanding you correctly, it's
-not strictly a requirement for snp_launch_update() to first support a
-NULL 'src' parameter before this series lands.
-
-Without this series, the startup procedure is to have memory set up in
-non-guest_memfd shared memory, and then snp_launch_update()-ed into
-guest_memfd private memory.
-
-With this series, it is a little troublesome, but the startup procedure
-can still set up memory in guest_memfd shared memory, then copy
-everything out to some temporary memory, then set guest_memfd memory to
-private, then snp_launch_update() the temporary memory into guest_memfd
-private memory.
-
-We would be unnecessarily copying the src (now in some temporary memory)
-back onto itself. Can that be a separate patch series?
-
-Btw, if snp_launch_update() is going to accept a NULL src parameter and
-launch-update the src in-place:
-
-+ Will userspace have to set that memory to private before calling launch
-  update?
-    + If yes, then would we need some other mode of conversion that is
-      not ZERO and not quite PRESERVE (since PRESERVE is defined as that
-      the guest will see what the host wrote post-encryption, but it
-      sounds like launch update is doing the encryption)
-+ Or should launch update be called when that memory is shared? Will
-  launch update then also set that memory to private in guest_memfd?
-
+> That's only true for the guest_memfd ioctl, for KVM ioctl these new
+> fields and r/w behavior are basically ignored. So you might need to be
+> clearer on which fields/behavior are specific to guest_memfd like in
+> the preceeding paragraphs..
 >
-> So maybe there should be an arch hook to check a whitelist of VM types
-> that support KVM_MEMORY_ATTRIBUTE_PRIVATE when vm_memory_attributes=0,
-> and if we decide to enable it for SNP as part of this series you could
-> include the 1-2 patches needed there, or I could enable the SNP support
-> separately as a small series and I guess that would then become a prereq
-> for the SNP self-tests?
+
+Yes, will update in the next revision, thanks!
+
+> ..or maybe it's better to do the opposite and just have a blanket 'for
+> now, all newly-described behavior pertains only to usage via a
+> guest_memfd ioctl, and for KVM ioctls only the fields/behaviors common
+> with KVM_SET_MEMORY_ATTRIBUTES are applicable.', since it doesn't seem
+> like vm_memory_attributes=1 is long for this world and that's the only
+> case where KVM memory attribute ioctls seem relevant.
 >
-> Not sure if additional enablement is needed for TDX or not before
-> KVM_MEMORY_ATTRIBUTE_PRIVATE would be advertised, but similar
-> considerations there.
+> But then it makes me wonder, if we adopt the semantics I mentioned
+> earlier and have KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES advertise both
+> the gmem ioctl support as well as the struct kvm_memory_attributes2
+> support, if we should even advertise KVM_CAP_MEMORY_ATTRIBUTES2 at all
+> as part of this series.
 >
+
+Read your other email as well, thanks for reviewing!
+
+It makes sense, hope this captures what you suggested. In v5,
+
+If vm_memory_attributes == 1:
+    (KVM_CAP_MEMORY_ATTRIBUTES2 will be removed (will return 0))
+
+If vm_memory_attributes == 0 aka attributes are tracked by guest_memfd:
+    KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES2 will return valid attributes
+    (KVM_CAP_MEMORY_ATTRIBUTES2 will be removed (will return 0))
+
+So yup, KVM_CAP_MEMORY_ATTRIBUTES2 will not even be #defined at all.
+
+>> +
+>> +Userspace is expected to figure out how to remove all known refcounts
+>> +on the shared pages, such as refcounts taken by get_user_pages(), and
+>> +try the ioctl again. A possible source of these long term refcounts is
+>> +if the guest_memfd memory was pinned in IOMMU page tables.
+>
+> One might read this to mean error_offset is used purely for the EAGAIN
+> case, so it might be worth touching on the other cases as well.
+>
+
+Will update this in the next revision.
+
 > -Mike
 >
->>  #endif
->>  	default:
->>  		break;
 >>
->> --
->> 2.53.0.1018.g2bb0e51243-goog
+>> [...snip...]
 >>
