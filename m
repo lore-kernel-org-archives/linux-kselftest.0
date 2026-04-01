@@ -1,137 +1,340 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56946370D62
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 11:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775044602; cv=pass; b=QaNwRutTA1E7Z2ckXOkeowmrz5MRo4oFVftObEPQ2ht7Aw94lvuROAvToFGCG3SrUZJ+vhmlMTmwGfkgvGIHU/l4PUjysMpH84Bq9KW5P6AHBIxViwmBrTZ8Gi4VZXff0s7YyIedpq4bSwSfilNsFMTFMj9RSa+P4X3PGr9EKxs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775044602; c=relaxed/simple;
-	bh=E6ekpZzhDIC53BvOSNzztWhrdmf4qJGm7P6hkWiSYLI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QBFOwhS4Z3+XQnqrjC95DwQW+eXjaICBD3e6xxFoQ3uqcVIaD/Oph6a4N+yEgkhYJfigjNYnKomSoX0wTGO46AsGs7IKX3PEN2c2lM9gWb3SK0R/TIGOlNfV3sm1ppYE5G71vjF9a8HqetNykj0qBAzeYySJRiXbX596WVFcgfU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fL/YHr7X; arc=pass smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B0126E706;
+	Wed,  1 Apr 2026 12:08:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775045320; cv=none; b=uOab0f5ubYvGjDdpGKwd8k2sPEW3PAeJqCcACXdJAB/YUNbRkyTg1/266X4s8bbcM8YrmbwWSBQm5CNETBx3C+6MqcTwZWQbycTPYlLZ6gCzAVYVFphdjYB+99yh3stgZU++KzXBJQjjmiZG4yqj9cZVuScrlYFiQKucD5AXPas=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775045320; c=relaxed/simple;
+	bh=jIw57Z5e5+7jYJ1u/tPk4zJAL9oJ2w8cogV8BPsUrVc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ec4FIM1eEVbbOXOfCSDYvhjp2vYMBvOXxYcDSyMta73MVjp2yIKCeosSQPsbtf/sqVW4fhYM+3DF8LnfkYFAb0gA/WUoh9WQsNoD3xNI0zDHtPVO76oowl0bb9lNGmNarGb6tuHdPQNg0Dzd/ZauL1Ot00E9zuVwCbnGww70ycQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fk3IuFu7; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fL/YHr7X"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5a2c063fc29so10643e87.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 04:56:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775044599; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aIWhil+8WNyJQexLySum17ITy2Swxm2RsrhWZwWQlNoMkjY6zinyqdoG4UJLY68skS
-         vZg4/EJeZEDUc1CX/9b0Gu9ZimhY/kpWpZwFxFBSzPq86IGgra2h1qse5JSU8vclMul6
-         VDQgIjhe2VYVzy5uLN7ZQS5uw1OivOVGJ8bsXb0aiyX26eGDCPW6c3AZoVBBiYDlIp0s
-         ctL+wG/LOslvr0t4H5nUHJvjh9fTt+Wunm2BSvlVNKSImSAD0PurPeqVtTiB+gl6Eya2
-         8lr+JdDp9x58yu8fsQNwBmPXMuQzx1J98nkGcw1DTNNxHucXdZvutPM6JwA9BsSrC/fE
-         qeTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=E6ekpZzhDIC53BvOSNzztWhrdmf4qJGm7P6hkWiSYLI=;
-        fh=ZaOEUA/S0sP/0RC1PPpwKp+ads2VJ5hzmf9c9oYrJzo=;
-        b=HoX6cOqjBFEE9JWfu/GIiHrUmW8SZPC6Wxw/0L2+QJSWsJeq3jCbYMkApT2xD6znQh
-         rrEpIK4ka0upNaWxbGuRgwEKjd5hyUUxfsWXxlp2Rrd9iKqTxJfcfHVQ2DsHXEiAFKfz
-         TerAkUoaMDJQjA1SEFFMVrsdUmRsVkT5Ut+oWy6TkboUZeOHA6eAS6LpdKu2ZEmiUOm2
-         P/9NZjdDrYMJRxGVAMBwlpEGnmXwPZzOiVupQu1yBa/eZiC+7i5BtZi0uCmYTKvIeOvO
-         6YgYVxkMEa+aMwTZt9zjE27b4vp34qUt/3uvM2vLTevyF4I0zYLY+f12SkXlKcYfuS+G
-         WiDQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775044599; x=1775649399; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E6ekpZzhDIC53BvOSNzztWhrdmf4qJGm7P6hkWiSYLI=;
-        b=fL/YHr7XG/F5Q+xb0iyIMjyD4pQlzjBBwE7CCjOviNalQ9HVMOY+vaR6B/zrqQZf8E
-         +bitBJ8ZmLr+Omd1aOvUvt8lKn3wlWqKV0yYNIqBwYyfOUalZuNrn3yXSpU3KeZXEx47
-         jIaMdoDcS7sAD77RHmM0N83L6zt+yXhSxgGxQkugS7C19oELYtXvDSFsiN7p2TAk1okB
-         Te7y3k4fPO0s+4QppY/KdXTeeEomSWb0+42TLD/X1kpxPKOgd2hGFduz/PsG2wdVx1RN
-         iVrCN9XN9NQcw46pYx5sEuwmJuC7MaEsIlSGObsDbQKja0E0aE2EfeDmch6v6ZVvkDsy
-         tYYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775044599; x=1775649399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=E6ekpZzhDIC53BvOSNzztWhrdmf4qJGm7P6hkWiSYLI=;
-        b=M5j4hdRGTs+Krzn3OsWJ2dRB4MbtPujhFkgY2X7LIJPn6V6x76gkWDUfRwIPtZNHxw
-         An+o6slX6FeQrfrz6ss8V0+51jROYb04WkYcUiuyIaQ9Vjd5KhVM3xVaVn1C0oNB121v
-         05OdC6xFVNGBFcqcoRhvyJcBsjiMNoYTYED1zLNENAePD/UuGMZxXU1dpoWD7pbC0iep
-         IOllQx7YuAIO8gfNh8ALB1EaHf7hzvsaXyXChiz24StgoVKmExmzmJXOM9ml/xzbmc1Y
-         vHAJXYx9o7qKNWat5ikpi36LlfPlYWwL/VnFGby3hhf2LNra+zcUFHQeN6893XwJfxGz
-         GVPw==
-X-Forwarded-Encrypted: i=1; AJvYcCXus6TYNsJpCI8AqbKdlbnhUfTpw9151LGvIZMxlSJ3apuO+bi6hhC+AzmYLgtH7gQZv366FlwHc+ikpm4Vy4s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylecwSQHVtivzFLXGuIFj019tX7RX4O1c1QXI4DN9Mbmo4bAF7
-	nSVMsK3etPXIffbdeJ4hgXs1P5H3n90glJYFDIPUy5a6cj6a9WkKNRkTSVOlDFxYCkDzdx8/p1j
-	KcUsmDUi6sXLNqnjqJajUNFIE+tjY91uoxEcbBHIMyttGmz3S9EzCj9I+lv8=
-X-Gm-Gg: ATEYQzxMYUv8vJCg4zkkbQ6SvIV5CrwUTJ70/nPOj5ndHevstw72lHT0RmivM5H6B2H
-	IKIpC0LjMkPAZlN95iivZkvq8e7tZRiDXmWrYCHGGMFgxgJNPpYDbgVk+Vul1bdtvyyVxMl2FIf
-	84LtqoYAuPLn2oj68NI4M2hWqyAgW01d+nVfMpn2RxNI2RHaayTMwFxc3AEWVmoSCt5jA4favwS
-	H1s657E2LIATSVDemMxsjNX+DTcJh95P1/J2Z6aN8pKcizTF4hyFlXWeQgcntipQEoiZIt1dOg7
-	F0K+A8/yeTQeMYO+l4gLPO+Zu2/91qW5YA==
-X-Received: by 2002:ac2:5594:0:b0:5a2:b59b:3161 with SMTP id
- 2adb3069b0e04-5a2c39dc3b3mr89372e87.10.1775044599038; Wed, 01 Apr 2026
- 04:56:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fk3IuFu7"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62VK44Vl236239;
+	Wed, 1 Apr 2026 12:08:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=5f0Iff
+	ibYAA3+jXPPM0BXqcimagyKLeqM75QCj5Axwg=; b=fk3IuFu7LE/I/zPNDcfMp9
+	9eKiSNPB2lNwpDxbVmnum7hfBws/ERARIKjl9IPjsStnmzbjilXXFLO99amrrTzX
+	jClgs0yyOPv523XbnheI3/bQzstVkDPM25thSn6OnUUxOU/I6UtP/ZFsH6ge85mt
+	OpiesL7bZ6CmFvse+nOZCx0W8TuXLImVBsKDSKBPl7y4ht89TpMVF8uDzjX0bOnb
+	UQNEXCbNt7C5zQOufUQ4T4LcVdYvOUWBEHQ2IF6Jvuu97oZ1jUaMsZ+PMxxfqebT
+	+nOFX7i8FwFcr47cCuUrjoP5c5Ajkawz/mHT5Fr2dFQ11bLlnVToNoI2yvg9kesg
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66q37xmd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 12:08:22 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6317ZdoT008693;
+	Wed, 1 Apr 2026 12:08:21 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d6v11n778-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 12:08:21 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631C8IY126214778
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 1 Apr 2026 12:08:18 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0F0B820043;
+	Wed,  1 Apr 2026 12:08:18 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2AB3220040;
+	Wed,  1 Apr 2026 12:08:16 +0000 (GMT)
+Received: from [9.39.18.157] (unknown [9.39.18.157])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  1 Apr 2026 12:08:15 +0000 (GMT)
+Message-ID: <af67c86b-b84d-4054-a78d-c3368a01a9ef@linux.ibm.com>
+Date: Wed, 1 Apr 2026 17:38:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318080825.3063959-1-hmazur@google.com> <20260318080825.3063959-2-hmazur@google.com>
- <cd22b0b8-1e1c-4442-b4e4-5d7a6303ce4d@linuxfoundation.org>
-In-Reply-To: <cd22b0b8-1e1c-4442-b4e4-5d7a6303ce4d@linuxfoundation.org>
-From: Hubert Mazur <hmazur@google.com>
-Date: Wed, 1 Apr 2026 13:56:28 +0200
-X-Gm-Features: AQROBzBmsqVa0bLuslxO33uYORmv1Oc1fkKk_IO_8NILdGvBGJCqdyb31Q3Fr7g
-Message-ID: <CAJ7Hp_qzT1KK5FOYjoEjCUZT2_GMmTcL5yQiisJN_fa=cWDMBw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] selftests/cpu-hotplug: Make the script complaint
- with sh shell
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Shuah Khan <shuah@kernel.org>, Jihed Chaibi <jihed.chaibi.dev@gmail.com>, 
-	Slawomir Rosek <srosek@google.com>, Lukasz Majczak <lmajczak@google.com>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] powerpc64/bpf: Implement fsession support
+To: adubey@linux.ibm.com, linuxppc-dev@lists.ozlabs.org
+Cc: bpf@vger.kernel.org, maddy@linux.ibm.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+References: <20260401141043.41513-1-adubey@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20260401141043.41513-1-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wwSatRe_gFWADyMT5WfeEl2fktC8-xO5
+X-Authority-Analysis: v=2.4 cv=frzRpV4f c=1 sm=1 tr=0 ts=69cd0ab6 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=uVQQCN5PlBYlMZYk4qIA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: wwSatRe_gFWADyMT5WfeEl2fktC8-xO5
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDEwOCBTYWx0ZWRfX3h1HEDiMsDG3
+ g+nV0TJmicZl0PvrRypMYIsuj5v5ye+LnLO0PtXN7TWIL2IYVV+/vTFrRp88euWKLmEPeFsFKEm
+ Bb8pgcO0xOdjPUMUpA+ac4+2RcNO4Hn9hqNO39dzC/yI+lhVKnhvZyVdUWzwALLe1m0oRvamUlo
+ LxIppBG4JER9lZhyUuOuJP4IvBwJl5AVDCIwbBuGtHTGwidzcOZHWsumrdYRa9B+T8wwzAipvHE
+ +MKW8TC8zWmFuVc8a7APV0E57XwQLxoQOej9QY6tDGzzGa3XiIOAvA5xQFQHMj73IRVlJ8Qf3Nr
+ c02YWs3Moe4re7ZUHUmXJZDVEPmaGmlpc5NKIqR+23IWjRAMyz4DCu+Mp66fxv/aWHxb/rypDZw
+ MXLorlLwnzZ5NokuQdoNmo8XY/XbD+Z3RqFr5O9W1b6Lkvw245YGO+3kgmfWCR6+a1WB1ag8ee2
+ ZFtOBN5A8C2FNJUkcIg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_03,2026-04-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010108
 
-On Tue, Mar 31, 2026 at 11:52=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.=
-org> wrote:
->
-> On 3/18/26 02:08, Hubert Mazur wrote:
-> > The script uses by default the bash shell that is inaccessible in
-> > the x86 embedded devices. This leads to the syntax errors. To mitigate
->
-> some x86 embedded devices - which ones?
-Actually - this isn't particularly accurate since it applies to any devices
-which rely on busybox or other small environments.
 
-> > this, change the interpreter to /bin/sh and properly assign the
-> > FUNCNAME variable for each of the functions as 'sh' doesn't set this
-> > env. Change the conditional check for being a root from not
-> > existent UID and replace with command execution "id -u".
->
-> Please include errors in the change log
-The first error comes from the "$UID" environment variable,
-and the error is:
-./cpu-on-off-test.sh[193]: [: 0: unexpected operator/operand
 
-Regarding the changes to "$FUNCNAME" - there's no error printed
-but also the function name is missing in print:
-"echo $FUNCNAME $cpu: unexpected success >&2"
+On 01/04/26 7:40 pm, adubey@linux.ibm.com wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> Implement JIT support for fsession in powerpc64 trampoline.
+> The trampoline stack now accommodate session cookies and
+> function metadata in place of function argument. fentry/fexit
+> programs consume corresponding function metadata. This mirrors
+> existing x86 behavior and enable session cookies on powerpc64.
+> 
+> # ./test_progs -t fsession
+> #135/1   fsession_test/fsession_test:OK
+> #135/2   fsession_test/fsession_reattach:OK
+> #135/3   fsession_test/fsession_cookie:OK
+> #135     fsession_test:OK
+> Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+> 
 
-The v1 already addresses the most urgent issues with $UID and $FUNCNAME
-which I faced but in the meantime I took a look at the sashiko.dev review t=
-ool:
-https://sashiko.dev/#/patchset/20260318080825.3063959-2-hmazur%40google.com
+Looks good to me.
 
-and uploaded v2 patch which addresses other issues reported by the tool:
-https://lore.kernel.org/all/20260331115111.1522473-1-hmazur@google.com/
+Acked-by: Hari Bathini <hbathini@linux.ibm.com>
 
-Please let me know if I should revert to v1 and update the changelog
-and commit message or we can continue with v2.
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> ---
+> 
+> This patch is rebased over https://lore.kernel.org/bpf/20260401103215.104438-1-adubey@linux.ibm.com
+> 
+> v2->v3:
+>    Rebased over latest changes
+>    Collected Tested-by tag
+> v1->v2:
+>    No change since v1
+> 
+> [v2]: https://lore.kernel.org/bpf/20260226041217.18059-1-adubey@linux.ibm.com
+> [v1]: https://lore.kernel.org/bpf/20260216155310.38457-1-adubey@linux.ibm.com
+> 
+>   arch/powerpc/net/bpf_jit.h        |  4 +-
+>   arch/powerpc/net/bpf_jit_comp.c   | 69 ++++++++++++++++++++++++++-----
+>   arch/powerpc/net/bpf_jit_comp64.c | 25 +++++++++++
+>   3 files changed, 87 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index a232f3fb73be..f32de8704d4d 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -218,7 +218,9 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+>   void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
+>   void bpf_jit_realloc_regs(struct codegen_context *ctx);
+>   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
+> -
+> +void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
+> +								int cookie_off, int retval_off);
+> +void store_func_meta(u32 *image, struct codegen_context *ctx, u64 func_meta, int func_meta_off);
+>   int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass,
+>   			  struct codegen_context *ctx, int insn_idx,
+>   			  int jmp_off, int dst_reg, u32 code);
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 2018260f56c6..16d15ff3145a 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -540,6 +540,11 @@ bool bpf_jit_supports_private_stack(void)
+>   	return IS_ENABLED(CONFIG_PPC64);
+>   }
+>   
+> +bool bpf_jit_supports_fsession(void)
+> +{
+> +	return IS_ENABLED(CONFIG_PPC64);
+> +}
+> +
+>   bool bpf_jit_supports_arena(void)
+>   {
+>   	return IS_ENABLED(CONFIG_PPC64);
+> @@ -812,12 +817,16 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>   					 struct bpf_tramp_links *tlinks,
+>   					 void *func_addr)
+>   {
+> -	int regs_off, nregs_off, ip_off, run_ctx_off, retval_off, nvr_off, alt_lr_off, r4_off = 0;
+> +	int regs_off, func_meta_off, ip_off, run_ctx_off, retval_off;
+> +	int nvr_off, alt_lr_off, r4_off = 0;
+>   	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+>   	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+>   	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+>   	int i, ret, nr_regs, retaddr_off, bpf_frame_size = 0;
+>   	struct codegen_context codegen_ctx, *ctx;
+> +	int cookie_off, cookie_cnt, cookie_ctx_off;
+> +	int fsession_cnt = bpf_fsession_cnt(tlinks);
+> +	u64 func_meta;
+>   	u32 *image = (u32 *)rw_image;
+>   	ppc_inst_t branch_insn;
+>   	u32 *branches = NULL;
+> @@ -853,9 +862,11 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>   	 *                              [ reg argN          ]
+>   	 *                              [ ...               ]
+>   	 *       regs_off               [ reg_arg1          ] prog_ctx
+> -	 *       nregs_off              [ args count        ] ((u64 *)prog_ctx)[-1]
+> +	 *       func_meta_off          [ args count        ] ((u64 *)prog_ctx)[-1]
+>   	 *       ip_off                 [ traced function   ] ((u64 *)prog_ctx)[-2]
+> +	 *                              [ stack cookieN     ]
+>   	 *                              [ ...               ]
+> +	 *       cookie_off             [ stack cookie1     ]
+>   	 *       run_ctx_off            [ bpf_tramp_run_ctx ]
+>   	 *                              [ reg argN          ]
+>   	 *                              [ ...               ]
+> @@ -887,16 +898,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>   	run_ctx_off = bpf_frame_size;
+>   	bpf_frame_size += round_up(sizeof(struct bpf_tramp_run_ctx), SZL);
+>   
+> +	/* room for session cookies */
+> +	cookie_off = bpf_frame_size;
+> +	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
+> +	bpf_frame_size += cookie_cnt * 8;
+> +
+>   	/* Room for IP address argument */
+>   	ip_off = bpf_frame_size;
+>   	if (flags & BPF_TRAMP_F_IP_ARG)
+>   		bpf_frame_size += SZL;
+>   
+> -	/* Room for args count */
+> -	nregs_off = bpf_frame_size;
+> +	/* Room for function metadata, arg regs count */
+> +	func_meta_off = bpf_frame_size;
+>   	bpf_frame_size += SZL;
+>   
+> -	/* Room for args */
+> +	/* Room for arg regs */
+>   	regs_off = bpf_frame_size;
+>   	bpf_frame_size += nr_regs * SZL;
+>   
+> @@ -995,9 +1011,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>   		EMIT(PPC_RAW_STL(_R3, _R1, retaddr_off));
+>   	}
+>   
+> -	/* Save function arg count -- see bpf_get_func_arg_cnt() */
+> -	EMIT(PPC_RAW_LI(_R3, nr_regs));
+> -	EMIT(PPC_RAW_STL(_R3, _R1, nregs_off));
+> +	/* Save function arg regs count -- see bpf_get_func_arg_cnt() */
+> +	func_meta = nr_regs;
+> +	store_func_meta(image, ctx, func_meta, func_meta_off);
+>   
+>   	/* Save nv regs */
+>   	EMIT(PPC_RAW_STL(_R25, _R1, nvr_off));
+> @@ -1011,10 +1027,28 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>   			return ret;
+>   	}
+>   
+> -	for (i = 0; i < fentry->nr_links; i++)
+> +	if (fsession_cnt) {
+> +		/*
+> +		 * Clear all the session cookies' values
+> +		 * Clear the return value to make sure fentry always get 0
+> +		 */
+> +		prepare_for_fsession_fentry(image, ctx, cookie_cnt, cookie_off, retval_off);
+> +	}
+> +
+> +	cookie_ctx_off = (regs_off - cookie_off) / 8;
+> +
+> +	for (i = 0; i < fentry->nr_links; i++) {
+> +		if (bpf_prog_calls_session_cookie(fentry->links[i])) {
+> +			u64 meta = func_meta | (cookie_ctx_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
+> +
+> +			store_func_meta(image, ctx, meta, func_meta_off);
+> +			cookie_ctx_off--;
+> +		}
+> +
+>   		if (invoke_bpf_prog(image, ro_image, ctx, fentry->links[i], regs_off, retval_off,
+>   				    run_ctx_off, flags & BPF_TRAMP_F_RET_FENTRY_RET))
+>   			return -EINVAL;
+> +	}
+>   
+>   	if (fmod_ret->nr_links) {
+>   		branches = kcalloc(fmod_ret->nr_links, sizeof(u32), GFP_KERNEL);
+> @@ -1076,12 +1110,27 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>   		image[branches[i]] = ppc_inst_val(branch_insn);
+>   	}
+>   
+> -	for (i = 0; i < fexit->nr_links; i++)
+> +	/* set the "is_return" flag for fsession */
+> +	func_meta |= (1ULL << BPF_TRAMP_IS_RETURN_SHIFT);
+> +	if (fsession_cnt)
+> +		store_func_meta(image, ctx, func_meta, func_meta_off);
+> +
+> +	cookie_ctx_off = (regs_off - cookie_off) / 8;
+> +
+> +	for (i = 0; i < fexit->nr_links; i++) {
+> +		if (bpf_prog_calls_session_cookie(fexit->links[i])) {
+> +			u64 meta = func_meta | (cookie_ctx_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
+> +
+> +			store_func_meta(image, ctx, meta, func_meta_off);
+> +			cookie_ctx_off--;
+> +		}
+> +
+>   		if (invoke_bpf_prog(image, ro_image, ctx, fexit->links[i], regs_off, retval_off,
+>   				    run_ctx_off, false)) {
+>   			ret = -EINVAL;
+>   			goto cleanup;
+>   		}
+> +	}
+>   
+>   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>   		if (ro_image) /* image is NULL for dummy pass */
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index 6670d8c69ade..d9038c468af6 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -179,6 +179,31 @@ static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
+>   	BUG();
+>   }
+>   
+> +void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
+> +				int cookie_off, int retval_off)
+> +{
+> +	EMIT(PPC_RAW_LI(bpf_to_ppc(TMP_REG_1), 0));
+> +
+> +	for (int i = 0; i < cookie_cnt; i++)
+> +		EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, cookie_off + 8 * i));
+> +	EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, retval_off));
+> +}
+> +
+> +void store_func_meta(u32 *image, struct codegen_context *ctx,
+> +					u64 func_meta, int func_meta_off)
+> +{
+> +	/*
+> +	 * Store func_meta to stack at [R1 + func_meta_off] = func_meta
+> +	 *
+> +	 * func_meta :
+> +	 *	bit[63]: is_return flag
+> +	 *	byte[1]: cookie offset from ctx
+> +	 *	byte[0]: args count
+> +	 */
+> +	PPC_LI64(bpf_to_ppc(TMP_REG_1), func_meta);
+> +	EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, func_meta_off));
+> +}
+> +
+>   void bpf_jit_realloc_regs(struct codegen_context *ctx)
+>   {
+>   }
 
-Regards
-Hubert
