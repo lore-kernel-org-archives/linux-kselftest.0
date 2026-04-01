@@ -1,172 +1,154 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70AC30C368;
-	Wed,  1 Apr 2026 17:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775064853; cv=none; b=lS6aFVgYtOeUViWmhknvXV439NtIH4IXm5YgikfKdXNRAdhOm+ReWPpkLXFmF0fsUZhx4B5O3gKcu81LbGbA1z+BKEV5xs60duF2gkFm2Z3pCd9nRO5TpN+IkvO/B5qkcZhqyoAe1UkvDirbnxm/nI+8j4hff1y+kzj3uI5hgqM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775064853; c=relaxed/simple;
-	bh=g1j1g0ZBdCP+Yz7la4BltnErbiZJ/DiY4OuntowfNJA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XojUUeqUhCNeL4LkEmh46HcvPQyCytFS52CElMjIctCQqX27dbe5QqKL+UkrLbbL7fpsuGQvLxXPpe5OLolN+MsHZBVEipkCnIA7AjO2mIShgAMNIHKw8VXjRdHkaScBFqWt4UkL26K8FiyIyacOpFD09GIvxa9LdGETQYVCmvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=o1DVKJC0; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399CA472780
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 17:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775065000; cv=pass; b=KyKxhIvvooS0vsGaR9E1kK546DTRE9YoOY7TP9t38ZBeuSqpXhKfrpYzUAHrX+Giqvg/QPVLtJbRKkEnjFAXWT1YQaVO5ob3YUvyQ2dx2rsLMRnOOhz3Ufd619014KXQjahl5q3HB38ZCRu1kD+yFRHZNUaWHQQ+iXerDwKTp/8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775065000; c=relaxed/simple;
+	bh=Madpyzu+7zvyLSmbgHorRXu83g1kA3bqkxQ/QKvvzXA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bWZC0YERdfOJ13u4gPXlFLbijEK7ujvnCzxGV4/aJRrRLUqUeagUYVeDzdcq93mAUmc/pAvcqX7Bv1PPdvCTfbiWr4deHc01m7XrBgIcTRh+rWNprkYjvUzhwCI/hdFkhrN4lUdB6MyrtUWx42KZMiKBPWZg2C3BN5dluTRtdeY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m47/sJ8V; arc=pass smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="o1DVKJC0"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631AVPX0505649;
-	Wed, 1 Apr 2026 17:33:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=rSqaC2
-	HS6F3jm0Ha+Zxiv2wIM9/dauwd7UVnyK3ZjbE=; b=o1DVKJC04XxVqWAtIzvm4Q
-	LvBKhissxWZgbfjOMM41uOIN40Vbf7jf8rD5RxfPQpQ8rxnwmMJCTWMrjuTec8f4
-	O+LXOFaX5MtNt9OwkYdW8m5/6Tlsy7A6TacUJeiTkHJtHOmepgg79JpyRxZTRkq7
-	22pxvXhguFyk2/LGs0FlKOYyGjBQAG75lFktzcBkT0rVrvhXrU/5NgrEGB9s+np1
-	YtSPbsKbjeZaQHj3bQ1K5izuMlXdtOlQP6iru4ZV7/lJbr2hksjo5YyawNOt3rud
-	Ux2zjYfchNL/r75AR4k3CvwZBrqhXbNZ/YjQ8/6tx+1qqoA3TibcvbJ+gjo8d+hA
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66g21fg6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 17:33:44 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 631FYUVo022165;
-	Wed, 1 Apr 2026 17:33:43 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6tan6pjp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 17:33:43 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631HXhgG26673892
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 Apr 2026 17:33:43 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1C00458052;
-	Wed,  1 Apr 2026 17:33:43 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 36C5558056;
-	Wed,  1 Apr 2026 17:33:38 +0000 (GMT)
-Received: from [9.39.18.42] (unknown [9.39.18.42])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  1 Apr 2026 17:33:37 +0000 (GMT)
-Message-ID: <f8934e88-5b88-456d-affd-e29e2f78b6cf@linux.ibm.com>
-Date: Wed, 1 Apr 2026 23:03:31 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m47/sJ8V"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-127148c2112so7695c88.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 10:36:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775064998; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jcU79eegQ7DjzJ8+nVw4XfmiuEvt2VKl7QPPawsw/UII7SsYf+oerBOmDyQ+3kk1ZI
+         KfdgenegGHJPw42rNldfRZCijZYFQcEAvla/p4KEbtea4f8hI++I4JOxOH90gg0oiSBT
+         OHazyvv38XZ3ZQirGkKg6UMD03Dk4A6Seju/2WScmQc6hZsY3LVskFMMpZdHjRcM7i+o
+         byAwfYc5pBbtNyqQ6KRE4/7vUpHdYzTavEv+Hcq45jqqOWeBTI5I5uwsoAQGgEc3fAbN
+         hDAyMPK9TgGPXJupO6o+3BSMnyJZ2duQGo4AhPNuzhu977ui7TWOgqb2MFBGLwvoqYQg
+         h1DQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Madpyzu+7zvyLSmbgHorRXu83g1kA3bqkxQ/QKvvzXA=;
+        fh=WbAFdVMLZY+6R4kMs1iGFK2QsWeM2WGdP4dgIT/SoxE=;
+        b=Zqes4tD9ae8y6lBj7tvV/2YpALJhYeJLgsff8PIaLYE+Z5mmjAmvjzN+HNxDJLDgAF
+         wv0UABlEubMBKE6727xyVesoec0IEL8Ss2ych4ov5vU8Y5YrIpmlekHQ+cOSp7WEbqIS
+         T8MD/ycX0tgGGH97171vtemkC/43JZKCRXEPZis79f2dGXFUFfVSsGJ9N4TjnWORjCPf
+         cH9uCnevwp+y4d5Sp4TTghSNLI7snfRmEPrUOH+vuHwaBnsDFIubrhb25MjFDxayo2Og
+         yuQihcD3czBMx2rfB1A9K89VQbyVJ8fywqPL6lQQssvS9WwWBeY/nepv7GXMNnI1MlT7
+         XSKQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775064998; x=1775669798; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Madpyzu+7zvyLSmbgHorRXu83g1kA3bqkxQ/QKvvzXA=;
+        b=m47/sJ8VF5zmkEbgvymxRwXRqMU1Z/SMQ1njp0gn1sBAbbZeHHcDZwn9Ov5QCfkASU
+         IYCyXdshryWiChJCSKlCTLKnWq+cjV+SueJ0RS1kudCFliXnb1YcC/VNmS/glt0Ym+18
+         i/hh7HaxM41rZ4fLKiMBtU+DCN5UMWtHllNzl0Lq2ZOhVCOgWKY9f3iMAc/ckyFgm2bC
+         phA0/vIEnZ/8ZF/59f6s1sC6QR0J1Nfm78sLyH4nFLXJ5D/XhZh3PjfHWL6vp/vFlaYb
+         FqY/DKSgpkqYWCMJ9Pt96U66Bk6BJy9seltRXj/JzBJfl/oFXs38w7bGYUrJGgoyxxWP
+         wbcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775064998; x=1775669798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Madpyzu+7zvyLSmbgHorRXu83g1kA3bqkxQ/QKvvzXA=;
+        b=TZG9aBrMPAaih+bsawns8cKn33v47Teb+T9KSXa4ItIx6jecl04iZNj/NXqSbxv2+J
+         h46Fr5Dyo3S7D5eqzv3DpOGl5BaULG+Wh19k0CV3CqPNt8MYzgtl5HgV+Io4LNE7Wgl8
+         LJhgunn+tNyNoqyENtDwOO4k9dvuTpLywPZmGRSb92rC53/xZ3d16C0K66MogjDEP5vC
+         Y20ZVyGAwVlWWKsAGsAiDTPhmDIxVj1Ydc+wXX/xBRYdJr2Oyc/wqSmmzIT9mtePc2aV
+         xgSsyrPeaX5uODkZR7Qh3UBU4ULvGw6XaJY8kTZ/k+sfGtHptlbQxC04TK8vASmjYTQc
+         pQiA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5fv+NCp5wY1SAXfJbMFCMazGpXHWfOzxfgXf6DfyTbU7DNBEFgbUbOCPFRb901nrKau8hshFUS0H8tvHbSOY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwT0kUg9YRw/BVH7/lyRs+bh/UAgz4qE7owB8KB4CldCgwAQURV
+	A31wKuHGwSUrfiR3MN4ps932xoWcgCdaMUxT9k3xcVQiPVbyZjOKSs+Iv+YHb3Uai0uazRwQpGj
+	D/TeCYq/UrwUIuA7BvSCRhJS0ZgfZUZ0=
+X-Gm-Gg: ATEYQzzitxT5CEaFGGf4hGzQMlU5K+Pifx6cuFqsNbwz7ouBYoAQe9kAyPl0gJnAKt/
+	98lvMdX39yflmNHCnOy/vo0VEheWtVLRro7XBirf/okiLi+wwJLfHK4VLgAmjweKntldp9WSkLv
+	2JIN/yNdf4+zEMuq0zX5wqpKkhRYLbBseOT68mq8J/EZ8wRX6R30VQnBnhKn/xRqaDfismUKXBh
+	u2STdNtiBYIezUD0K41qNF9FMQmJUcyUwowkxox7xjOdHMeC0dxmw+LEE4C6sOmhq9mDQRZl7AN
+	Q0cPba7jm0ufrrpqmK3QiNuPwlpW8e28qe70NHiPyUycFgLd7caLp7mkNmNBTFfZewArLPkreIe
+	prW1xYcpYtVhgCUAHgwt9OCk=
+X-Received: by 2002:a05:693c:2c97:b0:2c7:2cac:8162 with SMTP id
+ 5a478bee46e88-2c9326aa500mr1010168eec.5.1775064998156; Wed, 01 Apr 2026
+ 10:36:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Sayali Patil <sayalip@linux.ibm.com>
-Subject: Re: [PATCH v3 11/13] selftests/mm: fix double increment in linked
- list cleanup in compaction_test
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <4c47a2ebbc41f90c7a0cb3f8b34106b2b64296f6.1774591179.git.sayalip@linux.ibm.com>
- <b6d211e1-233e-4079-a8b9-6682e12077ba@linux.ibm.com>
- <5684cab6-d5a6-4de9-9545-f8cae775d825@kernel.org>
-Content-Language: en-IN
-In-Reply-To: <5684cab6-d5a6-4de9-9545-f8cae775d825@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=Fdo6BZ+6 c=1 sm=1 tr=0 ts=69cd56f9 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=Ikd4Dj_1AAAA:8
- a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=T6nULJMaX99D9d00DIAA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: Bxer0GwKb5xpt3tAX3oiBerSsEtjsxnZ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDE2MiBTYWx0ZWRfXzEISyrtqStlA
- hNkcbo7yzW2GQIQlG/T++H5n5nbP9R4jBNPLST6vVhS0DrgKsrqn9FT6HkVY/ip1FchAa3/SLMl
- KtPoBJcHbTL157FOIpjzDMq0ytao+4spNvl9bCbLTdzKwtVyL4VgqLI2+WScV1BTmtyMjS9L6Vj
- kwe44k4cuZ4BTzzlv2FQdD9ytLMhoDWFzrc5nqQyHpXhEEN2Gyih5VhWoe26aHMR36iVWy6dsVQ
- zZiWJpH/ckXojBJZwOoLcpOYp2QLtRj3IYONhTkJ+8olYpEUpFpFaO85uHSBxLD9MDiRtPze2oP
- uR9WdL9QrlU+cSU0/fLvpR5MDQpt1kl9Puyp10hbaLabexZqJYewwFd4GzE9Hlj4Z0QdAONKp9k
- FZOHRpiRtOXRbJZ7TZtr3cxKjuDHfHv2/mJD3kY3SJTbAtJxbPEpBj67f66RlDs6/2VUSQ+P/CB
- V4OX2hHq/vbPwVps/jg==
-X-Proofpoint-GUID: aqf5EXqq0VS2xdQNbf1Bhqhvgccm-WRq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-01_04,2026-04-01_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1015 bulkscore=0 suspectscore=0 priorityscore=1501
- adultscore=0 malwarescore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010162
+References: <20260401114540.30108-1-ojeda@kernel.org> <20260401114540.30108-9-ojeda@kernel.org>
+ <DHHVEPJHLGDW.1E6KDP9BUFG5U@garyguo.net>
+In-Reply-To: <DHHVEPJHLGDW.1E6KDP9BUFG5U@garyguo.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 1 Apr 2026 19:36:25 +0200
+X-Gm-Features: AQROBzBeO_yfCUmMruxpBPrHPRt9Z-RBtWsQqT4MIRVUyc-eOkOj6bAx0WG8aNs
+Message-ID: <CANiq72mnnro6UD3SYgTOG+kipwkTBvbEAGH+jXUa3kLTUNje2A@mail.gmail.com>
+Subject: Re: [PATCH 08/33] rust: kbuild: simplify `--remap-path-prefix` workaround
+To: Gary Guo <gary@garyguo.net>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Courbot <acourbot@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
+	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
+	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
+	moderated for non-subscribers <linux-arm-kernel@lists.infradead.org>, Alexandre Ghiti <alex@ghiti.fr>, 
+	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Apr 1, 2026 at 3:59=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+>
+> I'm not sure that I parse this. You do remove the filter-out completely b=
+elow?
 
+(I see you saw the other commit)
 
-On 01/04/26 20:09, David Hildenbrand (Arm) wrote:
-> On 4/1/26 16:32, Sayali Patil wrote:
->>
->> On 27/03/26 12:46, Sayali Patil wrote:
->>> The cleanup loop of allocated memory currently uses:
->>>
->>>       for (entry = list; entry != NULL; entry = entry->next) {
->>>           munmap(entry->map, MAP_SIZE);
->>>           if (!entry->next)
->>>               break;
->>>           entry = entry->next;
->>>       }
->>>
->>> The inner entry = entry->next causes the loop to skip every
->>> other node, resulting in only half of the mapped regions being
->>> unmapped.
->>>
->>> Remove the redundant increment to ensure every entry is visited
->>> and unmapped during cleanup.
->>>
->>> Fixes: bd67d5c15cc1 ("Test compaction of mlocked memory")
->>> Reviewed-by: Zi Yan <ziy@nvidia.com>
->>> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->>> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
->>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
->>> ---
->>>    tools/testing/selftests/mm/compaction_test.c | 3 ---
->>>    1 file changed, 3 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/
->>> testing/selftests/mm/compaction_test.c
->>> index 30209c40b697..f73930706bd0 100644
->>> --- a/tools/testing/selftests/mm/compaction_test.c
->>> +++ b/tools/testing/selftests/mm/compaction_test.c
->>> @@ -263,9 +263,6 @@ int main(int argc, char **argv)
->>>          for (entry = list; entry != NULL; entry = entry->next) {
->>>            munmap(entry->map, MAP_SIZE);
->>> -        if (!entry->next)
->>> -            break;
->>> -        entry = entry->next;
->>>        }
->>>          if (check_compaction(mem_free, hugepage_size,
->>
->> Sorry, this change is not valid.
->>
->> The goal of this test is to verify the kernel’s ability to compact
->> unevictable (MAP_LOCKED) pages. The loop is intentionally written to
->> unmap every other chunk, thereby creating fragmentation with locked pages
->> before check_compaction() is invoked.
->>
->> With the proposed change (removing the double increment), the loop ends up
->> unmapping all allocated locked pages instead of leaving a fragmented
->> pattern. This results in memory being effectively unfragmented.
-> 
-> Ahhh, we should really make that clearer in a comment. I missed it myself :(
-> 
-yes, let me add a comment to clarify this and send it in v4.
+> Looks like this is going to conflict with rust-fixes (which adds the
+> --remap-path-scope). Perhaps worth doing a back merge?
+
+It would be only a couple lines conflicting, so it should be fine.
+
+Having said that, when I was doing this, I wondered if we should even
+consider keeping the workaround. In other words, locally for
+`rust-next`, the "normal" commit would be to remove the workaround
+entirely because there the flag doesn't exist to begin with (i.e. the
+workaround should have been removed back when the revert landed).
+
+Then, when conflict happens in linux-next, we can just keep the
+addition of the flag from your commit -- the rest can say as-is, i.e.
+no workaround needed, because you only enable both flags in a version
+(1.95.0) where there is no need for the workaround (which was for <
+1.87.0).
+
+It is also why I added the second commit here, i.e. the "make it
+conditional", because I was testing that indeed we didn't need the
+workaround anymore.
+
+So it may just simpler to do that. What I thought was that perhaps the
+workaround is good even if we ourselves don't pass the flag, e.g.
+someone else may be passing it. But the chances are very low,
+restricted to a couple versions, and the error is obvious and at build
+time anyway.
+
+Cheers,
+Miguel
