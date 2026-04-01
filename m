@@ -1,144 +1,193 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197E827442;
-	Wed,  1 Apr 2026 07:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA4B37BE6E
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 07:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775028975; cv=none; b=tpOZvfEhxmzMol7HXRnp/S5CGXW/8XcHkYnGJh9tTCzttKNZtHCOz2LfX+DzKYGt3Nevi8rw1HkT9E5m4xpj4D2tUYR1fzRsVRbGOGQF0CiV8Ix79YzNes/FWbT1LzzE4aYWMFbmoz4CDu9F2Z0Y/jl77YvQ/fIHhXMTCmexpk0=
+	t=1775029269; cv=none; b=ezb/HiijsbwfUjSs0dtnd3jw/nzP4lfek7T9NrMlgc91MUzocCvbZuze5P7IzmcCZm6Ha4iwvlgBHgJ5BZqwWj7Vz9CDsi6Br0HZ+FIDwoQS8kzlqJju9Eq1rCnQPgckHIZaXr7EZKvJOJ/obfIfSGoMh8Ome/A4tQsyX1FBkcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775028975; c=relaxed/simple;
-	bh=5rTB7ibb4EJd260wLqdjnMqvReSP2z55srJA8vs8o5A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kuEt21VIF7AHnGnmdHhrxlJszG0WmJidT+sAEeGxtg5MCLhcwF5y/u+VFJkKrZyJK7MbL9HyenJssjPk1hmbZXVq0hucGbcIHlNpVK3noZtAy6DM9t181X4L92MDIQlEKig4dL6hyAFZZK9VB9Nr3rgMh0r2bJr23IW/kcxl9t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k4CtlpsL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775029269; c=relaxed/simple;
+	bh=erEGmthLCCq5QaevIpQZZtKGYxx/zf3Sdg+6Wd/Uo3w=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=KenEqybo7elJAfcVmrza2NWxjjvBIqLPXrwewcRo5uonKuGuNmzWmSrg+DZktpnfl0sNQrTkkwQ+i1oiPo8KuV82Ztb8PXdr/Tgxr4eT0k6KUorEXuE2KK7g2wDJvJIbFd/G5KQUcG8vfzzgqHR5Pm96nklqAadIvApJ/kk0a30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CGHbsyHr; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=141OuvNb; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=z4eYEgF2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=z3XHhETI; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k4CtlpsL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 380D7C4CEF7;
-	Wed,  1 Apr 2026 07:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775028975;
-	bh=5rTB7ibb4EJd260wLqdjnMqvReSP2z55srJA8vs8o5A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k4CtlpsL26Rsw+EZZiTev651DLF0iUWb89sMoje+UpM9F2+9JyFQZV7uiePHV1H+n
-	 /i2ukQTEDcgSXP4NUwDuAFdXGGwo/Skow9y1ktYu/p7/E3VMhv2M4hEufIewFANfj8
-	 p/BLMWEdSs+wgnXhSzjJHNiUJoU+H+Ex153JmRFl3GB3ug+v36/cIap6jkeDHIb3Q+
-	 JRUnqk4t12bzXNjWSMzpk1U40HVspfd5ZbNgLe5tm1fZfUSyJLrweLyQKM44XGSoKI
-	 DaMJMVfeLeLKAMo2esv8n7fnhIzaVPkwV2qo94yC5nfESljP26VOXlECeRxjDtAXLF
-	 kONBLyKbWn1wA==
-Date: Wed, 1 Apr 2026 10:36:03 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: "Harry Yoo (Oracle)" <harry@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Andrei Vagin <avagin@google.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 02/15] userfaultfd: introduce struct mfill_state
-Message-ID: <aczK4-vrULRiTvyh@kernel.org>
-References: <20260330101116.1117699-1-rppt@kernel.org>
- <20260330101116.1117699-3-rppt@kernel.org>
- <actxscYZGFiyvUcs@hyeyoo>
- <acva_NKf7T5rbIC8@kernel.org>
- <acvnEd3-s6XI26vb@hyeyoo>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CGHbsyHr";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="141OuvNb";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="z4eYEgF2";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="z3XHhETI"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id DDDC34D1E6;
+	Wed,  1 Apr 2026 07:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1775029266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b1pEdDeMovITLQfcEHCNx180y8KjPanNMnxJcqmlOt8=;
+	b=CGHbsyHrfnSjT79FZ+5Va7hTUHGdbdtMvl/y8DyR7Y01ZVJfVTzCsCrxTJ9aQNxl2zFpHH
+	x1NnapJ1m2gnVFKhRF4XxEdUJsHXx62VX9sOKolgrgAIwFqTcYY6rgZQNrA7rK8oFvo5y1
+	O19uC0HtyPzV2KYEftUqiRoWcZw3m6U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1775029266;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b1pEdDeMovITLQfcEHCNx180y8KjPanNMnxJcqmlOt8=;
+	b=141OuvNbRIjjpUQ+nBpbbyldgmG3O0YE/HGK9es8fhAHS4y8Esy8coQdD1Pu5SGeazv77K
+	efoZ85skoBid4jBQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1775029265; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b1pEdDeMovITLQfcEHCNx180y8KjPanNMnxJcqmlOt8=;
+	b=z4eYEgF2oBMO7xLy+jaGqL4OUSiqakxBduOipe6nXIoUT3OAId9dsBug+wg7l89gdltSMq
+	mlVJ+X5nagDQw3GlbH3N5BPerqxfU9RotkWvD5chrRCYGD2ciuwzL3U7aP+pDdRd6+AraS
+	OWwhyu+3A5ai5cAU4uvhsqGSweHIT9g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1775029265;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b1pEdDeMovITLQfcEHCNx180y8KjPanNMnxJcqmlOt8=;
+	b=z3XHhETIrT2fg6CmVJEE31EIFXqqCiMhE+B/gRp3gs5p68bhLiFv++YWA07d4AH4323YyO
+	x+lbuU8ZTpSXrDAQ==
+Date: Wed, 1 Apr 2026 09:41:05 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+cc: Joe Lawrence <joe.lawrence@redhat.com>, 
+    Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
+    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] selftests: livepatch: test-syscall: Check for
+ ARCH_HAS_SYSCALL_WRAPPER
+In-Reply-To: <a23f00ad4a454cbb3379cdf512e8c61ce7499194.camel@suse.com>
+Message-ID: <alpine.LSU.2.21.2604010937120.12688@pobox.suse.cz>
+References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>  <20260313-lp-tests-old-fixes-v1-1-71ac6dfb3253@suse.com>  <abhjYtyveer4niGM@redhat.com> <a23f00ad4a454cbb3379cdf512e8c61ce7499194.camel@suse.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acvnEd3-s6XI26vb@hyeyoo>
+Content-Type: multipart/mixed; boundary="-2146828000-2095840910-1775029265=:12688"
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	CTYPE_MIXED_BOGUS(1.00)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.998];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+];
+	TO_DN_SOME(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
+X-Spam-Flag: NO
 
-On Wed, Apr 01, 2026 at 12:24:01AM +0900, Harry Yoo (Oracle) wrote:
-> On Tue, Mar 31, 2026 at 05:32:28PM +0300, Mike Rapoport wrote:
-> |         /*
-> |          * Make sure the vma is not shared, that the dst range is
-> |          * both valid and fully within a single existing vma.
-> |          */
-> |         dst_vma = uffd_mfill_lock(dst_mm, dst_start, len);
-> 
-> It acquires the vma lock (or mmap_lock) here, but doesn't set state.vma.
-> 
-> |         if (IS_ERR(dst_vma)) {
-> |                 err = PTR_ERR(dst_vma);
-> |                 goto out;
-> |         }
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-...
+---2146828000-2095840910-1775029265=:12688
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-> |         if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
-> |                 goto out_unlock;
-> |         if (!vma_is_shmem(dst_vma) &&
-> |             uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
-> |                 goto out_unlock;
-> |
-> |         state.vma = dst_vma;
-> 
-> It is set here. So if anything before this jumps to `out_unlock`
-> label due to a sanity check,
-> 
-> [...]
-> 
-> |         while (state.src_addr < src_start + len) {                              
-> |                 VM_WARN_ON_ONCE(state.dst_addr >= dst_start + len);             
-> |                                                                                 
-> |                 pmd_t dst_pmdval;         
-> | [...]
-> | 
-> | out_unlock:
-> |         up_read(&ctx->map_changing_lock);
-> |         uffd_mfill_unlock(state.vma);
-> 
-> the `vma` parameter will be NULL?
-> 
-> If I'm not missing something this is introduced in patch 2 and
-> fixed in patch 4.
+On Tue, 31 Mar 2026, Marcos Paulo de Souza wrote:
 
-You are right.
-Here's a fixup (it causes a conflict in patch 4 though).
-Andrew, I can send v4 if you prefer.
+> On Mon, 2026-03-16 at 16:12 -0400, Joe Lawrence wrote:
+> > On Fri, Mar 13, 2026 at 05:58:32PM -0300, Marcos Paulo de Souza
+> > wrote:
+> > > Instead of checking if the architecture running the test was
+> > > powerpc,
+> > > check if CONF_ARCH_HAS_SYSCALL_WRAPPER is defined or not.
+> > > 
+> > > No functional changes.
+> > > 
+> > > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> > > ---
+> > >  tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > > | 7 +++----
+> > >  1 file changed, 3 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git
+> > > a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > > b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > > index dd802783ea849..c01a586866304 100644
+> > > ---
+> > > a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > > +++
+> > > b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> > > @@ -12,15 +12,14 @@
+> > >  #include <linux/slab.h>
+> > >  #include <linux/livepatch.h>
+> > >  
+> > > -#if defined(__x86_64__)
+> > > +#if !defined(CONFIG_ARCH_HAS_SYSCALL_WRAPPER)
+> > > +#define FN_PREFIX
+> > > +#elif defined(__x86_64__)
+> > >  #define FN_PREFIX __x64_
+> > >  #elif defined(__s390x__)
+> > >  #define FN_PREFIX __s390x_
+> > >  #elif defined(__aarch64__)
+> > >  #define FN_PREFIX __arm64_
+> > > -#else
+> > > -/* powerpc does not select ARCH_HAS_SYSCALL_WRAPPER */
+> > > -#define FN_PREFIX
+> > 
+> > The patch does maintain the previous behavior, but I'm wondering if
+> > the
+> > original assertion about ARCH_HAS_SYSCALL_WRAPPER on Power was
+> > correct:
+> > 
+> >   $ grep ARCH_HAS_SYSCALL_WRAPPER arch/powerpc/Kconfig
+> >           select ARCH_HAS_SYSCALL_WRAPPER         if !SPU_BASE &&
+> > !COMPAT
+> >           depends on PPC64 && ARCH_HAS_SYSCALL_WRAPPER
+> > 
+> > Perhaps I just forgot what that additional piece of information that
+> > explains the comment (highly probable these days), and if so, might
+> > be
+> > nice to add to this commit since I don't see it in 6a71770442b5
+> > ("selftests: livepatch: Test livepatching a heavily called syscall").
+> 
+> Looking again at the code and at the symbols for SLE for ppc64le, I can
+> say that, even with ARCH_HAS_SYSCALL_WRAPPER being set, the syscall
+> names are not changed for ppc64le. Looking at
+> arch/powerpc/kernel/systbl.c:
+> 
+> #ifdef CONFIG_ARCH_HAS_SYSCALL_WRAPPER
+> #define __SYSCALL(nr, entry) [nr] = entry,
+> #else
+> /*
+>  * Coerce syscall handlers with arbitrary parameters to common type
+>  * requires cast to void* to avoid -Wcast-function-type.
+>  */
+> #define __SYSCALL(nr, entry) [nr] = (void *) entry,
+> #endif
 
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index fa9622ec7279..c4074b6f4aca 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -764,6 +764,7 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
- 		err = PTR_ERR(dst_vma);
- 		goto out;
- 	}
-+	state.vma = dst_vma;
- 
- 	/*
- 	 * If memory mappings are changing because of non-cooperative
-@@ -804,8 +805,6 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
- 	    uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
- 		goto out_unlock;
- 
--	state.vma = dst_vma;
--
- 	while (state.src_addr < src_start + len) {
- 		VM_WARN_ON_ONCE(state.dst_addr >= dst_start + len);
- 
- 
+I think this is not the complete picture though. The definition of the 
+syscall table did not change but the actual wrappers (or syscall functions 
+naming before) did change a couple of times even on powerpc if I am 
+reading the git history right. ARCH_HAS_SYSCALL_WRAPPER also changed how 
+syscall parameters are consumed (from registers to stack frame (pt_regs)). 
+It is not particularly relevant for getpid() which is SYSCALL_DEFINE0() 
+but I wanted to point that out.
 
--- 
-Sincerely yours,
-Mike.
+Miroslav
+---2146828000-2095840910-1775029265=:12688--
