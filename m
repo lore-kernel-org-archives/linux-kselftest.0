@@ -1,229 +1,194 @@
-Received: from CWXP265CU008.outbound.protection.outlook.com (mail-ukwestazon11020073.outbound.protection.outlook.com [52.101.195.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E1F426D19;
-	Wed,  1 Apr 2026 13:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.195.73
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775051976; cv=fail; b=aeHW5/nOdOUkkrg5S1Js06hN0QLezqR4+xajmYzU4Rx0SeOhmnquF9yzr3k5VFgyn0mOfPRObhwE43SwlFwQg8DcN4YV2itp2oXFcQSSszmZ6gW+fUdtFDaKAoxW4eVDxvns7s5kBUloV/BCPunpIo9e5S5aqQgju3YM5KbK/Iw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775051976; c=relaxed/simple;
-	bh=b+uai7eS/sQg33DpjZGV7x5IT+NfL7oewQvLrTzFduU=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:References:
-	 In-Reply-To:MIME-Version; b=A3ugKUphoSwn3jzw92MkbSZ6APJoWlkPAPhq+nOc1Kcw4ya2OioIG4BcXVqpVhvfV42aHMFK96jmeJYM0lb1zVgRJcNNLOg/Ks8v3P5VvNglAy5M5C4GvxdwkLBBxrdtVJezEqpg6uhzZ9WHyhSDwIEwqhwml8TaYLMrtIRbOrA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=CR/yjg0C; arc=fail smtp.client-ip=52.101.195.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9442D97B9
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 14:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775052081; cv=none; b=kx1FMiv/GoaUQ66sg94mYJaob6MbtlEOefPOkTiW9Pbq1LuFesW3q2qgbA1Zr5yVySpzjNHYobjbmvcoUs4W579cqrFjPrrfQkSlYSvL3TBkLnsy/UUfNhqLKpBGOctJOuiGjsdwOKGtZEPtQTR3gYscNpEtLdEafop4ACXzfPk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775052081; c=relaxed/simple;
+	bh=Z4WlmMfJ0XDGS7BS32s/UsiiKs7WV2opdSLaVHXL2x0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=LTFq1iW2fK0ilMQp3ipVKTrg5YQO0DpaoHw3I5Qu14h0s1CyeW9SP83hlkvMTMuaja8FDW1CGA5mbJYLtUP7/JKp53C7zvaj3Q2wv9zQdrNsVpWSTkUN4K2fxLms8JRYoWxFpa3GFmg9KOVXKTpWFYJ2+IjgnKWQFqunQBz17Cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CkLNugw1; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="CR/yjg0C"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TLe+oZzULe9FPMkkVQFnjCObZVF9eI5RM8vC0wH8ybXiUdnhVpzfrnjKkqzJ0pICAktWWDTKWPYAbcmrhGd9TdbiaxQUk3Q2Iu5Me94VVz/ZVekMPTLu/8jXHepW6+tUZBvnDLzbmQf98prGIdLdcF/emxHyMtFXgYzHm5keSRbQts7rBd/lP+aFAd+qxXQWZnSqwyTaSXWifY2R9HxIjXDh6/fORlW0XU9lE6IcNLG/WXJVNeHxQpfYDqH6uC/QNBiVpFSMeiqcRT7NTeplDlfTnvKpmJl2v/LLJxLMW1HpzA46K5jRYIVolkrt4Pf7sUgtr7v1kB1NvclKdEfuDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IcB1TXDB3R4KqMqU/4Qj98B3Elk+KRtdA5bl2TAPotE=;
- b=UDpGsrEyT5iyDCjAk4/Nsp31qbDFGF6SwEtk4FvVT0AKVNk7UuHxJ645BDg1k8NroDzyz8eSPNjFHtUnQviQPvZhhz9VyLl+f+n4uM1qQo46zWHD9COUQ1LlCwxmDSKark7hfK1r9ZVO1xj+F/+qVa6JK/PXPZz73F7pNaOau06/25fapG90tzOaOFi066pbI7B6Ja1rzhS5Ao/Welwx5NZh1iT+4zLAyAItuxMRUISt3w0BTd9HDbBAp147u68qMmMguxGtIIf57rnwANVoWL3lwBJoEAF99OfvSITRYAPCDHZxuI+G+Ql7irptaQq5SKuB8YkbWLKwuGUdwMrOYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IcB1TXDB3R4KqMqU/4Qj98B3Elk+KRtdA5bl2TAPotE=;
- b=CR/yjg0C4FSD9sGmQmQRe+6hSjARo+4fpGpxNOExnhsYmfTXyIloHcpbQ60qFlqOPM73NFX6wnP+Fc0A6uOzxCuzR/vAqizW6tjRGNXStNgJ3ffx6ctBIgvlnMV3X4x9131wZ/78Bom7s/R35Q1mfz/2S7TY/z1DANYaN+k5VVw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
- by CWLP265MB3059.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:cb::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Wed, 1 Apr
- 2026 13:59:30 +0000
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9769.014; Wed, 1 Apr 2026
- 13:59:30 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 01 Apr 2026 14:59:29 +0100
-Message-Id: <DHHVEPJHLGDW.1E6KDP9BUFG5U@garyguo.net>
-To: "Miguel Ojeda" <ojeda@kernel.org>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Danilo Krummrich"
- <dakr@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Catalin
- Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Paul
- Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, "Alexandre Courbot" <acourbot@nvidia.com>,
- "David Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
- <david@davidgow.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, "Todd Kjos"
- <tkjos@android.com>, "Christian Brauner" <christian@brauner.io>, "Carlos
- Llamas" <cmllamas@google.com>, "Alice Ryhl" <aliceryhl@google.com>,
- "Jonathan Corbet" <corbet@lwn.net>
-Cc: "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- <rust-for-linux@vger.kernel.org>, <linux-kbuild@vger.kernel.org>, "Lorenzo
- Stoakes" <lorenzo.stoakes@oracle.com>, "Vlastimil Babka"
- <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- "Uladzislau Rezki" <urezki@gmail.com>, <linux-block@vger.kernel.org>,
- "moderated for non-subscribers" <linux-arm-kernel@lists.infradead.org>,
- "Alexandre Ghiti" <alex@ghiti.fr>, <linux-riscv@lists.infradead.org>,
- <nouveau@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>, "Rae
- Moar" <raemoar63@gmail.com>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>, "Nick Desaulniers"
- <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, <llvm@lists.linux.dev>,
- <linux-kernel@vger.kernel.org>, "Shuah Khan" <skhan@linuxfoundation.org>,
- <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH 08/33] rust: kbuild: simplify `--remap-path-prefix`
- workaround
-From: "Gary Guo" <gary@garyguo.net>
-X-Mailer: aerc 0.21.0
-References: <20260401114540.30108-1-ojeda@kernel.org>
- <20260401114540.30108-9-ojeda@kernel.org>
-In-Reply-To: <20260401114540.30108-9-ojeda@kernel.org>
-X-ClientProxiedBy: LO4P265CA0157.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c7::14) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:488::16)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CkLNugw1"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c76b06f37a7so1044561a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 07:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775052080; x=1775656880; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4Of6IXR9kF08fb3y1GD1Duw1/k8Epn7khL83oxb2ObA=;
+        b=CkLNugw1r+4em7BO186nX6SYSN2UfxFuc8ZhuHyZWYVdpfFfiFDewksp1+Qk57+aCE
+         e+hMOejXl7bWL/0j8I4SEBR/NZDQng8GB9Hs9GtFx1iRyTxHqla7djJHNujDdknh2zsp
+         k1DUcMYSdrWuQ5k59Z+7+AX4Mi0ff1cNmb3Y6T6xly90cpQ1KYCTxEamQw72d41ypv1M
+         bg7qYaQo+YLuKhgsu3w/YrUdjTfT4iVljTfPcV24YddoDrr4VcRGb5+lHb2FALHZRn1l
+         vgXy/BS6eTyiWitc/RCRvAmEpc1IWvpucPXCfpcqyyqPKzwQC68gvLJC/h8ixqSHLKpZ
+         WnSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775052080; x=1775656880;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4Of6IXR9kF08fb3y1GD1Duw1/k8Epn7khL83oxb2ObA=;
+        b=N8chbsvYNVJh9z2ZALMCawyYEItaeoLLTCGNrXAwlOB0ywVdOR+FJSUrBBsvuP0bqm
+         X367VBwpsvi9/ZhU8WwUWZ+90RUkSAOkyBRMjWSeEnl49TTiw4HJstJnEDEUdyODJ1J0
+         yaFfIZEbvUYMqAtdQ/iNPeCWF1dT39ZP2MgMCs8odnR9zfzGt5pMsWMvQG0gzVxVO9lw
+         KozSTBm3QgmLf2Nirm0rLWOpEhOeKPSLD7AuCcwn9gYg6VW/rlx2uHV/vH9kDqg6IRaI
+         FVjDHOwOabUs9LQ6EvGHI12UhMXUijd5/AY7+nfrd0yFRGGvnCfOL6PRHReyjVmZWP27
+         yeAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUgoRLYGHlXDKT8SpZqSlaEeVI+2LZpGQl4CcYkNoNwwdnaaj06FytYz+1ah4V37StQ8ze/SSdsJyuWietxv5c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yywv1iVPr18RuNitKSt2uz6hbGh/89lGe96s726wX2W+EgWrhZf
+	w+g5/ePU1DDFUetMprmBOmR8CQtSDKuGRbNMlhttJEz9tIwJ9lvNFQI9hcgMO+qiu2l0QYftPQ2
+	OwWv9FA==
+X-Received: from pfop13.prod.google.com ([2002:a05:6a00:b4d:b0:82c:6f5f:fa9])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:998e:b0:39c:787:f197
+ with SMTP id adf61e73a8af0-39ef7688196mr4030395637.36.1775052079691; Wed, 01
+ Apr 2026 07:01:19 -0700 (PDT)
+Date: Wed, 1 Apr 2026 07:01:18 -0700
+In-Reply-To: <4334432d-982e-4450-9281-de739c25ebfd@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CWLP265MB3059:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5402742a-fe9a-4239-c8f6-08de8ff6e57c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|10070799003|13003099007|921020|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	lJLHUhEuXuBUra1C2X2buN4XN4SEaPuxxGVCL+yUAfb+4Qf34e97t5m4t+Au5la7hkzi813vDD+GtkZpLuHSlREzWE3cQ2XKFqJ0okEEy2rD4T6OuyuKYJZvFWYg87heKp8TQd3ovfzSaxHavpmkWbZoWTQOdJlvV8j33iAgPv9s+Ecdl7r34nNDQ6Sw8E76WzlflgjTx8HcwbBCn0wTSi16DROgFaDhwS6JATs/cUCGfgKdDSqqq2orFaeYZ79PoGY14e+RtyL2OtSW8+8XcsxO1FX5CdBzEu/9AVXwv01s5HI3sop5Busb9ul4J3iDr+Dq/q5ABFIFoYp3QMRMoHXMwNTHQ+1GlHYJWKDrWOD6TNPGwGi0MPT44877UNhogISbxaB6wBMHqnFvVZHr9e9/5+0cbmu46CfH3gUx2eb2WEdHl8/lcQhKa67sBHBVFAQjQeiv+urMV3fKR+4iLmoyWMWx4K/Sx1B+AcIFIJBx6MZoMYduE2xJqADoFIay6ax7LDE998obTzPehrV9h4XRr8imnY2VSiYgAUN9ysPACpRKgjz50559qUioj+O8JIj9nYzFUwDB2UynL41HgSg/64qXEjDkGR4yHlLCdMm2Elx46qvC4W3wFTo1fQ5E2hfCxfFmFXyGeaPzGBV34beaSWjQKYievMpRk4ENE3dJkdIonGZD4LIPcXTLfLsNaCpdM5hNUk4Ar58AcSw7gjoUMbcchE2Zzh5lrwkMEBothJPowZkRrA6RaAj/7VSEG/Uq1e+zUlCaUowH3t0j0w==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(10070799003)(13003099007)(921020)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S2VNWEl2d0NnSWdiMmcvd3ZVQnE5ZEJVYTFhQU8vekFIZmdWRWdtYnREdFRD?=
- =?utf-8?B?NEx0MmNwWnBUT1V5MlVnYmdXUWlXMnZFWmF4N3Nlak9yYVl3eVg5MmtPejdi?=
- =?utf-8?B?Qk1nbHluSno2Uktja1lqb1o3ZStMQml4aHNDRlRVcmdtSDdDNFBuRllSbUJx?=
- =?utf-8?B?UHRYZnJjNnZXV0xxYk94SzV0VW9SM3UzSG1MejlUTUVtTHZWMEhpSUlmOUtU?=
- =?utf-8?B?Z0t4cVZ0U3l3TFVKdHA0RDQxZllZYmE0VlJvd1pSQU9LQjQ1VzFmSUtZcmlB?=
- =?utf-8?B?VnphRUhiczRtS2RLS3VnaHB3NUhZd1UzZlJUT3MrTENYcjA3L1RaWkNad0RF?=
- =?utf-8?B?VjkrcEZHVDhaNlRHZEJPZzh5Y3hISUVINFdzK21UWktPZW9jVVRjT2xlS2RZ?=
- =?utf-8?B?UnNuMHF5TWIrWTlhamw1RGRwb2tkYml4d3czNGRLNXlDeFpFUVA0bk5PVHVm?=
- =?utf-8?B?L2FtUXluNzJOTEY5RGI3bW9nT0Zyb1VkbytDclJ1YXVuOTRhc0JQZFNjQy93?=
- =?utf-8?B?SkMzM0thMjdLRmNORDNLRXUrRURaYk5TS2JJZCtPd0dta3p2NXBjc3NnVUJR?=
- =?utf-8?B?eVY3dE9VcmlYV2JqcERrenYyYk9hZzNFLzI4TVVsTDI3ZnhwNjdHSXNWYi9n?=
- =?utf-8?B?S2cwK1BudHVIaUFJM0tvQnFlWHJrZU11bkNjUGxUV0JqeFpSaWt5dGVLSVRQ?=
- =?utf-8?B?WElPSVpEZzEvek9kdmZkM0duV2kyajNxZjlrUlhUVFdJTHZGUkpkUm50S2hE?=
- =?utf-8?B?VzZqSnlZRlFscmxDRnU5bWt2VUluTUxwK0F6STFucWJHOGRzakZ6SG5tcWNs?=
- =?utf-8?B?a3pVWWNpem1RMUdTUUlTU2E0K2RiM0NlckVtcW1tL3VmVjNoTVNOT2FXTWF3?=
- =?utf-8?B?MWx5WUVNNmU2eGVISGJhOU5aSU1lMVY2Z2V2NVgxcE9XSjdlL3NBME9kcDdB?=
- =?utf-8?B?anBDZ09UTTB3OXM5YzRyL3RnUmtmQmEybitMV01iZTNCU2JpK0hBUW1QbG9i?=
- =?utf-8?B?SVVSYXIxb1lMSklVUUpuejM5RXNPMWRWejB1R1NqMi9GRXdpM1hsMDd4UUcx?=
- =?utf-8?B?Z2o4MTMwak5VRStHV2JEV2NHWVJHM3BkQ1RHTC9RZU9tVWlkTUpBK1RNcUVh?=
- =?utf-8?B?UW9lM2xrR0dwaUJDREVZc2RjQlBGZ1RoZXNmL1pCY0ptZkFoZC9hd1lYbGR2?=
- =?utf-8?B?WFpqbVpUcFRWdUUrcEU4cStPL2MzTGpNcmpmVFFCaGJ3RmtQbU13YStZWFNZ?=
- =?utf-8?B?NTdnazl3MWZyeHhWTFNSODRoVWJxNWN4RzIzNW9ISmRhYTY3RWQyYzk1MDhY?=
- =?utf-8?B?clBsZXMvV1VkMTBEM1YwOWVEU1k4Vi96VVNzL1I0RXV2MDFTN2d0NjNDcWRu?=
- =?utf-8?B?VmowdmR4bmZWREMva3FFOWtiR1RSaExweFpyay80ZHJpZ21EcEk2NWpmSndk?=
- =?utf-8?B?Y2JyTzlSNmlyYW4xcHJnZjVJVHh2SlFFVFZRTlpVd3lFdkIrRnRSaVRXa0RU?=
- =?utf-8?B?ZXRwU3lZUDBtK3hueEU5bFU3aHYzSnhsWWYwUFVlZXJkVmo3bTVNQzdLN3F6?=
- =?utf-8?B?T0NmWUcvbzk1VUdCMVIrTzJhTmhOOTJYYVhBLzJEMVZlWFY3RGk2MFMrUE5a?=
- =?utf-8?B?M2huZGtFbXFiSHdLMWx1ZFdVcVp5TVcweVlSaVhaT2lmZC95Wk42cDFEdnNW?=
- =?utf-8?B?S0RIRkYrcDU0VzJaT1psSzVnQlVVTEcyQWJvRk5sYTlvdit0NUF2RlJRT3M0?=
- =?utf-8?B?V1VmRXNuWWFnajhQaDFqb3hhcGtZL2xjSzdlT3dKWDBTSnJhcm5ObHpGejk0?=
- =?utf-8?B?ZHFiWEJVeXFlODBQQWVJTE9YZG5LMzFkVnRnM1J3L2dKV1ljeDVIVC8rQzBx?=
- =?utf-8?B?OWpFZmRHVWxadFVoV1dFME1MQm4wNDcrSkthcnN4ZGUreTdRZ0sxQUkvbXFO?=
- =?utf-8?B?c0VWbXkwTkRYcTVHb0dLaDNHcWs2dERrZlQvdFVrQzFNZUlxYjNGeHBRTEwx?=
- =?utf-8?B?LzFaVTZzRE13QTFxVjh6U1dsQmo3ZUNIMVRiaCtlLzdaWklCTGduWE0xbUJy?=
- =?utf-8?B?NEwrWXJwMkFMcTRtV0pHY1pZalJwZVhNQ0luMmFWcm9scGtSN2UxMEJCWDBN?=
- =?utf-8?B?RnRlODE4MjVUVEY4SThOdW1KMGx2c1BrMlUzOHo2VXFSQUF1MGMzd3JyR3Ex?=
- =?utf-8?B?UU1yaGtHNzcvdFIvcGppN2drWFJmVE1lOWUyUmVpMFpndWdZbmZyUmFzYXRr?=
- =?utf-8?B?YWpIOUdqMjRkNHZicnVwUEsvLzhUbnlHOHpCQ0RsNGpScm1tcUdvT3lTMVpP?=
- =?utf-8?B?VVNIWkJiTXFHaEpzdWVqNUcwUlFaY0ZaT1M4Q2x3ZUVHSDFpYjhSQT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5402742a-fe9a-4239-c8f6-08de8ff6e57c
-X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 13:59:30.8987
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bT2HFVNStRc+G2k4L8oaNUUlDGnMfmd/IDyJFZShyWYAZWqTaAMMN+rjSHdMhu5dmuDgaaYsHn+72Kd9nFmBtQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB3059
+Mime-Version: 1.0
+References: <20260319000842.1213426-2-hisamshar@gmail.com> <091f264f-21f1-464d-913a-1500643728c7@linuxfoundation.org>
+ <137f63af-a993-4b1c-a9e9-931718a47343@linuxfoundation.org>
+ <f044f31d-740d-4cdb-834c-59de7691203d@gmail.com> <4334432d-982e-4450-9281-de739c25ebfd@linuxfoundation.org>
+Message-ID: <ac0lGVlg4cJSNCGl@google.com>
+Subject: Re: [PATCH] KVM: selftests: Guard execinfo.h inclusion for non-glibc builds
+From: Sean Christopherson <seanjc@google.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Hisam Mehboob <hisamshar@gmail.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Aqib Faruqui <aqibaf@amazon.com>, shuah@kernel.org, pbonzini@redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed Apr 1, 2026 at 12:45 PM BST, Miguel Ojeda wrote:
-> With the minimum version bump in place, `rustdoc` now always recognizes
-> the `--remap-path-prefix` flag.
->
-> In addition, the Internal Compiler Error that the comment mentions [1]
-> was fixed in Rust 1.87.0 [2], so we still need to skip the flag for
-> the normal `rustdoc` case, but not for `--test` since the ICE does not
-> reproduce there -- please see commit 2c8725c1dca3 ("rust: kbuild: skip
-> `--remap-path-prefix` for `rustdoc`").
->
-> Thus update the comment and remove the skipping of the flag for the
-> `--test` case.
->
-> Note that commit dda135077ecc ("rust: build: remap path to avoid
-> absolute path") re-landed the `--remap-path-prefix` flag (together with
-> `--remap-path-scope`), so we keep the workaround, i.e. an alternative
-> could have been to simply delete the skip entirely, but since we still
-> have it and it will be needed when this gets merged, let's keep it.
+On Tue, Mar 31, 2026, Shuah Khan wrote:
+> On 3/25/26 12:47, Hisam Mehboob wrote:
+> > On 3/25/26 23:03, Shuah Khan wrote:
+> > > On 3/24/26 12:02, Shuah Khan wrote:
+> > > > On 3/18/26 18:08, Hisam Mehboob wrote:
+> > > > > The backtrace() function and execinfo.h are GNU extensions availa=
+ble
+> > > > > in glibc but not in non-glibc C libraries such as musl. Building =
+KVM
+> > > > > selftests with musl-gcc fails with:
+> > > > >=20
+> > > > > =C2=A0=C2=A0 lib/assert.c:9:10: fatal error: execinfo.h: No such =
+file or directory
+> > > > >=20
+> > > > > Guard the inclusion of execinfo.h under #ifdef __GLIBC__, and wra=
+p
+> > > > > all backtrace() usage under the same guard with a fallback messag=
+e
+> > > > > for non-glibc builds indicating that stack traces are not availab=
+le.
+> > > > >=20
+> > > > > Unlike the approach of adding a weak stub for backtrace(), this
+> > > > > explicitly handles the non-glibc case rather than silently provid=
+ing
+> > > > > an empty implementation.
+> > > > >=20
+> > > > > Link: https://lore.kernel.org/kvm/20250829142556.72577-7- aqibaf@=
+amazon.com/
+> > > > >=20
+> > > > > Suggested-by: Aqib Faruqui <aqibaf@amazon.com>
+> > > > > Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
+> > > > > ---
+> > > > > =C2=A0 tools/testing/selftests/kvm/lib/assert.c | 7 +++++++
+> > > > > =C2=A0 1 file changed, 7 insertions(+)
+> > > > >=20
+> > > > > diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/ te=
+sting/selftests/kvm/lib/assert.c
+> > > > > index b49690658c60..3442b80c37c1 100644
+> > > > > --- a/tools/testing/selftests/kvm/lib/assert.c
+> > > > > +++ b/tools/testing/selftests/kvm/lib/assert.c
+> > > > > @@ -6,7 +6,9 @@
+> > > > > =C2=A0=C2=A0 */
+> > > > > =C2=A0 #include "test_util.h"
+> > > > > +#ifdef __GLIBC__
+> > > > > =C2=A0 #include <execinfo.h>
+> > > > > +#endif
+> > > > > Is __GLIBC__ defined in musl-gcc? Looks like that is the case wit=
+h the
+> > > > error?
+> > >=20
+> > > If __GLIBC__ isn't there you shouldn't see this error because the inc=
+lude
+> > > is in - this error doesn't make sense if __GLIBC__ isn't defined. Wha=
+t
+> > > am I missing?
+> > >=20
+> >=20
+> > To clarify the compiler error you mentioned: the error log in the commi=
+t
+> > message shows the failure that occurs before this patch is applied. Bec=
+ause
+> > musl-gcc doesn't define __GLIBC__, the original unconditional <execinfo=
+.h>
+> > inclusion causes the build to fail. The #ifdef in my patch was intended=
+ to
+> > fix that exact failure.
+> >=20
+> > > +#ifdef __GLIBC__
+> > > =C2=A0=C2=A0#include <execinfo.h>
+> > > +#endif
+> > >=20
+> > > Also check tools/testing/selftests/bpf/test_progs.c - I think backtra=
+ce()
+> > > stub needs be defined only for the !__GLIBC__ case
+> > >=20
+> >=20
+> > Looking at how bpf/test_progs.c handles it, I agree the weak stub appro=
+ach
+> > is much cleaner. I will implement it so that it still prints an explici=
+t
+> > warning message when a trace is unavailable.
 
-I'm not sure that I parse this. You do remove the filter-out completely bel=
-ow?
+I disagree.  _If_ we didn't need the __GLIBC__ #ifdef, then I would be in f=
+avor
+of __weak, but since the #ifdeffery is needed, using an #ifdef and a __weak=
+ symbol
+is double the ugliness.
 
->
-> Link: https://github.com/rust-lang/rust/issues/138520 [1]
-> Link: https://github.com/rust-lang/rust/pull/138556 [2]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  rust/Makefile | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
->
-> diff --git a/rust/Makefile b/rust/Makefile
-> index 193cf06eea64..708530ee3613 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -142,10 +142,9 @@ rustdoc_modifiers_workaround :=3D $(if $(call rustc-=
-min-version,108800),-Cunsafe-a
->  # Similarly, for doctests (https://github.com/rust-lang/rust/issues/1464=
-65).
->  doctests_modifiers_workaround :=3D $(rustdoc_modifiers_workaround)$(if $=
-(call rustc-min-version,109100),$(comma)sanitizer)
-> =20
-> -# `rustc` recognizes `--remap-path-prefix` since 1.26.0, but `rustdoc` o=
-nly
-> -# since Rust 1.81.0. Moreover, `rustdoc` ICEs on out-of-tree builds sinc=
-e Rust
-> -# 1.82.0 (https://github.com/rust-lang/rust/issues/138520). Thus workaro=
-und both
-> -# issues skipping the flag. The former also applies to `RUSTDOC TK`.
-> +# `rustdoc` ICEs on out-of-tree builds in Rust < 1.87.0
-> +# (https://github.com/rust-lang/rust/issues/138520). Thus workaround the
-> +# issue skipping the flag.
->  quiet_cmd_rustdoc =3D RUSTDOC $(if $(rustdoc_host),H, ) $<
->        cmd_rustdoc =3D \
->  	OBJTREE=3D$(abspath $(objtree)) \
-> @@ -333,7 +332,7 @@ quiet_cmd_rustdoc_test_kernel =3D RUSTDOC TK $<
->  	rm -rf $(objtree)/$(obj)/test/doctests/kernel; \
->  	mkdir -p $(objtree)/$(obj)/test/doctests/kernel; \
->  	OBJTREE=3D$(abspath $(objtree)) \
-> -	$(RUSTDOC) --test $(filter-out --remap-path-prefix=3D%,$(rust_flags)) \
+IMO, the way to make this less ugly is to using a single #ifdef and a local=
+ stub.
 
-Looks like this is going to conflict with rust-fixes (which adds the
---remap-path-scope). Perhaps worth doing a back merge?
-
-Best,
-Gary
-
-
-> +	$(RUSTDOC) --test $(rust_flags) \
->  		-L$(objtree)/$(obj) --extern ffi --extern pin_init \
->  		--extern kernel --extern build_error --extern macros \
->  		--extern bindings --extern uapi \
-
+diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selft=
+ests/kvm/lib/assert.c
+index b49690658c60..315175ca49f1 100644
+--- a/tools/testing/selftests/kvm/lib/assert.c
++++ b/tools/testing/selftests/kvm/lib/assert.c
+@@ -6,11 +6,13 @@
+  */
+ #include "test_util.h"
+=20
+-#include <execinfo.h>
+ #include <sys/syscall.h>
+=20
+ #include "kselftest.h"
+=20
++#ifdef __GLIBC__
++#include <execinfo.h>
++
+ /* Dumps the current stack trace to stderr. */
+ static void __attribute__((noinline)) test_dump_stack(void);
+ static void test_dump_stack(void)
+@@ -57,6 +59,9 @@ static void test_dump_stack(void)
+        system(cmd);
+ #pragma GCC diagnostic pop
+ }
++#else
++static void test_dump_stack(void) {}
++#endif
+=20
+ static pid_t _gettid(void)
+ {
