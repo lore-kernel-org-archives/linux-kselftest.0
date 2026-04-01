@@ -1,60 +1,60 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594A53783D0;
-	Wed,  1 Apr 2026 20:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F88386446;
+	Wed,  1 Apr 2026 20:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775075984; cv=none; b=tHShRbJ1DkqyU9Kni9pBZs/DpeANMpfphwafVquYDz40D3JsDcy4QYuxmru43XpCtPE/PVUiG4VstWhKSSiTtRR4qJeNt7It2vWIEZhOh0C3bWCxvILZdUdXaOimOX93SBK8u5t8M9Ym5Ffe27AHUoQ5DS1g+6Yj/E2TLizBTtY=
+	t=1775076376; cv=none; b=qx6wiQOKqMgoyHPArcqXY6oShUj+gZEbGFujVcRLNpy6QCtvz+/WKpSUAb504aRMmP4RmoWDeju/ONaDX3XXP+HCzufvegfX5AIBdjR6zsMn8NSdRBU0xxP4tyA+gWaSeaSlUS+q6YfAcx0mvnc4NqVBGfHC8hLX/PHBWIVm18E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775075984; c=relaxed/simple;
-	bh=a4z3f3TzwQkkYTR1IT9w8JxFreUfRyjAlwHwQFJ+aIo=;
+	s=arc-20240116; t=1775076376; c=relaxed/simple;
+	bh=JrVCJyBTIlXr5qZi5cgtJcAbGNb9zH+PqOAvjdeVWg0=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XwlB2v3mRSCbvRuHQMIds5aZSaThkF3ysskPvUz5gbGmODMWTF6Ls4czjwFDd85bMlmF8m30ANjrtojK4bYdwihWMQPyBhQtjBG+ZxYiIE7Ej8txZa109mnFfyXK635pftNUWQtjG+oX0Du43qXq+fD9tKqWmAxKHUjq9CFoZNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SfY0K0Sy; arc=none smtp.client-ip=148.163.156.1
+	 In-Reply-To:Content-Type; b=BqgxEpdtXWuVINGu0KslrngzjzGqiwtFtZ9XvJRbRwXMAelXU3pM35wqsb+QhAcDg3iv5KLtCD2vFk+kQkMrbp6fZXsmhLsivPZcAASaiQhf/MkDx9yaOBHdxXnFZSHL2SYc2+ifCrSgyVfnoBq/O55CxGOY4LjdeufdsUBmWgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=E7b6l/2Q; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SfY0K0Sy"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="E7b6l/2Q"
 Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631C9VAc347700;
-	Wed, 1 Apr 2026 20:39:20 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631AjOUb015098;
+	Wed, 1 Apr 2026 20:45:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=uFyDQY
-	WvHXwDNnSeTet24tb62Td7pIMgSR2cvMwnqm0=; b=SfY0K0SyD27k0V+7cbghlC
-	aXnox0s+UDp7GGzrXymXSJqJZXlMM7tSqsx6mfndrALV4MTdBVMPLlOfBAe7Fl4y
-	7Crq8ad2Y2Ld2K1j1gYUOqHmP7xL7pu6Khz+68+F4qXRnIYdjMcEVhZkF9wvM6KO
-	lAfGvWobyQteZr3iyQsaU4gqPcK1CjLwLMWFBuJs6ll8Q5Nh+uYwMK0NQhyhKXdf
-	aZdXIta+bjTuG+bPctgF+ciDMr7tFpw5DL5Q2jCn09U4JXLdMikAiOschlrS94SI
-	9Wopdd/5dmxqvHGkA/NGp6Z2GQxsxLTi377C+aznMhrgtXAw7CCrrAs9Iprt1Csg
+	:message-id:mime-version:references:subject:to; s=pp1; bh=RWruVU
+	I1tyA0IagjZ+3lclFkCSQNagbCICLF95nwFe4=; b=E7b6l/2QjZCkcKJ5G4G/yI
+	hK9FUV+8cIkcFYWGWsXdUJG9JFH2o0hURCYLGsttdJMwHxUp0BmjOPrddiIhTJBf
+	JSI/aGGaWDK57MvekGVsXmjXF43WZ+YgR/eWbrEYJGU4x+eBOJ0e1RCTAPAizUvH
+	LNKFbXVymu7GR2aJk/aB00teaB43zhUraGE3IQr/JL0BKicELbB5GeqpBRV7syMa
+	FCPytU46RU4XoR2Sy5i9LRlIhshepaDecbeL5XoBO1FLlbYMktAfVIiqcZJpL0b/
+	atvkCs90EAZ7CdXunmqS3oejFRPhJDZpEt1cpeSBr7Z+U0+JxByfRkfaIAC13fAQ
 	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66q3a42t-1
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66q3a4p5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 20:39:19 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 631JEPTf013936;
-	Wed, 1 Apr 2026 20:39:18 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6ttkqap6-1
+	Wed, 01 Apr 2026 20:45:56 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 631Id5q2021709;
+	Wed, 1 Apr 2026 20:45:55 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d6sasqk58-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 20:39:18 +0000
+	Wed, 01 Apr 2026 20:45:55 +0000
 Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631KdHA826542624
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631Kjsf427984504
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 Apr 2026 20:39:17 GMT
+	Wed, 1 Apr 2026 20:45:55 GMT
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5B2D558056;
-	Wed,  1 Apr 2026 20:39:17 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id D426458052;
+	Wed,  1 Apr 2026 20:45:54 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5820B58052;
-	Wed,  1 Apr 2026 20:39:12 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 4CE1458062;
+	Wed,  1 Apr 2026 20:45:50 +0000 (GMT)
 Received: from [9.124.211.138] (unknown [9.124.211.138])
 	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  1 Apr 2026 20:39:12 +0000 (GMT)
-Message-ID: <066a146b-7dbb-408e-bbc0-542bdcdd6681@linux.ibm.com>
-Date: Thu, 2 Apr 2026 02:09:08 +0530
+	Wed,  1 Apr 2026 20:45:50 +0000 (GMT)
+Message-ID: <20a95f92-57f9-44cc-bc40-8110dd562998@linux.ibm.com>
+Date: Thu, 2 Apr 2026 02:15:48 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,189 +63,172 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Sayali Patil <sayalip@linux.ibm.com>
-Subject: Re: [PATCH v3 08/13] selftests/mm: ensure destination is
- hugetlb-backed in hugepage-mremap
-To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
-        "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+Subject: Re: [PATCH v3 06/13] selftest/mm: adjust hugepage-mremap test size
+ for large huge pages
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
         Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
         Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
         linuxppc-dev@lists.ozlabs.org,
         Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <3b6ffba238a4b59de891acf896fa25d7d3193228.1774591179.git.sayalip@linux.ibm.com>
- <ee15d52f-45df-415b-b0d9-3d267d147e5c@kernel.org>
- <b590a17c-13ed-45f4-9f51-ac662d00e7bf@lucifer.local>
+ <fd252496169a91c80e339910978f21c3f4aac9f7.1774591179.git.sayalip@linux.ibm.com>
+ <4e859cfa-db79-4676-9509-81a2140db3f3@kernel.org>
 Content-Language: en-IN
-In-Reply-To: <b590a17c-13ed-45f4-9f51-ac662d00e7bf@lucifer.local>
+In-Reply-To: <4e859cfa-db79-4676-9509-81a2140db3f3@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: iEvn9nC1rSRKV0ItDH2S3_8hPM1sN2Gd
-X-Authority-Analysis: v=2.4 cv=frzRpV4f c=1 sm=1 tr=0 ts=69cd8277 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+X-Proofpoint-GUID: ImgjBi1YotGdXNs22t1V0XVsv_SW0sfH
+X-Authority-Analysis: v=2.4 cv=frzRpV4f c=1 sm=1 tr=0 ts=69cd8404 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
  a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
  a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=Ikd4Dj_1AAAA:8
- a=VnNF1IyMAAAA:8 a=qGJu50tjSwPfCeBw4LkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: AChZenxUfvcSqwrWgHOKOoPV2SQ7V8qV
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDE5MSBTYWx0ZWRfX6gTg3Qo/OC+a
- NKUxDvTwjJq7HSy8zeYs5FwSJqy2nfjLyOJ1cCP4DSeby6GrSlJvadrKGU+Qbyjb9robLiFWrbh
- AfVWHrnhwKcgY7nJxFq4ZciZ8Z1RtmqPUIhykLM5m1M2AOvxd5Gw9ff4HUshbr13R0r0roTc1/g
- psm4h0oxItvrGm3ahpR4SxWU0QTpqvFMdltwB1ep5y9MfK7dJ5m0V1eQc7MeVoYNMrqPQxySBFC
- D2F1aA9BcU2i9ErzTf2Ds/Zft9olYL/729LF4Yukw8JpiD9m2l061fEwnrSxpVyH9jvObqhlqc/
- vA3RV6tMgpRxGpUB2ld0GCPbZ9dexbt/VAQaC/p3r0rE/6ix9xoOSxeeQi0LS6TTnlPu7rMsxBz
- RrDpEWw8SwosrHyO2OTZqtEZazxUbiJ6TPTqm4nff9NroFGZgnXf6F8iNkBtjzwqwl5SdvwBF1t
- 9Q45lo1MM4p7oA5rE+g==
+ a=VnNF1IyMAAAA:8 a=pPYpmyHQdkSp_mSMAUoA:9 a=pz4v2tEdkw714-FJ:21
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: PTslfsCMgxc-PgvVTdlUoFhCgIDowRJo
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDE5MSBTYWx0ZWRfX/vpITs/nmC19
+ /HYzZkKvv7DnQZZjAVg/dqj9D4Ya0Zju+8RAbNF7ZC79P24cqL0i3Xl7aFvXeSah2TSCS2iLMKe
+ Elu5RqPslaih4wdGEbIep85pvivsUFShFgT2nDqAQveRt/W6etlcGJfHwwKTbxhnUU1YHxVyzZB
+ KV1ZQ0n5qrEwUxd8Tl4BkXe5Wx47/eqF2sDLN/3zzJp0UN6dw9YNP/bU0LSK5rncvL3FawzE06A
+ o+5XjA5b1rzjhNrvTlmLXLgXjpejj+osr0A9E77Q8VjdSDiazL0lhoO4cwvr0poO1G2hJK+XLuY
+ 5a1MnnIouHfdYFflzxwgXSOaPP43O4bzx+SvZK565CPcKlV7rOICa4GhubHZ+mqm6K2YTwXz00a
+ KVSI0Ijm3/KXSS8w/UG2++nO6DyGUREGBVIZzf0qBIlmemvJ6EUu4uQa4lCf1DFxMVGlnKlof8A
+ ekT1kBhoZnFXhujbR4g==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-01_04,2026-04-01_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 clxscore=1011
+ impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
  lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0 phishscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010191
 
 
 
-On 01/04/26 20:10, Lorenzo Stoakes (Oracle) wrote:
-> On Wed, Apr 01, 2026 at 04:21:55PM +0200, David Hildenbrand (Arm) wrote:
->> On 3/27/26 08:16, Sayali Patil wrote:
->>> The hugepage-mremap selftest reserves the destination address using a
->>> anonymous base-page mapping before calling mremap() with MREMAP_FIXED,
->>> while the source region is hugetlb-backed.
->>>
->>> When remapping a hugetlb mapping into a base-page VMA may fail with:
->>>
->>>      mremap: Device or resource busy
->>>
->>> This is observed on powerpc hash MMU systems where slice constraints
->>> and page size incompatibilities prevent the remap.
-> 
-> OK so digging in:
-> 
-> mremap -> ... -> vrm_set_new_addr() -> get_unmapped_area() -> ... (in ppc arch
-> code) -> slice_get_unmapped_area():
-> 
-> unsigned long slice_get_unmapped_area(unsigned long addr, unsigned long len,
-> 				      unsigned long flags, unsigned int psize,
-> 				      int topdown)
-> {
-> 	...
-> 	/* bunch of checks */
-> 
-> 	/* If we have MAP_FIXED and failed the above steps, then error out */
-> 	if (fixed)
-> 		return -EBUSY;
-> 
-> 	...
-> }
-> 
-> Is presumably where we hit the issue.
-> 
->>>
+On 01/04/26 19:40, David Hildenbrand (Arm) wrote:
+> On 3/27/26 08:16, Sayali Patil wrote:
+>> The hugepage-mremap selftest uses a default size of 10MB, which is
+>> sufficient for small huge page sizes. However, when the huge page size
+>> is large (e.g. 1GB), 10MB is smaller than a single huge page.
+>> As a result, the test does not trigger PMD sharing and the
+>> corresponding unshare path in mremap(), causing the
+>> test to fail (mremap succeeds where a failure is expected).
 >>
->> That is weird. An mremap(MREMAP_FIXED) is really just an munmap() + move.
-> 
-> Yeah the weird bit I guess is that we _still_ invoke get_unmapped_area() but
-> with MAP_FIXED set to indicate that we want the specific address, so it's
-> subject to the above checks.
-> 
+>> Update run_vmtest.sh to use twice the huge page size when the huge page
+>> size exceeds 10MB, while retaining the 10MB default for smaller huge
+>> pages. This ensures the test exercises the intended PMD sharing and
+>> unsharing paths for larger huge page sizes.
 >>
->> Are we sure this is not some actual problem in the hugetlb implementation?
-> 
-> It seems the 'slices' check sees if the _target address_ has an equivalent page
-> size, presumably hugetlb-mandated, and fails if they're not equivalent, so this
-> change is just accounting for that.
-> 
-Yes, this change accounts for that by ensuring the destination is 
-created with MAP_HUGETLB so it has the same page size as the source.
-> 
+>> Before patch:
+>>   running ./hugepage-mremap
+>>   ------------------------------
+>>   TAP version 13
+>>   1..1
+>>    Map haddr: Returned address is 0x7eaa40000000
+>>    Map daddr: Returned address is 0x7daa40000000
+>>    Map vaddr: Returned address is 0x7faa40000000
+>>    Address returned by mmap() = 0x7fffaa600000
+>>    Mremap: Returned address is 0x7faa40000000
+>>    First hex is 0
+>>    First hex is 3020100
+>>   Bail out! mremap: Expected failure, but call succeeded
+>>   Planned tests != run tests (1 != 0)
+>>   Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>   [FAIL]
+>>   not ok 1 hugepage-mremap # exit=1
 >>
->>> Ensure the destination region is created using MAP_HUGETLB so that both
->>> source and destination VMAs are hugetlb-backed and compatible. Also add
->>> MAP_POPULATE to the destination mapping to prefault hugepages,
->>> matching the behaviour used for other hugetlb mapping in the test and
->>> ensuring deterministic behaviour.
+>> Before patch:
+>>   running ./hugepage-mremap
+>>   ------------------------------
+>>   TAP version 13
+>>   1..1
+>>    Map haddr: Returned address is 0x7eaa40000000
+>>    Map daddr: Returned address is 0x7daa40000000
+>>    Map vaddr: Returned address is 0x7faa40000000
+>>    Address returned by mmap() = 0x7fffaa600000
+>>    Mremap: Returned address is 0x7faa40000000
+>>    First hex is 0
+>>    First hex is 3020100
+>>   Bail out! mremap: Expected failure, but call succeeded
+>>   Planned tests != run tests (1 != 0)
+>>   Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>   [FAIL]
+>>   not ok 1 hugepage-mremap # exit=1
 >>
->> But then the test suddenly requires more hugetlb pages, no? I don't see
->> a good reason for the MAP_POPULATE, really. It will be discarded either way.
 > 
-> Yeah I'm not sure about the MAP_POPULATE being all that important here.
+> Why are there two "Before patch" in here?
+Thanks for pointing that out, Let me fix it in the next version.
 > 
-As far as I understand, without MAP_POPULATE, memory accesses would 
-trigger userfaults, and since the test is single-threaded and has no 
-background handler for the uffd, it would deadlock. MAP_POPULATE ensures 
-the test runs correctly by prefaulting all pages, but please let me know 
-if I’m mistaken.
+>> After patch:
+>>   running ./hugepage-mremap 2048
+>>   ------------------------------
+>>   TAP version 13
+>>   1..1
+>>    Map haddr: Returned address is 0x7eaa40000000
+>>    Map daddr: Returned address is 0x7daa40000000
+>>    Map vaddr: Returned address is 0x7faa40000000
+>>    Address returned by mmap() = 0x7fff13000000
+>>    Mremap: Returned address is 0x7faa40000000
+>>    First hex is 0
+>>    First hex is 3020100
+>>    ok 1 Read same data
+>>   Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>   [PASS]
+>>   ok 1 hugepage-mremap 2048
 >>
->>>
->>> Update the FLAGS macro to include MAP_HUGETLB | MAP_SHARED |
->>> MAP_POPULATE so that both mappings are hugetlb-backed and compatible.
->>> Also use the macro for the mmap() calls to avoid repeating
->>> the flag combination.
->>>
->>> This ensures the test reliably exercises hugetlb mremap instead of
->>> failing due to VMA type mismatch.
->>>
->>> Fixes: 12b613206474 ("mm, hugepages: add hugetlb vma mremap() test")
->>> Acked-by: Zi Yan <ziy@nvidia.com>
->>> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
->>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
->>> ---
->>>   tools/testing/selftests/mm/hugepage-mremap.c | 11 ++++-------
->>>   1 file changed, 4 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testing/selftests/mm/hugepage-mremap.c
->>> index e611249080d6..48c24a4ba9a7 100644
->>> --- a/tools/testing/selftests/mm/hugepage-mremap.c
->>> +++ b/tools/testing/selftests/mm/hugepage-mremap.c
->>> @@ -31,7 +31,7 @@
->>>   #define MB_TO_BYTES(x) (x * 1024 * 1024)
->>>
->>>   #define PROTECTION (PROT_READ | PROT_WRITE | PROT_EXEC)
->>> -#define FLAGS (MAP_SHARED | MAP_ANONYMOUS)
->>> +#define FLAGS (MAP_HUGETLB | MAP_SHARED | MAP_POPULATE)
->>>
->>>   static void check_bytes(char *addr)
->>>   {
->>> @@ -121,23 +121,20 @@ int main(int argc, char *argv[])
->>>
->>>   	/* mmap to a PUD aligned address to hopefully trigger pmd sharing. */
->>>   	unsigned long suggested_addr = 0x7eaa40000000;
->>> -	void *haddr = mmap((void *)suggested_addr, length, PROTECTION,
->>> -			   MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
->>> +	void *haddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
->>>   	ksft_print_msg("Map haddr: Returned address is %p\n", haddr);
->>>   	if (haddr == MAP_FAILED)
->>>   		ksft_exit_fail_msg("mmap1: %s\n", strerror(errno));
->>>
->>>   	/* mmap again to a dummy address to hopefully trigger pmd sharing. */
->>>   	suggested_addr = 0x7daa40000000;
->>> -	void *daddr = mmap((void *)suggested_addr, length, PROTECTION,
->>> -			   MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
->>> +	void *daddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
->>>   	ksft_print_msg("Map daddr: Returned address is %p\n", daddr);
->>>   	if (daddr == MAP_FAILED)
->>>   		ksft_exit_fail_msg("mmap3: %s\n", strerror(errno));
->>>
->>>   	suggested_addr = 0x7faa40000000;
->>> -	void *vaddr =
->>> -		mmap((void *)suggested_addr, length, PROTECTION, FLAGS, -1, 0);
->>> +	void *vaddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
->>>   	ksft_print_msg("Map vaddr: Returned address is %p\n", vaddr);
->>>   	if (vaddr == MAP_FAILED)
->>>   		ksft_exit_fail_msg("mmap2: %s\n", strerror(errno));
+>> Fixes: f77a286de48c ("mm, hugepages: make memory size variable in hugepage-mremap selftest")
+>> Acked-by: Zi Yan <ziy@nvidia.com>
+>> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+>> ---
+>>   tools/testing/selftests/mm/run_vmtests.sh | 13 ++++++++++++-
+>>   1 file changed, 12 insertions(+), 1 deletion(-)
 >>
->>
->> --
->> Cheers,
->>
->> David
+>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+>> index afdcfd0d7cef..eecec0b6eb13 100755
+>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>> @@ -293,7 +293,18 @@ echo "$shmmax" > /proc/sys/kernel/shmmax
+>>   echo "$shmall" > /proc/sys/kernel/shmall
+>>   
+>>   CATEGORY="hugetlb" run_test ./map_hugetlb
+>> -CATEGORY="hugetlb" run_test ./hugepage-mremap
+>> +
+>> +# If the huge page size is larger than 10MB, increase the test memory size
+>> +# to twice the huge page size (in MB) to ensure the test exercises PMD sharing
+>> +# and the unshare path in hugepage-mremap. Otherwise, run the test with
+>> +# the default 10MB memory size.
 > 
-> Cheers, Lorenzo
+> PMD sharing requires, on x86, a 1 GiB area with 2 MiB hugetlb folios.
+> 
+> How does doubling sort that out?
+> 
+> Also, why the magic value 10mb?
+> 
+> 
+Hi David,
+Yes, 1GB huge pages are mapped at the PUD level and are not involved in 
+PMD sharing, as huge_pte_alloc() skips sharing for sizes other than 
+PMD_SIZE.
 
+The issue here is due to an unaligned memory size on a 1GB mapping.
+This leads munmap() to fail at an unaligned address, causing the 
+subsequent expected-to-fail mremap() to unexpectedly succeed.
+The default memory size for this test is 10MB.
+
+Aligning the size to a multiple of 1GB avoids this failure, but it is 
+not related to PMD sharing. I will update the description in v4 to 
+reflect this more accurately.
+
+I will also update the test code directly to align the memory size to 
+the huge page size, rather than modifying run_vmtests.sh.
+
+Thanks,
+Sayali
