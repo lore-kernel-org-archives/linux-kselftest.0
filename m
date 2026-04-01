@@ -1,94 +1,36 @@
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012048.outbound.protection.outlook.com [40.107.200.48])
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96F7345CC2;
-	Wed,  1 Apr 2026 18:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775069573; cv=fail; b=S8iFpG1UpHV8/r9aPz+jzGcxgLGgB3Ay9an396YssVSqMyeiPexhq4Jsr1YPEn+tvj+qacJPfai3BE6fGRkOTp28LeLCVyoszbKhtsEtp61CteF4Gt8mbMQKTSti+W02PnWIEXf3RLTNYZP6jACUGjBuOpgEDqGjbhYoeqdIHOs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775069573; c=relaxed/simple;
-	bh=bNxPaFyKTr+8PzSZjErURSRhx42C1826Yt2rbTSXgps=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hiXiB9d09sl+qtLazygbS1e0jqhc+oLoty+bFFYVWSxpKZvoG7j/AqxAbpEvS65OU3fZbafGVvoVV/vszN1r1IxPzzsadXi+4xmQhj513X2ZZlrVOnSbkcNdRGlfVn05vuvgpNLGLtkE2BI4FYmqwPIG90bdzV221YsmVo1x5WM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VEvpT9Eb; arc=fail smtp.client-ip=40.107.200.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VEvpT9Eb"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r/4CkEHqrN4Km22fFYVXSXT9EFJVmZX9fBrWb3Jp/16d8o2PaQPkMHnX9yT+p56B8al4lR2TetKRL60vhBU5SWVjFCNbN6AZDHApcp3pck7OYIYsHGe1rwcdH4F8kYsmZc6c6WvX9CuymhOyqFjr4x/L5yjOOQgfOWSzlJkgxDhGpZRm63v//nEy5OmIpNa3ys3c6lhLVbE6kYMEnMBtCcjVGlmOMW4Voqtlvk1n5s2/cWx+ks3yfQkY62kcLnwUpkvzHOP2tSedVdOSBt0HGCM8f/z2fHhAAcdVOzwKe4BLRSQxWdguJIZbn/xaLDboI+nDqZ6NYwxsgIWouKhY6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ftahLqQoNhhEzHXVvf+M97Mjovjuqjqr+GfvnqTKqeI=;
- b=i2u/dy10327DGAdmzKutmNcUjQ9RAG9N/OEi7tWnRqfkoqRm6IvKB/nrokLJEzyM2KUkxPcS+mEfyi71WtRteTBSDHen34LYK1uzsO1jXycguP5IHY1j64p6T9isKVIlacXyQVkeQSZKmWOkG6S5mzGwtvE4u6egBz2P5FMA09JLmJIoliyNXlqkayZdwNACIlI1LrihkKYbptrY6IdmT2EkPgHkgHYLze7uVGnsaaxd9tPGuYiBKAYDpLah8HqqZtgnw3k5E+0gu+yF5mLHmSzkPpczSO0Wo8lrI/Zn0aP1BkkU1l22N86mUcPblgVYFjQ6FEHzUDXAkT7k1kMJog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ftahLqQoNhhEzHXVvf+M97Mjovjuqjqr+GfvnqTKqeI=;
- b=VEvpT9EbDtxZrIddUGd427KxnYlZW/gSVzC7ySpbjY5kZw0PItZPkW8gRmlw+mhQgpvaf1Z6owCUHwckK68Ztws2XjS4FStEx0LCbDQ9Rl7gg5Kh2cuKu6XAXDdewP3nAVQzmMxmLD6TYk88z6aUVEbPqaGHjTMJqitkThp3xQKSL/pezaOEpL7Zod5UqsZ5v1XrrxAdU48NyYQoM+0BTZ4sMG1vKKnGa78qp82Tn81InRLxaHOe4NQXWdiMsWsT8PVI7ilc9/9WFqL9J1iWO8J5dByXJIONI5cef3kLKKusFL+6GKVa+HfNIIbB3DzK0bhXbEr4p7jWD8I7+ySwuQ==
-Received: from BN9PR03CA0447.namprd03.prod.outlook.com (2603:10b6:408:113::32)
- by SJ2PR12MB9088.namprd12.prod.outlook.com (2603:10b6:a03:565::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.16; Wed, 1 Apr
- 2026 18:52:30 +0000
-Received: from BN2PEPF0000449F.namprd02.prod.outlook.com
- (2603:10b6:408:113:cafe::9d) by BN9PR03CA0447.outlook.office365.com
- (2603:10b6:408:113::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.29 via Frontend Transport; Wed,
- 1 Apr 2026 18:52:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN2PEPF0000449F.mail.protection.outlook.com (10.167.243.150) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.17 via Frontend Transport; Wed, 1 Apr 2026 18:52:30 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Apr
- 2026 11:52:08 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Apr
- 2026 11:52:08 -0700
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.10)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Wed, 1 Apr
- 2026 11:52:00 -0700
-From: Tariq Toukan <tariqt@nvidia.com>
-To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>
-CC: Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Saeed Mahameed <saeedm@nvidia.com>, "Leon
- Romanovsky" <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
-	<mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, Chuck Lever
-	<chuck.lever@oracle.com>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
-	Carolina Jubran <cjubran@nvidia.com>, Or Har-Toov <ohartoov@nvidia.com>,
-	Moshe Shemesh <moshe@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
-	Shahar Shitrit <shshitrit@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>,
-	Jacob Keller <jacob.e.keller@intel.com>, Cosmin Ratiu <cratiu@nvidia.com>,
-	Parav Pandit <parav@nvidia.com>, Shay Drori <shayd@nvidia.com>, "Adithya
- Jayachandran" <ajayachandra@nvidia.com>, Kees Cook <kees@kernel.org>, "Daniel
- Jurgens" <danielj@nvidia.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-rdma@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, Gal Pressman
-	<gal@nvidia.com>
-Subject: [PATCH net-next V4 12/12] devlink: Document resource scope filtering
-Date: Wed, 1 Apr 2026 21:49:47 +0300
-Message-ID: <20260401184947.135205-13-tariqt@nvidia.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20260401184947.135205-1-tariqt@nvidia.com>
-References: <20260401184947.135205-1-tariqt@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E06D47DD61;
+	Wed,  1 Apr 2026 18:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775069980; cv=none; b=l99rS4G0ostpNXjw/CcoGCpqSXmyQ+C5UDA1B5M6W1CZ9AX56GLQKgviRx25JepyxvsIAC3tltLoDFd3GHlL0xOw9IE32wr17+nGFqk7AeS67mMYUa5UdDeaTMuevswaT3aAAMCG3wHlMhkJbKqeekqKAezDvzEng2hKMpagXE8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775069980; c=relaxed/simple;
+	bh=PddmO3ll7X4KzOLLF4jhSMEIQsdAM2OrEVy93XuOfqA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZrUHXvmqSwQxYfyPjKBG2pa20YPuUcElA9TIFrhGI3d1CzkVNn7KvcHAqclTSESKqpKaFlnUtRUXqgpJExKh1OrBX5+wz0WZukA1sciAxQ6wIBngdRThIP21O2hKvlYVy8CwKOchoYSdVlOLuCw3yX/Jd6G3IuyOA/IYXso1HBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; arc=none smtp.client-ip=160.80.4.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+Received: from localhost.localdomain ([160.80.103.126])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 631Ix8mj029079;
+	Wed, 1 Apr 2026 20:59:15 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, horms@kernel.org, dsahern@kernel.org,
+        david.lebrun@uclouvain.be, stefano.salsano@uniroma2.it,
+        paolo.lungaroni@uniroma2.it, nicolas.dichtel@6wind.com,
+        linux-kernel@vger.kernel.org, Andrea Mayer <andrea.mayer@uniroma2.it>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH net v2 2/2] selftests: seg6: add test for dst_cache isolation in seg6 lwtunnel
+Date: Wed,  1 Apr 2026 20:57:55 +0200
+Message-Id: <20260401185755.29813-3-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20260401185755.29813-1-andrea.mayer@uniroma2.it>
+References: <20260401185755.29813-1-andrea.mayer@uniroma2.it>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,90 +38,242 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF0000449F:EE_|SJ2PR12MB9088:EE_
-X-MS-Office365-Filtering-Correlation-Id: 306d6d6a-d97e-49c2-063d-08de901fd3a2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|376014|7416014|1800799024|82310400026|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	aTycqXDe7ZVxkDKzAycH8LdSIH5sZBaJ8aJ+HOVt+3+L7jb9A7yWwCPlv3QKffPirMnm7M7h0d5UGRorSP9kVDINuSI/H586OwH/GWTXMaaHZEVw7Kf8ki2e4GgBCbwS/GPN7CxCFUHKBQ8xg02W8Q5h6BC9+lxGBWHR1aXll5sooNZpxPN0wVvel2Eg9f0fBz9O5mbmFCuZGYp61ApYXCbtSTTg1KsyGbThNxj8sDEzYbNTpPZV+Hh8lVX2pe9m/ilC0/NciGq183FNBcBPyvM8lvHXq8TJVKTO1ubHDNDVx4BT6wGYGcG4xux6QZ9bi45nIUnXjoGxYnLAylmpcpAREPo7N/KX/i76k+v7iwX/STJwUXpjasVRimN+UBXVzrADDlRdPQRO00278YuILIDPO7RAOR+1ZQbx3ibF55pNZQz/WQxGvJM5oQAxoCO5CJnJBtzMFHckOPDmlRmqDqqi4dBntOEQkAWlLP5qLbvyVgjgUyQ49el0sDn6n3km1sm++gP+mQPa+uSM4o/OULyXsvUjgKlIh1WSF13laBP40WgiPPiUYdqReCYpjEkMYJhl+wRCYJX4cIMbxAZB3nHUb8WEYfudcOOreOah38tX8zjLZEH8uMDS2Gog88KgYKuKl8vD6wOyvVMNApuJjZ9tmYQALPEbntaH1B/0eOK/a385Wz4YjQJw3jRkFsc1YPbXa3OmUFjL2rrK6iZm2MXZxhbhDVVKaDzDUOzVke7DVNxTMA6Rq3Ka4miWSktrDH4vEiIf6aZTv+G+TtkV4A==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(376014)(7416014)(1800799024)(82310400026)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	T48YHFUGQS4OI5cgrxLc35yGWxvJAr40HGSq3z7jCUwHTNpMdds3MwN4SDgAnyt074U9202Fy49h4BMjFJ4xeopyiimTKI+NSoYFQWEXYjtNWwYs1NYDQkfyL0Oej6udqq4gQQAz3/HiniygqbZ7pENHRQztvIliSVR8FxcM+2h4wqbuM1E4AVNjkcF2C7XuItpaij43M1RehIlweC6DD8rSgZDigB2925cXorvW1AcxvaJHFTFn5Vv6CGjZxZ/zCisoR1GOfaLik3k+u4izWICKoGnnlHqZPlureWzGllNyimr2pzTTAvrqo9BmUqHwbYK1xmu4cQiu3m4s2cS4AADZ06Meo7OJ1IbpyvMNoF19sb+xuLaLhixQ2z96AqJAH7F0BfDZ5fb6nmM7uBm694c9rb57SElL50o+4GkGU1Q1HxcBwbdPyGjzWDyBsY1k
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 18:52:30.0379
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 306d6d6a-d97e-49c2-063d-08de901fd3a2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF0000449F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9088
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-From: Or Har-Toov <ohartoov@nvidia.com>
+Add a selftest that verifies the dst_cache in seg6 lwtunnel is not
+shared between the input (forwarding) and output (locally generated)
+paths.
 
-Document the scope parameter for devlink resource show, which allows
-filtering the dump to device-level or port-level resources only.
+The test creates three namespaces (ns_src, ns_router, ns_dst)
+connected in a line. An SRv6 encap route on ns_router encapsulates
+traffic destined to cafe::1 with SID fc00::100. The SID is
+reachable only for forwarded traffic (from ns_src) via an ip rule
+matching the ingress interface (iif veth-r0 lookup 100), and
+blackholed in the main table.
 
-Signed-off-by: Or Har-Toov <ohartoov@nvidia.com>
-Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+The test verifies that:
+
+  1. A packet generated locally on ns_router does not reach
+     ns_dst with an empty cache, since the SID is blackholed;
+  2. A forwarded packet from ns_src populates the input cache
+     from table 100 and reaches ns_dst;
+  3. A packet generated locally on ns_router still does not
+     reach ns_dst after the input cache is populated,
+     confirming the output path does not reuse the input
+     cache entry.
+
+Both the forwarded and local packets are pinned to the same CPU
+with taskset, since dst_cache is per-cpu.
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
 ---
- .../networking/devlink/devlink-resource.rst   | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+Changes v1 -> v2:
+ - fix SKIP message wording (Nicolas)
+---
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/srv6_iptunnel_cache.sh      | 177 ++++++++++++++++++
+ 2 files changed, 178 insertions(+)
+ create mode 100755 tools/testing/selftests/net/srv6_iptunnel_cache.sh
 
-diff --git a/Documentation/networking/devlink/devlink-resource.rst b/Documentation/networking/devlink/devlink-resource.rst
-index 9839c1661315..47eec8f875b4 100644
---- a/Documentation/networking/devlink/devlink-resource.rst
-+++ b/Documentation/networking/devlink/devlink-resource.rst
-@@ -109,3 +109,38 @@ To show resources for a specific port:
-     $ devlink resource show pci/0000:03:00.0/196608
-     pci/0000:03:00.0/196608:
-       name max_SFs size 128 unit entry dpipe_tables none
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 605c54c0e8a3..c709523c99c6 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -89,6 +89,7 @@ TEST_PROGS := \
+ 	srv6_end_x_next_csid_l3vpn_test.sh \
+ 	srv6_hencap_red_l3vpn_test.sh \
+ 	srv6_hl2encap_red_l2vpn_test.sh \
++	srv6_iptunnel_cache.sh \
+ 	stress_reuseport_listen.sh \
+ 	tcp_fastopen_backup_key.sh \
+ 	test_bpf.sh \
+diff --git a/tools/testing/selftests/net/srv6_iptunnel_cache.sh b/tools/testing/selftests/net/srv6_iptunnel_cache.sh
+new file mode 100755
+index 000000000000..1f3ebb930eb2
+--- /dev/null
++++ b/tools/testing/selftests/net/srv6_iptunnel_cache.sh
+@@ -0,0 +1,177 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# author: Andrea Mayer <andrea.mayer@uniroma2.it>
 +
-+Resource Scope Filtering
-+========================
++# This test verifies that the seg6 lwtunnel does not share the dst_cache
++# between the input (forwarding) and output (locally generated) paths.
++#
++# A shared dst_cache allows a forwarded packet to populate the cache and a
++# subsequent locally generated packet to silently reuse that entry, bypassing
++# its own route lookup. To expose this, the SID is made reachable only for
++# forwarded traffic (via an ip rule matching iif) and blackholed for everything
++# else. A local ping on ns_router must always hit the blackhole;
++# if it succeeds after a forwarded packet has populated the
++# cache, the bug is confirmed.
++#
++# Both forwarded and local packets are pinned to the same CPU with taskset,
++# since dst_cache is per-cpu.
++#
++#
++# +--------------------+                        +--------------------+
++# |      ns_src        |                        |      ns_dst        |
++# |                    |                        |                    |
++# |  veth-s0           |                        |           veth-d0  |
++# |  fd00::1/64        |                        |        fd01::2/64  |
++# +-------|------------+                        +----------|---------+
++#         |                                                |
++#         |            +--------------------+              |
++#         |            |     ns_router      |              |
++#         |            |                    |              |
++#         +----------->+ veth-r0   veth-r1  +<-------------+
++#                      | fd00::2   fd01::1  |
++#                      +--------------------+
++#
++#
++# ns_router: encap (main table)
++# +---------+---------------------------------------+
++# | dst     | action                                |
++# +---------+---------------------------------------+
++# | cafe::1 | encap seg6 mode encap segs fc00::100  |
++# +---------+---------------------------------------+
++#
++# ns_router: post-encap SID resolution
++# +-------+------------+----------------------------+
++# | table | dst        | action                     |
++# +-------+------------+----------------------------+
++# | 100   | fc00::100  | via fd01::2 dev veth-r1    |
++# +-------+------------+----------------------------+
++# | main  | fc00::100  | blackhole                  |
++# +-------+------------+----------------------------+
++#
++# ns_router: ip rule
++# +------------------+------------------------------+
++# | match            | action                       |
++# +------------------+------------------------------+
++# | iif veth-r0      | lookup 100                   |
++# +------------------+------------------------------+
++#
++# ns_dst: SRv6 decap (main table)
++# +--------------+----------------------------------+
++# | SID          | action                           |
++# +--------------+----------------------------------+
++# | fc00::100    | End.DT6 table 255 (local)        |
++# +--------------+----------------------------------+
 +
-+When dumping resources for all devices, ``devlink resource show`` accepts
-+an optional ``scope`` parameter to restrict the response to device-level
-+resources, port-level resources, or both (the default).
++source lib.sh
 +
-+To dump only device-level resources across all devices:
++readonly SID="fc00::100"
++readonly DEST="cafe::1"
 +
-+.. code:: shell
++readonly SRC_MAC="02:00:00:00:00:01"
++readonly RTR_R0_MAC="02:00:00:00:00:02"
++readonly RTR_R1_MAC="02:00:00:00:00:03"
++readonly DST_MAC="02:00:00:00:00:04"
 +
-+    $ devlink resource show scope dev
-+    pci/0000:03:00.0:
-+      name max_local_SFs size 128 unit entry dpipe_tables none
-+      name max_external_SFs size 128 unit entry dpipe_tables none
-+    pci/0000:03:00.1:
-+      name max_local_SFs size 128 unit entry dpipe_tables none
-+      name max_external_SFs size 128 unit entry dpipe_tables none
++cleanup()
++{
++	cleanup_ns "${NS_SRC}" "${NS_RTR}" "${NS_DST}"
++}
 +
-+To dump only port-level resources across all devices:
++check_prerequisites()
++{
++	if ! command -v taskset &>/dev/null; then
++		echo "SKIP: taskset not found"
++		exit "${ksft_skip}"
++	fi
++}
 +
-+.. code:: shell
++setup()
++{
++	setup_ns NS_SRC NS_RTR NS_DST
 +
-+    $ devlink resource show scope port
-+    pci/0000:03:00.0/196608:
-+      name max_SFs size 128 unit entry dpipe_tables none
-+    pci/0000:03:00.0/196609:
-+      name max_SFs size 128 unit entry dpipe_tables none
-+    pci/0000:03:00.1/196708:
-+      name max_SFs size 128 unit entry dpipe_tables none
-+    pci/0000:03:00.1/196709:
-+      name max_SFs size 128 unit entry dpipe_tables none
++	ip link add veth-s0 netns "${NS_SRC}" type veth \
++		peer name veth-r0 netns "${NS_RTR}"
++	ip link add veth-r1 netns "${NS_RTR}" type veth \
++		peer name veth-d0 netns "${NS_DST}"
 +
-+Note that port-level resources are read-only.
++	ip -n "${NS_SRC}" link set veth-s0 address "${SRC_MAC}"
++	ip -n "${NS_RTR}" link set veth-r0 address "${RTR_R0_MAC}"
++	ip -n "${NS_RTR}" link set veth-r1 address "${RTR_R1_MAC}"
++	ip -n "${NS_DST}" link set veth-d0 address "${DST_MAC}"
++
++	# ns_src
++	ip -n "${NS_SRC}" link set veth-s0 up
++	ip -n "${NS_SRC}" addr add fd00::1/64 dev veth-s0 nodad
++	ip -n "${NS_SRC}" -6 route add "${DEST}"/128 via fd00::2
++
++	# ns_router
++	ip -n "${NS_RTR}" link set veth-r0 up
++	ip -n "${NS_RTR}" addr add fd00::2/64 dev veth-r0 nodad
++	ip -n "${NS_RTR}" link set veth-r1 up
++	ip -n "${NS_RTR}" addr add fd01::1/64 dev veth-r1 nodad
++	ip netns exec "${NS_RTR}" sysctl -qw net.ipv6.conf.all.forwarding=1
++
++	ip -n "${NS_RTR}" -6 route add "${DEST}"/128 \
++		encap seg6 mode encap segs "${SID}" dev veth-r0
++	ip -n "${NS_RTR}" -6 route add "${SID}"/128 table 100 \
++		via fd01::2 dev veth-r1
++	ip -n "${NS_RTR}" -6 route add blackhole "${SID}"/128
++	ip -n "${NS_RTR}" -6 rule add iif veth-r0 lookup 100
++
++	# ns_dst
++	ip -n "${NS_DST}" link set veth-d0 up
++	ip -n "${NS_DST}" addr add fd01::2/64 dev veth-d0 nodad
++	ip -n "${NS_DST}" addr add "${DEST}"/128 dev lo nodad
++	ip -n "${NS_DST}" -6 route add "${SID}"/128 \
++		encap seg6local action End.DT6 table 255 dev veth-d0
++	ip -n "${NS_DST}" -6 route add fd00::/64 via fd01::1
++
++	# static neighbors
++	ip -n "${NS_SRC}" -6 neigh add fd00::2 dev veth-s0 \
++		lladdr "${RTR_R0_MAC}" nud permanent
++	ip -n "${NS_RTR}" -6 neigh add fd00::1 dev veth-r0 \
++		lladdr "${SRC_MAC}" nud permanent
++	ip -n "${NS_RTR}" -6 neigh add fd01::2 dev veth-r1 \
++		lladdr "${DST_MAC}" nud permanent
++	ip -n "${NS_DST}" -6 neigh add fd01::1 dev veth-d0 \
++		lladdr "${RTR_R1_MAC}" nud permanent
++}
++
++test_cache_isolation()
++{
++	RET=0
++
++	# local ping with empty cache: must fail (SID is blackholed)
++	if ip netns exec "${NS_RTR}" taskset -c 0 \
++			ping6 -c 1 -W 2 "${DEST}" &>/dev/null; then
++		echo "SKIP: local ping succeeded, topology broken"
++		exit "${ksft_skip}"
++	fi
++
++	# forward from ns_src to populate the input cache
++	if ! ip netns exec "${NS_SRC}" taskset -c 0 \
++			ping6 -c 1 -W 2 "${DEST}" &>/dev/null; then
++		echo "SKIP: forwarded ping failed, topology broken"
++		exit "${ksft_skip}"
++	fi
++
++	# local ping again: must still fail; if the output path reuses
++	# the input cache, it bypasses the blackhole and the ping succeeds
++	if ip netns exec "${NS_RTR}" taskset -c 0 \
++			ping6 -c 1 -W 2 "${DEST}" &>/dev/null; then
++		echo "FAIL: output path used dst cached by input path"
++		RET="${ksft_fail}"
++	else
++		echo "PASS: output path dst_cache is independent"
++	fi
++
++	return "${RET}"
++}
++
++trap cleanup EXIT
++
++check_prerequisites
++setup
++test_cache_isolation
++exit "${RET}"
 -- 
-2.44.0
+2.43.0
 
