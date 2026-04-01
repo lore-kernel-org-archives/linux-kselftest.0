@@ -1,134 +1,127 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B363F660A;
-	Wed,  1 Apr 2026 11:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A62C346ADE
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 11:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775042517; cv=none; b=CGURqh1fis4XY1MCkUB7vU55CYLTpse4ndyKyWoFnodH5Amx19UATkUHVETVpRhWn2GPMXLqc8iRVPSK5Y5FdLsYqER3aRBZ/CmvhChBfVPoOKf6YLCfVmIKXTyB4Wr1CSe/saPZvSN9/NDCKgSzXBW/0olG73kTQBszgAYEvEc=
+	t=1775043921; cv=none; b=uBcxPudhxCt4irYNXzNvgoYdEyFIPwKNwvSxowpVhATMX89L+wL9DQA1IMGOZ0e4rgwYKw919X+WAujsKA601qmVLH2AFA0filZLxMouMZCvvcjYOBoe2xBaAjFPwPwLJqS/6foD2XjUYyqognXY9cvQCio3Xrqp2eGSJ0GmYYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775042517; c=relaxed/simple;
-	bh=e66tGdbOEp8a+R0NAHvELsL6eibm+s6rmnCFf98bwYs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qti/GES2YWnieWHvyuoQNWmQunF/UJr5/5rVipTCMP556e6MqwGIMDBx4LsigRHtUWLAYp29bg13lDXf22yQyCKLMiDkU1aRgKUsJkpr0glNvzbdZ16tS68Mhw8AGDjtnTdymKOnwvmthaRfq5Aiefx/+a1Sr1K8TXEEU+bZWdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gUuY9V+s; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1775043921; c=relaxed/simple;
+	bh=1YQR4oYB827jWhblwTuayOmLSRnKLaKfpyTUg03CM7I=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=EcpQsW9MSm2Zt08YT3EMxtz4UQGxw1g+QkdnZuetPGs8wfjOcwaQfXOgHPDnNFZxHqA7wLjqfOJHK01L8rPZxZbBj/8v7meEKO23i/nAGDfohVRQlnz+S8Ct+J2zPvMNu5JJWt6FOpMhPJsXQr/yff3iNScKni4Z5jvK7hteMhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dtvdGYmX; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gUuY9V+s"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62VJ0uCs354949;
-	Wed, 1 Apr 2026 11:21:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=BnAL5isth8Y/G2+yC
-	PbQsqWQbOy5blKQ61Du/V6wy+g=; b=gUuY9V+s/U+MoVX7O3kx8Ds0utfEXvOkW
-	kzeujrTBe3Jskp1+rmZ6FL4UYPGAbYJHib1uOAETLL18dihkaxFbpGfUl/ZYuMUi
-	mG6hyAl8osjc4fCsYNfHmhN6EUO1b13ZMZpFpmtrI/XQx+Nr1O/WxvF+hEl+TMk3
-	H5+SIPSF8unFxc/L/BoE7pUVjcLIoMWkvfjH/y2ueu39ubfAhYfMdHBPKPgdx3/9
-	WXo0mObs5byjrEcP0v/frG+1rVifz1/RUbKxWc6LiVzlUfo/lkRHgudIZYbBCjA/
-	nGmDL52zLsg+Ti9gRJb5zMUDHlG/UzgLBXPHaY666rtIaQeGG3imA==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d64dgq94q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 11:21:38 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6316eDn0022197;
-	Wed, 1 Apr 2026 11:21:37 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6tan5909-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 11:21:37 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631BLXYV51184120
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 Apr 2026 11:21:33 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4868F2004D;
-	Wed,  1 Apr 2026 11:21:33 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EB1D020040;
-	Wed,  1 Apr 2026 11:21:30 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  1 Apr 2026 11:21:30 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Abhishek Dubey <adubey@linux.ibm.com>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [PATCH v3 4/4] selftest/bpf: Enable gotox tests for powerpc64
-Date: Wed,  1 Apr 2026 11:21:33 -0400
-Message-ID: <20260401152133.42544-5-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260401152133.42544-1-adubey@linux.ibm.com>
-References: <20260401152133.42544-1-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dtvdGYmX"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-486fb14227cso89954205e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 04:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775043917; x=1775648717; darn=vger.kernel.org;
+        h=in-reply-to:references:to:cc:subject:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NPqO66ooSzvYXcHovRc3kumo4Z4L11P3H0CO3iwizgE=;
+        b=dtvdGYmXGaGve3LSX3VP8QqMMITzokNLUKzGpAmN+Ptl9Y+loyyXyiMW/3nKqpN3XT
+         tgDPCF8sM59IoJ+bJ0ptVeEVccIZtvAaOF9+vimBGkRwcKs54lhSaTvp8Q5m1N9ocBhy
+         OuGoJQsvwUXnFt7NTWALhrNgRwxaL7L3x5o3nAfSZroMkoZurp3vNZ7IX5B8AwN1SZxX
+         39oMnGzhiQJ6HvxI+Fm0iPGFo0E9R45EGsnBc3hxp0ePCYCTLUDN5sOUjT7agxxAP8/k
+         dZkmUgzP7BdrLkMs6pBt1RzKF738kWDchzOQhOrahsQayVhjbZSZi2Edb5JJdST9T1+V
+         OfVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775043917; x=1775648717;
+        h=in-reply-to:references:to:cc:subject:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NPqO66ooSzvYXcHovRc3kumo4Z4L11P3H0CO3iwizgE=;
+        b=DGgDWv70L6cIOrV/RX0grVV+ntVLdwEm9Ze8LeQyHZP4PgExn20c6lRRjVzRzXl5EF
+         ITnyteil8ahYkmrB08qG+JnkY2GnpSxsfR4f71tz02lk0Bt+WBf9pN7YlCwkzBOCYRdm
+         SXfA6Jy1MdD6V7f0HoX9W9KZn3zlaTZYAnjw/q2EdXn2cJzQY0DtqUXsvP/5QqK0Lltk
+         mTWF2UkCmsRklHaEkRzgh2K6QEY8ifwE3N84sHxaVtHl/iEDb1N8hqeuOnPwx2P9fXjR
+         pfUqICYc1v9TV4PUeSqjvK4jalgro1n2SgI/e2akIcBVopWh0dcigyICxME8CljGk4E/
+         GgQw==
+X-Gm-Message-State: AOJu0YwhLCnasjgsM69AQjvjmjbAG1LInuiyJe2MhVJjAcF1GJ3D0jxP
+	x1dCBbqQwkgjhEIEETm/WY5qidcJ21AEwUJxWH0d+hi/EPY5N6A6tvvQDSXHA9VAGew=
+X-Gm-Gg: ATEYQzwpOgd7OGnKPxGJKznch9c7SRyAtcGmYQUFRxLluq1xX9ZM/7hGPiElsFmx2Gy
+	bgVLwFR5GXWNDvz9raNzjlZ1BSvpU61j5l3aLzRH7CA9WuxBvXznKZl2m8negAfj/vdVWjQAq8j
+	/MZIuxcqEy0bEJV8azIsY4ixdqd+SKtM/++mF/79jgzzK7+JnEcx1KiKPKiBsrUvngEIPRft7NO
+	DTkqjpkVNnRqSTzs/XikyXWu0UoxXRL3KbmhmOMIV3FcdCP2it5tZ9SqzmSZfZr/PYbyWkf84Yk
+	DeR1qrbDQZakIGJfMmfBxWIxNC9QUTp1JIwhS/liBUIov2d+QmdlGhmkN5W1kmbUFkDwhFb2fKU
+	ZCkGVceir0QmurEHjzxXfTcj3nwk/IpJLSl+rxvhASHhr9ea8sBGp2k23lnhBffxaoiApYt9AqV
+	dKqpuqwB0=
+X-Received: by 2002:a05:600c:5298:b0:488:7ff5:2c67 with SMTP id 5b1f17b1804b1-488835887f7mr57611785e9.12.1775043916610;
+        Wed, 01 Apr 2026 04:45:16 -0700 (PDT)
+Received: from localhost ([189.99.238.3])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56d58a7ba96sm15541462e0c.17.2026.04.01.04.45.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 04:45:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDEwMyBTYWx0ZWRfX1Ef1bjBXomOE
- rG6L/x0wLgSd0+LP/4VVNm/VpgWAI2HPVGZEaDGxVqWj9mZ9UuCeDSwILH3knl96Eq3UYalsnYn
- fdhsQyrBbcR25Ownp7Wyes11z/Lw01VdnX4cSk+fqOmfyEcUqPh69LZZTmMzxgpvY8858NLTiCm
- xSnweKqnu+B4Wl3UWF/ryzPbAqRke5OvSEdT8+pUX1sZAHitafRl2+nWR7W9bBNlXbAwAE9kq0R
- g46cru0GOWD//Y/GMcV3mQ4c69n/w/dVP1OU7JZ+LeEMKGoe+Wyl9Bx0Nr8/REejlnsUX5nPgSP
- kVSNbgEUAnpQpdG5H5RCYBXvIcsSKdwKu45f+1gr1DHxm4H6pbg4qQvlC22osFSmuRR44NKGcCI
- adxDkAWNANHsih7iqJy3LVkNJfCdUyXKEbHLoCilJEU7n+K2wFgRHNCIs1aSYoxDy14rVpmCZ5G
- WhEf1VREly4UqeCPllg==
-X-Authority-Analysis: v=2.4 cv=QKZlhwLL c=1 sm=1 tr=0 ts=69ccffc2 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8 a=cN72D6WRG5boQ4SUoSsA:9
-X-Proofpoint-GUID: iRmYhG_HSGew1CF_qgothGl9dIAdlGjT
-X-Proofpoint-ORIG-GUID: iRmYhG_HSGew1CF_qgothGl9dIAdlGjT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-01_03,2026-04-01_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0 clxscore=1015
- spamscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010103
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 01 Apr 2026 08:45:13 -0300
+Message-Id: <DHHSJWIDPYS1.332RJY2H7YNA2@suse.com>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Subject: Re: [PATCH 0/6] selftests: run_kselftest.sh cleanup and fixes
+Cc: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kbuild@vger.kernel.org>
+To: "Shuah Khan" <skhan@linuxfoundation.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
+ Schier" <nsc@kernel.org>
+X-Mailer: aerc 0.21.0-120-g22b95d38161f
+References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
+ <b01d1156-2213-4051-9f98-60e74d18e2a6@linuxfoundation.org>
+In-Reply-To: <b01d1156-2213-4051-9f98-60e74d18e2a6@linuxfoundation.org>
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+On Tue Mar 31, 2026 at 7:43 PM -03, Shuah Khan wrote:
+> On 3/20/26 12:29, Ricardo B. Marli=C3=A8re wrote:
+>> Hi Shuah,
+>>=20
+>> Please consider merging the following patches. They are mostly small fix=
+es
+>> to run_kselftest.sh, plus one feature: adding the option of passing a
+>> directory to the "-p --per-test-log" argument.
+>>=20
+>> There is a small corner case spotted in tools/testing/selftests/Makefile
+>> regarding failing sub-targets, and also the removal of the default insta=
+ll
+>> directory for out of tree builds in the top-level Makefile.
+>>=20
+>> Thank you!
+>>=20
+>> Signed-off-by: Ricardo B. Marli=C3=A8re <rbm@suse.com>
+>> ---
+>> Ricardo B. Marli=C3=A8re (6):
+>>        selftests/run_kselftest.sh: Remove unused $ROOT
+>>        selftests/run_kselftest.sh: Add missing quotes
+>>        selftests/run_kselftest.sh: Resolve BASE_DIR with pwd -P
+>>        selftests/run_kselftest.sh: Allow choosing per-test log directory
+>>        selftests: Preserve subtarget failures in all/install
+>>        kbuild: remove kselftest output in mrproper
+>>=20
+>>   Makefile                                    |  1 +
+>>   tools/testing/selftests/Makefile            |  8 ++---
+>>   tools/testing/selftests/kselftest/runner.sh |  3 +-
+>>   tools/testing/selftests/run_kselftest.sh    | 46 +++++++++++++++++++++=
+--------
+>>   4 files changed, 40 insertions(+), 18 deletions(-)
+>
+> Thank you Ricardo. I applied the series to linux_kselftest next
+>
+> I had to fix a minor merge conflict when I applied patch v2.
+> Please check to see if everything looks sane.
 
-With gotox instruction and jumptable now supported,
-enable corresponding bpf selftest on powerpc.
+Can you please drop commit 33880424308d
+("selftests/run_kselftest.sh: Add missing quotes") ? This actually
+introduced a regression. I'm sorry about that.
 
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
-Acked-by: Hari Bathini <hbathini@linux.ibm.com>
-Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
----
- tools/testing/selftests/bpf/progs/verifier_gotox.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-index 607dad058ca1..0f43b56ec2bc 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-@@ -6,7 +6,7 @@
- #include "bpf_misc.h"
- #include "../../../include/linux/filter.h"
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_powerpc)
- 
- #define DEFINE_SIMPLE_JUMP_TABLE_PROG(NAME, SRC_REG, OFF, IMM, OUTCOME)	\
- 									\
-@@ -384,6 +384,6 @@ jt0_%=:								\
- 	: __clobber_all);
- }
- 
--#endif /* __TARGET_ARCH_x86 || __TARGET_ARCH_arm64 */
-+#endif /* __TARGET_ARCH_x86 || __TARGET_ARCH_arm64 || __TARGET_ARCH_powerpc*/
- 
- char _license[] SEC("license") = "GPL";
--- 
-2.52.0
+>
+> thanks,
+> -- Shuah
 
