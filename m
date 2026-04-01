@@ -1,119 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B934B2C029F
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 13:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D323BBA0F;
+	Wed,  1 Apr 2026 13:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775050375; cv=none; b=D7sWagpgPOq4xz11F3ix41FGCzOxQWKHLfTSK6wt5AU5OA9OhTOJN62q6Ne9azNwusqISxqyGfqGznD+WMfwdzwR36hXD3Jy8iLX2gxaVDiLzFd9mixpPlDt4JQs5XBzU43IgXJBfye8apiGjADWi7wJEqIpR9HEBm0yI124NkU=
+	t=1775051022; cv=none; b=YC/l76LJq1jsl1m46I2LRKjBQJVitA7ZVQhFnEJAU981FHuRpyODY4/0iP0eta4NOkqEGbjO+PBfYw/a8wkJXg/klUjokvU4egqLBHdMcmuZGcsmJEwFHRRSuEY6ma91Ia0AZV0uKrWMbcfhQNO+Enp75ePM2vTs6lTpIZthv0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775050375; c=relaxed/simple;
-	bh=45Tx1NH/P/n/wtF1DkpQdhkGyPSeD0g4+GvPS8EoYHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aSb5YkxvdrjRJOoWXWTFoT73YtvC/kGOmAvJeTbZadFKJGbh/jKb34G71B9Jwur4WUptbkirbtV84juohj/fQdlWfnNmDZVQTE6qabxare3QrKytfVm8V5yYSeKsFJx4t2u/4S3ZH8YlsYcMXt4ptjAod0UxFq6ml/DMFC4cX/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Cljfb6cZ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775051022; c=relaxed/simple;
+	bh=M5f6qgsTJ20AEmhOuE5Pj1TpDhKrIqEKyXg1PYUX8yo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=I5qDX6q4mbP4DKKcIFZ2B9LEiYDEay9/zf4jZ99LHS7ddpNPFOqaFPQ5qmkoIejR9FfmgvYvw3Rvqd/nVCc1QrhQt8w0DUNndUPJhZHULBruwhOfONF/VAbB5/3SbuoPJrpOrGO9FwmWyEFcltBHztkORXxmVsqt59oDyCSrFNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i0PknoYK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Cljfb6cZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775050373;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Eod5Dm6xkRNC6hJL1r+h+vVL6U6P37BniZZLgne8chs=;
-	b=Cljfb6cZpG5zooVCcvof0lZZx2NWsG/Qy9mGWFquGmcWnVcFCVKvpmmPNtvS34ePYZoijt
-	HQqG7k+Z1xB9vu48KPLwcpvipuMuJVSB4ctfkDW47SUC0T9b376b8hXIixvvLc9cH5i7aJ
-	ewW17EHPzeDLuuIS7ynHat/UhgQZGR4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-589-D9Cs-343OMeKmLLb3mjglA-1; Wed,
- 01 Apr 2026 09:32:52 -0400
-X-MC-Unique: D9Cs-343OMeKmLLb3mjglA-1
-X-Mimecast-MFC-AGG-ID: D9Cs-343OMeKmLLb3mjglA_1775050366
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5FBB118002CD;
-	Wed,  1 Apr 2026 13:32:45 +0000 (UTC)
-Received: from gmail.com (unknown [10.72.112.80])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6511C19560AB;
-	Wed,  1 Apr 2026 13:32:34 +0000 (UTC)
-Date: Wed, 1 Apr 2026 21:32:30 +0800
-From: Chunyu Hu <chuhu@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: david@kernel.org, shuah@kernel.org, linux-mm@kvack.org, ljs@kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com, npache@redhat.com,
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
-	lance.yang@linux.dev
-Subject: Re: [PATCH v7 4/7] selftests: ksft_exit_fail_perror: support printf
- style arguments
-Message-ID: <ac0ebqaDxWWAYitu@gmail.com>
-References: <20260330151503.670415-1-chuhu@redhat.com>
- <20260330151503.670415-5-chuhu@redhat.com>
- <acuijiUs81Z7qYSL@gmail.com>
- <20260331120902.4612d93efb89f71a0d79bb5b@linux-foundation.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i0PknoYK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC80C116C6;
+	Wed,  1 Apr 2026 13:43:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775051021;
+	bh=M5f6qgsTJ20AEmhOuE5Pj1TpDhKrIqEKyXg1PYUX8yo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=i0PknoYKoleXinqYAN6LNjMgsttJS4usoB11QIhW4Dl0G9pvilnpS4WISn2YfK7Ld
+	 c+BAFvGRmSLr5qdMJpwFVT8D7Y5cQQ13r8DcUL22qg+7cHSPSXqawQPqnz0yGbl7h+
+	 bHunfp+GoXQEDiVsJl6Tmr5gcMgdLySDduTndrXioaEAABMPaEmAozewjDyJr0+Ul1
+	 YCLTpcF12JFiS2mx0ApGKkHb+ceqxjVooZladdca6ADFJExCnbZU4Khc8zb5YFomIv
+	 waRKFBCrUtsUVebBOUweQKkUKPhRg6W4s0XyNbWlrcjxeYBobnq8Zz57315P+9tU/X
+	 7J6TYhDk++6pg==
+From: Jeff Layton <jlayton@kernel.org>
+Subject: [PATCH v6 0/2] firmware_loader: allow firmware_class.path to take
+ multiple paths
+Date: Wed, 01 Apr 2026 09:43:26 -0400
+Message-Id: <20260401-fw-path-v6-0-4ebe70441839@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260331120902.4612d93efb89f71a0d79bb5b@linux-foundation.org>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XOywrCMBAF0F+RrI3M5NXUlf8hLpJ2YoPSSipVk
+ f67qeCL4vIOc+7MnfWUIvVsvbizREPsY9fmYJYLVjWu3ROPdc5MgDAgseDhwk/u3HAHpaokCF0
+ 6zfL2KVGI12fTdpdzE/tzl27P4gGn6avDvjsG5MgLa1Vd+mDQhs2BUkvHVZf2bCoZxB8oMrQOw
+ ZAvkbyaQfkHygxdAejA+ip/P4PqCwr4QDW9qlVBIkBdmflF/Q3lB2oOnKz1IhAqHeQPHMfxAfv
+ UL1mDAQAA
+X-Change-ID: 20260317-fw-path-a094c30259a5
+To: Luis Chamberlain <mcgrof@kernel.org>, 
+ Russ Weight <russ.weight@linux.dev>, Danilo Krummrich <dakr@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Michal Grzedzicki <mge@meta.com>, driver-core@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Jeff Layton <jlayton@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1847; i=jlayton@kernel.org;
+ h=from:subject:message-id; bh=M5f6qgsTJ20AEmhOuE5Pj1TpDhKrIqEKyXg1PYUX8yo=;
+ b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpzSEI5mKh+RdxrINpRxxKYVHC2NxBUFZNgZL18
+ Tee1lzQQayJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCac0hCAAKCRAADmhBGVaC
+ FcvSEACM5FrOLcfUvHU29JG+SFBB5pVE27jAOhwGG6CTS82edqn146lQIfT1SlGrRZomBtrLxFP
+ Xt6UEiO2zg7W33rKbGanwh1yHRb43wTRVTeS3ni1BJDfea6a2r3rZ0R8VwOfUepMZuPbCzIrNys
+ 9jOosYXsTkuSzm7LpYWy5MESV/qTNJLd8hZlhyc13U+CvADPdBfteMezs0OXeaZ/lSYqD95ea8y
+ IIzzFEFYCjJKCwpPf53NB1z0BH7CkytQetsL0GvjOUcWU446YdbkEsv1jvOl6DfiWkIyF6ExTge
+ Reki3U2Ia7XSvOubr/9j2ijZKCBzsPkrJMGC3mWIJaFSujQhcDCOoGTo/axRp+dgYBJ16CoW2vf
+ YEh40YwVWXsa32YvzMl+CciVcYm0u16abG0G2Nc4UXKD0lsTT8P86nXjjUSXceki/MrOMc0W5sd
+ ziIis8xNvXcfPzlUltJiNAg/+SpRQNBS7FgG1odLMTLdIhHvy+HNh+AGmYvbGLZEHj6sraKP+/O
+ cveJ1VmmCAfuM8Hnv7SRB7FPNlw7l0L8THNUL40Bhvus/uKawMKcR6zIMc9OJriGV+7WGEpeHcP
+ qLIlzqw7ToLOS8HrFXLvdw6susif2pvDMQi4P10XeIi1vT2eeO4QgdeUP5t6B+t3C6KAlcmcWgT
+ INr1OvMREQ+Vffw==
+X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
+ fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
 
-On Tue, Mar 31, 2026 at 12:09:02PM -0700, Andrew Morton wrote:
-> On Tue, 31 Mar 2026 18:31:42 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
-> 
-> > > -	ksft_exit_fail_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
-> > > +	va_list args;
-> > > +	char *buf = NULL;
-> > > +	int saved_errno = errno;
-> > > +
-> > > +	va_start(args, msg);
-> > > +	if (vasprintf(&buf, msg, args) == -1) {
-> > 
-> > kernel test robot reported compile error on this, as the vasprintf
-> > required _GNU_SOURCE. Looks like it's not appropriate to be used
-> > in the common header. Looks like it can be replaced with a buf and
-> > vsnprintf instead.
-> 
-> I like vasprintf()!
-> 
-> "#define _GNU_SOURCE" occurs 402 times in selftests/, so perhaps we can
-> find a way to keep it?
-> 
-> (err, *why* 402 times?  Can't it be just once?)
-> 
+This is something Michal had asked for last year, and I just got around
+to implementing. This version is just a minor cleanup for
+reviewability's sake. I also renamed the search= option to search_path=.
 
-_GNU_SOURCE is a feature macro, may silently cause troubles if defined
-globally and it's recommended to be used explicitly and maybe that's why
-we have so many definitions in c files.  It's usually requireed to be
-defined on the top of the include file list of c file. So although we
-can see kselftest_harness.h defined _GNU_SOURCE, but still can see some
-many (80+) c files define _GNU_SOURCE on the top and include
-"kselftest_harness.h" at same file in the bottom of the include files list.
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+Changes in v6:
+- Add fw_search_unescape() to make the search path parsing more readable
+- Rename search= to search_path=
+- Link to v5: https://lore.kernel.org/r/20260323-fw-path-v5-0-e88b2fe145f3@kernel.org
 
-So the side efffect of using the vasprintf in kselftest.h is user need
-to take care of _GNU_SOURCE definition because a header requries that...
-and the header may change something silently because of the _GNU_SOURCE.
+Changes in v5:
+- Increase search= string length from 256 to 4096
+- Preprocess search= path when it's set rather than on every firmware load
+- Add selftests for search= functionality
+- Link to v4: https://lore.kernel.org/r/20260320-fw-path-v4-1-7547e2f0dc64@kernel.org
 
-And a weird thing is _GNU_SOURCE is not defined, but the compile of
-the selftests calling the ksft_exit_fail_perror(vasprintf) succeed by
-accident, maybe man page need update or something I missed.
+Changes in v4:
+- Move search path to new search= option that is tried after path=
+- Link to v3: https://lore.kernel.org/r/20260318-fw-path-v3-1-a701a08bc025@kernel.org
 
-As Mark and Thomas mentioned, the root cause is not this macro's lack
-of definition, it's when '-nostdlib' is specified in the compile flag,
-the nolibc lib don't have the fallback implement.
+Changes in v3:
+- Allow '\' to escape a literal ':' or '\' in the string
+- Link to v2: https://lore.kernel.org/r/20260318-fw-path-v2-1-8a106eb91eb4@kernel.org
 
-So it may be not appropriate to use it in the kselftest.h. And
-considering if we use a buf[], the size is limited and the message
-could be truncated, still not ideal.
+Changes in v2:
+- switch to using ':' as path delimiter
+- Link to v1: https://lore.kernel.org/r/20260318-fw-path-v1-1-7884d9bf618f@kernel.org
+
+---
+Jeff Layton (2):
+      firmware_loader: add search_path= module option for multi-path firmware lookup
+      selftests/firmware: add search path test for firmware_class.search_path=
+
+ drivers/base/firmware_loader/main.c           | 298 +++++++++++++++++++-------
+ tools/testing/selftests/firmware/Makefile     |   2 +-
+ tools/testing/selftests/firmware/fw_search.sh | 222 +++++++++++++++++++
+ 3 files changed, 445 insertions(+), 77 deletions(-)
+---
+base-commit: c369299895a591d96745d6492d4888259b004a9e
+change-id: 20260317-fw-path-a094c30259a5
+
+Best regards,
+-- 
+Jeff Layton <jlayton@kernel.org>
 
