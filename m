@@ -1,131 +1,127 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198A444CAC1
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 16:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775060175; cv=none; b=ELY6ZbKB1rvZrNNxT7cIeu84+C3F3jjZP9MgRIpJiujgusZijqt9YsZNpGhb/Zx7S1VL2lsz5X+25smViemwzkLL1kc9LiZb46MBseAjOJ14LOfR3/H6M99II0Sxbw0Q/wjPStQMmyNIcJb/qJVXUwhfkZBE84fedqjJxNXwh5s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775060175; c=relaxed/simple;
-	bh=yVagyWKvjPbOTMFBAGYFdTOqwRpe3t1YiqqD3RZmsw8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iO3dOBeapIGtW1FseGgFkY4gtBtLlab+mpvXe7dQ0Ufhbyef4kYjhsbFmR+lYi8BfKmgN02P45U9ZGnW/dykwv0eUrwGENyG6pUuKQbH4zbIazaWu3HyB+RdAuyk0l/9atPKBrzKp7H73ArSYO1YYdwNfCmCp6PTQmYEvmCkxcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OyIRog/E; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887FB47B425
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 17:01:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775062865; cv=pass; b=UtqKNRTWk1V0CnLiyPXc/ooy4r8PPfxveEj0rOB5wkck0zQvE9uKavh7RbkLI0TC+BpKf6qv2uwf8ogkG46iltd6BOLyd4OVD8gqOAEEv5XJHr3cAmtiPRdXJEA/Pxq0CPxEbvmB4JegMN4/7JzsyeinIPDZL1CsJQVIgOQlbBY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775062865; c=relaxed/simple;
+	bh=HMh3BmfgmzdgimyYYoM6Rn1fwSBCsNHDQSYfQwRc9+E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TSLPY/4i420mjYtG5ubgXwajQe+54vSkBGdj7vNjIJdJx3vUZKgcbF1LtfwTEoqJB9vezaNj9C7EbOsDhLoyFnvHAwhhzagpj4oVYwCztVkvc7Ay2eMEDDQv6SU3Mhq8onfZPK7qOQ8j4hgaYOx6DnAE51So1UgJtANuBlinIes=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dvQBlLs+; arc=pass smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OyIRog/E"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-66ba9898ae8so1870071a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 09:16:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dvQBlLs+"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-66ba6d3dab3so349a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 10:01:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775062862; cv=none;
+        d=google.com; s=arc-20240605;
+        b=axTGmFKButTEw+ay0dCs5W/mJN0XGl0N9PcjQZS/s7GsyoO6f06GXoIedN7sjDIi8a
+         rXQRRvdtTXcD2EUfPT8OpVlewhAeXxIRhaBg9PHZTeMp7ok6HOMNnJqcP1TLbhPFCQbq
+         mP6k91DV8XXZuaZfOuZg3gvpDjCQk0GIXxrXWHT6T24W6/mKOODdzQUffH3MhbNJRePg
+         H/aAkFKXC+DZVm8nvGzPWqAQhfs+3CWtZ21FzEZaGrJFptZ7jqRSw6hYvw5zvhSE7cNb
+         4QtbO2RvcoT6N/HKpJ/j2lsbc5Yu/ehlurEQZ+9EM5S+Qy2ZDEsaTNKaH4biKz6J1MVu
+         vKJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HMh3BmfgmzdgimyYYoM6Rn1fwSBCsNHDQSYfQwRc9+E=;
+        fh=2gDJ1i98XeJVw87MP41PWH/q5eAtOVCnwxg7hfMlyBk=;
+        b=c09TpPjfJKT2X2H8ct5W8USSNeBqTiRXbGwJzygTDWeHA6eoVyDw47dnOI/geV/juk
+         4O640mR6Aw3ccaxGE+ftB0Ud4ajlLz6i7Z0xWPXmdYJI+10XAczoAVVEiyYKWxKBLYCC
+         tM2oYwjVQ05AqiVDwlIsk9aW622/NSxWYptXiUp89vNVMbc/UXSZAy+ZNnyuJ7ufXczK
+         JhPAlUpDI5PDxK8y16HwqT4RdmT+xJbnSB2eS6wAxS71QHbxsm/nA/nRVFLxHzItqO8c
+         Zt1JUhgasoQ8+LMlTw3QqOEJRk86y+23mJcjFvruTzuJmpmFZ3PeXSHcieMYFrH1EFmr
+         eqUA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775060170; x=1775664970; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3FvjqJGRUGf5rvJLMczRoDDubOCSWcD2sRCL5wLsrmc=;
-        b=OyIRog/ECRzZPoExYO7DKJ58u+Hfat7TItfxQ6a3CAlTJGaKaFLw/+WdFx2g6o6tOs
-         RPpm7cyjQbjjTcOIUhAR0JzME1mUfhro+KHhOz3pmgXkSo+kCWwsivuz80vtjGbGXH/Z
-         XgwEZlMZecFlr5nTQ1JLf38GyiLf6I9xlAE+Zdm0yAIKA4HL7JGwacPST2ukJGwLCmO2
-         s3tIB63tnv+xQ1WsD311pjPkZwwksCF22oJFITVGjylFUst4ISGbEOPbyWS1MXsWXlvp
-         DLsgDESrww9urcI4n7/lcnUpanjfv6OefIDyjwS4L7S+VlsL4prKYldS7a21xobU2kNw
-         lKIw==
+        d=google.com; s=20251104; t=1775062862; x=1775667662; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HMh3BmfgmzdgimyYYoM6Rn1fwSBCsNHDQSYfQwRc9+E=;
+        b=dvQBlLs+a1mlA59kQDDucXKd+evLi5uR8v4xBe8WJq5qqx4RWVaooOo8k8aXcsdAG3
+         AO+2DMisWBw3GMYfVttTj+g/8McDxDEPxRuF/Jn+CQzHi4BxW5/YgVWKKBEIKhVx+Ays
+         4L7HDUptNlUzZKOQG82sLxYB5Q7Nqk9APNG69mhUqmWONdphMBSkJwSadgq1wS3SVkbo
+         UDamTJvFLnYBZxCE4/nm3tLTPhNypdVgtECr39Kz8y0Wy8pTWEP+3uMJMLcUJJnfH3F/
+         GJ/USZAiY1Mg7oRme75r6nkSrqdMxgbz983QnSVPIRsXtNYYnRe622je61whaDF5qe4M
+         /XLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775060170; x=1775664970;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3FvjqJGRUGf5rvJLMczRoDDubOCSWcD2sRCL5wLsrmc=;
-        b=jVZpNR5hKVpBk9f8F/lQbb8QTBnVKOHNvPFB4DsFxKnqa91NA4wI0cfctpWoItWtEE
-         Hd5njC40gTUjffvm2i8GPsutgSEfqMPmF0OkelQ5DCMKKTs63cIW5wNzpD8aI9Lc/iu0
-         XL9vqo3CwPCcU5NVEktgaSwZmfpo8oI6ooYSjjNDI48wv7rNrXrGEtHRLKCufFxp++5Q
-         QnyVKvADB0n/BcSpgDduAuC5vAWs0hdQyy5dgs8wxL5IlSAGtE66R1hUoAsgQXMquriE
-         ddT9Ipj76op/he8rEqsTx9OQ3BjDz5lJrmSMTwSZnaQhXi1eJZUrrSwL//rOIZ87a35J
-         +JVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXclOtr8LOMKT1z9b560TIcofUmrdWxDBfcT+oedZSecNKiHrhdzxNw7e21wr2nt/U65zRTmT0ZhyCtXLd/nZ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwG6MNRHkdbhCm9CpU0ghymPDmOOgQRF6vLUv/i2TQh/+mtX2xX
-	vr7U5FK1AxwAsPEIj55u5u0922pftKWZE4bkhn+Mdv5hwIDmobRnqVgglVSI6pu8wrE=
-X-Gm-Gg: ATEYQzzGbqUh5QU4PY/rXcEXh+zv0FaECs17xZLC7HPiRTIAypJq4Wrm4ncm24pQYA+
-	rswb0pGGT0M71Jf1ie3C45Us8sbMcSz4CsBhXcaZH1jTbJux20qBHkdHIVD/3UrXIw+5jLiE7Sd
-	HXE4gUx71FtCeZ42lNceDDOzn4SGgBAhqIASu03ZyCGcydKY8OTBUkOUp/Nk4IbNDg6nkZUXyh+
-	9rYoPDQmf7+5zyAtcgHvoje4hPfwAS1d27rfkfmreR9OLIrMEA5wEDG5BdrbBbuCAo9NKy+T/ED
-	pnBsrlVR1kR1reoINQLOs8C/X86ZYquosih27n7NmzLCAMx0Fh+iLCdwUNJ6Xd7MeZcQ91yiNrv
-	Y5kyHHqd16qOXHFGXwQib14EgjlQf6I0AK5dE7QD1tUZY8Gyk7Foop+oVuRfy01oOEodpfnu+uy
-	yDBMebS+NQ
-X-Received: by 2002:a17:907:80d:b0:b97:b88c:386b with SMTP id a640c23a62f3a-b9be88fea21mr486276566b.29.1775060169798;
-        Wed, 01 Apr 2026 09:16:09 -0700 (PDT)
-Received: from localhost ([189.99.238.3])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-953fb4fb62esm539517241.0.2026.04.01.09.16.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 09:16:08 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Wed, 01 Apr 2026 13:15:17 -0300
-Subject: [PATCH 10/10] selftests/bpf: Tolerate missing files during install
+        d=1e100.net; s=20251104; t=1775062862; x=1775667662;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=HMh3BmfgmzdgimyYYoM6Rn1fwSBCsNHDQSYfQwRc9+E=;
+        b=Pty85TrWiz5o01mBrDiZR13UpkUgKc5AA19lwltcD/rEsuD1H5QxFdwyw9n+tncVA4
+         JrpovO68QJUo8ypNBJYbHT+flC7tkNGFx6aoTlpK+5GuOUAH1eWk/cwUOaYIrlc7FZZm
+         T8uV8ga/9Cb+54xiMxJfk9SFg2eSLmaLdrZO9yIQHjVyloVNCFnC0WqY6Q4rWTUbhU4j
+         nSOlCyPbTbY/pVuYS1YuRGIlWmwnm476jjxSoSeWmQUsRqGkdcnC6tudRnhJVXwBITbo
+         5k5KY/ZDcqvQ7CR4/L40G+4ogJPSNyfz6VpQFagwi9S1Huj+BxEBN8LehE8DjTcSVsqn
+         hkeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVucxpk3uSIDR5eW80dirL7FjaqTs/pRZfkpfj2JwBlFg3snJd1u/ni6NzG6GSxrnR8WXh2PfYU43qq/UHRKdk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwG03Vou+DXqSy2Mu7K5wZhFPyseWpLSt6clts3IE8Hekdh57fX
+	JJQ7FIEjhXqHWDz/a6qfy4u6Id/BuC2S3xd+uwICq7jeSkgTsH6khWfxkthgcmkCFV0m2CX8JeE
+	MbbsdRYig3OQ3qZop6UF3JrsCL3jmoa6ojfnU2GkE7b28B//BNFs4aemQ
+X-Gm-Gg: ATEYQzw+L9BSm+fto6JDdTzXknpTzV/eLQj/ZYuortvbBpKGm7MtVxc0xxlq2gA1LTv
+	29C3jZ0mCCwPXbB7GW99PeHajMXzwdt1Y7Ujdcg2BYfOwvm62iOvCZVOx4lNQbB1LSdgUZU3po0
+	xjNLL2YmRj8vwem05PuEn6jzEyT9YrOkBVjiK8X8puDzL3MCWEpWkDV51f4GYW75NE0NWu8vyVC
+	TWNnDgKk2XzyYV399Ecgk2GC/e4sMjP55k7qQlAXRz/al0fEqF76o8wwwpW/V+wf8958tyn11Q9
+	Gk/+09ulsEhqZxQ24fmIGq8NUFMneqLZsWCasVvXdhwZQ3x/duifcOBduoWlOZYuANtVpg==
+X-Received: by 2002:aa7:c58b:0:b0:66b:eb42:be7 with SMTP id
+ 4fb4d7f45d1cf-66e033bcbe5mr2565a12.13.1775062861460; Wed, 01 Apr 2026
+ 10:01:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260401-selftests-bpf_misconfig-v1-10-3ae42c0af76f@suse.com>
-References: <20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com>
-In-Reply-To: <20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openssh-sha256; t=1775060128; l=1301;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=yVagyWKvjPbOTMFBAGYFdTOqwRpe3t1YiqqD3RZmsw8=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QJqWMuDkW7CGJ4c4k1sKyalpyIqTV3VBzKB/br2/xyUcVyk8o5hnm2bUhNHeFiX5vKvdQ7v/CyK
- tdCTirSltDAU=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+References: <20260401-teaming-driver-internal-v2-0-f80c1291727b@google.com> <20260401075720.7976a1da@kernel.org>
+In-Reply-To: <20260401075720.7976a1da@kernel.org>
+From: Marc Harvey <marcharvey@google.com>
+Date: Wed, 1 Apr 2026 10:00:50 -0700
+X-Gm-Features: AQROBzBsblDbpWXSnvlD0rrlndtlTFYB_FDROw_4NMEeJP_41nBpXwToL4b7S54
+Message-ID: <CANkEMg=sCEMGdyL5qOU-nSGCk2Tartiqvk1yQkg+3PMm46VdaQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 0/7] Decouple receive and transmit enablement
+ in team driver
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
+On Wed, Apr 1, 2026 at 7:57=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> On Wed, 01 Apr 2026 06:05:24 +0000 Marc Harvey wrote:
+> > Allow independent control over receive and transmit enablement states
+> > for aggregated ports in the team driver.
+> >
+> > The motivation is that IEE 802.3ad LACP "independent control" can't
+> > be implemented for the team driver currently. This was added to the
+> > bonding driver in commit 240fd405528b ("bonding: Add independent
+> > control state machine").
+> >
+> > This series also has a few patches that add tests to show that the old
+> > coupled enablement still works and that the new decoupled enablement
+> > works as intended (4, 5, and 7).
+> >
+> > There are three patches with small fixes as well, with the goal of
+> > making the final decouplement patch clearer (1, 2, and 3).
+>
+> Closer but the activebackup test times out (45sec is the default ksft
+> timeout, I think). How long does it take when you run it?
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic.
-
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- tools/testing/selftests/bpf/Makefile | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3d5b88435446..ec24bad44017 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -951,6 +951,13 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# Some generated files might be absent when only a subset of BPF objects
-+# could be built. Tell rsync to ignore missing source arguments.
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
-
--- 
-2.53.0
-
+Very strange, for me the script finishes in seconds (even with the
+netdev CI recreation steps). It seems like the teardown, specifically
+the graceful killing the teamd daemon, is timing out in your
+environment. I don't think we need a graceful teardown, so I can just
+replace this with pkill in v3.
