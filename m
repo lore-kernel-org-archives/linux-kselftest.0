@@ -1,112 +1,242 @@
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00782F25F5
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 23:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DFE3EFD1F
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 23:38:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775086554; cv=none; b=ZDCP1dYtuge88q83Y2PoVBqjyI7Qxy8i8eufCMXLn3TI1ORK1k/UOBmbRpFGHrSC/4gOxDcsuKFwcOQn4VR4NWdp9+gQ8S2nRjGmKUVEFPT4lFseNL1R15eHbbZvJxqmajgBV1CoUbhmlxM33hRLA/XiRszeD9+ljCXsSBWIyBs=
+	t=1775086699; cv=none; b=KRaWO6FxO1nMVcDKUx9wqNhYTHmccWF1wUjEbY3PHXYkcZ7jp+yGsf+VzNzGwLG5lDXPo1yGzwXrgby1/iK3VNEMUqmz3EPP4EKOsAZxgd2XHtKEL4MNHKxHFv1mBabiPcHovU2opNYiyWOKRcjzWDNQN+SgEyro8qU2DvH9K90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775086554; c=relaxed/simple;
-	bh=h5k3Xx4lObwj4IO8cFxWfuy9O+uGkMuCLqqzf6mDyFo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kcT7xA1pp+hpB7ZDg6XO1i02A2tndpLA7J5qHPCIeY57gUpRnbShemq5AI3R7puJ7OegAYcMjGgKZRW3pBzPnUp86XpSG62Luir6S6mtWd8+pB8ZNeVwW4xbsHD9FyrUp/w/qvvgzysgMvKCC7Yy1gep4AOOr9k6Xqvcn3OmXDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=b2SgRaWD; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1775086699; c=relaxed/simple;
+	bh=8wDnYGmsZvC7abjvNEJ3Tk+IvO8q3U34sLBOd8TOXA8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=H5sBs+VqWsjI5xBP5onw9stEWAhOXthK02+7iT7JvZpQ9ai0JLRHYyXizJlWIBj+oJYaPCvLEUFVjp9j5FLMFRMyOkbvEbm+JAvE/rSP0Th263YglZjdPuXnGhdUq4YlBuSueyYDHV7Wgs3AqDIpUX+KUGv2QhIP06/X38onrno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=BtTAUNxg; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="b2SgRaWD"
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-67bb04151dcso170832eaf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 16:35:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="BtTAUNxg"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c76b6f9a50eso83420a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 16:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1775086551; x=1775691351; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zfjh2JtIM03zvg4bBCmPSybeaL43I2wt5CLM1EweZGM=;
-        b=b2SgRaWDmHpCJZ/TeBuSRbS25s3AtbybF+DEdFPx+K2OtPY7f5CwiXJPRYMxSu2wAD
-         213/5qKi/DSuVxrcgpXUVoddxSUE2J7VbTJiRCKKKg68Fe3uR4n+Z71YXtBpyYAoz8xp
-         xn+5fdtoxXppw2a8vFydn1vdISfmctZ+dwjr4=
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1775086693; x=1775691493; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NLMUaKCgV8ol4xEA39jbeNRFpzXzgz54RkpOpnmPJPI=;
+        b=BtTAUNxgkl40G3QbV4lpMXmZDZcHWpK6LHqIasTGGiqKhokxl6Ip7J5UW2klnzlYod
+         EE0W6yA2QdYkm9RX+PoArFbx+49pjL8LTxXVKxXTVBU+vh6toW4DjWTgwSLFjpm39IFY
+         /mnEYp2DyOe7KDhYAoN3svzA8L75o16hiqlduxx0WV6PJuXbMfdawIw3bCqEgXwr9FEj
+         A3MDdLGndmYSK6AgeR5QwLf1X2Dzck4VkYz5JI8Ug68Isx2nFTgEEhK7/Vojae+/iJCA
+         /Tsa+HIMoXtbEwcRoKKTnzjwRll4d8wAGGazpRYk4AyqWZyvUVdI3OOWj2onPo/pkNRH
+         okSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775086551; x=1775691351;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zfjh2JtIM03zvg4bBCmPSybeaL43I2wt5CLM1EweZGM=;
-        b=LqiLE/rqeNPhQYZH3DYu6lVjigNsRSm5TbT3cIK5qSD6cocEnC7F4dQDhFCHOhxK8b
-         pgcMY6sXcJW3s+zp6D5KJtAfBwfMybJjuXTFggAbOCQ5E4ZVQ18nohSaB3x2OngZgFMp
-         JCTboXg7GXd8HCxlqePJlUjzji4qAwv84ZsZCwTGE4ep1S/uxqGWpiMRu9IJDWppRGAg
-         QWbxFSrBUS6yK+wOdqnw6lY+kunkezHE5WfET9i0kaZpMxSw3wAL4fHemEaKuhSJBVbN
-         EO6Kz6PuWcjYIJooSa2RR8g6L7lbPdO1CSqJLkL5FjqPk6eh4p2zZ8PxFsTLY8xMwFX4
-         c2xg==
-X-Gm-Message-State: AOJu0Yxq+QmMYR0sE54RouhUY5d5xzM3iawr39UdhQwl0hLocAZcZMmQ
-	9duRYUBwoOn8bFPeFSMg+Qmj864WD3GeEBcfIn77+aagPkSmBhjpxfm9b5b5vMDp2zQ=
-X-Gm-Gg: ATEYQzwE9rCHMIGAaRyHH4/adDwR0oPYbPJzIF0RpN3/SvO0rTO2ubmz6hD+TL//4Is
-	51lZySIQjrGEHCDCV0reKHjD59S4RRqDB4Gq0QzzUPPZ4RjgJyVD0hq+yG0LHOvZI1OvZYLyZtm
-	tJsKqZbuu83qdUTH7CuxdvzgFEpZWBwoaV4SQVQe25IgKomoS1eSkEFcGeBXJnrdbZ+nW/pxgqT
-	KLQ8eIo2LPLQiTJlOGBeNceeSRh2BoKpW3LpeDVzaCaSNCnqWyTl27hjnesPNyPLEJf4japQp/F
-	45bnUvlkVOAGvQNgNrQum9SIfBk0GJwTy5++uaUW4rbsiJS9bb2ne94V6o4LP8mLre8rr/N49Nb
-	DPBR85gpDRLrDeVJQWgNcDl7o8wWJ6uFtqrRDZm8zF9Cnq9SNdVvK3SMLej/9Rx7vc1kuO96Nwv
-	6andwh7rQMm3oGpPsK/QtKWEg/P4jzURdyxMM=
-X-Received: by 2002:a05:6820:1897:b0:67b:b0bd:8bd2 with SMTP id 006d021491bc7-680a8548b56mr858545eaf.59.1775086551530;
-        Wed, 01 Apr 2026 16:35:51 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-680a63c7fd1sm751543eaf.8.2026.04.01.16.35.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Apr 2026 16:35:50 -0700 (PDT)
-Message-ID: <8290d427-ae1f-4e90-b988-c209e81ec85c@linuxfoundation.org>
-Date: Wed, 1 Apr 2026 17:35:49 -0600
+        d=1e100.net; s=20251104; t=1775086693; x=1775691493;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NLMUaKCgV8ol4xEA39jbeNRFpzXzgz54RkpOpnmPJPI=;
+        b=JPiH5YHzLk04dMKoSvFA8yV5F7fcS5kpXxNGa4J67qOuCPXPSRLZ6glSEK5dqcrXX/
+         Q0/aLibsCt0QlKTdSJT0U1VcuMEBfUnis5rhHDsMszH7lJJlGuD6KjpUeaiCMF0svIxj
+         5OeUKfe+JUIurrvOQAskw2NDxzNfcvQfzkFwKLih79C8d5PfCtJ+9HtjI8iAc5mYa544
+         7bmiq1qyp+3vZA9sWgso/MDUSVGi/HAGtc8CeOhwyseCIfGa3c7NSKap9bVQREmWQ30C
+         5PbxnXrE0avKLVjG4VTmDie34svTmBAieXrOfN1rX1q6PbKVjTIewxOnh9KFTGs5lBz8
+         y2Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCX/qpqNWEW3pLXFYE+k5uyXthhjkd+LoLMKfgCs+1EkHWYuXDNXIzcP8J08YJTZtlwRVeH5R5oxarcvj8BqI7c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmJZ+WnDEBdjwdxW3fcw4+KHJ68uZU8YwDrV55HUh9zwS2aG3I
+	53ehFJkXdb26IwixqyP9XH0w/JT+XnWhC4W6q+EErSeMAZiJGNFjI1ZjsWlcBbr5Fgw=
+X-Gm-Gg: ATEYQzzamw3/HrJ3ce51MiyFn/66fsmNEAXHT2oENcPo0vBaviJ119RB2GuTXKPYRfl
+	AJv3dkO7pKUxcvr0N5O91ceISgVf4ofhVE1zNhj9uYJakVnXKodpOwfQRC0wGJ8HrxI8lnTNgq8
+	89jFbGYekvD0J8EiyvytEwTyMQOeSDfqAryK/RCMjEWnyk1Vfv0TDTVCOySP1VancifOqXJt0xP
+	kFUq5DinYSdQBkJ2qOFS+XfDdmUx9iVjkw2SBq2btuOlcQKtxJcFb6LFZym2SpumFtILF4+0d5a
+	5S19+zgKHhzNTtJPqkJiAovShN3qxGKNERgodEopViXnNMQZHaE5cyRnycMx8CGuyLb684MX8Yr
+	nBasIWHK7F9ouyeptymP0GQouXLaQXkca6dJF9MOHQg7ddzBTThmbIpTap7O0vdQefCDIXMwJFn
+	4taen6
+X-Received: by 2002:a05:6a21:9983:b0:39c:787:f17a with SMTP id adf61e73a8af0-39ef76a85e2mr5757489637.41.1775086693216;
+        Wed, 01 Apr 2026 16:38:13 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:70::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9b3dcbesm1012860b3a.22.2026.04.01.16.38.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 16:38:12 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: horms@kernel.org,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	linux-kernel@vger.kernel.org,
+	leon@kernel.org,
+	Joe Damato <joe@dama.to>,
+	linux-kselftest@vger.kernel.org
+Subject: [net-next v7 10/10] selftests: drv-net: Add USO test
+Date: Wed,  1 Apr 2026 16:37:38 -0700
+Message-ID: <20260401233745.2333858-11-joe@dama.to>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260401233745.2333858-1-joe@dama.to>
+References: <20260401233745.2333858-1-joe@dama.to>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Sashiko.dev for kselftest
-To: Roman Gushchin <roman.gushchin@linux.dev>, Shuah <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, sashiko@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <d0dc7caa-052b-4d50-aeb8-60d3327d1130@kernel.org>
- <877bqqh11y.fsf@linux.dev>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <877bqqh11y.fsf@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/1/26 14:34, Roman Gushchin wrote:
-> Shuah <shuah@kernel.org> writes:
-> 
-> Hi Shuah,
-> 
-> Sure, will add later today.
-> 
->> Hi Roman,
->>
->> Please add linux-kselftest list to sashiko.dev for reviews.
->>
->> There might be double coverage for patches cc'ed to lkml
->> and other lists such as mm, net, bpf etc. Hope that won't
->> cause problems.
-> 
-> It's not a problem at all.
-> 
-> What I believe might be a problem: kselftests are mostly userspace
-> code and at least some parts are written somewhat loosely (which
-> is totally fine for tests), so Sashiko will report a ton of issues,
-> many of them are not worth fixing.
+Add a simple test for USO. Tests both ipv4 and ipv6 with several full
+segments and a partial segment.
 
-Good point. Maybe we can also find things that are worth fixing. It will
-be an experiment.
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ v7:
+   - Dropped Pavan's Reviewed-by as there were changes.
+   - Update to use ksft_variants with a generator and a parameterized test_uso
+     function.
+   - Save original USO state and restore it at the end of the test.
+   - Replace sleep with cfg.wait_hw_stats_settle
+   - Use a socat receiver and check tx stats locally instead of rx on the
+     remote.
 
-> 
-> So I guess it will be good to put down a kselftest-specific prompt with
-> some guidance what we believe is acceptable in tests code and what's not.
-> 
+ v5:
+   - Added Pavan's Reviewed-by. No functional changes.
 
-I can definitely do that depending on what we find.
+ v4:
+   - Fix python linter issues (unused imports, docstring, etc).
 
-thanks,
--- Shuah
+ rfcv2:
+   - new in rfcv2
+
+ tools/testing/selftests/drivers/net/Makefile |   1 +
+ tools/testing/selftests/drivers/net/uso.py   | 103 +++++++++++++++++++
+ 2 files changed, 104 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/uso.py
+
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index 7c7fa75b80c2..335c2ce4b9ab 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -21,6 +21,7 @@ TEST_PROGS := \
+ 	ring_reconfig.py \
+ 	shaper.py \
+ 	stats.py \
++	uso.py \
+ 	xdp.py \
+ # end of TEST_PROGS
+ 
+diff --git a/tools/testing/selftests/drivers/net/uso.py b/tools/testing/selftests/drivers/net/uso.py
+new file mode 100755
+index 000000000000..75bf02849075
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/uso.py
+@@ -0,0 +1,103 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""Test USO
++
++Sends large UDP datagrams with UDP_SEGMENT and verifies that the peer
++receives the correct number of individual segments with correct sizes.
++"""
++import random
++import socket
++import string
++
++from lib.py import ksft_run, ksft_exit, KsftSkipEx
++from lib.py import ksft_eq, ksft_ge, ksft_variants, KsftNamedVariant
++from lib.py import NetDrvEpEnv
++from lib.py import bkg, defer, ethtool, ip, rand_port, wait_port_listen
++
++# python doesn't expose this constant, so we need to hardcode it to enable UDP
++# segmentation for large payloads
++UDP_SEGMENT = 103
++
++
++def _send_uso(cfg, ipver, mss, total_payload, port):
++    if ipver == "4":
++        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++        dst = (cfg.remote_addr_v["4"], port)
++    else:
++        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
++        dst = (cfg.remote_addr_v["6"], port)
++
++    sock.setsockopt(socket.IPPROTO_UDP, UDP_SEGMENT, mss)
++    payload = ''.join(random.choice(string.ascii_lowercase)
++                      for _ in range(total_payload))
++    sock.sendto(payload.encode(), dst)
++    sock.close()
++    return payload
++
++
++def _get_tx_packets(cfg):
++    stats = ip(f"-s link show dev {cfg.ifname}", json=True)[0]
++    return stats['stats64']['tx']['packets']
++
++
++def _test_uso(cfg, ipver, mss, total_payload):
++    cfg.require_ipver(ipver)
++    cfg.require_cmd("socat", remote=True)
++
++    features = ethtool(f"-k {cfg.ifname}", json=True)
++    uso_was_on = features[0]["tx-udp-segmentation"]["active"]
++
++    try:
++        ethtool(f"-K {cfg.ifname} tx-udp-segmentation on")
++    except Exception as exc:
++        raise KsftSkipEx(
++            "Device does not support tx-udp-segmentation") from exc
++    if not uso_was_on:
++        defer(ethtool, f"-K {cfg.ifname} tx-udp-segmentation off")
++
++    expected_segs = (total_payload + mss - 1) // mss
++
++    port = rand_port(stype=socket.SOCK_DGRAM)
++    rx_cmd = f"socat -{ipver} -T 2 -u UDP-RECV:{port},reuseport STDOUT"
++
++    tx_before = _get_tx_packets(cfg)
++
++    with bkg(rx_cmd, host=cfg.remote, exit_wait=True) as rx:
++        wait_port_listen(port, proto="udp", host=cfg.remote)
++        _send_uso(cfg, ipver, mss, total_payload, port)
++
++    ksft_eq(len(rx.stdout), total_payload,
++            comment=f"Received {len(rx.stdout)}B, expected {total_payload}B")
++
++    cfg.wait_hw_stats_settle()
++
++    tx_after = _get_tx_packets(cfg)
++    tx_delta = tx_after - tx_before
++
++    ksft_ge(tx_delta, expected_segs,
++            comment=f"Expected >= {expected_segs} tx packets, got {tx_delta}")
++
++
++def _uso_variants():
++    for ipver in ["4", "6"]:
++        yield KsftNamedVariant(f"v{ipver}_partial", ipver, 1400, 1400 * 10 + 500)
++        yield KsftNamedVariant(f"v{ipver}_exact", ipver, 1400, 1400 * 5)
++
++
++@ksft_variants(_uso_variants())
++def test_uso(cfg, ipver, mss, total_payload):
++    """Send a USO datagram and verify the peer receives the expected segments."""
++    _test_uso(cfg, ipver, mss, total_payload)
++
++
++def main() -> None:
++    """Run USO tests."""
++    with NetDrvEpEnv(__file__) as cfg:
++        ksft_run([test_uso],
++                 args=(cfg, ))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.52.0
+
