@@ -1,185 +1,127 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4FA370D62;
-	Wed,  1 Apr 2026 03:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C3036B07B
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 04:19:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775012785; cv=none; b=eI+ICx1OwVHbgxkUJ0QRkIPqPs65lqcHGgT7ROxyJTISe/PCw6RSTVzKfR9598y6YB0m5R2iPE/HP2ZKNHm7MGr4sdaGckCXIKwGq8SH2uVYosMXVjm3gfWcwtVuLJgElFNMCp8XPRrDQXj27ks5S3u/OAqg4ZqkqumUXnGYL2o=
+	t=1775017198; cv=none; b=HKKcrTqOXiaM/1lPuiNIz2DIqMQxjPrb+uOyrhXZEsjVj3Dk9JmY0vRw9e2EpBL7CnLPe80kKDGWoCXfm+gt/a3So6mHSL2yKvBIbuaY1DE4/jgJ6Jm3XJDxNQUIC4OhToSbTlY+StNT07cI95Iywb6XuL8F5uMalgdD4OTgFbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775012785; c=relaxed/simple;
-	bh=gXYXU3bjuBX7pMTIJZ2X4lQpzBLeXA8zyv1z1xH502Y=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=b+22KwBdZrhQkrguDMBuLMSfwZ8SRvxbHoF41PhNaNGV7+KlAjfAwxfFkrQiqhSA13TaVmQaqcnqVIXSlEHRm1yCkmZt8JPtcJ8u2/ThNtHOQvefMbGk07OEOzWf1kEmmRd02qFBkGs58/O8b8CIRTsxANMPsFnLQ1X4SOTDu4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=iJQBXzH+; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1775017198; c=relaxed/simple;
+	bh=GW93UXZZL/AJcKizbF9MiVumq3K474SVj7RsNaKwVOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q7/nTrkNcYQaenfgoh9ogEORzuNlXKOFJVchyG3PaAdzlr6IrnI14KMEiq6tk6QRt0I/oetDQNcKgnJ5Dn/4YX4UG7MgFzMvCHkHC69A7F7TijHBVj6YcJmMRsWh8lwtOuZRdp7b0nc3dzxM4pmDPdeFOgWGMMdU6PHM6iu5iTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SoAsePdW; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="iJQBXzH+"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 6312mDBW1350248
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 31 Mar 2026 19:48:13 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 6312mDBW1350248
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026032601; t=1775011694;
-	bh=UruaA8qNd4O3gD374Pj4fjqcSgBsMnolMzN4x29oqSA=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=iJQBXzH+iB8VJYgBFwUEqDrDZDFMPpnUsdn6RKroS34BPs91Xlm4RHnWlQW+ZctCv
-	 p4ihABAqT2CBuR2DV+iwKg12e+cNkezytPYRK4zenq9vrAtcGosHjhWMfle+kKw2Gy
-	 nJ08SIgH0cEqHYIAhdG5BU8QigL6AMVKua/x02nQ192izIGx3dn7IJglN6jGPZS9r0
-	 kMEi9ZZg6rJF0+CJpt/YT7ZEYnzwccQK8G81LZvye1Sfk4A0kSMXNQiDgdCE0NPXU9
-	 vA0fE+v7GvYwappIjnVl6UGX9m+Dp8jTabGyZizpcFyI4SHF69wg4qeRg4PvkwREtr
-	 vDUwMoEvNONZA==
-Date: Tue, 31 Mar 2026 19:48:06 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Xin Li <xin@zytor.com>, "Lai, Yi" <yi1.lai@intel.com>
-CC: Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, yi1.lai@linux.intel.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3=5D_selftests/x86=3A_Fix_sysre?=
- =?US-ASCII?Q?t=5Frip_assertion_failure_on_FRED_systems?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <E9D8D677-1B95-4569-829E-80E8B8371198@zytor.com>
-References: <20260326094423.711724-1-yi1.lai@intel.com> <d0560111-a999-4024-aadd-f0d468d3744c@app.fastmail.com> <20260327123315.GR2872@noisy.programming.kicks-ass.net> <acsvrv0gCwTI9rWI@ly-workstation> <EFD7015E-E7B1-4BF1-81A1-1627E1D3DE31@zytor.com> <E9D8D677-1B95-4569-829E-80E8B8371198@zytor.com>
-Message-ID: <1D8D9EE4-D652-4E09-86C2-2D3FAB151100@zytor.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoAsePdW"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43cfbd17589so2978727f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 21:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775017195; x=1775621995; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FpxTHYW9PCEMGlcpR0vGWm0MEHjo8lB3T6MyF9di0eg=;
+        b=SoAsePdWP+Ziu75muCsKjEsNT5foNHSfACGEKlH+KoatdtogWSGBjns4ClD/iv4mJt
+         Ri3qw7tPE90PLba3ryuu4fY+h1eQFTRZUhq6wVZopWnamtXCXY6ehGhl5fxtIu2R+0JD
+         Ed1GhIHmbKmeBVHjtNqhv9+Jy7nluoh9gRQe0vHgmf/Xs+c91QYDTLI2bG58VEyyp67k
+         vHG0GmkP/UA0TJFx0xmDqPLIuKKwg5DE+5gR0QUop0Ywgs8XzWcEXy01CrNF9hW3TH6I
+         SmNNdxw1ImY+Y598Oc1pxiLHnTMZsEt1bKCenZRGU2GjSCFIJ4YhSJM2huqsHZbGNfIY
+         NOsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775017195; x=1775621995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FpxTHYW9PCEMGlcpR0vGWm0MEHjo8lB3T6MyF9di0eg=;
+        b=JT3wMoGrVHPtxHvklOL+dIwi5cSjVSEsizpgFNZ0eqpSI9fpjqfpx92n/k57eBTVKy
+         UslQur2oSzzbdAEeSFDndW5LE2Qv3ojdSuN+xltoObQqR3zOpvqiIaE0pdnNFkflxO8g
+         pDuKOjpLe2xMD28ddvsO4DolZG4LY23d2HFWkWEfYokn0VbvGU3RmsaWJfjdYJwsN5FK
+         sK4uEJJksmW5P7tcAvJ48fUgf3Kj91jniB8mysMhXe9ZY8+Ywjl99Yluvl4ki6OxC+h6
+         Iiycx3jNy5+Bl0TfNpEcpBwGWinnGw4S89eT6qkIgeslMO4Pzgb5vnxZSJPJG6dBCh9i
+         +D2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXQ02Wu8hICI9K6q1Tm+1NE4H27qyziSoTRsib2LUGMZE3qnVa68KYPRqdeC6/PbAc/7Pb9Y922zm29yoYhuAA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVPR59TkJT4Eldtar/r8UGAzEIro7HDuXSdIV67YBKb1t/AoVj
+	3mnCfLDUp6pT+Nf7mkAP4twdczlELyfwMixzYUpq3c8hfHRgnouK3TQX
+X-Gm-Gg: ATEYQzzGN7z2xyL06vUx4E6KatVkRV5hkto0Hj41l38WXAq5kex+lotPCTi9mZyqKIX
+	tsnOiAnXj34TclT9qVv1JP/Z5k+3Zi8PPt0+zDMsgsx1evXCmEeF6s7owH0QBR+nYHC4iRJV+LT
+	9sUrTxBYsBmzy2yebBV6mdyTbAWjUOJrB4NCsw1eByUhcLWh0mY03n8BIP/mnVVUJkSO/G3hP74
+	3Xcy+4iXgcTerYe9HeeNEmEmcUYYvqATkqLAjUXCWVzhTnBXT6YOvig5I5PJSpqCYrCHjJmoa1B
+	DQHmaDP3GhmzMs5ghTsZFNclPq9CKaVBjpjb6Y7/HSVeSnr//JgE+0NoCHE2rbaJYuIv7AXqkdT
+	kEAkOi+i2uOj+wcWLJuJ+ziEWHnYJy5iW55/5UmaXyP5PXMEs9BcR1MN904C6RmdtDUx86zHUZf
+	rKLs4lTX6A0aHtZZW43PgwUnTsxgh0wZq6J5e8opyrS1MsnuX7vr9/EqFIYC9x2ZVWyeQr1JQ=
+X-Received: by 2002:a05:600c:c178:b0:486:f8e9:add5 with SMTP id 5b1f17b1804b1-48883591777mr30069195e9.19.1775017195266;
+        Tue, 31 Mar 2026 21:19:55 -0700 (PDT)
+Received: from f (cst-prg-89-171.cust.vodafone.cz. [46.135.89.171])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e7e9728sm87601455e9.1.2026.03.31.21.19.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 21:19:54 -0700 (PDT)
+Date: Wed, 1 Apr 2026 06:19:40 +0200
+From: Mateusz Guzik <mjguzik@gmail.com>
+To: Jori Koolstra <jkoolstra@xs4all.nl>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>, 
+	Alexander Aring <alex.aring@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Andrey Albershteyn <aalbersh@redhat.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, Namhyung Kim <namhyung@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Aleksa Sarai <cyphar@cyphar.com>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, cmirabil@redhat.com, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
+Message-ID: <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
+References: <20260331172011.3512876-1-jkoolstra@xs4all.nl>
+ <20260331172011.3512876-2-jkoolstra@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260331172011.3512876-2-jkoolstra@xs4all.nl>
 
-On March 31, 2026 6:59:06 PM PDT, Xin Li <xin@zytor=2Ecom> wrote:
->
->
->> On Mar 30, 2026, at 11:03=E2=80=AFPM, Xin Li <xin@zytor=2Ecom> wrote:
->>=20
->>=20
->>>>>> The existing 'sysret_rip' selftest asserts that 'regs->r11 =3D=3D
->>>>>> regs->flags'=2E This check relies on the behavior of the SYSCALL
->>>>>> instruction on legacy x86_64, which saves 'RFLAGS' into 'R11'=2E
->>>>>>=20
->>>>>> However, on systems with FRED (Flexible Return and Event Delivery)
->>>>>> enabled, instead of using registers, all state is saved onto the st=
-ack=2E
->>>>>> Consequently, 'R11' retains its userspace value, causing the assert=
-ion
->>>>>> to fail=2E
->>>>>>=20
->>>>>> Fix this by detecting if FRED is enabled and skipping the register
->>>>>> assertion in that case=2E The detection is done by checking if the =
-RPL
->>>>>> bits of the GS selector are preserved after a hardware exception=2E
->>>>>> IDT (via IRET) clears the RPL bits of NULL selectors, while FRED (v=
-ia
->>>>>> ERETU) preserves them=2E
->>>>>>=20
->>>>>=20
->>>>> I don't really like this=2E  I think we have two credible choices:
->>>>>=20
->>>>> 1=2E Define the Linux ABI to be that, on FRED systems, SYSCALL prese=
-rves
->>>>> R11 and RCX on entry and exit=2E  And update the test to actually te=
-st
->>>>> this=2E
->>>>>=20
->>>>> 2=2E Define the Linux ABI to be what it has been for quite a few yea=
-rs:
->>>>> SYSCALL entry copies RFLAGS to R11 and RIP to RCX and SYSCALL exit
->>>>> preserves all registers=2E
->>>>>=20
->>>>> I'm in favor of #2=2E  People love making new programming languages =
-and
->>>>> runtimes and inline asm and, these days, vibe coded crap=2E  And it'=
-s
->>>>> *easier* to emit a SYSCALL and forget to tell the compiler / code
->>>>> generator that RCX and R11 are clobbered than it is to remember that
->>>>> they're clobbered=2E  And it's easy to test on FRED (well, not reall=
-y,
->>>>> but it hopefully will be some day) and it's easy to publish one's
->>>>> code, and then everyone is a bit screwed when the resulting program
->>>>> crashes sometimes on non-FRED systems=2E  And it will be miserable t=
-o
->>>>> debug=2E
->>>>>=20
->>>>> (It's *really* *really* easy to screw this up in a way that sort of
->>>>> works even on non-FRED: RCX and R11 are usually clobbered across
->>>>> function calls, so one can get into a situation in which one's
->>>>> generated code usually doesn't require that SYSCALL preserve one of
->>>>> these registers until an inlining decision changes or some code gets
->>>>> reordered, and then it will start failing=2E  And making the failure
->>>>> depend on hardware details is just nasty=2E
->>>>>=20
->>>>> So I think we should add the ~2 lines of code to fix the SYSCALL ent=
-ry
->>>>> on FRED to match non-FRED=2E
->>>>=20
->>>> Yes; I'm afraid I have to concur=2E Preserving the clobber on entry f=
-or
->>>> FRED systems is by far the safest choice=2E=20
->>>>=20
->>>> Aside from this selftest, fancy debuggers and anything that can trans=
-fer
->>>> userspace state between machines might be 'surprised'=2E
->>>=20
->>> Thanks Andy and Peter=2E
->>>=20
->>> Indeed, making the selftest branch on FRED vs=2E non-FRED behavior
->>> is not a good practice=2E The selftest should validate ABI consistency=
-=2E
->>>=20
->>> I agree with Andy's option #2, so this should be fixed in the FRED
->>> syscall entry implementation=2E
->>>=20
->>> Li Xin, does this direction look right to you? I can assit with
->>> validation and keep the selftest aligned with the agreed ABI=2E
->>>=20
->>=20
->> Yes, consistency should take precedence over hardware-specific variatio=
-ns=2E
->>=20
->> I would like to hear from Andrew Cooper and hpa before we do it=2E
->
->Per Andy=E2=80=99s suggestion, the change would be:
->
->diff --git a/arch/x86/entry/entry_fred=2Ec b/arch/x86/entry/entry_fred=2E=
-c
->index 88c757ac8ccd=2E=2Ea19898747a2c 100644
->--- a/arch/x86/entry/entry_fred=2Ec
->+++ b/arch/x86/entry/entry_fred=2Ec
->@@ -79,6 +79,9 @@ static __always_inline void fred_other(struct pt_regs *=
-regs)
-> {
-> 	/* The compiler can fold these conditions into a single test */
-> 	if (likely(regs->fred_ss=2Evector =3D=3D FRED_SYSCALL && regs->fred_ss=
-=2El)) {
->+		regs->cx =3D regs->ip;
->+		regs->r11 =3D regs->flags;
->+
-> 		regs->orig_ax =3D regs->ax;
-> 		regs->ax =3D -ENOSYS;
-> 		do_syscall_64(regs, regs->orig_ax);
->
->It adds 4 extra MOVs on this hot path, but I don=E2=80=99t see it's a pro=
-blem here=2E
->
->
->
->
->
->
->
+On Tue, Mar 31, 2026 at 07:19:58PM +0200, Jori Koolstra wrote:
+> @@ -5286,7 +5290,25 @@ int filename_mkdirat(int dfd, struct filename *name, umode_t mode)
+>  		lookup_flags |= LOOKUP_REVAL;
+>  		goto retry;
+>  	}
+> +
+> +	if (!error && (flags & MKDIRAT_FD_NEED_FD)) {
+> +		struct path new_path = { .mnt = path.mnt, .dentry = dentry };
+> +		error = FD_ADD(0, dentry_open(&new_path, O_DIRECTORY, current_cred()));
+> +	}
+> +	end_creating_path(&path, dentry);
+>  	return error;
 
-We discussed this over a year ago, and at that point agreed that reserving=
- the register was the desired behavior=2E Why has this changed now?
+
+You can't do it like this. Should it turn out no fd can be allocated,
+the entire thing is going to error out while keeping the newly created
+directory behind. You need to allocate the fd first, then do the hard
+work, and only then fd_install and or free the fd. The FD_ADD machinery
+can probably still be used provided proper wrapping of the real new
+mkdir.
+
+It should be perfectly feasible to de facto wrap existing mkdir
+functionality by this syscall.
+
+On top of that similarly to what other people mentioned the new syscall
+will definitely want to support O_CLOEXEC and probably other flags down
+the line.
+
+Trying to handle this in open() is a no-go. openat2 is rather
+problematic.
+
+I tend to agree mkdirat_fd is not a good name for the syscall either,
+but I don't have a suggestion I'm happy with. I think least bad name
+would follow the existing stuff and be mkdirat2 or similar.
+
+The routine would have to start with validating the passed O_ flags, for
+now only allowing O_CLOEXEC and EINVAL-ing otherwise.
