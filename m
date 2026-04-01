@@ -1,90 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473E9175A9B;
-	Wed,  1 Apr 2026 11:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB633F7A9A;
+	Wed,  1 Apr 2026 11:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775042256; cv=none; b=l1asvozS/IFJFPZHftDiGladznsf82jkS9X1tVM5dxK0KOqZ+WHSKEv0d0so8bBJaZJ551nKlF4nHyKyzyrTBrPJ2vHl2NMRu8/X19bRN/xgCDfMRhG90RdZIuMVvF1tQP7vNddydiVuOTElG+c90fiOWjQ5aM1jfALoD5IAD/s=
+	t=1775042497; cv=none; b=BNAc0RPNPtxfQejHHwEqRkJTvWfrH2QBX85WZ64WgswZ3cTerM7NHJwk0b1W/lcLMjnpcPYmbmAXVE3gMPlhWkfThJoJhCYzCtdnkgigxR0t+upc/sCap93n5hm0cDZD0hQ2CbgYJyBNYXIQN+rh8/g4pm3dwWlRlGlGGNUdeDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775042256; c=relaxed/simple;
-	bh=N1Lg/uuMEG2XclojkpbMXk7nlKJI478QJMLpw9zok0Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WIrxS7nbIzXeKRG5sfo8TyMOARxVEHvWBAkM/iCYcD2eO5GtOOo+uCzshNcWFN/GfFARrTdLv62EALEta4OhUOnuUTDvyNURNIvicUbTW5joHxiEp2qrnVlDlQYIkwYB+rrHKjmX2PbjjhXgmfhBV4D7ec/OsuwYH1S4u9yu7LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TtkyqXx0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775042497; c=relaxed/simple;
+	bh=8EkJfb6DV097HgV2AJ5ew5aaxcDdiTGbyI8uQ9lcmcI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gtn5VkgaEnzmuAxQuL5adIvPgky3Dh9+dS6tVLXFkcNUem1XBP5HIUYhpJn/EM5k4iahc83Y6bRpbMnlwpiAmxQu6sMkyjoU9GkrItk+pp4CykuwDpzprnsWWNfImn1irj99ITS6B1wFeCYwGKtdKReWo5r4DuARlP59aGnuhn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XzQMbPXZ; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TtkyqXx0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0268DC4CEF7;
-	Wed,  1 Apr 2026 11:17:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775042256;
-	bh=N1Lg/uuMEG2XclojkpbMXk7nlKJI478QJMLpw9zok0Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TtkyqXx0O7OeO7sZ0xDozi/d6eOhTtvwWBptDQHmVQaL4CKzCN9kCUoZBOpvrZKeE
-	 Pp5UnmUUAFa95UoVI2lwUNtcTYvqACblxFId+EBTFK3q6sJSDeutW3aSA+s7ONlSv3
-	 rG3M+xaK8nhjtsuL7b7mTVMFc7kEU1xGfJ53dsGjtPpveDkSpfUsf5rO+n1uu8CBLh
-	 8bbc5nXSPsSWYr/a1/eBBQBVUNL5H2f+tFemz2mxJuovPcTcCbEGiXiDOmWtp0JyXI
-	 QG6BpI3HY34L0gIlPJ4oem2aNcFY1S0Qyi1hOXmwYKyC9FmjGsMFcNibqcG3gqaL9H
-	 LfmfYU4KvL2/g==
-Date: Wed, 1 Apr 2026 12:17:30 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Anthony Yznaga <anthony.yznaga@oracle.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	david@kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com,
-	vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
-	mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
-	Jason@zx2c4.com, shuah@kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/mm: verify droppable mappings cannot be
- locked
-Message-ID: <d20a7a98-2bc7-48fc-b467-21eba8df89a4@sirena.org.uk>
-References: <20260310155821.17869-1-anthony.yznaga@oracle.com>
- <20260310155821.17869-2-anthony.yznaga@oracle.com>
- <52bec9ea-5627-4ea2-8f27-f1729957fa47@sirena.org.uk>
- <20260331141714.b2f4e41b494060e55610a5f3@linux-foundation.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XzQMbPXZ"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6319HAd7202727;
+	Wed, 1 Apr 2026 11:21:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=VJjTbq4YncHhXwFfY
+	bGc3aDQVETLzdOAb2F35qDqNEI=; b=XzQMbPXZyokTcC8I/UgfPom/Dpv0CnFxq
+	6A0yiDSgGP22bU0alCgCrir22Rwt0J3mTIcjnJvk9TqY0Fbw3b2oiEMOkg73D65A
+	xUZ7VrEt6/Eoc8mKIBJQ7Uhc2+sDdqRfr6NP8bDL1yBKQgij3bDl3O6nDzVeYHAQ
+	nrmg6AI5XIxARArjvBtG/JGKwdYpQC5P3PV0jQJI2hbeVX09VcOphktxe2bWaLnS
+	oGQiO9TR3aFd3m5jvuqpQz1ctKIF88nKh26mF/lekDwQRyn/4V1zCRqfpSKlrzy9
+	QWfUXVyBq4HtsAC2ArVxm+3lKIanV5AfyUznW1tyrK03Xs+gXq8yQ==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66nnqsh5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 11:21:25 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63182bZs030955;
+	Wed, 1 Apr 2026 11:21:24 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d6uhjw4ma-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 11:21:24 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631BLLEX21954936
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 1 Apr 2026 11:21:21 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E3B2C20043;
+	Wed,  1 Apr 2026 11:21:20 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1ADA520040;
+	Wed,  1 Apr 2026 11:21:19 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  1 Apr 2026 11:21:18 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH v3 1/4] powerpc/bpf: Add support for instruction array
+Date: Wed,  1 Apr 2026 11:21:30 -0400
+Message-ID: <20260401152133.42544-2-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260401152133.42544-1-adubey@linux.ibm.com>
+References: <20260401152133.42544-1-adubey@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="JxsWWm5ZucbJodln"
-Content-Disposition: inline
-In-Reply-To: <20260331141714.b2f4e41b494060e55610a5f3@linux-foundation.org>
-X-Cookie: "Yo baby yo baby yo."
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 02IQjd_29Lu66KduikJlQsx7Ysk3_nts
+X-Authority-Analysis: v=2.4 cv=KslAGGWN c=1 sm=1 tr=0 ts=69ccffb5 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8 a=6tkAVXMqj22fOBSrVA8A:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDEwMyBTYWx0ZWRfX/woH+zO7pPzu
+ Awe+/Peb1bmdH4E0a5XD1EN2qXUVTALCwdh0znvc6+uoiLj7VrVrayyz3Czyg8B/QPylnyjZZ75
+ h+IJUPGZu37M2mkQS5BX4To3FKNwwgGvgvZ4/CtM/aOWjevO4+ZBQvxp1VoD0cKTnV6hQchxyIs
+ mdn3t4qJqNyuLruYdKKmGawepJlXUuU/428PzTpaQ+AqKZsV9K+2sGcRk8iQlR1PpXWl5OQOD6r
+ wJ6C69+HZsxTmUnMLpmKjOEgpOhJYy9Bnzb/xYrgVj9pZgav6qWR0AKQfIuAC4zwihN2aC7nRn7
+ 8bxyKzKY3D5Wqi5wIVZpqZCOR93ioA6A+bBkCGTAAj7hwsOpFTSUhnXFFFj66nJKuVADXX265wh
+ RN8sPFAchcvUr6ZPj4DfMEMSVgTL1pyEBHNT8RIYAFK4FGdFLo/PrtF/BHTxhFODG/WiXfNx1bh
+ RQ+/StVfeI0uht5qVJg==
+X-Proofpoint-ORIG-GUID: 02IQjd_29Lu66KduikJlQsx7Ysk3_nts
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_03,2026-04-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
+ phishscore=0 adultscore=0 bulkscore=0 impostorscore=0 clxscore=1015
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2604010103
 
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
---JxsWWm5ZucbJodln
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On loading the BPF program, the verifier might adjust/omit some
+instructions. The adjusted instruction offset is accounted in the
+map containing original instruction -> xlated mapping. This patch
+add ppc64 JIT support to additionally build the xlated->jitted
+mapping for every instruction present in instruction array. This
+change is needed to enable support for indirect jumps, added in a
+subsequent patch.
 
-On Tue, Mar 31, 2026 at 02:17:14PM -0700, Andrew Morton wrote:
-> On Tue, 31 Mar 2026 14:17:50 +0100 Mark Brown <broonie@kernel.org> wrote:
+Invoke bpf_prog_update_insn_ptrs() with offset pair of xlated_offset
+and jited_offset. The offset mapping is already available, which is
+being used for bpf_prog_fill_jited_linfo() and can be directly used
+for bpf_prog_update_insn_ptrs() as well.
 
-> > All these failures which cause the entire test program to immediately
-> > die seem exceessively strong...
+Additional details present at:
 
-> Well, is the test code incorrect, or is the patch which it's testing
-> incorrect?  That's 5435ba164b0d ("mm: prevent droppable mappings from
-> being locked")?
+commit b4ce5923e780 ("bpf, x86: add new map type: instructions array")
 
-I've done no investigation on the actual failure, sorry - the comment
-above is a stylistic/usability one about the test program.
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+Acked-by: Hari Bathini <hbathini@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit_comp.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---JxsWWm5ZucbJodln
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index b2fdf8ff9c60..50103b3794fb 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -373,6 +373,13 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 			goto out_addrs;
+ 		}
+ 		bpf_prog_fill_jited_linfo(fp, addrs);
++		/*
++		 * On ABI V1, executable code starts after the function
++		 * descriptor, so adjust base accordingly.
++		 */
++		bpf_prog_update_insn_ptrs(fp, addrs,
++				(void *)fimage + FUNCTION_DESCR_SIZE);
++
+ out_addrs:
+ 		if (!image && priv_stack_ptr) {
+ 			fp->aux->priv_stack_ptr = NULL;
+-- 
+2.52.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnM/skACgkQJNaLcl1U
-h9CnEAf8D+qC45AiMzqQRSdGPBaX2a40RNgSp2rCACIzsmXr1xk7NNZ1k+XlQc2I
-BMlDKY7emJ7ZDKoEdOFE4ghdlkNyLSpx3fY/p9Iu+tiN7cE4G14FJzmuqg9QY0DR
-vNPFvJGsKVeCIAz5Rf4DsB2NwFCR3iD1iJNXe2LpjqNb9xDxL2823/F5jLXGeR9e
-K0PN6ABceEV2fFUeXLg9O3iNp/0A7tbSfGirAlu0pebo+8Po+wISeXk5G/qNRn1w
-IxqJ+HGTGiwAPcCmDs8LeOf816+NMN1XQ8vU3XkVXanViBgfjfYPcF0HRTey7M6j
-w2yh4lWvUy1Gsn/uAr9LbLdR6jNhdg==
-=T9t+
------END PGP SIGNATURE-----
-
---JxsWWm5ZucbJodln--
