@@ -1,60 +1,33 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAC4279DC8;
-	Wed,  1 Apr 2026 14:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD322DC357;
+	Wed,  1 Apr 2026 14:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775053970; cv=none; b=DdH0X7uxTqV2z6S986H7Qi7sUmTMX7xso79cDPrgtPb2VjbEShH3Z9OMok7eS6wGrGkmVWR+zu5geqHrtXqKSXWge7kW83es6M+H0YR0V3cupCI7ruIzRUpWj2Q2f0ZK3dCACG4llmjVuqnvjD3uJ/S7xLAGNASY6ujNPemXsJs=
+	t=1775054123; cv=none; b=Kz6O5o6TCTC0Zlkov2ckslbf01ztqSgRjg/IEHm8L1CwG2ivwO6wYoCv73J2xxI+bKHRyfHGb/dbA4A3afNpTD7y72+puNGEnYZxohDRcdQwboK5bZVZa7ylp7GHage2v9CBRC1oXmr8YNDGBXRxCnn/UPP9oGcIIkXybOHQ200=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775053970; c=relaxed/simple;
-	bh=iGrJXvkAoQXBz4LQTuTKN9OniAjK/VtkFDcoVVaCCvs=;
+	s=arc-20240116; t=1775054123; c=relaxed/simple;
+	bh=8L15mk7uBbIcb7Tq2K1XChKVrDaUFFZb9Sv7JfqIHto=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RwXvCfqe+ztpaaGhu+1KK9H0PqIyNVIkQsi2TLCBpgCMLILv7+WC0JTS5CzzK2tG5+9XRG9XyT4qKro8c48BiIHFFeZYqwncf8YUn+vMc/TAXlikjllKliMGIf2atXL8KaoTfS6pJzbJXbVVxfpik7peSj9XcOzG6YhmuYeZVaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lUexXE+/; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 In-Reply-To:Content-Type; b=J2PHqVqzMVmu8yN7TAuBHg8jMWuyztHYhva9R4gkKhhrX8pKIDEeOEzXdppWmLTjWDKK8qMC+46/RWd2Y0ZgTQ8NdRYgTpl1GntWekbi24TW38huxXCPFogeDSG1xWhSGrdNOG8XZb5wnYAZL6HBLNZYkJXbGtpyDFJqFqooU00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YJJhGtI9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lUexXE+/"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631CXfGr169440;
-	Wed, 1 Apr 2026 14:32:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=XCjnqf
-	zND3siMSjdM7ztAg0ApusfOuj9tUAMFjr53ZY=; b=lUexXE+/iv7l23MV8dz9Oz
-	0XEzCy1FXjw990EAmF7E/gNcymfqYhA2gRKKmxaU7hRkeOctQb/qbb8PRYLUHUlS
-	TFbSPFYkM8cRfGpSq5sdSifV/QAj4jpichXMmuolEJNvKWR25kU1ZzOPbusdYD7l
-	cpmgv6tsDFNcO7T0P9+ungV07c705ctfMR4zS2hWLRh0wJfX6gVkOhaCWMiIxqEK
-	BUhuPsLDMqzVHf53A68y6p/qszDRo2uAQbD2F9NcW3SKVl0JYfKhdE8jrbYl2VbJ
-	IiO5jRjFT8cLyrWZYPERMKcB7oVaTi1BLTu3aejyrH6KfGd2zMuowFYf4P8ok+hw
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66q38m3y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 14:32:31 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 631BjPRO022291;
-	Wed, 1 Apr 2026 14:32:29 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6tan5yx1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 14:32:29 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631EWS3X1770044
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 Apr 2026 14:32:29 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DB54C58054;
-	Wed,  1 Apr 2026 14:32:28 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 563F25803F;
-	Wed,  1 Apr 2026 14:32:23 +0000 (GMT)
-Received: from [9.39.18.42] (unknown [9.39.18.42])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  1 Apr 2026 14:32:23 +0000 (GMT)
-Message-ID: <b6d211e1-233e-4079-a8b9-6682e12077ba@linux.ibm.com>
-Date: Wed, 1 Apr 2026 20:02:14 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YJJhGtI9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8489C4CEF7;
+	Wed,  1 Apr 2026 14:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775054122;
+	bh=8L15mk7uBbIcb7Tq2K1XChKVrDaUFFZb9Sv7JfqIHto=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YJJhGtI9LqaXWQGbRVZsPCUbXFlAgkfoX4ONmNboth4EOEPZ/BavQQ76K3894U6UB
+	 o4e7o4BAATRZ8R3zHDRokeuqDK+++QlmsrEtiFtENF3l6Xr4yce6xsquadb55zT+ZV
+	 S3QgbVdUGD2S+OTVwVxuRaB0p98IpDkit7XG2XsPRkTcGWwzN6/Cvyrys7jiHKpTrJ
+	 zZr1KX1PsRCo+vzPxmj9IolWPJMLgx5+x3O9Jtm3i82jP5VrpwOR/r0f4kOl27syp/
+	 DUaRPDO008259oUk3rrNfXm5o8c8cwGeOFbDTrwdQKVIPjt3mFJ5J9Nu1wr+ANUAqb
+	 w/mSd6j0BrhxQ==
+Message-ID: <cd36fe49-56b6-4ec6-8dc7-9c793f939bb5@kernel.org>
+Date: Wed, 1 Apr 2026 16:35:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,106 +35,137 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 11/13] selftests/mm: fix double increment in linked
- list cleanup in compaction_test
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <4c47a2ebbc41f90c7a0cb3f8b34106b2b64296f6.1774591179.git.sayalip@linux.ibm.com>
-Content-Language: en-IN
-From: Sayali Patil <sayalip@linux.ibm.com>
-In-Reply-To: <4c47a2ebbc41f90c7a0cb3f8b34106b2b64296f6.1774591179.git.sayalip@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: N46Buve6LLjOY-8cEDx28LKGk35wp2Te
-X-Authority-Analysis: v=2.4 cv=frzRpV4f c=1 sm=1 tr=0 ts=69cd2c7f cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=Ikd4Dj_1AAAA:8
- a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=_rQTWCYq3bkPLdup__cA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: q70nen16mzFyUJWl05e4U8Txb9r8jnvY
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDEzMyBTYWx0ZWRfXxVz1MwK3oBRi
- b593UD/1bwhpKB6ZGc+V1gyY5N3wSUvdD6PIJn+ip4X0z5qBlhU4hTlwJjq0CjZiI6pqhhTzRZE
- oZCOtFPMjtQABspSqebRFvaMc2MRFCCmxOT+sWTHuGHFHcSk3I6ont3eeHT3219qcn32cHaHkS7
- ld8RA5ofe1bmWjrzf1XeSzQ1rQgQhwgl/SqZz16H7KXl2G7USFCtI/5Fs4SKb3goyPIP3rXts4M
- IrkXoL3Jz8bKPQOLExNaj+QM5on8Oh8nz1rb2tF6lE6WxrzoKtB8+gkJ8LxEAsp5WlIGIXpXTla
- 9rH06kriLngXUJaPRfyv/GkAzcJ5UsuqFBDUcgi7Z+nEAMySwe8e5l/i96J+BTxw1NUlt5hEu8l
- aQDZIukCAk9RSqribHSDgd4gqa5gN46CV8QT/XlEdPOj0przE/HgR+O5D3TIOfrVZJAn+RUmFbq
- W8iifSNYOHfP21RDdYQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-01_04,2026-04-01_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010133
+Subject: Re: [PATCH v1 03/10] mm: fs: remove filemap_nr_thps*() functions and
+ their users
+To: Zi Yan <ziy@nvidia.com>, "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260327014255.2058916-1-ziy@nvidia.com>
+ <20260327014255.2058916-4-ziy@nvidia.com>
+ <aaea8ce1-eac6-49d6-8c85-7361977b9a9f@lucifer.local>
+ <b098fce7-be16-479e-b9a4-36f0ad71d242@kernel.org>
+ <53cf6157-58b1-4539-a276-2486e8796c57@lucifer.local>
+ <25899F67-955D-44DC-935E-D7F234BD335A@nvidia.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <25899F67-955D-44DC-935E-D7F234BD335A@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 3/27/26 16:05, Zi Yan wrote:
+> On 27 Mar 2026, at 10:23, Lorenzo Stoakes (Oracle) wrote:
+> 
+>> On Fri, Mar 27, 2026 at 02:58:12PM +0100, David Hildenbrand (Arm) wrote:
+>>>
+>>> There could now be a race between collapsing and the file getting opened
+>>> r/w.
+>>>
+>>> Are we sure that all code can really deal with that?
+>>>
+>>> IOW, "they already had to handle it separately" -- is that true?
+>>> khugepaged would have never collapse in writable files, so I wonder if
+>>> all code paths are prepared for that.
+>>
+>> OK I guess I overlooked a part of this code... :) see below.
+>>
+>> This is fine and would be a no-op anyway
+>>
+>> -       if (f->f_mode & FMODE_WRITE) {
+>> -               /*
+>> -                * Depends on full fence from get_write_access() to synchronize
+>> -                * against collapse_file() regarding i_writecount and nr_thps
+>> -                * updates. Ensures subsequent insertion of THPs into the page
+>> -                * cache will fail.
+>> -                */
+>> -               if (filemap_nr_thps(inode->i_mapping)) {
+>>
+>> But this:
+>>
+>> -       if (!is_shmem) {
+>> -               filemap_nr_thps_inc(mapping);
+>> -               /*
+>> -                * Paired with the fence in do_dentry_open() -> get_write_access()
+>> -                * to ensure i_writecount is up to date and the update to nr_thps
+>> -                * is visible. Ensures the page cache will be truncated if the
+>> -                * file is opened writable.
+>> -                */
+>> -               smp_mb();
+>>
+>> We can drop barrier
+>>
+>> -               if (inode_is_open_for_write(mapping->host)) {
+>> -                       result = SCAN_FAIL;
+>>
+>> But this is a functional change!
+>>
+>> Yup missed this.
+> 
+> But I added
+> 
+> +	if (!is_shmem && inode_is_open_for_write(mapping->host))
+> +		result = SCAN_FAIL;
+> 
+> That keeps the original bail out, right?
 
-On 27/03/26 12:46, Sayali Patil wrote:
-> The cleanup loop of allocated memory currently uses:
->
->      for (entry = list; entry != NULL; entry = entry->next) {
->          munmap(entry->map, MAP_SIZE);
->          if (!entry->next)
->              break;
->          entry = entry->next;
->      }
->
-> The inner entry = entry->next causes the loop to skip every
-> other node, resulting in only half of the mapped regions being
-> unmapped.
->
-> Remove the redundant increment to ensure every entry is visited
-> and unmapped during cleanup.
->
-> Fixes: bd67d5c15cc1 ("Test compaction of mlocked memory")
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> ---
->   tools/testing/selftests/mm/compaction_test.c | 3 ---
->   1 file changed, 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
-> index 30209c40b697..f73930706bd0 100644
-> --- a/tools/testing/selftests/mm/compaction_test.c
-> +++ b/tools/testing/selftests/mm/compaction_test.c
-> @@ -263,9 +263,6 @@ int main(int argc, char **argv)
->   
->   	for (entry = list; entry != NULL; entry = entry->next) {
->   		munmap(entry->map, MAP_SIZE);
-> -		if (!entry->next)
-> -			break;
-> -		entry = entry->next;
->   	}
->   
->   	if (check_compaction(mem_free, hugepage_size,
+Independent of that, are we sure that the possible race we allow is ok?
 
-Sorry, this change is not valid.
+-- 
+Cheers,
 
-The goal of this test is to verify the kernel’s ability to compact
-unevictable (MAP_LOCKED) pages. The loop is intentionally written to
-unmap every other chunk, thereby creating fragmentation with locked pages
-before check_compaction() is invoked.
-
-With the proposed change (removing the double increment), the loop ends up
-unmapping all allocated locked pages instead of leaving a fragmented
-pattern. This results in memory being effectively unfragmented.
-
-I will send v4 without this patch.
-
-Thanks,
-Sayali
+David
