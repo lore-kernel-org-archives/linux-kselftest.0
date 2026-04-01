@@ -1,193 +1,122 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA4B37BE6E
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 07:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD29318EC9;
+	Wed,  1 Apr 2026 08:34:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775029269; cv=none; b=ezb/HiijsbwfUjSs0dtnd3jw/nzP4lfek7T9NrMlgc91MUzocCvbZuze5P7IzmcCZm6Ha4iwvlgBHgJ5BZqwWj7Vz9CDsi6Br0HZ+FIDwoQS8kzlqJju9Eq1rCnQPgckHIZaXr7EZKvJOJ/obfIfSGoMh8Ome/A4tQsyX1FBkcY=
+	t=1775032486; cv=none; b=MzqfXWc77KE2UM9hHNJSq8rgTDD32r80B4loG+maGB2TaoAyHccFIcGSY1AWKrbM0sXVX8Cm+Eu0MKIhRQMZAPwzKJR8D1ZqwCkHqOh9RdSn/pcZu5cBvFvPxKY5ODYpimMjz1HIIdJqeIBls4TTEnEXUxfJXF5SL9rpjXRqWYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775029269; c=relaxed/simple;
-	bh=erEGmthLCCq5QaevIpQZZtKGYxx/zf3Sdg+6Wd/Uo3w=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=KenEqybo7elJAfcVmrza2NWxjjvBIqLPXrwewcRo5uonKuGuNmzWmSrg+DZktpnfl0sNQrTkkwQ+i1oiPo8KuV82Ztb8PXdr/Tgxr4eT0k6KUorEXuE2KK7g2wDJvJIbFd/G5KQUcG8vfzzgqHR5Pm96nklqAadIvApJ/kk0a30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CGHbsyHr; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=141OuvNb; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=z4eYEgF2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=z3XHhETI; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1775032486; c=relaxed/simple;
+	bh=1w0/GG5qdyXghEHkrjmckecNc+tGwP/YtCUkolWuqHA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ULvLkgbQvDTa/EO9utLbNctTI3ljOLVRJwAy4VxL4U5HaQVoE5dWv/NafyyOajXaXu/UdZqhKBX/7+ydTpvcZ6wuvsH0FgRlzMqexydboueP9wg66qct8aouvKWUbhXDLQRPgPOCDfsITVa5wiyg/5fwAo2a0MGAsw2a1S3ItKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IxGG+u2r; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CGHbsyHr";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="141OuvNb";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="z4eYEgF2";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="z3XHhETI"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id DDDC34D1E6;
-	Wed,  1 Apr 2026 07:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1775029266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b1pEdDeMovITLQfcEHCNx180y8KjPanNMnxJcqmlOt8=;
-	b=CGHbsyHrfnSjT79FZ+5Va7hTUHGdbdtMvl/y8DyR7Y01ZVJfVTzCsCrxTJ9aQNxl2zFpHH
-	x1NnapJ1m2gnVFKhRF4XxEdUJsHXx62VX9sOKolgrgAIwFqTcYY6rgZQNrA7rK8oFvo5y1
-	O19uC0HtyPzV2KYEftUqiRoWcZw3m6U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1775029266;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b1pEdDeMovITLQfcEHCNx180y8KjPanNMnxJcqmlOt8=;
-	b=141OuvNbRIjjpUQ+nBpbbyldgmG3O0YE/HGK9es8fhAHS4y8Esy8coQdD1Pu5SGeazv77K
-	efoZ85skoBid4jBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1775029265; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b1pEdDeMovITLQfcEHCNx180y8KjPanNMnxJcqmlOt8=;
-	b=z4eYEgF2oBMO7xLy+jaGqL4OUSiqakxBduOipe6nXIoUT3OAId9dsBug+wg7l89gdltSMq
-	mlVJ+X5nagDQw3GlbH3N5BPerqxfU9RotkWvD5chrRCYGD2ciuwzL3U7aP+pDdRd6+AraS
-	OWwhyu+3A5ai5cAU4uvhsqGSweHIT9g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1775029265;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b1pEdDeMovITLQfcEHCNx180y8KjPanNMnxJcqmlOt8=;
-	b=z3XHhETIrT2fg6CmVJEE31EIFXqqCiMhE+B/gRp3gs5p68bhLiFv++YWA07d4AH4323YyO
-	x+lbuU8ZTpSXrDAQ==
-Date: Wed, 1 Apr 2026 09:41:05 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-cc: Joe Lawrence <joe.lawrence@redhat.com>, 
-    Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-    Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
-    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/8] selftests: livepatch: test-syscall: Check for
- ARCH_HAS_SYSCALL_WRAPPER
-In-Reply-To: <a23f00ad4a454cbb3379cdf512e8c61ce7499194.camel@suse.com>
-Message-ID: <alpine.LSU.2.21.2604010937120.12688@pobox.suse.cz>
-References: <20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com>  <20260313-lp-tests-old-fixes-v1-1-71ac6dfb3253@suse.com>  <abhjYtyveer4niGM@redhat.com> <a23f00ad4a454cbb3379cdf512e8c61ce7499194.camel@suse.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IxGG+u2r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2575C4CEF7;
+	Wed,  1 Apr 2026 08:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775032486;
+	bh=1w0/GG5qdyXghEHkrjmckecNc+tGwP/YtCUkolWuqHA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IxGG+u2rr/ad4XEBZBnd/tb5GmMxRtkBZKF5Xo4+ciDnYGUZAn0l83cG2WqTxe/yC
+	 pVfAkeHlfCuCJ1VsvHWr2eeYRPSO2ik65KmqZqUBbV8DXa3RqZ1kFbK3VVVaiOdHPK
+	 BtDmlV9goLrIH55wF0WTxAF2GJiqjg6GutIBSfahEFfMqiWTQijXTw617+F+89vkyh
+	 kLSlc2aCOzWg6Y2fvyY6aXSIO/Mj5iwJ2hFMcMDGicCrtFxyPLTx6ZeLSASwR5Czky
+	 QEnCS2JRwBBHVe3OgggeLHBpTfFLNr+hBsDLG2vfwdpuQms3gu9H9vXSs6slkRKjMm
+	 2Oa0Ubztz0KIQ==
+Message-ID: <b9625c60-2b1a-4890-a703-49e31aaaa168@kernel.org>
+Date: Wed, 1 Apr 2026 10:34:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-2146828000-2095840910-1775029265=:12688"
-X-Spam-Score: -3.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	CTYPE_MIXED_BOGUS(1.00)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.998];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+];
-	TO_DN_SOME(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
-X-Spam-Flag: NO
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
----2146828000-2095840910-1775029265=:12688
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] selftests/mm: skip hugetlb_dio tests when DIO
+ alignment is incompatible
+To: Li Wang <liwang@redhat.com>
+Cc: akpm@linux-foundation.org, rppt@kernel.org, ljs@kernel.org,
+ Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org, aubaker@redhat.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org
+References: <20260330125307.98581-1-liwang@redhat.com>
+ <96d14f27-ca0f-413d-8b61-768933ee70ba@kernel.org>
+ <acxpVd5hQUuGPQCF@redhat.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <acxpVd5hQUuGPQCF@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 
-On Tue, 31 Mar 2026, Marcos Paulo de Souza wrote:
-
-> On Mon, 2026-03-16 at 16:12 -0400, Joe Lawrence wrote:
-> > On Fri, Mar 13, 2026 at 05:58:32PM -0300, Marcos Paulo de Souza
-> > wrote:
-> > > Instead of checking if the architecture running the test was
-> > > powerpc,
-> > > check if CONF_ARCH_HAS_SYSCALL_WRAPPER is defined or not.
-> > > 
-> > > No functional changes.
-> > > 
-> > > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > > ---
-> > >  tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> > > | 7 +++----
-> > >  1 file changed, 3 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git
-> > > a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> > > b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> > > index dd802783ea849..c01a586866304 100644
-> > > ---
-> > > a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> > > +++
-> > > b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> > > @@ -12,15 +12,14 @@
-> > >  #include <linux/slab.h>
-> > >  #include <linux/livepatch.h>
-> > >  
-> > > -#if defined(__x86_64__)
-> > > +#if !defined(CONFIG_ARCH_HAS_SYSCALL_WRAPPER)
-> > > +#define FN_PREFIX
-> > > +#elif defined(__x86_64__)
-> > >  #define FN_PREFIX __x64_
-> > >  #elif defined(__s390x__)
-> > >  #define FN_PREFIX __s390x_
-> > >  #elif defined(__aarch64__)
-> > >  #define FN_PREFIX __arm64_
-> > > -#else
-> > > -/* powerpc does not select ARCH_HAS_SYSCALL_WRAPPER */
-> > > -#define FN_PREFIX
-> > 
-> > The patch does maintain the previous behavior, but I'm wondering if
-> > the
-> > original assertion about ARCH_HAS_SYSCALL_WRAPPER on Power was
-> > correct:
-> > 
-> >   $ grep ARCH_HAS_SYSCALL_WRAPPER arch/powerpc/Kconfig
-> >           select ARCH_HAS_SYSCALL_WRAPPER         if !SPU_BASE &&
-> > !COMPAT
-> >           depends on PPC64 && ARCH_HAS_SYSCALL_WRAPPER
-> > 
-> > Perhaps I just forgot what that additional piece of information that
-> > explains the comment (highly probable these days), and if so, might
-> > be
-> > nice to add to this commit since I don't see it in 6a71770442b5
-> > ("selftests: livepatch: Test livepatching a heavily called syscall").
+On 4/1/26 02:39, Li Wang wrote:
+>>> +static void run_test(int fd, unsigned int start_off,
+>>> +		     unsigned int end_off, unsigned int align)
+>>
+>> Nit: prefer to-tab alignment in MM land.
 > 
-> Looking again at the code and at the symbols for SLE for ppc64le, I can
-> say that, even with ARCH_HAS_SYSCALL_WRAPPER being set, the syscall
-> names are not changed for ppc64le. Looking at
-> arch/powerpc/kernel/systbl.c:
+> Yes, I noticed Andrew (thanks!) corrected it and added to -mm mm-new branch.
 > 
-> #ifdef CONFIG_ARCH_HAS_SYSCALL_WRAPPER
-> #define __SYSCALL(nr, entry) [nr] = entry,
-> #else
-> /*
->  * Coerce syscall handlers with arbitrary parameters to common type
->  * requires cast to void* to avoid -Wcast-function-type.
->  */
-> #define __SYSCALL(nr, entry) [nr] = (void *) entry,
-> #endif
+>>> +{
+>>> +	if (!check_dio_alignment(start_off, end_off, align))
+>>> +		return;
+>>
+>> Is there a reason we just perform that at the beginning of
+>> run_dio_using_hugetlb(), avoiding run_test() entirely?
+> 
+> That will make the run_dio_using_hugetlb() have too many args and
+> uncomfortable to read, yes, it's more likely personal preference.
 
-I think this is not the complete picture though. The definition of the 
-syscall table did not change but the actual wrappers (or syscall functions 
-naming before) did change a couple of times even on powerpc if I am 
-reading the git history right. ARCH_HAS_SYSCALL_WRAPPER also changed how 
-syscall parameters are consumed (from registers to stack frame (pt_regs)). 
-It is not particularly relevant for getpid() which is SYSCALL_DEFINE0() 
-but I wanted to point that out.
+Nah, just squash it. There is no need for this separate function, really.
 
-Miroslav
----2146828000-2095840910-1775029265=:12688--
+-- 
+Cheers,
+
+David
