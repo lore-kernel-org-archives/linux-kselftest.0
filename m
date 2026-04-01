@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1456142882D;
-	Wed,  1 Apr 2026 13:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5211943CEFC;
+	Wed,  1 Apr 2026 13:43:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775051023; cv=none; b=W/wXXZqcbAibC2v9XrGeGELWNi1+HJ4YiSHyB34rcfSWt5RjRP85ih47EpP/EMfaGx/2lSh1F3Z6PId5orG3aGZlVsNn+3haEZcGYWAPWbF/hRhMDxPhCAEQK0tQFa3HaW2Sw4lqumIzf/cLfaLdBNS6gv9DJr/c/pkgZu+HBcY=
+	t=1775051024; cv=none; b=YJHv889rIzjRsMZ9Sc6oAWnfbcYKzVBQGJUIzO3ioOKEihxOdlBye4uVc5OuSx63RPpmJ+beidm/U+N7hU/KF0UW6qngVBBtU55oecMFNtfF6H6J4cwCBJWitkJ0gXcXeKGq9zqLKoO1aPykmpU4Wcv4IPh4DLAn3iVQfMNm0IA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775051023; c=relaxed/simple;
-	bh=4SZZm3JhKyjaD020mKJyK6ARXZQzN7GM8LgawIblwbI=;
+	s=arc-20240116; t=1775051024; c=relaxed/simple;
+	bh=h2TewXUFQQoABq7Mcj2uXgEyBXVxKvWZj5vOBtLRV2k=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Wr84K5mvPKM74Q2WsF2f2IK66BDWyT1IABVs24eI1eq2XfmFsAgocELcarfG2Br5PonbBXyZLYWf8i41fVMDYWVZGTlQWmONy2rjBIFUhhv6t+qA88uHbqZoTJxSvcfSQMrlzDCyzDXkrcZaJwiPyuCzFBwM8dtlImKFQOKh63E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTxjZMUQ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=CTVsEgLu7IZH1YH3ZgzKAdvClSgwyuUW0eK/RzESf7gJC+zXAR5M654qkf65ROBgnZ2PDYidXMUp1aoDLvYH77/F41LoCXNLh+DYErMd2bhj2/XtaYb0dJTr3eTaB1J9xD1ZjFQlGYmMyYrGR6EUEaGbW1y76O+mDciPuh75JbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IT0kSFU7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTxjZMUQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EDAC2BCB3;
-	Wed,  1 Apr 2026 13:43:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IT0kSFU7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D8DC116C6;
+	Wed,  1 Apr 2026 13:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775051022;
-	bh=4SZZm3JhKyjaD020mKJyK6ARXZQzN7GM8LgawIblwbI=;
+	s=k20201202; t=1775051024;
+	bh=h2TewXUFQQoABq7Mcj2uXgEyBXVxKvWZj5vOBtLRV2k=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BTxjZMUQ/By1avzMYerZzBhGmd+fc96vfb17/1UtE5Yezn70n3f6KZ53RsHPMi/We
-	 uQDdLxGRNU8VNPNW/qpKSoWpk+XrlIJ/TnshTpgctWZMC+tPQddTXGq+X7JTUpRztP
-	 JO3WFFT31U+ZQ+mRgkAoIgkVVR0V35Zd6+Jl9p1qTBAO7WNpYRTj9NxJh8+ggbJU4g
-	 bOKrsMmkTA0Axq/TPk7F4q6GWkSW6GV3+kI6s4aPutbSMvgwznrybsi7tqnRjZ3LSH
-	 HygRc7oqBGU5nygSjqmu/QwFxYOR5ZrKC38GmLRQNWJuaHw1I4wrdwdo71s6vW3JW3
-	 kjADDEy/5YA1Q==
+	b=IT0kSFU7KN6VScYi/y2Iy6qWbxAQRenSY6Ulrm1cCBCH9whcctI76yfL74TwR6eFu
+	 X8mcFACsfdPQ+x47dEIfpA3LwTXb9NpQlK9IV8BIK74kTVoUVkIr9gN3BVzKVbFMC+
+	 4O/C+TPJPRqFcWyk2raq5vTkSNRGafBT9KsX6iLMckw4XpnVEB5H8BhKD894rHgvOS
+	 8jp0ldZ2PKFmODKH3vsQlsTf+pyLs8RjyRjGERHdstxVktgxBXiRlzJ0OZoTqLqgVS
+	 LgW+3pMYfQBvnSC67wPYPIxpqPn5GJGPyVjZhOhK1b1uqg0Ksowr+pTFSafdQpXljG
+	 2UnyD00UrNP3Q==
 From: Jeff Layton <jlayton@kernel.org>
-Date: Wed, 01 Apr 2026 09:43:27 -0400
-Subject: [PATCH v6 1/2] firmware_loader: add search_path= module option for
- multi-path firmware lookup
+Date: Wed, 01 Apr 2026 09:43:28 -0400
+Subject: [PATCH v6 2/2] selftests/firmware: add search path test for
+ firmware_class.search_path=
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260401-fw-path-v6-1-4ebe70441839@kernel.org>
+Message-Id: <20260401-fw-path-v6-2-4ebe70441839@kernel.org>
 References: <20260401-fw-path-v6-0-4ebe70441839@kernel.org>
 In-Reply-To: <20260401-fw-path-v6-0-4ebe70441839@kernel.org>
 To: Luis Chamberlain <mcgrof@kernel.org>, 
@@ -49,385 +49,284 @@ Cc: Michal Grzedzicki <mge@meta.com>, driver-core@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Jeff Layton <jlayton@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10423; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=4SZZm3JhKyjaD020mKJyK6ARXZQzN7GM8LgawIblwbI=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpzSEML1UzHIzqJdCRXmL0XTQOhBvJ1pBM8VKPd
- 5dZo7FOZLGJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCac0hDAAKCRAADmhBGVaC
- FV+kD/9DY6sX3GrAWML0dE2cP15w4kzmQHpnHc8/thSSQcHjnFnucXq70URq+jmKsKMJXn/eAZW
- L5pad6Zaqg6zu7adsF2BN2+4e8us4fvSeBNd3UVLssj/eg0HkpbrpmK9Ddwz6jR+sqqIyuTXs50
- i+8KTcIuDMn/Ymdig8guialQPHItvOJY43hwx57v42CwENrtyJLcqlHt44XypZAnhSuhLFnGChJ
- ncLZ2MfYnQTUM+Z2cwDOyJYB5rq4nzPdZozcRXY74bTb8oQEaW6y/y3padFQxojoiNYt5ZtYjG1
- 1ovHSgaXklMXlof4L94SKuGLs4+7HUamcc2sxzotRaz872OOzPfjsz+5znrQW0DyTltD6b7V0xg
- mV1p2O3TsBF2TaSbbDTf7sIrTl7AtxyPEyBtN2km5eWcHFPysm8Dty9FPPeAzbQ30RjL0CQzjAg
- v5jTaDjx62gPsSr1Jv2QZsUDh/idHgQ7WRCF43Ku7cQ0bj0hB8xp3HFNdYPwlc9pXatlCCk4CEo
- hAvMcTwyKqso67VNhwOm9JU1881993VWXpH34RwqokS54HMQigOzHlUB862z90fis6kB4ITTme6
- clldTJMt75/kzlJ1Wwvkra7f3LPkpjHRcmMcxMB2Hg9VAnu31BashBJjY50EIN13CSKhDiEey+l
- 3hFjt0Q+MCv6SXw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8738; i=jlayton@kernel.org;
+ h=from:subject:message-id; bh=h2TewXUFQQoABq7Mcj2uXgEyBXVxKvWZj5vOBtLRV2k=;
+ b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpzSEMjKW4fxN17my8115BZwXcHgtD6TQboZG08
+ ekhjl+I/3iJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCac0hDAAKCRAADmhBGVaC
+ FbgiD/9Anx+uuXq/swZP21KphdoVsfz8wm+Bb2ABCQdYXlVz28TsB7cYxXcxQypRlcZBd433NRJ
+ E1+aZaEj9QP0bn8WNA5HXOR2lgtzuQJXewNVMgogtOicXb8ylIlm/UCpLAfIJu208F9bOn46FtS
+ qqRkiOZUsISPPkGaLBOr8z3qYgk7STfFa6/lyWF8Rb7xkTTlXtvNrxA5nnLiB3Pbg8g3O/a7PyL
+ Hh2mtz/d5wMqYwzFJLOGhq13w1vEBbAP88btxiqnguS9gugkZWux+sLGRByJCU8EbMuNcZV54lI
+ tfVPcjQAydfqNIC+MW0ShwUVMO0KWipXfhFI0iWcfWjqxkhdyQMmdCQNMZV+/oRaAjabjjC0Yr0
+ trAVvUjHFD07tffzr10iQlc3veZ9E0ugyJOG5QZKiOGavekyDwccHi/L8dNVzvWO8OCDmNtaP5o
+ jpO31D4R8DLE34eXkCHLcmkRn2+zQyGcOQ+dL96pTLaoQL7lWb7sZJr8tZ33b3JBwMxUzFdOkbU
+ 8dn4Msr50rWrqzMwvk5EQsbiXxOyuABBTvfhzEGKWSi+mqEzZiK6zty6nmXgcGdrhSG1SAX5EUS
+ rZYFmTmsT1LnyrdelID75/ZAhDHMS8r3rxEegLnLQ3myso567o2ClwhOlLijpGSX7SiN/Ojd/oZ
+ 0fZmnoZzmsLRhmA==
 X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
  fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
 
-Refactor fw_get_filesystem_firmware() by extracting the per-path
-firmware loading logic into a new fw_try_firmware_path() helper.
+Add fw_search.sh, a new selftest that validates the firmware_class.search_path=
+module parameter using the existing test_firmware module's sysfs trigger
+interface.
 
-Add a new firmware_class.search_path= module option that accepts a
-':'-separated list of firmware search directories. The input is
-preprocessed at set time (boot or sysfs write) into a NUL-separated
-sequence of paths, avoiding per-load parsing overhead. Backslash
-escapes are supported: '\:' for literal ':', '\\' for literal '\'.
+The test covers:
+  - Firmware found in first/second/third search directory
+  - Firmware not found in any search path
+  - path= takes priority over search_path=
+  - Empty search_path= does not break firmware loading
+  - Sysfs readback matches what was written
+  - Escaped colon (\:) in directory name
+  - Escaped backslash (\\) in directory name
+  - Escaped colon combined with multiple search paths
 
-The firmware lookup order is:
-
-  1. firmware_class.path= (single legacy path)
-  2. firmware_class.search_path= (colon-separated paths)
-  3. Built-in default paths (/lib/firmware/updates/..., /lib/firmware)
-
-Example:
-
-  firmware_class.search_path=/custom/path1:/custom/path2
-
-Suggested-by: Michal Grzedzicki <mge@meta.com>
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- drivers/base/firmware_loader/main.c | 298 +++++++++++++++++++++++++++---------
- 1 file changed, 222 insertions(+), 76 deletions(-)
+ tools/testing/selftests/firmware/Makefile     |   2 +-
+ tools/testing/selftests/firmware/fw_search.sh | 222 ++++++++++++++++++++++++++
+ 2 files changed, 223 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index a11b30dda23be563bd55f25474ceff2153ddd667..06f9530b3eba22187f34416fcd00c1cab8c79291 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -469,8 +469,9 @@ static int fw_decompress_xz(struct device *dev, struct fw_priv *fw_priv,
+diff --git a/tools/testing/selftests/firmware/Makefile b/tools/testing/selftests/firmware/Makefile
+index 7992969deaa2737ff2a033ffe60136b84ea2f3f0..42e5bd72886b3cd8f62ae42d53c1554e8a1b331c 100644
+--- a/tools/testing/selftests/firmware/Makefile
++++ b/tools/testing/selftests/firmware/Makefile
+@@ -3,7 +3,7 @@
+ CFLAGS = -Wall \
+          -O2
  
- /* direct firmware loading support */
- static char fw_path_para[256];
-+static char fw_search_para[4096];
-+static int fw_search_len;
- static const char * const fw_path[] = {
--	fw_path_para,
- 	"/lib/firmware/updates/" UTS_RELEASE,
- 	"/lib/firmware/updates",
- 	"/lib/firmware/" UTS_RELEASE,
-@@ -485,6 +486,184 @@ static const char * const fw_path[] = {
- module_param_string(path, fw_path_para, sizeof(fw_path_para), 0644);
- MODULE_PARM_DESC(path, "customized firmware image search path with a higher priority than default path");
+-TEST_PROGS := fw_run_tests.sh
++TEST_PROGS := fw_run_tests.sh fw_search.sh
+ TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_upload.sh fw_lib.sh
+ TEST_GEN_FILES := fw_namespace
  
-+/*
-+ * fw_search_unescape - copy src to dst, processing backslash escapes
-+ *
-+ * Handles '\:' (literal ':') and '\\' (literal '\'). Returns the number
-+ * of bytes written (not counting the trailing NUL).
-+ */
-+static int fw_search_unescape(char *dst, int dst_size, const char *src, int src_len)
+diff --git a/tools/testing/selftests/firmware/fw_search.sh b/tools/testing/selftests/firmware/fw_search.sh
+new file mode 100755
+index 0000000000000000000000000000000000000000..19a23284c31104c3bad3044a910c50aa71a2a766
+--- /dev/null
++++ b/tools/testing/selftests/firmware/fw_search.sh
+@@ -0,0 +1,222 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test the firmware_class.search_path= module parameter, which allows
++# specifying multiple colon-separated firmware search directories.
++
++set -e
++
++TEST_REQS_FW_SYSFS_FALLBACK="no"
++TEST_REQS_FW_SET_CUSTOM_PATH="no"
++TEST_DIR=$(dirname $0)
++source $TEST_DIR/fw_lib.sh
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++SEARCH_SYSFS="/sys/module/firmware_class/parameters/search_path"
++PATH_SYSFS="/sys/module/firmware_class/parameters/path"
++
++check_mods
++check_setup
++verify_reqs
++
++if [ ! -f "$SEARCH_SYSFS" ]; then
++	echo "$0: search_path= parameter not available, skipping"
++	exit $ksft_skip
++fi
++
++# Save original values
++OLD_SEARCH="$(cat $SEARCH_SYSFS)"
++OLD_PATH="$(cat $PATH_SYSFS)"
++
++# Create temp directories for firmware
++FWDIR1=$(mktemp -d)
++FWDIR2=$(mktemp -d)
++FWDIR3=$(mktemp -d)
++
++FW_NAME="test-search-fw.bin"
++FW_CONTENT1="SEARCH_PATH_1"
++FW_CONTENT2="SEARCH_PATH_2"
++FW_CONTENT3="SEARCH_PATH_3"
++
++DIR=/sys/devices/virtual/misc/test_firmware
++
++cleanup()
 +{
-+	int i, len = 0;
-+
-+	for (i = 0; i < src_len && len < dst_size - 1; i++) {
-+		if (src[i] == '\\' && i + 1 < src_len &&
-+		    (src[i + 1] == ':' || src[i + 1] == '\\'))
-+			i++;
-+		dst[len++] = src[i];
-+	}
-+	dst[len] = '\0';
-+	return len;
++	# Restore original values
++	if [ "$OLD_PATH" = "" ]; then
++		printf '\000' >$PATH_SYSFS
++	else
++		echo -n "$OLD_PATH" >$PATH_SYSFS
++	fi
++	if [ "$OLD_SEARCH" = "" ]; then
++		printf '\000' >$SEARCH_SYSFS
++	else
++		echo -n "$OLD_SEARCH" >$SEARCH_SYSFS
++	fi
++	rm -rf "$FWDIR1" "$FWDIR2" "$FWDIR3"
 +}
++trap cleanup EXIT
 +
-+/*
-+ * fw_search_set - preprocess a colon-separated search path string
-+ *
-+ * Converts the input into a NUL-separated sequence of paths stored in
-+ * fw_search_para, with fw_search_len tracking the total used length.
-+ * Backslash escapes '\:' (literal ':') and '\\' (literal '\').
-+ * Trailing newlines on each component are stripped.
-+ */
-+static int fw_search_set(const char *val, const struct kernel_param *kp)
-+{
-+	int len = 0;
++# Clear path= so search_path= is consulted
++printf '\000' >$PATH_SYSFS
 +
-+	if (!val) {
-+		fw_search_para[0] = '\0';
-+		fw_search_len = 0;
-+		return 0;
-+	}
++# Test 1: firmware found in first search path
++echo -n "$FW_CONTENT1" >"$FWDIR1/$FW_NAME"
++echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
 +
-+	while (*val) {
-+		const char *sep;
-+		int comp_len, remaining;
++if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
++	echo "$0: FAIL - could not trigger request for test 1" >&2
++	exit 1
++fi
++if ! diff -q "$FWDIR1/$FW_NAME" /dev/test_firmware >/dev/null; then
++	echo "$0: FAIL - firmware content mismatch in test 1" >&2
++	exit 1
++fi
++echo "$0: search path - first directory: OK"
 +
-+		/* find the next unescaped ':' or end of string */
-+		for (sep = val; *sep; sep++) {
-+			if (*sep == '\\' && (sep[1] == ':' || sep[1] == '\\'))
-+				sep++;
-+			else if (*sep == ':')
-+				break;
-+		}
++# Test 2: firmware found in second search path (not in first)
++rm -f "$FWDIR1/$FW_NAME"
++echo -n "$FW_CONTENT2" >"$FWDIR2/$FW_NAME"
++echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
 +
-+		remaining = sizeof(fw_search_para) - len - 1;
-+		comp_len = fw_search_unescape(fw_search_para + len, remaining,
-+					       val, sep - val);
++if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
++	echo "$0: FAIL - could not trigger request for test 2" >&2
++	exit 1
++fi
++if ! diff -q "$FWDIR2/$FW_NAME" /dev/test_firmware >/dev/null; then
++	echo "$0: FAIL - firmware content mismatch in test 2" >&2
++	exit 1
++fi
++echo "$0: search path - second directory: OK"
 +
-+		/* strip trailing newline */
-+		if (comp_len > 0 && fw_search_para[len + comp_len - 1] == '\n')
-+			comp_len--;
++# Test 3: firmware not found in any search path
++rm -f "$FWDIR2/$FW_NAME"
++echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
 +
-+		/* only record non-empty components */
-+		if (comp_len > 0) {
-+			len += comp_len;
-+			fw_search_para[len++] = '\0';
-+		}
++if echo -n "nonexistent-$FW_NAME" >$DIR/trigger_request 2>/dev/null; then
++	echo "$0: FAIL - firmware should not have been found in test 3" >&2
++	exit 1
++fi
++echo "$0: search path - not found: OK"
 +
-+		val = *sep ? sep + 1 : sep;
-+	}
++# Test 4: path= takes priority over search_path=
++echo -n "$FW_CONTENT1" >"$FWDIR1/$FW_NAME"
++echo -n "$FW_CONTENT2" >"$FWDIR2/$FW_NAME"
++echo -n "$FWDIR1" >$PATH_SYSFS
++echo -n "$FWDIR2" >$SEARCH_SYSFS
 +
-+	/* ensure NUL termination even when empty */
-+	fw_search_para[len] = '\0';
-+	fw_search_len = len;
++if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
++	echo "$0: FAIL - could not trigger request for test 4" >&2
++	exit 1
++fi
++if ! diff -q "$FWDIR1/$FW_NAME" /dev/test_firmware >/dev/null; then
++	echo "$0: FAIL - path= should take priority over search_path= in test 4" >&2
++	exit 1
++fi
++echo "$0: search path - path= priority over search_path=: OK"
 +
-+	return 0;
-+}
++# Clear path= again for remaining tests
++printf '\000' >$PATH_SYSFS
 +
-+/*
-+ * fw_search_get - reconstruct colon-separated string for sysfs reads
-+ */
-+static int fw_search_get(char *buffer, const struct kernel_param *kp)
-+{
-+	const char *p;
-+	int pos = 0;
++# Test 5: three search paths, firmware in third
++rm -f "$FWDIR1/$FW_NAME" "$FWDIR2/$FW_NAME"
++echo -n "$FW_CONTENT3" >"$FWDIR3/$FW_NAME"
++echo -n "$FWDIR1:$FWDIR2:$FWDIR3" >$SEARCH_SYSFS
 +
-+	p = fw_search_para;
-+	while (p < fw_search_para + fw_search_len) {
-+		int slen = strlen(p);
++if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
++	echo "$0: FAIL - could not trigger request for test 5" >&2
++	exit 1
++fi
++if ! diff -q "$FWDIR3/$FW_NAME" /dev/test_firmware >/dev/null; then
++	echo "$0: FAIL - firmware content mismatch in test 5" >&2
++	exit 1
++fi
++echo "$0: search path - third directory: OK"
 +
-+		if (!slen)
-+			break;
-+		if (pos > 0)
-+			buffer[pos++] = ':';
-+		memcpy(buffer + pos, p, slen);
-+		pos += slen;
-+		p += slen + 1;
-+	}
-+	buffer[pos] = '\0';
-+	return pos;
-+}
++# Test 6: empty search_path= should not break anything
++rm -f "$FWDIR3/$FW_NAME"
++printf '\000' >$SEARCH_SYSFS
 +
-+static const struct kernel_param_ops fw_search_ops = {
-+	.set = fw_search_set,
-+	.get = fw_search_get,
-+};
-+module_param_cb(search_path, &fw_search_ops, NULL, 0644);
-+MODULE_PARM_DESC(search_path, "colon-separated list of firmware search paths, tried after path= (use '\\:' for literal ':', '\\\\' for literal '\\')");
++if echo -n "nonexistent-$FW_NAME" >$DIR/trigger_request 2>/dev/null; then
++	echo "$0: FAIL - empty search_path= should not find firmware" >&2
++	exit 1
++fi
++echo "$0: search path - empty search_path=: OK"
 +
-+static int
-+fw_try_firmware_path(struct device *device, struct fw_priv *fw_priv,
-+		     const char *suffix,
-+		     int (*decompress)(struct device *dev,
-+				       struct fw_priv *fw_priv,
-+				       size_t in_size,
-+				       const void *in_buffer),
-+		     const char *dir, int dirlen,
-+		     char *path, void **bufp, size_t msize)
-+{
-+	size_t file_size = 0;
-+	size_t *file_size_ptr = NULL;
-+	size_t size;
-+	int len, rc;
++# Test 7: verify sysfs readback matches what was written
++echo -n "$FWDIR1:$FWDIR2:$FWDIR3" >$SEARCH_SYSFS
++READBACK="$(cat $SEARCH_SYSFS)"
++EXPECTED="$FWDIR1:$FWDIR2:$FWDIR3"
++if [ "$READBACK" != "$EXPECTED" ]; then
++	echo "$0: FAIL - sysfs readback mismatch: '$READBACK' != '$EXPECTED'" >&2
++	exit 1
++fi
++echo "$0: search path - sysfs readback: OK"
 +
-+	len = snprintf(path, PATH_MAX, "%.*s/%s%s",
-+		       dirlen, dir, fw_priv->fw_name, suffix);
-+	if (len >= PATH_MAX)
-+		return -ENAMETOOLONG;
++# Test 8: escaped colon in directory name (\: -> literal ':')
++FWDIR_COLON=$(mktemp -d)/fw:dir
++mkdir -p "$FWDIR_COLON"
++echo -n "$FW_CONTENT1" >"$FWDIR_COLON/$FW_NAME"
++# Write the path with the colon escaped as \:
++ESCAPED_COLON="${FWDIR_COLON//:/\\:}"
++echo -n "$ESCAPED_COLON" >$SEARCH_SYSFS
 +
-+	fw_priv->size = 0;
++if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
++	echo "$0: FAIL - could not trigger request for test 8" >&2
++	rm -rf "$(dirname "$FWDIR_COLON")"
++	exit 1
++fi
++if ! diff -q "$FWDIR_COLON/$FW_NAME" /dev/test_firmware >/dev/null; then
++	echo "$0: FAIL - firmware content mismatch in test 8" >&2
++	rm -rf "$(dirname "$FWDIR_COLON")"
++	exit 1
++fi
++rm -rf "$(dirname "$FWDIR_COLON")"
++echo "$0: search path - escaped colon in directory: OK"
 +
-+	/*
-+	 * The total file size is only examined when doing a partial
-+	 * read; the "full read" case needs to fail if the whole
-+	 * firmware was not completely loaded.
-+	 */
-+	if ((fw_priv->opt_flags & FW_OPT_PARTIAL) && *bufp)
-+		file_size_ptr = &file_size;
++# Test 9: escaped backslash in directory name (\\ -> literal '\')
++FWDIR_BS=$(mktemp -d)/fw\\dir
++mkdir -p "$FWDIR_BS"
++echo -n "$FW_CONTENT2" >"$FWDIR_BS/$FW_NAME"
++# Write the path with backslashes escaped as \\
++ESCAPED_BS="${FWDIR_BS//\\/\\\\}"
++echo -n "$ESCAPED_BS" >$SEARCH_SYSFS
 +
-+	/* load firmware files from the mount namespace of init */
-+	rc = kernel_read_file_from_path_initns(path, fw_priv->offset,
-+					       bufp, msize,
-+					       file_size_ptr,
-+					       READING_FIRMWARE);
-+	if (rc < 0) {
-+		if (!(fw_priv->opt_flags & FW_OPT_NO_WARN)) {
-+			if (rc != -ENOENT)
-+				dev_warn(device,
-+					 "loading %s failed with error %d\n",
-+					 path, rc);
-+			else
-+				dev_dbg(device,
-+					"loading %s failed for no such file or directory.\n",
-+					path);
-+		}
-+		return rc;
-+	}
-+	size = rc;
++if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
++	echo "$0: FAIL - could not trigger request for test 9" >&2
++	rm -rf "$(dirname "$FWDIR_BS")"
++	exit 1
++fi
++if ! diff -q "$FWDIR_BS/$FW_NAME" /dev/test_firmware >/dev/null; then
++	echo "$0: FAIL - firmware content mismatch in test 9" >&2
++	rm -rf "$(dirname "$FWDIR_BS")"
++	exit 1
++fi
++rm -rf "$(dirname "$FWDIR_BS")"
++echo "$0: search path - escaped backslash in directory: OK"
 +
-+	dev_dbg(device, "Loading firmware from %s\n", path);
-+	if (decompress) {
-+		dev_dbg(device, "f/w decompressing %s\n",
-+			fw_priv->fw_name);
-+		rc = decompress(device, fw_priv, size, *bufp);
-+		/* discard the superfluous original content */
-+		vfree(*bufp);
-+		*bufp = NULL;
-+		if (rc) {
-+			fw_free_paged_buf(fw_priv);
-+			return rc;
-+		}
-+	} else {
-+		dev_dbg(device, "direct-loading %s\n",
-+			fw_priv->fw_name);
-+		if (!fw_priv->data)
-+			fw_priv->data = *bufp;
-+		fw_priv->size = size;
-+	}
-+	fw_state_done(fw_priv);
-+	return 0;
-+}
++# Test 10: escaped colon with multiple search paths
++FWDIR_COLON2=$(mktemp -d)/has:colon
++mkdir -p "$FWDIR_COLON2"
++echo -n "$FW_CONTENT3" >"$FWDIR_COLON2/$FW_NAME"
++ESCAPED_COLON2="${FWDIR_COLON2//:/\\:}"
++# First path is normal (no firmware), second has escaped colon (has firmware)
++echo -n "$FWDIR1:$ESCAPED_COLON2" >$SEARCH_SYSFS
 +
- static int
- fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 			   const char *suffix,
-@@ -493,10 +672,9 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 					     size_t in_size,
- 					     const void *in_buffer))
- {
--	size_t size;
--	int i, len, maxlen = 0;
-+	int i;
- 	int rc = -ENOENT;
--	char *path, *nt = NULL;
-+	char *path;
- 	size_t msize = INT_MAX;
- 	void *buffer = NULL;
- 
-@@ -511,83 +689,51 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 		return -ENOMEM;
- 
- 	wait_for_initramfs();
--	for (i = 0; i < ARRAY_SIZE(fw_path); i++) {
--		size_t file_size = 0;
--		size_t *file_size_ptr = NULL;
--
--		/* skip the unset customized path */
--		if (!fw_path[i][0])
--			continue;
--
--		/* strip off \n from customized path */
--		maxlen = strlen(fw_path[i]);
--		if (i == 0) {
--			nt = strchr(fw_path[i], '\n');
--			if (nt)
--				maxlen = nt - fw_path[i];
--		}
- 
--		len = snprintf(path, PATH_MAX, "%.*s/%s%s",
--			       maxlen, fw_path[i],
--			       fw_priv->fw_name, suffix);
--		if (len >= PATH_MAX) {
--			rc = -ENAMETOOLONG;
--			break;
--		}
-+	/* Try the customized path first */
-+	if (fw_path_para[0]) {
-+		int dirlen = strlen(fw_path_para);
- 
--		fw_priv->size = 0;
-+		/* strip trailing newline */
-+		if (fw_path_para[dirlen - 1] == '\n')
-+			dirlen--;
- 
--		/*
--		 * The total file size is only examined when doing a partial
--		 * read; the "full read" case needs to fail if the whole
--		 * firmware was not completely loaded.
--		 */
--		if ((fw_priv->opt_flags & FW_OPT_PARTIAL) && buffer)
--			file_size_ptr = &file_size;
--
--		/* load firmware files from the mount namespace of init */
--		rc = kernel_read_file_from_path_initns(path, fw_priv->offset,
--						       &buffer, msize,
--						       file_size_ptr,
--						       READING_FIRMWARE);
--		if (rc < 0) {
--			if (!(fw_priv->opt_flags & FW_OPT_NO_WARN)) {
--				if (rc != -ENOENT)
--					dev_warn(device,
--						 "loading %s failed with error %d\n",
--						 path, rc);
--				else
--					dev_dbg(device,
--						"loading %s failed for no such file or directory.\n",
--						path);
--			}
--			continue;
--		}
--		size = rc;
--		rc = 0;
--
--		dev_dbg(device, "Loading firmware from %s\n", path);
--		if (decompress) {
--			dev_dbg(device, "f/w decompressing %s\n",
--				fw_priv->fw_name);
--			rc = decompress(device, fw_priv, size, buffer);
--			/* discard the superfluous original content */
--			vfree(buffer);
--			buffer = NULL;
--			if (rc) {
--				fw_free_paged_buf(fw_priv);
--				continue;
--			}
--		} else {
--			dev_dbg(device, "direct-loading %s\n",
--				fw_priv->fw_name);
--			if (!fw_priv->data)
--				fw_priv->data = buffer;
--			fw_priv->size = size;
-+		rc = fw_try_firmware_path(device, fw_priv, suffix, decompress,
-+					  fw_path_para, dirlen,
-+					  path, &buffer, msize);
-+		if (!rc)
-+			goto done;
-+	}
++if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
++	echo "$0: FAIL - could not trigger request for test 10" >&2
++	rm -rf "$(dirname "$FWDIR_COLON2")"
++	exit 1
++fi
++if ! diff -q "$FWDIR_COLON2/$FW_NAME" /dev/test_firmware >/dev/null; then
++	echo "$0: FAIL - firmware content mismatch in test 10" >&2
++	rm -rf "$(dirname "$FWDIR_COLON2")"
++	exit 1
++fi
++rm -rf "$(dirname "$FWDIR_COLON2")"
++echo "$0: search path - escaped colon with multiple paths: OK"
 +
-+	/* Try each preprocessed NUL-separated path in fw_search_para */
-+	if (fw_search_len > 0) {
-+		const char *p = fw_search_para;
-+
-+		while (p < fw_search_para + fw_search_len) {
-+			int dirlen = strlen(p);
-+
-+			if (!dirlen)
-+				break;
-+			rc = fw_try_firmware_path(device, fw_priv,
-+						  suffix, decompress,
-+						  p, dirlen,
-+						  path, &buffer, msize);
-+			if (!rc)
-+				goto done;
-+			p += dirlen + 1;
- 		}
--		fw_state_done(fw_priv);
--		break;
- 	}
-+
-+	/* Try default firmware paths */
-+	for (i = 0; i < ARRAY_SIZE(fw_path); i++) {
-+		rc = fw_try_firmware_path(device, fw_priv, suffix, decompress,
-+					  fw_path[i], strlen(fw_path[i]),
-+					  path, &buffer, msize);
-+		if (!rc)
-+			break;
-+	}
-+
-+done:
- 	__putname(path);
- 
- 	return rc;
++echo "$0: all search path tests passed"
++exit 0
 
 -- 
 2.53.0
