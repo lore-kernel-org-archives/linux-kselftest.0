@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51762C21D8;
-	Wed,  1 Apr 2026 14:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA232DB7A3;
+	Wed,  1 Apr 2026 14:06:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775052334; cv=none; b=MZP8iHx+69wy6hqN8a1gIyHtoZpS2+dabG+xT5El6dpWooX8bhWTYlU4XaGXGzDGbe4akxcdO9Fdfkrpke34EFXF/+QHtxard++MbQykvZCTkHhSVfdYgsjkyDnttW4qkl+ZD2CRMWAcvZ/n+mRnn2XCSI+s2ab80oCJSdJ5d6Y=
+	t=1775052392; cv=none; b=u44kWBN08tETle9SBiDuvEdWR69kMob18rUYxWjafChU5e0alAC/sRvOxvs6qNauwWpumshyaujBMB+U31pmtd1hZPj8dfWCTSpOTvxVNgl4ECbY1KpBn/V6QrP+69+VblWk3sHJsOvnbfDo189UZitRviE5ubl9cfZP8rgjcjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775052334; c=relaxed/simple;
-	bh=18eng7a3PN7FjoM6NdQpFNVTtE1OZpCZ4zH2G0dIZ+o=;
+	s=arc-20240116; t=1775052392; c=relaxed/simple;
+	bh=cxVnBzqdjqFWTZAgsZ5um3GJjilJSoMxDnvtKIE779o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HTVIQP1Z3SEGK34XtgTSx7tDCOWCI5oW2UVfmPJVtX1aDfIoGf96YH+wos9E8IsdTQ1QgpTntqObNSlndFEejX1ld9CX8YEMtedIhhETI12+sH7W2ggC0dP4XEgBfHvjhfrdp6HfHURs+1Co2fhCOb2as84CRVnaotsCVW4+jrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=okgej+9y; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=Qb4LTcU3qjjEBJHWkEmHD9PW4m5snztH47a1uopx7F2R31YnF5QuQ639v2u8XAYrbhuDOqyU/4uCqPE3VFxhBr4IxP4bMxs2VFdSbiUWa0PEZ2yZb8RTwXbXC18dHNp6b3+Wex2XiJDA0e0ubPvAyiY/mTPTou/Twd0hwU5cE3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rfcqm4bj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="okgej+9y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A9A4C4CEF7;
-	Wed,  1 Apr 2026 14:05:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rfcqm4bj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BEFC4CEF7;
+	Wed,  1 Apr 2026 14:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775052334;
-	bh=18eng7a3PN7FjoM6NdQpFNVTtE1OZpCZ4zH2G0dIZ+o=;
+	s=k20201202; t=1775052391;
+	bh=cxVnBzqdjqFWTZAgsZ5um3GJjilJSoMxDnvtKIE779o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=okgej+9yHEHuMp5ikbtmmnewWHiF7KMMZ4fM8OVjC8xqDnhI0DkQosCa2KAIvYo29
-	 pHkodWFZQ5ir9UOmI3Dj3wNHtFn/l3E5JgiM229RpZuVfYkdRYCO0mXrWpRScT7OU0
-	 eCb5drED+kOCKwubCdvl8PjwMbYHqOXezSm8p6+PuKf60TsitaPP0NtmPzXEiupv88
-	 qLL7xbEGPMIbdVAoMUNV5IugM+UjCPHp9kq4RMsVMgMSq7ihVTY2ICGerKo3GB2UMn
-	 kxCwgbRlSHxIi7yJgYwylVsITdutYEs8dsZZdstaqrLM8DWIdzXNMASwTD2i5kGmmp
-	 NFKD2rRZk/mCA==
-Message-ID: <7bc24281-8676-481b-8c61-1c5cb71068f3@kernel.org>
-Date: Wed, 1 Apr 2026 16:05:28 +0200
+	b=Rfcqm4bj/SYJzxPuxmgocTdUVdfpmEg/yKOuHcPtzZVp2bMAq8xAF5bgIXDyM2MHm
+	 7KBDBReICSpNTUhShYwpQWkVaoZJAVBKMsQe4MwT88U6rXFBygwZUu1iCVG2/tOVPe
+	 jPA54OIonFN9Q+YD06EL+0yejAZC8e7BzbHMQb6HEookQ799RrNNgJOesXHEzMG2qI
+	 RUTkU+e3CQMJABxd9HoKhURbhVLlyBY4P7m742XTuPI+E3Vr6/1RAzOEomVvf1KiMr
+	 HIwpalNO03k+QDegeJsYIm9l9SdaopRMNM1Ry1J8iF9v+MO7PTIutWe5orWFpeFkIL
+	 3+TAiAhoeGJDw==
+Message-ID: <30ab15c5-56c3-4855-914f-74ece8ac5ec5@kernel.org>
+Date: Wed, 1 Apr 2026 16:06:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,20 +35,19 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/13] selftests/mm: fix failures and robustness
- improvements
-To: Andrew Morton <akpm@linux-foundation.org>,
- Sayali Patil <sayalip@linux.ibm.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Ritesh Harjani <ritesh.list@gmail.com>, Zi Yan <ziy@nvidia.com>,
- Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+Subject: Re: [PATCH v3 02/13] selftests/mm: fix hugetlb pathname construction
+ in charge_reserved_hugetlb.sh
+To: Sayali Patil <sayalip@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
+ Oscar Salvador <osalvador@suse.de>,
  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
- Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org
+ Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
+ Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <20260327111104.b8bc18be45172639f5b9226f@linux-foundation.org>
- <09104413-483f-4852-9d7e-71e0f86a1754@linux.ibm.com>
- <20260330151125.d0b6cbb24b273bc963b05116@linux-foundation.org>
+ <705e68507c9a0d20de835d53dd332eeda7dee772.1774591179.git.sayalip@linux.ibm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -95,38 +94,36 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260330151125.d0b6cbb24b273bc963b05116@linux-foundation.org>
+In-Reply-To: <705e68507c9a0d20de835d53dd332eeda7dee772.1774591179.git.sayalip@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/31/26 00:11, Andrew Morton wrote:
-> On Mon, 30 Mar 2026 11:27:04 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
+On 3/27/26 08:15, Sayali Patil wrote:
+> The charge_reserved_hugetlb.sh script assumes hugetlb cgroup memory
+> interface file names use the "<size>MB" format
+> (e.g. hugetlb.1024MB.current).
+> This assumption breaks on systems with larger huge pages such as 1GB,
+> where the kernel exposes normalized units:
+>     hugetlb.1GB.current
+>     hugetlb.1GB.max
+>     hugetlb.1GB.rsvd.max
+>     ...
 > 
->>> I don't want to risk breaking selftests so I'll set v3 aside until
->>> you're confident we should proceed.
->>>
->>> Thanks.
->>
->> This line continuation pattern has been used in selftests for quite some 
->> time. For example, a similar usage exists in 
->> |charge_reserved_hugetlb.sh|, introduced here:
->> https://lore.kernel.org/all/20200211213128.73302-8-almasrymina@google.com/T/#u
->> <https://lore.kernel.org/all/20200211213128.73302-8-almasrymina@google.com/T/#u>
->>
->>   echo "$reservation_limit" > \
->>      $cgroup_path/$name/hugetlb.${MB}MB.$reservation_limit_file
->>
->> In this case, it was primarily used to keep line length within 100 
->> characters. I’ve tested the script  and it behaved as expected.
+> As a result, the script attempts to access files like
+> hugetlb.1024MB.current, which do not exist when the kernel reports the
+> size in GB.
 > 
-> Great, thanks for checking.
+> Normalize the huge page size and construct the pathname using the
+> appropriate unit (MB or GB), matching the hugetlb controller naming.
 > 
-> Series is nicely reviewed and an earlier version spent time in mm.git. 
-> And the bar tends to be lower for selftests.  So I *could* break my rule
-> (https://lkml.kernel.org/r/20260323202941.08ddf2b0411501cae801ab4c@linux-foundation.org)
-> but would prefer not.  What do others think?
+> Fixes: 209376ed2a84 ("selftests/vm: make charge_reserved_hugetlb.sh work with existing cgroup setting")
+> Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+> ---
 
-I guess it doesn't really hurt to take this now.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
