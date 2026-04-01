@@ -1,127 +1,116 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B2F224B1E
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 01:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9531991CB;
+	Wed,  1 Apr 2026 01:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775005516; cv=none; b=u7kGj5cg7ASCQBtwB+Es4IJErFxEk0hESaUkuR9V4Jnps/bhtmbKzeflM5AnDI/p5CQNvLuH8BpM3FDDg4RBtLEfZHmBLTqYuRbcdwrmMgHKOP5s9uX7UlljA/9xUboHpS+8mSOHSiRAvSUW0vXoFPVzR1B3T3fp6jYSMxyyIBE=
+	t=1775005928; cv=none; b=Vm/fuyWmLqB6bhu9gmuhPZAaWrOohKd0qQDrJznkPS6ILr2nt+JWLsoWBl7lvu5g1Em/O7E3WZk3FsY5j4GLa/LCNBNPiSHGabxkhvUwJpqAQ+6Z2E1J8o64lum109Eu+I19zYfHTleiKqy2It1msq1+zsyS0FwAAILF5yXTTF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775005516; c=relaxed/simple;
-	bh=CPNTE8tzCVGAOF9o8mcrIX6f6heRWkwKn0jZAUVBrzk=;
+	s=arc-20240116; t=1775005928; c=relaxed/simple;
+	bh=TcBCyXx/bxrQNvQ7d2lJlDlmlHvgc6pYGr37ptCyNlY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JEvAqpv/1wYzXBp5slTGPC8AKwuS1V+VCyjcpZ+xw3GUqZICBI/nfMEnUvGWoDg+H6Q9ggXRTPYLpeSFTVSRVkylGaONlg7IXAbEM4w9Oa4Vmp4p6QZFWd4Wvm/taCcKT01ES5jcTmFMSynTJv+oksQUSJCgBFL7yElrAxmGsaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pNZJEJjb; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=nGtq5SWvYNn+UKLjkfkzxOpvDa6g8rgYapAV5yBoaJziQIS8NQcgHLbt+S9e3ANAzykImX8vQICemKbbyHpgVLs5+7X+HUeEPC/2FrxXQaNP4eD0Z7eUn600ajj6hoJoIUwlJ7oBX6GtjaVVOTtu9tbY6GSX0t1PdZfE5MyqfCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=erTkxrwx; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pNZJEJjb"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35d9827661bso1931419a91.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2026 18:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775005515; x=1775610315; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7z1thZP8yYGMiKbnDNmtSPLqeR+cQiCFdf1/ng8Yk70=;
-        b=pNZJEJjbrH3rGiXc+ByNjP0fJerKZbdQqmacId6VzwU0f50yW8jOmDzXecE0oLiRtG
-         KDQsmTC7futfk3D9FmWUp4is0/zKIHlg17lL4oJHYkPms976XUYb25sibjzPH94HHtDu
-         mplQqB4hTA1d7Xol9x3NZCAlMqLD6xpzZPMT/d8ss1qZsQn1nnlv60qVhSWD3/X+kUmo
-         DRBUiCnZSQ2hj75Nu98lTMwVfvGMg95f+QRpX8mKy8vEqk5S58yaIjgSotQXtofrNTGW
-         FUfWbonLy2U5aT6WK8T5TyfNqboxINsMsRyJYmKA+HDVAy7JT1ZN6tf9pzeNas+KpI6z
-         0v6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775005515; x=1775610315;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7z1thZP8yYGMiKbnDNmtSPLqeR+cQiCFdf1/ng8Yk70=;
-        b=h4at6TkC0zVGn7VtistRSTcQckzBxlaOyMGlhdFV0hDpI/hm42SwtESVWHh63LBfTk
-         5L3esOeGQtmie1FgyNR3Irpu5PL9hLccDBPdtdLJAvaKX6QPlhMx6/q2z2RxN9k7JvVj
-         gqLSHGi1NspUPMKTybTTtysdjTspAuxNAVU1QY7zLiXmtF975oyE8ij7TWfzaWRbjELP
-         HREOpWJyticfrwSWkIVScghL7JiXplAiYYkLTvmS048XgomdkDjXgNiTqn+U36cSBrUu
-         6k6u7Dfg3MOjPUQtzWaHkeq+95zVYoDw8kQZWb4pmZWjsyJSHtqDFMh/dT2VWdUGHcq4
-         3U9w==
-X-Gm-Message-State: AOJu0Yy007guRPEi5VCdFOLfrW3eyZ3Y99lUGxRBnOfFRYThOZGakiaJ
-	L8QW1Ji/pp/7zjoaiF9LM5I8DGhha2q84j2s9Uugi5NWgN3gduGSxYrM
-X-Gm-Gg: ATEYQzznntQLsgVOk3OR+MkH9deVgNJGq2U2uvY7uuki8dThexiEYUlfKqL8X2oa213
-	k3gM+RYCHwNTI0qaJX7BsdUTkWM0jZQMBs4FklJyAkVp6b9fwfasKtbEV7SA2G8TzBd61xGd0Yk
-	9mQt8t+o6YW+EH1PqM66lm2qKCQbwNoP+nGQ1KXr6Me5FzNWP0Gzgt4dVL3UR09/QyfMyjxG+L8
-	TsA8CHGQPGe6JU0uxXZSm7h/6f6s5A/nqWih9otf+zEnGH1OM8RlKBLNSnHUq42BKziUs0/5A4A
-	H3k280cLSC13h8gEX4VXAy5Yug1EHAhjUcHZ2FPMyrLzlqMhkMWUSMP3KaAthdVRL7NipvH+jZv
-	RKO0O3Yd19SXaSU3R5zqOiZw8GRbiZFHTTRfojG95QHMiCkF/Tm+ElDZkmqpwDpUZADZrw5zQRr
-	SNOJuTFPMDyNWJLQ1D/scZgcJ6xdY=
-X-Received: by 2002:a17:90b:57c6:b0:35d:a542:2dcb with SMTP id 98e67ed59e1d1-35dc6fae2ecmr1289781a91.16.1775005514806;
-        Tue, 31 Mar 2026 18:05:14 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe5e4ba7sm2824076a91.4.2026.03.31.18.05.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 18:05:13 -0700 (PDT)
-Date: Wed, 1 Apr 2026 01:05:04 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="erTkxrwx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775005926; x=1806541926;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TcBCyXx/bxrQNvQ7d2lJlDlmlHvgc6pYGr37ptCyNlY=;
+  b=erTkxrwxOjS26qdfaR6T4wCiHSa3QCUBJ2oHlQmV5rj0jPVYzAhDHBBS
+   lwTUUki1boVkovKwnB4py8ppWzgUt9K8Ph4VRkqZWh3aTlQHfDgC69gnM
+   AF+no4qP3YUA/XKy4bxghekCof1G/72MsHil25ouHDisoCYh0RPNwgcmO
+   lF282gn0dWHXivNSxGCjnAg2TOWCRok6ONPI/3zqgugEiA8gFK7LwAwsK
+   9ODu6iSvGg+hkk27VNNM0xoDtKoMpq7jMK2y1r73ESJbh9qRkNGIOt3sh
+   PfQKlMf/kJCHygTBa7bdXHRxXwnOy4uDXSNP7hktgC6SNPJnjKh+yrSCF
+   A==;
+X-CSE-ConnectionGUID: YUEtK6GLQCCCaqGhSo2cYA==
+X-CSE-MsgGUID: E73Rl+Y2QvqIYij0ahdsIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="78628718"
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="78628718"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 18:12:05 -0700
+X-CSE-ConnectionGUID: 6mj7mPNuQgyn6+enEWc3XQ==
+X-CSE-MsgGUID: gn6QdPMhSsK9Kn2CAXDtQw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="230951841"
+Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 18:12:02 -0700
+Date: Wed, 1 Apr 2026 09:11:59 +0800
+From: "Lai, Yi" <yi1.lai@intel.com>
 To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>, netdev@vger.kernel.org
-Subject: Re: [PATCHv3] selftests: Use ktap helpers for runner.sh
-Message-ID: <acxvQJsySH0NBmB1@fedora>
-References: <20260225010833.11301-1-liuhangbin@gmail.com>
- <014b54f0-c4a6-40f2-afd0-0ea3e2f796e4@linuxfoundation.org>
+Cc: brauner@kernel.org, shuah@kernel.org, areber@redhat.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	yi1.lai@linux.intel.com
+Subject: Re: [PATCH] selftests/clone3: Fix capability dropping by using
+ standard libcap API
+Message-ID: <acxw3gZcmX8Hmiuh@ly-workstation>
+References: <20260310031415.151531-1-yi1.lai@intel.com>
+ <b098d65a-bb67-4399-87e6-3fc5a2f086a1@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <014b54f0-c4a6-40f2-afd0-0ea3e2f796e4@linuxfoundation.org>
+In-Reply-To: <b098d65a-bb67-4399-87e6-3fc5a2f086a1@linuxfoundation.org>
 
-On Tue, Mar 31, 2026 at 02:51:48PM -0600, Shuah Khan wrote:
-> On 2/24/26 18:08, Hangbin Liu wrote:
-> > Instead of manually writing ktap messages, we should use the formal
-> > ktap helpers in runner.sh. Brendan did some work in d9e6269e3303
-> > ("selftests/run_kselftest.sh: exit with error if tests fail") to make
-> > run_kselftest.sh exit with the correct return value. However, the output
-> > does not include the total results, such as how many tests passed or failed.
+On Tue, Mar 31, 2026 at 02:10:09PM -0600, Shuah Khan wrote:
+> On 3/9/26 21:14, Yi Lai wrote:
+> > The clone3_cap_checkpoint_restore.c selftest defined its own 'struct
+> > libcap' to manually cast and manipulate the internal memory layout of
+> > the opaque 'cap_t' type.
 > > 
-> > Let’s convert all manually printed messages in runner.sh to use the
-> > formal ktap helpers. Here are what I changed:
+> > Starting with libcap v2.60 (commit aca076443591 "Make cap_t operations
+> > thread safe"), a '__u8 mutex' was added to the beginning of the internal
+> > 'struct _cap_struct'. This structural shift breaks the selftest's custom
+> > struct layout assumptions, causing capability corruption and leading to
+> > failures during test execution.
 > > 
-> >    1. Move TAP header from runner.sh to run_kselftest.sh, since run_kselftest.sh
-> >       is the only caller of run_many().
-> >    2. In run_kselftest.sh, call run_many() in main process to count the
-> >       pass/fail numbers.
-> >    3. In run_kselftest.sh, do not generate kselftest_failures_file. Just
-> >       use ktap_print_totals to report the result.
-> >    4. In runner.sh run_one(), get the return value and use ktap helpers for
-> >       all pass/fail reporting. This allows counting pass/fail numbers in the
-> >       main process.
-> >    5. In runner.sh run_in_netns(), also return the correct rc, so we can
-> >       count results during wait.
+> > Fix this by removing the custom struct definition and use the standard
+> > cap_set_flag() API.
+> 
+> What king of failures are you seeing? Can you send the failures from
+> the run?
+> 
+
+I can reproduce the failure on CentOS Stream 10 with libcap 2.69:
+
+TAP version 13
+1..1
+# Starting 1 tests from 1 test cases.
+#  RUN           global.clone3_cap_checkpoint_restore ...
+# clone3() syscall supported
+# clone3_cap_checkpoint_restore.c:151:clone3_cap_checkpoint_restore:Child has PID 10647
+cap_set_proc: Operation not permitted
+# clone3_cap_checkpoint_restore.c:160:clone3_cap_checkpoint_restore:Expected set_capability() (-1) == 0 (0)
+# clone3_cap_checkpoint_restore.c:161:clone3_cap_checkpoint_restore:Could not set CAP_CHECKPOINT_RESTORE
+# clone3_cap_checkpoint_restore: Test terminated by assertion
+#          FAIL  global.clone3_cap_checkpoint_restore
+not ok 1 global.clone3_cap_checkpoint_restore
+# FAILED: 0 / 1 tests passed.
+# Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+
+After applying the proposed fix patch that uses standard libcap APIs,
+the test passes in my test environment. It also passes on CentOS Stream
+9 with libcap 2.48 (<2.60).
+
+Regards,
+Yi Lai
+
 > > 
-> > After the change, the printed result looks like:
-> > 
-> >    not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=1
-> >    # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
-> > 
-> >    ]# echo $?
-> >    1
-> > 
-> > Tested-by: Brendan Jackman <jackmanb@google.com>
-> > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> > Fixes: 1d27a0be16d6 ("selftests: add clone3() CAP_CHECKPOINT_RESTORE test")
+> > Signed-off-by: Yi Lai <yi1.lai@intel.com>
 > > ---
-> > 
-> 
-> Applied to linux-kselftest next for Linux 7.1-rc1
-> 
-> I had to fix commit description and long lines in change log.
-> In the future make sure to run checkpatch to catch errors
-> related to commit descriptions.
-
-Thanks, I will take care of this.
-
-Hangbin
 > 
 > thanks,
 > -- Shuah
