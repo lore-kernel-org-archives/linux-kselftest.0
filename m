@@ -1,48 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4091E3AEF46;
-	Wed,  1 Apr 2026 09:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED7D3B27C4
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 09:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775034937; cv=none; b=jXFEG/q3Xwz90NPp7bP6JofniNqjIVrFDCdMS3848sWWhJjHAT9+BtQLDkPbx1w94CCfd0nJQa1i9c5rqGJXmm+n60LUN73Dgeoe1WPw1ASNIkeYjWl4qav0augjX9uEuSZwDnEl/29NucsHDTl5aSu5/wkRE2Kf3z5W+T3P51M=
+	t=1775036683; cv=none; b=Xc6p3HL/pDSyPItsDqESHa93YmtBkUDIod1PS3Gt0YCx9Bmj9xGi4dkm9S9m7/IZULRNLv5rNTMcwnotS/A9St6spyC3HSFfi8vsU69WVBNLGgjN0C8Cg4/VjipQaTdS8GCAIkbq4WSqQg2uDSwgs1Qb/KK6B86/zz5xptN0vrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775034937; c=relaxed/simple;
-	bh=MbauUPQspJHR0GdLliIx6BVUDnFU+IiADRZGVQ9BaLU=;
+	s=arc-20240116; t=1775036683; c=relaxed/simple;
+	bh=FoWgwIPII31w9IloJ01wrIjQh4siWeW3ph18YCi9JGg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lG3a+gqqXNogx1GbCCB6mNVEDBi9AMeU+1wFlNHifHdLFiTX7TVKdxvk4RSgjiHX7TB0TJviJ4dlsiafUZl2ke4cbASYC1D31M7/6yFXfCHl0dyrjGz5VyaWMAsXJYZP2YjdqpzJ15viABgqsFJf2sogm6KNzPZZK4PafnzmxQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=caXwpaGN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=YgW0s+/uMbkUpOfRma4CkpvJM9kE4wBMdC3p29qhmngrpPGA5CWtwEfb245ouFfXJvm7jd0QWrXYDWczUxkP8BKqZQ5NSg5mVRJN79U507rYWTTWuNgF64ohRhiOvv+/sev8jc2wNVcu3K3ZQnfpyO6zJqZtnkfKjFpUiUj/gXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mzlfg+53; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=pGu61XIF; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Gknx2IGg; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=hVhZh1rP; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="caXwpaGN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D41C4CEF7;
-	Wed,  1 Apr 2026 09:15:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1775034936;
-	bh=MbauUPQspJHR0GdLliIx6BVUDnFU+IiADRZGVQ9BaLU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=caXwpaGNnldVX3yT6hRRLXMuHUQyLW4rE5/5s6B84MRWQPwO5NhUC/T8Vsh89mYtI
-	 3XEEOyqcPrXCQyPDFa3qvbzjAX/Sj8gFJrw6IJ7ogLb2Xrym9+WVxLcAAgcPnbKBfa
-	 5qx0C2z61tC0sZKXFLpaLLVAOC3O/HzauiW4VKmE=
-Date: Wed, 1 Apr 2026 11:15:34 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	kernel-team@android.com, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, driver-core@lists.linux.dev,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
-Message-ID: <2026040136-ocelot-simply-8981@gregkh>
-References: <20260331153413.2469218-1-wusamuel@google.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mzlfg+53";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="pGu61XIF";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Gknx2IGg";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="hVhZh1rP"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0AA054D2CA;
+	Wed,  1 Apr 2026 09:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1775036680; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rZvktBZcpJDhL07WKyupr1O/mQs6dyCJ+xGrltnKO60=;
+	b=mzlfg+53zJ+6CU0l+KzBTOFAAIA2n8yVD19k2u+/tlgpfK9/KoEkUQWJHs54Wj+Ge4dtuL
+	oE4ta+cCIpvXlxvtlWzFOjAYC2e6HalHAokVsaQFCSeiwVxmD3/EcsKAxV37t6JozvCZot
+	88yziSiDPlNZMdUdpEmrav1l1iDXtbk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1775036680;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rZvktBZcpJDhL07WKyupr1O/mQs6dyCJ+xGrltnKO60=;
+	b=pGu61XIFhzy7d6C0FtwZCC5T6p8l2SCCNvbLD2OblwCp9nHddY9JWHCXP0OK2vXAWVd5LA
+	R1++6YJi2rXdcuCw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Gknx2IGg;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=hVhZh1rP
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1775036679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rZvktBZcpJDhL07WKyupr1O/mQs6dyCJ+xGrltnKO60=;
+	b=Gknx2IGgBCgC9M/i4cykkUhPrlLdIent4K7Gn7h9dhzAZLF2wvYFqOnFAQWSw11qrUaVWz
+	SBzdO9D4zDZ3/cj6BfGNFdluS4vjotCpooKmR9mmLbgluTtpYJygHYfjOnmd1fgZ4yBhER
+	2RG2I8lB7/k1oiutp/Y0zUybvh7pzG0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1775036679;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rZvktBZcpJDhL07WKyupr1O/mQs6dyCJ+xGrltnKO60=;
+	b=hVhZh1rPS6dE2FDgo2OhXFUX7e1eT7yrFlhBFDuzRxVmEM4rnUTad+1Sr43KgSrbQUwxr6
+	TP8YHxzRg3/ML+CA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E8CE54A0B0;
+	Wed,  1 Apr 2026 09:44:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id B1efOAbpzGleVwAAD6G6ig
+	(envelope-from <chrubis@suse.cz>); Wed, 01 Apr 2026 09:44:38 +0000
+Date: Wed, 1 Apr 2026 11:44:42 +0200
+From: Cyril Hrubis <chrubis@suse.cz>
+To: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Jori Koolstra <jkoolstra@xs4all.nl>, Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Aleksa Sarai <cyphar@cyphar.com>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	cmirabil@redhat.com,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
+Message-ID: <aczpCi_6lm7GQCNY@yuki.lan>
+References: <20260331172011.3512876-1-jkoolstra@xs4all.nl>
+ <20260331172011.3512876-2-jkoolstra@xs4all.nl>
+ <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,55 +111,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260331153413.2469218-1-wusamuel@google.com>
+In-Reply-To: <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,xs4all.nl];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_TWELVE(0.00)[34];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_CC(0.00)[xs4all.nl,kernel.org,redhat.com,alien8.de,linux.intel.com,zeniv.linux.org.uk,oracle.com,arndb.de,linuxfoundation.org,zytor.com,suse.cz,gmail.com,infradead.org,efficios.com,linutronix.de,cyphar.com,vger.kernel.org];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	TAGGED_RCPT(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLm9gkzykbo3gasup6o9qgcqqe)];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Queue-Id: 0AA054D2CA
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Spam-Level: 
 
-On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
-> This patchset adds requisite kfuncs for BPF programs to safely traverse
-> wakeup_sources, and puts a config flag around the sysfs interface.
-> 
-> Currently, a traversal of wakeup sources require going through
-> /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to query
-> sysfs is inefficient, as there can be hundreds of wakeup_sources, with each
-> wakeup source also having multiple attributes. debugfs is unstable and
-> insecure.
+Hi!
+> I tend to agree mkdirat_fd is not a good name for the syscall either,
+> but I don't have a suggestion I'm happy with. I think least bad name
+> would follow the existing stuff and be mkdirat2 or similar.
 
-Describe "inefficient" please?
+Why not mkdirat_open() as it does combine these two syscalls into one?
 
-And if you really think that doing an open/read/close on a virtual
-filesystem is inefficient, then I have the syscall for you!
-
-I've been trying to get readfile() accepted every few years, looks like
-I last tried in 2020:
-	https://lore.kernel.org/r/20200704140250.423345-1-gregkh@linuxfoundation.org
-but I keep the patchset up to date in my local tree all the time.
-
-Would that help you out here instead?
-
-> Adding kfuncs to lock/unlock wakeup sources allows BPF program to safely
-> traverse the wakeup sources list. The head address of wakeup_sources can
-> safely be resolved through BPF helper functions or variable attributes.
-
-Who is going to be calling this?
-
-> On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34x
-> speedup (sampled 75 times in table below). For a device under load, the
-> speedup is greater.
-> +-------+----+----------+----------+
-> |       | n  | AVG (ms) | STD (ms) |
-> +-------+----+----------+----------+
-> | sysfs | 75 | 44.9     | 12.6     |
-> +-------+----+----------+----------+
-> | BPF   | 75 | 1.3      | 0.7      |
-> +-------+----+----------+----------+
-
-150 sysfs calls in 44.9 ms feels very slow.  but really, what are you
-expecting here, sysfs should NEVER be on a "fast path" that you care
-about performance.  Why are you hammering on sysfs here?  What HAS to
-have this type of performance?
-
-In other words, what problem are you trying to solve that having access
-to 150+ sysfs files all at once in a faster way is going to fix?
-
-thanks,
-
-greg k-h
+-- 
+Cyril Hrubis
+chrubis@suse.cz
