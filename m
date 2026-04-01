@@ -1,189 +1,229 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0AD3E0C61;
-	Wed,  1 Apr 2026 14:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775053321; cv=none; b=fWVUJ6AONuKSHSt9wwPtNEKRP0BdBNmgTXRQKtbt8+3/zZ22D3diYx/wQgGBgLqPNOnpaIW4ZkhQ8727yl9zcN8Diktej7DSefkGkuVpNNReVBhGzvRB+dCmo2yxHBul6MxuYp89vOUya50CqdYNMYkhbH4/XKdqkh5lYXOQwyk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775053321; c=relaxed/simple;
-	bh=Z33pYm24qbSvYLg3avP20eCSmcuudyAdxkucbIxFgJc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QJaIxGdnzoWjGZEamEb1y290Z6D4EWUs0TFV9KVyh2VCeWsu9eU0/YtP3eq14TH1KhlQmJeBdKGLgf6cvaF5tnvecFE/tfBUmU231FXAUrrusP+yHsr9jx3GEaz4hP26/T1i4XkAzlCyUvk4QQorsKUZLnuIWY2lFiv6XS/qsJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f801QttQ; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5830223AB8D
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 14:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775053413; cv=pass; b=DUP8kKRIbFmcmBffx16N+5e1sx/KFo4HEvlxVJJxKzoiP/nkJbFQvjuvz6cCuc/AMNFBy6HK/YfLBlxQs93d8ImP2TVPdjU+R29nBh2R+ZxYO/7x4smy2BYGc+rhPFIDLP7t0PHmKAWQ0vXjgQfGDVEcMvITjvZfSBShtzbPePg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775053413; c=relaxed/simple;
+	bh=jCAWadVZxWjFHf3Z7AAoz9vfZzBHXx1pRn0Dhndlvzs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ia3Mus1cpFyjZEV1kSjqc8L8RFH3eM5AmZKrYqstDMk8TViIWcPc8ob/6k8wG6SycbrFinuN6yVq0NrgsD/XfnZPlLNmE8t494DZuC3tp+2VDHHih6NaC1evZgY/mWq8rjv2WdLo/nHRHxY+hZxsN1xN4PW/h5ElaCoi6doLO4E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oHujUwou; arc=pass smtp.client-ip=209.85.221.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f801QttQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FA86C4CEF7;
-	Wed,  1 Apr 2026 14:21:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775053320;
-	bh=Z33pYm24qbSvYLg3avP20eCSmcuudyAdxkucbIxFgJc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=f801QttQuTDTdEug++TXlbPQYcGwCgqDN19BY676yqfaczi4em00rtie+1epsL2uV
-	 MhCJ7qmAWnh5SFl3tHZQi4yrsSvvaYgZu8/S56CJxizHoD4xCSPPOyNDKQhK1WgNun
-	 bQB2dzI1VOjGQ5BL3YOgMbmS/jIUXG6esDRtAp/7fqqCfSxCZcfruuF3rSoha8Wxzl
-	 Pjy5mpBddDIHQ9/Bn/R+HLjeQfhHcUxC48da58+1PICwZ7WDOUIMjkr7dC6E/MPo3e
-	 OnTv6usFWdMqfkzWa4bA666Z997TUHktcBwCkpMUyQ1u+drN4FEyoa36g71VySGYeK
-	 Fg92NM9zrxGpQ==
-Message-ID: <ee15d52f-45df-415b-b0d9-3d267d147e5c@kernel.org>
-Date: Wed, 1 Apr 2026 16:21:55 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oHujUwou"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43cfb723698so2975417f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 07:23:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775053410; cv=none;
+        d=google.com; s=arc-20240605;
+        b=cwdYeWxdN984xekP7s1eCEpHiA7vc4SrWkz7krs4vlvx/LI6PQOO1Lc79cRPgDtJRH
+         l1pEM4BPYj0rBoDav2grstrapztPo9nwJ1GqASZiNvoIgmtjhLhpS+YFTMll5ggYh5d7
+         q7Z6rl76WHo8VCNCGE7nuDN2LctKAYYyAiAehm1Pb0cOOT3BU0OLO6szkAuUh1uA54rB
+         2Zk+VBFRbzDqLHbI6pdYWR+alys3z83etZzz6kVahHQwBvTYn6326RCWXn5yqq777qnb
+         E22+SYaUx9RdBzhxGRf32PyJ1zww7a/B8YSTiym9nsh9f7xWDdSnOpC9n1+KTEptP8a3
+         DpwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=+su7u1DujUR7e0bvScKtwYqkb+UMyoruXcpy4rpqvic=;
+        fh=8wBmyxhhwUgjqNhz0gfb7Zx2znZecZl2C8BIywWIzc0=;
+        b=Jr0BHD1BuEx1vpXO7blTkr8mUeqnABcVMvyviy8gKFKrLhoOAZTfqPAr391IiTBuxP
+         6sMAUsqB2bc/s5rZogzKvhs8Y4umbd2Y8t4gZJXv86QH5fpD3dslUBjgr4atPg/fr+bY
+         NQGejSsdjj5q5VQYc75LkQBPf3JoDF6VTG1/vvm9m71I58Easz0TWL1HT7Hj2T945KMT
+         71gtGZd7PtINUZI06KBZSQsYs5oc6s9XYYQpj3f+h76NTB0+gbES/tvgUlm8l7Q388ri
+         62uoHubkJlNBWELmvRG2U05mwoFmRUj3klRA4XXKSixojlc7A2fT8uW7jHYj747Lbsuq
+         8Tjw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775053410; x=1775658210; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+su7u1DujUR7e0bvScKtwYqkb+UMyoruXcpy4rpqvic=;
+        b=oHujUwoukkqvnSQZDtRjKwYXDOvtOVLSNtT+IUJtgnzziCEdSWc5/1xtmGs2AiLITS
+         ezonN4aLGAHDrtUXbsbisagde34z8ETUZzPTyKZ8MBJtCeVbhws5EQrSpZgU7zjAB/A4
+         jZZvatC7DkIv2jj8JQ604jH4yEVlxQfEGf8AkZRdXC0FukCXhQRbrOW5wklZMBt5EiWq
+         KSdUtgtfSJdasyzVH0GUdLFQI9x3m+IPP7ushlK7FaRgEiyuzRXBbBGyrBmjpNpoVlfr
+         rOxQARq/cQYBE4k8RCGopxQZRZb0cCia5Dpv8akVgIKMZsGp959CWQ7TI7S4AFCQoxHu
+         j7Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775053410; x=1775658210;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+su7u1DujUR7e0bvScKtwYqkb+UMyoruXcpy4rpqvic=;
+        b=SW6+uueQJzVMPgDPwyEuET5KhFFRuQT8v9iATeO+G8szefXuMcfCJkESPorrm7yULK
+         WHb27heOEO9WkfraDk9SoPmuAyso7l5XTnn/9BiIGsgBe/8SvrTcJMipWoUoaljrUccP
+         KVxFkoe2LMHTTrk1P4vvQjlCYI/r4JT92fpA7rTnel5afGUhiKWcI4qabCXsEd44s8NN
+         idgVlioyZFgJIE1v3fBDvHaM22Cj/w3anWp49bJpOjq6eKocqg7RYo3+WIFRFqYzggm6
+         x4Gn/L0RM4u2KsRMTGTrfq8sD+6/xOCXHzfH0CqLYsnzCZ+A9Pkg8s/PIc6yoESpfL0t
+         GagA==
+X-Forwarded-Encrypted: i=1; AJvYcCV2VDEWyHjpEpfMi9MuM3wR64EWaBzCtYEwZD+9Jw0B8t+TCJl3DKI6xYVXql93SLGGwQVLnH9N7HTe1sW5t64=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBp+glk1erdUZclkyoFdc/ysQ0DyZrYeMcgbJ8RiriaN41fMvz
+	yifQ/9T/3JcFovb5TlAaago/cIAD+juvCB1MAEtP7RNA/F3yn8Hk9hwXHnLY0RWlI1+1E5ajR64
+	eo1zoZBkLsf0EJsArkuDDXGgVbM94ASU=
+X-Gm-Gg: ATEYQzz9Igxg6j7lyvfw8dnvDwaepQQqoud2tFOKavFxZqOG3WQFnEOk9c2iOHBHI2C
+	AQGoGLPWEdmN72GRdmzd3r9Qfe4ZKIK8R+dreJTmRurX5OaB4v/oMWcTN33IkXieC07WtPZ4Lpg
+	dl0pGvoZnZDDGtdkmmp1p29MBLmK/QDAqrv82tj6+WAD1pIQsG1EQUupOLt8hoQ4wqDS8Pk4qEd
+	of+h1F0F5e6rlIda9OOWAA9nOUjK0jRjqHLTz0Xil/ssxaeSahDYE7/E4pbaDVA88hEaTuA4Adw
+	N68y04IpMatmnvlUf8m1rieVTn4aQ+w5vKJLz5wDNnEK5tM4n+UIdHMf36I5H+VqepSWOA==
+X-Received: by 2002:a05:6000:18a8:b0:43c:f90b:5663 with SMTP id
+ ffacd0b85a97d-43d150d7563mr6887118f8f.37.1775053406663; Wed, 01 Apr 2026
+ 07:23:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/13] selftests/mm: ensure destination is
- hugetlb-backed in hugepage-mremap
-To: Sayali Patil <sayalip@linux.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
- Oscar Salvador <osalvador@suse.de>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
- Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <3b6ffba238a4b59de891acf896fa25d7d3193228.1774591179.git.sayalip@linux.ibm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <3b6ffba238a4b59de891acf896fa25d7d3193228.1774591179.git.sayalip@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260331153413.2469218-1-wusamuel@google.com> <20260331153413.2469218-2-wusamuel@google.com>
+ <2026040153-overpass-shanty-71a0@gregkh>
+In-Reply-To: <2026040153-overpass-shanty-71a0@gregkh>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 1 Apr 2026 16:22:49 +0200
+X-Gm-Features: AQROBzDH-gBJUmuMrT1i00bs7K7Gj7h7rmupTCDKMaOOIhQqh803srjDhQwcCmU
+Message-ID: <CAP01T75nL2wzq+ONGNZ2AB6=A9iFDabTrXOWOwXLhqYohz2ZQQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PM: wakeup: Add kfuncs to traverse over wakeup_sources
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Samuel Wu <wusamuel@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, driver-core@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/27/26 08:16, Sayali Patil wrote:
-> The hugepage-mremap selftest reserves the destination address using a
-> anonymous base-page mapping before calling mremap() with MREMAP_FIXED,
-> while the source region is hugetlb-backed.
-> 
-> When remapping a hugetlb mapping into a base-page VMA may fail with:
-> 
->     mremap: Device or resource busy
-> 
-> This is observed on powerpc hash MMU systems where slice constraints
-> and page size incompatibilities prevent the remap.
-> 
+On Wed, 1 Apr 2026 at 11:11, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Mar 31, 2026 at 08:34:10AM -0700, Samuel Wu wrote:
+> > Iterating through wakeup sources via sysfs or debugfs can be inefficient
+> > or restricted. Introduce BPF kfuncs to allow high-performance and safe
+> > in-kernel traversal of the wakeup_sources list.
+>
+> What exactly is "inefficient"?  I think you might have some numbers in
+> your 0/2 patch, but putting it in here would be best.
+>
+> And who is going to be calling these functions, just ebpf scripts?
+>
+> > The new kfuncs include:
+> > - bpf_wakeup_sources_get_head() to obtain the list head.
+> > - bpf_wakeup_sources_read_lock/unlock() to manage the SRCU lock.
+>
+> Does this mean we can stop exporting wakeup_sources_read_lock() now?
+>
+> > For verifier safety, the underlying SRCU index is wrapped in an opaque
+> > 'struct bpf_ws_lock' pointer. This enables the use of KF_ACQUIRE and
+> > KF_RELEASE flags, allowing the BPF verifier to strictly enforce paired
+> > lock/unlock cycles and prevent resource leaks.
+>
+> But it's an index, not a lock.  Is this just a verifier thing?
 
-That is weird. An mremap(MREMAP_FIXED) is really just an munmap() + move.
+It's a verifier thing. The index must be passed to SRCU unlock wrapped
+by the unlock kfunc for correctness. The verifier understands such
+acquire/release tracking for pointers (e.g., taking refcount and
+putting it), but not for scalar values, so we need to launder it
+through a pointer to an empty struct, which isn't really usable except
+for passing it eventually to unlock. If the program doesn't do the
+unlock, the verifier will reject it.
 
-Are we sure this is not some actual problem in the hugetlb implementation?
+>
+> >
+> > Signed-off-by: Samuel Wu <wusamuel@google.com>
+> > ---
+> >  drivers/base/power/power.h  |  7 ++++
+> >  drivers/base/power/wakeup.c | 72 +++++++++++++++++++++++++++++++++++--
+> >  2 files changed, 77 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> > index 922ed457db19..8823aceeac8b 100644
+> > --- a/drivers/base/power/power.h
+> > +++ b/drivers/base/power/power.h
+> > @@ -168,3 +168,10 @@ static inline void device_pm_init(struct device *dev)
+> >       device_pm_sleep_init(dev);
+> >       pm_runtime_init(dev);
+> >  }
+> > +
+> > +#ifdef CONFIG_BPF_SYSCALL
+> > +struct bpf_ws_lock { };
+>
+> An empty structure?  This is just an int, so you are casting an int to a
+> pointer?  Can we make wakeup_sources_read_lock() actually use a
+> structure instead to make this simpler?
 
-> Ensure the destination region is created using MAP_HUGETLB so that both
-> source and destination VMAs are hugetlb-backed and compatible. Also add
-> MAP_POPULATE to the destination mapping to prefault hugepages,
-> matching the behaviour used for other hugetlb mapping in the test and
-> ensuring deterministic behaviour.
+See above.
 
-But then the test suddenly requires more hugetlb pages, no? I don't see
-a good reason for the MAP_POPULATE, really. It will be discarded either way.
+>
+> > +struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void);
+> > +void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock);
+> > +void *bpf_wakeup_sources_get_head(void);
+> > +#endif
+> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> > index b8e48a023bf0..8eda7d35d9cc 100644
+> > --- a/drivers/base/power/wakeup.c
+> > +++ b/drivers/base/power/wakeup.c
+> > @@ -1168,11 +1168,79 @@ static const struct file_operations wakeup_sources_stats_fops = {
+> >       .release = seq_release_private,
+> >  };
+> >
+> > -static int __init wakeup_sources_debugfs_init(void)
+> > +#ifdef CONFIG_BPF_SYSCALL
+> > +#include <linux/btf.h>
+> > +
+> > +__bpf_kfunc_start_defs();
+> > +
+> > +/**
+> > + * bpf_wakeup_sources_read_lock - Acquire the SRCU lock for wakeup sources
+> > + *
+> > + * The underlying SRCU lock returns an integer index. However, the BPF verifier
+> > + * requires a pointer (PTR_TO_BTF_ID) to strictly track the state of acquired
+> > + * resources using KF_ACQUIRE and KF_RELEASE semantics. We use an opaque
+> > + * structure pointer (struct bpf_ws_lock *) to satisfy the verifier while
+> > + * safely encoding the integer index within the pointer address itself.
+> > + *
+> > + * Return: An opaque pointer encoding the SRCU lock index + 1 (to avoid NULL).
+> > + */
+> > +__bpf_kfunc struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void)
+> > +{
+> > +     return (struct bpf_ws_lock *)(long)(wakeup_sources_read_lock() + 1);
+>
+> Why are you incrementing this by 1?
 
-> 
-> Update the FLAGS macro to include MAP_HUGETLB | MAP_SHARED |
-> MAP_POPULATE so that both mappings are hugetlb-backed and compatible.
-> Also use the macro for the mmap() calls to avoid repeating
-> the flag combination.
-> 
-> This ensures the test reliably exercises hugetlb mremap instead of
-> failing due to VMA type mismatch.
-> 
-> Fixes: 12b613206474 ("mm, hugepages: add hugetlb vma mremap() test")
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> ---
->  tools/testing/selftests/mm/hugepage-mremap.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testing/selftests/mm/hugepage-mremap.c
-> index e611249080d6..48c24a4ba9a7 100644
-> --- a/tools/testing/selftests/mm/hugepage-mremap.c
-> +++ b/tools/testing/selftests/mm/hugepage-mremap.c
-> @@ -31,7 +31,7 @@
->  #define MB_TO_BYTES(x) (x * 1024 * 1024)
->  
->  #define PROTECTION (PROT_READ | PROT_WRITE | PROT_EXEC)
-> -#define FLAGS (MAP_SHARED | MAP_ANONYMOUS)
-> +#define FLAGS (MAP_HUGETLB | MAP_SHARED | MAP_POPULATE)
->  
->  static void check_bytes(char *addr)
->  {
-> @@ -121,23 +121,20 @@ int main(int argc, char *argv[])
->  
->  	/* mmap to a PUD aligned address to hopefully trigger pmd sharing. */
->  	unsigned long suggested_addr = 0x7eaa40000000;
-> -	void *haddr = mmap((void *)suggested_addr, length, PROTECTION,
-> -			   MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
-> +	void *haddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
->  	ksft_print_msg("Map haddr: Returned address is %p\n", haddr);
->  	if (haddr == MAP_FAILED)
->  		ksft_exit_fail_msg("mmap1: %s\n", strerror(errno));
->  
->  	/* mmap again to a dummy address to hopefully trigger pmd sharing. */
->  	suggested_addr = 0x7daa40000000;
-> -	void *daddr = mmap((void *)suggested_addr, length, PROTECTION,
-> -			   MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
-> +	void *daddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
->  	ksft_print_msg("Map daddr: Returned address is %p\n", daddr);
->  	if (daddr == MAP_FAILED)
->  		ksft_exit_fail_msg("mmap3: %s\n", strerror(errno));
->  
->  	suggested_addr = 0x7faa40000000;
-> -	void *vaddr =
-> -		mmap((void *)suggested_addr, length, PROTECTION, FLAGS, -1, 0);
-> +	void *vaddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
->  	ksft_print_msg("Map vaddr: Returned address is %p\n", vaddr);
->  	if (vaddr == MAP_FAILED)
->  		ksft_exit_fail_msg("mmap2: %s\n", strerror(errno));
+I think SRCU indices can be 0, so it would appear as a NULL pointer to
+the program.
 
+>
+> > +}
+> > +
+> > +/**
+> > + * bpf_wakeup_sources_read_unlock - Release the SRCU lock for wakeup sources
+> > + * @lock: The opaque pointer returned by bpf_wakeup_sources_read_lock()
+> > + *
+> > + * The BPF verifier guarantees that @lock is a valid, unreleased pointer from
+> > + * the acquire function. We decode the pointer back into the integer SRCU index
+> > + * by subtracting 1 and release the lock.
+> > + */
+> > +__bpf_kfunc void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock)
+> > +{
+> > +     wakeup_sources_read_unlock((int)(long)lock - 1);
+>
+> Why decrementing by one?
+>
+> So it's really an int, but you are casting it to a pointer, incrementing
+> it by one to make it a "fake" pointer value (i.e. unaligned mess), and
+> then when unlocking casting the pointer back to an int, and then
+> decrementing the value?
+>
+> This feels "odd" :(
 
--- 
-Cheers,
+It isn't readable, though, because it's an empty struct, so I don't
+think it would cause any issues in practice.
 
-David
+>
+> [...]
