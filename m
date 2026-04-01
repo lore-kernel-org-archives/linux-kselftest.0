@@ -1,290 +1,189 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC9239C014
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 09:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E5A2857EA;
+	Wed,  1 Apr 2026 09:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775034342; cv=none; b=dq0IrZ8vohT64nrRwx2VPK3GZjG2eo4uxL+QevPeCEtk006KKUGt0xeG/XzMlordLyas43OhG6hsQoUjqZGDTs6xc6/x2Jqj8ZRa4WP9SVL1SEVu0nCw084Gu9W4PtEob5yVB7ln8WP76/NYX+MKZc/2hcdo1xibusYpGv1LoBo=
+	t=1775034692; cv=none; b=rIIKv8wQvTwNPmgc3xpurQVQ+scdb7OfBzOlz54suIHlWKFnkXGTEtlnzuyqNH38kdH5hZ6fz/PiDpqT8ZhSv2WJVPF66Q1Lu+M5iXgG0AO0YoTg5qrlsvg14Frr6Yk0UM5EnuDXaDYxyqpyQ7sutViMYa1HCz+0fpRD3OmIL8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775034342; c=relaxed/simple;
-	bh=0BJE9RQrwr8D74Ts1d3VtpEAs00vU1r/WZJ+7T5Dgug=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vu7krrfxE7j6Km0KgZ9sjcRUh8A1m/U5RoyOqzRMVjbu9GqASk3RiWm4YbWaUmSGDxwGiZ6DUvJnG+HgbeVfGFZaYKM7auAVkfaPnzNwCuffCtksnfZDt/IZmFEOxNQt6h8HU3CuL0gRFDg2Nj3EKVoqo2eKXv9K9Wt1Rhsmgpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fnATgJQb; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775034692; c=relaxed/simple;
+	bh=w7MTOz/QakdpD3/7WWwcxLbnWHxPxiLC90EH6FntTfI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JPuJZH+p7mIwnXA3Vq55qrUoqBkrwaDOMZ0Y3H7lbHn3FUe0ATrZU6pbOqR3LxA4RSQfhbeYRiVZdyXH0uutN4/2e0mZHLj3kjv7yfhUlbPuoPuFhAr8/C60us+dIbkKKQFZcX2eYaDjkJ/3uLY98mxmZZ/0WE9ToqAc2jF8imE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lHHLd6CQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fnATgJQb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775034340;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=G1mkLUm4prh4qAYbnuC/D7JWciihmbxYUROMBFnTIno=;
-	b=fnATgJQbrE2zHTMUQFy9xxtCf9joZ3xWZCMLk+z6UNG2TuXF8Fnc//4D9OUezlzACg2AOd
-	vE5oiicCjtz75ZNd5p8dcqxgXvvilGvU8OGAfb/X2zx9chYnZasolRHcib1qMbHV130gcP
-	fntWZa/OvGyfzoXRloCYiTY2LuECvwc=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-376-hcwD6IBlMGiPpYHhKxqwfA-1; Wed,
- 01 Apr 2026 05:05:33 -0400
-X-MC-Unique: hcwD6IBlMGiPpYHhKxqwfA-1
-X-Mimecast-MFC-AGG-ID: hcwD6IBlMGiPpYHhKxqwfA_1775034331
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 98F30195C25F;
-	Wed,  1 Apr 2026 09:05:31 +0000 (UTC)
-Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.195])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 331541800107;
-	Wed,  1 Apr 2026 09:05:24 +0000 (UTC)
-From: Li Wang <liwang@redhat.com>
-To: akpm@linux-foundation.org,
-	rppt@kernel.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	Liam.Howlett@oracle.com,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org
-Cc: aubaker@redhat.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [PATCH v5] selftests/mm: skip hugetlb_dio tests when DIO alignment is incompatible
-Date: Wed,  1 Apr 2026 17:05:20 +0800
-Message-ID: <20260401090520.24018-1-liwang@redhat.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lHHLd6CQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 958A7C4CEF7;
+	Wed,  1 Apr 2026 09:11:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1775034692;
+	bh=w7MTOz/QakdpD3/7WWwcxLbnWHxPxiLC90EH6FntTfI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lHHLd6CQQ3yDRpw3pg0btc+UgcMBdI5rl5tOI1Hp4xKdKqDaJDE0Hl93k7UWmaxZA
+	 z6uU7g7yERKJV3bDoQYekUYh8jpwT3qTlxw0xLT5ndOBnUNz1K5SFHpfPITBpPF7FT
+	 uuCQxx3QhZrZmYMU/wk2wRGlODVtIsnOfn0pQWIo=
+Date: Wed, 1 Apr 2026 11:11:29 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Samuel Wu <wusamuel@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	kernel-team@android.com, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, driver-core@lists.linux.dev,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] PM: wakeup: Add kfuncs to traverse over
+ wakeup_sources
+Message-ID: <2026040153-overpass-shanty-71a0@gregkh>
+References: <20260331153413.2469218-1-wusamuel@google.com>
+ <20260331153413.2469218-2-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260331153413.2469218-2-wusamuel@google.com>
 
-hugetlb_dio test uses sub-page offsets (pagesize / 2) to verify that
-hugepages used as DIO user buffers are correctly unpinned at completion.
+On Tue, Mar 31, 2026 at 08:34:10AM -0700, Samuel Wu wrote:
+> Iterating through wakeup sources via sysfs or debugfs can be inefficient
+> or restricted. Introduce BPF kfuncs to allow high-performance and safe
+> in-kernel traversal of the wakeup_sources list.
 
-However, on filesystems with a logical block size larger than half the
-page size (e.g., 4K-sector block devices), these unaligned DIO writes
-are rejected with -EINVAL, causing the test to fail unexpectedly.
+What exactly is "inefficient"?  I think you might have some numbers in
+your 0/2 patch, but putting it in here would be best.
 
-Add get_dio_alignment() to query the filesystem's required DIO alignment
-via statx(STATX_DIOALIGN) and skip individual test cases whose file
-offset or write size is not a multiple of that alignment. Aligned cases
-continue to run so the core coverage is preserved.
+And who is going to be calling these functions, just ebpf scripts?
 
-While here, open the temporary file once in main() and share the fd
-across all test cases instead of reopening it in each invocation.
+> The new kfuncs include:
+> - bpf_wakeup_sources_get_head() to obtain the list head.
+> - bpf_wakeup_sources_read_lock/unlock() to manage the SRCU lock.
 
-=== Reproduce Steps ===
+Does this mean we can stop exporting wakeup_sources_read_lock() now?
 
-  # dd if=/dev/zero of=/tmp/test.img bs=1M count=512
-  # losetup --sector-size 4096 /dev/loop0 /tmp/test.img
-  # mkfs.xfs /dev/loop0
-  # mkdir -p /mnt/dio_test
-  # mount /dev/loop0 /mnt/dio_test
+> For verifier safety, the underlying SRCU index is wrapped in an opaque
+> 'struct bpf_ws_lock' pointer. This enables the use of KF_ACQUIRE and
+> KF_RELEASE flags, allowing the BPF verifier to strictly enforce paired
+> lock/unlock cycles and prevent resource leaks.
 
-  // Modify test to open /mnt/dio_test and rebuild it:
-  -       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-  +       fd = open("/mnt/dio_test", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+But it's an index, not a lock.  Is this just a verifier thing?
 
-  # getconf PAGESIZE
-  4096
+> 
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+>  drivers/base/power/power.h  |  7 ++++
+>  drivers/base/power/wakeup.c | 72 +++++++++++++++++++++++++++++++++++--
+>  2 files changed, 77 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> index 922ed457db19..8823aceeac8b 100644
+> --- a/drivers/base/power/power.h
+> +++ b/drivers/base/power/power.h
+> @@ -168,3 +168,10 @@ static inline void device_pm_init(struct device *dev)
+>  	device_pm_sleep_init(dev);
+>  	pm_runtime_init(dev);
+>  }
+> +
+> +#ifdef CONFIG_BPF_SYSCALL
+> +struct bpf_ws_lock { };
 
-  # echo 100 >/proc/sys/vm/nr_hugepages
+An empty structure?  This is just an int, so you are casting an int to a
+pointer?  Can we make wakeup_sources_read_lock() actually use a
+structure instead to make this simpler?
 
-  # ./hugetlb_dio
-  TAP version 13
-  1..4
-  # No. Free pages before allocation : 100
-  # No. Free pages after munmap : 100
-  ok 1 free huge pages from 0-12288
-  Bail out! Error writing to file
-  : Invalid argument (22)
-  # Planned tests != run tests (4 != 1)
-  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> +struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void);
+> +void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock);
+> +void *bpf_wakeup_sources_get_head(void);
+> +#endif
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index b8e48a023bf0..8eda7d35d9cc 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -1168,11 +1168,79 @@ static const struct file_operations wakeup_sources_stats_fops = {
+>  	.release = seq_release_private,
+>  };
+>  
+> -static int __init wakeup_sources_debugfs_init(void)
+> +#ifdef CONFIG_BPF_SYSCALL
+> +#include <linux/btf.h>
+> +
+> +__bpf_kfunc_start_defs();
+> +
+> +/**
+> + * bpf_wakeup_sources_read_lock - Acquire the SRCU lock for wakeup sources
+> + *
+> + * The underlying SRCU lock returns an integer index. However, the BPF verifier
+> + * requires a pointer (PTR_TO_BTF_ID) to strictly track the state of acquired
+> + * resources using KF_ACQUIRE and KF_RELEASE semantics. We use an opaque
+> + * structure pointer (struct bpf_ws_lock *) to satisfy the verifier while
+> + * safely encoding the integer index within the pointer address itself.
+> + *
+> + * Return: An opaque pointer encoding the SRCU lock index + 1 (to avoid NULL).
+> + */
+> +__bpf_kfunc struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void)
+> +{
+> +	return (struct bpf_ws_lock *)(long)(wakeup_sources_read_lock() + 1);
 
-Signed-off-by: Li Wang <liwang@redhat.com>
-Suggested-by: Mike Rapoport <rppt@kernel.org>
-Suggested-by: David Hildenbrand <david@kernel.org>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
----
+Why are you incrementing this by 1?
 
-Notes:
-    v5:
-    	- Perform that align checks at the beginning of run_dio_using_hugetlb()
-    	  but not addinital run_test().
-    v4:
-    	- Open the file once and pass the fd to functions.
-    	- Add check_dio_alignment dedicated to alignment checking.
-    v3:
-    	- Adopt statx raw syscall to build on older glibc.
-    	- add buf offset alignment check as well.
-    v2:
-    	- Pass dio_align as a parameter to run_dio_using_hugetlb().
-    	  instead of generally page_size/2 alignment check.
-    	- Add O_DIRECT flag back to the first open().
-    	- Add stx_dio_offset_align zero check.
+> +}
+> +
+> +/**
+> + * bpf_wakeup_sources_read_unlock - Release the SRCU lock for wakeup sources
+> + * @lock: The opaque pointer returned by bpf_wakeup_sources_read_lock()
+> + *
+> + * The BPF verifier guarantees that @lock is a valid, unreleased pointer from
+> + * the acquire function. We decode the pointer back into the integer SRCU index
+> + * by subtracting 1 and release the lock.
+> + */
+> +__bpf_kfunc void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock)
+> +{
+> +	wakeup_sources_read_unlock((int)(long)lock - 1);
 
- tools/testing/selftests/mm/hugetlb_dio.c | 91 ++++++++++++++++++------
- 1 file changed, 69 insertions(+), 22 deletions(-)
+Why decrementing by one?
 
-diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-index 9ac62eb4c97d..31a054fa8134 100644
---- a/tools/testing/selftests/mm/hugetlb_dio.c
-+++ b/tools/testing/selftests/mm/hugetlb_dio.c
-@@ -17,12 +17,57 @@
- #include <unistd.h>
- #include <string.h>
- #include <sys/mman.h>
-+#include <sys/syscall.h>
- #include "vm_util.h"
- #include "kselftest.h"
- 
--void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
-+#ifndef STATX_DIOALIGN
-+#define STATX_DIOALIGN		0x00002000U
-+#endif
-+
-+static int get_dio_alignment(int fd)
-+{
-+	struct statx stx;
-+	int ret;
-+
-+	ret = syscall(__NR_statx, fd, "", AT_EMPTY_PATH, STATX_DIOALIGN, &stx);
-+	if (ret < 0)
-+		return -1;
-+
-+	/*
-+	 * If STATX_DIOALIGN is unsupported, assume no alignment
-+	 * constraint and let the test proceed.
-+	 */
-+	if (!(stx.stx_mask & STATX_DIOALIGN) || !stx.stx_dio_offset_align)
-+		return 1;
-+
-+	return stx.stx_dio_offset_align;
-+}
-+
-+static bool check_dio_alignment(unsigned int start_off,
-+				unsigned int end_off, unsigned int align)
-+{
-+	unsigned int writesize = end_off - start_off;
-+
-+	/*
-+	 * The kernel's DIO path checks that file offset, length, and
-+	 * buffer address are all multiples of dio_offset_align.  When
-+	 * this test case's parameters don't satisfy that, the write
-+	 * would fail with -EINVAL before exercising the hugetlb unpin
-+	 * path, so skip.
-+	 */
-+	if (start_off % align != 0 || writesize % align != 0) {
-+		ksft_test_result_skip("DIO align=%u incompatible with offset %u writesize %u\n",
-+				align, start_off, writesize);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static void run_dio_using_hugetlb(int fd, unsigned int start_off,
-+				unsigned int end_off, unsigned int align)
- {
--	int fd;
- 	char *buffer =  NULL;
- 	char *orig_buffer = NULL;
- 	size_t h_pagesize = 0;
-@@ -32,6 +77,9 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
- 	const int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
- 	const int mmap_prot  = PROT_READ | PROT_WRITE;
- 
-+	if (!check_dio_alignment(start_off, end_off, align))
-+		return;
-+
- 	writesize = end_off - start_off;
- 
- 	/* Get the default huge page size */
-@@ -39,10 +87,9 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
- 	if (!h_pagesize)
- 		ksft_exit_fail_msg("Unable to determine huge page size\n");
- 
--	/* Open the file to DIO */
--	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
--	if (fd < 0)
--		ksft_exit_fail_perror("Error opening file\n");
-+	/* Reset file position since fd is shared across tests */
-+	if (lseek(fd, 0, SEEK_SET) < 0)
-+		ksft_exit_fail_perror("lseek failed\n");
- 
- 	/* Get the free huge pages before allocation */
- 	free_hpage_b = get_free_hugepages();
-@@ -71,7 +118,6 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
- 
- 	/* unmap the huge page */
- 	munmap(orig_buffer, h_pagesize);
--	close(fd);
- 
- 	/* Get the free huge pages after unmap*/
- 	free_hpage_a = get_free_hugepages();
-@@ -89,37 +135,38 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
- 
- int main(void)
- {
--	size_t pagesize = 0;
--	int fd;
-+	int fd, align;
-+	const size_t pagesize = psize();
- 
- 	ksft_print_header();
- 
--	/* Open the file to DIO */
--	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
--	if (fd < 0)
--		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
--	close(fd);
--
- 	/* Check if huge pages are free */
- 	if (!get_free_hugepages())
- 		ksft_exit_skip("No free hugepage, exiting\n");
- 
--	ksft_set_plan(4);
-+	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-+	if (fd < 0)
-+		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
- 
--	/* Get base page size */
--	pagesize  = psize();
-+	align = get_dio_alignment(fd);
-+	if (align < 0)
-+		ksft_exit_skip("Unable to obtain DIO alignment: %s\n",
-+				strerror(errno));
-+	ksft_set_plan(4);
- 
- 	/* start and end is aligned to pagesize */
--	run_dio_using_hugetlb(0, (pagesize * 3));
-+	run_dio_using_hugetlb(fd, 0, (pagesize * 3), align);
- 
- 	/* start is aligned but end is not aligned */
--	run_dio_using_hugetlb(0, (pagesize * 3) - (pagesize / 2));
-+	run_dio_using_hugetlb(fd, 0, (pagesize * 3) - (pagesize / 2), align);
- 
- 	/* start is unaligned and end is aligned */
--	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3));
-+	run_dio_using_hugetlb(fd, pagesize / 2, (pagesize * 3), align);
- 
- 	/* both start and end are unaligned */
--	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3) + (pagesize / 2));
-+	run_dio_using_hugetlb(fd, pagesize / 2, (pagesize * 3) + (pagesize / 2), align);
-+
-+	close(fd);
- 
- 	ksft_finished();
- }
--- 
-2.53.0
+So it's really an int, but you are casting it to a pointer, incrementing
+it by one to make it a "fake" pointer value (i.e. unaligned mess), and
+then when unlocking casting the pointer back to an int, and then
+decrementing the value?
 
+This feels "odd" :(
+
+
+> +}
+> +
+> +/**
+> + * bpf_wakeup_sources_get_head - Get the head of the wakeup sources list
+> + *
+> + * Return: The head of the wakeup sources list.
+> + */
+> +__bpf_kfunc void *bpf_wakeup_sources_get_head(void)
+> +{
+> +	return &wakeup_sources;
+> +}
+> +
+> +__bpf_kfunc_end_defs();
+> +
+> +BTF_KFUNCS_START(wakeup_source_kfunc_ids)
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_read_lock, KF_ACQUIRE)
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_read_unlock, KF_RELEASE)
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_get_head)
+> +BTF_KFUNCS_END(wakeup_source_kfunc_ids)
+> +
+> +static const struct btf_kfunc_id_set wakeup_source_kfunc_set = {
+> +	.owner = THIS_MODULE,
+
+This isn't a module.
+
+thanks,
+
+greg k-h
