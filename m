@@ -1,194 +1,191 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9442D97B9
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 14:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775052081; cv=none; b=kx1FMiv/GoaUQ66sg94mYJaob6MbtlEOefPOkTiW9Pbq1LuFesW3q2qgbA1Zr5yVySpzjNHYobjbmvcoUs4W579cqrFjPrrfQkSlYSvL3TBkLnsy/UUfNhqLKpBGOctJOuiGjsdwOKGtZEPtQTR3gYscNpEtLdEafop4ACXzfPk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775052081; c=relaxed/simple;
-	bh=Z4WlmMfJ0XDGS7BS32s/UsiiKs7WV2opdSLaVHXL2x0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LTFq1iW2fK0ilMQp3ipVKTrg5YQO0DpaoHw3I5Qu14h0s1CyeW9SP83hlkvMTMuaja8FDW1CGA5mbJYLtUP7/JKp53C7zvaj3Q2wv9zQdrNsVpWSTkUN4K2fxLms8JRYoWxFpa3GFmg9KOVXKTpWFYJ2+IjgnKWQFqunQBz17Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CkLNugw1; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96312DB7A3
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 14:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775052322; cv=pass; b=qhv6yG4LpkNKht1k2/mVekPgpVRi/BKU9/Z23p0335lLZLKo5dkUEO4Y8wSdeXJMZhoAVdoq9Um+29SP8hSCfc3NtbrQcSMBBqwlRtJGuY1XKDDfp83Dq6qgeRjoUg161K1qB7ACtB/QLkTTsWuRQRalkcqTnJtHcQanSRwdQos=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775052322; c=relaxed/simple;
+	bh=3T7GMoC0fS9mqAo2YBiLIAD1sZxRlz6N0Q1xMegEdoc=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cZ2oEMrXLAbW05uD02OPBuY6H7mJAT9rDNaUsQ4yDt5ofjYD89qowuFeQdGaCMQmpuQarAEE0/JdpKYsRDzGf8VvHvvpSnrSPTMTBILoJnFLVaoaeudm0hfItmbC/3G3e4OpNE1HjfLrIt+kiGdTY6xXl6JFdpzp7gr5rKC0xMc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EYLQj4Dh; arc=pass smtp.client-ip=209.85.221.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CkLNugw1"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c76b06f37a7so1044561a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 07:01:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EYLQj4Dh"
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-56ce5c899fcso2171009e0c.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 07:05:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775052318; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YcN4rFwV+1quAJW/kVsK+ZnXZXGArVtGAM7sQNNk4JepH/PdpsFK1BduGQELnjBWPk
+         TqKjtohBbGVdkgiDhy6nBjpLOEV/f0PX1tHycKmSdBLyW5FhG7K1Tlvw0D5eAA83fAv6
+         govlIEUjv01HD8GyB8qCrnLVjXwrS1n14idwqdN/+IbU5SxF4z5f/rfWjO6wfl0EL4fy
+         ucI2KBEbbSGk5fbAjVuyr9IR8uBtNXmLY6FoIka+c/J693p0Hx0u2hdSTKtwa+Nk82Fh
+         ebvvStxqqyu0L14Y/9mqwGOyB9yy1i5v7xnBG+1Pr68FC7JJMQyFN6JNcPT3glIkMH1R
+         oANQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=cok0tTO+M9AY7GrL3ZPCAkrKaBzewD/gpEZeNzSpUo4=;
+        fh=O0wLnIMfrVDmAgkLLQhjh7yR+166s2+1UrO7aECdUY4=;
+        b=f+pMgj7LrIEatcKB5yq6PYYagVo7wizUYDvCKONNEtx1Gb4og80bZpEFHi+Lot5YHY
+         XvyCZdYxKjj6wrE/pFnwPzatnfhUDgwcaKeKo+XijTCw8dqOUed7xWEWIBps4KsK8VjX
+         7mcEfbK01F1/7RsTcyIxDaVWFdgyJ40g0M1lp5gHd2r0YOHAYYu9JqFJxnj4b9APD7t9
+         eYj004HF1QoSWf5eaLlFAhS2CYQ2Tl60hkw96G/v6gCULqSE/cv3gXz2p1wPM0bQZfsd
+         TtqMwtiomreBUd9sSq4d5wEE0F7NdHaFhkIpOTyk/OWIWwl8V8tQwsZDN6BkyVvypgD/
+         lhRA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775052080; x=1775656880; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4Of6IXR9kF08fb3y1GD1Duw1/k8Epn7khL83oxb2ObA=;
-        b=CkLNugw1r+4em7BO186nX6SYSN2UfxFuc8ZhuHyZWYVdpfFfiFDewksp1+Qk57+aCE
-         e+hMOejXl7bWL/0j8I4SEBR/NZDQng8GB9Hs9GtFx1iRyTxHqla7djJHNujDdknh2zsp
-         k1DUcMYSdrWuQ5k59Z+7+AX4Mi0ff1cNmb3Y6T6xly90cpQ1KYCTxEamQw72d41ypv1M
-         bg7qYaQo+YLuKhgsu3w/YrUdjTfT4iVljTfPcV24YddoDrr4VcRGb5+lHb2FALHZRn1l
-         vgXy/BS6eTyiWitc/RCRvAmEpc1IWvpucPXCfpcqyyqPKzwQC68gvLJC/h8ixqSHLKpZ
-         WnSw==
+        d=google.com; s=20251104; t=1775052318; x=1775657118; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cok0tTO+M9AY7GrL3ZPCAkrKaBzewD/gpEZeNzSpUo4=;
+        b=EYLQj4Dhny63Ff/pV2FGIcuXjBIBXXubDiwrYFSWrrKaXz6kiuUMYDaa1XNmmVHiG4
+         7sOApBTxaJrj9nLFd/hCCXL8NuGA3gDNQE7QAdzzNba+qKrFZLh8L0zBAv8QOB53PHnV
+         yJUS8oKR0jjomFrVwZtutMBSNKQjMtS1F+pmKYchoYexsK+eTadQzUIKmp3t7ZrzKN6W
+         R9RyG3CUQ+u5TJHJjZ/P8qBciP/CLYzR9yVKj5hFZNSdN9ll8Kzwn3ob3Ayhoqn9LtoI
+         RdS3DoDXeem3TKxNoTwEjoQ4OKjez1g/8weDLG2wog+O/cnXrIkXiAO+Ofi4u2GXFgCX
+         iHfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775052080; x=1775656880;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4Of6IXR9kF08fb3y1GD1Duw1/k8Epn7khL83oxb2ObA=;
-        b=N8chbsvYNVJh9z2ZALMCawyYEItaeoLLTCGNrXAwlOB0ywVdOR+FJSUrBBsvuP0bqm
-         X367VBwpsvi9/ZhU8WwUWZ+90RUkSAOkyBRMjWSeEnl49TTiw4HJstJnEDEUdyODJ1J0
-         yaFfIZEbvUYMqAtdQ/iNPeCWF1dT39ZP2MgMCs8odnR9zfzGt5pMsWMvQG0gzVxVO9lw
-         KozSTBm3QgmLf2Nirm0rLWOpEhOeKPSLD7AuCcwn9gYg6VW/rlx2uHV/vH9kDqg6IRaI
-         FVjDHOwOabUs9LQ6EvGHI12UhMXUijd5/AY7+nfrd0yFRGGvnCfOL6PRHReyjVmZWP27
-         yeAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUgoRLYGHlXDKT8SpZqSlaEeVI+2LZpGQl4CcYkNoNwwdnaaj06FytYz+1ah4V37StQ8ze/SSdsJyuWietxv5c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yywv1iVPr18RuNitKSt2uz6hbGh/89lGe96s726wX2W+EgWrhZf
-	w+g5/ePU1DDFUetMprmBOmR8CQtSDKuGRbNMlhttJEz9tIwJ9lvNFQI9hcgMO+qiu2l0QYftPQ2
-	OwWv9FA==
-X-Received: from pfop13.prod.google.com ([2002:a05:6a00:b4d:b0:82c:6f5f:fa9])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:998e:b0:39c:787:f197
- with SMTP id adf61e73a8af0-39ef7688196mr4030395637.36.1775052079691; Wed, 01
- Apr 2026 07:01:19 -0700 (PDT)
-Date: Wed, 1 Apr 2026 07:01:18 -0700
-In-Reply-To: <4334432d-982e-4450-9281-de739c25ebfd@linuxfoundation.org>
+        d=1e100.net; s=20251104; t=1775052318; x=1775657118;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cok0tTO+M9AY7GrL3ZPCAkrKaBzewD/gpEZeNzSpUo4=;
+        b=J3CjLq983REcYWJBc1A0xR/FBD5dLmceEZfSRmQrlKiFkLSyq09Dsy42yvlQZ1trF9
+         iajbhjfp61+XveJjcaLQINVCLuhyjKkeQ87P4DsmSRjZiNUYz5nBWAccmrJkg2rsaPy7
+         JX6VoCmoEqnMRWAqEOVGGKZfwy+s6Xbbeq7RLm0g5lQgdPyrpKcHUHGiW+RGTeQD8VbK
+         muGj+LZtjmdUX0SRltr1DZS/ba7y90blRdNV4woOyotwtbN4JODQC/6UFfhr6EoOhxJp
+         aQWaG7unXKRHyeb1GyY5W4fY9KsF5lkVq19gJ5a4ablAIUYGKccWAkbGdvBDiAKO43bw
+         8D8A==
+X-Forwarded-Encrypted: i=1; AJvYcCXlCzqqfAvaK4mwTxNGOhy+Pyz8vI0NVnR7ZxwEC8w5HMv8yoCSOxoC2WO7n5QysPtxhDmIj+KIp2fco665Bxk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIVgU3nApjo8M0r12JJCi7hfm71PcGeIDb4sXJ03U7G+sY+3NA
+	3CRLVAcPPyepUipOxgxE/UYrC32Cx1Lztm0qahgU/JEYC+jM+Wek9C8HOu+/qAuNGsuZtpQYJ8S
+	pVqTcrY5CCCIzhD3Zi7geDouy01t8Nw8IHtIAOiYQ
+X-Gm-Gg: ATEYQzw1YnrD212vOoY33iwgUkAfQ2rTZPU2nrFDbO0rjvdNalAd10emLD+umirdhEf
+	M/YZb00h8hF0tCCgd7yYNQvW1Cul1duWNo+eKwvyYn/qGzHMGt+yrzHltrbaIibEtX94UrAL2cB
+	leADVzKUiup6cJDz2lp+27Zf/ODSr2j/TYiZAptcMXZscPscQRjC6djD1kpKjpNRIMWd0X+NHsC
+	FHZDdTfu9uQ3mD3EUgv+GaUeewza/BGAKadN8TUeBjGHgsldrTMEM7ynPzpjlb+qBMIEysWDSsG
+	rjMdmo0MBrVGg/8PArL/kCsMCX5nGcW3pnAfVQ==
+X-Received: by 2002:a05:6122:ca1:b0:56a:ef89:34fc with SMTP id
+ 71dfb90a1353d-56d8a81bd48mr1423992e0c.6.1775052317094; Wed, 01 Apr 2026
+ 07:05:17 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 1 Apr 2026 07:05:16 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 1 Apr 2026 07:05:16 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20260326-gmem-inplace-conversion-v4-7-e202fe950ffd@google.com>
+References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com> <20260326-gmem-inplace-conversion-v4-7-e202fe950ffd@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260319000842.1213426-2-hisamshar@gmail.com> <091f264f-21f1-464d-913a-1500643728c7@linuxfoundation.org>
- <137f63af-a993-4b1c-a9e9-931718a47343@linuxfoundation.org>
- <f044f31d-740d-4cdb-834c-59de7691203d@gmail.com> <4334432d-982e-4450-9281-de739c25ebfd@linuxfoundation.org>
-Message-ID: <ac0lGVlg4cJSNCGl@google.com>
-Subject: Re: [PATCH] KVM: selftests: Guard execinfo.h inclusion for non-glibc builds
-From: Sean Christopherson <seanjc@google.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Hisam Mehboob <hisamshar@gmail.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Aqib Faruqui <aqibaf@amazon.com>, shuah@kernel.org, pbonzini@redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Date: Wed, 1 Apr 2026 07:05:16 -0700
+X-Gm-Features: AQROBzB8ZjEkM1kRtGYPSYrf1SL2xnDWxbzougnTteAKEFNAbNZQz2YVpzx5v1o
+Message-ID: <CAEvNRgF+FjJ1EWSR_rzD1=N040ZitiRrM2O3N0Kj5yN5rT3h+Q@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 07/44] KVM: guest_memfd: Only prepare folios for
+ private pages
+To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	ira.weiny@intel.com, jmattson@google.com, jroedel@suse.de, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 31, 2026, Shuah Khan wrote:
-> On 3/25/26 12:47, Hisam Mehboob wrote:
-> > On 3/25/26 23:03, Shuah Khan wrote:
-> > > On 3/24/26 12:02, Shuah Khan wrote:
-> > > > On 3/18/26 18:08, Hisam Mehboob wrote:
-> > > > > The backtrace() function and execinfo.h are GNU extensions availa=
-ble
-> > > > > in glibc but not in non-glibc C libraries such as musl. Building =
-KVM
-> > > > > selftests with musl-gcc fails with:
-> > > > >=20
-> > > > > =C2=A0=C2=A0 lib/assert.c:9:10: fatal error: execinfo.h: No such =
-file or directory
-> > > > >=20
-> > > > > Guard the inclusion of execinfo.h under #ifdef __GLIBC__, and wra=
-p
-> > > > > all backtrace() usage under the same guard with a fallback messag=
-e
-> > > > > for non-glibc builds indicating that stack traces are not availab=
-le.
-> > > > >=20
-> > > > > Unlike the approach of adding a weak stub for backtrace(), this
-> > > > > explicitly handles the non-glibc case rather than silently provid=
-ing
-> > > > > an empty implementation.
-> > > > >=20
-> > > > > Link: https://lore.kernel.org/kvm/20250829142556.72577-7- aqibaf@=
-amazon.com/
-> > > > >=20
-> > > > > Suggested-by: Aqib Faruqui <aqibaf@amazon.com>
-> > > > > Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
-> > > > > ---
-> > > > > =C2=A0 tools/testing/selftests/kvm/lib/assert.c | 7 +++++++
-> > > > > =C2=A0 1 file changed, 7 insertions(+)
-> > > > >=20
-> > > > > diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/ te=
-sting/selftests/kvm/lib/assert.c
-> > > > > index b49690658c60..3442b80c37c1 100644
-> > > > > --- a/tools/testing/selftests/kvm/lib/assert.c
-> > > > > +++ b/tools/testing/selftests/kvm/lib/assert.c
-> > > > > @@ -6,7 +6,9 @@
-> > > > > =C2=A0=C2=A0 */
-> > > > > =C2=A0 #include "test_util.h"
-> > > > > +#ifdef __GLIBC__
-> > > > > =C2=A0 #include <execinfo.h>
-> > > > > +#endif
-> > > > > Is __GLIBC__ defined in musl-gcc? Looks like that is the case wit=
-h the
-> > > > error?
-> > >=20
-> > > If __GLIBC__ isn't there you shouldn't see this error because the inc=
-lude
-> > > is in - this error doesn't make sense if __GLIBC__ isn't defined. Wha=
-t
-> > > am I missing?
-> > >=20
-> >=20
-> > To clarify the compiler error you mentioned: the error log in the commi=
-t
-> > message shows the failure that occurs before this patch is applied. Bec=
-ause
-> > musl-gcc doesn't define __GLIBC__, the original unconditional <execinfo=
-.h>
-> > inclusion causes the build to fail. The #ifdef in my patch was intended=
- to
-> > fix that exact failure.
-> >=20
-> > > +#ifdef __GLIBC__
-> > > =C2=A0=C2=A0#include <execinfo.h>
-> > > +#endif
-> > >=20
-> > > Also check tools/testing/selftests/bpf/test_progs.c - I think backtra=
-ce()
-> > > stub needs be defined only for the !__GLIBC__ case
-> > >=20
-> >=20
-> > Looking at how bpf/test_progs.c handles it, I agree the weak stub appro=
-ach
-> > is much cleaner. I will implement it so that it still prints an explici=
-t
-> > warning message when a trace is unavailable.
+Ackerley Tng <ackerleytng@google.com> writes:
 
-I disagree.  _If_ we didn't need the __GLIBC__ #ifdef, then I would be in f=
-avor
-of __weak, but since the #ifdeffery is needed, using an #ifdef and a __weak=
- symbol
-is double the ugliness.
+> All-shared guest_memfd used to be only supported for non-CoCo VMs where
+> preparation doesn't apply. INIT_SHARED is about to be supported for
+> non-CoCo VMs in a later patch in this series.
+>
+> In addition, KVM_SET_MEMORY_ATTRIBUTES2 is about to be supported in
+> guest_memfd in a later patch in this series.
+>
+> This means that the kvm fault handler may now call kvm_gmem_get_pfn() on a
+> shared folio for a CoCo VM where preparation applies.
+>
+> Add a check to make sure that preparation is only performed for private
+> folios.
+>
+> Preparation will be undone on freeing (see kvm_gmem_free_folio()) and on
+> conversion to shared.
+>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>  virt/kvm/guest_memfd.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index b6ffa8734175d..d414ebfcb4c19 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -900,6 +900,7 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  		     int *max_order)
+>  {
+>  	pgoff_t index = kvm_gmem_get_index(slot, gfn);
+> +	struct inode *inode;
+>  	struct folio *folio;
+>  	int r = 0;
+>
+> @@ -907,7 +908,8 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  	if (!file)
+>  		return -EFAULT;
+>
+> -	filemap_invalidate_lock_shared(file_inode(file)->i_mapping);
+> +	inode = file_inode(file);
+> +	filemap_invalidate_lock_shared(inode->i_mapping);
+>
+>  	folio = __kvm_gmem_get_pfn(file, slot, index, pfn, max_order);
+>  	if (IS_ERR(folio)) {
+> @@ -920,7 +922,8 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  		folio_mark_uptodate(folio);
+>  	}
+>
+> -	r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
+> +	if (kvm_gmem_is_private_mem(inode, index))
+> +		r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
 
-IMO, the way to make this less ugly is to using a single #ifdef and a local=
- stub.
+Michael, I might have misunderstood you at the last guest_memfd call:
+sev_gmem_prepare() doesn't prepare a page for being a shared page,
+right? Does this work? That prepare is only called to "make private"?
 
-diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selft=
-ests/kvm/lib/assert.c
-index b49690658c60..315175ca49f1 100644
---- a/tools/testing/selftests/kvm/lib/assert.c
-+++ b/tools/testing/selftests/kvm/lib/assert.c
-@@ -6,11 +6,13 @@
-  */
- #include "test_util.h"
-=20
--#include <execinfo.h>
- #include <sys/syscall.h>
-=20
- #include "kselftest.h"
-=20
-+#ifdef __GLIBC__
-+#include <execinfo.h>
-+
- /* Dumps the current stack trace to stderr. */
- static void __attribute__((noinline)) test_dump_stack(void);
- static void test_dump_stack(void)
-@@ -57,6 +59,9 @@ static void test_dump_stack(void)
-        system(cmd);
- #pragma GCC diagnostic pop
- }
-+#else
-+static void test_dump_stack(void) {}
-+#endif
-=20
- static pid_t _gettid(void)
- {
+>
+>  	folio_unlock(folio);
+>
+> @@ -930,7 +933,7 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  		folio_put(folio);
+>
+>  out:
+> -	filemap_invalidate_unlock_shared(file_inode(file)->i_mapping);
+> +	filemap_invalidate_unlock_shared(inode->i_mapping);
+>  	return r;
+>  }
+>  EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_gmem_get_pfn);
+>
+> --
+> 2.53.0.1018.g2bb0e51243-goog
