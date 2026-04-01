@@ -1,209 +1,249 @@
-Received: from CWXP265CU008.outbound.protection.outlook.com (mail-ukwestazon11020137.outbound.protection.outlook.com [52.101.195.137])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010063.outbound.protection.outlook.com [52.101.46.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844F936EA9F;
-	Wed,  1 Apr 2026 15:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.195.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7911C33A9CF;
+	Wed,  1 Apr 2026 15:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.63
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775056514; cv=fail; b=WuaGfB8VElxkAHJtcMGdlxfIkXwxOYK8zWR3FCf7Lx8xd1lvW5h0qWevv3Y8HOSfeCRamBRONKaPRWlGbDigs/iC7BwJygjDx292JqS2JZosUrlTOcUFuE0Q1ykNsBYgRCfSl/WGFXKUmAu6wx532x6eO2xPFpazp963UiRapMA=
+	t=1775056595; cv=fail; b=Oh1sAApF7K2YH2WwkflIOPJiV8wz+KHfuw2Q/ES8t+osiSW8BZplaGUI/m5sCjWKwi5g1/0agfMpgzWaNDqFrDwWT4FLVbtcd0xYueENsX9wxlPqLfMxvCZu9ZWMLAFRv1nWpikblgS7bWkP73kF47qKCtNTJIaEs/QVX0YAbOQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775056514; c=relaxed/simple;
-	bh=dFwJ/yLjEK76Xp9mf8qnM5tm+uuBXgGAF+2qsw60CxM=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:MIME-Version; b=V3zuclGa0EcGwF6rFcCq9df6R/0Ad/IpiOkKvWx0Cs7pZS3yHj1aVtz/JGCTDwvPVuibNDGpTfvZRfn8lPrPxGafDBlFR+EGZ/oBcaII41GNUrYOvFQb2j/Pz8iE8+Y07tHkXmV17/D1XCe0DI/d5m9vzmYPRUZenKLZK/BU0K8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=jYXDi7P7; arc=fail smtp.client-ip=52.101.195.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	s=arc-20240116; t=1775056595; c=relaxed/simple;
+	bh=x2NMzsmDvLwnojKiM1+PjmgqTBmuN9XZreZZ3av69S0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ud7ZDaoXjPPniu4cqcQr6Rq25JiNflGQrIWIcSww8bKFtlCIifBacwGmgtd/g95eDD6riqxgr0O3DRgLVsmujwzxKH6/3SXgULIhCbfCdJAXpfgFFzfWsIAQnIzwdnb7lIOrtYCqKjEfLpLCGo8OnxajkwCJWbpE81uKARoScMM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=FWb+47bj; arc=fail smtp.client-ip=52.101.46.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="jYXDi7P7"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="FWb+47bj"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zL86eoyHSdG3dJwxvbvs+i0QOHpFmU0EgAsBjQ35GUrSAuDrdds1+L5WBJms7ImyPuZbFXp33a+We9pTSudwAkBv2Zx7vW/JgT7tzLZ5UzLurpCYgOYDtwZUQYhv17A4SRqdkRWZJptieiRnTyG2Tl1SfpWnlecEPGdkgBjYy/DDYdygGQKBkdxnZxXacGYn3yp6ZE9oLp0thGs1XGS8Rc9EavY8qdHrobtc35ABhUr/fzacqDo+ExXPiqXR/vLhpkoahnG7JNcWlG9RN8zIl6bZcD37R15SS7ReYR2u8xyYpFNDVBkWUEUhwaPsiWrTQS3/AhhblauyFHHDsabLbg==
+ b=dpRH/8qTGowq8wTk7e6gZK05hdTDq9RWP6Apgt13BaCSJC2D2kXLJJemX8a8eUI/ahpdROi0ZgQv+QKDFGhj/klFDEavM2krUdCysCROuqvdAc7Y3YMZ6lbvrSZxuXMQvD2PVN7oAaz9hQQ/zncLZWdYburCXv0UcHnjejWK+grM5iXN7yvCX75vmgBjcNKIrh9UMvzDzAA3xSUyAy5aemzTZ7m+Wlm3HSxN6Mdyq6JRigMhh8p3LnWpG7jstrCRMo60n7mtEedLSlNpdonn2HT4dZMCa6tt0DJ+eQZTAe0CcgIHnDuw8UDwuPPMDHpyu5rBk1nudJQr6LzVXybcdw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JIveiotkeGlE192c9KG+dumBiPtlgN2ju7yaOPdld0M=;
- b=ZMGkUlXrQSz7GPEHTqFapKwyaZ5E+eUbm/QFOyuLvZqiwCtC3/f2FC5tg/iwgzt3M+WY+cHK2mQ0u3hUqyGAEVSwc+7FX75TTtXE04LO02Q2HF9x+OpKVLS2+04Hu9b8AB9+mHSyIiXtr1lzVpj9kUbmsZtT78cRxscrK2tihULTYRp1jRl4Bl0jhjxHB9aodc2m+cD8L2gUy4YpTXZfkB+lNclWV+X+l3O099siFNEcCmFA5fd/77rYRfExGGqgAjLXcDqrDA9p5INIV45xH01I1QCvp8n/5mkLn7Emkwlhd0G0tsmqqdeLXpSkjos5Oj/5y99n9BNlliPRH/WX9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
+ bh=3+9k8JR0Ma+fU77OX2G1VmdHTeBqJ7vzDnkf43am6Zs=;
+ b=Xqf8XhhcEp4psCMi/Af5EMPdwjgeHy0JDwSyNYXTB8NqhBDJEJ28MDJy1tikXnqF2TKg4+1QLz8jceH9v5iShNKq39gBEyljHOx8mNZOGgMpWY+vBEnZOzfM3L1DefQDjWIgT6XZtaFmQvSdQbPNOyvH8PrINMxpE7Phlw15C8NlhOyB9y7WAiWtJ13l1HHBWGX+IkEsDhqO25IB4ipDNOYLHLrCmutqXUsbOyOJfcWX2E7zCVn+Hd4OkvmfK8N+2CSDdD+hbg1OF3F/ciSHSYViFLDO7/FFGA3x73uJjUD460CoaqLOKg/d+JUw+CUZte0jnc482rKfdmYRnO5sEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JIveiotkeGlE192c9KG+dumBiPtlgN2ju7yaOPdld0M=;
- b=jYXDi7P7W0SYPlxUPzvKi4vktHuqnu1f9Nkr4YFU5PmuPHwMeHJHAPjL1qV4P+l0OVPkFXvWcHbi9ok93ntuiQaq8mXuB8Rt+3PnIcIvNXX2RKTbq1bLI724Ib+YFHcJqFdiBYVQxe1Tb2nhHYQ/3i1naEV8W38CL5cnzUTFxB0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
- by CWXP265MB5651.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:158::8) with
+ bh=3+9k8JR0Ma+fU77OX2G1VmdHTeBqJ7vzDnkf43am6Zs=;
+ b=FWb+47bjFKXeXDde3tKB0z8gHotXO6r2s+QPw0GnH+EWuYOuSnsARujou4nZz2ACsblrlnJZfydz8+NDw3p3YYocs9lo8W0CyApmmS/ciRIhAfqySx+LNpAlvePz5Y7Wahj1Nyv5T1Xk5Si0D2YSz7l9o2c8GEfZHwSd+NTeJMI=
+Received: from MN0P221CA0003.NAMP221.PROD.OUTLOOK.COM (2603:10b6:208:52a::6)
+ by SJ2PR12MB8979.namprd12.prod.outlook.com (2603:10b6:a03:548::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Wed, 1 Apr
- 2026 15:15:07 +0000
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9769.014; Wed, 1 Apr 2026
- 15:15:07 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 01 Apr 2026 16:15:06 +0100
-Message-Id: <DHHX0LG9K10F.3NNW0OGTARLLK@garyguo.net>
-Cc: "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- <rust-for-linux@vger.kernel.org>, <linux-kbuild@vger.kernel.org>, "Lorenzo
- Stoakes" <lorenzo.stoakes@oracle.com>, "Vlastimil Babka"
- <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- "Uladzislau Rezki" <urezki@gmail.com>, <linux-block@vger.kernel.org>,
- "moderated for non-subscribers" <linux-arm-kernel@lists.infradead.org>,
- "Alexandre Ghiti" <alex@ghiti.fr>, <linux-riscv@lists.infradead.org>,
- <nouveau@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>, "Rae
- Moar" <raemoar63@gmail.com>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>, "Nick Desaulniers"
- <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, <llvm@lists.linux.dev>,
- <linux-kernel@vger.kernel.org>, "Shuah Khan" <skhan@linuxfoundation.org>,
- <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH 28/33] docs: rust: quick-start: remove GDB/Binutils
- mention
-From: "Gary Guo" <gary@garyguo.net>
-To: "Miguel Ojeda" <ojeda@kernel.org>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Danilo Krummrich"
- <dakr@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Catalin
- Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Paul
- Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, "Alexandre Courbot" <acourbot@nvidia.com>,
- "David Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
- <david@davidgow.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, "Todd Kjos"
- <tkjos@android.com>, "Christian Brauner" <christian@brauner.io>, "Carlos
- Llamas" <cmllamas@google.com>, "Alice Ryhl" <aliceryhl@google.com>,
- "Jonathan Corbet" <corbet@lwn.net>
-X-Mailer: aerc 0.21.0
-References: <20260401114540.30108-1-ojeda@kernel.org>
- <20260401114540.30108-29-ojeda@kernel.org>
-In-Reply-To: <20260401114540.30108-29-ojeda@kernel.org>
-X-ClientProxiedBy: LO4P123CA0323.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:197::22) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:488::16)
+ 2026 15:16:29 +0000
+Received: from BL6PEPF0001AB58.namprd02.prod.outlook.com
+ (2603:10b6:208:52a:cafe::1d) by MN0P221CA0003.outlook.office365.com
+ (2603:10b6:208:52a::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.30 via Frontend Transport; Wed,
+ 1 Apr 2026 15:16:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BL6PEPF0001AB58.mail.protection.outlook.com (10.167.241.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.17 via Frontend Transport; Wed, 1 Apr 2026 15:16:29 +0000
+Received: from localhost (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 1 Apr
+ 2026 10:16:28 -0500
+Date: Wed, 1 Apr 2026 10:16:11 -0500
+From: Michael Roth <michael.roth@amd.com>
+To: Ackerley Tng <ackerleytng@google.com>
+CC: <aik@amd.com>, <andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>,
+	<brauner@kernel.org>, <chao.p.peng@linux.intel.com>, <david@kernel.org>,
+	<ira.weiny@intel.com>, <jmattson@google.com>, <jroedel@suse.de>,
+	<jthoughton@google.com>, <oupton@kernel.org>, <pankaj.gupta@amd.com>,
+	<qperret@google.com>, <rick.p.edgecombe@intel.com>, <rientjes@google.com>,
+	<shivankg@amd.com>, <steven.price@arm.com>, <tabba@google.com>,
+	<willy@infradead.org>, <wyihan@google.com>, <yan.y.zhao@intel.com>,
+	<forkloop@google.com>, <pratyush@kernel.org>, <suzuki.poulose@arm.com>,
+	<aneesh.kumar@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, "Sean
+ Christopherson" <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+	<hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+	<mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song
+	<baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie
+	<yuanchu@google.com>, Wei Xu <weixugc@google.com>, Jason Gunthorpe
+	<jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>
+Subject: Re: [PATCH RFC v4 07/44] KVM: guest_memfd: Only prepare folios for
+ private pages
+Message-ID: <s4dbqrv2c6yzt4nsflfarnggtl25xlz6mzg74tfeg3eskceno6@6l5hpfmcbju3>
+References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
+ <20260326-gmem-inplace-conversion-v4-7-e202fe950ffd@google.com>
+ <CAEvNRgF+FjJ1EWSR_rzD1=N040ZitiRrM2O3N0Kj5yN5rT3h+Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAEvNRgF+FjJ1EWSR_rzD1=N040ZitiRrM2O3N0Kj5yN5rT3h+Q@mail.gmail.com>
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CWXP265MB5651:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3b00ac4-bdfc-4313-0636-08de90017539
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB58:EE_|SJ2PR12MB8979:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff40745b-b42a-494c-3951-08de9001a639
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|10070799003|366016|376014|7416014|921020|18002099003|22082099003|56012099003;
+	BCL:0;ARA:13230040|36860700016|7416014|376014|82310400026|1800799024|56012099003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	OYr5ZvfguCLkWwH7cRnSLnKVQ02OwxukuobmX820gGDbWFv1hdkRoFF1TbqYHusSuMcsA3sAJdG8EhXwinS01u0UGaCSg9XsJxVCu1f57XJnfL7wHzIyZDIHmHJJtDTbUEEa4jOQDvM7aXWJ2MjGIGoYRojcZdTgthR9pYgDhfnS42549v79xDSdUM1Cfm1QHAD9vM7eQ7ZvpfiUYlRXM1oyOA/dDhrcMMfimrhkPT6yT+0CVwoRTyqroUIQJB2anBpaXO3vFQCwMZnEHQLdZqjbLnnQ4uYGPlRT/oldrotTw1aLyU0xJOd7skePyQ8WLGrygmzgK9ViueXYU6bsDkFmHex8ldpMW4iJCsnrNRyZfuZWX9FQBSbLygZ0nu9R4uYhKaC+7mJrloDqadmpyxsz0O0xfjiV4OkOc36Gg48R+14sgVysYTyX+ZCQP84BS43GGgYjI2tFAz7pguTNQxmFKZkA5x8RoHOLqrMmc1eNcOZhCmR1WTDsCsitkjeZgBmx/WPnAQ5iwVEQiygQPSKbU1Ca9RUDhjd1wIS5lGv0Uf+bRI7niedrbGGNSZ80C7Vr3oTyRlDpFgkRjwXVZ+5fzhDA+1xICEawJTtLjaEVix7UtDPlQ9o27ovf24NRbP40sv8Orlxl3/bC66Mo2hj3YItnqPNwnNFCY0jLyt73G3BfiOvHAanLWfc913u6wpy+xwB+g9F2GA6+fzBxc+VXCeSWUp5bVIqZ5tO8Gc7lezzMohreoB9HHisGE13jzKu+4AQgxAWrfqB7qhSbhg==
+	mui79d6WuBdwGPubUtn7BNSU3jT282Dhswk6ENFdhnDCc9ZI8zlPlr73kshxh//pWhss6OcsMg5zHvXhxwrUSpIlnTIaPkKy7aOTuwsign9ECxrbbJcVf2j5xCrBMT7meU1CV/ChOjqkM8gTfQnJ3PLQNgJqu9VWeyjmWKJm9Of0fsltOBRrnWr0JssZ4SAelkWvbZzaCYHjI3hxLLS0tVm2TsSShHbbQO2HAFRgP2todtk3Z0+cAJ1U0UJjXYpNdZLMlqov6uMiI59nvrofXy6nJeLgFPULBjT7YJaTkXZicRaQtUp/lfjXm1krIOneTxqIAFmGKRD4UWTM0FGVB0hVy405FF9BGRGn1pzd+v9IRvB6vTrag6bq0cOQyo1NAcszcawZNhREoX1+FDjOYXzGiTiCpBC6sYeIT7hh6Ei07SCagTlzn4r9axGOoNLVj6bejksqoJDoO0d3TAFhZfQvrUrAMethbT2q1HjSp5zOG7w4I0PcLHsy4mvJ19K2EmDnYTI7hCEKZlViRanMXRtSwDyYmPr75hCAu0PxtcEgBeaE0prXuHdDt6FsirfDjoLd9PDzSVsUIUnmixFa3yGoNtpaedR1EJP98l5pUIq5jitqmmiFfuqGGt0KtcNbuVJU5zwzTRkdmpeM8OHxBf6baQYwNzdOJV0/QNhOjOPUT6c/n4CksnZ5ZNvjKUUwBLzYJiZ92VwrN4YKlxr1cEr5+XB7q41x36BhiDuiWqa9V8G5uXCuc4g8MSEoTxWo09k48ActffrteUeNfwfS5w==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(10070799003)(366016)(376014)(7416014)(921020)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1102;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(376014)(82310400026)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NVN1WWhsZFl6ak5QRzU2RExaQnpqQ2ZVTkxrU3k3Uy85dnk2cy93c2tidTlk?=
- =?utf-8?B?NmE1cFovcU9MMGlwVk9vV0hEUURabWxSeWxHanFpWGZLMEZ1NlB3UmVUOG1q?=
- =?utf-8?B?ckZLNjZJT21UNWhzR3NRalE1YnNFeDNCUGNTdlFWNEw4YUNRTEJzd0NyYWdy?=
- =?utf-8?B?QU96bjkyYmZra3ErSG12M3JIMmFNbnlzYmJRVlBQSk9qd0pWWjVVVy9zci9w?=
- =?utf-8?B?djdsS0dwemNnbHNTTnFNWFV5VGl0YUdWYzFrZGtPNURyNWxGRjBzbnRvUExz?=
- =?utf-8?B?dVBMR0dYOXdXTm5Gbi9OMWNrSWtEdlpHaTRienUyWHNpT3kveTBrcEltRzl4?=
- =?utf-8?B?azRJTWR1aDlaSGdUQ245QTB2Z0hrRmVTMWR6N0lRTndRQTl6RmdncWlNQU5Q?=
- =?utf-8?B?dmRpbVJqTzVpdjVOZkYzWEUycEpUQzNhdGJzUjcyREw2T0JEVTNiMzdjam5s?=
- =?utf-8?B?YlF3U0dXNVpHTmttSDA0ZkJ0Q2VTbTF4b0MzU29zWlhUY0g2a0s3aWcxSjYz?=
- =?utf-8?B?b1Z6b2lHWUdYME5KVzZUWEt6cjZySE1pUjNxWTF3SFBDeEpLMG1UTXdQK2V3?=
- =?utf-8?B?NHdaNmR1bHAvSGhxcUpWZVJzY3E5NzR6ZE5YZXo3N0pTRktTZ3FZSFBQQlZD?=
- =?utf-8?B?OU80M2E2TVlCOEdmS1JrMmFidHRVQ290Qm94aHJCRm42em9UYmwzQnQ5SUMw?=
- =?utf-8?B?bGFvRG9rYjJxRFk1Zll5cEMyeTY4NjZjNDlwRHlUU056UHUwQlQ1OFZMbGlD?=
- =?utf-8?B?bmNIMWdGdGswaHFzeGxIejY2RmtobHRXUUg3K3RONDFEcDZFZ1BEdnpLc1F6?=
- =?utf-8?B?Zi92bTZ2cm5CRkdIZXF3MXdZMTZmQTVIVjUyUGhsTEh2d08waWtaUWRsQlBZ?=
- =?utf-8?B?SDBGaUYzSU9FUkFQdEgyNW1ma0NMd0ZLZUU2Q1F6UU1YNmU0ZGRFQWRqbDhz?=
- =?utf-8?B?RmlUMGJrVytaR1dGWEtoOHVNYjVNRnU3aEl1Z0RYQlk5OUFxYk1odWc0WE1n?=
- =?utf-8?B?Yzg1VG5NT1BYU0RZaTFUL0Ruakd4OVFlZS9aYW1aaFE5YVpOdmdlSnJoVUVF?=
- =?utf-8?B?V3RZZ0dUYlNpN3NCelRTL0ltNnN2M1pxT2hTOElUS2ptUkVJbVZ2aElXMWRX?=
- =?utf-8?B?SXZUUkVWVlZJbGtGdjQyWW5HanUxakxYWnNUZXc3dVBXTlM4ZFFDT1BnY1lG?=
- =?utf-8?B?SGNxTjRrUjVoZDVZT0psKy9DL1BZOGF1N05aN21nVTl4ZzV2eUZzNzdibXA3?=
- =?utf-8?B?eFZMTFMrVHhtaDNObXdMSUpuKzZKL0FvRVFjZTQ1dFN3MjhFM1JJQ3lLM0Nw?=
- =?utf-8?B?SGg3MWQ3Z3BqNDRmaDBYV0ZPeXlnOEZYZFZ2dmtrUjlBVlQ1OWM1dmRMZkkw?=
- =?utf-8?B?d3dzR0NiUXNHRHp4TUlhRU5rc1ZiUHB1aTR6TkhSZDVUUWtLTUpVbmlKY1JM?=
- =?utf-8?B?VGlKa2hzYjlVUzZxbmxxZ1p1SGNzRVBsZHNCWE54T05pMHZ4NXdUWnZEYXda?=
- =?utf-8?B?WmZCTXNPR0cxNER4a3NLN2lzSElxS2dMUkczdDBTL3hTajh2TWpob1YrTEdv?=
- =?utf-8?B?dmxEL3lwRkhOcnhPak9GdUkrTlRDTHRCeVBsVm1WaGhMWHBkbUIwdWNSU3B6?=
- =?utf-8?B?U0Z2NUh5NXFFMS9XRmEyOUJZZmpVOUllSTVFakdydWhSeTNheFdySjZnRnJQ?=
- =?utf-8?B?RjJPbE9OOHVmbGNWTE5tNHlSajgyWG11cFdZd2lpUmsxYlVNa3JOenlzSXEx?=
- =?utf-8?B?Ny9zKzFLdFZKZWxUVUhzc0dwSllQdlZhWjN4WFJpWVhVa3JGVDdJb1ZjS0Nj?=
- =?utf-8?B?MmY1VUZnejdiYURSUEs3enhPNkRZZmFWQ21pZkpITkpCY0k5K0hBMTJDUE0z?=
- =?utf-8?B?MW1OODNmVnAvb0pLVFBUT1IvS0IvRzQ5aG45aDNJQjB0RERPTDBZMU1xZ1J5?=
- =?utf-8?B?ak9yUWJoWTVNTE96cmNtUFk5Um9wN3lUQmtoK3gweWdNZTZkY0MvczlJNlVi?=
- =?utf-8?B?QVdaM0FTVkNCajRnUmY5TFRWYmZ5OEdwdGgvQXlXOTI4OUlaZGdEcXV5WHE4?=
- =?utf-8?B?OVZrUVpMblRjVklmbWRCbzMzMFNDTEh4ZVlxZlRpem9YWm00aU04S0Vsc0tn?=
- =?utf-8?B?RFJwQlNVMVU3c0d4RUVWYmpzd1NTcnBhZ2cvSGhxQUZuQnlTNVZDM3FzSEt3?=
- =?utf-8?B?cmN4ZWl2dkNNaHREQkMrb1B3c1M5ekNabjVUTUxEZDV1c3BQTG1YVlFuM3o5?=
- =?utf-8?B?RUp3WEFrZDJXaklrUkdpL3hjVkR2NXJRQzU4OVU0YTVVdUlUNk5VQmdMbUdN?=
- =?utf-8?B?L2N2S0RLR29yWFBNOUZKeWhQOElXcU00aWJpWmdVaU56bVRVSWh2dz09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3b00ac4-bdfc-4313-0636-08de90017539
-X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 15:15:06.9954
+	6j0hghzGGfUdhgvFuRXBlwdLqgPU+otHpxr1M7O7RokP7WQ8mPd4l79jTc5H90IqV/NkKXvpi3PJH8AYLdpcP7vjdB10HSAwSyG7aAK7cHVuFYq5IKnDqP5Mb1gsIVNmjXD/UDU6f+6FxDQU2MtiumT6n3evwWvFAcgX0g0p5lpk9OT+SAHTjAUt8tqvg5Cxy0FyXs+WY3Cz0RtVtnU9+/xGSfxc+zwo+/Hi9hPf8Xu1kHMPpm4UH2pBDy7yNNFDBAFMY/GBKwZkrLW1RxBpI8W6h3cpUrbz8gJGVb12cxBfSz76JXXFMOoEcJGmgjQYO/oEg/V/D/74m8oMMyec3kP+IHaey5Fd5ybIdoY9CogEDAzI781QP4r7wYTguMG9uWHZ6w1mMZZoA7a9Sasces9jKAOgrKWrXKzJ7nub54kZ61mu+gPWAjyegATcwOvB
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 15:16:29.0873
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3lHflWd9u7AoLIoFJ49pndNMlb5mo4KUN7L4Yv+bYf3FuKZ7e2r+1U5oqTt9AQtzsC76N53PD3YPfie7Ht+YmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB5651
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff40745b-b42a-494c-3951-08de9001a639
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB58.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8979
 
-On Wed Apr 1, 2026 at 12:45 PM BST, Miguel Ojeda wrote:
-> The versions provided nowadays by even a distribution like Debian Stable
-> (and Debian Old Stable) are newer than those mentioned [1].
->
-> Thus remove the workaround.
->
-> Note that the minimum binutils version in the kernel is still 2.30, so
-> one could argue part of the note is still relevant, but it is unlikely
-> a kernel developer using such an old binutils is enabling Rust on a
-> modern kernel, especially when using distribution toolchains, e.g. the
-> Rust minimum version is not satisfied by Debian Old Stable.
+On Wed, Apr 01, 2026 at 07:05:16AM -0700, Ackerley Tng wrote:
+> Ackerley Tng <ackerleytng@google.com> writes:
+> 
+> > All-shared guest_memfd used to be only supported for non-CoCo VMs where
+> > preparation doesn't apply. INIT_SHARED is about to be supported for
+> > non-CoCo VMs in a later patch in this series.
+> >
+> > In addition, KVM_SET_MEMORY_ATTRIBUTES2 is about to be supported in
+> > guest_memfd in a later patch in this series.
+> >
+> > This means that the kvm fault handler may now call kvm_gmem_get_pfn() on a
+> > shared folio for a CoCo VM where preparation applies.
+> >
+> > Add a check to make sure that preparation is only performed for private
+> > folios.
+> >
+> > Preparation will be undone on freeing (see kvm_gmem_free_folio()) and on
+> > conversion to shared.
+> >
+> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > ---
+> >  virt/kvm/guest_memfd.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> > index b6ffa8734175d..d414ebfcb4c19 100644
+> > --- a/virt/kvm/guest_memfd.c
+> > +++ b/virt/kvm/guest_memfd.c
+> > @@ -900,6 +900,7 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+> >  		     int *max_order)
+> >  {
+> >  	pgoff_t index = kvm_gmem_get_index(slot, gfn);
+> > +	struct inode *inode;
+> >  	struct folio *folio;
+> >  	int r = 0;
+> >
+> > @@ -907,7 +908,8 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+> >  	if (!file)
+> >  		return -EFAULT;
+> >
+> > -	filemap_invalidate_lock_shared(file_inode(file)->i_mapping);
+> > +	inode = file_inode(file);
+> > +	filemap_invalidate_lock_shared(inode->i_mapping);
+> >
+> >  	folio = __kvm_gmem_get_pfn(file, slot, index, pfn, max_order);
+> >  	if (IS_ERR(folio)) {
+> > @@ -920,7 +922,8 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+> >  		folio_mark_uptodate(folio);
+> >  	}
+> >
+> > -	r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
+> > +	if (kvm_gmem_is_private_mem(inode, index))
+> > +		r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
+> 
+> Michael, I might have misunderstood you at the last guest_memfd call:
+> sev_gmem_prepare() doesn't prepare a page for being a shared page,
+> right? Does this work? That prepare is only called to "make private"?
 
-I suppose people could have been using an old LTS distro + rustup and run i=
-nto
-this issue. Albeit it's probably quite unlikely.
+Hmm, I guess your guest_memfd-inplace-conversion-v4 branch is out of sync with
+these patches?
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+I have the below local patch based on top of that for SNP-specific enablement,
+which is basically identically, so suffice to say: yes, this should work
+for SNP :) If any architecture pops up that needs to do some prep in
+advance of mapping shared pages, then we could potentially plumb the
+shared/private flag through to the arch-specific prep hook, as was also
+suggested on the call, but it doesn't seem like that's needed by any
+users for now.
 
->
-> So we are at the point where keeping the docs short and relevant for
-> essentially everyone is probably the better trade-off.
->
-> Link: https://packages.debian.org/search?suite=3Dall&searchon=3Dnames&key=
-words=3Dbinutils [1]
-> Link: https://lore.kernel.org/all/CANiq72mCpc9=3D2TN_zC4NeDMpFQtPXAFvyiP+=
-gRApg2vzspPWmw@mail.gmail.com/
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  Documentation/rust/quick-start.rst | 9 ---------
->  1 file changed, 9 deletions(-)
->
-> diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quic=
-k-start.rst
-> index 5bbe059a8fa3..a6ec3fa94d33 100644
-> --- a/Documentation/rust/quick-start.rst
-> +++ b/Documentation/rust/quick-start.rst
-> @@ -352,12 +352,3 @@ Hacking
->  To dive deeper, take a look at the source code of the samples
->  at ``samples/rust/``, the Rust support code under ``rust/`` and
->  the ``Rust hacking`` menu under ``Kernel hacking``.
-> -
-> -If GDB/Binutils is used and Rust symbols are not getting demangled, the =
-reason
-> -is the toolchain does not support Rust's new v0 mangling scheme yet.
-> -There are a few ways out:
-> -
-> -- Install a newer release (GDB >=3D 10.2, Binutils >=3D 2.36).
-> -
-> -- Some versions of GDB (e.g. vanilla GDB 10.1) are able to use
-> -  the pre-demangled names embedded in the debug info (``CONFIG_DEBUG_INF=
-O``).
+-Mike
 
+  Author: Michael Roth <michael.roth@amd.com>
+  Date:   Mon Oct 27 07:58:32 2025 -0500
+  
+      KVM: guest_memfd: Don't prepare shared folios
+  
+      In the current guest_memfd logic, "preparation" is only used currently
+      to describe the additional work of putting a guest_memfd page into an
+      architecturally-defined "private" state, such as updating RMP table
+      entries for SEV-SNP guests. As such, there's no input to the
+      corresponding kvm_arch_gmem_prepare() hooks as to whether a page is
+      being prepared/accessed as shared or as private, so "preparation" will
+      end up being erroneously done on pages that were supposed to remain in a
+      shared state. Rather than plumb through the additional information
+      needed to distinguish between shared vs. private preparation, just
+      continue to only do preparation on private pages, as was the case prior
+      to support for GUEST_MEMFD_FLAG_MMAP being introduced.
+  
+      Signed-off-by: Michael Roth <michael.roth@amd.com>
+  
+  diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+  index 3acc6d983449..4869e59e4fc5 100644
+  --- a/virt/kvm/guest_memfd.c
+  +++ b/virt/kvm/guest_memfd.c
+  @@ -1249,7 +1249,8 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+                  folio_mark_uptodate(folio);
+          }
+  
+  -       r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
+  +       if (!kvm_gmem_is_shared_mem(file_inode(file), index))
+  +               r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
+  
+          folio_unlock(folio);
+
+> 
+> >
+> >  	folio_unlock(folio);
+> >
+> > @@ -930,7 +933,7 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+> >  		folio_put(folio);
+> >
+> >  out:
+> > -	filemap_invalidate_unlock_shared(file_inode(file)->i_mapping);
+> > +	filemap_invalidate_unlock_shared(inode->i_mapping);
+> >  	return r;
+> >  }
+> >  EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_gmem_get_pfn);
+> >
+> > --
+> > 2.53.0.1018.g2bb0e51243-goog
