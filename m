@@ -1,234 +1,113 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F88386446;
-	Wed,  1 Apr 2026 20:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17BD258CCC
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 20:50:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775076376; cv=none; b=qx6wiQOKqMgoyHPArcqXY6oShUj+gZEbGFujVcRLNpy6QCtvz+/WKpSUAb504aRMmP4RmoWDeju/ONaDX3XXP+HCzufvegfX5AIBdjR6zsMn8NSdRBU0xxP4tyA+gWaSeaSlUS+q6YfAcx0mvnc4NqVBGfHC8hLX/PHBWIVm18E=
+	t=1775076627; cv=none; b=j37ZHJ99uczomoybdMmicCP0OFF+77myk1UzGiXwVqvorB8Rv6IjYr6x3ScI7Q9dG02nYD+UL6xFazVDhLP48t1VSmgZdrcSceNtHthrPOULoBOXZ4OFTXmUkhPE6A1VqdvwyECtveGq6jxiZbQATxXrueV+WZchBNWArR8tnsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775076376; c=relaxed/simple;
-	bh=JrVCJyBTIlXr5qZi5cgtJcAbGNb9zH+PqOAvjdeVWg0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=BqgxEpdtXWuVINGu0KslrngzjzGqiwtFtZ9XvJRbRwXMAelXU3pM35wqsb+QhAcDg3iv5KLtCD2vFk+kQkMrbp6fZXsmhLsivPZcAASaiQhf/MkDx9yaOBHdxXnFZSHL2SYc2+ifCrSgyVfnoBq/O55CxGOY4LjdeufdsUBmWgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=E7b6l/2Q; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1775076627; c=relaxed/simple;
+	bh=UxYX2hMtqcuAWB5RlFy6fDwCyO5Sq8mv97Ebeml/t9s=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=isgM+qyGXIs+Y1FJAGUSNJN/Eq/+8QI4b78qTloSufjLqtKXHaLH4/8YMZ6soSevWas1oFUC0y1f/ZXcCzXT9SeQtFsXkrNZ5K2DpLHgDpT5lbetTcnJjg7f/VSUxLvDwW3KE42VMM3NH4BkSGXl0lOkGbCCO7gF5dll+KuJkng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=JA3R6vzZ; arc=none smtp.client-ip=195.121.94.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="E7b6l/2Q"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631AjOUb015098;
-	Wed, 1 Apr 2026 20:45:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=RWruVU
-	I1tyA0IagjZ+3lclFkCSQNagbCICLF95nwFe4=; b=E7b6l/2QjZCkcKJ5G4G/yI
-	hK9FUV+8cIkcFYWGWsXdUJG9JFH2o0hURCYLGsttdJMwHxUp0BmjOPrddiIhTJBf
-	JSI/aGGaWDK57MvekGVsXmjXF43WZ+YgR/eWbrEYJGU4x+eBOJ0e1RCTAPAizUvH
-	LNKFbXVymu7GR2aJk/aB00teaB43zhUraGE3IQr/JL0BKicELbB5GeqpBRV7syMa
-	FCPytU46RU4XoR2Sy5i9LRlIhshepaDecbeL5XoBO1FLlbYMktAfVIiqcZJpL0b/
-	atvkCs90EAZ7CdXunmqS3oejFRPhJDZpEt1cpeSBr7Z+U0+JxByfRkfaIAC13fAQ
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66q3a4p5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 20:45:56 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 631Id5q2021709;
-	Wed, 1 Apr 2026 20:45:55 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d6sasqk58-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 20:45:55 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631Kjsf427984504
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 Apr 2026 20:45:55 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D426458052;
-	Wed,  1 Apr 2026 20:45:54 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4CE1458062;
-	Wed,  1 Apr 2026 20:45:50 +0000 (GMT)
-Received: from [9.124.211.138] (unknown [9.124.211.138])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  1 Apr 2026 20:45:50 +0000 (GMT)
-Message-ID: <20a95f92-57f9-44cc-bc40-8110dd562998@linux.ibm.com>
-Date: Thu, 2 Apr 2026 02:15:48 +0530
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="JA3R6vzZ"
+X-KPN-MessageId: 3f509360-2e0c-11f1-8ff1-005056999439
+Received: from mta.kpnmail.nl (unknown [10.31.161.189])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 3f509360-2e0c-11f1-8ff1-005056999439;
+	Wed, 01 Apr 2026 22:49:16 +0200 (CEST)
+Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.189])
+	by mta.kpnmail.nl (Halon) with ESMTP
+	id 3f4a0ff1-2e0c-11f1-b5d0-0050569981f5;
+	Wed, 01 Apr 2026 22:49:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:subject:message-id:to:from:date;
+	bh=f3ki8xj5EkThUxzdXA2NV9BxrUJB2o3KdN4Rk7USO3k=;
+	b=JA3R6vzZlzCiLjDMl9hv54rjCHogZS1NlFQ0irJLzE7N8vxSgPBfVbFppC4DUpENsJEHYa16xGWjd
+	 sjsb6FmM8OzQyrzPUsHBjFpIFxr0QvtKHR/Wxup3x2CxEzQRDCQowkkDCCafqXvrzOhKOfc+7UFW3Y
+	 tpRBFAe2y94bCFyWzim7aTPvSq56a40aOGTlqZKtN5EWs1KbbrKrnCx0TFExKRwUb9R60M8nL5BkuW
+	 75sliE6pYRO0FBjodR1sd5kGcHOIl+09qMm6l4C92nfYf8M1btWUqkcIOazBaCJ9M34pAqJsgHdHrQ
+	 07rYPoMamivu/M52wRp14yhW67pgEWg==
+X-KPN-MID: 33|WgdNH6WpjibWQiD0q7BqUXta8PRdpD2JG0HSLm2HgGIJHA90ifK280e8S6j0q2I
+ NvgYcRz19Y/KQq2Y2Dn2imC1b5n6vY6h7hrV1lkAT52Q=
+X-CMASSUN: 33|HXMSAvOeAupMVeHNJfZFsHo+8VkLF9TMmk3oWYffGEvEvklGmdWB7xOWbn3uzas
+ UYIJJ2QmHmnXiBLNvDIF49w==
+X-KPN-VerifiedSender: Yes
+Received: from cpxoxapps-mh05 (cpxoxapps-mh05.personalcloud.so.kpn.org [10.128.135.211])
+	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
+	id 3f3f2824-2e0c-11f1-94b1-00505699eff2;
+	Wed, 01 Apr 2026 22:49:16 +0200 (CEST)
+Date: Wed, 1 Apr 2026 22:49:16 +0200 (CEST)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Aleksa Sarai <cyphar@cyphar.com>, Christian Brauner <brauner@kernel.org>
+Cc: Chuck Lever <chuck.lever@oracle.com>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Ethan Tidmore <ethantidmore06@gmail.com>,
+	NeilBrown <neil@brown.name>, Oleg Nesterov <oleg@redhat.com>,
+	Penglei Jiang <superman.xpt@gmail.com>, Kees Cook <kees@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Message-ID: <1674899546.858116.1775076556076@kpc.webmail.kpnmail.nl>
+In-Reply-To: <2026-04-01-distant-broke-bonnet-catacomb-cnRW5o@cyphar.com>
+References: <20260326182033.1809567-1-jkoolstra@xs4all.nl>
+ <20260326182033.1809567-2-jkoolstra@xs4all.nl>
+ <ecc86514cde4732995d9f50b9f5071fbb1f675e4.camel@kernel.org>
+ <2026-04-01-distant-broke-bonnet-catacomb-cnRW5o@cyphar.com>
+Subject: Re: [RFC PATCH v2 1/3] vfs: add support for empty path to
+ openat2(2)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Sayali Patil <sayalip@linux.ibm.com>
-Subject: Re: [PATCH v3 06/13] selftest/mm: adjust hugepage-mremap test size
- for large huge pages
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <fd252496169a91c80e339910978f21c3f4aac9f7.1774591179.git.sayalip@linux.ibm.com>
- <4e859cfa-db79-4676-9509-81a2140db3f3@kernel.org>
-Content-Language: en-IN
-In-Reply-To: <4e859cfa-db79-4676-9509-81a2140db3f3@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: ImgjBi1YotGdXNs22t1V0XVsv_SW0sfH
-X-Authority-Analysis: v=2.4 cv=frzRpV4f c=1 sm=1 tr=0 ts=69cd8404 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=Ikd4Dj_1AAAA:8
- a=VnNF1IyMAAAA:8 a=pPYpmyHQdkSp_mSMAUoA:9 a=pz4v2tEdkw714-FJ:21
- a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: PTslfsCMgxc-PgvVTdlUoFhCgIDowRJo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDE5MSBTYWx0ZWRfX/vpITs/nmC19
- /HYzZkKvv7DnQZZjAVg/dqj9D4Ya0Zju+8RAbNF7ZC79P24cqL0i3Xl7aFvXeSah2TSCS2iLMKe
- Elu5RqPslaih4wdGEbIep85pvivsUFShFgT2nDqAQveRt/W6etlcGJfHwwKTbxhnUU1YHxVyzZB
- KV1ZQ0n5qrEwUxd8Tl4BkXe5Wx47/eqF2sDLN/3zzJp0UN6dw9YNP/bU0LSK5rncvL3FawzE06A
- o+5XjA5b1rzjhNrvTlmLXLgXjpejj+osr0A9E77Q8VjdSDiazL0lhoO4cwvr0poO1G2hJK+XLuY
- 5a1MnnIouHfdYFflzxwgXSOaPP43O4bzx+SvZK565CPcKlV7rOICa4GhubHZ+mqm6K2YTwXz00a
- KVSI0Ijm3/KXSS8w/UG2++nO6DyGUREGBVIZzf0qBIlmemvJ6EUu4uQa4lCf1DFxMVGlnKlof8A
- ekT1kBhoZnFXhujbR4g==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-01_04,2026-04-01_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010191
+X-Priority: 3
+Importance: Normal
 
 
+> Op 01-04-2026 14:23 CEST schreef Aleksa Sarai <cyphar@cyphar.com>:
+> 
+>  
+> On 2026-03-30, Jeff Layton <jlayton@kernel.org> wrote:
+> > Looks sane to me. Can this be merged apart from the rest of the series?
+> > It doesn't seem like the transitive stuff is dependent on this.
+> 
+> My only comment is that I would like this to be usable in open() as it
+> is one of the very few cases of an O_* flag that is actually backwards
+> compatible with all of the brokenness of open() and the systemd folks
+> would probably want to use it (they can't use openat2() yet).
 
-On 01/04/26 19:40, David Hildenbrand (Arm) wrote:
-> On 3/27/26 08:16, Sayali Patil wrote:
->> The hugepage-mremap selftest uses a default size of 10MB, which is
->> sufficient for small huge page sizes. However, when the huge page size
->> is large (e.g. 1GB), 10MB is smaller than a single huge page.
->> As a result, the test does not trigger PMD sharing and the
->> corresponding unshare path in mremap(), causing the
->> test to fail (mremap succeeds where a failure is expected).
->>
->> Update run_vmtest.sh to use twice the huge page size when the huge page
->> size exceeds 10MB, while retaining the 10MB default for smaller huge
->> pages. This ensures the test exercises the intended PMD sharing and
->> unsharing paths for larger huge page sizes.
->>
->> Before patch:
->>   running ./hugepage-mremap
->>   ------------------------------
->>   TAP version 13
->>   1..1
->>    Map haddr: Returned address is 0x7eaa40000000
->>    Map daddr: Returned address is 0x7daa40000000
->>    Map vaddr: Returned address is 0x7faa40000000
->>    Address returned by mmap() = 0x7fffaa600000
->>    Mremap: Returned address is 0x7faa40000000
->>    First hex is 0
->>    First hex is 3020100
->>   Bail out! mremap: Expected failure, but call succeeded
->>   Planned tests != run tests (1 != 0)
->>   Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->>   [FAIL]
->>   not ok 1 hugepage-mremap # exit=1
->>
->> Before patch:
->>   running ./hugepage-mremap
->>   ------------------------------
->>   TAP version 13
->>   1..1
->>    Map haddr: Returned address is 0x7eaa40000000
->>    Map daddr: Returned address is 0x7daa40000000
->>    Map vaddr: Returned address is 0x7faa40000000
->>    Address returned by mmap() = 0x7fffaa600000
->>    Mremap: Returned address is 0x7faa40000000
->>    First hex is 0
->>    First hex is 3020100
->>   Bail out! mremap: Expected failure, but call succeeded
->>   Planned tests != run tests (1 != 0)
->>   Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->>   [FAIL]
->>   not ok 1 hugepage-mremap # exit=1
->>
-> 
-> Why are there two "Before patch" in here?
-Thanks for pointing that out, Let me fix it in the next version.
-> 
->> After patch:
->>   running ./hugepage-mremap 2048
->>   ------------------------------
->>   TAP version 13
->>   1..1
->>    Map haddr: Returned address is 0x7eaa40000000
->>    Map daddr: Returned address is 0x7daa40000000
->>    Map vaddr: Returned address is 0x7faa40000000
->>    Address returned by mmap() = 0x7fff13000000
->>    Mremap: Returned address is 0x7faa40000000
->>    First hex is 0
->>    First hex is 3020100
->>    ok 1 Read same data
->>   Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
->>   [PASS]
->>   ok 1 hugepage-mremap 2048
->>
->> Fixes: f77a286de48c ("mm, hugepages: make memory size variable in hugepage-mremap selftest")
->> Acked-by: Zi Yan <ziy@nvidia.com>
->> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
->> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
->> ---
->>   tools/testing/selftests/mm/run_vmtests.sh | 13 ++++++++++++-
->>   1 file changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
->> index afdcfd0d7cef..eecec0b6eb13 100755
->> --- a/tools/testing/selftests/mm/run_vmtests.sh
->> +++ b/tools/testing/selftests/mm/run_vmtests.sh
->> @@ -293,7 +293,18 @@ echo "$shmmax" > /proc/sys/kernel/shmmax
->>   echo "$shmall" > /proc/sys/kernel/shmall
->>   
->>   CATEGORY="hugetlb" run_test ./map_hugetlb
->> -CATEGORY="hugetlb" run_test ./hugepage-mremap
->> +
->> +# If the huge page size is larger than 10MB, increase the test memory size
->> +# to twice the huge page size (in MB) to ensure the test exercises PMD sharing
->> +# and the unshare path in hugepage-mremap. Otherwise, run the test with
->> +# the default 10MB memory size.
-> 
-> PMD sharing requires, on x86, a 1 GiB area with 2 MiB hugetlb folios.
-> 
-> How does doubling sort that out?
-> 
-> Also, why the magic value 10mb?
-> 
-> 
-Hi David,
-Yes, 1GB huge pages are mapped at the PUD level and are not involved in 
-PMD sharing, as huge_pte_alloc() skips sharing for sizes other than 
-PMD_SIZE.
+OK. I'll just wait a bit on what Christian has to say about adding it to
+openat(), since he initially rejected that, before I write up the new patch.
 
-The issue here is due to an unaligned memory size on a 1GB mapping.
-This leads munmap() to fail at an unaligned address, causing the 
-subsequent expected-to-fail mremap() to unexpectedly succeed.
-The default memory size for this test is 10MB.
-
-Aligning the size to a multiple of 1GB avoids this failure, but it is 
-not related to PMD sharing. I will update the description in v4 to 
-reflect this more accurately.
-
-I will also update the test code directly to align the memory size to 
-the huge page size, rather than modifying run_vmtests.sh.
+> 
+> -- 
+> Aleksa Sarai
+> https://www.cyphar.com/
 
 Thanks,
-Sayali
+Jori.
