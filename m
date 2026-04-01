@@ -1,203 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022131.outbound.protection.outlook.com [52.101.101.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5322E62D9;
-	Wed,  1 Apr 2026 14:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775052657; cv=none; b=hXeOqqMfmSjDzIahZQCrBFxkWDg2O3oBPJMJIFe57D2c8Uvi0XusanF8EXck+skYcyvryR705oonvEj/zJGggEglcVSX/DQ75L66JQf1CzJW5o9RFgUNL6p8ik2h80Z5eisX7VBRoxMrYo+j3NggaevvqsedDVGEguhiXKD3oIE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775052657; c=relaxed/simple;
-	bh=y9AZ3kPGoHublxbM40WNj5WyT0fJ5pu6ZSBg2xxPUXM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HRnv3beQ31CceQyZvirkolcO05fZX3MlCunDoATeUVzNs1M02owcay/WcqaopOT5cglZhiDhSQl05tJsnZwx+PWABZqticERsfa4nFwxBnakJZ1ZM1swGvo7UOAYiCtUfcQ8P4wCV+tPDjcVHBWBAygTA2v2HUM8DtYzOABj5gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EVtkVC0K; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A356144D039;
+	Wed,  1 Apr 2026 14:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.131
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775052664; cv=fail; b=p/ah4PYgyY5xpKjt9DrXwrBdOliBHEqdYBlC931ifT5jWJ1xJlLg3pGSkDHkyeIwMTGH9xAnVByMh2BjU7zDggyjF5trgSpR8sXe9YMBI7rVj1jfCS0oZssQc9eyEKGypvyD3QIJGwA9D1ZlWgIo8Bp0IWfykt8qayiXZpPoxvM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775052664; c=relaxed/simple;
+	bh=Mv3D/NsPQXucDco8XJZ2rGV+WvNHcJUKd4XjwCUbr4w=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=f2gwG3VtkS2fa603JQrU0X412OZ+EmCue3oDlD0VhoEFHleYCMQfpyLoro0Bhgtn4v0vprhRD8ImeH10F6eNGKsIHIxud/x1PbyRxr0E1NupaHENqPd6NrUrABX1s9EEyIQgSyLyC8GktE3tWX7HHPjN5LidSorf0L4Nj163haU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=zd9VqGr0; arc=fail smtp.client-ip=52.101.101.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EVtkVC0K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA854C19421;
-	Wed,  1 Apr 2026 14:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775052657;
-	bh=y9AZ3kPGoHublxbM40WNj5WyT0fJ5pu6ZSBg2xxPUXM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EVtkVC0K0I6FJox73TKW/Bx7q/dEY4tNpkzJoZqc9VoM5MX9GOTFVnOQ9eqLz7fTt
-	 xHfpZyN+DdIdzs6aSCnUdS1E1rzPqX9K0cGIS2P/lcAtjkq/xMbunYz4Wt8JJwHoAK
-	 Pq9g8E9qiPs5uVsSD6ZO1tsAcA39t6bDwU69m5irmlIpXRpIXKk1z+OcMIybSlMQdy
-	 s9QC1w3DFHiUJ0kgQbcJwM/7C6S6H4fVS0ehb8yhaACrRMOK7AQo5m4DksLS1tjxGD
-	 2M4hyTLZUbmibYBR4DjVRPy/3ENNUFj0yHk5v+FJL+XF9SSCdboUk5MuMJp4Y1fen2
-	 zDQyJktu+qzLw==
-Message-ID: <4e859cfa-db79-4676-9509-81a2140db3f3@kernel.org>
-Date: Wed, 1 Apr 2026 16:10:51 +0200
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="zd9VqGr0"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lzLFrawO7ITAXuj81RrPgIbhl8yrRfvMgYTgdmwA4CfoVRWqD+rhoXh3d4VMV7DnY+3gpaoU8x7xSQpwjte4GSG35ENtStmGG0NZC/L462FbUO5iMYYBSw0Vu0UX3yiDnxwtheKXKy0dt295sQ4gACRpi5skxgGs5Y3ehTvfizTOxlaowpRMtfAYGxcZG4CDmLCgqbLY8DKOaQZDcnhvqHayra1p3cfW1EoQ0iydokaW+cyYMzMYgIBK6AXBzS6JCun9jdrunh9DQhgFe/QS6DYc3ZFluCgK+BmJzewtMysrIEOz9PiBYmVsJ49p37AgAm1pU+/X85wzJnuoveiWkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FTAOait/Ei6XeI9JIrslmORBpM1kCqoz1yiKsUX9CwA=;
+ b=knE0w9iqJVJLYEfxS1LpTBxeQcoI7wTLDscajvMwb7Xw+NJIkvhJQ9QpEEMA6VUo550gnEYrezNEnuaD/8VR2/voKwX38994yPxSwQHqI0c0MQ/R5GR/hh+LuwZEQnJxrSA9zu+JeKaSfKhgqXs2RtFl3AJw5HSdnhYlwZad1aLKTmoKsibdjItQuCZucU1Yuolouk8Jea+NwyoB6vl9koqmFu8ptqcJwkMcIDyVaUI+2v8kvtd72VTu1qfC0UlOEBm5fsa/dxLasQ5+BMuSunh2XVPrj6R4oWsUA3q+nyZ1tjbqtfSLcFmeCBBV+mwlqCrFibsi0gKQ4hHod3UPEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FTAOait/Ei6XeI9JIrslmORBpM1kCqoz1yiKsUX9CwA=;
+ b=zd9VqGr0q5lMIgS13UBxtIdSrJqMERwYyZgCI9iglAk6deb1itqWg4HRvbbTVERNkOiyM10etI8jazF/oJm86svr+zfrbUO9ukrVUDRcz6okoTn0Q1e/9topOm3aiFt0P044KWbtiyq9dn2PMvo4dwjxDNiE8Nnd166cPBSArHg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by LO2P265MB3423.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:199::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Wed, 1 Apr
+ 2026 14:10:59 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9769.014; Wed, 1 Apr 2026
+ 14:10:59 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 01 Apr 2026 15:10:58 +0100
+Message-Id: <DHHVNHVHWO9O.1NCHKQ8SDVNAF@garyguo.net>
+Cc: "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
+ <rust-for-linux@vger.kernel.org>, <linux-kbuild@vger.kernel.org>, "Lorenzo
+ Stoakes" <lorenzo.stoakes@oracle.com>, "Vlastimil Babka"
+ <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ "Uladzislau Rezki" <urezki@gmail.com>, <linux-block@vger.kernel.org>,
+ "moderated for non-subscribers" <linux-arm-kernel@lists.infradead.org>,
+ "Alexandre Ghiti" <alex@ghiti.fr>, <linux-riscv@lists.infradead.org>,
+ <nouveau@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>, "Rae
+ Moar" <raemoar63@gmail.com>, <linux-kselftest@vger.kernel.org>,
+ <kunit-dev@googlegroups.com>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, <llvm@lists.linux.dev>,
+ <linux-kernel@vger.kernel.org>, "Shuah Khan" <skhan@linuxfoundation.org>,
+ <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH 10/33] rust: transmute: simplify code with Rust 1.80.0
+ `split_at_*checked()`
+From: "Gary Guo" <gary@garyguo.net>
+To: "Miguel Ojeda" <ojeda@kernel.org>, "Nathan Chancellor"
+ <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Danilo Krummrich"
+ <dakr@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Paul
+ Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
+ Ou" <aou@eecs.berkeley.edu>, "Alexandre Courbot" <acourbot@nvidia.com>,
+ "David Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>,
+ "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
+ <david@davidgow.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, "Todd Kjos"
+ <tkjos@android.com>, "Christian Brauner" <christian@brauner.io>, "Carlos
+ Llamas" <cmllamas@google.com>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Jonathan Corbet" <corbet@lwn.net>
+X-Mailer: aerc 0.21.0
+References: <20260401114540.30108-1-ojeda@kernel.org>
+ <20260401114540.30108-11-ojeda@kernel.org>
+In-Reply-To: <20260401114540.30108-11-ojeda@kernel.org>
+X-ClientProxiedBy: LO4P123CA0303.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:196::20) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 06/13] selftest/mm: adjust hugepage-mremap test size
- for large huge pages
-To: Sayali Patil <sayalip@linux.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
- Oscar Salvador <osalvador@suse.de>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
- Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <fd252496169a91c80e339910978f21c3f4aac9f7.1774591179.git.sayalip@linux.ibm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <fd252496169a91c80e339910978f21c3f4aac9f7.1774591179.git.sayalip@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|LO2P265MB3423:EE_
+X-MS-Office365-Filtering-Correlation-Id: d4f41b4f-3584-4030-0fae-08de8ff87fd5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|10070799003|366016|921020|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	oUwFZpcO8JmYscJk93cfsLhQD8ZjFrOMoVhbY6FGw8fx2cfqaAIEWlYi56sY2iI3LCmIhOv7Xtq0KVXrdGxQ8JXuMrI4eBqipgEtyMgV5IpohzHh4lzCFDRo+NalkpkdlVk9IuzaCvXB6gbhUbSAAPTRt3bve9pzaZg9aePdRuOJKL5lyMRjKh+tQQz2iuuRwtRocaMYfWeeMQ7gzW1+D9H51mt79xfE8fet54cBEyTvULAXUa6AA14X9OzM9sZ9LXFklb0gsGHAMxvoYXgTJdt6i14bi9uV5Fo+HsjDWbJsSTIWWULf33HD0yhWiIT3x38QpvBDyhC31q7zVifQV46/PhoOAVtoT78hXThqbm8aM/vESq3WJtV/cORDpyqDe5QVoLzoV5LOE/Lm7P3wumU8kTARy4FFzOpMKa4CJXmtcAvEq+WXLWLlPufc1AL/+ljeofSv6UqQCjW8ahKf/LdeJ99TnsbfWLFY7FM4r6GRB/Y1QzJL7+JNud9Cth3l9GglYQYtERGKtyPp5xJ2/Fs9hPpq2+Ntir7bh7gJdTps25wAFIUSyuhC2bY6FVuy/9ad5wPLQf4Hoks2UUyQraDOICFMHdMq84vqT0caZRwJQeVLA/y9YOW2U7hk7qKK4s672FjDOEp3+Sd5nL4PkHuq6m0xgu214F2ltRTmR9tDEI4UOsuj//CN2+3O/MgL2OD6eb2Fw1AKtUlohEEK8ZU5cgavXxmwCusTrZgDj1xPg83CWVRDS0hX1P7yCR31exTLg7fvmh3NB86mn2OcDg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(10070799003)(366016)(921020)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YlBXSmJQUkJQTm1vQlR6LzlhTmEvZWVkNkVLUXZsNGpDaHRFVEsyMHd6RW9Y?=
+ =?utf-8?B?a3JEbG5tb3ZpUXhicXE4MGVVWmx6ZEVpdW83ZHJCNmRWdWtiV2VNSi9UTmRU?=
+ =?utf-8?B?ZHNUZ1RMb0VKMmp1dkRXUDBDV3o4VnhDQmNubUtVNmJoK3g4bGZMaDdUS1U4?=
+ =?utf-8?B?blhmWW9kVGp6dW12UFB0emdDUUQ5dGo4QW40cU5FKzZqa1VMUm04aDI0MVdu?=
+ =?utf-8?B?TnRXSUgxQWMwTm9KWnM2NjhLV2JvR2JhR3dhaUZOeVNCYURCb2VqK3dhcXNC?=
+ =?utf-8?B?MXRIVHVyRHJITXlQWGV3aHJWT3ZyMFp0dExldno3STliVGt4SXJyQnpLazFu?=
+ =?utf-8?B?U1VJNEJucTBKN1hPa00zckRhWUZXK050UGViaTlqVHZSWjRCK0lmbHAzeFg2?=
+ =?utf-8?B?VXM4UFRSWU8wVG50VE1OOGduUDRydFQwYVJNL0c3dWxsUkJIL2kveC9wbU10?=
+ =?utf-8?B?WGhLRmZMTjRBNWN3dTllaVVDSHVhTTVad1ZpZlJESHF4MEVxWEJ0bnNBYi9S?=
+ =?utf-8?B?S2FTV3B2ZXdxZXgxZjFBaUpyaGFWbGU1UTAxdzRnR2tNc0c5WUJMSDNreXRG?=
+ =?utf-8?B?dWFHa3llai9GVjNvRklvWS9zREI2T2lFM0duS0cwbGVEVjFpSUprQ0o3cmk4?=
+ =?utf-8?B?b0tTbWh5ejY3ak1pdmhMcytzbjJ1WGEvcmxsVjlGT3FmY2VUcW9yWERqbjV5?=
+ =?utf-8?B?dmlId1k1aXB1L1dHK3BJd2ZTU1ZYekFvLzY3RE1KOE1TWHNkTGZuSk5vQUty?=
+ =?utf-8?B?ekR5YnZRbWJqQ2duWlFFNjh5MXg0dUZlYUgvNVF1Y2N6T1BaajlmdVgrOVE1?=
+ =?utf-8?B?N1pFeXdQSVQvbG1BcGk4dExxcTV5ZVRuOEs4TFhTSW5Kd1Zta09nWVpHcXM2?=
+ =?utf-8?B?VjZQa2N2YkdwbDNXRExJMjNoUVhoZ0tJMm9saVhUQVhGa1FTK09KUmZReHpl?=
+ =?utf-8?B?L3pzd0k0Q1BQYStBcnI0SmhQcnJpSytyeGZscFFhL1FUWU5QYWl3b3NOYUEy?=
+ =?utf-8?B?WVRCMEhMWGpEYit3TThOLzVXVlZmc2FMR05Rd2owaCs5d05nTUhMZGlNMDh0?=
+ =?utf-8?B?QTNWd2NOUHZpRFVrTGVXM0RqQ1JPdHM2ZkRtbFdnYW54SzlXVlNrVk5QRXJI?=
+ =?utf-8?B?MWJjWm4vSFg3aldRVzZkemZDam9YSHNZK0JWSFJRMjh2cTcycm1LTVZIZUVD?=
+ =?utf-8?B?eitkZVd3QVBsTnpJK0V1dUpWVmE5VllDQlYvdm14bFdSbjlvVWtUenJUUTNt?=
+ =?utf-8?B?OTNHcXorNVlZYnFPbjBBMzY1OUh2Um1hVUF3Y2hHT3NEbzRWVFRrc2ZEU2FU?=
+ =?utf-8?B?ZzZzSnJtNDJ6Zmg1OVY1YmsvaXNtengrVDJOMVVoY3VwalUyNVZua05JTkpY?=
+ =?utf-8?B?M3hjSGVHYi9iUUJ0SVpKQzZvTHJ3ZWFjQk1odUdMSEV2TFlCMjhqdjk0VUQ0?=
+ =?utf-8?B?NkxLSjZrVGZ6bFFnSnJTMk1KVlVvRGY0bGxHV0t6Sjl2SFhDRzBPZkZrbEgx?=
+ =?utf-8?B?VFJ4NHYyUVpHUTZVNFJKUGFVNE5XbFpzdDN0a1lXbEo5VnhYTzZ3RFRYcml3?=
+ =?utf-8?B?eXI0eE5zVmwvOWNqVkJmU2ljUDVxNXRvTDNKSkJJT0tIaFQ4VVdybmJ4T3Bx?=
+ =?utf-8?B?c1ZqcEhRcm5TNktRdU9DTGY3bU5aNTFCVnJXd0xuZGdXRTNObGJvV243TlVx?=
+ =?utf-8?B?Z2gzYmt2NTIwYkx0VFpIalI3L1VOdG52djRjb1d4TW1MbzVrak5nL1NzaVVR?=
+ =?utf-8?B?aTd0WUV3UjV2T2tLOUx6QU1Ib3RGMjRVUEVlUDM1ZE1XZ2t4RHhzeDM4R25Q?=
+ =?utf-8?B?Yi9JR1pveE1zUXozUS9OWTlRSTFuTXRIb2ZHcXBRVlR1UElrZEd1eERCVjJK?=
+ =?utf-8?B?VmtHT01udTNncU9QaXpic2ZmK2dFUTcxeEhNOC80QmJmSlBYcUR1VURtaVU2?=
+ =?utf-8?B?LzA0b0Y0czBSM0x5ZExBTzRCY1BsQUpNcVhCMmREUGRuU0VrRmYzZzd2ZE1J?=
+ =?utf-8?B?RmIxN3cyUVgxYWpodmtmMzB3NUxxZEUyV2lKZTZ0UC81eTI3QSttS1lkOG1D?=
+ =?utf-8?B?TUJUM1RxUTRmYS9LMlNhY3VpL2RmTGFVRXlyWTVCVnZKN2g3U2NLalRod1Ry?=
+ =?utf-8?B?TXpBclBRSVVtM2drS296YmNtYWwzaHdsRU9QTGxuaVg5UmdYWGp5VEdPUkd6?=
+ =?utf-8?B?NURyY3J3ZSt1ejFpcjU4YjRxdmZNSHlpYTl3WFNsMEdMSG8rZXcwQWY0anRX?=
+ =?utf-8?B?eC8vdEhVVjNzaUk5NFJ2bEtFRGJ2S2cwSXc4ZTdvYnM0V3RoNFlzNkNXLzB3?=
+ =?utf-8?B?dXRUSURadGg2R21vbDVwb05TN0Q0Zk5aRkVXRjdtanlvMHhWSW85UT09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4f41b4f-3584-4030-0fae-08de8ff87fd5
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 14:10:59.3333
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wjMx10W9Vb+bESz+ezSQ5YMIm9X7Bippdaq6R6jKLekvr5BkMfovlNBVK1T5rrPl8q/bReAcgaNWYrLS2M3+JQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P265MB3423
 
-On 3/27/26 08:16, Sayali Patil wrote:
-> The hugepage-mremap selftest uses a default size of 10MB, which is
-> sufficient for small huge page sizes. However, when the huge page size
-> is large (e.g. 1GB), 10MB is smaller than a single huge page.
-> As a result, the test does not trigger PMD sharing and the
-> corresponding unshare path in mremap(), causing the
-> test to fail (mremap succeeds where a failure is expected).
-> 
-> Update run_vmtest.sh to use twice the huge page size when the huge page
-> size exceeds 10MB, while retaining the 10MB default for smaller huge
-> pages. This ensures the test exercises the intended PMD sharing and
-> unsharing paths for larger huge page sizes.
-> 
-> Before patch:
->  running ./hugepage-mremap
->  ------------------------------
->  TAP version 13
->  1..1
->   Map haddr: Returned address is 0x7eaa40000000
->   Map daddr: Returned address is 0x7daa40000000
->   Map vaddr: Returned address is 0x7faa40000000
->   Address returned by mmap() = 0x7fffaa600000
->   Mremap: Returned address is 0x7faa40000000
->   First hex is 0
->   First hex is 3020100
->  Bail out! mremap: Expected failure, but call succeeded
->  Planned tests != run tests (1 != 0)
->  Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->  [FAIL]
->  not ok 1 hugepage-mremap # exit=1
-> 
-> Before patch:
->  running ./hugepage-mremap
->  ------------------------------
->  TAP version 13
->  1..1
->   Map haddr: Returned address is 0x7eaa40000000
->   Map daddr: Returned address is 0x7daa40000000
->   Map vaddr: Returned address is 0x7faa40000000
->   Address returned by mmap() = 0x7fffaa600000
->   Mremap: Returned address is 0x7faa40000000
->   First hex is 0
->   First hex is 3020100
->  Bail out! mremap: Expected failure, but call succeeded
->  Planned tests != run tests (1 != 0)
->  Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->  [FAIL]
->  not ok 1 hugepage-mremap # exit=1
-> 
+On Wed Apr 1, 2026 at 12:45 PM BST, Miguel Ojeda wrote:
+> `feature(split_at_checked)` [1] has been stabilized in Rust 1.80.0 [2],
+> which is beyond our new minimum Rust version (Rust 1.85.0).
+>=20
+> Thus simplify the code using `split_at_*checked()`.
+>=20
+> Link: https://github.com/rust-lang/rust/issues/119128 [1]
+> Link: https://github.com/rust-lang/rust/pull/124678 [2]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Why are there two "Before patch" in here?
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-> After patch:
->  running ./hugepage-mremap 2048
->  ------------------------------
->  TAP version 13
->  1..1
->   Map haddr: Returned address is 0x7eaa40000000
->   Map daddr: Returned address is 0x7daa40000000
->   Map vaddr: Returned address is 0x7faa40000000
->   Address returned by mmap() = 0x7fff13000000
->   Mremap: Returned address is 0x7faa40000000
->   First hex is 0
->   First hex is 3020100
->   ok 1 Read same data
->  Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
->  [PASS]
->  ok 1 hugepage-mremap 2048
-> 
-> Fixes: f77a286de48c ("mm, hugepages: make memory size variable in hugepage-mremap selftest")
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 > ---
->  tools/testing/selftests/mm/run_vmtests.sh | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index afdcfd0d7cef..eecec0b6eb13 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -293,7 +293,18 @@ echo "$shmmax" > /proc/sys/kernel/shmmax
->  echo "$shmall" > /proc/sys/kernel/shmall
->  
->  CATEGORY="hugetlb" run_test ./map_hugetlb
-> -CATEGORY="hugetlb" run_test ./hugepage-mremap
-> +
-> +# If the huge page size is larger than 10MB, increase the test memory size
-> +# to twice the huge page size (in MB) to ensure the test exercises PMD sharing
-> +# and the unshare path in hugepage-mremap. Otherwise, run the test with
-> +# the default 10MB memory size.
+>  rust/kernel/transmute.rs | 33 ++++++---------------------------
+>  1 file changed, 6 insertions(+), 27 deletions(-)
 
-PMD sharing requires, on x86, a 1 GiB area with 2 MiB hugetlb folios.
-
-How does doubling sort that out?
-
-Also, why the magic value 10mb?
-
-
--- 
-Cheers,
-
-David
