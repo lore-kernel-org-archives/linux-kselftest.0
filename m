@@ -1,96 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A948481AA2;
-	Wed,  1 Apr 2026 23:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00782F25F5
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 23:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775084523; cv=none; b=q7A0lN/1FZ8w6cMTRiyvF/ud37/xrzYoy44eQWoMpm3aRoCDqsw2Ck0Z/gEE3KKyOIeJsrIwytelqrjBOClVau2roCmJS2BqyHkTUeMK9vn5mMh2zyN3jZn+mL95zqTxE3WqasgnSAOFl0Zp6CMNHOjVvaBskqVogloU1tZVsO8=
+	t=1775086554; cv=none; b=ZDCP1dYtuge88q83Y2PoVBqjyI7Qxy8i8eufCMXLn3TI1ORK1k/UOBmbRpFGHrSC/4gOxDcsuKFwcOQn4VR4NWdp9+gQ8S2nRjGmKUVEFPT4lFseNL1R15eHbbZvJxqmajgBV1CoUbhmlxM33hRLA/XiRszeD9+ljCXsSBWIyBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775084523; c=relaxed/simple;
-	bh=mIoLqdGB6FEaivDOYbSVC5sMk8eFMcAZ8xp8MdTnV0k=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=EnUueJXsbNkT5FuDlfIP18VERE38VEVHSIjRB0uqM619OnSvXCWEZ1iLj0FA/QQZnvkSifBGINvwkE41KvWrSFV9WxWvhnIu9EdTwMT0IARsv6Xph/+cRG0/UaEQgkLDyx1FbDQoVH58Iwq7CUAGr73PlScOrFNyfRYt36BVYvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZXyGeWKi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775086554; c=relaxed/simple;
+	bh=h5k3Xx4lObwj4IO8cFxWfuy9O+uGkMuCLqqzf6mDyFo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kcT7xA1pp+hpB7ZDg6XO1i02A2tndpLA7J5qHPCIeY57gUpRnbShemq5AI3R7puJ7OegAYcMjGgKZRW3pBzPnUp86XpSG62Luir6S6mtWd8+pB8ZNeVwW4xbsHD9FyrUp/w/qvvgzysgMvKCC7Yy1gep4AOOr9k6Xqvcn3OmXDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=b2SgRaWD; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZXyGeWKi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03BBFC2BCB0;
-	Wed,  1 Apr 2026 23:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775084522;
-	bh=mIoLqdGB6FEaivDOYbSVC5sMk8eFMcAZ8xp8MdTnV0k=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
-	b=ZXyGeWKi13Ct8X9D0547XxKoA9LfoDtpV+LhRj3iXOQd+bnjQ22veAr1KWQzEnIDA
-	 kCTGsTKkVr/gscyEmrZwOvWOWJ7En260oBqHLZzHIzEAlkTuiEm6eUc5UILdqgZy+H
-	 HXAequvu6ZpIY4U3LMW8wzpcshrEKczrtsPGEnHRqS7XkcXKcwcDDz47C4fWwDAXKO
-	 OIQVKkdK/nf9H0jRFaReCDhlcyWz4+4QQtQPnKMye0CMmsL4cTMnrf7NbrpD+fnPzG
-	 ktDfNcL8YfxyQiu9pd7SwNmlkrwL9bKsRyvSsH9EF8GOZzd/XyeyosIPxWhon0MbUH
-	 E+D3sywT0mp+Q==
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="b2SgRaWD"
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-67bb04151dcso170832eaf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 16:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1775086551; x=1775691351; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zfjh2JtIM03zvg4bBCmPSybeaL43I2wt5CLM1EweZGM=;
+        b=b2SgRaWDmHpCJZ/TeBuSRbS25s3AtbybF+DEdFPx+K2OtPY7f5CwiXJPRYMxSu2wAD
+         213/5qKi/DSuVxrcgpXUVoddxSUE2J7VbTJiRCKKKg68Fe3uR4n+Z71YXtBpyYAoz8xp
+         xn+5fdtoxXppw2a8vFydn1vdISfmctZ+dwjr4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775086551; x=1775691351;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zfjh2JtIM03zvg4bBCmPSybeaL43I2wt5CLM1EweZGM=;
+        b=LqiLE/rqeNPhQYZH3DYu6lVjigNsRSm5TbT3cIK5qSD6cocEnC7F4dQDhFCHOhxK8b
+         pgcMY6sXcJW3s+zp6D5KJtAfBwfMybJjuXTFggAbOCQ5E4ZVQ18nohSaB3x2OngZgFMp
+         JCTboXg7GXd8HCxlqePJlUjzji4qAwv84ZsZCwTGE4ep1S/uxqGWpiMRu9IJDWppRGAg
+         QWbxFSrBUS6yK+wOdqnw6lY+kunkezHE5WfET9i0kaZpMxSw3wAL4fHemEaKuhSJBVbN
+         EO6Kz6PuWcjYIJooSa2RR8g6L7lbPdO1CSqJLkL5FjqPk6eh4p2zZ8PxFsTLY8xMwFX4
+         c2xg==
+X-Gm-Message-State: AOJu0Yxq+QmMYR0sE54RouhUY5d5xzM3iawr39UdhQwl0hLocAZcZMmQ
+	9duRYUBwoOn8bFPeFSMg+Qmj864WD3GeEBcfIn77+aagPkSmBhjpxfm9b5b5vMDp2zQ=
+X-Gm-Gg: ATEYQzwE9rCHMIGAaRyHH4/adDwR0oPYbPJzIF0RpN3/SvO0rTO2ubmz6hD+TL//4Is
+	51lZySIQjrGEHCDCV0reKHjD59S4RRqDB4Gq0QzzUPPZ4RjgJyVD0hq+yG0LHOvZI1OvZYLyZtm
+	tJsKqZbuu83qdUTH7CuxdvzgFEpZWBwoaV4SQVQe25IgKomoS1eSkEFcGeBXJnrdbZ+nW/pxgqT
+	KLQ8eIo2LPLQiTJlOGBeNceeSRh2BoKpW3LpeDVzaCaSNCnqWyTl27hjnesPNyPLEJf4japQp/F
+	45bnUvlkVOAGvQNgNrQum9SIfBk0GJwTy5++uaUW4rbsiJS9bb2ne94V6o4LP8mLre8rr/N49Nb
+	DPBR85gpDRLrDeVJQWgNcDl7o8wWJ6uFtqrRDZm8zF9Cnq9SNdVvK3SMLej/9Rx7vc1kuO96Nwv
+	6andwh7rQMm3oGpPsK/QtKWEg/P4jzURdyxMM=
+X-Received: by 2002:a05:6820:1897:b0:67b:b0bd:8bd2 with SMTP id 006d021491bc7-680a8548b56mr858545eaf.59.1775086551530;
+        Wed, 01 Apr 2026 16:35:51 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-680a63c7fd1sm751543eaf.8.2026.04.01.16.35.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Apr 2026 16:35:50 -0700 (PDT)
+Message-ID: <8290d427-ae1f-4e90-b988-c209e81ec85c@linuxfoundation.org>
+Date: Wed, 1 Apr 2026 17:35:49 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: Sashiko.dev for kselftest
+To: Roman Gushchin <roman.gushchin@linux.dev>, Shuah <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, sashiko@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <d0dc7caa-052b-4d50-aeb8-60d3327d1130@kernel.org>
+ <877bqqh11y.fsf@linux.dev>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <877bqqh11y.fsf@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 33/33] rust: kbuild: allow `clippy::precedence` for
- Rust < 1.86.0
-From: Tamir Duberstein <tamird@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Andreas Hindborg <a.hindborg@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Courbot <acourbot@nvidia.com>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
- Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
- Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
- Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
- rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
- Vlastimil Babka <vbabka@kernel.org>, 
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
- Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, Alexandre Ghiti <alex@ghiti.fr>, 
- linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
- Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
-In-Reply-To: <20260401114540.30108-34-ojeda@kernel.org>
-References: <20260401114540.30108-1-ojeda@kernel.org>
- <20260401114540.30108-34-ojeda@kernel.org>
-Date: Wed, 01 Apr 2026 18:59:04 -0400
-Message-Id: <177508434476.73816.11744805605122440072.b4-review@b4>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=490; i=tamird@kernel.org;
- h=from:subject:message-id; bh=mIoLqdGB6FEaivDOYbSVC5sMk8eFMcAZ8xp8MdTnV0k=;
- b=owGbwMvMwCV2wYdPVfy60HTG02pJDJlnF7s6hUfb+jyd9vbK0ZWKNtIml3vZzdZu5eWV+2r4r
- rMtuaq8YyILgxgXg6WYIkui6KG96am398hmvjsOM4eVCWSItEgDAxCwMPDlJuaVGukY6ZlqG+oZ
- GukY6BgzcHEKwFSr3mdk+LXi1KaghwuXvXvryuIh3xizmzukzafohmvWRgutvqoD3IwMq9NSuvc
- +cVOd5nUvf9cfyV0no/Naz6wyyv7a/lP08aU4HgA=
-X-Developer-Key: i=tamird@kernel.org; a=openpgp;
- fpr=5A6714204D41EC844C50273C19D6FF6092365380
 
-On Wed, 01 Apr 2026 13:45:40 +0200, Miguel Ojeda <ojeda@kernel.org> wrote:
-> The Clippy `precedence` lint was extended in Rust 1.85.0 to include
-> bitmasking and shift operations [1]. However, because it generated
-> many hits, in Rust 1.86.0 it was split into a new `precedence_bits`
-> lint which is not enabled by default [2].
+On 4/1/26 14:34, Roman Gushchin wrote:
+> Shuah <shuah@kernel.org> writes:
+> 
+> Hi Shuah,
+> 
+> Sure, will add later today.
+> 
+>> Hi Roman,
+>>
+>> Please add linux-kselftest list to sashiko.dev for reviews.
+>>
+>> There might be double coverage for patches cc'ed to lkml
+>> and other lists such as mm, net, bpf etc. Hope that won't
+>> cause problems.
+> 
+> It's not a problem at all.
+> 
+> What I believe might be a problem: kselftests are mostly userspace
+> code and at least some parts are written somewhat loosely (which
+> is totally fine for tests), so Sashiko will report a ton of issues,
+> many of them are not worth fixing.
 
-Might be good to retain some of this in a code comment.
+Good point. Maybe we can also find things that are worth fixing. It will
+be an experiment.
 
-Reviewed-by: Tamir Duberstein <tamird@kernel.org>
+> 
+> So I guess it will be good to put down a kselftest-specific prompt with
+> some guidance what we believe is acceptable in tests code and what's not.
+> 
 
--- 
-Tamir Duberstein <tamird@kernel.org>
+I can definitely do that depending on what we find.
+
+thanks,
+-- Shuah
