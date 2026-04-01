@@ -1,113 +1,162 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17BD258CCC
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 20:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7A53B8930;
+	Wed,  1 Apr 2026 21:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775076627; cv=none; b=j37ZHJ99uczomoybdMmicCP0OFF+77myk1UzGiXwVqvorB8Rv6IjYr6x3ScI7Q9dG02nYD+UL6xFazVDhLP48t1VSmgZdrcSceNtHthrPOULoBOXZ4OFTXmUkhPE6A1VqdvwyECtveGq6jxiZbQATxXrueV+WZchBNWArR8tnsA=
+	t=1775077282; cv=none; b=IEt3f59VFQltflVxOUgTDNoRm1F/y6VZHeKAimhWiEM4xQvgSNPi5E9Tpk8SWxYo/M22k+FwcMD/IuQr/hiYRD12A6+V15fla6N9SAfzq7Ka+StexrUS0ZAzBBRhpMQE8huQYgDo1wZiGxDJWxu6gvXNwqs9sFmDI1hQj06QDR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775076627; c=relaxed/simple;
-	bh=UxYX2hMtqcuAWB5RlFy6fDwCyO5Sq8mv97Ebeml/t9s=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=isgM+qyGXIs+Y1FJAGUSNJN/Eq/+8QI4b78qTloSufjLqtKXHaLH4/8YMZ6soSevWas1oFUC0y1f/ZXcCzXT9SeQtFsXkrNZ5K2DpLHgDpT5lbetTcnJjg7f/VSUxLvDwW3KE42VMM3NH4BkSGXl0lOkGbCCO7gF5dll+KuJkng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=JA3R6vzZ; arc=none smtp.client-ip=195.121.94.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	s=arc-20240116; t=1775077282; c=relaxed/simple;
+	bh=O8Vo4jZDWqqW0uxQ2thCeW0mz8X2oEjk8T/VgT+wO6E=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=hMweiv+kPP15u0CO5MSnC4REvE1UvE8IaqJ2B1OjW2Ud6vrnsm6x/6e9Vg7cHlOZJnx1msvd7gxVnyY3fJEZ0GHrNe+8oc/mWluIT62fMf/nbR4LaO43nJpWim7F+0c/gMzijmvxaeWczfqr+kSR/n4s3O2/hEdkX6o3jlCti3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=hUYT0NQw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="JA3R6vzZ"
-X-KPN-MessageId: 3f509360-2e0c-11f1-8ff1-005056999439
-Received: from mta.kpnmail.nl (unknown [10.31.161.189])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 3f509360-2e0c-11f1-8ff1-005056999439;
-	Wed, 01 Apr 2026 22:49:16 +0200 (CEST)
-Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.189])
-	by mta.kpnmail.nl (Halon) with ESMTP
-	id 3f4a0ff1-2e0c-11f1-b5d0-0050569981f5;
-	Wed, 01 Apr 2026 22:49:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=content-type:mime-version:subject:message-id:to:from:date;
-	bh=f3ki8xj5EkThUxzdXA2NV9BxrUJB2o3KdN4Rk7USO3k=;
-	b=JA3R6vzZlzCiLjDMl9hv54rjCHogZS1NlFQ0irJLzE7N8vxSgPBfVbFppC4DUpENsJEHYa16xGWjd
-	 sjsb6FmM8OzQyrzPUsHBjFpIFxr0QvtKHR/Wxup3x2CxEzQRDCQowkkDCCafqXvrzOhKOfc+7UFW3Y
-	 tpRBFAe2y94bCFyWzim7aTPvSq56a40aOGTlqZKtN5EWs1KbbrKrnCx0TFExKRwUb9R60M8nL5BkuW
-	 75sliE6pYRO0FBjodR1sd5kGcHOIl+09qMm6l4C92nfYf8M1btWUqkcIOazBaCJ9M34pAqJsgHdHrQ
-	 07rYPoMamivu/M52wRp14yhW67pgEWg==
-X-KPN-MID: 33|WgdNH6WpjibWQiD0q7BqUXta8PRdpD2JG0HSLm2HgGIJHA90ifK280e8S6j0q2I
- NvgYcRz19Y/KQq2Y2Dn2imC1b5n6vY6h7hrV1lkAT52Q=
-X-CMASSUN: 33|HXMSAvOeAupMVeHNJfZFsHo+8VkLF9TMmk3oWYffGEvEvklGmdWB7xOWbn3uzas
- UYIJJ2QmHmnXiBLNvDIF49w==
-X-KPN-VerifiedSender: Yes
-Received: from cpxoxapps-mh05 (cpxoxapps-mh05.personalcloud.so.kpn.org [10.128.135.211])
-	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
-	id 3f3f2824-2e0c-11f1-94b1-00505699eff2;
-	Wed, 01 Apr 2026 22:49:16 +0200 (CEST)
-Date: Wed, 1 Apr 2026 22:49:16 +0200 (CEST)
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: Aleksa Sarai <cyphar@cyphar.com>, Christian Brauner <brauner@kernel.org>
-Cc: Chuck Lever <chuck.lever@oracle.com>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Ethan Tidmore <ethantidmore06@gmail.com>,
-	NeilBrown <neil@brown.name>, Oleg Nesterov <oleg@redhat.com>,
-	Penglei Jiang <superman.xpt@gmail.com>, Kees Cook <kees@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Message-ID: <1674899546.858116.1775076556076@kpc.webmail.kpnmail.nl>
-In-Reply-To: <2026-04-01-distant-broke-bonnet-catacomb-cnRW5o@cyphar.com>
-References: <20260326182033.1809567-1-jkoolstra@xs4all.nl>
- <20260326182033.1809567-2-jkoolstra@xs4all.nl>
- <ecc86514cde4732995d9f50b9f5071fbb1f675e4.camel@kernel.org>
- <2026-04-01-distant-broke-bonnet-catacomb-cnRW5o@cyphar.com>
-Subject: Re: [RFC PATCH v2 1/3] vfs: add support for empty path to
- openat2(2)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="hUYT0NQw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B32BFC116C6;
+	Wed,  1 Apr 2026 21:01:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1775077282;
+	bh=O8Vo4jZDWqqW0uxQ2thCeW0mz8X2oEjk8T/VgT+wO6E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hUYT0NQwE1/aqyZL6tnYr8vsofwQSlwRlkfoXcyTUN7oAj4RVLQMrS7DjPVj93Yih
+	 pk1v5NE3GBqu4oRB//kra+8WheLUs+YSTYiuz5GCf2burXypwSe6dfdDANy/nq5Nyh
+	 ne0uu0GVYVP+ORus40ex+AQ5AP0IHcZUErLCWTN4=
+Date: Wed, 1 Apr 2026 14:01:21 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Li Wang <liwang@redhat.com>
+Cc: rppt@kernel.org, david@kernel.org, ljs@kernel.org,
+ Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org, aubaker@redhat.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v5] selftests/mm: skip hugetlb_dio tests when DIO
+ alignment is incompatible
+Message-Id: <20260401140121.23643cf9784ae8dafd9f0ab6@linux-foundation.org>
+In-Reply-To: <20260401090520.24018-1-liwang@redhat.com>
+References: <20260401090520.24018-1-liwang@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
 
+On Wed,  1 Apr 2026 17:05:20 +0800 Li Wang <liwang@redhat.com> wrote:
 
-> Op 01-04-2026 14:23 CEST schreef Aleksa Sarai <cyphar@cyphar.com>:
+> hugetlb_dio test uses sub-page offsets (pagesize / 2) to verify that
+> hugepages used as DIO user buffers are correctly unpinned at completion.
 > 
->  
-> On 2026-03-30, Jeff Layton <jlayton@kernel.org> wrote:
-> > Looks sane to me. Can this be merged apart from the rest of the series?
-> > It doesn't seem like the transitive stuff is dependent on this.
+> However, on filesystems with a logical block size larger than half the
+> page size (e.g., 4K-sector block devices), these unaligned DIO writes
+> are rejected with -EINVAL, causing the test to fail unexpectedly.
 > 
-> My only comment is that I would like this to be usable in open() as it
-> is one of the very few cases of an O_* flag that is actually backwards
-> compatible with all of the brokenness of open() and the systemd folks
-> would probably want to use it (they can't use openat2() yet).
-
-OK. I'll just wait a bit on what Christian has to say about adding it to
-openat(), since he initially rejected that, before I write up the new patch.
-
+> Add get_dio_alignment() to query the filesystem's required DIO alignment
+> via statx(STATX_DIOALIGN) and skip individual test cases whose file
+> offset or write size is not a multiple of that alignment. Aligned cases
+> continue to run so the core coverage is preserved.
 > 
-> -- 
-> Aleksa Sarai
-> https://www.cyphar.com/
+> While here, open the temporary file once in main() and share the fd
+> across all test cases instead of reopening it in each invocation.
+> 
+> === Reproduce Steps ===
+> 
+>   # dd if=/dev/zero of=/tmp/test.img bs=1M count=512
+>   # losetup --sector-size 4096 /dev/loop0 /tmp/test.img
+>   # mkfs.xfs /dev/loop0
+>   # mkdir -p /mnt/dio_test
+>   # mount /dev/loop0 /mnt/dio_test
+> 
+>   // Modify test to open /mnt/dio_test and rebuild it:
+>   -       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+>   +       fd = open("/mnt/dio_test", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+> 
+>   # getconf PAGESIZE
+>   4096
+> 
+>   # echo 100 >/proc/sys/vm/nr_hugepages
+> 
+>   # ./hugetlb_dio
+>   TAP version 13
+>   1..4
+>   # No. Free pages before allocation : 100
+>   # No. Free pages after munmap : 100
+>   ok 1 free huge pages from 0-12288
+>   Bail out! Error writing to file
+>   : Invalid argument (22)
+>   # Planned tests != run tests (4 != 1)
+>   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-Thanks,
-Jori.
+Thanks, I update mm.git to this version,
+
+> Notes:
+>     v5:
+>     	- Perform that align checks at the beginning of run_dio_using_hugetlb()
+>     	  but not addinital run_test().
+
+Here's how v5 altered mm.git:
+
+--- a/tools/testing/selftests/mm/hugetlb_dio.c~selftests-mm-skip-hugetlb_dio-tests-when-dio-alignment-is-incompatible-v5
++++ a/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -66,7 +66,7 @@ static bool check_dio_alignment(unsigned
+ }
+ 
+ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
+-				  unsigned int end_off)
++				unsigned int end_off, unsigned int align)
+ {
+ 	char *buffer =  NULL;
+ 	char *orig_buffer = NULL;
+@@ -77,6 +77,9 @@ static void run_dio_using_hugetlb(int fd
+ 	const int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
+ 	const int mmap_prot  = PROT_READ | PROT_WRITE;
+ 
++	if (!check_dio_alignment(start_off, end_off, align))
++		return;
++
+ 	writesize = end_off - start_off;
+ 
+ 	/* Get the default huge page size */
+@@ -130,15 +133,6 @@ static void run_dio_using_hugetlb(int fd
+ 			 "free huge pages from %u-%u\n", start_off, end_off);
+ }
+ 
+-static void run_test(int fd, unsigned int start_off,
+-		     unsigned int end_off, unsigned int align)
+-{
+-	if (!check_dio_alignment(start_off, end_off, align))
+-		return;
+-
+-	run_dio_using_hugetlb(fd, start_off, end_off);
+-}
+-
+ int main(void)
+ {
+ 	int fd, align;
+@@ -161,16 +155,16 @@ int main(void)
+ 	ksft_set_plan(4);
+ 
+ 	/* start and end is aligned to pagesize */
+-	run_test(fd, 0, (pagesize * 3), align);
++	run_dio_using_hugetlb(fd, 0, (pagesize * 3), align);
+ 
+ 	/* start is aligned but end is not aligned */
+-	run_test(fd, 0, (pagesize * 3) - (pagesize / 2), align);
++	run_dio_using_hugetlb(fd, 0, (pagesize * 3) - (pagesize / 2), align);
+ 
+ 	/* start is unaligned and end is aligned */
+-	run_test(fd, pagesize / 2, (pagesize * 3), align);
++	run_dio_using_hugetlb(fd, pagesize / 2, (pagesize * 3), align);
+ 
+ 	/* both start and end are unaligned */
+-	run_test(fd, pagesize / 2, (pagesize * 3) + (pagesize / 2), align);
++	run_dio_using_hugetlb(fd, pagesize / 2, (pagesize * 3) + (pagesize / 2), align);
+ 
+ 	close(fd);
+ 
+_
+
