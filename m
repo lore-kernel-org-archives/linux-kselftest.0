@@ -1,172 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D7B258CCC;
-	Wed,  1 Apr 2026 20:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 007BE40DFB5;
+	Wed,  1 Apr 2026 20:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775074859; cv=none; b=Hw7b+1PoYqmHTe6AmQky7uZojPWCQR9vpX24cXFzNw+eVfFQCrzgSiqpwkmZZPS1AnIvYpbmKs7tLQhHiBuj2bnzSY3SY7wEO2RYur6q4E7Dj7N5U8EMUXk9loJXLe/NIPDqvEp0X5yLqAtdLxYdFUgSOCeiTqp/jkyJD7S5sg4=
+	t=1775075244; cv=none; b=rOiaRRD6CZT+9ovDCZsr8a4pILPaf+qa0gM+3nKuNigvXjytA4jqckWmF/seda8L8cquOfUo0sP9ALgaTOj8/IV5Awxaw9zt71GCp9xCkaZRAFIYgKJj0nS5qwwqmL11Qhi97Ar3KP2Lsb6BIDlo4jGHM+Sfg27RprWhq96rlLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775074859; c=relaxed/simple;
-	bh=1RcjQtgv6nCPlXqgFOGsKwCHeaW7HAs7c6eK6eQtM3A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=un2OhJwTcVgr20yHOKSV6FGjatbEQoOmUBEafvhoHMrbivv7wKAd5Tj2667cPMAT2EPbQlMQX/gFRxkCT/p/OpEZmO8YDJQtaRDIRlmcijdXtd3Pd0btV4RQBc/iC/zSLQmFt40uK0XJ5Z9j4E+smAzNKIWSgukC0MUBc4YSGTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PoUJueOW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775075244; c=relaxed/simple;
+	bh=OWtKm95laT3U6i3fhcBOR5W+DKz0FEB3jZZILO5nH8A=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=XpyZ3u1hGwVNXNi5NsWl4Hgpdx3HZWTxsm19jGC7fVqM6++p1VWO8Y48d7tgYjA6ax/Cc5ZG47Gu8wMOM9+dlxo+PFChWIXNIwXHZG9GyoVN89nJBQDdCsEAfWuveDJgyorry0I/aA6YQ2UQiofK+nGgMikFxWWjR9BIUUJxjBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Uws9wjJE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PoUJueOW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6ECEC4CEF7;
-	Wed,  1 Apr 2026 20:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775074859;
-	bh=1RcjQtgv6nCPlXqgFOGsKwCHeaW7HAs7c6eK6eQtM3A=;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Uws9wjJE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C92C4CEF7;
+	Wed,  1 Apr 2026 20:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1775075243;
+	bh=OWtKm95laT3U6i3fhcBOR5W+DKz0FEB3jZZILO5nH8A=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PoUJueOWCtAX24oRzQgr4+Kz8BUXkTu1owpVMvmuyhXppoocE8K4iGslQ4C/t+b3+
-	 KDs6tywrF7ggrjf8gMeYW+/fReHcn1VfPCU6fsjFW5ru7UT7ycJZ+Y8Y+bvhS+ykzX
-	 LGwg+gXCmnxQ0KxfAVxWvHWfX0Rz4LtXp5f0O7ZOkhIfJEs5U+JEQOhzgnKrfDv/CV
-	 Gc0VZ9exDNN0inio2rXIOJSvhbWPr/W/VyLoNuhd1MIcDRPujZyyskZodfjn8JY8mj
-	 tQj9ZIjjP3GAJHdZFGEj93gVnA8dP36n0KvSy6IexKbvBvcnXNdreE8DY4ZbVRLCqa
-	 lYVX6KIZxM6gA==
-Date: Wed, 1 Apr 2026 13:20:48 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Leon Hwang <leon.huangfu@shopee.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests/net: Add two xdp tests to xdp.py
-Message-ID: <20260401132048.3a15601e@kernel.org>
-In-Reply-To: <20260401052746.314667-1-leon.huangfu@shopee.com>
-References: <20260401052746.314667-1-leon.huangfu@shopee.com>
+	b=Uws9wjJE8a6LUlC1K75cOrahSIa88MlVL/cOcGuUfmc1fIrG9KUDszDZkHNbCl0c5
+	 7fg+sHAYKj2SjgOTbgnX0K9/5vfXssNMrRMlEuipz5giV8UMy0BiZsnKd9TrQ7yX2U
+	 0FS7eKqnC8rVi0MtpnmgZSNg+gx/mfFft9Y/l++c=
+Date: Wed, 1 Apr 2026 13:27:21 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Anthony Yznaga <anthony.yznaga@oracle.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ david@kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, shuah@kernel.org
+Subject: Re: [PATCH v2 2/2] selftests/mm: verify droppable mappings cannot
+ be locked
+Message-Id: <20260401132721.ef6c976eeb5e50b0cf6bb635@linux-foundation.org>
+In-Reply-To: <d20a7a98-2bc7-48fc-b467-21eba8df89a4@sirena.org.uk>
+References: <20260310155821.17869-1-anthony.yznaga@oracle.com>
+	<20260310155821.17869-2-anthony.yznaga@oracle.com>
+	<52bec9ea-5627-4ea2-8f27-f1729957fa47@sirena.org.uk>
+	<20260331141714.b2f4e41b494060e55610a5f3@linux-foundation.org>
+	<d20a7a98-2bc7-48fc-b467-21eba8df89a4@sirena.org.uk>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed,  1 Apr 2026 13:27:46 +0800 Leon Hwang wrote:
-> In "bpf: Disallow freplace on XDP with mismatched xdp_has_frags values" [1],
-> these two XDP tests are suggested to add to xdp.py.
+On Wed, 1 Apr 2026 12:17:30 +0100 Mark Brown <broonie@kernel.org> wrote:
+
+> On Tue, Mar 31, 2026 at 02:17:14PM -0700, Andrew Morton wrote:
+> > On Tue, 31 Mar 2026 14:17:50 +0100 Mark Brown <broonie@kernel.org> wrote:
 > 
-> 1. Verify the failure of attaching non-frag-capable prog to mtu=9k driver.
-> 2. Verify the failure of updating frag-capable prog with non-frag-capable
->    prog, when the frag-capable prog attaches to mtu=9k driver.
+> > > All these failures which cause the entire test program to immediately
+> > > die seem exceessively strong...
 > 
-> They have been verified against Mellanox CX6 and Intel 82599ES NICs.
+> > Well, is the test code incorrect, or is the patch which it's testing
+> > incorrect?  That's 5435ba164b0d ("mm: prevent droppable mappings from
+> > being locked")?
 > 
-> With dropping other tests, here are the test logs.
-> 
->  # ethtool -i eth0
->  driver: mlx5_core
->  version: 6.19.0-061900-generic
-> 
->  # NETIF=eth0 python3 xdp.py
->  TAP version 13
->  1..2
->  ok 1 xdp.test_xdp_native_attach_sb_to_mb
->  ok 2 xdp.test_xdp_native_update_mb_to_sb
->  # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
->  # ethtool -i eth0
->  driver: ixgbe
->  version: 6.19.0-061900-generic
-> 
->  # NETIF=eth0 python3 xdp.py
->  TAP version 13
->  1..2
->  ok 1 xdp.test_xdp_native_attach_sb_to_mb # SKIP RTNETLINK answers: Invalid argument
->  ok 2 xdp.test_xdp_native_update_mb_to_sb # SKIP RTNETLINK answers: Invalid argument
->  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:2 error:0
-> 
-> Links:
-> [1] https://lore.kernel.org/bpf/20260326124205.1a3bb825@kernel.org/
+> I've done no investigation on the actual failure, sorry - the comment
+> above is a stylistic/usability one about the test program.
 
-Thanks for working on it! 
+Thanks.
 
-> diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
-> index d86446569f89..fe34b491778b 100755
-> --- a/tools/testing/selftests/drivers/net/xdp.py
-> +++ b/tools/testing/selftests/drivers/net/xdp.py
-> @@ -13,7 +13,7 @@ from enum import Enum
->  
->  from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_ne, ksft_pr
->  from lib.py import KsftNamedVariant, ksft_variants
-> -from lib.py import KsftFailEx, NetDrvEpEnv
-> +from lib.py import KsftFailEx, KsftSkipEx, NetDrvEpEnv
->  from lib.py import EthtoolFamily, NetdevFamily, NlError
->  from lib.py import bkg, cmd, rand_port, wait_port_listen
->  from lib.py import ip, defer
-> @@ -693,6 +693,55 @@ def test_xdp_native_qstats(cfg, act):
->              ksft_ge(after['tx-packets'], before['tx-packets'])
->  
->  
-> +def _set_jumbo_mtu(cfg, mtu):
-> +    ip(f"link set dev {cfg.ifname} mtu {mtu}")
-> +    defer(ip, f"link set dev {cfg.ifname} mtu 1500")
+Anthony believes this is a problem in the test code, not in the kernel
+code which is being tested.  He's working on the test code so I shall
+drop the current test code from mm.git't mm-stable tree. 
 
-cfg records the original MTU, you can copy this line from here:
-https://elixir.bootlin.com/linux/v7.0-rc6/source/tools/testing/selftests/drivers/net/gro.py#L88
-
-> +def _exec_cmd(cfg, obj, sec, ip_opts=""):
-> +    return cmd(f"ip {ip_opts} link set dev {cfg.ifname} xdpdrv obj {obj} sec {sec}", shell=True, fail=False)
-
-We shouldn't need the shell=True where?
-Also it's probably cleaner to pass fail as optional argument here
-so that you can let this throw an exception in the cases we expect
-to succeed instead of having to check in the caller explicitly
-
-> +def test_xdp_native_attach_sb_to_mb(cfg):
-> +    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
-> +    mtu = 9000
-> +
-> +    _set_jumbo_mtu(cfg, mtu)
-> +
-> +    probe = _exec_cmd(cfg, obj, "xdp.frags")
-> +    if probe.ret != 0:
-> +        output = probe.stderr.strip() or probe.stdout.strip()
-> +        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
-
-May be simpler and cleaner to print the whole command separately:
-	
-	if probe.ret != 0:
-		ksft_pr(probe)
-		raise KsftSkipEx("device does not support multi-buffer XDP")
-
-> +    ip(f"link set dev {cfg.ifname} xdpdrv off")
-> +
-> +    probe = _exec_cmd(cfg, obj, "xdp")
-> +    if probe.ret == 0:
-> +        ip(f"link set dev {cfg.ifname} xdpdrv off")
-> +        raise KsftFailEx(f"driver unexpectedly allows non-multi-buffer XDP at MTU {mtu}")
-
-Hm, TBH I don't think this sb_to_mb case is adding any coverage.
-Let's just add the test case below?
-
-
-> +def test_xdp_native_update_mb_to_sb(cfg):
-> +    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
-> +
-> +    _set_jumbo_mtu(cfg, 9000)
-> +
-> +    attach = _exec_cmd(cfg, obj, "xdp.frags")
-> +    if attach.ret != 0:
-> +        output = attach.stderr.strip() or attach.stdout.strip()
-> +        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
-> +
-> +    defer(ip, f"link set dev {cfg.ifname} xdpdrv off")
-> +
-> +    update1 = _exec_cmd(cfg, obj, "xdp.frags", "-force")
-> +    if update1.ret != 0:
-> +        raise KsftFailEx("device fails to update multi-buffer XDP")
-> +
-> +    update2 = _exec_cmd(cfg, obj, "xdp", "-force")
-> +    if update2.ret == 0:
-> +        raise KsftFailEx("device unexpectedly updates non-multi-buffer XDP")
--- 
-pw-bot: cr
+That's 6235dbcce97f ("selftests/mm: verify droppable mappings cannot be
+locked")
