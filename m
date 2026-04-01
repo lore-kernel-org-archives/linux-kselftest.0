@@ -1,192 +1,174 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE1B33F586
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Apr 2026 19:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775070447; cv=pass; b=MCTfpRHAP2yzfyVacGcMcAHNk/ZFj+J1PHch26XSJ8T0SaO6zTJAHXhUNfH3MObKM22Njan+31J9X5j11ZEnXjX/mbTULvONIiVaSScg1VlAuIq13jKBYOmuS8+09ElRjz9bw3rcimI4Cp0j8GW3dKu80hKPsRcqIYFHtMrDkAM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775070447; c=relaxed/simple;
-	bh=oPmpGJgra+J/X4ds4wcUHLxA6Eg7GvkHp+DXASeWwJc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nb2bGhrOw5rLkWxnpyhgeMKbfj9pu/AWn991L+nmHLCf/55RWmJtemKeRL5jROIYWdgReqk2PVcMtNekRIQuRfQH/1GzPASG1lRh0/3MeRP9SC9UQNjuWld3ol5kpEVB11PmJdL3PwsVMG8ynigp8JaHVGFlAruIMvIXzZAxhf4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a1//AZe5; arc=pass smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C07023A984;
+	Wed,  1 Apr 2026 19:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775070933; cv=none; b=Mkzd+xy5suX+q+LlzJCMB2cJqmSYPTpeSLdR4hsiai/FydS7dI8HDWsh1t23ovsp2wsPJ9ecQuX+zVO/pYY6snxsPSzZHuKzcPLom8GTzlrNFRYnEC1XsjMLrBYbU97aFbly+49+YcvvZe0zJxPPNXHY1i3GOdqisCh6nY45MQc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775070933; c=relaxed/simple;
+	bh=1Dfy8STCS29Dd/L8IzAykKpCipm+hEQa8viNiYyzGfU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a8TE2JburPXRHVA06lo0RGadbtK5yLDvhiQkKhp7R8vb+9QNMh9ziAHGA27e042C5REaPgDCo1zLmUoTWqOITTMaKk4NO6sX2HBfJl1nVpH/TlZrqrfM78zajDHIjXyrAOEY+m38VxJ8NsPoD3fHfEJS3FBbp0E1w7gmpCL2C0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lzjqgOm+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a1//AZe5"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b9bfcbaa81eso12315966b.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 12:07:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775070444; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Hu8SQZTBAHbnK1v+CgMyAFOQv4FUUu3tQN9oI+r187UHr6Wrh6w9qnGV/bIxTFci58
-         bOj0eO5Gt25t59dqSa4oMq5MTjdHEkqtk1dIyVy+kv5IZTdZw2I6eyNIs8LtSBmenHvB
-         Gmx33FygfsWMASR9FQXTry8cmjJ6GTXJ4XvqeE6edZSmHDmi+V8uDpRhnJ45ZhmBEzcG
-         73DwhBEu8MvgqUKOjs2Za9Fk4ccW5AzPgrfPMtTty+t6N0pmpsSwz1N95Qp/SbDNLbHD
-         Bj9TwGtjLJkDkph0m34yyBsGATjVeqrrI7KkfrpU2X95X8ObG+GKiPioNq7eXFsc2oT4
-         0BNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
-        fh=1hPn0vxQzk76yGUm+nYXpBUMc/LIzWOsWubXoallBIo=;
-        b=IMVPDLe7iEqtJCy7kQQhHPbqP2veUm0s7v/4/bMOCtf8gYQgJNsRQK33A+E3mqNGUl
-         x7h/afYpkFJ3+quJTd+Q2/+bIcToT8jITBIfouPq1ziIpvWgh++3cNEtpvas62Wnyskm
-         xtc7u+0uSQTrmbiT8LfyKQvsXUV1ImMTp9LOXw7OwEWLu8vpczbaQVK8IAwJVOt85fis
-         5eRZfdd+jw2ur6D/sue4oLuaATjnnZVjVM7znfrSvNxWoyLZul+PGZirorxHegG8GZfc
-         +uplrK0MlOxnGVw3z4Ye49D8qt3yoGo7dG+p7ZuJoTSUnr6K7exZNvCPCH5ALUWXf/wA
-         u2hg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775070444; x=1775675244; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
-        b=a1//AZe5DdgS5fEZq0/0QEqk9mG6WFqo1M2mVCPIGwJratfVF9Q8YNqsXDe1cUWJax
-         fsuZz6klosQzCNo9xAyYm3I1UogQscr6pdkjOPiNqV4//KkaFAj90Sm5wF5p2I27SLCb
-         aQcLgWyAXcEZjyAknqF176bxnWUWElv1qfbL+4lqrCKOCdMejByVmHZTb9qYr9fyiFly
-         c4yarJIxvfSV96KdkRV6sIVyDg8aalM9zaMEXYjhHTnwwWGJl6ZuMT0sghhzAHb2OkMZ
-         6sDqT6BulxNVCVECJVB09GPwU0xos9b3u+D0FOtstJidKEivN2T0LfuTJAKj5YkwEl2h
-         otRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775070444; x=1775675244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
-        b=iJ8cR5UsKNnqItKd379FOjEpqGe3zgoTTt6LMNzxOU92RjRTpKWisacao8dAxoOR2F
-         ODSkYsHT1o7otaPugARDDp5I9+dzUPxDyvWhaa87yzis+kFirwHW6TU+quyrKBXugr5S
-         4ft+2gsyzrsHgzXsj2nGekb9lSie/w/HBt+Bo7k5Nip5wsN96s8WomVgIn4OvyVnP7V7
-         UdYx7RCP/wBRIj3IsmOZ8+EDjFktjFYUWzolKG+pzPqmqX0vwjoBOkIKGGX98qbC+rVV
-         WjR7+1yfYOT2JdmVUYhGp7sF/92UsKhA6yAC+BSZDgu3IOuj9Z7I10njwxLiUU8RZn8U
-         rIqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVpV7tf8Q0mKjkG/5CgWaeoLnLKi6E+IeQVcCQydnxx4qD7d1r/w9yVPko/3LX4IjtpXDGqAatRNiOZpN1EY+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ/D3ao2n0MdBLo63FH50DG7vKoI9sdXFGz2YZiSeOFOCfSrTx
-	zJ1o8IIlzdkUr/E//ew8/NJOfhwm0nrHKeNsqvQ8toAWrRneje6ufbkPI5kDKgGShPGdi8w4ooS
-	BAJ+13u5szIl6EaPB8XhGG2I2nt7sfeNNW0z1pg46
-X-Gm-Gg: ATEYQzwLtAcqwhM2l/JVx5Ku1eGA0bqFnobaiK1/tLZww6t+CC246R3Ag35GijNv53j
-	QzjskdGMzevZhuqymV7ZKSvpzYcEIlC1Gm2DwmSzmIiDPAvfwel9N2nGU2zmMIUI6DJSmRWIesV
-	7pkjcdIzQ9l9stFgqIsSKfPHtb4q7XcMvUtK9kThgDTrh+E9rpwgvs8OCVDm9Hvgy/JCOAaap1f
-	/NMhUtPFwDLDdTX5pEPsa7qSAEZqNj+cuLvS/7BLFEF+F+bQoPvtKf1IYeU7k5C/2NgR+GGgHD0
-	Eleua7awgqadkr0KGG4CY81L8gNxEfw2s1KO3g==
-X-Received: by 2002:a17:906:194a:b0:b9b:e5d:71df with SMTP id
- a640c23a62f3a-b9c1390345cmr238853766b.19.1775070443780; Wed, 01 Apr 2026
- 12:07:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lzjqgOm+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD10AC4CEF7;
+	Wed,  1 Apr 2026 19:15:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775070933;
+	bh=1Dfy8STCS29Dd/L8IzAykKpCipm+hEQa8viNiYyzGfU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lzjqgOm+wFCzIALJBVhPXdFb/bNnvF5NnNteJFDvPa5LDOk2vBC0AmwqvDuBIROnJ
+	 UroG3YHrw2asdYXECNtFGj38U5CqTjXdTjDrnleArISDl1om4LGTKYSpGfuzP3b1OL
+	 SnXo7byHAudebm6kZyhIN2UJuzDNoyzSr2+OWTXvKQnv+/bfLEEeNnY79duBu9CAXS
+	 y/hT1dupJK6YHXvSf2tOLCJAqf48L2OhF/Kh6GLG6JpbeA231aLBvCjw+DYI0VC9kR
+	 aRbB4G1PdoLXTI41OoyjMF4O2MWtSUU4ceYsWS9EdeJYYu6AKEIJRdjdZRooNuMXMb
+	 4SEYQ1KwNLBAw==
+Message-ID: <f7e1bdbf-cb88-42f0-ac48-1a273bda2455@kernel.org>
+Date: Wed, 1 Apr 2026 21:15:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331153413.2469218-1-wusamuel@google.com> <2026040136-ocelot-simply-8981@gregkh>
-In-Reply-To: <2026040136-ocelot-simply-8981@gregkh>
-From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 1 Apr 2026 12:07:12 -0700
-X-Gm-Features: AQROBzDAv1zFg2qxt-3Ch7XBslSJIDWmAx0yiNuGqnKyk-N-jI_iMZvmNf44ICs
-Message-ID: <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, driver-core@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 03/10] mm: fs: remove filemap_nr_thps*() functions and
+ their users
+To: Zi Yan <ziy@nvidia.com>
+Cc: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260327014255.2058916-1-ziy@nvidia.com>
+ <20260327014255.2058916-4-ziy@nvidia.com>
+ <aaea8ce1-eac6-49d6-8c85-7361977b9a9f@lucifer.local>
+ <b098fce7-be16-479e-b9a4-36f0ad71d242@kernel.org>
+ <53cf6157-58b1-4539-a276-2486e8796c57@lucifer.local>
+ <25899F67-955D-44DC-935E-D7F234BD335A@nvidia.com>
+ <cd36fe49-56b6-4ec6-8dc7-9c793f939bb5@kernel.org>
+ <EF04F17A-89ED-40EB-BA91-7A82713E28F8@nvidia.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <EF04F17A-89ED-40EB-BA91-7A82713E28F8@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 1, 2026 at 2:15=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
-> > This patchset adds requisite kfuncs for BPF programs to safely traverse
-> > wakeup_sources, and puts a config flag around the sysfs interface.
-> >
-> > Currently, a traversal of wakeup sources require going through
-> > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to qu=
-ery
-> > sysfs is inefficient, as there can be hundreds of wakeup_sources, with =
-each
-> > wakeup source also having multiple attributes. debugfs is unstable and
-> > insecure.
->
-> Describe "inefficient" please?
+On 4/1/26 17:32, Zi Yan wrote:
+> On 1 Apr 2026, at 10:35, David Hildenbrand (Arm) wrote:
+> 
+>> On 3/27/26 16:05, Zi Yan wrote:
+>>>
+>>>
+>>> But I added
+>>>
+>>> +	if (!is_shmem && inode_is_open_for_write(mapping->host))
+>>> +		result = SCAN_FAIL;
+>>>
+>>> That keeps the original bail out, right?
+>>
+>> Independent of that, are we sure that the possible race we allow is ok?
+> 
+> Let me think.
+> 
+> do_dentry_open() -> file_get_write_access() -> get_write_access() bumps
+> inode->i_writecount atomically and it turns inode_is_open_for_write()
+> to true. Then, do_dentry_open() also truncates all pages
+> if filemap_nr_thps() is not zero. This pairs with khugepaged’s first
+> filemap_nr_thps_inc() then inode_is_open_for_write() to prevent opening
+> a fd with write when there is a read-only THP.
+> 
+> After removing READ_ONLY_THP_FOR_FS, khugepaged only creates read-only THPs
+> on FSes with large folio support (to be precise THP support). If a fd
+> is opened for write before inode_is_open_for_write() check, khugepaged
+> will stop. It is fine. But if a fd is opened for write after
+> inode_is_open_for_write() check, khugepaged will try to collapse a read-only
+> THP and the fd can be written at the same time.
 
-Ack; I=E2=80=99ll provide a more detailed breakdown in the v4 cover letter.=
- To
-summarize: the "inefficiency" isn't just the number of sources (150),
-but the fact that each source has 10 attributes. We are looking at
-1,500+ sysfs nodes to get a full snapshot of the system.
+Exactly, that's the race I mean.
 
->
-> And if you really think that doing an open/read/close on a virtual
-> filesystem is inefficient, then I have the syscall for you!
->
-> I've been trying to get readfile() accepted every few years, looks like
-> I last tried in 2020:
->         https://lore.kernel.org/r/20200704140250.423345-1-gregkh@linuxfou=
-ndation.org
-> but I keep the patchset up to date in my local tree all the time.
->
-> Would that help you out here instead?
+> 
+> I notice that fd write requires locking the to-be-written folio first
+> (I see it from f_ops->write_iter() -> write_begin_get_folio() and assume
+> f_ops->write() has the same locking requirement) and khugepaged has already
+> locked the to-be-collapsed folio before inode_is_open_for_write(). So if the
+> fd is opened for write after inode_is_open_for_write() check, its write
+> will wait for khugepaged collapse and see a new THP. Since the FS
+> supports THP, writing to the new THP should be fine.
+> 
+> Let me know if my analysis above makes sense. If yes, I will add it
+> to the commit message and add a succinct comment about it before
+> inode_is_open_for_write().
 
-`readfile()` seems like it would be a great optimization for many
-usecases, but it doesn't solve the context switch bottleneck.
-Additionally, current userspace implementations attempt to speed up
-this traversal by caching fds, so this new syscall wouldn't help as
-much as one might initially expect.
+khugepaged code is the only code that replaces folios in the pagecache
+by other folios. So my main concern is if that is problematic on
+concurrent write access.
 
-> > Adding kfuncs to lock/unlock wakeup sources allows BPF program to safel=
-y
-> > traverse the wakeup sources list. The head address of wakeup_sources ca=
-n
-> > safely be resolved through BPF helper functions or variable attributes.
->
-> Who is going to be calling this?
+You argue that the folio lock is sufficient. That's certainly true for
+individual folios, but I am more concerned about the replacement part.
 
-BPF programs call the new kfuncs. I realized I left some stale text in
-the v2 cover letter regarding the interface; I'll clean that up for
-the next version to make this point clearer.
+I don't have anything concrete, primarily just pointing out that this is
+a change that might unlock some code paths that could not have been
+triggered before.
 
-> > On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34x
-> > speedup (sampled 75 times in table below). For a device under load, the
-> > speedup is greater.
-> > +-------+----+----------+----------+
-> > |       | n  | AVG (ms) | STD (ms) |
-> > +-------+----+----------+----------+
-> > | sysfs | 75 | 44.9     | 12.6     |
-> > +-------+----+----------+----------+
-> > | BPF   | 75 | 1.3      | 0.7      |
-> > +-------+----+----------+----------+
->
-> 150 sysfs calls in 44.9 ms feels very slow.  but really, what are you
-> expecting here, sysfs should NEVER be on a "fast path" that you care
-> about performance.  Why are you hammering on sysfs here?  What HAS to
-> have this type of performance?
->
-> In other words, what problem are you trying to solve that having access
-> to 150+ sysfs files all at once in a faster way is going to fix?
+-- 
+Cheers,
 
-The 44.9ms is the cost of reading ~1,500 sysfs nodes (150 sources * 10
-attributes). This is even worse on wearables, where the compute and
-power constrained platform exacerbates performance sensitivity even
-more.
-
-On these platforms, the CPU is suspended as much as possible. A
-byproduct of this is that the wakeup source traversal occurs on a
-user-perceptible path, which impacts battery life and UI
-responsiveness.
-
-Beyond the performance improvement, moving to BPF offers other benefits:
-1. Reduce Memory: Drop the fd caching logic
-2. Simplify Security: Consolidate SELinux permissions rather than
-managing labels for every single *possible* wakeup_source
-
-Thanks Greg!
-
--- Sam
+David
