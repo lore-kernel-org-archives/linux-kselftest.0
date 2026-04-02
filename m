@@ -1,50 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB793FBA7;
-	Thu,  2 Apr 2026 09:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360B9395250
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 09:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775120733; cv=none; b=OGywknzuwgyM3nvrKPHjsOCgO5X0v5aivCJQDObt1T3kqYXQGGqbZUR9s/7Gxjg8lm0A3rQ0LJHYC7Wmf1h3bAhVwFwerU0m985wbg4UZzHOJ42nm7dirAhMevafE5sR12mHUKynm9Nw/eG6TWPkaPqWyWXk+qixC/yJAiNnE/I=
+	t=1775122040; cv=none; b=sU91P5nsLgov+KCjDG93WbUSjYWVBI/gFQavjcA29A75NW6LdfviX2ElnfkmF+c0UDOsCRjr72eUD8tpaC7pB+7UAT/jBrNrYhldBXfUkBgNOYRp2WlYJMbJFntGl8PmkeOWEnPcoCLRdIS+OXzFlrflykZbSIjGQjpq9uUXCzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775120733; c=relaxed/simple;
-	bh=yfHUvvgXQutH0PejSYAx1kYrHzNDD4c4DofRBzeLTh8=;
+	s=arc-20240116; t=1775122040; c=relaxed/simple;
+	bh=8HBEZkldhVOCvg+h8X+QyqxrVDgc44S4RwM2B4Lv89Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G9uT7qFVgCdVSP51DNJOr5CX16x1OYVGM4sn9Wp3NlaaO1WeqDvtzgO2YHfUp9UNHVRRR7HMFxQVIHm0epdfemwuZ6g4versTYFP9ca6YAnMF8IRskieY9PlNtbrPtwZm4ul8GqWa85WtH6gLmTOUSnf6Y2jX0L7RRixKo80GgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=efM43sZ2; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=rwj3RTtF4z09CE5a+2zarbP2p07L4WRyVHJI7aZEUoUkpaPb3DA+kAXQy8dD993JtfZVb1Jai02RCeLOR3NMjgJ+NtxnAqSszz788MwVKoOfNei3gPZSXrT5XX42EsACgnK8Lhui2Qsb9YoH8RRLMhYuuvbAPmRM5aDJJnN/m5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WxcNR/jT; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=J180q0GQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="efM43sZ2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24E7C19423;
-	Thu,  2 Apr 2026 09:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775120733;
-	bh=yfHUvvgXQutH0PejSYAx1kYrHzNDD4c4DofRBzeLTh8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=efM43sZ2A/ZfqyTCE6QyXcUhTSqKNHMGoc0DNLI6pUPvzYoAPSciVsLz8B77AduZp
-	 w+XxRaaVCxnlnepcfCZi93QgTadPznyIAojrLQDjc0NEs094/tdyiDFHLPVIluVQLN
-	 dipx3TePpmSg2cPvw4jD+xaSFkoCNdM3v17oS7thDGheJQdmQohtZGWj51KOJ2wD/6
-	 TnyzywN1U9/A1hrwLZqWF4gymmrNJb78av1IMn1MO+0ayyq6AaX/MnvziDjvFty/b8
-	 N0oBHp4YsZYN9qenBb1q0IlcfJUAdtCvlC5pzag7GOrwMpa029pRCbadCwq0cnIC11
-	 25jESRIAdN9bg==
-Date: Thu, 2 Apr 2026 10:05:27 +0100
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Sayali Patil <sayalip@linux.ibm.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Ritesh Harjani <ritesh.list@gmail.com>, Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, 
-	Oscar Salvador <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org, 
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: Re: [PATCH v3 08/13] selftests/mm: ensure destination is
- hugetlb-backed in hugepage-mremap
-Message-ID: <0a1befae-1037-4bbe-b976-352ef4607d2a@lucifer.local>
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <3b6ffba238a4b59de891acf896fa25d7d3193228.1774591179.git.sayalip@linux.ibm.com>
- <ee15d52f-45df-415b-b0d9-3d267d147e5c@kernel.org>
- <b590a17c-13ed-45f4-9f51-ac662d00e7bf@lucifer.local>
- <066a146b-7dbb-408e-bbc0-542bdcdd6681@linux.ibm.com>
- <86889304-c450-491c-8c06-48ca9c973531@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WxcNR/jT";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="J180q0GQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775122030;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=36+ATcVryHEsHCfEL0i5GnGjSCxjk7f9m5BZERXBqcg=;
+	b=WxcNR/jTpy8FNj3+m3kIgzNB1kOzMLYe0bTrsZTpfy2RpPXaqdvhaOhjhIVfNV/iGMzI9P
+	VdKpbqKYmDZ3SQ9H+0Q7h6m56zoh2MGbKhTmQhqD9ctVa+FwWM5RwthGMmweWVXxNPqH5Z
+	Zodjx1FueDTYs6Gx+24wIA0xJ3kRWDE=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-499-cFxPnmDwO8uG7HCMBLPChg-1; Thu, 02 Apr 2026 05:27:09 -0400
+X-MC-Unique: cFxPnmDwO8uG7HCMBLPChg-1
+X-Mimecast-MFC-AGG-ID: cFxPnmDwO8uG7HCMBLPChg_1775122028
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3595485abbbso959593a91.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 02:27:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1775122028; x=1775726828; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=36+ATcVryHEsHCfEL0i5GnGjSCxjk7f9m5BZERXBqcg=;
+        b=J180q0GQPV0hVzyI1LSWUzdunwlCqdvAbMluYOJpoyMvgzWAzljWCOaI9zzUvvFJcD
+         ZUAT8Xu++6Ynh/1n+sAfMpRVDPi/FVm3qbyFaSh6H3fPnylL5/tsyWvZ1SLrYVJD+o5c
+         6/tPuaE+Cy/uhlBNYpyrijYtmx4fs7kc6FqRYBtGdbKrnS80NKUU0YeHsp9NNMMc6Bf5
+         3Gb/2h2up4dQifohO3u9MxJ/y3+QW3U7dMf90vBbxdtbt3UEhQwHrmZNcEG2+fg6NMPl
+         EPpAE9qarkD4+hdKuEngS0fvhHrrPy0ygUc2l/Jc01fk0hckVrt0Wv+zQ73+vino/DJ0
+         KOPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775122028; x=1775726828;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=36+ATcVryHEsHCfEL0i5GnGjSCxjk7f9m5BZERXBqcg=;
+        b=HzMESVT5i+PmqEPbxIFbec+r8858pmmmH5NB4hTb60Doi7UgtumxwGisPCsrBY1746
+         TG41Vbt03/Pxv0tj/qT10DYDeirQF/ko1H+ele9iL7/Q18dJ9nFdRmHT6ANhj9ZiPZ0a
+         8QHUI0/8Pwauj7UIRWnN5hcDmQf7fgbHKCf9i2vr0Yi0vhNiLxt5Yf/eBx9Mk3rNTqOu
+         j7MN7KzYgCCwHOOzFOBivRPplRDl8qyrCOcUUDwJ1xvWi4qrAyUhvQdwYpjL7JB2285I
+         /aj6OyIGvFftTHkaOoH3d3UUxxKrp4nhC7Y72zWMOwhKa3jjf/WE65Xy40Fs8m7PLtmx
+         Nv6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVRPs7D1gn5dfOSZE9K7lDRKmWGRXuHJEO4bWuK/pLFgXvtRrg3W0whCaXEWH6jHeDXudIV3/tc6eaVAXI6SsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8aVtnYLN36TT1fOhFfYSF6kNB5FMVKiDKD+bmsZpZBObf3Z6Z
+	l37hGOqbGBbjDD6f8oQFfpNSMq9AFF7Tox73lmPGPEDdcC6cfcbmkqJdfikqivKZFUsGdSk5M8O
+	f4u+8ro4JjsFz0OXrmt6s7wedoZd3MP/bAYoXEAgwYc7KYu6e+qCj8WQq/dLoesY8lXJKFg==
+X-Gm-Gg: AeBDietNK0LZZY4xzWzhyD8XeKGoDF2IftYNsMCEjKrCr1hG/XUnBikKl9TW3beqrsB
+	kGwhAkq7NSnFrjNuV1XzjqZlILPHVU/Wf56366sJQIMRIn2MY+g1WQJfvkuLHvSeiNZFehLM87g
+	/sPMGCcLTtMLzZWdL1x+oCVnXLvklVubc3zZIgJpHSD8L2EzzITliI4/odT9Ox2p2J+IuEoplCc
+	jXjLiUOzUh93w3COXDE+rUu71atrWNTwVnvFilIhuRp0OdwG5URairHEUFdrGLEl3CwtYjaPtYX
+	q59HGFB1AAqCKHYKqeES7J5y9OTqKU4XObSb1JZbxY3fys0kNYs/XbP5383iJ5WtMzZ4IzDgD51
+	ro3jnO8N0aEsuxYQYSA==
+X-Received: by 2002:a17:90b:3947:b0:35b:e566:15a6 with SMTP id 98e67ed59e1d1-35dc6f4f018mr6646514a91.28.1775122027789;
+        Thu, 02 Apr 2026 02:27:07 -0700 (PDT)
+X-Received: by 2002:a17:90b:3947:b0:35b:e566:15a6 with SMTP id 98e67ed59e1d1-35dc6f4f018mr6646481a91.28.1775122027294;
+        Thu, 02 Apr 2026 02:27:07 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27477736dsm22344875ad.24.2026.04.02.02.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 02:27:06 -0700 (PDT)
+Date: Thu, 2 Apr 2026 17:27:04 +0800
+From: Li Wang <liwang@redhat.com>
+To: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: Waiman Long <longman@redhat.com>, Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	James Houghton <jthoughton@google.com>,
+	Sebastian Chlad <sebastianchlad@gmail.com>,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
+Subject: Re: [PATCH v2 1/7] memcg: Scale up vmstats flush threshold with
+ int_sqrt(nr_cpus+2)
+Message-ID: <ac42aIDVaGim5moO@redhat.com>
+References: <20260320204241.1613861-1-longman@redhat.com>
+ <20260320204241.1613861-2-longman@redhat.com>
+ <n6mhkjsxsami3qmczkdh57eep4lmcgbtyl7ox3ajzveke44yf6@m4bjevvsr47k>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,92 +109,131 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <86889304-c450-491c-8c06-48ca9c973531@kernel.org>
+In-Reply-To: <n6mhkjsxsami3qmczkdh57eep4lmcgbtyl7ox3ajzveke44yf6@m4bjevvsr47k>
 
-On Thu, Apr 02, 2026 at 09:33:29AM +0200, David Hildenbrand (Arm) wrote:
-> On 4/1/26 22:39, Sayali Patil wrote:
-> >
-> >
-> > On 01/04/26 20:10, Lorenzo Stoakes (Oracle) wrote:
-> >> On Wed, Apr 01, 2026 at 04:21:55PM +0200, David Hildenbrand (Arm) wrote:
-> >>
-> >> OK so digging in:
-> >>
-> >> mremap -> ... -> vrm_set_new_addr() -> get_unmapped_area() -> ... (in
-> >> ppc arch
-> >> code) -> slice_get_unmapped_area():
-> >>
-> >> unsigned long slice_get_unmapped_area(unsigned long addr, unsigned
-> >> long len,
-> >>                       unsigned long flags, unsigned int psize,
-> >>                       int topdown)
-> >> {
-> >>     ...
-> >>     /* bunch of checks */
-> >>
-> >>     /* If we have MAP_FIXED and failed the above steps, then error out */
-> >>     if (fixed)
-> >>         return -EBUSY;
-> >>
-> >>     ...
-> >> }
-> >>
-> >> Is presumably where we hit the issue.
-> >>
-> >>>
-> >>> That is weird. An mremap(MREMAP_FIXED) is really just an munmap() +
-> >>> move.
-> >>
-> >> Yeah the weird bit I guess is that we _still_ invoke
-> >> get_unmapped_area() but
-> >> with MAP_FIXED set to indicate that we want the specific address, so it's
-> >> subject to the above checks.
-> >>
-> >>>
-> >>> Are we sure this is not some actual problem in the hugetlb
-> >>> implementation?
-> >>
-> >> It seems the 'slices' check sees if the _target address_ has an
-> >> equivalent page
-> >> size, presumably hugetlb-mandated, and fails if they're not
-> >> equivalent, so this
-> >> change is just accounting for that.
-> >>
-> > Yes, this change accounts for that by ensuring the destination is
-> > created with MAP_HUGETLB so it has the same page size as the source.
->
-> Okay, weird, so it's the right thing to do to cover all odd arch behavior.
->
-> >>
-> >>>
-> >>>
-> >>> But then the test suddenly requires more hugetlb pages, no? I don't see
-> >>> a good reason for the MAP_POPULATE, really. It will be discarded
-> >>> either way.
-> >>
-> >> Yeah I'm not sure about the MAP_POPULATE being all that important here.
-> >>
-> > As far as I understand, without MAP_POPULATE, memory accesses would
-> > trigger userfaults, and since the test is single-threaded and has no
-> > background handler for the uffd, it would deadlock. MAP_POPULATE ensures
-> > the test runs correctly by prefaulting all pages, but please let me know
-> > if I’m mistaken.
->
-> So you are saying the test would deadlock if you are not adding
-> MAP_POPULATE? If so, please double check if that is actually the case.
->
-> And if it's actually the case, please carefully document that in the
-> patch description, and probably as a comment above the MAP_POPULATE usage.
+Hi Michal,
 
-Do keep in mind MAP_POPULATE is not _guaranteed_ to work :)
+> Hello Waiman and Li.
+> ...
+> The explanation seems [1] to just pick a function because log seemed too
+> slow.
+> 
+> (We should add a BPF hook to calculate the threshold. Haha, Date:)
+> 
+> The threshold has twofold role: to bound error and to preserve some
+> performance thanks to laziness and these two go against each other when
+> determining the threshold. The reasoning for linear scaling is that
+> _each_ CPU contributes some updates so that preserves the laziness.
+> Whereas error capping would hint to no dependency on nr_cpus.
+> 
+> My idea is that a job associated to a selected memcg doesn't necessarily
+> run on _all_ CPUs of (such big) machines but effectively cause updates
+> on J CPUs. (Either they're artificially constrained or they simply are
+> not-so-parallel jobs.) 
 
-For guaranteed populate you need madvise(..., MADV_POPULATE_[READ/WRITE]) or to
-directly fault in.
+> Hence the threshold should be based on that J and not actual nr_cpus.
 
->
-> --
-> Cheers,
->
-> David
+I completely agree on this point.
 
-Cheers, Lorenzo
+> Now the question is what is expected (CPU) size of a job and for that
+> I'd would consider a distribution like:
+> - 1 job of size nr_cpus, // you'd overcommit your machine with bigger job
+> - 2 jobs of size nr_cpus/2,
+> - 3 jobs of size nr_cpus/3,
+> - ...
+> - nr_cpus jobs of size 1. // you'd underutilize the machine with fewer
+> 
+> Note this is quite naïve and arbitrary deliberation of mine but it
+> results in something like Pareto distribution which is IMO quite
+> reasonable. With (only) that assumption, I can estimate the average size
+> of jobs like
+> 	nr_cpus / (log(nr_cpus) + 1)
+> (it's natural logarithm from harmonic series and +1 is from that
+> approximation too, it comes handy also on UP)
+> 
+> 	log(x) = ilog2(x) * log(2)/log(e) ~ ilog2(x) * 0.69
+> 	log(x) ~ 45426 * ilog2(x) / 65536
+> 
+> or 
+> 	65536*nr_cpus / (45426 * ilog2(nr_cpus) + 65536)
+> 
+> 
+> with kernel functions:
+> 	var1 = 65536*nr_cpus / (45426 * ilog2(nr_cpus) + 65536)
+> 	var2 = DIV_ROUND_UP(65536*nr_cpus, 45426 * ilog2(nr_cpus) + 65536)
+> 	var3 = roundup_pow_of_two(var2)
+> 
+> I hope I don't need to present any more numbers at this moment because
+> the parameter derivation is backed by solid theory ;-) [*]
+> [*]
+
+It is a elegant method but still not based on the J CPUs.
+
+As you capture the core tension: bounding error wants the threshold
+as small as possible, while preserving laziness wants it as large as
+possible. Any scheme is a compromise between the two.
+
+But there has several practical issues:
+
+The threshold formula is system-wide, while each memcg has its own counter,
+they all evaluate against the same MEMCG_CHARGE_BATCH * f(nr_cpu_ids),
+with no awareness of how many CPUs are actually active for that particular
+memcg. Small tasks with J=2 coexist with large services where J approaches
+nr_cpus, yet they all face the same threshold. The ln-harmonic formula
+optimizes for the average J, but workloads that most critically need
+accurate memory.stat are precisely those spanning many CPUs, well above
+average.
+
+Moreover, the "average J" estimate assumes tasks are uniformly distributed
+across CPUs, which rarely holds in practice with cpuset constraints, NUMA
+affinity, and nested cgroup hierarchies. And even accepting that estimate,
+the data shows ln-harmonic still yields 237MB of error at 2048 CPUs with
+64K pages — still large enough to cause selftest failures.
+
+In short: the theoretical analysis is sound, but the conclusion conflates
+average case with worst case. Under the constraint of a single global
+threshold, sqrt remains the more robust choice.
+
+In future, if the J-sensory threshold per-memcg can be achieved, then your
+ln-harmonic method is the most ideal formula.
+
+To compare the three methods (linear, sqrt, ln-harmonic):
+
+4K page size (BATCH=64):
+
+  CPUs   linear   sqrt     ln-var3
+  --------------------------------
+  1      256KB    256KB     256KB
+  2      512KB    512KB     512KB
+  4      1MB      512KB     512KB
+  8      2MB      768KB     1MB
+  16     4MB      1MB       2MB
+  32     8MB      1.25MB    2MB
+  64     16MB     2MB       4MB
+  128    32MB     2.75MB    8MB
+  256    64MB     4MB       16MB
+  512    128MB    5.5MB     32MB
+  1024   256MB    8MB       64MB
+  2048   512MB    11.25MB   64MB
+
+64K page size (BATCH=16):
+
+  CPUs   linear   sqrt     ln-var3
+  --------------------------------
+  1      1MB      1MB      1MB
+  2      2MB      2MB      2MB
+  4      4MB      2MB      2MB
+  8      8MB      3MB      4MB
+  16     16MB     4MB      8MB
+  32     32MB     5MB      8MB
+  64     64MB     8MB      16MB
+  128    128MB    11MB     32MB
+  256    256MB    16MB     64MB
+  512    512MB    22MB     128MB
+  1024   1GB      32MB     256MB
+  2048   2GB      45MB     256MB
+
+-- 
+Regards,
+Li Wang
+
