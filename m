@@ -1,328 +1,181 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00364e01.pphosted.com (mx0b-00364e01.pphosted.com [148.163.139.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A0636C9CC;
-	Thu,  2 Apr 2026 19:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6E32737FC
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 19:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.139.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775157799; cv=none; b=ltbyxjXgoWaoy1msICUjnqFm1tcJJREtlNP+3oQN7Sr2Ae56NuOND9ALkb4zLSrcjvnWFwNCnjRDl+n8YpbcmdXvb1xe2RrqbIJ0LldAXZJiS86kGht7rtl9WTNJOsybQQItdZpe+FGARNjWGpN5BNqzFoDBlJVdTtC1MOSSu5I=
+	t=1775158391; cv=none; b=YTkr2o82btDVKA1d0wMms4uGjPlCBF3vm+w9gy0f8njOF6UMc2RFR2qNAC20dYzLYB1KFAi9PuWhANMc9gnCdXsc7XjCcRyAVYBMA5TW9WaVZ01WK4f27t7NAEaHMtsByivEuYoHT0DIuKCZrZbGaV/+dnVsHuxW48ZpOn+CLpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775157799; c=relaxed/simple;
-	bh=CX5Zg8UaUOqAXyggxlY61Y+AHoFP7AKYXNrajI0glkM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QwUpFbOrCr45WUGyhclNuNbpUG60/FhDJrHzW92d1JdHqm1zcG7al+gpRf20G81R71GBOQrCVxe54plzzm4Wd3kjP27ZW5SGIJY87A6iUrqE5DQ0c1thUDQZwD4S6n8mKMxw4txLXoZ2c/AvJzm2A+J6m7At/27R1kn18ilsLqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5Mq/uw3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775158391; c=relaxed/simple;
+	bh=sxuqQOtpTIhnsnruCurB+KsFnny3NxywxLqvf8D1RWM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kI5HITVQBhcKOK5Em8A/nZ/kvsAfH2P373it51uZR56mX5keqx9BtAH2ciOlZy8FcwzvLbdhNT6Xn4wWArRUxJwU8mqJAd/MeHfN2XsJ+W8izTNaGYoB4S2I8nRBEvRYhzu9qVY7nSarnj91giZUa2z3iElf6y4zYrwAmlU0TBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu; spf=pass smtp.mailfrom=columbia.edu; dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b=pBQ67VJ4; arc=none smtp.client-ip=148.163.139.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=columbia.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5Mq/uw3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A995BC2BC9E;
-	Thu,  2 Apr 2026 19:23:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775157798;
-	bh=CX5Zg8UaUOqAXyggxlY61Y+AHoFP7AKYXNrajI0glkM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=J5Mq/uw3rXDiTW0+ZAkNUTxlhx4xY68BKtIE43rpjTeMoQ5RACIhTKhAVJpc7Tcpu
-	 Ld3NMo2/T7fI4CdkVXSri6q1m6t+bnAIPS5S/4nBK7ySkao4Gun0AbtjYNs/eW5Z1u
-	 ZeDyA5pMNvo+s9/JBFYMt5GZjQbRH3TVEL+XMR47K3V9CdEtyiiY5ueCqdFhfGSphp
-	 3AA0P1omyeOl4enFcPKODJCS9PF9/hGJ+IRKi+AEaoGCel9/Qh2olqQqHF5h+YLRnO
-	 rilDtKLtx27RdfJhI7xDClxwApvKrQhOxX8BUuV9V61dd0BE+5URVCZxnn4z+SFrdQ
-	 ns/GW+AsRtz8A==
-From: Jeff Layton <jlayton@kernel.org>
-Date: Thu, 02 Apr 2026 15:23:09 -0400
-Subject: [PATCH v7 2/2] selftests/firmware: add search path test for
- firmware_class.search_path=
+	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b="pBQ67VJ4"
+Received: from pps.filterd (m0167073.ppops.net [127.0.0.1])
+	by mx0b-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 632JSZWm3441965
+	for <linux-kselftest@vger.kernel.org>; Thu, 2 Apr 2026 15:33:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps01; bh=1Wma
+	Gc9Te9yz0Zibs0J92PxP2axqg3Ucqwb44WM0s3g=; b=pBQ67VJ46+SO5CMoxNw4
+	10vf2BWyi8pCFVjd3/INcGVNa2Rx4KtH2rep92OIs2n1Z89uB2lTfNviu+kbwbPd
+	DjAPZzTjPlQJxf6aaLj8+55swS1/gYcctqfhFYgYzhKlR/0crQjLSGCN03sDQss9
+	4tZHP4P+wILE7QdbAjcgpe5P/Ff4my0GTEA5qtpp8D85WKZQFROup1Kp2l2MpjiS
+	9Yj3nNMZauc2U5s34Um9d9jiL/3yeihYWBvWrqrsZRhGbHQbSjGDG8Q5TIp8ZYZM
+	cU3Bx2XRUUejxzakioCYxP6G9EC5W5f3QZfaBWft5Fh55KmbHTKoFuO3cCmIUNz2
+	vA==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0b-00364e01.pphosted.com (PPS) with ESMTPS id 4d96kda1wr-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 15:33:01 -0400 (EDT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8d3e4c19307so84808885a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 12:33:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775158381; x=1775763181;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1WmaGc9Te9yz0Zibs0J92PxP2axqg3Ucqwb44WM0s3g=;
+        b=Na7wNc8P/6lPmdyBVzbvpyxeXaUeUI+MohAvAsqaFNRRM8B/R3gFC4zy8Ut5rPkQc0
+         iNhW1vUg+VmkPjOpsMJDsSjGQwSAI/8HBX1rqC9Iruoi3ZkmoxavBwPB72EHs9Po7uPe
+         6B6gUF4gr6mS1/RSxC7uPasNXSFP503gzrhsT1fcJHVvWOdUrqR+j/9btcZt4WZ2vm4n
+         ftMIML/8PO8TFTy7zfRjlbJbhk6r4s0x4+cQyopNTVnwIu77Zsx4svIfVS5xK+hfbCiS
+         zbUCPspnCc925q+nuZUPrpVIPYKwsYxxA7/OO3qhUiRy3fqPTk1sn2qKTCOowX7D8rXc
+         Cyow==
+X-Forwarded-Encrypted: i=1; AJvYcCVVxrD2Al24e9GZxVG+3E0gxpmWOmD1Hy6MF0kxyZw/MBzxHra7zeRHoebLDKoGgFhlDQ5OsrHSTmV0IKu5DP8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKr9eQV8aJLk2zuXTLb8iRLcHyc3qGj8NV2E41O+WE1m3ixACn
+	hVFDS5Dx/4izhfWCLaJBAS6SlyuwRUoAB9mR+G98zbJO2JKwNoPegcwgrQQTXsLzI5pxGc4TuN6
+	oLzTTO4qC4NBupw87XzHJzTXrC2ZCAo0dH9qJA8R2tc6ivbgWPdBwqIseVJk309bWxQ==
+X-Gm-Gg: ATEYQzxnMR7yfQvu1w+KZWcmrpXyeUCbt1Hcb1vHwL6bMffpSGQTY6qGMT77mViBOjO
+	zquEqMpV2MjtCsIz5n+RKXwIwLyrjJKjBZXdLJm88isZl8Bqa/SC0U2JQtBFLjTVmVOYFQLDc6m
+	gpLdF+GZM1Sa0Ln8iFH+sWCoTEvz8pGqp7+lmOplDkUpynAmSwYRRT2Ua8cdCtr06A9F2hZmWOQ
+	qS6Qt3AtNAjibiAd8WdpJJSKnBdtFAVzQVWxWdjyYhOmK2V7SjVVDV21aosXxHbeyJMuEl2raah
+	vLVoHr8GI7qdMV2ugSjC3iWSX8TWTOGeZjIB35Xdyg1QJoVsYHBH1GUJEEwzQuXeI1SlNVR6vw+
+	8x9YcJ4fvVeOw852Rb9XxsksKbst4LLhY+VLb3kA=
+X-Received: by 2002:a05:620a:298b:b0:8cd:9599:b7cb with SMTP id af79cd13be357-8d41c6ac558mr84739485a.25.1775158380988;
+        Thu, 02 Apr 2026 12:33:00 -0700 (PDT)
+X-Received: by 2002:a05:620a:298b:b0:8cd:9599:b7cb with SMTP id af79cd13be357-8d41c6ac558mr84732685a.25.1775158380358;
+        Thu, 02 Apr 2026 12:33:00 -0700 (PDT)
+Received: from [10.206.121.101] ([129.236.224.148])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8d2a80680dcsm283333085a.26.2026.04.02.12.32.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Apr 2026 12:32:59 -0700 (PDT)
+Message-ID: <6a171abc-ebd2-4ddf-8c36-34c66ca42043@columbia.edu>
+Date: Thu, 2 Apr 2026 15:32:58 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 07/15] userfaultfd: introduce vm_uffd_ops
+To: Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton
+ <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>
+Cc: Andrea Arcangeli <aarcange@redhat.com>, Andrei Vagin <avagin@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Harry Yoo
+ <harry.yoo@oracle.com>, Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+        Nikita Kalyazin <kalyazin@amazon.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260402041156.1377214-1-rppt@kernel.org>
+ <20260402041156.1377214-8-rppt@kernel.org>
+Content-Language: en-US
+From: Tal Zussman <tz2294@columbia.edu>
+In-Reply-To: <20260402041156.1377214-8-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260402-fw-path-v7-2-5b7e9c41a8c0@kernel.org>
-References: <20260402-fw-path-v7-0-5b7e9c41a8c0@kernel.org>
-In-Reply-To: <20260402-fw-path-v7-0-5b7e9c41a8c0@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>, 
- Russ Weight <russ.weight@linux.dev>, Danilo Krummrich <dakr@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Michal Grzedzicki <mge@meta.com>, driver-core@lists.linux.dev, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Jeff Layton <jlayton@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8582; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=CX5Zg8UaUOqAXyggxlY61Y+AHoFP7AKYXNrajI0glkM=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpzsIiHKnQ9whBItl0+oK+296WUjlITYfDG5uer
- sCurGUP8FyJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCac7CIgAKCRAADmhBGVaC
- FfSCD/9H2AY08QY2WVut4A1X8nYzl+js5e1bgxQSQLbAJh9v0fjgBj6kRgShtOzRmJsdoFt2MSi
- NLqp93ZHB4ITdYcenovX5c3CamzsYvqraaA6UTnmDYS+buzgNFPx4V0wNVsNxnuuTBrFvoKEwdM
- I/s0BtKyqhYERbP72OVkrLWeBUIz/cVCXXGPEg5x6wsyBv0+75UXVSZeFyzm8jzQTqYgzG/VjO6
- Oq7Ge899GzeJlYyTeu3mXh9Kk6p9/zmQUsRSSlJUhzJ7PyEBtL3xEdKBryl8TkNeSP5JCBrSdQl
- oPP+yEyWVyTjXYSywWq2QBCC0tYdQvrNZaXYZV7ZDfWNNtl5Rfes82QHzoO2pdF/pV7sPGHBwLh
- +5veZwbVDvfrihQYzApJ2jvdMvH42CYBxczOlrtH2gcWkNHqEeJQk1is0FoY3Keri5c7csf9yW0
- z41dp1p/fRrxyzcaXHZqIP4XfNH1SUDjznFVjqVtZtXzB2Bev0BLQnxlqW4iZN1pT4q+wNsVGFQ
- QDBfH3JHmhUBzjQNtuHnCDFqqR3yTKHAq+i5amiyFWl2fLu1mc/pnzklevIZtUunvW2rifEWBfk
- gNc6E4Cha6hhywfon5vDqJxfZGWrdY9q+hAOudFF/CD0FgCN0gPQ2trS1IgMmu5A1zBfcL1wvhT
- JR/9ww76nEEcVyw==
-X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
- fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
+X-Proofpoint-GUID: wxe9YaaDE2KtOkiwhRzJbvi3-hUQDgrk
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDE3NSBTYWx0ZWRfXzvi5k1dglL0B
+ KABvXKHRmymvZTQ059toiYZiSFK1DZGT8ISw4SgqnPdCX86W1TUBlKXAbKo/kdHNeJmh7LX3vcx
+ 9aVZhD4bvo7ZhA/BVgukPbbiG/Cni/6f7jBi9XPuOZEhWbEnXm4JGZ/ootVcVEhZ7X5NDxhZjqd
+ xkxuoOLP7KkyW6VDOmMD08cMtKE6iuzARlJ/Rbii+A7aqCSAY+vuk+GAScbu/8QOKPr3Y1uLvG5
+ xmGP3p3gnf59SXz1t2xMDPBGyLMXl+8Uczst02pSa1nJxBVszZx6eo2/V486i1XvQoaJo/6nW7j
+ G285RN2evZdezKRRYJFsU6fl7wWIjrahZ8NrVmfVHNRKsa/CZ2tU1JMglVPuKUSd46ntVYBXkwH
+ jLVhfsbwRmrXsWLljxSAym6iL1yMZLvNkgB1XNv2IQW/O271PW0nX8MbFVKpiR1rQOqEt4R7A16
+ +P8jhD95KrjcbmaUJyg==
+X-Authority-Analysis: v=2.4 cv=RozI7SmK c=1 sm=1 tr=0 ts=69cec46d cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=k+Kg2sH3hDje3YXt6xVjPQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=x7bEGLp0ZPQA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Da8U98TiO7q1upZEImrf:22 a=jHxIr1HyPKZ_Q5_91PL3:22
+ a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8 a=-OANyN2A5GHSoQQpHzcA:9 a=QEXdDO2ut3YA:10
+ a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-ORIG-GUID: wxe9YaaDE2KtOkiwhRzJbvi3-hUQDgrk
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11747
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 lowpriorityscore=10 malwarescore=0 spamscore=0 impostorscore=10
+ priorityscore=1501 suspectscore=0 bulkscore=10 adultscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604020175
 
-Add fw_search.sh, a new selftest that validates the firmware_class.search_path=
-module parameter using the existing test_firmware module's sysfs trigger
-interface.
+Hi Mike,
 
-The test covers:
-  - Firmware found in first/second/third search directory
-  - Firmware not found in any search path
-  - path= takes priority over search_path=
-  - Empty search_path= does not break firmware loading
-  - Sysfs readback matches what was written
-  - Escaped colon (\:) in directory name
-  - Escaped backslash (\\) in directory name
-  - Escaped colon combined with multiple search paths
+On 4/2/26 12:11 AM, Mike Rapoport wrote:
+> @@ -2021,34 +2040,33 @@ ssize_t move_pages(struct userfaultfd_ctx *ctx, unsigned long dst_start,
+>  bool vma_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags,
+>  		       bool wp_async)
+>  {
+> -	vm_flags &= __VM_UFFD_FLAGS;
+> +	const struct vm_uffd_ops *ops = vma_uffd_ops(vma);
+>  
+> -	if (vma->vm_flags & VM_DROPPABLE)
+> -		return false;
+> -
+> -	if ((vm_flags & VM_UFFD_MINOR) &&
+> -	    (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma)))
+> -		return false;
+> +	vm_flags &= __VM_UFFD_FLAGS;
+>  
+>  	/*
+> -	 * If wp async enabled, and WP is the only mode enabled, allow any
+> +	 * If WP is the only mode enabled and context is wp async, allow any
+>  	 * memory type.
+>  	 */
+>  	if (wp_async && (vm_flags == VM_UFFD_WP))
+>  		return true;
+>  
+> +	/* For any other mode reject VMAs that don't implement vm_uffd_ops */
+> +	if (!ops)
+> +		return false;
+> +
+> +	if (vma->vm_flags & VM_DROPPABLE)
+> +		return false;
+> +
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- tools/testing/selftests/firmware/Makefile     |   2 +-
- tools/testing/selftests/firmware/fw_search.sh | 217 ++++++++++++++++++++++++++
- 2 files changed, 218 insertions(+), 1 deletion(-)
+Doesn't moving the VM_DROPPABLE check after the wp_async early return make
+the issue David raised in [1] possible again (i.e. moving swapbacked pages
+into a droppable region using UFFDIO_MOVE)? With this change, VM_DROPPABLE
+pages can now be registered with uffd under wp_async, which allows
+UFFDIO_MOVE.
 
-diff --git a/tools/testing/selftests/firmware/Makefile b/tools/testing/selftests/firmware/Makefile
-index 7992969deaa2737ff2a033ffe60136b84ea2f3f0..42e5bd72886b3cd8f62ae42d53c1554e8a1b331c 100644
---- a/tools/testing/selftests/firmware/Makefile
-+++ b/tools/testing/selftests/firmware/Makefile
-@@ -3,7 +3,7 @@
- CFLAGS = -Wall \
-          -O2
- 
--TEST_PROGS := fw_run_tests.sh
-+TEST_PROGS := fw_run_tests.sh fw_search.sh
- TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_upload.sh fw_lib.sh
- TEST_GEN_FILES := fw_namespace
- 
-diff --git a/tools/testing/selftests/firmware/fw_search.sh b/tools/testing/selftests/firmware/fw_search.sh
-new file mode 100755
-index 0000000000000000000000000000000000000000..9714e9c10c627fc710fb14e5b0ae70537bc78623
---- /dev/null
-+++ b/tools/testing/selftests/firmware/fw_search.sh
-@@ -0,0 +1,217 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test the firmware_class.search_path= module parameter, which allows
-+# specifying multiple colon-separated firmware search directories.
-+
-+set -e
-+
-+TEST_REQS_FW_SYSFS_FALLBACK="no"
-+TEST_REQS_FW_SET_CUSTOM_PATH="no"
-+TEST_DIR=$(dirname $0)
-+source $TEST_DIR/fw_lib.sh
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+SEARCH_SYSFS="/sys/module/firmware_class/parameters/search_path"
-+PATH_SYSFS="/sys/module/firmware_class/parameters/path"
-+
-+check_mods
-+check_setup
-+verify_reqs
-+
-+if [ ! -f "$SEARCH_SYSFS" ]; then
-+	echo "$0: search_path= parameter not available, skipping"
-+	exit $ksft_skip
-+fi
-+
-+# Save original values
-+OLD_SEARCH="$(cat $SEARCH_SYSFS)"
-+OLD_PATH="$(cat $PATH_SYSFS)"
-+
-+# Create temp directories for firmware
-+FWDIR1=$(mktemp -d)
-+FWDIR2=$(mktemp -d)
-+FWDIR3=$(mktemp -d)
-+FWDIR_COLON_BASE=$(mktemp -d)
-+FWDIR_BS_BASE=$(mktemp -d)
-+FWDIR_COLON2_BASE=$(mktemp -d)
-+
-+FW_NAME="test-search-fw.bin"
-+FW_CONTENT1="SEARCH_PATH_1"
-+FW_CONTENT2="SEARCH_PATH_2"
-+FW_CONTENT3="SEARCH_PATH_3"
-+
-+DIR=/sys/devices/virtual/misc/test_firmware
-+
-+cleanup()
-+{
-+	# Restore original values
-+	if [ "$OLD_PATH" = "" ]; then
-+		printf '\000' >$PATH_SYSFS
-+	else
-+		echo -n "$OLD_PATH" >$PATH_SYSFS
-+	fi
-+	if [ "$OLD_SEARCH" = "" ]; then
-+		printf '\000' >$SEARCH_SYSFS
-+	else
-+		echo -n "$OLD_SEARCH" >$SEARCH_SYSFS
-+	fi
-+	rm -rf "$FWDIR1" "$FWDIR2" "$FWDIR3" \
-+	       "$FWDIR_COLON_BASE" "$FWDIR_BS_BASE" "$FWDIR_COLON2_BASE"
-+}
-+trap cleanup EXIT
-+
-+# Clear path= so search_path= is consulted
-+printf '\000' >$PATH_SYSFS
-+
-+# Test 1: firmware found in first search path
-+echo -n "$FW_CONTENT1" >"$FWDIR1/$FW_NAME"
-+echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 1" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR1/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 1" >&2
-+	exit 1
-+fi
-+echo "$0: search path - first directory: OK"
-+
-+# Test 2: firmware found in second search path (not in first)
-+rm -f "$FWDIR1/$FW_NAME"
-+echo -n "$FW_CONTENT2" >"$FWDIR2/$FW_NAME"
-+echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 2" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR2/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 2" >&2
-+	exit 1
-+fi
-+echo "$0: search path - second directory: OK"
-+
-+# Test 3: firmware not found in any search path
-+rm -f "$FWDIR2/$FW_NAME"
-+echo -n "$FWDIR1:$FWDIR2" >$SEARCH_SYSFS
-+
-+if echo -n "nonexistent-$FW_NAME" >$DIR/trigger_request 2>/dev/null; then
-+	echo "$0: FAIL - firmware should not have been found in test 3" >&2
-+	exit 1
-+fi
-+echo "$0: search path - not found: OK"
-+
-+# Test 4: path= takes priority over search_path=
-+echo -n "$FW_CONTENT1" >"$FWDIR1/$FW_NAME"
-+echo -n "$FW_CONTENT2" >"$FWDIR2/$FW_NAME"
-+echo -n "$FWDIR1" >$PATH_SYSFS
-+echo -n "$FWDIR2" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 4" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR1/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - path= should take priority over search_path= in test 4" >&2
-+	exit 1
-+fi
-+echo "$0: search path - path= priority over search_path=: OK"
-+
-+# Clear path= again for remaining tests
-+printf '\000' >$PATH_SYSFS
-+
-+# Test 5: three search paths, firmware in third
-+rm -f "$FWDIR1/$FW_NAME" "$FWDIR2/$FW_NAME"
-+echo -n "$FW_CONTENT3" >"$FWDIR3/$FW_NAME"
-+echo -n "$FWDIR1:$FWDIR2:$FWDIR3" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 5" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR3/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 5" >&2
-+	exit 1
-+fi
-+echo "$0: search path - third directory: OK"
-+
-+# Test 6: empty search_path= should not break anything
-+rm -f "$FWDIR3/$FW_NAME"
-+printf '\000' >$SEARCH_SYSFS
-+
-+if echo -n "nonexistent-$FW_NAME" >$DIR/trigger_request 2>/dev/null; then
-+	echo "$0: FAIL - empty search_path= should not find firmware" >&2
-+	exit 1
-+fi
-+echo "$0: search path - empty search_path=: OK"
-+
-+# Test 7: verify sysfs readback matches what was written
-+echo -n "$FWDIR1:$FWDIR2:$FWDIR3" >$SEARCH_SYSFS
-+READBACK="$(cat $SEARCH_SYSFS)"
-+EXPECTED="$FWDIR1:$FWDIR2:$FWDIR3"
-+if [ "$READBACK" != "$EXPECTED" ]; then
-+	echo "$0: FAIL - sysfs readback mismatch: '$READBACK' != '$EXPECTED'" >&2
-+	exit 1
-+fi
-+echo "$0: search path - sysfs readback: OK"
-+
-+# Test 8: escaped colon in directory name (\: -> literal ':')
-+FWDIR_COLON=$FWDIR_COLON_BASE/fw:dir
-+mkdir -p "$FWDIR_COLON"
-+echo -n "$FW_CONTENT1" >"$FWDIR_COLON/$FW_NAME"
-+# Write the path with the colon escaped as \:
-+ESCAPED_COLON="${FWDIR_COLON//:/\\:}"
-+echo -n "$ESCAPED_COLON" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 8" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR_COLON/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 8" >&2
-+	exit 1
-+fi
-+echo "$0: search path - escaped colon in directory: OK"
-+
-+# Test 9: escaped backslash in directory name (\\ -> literal '\')
-+FWDIR_BS=$FWDIR_BS_BASE/fw\\dir
-+mkdir -p "$FWDIR_BS"
-+echo -n "$FW_CONTENT2" >"$FWDIR_BS/$FW_NAME"
-+# Write the path with backslashes escaped as \\
-+ESCAPED_BS="${FWDIR_BS//\\/\\\\}"
-+echo -n "$ESCAPED_BS" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 9" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR_BS/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 9" >&2
-+	exit 1
-+fi
-+echo "$0: search path - escaped backslash in directory: OK"
-+
-+# Test 10: escaped colon with multiple search paths
-+FWDIR_COLON2=$FWDIR_COLON2_BASE/has:colon
-+mkdir -p "$FWDIR_COLON2"
-+echo -n "$FW_CONTENT3" >"$FWDIR_COLON2/$FW_NAME"
-+ESCAPED_COLON2="${FWDIR_COLON2//:/\\:}"
-+# First path is normal (no firmware), second has escaped colon (has firmware)
-+echo -n "$FWDIR1:$ESCAPED_COLON2" >$SEARCH_SYSFS
-+
-+if ! echo -n "$FW_NAME" >$DIR/trigger_request; then
-+	echo "$0: FAIL - could not trigger request for test 10" >&2
-+	exit 1
-+fi
-+if ! diff -q "$FWDIR_COLON2/$FW_NAME" /dev/test_firmware >/dev/null; then
-+	echo "$0: FAIL - firmware content mismatch in test 10" >&2
-+	exit 1
-+fi
-+echo "$0: search path - escaped colon with multiple paths: OK"
-+
-+echo "$0: all search path tests passed"
-+exit 0
+I think the VM_DROPPABLE check should go right before the wp_async check.
+And it would probably benefit from a comment...
 
--- 
-2.53.0
+[1] https://lore.kernel.org/linux-mm/5a875a3a-2243-4eab-856f-bc53ccfec3ea@redhat.com/
+
+Thanks,
+Tal
+
+  
 
