@@ -1,124 +1,159 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013070.outbound.protection.outlook.com [40.107.162.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0B33DE42F
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 10:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8CC3191BB;
+	Thu,  2 Apr 2026 10:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.70
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775124801; cv=pass; b=CpXVi9bBo/rJmqrsFmUqXm0H5OYRSeGkBLZn9XQy86bwK5G6xJwPmn6uGIuyGbLnKRmdYdzBanKFe/96cBermH+slbBih5osSgYaTapUWrNFN/L0E/9d8zR+NheNHciY82byQ0AGjwXlup5LOpzmws4ZEe7uo9gleIHeE+VwEWw=
+	t=1775125132; cv=fail; b=DVUYBeUeUCakdXimF7gyLQC/ABmtMzTpN5tLN12bsNHY0E1ADnOS2nWiCLD02olLtKHqm0rxSg7xz8qkqIDDsXEovy6TW1Q3J1gcWh4wFyroFzcyrvkrxnTviiVLem6/5lr7NgDpVoJbnkP0peWorIh1CYIUdzE8YslFX51lCjU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775124801; c=relaxed/simple;
-	bh=UHRKW7d/gI/agzapMah+6q2m1siwp6pLPB48km3Iw+I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uyROv21OlgBjDGB96G5/uptTMyEKCgi//S989Itgauyq9W7XXx716WdhU1UenwSJ+bPEItkHBKN4Mdu7k4eITBt21hdGX2h2Ja5tPFqbxe2EYj7JbjgjyJ7Kpd2B+bRG0RCWt0sGKRwQ/NE/nvlKYJRJCD7KSLMMQZlTh9Scn6o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ab3lWxkr; arc=pass smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775125132; c=relaxed/simple;
+	bh=SHTbRDa6A9jLCJ8WmcfNSSUiUM9RKcfeyrRDzEk/RXA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Fc8h97OBBdi1dbx5LeTq+zbq4+pyj35Gp6dEytZxBcmmJqT+OCiZcd4EiIFLT2TYzrX5GngVUqY4DmcS5q41gB/Ps46tnijNaP2hzs9tS4+WfTgHaPm+FviMFYbGoOsVbARtNVDJamkUVMA3ncs2SaXqO3EyTAqX+zbDb9T9FdU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Lsflcwyc; arc=fail smtp.client-ip=40.107.162.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ab3lWxkr"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-79885f4a8ffso5485797b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 03:13:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775124797; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZbWtd7Anm9cES8WDQW7lpIeiDiJOUsGlQV97EVfZb3nf4iQQH+octJU6wssnvUFZf1
-         Sdg3odl4UYjkCMA26uust7n6wY280o0FhJN+n7F3IJ2XhRBT/+C66i4+LgtT5Fox26iD
-         4yDuQc3JY2tYTZubI4iUwzJOatmRmMlvHI/9z91yCJnRshOUKLHsLXPuKblwg7mnIk1U
-         qD2KwRnFpwqXu8MikE1DwVWfHHjbSRJvd/juR7UbfgexGk622fdab2ZbQE4FqGSSsqhB
-         mWE4mrMjgEECQfnAnbBhV8DAMpXyocybEELJoMD7cjTMPTQ7cJAUKNxtbKVyTP0YwOrP
-         2Jkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=UHRKW7d/gI/agzapMah+6q2m1siwp6pLPB48km3Iw+I=;
-        fh=3uJvt2pC9/n89mcQl7nMAzSVhQtwd1YR820IQWEpW1A=;
-        b=aDLjMPK9kqgdMpSTOO0k2IhJ/dnw0BsE7cPcPibXdF8U16ba20qugpb11Z2YbZogyx
-         /5yrNJTOLfr7dFS6cU5zTrXIHZLYol7CfUm1s4uWh6HbDwvHFxcB7aetc7zlxicvq+YD
-         sY11U8q2cqVDiYcU2BBN/YbyRa4rRVCaewsesijIVk5RBbjVYPnBbCgu3hs3V1kJQAKM
-         qPeMrypwtyCiOPnHHg0ra1abgnXCR8rodEvVffc2GxFRVZ3f0LqtLcajq+64wHRL/3sR
-         T7S9ytNk2uHcl2L2oGVWRv4ywGIBN4HWB+ogEepoapUlsFOjtLXcpWghakqEbbeiTj7k
-         kz9g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775124797; x=1775729597; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UHRKW7d/gI/agzapMah+6q2m1siwp6pLPB48km3Iw+I=;
-        b=Ab3lWxkrx4atMVO6dRMkxBOrypILc/ouLfaq77lO1TYP/ZcSruZzGaxuLWoC+pa8zF
-         aiMsI56tnneL1uDBRajVYW1hz1cI9z635+8cuGtaP092Oqyde7pO/1WjcI4m9c/yiHsY
-         hvXPDUYi8KGOHWTDO5WuAD2+ubmaIMAtWCInb3D8oW6aIODDNRAgwajwVGTuu3Ol+t/x
-         sMMGmGJiNx1N7z7VtJN1e/fhH8hFDTV3oX11BEQ/lQ8YT36yN153CP+jMGheEhP9srcB
-         Dxhl5cC9XcO892r+YHCUDE9T6ieL+ni4ohqrW7OQRZYxqiB5iPvl3n7fPCggVH64AhOo
-         RFRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775124797; x=1775729597;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UHRKW7d/gI/agzapMah+6q2m1siwp6pLPB48km3Iw+I=;
-        b=ptob8hE1niwEcclPDhKQfKzvJfqRdrI5Khy6/dhULLf+eb3JR+j6pk2hb1FhNJarQD
-         lpsmtVSci3LBf1W0dTzwQQqmMA3pXQOdJlwm+XWefsyEK+BjPc6TpoWR9aplmF+SWPVa
-         kUWe0E8TuKsz7QGUGbAqI6DCe46hAgS2TNAORiSE41OTvDZ56I8e3zs6cj0FcDu4gOu4
-         Q+281P8Fb/BEChet443A8aQWVs7WvF7arS89DkXaRUlNPFcwu0QfAkSYzy1NCm1rNtHa
-         73WCACWyr8HcdXclHky3hvf41Q9u4YmD0hr1V+idcYT48swtNAu3JTmAjytbwk3+FYsW
-         JFUA==
-X-Forwarded-Encrypted: i=1; AJvYcCWrDU/xK2jc2J9EyPzVsNMFrLQVtQyy5NESKg2ZuMu3xXgAseOcF1QFK0/2Ci1x9kqTEPRMBAZOwpklu2rCQEE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygTm6wmz12y2cEG+SPTUkDICGjbjvJiOFgexGgxS3wntmu+ngF
-	oZVbhT+0+m/tplFCwG6AFGuBLe9gjbxF73s7JWPbGhRVD/jpNpb9Ce9G+SWH0OZSDCSY3ng8X6E
-	TYjt9lhvCH4FER6TIH69ojZ5B3agvDYM=
-X-Gm-Gg: AeBDiev0jEQeuDbTPcVQl1Ir2kYwtX5zhm83DUEkZxxZn9Fgym62VioWL/GHdoz62u6
-	5u2Ngsbu7hsw0t72v/phW3AhTn+G7v1eXJEsWePvKvkx6BXQ9a2yrRpf6zdBApHjN7PnxEqadRC
-	xEF3uzQX5/BAvk6+nVuFoaXxwfDz4suaqlzNHEvh3/S8YqC5+4RnAe3dvQIDvvsSJUrBU4dgFcH
-	U4c7enZFqotDDG4z3WtIOtI4yFNk3cFCErr4evQQP5KIwMh91oGCeHFdL6BQdCGrt488N8cIqSq
-	t395AmPz2smbXsL+HJMxLmckR3Cetf8A4QfbyE0n
-X-Received: by 2002:a05:690c:38b:b0:79c:a09a:e59a with SMTP id
- 00721157ae682-7a210a8c012mr71187397b3.24.1775124797268; Thu, 02 Apr 2026
- 03:13:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Lsflcwyc"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eXIpo95XM9sKJoQd3xOh1n6Gesn6sQYPd7Lnsf7wqMGZVQoGsr8ixK4nWZRQsv2YHU+0UR1/Vcx+k0WG5xbUbOTgI6FZS3GhB8vPf1Eh+Bau9eUoxgaYwgC0BwPvqUzIqu6svQB4oNl5gFyeVjXds4VAR3exKnuIFrTmfGrZvYi/t1u9Ap1fIKSC93vy9hQLOW5nUE276LmL2KFGGYY3KyXEHjThr2EMBJzFn5D6n5HjqiozgwGzBtnP/V2amMvhT4hcl7sTfLoNWbg9xrJ0FUE1YsU8zNbn0VWaII7q+w486XIg/Ckj4Tb3k7vlU0XPicElgxtTRSciv1JRUcX2tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MT8TqbOLWh5WLpr2ltVBkjJdJk+C9SOgyhrqvhsJa40=;
+ b=B3vOWDeFZrTRkhTcASWQh4d8fmU4QELuPRMulvKwsPFuAy/JcU9NDI0tCF75sxUAe6KbRkGnMsXT2YcWqAOERA8jD02InUoaX+OgZenZWuGpeh1/uhes+ccvGutzFKBS9KcweCMDy7/9k56/ufwaB6ZgESFb8qGLt+gLjbrwMFdJNNVttqpUJgI44QdOYdkuMa//IOJXc6KK6nWJlDd25t68iD0POuMqXSrLxDdRhoLzI35oFXVhI2w3kshWntGR5fJ5qJnfdEgtS0NfjY/vIcPP5aSAtS76/4Pg4EfyLgERFmPnD3l4YwNtOsowbtKxOKnBgHPW8TSc29xkCxfK3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MT8TqbOLWh5WLpr2ltVBkjJdJk+C9SOgyhrqvhsJa40=;
+ b=LsflcwycybiAPpfQDV2TqjyfDmYY47kJAPA9p6gTX0kKdNvK4SKi95JNUd3HZ5URVw3uwdA4usFhJp3j00O8XoNTB0ebmzd6cls7GCfytXbfy+0izUkZN0O3wTZqd9EzBhEDUOIV9NkiefggzG1N52/TFzjnpOppFb6/r8NjBVnz9obAaCq8f4UVjZa82hWhs7VKshFNVHmpvVzm8YoJN4e5fbQ1eqXz1vurCDpGfyZ3eVCaSQNO9mswhaWy0t+kFHHx8T27BHWkWZbCLBTQHHq20qwdgqUoJZsOdDdSVv+KPbSusHBPTYQ0ZynV1jtE7fFH/VORwk1Qc+81m95BbA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
+ by AS8PR04MB9207.eurprd04.prod.outlook.com (2603:10a6:20b:44e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.20; Thu, 2 Apr
+ 2026 10:18:48 +0000
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9769.016; Thu, 2 Apr 2026
+ 10:18:48 +0000
+Date: Thu, 2 Apr 2026 13:18:44 +0300
+From: Ioana Ciornei <ioana.ciornei@nxp.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org, 
+	petrm@nvidia.com, willemb@google.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v5 7/9] selftests: drivers: hw: move to KTAP
+ output
+Message-ID: <vp4rs7xouynftjwck3cvet26hbdxzi22nr3xdr7ynfi64rmbcj@se3hdxhudpp6>
+References: <20260330152933.2195885-1-ioana.ciornei@nxp.com>
+ <20260330152933.2195885-8-ioana.ciornei@nxp.com>
+ <5b7faeab-77b5-4a3c-a717-5a80f5e76a31@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b7faeab-77b5-4a3c-a717-5a80f5e76a31@redhat.com>
+X-ClientProxiedBy: FR4P281CA0398.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:cf::16) To PAXPR04MB8253.eurprd04.prod.outlook.com
+ (2603:10a6:102:1bf::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330035604.133073-1-dqfext@gmail.com> <20260401081030.29b050d5@kernel.org>
- <CALW65jahWApDnVmFReW+Y3HDxBEmCwzsT1oyh03SW7X5ry6PzA@mail.gmail.com>
- <20260401175621.549c492e@kernel.org> <CALW65jaTbaosbO8ypKZ6G37HxuxXabeTaP_Fhq72xTovmDj+8g@mail.gmail.com>
- <50ae3c69-2c4e-499f-a46a-cbd207ff5f09@redhat.com>
-In-Reply-To: <50ae3c69-2c4e-499f-a46a-cbd207ff5f09@redhat.com>
-From: Qingfang Deng <dqfext@gmail.com>
-Date: Thu, 2 Apr 2026 18:13:05 +0800
-X-Gm-Features: AQROBzAyy1DnZFo-szwYlk4Mp8iFMyQo5jot_GYlouwlaNbxdnQyOVQ65zMkKtE
-Message-ID: <CALW65ja1FV-OcqSazgKZhQhKf3oqr=kcGxyGkOGbhurGLOJ0-w@mail.gmail.com>
-Subject: Re: [PATCH net-next v7] selftests: net: add tests for PPP
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Dianne Skoll <dianne@skoll.ca>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Simon Horman <horms@kernel.org>, Felix Maurer <fmaurer@redhat.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org, 
-	netdev@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>, Jaco Kroon <jaco@uls.co.za>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|AS8PR04MB9207:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5311160d-7f63-4c8b-df48-08de90a13a97
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|19092799006|1800799024|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	OqZZbxSbjzZYDNBk4cyS/JATy0OVYp7dAFwU5pmL4ssqQx9kpR6zcSCT8RuN1w1ghnz9t/OVZMhHlxhAZf2U6aOlzuNcIV5H6r8l3+z0oYjAIvZQrYI3VZwxa7Lajl7xpuc4avbUK5F4Mr46WUjr2NyIqJ8y6iUWJf90jiYGtUu2FapWROA1D7ZszYXaGj0xi/4aGTQHSTTRQqhR6LNZ4yh6YJc7OOcNIebXI9sQPh/d8ucXoDYRyxz2qIRyBK6Qk2mcxGDUis8EjoaweLOkO0f0xn4xu626J4yYX5Gn3tMCJ9BNrMCGUo1/hwhKLxLEhnuBLqZTKnI+dgY3+xPBM/JAcRExfTYPCgdzTesMM3t7PY8y7pDujmYuDpXxw0vObevATDVlowsf1EP3rUE0tZOmuK9KaiUq7k794JbYIJvJ9vDM2xj1KwWoIai9NfQSlTm3+43TZm5Kf2iNsFFQ/rzQiQ3Gay13M9+pfUhCPGAkutFUoBrjil+MpM6vkpmLKU8XkS3hbonxRR2UrWh2E/i+236KbU6HuQFMd4yODv6VvuI5ED0IopFTd7eGKxJHXUji6SL0SlnJXEThSGsnVAXJ1E0Ud4r29E8uJHk+n2MUL+nXGGTHMLYCzIGe35ku7hwzLlXjRbg9Bk2+RHvtkp88YYIwGq6cvJo+sm/I6TT0gFsYwvIIK1Apt/X3FvUUNqpjijnPXLHmdE9v5yvdS0kqVW1o2SWjTgM5C93uCFE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(19092799006)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ZEBJS7MA4Y74JlEoEux70hhh1OglTim7QSqAnCOTGG/eolJcwKyxBvzS7iEe?=
+ =?us-ascii?Q?sC6wgeuPIdjVrcHVXABg81JY/BP/j2rxfzW/OqlE497axDXxy0eNKdrtFmU6?=
+ =?us-ascii?Q?aGYcaUFZZRyXm+TIBUOlkOOJ5CRj1/GptA6mjy1TYhaosus52XGVNajrEDey?=
+ =?us-ascii?Q?ac6wjn0a6ZLzBbmKSNTTHJr4SrsT7lj97hrin7EeyXGUxTnGYgO713AVnfDM?=
+ =?us-ascii?Q?bn1O3PHb3ZImI/zPmypxIqEKH+TksA4mBhSIACQoah2HtJNfJzeVrvRwkRm4?=
+ =?us-ascii?Q?cAEePOikhSx/1ArUdx+qO7bMoRDkDMYf5GlOC9+JqsGiyZX8LPHRI0/s6Oyr?=
+ =?us-ascii?Q?hOKomkMXF447KCnry+4UWLMEmtLimpkTX3PguogH+KYfnCouTikTCKqnYtmo?=
+ =?us-ascii?Q?VRWOmWz0XY45XaiaWfQQuK84XHMcznv6QqLke1O8xOGjSGuRfmJZj5KPQsN5?=
+ =?us-ascii?Q?AFCsZEGIuGSVoQ9APorJpMbrPoLh8iEmyA/QlWgudEnlB1T2lvjwqiY/s8RS?=
+ =?us-ascii?Q?vKtaau+0H/EqfCOIjEsn5JWU8+g4cI5hhbL57rH1mtR3s53xXDJQTE/D+Z2D?=
+ =?us-ascii?Q?4N9/91ckQWQRs2yKWEcxFqnQEzThGHZvDeAIaZG9CUKzAjymMtdJiX7WTnr5?=
+ =?us-ascii?Q?E5MEr5n4/jl041ysRLfc6qjbVBkx/BdhKIwX4LlWa1R9kIaquPV83HL9+O2G?=
+ =?us-ascii?Q?nlqG0ZeyGFgewIWPfUi6EkVmbz6FVxH5vB/ogFJOJD2pC2lpDrVNX0FQMfLY?=
+ =?us-ascii?Q?AVqrrw8H3TSPy9DXOfumsA9+/NgWV0CTcf3+CwAhzOGeFUetMaeV9snvScr/?=
+ =?us-ascii?Q?aQMHjfgHg8Fr5Tq71XZYOtDzHjIdT+RwzYcD1axPJEoUabQPDBhoIW4xLNsE?=
+ =?us-ascii?Q?/3JUA9ZndvaUUsNO4AZXvnc4m2/8OcJSoVUqb5/EEPDW7dayz6F0ipL5XJgW?=
+ =?us-ascii?Q?j/1wLvNzJa/6wBdEysQo7OnVAtOwhQvRc5pNpxBm2sTzLqKvWgq0WKApAlcN?=
+ =?us-ascii?Q?aWYLNogbkoEw3Zx89bm49/wvAqNt1khiRq0Nyn2LlZSENru0kRkHpLkGU5bQ?=
+ =?us-ascii?Q?7QWlXEH/uy6ZXDGPqmaWjPBYQsUEt2Wsk7VTwTzbmtvNc3Ssv9VhKT4/GNwq?=
+ =?us-ascii?Q?WSXhmA3qTXN0FXtgnIMdcPn8TkHMf6ucY7RRgzZ/5PAXab2lBBhBY/zcH0fH?=
+ =?us-ascii?Q?Z+K+jtDh3a6rULGR8NTdCUVU9gAc7tGNZJR/KoWKVbdcKBBzxM2beWMMZSYw?=
+ =?us-ascii?Q?unYYpo3JT1McTuFrtVcuGjBaxWqzwaf6JKe665TPR+M3BJG7cCUvreV1GBsV?=
+ =?us-ascii?Q?hj3wHNMGn0Hs9AgwDYnsmBJul+JYIgrmdvUQqkN3JH1kdZIyMrZyCp5IBIsU?=
+ =?us-ascii?Q?+PieqY+buMFr5ezd3hbN3uqLmmKdCSvlII3YG4z40fc3A1yetR10D/cg/HID?=
+ =?us-ascii?Q?N7k9WusJif0H4EIizVeW+p5R8J23J+tVVXxR06BdHTKhkkWT5RrH7sbiEIhq?=
+ =?us-ascii?Q?S3lsjqyZUMRr1AjyF6BHLNYCs9nN/tSQsqEbyCA1NBbeFn/BCupRhzVU7/G6?=
+ =?us-ascii?Q?aHyhLEbqoXO6z8J8ZPn9l435+fm14UkHshYxi73ekd7y4+HCpfsA69ZoIz05?=
+ =?us-ascii?Q?W29dedX6w4E1MKyDuy+W002eka7tabJ09nnSMqiFla5K4xrEYx5tXaMw1DBG?=
+ =?us-ascii?Q?XgqKyNyF/gXPsI7m6NoeRIux1U+8OdCg5qHIYLACqxb6ZJFx3uvQ/lrFvXJ+?=
+ =?us-ascii?Q?/hVkXBzYDw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5311160d-7f63-4c8b-df48-08de90a13a97
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 10:18:48.3486
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F0UF5f1CcxmQKyWUMQ2o0b67/WziOrr2UFQRwu6IVE0oGJM71B8ftlol5cq3EIkTQlKRHLbUuUxk1Gf1/LOysA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9207
 
-Hi Paolo and Jakub,
+On Thu, Apr 02, 2026 at 12:10:09PM +0200, Paolo Abeni wrote:
+> On 3/30/26 5:29 PM, Ioana Ciornei wrote:
+> > diff --git a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
+> > index f290ce1832f1..ed81bdc33536 100755
+> > --- a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
+> > +++ b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
+> > @@ -11,10 +11,12 @@ ALL_TESTS="
+> >  NUM_NETIFS=2
+> >  lib_dir=$(dirname "$0")
+> >  source "$lib_dir"/../../../net/forwarding/lib.sh
+> > +source "$lib_dir"/../../../kselftest/ktap_helpers.sh
+> 
+> AI review noted:
+> ---
+> Will this test work correctly after installation? The test sources
+> ktap_helpers.sh but the file doesn't appear to be included in the
+> Makefile's TEST_INCLUDES variable.
+> 
+> Looking at tools/testing/selftests/drivers/net/hw/Makefile, when
+> 'make install' is run, only files listed in TEST_PROGS, TEST_FILES,
+> and TEST_INCLUDES are copied to the installation directory. Files
+> referenced via 'source' need to be in TEST_INCLUDES to be available
+> at runtime.
+> 
+> Without adding '../../../kselftest/ktap_helpers.sh' to TEST_INCLUDES,
+> the test will fail with 'No such file or directory' when run from an
+> installed location.
+> ---
+> 
+> IMHO this is better handled with a follow-up as opposed to a repost.
+> While at that, please also take care of Petr's comment on 2/9.
 
-On Thu, Apr 2, 2026 at 5:48=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
-e:
-> Note that similar failures in the past in other test-cases were usually
-> due to timing issues. i.e. the pppoe-server starts in background too
-> late for the client.
+Sure. I can submit a follow-up with these small fixes.
 
-I don't think it is a timing issue, otherwise the PADI negotiation
-won't succeed. The "updetach" option on the client side also make it
-wait for the negotiation.
-It's likely that the pppd instance spawned by pppoe-server fails to
-find the "rp-pppoe.so" plugin, so the connection fails when handing
-off the session from pppoe-server to pppd. Note the naming difference:
-the client loads "pppoe.so", while the server loads "rp-pppoe.so" by
-default.
-
-What distro do you run CI tests on? On Ubuntu 24.04, "rp-pppoe.so" is
-a symlink to "pppoe.so" in apt package "ppp". Maybe an additional
-package is required for the distro you use, or I may work around that
-by manually creating the symlink.
+Thanks,
+Ioana
