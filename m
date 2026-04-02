@@ -1,149 +1,69 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311703328FD
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194A2E56A;
+	Thu,  2 Apr 2026 02:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775094420; cv=none; b=k/W4Kqp4Zphjyg3lvjvl8/bb6Rj8YDesFv4T0WoyNn9h7yUOnFok4C97qwBBSHZ/FJ2M9EPwKFcETjUWIpiRE5V0BU8jf3l6lIeFQFsm4jMGjyKFKZ+MUrqTMZG1mFYMzPDfwX3ZuwVrngRbk8Gmk1fU8n9iQbvEjd4UlzEhNcs=
+	t=1775095832; cv=none; b=HyGxn7VqDSCC9ZvSTB/fbYLT2ZP2jL8hnLSchEMkFwkENy4Z1dTkBGC3Ir1fClfdvN1xMfRM3yxhIh5mrJQBQJAW1t8eX2pB2DSUIZOnB9RnoK62Be3VHLA8h5VAHpAATSRWXFNF8bX806Bibvf75x+wIm+A6+Novqo9XX7f5mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775094420; c=relaxed/simple;
-	bh=0ZNjKjARdZvcdL31QoVs+UqP+O/z4+0bO2/UPGbm13o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lp1ucVsMsQi2GVnnumQOKGB9imuX+s5MinLcs8l9nJSExPS7Bgr8cgRNwJOb6O85f09/VMBUzgXKSJ/gL+OIwzTTmEDR7Ou8mCyGv0xBnHw2QfSyxUYw4IdBv5zK7WP2ZZUECWo8lThnvu6GJeDyYePI8ur4diMINJCz6/rdGUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MWfEAbP6; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775095832; c=relaxed/simple;
+	bh=zB6kOG7fciPUNFoM1IZLtIh9x7gRrKuNJdvfy9y6XzE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AlW0EiKeTVMaNGuSgl7hRsjJs59828BZAj48x+W2NcMTDI+6w2oO7dsJUM6Vy0Pmcs+rShEZ45BlBIUWnAHKG5rMvtRl8McQTZXu9qRXlCRVHb7Sq9bKM3Yfaa0DjGYHK7thqi8B2wmsstpo1NQmXbcAK+6+AfnGl6Aglopexk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q6mYIiGv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MWfEAbP6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775094418;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z5cQUZey16cto7EAHb0l8lICJnDidIXEapbKPGxTzr4=;
-	b=MWfEAbP6t0j747FPuqle4e164+vG6HHgcKHaskwqX30+RtlrwgkYkWJoDCSYVC4m4FeHAe
-	gVye/ss8XThoJyAo4DceODvtvuX0i/6SX0GXrLuSYoDHM/BnXpxqyUdoZPRBoDs+R/7bOm
-	a4dVHoLIAPOY6nyCoXDNTBgMQlDigdk=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-304-Ys615eQANGK9p86PrAQtoA-1; Wed,
- 01 Apr 2026 21:46:52 -0400
-X-MC-Unique: Ys615eQANGK9p86PrAQtoA-1
-X-Mimecast-MFC-AGG-ID: Ys615eQANGK9p86PrAQtoA_1775094410
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4879E1956055;
-	Thu,  2 Apr 2026 01:46:50 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DE9F519560AB;
-	Thu,  2 Apr 2026 01:46:41 +0000 (UTC)
-From: Chunyu Hu <chuhu@redhat.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	chuhu@redhat.com,
-	Li Wang <liwang@redhat.com>
-Subject: [PATCH v8 6/6] selftests/mm: transhuge_stress: skip the test when thp not available
-Date: Thu,  2 Apr 2026 09:45:43 +0800
-Message-ID: <20260402014543.1671131-7-chuhu@redhat.com>
-In-Reply-To: <20260402014543.1671131-1-chuhu@redhat.com>
-References: <20260402014543.1671131-1-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q6mYIiGv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B260C4CEF7;
+	Thu,  2 Apr 2026 02:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775095831;
+	bh=zB6kOG7fciPUNFoM1IZLtIh9x7gRrKuNJdvfy9y6XzE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=q6mYIiGvU7L00TNjue12W+KSu04BYE6BrT9GvyxbzAPeqJtnDSxAZ4dWg3sc6H6PD
+	 Ky+is/w+Tm1edFK2BHnf2ZjkjOoCnz+khFGZZ/9aPwM91PwU6F7AZEmfDK1EYdTyDT
+	 BcnfA3wLmNx2H+zQcYNfHY1n/X4jVJfR3Qpr3noqbeKc/SD1i3K+TnkK1cIGzy6Qmx
+	 dBqBTBpqq3q+uWlofpJNnrZEDDM9PAi06rp8Eis3cNZ2p+WW1F5BCYEtyaMrrbS5Dx
+	 56xuz5vyZWhQiLUhWcQPn1uzsQ5x9m6+gDpcDrU+xnk1sYeZ0Tj866w692UVReq39Y
+	 JdCLoC5QnblVQ==
+Date: Wed, 1 Apr 2026 19:10:30 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, willemb@google.com, petrm@nvidia.com,
+ anubhavsinggh@google.com, richardbgobert@gmail.com,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 6/6] selftests: drv-net: gro: add a test for
+ bad IPv4 csum
+Message-ID: <20260401191030.23104696@kernel.org>
+In-Reply-To: <willemdebruijn.kernel.14f444719030c@gmail.com>
+References: <20260401182625.372605-1-kuba@kernel.org>
+	<20260401182625.372605-7-kuba@kernel.org>
+	<willemdebruijn.kernel.14f444719030c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The test requires thp, skip the test when thp is not available to avoid
-false positive.
+On Wed, 01 Apr 2026 20:28:46 -0400 Willem de Bruijn wrote:
+> >  	/* ip sub-tests - IPv4 only */
+> > +	} else if (strcmp(testname, "ip_csum") == 0) {
+> > +		correct_payload[0] = PAYLOAD_LEN;
+> > +		correct_payload[1] = PAYLOAD_LEN;
+> > +		printf("bad ip checksum doesn't coalesce: ");
+> > +		check_recv_pkts(rxfd, correct_payload, 2);  
+> 
+> This verifies that a packet with bad csum does not coalesce to a valid
+> packet. Perhaps too paranoid but, do you also want to test the reverse
+> case?
 
-Tested with thp disabled kernel.
-Before the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..1
-  # transhuge-stress: allocate 1453 transhuge pages, using 2907 MiB virtual memory and 11 MiB of ram
-  # Bail out! MADV_HUGEPAGE# Planned tests != run tests (1 != 0)
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 60 transhuge-stress -d 20 # exit=1
-
-After the fix:
-  # --------------------------------
-  # running ./transhuge-stress -d 20
-  # --------------------------------
-  # TAP version 13
-  # 1..0 # SKIP Transparent Hugepages not available
-  # [SKIP]
-  ok 5 transhuge-stress -d 20 # SKIP
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-CC: Li Wang <liwang@redhat.com>
-Signed-off-by: Chunyu Hu <chuhu@redhat.com>
----
-V3 changes:
-  - Add review by from Mike
-  - Add acked-by from David
-V2 changes:
-  - Move the exit chunk to the front of ksft_print_headers() as suggested
-    by David.
-  - Add reviewed by from Zi and Lorenzo
----
- tools/testing/selftests/mm/transhuge-stress.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-index bcad47c09518..7a9f1035099b 100644
---- a/tools/testing/selftests/mm/transhuge-stress.c
-+++ b/tools/testing/selftests/mm/transhuge-stress.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include "vm_util.h"
- #include "kselftest.h"
-+#include "thp_settings.h"
- 
- int backing_fd = -1;
- int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-@@ -37,6 +38,9 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 
-+	if (!thp_is_enabled())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / psize() / 4)
- 		ram = SIZE_MAX / 4;
--- 
-2.53.0
-
+Will do, easy enough. Tho TBH I can't think of a case where this would
+matter. Bad csum pkt must bypass all GRO processing completely right?
+Because we don't want a corrupted packet to flush a valid session?
+Or you think some implementation may actually feed these packets into
+GRO to avoid waiting for a session timeout?
