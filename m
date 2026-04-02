@@ -1,109 +1,240 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE7C324B32
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 06:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD682EC0A2;
+	Thu,  2 Apr 2026 07:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775112421; cv=none; b=Z4ne+CuRFKppf4mdLwjf+IGYTD8On+Xw+SUN2HPIh2kctaNcVl+SzCCFPLxigpFA9GPka++nA7hsaDs6Wm0EmLk7ks+CjgUX3qNZ755ijrkN8zI6+apvAGqqJIHMsNfePz8ICCCHAnq6KY9SFm6XOqKCrW6EOimPkjO/T6CmBdA=
+	t=1775113212; cv=none; b=QHxhPvkKFLYlrP6Bgj2VoRGCKx+iSw2KoaiOsemyHkhYDSbdd9SOiFDv8mysrIWN27od+ttXCftvsLxu1450Q3WxHyG+U8+vpxGfJ+Zdv2zFmcpBuFzinMlEk9RBD6quTC2foIC8y35BzkPGPubEeWJxHoZVw9ck2qyNb+ijQ/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775112421; c=relaxed/simple;
-	bh=XMVpoDBLSHHbE0Mwvu9CGUL9kY1LYEBBK2ogtM2hQRg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gnwvbYGIZehL62ng9wc86YxzZJG4C+m06l0piiItWkIDiHcRXmSb94YidUlRsvw/XifvnN0SR9ZYMDR2Uk7BErY1EnFwPjlwGBJp/TGCV75yAX+Z0KjrQeH2iuZxpWvM3sVktEznr/kouSz0RVdGFsIjirneb1rkl+DtYYkHo6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NI0zIdCb; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=B9plMG81; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775113212; c=relaxed/simple;
+	bh=lMYu3HO5wpyeTrTmdXA+m/M1V1S3X4eK2aZzz02Coe0=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=j1YCCVDCNZgwT2RSAnbsXAwhZpOvSDN8+rJIyprHdJjNrJs8oaOmh0+7BRQ12nwaM+ytvy8XiYxy0BoPTILZte2vSUEX350tk55L+JqkfY20VYZ6ok7wFi3zHhQcBf2xwCMCEVIqeo0xpQeOndTcceJMB00pPaFgMOTzwk0Y+RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LpmVkUw+; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NI0zIdCb";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="B9plMG81"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775112419;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Mxu2F3PCmiUGqsP0hxcjrN1Nn2zyXEIv5lQq4+t4q4k=;
-	b=NI0zIdCb25ipXMPtELg+dRtXYfDSuLPwSFNuVqZp1YcKisvBPgnmM+k+6JS1dg/JVPcScT
-	Pca8DACmdsv36AMHx/+9VXtEVF9rkEPzp7Fnhc/m+kKMI1Vw4V5hViprrhl9g6bRI4MR6P
-	Nz3+dXI0tthwATI5Cwz7I+Mw012dJCA=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-496-HcoEoIOKNimZDUe1_gefCg-1; Thu, 02 Apr 2026 02:46:58 -0400
-X-MC-Unique: HcoEoIOKNimZDUe1_gefCg-1
-X-Mimecast-MFC-AGG-ID: HcoEoIOKNimZDUe1_gefCg_1775112417
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2b23c909256so6915115ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 23:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1775112416; x=1775717216; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mxu2F3PCmiUGqsP0hxcjrN1Nn2zyXEIv5lQq4+t4q4k=;
-        b=B9plMG811XIcJAL+Gf/iWmXpfBMGK/fWHz87sb3U4jFVdlT4Wmml9rgl21Ow12wo78
-         b2UiLykZjNWSDhTV5PNXxHh7z723MMtICMPtQU6zyE1DdyDpaOC5VB4SRdSf93aWRPU3
-         1Nohgh/n9OHOvBKOfioTdKS7zbgFhTrefe6cDInd1N1ISqUS02RFB1jSteShoT7TdVaX
-         4AAS1EBZjmpc7zjzI0apv1CAyMT6JBismImigEwnEboy4IezUWq17cGm/SHcH9CYRXS8
-         LunOFrYtmQnPWfQqC2Lbc9EdWPMRS69IEes6VTq/YRBmaoUtxeYkLf31FaVQfh0Mo9pl
-         hRxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775112416; x=1775717216;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mxu2F3PCmiUGqsP0hxcjrN1Nn2zyXEIv5lQq4+t4q4k=;
-        b=b4GLtXsFMPwvhW494rCeyGen8dUQ2umAzmVTomWJzsuFxWacs421LYitPEBZR5yYfW
-         nNjIJ0GaOWZ1lTou/jIeTejYOg5HneCEaa12MnIS1IkUeqCJjvSH1LSaXna8v3BDg0Gf
-         BZOxNkqhZWWg0Dyyg6pdch/bpGWPyhkwBtMy6JP9d8MS/nX0YZMP1UdnDngumXVzhVRa
-         v+xtof2eUPPb74zKs4KsiE9Z3IuZSNQ1H1tMZNvCOuEz7YXeC1FcJd7c8zFWleYsbd4N
-         1gVrRqWkR/1P3Cu+hwEnd1RC6mvhaipWeXsPDHP154NUrNamWzQ7+7I/H6kBWuL3Wm2h
-         zJxA==
-X-Gm-Message-State: AOJu0YxHdStzHBqrq/l0q1owgHdxHTPnvka2AVV4MCz0Hf06p01394WH
-	fESp9QjwkSibUGA6JRVG/fU131k1VM6wzf2JkH+tbhtHJCRTUEUWz8WkypXYrtZrnfvub0FAmCt
-	qobSD18/nhLQFAAsUH2vjvdjDj49BhNSt4qlmoxW3Xr+QOM9zi4qFdvQqP23vq6Ig4mqkwPZ+yV
-	EV9d26G6AJVwVE3ZD8RmQg4Ds2SpYnvcpSLqkj9VIHanB3CqKEbOyqKw==
-X-Gm-Gg: AeBDieuV9ZUpKEuD1MANLj74zjCZusIbEcX8FsJyWgJezCIZkrVBWFxYL0rkKrjqDdC
-	J2TR6ndWn/DIqieI/65wWdoaobNORidSFnlL0euqKx9HWnik4AgH15x6G6eyEAMsamW2v3oI6yX
-	QNxQbhdQks0BG94Y2CxAYkb0BytUdwaPHWvcfnkrvDWZsT2dZ/tsHk4x3sexH40Wn+5hrW8/Zci
-	BDfLQYNre3ToZzonoDDFqcU9CpVPymb0He01LFHQ2V1aOjSLHm5/s2ow+ePrF0w6b+kBtcJNNxv
-	HMxQ18QWP8wC9fQlzSpkz4ula/uEGIMOiH+Q+fzFlpdn6tBeDmPGZKSgXsFwT6NZSio3bTG7w0j
-	g4aMA+XDYvtlH/UE2aA==
-X-Received: by 2002:a17:902:ef43:b0:2ae:b991:a46f with SMTP id d9443c01a7336-2b269cb704cmr65098175ad.42.1775112416477;
-        Wed, 01 Apr 2026 23:46:56 -0700 (PDT)
-X-Received: by 2002:a17:902:ef43:b0:2ae:b991:a46f with SMTP id d9443c01a7336-2b269cb704cmr65097765ad.42.1775112415869;
-        Wed, 01 Apr 2026 23:46:55 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27472d54bsm17647875ad.1.2026.04.01.23.46.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 23:46:55 -0700 (PDT)
-Date: Thu, 2 Apr 2026 14:46:52 +0800
-From: Li Wang <liwang@redhat.com>
-To: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org, mkoutny@suse.com
-Cc: Waiman Long <longman@redhat.com>, Christoph Lameter <cl@linux.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
-	Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 1/2] selftests/cgroup: Fix hardcoded page size in
- test_percpu_basic
-Message-ID: <ac4Q3HT4Jep51iE9@redhat.com>
-References: <20260306071843.149147-1-liwang@redhat.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LpmVkUw+"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631KTqkw3487166;
+	Thu, 2 Apr 2026 06:59:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=g9lHFd
+	T/4a2Nmji3esrNHN41u6kgv2wWacp4OAjXPmQ=; b=LpmVkUw+GhRwIyfiN7Izek
+	8wcTZXuAfu5PlbBsqFG7RRdJfxSm83zrC6d7J//FrsBxLcxasUZagbh9RPnnBzkn
+	DQ3mqcr2kR32mad9zvoUdLK4fjDT0eeYq9+JCMMs4kE17+yCw6xTZqMwr0DfcfQM
+	sRM1NWs3oGVLC8IC+eEOHf4p7IHhQ/k5RfwACm8RCRxXQ+NZZxRUoZrDTEm4NU6e
+	p5NXMnXiijvuE/1D/KyogTDoAiZLD0dVTEaWc+2SpHTga7ryBFdJKPdNqKik3IJB
+	Pm4N8kGx4W9+YCLDvyCHxixG0B+adliKHuua5PXrDbyhid9F9zLL5u4+0NadL5/w
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66g23qhc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 02 Apr 2026 06:59:49 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6326YFlV022291;
+	Thu, 2 Apr 2026 06:59:48 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6tan90ah-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 02 Apr 2026 06:59:48 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6326xlVD32572062
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 2 Apr 2026 06:59:47 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9FC185805A;
+	Thu,  2 Apr 2026 06:59:47 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 42DD95803F;
+	Thu,  2 Apr 2026 06:59:42 +0000 (GMT)
+Received: from [9.124.211.187] (unknown [9.124.211.187])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  2 Apr 2026 06:59:41 +0000 (GMT)
+Message-ID: <c563e9ad-2e87-4d91-ab0e-f2afa77387cc@linux.ibm.com>
+Date: Thu, 2 Apr 2026 12:29:40 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260306071843.149147-1-liwang@redhat.com>
+User-Agent: Mozilla Thunderbird
+From: Sayali Patil <sayalip@linux.ibm.com>
+Subject: Re: [PATCH v3 09/13] selftests/mm: skip uffd-wp-mremap if UFFD
+ write-protect is unsupported
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1774591179.git.sayalip@linux.ibm.com>
+ <5bc0fe27cdd316ef6f776bf9b52b6c0de4bef54f.1774591179.git.sayalip@linux.ibm.com>
+Content-Language: en-IN
+In-Reply-To: <5bc0fe27cdd316ef6f776bf9b52b6c0de4bef54f.1774591179.git.sayalip@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=Fdo6BZ+6 c=1 sm=1 tr=0 ts=69ce13e6 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=Ikd4Dj_1AAAA:8
+ a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=X_KCTOUB8Lo47miopUAA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: _PKXl_TFP9s8I2DLHw3-X6DosxfFph5V
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDA1OSBTYWx0ZWRfXzClFUfw9yQ1K
+ mS1M24R0Wl1zjNTReKRTJXi2ZL5bYLTAsQSMc5GAR3FHWkenF84klAAgrMAEPzc80g28QfQskxE
+ kWC3BytAk24o48Hzfg8mGnWx8PCFm2RyXBGsh9ozkhvQsg4Ha2kKNCYgrx8db8GOKHMzhGica6t
+ TQY+K0IZuKUVLC+MrvYDVxct3tUxWaI4/guWSCvRORoePZmhgCmftrNhzNVlJ8OX2CisyQ+ZlKQ
+ JkbLT3kxj/3lOB0KqshddGiDUdntaa0FpABnMDDd1QZyoynVQyBSbbhQaebUWosirEeL1YI6jGq
+ 6yUKt9b0q0MEWN0pQhSfNUjManVAsgf0hTro1BtJGBuAGo14DegAmZt9mCNJkm7VMx2YEAZ+ECZ
+ snVINASbaK3rX3JD6i09xD7z3AsFx2nvH91B/V0vwOujEJJqzWKNKsvIvk8XLG+otjTEJiR+4s7
+ v/bq1Jma+BkcXbz+2Pw==
+X-Proofpoint-GUID: sJCAzj54eSGJ2M_geFmpHo6yBe2LRsGe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-02_01,2026-04-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 bulkscore=0 suspectscore=0 priorityscore=1501
+ adultscore=0 malwarescore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604020059
 
-Hello All,
 
-Gental ping~
-Any more review comments will be appreciated!
 
--- 
-Regards,
-Li Wang
+On 27/03/26 12:46, Sayali Patil wrote:
+> The uffd-wp-mremap test requires the UFFD_FEATURE_PAGEFAULT_FLAG_WP
+> capability. On systems where userfaultfd write-protect is
+> not supported, uffd_register() fails and the test reports failures.
+> 
+> Check for the required feature at startup and skip the test when the
+> UFFD_FEATURE_PAGEFAULT_FLAG_WP capability is not present,
+> preventing false failures on unsupported configurations.
+> 
+> Before patch:
+>   running ./uffd-wp-mremap
+>   ------------------------
+>    [INFO] detected THP size: 256 KiB
+>    [INFO] detected THP size: 512 KiB
+>    [INFO] detected THP size: 1024 KiB
+>    [INFO] detected THP size: 2048 KiB
+>    [INFO] detected hugetlb page size: 2048 KiB
+>    [INFO] detected hugetlb page size: 1048576 KiB
+>   1..24
+>    [RUN] test_one_folio(size=65536, private=false, swapout=false,
+>    hugetlb=false)
+>   not ok 1 uffd_register() failed
+>    [RUN] test_one_folio(size=65536, private=true, swapout=false,
+>    hugetlb=false)
+>   not ok 2 uffd_register() failed
+>    [RUN] test_one_folio(size=65536, private=false, swapout=true,
+>    hugetlb=false)
+>   not ok 3 uffd_register() failed
+>    [RUN] test_one_folio(size=65536, private=true, swapout=true,
+>    hugetlb=false)
+>   not ok 4 uffd_register() failed
+>    [RUN] test_one_folio(size=262144, private=false, swapout=false,
+>    hugetlb=false)
+>   not ok 5 uffd_register() failed
+>    [RUN] test_one_folio(size=524288, private=false, swapout=false,
+>    hugetlb=false)
+>   not ok 6 uffd_register() failed
+>   .
+>   .
+>   .
+>   Bail out! 24 out of 24 tests failed
+>    Totals: pass:0 fail:24 xfail:0 xpass:0 skip:0 error:0
+>   [FAIL]
+> not ok 1 uffd-wp-mremap # exit=1
+> 
+> After patch:
+>   running ./uffd-wp-mremap
+>   ------------------------
+>   1..0 # SKIP uffd-wp feature not supported
+>   [SKIP]
+> ok 1 uffd-wp-mremap # SKIP
+> 
+> Acked-by: Zi Yan <ziy@nvidia.com>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+> ---
+>   tools/testing/selftests/mm/uffd-wp-mremap.c | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> index 17186d4a4147..6edbd09f0ca6 100644
+> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
+> +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> @@ -19,6 +19,17 @@ static size_t thpsizes[20];
+>   static int nr_hugetlbsizes;
+>   static size_t hugetlbsizes[10];
+>   
+> +static void check_uffd_wp_feature_supported(void)
+> +{
+> +	uint64_t features;
+> +
+> +	if (uffd_get_features(&features) && errno == ENOENT)
+> +		ksft_exit_skip("failed to get available features (%d)\n", errno);
+> +
+> +	if (!(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP))
+> +		ksft_exit_skip("uffd-wp feature not supported\n");
+> +}
+> +
+>   static int detect_thp_sizes(size_t sizes[], int max)
+>   {
+>   	int count = 0;
+> @@ -336,6 +347,8 @@ int main(int argc, char **argv)
+>   	struct thp_settings settings;
+>   	int i, j, plan = 0;
+>   
+> +	check_uffd_wp_feature_supported();
+> +
+>   	pagesize = getpagesize();
+>   	nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
+>   	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
 
+AI review question:
+
+> commit 22914640356d1eaf4e0a8a8b13ad71911d12db50
+> Author: Sayali Patil <sayalip@linux.ibm.com>
+> selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported
+> This commit adds a check at startup to verify if the userfaultfd
+> write-protect capability is present. It skips the test instead of reporting> false failures on unsupported configurations.
+> > diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c> > index 17186d4a4147..6edbd09f0ca6 100644
+> > --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
+> > +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> > @@ -19,6 +19,17 @@ static size_t thpsizes[20];
+> > static int nr_hugetlbsizes;
+> > static size_t hugetlbsizes[10];
+>
+> > +static void check_uffd_wp_feature_supported(void)
+> > +{
+> > +	uint64_t features;
+> > +
+> > +	if (uffd_get_features(&features) && errno == ENOENT)
+> > +		ksft_exit_skip("failed to get available features (%d)\n", errno);
+> If uffd_get_features() fails but errno is something other than ENOENT (for> example, EPERM when unprivileged userfaultfd is disabled), this check will
+> evaluate to false and execution will continue.> > +
+> > +	if (!(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP))
+> Could this evaluate uninitialized stack memory?
+> If uffd_get_features() fails and is bypassed by the previous check, the
+> features variable will remain uninitialized. This might cause the test to
+> falsely pass or fail depending on whatever data happens to be on the stack.> Should we initialize features to zero or exit on all uffd_get_features()
+> failures instead?
+> > +		ksft_exit_skip("uffd-wp feature not supported\n");
+> > +}
+
+Yes,If uffd_get_features() fails with an error other than ENOENT, the 
+features variable would remain uninitialized, which could lead to 
+undefined behavior in the subsequent check.
+
+I will fix this in the next patch version.
+
+Thanks,
+Sayali
