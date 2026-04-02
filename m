@@ -1,76 +1,138 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A2637C11C
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 05:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30C437BE99
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 06:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775108858; cv=none; b=jNqWdj5BnU+kfwzHbgxR8vXoWrpg5Hcqa5OqGBgq2+MZisIJjQQiG4uPkx46FepMclvD7solf9NpEOEzFS0qlkjEDqn7Br9r2NB0bnhLvPZvae3Hv4i/4UJiGkoXZS62bzK5u8yyjfaG1SBXjI701D7AQMoR85BZ35fAlKxQVo4=
+	t=1775111074; cv=none; b=qdmL7wmmBZDKdvR65jTOIXEcERRD3GFLe59+xJpaqLLsFssWbqhThEliVc09K+Xs+YaqKGGXP2JJi3/L1sQ3Yk4MdY1rSjN7wu7eQ8QfrEuHhPy/TcvvPMzmG6EoZmcolRz8C2Afz7bpmwNxyi7xyeAWBslfUCo9ZiLXc9MtO7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775108858; c=relaxed/simple;
-	bh=ePE2E+AdpjzDX1Dv/2T3Ptj9iazcYPXbEFUDKn34kIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nuYnuPPIdRBuJhKVe+Ft06DQO8FZzHRPw2Zuu5rw21cPrILE/gGC+cilFoqCSQ7S5PDv6ZLk+VlWmfJZXsHZ54UFPqSyeT/NISh1AohpLrPbM73vDGP0l7gySJpznKhWJsfZdfvc6DoySnxdmrjX9ZRxKzwVcU9zulbvkEpYvKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eHnxBlpl; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775111074; c=relaxed/simple;
+	bh=jNNY6xH+1KGT9YM6pvXjPQXXBllRdf1QVqkq35Y6vJ8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=EOjMrPiysMN8lTkwPMLW/3VkEG+TNqwFKBGI+74Mf0M7EBBjiC6IP2M+4Q57dm0wrRBK/JxwYsnxlMYI2JI/Cu8yNtYv0xSklLTt+CxtUrke6cgOjodSeD5oTWH6+zmvL549prTt16aH1DrHFPfxbAWOQ9vnTLWhDj3a2LO2eFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QjKfYoGb; arc=none smtp.client-ip=74.125.82.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eHnxBlpl"
-Date: Wed, 1 Apr 2026 22:47:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775108841;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4Vtgi/Z4gP8WecPRIsC4VJpf13leM+WQF79E0/GqHtY=;
-	b=eHnxBlplQyLxLgkR4ElenGlRnbh0IYrqzk/tlwlTaiy3H5lwK3EhKulsEm272L7AWghqW+
-	vBLEoNkLuXay3W6BxcxvKDg5g1HjbBjSaT2etBoB7lZfBpAaBWAYU2u1mh8PI8spIb5kZ4
-	14y7f4HSrIw8jfPy25OF69PlIbZUWDU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v5 1/2] bpf: tcp: Reject non-TCP skb in
-  bpf_sk_assign_tcp_reqsk()
-Message-ID: <ac3_SCbLAwVOFKDC@devbig1721.ftw5.facebook.com>
-References: <20260401110511.73355-1-jiayuan.chen@linux.dev>
- <20260401110511.73355-2-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QjKfYoGb"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2c72849f648so2802015eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 23:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775111071; x=1775715871; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kHhJ1PGkTf+U3ICNlGbkmQaGPWwbR8hI+GskGCVVpx8=;
+        b=QjKfYoGbbzBG0nbPHOTamLhb68BKznRS47UOFt8vDlV62DzBUkpmfj6vUHLBo4jqMQ
+         H2ELEjMWqStzU8cICCmpIGMZB+7EQlTa5dji9lC0ZnWRTEJEKQPe8zKtRyvSyknfVQlB
+         eiTVIaOaZzhRCWR43aVr1QYFV2XdEcJkc90ZXyF0/pBWkEAOlaF6rJ4Huyz3mZTWHF5y
+         PflAn+/0D3J4s+BitHSvv4AwGGCUWsoM2dsSBfv8q0IuCvSdI/rk+R11aosE5q5dj44k
+         o7iWtP6W9lLRRubZAiJNbkMH9dodMhnvmp2mt2nmVxVIu6wJ7jorP8Azxcfu9k6xcsl/
+         6Iog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775111071; x=1775715871;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kHhJ1PGkTf+U3ICNlGbkmQaGPWwbR8hI+GskGCVVpx8=;
+        b=GcVuKEDanbGot6LQAlJH1LucD6FbfEg9AZ6SZbVwnBVFbWg5w+R41CA8jyoqr9AXo6
+         +lbzGT6ZkE81Xvj9T4U1FwdBb59JZ7zXsRccdHSPpA3mP3/Ap5akRvrfchB2RKwmpuS6
+         3MuSf38m08ElvPhHBiECHnLapT5z3IJop1nuUpLChrtRy6uLs3Tq25LPzuiFP64pgs6i
+         qHY3qr2Wo3FMhMlyYRaKy78jl4uRMdBkSIWTZCcxeNI93cb6i9ljtcg1XEp5VfRw0FU+
+         RZGHi/ReeLdghuPAkaW936x8fZOJXFXpWC3ZQUun5aSsNr0xFjHzhFsvLGxPTJp+AI0b
+         aMqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBj6sGloff5uzhxOpnGkuvqorZyusL/Qk7C9NfEOKU4efTNgp5lPrwqwdmsvX84l8Irnt6NzIVt+Pj6Lh1WaU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHZM9E7Na0PHTKmARQE/K2mcvfWJcKQcUDmDvlJ2jrwTZvfvaE
+	EziWYShwTWV4kZ+6oNdM1RfTYHNHEf+aKoYas01YWEOFe40VyDS1p7Ajv58Dky1Qc1zu5cF3+OB
+	H5XihMkyOmchT149zhnFvQw==
+X-Received: from dybhk14.prod.google.com ([2002:a05:7301:288e:b0:2c8:6bd1:63ba])
+ (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7300:d519:b0:2c8:409:a9bb with SMTP id 5a478bee46e88-2c92db5659bmr3891805eec.0.1775111070700;
+ Wed, 01 Apr 2026 23:24:30 -0700 (PDT)
+Date: Thu, 02 Apr 2026 06:24:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401110511.73355-2-jiayuan.chen@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAI0LzmkC/4WNQQqDMBBFryKz7pQxitqueo/iwuokDmgiSQgW8
+ e4NXqDLx+O/f0BgLxzgWRzgOUkQZzNUtwLGebCGUabMoEg1VFOJkYdVrMHJS2KPYiN7OyzYVVp
+ poraemg7yevOsZb/Kb7Ac0fIeoc9mlhCd/16XSV3+bz0pJNQdjaV6lK1qPy/jnFn4ProV+vM8f +PG4QXJAAAA
+X-Change-Id: 20260401-teaming-driver-internal-83f2f0074d68
+X-Developer-Key: i=marcharvey@google.com; a=ed25519; pk=OzOeciadbfF5Bug/4/hyEAwfrruSY4tn0Q0LocyYUL0=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775111069; l=2821;
+ i=marcharvey@google.com; s=20260401; h=from:subject:message-id;
+ bh=jNNY6xH+1KGT9YM6pvXjPQXXBllRdf1QVqkq35Y6vJ8=; b=0iQ9V2HUcMbmnnk8AcjAiGI57v+Zdo9KC7s9bBkzcWiyLcDH6ly2Q4tfB82N9u4IwUmFGvH18
+ /ng1pLe+ey5DPTujJw9pJLNKva+sHedDvB8PqzHibKg7iTcFo0YxLd5
+X-Mailer: b4 0.14.3
+Message-ID: <20260402-teaming-driver-internal-v3-0-e8cfdec3b5c2@google.com>
+Subject: [PATCH net-next v3 0/7] Decouple receive and transmit enablement in
+ team driver
+From: Marc Harvey <marcharvey@google.com>
+To: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Marc Harvey <marcharvey@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Wed, Apr 01, 2026 at 07:04:49PM +0800, Jiayuan Chen wrote:
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 78b548158fb0..f251744025e2 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -12248,11 +12248,23 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
->
->  	switch (skb->protocol) {
->  	case htons(ETH_P_IP):
-> +		if (!pskb_may_pull(skb, sizeof(struct iphdr)))
+Allow independent control over receive and transmit enablement states
+for aggregated ports in the team driver.
 
-The ai-review [1] is correct. skb_header_pointer() should be used.
-pskb_may_pull() could invalidate the skb->data[_end] pointers
-in the bpf prog.
+The motivation is that IEE 802.3ad LACP "independent control" can't
+be implemented for the team driver currently. This was added to the
+bonding driver in commit 240fd405528b ("bonding: Add independent
+control state machine").
 
-[1]: https://sashiko.dev/#/patchset/20260401110511.73355-1-jiayuan.chen%40linux.dev
+This series also has a few patches that add tests to show that the old
+coupled enablement still works and that the new decoupled enablement
+works as intended (4, 5, and 7).
 
-It needs one more spin. Thanks.
+There are three patches with small fixes as well, with the goal of
+making the final decouplement patch clearer (1, 2, and 3).
 
-pw-bot: cr
+Signed-off-by: Marc Harvey <marcharvey@google.com>
+---
+Changes in v3:
+- Patch 5: In test cleanup, kill teamd to fix timeout.
+- Link to v2: https://lore.kernel.org/r/20260401-teaming-driver-internal-v2-0-f80c1291727b@google.com
+
+Changes in v2:
+- Patch 4 and 5: Fix shellcheck errors and warnings, use iperf3
+  instead of netcat+pv, fix dependency checking.
+- Patch 7: Fix shellcheck errors and warnings, fix dependency
+  checking.
+- Link to v1: https://lore.kernel.org/all/20260331053353.2504254-1-marcharvey@google.com/
+
+---
+Marc Harvey (7):
+      net: team: Annotate reads and writes for mixed lock accessed values
+      net: team: Remove unused team_mode_op, port_enabled
+      net: team: Rename port_disabled team mode op to port_tx_disabled
+      selftests: net: Add tests for failover of team-aggregated ports
+      selftests: net: Add test for enablement of ports with teamd
+      net: team: Decouple rx and tx enablement in the team driver
+      selftests: net: Add tests for team driver decoupled tx and rx control
+
+ drivers/net/team/team_core.c                       | 241 +++++++++++++++++---
+ drivers/net/team/team_mode_loadbalance.c           |   8 +-
+ drivers/net/team/team_mode_random.c                |   4 +-
+ drivers/net/team/team_mode_roundrobin.c            |   2 +-
+ include/linux/if_team.h                            |  63 +++---
+ tools/testing/selftests/drivers/net/team/Makefile  |   4 +
+ tools/testing/selftests/drivers/net/team/config    |   4 +
+ .../drivers/net/team/decoupled_enablement.sh       | 249 +++++++++++++++++++++
+ .../testing/selftests/drivers/net/team/options.sh  |  99 +++++++-
+ .../testing/selftests/drivers/net/team/team_lib.sh | 115 ++++++++++
+ .../drivers/net/team/teamd_activebackup.sh         | 217 ++++++++++++++++++
+ .../drivers/net/team/transmit_failover.sh          | 151 +++++++++++++
+ tools/testing/selftests/net/lib.sh                 |  13 ++
+ 13 files changed, 1100 insertions(+), 70 deletions(-)
+---
+base-commit: cee10a01e286e88e0949979e91231270ca9fdb8e
+change-id: 20260401-teaming-driver-internal-83f2f0074d68
+
+Best regards,
+-- 
+Marc Harvey <marcharvey@google.com>
+
