@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4795E332917
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F4A324705
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775094389; cv=none; b=KDcumXK9vbhAurrIahVVNoCa3Wosd07L3jXEmCfirFtZp2/UWKzLQTDPqAjozkFy559fj0Yd1Proms99MkSB8NwrQ87ZphaKtOJrGB1KD5e5deGQHT/RrzCN4Fy1WSYOs3FDL2d9q7LGOkCZES3968Y2SNwR+LhMR98Ryn0VQ08=
+	t=1775094400; cv=none; b=GCEYK19c1kMNNJBEqo1Y08IXVnULbCCLq6JmwcIranpNuZignqLx8gD06+378ExA/hSvct2IzoEH0hwwaLYc094lUq+E+qJfTVSuw4YlTsKqj4/RZPUwrS8a84VOVyckEFxqq6QpKXnIeZG+MdLR/7PceKmJhmY1NW2mAGc4c30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775094389; c=relaxed/simple;
-	bh=v8gKI+PNCs7vEzGBzviHnReOhtiQ1Yf/5kZHPLYZtH4=;
+	s=arc-20240116; t=1775094400; c=relaxed/simple;
+	bh=F/tQZ7MZbHJuL6ABQZeL560ScXtKvvHOv6ROCzLjtdA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dUx6/7Fn/ccgnf9B49uXj5EgENkVlUvrDTsAu3c35tS+juEiVRnCvdDz5UcsUu3jQQb4e/E2DbHz+KkrvcDRj6WPcO/CDvH9FnYiiRdTt3ZiuxfFctE7HupD9QpNnMgGZf5n+RSpCBR4K9dYWIQkoX/J15dnT1n+i0gJ+zZXb1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fNOto1RJ; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=cW+LvhwApzQV4/N8U3f16RCvp1t+GgKq2FFJTeJlkf3vEFBbBtwuSbsA4RztdRAdJhg3PTlpw7jICLVvPphSYh1q6zWOtRbX99qhhv22AwDjNe3HwgGFyEh+I+X7R/NFxRBz8fEbQc7L/wJy1x+gKAT8r6l6aOTeocIg4Z5vGDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B2HTg37d; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fNOto1RJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B2HTg37d"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775094387;
+	s=mimecast20190719; t=1775094398;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9tZowJL8GjFLSw4sIge6Gujv1KBlMa1KFIvCe3PwXUI=;
-	b=fNOto1RJD3ZWWkbLESIlyxl55iO0hup9Oj2JUwywytAPwHcz/cXtQMrAdA7pSkHqHQucy/
-	S5JuHcAulLYW9Qq7Rnq7awJah9Fgimu/UyARBlt7Ucs0uT1kqCsSbJlUKlex17OYMI29ar
-	q2gTf/bq/jqvSok+xKB1Et2B4ysYHlc=
+	bh=KDU4afNqvnoHoqSo/k3e5WTx+bzCLp33/wZdOxE3SPA=;
+	b=B2HTg37dRVGgIDxkbv+xbVw71b6OEERBXos6Q1ekSNt5a3ApWBVRczseq/HxcPmlfd57XQ
+	1Rh7qcQGVE3H1dKp7n0OxOeDgaGW8lNv2phCgr9DghbIbTvRWdDMmc6Lh1g0mHoH3ymmTr
+	jP+YMIXfk+7ByvirmxBQSVraYpklyy8=
 Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-486-CrXok06gMk2u5HjxF2_H3g-1; Wed,
- 01 Apr 2026 21:46:26 -0400
-X-MC-Unique: CrXok06gMk2u5HjxF2_H3g-1
-X-Mimecast-MFC-AGG-ID: CrXok06gMk2u5HjxF2_H3g_1775094383
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-248-CzV-77pMPretbtz4CzGeKg-1; Wed,
+ 01 Apr 2026 21:46:34 -0400
+X-MC-Unique: CzV-77pMPretbtz4CzGeKg-1
+X-Mimecast-MFC-AGG-ID: CzV-77pMPretbtz4CzGeKg_1775094392
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70A4F1956065;
-	Thu,  2 Apr 2026 01:46:23 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 09E8D195604F;
+	Thu,  2 Apr 2026 01:46:32 +0000 (UTC)
 Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 774CB1955F25;
-	Thu,  2 Apr 2026 01:46:15 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0862F19560AB;
+	Thu,  2 Apr 2026 01:46:23 +0000 (UTC)
 From: Chunyu Hu <chuhu@redhat.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -64,9 +64,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	baohua@kernel.org,
 	lance.yang@linux.dev,
 	chuhu@redhat.com
-Subject: [PATCH v8 3/6] selftests/mm: move write_file helper to vm_util
-Date: Thu,  2 Apr 2026 09:45:40 +0800
-Message-ID: <20260402014543.1671131-4-chuhu@redhat.com>
+Subject: [PATCH v8 4/6] selftests/mm/vm_util: robust write_file()
+Date: Thu,  2 Apr 2026 09:45:41 +0800
+Message-ID: <20260402014543.1671131-5-chuhu@redhat.com>
 In-Reply-To: <20260402014543.1671131-1-chuhu@redhat.com>
 References: <20260402014543.1671131-1-chuhu@redhat.com>
 Precedence: bulk
@@ -78,192 +78,69 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-thp_settings provides write_file() helper for safely writing to a file and
-exit when write failure happens. It's a very low level helper and many sub
-tests need such a helper, not only thp tests.
+Add three more checks for buflen and numwritten. The buflen should be at
+least two, that means at least one char and the null-end. The error case
+check is added by checking numwriten < 0 instead of numwritten < 1. And the
+truncate case is checked. The test will exit if any of these conditions
+aren't met.
 
-split_huge_page_test also defines a write_file locally. The two have minior
-differences in return type and used exit api. And there would be conflicts
-if split_huge_page_test wanted to include thp_settings.h because of
-different prototype, making it less convenient.
+Additionally, add more print information when a write failure occurs or
+a truncated write happens, providing clearer diagnostics.
 
-It's possisble to merge the two, although some tests don't use the
-kselftest infrastrucutre for testing. It would also work when using the
-ksft_exit_msg() to exit in my test, as the counters are all zero. Output
-will be like:
-
-  TAP version 13
-  1..62
-  Bail out! /proc/sys/vm/drop_caches1 open failed: No such file or directory
-  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-So here we just keep the version in split_huge_page_test, and move it into
-the vm_util. This makes it easy to maitain and user could just include one
-vm_util.h when they don't need thp setting helpers. Keep the prototype of
-void return as the function will exit on any error, return value is not
-necessary, and will simply the callers like write_num() and write_string().
-
-Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Suggested-by: Mike Rapoport <rppt@kernel.org>
 Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 ---
+Changes in v8:
+  - go back to ksft_exit_fail_msg in the two error exit path as no clean
+    ksft_exit_fail_perror that supports va_list
+Changes in v7:
+  - add an empty line before the 'buflen < 1' line.  And change to
+   'buflen < 2 to limit the buflen at least to be 2, so at least one char
+    is allowed.
+  - handle the numwriten < 0 case, which is the error path.
+  - use ksft_exit_fail_perror in error exit path.
+  - use %.*s to print the buf when error happened
 Changes in v6:
-  - add reviewed-by from Lorenzo
-Changes in v5:
-  - updated acked-by and reviewed-by
-Changes in v3:
-  - make the write_file void return
-Changes in v2:
-  new patch from v2
+  - save/restore errno before and after the close(), so the log could show
+    the correct error info on failure. Suggested by AI.
+Chagnes in v5:
+  - new patch for making improve on write_file. Add more safety checks and
+    diagnostics info in log
 ---
- .../selftests/mm/split_huge_page_test.c       | 15 --------
- tools/testing/selftests/mm/thp_settings.c     | 35 ++-----------------
- tools/testing/selftests/mm/thp_settings.h     |  1 -
- tools/testing/selftests/mm/vm_util.c          | 15 ++++++++
- tools/testing/selftests/mm/vm_util.h          |  2 ++
- 5 files changed, 20 insertions(+), 48 deletions(-)
+ tools/testing/selftests/mm/vm_util.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index e0167111bdd1..93f205327b84 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -255,21 +255,6 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
- 	return status;
- }
- 
--static void write_file(const char *path, const char *buf, size_t buflen)
--{
--	int fd;
--	ssize_t numwritten;
--
--	fd = open(path, O_WRONLY);
--	if (fd == -1)
--		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
--
--	numwritten = write(fd, buf, buflen - 1);
--	close(fd);
--	if (numwritten < 1)
--		ksft_exit_fail_msg("Write failed\n");
--}
--
- static void write_debugfs(const char *fmt, ...)
- {
- 	char input[INPUT_MAX];
-diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
-index 574bd0f8ae48..e748ebfb3d4e 100644
---- a/tools/testing/selftests/mm/thp_settings.c
-+++ b/tools/testing/selftests/mm/thp_settings.c
-@@ -6,6 +6,7 @@
- #include <string.h>
- #include <unistd.h>
- 
-+#include "vm_util.h"
- #include "thp_settings.h"
- 
- #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
-@@ -64,29 +65,6 @@ int read_file(const char *path, char *buf, size_t buflen)
- 	return (unsigned int) numread;
- }
- 
--int write_file(const char *path, const char *buf, size_t buflen)
--{
--	int fd;
--	ssize_t numwritten;
--
--	fd = open(path, O_WRONLY);
--	if (fd == -1) {
--		printf("open(%s)\n", path);
--		exit(EXIT_FAILURE);
--		return 0;
--	}
--
--	numwritten = write(fd, buf, buflen - 1);
--	close(fd);
--	if (numwritten < 1) {
--		printf("write(%s)\n", buf);
--		exit(EXIT_FAILURE);
--		return 0;
--	}
--
--	return (unsigned int) numwritten;
--}
--
- unsigned long read_num(const char *path)
- {
- 	char buf[21];
-@@ -104,10 +82,7 @@ void write_num(const char *path, unsigned long num)
- 	char buf[21];
- 
- 	sprintf(buf, "%ld", num);
--	if (!write_file(path, buf, strlen(buf) + 1)) {
--		perror(path);
--		exit(EXIT_FAILURE);
--	}
-+	write_file(path, buf, strlen(buf) + 1);
- }
- 
- int thp_read_string(const char *name, const char * const strings[])
-@@ -165,11 +140,7 @@ void thp_write_string(const char *name, const char *val)
- 		printf("%s: Pathname is too long\n", __func__);
- 		exit(EXIT_FAILURE);
- 	}
--
--	if (!write_file(path, val, strlen(val) + 1)) {
--		perror(path);
--		exit(EXIT_FAILURE);
--	}
-+	write_file(path, val, strlen(val) + 1);
- }
- 
- unsigned long thp_read_num(const char *name)
-diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
-index 76eeb712e5f1..7748a9009191 100644
---- a/tools/testing/selftests/mm/thp_settings.h
-+++ b/tools/testing/selftests/mm/thp_settings.h
-@@ -63,7 +63,6 @@ struct thp_settings {
- };
- 
- int read_file(const char *path, char *buf, size_t buflen);
--int write_file(const char *path, const char *buf, size_t buflen);
- unsigned long read_num(const char *path);
- void write_num(const char *path, unsigned long num);
- 
 diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index a6d4ff7dfdc0..ad96d19d1b85 100644
+index ad96d19d1b85..db94564f4431 100644
 --- a/tools/testing/selftests/mm/vm_util.c
 +++ b/tools/testing/selftests/mm/vm_util.c
-@@ -764,3 +764,18 @@ int unpoison_memory(unsigned long pfn)
+@@ -767,15 +767,24 @@ int unpoison_memory(unsigned long pfn)
  
- 	return ret > 0 ? 0 : -errno;
+ void write_file(const char *path, const char *buf, size_t buflen)
+ {
+-	int fd;
++	int fd, saved_errno;
+ 	ssize_t numwritten;
+ 
++	if (buflen < 2)
++		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
++
+ 	fd = open(path, O_WRONLY);
+ 	if (fd == -1)
+ 		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+ 
+ 	numwritten = write(fd, buf, buflen - 1);
++	saved_errno = errno;
+ 	close(fd);
+-	if (numwritten < 1)
+-		ksft_exit_fail_msg("Write failed\n");
++	errno = saved_errno;
++	if (numwritten < 0)
++		ksft_exit_fail_msg("%s write(%.*s) failed: %s\n", path, (int)(buflen - 1),
++				buf, strerror(errno));
++	if (numwritten != buflen - 1)
++		ksft_exit_fail_msg("%s write(%.*s) is truncated, expected %zu bytes, got %zd bytes\n",
++				path, (int)(buflen - 1), buf, buflen - 1, numwritten);
  }
-+
-+void write_file(const char *path, const char *buf, size_t buflen)
-+{
-+	int fd;
-+	ssize_t numwritten;
-+
-+	fd = open(path, O_WRONLY);
-+	if (fd == -1)
-+		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
-+
-+	numwritten = write(fd, buf, buflen - 1);
-+	close(fd);
-+	if (numwritten < 1)
-+		ksft_exit_fail_msg("Write failed\n");
-+}
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index e9c4e24769c1..1a07305ceff4 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -166,3 +166,5 @@ int unpoison_memory(unsigned long pfn);
- 
- #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
-+
-+void write_file(const char *path, const char *buf, size_t buflen);
 -- 
 2.53.0
 
