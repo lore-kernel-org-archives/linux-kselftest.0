@@ -1,124 +1,124 @@
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3213B776D
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 21:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCB1387590;
+	Thu,  2 Apr 2026 21:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775165842; cv=none; b=iBTZ3VUKWPDoZ+Kn0dhRsDyFAqG0ULHMrb2hFkQaUTW5Cl+24beokr+txhseh4WUx64lM85g6hd/nWdg81S1wsEtsyP4LTPxYNKAMyMwDGz9YMhSKccYvwNrrKj4J78Qi7zZ5mb800j5HLI7qdYW2ZKvlphm4JeRovpUbNroL94=
+	t=1775166888; cv=none; b=uoTfHy9k08jMO6tpeDVrDa91bQTwwprfjAj7H9dL0vp/D3G/qiH/ZPfwLA7VxOEaP156GvofjYusVGVnX6etuXaoXutlvG8K4YjW6rlQsUAmSauCHCAa2p2OOIIB4HOT1c6zt6i84c5cP+Qw5R9WUBsXXXnLHU/obS4SYwwcMWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775165842; c=relaxed/simple;
-	bh=W3scN7dzNt1e15M5oNBsPnC7KIKxRsloBy39yk58Ja0=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=E+HeXp7tNY22gV6JYSFQOVd0gXim6siiqFggYS523tKxZ1v74j/Hbm2ylXCjV9KIzG2tAhjD4G+P2fq8+JTWO0Xc43wg/ICM8a+WHNs7hS79EouIEtpUV2Y8LazRVetYmbppuAJSpvnBoC+UhtVxZ1wfzWISdk7P2gu/GhmlCDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mTMT7GUT; arc=none smtp.client-ip=74.125.224.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775166888; c=relaxed/simple;
+	bh=8xG47UVaicBg3PGvoKmkcXt2eBzcPg4SMCh5HpVNuIY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k1tpWK9l/GDQJ/XlN2+U/7WB44t3jSHUKgVJu1/mNV01159j239XymjiSZmW1+cxMvOP5uYxT1/kIAqWKcFuHh+eKCAz+2+4PdZyRa7DCK8Vuqm8ChxVHNbiaXHQlj0h9Z52+MX91Pps0ne+zsjJZH+aQTxusvHgN50b8V3sk3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jugfr0Nv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mTMT7GUT"
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-6501cbb52e5so1537950d50.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 14:37:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775165840; x=1775770640; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A7TuW0G8B0XaMIfsGGJiYSCTzDLrTNNDB5kSjHsf114=;
-        b=mTMT7GUTpGpPoYrudzEtF2EL9iUEQGIsG9I/qg8ishfZwFKPhZNblqqaFvJOfG77dZ
-         d2zIRHRqD/r00Nh4oV+qpAJi8iyjy7bUj6Esi8PZ0XFjTQ6NVverkVGFCPQVuEf2ZEDD
-         uiVg1ioO2dWepco/opJFPbP5VBcOgtst5ut1ANMYycqcH/JIO6i4NwZx6AwhC5Ateelr
-         QkR6C07mhQXju20le9EGgSPPYj1HF1AGTIzsO6z0lIS7MslW8Bcv31C3MT1rcnb+AMA3
-         OfFH8QgHeYcpqG/aXVCfMMB6v1zKVr/1DhMZMk2EaV66AiAWRXN7O9GcEEIMmy5pCjPZ
-         97yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775165840; x=1775770640;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A7TuW0G8B0XaMIfsGGJiYSCTzDLrTNNDB5kSjHsf114=;
-        b=WVwJnD7QIRwir5RxBmIN2pj5h3YCBATlMdJp8mN7i7fs1u3nL1/78BcxJl9dTYs1zZ
-         iGSnL//oCAeURL1Ff9RlWW5DQEYEZKLnEuzTemz42r842fOleBSJC+aIEXLUldpVr3Rr
-         AMOS1jAGvhiBDs6udOBuWrUH4CkyHNOYQV1Msh7OGxtye9mOFtM8+IkbzYNOB5X0TENt
-         oELfe1wW6SIzges/2IezlCpxf0YVR8IVtQVmSloQZZQI+D2c7AJWUr/PVpmmtJGps4Jt
-         cQ6TCV4tBHguV8HmWsYuuvJyzSyNDF3YPw1rg+l3S9tg/AxCtUhRYstajj3GMFf08Pvl
-         wXMw==
-X-Forwarded-Encrypted: i=1; AJvYcCXLGQMiPfeK+X8yyOmcrlKlEie4A6phXHut/2pKWs+4uBw2BZLLXpLf3ILXclJLqXKTwr10Q7aGyRADZY2O/nc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHVdjODPtfsA8IBxXc+K5HzAWiexPoCmHo+sc8FWqQZ3tjZY9Y
-	jRIKVj370qYrMHzOmcwu2VD6fn7T1DTkFeMv1ciP4oapLO9xe9tJLkk6
-X-Gm-Gg: AeBDietHNso6LBv9+yJNM8ymtnlETV/zTyHWPGx+106aJJzOBImKa6GGleT2WmS/wE6
-	e03pMAq6TkTN/8kq4K6UwKzFzNB3PpgjD9LgmNlc+xu2YIOlbVKxwh8w7fWCJ6hpl0rcGszfpts
-	Rw2WyxPK5/KyzCJwSt0xiREVbG8D9xo+EPH9EzlP7ged7RHPgvbElKp07aPRt6pNmB8duai26IK
-	Z5BKKlYiRjpZX2j3Gi9zCzTtXIG24iorHQG2lWKs44mMa7sc/tDzbxN6k4MzDSETCktlRhluVZV
-	PIOtJgGzOWqixA/Az7LSeLnK6qI0KUZGD1I+LMmmWDxdHdLLb86JvQoHwBrEdOE4QRFbLBtbPjt
-	iEz6SAgnI0Kx618R9CEicxzDbKuD7r/L3Y/UqH92xPG2GcTxrCYTP8vu8XbRPDyce8YgUpZ1nQ1
-	bUCfkx/dW/5i/uwzUeUB1MGmtfjhe/kThyyjN9V64aqLjf/XUCXK196SCMQ4ZhSWINuCpUjnN+g
-	glJ
-X-Received: by 2002:a05:690c:110:b0:7a3:3192:386e with SMTP id 00721157ae682-7a4d68304a8mr10511047b3.53.1775165839769;
-        Thu, 02 Apr 2026 14:37:19 -0700 (PDT)
-Received: from gmail.com (180.134.85.34.bc.googleusercontent.com. [34.85.134.180])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7a36ea27d19sm15135357b3.20.2026.04.02.14.37.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 14:37:19 -0700 (PDT)
-Date: Thu, 02 Apr 2026 17:37:18 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- shuah@kernel.org, 
- willemb@google.com, 
- petrm@nvidia.com, 
- anubhavsinggh@google.com, 
- richardbgobert@gmail.com, 
- linux-kselftest@vger.kernel.org, 
- Jakub Kicinski <kuba@kernel.org>
-Message-ID: <willemdebruijn.kernel.1b7e7cef1d1b6@gmail.com>
-In-Reply-To: <20260402210000.1512696-1-kuba@kernel.org>
-References: <20260402210000.1512696-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next v2 0/8] selftests: drv-net: gro: more test cases
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jugfr0Nv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE97FC116C6;
+	Thu,  2 Apr 2026 21:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775166887;
+	bh=8xG47UVaicBg3PGvoKmkcXt2eBzcPg4SMCh5HpVNuIY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jugfr0NvB1mIYoQZ/YuvrKSYo/SX+02atopM5EUi7Yv0Nmfwv0r+3n9o4nqOGgQNL
+	 mUxmXo3gaqtFN19dmH0/OPHlHcHT9Eoy11LYUUykyYdjsgkl3NMzekhqWNL0OUD7M4
+	 fhVAMNaITjHmJoDLywZ1tpxYiwM/HIOmGJcOCNSvgUyBCnwspj8E815chE8ZmgMhVB
+	 x6lZH6un8ZcW4i0CeU4niVKB5WT2DzqHQSSzUm6b9QWorQ6nEzyQ9kIqM8lyBEmjDb
+	 ux/A5YFcAgZKRn5E6rujsvb16TQtMbOYz5XyUmvIDL2BOi+Sn5l2CNbqsbyOEfFnEx
+	 KUjPDISeA8jYw==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Willem de Bruijn <willemb@google.com>,
+	Joe Damato <joe@dama.to>,
+	shuah@kernel.org,
+	petrm@nvidia.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v2] selftests: net: py: color the basics in the output
+Date: Thu,  2 Apr 2026 14:54:44 -0700
+Message-ID: <20260402215444.1589893-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski wrote:
-> Add a few more test cases for GRO.
-> 
-> First 4 patches are unchanged from v1.
-> 
-> Patches 5 and 6 are new. Willem pointed out that the defines are
-> duplicated and all these imprecise defines have been annoying me
-> for a while so I decided to clean them up.
-> 
-> With the defines cleaned up and now more precise patch 7 (was 5)
-> no longer has to play any games with the MTU for ip6ip6.
-> 
-> The last patch now sends 3 segments as requested.
-> 
-> v1: https://lore.kernel.org/20260401182625.372605-1-kuba@kernel.org
-> 
-> Jakub Kicinski (8):
->   selftests: drv-net: gro: add data burst test case
->   selftests: drv-net: gro: add 1 byte payload test
->   selftests: drv-net: gro: always wait for FIN in the capacity test
->   selftests: drv-net: gro: prepare for ip6ip6 support
->   selftests: drv-net: gro: remove TOTAL_HDR_LEN
->   selftests: drv-net: gro: make large packet math more precise
->   selftests: drv-net: gro: test ip6ip6
->   selftests: drv-net: gro: add a test for bad IPv4 csum
-> 
->  tools/testing/selftests/net/lib/gro.c      | 207 +++++++++++++++------
->  tools/testing/selftests/drivers/net/gro.py |   7 +-
->  2 files changed, 157 insertions(+), 57 deletions(-)
+Sometimes it's hard to spot the ok / not ok lines in the output.
+This is especially true for the GRO tests which retries a lot
+so there's a wall of non-fatal output printed.
 
-For the series:
+Try to color the crucial lines green / red / yellow when running
+in a terminal.
 
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Reviewed-by: Willem de Bruijn <willemb@google.com>
+Acked-by: Joe Damato <joe@dama.to>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+v2:
+ - use functools instead of open coding the caching (pylint)
+v1: https://lore.kernel.org/20260401183309.378671-1-kuba@kernel.org
+
+CC: shuah@kernel.org
+CC: petrm@nvidia.com
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/lib/py/ksft.py | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+index 6cdfb8afccb5..7b8af463e35d 100644
+--- a/tools/testing/selftests/net/lib/py/ksft.py
++++ b/tools/testing/selftests/net/lib/py/ksft.py
+@@ -2,6 +2,7 @@
+ 
+ import functools
+ import inspect
++import os
+ import signal
+ import sys
+ import time
+@@ -31,6 +32,17 @@ KSFT_DISRUPTIVE = True
+     pass
+ 
+ 
++@functools.lru_cache()
++def _ksft_supports_color():
++    if os.environ.get("NO_COLOR") is not None:
++        return False
++    if not hasattr(sys.stdout, "isatty") or not sys.stdout.isatty():
++        return False
++    if os.environ.get("TERM") == "dumb":
++        return False
++    return True
++
++
+ def ksft_pr(*objs, **kwargs):
+     """
+     Print logs to stdout.
+@@ -165,6 +177,14 @@ KSFT_DISRUPTIVE = True
+         res += "." + case_name
+     if comment:
+         res += " # " + comment
++    if _ksft_supports_color():
++        if comment.startswith(("SKIP", "XFAIL")):
++            color = "\033[33m"
++        elif ok:
++            color = "\033[32m"
++        else:
++            color = "\033[31m"
++        res = color + res + "\033[0m"
+     print(res, flush=True)
+ 
+ 
+-- 
+2.53.0
+
