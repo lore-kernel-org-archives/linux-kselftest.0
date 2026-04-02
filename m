@@ -1,126 +1,147 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28633D561
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24A927C162
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775092643; cv=none; b=EWNycqZ/+keXXKH/OydA8yCjCPMtaNY8hS9KY2lt+SyL0sBscXGj3qePbbgL4Un0gqpAedFsPStc5eikHJaFjhKEZrxSShQ4OgTEkZnhIIoCrKEvfg8ZRnxuWDgO2a+aJsvWKJ82TR0LAvqnsf1r/wD5KKcihDyd5MWJobfNrdY=
+	t=1775093699; cv=none; b=jDSv7uEZZPpkS9Sbd6P1zpyCAkeJAeCGhWQtx2P8tD0M7j0XZQ34RjLMWl4+d874giga+xiSgx5RVvDudGwGgYTWefviZH92LjCzwc1vBsRfsCmbBwKHemiCgTOi+LbB/vfTA6Eqrwuz71LiZm5JDW0p6Mm6QjyKZQrjJCRkpTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775092643; c=relaxed/simple;
-	bh=W5fGaDowPr9MuuDzZhxn9FoNrI278i+RBWaxHJhdEaE=;
+	s=arc-20240116; t=1775093699; c=relaxed/simple;
+	bh=m297v3GiOVxkqkQKNKsn0SSm2BRnx0wYfsw0+elhHng=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OhYe0fBAKmtg6WDHfmcqU6bc3HGfTgNo0pDS50GJtojUyXbp6kxlDvZuJaw/14loGXYFZEmMu0W148Lu77pjMO+2sR1wTWDOmFPOwYgPpes5w85PhO0kAdBvWaadYD9KyaQnRJXoGGDTxvWejbe6IijSkQkfI0gC/x2KPCCR4xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gnGGbpm0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=iSVWNMlt9FkL1uRSV4dm3spqswrAwSD+3/u8EOynvvBrkZOQE7feBGyLV9BFxOal01hxKUzqdb5bVRfuwuaKyNhjGVTFn/pmL4pWtqe4y4b1xPfK+EYY+FimaIh1OiNHfUPJdxlHBt4fWJaXF8VbD6nWoYZjFUzapDocrS92+oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uIDVavCa; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gnGGbpm0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775092641;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uIDVavCa"
+Date: Wed, 1 Apr 2026 18:34:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775093685;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ESlYIolGBSFH6AWVL5HUwn+hc6w8VfR5MT+DXBPeS+0=;
-	b=gnGGbpm08+n2f5V7gjZeSFWL+EhzMjSqNOwCBesR/2K4yzKLLm56S9Mfx1i7GQG8oq4Bxd
-	Dp6qIjKlrCwgbkPqNbd5zUM5Y2epDh1o4EJgnCTS89UuY6hzfVYkDN+uRHw1XHa23j5MRn
-	hykKYowRtM++xxER0hlN8GwmFSc/HYc=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-659-1QYFvXvBMOGBxgNU06fP0A-1; Wed,
- 01 Apr 2026 21:17:16 -0400
-X-MC-Unique: 1QYFvXvBMOGBxgNU06fP0A-1
-X-Mimecast-MFC-AGG-ID: 1QYFvXvBMOGBxgNU06fP0A_1775092633
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8BE9E1800281;
-	Thu,  2 Apr 2026 01:17:12 +0000 (UTC)
-Received: from gmail.com (unknown [10.72.112.80])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 43EC430001A2;
-	Thu,  2 Apr 2026 01:17:00 +0000 (UTC)
-Date: Thu, 2 Apr 2026 09:16:54 +0800
-From: Chunyu Hu <chuhu@redhat.com>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Mark Brown <broonie@kernel.org>, akpm@linux-foundation.org,
-	david@kernel.org, shuah@kernel.org, linux-mm@kvack.org,
-	ljs@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
-	surenb@google.com, mhocko@suse.com, ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com, npache@redhat.com,
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
-	lance.yang@linux.dev, Willy Tarreau <w@1wt.eu>
-Subject: Re: [PATCH v7 4/7] selftests: ksft_exit_fail_perror: support printf
- style arguments
-Message-ID: <ac3DhrTIcxvAki3X@gmail.com>
-References: <20260330151503.670415-1-chuhu@redhat.com>
- <20260330151503.670415-5-chuhu@redhat.com>
- <efbad6c5-8d5e-4774-8d0a-d455e6e2c182@sirena.org.uk>
- <c6976e34-54b7-42a8-968e-9ae967c52968@t-8ch.de>
+	bh=QIoJDHbGUi2T/S0l/YZNFtyf9ayIGPFiBwet0GcLpco=;
+	b=uIDVavCa2u2MMjx4gA75IWMWn8CnNonvE3gYY8ZwaNY/D/b8Pru3oHsGl0/dAPjD1gxyqp
+	BMbIN6FIaEHgEr4rzTlUMqB5C3vy0QK/ntg/MFZzoyMAk7CdYmK2usVt4LaljM1PHjBTx+
+	hgoH7PNIK2wuRPEA/6jvvMUQpjTVlLU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: Jiayuan Chen <mrpre@163.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
+Message-ID: <ac2z6IqYyIxSZFPS@devbig1721.ftw5.facebook.com>
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
+ <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
+ <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+ <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+ <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
+ <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
+ <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
+ <ae86a1e5-769c-44d8-ad7e-ad724800e9e4@linux.dev>
+ <08c824b0-cfbb-40ca-b976-9fbd41e5e855@rbox.co>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c6976e34-54b7-42a8-968e-9ae967c52968@t-8ch.de>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <08c824b0-cfbb-40ca-b976-9fbd41e5e855@rbox.co>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Apr 01, 2026 at 02:08:53PM +0200, Thomas Weißschuh wrote:
-> On 2026-04-01 12:03:09+0100, Mark Brown wrote:
-> > On Mon, Mar 30, 2026 at 11:15:00PM +0800, Chunyu Hu wrote:
+On Wed, 01 Apr 2026 00:43:58 +0200, Michal Luczaj wrote:
+> On 3/31/26 02:20, Martin KaFai Lau wrote:
+> > On 3/30/26 4:03 PM, Michal Luczaj wrote:
+> >> On 3/26/26 07:26, Martin KaFai Lau wrote:
+> >>> On 3/15/26 4:58 PM, Michal Luczaj wrote:
+> >>>>> Beside, from looking at the may_update_sockmap(), I don't know if it is
+> >>>>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
+> >>>>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
+> >>>>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
+> >>>>> when the bpf_map_update_elem(sockmap) support was added iirc.
+> >>>>
+> >>>> What about a situation when unix_sk is stored in a sockmap, then tc prog
+> >>>> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
+> >>>> useful, but seems doable.
+> >>>
+> >>> [ Sorry for the late reply ]
+> >>>
+> >>> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible
+> >>> from tc :(
+> >>>
+> >>> Then unix_state_lock() in its current form cannot be safely acquired in
+> >>> sock_map_update_elem(). It is currently a spin_lock() instead of
+> >>> spin_lock_bh().
+> >>
+> >> Is there a specific deadlock you have in your mind?
 > > 
-> > > The ksft_exit_fail_perror function previously only accepted a single string
-> > > argument, which limited its flexibility for providing specific context to
-> > > failure messages.
-> > 
-> > > This change updates ksft_exit_fail_perror to support variable arguments,
-> > > similar to ksft_exit_fail_msg.  Adding the __printf(1, 2) attribute enables
-> > > compile-time checking for format string correctness.
-> > 
-> > This is causing build regressions on the arm64 selftests:
-> > 
-> > /arm64/fp/za-fork-asm.o -o /build/stage/build-work/kselftest/arm64/fp/za-fork
-> > In file included from za-fork.c:12:
-> > ../../kselftest.h: In function ‘ksft_exit_fail_perror’:
-> > ../../kselftest.h:427:13: error: implicit declaration of function ‘vasprintf’; d
-> > id you mean ‘vsprintf’? [-Wimplicit-function-declaration]
-> >   427 |         if (vasprintf(&buf, msg, args) == -1) {
-> >       |             ^~~~~~~~~
-> >       |             vsprintf
-> > 
-> > This is because za-fork uses nolibc which does not implement
-> > vasprintf().
+> > e.g. unix_stream_connect() is taking unix_state_lock(). Can a tc's 
+> > ingress bpf prog call unix_state_lock()?
 > 
-> We can add vasprintf() to nolibc, I'll send a patch later today.
-> But it will be fairly inefficient, as our malloc() implementation
-> is *very* simple. Not that it would matter here.
-Thanks! 
+> Ah, right, that's the problem, thanks for explaining.
 > 
-> That said, I am not a fan of the new ksft_exit_fail_perror().
-> What about this:
-> 
-> #define ksft_exit_fail_perror(msg, ...)	\
-> 	ksft_exit_fail_msg(msg ": %s (%d)\n" __VA_OPT__(,) __VA_ARGS__, strerror(errno), errno);
-> 
-> A similar treatment might be done to ksft_exit_fail_msg().
+> But, as I've asked in the parallel thread, do we really need to take the
+> unix_state_lock() in sock_map_update_elem()? Taking it in
+> sock_map_update_elem_sys() fixes the null-ptr-deref and does not lead to a
+> deadlock. Taking unix_state_lock() in sock_map_update_elem() seems
+> unnecessary. Well, at least under the assumption progs can only access
+> unix_sk via the sockmap lookup.
 
-Thanks for the suggestion! I would use ksft_exit_fail_msg directly for
-now, and we don't bother to make it that complex just for saving two
-parameters.
+right, sock_map_update_elem_sys() should be safe to take
+unix_state_lock().
+
+If it is fixed by testing unix_peer(), is the TCPF_ESTABLISHED test
+in sock_map_sk_state_allowed() still useful and needed? Also,
+please explain in detail in the commit message why testing for NULL
+without unix_state_lock() is enough. For example, for the BPF iterator on
+sock_map, my understanding is that unix_release_sock() can still happen
+while the BPF iterator is iterating over a unix_sock. I guess a future
+unix_state_lock() in the iterator's seq_show() should be useful.
+
+It will also be useful to mention what was discovered about TC + lookup
++ update_elem(&sock_map, ...) and why it is not safe to take
+unix_state_lock() in that path. Thanks.
 
 > 
-> > I need to look at why this managed to pass the build testing I do in
-> > -next...
+> >> ...
+> >> And sock_{map,hash}_seq_show() (being a part of bpf iter machinery) needs
+> >> to take lock_sock() just as well? Would that require a special-casing
+> >> (unix_state_lock()) for af_unix?
+> > 
+> > I would think so for lock_sock() considering the current bh_lock_sock 
+> > without !sock_owned_by_user() usage is incorrect in 
+> > sock_map_update_elem(). [ this probably should be a separate issue for 
+> > another patch ]
 > 
+> All right, leaving that for later.
 > 
-> Thomas
+> > Some more side-tracking... from looking at the code, the bpf_iter of 
+> > sock_{map,hash} can do bpf_map_lookup_elem(&sock_map, ...). This 
+> > bpr_iter program probably will be failed to load because the 
+> > bpf_sk_release() is not available.
 > 
+> I think ability to bpf_map_lookup_elem(sockmap) was added way before bpf
+> iter in
+> https://lore.kernel.org/bpf/20200429181154.479310-2-jakub@cloudflare.com/
+> and iter "allows" it somewhat accidentally. Would you rather have it
+> explicitly dropped?
 
+It is fine to leave it as is. It would be a bit nicer to reject map_lookup
+on sockmap instead of giving the confusing error that bpf_sk_release
+is not available. That is for another day. I was just wondering what else
+could go wrong with map_lookup.
