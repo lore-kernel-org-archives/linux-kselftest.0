@@ -1,239 +1,158 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360B9395250
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 09:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA50038D016
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 09:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775122040; cv=none; b=sU91P5nsLgov+KCjDG93WbUSjYWVBI/gFQavjcA29A75NW6LdfviX2ElnfkmF+c0UDOsCRjr72eUD8tpaC7pB+7UAT/jBrNrYhldBXfUkBgNOYRp2WlYJMbJFntGl8PmkeOWEnPcoCLRdIS+OXzFlrflykZbSIjGQjpq9uUXCzM=
+	t=1775123333; cv=none; b=VH67ejrplqs4lxDpHP0KNvrMBnBBH6gTbMEuUAIK98SJtVcEnaElEcnuFXGHiPfUZEQmX2nqIF3Fa4eK0IzWt+XtYovzDzuHJxUyKb7hTmwPPq+o35PSrGj8FNlGyHHNd/scovBgR+ZZF7aMBuaktLoznYdYKD0FDao1yM//lYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775122040; c=relaxed/simple;
-	bh=8HBEZkldhVOCvg+h8X+QyqxrVDgc44S4RwM2B4Lv89Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rwj3RTtF4z09CE5a+2zarbP2p07L4WRyVHJI7aZEUoUkpaPb3DA+kAXQy8dD993JtfZVb1Jai02RCeLOR3NMjgJ+NtxnAqSszz788MwVKoOfNei3gPZSXrT5XX42EsACgnK8Lhui2Qsb9YoH8RRLMhYuuvbAPmRM5aDJJnN/m5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WxcNR/jT; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=J180q0GQ; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1775123333; c=relaxed/simple;
+	bh=FxR2bhBkRY0ikaJ1Hs1fd9nHf+FN0AGKBDKZwHlC+gg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OC+4FPKGO682Cz6Je9mtg+SNoOms0VHjWTS7LCixEQduNnrsbbTd9RMFEckwsA/EL2ZI59eTL93MPf/mvGuXNPS/YrFwmjRVZmGP7BGF/Afvj5N/Cd33RzdrTQ0qa13iVX6LxRu2u/cLECNlbYqfBykJdCE2C+LJv2Ukkfo5fx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KCWceTh6; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z+kV8++Z; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WxcNR/jT";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="J180q0GQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KCWceTh6";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z+kV8++Z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775122030;
+	s=mimecast20190719; t=1775123325;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=36+ATcVryHEsHCfEL0i5GnGjSCxjk7f9m5BZERXBqcg=;
-	b=WxcNR/jTpy8FNj3+m3kIgzNB1kOzMLYe0bTrsZTpfy2RpPXaqdvhaOhjhIVfNV/iGMzI9P
-	VdKpbqKYmDZ3SQ9H+0Q7h6m56zoh2MGbKhTmQhqD9ctVa+FwWM5RwthGMmweWVXxNPqH5Z
-	Zodjx1FueDTYs6Gx+24wIA0xJ3kRWDE=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=tLN44LxxXgYTiWrwLkxzAK8Zoqz3iKp5J7224wtn/u4=;
+	b=KCWceTh6w59zPJbCslbmZrqWhnq2N5ye4Y4ty+BtL//6TQ2LRR8f0NQ2AfyuFCcJ2QRksF
+	klh0RRVGkvNc/kbJseMAHyMeZO747MZlxvLPuFYp2BKZ1mtPNjyRxdg2BPeR5XdOdM7Wn+
+	7aif9natp7gO7pdCDw33G5d84bTIbtc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-499-cFxPnmDwO8uG7HCMBLPChg-1; Thu, 02 Apr 2026 05:27:09 -0400
-X-MC-Unique: cFxPnmDwO8uG7HCMBLPChg-1
-X-Mimecast-MFC-AGG-ID: cFxPnmDwO8uG7HCMBLPChg_1775122028
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3595485abbbso959593a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 02:27:08 -0700 (PDT)
+ us-mta-617-ApUl3UADNOiYUTEfmcOVpg-1; Thu, 02 Apr 2026 05:48:43 -0400
+X-MC-Unique: ApUl3UADNOiYUTEfmcOVpg-1
+X-Mimecast-MFC-AGG-ID: ApUl3UADNOiYUTEfmcOVpg_1775123322
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4837bfcfe0dso10709865e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 02:48:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1775122028; x=1775726828; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=36+ATcVryHEsHCfEL0i5GnGjSCxjk7f9m5BZERXBqcg=;
-        b=J180q0GQPV0hVzyI1LSWUzdunwlCqdvAbMluYOJpoyMvgzWAzljWCOaI9zzUvvFJcD
-         ZUAT8Xu++6Ynh/1n+sAfMpRVDPi/FVm3qbyFaSh6H3fPnylL5/tsyWvZ1SLrYVJD+o5c
-         6/tPuaE+Cy/uhlBNYpyrijYtmx4fs7kc6FqRYBtGdbKrnS80NKUU0YeHsp9NNMMc6Bf5
-         3Gb/2h2up4dQifohO3u9MxJ/y3+QW3U7dMf90vBbxdtbt3UEhQwHrmZNcEG2+fg6NMPl
-         EPpAE9qarkD4+hdKuEngS0fvhHrrPy0ygUc2l/Jc01fk0hckVrt0Wv+zQ73+vino/DJ0
-         KOPQ==
+        d=redhat.com; s=google; t=1775123322; x=1775728122; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tLN44LxxXgYTiWrwLkxzAK8Zoqz3iKp5J7224wtn/u4=;
+        b=Z+kV8++ZG8I0b/VTs68aucsnVGe8e4N2ThrqekVy5f+PN469KC2Vpm51FR6lSWKBsN
+         SvJrwCZd78z0vE5/PknU7G9YVW2qV60KqxLkhVkZ8CruVwX1QeFvy5vbBvhTZAohVbsP
+         4jTYGTUHM8T9Nu5hIbn33hsmDmPa2uMwtqCZWwZyuyKTLsD9QM4wV5NUqfYtBG0sWV5W
+         U5cNbV0B0FQ5fM1QuBboCQaaelwbqr8CqBCMY+jNmsCt5tS4uQ19EXBbhXtH8qWAgq7k
+         gjt0LNNMWDHRIN/UiPtwU1GiE9aYN/4k+Bqfa8QI3yfJJBnVlpN/DUSZcWUJOwZt0kvY
+         XllA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775122028; x=1775726828;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=36+ATcVryHEsHCfEL0i5GnGjSCxjk7f9m5BZERXBqcg=;
-        b=HzMESVT5i+PmqEPbxIFbec+r8858pmmmH5NB4hTb60Doi7UgtumxwGisPCsrBY1746
-         TG41Vbt03/Pxv0tj/qT10DYDeirQF/ko1H+ele9iL7/Q18dJ9nFdRmHT6ANhj9ZiPZ0a
-         8QHUI0/8Pwauj7UIRWnN5hcDmQf7fgbHKCf9i2vr0Yi0vhNiLxt5Yf/eBx9Mk3rNTqOu
-         j7MN7KzYgCCwHOOzFOBivRPplRDl8qyrCOcUUDwJ1xvWi4qrAyUhvQdwYpjL7JB2285I
-         /aj6OyIGvFftTHkaOoH3d3UUxxKrp4nhC7Y72zWMOwhKa3jjf/WE65Xy40Fs8m7PLtmx
-         Nv6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVRPs7D1gn5dfOSZE9K7lDRKmWGRXuHJEO4bWuK/pLFgXvtRrg3W0whCaXEWH6jHeDXudIV3/tc6eaVAXI6SsQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8aVtnYLN36TT1fOhFfYSF6kNB5FMVKiDKD+bmsZpZBObf3Z6Z
-	l37hGOqbGBbjDD6f8oQFfpNSMq9AFF7Tox73lmPGPEDdcC6cfcbmkqJdfikqivKZFUsGdSk5M8O
-	f4u+8ro4JjsFz0OXrmt6s7wedoZd3MP/bAYoXEAgwYc7KYu6e+qCj8WQq/dLoesY8lXJKFg==
-X-Gm-Gg: AeBDietNK0LZZY4xzWzhyD8XeKGoDF2IftYNsMCEjKrCr1hG/XUnBikKl9TW3beqrsB
-	kGwhAkq7NSnFrjNuV1XzjqZlILPHVU/Wf56366sJQIMRIn2MY+g1WQJfvkuLHvSeiNZFehLM87g
-	/sPMGCcLTtMLzZWdL1x+oCVnXLvklVubc3zZIgJpHSD8L2EzzITliI4/odT9Ox2p2J+IuEoplCc
-	jXjLiUOzUh93w3COXDE+rUu71atrWNTwVnvFilIhuRp0OdwG5URairHEUFdrGLEl3CwtYjaPtYX
-	q59HGFB1AAqCKHYKqeES7J5y9OTqKU4XObSb1JZbxY3fys0kNYs/XbP5383iJ5WtMzZ4IzDgD51
-	ro3jnO8N0aEsuxYQYSA==
-X-Received: by 2002:a17:90b:3947:b0:35b:e566:15a6 with SMTP id 98e67ed59e1d1-35dc6f4f018mr6646514a91.28.1775122027789;
-        Thu, 02 Apr 2026 02:27:07 -0700 (PDT)
-X-Received: by 2002:a17:90b:3947:b0:35b:e566:15a6 with SMTP id 98e67ed59e1d1-35dc6f4f018mr6646481a91.28.1775122027294;
-        Thu, 02 Apr 2026 02:27:07 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27477736dsm22344875ad.24.2026.04.02.02.27.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 02:27:06 -0700 (PDT)
-Date: Thu, 2 Apr 2026 17:27:04 +0800
-From: Li Wang <liwang@redhat.com>
-To: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Waiman Long <longman@redhat.com>, Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	James Houghton <jthoughton@google.com>,
-	Sebastian Chlad <sebastianchlad@gmail.com>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>, Li Wang <liwan@redhat.com>
-Subject: Re: [PATCH v2 1/7] memcg: Scale up vmstats flush threshold with
- int_sqrt(nr_cpus+2)
-Message-ID: <ac42aIDVaGim5moO@redhat.com>
-References: <20260320204241.1613861-1-longman@redhat.com>
- <20260320204241.1613861-2-longman@redhat.com>
- <n6mhkjsxsami3qmczkdh57eep4lmcgbtyl7ox3ajzveke44yf6@m4bjevvsr47k>
+        d=1e100.net; s=20251104; t=1775123322; x=1775728122;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tLN44LxxXgYTiWrwLkxzAK8Zoqz3iKp5J7224wtn/u4=;
+        b=ZYSdgawUEvExzoD1gp35CtdXm//zxu8FYtL6Bz2TKfvi5cjdTrOgT9QPpdlYBDeuSs
+         z+pXfE5/k11YG4YmuE61ARZpFvnKerN+wXtaTDr1VwuZjkCIK5SHIW4Ajx5Ymv7kdEBn
+         AgKm9lxHSmYN72NNrCaB+vS0FIMXXCYaX0za8aRT8u2qkR+wC2MT24XQXEXs5CnZ5Ao9
+         0oxvGdul4H6/aJ4OcDVV4/3HXtB4MxIYcnixxfOjSfmbxhIBMAgG4hysz6U7hLDMi6m9
+         cHCWrLtyFoVluh2pQGg3xQ4OH1C8wUIlb7yIG4oiUw85b7jmuXyVn7LO1Y69PevU3npr
+         z/9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWsyQlOBdSebAXXkP7dNIPGlb5omRZeJJ36ulLpco9x0hsdyr5ExfirA3ljbl0XiBw6B0Z5TkIq954Kks4/iK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH3Rlk9Cu40oxFKJEVDWHaNMjyjvxYyheOj1y4TAA0N+B1Jms5
+	xIHl3BsNKCiaVxVlB+EiyszvEa34X/eIIHGdinJ0V5pd3mi/6eemxEz9OZK8zdUoIDvihLW4QZL
+	j+hItUS5YX+PjsDYZ6DFo6XNA8U9kMtLZVBlova0j0S4qlx6V+b7YWZtcGxdFKur1MseNjQ==
+X-Gm-Gg: ATEYQzyLab1rw/3vhRbWVBBFNxfPQmSd3/0VLGw35Y1CS9gD66Uh5sKuwVDmluNww5I
+	HQy8bHepamYIKAwUmjQ6Yl7P9D2dFY+fC26O3YDrxEgBO0+lp3eY6E/LxfsbzJh5S2FJwqht2OM
+	/asBWe4uT+i3v0xj3i689TBufqdBTk9Hoh2WzVs1YIKKczyNiq7I8Mk6t+azxUARofvwkECUfI8
+	HncRs42kLTbqJ8tHVuQedEMkVw3/7ZekhSn0hqPcAuXvtAFAch5sDUNLikeg/MSGeyds50Ntk1R
+	1z3NeiiptHFJNpbG0i78H3MQoG13ta2Dx/4z2w2SLHHy7+HgI6QCPIPBkqjBE5jk1Z63hzwrcgl
+	EWwjLMtavdPAeGd9qVbS/8COUSBtsqHQbS9jRpRkZ5eLcoTzOg7CCY9fFtg==
+X-Received: by 2002:a05:600c:45c5:b0:483:6d42:25c6 with SMTP id 5b1f17b1804b1-48883592213mr114334295e9.23.1775123322354;
+        Thu, 02 Apr 2026 02:48:42 -0700 (PDT)
+X-Received: by 2002:a05:600c:45c5:b0:483:6d42:25c6 with SMTP id 5b1f17b1804b1-48883592213mr114333895e9.23.1775123321886;
+        Thu, 02 Apr 2026 02:48:41 -0700 (PDT)
+Received: from [192.168.88.32] ([212.105.153.248])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887c8852a5sm148784745e9.9.2026.04.02.02.48.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Apr 2026 02:48:41 -0700 (PDT)
+Message-ID: <50ae3c69-2c4e-499f-a46a-cbd207ff5f09@redhat.com>
+Date: Thu, 2 Apr 2026 11:48:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7] selftests: net: add tests for PPP
+To: Qingfang Deng <dqfext@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+ Dianne Skoll <dianne@skoll.ca>
+Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ Felix Maurer <fmaurer@redhat.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org,
+ netdev@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>
+References: <20260330035604.133073-1-dqfext@gmail.com>
+ <20260401081030.29b050d5@kernel.org>
+ <CALW65jahWApDnVmFReW+Y3HDxBEmCwzsT1oyh03SW7X5ry6PzA@mail.gmail.com>
+ <20260401175621.549c492e@kernel.org>
+ <CALW65jaTbaosbO8ypKZ6G37HxuxXabeTaP_Fhq72xTovmDj+8g@mail.gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <CALW65jaTbaosbO8ypKZ6G37HxuxXabeTaP_Fhq72xTovmDj+8g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <n6mhkjsxsami3qmczkdh57eep4lmcgbtyl7ox3ajzveke44yf6@m4bjevvsr47k>
 
-Hi Michal,
-
-> Hello Waiman and Li.
-> ...
-> The explanation seems [1] to just pick a function because log seemed too
-> slow.
+On 4/2/26 4:26 AM, Qingfang Deng wrote:
+> On Thu, Apr 2, 2026 at 8:56 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>> On Wed, 1 Apr 2026 23:45:38 +0800 Qingfang Deng wrote:
+>>>> # iperf3: error - unable to connect to server - server may have stopped running or use a different port, firewall issue, etc.: Network is unreachable
+>>>> # TEST: PPPoE                                                         [FAIL]
+>>>> not ok 1 selftests: net/ppp: pppoe.sh # exit=1
+>>>
+>>> It looks like pppoe-server fails to start. You may check the syslog to
+>>> see what's going on.
+>>
+>> Hm, we don't capture syslog automatically :S We capture stdout and
+>> stderr
+>>
+>> I'm not even sure there's something listening on syslog in virtme-ng
+>> Is it possible to make the daemon log to stdout or a file and dump
+>> that file to stdout on failure? Even if we fix the current issue
+>> it will be quite inconvenient if we have to go into syslog every time
+>> the test is failing. The test output should provide enough info to
+>> debug failures.
 > 
-> (We should add a BPF hook to calculate the threshold. Haha, Date:)
+> Add Cc: Dianne
 > 
-> The threshold has twofold role: to bound error and to preserve some
-> performance thanks to laziness and these two go against each other when
-> determining the threshold. The reasoning for linear scaling is that
-> _each_ CPU contributes some updates so that preserves the laziness.
-> Whereas error capping would hint to no dependency on nr_cpus.
+> I checked the man page of pppoe-server and did not find such option.
+> We can instead start our own listener and redirect the syslog to a
+> file or stdout:
 > 
-> My idea is that a job associated to a selected memcg doesn't necessarily
-> run on _all_ CPUs of (such big) machines but effectively cause updates
-> on J CPUs. (Either they're artificially constrained or they simply are
-> not-so-parallel jobs.) 
+> socat -u UNIX-RECV:/dev/log,ignoreeof STDOUT &
 
-> Hence the threshold should be based on that J and not actual nr_cpus.
+Note that similar failures in the past in other test-cases were usually
+due to timing issues. i.e. the pppoe-server starts in background too
+late for the client.
 
-I completely agree on this point.
+Possibly a somewhat clean solution is to wait in a loop for the
+'pppoe-server ready' event, somewhat similar to wait_local_port_listen().
 
-> Now the question is what is expected (CPU) size of a job and for that
-> I'd would consider a distribution like:
-> - 1 job of size nr_cpus, // you'd overcommit your machine with bigger job
-> - 2 jobs of size nr_cpus/2,
-> - 3 jobs of size nr_cpus/3,
-> - ...
-> - nr_cpus jobs of size 1. // you'd underutilize the machine with fewer
-> 
-> Note this is quite naïve and arbitrary deliberation of mine but it
-> results in something like Pareto distribution which is IMO quite
-> reasonable. With (only) that assumption, I can estimate the average size
-> of jobs like
-> 	nr_cpus / (log(nr_cpus) + 1)
-> (it's natural logarithm from harmonic series and +1 is from that
-> approximation too, it comes handy also on UP)
-> 
-> 	log(x) = ilog2(x) * log(2)/log(e) ~ ilog2(x) * 0.69
-> 	log(x) ~ 45426 * ilog2(x) / 65536
-> 
-> or 
-> 	65536*nr_cpus / (45426 * ilog2(nr_cpus) + 65536)
-> 
-> 
-> with kernel functions:
-> 	var1 = 65536*nr_cpus / (45426 * ilog2(nr_cpus) + 65536)
-> 	var2 = DIV_ROUND_UP(65536*nr_cpus, 45426 * ilog2(nr_cpus) + 65536)
-> 	var3 = roundup_pow_of_two(var2)
-> 
-> I hope I don't need to present any more numbers at this moment because
-> the parameter derivation is backed by solid theory ;-) [*]
-> [*]
+Otherwise an hackish sleep in between should do.
 
-It is a elegant method but still not based on the J CPUs.
+Note that you should be possibly able to reproduce this kind of failure
+in a virtualized/slow enough environment (i.e. using vng as described on
+nipa wiki)
 
-As you capture the core tension: bounding error wants the threshold
-as small as possible, while preserving laziness wants it as large as
-possible. Any scheme is a compromise between the two.
+Finally, note that in this test script you should start the socat
+listener only if /dev/log does not exists, or ignore socat startup
+errors - because self-test should run also on different systems.
 
-But there has several practical issues:
+/P
 
-The threshold formula is system-wide, while each memcg has its own counter,
-they all evaluate against the same MEMCG_CHARGE_BATCH * f(nr_cpu_ids),
-with no awareness of how many CPUs are actually active for that particular
-memcg. Small tasks with J=2 coexist with large services where J approaches
-nr_cpus, yet they all face the same threshold. The ln-harmonic formula
-optimizes for the average J, but workloads that most critically need
-accurate memory.stat are precisely those spanning many CPUs, well above
-average.
-
-Moreover, the "average J" estimate assumes tasks are uniformly distributed
-across CPUs, which rarely holds in practice with cpuset constraints, NUMA
-affinity, and nested cgroup hierarchies. And even accepting that estimate,
-the data shows ln-harmonic still yields 237MB of error at 2048 CPUs with
-64K pages — still large enough to cause selftest failures.
-
-In short: the theoretical analysis is sound, but the conclusion conflates
-average case with worst case. Under the constraint of a single global
-threshold, sqrt remains the more robust choice.
-
-In future, if the J-sensory threshold per-memcg can be achieved, then your
-ln-harmonic method is the most ideal formula.
-
-To compare the three methods (linear, sqrt, ln-harmonic):
-
-4K page size (BATCH=64):
-
-  CPUs   linear   sqrt     ln-var3
-  --------------------------------
-  1      256KB    256KB     256KB
-  2      512KB    512KB     512KB
-  4      1MB      512KB     512KB
-  8      2MB      768KB     1MB
-  16     4MB      1MB       2MB
-  32     8MB      1.25MB    2MB
-  64     16MB     2MB       4MB
-  128    32MB     2.75MB    8MB
-  256    64MB     4MB       16MB
-  512    128MB    5.5MB     32MB
-  1024   256MB    8MB       64MB
-  2048   512MB    11.25MB   64MB
-
-64K page size (BATCH=16):
-
-  CPUs   linear   sqrt     ln-var3
-  --------------------------------
-  1      1MB      1MB      1MB
-  2      2MB      2MB      2MB
-  4      4MB      2MB      2MB
-  8      8MB      3MB      4MB
-  16     16MB     4MB      8MB
-  32     32MB     5MB      8MB
-  64     64MB     8MB      16MB
-  128    128MB    11MB     32MB
-  256    256MB    16MB     64MB
-  512    512MB    22MB     128MB
-  1024   1GB      32MB     256MB
-  2048   2GB      45MB     256MB
-
--- 
-Regards,
-Li Wang
 
