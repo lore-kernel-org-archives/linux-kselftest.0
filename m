@@ -1,97 +1,234 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF92D3D3007
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 22:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775169087; cv=none; b=tnRKW4wuD36IV9ec8j0Xhnw9G4CyvMgg2uML0TpfuJgk5yi5vzAvxLnsUJaGAZ4IJj8hprJ4lWjUIaFvyjOXpVX6L4TIgyqFy560div24p6CbfM/kpSqJAhrOGycRb7Blh4c2K7dmu7HP4zwTr3yyAPW4P1g3Lf754sLXcS3iSM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775169087; c=relaxed/simple;
-	bh=ZaLZ5gQqr0147GN/Lc0DeadSAPS83YIjQ9YpwTgNBjA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=BG5MVzwm9tSGpBl9A7VSI2G+BtDtL8/VpHHyC+ak/I6bzaH+oVCg7h/J0GHV44ODEN34ENcoiI3/z1zlpR8+D/XZDM4wypvcAbtoWo2PwvKXp2jxymrqNM/ofhjk6r7sP8L8F3wd2ycnNrgUroA+PbEuJjjDX0IqZU6lRQ3jCnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AWf0Ll8a; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EF73B6362;
+	Thu,  2 Apr 2026 23:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775171619; cv=fail; b=uksakGG32NbR5txzg44BnlW1fyLVOfNgaJvE4xpDz7q5c//zUJp9R54q2MqlIG94cyetlFHXwHECiwLaKpTjIbXupXBN5s4k9/1fT68kODzc06KkSfF+l+etpno5ucOp1UtJDS+MylTr7H/sje7zT9ktEN4hP5RYVurbryRuSDA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775171619; c=relaxed/simple;
+	bh=Cv7HVaFCzSlvsSeiy2AXBtUKQSJxuCupS5n8UaylA2s=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=sNZU1pX2OmOU29q2aZ/bArgjrwLI8I84ylcGYYVlFDMBPNdkUTZ1duUe5kKfal9ipvMkYN/MVuJecEQA/184K8kV/W3nG1Yn0Ssy3s2oqMybm7O77beLeXpSFP445hyH7MqG5S/e7OMgI8U9msBaffBBtUP16eXICNtK4q93/iE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UaKcxnIB; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=EOeHI0gK; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AWf0Ll8a"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c7691378914so570505a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 15:31:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UaKcxnIB";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="EOeHI0gK"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 632FCaLg2207721;
+	Thu, 2 Apr 2026 23:13:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=gIxPwIglMf3Jn5NxSySIV8QHHy0HgXwFtN4JvJuWXmk=; b=
+	UaKcxnIB3129oCkMl/iogItnlgBaMsINzfKmMCuM+ELSrTOHxIZ7Bo52MI04FEUv
+	8y9Mj+3XtqZPEs7m3AAZ1XT6tEfiC5V9ydmqIWV5kej/2TDLajClrPR4dgkB7oU5
+	uhczecGLA5VsK9U0gjLTc+/Oe0GxmFbWnjj9en1jnqZQ1UoID/cjeThyj1SxbaNI
+	M7c0pzFDHfAqINYCj/lrKp1YRACekZeaHS+y3c+3ozc0iD7WvzDIEg11CYZBg0k8
+	n9fEF2bgyNLH1kXGtf5i8wjshRdsEYhALreTb3qd6LgJrgx+AfvusUEHK8aBVMCw
+	BfJ8zWpHmFIYTugOL2ib9Q==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d66v5sbeh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 Apr 2026 23:13:21 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 632L5EMi021206;
+	Thu, 2 Apr 2026 23:13:21 GMT
+Received: from ch5pr02cu005.outbound.protection.outlook.com (mail-northcentralusazon11012065.outbound.protection.outlook.com [40.107.200.65])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d65edj8um-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 Apr 2026 23:13:21 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oaaKCfGpczhRluGD0cwKHqnlmFKAYQdILrYifXmjljDYDNINchO3oJ1XFSMbZswWPtbNcr5YJAJH6UR5aqZfA/S26WR8wPErtideC+N5p24+yVJaPLZkO0O687LUFQT4l6VY7YU+RrZPwIvTuiDinr+I9V49gxOGW2kTHABVHAt1uxIiZGIcdxwKSZbeAXsvoqLRTDcWJOw3GwSYYunn85KLwDEeG/pO8Ytm8j85wfBLFGVpA6IMrIOi2REebg5FJ8a0rBPaNB3+9b/aU/PNiyk57m3x1ZH6MOGXue3GtSz4DMgBwwYWT2CABtquEtbf2bNQexZzRl5BGQOWhRGtdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gIxPwIglMf3Jn5NxSySIV8QHHy0HgXwFtN4JvJuWXmk=;
+ b=ieG3XWvCHxzcl4jfW2XuokVarhV4oX8IueG+fLURHLxumrIaL/WBEe9J2UgKLj+48adGUvPJNZrcyFv9VVliGmAqxKGVpVE9By06bGsElWVEoc+XfxmtF889cY8HQ4j6UtFjbFl+VKnUcFBXS0JWct9yWxths7NNQeCfRuD29ACrav8MpjIQSg1MqTv+o2CD4K77cai1c99r5nVqHbnf8hBIE8XkpqSITeuFMiD2xT5uZ6iJLqEmBp3ykE3rK/EDB8La16zbmLb/GsOIRw/2Oeht7yB3EX3Q36NFZ7sHTtACQLpkZZWRX5ItJPSOqh+bDso7b2Cqu4zHNGkAG+98ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775169085; x=1775773885; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EitAmK80FnP6W5boJ91nHb8aM9ZxOtPro7KbAdjZ2GI=;
-        b=AWf0Ll8aNN49x6DpK9pcXuU9v1V5wEBF1A4EJgoW410iwKEr9M6+RCHO/75NBUMksl
-         Q3YLsMRykj4uqDk5w1rRRKgC5oCSyHkB5OqRclzS/gt7GfXFTFsTcPak7QvjeFFL1pDs
-         EvleWaccyfLEh0MMz6wEioy9CnB1BYUTzCUOlGArfcw1qlRy5iebQqMhn2spj0pizvBC
-         2CcbxboN5JpAAkJtLjt2nCVFV2Ro7ZzcHvUreMxU5DTPxqMqW5gmR31G+wNaALsjwFAP
-         rKkhj0FRxV/1u4AuDTAM/CGKdEapnE2jEKk5qJITykMXjIseUIAWQyPKi0IQwuMTh+n/
-         0X3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775169085; x=1775773885;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EitAmK80FnP6W5boJ91nHb8aM9ZxOtPro7KbAdjZ2GI=;
-        b=Tw4WlsT5L/uuMXyxZ9/TDV8C+OXW1TtlIbE9z7hfwF1LtKnY1cXMLVfxrWBN6/O/aq
-         ++x6hhkdGvvj91s/mUG/kl61C6hxRmMs0EtuMbCW6gWRg35qhEN7KjBYl3kRBnr6ZDAE
-         ZA9rZRA6io/0YF0T3vUK/4T58zliCu6KoNJoZ5PgbCM/iCL0VJjNpE794RvC+abhm6wG
-         qL8gYVoz39/EsFRSaMmiLpVPYLmt/bInXp4cDxvgAAL+JLPvui7K1iqPb7aoaoO9leEf
-         qsHyHab9JQyVuSJ29XLqu4cNiAnBz9p8vM75WlrBCCooPnlvzhp1t9Du5pw8B5OF8mSv
-         zXfA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHPVHBdjyLA4urbGF4U+GdtGeI/1og6NX8ek961FBTq2QenZ7t99w9qw7v0oM3712QllMHDN1pCtTw8ifXNrk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6UL3milgNhzADpb6bXutrv7lWHlVmZZMvfIRrx5qzSyo2Q0Fy
-	lHAbKaXqh/AkEEISpfGd26F8ZiZAqUuauQahgaz8f/dhifysIC5RdYxTqImG3nFv22XOc22FxU/
-	PCZWqzZZcOb0ZnA==
-X-Received: from pgbdn5.prod.google.com ([2002:a05:6a02:e05:b0:c73:fbb5:af1b])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:6d9f:b0:398:b178:a53f with SMTP id adf61e73a8af0-39f2f07f434mr520986637.40.1775169084899;
- Thu, 02 Apr 2026 15:31:24 -0700 (PDT)
-Date: Thu,  2 Apr 2026 15:31:02 -0700
-In-Reply-To: <20260402223108.650572-1-jmattson@google.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gIxPwIglMf3Jn5NxSySIV8QHHy0HgXwFtN4JvJuWXmk=;
+ b=EOeHI0gKBlwem9uXiEG9YSyoZl6mcRiofiCryEsPFsjN2NLGnKxgnq+5TxN1/M1ol+Qfm83rseTlkRN238p1x9TRhS0tGXSTIDxSu3RAyR2AIm/dbLGVj2ZGjmeP08L8d65NSKd/ALR8MkPQuCtjyAYEvhn/q6YHS6bFWVRmPbk=
+Received: from SJ2PR10MB7653.namprd10.prod.outlook.com (2603:10b6:a03:542::22)
+ by PH7PR10MB6459.namprd10.prod.outlook.com (2603:10b6:510:1ee::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.16; Thu, 2 Apr
+ 2026 23:13:17 +0000
+Received: from SJ2PR10MB7653.namprd10.prod.outlook.com
+ ([fe80::f05:2c3:660e:b36]) by SJ2PR10MB7653.namprd10.prod.outlook.com
+ ([fe80::f05:2c3:660e:b36%3]) with mapi id 15.20.9769.018; Thu, 2 Apr 2026
+ 23:13:16 +0000
+Message-ID: <2f59c4e3-303f-4e13-a0a5-e1b5e5c1a37f@oracle.com>
+Date: Thu, 2 Apr 2026 16:13:13 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm: fix mmap errno value when MAP_DROPPABLE is not
+ supported
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, ljs@kernel.org,
+        Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
+        surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
+        Jason@zx2c4.com, shuah@kernel.org
+References: <20260402003417.438037-1-anthony.yznaga@oracle.com>
+ <20260402003417.438037-2-anthony.yznaga@oracle.com>
+ <20260401174440.0f85ea303f0a027b50d99e5d@linux-foundation.org>
+ <ca14b239-26db-479f-ba58-11e15f2379eb@kernel.org>
+Content-Language: en-US
+From: anthony.yznaga@oracle.com
+In-Reply-To: <ca14b239-26db-479f-ba58-11e15f2379eb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PH0PR07CA0071.namprd07.prod.outlook.com
+ (2603:10b6:510:f::16) To SJ2PR10MB7653.namprd10.prod.outlook.com
+ (2603:10b6:a03:542::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260402223108.650572-1-jmattson@google.com>
-X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
-Message-ID: <20260402223108.650572-4-jmattson@google.com>
-Subject: [PATCH 3/3] KVM: selftests: Update hwcr_msr_test for CPUID faulting bit
-From: Jim Mattson <jmattson@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Clayton Pence <ctpence@google.com>
-Cc: Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR10MB7653:EE_|PH7PR10MB6459:EE_
+X-MS-Office365-Filtering-Correlation-Id: a0b8b5a2-607f-4370-340a-08de910d6bed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	urGzMV/3zilHyJiF1TusDU9OrtH7ePTJ3TwZ0Nf969Ka51h11dq8PJOsolw59oAhjkBR1ecgzO118sXnTSHAuDrTWQgYeWbMFBvKdnWjrmhn7TgzApsGEYfkMMImOqCSh4IGCHC7elEC/K5AJGxn96cHOsz55bsssudMBtjZs3ejba+I+SwZK6/j/pWnSnJSAOgsZdYT6neFMN1Yz6wvV61p7tL7/5SEDvyQLU/sp6TvquEIm5lXYUjeyIkspe+GFbZgjVK6QZZQpgzDwWTxQMavhoI3C1FPzV8S1hjfFPSZgmMb5Nl4cPXbPVvQ380rKUtdfdXQYkGWkScpGFhSp7DeFYr2AE8+nmq8jGM1CS3008nLpWs5YqMVuGDE54CTtN72k2oDqP/pXh7Vdlv1QurL2CiVJNZH2gJ+zoCAFTGcESJ0K8WW/TOl//epP7wj8+WBAcvh2wsMUJqfBAe64+0OKERONGnxF0Tz1V93SNqHOIh8VjX2wu2qfo3eZ100REC9BYUCubzUwcGVFka0ZlQBIBdvJp9y3eDSzM5q1sR59UGk/OtVbmKY8jTgyAzevgRYtFR2Ju+9ux+Ku/5kSPtyek7SyBDn+zMRyKYCWRB3bidZysDSny5WAEwJnn78fsoMsizDgbcd3dTD7Y/2C1lMDIgtRA3RFUN3HZ5jhS+vRnvadkICTY3TwIUm/FpdFGlKEDiwOneT94p6Vag/uqSJMtbODiLZTxrLdyhfNXc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR10MB7653.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TGJWaFh1eWxJNVd0OHBPVkM5ZC9oYXUyZDBGUm9FYitOWHdKQS9DWVBQQ2F2?=
+ =?utf-8?B?d2JsZFB3dW9iaXpHU2dIbVFMd0tJTXJ5allUYlBrV0hlZ3VtWnNWYzMvNmJw?=
+ =?utf-8?B?OEVlRHo5d2plWUNZaGx6SDV3V24xL28wa2JHejlkMHZEN29QNHdzWlVqQUFV?=
+ =?utf-8?B?ZGpMb3NjenpDNGN1eHlxdStwQ2x4d3dxODlhMHY4QXZac3ovZHh3NzlGUC9s?=
+ =?utf-8?B?NGdiaXRqeUxhQktGblZLUHlJeE1EYXNvZXFZUEhMUVhha3NXNzA3dFZjU0M3?=
+ =?utf-8?B?L1N0RkVrMzNSeWFHR2pscXZMaDRZbkdVOWU4eUxnUFVVRHhUSHVvTENFbGth?=
+ =?utf-8?B?T1I5OTVqSVkxSDVXK3gzK0hJZ3I3SzJzaVVWYUhNTm9vc2xlV3dsdThLQ25I?=
+ =?utf-8?B?MlhUd0hOYVRvcVlIQUxvQStwcEpMQmxwNmhVTlBub2Erb242bVZtUGVtQ3M5?=
+ =?utf-8?B?TC80cHpMS3J1YUNtWXIvWE1kK2FhbzdoNm4xLzFqT0J3ZUZJQXRsMGNTRHVn?=
+ =?utf-8?B?SXNKVnpBcndJWGVMbGN2NXQ5UFVFblVOOFI1YVhhZ0ZQVFU0OHZhdVBpd1Ft?=
+ =?utf-8?B?Ly93d3VCdzFPYjU3Vitwajg1UjRQMVR0K0xVMXV2dmNNNnNSWWFwYlkyZFhB?=
+ =?utf-8?B?djVySmxOQ2ZYUVZGaldNK25UT1dNajVBV3R2NlZWSDA2b1FRWmJSSWhnWWhC?=
+ =?utf-8?B?TlJwRnZ4alhYL1ZxdktZQm5qMCtyM0FGdVhiWjArdnFMaFBFcDJuaTcxeEk1?=
+ =?utf-8?B?VExCRjVEcFBHZGhNSUVaZmpUUjRic3hOS3ZuMEdGWkxXUHdVN3J5WWZRTldJ?=
+ =?utf-8?B?dXdsT2JYaktjbzFFVkFMQzJmU01XbUlJL3ZqdnpvbkZXaHF3K0x4UUhhV3Mv?=
+ =?utf-8?B?S3NvZlV4WVJ6dTRRT2lEdXNFZ00wL0ptNHBHRHN5L3FRcFJaS2NERHR6RjdR?=
+ =?utf-8?B?MnZ6RmdFNkpkQ0RrTmlINGc5Z2s3VThVc3RLanB3akZUTDNVVzNHOEdRWjM5?=
+ =?utf-8?B?eTNoSnhSb2RhaEg0a2k1bWVJZXZ2Yzg5aEVBblVNbXozNFNlSW0zeGhRMjNF?=
+ =?utf-8?B?SnBVZkN2MFFubDZPeUtPK2FTclBVQnhSY0Y1ZDJ0K2t5b24yTjlrelVVOTgv?=
+ =?utf-8?B?Wkl3bHZLUlJvZHhQUnRFOHptM1puZDVHVmo3cUEzdm5jN3dVaW56MDdvbHBq?=
+ =?utf-8?B?R1F2T0QzR2gyV1l3ckZPclV6cnczUEF2YTllTWNKcytxQlZoUWV3b0tmdXpV?=
+ =?utf-8?B?T2IybmpBSDN0a0V6S0NtTGlVSDNCQmxkZ3JxRktRSVp4ZFZsZlEzNTJmaTlS?=
+ =?utf-8?B?RDVmWm4zdXN3YnBCUlVLOFE2QkJua0NZaHE3ZnlyWEhtaE1qVlQ1aDhaQjhw?=
+ =?utf-8?B?NkhCMzZjRFR4TldWSDVVWlF3TWNURTYxcHMvU2cxcmxLQU5ZdGRGWk8rcWww?=
+ =?utf-8?B?VllnQXFNdEo4d0g1NFd6dzdNMkFTR2pZRkdFeXA4N2Vmam9DQjdveVF1ZjJ3?=
+ =?utf-8?B?Tm0vc1JPSFUxM1lQcEZDcEFDcFJXRGRhcVoxSUZFNm8xYVYwT01yWXp2bHJu?=
+ =?utf-8?B?QVpCcE9HdndyZXFobGhkUXl2blVZRXZnR3h3eTJraEo5MDV5QWVySXVtSjdM?=
+ =?utf-8?B?UFJZQVdFS1Jycm5xS3Q1Y1o5RWx2bHRBd2tUcVN2REx0NzdwVFRkeTVCaUJ5?=
+ =?utf-8?B?TklTQ3JFcmlNdUFwcUVIU2VOSDdPcUdLQjNTMlQ1OTJ0M0JzNUR4eitqUGtr?=
+ =?utf-8?B?a1ZvdTVJeUZyWTNmTjlmYTZ0aWVHMzgrbUViUnBYMElWOFk5d3N0ODA4R3Fk?=
+ =?utf-8?B?S2daWEhVaCthZHZLaEdWZWVvdzhKek9VeFBORzFYaDV3UHhrUllXZjI0V0ZY?=
+ =?utf-8?B?eFpIUnRTSWRNR1AwOGtCdTVocHJrZEZETlpnRXkzSVVXWjh3Y1ZNMVFiSWhp?=
+ =?utf-8?B?VzlLSE1CcC95VHBqMDNPTHpmMytud2RZTVdIT2hyclBsc1RuTnR3MDNWZHZH?=
+ =?utf-8?B?cHI4NG9IZmRnRnIvTGs1TG05Q0pSaUJHV3Bjd2RlZDZHazhKZGJzQWlFdjNE?=
+ =?utf-8?B?a3RaOHM2Tm9CZW93NDA3b1ZvT3F4Z1BsSHYxdGlpVXlOSE1qdVlWYm1XUTRm?=
+ =?utf-8?B?TWtOSmlVcDAxNVhrSVV3MmNnTHZwUUtqelp1WkhyRWhHVmNYVHhoNjNBVHBx?=
+ =?utf-8?B?ckdKREFZMSt2eTVWQjNtVDVJTUxnb0x5NnFMb3V2bU0zMFZ0ZXpVVWZHTm95?=
+ =?utf-8?B?MkdHQ09NUFlKUXhCM2dCbEI0Z253eWNjQVhieWtZWEZIZHEvc0ZxL1A4V1NP?=
+ =?utf-8?B?VThjWHNGT0lHSzlnZXB1QTZlamJLbGV1SzcwSmJ3aXdCYzViN3Q2YW1QeEdm?=
+ =?utf-8?Q?lH2bzukW1vlmS5lo=3D?=
+X-Exchange-RoutingPolicyChecked:
+	E2bOABfEKcG4qPdpn2eWPaYWrZZnyCcaBZevS+3cR0uVbO/8LX0nxbvrDwafGAhkOqTjjDoXJAG81xTG26xXv9MMqpbWGvgGizc1IYIoc03mJ4mZnvDqIcRuzfi4lcUHy4hfEXCg1Gr0a7V3Oj+Ap87UDxo4Ad9WVeg+GaqkqxzIP9M0vX9XegrTS8nLkpXqBei0oHTGTRGt/X36Iq6UGiAUs9GAqGLmaV1RMeaDfxe4IzTJEu95+GgXbXSm8/I1GZmQjmwrPcngkVOUT+/rz+xl+hAN2kdcOkUZv6B2tvtQe+1KRuoJipwzhcqTfOrfxSugU7n9b6rIw2xe7eUtcA==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	IMvI5H+B5UUV6Tvlc0njAS+JJKBsifuNfnFve88VMQRtmBURzniXIEKuzFpgvzDQthoZMgTkgDFdOGvg+nZzRLqjMXfiP6OoxIF2cNtTpsT63itovwhy616E/pPU9wBJYDBcoMPmAXwfe6+mUQD0+2ruk17n4xXLH8TmG5dnhz8GMZNrHprvNvhOzjbDdfabN1bZU8uZYWQxAbeh4Hg//t2gYknewgY0EU2oYB5Wtg7toVWhk15aeC9hXtmLDa1+WPXMiXGP2WhT744BNBBA76OIbswVn5glFe/cQRYms6mu73scPVb0NkXWxQIUVHpcfEevtUeeNrTC+2sOPeEi9PxbBrXiNr3cn1Nkxp06U1CEtvEc+jNjUy9rkI0+VrDhlDvy45OFXQ5NrmlonVVYJ3fQSsWvUrNbGnWcvrFcraRRMzi9LStiPMCrsGc3JZe6qHoXB3VK1N3YKWUtRNnxnEWNSaYOPYe+EpthIGZiKl6S8WLDLyHl03Q+TcbYf7TpY5tiIuAiz4W868lJyX91wdCayHZWQt/QMs/U1TNdn63cU3lktFQ8IUXO26fzM9G4cDHfK4GV3wHxab0swi8+gwkcoKR+lIF2NwoYJnNqoPM=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0b8b5a2-607f-4370-340a-08de910d6bed
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR10MB7653.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 23:13:16.7626
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8QVUBJCfWz4D3uVVtM9gYLjSYOhz+hlNk2uHKLafx6CmaGHhghuUhgylaDIQYvdY0J4qi0x89UsxqPjVRKlK56JT2Dc69wkHuHlKHu4fR1E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6459
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-02_04,2026-04-02_05,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2603050001 definitions=main-2604020207
+X-Proofpoint-GUID: ZQaUbzErxP8keXkz1xuRAR2H0ULPUd_S
+X-Authority-Analysis: v=2.4 cv=G7cR0tk5 c=1 sm=1 tr=0 ts=69cef812 cx=c_pps
+ a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=A5OVakUREuEA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22 a=yPCof4ZbAAAA:8
+ a=VwQbUJbxAAAA:8 a=OiMHfeZHMkmyc8z7bLAA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: ZQaUbzErxP8keXkz1xuRAR2H0ULPUd_S
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDIwNyBTYWx0ZWRfXyDJtz6RxhRZ1
+ fhBcNikxtzPPOOALXLEWTxzl58JF4D8N9UzTmeNoBz++xmhp1nYjmLcx7XQ+GQXynK8g6dCRI9L
+ cg0Ojzl5Dp5Z5K2mewjUQ8Q+vayRGh0Nl5wb9D6o0E50fA10xHEWVaAzXdH04WW9V4c/QEyfbvs
+ sqwk1O4npTUX5q5BGLUNmUk6IAqGnbQgqm4E8UM68SUtKrBPJETZa9Qtks5N7575HHAVqZtmtd7
+ bvpWwu6ibA0EuBLmoXeI33p60eG00TWc2MMg/izHT7o9R0ZOi+9S1kfz1oD0I5T1S4JHytaYL9a
+ QawPK4Q5n7hL8motfaofJoB/HsIxuPWFe0wolLD5dFJF5EuwVE7sJX+B4Iwj+TzvTrLHPaPA4mf
+ Ky6P26fCEHP1tCA9XQFGgdOtMPi94jSicFjnuFtUMVI9zoJXAdnVIH3SdDFOptsexHK0rHNP+HK
+ qETC4rnhNhJm/f6ONwg==
 
-Add BIT_ULL(35) (CpuidUserDis) to the valid mask in hwcr_msr_test, now that
-KVM accepts writes to this bit when the guest CPUID advertises
-CpuidUserDis.
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- tools/testing/selftests/kvm/x86/hwcr_msr_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/x86/hwcr_msr_test.c b/tools/testing/selftests/kvm/x86/hwcr_msr_test.c
-index 10b1b0ba374e..5357281e6e4e 100644
---- a/tools/testing/selftests/kvm/x86/hwcr_msr_test.c
-+++ b/tools/testing/selftests/kvm/x86/hwcr_msr_test.c
-@@ -11,7 +11,7 @@
- void test_hwcr_bit(struct kvm_vcpu *vcpu, unsigned int bit)
- {
- 	const uint64_t ignored = BIT_ULL(3) | BIT_ULL(6) | BIT_ULL(8);
--	const uint64_t valid = BIT_ULL(18) | BIT_ULL(24);
-+	const uint64_t valid = BIT_ULL(18) | BIT_ULL(24) | BIT_ULL(35);
- 	const uint64_t legal = ignored | valid;
- 	uint64_t val = BIT_ULL(bit);
- 	uint64_t actual;
--- 
-2.53.0.1213.gd9a14994de-goog
-
+On 4/2/26 12:17 AM, David Hildenbrand (Arm) wrote:
+> On 4/2/26 02:44, Andrew Morton wrote:
+>> On Wed,  1 Apr 2026 17:34:16 -0700 Anthony Yznaga <anthony.yznaga@oracle.com> wrote:
+>>
+>>> On configs where MAP_DROPPABLE is not supported (currently any 32-bit
+>>> config except for PPC32), mmap fails with errno set to ENOTSUPP.
+>>> However, ENOTSUPP is not a standard error value that userspace knows
+>>> about. The acceptable userspace-visible errno to use is EOPNOTSUPP.
+>>> checkpatch.pl has a warning to this affect.
+>> Sounds very reasonable.
+>>
+>> EOPNOTSUPP is clearly a networking thing so what on earth is it doing
+>> coming out of mmap code?  Our poor operator is now looking at a networking
+>> error code and wondering what this supposedly non-networking
+>> application is up to.
+>>
+>> But just that's a pet peeve - I lost that one decades ago.
+>>
+>>> Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always lazily freeable mappings")
+>> Nearly two years ago so I think I'll add this to mm-unstable for
+>> 7.1-rc1 and shall let it trickle back a little more slowly than might a
+>> 7.0-rcX hotfix.
+>>
+>>
+>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>
+>
+> But
+>
+> ~/git/linux/mm$ git grep ENOTSUPP
+> hugetlb_vmemmap.c:                      ret = -ENOTSUPP;
+> mmap.c:                         return -ENOTSUPP;
+>
+>
+> Should we fix up the other one as well?
+>
+I'm looking into this. It's returned for the case where vmemmap mappings 
+cannot be split/freed because they are self-hosted due to memory 
+hotplug. Many callers end up ignoring the error, but there may be a way 
+for it to be propagated to userspace as the errno for a failed write to 
+a sysfs file.
