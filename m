@@ -1,69 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1BDD384232
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 20:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB551F7575;
+	Thu,  2 Apr 2026 20:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775161606; cv=none; b=ifJ7viebg8bim9a9S1PppWu/BG22mHJnOGfeMQD2xaCSx26uqdfeNUh43K4e6y6piI14SJGxRrQBPb20hyeiUiDA5Irszc9xdV//D0MxwYxLS+jyvoVyM5vFVLdn5vMc6RHSIFLDE3EVL4ptDLMC+QDTWlkXhKRfMoC9ESCUQ2c=
+	t=1775161827; cv=none; b=ji7j6jrRW+o6FMB4bCgRzUgk/tHJtou+O2q6hnWzgogVSjmINWHdMVMutx9TXvjk3GzvSqLgnRmnngvTF6Po+JPZrJSUbwJhVpxDK0Ns8Yi66MPOkJn8c7B3vxysTcP0U9b55M21O3ms71MVGkWGWB+xE4w5niVPuNnhnFSLBGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775161606; c=relaxed/simple;
-	bh=4DYw+Ix5GAjX9NcaEm6lX1l6AjvR1uyssa1w9DS4V/A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DG4PFLw+nqeSizuAW1Y7lRrjsAtxecvdc2SJlL0kWG3v4fbnu/UazFkOQ7w1wxvEzxhicWtUynLg2LlHNwIZieA0iOkiOReGHaDx72Ev5JvVjvLLMwJm9qmMgXBku3JV+KWQcInmRiIMGRyKnvRwHiyWL86q3JIs4X7KzMhbCvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVnc6NtE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775161827; c=relaxed/simple;
+	bh=onzn5soQ8SI5RtgTGNOpWEEtCO0mzbfi8iMp2h0fnj4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PVr34AmNqtnd39EIqFejzhf8lszJo4IlWcscGvawkwMtS/oW2a60CImVgLO5xdo9kQLBtYKqZATdWpAG2Ijd7MkhFMAvNbNZlsrDdTPbEl418PLu2XSC8uYa8IW7UIpwplV7J+vKpb4tbvfHICF1Yc/XPgNHEzxy3Z3ATs9S0Oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R86BR4qW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVnc6NtE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3AF6C2BCB6
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 20:26:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R86BR4qW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427AFC116C6;
+	Thu,  2 Apr 2026 20:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775161605;
-	bh=4DYw+Ix5GAjX9NcaEm6lX1l6AjvR1uyssa1w9DS4V/A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SVnc6NtEwNl1ukkemdgwNbZgcNlnXaqGr0+KHATvqlNk93DxfT2mGg20rfraieQpi
-	 UjjRza9af6spaxsnV2vXFyK6t+WrtopCi5MxTNhgmpptjQtl5fA79949m3CNjpmLGX
-	 axKoS5GQSGplnQsx7BToDTQN5vaWmIA1RlFSXwiwKjCrh9GsaG61OirBAHw2UWidYt
-	 OlH31Pmqs2VWU42+Lx/fiumqMsjzf9/VLLu7bEcvYVFaxCRliiS0RFB8W4VcGqAt4V
-	 AkFD+QmrHkQwyETmMNLxY7J0Bfe2GvY9xc2bxN1fbeVQZYEK18qrrnAQ8E/xZnFQ8F
-	 TJhgsO3OXNTzQ==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-66b2f6e983bso2156723a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 13:26:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVVwhY47KS6LC/kU5wky5ugEAn7RcEowDufwtrrPqtTf6/qlZ9qmyZtPMWEJC5gWOeXxiamafVCngW/1lM/+4k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhEWZQN5I4AHTRcgM6A/ByPmn5wzk1DQwOQh0d24cZ/PWAJXgH
-	bIskxcIgG5N7Zf878jUk9RgglHErK20QT6CEzAjeUmYdhXBol3xBiyztlfvvPec3fRgeZzjV4Y6
-	QD5leTtXWE0vvIANz33Ir18M3P4rP+Y4=
-X-Received: by 2002:a17:907:3d51:b0:b94:1d92:7eb with SMTP id
- a640c23a62f3a-b9c67802d69mr14905466b.18.1775161604406; Thu, 02 Apr 2026
- 13:26:44 -0700 (PDT)
+	s=k20201202; t=1775161827;
+	bh=onzn5soQ8SI5RtgTGNOpWEEtCO0mzbfi8iMp2h0fnj4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=R86BR4qWx8S0BqdfIYXKPY4f9Rfits/tisuHRSr3AES5KVJF7eB8R4nrDDhs6ni+D
+	 zAQjwA5buxDuj7RtazAYKB5Wy2ToEgOf+wOObILNK95JEAtTUz2bOvleoNL7MT8N2A
+	 jK9PtXa0sxSWZmKME0Re4KZmeKhlkhHti+5trc3rEHuwZTVWHGmtiG4zeQZmuBhhyq
+	 gGriiRlw1tTxe2dob2AqZGegiSe65NV7MRqimFawGroy3dpJt+BEAa8SVqid87v7vP
+	 KxIZ1ywgeyILEQ7FV1mEC4kmtYq7ikqR/iX4pAzbvKM0ly5aQQRB6EmA31YfjIRNLR
+	 WB9wLB3WTSPeA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9F5D3809A09;
+	Thu,  2 Apr 2026 20:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260327234023.2659476-2-jmattson@google.com> <202603301501.N2sdlIQ9-lkp@intel.com>
- <CALMp9eSO6gz4R0f1S=E-sA3YE8KE0uJ30otcGsMV1NS3ujUcNA@mail.gmail.com>
-In-Reply-To: <CALMp9eSO6gz4R0f1S=E-sA3YE8KE0uJ30otcGsMV1NS3ujUcNA@mail.gmail.com>
-From: Yosry Ahmed <yosry@kernel.org>
-Date: Thu, 2 Apr 2026 13:26:32 -0700
-X-Gmail-Original-Message-ID: <CAO9r8zOymT3dV3dDHfhHTM7oawuuzpysWEVgs2-dShZ9BfUo9w@mail.gmail.com>
-X-Gm-Features: AQROBzDeel1_OQ9-UKJ3j7R37ZttRLzLFRNbeAQTW_xCWYguBo3oZA-kZDOKmw0
-Message-ID: <CAO9r8zOymT3dV3dDHfhHTM7oawuuzpysWEVgs2-dShZ9BfUo9w@mail.gmail.com>
-Subject: Re: [PATCH v7 1/9] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
-To: Jim Mattson <jmattson@google.com>
-Cc: kernel test robot <lkp@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v7 0/3] libbpf: clarify raw-address single kprobe
+ attach behavior
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177516180954.605612.3114427119348580758.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Apr 2026 20:30:09 +0000
+References: <20260401143116.185049-1-hoyeon.lee@suse.com>
+In-Reply-To: <20260401143116.185049-1-hoyeon.lee@suse.com>
+To: Hoyeon Lee <hoyeon.lee@suse.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ yangfeng@kylinos.cn, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-> It looks like svm.h should include x86.h.
->
-> Sean: Do you want me to send a new series?
+Hello:
 
-FWIW, this is the same problem as:
-https://lore.kernel.org/kvm/CAO9r8zPuDcHMObfzTQVY-P0Z3kXZbw6y5KJizxvpFWXdW7uKbQ@mail.gmail.com/.
-So only the first series that gets picked up will need the fixup.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Wed,  1 Apr 2026 23:29:28 +0900 you wrote:
+> Today libbpf documents single-kprobe attach through func_name, with an
+> optional offset. For the PMU-based path, func_name = NULL with an
+> absolute address in offset already works as well, but that is not
+> described in the API.
+> 
+> This patchset clarifies this behavior. First commit fixes kprobe
+> and uprobe attach error handling to use direct error codes. Next adds
+> kprobe API comments for the raw-address form and rejects it explicitly
+> for legacy tracefs/debugfs kprobes. Last adds PERF and LINK selftests
+> for the raw-address form, and checks that LEGACY rejects it.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v7,1/3] libbpf: use direct error codes for kprobe/uprobe attach
+    https://git.kernel.org/bpf/bpf-next/c/f547cf79475f
+  - [bpf-next,v7,2/3] libbpf: clarify raw-address single kprobe attach behavior
+    https://git.kernel.org/bpf/bpf-next/c/e1621c752865
+  - [bpf-next,v7,3/3] selftests/bpf: add test for raw-address single kprobe attach
+    https://git.kernel.org/bpf/bpf-next/c/9d77cefe8fcd
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
