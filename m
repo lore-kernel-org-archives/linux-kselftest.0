@@ -1,82 +1,60 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B063A782A
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 23:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6B93B6C1D;
+	Thu,  2 Apr 2026 23:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775172167; cv=none; b=CUIxkDzMK6ZRpXMtdV7HIK+XvmzwdKUNVYJqKAPQ3qaaoDOzZXnWEMuSvGp9NbZvS8LUFl9hXALjnV7X3raTXpNnewfn1dX22wQ2YU4XkPs090lrJZaZQO7ldABWAASnni0lTAlgx4/+YAg0aA9WHCQFFqKyqOpTukEvmHPXyUc=
+	t=1775174391; cv=none; b=PI+aqEuuEBT4SjhyTQ6NEkN6sO9p9rF5UxhyOda5ilhHBwl6Wni5+Iuqczfp9oeyOMPQ4fcUzffPVE55+ChCekMLl7XZygXN283XFoicg6UvGW/tnE/q+7MyapDl1T2MwkX4dlCyQrJ14oboKZlj+3s4+VD1m9OKu72ULo8tFBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775172167; c=relaxed/simple;
-	bh=DTdy0wGHn9nJPdYwvVneV3WjcTxwCTyqAhd+aFkuiNE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SRqzytaXNlqQcopQ90SxmIujLzPLik282/rWctje95S9EPwJSRusP/YkiQTxkPrsyzB4BbGmTtUS0W+DijjaZI02ryoNQFMfAMCG6XLnlzy6t7VZCesVIpnLF7Alg3Kvq07pNW/+71Bb0miZIiXUdUi7yt4k0W7C6Wx2wO2PG7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=UjhHxjKB; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1775174391; c=relaxed/simple;
+	bh=Z0epq685YK9aw011fJkTOzjs7AOX+98uISA4LTq2gds=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=halyS/D2rlVwaGz//YGqArm7Jyi4wU32izLv+9Pp6L6ol7cg4A7BZ7G+HrvPhFJZvC+sdHRSbl2zhlTachiotMsxbKF0X0Wh0nsUmXtPg+QblkO/pg/uCEMemd2+j9MlyOtT/YWYThCFhVBwtBnto1SBzKKnrbUjeh3uekeWkXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=d7iVicLi; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="UjhHxjKB"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c76cce85bd9so406498a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 16:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1775172165; x=1775776965; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tPx/23GDUuRn7oQUGbzWX+WqVXLgjJ891p+NWHhkBJw=;
-        b=UjhHxjKB4J/ucIQj7IzKGn5JTn6iaN1jQ2phJYbD3qQjYP3JQNZYyzgsUzemltU19P
-         LAXcC448YSqCnrv378IUKrc06/+7EZss4kPEeExTjLgRaRsSZoJCu30Vc8rsfIPXksnw
-         FWFIxiNGRf5AQbpBfM9HZiEbqnarvsRND0AlXI5/FPN7ByZQlJ13/BUYMP8y2panWQ0X
-         pGxjjZ3sEUpnqkmefTmf26MqjtBLDsZ6waPPPc3yS4/yIgXoTLoevSIsDtH2Frj8crek
-         ggjn21Nq73noJsTwpOZaHJVZ4mt3H+LnQRtqm/ac0WYHeUPy4U7UPkyPizYauOkGg13H
-         iQWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775172165; x=1775776965;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tPx/23GDUuRn7oQUGbzWX+WqVXLgjJ891p+NWHhkBJw=;
-        b=F+xaGpIL0HCzo7PL/x74X2AjafvG9nAWi4OClBS/PJUCq4/0ECnH2g4ZIZb1E7W3LK
-         bxk15Rf3QjQvjJZd+ewtlGIv0imAoA3F3LgIa6vUqmCHgFMhjNSamMaj6QyhrQnI5Txt
-         OQiKbkpnVS4U4e6kwFfWv6Fbr945xZz7NjA7JW9kHdns09pKhKA/YY25nuScmkzWA7zB
-         0CRXp6pIJYoADb+XXm/Bnvq1tv+hM2GYgSTgDNnc3NAxkqRaGO/vXMxYuTVggawBqk9Q
-         KrPDZFDlhWxkKvOAY2d+pGW5LvRZWkqJwD2AX3TYvi4nGLBnU7vdFIMXNuDZWgaTxis6
-         ryRw==
-X-Forwarded-Encrypted: i=1; AJvYcCW4bsWkvKYsMs4a9iNb9ztXT4XAbPfwV17A3vhxiTv/fCBTLriALdV/0nAV4oYAvBWJyhMsUidUZ+MvRByywrs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTS8eAK+jcON87+4ordyegvjRjgWLVQbsIfKmUVKe8o6LSPoNY
-	oYzYJRRxEp6krebHUzp/7exr2ZZVdxID9oLPOI2zABNni9YI3mi2D7SvIXttFQ45wIM=
-X-Gm-Gg: AeBDieulUv1T6HZqFIFO4SYBmQlJwYMFH15fg9ZxRSIlRd1hDje2kiaedhfkxVR09bH
-	CesYWjtyKGKRxlIfLA1x4+FgvzkuSmbnEZK8lFFs9g1aMAkm/ry54SnJO4mMlnrN8WtqvzYwjCP
-	ZZf9DeTAxHgHEmGs0YTqoouLkZn96AT/OX9UdhQIl0WWOA80hyrig7Rj3SUDF/rUEWlxzFiCasc
-	x3lq3M4c6qM5kyfROHj7v5yQRdXgjsVvZGp/B+494aGGMKONOHhurUN3yd/6sttvM8kMN0GOrwJ
-	gMuDQ3UWOP/i/e2Znmm97lqFfZ/QiEycNdB7nmIHQwu3lZMNE0FltIBRiklQ46skO2uTFdpzCMH
-	OcI5z+mYGeFqeO56i1WvRZXYxdNVpMCRTTVNciAkYw4kklvBoWPOLB2BLu/wxk/Hhu6jTQhTow1
-	OayPLTYzW6IXdOck8=
-X-Received: by 2002:a17:902:f611:b0:2b2:65db:8c51 with SMTP id d9443c01a7336-2b28164cba3mr11916705ad.8.1775172165399;
-        Thu, 02 Apr 2026 16:22:45 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:5d::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749794e8sm42617235ad.53.2026.04.02.16.22.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 16:22:44 -0700 (PDT)
-From: Joe Damato <joe@dama.to>
-To: netdev@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: andrew+netdev@lunn.ch,
-	linux-kernel@vger.kernel.org,
-	willemb@google.com,
-	Joe Damato <joe@dama.to>,
-	linux-kselftest@vger.kernel.org
-Subject: [net-next 3/3] selftests/net: Test PACKET_AUXDATA
-Date: Thu,  2 Apr 2026 16:21:59 -0700
-Message-ID: <20260402232203.2004496-4-joe@dama.to>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260402232203.2004496-1-joe@dama.to>
-References: <20260402232203.2004496-1-joe@dama.to>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="d7iVicLi"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 632FBp0I2879374;
+	Thu, 2 Apr 2026 23:59:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=KgAgI6QiIGv+4vwAVEjIV77rTVYiL
+	2wkbzExgyHD95U=; b=d7iVicLiRl6O85ptCNGJYVRkUrzi34eMKS6EcHxOp9z1g
+	Vq8WmWwDqRsciZ9xn4/TzAUYm40jvtYACN+8KCe4s7ODg01TfBK0GH2j2g+pxVup
+	kfL/+r6mynVjxv6rCBwws/vH895XZBemZM8BtmweDV3c9Ib6zE14MHpavvXL0V2j
+	A6y7cquNt6Qt9qyY75WOKma9qaD7pD3sAS1pf4K6nzbKnBVH3Ve/xpr/mRC/jQyQ
+	cJOWKL5tMbfaxN9XKDXMoFK2j9APa5SyGTbBg7z/bfIBYfyI4m04376xstGYX1Ia
+	x8F7RwNMKcQhGjQW8M7fd4HmpNZcEE3HBlz+LxKZg==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d65s11dxv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 Apr 2026 23:59:38 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 632KoxLO008476;
+	Thu, 2 Apr 2026 23:59:38 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4d65ekna7s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 Apr 2026 23:59:37 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 632Nxb6N011992;
+	Thu, 2 Apr 2026 23:59:37 GMT
+Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4d65ekna7a-1;
+	Thu, 02 Apr 2026 23:59:37 +0000
+From: Anthony Yznaga <anthony.yznaga@oracle.com>
+To: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
+        Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
+        surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
+        Jason@zx2c4.com, shuah@kernel.org
+Subject: [PATCH v2 0/2] fix MAP_DROPPABLE not supported errno
+Date: Thu,  2 Apr 2026 16:59:31 -0700
+Message-ID: <20260402235933.10588-1-anthony.yznaga@oracle.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,136 +62,55 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-02_04,2026-04-02_05,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=896 mlxscore=0
+ phishscore=0 adultscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
+ definitions=main-2604020214
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDIxNCBTYWx0ZWRfX8YZMLSTNr/lS
+ jy4LXzezIKxk0PHM0M50iSwy02pVt0pphOez1gepZoeQVrghTS0L1/PCe7nNDRms/sbET7YhKHQ
+ 8zhkmC2RTgBsGzLxmRdSRMkObjwJUTiaXMTY/cF8Xm1sPJby1I0po0rfNZ3fgX/N3xTFZ8r8DiU
+ hIAd65G7mf8DCoSXJhb+BUl+ZbHtIhRB5YJpNwW/F5N3/d7gwNkwAO8jeImvYI5pbuH+986t6O0
+ P1hgRJrPKh0OA7muKD9flYei9Zv/h8ueFqqK+nYMqXSkTse+99B1EdqQZl2eEmqQQCzF8xtF64L
+ Ceju3OC0CyepgB2vf9417GjTUO3qjhvNYwaAJ6OprmAraor4ry0Ywjc1W2/FdAha3l06WeJvWZm
+ AX680frjPD7Rn+EplRo8wSxn/Lb9zEP3CqIIEUgxueBRv6+yC4fjHXRnSPZ8qX5nj7LhYiHlcZO
+ 7ZIlcl9SSz7J1fujHCeSLvEpF8DfYixvne6sqmSc=
+X-Proofpoint-ORIG-GUID: 857CPNq1TVNNUZDOJnyMECOquKgSaTXY
+X-Authority-Analysis: v=2.4 cv=BvOQAIX5 c=1 sm=1 tr=0 ts=69cf02ea b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=o5oIOnhZENCTenyL_yNV:22 a=hZgukN1trT8sADp7EUgA:9 cc=ntf awl=host:12291
+X-Proofpoint-GUID: 857CPNq1TVNNUZDOJnyMECOquKgSaTXY
 
-Extend the packet socket selftest, adding a recvmsg path, to test
-PACKET_AUXDATA. Check basic attributes of tpacket_auxdata.
+Mark Brown reported seeing a regression in -next on 32 bit arm with the
+mlock selftests. Before exiting and marking the tests failed, the following
+message was logged after an attempt to create a MAP_DROPPABLE mapping:
 
-Signed-off-by: Joe Damato <joe@dama.to>
----
- tools/testing/selftests/net/psock_snd.c  | 57 ++++++++++++++++++++++--
- tools/testing/selftests/net/psock_snd.sh |  5 +++
- 2 files changed, 59 insertions(+), 3 deletions(-)
+Bail out! mmap error: Unknown error 524
 
-diff --git a/tools/testing/selftests/net/psock_snd.c b/tools/testing/selftests/net/psock_snd.c
-index 7bbce274b9f0..682e0afe364d 100644
---- a/tools/testing/selftests/net/psock_snd.c
-+++ b/tools/testing/selftests/net/psock_snd.c
-@@ -40,6 +40,7 @@ static bool	cfg_use_qdisc_bypass;
- static bool	cfg_use_vlan;
- static bool	cfg_use_vnet;
- static bool	cfg_drop;
-+static bool	cfg_aux_data;
- 
- static char	*cfg_ifname = "lo";
- static int	cfg_mtu	= 1500;
-@@ -281,9 +282,26 @@ static int setup_rx(void)
- 
- static void do_rx(int fd, int expected_len, char *expected)
- {
-+	char cmsg_buf[1024] = {};
-+	struct msghdr msg = {};
-+	struct iovec iov[1];
- 	int ret;
- 
--	ret = recv(fd, rbuf, sizeof(rbuf), 0);
-+	if (cfg_aux_data) {
-+		iov[0].iov_base = rbuf;
-+		iov[0].iov_len = sizeof(rbuf);
-+
-+		msg.msg_iov = iov;
-+		msg.msg_iovlen = 1;
-+
-+		msg.msg_control = cmsg_buf;
-+		msg.msg_controllen = sizeof(cmsg_buf);
-+
-+		ret = recvmsg(fd, &msg, 0);
-+	} else {
-+		ret = recv(fd, rbuf, sizeof(rbuf), 0);
-+	}
-+
- 	if (ret == -1)
- 		error(1, errno, "recv");
- 	if (ret != expected_len)
-@@ -292,6 +310,31 @@ static void do_rx(int fd, int expected_len, char *expected)
- 	if (memcmp(rbuf, expected, ret))
- 		error(1, 0, "recv: data mismatch");
- 
-+	if (cfg_aux_data) {
-+		struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
-+		struct tpacket_auxdata *adata;
-+
-+		if (!cmsg)
-+			error(1, 0, "auxdata null");
-+
-+		if (cmsg->cmsg_level != SOL_PACKET)
-+			error(1, 0, "cmsg_level != SOL_PACKET");
-+
-+		if (cmsg->cmsg_type != PACKET_AUXDATA)
-+			error(1, 0, "cmsg_type != PACKET_AUXDATA");
-+
-+		adata = (struct tpacket_auxdata *)CMSG_DATA(cmsg);
-+
-+		if (adata->tp_net != ETH_HLEN)
-+			error(1, 0, "cmsg tp_net != ETH_HLEN");
-+
-+		if (adata->tp_len != expected_len)
-+			error(1, 0, "cmsg tp_len != %u", expected_len);
-+
-+		if (adata->tp_snaplen != expected_len)
-+			error(1, 0, "cmsg tp_snaplen != %u", expected_len);
-+	}
-+
- 	fprintf(stderr, "rx: %u\n", ret);
- }
- 
-@@ -312,6 +355,10 @@ static int setup_sniffer(void)
- 		if (setsockopt(fd, SOL_SOCKET, SO_RCVBUF, &one, sizeof(one)))
- 			error(1, errno, "setsockopt SO_RCVBUF");
- 
-+	if (cfg_aux_data)
-+		if (setsockopt(fd, SOL_PACKET, PACKET_AUXDATA, &one, sizeof(one)))
-+			error(1, errno, "setsockopt PACKET_AUXDATA");
-+
- 	pair_udp_setfilter(fd);
- 	do_bind(fd);
- 
-@@ -322,8 +369,11 @@ static void parse_opts(int argc, char **argv)
- {
- 	int c;
- 
--	while ((c = getopt(argc, argv, "bcCdDgl:qt:vV")) != -1) {
-+	while ((c = getopt(argc, argv, "abcCdDgl:qt:vV")) != -1) {
- 		switch (c) {
-+		case 'a':
-+			cfg_aux_data = true;
-+			break;
- 		case 'b':
- 			cfg_use_bind = true;
- 			break;
-@@ -436,7 +486,8 @@ static void run_test(void)
- 		check_packet_stats(fds);
- 	}
- 
--	do_rx(fdr, cfg_payload_len, tbuf + total_len - cfg_payload_len);
-+	if (!cfg_aux_data)
-+		do_rx(fdr, cfg_payload_len, tbuf + total_len - cfg_payload_len);
- 
- out:
- 	if (close(fds))
-diff --git a/tools/testing/selftests/net/psock_snd.sh b/tools/testing/selftests/net/psock_snd.sh
-index b6ef12fad5d5..111c9e2f0d21 100755
---- a/tools/testing/selftests/net/psock_snd.sh
-+++ b/tools/testing/selftests/net/psock_snd.sh
-@@ -97,4 +97,9 @@ echo "raw gso max size + 1 (expected to fail)"
- echo "test drops statistics"
- ./in_netns.sh ./psock_snd -D
- 
-+# test aux data
-+
-+echo "test aux data"
-+./in_netns.sh ./psock_snd -a
-+
- echo "OK. All tests passed"
+It turns out error 524 is ENOTSUPP which is an error that userspace is not
+supposed to see, but it indicates in this instance that MAP_DROPPABLE is
+not supported.
+
+The first patch changes the errno returned to EOPNOTSUPP. The second patch
+is a second version of a prior patch to introduce selftests to verify
+locking behavior with droppable mappings with the additonal change to skip
+the tests when MAP_DROPPABLE is not supported.
+
+v2:
+- Remove unnecessary mlock() call from selftest (DavidH)
+- Change tests to not exit on failure (DavidH)
+
+Anthony Yznaga (2):
+  mm: fix mmap errno value when MAP_DROPPABLE is not supported
+  selftests/mm: verify droppable mappings cannot be locked
+
+ mm/mmap.c                                 |  2 +-
+ tools/testing/selftests/mm/mlock2-tests.c | 87 ++++++++++++++++++++---
+ 2 files changed, 79 insertions(+), 10 deletions(-)
+
 -- 
-2.52.0
+2.47.3
 
