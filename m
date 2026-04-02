@@ -1,115 +1,141 @@
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7AB539658D;
-	Thu,  2 Apr 2026 10:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E273DD50D
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 10:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775124599; cv=none; b=ub2uXMBRU0hgHEW9gED8QSXeFkoB89UJrHzDke/riAhq0mudZdVNJw5dZA7pRa2kbEInY4+SG2KyvtPa7dGhbSZLDU9GsusHE0bGZSCEdaPotClIwtpRwSfMXEHVGT60jG6pCcdC1r86OKhh6DOIZhmhAb7yqL5ogSkkNWEgaPI=
+	t=1775124617; cv=none; b=f2Ott8CnUgnjK0TGHyU/S59aBmQfCROZaxLN0YHHMbp8w02qXJ+G9I65O7R/kvLsconrK8hqA4OxjcENRjf2whiwqAQjICkyBEbr37S65dEudAc8ao7D1QFEclnkrHCZLTRF9TIvMiFU0+c26WKR/u4WwYYk3K6u44nuUHfCwfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775124599; c=relaxed/simple;
-	bh=Q8my8z2czIQTbbasLPpWnzgJlYNGB5PfMpthwy71GAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ke3Q6f4wPgtD7tEYayMTMJOANP/OEKwrJZd0Mj9JfgPij4r5zVwczfIt3I/titarhULIroraY3rZWSTlDoJ1Ptb+F/kCxGviQ6mBj8Qtcc3nj2bvsjBtu0l9Puf5HaEi/m5jmpxSsJuFZa0cr9oMIIlvAIX08ZK3/e0693oH3zQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=D/PMtfr6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VtvJWq0l; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1775124617; c=relaxed/simple;
+	bh=zHFrCPHhU82trU3T1Txy7LHnZJ2znMMSxro8pRXdEog=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZaqZk0oy8AzgSmOUdUI4idctDuLHs7zRiCwSj43t+MuboeqNx4cM4iv5xxzYHGOmU+fwMaMKtnjHNlVIQ7zGrpJYXHXuRWQqY+Q+dAygRMPMdypXlfSjY9zbpOxSPcnRuyVKtbkr0cY4mSl294T5++jXgTni4BiAQR3iozD9eu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fn5RhOQW; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VYRQfAoC; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="D/PMtfr6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VtvJWq0l"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id E5F80140027D;
-	Thu,  2 Apr 2026 06:09:56 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Thu, 02 Apr 2026 06:09:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1775124596; x=
-	1775210996; bh=/X0lAsHuUwtq9gmFrxKkkryl3B8IzaJkdJQ1jRzZxrI=; b=D
-	/PMtfr61UJvI5m/aTZmvLqcnnWMEVtO/4pdim+MWiT34EoH8MJu0WyC43/6sjEao
-	R6QqMmQ7QEINma59qNcxVtAfYJPyf1XRwSx532d865Vd1ZmaUinTqeEUzTyMnoRP
-	vqn9rbv7OztMWL5svYpBqlMw+Baf539nghuiRqpJEZHn/VI/QHUxRzySRUobRAWi
-	80K9YUT4zUIzFArd7Dp40ZuczRuzmm2HFQ+XjeNQ0En5YF0gZgTZ5TXpb4jN+Tg+
-	PU9uM//MY2cr4yei0I8bpUFVP2CBp8YABFu3c4CUfmml0WY+jfIR1XhkghyPv0pf
-	XDEYgBD323MOfOlUSI7tg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1775124596; x=1775210996; bh=/X0lAsHuUwtq9gmFrxKkkryl3B8IzaJkdJQ
-	1jRzZxrI=; b=VtvJWq0l+QTsbUhUsEuf4nNO3Bq67hnFtGR6MO6hJCDyIuhqliG
-	L6D7aeCqt08dQInLduDaNxgeJ5IfuFzmClV78bWR17ITnTc3hZGBWV6KhMIxUgr3
-	dgbGyNJVL8y/NRuhpmgfBBC3iz72GQbJpSv0YCoPWylNHYHYLOcrntyJCIg0s6Jh
-	CALpvFwy0jdL7a6t+5tzbGsYjzKqyeP9GPZyhrv6pQ64biPaaF0yEHPXc1f6d5OR
-	sMzRbtplKPo8NLgFq37CB7lYzorg3QWpY0eZ6EXVw2QMaDW/RCFWJddQIptKKU+V
-	bgevOpJ5135220yFLWbkwjHGJglTFYYbyAg==
-X-ME-Sender: <xms:dEDOaYrrRt09ARH8sZ9nAkdk_8qmSYWBqMZt2ak4HrOV-1vYJZ-7GA>
-    <xme:dEDOaQODtvDGwTu33oTL3spiIP_-sIY0WuDr4vIEvzT0qLfIXXFAAJ14BxdLaQm4g
-    pxx_bhgxE8e2k8842MVpKEmLQZju9yZJtSA8C3swfIeNN4R_Pu4WB9E>
-X-ME-Received: <xmr:dEDOaccQuR72uwHHq6Or6Z9qhnRFq21hX9-pECj-rCJjBCbLazs6RlZkSRrY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdehjeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhnrgcu
-    ffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrfgrth
-    htvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvuefffefg
-    udffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
-    gusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopeduvddpmhhouggv
-    pehsmhhtphhouhhtpdhrtghpthhtoheptghrrghtihhusehnvhhiughirgdrtghomhdprh
-    gtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmh
-    esuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhg
-    lhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohephhhorhhmsheskhgv
-    rhhnvghlrdhorhhgpdhrtghpthhtohepshgufhesfhhomhhitghhvghvrdhmvg
-X-ME-Proxy: <xmx:dEDOaWXAUY48p-_JymtpvTl3N_xTjcXH78ZgbOckuo9_Ii3TekhShg>
-    <xmx:dEDOadC2XshAQ3bkz_x-Xwu2NFlI5J3PjRrkTKQDGxn6DshML8e0Ng>
-    <xmx:dEDOaR41vaIyFjGT3Kiejp7MxmQXbgnEUBSIc0oiPf4TCTKgJJuusg>
-    <xmx:dEDOaU2z4MDDb5AevFSzXkFJOvx4mPyryiHucP85h6GWEKYjoTbOIg>
-    <xmx:dEDOaZturolf87oXhLZ5dss4220ghAwuVvNH1u_c-Td5I5ypYdQMV_xo>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Apr 2026 06:09:56 -0400 (EDT)
-Date: Thu, 2 Apr 2026 12:09:54 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Dragos Tatulea <dtatulea@nvidia.com>
-Subject: Re: [PATCH net v6 2/4] nsim: Add support for VLAN filters
-Message-ID: <ac5Acqsc9cbB089G@krikkit>
-References: <20260330130130.989236-1-cratiu@nvidia.com>
- <20260330130130.989236-3-cratiu@nvidia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fn5RhOQW";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VYRQfAoC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775124614;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vI34ad9TZ0aROIv3z6J1CAQ0jr+pvjoqHVYmg8tKBOs=;
+	b=Fn5RhOQWYFKdDSAHY6i+BgliUfNONbgeAsmFXRwfe096b2QyO6EZoJ3cdnLFHrdtyD+e6r
+	5EcHyBMXVo7BlcVWQif2ZG7Bja26mZ2iBs26PWkew6J41agw9xiD4ZwrFRbkpSUac6nraT
+	mRTEIluRBD0/+RS/djyyh5K7FcHGhKU=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-122-uhz6P16pOJGq1mn8uLgWsA-1; Thu, 02 Apr 2026 06:10:13 -0400
+X-MC-Unique: uhz6P16pOJGq1mn8uLgWsA-1
+X-Mimecast-MFC-AGG-ID: uhz6P16pOJGq1mn8uLgWsA_1775124612
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-43d07f0aca0so569731f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 03:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1775124611; x=1775729411; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vI34ad9TZ0aROIv3z6J1CAQ0jr+pvjoqHVYmg8tKBOs=;
+        b=VYRQfAoCsihuW+YgM7G+OmieWlW7QcB3oYTaylUkuB1qterNJYwfZAjthBBQwsUz4Q
+         TllXpn40O/5msTcgCh4mHA8zCSdYmN4O1pQY2xZku/NCbZxt/YaLdoZ1T+MV6ivNVo3z
+         mSafhlg1pM185Ainhqj248TyPiNLuYZ1LmNnKUz4f9pM0+4fHQkApWF/lAx55022CP4L
+         nXnebY0DU18AKAMC0WWmkYF8eYoMl2OI8Nev8CX582riMHI7QqXwJi+RvuZcAa9wv3ZZ
+         Otydikw6yEEJuilWijZhu0w0zbZGG2gokdXAkRWoIe5f0r0+hS/hMvZOm9S1B3w0o/9q
+         ooRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775124611; x=1775729411;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vI34ad9TZ0aROIv3z6J1CAQ0jr+pvjoqHVYmg8tKBOs=;
+        b=sHcqCZ+RtZJpwjXQy+bUg0gOGbt7Dh+nlf0761edaj7htnwB0eHgt/MMaqUhAJXLDV
+         8YMwWddOm1Pc5UJK0dQJES18UzPsdncbfeJT3dBA+0LYg10QWutriZ0zfjs20EgwW8Fx
+         xPBhIksy0V9DjbIwAXEgfFje4zb9rsNNwvXqLfS45mdhnbtk0llaNp8AEOuwFw8G1FQK
+         EQ7SrmyVcHVbX6/s9eQ49TYTrnfWHBle54FDCwp6Pif0S1q5asgom/jzEBJXII+LH6/a
+         IKlFUxW7+OH59JDvAG+g+KE9xVHojA1Lm1SYxMvLoynUHz8kQ7nSB/c+OwCXU/Zur/hx
+         9Mgg==
+X-Forwarded-Encrypted: i=1; AJvYcCU247+5HkeA38l5A1jAfdINLZwylg8Q2KMMR6lICCK87SgYu8b9ctcDI6NGJXbr8Ju3lkoC0vccagT+Oi/vgGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxwEoeyV/LeUBfiPdAM0TLc6YNxHY2ev2EZp8nmvKeKXkRh0zh
+	xvmQDjjgIVLTU70KkIvelBvIqSKc0XA8Wxd3m46N8Xtadsb4N2wcQytIRAFUZmtNQa25783wW0S
+	a5+gsy5tgOkLOxAqZ/NuWcNwYySkANFfi5uISyKaVOYL2HDpWIjrd+U0VKudQr06qRZ1NiiQ/Se
+	nRrw==
+X-Gm-Gg: ATEYQzz2BcRGr4wP+wH33qKafkqVHaWOLdORPNDNkNkMc5WAoPwQE/M9miglF8dEwPw
+	vOqJSAfXCGFZ7tZdPmr5aHZkJJVZ/5KdD9FnhmnumJJvVYCIv4Wj5lbG1VtRTLHiOj0v0vtu/CV
+	/hXMgmQ9ZCW7daYLufkVpFpSRyIVV3yngm+U5yh9UDuINx7yThvftMn9tTvrHXETqYnsrSHvN9M
+	rPNM9cv4UEiuiHjaPu3L7mPOQe7yEP2vCpX5JYsnJ08bGfHQmz6lAHXzhtBpUDupEivyMQvc2VI
+	5Vs8BM43kqaDvqmGZqNkFM9AGtgODZvFR7wcrR9aCJOSLz0HP56mfCkmYMN4s1BSGZ5clJ5ppBq
+	HZ6is2bGbeSvk/syUnR7O+omkaQRnKCWQKXxefPdrTA7FuDmZDMb1ASjloQ==
+X-Received: by 2002:a05:6000:288c:b0:439:ddf9:a205 with SMTP id ffacd0b85a97d-43d1f1c0348mr4685309f8f.10.1775124611423;
+        Thu, 02 Apr 2026 03:10:11 -0700 (PDT)
+X-Received: by 2002:a05:6000:288c:b0:439:ddf9:a205 with SMTP id ffacd0b85a97d-43d1f1c0348mr4685243f8f.10.1775124610926;
+        Thu, 02 Apr 2026 03:10:10 -0700 (PDT)
+Received: from [192.168.88.32] ([212.105.153.248])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e1fe0b0sm6286938f8f.0.2026.04.02.03.10.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Apr 2026 03:10:10 -0700 (PDT)
+Message-ID: <5b7faeab-77b5-4a3c-a717-5a80f5e76a31@redhat.com>
+Date: Thu, 2 Apr 2026 12:10:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260330130130.989236-3-cratiu@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 7/9] selftests: drivers: hw: move to KTAP
+ output
+To: Ioana Ciornei <ioana.ciornei@nxp.com>, netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, petrm@nvidia.com, willemb@google.com,
+ linux-kselftest@vger.kernel.org
+References: <20260330152933.2195885-1-ioana.ciornei@nxp.com>
+ <20260330152933.2195885-8-ioana.ciornei@nxp.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260330152933.2195885-8-ioana.ciornei@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-2026-03-30, 16:01:28 +0300, Cosmin Ratiu wrote:
-> Add support for storing the list of VLANs in nsim devices, together with
-> ops for adding/removing them and a debug file to show them.
-> 
-> This will be used in upcoming tests.
-> 
-> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-> ---
->  drivers/net/netdevsim/netdev.c    | 65 ++++++++++++++++++++++++++++++-
->  drivers/net/netdevsim/netdevsim.h |  8 ++++
->  2 files changed, 71 insertions(+), 2 deletions(-)
+On 3/30/26 5:29 PM, Ioana Ciornei wrote:
+> diff --git a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
+> index f290ce1832f1..ed81bdc33536 100755
+> --- a/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
+> +++ b/tools/testing/selftests/drivers/net/hw/ethtool_rmon.sh
+> @@ -11,10 +11,12 @@ ALL_TESTS="
+>  NUM_NETIFS=2
+>  lib_dir=$(dirname "$0")
+>  source "$lib_dir"/../../../net/forwarding/lib.sh
+> +source "$lib_dir"/../../../kselftest/ktap_helpers.sh
 
-Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
+AI review noted:
+---
+Will this test work correctly after installation? The test sources
+ktap_helpers.sh but the file doesn't appear to be included in the
+Makefile's TEST_INCLUDES variable.
 
--- 
-Sabrina
+Looking at tools/testing/selftests/drivers/net/hw/Makefile, when
+'make install' is run, only files listed in TEST_PROGS, TEST_FILES,
+and TEST_INCLUDES are copied to the installation directory. Files
+referenced via 'source' need to be in TEST_INCLUDES to be available
+at runtime.
+
+Without adding '../../../kselftest/ktap_helpers.sh' to TEST_INCLUDES,
+the test will fail with 'No such file or directory' when run from an
+installed location.
+---
+
+IMHO this is better handled with a follow-up as opposed to a repost.
+While at that, please also take care of Petr's comment on 2/9.
+
+Thanks,
+
+Paolo
+
