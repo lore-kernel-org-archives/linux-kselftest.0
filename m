@@ -1,70 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC132571D7;
-	Thu,  2 Apr 2026 00:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE753093D3
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775091383; cv=none; b=AALcSpKAyh1yDu0dzQl73udgaR+nUOqNn3/hgtn7V/szAvAu9vDw4nlwtdPLKh/Yn06IkhaGo62/cdaa/DychdyxA2VaWpjvsr8y/5srBD2LZPHHWYtOWTu5hwUvpJCWVmk1nBP1nw01CVnj6xsP6S8Tho43FU2Bd/o5u9zPWQw=
+	t=1775092450; cv=none; b=Dp65RLslHK/ArdgP5RfI5w6yjUBnII5KMYrKiPS1RTlK9IqgZICq8sNxxrVp+kobIO3QQKw31hZgDdpeM3Wn5639qPiWJ6q87qJ0orkOv3tMxn6WeuAADG0J0T0hoyvriUsLd/Ubn9z/blN43cPN7zGbQEUUpQDhpeX6RTeLKaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775091383; c=relaxed/simple;
-	bh=e2QI+rIqwi6RKccJOXV7cRkQhyCjqCLDKS5ak4bJvZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OOIFlte0md2SP6eaLq/bYcG0LnMgAP22/l4HpuI6x0WE7lmnGg8hJv4DhdyiOFtOH4BK+1GqKCG53101IZbu2aVinzWd9wH4FOnGGWODPyJIYRuS/q61whlVkotzpXwAZwiZ8SCLHMmzEmMRVbZvgCzezWnT7Z+GxAMZv+wzNdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=asAYXoSu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775092450; c=relaxed/simple;
+	bh=foDVFVbcuWW1ekLdnpJH9JMK+N8WAAFswyL/EY42dbs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z4ks4d8CaEWilRujh9B8r/u/xS6ovQ+WKS8sNfs/mVmg8yskRfDNs0Z0x+OkuXrv33obA/kYkw0ZRtq9iXBt1Yb4XoYNmtjdOuGboIQ84TB5Lfe7W86T5eKIXwao2dfCRjlt+ogpXhEE6hiXzpqVwkICflUHbUjSkwW0N+ZM5Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HhRuXTsu; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="asAYXoSu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879D3C4CEF7;
-	Thu,  2 Apr 2026 00:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775091383;
-	bh=e2QI+rIqwi6RKccJOXV7cRkQhyCjqCLDKS5ak4bJvZQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=asAYXoSueduEx0vo4OQi1AoLG1Bd7JB/6fpnh2+O9ClU+dFEt0+P6Z+9XCib2zdtX
-	 0cuVDG9Qi4VLhQ9IbYKMll0qlKdndYTPhQUTuhZ/CJLXrNucN9tH/19o42CTn8gn3b
-	 ZWpAjZvw7hDWFfife0hfQwbOtnjBv+QmU6986gkUIt4yDPbbaHeBADdLbv2TJ60GSM
-	 IM0K6y0J0ng2Com9yuPHW6CadPlkPbz27foLTZ9+Hn/8l77GtVtuyK9VXdNIC/cMau
-	 uEpiWHyz+7rATpNWoN2HJMuiR8EGtFjXqSnW8p68X+lTfsvxd/mPodWHMwj3tP9LeC
-	 rNJ7G3WZS3sPQ==
-Date: Wed, 1 Apr 2026 17:56:21 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Qingfang Deng <dqfext@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Felix Maurer <fmaurer@redhat.com>, Sebastian
- Andrzej Siewior <bigeasy@linutronix.de>, "Matthieu Baerts (NGI0)"
- <matttbe@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org,
- netdev@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>
-Subject: Re: [PATCH net-next v7] selftests: net: add tests for PPP
-Message-ID: <20260401175621.549c492e@kernel.org>
-In-Reply-To: <CALW65jahWApDnVmFReW+Y3HDxBEmCwzsT1oyh03SW7X5ry6PzA@mail.gmail.com>
-References: <20260330035604.133073-1-dqfext@gmail.com>
-	<20260401081030.29b050d5@kernel.org>
-	<CALW65jahWApDnVmFReW+Y3HDxBEmCwzsT1oyh03SW7X5ry6PzA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HhRuXTsu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775092448;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b1BrIuh4JRk9mChsYnd7IZf+UTRPtmSlQTkGsjvBknE=;
+	b=HhRuXTsuxMakh+NIWy/QJ0Hv9TgMNJkmvBvNPElOTwP9oKvu81ZU4IvxbJaxP2SojGsmZF
+	Wl74SuDcI4PEaCbcGaQ+6PS/isqX2/Dx8fx07ns+No6tzz6zMGOcUS9h2EUphBD7WErZW6
+	kCkiJweSN0eRhQx14VEW/IvRyQqcLJM=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-304-RM-cyG3sMXiA47fcz3YQsQ-1; Wed,
+ 01 Apr 2026 21:14:04 -0400
+X-MC-Unique: RM-cyG3sMXiA47fcz3YQsQ-1
+X-Mimecast-MFC-AGG-ID: RM-cyG3sMXiA47fcz3YQsQ_1775092443
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1AC181800464;
+	Thu,  2 Apr 2026 01:14:03 +0000 (UTC)
+Received: from gmail.com (unknown [10.72.112.80])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E57B319560AB;
+	Thu,  2 Apr 2026 01:13:59 +0000 (UTC)
+Date: Thu, 2 Apr 2026 09:13:54 +0800
+From: Chunyu Hu <chuhu@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, akpm@linux-foundation.org
+Subject: Re: [PATCH v7 4/7] selftests: ksft_exit_fail_perror: support printf
+ style arguments
+Message-ID: <ac3C0iozW_xgS40r@gmail.com>
+References: <20260330151503.670415-1-chuhu@redhat.com>
+ <20260330151503.670415-5-chuhu@redhat.com>
+ <efbad6c5-8d5e-4774-8d0a-d455e6e2c182@sirena.org.uk>
+ <ac0huDc_GH2uSgsZ@gmail.com>
+ <20260401143831.31f40405758f78d7955ff6db@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260401143831.31f40405758f78d7955ff6db@linux-foundation.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Wed, 1 Apr 2026 23:45:38 +0800 Qingfang Deng wrote:
-> > # iperf3: error - unable to connect to server - server may have stopped running or use a different port, firewall issue, etc.: Network is unreachable
-> > # TEST: PPPoE                                                         [FAIL]
-> > not ok 1 selftests: net/ppp: pppoe.sh # exit=1  
+On Wed, Apr 01, 2026 at 02:38:31PM -0700, Andrew Morton wrote:
+> On Wed, 1 Apr 2026 21:46:32 +0800 Chunyu Hu <chuhu@redhat.com> wrote:
 > 
-> It looks like pppoe-server fails to start. You may check the syslog to
-> see what's going on.
+> > > I need to look at why this managed to pass the build testing I do in
+> > > -next...
+> > 
+> > I can reproduce this issue with nolibc compile. Thanks for the
+> > debugging. It's great if we have that definition in nolibc lib.
+> > 
+> > For thsi series, because according to man page, vasprintf()
+> > requires _GNU_SOURCE, and implemeted it in kselftest.h will
+> > add the burden to all c files, or fore a _GNU_SOURCE to
+> > all c files included, I tend to go back to ksft_exit_fail_msg.
+> > ;)
+> 
+> Thanks.
+> 
+> Can we please get this sorted out fairly soon?  It's not good
+> to be breaking -next for others.
 
-Hm, we don't capture syslog automatically :S We capture stdout and
-stderr
+Sure. Will post v8 soon. Added back two mail lists.
 
-I'm not even sure there's something listening on syslog in virtme-ng
-Is it possible to make the daemon log to stdout or a file and dump
-that file to stdout on failure? Even if we fix the current issue
-it will be quite inconvenient if we have to go into syslog every time
-the test is failing. The test output should provide enough info to
-debug failures.
+> 
+> I would prefer to retain the series - all those false negatives
+> on no-THP kernels are undesirable!
+> 
+
+Thanks! 
+
