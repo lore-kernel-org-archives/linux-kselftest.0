@@ -1,240 +1,137 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD682EC0A2;
-	Thu,  2 Apr 2026 07:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775113212; cv=none; b=QHxhPvkKFLYlrP6Bgj2VoRGCKx+iSw2KoaiOsemyHkhYDSbdd9SOiFDv8mysrIWN27od+ttXCftvsLxu1450Q3WxHyG+U8+vpxGfJ+Zdv2zFmcpBuFzinMlEk9RBD6quTC2foIC8y35BzkPGPubEeWJxHoZVw9ck2qyNb+ijQ/k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775113212; c=relaxed/simple;
-	bh=lMYu3HO5wpyeTrTmdXA+m/M1V1S3X4eK2aZzz02Coe0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=j1YCCVDCNZgwT2RSAnbsXAwhZpOvSDN8+rJIyprHdJjNrJs8oaOmh0+7BRQ12nwaM+ytvy8XiYxy0BoPTILZte2vSUEX350tk55L+JqkfY20VYZ6ok7wFi3zHhQcBf2xwCMCEVIqeo0xpQeOndTcceJMB00pPaFgMOTzwk0Y+RY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LpmVkUw+; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC8D31F9B8
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 07:12:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775113958; cv=pass; b=iRXTSxtYgqEiFTZ+5PxpqRyUHR7nogdc0WNrv8jmOpYElAYiwvk1zDVnM153vash+wRSaTwGT+pG3coc17yfBExHbuaJiXArIgAVs4h8dRf96mD88H4AtnHnnAy2sh0W8ISCphbAFb9g+Lg+3fmwn3WVobmvjmXYMr6Iuxotixg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775113958; c=relaxed/simple;
+	bh=5KsNlup00ToveqB7aTUYVDBzpUNHd54qGWP+GbDHjCc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sMRfSnOdn2OKRxI5OtGVxAN+PXnL3Jj8PzjKvPrbRmn3F87/6MTY5rcMKN91RWCrg429xNwugLqRnnr3i/Gcdxc+qqyf93d1D9QxSfltLaVTYplNuyn0QaoiQTvUAgqz3Iym0K4PW6uTjX6UnXV4/VpSNSSdFCfJ2sMDKLdMd8A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rctgc0sm; arc=pass smtp.client-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LpmVkUw+"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631KTqkw3487166;
-	Thu, 2 Apr 2026 06:59:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=g9lHFd
-	T/4a2Nmji3esrNHN41u6kgv2wWacp4OAjXPmQ=; b=LpmVkUw+GhRwIyfiN7Izek
-	8wcTZXuAfu5PlbBsqFG7RRdJfxSm83zrC6d7J//FrsBxLcxasUZagbh9RPnnBzkn
-	DQ3mqcr2kR32mad9zvoUdLK4fjDT0eeYq9+JCMMs4kE17+yCw6xTZqMwr0DfcfQM
-	sRM1NWs3oGVLC8IC+eEOHf4p7IHhQ/k5RfwACm8RCRxXQ+NZZxRUoZrDTEm4NU6e
-	p5NXMnXiijvuE/1D/KyogTDoAiZLD0dVTEaWc+2SpHTga7ryBFdJKPdNqKik3IJB
-	Pm4N8kGx4W9+YCLDvyCHxixG0B+adliKHuua5PXrDbyhid9F9zLL5u4+0NadL5/w
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66g23qhc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 02 Apr 2026 06:59:49 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6326YFlV022291;
-	Thu, 2 Apr 2026 06:59:48 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6tan90ah-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 02 Apr 2026 06:59:48 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6326xlVD32572062
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 2 Apr 2026 06:59:47 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9FC185805A;
-	Thu,  2 Apr 2026 06:59:47 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 42DD95803F;
-	Thu,  2 Apr 2026 06:59:42 +0000 (GMT)
-Received: from [9.124.211.187] (unknown [9.124.211.187])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  2 Apr 2026 06:59:41 +0000 (GMT)
-Message-ID: <c563e9ad-2e87-4d91-ab0e-f2afa77387cc@linux.ibm.com>
-Date: Thu, 2 Apr 2026 12:29:40 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rctgc0sm"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2c44547f6d5so19105eec.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 00:12:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775113957; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fw+Mp603jhzVQyTGCHpHj8SjuQ6uSQDR0toCE3tPUOOtpgOnCm98p1jjjHoEvKMTFJ
+         hjBniFhR+2nsrtGnallqvoRZ8ys9jKp4uSjHP+FeoKJ3suoTkncbPd64iUoAx7JqKhmn
+         YqsdGUaGeim2Zrisux31gCFefa3BZWPudzx0RFGfN+3uyvfIIdu78qz4JSMbeCMa+s/Z
+         7RizN6AgL8UzBYMRALBIAb810ZrJ7P+C3v6+RTcyh4JJBDDw84Sw8cBqr37ek03IlM33
+         W2Up9cPV5Lue5JaDbd3KCLjUOMzb9Bvtv/hhp9LIiyBZCwKaL/1QBEfrNr4bdOHmnXL6
+         TTcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5KsNlup00ToveqB7aTUYVDBzpUNHd54qGWP+GbDHjCc=;
+        fh=lak8vjp6LapXgcfyOJxlC2dHNsEAsT1M7pnLvwngPfE=;
+        b=Ro/J1WcoP5b2V4nA4tUDKKv4AzKxEz+FKpYh2Lr7cIEieYcejZo6CNH4+fQ1/75SAB
+         b8VBY9tsR7p3e3QCYy2L82Xy8zyZvPCuq+GgHHM88v8VdGTIzQG3AvDHiyP4BC236o9p
+         nmkvyW6XdODwysR0iwZuG+qEPMUm0NcWaTBjTMzWFIkb0a9QsLjQ2h4rvZYDZ/nA3xv+
+         kH3e7sgxpDNtporhJqWcQ5mO/iwFVuiBpZaSnj6EbL6rZsoS4o2nDClw4x1UiQ7/GIw5
+         +xzb+LXR3ktaOZpPz3UeUyLKDMvyQYcmdkSYvGruEtiMYAv7i70LP0Jl1VIpGZD+ql6T
+         1ZTw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775113957; x=1775718757; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5KsNlup00ToveqB7aTUYVDBzpUNHd54qGWP+GbDHjCc=;
+        b=Rctgc0smJaz1L/DzT0w31Pkz2ioXDTbLbdLHju8I+MYH+TZcUE3kHlF1I3EWm1SyCh
+         eQiNL6PiFdoKan04df3xcrWzktvgLtMghA82LhAy1WM8mvZxgLz1GSwI8XqGOCnMQ7YT
+         2D1lyJ0uq3ZCMkSjEpGiGkD4H86zNRjQKPGPw6RpZfq6HwjQJWO20WsfP29oaR3kWllo
+         UTeti7cU9wsmV9EetTySmlcHgqjE7xKikJY34Of/cFLLlkcsUWK4X7Vkycacqi4xDHHa
+         3JLgo68Gh6qywE0saN37PiY4ogF+/E6JrqwZSKSReopxi6fjf65hPIDqvZnM7SCkNmQJ
+         AROA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775113957; x=1775718757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5KsNlup00ToveqB7aTUYVDBzpUNHd54qGWP+GbDHjCc=;
+        b=Aut0CrdPPDRYLEDh+W2XXDhuqeFYxe3RkbVM9OWZWFmXh8NOAHVrj7W715gSa+kRgM
+         k0ihxwEDxyDtf/u27D6Yd/zWtV2mR7hVwJ6cVLVn0QT2fNcfUpXPQQu7+p+rmblZEDP7
+         WtVr64NPkNCN5bzq9Z2eq/y06X+rFoN9SZ9gpika1fRqzTVS/3V++Z5C+9SgchnvkJ0i
+         7J2Ir8k8T2Pa2uuDJPescmxxUfxyfEA0O01DWZBGoi+GdjRQAg7GX1qgnaxGKq6ckDBK
+         yEg4GsM6puiPd7wtk3F+NbfYut9usAh6I8pBz1OAtT3UkI28U8KcIQ9pat/FmbY7b9IA
+         XIqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbCQgYtCa4sWwnzUknXe1FHiFjJdmSKZEerJgKszsDHJeOuOfypgZgULoYs4TZh80fzYjKXAiVccYfXVqRDH4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS72jSBf/w72cW8Pc2ycSooToCtNhrEu+hKY14kasCjFUrxEkI
+	dwJJGxADsHFlxEKp598pTMRSn71TEl3DbmNzjkybEcfvuyUeTeyZN56r6ySHAo0+Fb2jclrGnvq
+	8eAf+8Tgrjdadj88R7kNymTYyFmbb4xU=
+X-Gm-Gg: ATEYQzwGJP4omRUhl6PkwYjOXCX05bmZ7fsWaKXXHx3JLAfWCMvvsB46XV13Zq5NaP8
+	ZaNWGZf6CzL/HsAKF/jAjATFlCDbv9KL4t2Sfqe9tlrl0E/870j17s+I1yi1zB1DcAPquPUZAXS
+	FKM3leflVmFOCCx+pHRWSVtOjZfeLT9yg86JdzWkn1CpxY0FYbPbwZ52BIJtumT9qAB7bPpOko2
+	Edl9UiQzefo2xkVQFWC7dx8xx/lbQNWyb2kEbrKn+6ExgCJS4v1rv0RXyjbr60PEu/ieul42D0f
+	p72i8GO6ieipDDBY+P5qHuy89btIWT0UuDnbUIG1u4Mswbq1KK9UjPu77eClG+ULHP3xX4wcWv9
+	94PcHDilUuYbvB9BLOW1RiaU=
+X-Received: by 2002:a05:7301:6790:b0:2c1:6416:2a07 with SMTP id
+ 5a478bee46e88-2c9321b7bf4mr1634311eec.4.1775113956496; Thu, 02 Apr 2026
+ 00:12:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Sayali Patil <sayalip@linux.ibm.com>
-Subject: Re: [PATCH v3 09/13] selftests/mm: skip uffd-wp-mremap if UFFD
- write-protect is unsupported
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <5bc0fe27cdd316ef6f776bf9b52b6c0de4bef54f.1774591179.git.sayalip@linux.ibm.com>
-Content-Language: en-IN
-In-Reply-To: <5bc0fe27cdd316ef6f776bf9b52b6c0de4bef54f.1774591179.git.sayalip@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=Fdo6BZ+6 c=1 sm=1 tr=0 ts=69ce13e6 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=Ikd4Dj_1AAAA:8
- a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=X_KCTOUB8Lo47miopUAA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: _PKXl_TFP9s8I2DLHw3-X6DosxfFph5V
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDA1OSBTYWx0ZWRfXzClFUfw9yQ1K
- mS1M24R0Wl1zjNTReKRTJXi2ZL5bYLTAsQSMc5GAR3FHWkenF84klAAgrMAEPzc80g28QfQskxE
- kWC3BytAk24o48Hzfg8mGnWx8PCFm2RyXBGsh9ozkhvQsg4Ha2kKNCYgrx8db8GOKHMzhGica6t
- TQY+K0IZuKUVLC+MrvYDVxct3tUxWaI4/guWSCvRORoePZmhgCmftrNhzNVlJ8OX2CisyQ+ZlKQ
- JkbLT3kxj/3lOB0KqshddGiDUdntaa0FpABnMDDd1QZyoynVQyBSbbhQaebUWosirEeL1YI6jGq
- 6yUKt9b0q0MEWN0pQhSfNUjManVAsgf0hTro1BtJGBuAGo14DegAmZt9mCNJkm7VMx2YEAZ+ECZ
- snVINASbaK3rX3JD6i09xD7z3AsFx2nvH91B/V0vwOujEJJqzWKNKsvIvk8XLG+otjTEJiR+4s7
- v/bq1Jma+BkcXbz+2Pw==
-X-Proofpoint-GUID: sJCAzj54eSGJ2M_geFmpHo6yBe2LRsGe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-02_01,2026-04-01_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1015 bulkscore=0 suspectscore=0 priorityscore=1501
- adultscore=0 malwarescore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604020059
+References: <20260401114540.30108-1-ojeda@kernel.org> <20260401114540.30108-16-ojeda@kernel.org>
+ <DHHWO582XLXH.1DU3CO41F1PV7@garyguo.net>
+In-Reply-To: <DHHWO582XLXH.1DU3CO41F1PV7@garyguo.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 2 Apr 2026 09:12:22 +0200
+X-Gm-Features: AQROBzDaEWueCbjTzytnJo43NDIAkvyWYngeEqQLnAsLh-4PZJOJIJpad43tD2c
+Message-ID: <CANiq72n4sCU=2m4Uee8Wpsv3mjkw_BuT8Sg54Gu0U68j7qAM5A@mail.gmail.com>
+Subject: Re: [PATCH 15/33] rust: rust_is_available: remove warning for
+ 0.66.[01] buggy versions
+To: Gary Guo <gary@garyguo.net>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Courbot <acourbot@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
+	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
+	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
+	moderated for non-subscribers <linux-arm-kernel@lists.infradead.org>, Alexandre Ghiti <alex@ghiti.fr>, 
+	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 27/03/26 12:46, Sayali Patil wrote:
-> The uffd-wp-mremap test requires the UFFD_FEATURE_PAGEFAULT_FLAG_WP
-> capability. On systems where userfaultfd write-protect is
-> not supported, uffd_register() fails and the test reports failures.
-> 
-> Check for the required feature at startup and skip the test when the
-> UFFD_FEATURE_PAGEFAULT_FLAG_WP capability is not present,
-> preventing false failures on unsupported configurations.
-> 
-> Before patch:
->   running ./uffd-wp-mremap
->   ------------------------
->    [INFO] detected THP size: 256 KiB
->    [INFO] detected THP size: 512 KiB
->    [INFO] detected THP size: 1024 KiB
->    [INFO] detected THP size: 2048 KiB
->    [INFO] detected hugetlb page size: 2048 KiB
->    [INFO] detected hugetlb page size: 1048576 KiB
->   1..24
->    [RUN] test_one_folio(size=65536, private=false, swapout=false,
->    hugetlb=false)
->   not ok 1 uffd_register() failed
->    [RUN] test_one_folio(size=65536, private=true, swapout=false,
->    hugetlb=false)
->   not ok 2 uffd_register() failed
->    [RUN] test_one_folio(size=65536, private=false, swapout=true,
->    hugetlb=false)
->   not ok 3 uffd_register() failed
->    [RUN] test_one_folio(size=65536, private=true, swapout=true,
->    hugetlb=false)
->   not ok 4 uffd_register() failed
->    [RUN] test_one_folio(size=262144, private=false, swapout=false,
->    hugetlb=false)
->   not ok 5 uffd_register() failed
->    [RUN] test_one_folio(size=524288, private=false, swapout=false,
->    hugetlb=false)
->   not ok 6 uffd_register() failed
->   .
->   .
->   .
->   Bail out! 24 out of 24 tests failed
->    Totals: pass:0 fail:24 xfail:0 xpass:0 skip:0 error:0
->   [FAIL]
-> not ok 1 uffd-wp-mremap # exit=1
-> 
-> After patch:
->   running ./uffd-wp-mremap
->   ------------------------
->   1..0 # SKIP uffd-wp feature not supported
->   [SKIP]
-> ok 1 uffd-wp-mremap # SKIP
-> 
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> ---
->   tools/testing/selftests/mm/uffd-wp-mremap.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
-> index 17186d4a4147..6edbd09f0ca6 100644
-> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
-> +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
-> @@ -19,6 +19,17 @@ static size_t thpsizes[20];
->   static int nr_hugetlbsizes;
->   static size_t hugetlbsizes[10];
->   
-> +static void check_uffd_wp_feature_supported(void)
-> +{
-> +	uint64_t features;
-> +
-> +	if (uffd_get_features(&features) && errno == ENOENT)
-> +		ksft_exit_skip("failed to get available features (%d)\n", errno);
-> +
-> +	if (!(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP))
-> +		ksft_exit_skip("uffd-wp feature not supported\n");
-> +}
-> +
->   static int detect_thp_sizes(size_t sizes[], int max)
->   {
->   	int count = 0;
-> @@ -336,6 +347,8 @@ int main(int argc, char **argv)
->   	struct thp_settings settings;
->   	int i, j, plan = 0;
->   
-> +	check_uffd_wp_feature_supported();
-> +
->   	pagesize = getpagesize();
->   	nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
->   	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
-
-AI review question:
-
-> commit 22914640356d1eaf4e0a8a8b13ad71911d12db50
-> Author: Sayali Patil <sayalip@linux.ibm.com>
-> selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported
-> This commit adds a check at startup to verify if the userfaultfd
-> write-protect capability is present. It skips the test instead of reporting> false failures on unsupported configurations.
-> > diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c> > index 17186d4a4147..6edbd09f0ca6 100644
-> > --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
-> > +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
-> > @@ -19,6 +19,17 @@ static size_t thpsizes[20];
-> > static int nr_hugetlbsizes;
-> > static size_t hugetlbsizes[10];
+On Wed, Apr 1, 2026 at 4:58=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
 >
-> > +static void check_uffd_wp_feature_supported(void)
-> > +{
-> > +	uint64_t features;
-> > +
-> > +	if (uffd_get_features(&features) && errno == ENOENT)
-> > +		ksft_exit_skip("failed to get available features (%d)\n", errno);
-> If uffd_get_features() fails but errno is something other than ENOENT (for> example, EPERM when unprivileged userfaultfd is disabled), this check will
-> evaluate to false and execution will continue.> > +
-> > +	if (!(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP))
-> Could this evaluate uninitialized stack memory?
-> If uffd_get_features() fails and is bypassed by the previous check, the
-> features variable will remain uninitialized. This might cause the test to
-> falsely pass or fail depending on whatever data happens to be on the stack.> Should we initialize features to zero or exit on all uffd_get_features()
-> failures instead?
-> > +		ksft_exit_skip("uffd-wp feature not supported\n");
-> > +}
+> The scripts/rust_is_available.sh change looks correct to me, although I c=
+ouldn't
+> get scripts/rust_is_available_test.py to run on NixOS.
+>
+> Looks like it filtered out PATH but uses /usr/bin/env to find python bina=
+ry? For
+> obvious reasons that will only work if python is located /usr/bin/python.
 
-Yes,If uffd_get_features() fails with an error other than ENOENT, the 
-features variable would remain uninitialized, which could lead to 
-undefined behavior in the subsequent check.
+Yeah, the script has some assumptions on it (e.g. it also assumes
+`dash` behavior vs. `bash` in a couple tests which I should relax
+too). Happy to change that.
 
-I will fix this in the next patch version.
+Thanks for testing it :)
 
-Thanks,
-Sayali
+Cheers,
+Miguel
