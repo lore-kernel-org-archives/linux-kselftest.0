@@ -1,65 +1,65 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011010.outbound.protection.outlook.com [52.101.57.10])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012062.outbound.protection.outlook.com [40.93.195.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5775E2E1746;
-	Thu,  2 Apr 2026 11:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B2E33F5B6;
+	Thu,  2 Apr 2026 11:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.62
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775128290; cv=fail; b=aeeT04WCTjAcZ3n3Beme3TqJwYDMUjsXftS8rCOELNthTlQ61vdWYiAbKRow6Yh9aVPt19toJVrYnhIniITiZvfrInZMAjiIBO6+sIocH+shLdqRLCC/T94h90+Bep4KEOYON5ZLIA8LenDAg0/2hFoN5lXipuEhL3TVO6wLFv8=
+	t=1775128295; cv=fail; b=eCHmJvrf2XtKXxwAXBCjn4B5PWJEeqbaXY6RF5z4lH4jBcwgkTag8X1XM9MzYCULCx0BICRKGJrvGKA4DUrHMePefTMBU6LgxDDH2vqDXvLGS1h4ljzn8rPs+J5JDRIZ3qaSBsnbwmu0htvhGbKzFG7FXc0YXn/+zWmr1a0+JB0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775128290; c=relaxed/simple;
-	bh=1WKwHCsN0wmHZhiRLiy04MSsIqEfUKZdCz0ONI7bN3M=;
+	s=arc-20240116; t=1775128295; c=relaxed/simple;
+	bh=16h8f8tWHACA+ancKxzy6b3jFlKhDUzcKZs4oNJw1oA=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FRFjlwUMhtnjOJyE09bMWPFECaTEDg59kB4gJGpjnzUtgWXZ92xmZ/c911MhUmGmLq5breUi4jbqi6jwJl3pgPh9GMoB5m/HpQCpExSEhrqTeOTB/2nZhXwIFRxDPFVDdZnA9/eQwOh3whs8eMrxe+zrjqGz7j2WkDt67kreiyg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GAXq6w07; arc=fail smtp.client-ip=52.101.57.10
+	 MIME-Version:Content-Type; b=kGndOwMd5/zFEjaF9ZLBESzQGgJk9+hlHQqss/6StHUzcZaMXJi5uckKXY67axktzPJk3V0krhR2G31HHOHSm3by5OnBfNomGDbcaaK6LeGEVDCfrllT90nru4mCpup1av2mUzSg1NRJXmPnfoRoD3mQZlvw8dDRG7LJ0uJ7h9g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=PTK8rvwD; arc=fail smtp.client-ip=40.93.195.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GAXq6w07"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="PTK8rvwD"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vCwgMYw/voEJrURh9lUE8C8/Uvit5JiqUwDa96+w6Hm03s1HJYtGbd4J16sztropgLfG8yqH+1hikhnlQeBfnzQ9VwbeqoG86HwfJeCfp6i3eFCMO6OjTZt+TCVNxSFbdRUJKTVjA6232TPSEvqsqW8AGs8Erw+5wiNi4QdX2+VAVYYIVbr5khUYmuc4W88hG8c3hP3Y+TRlscRhcoVmM3m1os4d/SW1a5FzM73TbedXaDqMgv1toZjparuQM/5Gh4LbiCCYEMK8NlxxFBGTmcS7P8FCAxtFd6Vuu0EIpeiOQGSneet5tcOFP7Zcfxn8C1EuLVY3PqXEjEt6hmAl2w==
+ b=qjbF9DrqLbwPKkjvrPuy3kO9L4/2u1VEYzdBmLogl/FeIA8Mh823Hr+pYapUpt1rG9ZfJSelRLV/2BT6MYh7m/I9zPBAxtjPTUxgH2+8IMLcFIlnOsPIsy09BjR63TFuAhO6Mft+Uaz6a9Z1BagqO/iVaAlrh63mFyMMF0FwmAoHSWEvo9qn1NqMkiEnFMW065b1mxdkitFTIwLOqSFg8ifgFPMTuS3CdDAAIf7bdo4rnOGvgTMzwt/khi/7HMH25w8nU9hj5ognKvMnRG0/fnqz4ZmmFiFk6ZwGXmT/Gm1Ab+a6W7nn1hbyJM7UEN0YYugBEKGc7yGn8KvMWMqKFQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yy8quJrq3c/xMwAeU6PVRAP0gnrlJEGxUvCpMLO9VUY=;
- b=EXQCE/arTUKIDdA/TpZeMqJqKMKau5BpsMohsxXTqka6HRN4r1c8YOlKKxC0hqmNXAs36EsnH1EIdmSdhsWMCTyGWh9G2p7u4WxVIo8LkfqESij+mB1y707ZgdKK3UhmUfoMF30jwn9mvaCClyagpihWJ9eAH6vPzj7GlwX6MQSQWRnj4KLAs+MjYs/ehOmUdDKRRcYyOg/Ebwvh5FvlETpGSbnyvO2kh4bU4mzINzOwc0b4BNaW1c9neZyiFOOfBkUZsSjFtS5UQHgOhibSfsvT3KFqD4WS81xAmOKS8AJajZhnNY0lt2SKYFejQMWOtllXp7tX9mEOuXcELfr6pQ==
+ bh=MbnOOYVtanCy4OK7WZiS98f00c1IPoLq5dVjdUSbIPs=;
+ b=yQYwt+RuTib340R1BflieqaOtvYuWEpEYAxLhfp1VP1Ea2wX9v7nILpLvIuYfCsJMigRITctKUcmR4l06PplaiINYNm6OWQ5qJ48vmXqxuh+r8MwYh+2+jBXGfR8AKT5NJ002GxyryT7vegIU1UcwZk6bdWICFI5+TatGXvFQqnD6bdFOtn2a7BtozX5i1m04fFDdWCNtMm0dqxpWcxXx+aVXtRHzpAW9jQcAoj0bSpOLH2wQtli1pfwb4Q1cBPmbknSz5mpg8x00dmlLzCXDub5Baxaeb5KvwACoaUdPxXwDwePcdmO5q7NjsDG2tN7RlpXUYMrx7+agYiTYluSpQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yy8quJrq3c/xMwAeU6PVRAP0gnrlJEGxUvCpMLO9VUY=;
- b=GAXq6w07LpJM4frmpBxLFQwdfzJKtITC7W9cjTfsWxAdd4rjVLn3dfatJRjYb12BZrXAlzqg47X+xy/49YEo1v3ScM87ltd76Z70opvZKM019fVZOpSMyypZWoi/wliIyz2ZJ1HDEctN2LHhudNsFFAebR7+H504VVIqs8lD1Mm0kkN9cxVPgaP9SQHr/nCVgYDeGd+0HbQeWN5tIdcy/i+d+J/Dmf/29T8ulMvk/l+e7TDOkHs8a9RCmYOrJhABrpqKWJxFBELMmW0izZPgOHSssQrqTZdhqjaIaFIz55x4IejLSGbzcEWLig+dmmHPyHEunTvUyh/7qxyFAiJFJA==
-Received: from SJ0PR13CA0017.namprd13.prod.outlook.com (2603:10b6:a03:2c0::22)
- by PH7PR12MB6667.namprd12.prod.outlook.com (2603:10b6:510:1a9::10) with
+ bh=MbnOOYVtanCy4OK7WZiS98f00c1IPoLq5dVjdUSbIPs=;
+ b=PTK8rvwDj8kN4AQ13FeOTlW8gffgyxNTTHm9tBeBPdwa/ocJ29O5abYaQ0fQ7Y+OP/R+zIAlvTFP4QB224DyODLAzwP6K1qb4w+tpzVWOe8bOJl4t+WfprN4lvupVNVwwUlMPy8LUhDMkaToiMa4V91FzYtWGXD6jjU7+MPOLtl97BBMJXcDuhP54Dp4rTJPo7aUQz/3mrPCrozAnslL9LOYvgAkRSojIIYcpBn2J8DmL84ovyjj1MUsYpBHPgzwxdNj8olvf3yV2Kj0WvMwGqc6Y9Es5EAQ4O/1POMCWzDc855AVAtogYIf/hOhJRkt/kcyLOznB0t6ohGzaTMEXg==
+Received: from BL1P222CA0017.NAMP222.PROD.OUTLOOK.COM (2603:10b6:208:2c7::22)
+ by DS0PR12MB8247.namprd12.prod.outlook.com (2603:10b6:8:f5::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Thu, 2 Apr
- 2026 11:11:23 +0000
-Received: from SJ5PEPF000001D0.namprd05.prod.outlook.com
- (2603:10b6:a03:2c0:cafe::fa) by SJ0PR13CA0017.outlook.office365.com
- (2603:10b6:a03:2c0::22) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.17 via Frontend Transport; Thu,
- 2 Apr 2026 11:11:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.18; Thu, 2 Apr
+ 2026 11:11:27 +0000
+Received: from BN1PEPF00004687.namprd05.prod.outlook.com
+ (2603:10b6:208:2c7:cafe::af) by BL1P222CA0017.outlook.office365.com
+ (2603:10b6:208:2c7::22) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.31 via Frontend Transport; Thu,
+ 2 Apr 2026 11:11:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ5PEPF000001D0.mail.protection.outlook.com (10.167.242.52) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN1PEPF00004687.mail.protection.outlook.com (10.167.243.132) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.17 via Frontend Transport; Thu, 2 Apr 2026 11:11:23 +0000
+ 15.20.9769.17 via Frontend Transport; Thu, 2 Apr 2026 11:11:26 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 2 Apr
- 2026 04:11:04 -0700
+ 2026 04:11:12 -0700
 Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.230.35) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 2 Apr 2026 04:11:00 -0700
+ 15.2.2562.20; Thu, 2 Apr 2026 04:11:08 -0700
 From: Cosmin Ratiu <cratiu@nvidia.com>
 To: <netdev@vger.kernel.org>
 CC: Sabrina Dubroca <sd@queasysnail.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -69,9 +69,9 @@ CC: Sabrina Dubroca <sd@queasysnail.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
 	<dw@davidwei.uk>, Shuah Khan <shuah@kernel.org>,
 	<linux-kselftest@vger.kernel.org>, Cosmin Ratiu <cratiu@nvidia.com>, "Dragos
  Tatulea" <dtatulea@nvidia.com>
-Subject: [PATCH net v7 2/4] nsim: Add support for VLAN filters
-Date: Thu, 2 Apr 2026 14:10:32 +0300
-Message-ID: <20260402111034.1494714-3-cratiu@nvidia.com>
+Subject: [PATCH net v7 4/4] macsec: Support VLAN-filtering lower devices
+Date: Thu, 2 Apr 2026 14:10:34 +0300
+Message-ID: <20260402111034.1494714-5-cratiu@nvidia.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260402111034.1494714-1-cratiu@nvidia.com>
 References: <20260402111034.1494714-1-cratiu@nvidia.com>
@@ -87,214 +87,147 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D0:EE_|PH7PR12MB6667:EE_
-X-MS-Office365-Filtering-Correlation-Id: 932e4241-745d-4022-4e6a-08de90a89340
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004687:EE_|DS0PR12MB8247:EE_
+X-MS-Office365-Filtering-Correlation-Id: adb0a6f0-1101-4140-296f-08de90a89583
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700016|7416014|376014|82310400026|56012099003|22082099003|18002099003;
+	BCL:0;ARA:13230040|1800799024|376014|7416014|82310400026|36860700016|18002099003|56012099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	O6kvcIow43nduiBB/UvpDnQHc/MRHIzD5Fryd5r8/abfiG+CXd2uSLq/Fa+mjrEEb39FCJ4IqJz17ad/pvxjCv4EQD9+puYP8pqAHs7hotj0epzOK+dZXCfbtdOMnFeBtW0OW+fv9pXdQyv0Hx6Km3UUdU8T2CkQ/IDnoutXJuNZ45AKChWX0qPCv4KIFhnqEERoMaH2dhXYRUsamNY5v1fVabHfPPvIrhKrUCUA8lKAVA7v9XJp8SZV6Y1ctP1ZpwHWxOaY3aBOZizzx3fr5A3uNELYVOT6cDkUpFOrJ+egGKHhJ33ZeOGz+6Ud7MQg33afSgqbWCd43Pc8en2LRuro3ZiNhPhMq3I/QkazAa6netE4MKmIbCrZ8Douu9KwS+sFBWY7XgOBjaYfFQ9o/xzntdLq9ggksO2mdj/RLSuW8OBxFVK8a0ze+ZUelIOy1DK3ES5+/0cp4gbwXGUy469w1nwQoDcEA39WfPuXSA3dCbJnJ7dtfqo+vrIkLvEIrtfLRBl9+gdvVo14gIJnyYI1XnefkypVABZyt9MI+0G6UZNlNk7C5kwb7VH74rxlBH59ikiv6+02Jsts86z3b4Wfriazl6S4AvVaW9CXjVLCwK+Gtfrxuxb9u3gy0mLh8BOVFGuT18NhkSQIdJfPGvk5y3NY+rxoPWqirZdjaoNk/cHE5YnSuLnMNhlj9X0CENM5QP7tuw6JsQNX8KbhaU2MHEsc9JexRI5RJJO7slFdrZux7YMO+u4o2kKbJ65VMcTFtUvdkXWLpp+zr411Rg==
+	2rMx+4+BFEaFvI4N8AE2eVXkCexdBpPXeSfDd8NcnCaWrQdfTozC/ZUAV0IWlBWrIUZF6cQYnG9ck1EBLwFy1MlWN5q+xdQn/BwRtIEJqbJ5Z9id6scmy6sDuC27tsRveDZCDUw+lxrWCDpPNabzeUuDO3Md3G/arNRLTWcsyU1e0kTACKHlWh9LOayxb/dJVzaZc9KsfE+xmO/srrVs1KtyUHNp41wHkAp1A6qDncunZaPRw5GKUnNFrDtCvpRm3Wyurzz3KXXTodFqjihjkSjUokmioAQjpKkhHmNUjMrvhk3LEa5yti+BGhitHajKvxQzmsSqQPTQpTgzJtno7gpwef6O4bCk8e9w2sbEQuVnPUcEiOM73bPSDnVzREBuidtM/CZux4bb/KlBXxhoTLHS8yVqW4Ibt1SFVfqqcgrLUGSvaqUQBfgxwz8+CTABI2RLT9fJW54KNzbTdM9l4WcHvtcT1htiSzZx5F2W5Ft8xsWt93TqZmojxiI4SV+sEophdLE0xjllcxchgljW4WF0IW6E9Ei8QEqln51W1BgvANqx0XifyXcNCul35e8jRHkWiRLfgrwkWM1/sEEAEl10YTULNUK4s8RqkMHYNQlNQjELYWPg6vWZQGzRxE0eRlso1kqDSwZqu+VFXylwNTM7cI67r0fdqIFbmO17waFDcSoGCIMPrsII9lfFttdlR3D5ic0mdJKhr5kn2/MvhE2ei8sTYl/akphDyIl/mBt26OhiZYMTuPug04sAOjMplB4oQ83YIEZiIvvp/hKphQ==
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(7416014)(376014)(82310400026)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(82310400026)(36860700016)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	FGVZbR9kmg0QmO/hqVUNhdmrh6wlDXgrEjUZwmfX17K2Fj0DkOCF81qgVStlMrUdk8MU5h9SAuCAlI8GvOoH4WoRl8qeHgo/N38vk5w4o/zwsqQyIg6Em6GFz29/x/+UGytF4XRQYASNqQc/uFVp/Eb0HLusVLlTLU3i3i3SHA5Np+AmsF3KkIb16iTJg2nbFEBlrUiVvL/OKol3t6xVTOQ7wUjuXNzkwJGdbBv0Oz4Vwxlfh9dzyQxDlXadI1a36BqVV3gcrppJ2FUzhMrDwK7RlmVgagC7bcs2zH0s2BJXCc+ZeB0RuHx6KzM56WwE1oco6bl/NSeA+SB4d1diX3EbytqaCGZ49aXGEHWyiTxVGRQ9VB6v5QklXMJs/brWykIec+SwOfDHKDyMcoVZr9Kp6xsvs1STpfJyl3iSxbnhMi2Q4XAyv8aOpk6TGw9t
+	BdldeGBIkBhvv2acTAdW/wMFqxVT62gR9G7hgq4SaBCDJusdGcdNz2WwwaL1wvT3bIzJQwVKRkRoNjF+AZw/9qmF1d+PA3f8Hrp8F8cH5dGB9o8rfdj0hXzBNZgHs41ftSgwNy4sDPjQEpyZAR9uCAJf5bk8j3zgASXr/Tss78op96gF4g5AdIMPRJXY+Whg8GAjDPU9ipNL6e2xeBNIEoW/n3bxeWEM4HE8VU8+ezX1vu3G2qxUK0qVU1WyGEK8rv0gBij4GkgW0Nm2r5Mj6bOY51wBigC3Kj0o5yE/+OYk3AT225nrD0jFvNeVYPZwFFUzWbMh4vKfl21nwzY0kck8/xPilUzvxaFn+dwpKKqpWzWoPNa7rJTzY7hq0ivX8Vr0Jy45M2GzbvzCqMChItuoi08zfaZYxNfQqWoy3oHq72cUdd4xFgEwFa93pl0K
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 11:11:23.1162
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 11:11:26.8603
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 932e4241-745d-4022-4e6a-08de90a89340
+X-MS-Exchange-CrossTenant-Network-Message-Id: adb0a6f0-1101-4140-296f-08de90a89583
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001D0.namprd05.prod.outlook.com
+	BN1PEPF00004687.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6667
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8247
 
-Add support for storing the list of VLANs in nsim devices, together with
-ops for adding/removing them and a debug file to show them.
+VLAN-filtering is done through two netdev features
+(NETIF_F_HW_VLAN_CTAG_FILTER and NETIF_F_HW_VLAN_STAG_FILTER) and two
+netdev ops (ndo_vlan_rx_add_vid and ndo_vlan_rx_kill_vid).
 
-This will be used in upcoming tests.
+Implement these and advertise the features if the lower device supports
+them. This allows proper VLAN filtering to work on top of MACsec
+devices, when the lower device is capable of VLAN filtering.
+As a concrete example, having this chain of interfaces now works:
+vlan_filtering_capable_dev(1) -> macsec_dev(2) -> macsec_vlan_dev(3)
 
+Before the mentioned commit this used to accidentally work because the
+MACsec device (and thus the lower device) was put in promiscuous mode
+and the VLAN filter was not used. But after commit [1] correctly made
+the macsec driver expose the IFF_UNICAST_FLT flag, promiscuous mode was
+no longer used and VLAN filters on dev 1 kicked in. Without support in
+dev 2 for propagating VLAN filters down, the register_vlan_dev ->
+vlan_vid_add -> __vlan_vid_add -> vlan_add_rx_filter_info call from dev
+3 is silently eaten (because vlan_hw_filter_capable returns false and
+vlan_add_rx_filter_info silently succeeds).
+
+For MACsec, VLAN filters are only relevant for offload, otherwise
+the VLANs are encrypted and the lower devices don't care about them. So
+VLAN filters are only passed on to lower devices in offload mode.
+Flipping between offload modes now needs to offload/unoffload the
+filters with vlan_{get,drop}_rx_*_filter_info().
+
+To avoid the back-and-forth filter updating during rollback, the setting
+of macsec->offload is moved after the add/del secy ops. This is safe
+since none of the code called from those requires macsec->offload.
+
+Fixes: 0349659fd72f ("macsec: set IFF_UNICAST_FLT priv flag")
 Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
 ---
- drivers/net/netdevsim/netdev.c    | 65 ++++++++++++++++++++++++++++++-
- drivers/net/netdevsim/netdevsim.h |  8 ++++
- 2 files changed, 71 insertions(+), 2 deletions(-)
+ drivers/net/macsec.c | 44 +++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 39 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index 3645ebde049a..19b0ff183c45 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -605,6 +605,36 @@ static int nsim_stop(struct net_device *dev)
- 	return 0;
+diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
+index f6cad0746a02..3bdb6f3fae8e 100644
+--- a/drivers/net/macsec.c
++++ b/drivers/net/macsec.c
+@@ -2616,14 +2616,22 @@ static int macsec_update_offload(struct net_device *dev, enum macsec_offload off
+ 	if (!ops)
+ 		return -EOPNOTSUPP;
+ 
+-	macsec->offload = offload;
+-
+ 	ctx.secy = &macsec->secy;
+ 	ret = offload == MACSEC_OFFLOAD_OFF ? macsec_offload(ops->mdo_del_secy, &ctx)
+ 					    : macsec_offload(ops->mdo_add_secy, &ctx);
+-	if (ret) {
+-		macsec->offload = prev_offload;
++	if (ret)
+ 		return ret;
++
++	/* Remove VLAN filters when disabling offload. */
++	if (offload == MACSEC_OFFLOAD_OFF) {
++		vlan_drop_rx_ctag_filter_info(dev);
++		vlan_drop_rx_stag_filter_info(dev);
++	}
++	macsec->offload = offload;
++	/* Add VLAN filters when enabling offload. */
++	if (prev_offload == MACSEC_OFFLOAD_OFF) {
++		vlan_get_rx_ctag_filter_info(dev);
++		vlan_get_rx_stag_filter_info(dev);
+ 	}
+ 
+ 	macsec_set_head_tail_room(dev);
+@@ -3486,7 +3494,8 @@ static netdev_tx_t macsec_start_xmit(struct sk_buff *skb,
  }
  
-+static int nsim_vlan_rx_add_vid(struct net_device *dev, __be16 proto, u16 vid)
+ #define MACSEC_FEATURES \
+-	(NETIF_F_SG | NETIF_F_HIGHDMA | NETIF_F_FRAGLIST)
++	(NETIF_F_SG | NETIF_F_HIGHDMA | NETIF_F_FRAGLIST | \
++	 NETIF_F_HW_VLAN_STAG_FILTER | NETIF_F_HW_VLAN_CTAG_FILTER)
+ 
+ #define MACSEC_OFFLOAD_FEATURES \
+ 	(MACSEC_FEATURES | NETIF_F_GSO_SOFTWARE | NETIF_F_SOFT_FEATURES | \
+@@ -3707,6 +3716,29 @@ static int macsec_set_mac_address(struct net_device *dev, void *p)
+ 	return err;
+ }
+ 
++static int macsec_vlan_rx_add_vid(struct net_device *dev,
++				  __be16 proto, u16 vid)
 +{
-+	struct netdevsim *ns = netdev_priv(dev);
++	struct macsec_dev *macsec = netdev_priv(dev);
 +
-+	if (vid >= VLAN_N_VID)
-+		return -EINVAL;
++	if (!macsec_is_offloaded(macsec))
++		return 0;
 +
-+	if (proto == htons(ETH_P_8021Q))
-+		WARN_ON_ONCE(test_and_set_bit(vid, ns->vlan.ctag));
-+	else if (proto == htons(ETH_P_8021AD))
-+		WARN_ON_ONCE(test_and_set_bit(vid, ns->vlan.stag));
++	return vlan_vid_add(macsec->real_dev, proto, vid);
++}
 +
++static int macsec_vlan_rx_kill_vid(struct net_device *dev,
++				   __be16 proto, u16 vid)
++{
++	struct macsec_dev *macsec = netdev_priv(dev);
++
++	if (!macsec_is_offloaded(macsec))
++		return 0;
++
++	vlan_vid_del(macsec->real_dev, proto, vid);
 +	return 0;
 +}
 +
-+static int nsim_vlan_rx_kill_vid(struct net_device *dev, __be16 proto, u16 vid)
-+{
-+	struct netdevsim *ns = netdev_priv(dev);
-+
-+	if (vid >= VLAN_N_VID)
-+		return -EINVAL;
-+
-+	if (proto == htons(ETH_P_8021Q))
-+		WARN_ON_ONCE(!test_and_clear_bit(vid, ns->vlan.ctag));
-+	else if (proto == htons(ETH_P_8021AD))
-+		WARN_ON_ONCE(!test_and_clear_bit(vid, ns->vlan.stag));
-+
-+	return 0;
-+}
-+
- static int nsim_shaper_set(struct net_shaper_binding *binding,
- 			   const struct net_shaper *shaper,
- 			   struct netlink_ext_ack *extack)
-@@ -662,6 +692,8 @@ static const struct net_device_ops nsim_netdev_ops = {
- 	.ndo_bpf		= nsim_bpf,
- 	.ndo_open		= nsim_open,
- 	.ndo_stop		= nsim_stop,
-+	.ndo_vlan_rx_add_vid	= nsim_vlan_rx_add_vid,
-+	.ndo_vlan_rx_kill_vid	= nsim_vlan_rx_kill_vid,
- 	.net_shaper_ops		= &nsim_shaper_ops,
- };
- 
-@@ -673,6 +705,8 @@ static const struct net_device_ops nsim_vf_netdev_ops = {
- 	.ndo_change_mtu		= nsim_change_mtu,
- 	.ndo_setup_tc		= nsim_setup_tc,
- 	.ndo_set_features	= nsim_set_features,
-+	.ndo_vlan_rx_add_vid	= nsim_vlan_rx_add_vid,
-+	.ndo_vlan_rx_kill_vid	= nsim_vlan_rx_kill_vid,
- };
- 
- /* We don't have true per-queue stats, yet, so do some random fakery here.
-@@ -970,6 +1004,20 @@ static const struct file_operations nsim_pp_hold_fops = {
- 	.owner = THIS_MODULE,
- };
- 
-+static int nsim_vlan_show(struct seq_file *s, void *data)
-+{
-+	struct netdevsim *ns = s->private;
-+	int vid;
-+
-+	for_each_set_bit(vid, ns->vlan.ctag, VLAN_N_VID)
-+		seq_printf(s, "ctag %d\n", vid);
-+	for_each_set_bit(vid, ns->vlan.stag, VLAN_N_VID)
-+		seq_printf(s, "stag %d\n", vid);
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(nsim_vlan);
-+
- static void nsim_setup(struct net_device *dev)
+ static int macsec_change_mtu(struct net_device *dev, int new_mtu)
  {
- 	ether_setup(dev);
-@@ -982,14 +1030,18 @@ static void nsim_setup(struct net_device *dev)
- 			 NETIF_F_FRAGLIST |
- 			 NETIF_F_HW_CSUM |
- 			 NETIF_F_LRO |
--			 NETIF_F_TSO;
-+			 NETIF_F_TSO |
-+			 NETIF_F_HW_VLAN_CTAG_FILTER |
-+			 NETIF_F_HW_VLAN_STAG_FILTER;
- 	dev->hw_features |= NETIF_F_HW_TC |
- 			    NETIF_F_SG |
- 			    NETIF_F_FRAGLIST |
- 			    NETIF_F_HW_CSUM |
- 			    NETIF_F_LRO |
- 			    NETIF_F_TSO |
--			    NETIF_F_LOOPBACK;
-+			    NETIF_F_LOOPBACK |
-+			    NETIF_F_HW_VLAN_CTAG_FILTER |
-+			    NETIF_F_HW_VLAN_STAG_FILTER;
- 	dev->pcpu_stat_type = NETDEV_PCPU_STAT_DSTATS;
- 	dev->max_mtu = ETH_MAX_MTU;
- 	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_HW_OFFLOAD;
-@@ -1156,6 +1208,8 @@ struct netdevsim *nsim_create(struct nsim_dev *nsim_dev,
- 	ns->qr_dfs = debugfs_create_file("queue_reset", 0200,
- 					 nsim_dev_port->ddir, ns,
- 					 &nsim_qreset_fops);
-+	ns->vlan_dfs = debugfs_create_file("vlan", 0400, nsim_dev_port->ddir,
-+					   ns, &nsim_vlan_fops);
- 	return ns;
- 
- err_free_netdev:
-@@ -1167,7 +1221,9 @@ void nsim_destroy(struct netdevsim *ns)
- {
- 	struct net_device *dev = ns->netdev;
- 	struct netdevsim *peer;
-+	u16 vid;
- 
-+	debugfs_remove(ns->vlan_dfs);
- 	debugfs_remove(ns->qr_dfs);
- 	debugfs_remove(ns->pp_dfs);
- 
-@@ -1193,6 +1249,11 @@ void nsim_destroy(struct netdevsim *ns)
- 	if (nsim_dev_port_is_pf(ns->nsim_dev_port))
- 		nsim_exit_netdevsim(ns);
- 
-+	for_each_set_bit(vid, ns->vlan.ctag, VLAN_N_VID)
-+		WARN_ON_ONCE(1);
-+	for_each_set_bit(vid, ns->vlan.stag, VLAN_N_VID)
-+		WARN_ON_ONCE(1);
-+
- 	/* Put this intentionally late to exercise the orphaning path */
- 	if (ns->page) {
- 		page_pool_put_full_page(pp_page_to_nmdesc(ns->page)->pp,
-diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
-index f767fc8a7505..f844c27ca78b 100644
---- a/drivers/net/netdevsim/netdevsim.h
-+++ b/drivers/net/netdevsim/netdevsim.h
-@@ -18,6 +18,7 @@
- #include <linux/ethtool.h>
- #include <linux/ethtool_netlink.h>
- #include <linux/kernel.h>
-+#include <linux/if_vlan.h>
- #include <linux/list.h>
- #include <linux/netdevice.h>
- #include <linux/ptp_mock.h>
-@@ -75,6 +76,11 @@ struct nsim_macsec {
- 	u8 nsim_secy_count;
- };
- 
-+struct nsim_vlan {
-+	DECLARE_BITMAP(ctag, VLAN_N_VID);
-+	DECLARE_BITMAP(stag, VLAN_N_VID);
-+};
-+
- struct nsim_ethtool_pauseparam {
- 	bool rx;
- 	bool tx;
-@@ -135,6 +141,7 @@ struct netdevsim {
- 	bool bpf_map_accept;
- 	struct nsim_ipsec ipsec;
- 	struct nsim_macsec macsec;
-+	struct nsim_vlan vlan;
- 	struct {
- 		u32 inject_error;
- 		u32 __ports[2][NSIM_UDP_TUNNEL_N_PORTS];
-@@ -146,6 +153,7 @@ struct netdevsim {
- 	struct page *page;
- 	struct dentry *pp_dfs;
- 	struct dentry *qr_dfs;
-+	struct dentry *vlan_dfs;
- 
- 	struct nsim_ethtool ethtool;
- 	struct netdevsim __rcu *peer;
+ 	struct macsec_dev *macsec = macsec_priv(dev);
+@@ -3748,6 +3780,8 @@ static const struct net_device_ops macsec_netdev_ops = {
+ 	.ndo_set_rx_mode	= macsec_dev_set_rx_mode,
+ 	.ndo_change_rx_flags	= macsec_dev_change_rx_flags,
+ 	.ndo_set_mac_address	= macsec_set_mac_address,
++	.ndo_vlan_rx_add_vid	= macsec_vlan_rx_add_vid,
++	.ndo_vlan_rx_kill_vid	= macsec_vlan_rx_kill_vid,
+ 	.ndo_start_xmit		= macsec_start_xmit,
+ 	.ndo_get_stats64	= macsec_get_stats64,
+ 	.ndo_get_iflink		= macsec_get_iflink,
 -- 
 2.53.0
 
