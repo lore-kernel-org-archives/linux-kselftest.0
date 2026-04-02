@@ -1,157 +1,63 @@
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877FF213E7A;
-	Thu,  2 Apr 2026 02:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6423559F5;
+	Thu,  2 Apr 2026 02:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775098367; cv=none; b=TtIDZSHo6oI6+UL9/VJT1XHwAf06kYYuSsZ6SKP6X0H9oMOT7PlXiIVCpeT91ojawMFnSlRVMK4Ac6FjjsOEheshlwuMMjJKpwX+9T1i9CSdSzzE1tj+NC9JAMS72EE1Q7FZVrRMFroxrvbuk5RAalHgIzpL8xde4Ftp91RlIwM=
+	t=1775098497; cv=none; b=jBgYyK39p7ZqL5XA0Bx8BMAKcCX09DxcEowHQivnFB7kKIEox5SWKfInQOxrDgtkQS3y5HWwQhHDBytEpP1FW/AitPgL2kf6VitNmG7YFVn4RvuNjf1vSSAOXwDxWq+ISmWSFqPdklHKP7im3MWCHQJfev1Lh9WCtMTmtYK+bQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775098367; c=relaxed/simple;
-	bh=0s3Ltdb3st4RBI8X7GzRMeGijr+TMGvhGRqHHFtYADY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rDhxgyKv5bIwp9XZlOABIRwZBcfdjccmnFJ3NbWTUBVi5QjPqU0daKosz2qsnlv+w5Eo5IOMw95y/0CQkfPwL4YsAM3VBWGvCc2unWNMHFhBYgOxgl6nl39xwI1OWJLd0SxaMNBBcno5gXpRCRTl2u/cpJ4VrLmbYTTysoQCP08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=e87DXpVA; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+	s=arc-20240116; t=1775098497; c=relaxed/simple;
+	bh=6y8m9lKrIl5oqGsP2iAAVKka5afAWJWZxkBTDRHd1Z4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=th4ji2dvtydBs8BcIpBshTq8OU4/4U5OFkVeEdDso8oDvffxjolN2WRcGLEye9ZoL9ueZIDZ6RDLQUGigALe49qhGT70g/havAuMNmgjAQIJsZf48pOZpD+zctfydXhKnj2dBRdGaAroaXrLDO2XWo7yxrbXYuXqjBKnkrMOhJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tJ9eLlfT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="e87DXpVA"
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4fmRGw2qrYz9vVy;
-	Thu,  2 Apr 2026 04:52:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1775098360;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PI01UIN30SAwEOjcWCs+qKe0QnW9aOaFpOr0QZg4IbQ=;
-	b=e87DXpVA8fumafTy2ZJ4E9FwM6UVRu2C4sFnzIlhrIaWfjkqBUFxVQ552e3H+1apr2Hh1b
-	1+GeY8BaAQToBwK8+aFRYuzXIB0NzFFynuHuG5rfKhwy0xwciIRkKFKHtcM/ATFdVFsXGi
-	e/D+thWbkBZ5YSejLIiWl3CJyb+fWEHKZhYk/iANTu/LoLDaWqdJd6EVfuqNon87UrvPHI
-	HAZVaCgUkhqoDbwqOB+yDsuRvpThDpZX+IJY/sHnNWCcWHOgKcI0+nFN8Sd/rlZ0qsfprc
-	gAbrBmrW9Vputu5fQOImbhR1zEadhHNAkicDb5XW/DvHVbdgwI4yv441hSyM4A==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-Date: Thu, 2 Apr 2026 13:52:15 +1100
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Jori Koolstra <jkoolstra@xs4all.nl>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>, 
-	Alexander Aring <alex.aring@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Andrey Albershteyn <aalbersh@redhat.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, Namhyung Kim <namhyung@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	cmirabil@redhat.com, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
-Message-ID: <2026-04-02-aged-convex-snowbird-foxes-Ym20JZ@cyphar.com>
-References: <20260331172011.3512876-1-jkoolstra@xs4all.nl>
- <20260331172011.3512876-2-jkoolstra@xs4all.nl>
- <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tJ9eLlfT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C47EC2BCAF;
+	Thu,  2 Apr 2026 02:54:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775098497;
+	bh=6y8m9lKrIl5oqGsP2iAAVKka5afAWJWZxkBTDRHd1Z4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=tJ9eLlfTajYGCPQcAsEInjeUCf5cS9tbvNNfcgBJY4GVbjFsVZTUCcNwXi1Ky4/Jq
+	 4N3i6NXG6RmVUdKs3yLa54LtCWq0F1yCfXkzAMCFGsabbWT5EaY+ys6JWdlvXL8mo+
+	 jLaqml9Sqqy9k6SSu6H8jpUkNKj4Jc4A2bG71+cIZttkbh1pPzV3rK8Hi3Qly5pIlO
+	 sOtglWv1iy+UWzHZG92tm1xADknKFqVOtwkUwTHL52Ik1IdXIQaUWNwzm8hnyc8YxX
+	 qjGXKVL1CMMqgUZ9k6lIIpywzVTcZ19LBP4Dfb+LYl+IW13t37KGFDDKzDnQ/b6feC
+	 m4PO6/8Ws7JWA==
+Date: Wed, 1 Apr 2026 19:54:56 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Cosmin Ratiu <cratiu@nvidia.com>, <netdev@vger.kernel.org>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Shuah
+ Khan <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, Dragos Tatulea
+ <dtatulea@nvidia.com>
+Subject: Re: [PATCH net v6 0/4] macsec: Add support for VLAN filtering in
+ offload mode
+Message-ID: <20260401195456.6158e9cb@kernel.org>
+In-Reply-To: <20260330130130.989236-1-cratiu@nvidia.com>
+References: <20260330130130.989236-1-cratiu@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="o3fvuy4phjbklnx7"
-Content-Disposition: inline
-In-Reply-To: <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
-X-Rspamd-Queue-Id: 4fmRGw2qrYz9vVy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Mon, 30 Mar 2026 16:01:26 +0300 Cosmin Ratiu wrote:
+> This short series adds support for VLANs in MACsec devices when offload
+> mode is enabled. This allows VLAN netdevs on top of MACsec netdevs to
+> function, which accidentally used to be the case in the past, but was
+> broken. This series adds back proper support.
+> 
+> As part of this, the existing nsim-only MACsec offload tests were
+> translated to Python so they can run against real HW and new
+> traffic-based tests were added for VLAN filter propagation, since
+> there's currently no uAPI to check VLAN filters.
 
---o3fvuy4phjbklnx7
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
-MIME-Version: 1.0
-
-On 2026-04-01, Mateusz Guzik <mjguzik@gmail.com> wrote:
-> On Tue, Mar 31, 2026 at 07:19:58PM +0200, Jori Koolstra wrote:
-> > @@ -5286,7 +5290,25 @@ int filename_mkdirat(int dfd, struct filename *n=
-ame, umode_t mode)
-> >  		lookup_flags |=3D LOOKUP_REVAL;
-> >  		goto retry;
-> >  	}
-> > +
-> > +	if (!error && (flags & MKDIRAT_FD_NEED_FD)) {
-> > +		struct path new_path =3D { .mnt =3D path.mnt, .dentry =3D dentry };
-> > +		error =3D FD_ADD(0, dentry_open(&new_path, O_DIRECTORY, current_cred=
-()));
-> > +	}
-> > +	end_creating_path(&path, dentry);
-> >  	return error;
->=20
->=20
-> You can't do it like this. Should it turn out no fd can be allocated,
-> the entire thing is going to error out while keeping the newly created
-> directory behind. You need to allocate the fd first, then do the hard
-> work, and only then fd_install and or free the fd. The FD_ADD machinery
-> can probably still be used provided proper wrapping of the real new
-> mkdir.
->=20
-> It should be perfectly feasible to de facto wrap existing mkdir
-> functionality by this syscall.
->=20
-> On top of that similarly to what other people mentioned the new syscall
-> will definitely want to support O_CLOEXEC and probably other flags down
-> the line.
->=20
-> Trying to handle this in open() is a no-go. openat2 is rather
-> problematic.
-
-I'm interested in what makes you say that. It would be very nice to be able
-to do mkdir + RESOLVE_IN_ROOT and get an fd back all in one syscall. :D
-
-To be fair, build_open_how() will need some more magic to keep openat()
-working, and that won't be particularly pretty. If we went with
-O_CREAT|O_DIRECTORY we would need to be quite careful to make sure
-O_TMPFILE continues to work for both openat() and openat2()...
-
-> I tend to agree mkdirat_fd is not a good name for the syscall either,
-> but I don't have a suggestion I'm happy with. I think least bad name
-> would follow the existing stuff and be mkdirat2 or similar.
->=20
-> The routine would have to start with validating the passed O_ flags, for
-> now only allowing O_CLOEXEC and EINVAL-ing otherwise.
-
-Please do not use O_* flags! O_CLOEXEC takes up 3 flag bits on different
-architectures which makes adding new flags a nightmare.
-
-I think this should take AT_* flags and (like most newer syscalls)
-O_CLOEXEC should be automatically set. Userspace can unset it with
-fnctl(F_SETFD) in the relatively rare case where they don't want
-O_CLOEXEC. Alternatively, we could just bite the bullet and make
-AT_NO_CLOEXEC a thing...
-
-But yes, new syscalls *absolutely* need to take some kind of flag
-argument. I'd hoped we finally learned our lesson on that one...
-
---=20
-Aleksa Sarai
-https://www.cyphar.com/
-
---o3fvuy4phjbklnx7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCac3Z3xsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG8N0gD/WJsvCCKORuiEQhk4zFP7
-tBYNwHeV6BT/7bD+Jb52nxkA+wSQXbre6aJO6Pc2aZ8UZ63KKnV5jrW7ZCjzd1rW
-q5wG
-=Sn0T
------END PGP SIGNATURE-----
-
---o3fvuy4phjbklnx7--
+Hi Sabrina, how does this look to you?
