@@ -1,164 +1,120 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5131DDC28
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 00:28:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72841A275;
+	Thu,  2 Apr 2026 00:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775089729; cv=none; b=UPlPvOwIWrzip5ajg53fKKWiCmp6BLHSyEEsOWKP9UIRDKQdTZleipuF/TZBJGN/hEGu3yBo9OJVz/V093QE2f8t1MitQUuwjMsgtdl28WaV5FztGCLem6h1N2yw2PK2f6kJ7oxBfoxdomMqVaH5XKprSnA6aOzTwa9Ag4r16PA=
+	t=1775090075; cv=none; b=moKKEUobCknSNtD1Sp7ibeo8AuIHE4jAk/+eAec4qKRsziLd+pv49zH1icpjNWE/IBrFsZrOuFnt1ArpgiUOzVAEtcHnGenS3niRGZL1UrIahS/WO6qa2Sdf4pPlz8abT+ZvfGr8WM4fBbmH2mEr1h/k7hNQnwsWEksr/fBXA2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775089729; c=relaxed/simple;
-	bh=NsFHEc9cLIhxwHd8GCARIIYerKt25yqMowBZFNTuQ6s=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=B/r4sRBypoSnJwq67jiAVpAzKHFjQIBM0pSWArnP8lWUBoeXVfRBeca0eL5AT8N6AyB9Grf9H3q7BoMgQ1JebuWlRbFMAUSoTOcHbPfbrUF4c2noRwYnyHYhPneyzZKDr7fjXk1ymkRkNyURku8h9rtKD9oVKiNYWGOsod1Ybmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qZyxaZhF; arc=none smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775090075; c=relaxed/simple;
+	bh=zwjMt9fc/YEI5eQpuM/nbLt999tiwy+apdZ7cEZ95n0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=B1eOS3NMPfPgSdAbcZKSNsEQ2wEIs3Md3C3vRZhf0t/5Ync8zSpzHKy4822X8G93XXbwfiwhbQ9V0b6ZUzQuTgog2njtbJercRMJlkUqi95Xvg3THSfumD7VaxMmfRIgPCgaj9bEBzmtNLvGor6WoX+X7lklatVskE/BwFZxDfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=quK8IuPj; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qZyxaZhF"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-6501d32b04bso362021d50.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Apr 2026 17:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775089727; x=1775694527; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EG+TGuMH7iRqP+SEgh1/fCjYkx8AoXZpEYux/97XIDg=;
-        b=qZyxaZhFXBrp9Fddl2ELPB719MzoC7PMpKO3lEqRjpVNhgB03tJSQ15MbjrZCTrYpd
-         7bVwTOwVBsgqAjsc+mR/XfDAPAAoCvKz/Vawi4KSiPScE5cf7ujXW56dCmgPV85pDlQX
-         siCSwO3UKCVyVwyO2bk3pB/I7eRYOlZSy/j8sRnp/dN0i55IxH9QdVzDLRS4rVF3QVNU
-         BPIFeexvp0tCeGEPthVnfZfekgiFYP+B04NLnNGmjBBU7vPbyrrtuH5//zjBHcLBrrMe
-         QTui1ZeZi6rPhL1JmbSk+fz59GdU0WM1aqVPqmHgbQU+oUxGmENtMdkHVNOyOrN4aI9l
-         On9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775089727; x=1775694527;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EG+TGuMH7iRqP+SEgh1/fCjYkx8AoXZpEYux/97XIDg=;
-        b=R9Ewm8+mE59jrcGWBbiYqW7sBuTlXbH4I9BT6sTpk1WKJpRgG7fxv52yR/7tC/nhmh
-         j7eIfDEoQ1GqUAuzSVZu27qChOjhUWnw3Rpf2ejYzenVVpff7c4ZSMG67mi8AA4RTP6A
-         b6vFwcMZ0mAC/7fJmuDeMpn8Wwj43S3N0JiWTMXCPMAX2Or1t4BFv4JOv+nMBksfFgg5
-         j6gXNITImP1LAcdOnt7fYOfyOdEsYyHBsOxfp9R0U55ESWgQ0/vHZ9RC87irvOmSF1N/
-         JEN1o1GLs8H0RNeMDVK3rQZTYKowNbWTaQCZ0mJOXoqKC5i2XWPPVIa9sDInPoQIeGFL
-         N4Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCUrVILoRltoMLhY8YLOqJ04QwMZht6F5kJ4VOy9x7BqP+H5dGfq0n5omqhAc30X1WDCuGiJLqdH/A76Ddx/u8U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIPyu5KnXVFSImlCHuVZ8PPWUb5lHgA9k91CyVXQXDGQd73lIz
-	IlLkurpZYPxgTsX7QOnGLgPanWMb/52VRs15/Ej6kjDX5YMbfCJ8x3gp
-X-Gm-Gg: AeBDietVrOPUJ2LDVuxH0Hz5VotG7bAnAMe1+P9rgmtE7nNeWyJWz7Q74fl5f+8HGuU
-	QJUKePtPezoVQN360UGr69rzMfyi2P8WoKBnbaaXL9125AoL8VT1UXkW5E9sYP8wnd58R0lhmbw
-	gCmnCrrf9xvx9MPZCywrhVaNqZwfFblMVmbw6nnx/q3SyYtK8XrOR+9fBfWK2/zJO6buRFdSvkP
-	7vBe+qewKr2LrxNDhPX+gCeG/ylIyAIb3/5A2m+E5IfMHQRPVy2KP3TdVHs+atUEhSn6prX6Tjv
-	QdUlJROILjaX9ADD12LNSVvAC3xF8Unq1GYvGjN2vaIY7YAae02REKTi15279rLoQ/vJgafalho
-	xd//ZBaOrskTtLjfFpil/PCcrBni0eD0vs4m7le3PMxMSjnIRjUDW6jBnixXGxwZ9abwbxKHf3h
-	uOwfE0e2PpB0Sjk5nHuzHuUNuqvNUBBItkcr52bufNQSQRB2Tj0DWrKr6OQ6BqrLSed74cHjZ2U
-	WMa
-X-Received: by 2002:a53:420d:0:b0:650:2257:e085 with SMTP id 956f58d0204a3-6502fde2b85mr3979331d50.30.1775089727443;
-        Wed, 01 Apr 2026 17:28:47 -0700 (PDT)
-Received: from gmail.com (180.134.85.34.bc.googleusercontent.com. [34.85.134.180])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a9cabaesm573157d50.18.2026.04.01.17.28.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 17:28:46 -0700 (PDT)
-Date: Wed, 01 Apr 2026 20:28:46 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- shuah@kernel.org, 
- willemb@google.com, 
- petrm@nvidia.com, 
- anubhavsinggh@google.com, 
- richardbgobert@gmail.com, 
- linux-kselftest@vger.kernel.org, 
- Jakub Kicinski <kuba@kernel.org>
-Message-ID: <willemdebruijn.kernel.14f444719030c@gmail.com>
-In-Reply-To: <20260401182625.372605-7-kuba@kernel.org>
-References: <20260401182625.372605-1-kuba@kernel.org>
- <20260401182625.372605-7-kuba@kernel.org>
-Subject: Re: [PATCH net-next 6/6] selftests: drv-net: gro: add a test for bad
- IPv4 csum
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="quK8IuPj"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6320BoMn337829;
+	Thu, 2 Apr 2026 00:34:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=2dOBY
+	yv3A6fc59MBInXOI0qr/cp1C0Rbd5GSjFSiR/8=; b=quK8IuPj8pMGJ2T4vc4MN
+	pnmoOWyz6blbF7KX9KRp1Gvwxqwh2nSS7jq7d5exuIM2kckY5ZLKXh3S/831nebe
+	tyxfuuEgitUaDT8PaXXEA9+v/MK5Fxp2YiWv7vQ/MRjPHkQtPUXGZjC8qBj0HlaX
+	XBla1rvIHB9YWYo6TxMAMvAiZ4PowpzhpO3wN2IkH66FgtHZETYV4nZakDu9ylpr
+	3VNOxa/Kk9TXRXGM+23W1tFO+ppkHETKbWZ3q6J92PJmg2gmjz6QU8P1FatIGORY
+	TAK1KhBWFFX4oIyojWqRJNJsfbLqNxoZ5LOB4uhrDKzcP6Xl2SvJJLgcm+CdEpmi
+	w==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d66v5qjtf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 Apr 2026 00:34:22 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 631NwbJJ025980;
+	Thu, 2 Apr 2026 00:34:21 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d65ec222p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 Apr 2026 00:34:21 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 6320YJ7e001596;
+	Thu, 2 Apr 2026 00:34:20 GMT
+Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4d65ec221n-2;
+	Thu, 02 Apr 2026 00:34:20 +0000
+From: Anthony Yznaga <anthony.yznaga@oracle.com>
+To: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
+        Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
+        surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
+        Jason@zx2c4.com, shuah@kernel.org
+Subject: [PATCH 1/2] mm: fix mmap errno value when MAP_DROPPABLE is not supported
+Date: Wed,  1 Apr 2026 17:34:16 -0700
+Message-ID: <20260402003417.438037-2-anthony.yznaga@oracle.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260402003417.438037-1-anthony.yznaga@oracle.com>
+References: <20260402003417.438037-1-anthony.yznaga@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_05,2026-04-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=999 phishscore=0 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
+ definitions=main-2604020003
+X-Proofpoint-GUID: 6Z-8Pd5rBCVrAJq5qnKIDBNWX2gY9RRO
+X-Authority-Analysis: v=2.4 cv=G7cR0tk5 c=1 sm=1 tr=0 ts=69cdb98e b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=EIcjfB9IiI4px24ztqRk:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
+ a=8mUEbX9rbSpP1ZQJX6cA:9 a=ZXulRonScM0A:10
+X-Proofpoint-ORIG-GUID: 6Z-8Pd5rBCVrAJq5qnKIDBNWX2gY9RRO
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDAwMyBTYWx0ZWRfXweGrWjXFhoe0
+ ak8nteaYbA7rH44XhsjFSL3Vnm3ocduDOalfdsxapBJpsRioIrjg4wwkgS3ohRc0ulV393oajvf
+ 1HR96MjGTyrDxBVCqGRRuhCddYCrlX7Pav1Z3Y/f4G1MOuMLGmQOEbN5jAz3pnvyF3+6bErJ+ZD
+ dAlGb7nacHB1sNJRq8fm44Cr0WutxsklpF7d1q9hB2Ch2j9kjTPhE1U6WAiSYMbk2fSKvHMMPe1
+ 315ekbd6rQNuhoHyXL1ztSlbI+9DMHlpOH1lOM0XNxlbNSy5gB82Q/Jns3KG9qivsmnX6XiQojb
+ Npm3yPaQI8zwQxPFyGk/NXFS5V60knYVOTHILi8Gfo2n9VjSGE8fLEJTfLCZroUSFAeqhm+kuGh
+ WBBZFfcuKzFEggR2yrLH3DmUp1IJHnJBzhdbSxkKp8zhJerK3nIRBGaExTYuLWT0lt+UTMBskdt
+ a8wzKU3642+VqeUcjgA==
 
-Jakub Kicinski wrote:
-> We have a test for coalescing with bad TCP checksum, let's also
-> test bad IPv4 header checksum.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  tools/testing/selftests/net/lib/gro.c      | 25 ++++++++++++++++++++++
->  tools/testing/selftests/drivers/net/gro.py |  1 +
->  2 files changed, 26 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
-> index 762e88932ed2..a458cfbd11eb 100644
-> --- a/tools/testing/selftests/net/lib/gro.c
-> +++ b/tools/testing/selftests/net/lib/gro.c
-> @@ -36,6 +36,7 @@
->   *  Packets with different (ECN, TTL, TOS) header, IP options or
->   *  IP fragments shouldn't coalesce.
->   *   - ip_ecn, ip_tos:            shared between IPv4/IPv6
-> + *   - ip_csum:                   IPv4 only, bad IP header checksum
->   *   - ip_ttl, ip_opt, ip_frag4:  IPv4 only
->   *   - ip_id_df*:                 IPv4 IP ID field coalescing tests
->   *   - ip_frag6, ip_v6ext_*:      IPv6 only
-> @@ -675,6 +676,21 @@ static void send_changed_checksum(int fd, struct sockaddr_ll *daddr)
->  	write_packet(fd, buf, pkt_size, daddr);
->  }
->  
-> +/* Packets with incorrect IPv4 header checksum don't coalesce. */
-> +static void send_changed_ip_checksum(int fd, struct sockaddr_ll *daddr)
-> +{
-> +	static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
-> +	struct iphdr *iph = (struct iphdr *)(buf + ETH_HLEN);
-> +	int pkt_size = total_hdr_len + PAYLOAD_LEN;
-> +
-> +	create_packet(buf, 0, 0, PAYLOAD_LEN, 0);
-> +	write_packet(fd, buf, pkt_size, daddr);
-> +
-> +	create_packet(buf, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
-> +	iph->check = iph->check - 1;
-> +	write_packet(fd, buf, pkt_size, daddr);
-> +}
-> +
->   /* Packets with non-consecutive sequence number don't coalesce.*/
->  static void send_changed_seq(int fd, struct sockaddr_ll *daddr)
->  {
-> @@ -1392,6 +1408,10 @@ static void gro_sender(void)
->  		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
->  
->  	/* ip sub-tests - IPv4 only */
-> +	} else if (strcmp(testname, "ip_csum") == 0) {
-> +		send_changed_ip_checksum(txfd, &daddr);
-> +		usleep(fin_delay_us);
-> +		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
->  	} else if (strcmp(testname, "ip_ttl") == 0) {
->  		send_changed_ttl(txfd, &daddr);
->  		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
-> @@ -1588,6 +1608,11 @@ static void gro_receiver(void)
->  		check_recv_pkts(rxfd, correct_payload, 2);
->  
->  	/* ip sub-tests - IPv4 only */
-> +	} else if (strcmp(testname, "ip_csum") == 0) {
-> +		correct_payload[0] = PAYLOAD_LEN;
-> +		correct_payload[1] = PAYLOAD_LEN;
-> +		printf("bad ip checksum doesn't coalesce: ");
-> +		check_recv_pkts(rxfd, correct_payload, 2);
+On configs where MAP_DROPPABLE is not supported (currently any 32-bit
+config except for PPC32), mmap fails with errno set to ENOTSUPP.
+However, ENOTSUPP is not a standard error value that userspace knows
+about. The acceptable userspace-visible errno to use is EOPNOTSUPP.
+checkpatch.pl has a warning to this affect.
 
-This verifies that a packet with bad csum does not coalesce to a valid
-packet. Perhaps too paranoid but, do you also want to test the reverse
-case?
+Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always lazily freeable mappings")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+---
+ mm/mmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Can be a single test by adding another write_packet and observing all
-three separate packets.
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 5754d1c36462..2311ae7c2ff4 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -504,7 +504,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 			break;
+ 		case MAP_DROPPABLE:
+ 			if (VM_DROPPABLE == VM_NONE)
+-				return -ENOTSUPP;
++				return -EOPNOTSUPP;
+ 			/*
+ 			 * A locked or stack area makes no sense to be droppable.
+ 			 *
+-- 
+2.47.3
+
