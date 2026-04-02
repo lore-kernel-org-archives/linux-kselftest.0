@@ -1,147 +1,111 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24A927C162
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8980D22FF22;
+	Thu,  2 Apr 2026 01:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775093699; cv=none; b=jDSv7uEZZPpkS9Sbd6P1zpyCAkeJAeCGhWQtx2P8tD0M7j0XZQ34RjLMWl4+d874giga+xiSgx5RVvDudGwGgYTWefviZH92LjCzwc1vBsRfsCmbBwKHemiCgTOi+LbB/vfTA6Eqrwuz71LiZm5JDW0p6Mm6QjyKZQrjJCRkpTg=
+	t=1775094085; cv=none; b=MrdCa+R++l+xJc7RHRG9N7q2jQJ6hVLBK+OaERZ1/2nVu3QuxcwKDtUhCbSehsKjMoX64rgHQqiO3LwA4Q3F3iVCAZya799q6cKOSR9dt+y7eEmhQ3ga/0LB6S4IvTIEZIIzJgdC2w0Z+XRBG1d958HTIwoXoa9FgiD4CpzaU2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775093699; c=relaxed/simple;
-	bh=m297v3GiOVxkqkQKNKsn0SSm2BRnx0wYfsw0+elhHng=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iSVWNMlt9FkL1uRSV4dm3spqswrAwSD+3/u8EOynvvBrkZOQE7feBGyLV9BFxOal01hxKUzqdb5bVRfuwuaKyNhjGVTFn/pmL4pWtqe4y4b1xPfK+EYY+FimaIh1OiNHfUPJdxlHBt4fWJaXF8VbD6nWoYZjFUzapDocrS92+oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uIDVavCa; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775094085; c=relaxed/simple;
+	bh=BzANNX+XCdxr/liDOmc+KLPcWYuqzJ1vlYE/EVAGvEg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=seNwNrc1bo1khzVpgUooi2FUJVapaySZ7IXNwgnVgXEXgMB8go/lM0pnrCGCo7sm3C0yR5jE440y4nrEdMNWlG4OY11c1TJCRmqitKrestaBMFcSTOZVQGDiF4wOCB3l43fFVaLmslArACgKtpidZvoeM84XmaGGdqqy5yFdi3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=i0naMR9w; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uIDVavCa"
-Date: Wed, 1 Apr 2026 18:34:32 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775093685;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QIoJDHbGUi2T/S0l/YZNFtyf9ayIGPFiBwet0GcLpco=;
-	b=uIDVavCa2u2MMjx4gA75IWMWn8CnNonvE3gYY8ZwaNY/D/b8Pru3oHsGl0/dAPjD1gxyqp
-	BMbIN6FIaEHgEr4rzTlUMqB5C3vy0QK/ntg/MFZzoyMAk7CdYmK2usVt4LaljM1PHjBTx+
-	hgoH7PNIK2wuRPEA/6jvvMUQpjTVlLU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Jiayuan Chen <mrpre@163.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
-Message-ID: <ac2z6IqYyIxSZFPS@devbig1721.ftw5.facebook.com>
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
- <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
- <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
- <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
- <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
- <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
- <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
- <ae86a1e5-769c-44d8-ad7e-ad724800e9e4@linux.dev>
- <08c824b0-cfbb-40ca-b976-9fbd41e5e855@rbox.co>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="i0naMR9w"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=cLdczJYdweiDTR4k8RfWxcCkbFm9C4zs52yHWSQ3P04=;
+	b=i0naMR9w04jGCrCibz1QpTYUhPTuY7iux05gGMK9OFaMfxlmSa7ATYNv3hCbz5tRSIo6iRQcu
+	XVq9K1Etj+PvKfocDXdznvishGbYpJDXYsTaKic+8y9AKj0FIbaMo2KSJwzioj8ZvT/E3OzEr5d
+	1qXQG41oOqb5dstsqF+2Qws=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4fmPY40Wncz12LJV;
+	Thu,  2 Apr 2026 09:34:48 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id B11FC40569;
+	Thu,  2 Apr 2026 09:41:13 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 2 Apr 2026 09:41:10 +0800
+Message-ID: <adf2b4a8-27d6-59ad-74f3-ea43e07fe84f@huawei.com>
+Date: Thu, 2 Apr 2026 09:41:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <08c824b0-cfbb-40ca-b976-9fbd41e5e855@rbox.co>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v14 3/4] arm64: Use generic TIF bits for common thread
+ flags
+Content-Language: en-US
+To: Catalin Marinas <catalin.marinas@arm.com>
+CC: <will@kernel.org>, <chenhuacai@kernel.org>, <kernel@xen0n.name>,
+	<hca@linux.ibm.com>, <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
+	<borntraeger@linux.ibm.com>, <svens@linux.ibm.com>, <oleg@redhat.com>,
+	<tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <arnd@arndb.de>,
+	<shuah@kernel.org>, <kevin.brodsky@arm.com>, <yeoreum.yun@arm.com>,
+	<anshuman.khandual@arm.com>, <thuth@redhat.com>, <ryan.roberts@arm.com>,
+	<mark.rutland@arm.com>, <song@kernel.org>, <ziyao@disroot.org>,
+	<linusw@kernel.org>, <schuster.simon@siemens-energy.com>,
+	<jremus@linux.ibm.com>, <akpm@linux-foundation.org>,
+	<mathieu.desnoyers@efficios.com>, <kmal@cock.li>, <dvyukov@google.com>,
+	<reddybalavignesh9979@gmail.com>, <x86@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-s390@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+References: <20260320104222.1381274-1-ruanjinjie@huawei.com>
+ <20260320104222.1381274-4-ruanjinjie@huawei.com> <acz5mOrm6_E1UBwV@arm.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <acz5mOrm6_E1UBwV@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-On Wed, 01 Apr 2026 00:43:58 +0200, Michal Luczaj wrote:
-> On 3/31/26 02:20, Martin KaFai Lau wrote:
-> > On 3/30/26 4:03 PM, Michal Luczaj wrote:
-> >> On 3/26/26 07:26, Martin KaFai Lau wrote:
-> >>> On 3/15/26 4:58 PM, Michal Luczaj wrote:
-> >>>>> Beside, from looking at the may_update_sockmap(), I don't know if it is
-> >>>>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
-> >>>>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
-> >>>>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
-> >>>>> when the bpf_map_update_elem(sockmap) support was added iirc.
-> >>>>
-> >>>> What about a situation when unix_sk is stored in a sockmap, then tc prog
-> >>>> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
-> >>>> useful, but seems doable.
-> >>>
-> >>> [ Sorry for the late reply ]
-> >>>
-> >>> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible
-> >>> from tc :(
-> >>>
-> >>> Then unix_state_lock() in its current form cannot be safely acquired in
-> >>> sock_map_update_elem(). It is currently a spin_lock() instead of
-> >>> spin_lock_bh().
-> >>
-> >> Is there a specific deadlock you have in your mind?
-> > 
-> > e.g. unix_stream_connect() is taking unix_state_lock(). Can a tc's 
-> > ingress bpf prog call unix_state_lock()?
+
+
+On 2026/4/1 18:55, Catalin Marinas wrote:
+> On Fri, Mar 20, 2026 at 06:42:21PM +0800, Jinjie Ruan wrote:
+>> Use the generic TIF bits defined in <asm-generic/thread_info_tif.h> for
+>> standard thread flags (TIF_SIGPENDING, TIF_NEED_RESCHED, TIF_NOTIFY_RESUME,
+>> TIF_RESTORE_SIGMASK, TIF_SINGLESTEP, etc.) instead of defining
+>> them locally.
+>>
+>> Arm64-specific bits (TIF_FOREIGN_FPSTATE, TIF_MTE_ASYNC_FAULT, TIF_SVE,
+>> TIF_SSBD, etc.) are renumbered to start at bit 16 to avoid conflicts.
+>>
+>> This enables RSEQ optimizations which require CONFIG_HAVE_GENERIC_TIF_BITS
+>> combined with the generic entry infrastructure (already used by arm64).
+>>
+>> By the way, remove TIF_FREEZE because this flag became unused since
+>> commit d88e4cb67197 ("freezer: remove now unused TIF_FREEZE").
+>>
+>> Cc: Thomas Gleixner <tglx@kernel.org>
+>> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+>> Reviewed-by: Linus Walleij <linusw@kernel.org>
+>> Reviewed-by: Yeoreum Yun <yeoreum.yun@arm.com>
+>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 > 
-> Ah, right, that's the problem, thanks for explaining.
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 > 
-> But, as I've asked in the parallel thread, do we really need to take the
-> unix_state_lock() in sock_map_update_elem()? Taking it in
-> sock_map_update_elem_sys() fixes the null-ptr-deref and does not lead to a
-> deadlock. Taking unix_state_lock() in sock_map_update_elem() seems
-> unnecessary. Well, at least under the assumption progs can only access
-> unix_sk via the sockmap lookup.
+> Given that it's touching multiple trees, I guess it's a series for
+> Andrew?
 
-right, sock_map_update_elem_sys() should be safe to take
-unix_state_lock().
+Yes, this series touches x86, arm64, s390 and loongarch. It's best for
+Andrew to help merge this in the -mm tree.
 
-If it is fixed by testing unix_peer(), is the TCPF_ESTABLISHED test
-in sock_map_sk_state_allowed() still useful and needed? Also,
-please explain in detail in the commit message why testing for NULL
-without unix_state_lock() is enough. For example, for the BPF iterator on
-sock_map, my understanding is that unix_release_sock() can still happen
-while the BPF iterator is iterating over a unix_sock. I guess a future
-unix_state_lock() in the iterator's seq_show() should be useful.
-
-It will also be useful to mention what was discovered about TC + lookup
-+ update_elem(&sock_map, ...) and why it is not safe to take
-unix_state_lock() in that path. Thanks.
+Moreover, the latter two arm64-related patches depend on patch serise
+"arm64:
+entry: Convert to Generic Entry" v14 being merged first, while the first
+two patches can be merged in advance.
 
 > 
-> >> ...
-> >> And sock_{map,hash}_seq_show() (being a part of bpf iter machinery) needs
-> >> to take lock_sock() just as well? Would that require a special-casing
-> >> (unix_state_lock()) for af_unix?
-> > 
-> > I would think so for lock_sock() considering the current bh_lock_sock 
-> > without !sock_owned_by_user() usage is incorrect in 
-> > sock_map_update_elem(). [ this probably should be a separate issue for 
-> > another patch ]
-> 
-> All right, leaving that for later.
-> 
-> > Some more side-tracking... from looking at the code, the bpf_iter of 
-> > sock_{map,hash} can do bpf_map_lookup_elem(&sock_map, ...). This 
-> > bpr_iter program probably will be failed to load because the 
-> > bpf_sk_release() is not available.
-> 
-> I think ability to bpf_map_lookup_elem(sockmap) was added way before bpf
-> iter in
-> https://lore.kernel.org/bpf/20200429181154.479310-2-jakub@cloudflare.com/
-> and iter "allows" it somewhat accidentally. Would you rather have it
-> explicitly dropped?
-
-It is fine to leave it as is. It would be a bit nicer to reject map_lookup
-on sockmap instead of giving the confusing error that bpf_sk_release
-is not available. That is for another day. I was just wondering what else
-could go wrong with map_lookup.
