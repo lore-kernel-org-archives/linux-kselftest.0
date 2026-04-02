@@ -1,132 +1,123 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB0337C912
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 12:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775131476; cv=pass; b=FO1w6TqVFiWRSbW/R4a+RQflI1zuB0YL9D7koQtnUkvb1LbTk5YKYxm0+YLzQWWde1Qf4nrsm3HZvZBCwW4o1I8nJ0AAkVjupfo/RaniO6ey1Sezt2PwY2Ad401L7+XmlVTUZFzeGrlcVO+Y8a0598ElTdW7uc4sg1s2fLvjy94=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775131476; c=relaxed/simple;
-	bh=zKWFrITeul/qgtQWiLbC+mauwtMzdzB7O/5xgYGl/5U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gvCwLA6zmru6wTSLfbXo73Lwt266Y9cESHF5lGVApVjqFbFzIGxDHU8odtx72V+gdl3VxkuOG+hI3ZHQsUDALmsFVC6O17w3dw9kbE3kH+X69c5K6jvg8SPb//eUxBPM3pltsUeLU8GWpFK8TmQs0vyNDfESMkUbElWsxfyyYeM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXYUFk+C; arc=pass smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC863E51C4
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 12:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775134509; cv=none; b=UbnaS77l4Vy/eDl49bFxKS+pt5ScWuAk55Nlab+eSsDDW4Wo4zFJAjP5YS+nHFEgsh3pUtdBPCphT2rQwp51rWIbFV+OT7SdobmxpGBGVllNSFSBU+KQR9zw4qfAyxnaA86XF5LdfMaI9EEleyZmKLdQ53E1Re9E2l79dh49YBw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775134509; c=relaxed/simple;
+	bh=0EExnHRsi8qpzqXO+XeoCnMx5K/0WcTSOtlzYNAHJIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CVuKqn6gtdMuTBbLMXN5QXuoWel8sy+PCNroA6zJlJbGpg5cj2vuPd02daDlI4+VV2yY95ISifLf6vtCz+kdE6Fp6b5Ff/aHgb1s+ctsIoRq+Bvfb1NY/yzWuVKeX8LnI64rSpe5ykrX1TK75uQK8eSETFUJ5yve/751ts+6yU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=JViMMnuh; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXYUFk+C"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-79885f4a8ffso6361707b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 05:04:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775131474; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Vmjp5iEr3o7cUa4njjltI89Prqp5Oayhfmu1tZY2oOvOdzEPfecGhamV/Q4WM8WWrf
-         uUFy6IcfN1wl7oF64ygFcazNGSjST1uiMIi01R+/XZTPDPr+R0s/SwGXMP7l8o/T9B6g
-         rtmjaitRV/vNKab4hdV96Dun/nREjWkdKWUEzzmcq9fDo/5iB1fYIRsOsLYYMPRoEKzt
-         Wg0qT4b2Eli4DDeAHwhfCdw1NBRDGmW2KFqEAE4hmMj2alqu9a02XkuCEfp41XhsbQ/Q
-         m/ZT2P7kER2HJvqibSQ63zP4KvdZpZq1I/YNLuOcpSpHxGkVkEXDg74OueAQVh9ETMyG
-         B9jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zKWFrITeul/qgtQWiLbC+mauwtMzdzB7O/5xgYGl/5U=;
-        fh=Cg+P3R5llrfsipVCkBFjKm2lrWb6Jn87gCrkEOeAXHo=;
-        b=kzTL7GA7Ihtf8I16cUK5Accoz1c1k1aVF+fayttopf/YNDK60WqSpRBYtGyf/YIw5t
-         kUgUYtw0pIVUsOv3t69PzVrAbU/KqIno6M0I7ayLLmrjzTI/hjcud0I6ajVrjOFnPL2t
-         7Ju4IoTmNKUmsmUVnSbWfwxrsUA97AwTFJyeQRg+DU5Yqwq2MDEZ/nkCXQ/ZFTH7LXNg
-         QGYiHUozGAWkod/hCW/JaYf7FElM9Od6MpX3YY/W1vpwOd1VJVIWK5VvATI2Fz/ijStJ
-         Bf27BMqPgebpUG4JdXQ5AyUzrRQydvF7xtXkVLbNmRmvvK3ulBntMxYPFIuHYsN1c67L
-         2AYw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="JViMMnuh"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-483487335c2so8085615e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 05:54:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775131474; x=1775736274; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zKWFrITeul/qgtQWiLbC+mauwtMzdzB7O/5xgYGl/5U=;
-        b=VXYUFk+CoDu8M8EaV3fM67tURl8pgvESG6Ln4kfzswHkFKtmFf2y9WIaLYryLL6rT6
-         frQDoznSMtQy/JVUQr4Mterw+FbRoNPv0VaTkcxppimirTEbThZfjME1/DG3KBfnpsY9
-         OZvshLk4OLJn589ecHkqFLSFic4YDbapAe8iMLCzhfU1qfR3y9ILZgOEEhoRXgWAmnNJ
-         DCywUDKILlkXZZLGZ3Hi6t97Ye1GKZJLTkHY7ijgxcUfJToq9xwFzRsGRuaqfJfakMtq
-         VNFEDW0OS9KYfWYQE/o5svSRvxh4z0S7etR2mnQkIM2h15jUtHaFJMwmt8s9MuxAMZof
-         Duew==
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1775134496; x=1775739296; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c5UfMDLJ2KJzfp9G85RI0M9qPEewqJ6RkFSMS1YKOdQ=;
+        b=JViMMnuh+7EhVhiXoeNY4nENXzBPNJQRqvInu6vkgqlrUF+uGCvVKCYURq61uY10YT
+         4m6NYGI+3Whb3iybZcHjptmSyxN8xtOJUJtkzR/to51wEi/2fH3vg/Zxwk8Q6/3I8GWM
+         CskgKnQp21r+KttV3e2dP32SozsKLwhsSUhENyCXQqqg+jbHtNTrIDK9v3Waw4uu012J
+         nW0HZV9TwPeWaGhz1/Ov9kJ3jOUXhzLI8gq6HfXGHkdlRo4TqFzfEpsWuKXL8UF+MAKQ
+         WQpb9xOS6owzO4sY2aw64j2Krah9khCIGi1+BIBlOVvLYdpv4Of31dnLaXfsqpirGYVq
+         ghiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775131474; x=1775736274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zKWFrITeul/qgtQWiLbC+mauwtMzdzB7O/5xgYGl/5U=;
-        b=jmiilTjQ37rdnOL1Qd1ZOBVj5E3psrVpBcbBFzJV1NEWZmYjyL7IJtTjU/jt3eNj9H
-         XO1BuDHbQnU/EP6YywpYJXMF6IdijXNjmTaX6wCyNL5trryCXnWzlOz8m7ISShNhbNEP
-         unyMFYO9dDXEJWiG5sWge1EBMofGAqQV5W+T93Pb0Gc6T4SlcoSIxPlcF4T9Sgw3nusp
-         TKpccFeopfvhlUlkEU8hLXjJKh6Sn1An4amM4BooIixWhKhYcwd/x4QkoFfoONWPXGTm
-         T+ytKrEV67rbCZXfmeEKEZZly4fw5jtW3ZkWVOwhM3fjDhss4VM3isOz5tdG40bhdAXl
-         UUiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXmRqT5hqKUacGXzaFCR5n/Rs9gCc6f3HsBfR/Xaqu4nDf9pv2rCaDSESUvJ3s+olNYlWwZGg741hs7E0X3zQk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxL+iXGy7dp+EfQpjwfV6FQltoF0S1c/p1jpyBJxM8XV1s4TycO
-	h/8qLDJV4iTswufZ977mrgm9zLcJjP6AflEjDe1VKovmmjFiuLRKJ6j/lifZIog6LGQTnaNZLkw
-	y3ZDiKIWnFJbAcMBXFX/RYg/64IPCmGw=
-X-Gm-Gg: AeBDievAmgUIYhxqeNh1JdUJ6p1sIAiYO1pjp451t44FxH9M3gS2YCoxj5jl5LVBOkU
-	0rnMRkldp3cfB6Fa4Do47J1oqAQTnUocldLylGvXIvnu1pgExTdDa+wd1SHFVtNtxdTrOScS5AS
-	Y/JoMdWMXliQGZB4PwJtDRuorOPJeQwH/jYARGyzA90kXgK9wNVgBUetkFUDzSXTmeFRleLIcf+
-	mrTmV2+tUrcbXcWckLbM5hzjvnsuWZjgnrxioQD1e+617yHKsdtu2PBqrPm2fT7EEZKKFnIEfPv
-	3AgeJx3h07dmgnQ8FWalu4monHoQGRoxMJe9
-X-Received: by 2002:a05:690c:4b0f:b0:799:182:17d1 with SMTP id
- 00721157ae682-7a212d172a8mr79902757b3.45.1775131474012; Thu, 02 Apr 2026
- 05:04:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775134496; x=1775739296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c5UfMDLJ2KJzfp9G85RI0M9qPEewqJ6RkFSMS1YKOdQ=;
+        b=e4vpMkPKR6KpdJJEARzsuZcyvxRkYFlihmWLH/diL7ErmByrtJHocqUeLnTVotf6eG
+         eh5rN+l5HxXZdBqEkPo5JWbdR2PpizaegTyFxmNzdTW5yDZhJK62L5G/I9odCmE3FIBI
+         9Mt5+xgJZz7cpUJjd0gRhgr5BrwwEAffWAYMMdGsd3QQjvkyVScFh+9CUahVuXIZQkFp
+         Lc1It1MxJzoL+K39dbzcOwq7t19KA8TXLFuvqpI8teV0Kg9YnNXcwEZeX4ehZAhvN76m
+         QRxbME/WLDIFti3ZynqPFUpB3m0inP2otlfwvSFaf6Pw1SB0GdbFgewyUAbjRfBjZ5pG
+         /A6w==
+X-Forwarded-Encrypted: i=1; AJvYcCWr+u8vSrXMZMIyxhgV+xfpD3Y1Bsp+8N0zIpxDtfrfAJ0gLxE3dT94wPjjecP5sP0oNy5aDhW0KYVgotNHV7g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyX+J2tJ1WVqFw/pPDMruTBieLrD4OjFQ25iPZ/WzlBcHqW3wk1
+	j6JVHGAJAK9ga7agDp16N296Wtx+U6sRCwM7O08hXWjSjlGPsFOGWZ0itJTqFuDtenc=
+X-Gm-Gg: ATEYQzw5BzzeeUvmQGWXn8BKoEkk5jCCVVlCUEdQJZnv51vO4Nw+jb6T3Q7cmLobeZU
+	JiCMvf1SS91xYJhNzwxm3mIBUpzSi++kccSExRA/u9aW6DOs8AD2NpIUaNGeOzlM67XU58qnoI5
+	QfodDV8vogRjr9M6wkVIAK4Eq52jD1gv78pc6Enag7XAnqRCO3HIDfWI91yEwN2Q+bu0eSgFoo3
+	yeAsgX+zxEtxHqdv/mCWPGu65P8xJ65qLi0Kd53RMSZ/dwG/pC3ewSqMuv22oS+qEyLx5t7xBDc
+	VBQOvFefHhdWof2GEoNiRaibqCeINCWdAU/kzmtHIS3KpZ63we5DtjmYdy1YDLXLeYqU8gYk9lF
+	D2SJw0rLvbqzFfsg8MItI3oJH2FIru04EQuuQS6xstGKtDUy5ibtqIfx9hPW0ZxdRA7Esoux5e+
+	w7fztuPd1hs1YqE6bf+uR1uDNkbkq+zXlP4A5YN4LYKg==
+X-Received: by 2002:a05:600c:8b66:b0:480:1e40:3d2 with SMTP id 5b1f17b1804b1-488835b7bd9mr133099685e9.29.1775134495637;
+        Thu, 02 Apr 2026 05:54:55 -0700 (PDT)
+Received: from FV6GYCPJ69 ([208.127.45.21])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887adc5690sm114520655e9.2.2026.04.02.05.54.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 05:54:55 -0700 (PDT)
+Date: Thu, 2 Apr 2026 14:54:52 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Marc Harvey <marcharvey@google.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3 6/7] net: team: Decouple rx and tx enablement
+ in the team driver
+Message-ID: <j4tjzpbsfu57r5bbqcpo4lfnzzonnmgye23kiyu4la5d7cxuq7@63nrgj4f3xto>
+References: <20260402-teaming-driver-internal-v3-0-e8cfdec3b5c2@google.com>
+ <20260402-teaming-driver-internal-v3-6-e8cfdec3b5c2@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330035604.133073-1-dqfext@gmail.com> <20260401081030.29b050d5@kernel.org>
- <CALW65jahWApDnVmFReW+Y3HDxBEmCwzsT1oyh03SW7X5ry6PzA@mail.gmail.com>
- <20260401175621.549c492e@kernel.org> <CALW65jaTbaosbO8ypKZ6G37HxuxXabeTaP_Fhq72xTovmDj+8g@mail.gmail.com>
- <50ae3c69-2c4e-499f-a46a-cbd207ff5f09@redhat.com> <CALW65ja1FV-OcqSazgKZhQhKf3oqr=kcGxyGkOGbhurGLOJ0-w@mail.gmail.com>
- <cb43761b-d414-4878-bf41-4ef6c988f881@redhat.com>
-In-Reply-To: <cb43761b-d414-4878-bf41-4ef6c988f881@redhat.com>
-From: Qingfang Deng <dqfext@gmail.com>
-Date: Thu, 2 Apr 2026 20:04:23 +0800
-X-Gm-Features: AQROBzBt3iwuFhkn47HugLmDXoXDBifovZc4o_ihC5WPjxUjy9gSLkKhZ_qqgHg
-Message-ID: <CALW65jZszAVHNSYgo9Fav8J-Ph9dXzR34CYr1-Ar776mOy4Lbw@mail.gmail.com>
-Subject: Re: [PATCH net-next v7] selftests: net: add tests for PPP
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Dianne Skoll <dianne@skoll.ca>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Simon Horman <horms@kernel.org>, Felix Maurer <fmaurer@redhat.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org, 
-	netdev@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>, Jaco Kroon <jaco@uls.co.za>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260402-teaming-driver-internal-v3-6-e8cfdec3b5c2@google.com>
 
-On Thu, Apr 2, 2026 at 7:17=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
-e:
+Thu, Apr 02, 2026 at 08:24:19AM +0200, marcharvey@google.com wrote:
+>There are use cases where an aggregated port should send traffic, but
+>not receive traffic, and vice versa. For example, in the IEEE
+>802.3ad-2000 specification, there is an optional "Independent Control"
+>version of the mux machine. Currently there is no way create
+>implementations like this for the team driver.
 >
-> On 4/2/26 12:13 PM, Qingfang Deng wrote:
+>Separate the existing "enabled" per-port option into tx and rx
+>specific enablement options, but do so without breaking the existing
+>"enabled" option. The existing "enabled" option is now defined as
+>(rx_enabled AND tx_enabled), so if one is independently disabled, then
+>the old "enabled" option will also not be enabled. However, setting
+>the old "enabled" option affects both the rx_enabled and tx_enabled
+>options. This is the first case where setting an option can affect
+>another option.
 >
-> > What distro do you run CI tests on? On Ubuntu 24.04, "rp-pppoe.so" is
-> > a symlink to "pppoe.so" in apt package "ppp". Maybe an additional
-> > package is required for the distro you use, or I may work around that
-> > by manually creating the symlink.
+>Note that teamd and any other software that exclusively uses "coupled"
+>enablement will continue to work without any changes.
 >
-> It's fedora 43 with ppp and pppoe installed.
+>Signed-off-by: Marc Harvey <marcharvey@google.com>
+>---
+>Changes in v3:
+>- None
 >
-> ppp provides pppoe.so, and AFAICS nothink provides rp-pppoe.so, and the
-> pppoe-server is looking for a non existing /etc/ppp/plugins/rp-pppoe.so
-> plugin.
->
-> Before I mess with the nipa testbed, could you please double check that
->
-> ln -n /usr/lib64/pppd/2.5.1/pppoe.so /etc/ppp/plugins/rp-pppoe.so
->
-> should solve?
+>Changes in v2:
+>- None
+>---
+> drivers/net/team/team_core.c             | 238 ++++++++++++++++++++++++++-----
+> drivers/net/team/team_mode_loadbalance.c |   4 +-
+> drivers/net/team/team_mode_random.c      |   4 +-
+> drivers/net/team/team_mode_roundrobin.c  |   2 +-
+> include/linux/if_team.h                  |  60 +++++---
+> 5 files changed, 245 insertions(+), 63 deletions(-)
 
-Hard links will also work.
-Alternatively, if your rp-pppoe version is 4.0, you can use the new
-option `-g` to specify the full path of the pppoe.so plugin.
+I see multiple patches squashed here. Could you please split for
+easier review?
 
-Regards,
-Qingfang
+Renames separate, preparations separate, adding rx_en separate, adding
+tx_en separata etc?
+
+Thanks!
