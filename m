@@ -1,89 +1,111 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C1C53A4F3B;
-	Thu,  2 Apr 2026 21:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775164450; cv=none; b=adeYaJRwbbCq4fxD894CTh8C7yOeK+luDA3PIvTbDu7Z6r8E5M55CR+VPDIxTfEQzpQ+rKlxS7AJT/OP1HnycZlyCgGdszdcGLcdpBtmTN4zgGdwG+0o5sKZ9WIwC71KGrj8tG3keHVGUg2WFywxPx4IqfhVFg2pYBygOalPXmU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775164450; c=relaxed/simple;
-	bh=I9dw14O86cZwkKMn5PUe2owUIFbxPW/XNrvSe558xsw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Drnze3GPXiNKAS3tA7+TSZQQckm5EIu6EiYZVQNvKZors5B66sVdNh3xVudz179WeXUi2uxeAbjVw92h6KuRw/NqMq+qckBDQkBm5pIGnDp1c+dO8umOIl5gBeLXTvN+HWLv1lyqQgu0knuId6nfZpzba0FDI9ZPE28rN0irQOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=NUdab221; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6FD36074B
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 21:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775164628; cv=pass; b=X2e+y+05bjRSx3s4ob5r0FXYzPnQesutz46hyzSkw6zSCQKpIodDqq6LkFzZeFReCSWd3v2f3mBHYdgUxHV4yka+MfDucdoKbrhfxMGueou2Y4MHfA/WpX56eEI05D+lfcdSCv7elo2fWdKcdKuVIis1xoBiLN7Q2qJpHmxWCjo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775164628; c=relaxed/simple;
+	bh=JYemv0pFJukvLWAyAa8iu4BJ0hea3asYhAZuD5UD2pk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AsG0qoIUR5fQz48qRzM+ehk7bJs7XxKcHsyCaPHu1b+Qnas4r46jxmIC2rlhgmWTVkA7++eNbtU0DhCFhtEwaitHAr6omwDEoA1KF426peFArF8YZYILdm9YNj94OjXALijkneqtpJUZLWuR0xYRVBcO7xAMCFDJGinA7ztZuTM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DVJ51DWI; arc=pass smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="NUdab221"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8A4D19F6;
-	Thu,  2 Apr 2026 14:14:01 -0700 (PDT)
-Received: from gaia.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 17AE13F7D8;
-	Thu,  2 Apr 2026 14:14:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1775164447; bh=I9dw14O86cZwkKMn5PUe2owUIFbxPW/XNrvSe558xsw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NUdab221kb6KYuy9thKc6lr0wavgu6G0BdzLcaJyX/ORI0eU/ChjYSG6lxDSuHXA8
-	 fHN5vDTYyvgPT+hoq8NrZKJ4GHDaxtuDhSl3FE2itE/3xEMa6nHaegoCLnHUkSowYl
-	 xJOQDb+Epa+QlgYWE+3FczNfLY849JDaZPWkjQBQ=
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Mark Brown <broonie@kernel.org>
-Cc: Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: (subset) [PATCH v10 00/30] KVM: arm64: Implement support for SME
-Date: Thu,  2 Apr 2026 22:12:18 +0100
-Message-ID: <177516433892.97388.575450953513622752.b4-ty@arm.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
-References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DVJ51DWI"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-66bb7118c96so3962a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 14:17:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775164625; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XmBxKerfVW66Gz9InoqEb0i18j3cgfcUKlNwX30VW1NcZW1YZsFa9iwNlyz08PwQUK
+         qct8Q1Tym1y4te5IEBIJe9CRW1eKejr6o9gP+eFyLlDGM/BojD6YOTA/uMWThKdMmGJK
+         Ake9Naaz2XWcAmafuXnEtNLjw77tO2E+lIKU5cYeThFSzCsKOpKVMIiIW8lCvSlKyM8t
+         GwjhR6CviCf+BF4ZPWTQwANdQGH6KxH1+KcjfnfWaeRS+v5FviUmFbrww0r2zInAcX8S
+         9t8KZDKzMJ8ZsrAZDIah4mbxBKB+7K7jtTTYsF9HCguu+vdxeEcoPA8TKHwf8GzjGTs8
+         rSpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JYemv0pFJukvLWAyAa8iu4BJ0hea3asYhAZuD5UD2pk=;
+        fh=hgLW7nc5P+Xtc7XsVk8Sm0jAXDCnh7OCOe7dYa/lNvI=;
+        b=SdK2sXzBAvqaII9jXhrHVK1ziNcJcux1kcnZEJtUu0gv5sPEiFktPAWi0kIcXtR2EM
+         Fibbavup7J/GlCTlzS/GtwrR2gHoGYhAx+IDFBZxOwey3Mj7/im7kQvO+07aEqrGzErx
+         GfrB/VT80pq+4e9NAspHWyJyvHVfmxie+aTXE1PbmkwLTKNFrdZ5SYJvbHqf+3KJsn+2
+         V1WZTWlkle7LCyLxFWhjbZ+5j79/YJTafekNkSJTrwoKbNJFrjS4rhrF+iZEYVm6cV8G
+         w23U6dc+EJ4a/NFfkjh7F71MLj18lfwf+Cg6w7p4Dghb0OZ6jXdMci2s6QxI645MgxV9
+         xDog==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775164625; x=1775769425; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JYemv0pFJukvLWAyAa8iu4BJ0hea3asYhAZuD5UD2pk=;
+        b=DVJ51DWIGVmvUkMPVa8dvWQXoI8HwPjgGEwI/4aWN9F1LCOJ+EcnjNFfHozgXoYw9n
+         QxFPskwAZWtzbhMV2452RLmMLijMADld6KZGlx18W7nJgAje+NG1Km1o2BtRU/9fHh0g
+         82TWBcUrx8waqJ7+F2U0z6/cJP3YUItWl9RwRvVxDv979EAMTneoiKXVXf2P4mamyewp
+         Q1vOSCeyeEbZNJ1az3hX233/uufXsrbeBBZylBBKOMvQJw0h9lPWNoi5QV+b+8el9slm
+         g+1oPyUj434iB6kkrQ4dqQxtuLfXHS5ymkOMJ1c5mRkpNEozwUHLAh5Un4lnWLCF70u3
+         g6TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775164625; x=1775769425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JYemv0pFJukvLWAyAa8iu4BJ0hea3asYhAZuD5UD2pk=;
+        b=PNSLQ5vZyNfdSwUUKoHaXFnJMS+4Z4VY9sBjadMzo5sCdnjQ1u998uy0DCeTJ/4ZWD
+         kEWRA00dC0SgAihCAKNxr/JYV4WhJG4/ZLx+t3MSFfsTCI8GdGFuRUZdz6JWJtof9tOD
+         pW6BGc+8jb5GN0KMwH15Gr98f9gv1JjcNYHJzB4G6eFnN80TLrYCtXiiefydKEpmmH1d
+         aHjxi8XizmPmasI/TGUfJVdf98AYvRVYI/nS3BSQERQ58fRIhY+O5gb89PDeTiQ1W5Ov
+         B0ouf3oWXmkmsrZ0Fm/yHR0Ba4i5szk9trWcTRLOkA8eQNt6E/3WGNR35eL86WKWUa0h
+         2I1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWsSR0NMszFfHQYiRDesuHtd5wuBhZ6XGM4wGgMOfQ+MmmhuBeNpTCgpbJfnm76arHGNrR2qqjBRiC4jEKoGwg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu9OgSrmloH065Zhqv0NQNuoTSyDwSLzvpBWS355R8OTzPSPAu
+	3ooggPdQv8UA652q1KOPXxYFZghxei2OteVohv+C5rfJQFGhYh+TsKesvQcZqCihkQmrutobHLZ
+	ESd1EUi//49Mg9vEHHEBys+qInCZJk6oUpOyJOfRoq7L3U+QOVgK5j8Is
+X-Gm-Gg: AeBDievglSiyLDFULwaFbn9wIXVqR/b8KhdZcgewL1YXJZAZExtRHWrc176NkVfndIK
+	MySqDun/0Dvf8PtSX1GflXtsoN/RZX+1ZL6/n7ndLKMG+Fo9B6s1V35NOsU9/wtDsFwhTSCFWNW
+	w7FfI7NCXo+0gmWJniZ49elJ5lcQRP12n0qs9IxMbaXysbv+YpZpWlBft321NDFh056ZwCulQRx
+	niSY+652sOiC4E4HUMKv+Pqy6fIthbNsawFKfIQFcN4ki1J6fjQcW3qdcOlB6LKk6FYsiGs4uzD
+	5cpC/KiblG6vlBkaurCeLaostCLncaROEz/fgbY0eepyRSRcQ1LzmEJKtaskOjM+q052AbjIiQg
+	ssnPq
+X-Received: by 2002:aa7:cd13:0:b0:66b:ea0e:1782 with SMTP id
+ 4fb4d7f45d1cf-66e40f43978mr6990a12.2.1775164624812; Thu, 02 Apr 2026 14:17:04
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20260402-teaming-driver-internal-v3-0-e8cfdec3b5c2@google.com>
+ <20260402-teaming-driver-internal-v3-6-e8cfdec3b5c2@google.com> <j4tjzpbsfu57r5bbqcpo4lfnzzonnmgye23kiyu4la5d7cxuq7@63nrgj4f3xto>
+In-Reply-To: <j4tjzpbsfu57r5bbqcpo4lfnzzonnmgye23kiyu4la5d7cxuq7@63nrgj4f3xto>
+From: Marc Harvey <marcharvey@google.com>
+Date: Thu, 2 Apr 2026 14:16:51 -0700
+X-Gm-Features: AQROBzAH5HMbiL0k4hiF5gpVjnYSC-HQWNnE9Kb7GP-2itiiWEQcG4Uq-kpwXM4
+Message-ID: <CANkEMgmW693-_tiP8rC7ciKuvLOPwRJzFsP=c2bYdQyHREpKcQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 6/7] net: team: Decouple rx and tx enablement
+ in the team driver
+To: Jiri Pirko <jiri@resnulli.us>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 06 Mar 2026 17:00:52 +0000, Mark Brown wrote:
-> I've removed the RFC tag from this version of the series, but the items
-> that I'm looking for feedback on remains the same:
-> 
->  - The userspace ABI, in particular:
->   - The vector length used for the SVE registers, access to the SVE
->     registers and access to ZA and (if available) ZT0 depending on
->     the current state of PSTATE.{SM,ZA}.
->   - The use of a single finalisation for both SVE and SME.
-> 
-> [...]
+On Thu, Apr 2, 2026 at 5:54=E2=80=AFAM Jiri Pirko <jiri@resnulli.us> wrote:
+> I see multiple patches squashed here. Could you please split for
+> easier review?
+>
+> Renames separate, preparations separate, adding rx_en separate, adding
+> tx_en separata etc?
+>
+> Thanks!
 
-Applied to arm64 (for-next/sysreg), thanks!
-
-[01/30] arm64/sysreg: Update SMIDR_EL1 to DDI0601 2025-06
-        https://git.kernel.org/arm64/c/85b6f920a869
-
-I looked to add more core arch patches but they all look like
-preparation for subsequent KVM support. If the subsequent patches will
-have to change following review, I couldn't figure out whether the first
-3-4 patches in this series will remain the same.
-
--- 
-Catalin
+Thanks, I will split this in v4.
