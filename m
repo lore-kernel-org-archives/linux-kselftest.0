@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F4A324705
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC73829A31C
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Apr 2026 01:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775094400; cv=none; b=GCEYK19c1kMNNJBEqo1Y08IXVnULbCCLq6JmwcIranpNuZignqLx8gD06+378ExA/hSvct2IzoEH0hwwaLYc094lUq+E+qJfTVSuw4YlTsKqj4/RZPUwrS8a84VOVyckEFxqq6QpKXnIeZG+MdLR/7PceKmJhmY1NW2mAGc4c30=
+	t=1775094407; cv=none; b=pN+vZS8z5CTs/ZVS8zL3eU4AOS2PdCaIa7bZ2iBqTQ9SaPSBoXRpGC4x5scjBpA/8DP5Phd0h2h7C4q48sPovbt52fHE58YQsSwO8L7b9N5R4lG5E7AdeQSYVX3UaFC2zT7VyVMH5F8Xbw1VPR4u0Q7BhJpX0uq2eP2gyn/VsSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775094400; c=relaxed/simple;
-	bh=F/tQZ7MZbHJuL6ABQZeL560ScXtKvvHOv6ROCzLjtdA=;
+	s=arc-20240116; t=1775094407; c=relaxed/simple;
+	bh=8kcSjbIIEeXJAGXv7dzdKrrWxBbWF0Q3ow1gEe2ds6c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cW+LvhwApzQV4/N8U3f16RCvp1t+GgKq2FFJTeJlkf3vEFBbBtwuSbsA4RztdRAdJhg3PTlpw7jICLVvPphSYh1q6zWOtRbX99qhhv22AwDjNe3HwgGFyEh+I+X7R/NFxRBz8fEbQc7L/wJy1x+gKAT8r6l6aOTeocIg4Z5vGDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B2HTg37d; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=MVrLV+Ik6hmf04b0aODS+q3kuH0S4+8OJ7APD6XRO6TSg217mC2o7VWZYVrkWoJGXurIiO40y5Tf2Kes0TLsyDlqyBfHQ3osFwTVmcoztsm85vk5m53SoTWLVJ40QcTS7KZblS7oFeCGeY1+MywGaKTm3/OUeBbglg2D2/48npE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KpFum2Q2; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B2HTg37d"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KpFum2Q2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775094398;
+	s=mimecast20190719; t=1775094405;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=KDU4afNqvnoHoqSo/k3e5WTx+bzCLp33/wZdOxE3SPA=;
-	b=B2HTg37dRVGgIDxkbv+xbVw71b6OEERBXos6Q1ekSNt5a3ApWBVRczseq/HxcPmlfd57XQ
-	1Rh7qcQGVE3H1dKp7n0OxOeDgaGW8lNv2phCgr9DghbIbTvRWdDMmc6Lh1g0mHoH3ymmTr
-	jP+YMIXfk+7ByvirmxBQSVraYpklyy8=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=cP9CaaUU0YGWeU606cF4HfEnHjH3cqBLv/sm6TUkYWs=;
+	b=KpFum2Q2GZG3y7JBYL3rE9F/+CazZwFWtiq8NnNdyAQpyB0O1QX9O8LPJX/Ars7x2J16HZ
+	7K3IRTqYubbSQ2qr8awfJaFqqIfVPUIjWXGKmZfPiYaF0F71d/bQoS7twihsgmrIODF8Ij
+	X34epZZpLJwWh75uXHIpMGeWSZ+RVlw=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-248-CzV-77pMPretbtz4CzGeKg-1; Wed,
- 01 Apr 2026 21:46:34 -0400
-X-MC-Unique: CzV-77pMPretbtz4CzGeKg-1
-X-Mimecast-MFC-AGG-ID: CzV-77pMPretbtz4CzGeKg_1775094392
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-147-ikX5ZTKfMBSHvO7QSL9muw-1; Wed,
+ 01 Apr 2026 21:46:43 -0400
+X-MC-Unique: ikX5ZTKfMBSHvO7QSL9muw-1
+X-Mimecast-MFC-AGG-ID: ikX5ZTKfMBSHvO7QSL9muw_1775094401
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 09E8D195604F;
-	Thu,  2 Apr 2026 01:46:32 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3D56C19560A2;
+	Thu,  2 Apr 2026 01:46:41 +0000 (UTC)
 Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0862F19560AB;
-	Thu,  2 Apr 2026 01:46:23 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BB5E219560AB;
+	Thu,  2 Apr 2026 01:46:32 +0000 (UTC)
 From: Chunyu Hu <chuhu@redhat.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -63,10 +63,11 @@ Cc: linux-kselftest@vger.kernel.org,
 	dev.jain@arm.com,
 	baohua@kernel.org,
 	lance.yang@linux.dev,
-	chuhu@redhat.com
-Subject: [PATCH v8 4/6] selftests/mm/vm_util: robust write_file()
-Date: Thu,  2 Apr 2026 09:45:41 +0800
-Message-ID: <20260402014543.1671131-5-chuhu@redhat.com>
+	chuhu@redhat.com,
+	Li Wang <liwang@redhat.com>
+Subject: [PATCH v8 5/6] selftests/mm: split_huge_page_test: skip the test when thp is not available
+Date: Thu,  2 Apr 2026 09:45:42 +0800
+Message-ID: <20260402014543.1671131-6-chuhu@redhat.com>
 In-Reply-To: <20260402014543.1671131-1-chuhu@redhat.com>
 References: <20260402014543.1671131-1-chuhu@redhat.com>
 Precedence: bulk
@@ -78,69 +79,71 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Add three more checks for buflen and numwritten. The buflen should be at
-least two, that means at least one char and the null-end. The error case
-check is added by checking numwriten < 0 instead of numwritten < 1. And the
-truncate case is checked. The test will exit if any of these conditions
-aren't met.
+When thp is not enabled on some kernel config such as realtime kernel, the
+test will report failure. Fix the false positive by skipping the test
+directly when thp is not enabled.
 
-Additionally, add more print information when a write failure occurs or
-a truncated write happens, providing clearer diagnostics.
+Tested with thp disabled kernel:
+Before The fix:
+  # --------------------------------------------------
+  # running ./split_huge_page_test /tmp/xfs_dir_Ywup9p
+  # --------------------------------------------------
+  # TAP version 13
+  # Bail out! Reading PMD pagesize failed
+  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+  # [FAIL]
+  not ok 61 split_huge_page_test /tmp/xfs_dir_Ywup9p # exit=1
 
+After the fix:
+  # --------------------------------------------------
+  # running ./split_huge_page_test /tmp/xfs_dir_YHPUPl
+  # --------------------------------------------------
+  # TAP version 13
+  # 1..0 # SKIP Transparent Hugepages not available
+  # [SKIP]
+  ok 6 split_huge_page_test /tmp/xfs_dir_YHPUPl # SKIP
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+CC: Li Wang <liwang@redhat.com>
 Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 ---
-Changes in v8:
-  - go back to ksft_exit_fail_msg in the two error exit path as no clean
-    ksft_exit_fail_perror that supports va_list
-Changes in v7:
-  - add an empty line before the 'buflen < 1' line.  And change to
-   'buflen < 2 to limit the buflen at least to be 2, so at least one char
-    is allowed.
-  - handle the numwriten < 0 case, which is the error path.
-  - use ksft_exit_fail_perror in error exit path.
-  - use %.*s to print the buf when error happened
-Changes in v6:
-  - save/restore errno before and after the close(), so the log could show
-    the correct error info on failure. Suggested by AI.
-Chagnes in v5:
-  - new patch for making improve on write_file. Add more safety checks and
-    diagnostics info in log
+V3 chagnes:
+  - add acked-by from David
+  - add reviewed by from Mike
+V2 changes:
+  - removed the {} in if block
+  - removed the write_file helper rename chunk, as there's a new patch 3 to
+    resolve the conflict with thp_settings.h by moving it to vm_util.
+  - Add reviewed by from Zi and Lorenzo
 ---
- tools/testing/selftests/mm/vm_util.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mm/split_huge_page_test.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index ad96d19d1b85..db94564f4431 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -767,15 +767,24 @@ int unpoison_memory(unsigned long pfn)
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 93f205327b84..500d07c4938b 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -21,6 +21,7 @@
+ #include <time.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
++#include "thp_settings.h"
  
- void write_file(const char *path, const char *buf, size_t buflen)
- {
--	int fd;
-+	int fd, saved_errno;
- 	ssize_t numwritten;
+ uint64_t pagesize;
+ unsigned int pageshift;
+@@ -757,6 +758,9 @@ int main(int argc, char **argv)
+ 		ksft_finished();
+ 	}
  
-+	if (buflen < 2)
-+		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
++	if (!thp_is_enabled())
++		ksft_exit_skip("Transparent Hugepages not available\n");
 +
- 	fd = open(path, O_WRONLY);
- 	if (fd == -1)
- 		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+ 	if (argc > 1)
+ 		optional_xfs_path = argv[1];
  
- 	numwritten = write(fd, buf, buflen - 1);
-+	saved_errno = errno;
- 	close(fd);
--	if (numwritten < 1)
--		ksft_exit_fail_msg("Write failed\n");
-+	errno = saved_errno;
-+	if (numwritten < 0)
-+		ksft_exit_fail_msg("%s write(%.*s) failed: %s\n", path, (int)(buflen - 1),
-+				buf, strerror(errno));
-+	if (numwritten != buflen - 1)
-+		ksft_exit_fail_msg("%s write(%.*s) is truncated, expected %zu bytes, got %zd bytes\n",
-+				path, (int)(buflen - 1), buf, buflen - 1, numwritten);
- }
 -- 
 2.53.0
 
