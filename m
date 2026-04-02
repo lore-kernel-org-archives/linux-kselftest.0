@@ -1,145 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB4537C915;
-	Thu,  2 Apr 2026 21:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C1C53A4F3B;
+	Thu,  2 Apr 2026 21:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775163615; cv=none; b=bsUZ4RBuj+936Wx9FRNHag0C+nVBAJQrLDlNNRsQ2ER9eq0Ujgs8KfGDEYMt5EdqukCUWE7vAm6lbW5uzGasJev00ULKfKL1KkFMK8gkwR709qTY+I6Bym8KPX3xZZUgSGFD/EGsMhntmdZ8V1pzfHTJMZ45gmot3eTqO4aw0sk=
+	t=1775164450; cv=none; b=adeYaJRwbbCq4fxD894CTh8C7yOeK+luDA3PIvTbDu7Z6r8E5M55CR+VPDIxTfEQzpQ+rKlxS7AJT/OP1HnycZlyCgGdszdcGLcdpBtmTN4zgGdwG+0o5sKZ9WIwC71KGrj8tG3keHVGUg2WFywxPx4IqfhVFg2pYBygOalPXmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775163615; c=relaxed/simple;
-	bh=bphm+tAH2cT1kmlF/w/ZjVFghWPiehqG5zy3NO9299w=;
+	s=arc-20240116; t=1775164450; c=relaxed/simple;
+	bh=I9dw14O86cZwkKMn5PUe2owUIFbxPW/XNrvSe558xsw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X48+Z33SmbN+a3oL6rgQpWaoeiGaKWZ3G3b5KTfKtKB3PLdW2UUTPEUw8uvj+ihHggwshKaRmt/bJ4AdlGFQozF2s5AHqB0lv4Of7ppaL5i/55+xt3RpHbo5S9KubUlNPESh3V43lRDCqbL93Bqg3wjHlEKCzE7lZQ/2vdF7lis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GMu/gG1Q; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=Drnze3GPXiNKAS3tA7+TSZQQckm5EIu6EiYZVQNvKZors5B66sVdNh3xVudz179WeXUi2uxeAbjVw92h6KuRw/NqMq+qckBDQkBm5pIGnDp1c+dO8umOIl5gBeLXTvN+HWLv1lyqQgu0knuId6nfZpzba0FDI9ZPE28rN0irQOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=NUdab221; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GMu/gG1Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E4CC2BCB1;
-	Thu,  2 Apr 2026 21:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775163615;
-	bh=bphm+tAH2cT1kmlF/w/ZjVFghWPiehqG5zy3NO9299w=;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="NUdab221"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8A4D19F6;
+	Thu,  2 Apr 2026 14:14:01 -0700 (PDT)
+Received: from gaia.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 17AE13F7D8;
+	Thu,  2 Apr 2026 14:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1775164447; bh=I9dw14O86cZwkKMn5PUe2owUIFbxPW/XNrvSe558xsw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GMu/gG1Q17/9aZwha61RWbkUBocQzT701x5m4WCVbcwOaHvCJSlS6GQK049iAY0if
-	 Qnnbsjy9+Pa4PjVGfLEo7fp3J9dq79ie0dwtvlBIm+wkakJgZI4r9/R9PmKq36c+41
-	 qHzHpIuLrXcAdWmoiwH6SOCzj/o2ulD0rwKAaMU/v7K2oApoU8/5y1vjNAoBEabhUt
-	 zyryvk15Jhrlrf+JmPriJqbatWXZN7hNszP1zbMBWgH+coqUZ8+dX+Mjp3RVt0iuKw
-	 Qt8WusEjpZjKvJHz7mvCWeXU2pMcfVtxXBh/uPrB+OvyNcO2x7O8AZa6VnP2Gq3zTO
-	 rILdOgJFkpwiw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	shuah@kernel.org,
-	willemb@google.com,
-	petrm@nvidia.com,
-	anubhavsinggh@google.com,
-	richardbgobert@gmail.com,
+	b=NUdab221kb6KYuy9thKc6lr0wavgu6G0BdzLcaJyX/ORI0eU/ChjYSG6lxDSuHXA8
+	 fHN5vDTYyvgPT+hoq8NrZKJ4GHDaxtuDhSl3FE2itE/3xEMa6nHaegoCLnHUkSowYl
+	 xJOQDb+Epa+QlgYWE+3FczNfLY849JDaZPWkjQBQ=
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Cc: Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 8/8] selftests: drv-net: gro: add a test for bad IPv4 csum
-Date: Thu,  2 Apr 2026 14:00:00 -0700
-Message-ID: <20260402210000.1512696-9-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260402210000.1512696-1-kuba@kernel.org>
-References: <20260402210000.1512696-1-kuba@kernel.org>
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: (subset) [PATCH v10 00/30] KVM: arm64: Implement support for SME
+Date: Thu,  2 Apr 2026 22:12:18 +0100
+Message-ID: <177516433892.97388.575450953513622752.b4-ty@arm.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-We have a test for coalescing with bad TCP checksum, let's also
-test bad IPv4 header checksum.
+On Fri, 06 Mar 2026 17:00:52 +0000, Mark Brown wrote:
+> I've removed the RFC tag from this version of the series, but the items
+> that I'm looking for feedback on remains the same:
+> 
+>  - The userspace ABI, in particular:
+>   - The vector length used for the SVE registers, access to the SVE
+>     registers and access to ZA and (if available) ZT0 depending on
+>     the current state of PSTATE.{SM,ZA}.
+>   - The use of a single finalisation for both SVE and SME.
+> 
+> [...]
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v2:
- - add a third packet
-v1: https://lore.kernel.org/all/20260401182625.372605-7-kuba@kernel.org/
----
- tools/testing/selftests/net/lib/gro.c      | 29 ++++++++++++++++++++++
- tools/testing/selftests/drivers/net/gro.py |  1 +
- 2 files changed, 30 insertions(+)
+Applied to arm64 (for-next/sysreg), thanks!
 
-diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
-index b99c0f00b8fe..11b16ae5f0e8 100644
---- a/tools/testing/selftests/net/lib/gro.c
-+++ b/tools/testing/selftests/net/lib/gro.c
-@@ -36,6 +36,7 @@
-  *  Packets with different (ECN, TTL, TOS) header, IP options or
-  *  IP fragments shouldn't coalesce.
-  *   - ip_ecn, ip_tos:            shared between IPv4/IPv6
-+ *   - ip_csum:                   IPv4 only, bad IP header checksum
-  *   - ip_ttl, ip_opt, ip_frag4:  IPv4 only
-  *   - ip_id_df*:                 IPv4 IP ID field coalescing tests
-  *   - ip_frag6, ip_v6ext_*:      IPv6 only
-@@ -685,6 +686,24 @@ static void send_changed_checksum(int fd, struct sockaddr_ll *daddr)
- 	write_packet(fd, buf, pkt_size, daddr);
- }
- 
-+/* Packets with incorrect IPv4 header checksum don't coalesce. */
-+static void send_changed_ip_checksum(int fd, struct sockaddr_ll *daddr)
-+{
-+	static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
-+	struct iphdr *iph = (struct iphdr *)(buf + ETH_HLEN);
-+	int pkt_size = total_hdr_len + PAYLOAD_LEN;
-+
-+	create_packet(buf, 0, 0, PAYLOAD_LEN, 0);
-+	write_packet(fd, buf, pkt_size, daddr);
-+
-+	create_packet(buf, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
-+	iph->check = iph->check - 1;
-+	write_packet(fd, buf, pkt_size, daddr);
-+
-+	create_packet(buf, PAYLOAD_LEN * 2, 0, PAYLOAD_LEN, 0);
-+	write_packet(fd, buf, pkt_size, daddr);
-+}
-+
-  /* Packets with non-consecutive sequence number don't coalesce.*/
- static void send_changed_seq(int fd, struct sockaddr_ll *daddr)
- {
-@@ -1402,6 +1421,10 @@ static void gro_sender(void)
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 
- 	/* ip sub-tests - IPv4 only */
-+	} else if (strcmp(testname, "ip_csum") == 0) {
-+		send_changed_ip_checksum(txfd, &daddr);
-+		usleep(fin_delay_us);
-+		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 	} else if (strcmp(testname, "ip_ttl") == 0) {
- 		send_changed_ttl(txfd, &daddr);
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
-@@ -1598,6 +1621,12 @@ static void gro_receiver(void)
- 		check_recv_pkts(rxfd, correct_payload, 2);
- 
- 	/* ip sub-tests - IPv4 only */
-+	} else if (strcmp(testname, "ip_csum") == 0) {
-+		correct_payload[0] = PAYLOAD_LEN;
-+		correct_payload[1] = PAYLOAD_LEN;
-+		correct_payload[2] = PAYLOAD_LEN;
-+		printf("bad ip checksum doesn't coalesce: ");
-+		check_recv_pkts(rxfd, correct_payload, 3);
- 	} else if (strcmp(testname, "ip_ttl") == 0) {
- 		correct_payload[0] = PAYLOAD_LEN;
- 		correct_payload[1] = PAYLOAD_LEN;
-diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
-index ee95144b73ac..221f27e57147 100755
---- a/tools/testing/selftests/drivers/net/gro.py
-+++ b/tools/testing/selftests/drivers/net/gro.py
-@@ -301,6 +301,7 @@ def _run_gro_bin(cfg, test_name, protocol=None, num_flows=None,
- 
-     # Tests specific to IPv4
-     ipv4_tests = [
-+        "ip_csum",
-         "ip_ttl", "ip_opt", "ip_frag4",
-         "ip_id_df1_inc", "ip_id_df1_fixed",
-         "ip_id_df0_inc", "ip_id_df0_fixed",
+[01/30] arm64/sysreg: Update SMIDR_EL1 to DDI0601 2025-06
+        https://git.kernel.org/arm64/c/85b6f920a869
+
+I looked to add more core arch patches but they all look like
+preparation for subsequent KVM support. If the subsequent patches will
+have to change following review, I couldn't figure out whether the first
+3-4 patches in this series will remain the same.
+
 -- 
-2.53.0
-
+Catalin
