@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2911A33F5A6;
-	Thu,  2 Apr 2026 07:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4A51C84BB;
+	Thu,  2 Apr 2026 07:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775115087; cv=none; b=H1CGFvi3V4ompz0cd0nB74Rfb0xz5nZw5sy1ZZwtGXYZ00XzYxcv0UO4yd1eVG5DtUOzngl3P/OjGzq/WGgdotoAnP3QdB7yY+EprY8scbnwn1Tr7kKu6zNUpOusteCtKbhf5fP728idYjzUZQC+3a7i4ywamYy0aaGp1Afovyw=
+	t=1775115217; cv=none; b=t0hST9pc5uYRQKWW3JDW/k/BaRTWjYfj1kC1W005lPGXHG7bvDHFRUV7lCL/lQSwt37/STj+2D3QSM2+11LtNKfw+/liC2Q0W5JwGQWs4L199tAdQLTQ8LEERfTpllJsuLoGHdliy0ZsE6cEdUyEljkNrYdpZnTTrBWFDe/yxK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775115087; c=relaxed/simple;
-	bh=LB/+oqKlI4VRU5D1rjvBo04nLr5ECYtn29znNNozBBs=;
+	s=arc-20240116; t=1775115217; c=relaxed/simple;
+	bh=R/cIO2BwJHu7sNONJs+MahbX4J5TngFBvxR6D1WjqBk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nq7jEWiE8rhQFagqGgMs/s7ReL0oYz6zfJds27NvWjeXxOlSFfWEdpavsDqec8MAYxCHrmMPOCjGTrNyp/UXbk6+QX80VhNLCmsNbz5Ed0u04c08ENHN0gKDNHLk0tgyU2KyTZF/VTPHie6U0pqYQjF0Qp/7HOskjkfR5Fk0EAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMPIrBvK; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=nV0cfOKe4TuNdLZHAR4c5Rss+ANteszECUErS2JUwFrjrtH9HISta7kJjMknRy347jBVgxW3C/39Ifor5EEvcy5cSPBwwJ4HSYz72PIAz46AvivTcaROO/WL4A0o+rg8dvPO4DYGTjMEzqE05upRPGkPZjxkQh0RjNW1fY9uuDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t7TCNLzn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMPIrBvK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B54AC19423;
-	Thu,  2 Apr 2026 07:31:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t7TCNLzn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA868C19423;
+	Thu,  2 Apr 2026 07:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775115086;
-	bh=LB/+oqKlI4VRU5D1rjvBo04nLr5ECYtn29znNNozBBs=;
+	s=k20201202; t=1775115217;
+	bh=R/cIO2BwJHu7sNONJs+MahbX4J5TngFBvxR6D1WjqBk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tMPIrBvKTo40byCvRHv/28b+KqoC03TZRGKKrgRpkMzvXCSuJUdMY/EoIx48skJE1
-	 pAkwb80w8EdBKR3zTVIxlc4RdsMGGm2DgW/R+Me9bVea1VDevoQHRqZOcdF/XGR7Pf
-	 i/KHLYGmyG9qPEVVvgFkKWzdYXCXIP5Jzw+IxQ2PCrsAlDc27p0EAWkb/bPvMB+oyj
-	 ny5NhcJ8nexHxMXECxD0WVtcyHBRSIx61acnotLrQcc5fFiedg95GQOcVvdq9M3bBE
-	 Lszm77bdUctMVWYUQx3IK7mZYZDY757Tv5MuRoh5MrT/0+Z2a9S4zLaqfIq6KT/yfP
-	 J8rwI4BZG+lXA==
-Message-ID: <a1527067-0d49-48dd-85c5-06b628471424@kernel.org>
-Date: Thu, 2 Apr 2026 09:31:18 +0200
+	b=t7TCNLznhEu1vja0NnYDXrVOKmFFxna/Vom0HAPoTOZGSuqAcVT4jGXBER+jNmJ9h
+	 /CNAqy/dORnTLDf8FEuc1hKDb1l6pMS/Mpp1U52NEnLHBmCGHJaC6UdirktXq6Sd9G
+	 JHLm9x2dJ0yO5+WJQHMJgNxZ+0L/ljldDz2GddLcJ8mPpafOKZJc2oaPqO9f5uP0+G
+	 PwWF33kLu4PLXV2ercsZAqG29cW3NQiND/oNiMtf6o43X+aR/dUXj38AheX+qr84GA
+	 J+w3xJ5yhTUAvfQfWSjEbI4oGSpvSIy8XFFSe24FMfDdYQbhs1Fzis4oGSau+g5+cB
+	 rHpt+a+4zsiCw==
+Message-ID: <86889304-c450-491c-8c06-48ca9c973531@kernel.org>
+Date: Thu, 2 Apr 2026 09:33:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,21 +35,23 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 07/13] selftest/mm: register existing mapping with
- userfaultfd in hugepage-mremap
+Subject: Re: [PATCH v3 08/13] selftests/mm: ensure destination is
+ hugetlb-backed in hugepage-mremap
 To: Sayali Patil <sayalip@linux.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
+ linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>,
+ Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
  Oscar Salvador <osalvador@suse.de>,
  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
  Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
  Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <b3a1760e4583340e767d4045b90784ee41c8773e.1774591179.git.sayalip@linux.ibm.com>
- <142f8c68-43c7-4a6a-bd2c-1c5ebda09b27@kernel.org>
- <7b6652f3-c994-4ef4-87a4-5473cd1254b7@linux.ibm.com>
+ <3b6ffba238a4b59de891acf896fa25d7d3193228.1774591179.git.sayalip@linux.ibm.com>
+ <ee15d52f-45df-415b-b0d9-3d267d147e5c@kernel.org>
+ <b590a17c-13ed-45f4-9f51-ac662d00e7bf@lucifer.local>
+ <066a146b-7dbb-408e-bbc0-542bdcdd6681@linux.ibm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -96,135 +98,83 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <7b6652f3-c994-4ef4-87a4-5473cd1254b7@linux.ibm.com>
+In-Reply-To: <066a146b-7dbb-408e-bbc0-542bdcdd6681@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/1/26 16:43, Sayali Patil wrote:
+On 4/1/26 22:39, Sayali Patil wrote:
 > 
-> On 01/04/26 19:48, David Hildenbrand (Arm) wrote:
->> On 3/27/26 08:16, Sayali Patil wrote:
->>> Previously, register_region_with_uffd() created a new anonymous
->>> mapping and overwrote the address supplied by the caller before
->>> registering the range with userfaultfd.
->>>
->>> As a result, userfaultfd was applied to an unrelated anonymous mapping
->>> instead of the hugetlb region used by the test.
->>>
->>> Remove the extra mmap() and register the caller-provided address range
->>> directly using UFFDIO_REGISTER_MODE_MISSING, so that faults are
->>> generated for the hugetlb mapping used by the test.
->>>
->>> This ensures userfaultfd operates on the actual hugetlb test region and
->>> validates the expected fault handling.
->>>
->>> Before patch:
->>>  running ./hugepage-mremap
->>>  -------------------------
->>>  TAP version 13
->>>  1..1
->>>   Map haddr: Returned address is 0x7eaa40000000
->>>   Map daddr: Returned address is 0x7daa40000000
->>>   Map vaddr: Returned address is 0x7faa40000000
->>>   Address returned by mmap() = 0x7fff9d000000
->>>   Mremap: Returned address is 0x7faa40000000
->>>   First hex is 0
->>>   First hex is 3020100
->>>  ok 1 Read same data
->>>  Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>  [PASS]
->>>  ok 1 hugepage-mremap
->>>
->>> After patch:
->>>  running ./hugepage-mremap
->>>  -------------------------
->>>  TAP version 13
->>>  1..1
->>>   Map haddr: Returned address is 0x7eaa40000000
->>>   Map daddr: Returned address is 0x7daa40000000
->>>   Map vaddr: Returned address is 0x7faa40000000
->>>   Registered memory at address 0x7eaa40000000 with userfaultfd
->>>   Mremap: Returned address is 0x7faa40000000
->>>   First hex is 0
->>>   First hex is 3020100
->>>  ok 1 Read same data
->>>  Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>  [PASS]
->>>  ok 1 hugepage-mremap
->> Okay, so we tested mremap() of something that is not even hugetlb.
->>
->>> Fixes: 12b613206474 ("mm, hugepages: add hugetlb vma mremap() test")
->>> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
->>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
->>> ---
->>>  tools/testing/selftests/mm/hugepage-mremap.c | 21 +++++---------------
->>>  1 file changed, 5 insertions(+), 16 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testing/selftests/mm/hugepage-mremap.c
->>> index b8f7d92e5a35..e611249080d6 100644
->>> --- a/tools/testing/selftests/mm/hugepage-mremap.c
->>> +++ b/tools/testing/selftests/mm/hugepage-mremap.c
->>> @@ -85,25 +85,14 @@ static void register_region_with_uffd(char *addr, size_t len)
->>>  	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1)
->>>  		ksft_exit_fail_msg("ioctl-UFFDIO_API: %s\n", strerror(errno));
->>>  
->>> -	/* Create a private anonymous mapping. The memory will be
->>> -	 * demand-zero paged--that is, not yet allocated. When we
->>> -	 * actually touch the memory, it will be allocated via
->>> -	 * the userfaultfd.
->>> -	 */
->>> -
->>> -	addr = mmap(NULL, len, PROT_READ | PROT_WRITE,
->>> -		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->>> -	if (addr == MAP_FAILED)
->>> -		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
->>> -
->>> -	ksft_print_msg("Address returned by mmap() = %p\n", addr);
->>> -
->>> -	/* Register the memory range of the mapping we just created for
->>> -	 * handling by the userfaultfd object. In mode, we request to track
->>> -	 * missing pages (i.e., pages that have not yet been faulted in).
->>> +	/* Register the passed memory range for handling by the userfaultfd object.
->> /*
->>  * ...
->>
->> While at it.
->>
->>> +	 * In mode, we request to track missing pages
->>> +	 * (i.e., pages that have not yet been faulted in).
->>>  	 */
->>>  	if (uffd_register(uffd, addr, len, true, false, false))
->>>  		ksft_exit_fail_msg("ioctl-UFFDIO_REGISTER: %s\n", strerror(errno));
->>> +
->>> +	ksft_print_msg("Registered memory at address %p with userfaultfd\n", addr);
->>>  }
->>>  
->>>  int main(int argc, char *argv[])
->> Yes, that code is extremely weird. I wonder if this was some
->> copy-and-paste from other uffd test code.
->>
->> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->>
->>
-> Hi David,
 > 
-> Yes, the test operates on hugetlb mappings created with
-> |MAP_HUGETLB | MAP_POPULATE|and sets up userfaultfd. Consequently,
-> registering it with |UFFDIO_REGISTER_MODE_MISSING| does not result in
-> any userfaults.
-> 
-> Originally, the helper function created a separate anonymous mapping and
-> registered it with userfaultfd instead of the address supplied by the
-> caller. However, the test operates on hugetlb mappings, and the registered
-> anonymous mapping is never used in the |mremap()| path being exercised.
-> 
-> Would it be better to remove userfaultfd registration entirely from this
-> test, since that path is not actually being tested?
+> On 01/04/26 20:10, Lorenzo Stoakes (Oracle) wrote:
+>> On Wed, Apr 01, 2026 at 04:21:55PM +0200, David Hildenbrand (Arm) wrote:
+>>
+>> OK so digging in:
+>>
+>> mremap -> ... -> vrm_set_new_addr() -> get_unmapped_area() -> ... (in
+>> ppc arch
+>> code) -> slice_get_unmapped_area():
+>>
+>> unsigned long slice_get_unmapped_area(unsigned long addr, unsigned
+>> long len,
+>>                       unsigned long flags, unsigned int psize,
+>>                       int topdown)
+>> {
+>>     ...
+>>     /* bunch of checks */
+>>
+>>     /* If we have MAP_FIXED and failed the above steps, then error out */
+>>     if (fixed)
+>>         return -EBUSY;
+>>
+>>     ...
+>> }
+>>
+>> Is presumably where we hit the issue.
+>>
+>>>
+>>> That is weird. An mremap(MREMAP_FIXED) is really just an munmap() +
+>>> move.
+>>
+>> Yeah the weird bit I guess is that we _still_ invoke
+>> get_unmapped_area() but
+>> with MAP_FIXED set to indicate that we want the specific address, so it's
+>> subject to the above checks.
+>>
+>>>
+>>> Are we sure this is not some actual problem in the hugetlb
+>>> implementation?
+>>
+>> It seems the 'slices' check sees if the _target address_ has an
+>> equivalent page
+>> size, presumably hugetlb-mandated, and fails if they're not
+>> equivalent, so this
+>> change is just accounting for that.
+>>
+> Yes, this change accounts for that by ensuring the destination is
+> created with MAP_HUGETLB so it has the same page size as the source.
 
-If it's tested with your change now (which I think that's what
-happenes), this is fine.
+Okay, weird, so it's the right thing to do to cover all odd arch behavior.
 
-It was just very weird before, because it tested something fairly unrelated.
+>>
+>>>
+>>>
+>>> But then the test suddenly requires more hugetlb pages, no? I don't see
+>>> a good reason for the MAP_POPULATE, really. It will be discarded
+>>> either way.
+>>
+>> Yeah I'm not sure about the MAP_POPULATE being all that important here.
+>>
+> As far as I understand, without MAP_POPULATE, memory accesses would
+> trigger userfaults, and since the test is single-threaded and has no
+> background handler for the uffd, it would deadlock. MAP_POPULATE ensures
+> the test runs correctly by prefaulting all pages, but please let me know
+> if I’m mistaken.
+
+So you are saying the test would deadlock if you are not adding
+MAP_POPULATE? If so, please double check if that is actually the case.
+
+And if it's actually the case, please carefully document that in the
+patch description, and probably as a comment above the MAP_POPULATE usage.
 
 -- 
 Cheers,
