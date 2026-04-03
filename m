@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442173D75BF;
-	Fri,  3 Apr 2026 19:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F063D6CA4;
+	Fri,  3 Apr 2026 19:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775245233; cv=none; b=UykVadA5R/p5gPM6dMyVKoEraSOwPzYXaasG9dVZvG4ihcSGoIDCoOxt39fhg200PUbo9c5Q7IGeQEhoW3W8ZfjljC+khu70F9aT59G7SxxgZnbAuOvFI0o5mAlpWkB/H4+DJSemrLcAuqHymcaHacXqtcT6QEQ9zCteiphj0vo=
+	t=1775245235; cv=none; b=p2PjBLAT5R7n4c35XgG+uiganc8cUAxo4zk6Y2taRZcddPoXvSkXtPVCUHYXhrF4wb0aYUHyD10LiHIix3pBod/SO+VeFEPZ8S5H8kdBiH2JqLzag/dnidMaMOwNV3BU2rrSE/sBqgzXsTkKd+hdWyZaHFtNeeByfSkWyq6rZbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775245233; c=relaxed/simple;
-	bh=4sQ2am7P1fIKmx4JakwbC3BEjgsHp2lmwc8hACFKRSQ=;
+	s=arc-20240116; t=1775245235; c=relaxed/simple;
+	bh=FJIlVUEHAp7ZJEKT0idl4M4VyELOXTlHEmJHYyO6eBY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mCXzH2FJ+gh5LXe9mX3Muw3+gAVelKdTAf9JGWddifm8D3/gw12SvSd266eT882zZmvLGNkyyY8f4gr0r2dt6QQsD7l9lSXCHJvflMVuCEu5Yyqp5C4+pA4UwTltfC2p60D/n7ntOZpdXQJEl+o+g0U8cnI+Kf7hzEzSf68igrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Go2tvX9v; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=gj8JOfti0DjTYbbVZsacdEQxa6dUBrRkfKBnX3ZGl4UnSwMayzccqhQLuVJJ8i97lzPvi5guu1AvtV5lTD79XuILdlzikavVK9YyneWggrF/ABhOEvwEV3nRvDf8vQPFNb0DdvjFteY7PSeuRot+bXzMeBGRu76UcgJMGmShemo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ITI6lWTo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Go2tvX9v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2E5C2BCB3;
-	Fri,  3 Apr 2026 19:40:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ITI6lWTo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E04C2BCAF;
+	Fri,  3 Apr 2026 19:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775245232;
-	bh=4sQ2am7P1fIKmx4JakwbC3BEjgsHp2lmwc8hACFKRSQ=;
+	s=k20201202; t=1775245235;
+	bh=FJIlVUEHAp7ZJEKT0idl4M4VyELOXTlHEmJHYyO6eBY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Go2tvX9vIXO8EQ7FnchajHLDwJAyDeUd2ba9pglp4R8p4TfPwtbTRxvwWW8nAex8z
-	 riJFtzogQZha0TsAVk6oEpL5fa6Q1IDjFFZirOhY2UxemaonhgAqvut8CQ/gE4f7Ne
-	 SNMgJq17zo4XkmuluRT1n2FCChbhIcTWBPfI4smS2mjYs+MYHr+t6PhRWSL5lbEoMB
-	 SSpZZ4DBKE6SvQPew1OX2ROC5OgUOLteIWDz+pX4rV5+DgXIFzIDztY/h21VJNhvNB
-	 reMVhu3ewxbXcTdsYDbJvmYi0jwjpJX4QNxMcI4tvAP7WwQGRDBznGTwfm8N7onmLv
-	 3C3Pz6cKJsRPg==
+	b=ITI6lWToNau7UFzXYD5NG6S04w5VvF0y9PiRgP8aOTF8SaPWU0ntqT+ztUJHwCQsQ
+	 lFVEWyHtVOSgin1AwMzWxwxHaXokWKEr12q0OSjUSg64SQFwpnOf8f4y3a8YQ4/On2
+	 9yaFxndaJx+FCSG0610AJQfawQNYrkDmAnqVHH4s4WpQ+6vQcm4/g3kESjOm6eBVlU
+	 WY017tHR10glhlBpnfRshzKObMqgQ1XA677drxqveJMqzq4K/Km8bRQ2QDrxabyOxj
+	 emAl0D4bLmYM+V3qsYgwFV5rQhev7Zxg26TKN4Yo+0IJF+3314bz1X3YBlDBSQLSk4
+	 dw7KVccZMB7ZQ==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Mike Rapoport <rppt@kernel.org>,
@@ -35,11 +35,10 @@ To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Usama Arif <usama.arif@linux.dev>
 Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	Pratyush Yadav <ptyadav@amazon.de>
-Subject: [PATCH v2 3/6] selftests/liveupdate: add test for memfd content preservation
-Date: Fri,  3 Apr 2026 19:40:09 +0000
-Message-ID: <20260403194014.3704180-4-pratyush@kernel.org>
+	linux-mm@kvack.org
+Subject: [PATCH v2 4/6] selftests/liveupdate: add test for zero-size memfd preservation
+Date: Fri,  3 Apr 2026 19:40:10 +0000
+Message-ID: <20260403194014.3704180-5-pratyush@kernel.org>
 X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
 In-Reply-To: <20260403194014.3704180-1-pratyush@kernel.org>
 References: <20260403194014.3704180-1-pratyush@kernel.org>
@@ -53,136 +52,87 @@ Content-Transfer-Encoding: 8bit
 
 From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 
-Add a selftest that makes sure the contents of a memfd are correctly
-preserved across a live update. In stage 1, create a memfd and fill it
-with random data, and preserve it. Save the random data to the file
-system. This will be used by stage 2 to verify the contents are correct.
+A zero-size memfd is a special case of memfd preservation. It takes a
+different path from normal both during preservation and during restore.
+In the serialization structure, the number of folios is zero and the
+vmalloc array with folios is empty. The restore logic should check for
+this and make sure to not touch the invalid array.
 
-In stage 2, retrieve the memfd and compare its contents with the
-contents saved on the file system.
+Add a test to make sure this path works as expected. In stage 1, the
+test creates and preserves a memfd without any data. In stage 2, the
+test retrieves the memfd and makes sure it is still without data.
 
-Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 ---
- tools/testing/selftests/liveupdate/Makefile   |  1 +
- .../testing/selftests/liveupdate/luo_memfd.c  | 80 +++++++++++++++++++
- 2 files changed, 81 insertions(+)
+ .../testing/selftests/liveupdate/luo_memfd.c  | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
-index 051daae55eec..8e2eb6500c07 100644
---- a/tools/testing/selftests/liveupdate/Makefile
-+++ b/tools/testing/selftests/liveupdate/Makefile
-@@ -13,6 +13,7 @@ TEST_FILES += do_kexec.sh
- include ../lib.mk
- 
- CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -I$(top_srcdir)/tools/include
- CFLAGS += -Wall -O2 -Wno-unused-function
- CFLAGS += -MD
- 
 diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
-index 47d2c3163b62..70eb96950f04 100644
+index 70eb96950f04..3ba0709f2c61 100644
 --- a/tools/testing/selftests/liveupdate/luo_memfd.c
 +++ b/tools/testing/selftests/liveupdate/luo_memfd.c
-@@ -3,6 +3,9 @@
- /*
-  * Copyright (c) 2026, Google LLC.
-  * Pratyush Yadav (Google) <pratyush@kernel.org>
-+ *
-+ * Copyright (C) 2025 Amazon.com Inc. or its affiliates.
-+ * Pratyush Yadav <ptyadav@amazon.de>
-  */
+@@ -36,6 +36,9 @@
+ #define MEMFD_DATA_BUFFER_SIZE SZ_1M
+ #define MEMFD_DATA_FS_COPY "memfd_data_fs_copy.bin"
  
- /*
-@@ -11,11 +14,14 @@
- 
- #include <errno.h>
- #include <fcntl.h>
-+#include <stdlib.h>
- #include <string.h>
- #include <sys/ioctl.h>
-+#include <sys/mman.h>
- #include <unistd.h>
- 
- #include <linux/liveupdate.h>
-+#include <linux/sizes.h>
- 
- #include "../kselftest.h"
- #include "../kselftest_harness.h"
-@@ -25,9 +31,83 @@
- #define STATE_SESSION_NAME "luo-state"
- #define STATE_MEMFD_TOKEN 1
- 
-+#define MEMFD_DATA_SESSION_NAME "memfd_data_session"
-+#define MEMFD_DATA_TOKEN 1
-+#define MEMFD_DATA_BUFFER_SIZE SZ_1M
-+#define MEMFD_DATA_FS_COPY "memfd_data_fs_copy.bin"
++#define ZERO_SESSION_NAME "zero_session"
++#define ZERO_MEMFD_TOKEN 1
 +
  static int luo_fd = -1;
  static int stage;
  
-+static void memfd_data_stage_1(struct __test_metadata *_metadata)
+@@ -108,6 +111,60 @@ TEST(memfd_data)
+ 	}
+ }
+ 
++static void zero_memfd_stage_1(struct __test_metadata *_metadata)
 +{
-+	int fd, session;
-+	char *buffer;
++	int zero_fd, session;
 +	struct liveupdate_session_preserve_fd preserve_arg = { .size = sizeof(preserve_arg) };
 +
-+	buffer = malloc(MEMFD_DATA_BUFFER_SIZE);
-+	ASSERT_NE(buffer, NULL);
-+
-+	session = luo_create_session(luo_fd, MEMFD_DATA_SESSION_NAME);
++	session = luo_create_session(luo_fd, ZERO_SESSION_NAME);
 +	ASSERT_GE(session, 0);
 +
-+	fd = create_random_memfd("memfd_data", buffer, MEMFD_DATA_BUFFER_SIZE);
-+	ASSERT_GE(fd, 0);
++	zero_fd = memfd_create("zero_memfd", 0);
++	ASSERT_GE(zero_fd, 0);
 +
-+	ASSERT_EQ(save_test_data(MEMFD_DATA_FS_COPY, buffer, MEMFD_DATA_BUFFER_SIZE), 0);
-+
-+	preserve_arg.fd = fd;
-+	preserve_arg.token = MEMFD_DATA_TOKEN;
++	preserve_arg.fd = zero_fd;
++	preserve_arg.token = ZERO_MEMFD_TOKEN;
 +	ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_PRESERVE_FD, &preserve_arg), 0);
 +
 +	daemonize_and_wait();
 +}
 +
-+static void memfd_data_stage_2(struct __test_metadata *_metadata)
++static void zero_memfd_stage_2(struct __test_metadata *_metadata)
 +{
-+	int fd, session;
-+	char *buffer;
++	int zero_fd, session;
 +	struct liveupdate_session_retrieve_fd retrieve_arg = { .size = sizeof(retrieve_arg) };
 +
-+	buffer = malloc(MEMFD_DATA_BUFFER_SIZE);
-+	ASSERT_NE(buffer, NULL);
-+
-+	session = luo_retrieve_session(luo_fd, MEMFD_DATA_SESSION_NAME);
++	session = luo_retrieve_session(luo_fd, ZERO_SESSION_NAME);
 +	ASSERT_GE(session, 0);
 +
-+	ASSERT_EQ(load_test_data(MEMFD_DATA_FS_COPY, buffer, MEMFD_DATA_BUFFER_SIZE), 0);
-+
-+	retrieve_arg.token = MEMFD_DATA_TOKEN;
++	retrieve_arg.token = ZERO_MEMFD_TOKEN;
 +	ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_RETRIEVE_FD, &retrieve_arg), 0);
-+	fd = retrieve_arg.fd;
-+	ASSERT_GE(fd, 0);
++	zero_fd = retrieve_arg.fd;
++	ASSERT_GE(zero_fd, 0);
 +
-+	ASSERT_EQ(verify_fd_content_read(fd, buffer, MEMFD_DATA_BUFFER_SIZE), 0);
++	ASSERT_EQ(lseek(zero_fd, 0, SEEK_END), 0);
 +
 +	ASSERT_EQ(luo_session_finish(session), 0);
 +}
 +
 +/*
-+ * Test that a memfd with its data is preserved across live update.
++ * Test that a zero-sized memfd is preserved across live update.
 + */
-+TEST(memfd_data)
++TEST(zero_memfd)
 +{
-+	if (cwd_is_tmpfs())
-+		SKIP(return, "test saves data to rootfs, cannot run on tmpfs");
-+
 +	switch (stage) {
 +	case 1:
-+		memfd_data_stage_1(_metadata);
++		zero_memfd_stage_1(_metadata);
 +		break;
 +	case 2:
-+		memfd_data_stage_2(_metadata);
++		zero_memfd_stage_2(_metadata);
 +		break;
 +	default:
 +		TH_LOG("Unknown stage %d\n", stage);
