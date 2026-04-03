@@ -1,326 +1,91 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D7A1D61BC
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 03:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87FA31F994;
+	Fri,  3 Apr 2026 05:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775188176; cv=none; b=YFSIXGbL4efEMavDII9C+2vqMlvO9pLXH4HXsCKlItuHDMC24r3o+0Jd9hmLIdip7lRJr5TUUJ0ZlHCY/jWdyacGJFVTlAi8mKHoClxRMco3A5FVaJOAc8U6DRbfxabqmKXuoHeymCKlCsu67XWduSNXv26cPcY2yZjMS4NcF4M=
+	t=1775193353; cv=none; b=P9vlivd4zG5PZzOjXiQIh0de4uYFJvjOLDbY8l9OdBfyfJDQ43F5e/xwp5KtZgISTKJVTYy22apFfd1RTF8u7xP4JcVOo9I3Vf2tF+0S5uXtkBBEBjCliOjFOYX/EWeYtGnWBV9FdPtUXxxlKtvx//OjIrft+8q1zlUt7CE3B2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775188176; c=relaxed/simple;
-	bh=YFkuOCnrJpzDB0Z5a3xx3tq1/XaMpLmaUp4WPCCuAOE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DmqO8EFh8r6VNx7lbvd4Il6Bb7O2ssJgvDxUkYj1cXjYt8JU8t/3M2fbCyR5XKVkkGCXubSuwEYLho+y7IzwhWicXefQSFkyOTj+mmRsZhnnxhTIfcGFvRW4X2Cebg6CrjSI/Rw3DzljLcHWrKgpvNd3UDB/VIuxvtifEwvMmEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=K2Q6BhAr; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775193353; c=relaxed/simple;
+	bh=Sswnkko+CAR04IjXTq+jqkrW6/QTDN4rDDu6gHkH/nQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=axVv43mKEpy+wrN5v2pmYeB0+Bl4ELa53LlFQVzE4iNgD0nqDKYcdt9RGvSyVhyQuPF4LU0RVq69hUOXguJQ5J1nItC/A8KZN15IsAtjq3sxW3JjoG3eluMJ17IPOTlrSOABKpBPy2viLIjAA772F+hcJj/tIJ6Fo7LZ27l6ccU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P0/0BQvl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="K2Q6BhAr"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775188162;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=sVqEFwMZ86bS0uTEmuMewmHsbzVj9vG2EZxLHT6aEYw=;
-	b=K2Q6BhArTwDCDJwXi0UpTLj4IFN21DwvtE5BEeNrWo9Hs53mp019xmw8xYi28IpCzMYZJx
-	vQLzWb+zQ7f+pAa90n33Kb44J44sEDGG79EuPEhKJK0E3PzdQ1B0NuXYYSij+hnzI9Xcz0
-	m+f3gk+NbpEtjAm2TUw0X+hTdyZjWyE=
-From: Qingfang Deng <qingfang.deng@linux.dev>
-To: linux-ppp@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Felix Maurer <fmaurer@redhat.com>,
-	Qingfang Deng <qingfang.deng@linux.dev>,
-	Petr Machata <petrm@nvidia.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Paul Mackerras <paulus@ozlabs.org>,
-	Dianne Skoll <dianne@skoll.ca>,
-	Jaco Kroon <jaco@uls.co.za>,
-	James Carlson <carlsonj@workingcode.com>,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH net-next v8] selftests: net: add tests for PPP
-Date: Fri,  3 Apr 2026 11:48:47 +0800
-Message-ID: <20260403034908.30017-1-qingfang.deng@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P0/0BQvl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F4DDC19421;
+	Fri,  3 Apr 2026 05:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775193353;
+	bh=Sswnkko+CAR04IjXTq+jqkrW6/QTDN4rDDu6gHkH/nQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=P0/0BQvlV6xKx+ITyRBIzEtR+hF9tgeVwEuaBnsUSQEVaPQqwoGUbwpNIBlbzYLJs
+	 P7842NfwZQcA/B/2S5qaSo4pXvcbvTPmYHWcR/1ha/rnzbUsidl6Jt5HqK4f9mUtTK
+	 9334zbehed47fDfLWfI8Klb+OdgHQiSTylVORk8LCvQKfXw2Ykrz8Zjpcy///HG6yL
+	 Mz05wl0lk+xli4mSAbiL+Nw40gI9Z1UeWXPsdxTqsMmkVEt88BR/rYV2uQE6H1MDlp
+	 lz854fRVGEF9biTZjvZwEwjru8HKypPzFgcl9bFz3XLFLsrqO2+2GImlfk7h5NG5Ks
+	 ghnoTjgOxx6Lw==
+Content-Type: multipart/mixed; boundary="===============0074582293386729096=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <3e5a19c82d5a24696101ee24e1e9141f4fb06d0fc892215b980522d01a1322a8@mail.kernel.org>
+In-Reply-To: <20260402160147.215499-1-sun.jian.kdev@gmail.com>
+References: <20260402160147.215499-1-sun.jian.kdev@gmail.com>
+Subject: Re: [PATCH bpf-next v3] bpf: reject short IPv4/IPv6 inputs in bpf_prog_test_run_skb
+From: bot+bpf-ci@kernel.org
+To: sun.jian.kdev@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org
+Cc: syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,sun.jian.kdev@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  3 Apr 2026 05:15:53 +0000 (UTC)
 
-Add ping and iperf3 tests for ppp_async.c and pppoe.c.
+--===============0074582293386729096==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 4cd6b3ea1815a..2bc04feadfabe 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -1137,19 +1137,23 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+>
+> 	switch (skb->protocol) {
+> 	case htons(ETH_P_IP):
+> -		sk->sk_family = AF_INET;
+> -		if (sizeof(struct iphdr) <= skb_headlen(skb)) {
+> -			sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
+> -			sk->sk_daddr = ip_hdr(skb)->daddr;
+> +		if (skb_headlen(skb) < sizeof(struct iphdr)) {
+> +			ret = -EINVAL;
+> +			goto out;
+> 		}
+> +		sk->sk_family = AF_INET;
+> +		sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
+> +		sk->sk_daddr = ip_hdr(skb)->daddr;
+> 		break;
+
+[ ... ]
+
+This fixes a bug that has existed since fa5cb548ced6 ("bpf: Setup
+socket family and addresses in bpf_prog_test_run_skb") which
+introduced the sk_family assignment and ip_hdr()/ipv6_hdr() access
+without rejecting packets too short to contain L3 headers.
+
+Should this carry a Fixes: tag?  Something like:
+
+Fixes: fa5cb548ced6 ("bpf: Setup socket family and addresses in bpf_prog_test_run_skb")
+
+This was also raised in the v2 review thread:
+https://lore.kernel.org/bpf/20260329161751.1914272-1-sun.jian.kdev@gmail.com/
+
+
 ---
-v8:
- - locate pppoe.so and pass it to pppoe-server
- - start socat as a syslog listener and dump the log messages if the test fails
- https://lore.kernel.org/netdev/20260330035604.133073-1-dqfext@gmail.com/
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/net/ppp/Makefile      | 15 +++++
- tools/testing/selftests/net/ppp/config        |  9 +++
- tools/testing/selftests/net/ppp/ppp_async.sh  | 43 ++++++++++++
- tools/testing/selftests/net/ppp/ppp_common.sh | 45 +++++++++++++
- .../selftests/net/ppp/pppoe-server-options    |  2 +
- tools/testing/selftests/net/ppp/pppoe.sh      | 65 +++++++++++++++++++
- 8 files changed, 181 insertions(+)
- create mode 100644 tools/testing/selftests/net/ppp/Makefile
- create mode 100644 tools/testing/selftests/net/ppp/config
- create mode 100755 tools/testing/selftests/net/ppp/ppp_async.sh
- create mode 100644 tools/testing/selftests/net/ppp/ppp_common.sh
- create mode 100644 tools/testing/selftests/net/ppp/pppoe-server-options
- create mode 100755 tools/testing/selftests/net/ppp/pppoe.sh
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c583c5478ef6..c92bfed47ead 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21089,6 +21089,7 @@ PPP PROTOCOL DRIVERS AND COMPRESSORS
- L:	linux-ppp@vger.kernel.org
- S:	Orphan
- F:	drivers/net/ppp/ppp_*
-+F:	tools/testing/selftests/net/ppp/
- 
- PPS SUPPORT
- M:	Rodolfo Giometti <giometti@enneenne.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 450f13ba4cca..65f84e8a0cf0 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -78,6 +78,7 @@ TARGETS += net/netfilter
- TARGETS += net/openvswitch
- TARGETS += net/ovpn
- TARGETS += net/packetdrill
-+TARGETS += net/ppp
- TARGETS += net/rds
- TARGETS += net/tcp_ao
- TARGETS += nolibc
-diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
-new file mode 100644
-index 000000000000..b39b0abadde6
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/Makefile
-@@ -0,0 +1,15 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+top_srcdir = ../../../../..
-+
-+TEST_PROGS := \
-+	ppp_async.sh \
-+	pppoe.sh \
-+# end of TEST_PROGS
-+
-+TEST_FILES := \
-+	ppp_common.sh \
-+	pppoe-server-options \
-+# end of TEST_FILES
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
-new file mode 100644
-index 000000000000..b45d25c5b970
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/config
-@@ -0,0 +1,9 @@
-+CONFIG_IPV6=y
-+CONFIG_PACKET=y
-+CONFIG_PPP=m
-+CONFIG_PPP_ASYNC=m
-+CONFIG_PPP_BSDCOMP=m
-+CONFIG_PPP_DEFLATE=m
-+CONFIG_PPPOE=m
-+CONFIG_PPPOE_HASH_BITS_4=y
-+CONFIG_VETH=y
-diff --git a/tools/testing/selftests/net/ppp/ppp_async.sh b/tools/testing/selftests/net/ppp/ppp_async.sh
-new file mode 100755
-index 000000000000..10f54c8dd0bc
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/ppp_async.sh
-@@ -0,0 +1,43 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ppp_common.sh
-+
-+# Temporary files for PTY symlinks
-+TTY_DIR=$(mktemp -d /tmp/ppp.XXXXXX)
-+TTY_SERVER="$TTY_DIR"/server
-+TTY_CLIENT="$TTY_DIR"/client
-+
-+# shellcheck disable=SC2329
-+cleanup() {
-+	cleanup_all_ns
-+	[ -n "$SOCAT_PID" ] && kill_process "$SOCAT_PID"
-+	rm -fr "$TTY_DIR"
-+}
-+
-+trap cleanup EXIT
-+
-+ppp_common_init
-+modprobe -q ppp_async
-+
-+# Create the virtual serial device
-+socat -d PTY,link="$TTY_SERVER",rawer PTY,link="$TTY_CLIENT",rawer &
-+SOCAT_PID=$!
-+
-+# Wait for symlinks to be created
-+slowwait 5 [ -L "$TTY_SERVER" ]
-+
-+# Start the PPP Server
-+ip netns exec "$NS_SERVER" pppd "$TTY_SERVER" 115200 \
-+	"$IP_SERVER":"$IP_CLIENT" \
-+	local noauth nodefaultroute debug
-+
-+# Start the PPP Client
-+ip netns exec "$NS_CLIENT" pppd "$TTY_CLIENT" 115200 \
-+	local noauth updetach nodefaultroute debug
-+
-+ppp_test_connectivity
-+
-+log_test "PPP async"
-+
-+exit "$EXIT_STATUS"
-diff --git a/tools/testing/selftests/net/ppp/ppp_common.sh b/tools/testing/selftests/net/ppp/ppp_common.sh
-new file mode 100644
-index 000000000000..40bbec317039
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/ppp_common.sh
-@@ -0,0 +1,45 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# shellcheck disable=SC2153
-+
-+source ../lib.sh
-+
-+IP_SERVER="192.168.200.1"
-+IP_CLIENT="192.168.200.2"
-+
-+ppp_common_init() {
-+	# Package requirements
-+	require_command socat
-+	require_command pppd
-+	require_command iperf3
-+
-+	# Check for root privileges
-+	if [ "$(id -u)" -ne 0 ];then
-+		echo "SKIP: Need root privileges"
-+		exit "$ksft_skip"
-+	fi
-+
-+	# Namespaces
-+	setup_ns NS_SERVER NS_CLIENT
-+}
-+
-+ppp_check_addr() {
-+	dev=$1
-+	addr=$2
-+	ns=$3
-+	ip -netns "$ns" -4 addr show dev "$dev" 2>/dev/null | grep -q "$addr"
-+	return $?
-+}
-+
-+ppp_test_connectivity() {
-+	slowwait 10 ppp_check_addr "ppp0" "$IP_CLIENT" "$NS_CLIENT"
-+
-+	ip netns exec "$NS_CLIENT" ping -c 3 "$IP_SERVER"
-+	check_err $?
-+
-+	ip netns exec "$NS_SERVER" iperf3 -s -1 -D
-+	wait_local_port_listen "$NS_SERVER" 5201 tcp
-+
-+	ip netns exec "$NS_CLIENT" iperf3 -c "$IP_SERVER" -Z -t 2
-+	check_err $?
-+}
-diff --git a/tools/testing/selftests/net/ppp/pppoe-server-options b/tools/testing/selftests/net/ppp/pppoe-server-options
-new file mode 100644
-index 000000000000..66c8c9d319e9
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/pppoe-server-options
-@@ -0,0 +1,2 @@
-+noauth
-+noipdefault
-diff --git a/tools/testing/selftests/net/ppp/pppoe.sh b/tools/testing/selftests/net/ppp/pppoe.sh
-new file mode 100755
-index 000000000000..f67b51df7490
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/pppoe.sh
-@@ -0,0 +1,65 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ppp_common.sh
-+
-+VETH_SERVER="veth-server"
-+VETH_CLIENT="veth-client"
-+PPPOE_LOG=$(mktemp /tmp/pppoe.XXXXXX)
-+
-+# shellcheck disable=SC2329
-+cleanup() {
-+	cleanup_all_ns
-+	[ -n "$SOCAT_PID" ] && kill_process "$SOCAT_PID"
-+	rm -f "$PPPOE_LOG"
-+}
-+
-+trap cleanup EXIT
-+
-+require_command pppoe-server
-+ppp_common_init
-+modprobe -q pppoe
-+
-+# Try to locate pppoe.so plugin
-+PPPOE_PLUGIN=$(find /usr/{lib,lib64,lib32}/pppd/ -name pppoe.so -type f -print -quit)
-+if [ -z "$PPPOE_PLUGIN" ]; then
-+	log_test_skip "PPPoE: pppoe.so plugin not found"
-+	exit "$EXIT_STATUS"
-+fi
-+
-+# Create the veth pair
-+ip link add "$VETH_SERVER" type veth peer name "$VETH_CLIENT"
-+ip link set "$VETH_SERVER" netns "$NS_SERVER"
-+ip link set "$VETH_CLIENT" netns "$NS_CLIENT"
-+ip -netns "$NS_SERVER" link set "$VETH_SERVER" up
-+ip -netns "$NS_CLIENT" link set "$VETH_CLIENT" up
-+
-+# Start socat as syslog listener
-+socat -v -u UNIX-RECV:/dev/log OPEN:/dev/null > "$PPPOE_LOG" 2>&1 &
-+SOCAT_PID=$!
-+
-+# Start the PPP Server. Note that versions before 4.0 ignore -g option and
-+# instead use a hardcoded plugin path, so they may fail to find the plugin.
-+ip netns exec "$NS_SERVER" pppoe-server -I "$VETH_SERVER" \
-+	-L "$IP_SERVER" -R "$IP_CLIENT" -N 1 -q "$(command -v pppd)" \
-+	-k -O "$(pwd)/pppoe-server-options" -g "$PPPOE_PLUGIN"
-+
-+# Start the PPP Client
-+ip netns exec "$NS_CLIENT" pppd \
-+	local debug updetach noipdefault noauth nodefaultroute \
-+	plugin "$PPPOE_PLUGIN" nic-"$VETH_CLIENT"
-+
-+ppp_test_connectivity
-+
-+log_test "PPPoE"
-+
-+# Dump syslog messages if the test failed
-+if [ "$RET" -ne 0 ]; then
-+	while read -r _sign _date _time len _from _to
-+	do      len=${len##*=}
-+		read -n "$len" -r LINE
-+		echo "$LINE"
-+	done < "$PPPOE_LOG"
-+fi
-+
-+exit "$EXIT_STATUS"
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23910290394
+--===============0074582293386729096==--
