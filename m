@@ -1,392 +1,118 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B283D3CE6;
-	Fri,  3 Apr 2026 17:17:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FEE394787
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 17:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775236624; cv=none; b=dnbdwcf+WhSwzMV8VRjsWrOuZYtwaJYJN9g/Bbp5Ni6dDb8MIfT3CBwKK6xwVsxgkkF/Ag452wz0xbTPJ2ST0XFxQunVclzn9IHKHzAc0QCcp32hQQ2mnuBQfe0q6MPxJNUk/h3cNsbvM7SA/Nsu6NjO/d5gnAa5O7iAwkgjf2Q=
+	t=1775237087; cv=none; b=rHA5A50uAd9g8oriQR9lbCoEwvdSu5kDs15t46vfgioGytkJNpaBv1USlwlgFwQX7ykCtu/mnOxtcMj9mG1xf3ZtjwABkr6flXk+1aJ5eSJsuyqgcHYvxccIQ2vnPJcJLUcF9zzU5+WgVNpeDXKJ+z17FD+tvquvVI4Napu7N5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775236624; c=relaxed/simple;
-	bh=LxR5Mwx2K1sWToDzGUCQ6ZjqvU0M9MV3q7tK2pTT1Hk=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=OGMKjLc7sMLXM7zulOv3X9lH0/lyQMaJ3mDfe1YmV+TgURih9NHXdFk8dzGtFqtOPxKset1vmVF622At4RWAAsudmR27vcng4XW+1Wq1n+wT3X5fxCnpckK2OGGaAV5C4RTa5KppNIgrWBK3u36CyhpTTNhpHDElsXicwUGlg90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=NajoZDuk; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1775237087; c=relaxed/simple;
+	bh=E1bzUypaVS7w28CbARApxGc+uxb6NjOyzaisp3si/6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bp85Q0NVvoyfR1YLM4LLH3psjJAMta1mIZZUawxIxrlFlA4HX99rAgd6/5rx8Ba4qfu4SkSfkZnIe4oc9xVPXeO2tVhKE92p7/oGvbW8k0qSy6DeIyzbbf+0uILMk+AlDVpBsZ1apixteQ1lbQOWKmbnwhxc4eo3TJwG9dXBgBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ri162ENa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NajoZDuk"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 632LdVog3113759;
-	Fri, 3 Apr 2026 17:16:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=NohWR1
-	irjMQ2u8AmGUhis2y6lSL4Qqs49+8cKnjPScA=; b=NajoZDuknduwv9R0SxWu6U
-	gwjA+dnvY1Zz9V992Zw6PFGzc8NzaCC88rEWL1H38+eEAUEA/0kiqhj6VF5mgl7Q
-	nX8EBKC19uF4YB8FHEBMr9XxjqhHW+wW/U7ykoOtCE8cDk+PZLqLFwx8C3jHIICB
-	wgXLDVhD4DoDRdk4j898rG1qs/AxI2HV+YkcggZgDaRRlRXnBglhIWTIkxK2mUFh
-	8PrYdtyPEHRgz5TF2i+JeqAS3+a0Em46W5YQMNW28CwjZ48uhRNIs+glH+hr3ymD
-	lbvY5CvHs+AEx2gfBW7v7BThTqgXM7JLHouGk611vTt+JIAjwBPdJWXv0VfBkAtQ
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66np1k6t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 03 Apr 2026 17:16:40 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 633EtSXF022217;
-	Fri, 3 Apr 2026 17:16:39 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6taneufy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 03 Apr 2026 17:16:39 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 633HGc6D63308230
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 3 Apr 2026 17:16:39 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9C0805804B;
-	Fri,  3 Apr 2026 17:16:38 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3726358063;
-	Fri,  3 Apr 2026 17:16:33 +0000 (GMT)
-Received: from [9.124.211.212] (unknown [9.124.211.212])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  3 Apr 2026 17:16:32 +0000 (GMT)
-Message-ID: <dd044148-b40f-47f5-a254-ef6f1b86cb0f@linux.ibm.com>
-Date: Fri, 3 Apr 2026 22:46:29 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ri162ENa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F35A9C2BCB2
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 17:24:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775237087;
+	bh=E1bzUypaVS7w28CbARApxGc+uxb6NjOyzaisp3si/6g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ri162ENaaXiSRPqBTShI8ahm36fA0yxapnpusRTreYOdDDMZ+niMHjj7xqXvZwXxR
+	 W4688wQ9cGxnGe+4MGiHfTAaMtuD2Con4gYFbAMxcYjgjIt93lCPasclWTi7ojO9Zc
+	 cazVdgRwAtkk89yPiJTWnIHMEFFN8LHV8glDBn0X8QcC5UvdP0JZaLMOMJXUx/iVXU
+	 J6GWfBEZdlJkOBVUvtov+m1djxfdByrpUr0rmKXjb+/NqCjkj+Qy2GYzHPm2Fr+5nb
+	 8/vPh720vR6+uCmdKhX7HYao8p87jfXTXfxJbR1k47IxMwREqsFF2kj0iRdD6uwC5X
+	 E/5FWDXI51lcQ==
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-65009bfdcfdso2275602d50.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 10:24:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVANzWzFOvZwuMu+TNCkahEhuhsGWNIqubSwrvibSlE7aDsttnldVuQfobujzI1CmQBowTnQMMd3xhXhQ8r5Q0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxlhv3emXG9k1W+/EO8Ko9toLk5jomuOhKRk35yisvh2KIwbc9l
+	MorxLTqii00Xy0Lrc9hqLK61+Iq72BNp8s59mGWro8jrC5M8w1j4roHoe1pS82bRLSJjiOwy45K
+	DIzfvsvRoUHiEG9nXhjeF2iiscZBVuXg9NBBDmAox3Q==
+X-Received: by 2002:a05:690e:d41:b0:64e:a765:ef82 with SMTP id
+ 956f58d0204a3-6504870ea48mr3180067d50.24.1775237086162; Fri, 03 Apr 2026
+ 10:24:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Sayali Patil <sayalip@linux.ibm.com>
-Subject: Re: [PATCH v3 13/13] selftests/cgroup: extend test_hugetlb_memcg.c to
- support all huge page sizes
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <41fc5be38d4205b5a4aee8499631cf60a9026163.1774591179.git.sayalip@linux.ibm.com>
-Content-Language: en-IN
-In-Reply-To: <41fc5be38d4205b5a4aee8499631cf60a9026163.1774591179.git.sayalip@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: 69vhz5yWDpv4Gm8HrOCAu_WeVf-f2gNK
-X-Authority-Analysis: v=2.4 cv=KslAGGWN c=1 sm=1 tr=0 ts=69cff5f9 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
- a=kpH4_RMYAZ5BTZvzzSMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAzMDE1MCBTYWx0ZWRfXz4DnOPXlTlXH
- ffm37kttd21y3nY0gDVS8P7Tvb0B+memDYJo2RmLEAyvaHQleMnpGT12s+GiO5Oy9PolWh/FOZ4
- dfdRopDciAZUNfdr+0QF8TNyKe49YN3hH7npCKLFc2+BLn6tKZS7CFH2hxx+Qsg6+BBU3Pv5gQs
- og2RrB4ADgtQzDyxwJc4afTVxJAhKwDcuDmWdUj7E72FF+COS7CPn2g2jfaJ4Y3p8QC7DuTUq2/
- kACnpXDz1pZ5qW498flW8dQnonRKL2aKxu9nAVuTY5NDACikdo4p5++iJjQu5ByKxOUQRPIk04S
- 0rOn2tyVCm/7YnDp3PVH0DQTnWal18D0Ra618rrpmnoCtOu1jUUkBj0EJQe09zzbnxVDkltXtBJ
- QNhQH+3q+xQhS0foMgAXDPQUYoxXYnHHdTqkArvGUKIgUCrv4VWCW89NbuTgY+fdIKEtUWf1VDi
- HB6rxgHexuR9G50bKHw==
-X-Proofpoint-ORIG-GUID: 7CF89Kh9ryTGIGLER7mfKFvRSvYinXz8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-03_05,2026-04-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
- phishscore=0 adultscore=0 bulkscore=0 impostorscore=0 clxscore=1015
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2604030150
+References: <20260323235817.1960573-1-dmatlack@google.com> <20260323235817.1960573-3-dmatlack@google.com>
+ <e3fe7085-1297-47b8-bb17-a48196e8f37f@linux.dev>
+In-Reply-To: <e3fe7085-1297-47b8-bb17-a48196e8f37f@linux.dev>
+From: Chris Li <chrisl@kernel.org>
+Date: Fri, 3 Apr 2026 10:24:35 -0700
+X-Gmail-Original-Message-ID: <CACePvbWrHCSzYmiKz0EuXE48MNk26+4j0njSP+1Vy83RMvvVrQ@mail.gmail.com>
+X-Gm-Features: AQROBzDLi9Fnv8_mDDwmklVKEby5KKVysrnsYTweXxYMFegWZQjyvtyGp9AI6Cw
+Message-ID: <CACePvbWrHCSzYmiKz0EuXE48MNk26+4j0njSP+1Vy83RMvvVrQ@mail.gmail.com>
+Subject: Re: [PATCH v3 02/24] PCI: Add API to track PCI devices preserved
+ across Live Update
+To: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+Cc: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Askar Safin <safinaskar@gmail.com>, 
+	"Borislav Petkov (AMD)" <bp@alien8.de>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
+	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
+	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
+	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Apr 2, 2026 at 2:29=E2=80=AFPM Yanjun.Zhu <yanjun.zhu@linux.dev> wr=
+ote:
+> > +config PCI_LIVEUPDATE
+> > +     bool "PCI Live Update Support (EXPERIMENTAL)"
+> > +     depends on PCI && LIVEUPDATE
+> > +     help
+> > +       Support for preserving PCI devices across a Live Update. This o=
+ption
+> > +       should only be enabled by developers working on implementing th=
+is
+> > +       support. Once enough support as landed in the kernel, this opti=
+on
+> > +       will no longer be marked EXPERIMENTAL.
+> > +
+> > +       If unsure, say N.
+>
+> Currently, it only supports 'n' or 'y'. Is it possible to add 'm'
+> (modular support)?
+>
+> This would allow the feature to be built as a kernel module. For
+> development
+>
+> purposes, modularization means we only need to recompile a single module
+>
+> for testing, rather than rebuilding the entire kernel. Compiling a
+> module should
+>
+> be significantly faster than a full kernel build.
 
+Building as a module has extra complexity to handle, e.g. the callback
+can happen when the module hasn't been loaded. Then the user space can
+take an arbitrarily long time to load the module.
 
-On 27/03/26 12:46, Sayali Patil wrote:
-> The hugetlb memcg selftest was previously skipped when the configured
-> huge page size was not 2MB, preventing the test from running on systems
-> using other default huge page sizes.
-> 
-> Detect the system's configured huge page size at runtime and use it for
-> the allocation instead of assuming a fixed 2MB size. This allows the
-> test to run on configurations using non-2MB huge pages and avoids
-> unnecessary skips.
-> 
-> Fixes: c0dddb7aa5f8 ("selftests: add a selftest to verify hugetlb usage in memcg")
-> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> ---
->   .../selftests/cgroup/test_hugetlb_memcg.c     | 66 ++++++++++++++-----
->   1 file changed, 48 insertions(+), 18 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-> index f451aa449be6..a449dbec16a8 100644
-> --- a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-> +++ b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-> @@ -12,10 +12,15 @@
->   
->   #define ADDR ((void *)(0x0UL))
->   #define FLAGS (MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB)
-> -/* mapping 8 MBs == 4 hugepages */
-> -#define LENGTH (8UL*1024*1024)
->   #define PROTECTION (PROT_READ | PROT_WRITE)
->   
-> +/*
-> + * This value matches the kernel's MEMCG_CHARGE_BATCH definition:
-> + * see include/linux/memcontrol.h. If the kernel value changes, this
-> + * test constant must be updated accordingly to stay consistent.
-> + */
-> +#define MEMCG_CHARGE_BATCH 64U
-> +
->   /* borrowed from mm/hmm-tests.c */
->   static long get_hugepage_size(void)
->   {
-> @@ -84,11 +89,11 @@ static unsigned int check_first(char *addr)
->   	return *(unsigned int *)addr;
->   }
->   
-> -static void write_data(char *addr)
-> +static void write_data(char *addr, size_t length)
->   {
->   	unsigned long i;
->   
-> -	for (i = 0; i < LENGTH; i++)
-> +	for (i = 0; i < length; i++)
->   		*(addr + i) = (char)i;
->   }
->   
-> @@ -96,26 +101,31 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
->   {
->   	char *test_group = (char *)arg;
->   	void *addr;
-> +	long hpage_size = get_hugepage_size() * 1024;
->   	long old_current, expected_current, current;
->   	int ret = EXIT_FAILURE;
-> +	size_t length = 4 * hpage_size;
-> +	int pagesize, nr_pages;
-> +
-> +	pagesize = getpagesize();
->   
->   	old_current = cg_read_long(test_group, "memory.current");
->   	set_nr_hugepages(20);
->   	current = cg_read_long(test_group, "memory.current");
-> -	if (current - old_current >= MB(2)) {
-> +	if (current - old_current >= hpage_size) {
->   		ksft_print_msg(
->   			"setting nr_hugepages should not increase hugepage usage.\n");
->   		ksft_print_msg("before: %ld, after: %ld\n", old_current, current);
->   		return EXIT_FAILURE;
->   	}
->   
-> -	addr = mmap(ADDR, LENGTH, PROTECTION, FLAGS, 0, 0);
-> +	addr = mmap(ADDR, length, PROTECTION, FLAGS, 0, 0);
->   	if (addr == MAP_FAILED) {
->   		ksft_print_msg("fail to mmap.\n");
->   		return EXIT_FAILURE;
->   	}
->   	current = cg_read_long(test_group, "memory.current");
-> -	if (current - old_current >= MB(2)) {
-> +	if (current - old_current >= hpage_size) {
->   		ksft_print_msg("mmap should not increase hugepage usage.\n");
->   		ksft_print_msg("before: %ld, after: %ld\n", old_current, current);
->   		goto out_failed_munmap;
-> @@ -124,10 +134,24 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
->   
->   	/* read the first page */
->   	check_first(addr);
-> -	expected_current = old_current + MB(2);
-> +	nr_pages = hpage_size / pagesize;
-> +	expected_current = old_current + hpage_size;
->   	current = cg_read_long(test_group, "memory.current");
-> -	if (!values_close(expected_current, current, 5)) {
-> -		ksft_print_msg("memory usage should increase by around 2MB.\n");
-> +	if (nr_pages < MEMCG_CHARGE_BATCH && current == old_current) {
-> +		/*
-> +		 * Memory cgroup charging uses per-CPU stocks and batched updates to the
-> +		 *  memcg usage counters. For hugetlb allocations, the number of pages
-> +		 *  that memcg charges is expressed in base pages (nr_pages), not
-> +		 *  in hugepage units. When the charge for an allocation is smaller than
-> +		 *  the internal batching threshold  (nr_pages <  MEMCG_CHARGE_BATCH),
-> +		 *  it may be fully satisfied from the CPU’s local stock. In such
-> +		 *  cases memory.current does not necessarily
-> +		 *  increase.
-> +		 *  Therefore, Treat a zero delta as valid behaviour here.
-> +		 */
-> +		ksft_print_msg("no visible memcg charge, allocation consumed from local stock.\n");
-> +	} else if (!values_close(expected_current, current, 5)) {
-> +		ksft_print_msg("memory usage should increase by ~1 huge page.\n");
->   		ksft_print_msg(
->   			"expected memory: %ld, actual memory: %ld\n",
->   			expected_current, current);
-> @@ -135,11 +159,11 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
->   	}
->   
->   	/* write to the whole range */
-> -	write_data(addr);
-> +	write_data(addr, length);
->   	current = cg_read_long(test_group, "memory.current");
-> -	expected_current = old_current + MB(8);
-> +	expected_current = old_current + length;
->   	if (!values_close(expected_current, current, 5)) {
-> -		ksft_print_msg("memory usage should increase by around 8MB.\n");
-> +		ksft_print_msg("memory usage should increase by around 4 huge pages.\n");
->   		ksft_print_msg(
->   			"expected memory: %ld, actual memory: %ld\n",
->   			expected_current, current);
-> @@ -147,7 +171,7 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
->   	}
->   
->   	/* unmap the whole range */
-> -	munmap(addr, LENGTH);
-> +	munmap(addr, length);
->   	current = cg_read_long(test_group, "memory.current");
->   	expected_current = old_current;
->   	if (!values_close(expected_current, current, 5)) {
-> @@ -162,13 +186,15 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
->   	return ret;
->   
->   out_failed_munmap:
-> -	munmap(addr, LENGTH);
-> +	munmap(addr, length);
->   	return ret;
->   }
->   
->   static int test_hugetlb_memcg(char *root)
->   {
->   	int ret = KSFT_FAIL;
-> +	int num_pages = 20;
-> +	long hpage_size = get_hugepage_size();
->   	char *test_group;
->   
->   	test_group = cg_name(root, "hugetlb_memcg_test");
-> @@ -177,7 +203,7 @@ static int test_hugetlb_memcg(char *root)
->   		goto out;
->   	}
->   
-> -	if (cg_write(test_group, "memory.max", "100M")) {
-> +	if (cg_write_numeric(test_group, "memory.max", num_pages * hpage_size * 1024)) {
->   		ksft_print_msg("fail to set cgroup memory limit.\n");
->   		goto out;
->   	}
-> @@ -200,6 +226,7 @@ int main(int argc, char **argv)
->   {
->   	char root[PATH_MAX];
->   	int ret = EXIT_SUCCESS, has_memory_hugetlb_acc;
-> +	long val;
->   
->   	has_memory_hugetlb_acc = proc_mount_contains("memory_hugetlb_accounting");
->   	if (has_memory_hugetlb_acc < 0)
-> @@ -208,12 +235,15 @@ int main(int argc, char **argv)
->   		ksft_exit_skip("memory hugetlb accounting is disabled\n");
->   
->   	/* Unit is kB! */
-> -	if (get_hugepage_size() != 2048) {
-> -		ksft_print_msg("test_hugetlb_memcg requires 2MB hugepages\n");
-> +	val = get_hugepage_size();
-> +	if (val < 0) {
-> +		ksft_print_msg("Failed to read hugepage size\n");
->   		ksft_test_result_skip("test_hugetlb_memcg\n");
->   		return ret;
->   	}
->   
-> +	ksft_print_msg("Hugepage size: %ld kB\n", val);
-> +
->   	if (cg_find_unified_root(root, sizeof(root), NULL))
->   		ksft_exit_skip("cgroup v2 isn't mounted\n");
->   
+It needs more infrastructure to support the liveupdate as a module.
 
-AI review question:
-
-
-> > -	addr = mmap(ADDR, LENGTH, PROTECTION, FLAGS, 0, 0);
-> > +	addr = mmap(ADDR, length, PROTECTION, FLAGS, 0, 0);
-> >  	if (addr == MAP_FAILED) {
-> >  		ksft_print_msg("fail to mmap.\n");
-> >  		return EXIT_FAILURE;
-> Should the test gracefully handle memory constraints by skipping
-> instead of returning EXIT_FAILURE here?
-> With the removal of the 2MB skip condition, the test will now run on systems
-> with large default huge pages (e.g., 1GB on x86_64). Reserving 20 
-> huge pages
-> (20GB) and mapping 4 huge pages (4GB) might easily fail due to memory
-> exhaustion in typical automated testing environments, causing false 
-> test regressions.
-
-I’ll update it in v4 to skip on memory constraints instead of returning 
-EXIT_FAILURE.
-
-> > @@ -124,10 +134,24 @@ static int hugetlb_test_program(const char 
-> *cgroup, void *arg)
-> >
-> >  	/* read the first page */
-> >  	check_first(addr);
-> > -	expected_current = old_current + MB(2);
-> > +	nr_pages = hpage_size / pagesize;
-> > +	expected_current = old_current + hpage_size;
-> >  	current = cg_read_long(test_group, "memory.current");
-> > -	if (!values_close(expected_current, current, 5)) {
-> > -		ksft_print_msg("memory usage should increase by around 2MB.\n");
-> > +	if (nr_pages < MEMCG_CHARGE_BATCH && current == old_current) {
-> > +		/*
-> > +		 * Memory cgroup charging uses per-CPU stocks and batched 
-> updates to the
-> > +		 *  memcg usage counters. For hugetlb allocations, the number of 
-> pages
-> > +		 *  that memcg charges is expressed in base pages (nr_pages), not
-> > +		 *  in hugepage units. When the charge for an allocation is 
-> smaller than
-> > +		 *  the internal batching threshold  (nr_pages < 
-> > MEMCG_CHARGE_BATCH),
-> > +		 *  it may be fully satisfied from the CPU’s local stock. In such
-> > +		 *  cases memory.current does not necessarily
-> > +		 *  increase.
-> > +		 *  Therefore, Treat a zero delta as valid behaviour here.
-> > +		 */
-> > +		ksft_print_msg("no visible memcg charge, allocation consumed 
-> from local stock.\n");
-> > +	} else if (!values_close(expected_current, current, 5)) {
-> Does this exception fully account for memcg stock batching when the 
-> per-CPU
-> stock is empty?
-> If the stock lacks sufficient pages, charging the huge page triggers 
-> a stock
-> refill that charges exactly MEMCG_CHARGE_BATCH (64) base pages from 
-> the global
-> memcg counter.
-> On an architecture with 64KB base pages and 2MB contiguous huge pages,
-> nr_pages is 32. Refilling the stock would charge 64 base pages (4MB), 
-> which
-> increases memory.current by 4MB instead of the expected 2MB. Since
-> current != old_current, the test falls through to values_close(), 
-> which expects
-> a 2MB increase and may fail the test.
-
-Valid point.
-The current exception does not fully account for this
-scenario when the per-CPU stock is empty and a refill charges
-MEMCG_CHARGE_BATCH. This can indeed lead to a larger-than-expected jump
-in memory.current and cause the test to fail.
-I’ll update the logic in v4 to handle this case more robustly.
-
-> > @@ -177,7 +203,7 @@ static int test_hugetlb_memcg(char *root)
-> >  		goto out;
-> >  	}
-> >
-> > -	if (cg_write(test_group, "memory.max", "100M")) {
-> > +	if (cg_write_numeric(test_group, "memory.max", num_pages * 
-> > hpage_size * 1024)) {
-> Can this calculation overflow on 32-bit systems?
-> Since long is 32 bits on 32-bit systems, num_pages * hpage_size * 1024 can
-> exceed the 32-bit signed integer maximum if the architecture supports large> huge pages (e.g., 256MB on MIPS).This would evaluate to 5,368,709,120,
-> resulting in a negative or truncated value, which sets memory.max to an
-> invalid or overly restrictive limit.
-
-Yes,  this can overflow on 32-bit systems. I’ll fix it in v4.
+Chris
