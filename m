@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F063D6CA4;
-	Fri,  3 Apr 2026 19:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161DB3D7D8C;
+	Fri,  3 Apr 2026 19:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775245235; cv=none; b=p2PjBLAT5R7n4c35XgG+uiganc8cUAxo4zk6Y2taRZcddPoXvSkXtPVCUHYXhrF4wb0aYUHyD10LiHIix3pBod/SO+VeFEPZ8S5H8kdBiH2JqLzag/dnidMaMOwNV3BU2rrSE/sBqgzXsTkKd+hdWyZaHFtNeeByfSkWyq6rZbs=
+	t=1775245238; cv=none; b=onKxdzuuT2T4gg4US6DsPjRkxYC5ERcqTBXvAkYydVqsvdeYwsFVOKqSEsfaeS9ecJG2X6dHO9xA/09CHJr3v4B3AfI3g5Jpqc7Qlwp8gnpUUMZkpdhWHFDIhfSkGbsjZJgkM2hNmiI9v6e//ACukDLaE1FGm5HLqMWEz6htjbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775245235; c=relaxed/simple;
-	bh=FJIlVUEHAp7ZJEKT0idl4M4VyELOXTlHEmJHYyO6eBY=;
+	s=arc-20240116; t=1775245238; c=relaxed/simple;
+	bh=hx4LuheWBNtlwVbJuz9IzDnvXJqSAD9ip7Q7EdlOqnY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gj8JOfti0DjTYbbVZsacdEQxa6dUBrRkfKBnX3ZGl4UnSwMayzccqhQLuVJJ8i97lzPvi5guu1AvtV5lTD79XuILdlzikavVK9YyneWggrF/ABhOEvwEV3nRvDf8vQPFNb0DdvjFteY7PSeuRot+bXzMeBGRu76UcgJMGmShemo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ITI6lWTo; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=aj9++dW4lX0SnFdR9GTNS7sR9HvhmS7s8lckEUAOm5msGlfqHKGqsPQR2tHF9gHz1/kljuqpILL+dDQjQfr7AfalXWKkL0+G6T24TZ4QJUStQlL8gKpD/bdVPcY2rtBg/adWjLzGKaZjVdIlslDntmlgMbEk08XIbPWov5y6gz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a3ej2wEl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ITI6lWTo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E04C2BCAF;
-	Fri,  3 Apr 2026 19:40:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a3ej2wEl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB6FC19424;
+	Fri,  3 Apr 2026 19:40:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775245235;
-	bh=FJIlVUEHAp7ZJEKT0idl4M4VyELOXTlHEmJHYyO6eBY=;
+	s=k20201202; t=1775245237;
+	bh=hx4LuheWBNtlwVbJuz9IzDnvXJqSAD9ip7Q7EdlOqnY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ITI6lWToNau7UFzXYD5NG6S04w5VvF0y9PiRgP8aOTF8SaPWU0ntqT+ztUJHwCQsQ
-	 lFVEWyHtVOSgin1AwMzWxwxHaXokWKEr12q0OSjUSg64SQFwpnOf8f4y3a8YQ4/On2
-	 9yaFxndaJx+FCSG0610AJQfawQNYrkDmAnqVHH4s4WpQ+6vQcm4/g3kESjOm6eBVlU
-	 WY017tHR10glhlBpnfRshzKObMqgQ1XA677drxqveJMqzq4K/Km8bRQ2QDrxabyOxj
-	 emAl0D4bLmYM+V3qsYgwFV5rQhev7Zxg26TKN4Yo+0IJF+3314bz1X3YBlDBSQLSk4
-	 dw7KVccZMB7ZQ==
+	b=a3ej2wElP+3pm9krk6g11dT5QXKQSXJCjHbUiold3i0U+NJB8RlKfgZcxGbiLUSz7
+	 A6VoexLAElGlVS2Q4t7lSFX28GrDvLxgGRkqVuqsTgAmsofO5O+ryPwnOZk/HW7fWY
+	 KwYGJGnuhroSM2GPlktidOMiaKIFBeV5JpM2e1nFGFlW+LshjuEP19yqngZgIufq2U
+	 /+KfF/d4qQRm5/iMnkyw6OYn2Q8i97CTHv8HthTlYdZD930cYZzZQUn7Bm42GPFema
+	 Jf0HRYsmBhlwfgob+j81QzJIMm/OGdp72nhgv9wbjES9lkOMRMvklpnv4jKZZ0f/aC
+	 UEMcEsbWjtupA==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Mike Rapoport <rppt@kernel.org>,
@@ -35,10 +35,11 @@ To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Usama Arif <usama.arif@linux.dev>
 Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v2 4/6] selftests/liveupdate: add test for zero-size memfd preservation
-Date: Fri,  3 Apr 2026 19:40:10 +0000
-Message-ID: <20260403194014.3704180-5-pratyush@kernel.org>
+	linux-mm@kvack.org,
+	Pratyush Yadav <ptyadav@amazon.de>
+Subject: [PATCH v2 5/6] selftests/liveupdate: add test for operations on a preserved memfd
+Date: Fri,  3 Apr 2026 19:40:11 +0000
+Message-ID: <20260403194014.3704180-6-pratyush@kernel.org>
 X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
 In-Reply-To: <20260403194014.3704180-1-pratyush@kernel.org>
 References: <20260403194014.3704180-1-pratyush@kernel.org>
@@ -52,92 +53,92 @@ Content-Transfer-Encoding: 8bit
 
 From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 
-A zero-size memfd is a special case of memfd preservation. It takes a
-different path from normal both during preservation and during restore.
-In the serialization structure, the number of folios is zero and the
-vmalloc array with folios is empty. The restore logic should check for
-this and make sure to not touch the invalid array.
+Once a memfd is preserved, certain operations are not allowed to
+succeed since they might make the state of the memfd inconsistent with
+the serialized state. Among these operations are truncating or growing
+the memfd. Writes and reads to already existing memfd should succeed.
 
-Add a test to make sure this path works as expected. In stage 1, the
-test creates and preserves a memfd without any data. In stage 2, the
-test retrieves the memfd and makes sure it is still without data.
+Add a test that makes sure a preserved memfd does not allow growing or
+shrinking, but does allow reads and writes to existing memory to go
+thorough.
 
 Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
 Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 ---
  .../testing/selftests/liveupdate/luo_memfd.c  | 57 +++++++++++++++++++
  1 file changed, 57 insertions(+)
 
 diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
-index 70eb96950f04..3ba0709f2c61 100644
+index 3ba0709f2c61..a1e9f34da006 100644
 --- a/tools/testing/selftests/liveupdate/luo_memfd.c
 +++ b/tools/testing/selftests/liveupdate/luo_memfd.c
-@@ -36,6 +36,9 @@
- #define MEMFD_DATA_BUFFER_SIZE SZ_1M
- #define MEMFD_DATA_FS_COPY "memfd_data_fs_copy.bin"
+@@ -39,6 +39,10 @@
+ #define ZERO_SESSION_NAME "zero_session"
+ #define ZERO_MEMFD_TOKEN 1
  
-+#define ZERO_SESSION_NAME "zero_session"
-+#define ZERO_MEMFD_TOKEN 1
++#define PRESERVED_SESSION_NAME "preserved_session"
++#define PRESERVED_MEMFD_TOKEN 1
++#define PRESERVED_BUFFER_SIZE SZ_1M
 +
  static int luo_fd = -1;
  static int stage;
  
-@@ -108,6 +111,60 @@ TEST(memfd_data)
+@@ -165,6 +169,59 @@ TEST(zero_memfd)
  	}
  }
  
-+static void zero_memfd_stage_1(struct __test_metadata *_metadata)
++/*
++ * Test that preserved memfd can't grow or shrink, but reads and writes still
++ * work.
++ */
++TEST(preserved_ops)
 +{
-+	int zero_fd, session;
++	char write_buffer[128] = {'A'};
++	int fd, session;
++	char *buffer;
 +	struct liveupdate_session_preserve_fd preserve_arg = { .size = sizeof(preserve_arg) };
 +
-+	session = luo_create_session(luo_fd, ZERO_SESSION_NAME);
++	if (stage != 1)
++		SKIP(return, "test only expected to run on stage 1");
++
++	buffer = malloc(PRESERVED_BUFFER_SIZE);
++	ASSERT_NE(buffer, NULL);
++
++	session = luo_create_session(luo_fd, PRESERVED_SESSION_NAME);
 +	ASSERT_GE(session, 0);
 +
-+	zero_fd = memfd_create("zero_memfd", 0);
-+	ASSERT_GE(zero_fd, 0);
++	fd = create_random_memfd("preserved_memfd", buffer, PRESERVED_BUFFER_SIZE);
++	ASSERT_GE(fd, 0);
 +
-+	preserve_arg.fd = zero_fd;
-+	preserve_arg.token = ZERO_MEMFD_TOKEN;
++	preserve_arg.fd = fd;
++	preserve_arg.token = PRESERVED_MEMFD_TOKEN;
 +	ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_PRESERVE_FD, &preserve_arg), 0);
 +
-+	daemonize_and_wait();
-+}
++	/*
++	 * Write to the preserved memfd (within existing size). This should
++	 * work.
++	 */
++	ASSERT_GE(lseek(fd, 0, SEEK_SET), 0);
++	/* Write buffer is smaller than total file size. */
++	ASSERT_EQ(write_size(fd, write_buffer, sizeof(write_buffer)), 0);
++	ASSERT_EQ(verify_fd_content_read(fd, write_buffer, sizeof(write_buffer)), 0);
 +
-+static void zero_memfd_stage_2(struct __test_metadata *_metadata)
-+{
-+	int zero_fd, session;
-+	struct liveupdate_session_retrieve_fd retrieve_arg = { .size = sizeof(retrieve_arg) };
++	/* Try to grow the file using write(). */
 +
-+	session = luo_retrieve_session(luo_fd, ZERO_SESSION_NAME);
-+	ASSERT_GE(session, 0);
++	/* First, seek to one byte behind initial size. */
++	ASSERT_GE(lseek(fd, PRESERVED_BUFFER_SIZE - 1, SEEK_SET), 0);
 +
-+	retrieve_arg.token = ZERO_MEMFD_TOKEN;
-+	ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_RETRIEVE_FD, &retrieve_arg), 0);
-+	zero_fd = retrieve_arg.fd;
-+	ASSERT_GE(zero_fd, 0);
++	/*
++	 * Then, write some data that should increase the file size. This should
++	 * fail.
++	 */
++	ASSERT_LT(write_size(fd, write_buffer, sizeof(write_buffer)), 0);
++	ASSERT_EQ(lseek(fd, 0, SEEK_END), PRESERVED_BUFFER_SIZE);
 +
-+	ASSERT_EQ(lseek(zero_fd, 0, SEEK_END), 0);
-+
-+	ASSERT_EQ(luo_session_finish(session), 0);
-+}
-+
-+/*
-+ * Test that a zero-sized memfd is preserved across live update.
-+ */
-+TEST(zero_memfd)
-+{
-+	switch (stage) {
-+	case 1:
-+		zero_memfd_stage_1(_metadata);
-+		break;
-+	case 2:
-+		zero_memfd_stage_2(_metadata);
-+		break;
-+	default:
-+		TH_LOG("Unknown stage %d\n", stage);
-+		ASSERT_FALSE(true);
-+	}
++	/* Try to shrink the file using truncate. This should also fail. */
++	ASSERT_LT(ftruncate(fd, PRESERVED_BUFFER_SIZE / 2), 0);
++	ASSERT_EQ(lseek(fd, 0, SEEK_END), PRESERVED_BUFFER_SIZE);
 +}
 +
  int main(int argc, char *argv[])
