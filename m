@@ -1,224 +1,180 @@
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013038.outbound.protection.outlook.com [40.93.201.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EBAC2DB7BD;
-	Fri,  3 Apr 2026 10:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.38
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775211599; cv=fail; b=FRqJBYhILR1DDeXPDVqkZF32OIb/0POwnZGydEaGmxUT1qEl25z8Pid/5CUdqmQEhzKKyKqH/jN253Q9izNpy26gQGH4L82Gl6JMaKqL0lZVZPfJGmWfNv2q3S3pJ0QvMvEIUMZ5OVLRs6wgMcZ2ultid9E+h4VV0hbb5BPk5vI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775211599; c=relaxed/simple;
-	bh=Rf4kFVUOGSB7DDEB+cULqBDz8WzHKhWVytv0+XzSHoI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=nH5myvflFGUTm1OoAuoOFvzLzJOOhFoloK7Ypa+qXOSat1PaSfCmImwFOG2X29pB7cDyN7/aiJXKVQ7IepLZn84YtMdZymE89pOH/hZqSLcZA4fXNAeTPXTg87dpae+XAqk2ZxxKE9+qbcdgVwBL16BTnRWJmt+db3+aHE7Bux4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BwkhbEXl; arc=fail smtp.client-ip=40.93.201.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8623236A03F
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 10:23:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775211785; cv=none; b=oEx9Abl7wkQuYkeYe4fIkFtwauijv2EV3DE8IK+R57eHpr3yknPGC3YFKa1ZeRXHMQ8hDYP7vCBi/tv0JZQOP+GxJNmV7vPI/rL2qTn5a6AuiMjMgZ7oZq2LZxbNXYOm+FhamADcooHE7gQs1To1pldOZEnpbHW04Wn49kwyCIU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775211785; c=relaxed/simple;
+	bh=3lQBs4ulGXX8bGcZi3QX1TqUr5YFr0oPGSGI4Gwfknk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fj1KQaA3YlkS/7ge2HrvIFSCc/NO+BgQl/1napk3k8YpMY31t9kFJ8T5+A0YHohYhx0NFCxZK9QJx0dNUAGu326U6GFRQaUkuOSJWdwfrruXvZJzGz55KI1qebIl+UfB2HS2AGdZ0KDqVwMfyRvVCgbW5Vivnzvv0QXIMGuTfEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k1BK2ZiU; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BwkhbEXl"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=p+ZGMBn15QH3r0jCmWX2TzhxASl20W0y0MHmWHgkFvovw483axE9aHzD4/hhLT2Ht5PgPLvBZ5IeyKeJ29o1U9gUy/uzdGgs+6srXcQz8g8eD3Vsc3CShtmLKeGLx1xY06rylRHN/G2TztjtfJnTUXsv3cY3vG8oTryagR3YGpKAWzSEmr+ojq3jgMlu40UCj5JwjAfYAZXDkbgjW2CUzGDLdApslFKBzao7jsge+3YFycnT4J8KuNVyJ3HTlefSt7ZGVIpcDElYf07iselcTEOoz+6D6SpZR6ohfrSHp06bKKuSjb/qTZtMeHDZj2jamKJyG52ACXWmlcSBMSyDxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xhTwgkLVzHdt+RwA8qI7SUy6fWNJyjBzkIWsjZybz8k=;
- b=iYQ6ItWMuz3WZDKr14dBrLEe3a2dKKjqk+aEwonsuB2Mc5m6S3O/gSzUbxP/mw3P+2PyfWwJI/ipm+Jiq6AkfnXCPkiO9cU0SqtkfGZ6owtYtK9wXrtW1zxAaRV7K7enhe2TXODAhfMC1xdSk8UhQXivDIY8I1D6i1QjihQ2JMtdQDindNYxdZu6GZUfBQjhoCsrzArV18K3Y2qcZdbcARfcL0QLIocCpRSkpX3k8gxSqPVmw+IsL9eWKfEmDkdiloZquY+dVC/KpQU49jjGGx+e9zyJDPDVDidqImf0FVoH97dAK8cZup2asviRJogZFOusyFsXoMp+Ia9di+6vxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xhTwgkLVzHdt+RwA8qI7SUy6fWNJyjBzkIWsjZybz8k=;
- b=BwkhbEXlDw3jwXBD2g1Umninrx9WxnPny/coTh0x9LmnLo2MvzzagUu9q9kK674SfXgSk5Ypff08Tb0P1iWnEWc4tDFDHA4nVG7ZWSzs7Bk7NYaX8dZb64rGNKDi+tL3EftPb+tYLJQSBXRmb0o5BwsX+M8TlRZR5ynx2wc5yzujC+paiAdihFxicivIHJlMogoZVCEeAef2F1lbt0DUVYbOAOgmZHvpNVab0f9AGDoTWqe8RA4eSpXFAU14hgpamzEv0FEtx9CmDXJ3dyLqo5/Sgb1MQAaC7553KnIhDdBat+CqqTIW5Thg61rGSlJY/Vj9nAVGnQRrttie1mblAA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by LV8PR12MB9406.namprd12.prod.outlook.com (2603:10b6:408:20b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.18; Fri, 3 Apr
- 2026 10:19:53 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9769.016; Fri, 3 Apr 2026
- 10:19:53 +0000
-Date: Fri, 3 Apr 2026 13:19:44 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Ujjal Roy <royujjal@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>,
-	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>,
-	bridge@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/5] selftests: net: bridge: add tests for
- igmpv3 MRC and QQIC validation
-Message-ID: <20260403101944.GA66518@shredder>
-References: <f23ed1b3-6321-4e6d-9cda-ec5d34304f3b@blackwall.org>
- <20260330191611.16929-1-royujjal@gmail.com>
- <20260330191611.16929-6-royujjal@gmail.com>
- <20260331141347.GA1637150@shredder>
- <CAE2MWkn3gPc1kBwy2p7r5bx6QozMStM0N6oEutT7g7GnJrKteA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAE2MWkn3gPc1kBwy2p7r5bx6QozMStM0N6oEutT7g7GnJrKteA@mail.gmail.com>
-X-ClientProxiedBy: TL0P290CA0002.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:5::10) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1BK2ZiU"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488a041eae5so931475e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 03:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775211780; x=1775816580; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=b5dZnPo99Ahf3Imv37Sc8IChQ262fqrmJ68c0dD4ENA=;
+        b=k1BK2ZiUJ5FZaZBea2O274a0fL6h3XPF43GBmJBDghcntv4IdLJGdfqx1TuY9xm7yT
+         X7eeMOsc8/o6E6uwG+uxnmcz9z1WHk0Q6lgxH4IEK9DO34UXV4tC7dG+8ZewfkZyCm/p
+         hwUbzdX0Pn7/U9HSI3a94g/+bRps5K9L9tqGNowpGw6AlMc78a8zEHRNr27Kg3znHZgb
+         0dPYwQISK8YjvO94MmhrjRwVRkVpn94JhRP543Dx0NP2O68Ctj1o7scrqLwD0AxrPccr
+         VOl4hre1wFqWs6Vbd9lz6F8cuhVS61w7iQ/w4qmrIqUHmwQgHKOzDVbthxidsh14hAd9
+         VUCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775211780; x=1775816580;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b5dZnPo99Ahf3Imv37Sc8IChQ262fqrmJ68c0dD4ENA=;
+        b=mset37S2Ni1O4MGZr2wqzAhFcrT+Fp7wwDWBwygZafmcy6LXiLsaqh3xcxixsb+zdF
+         qOIzElc1RKgEfB3o6qut0tcqJOrvs8MVv1B/W5+i90Wv4NKH/xQr4iV6OaZfctROk0Y6
+         J1e1oQ1F9VY7MXnaZcmdFN+Achub/szqsbw1EPD0mRuxzhVvrB7jI0k5xaNLEXWKA+HT
+         P+EnLMVmy5Tg4ZVXGy+HhFKPQ/W0N+IkG8B6O91YoREmU+qiXZDe2Mv/6uH+LDuZ6GQH
+         t26yIPBec7Rd9OHvXl+i8XQSKLMnslZJXl5CeDKzRLXLxrPSDdfecjwGRnvzLXgunhxO
+         /1jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCMTs0Qsq9JtHsf1GetAcAOOtflf9PmrbgPibIRC/c7t1mdyIVkM9XREvwv9A/uhhj001xTNAsR9KspqNNqTM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYSLHLYFc82hlk7pbLExxqS0gMSoqolR0bD1ein27YlqptH2te
+	Xbz3WuXF1Ha1ZRw/FltD6PfmoOparhENhCv1qLKU3qcYM4+4K+30heMe
+X-Gm-Gg: ATEYQzzmZJlRutcriOEr0n6xic1Nes0iC+NzOn5Y5j+HoTvPSiOoNBKatK5NGHe7KAI
+	Ewo7PC/HwuTpdibStkaFmDGCZwwN3fKXjacHlFPYp1udCmw/c70TlYuk1yYQ1dc/Nrwhae1Ka0Z
+	51svSOoz8liLakGQyKrYdjwQoBFuRwsS+GGhZ5nOuy2hakozfAZbDztD5ppD04oOUTiLXDc+CqH
+	lxhQUttxlEe3AK/1lsKK0Xdkj+ydzFiwhpDZYKqUmlmFFivtRKzL3koJfiau2wQI5DBL54TDLQQ
+	tQVgm9D2ZlxJGRryyU/PBKqD2A05C218Ws8NbhyIxRLpssh6ZqywhfM956FCh14fjEH+vVS8vFX
+	rowMT7L+DJHDWhxKwXTELZqmbi+blvRHFbsJ+Qrqvk/KSi/SOXrzrRNRvefGW1WCw5TdgvZjsxp
+	XnjK6dwZRVJM1c/aCJ0+N5cxxRRDsEv9FJfRL+LsM2rguildyUgI8CqyfILl5vkrGboaKe8Lj1n
+	WuGlKHsdIC+x10mKWp5J8XPNT7xBCkHmVegtukRJi4pLwJlqh2uYq/Y167d5QuTj4Sy4BNtUtfd
+	sP0UXL/ycaM6Wo09urRDjhvcQLq8fVZndxYA9jBrZC8=
+X-Received: by 2002:a05:600c:37cf:b0:485:3fe6:21f5 with SMTP id 5b1f17b1804b1-4889974678emr39768445e9.10.1775211779694;
+        Fri, 03 Apr 2026 03:22:59 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e00e1e89335f46e29e8.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:e1e8:9335:f46e:29e8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48897fdd2cesm20956425e9.4.2026.04.03.03.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 03:22:59 -0700 (PDT)
+Date: Fri, 3 Apr 2026 12:22:57 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	ebpf@linuxfoundation.org,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: remove unused toggle in tc_tunnel
+Message-ID: <ac-VAQEOh7dAUHl8@mail.gmail.com>
+References: <20260403-tc_tunnel_cleanup-v1-1-4f1bb113d3ab@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|LV8PR12MB9406:EE_
-X-MS-Office365-Filtering-Correlation-Id: 26a88ef9-1d53-4259-c6c6-08de916a8bcf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|22082099003|56012099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	dfN9VlYksDY9vS1SIEcERN5HHo8qqgMItg1oWLKOzp7MWul/EJrWWZb0VrTWFlDEM0DupKy+NDCkZ5qy5who6xqf8D5FJ/GQxD0E9zpWPcZ8EB5zsvGstvjNyNTahYXx5Yg5Q0mCi9v2G4f+c+1aap3D2UyYutbQEDTPUM81N4zd8AQMIX2dl/fdZo9e2k5L4kd84n6N89aXA44AK5HWEItVIYUTAthbSmeokYG/vrkhDu9MLLHK7YwdlmxYHrrfwg719usrbTuy+/EHc7JfN3cW4n+AQNuJUMavoXPbHKkABREvqrKDdFyxDTldHX1pClhUkSBYEd10vYbBXGirgm15hx/GX1OnTxtg0BGveciadJp4U4M2tiwUiOpvWVvoR9CRZ4DuM/Y/0ke7Cx51xpNilUUo8oevEjirILTnj91QVz04xSxuX7XTFYR0pz3rBScbv6lHpusGr4pR9n1ovHkW0KJC/TgEELbCCzabNTAfeUIJu1YMabkS9V5ugW8f5CSoVodiOk2yFl3Ao+BpePpDVPi4NTOC0nzW7ibMERhsuKPiFziuTdZ1aUd8XuXxLRa3ULKcbyys2R0qYM0LkS73RUTtUbEuUyO2YxGat66wdFidHHPEtApdSc9b+XhFYBA85eR65ewAf55XwxWiG4r+4CEBmqtqbKOdmU3vcR/ZsQQZTCea5vuDXgmfHqRkFMoA/cEx60mQdavU0hU2Z5ldGGTZxFidw1eT+p7P60c=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UEl1KzFUcDl2R0M2dFgxWnE1dmpEbGU2ZlRVUXpVOU45dWJYelZnT0pZL2VO?=
- =?utf-8?B?b1pWaGVYVmdYd1U1RFRMYm11RTVPME9GZE5CMnVibGRwRUpLaXFlRnc1Zi81?=
- =?utf-8?B?T3FGRXRRZUxwSSt1cWNSQm5oWm96RUNoeStWckwzZkR0ZzFrWUFUN0l4b2Vj?=
- =?utf-8?B?R1JESTZHcjBRQ1J0YWdkaHRnY0s4d0pBVTFyYmpKTVZnOWlFQkdMT05NUnd5?=
- =?utf-8?B?VmI0eUJzWkw1ZDBpRTFWUDBMZ2NnUUdlVzlzWmwxWWRzamxnbnRBdXhuVEJl?=
- =?utf-8?B?SktrRXBZYUkxdUZtcTl0NTFZa3BnNjdsZldVYW9XK2RiYzhMYmVJdTZ2K2VC?=
- =?utf-8?B?cXQwb2tNT21BSi94VEQyMG9xT1RrWUhUaERzOTFrbnJhU2ZoSWxYMDJQRlRy?=
- =?utf-8?B?aWJ5U0FNM0hqeHZqZzNOQ1JnOGUxWVkwSTE5dExDR3BQaXc0bWxIVVhSdlZ5?=
- =?utf-8?B?QTEwa0lleFBYcDhqTW4yRGw1c2NZMlQ2STVibWh6RjVFL0ZwY2lWZFlDTEE1?=
- =?utf-8?B?NkE0Z1B5YksyNmY4MER1NFBjOXRyWTJ2T1VPYlI5VmgwZ3lYa0wyVi96TEw1?=
- =?utf-8?B?Wkkzck5PSy85Mk81SXBMQmo5M3poMHFzVXo4UURPZ1BNL1VCTGcyL0JGenZQ?=
- =?utf-8?B?K2hNR0FkUFJ4Y2dlZ0REV05nSVFrdVIwcGhUSTQwZm5tRk5vZ1FIMWFIZjVx?=
- =?utf-8?B?KzJIcFR1dlpVL0xSTVIxME5GNHlVT1ZlVkNaU0kraEVDY3ZTTnk3N1VSczNa?=
- =?utf-8?B?ckM1ajc4MTBwZitFWURwQm5BYVdVbUJZTzFkR2VsTEZraUxGQU0vaEc2ZkYy?=
- =?utf-8?B?bVJ1RHRkSU1qWG1uMkpOKzkvY00xaWJXeFYzbGdnSXRSREE0Y0kyNUtJU28x?=
- =?utf-8?B?RzNUaXhDZkRlUWIzWjRFOGs2MVF4OFRWNXl5b1FCNFpwT0IvcjI3ZS9HeUhn?=
- =?utf-8?B?SzEvSFRMMXN3MFFtSDVEQWdJc2g2S2RhaWpPVHljOWZDMFVJdmRQdDlBaXJp?=
- =?utf-8?B?WjJ3T3ZMcDE5U2ZwaXBkR29RQXU4WVZzVnVOTXlkME5LUFFTRDg0aHQ4R3B5?=
- =?utf-8?B?OGdCWkFYVnhHVkZQbnM5OXF6YjhzY01HeENxemF6ZlJOZEFMbGVyMm0yTGRI?=
- =?utf-8?B?NUtQVnNFb0pyd0JtdithUXhqa3hOY2xyVXRlRWVCNmkvcDM1T1BTUjBtQjVq?=
- =?utf-8?B?elc5eXJ0STQ3V0ZjMUI2MlJTYTh2RXJmYThNN1FRVlI2TkZTVVFWU1dEMkFw?=
- =?utf-8?B?eGJYczkzU254S0oza1BadGUvN25WemVOdWtvUzFMbldVaFcxVy9oOXhTeFdG?=
- =?utf-8?B?MmpjeGhFYzZxTzl2NGdldER6NlM0Ri9oVlZVNGpvQmhPOFlSSU93QW1CMEti?=
- =?utf-8?B?Q2N3L3ZJTk9WMjdQcnU2OTVsTWs2Wmg2ODliWld3d3N4NmFBeXErZklBdWdo?=
- =?utf-8?B?Tk15TEp3bUNvMDdYNVUzSUdqWmxCUkRWVG5iWjFoSi9Ya1ZnSkxJVzN5bHhZ?=
- =?utf-8?B?eW9VYTNRNHA4Z1RvVXBIVjRMdzRGcWlTNkFsZWg2ZXhUUVFFWXp1SE1zeU9a?=
- =?utf-8?B?QUJraUJTN3ozT2I5L2FKSFVESm9mbTlOd2hhQnZOaEFrdVhJYnlWVnZiR3p5?=
- =?utf-8?B?K2lLMlQweHBuQ083V1BCNHAxYkgzZlo3akJHbkgvVEFtVE0yWGFIT1FzQVB3?=
- =?utf-8?B?QjRXcTdqemdnbzFQS1RjRm5pRE5ITjhaK1VlV1FydmE2NEtSRE9ON2ZKc2g5?=
- =?utf-8?B?Z2NqSjIzSHRsZXhWOHRQUUhkZW1MRTFyTmd5OXcxK3N0RUJZN0FuL09DU2pH?=
- =?utf-8?B?M3E2QWN0MElNR3FFaXpJZ0pXUVJjR0tHR3E2R2pDV3JYV3VVRDJwYlhPcWZN?=
- =?utf-8?B?R09PWUFJUkphZ2VZWWtpUHdCalM5ZFArcDUwY1BicFVTZUVTZ1Q5QXRYa2xB?=
- =?utf-8?B?Znd4cTU3YUNCMlJ6ME5LVHc1QmI0Y2U0Z0tScm1nc25GQmpib3JmMHNmVTVL?=
- =?utf-8?B?TjFXTDlTN1o0M2x2SmVwanlZY2ViT1o2UWptRG1iR2FKS3dsc0ZrZFpwMGRo?=
- =?utf-8?B?VEtvM0xrdWNXaVhlWEVXYm9rUGhQL3JXMEhjR01tREk3QzdtK2Y3S2xKTjdm?=
- =?utf-8?B?RDIyYmZrZnJsalh6cDVKQnI4QWN4YzhpaUJVWDJyNXlIaGlnSWQ5N1Q0NWti?=
- =?utf-8?B?ZXU1Y2xMQkU4Z1JwSUxvdDR2N3lqbERrVkZWb2pGd0RYUWtPc3BNdnNYaG9X?=
- =?utf-8?B?TEpqallaZk1qdFJONTQ0MmNaVTNHemFLOUliSHV4ZXRPYkZja3RzYlY4elo2?=
- =?utf-8?B?T21jTVFhajBlUlZuRzI3L2YwWHlEZW5DMUVUVkx1QnFCVUFDc25ydz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26a88ef9-1d53-4259-c6c6-08de916a8bcf
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2026 10:19:53.4384
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NBFSu4KP8mVkMhnCcy0K+P4WkgcfCVY8jXBAMtjCqCyF6EBnfVgPcF4ML2eWvi6kyxTwrIIr54hs2afs5DbJfw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9406
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260403-tc_tunnel_cleanup-v1-1-4f1bb113d3ab@bootlin.com>
 
-On Fri, Apr 03, 2026 at 01:20:49PM +0530, Ujjal Roy wrote:
-> On Tue, Mar 31, 2026 at 7:44â€¯PM Ido Schimmel <idosch@nvidia.com> wrote:
-> >
-> > On Mon, Mar 30, 2026 at 07:16:11PM +0000, Ujjal Roy wrote:
-> > > Add bridge selftests that configure IGMPv3 parameters and validate the
-> > > resulting Query packet fields for Max Resp Code (MRC) and Querier Query
-> > > Interval Code (QQIC).
-> > >
-> > > This also adds helper binary to encode floating-point exponential fields.
-> > >
-> > > Future extensions may cover corresponding IPv6 cases.
-> >
-> > Please cover both IGMPv3 and MLDv2 since the patchset touches both. You
-> > can add the MLDv2 tests in bridge_mld.sh.
-> >
-> > Also, I think you can simplify the test by simply matching on the
-> > expected values of MRC and QQIC using tc-u32.
-> >
-> > For both IGMPv3 and MLDv2 please test both:
-> >
-> > * MRC and QQIC in linear range.
-> > * MRC and QQIC in non-linear range.
-> >
-> > And please make sure the new test cases don't add new shellcheck
-> > warnings / errors or it will fail in the CI. You can ignore existing
-> > ones.
+On Fri, Apr 03, 2026 at 09:52:06AM +0200, Alexis Lothoré (eBPF Foundation) wrote:
+> tc_tunnel test is based on a send_and_test_data function which takes a
+> subtest configuration, and a boolean indicating whether the connection
+> is supposed to fail or not. This boolean is systematically passed to
+> true, and is a remnant from the first (not integrated) attempts to
+> convert tc_tunnel to test_progs: those versions validated for
+> example that a connection properly fails when only one side of the
+> connection has tunneling enabled. This specific testing has not been
+> integrated because it involved large timeouts which increased quite a
+> lot the test duration, for little added value.
 > 
-> I will upgrade the existing test cases in file bridge_vlan_mcast.sh
-> instead of the previous file (bridge_igmp/mld.sh).
+> Remove the unused boolean from send_and_test_data to simplify the
+> generic part of subtests.
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-Is there a reason to place them in bridge_vlan_mcast.sh given they are
-not specific to the per-VLAN multicast context? bridge_{igmp,mld}.sh
-looks like a better fit.
+For reference, the discussion on the non-integrated version was at
+https://lore.kernel.org/all/DDOOS5LR0GZH.ITEM5495FPOX@bootlin.com/.
+Seems like a good bit of cleanup :)
 
-> 
-> I have some doubts on test case logs reporting. Below are the logs
-> without my patchset. API used vlmc_query_intvl_test() and
-> vlmc_query_response_intvl_test().
-> TEST: Vlan mcast_query_interval global option default value         [ OK ]
-> TEST: Vlan 10 mcast_query_interval option changed to 200            [ OK ]
-> TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval option changed to 200   [ OK ]
-> 
-> I am expecting some suggestions from the logs below. And are these
-> covers both IGMPv3 and MLDv2 for QQIC and MRC?
-> Actually mcast_query_interval=QQIC and
-> mcast_query_response_interval=MRC we already know.
+Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
 
-Not sure what you are asking. My request was to have test cases for both
-MRC and QQIC, for both IGMPv3 and MLDv2.
-
+> ---
+>  tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
 > 
-> TEST: Vlan mcast_query_interval global option default value         [ OK ]
-> TEST: Vlan 10 mcast_query_interval option changed to 200            [ OK ]
-> TEST: Vlan 10 mcast_query_interval number of IGMPv2 general query   [
-> OK ] -> old case added log
-> TEST: Vlan 10 mcast_query_interval option changed to 6000           [ OK ]
-> TEST: Vlan 10 mcast_query_interval in IGMPv3 is 60                  [ OK ]
-> TEST: Vlan 10 mcast_query_interval in MLDv2 is 60                   [ OK ]
-> TEST: Vlan 10 mcast_query_interval option changed to 16000          [ OK ]
-> TEST: Vlan 10 mcast_query_interval in IGMPv3 is 160                 [ OK ]
-> TEST: Vlan 10 mcast_query_interval in MLDv2 is 160                  [ OK ]
-> TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval option changed to 600   [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval in IGMPv3 is 60         [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval option changed to 1600   [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval in IGMPv3 is 160        [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval option changed to 3000   [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval in MLDv2 is 30000       [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval option changed to 6000   [ OK ]
-> TEST: Vlan 10 mcast_query_response_interval in MLDv2 is 60000       [ OK ]
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> index 23b5c522ea9f..1aa7c9463980 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> @@ -206,18 +206,13 @@ static void disconnect_client_from_server(struct subtest_cfg *cfg,
+>  	free(conn);
+>  }
+>  
+> -static int send_and_test_data(struct subtest_cfg *cfg, bool must_succeed)
+> +static int send_and_test_data(struct subtest_cfg *cfg)
+>  {
+>  	struct connection *conn;
+>  	int err, res = -1;
+>  
+>  	conn = connect_client_to_server(cfg);
+> -	if (!must_succeed && !ASSERT_ERR_PTR(conn, "connection that must fail"))
+> -		goto end;
+> -	else if (!must_succeed)
+> -		return 0;
+> -
+> -	if (!ASSERT_OK_PTR(conn, "connection that must succeed"))
+> +	if (!ASSERT_OK_PTR(conn, "connect to server"))
+>  		return -1;
+>  
+>  	err = send(conn->client_fd, tx_buffer, DEFAULT_TEST_DATA_SIZE, 0);
+> @@ -391,7 +386,7 @@ static void run_test(struct subtest_cfg *cfg)
+>  		goto fail;
+>  
+>  	/* Basic communication must work */
+> -	if (!ASSERT_OK(send_and_test_data(cfg, true), "connect without any encap"))
+> +	if (!ASSERT_OK(send_and_test_data(cfg), "connect without any encap"))
+>  		goto fail;
+>  
+>  	/* Attach encapsulation program to client */
+> @@ -403,7 +398,7 @@ static void run_test(struct subtest_cfg *cfg)
+>  		if (!ASSERT_OK(configure_kernel_decapsulation(cfg),
+>  					"configure kernel decapsulation"))
+>  			goto fail;
+> -		if (!ASSERT_OK(send_and_test_data(cfg, true),
+> +		if (!ASSERT_OK(send_and_test_data(cfg),
+>  			       "connect with encap prog and kern decap"))
+>  			goto fail;
+>  	}
+> @@ -411,7 +406,7 @@ static void run_test(struct subtest_cfg *cfg)
+>  	/* Replace kernel decapsulation with BPF decapsulation, test must pass */
+>  	if (!ASSERT_OK(configure_ebpf_decapsulation(cfg), "configure ebpf decapsulation"))
+>  		goto fail;
+> -	ASSERT_OK(send_and_test_data(cfg, true), "connect with encap and decap progs");
+> +	ASSERT_OK(send_and_test_data(cfg), "connect with encap and decap progs");
+>  
+>  fail:
+>  	close_netns(nstoken);
 > 
-> Or is it better to name them properly instead of mcast option names, like below?
+> ---
+> base-commit: 9ebb4fa90266705741534924eac62d6f03895fea
+> change-id: 20260403-tc_tunnel_cleanup-bf03af4f8c7c
 > 
-> Vlan 10 mcast_query_interval:
-> TEST: Number of tagged IGMPv2 general query                         [ OK ]
-> TEST: IGMPv3 QQIC linear value 60                                   [ OK ]
-> TEST: IGMPv3 QQIC non linear value 160                              [ OK ]
-> TEST: MLDv2 QQIC linear value 60                                    [ OK ]
-> TEST: MLDv2 QQIC non linear value 160                               [ OK ]
-
-I find the latter clearer.
+> Best regards,
+> --  
+> Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> 
+> 
