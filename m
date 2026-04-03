@@ -1,114 +1,121 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D4D13A86C
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 22:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775255518; cv=none; b=GuS1D/G+QnaHIxPWizBxDCiuDBik2jyImuMtAsMG4TR+vBFRNz7giMP3VCsKFO69XVoMjeMTXnG/McLb4BZGTA6HlL+3TJSo+aYgAr/XKfDo1Q5/xbl/zA0QhnTMIo+OkJ47gFnzQN/NDUu78TME1er7vm+isXuF72cvQzGRFRQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775255518; c=relaxed/simple;
-	bh=dCVzQ+2ZUEgOwhHEP9zxfIHH7Fby5pavu1Gyb7oLnrs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QKODzAenatkBelB2NHg8nnCiKfEwag36OX6q/xhk7ohHCjfW1+b8bbh8d4ib9wuoXMHrc+9j7pjHdlgEMRW4x5XvmihDAPOeU9M0UpLpZ/qdZdjiCX6v94LUwXQ8teEvJH24ikX6x2vKnOYEPibHnFm+Yo+/AzA4O64JJRz3N0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CbnEGOhY; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8862726E711
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 22:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775255633; cv=pass; b=SsAnhh+vtCoLLLAawB2zXIBT2Kw0cP/+yiY7B1xnH5ilgptWHZVDd/1UKvLWqhFH0qrtaI91pjnSDnW6YstAqKwYV+GCrOgWF3tqry2GWuGRySu6tPicJPGDHPaxi97jiUyj2zxfL3utTOlvJYx7gcQI2CWD6ROmZjZNvLpjgq8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775255633; c=relaxed/simple;
+	bh=cS5TMYt6NGRCXh6lDnItZ3RPNIxHU4pQkaBi4/8IShE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SQtvJ2w2kQdnKyTceNlXfS+N0qbMOoRz/jfVCupRwDmgc8nnMEbZbI02ALT+81eHYTybB9ByOFTx+5Ed1EjF8Szr7lGoY6wY6fo67mKykCCokEVkMymMqgqpYsAKdTJQaxlnxGdS3cv/lMo/qpo6yorIpwek0rdRDdDDQZW5cAo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=V2Qtp6oi; arc=pass smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CbnEGOhY"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b243198058so90825ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 15:31:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="V2Qtp6oi"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6618bc129acso3100373a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 15:33:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775255630; cv=none;
+        d=google.com; s=arc-20240605;
+        b=IB+qtjOEqQtRnPYnMErXbWWeANm8H0rSyN4+oUHqR7nHSnWWKAy/81HpDHj7ZvOocY
+         HK2IJQGAv16Iuzy44sX7gvTYol2qcNtcVHMZRL5eCGFwf9Lar8sVenXWs64ZhDZyGwl8
+         jCHEUbdyzNI2XIJb6Nx7tnttjGNGSEsy1KlcJCiL/Qk5uVZLGWqpuhpTDFI+hFlj/Dzy
+         nrrZzkfzPOgOTFGZ3UITNcUSujgtMxxB8CRWtpAAsLgcoQyZNjs5FW1CXuVZi1G7mvG3
+         3EfO/Dj6uGVz0M2tK3+hUja4aBTuDySfTvFQmXCjQH426qWCWSsUiHGJzvoKLbKGxfcA
+         3KAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yzu/7ISN0+xt4wDqduVVLnGl52TlATKkSUYDdczLfIo=;
+        fh=dtBsXvoUuwrtT7m9k6iRNt39z8+Hl3CHRITxbDOY6y0=;
+        b=iXFMU6XONeH9o2608gN21nzPW6BmUCJzFURMPgJtHlKd6JWoFWyrz7TAvGsb1bvpyM
+         AXYwS6pcIDt120bdghRBEt74REs8rLwY5ZlJQsB4SGJ21cXcgDjoxG3sX0Fb6vLi8vXI
+         zLEuhs91z8KMckOTs6kPrB8/A7XLo4rofCIBkhAVupsRX2Vuid8AJTopKVzp7IOVQf/C
+         x2zDVoYUf853YfRcHH4NDAEntLqJ7+VEmFZMrcOeF51HrkofUn1dY/45KlhFVRjfW2Gy
+         rThXt2xKRpn9rw3UK9o7YS2NnSW4jiU8dH7DvtPqJr/9nUOfriigVN367G5eKDNw5tVm
+         EqrA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775255517; x=1775860317; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gjuoZin8EjeumwxQWlEEfcXBzhIlUZuPBzNuCTkTKsY=;
-        b=CbnEGOhYY93pCIdTzh75W2Fs0ASmGCfsfxM/8cvLTvA+xqj9LieZUWqsmuqvOm2RFq
-         amVafFA7GnCExeWxZ1UIBihg8TUjx6ybismWgQrC5x2itFqdWFkJDel2YDKkHT8hxKQJ
-         wl1GRp5QFEkPNJgxUqWTUykT8F3OzJClEx0BD7pzfgBQClOhaWCxur0LrPWD9AZW2+Gr
-         Vr5HPA0Mhz1moiupTxEfWjb95Er5hBFm698UvnGaZt54NGQ3ZeP9k6NCl8YRrpD6RLj/
-         bBi/svdYCYj2Gzp4QWWoV6XIi12l7PlwZnp9CX14af4vaRop3VnK7z1yV7tTESTSgZ/V
-         c7BA==
+        d=soleen.com; s=google; t=1775255630; x=1775860430; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yzu/7ISN0+xt4wDqduVVLnGl52TlATKkSUYDdczLfIo=;
+        b=V2Qtp6oi6YDbGy4nYXYt4IptoSyfEOHYjwoAJ9WxhJR0WgnwFmzuZq4lIEZohQnVgZ
+         wPqah/fcbMR6fMN0y0TA0A6BcduUKZ0RusPwCg5bQHN/v+c0DUPy2TeAoj5se19/nK/T
+         iDyAMJ0aBmeUB0Dhc8lE5R4Nr/6Kp7hiTfSVKJ0Xy3qRu8/b5aUAHTSLaFWKKb2oQFID
+         DXg8q5RHYFyIynsrJbGdsWGdiQsqHYwC3PDoGQjehxMcFlAAvbTl/vip96bDPej4Uo5n
+         1XNR90AgIzQAym6iCggVur7zKoQ+v+KIvqBsSdE/pSO2MiDIeIR4iG4cF7avVe+ktFzw
+         BE8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775255517; x=1775860317;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gjuoZin8EjeumwxQWlEEfcXBzhIlUZuPBzNuCTkTKsY=;
-        b=JPKAm0uc5Wc3kolfdCTKL33vcUBsHDl9BUXRAP3hYgzFPzVpfH2v6UY8byX1nPQaha
-         QRrF79RSpJfZADQVtmKbIzInxw4omcoW3UvggkLUFQqr0S8Mll3XrXZIwGiFgBz3tMyf
-         0mW/K61KCOOX1u7irx1UVz4ufiNbZtPGl3DDLoOZJAGK1bVkIoTSOPITi0rMXKx+NKc3
-         a6Lu/SnmgvXcVeMY57Klfr1CnGqWCtBKJzd6lpuUzeDmpl8u5v2BiUCbdnOZoVNCrGQk
-         uZB3o+ja7CaGhnIUv9gxXcG13zOtvDxb8sH/rDxm6Kl8WkOOSzTyoy+LzMChxZ4zn2hR
-         tfXA==
-X-Forwarded-Encrypted: i=1; AJvYcCVKDHoCTe+Bp4KTLEYdSltJfFI0Yi7JehEz7DA2YHeSsp2Ow47WCI6+CpxUCl0HxZ9MsnLONPjqxZubvyGoM0I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFyvyIARSfWWyaqgkkksW99afpXhQv/JCpJ6u0PmonjDmcptSo
-	/e/J/tCCLvCGTyHi9Mke7BhwZgw6wIsf0Em9jVsSDYPjK778saMC40r0m7Z4H4ZdFQ==
-X-Gm-Gg: AeBDieuew9TfIV2lIJqscH5r7ia9gFGrTmfdVwfztJt8IhIoDdMPNAAZuV1oWTBPlCt
-	Esg+SuzEqb60t1vbNUmDLbbZsFUMke4qhXPyvoVhAbeIxg5a5ANpQjgqm4pSqzdsZ9BRA+P6RuV
-	BkjFJKsP6OWkkPfdgab++MNFxshE/Lf7n4EWRGSa3G9a51UBjI51Nz3m7h5ZfSBWwRAIFDXDvOp
-	z3HR8jKKBjiUFqnSMHf9nbiUnstdJZwhlxrmwNDuM9TIOc1SBFXB7XSs1RpDexJGcFf72yRSsaY
-	OOtv7FcfTIHI49/m8EVrO+QDhWYoBtyR5oFZK223njl8Mzmxj5eD//B9w75sg6Qc99FoNjojwpr
-	arkgGspsyxJoAQ9TE/tjY5J5hWTRreH4ixtomzV1eIguf0MDYOeVme3fi25eOpToE53DsvbSvHX
-	S8UzWbBnUjGzYxry/+ITpovblkatS/0TFj0a90uSXjsV+g4mEbYqrUtVDr24LKUuFG
-X-Received: by 2002:a17:902:da87:b0:2ae:4453:3674 with SMTP id d9443c01a7336-2b282ed2eddmr3770265ad.4.1775255515833;
-        Fri, 03 Apr 2026 15:31:55 -0700 (PDT)
-Received: from google.com (115.112.199.104.bc.googleusercontent.com. [104.199.112.115])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe95abc3sm12613068a91.15.2026.04.03.15.31.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 15:31:55 -0700 (PDT)
-Date: Fri, 3 Apr 2026 22:31:51 +0000
-From: Lisa Wang <wyihan@google.com>
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: rientjes@google.com, seanjc@google.com, ackerleytng@google.com,
-	vannapurve@google.com, michael.roth@amd.com, jiaqiyan@google.com,
-	tabba@google.com, dave.hansen@linux.intel.com,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 2/7] mm: memory_failure: Allow
- truncate_error_folio to return MF_DELAYED
-Message-ID: <adA_1zXLUBqmSHFl@google.com>
-References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
- <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-2-92c596402a7a@google.com>
- <2f177e0f-2eb0-48d0-b48c-7a0a340caf5d@huawei.com>
+        d=1e100.net; s=20251104; t=1775255630; x=1775860430;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yzu/7ISN0+xt4wDqduVVLnGl52TlATKkSUYDdczLfIo=;
+        b=dpOB1O51nJHBDdJ6UOmKvIQ2qWdzwZTD237axUCMllIKzSyp4wYioKOssSjHZtdN0p
+         nziL65Sg07cVHj2aGg2FTEXa/W0SVuP2md6naJji4Yw+/F7j2aAkDw+XPlopzo4eDODo
+         cvdyjRQxG0IXk/N8c+dzJr4b8ZQ1b4ZKKiHLZ97lpftoNOvG8nj5DLvf4BKLDwwYxD9I
+         gGePRcbLNPqLvkOauvcF1O21oTD6wlyk6/4L2Jn/k7OUa5/1d17CW8l/e8swB14JlDBd
+         mngSuVnAYe+S28YQMX43abS/2tgy7UtXYm/vRweLBrKs8tbWtQgviZkN/eXhAczf2ROe
+         YVjw==
+X-Forwarded-Encrypted: i=1; AJvYcCX3Z1alolssIylf9g+VI0TTX/Tzp4JaSDzHwuCpcdN43y/y4mRfl1jiamaJ05sCNeaOtSvz4tFn23TO2dD53DQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdxDCelJ7F9cPgtQWhGZb3my+x3o+FuiCebaMBMSKyvZeYvmb8
+	bJuPwcOEzKDOOrsD0/4zUzhSVJ2Fn95NjylXUfQZCYXeUCvKtgoT91Hj8BJ8l72CxqO2cB2NtgG
+	Og5cdRLK2X32riwU5NVQ8DE06WlRmDNWWcHYlkoe9drJN5OttLu1Ae1Q=
+X-Gm-Gg: AeBDietS+w6GfIRse9vNGDh66bZYrs6FxtnaZM0/VxoHA6mMlKhmsWlo3b+I4jZCdrs
+	83O2jQa3bv8RtPv3OUtHT3VI3XD0jKT0dl9r8ATXQHmCqgfZ8HgbebrXp2dXZREi38GcYHT623j
+	bEa2bS9Jhsq5gLZ+Af/M49nDn0YHk1w6XsLsz1tUFo/R4tQYxdPmDLVCqyU8tl7z/26+1nM6fAk
+	kH1hHVmmYhxlotPeRjV1T2E8h+eQ/U+om1sVxVTK5HMg9vQYErstKOXXW+YYHsI8acAm53WcG37
+	XtlD8sVwyf2BHy3zVnGwph/pAcT01CnP56W7HA==
+X-Received: by 2002:a17:906:6a08:b0:b98:44b3:7e95 with SMTP id
+ a640c23a62f3a-b9c67b7fdb7mr227433566b.40.1775255629620; Fri, 03 Apr 2026
+ 15:33:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f177e0f-2eb0-48d0-b48c-7a0a340caf5d@huawei.com>
+References: <20260403194014.3704180-1-pratyush@kernel.org> <20260403150801.f42e27896fd2da5db6ca3425@linux-foundation.org>
+In-Reply-To: <20260403150801.f42e27896fd2da5db6ca3425@linux-foundation.org>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Fri, 3 Apr 2026 18:33:13 -0400
+X-Gm-Features: AQROBzCcDPnwZI0D7T5sCVdRGDwIktnyvWZTlqb0GhyONyozrqjrEuFs_Tx-qQ4
+Message-ID: <CA+CK2bB4nn87FtaH_1VZjZYKFzWFi9gDtHngKv8bkzCqi6oLyQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] selftests/liveupdate: add memfd tests
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Pratyush Yadav <pratyush@kernel.org>, Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On Mon, Mar 30, 2026 at 03:02:01PM +0800, Miaohe Lin wrote:
-[...snip...]
-> > --- a/mm/memory-failure.c
-> > +++ b/mm/memory-failure.c
-> > @@ -941,6 +941,8 @@ static int truncate_error_folio(struct folio *folio, unsigned long pfn,
-> >  	if (mapping->a_ops->error_remove_folio) {
-> >  		int err = mapping->a_ops->error_remove_folio(mapping, folio);
-> >  
-> > +		if (err == MF_DELAYED)
-> > +			return err;
-> 
-> Will it be better to add a pr_info here to provide some information for users?
-> 
-> Thanks.
-> .
-I think we don't need to add pr_info here; truncate_error_folio() always
-leads to action_result, which already logs the recovery status.
+On Fri, Apr 3, 2026 at 6:08=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
+.org> wrote:
+>
+> On Fri,  3 Apr 2026 19:40:06 +0000 Pratyush Yadav <pratyush@kernel.org> w=
+rote:
+>
+> > This series adds some tests for memfd preservation across a live update=
+.
+> > Currently memfd is only tested indirectly via luo_kexec_simple or
+> > luo_multi_session. Add a dedicated test suite for it.
+> >
+> > Patches 1 and 2 are preparatory, adding base framework and helpers, and
+> > the other patches each add a test. Some of the code is taken from the
+> > libluo patches [0] I sent a while ago.
+>
+> Look like a nice series and it comes well-reviewed.  Maybe my "we're
+> all full" policy-making should have a selftests escape clause...
 
-Lisa
+LOL. I noticed Sashiko is uncharacteristically lenient toward
+selftests; I guess it sees a use for them as well.
+>
+> I see that the malignant gaze of Sauron's eye fell upon your work:
+>         https://sashiko.dev/#/patchset/20260403194014.3704180-1-pratyush@=
+kernel.org
