@@ -1,64 +1,84 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD41A3B8BC1;
-	Thu,  2 Apr 2026 23:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A5728C869
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 00:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775174393; cv=none; b=F7GGOoVVl9q9fWcLQtzz1FaY+P3hQb7gRBxHgFEYR9CtkdTP2dta6tCJVTEIbQdj7a35rwDVVmO3G5Kp1joBWY3lGdpWo+ofByqfmhKLFTI0jk9PaMCKK1IlJr0Ll10LipspaTtNmnSUeG302eohJOeAkLPSX2e82X/YrtRPms8=
+	t=1775176568; cv=none; b=k0L6hyHMi+cGOT0KysNU4fMo+FNqqlKH/DlHaaNhRyEhF9buI6J+QIvLn+4lWz7R5KpstYRbJc2rPkM/c/E1Sz7edwjlzo3lsmBCPRucM5tM2GVRBzUkV6Bp9azrhsDPPGZfGuZP5LU76Sb2O0KVhicZVzJerV/2Q4pGTedPNvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775174393; c=relaxed/simple;
-	bh=Igf7+7sGmQRd/r/FdnvNwkKW3740cJk8JpNUKAOkMS0=;
+	s=arc-20240116; t=1775176568; c=relaxed/simple;
+	bh=8wDnYGmsZvC7abjvNEJ3Tk+IvO8q3U34sLBOd8TOXA8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WZ10jcdfDVmDfRbN3XVD4bqyVfGV5vMPTW1ioTZpNXLZtoxomOW8P1p9UzYRfYxIPSYe5e8/dTOFujBdWn1L28A9U2ufhIrNWwKuKDCCCjRN8PSHyQDHx+Q/Jq9jV8OCR05lmGZpwGmud+ny6k4hbARQSdrSS1y7EtwQq90gUbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Bye4XgbO; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	 MIME-Version; b=ILY8jJEfh9e2oHDGSfBG0ujVjudQy2baKFSG1onzYfZlF93BVETxKzt0rtTzleFZOhohR/yauP89spOvQjBebrhO8XPZFxfuVEcPReex6gwftm+6o44p31gkQ8aokbfzQbEG3kJx5txGVjcO8zjbj+MmT8iwcnB0PaNrT8MRg9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=VfvzpoH6; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Bye4XgbO"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 632FBnYc2879362;
-	Thu, 2 Apr 2026 23:59:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=8r3Z9
-	sl9oUTSLnWJ1fAH6yXNWbaC0iemvsrsKPlZqTE=; b=Bye4XgbOU14RUw+RQe9Rr
-	hly9iVhYrKSpm5cQZxN4393iuVCskcljrpVdfQ2Zl+2WOZyWGf6a4ft0w9h9qwG5
-	CqsSchUWb2iiBQke9FFs60Yt++/G/a3vonRF8VfvhhOlhxl+cbT97FFIkyAXTIVE
-	J1vBMPtesG5ew+GxoWFJHBwXYX8zkm/LtBSK2DBN6AKf+Bgnrjj50RB/vCj+RrN+
-	kDsssGmMid9a7b4jsPyyy7YNamQ6yD1tk89TI7escz/Eiso3XIh8zNCroye6Vz2h
-	G7Kn65URNmdnxeeJgk9w/BFaxva2SViD2cr+Mx4Ok2cT652kIMyoCdmRATbxRJf4
-	A==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d65s11dxw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 02 Apr 2026 23:59:42 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 632KoxLQ008476;
-	Thu, 2 Apr 2026 23:59:41 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4d65ekna89-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 02 Apr 2026 23:59:41 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 632Nxb6R011992;
-	Thu, 2 Apr 2026 23:59:40 GMT
-Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4d65ekna7a-3;
-	Thu, 02 Apr 2026 23:59:40 +0000
-From: Anthony Yznaga <anthony.yznaga@oracle.com>
-To: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
-        Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
-        surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
-        Jason@zx2c4.com, shuah@kernel.org
-Subject: [PATCH v2 2/2] selftests/mm: verify droppable mappings cannot be locked
-Date: Thu,  2 Apr 2026 16:59:33 -0700
-Message-ID: <20260402235933.10588-3-anthony.yznaga@oracle.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260402235933.10588-1-anthony.yznaga@oracle.com>
-References: <20260402235933.10588-1-anthony.yznaga@oracle.com>
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="VfvzpoH6"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2a871daa98fso10798145ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 17:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1775176566; x=1775781366; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NLMUaKCgV8ol4xEA39jbeNRFpzXzgz54RkpOpnmPJPI=;
+        b=VfvzpoH6pNmkO3AKv5bsD/XwKnYjQs5Qycpuz7hrofgEvL2WyvJ8QYYqX/Ef/RTJ5w
+         HwiwG/NP55ALItUKag1Asr9FCxVH1dRYNuBIYE+AEgIiuvgNpGl6aLvJEPqrqStB/RKc
+         uxD8z8buOdOwDugaBZ4Ld+P+w5w1uvtXNq6YlNUGjRNUSGXW2XQrPRX9wDG2nZOhdYjT
+         R/76NBd1w0sMJSVx24jt1zRkeW1TCJFNjXs1o13DK2Wlljlfg+N0K9/iD2nSePyReFyk
+         bSFAEJmp3hvB4x0H5VyRl1BOf9Rx9rG50kD7eRtZotynIDeCq7PgcpDdukprsW21VrZe
+         /ShQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775176566; x=1775781366;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NLMUaKCgV8ol4xEA39jbeNRFpzXzgz54RkpOpnmPJPI=;
+        b=m7HpegIhljQhaWDuvIT5FkCBswOWyQbhULHDzqfvOms/CJtjPmaJY0ictArDWe4hmY
+         k7L3DHhoMktBElBq4ZOfLc/lq5W3GlvgOEBXrWCCVAbzCcqY3U6YecOVfJRrLXH1IXOI
+         zWr9Dk/Iy0Qa5pFbB0U5ZNBnk/hzrkQ+XcapvdT5zunotF4w1iyBjckcx7/W7j4exV7G
+         DjpuXuAN1cQ5Lyasn9bp98vH51hBqXxJ5KijVujQWBsvNL3gUrq/oGlzV0hm3Xlgb9Zu
+         Df7Z/uN7o8hSgCjSB1iU2qvEgQ7XKXcjaSbisp+jpOUhSNx9vbiJYn2wO80L0kmBvvBr
+         Ms7w==
+X-Forwarded-Encrypted: i=1; AJvYcCV9iyIPB+mBpvHo0212LjCwEFzkIyWw6Pm8YcmXqQz8ZBhOOZ/M8RCBJqAfAgsecbFnWDKCPL/lwpEwSc4SP1M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypD4mTOGuPceLBpAw1brjycoU/jPx7wFt1jIs1auHzBD422FSA
+	KDdYQj5pyvN2TtoLSAg8IK36Rh7cdq4EqPPw+X3LpaOvEQOamngybfzr/xde8wmWx0U=
+X-Gm-Gg: AeBDievKGHuQlfmXSFt+cIRICL9Z+4B3LMUc5baCkDUqHZKqG6hqAim4C6rAeTc3LCX
+	TYhzeLK3O3KGf10LsrgkzHSEl6XDwim5/DKBYMpySiR4fsMQ+D5FFFLj4rwJoD4cPVWHf9X2XEP
+	jNy6BjyR1fXA1RJ/Upw++GHP7W3lHY11yihNL1xLjPiYtaEIQyYzrk0aHZarBjoc4PIkxc4ti53
+	5MGm4G1nqwi1YDgz70xUbdPzrkhmAP422NIsMZ/EJYr8NzJLV6Cp2TgZPYFj0CoMikDcXR5sW61
+	IWCMqPyKxVP5kXsJ5ozxsBzc8WDRpxvjmEE2oFA7SoLqUDNCb081wqaC/l9hYP8VJUpaqYUuKIl
+	3xU1Ylljt6a3Xn5H/ufX47eIjBBikTBzR/yJlLS+ozpyO6Lp6zOsDcUxKiGOf7o5xgzSuQXPFHV
+	SIhAo=
+X-Received: by 2002:a17:903:2a86:b0:2ae:ce35:2686 with SMTP id d9443c01a7336-2b281706f07mr13520335ad.5.1775176566421;
+        Thu, 02 Apr 2026 17:36:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:1::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749cbd85sm38769725ad.74.2026.04.02.17.36.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 17:36:06 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: horms@kernel.org,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	linux-kernel@vger.kernel.org,
+	leon@kernel.org,
+	Joe Damato <joe@dama.to>,
+	linux-kselftest@vger.kernel.org
+Subject: [net-next v8 10/10] selftests: drv-net: Add USO test
+Date: Thu,  2 Apr 2026 17:35:17 -0700
+Message-ID: <20260403003524.2564973-11-joe@dama.to>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260403003524.2564973-1-joe@dama.to>
+References: <20260403003524.2564973-1-joe@dama.to>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,181 +86,157 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-02_04,2026-04-02_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- phishscore=0 adultscore=0 malwarescore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
- definitions=main-2604020214
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDIxNCBTYWx0ZWRfX6J72LJy+SDF/
- NybwQaUdStmI9xHGIpy2JIgK6NJux6h1L2y8cSjwsdhYHmoAmsrc+9LR2gzgmM+P6/lGFdrfgmA
- HTlvJ5HCfXSsGmOCdUWqZxHS2yVAL4hnzfJxhCU8qS90ABCS2Zn81FrYVmUkI8ZBLRgiCgTp6O8
- m7SgeoDAb9tvmGXE0O/jMSPkN7HGbtWvNlX66NRZnpoCdKo8S/LuR/YJ0ftSm13+S9WVvlUZi3E
- mxPg9nH31s8Xnk1mN9D6lfqP1hMaLYFYtbkm8wCQZmA2XuBG/F/Du1Ecx6mvrzbBf+oL0D9Tl7g
- u0I9V0X+YiAgrsGeDqfRxfijrqHV6kKPO913lv1rH54JhLrzN/Kqki2ew5HXYfXzbVSxm8txfB+
- lG9yXhKWdbT0tXy/+iKC7EgYN4zzpqoTATay5rV77+7NeMRWpBdh8ELd5bk54y5SwFMAizjnL9S
- gk2+QFP6GBr+wXSlrQi9jvopsK1Ih2iHw2GT4eYQ=
-X-Proofpoint-ORIG-GUID: XLamt7WrgjBa-D-1jgURnDm02QIwO6h7
-X-Authority-Analysis: v=2.4 cv=BvOQAIX5 c=1 sm=1 tr=0 ts=69cf02ee b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=o5oIOnhZENCTenyL_yNV:22 a=yPCof4ZbAAAA:8 a=_qCjRXgy2aYRKG6zBr8A:9 cc=ntf
- awl=host:12291
-X-Proofpoint-GUID: XLamt7WrgjBa-D-1jgURnDm02QIwO6h7
 
-For configs that support MAP_DROPPABLE verify that a mapping created
-with MAP_DROPPABLE cannot be locked via mlock(), and that it will not
-be locked if it's created after mlockall(MCL_FUTURE).
+Add a simple test for USO. Tests both ipv4 and ipv6 with several full
+segments and a partial segment.
 
-Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Joe Damato <joe@dama.to>
 ---
- tools/testing/selftests/mm/mlock2-tests.c | 87 ++++++++++++++++++++---
- 1 file changed, 78 insertions(+), 9 deletions(-)
+ v7:
+   - Dropped Pavan's Reviewed-by as there were changes.
+   - Update to use ksft_variants with a generator and a parameterized test_uso
+     function.
+   - Save original USO state and restore it at the end of the test.
+   - Replace sleep with cfg.wait_hw_stats_settle
+   - Use a socat receiver and check tx stats locally instead of rx on the
+     remote.
 
-diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
-index b474f2b20def..353d0e5daa44 100644
---- a/tools/testing/selftests/mm/mlock2-tests.c
-+++ b/tools/testing/selftests/mm/mlock2-tests.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #define _GNU_SOURCE
- #include <sys/mman.h>
-+#include <linux/mman.h>
- #include <stdint.h>
- #include <unistd.h>
- #include <string.h>
-@@ -163,14 +164,17 @@ static int lock_check(unsigned long addr)
- 	return (vma_rss == vma_size);
- }
+ v5:
+   - Added Pavan's Reviewed-by. No functional changes.
+
+ v4:
+   - Fix python linter issues (unused imports, docstring, etc).
+
+ rfcv2:
+   - new in rfcv2
+
+ tools/testing/selftests/drivers/net/Makefile |   1 +
+ tools/testing/selftests/drivers/net/uso.py   | 103 +++++++++++++++++++
+ 2 files changed, 104 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/uso.py
+
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index 7c7fa75b80c2..335c2ce4b9ab 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -21,6 +21,7 @@ TEST_PROGS := \
+ 	ring_reconfig.py \
+ 	shaper.py \
+ 	stats.py \
++	uso.py \
+ 	xdp.py \
+ # end of TEST_PROGS
  
--static int unlock_lock_check(char *map)
-+static int unlock_lock_check(char *map, bool mlock_supported)
- {
--	if (is_vmflag_set((unsigned long)map, LOCKED)) {
-+	if (!is_vmflag_set((unsigned long)map, LOCKED))
-+		return 0;
+diff --git a/tools/testing/selftests/drivers/net/uso.py b/tools/testing/selftests/drivers/net/uso.py
+new file mode 100755
+index 000000000000..75bf02849075
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/uso.py
+@@ -0,0 +1,103 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
-+	if (mlock_supported)
- 		ksft_print_msg("VMA flag %s is present on page 1 after unlock\n", LOCKED);
--		return 1;
--	}
-+	else
-+		ksft_print_msg("VMA flag %s is present on an unsupported VMA\n", LOCKED);
- 
--	return 0;
-+	return 1;
- }
- 
- static void test_mlock_lock(void)
-@@ -196,7 +200,7 @@ static void test_mlock_lock(void)
- 		ksft_exit_fail_msg("munlock(): %s\n", strerror(errno));
- 	}
- 
--	ksft_test_result(!unlock_lock_check(map), "%s: Unlocked\n", __func__);
-+	ksft_test_result(!unlock_lock_check(map, true), "%s: Unlocked\n", __func__);
- 	munmap(map, 2 * page_size);
- }
- 
-@@ -296,7 +300,7 @@ static void test_munlockall0(void)
- 		ksft_exit_fail_msg("munlockall(): %s\n", strerror(errno));
- 	}
- 
--	ksft_test_result(!unlock_lock_check(map), "%s: No locked memory\n", __func__);
-+	ksft_test_result(!unlock_lock_check(map, true), "%s: No locked memory\n", __func__);
- 	munmap(map, 2 * page_size);
- }
- 
-@@ -336,7 +340,70 @@ static void test_munlockall1(void)
- 		ksft_exit_fail_msg("munlockall() %s\n", strerror(errno));
- 	}
- 
--	ksft_test_result(!unlock_lock_check(map), "%s: No locked memory\n", __func__);
-+	ksft_test_result(!unlock_lock_check(map, true), "%s: No locked memory\n", __func__);
-+	munmap(map, 2 * page_size);
-+}
++"""Test USO
 +
-+/*
-+ * Droppable memory should not be lockable.
-+ */
-+static void test_mlock_droppable(void)
-+{
-+	char *map;
-+	unsigned long page_size = getpagesize();
++Sends large UDP datagrams with UDP_SEGMENT and verifies that the peer
++receives the correct number of individual segments with correct sizes.
++"""
++import random
++import socket
++import string
 +
-+	/*
-+	 * Ensure MCL_FUTURE is not set.
-+	 */
-+	if (munlockall()) {
-+		ksft_test_result_fail("munlockall() %s\n", strerror(errno));
-+		return;
-+	}
++from lib.py import ksft_run, ksft_exit, KsftSkipEx
++from lib.py import ksft_eq, ksft_ge, ksft_variants, KsftNamedVariant
++from lib.py import NetDrvEpEnv
++from lib.py import bkg, defer, ethtool, ip, rand_port, wait_port_listen
 +
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
-+	if (map == MAP_FAILED) {
-+		if (errno == EOPNOTSUPP)
-+			ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
-+		else
-+			ksft_test_result_fail("mmap error: %s\n", strerror(errno));
-+		return;
-+	}
++# python doesn't expose this constant, so we need to hardcode it to enable UDP
++# segmentation for large payloads
++UDP_SEGMENT = 103
 +
-+	if (mlock2_(map, 2 * page_size, 0))
-+		ksft_test_result_fail("mlock2(0): %s\n", strerror(errno));
-+	else
-+		ksft_test_result(!unlock_lock_check(map, false),
-+				"%s: droppable memory not locked\n", __func__);
 +
-+	munmap(map, 2 * page_size);
-+}
++def _send_uso(cfg, ipver, mss, total_payload, port):
++    if ipver == "4":
++        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++        dst = (cfg.remote_addr_v["4"], port)
++    else:
++        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
++        dst = (cfg.remote_addr_v["6"], port)
 +
-+static void test_mlockall_future_droppable(void)
-+{
-+	char *map;
-+	unsigned long page_size = getpagesize();
++    sock.setsockopt(socket.IPPROTO_UDP, UDP_SEGMENT, mss)
++    payload = ''.join(random.choice(string.ascii_lowercase)
++                      for _ in range(total_payload))
++    sock.sendto(payload.encode(), dst)
++    sock.close()
++    return payload
 +
-+	if (mlockall(MCL_CURRENT | MCL_FUTURE)) {
-+		ksft_test_result_fail("mlockall(MCL_CURRENT | MCL_FUTURE): %s\n", strerror(errno));
-+		return;
-+	}
 +
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
++def _get_tx_packets(cfg):
++    stats = ip(f"-s link show dev {cfg.ifname}", json=True)[0]
++    return stats['stats64']['tx']['packets']
 +
-+	if (map == MAP_FAILED) {
-+		if (errno == EOPNOTSUPP)
-+			ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
-+		else
-+			ksft_test_result_fail("mmap error: %s\n", strerror(errno));
-+		return;
-+	}
 +
-+	ksft_test_result(!unlock_lock_check(map, false), "%s: droppable memory not locked\n",
-+			__func__);
++def _test_uso(cfg, ipver, mss, total_payload):
++    cfg.require_ipver(ipver)
++    cfg.require_cmd("socat", remote=True)
 +
-+	munlockall();
- 	munmap(map, 2 * page_size);
- }
- 
-@@ -442,7 +509,7 @@ int main(int argc, char **argv)
- 
- 	munmap(map, size);
- 
--	ksft_set_plan(13);
-+	ksft_set_plan(15);
- 
- 	test_mlock_lock();
- 	test_mlock_onfault();
-@@ -451,6 +518,8 @@ int main(int argc, char **argv)
- 	test_lock_onfault_of_present();
- 	test_vma_management(true);
- 	test_mlockall();
-+	test_mlock_droppable();
-+	test_mlockall_future_droppable();
- 
- 	ksft_finished();
- }
++    features = ethtool(f"-k {cfg.ifname}", json=True)
++    uso_was_on = features[0]["tx-udp-segmentation"]["active"]
++
++    try:
++        ethtool(f"-K {cfg.ifname} tx-udp-segmentation on")
++    except Exception as exc:
++        raise KsftSkipEx(
++            "Device does not support tx-udp-segmentation") from exc
++    if not uso_was_on:
++        defer(ethtool, f"-K {cfg.ifname} tx-udp-segmentation off")
++
++    expected_segs = (total_payload + mss - 1) // mss
++
++    port = rand_port(stype=socket.SOCK_DGRAM)
++    rx_cmd = f"socat -{ipver} -T 2 -u UDP-RECV:{port},reuseport STDOUT"
++
++    tx_before = _get_tx_packets(cfg)
++
++    with bkg(rx_cmd, host=cfg.remote, exit_wait=True) as rx:
++        wait_port_listen(port, proto="udp", host=cfg.remote)
++        _send_uso(cfg, ipver, mss, total_payload, port)
++
++    ksft_eq(len(rx.stdout), total_payload,
++            comment=f"Received {len(rx.stdout)}B, expected {total_payload}B")
++
++    cfg.wait_hw_stats_settle()
++
++    tx_after = _get_tx_packets(cfg)
++    tx_delta = tx_after - tx_before
++
++    ksft_ge(tx_delta, expected_segs,
++            comment=f"Expected >= {expected_segs} tx packets, got {tx_delta}")
++
++
++def _uso_variants():
++    for ipver in ["4", "6"]:
++        yield KsftNamedVariant(f"v{ipver}_partial", ipver, 1400, 1400 * 10 + 500)
++        yield KsftNamedVariant(f"v{ipver}_exact", ipver, 1400, 1400 * 5)
++
++
++@ksft_variants(_uso_variants())
++def test_uso(cfg, ipver, mss, total_payload):
++    """Send a USO datagram and verify the peer receives the expected segments."""
++    _test_uso(cfg, ipver, mss, total_payload)
++
++
++def main() -> None:
++    """Run USO tests."""
++    with NetDrvEpEnv(__file__) as cfg:
++        ksft_run([test_uso],
++                 args=(cfg, ))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
-2.47.3
+2.52.0
 
