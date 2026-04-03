@@ -1,125 +1,224 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013038.outbound.protection.outlook.com [40.93.201.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3BD382F1F;
-	Fri,  3 Apr 2026 10:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775210675; cv=none; b=fxPUHkxIIovro3SIDSfE9RZvdbYhuxJHcAuR3YUw8dw11DrPudMSG4xIyyw13oo5d+ArAUlpyNoAadW9r5iGHMW1KdtQbAnBkRJnWYCkbbyO8OUrocb7gP5VdXHw26oaNHMbVjUPj8zIF1YCCqS2LK3mkVCOwJI/4B6/pcPltE4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775210675; c=relaxed/simple;
-	bh=nCK2cjRjdUkyaUHFwq1pM3cPECQPLn84HA5G9U6CD88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bEU/HrXo/98WuXLwAL7q+911AolE3M1Ob1JkmAJC1kcxJ60tYdSaDMyAmoE13ZUYJy0x7Ubtdk5L2sbCElMPDTK01vtGysp42ih5EVd4j6uf9CPCNCzg0k0k49s1+rzF4QjjG+Elbm05qJc0UOIBwI8JSReclEM5TlNeS2QARHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E48qU7OC; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EBAC2DB7BD;
+	Fri,  3 Apr 2026 10:19:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.38
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775211599; cv=fail; b=FRqJBYhILR1DDeXPDVqkZF32OIb/0POwnZGydEaGmxUT1qEl25z8Pid/5CUdqmQEhzKKyKqH/jN253Q9izNpy26gQGH4L82Gl6JMaKqL0lZVZPfJGmWfNv2q3S3pJ0QvMvEIUMZ5OVLRs6wgMcZ2ultid9E+h4VV0hbb5BPk5vI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775211599; c=relaxed/simple;
+	bh=Rf4kFVUOGSB7DDEB+cULqBDz8WzHKhWVytv0+XzSHoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=nH5myvflFGUTm1OoAuoOFvzLzJOOhFoloK7Ypa+qXOSat1PaSfCmImwFOG2X29pB7cDyN7/aiJXKVQ7IepLZn84YtMdZymE89pOH/hZqSLcZA4fXNAeTPXTg87dpae+XAqk2ZxxKE9+qbcdgVwBL16BTnRWJmt+db3+aHE7Bux4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BwkhbEXl; arc=fail smtp.client-ip=40.93.201.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E48qU7OC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604F4C4CEF7;
-	Fri,  3 Apr 2026 10:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1775210672;
-	bh=nCK2cjRjdUkyaUHFwq1pM3cPECQPLn84HA5G9U6CD88=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E48qU7OC6xFjPerUSUZYJ12mNKtop1wOk8mjGiOxGihJzLPR99CmmQsqzAPL4jua2
-	 YXOll3riGP6uYNeratDMe58sSulLppbzuCCqCoH/lz1Xn/hQN3N16ULHTmvhbx+oLV
-	 91V/M1EdSu3aWdj5+7VSZi3R5sAtlwqgZlJubCuU=
-Date: Fri, 3 Apr 2026 12:04:30 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	kernel-team@android.com, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, driver-core@lists.linux.dev,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
-Message-ID: <2026040357-undefined-gave-c98e@gregkh>
-References: <20260331153413.2469218-1-wusamuel@google.com>
- <2026040136-ocelot-simply-8981@gregkh>
- <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com>
- <2026040236-kiln-carat-bb6d@gregkh>
- <CAG2Kctpr7vBm_=Xz4H5FHYAfFxg=bDt35j6B4EprfUGio=Ftew@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BwkhbEXl"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=p+ZGMBn15QH3r0jCmWX2TzhxASl20W0y0MHmWHgkFvovw483axE9aHzD4/hhLT2Ht5PgPLvBZ5IeyKeJ29o1U9gUy/uzdGgs+6srXcQz8g8eD3Vsc3CShtmLKeGLx1xY06rylRHN/G2TztjtfJnTUXsv3cY3vG8oTryagR3YGpKAWzSEmr+ojq3jgMlu40UCj5JwjAfYAZXDkbgjW2CUzGDLdApslFKBzao7jsge+3YFycnT4J8KuNVyJ3HTlefSt7ZGVIpcDElYf07iselcTEOoz+6D6SpZR6ohfrSHp06bKKuSjb/qTZtMeHDZj2jamKJyG52ACXWmlcSBMSyDxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xhTwgkLVzHdt+RwA8qI7SUy6fWNJyjBzkIWsjZybz8k=;
+ b=iYQ6ItWMuz3WZDKr14dBrLEe3a2dKKjqk+aEwonsuB2Mc5m6S3O/gSzUbxP/mw3P+2PyfWwJI/ipm+Jiq6AkfnXCPkiO9cU0SqtkfGZ6owtYtK9wXrtW1zxAaRV7K7enhe2TXODAhfMC1xdSk8UhQXivDIY8I1D6i1QjihQ2JMtdQDindNYxdZu6GZUfBQjhoCsrzArV18K3Y2qcZdbcARfcL0QLIocCpRSkpX3k8gxSqPVmw+IsL9eWKfEmDkdiloZquY+dVC/KpQU49jjGGx+e9zyJDPDVDidqImf0FVoH97dAK8cZup2asviRJogZFOusyFsXoMp+Ia9di+6vxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xhTwgkLVzHdt+RwA8qI7SUy6fWNJyjBzkIWsjZybz8k=;
+ b=BwkhbEXlDw3jwXBD2g1Umninrx9WxnPny/coTh0x9LmnLo2MvzzagUu9q9kK674SfXgSk5Ypff08Tb0P1iWnEWc4tDFDHA4nVG7ZWSzs7Bk7NYaX8dZb64rGNKDi+tL3EftPb+tYLJQSBXRmb0o5BwsX+M8TlRZR5ynx2wc5yzujC+paiAdihFxicivIHJlMogoZVCEeAef2F1lbt0DUVYbOAOgmZHvpNVab0f9AGDoTWqe8RA4eSpXFAU14hgpamzEv0FEtx9CmDXJ3dyLqo5/Sgb1MQAaC7553KnIhDdBat+CqqTIW5Thg61rGSlJY/Vj9nAVGnQRrttie1mblAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by LV8PR12MB9406.namprd12.prod.outlook.com (2603:10b6:408:20b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.18; Fri, 3 Apr
+ 2026 10:19:53 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9769.016; Fri, 3 Apr 2026
+ 10:19:53 +0000
+Date: Fri, 3 Apr 2026 13:19:44 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Ujjal Roy <royujjal@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>,
+	bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 5/5] selftests: net: bridge: add tests for
+ igmpv3 MRC and QQIC validation
+Message-ID: <20260403101944.GA66518@shredder>
+References: <f23ed1b3-6321-4e6d-9cda-ec5d34304f3b@blackwall.org>
+ <20260330191611.16929-1-royujjal@gmail.com>
+ <20260330191611.16929-6-royujjal@gmail.com>
+ <20260331141347.GA1637150@shredder>
+ <CAE2MWkn3gPc1kBwy2p7r5bx6QozMStM0N6oEutT7g7GnJrKteA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE2MWkn3gPc1kBwy2p7r5bx6QozMStM0N6oEutT7g7GnJrKteA@mail.gmail.com>
+X-ClientProxiedBy: TL0P290CA0002.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:5::10) To SA3PR12MB7901.namprd12.prod.outlook.com
+ (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG2Kctpr7vBm_=Xz4H5FHYAfFxg=bDt35j6B4EprfUGio=Ftew@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|LV8PR12MB9406:EE_
+X-MS-Office365-Filtering-Correlation-Id: 26a88ef9-1d53-4259-c6c6-08de916a8bcf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	dfN9VlYksDY9vS1SIEcERN5HHo8qqgMItg1oWLKOzp7MWul/EJrWWZb0VrTWFlDEM0DupKy+NDCkZ5qy5who6xqf8D5FJ/GQxD0E9zpWPcZ8EB5zsvGstvjNyNTahYXx5Yg5Q0mCi9v2G4f+c+1aap3D2UyYutbQEDTPUM81N4zd8AQMIX2dl/fdZo9e2k5L4kd84n6N89aXA44AK5HWEItVIYUTAthbSmeokYG/vrkhDu9MLLHK7YwdlmxYHrrfwg719usrbTuy+/EHc7JfN3cW4n+AQNuJUMavoXPbHKkABREvqrKDdFyxDTldHX1pClhUkSBYEd10vYbBXGirgm15hx/GX1OnTxtg0BGveciadJp4U4M2tiwUiOpvWVvoR9CRZ4DuM/Y/0ke7Cx51xpNilUUo8oevEjirILTnj91QVz04xSxuX7XTFYR0pz3rBScbv6lHpusGr4pR9n1ovHkW0KJC/TgEELbCCzabNTAfeUIJu1YMabkS9V5ugW8f5CSoVodiOk2yFl3Ao+BpePpDVPi4NTOC0nzW7ibMERhsuKPiFziuTdZ1aUd8XuXxLRa3ULKcbyys2R0qYM0LkS73RUTtUbEuUyO2YxGat66wdFidHHPEtApdSc9b+XhFYBA85eR65ewAf55XwxWiG4r+4CEBmqtqbKOdmU3vcR/ZsQQZTCea5vuDXgmfHqRkFMoA/cEx60mQdavU0hU2Z5ldGGTZxFidw1eT+p7P60c=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UEl1KzFUcDl2R0M2dFgxWnE1dmpEbGU2ZlRVUXpVOU45dWJYelZnT0pZL2VO?=
+ =?utf-8?B?b1pWaGVYVmdYd1U1RFRMYm11RTVPME9GZE5CMnVibGRwRUpLaXFlRnc1Zi81?=
+ =?utf-8?B?T3FGRXRRZUxwSSt1cWNSQm5oWm96RUNoeStWckwzZkR0ZzFrWUFUN0l4b2Vj?=
+ =?utf-8?B?R1JESTZHcjBRQ1J0YWdkaHRnY0s4d0pBVTFyYmpKTVZnOWlFQkdMT05NUnd5?=
+ =?utf-8?B?VmI0eUJzWkw1ZDBpRTFWUDBMZ2NnUUdlVzlzWmwxWWRzamxnbnRBdXhuVEJl?=
+ =?utf-8?B?SktrRXBZYUkxdUZtcTl0NTFZa3BnNjdsZldVYW9XK2RiYzhMYmVJdTZ2K2VC?=
+ =?utf-8?B?cXQwb2tNT21BSi94VEQyMG9xT1RrWUhUaERzOTFrbnJhU2ZoSWxYMDJQRlRy?=
+ =?utf-8?B?aWJ5U0FNM0hqeHZqZzNOQ1JnOGUxWVkwSTE5dExDR3BQaXc0bWxIVVhSdlZ5?=
+ =?utf-8?B?QTEwa0lleFBYcDhqTW4yRGw1c2NZMlQ2STVibWh6RjVFL0ZwY2lWZFlDTEE1?=
+ =?utf-8?B?NkE0Z1B5YksyNmY4MER1NFBjOXRyWTJ2T1VPYlI5VmgwZ3lYa0wyVi96TEw1?=
+ =?utf-8?B?Wkkzck5PSy85Mk81SXBMQmo5M3poMHFzVXo4UURPZ1BNL1VCTGcyL0JGenZQ?=
+ =?utf-8?B?K2hNR0FkUFJ4Y2dlZ0REV05nSVFrdVIwcGhUSTQwZm5tRk5vZ1FIMWFIZjVx?=
+ =?utf-8?B?KzJIcFR1dlpVL0xSTVIxME5GNHlVT1ZlVkNaU0kraEVDY3ZTTnk3N1VSczNa?=
+ =?utf-8?B?ckM1ajc4MTBwZitFWURwQm5BYVdVbUJZTzFkR2VsTEZraUxGQU0vaEc2ZkYy?=
+ =?utf-8?B?bVJ1RHRkSU1qWG1uMkpOKzkvY00xaWJXeFYzbGdnSXRSREE0Y0kyNUtJU28x?=
+ =?utf-8?B?RzNUaXhDZkRlUWIzWjRFOGs2MVF4OFRWNXl5b1FCNFpwT0IvcjI3ZS9HeUhn?=
+ =?utf-8?B?SzEvSFRMMXN3MFFtSDVEQWdJc2g2S2RhaWpPVHljOWZDMFVJdmRQdDlBaXJp?=
+ =?utf-8?B?WjJ3T3ZMcDE5U2ZwaXBkR29RQXU4WVZzVnVOTXlkME5LUFFTRDg0aHQ4R3B5?=
+ =?utf-8?B?OGdCWkFYVnhHVkZQbnM5OXF6YjhzY01HeENxemF6ZlJOZEFMbGVyMm0yTGRI?=
+ =?utf-8?B?NUtQVnNFb0pyd0JtdithUXhqa3hOY2xyVXRlRWVCNmkvcDM1T1BTUjBtQjVq?=
+ =?utf-8?B?elc5eXJ0STQ3V0ZjMUI2MlJTYTh2RXJmYThNN1FRVlI2TkZTVVFWU1dEMkFw?=
+ =?utf-8?B?eGJYczkzU254S0oza1BadGUvN25WemVOdWtvUzFMbldVaFcxVy9oOXhTeFdG?=
+ =?utf-8?B?MmpjeGhFYzZxTzl2NGdldER6NlM0Ri9oVlZVNGpvQmhPOFlSSU93QW1CMEti?=
+ =?utf-8?B?Q2N3L3ZJTk9WMjdQcnU2OTVsTWs2Wmg2ODliWld3d3N4NmFBeXErZklBdWdo?=
+ =?utf-8?B?Tk15TEp3bUNvMDdYNVUzSUdqWmxCUkRWVG5iWjFoSi9Ya1ZnSkxJVzN5bHhZ?=
+ =?utf-8?B?eW9VYTNRNHA4Z1RvVXBIVjRMdzRGcWlTNkFsZWg2ZXhUUVFFWXp1SE1zeU9a?=
+ =?utf-8?B?QUJraUJTN3ozT2I5L2FKSFVESm9mbTlOd2hhQnZOaEFrdVhJYnlWVnZiR3p5?=
+ =?utf-8?B?K2lLMlQweHBuQ083V1BCNHAxYkgzZlo3akJHbkgvVEFtVE0yWGFIT1FzQVB3?=
+ =?utf-8?B?QjRXcTdqemdnbzFQS1RjRm5pRE5ITjhaK1VlV1FydmE2NEtSRE9ON2ZKc2g5?=
+ =?utf-8?B?Z2NqSjIzSHRsZXhWOHRQUUhkZW1MRTFyTmd5OXcxK3N0RUJZN0FuL09DU2pH?=
+ =?utf-8?B?M3E2QWN0MElNR3FFaXpJZ0pXUVJjR0tHR3E2R2pDV3JYV3VVRDJwYlhPcWZN?=
+ =?utf-8?B?R09PWUFJUkphZ2VZWWtpUHdCalM5ZFArcDUwY1BicFVTZUVTZ1Q5QXRYa2xB?=
+ =?utf-8?B?Znd4cTU3YUNCMlJ6ME5LVHc1QmI0Y2U0Z0tScm1nc25GQmpib3JmMHNmVTVL?=
+ =?utf-8?B?TjFXTDlTN1o0M2x2SmVwanlZY2ViT1o2UWptRG1iR2FKS3dsc0ZrZFpwMGRo?=
+ =?utf-8?B?VEtvM0xrdWNXaVhlWEVXYm9rUGhQL3JXMEhjR01tREk3QzdtK2Y3S2xKTjdm?=
+ =?utf-8?B?RDIyYmZrZnJsalh6cDVKQnI4QWN4YzhpaUJVWDJyNXlIaGlnSWQ5N1Q0NWti?=
+ =?utf-8?B?ZXU1Y2xMQkU4Z1JwSUxvdDR2N3lqbERrVkZWb2pGd0RYUWtPc3BNdnNYaG9X?=
+ =?utf-8?B?TEpqallaZk1qdFJONTQ0MmNaVTNHemFLOUliSHV4ZXRPYkZja3RzYlY4elo2?=
+ =?utf-8?B?T21jTVFhajBlUlZuRzI3L2YwWHlEZW5DMUVUVkx1QnFCVUFDc25ydz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26a88ef9-1d53-4259-c6c6-08de916a8bcf
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2026 10:19:53.4384
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NBFSu4KP8mVkMhnCcy0K+P4WkgcfCVY8jXBAMtjCqCyF6EBnfVgPcF4ML2eWvi6kyxTwrIIr54hs2afs5DbJfw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9406
 
-On Thu, Apr 02, 2026 at 12:37:12PM -0700, Samuel Wu wrote:
-> On Wed, Apr 1, 2026 at 9:06 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+On Fri, Apr 03, 2026 at 01:20:49PM +0530, Ujjal Roy wrote:
+> On Tue, Mar 31, 2026 at 7:44 PM Ido Schimmel <idosch@nvidia.com> wrote:
 > >
-> > On Wed, Apr 01, 2026 at 12:07:12PM -0700, Samuel Wu wrote:
-> > > On Wed, Apr 1, 2026 at 2:15 AM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
-> > > > > This patchset adds requisite kfuncs for BPF programs to safely traverse
-> > > > > wakeup_sources, and puts a config flag around the sysfs interface.
-> > > > >
-> > > > > Currently, a traversal of wakeup sources require going through
-> > > > > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to query
-> > > > > sysfs is inefficient, as there can be hundreds of wakeup_sources, with each
-> > > > > wakeup source also having multiple attributes. debugfs is unstable and
-> > > > > insecure.
-> > > >
-> > > > Describe "inefficient" please?
+> > On Mon, Mar 30, 2026 at 07:16:11PM +0000, Ujjal Roy wrote:
+> > > Add bridge selftests that configure IGMPv3 parameters and validate the
+> > > resulting Query packet fields for Max Resp Code (MRC) and Querier Query
+> > > Interval Code (QQIC).
 > > >
-> > > Ack; I’ll provide a more detailed breakdown in the v4 cover letter. To
-> > > summarize: the "inefficiency" isn't just the number of sources (150),
-> > > but the fact that each source has 10 attributes. We are looking at
-> > > 1,500+ sysfs nodes to get a full snapshot of the system.
+> > > This also adds helper binary to encode floating-point exponential fields.
+> > >
+> > > Future extensions may cover corresponding IPv6 cases.
 > >
-> > Wait, no, something is wrong here.  You should NEVER be wanting to
-> > combine multiple sysfs files at the same time into a "snapshot" of the
-> > system because by virtue of how this works, it's going to change while
-> > you are actually traversing all of those files!
+> > Please cover both IGMPv3 and MLDv2 since the patchset touches both. You
+> > can add the MLDv2 tests in bridge_mld.sh.
+> >
+> > Also, I think you can simplify the test by simply matching on the
+> > expected values of MRC and QQIC using tc-u32.
+> >
+> > For both IGMPv3 and MLDv2 please test both:
+> >
+> > * MRC and QQIC in linear range.
+> > * MRC and QQIC in non-linear range.
+> >
+> > And please make sure the new test cases don't add new shellcheck
+> > warnings / errors or it will fail in the CI. You can ignore existing
+> > ones.
 > 
-> Agree, the current approach with sysfs might have stale values. The
-> BPF approach holds a lock while traversing the list. It's not a
-> perfect snapshot, but it's internally consistent and arguably better
-> than the current sysfs implementation.
+> I will upgrade the existing test cases in file bridge_vlan_mcast.sh
+> instead of the previous file (bridge_igmp/mld.sh).
+
+Is there a reason to place them in bridge_vlan_mcast.sh given they are
+not specific to the per-VLAN multicast context? bridge_{igmp,mld}.sh
+looks like a better fit.
+
 > 
-> > Why are you trying to read 1500+ sysfs files at once, and what are you
-> > doing with that information?  And if you really need it "all at once",
-> > why can't we provide it for you in a sane manner, instead of being
-> > forced to either walk the whole sysfs tree, or rely on a bpf script?
+> I have some doubts on test case logs reporting. Below are the logs
+> without my patchset. API used vlmc_query_intvl_test() and
+> vlmc_query_response_intvl_test().
+> TEST: Vlan mcast_query_interval global option default value         [ OK ]
+> TEST: Vlan 10 mcast_query_interval option changed to 200            [ OK ]
+> TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval option changed to 200   [ OK ]
 > 
-> The data is fundamental for debugging and improving power at scale.
-> The original discussion and patch [1] provide more context of the
-> intent. To summarize the history, debugfs was unstable and insecure,
-> leading to the current sysfs implementation. However, sysfs has the
-> constraint of one attribute per node, requiring 10 sysfs accesses per
-> wakeup source.
+> I am expecting some suggestions from the logs below. And are these
+> covers both IGMPv3 and MLDv2 for QQIC and MRC?
+> Actually mcast_query_interval=QQIC and
+> mcast_query_response_interval=MRC we already know.
 
-Ok, as the sysfs api doesn't work your use case anymore, why do we need
-to keep it around at all?
+Not sure what you are asking. My request was to have test cases for both
+MRC and QQIC, for both IGMPv3 and MLDv2.
 
-> That said, I completely agree that reading 1500+ sysfs files at once
-> is unreasonable. Perhaps the sysfs approach was manageable at the time
-> of [1], but moving forward we need a more scalable solution. This is
-> the main motivator and makes BPF the sane approach, as it improves
-> traversal in nearly every aspect (e.g. cycles, memory, simplicity,
-> scalability).
+> 
+> TEST: Vlan mcast_query_interval global option default value         [ OK ]
+> TEST: Vlan 10 mcast_query_interval option changed to 200            [ OK ]
+> TEST: Vlan 10 mcast_query_interval number of IGMPv2 general query   [
+> OK ] -> old case added log
+> TEST: Vlan 10 mcast_query_interval option changed to 6000           [ OK ]
+> TEST: Vlan 10 mcast_query_interval in IGMPv3 is 60                  [ OK ]
+> TEST: Vlan 10 mcast_query_interval in MLDv2 is 60                   [ OK ]
+> TEST: Vlan 10 mcast_query_interval option changed to 16000          [ OK ]
+> TEST: Vlan 10 mcast_query_interval in IGMPv3 is 160                 [ OK ]
+> TEST: Vlan 10 mcast_query_interval in MLDv2 is 160                  [ OK ]
+> TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval option changed to 600   [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval in IGMPv3 is 60         [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval option changed to 1600   [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval in IGMPv3 is 160        [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval option changed to 3000   [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval in MLDv2 is 30000       [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval option changed to 6000   [ OK ]
+> TEST: Vlan 10 mcast_query_response_interval in MLDv2 is 60000       [ OK ]
+> 
+> Or is it better to name them properly instead of mcast option names, like below?
+> 
+> Vlan 10 mcast_query_interval:
+> TEST: Number of tagged IGMPv2 general query                         [ OK ]
+> TEST: IGMPv3 QQIC linear value 60                                   [ OK ]
+> TEST: IGMPv3 QQIC non linear value 160                              [ OK ]
+> TEST: MLDv2 QQIC linear value 60                                    [ OK ]
+> TEST: MLDv2 QQIC non linear value 160                               [ OK ]
 
-I'm all for making this more scalable and work for your systems now, but
-consider if you could drop the sysfs api entirely, would you want this
-to be a different type of api entirely instead of having to plug through
-these using ebpf?
-
-thanks,
-
-greg k-h
+I find the latter clearer.
