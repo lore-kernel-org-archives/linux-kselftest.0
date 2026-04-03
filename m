@@ -1,266 +1,106 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA11345731
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 15:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A192C3255;
+	Fri,  3 Apr 2026 15:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775229964; cv=none; b=EOAcaXL7Sn4mIGnzpHhu3oCxhjLno74qLowDUWMeTeYQu8OQYEkYOoqBphPYp7i6c2rFUHXruFLeJwY5WDgNncfrRewbCpjvHcCTfCxPqJ05ZjQ8dP4CIQQkGdL6Mq0W/bIRs0KMxLeyP6pDIZi43fyU++Do9EXtlZfEEiKL7lg=
+	t=1775230311; cv=none; b=mGxUvr51YWH8iIZTsw0ok1AL5Fl/V8UNS9p/WhHFR+7itmC6BqiWb+34pM7kma3Ao8ekmKg/+hUXWtxBwFvdFGjEYDbWT4TJcgnEXYCNzWP+qRXUxOy969//x/3i1FGflmzshI/qgLRlFJ2Mrfbtff07X55cySvjAS+sFoqXNSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775229964; c=relaxed/simple;
-	bh=/iuUiBKd/QehSumXg68bTOYBxK/MWSEcoYlGJ5L4Wi4=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=HHKgQopS4c4ipucdLIOq6/EG3V3RtRE2ksA7F+ClXAfbcS9WBlqkM09dYyDIDe4e2rliH/rnhd0zSLDbqVixVUmc8NZI1VwBQYKHi3yCEIIQrPywkOrDh8IZZwVvtxTB66IkpJOQkP05en9tvULhwlUh5X2n2bv/Ek6PO2E3tY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hPnSFXxx; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775230311; c=relaxed/simple;
+	bh=agMln0ujWJSLy5SV56SLKyuGqXBTlsDf1LetTYGjGVY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=lkLoWMe+vzJ4ZpJFKnbZ4svQu08yTccwmyGB+SAPlT9yIY4tRHVxcpkgxU4Stc8YyfXbrg+QDsKOseMPmAyAFItKSK3pLLL/t5jqWH2B2XOLwPhvYL1ZmILDRm1uMhsIYypuO9MQPA5UXW8P3yI/WkTDWaZju1ZEwaxZw5yrEP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOGJTs6t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hPnSFXxx"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-79853c0f5b9so33108037b3.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 08:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775229962; x=1775834762; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=phgEzarmetA3rPcVDi8C467Z7leoFPBcCeNvveOYnOE=;
-        b=hPnSFXxx15dfsYGWgXmJoQPNdxqnS+jk29YdsNJwJJKvnpCuyaEZBSVqXi2yVOvr7l
-         emsXExVs9Rysc4ukhZMufx5+2b5CGD5n5zJiwIyzNaDx3gCt4+TawoGbcKBeFpxlIpxP
-         CcwFnyi+SPBH3DeVIsgBth9xu1U12YiZ/L+ZgXxYHAFHmv/SR/n4HtXnSUlYlT5wPh6E
-         gppzDIigx1L4rRyjYfC2KsfTJlqUE2YfMcb9z7DBxB12EI1WnjnGZdspw1FeuA43a71G
-         rNgcA7HQxKwgVCiDiNnmN1QvcljMY3bONR12k9aoh+/IVZVY+sGyy99tt4dh7Hm+bdFS
-         +pWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775229962; x=1775834762;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=phgEzarmetA3rPcVDi8C467Z7leoFPBcCeNvveOYnOE=;
-        b=h+zz2B1Csv2oOqas4DFzqaurejir/wi2QuRXAJZKcKD2GmdD6tLz7ZAYwIpRT3calW
-         ZET5LvNtFZrXf7yljXSE6niQ6uaf4m27xT8wVVhR8LPTYWjX7LZtKf/OfkVupllWlj7v
-         ZhOpFLmIUgRP0NuAwldW9ndQ1ETUwLCb08pB7uyAC9lWiXWQFQpsywWNSRulrwGxvjqO
-         cfxPWvCNvffXRZ1PvZ6MoAM3TYMyDdCa7U5YTZV/z9AlYSlehRWC9vnFVvPGBe6TtbPt
-         et8Clw6aD/An7cxtr+olYzrlw9R2Q/GBw3+2LcQtZqWXpsZ77nZ3MRt8f41D77PGicSE
-         DJxA==
-X-Forwarded-Encrypted: i=1; AJvYcCWtSBSDciRalGn1auZH8Cc5a3k0PjYcthg76MvfLZmq2XGQqva8QnmqfcPpN+1bW0DNdyHOl8MQJOORokaw38s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9ife+IjlJ88ZdpOg23VOfH7dt7YV0YI+ISQzTdpQcJxt25iPf
-	CWAjSPFOuck3YzxQ5gTt34ATrZMZrA7JC12MDL/O+8drmVChCoGcQ7eC
-X-Gm-Gg: AeBDietICgOiwUY1Vw+ONvOWCXEr80XB/Pe+ZyZLu/7z6XcZOA1Nj0/ItsYjlxXwVaA
-	sGZm17OFI6k3v3k9h6sgbxahSN6rccnlFCO1cvHvoEn7/H+D8YlITbLYCUt/wjS4pEvMvGlCy/w
-	dE94LaWtJxv8vBSCaqVZvc1ECjeBkNf3bq9lGv+PISAAyJP6Iy3pMZtrowJNKryAuAGxjezx1e5
-	SWNJ4bVOb1ufYxuLuDHsrr2G0y5ObalK5MRjjSzq6Ap5rQMuZp+KN9UkDhtkUDZ+k3XWwIxeFtg
-	K/8KHJjFMH594HNM0mQfhAArVsaitHZHj43ZnBqe0VK5IuagX67irJjaBA0IPhUgkahQ7swTkjt
-	RreYXWLIYpv3/pvfLR4tUmUEGQIxm4wxQ10hPSXkOYXLo4AckwaBiWDHTnEsdrBf/OHESsKuyKt
-	+huaMPqLnsbhLz9fDI79Q/m5FvTjW/Iu6nyWH4coHTmHexqvx567J94245CnHbQy2s2nS6CUVLT
-	Mwk
-X-Received: by 2002:a05:690c:d96:b0:79e:8d95:7ebb with SMTP id 00721157ae682-7a4d3ac7a7fmr35626207b3.14.1775229962152;
-        Fri, 03 Apr 2026 08:26:02 -0700 (PDT)
-Received: from gmail.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7a36e229135sm22909397b3.3.2026.04.03.08.26.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 08:26:01 -0700 (PDT)
-Date: Fri, 03 Apr 2026 11:26:01 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Joe Damato <joe@dama.to>, 
- netdev@vger.kernel.org, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: andrew+netdev@lunn.ch, 
- linux-kernel@vger.kernel.org, 
- willemb@google.com, 
- Joe Damato <joe@dama.to>, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.886450145305@gmail.com>
-In-Reply-To: <20260402232203.2004496-3-joe@dama.to>
-References: <20260402232203.2004496-1-joe@dama.to>
- <20260402232203.2004496-3-joe@dama.to>
-Subject: Re: [net-next 2/3] selftests/net: Test PACKET_STATISTICS drops
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOGJTs6t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99222C4CEF7;
+	Fri,  3 Apr 2026 15:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775230311;
+	bh=agMln0ujWJSLy5SV56SLKyuGqXBTlsDf1LetTYGjGVY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=TOGJTs6tfRz9Vpg2ljzZygZClY5fjXKpgQgTEUJ8qkyvPs+gx3ihDyRTd68n2YeAO
+	 FdLD7CRfPla9DEc7jKRvvt0RwfgXeJ/WatL9Ep36Z31T6aAtwTg8QH467fELeugfkv
+	 NYG3HjAaRV9/ChvYXvu3IkpFoq0/tPtQEbuN6Zg0UPGRSjZfax9KD5Bs+l8vcSdXDc
+	 3aN1ua8J0GuKPoPXVBWWS+d9J4GagucXPzCMWV44BECbUj/LWMeqc89jHYZFrKHmqI
+	 EIm//2fh0RKa1AVf41HUX61ICqi3T4wh07H8pMWX9vaiTeB9Fn3aEZtG4n44kMhNdN
+	 joA+nCk1fq8vA==
+Content-Type: multipart/mixed; boundary="===============5395896508885707630=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+Message-Id: <e31cce2c29bdf1172acb1b8aff046729ef5b0b20ffed3c276fcf62261a94ccca@mail.kernel.org>
+In-Reply-To: <20260403-selftests-bpf_misconfig-v2-5-f06700380a9d@suse.com>
+References: <20260403-selftests-bpf_misconfig-v2-5-f06700380a9d@suse.com>
+Subject: Re: [PATCH v2 05/10] selftests/bpf: Tolerate test file compilation failures
+From: bot+bpf-ci@kernel.org
+To: rbm@suse.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  3 Apr 2026 15:31:50 +0000 (UTC)
+
+--===============5395896508885707630==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-Joe Damato wrote:
-> Extend psock_snd to test drops by setting a tiny receive buffer and
-> sending a large burst of packets.
-> 
-> Signed-off-by: Joe Damato <joe@dama.to>
-> ---
->  tools/testing/selftests/net/psock_snd.c  | 52 ++++++++++++++++++++----
->  tools/testing/selftests/net/psock_snd.sh |  5 +++
->  2 files changed, 48 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/psock_snd.c b/tools/testing/selftests/net/psock_snd.c
-> index 5be481a3d2bd..7bbce274b9f0 100644
-> --- a/tools/testing/selftests/net/psock_snd.c
-> +++ b/tools/testing/selftests/net/psock_snd.c
-> @@ -39,6 +39,7 @@ static bool	cfg_use_gso;
->  static bool	cfg_use_qdisc_bypass;
->  static bool	cfg_use_vlan;
->  static bool	cfg_use_vnet;
-> +static bool	cfg_drop;
->  
->  static char	*cfg_ifname = "lo";
->  static int	cfg_mtu	= 1500;
-> @@ -49,6 +50,8 @@ static uint16_t	cfg_port = 8000;
->  /* test sending up to max mtu + 1 */
->  #define TEST_SZ	(sizeof(struct virtio_net_hdr) + ETH_HLEN + ETH_MAX_MTU + 1)
->  
-> +#define BURST_CNT (1000)
-> +
->  static char tbuf[TEST_SZ], rbuf[TEST_SZ];
->  
->  static unsigned long add_csum_hword(const uint16_t *start, int num_u16)
-> @@ -212,13 +215,14 @@ static void do_send(int fd, char *buf, int len)
->  	if (ret != len)
->  		error(1, 0, "write: %u %u", ret, len);
->  
-> -	fprintf(stderr, "tx: %u\n", ret);
-> +	if (!cfg_drop)
-> +		fprintf(stderr, "tx: %u\n", ret);
->  }
->  
-> -static int do_tx(void)
-> +static int do_tx(bool burst)
->  {
->  	const int one = 1;
-> -	int fd, len;
-> +	int i, fd, len;
->  
->  	fd = socket(PF_PACKET, cfg_use_dgram ? SOCK_DGRAM : SOCK_RAW, 0);
->  	if (fd == -1)
-> @@ -242,6 +246,10 @@ static int do_tx(void)
->  
->  	do_send(fd, tbuf, len);
->  
-> +	if (burst)
-> +		for (i = 0; i < BURST_CNT; i++)
-> +			do_send(fd, tbuf, len);
-> +
->  	if (close(fd))
->  		error(1, errno, "close t");
->  
-> @@ -290,6 +298,7 @@ static void do_rx(int fd, int expected_len, char *expected)
->  static int setup_sniffer(void)
->  {
->  	struct timeval tv = { .tv_usec = 100 * 1000 };
-> +	const int one = 1;
->  	int fd;
->  
->  	fd = socket(PF_PACKET, SOCK_RAW, 0);
-> @@ -299,6 +308,10 @@ static int setup_sniffer(void)
->  	if (setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)))
->  		error(1, errno, "setsockopt rcv timeout");
->  
-> +	if (cfg_drop)
-> +		if (setsockopt(fd, SOL_SOCKET, SO_RCVBUF, &one, sizeof(one)))
-> +			error(1, errno, "setsockopt SO_RCVBUF");
-> +
->  	pair_udp_setfilter(fd);
->  	do_bind(fd);
->  
-> @@ -309,7 +322,7 @@ static void parse_opts(int argc, char **argv)
->  {
->  	int c;
->  
-> -	while ((c = getopt(argc, argv, "bcCdgl:qt:vV")) != -1) {
-> +	while ((c = getopt(argc, argv, "bcCdDgl:qt:vV")) != -1) {
->  		switch (c) {
->  		case 'b':
->  			cfg_use_bind = true;
-> @@ -323,6 +336,9 @@ static void parse_opts(int argc, char **argv)
->  		case 'd':
->  			cfg_use_dgram = true;
->  			break;
-> +		case 'D':
-> +			cfg_drop = true;
-> +			break;
->  		case 'g':
->  			cfg_use_gso = true;
->  			break;
-> @@ -367,11 +383,23 @@ static void check_packet_stats(int fd)
->  	if (getsockopt(fd, SOL_PACKET, PACKET_STATISTICS, &st, &len))
->  		error(1, errno, "getsockopt packet statistics");
->  
-> -	if (st.tp_packets != 1)
-> -		error(1, 0, "stats: tp_packets %u != 1", st.tp_packets);
-> +	if (cfg_drop) {
-> +		/* PACKET_STATISTICS reports all packets seen (including
-> +		 * drops) in tp_packets
-> +		 */
-> +		if (st.tp_packets < st.tp_drops)
-> +			error(1, 0, "stats: tp_packets %u < tp_drops %u",
-> +			      st.tp_packets, st.tp_drops);
->  
-> -	if (st.tp_drops != 0)
-> -		error(1, 0, "stats: tp_drops %u != 0", st.tp_drops);
-> +		if (st.tp_drops == 0)
-> +			error(1, 0, "stats: expected drops but tp_drops == 0");
-> +	} else {
-> +		if (st.tp_packets != 1)
-> +			error(1, 0, "stats: tp_packets %u != 1", st.tp_packets);
-> +
-> +		if (st.tp_drops != 0)
-> +			error(1, 0, "stats: tp_drops %u != 0", st.tp_drops);
-> +	}
->  
->  	/* verify clear on read */
->  	memset(&st, 0xff, sizeof(st));
-> @@ -394,7 +422,12 @@ static void run_test(void)
->  	fdr = setup_rx();
->  	fds = setup_sniffer();
->  
-> -	total_len = do_tx();
-> +	total_len = do_tx(cfg_drop);
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 72f576a8236a..6a3835a58f87 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
 
-only if respinning: no need to pass global cfg_.. variables through
-function arguments.
+[ ... ]
 
-> +
-> +	if (cfg_drop) {
-> +		check_packet_stats(fds);
-> +		goto out;
-> +	}
+> @@ -688,11 +688,14 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
+>  		      $(TRUNNER_TESTS_DIR)/%.c				\
+>  		      | $(TRUNNER_OUTPUT)/%.test.d
+>  	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
+> -	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
+> +	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F) || \
+> +		($(RM) $$(@F); printf '  %-12s %s\n' 'SKIP-TEST' '$$(notdir $$@)' 1>&2)
+>  	$$(if $$(TEST_NEEDS_BTFIDS),						\
+> +		if [ -f $$@ ]; then						\
+>  		$$(call msg,BTFIDS,$(TRUNNER_BINARY),$$@)			\
+>  		$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@;	\
+> -		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@)
+> +		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@;		\
+> +		fi)
 
-can this not use the check_packet_stats added in the previous patch
-right below?
+When TEST_NEEDS_BTFIDS is set (for resolve_btfids.test.o) and the
+object file exists, does the msg macro interact correctly with the
+new if guard?
 
->  
->  	/* BPF filter accepts only this length, vlan changes MAC */
->  	if (cfg_payload_len == DATA_LEN && !cfg_use_vlan) {
-> @@ -405,6 +438,7 @@ static void run_test(void)
->  
->  	do_rx(fdr, cfg_payload_len, tbuf + total_len - cfg_payload_len);
->  
-> +out:
->  	if (close(fds))
->  		error(1, errno, "close s");
->  	if (close(fdr))
-> diff --git a/tools/testing/selftests/net/psock_snd.sh b/tools/testing/selftests/net/psock_snd.sh
-> index 1cbfeb5052ec..b6ef12fad5d5 100755
-> --- a/tools/testing/selftests/net/psock_snd.sh
-> +++ b/tools/testing/selftests/net/psock_snd.sh
-> @@ -92,4 +92,9 @@ echo "raw gso max size"
->  echo "raw gso max size + 1 (expected to fail)"
->  (! ./in_netns.sh ./psock_snd -v -c -g -l "${max_mss_exceeds}")
->  
-> +# test drops statistics
-> +
-> +echo "test drops statistics"
-> +./in_netns.sh ./psock_snd -D
-> +
->  echo "OK. All tests passed"
-> -- 
-> 2.52.0
-> 
+The msg macro in lib.mk expands to:
+
+    msg = @printf '  %-8s%s %s%s\n' ...;
+
+Before this change, $$(call msg,BTFIDS,...) was the first thing in the
+$(if) body, so the @ ended up at the start of the recipe line where
+make treats it as a "don't echo" prefix and strips it before passing
+the command to the shell.
+
+With the if [ -f $$@ ] guard inserted before the msg call, the recipe
+line now starts with "if" instead of "@".  Make passes the literal
+@printf to the shell, which tries to find a command named @printf:
+
+    /bin/sh -c "if [ -f file ]; then @printf '...' ...; resolve_btfids ...; fi"
+
+This produces a "command not found" error on stderr during every
+non-verbose build of resolve_btfids.test.o.  The BTFIDS processing
+itself still runs because the semicolons cause the subsequent commands
+to execute regardless, but the spurious error is confusing.
+
+One possible fix would be to move the msg call before the if guard,
+or strip the @ from the msg expansion when used inside shell control
+flow.
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23951016185
+--===============5395896508885707630==--
