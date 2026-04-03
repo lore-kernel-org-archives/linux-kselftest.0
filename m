@@ -1,118 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FEE394787
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 17:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEF02248A5;
+	Fri,  3 Apr 2026 17:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775237087; cv=none; b=rHA5A50uAd9g8oriQR9lbCoEwvdSu5kDs15t46vfgioGytkJNpaBv1USlwlgFwQX7ykCtu/mnOxtcMj9mG1xf3ZtjwABkr6flXk+1aJ5eSJsuyqgcHYvxccIQ2vnPJcJLUcF9zzU5+WgVNpeDXKJ+z17FD+tvquvVI4Napu7N5I=
+	t=1775237837; cv=none; b=GLUHxS/tETehJ06+em85uGhFQDrXiHfCvxn9JMrr2l/TS04yJogi7c+PeN494qrIfFMFD54UtCVChXJa2Ly1R9jN8y/mGfHIh0uG+Ohh7jGHn2E9ZCQhgREeqj9EDdivuzOxeR9raSgF9RhvDYZFGvQEHOKSeUAuBl0cIgQPeXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775237087; c=relaxed/simple;
-	bh=E1bzUypaVS7w28CbARApxGc+uxb6NjOyzaisp3si/6g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bp85Q0NVvoyfR1YLM4LLH3psjJAMta1mIZZUawxIxrlFlA4HX99rAgd6/5rx8Ba4qfu4SkSfkZnIe4oc9xVPXeO2tVhKE92p7/oGvbW8k0qSy6DeIyzbbf+0uILMk+AlDVpBsZ1apixteQ1lbQOWKmbnwhxc4eo3TJwG9dXBgBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ri162ENa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775237837; c=relaxed/simple;
+	bh=5wivT/1CHuKGSFxPIsOl2/Bj9TfQNtwwD7V/KfbZO9U=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Jpjy53rZQWrSZS6uUvSLYGB2bvXqtdm/zuz508+9V717xptr+CoiSt8JDDTcw+JKs0SPrpdiILTVp4QQDk/6AHkDZUFF/h8qzoYjaYkCbSbbyr//iAk6LPV5ry11X3rPQdt6OjHxxhhVkNwl8MANiqmYPpOiDXHAD6p447/YHV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=y5uKcWX8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ri162ENa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F35A9C2BCB2
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 17:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775237087;
-	bh=E1bzUypaVS7w28CbARApxGc+uxb6NjOyzaisp3si/6g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ri162ENaaXiSRPqBTShI8ahm36fA0yxapnpusRTreYOdDDMZ+niMHjj7xqXvZwXxR
-	 W4688wQ9cGxnGe+4MGiHfTAaMtuD2Con4gYFbAMxcYjgjIt93lCPasclWTi7ojO9Zc
-	 cazVdgRwAtkk89yPiJTWnIHMEFFN8LHV8glDBn0X8QcC5UvdP0JZaLMOMJXUx/iVXU
-	 J6GWfBEZdlJkOBVUvtov+m1djxfdByrpUr0rmKXjb+/NqCjkj+Qy2GYzHPm2Fr+5nb
-	 8/vPh720vR6+uCmdKhX7HYao8p87jfXTXfxJbR1k47IxMwREqsFF2kj0iRdD6uwC5X
-	 E/5FWDXI51lcQ==
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-65009bfdcfdso2275602d50.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 10:24:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVANzWzFOvZwuMu+TNCkahEhuhsGWNIqubSwrvibSlE7aDsttnldVuQfobujzI1CmQBowTnQMMd3xhXhQ8r5Q0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxlhv3emXG9k1W+/EO8Ko9toLk5jomuOhKRk35yisvh2KIwbc9l
-	MorxLTqii00Xy0Lrc9hqLK61+Iq72BNp8s59mGWro8jrC5M8w1j4roHoe1pS82bRLSJjiOwy45K
-	DIzfvsvRoUHiEG9nXhjeF2iiscZBVuXg9NBBDmAox3Q==
-X-Received: by 2002:a05:690e:d41:b0:64e:a765:ef82 with SMTP id
- 956f58d0204a3-6504870ea48mr3180067d50.24.1775237086162; Fri, 03 Apr 2026
- 10:24:46 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="y5uKcWX8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 617ABC19421;
+	Fri,  3 Apr 2026 17:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1775237836;
+	bh=5wivT/1CHuKGSFxPIsOl2/Bj9TfQNtwwD7V/KfbZO9U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=y5uKcWX8kD48kqz0cp/5ZVIWIwf5/lCY5Yp+T4vXaP15g2yMe9Vj3qPLTqkUoyvV2
+	 XiLcCOnVhZT6oCoXdQncRVCdxKx7QqFb+7xqG2PSIvdEQm9F0M7d7IJFu1gCZczzth
+	 gxVOv1zcI6j6rUJeawSxa5WCeXllxWeYr8clXsPE=
+Date: Fri, 3 Apr 2026 10:37:15 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Anthony Yznaga <anthony.yznaga@oracle.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, david@kernel.org, ljs@kernel.org,
+ Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
+ Jason@zx2c4.com, shuah@kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 0/2] fix MAP_DROPPABLE not supported errno
+Message-Id: <20260403103715.0f61fa1d0991a90d85bedaf5@linux-foundation.org>
+In-Reply-To: <20260402235933.10588-1-anthony.yznaga@oracle.com>
+References: <20260402235933.10588-1-anthony.yznaga@oracle.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260323235817.1960573-1-dmatlack@google.com> <20260323235817.1960573-3-dmatlack@google.com>
- <e3fe7085-1297-47b8-bb17-a48196e8f37f@linux.dev>
-In-Reply-To: <e3fe7085-1297-47b8-bb17-a48196e8f37f@linux.dev>
-From: Chris Li <chrisl@kernel.org>
-Date: Fri, 3 Apr 2026 10:24:35 -0700
-X-Gmail-Original-Message-ID: <CACePvbWrHCSzYmiKz0EuXE48MNk26+4j0njSP+1Vy83RMvvVrQ@mail.gmail.com>
-X-Gm-Features: AQROBzDLi9Fnv8_mDDwmklVKEby5KKVysrnsYTweXxYMFegWZQjyvtyGp9AI6Cw
-Message-ID: <CACePvbWrHCSzYmiKz0EuXE48MNk26+4j0njSP+1Vy83RMvvVrQ@mail.gmail.com>
-Subject: Re: [PATCH v3 02/24] PCI: Add API to track PCI devices preserved
- across Live Update
-To: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-Cc: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
-	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Askar Safin <safinaskar@gmail.com>, 
-	"Borislav Petkov (AMD)" <bp@alien8.de>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
-	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
-	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
-	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
-	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
-	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Pranjal Shrivastava <praan@google.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 2, 2026 at 2:29=E2=80=AFPM Yanjun.Zhu <yanjun.zhu@linux.dev> wr=
-ote:
-> > +config PCI_LIVEUPDATE
-> > +     bool "PCI Live Update Support (EXPERIMENTAL)"
-> > +     depends on PCI && LIVEUPDATE
-> > +     help
-> > +       Support for preserving PCI devices across a Live Update. This o=
-ption
-> > +       should only be enabled by developers working on implementing th=
-is
-> > +       support. Once enough support as landed in the kernel, this opti=
-on
-> > +       will no longer be marked EXPERIMENTAL.
-> > +
-> > +       If unsure, say N.
->
-> Currently, it only supports 'n' or 'y'. Is it possible to add 'm'
-> (modular support)?
->
-> This would allow the feature to be built as a kernel module. For
-> development
->
-> purposes, modularization means we only need to recompile a single module
->
-> for testing, rather than rebuilding the entire kernel. Compiling a
-> module should
->
-> be significantly faster than a full kernel build.
+On Thu,  2 Apr 2026 16:59:31 -0700 Anthony Yznaga <anthony.yznaga@oracle.com> wrote:
 
-Building as a module has extra complexity to handle, e.g. the callback
-can happen when the module hasn't been loaded. Then the user space can
-take an arbitrarily long time to load the module.
+> Mark Brown reported seeing a regression in -next on 32 bit arm with the
+> mlock selftests. Before exiting and marking the tests failed, the following
+> message was logged after an attempt to create a MAP_DROPPABLE mapping:
+> 
+> Bail out! mmap error: Unknown error 524
+> 
+> It turns out error 524 is ENOTSUPP which is an error that userspace is not
+> supposed to see, but it indicates in this instance that MAP_DROPPABLE is
+> not supported.
+> 
+> The first patch changes the errno returned to EOPNOTSUPP. The second patch
+> is a second version of a prior patch to introduce selftests to verify
+> locking behavior with droppable mappings with the additonal change to skip
+> the tests when MAP_DROPPABLE is not supported.
 
-It needs more infrastructure to support the liveupdate as a module.
+Thanks, I updated mm.git's mm-unstable branch to this version.
 
-Chris
+In [1/2] I added Mark's Reported.by:.  We had David's Acked-by: on v1's
+[1/2] patch so I reinstated that.
+
+
