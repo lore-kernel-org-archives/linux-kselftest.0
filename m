@@ -1,225 +1,182 @@
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4BD3BD243
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 14:50:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775227820; cv=pass; b=hCFh3RPUrOLE6Dy7VnEDJB5yR7xcDtRuYbpZEHgS2j7VMAwNqPq/AwzB0LXihjSfG1osa864TNXzVjgxbFhjxTdCw63fr84WTSak+XuIA+Fpe6ARMlj/ENQt5y3AntKW7xcuu8k7+3k1Z5dWIoP8PkPkJ1rn0s1X70pmhtGZKSk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775227820; c=relaxed/simple;
-	bh=I+MWzIcjsJY2NaaxS4ZYHOH26kmrsRv9LK+RJfKkIC8=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LkL3EEk8WZkjzIRwMZT+zMD/uNODGCyeJL79gT5TlegHc/kFBdFqTYJrT/+FmAZe7/FSJb8JC3EBlnPSdd4m0Yv1nRLQSMHGU1B+DvP7qeFvJADvh83XcrD8Lmqi49EVsY8SQN6SQflytBawezFRd6mHUfVGco+dJc7nXNUfJvc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NGK1DH3y; arc=pass smtp.client-ip=209.85.222.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580BD392815
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 14:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775228352; cv=none; b=nufBJjt4uDNtOOrFMSNFrZPA3n/ZPhU0WJToD8/4W19pVvFNaPToNEmwSmmR2+Gxc6mjP1uIAmW+LAibwFUsH7BlgxE5GGf1jgDld3Az9Txo0oxkHA8UcKH7YP1h0Yki1fC4RgI9yhHkxBEGaZfZRxa+7NAzDbGiMMOKk6sSurY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775228352; c=relaxed/simple;
+	bh=89ji6KrXytsoyroMrXYgsYDJJAfuNLm0CiKJEhTy/wQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HB2HGTj8WSmSX1blLlY20d2Z6cJQr9DMQZzZMSMKbvNuVOf7v1hMoA637GtrSqHIXbgJvLQWbZjGwHbvbgoIN5VwpbKpC1woarf+t+9e7Ln7mou3LE3l0FmS4G0jw6dg5iSyrWM6tvyG9xGdNWs/o21SqiU8h1WR5lnP21rjdr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=B55YuYen; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NGK1DH3y"
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-953b8cb56f2so524096241.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 07:50:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775227818; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BY9a9R5YqhYi9ap2OJoi+fy8iTXgrDA62gAkb5N20Gr9/tbwfQsGsOcZhn0wp0eJfk
-         F1sQN+ytQaImLAQVwivU0ddxIlX7yP5ZmDUKjgMEPxJZMcI8dnlv/wftydeYa2Nrf4Yh
-         sVcTpJrrNvHFihq7jZeoLCuFPMP/H2G/00p1RVN3pvwvm5UAoBI0IH1tzz+QhGlHEfZj
-         Dm2hkutlkeFky5yrbW2mH38zcyE9Ueiz5/Hd2M29aLz3H/AjMJ/y+k3p7Km7HcTk9RjT
-         /fdQHn2Ou2Lz/PkvuUSTPgps+XlX1vVFG9+4x3qiXQXFKPkT6qFrEzpjR4D+Fi4QTKtI
-         2Ccg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=2nO332cdhj8pkWKcB2XgZGKk4lKtIFb9kXIiefVqdlI=;
-        fh=uENQBeEQQQb1133BOm/cdcCJic4R5qrJFM63n5WKxxU=;
-        b=OjTikT8hRVPEEyc7YnQV2zeyQ8JYeyA4V/fQdSgBV4MxGadU0aN/7+ffn7KObed+Om
-         VYo+SjbAMz3pBDM1K//BfuIsVEgzRU98hD5c+IMUaSFgTsci5GL0gtC9CWHmyk3/ronQ
-         PoeCi80aoJnHChxz6JMN49rkOFopIuLtGngKHnhroX32P5KITInfZP4GH7hPMF8ws2fV
-         M/jGaJttyRrsTiWsEf4H30AYOg5hWOhbU1rGMaI9F5Vfr0wIkQluPsRsQByIS6/RBYBc
-         H+HFw0X0Ds8TsCOeLS2ibQgRMe0LDxCmNXsuTHLKA0qMO0Wlgd9sSDz7pwsrAtEBEtlt
-         bhGQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="B55YuYen"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-486b9675d36so17284155e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 07:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775227818; x=1775832618; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nO332cdhj8pkWKcB2XgZGKk4lKtIFb9kXIiefVqdlI=;
-        b=NGK1DH3yyn5nUejSMB0t9cy6aOLKsbYkj6IBg4L7FqZ3yr+oMSxT420e2LtcIR0DlA
-         By/DZyB05YL4mTfMOYOa6OoIIpRgTpGraEMBlr9hoDuF0EyUEibEdUK0DJG5cnSncINA
-         MIpweP3nBuVSyvKHWc/S30NLstZe9iqAgnOGq2obdA5dIWj9tU7IIV/9FVhuR72yh9Xd
-         TgNIFM1nZielDcKTROVl/BGJ1K7Q9N/9gQz4deGgtbn6FTiRIAd/cEIOYPDbBZD2EkPu
-         3GTfomPcbI5Op/tNJ/0JjEWkVbw3eJB4+Mbrmb1YxEcdYJQWUghr/EbW+A4G0DsL78F5
-         OM8Q==
+        d=suse.com; s=google; t=1775228349; x=1775833149; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H+OgrwFlApvpqkLRR93ZwtakkLIUZgZQlxVrJ4qAo4U=;
+        b=B55YuYenvg/+tnPpXdJS9gEtYREoR+eui7WCUdyVKpiFGF2Ib6T7YYsD/C8BVNws5j
+         4nrUK8ywH3z504cL5hmSXMSHapRp5YLadxpv5e4XFEwlXuE/ia29D4H7mwuuE1eD7cuX
+         l1FBXdthOsMEjvpjUpzy9zmxSmLF9PfsRhfzIQBy680tav0otNGblKJGrpEocJZnleGF
+         GkHVCMVu6hw/dMdZg7t3t9ZpJwymIcBbPIF7F0jgsWlNJFEXOl7/q8gWFfcEWo53HDuv
+         9iYUPDr4vXhGm3yxUtTvpf3xwc+RIXUMA0T06AHLUpaAlYqSvDqpyO1v9HP6gsRRUN+k
+         OyZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775227818; x=1775832618;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2nO332cdhj8pkWKcB2XgZGKk4lKtIFb9kXIiefVqdlI=;
-        b=JUpXjKQrQLXe7lpGAnjbC9e+UAGv38qZVkLtY8KEo9/SxiObN4tWkPmVCfUTTRYCrM
-         3ZZosJU+UX6czV7Uefk+cE8TZc48qaeLYfLXbPLV6u+jqVhoRtOehScCyohXz9WB1Gw+
-         /96O7Sx62DRGEkvCCJy8qgLdoMWyU3+WSQekesRiUvtABK1JQ6Sc7qFRNmhXMZMdGC5I
-         YjN4Y+DNkXtW3M9Z7SGJn2l/3PolKkaaI4bq626It6u7mwmfwxaAA3/zeLeSV2aBNA/v
-         BsDsx1tfU8WpRry+k8S2YKybErAwP8Gt1ekyqlBTAGH5X3zJp/Obl38EjAx6qFbNHRCQ
-         RwMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvtmz3AE6Syco29n6Vl53mmHyaogoIKU33gL6JV/BaX3cjFsi7olz+VDJI8djNCwReZhYWe5MrnKhNB2sV58c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHa1j2XILvOvWf2Oz4snGE6uh9EO12hSuiGLQLMZwZky0gg22q
-	pSv+eUG3ybNJ3zcYZ3DydRe3+70FZMrIt2zyU8ZDd1C0Q2VMexsKLADcgOfMtglAjcy05Ip0J8Q
-	DuqQUZTwIngM6SVB3PmW+SrvLLm7rIyuUD4bpSGE6
-X-Gm-Gg: AeBDiet7lvPFiuqfY8XQENGxKDH7oXmA4xij/NY0u3DV3449TAWm2TfeV2A17kjVBBW
-	QgCv0r/ZNF8mDsPy3Zk6z295dw8bnMh41d7KIpo9Se95VFPakWbdU84lU2G7hxDHAgFeR5oVMjC
-	2LU78jAawab02drUuUZubLWrlSJ9VieHrDMR+swTS7zHHyqF7gI8QOm8uEXWI9WQXfAbQcqjVNL
-	AXwllSnz3bThbgOERIbuj3kbsyPU0Y6m1V61BUK7nlaiRTrDJS4Fprth3EsRRYS7OR0w0I8l44Y
-	Aluf18tr2DnsnlUi+7ks+EcOaNvQHpbp1T5B5g==
-X-Received: by 2002:a05:6102:5a92:b0:605:8280:5e68 with SMTP id
- ada2fe7eead31-605a50e2a2bmr1113935137.16.1775227817848; Fri, 03 Apr 2026
- 07:50:17 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 3 Apr 2026 07:50:17 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 3 Apr 2026 07:50:16 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <CAEvNRgGm9icDK8sK5ZfqHEOEqSbvjwtihE4p9d3vpBq-NfVjmw@mail.gmail.com>
-References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
- <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com>
- <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
- <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com> <CAEvNRgGm9icDK8sK5ZfqHEOEqSbvjwtihE4p9d3vpBq-NfVjmw@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1775228349; x=1775833149;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H+OgrwFlApvpqkLRR93ZwtakkLIUZgZQlxVrJ4qAo4U=;
+        b=OfiJrF7/d8/EhnrjD+5gFlY8KYn9boPliG3Njs+yNTUJjtq7JsPMx9w69NM+GJ5yv+
+         UeeQddXlvzclLNUJ+7/9OTAHJGPoMP9Z183Iq8a6QAzVWHn6sGaGpTV1MNURP16GjUV7
+         FTXuURxwS/snMylxUwC5rL8d903ggoyOB+5vCWRplNj0lKB5Ou88j7Uh7KVmdM2q6Uhb
+         QWO1JITQRJSSGZ2Eefus4Uq4uRd0mFszLpKRU/iNYi/MSZ/rvG3heb/93A9wQ4xQ/B8g
+         QMp5pbxkfDw2Y2GbNu0VW29Xm9PGB9yCL2ku+OydJj7ziLXpLCo9vDJ82uxTdOWFGhg6
+         EYPg==
+X-Forwarded-Encrypted: i=1; AJvYcCWGqW6h3AvW6grPi3+d1agLWvNHxb3fh+qJqQv3yNgEciGhBTeDmjMPkL0KhyPKARsr/SRweh3YA6R2bokryVE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVquiSRw54tf3sn3axEOVIRggoFNdk7nP9qIePr1dePPq9+UUz
+	/sabFCv9cWlKmkuTOxpPQLcJZAqUxPXTy2oaCqK+l4JEKkVtBls/Sf27BuQb2+AeSOM=
+X-Gm-Gg: ATEYQzylOW+On5VIsUZLPlyAiQOePKFPWBATO9Fh9rxkT03G3F3k5QQbLajhEPyxK/W
+	8lWJK3flkqdB4eogver67aFw6Im1AT/82ZiejHf4m/7kFek8oyKuDFdQQ7WoWA5d68ZD5nPz2Mu
+	73zyqkBTYZsOejnzqPoFJL7530Q/u3rqmdzz37cErAgxTI4s/JAxtjA/NIYIyCx/daPjpw0duM8
+	7/z6zo8cPEX50hTrwm93T+u+rvG9KB1yxvYIX/goG616ZNbKB8uxqBC1FLkq6J+2JArC4eT6VH1
+	0dCTHuKfPzUZoKCwhJsP53azZe6BUDLuqGve5/d4j1Rd8RURgCNOCfaE/o2W6iJ9rtkr537TbR7
+	BwBUK4cTJjarb4pf56C+Lo65N14tiPfcty/SlzAJm/91zXhc8GQUyID1idQaMhi5Gj+5Llaulzp
+	TJwq8N1XyH
+X-Received: by 2002:a05:600c:3e83:b0:485:2fc5:3a5 with SMTP id 5b1f17b1804b1-488997bd938mr55388085e9.26.1775228348640;
+        Fri, 03 Apr 2026 07:59:08 -0700 (PDT)
+Received: from localhost ([189.99.238.3])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56d9bc9bc41sm6877313e0c.11.2026.04.03.07.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 07:59:07 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Subject: [PATCH v2 00/10] selftests/bpf: Tolerate partial builds across
+ kernel configs
+Date: Fri, 03 Apr 2026 11:58:53 -0300
+Message-Id: <20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 3 Apr 2026 07:50:16 -0700
-X-Gm-Features: AQROBzCC-hVilK2nAfJ3eE8zmQqqNa0fWthx2SZG4jgOFPeFQ_7rmzXurA8c2f4
-Message-ID: <CAEvNRgEtigp7+PVDkyu_DH947CUqDt312d+P+hWjjd2fHONiag@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 10/44] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
-To: Michael Roth <michael.roth@amd.com>
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	ira.weiny@intel.com, jmattson@google.com, jthoughton@google.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAK7Vz2kC/4WOWw6CMBREt0L67dVSHiZ+uQ9DTCm3UCMt6S0EQ
+ 9i7LS7AzzOZOZmNEXqDxG7ZxjwuhoyzEcQpY2qQtkcwXWQmuKh5yXMgfOuAFAjaST9HQ8pZbXo
+ oVVGgrlRVd5LF9eRRm/UwP5of09y+UIWkS41WEkLrpVVDiqIOLK7hMkoK6FNjMBSc/xznljyZ/
+ v9YcuBQSCyF4lJfa32nmfCs3Miafd+/mh4j1vEAAAA=
+X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=openssh-sha256; t=1775228344; l=3685;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=89ji6KrXytsoyroMrXYgsYDJJAfuNLm0CiKJEhTy/wQ=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QOX84k2QeUwuO8dcrNzMtD1XuDwQUFz8m1vv5l9tXa8jO8hI0wgfABLN8BJzTmBx68QP3xhU36b
+ 527bSAbwGbg0=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Ackerley Tng <ackerleytng@google.com> writes:
+Currently the BPF selftests can only be built by using the minimum kernel
+configuration defined in tools/testing/selftests/bpf/config*. This poses a
+problem in distribution kernels that may have some of the flags disabled or
+set as module. For example, we have been running the tests regularly in
+openSUSE Tumbleweed [1] [2] but to work around this fact we created a
+special package [3] that build the tests against an auxiliary vmlinux with
+the BPF Kconfig. We keep a list of known issues that may happen due to,
+amongst other things, configuration mismatches [4] [5].
 
->
-> [...snip...]
->
-> guest_memfd's populate will first check that the memory is shared, then
-> also set the memory to private after the populate.
->
-> [...snip...]
->
-Looking at this again, the above basically means that the entire
-conversion process needs to be performed within populate.
+The maintenance of this package is far from ideal, especially for
+enterprise kernels. The goal of this series is to enable the common usecase
+of running the following in any system:
 
-In addition to setting the attributes in guest_memfd as private, for
-consistency, populate will also have to do all the associated
-operations, especially unmapping from the host, checking refcounts,
-and the list of work in conversion will only increase in future with
-direct map removal/restoration and huge page merging.
+```sh
+make -C tools/testing/selftests install \
+        SKIP_TARGETS= \
+        TARGETS=bpf \
+        O=/lib/modules/$(uname -r)/build
+```
 
-The complexity of conversion also means possible errors (EAGAIN for
-elevated refcounts and ENOMEM when we're out of memory), and error
-information like the offset where the elevated refcount was.
+As an example, the following script targeting a minimal config can be used
+for testing:
 
-It doesn't look like there's room for this information to be plumbed out
-through the platform-specific ioctls, and even if we make space, it
-seems odd to have conversion-related error information returned through
-the platform-specific call.
+```sh
+make defconfig
+scripts/config --file .config \
+               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+               --enable DEBUG_INFO_BTF \
+               --enable BPF_SYSCALL \
+               --enable BPF_JIT
+make olddefconfig
+make -j$(nproc)
+make -j$(nproc) -C tools/testing/selftests SKIP_TARGETS= TARGETS=bpf install
+```
 
+This produces a test_progs binary with 579 subtests, against the total of
+708. Many of them will still fail or be skipped at runtime due to lack of
+symbols, but at least there will be a clear way of building the tests.
 
-I agree with the goal of not having KVM touch private memory contents as
-tracked by guest_memfd, so I'd like to propose that we distinguish:
+[1]: https://openqa.opensuse.org/tests/5811715
+[2]: https://openqa.opensuse.org/tests/5811730
+[3]: https://src.opensuse.org/rmarliere/kselftests
+[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
+[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
 
-1. private as tracked by KVM (guest_memfd/vm_memory_attributes)
-2. private as tracked by trusted entity
+Assisted-by: {codex,claude}
+Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+---
+Changes in v2:
+- Skip test_kmods build/clean when KDIR directory does not exist
+- Use `Module.symvers` instead of `.config` for in-tree detection
+- Fix skeleton order-only prereqs commit message
+- Guard BTFIDS step when .test.o is absent
+- Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
+- Link to v1: https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com
 
+---
+Ricardo B. Marlière (10):
+      selftests/bpf: Fall back to distro build directory for test_kmods
+      selftests/bpf: Tolerate BPF and skeleton generation failures
+      selftests/bpf: Avoid rebuilds when running emit_tests
+      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
+      selftests/bpf: Tolerate test file compilation failures
+      selftests/bpf: Allow test_progs to link with a partial object set
+      selftests/bpf: Tolerate benchmark build failures
+      selftests/bpf: Provide weak definitions for cross-test functions
+      selftests/bpf: Skip tests whose objects were not built
+      selftests/bpf: Tolerate missing files during install
 
-Currently, in TDX's populate flow, KVM doesn't do any copying, it only
-instructs TDX to do the copying.
+ tools/testing/selftests/bpf/Makefile               | 111 ++++++++++++++-------
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  20 +++-
+ tools/testing/selftests/bpf/prog_tests/iters.c     |  10 +-
+ tools/testing/selftests/bpf/test_kmods/Makefile    |   8 +-
+ tools/testing/selftests/bpf/test_progs.c           |   7 +-
+ 5 files changed, 110 insertions(+), 46 deletions(-)
+---
+base-commit: 6f6c794d0ff05dab1fa4677f39043de8a6a80da3
+change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
 
-"TDH.MEM.PAGE.ADD Operands Information Definition" in the TDX module
-ABI spec says the source is accessed as shared, the destination is
-accessed as private, and in the case that source and destination are
-the same, the "In-Place Add" section says the source will be converted
-to private.
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
 
-In SNP's populate flow, SNP-specific code in KVM does the copying from
-shared memory into the destination, then makes the destination address
-private in the RMP table before telling the firmware to do the
-in-place encryption.
-
-
-I think we should think of the populate ioctls as being
-platform-specific ioctls that, when called, accept
-
-+ destination address: private (as tracked by guest_memfd)
-+ source address: shared (as tracked by guest_memfd) or NULL
-
-KVM doesn't touch private memory contents, even in this case, because
-it's really a platform-specific ioctl that handles loading, and the
-platform does expect the destination is private for both TDX and SNP
-at the firmware boundary.
-
-Since SNP (platform-specific) only allows in-place launch update, and
-KVM had to provide an interface that allows a different source address
-for support before in-place conversion, then SNP has to continue
-supporting the to-be-deprecated path by doing the copying within
-platform-specific code.
-
-For consistency, guest_memfd can continue to check that it tracks the
-destination address as private, and sev_gmem_populate will then hide
-the copying code away just to support the legacy case.
-
-
-The flow before in-place conversion is
-
-1. Load memory (shared or non-guest_memfd memory)
-2. KVM_SEV_SNP_LAUNCH_UPDATE or KVM_TDX_INIT_MEM_REGION (destination:
-   gfn for separate private memory, source: shared memory)
-
-The proposed flow for in-place conversion is
-
-1. INIT_SHARED or convert to shared
-2. Load memory while it is shared
-3. Convert to private (PRESERVE, or new flag?)
-4. KVM_SEV_SNP_LAUNCH_UPDATE or KVM_TDX_INIT_MEM_REGION (destination:
-   gfn for converted private memory, source: NULL)
-
-
-TLDR:
-
-+ Think of populate ioctls not as KVM touching memory, but platform
-  handling population.
-+ KVM code (kvm_gmem_populate) still doesn't touch memory contents
-+ post_populate is platform-specific code that handles loading into
-  private destination memory just to support legacy non-in-place
-  conversion.
-+ Don't complicate populate ioctls by doing conversion just to support
-  legacy use-cases where platform-specific code has to do copying on
-  the host.
-
->>>
->>> [...snip...]
->>>
