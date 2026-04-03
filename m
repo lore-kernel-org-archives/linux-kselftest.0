@@ -1,132 +1,217 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6EA53CCA12
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 14:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0D53C6A4C
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 15:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775228387; cv=none; b=BHHYT3mLvUjUclNpBCJk8MxQcWjCc0LOnTWkwBfImpGxhYmT/bkGesw3t4drvPWWdZ0qRIVpzpjexeiEaxvThZu4Ocnwyyw5jYR2HqGW7UGTmPWJU4lMtIpeMdjT1UDlH1nVKJsbXdYW7+L4cvBVQNyRMFUe8LUilCrYBd5NmTg=
+	t=1775228462; cv=none; b=mL0w9zYP9GZuZ1v6rqSdQktS3bGixW5tloMfkc8ze966fj6LgYBehHUo0iiovgXzDe36YKYO1kLDdzdx9ZYQcMUYrFNCPO2/l06VrcSFdDclo3lZ1fRawW6avEQhLwne321MKNDZH/GeBjMnzkmU7d01x1i4VCBdfPmFQbiI6Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775228387; c=relaxed/simple;
-	bh=VgaZGJgNoIf6wfVc9SmL/U8SxxfQLWizje2Jxoqjl4s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ihnf2n/aHa6rf/9yPS4TdkZbJJoaFF8uy94oYgHfyR9M6PWf/Mg34LwRBbW2jvQimnorwsfokQsZme5LuyQkEZ+WaAy4iMDP3zMyCZ3qpCp/dwuo3ue5f/5mzdWlQjCh4IKLF4Aw+Cmj0PhGN/t4tEb2eYgBTFGinaNcf+5KxhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IGePjyxv; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1775228462; c=relaxed/simple;
+	bh=4T03tU+HgJyUNh24jwyBJCtFpN1e7T9GXw7WPkcUWAg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YY5BQo8k2Tr4CLa1zdgV2krIxqwhQ2mpSKkBDS2THHD62M0XqXRclDdNysEiNp8x25O5U2EwSGZOqcJ3zIDaOyH0811polPwySwTWzXXf+krsT5DC8K/j4IIKyPTsIctFyDmICILy9VZo34BiSZpOupNxbN2lOtPklm4BkLacfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqLHL1Pu; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IGePjyxv"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-486fb14227cso27037285e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 07:59:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqLHL1Pu"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82cebbdbdccso1007686b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 08:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775228384; x=1775833184; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o5ke/PdA8QzVJR7Spl86h1CIBtkkSiz3t60hf2vQo38=;
-        b=IGePjyxvBRQb1B/xTLFB7ActDYPFyQDs815ncYUpnmikOzSXpjoHZNoGTCSAyhly5v
-         VAjL/Vf/UlOtcDbPFNRXOSMvQHUclGGxd27FY5T9J8PHa6SUR0Ti9ZbXkt2D7CDTSEtW
-         NS5eVPwp3gzlGJgNWTbLfmHu1f6/lo0FFYhPilm8BKWLsZkIhsxf+RxH8sx0JPPNPZmJ
-         9t3Io7pd+U9dBdYuiL9G9BpFHShSVFJTaIMH83P//cRy/dqytXyDylKsHLLURphbobIy
-         oYsNvAx71Anh+w0jgoY2YfE7dQD8F/r5UDa9ZNBK+KChff2A1ez7fSDSX180Od4a+2u/
-         E7+A==
+        d=gmail.com; s=20251104; t=1775228460; x=1775833260; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nYEKwooYgSKsCFZiHLlPAB+cRjNKV5UWBUUDOOvo/B8=;
+        b=nqLHL1PuPq6cfrUp9WegC8YrePQIifVctubI4VleZd2ZKrpBjnWkcV+Vkz+ELm7ewd
+         EhadxO2JiiWiEu7FQp7iVni+1y2qtx1Kja/a6Onk10PFSN1bLmAtlCR6nX8MSttsbytg
+         YCVYbofX8i2TwEAKH5+2YY0O6sx7lkpujzQKhef+uCw8rpVOXc7IpNcsMSn/oJhOp6oP
+         cQAmm16iwvPDA2aox36SUjUMkuESslLNd+MLO0ceN7KR6bqWMir0mICJQu1tWqGDBliT
+         aV+F5L2Vt6lGf3Qs4Xy0KbYLHRxupaviB1jeeOrCUVRFgAm9E+nC7LvRSe40+HJLrO0/
+         gTig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775228384; x=1775833184;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=o5ke/PdA8QzVJR7Spl86h1CIBtkkSiz3t60hf2vQo38=;
-        b=WT0T2ZBaQ9LNjtrOzkq05R4ujtr2KIz4iO+8Papvcz9BUyzk3EMCyK35sVxYUPhh9X
-         tI5AwJB55tquCL/fQBGKqisyhJvAyOmQVgaC3es3FcTrD0kC17+murD+jqLaDcetD89C
-         5LHU811sWnpDsaJAnfDG0BGNmYhF3JhBa1qq7/045Xiky8L6sQKHfkgf2I5J1mZbLQvl
-         a4d6hk5hFEt3KOCGgZm0bf+jTlkyhle0hwSMyWefwXLdQH8ztCbE45KCQPnlMUt2ol/C
-         /oQkJsbmXSv0/gAMv2fHDMd1UidF6NwaWDUPFpXammZvDIU1MX2xmrnPLi+2elI4fU1w
-         e++w==
-X-Forwarded-Encrypted: i=1; AJvYcCUbWnSueCfZKuN0+4r32EJHEeGoZnR3YfGcV2BukaSgeDuXYqTGc5CmubpG5m62SAhQbiZZdr70Hl8zOvPQuzI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwM3pJyhjDNMwX3nwSPAm03U1x3uDhYzmc4dkvO28bY/05RAJ+j
-	o6/ZorG7xQmvSvDgcDmX59I2vpgo5nomoFFDoxAE3g3fVp2DBF2yLae8YJH4Qu9mocA=
-X-Gm-Gg: ATEYQzzl982ZCL89I5aHrcpINa9nTs2qOHIbK54PL4fZKd9zgFqI8dLdJpFQNoQn1o8
-	+sUoqgGJ1HHuDR4lD/bUakGX2tSFxsT/CXu6tMrsuSA+bMl9m+y3DYc5ibsTptDx7XJWodLXtPm
-	fi+xZ8w4nwhNsON4djMTVmzxXIi3fJEiqiVn2C36eKz1apWRcKqqGpAfmXsmwDt8tT/D0z6FVLq
-	W7l1TbG+hJGGjHVBIYLYSADQm+WkfuYnnDw4XuGu4du99KMcIosoaD9kO7Y//04mtgVWGIQHkhg
-	24REQPiZYP2eGDJSl7Pwd46wNnA21h2M47ue0p74sxlY/ypZJJRgk+M/ay1DUHSIS7sv5hezm7G
-	v2wdoSEKLlYQp5yEhcNMwsetYAMH65E04p9EVNx7CZ1DEGKcEYBEZspO7Yp+42hM2zp2pvfpzgy
-	9aLeFnbU04
-X-Received: by 2002:a05:600c:4688:b0:485:379b:57bb with SMTP id 5b1f17b1804b1-488997154femr50823345e9.3.1775228384139;
-        Fri, 03 Apr 2026 07:59:44 -0700 (PDT)
-Received: from localhost ([189.99.238.3])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56d9bc9bc41sm6878642e0c.11.2026.04.03.07.59.42
+        d=1e100.net; s=20251104; t=1775228460; x=1775833260;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nYEKwooYgSKsCFZiHLlPAB+cRjNKV5UWBUUDOOvo/B8=;
+        b=a2zbAdvFcuLdtkwpEckItCOvZMqX2wfMOly2sAY94kuIAjkaWJrBr+vQE8MgB4i3bi
+         5F+vDrMrOgy8pV6itOWQSiTXtkoBYfX2lp8GdPf9V+mQxJkx85td+XI9AUUEJsVTajnU
+         KQGYdgUr1xGGhRHwLM1Ts3kco7rxtvvzB9shr87daswRAEL7X8P0kXcSAqnsJBJ31P2G
+         lGlMMYjW6G+ra9bzoRmr6S0cPI9FWbquLNw7D7qq04GWYOtzgrE5fLj8NAFmYDcPqBh1
+         2SF1CViE7A+NfxmffyxjvpLKOKHLvIoHO3GBbcTBSjnb2nyXibd4pjqRSg6Su4yQlye4
+         pmVg==
+X-Forwarded-Encrypted: i=1; AJvYcCXj+S7p3/a+PfX21BJILzDb/Zu5oCOLBtPU8SbuR0dj6Ow2G9U1jBlSbhWJwkwcN8g9k3pI6wDtKZUBRjgHsVI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxP099mhoM3e9WLJOTJ0A9CqhPczdIUwSrdvW6cmVODcUVMvRUW
+	XYXPpvQNoQh7tyTru9AS3QraKsHbvEuOF2iNLDLlsc139UeC7nrGDFlI
+X-Gm-Gg: AeBDiet9c8CPff0vb+d2MkT7kg+7mlv0XKaMijWZpFI9iO+P+kOSiVgmu2Kba1XhKHB
+	ZMuaIpdveY9m7KRVgqBnN+ZRFT3PKTa+69E/lTltOf81MLLTA1Gp+8bLJ4kLvfIqZlEJSYrXTaM
+	fDtgW3Ntr2cGWPz5OZuwXTcRlWtaTp4R1g9MRwcyOXmNq0QhqmL9/gySPLdUXy/j749cSUMi9ae
+	TcuKI8xgU7/I8KZ1ccDQsQbp/uXQ5tSK++/fMDrvppzoureTob8JnTwMRy+sjdfHqHD0kM2DdoL
+	kbyJY/MG06zAcilMB/vX84F2Ef1E5LcLZbgf30mb9iWbveOTwPLNInz6fVVaTEintoTFm0NtCer
+	2VEp9srxuYkoiI5n5tccZS6OMS/gJoS850kU7yXQ1gOlPxlXXO1q6h6syYzbL/c2anWn/eoVHGm
+	b+W3gSGUfp7O3A7YPalXwrf4sgSpp51YPaiZqasz5m
+X-Received: by 2002:a05:6a00:340a:b0:827:2d7b:5038 with SMTP id d2e1a72fcca58-82d001e9e7amr6034017b3a.5.1775228460095;
+        Fri, 03 Apr 2026 08:01:00 -0700 (PDT)
+Received: from DESKTOP-82PPU4A.localdomain ([202.8.116.192])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9ca79basm7789483b3a.58.2026.04.03.08.00.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 07:59:43 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Fri, 03 Apr 2026 11:59:03 -0300
-Subject: [PATCH v2 10/10] selftests/bpf: Tolerate missing files during
- install
+        Fri, 03 Apr 2026 08:00:59 -0700 (PDT)
+From: Ujjal Roy <royujjal@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>,
+	Yong Wang <yongwang@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>
+Cc: Ujjal Roy <ujjal@alumnux.com>,
+	bridge@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v3 0/5] net: bridge: mcast: support exponential field encoding
+Date: Fri,  3 Apr 2026 15:00:45 +0000
+Message-ID: <20260403150050.1235-1-royujjal@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260403-selftests-bpf_misconfig-v2-10-f06700380a9d@suse.com>
-References: <20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com>
-In-Reply-To: <20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openssh-sha256; t=1775228344; l=1301;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=VgaZGJgNoIf6wfVc9SmL/U8SxxfQLWizje2Jxoqjl4s=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QMrZ54BOOJqDcZdAFl3NiwWeFS+siYvHChakdRJTLU+EGvle5lkem4T3+OqPl66zcPPffeR+n5j
- kC40uYAgbyw8=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
+Description:
+This series addresses a mismatch in how multicast query
+intervals and response codes are handled across IPv4 (IGMPv3)
+and IPv6 (MLDv2). While decoding logic currently exists,
+the corresponding encoding logic is missing during query
+packet generation. This leads to incorrect intervals being
+transmitted when values exceed their linear thresholds.
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic.
+The patches introduce a unified floating-point encoding
+approach based on RFC3376 and RFC3810, ensuring that large
+intervals are correctly represented in QQIC and MRC fields
+using the exponent-mantissa format.
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- tools/testing/selftests/bpf/Makefile | 7 +++++++
- 1 file changed, 7 insertions(+)
+Key Changes:
+* ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation
+  Removes legacy macros in favor of a cleaner, unified
+  calculation for retrieving intervals from encoded fields,
+  improving code maintainability.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6c4f85459486..d90e0dd9d0e3 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -953,6 +953,13 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# Some generated files might be absent when only a subset of BPF objects
-+# could be built. Tell rsync to ignore missing source arguments.
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
+* ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()
+  Standardizes MLDv2 terminology by renaming mldv2_mrc()
+  to mldv2_mrd() (Maximum Response Delay) and introducing
+  a new API mldv2_qqi for QQI calculation, improving code
+  readability.
 
+* ipv4: igmp: encode multicast exponential fields
+  Introduces the logic to dynamically calculate the exponent
+  and mantissa using bit-scan (fls). This ensures QQIC and
+  MRC fields (8-bit) are properly encoded when transmitting
+  query packets with intervals that exceed their respective
+  linear threshold value of 128 (for QQI/MRT).
+
+* ipv6: mld: encode multicast exponential fields
+  Applies similar encoding logic for MLDv2. This ensures
+  QQIC (8-bit) and MRC (16-bit) fields are properly encoded
+  when transmitting query packets with intervals that exceed
+  their respective linear thresholds (128 for QQI; 32768
+  for MRD).
+
+* selftests: net: bridge: add tests for MRC and QQIC validation
+  Updates bridge selftests to validate both linear and non-linear
+  (exponential) encoding for MRC and QQIC fields, ensuring
+  protocol compliance across IGMPv3 and MLDv2.
+
+Impact:
+These changes ensure that multicast queriers and listeners
+stay synchronized on timing intervals, preventing protocol
+timeouts or premature group membership expiration caused
+by incorrectly formatted packet headers.
+
+Test results:
+Giving results only from vlmc_query_intvl_test and vlmc_query_response_intvl_test
+of the script bridge_vlan_mcast.sh.
+Without patchset, here is the result.
+    - TEST: Vlan multicast snooping enable                                [ OK ]
+    - TEST: Vlan mcast_query_interval global option default value         [ OK ]
+    - Vlan 10 mcast_query_interval (QQIC) test cases:
+    - TEST: Number of tagged IGMPv2 general query                         [ OK ]
+    - TEST: IGMPv3 QQIC linear value 60                                   [ OK ]
+    - TEST: MLDv2 QQIC linear value 60                                    [ OK ]
+    - TEST: IGMPv3 QQIC non linear value 160                              [FAIL]
+    -         Wrong QQIC in sent tagged IGMPv3 general queries
+    - TEST: MLDv2 QQIC non linear value 160                               [FAIL]
+    -         Wrong QQIC in sent tagged MLDv2 general queries
+    - TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
+    - Vlan 10 mcast_query_response_interval (MRC) test cases:
+    - TEST: IGMPv3 MRC linear value 60                                    [ OK ]
+    - TEST: IGMPv3 MRC non linear value 160                               [FAIL]
+    -         Wrong MRC in sent tagged IGMPv3 general queries
+    - TEST: MLDv2 MRC linear value 30000                                  [ OK ]
+    - TEST: MLDv2 MRC non linear value 60000                              [FAIL]
+    -         Wrong MRC in sent tagged MLDv2 general queries
+With these patchset, here is the result.
+    * TEST: Vlan multicast snooping enable                                [ OK ]
+    * TEST: Vlan mcast_query_interval global option default value         [ OK ]
+    * Vlan 10 mcast_query_interval (QQIC) test cases:
+    * TEST: Number of tagged IGMPv2 general query                         [ OK ]
+    * TEST: IGMPv3 QQIC linear value 60                                   [ OK ]
+    * TEST: MLDv2 QQIC linear value 60                                    [ OK ]
+    * TEST: IGMPv3 QQIC non linear value 160                              [ OK ]
+    * TEST: MLDv2 QQIC non linear value 160                               [ OK ]
+    * TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
+    * Vlan 10 mcast_query_response_interval (MRC) test cases:
+    * TEST: IGMPv3 MRC linear value 60                                    [ OK ]
+    * TEST: IGMPv3 MRC non linear value 160                               [ OK ]
+    * TEST: MLDv2 MRC linear value 30000                                  [ OK ]
+    * TEST: MLDv2 MRC non linear value 60000                              [ OK ]
+
+v3:
+- Updated the series title for better clarity; old one is here
+  https://lore.kernel.org/all/20260326150742.50289-1-royujjal@gmail.com/
+- Added key changes section for new selftests patch
+- Updated netdev style comments and addressed review comments
+- Fixed MLDv2 MRC conversion logic during query generation
+- Mentioned intervals in units wherever applicable
+- Dropped type casting and fixed indentations
+
+v2:
+- Retargeted the series to net-next as suggested
+- Fixed a compilation warning in the MLD rename change
+- Kept reverse xmas tree order in IGMP exponential encoding change
+- Added bridge selftests to validate IGMPv3 Query MRC and QQIC handling
+
+Ujjal Roy (5):
+  ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation
+  ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()
+  ipv4: igmp: encode multicast exponential fields
+  ipv6: mld: encode multicast exponential fields
+  selftests: net: bridge: add tests for MRC and QQIC validation
+
+ include/linux/igmp.h                          | 171 +++++++++++++++-
+ include/net/mld.h                             | 190 +++++++++++++++++-
+ net/bridge/br_multicast.c                     |  22 +-
+ net/ipv4/igmp.c                               |   6 +-
+ net/ipv6/mcast.c                              |  19 +-
+ .../selftests/net/forwarding/.gitignore       |   2 +
+ .../testing/selftests/net/forwarding/Makefile |  10 +
+ .../net/forwarding/bridge_vlan_mcast.sh       | 157 ++++++++++++++-
+ .../selftests/net/forwarding/mc_decode.c      |  73 +++++++
+ .../selftests/net/forwarding/mc_encode.c      |  78 +++++++
+ 10 files changed, 675 insertions(+), 53 deletions(-)
+ create mode 100644 tools/testing/selftests/net/forwarding/mc_decode.c
+ create mode 100644 tools/testing/selftests/net/forwarding/mc_encode.c
+
+
+base-commit: 8b0e64d6c9e7feec5ba5643b4fa8b7fd54464778
 -- 
-2.53.0
+2.43.0
 
