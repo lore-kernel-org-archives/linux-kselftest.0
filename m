@@ -1,210 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABEB312D1F1;
-	Fri,  3 Apr 2026 02:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775181742; cv=none; b=q8GpJeSJ96W/ldXHEl7V2DbJuEnEdVcAyD5rNNLeSi6/EzqMKPS+aOsS5m3bIM2cs1Qx6WM2ZJDjjYGwtHZIQjir9VFDWWbdPPTkEr3Y/MV/dQsgBzeNRVwbjZcsecWBTLc6TOTl3FYwj64uGj+tDARtOtXGxLezIcBNAUtvyvI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775181742; c=relaxed/simple;
-	bh=hBW6F4YpD0yqJIg2zZyuPH27KccORAZiNhePtVabi0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QsyH1ZoA8cGJzTle7HlmRVp4z0+enCLRkrhzLF5rNP1kbbcHIwljg9yvVG4DJoanHPFC7cX9ChJUr5zIbIph0ny9pcr8uKYmBSc5EorMHYTJOr5qA7vKdEHCOQUc+LpDZfBdhl7/twQNE8QbQBG7qA0esGztKAsoBOXNKSKMkmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EC3C2lkq; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71378346FA6
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 02:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775183208; cv=pass; b=NT/FMb4e18GhVSdNavf/XO5NMCOJLs0rTqZwsoNzlvSI+3IXeLNRmhkDJZ2LvMyilm80OIY8aouOwuvDvcFoToIGORGB/nQVeHHtW3BqmYiRTDu+iLC2hV0NEqpkiXuFyC1KuyMMJW95T8+MHFj0Ym18Oqi535t53RNRnw/S2NQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775183208; c=relaxed/simple;
+	bh=vcJVYVcsjtujJhxPM2Hmf6GUicBFUB6Kawjcdbn0m+k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AlvWBwNXuNxsiJYcYu0+LYUoiqI2IfT+//hDj0JZpekoWZ8A9XKTzYQiQWY7MKB76Q9TN97uu/coZZvqSfp2nsompxtlPZrrZODeDOzAlfA7Qh/qAZXWuwKcZyLL8fuJKZx2IlfgsGOYVNdOfQa1X1QzaKvMrdB2Ub6oGXXZ7Ts=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pj9APJiX; arc=pass smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EC3C2lkq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA79AC116C6;
-	Fri,  3 Apr 2026 02:02:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775181742;
-	bh=hBW6F4YpD0yqJIg2zZyuPH27KccORAZiNhePtVabi0s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EC3C2lkqB7Bn7bQ13mLQk3s218ldUKnOv1X1OS96uBO7lAItMT5JQ81T4hrEQbgzn
-	 H0eOjqKOQkH4V0XESx9AT3gO8Wwdj6cGmmVASJFcE8KmNcL/CwQ5bbmXlcrzvH/uJr
-	 HS5uEJrjsZyMqa811+KxUJmatz0EcxgRhXzI0X6eq/x3ivhj9bG0DUBnHNBpQEjgKw
-	 Y0lOtlEmeRUbaXULuYsJLqBZ3teeFWcCjRGgkm75SLtenoGilEAWEEFZXwbvk1Uugd
-	 VFJDMCkc2zdOLpKUrWL8yF9zCMtr/cjqtDU3SS57ImJA0Whq1LjyWDt5IKMdNIOm/1
-	 65jg+CGIITnaw==
-Date: Thu, 2 Apr 2026 19:02:19 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Simon Horman <horms@kernel.org>, Donald Hunter
- <donald.hunter@gmail.com>, Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Saeed Mahameed
- <saeedm@nvidia.com>, "Leon Romanovsky" <leon@kernel.org>, Mark Bloch
- <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, Chuck Lever
- <chuck.lever@oracle.com>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
- Carolina Jubran <cjubran@nvidia.com>, Or Har-Toov <ohartoov@nvidia.com>,
- Moshe Shemesh <moshe@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
- Shahar Shitrit <shshitrit@nvidia.com>, Daniel Zahka
- <daniel.zahka@gmail.com>, Jacob Keller <jacob.e.keller@intel.com>, Cosmin
- Ratiu <cratiu@nvidia.com>, Parav Pandit <parav@nvidia.com>, Shay Drori
- <shayd@nvidia.com>, "Adithya Jayachandran" <ajayachandra@nvidia.com>, Kees
- Cook <kees@kernel.org>, "Daniel Jurgens" <danielj@nvidia.com>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, Gal Pressman <gal@nvidia.com>
-Subject: Re: [PATCH net-next V4 10/12] devlink: Add resource scope filtering
- to resource dump
-Message-ID: <20260402190219.61ea7da1@kernel.org>
-In-Reply-To: <20260401184947.135205-11-tariqt@nvidia.com>
-References: <20260401184947.135205-1-tariqt@nvidia.com>
-	<20260401184947.135205-11-tariqt@nvidia.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pj9APJiX"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7991db3dc98so17016547b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2026 19:26:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775183206; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ha273rQpDcyEF9fg2W/6a1QIPDeSi6pGLAK8m/YpE/jqKYX9xQpkg11NYFnco0SRrD
+         gcYxiLKYsWcMEshy1Cn8rKAbrqk79LVp9JETvII6m5jfjEIcwr8+iVhEUay7Fa9MesiQ
+         T37Z11+zHjaUeB9bEh2DQTfUnZ6/pQAbEdVT/zeJYu4UwdmboolsaAxMdjz6BaupBpUV
+         HB4pueFsVxCbxnlC8/Yk55ymNIvP9pznPF4tl4Jhkr1OVnHwSM/5PmclqmUnOnYar6Cb
+         BmSt2szetwnQl5xO6q0laI9oi1PoKZXmwlosuL068i8lB0mSyO+Twt4lHcJxATS3guBo
+         GKWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
+        fh=gDZVIVtxi5L3J7KRHbN8goqFk7Q11gjbpH9UIlmV4cg=;
+        b=A5udgUgQdTVIATh/OqD8I1UpMk2Wz201VjxhiwVnxfQrGeE9AVFLrwwNMVrFqDnDdL
+         W7tYhhsAs06oUuna4RSYUVapDn8VlrY8vVYPTWwbamUB2w55MwbQQ1gEGq04RokQP5OC
+         QN/W4OJCsoacBEQRfa1aza+BCWXk+DdukCsi6KrGbfnLMa4v9GXjKwOFHNhdI4p93LXe
+         APW2EiG59U8SYsTC/P5Var/efkLYog9LZFlmOUpMX+BLKN+Vb+ZcrJj/XHC/4NyaIppC
+         xHpeFt0S8rUX7XDcDElDdWurfsofjKEQrgMrHLTeX4mrAr/IG8lUk/XxX9xm/tJegYl8
+         EQxg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775183206; x=1775788006; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
+        b=pj9APJiXwPQpv2w/t6G6RTFnZEOcQthmzNUT0gh9/PMgPwKu0cOD8de4u4xK8MFJG8
+         rh5op5ZoOQFvio0wkCcf4oeMdLGXICbgT0ECbrVKn9uZwhLNNVYPQwgL24ik/wPbdw/n
+         u5KFOb+Tuizym1/1P+Di0L2Wwr5/HOANx9ZcMLCy5hDIEkFgBImB8ZQjW4sw1rsUWTh+
+         ByWNE7yg5BohdHOxBKMA0nSisf1YKIzKOw0bKPmn6LqpQctIK5vy7s2NhKCslkRlkNEY
+         zv+sYPBO1mzQuJNfw9rfaEIuFv6AuqLwyelA3QR4mlS0VGVbYGY9eIxKBaE6y/k5acem
+         nkfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775183206; x=1775788006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
+        b=nMtzkDucnoe9FfVUxRK8gLaaMC0LI3Np1IkuN7Tf8t+aFIM2rCYUBmWbYzNn/UXDHy
+         9LTZplOc/anVkRtLaAndCGsOa1SJKQcY1s3ylpAfuZvU8numZ9T9cG8CwlhYJKESYvqr
+         CjvhxnNaofPUEHo8ZuAIrRluEUJWPDVQL0Oeof64lHKsajbXc9ybLDQKdBv0BGN29YGE
+         Qeiqk+6TazGdSdfsrdL2M3kuXIJT6jHMiaiiWq130VBSOI8JAeEbQQAvg96WhmGZFkpd
+         Jas7IclRK5WS43P0jfoTWq179WISqUg1J0BC0UHOzAJeSoXq+zoN/lJuvq2EvDAW9o76
+         lkfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUH/KQKtsJpTWLOzN+v7HQI+BcR+X/SVerM6HQx+jO6Rsyq2YKhnLxVbcaCHgW40IMjP7YkLc8SyrpbRJsrw1E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMtBcXk4MKYn7J8DTEO8z5qz8B2hWRkjJ5cUefNWEuYTEFNPTc
+	ESPVlvzBe48svut4lSxGSk9Ob5E6ZsAq1MotyLtejM053qSTx0VOCuzWtzBoGmXCKQbgX8GcjXN
+	o+C6k50P9Yv8RUSIirci1Qr+OeURlrX92ArxXnMJs
+X-Gm-Gg: AeBDiesf/yoCVoxkehJLLvn58IU6c88RnMp9Y0eEeRHruVi2B5Pjl1mkaPCjEWpVcWB
+	Ng1GycNRWdKK473D7cCAuTYdffeEv/8cRk46TFcVX1g8FfhoFo0hA19Lk5hk7abOw9RtJMdw3/q
+	ymyLHSW1jDhr2Y6fOIxGBVxARP2IqXLtQZ7VMDoIlccNQ0NSkQYmFoYsuyStR1wUSS/vbIj4xpA
+	VlPt1NGCVQYEPlSm3CQbBsEnHQorObROUMjTOLhDy2Ms5cTAGtWM/XIBjrsr8i5V+GgfMe11uWW
+	8rTrneMwyqQAUeprUg==
+X-Received: by 2002:a05:690c:90:b0:79a:c396:c01 with SMTP id
+ 00721157ae682-7a4d6732758mr17280927b3.55.1775183206003; Thu, 02 Apr 2026
+ 19:26:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260403015851.148209-1-jiayuan.chen@linux.dev> <20260403015851.148209-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260403015851.148209-2-jiayuan.chen@linux.dev>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 2 Apr 2026 19:26:34 -0700
+X-Gm-Features: AQROBzAh2Ysi0SF15X8q_e3XfU4X2ZmmJIBBcIrVoyrG5eWnijGl8DAlrd1gYkE
+Message-ID: <CANn89i+1VzG3KSv1NvhTbPm2EdG4Lvii256yZj_wq9jcB-qQ0A@mail.gmail.com>
+Subject: Re: [PATCH bpf v6 1/2] bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 1 Apr 2026 21:49:45 +0300 Tariq Toukan wrote:
-> @@ -873,6 +881,16 @@ attribute-sets:
->          doc: Unique devlink instance index.
->          checks:
->            max: u32-max
-> +      -
-> +        name: resource-scope-mask
-> +        type: bitfield32
+On Thu, Apr 2, 2026 at 6:59=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
+> wrote:
+>
+> bpf_sk_assign_tcp_reqsk() only validates skb->protocol (L3) but does not
+> check the L4 protocol in the IP header. A BPF program can call this kfunc
+> on a UDP skb with a valid TCP listener socket, which will succeed and
+> attach a TCP reqsk to the UDP skb.
+>
+> When the UDP skb enters the UDP receive path, skb_steal_sock() returns
+> the TCP listener from the reqsk. The UDP code then passes this TCP socket
+> to udp_unicast_rcv_skb() -> __udp_enqueue_schedule_skb(), which casts
+> it to udp_sock and accesses UDP-specific fields at invalid offsets,
+> causing a null pointer dereference and kernel panic:
+>
+>   BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
+>   Read of size 4 at addr 0000000000000008 by task test_progs/537
 
-no need for a bitfield here, this is a simpler selector
-bitfield is for cases when we need to update some persistent
-state, in that case we want to indicate which bits we intend
-to update:
 
-	cfg = (cfg & ~bf.mask) | bf.val
+>
+> Fix this by checking the IP header's protocol field in
+> bpf_sk_assign_tcp_reqsk() and rejecting non-TCP skbs with -EINVAL.
+>
+> Note that for IPv6, the nexthdr check does not walk extension headers.
+> This is uncommon for TCP SYN packets in practice, and keeping it simple
+> was agreed upon by Kuniyuki Iwashima.
+>
+> Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-scope is a straight attribute, there's no updating of anything.
-
-u32 or unit would do
-
-> +        enum: resource-scope
-> +        enum-as-flags: true
-> +        doc: |
-> +          Bitmask selecting which resource classes to include in a
-> +          resource-dump response. Bit 0 (dev) selects device-level
-> +          resources; bit 1 (port) selects port-level resources.
-> +          When absent all classes are returned.
->    -
->      name: dl-dev-stats
->      subset-of: devlink
-> @@ -1775,7 +1793,11 @@ operations:
->              - resource-list
->        dump:
->          request:
-> -          attributes: *dev-id-attrs
-> +          attributes:
-> +            - bus-name
-> +            - dev-name
-> +            - index
-> +            - resource-scope-mask
->          reply: *resource-dump-reply
->  
->      -
-> diff --git a/include/uapi/linux/devlink.h b/include/uapi/linux/devlink.h
-> index 7de2d8cc862f..e0a0b523ce5c 100644
-> --- a/include/uapi/linux/devlink.h
-> +++ b/include/uapi/linux/devlink.h
-> @@ -645,6 +645,7 @@ enum devlink_attr {
->  	DEVLINK_ATTR_PARAM_RESET_DEFAULT,	/* flag */
->  
->  	DEVLINK_ATTR_INDEX,			/* uint */
-> +	DEVLINK_ATTR_RESOURCE_SCOPE_MASK,	/* bitfield32 */
->  
->  	/* Add new attributes above here, update the spec in
->  	 * Documentation/netlink/specs/devlink.yaml and re-generate
-> @@ -704,6 +705,22 @@ enum devlink_resource_unit {
->  	DEVLINK_RESOURCE_UNIT_ENTRY,
->  };
->  
-> +enum devlink_resource_scope {
-> +	DEVLINK_RESOURCE_SCOPE_DEV_BIT,
-> +	DEVLINK_RESOURCE_SCOPE_PORT_BIT,
-> +
-> +	__DEVLINK_RESOURCE_SCOPE_MAX_BIT,
-> +	DEVLINK_RESOURCE_SCOPE_MAX_BIT =
-
-do we need this? it's not an attr enum all we care about here is 
-the mask, really so just a trailing value which is max real value + 1
-is enough for all users?
-
-> +		__DEVLINK_RESOURCE_SCOPE_MAX_BIT - 1
-> +};
-> +
-> +#define DEVLINK_RESOURCE_SCOPE_DEV \
-> +	_BITUL(DEVLINK_RESOURCE_SCOPE_DEV_BIT)
-> +#define DEVLINK_RESOURCE_SCOPE_PORT \
-> +	_BITUL(DEVLINK_RESOURCE_SCOPE_PORT_BIT)
-> +#define DEVLINK_RESOURCE_SCOPE_VALID_MASK \
-> +	(_BITUL(__DEVLINK_RESOURCE_SCOPE_MAX_BIT) - 1)
-> +
->  enum devlink_port_fn_attr_cap {
->  	DEVLINK_PORT_FN_ATTR_CAP_ROCE_BIT,
->  	DEVLINK_PORT_FN_ATTR_CAP_MIGRATABLE_BIT,
-
-> +static u32 devlink_resource_scope_get(struct nlattr **attrs, int *flags)
-> +{
-> +	struct nla_bitfield32 scope;
-> +	u32 value;
-> +
-> +	if (!attrs || !attrs[DEVLINK_ATTR_RESOURCE_SCOPE_MASK])
-> +		return DEVLINK_RESOURCE_SCOPE_VALID_MASK;
-> +
-> +	scope = nla_get_bitfield32(attrs[DEVLINK_ATTR_RESOURCE_SCOPE_MASK]);
-> +	value = scope.value & scope.selector;
-> +	if (value != DEVLINK_RESOURCE_SCOPE_VALID_MASK)
-> +		*flags |= NLM_F_DUMP_FILTERED;
-> +
-> +	return value;
-> +}
-> +
->  static int
->  devlink_resource_dump_fill_one(struct sk_buff *skb, struct devlink *devlink,
->  			       struct devlink_port *devlink_port,
-> @@ -400,16 +416,27 @@ devlink_nl_resource_dump_one(struct sk_buff *skb, struct devlink *devlink,
->  	struct devlink_nl_dump_state *state = devlink_dump_state(cb);
->  	struct devlink_port *devlink_port;
->  	unsigned long port_idx;
-> +	u32 scope;
->  	int err;
->  
-> -	if (!state->port_number) {
-> +	scope = devlink_resource_scope_get(genl_info_dump(cb)->attrs, &flags);
-> +	if (!scope) {
-> +		NL_SET_ERR_MSG_ATTR(genl_info_dump(cb)->extack,
-> +				    genl_info_dump(cb)->attrs[DEVLINK_ATTR_RESOURCE_SCOPE_MASK],
-
-we have genl_info_dump(cb) 3 times here, let's save the pointer 
-on the stack to make the lines shorter.
-
-> +				    "empty resource scope selection");
-> +		return -EINVAL;
-> +	}
-> +	if (!state->port_number && (scope & DEVLINK_RESOURCE_SCOPE_DEV)) {
->  		err = devlink_resource_dump_fill_one(skb, devlink, NULL,
-> -						     cb, flags, &state->idx);
-> +						     cb, flags,
-> +						     &state->idx);
->  		if (err)
->  			return err;
->  		state->idx = 0;
->  	}
->  
-> +	if (!(scope & DEVLINK_RESOURCE_SCOPE_PORT))
-> +		goto out;
->  	xa_for_each_start(&devlink->ports, port_idx, devlink_port,
->  			  state->port_number ? state->port_number - 1 : 0) {
->  		err = devlink_resource_dump_fill_one(skb, devlink, devlink_port,
-> @@ -420,6 +447,7 @@ devlink_nl_resource_dump_one(struct sk_buff *skb, struct devlink *devlink,
->  		}
->  		state->idx = 0;
->  	}
-> +out:
->  	state->port_number = 0;
->  	return 0;
->  }
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
