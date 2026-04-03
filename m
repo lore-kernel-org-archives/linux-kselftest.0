@@ -1,109 +1,210 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AC93CB2C1;
-	Fri,  3 Apr 2026 15:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4C93BC666
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 15:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775230313; cv=none; b=UmP39bAAVfBXR30mtBXOPxXyVlu+zHzHu1JFFNYHTJ4yguMnZpIqvjl5frddI/olp1d0kvoMK+hUQeJPpbsfoXGhUMkj9dBxTqKMrnfmRhTH4rDp1C3QLeU/9erS6U0ZpJh+QegDxk7sk2xzyTgThGpBtrSQLxcShVVinwTTo1w=
+	t=1775230633; cv=none; b=G7mSbWfIfnNR+9Y/WdzfFp1AlsfYr67XknZO+B1EVJNDUlUrKwz3F+3/4iKA/CCgedkoxl8byKaCM8AJZJadbEWhA9gP73AqJIDkZm9iqLJmFOS5lGbyvz4VeMK+HOj8HKLTu3VqAULnUb1e+Q07iBOpmZDkjdKrpAdrM9eYHMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775230313; c=relaxed/simple;
-	bh=Mp3ntR/iCOy4NhXi36GY202qgx9qFfoM+yk8F8xJzuI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=CF6fnAJyhVkKOg/Pk2/F5p2Xhnn2hmkuX9UA5g01t2UDlcMNFmnbNxGumFp0vc7bwYLjAp8qFfcVzCtQbbVZcYzHouPm6hEdC5a88+xn9P/GA/UrUkz9rB7iXLcftbbfeXMhZXLOs2VNJcUs+6ooYXOTqAnFkdzGzrhK/pxHEic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FyPlX8x/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775230633; c=relaxed/simple;
+	bh=YZ9x9LlQUdaWzhrdGk3G6BEBa/K0v+Vx0017f8NKskQ=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=ro8k3ybvNKnc7XOw4diWQvltSEbCNYS+/iVcN/LeLtRgQCbVUpJEEETWlfoEHRo1TDhtlkaPWyzJNBrIpkvVt7uSTNLyrifh9jtoSIPrvlUTC2NiZbfewafqHodz57/ID8lfAhSAHpjTwEcTPSsM5tCTh/nHHTMtkyvpP0h2cvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X65IIqZe; arc=none smtp.client-ip=74.125.224.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FyPlX8x/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A89BC4CEF7;
-	Fri,  3 Apr 2026 15:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775230312;
-	bh=Mp3ntR/iCOy4NhXi36GY202qgx9qFfoM+yk8F8xJzuI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=FyPlX8x/gn+eo5S1Rg7TwWp8VogVOaiYXTlhKqr3DbR6o3KJGZdB19twzdr9LdnIo
-	 lYfQJAfM1Cne3fHPRAHOgAMYEnGkPHwjGYxu9kninU8llAPDyVCpFFAf9uaag69F4+
-	 1XoxXp6ZEH5se8q8V/9jSADRdDbTWwXc6UY0yp6TnC4deKF/adO1Dfs0J69JP5xP9e
-	 OZpgSyvpzFzMiAtUIQseh2yMqJrqKTlokHKn/Tsu1uChF6/UUBrTbFWGK0k1l19fL/
-	 nJjio8MpRxD+SHgb9hY5DqRm03/e5IwZB6ArhofNnzi+Gtmvp9zOkMlsbjVvKDmHts
-	 XRkWmIVEX7liw==
-Content-Type: multipart/mixed; boundary="===============6298061062702668847=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X65IIqZe"
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6500040f128so1846340d50.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 08:37:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775230631; x=1775835431; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KpuvJuy/tFtXZE3ikq8tJ0F1YYf2MuYLH559k2dBC5U=;
+        b=X65IIqZeuVffj6BLMsybZKW9d7TTWuCd9/LMImdp7VgmNlg3MlwLn6+In6wGr3V2lK
+         jiFdCpcDAcyFszfFS45ZN5nC1p6kRYNNlo2uTKDV3c4IQIO9Nr31gFDvgAJ1WortHWaG
+         0Gzo9EqJRijdNOjpmRVpHiQqWQi3trkclj9lvI6eSLf+7AdIGqmifqULjOWAKIf435iI
+         LEQ8Ns/Cp7jDXaMRNtVt6obbsZhX4wU7mp13Vj6fC/fihrv+b/AGYZrwASnaWt/ZHbGd
+         0wTpb9oeFg5fBZ2ZzD7f/03qyxklPCHg8swgOC+t26uiDUaKTzDsBvRoO0aQ8gdvYqK2
+         Eo+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775230631; x=1775835431;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KpuvJuy/tFtXZE3ikq8tJ0F1YYf2MuYLH559k2dBC5U=;
+        b=eG0vpoQbSxr1S7kOI+t0OWbR+z23JSF5kpW35+oJiSm+zJCfIskoH3MxKaUiIImwre
+         NjFrm3B+L7Q15ufEhNmUL4ji2kdk9R0eSIUufWrycTUYg0pzThNWdNh7qHYUhs+Jp6iG
+         /EL9Y6qN9xmFlEUlaisC0KrraYSeA11LrLtd0BGTuNN/f3Ol65sJXcGtKEWc6ag8pEll
+         PsAa6nhDlmlirsGWaQqcdYQOKpcvWTCoArRd6pzIhyhG8aOZCCdd24hcOghQz0PrxuhZ
+         5v2V0Z13VWktrTgT0JP2tJaEhS6htvkFWstVYDRnukpUpEUFMEbW4eFz1HhXTdoL3gRy
+         An4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXM2m2Q3cw86u3vAGExWLtCRWDcEjG+WU25E6YTTxgw/Awli3UdEnRH4u8n1aPX3ji3hmLxzLHgfqdbqJd8Nyg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyxwpw6tv3km45ssN06EmVVBdvl1bKQfaFWk3qaxeeDM9TTwHxF
+	w8zO+7ABVbLjlXm8ujN4HCkr1mKmTpLd/PJCifX/UGQwcY3PojulTpWk
+X-Gm-Gg: AeBDiesCA1aHUsAqIk6ofWjHKYV0dSBXrLeYghVFq/Joo86gWDjWW5cc+gMFEiR81kX
+	3F06lrBntCtPDWDWks3ZDK871TjxygTDXJ3dfqFm5ekKtrniWpcFnNctBBzjPp8SJ4pTNABIz0D
+	bWzeOE/vG2Z7KLHerAOpGEltBcb2vXjyNMqxTfxZN3SnKzwwPhxWPZo9tfwBQo0UNxkSN8Qp87Y
+	jQe1Au78Fb+pdchxMxXuXdpeZi8Rjs4a2MHim1AFjM8YtHNQL/HUyek+gh/+pek1fxCLaWxEksE
+	CL2JVVSKo+I5RmMs3CseXlTRsiKjtDO2mLHxFDgsERHD83LDhNGP1U8YxXyYwrLrIs5IhGOXBDc
+	gpTvHZSBRP9jskO8Y5Fs5rUAvuvr4g8UD3LK8oxZWUfZPoBwKhgcrZHbytwPhhHHtWkTjc3oCnd
+	PrtccQjg9vp55UoS8zKm5H3dC8iY4aD4Fb/zkYMp9rOSOl8wxapRb1HeFn5qpl6jjUsx/JrYwcf
+	iV6
+X-Received: by 2002:a05:690c:dd4:b0:79a:b75e:1509 with SMTP id 00721157ae682-7a4d6158cbamr36144717b3.43.1775230631157;
+        Fri, 03 Apr 2026 08:37:11 -0700 (PDT)
+Received: from gmail.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7a3709075besm22668317b3.25.2026.04.03.08.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 08:37:10 -0700 (PDT)
+Date: Fri, 03 Apr 2026 11:37:10 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Joe Damato <joe@dama.to>, 
+ netdev@vger.kernel.org, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: andrew+netdev@lunn.ch, 
+ linux-kernel@vger.kernel.org, 
+ willemb@google.com, 
+ Joe Damato <joe@dama.to>, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.fd5e56c96ff3@gmail.com>
+In-Reply-To: <20260402232203.2004496-4-joe@dama.to>
+References: <20260402232203.2004496-1-joe@dama.to>
+ <20260402232203.2004496-4-joe@dama.to>
+Subject: Re: [net-next 3/3] selftests/net: Test PACKET_AUXDATA
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <dc2906a8892a559e96eb401e2c334cd01e61027ce9c280a53ab890eed906de36@mail.kernel.org>
-In-Reply-To: <20260403-selftests-bpf_misconfig-v2-6-f06700380a9d@suse.com>
-References: <20260403-selftests-bpf_misconfig-v2-6-f06700380a9d@suse.com>
-Subject: Re: [PATCH v2 06/10] selftests/bpf: Allow test_progs to link with a partial object set
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  3 Apr 2026 15:31:52 +0000 (UTC)
-
---===============6298061062702668847==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6a3835a58f87..ca64a7678dfe 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
+Joe Damato wrote:
+> Extend the packet socket selftest, adding a recvmsg path, to test
+> PACKET_AUXDATA. Check basic attributes of tpacket_auxdata.
+> 
+> Signed-off-by: Joe Damato <joe@dama.to>
+> ---
+>  tools/testing/selftests/net/psock_snd.c  | 57 ++++++++++++++++++++++--
+>  tools/testing/selftests/net/psock_snd.sh |  5 +++
+>  2 files changed, 59 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/psock_snd.c b/tools/testing/selftests/net/psock_snd.c
+> index 7bbce274b9f0..682e0afe364d 100644
+> --- a/tools/testing/selftests/net/psock_snd.c
+> +++ b/tools/testing/selftests/net/psock_snd.c
+> @@ -40,6 +40,7 @@ static bool	cfg_use_qdisc_bypass;
+>  static bool	cfg_use_vlan;
+>  static bool	cfg_use_vnet;
+>  static bool	cfg_drop;
+> +static bool	cfg_aux_data;
+>  
+>  static char	*cfg_ifname = "lo";
+>  static int	cfg_mtu	= 1500;
+> @@ -281,9 +282,26 @@ static int setup_rx(void)
+>  
+>  static void do_rx(int fd, int expected_len, char *expected)
+>  {
+> +	char cmsg_buf[1024] = {};
+> +	struct msghdr msg = {};
+> +	struct iovec iov[1];
+>  	int ret;
+>  
+> -	ret = recv(fd, rbuf, sizeof(rbuf), 0);
+> +	if (cfg_aux_data) {
+> +		iov[0].iov_base = rbuf;
+> +		iov[0].iov_len = sizeof(rbuf);
+> +
+> +		msg.msg_iov = iov;
+> +		msg.msg_iovlen = 1;
+> +
+> +		msg.msg_control = cmsg_buf;
+> +		msg.msg_controllen = sizeof(cmsg_buf);
+> +
+> +		ret = recvmsg(fd, &msg, 0);
+> +	} else {
+> +		ret = recv(fd, rbuf, sizeof(rbuf), 0);
+> +	}
+> +
+>  	if (ret == -1)
+>  		error(1, errno, "recv");
+>  	if (ret != expected_len)
+> @@ -292,6 +310,31 @@ static void do_rx(int fd, int expected_len, char *expected)
+>  	if (memcmp(rbuf, expected, ret))
+>  		error(1, 0, "recv: data mismatch");
+>  
+> +	if (cfg_aux_data) {
+> +		struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
+> +		struct tpacket_auxdata *adata;
+> +
+> +		if (!cmsg)
+> +			error(1, 0, "auxdata null");
+> +
+> +		if (cmsg->cmsg_level != SOL_PACKET)
+> +			error(1, 0, "cmsg_level != SOL_PACKET");
+> +
+> +		if (cmsg->cmsg_type != PACKET_AUXDATA)
+> +			error(1, 0, "cmsg_type != PACKET_AUXDATA");
+> +
+> +		adata = (struct tpacket_auxdata *)CMSG_DATA(cmsg);
+> +
+> +		if (adata->tp_net != ETH_HLEN)
+> +			error(1, 0, "cmsg tp_net != ETH_HLEN");
+> +
+> +		if (adata->tp_len != expected_len)
+> +			error(1, 0, "cmsg tp_len != %u", expected_len);
+> +
+> +		if (adata->tp_snaplen != expected_len)
+> +			error(1, 0, "cmsg tp_snaplen != %u", expected_len);
+> +	}
+> +
+>  	fprintf(stderr, "rx: %u\n", ret);
+>  }
+>  
+> @@ -312,6 +355,10 @@ static int setup_sniffer(void)
+>  		if (setsockopt(fd, SOL_SOCKET, SO_RCVBUF, &one, sizeof(one)))
+>  			error(1, errno, "setsockopt SO_RCVBUF");
+>  
+> +	if (cfg_aux_data)
+> +		if (setsockopt(fd, SOL_PACKET, PACKET_AUXDATA, &one, sizeof(one)))
+> +			error(1, errno, "setsockopt PACKET_AUXDATA");
+> +
+>  	pair_udp_setfilter(fd);
+>  	do_bind(fd);
+>  
+> @@ -322,8 +369,11 @@ static void parse_opts(int argc, char **argv)
+>  {
+>  	int c;
+>  
+> -	while ((c = getopt(argc, argv, "bcCdDgl:qt:vV")) != -1) {
+> +	while ((c = getopt(argc, argv, "abcCdDgl:qt:vV")) != -1) {
+>  		switch (c) {
+> +		case 'a':
+> +			cfg_aux_data = true;
+> +			break;
+>  		case 'b':
+>  			cfg_use_bind = true;
+>  			break;
+> @@ -436,7 +486,8 @@ static void run_test(void)
+>  		check_packet_stats(fds);
+>  	}
+>  
+> -	do_rx(fdr, cfg_payload_len, tbuf + total_len - cfg_payload_len);
+> +	if (!cfg_aux_data)
+> +		do_rx(fdr, cfg_payload_len, tbuf + total_len - cfg_payload_len);
 
-[ ... ]
+Slight preference to instead detect that this is a read not from a packet
+socket and skip the cmsg processing inside do_rx as a result.
 
-> -$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
-> -			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
-> +$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
->  			     $(TRUNNER_LIB_OBJS)			\
->  			     $(TRUNNER_BPFTOOL)				\
->  			     $(OUTPUT)/veristat				\
-> -			     | $(TRUNNER_BINARY)-extras
-> +			     | $(TRUNNER_BINARY)-extras			\
-> +			     $(TRUNNER_TEST_OBJS)
->  	$$(call msg,BINARY,,$$@)
-> -	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-> +	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^ $$(wildcard $(TRUNNER_TEST_OBJS))) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-
-Does this change the link order in a way that breaks GNU ld builds?
-
-Before this patch, $^ expanded to:
-
-    TRUNNER_TEST_OBJS TRUNNER_EXTRA_OBJS BPFOBJ TRUNNER_LIB_OBJS ...
-
-After the filter, the linker saw:
-
-    test*.test.o extra*.o libbpf.a lib*.o
-
-After this patch, the filter over "$^ $(wildcard TEST_OBJS)" produces:
-
-    extra*.o libbpf.a lib*.o test*.test.o
-
-BPFOBJ is libbpf/libbpf.a (a static archive). GNU ld scans archives
-once, left to right, pulling in only the members that resolve symbols
-unresolved at that point. With the new ordering, libbpf.a is scanned
-before any test object is seen, so libbpf symbols referenced
-exclusively by test objects will remain unresolved.
-
-For example, ring_buffer__new() (in libbpf's ringbuf.c) is called by
-prog_tests/ringbuf.c, prog_tests/test_ima.c, and others, but is not
-referenced by any TRUNNER_EXTRA_SOURCES file. With this link order,
-the ringbuf.o archive member is never pulled in and the link fails
-with unresolved symbols.
-
-There is no --start-group or --whole-archive in the link flags, and
-LDLIBS (-lelf -lz -lrt -lpthread) does not provide libbpf symbols.
-
-One possible fix would be to append $$(BPFOBJ) after the wildcard
-expansion in the filter expression, or to place the test objects
-before libbpf.a in the argument list.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23951016185
---===============6298061062702668847==--
+A roundabout way would be using getsockname. Simpler may be just to pass a new
+boolean to do_rx is_psock or os.
