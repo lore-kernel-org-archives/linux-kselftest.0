@@ -1,174 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EAF3D8105;
-	Fri,  3 Apr 2026 19:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92D3350D7F;
+	Fri,  3 Apr 2026 19:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775245240; cv=none; b=G6KUS1kvThzZUYkRKROaA5XlXGCt+y74SvBb40OZTIjo0n3vYRuTMmQxYcRKLLnH625iant5SDnBHD4uG4isML+QPA7cwC6wNTvKgduokTTMH0Rj9+Jdq632yRwijOg674UWqeD4G351XEUlYhZhBftoNTTUPV/UyC8Zf0OibxA=
+	t=1775246399; cv=none; b=jobdYnXIHQWSYj2OCmvUI24CRLWNXoyGq72nr9L4pg+UZ2PgkNW3B50wkTlbOykhwLx6HjZ54Xu8EbfAANSNf5ey7m+yKWcC0A9a6RDLcwlQvCEHZ1NZxsZW+aey9K2Clmsscpliy+Ihb/6UaBq2m3p+cYbaVHy3lsxWWZ0Sgmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775245240; c=relaxed/simple;
-	bh=CUyr5fNZuY4RKq1OLQXkrBMqLq0EWre1SrQk+TC1ABM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ILtYs0gAnqi57qPhJ+O+xRqmNxdU7xUgz3j52w1w1FVnQBzv+yKg3KgezTd7HFxm2KbOWrEsCrKGGv/YpogQwzzluP1MhCV+w7QVmQIsYEbSJGCZQUhK1qHn35YUse+ZnVXuL9GWxfqRolP4/ZmYSOpQDicxG3exNrFaOvH2ie8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dIPziEqe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775246399; c=relaxed/simple;
+	bh=o/ViAgOa4Mt5BFpI6Q+ugyptkTjgB6MinQaYG01hV+0=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=S5dEVlZ5sB/7RVzcgxsUv/g/uHG0ixEnjnIjvlFy2nad91NzBZZPxdGiBq7igGn7043P1Aua2X02oaQEeKpJQTSZ+1HrcxA1e7szJhBIr+fKBNwuvxPjAmQicJv+Otrs7/gwnRlcEs2EMaRVWTWBYZuYJTKs4hDrRVP7HKIhxDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=S5hKRqq5; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dIPziEqe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C21C2BCAF;
-	Fri,  3 Apr 2026 19:40:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775245239;
-	bh=CUyr5fNZuY4RKq1OLQXkrBMqLq0EWre1SrQk+TC1ABM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dIPziEqeVeRPRUf4x4dKXgETATxg/MOMCYRoLEjhgV8QqBul4R0BXSVDkR+Bj4atL
-	 60u03+RgXPzKHlpyTtqMgHuraKDXu1UbtDtkvlz8aA2DPEAgrLXwEafafyB5n1nu5L
-	 GBmrAEGKPzhW5UxwVcfYjCPcob+fgZab75SHf9oMpcvmc1pQg5MFCil3RFvVla1/4b
-	 NHrofvyYG8y52AWHiZJyf1Chrsbs43bQaaFYTuJVTHM+W6Kk363WBZIm1MfMjZdBFp
-	 ZXrfd5PK2CsWXen6CjqDW/aFNZ6ZWw3emXkj8gD+0+zCVSCZJly7hhQaaRy5Roldry
-	 ieEgLRH/JLpqQ==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Usama Arif <usama.arif@linux.dev>
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v2 6/6] selftests/liveupdate: add fallocate test for memfd
-Date: Fri,  3 Apr 2026 19:40:12 +0000
-Message-ID: <20260403194014.3704180-7-pratyush@kernel.org>
-X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
-In-Reply-To: <20260403194014.3704180-1-pratyush@kernel.org>
-References: <20260403194014.3704180-1-pratyush@kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="S5hKRqq5"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6339lP8L3728728;
+	Fri, 3 Apr 2026 19:59:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=OVNyj2
+	Jj76qFM+tO9FJUNvpvUkWT58xHyWuu5jTOYlw=; b=S5hKRqq5XMw7x1MN4VawRp
+	Z55hyQHiaeEd8V7+mrdovCPVhK9AZLZgR7QxeDWpD0p9NhZ9NtFZVXJwJC1XLn85
+	g/1sTH/g4/s17WerFAGL4lMvCu825UEMJWMHv1Irzy5BgzXsODyp3yFtPESlCJwB
+	DvV+ceNOPSSUNjm5hciaunOuZTmii3DZHEPf73p/tp0G9QfuPhwOkz88H+RDSePY
+	YVjUv54OWF2x2qCzx782dU2WRzUaBsVrk689a5dgQSe0b/YeeVm0lHTtNXfuZwXb
+	dEzuVpStxl6qiIgqT2E/weiG8crA+Wa7BE0ttwBLaKkueYfALJHl6Lv7JdbAcROQ
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d64dh14pj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Apr 2026 19:59:39 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 633F5C2N031552;
+	Fri, 3 Apr 2026 19:59:38 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d6uhk75t3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Apr 2026 19:59:38 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 633JxbMV7864898
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 3 Apr 2026 19:59:38 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C21FC58061;
+	Fri,  3 Apr 2026 19:59:37 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E69795803F;
+	Fri,  3 Apr 2026 19:59:32 +0000 (GMT)
+Received: from [9.124.211.212] (unknown [9.124.211.212])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  3 Apr 2026 19:59:32 +0000 (GMT)
+Message-ID: <e8286f08-abcb-4b77-952d-228ee1dbd705@linux.ibm.com>
+Date: Sat, 4 Apr 2026 01:29:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Sayali Patil <sayalip@linux.ibm.com>
+Subject: Re: [PATCH v3 04/13] selftest/mm: fix cgroup task placement and drop
+ memory.current checks in hugetlb_reparenting_test.sh
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1774591179.git.sayalip@linux.ibm.com>
+ <1ac1cac332a692e8d2dd70922bb09c0582340143.1774591179.git.sayalip@linux.ibm.com>
+ <7dadb91c-745d-4fde-8a2b-c141b26823a7@kernel.org>
+Content-Language: en-IN
+In-Reply-To: <7dadb91c-745d-4fde-8a2b-c141b26823a7@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAzMDE3NyBTYWx0ZWRfX5MBkzgzA1UV4
+ qMVrVKeKymhEVQTmw7N8t1ma4JJlMHknnQcknGuiI8QNTP39xAtr9A0tNvfRo15S5zH7H2stqNy
+ r3Dwdf6EQX2DTLHQhu0hTIqKm7pk+AkeSdjJwtv9EepAoU4vtZjlpEvIeD9KHdCnSHOv7ibbdg2
+ ZLc2v54DrDuTH2Pe2vc/SBT5B255nBzZiyIQl8iWjCljzRQcDp+/Fy+8iN5vkQeoTXrPut8A/BR
+ JoxyaGKtj00jjFdZSxVEewYEl1fKY00vyZ/v8RmpFLlDppopnSt/sefB4vv27F+5fGv5+0+PwiG
+ IS/SzkrlkqfuNTgQZ7dE71a/uHUO+DhBBORwmxtD36/6J+IsnaCoNwTjKujO+eQdaAR10VtXE6m
+ S3ygT76rodWUjE4aDxJQmCarHPGkZ4LwLrEQzEkWGkYSb284S1oyiWIVXpb7/bm0MBq1Aqu7309
+ NIt1GrODPAYIZGzEW3g==
+X-Authority-Analysis: v=2.4 cv=QKZlhwLL c=1 sm=1 tr=0 ts=69d01c2c cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=3LRxwzKv8Tv0BEPaKXkA:9
+ a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
+X-Proofpoint-GUID: KVFWCwqj010Fi5fKpLtM7gvpgDBcnRQY
+X-Proofpoint-ORIG-GUID: BSE_BQcmlXWY7GF8pNScHrx-nM-SzM15
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-03_06,2026-04-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0 clxscore=1015
+ spamscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604030177
 
-From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 
-When memory is added to a memfd via fallocate(), it does not get zeroed
-immediately. This is tracked by the absence of the uptodate folio flag.
-Initially, memfd preservation simply saved the folio flags at preserve
-time. This led to a bug, where all writes to un-initialized fallocated
-memory after preserve were lost after live update. This is fixed by
-commit 50d7b4332f27 ("mm: memfd_luo: always make all folios uptodate").
 
-Add a test that fallocates some memory in a memfd, preserves it, writes
-to it. Then in stage 2 it verifies the written content is still present.
+On 01/04/26 19:38, David Hildenbrand (Arm) wrote:
+> On 3/27/26 08:15, Sayali Patil wrote:
+>> Launch write_to_hugetlbfs as a separate process and move only its PID
+>> into the target cgroup before waiting for completion. This avoids moving
+>> the test shell itself, prevents unintended charging to the shell, and
+>> ensures hugetlb and memcg accounting is attributed only to the intended
+>> workload.
+>>
+>> Add a short delay before the hugetlb allocation to avoid a race where
+>> memory may be charged before the task migration takes effect, which
+>> can lead to incorrect accounting and intermittent test failures.
+> 
+> Isn't there still a chance for a race, for example, when running in a VM?
+> 
+Yes, there is still a small race window in the current approach.
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
----
- .../testing/selftests/liveupdate/luo_memfd.c  | 83 +++++++++++++++++++
- 1 file changed, 83 insertions(+)
+I am looking into making this more reliable with a deterministic 
+synchronization mechanism to avoid such timing dependencies.
 
-diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
-index a1e9f34da006..bc6ab063363f 100644
---- a/tools/testing/selftests/liveupdate/luo_memfd.c
-+++ b/tools/testing/selftests/liveupdate/luo_memfd.c
-@@ -43,6 +43,11 @@
- #define PRESERVED_MEMFD_TOKEN 1
- #define PRESERVED_BUFFER_SIZE SZ_1M
- 
-+#define FALLOCATE_SESSION_NAME "fallocate_session"
-+#define FALLOCATE_MEMFD_TOKEN 1
-+#define FALLOCATE_BUFFER_SIZE SZ_1M
-+#define FALLOCATE_DATA_FS_COPY "fallocate_data_fs_copy.bin"
-+
- static int luo_fd = -1;
- static int stage;
- 
-@@ -222,6 +227,84 @@ TEST(preserved_ops)
- 	ASSERT_EQ(lseek(fd, 0, SEEK_END), PRESERVED_BUFFER_SIZE);
- }
- 
-+static void fallocate_memfd_stage_1(struct __test_metadata *_metadata)
-+{
-+	int fd, session;
-+	char *buffer;
-+	struct liveupdate_session_preserve_fd preserve_arg = { .size = sizeof(preserve_arg) };
-+
-+	buffer = malloc(FALLOCATE_BUFFER_SIZE);
-+	ASSERT_NE(buffer, NULL);
-+
-+	session = luo_create_session(luo_fd, FALLOCATE_SESSION_NAME);
-+	ASSERT_GE(session, 0);
-+
-+	fd = memfd_create("fallocate_memfd", 0);
-+	ASSERT_GE(fd, 0);
-+
-+	/* Fallocate memory but do not write to it yet */
-+	ASSERT_EQ(fallocate(fd, 0, 0, FALLOCATE_BUFFER_SIZE), 0);
-+
-+	preserve_arg.fd = fd;
-+	preserve_arg.token = FALLOCATE_MEMFD_TOKEN;
-+	ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_PRESERVE_FD, &preserve_arg), 0);
-+
-+	/* Now write to it after preserving */
-+	ASSERT_GE(generate_random_data(buffer, FALLOCATE_BUFFER_SIZE), 0);
-+	ASSERT_EQ(save_test_data(FALLOCATE_DATA_FS_COPY, buffer, FALLOCATE_BUFFER_SIZE), 0);
-+
-+	ASSERT_GE(lseek(fd, 0, SEEK_SET), 0);
-+	ASSERT_EQ(write_size(fd, buffer, FALLOCATE_BUFFER_SIZE), 0);
-+
-+	daemonize_and_wait();
-+}
-+
-+static void fallocate_memfd_stage_2(struct __test_metadata *_metadata)
-+{
-+	int fd, session;
-+	char *buffer;
-+	struct liveupdate_session_retrieve_fd retrieve_arg = { .size = sizeof(retrieve_arg) };
-+
-+	buffer = malloc(FALLOCATE_BUFFER_SIZE);
-+	ASSERT_NE(buffer, NULL);
-+
-+	session = luo_retrieve_session(luo_fd, FALLOCATE_SESSION_NAME);
-+	ASSERT_GE(session, 0);
-+
-+	ASSERT_EQ(load_test_data(FALLOCATE_DATA_FS_COPY, buffer, FALLOCATE_BUFFER_SIZE), 0);
-+
-+	retrieve_arg.token = FALLOCATE_MEMFD_TOKEN;
-+	ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_RETRIEVE_FD, &retrieve_arg), 0);
-+	fd = retrieve_arg.fd;
-+	ASSERT_GE(fd, 0);
-+
-+	ASSERT_EQ(verify_fd_content_read(fd, buffer, FALLOCATE_BUFFER_SIZE), 0);
-+
-+	ASSERT_EQ(luo_session_finish(session), 0);
-+}
-+
-+/*
-+ * Test that an fallocated memfd is preserved across live update and can be
-+ * written to after being preserved.
-+ */
-+TEST(fallocate_memfd)
-+{
-+	if (cwd_is_tmpfs())
-+		SKIP(return, "test saves data to rootfs, cannot run on tmpfs");
-+
-+	switch (stage) {
-+	case 1:
-+		fallocate_memfd_stage_1(_metadata);
-+		break;
-+	case 2:
-+		fallocate_memfd_stage_2(_metadata);
-+		break;
-+	default:
-+		TH_LOG("Unknown stage %d\n", stage);
-+		ASSERT_FALSE(true);
-+	}
-+}
-+
- int main(int argc, char *argv[])
- {
- 	int expected_stage = 0;
--- 
-2.53.0.1213.gd9a14994de-goog
+I will send a v4 with this improvement.
 
+Thanks,
+Sayali
