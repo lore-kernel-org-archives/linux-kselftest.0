@@ -1,86 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2118E14884C;
-	Fri,  3 Apr 2026 17:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93512DCF57;
+	Fri,  3 Apr 2026 18:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775238423; cv=none; b=ERWtgxCg73F8Aw8rlznFGvkgkW3zFzB7emyCjAXOfIJFFGzGnSgGeYvsSEG5vt82pZVK1lOGku6vUPh6YyE9K0neRTQaxQzx86ZwrUS2apWw2+f4cVD4KPWUMOtragazCEq093L7zb+PY4qeiQHLjCZ13TktoAL6vXBz/dNSJGY=
+	t=1775239523; cv=none; b=gJYBf5zXAbT3xy3Yze1+IQFjk6EezgB4Q7GYZCiYZ8XqisvusElhYRhcwvzuZiRCtQKfqPDBtwfkCk9AQldePnBt2iMAniEJb5CF67Gq2FNsIogb9P3Np96pKeKSMKE8EYKb10aVFOLMpqnXNlsIty4gshv6wU1lkY5PWqQVnm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775238423; c=relaxed/simple;
-	bh=+VwpswqaaiwBaK6+QDNWGhUo7EoQ39AbAVV+PZHtYxk=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=HyUqjTOWFCphbdGhfLXb+UbpOYQHCpzLzKonMSUVdaqM6kWoC5w21QDfR6AqR90DhLDOaBGOnH2ivSRmeJH6dCLB4RFlSlNUTRVxgV8noUZjLdxZ5ATYhQ/to3QwTGX4BEPNsXiTG/ycOZefasr6x6N/j2ENRRfc9etQNqPLvIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QCGuCY3e; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775239523; c=relaxed/simple;
+	bh=ro02FtIJr36x2ibFmDyHfIlKaI44RwN4ZHheO9b6kZA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j1R9wrAdcy+LFiYD4zbI1pqfm6lWIzbZyqGaVvKERCBPflKpRuvXhQjm83CTDjZvMVldCeQMJvlSI2NBEtMg9b/MiZEbuWDWkRh0emT4dCttaTL+PKE6qKm6rvbgMmmDryutHJ+qQ9hZQtTTfz4/l5Tw9iIj66zVwPxPXxP48io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=UeTHbTDS; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QCGuCY3e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89258C4CEF7;
-	Fri,  3 Apr 2026 17:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775238422;
-	bh=+VwpswqaaiwBaK6+QDNWGhUo7EoQ39AbAVV+PZHtYxk=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=QCGuCY3ehFpVJpwa1ZhKEVOkgLwnGiCvMIrF1lkS60M60cbRMiWSaXaKJwPxXMX+y
-	 14v2lJTi1i9uzpYyzz0ye/4dLAmqHSPZv5L1Ztq2fVV0jX0vSLnzk1nezKF1oa5B/r
-	 nReVNeIsB1fY96br2+OIpaoJVjEuzLt2DvZJeyXXCC1FRHEnfnm9Iu4e029cH0jgOE
-	 0d9t9ClKNtPb+4dHTEZhBOUNPPA4K6nWuo+cNYu5NGj/K2rs/jsWdo7t4JxCyunJwD
-	 Cm9uNRVfTrf1GINu+PdlHh4UbFgE1t16+9A2TtaEqoimM3eB/12USMTP7o8+ohe17D
-	 exfqTgw6+tSXw==
-Date: Fri, 3 Apr 2026 11:46:53 -0600 (MDT)
-From: Paul Walmsley <pjw@kernel.org>
-To: Charlie Jenkins <thecharlesjenkins@gmail.com>
-cc: Shuah Khan <shuah@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-    Sergey Matyukevich <geomatsi@gmail.com>, Andy Chiu <andybnac@gmail.com>, 
-    Deepak Gupta <debug@rivosinc.com>, linux-kselftest@vger.kernel.org, 
-    linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] selftests: riscv: Add braces around EXPECT_EQ()
-In-Reply-To: <d79b23d2-f8e8-b92e-cad4-5cbdf7690f12@kernel.org>
-Message-ID: <34fbc75a-ae74-8337-3107-80957707bc8f@kernel.org>
-References: <20260309-fix_selftests-v2-0-9d5a553a531e@gmail.com> <20260309-fix_selftests-v2-2-9d5a553a531e@gmail.com> <d79b23d2-f8e8-b92e-cad4-5cbdf7690f12@kernel.org>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="UeTHbTDS"
+Received: from [IPV6:2601:646:8081:9481:131a:c8a1:d20e:30b7] ([IPv6:2601:646:8081:9481:131a:c8a1:d20e:30b7])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 633HWgxg3320304
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 3 Apr 2026 10:32:43 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 633HWgxg3320304
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026032601; t=1775237566;
+	bh=e3cR/vToF5Ce/MEbtXk/yw4r80dGioZbyZEkOk9IysM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UeTHbTDSW7NXOxSqySW1Fe9AXp/XbsTTuQ7PecZRfRcXUHUIq0U5C3aovkkizjDpG
+	 DWGSm+LGnHY9TJZQqTIVYPg6fJM8K8IVTlnaSolp1Z90hw224PFQXFsjuXkPi95szg
+	 P9gnDHvPbCAlY32pirFka5ovuiS2unXtMwk1GNZBpwyKilk6kuvWM9NUtPapyPP5Uv
+	 IIUp1Nhbz02EdY+bMV8FpsgOKUPN0c5FKZTBtw/49EbwnQqUaeHkoMAIBNOvss0CC+
+	 Fp5Lh9cNjXOit8lwnI8ZhfrUrPmnQ/a7LgOcOKSW35KvkflWDjM6AZeqFgtCxzP8Rc
+	 VX1omFB5tVVeQ==
+Message-ID: <9e27aab2-7975-4f5f-b952-90e30be26caa@zytor.com>
+Date: Fri, 3 Apr 2026 10:32:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2069827645-1775238422=:751248"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] selftests/x86: Fix sysret_rip assertion failure on
+ FRED systems
+To: Andy Lutomirski <luto@kernel.org>, Xin Li <xin@zytor.com>
+Cc: Yi Lai <yi1.lai@intel.com>,
+        "Peter Zijlstra (Intel)"
+ <peterz@infradead.org>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Khan Shuah <shuah@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, yi1.lai@linux.intel.com
+References: <1D8D9EE4-D652-4E09-86C2-2D3FAB151100@zytor.com>
+ <B916BEC6-D778-46FF-8271-D6BE6EBD042B@zytor.com>
+ <C318F823-C3B9-49D1-8048-C57E34538F4D@zytor.com>
+ <bd0caa85-f92c-4c06-ba8a-0b3a80f00f5b@app.fastmail.com>
+Content-Language: en-US, sv-SE
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <bd0caa85-f92c-4c06-ba8a-0b3a80f00f5b@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-2069827645-1775238422=:751248
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Fri, 20 Mar 2026, Paul Walmsley wrote:
-
-> On Mon, 9 Mar 2026, Charlie Jenkins via B4 Relay wrote:
+On 2026-04-02 06:21, Andy Lutomirski wrote:
 > 
-> > From: Charlie Jenkins <thecharlesjenkins@gmail.com>
-> > 
-> > EXPECT_EQ() expands to multiple lines, breaking up one-line if
-> > statements. This issue was not present in the patch on the mailing list
-> > but was instead introduced by the maintainer when attempting to fix up
-> > checkpatch warnings. Add braces around EXPECT_EQ() to avoid the error
-> > even though checkpatch suggests them to be removed:
-> > 
-> > validate_v_ptrace.c:626:17: error: ‘else’ without a previous ‘if’
+> I don't really agree.  For quite a few years now, we've tried to make the exit path uniform, and we have this logic in syscall_64:
 > 
-> That's annoying.  Can't the macro body be wrapped in do { ... } while (0); 
-> instead, rather than adding these permanent checkpatch warnings?
+>         /* SYSRET requires RCX == RIP and R11 == EFLAGS */
+>         if (unlikely(regs->cx != regs->ip || regs->r11 != regs->flags))
+>                 return false;  <-- fall back to IRET
+> 
+> and this is not just an aesthetic thing -- it allows us to have deliver signals and implement things like sigreturn without needing to track extra flag bits that mean "well, actually, we're in the syscall *code* but we're not returning from a syscall any more".  We had that a long time ago, and it was extremely difficult to understand and maintain.
+> 
+> So, on current kernels and kernels going back, I dunno, 10 years (I didn't try to dig out the git history, but I did write much of this code...), the semantics have been that we return to usermode in a state that matches pt_regs as precisely as we can arrange.  For the one case where we have a very longstanding divergence between entry and exit regs, we have orig_ax.
+> 
+> So it would be at least a fairly large maintainability regression to make the non-FRED SYSCALL behavior modify rcx and/or r11 on exit.
+> 
+> Now we have FRED.  Sure, it would be nice to remember the entry RCX and R11, but if we want to avoid the footgun where the effect of SYSCALL is different on FRED and non-FRED hardware, then we need the context after entry completes to have regs->rcx == regs->rip and regs->rcx == regs->flags (or perhaps RCX and R11 differently poisoned, but that seems a bit silly).
+> 
+> If we really want to have the option to fish the original rcx and r11 out from somewhere or perhaps to have extra-bonus-efficient many-parameter syscalls (I'm not sure why), then we could add orig_rcx and orig_r11.  Or we could invent a time machine and fix SYSCALL when it first came out.
+> 
 
-I guess you haven't had the chance to take a look at this.  Or maybe you 
-took a look at the kselftest harness macro mess and just decided not to 
-say anything ;-)  I did look, after not hearing back, and the way those 
-macros are used would make it a big and painful lift to straighten out - 
-definitely not something for the -rc time frame.
+I certainly see what you're saying. I still don't like the idea of clobbering
+registers "just because" for this reason and more...
 
-So in the short term, I'm planning to take this as a fix to deal with the 
-immediate issue.
+	-hpa
 
-checkpatch.pl clearly needs to be patched to assume that these kselftest 
-harness macros don't follow the rules.  Care to take that on?
-
-
-- Paul
---8323329-2069827645-1775238422=:751248--
