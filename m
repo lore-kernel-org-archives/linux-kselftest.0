@@ -1,143 +1,127 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6EA273F9
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Apr 2026 07:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC95E37C913;
+	Fri,  3 Apr 2026 08:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775202740; cv=none; b=GeInnVKDMGggfTSSNW369fLRs3X4EiOvn7gs8w428YUsRipyeOlyJKG6qworQkTJh567Rkf0PZZnBDjmFbW+YDgFmL8wNV7IRBhAmaxROq9KRfxbN79iMYPj3udy3F39o8qGFT6kPwmwoXPOt9eDOtu6oc29prkyg0tpZqRjIVs=
+	t=1775205605; cv=none; b=f5mQwKeAfT7YMLJCoU2KE+yLT7tUdSJWDptT5Y8LitjK/D0mHjaLvWmMOwAnyzMmP1zzPrju/LdcWwzNLG/GMSAAAuVyT+ZZZsb05ejpLRDGIsE5YrrzL/H2vPXmBpDVi8wwmRxWNaK7vpdn7N9t5gQLf5tThaCEtEcjGvTrF3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775202740; c=relaxed/simple;
-	bh=OBpaZEE22lcXZcmCVd7Uv4GpMiXDbuH6DCx2uQqXPSk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YEPLtGJMZomz7JvfFMwiI0H3IYFw5tTZwnsne6dkL5eQQKFTSY7gIMG7uXYqh2gN2Ek8S67JoOYVVhtrUV3DTUP3p9HQ+wsP5VLTtGT8Bl56ph8a+pm9oniENWazycLvm4qbvTSuwnDN01yC+zXMCpBgOwNlyDIXuYczF1RQsDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Hfw/T8mk; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1775205605; c=relaxed/simple;
+	bh=4NpuTgtQubgd0Goa0gz+SlCjolrad5ID45WJmtv8lns=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a2ABJbA+3oO9xsUl8f5FjvuRHtg1flumhCb5UwR1XiAvXZFfWKZFMIOmxLzV88RxB08repfl/1YwSWFC5G4oaKGp1Gf4C7ok6c+2vciH96nH2JL/1RwS4qAbiLnO1GtQqfXsIfy9gpDQ2gbrpK9tpdpyJCTVNpWYhlURb2vf0u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hpAz6Hcc; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Hfw/T8mk"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 5D1A4C59F57;
-	Fri,  3 Apr 2026 07:52:47 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7CCD7603C1;
-	Fri,  3 Apr 2026 07:52:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AF802104502AB;
-	Fri,  3 Apr 2026 09:52:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1775202734; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=l2tKqb2cP8dgE3Jxvi84X6u600OhvCUQw7yoh5rEaXU=;
-	b=Hfw/T8mk+G1OivmviRmK2FPteJEYnDzfJ0ERP907qXaTRLR5fkj3iAWWTToGv9+qaV7biN
-	cWD3Cg1V4XZ9riLZFSK+jPYyZXB4y9K9oExToeVTjGo0vhkuJ43rAN0mYsvvhDVElbdhps
-	LKn+lpA+4FLzLcPQnMCYKCmgqndEuw2dbBW2vKLlmfMGarb4fJzSqCZ9AsqIvRTK19dBzi
-	w/ymb2fZV7Pro0u3Hnc1DQpF2ZzA7gHi9xsBrH1rrV9dnvzcs9xO+AX92F/QnOf1oEdnCM
-	Z8FxbA+/dB3M4YBosn3dUvXbjoabHa2guMx5dapakJrMQwDQbQkXOhsL3JecbA==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Fri, 03 Apr 2026 09:52:06 +0200
-Subject: [PATCH bpf-next] selftests/bpf: remove unused toggle in tc_tunnel
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hpAz6Hcc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775205604; x=1806741604;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4NpuTgtQubgd0Goa0gz+SlCjolrad5ID45WJmtv8lns=;
+  b=hpAz6HccwDQ3GehYy70eoCg2cmKpiUf98d+C4Y2ZnJ9+7Q/EaE71NQ5n
+   Qy2w+7zfuA5O9glQO6mGIcSoMNs+OL4O26sfpLFUHESReaDDiY5IV3dnI
+   F1Op0aQP9TiK9njez8NnpviLtN2kxUCM1Kr8U5VC0msbbCgxfXmQiFwe0
+   TJtN0ic9tMfHTCObQx+C1fEhlVlNGKcNQF5Fgf+b3EX+xiOP4rTxM4H+6
+   ic4YhWijt2h6+r96DxJMF4+rIfQyQaS/lV3XS0TymcaAT9zJ6kYwVhV3G
+   MW6M9xk+zZfpOtuFTGJQFT/mYb+HM7wvums1lS7Mg/G1W+EMT853YFe8h
+   w==;
+X-CSE-ConnectionGUID: n/obfpR/SP6/bOShlJFT3A==
+X-CSE-MsgGUID: ScahsEkiQ42lp0XCjtmaig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="76156553"
+X-IronPort-AV: E=Sophos;i="6.23,157,1770624000"; 
+   d="scan'208";a="76156553"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 01:40:02 -0700
+X-CSE-ConnectionGUID: iSOUjhXaQa+Zvz7mT/XTYQ==
+X-CSE-MsgGUID: YTH3wLz/SV6dN90yKBKubg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,157,1770624000"; 
+   d="scan'208";a="220570282"
+Received: from lkp-server01.sh.intel.com (HELO 064ad336901d) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 03 Apr 2026 01:39:57 -0700
+Received: from kbuild by 064ad336901d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w8a4H-0000000011b-3VXz;
+	Fri, 03 Apr 2026 08:39:53 +0000
+Date: Fri, 3 Apr 2026 16:39:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Yosry Ahmed <yosry@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v6 01/10] KVM: x86: Define
+ KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+Message-ID: <202604021052.kPiiRT2h-lkp@intel.com>
+References: <20260326174944.3820245-2-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260403-tc_tunnel_cleanup-v1-1-4f1bb113d3ab@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMWwrCMBAAr1L220D6oEqvIlKSdbeulDXkIYXSu
- xv1cxhmdkgUhRJMzQ6R3pLkpRXaUwP4cLqQkXtl6Gw32sH2JuOciyqtM67ktATj2faOB77gGaF
- 2IRLL9ntewQc2SluG29+k4p+E+buE4/gAd2mYTH8AAAA=
-X-Change-ID: 20260403-tc_tunnel_cleanup-bf03af4f8c7c
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.0
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260326174944.3820245-2-jmattson@google.com>
 
-tc_tunnel test is based on a send_and_test_data function which takes a
-subtest configuration, and a boolean indicating whether the connection
-is supposed to fail or not. This boolean is systematically passed to
-true, and is a remnant from the first (not integrated) attempts to
-convert tc_tunnel to test_progs: those versions validated for
-example that a connection properly fails when only one side of the
-connection has tunneling enabled. This specific testing has not been
-integrated because it involved large timeouts which increased quite a
-lot the test duration, for little added value.
+Hi Jim,
 
-Remove the unused boolean from send_and_test_data to simplify the
-generic part of subtests.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+[auto build test ERROR on 3d6cdcc8883b5726513d245eef0e91cabfc397f7]
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-index 23b5c522ea9f..1aa7c9463980 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-@@ -206,18 +206,13 @@ static void disconnect_client_from_server(struct subtest_cfg *cfg,
- 	free(conn);
- }
- 
--static int send_and_test_data(struct subtest_cfg *cfg, bool must_succeed)
-+static int send_and_test_data(struct subtest_cfg *cfg)
- {
- 	struct connection *conn;
- 	int err, res = -1;
- 
- 	conn = connect_client_to_server(cfg);
--	if (!must_succeed && !ASSERT_ERR_PTR(conn, "connection that must fail"))
--		goto end;
--	else if (!must_succeed)
--		return 0;
--
--	if (!ASSERT_OK_PTR(conn, "connection that must succeed"))
-+	if (!ASSERT_OK_PTR(conn, "connect to server"))
- 		return -1;
- 
- 	err = send(conn->client_fd, tx_buffer, DEFAULT_TEST_DATA_SIZE, 0);
-@@ -391,7 +386,7 @@ static void run_test(struct subtest_cfg *cfg)
- 		goto fail;
- 
- 	/* Basic communication must work */
--	if (!ASSERT_OK(send_and_test_data(cfg, true), "connect without any encap"))
-+	if (!ASSERT_OK(send_and_test_data(cfg), "connect without any encap"))
- 		goto fail;
- 
- 	/* Attach encapsulation program to client */
-@@ -403,7 +398,7 @@ static void run_test(struct subtest_cfg *cfg)
- 		if (!ASSERT_OK(configure_kernel_decapsulation(cfg),
- 					"configure kernel decapsulation"))
- 			goto fail;
--		if (!ASSERT_OK(send_and_test_data(cfg, true),
-+		if (!ASSERT_OK(send_and_test_data(cfg),
- 			       "connect with encap prog and kern decap"))
- 			goto fail;
- 	}
-@@ -411,7 +406,7 @@ static void run_test(struct subtest_cfg *cfg)
- 	/* Replace kernel decapsulation with BPF decapsulation, test must pass */
- 	if (!ASSERT_OK(configure_ebpf_decapsulation(cfg), "configure ebpf decapsulation"))
- 		goto fail;
--	ASSERT_OK(send_and_test_data(cfg, true), "connect with encap and decap progs");
-+	ASSERT_OK(send_and_test_data(cfg), "connect with encap and decap progs");
- 
- fail:
- 	close_netns(nstoken);
+url:    https://github.com/intel-lab-lkp/linux/commits/Jim-Mattson/KVM-x86-Define-KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT/20260330-195326
+base:   3d6cdcc8883b5726513d245eef0e91cabfc397f7
+patch link:    https://lore.kernel.org/r/20260326174944.3820245-2-jmattson%40google.com
+patch subject: [PATCH v6 01/10] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260402/202604021052.kPiiRT2h-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260402/202604021052.kPiiRT2h-lkp@intel.com/reproduce)
 
----
-base-commit: 9ebb4fa90266705741534924eac62d6f03895fea
-change-id: 20260403-tc_tunnel_cleanup-bf03af4f8c7c
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604021052.kPiiRT2h-lkp@intel.com/
 
-Best regards,
---  
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+All errors (new ones prefixed by >>):
 
+   In file included from arch/x86/kvm/svm/svm_onhyperv.c:11:
+>> arch/x86/kvm/svm/svm.h:622:4: error: call to undeclared function 'kvm_check_has_quirk'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     622 |                 !kvm_check_has_quirk(svm->vcpu.kvm,
+         |                  ^
+   In file included from arch/x86/kvm/svm/svm_onhyperv.c:12:
+   In file included from arch/x86/kvm/svm/svm_ops.h:7:
+>> arch/x86/kvm/x86.h:429:20: error: conflicting types for 'kvm_check_has_quirk'
+     429 | static inline bool kvm_check_has_quirk(struct kvm *kvm, u64 quirk)
+         |                    ^
+   arch/x86/kvm/svm/svm.h:622:4: note: previous implicit declaration is here
+     622 |                 !kvm_check_has_quirk(svm->vcpu.kvm,
+         |                  ^
+   2 errors generated.
+
+
+vim +/kvm_check_has_quirk +622 arch/x86/kvm/svm/svm.h
+
+   618	
+   619	static inline bool l2_has_separate_pat(struct vcpu_svm *svm)
+   620	{
+   621		return nested_npt_enabled(svm) &&
+ > 622			!kvm_check_has_quirk(svm->vcpu.kvm,
+   623					     KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT);
+   624	}
+   625	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
