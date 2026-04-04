@@ -1,117 +1,270 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774FB21D3CC
-	for <linux-kselftest@vger.kernel.org>; Sat,  4 Apr 2026 01:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775266442; cv=pass; b=R7KuCZe4aGfFCMfod6/t45JZIrObjFGE1X5oW9dBT/fhJ/RoKz3NyjFB865D1+J3yufDYYtS1bQeN5OYjA6Ta9Q59HJZZWFe+k7Oi8ZHaMLVpl6WsCpz1hnjxLWK4F9/XBWccaVYWY2aeboZjnBC6+AohitJeawhEKPKrngxZJs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775266442; c=relaxed/simple;
-	bh=tACdfuNvuecVdLWS0HJWivNtfxvEwyjMHCX4AbXRuBo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cdLTb6RTaUm/jFKb0BarbsH7cm/2/EhlZc6p1jar4pROISrQVshrTW1IlJ0KxqCeeOEX+ksgOgXLnuJVMgthcGWp0o2FJExMtUGKxQSPeI1I1tWv0zUYNEg9WEtHIShsOWfK9SIwwia1ITst+iK0rF12mjcgFeSB5oNS7GrFEyY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KMMPhGss; arc=pass smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E4023EABA;
+	Sat,  4 Apr 2026 01:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775267807; cv=none; b=jcEl0E68oQ72URg5rO5JzqcwWzPa7kc5CqdPOsapS2X1QEoZOZze3otd3P7Inc8NRUJENJCERVr3UeU2E6tYDUoOtbon/d3ds2fWI30V/coOFyOcEPdNqQMxbVwSp+NBLyf7BJVs5JnW1nvg3CbDvwTcZMbD7cu/6EgG++bmz2w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775267807; c=relaxed/simple;
+	bh=fK5XQeBQzWMAEfkpexHViEcwK3WoZrQhjXaLzGSiMDA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AvZADETKkbEywa8iM6k2f+VT3OupIZ7KQs/Un4SDedaySYkqzqGFHy14pI+Vg24ITXnU1dV+CdjGQBu8Xu1i1UwFbYxAawMQ3Dbt5m+Eun8OSakROUsop3ya5wuWxLhlyOlDoSo5/CHhhu4eCXCXbSiePNoWBuIqvrQjGgi5100=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WddOZric; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KMMPhGss"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-66ba6d3dab3so15916a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Apr 2026 18:34:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775266440; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HqceP63K4RYg4QEMB1T7LqQAkRV5wO+8vPHR/fuSb3lOH1UoQdBfqg+lmqPnu4A8Wd
-         DihW9zLF/A52dedcG9/sdUcjd4TtA9maLF9aCFHP5seXSbnnvINAb8WyKGqBvP5OP9s2
-         qy7hh2XAE6b7bpqn5jVDfLdVoskzY8m5l0lv4WD3KY8rdLQ+uyJ4v0piLLPgts5Trttn
-         ivoTryUorMFq7NKtxd9YpLILy51+Nj38ziNVoWkErdW1YMn4qxwJuAqTIw9ELX0fXYuH
-         2yetx2y61cPtYVyrndwaFzHFO6dsIUqYitp5eLFWFE0qEyZTMm3+s2qmcenhbDK/DFIT
-         q9Pg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tACdfuNvuecVdLWS0HJWivNtfxvEwyjMHCX4AbXRuBo=;
-        fh=2xUAf8jSaDLuxD0ZQIuvw1P1L+sw0d760KdsSXS81rk=;
-        b=gp2rQP1+Q07gXOVCXW7SNeIiFQwb7nNMzSHnCXSFmmvS3tFcMFeNa7U7VWjT4yY+ec
-         utts3XIY/rBQxg3ullcopLFFdE1mBCRgXR8DXZiVbcq+7wIMMJuZNa+5C2sy3Vg56yxR
-         ozcVjiVKNBQqBUmgetb9HFREhbspWsxVYDfYue4+B6RebK0zy218qfYCs8zu0UHLYfnv
-         P149tPT3N4EGMjDliuhdgP6cJBhvpYV1nkL5LAzGPDBElPtv8W4wrYc2QkZyx7SyfkLE
-         jj1Qs1B6OhAzGZ3GBrfKPZBtK3srqS9pxIGRK1r7kiLrUzSfGinxJkwa8bGRZlMKMg1U
-         7Rqg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775266440; x=1775871240; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tACdfuNvuecVdLWS0HJWivNtfxvEwyjMHCX4AbXRuBo=;
-        b=KMMPhGss9evwWTfp0uVDdTvVCAW8QA2DVFc0U65NWgxCMwNinxzMqu9UTa7DHpNpiz
-         zd8WtzodUw4A8ppaS+1w+dcVgFxFswO6Vqftp2uobSgDGrlp3W/vT/aFPp/r2RmjE1pc
-         s8RE0bT79R5TXcfxZw6JNPbHk3fRfnT0hOwDbqwGTVJ0zJnEgGQYRl9T+vOWXNKnDrDr
-         +5YD9sxJsIO6KATqkk7XsE+7uWbmwDAZbZlfmL6le9Styyww2XraYuDaVdL93DvHxW9Q
-         HLgZhtP9VOVBHK8qlP/DT+yrQyLji9PA1UcXXss7K6c+flZuV4HZ4+VkZslIVN1T/wg1
-         hzGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775266440; x=1775871240;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tACdfuNvuecVdLWS0HJWivNtfxvEwyjMHCX4AbXRuBo=;
-        b=piGEuyOXwfV6/mc7VMcxpK8ScodayU6a3MjuA9fZ4F7DsdAoDFd+Igp+H3by8J5rFs
-         iVFtZxQVVDqAjG5HfxyzwN+IuqDHq8clwDxdTN3fJvhB6zY3ZQ+cfuaVBeYa1u7Sfe5q
-         LKn/2Zf7jW11EMOhyvGOY9mfBg6Wu60QNY7c28f6J0OE8/MS/vlLrKjmcrr7SZoBG1aW
-         zIQnRFJBHj7mKB5L4GrQx0/0up93VN1FDLyB7IhUOeIyaRRJ/rVA4FACG6IYppf3WyBA
-         N+CCbUCEk6nZxsmmsfy/Vh2ThvreM/GLyrhMfC4MCBX1vAyhvUgM7zJX0Tw/e17BLBac
-         j4nA==
-X-Forwarded-Encrypted: i=1; AJvYcCUMExQH4C0rIGAUK00K02kaN/LaxIS5expgCyheOFG83WRdsSdTl5wW8fYdDaNkC75LEhN4kYKb8QKzdvN/SLI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9OjxhszqBsZMq1mMwYz2CMzA03Ls68iiZgu5Vyz2NtTq0R68d
-	Hfx2wV8YoZwzCIDZWhR2TrIi6CBr6hm36GfQgyJNddQw/wUrJNKmdTNpSWDJxvXg1IWoMvK/H3f
-	WCM5pcKgr0mRvxpXsfStftuZ7n1ICHOCcC9drO9Fk
-X-Gm-Gg: AeBDieuXKX3DgaxcgLIYq08jkYocoH0TtH9/aqdBzEntEMXV7WFQMFIIUeGxXsfemmS
-	+RYCm77Bj4kmeuKFEZxn83m8gUN1CzRnmLs/VwnWFdy82R2zlMpvTNb/ByxMQ57PCWhXJRkRrvY
-	fHccV+XnLdIpUK0SDN/o7pbD6FKiLlcbtYWTHIhOkoKVbaM6bAPuzMlPlgne12sHZ4nM7ROHhY6
-	2+2S9ds1vIp+QL3aqZ/CAiy2mRgby0ItV994saJ+jtH/bkVTiciojeu6rEEhfxmZhC2cwUU0d/W
-	BSQWoiydtPscL952v1Cdp++Kg8uK185FOnXDtb0=
-X-Received: by 2002:a05:6402:5345:10b0:66b:eb28:2779 with SMTP id
- 4fb4d7f45d1cf-66e415a0e54mr43493a12.12.1775266439410; Fri, 03 Apr 2026
- 18:33:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WddOZric"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775267805; x=1806803805;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fK5XQeBQzWMAEfkpexHViEcwK3WoZrQhjXaLzGSiMDA=;
+  b=WddOZricsenisGwoAiQ84kP4EOM19GCiRHSGPF0XKFy7NKH59R9uxFhD
+   qkI+FqtmjTHOiHXbdOyX3YiK+nXObfvOseSqMABbTZ/AskRFBt/MxMfPf
+   YpYa6iJ+hK4+n18EzkQrJsfp8fFvmkD5tbABEIYYQeO5JYTeUtOk5tw5u
+   51kgWWHvZ/n6YPpwa851BlqubrSkbResVYgad3TfLf/If27Cl3bcF5lEz
+   Dqr+KGT9I2IzehH828JYhl1O8BVfwjh4okgdZuSbGCRFMu14kVX+Eo5Ud
+   4Hq9I/LxF5I/XBgOb69KqYuIP3K/L5T9at6ki7ro8ivT44WtaFDsGocVQ
+   A==;
+X-CSE-ConnectionGUID: lCXn0jeaRim3C/Rgpm0Z/A==
+X-CSE-MsgGUID: 6KTVylsaS4OrtXLCRRPjLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76343376"
+X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
+   d="scan'208";a="76343376"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:44 -0700
+X-CSE-ConnectionGUID: Lxh12dmoT/enq5S79zXJlQ==
+X-CSE-MsgGUID: fjY+0pJ6Szywgp6MS4Ev2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
+   d="scan'208";a="224121495"
+Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:16 -0700
+From: Reinette Chatre <reinette.chatre@intel.com>
+To: shuah@kernel.org,
+	Dave.Martin@arm.com,
+	james.morse@arm.com,
+	tony.luck@intel.com,
+	babu.moger@amd.com,
+	ilpo.jarvinen@linux.intel.com
+Cc: fenghuay@nvidia.com,
+	peternewman@google.com,
+	zide.chen@intel.com,
+	dapeng1.mi@linux.intel.com,
+	ben.horgan@arm.com,
+	yu.c.chen@intel.com,
+	jason.zeng@intel.com,
+	reinette.chatre@intel.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev
+Subject: [PATCH v4 01/10] selftests/resctrl: Improve accuracy of cache occupancy test
+Date: Fri,  3 Apr 2026 18:56:00 -0700
+Message-ID: <b160592179f88069cdc679563e152007998a0d76.1775266384.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <cover.1775266384.git.reinette.chatre@intel.com>
+References: <cover.1775266384.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260403-teaming-driver-internal-v4-0-d3032f33ca25@google.com> <20260403123039.77c80266@kernel.org>
-In-Reply-To: <20260403123039.77c80266@kernel.org>
-From: Marc Harvey <marcharvey@google.com>
-Date: Fri, 3 Apr 2026 18:33:48 -0700
-X-Gm-Features: AQROBzCcDmh9vMwsBnfFw6XOXuPHROjL8aDLdAW0gvpf0c5E0VDu0J3cAY2ph0Y
-Message-ID: <CANkEMgmh4_QtDum0brYNZOxJxzjeZpsxr8PMMKoKVBDawA6GXw@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 00/10] Decouple receive and transmit
- enablement in team driver
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 3, 2026 at 12:30=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> The test seems flaky, we hit this twice in the last 24h:
+Dave Martin reported inconsistent CMT test failures. In one experiment
+the first run of the CMT test failed because of too large (24%) difference
+between measured and achievable cache occupancy while the second run passed
+with an acceptable 4% difference.
 
-Hmm it waits for the active port to change before checking the packet
-counts, but that appears insufficient. I will make it wait for the
-newly inactive link to stop receiving traffic, using a generous
-polling timeout, which should fix this race condition.
+The CMT test is susceptible to interference from the rest of the system.
+This can be demonstrated with a utility like stress-ng by running the CMT
+test while introducing cache misses using:
 
-> What's even worse the retry of the test then fails like this:
+   stress-ng --matrix-3d 0 --matrix-3d-zyx
 
-When starting up teamd, it seems to check for a pid file, which
-persists after using sigkill on the previous test run. So if we don't
-kill teamd gracefully, then this file must be deleted manually. It's
-strange that it didn't cause any problems on my end, but I can fix it
-in the next iteration.
+Below shows an example of the CMT test failing because of a significant
+difference between measured and achievable cache occupancy when run with
+interference:
+    # Starting CMT test ...
+    # Mounting resctrl to "/sys/fs/resctrl"
+    # Cache size :335544320
+    # Writing benchmark parameters to resctrl FS
+    # Benchmark PID: 7011
+    # Checking for pass/fail
+    # Fail: Check cache miss rate within 15%
+    # Percent diff=99
+    # Number of bits: 5
+    # Average LLC val: 235929
+    # Cache span (bytes): 83886080
+    not ok 1 CMT: test
+
+The CMT test creates a new control group that is also capable of monitoring
+and assigns the workload to it. The workload allocates a buffer that by
+default fills a portion of the L3 and keeps reading from the buffer,
+measuring the L3 occupancy at intervals. The test passes if the workload's
+L3 occupancy is within 15% of the buffer size.
+
+By not adjusting any capacity bitmasks the workload shares the cache with
+the rest of the system. Any other task that may be running could evict
+the workload's data from the cache causing it to have low cache occupancy.
+
+Reduce interference from the rest of the system by ensuring that the
+workload's control group uses the capacity bitmask found in the user
+parameters for L3 and that the rest of the system can only allocate into
+the inverse of the workload's L3 cache portion. Other tasks can thus no
+longer evict the workload's data from L3.
+
+With the above adjustments the CMT test is more consistent. Repeating the
+CMT test while generating interference with stress-ng on a sample
+system after applying the fixes show significant improvement in test
+accuracy:
+
+    # Starting CMT test ...
+    # Mounting resctrl to "/sys/fs/resctrl"
+    # Cache size :335544320
+    # Writing benchmark parameters to resctrl FS
+    # Write schema "L3:0=fffe0" to resctrl FS
+    # Write schema "L3:0=1f" to resctrl FS
+    # Benchmark PID: 7089
+    # Checking for pass/fail
+    # Pass: Check cache miss rate within 15%
+    # Percent diff=12
+    # Number of bits: 5
+    # Average LLC val: 73269248
+    # Cache span (bytes): 83886080
+    ok 1 CMT: test
+
+Reported-by: Dave Martin <Dave.Martin@arm.com>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Tested-by: Chen Yu <yu.c.chen@intel.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/lkml/aO+7MeSMV29VdbQs@e133380.arm.com/
+---
+Changes since v1:
+- Fix typo in changelog: "data my be in L2" -> "data may be in L2".
+
+Changes since v2:
+- Split patch to separate changes impacting L3 and L2 resource. (Ilpo)
+- Re-run tests after patch split to ensure test impact match patch
+  and update changelog with refreshed data.
+- Since fix is now split across two patches: "Closes:" -> "Link:"
+- Rename "long_mask" to "full_mask". (Ilpo)
+- Add Chen Yu's tag.
+
+Changes since v3:
+- Add Ilpo's RB tag.
+---
+ tools/testing/selftests/resctrl/cmt_test.c    | 26 +++++++++++++++++--
+ tools/testing/selftests/resctrl/mba_test.c    |  4 ++-
+ tools/testing/selftests/resctrl/mbm_test.c    |  4 ++-
+ tools/testing/selftests/resctrl/resctrl.h     |  4 ++-
+ tools/testing/selftests/resctrl/resctrl_val.c |  2 +-
+ 5 files changed, 34 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index d09e693dc739..7bc6cf49c1c5 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -19,12 +19,34 @@
+ #define CON_MON_LCC_OCCUP_PATH		\
+ 	"%s/%s/mon_data/mon_L3_%02d/llc_occupancy"
+ 
+-static int cmt_init(const struct resctrl_val_param *param, int domain_id)
++/*
++ * Initialize capacity bitmasks (CBMs) of:
++ * - control group being tested per test parameters,
++ * - default resource group as inverse of control group being tested to prevent
++ *   other tasks from interfering with test.
++ */
++static int cmt_init(const struct resctrl_test *test,
++		    const struct user_params *uparams,
++		    const struct resctrl_val_param *param, int domain_id)
+ {
++	unsigned long full_mask;
++	char schemata[64];
++	int ret;
++
+ 	sprintf(llc_occup_path, CON_MON_LCC_OCCUP_PATH, RESCTRL_PATH,
+ 		param->ctrlgrp, domain_id);
+ 
+-	return 0;
++	ret = get_full_cbm(test->resource, &full_mask);
++	if (ret)
++		return ret;
++
++	snprintf(schemata, sizeof(schemata), "%lx", ~param->mask & full_mask);
++	ret = write_schemata("", schemata, uparams->cpu, test->resource);
++	if (ret)
++		return ret;
++
++	snprintf(schemata, sizeof(schemata), "%lx", param->mask);
++	return write_schemata(param->ctrlgrp, schemata, uparams->cpu, test->resource);
+ }
+ 
+ static int cmt_setup(const struct resctrl_test *test,
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index c7e9adc0368f..cd4c715b7ffd 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -17,7 +17,9 @@
+ #define ALLOCATION_MIN		10
+ #define ALLOCATION_STEP		10
+ 
+-static int mba_init(const struct resctrl_val_param *param, int domain_id)
++static int mba_init(const struct resctrl_test *test,
++		    const struct user_params *uparams,
++		    const struct resctrl_val_param *param, int domain_id)
+ {
+ 	int ret;
+ 
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 84d8bc250539..58201f844740 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -83,7 +83,9 @@ static int check_results(size_t span)
+ 	return ret;
+ }
+ 
+-static int mbm_init(const struct resctrl_val_param *param, int domain_id)
++static int mbm_init(const struct resctrl_test *test,
++		    const struct user_params *uparams,
++		    const struct resctrl_val_param *param, int domain_id)
+ {
+ 	int ret;
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index afe635b6e48d..c72045c74ac4 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -135,7 +135,9 @@ struct resctrl_val_param {
+ 	char			filename[64];
+ 	unsigned long		mask;
+ 	int			num_of_runs;
+-	int			(*init)(const struct resctrl_val_param *param,
++	int			(*init)(const struct resctrl_test *test,
++					const struct user_params *uparams,
++					const struct resctrl_val_param *param,
+ 					int domain_id);
+ 	int			(*setup)(const struct resctrl_test *test,
+ 					 const struct user_params *uparams,
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 7c08e936572d..a5a8badb83d4 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -569,7 +569,7 @@ int resctrl_val(const struct resctrl_test *test,
+ 		goto reset_affinity;
+ 
+ 	if (param->init) {
+-		ret = param->init(param, domain_id);
++		ret = param->init(test, uparams, param, domain_id);
+ 		if (ret)
+ 			goto reset_affinity;
+ 	}
+-- 
+2.50.1
+
