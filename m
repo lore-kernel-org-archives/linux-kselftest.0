@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A1F2D8DD6;
-	Sat,  4 Apr 2026 01:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214FA2DAFA9;
+	Sat,  4 Apr 2026 01:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775267810; cv=none; b=W1fnzb5F0/3cjXVRngVA5RqKywHrOS4rBMlKoB8Si+/4wputkEn/rCRSO/YGtb545u8lhC4tisYe1Ishs9sJ2WyEw0xaXoVHsvPtdnen9qm/+3/KezzsrKzDm8ZUyJ2P1oewdzi4Ck5hMrWIs9950i4LJNiCjEcAHm3K7J27lds=
+	t=1775267810; cv=none; b=nazCFl+Q6gUHxAgfssHuogIhPcfon1Hu9i5DAt/FkF1uPI/V6N3XLSikOgqQgcMKOH4Za/oaE2pzZeZsDrteLue1Dnqt2AVJBbRIJRLYgz+x6DXc1xKUnoHCfY1naynT+o2QYUFDpCQuLh35BP18PjdcAz2hLE6TfL3aVQQvCfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775267810; c=relaxed/simple;
-	bh=NoaYUKVR4lY9sNUPm9mCjY1AAjwxHOVH15U9IBXNMGg=;
+	bh=lUjxt+hDZL+o4Rrc+j7qS62qkbC6Cn6HcahwNmT9Z3w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pkw2lzauadKkvrJ2Uj+si3j8PPZh+ZYxDbB0Se/nkvbr5dsiNbdKi0N4yVOT/nKiKSEf+r3R4jtSObOzh/lL44KoCMBqssPnN7/Zw8R7PueluXWz/kozSNG0gZC5Z+l4B8fLB/h3XQ0Ac+nW50nZI2d03YXIEFMoG1oADrsrtkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=amdLyw5v; arc=none smtp.client-ip=198.175.65.18
+	 MIME-Version:Content-Type; b=Z1P+jVIsfAZtnA3Jcq/n6VpBdxDdHVxpT3LUpU0bD+ypVU3Ag26KcGwhNQxJDPGcewDvJ+nthI3WezZ2uGfcKsdphhXq4EEPwxcDQRNkFndgEwuR/6hP/5aJh3xMqbKbsyKEIQAAsMdXrwpg20D2MF0Ex3/emi4QpBBrnVnJnng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hXvc50JZ; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="amdLyw5v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hXvc50JZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1775267809; x=1806803809;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NoaYUKVR4lY9sNUPm9mCjY1AAjwxHOVH15U9IBXNMGg=;
-  b=amdLyw5vdi1URFIAE3j+r2myOWP0qfDmuiCwKeU7w8gxhyww6Bn6CChb
-   zbJsfCqfxWt/hApE1OEeXGmNjWHI42eB8Jc5VgiE9XgqYfMMc9UhnK1B+
-   X+p01CEhZ0Y7L1bRLGeyaR74BBWKeLdgkIrgVWZF7I8la9IQ87NVzYP5R
-   Pc8E1z++yizGChlavlm5IV9b66FYHp0kDnGU3xJQIWk5IphV4b4qQ8qJh
-   s/P65Km+UGj4q2MnTjG6oFzGNwQSxZE/2AWp/7f6Ls0ExvIBD9R6hBLWn
-   KWBrABHbZyZXK+nIV9syt3enJL2hUv3I56k3XLK/XFCVkPZch5W1y1eW5
-   A==;
-X-CSE-ConnectionGUID: qdrOuLPcRPaHKcRryJLSLg==
-X-CSE-MsgGUID: xAn/QN/TTC2TkKCJuZjUjg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76343401"
+  bh=lUjxt+hDZL+o4Rrc+j7qS62qkbC6Cn6HcahwNmT9Z3w=;
+  b=hXvc50JZNCMbY5Xyb1YKIoILgeplX+LxxE5VxPYxQxpooeTkGFGnjVRr
+   G5jTHU3rs3knmcidqsrazsxFUygU7+XCWZEylPvqsyOB6sg0uptYHsyUS
+   iLHCrV++22dVndlmlmJvUIk52Cp3LBW+h8YuyCETMMw0d1OHMbqWUE0OX
+   83CFNqpL8rENBkN/9SFCPWtn72buMW8MuQf65z8SNsaeFzfy56RK3vqhm
+   v6m+bixvG7tFLfUkkzPPUsB29M9BEn+dY4D3O4nuKZ2FEpegVwog+hLri
+   CR0gkkP3xvfY3LniBaTyVwoYRhniYSpKCXB+OsBNdBFlIxE4268d5IQgo
+   g==;
+X-CSE-ConnectionGUID: ykdn9ujMQK6msyVSk93f2w==
+X-CSE-MsgGUID: 6eZ28w3mRpKpb/TL36C/4A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76343415"
 X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="76343401"
+   d="scan'208";a="76343415"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:44 -0700
-X-CSE-ConnectionGUID: TR0B63d7Q7+AwsKDqmyRxQ==
-X-CSE-MsgGUID: Y1InwMGzTo6hwV1e6P1mzg==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:45 -0700
+X-CSE-ConnectionGUID: sSONFkpRQCSZL3lICQq0Ug==
+X-CSE-MsgGUID: t6bm+Mq/SuSvCph+5c1JIw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="224121542"
+   d="scan'208";a="224121548"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:18 -0700
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:19 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
 To: shuah@kernel.org,
 	Dave.Martin@arm.com,
@@ -61,9 +61,9 @@ Cc: fenghuay@nvidia.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: [PATCH v4 06/10] selftests/resctrl: Increase size of buffer used in MBM and MBA tests
-Date: Fri,  3 Apr 2026 18:56:05 -0700
-Message-ID: <1bd4d8c5fc791234b0a9da94f29a3e278ba2f7ee.1775266384.git.reinette.chatre@intel.com>
+Subject: [PATCH v4 08/10] selftests/resctrl: Remove requirement on cache miss rate
+Date: Fri,  3 Apr 2026 18:56:07 -0700
+Message-ID: <6de4da5486354c0f25fef0d194956470cb744041.1775266384.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <cover.1775266384.git.reinette.chatre@intel.com>
 References: <cover.1775266384.git.reinette.chatre@intel.com>
@@ -76,32 +76,29 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Errata for Sierra Forest [1] (SRF42) and Granite Rapids [2] (GNR12)
-describe the problem that MBM on Intel RDT may overcount memory bandwidth
-measurements. The resctrl tests compare memory bandwidth reported by iMC
-PMU to that reported by MBM causing the tests to fail on these systems
-depending on the settings of the platform related to the errata.
+As the CAT test reads the same buffer into different sized cache portions
+it compares the number of cache misses against an expected percentage
+based on the size of the cache portion.
 
-Since the resctrl tests need to run under various conditions it is not
-possible to ensure system settings are such that MBM will not overcount.
-It has been observed that the overcounting can be controlled via the
-buffer size used in the MBM and MBA tests that rely on comparisons
-between iMC PMU and MBM measurements.
+Systems and test conditions vary. The CAT test is a test of resctrl
+subsystem health and not a test of the hardware architecture so it is not
+required to place requirements on the size of the difference in cache
+misses, just that the number of cache misses when reading a buffer
+increase as the cache portion used for the buffer decreases.
 
-Running the MBM test on affected platforms with different buffer sizes it
-can be observed that the difference between iMC PMU and MBM counts reduce
-as the buffer size increases. After increasing the buffer size to more
-than 4X the differences between iMC PMU and MBM become insignificant.
+Remove additional constraint on how big the difference between cache
+misses should be as the cache portion size changes. Only test that the
+cache misses increase as the cache portion size decreases. This remains
+a good sanity check of resctrl subsystem health while reducing impact
+of hardware architectural differences and the various conditions under
+which the test may run.
 
-Increase the buffer size used in MBM and MBA tests to 4X L3 size to reduce
-possibility of tests failing due to difference in counts reported by iMC
-PMU and MBM.
+Increase the size difference between cache portions to additionally avoid
+any consequences resulting from smaller increments.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 Tested-by: Chen Yu <yu.c.chen@intel.com>
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://edc.intel.com/content/www/us/en/design/products-and-solutions/processors-and-chipsets/sierra-forest/xeon-6700-series-processor-with-e-cores-specification-update/errata-details/ # [1]
-Link: https://edc.intel.com/content/www/us/en/design/products-and-solutions/processors-and-chipsets/birch-stream/xeon-6900-6700-6500-series-processors-with-p-cores-specification-update/011US/errata-details/ # [2]
 ---
 Changes since v2:
 - Add Chen Yu's tag.
@@ -109,22 +106,80 @@ Changes since v2:
 Changes since v3:
 - Add Ilpo's RB tag.
 ---
- tools/testing/selftests/resctrl/fill_buf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c | 33 ++++------------------
+ 1 file changed, 5 insertions(+), 28 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index 19a01a52dc1a..b9fa7968cd6e 100644
---- a/tools/testing/selftests/resctrl/fill_buf.c
-+++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -139,6 +139,6 @@ ssize_t get_fill_buf_size(int cpu_no, const char *cache_type)
- 	if (ret)
- 		return ret;
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index f00b622c1460..8bc47f06679a 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -14,42 +14,20 @@
+ #define RESULT_FILE_NAME	"result_cat"
+ #define NUM_OF_RUNS		5
  
--	return cache_total_size * 2 > MINIMUM_SPAN ?
--			cache_total_size * 2 : MINIMUM_SPAN;
-+	return cache_total_size * 4 > MINIMUM_SPAN ?
-+			cache_total_size * 4 : MINIMUM_SPAN;
+-/*
+- * Minimum difference in LLC misses between a test with n+1 bits CBM to the
+- * test with n bits is MIN_DIFF_PERCENT_PER_BIT * (n - 1). With e.g. 5 vs 4
+- * bits in the CBM mask, the minimum difference must be at least
+- * MIN_DIFF_PERCENT_PER_BIT * (4 - 1) = 3 percent.
+- *
+- * The relationship between number of used CBM bits and difference in LLC
+- * misses is not expected to be linear. With a small number of bits, the
+- * margin is smaller than with larger number of bits. For selftest purposes,
+- * however, linear approach is enough because ultimately only pass/fail
+- * decision has to be made and distinction between strong and stronger
+- * signal is irrelevant.
+- */
+-#define MIN_DIFF_PERCENT_PER_BIT	1UL
+-
+ static int show_results_info(__u64 sum_llc_val, int no_of_bits,
+ 			     unsigned long cache_span,
+-			     unsigned long min_diff_percent,
+ 			     unsigned long num_of_runs, bool platform,
+ 			     __s64 *prev_avg_llc_val)
+ {
+ 	__u64 avg_llc_val = 0;
+-	float avg_diff;
+ 	int ret = 0;
+ 
+ 	avg_llc_val = sum_llc_val / num_of_runs;
+ 	if (*prev_avg_llc_val) {
+-		float delta = (__s64)(avg_llc_val - *prev_avg_llc_val);
+-
+-		avg_diff = delta / *prev_avg_llc_val;
+-		ret = platform && (avg_diff * 100) < (float)min_diff_percent;
+-
+-		ksft_print_msg("%s Check cache miss rate changed more than %.1f%%\n",
+-			       ret ? "Fail:" : "Pass:", (float)min_diff_percent);
++		ret = platform && (avg_llc_val < *prev_avg_llc_val);
+ 
+-		ksft_print_msg("Percent diff=%.1f\n", avg_diff * 100);
++		ksft_print_msg("%s Check cache miss rate increased\n",
++			       ret ? "Fail:" : "Pass:");
+ 	}
+ 	*prev_avg_llc_val = avg_llc_val;
+ 
+@@ -58,10 +36,10 @@ static int show_results_info(__u64 sum_llc_val, int no_of_bits,
+ 	return ret;
  }
+ 
+-/* Remove the highest bit from CBM */
++/* Remove the highest bits from CBM */
+ static unsigned long next_mask(unsigned long current_mask)
+ {
+-	return current_mask & (current_mask >> 1);
++	return current_mask & (current_mask >> 2);
+ }
+ 
+ static int check_results(struct resctrl_val_param *param, const char *cache_type,
+@@ -112,7 +90,6 @@ static int check_results(struct resctrl_val_param *param, const char *cache_type
+ 
+ 		ret = show_results_info(sum_llc_perf_miss, bits,
+ 					alloc_size / 64,
+-					MIN_DIFF_PERCENT_PER_BIT * (bits - 1),
+ 					runs, get_vendor() == ARCH_INTEL,
+ 					&prev_avg_llc_val);
+ 		if (ret)
 -- 
 2.50.1
 
