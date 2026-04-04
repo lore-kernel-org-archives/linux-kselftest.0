@@ -1,127 +1,311 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809F423E342
-	for <linux-kselftest@vger.kernel.org>; Sat,  4 Apr 2026 17:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775323556; cv=pass; b=fNp4s4DkrSnHTct00mtQbJUPf4tc0tFM48wKkvu4URCYbYqbcLMgMK6F4f1zJ2Pnx+aoas6u+Tyr0MuaIUwAHzcj3Vbhy8JG/obaBMwBT1iC5bPdN2qsZ/ARmia6UmNOxtt20R8+MdzE2Yy8G9NJT1iJk1i/P0g03gA+cTGIpRY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775323556; c=relaxed/simple;
-	bh=iidgvtRYuaAhqrnd+5Px2QKaie9WCq8NPbXMgIRsVnU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EZUccowhOL3Zl8DRBEFASWU7Y/Pv/j/4Tbq0i9Ta3DL9ajSQQouxf1jBTOpiqtWA5ZH4L9ut3ErCxamYOl7uOh1f3HGlFjS5ORYrb/PVg2CPip4eIvn7EV3SSqWI0M9MjYm4ECfKNrdoeDEBB2a8mbj7Wsqg43hQmLZFOvio3UU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Foj2L3PY; arc=pass smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CEA92E54D3
+	for <linux-kselftest@vger.kernel.org>; Sat,  4 Apr 2026 17:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775325246; cv=none; b=drvviotZnF0Kenye8C/HS2KyjazkDdoTFvsik5sYqVUrg9+hZUrI7uUN0jRwaP2EYWZvt3mMokKEB+8ONO+XWODkPAVN+SEFXGjURIZQkGPQImgZoSDkPXJlzzcNc4vABJbCs/HN+2rk0XmsnJZNPNXBfQySh4evqicqvd/9lA8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775325246; c=relaxed/simple;
+	bh=Jet0kAWW8WbFobLI7q4QKFu+ZFv/bm7fTLwnpkiJZnA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kJSiE0Yy+WRYmAyGJFMX0IxSAyxL6/wTYckHEH2qYW5QrmgXguA00vbX6/oc8JRoCkFm8o8JZsemV7CWmPCEeYaJY8E83r2ato6JBy1J0GhpOSXrn0eqOVL0vAvQCy+PgID51ivCaK/gMBXlCpymIWoNFNButBVJLv3/E/4cg9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mN8FEh5q; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Foj2L3PY"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b9c11eba219so311036066b.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Apr 2026 10:25:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775323554; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kAm42uII7BiVHdzkrV9AAb99H8wP3UYKe479htOy7N0jRubQj+9zJbXAYeUZRfOnxC
-         N8v53XVmziw0vWGxoC9dWruyQEjls/kPXZd1pMetw0zR8c8yOSC3fejGArbSfFmH4N8n
-         VS4GOB/qIiLXPiKDWcgGurvDfLTWKHNpJiNEHdC9UVmAncTJ5ztWbrozu33RaEui4jIN
-         5h9cIXrbYyns+iuU/wDeAtGVe4gjTYE8u+xdPy2x2HQD55MWLM7QI0NCb+IDFnr5XykC
-         e4ZgHEUEuUYZgRmbRsLL0zRm4vI/LbAdxAY41pCRGl+zDlD9BzEyRNPsE8sYYBSniJtx
-         CrMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=iidgvtRYuaAhqrnd+5Px2QKaie9WCq8NPbXMgIRsVnU=;
-        fh=hI75gvxeyoLNyLVsiB6N8/uPG7+PdDMUrCBNNpUV/Vg=;
-        b=BSmNOU0hmcu8ulC8GoqvXY7knVg6uzvLSPT/y13tWCOxjnLfksD5IqZcxsWsvUBAEq
-         kenasytfTSkpwDR+v54u+7WdtLz1OV4USb6ditXTr3/aUPoym/IslEHrSUPvKW5wntgh
-         JG26qMvVqYBtn48CqBrDu2h+VWKGOljjriZMoBifjPhbj56s0me/8+Ncm1FzI6E9QnIz
-         e0AndJhm08Pd5JXukzS5F7YFJNpzGKryogIge2QyqS0D726H6HQRcKtjwUOtLZJCXRN7
-         4LXiVEe404RrsKEi4EIKQu7jVN88m9usgradid7XYQk2wramjWwP2GD4T+8nXOauYbeU
-         5G5Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775323554; x=1775928354; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iidgvtRYuaAhqrnd+5Px2QKaie9WCq8NPbXMgIRsVnU=;
-        b=Foj2L3PY/2C5011OYzRTRh+FtzyiYjsJW4ZTU0VGU+uhDG0Z0IaNv8CCV6Mr6Ra6Jp
-         hnsPFwzH9rhviGQ4/znbhQCN4YLmWk4FaWHU48bCBFyH3NjBqd9c3FLFBX7d1kqnA9hq
-         165DkUOCUm5PsRAvobBUqBUibwtY1+Oe4BKgwNvlPnjL27WiwkIUHjqWGqgDSrguktHr
-         ZCDb9kavuAG76FUklKoCVDB3mxwrmJ4a3oktDSXY3PV1h7w9K8bNLl9jqGsZkXegR86O
-         PaR8p+pEho9EcGcoq7BB8KAkdA7vujIzmjwjO0FWjgjOkZV1PRN6002emu5EDVT2eTP3
-         5qzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775323554; x=1775928354;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iidgvtRYuaAhqrnd+5Px2QKaie9WCq8NPbXMgIRsVnU=;
-        b=WgeR8S0RS8JgUO/PYPBNKNRPjDBjzWkugu3pWuYqp7UGD7fg8Hfa4cQwRROmtA2tEi
-         6gVR1Rf2SNz2mlk9qW6CTs7tAzPW7w8uDKuKoXDRLB4+PE1CZNdoqM16HCP7XF37psNA
-         FhZ3R76rzU0cvaWY9CMllK2gugBpzvm7/C7m5AMvS/mdD8mPYcPqLHdf+6VXCBJce7ZG
-         8WwX9+Eg6cTtJNRiy4Qk94NUsEkYU6KTkTVA3otHtW4uDncobmmK9TBtzZP+s0pD2k4w
-         DdZlzGweYdf4mgAd/DEXfv4kC4Xxj2yZUj/7i9sAzjU8l+JfcVw7nx7lCDMCa3QrDxyv
-         NnDA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/08W+8o5Htbih9dretc/IPxtnyIlxERxIPJI0P2BpS/6142NBkL933Rt+uLOp9E6UG1mIfpRRbbJwYcNFaJE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5xVh7g8HRqLULdjCHYGQJUFtizrNow4Bg3t+GC9/f2QtzsdTQ
-	RPP0+9EvXssUnKMc47A/SfZTMBXHgX2+Q7vYBnC6YJyOuc1fkG0Vt5nK22VVA/Nn01aJfG/f/Sq
-	dlkYvE1RweH6MLyg7BLvHBBOi/v2YP4I=
-X-Gm-Gg: AeBDiesTbAJPQKMD0daM8A3kcBBzBlHhbXLVvn7iBbwWDtSU6NzX0EXRWuViww0H658
-	zAA2HNPTdh6My0m1hurU1DCrktWRt1CdlMEKY8uAzueFs9i1TaTUmkx0CFmNGmBOT/4oYYahHBy
-	oG2oidxAD1C4q67GXYwPmiCjb5QcgKLygA3YB/J+07vRqYrHxlxYJS12LGdsHsxon/Bc4fB1tdh
-	/nAXTAF39idced61hOmDLTFIcWLJEikaSwH9MjwKzAkF2mLq/FXeB6zDqB/H/KgK5ofXA2UPTZj
-	/AQRV5w=
-X-Received: by 2002:a17:907:ca19:b0:b98:4b8:1046 with SMTP id
- a640c23a62f3a-b9c67922d67mr245594366b.31.1775323553422; Sat, 04 Apr 2026
- 10:25:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mN8FEh5q"
+Message-ID: <c783bc1b-3327-422f-9191-11550513b13c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775325232;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D9/n0xOrVIg4JzXNz87bIfUmI/ls7SmA5Keb0MGw30A=;
+	b=mN8FEh5qtk/m7/N1JG0dCSTSUfbBYtfsGQLC016NC56eKf8FDTo54FA5xQa6vXB7CU6IIE
+	+/5t19o4gpNyK3Ns7deKkwEODR7xY81tgJM09f5N8YduC8lZjx73YRa/uKDjaQUGxB5pl0
+	ahysqUd6FYgcWlEVpEanB9b76mME9ZI=
+Date: Sat, 4 Apr 2026 10:53:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f23ed1b3-6321-4e6d-9cda-ec5d34304f3b@blackwall.org>
- <20260330191611.16929-1-royujjal@gmail.com> <20260331141647.GB1637150@shredder>
-In-Reply-To: <20260331141647.GB1637150@shredder>
-From: Ujjal Roy <royujjal@gmail.com>
-Date: Sat, 4 Apr 2026 22:55:38 +0530
-X-Gm-Features: AQROBzBVeQxzaE8wUvFhFsGym5EPOw52jRhY5t-OqeOyQKNixaLBWAKYKMiyQyE
-Message-ID: <CAE2MWk=CSaijB_x0BzMtVGjuibqbzuCov8y+3Hm2UodrJJpF3A@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 0/5] net: bridge: mcast: add multicast
- exponential field encoding
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>, 
-	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev, 
-	Kernel <netdev@vger.kernel.org>, Kernel <linux-kernel@vger.kernel.org>, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 2/6] selftests/liveupdate: add helper functions for
+ memfd tests
+To: Pratyush Yadav <pratyush@kernel.org>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, Mike Rapoport <rppt@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Usama Arif <usama.arif@linux.dev>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20260404102452.4091740-1-pratyush@kernel.org>
+ <20260404102452.4091740-3-pratyush@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20260404102452.4091740-3-pratyush@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Mar 31, 2026, 7:47=E2=80=AFPM Ido Schimmel <idosch@nvidia.com> wrot=
-e:
->
-> On Mon, Mar 30, 2026 at 07:16:06PM +0000, Ujjal Roy wrote:
-> > Description:
-> > This series addresses a mismatch in how multicast query
-> > intervals and response codes are handled across IPv4 (IGMPv3)
-> > and IPv6 (MLDv2). While decoding logic currently exists,
-> > the corresponding encoding logic is missing during query
-> > packet generation. This leads to incorrect intervals being
-> > transmitted when values exceed their linear thresholds.
->
-> Thanks for the patches. I will take a look, but please read:
->
-> https://docs.kernel.org/process/maintainer-netdev.html
->
-> In particular:
->
-> "The new version of patches should be posted as a separate thread, not
-> as a reply to the previous posting."
+在 2026/4/4 3:24, Pratyush Yadav 写道:
+> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
+> 
+> Add some helper functions that will be used by memfd tests. This moves
+> some of the complexity out of the test itself, which results in better
+> test readability and less code duplication.
+> 
+> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
+> Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+> ---
+>   .../selftests/liveupdate/luo_test_utils.c     | 191 +++++++++++++++++-
+>   .../selftests/liveupdate/luo_test_utils.h     |  10 +
+>   2 files changed, 200 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c b/tools/testing/selftests/liveupdate/luo_test_utils.c
+> index 3c8721c505df..ceb918ef9813 100644
+> --- a/tools/testing/selftests/liveupdate/luo_test_utils.c
+> +++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
+> @@ -1,8 +1,12 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   
+>   /*
+> - * Copyright (c) 2025, Google LLC.
+> + * Copyright (c) 2025-2026, Google LLC.
+>    * Pasha Tatashin <pasha.tatashin@soleen.com>
+> + * Pratyush Yadav (Google) <pratyush@kernel.org>
+> + *
+> + * Copyright (C) 2025 Amazon.com Inc. or its affiliates.
+> + * Pratyush Yadav <ptyadav@amazon.de>
+>    */
+>   
+>   #define _GNU_SOURCE
+> @@ -20,9 +24,194 @@
+>   #include <sys/stat.h>
+>   #include <errno.h>
+>   #include <stdarg.h>
+> +#include <sys/vfs.h>
+> +#include <linux/magic.h>
+>   
+>   #include "luo_test_utils.h"
+>   
+> +int cwd_is_tmpfs(void)
+> +{
+> +	struct statfs buf;
+> +
+> +	if (statfs(".", &buf) < 0)
+> +		return -errno;
+> +
+> +	return buf.f_type == TMPFS_MAGIC;
+> +}
+> +
+> +/* Read exactly specified size from fd. Any less results in error. */
+> +int read_size(int fd, char *buffer, size_t size)
+> +{
+> +	size_t remain = size;
+> +	ssize_t bytes_read;
+> +
+> +	while (remain) {
 
-I have updated the cover letter title and sent the new version as a
-separate thread. The same can be found here in this link:
-https://lore.kernel.org/all/20260403150050.1235-1-royujjal@gmail.com/
+while (remain > 0) ?
+
+> +		bytes_read = read(fd, buffer, remain);
+> +		if (bytes_read == 0)
+> +			return -ENODATA;
+> +		if (bytes_read < 0) {
+> +			if (errno == EINTR)
+> +				continue;
+> +			else
+> +				return -errno;
+> +		}
+> +
+> +		remain -= bytes_read;
+> +		buffer += bytes_read;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/* Write exactly specified size from fd. Any less results in error. */
+> +int write_size(int fd, const char *buffer, size_t size)
+> +{
+> +	size_t remain = size;
+> +	ssize_t written;
+> +
+> +	while (remain) {
+
+while (remain>0) is better?
+
+Zhu Yanjun
+
+> +		written = write(fd, buffer, remain);
+> +		if (written == 0)
+> +			return -EIO;
+> +		if (written < 0) {
+> +			if (errno == EINTR)
+> +				continue;
+> +			else
+> +				return -errno;
+> +		}
+> +
+> +		remain -= written;
+> +		buffer += written;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int generate_random_data(char *buffer, size_t size)
+> +{
+> +	int fd, ret;
+> +
+> +	fd = open("/dev/urandom", O_RDONLY);
+> +	if (fd < 0)
+> +		return -errno;
+> +
+> +	ret = read_size(fd, buffer, size);
+> +	close(fd);
+> +	return ret;
+> +}
+> +
+> +int save_test_data(const char *filename, const char *buffer, size_t size)
+> +{
+> +	int fd, ret;
+> +
+> +	fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
+> +	if (fd < 0)
+> +		return -errno;
+> +
+> +	ret = write_size(fd, buffer, size);
+> +	fsync(fd);
+> +	close(fd);
+> +	return ret;
+> +}
+> +
+> +int load_test_data(const char *filename, char *buffer, size_t size)
+> +{
+> +	int fd, ret;
+> +
+> +	fd = open(filename, O_RDONLY);
+> +	if (fd < 0)
+> +		return -errno;
+> +
+> +	ret = read_size(fd, buffer, size);
+> +	close(fd);
+> +	return ret;
+> +}
+> +
+> +/* Create and initialize a memfd with random data. */
+> +int create_random_memfd(const char *memfd_name, char *buffer, size_t size)
+> +{
+> +	int fd;
+> +	int ret;
+> +
+> +	fd = memfd_create(memfd_name, 0);
+> +	if (fd < 0)
+> +		return -errno;
+> +
+> +	ret = generate_random_data(buffer, size);
+> +	if (ret < 0) {
+> +		close(fd);
+> +		return ret;
+> +	}
+> +
+> +	ret = write_size(fd, buffer, size);
+> +	if (ret < 0) {
+> +		close(fd);
+> +		return ret;
+> +	}
+> +
+> +	/* Reset file position to beginning */
+> +	if (lseek(fd, 0, SEEK_SET) < 0) {
+> +		ret = -errno;
+> +		close(fd);
+> +		return ret;
+> +	}
+> +
+> +	return fd;
+> +}
+> +
+> +/*
+> + * Make sure fd contains expected data up to size. Returns 0 on success, 1 on
+> + * data mismatch, -errno on error.
+> + */
+> +int verify_fd_content_read(int fd, const char *expected_data, size_t size)
+> +{
+> +	char *buffer;
+> +	int ret;
+> +
+> +	buffer = malloc(size);
+> +	if (!buffer)
+> +		return -ENOMEM;
+> +
+> +	/* Reset file position to beginning */
+> +	if (lseek(fd, 0, SEEK_SET) < 0) {
+> +		ret = -errno;
+> +		goto out;
+> +	}
+> +
+> +	ret = read_size(fd, buffer, size);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	if (memcmp(buffer, expected_data, size) != 0) {
+> +		ret = 1;
+> +		goto out;
+> +	}
+> +
+> +	ret = 0;
+> +
+> +out:
+> +	free(buffer);
+> +	return ret;
+> +}
+> +
+> +/*
+> + * Verify fd content using mmap. Returns 0 on success, 1 on data mismatch,
+> + * -errno on error.
+> + */
+> +int verify_fd_content_mmap(int fd, const char *expected_data, size_t size)
+> +{
+> +	char *mapped_mem;
+> +	int ret;
+> +
+> +	mapped_mem = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+> +	if (mapped_mem == MAP_FAILED)
+> +		return -errno;
+> +
+> +	ret = memcmp(mapped_mem, expected_data, size) ? 1 : 0;
+> +	munmap(mapped_mem, size);
+> +	return ret;
+> +}
+> +
+>   int luo_open_device(void)
+>   {
+>   	return open(LUO_DEVICE, O_RDWR);
+> diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.h b/tools/testing/selftests/liveupdate/luo_test_utils.h
+> index 90099bf49577..a69dce2649b0 100644
+> --- a/tools/testing/selftests/liveupdate/luo_test_utils.h
+> +++ b/tools/testing/selftests/liveupdate/luo_test_utils.h
+> @@ -35,6 +35,16 @@ void restore_and_read_stage(int state_session_fd, int token, int *stage);
+>   
+>   void daemonize_and_wait(void);
+>   
+> +int cwd_is_tmpfs(void);
+> +int read_size(int fd, char *buffer, size_t size);
+> +int write_size(int fd, const char *buffer, size_t size);
+> +int generate_random_data(char *buffer, size_t size);
+> +int save_test_data(const char *filename, const char *buffer, size_t size);
+> +int load_test_data(const char *filename, char *buffer, size_t size);
+> +int create_random_memfd(const char *memfd_name, char *buffer, size_t size);
+> +int verify_fd_content_read(int fd, const char *expected_data, size_t size);
+> +int verify_fd_content_mmap(int fd, const char *expected_data, size_t size);
+> +
+>   typedef void (*luo_test_stage1_fn)(int luo_fd);
+>   typedef void (*luo_test_stage2_fn)(int luo_fd, int state_session_fd);
+>   
+
