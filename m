@@ -1,48 +1,47 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E4023EABA;
-	Sat,  4 Apr 2026 01:56:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF85E2264B0;
+	Sat,  4 Apr 2026 01:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775267807; cv=none; b=jcEl0E68oQ72URg5rO5JzqcwWzPa7kc5CqdPOsapS2X1QEoZOZze3otd3P7Inc8NRUJENJCERVr3UeU2E6tYDUoOtbon/d3ds2fWI30V/coOFyOcEPdNqQMxbVwSp+NBLyf7BJVs5JnW1nvg3CbDvwTcZMbD7cu/6EgG++bmz2w=
+	t=1775267807; cv=none; b=A/5XUW6sP4E9EplonrD4PuPVzrEx7FduD4/Ljr2Wmvof8g26vhwss+smaBkMwlPbZRa5qLgt2ur3FzTeY3rY1+rjUwwxujBgu7itwhXROOWE+y66O8V9/FVV3Vi5c6cJlOB5ZNhaUWI456vem5dQ1WVPivgQQxXvD4pFRDyzQHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775267807; c=relaxed/simple;
-	bh=fK5XQeBQzWMAEfkpexHViEcwK3WoZrQhjXaLzGSiMDA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AvZADETKkbEywa8iM6k2f+VT3OupIZ7KQs/Un4SDedaySYkqzqGFHy14pI+Vg24ITXnU1dV+CdjGQBu8Xu1i1UwFbYxAawMQ3Dbt5m+Eun8OSakROUsop3ya5wuWxLhlyOlDoSo5/CHhhu4eCXCXbSiePNoWBuIqvrQjGgi5100=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WddOZric; arc=none smtp.client-ip=198.175.65.18
+	bh=SnVEYvcFy8oSbkOvmYPPrajsMz1D7zXAXpxq9nblfG8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=f8qYvVF5A4dEZW658kih6PuTrd/8drKnA0W5jo452GpiTU7IXJxuHAJ8zCgKi6sFqWSq0m3XgGGPX7/OwoTtPlS+ioW59h0oYD9R6S3kH0Aq3JslWwrzcEUlmVWylgtfO9o9gGQV1liFe9ozkQRTaru+To4sBpycNXTgRkBQM54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l9GaO8C5; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WddOZric"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l9GaO8C5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775267805; x=1806803805;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fK5XQeBQzWMAEfkpexHViEcwK3WoZrQhjXaLzGSiMDA=;
-  b=WddOZricsenisGwoAiQ84kP4EOM19GCiRHSGPF0XKFy7NKH59R9uxFhD
-   qkI+FqtmjTHOiHXbdOyX3YiK+nXObfvOseSqMABbTZ/AskRFBt/MxMfPf
-   YpYa6iJ+hK4+n18EzkQrJsfp8fFvmkD5tbABEIYYQeO5JYTeUtOk5tw5u
-   51kgWWHvZ/n6YPpwa851BlqubrSkbResVYgad3TfLf/If27Cl3bcF5lEz
-   Dqr+KGT9I2IzehH828JYhl1O8BVfwjh4okgdZuSbGCRFMu14kVX+Eo5Ud
-   4Hq9I/LxF5I/XBgOb69KqYuIP3K/L5T9at6ki7ro8ivT44WtaFDsGocVQ
+  t=1775267804; x=1806803804;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SnVEYvcFy8oSbkOvmYPPrajsMz1D7zXAXpxq9nblfG8=;
+  b=l9GaO8C5/UaNcrwPaFPUYHU2WvXZcSfsCSPuueMytgy9ufUXRFVtdMES
+   Kxh7BoKKhDNnoIBKbaBfKr/f6p0zlm/8pgW+9WYQXG8XeHDx0roGRfKco
+   +n0njMoll21hfDGH0C8nyLKmnhUFRgJQBPBozr0nG6wfg417TQ/Cny2Q1
+   NKCCzztzsAZrXNFIEs5pALQUweU3nTLX0a8WghPTi+TPvH2Qf/1cf+C0F
+   8fdAAkVMFsqXP1LX9Qy15vGLGv2rdcxjXeCgU1nd2CdgY1T02uN1bVoyJ
+   bwxbDHKaXQdW5KlRq6AFHu4kZJHS9xvm6kVWFyprgG1HE5u5GQVaqBk/R
    A==;
-X-CSE-ConnectionGUID: lCXn0jeaRim3C/Rgpm0Z/A==
-X-CSE-MsgGUID: 6KTVylsaS4OrtXLCRRPjLQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76343376"
+X-CSE-ConnectionGUID: Qm70jlhDQf2tPodFaqFg0w==
+X-CSE-MsgGUID: AQDbAODsSnWIvxl6Jx80qQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76343368"
 X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="76343376"
+   d="scan'208";a="76343368"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:44 -0700
-X-CSE-ConnectionGUID: Lxh12dmoT/enq5S79zXJlQ==
-X-CSE-MsgGUID: fjY+0pJ6Szywgp6MS4Ev2w==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:43 -0700
+X-CSE-ConnectionGUID: 6m3UxA2OQmCJlKqAtU0qBw==
+X-CSE-MsgGUID: Igrb2QAMTOSehy04/25xZw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="224121495"
+   d="scan'208";a="224121492"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:16 -0700
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:15 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
 To: shuah@kernel.org,
 	Dave.Martin@arm.com,
@@ -61,12 +60,10 @@ Cc: fenghuay@nvidia.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: [PATCH v4 01/10] selftests/resctrl: Improve accuracy of cache occupancy test
-Date: Fri,  3 Apr 2026 18:56:00 -0700
-Message-ID: <b160592179f88069cdc679563e152007998a0d76.1775266384.git.reinette.chatre@intel.com>
+Subject: [PATCH v4 00/10] selftests/resctrl: Fixes and improvements focused on Intel platforms
+Date: Fri,  3 Apr 2026 18:55:59 -0700
+Message-ID: <cover.1775266384.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <cover.1775266384.git.reinette.chatre@intel.com>
-References: <cover.1775266384.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,195 +73,112 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Dave Martin reported inconsistent CMT test failures. In one experiment
-the first run of the CMT test failed because of too large (24%) difference
-between measured and achievable cache occupancy while the second run passed
-with an acceptable 4% difference.
+Hi Shuah,
 
-The CMT test is susceptible to interference from the rest of the system.
-This can be demonstrated with a utility like stress-ng by running the CMT
-test while introducing cache misses using:
+Could you please consider this series for inclusion?
 
-   stress-ng --matrix-3d 0 --matrix-3d-zyx
+No problem if you already took v3. There have been no functional changes since v3.
 
-Below shows an example of the CMT test failing because of a significant
-difference between measured and achievable cache occupancy when run with
-interference:
-    # Starting CMT test ...
-    # Mounting resctrl to "/sys/fs/resctrl"
-    # Cache size :335544320
-    # Writing benchmark parameters to resctrl FS
-    # Benchmark PID: 7011
-    # Checking for pass/fail
-    # Fail: Check cache miss rate within 15%
-    # Percent diff=99
-    # Number of bits: 5
-    # Average LLC val: 235929
-    # Cache span (bytes): 83886080
-    not ok 1 CMT: test
+Thank you very much,
 
-The CMT test creates a new control group that is also capable of monitoring
-and assigns the workload to it. The workload allocates a buffer that by
-default fills a portion of the L3 and keeps reading from the buffer,
-measuring the L3 occupancy at intervals. The test passes if the workload's
-L3 occupancy is within 15% of the buffer size.
-
-By not adjusting any capacity bitmasks the workload shares the cache with
-the rest of the system. Any other task that may be running could evict
-the workload's data from the cache causing it to have low cache occupancy.
-
-Reduce interference from the rest of the system by ensuring that the
-workload's control group uses the capacity bitmask found in the user
-parameters for L3 and that the rest of the system can only allocate into
-the inverse of the workload's L3 cache portion. Other tasks can thus no
-longer evict the workload's data from L3.
-
-With the above adjustments the CMT test is more consistent. Repeating the
-CMT test while generating interference with stress-ng on a sample
-system after applying the fixes show significant improvement in test
-accuracy:
-
-    # Starting CMT test ...
-    # Mounting resctrl to "/sys/fs/resctrl"
-    # Cache size :335544320
-    # Writing benchmark parameters to resctrl FS
-    # Write schema "L3:0=fffe0" to resctrl FS
-    # Write schema "L3:0=1f" to resctrl FS
-    # Benchmark PID: 7089
-    # Checking for pass/fail
-    # Pass: Check cache miss rate within 15%
-    # Percent diff=12
-    # Number of bits: 5
-    # Average LLC val: 73269248
-    # Cache span (bytes): 83886080
-    ok 1 CMT: test
-
-Reported-by: Dave Martin <Dave.Martin@arm.com>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Tested-by: Chen Yu <yu.c.chen@intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/lkml/aO+7MeSMV29VdbQs@e133380.arm.com/
----
-Changes since v1:
-- Fix typo in changelog: "data my be in L2" -> "data may be in L2".
-
-Changes since v2:
-- Split patch to separate changes impacting L3 and L2 resource. (Ilpo)
-- Re-run tests after patch split to ensure test impact match patch
-  and update changelog with refreshed data.
-- Since fix is now split across two patches: "Closes:" -> "Link:"
-- Rename "long_mask" to "full_mask". (Ilpo)
-- Add Chen Yu's tag.
+Reinette
 
 Changes since v3:
-- Add Ilpo's RB tag.
----
- tools/testing/selftests/resctrl/cmt_test.c    | 26 +++++++++++++++++--
- tools/testing/selftests/resctrl/mba_test.c    |  4 ++-
- tools/testing/selftests/resctrl/mbm_test.c    |  4 ++-
- tools/testing/selftests/resctrl/resctrl.h     |  4 ++-
- tools/testing/selftests/resctrl/resctrl_val.c |  2 +-
- 5 files changed, 34 insertions(+), 6 deletions(-)
+- v3: https://lore.kernel.org/lkml/cover.1773432891.git.reinette.chatre@intel.com/
+- No functional changes.
+- Start sentence in changelog using upper case. (Ilpo)
+- Add Reviewed-by tags.
 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index d09e693dc739..7bc6cf49c1c5 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -19,12 +19,34 @@
- #define CON_MON_LCC_OCCUP_PATH		\
- 	"%s/%s/mon_data/mon_L3_%02d/llc_occupancy"
- 
--static int cmt_init(const struct resctrl_val_param *param, int domain_id)
-+/*
-+ * Initialize capacity bitmasks (CBMs) of:
-+ * - control group being tested per test parameters,
-+ * - default resource group as inverse of control group being tested to prevent
-+ *   other tasks from interfering with test.
-+ */
-+static int cmt_init(const struct resctrl_test *test,
-+		    const struct user_params *uparams,
-+		    const struct resctrl_val_param *param, int domain_id)
- {
-+	unsigned long full_mask;
-+	char schemata[64];
-+	int ret;
-+
- 	sprintf(llc_occup_path, CON_MON_LCC_OCCUP_PATH, RESCTRL_PATH,
- 		param->ctrlgrp, domain_id);
- 
--	return 0;
-+	ret = get_full_cbm(test->resource, &full_mask);
-+	if (ret)
-+		return ret;
-+
-+	snprintf(schemata, sizeof(schemata), "%lx", ~param->mask & full_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret)
-+		return ret;
-+
-+	snprintf(schemata, sizeof(schemata), "%lx", param->mask);
-+	return write_schemata(param->ctrlgrp, schemata, uparams->cpu, test->resource);
- }
- 
- static int cmt_setup(const struct resctrl_test *test,
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index c7e9adc0368f..cd4c715b7ffd 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -17,7 +17,9 @@
- #define ALLOCATION_MIN		10
- #define ALLOCATION_STEP		10
- 
--static int mba_init(const struct resctrl_val_param *param, int domain_id)
-+static int mba_init(const struct resctrl_test *test,
-+		    const struct user_params *uparams,
-+		    const struct resctrl_val_param *param, int domain_id)
- {
- 	int ret;
- 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 84d8bc250539..58201f844740 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -83,7 +83,9 @@ static int check_results(size_t span)
- 	return ret;
- }
- 
--static int mbm_init(const struct resctrl_val_param *param, int domain_id)
-+static int mbm_init(const struct resctrl_test *test,
-+		    const struct user_params *uparams,
-+		    const struct resctrl_val_param *param, int domain_id)
- {
- 	int ret;
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index afe635b6e48d..c72045c74ac4 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -135,7 +135,9 @@ struct resctrl_val_param {
- 	char			filename[64];
- 	unsigned long		mask;
- 	int			num_of_runs;
--	int			(*init)(const struct resctrl_val_param *param,
-+	int			(*init)(const struct resctrl_test *test,
-+					const struct user_params *uparams,
-+					const struct resctrl_val_param *param,
- 					int domain_id);
- 	int			(*setup)(const struct resctrl_test *test,
- 					 const struct user_params *uparams,
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 7c08e936572d..a5a8badb83d4 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -569,7 +569,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		goto reset_affinity;
- 
- 	if (param->init) {
--		ret = param->init(param, domain_id);
-+		ret = param->init(test, uparams, param, domain_id);
- 		if (ret)
- 			goto reset_affinity;
- 	}
+Changes since v2:
+- v2: https://lore.kernel.org/linux-patches/cover.1772582958.git.reinette.chatre@intel.com/
+- Rebased on top of v7.0-rc3.
+- Split "selftests/resctrl: Improve accuracy of cache occupancy test" into
+  changes impacting L3 and L2 respectively. (Ilpo)
+- "long_mask" -> "full_mask", "return_value" -> "measurement", "org_count"
+  -> "orig_count". (Ilpo)
+- Use PATH_MAX where appropriate. (Ilpo)
+- Handle errors first to reduce indentation. (Ilpo)
+- Detailed changes in changelogs.
+- No functional changes since v2. Series tested by running 20 iterations of all
+  tests on Emerald Rapids, Granite Rapids, Sapphire Rapids, Ice Lake, Sierra
+  Forest, and Broadwell.
+
+Changes since v1:
+- v1: https://lore.kernel.org/lkml/cover.1770406608.git.reinette.chatre@intel.com/
+- The new perf interface that resctrl selftests can utilize has been accepted and
+  merged into v7.0-rc2. This series can thus now be considered for inclusion.
+  For reference,
+  commit 6a8a48644c4b ("perf/x86/intel/uncore: Add per-scheduler IMC CAS count events")
+  The resctrl selftest changes making use of the new perf interface are backward
+  compatible. The selftests do not require a v7.0-rc2 kernel to run but the
+  tests can only pass on recent Intel platforms running v7.0-rc2 or later.
+- Combine the two outstanding resctrl selftest submissions into one series
+  for easier tracking:
+  https://lore.kernel.org/lkml/084e82b5c29d75f16f24af8768d50d39ba0118a5.1769101788.git.reinette.chatre@intel.com/
+  https://lore.kernel.org/lkml/cover.1770406608.git.reinette.chatre@intel.com/
+- Fix typo in changelog of "selftests/resctrl: Improve accuracy of cache
+  occupancy test": "the data my be in L2" -> "the data may be in L2"
+- Add Zide Chen's RB tags.
+
+Cover letter updated to be accurate wrt perf changes:
+
+The resctrl selftests fail on recent Intel platforms. Intermittent failures
+in the CAT test and permanent failures of MBM and MBA tests on new platforms
+like Sierra Forest and Granite Rapids.
+
+The MBM and MBA resctrl selftests both generate memory traffic and compare the
+memory bandwidth measurements between the iMC PMUs and MBM to determine pass or
+fail. Both these tests are failing on recent platforms like Sierra Forest and
+Granite Rapids that have two events that need to be read and combined
+for a total memory bandwidth count instead of the single event available on
+earlier platforms.
+
+resctrl selftests prefer to obtain event details via sysfs instead of adding
+model specific details on which events to read. Enhancements to perf to expose
+the new event details are available since:
+ commit 6a8a48644c4b ("perf/x86/intel/uncore: Add per-scheduler IMC CAS count events")
+This series demonstrates use of the new sysfs interface to perf
+to obtain accurate iMC read memory bandwidth measurements.
+
+An additional issue with all the tests is that these selftests are part
+performance tests and determine pass/fail on performance heuristics selected
+after running the tests on a variety of platforms. When new platforms
+arrive the previous heuristics may cause the tests to fail. These failures are
+not because of an issue with the resctrl subsystem the tests intend to test
+but because of the architectural changes in the new platforms.
+
+Adapt the resctrl tests to not be as sensitive to architectural changes
+while adjusting the remaining heuristics to ensure tests pass on a variety
+of platforms. More details in individual patches.
+
+Tested by running 100 iterations of all tests on Emerald Rapids, Granite
+Rapids, Sapphire Rapids, Ice Lake, Sierra Forest, and Broadwell.
+
+Reinette Chatre (10):
+  selftests/resctrl: Improve accuracy of cache occupancy test
+  selftests/resctrl: Reduce interference from L2 occupancy during cache
+    occupancy test
+  selftests/resctrl: Do not store iMC counter value in counter config
+    structure
+  selftests/resctrl: Prepare for parsing multiple events per iMC
+  selftests/resctrl: Support multiple events associated with iMC
+  selftests/resctrl: Increase size of buffer used in MBM and MBA tests
+  selftests/resctrl: Raise threshold at which MBM and PMU values are
+    compared
+  selftests/resctrl: Remove requirement on cache miss rate
+  selftests/resctrl: Simplify perf usage in CAT test
+  selftests/resctrl: Reduce L2 impact on CAT test
+
+ tools/testing/selftests/resctrl/cache.c       |  30 ++--
+ tools/testing/selftests/resctrl/cat_test.c    |  41 ++----
+ tools/testing/selftests/resctrl/cmt_test.c    |  36 ++++-
+ tools/testing/selftests/resctrl/fill_buf.c    |   4 +-
+ tools/testing/selftests/resctrl/mba_test.c    |   6 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |   6 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  20 ++-
+ tools/testing/selftests/resctrl/resctrl_val.c | 135 +++++++++++++-----
+ 8 files changed, 179 insertions(+), 99 deletions(-)
+
 -- 
 2.50.1
 
