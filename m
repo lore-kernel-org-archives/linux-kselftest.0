@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B98D329E47;
-	Sat,  4 Apr 2026 10:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B16F39A056;
+	Sat,  4 Apr 2026 10:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775298303; cv=none; b=LFProgCEa8vm8ghAF9Lo62sknEGtnoEmBUGoY/eGCB3Y3Y6Z4K25BlgIUsrhoC1hXokYaPgG9xvFLO4t7lLyV2dHRrYhmZZ/QkZ5LSVq7MnbFZ/cy6ejc4QVqq3lvTJQ/hE9WrFFkEyTgVjUhRewWKMOB5TVKra8I1QqymRRTlQ=
+	t=1775298305; cv=none; b=l78oQdiziOBWZb2J1TkDR0PDvIeT4DRA/pejMKceBjvR/7GA5hCPvWGcW/iEsmep1skOQ2haSPPo+PtMhUXYo1qeWoyslVIbZovvPVR/f4OpqgYNWY5MSGgObTt7pZ/KOqp7aI7GAV04/UgaQ/aHUEeYvVQlalzpzCVmrUQvO04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775298303; c=relaxed/simple;
-	bh=ByOnS4HzfTTQZAhJJz0SxZtaNSu6NrKjsBAusN0AUIs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W89mLlK9rvPw/gtYTdB3WNn5YXooPEYHSNnktx6EQwFpBBJNoe0ra3OQhLbrL/SEH4UFPey1CMCR1Cd+3gi/uEgE/l9AEB/ZqGH370SYEosE+cBOaq8igf8RCrOyN7q0suf+mTALwbzwPcKMYFoYpoS4DtDe/FvbuF46l8RINzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ARqHXi/t; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775298305; c=relaxed/simple;
+	bh=/EUjIrH0nCwQKenCVjkx2cRPuoQiXcxmaLv25odT908=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AyOGAoOge7Z63LhBrNCTX4wyIOd2fAA1aaLaVBtYsgSTnXmP2rPZZfbBwM9RCvnuoEhpPXjWIsjLhyYRyMSb5NLLvlLA5WrKmM9GNdmoMvczZNgc9QNNo8lsNsO2SmuWowKYykDJfD7W4MTGStGoEkNmRKRieRvKDHose7yupXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j1xr4ow1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ARqHXi/t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F80C19421;
-	Sat,  4 Apr 2026 10:25:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j1xr4ow1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B93C19425;
+	Sat,  4 Apr 2026 10:25:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775298302;
-	bh=ByOnS4HzfTTQZAhJJz0SxZtaNSu6NrKjsBAusN0AUIs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ARqHXi/txN5TnqjmiEtATZ5YeyNFtrgSqgAOXqm2MIXFiMtNrcNH4JY8A6iuwObax
-	 KBBcbC2KKFqd9QnITYW7rB4TVbeSb7xvC9sFCxKuoBL4gA6N8DivPVHO/peSMLTD/+
-	 gQ3zDiN4pjSoZCcqJhBr4+zI8yJWGLd3wt0QKQ4P9AkHz7JLhvHQqTtx5SZe763dWj
-	 qxxGiayspP6LgIGcl7D7Amrc3O/+leWsUJ2GWKOCQfG8IOYQxRWkjRQZxGdb1UIWBt
-	 VSkizps2OPJYNz48d60nT5uUKCHuNFLwH3gby/k2Ssc8LwNMEbOcey0tpWBaN6Z1X8
-	 n6AUEN1OxBn3w==
+	s=k20201202; t=1775298305;
+	bh=/EUjIrH0nCwQKenCVjkx2cRPuoQiXcxmaLv25odT908=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=j1xr4ow13eYqPzo66Vy7ar9HIiMtgRGMDsnKwNvIASkjsql8yqCEakVNO1Pv2rBhe
+	 aL183bC/PXsEwZZFmWvwz/XivGToT7uyDgmXzJPsrn3sqaxTrpEBqQSHT/zLZdDMoo
+	 AuKQwlKDV1wQBYhYDT/hDJPFjV+2Z5C2JqO7P1RF2gywkf+6Zu66QgSrha64T5/3u4
+	 vq1zFsskLW5KQtI5VIgRfidZRWs5DENxK5TsIvH+zwuI9MBksbIT18PQbSygstt5aT
+	 2xPO0Lr1s/uOqZ/9UEPJuS9mJotn9KpZ4l8KFjJYKmJRSOqjBGqaJSr3lXDYDOrn+3
+	 RkgyjKWYlkchw==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Mike Rapoport <rppt@kernel.org>,
@@ -35,10 +36,12 @@ To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 0/6] selftests/liveupdate: add memfd tests
-Date: Sat,  4 Apr 2026 10:24:43 +0000
-Message-ID: <20260404102452.4091740-1-pratyush@kernel.org>
+Subject: [PATCH v3 1/6] selftests/liveupdate: add framework for memfd tests
+Date: Sat,  4 Apr 2026 10:24:44 +0000
+Message-ID: <20260404102452.4091740-2-pratyush@kernel.org>
 X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
+In-Reply-To: <20260404102452.4091740-1-pratyush@kernel.org>
+References: <20260404102452.4091740-1-pratyush@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,62 +52,134 @@ Content-Transfer-Encoding: 8bit
 
 From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 
-Hi,
+Currently memfd preservation using LUO is only tested indirectly via the
+luo_multi_session or luo_kexec_simple tests. Their main purpose is to
+test other live update functionality.
 
-This series adds some tests for memfd preservation across a live update.
-Currently memfd is only tested indirectly via luo_kexec_simple or
-luo_multi_session. Add a dedicated test suite for it.
+Add a framework for writing memfd tests. The framework hooks into the
+kselftest harness, but adds some things on top to make it suitable for
+live update.
 
-Patches 1 and 2 are preparatory, adding base framework and helpers, and
-the other patches each add a test. Some of the code is taken from the
-libluo patches [0] I sent a while ago.
+The LUO FD (/dev/liveupdate) can only be opened by one process at a
+time. Each test runs in its own process. This means the LUO FD must be
+owned by the main process and shared to children. main() opens the LUO
+FD and shares it to child runners using a global variable.
 
-[0] https://lore.kernel.org/linux-mm/20250723144649.1696299-33-pasha.tatashin@soleen.com/
+Live update tests run in two stages. One before kexec and one after.
+Detect the stage using a special state session. If the session is
+present, it means the test is in post-kexec state.
 
-Changes in v3:
-- Retry on EINTR instead of giving up in read_size() and write_size().
-- Use O_TRUNC in save_test_data().
-- Return the value of write_size() directly in create_random_memfd(). No
-  need to check errno since write_size() already returns -errno.
-- Save errno before calling close() in create_random_memfd() to avoid
-  overwriting the value.
-- Use memcmp() instead of open-coding the comparison loop.
-- Return value of test_harness_run() from main().
+Additionally, take in an optional --stage argument that lets callers
+specify expected stage. This is useful as a safety net to catch LUO core
+failures. If LUO core fails to preserve the state session properly, this
+option can help detect this and fail early. Since the option is not
+recognized by the kselftest harness, remove it from argv before calling
+test_harness_run().
 
-Changes in v2:
-- Drop LIVEUPDATE_DEV since it isn't used.
-- Split luo_fd and stage declaration on separate lines.
-- Split all 2-stage tests into helper function for each test.
-- Fix wording and argument order when LUO_DEVICE fails to open.
-- Rename verify_fd_content() to verify_fd_content_read().
-- Advance buffer pointer in {read,write}_size().
-- Add a check to make sure current working directory is not on a tmpfs
-  mount. If so, skip the tests since saved data files will be lost.
-- Rename RANDOM_DATA_FILE and RANDOM_DATA_FILE_FALLOCATE to
-  MEMFD_DATA_FS_COPY and FALLOCATE_DATA_FS_COPY respectively. Also
-  update the file names to reflect this naming convention.
-- Collect R-bys.
-
-Regards,
-Pratyush Yadav
-
-Pratyush Yadav (Google) (6):
-  selftests/liveupdate: add framework for memfd tests
-  selftests/liveupdate: add helper functions for memfd tests
-  selftests/liveupdate: add test for memfd content preservation
-  selftests/liveupdate: add test for zero-size memfd preservation
-  selftests/liveupdate: add test for operations on a preserved memfd
-  selftests/liveupdate: add fallocate test for memfd
-
- tools/testing/selftests/liveupdate/Makefile   |   2 +
- .../testing/selftests/liveupdate/luo_memfd.c  | 355 ++++++++++++++++++
- .../selftests/liveupdate/luo_test_utils.c     | 191 +++++++++-
- .../selftests/liveupdate/luo_test_utils.h     |  10 +
- 4 files changed, 557 insertions(+), 1 deletion(-)
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+---
+ tools/testing/selftests/liveupdate/Makefile   |  1 +
+ .../testing/selftests/liveupdate/luo_memfd.c  | 78 +++++++++++++++++++
+ 2 files changed, 79 insertions(+)
  create mode 100644 tools/testing/selftests/liveupdate/luo_memfd.c
 
-
-base-commit: 98ddd87f9704ef2fc837ec2ca38877c364d8dada
+diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
+index 080754787ede..051daae55eec 100644
+--- a/tools/testing/selftests/liveupdate/Makefile
++++ b/tools/testing/selftests/liveupdate/Makefile
+@@ -6,6 +6,7 @@ TEST_GEN_PROGS += liveupdate
+ 
+ TEST_GEN_PROGS_EXTENDED += luo_kexec_simple
+ TEST_GEN_PROGS_EXTENDED += luo_multi_session
++TEST_GEN_PROGS_EXTENDED += luo_memfd
+ 
+ TEST_FILES += do_kexec.sh
+ 
+diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
+new file mode 100644
+index 000000000000..c1f3275963dc
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/luo_memfd.c
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (c) 2026, Google LLC.
++ * Pratyush Yadav (Google) <pratyush@kernel.org>
++ */
++
++/*
++ * Selftests for memfd preservation via LUO.
++ */
++
++#include <errno.h>
++#include <fcntl.h>
++#include <string.h>
++#include <sys/ioctl.h>
++#include <unistd.h>
++
++#include <linux/liveupdate.h>
++
++#include "../kselftest.h"
++#include "../kselftest_harness.h"
++
++#include "luo_test_utils.h"
++
++#define STATE_SESSION_NAME "luo-state"
++#define STATE_MEMFD_TOKEN 1
++
++static int luo_fd = -1;
++static int stage;
++
++int main(int argc, char *argv[])
++{
++	int expected_stage = 0;
++	int session;
++
++	/*
++	 * The test takes an optional --stage argument. This lets callers
++	 * provide the expected stage, and if that doesn't match the test errors
++	 * out.
++	 *
++	 * Look for the stage. Since test_harness_run() doesn't recognize it,
++	 * once found, remove it from argv.
++	 */
++	for (int i = 1; i < argc; i++) {
++		if (strcmp(argv[i], "--stage") == 0) {
++			if (i + 1 < argc) {
++				expected_stage = atoi(argv[i + 1]);
++				memmove(&argv[i], &argv[i + 2], (argc - i - 1) * sizeof(char *));
++				argc -= 2;
++				i--;
++			} else {
++				ksft_exit_fail_msg("Option --stage requires an argument\n");
++			}
++		}
++	}
++
++	luo_fd = luo_open_device();
++	if (luo_fd < 0)
++		ksft_exit_skip("Failed to open %s (%s) device. Is LUO enabled?\n",
++			       LUO_DEVICE, strerror(errno));
++
++	session = luo_retrieve_session(luo_fd, STATE_SESSION_NAME);
++	if (session == -ENOENT)
++		stage = 1;
++	else if (session >= 0)
++		stage = 2;
++	else
++		ksft_exit_fail_perror("Failed to check for state session");
++
++	if (expected_stage && expected_stage != stage)
++		ksft_exit_fail_msg("Stage mismatch: expected %d, got %d\n",
++				   expected_stage, stage);
++
++	if (stage == 1)
++		create_state_file(luo_fd, STATE_SESSION_NAME, STATE_MEMFD_TOKEN, 2);
++
++	return test_harness_run(argc, argv);
++}
 -- 
 2.53.0.1213.gd9a14994de-goog
 
