@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B5F2DF132;
-	Sat,  4 Apr 2026 01:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7397A2F39C7;
+	Sat,  4 Apr 2026 01:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775267812; cv=none; b=KKjTwzj6SspFIR8o4z7UCYeEW4L0S1MJqauKVUEc+aLhr+WgNlzu+/JoxhYRftuEyi2pIHTdSdrWlzYurEIjrqAqQjY0m8qpFKkbvgtkfDHpjZjWVWEjS2ea4hQFB6tA/I1AxrUAuGHFD03dz5l4279z839UiGJTimsAhQ/1Seg=
+	t=1775267814; cv=none; b=pSZn3ediOnT5OAtAJASUs62DijVMWovvpQZ+2iXTFyY+fH8KhsmihUrV4qBZY02axUxr30RKRrqCTAh1RKbBAH9jYsVjPL8NVXnEDhBrZJcRKhFtLotNMtH+TYEH4jM5Greakl/9nXu4b6RJn1IcN3LgrBAmFQlCcwivuBWbQyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775267812; c=relaxed/simple;
-	bh=CyQqMUHLIJLOniMbFZD78eS2kKM4fFn2foPveBaayYE=;
+	s=arc-20240116; t=1775267814; c=relaxed/simple;
+	bh=TMYWBwczQQyNXGbZEwr5vrsjgD4HeYYTjcWXQ5+Sv5s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CmZ8EFXmAneZgeznFng73BHb8vp2/LMBxJYRqz6qFucP8E9mlKlAYzbWof5199U9hzGqTI5irJRXlaNnb4pmp0GbXrsFFCRmM7U2DJN3Kt1xDvJd1NH23J7WThuleWt0UsvQ4fkT0arTfCrm8QNbAs+09hcd/R20SCPefZrm8is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TT6fKHSm; arc=none smtp.client-ip=198.175.65.18
+	 MIME-Version:Content-Type; b=pqUkaXp9bmwTfk79V/ihwuPPNCFKXgOiZn9Buhhi4wRndtMG1EfYiR18bcb0z3DLdTMmtjdPeyqNqH6txdfvPVo6LA8F6vm5ztPA8woxLpRGKTmcxy0GEWgPndZll11q0Zl8OWutT9LY4aTf8/+t5M38vjMeP9lI1pQjza/fscY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M91mt9b4; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TT6fKHSm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M91mt9b4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775267810; x=1806803810;
+  t=1775267813; x=1806803813;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=CyQqMUHLIJLOniMbFZD78eS2kKM4fFn2foPveBaayYE=;
-  b=TT6fKHSmSVvngQdROF2KTM2MkzwLnx0zVuI4hcg94/InSb0aBx0+ABSP
-   L60grQUynMI+uZXr9QQhdjCbZVhsWrkZ+DNJ1FpZ79vxDSMVnXLg9zgzi
-   e6EY7Ho+g52x2T23heRNtSyXiBZQ7DHUySvlSmq55/GLQ5Djm9HxLpOue
-   dQIu4DPbjEoKcFioQ48LtsYIvJcgKQBI3iMasne8lAvBu8v6JBSZn+Qhl
-   e7ZfKAsIBn4GBPRWzQ5We9+xy4zgULy0wAiV9k60NK5p/5CG/hqUAPIUb
-   nnz6ngxb/1d4tTzCFFje1dbo7v/mtnACx99t4i9C4yhB0wZDqrHlBPAZy
-   Q==;
-X-CSE-ConnectionGUID: J4ge8xcfRV2p/FsKsBSPZg==
-X-CSE-MsgGUID: P/AzphPVR7OBIvsgM7I4bw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76343414"
+  bh=TMYWBwczQQyNXGbZEwr5vrsjgD4HeYYTjcWXQ5+Sv5s=;
+  b=M91mt9b4XTuciLk7sXnugfHU+3EdRBtmICQG7etDXqOu0X4OmA9Ux/GK
+   9Zf9tuWr77B1/1XiT4HVej3N0XyMH77ysapGdCwS6mZleulsr/K5yqyJP
+   1LU/DAVlNrClepDq9WdwIjHdF0FDrR1RHPkFBM7JyQNqbwN5eCaNbx7XC
+   /yijX4lkdHgP7eeuOqD2dRjVq9/YLeQoU7XZ4vOAj5BJlqpOaLJ0ewtnA
+   BRp2REYQWuFjXTRhWCNzk3TavbauW8XePKiP1miJeGj63B42NDeffI94Y
+   AeLjFWY/LcnCJ7D/TGemjivta+fTBIw8msd/ReXtwILNwvyVMkwOmgQNA
+   w==;
+X-CSE-ConnectionGUID: ZI47sMo2TN2k67pnpxoebg==
+X-CSE-MsgGUID: XMd9O2DyTLWLDwIGK1CzlQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76343419"
 X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="76343414"
+   d="scan'208";a="76343419"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
   by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:45 -0700
-X-CSE-ConnectionGUID: hVAtZnmcT4GRzUf00XeD/w==
-X-CSE-MsgGUID: JFmitjh2S6efCUVC5DnnRQ==
+X-CSE-ConnectionGUID: VWRYRkZaT8+CPdTF+Y0Raw==
+X-CSE-MsgGUID: TdQQh+obTtOK4eAOI9UkiA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="224121549"
+   d="scan'208";a="224121550"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:19 -0700
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 18:56:20 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
 To: shuah@kernel.org,
 	Dave.Martin@arm.com,
@@ -61,9 +61,9 @@ Cc: fenghuay@nvidia.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: [PATCH v4 09/10] selftests/resctrl: Simplify perf usage in CAT test
-Date: Fri,  3 Apr 2026 18:56:08 -0700
-Message-ID: <fb69325eba5031b735fa79effaaacd797c9c6040.1775266384.git.reinette.chatre@intel.com>
+Subject: [PATCH v4 10/10] selftests/resctrl: Reduce L2 impact on CAT test
+Date: Fri,  3 Apr 2026 18:56:09 -0700
+Message-ID: <1f5aad318889cd6d4f9a8d8b0fbe83e3848d41a9.1775266384.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <cover.1775266384.git.reinette.chatre@intel.com>
 References: <cover.1775266384.git.reinette.chatre@intel.com>
@@ -76,15 +76,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The CAT test relies on the PERF_COUNT_HW_CACHE_MISSES event to determine if
-modifying a cache portion size is successful. This event is configured to
-report the data as part of an event group, but no other events are added to
-the group.
+The L3 CAT test loads a buffer into cache that is proportional to the L3
+size allocated for the workload and measures cache misses when accessing
+the buffer as a test of L3 occupancy. When loading the buffer it can be
+assumed that a portion of the buffer will be loaded into the L2 cache and
+depending on cache design may not be present in L3. It is thus possible
+for data to not be in L3 but also not trigger an L3 cache miss when
+accessed.
 
-Remove the unnecessary PERF_FORMAT_GROUP format setting. This eliminates
-the need for struct perf_event_read and results in read() of the associated
-file descriptor to return just one value associated with the
-PERF_COUNT_HW_CACHE_MISSES event of interest.
+Reduce impact of L2 on the L3 CAT test by, if L2 allocation is supported,
+minimizing the portion of L2 that the workload can allocate into. This
+encourages most of buffer to be loaded into L3 and support better
+comparison between buffer size, cache portion, and cache misses when
+accessing the buffer.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 Tested-by: Chen Yu <yu.c.chen@intel.com>
@@ -96,132 +100,24 @@ Changes since v2:
 Changes since v3:
 - Add Ilpo's RB tag.
 ---
- tools/testing/selftests/resctrl/cache.c    | 17 +++++------------
- tools/testing/selftests/resctrl/cat_test.c |  4 +---
- tools/testing/selftests/resctrl/resctrl.h  | 11 +----------
- 3 files changed, 7 insertions(+), 25 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index bef71b6feacc..df9bea584a2d 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -10,7 +10,6 @@ void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config)
- 	memset(pea, 0, sizeof(*pea));
- 	pea->type = PERF_TYPE_HARDWARE;
- 	pea->size = sizeof(*pea);
--	pea->read_format = PERF_FORMAT_GROUP;
- 	pea->exclude_kernel = 1;
- 	pea->exclude_hv = 1;
- 	pea->exclude_idle = 1;
-@@ -37,19 +36,13 @@ int perf_event_reset_enable(int pe_fd)
- 	return 0;
- }
- 
--void perf_event_initialize_read_format(struct perf_event_read *pe_read)
--{
--	memset(pe_read, 0, sizeof(*pe_read));
--	pe_read->nr = 1;
--}
--
- int perf_open(struct perf_event_attr *pea, pid_t pid, int cpu_no)
- {
- 	int pe_fd;
- 
- 	pe_fd = perf_event_open(pea, pid, cpu_no, -1, PERF_FLAG_FD_CLOEXEC);
- 	if (pe_fd == -1) {
--		ksft_perror("Error opening leader");
-+		ksft_perror("Unable to set up performance monitoring");
- 		return -1;
- 	}
- 
-@@ -132,9 +125,9 @@ static int print_results_cache(const char *filename, pid_t bm_pid, __u64 llc_val
-  *
-  * Return: =0 on success. <0 on failure.
-  */
--int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
--		       const char *filename, pid_t bm_pid)
-+int perf_event_measure(int pe_fd, const char *filename, pid_t bm_pid)
- {
-+	__u64 value;
- 	int ret;
- 
- 	/* Stop counters after one span to get miss rate */
-@@ -142,13 +135,13 @@ int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
- 	if (ret < 0)
- 		return ret;
- 
--	ret = read(pe_fd, pe_read, sizeof(*pe_read));
-+	ret = read(pe_fd, &value, sizeof(value));
- 	if (ret == -1) {
- 		ksft_perror("Could not get perf value");
- 		return -1;
- 	}
- 
--	return print_results_cache(filename, bm_pid, pe_read->values[0].value);
-+	return print_results_cache(filename, bm_pid, value);
- }
- 
- /*
 diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 8bc47f06679a..6aac03147d41 100644
+index 6aac03147d41..371a2f26dc47 100644
 --- a/tools/testing/selftests/resctrl/cat_test.c
 +++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -135,7 +135,6 @@ static int cat_test(const struct resctrl_test *test,
- 		    struct resctrl_val_param *param,
- 		    size_t span, unsigned long current_mask)
- {
--	struct perf_event_read pe_read;
- 	struct perf_event_attr pea;
- 	cpu_set_t old_affinity;
- 	unsigned char *buf;
-@@ -159,7 +158,6 @@ static int cat_test(const struct resctrl_test *test,
+@@ -157,6 +157,10 @@ static int cat_test(const struct resctrl_test *test,
+ 	if (ret)
  		goto reset_affinity;
  
++	ret = minimize_l2_occupancy(test, uparams, param);
++	if (ret)
++		goto reset_affinity;
++
  	perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
--	perf_event_initialize_read_format(&pe_read);
  	pe_fd = perf_open(&pea, bm_pid, uparams->cpu);
  	if (pe_fd < 0) {
- 		ret = -1;
-@@ -192,7 +190,7 @@ static int cat_test(const struct resctrl_test *test,
- 
- 			fill_cache_read(buf, span, true);
- 
--			ret = perf_event_measure(pe_fd, &pe_read, param->filename, bm_pid);
-+			ret = perf_event_measure(pe_fd, param->filename, bm_pid);
- 			if (ret)
- 				goto free_buf;
- 		}
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 3bad2d80c09b..175101022bf3 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -148,13 +148,6 @@ struct resctrl_val_param {
- 	struct fill_buf_param	*fill_buf;
- };
- 
--struct perf_event_read {
--	__u64 nr;			/* The number of events */
--	struct {
--		__u64 value;		/* The value of the event */
--	} values[2];
--};
--
- /*
-  * Memory location that consumes values compiler must not optimize away.
-  * Volatile ensures writes to this location cannot be optimized away by
-@@ -210,11 +203,9 @@ unsigned int count_bits(unsigned long n);
- int snc_kernel_support(void);
- 
- void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
--void perf_event_initialize_read_format(struct perf_event_read *pe_read);
- int perf_open(struct perf_event_attr *pea, pid_t pid, int cpu_no);
- int perf_event_reset_enable(int pe_fd);
--int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
--		       const char *filename, pid_t bm_pid);
-+int perf_event_measure(int pe_fd, const char *filename, pid_t bm_pid);
- int measure_llc_resctrl(const char *filename, pid_t bm_pid);
- int minimize_l2_occupancy(const struct resctrl_test *test,
- 			  const struct user_params *uparams,
 -- 
 2.50.1
 
