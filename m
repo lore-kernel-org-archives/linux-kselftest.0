@@ -1,45 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9154821B9F5;
-	Sat,  4 Apr 2026 21:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB6F1EA84;
+	Sat,  4 Apr 2026 23:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775336798; cv=none; b=baa7nBWhw5IlItQsBTGPKJL7fkL03lcBAeWDNE5ufgALiTfa60F4C4S/hX9jR8Vr1q/ME9oCL4Euk6huCwu8Ao/2DbjQu1uS05PV8iAJhhU3owv+KDsIltwJ0JNNsXZsGkem+/XDk/FRIx/TOxlDUkTRlRmTfE4H9PFge+1zS4c=
+	t=1775343668; cv=none; b=lUybSt3HO/0NkgOd3siF6doOsau92Ncb/phxA7XSipdfNyH80Cu2Xs/Z4ZZ0yI7XQ5Yen/Jd3mob/FpnCxk95ni4AEechlAjtU52SxtN8AOGwlt7IuwoggoQZUjFwxiuYCllWkqSrTrLZ3+AyZ3XZ9Ymrt+/Bzqx8yOTwxaK/a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775336798; c=relaxed/simple;
-	bh=4SryKwM7vsegLO0c1BFP+xu0X8RY5OoE3Nf4Yl1SFh4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nvVaYWLateoNsGfgQ8TY2qBHsuYbGw5wx03pQkl/61WccKkrYzg65tq7nHR7L/V+UhqTnyW2L34gKsx2h++kxy3K59+aP+fkjNIyaQtCd4UGLZLEqaWXQXTilStv0KgLPQl+ZiO3sbtRIWGNf22Gx5GcIfclbXakqD9zCqqegPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t1syRjMY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775343668; c=relaxed/simple;
+	bh=TQ2wXMvDctGe1B4QAE0hv9o3OLuDViTCM9NvemtJWY8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SAS+9dxtFaQNheEFXalunJybAX729D+aNT+pOeF9Vdk5luHPxFowkWyOYgKmFgXkIA4Co85AW6Fi4TJRHuzRIg11qvw51v1TFmEfHI1v/lpUjDdHF9vh4REfzsIWM+OAJLDt5UQsh4toGF6VOo8xWsLMbgBKQt7bFmCO+vgRYJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I89J+RDn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t1syRjMY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F194DC19421;
-	Sat,  4 Apr 2026 21:06:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I89J+RDn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3F6C19421;
+	Sat,  4 Apr 2026 23:01:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775336798;
-	bh=4SryKwM7vsegLO0c1BFP+xu0X8RY5OoE3Nf4Yl1SFh4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=t1syRjMYle4xMK+gSEsZrcuYSNG1IxBD6oDNJNvj60aCCos1ZGIJCcinPiEHdzH2F
-	 0/8Qk7SwJrsUZDScopGiUSi9sNUdqJVHOaI465T5900BmJtO81RujxH/aHQYOhGwB2
-	 6zenI80UAnJlu0lBDGmBYbxJ/u+GRuHu1BQLZbAv2x9fJgGreuGGNMyNkKvXu4sDbk
-	 sgk8+bdXzlEZLqjItXYRUrBnAhCnjqv9i9JEnj2kHCCxxBcjaaXgwJWMZAeIlggg4D
-	 dFHJV20oRnsIPTl6W7j3LbvBrrbRqYaLjMdmZbnaa7yYBOcWJ+TW0al2b5IwfgjToM
-	 AIz82ny77TGpg==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: (sashiko status) [RFC PATCH 0/9] mm/damon: introduce DAMOS failed region quota charge ratio
-Date: Sat,  4 Apr 2026 14:06:35 -0700
-Message-ID: <20260404210636.87762-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260404163943.89278-1-sj@kernel.org>
-References: 
+	s=k20201202; t=1775343667;
+	bh=TQ2wXMvDctGe1B4QAE0hv9o3OLuDViTCM9NvemtJWY8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=I89J+RDnWLr5lXMBrKGChRbkMMn9f5Rsf9GaTLOGSSnajdyJ0G1/MHBhzOQ/y6P5v
+	 58ZHBoGb36BMdWLcSnJAlfcSdqtlm+hzoRP1xznvn4rn2o3/5KHi8T2rpGv1WUTT0z
+	 Vq1VS9HmD3+E8ggFFDI3t10+BI2C13uhu7SAwX407irOUMwQISV5QG2GLsBOLtXGMG
+	 4430/NajH3JnKN5qAMrwKGGj1ASRHjS8ilpYwQmoOLjuIQFW90cGRqK/nqASxlOTqb
+	 Ol5YT6blM5vatYpQteWEA90ttv1C8VqiljPL8tUgkIIblzNyJGlgURvnWx8NvhElw1
+	 muwGQ1KBIUgWg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	leitao@debian.org,
+	shuah@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drv-net: adjust to socat changes
+Date: Sat,  4 Apr 2026 16:01:03 -0700
+Message-ID: <20260404230103.2719103-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,52 +51,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Dropped individuals from Cc list to reduce the traffic.
+socat v1.8.1.0 now defaults to shut-null, it sends an extra
+0-length UDP packet when sender disconnects. This breaks
+our tests which expect the exact packet sequence.
 
-TL; DR: sashiko made a few useful findings.  I will address those in the next
-revision.
+Add shut-none which was the old default where necessary.
 
-Forwarding sashiko.dev review status for the overall picture.  Read my replies
-to 'ISSUES MAY FOUND' patches for more details.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: leitao@debian.org
+CC: shuah@kernel.org
+CC: hawk@kernel.org
+CC: john.fastabend@gmail.com
+CC: sdf@fomichev.me
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh | 6 +++---
+ tools/testing/selftests/drivers/net/xdp.py                | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-# review url: https://sashiko.dev/#/patchset/20260404163943.89278-1-sj@kernel.org
+diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+index 02dcdeb723be..a9a01a64b7b3 100644
+--- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
++++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+@@ -251,7 +251,7 @@ function listen_port_and_save_to() {
+ 
+ 	# Just wait for 3 seconds
+ 	timeout 3 ip netns exec "${NAMESPACE}" \
+-		socat "${SOCAT_MODE}":"${PORT}",fork "${OUTPUT}" 2> /dev/null
++		socat "${SOCAT_MODE}":"${PORT}",fork,shut-none "${OUTPUT}" 2> /dev/null
+ }
+ 
+ # Only validate that the message arrived properly
+@@ -360,8 +360,8 @@ function check_for_taskset() {
+ 
+ # This is necessary if running multiple tests in a row
+ function pkill_socat() {
+-	PROCESS_NAME4="socat UDP-LISTEN:6666,fork ${OUTPUT_FILE}"
+-	PROCESS_NAME6="socat UDP6-LISTEN:6666,fork ${OUTPUT_FILE}"
++	PROCESS_NAME4="socat UDP-LISTEN:6666,fork,shut-none ${OUTPUT_FILE}"
++	PROCESS_NAME6="socat UDP6-LISTEN:6666,fork,shut-none ${OUTPUT_FILE}"
+ 	# socat runs under timeout(1), kill it if it is still alive
+ 	# do not fail if socat doesn't exist anymore
+ 	set +e
+diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
+index d86446569f89..7e635487d517 100755
+--- a/tools/testing/selftests/drivers/net/xdp.py
++++ b/tools/testing/selftests/drivers/net/xdp.py
+@@ -70,7 +70,7 @@ from lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+     cfg.require_cmd("socat", remote=True)
+ 
+     rx_udp_cmd = f"socat -{cfg.addr_ipver} -T 2 -u UDP-RECV:{port},reuseport STDOUT"
+-    tx_udp_cmd = f"echo -n {test_string} | socat -t 2 -u STDIN UDP:{cfg.baddr}:{port}"
++    tx_udp_cmd = f"echo -n {test_string} | socat -t 2 -u STDIN UDP:{cfg.baddr}:{port},shut-none"
+ 
+     with bkg(rx_udp_cmd, exit_wait=True) as nc:
+         wait_port_listen(port, proto="udp")
+@@ -271,7 +271,7 @@ from lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+         # Writing zero bytes to stdin gets ignored by socat,
+         # but with the shut-null flag socat generates a zero sized packet
+         # when the socket is closed.
+-        tx_cmd_suffix = ",shut-null" if payload_len == 0 else ""
++        tx_cmd_suffix = ",shut-null" if payload_len == 0 else ",shut-none"
+         tx_udp = f"echo -n {test_string} | socat -t 2 " + \
+                  f"-u STDIN UDP:{cfg.baddr}:{port}{tx_cmd_suffix}"
+ 
+-- 
+2.53.0
 
-- [RFC PATCH 1/9] mm/damon/core: introduce failed region quota charge ratio
-  - status: Reviewed
-  - review: ISSUES MAY FOUND
-- [RFC PATCH 2/9] mm/damon/sysfs-schemes: implement fail_charge_{num,denom} files
-  - status: Reviewed
-  - review: ISSUES MAY FOUND
-- [RFC PATCH 3/9] Docs/mm/damon/design: document fail_charge_{num,denom}
-  - status: Reviewed
-  - review: ISSUES MAY FOUND
-- [RFC PATCH 4/9] Docs/admin-guide/mm/damon/usage: document fail_charge_{num,denom} files
-  - status: Reviewed
-  - review: ISSUES MAY FOUND
-- [RFC PATCH 5/9] Docs/ABI/damon: document fail_charge_{num,denom}
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH 6/9] mm/damon/tests/core-kunit: test fail_charge_{num,denom} committing
-  - status: Reviewed
-  - review: ISSUES MAY FOUND
-- [RFC PATCH 7/9] selftets/damon/_damon_sysfs: support failed region quota charge ratio
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH 8/9] selftests/damon/drgn_dump_damon_status: support failed region quota charge ratio
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH 9/9] selftets/damon/sysfs.py: test failed region quota charge ratio
-  - status: Reviewed
-  - review: No issues found.
-
-# hkml [1] generated a draft of this mail.  It can be regenerated
-# using below command:
-#
-#     hkml patch sashiko_dev --thread_status --for_forwarding \
-#             20260404163943.89278-1-sj@kernel.org
-#
-# [1] https://github.com/sjp38/hackermail
-
-
-Thanks,
-SJ
