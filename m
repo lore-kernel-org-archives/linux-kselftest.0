@@ -1,148 +1,124 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from outbound.st.icloud.com (p-east2-cluster6-host6-snip4-8.eps.apple.com [57.103.76.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8642E1AB6F1
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Apr 2026 16:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBD230E0ED
+	for <linux-kselftest@vger.kernel.org>; Sun,  5 Apr 2026 16:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.76.229
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775406628; cv=none; b=Sn0AGxz2ADssd0rNI4SXnZTn6HG1hOxPNk79z73dQb+AJ9LQL1niybEIaaokxu7KB2kGlZeYe+8nKyn4CQim/E/4MotwZygeBZXrzIwFYCUknsB42ZG4OuwM+EABBM5vdB12pRIKZQMjWDePyR0xeC0uQ38aQmMRZljNhGFnfyw=
+	t=1775408035; cv=none; b=a573dvU7zscQaUo2SKFvjuAkiTIISzBKRvh5M3N47lkxECu4Kn86zmef83mAc1XN15QhN+Jkh/hRl4lHXzbWjfMTVb0S5MmwImGacWqjnMpCdRWZ8Qg59YNJJeIRSDbw7XOYVDgR+TNN4dNRlqKvl7IZ6poxdtV3vcU2muOCk8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775406628; c=relaxed/simple;
-	bh=c789ayyGQ4yRcOqcywA2wzIlZo22FYkyLwOqdDT06pQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bB78n0aHZ6H3Qp1mKX2lN/fWKFy3pfMJNQTMyYd6AzcKM9sfdnN6sMNNvzPfvrc0Ie/TRV47aHx0Ih2klv4YgXwupvTozRVGPA4nfQNRcMMMsMSEk6X/032/ZWcN/MN2MbIg1+B6UhV5Eu+vOypFfh/vvNjAzURo5TRiebvKzSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dzDC4aie; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775408035; c=relaxed/simple;
+	bh=v3yl9slSLpWvGImzZdbbFVDqQuIntL9xUh1TAmIX3KQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZY9MJnCdobu3ZN2J/SPrfrhGRPn1tDgo4CCXs+OXWUQLnciUjzxlbhzZS+OKJQkh3NtJ3AyoZ42JghK19pg3FYiesMmZfv/U79sJl1G4o1GY/ta9VvV6y4opZpUsCcw+r/YXotiKs+JFwhkS+flm9yTYA7wFYTG/dEEBkWkLLl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=IQ603w8e reason="key not found in DNS"; arc=none smtp.client-ip=57.103.76.229
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dzDC4aie"
-Message-ID: <b7af6516-1593-4e2b-9149-fc839e2b88bd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775406624;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LjUD/kLWetoMxCJ3PxzmkFjU0TTr1mOWnhqJ2E1tbHo=;
-	b=dzDC4aieMPnCPXwj7TE0O257iG4gwpW1KkFDZSb87AyYWIQFJUNBBSvlCdKGM9ThMJk4Iy
-	7CEHbAOQbccjlFxMy1NmWRmj77N1XEtD0WcflqatHKS//m+Zd58m8m2B56dyKEiM3nJ2ml
-	XKFcOceEg/l8Hw3+jRJDeZy+2BZcJM4=
-Date: Sun, 5 Apr 2026 09:30:17 -0700
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="IQ603w8e"
+Received: from outbound.st.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPS id DDC3C1800450;
+	Sun, 05 Apr 2026 16:53:51 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; t=1775408033; x=1778000033; bh=VSJ4q2wFeM/YCh0ps+bNo//AJyKpAA0ilsBmUNWsuWQ=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=IQ603w8eLuR2BzdJigy6lRatfvRnzM0F2da8ap8+NYgOnB74ETrKXiCF1lOZCZ8LxzRfauAWXEYbidKxaElQ5Kp00urE3iFisvu0Q39PZlT1xRUw1VLKhUDd6vzgd7h6IkMu7nw/SIza8MHxRT3lZrmy43b6Y4p3WNTVgA5BakDFw4UsFlx0FvmJesVjKKPud6DTXxV2iBeMRxaneWXNt6sj7F6phQOAgOpW5SE7V2Bqwk9KkYUmTkUyfraxmPQiWG8J4SOy5NCYxgjmC1hZQQj1VQcKVVKCuHi2HP/ci7dNM5LVoeY4T9hVFKB+nCS0CwzO09s9rTirs+ntxQyxbA==
+mail-alias-created-date: 1719758601013
+Received: from desktop.y-koj.net (unknown [17.42.251.67])
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPSA id 5C7DB1800DF2;
+	Sun, 05 Apr 2026 16:51:54 +0000 (UTC)
+From: Yohei Kojima <yk@y-koj.net>
+To: Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Yohei Kojima <yk@y-koj.net>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/4] nstree: Fix spurious ENOENT in listns pagination during grace period
+Date: Mon,  6 Apr 2026 01:50:36 +0900
+Message-ID: <cover.1775404451.git.yk@y-koj.net>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 2/6] selftests/liveupdate: add helper functions for
- memfd tests
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
- Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Usama Arif
- <usama.arif@linux.dev>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <20260404102452.4091740-1-pratyush@kernel.org>
- <20260404102452.4091740-3-pratyush@kernel.org>
- <c783bc1b-3327-422f-9191-11550513b13c@linux.dev>
- <2vxzecktc13r.fsf@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <2vxzecktc13r.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA1MDE3NiBTYWx0ZWRfX2OMeTkD9IwcX
+ BTA1wlIe7/OgM2j6G9vkD9nNWMZ1pSP3x84xdeg1EZjh/JiD+44DSEhzJENflrIOFWPE7fQPXlz
+ OWecYMy991AAHyZGgx1R4ECkiJK/uIx3+qQw/d0WCHP1eFeJm8Davd9FozOL0TaDhGH1Q5AAIpw
+ wCKY+wtJp/yKkPQDFkezoeN/QZjVkjacEztUwaDbRn9D+aS/ywSDkZMNKGMPHn1FBOjlnhqeVsW
+ Ub5Anpm0jiN5ze/100O8wNqbdNdeCDr92ZtgaBkpFYzGo/cs9y4DctlMeBiyX8ec7+Ss/2ZYoFy
+ I/TNo+TYh+jkJzOwklpq1nDgUO185cuhdKkmPNsGGItl8hdgpxf/X2ELvBHe1Q=
+X-Authority-Info-Out: v=2.4 cv=Cuiys34D c=1 sm=1 tr=0 ts=69d293a0
+ cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
+ a=YrL12D//S6tul8v/L+6tKg==:17 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=TCFzKv49ausxwcHn_0YA:9
+X-Proofpoint-GUID: -3gBA1-hBsK8p4CnL0yj-2J2kttvH4Dc
+X-Proofpoint-ORIG-GUID: -3gBA1-hBsK8p4CnL0yj-2J2kttvH4Dc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-05_05,2026-04-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=823
+ malwarescore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 adultscore=0
+ spamscore=0 bulkscore=0 clxscore=1030 mlxscore=0 classifier=spam authscore=0
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2604050176
+
+This series fixes the spurious ENOENT set by listns when (1) pagination
+is used and (2) listns tries to start enumeration from a destroyed or
+inactive namespace.
+
+The Cause of the Bug
+====================
+This bug was caused by lookup_ns_id_at(kls->last_ns_id + 1, ...), which
+is called by do_listns(). This function returned NULL if the first
+namespace after the given ns id was destroyed or inactivated before this
+function is called:
+
+A: active namespace
+D: destroyed (or inactive) namespace
+
+         +-----+-----+-----+-----+-----+-----+-----+-----+
+state:   |  A  |  A  |  A  |  D  |  D  |  A  |  A  |  A  |
+ns_id:   |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |
+         +-----+-----+-----+-----+-----+-----+-----+-----+
+	                |     |
+		        |     +-- (kls->last_ns_id + 1)
+		        +-- req.ns_id = 3
+
+For listns(), there is no way to distinguish this case with the case
+nstree is empty, therefore it returns -ENOENT although three namespaces
+remains in the tree.
+
+Solution
+========
+The bug is fixed by iterating over the nstree's internal list until it
+reaches the first active namespace.
+
+Patches Sequence
+================
+Patches 1 and Patch 2 fix the existing issues in namespace selftests.
+Patch 3 fixes the spurious ENOENT bug. Patch 4 adds a regression test
+for this bug.
+
+Disclaimer on Reproduction
+==========================
+Unfortunately I couldn't reproduce this bug on VM environment, perhaps
+because the test I added relies on timing-sensitive RCU behavior. At
+least, I confirmed that this bug reproduces on my bare-metal machine
+equipped with i7-14700K. Also, I confirmed that all namespaces tests
+pass after applying this series.
 
 
-在 2026/4/5 0:34, Pratyush Yadav 写道:
-> On Sat, Apr 04 2026, Zhu Yanjun wrote:
->
->> 在 2026/4/4 3:24, Pratyush Yadav 写道:
->>> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
->>> Add some helper functions that will be used by memfd tests. This moves
->>> some of the complexity out of the test itself, which results in better
->>> test readability and less code duplication.
->>> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
->>> Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
->>> Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
->>> ---
->>>    .../selftests/liveupdate/luo_test_utils.c     | 191 +++++++++++++++++-
->>>    .../selftests/liveupdate/luo_test_utils.h     |  10 +
->>>    2 files changed, 200 insertions(+), 1 deletion(-)
->>> diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c
->>> b/tools/testing/selftests/liveupdate/luo_test_utils.c
->>> index 3c8721c505df..ceb918ef9813 100644
->>> --- a/tools/testing/selftests/liveupdate/luo_test_utils.c
->>> +++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
->>> @@ -1,8 +1,12 @@
->>>    // SPDX-License-Identifier: GPL-2.0-only
->>>      /*
->>> - * Copyright (c) 2025, Google LLC.
->>> + * Copyright (c) 2025-2026, Google LLC.
->>>     * Pasha Tatashin <pasha.tatashin@soleen.com>
->>> + * Pratyush Yadav (Google) <pratyush@kernel.org>
->>> + *
->>> + * Copyright (C) 2025 Amazon.com Inc. or its affiliates.
->>> + * Pratyush Yadav <ptyadav@amazon.de>
->>>     */
->>>      #define _GNU_SOURCE
->>> @@ -20,9 +24,194 @@
->>>    #include <sys/stat.h>
->>>    #include <errno.h>
->>>    #include <stdarg.h>
->>> +#include <sys/vfs.h>
->>> +#include <linux/magic.h>
->>>      #include "luo_test_utils.h"
->>>    +int cwd_is_tmpfs(void)
->>> +{
->>> +	struct statfs buf;
->>> +
->>> +	if (statfs(".", &buf) < 0)
->>> +		return -errno;
->>> +
->>> +	return buf.f_type == TMPFS_MAGIC;
->>> +}
->>> +
->>> +/* Read exactly specified size from fd. Any less results in error. */
->>> +int read_size(int fd, char *buffer, size_t size)
->>> +{
->>> +	size_t remain = size;
->>> +	ssize_t bytes_read;
->>> +
->>> +	while (remain) {
->> while (remain > 0) ?
-> I don't think it is needed. bytes_read will always be smaller than or
-> equal to remain, so remain will never go below 0 anyway. And while
-> (remain) is nicer to read.
+Yohei Kojima (4):
+  selftests/namespace: fix selftest hang-up caused by zombie processes
+  selftests/namespace: fix unintentional skip in ns_active_ref_test.c
+  nstree: Fix spurious ENOENT in listns pagination during grace period
+  selftests/namespace: test spurious ENOENT bug in listns pagination
 
-If a wrong number is transferred, this makes remain less than 0. Then 
-this loop will run again and again.
+ kernel/nstree.c                               |  68 ++++--
+ .../namespaces/listns_pagination_bug.c        | 200 ++++++++++++++++++
+ .../selftests/namespaces/ns_active_ref_test.c |   4 +
+ .../testing/selftests/namespaces/nsid_test.c  |   8 +
+ 4 files changed, 258 insertions(+), 22 deletions(-)
 
-This while (remain > 0) will avoid this kind of scenario.
-
-ZhuYanjun
-
->
->>> +		bytes_read = read(fd, buffer, remain);
->>> +		if (bytes_read == 0)
->>> +			return -ENODATA;
->>> +		if (bytes_read < 0) {
->>> +			if (errno == EINTR)
->>> +				continue;
->>> +			else
->>> +				return -errno;
->>> +		}
->>> +
->>> +		remain -= bytes_read;
->>> +		buffer += bytes_read;
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>> +
-> [...]
->
 -- 
-Best Regards,
-Yanjun.Zhu
+2.52.0
 
