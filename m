@@ -1,76 +1,142 @@
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38F2382F0D;
-	Sun,  5 Apr 2026 21:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACE91A262D;
+	Sun,  5 Apr 2026 21:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775424582; cv=none; b=Ew5p+CSMmF2+vp6ICBxasGH4pYDvfOGmHatmCEZrzNKz47mx4tlAHvVbmhw0qDG1lYX0r8backoFTz9DhpKmYcJNtSM8omgxvtR/zJEJoE71MKsBFwxefVkozu5dOM909wSZCfo96VxIROYWbEWfuAyw8F/5CPAiVf+rPOZxlG4=
+	t=1775424747; cv=none; b=BRejW16p+kqq9Txmog6gHkaGAc2aYn27/73iIZ12RFtQeYx8ekmgTi29MgrcqLac9iiMPdQD0a1LU5jjAc4vVqv7SjhQ4Y63K20O33Qa7yvE/uCd1p9fl5Az3jll0PkdQVd4L03LgBybImde0MoD0S2tBGSfsmpkGLAJtYn5eJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775424582; c=relaxed/simple;
-	bh=ENtHUUCS6TwzO+/QPpuNyTsxeZ/HIpV7yozE2eg8xzU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=o99M0RKFWWeiUU1OptG676S+YDw8FDqm/0TQlYLkN6oRLIShPAghAPDOaB13MhNmZS8N1xA56blx/3Kz71BGVvvV1auWXTPnbbJ6tLUigmgssbAZsJE4AtexMbNrPXbklTU/b1vv6G/mhegCZOROs0CzaWc4j52bhBPMUlg3WdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
-Received: from local
-	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-	 (Exim 4.99)
-	(envelope-from <daniel@makrotopia.org>)
-	id 1w9V26-000000000jh-3OPx;
-	Sun, 05 Apr 2026 21:29:26 +0000
-Date: Sun, 5 Apr 2026 22:29:19 +0100
-From: Daniel Golle <daniel@makrotopia.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Daniel Golle <daniel@makrotopia.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: John Crispin <john@phrozen.org>,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Subject: [PATCH net] selftests: net: bridge_vlan_mcast: wait for h1 before
- querier check
-Message-ID: <c830f130860fd2efae08bfb9e5b25fd028e58ce5.1775424423.git.daniel@makrotopia.org>
+	s=arc-20240116; t=1775424747; c=relaxed/simple;
+	bh=4NEpxaG0yuBI7jkY+PpJhA+sLQ+oK9WXnFxmX5SW7j8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mm3FL8mysvbiPEVqxgXlJJIwkKTV7x5LPv01YDhzX73P2DORLg+xn9ZonNZZRcCdw2/gInyw+XMaXXBpqjLsI32RxPWPBhH41zTLcnJvZ4dZ0sGew2xs6t0HLQ0wyueSKAnfDqMwEN/t5HsQnbXpyHqfxCmzCRjNlSGkExkPThU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mj0ITPIW; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mj0ITPIW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=fT
+	m8Ymb+Z1XqMTFD8Vp9OWwDvEBHALKL1c3yKJxhXAE=; b=mj0ITPIWmn/Oo/KYTd
+	BB06VyFwUBQSIie+Djgp6+w0psQewnDP+VYPP2J/uAIoNPqQ2QEEAUbA1v+138B5
+	feQoSFc7z5qyqWcZkJpmqVeKhRRx/c7UPurwy2W79bgVQ0dU1kFNBQsSMvrkEz2q
+	W+I2JdkVfYsbFjbmw7tKnT3JE=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wCn_iy01NJpqzIwDg--.39331S2;
+	Mon, 06 Apr 2026 05:31:34 +0800 (CST)
+From: CaoRuichuang <create0818@163.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org
+Cc: ljs@kernel.org,
+	Liam.Howlett@oracle.com,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	CaoRuichuang <create0818@163.com>
+Subject: [PATCH] selftests: mm: stop relying on killall in charge_reserved_hugetlb
+Date: Mon,  6 Apr 2026 05:31:26 +0800
+Message-Id: <20260405213126.1161-1-create0818@163.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCn_iy01NJpqzIwDg--.39331S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCrWDWr1xGFWDXr4rKw4xCrg_yoW5Zr1rp3
+	4xK3Z8Gryrtr9rJr4kGF4UZrn7Gw4kXFyIqF4Fkr97Zr13GwsrKF1j9Fy7XrWxurWaqrWf
+	uw4Fvw4v93WUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0p_zuWDUUUUU=
+X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbC6BdxqmnS1Lce3gAA38
 
-The querier-interval test adds h1 (currently a slave of the VRF created
-by simple_if_init) to a temporary bridge br1 acting as an outside IGMP
-querier. The kernel VRF driver (drivers/net/vrf.c) calls cycle_netdev()
-on every slave add and remove, toggling the interface admin-down then up.
-Phylink takes the PHY down during the admin-down half of that cycle.
-Since h1 and swp1 are cable-connected, swp1 also loses its link may need
-several seconds to re-negotiate.
+charge_reserved_hugetlb.sh tears down background writers with
+killall -2 --wait write_to_hugetlbfs. That depends on killall from
+psmisc, which is not installed on minimal Ubuntu images, so the test
+fails in cleanup with "killall: command not found".
 
-Use setup_wait_dev $h1 0 which waits for h1 to return to UP state, so the
-test can rely on the link being back up at this point.
+Track the writer PIDs we start ourselves and signal them directly
+during cleanup instead. Make write_hugetlb_memory.sh exec
+write_to_hugetlbfs so the recorded PID names the long-lived test
+process, and redirect async output straight to the temporary log file
+instead of going through a tee pipeline.
 
-Fixes: 4d8610ee8bd77 ("selftests: net: bridge: add vlan mcast_querier_interval tests")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Signed-off-by: CaoRuichuang <create0818@163.com>
 ---
- tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh | 1 +
- 1 file changed, 1 insertion(+)
+ .../selftests/mm/charge_reserved_hugetlb.sh   | 25 +++++++++++++++----
+ .../selftests/mm/write_hugetlb_memory.sh      |  2 +-
+ 2 files changed, 21 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-index 72dfbeaf56b92..e8031f68200ad 100755
---- a/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-@@ -414,6 +414,7 @@ vlmc_querier_intvl_test()
- 	bridge vlan add vid 10 dev br1 self pvid untagged
- 	ip link set dev $h1 master br1
- 	ip link set dev br1 up
-+	setup_wait_dev $h1 0
- 	bridge vlan add vid 10 dev $h1 master
- 	bridge vlan global set vid 10 dev br1 mcast_snooping 1 mcast_querier 1
- 	sleep 2
+diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+index 447769657..757df4878 100755
+--- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
++++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+@@ -44,6 +44,8 @@ else
+ fi
+ export cgroup_path
+ 
++write_pids=()
++
+ function cleanup() {
+   if [[ $cgroup2 ]]; then
+     echo $$ >$cgroup_path/cgroup.procs
+@@ -193,10 +195,12 @@ function write_hugetlbfs_and_get_usage() {
+     [[ "$private" == "-r" ]] && [[ "$expect_failure" != 1 ]]; then
+ 
+     bash write_hugetlb_memory.sh "$size" "$populate" "$write" \
+-      "$cgroup" "$path" "$method" "$private" "-l" "$reserve" 2>&1 | tee $output &
++      "$cgroup" "$path" "$method" "$private" "-l" "$reserve" \
++      >"$output" 2>&1 &
+ 
+     local write_result=$?
+     local write_pid=$!
++    write_pids+=("$write_pid")
+ 
+     until grep -q -i "DONE" $output; do
+       echo waiting for DONE signal.
+@@ -261,10 +265,21 @@ function write_hugetlbfs_and_get_usage() {
+ function cleanup_hugetlb_memory() {
+   set +e
+   local cgroup="$1"
+-  if [[ "$(pgrep -f write_to_hugetlbfs)" != "" ]]; then
+-    echo killing write_to_hugetlbfs
+-    killall -2 --wait write_to_hugetlbfs
+-    wait_for_hugetlb_memory_to_get_depleted $cgroup
++  local write_pid
++
++  if (( ${#write_pids[@]} )); then
++    for write_pid in "${write_pids[@]}"; do
++      if kill -0 "$write_pid" 2>/dev/null; then
++        echo killing write_to_hugetlbfs pid "$write_pid"
++        kill -2 "$write_pid"
++        wait "$write_pid"
++      fi
++    done
++    write_pids=()
++
++    if [[ -n "$cgroup" ]]; then
++      wait_for_hugetlb_memory_to_get_depleted "$cgroup"
++    fi
+   fi
+   set -e
+ 
+diff --git a/tools/testing/selftests/mm/write_hugetlb_memory.sh b/tools/testing/selftests/mm/write_hugetlb_memory.sh
+index 3d2d2eb9d..49164bbfc 100755
+--- a/tools/testing/selftests/mm/write_hugetlb_memory.sh
++++ b/tools/testing/selftests/mm/write_hugetlb_memory.sh
+@@ -19,5 +19,5 @@ echo $$ > ${cgroup_path:-/dev/cgroup/memory}/"$cgroup"/cgroup.procs
+ echo "Method is $method"
+ 
+ set +e
+-./write_to_hugetlbfs -p "$path" -s "$size" "$write" "$populate" -m "$method" \
++exec ./write_to_hugetlbfs -p "$path" -s "$size" "$write" "$populate" -m "$method" \
+       "$private" "$want_sleep" "$reserve"
 -- 
-2.53.0
+2.39.5 (Apple Git-154)
+
