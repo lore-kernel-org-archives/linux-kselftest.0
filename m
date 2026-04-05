@@ -1,248 +1,139 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577C9273816
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Apr 2026 03:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F26A1A267;
+	Sun,  5 Apr 2026 07:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775359812; cv=none; b=Rksrf6t2WLcpvo2qWOx4Aktxdqkn3SSiM9jSAoX9xN8H768KhyFDF3JM9xsPZlL5VaSEVwuRtBA0Q2Wp1nRg9jR1/Re/FMk6xbMwicly9wQRYJYWo9mxV4HlV0z7wItgBjHDFceGHB3A7tcJFKQAurDAWjpVTCbadZaFK/T4k4U=
+	t=1775374444; cv=none; b=C3an2SxgBlSZgck3Y/wviotDg6CBpk8m2LpVpW/ByGtpZdHU83DgyapbcWHEMbql5w7mPvUzXlvseU4Ph4tbkxVGDZpEhRpqRMPSKn8ZgvCdR6V8dEPwv2b+EsfjyY1SIqZ0MObWLKJOfJGMsV1MrVpWkWcONoufPdO83nZGb+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775359812; c=relaxed/simple;
-	bh=6VgXMf1dbZIEFJ+BoZ7O6EwYBpyyfjLk5p6wRIkkWvU=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=hAyJBVHrPcGB593BrKmGGDhCZQnP/9bvoPso9iozf3Fb5JqD+L7XB8VmHJdt7Rt583DpuG3JrNs8Br1XJW82Z5n6GSyTNdi8giCf+BLrmrqhqNFq1+HJvYXESl3TxviuxjZHFgauKahhj4Ys1vAIZ3V+bXM9B4vIR0rElG/V318=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqCn98GQ; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775374444; c=relaxed/simple;
+	bh=Nfu4Tu+OUsT33sDUmIovSpX5KSqFMsSDTkbmrb8J+pg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=NkTL05Btlez+F7+LQ2bA9k7kaHuXpstli098ULOXpnbiPRqa0UIvJworYIBdWhRAPHbevc+0OT8iS38HY/w0Rx+98VhSKaDkIEjCNqNAT5Wpo2Oe20qvxYlTF7J8DJDdYzFxNqv7klryfP2/4Wq5XbN66gaSwQ2qkq7Tb5/O5JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYGBvzgC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqCn98GQ"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-78fc4425b6bso27495837b3.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Apr 2026 20:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775359810; x=1775964610; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rIhyqVeQcmo1jb/qAoAPSAYd8D2Hnw0/pgPPvAap7Ok=;
-        b=OqCn98GQWDz9jI20hI4x9a44Il9r2ZNPJKo0lCvR+piaBWaH1uxYHEu53ikpOMNBxl
-         VJGcbOKCGB8gQkzqRzK5PBi2g5FkkE4fjDWBQayLLMt5DmXr8CwUV7u4TapgSBl9wvQJ
-         AE/1ROUDrWuSs/R++4EN4BjAsNu6G+7SKM8XCDSctAqLGfl51PsCp7sQqwBLvm6gAHfH
-         /CRlRThl58sA7kH9NZIYYuM/uStCQTSnHa5rez+1QIFULRNb2vwD52X2+GLN+U4w7Ojd
-         ryMnrkP9Nyoaoat8hg+3AJLMGYXPOroo0Mtz+7yiqXdVFSHVhnsKdEz4NB66i9aFgGpo
-         zC8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775359810; x=1775964610;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rIhyqVeQcmo1jb/qAoAPSAYd8D2Hnw0/pgPPvAap7Ok=;
-        b=ptp7qWiVyykyBu1LEtJBro7+ZHFBMW/kJpOxE2bLqzgT82zCvhiB/BwVd+FFSDkkGK
-         InYDTRRCaJAuCiUBfRzNL90HxhTtwfiXIKUVY9MyYWl0b3OZ0jlAyu4XmY13ELhGKuWC
-         ih4FzUDsxQtuZcwWkftZjNIzmErDJbHE97QP/4lpW7MnJlybybiWQ1ZBC+5CTAv1tEUl
-         xP5jd/jeZuCB+hkeIw28t+KStFVEaPT+rK/dgLGauPeZEWqBdyN9eZ4Y0DyBGaAC7duC
-         Masr2LKHW7qLFU6GDYs4cR0LEzA4WP0ECE5pV2TZxOhXplIniCC/kVKY20SzI5JDQSm/
-         j1xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbKafIjjwAxasKlv7s9ifMu+S6H4a564HJbZB56Nk1FwZhR4xDD876UU3hbk+w1DIv1iUuWJhrmiN5VYpCNmg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaaeL5A8AzI3J4Gso+r4wIv2D+0MMEfQwQClDmf1ltGQ2k8bBr
-	YyWdSiYYE3fIF9/kjucZE5oRp+1NIlVl5ndLxMdOHfMU4XmkvA46v6Vt
-X-Gm-Gg: AeBDietl+IEJikpDR/xCnvMeZjEHTTEzRqnD46Rs8NRerPZbceQ4yRYxstZKB3G7BpD
-	cE5ysSOH4AuTzJYjAY4Bk2qBb6nDPF6Fm4qdbjsr/dG1StpSdxZDY0BEfbIC2rtvPRqFgtk+eLE
-	g9DZFQE7BL/CCqgG0wcq9Q4sO7jsavyAVwGMx8e/p+CxM1nfWzngIu5FQJ1FmPFD96yPTN9an1G
-	pavEkAF9Hmb8mnfmdHI1ESniD0aOvseY3UWS7IhPg4gI+PxB2Fdal9WfUTXSsLGr9iQiioudOBT
-	wJSttAVJcIwN3eD0Zj9Haw6I+mHxgF8ZvsSScJBUL1vwcHUikBtd95qJkhMpqyHPt/LRJ3tQWUr
-	B3DmPEDhkJbaWn6mAmTWwbwrx/tZHwl0OTtWSWD6NxlI8K1m2ZnOrPg3/BuQGhwJep9QurqIyGe
-	HE935HNFZrBLpllds/+kB2+t6od7BBJiTYG4XUOqjZHy5OaPjg5JaiCC61gotIu7barUz8+CoyH
-	q38
-X-Received: by 2002:a05:690c:660a:b0:79a:5ad7:b9ae with SMTP id 00721157ae682-7a4d61558demr90426747b3.42.1775359810385;
-        Sat, 04 Apr 2026 20:30:10 -0700 (PDT)
-Received: from gmail.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7a36ea2872esm38036227b3.19.2026.04.04.20.30.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Apr 2026 20:30:09 -0700 (PDT)
-Date: Sat, 04 Apr 2026 23:30:09 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Joe Damato <joe@dama.to>, 
- netdev@vger.kernel.org, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- dalias@libc.org
-Cc: andrew+netdev@lunn.ch, 
- linux-kernel@vger.kernel.org, 
- willemb@google.com, 
- Joe Damato <joe@dama.to>, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.14a8e29bbdc9a@gmail.com>
-In-Reply-To: <willemdebruijn.kernel.400d24decd7d@gmail.com>
-References: <20260403233240.178948-1-joe@dama.to>
- <20260403233240.178948-4-joe@dama.to>
- <willemdebruijn.kernel.400d24decd7d@gmail.com>
-Subject: Re: [net-next v2 3/3] selftests/net: Test PACKET_AUXDATA
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYGBvzgC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E61C116C6;
+	Sun,  5 Apr 2026 07:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775374443;
+	bh=Nfu4Tu+OUsT33sDUmIovSpX5KSqFMsSDTkbmrb8J+pg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=CYGBvzgCralwJZXcb0Y2UZClDnlHuroFvQBjHLNkJVVS4+pnQhVEG3V2staNu5jrd
+	 IkSKhRt2bkZr1QbF0CxiNYkZCxNPn1F5nOv9euSu8Xa6OKn0LDTqz2zk0xrTB9Uk3A
+	 RuPCMW4ps6khOcWMXhEWISemaOHClc8Gk3onWUelkzzt2GggfHsK5JdBF2Spj+wX7l
+	 RfCeJ3cVhoQt+G8lagbhV/qnb0nDvti3Z3+8amQxWikfEEq9zlr+uCfLdSDNfEtAgQ
+	 z+LHlM9iZRxwW0X18KeNCPduyfa9lS2ZkbfonX5I40ePeYjjuDewHgU8DAXyRV734y
+	 JzxZjk2EMqdjA==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: Pratyush Yadav <pratyush@kernel.org>,  Pasha Tatashin
+ <pasha.tatashin@soleen.com>,  Mike Rapoport <rppt@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>,  Usama
+ Arif <usama.arif@linux.dev>,  linux-kernel@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org
+Subject: Re: [PATCH v3 2/6] selftests/liveupdate: add helper functions for
+ memfd tests
+In-Reply-To: <c783bc1b-3327-422f-9191-11550513b13c@linux.dev> (Zhu Yanjun's
+	message of "Sat, 4 Apr 2026 10:53:47 -0700")
+References: <20260404102452.4091740-1-pratyush@kernel.org>
+	<20260404102452.4091740-3-pratyush@kernel.org>
+	<c783bc1b-3327-422f-9191-11550513b13c@linux.dev>
+Date: Sun, 05 Apr 2026 07:34:00 +0000
+Message-ID: <2vxzecktc13r.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Willem de Bruijn wrote:
-> Joe Damato wrote:
-> > Extend the packet socket selftest, adding a recvmsg path, to test
-> > PACKET_AUXDATA. Check basic attributes of tpacket_auxdata.
-> > 
-> > Signed-off-by: Joe Damato <joe@dama.to>
-> > ---
-> >  tools/testing/selftests/net/psock_snd.c  | 67 ++++++++++++++++++++++--
-> >  tools/testing/selftests/net/psock_snd.sh |  5 ++
-> >  2 files changed, 67 insertions(+), 5 deletions(-)
-> > 
-> > v2:
-> >   - Add is_psock bool argument to do_rx.
-> >   - Factor out aux data check into its own function for readability.
-> > 
-> > diff --git a/tools/testing/selftests/net/psock_snd.c b/tools/testing/selftests/net/psock_snd.c
-> > index 81096df5cffc..5464317c1764 100644
-> > --- a/tools/testing/selftests/net/psock_snd.c
-> > +++ b/tools/testing/selftests/net/psock_snd.c
-> > @@ -40,6 +40,7 @@ static bool	cfg_use_qdisc_bypass;
-> >  static bool	cfg_use_vlan;
-> >  static bool	cfg_use_vnet;
-> >  static bool	cfg_drop;
-> > +static bool	cfg_aux_data;
-> >  
-> >  static char	*cfg_ifname = "lo";
-> >  static int	cfg_mtu	= 1500;
-> > @@ -279,11 +280,54 @@ static int setup_rx(void)
-> >  	return fd;
-> >  }
-> >  
-> > -static void do_rx(int fd, int expected_len, char *expected)
-> > +static void check_aux_data(struct cmsghdr *cmsg, int expected_len)
-> >  {
-> > +	struct tpacket_auxdata *adata;
-> > +
-> > +	if (!cmsg)
-> > +		error(1, 0, "auxdata null");
-> > +
-> > +	if (cmsg->cmsg_level != SOL_PACKET)
-> > +		error(1, 0, "cmsg_level != SOL_PACKET");
-> > +
-> > +	if (cmsg->cmsg_type != PACKET_AUXDATA)
-> > +		error(1, 0, "cmsg_type != PACKET_AUXDATA");
-> > +
-> > +	adata = (struct tpacket_auxdata *)CMSG_DATA(cmsg);
-> 
-> Sashiko had another interesting observation that this access may be
-> unaligned, as cmsg_buf[1024] has 1-byte alignment.
-> 
-> That is not new in this patch. Indeed most tests in this dir just
-> deference msg_control as struct cmsghdr * and CMSG_DATA as whatever
-> domain specific type.
-> 
-> The man page also warns about this and suggests using memcpy to
-> access CMSG_DATA. Not sure why it does not warn about the other
-> cmsg_.. fields.
+On Sat, Apr 04 2026, Zhu Yanjun wrote:
 
-The commit that introduced that has more context
+> =E5=9C=A8 2026/4/4 3:24, Pratyush Yadav =E5=86=99=E9=81=93:
+>> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
+>> Add some helper functions that will be used by memfd tests. This moves
+>> some of the complexity out of the test itself, which results in better
+>> test readability and less code duplication.
+>> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+>> Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
+>> Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+>> ---
+>>   .../selftests/liveupdate/luo_test_utils.c     | 191 +++++++++++++++++-
+>>   .../selftests/liveupdate/luo_test_utils.h     |  10 +
+>>   2 files changed, 200 insertions(+), 1 deletion(-)
+>> diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c
+>> b/tools/testing/selftests/liveupdate/luo_test_utils.c
+>> index 3c8721c505df..ceb918ef9813 100644
+>> --- a/tools/testing/selftests/liveupdate/luo_test_utils.c
+>> +++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
+>> @@ -1,8 +1,12 @@
+>>   // SPDX-License-Identifier: GPL-2.0-only
+>>     /*
+>> - * Copyright (c) 2025, Google LLC.
+>> + * Copyright (c) 2025-2026, Google LLC.
+>>    * Pasha Tatashin <pasha.tatashin@soleen.com>
+>> + * Pratyush Yadav (Google) <pratyush@kernel.org>
+>> + *
+>> + * Copyright (C) 2025 Amazon.com Inc. or its affiliates.
+>> + * Pratyush Yadav <ptyadav@amazon.de>
+>>    */
+>>     #define _GNU_SOURCE
+>> @@ -20,9 +24,194 @@
+>>   #include <sys/stat.h>
+>>   #include <errno.h>
+>>   #include <stdarg.h>
+>> +#include <sys/vfs.h>
+>> +#include <linux/magic.h>
+>>     #include "luo_test_utils.h"
+>>   +int cwd_is_tmpfs(void)
+>> +{
+>> +	struct statfs buf;
+>> +
+>> +	if (statfs(".", &buf) < 0)
+>> +		return -errno;
+>> +
+>> +	return buf.f_type =3D=3D TMPFS_MAGIC;
+>> +}
+>> +
+>> +/* Read exactly specified size from fd. Any less results in error. */
+>> +int read_size(int fd, char *buffer, size_t size)
+>> +{
+>> +	size_t remain =3D size;
+>> +	ssize_t bytes_read;
+>> +
+>> +	while (remain) {
+>
+> while (remain > 0) ?
 
-https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/man/man3/cmsg.3?id=36d25246b4333513fefdbec7f78f29d193cf5d9a
+I don't think it is needed. bytes_read will always be smaller than or
+equal to remain, so remain will never go below 0 anyway. And while
+(remain) is nicer to read.
 
-It points out 32-bit platforms where cmsghdr is 12 bytes.
+>
+>> +		bytes_read =3D read(fd, buffer, remain);
+>> +		if (bytes_read =3D=3D 0)
+>> +			return -ENODATA;
+>> +		if (bytes_read < 0) {
+>> +			if (errno =3D=3D EINTR)
+>> +				continue;
+>> +			else
+>> +				return -errno;
+>> +		}
+>> +
+>> +		remain -=3D bytes_read;
+>> +		buffer +=3D bytes_read;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+[...]
 
-At least one example given, ptpd, uses a union to ensure alignment
-
-	union {
-		struct cmsghdr cm;
-		char	control[256];
-	}     cmsg_un;
-
-But at least one other example, ssmping, does not. So I think not even
-the 4B (on 32-bit archs) of cmsghdr fields can be depended on.
-
-> Indeed I can trigger this, e.g., with ipv6_flowlabel.c with
-> 
-> -       char control[CMSG_SPACE(sizeof(flowlabel))] = {0};
-> +       char control[1 + CMSG_SPACE(sizeof(flowlabel))] = {0};
-> 
-> -               cm = (void *)control;
-> +               cm = (void *)control + 1;
-> 
-> and compiling with -fsanitize=alignment. That triggers warnings for
-> all fields, starting from cmsg_len on line 78.
-> 
-> In practice this does not cause issues, because the compiler appears
-> to align char[] to 16B, even though __alignof__(control) shows 1. This
-> seems true for x86_64, but I am not aware that it is true across all
-> archs, especially those that cannot handle unaligned access.
-> 
-> I think the x86_64 source is the AMD64 ABI Draft, e.g., v 0.99.6
-> 
->    An array uses the same alignment as its elements, except that
->    a local or global array variable of length at least 16 bytes
->    or a C99 variable-length array variable always has alignment
->    of at least 16 bytes(4)
-> 
->    (4) The alignment requirement allows the use of SSE instructions
->    when operating on the array. [..]
-> 
-> Makes sense as sizeof struct cmsghdr == 16.
-> 
-> cmsg_len has length 8 (size_t). We'll be hardpressed to find a
-> CMSG_DATA example with a larger alignment requirement. Indeed I did
-> not in this directory. So satisfying 8-byte alignment for msg_control
-> will suffice for all tests in this directory.
-> 
-> Unless we're certain that 8B alignment for stack aligned char[] is
-> guaranteed across platforms, one safe approach it to add explicit
-> alignment:
-> 
-> -       char control[CMSG_SPACE(sizeof(flowlabel))] = {0};
-> +       char control[CMSG_SPACE(sizeof(flowlabel))] __attribute__((aligned(8))) = {0};
-> 
-> I can update the (other) tests. Unless someone knows that this is
-> indeed not needed in practice on any platform.
-> 
-> > +
-> > +	if (adata->tp_net != ETH_HLEN)
-> > +		error(1, 0, "cmsg tp_net != ETH_HLEN");
-> > +
-> > +	if (adata->tp_len != expected_len)
-> > +		error(1, 0, "cmsg tp_len != %u", expected_len);
-> > +
-> > +	if (adata->tp_snaplen != expected_len)
-> > +		error(1, 0, "cmsg tp_snaplen != %u", expected_len);
-> > +}
-> > +
-> > +static void do_rx(int fd, int expected_len, char *expected, bool is_psock)
-> > +{
-> > +	bool aux = is_psock && cfg_aux_data;
-> > +	char cmsg_buf[1024] = {};
-> > +	struct msghdr msg = {};
-> > +	struct iovec iov[1];
-> >  	int ret;
-> >  
-> > -	ret = recv(fd, rbuf, sizeof(rbuf), 0);
-> > +	if (aux) {
-> > +		iov[0].iov_base = rbuf;
-> > +		iov[0].iov_len = sizeof(rbuf);
-> > +
-> > +		msg.msg_iov = iov;
-> > +		msg.msg_iovlen = 1;
-> > +
-> > +		msg.msg_control = cmsg_buf;
-> > +		msg.msg_controllen = sizeof(cmsg_buf);
-> > +
-> > +		ret = recvmsg(fd, &msg, 0);
-> > +	} else {
-> > +		ret = recv(fd, rbuf, sizeof(rbuf), 0);
-> > +	}
-> > +
-
-
+--=20
+Regards,
+Pratyush Yadav
