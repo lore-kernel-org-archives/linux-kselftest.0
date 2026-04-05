@@ -1,165 +1,179 @@
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA78342146
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Apr 2026 23:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CE638236D;
+	Sun,  5 Apr 2026 23:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775433271; cv=none; b=Z99ftUGboap9lGkWviIrZKdpeQFjHqyVik3RY2Qd3eZqSmoxx5+9dxrz5BgpKY8DPpl4RUHvzDspTnd33cyFfUUt5bNpFLl2Jx5ewfOye305fn086WIdqdRya4vB1guXr4u8UD46jZm1jM6xnatnP8OcC9IVU9AYUXoVeqEc8Lw=
+	t=1775433276; cv=none; b=DnU2UxyfTAWoSb1rwdqpnIaTHLGhuz3m6T4MtWLTfxP19Y8FOMFNY7DVwobEyUTOdm4w/GuYV9UGslTIV3jIWjNE6wpXvqSVOtAW81cqvJSkX3eaSvvfmjp/BPLfL1ENEB4pFajvcUFlEFHXIu6FcMDZHOG4dlStUkJEkD1l2Bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775433271; c=relaxed/simple;
-	bh=nnE0n3Olzcs3ikXxyvwZtpvMfL9A+g+9v/5VhawH40A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=W6XR8iycbQLB66JkWb+du00Z2dNPDt1FiomFeRHxtwPsnqHCFYAhTNbe9MA+HnbkFOANsmJ2UmO4fMZos+vypNbUpEaV6T9+Mc1kyvqT+/5I8u9YpJbKJlcmnDVAm3P2LqkWaSgbB70BRlE55KSupkPcEkntf9ifs3uZqtXevHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=U9LzxMCU; arc=none smtp.client-ip=209.85.215.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1775433276; c=relaxed/simple;
+	bh=Blo4OMct9fYkxFdmel/7U9C+OpnsYmoKnhqmZOKw+4A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oPqld8hTAKFJP8YJUcBet31Qjs1dhOmBXwSniDNZyp9jWN5U0Y2PKgWGx94JcPkK6amcVyaWcX9+qnkFpMVw7LDcMJZAq2w62QnkJcqnDw6Ir7QKqiEKtOjkv6obZpb/hiXnJfKnuw16k1BUdpIPDP0H6WKBipiEgB3lFEBgOnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cN/Pm+h1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="U9LzxMCU"
-Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c76c067bc51so1118978a12.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Apr 2026 16:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775433269; x=1776038069; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qw6TUPdhywhOpcOC9GSGOxp4/imbBV1U3y0bPk5X3cQ=;
-        b=U9LzxMCUK5K16ZcZB7U0D/DbvcJEUt1UxaY93bJCFmc3iRVYJ+FerNMjAxWiw7DRSU
-         ixfH2HkFIPPFgqcwUVoIeVO6TaJBq/kBmiV6EyZ5HitJ5aGRX9E9JZ1HaqBxgvT/ivU9
-         S2gcXAB2C5zoHL0JB34zljHilBxfR7jLGBuK9Ujb6av7289FABXjAK/A3CW0p2WLHrP5
-         9xvwsQaYOs59XYlcWAxuHEu4h85CdpblfYVRAk+6LDiZBzmpI0FrWEdG1IVOGVAYL2l2
-         gOeeTUt1nsIkp4sJPOfjVMyjqGlbV/I0cj55M3muht3lhR+/8OnF792NfoiFFPW00Bqw
-         Yh1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775433269; x=1776038069;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qw6TUPdhywhOpcOC9GSGOxp4/imbBV1U3y0bPk5X3cQ=;
-        b=EYIbysNcmobjIPSh9YbRXKKnIZd2Nvu8tHpbqyrgKUeg3dZj8ymyoQTb6Hbf7cwi3P
-         nr6WLdnAkDeiH83C50Npe/DxojXVp/qRYScSOvAmjG6ne+M8wn6gL59ZKwks2aX2rl7D
-         qw+2DV/wE0NQS+AyOs/F4Q7VeH2estKNBYA/fLboE2DXtiPePQzZ77CCFadTxiyDYYSp
-         I+VxrJYUMy0NUYSJrmL+rxs4PPf7RSDLjywdH1t2P2EtudZfLHS+dq4uLIZuHaY2E2+5
-         YGgcIosIdZTMvbn25XznCBMUf2zm4tQnXT6AOsjIu+ZGedu7j4n16fDiMhNgIyc/H0fB
-         7bEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1XboacHF/0HZkqzQCyJxbTpJ0YPlL32XMhBdc9X6l9hFFqh9KTfBlf2F1C68DVltc7zJWRn9ZYpOvWobrvp0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9vkxszr7pgFCDk+VQ19z3atg5bDeOMQMJcgd3RVS0vFGq/tjO
-	JRcOsOG/da/1wfb1vHguBQznjkZLSlkMfJpaZRJ+PLNWL9m8cxQru8G+32uFhfo57n0=
-X-Gm-Gg: AeBDies8cOkt8hu75Qddt15KNda5ZCHcm583QgefGPaW/0qs4XMUAWhy74ska6+lv8N
-	su6819fTBSKSOl4952fUPJMbTpIx9u9nLTKDJLKv0tXmgbfUotGCVALM7cpzs9lnDgsG8k/4OYZ
-	TVrnKju67zU9RHF9C30te/JnvuRl9c+UiwQjdDKDxQtSJEDrVIchVBEYEbsX5ex4rZW3/Bjp9jf
-	aE2BpHAeaestoHBZjoSuGlm5awbtzNz3qQd1udCSDfm7zEDWIK2vCN4Pl1zm9pyOXLLNJbooI4S
-	eCQ0bAeKBh7U2cntW9igInATEkrlsfKCNM7anQ0KQt1jZFu8kMVASc3UAboa2GGe4l9y/9J6AQg
-	CyZ2IuvHTEnZZ8G4wL60E29PjP+VLkFVowZqzG0swvl6kQsVPAWOmX5O1gr+0gGD+5k2648DRWA
-	wm0mqQ8pY=
-X-Received: by 2002:a05:6a20:7f8d:b0:39b:f026:6f79 with SMTP id adf61e73a8af0-39f2f0f86e1mr9364005637.21.1775433268959;
-        Sun, 05 Apr 2026 16:54:28 -0700 (PDT)
-Received: from localhost ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76c6561fe9sm10324516a12.15.2026.04.05.16.54.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Apr 2026 16:54:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cN/Pm+h1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022B9C19425;
+	Sun,  5 Apr 2026 23:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775433275;
+	bh=Blo4OMct9fYkxFdmel/7U9C+OpnsYmoKnhqmZOKw+4A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=cN/Pm+h1MNJIdF8/BGkOea6H77vXoucr8wI0WEa1JjgbUvhFtEz8eoHKetlw+QXz/
+	 yKJO+pzg+gsG7x6RU/QXG3/NDSowmR9zbNCKxO2a/aJI+6JRSWJ7FlC/RdNHyNrNNL
+	 vkYkWnvMwABBEgYDSlwiUH1xGSN0AkwKOU2CezV3RZe4tdKCq5qAY+dKqINxZIBlio
+	 QPbluXudooBzD+JgtojrRNp/XPzmN19AXP+Mm5kqOBRju7q9dhhwB6RvmCMVM26hrH
+	 IFc9bvX9/tmEZHSnXE1MG/oWow9BHK1Pft0guBMO+KcF0Jd6vE0TdJ/PRljzy5/bOn
+	 xE4ThQHQFOw7g==
+From: Miguel Ojeda <ojeda@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>,
+	Christian Brauner <christian@brauner.io>,
+	Carlos Llamas <cmllamas@google.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	rust-for-linux@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	linux-block@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers),
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-riscv@lists.infradead.org,
+	nouveau@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	Rae Moar <raemoar63@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-doc@vger.kernel.org,
+	Tamir Duberstein <tamird@kernel.org>
+Subject: [PATCH v2 06/33] rust: bump Clippy's MSRV and clean `incompatible_msrv` allows
+Date: Mon,  6 Apr 2026 01:52:42 +0200
+Message-ID: <20260405235309.418950-7-ojeda@kernel.org>
+In-Reply-To: <20260405235309.418950-1-ojeda@kernel.org>
+References: <20260405235309.418950-1-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 05 Apr 2026 19:54:27 -0400
-Message-Id: <DHLMKFBINRKW.BS0BEK9AMU86@etsalapatis.com>
-Cc: "Quan Sun" <2022090917019@std.uestc.edu.cn>, "Yinhao Hu"
- <dddddd@hust.edu.cn>, "Kaiyan Mei" <M202472210@hust.edu.cn>, "Dongliang Mu"
- <dzm91@hust.edu.cn>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Alexei
- Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "David S.
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v1 1/2] bpf: Fix SOCK_OPS_GET_SK same-register OOB
- read in sock_ops
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, "Jiayuan Chen"
- <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260404141010.247536-1-jiayuan.chen@linux.dev>
- <DHLMGWNKBI4K.3LM87NOU4XB3O@etsalapatis.com>
-In-Reply-To: <DHLMGWNKBI4K.3LM87NOU4XB3O@etsalapatis.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun Apr 5, 2026 at 7:49 PM EDT, Emil Tsalapatis wrote:
-> On Sat Apr 4, 2026 at 10:09 AM EDT, Jiayuan Chen wrote:
->> When a BPF sock_ops program reads ctx->sk with dst_reg =3D=3D src_reg
->> (e.g., r1 =3D *(u64 *)(r1 + offsetof(sk))), the SOCK_OPS_GET_SK() macro
->> fails to zero the destination register in the is_fullsock =3D=3D 0 path.
->>
->> The macro saves/restores a temporary register and checks is_fullsock.
->> When is_fullsock =3D=3D 0 (e.g., TCP_NEW_SYN_RECV state with a request_s=
-ock),
->> it should set dst_reg =3D 0 (NULL) so the verifier's PTR_TO_SOCKET_OR_NU=
-LL
->> type is correct at runtime. Instead, dst_reg retains the original ctx
->> pointer, which passes subsequent NULL checks and can be used as a bogus
->> socket pointer, leading to stack-out-of-bounds access in helpers like
->> bpf_skc_to_tcp6_sock().
->>
->> Fix by:
->>  - Changing JMP_A(1) to JMP_A(2) in the fullsock path to skip the
->>    added instruction.
->>  - Adding BPF_MOV64_IMM(si->dst_reg, 0) after the temp register
->>    restore in the !fullsock path, placed after the restore because
->>    dst_reg =3D=3D src_reg means we need src_reg intact to read ctx->temp=
-.
->>
->> Fixes: 84f44df664e9 ("bpf: sock_ops sk access may stomp registers when d=
-st_reg =3D src_reg")
->> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
->> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
->> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
->> Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
->> Closes: https://lore.kernel.org/bpf/6fe1243e-149b-4d3b-99c7-fcc9e2f75787=
-@std.uestc.edu.cn/T/#u
->> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->
-> This patch only seems to fix the problem when dst_reg =3D=3D src_reg.
-> Why is this not an issue when is_fullsock =3D=3D 0, but dst_reg !=3D src_=
-reg?
-> In that case the dst_reg is unmodified by the whole macro but is still
-> marked as PTR_TO_SOCKET_OR_NULL. Isn't that a problem? Can you add
-> a test case for is_fullsock =3D=3D 0 but dst_reg !=3D src_reg in patch 2?
+Following the Rust compiler bump, we can now update Clippy's MSRV we
+set in the configuration, which will improve the diagnostics it generates.
 
-Sorry for the double post, but also check sashiko.dev:
-SOSK_OPTS_GET_FIELD seems to have the same issue as the
-SOCK_OPTS_GET_SK. Can you add the same fix to it?
+Thus do so and clean a few of the `allow`s that are not needed anymore.
 
->
->> ---
->> Apologies for the Easter timing!
->> ---
->>  net/core/filter.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> index 78b548158fb05..8fee00e6adef4 100644
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -10618,10 +10618,11 @@ static u32 sock_ops_convert_ctx_access(enum bp=
-f_access_type type,
->>  				      si->dst_reg, si->src_reg,		      \
->>  				      offsetof(struct bpf_sock_ops_kern, sk));\
->>  		if (si->dst_reg =3D=3D si->src_reg)	{			      \
->> -			*insn++ =3D BPF_JMP_A(1);				      \
->> +			*insn++ =3D BPF_JMP_A(2);				      \
->>  			*insn++ =3D BPF_LDX_MEM(BPF_DW, reg, si->src_reg,	      \
->>  				      offsetof(struct bpf_sock_ops_kern,      \
->>  				      temp));				      \
->> +			*insn++ =3D BPF_MOV64_IMM(si->dst_reg, 0);	      \
->>  		}							      \
->>  	} while (0)
->> =20
+Reviewed-by: Tamir Duberstein <tamird@kernel.org>
+Acked-by: Danilo Krummrich <dakr@kernel.org>
+Reviewed-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+ .clippy.toml                      | 2 +-
+ drivers/gpu/nova-core/gsp/cmdq.rs | 6 +-----
+ rust/kernel/ptr.rs                | 1 -
+ rust/kernel/transmute.rs          | 2 --
+ 4 files changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/.clippy.toml b/.clippy.toml
+index a51de9a46380..b0a78cc8be20 100644
+--- a/.clippy.toml
++++ b/.clippy.toml
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-msrv = "1.78.0"
++msrv = "1.85.0"
+ 
+ check-private-items = true
+ 
+diff --git a/drivers/gpu/nova-core/gsp/cmdq.rs b/drivers/gpu/nova-core/gsp/cmdq.rs
+index 46819a82a51a..d9f69366642a 100644
+--- a/drivers/gpu/nova-core/gsp/cmdq.rs
++++ b/drivers/gpu/nova-core/gsp/cmdq.rs
+@@ -281,7 +281,6 @@ fn allocate_command(&mut self, size: usize) -> Result<GspCommand<'_>> {
+         let (slice_1, slice_2) = {
+             let (slice_1, slice_2) = self.driver_write_area();
+ 
+-            #[allow(clippy::incompatible_msrv)]
+             (slice_1.as_flattened_mut(), slice_2.as_flattened_mut())
+         };
+ 
+@@ -572,10 +571,7 @@ fn wait_for_msg(&self, timeout: Delta) -> Result<GspMessage<'_>> {
+             Delta::from_millis(1),
+             timeout,
+         )
+-        .map(|(slice_1, slice_2)| {
+-            #[allow(clippy::incompatible_msrv)]
+-            (slice_1.as_flattened(), slice_2.as_flattened())
+-        })?;
++        .map(|(slice_1, slice_2)| (slice_1.as_flattened(), slice_2.as_flattened()))?;
+ 
+         // Extract the `GspMsgElement`.
+         let (header, slice_1) = GspMsgElement::from_bytes_prefix(slice_1).ok_or(EIO)?;
+diff --git a/rust/kernel/ptr.rs b/rust/kernel/ptr.rs
+index c7788656a162..91811f5e27de 100644
+--- a/rust/kernel/ptr.rs
++++ b/rust/kernel/ptr.rs
+@@ -81,7 +81,6 @@ pub const fn new_checked(align: usize) -> Option<Self> {
+     /// This is equivalent to [`align_of`], but with the return value provided as an [`Alignment`].
+     #[inline(always)]
+     pub const fn of<T>() -> Self {
+-        #![allow(clippy::incompatible_msrv)]
+         // This cannot panic since alignments are always powers of two.
+         //
+         // We unfortunately cannot use `new` as it would require the `generic_const_exprs` feature.
+diff --git a/rust/kernel/transmute.rs b/rust/kernel/transmute.rs
+index 5711580c9f9b..b9e6eadc08f5 100644
+--- a/rust/kernel/transmute.rs
++++ b/rust/kernel/transmute.rs
+@@ -49,7 +49,6 @@ fn from_bytes(bytes: &[u8]) -> Option<&Self>
+         let slice_ptr = bytes.as_ptr().cast::<Self>();
+         let size = size_of::<Self>();
+ 
+-        #[allow(clippy::incompatible_msrv)]
+         if bytes.len() == size && slice_ptr.is_aligned() {
+             // SAFETY: Size and alignment were just checked.
+             unsafe { Some(&*slice_ptr) }
+@@ -92,7 +91,6 @@ fn from_bytes_mut(bytes: &mut [u8]) -> Option<&mut Self>
+         let slice_ptr = bytes.as_mut_ptr().cast::<Self>();
+         let size = size_of::<Self>();
+ 
+-        #[allow(clippy::incompatible_msrv)]
+         if bytes.len() == size && slice_ptr.is_aligned() {
+             // SAFETY: Size and alignment were just checked.
+             unsafe { Some(&mut *slice_ptr) }
+-- 
+2.53.0
 
