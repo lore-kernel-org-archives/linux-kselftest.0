@@ -1,292 +1,318 @@
-Received: from outbound.st.icloud.com (p-east2-cluster5-host12-snip4-8.eps.apple.com [57.103.79.81])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCB2318BB5
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Apr 2026 16:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.79.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C34316902
+	for <linux-kselftest@vger.kernel.org>; Sun,  5 Apr 2026 16:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775408057; cv=none; b=FDgFRuk+a0084GKMIPhqqJ51REyslLs6Z6PR9nwwDq6RV9qv2K5QguYtdyRYAr2cXKHklmIAs4V5yHQYf7ukeE6M4tmNZ8PJ1jBFr53xYCnefX8TDSh4oNqWmImh1eWFKg28rmHOQdNlsrYY61CasU6X/853xa0dtI6Wp3glsrg=
+	t=1775408218; cv=none; b=WejL13Swbs6BXTVuGxpfmrTqZg87TXpqTPRI5KGRW9eDqbawdr3xj4Srh01aaioXTP7DhxvYc0b4WNqWe6BSnOsY7VXDfgko6dwSJ+ubKLzcOTwb7oStqHKqDAW1YEVH2I15wKcAzQfVWHTWtlH+QmEEClpxUT76M0ZplWZXofg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775408057; c=relaxed/simple;
-	bh=ikcCdo+WZM8RB3y5OCDr/km8u7w7Iz8WrIeo2sLnU+0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V+Lo7B9Al52LM/H7QCLvr7fliA88RwaYdeDzUEXeSYbk6HVN8Caqzfjhqaz2Q1Rcrk/YmLAJAvwJrin6ZGH6xGHAKLysu4JRLxpzcGdtDvKONc49/yQA+4x5fkssri6r2wFA9iBS2Kjo06N36NX1BeMjC6C+JjJx3B/qkSox3PA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=CcHyp63S reason="key not found in DNS"; arc=none smtp.client-ip=57.103.79.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
+	s=arc-20240116; t=1775408218; c=relaxed/simple;
+	bh=RRnbRDbdqY7d/4OONRcDMeGYkXL6lef3FEc5JeZsykQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ph0LLWbutA3YyJSVqVwEjjovVKcf1LhhlcQ2X/803JcDrBxSCruO9rZfEN0noQEXdNUZVUsF+R3Ew13a+DJffJM9hdHKyTKdntWb5/1dedajenkxD1Lz5nfv9iediYb7ZbY6jFXyYiXOLPo6PnbGNpcvXv+XqBeW7vYVP1+QMVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PAIk2eyM; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="CcHyp63S"
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPS id A3C841800D11;
-	Sun, 05 Apr 2026 16:54:10 +0000 (UTC)
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; t=1775408052; x=1778000052; bh=Uw0z3wNlqUHZIJxWz0zqHyrheKABI/b7SXnMNZgabtk=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=CcHyp63Sn33A99RCrJkvqUekpg3bmuB7d21MDpLcU6QhOimpf4Ek0WfuOytxrDxggBHvZzt4mZTYwwn/C2bhzqeTXTEDlFrXXwObrWnmcKYvwdIHHYpdjzV2XE7QCpaSPJ0YgZNIShdN6Ifh0Cooifm0mJ+VXPwK6Vm2rNxUgguogcfy/Vudq7q4JBA2FhQgj9RWuyeg9eFZ/OZfcM/oQkmUmCvQvZ+CG9HBALiVGoPHfp93+1TpeglJnTKcGMIWmjcFIDVxYP7nG2KXJ5XBBsxvHX/RiQCr6bhDqXqD24eyXXGhNdGMu4iy6Xb4EXMXuE1b6L8Vjg23uz90NCpk7g==
-mail-alias-created-date: 1719758601013
-Received: from desktop.y-koj.net (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPSA id 5DA1D18000AC;
-	Sun, 05 Apr 2026 16:52:32 +0000 (UTC)
-From: Yohei Kojima <yk@y-koj.net>
-To: Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Yohei Kojima <yk@y-koj.net>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] selftests/namespace: test spurious ENOENT bug in listns pagination
-Date: Mon,  6 Apr 2026 01:50:40 +0900
-Message-ID: <de6a63cf0135e29c2e114dc85ac3e46f1fabb32f.1775404451.git.yk@y-koj.net>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1775404451.git.yk@y-koj.net>
-References: <cover.1775404451.git.yk@y-koj.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PAIk2eyM"
+Message-ID: <c4138f66-edf2-4689-b5fe-16dc4839e9c3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775408214;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IFvtQF/EQRNqZnPTUPg67LAGyHPrcqrBHQ7jLg4MTF8=;
+	b=PAIk2eyMCUCV4fU3Q+SwHkNdyFkREbVgRJytHLvOs4PcnFfgF7qKdILVViQqknFRPYfPdU
+	W/6pl4gJWtEXyWjIR3V9I7JKWwfIlIWxaZOnd8ZYYI1cbeXW16sa1RdvqV8ITZPNFpxjb0
+	DgAJmKwf0EsTsx9JJb6XRb4OPHYUlYA=
+Date: Sun, 5 Apr 2026 09:56:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v3 02/24] PCI: Add API to track PCI devices preserved
+ across Live Update
+To: David Matlack <dmatlack@google.com>,
+ "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
+Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal
+ <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+ Askar Safin <safinaskar@gmail.com>, "Borislav Petkov (AMD)" <bp@alien8.de>,
+ Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>,
+ David Rientjes <rientjes@google.com>, Feng Tang
+ <feng.tang@linux.alibaba.com>, Jacob Pan <jacob.pan@linux.microsoft.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+ Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
+ kexec@lists.infradead.org, kvm@vger.kernel.org,
+ Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>,
+ Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>,
+ =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
+ Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ Pranjal Shrivastava <praan@google.com>, Pratyush Yadav
+ <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
+ Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>,
+ Yi Liu <yi.l.liu@intel.com>
+References: <20260323235817.1960573-1-dmatlack@google.com>
+ <20260323235817.1960573-3-dmatlack@google.com>
+ <e3fe7085-1297-47b8-bb17-a48196e8f37f@linux.dev>
+ <CALzav=eyf4XRTi8MfE_GBNSm+tjmfX7=d0M8Aj5Hh0vJn7huew@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <CALzav=eyf4XRTi8MfE_GBNSm+tjmfX7=d0M8Aj5Hh0vJn7huew@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: n4sppodIblwyg0Rj-85evoiZ1nyOrXa2
-X-Proofpoint-GUID: n4sppodIblwyg0Rj-85evoiZ1nyOrXa2
-X-Authority-Info-Out: v=2.4 cv=BLG+bVQG c=1 sm=1 tr=0 ts=69d293b3
- cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jnl5ZKOAAAAA:8 a=GaRdEwhpBMmz7FhzV_AA:9 a=RNrZ5ZR47oNZP8zBN2PD:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA1MDE3NiBTYWx0ZWRfX009bN9fbaOZN
- dBR6t0oD/Xcbafua9qomnkyjL7yozM2A1Ye2a0Zpxw+GO57J8DcRSZHZEFiLsrUubTNMxujwfHB
- OBJuGde7hcUD2rRJOdXRAimubQgoQep+5Ny/ySFtB3oS+VmKSQEKYm4W/JAS60GdoReFo7xxNS8
- M4W137tzmEMxHfT5H/JXeJIbmsHqBkVdOO23xwgaXIilIhpIcghCZy0KG8Fieh2bN8pwKlnKVGd
- HArqMJqDDF5FHefTzUbCTB3xylx8Y975g2X8DYm4OKy3SD8jhQgoJuAwPORFAdXTIWUnh+PtJkx
- ZO2CAtZrH2+Rh83j4MTvFKg48XE+zYC0NOvo6L1fBLUAwdygEkkf+GTCtym/Pk=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-05_05,2026-04-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- clxscore=1030 mlxlogscore=896 lowpriorityscore=0 suspectscore=0
- malwarescore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
- classifier=spam authscore=0 adjust=0 reason=mlx scancount=1
- engine=8.22.0-2601150000 definitions=main-2604050176
+X-Migadu-Flow: FLOW_OUT
 
-Test spurious ENOENT which occurs when it tried to start pagination from
-an inactivated or destroyed namespace. The new test is almost identical
-to pagination_with_type_filter, except that it calls run_noisy_children()
-which creates and lists namespaces to disturb nstree.
 
-As far as the author tested, this bug only reproduced on a baremetal
-environment, probably because the test relies on the RCU behavior and
-the kernel behaves differently on VM.
+在 2026/4/3 14:58, David Matlack 写道:
+> On Thu, Apr 2, 2026 at 2:29 PM Yanjun.Zhu <yanjun.zhu@linux.dev> wrote:
+>> On 3/23/26 4:57 PM, David Matlack wrote:
+>>> +config PCI_LIVEUPDATE
+>>> +     bool "PCI Live Update Support (EXPERIMENTAL)"
+>>> +     depends on PCI && LIVEUPDATE
+>>> +     help
+>>> +       Support for preserving PCI devices across a Live Update. This option
+>>> +       should only be enabled by developers working on implementing this
+>>> +       support. Once enough support as landed in the kernel, this option
+>>> +       will no longer be marked EXPERIMENTAL.
+>>> +
+>>> +       If unsure, say N.
+>> Currently, it only supports 'n' or 'y'. Is it possible to add 'm'
+>> (modular support)?
+>>
+>> This would allow the feature to be built as a kernel module. For
+>> development
+>>
+>> purposes, modularization means we only need to recompile a single module
+>>
+>> for testing, rather than rebuilding the entire kernel. Compiling a
+>> module should
+>>
+>> be significantly faster than a full kernel build.
+> I don't think it is possible for CONFIG_PCI_LIVEUPDATE to support 'm'.
+> pci_setup_device() (which is under CONFIG_PCI) needs to call
+> pci_liveupdate_setup_device(), and CONFIG_PCI cannot be built as a
+> module. This call is necessary so the PCI core knows whether a device
+> being enumerated was preserved across a previous Live Update.
 
-Signed-off-by: Yohei Kojima <yk@y-koj.net>
----
- .../namespaces/listns_pagination_bug.c        | 200 ++++++++++++++++++
- 1 file changed, 200 insertions(+)
+After the following changes, the liveupdate.ko can be generated 
+successfully.
 
-diff --git a/tools/testing/selftests/namespaces/listns_pagination_bug.c b/tools/testing/selftests/namespaces/listns_pagination_bug.c
-index da7d33f96397..f71d8f4d64bb 100644
---- a/tools/testing/selftests/namespaces/listns_pagination_bug.c
-+++ b/tools/testing/selftests/namespaces/listns_pagination_bug.c
-@@ -135,4 +135,204 @@ TEST(pagination_with_type_filter)
- 	}
- }
- 
-+static void run_noisy_children(int num_workers)
+"
+
+# ls drivers/pci/liveupdate.ko
+drivers/pci/liveupdate.ko
+"
+
+
+diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+
+index 05307d89c3f4..e172c31b33fa 100644
+--- a/drivers/pci/Kconfig
++++ b/drivers/pci/Kconfig
+@@ -335,7 +335,7 @@ config VGA_ARB_MAX_GPUS
+           multiple GPUS.  The overhead for each GPU is very small.
+
+  config PCI_LIVEUPDATE
+-       bool "PCI Live Update Support (EXPERIMENTAL)"
++       tristate "PCI Live Update Support (EXPERIMENTAL)"
+         depends on PCI && LIVEUPDATE
+         help
+           Support for preserving PCI devices across a Live Update. This 
+option
+diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
+index c1251f4f8438..71bab8ecba85 100644
+--- a/drivers/pci/liveupdate.c
++++ b/drivers/pci/liveupdate.c
+@@ -413,3 +413,26 @@ void pci_liveupdate_unregister_flb(struct 
+liveupdate_file_handler *fh)
+         liveupdate_unregister_flb(fh, &pci_liveupdate_flb);
+  }
+  EXPORT_SYMBOL_GPL(pci_liveupdate_unregister_flb);
++
++extern void (*pci_liveupdate_setup_device_hook)(struct pci_dev *dev);
++extern u32 (*pci_liveupdate_incoming_nr_devices_hook)(void);
++static int __init liveupdate_module_init(void)
 +{
-+	struct ns_id_req req = {
-+		.size = sizeof(req),
-+		.spare = 0,
-+		.ns_id = 0,
-+		.ns_type = CLONE_NEWUSER,  /* Filter by user namespace */
-+		.spare2 = 0,
-+		.user_ns_id = 0,
-+	};
-+	pid_t pids[num_workers];
-+	int num_forked = 0;
-+	int i;
-+
-+	/*
-+	 * Create worker processes that do concurrent operations;
-+	 * most of this part is borrowed from concurrent_namespace_operations
-+	 * test in stress_test.c
-+	 */
-+	for (i = 0; i < num_workers; i++) {
-+		pids[i] = fork();
-+		if (pids[i] < 0)
-+			goto failure;
-+		if (pids[i] > 0)
-+			num_forked++;
-+
-+		if (pids[i] == 0) {
-+			/* Each worker: create namespaces, list them, repeat */
-+			int iterations;
-+
-+			for (iterations = 0; iterations < 10; iterations++) {
-+				int userns_fd;
-+				__u64 temp_ns_ids[100];
-+				ssize_t ret;
-+
-+				/* Create a user namespace */
-+				userns_fd = get_userns_fd(0, getuid(), 1);
-+				if (userns_fd < 0)
-+					continue;
-+
-+				/* List namespaces */
-+				ret = sys_listns(&req, temp_ns_ids, ARRAY_SIZE(temp_ns_ids), 0);
-+				(void)ret;
-+
-+				close(userns_fd);
-+
-+				/* Small delay */
-+				usleep(1000);
-+			}
-+
-+			exit(0);
-+		}
-+	}
-+
-+	/*
-+	 * Return after waiting for children; this is enough for
-+	 * reproduction, and help keeping the test code simple.
-+	 */
-+	for (i = 0; i < num_forked; i++)
-+		waitpid(pids[i], NULL, 0);
-+
-+	return;
-+
-+failure:
-+	for (i = 0; i < num_forked; i++)
-+		kill(pids[i], SIGKILL);
-+	for (i = 0; i < num_forked; i++)
-+		waitpid(pids[i], NULL, 0);
++       pci_liveupdate_setup_device_hook = pci_liveupdate_setup_device;
++       pci_liveupdate_incoming_nr_devices_hook = 
+pci_liveupdate_incoming_nr_devices;
++       pr_info("loaded\n");
++       return 0;
 +}
 +
-+/*
-+ * A test case to reproduce spurious ENOENT in listns pagination
-+ *
-+ * The bug occurs when the ns id to start pagination is inactivated or
-+ * destroyed before listns is called (or during listns is processed).
-+ *
-+ * This test is almost identical to pagination_with_type_filter test
-+ * except that this calls run_noisy_children().
-+ */
-+TEST(pagination_during_grace_period)
++static void __exit liveupdate_module_exit(void)
 +{
-+	struct ns_id_req req = {
-+		.size = sizeof(req),
-+		.spare = 0,
-+		.ns_id = 0,
-+		.ns_type = CLONE_NEWUSER,  /* Filter by user namespace */
-+		.spare2 = 0,
-+		.user_ns_id = 0,
-+	};
-+	pid_t pids[10];
-+	int num_children = 10;
-+	const int num_noisy_children = 10;
-+	int i;
-+	int sv[2];
-+	__u64 first_batch[3];
-+	ssize_t ret;
-+
-+	ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, sv), 0);
-+
-+	run_noisy_children(num_noisy_children);
-+
-+	/* Create children with user namespaces */
-+	for (i = 0; i < num_children; i++) {
-+		pids[i] = fork();
-+		ASSERT_GE(pids[i], 0);
-+
-+		if (pids[i] == 0) {
-+			char c;
-+
-+			close(sv[0]);
-+
-+			if (setup_userns() < 0) {
-+				close(sv[1]);
-+				exit(1);
-+			}
-+
-+			/* Signal parent we're ready */
-+			if (write(sv[1], &c, 1) != 1) {
-+				close(sv[1]);
-+				exit(1);
-+			}
-+
-+			/* Wait for parent signal to exit */
-+			if (read(sv[1], &c, 1) != 1) {
-+				close(sv[1]);
-+				exit(1);
-+			}
-+
-+			close(sv[1]);
-+			exit(0);
-+		}
-+	}
-+
-+	close(sv[1]);
-+
-+	/* Wait for all children to signal ready */
-+	for (i = 0; i < num_children; i++) {
-+		char c;
-+
-+		if (read(sv[0], &c, 1) != 1) {
-+			close(sv[0]);
-+			for (int j = 0; j < num_children; j++)
-+				kill(pids[j], SIGKILL);
-+			for (int j = 0; j < num_children; j++)
-+				waitpid(pids[j], NULL, 0);
-+			ASSERT_TRUE(false);
-+		}
-+	}
-+
-+	/* First batch - this should work */
-+	ret = sys_listns(&req, first_batch, 3, 0);
-+	if (ret < 0) {
-+		if (errno == ENOSYS) {
-+			close(sv[0]);
-+			for (i = 0; i < num_children; i++)
-+				kill(pids[i], SIGKILL);
-+			for (i = 0; i < num_children; i++)
-+				waitpid(pids[i], NULL, 0);
-+			SKIP(return, "listns() not supported");
-+		}
-+		ASSERT_GE(ret, 0);
-+	}
-+
-+	TH_LOG("First batch returned %zd entries", ret);
-+
-+	if (ret == 3) {
-+		__u64 second_batch[3];
-+
-+		/* Second batch - pagination triggers the bug */
-+		req.ns_id = first_batch[2];  /* Continue from last ID */
-+		ret = sys_listns(&req, second_batch, 3, 0);
-+
-+		TH_LOG("Second batch returned %zd entries", ret);
-+		ASSERT_GE(ret, 0);
-+	}
-+
-+	/* Signal all children to exit */
-+	for (i = 0; i < num_children; i++) {
-+		char c = 'X';
-+
-+		if (write(sv[0], &c, 1) != 1) {
-+			close(sv[0]);
-+			for (int j = i; j < num_children; j++)
-+				kill(pids[j], SIGKILL);
-+			for (int j = 0; j < num_children; j++)
-+				waitpid(pids[j], NULL, 0);
-+			ASSERT_TRUE(false);
-+		}
-+	}
-+
-+	close(sv[0]);
-+
-+	/* Cleanup */
-+	for (i = 0; i < num_children; i++) {
-+		int status;
-+
-+		waitpid(pids[i], &status, 0);
-+	}
++       pci_liveupdate_setup_device_hook = NULL;
++       pci_liveupdate_incoming_nr_devices_hook = NULL;
++       pr_info("unloaded\n");
 +}
 +
- TEST_HARNESS_MAIN
++module_init(liveupdate_module_init);
++module_exit(liveupdate_module_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("PCI Live Update Support");
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index 979cb9921340..93f76500cb0d 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -1434,18 +1434,12 @@ static inline int pci_msix_write_tph_tag(struct 
+pci_dev *pdev, unsigned int inde
+         (PCI_CONF1_ADDRESS(bus, dev, func, reg) | \
+          PCI_CONF1_EXT_REG(reg))
+
+-#ifdef CONFIG_PCI_LIVEUPDATE
++#if IS_ENABLED(CONFIG_PCI_LIVEUPDATE)
+  void pci_liveupdate_setup_device(struct pci_dev *dev);
+-u32 pci_liveupdate_incoming_nr_devices(void);
+  #else
+  static inline void pci_liveupdate_setup_device(struct pci_dev *dev)
+  {
+  }
+-
+-static inline u32 pci_liveupdate_incoming_nr_devices(void)
+-{
+-       return 0;
+-}
+  #endif
+
+  #endif /* DRIVERS_PCI_H */
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 165056d71e66..4880302bca43 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -1369,6 +1369,9 @@ bool pci_ea_fixed_busnrs(struct pci_dev *dev, u8 
+*sec, u8 *sub)
+         return true;
+  }
+
++u32 (*pci_liveupdate_incoming_nr_devices_hook)(void) = NULL;
++EXPORT_SYMBOL_GPL(pci_liveupdate_incoming_nr_devices_hook);
++
+  static bool pci_assign_all_busses(void)
+  {
+         if (!pcibios_assign_all_busses())
+@@ -1389,7 +1392,7 @@ static bool pci_assign_all_busses(void)
+          * numbers during the initial cold boot, and then that topology 
+would
+          * then remain fixed across any subsequent Live Updates.
+          */
+-       if (pci_liveupdate_incoming_nr_devices()) {
++       if (pci_liveupdate_incoming_nr_devices_hook && 
+pci_liveupdate_incoming_nr_devices_hook()) {
+                 pr_info_once("Ignoring pci=assign-busses and inheriting 
+bus numbers during Live Update\n");
+                 return false;
+         }
+@@ -2030,6 +2033,9 @@ static const char *pci_type_str(struct pci_dev *dev)
+         }
+  }
+
++void (*pci_liveupdate_setup_device_hook)(struct pci_dev *dev) = NULL;
++EXPORT_SYMBOL_GPL(pci_liveupdate_setup_device_hook);
++
+  /**
+   * pci_setup_device - Fill in class and map information of a device
+   * @dev: the device structure to fill
+@@ -2091,7 +2097,8 @@ int pci_setup_device(struct pci_dev *dev)
+         if (pci_early_dump)
+                 early_dump_pci_device(dev);
+
+-       pci_liveupdate_setup_device(dev);
++       if (pci_liveupdate_setup_device_hook)
++               pci_liveupdate_setup_device_hook(dev);
+
+         /* Need to have dev->class ready */
+         dev->cfg_size = pci_cfg_space_size(dev);
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 27ee9846a2fd..aaab6adb487e 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -592,7 +592,7 @@ struct pci_dev {
+         u8              tph_mode;       /* TPH mode */
+         u8              tph_req_type;   /* TPH requester type */
+  #endif
+-#ifdef CONFIG_PCI_LIVEUPDATE
++#if IS_ENABLED(CONFIG_PCI_LIVEUPDATE)
+         unsigned int    liveupdate_incoming:1;  /* Preserved by 
+previous kernel */
+         unsigned int    liveupdate_outgoing:1;  /* Preserved for next 
+kernel */
+  #endif
+@@ -2876,7 +2876,7 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  
+pci_ers_result err_type);
+         WARN_ONCE(condition, "%s %s: " fmt, \
+                   dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
+
+-#ifdef CONFIG_PCI_LIVEUPDATE
++#if IS_ENABLED(CONFIG_PCI_LIVEUPDATE)
+  int pci_liveupdate_preserve(struct pci_dev *dev);
+  void pci_liveupdate_unpreserve(struct pci_dev *dev);
+  int pci_liveupdate_retrieve(struct pci_dev *dev);
+diff --git a/kernel/liveupdate/luo_flb.c b/kernel/liveupdate/luo_flb.c
+index 874830f8e44d..33fbdc6c417c 100644
+--- a/kernel/liveupdate/luo_flb.c
++++ b/kernel/liveupdate/luo_flb.c
+@@ -461,7 +461,7 @@ int liveupdate_register_flb(struct 
+liveupdate_file_handler *fh,
+
+         return 0;
+  }
+-
++EXPORT_SYMBOL_GPL(liveupdate_register_flb);
+  /**
+   * liveupdate_unregister_flb - Remove an FLB dependency from a file 
+handler.
+   * @fh:   The file handler that is currently depending on the FLB.
+@@ -487,7 +487,7 @@ void liveupdate_unregister_flb(struct 
+liveupdate_file_handler *fh,
+
+         luo_flb_unregister_one(fh, flb);
+  }
+-
++EXPORT_SYMBOL_GPL(liveupdate_unregister_flb);
+  /**
+   * liveupdate_flb_get_incoming - Retrieve the incoming FLB object.
+   * @flb:  The FLB definition.
+@@ -525,7 +525,7 @@ int liveupdate_flb_get_incoming(struct 
+liveupdate_flb *flb, void **objp)
+
+         return 0;
+  }
+-
++EXPORT_SYMBOL_GPL(liveupdate_flb_get_incoming);
+  /**
+   * liveupdate_flb_get_outgoing - Retrieve the outgoing FLB object.
+   * @flb:  The FLB definition.
+@@ -552,6 +552,7 @@ int liveupdate_flb_get_outgoing(struct 
+liveupdate_flb *flb, void **objp)
+
+         return 0;
+  }
++EXPORT_SYMBOL_GPL(liveupdate_flb_get_outgoing);
+
+  int __init luo_flb_setup_outgoing(void *fdt_out)
+  {
+
 -- 
-2.52.0
+Best Regards,
+Yanjun.Zhu
 
