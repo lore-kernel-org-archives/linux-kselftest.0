@@ -1,38 +1,38 @@
-Received: from outbound.st.icloud.com (p-east2-cluster5-host10-snip4-10.eps.apple.com [57.103.79.123])
+Received: from outbound.st.icloud.com (p-east2-cluster5-host12-snip4-8.eps.apple.com [57.103.79.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F74311C32
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Apr 2026 16:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.79.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCB2318BB5
+	for <linux-kselftest@vger.kernel.org>; Sun,  5 Apr 2026 16:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.79.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775408050; cv=none; b=qObRvVdpcT+oT3oHXak5UKMBtswQHax7cbtYkYIkSTEnl2ZWjNEfl6Ermt29xfYiLtcA9YKAVRxsww0Plbcb9Gv4volqzF7m4qMDfjuHhVrt+Z7onzy3EPwBQEgevnGcvdsRfFjNDMrUy/bJetPrqOt7FBQ2EUd24p9Ehew4VZw=
+	t=1775408057; cv=none; b=FDgFRuk+a0084GKMIPhqqJ51REyslLs6Z6PR9nwwDq6RV9qv2K5QguYtdyRYAr2cXKHklmIAs4V5yHQYf7ukeE6M4tmNZ8PJ1jBFr53xYCnefX8TDSh4oNqWmImh1eWFKg28rmHOQdNlsrYY61CasU6X/853xa0dtI6Wp3glsrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775408050; c=relaxed/simple;
-	bh=qDDMBivbPcAFOPeT6eY3oxNcMchO1/ahOVBlqetBVQM=;
+	s=arc-20240116; t=1775408057; c=relaxed/simple;
+	bh=ikcCdo+WZM8RB3y5OCDr/km8u7w7Iz8WrIeo2sLnU+0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MtPFxips8W+S2T4p/aN9Uk/oxLQzSNOZk5uTCQ34F51/RT0j6ZviUPYXVZks2yOOBHNKGn6i4bX2Ec6EpWdv1I4QXSYXwpLKUtK7stXStrFRh4qLzi5NFyNG/ShgzOnQrYTaFGcXhIovD2RQshFDtuuUG2eumFMYUWS4PD2LJBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=nIwAzNnK reason="key not found in DNS"; arc=none smtp.client-ip=57.103.79.123
+	 MIME-Version; b=V+Lo7B9Al52LM/H7QCLvr7fliA88RwaYdeDzUEXeSYbk6HVN8Caqzfjhqaz2Q1Rcrk/YmLAJAvwJrin6ZGH6xGHAKLysu4JRLxpzcGdtDvKONc49/yQA+4x5fkssri6r2wFA9iBS2Kjo06N36NX1BeMjC6C+JjJx3B/qkSox3PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=CcHyp63S reason="key not found in DNS"; arc=none smtp.client-ip=57.103.79.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="nIwAzNnK"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="CcHyp63S"
 Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPS id 6FE591800BBD;
-	Sun, 05 Apr 2026 16:54:06 +0000 (UTC)
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; t=1775408048; x=1778000048; bh=P++qanB99WVd4a1fk5cwJruX1uubGSks4JWteV9qK9E=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=nIwAzNnKbbcBZS2UAzfv04RaJtRMSx+3p6SQpKIMt4XuSNWS8+dBURwF5rSCkcmiriAbLxvwzeoS5nCvfI0aWy+2hly14g57CiqsN/mCGuqH4682uYZqXmxrlIOg0UCEbrkFpZkSxVtqVVFIgMYCHvLAszT2Yq/k0rBxKq4yhT6n9bO8cMDt3wyD03v9LQV9kl4UByFNQn3ZyOGLAUMolfUMSNu7XjydFukw9T6jmXb3uLvBa7XMuwQ6X++EVlPX6u4LWf7Z5jw0CQLpFion2cGw6VseJhKsin9o4RsOuKu1E4kiTFIDUeT30E3kspVfNSMiPEOFOQAGSmLBJJiJMA==
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPS id A3C841800D11;
+	Sun, 05 Apr 2026 16:54:10 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; t=1775408052; x=1778000052; bh=Uw0z3wNlqUHZIJxWz0zqHyrheKABI/b7SXnMNZgabtk=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=CcHyp63Sn33A99RCrJkvqUekpg3bmuB7d21MDpLcU6QhOimpf4Ek0WfuOytxrDxggBHvZzt4mZTYwwn/C2bhzqeTXTEDlFrXXwObrWnmcKYvwdIHHYpdjzV2XE7QCpaSPJ0YgZNIShdN6Ifh0Cooifm0mJ+VXPwK6Vm2rNxUgguogcfy/Vudq7q4JBA2FhQgj9RWuyeg9eFZ/OZfcM/oQkmUmCvQvZ+CG9HBALiVGoPHfp93+1TpeglJnTKcGMIWmjcFIDVxYP7nG2KXJ5XBBsxvHX/RiQCr6bhDqXqD24eyXXGhNdGMu4iy6Xb4EXMXuE1b6L8Vjg23uz90NCpk7g==
 mail-alias-created-date: 1719758601013
 Received: from desktop.y-koj.net (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPSA id 5AAB21800D31;
-	Sun, 05 Apr 2026 16:52:24 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-6 (Postfix) with ESMTPSA id 5DA1D18000AC;
+	Sun, 05 Apr 2026 16:52:32 +0000 (UTC)
 From: Yohei Kojima <yk@y-koj.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Shuah Khan <shuah@kernel.org>
 Cc: Yohei Kojima <yk@y-koj.net>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] selftests/namespace: fix unintentional skip in ns_active_ref_test.c
-Date: Mon,  6 Apr 2026 01:50:38 +0900
-Message-ID: <0b2a5dba0b5ce5a4e144237b9f365fe8fa971871.1775404451.git.yk@y-koj.net>
+Subject: [PATCH 4/4] selftests/namespace: test spurious ENOENT bug in listns pagination
+Date: Mon,  6 Apr 2026 01:50:40 +0900
+Message-ID: <de6a63cf0135e29c2e114dc85ac3e46f1fabb32f.1775404451.git.yk@y-koj.net>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1775404451.git.yk@y-koj.net>
 References: <cover.1775404451.git.yk@y-koj.net>
@@ -43,50 +43,250 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: TdN8Dc0ZLaoMmPwcZ_X839qEZ-FwmHnC
-X-Proofpoint-GUID: TdN8Dc0ZLaoMmPwcZ_X839qEZ-FwmHnC
-X-Authority-Info-Out: v=2.4 cv=BLG+bVQG c=1 sm=1 tr=0 ts=69d293ae
+X-Proofpoint-ORIG-GUID: n4sppodIblwyg0Rj-85evoiZ1nyOrXa2
+X-Proofpoint-GUID: n4sppodIblwyg0Rj-85evoiZ1nyOrXa2
+X-Authority-Info-Out: v=2.4 cv=BLG+bVQG c=1 sm=1 tr=0 ts=69d293b3
  cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
  a=YrL12D//S6tul8v/L+6tKg==:17 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jnl5ZKOAAAAA:8 a=jO6NblF5zQOfC-Z75CIA:9 a=RNrZ5ZR47oNZP8zBN2PD:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA1MDE3NiBTYWx0ZWRfX1AlbpBI6rXYA
- 9lKQ0kg5+ioNd8+4LkFCAJd+y/ZPn2UKt2ouJoxqr63fIj3f/G/BEKqHVrPlQqUvkDBG7a1qFjN
- OcRW9LWBjIqxyW3yWh3CxblKLufr+AIYdYXX265h2oDwVBfowt1LTcoDdMc4EDfydm+0eg57M6Q
- luaSQ1GCyikPV9beUC5mpQZ2zrGRAnADwen1kLs8rr56ZjCiloWaQG1MpB3pjaf55Hh7ugbpuK2
- ToWnR3oF+KeCuLpoF0BMfk/jvxSzqOvzZ1LpzkqmHs6f3n3+gXecG5hCURbQwVfWHX2bk2KIhye
- hK5qMco0WXsBc/EnTH5y/s7tNwftwev/paZU/iYTxnHznAFIfh2u8K6o2EpAKE=
+ a=jnl5ZKOAAAAA:8 a=GaRdEwhpBMmz7FhzV_AA:9 a=RNrZ5ZR47oNZP8zBN2PD:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA1MDE3NiBTYWx0ZWRfX009bN9fbaOZN
+ dBR6t0oD/Xcbafua9qomnkyjL7yozM2A1Ye2a0Zpxw+GO57J8DcRSZHZEFiLsrUubTNMxujwfHB
+ OBJuGde7hcUD2rRJOdXRAimubQgoQep+5Ny/ySFtB3oS+VmKSQEKYm4W/JAS60GdoReFo7xxNS8
+ M4W137tzmEMxHfT5H/JXeJIbmsHqBkVdOO23xwgaXIilIhpIcghCZy0KG8Fieh2bN8pwKlnKVGd
+ HArqMJqDDF5FHefTzUbCTB3xylx8Y975g2X8DYm4OKy3SD8jhQgoJuAwPORFAdXTIWUnh+PtJkx
+ ZO2CAtZrH2+Rh83j4MTvFKg48XE+zYC0NOvo6L1fBLUAwdygEkkf+GTCtym/Pk=
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-05_05,2026-04-03_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- clxscore=1030 mlxlogscore=744 lowpriorityscore=0 suspectscore=0
+ clxscore=1030 mlxlogscore=896 lowpriorityscore=0 suspectscore=0
  malwarescore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
  classifier=spam authscore=0 adjust=0 reason=mlx scancount=1
  engine=8.22.0-2601150000 definitions=main-2604050176
 
-Fix ESTALE from open_by_handle_at() in ns_multiple_children_same_parent
-when child processes exit before the parent run it.
+Test spurious ENOENT which occurs when it tried to start pagination from
+an inactivated or destroyed namespace. The new test is almost identical
+to pagination_with_type_filter, except that it calls run_noisy_children()
+which creates and lists namespaces to disturb nstree.
+
+As far as the author tested, this bug only reproduced on a baremetal
+environment, probably because the test relies on the RCU behavior and
+the kernel behaves differently on VM.
 
 Signed-off-by: Yohei Kojima <yk@y-koj.net>
 ---
- tools/testing/selftests/namespaces/ns_active_ref_test.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../namespaces/listns_pagination_bug.c        | 200 ++++++++++++++++++
+ 1 file changed, 200 insertions(+)
 
-diff --git a/tools/testing/selftests/namespaces/ns_active_ref_test.c b/tools/testing/selftests/namespaces/ns_active_ref_test.c
-index 093268f0efaa..29d96a6e8100 100644
---- a/tools/testing/selftests/namespaces/ns_active_ref_test.c
-+++ b/tools/testing/selftests/namespaces/ns_active_ref_test.c
-@@ -1193,6 +1193,10 @@ TEST(ns_multiple_children_same_parent)
- 		write(pipefd[1], &c1_id, sizeof(c1_id));
- 		write(pipefd[1], &c2_id, sizeof(c2_id));
- 		close(pipefd[1]);
-+
-+		/* give parent a time to run open_by_handle_at() */
-+		usleep(10000);
-+
- 		exit(0);
+diff --git a/tools/testing/selftests/namespaces/listns_pagination_bug.c b/tools/testing/selftests/namespaces/listns_pagination_bug.c
+index da7d33f96397..f71d8f4d64bb 100644
+--- a/tools/testing/selftests/namespaces/listns_pagination_bug.c
++++ b/tools/testing/selftests/namespaces/listns_pagination_bug.c
+@@ -135,4 +135,204 @@ TEST(pagination_with_type_filter)
  	}
+ }
  
++static void run_noisy_children(int num_workers)
++{
++	struct ns_id_req req = {
++		.size = sizeof(req),
++		.spare = 0,
++		.ns_id = 0,
++		.ns_type = CLONE_NEWUSER,  /* Filter by user namespace */
++		.spare2 = 0,
++		.user_ns_id = 0,
++	};
++	pid_t pids[num_workers];
++	int num_forked = 0;
++	int i;
++
++	/*
++	 * Create worker processes that do concurrent operations;
++	 * most of this part is borrowed from concurrent_namespace_operations
++	 * test in stress_test.c
++	 */
++	for (i = 0; i < num_workers; i++) {
++		pids[i] = fork();
++		if (pids[i] < 0)
++			goto failure;
++		if (pids[i] > 0)
++			num_forked++;
++
++		if (pids[i] == 0) {
++			/* Each worker: create namespaces, list them, repeat */
++			int iterations;
++
++			for (iterations = 0; iterations < 10; iterations++) {
++				int userns_fd;
++				__u64 temp_ns_ids[100];
++				ssize_t ret;
++
++				/* Create a user namespace */
++				userns_fd = get_userns_fd(0, getuid(), 1);
++				if (userns_fd < 0)
++					continue;
++
++				/* List namespaces */
++				ret = sys_listns(&req, temp_ns_ids, ARRAY_SIZE(temp_ns_ids), 0);
++				(void)ret;
++
++				close(userns_fd);
++
++				/* Small delay */
++				usleep(1000);
++			}
++
++			exit(0);
++		}
++	}
++
++	/*
++	 * Return after waiting for children; this is enough for
++	 * reproduction, and help keeping the test code simple.
++	 */
++	for (i = 0; i < num_forked; i++)
++		waitpid(pids[i], NULL, 0);
++
++	return;
++
++failure:
++	for (i = 0; i < num_forked; i++)
++		kill(pids[i], SIGKILL);
++	for (i = 0; i < num_forked; i++)
++		waitpid(pids[i], NULL, 0);
++}
++
++/*
++ * A test case to reproduce spurious ENOENT in listns pagination
++ *
++ * The bug occurs when the ns id to start pagination is inactivated or
++ * destroyed before listns is called (or during listns is processed).
++ *
++ * This test is almost identical to pagination_with_type_filter test
++ * except that this calls run_noisy_children().
++ */
++TEST(pagination_during_grace_period)
++{
++	struct ns_id_req req = {
++		.size = sizeof(req),
++		.spare = 0,
++		.ns_id = 0,
++		.ns_type = CLONE_NEWUSER,  /* Filter by user namespace */
++		.spare2 = 0,
++		.user_ns_id = 0,
++	};
++	pid_t pids[10];
++	int num_children = 10;
++	const int num_noisy_children = 10;
++	int i;
++	int sv[2];
++	__u64 first_batch[3];
++	ssize_t ret;
++
++	ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, sv), 0);
++
++	run_noisy_children(num_noisy_children);
++
++	/* Create children with user namespaces */
++	for (i = 0; i < num_children; i++) {
++		pids[i] = fork();
++		ASSERT_GE(pids[i], 0);
++
++		if (pids[i] == 0) {
++			char c;
++
++			close(sv[0]);
++
++			if (setup_userns() < 0) {
++				close(sv[1]);
++				exit(1);
++			}
++
++			/* Signal parent we're ready */
++			if (write(sv[1], &c, 1) != 1) {
++				close(sv[1]);
++				exit(1);
++			}
++
++			/* Wait for parent signal to exit */
++			if (read(sv[1], &c, 1) != 1) {
++				close(sv[1]);
++				exit(1);
++			}
++
++			close(sv[1]);
++			exit(0);
++		}
++	}
++
++	close(sv[1]);
++
++	/* Wait for all children to signal ready */
++	for (i = 0; i < num_children; i++) {
++		char c;
++
++		if (read(sv[0], &c, 1) != 1) {
++			close(sv[0]);
++			for (int j = 0; j < num_children; j++)
++				kill(pids[j], SIGKILL);
++			for (int j = 0; j < num_children; j++)
++				waitpid(pids[j], NULL, 0);
++			ASSERT_TRUE(false);
++		}
++	}
++
++	/* First batch - this should work */
++	ret = sys_listns(&req, first_batch, 3, 0);
++	if (ret < 0) {
++		if (errno == ENOSYS) {
++			close(sv[0]);
++			for (i = 0; i < num_children; i++)
++				kill(pids[i], SIGKILL);
++			for (i = 0; i < num_children; i++)
++				waitpid(pids[i], NULL, 0);
++			SKIP(return, "listns() not supported");
++		}
++		ASSERT_GE(ret, 0);
++	}
++
++	TH_LOG("First batch returned %zd entries", ret);
++
++	if (ret == 3) {
++		__u64 second_batch[3];
++
++		/* Second batch - pagination triggers the bug */
++		req.ns_id = first_batch[2];  /* Continue from last ID */
++		ret = sys_listns(&req, second_batch, 3, 0);
++
++		TH_LOG("Second batch returned %zd entries", ret);
++		ASSERT_GE(ret, 0);
++	}
++
++	/* Signal all children to exit */
++	for (i = 0; i < num_children; i++) {
++		char c = 'X';
++
++		if (write(sv[0], &c, 1) != 1) {
++			close(sv[0]);
++			for (int j = i; j < num_children; j++)
++				kill(pids[j], SIGKILL);
++			for (int j = 0; j < num_children; j++)
++				waitpid(pids[j], NULL, 0);
++			ASSERT_TRUE(false);
++		}
++	}
++
++	close(sv[0]);
++
++	/* Cleanup */
++	for (i = 0; i < num_children; i++) {
++		int status;
++
++		waitpid(pids[i], &status, 0);
++	}
++}
++
+ TEST_HARNESS_MAIN
 -- 
 2.52.0
 
