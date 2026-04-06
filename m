@@ -1,198 +1,131 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04B6336EC6
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 23:46:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41A33A0B36
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 23:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775519220; cv=none; b=mbQh7YGSO/MgTiaG2jDziuMEXOfJ+FbBwdDjgLluiNHdPF8QFjYyv8u8JvbCpNSa49XCNp1WuRjjWKJ+p6lOQnxN8yHS8c+Vj+dmJqiwKDyvbUO+IOLYViZlLeKbUlJST5RNsOu4uirQgM9yd6rdrBBFzyiMOikwKF7QNQ95Tzc=
+	t=1775519283; cv=none; b=mGKQ8OkNWuxtNMFbF4C0oJSsnC2eRzmmvGEHQWAJQ86uJpaxRG+5o0aMe1ykfrvekxPQkPyukakXJEXzD8sDS4pLkSuB2RU5YxbWO6hUZkqYUlEZdVzVQ2/eIioQky31tQZr58ywPnMOPq5jYYtO27jzuW9ytKllteWCVdaF43I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775519220; c=relaxed/simple;
-	bh=Uhsz4ifu1sjfHeM9W7g82BpAfLdqtoqGL5/l4I/0atI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mcezsbd2Vj8AqPrSqgoipAlTJCX6sa1YW6y8Pvn9X2PJ61wVKBVfiOJL2dw8NPol6aZA8AeAq3+ilp07FUAMdO9YtEGlCqOQVm582+UBqf7ptyMV8vDtbQ+Hu6OglorGD3aIiiPaG1awi2He6j2mSWC83iffJyBwHbLxoIOmOd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c9hJumc0; arc=none smtp.client-ip=209.85.210.172
+	s=arc-20240116; t=1775519283; c=relaxed/simple;
+	bh=x8NG4mfnBIGaHvidp37eSv1frVOu1FSrxdYuqYUhhkE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=FyUXDumBL37mhHP5zfh5/80Vzrf9zsXafyPnuEe+20ip3aHOCRblf9nYzBxzO2Z59v2uJNQ1inT6m+9V+tutqG0Eo/EtnAwzqDOTGzkwTHTzqDRsFpTwJZsM77yUzN9BLWDfv1QrZjKLFQWwuqVau4Vjo2YYc4hXe3nkxSMDHqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RlOdkhg5; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c9hJumc0"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82a893d289bso1870943b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 16:46:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RlOdkhg5"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b0c92ff4ebso58610345ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 16:47:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775519219; x=1776124019; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k3T7i72YN9fiJvQX+8W50iUjB0p6LYj7O+KBedNW7Rc=;
-        b=c9hJumc0qc2eK2mm/g1q/sRrRgNAyPUtOW9pAY1qo5ABfg+WQY+fChmTbtdM1PIKok
-         K6oVXFgkf+Yfm/1COVg6AoJbQFsY3fnSKhF3e/daF1OtzUI1ZFWlfP2j6QuesagOfYFg
-         L9fVSdk+OkUvneovtjrlTZSWFkd9Kbu6OzTazC/srlmB2sdLnGdYGfCDibMPfeCtv3/f
-         xEpnInNpgkuMarHr2y5W0uQ0KDOslnJNhM0HKkCDJZRxU4caqp4xJLk5doELYRRHObXG
-         POGnneqc+bLo0nZmwgRf9UVMQTmXhQTm5ewl4i4SxRNczD/vlZpBQF75sUJnCNMPOaab
-         WPBQ==
+        d=google.com; s=20251104; t=1775519278; x=1776124078; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hwcEAbY2bOvu6u/DfZ78E/6y5JAOUHxIU/exu8Slvng=;
+        b=RlOdkhg588nOfN1W1XRJAe5zNNUXAoHDM6cS8/vGfCvFRq0opVtIvHkJyGKhsG09Mg
+         8XCYEMBmroxFu4LD3sEZjH5V5yjxBFofjpRehY6CKFmr8w9/I88RMcFRQbf2Z8y33gUs
+         7tn+RIX/GJXDB+a8J7a05mbV7Gh+vq+JWNCF2aWPSHmeEG6uMBF52RuvkGUWyOGF7hu8
+         tAVF9gC2QuOCLJ2BH+HI57DaOH8kFZWxeBLNoXwSDuhw56r9L8GGHdAA6bFzvzXcFIol
+         t5aTC8j4Q6M5sJIGvvxnEEgNre3KAHLoiP8AfDECQYnuV9eyyidhbk0NN3fGvQiRZBBX
+         sWbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775519219; x=1776124019;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k3T7i72YN9fiJvQX+8W50iUjB0p6LYj7O+KBedNW7Rc=;
-        b=KgIz6iwrbRx0UrrXlS9WAhaDekbdiJNi4NardN1E0tzfBLo3AE1rTzpOQi6C8AimxZ
-         GZq5nJg9+KxMfP7gKGSSGCwxdVc07KhVn00EvMtkzq4a1ooLNhlEhHAtPbA9Xll1j4GS
-         jFGT0bbuw8Q+7vL6FHPI4sBYkHDQnSQdYCRa7YK8ZZl+253Ip4DGnBSKvP0i47AV5fb2
-         NQtOTYBAdeaNvW1eP15i6veFwg4l2SCgwXQKkfFRkmbVHQq0a1O9Dizj2sS1acaYGREc
-         DyCJ73pxxrmG+6/aS6R8HfsqvCP5vnp5v69BtxEcWZ7DSnf9pjSiTf9LMFVsFRGeb65x
-         IRHA==
-X-Forwarded-Encrypted: i=1; AJvYcCX36Pi/xZws5ZZUKQVo851+3vj+/jxsdu0kR/YLetsyHopC7xS8Kf6jvq2hSHQXgW2emujkkS6zV+rU01ErjqQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxD39yMofLMHlLBrri5m89DeQouEW7kloZPUmcd3ytXtdzqSLak
-	tY5fnJKv0fiEtyIiN/oGoJ1ZcjOZxglwug1EnfiBIgFZz5d2JfCglp9ghhZMlf7A+g==
-X-Gm-Gg: AeBDiesNspIGtns+xkwrhXXyM7LFvgvvMNiQrjj6KPPDzrJqQ7up0pqAe68cqNcDXtk
-	YUPlMNAijE6N5whk5pu0Nn93JQcPOiycfFS8kChUf70fn46sh+XY4BCWRWdH6ry6c95Xa/7Lu4w
-	mA9vXJBdFx4Yg8KrHqA6XqCV7CALLjF8BtwrJVa3WGgqjI5YEWUk9b8bdQkSF59j/EuTTk8vN+M
-	Hl9nYjEGamE+NPC2GME3SIb06FjYH0jaJLyxMjgqnuGIzjsYfbVqw8MuJoZlm8w33YMIMe9CWYZ
-	wFbydvWXBfnxEuLq5wiQ0+7UjukGXiE8hwyT6+e6rYouj1F8jXEmtTHZEKdt6XdyGCmu/W6dIeJ
-	udXJnND5hiB13tlfBtI4w3XuBCZ7h7qEAhEUprmZ+hm3GQSP1y+akdhXCn2TUXS3b7w1Y0dtoiU
-	VA6WamfmOoi5t4I2+ncqn4bLqBtT132hcDdW6juS/myxHuf/upactWwkR5g4hVgvY1wBmX1QgC
-X-Received: by 2002:a05:6a00:414c:b0:82c:dd31:b844 with SMTP id d2e1a72fcca58-82d0db96471mr13189316b3a.40.1775519218556;
-        Mon, 06 Apr 2026 16:46:58 -0700 (PDT)
-Received: from google.com (239.23.105.34.bc.googleusercontent.com. [34.105.23.239])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9c9cbdfsm19791071b3a.53.2026.04.06.16.46.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 16:46:57 -0700 (PDT)
-Date: Mon, 6 Apr 2026 23:46:53 +0000
-From: David Matlack <dmatlack@google.com>
-To: Rubin Du <rubind@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 4/4] selftests/vfio: Add NVIDIA Falcon driver for DMA
- testing
-Message-ID: <adRF7clGId7Wuiik@google.com>
-References: <20260403234444.350867-1-rubind@nvidia.com>
- <20260403234444.350867-5-rubind@nvidia.com>
+        d=1e100.net; s=20251104; t=1775519278; x=1776124078;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hwcEAbY2bOvu6u/DfZ78E/6y5JAOUHxIU/exu8Slvng=;
+        b=XaMGUEGVyOiWmEahVfybVw+ZOZCmLltBPCNhaZ3LAwi+cTAZ/O2e3mYlXryYXhgC/I
+         OyxvsJglLHaZmjoFj+DMVDXFyndyfEwJYeJjmopkAHS0UHaxsTlbAs7B4ac+Kws5r1yH
+         TXcvhELKfIquGtJBj4VMMwgRCN/oupC/g9JRqFifTub3EbGNhZpFLJAg56sBzCd3Y211
+         WKv0H9e3MZqWOi38Zxze7kQgFVZT8At7QaB3YqNPMr+9zZxdoAlwG4XMvC3uYps0tkNq
+         LA9KnUevyT4gIiwNuV4rldfX/atUfe36/zl9kFNj/YjRVNlEDxp9zVk7d909J10LZumn
+         zgjw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0Yx5ssCAYrBBv6KXN8n5bNNcazD2T3sj7BPHBHTOb4q44P6AnhnG7lKFjC/KADjg9NSKvwWv0Qkn+T6KY1V0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySC2PZcfKpyxBpC29n4ITab83NpmO5FhgGZqhaZ8rRpxci4N8I
+	0s3phDyQBuoe8+KjHJdYDmvwufaKBN+i3PFsXF1+aTzSL1kua0QgHc7k7xWPaykwHQxALIDvvmt
+	R38os4A==
+X-Received: from pgh3.prod.google.com ([2002:a05:6a02:4e03:b0:c73:8e3c:d0d9])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:9389:b0:398:7d6e:27f1
+ with SMTP id adf61e73a8af0-39f2ee005c5mr14221162637.9.1775519277748; Mon, 06
+ Apr 2026 16:47:57 -0700 (PDT)
+Date: Mon, 6 Apr 2026 16:47:56 -0700
+In-Reply-To: <20260327234023.2659476-9-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260403234444.350867-5-rubind@nvidia.com>
+Mime-Version: 1.0
+References: <20260327234023.2659476-1-jmattson@google.com> <20260327234023.2659476-9-jmattson@google.com>
+Message-ID: <adRGLPrmBpX-3DdX@google.com>
+Subject: Re: [PATCH v7 8/9] KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yosry Ahmed <yosry@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On 2026-04-03 04:44 PM, Rubin Du wrote:
-> Add a new VFIO PCI driver for NVIDIA GPUs that enables DMA testing
-> via the Falcon (Fast Logic Controller) microcontrollers. This driver
-> extracts and adapts the DMA test functionality from NVIDIA's
-> gpu-admin-tools project and integrates it into the existing VFIO
-> selftest framework.
+On Fri, Mar 27, 2026, Jim Mattson wrote:
+> @@ -1918,6 +1921,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+>  	struct vmcb_save_area_cached save_cached;
+>  	struct vmcb_ctrl_area_cached ctl_cached;
+>  	unsigned long cr0;
+> +	bool use_separate_l2_pat;
+
+Land this above "cr0" to preserve the inverted fir tree.
+
+>  	int ret;
+>  
+>  	BUILD_BUG_ON(sizeof(struct vmcb_control_area) + sizeof(struct vmcb_save_area) >
+> @@ -1993,6 +1997,18 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+>  	    !nested_vmcb_check_save(vcpu, &save_cached, false))
+>  		goto out_free;
+>  
+> +	/*
+> +	 * Validate gPAT when the shared PAT quirk is disabled (i.e. L2
+> +	 * has its own gPAT). This is done separately from the
+> +	 * vmcb_save_area_cached validation above, because gPAT is L2
+> +	 * state, but the vmcb_save_area_cached is populated with L1 state.
+> +	 */
+> +	use_separate_l2_pat =
+> +		(ctl_cached.misc_ctl & SVM_MISC_ENABLE_NP) &&
+> +		!kvm_check_has_quirk(vcpu->kvm,
+> +				     KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT);
+
+I vote for either:
+
+	use_separate_l2_pat = (ctl_cached.misc_ctl & SVM_MISC_ENABLE_NP) &&
+			      !kvm_check_has_quirk(vcpu->kvm,
+						   KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT);
+
+or
+
+	use_separate_l2_pat = (ctl_cached.misc_ctl & SVM_MISC_ENABLE_NP);
+	if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT))
+		use_separate_l2_pat = false;
+
+
+> +	if (use_separate_l2_pat && !kvm_pat_valid(kvm_state->hdr.svm.gpat))
+> +		goto out_free;
+>  
+>  	/*
+>  	 * All checks done, we can enter guest mode. Userspace provides
+> @@ -2017,6 +2033,10 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+>  	nested_copy_vmcb_control_to_cache(svm, ctl);
+>  
+>  	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+> +
+> +	if (use_separate_l2_pat)
+> +		vmcb_set_gpat(svm->vmcb, kvm_state->hdr.svm.gpat);
+> +
+>  	nested_vmcb02_prepare_control(svm);
+>  
+>  	/*
+> -- 
+> 2.53.0.1018.g2bb0e51243-goog
 > 
-> Falcons are general-purpose microcontrollers present on NVIDIA GPUs
-> that can perform DMA operations between system memory and device
-> memory. By leveraging Falcon DMA, this driver allows NVIDIA GPUs to
-> be tested alongside Intel IOAT and DSA devices using the same
-> selftest infrastructure.
-> 
-> The driver is named 'nv_falcon' to reflect that it specifically
-> controls the Falcon microcontrollers for DMA operations, rather
-> than exposing general GPU functionality.
-> 
-> Reference implementation:
-> https://github.com/NVIDIA/gpu-admin-tools
-> 
-> Signed-off-by: Rubin Du <rubind@nvidia.com>
-
-Will anyone from Nvidia be able to help review the correctness of the
-driver?
-
-> +static int gpu_poll_register(struct vfio_pci_device *device,
-> +			     const char *name, u32 offset,
-> +			     u32 expected, u32 mask, u32 timeout_ms)
-> +{
-> +	struct gpu_device *gpu = to_gpu_device(device);
-> +	struct timespec start, now;
-> +	u64 elapsed_ms;
-> +	u32 value;
-> +
-> +	clock_gettime(CLOCK_MONOTONIC, &start);
-> +
-> +	for (;;) {
-> +		value = gpu_read32(gpu, offset);
-> +		if ((value & mask) == expected)
-> +			return 0;
-> +
-> +		clock_gettime(CLOCK_MONOTONIC, &now);
-> +		elapsed_ms = (now.tv_sec - start.tv_sec) * 1000
-> +			     + (now.tv_nsec - start.tv_nsec) / 1000000;
-> +
-> +		if (elapsed_ms >= timeout_ms)
-> +			break;
-> +
-> +		usleep(1000);
-> +	}
-> +
-> +	dev_err(device,
-> +		"Timeout polling %s (0x%x): value=0x%x expected=0x%x mask=0x%x after %llu ms\n",
-> +		name, offset, value, expected, mask,
-> +		(unsigned long long)elapsed_ms);
-
-nit: You can replace ll with l in the format string and drop the cast to
-unsigned long long.
-
-We only support VFIO selftests on 64-bit architectures, and that matches
-what existing printfs for u64 use in VFIO selftests.
-
-> +static bool fsp_check_ofa_dma_support(struct vfio_pci_device *device)
-> +{
-> +	struct gpu_device *gpu = to_gpu_device(device);
-> +	u32 val = gpu_read32(gpu, NV_OFA_DMA_SUPPORT_CHECK_REG);
-> +
-> +	return (val >> 16) != 0xbadf;
-> +}
-> +
-> +static int size_to_dma_encoding(u64 size)
-> +{
-> +	size = min_t(u64, size, NV_FALCON_DMA_MAX_TRANSFER_SIZE);
-
-It should be impossible for size to be greater than
-NV_FALCON_DMA_MAX_TRANSFER_SIZE. This should be dropped or converted
-into a VFIO_ASSERT_LE().
-
-> +
-> +	if (!size || (size & 0x3))
-> +		return -EINVAL;
-> +
-> +	return ffs(size) - 3;
-
-Sashiko pointed out that this can lead to partial memcpys:
-
-. If a non-power-of-two size is passed (for example, 24 bytes), ffs(size) will
-. return the lowest set bit (bit 4, yielding an encoding for 8 bytes).
-.
-. Because nv_gpu_memcpy_wait() performs exactly one chunk transfer and does not
-. loop over the remainder, could this silently drop the remaining bytes and
-. cause a partial data copy? Should this check if the size is a power of 2, or
-. should the caller loop to handle remainders?
-
-https://sashiko.dev/#/patchset/20260403234444.350867-1-rubind%40nvidia.com?part=4
-
-I think this nuance needs to be handled within the nv_falcon driver.
-vfio_pci_driver_memcpy_start() just guarantees that size <=
-NV_FALCON_DMA_MAX_TRANSFER_SIZE.
-
-Perhaps this is why you had the loop in an earlier version of the
-patchset, in which case it was my mistake to ask you to remove it!
-
-When you add the loop back please add a comment to the loop to explain
-that it is necessary since the region needs to be sliced up into
-power-of-2 sizes for Falcon.
-
-> +const struct vfio_pci_driver_ops nv_falcon_ops = {
-> +	.name = "nv_falcon",
-> +	.probe = nv_gpu_probe,
-> +	.init = nv_gpu_init,
-> +	.remove = nv_gpu_remove,
-> +	.memcpy_start = nv_gpu_memcpy_start,
-> +	.memcpy_wait = nv_gpu_memcpy_wait,
-> +};
-
-Any particular reason these functions are named nv_gpu_*() instead of
-nv_falcon_*()
