@@ -1,54 +1,54 @@
 Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3748D335BBB
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 03:05:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328673358B8
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 03:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775444705; cv=none; b=UJ4eDdgWCqbFDn1tsc9pJL6qxgWchPbPAClngKI+KnXrrzpDJnji9qEnhYSdDu2ccPTdHoLYj/nhM7kS6B3WUhgYgIsEo97KZzwlP0SsC1hvEQti9E3YfswMoekpyhuxhKpH1LXdYDUg/yEKAFj0QH8WPS30JGsPXefq3ncKTrY=
+	t=1775444706; cv=none; b=uqJuhi+5QSUQgInsbygDugvYTS1RKIYjo4OMYhp31EMPKAUsDXpK1YqUHCMGvUc7IHzZ42B/uWELvhjhvgZD8C+P/MrFHi4HTFBunzWLsWTSTiyrTml3huD8cNS49IiYLurmn6zeDb3R/mt1ExigIcsqHKbFdpWGQKn3al5q/n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775444705; c=relaxed/simple;
-	bh=2rtJWUTXapLA4inY98q2d8R63sOMNqI7U9/VEg93OkQ=;
+	s=arc-20240116; t=1775444706; c=relaxed/simple;
+	bh=H/uaajKx1vxdRV09vwrGqxbZzExtD3ya3Un5atGXWk8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=p+fUkRKQzIuCSYBgsndzTS0KjH3dGPilhWMO3x1W4f3NeMFOnrgEL+HxFJWuJi79Krf/wQNluGiTb97PcWIjsNuBBZd8+2cdAYi/C2L++XiThmHQ9HBqTeWizdnc1FyF3L3+n6f7Gk6lDF0ZbNVX3k7c+8bDjJ/htzocS8K5f3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OZxsBvKs; arc=none smtp.client-ip=74.125.82.202
+	 To:Cc:Content-Type; b=LKqwvacipIEKBaQKJCHO5xx9lLjSkRZR1Qm/m3iDQq9JGEMOz3dCt6YM99MttPPHqN9mN9PCU1b7HHF6F/FQX3kkIwWSYUjgCHOgjIJ4o0xBIgt3C25VGCPte9EuuptN++dsDprjdn9duldoztVjXBv/2kxmFq7lxhtHyVoTWf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SdRyB2A5; arc=none smtp.client-ip=74.125.82.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OZxsBvKs"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ce1fe49225so1080231eec.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Apr 2026 20:05:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SdRyB2A5"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2bdc1b30ac8so23362758eec.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 05 Apr 2026 20:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775444702; x=1776049502; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775444703; x=1776049503; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ylM4a3PCnVxbY6JaU7231btKbSKhmAN8iSf776QMAk=;
-        b=OZxsBvKsUwybtriZx5P5A4bgjxazVP6pEUCfTCo6udFeOxPDH4Fl0bjzZKPDsBvTIH
-         Ua6JPgCg2TjbcMLv8FTpxAYN+jESMv3cHGA9lYEIDeL1S8thEljITC0vulf3qjdflRSQ
-         DXZfCGWwZrCQVbl/Bq34EwfRpuAro3ckWHvYOJayxZPlW8lVFHF6zIr7nw4cbBqdRwvm
-         gjVaG6dRAYj0I/DMbBRBGn1cX9FcPWMwKA+JSPm0mYRexs+SP38dSQlShFBAKIZ13bj/
-         1zFC1YEY5v3zRH01b9gnDomR84yX59NLcsq3oWLK6e+VkxNBe2Qd1TRuNAPpghBYBulF
-         yljg==
+        bh=oMtKRElyEZ3OLu3Q3K0AjubNzm6h9+s3y74+ZNAiAAU=;
+        b=SdRyB2A5C4MFBb0W13NLKBq0HGeuECjHVMpkmh6qIBsQ1FX+/5CAPqPM0MmkaRWFCa
+         KtG6agyXPdjjZIIh8XJDgwvHsmsflJ2WiLYL90+JOfzwiggrRbE3d7tG+ZPi0wPPY6eE
+         K3nii3xmR1nVqT+Qe34lc/hJeW93Pyt9uqk3SbqkKEHAwoLC3RsoK0zoudZZBbq8dVdg
+         m3YlbR+HveBwWY+TAwv7k7YQ8XIYsvwLTJZ6dpvEqr2rVFCKp+hGhOqK4t7gNEQqg2AL
+         c1fmz6ywnJiEMHOZG83RuxWfmfdO4vpWQ/wtzpZRMiXGCT49XLIqbxt/6IzdxbHCTNRs
+         +/Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775444702; x=1776049502;
+        d=1e100.net; s=20251104; t=1775444703; x=1776049503;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ylM4a3PCnVxbY6JaU7231btKbSKhmAN8iSf776QMAk=;
-        b=pT9KqWc4iFt1cygQ6q5ULEFWuoUrdvOh3hwoX5Efy8+NwiLnWw2PDNIymbPPhTWFoS
-         eGm2+fK0ZKOquxLE8//oxUAKIdWu6LwE4APIUwX9KuUSTCykbQTiiw+eZeYNVdtMNZOF
-         TrDPx5Fo/74Yh5b9ZQR48VzJigaIE9+9RffJ82vu6I5Nr4VMyDJjjY/DIiGQv6ktgzff
-         Tzsf4/jHVtTvF2zMiAqICkW2DJXJhkhRukxMr4krosEwjwxEIC5DhszhcJa9zhPC9EVw
-         844eTTr4w1h4R3Cy2/BD8thchimD7tXeToceNZYthqNP9krrkA4KBdw3B0KmKkS5Uxtj
-         S5ww==
-X-Forwarded-Encrypted: i=1; AJvYcCXjjkhUISvzdkEMcKEDBNslidft5qXFJEzHrUyZ3NTcVIghob0txV5SvoBjmUcWETelSKgycl58qnlHO90oUag=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyr33hEcpRgQSMIW49erTKD8Ptmv2LqYFioKk8ontDQ+Yu5tNDl
-	JqJgdZkHisWDSVY/EpOSw6WhiT3yHKubb4dnYY+ijlyNKA+IrM7R+a4smhZajgPbI/2aKAeYtbT
-	zoBD6pK4v9eLGi8O4GAkluw==
-X-Received: from dyek19.prod.google.com ([2002:a05:7300:6413:b0:2ca:f172:3f06])
+        bh=oMtKRElyEZ3OLu3Q3K0AjubNzm6h9+s3y74+ZNAiAAU=;
+        b=ORS1ofu5FxOKnZaDnoCp+0pw2UoQZA7kwYhpDshQQI04Y2HoPxuwLybCJXujqY1ocL
+         FF/ww7tSfrEM2H4bc+e9QwhDqwVbz4zXeUF37dn6hMrZx0Oe/ffp9gy+jFB2Bo7ZO/v2
+         YiSjvfIc5NK7bfc6PkWNReMTdBCp9UqK/0H9sDVfbMPHmrpXXDyc+22/90OdpjH04BfM
+         AEmoNSyfYF/qFRIF0vcniOkrlOJSVNAmRFdr4UZ5lKVfkMZ4vkGdFl3odTNkGplwd5lY
+         Kqcu65pux755tQOBYm4hE6woibTcoFPGh1d25K2O2GW/Bkn841f89Rk2pL/wSzbsr0rI
+         m9GA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcccADW0PDeROz8Auv+RMOyYOtzZskJCPYDzDJIE/G1/MksSnIOwzu6bmgbviYsmK+9lo5uEduNExAa3puNjI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfOs7BrcSjkGTqnXdww1089PtEhO+988uNK9KHRdsezvU220q2
+	DZMFJ/Tdj8gI2jMTDlW1F4w7oQYQ9d6h9cogJTsuyH7ik1wReE83Y9J9bDlHeBCbBk+6bdG2Chh
+	1QlFUv23Ih0wq76dHI6RwYA==
+X-Received: from dybmx6.prod.google.com ([2002:a05:7300:d406:b0:2cc:a944:fd94])
  (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:4090:b0:2c3:df83:1347 with SMTP id 5a478bee46e88-2cbf99e8c88mr5171878eec.1.1775444701521;
- Sun, 05 Apr 2026 20:05:01 -0700 (PDT)
-Date: Mon, 06 Apr 2026 03:03:44 +0000
+ 2002:a05:7300:371f:b0:2c5:76d1:7f95 with SMTP id 5a478bee46e88-2cbfc763331mr5532479eec.28.1775444703191;
+ Sun, 05 Apr 2026 20:05:03 -0700 (PDT)
+Date: Mon, 06 Apr 2026 03:03:45 +0000
 In-Reply-To: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,13 +58,13 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
 X-Developer-Key: i=marcharvey@google.com; a=ed25519; pk=OzOeciadbfF5Bug/4/hyEAwfrruSY4tn0Q0LocyYUL0=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775444686; l=2909;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775444686; l=3253;
  i=marcharvey@google.com; s=20260401; h=from:subject:message-id;
- bh=2rtJWUTXapLA4inY98q2d8R63sOMNqI7U9/VEg93OkQ=; b=BxSq+eNr8ZdlXRnHAOHVaohWryZua/Jefdw8xQDuoct4dJ6JFOKrEaBWCcnyXGmSQ3d+9qjHn
- x+ML9HbTiAGCIqHPUAJ5vfH/eY0FEsGb14Q/2RHkawT52ahl/8eERua
+ bh=H/uaajKx1vxdRV09vwrGqxbZzExtD3ya3Un5atGXWk8=; b=h5qA5SF9nK/bazgpPfM5lJVbAyXedwzZHVXoheWKPxzNkpTkG8fZC3GXpDYTdQ2auUu8jpOwV
+ rV6SYSND4pTB1DBzZafyh3IkrjpvzQGgEc25MnIK6FOo7HE/4e1lMcg
 X-Mailer: b4 0.14.3
-Message-ID: <20260406-teaming-driver-internal-v5-8-e8a3f348a1c5@google.com>
-Subject: [PATCH net-next v5 08/10] net: team: Add new rx_enabled team port option
+Message-ID: <20260406-teaming-driver-internal-v5-9-e8a3f348a1c5@google.com>
+Subject: [PATCH net-next v5 09/10] net: team: Add new tx_enabled team port option
 From: Marc Harvey <marcharvey@google.com>
 To: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -74,13 +74,12 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, Marc Harvey <marcharvey@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Allow independent control over rx enablement via the rx_enabled option
-without affecting tx enablement. This affects the normal enabled
-option since a port is only considered enabled if both tx and rx are
-enabled.
+This option allows independent control over tx enablement without
+affecting rx enablement. Like the rx_enabled option, this also
+implicitly affects the enabled option.
 
 If this option is not used, then the enabled option will continue to
-behave exactly as it did before.
+behave as it did before.
 
 Tested in a follow-up patch with a new selftest.
 
@@ -94,79 +93,92 @@ Changes in v4:
   Decouple rx and tx enablement in the team driver".
 - Link to v3: https://lore.kernel.org/netdev/20260402-teaming-driver-internal-v3-6-e8cfdec3b5c2@google.com/
 ---
- drivers/net/team/team_core.c | 49 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ drivers/net/team/team_core.c | 55 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
 diff --git a/drivers/net/team/team_core.c b/drivers/net/team/team_core.c
-index e437099a5a17..67f77de4cf10 100644
+index 67f77de4cf10..0c87f9972457 100644
 --- a/drivers/net/team/team_core.c
 +++ b/drivers/net/team/team_core.c
-@@ -941,6 +941,28 @@ static void __team_port_disable_rx(struct team *team,
- 	WRITE_ONCE(port->rx_enabled, false);
+@@ -978,6 +978,21 @@ static void __team_port_enable_tx(struct team *team,
+ 			   team_tx_port_index_hash(team, port->tx_index));
  }
  
-+static void team_port_enable_rx(struct team *team,
++static void team_port_enable_tx(struct team *team,
 +				struct team_port *port)
 +{
-+	if (team_port_rx_enabled(port))
++	if (team_port_tx_enabled(port))
 +		return;
 +
-+	__team_port_enable_rx(team, port);
++	__team_port_enable_tx(team, port);
 +	team_adjust_ops(team);
++	team_queue_override_port_add(team, port);
++
++	/* Don't rejoin multicast, since this port might not be receiving. */
 +	team_notify_peers(team);
-+	team_mcast_rejoin(team);
++	team_lower_state_changed(port);
 +}
 +
-+static void team_port_disable_rx(struct team *team,
+ static void __reconstruct_port_hlist(struct team *team, int rm_index)
+ {
+ 	struct hlist_head *tx_port_index_hash;
+@@ -1007,6 +1022,19 @@ static void __team_port_disable_tx(struct team *team,
+ 	WRITE_ONCE(team->tx_en_port_count, team->tx_en_port_count - 1);
+ }
+ 
++static void team_port_disable_tx(struct team *team,
 +				 struct team_port *port)
 +{
-+	if (!team_port_rx_enabled(port))
++	if (!team_port_tx_enabled(port))
 +		return;
 +
-+	__team_port_disable_rx(team, port);
++	__team_port_disable_tx(team, port);
++
++	team_queue_override_port_del(team, port);
 +	team_adjust_ops(team);
++	team_lower_state_changed(port);
 +}
 +
  /*
-  * Enable just TX on the port by adding to tx-enabled port hashlist and
-  * setting port->tx_index (Might be racy so reader could see incorrect
-@@ -1487,6 +1509,26 @@ static int team_port_en_option_set(struct team *team,
+  * Enable TX AND RX on the port.
+  */
+@@ -1529,6 +1557,26 @@ static int team_port_rx_en_option_set(struct team *team,
  	return 0;
  }
  
-+static void team_port_rx_en_option_get(struct team *team,
++static void team_port_tx_en_option_get(struct team *team,
 +				       struct team_gsetter_ctx *ctx)
 +{
 +	struct team_port *port = ctx->info->port;
 +
-+	ctx->data.bool_val = team_port_rx_enabled(port);
++	ctx->data.bool_val = team_port_tx_enabled(port);
 +}
 +
-+static int team_port_rx_en_option_set(struct team *team,
++static int team_port_tx_en_option_set(struct team *team,
 +				      struct team_gsetter_ctx *ctx)
 +{
 +	struct team_port *port = ctx->info->port;
 +
 +	if (ctx->data.bool_val)
-+		team_port_enable_rx(team, port);
++		team_port_enable_tx(team, port);
 +	else
-+		team_port_disable_rx(team, port);
++		team_port_disable_tx(team, port);
 +	return 0;
 +}
 +
  static void team_user_linkup_option_get(struct team *team,
  					struct team_gsetter_ctx *ctx)
  {
-@@ -1608,6 +1650,13 @@ static const struct team_option team_options[] = {
- 		.getter = team_port_en_option_get,
- 		.setter = team_port_en_option_set,
+@@ -1657,6 +1705,13 @@ static const struct team_option team_options[] = {
+ 		.getter = team_port_rx_en_option_get,
+ 		.setter = team_port_rx_en_option_set,
  	},
 +	{
-+		.name = "rx_enabled",
++		.name = "tx_enabled",
 +		.type = TEAM_OPTION_TYPE_BOOL,
 +		.per_port = true,
-+		.getter = team_port_rx_en_option_get,
-+		.setter = team_port_rx_en_option_set,
++		.getter = team_port_tx_en_option_get,
++		.setter = team_port_tx_en_option_set,
 +	},
  	{
  		.name = "user_linkup",
