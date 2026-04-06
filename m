@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72B338237F;
-	Mon,  6 Apr 2026 14:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F3D3822AF;
+	Mon,  6 Apr 2026 14:21:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775485274; cv=none; b=HnTfRclhFgUe6MfZUhATiAP8gPy4FMrt1f7UOwwvK1hn0s4A8uEqO05GnvGv85kZLPN17WkWQn4pFI10GmNvo5rOyJbg7OuqI6r0nPhZ7mJO4i63v0zgd44O64bMYkLxoxu/NmTTuZFDOT/mJQ4jjECmoQlkC4Vx5h9acAnQLgs=
+	t=1775485280; cv=none; b=aydrH2ePTy+fGR0yOjmtrp0lrXvr+5RwOp3CvF5F/6pY50Qnr/nM9og6vcIh+y1So6qqDrlB0AoQcEMfDH0Ek8/YUMx36b3HaFIinW77n6xd2bQxI8+lgoL5yjjVTMkf2qRJTnAmXCIYjxyfkp10mXwrO7Ep5l+VfT60a9rf3e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775485274; c=relaxed/simple;
-	bh=1E1PaJAheFq68IlA7LKJisHu/YP5aoXijmYjIj2LOcM=;
+	s=arc-20240116; t=1775485280; c=relaxed/simple;
+	bh=nlprzoVHw1LmFezPWbTzVMDcbCMocVKEurNVLRnJdhY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H5iCF+WSkspHstDiH6zq7OzccgyNGpYCFDjbcaWWqVwEdqDX7NMZ4AhDD+f9K3InuO0jetqf48YJeL88b5lJgWZjB6UwpahUZubOvPRkjpG4TjnUUtVry/fCHU5OdSJnSvM/ZGmq+3E1LY+1AcS2HPx0q9h4DS1k3kTX78wtFiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F26V/ngD; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=JhuTKHPB7UYVfJhNuie+XEPm7cl2zg54KU+rYSQHWrMjs/di1qsWEunVmTRgEB4oOEdmNoENaYCcWaoEA5jFNLWOeKpYb9cPt48e7jLUoZiY9LMtlLesqMw8B24xePfETcOKIbr2bkoA/LXY+3OdFTjGHIhtISO01c1OGX5T4a0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=agTROMm5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F26V/ngD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFD7C4AF0B;
-	Mon,  6 Apr 2026 14:21:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="agTROMm5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4163DC2BC9E;
+	Mon,  6 Apr 2026 14:21:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775485274;
-	bh=1E1PaJAheFq68IlA7LKJisHu/YP5aoXijmYjIj2LOcM=;
+	s=k20201202; t=1775485280;
+	bh=nlprzoVHw1LmFezPWbTzVMDcbCMocVKEurNVLRnJdhY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=F26V/ngDISfUxXDEjbjCfD4dgkfEyZ7yLYKiAYXU3dZvt78HSd6yW8f/Aynk1/ykz
-	 dllKi8Ge+eEDBUDSMJcm4pet77fXPNXVfpxmenPaAYUalmvRMQuMqV7m3v5ZEZyk6y
-	 CSaDsayvVihY6TsIPfkAQWIlNwpyo5mOUSqxnmEUjPJW79Gn56z7kfUMOCjCzUVFiH
-	 mNbeavG5e8L4W1vXgjmAUZFpDHvHIThbOO5blkWTfYvD+gOw9bYWOyjHm4bJjsHrfH
-	 zfsvpZ+RvnxS5EuPznLvW10btFFCYHU1ihazksnij/taKvU5pOSgnlHgx2s5Hkukzx
-	 UiVe4U+7kYhpQ==
+	b=agTROMm5+/L8PA1PIQV1DOjILhrJF9lyrFuWSR9Agki1LfX/O7YJ+Wt/YZzCklDnA
+	 b5G65oUCYtqzd8uRbHvsRvXd2xOQZsstAZ39uwds7uqJgd/AmanlNN67uxcQQb+0pe
+	 MXdbivHX+Vi+Udi+aeK5w2FnWf2M1jA1HQwny+3a5s3UfAVTOTxamd9nchmpZTzKoE
+	 3LGGwveUGotGzyOsFUZqX5BQZMAU26x2kuxoh1g2IX0+ubDe4ef0Zcwoz0h74wf7tk
+	 y2zGFwbfWWtaFz28ZAxj+SEgJru4P2bJXx8ufTwZh6Fw3yd0hcsNlX7E7Tp3esAFYi
+	 8vDfQweFV7ZwQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -51,9 +51,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 36/53] selftests/mm: hugetlb-madvise: add setup of HugeTLB pages
-Date: Mon,  6 Apr 2026 17:17:18 +0300
-Message-ID: <20260406141735.2179309-37-rppt@kernel.org>
+Subject: [PATCH 37/53] selftests/mm: hugetlb_madv_vs_map: add setup of HugeTLB pages
+Date: Mon,  6 Apr 2026 17:17:19 +0300
+Message-ID: <20260406141735.2179309-38-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260406141735.2179309-1-rppt@kernel.org>
 References: <20260406141735.2179309-1-rppt@kernel.org>
@@ -67,7 +67,7 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-hugetlb-madvise test skips testing if there are no free huge pages
+hugetlb_madv_vs_map test skips testing if there are no free huge pages
 prepared by a wrapper script.
 
 Add setup of HugeTLB pages to the test and make sure that the original
@@ -75,25 +75,35 @@ settings are restored on the test exit.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/hugetlb-madvise.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/hugetlb_madv_vs_map.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-index 3c08eb6db6a2..b20648d025e6 100644
---- a/tools/testing/selftests/mm/hugetlb-madvise.c
-+++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-@@ -68,9 +68,9 @@ int main(int argc, char **argv)
- 	if (!base_page_size)
- 		ksft_exit_fail_msg("Unable to determine base page size\n");
+diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+index dfbd71a7f709..6c95dd23ca81 100644
+--- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
++++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+@@ -77,7 +77,6 @@ void *map_extra(void *unused)
+ int main(void)
+ {
+ 	pthread_t thread1, thread2, thread3;
+-	unsigned long free_hugepages;
+ 	void *ret;
  
-+	if (!hugetlb_setup_default(MIN_FREE_PAGES))
-+		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", hugetlb_free_default_pages(), MIN_FREE_PAGES);
- 	free_hugepages = hugetlb_free_default_pages();
--	if (free_hugepages < MIN_FREE_PAGES)
--		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", free_hugepages, MIN_FREE_PAGES);
+ 	/*
+@@ -89,11 +88,9 @@ int main(void)
+ 	ksft_print_header();
+ 	ksft_set_plan(1);
  
- 	fd = memfd_create(argv[0], MFD_HUGETLB);
- 	if (fd < 0)
+-	free_hugepages = hugetlb_free_default_pages();
+-
+-	if (free_hugepages != 1)
++	if (!hugetlb_setup_default(1))
+ 		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
+-			       free_hugepages);
++			       hugetlb_free_default_pages());
+ 
+ 	mmap_size = default_huge_page_size();
+ 
 -- 
 2.53.0
 
