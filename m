@@ -1,265 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A4C381B0C;
-	Mon,  6 Apr 2026 14:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95C637419B;
+	Mon,  6 Apr 2026 14:28:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775485373; cv=none; b=CE2NdqLjYI41WvUi7mW8KJBwk8VCcksOPF6PSzHtGFbXUienuNBpqHmH73Z7Iqs7eS8JVFPdDVUE4j9bZR6o+NaYDssTCzY3mzK2NJ77fWPqcVMiOO2qC8zDtLR5Dngi1oYxVXGYtxiflePzU1AoBIUWh/zfOzGtCy88scTXe7g=
+	t=1775485683; cv=none; b=SUdpNO1FtQJUK+NIvsxcFWjZ6NnoccNhPyxgiqtYK3vx5OTB+J6nljmVzabM6KsCaxGldSUt9mOCbVoyBvgBaqAltWjVOckfqY4Q6Uu3A6B6uzVHg2bV8p5c+2DMjGEBTALkL94FPgK+lROXypHT7Bt0ZoOGSw1JzfbLhu4Qs6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775485373; c=relaxed/simple;
-	bh=sZoUbqG9CxBotaWHnOZiPFKTeBgb66YHvpq2HPRKqX0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m5HSQFb9I0yWtXbXvi3b9zP8Ug3aDNqM5S1BIRiipxjckzj6Tvn+GC2+cCVJhE4fuWuuEJshPo3CYCgGGqrSKilh9Yaz94JTtRuZO3jrGdAPUO+OdmHhh4D++sqUk2QK1WfZyhn0Yq4QSnBGaXnpkR1LhSkd5Zajx2pu+Khtr54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J3Kk9RhU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775485683; c=relaxed/simple;
+	bh=Jgs8OcyaNYF6N+1kAZCcYjNNqypzJ8NmBV0NzOlPQYg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UqSZQUyJUQoFobR72fVdD80WfSsk+khtOzP3Hqt9j5W2SJw3QmOQ0ExcQ4DnGE4d9x7fs6uqMD/7iYMRS/s3ehzAQJj5eJK4Jga2laQhtMda7aAdYXBfVqM2NClhsNCldgRYdSgkJ7tpKbBhvzX6oa4tfg0X9MLXhOo8YMWTB1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pQD9n4RC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3Kk9RhU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9317DC2BC9E;
-	Mon,  6 Apr 2026 14:22:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pQD9n4RC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C2C2C4CEF7;
+	Mon,  6 Apr 2026 14:27:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775485372;
-	bh=sZoUbqG9CxBotaWHnOZiPFKTeBgb66YHvpq2HPRKqX0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J3Kk9RhUvfGMtcs9qRAEkmrUVJwm0etJxgkg2wBysazgb8bchQM9eu35eExUkxx+P
-	 DyZrrIUpNMpM3TE4RYHQ5Ns0uzyWv/Uu2xLiMwusvOKTZinc/D4EYJhFR+ziSNtw4e
-	 z47lvoJg7Ju160XRVuqJRW2BOYcfNZGpQEJjYaa/bLZNaCTFIAeEtQG5Cfr9KHs5ZB
-	 PoU4dRg6WAXzIipNh+3SwGvQJ8txQkVrV/ffHoS+NlspiNoqpWXNbgpyur1X8xPsu3
-	 WPwdkcHeUIjTTYmJCW9QbhkNLORuIRfCjtEDvYp1toBXDuab4g5jYWjJOTnJjj2IiD
-	 V58SeHdkyVOJw==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>,
-	Dev Jain <dev.jain@arm.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
+	s=k20201202; t=1775485683;
+	bh=Jgs8OcyaNYF6N+1kAZCcYjNNqypzJ8NmBV0NzOlPQYg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pQD9n4RCELRdVba2kMQkSyXgQDtf++kFban9FsTWhEPNtWk8XBv4Hv50YyIcWXKWW
+	 k2aUlrPJnRh4ZF+1BMORV5+PsSEP5dWJQMxr0WmBDQndC/ElOpccsR9PwABv4MQoDq
+	 Gr+h0KW2woti0uV8U2vwJ0Jep6d1dQNRafoAJkmTQz+xI3+MlRqDZOurUJ/rk45PX8
+	 Y3HaZWKAbHNPFzDvwniINwiVeZfjj6eI3ANDOws8+pK1Uw+/HdZQu0Xvcf2m5Gswwc
+	 ii2tTWBzTdVpGt0EoJA9MAeLAaImt7LaydMRExvFqAOPFhwMRNvjT4xLXmo1Tk1sa0
+	 26eTuce+7N0Jw==
+Date: Mon, 6 Apr 2026 15:27:50 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
 	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nico Pache <npache@redhat.com>,
-	Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
+	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+	Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 53/53] selftests/mm: run_vmtests.sh: drop detection and setup of HugeTLB
-Date: Mon,  6 Apr 2026 17:17:35 +0300
-Message-ID: <20260406141735.2179309-54-rppt@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260406141735.2179309-1-rppt@kernel.org>
+Subject: Re: [PATCH 07/53] selftests/mm: hugetlb-shm: use kselftest framework
+Message-ID: <8fac53c1-f7c3-43dc-9389-07cb60fbbda5@sirena.org.uk>
 References: <20260406141735.2179309-1-rppt@kernel.org>
+ <20260406141735.2179309-8-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1MwePQTqQaQ8/AtX"
+Content-Disposition: inline
+In-Reply-To: <20260406141735.2179309-8-rppt@kernel.org>
+X-Cookie: Does not include installation.
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-All the tests that use HugeTLB can detect and setup HugeTLB pages on
-their own.
+--1MwePQTqQaQ8/AtX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Drop detection and setup of HugeTLB from run_vmtests.sh.
+On Mon, Apr 06, 2026 at 05:16:49PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>=20
+> Convert hugetlb-shm test to use kselftest framework for reporting and
+> tracking successful and failing runs.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- tools/testing/selftests/mm/run_vmtests.sh | 128 ++--------------------
- 1 file changed, 9 insertions(+), 119 deletions(-)
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index b42d19036182..7e0c379e7af4 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -157,60 +157,6 @@ run_gup_matrix() {
-     done
- }
- 
--# get huge pagesize and freepages from /proc/meminfo
--while read -r name size unit; do
--	if [ "$name" = "HugePages_Free:" ]; then
--		freepgs="$size"
--	fi
--	if [ "$name" = "Hugepagesize:" ]; then
--		hpgsize_KB="$size"
--	fi
--done < /proc/meminfo
--
--# Simple hugetlbfs tests have a hardcoded minimum requirement of
--# huge pages totaling 256MB (262144KB) in size.  The userfaultfd
--# hugetlb test requires a minimum of 2 * nr_cpus huge pages.  Take
--# both of these requirements into account and attempt to increase
--# number of huge pages available.
--nr_cpus=$(nproc)
--uffd_min_KB=$((hpgsize_KB * nr_cpus * 2))
--hugetlb_min_KB=$((256 * 1024))
--if [[ $uffd_min_KB -gt $hugetlb_min_KB ]]; then
--	needmem_KB=$uffd_min_KB
--else
--	needmem_KB=$hugetlb_min_KB
--fi
--
--# set proper nr_hugepages
--if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
--	orig_nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
--	needpgs=$((needmem_KB / hpgsize_KB))
--	tries=2
--	while [ "$tries" -gt 0 ] && [ "$freepgs" -lt "$needpgs" ]; do
--		lackpgs=$((needpgs - freepgs))
--		echo 3 > /proc/sys/vm/drop_caches
--		if ! echo $((lackpgs + orig_nr_hugepgs)) > /proc/sys/vm/nr_hugepages; then
--			echo "Please run this test as root"
--			exit $ksft_skip
--		fi
--		while read -r name size unit; do
--			if [ "$name" = "HugePages_Free:" ]; then
--				freepgs=$size
--			fi
--		done < /proc/meminfo
--		tries=$((tries - 1))
--	done
--	nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
--	if [ "$freepgs" -lt "$needpgs" ]; then
--		printf "Not enough huge pages available (%d < %d)\n" \
--		       "$freepgs" "$needpgs"
--	fi
--	HAVE_HUGEPAGES=1
--else
--	echo "no hugetlbfs support in kernel?"
--	HAVE_HUGEPAGES=0
--fi
--
- # filter 64bit architectures
- ARCH64STR="arm64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sparc64 x86_64"
- if [ -z "$ARCH" ]; then
-@@ -283,29 +229,13 @@ run_test() {
- echo "TAP version 13" | tap_output
- 
- CATEGORY="hugetlb" run_test ./hugetlb-mmap
--
--shmmax=$(cat /proc/sys/kernel/shmmax)
--shmall=$(cat /proc/sys/kernel/shmall)
--echo 268435456 > /proc/sys/kernel/shmmax
--echo 4194304 > /proc/sys/kernel/shmall
- CATEGORY="hugetlb" run_test ./hugetlb-shm
--echo "$shmmax" > /proc/sys/kernel/shmmax
--echo "$shmall" > /proc/sys/kernel/shmall
--
- CATEGORY="hugetlb" run_test ./hugetlb-mremap
- CATEGORY="hugetlb" run_test ./hugetlb-vmemmap
- CATEGORY="hugetlb" run_test ./hugetlb-madvise
- CATEGORY="hugetlb" run_test ./hugetlb_dio
--
--if [ "${HAVE_HUGEPAGES}" = "1" ]; then
--	nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
--	# For this test, we need one and just one huge page
--	echo 1 > /proc/sys/vm/nr_hugepages
--	CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
--	CATEGORY="hugetlb" run_test ./hugetlb_madv_vs_map
--	# Restore the previous number of huge pages, since further tests rely on it
--	echo "$nr_hugepages_tmp" > /proc/sys/vm/nr_hugepages
--fi
-+CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
-+CATEGORY="hugetlb" run_test ./hugetlb_madv_vs_map
- 
- if test_selected "hugetlb"; then
- 	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"	  | tap_prefix
-@@ -332,44 +262,12 @@ CATEGORY="gup_test" run_test ./gup_longterm
- CATEGORY="userfaultfd" run_test ./uffd-unit-tests
- uffd_stress_bin=./uffd-stress
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} anon 20 16
--# Hugetlb tests require source and destination huge pages. Pass in almost half
--# the size of the free pages we have, which is used for *each*. An adjustment
--# of (nr_parallel - 1) is done (see nr_parallel in uffd-stress.c) to have some
--# extra hugepages - this is done to prevent the test from failing by racily
--# reserving more hugepages than strictly required.
--# uffd-stress expects a region expressed in MiB, so we adjust
--# half_ufd_size_MB accordingly.
- adjustment=$(( (31 < (nr_cpus - 1)) ? 31 : (nr_cpus - 1) ))
--half_ufd_size_MB=$((((freepgs - adjustment) * hpgsize_KB) / 1024 / 2))
--CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb "$half_ufd_size_MB" 32
--CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private "$half_ufd_size_MB" 32
-+CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb 128 32
-+CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private 128 32
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem 20 16
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem-private 20 16
--# uffd-wp-mremap requires at least one page of each size.
--have_all_size_hugepgs=true
--declare -A nr_size_hugepgs
--for f in /sys/kernel/mm/hugepages/**/nr_hugepages; do
--	old=$(cat $f)
--	nr_size_hugepgs["$f"]="$old"
--	if [ "$old" == 0 ]; then
--		echo 1 > "$f"
--	fi
--	if [ $(cat "$f") == 0 ]; then
--		have_all_size_hugepgs=false
--		break
--	fi
--done
--if $have_all_size_hugepgs; then
--	CATEGORY="userfaultfd" run_test ./uffd-wp-mremap
--else
--	echo "# SKIP ./uffd-wp-mremap"
--fi
--
--#cleanup
--for f in "${!nr_size_hugepgs[@]}"; do
--	echo "${nr_size_hugepgs["$f"]}" > "$f"
--done
--echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
-+CATEGORY="userfaultfd" run_test ./uffd-wp-mremap
- 
- CATEGORY="compaction" run_test ./compaction_test
- 
-@@ -393,14 +291,11 @@ CATEGORY="mremap" run_test ./mremap_test
- CATEGORY="hugetlb" run_test ./thuge-gen
- CATEGORY="hugetlb" run_test ./charge_reserved_hugetlb.sh -cgroup-v2
- CATEGORY="hugetlb" run_test ./hugetlb_reparenting_test.sh -cgroup-v2
-+
- if $RUN_DESTRUCTIVE; then
--nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
--enable_soft_offline=$(cat /proc/sys/vm/enable_soft_offline)
--echo 8 > /proc/sys/vm/nr_hugepages
--CATEGORY="hugetlb" run_test ./hugetlb-soft-offline
--echo "$nr_hugepages_tmp" > /proc/sys/vm/nr_hugepages
--echo "$enable_soft_offline" > /proc/sys/vm/enable_soft_offline
--CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
-+	CATEGORY="hugetlb" run_test ./hugetlb-soft-offline
-+	echo "$enable_soft_offline" > /proc/sys/vm/enable_soft_offline
-+	CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
- fi
- 
- if [ $VADDR64 -ne 0 ]; then
-@@ -464,7 +359,6 @@ if [ -x ./protection_keys_64 ]
- then
- 	CATEGORY="pkey" run_test ./protection_keys_64
- fi
--echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
- 
- if [ -x ./soft-dirty ]
- then
-@@ -545,10 +439,6 @@ if [ -n "${LOADED_MOD}" ]; then
- 	modprobe -r hwpoison_inject > /dev/null 2>&1
- fi
- 
--if [ "${HAVE_HUGEPAGES}" = 1 ]; then
--	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
--fi
--
- echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
- echo "1..${count_total}" | tap_output
- 
--- 
-2.53.0
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+> +
 
+There's not a huge advantage where it's only one test but still, good
+practice.
+
+--1MwePQTqQaQ8/AtX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnTwuUACgkQJNaLcl1U
+h9CBbQf8Cl2vPXTZJB8sRNcTWsB0R9qT/5VUc3ynOeQWV3/yZvAfG+ztF2cfIzyq
+kxxdAgubXGfwFxee+9gr09hJLBTBFEt2y7yWxL+xSM6BeDqt0NA4xjeYW1ECUg+3
+5STEM/g3eJiuxNOAYnjbquFE9GcKf9AyvHpPKGMnvADpNbDfYnYIrZ4u5Frkqh3H
+6HqnaJ/a9xUSw7tNV3PbLdIekE4Ttw0SGpvO3TXha86ix8PW2GXXvrq3Qll6u7cF
+KunndEVCG2GKjcgdtnBukVJA1BfIVhjQdBNW2yGoYZnxBuMVuRvLyYar7Dmg8T8z
+dCCxEtiq3xGNm0mHEMHJPETv/pwAow==
+=bzJF
+-----END PGP SIGNATURE-----
+
+--1MwePQTqQaQ8/AtX--
