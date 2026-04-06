@@ -1,165 +1,192 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A8B34D4CB
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 16:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775491608; cv=pass; b=LrY0dCFTwePSdwFW/n3V9Ifx2wjVza+GMpvClMazrfyjVovdcMcoNnbGQHo9u7wio5QrxEp7WZ01+PAEuktHx0DrshhUikTdr8wKsJaFvBDBuwsnWGYkXgoBEZhar8FCo7gALcQxb/JpQh67d4RbooZOTtNYIBMeXz3HOpvxisI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775491608; c=relaxed/simple;
-	bh=0mfv2q13bWahVT0s2waY/ovs1AueK0bCMf6E6tJ8ke4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G3UnyPr/uj49TePZBTPemnTUhNjB7a/Q4dXkesofx/wFTG1HvC0TfBx+gdaSkkTGd4JeweDVNEV+AGpO/Ml57rgKcLJ8pwunBePi8datEJ/UO5zAeMUFCAmNAdWAm/Ab0PygiwVvAkElt0AEQ7G2sZRvW9NG2jKknWaI1LITRQI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IwnwHUVD; arc=pass smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2832B388369
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 16:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775491895; cv=none; b=aSm2LwL7jm7K6rHVEuWUhZIiNamUqFbYm+8GBqMkRP5hhor1/XrRgDdyoacOoVfd3GyerMpkXKQQVizTfO7CRPYMYvCQyO07rzbAOkQAw8/hZboI6bvKHFxMgkHPSvBQGILM27D+IQgghyl5enaRnj3gTrnUozdx23HmQqwes8M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775491895; c=relaxed/simple;
+	bh=ArgOU95qRvvNq5EYMPlzVjOtmEEPyIXcwsThZmdALLU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OgQYbZab+f06uXL+U1/7pTmsS9wGCK+40gk9ZhnGeolQ6lEW8lU3CRy/thZOMNw35pMxWcyoY6V2kt2CYMvipcWJA0O0C4uoPVASv3UsU/NqP7fbvPFbyACi5XFU1sVZrHp+ghLgtj5tzp8DEu/MdH01BLCbDyUb0OxfrJitOQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Git/Asxe; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IwnwHUVD"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5a3af1b7549so3457377e87.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 09:06:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775491605; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SLW66WdrW/9icHFRHuLuw+OOWff2dtj9lpFHjPl4H4mREdn3D5g2ex70xXXwJnGbVF
-         j+Slse42++l9l6txp8kfxcN8WqN4gAE0tsM7JbguR8anAIqqBFS9Gpfn7gtu6kJXZ4Yc
-         rq45qvXq8063fDJs3A/dHr8lrrrRz5CzRYwJHiAMotk6LAnLfpi0FNFm0iCHy7eKT69G
-         HbsP3qH1bpQvWO8Gbs/7w6FQAkqnh7ehSZOgCyJIKRHRClO30NgDdx9Q6joosMn6YwPv
-         +OF1BHSXhFGpzxggyg1ihwfRDJkm8MIgRt6JGvkb6YN0u3DKFwHGDeLQV8MeMlBtCNNW
-         +LLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=cOKcd1E+kh/rgDmBatc+5AEkevvJqYiqh34IKuXZ368=;
-        fh=qzMplwwDJgMTZIxYhwfdAboYkzqRA5XtYSYKusqglO8=;
-        b=kuA/Jm6sDIHx0TdqEEU+pe8DEA4krqjkFbK6uwxUX4EEI4yY5nQ0RvqFv4d2J89iNh
-         dixWN7gn4vS8Sbu+w2C1ZooJg4HDGNVEIFrTeGfMWBVNydrijRl0qAQkyRVmJjWOpSBc
-         4RFFzZZ32Mp3NyWYLKsPVJf0j46SDnTHaXt5Sr5GmX314ddq4K54rMUMY1e0riFwg4dx
-         mDcZIPgh0lTctMFwGxn4DyX/By5V19B2VlV3FyQUJfDAMoPVOX+OBxxoBx4yCSncCf+e
-         fI4sVlj8Uz2v6LUp/C6GrtQyDN95/SucUNvIPaPACJ0fy4dC0+SpEg8ab+GmXD0t7HWY
-         okrw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Git/Asxe"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-483487335c2so40893185e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 09:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775491605; x=1776096405; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cOKcd1E+kh/rgDmBatc+5AEkevvJqYiqh34IKuXZ368=;
-        b=IwnwHUVD2T4Xb+Dd46BueA+Str+szIapn/Y+fyFgQSwlj6mjzlptehM1Sg6sFr/dwP
-         3/Y1pkp2MwvbGzpNJKsRRCMnPF4yISFdb1OZv23yZ7I7QZgSWRjtI+UkYbPLzAUNkXhw
-         k7dgJGyqBsf48qQdKVz/KPE7CvG1T4JyZDRV/4/3numJsXFFE8ATg28Ku7sq8l9Ns5wR
-         aMXQgJT++ZZAj6Jq4q53P43tlh1BPBlIupFJOFOkGTTdquFzsj4NJtEubzYunEHrbwr4
-         Pj6Q5vptSf57UeMe8W+fBnqjBlh5WRfD7UwDgIrJ0Szmz1FrYU0sZzEQocx3URM+s4uc
-         RSjA==
+        d=suse.com; s=google; t=1775491890; x=1776096690; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o9sN4dQ77cdHfplJS7dhEnKxehvVdqPa8hIuKQeJ1sw=;
+        b=Git/AsxetiR48SYNAc6nr3z4lTxtZFDOoFVh6yhCUyJmmFOYHd4ELUTSxfqpuGnjmB
+         PadBZOuQQCIXhJkFuUXCTqPa0FrKFwtiNUl69sQQYACkS1zH0nrCnylHkNMb9pUsyAPG
+         nYrk1tG++SD8Ck+cqHzop/PF/O5Dfb94twv/OLpeb3DzQacQgcJvt1VKnwoTU7kB09mY
+         qTiGvqcQuab3UhnpR38jxx+dAoYyyPNXWmy6FyIEZ7MwXKewsnuLN2DAI4RB9P8luo04
+         ERuDOjmVzKfzdV47oeWotbKrj9j0e/B+MGoEy1GirYUDpl3dPlkHMNYRhmO3bzpjfEEq
+         D/5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775491605; x=1776096405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cOKcd1E+kh/rgDmBatc+5AEkevvJqYiqh34IKuXZ368=;
-        b=LD1iWV7clwC26eWlXQ3XfphXXeJJioCjk7RNPmFbTBePgQ9tYtFck2KlJUfc4ZTdxF
-         8I5fVtyshAZNOEjLZ+mwM1xqCBuCyRrnDDMiIUHEpNYSrtYVDRVMf4lX+If72TJWTHIc
-         f6Fs8icftxb3CawIPbGHaEM2XIm7IUZwxx31YGTK0H8TtZkWsXTzMaLAYkd99cYkoQd7
-         AzrPK29E1HABngyUnzGNEyCf7Pv2RHXXeMYLmCg17TZqAo8rB70KQwVItSy+1dN0ejJ7
-         09m8hTLPVaTd6DXU4z+t1BbvL5ORatw/ED9mTCmiPqrjVZeRbZlYHmm4ur4B6Poh3uIq
-         e0lg==
-X-Forwarded-Encrypted: i=1; AJvYcCUs4CSAKOCJgw1pwQpYEv8wDR/wmh5vz6YO//GLTKkPoLVvDHYmUPbyt8TEJrQU6XMqaHfY/dkKHXSshSr0p/0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3Ud5Ab8NBRVJ4LbvdvByVYIeGJru9fZx3EnD0xMBqDfVbxuI1
-	yXt992uY90+yYGCKv8ULaJBUPfcPEF5o+4GRTxDy5wHmQSWz6HfMz7xWnHf7dgvHZCb2JrfJk4K
-	rZnNoozy69622DB8IG/UwTXAOYyLJRMnxUEZ/oGQ2
-X-Gm-Gg: AeBDievoEP7H9m9IFb6VUvqqK/XOGJEsDrFHOMa7JZU9DPgucPhOTdrinP7la2uiG84
-	NNLslxsxJAHEuQgg0y30MlS8tXnb3QhxZ5bzzbCL6KBRTuY8VG8Cz/qKr5HF7TNxQ8r7n5/AETz
-	L5jgrp+mTm9xPmYrLQQVYBy5gZBB40fxPDycFM37M9zwdGD+2z56ct2md1K6bb4bl74bgDxPep8
-	yHLV0ZwEm2tbKu67k+/T36PReQVU1buqDJluEvaMSSIFtZWN4G1+JTz1KIF66ZUtravpiWzFpna
-	L+ER5j91
-X-Received: by 2002:a05:6512:33cd:b0:5a3:d2ef:2f93 with SMTP id
- 2adb3069b0e04-5a3d2ef2ff2mr3364086e87.30.1775491604807; Mon, 06 Apr 2026
- 09:06:44 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775491890; x=1776096690;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o9sN4dQ77cdHfplJS7dhEnKxehvVdqPa8hIuKQeJ1sw=;
+        b=aIRZkF0TXe1y+nlY44uoifQ2xBqPuG/jhE8AC6gxDtJeuxr+fsjKBpuEUhZzLexZ6a
+         IEwp4NV2X3fRpxMr/lcnaOpjKYTn31GBy5YD5vdRdzAkmxb7m3luVS8XQIzcqxUvqFuT
+         Sl1IP1RteiCyyKLokzj/2iaAy8cbAYV5DZf8a4aq0IPBt/OZXiX6vBC+yl4tsBVCWzwe
+         J9m3qAVmlIObCnoFXKb82LvV5PrRlI8c08sCAFdqH6TFoHEAg4le7Q5VIWsuJw9YHh+z
+         eaCy54IFSIm/XCe1+hYDdXj8X8LWqWtZoVHzz6ArVZ38jqED49UMFHdhnZ4us1l8/lo0
+         eiPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXtL2gWF04VkqPzr7pjwTVQiVewM+gh/Ka8pPOP3LGnBSd4x7OUlYVi1K+4zQB9m8xrfyj0V9GVYIZJgcVsOdQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRH/2al5VEszcbRFG4/wd0geQYJ/7eLSa0i4gN+XyyoqQaBqTd
+	fIi1JibtsRflQU74Gpl1qwZ7uLp3szuiG1IONPLvZytIO5plLe8q8UCgAouTS2VERPk=
+X-Gm-Gg: AeBDietX+6Uu9yWQhjy67E0KlvipWCvd9vwfZkVqfY61OHV4L7mCjauq5IFqrz86CTr
+	w/S50IOxhn5HWX+OVI3uXceZJv2yxaE7CbIYfgd3sxWpkeGnzY1yvuX3NeiJLXU5rIaV+tLCwY0
+	wXm3As3+oaeeWtyMYyX8Ksd7rv0w65aTbYcXrohb9Qxvfb5KEE4tqv5ruc5hSXz7gy0UrTGOMNA
+	qkvmjbvsMU2Qmztfj8s4y6IyPEsbPfghzaiFsV/F3ST3q0pFU2BfXpYloJ808BEnGirPuOQoANP
+	J3N8UYIAswFEdUfjh7b6BI0tEtho9/7EWIbIGDuSWcFhh1Y5kBrgYcXGbqTaMCLXZSv3rr2t6EF
+	tQEr7rOMNNzGuqRl0NDiupIK2935CNJTkh/I9LThaeB5gl5IQ2X13dqXXdrSqG5ni2RYKnJcJvq
+	q0xfN+tDzJJh39VG/UmJmwBYs=
+X-Received: by 2002:a05:600d:12:b0:485:3d3e:1675 with SMTP id 5b1f17b1804b1-4889971dbf4mr138978625e9.8.1775491890483;
+        Mon, 06 Apr 2026 09:11:30 -0700 (PDT)
+Received: from localhost ([2804:7f0:b767:120d:a4df:3777:2c55:2b95])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-60582b562bfsm17281537137.0.2026.04.06.09.11.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 09:11:29 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Subject: [PATCH v3 00/11] selftests/bpf: Tolerate partial builds across
+ kernel configs
+Date: Mon, 06 Apr 2026 13:11:22 -0300
+Message-Id: <20260406-selftests-bpf_misconfig-v3-0-587a1114263c@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323235817.1960573-1-dmatlack@google.com> <20260323235817.1960573-3-dmatlack@google.com>
- <e3fe7085-1297-47b8-bb17-a48196e8f37f@linux.dev> <CALzav=eyf4XRTi8MfE_GBNSm+tjmfX7=d0M8Aj5Hh0vJn7huew@mail.gmail.com>
- <c4138f66-edf2-4689-b5fe-16dc4839e9c3@linux.dev>
-In-Reply-To: <c4138f66-edf2-4689-b5fe-16dc4839e9c3@linux.dev>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 6 Apr 2026 09:06:15 -0700
-X-Gm-Features: AQROBzBbHlG2eO4NjewlbX-rvy8OZhgqlWaRP6spr5d6_KAEWYAdDGH-j6HkrWs
-Message-ID: <CALzav=ei_xSfM0MTdPFhGDjNwe3EQ0vHPiEk=vszFX-Xi_KjQw@mail.gmail.com>
-Subject: Re: [PATCH v3 02/24] PCI: Add API to track PCI devices preserved
- across Live Update
-To: Zhu Yanjun <yanjun.zhu@linux.dev>
-Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Askar Safin <safinaskar@gmail.com>, 
-	"Borislav Petkov (AMD)" <bp@alien8.de>, Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
-	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
-	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
-	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
-	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
-	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Pranjal Shrivastava <praan@google.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIACrb02kC/4XOTQ6CMBAF4KuYrq0OLeLPynsYY0qZSo0U0ikEQ
+ 7i7LW7cGJdv8ubLmxiht0jstJqYx8GSbV0Mcr1iulbujtxWMTMBooAcMk74NAEpEC87c2ss6dY
+ Ze+e5lhLNTu+KSrH43Xk0dlzky/WTqS8fqEPiUqNUhLz0yuk6nSLHHY5h2ygK6FOjthRa/1rGD
+ VmS/u8YMg5cKsyFBmX2hTlTT7jRbcPSjEF8M/I3IyJjoNgDyAOoY/XFzPP8Bui8ldw4AQAA
+X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=openssh-sha256; t=1775491886; l=4599;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=ArgOU95qRvvNq5EYMPlzVjOtmEEPyIXcwsThZmdALLU=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QN+3AuGyAVB98N94X/jHHKGCwEsduJGzrTLiK2iADVWsta0LBaieNypC1lG6o/dUkgxmP4sVyPf
+ AoXdf4cGh+QA=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-On Sun, Apr 5, 2026 at 9:56=E2=80=AFAM Zhu Yanjun <yanjun.zhu@linux.dev> wr=
-ote:
-> =E5=9C=A8 2026/4/3 14:58, David Matlack =E5=86=99=E9=81=93:
-> > On Thu, Apr 2, 2026 at 2:29=E2=80=AFPM Yanjun.Zhu <yanjun.zhu@linux.dev=
-> wrote:
-> >> On 3/23/26 4:57 PM, David Matlack wrote:
-> >>> +config PCI_LIVEUPDATE
-> >>> +     bool "PCI Live Update Support (EXPERIMENTAL)"
-> >>> +     depends on PCI && LIVEUPDATE
-> >>> +     help
-> >>> +       Support for preserving PCI devices across a Live Update. This=
- option
-> >>> +       should only be enabled by developers working on implementing =
-this
-> >>> +       support. Once enough support as landed in the kernel, this op=
-tion
-> >>> +       will no longer be marked EXPERIMENTAL.
-> >>> +
-> >>> +       If unsure, say N.
-> >> Currently, it only supports 'n' or 'y'. Is it possible to add 'm'
-> >> (modular support)?
-> >>
-> >> This would allow the feature to be built as a kernel module. For
-> >> development
-> >>
-> >> purposes, modularization means we only need to recompile a single modu=
-le
-> >>
-> >> for testing, rather than rebuilding the entire kernel. Compiling a
-> >> module should
-> >>
-> >> be significantly faster than a full kernel build.
-> > I don't think it is possible for CONFIG_PCI_LIVEUPDATE to support 'm'.
-> > pci_setup_device() (which is under CONFIG_PCI) needs to call
-> > pci_liveupdate_setup_device(), and CONFIG_PCI cannot be built as a
-> > module. This call is necessary so the PCI core knows whether a device
-> > being enumerated was preserved across a previous Live Update.
->
-> After the following changes, the liveupdate.ko can be generated
-> successfully.
+Currently the BPF selftests can only be built by using the minimum kernel
+configuration defined in tools/testing/selftests/bpf/config*. This poses a
+problem in distribution kernels that may have some of the flags disabled or
+set as module. For example, we have been running the tests regularly in
+openSUSE Tumbleweed [1] [2] but to work around this fact we created a
+special package [3] that build the tests against an auxiliary vmlinux with
+the BPF Kconfig. We keep a list of known issues that may happen due to,
+amongst other things, configuration mismatches [4] [5].
 
-Sure but you've broken the feature. Now devices can be probed before
-liveupdate.ko is loaded and the PCI core will have an incorrect view
-of which devices were preserved by the previous kernel.
+The maintenance of this package is far from ideal, especially for
+enterprise kernels. The goal of this series is to enable the common usecase
+of running the following in any system:
+
+```sh
+make -C tools/testing/selftests install \
+        SKIP_TARGETS= \
+        TARGETS=bpf \
+        O=/lib/modules/$(uname -r)/build
+```
+
+As an example, the following script targeting a minimal config can be used
+for testing:
+
+```sh
+make defconfig
+scripts/config --file .config \
+               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+               --enable DEBUG_INFO_BTF \
+               --enable BPF_SYSCALL \
+               --enable BPF_JIT
+make olddefconfig
+make -j$(nproc)
+make -j$(nproc) -C tools/testing/selftests SKIP_TARGETS= TARGETS=bpf install
+```
+
+This produces a test_progs binary with 579 subtests, against the total of
+708. Many of them will still fail or be skipped at runtime due to lack of
+symbols, but at least there will be a clear way of building the tests.
+
+[1]: https://openqa.opensuse.org/tests/5811715
+[2]: https://openqa.opensuse.org/tests/5811730
+[3]: https://src.opensuse.org/rmarliere/kselftests
+[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
+[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
+
+Assisted-by: {codex,claude}
+Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+---
+Changes in v3:
+- Split test_kmods patch into two: fix KDIR handling (O= passthrough, EXTRA_CFLAGS/EXTRA_LDFLAGS clearing) and wire into lib.mk via TEST_GEN_MODS_DIR
+- Pass O= through to the kernel module build so artifacts land in the output tree, not the source tree
+- Clear EXTRA_CFLAGS and EXTRA_LDFLAGS when invoking the kernel build to prevent host flags (e.g. -static) leaking into module compilation
+- Replace the bespoke test_kmods pattern rule with lib.mk module infrastructure (TEST_GEN_MODS_DIR); lib.mk now drives build and clean lifecycle
+- Make the .ko copy step resilient: emit SKIP instead of failing when a module is absent
+- Expand the uprobe weak stub comment in bpf_cookie.c to explain why noinline is required
+- Link to v2: https://patch.msgid.link/20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com
+
+Changes in v2:
+- Skip test_kmods build/clean when KDIR directory does not exist
+- Use `Module.symvers` instead of `.config` for in-tree detection
+- Fix skeleton order-only prereqs commit message
+- Guard BTFIDS step when .test.o is absent
+- Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
+- Link to v1: https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com
+
+---
+Ricardo B. Marlière (11):
+      selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
+      selftests/bpf: Route test_kmods through the kselftest module flow
+      selftests/bpf: Tolerate BPF and skeleton generation failures
+      selftests/bpf: Avoid rebuilds when running emit_tests
+      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
+      selftests/bpf: Tolerate test file compilation failures
+      selftests/bpf: Allow test_progs to link with a partial object set
+      selftests/bpf: Tolerate benchmark build failures
+      selftests/bpf: Provide weak definitions for cross-test functions
+      selftests/bpf: Skip tests whose objects were not built
+      selftests/bpf: Tolerate missing files during install
+
+ tools/testing/selftests/bpf/Makefile               | 135 +++++++++++++--------
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  24 +++-
+ tools/testing/selftests/bpf/prog_tests/iters.c     |  10 +-
+ tools/testing/selftests/bpf/test_kmods/Makefile    |  15 ++-
+ tools/testing/selftests/bpf/test_progs.c           |   7 +-
+ 5 files changed, 129 insertions(+), 62 deletions(-)
+---
+base-commit: a1aa9ef47c299c5bbc30594d3c2f0589edf908e6
+change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
+
