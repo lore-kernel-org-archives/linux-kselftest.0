@@ -1,163 +1,151 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3815E27E056
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 09:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775466204; cv=pass; b=pTil/4LpGIrLkOk7DizwPsTVqp1+9A46JdmNot/9ljVeZ909EAqjtwbGddweRAcT8+XdqinvWudaFp3M49YZF1oCMfdINhccfjj4/AC3nekSUfRdQcyGJnWgHTe8dF41nOO7LmWe22eEuAXUyVoidAK13KKpbQbjgoaqld0VAok=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775466204; c=relaxed/simple;
-	bh=R2dHTJQnBLz14FBWbb+c8la9tQYirU1vpp38y1sgoA4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HnsYx/Sg9ttGwZac/BE/pVpXIXoe6gtlBEisgTBmx2cQErbuYPB1RXcBC9QH8titVp+K2Sw2wtXddrTncubCF2VlyoV0tvuMFdxCTLhsKZ+GgTySAMHd1aB8R97KwMnYQpGJcRt2dt2+2Vhjc3oY2ERV8lLebvalw00HFyxSF5k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIATw31B; arc=pass smtp.client-ip=74.125.82.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE0F215ECCC;
+	Mon,  6 Apr 2026 09:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775467240; cv=none; b=e1n484IQzZVKM/3cZMvhsjRwHqv/2POMxsKu0k8Kh1Xy0JE+S0ia9jPXp63JIWiYbv58IMzOn/gz+UOt3hD8yuF/Wp02mXxuXzNWgDYLW4KAnv1x2mMqpMSv8jjm9JIhyNfPY9lQwBtvl20XGwOobqgs9Rmmin8DvGK0p0dv6Qs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775467240; c=relaxed/simple;
+	bh=b39dBg39Vc5MvMFjyujhjbW+YC592c3wFAJhPR0S/BM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=diKtrgcJ3fiuilMB86xP701tVdLeSJzmhk995zjEMtL2GKlJVJvzm8R4odGKAE2uTYTIspJbrXBGajXd20AEwxptuYweovZXPsDrP67aW5buitSiheMcB6QgWNtXasK1RFT5peaDxvFoK1GQqZvLxcltfM13BXI8/mVb5Lus7i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gjg7yGsB; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIATw31B"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2c7e5f38a69so203264eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 02:03:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775466202; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WSDP05OtkWD970w4zk7laxj1lWCUMhoh25btLuwEICBBA9b+Q7FJazmVF+YGOKkhSc
-         2kgv5eRFCYmwGKGMNZVmieZf8ZPMDGNOhKqWp8fiVAFAeujRaNQWawyNdMMBEbVnq72s
-         bXGPC1iKwkYQlnOGj6XFZ5HiOWsoMJXVYjd1rdnoqGrivXbfS6b7ZjzK9ja0M3CJln5u
-         TEu20+J06QcuK34Xj1/h48OnFS0k1IfP6+51cu1kajAyu4NPJ8tK69sSxpJJoaPqhrbH
-         iazjWVyanRA71IFw7+qF5pt+sU17/BQ2u0SK8MZDsvpMMg9ZW0bMPJeVANBjxUKdsuiO
-         1QKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=iVamUPJfkbP2PYNa14ddDsteyLquBt95MrPlozlxwT4=;
-        fh=WZxkmwDOmocVg3LWnYa9AVa1OvtjdNBe3KaSPXyCuY4=;
-        b=hEGNpahlw86WblHJGgBnELGlgpt2cX6xe72hB48qC2Y5XJBVmrhe7sHXUYB5cnIJGF
-         IU8u6bLbWjZeucWOJR9W7OHdG4mATCH2lMcgtHaEnEG/6slEpFrT87/+7YHqvyi89T8g
-         FIH41Jvr9VnX2UsXEiLaWjwY6nbPZ90XJmeqib3f5Na6ZwtCUi+NY4qFHPZaYegD/zss
-         RD5F7RO2kOTQy3rJaEY2tA4llVnFMV5IhpvHQMvcqIPWgBhbVBgPO8RZPzxjf5wx9buY
-         U9CSCdw8YfpjX5FwUx5RVjeZH0d87x1CEtjmt3wAEMEawt1Yh3mPqBNaKM62IkgRgDMy
-         vrvw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775466202; x=1776071002; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iVamUPJfkbP2PYNa14ddDsteyLquBt95MrPlozlxwT4=;
-        b=PIATw31Bk+3hkggZjJ21LYlWRCEdonuXrhStaxjfpeEy+RZoMphpX1G6fDXJDfirK0
-         Lcix84JqgjmxFvtJfqRfPYEpHGb1ZhF83nIFw3O8IG8D1d9G4/P2un8SlPIrkQlKDQvS
-         kAjTgHjN9voZ48IaKsTLutwUAdxm01rYT/4srX8EaIwQURRnjXuJteiO0uary5DO+b1y
-         eIHYD5+mctWtaH77V7OyvOW7r4QVs3CY/XzcE6cCxPuvfHIp2DtxiKgzIF0EMRv1ON+k
-         6WsWVXYwGXy8FB5vlCj+jWDIFXrgcqNUpc1z7vi6MIUB1fjeeM+HBhDZVaiEGtXGmhmh
-         Zktg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775466202; x=1776071002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iVamUPJfkbP2PYNa14ddDsteyLquBt95MrPlozlxwT4=;
-        b=ULl3GhVWcZkE9rWub6aOWo0D9Hc7DxyogNcGq3JFXd6SF/G93PC7ZFjHcG+kr1sjaT
-         TEBh0wsbICtoGMy37vbjHJg1M8ij7CTZTFoK6KyFgRSHUDiw+JS8lHVUXcYytxWpI3Gl
-         isRXpjkTp04LglSkF85FeSJl8Pno0r+I2oe5taNsq9Af7inAcjxsY67eNdIE4YhniUnK
-         +XqwNIWRGrAMnPN4u66xaFHFO78wGkYVT8I0k0v6mwKUVDpqyI0toSbdx2tpMGy5s63/
-         OvceyBsMakztF8AGKOZAfI2GBtIcKO3anRROxBpjQsk4O55PB4b6+G/xBLWpFbq+NKIT
-         R2GA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHIv+BYYehGFhcXxw/V6wAAvkFCHMOFOWQWaDYF+jpH7b8dWNwN9i2XbwHuuQYs7CsdDpb4mR7bH2+tMLWp8U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk5xyyY9xV07MaD5afCE5Q5bi5z20w2qPHcGbklwbb80p8wzO1
-	AjUKjWykUQvnxgfJ2CaEY3iT92vbmZHyBFYbMHtlF7wJJyml3e0y6da9nGgCOp75Lpr7nVB7lOC
-	yGSlI9MPhl5vtYsNVfIwetQkopwSUfvo=
-X-Gm-Gg: AeBDies8zpe7QCa9H5LFkOdKc1tkM3pMOnZ1zhLxoFjCaw2NAe1VqY+5dPIL5uG7oua
-	6tAMuGtrxQR98dq2RJHJ8X+/k1hZZZflrxj1Vj+vEtylgEtJrl/rj7em80A/aPk+zWmOWvbI37W
-	2KjpkKZ2X/0cEIYDpleS3C/KpIiIRzkGbXOBIn9R6y3xEZ2Jge3ycOPvgtMSw3Ai4MRSKfDtjCV
-	+xcY7iiWIu0Bpa9clnd2dO8PGtAo+MTeWfFwpgbLzVAtAYOGPlLWPskMK2O/vW8TgzUVnQ9eRVz
-	hI1QlJLhisgosZGLawmmzKqKRx3SYxZ8ekUh4izoW7nCgZ0Tt1UIybxiqNsonQEgcDjFwnxa9fz
-	mmjjmv7JIfpDbx25BleNFTBo=
-X-Received: by 2002:a05:7300:2315:b0:2c4:76a3:bdfc with SMTP id
- 5a478bee46e88-2cbf6897126mr2280931eec.0.1775466202269; Mon, 06 Apr 2026
- 02:03:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gjg7yGsB"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 635NsWYM3879301;
+	Mon, 6 Apr 2026 09:20:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=BE2EUKU/McYWqo37g
+	hWd6Kx9zwh5R4g+dFW5eL2I394=; b=gjg7yGsBRkoF7CHo65fX+pLrIWM+OOSgy
+	zqlDQhYqlezV2pGIRoepQHzM43iQWNXysqWSXzK6l4JEHdeeq7QshpAiN3DUkigh
+	DNhXnSuBfsJICk58vGs5LswJEmg6KjSOGiSSw9zUYOR6zIrd6Yb1XGhF6PTnBCv/
+	8VLR3BBne7RDQp9jIz1B8MX2OuIn8fTVUQcvaE5jJmZLlQcIVQULBei69Uc0odHZ
+	VmBtiR6S/lJngJz909fbkUTg01cDfqzNyckGO6fkezmBVdAJy/VYURxgSn2i70ma
+	NMMkoO86qIy5Sj//A2XrXX8ZGkDFG565A8nYZ7/OsKvuCfVqVZdxg==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dat9rdems-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Apr 2026 09:19:59 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63646psp018571;
+	Mon, 6 Apr 2026 09:19:58 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dbcysv7b0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Apr 2026 09:19:58 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6369JsKr42729738
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 6 Apr 2026 09:19:54 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 447AA20043;
+	Mon,  6 Apr 2026 09:19:54 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7762B20040;
+	Mon,  6 Apr 2026 09:19:50 +0000 (GMT)
+Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.bl1-in.ibm.com (unknown [9.123.3.209])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  6 Apr 2026 09:19:50 +0000 (GMT)
+From: Sayali Patil <sayalip@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+        Sayali Patil <sayalip@linux.ibm.com>
+Subject: [PATCH v4 03/15] selftests/mm: restore default nr_hugepages value via EXIT trap in hugetlb_reparenting_test.sh
+Date: Mon,  6 Apr 2026 14:49:22 +0530
+Message-ID: <e148e4232d4b802795751a7766fcce8884c6e3c7.1775466329.git.sayalip@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <cover.1775466329.git.sayalip@linux.ibm.com>
+References: <cover.1775466329.git.sayalip@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260405235309.418950-1-ojeda@kernel.org>
-In-Reply-To: <20260405235309.418950-1-ojeda@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 6 Apr 2026 11:03:08 +0200
-X-Gm-Features: AQROBzDwpcCEtASRfptsJ0WJ2jdyaJlOCl6SPsL-e-w0TnWmNnUbHOjTvtft1Wo
-Message-ID: <CANiq72mnGArtgAbe7xXZCYW1x7Zd5hozfnzoftaGy9rxoLO4ew@mail.gmail.com>
-Subject: Re: [PATCH v2 00/33] rust: bump minimum Rust and `bindgen` versions
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Courbot <acourbot@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
-	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
-	moderated for non-subscribers <linux-arm-kernel@lists.infradead.org>, Alexandre Ghiti <alex@ghiti.fr>, 
-	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-GUID: W7LetLeRBK4_w-4UpW93fUvAyuxjOU07
+X-Proofpoint-ORIG-GUID: G6LyCCgjL_tmGz3AUnWmYTvfJ_jmTIYE
+X-Authority-Analysis: v=2.4 cv=bLYb4f+Z c=1 sm=1 tr=0 ts=69d37abf cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=dU9eaedoi-733nYHt2kA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA2MDA5MCBTYWx0ZWRfX41v18ENz44Zy
+ r2Qcb5Z0AFbmVskgq/xuF2WLv8FzVjzo/Dvz6OSGz4RHEbYvZdgZPmIfnGSaOUi38C7/0ib0bsl
+ bXwYTHdAaBxhwM9aOXnAEMKo//dOnm8AkVYynRa2Dg1vYFHa9ttw0IHprVYEvHkHex/3oJpm+la
+ 1/GcOS3fCt/DExCJlCPxKAJb1lVi6UL6vdQN6MBvlvy1zmhQ15gHTg52tgmDfvLgEUp8plCADgG
+ 212iGeaOWIyKSpCPTuN/F3m/76OyCYv7GDcPlvqv67tv7CRAVQsaJei9eK0ytLkJnr7ee5XYkw4
+ KSqW2XyUdRSvSle6yTziS+/rfJ7TP8XwNuQ1+8EK9vkEXxdWHHjg3RwkqnaQWHIBk05IL16jRVF
+ 5SgWdUf1fpGsBM7pR5eoBM6l46QslyoTiS2cegLSEI3dusjc/C/U6nehmmX2V0QzIfYk92aOJbX
+ TLSkaT3fxMiJO4JLiSQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-06_02,2026-04-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 adultscore=0 suspectscore=0 phishscore=0 bulkscore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2604060090
 
-On Mon, Apr 6, 2026 at 1:53=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wrot=
-e:
->
-> As proposed in the past in e.g. LPC 2025 and the Maintainers Summit [1],
-> we are going to follow Debian Stable's Rust versions as our minimum
-> supported version.
->
-> Debian Trixie was released with a Rust 1.85.0 toolchain [2], which it
-> still uses to this day [3] (i.e. no update to Rust 1.85.1).
->
-> Debian Trixie was released with `bindgen` 0.71.1, which it also still
-> uses to this day [4].
->
-> Debian Trixie's release happened on 2025-08-09 [5], which means that a
-> fair amount of time has passed since its release for kernel developers
-> to upgrade.
->
-> Thus bump the minimum to the new versions, i.e.
->
->   - Rust: 1.78.0 -> 1.85.0
->   - bindgen: 0.65.1 -> 0.71.1
->
-> There are a few main parts to the series, in this order:
->
->   - A few cleanups that can be performed before the bumps.
->   - The Rust bump (and its cleanups).
->   - The `bindgen` bump (and its cleanups).
->   - Documentation updates.
->   - The `cfi_encoding` patch, added here, which needs the bump.
->   - The per-version flags support and a Clippy cleanup on top.
->
-> Link: https://lwn.net/Articles/1050174/ [1]
-> Link: https://www.debian.org/releases/trixie/release-notes/whats-new.en.h=
-tml#desktops-and-well-known-packages [2]
-> Link: https://packages.debian.org/trixie/rustc [3]
-> Link: https://packages.debian.org/trixie/bindgen [4]
-> Link: https://www.debian.org/releases/trixie/ [5]
+The test modifies nr_hugepages during execution and restores it from
+cleanup() and again reconfigure it setup, which is invoked multiple
+times across test flow. This can lead to repeated
+allocation/freeing of hugepages.
 
-Applied series to `rust-next` -- thanks everyone!
+With set -e, failures in cleanup (e.g., rmdir/umount) can also
+cause early exit before restoring the original value at the end.
 
-Let's see if we find any issue in -next.
+Move restoration to a single EXIT trap so the original value is
+restored reliably on all exit paths while avoiding repeated churn.
 
-(If someone wants to give tags today, then I am happy to pick them up)
+Fixes: 585a9145886a ("selftests/mm: restore default nr_hugepages value during cleanup in hugetlb_reparenting_test.sh")
+Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+---
+ tools/testing/selftests/mm/hugetlb_reparenting_test.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Cheers,
-Miguel
+diff --git a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
+index 0dd31892ff67..7ddb370e1572 100755
+--- a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
++++ b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
+@@ -12,6 +12,8 @@ if [[ $(id -u) -ne 0 ]]; then
+ fi
+ 
+ nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
++trap 'echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages' EXIT
++
+ usage_file=usage_in_bytes
+ 
+ if [[ "$1" == "-cgroup-v2" ]]; then
+@@ -56,7 +58,6 @@ function cleanup() {
+   rmdir "$CGROUP_ROOT"/a/b 2>/dev/null
+   rmdir "$CGROUP_ROOT"/a 2>/dev/null
+   rmdir "$CGROUP_ROOT"/test1 2>/dev/null
+-  echo $nr_hugepgs >/proc/sys/vm/nr_hugepages
+   set -e
+ }
+ 
+@@ -240,4 +241,3 @@ if [[ $do_umount ]]; then
+   rm -rf $CGROUP_ROOT
+ fi
+ 
+-echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+-- 
+2.52.0
+
