@@ -1,57 +1,57 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17CE321457;
-	Mon,  6 Apr 2026 09:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CEE322B8F;
+	Mon,  6 Apr 2026 09:21:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775467261; cv=none; b=P3bwN188mvrXViUQwyz6fAk8gLSygwSST97hv5zrmkY0A1SQYbZ932cB8+MSzDTGFH2ly2wDOE+uFYSEL+sYfISVMFRTQPMRzs872yyi97rE5B14BNIELqTiDmy81ST80JxyAbF77QvGKwRfVRbveLjcxtLoSTLiupraM0xDf/I=
+	t=1775467263; cv=none; b=BlbDYfo5yS83CVIvKBwq5v3max2ogfWazyWOe+dGDhzBKG4qiDS96TMSHKCE0VD9rMsssq9Gx0NOjkVUqXxpcqehsk69V905H21DsmU5Bx56X9JnmQSlCNSZzlGNOKlTT3BILPoFfKeg+5+dcmZGzXtF4htbyrgil7niGD1JcnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775467261; c=relaxed/simple;
-	bh=6VNHn+hDXpLxoAWpL+7HpkA4xqhWvUbTx8QpsP9ktpk=;
+	s=arc-20240116; t=1775467263; c=relaxed/simple;
+	bh=ePBYuhE8mqCK/w7SPIhqzT5ED2MzzxIqtlwGvfIyk+k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fAA0zBBP44m8TktIDd+9+UZeSss/tL78K54Wwk9N6QF4We74y3F8yXwNbvTzNofzI/Ztp/QqxmJ9d84UZ1NGx/3rSXvphAygh7QO0G+2/vVlbPe0PKDPKhbh0jdgxHvSPOlkuhFkYLuebcFj2qsY71fb5g8ah05a9cDWXzh1HFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eOxNig6o; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=XPFq3y3GMKrKR11Rs+7YbJa26CGJEIcFKwM3037WsHWQOE92ASU7l75/+fZ72j52OP9OYqP8Hr2k4BJzU5WhKPMyv4/+MXxvcnuXOhnQk6byIPN2Ndu/kptDabTo+OlBzz8egcTOp3UIxegvCKWzx6vjYl2Qu6eWW1o2kkWUlb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=NY/AE8em; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eOxNig6o"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 635GlcON3095729;
-	Mon, 6 Apr 2026 09:20:25 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NY/AE8em"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 635MdY2g4037439;
+	Mon, 6 Apr 2026 09:20:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=UfapbF0MIYNL4g108
-	uLsimu5HpFg3RBNrsbl+T8DHIM=; b=eOxNig6oTRdpY1BLjRBQF4rkVeX2jBYcg
-	b9flBQGOk8XaoidcPn1xpY4XGvhy88CPJITjGRgTlXokARHrQ6h6m9R8GkPuRgTO
-	jzpqef/ir04S1JjYZmv18kIFmH+IipYmEYWrdWSKcXBPRmhkgBA/Hqpgf6CD853F
-	dPMXqTAdxMRVfEu6wrC0winXDsDKQInmIhm6JKzWyrK8jK7E4pkNXexgYERC3sBN
-	UKZOdfBr5UZip5qPt4Ap6B5veoXYPTu4vyAHSkcUOvkSbZhmFl1S7kaZ+RveGtN5
-	nyhIo3z46uThetBX6+oYEaHSH7cnqUX/bjOcWI2V/RAtVBP38zCqQ==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4datc2nwjd-1
+	:mime-version:references:subject:to; s=pp1; bh=pBqdS5nVcWPMjB8CE
+	BH752E10Mp8905KEGmdHXqnGYM=; b=NY/AE8emcXIDAWqeHGkVPFPvm8XooucK4
+	V1qEeyPnF8vCnKLZqKkDv6bXPcYavYjcfiLRv3VpImxYeucHkimhQ90fwNS0tv8Q
+	pRu8H7eq67Eabw67wy4ksdQaHIsKqqwmcLwDltxdh4TzI5XeSzo+T1n58MZtjQHK
+	oZKRqUL4SPKtHS6hCw9x7vNSoFqB4Jnbp+uHZNYM0yH/m8JcO3om9j3XvBbPorQp
+	0pYdVlQR7KvZVzOGwOLzj0tjssDispGfqUYoJDNxq/rNi8Z/qFQ6VvTAZ6uAQ6pj
+	6g338AkAK1htk+nqbEag8m+grhRT4/hj+cPdkp/77cYy2qXOdOR+Q==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dat51wxka-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Apr 2026 09:20:24 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6366OCMV014777;
-	Mon, 6 Apr 2026 09:20:23 GMT
+	Mon, 06 Apr 2026 09:20:40 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6366GArt022945;
+	Mon, 6 Apr 2026 09:20:39 GMT
 Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dbf6jux04-1
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dbefkc0xj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Apr 2026 09:20:23 +0000
+	Mon, 06 Apr 2026 09:20:39 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6369KK8f57540906
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6369KYdG38928832
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 6 Apr 2026 09:20:20 GMT
+	Mon, 6 Apr 2026 09:20:35 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EFE4720043;
-	Mon,  6 Apr 2026 09:20:19 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id D602A20043;
+	Mon,  6 Apr 2026 09:20:34 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C54452004B;
-	Mon,  6 Apr 2026 09:20:16 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 54F5E20040;
+	Mon,  6 Apr 2026 09:20:31 +0000 (GMT)
 Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.bl1-in.ibm.com (unknown [9.123.3.209])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  6 Apr 2026 09:20:16 +0000 (GMT)
+	Mon,  6 Apr 2026 09:20:31 +0000 (GMT)
 From: Sayali Patil <sayalip@linux.ibm.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -64,9 +64,9 @@ Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
         linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
         Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
         Sayali Patil <sayalip@linux.ibm.com>
-Subject: [PATCH v4 10/15] selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap
-Date: Mon,  6 Apr 2026 14:49:29 +0530
-Message-ID: <a4c1dd0e2b83cc06ea84bd04e6a86ca6d51efb67.1775466330.git.sayalip@linux.ibm.com>
+Subject: [PATCH v4 14/15] selftests/mm: clarify alternate unmapping in compaction_test
+Date: Mon,  6 Apr 2026 14:49:33 +0530
+Message-ID: <e6ca6066c0869cf58c6fbef59ea2d35547cabc6d.1775466330.git.sayalip@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1775466329.git.sayalip@linux.ibm.com>
 References: <cover.1775466329.git.sayalip@linux.ibm.com>
@@ -79,97 +79,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA2MDA5MCBTYWx0ZWRfX+HqQvBPdjI7l
- xJZzg1OYzfGqyyWy8z2HbMBNarIa5WnTMvJ939WW/jsPwV123cUm09LKGl0KuI41Ic2kxvHjefa
- jgzq96VCO6nWli5GgbySQsa14E5gxAZ6vbYBbFbAER4lRSUp6Af3c8Hz69/cRuXPbWIVOXCE3tt
- UZ0uVsei/lmKV8eXkBV27BononKdJR1dYATNTA1yDfgwVdSQT5YaAOFm+0CEmTSmihBzS25X5m7
- 2gYGFfR43ZoyG1cfk5Ub4XEedRx2rH8W97CkfvEr39N/ZK17dGxyQBoRa+V9xnj/N68kPIr7xM7
- BMrtS1ZLqrqXvHVpIqczlPAX1AFfRBjw0RD/+Kq+3KtkpkzNHX6hsO4ISsZQIXNRoUj4qSRzU4I
- K6pLThgKBUoiUP4dVITKKCgYRs0Qry+pNw/vrucArkMjAd38NRN/fkU/0+4hE/54UlxmPEENsas
- BXoK2x8SrUAIkI0eaqg==
-X-Proofpoint-GUID: V2FNifgevaR4390n-0H9S2FXFBMEu_vI
-X-Proofpoint-ORIG-GUID: gl3H62yxUwUu_yrP0KNZSQ1Ea8nJuzTm
-X-Authority-Analysis: v=2.4 cv=HJvO14tv c=1 sm=1 tr=0 ts=69d37ad9 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+X-Authority-Analysis: v=2.4 cv=J6anLQnS c=1 sm=1 tr=0 ts=69d37ae8 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8 a=KgDUTMtFSFkb7SMnqUgA:9
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8 a=drp7DlKwS4wFpybDI60A:9
+ a=ZXulRonScM0A:10
+X-Proofpoint-GUID: mqojUT3DmpMioyJHmt3KvQPAQkRaaDlZ
+X-Proofpoint-ORIG-GUID: 19LRlPIFPDuzkGxRK8_l-LF11lGhtkKQ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA2MDA5MCBTYWx0ZWRfX+PdhhPBXeUrs
+ qBNQXlMPWA7f+tki8SwCHi0vHgFWvjAfcpSle1z5ZP1KDPAUWDlg5SgWZ7wbFYsdU/+gWK0VcvV
+ IFy1h0aOUJDUWdxWWFPr1yzctgBz4EwK/RG6NcsBvgVpz93sHj8TlR8zd4Rb3bF0jJG0SIFrt9U
+ v8W2iOl0cWTVeJe6lGqk9ZUU1boNY0AuVnOGnFSCOJExDBpa/3nhQw3YiHbfwXq8YCElnM1lmlL
+ S3yyxZ8B0MstX/W3MxydYGEF6+I5M1XuO0SfcNzw1qFvcRDXsoItXOXsZonVbApwQ9F8uqSa1UZ
+ O+hgfGnaep5cUGVoFIDEaNOh4X+HSGOuN+yiPmkc8dIq5rW5qgvDRRnjZxbekWbQ3WYPi/CVUqC
+ qRXhR62Xf6pIR9wkk2BNywoIP3rYj9FJHxcpBwNX4sDDwlMpjN4qkVr/p8KUhSCKMzNV27vecMs
+ 3MY/qLyDnwO96lTT4QQ==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-06_02,2026-04-03_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- malwarescore=0 spamscore=0 phishscore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501 clxscore=1015
+ impostorscore=0 phishscore=0 malwarescore=0 suspectscore=0 adultscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604060090
 
-The hugepage-mremap selftest reserves the destination address using a
-anonymous base-page mapping before calling mremap() with MREMAP_FIXED,
-while the source region is hugetlb-backed.
+Add a comment explaining that every other entry in the list is
+unmapped to intentionally create fragmentation with
+locked pages before invoking check_compaction().
 
-When remapping a hugetlb mapping into a base-page VMA may fail with:
-
-    mremap: Device or resource busy
-
-This is observed on powerpc hash MMU systems where slice constraints
-and page size incompatibilities prevent the remap.
-
-Ensure the destination region is created using MAP_HUGETLB so that both
-source and destination VMAs are hugetlb-backed and compatible.
-
-Update the FLAGS macro to include MAP_HUGETLB | MAP_SHARED
-so that both mappings are hugetlb-backed and compatible.
-Also use the macro for the mmap() calls to avoid repeating
-the flag combination.
-
-This ensures the test reliably exercises hugetlb mremap instead of
-failing due to VMA type mismatch.
-
-Fixes: 12b613206474 ("mm, hugepages: add hugetlb vma mremap() test")
+Fixes: bd67d5c15cc1 ("Test compaction of mlocked memory")
 Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 ---
- tools/testing/selftests/mm/hugepage-mremap.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ tools/testing/selftests/mm/compaction_test.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testing/selftests/mm/hugepage-mremap.c
-index 68c35d1d8a5f..a442d01908cc 100644
---- a/tools/testing/selftests/mm/hugepage-mremap.c
-+++ b/tools/testing/selftests/mm/hugepage-mremap.c
-@@ -31,7 +31,7 @@
- #define MB_TO_BYTES(x) (x * 1024 * 1024)
+diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+index 30209c40b697..e1610e2fbdf6 100644
+--- a/tools/testing/selftests/mm/compaction_test.c
++++ b/tools/testing/selftests/mm/compaction_test.c
+@@ -261,6 +261,9 @@ int main(int argc, char **argv)
+ 		mem_fragmentable_MB -= MAP_SIZE_MB;
+ 	}
  
- #define PROTECTION (PROT_READ | PROT_WRITE | PROT_EXEC)
--#define FLAGS (MAP_SHARED | MAP_ANONYMOUS)
-+#define FLAGS (MAP_HUGETLB | MAP_SHARED)
- #define ALIGN(x, a) (((x) + ((a) - 1)) & ~((a) - 1))
- 
- static void check_bytes(char *addr)
-@@ -131,23 +131,20 @@ int main(int argc, char *argv[])
- 
- 	/* mmap to a PUD aligned address to hopefully trigger pmd sharing. */
- 	unsigned long suggested_addr = 0x7eaa40000000;
--	void *haddr = mmap((void *)suggested_addr, length, PROTECTION,
--			   MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
-+	void *haddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
- 	ksft_print_msg("Map haddr: Returned address is %p\n", haddr);
- 	if (haddr == MAP_FAILED)
- 		ksft_exit_fail_msg("mmap1: %s\n", strerror(errno));
- 
- 	/* mmap again to a dummy address to hopefully trigger pmd sharing. */
- 	suggested_addr = 0x7daa40000000;
--	void *daddr = mmap((void *)suggested_addr, length, PROTECTION,
--			   MAP_HUGETLB | MAP_SHARED | MAP_POPULATE, fd, 0);
-+	void *daddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
- 	ksft_print_msg("Map daddr: Returned address is %p\n", daddr);
- 	if (daddr == MAP_FAILED)
- 		ksft_exit_fail_msg("mmap3: %s\n", strerror(errno));
- 
- 	suggested_addr = 0x7faa40000000;
--	void *vaddr =
--		mmap((void *)suggested_addr, length, PROTECTION, FLAGS, -1, 0);
-+	void *vaddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
- 	ksft_print_msg("Map vaddr: Returned address is %p\n", vaddr);
- 	if (vaddr == MAP_FAILED)
- 		ksft_exit_fail_msg("mmap2: %s\n", strerror(errno));
++	/* Unmap every other entry in the list to create fragmentation with
++	 * locked pages before invoking check_compaction().
++	 */
+ 	for (entry = list; entry != NULL; entry = entry->next) {
+ 		munmap(entry->map, MAP_SIZE);
+ 		if (!entry->next)
 -- 
 2.52.0
 
