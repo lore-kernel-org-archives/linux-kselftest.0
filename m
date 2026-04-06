@@ -1,67 +1,71 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FFB30FF32
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 21:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EED373C04
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 22:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775510531; cv=none; b=ItkFgMTAz5eLXNAD0Ahs9cdG5fs6fJTcqjz565FuY4gbEDCy3J9d/66tHH5JtVKxgeIoeJrSuLrpGWP5L1sMbxfnZ59PC2Cl52kdNBo0msLgmrjXpQJycAz1mkc71r6r2LKgS9EdU0W1jmu8MlX1AHt6nEmcF3MzxXypprt+BqU=
+	t=1775513126; cv=none; b=Wpp9UU5eHRo+dX7QLBHTB5XLlA6vlNkQwUr8DH0DrykP8P257t46NmVqKHHHSn8Usndg70YMHVwBnyvSb5p5l+Hz7PREQsNV1wrn94HWzBDhVKSNav038rXfE0cJLUDsQtnJUXI4bPQk/WFL4UAGj72lYlc/OroTtPrRGXNpaK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775510531; c=relaxed/simple;
-	bh=JZ+dyehG8Qui1SICa3zEJ6W1VNS5Q/aJb6bpEZfCTNI=;
+	s=arc-20240116; t=1775513126; c=relaxed/simple;
+	bh=oK9QofoXFukYbZ1c/cswd1bebDb7z9qu2bCtB6Eab70=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=reW6uF/7zV4Kw8tjz+P5slHuZJZ19f1Nmep525JJZBXYfRhjrn96WVYc8fzTTa68o4QvjHj12pn2XDv//Cp6ZrcSkUVhIGipoy56UsL1mm3+iAg+4fL36njaXPHhpZZR2GyxacI/yEUqPuDXFNsz9NM36MoPOqyd/+H3Qw90xEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=NIw0K/Jm; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=RMVgFJOXay7NE8mjIWClkZV5jTAOB1eBJ/WdSVzx+ymGvgta7bXEbflAjQNDJdYwo76fha2o15u3K8M68qF/SMG6dj67gJBxILR2mMUnJCxgCh2BfgeKT9j2JoZwRUhLDaAihs9ldfY34HCFD+finYbLyD1C7U3a0sA13K0mLSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=RVmy1JPg; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="NIw0K/Jm"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8d4694105e5so221370585a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 14:22:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="RVmy1JPg"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8d4694105e5so223066985a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 15:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1775510529; x=1776115329; darn=vger.kernel.org;
+        d=ziepe.ca; s=google; t=1775513123; x=1776117923; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WXvsaUDHCUG7ebT5AoggGp8dnlrhLarXhjXHf/nmguw=;
-        b=NIw0K/JmjEv0pxtjM5k7PT8qkK3QLbCkmZAgmHqAo2lFfIpKiw0dATM01jgqB4yq9Y
-         6djEzHkfx1REn9rboDs003ooAoeugKXRfov6KKuBSgj6NsqlqM52pRbJo3LTbUheX3U4
-         EL36XEX6gg8MGT1qP/nP6L6idcXeHWM44MmoJ/OBaBefQt6HPxrgspbapZ2orqjHiloj
-         H0IZ5zBOhKGKviZcg+RKd37x7RvjiCsc8//2IeIF+OMaimq2Gja4X0xv7RITOOvuLmPa
-         SYb0ipMJTkX06OFmNkU/gb+XpbrfCiFQ8OsR2xTkS0z2BgoGtQbWNIDh+RWorzC6DpEl
-         mPZQ==
+        bh=EGZao/IIzct9FspuaHKhJftGREYwsc0pd1AtS7x/cpc=;
+        b=RVmy1JPga9OP1fAYlBdCYxO5p1+NGTZBvNC1KuBLpT466N7Isgs+iKH5WT+SI/ROzv
+         yoHVWTtoIRc5V8m6KHP9CHMbAWIv8a8mW5oiPlKd84adiK6/r+zv22SOEoHy3lafQN9e
+         Ppx6aw2Tizpatlz00J0wp50QbbpAMXE5wJ1/6wlJPNKKRO7AnnxaBi+Ai7IGup59P7zI
+         nHVBfP2wgxCfxbg/eANCqyPufMfBzyPEbilOwLOHXKCxDD195xeJB//VTM/Is34+sddx
+         /uRwDjVsWwAAm4oB4gT5XJ5Tl8T8mTwvtRrPo0NbGANms9By8Bxw2O9Si3DM6tHyHOWy
+         lowQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775510529; x=1776115329;
+        d=1e100.net; s=20251104; t=1775513123; x=1776117923;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WXvsaUDHCUG7ebT5AoggGp8dnlrhLarXhjXHf/nmguw=;
-        b=WDrYPiocw8XXcrpozHkh0gkB6Q6ICY04Lkz/e3TJNyfChvNsPEBHuW8mtq6W/L3ybp
-         Hge1+fAAdS6dUZM5bRHTc7XTSL1fkJ4OuTf207I72KF/qFqdqCCmjwwJbPteM6t21tXM
-         VhylKdcF1M2D9Su8LY+rVafwHUnRgcOUEq7Ug/rITcFjUD+WpNJYEXNf+VXuDzyQtzyl
-         V8c4051F2GkBR9clLESBtjWmlTLoPK930RVZppOhpVgE7a5qdKcLb/qxyskwUGAwrNGS
-         PLSXPNrzAsaFihRDsDrfurCFXuWldcqZhOEKe4O87tJlQlvwTJ0DHPi2JbVmg2BI2K6F
-         Hjgw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgZzMeBNJlIt8i18vTQNhcOsRecBLirvvWh7PrHn9n96sRUSZ7atIM3byE5lGiQHMa1hWYKKs4HR8mj5/wy54=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1D8Cgh9fB0qPsZP/r2GXoDI4UwTQVGPVrQhQDugLp16lUnaQX
-	5O1YxT7DNvM7ZoKOnGEP49JzbjKRPz9Klw00nqxLkHC8m1pNy7i/jL0gYXEhty+jOJE=
-X-Gm-Gg: AeBDievNrsWHuQ2lmPFjClp6LrevuQM0Os6I895fPYRYbpWoFQmBxk+2A+jWhzt3Tg7
-	hmcbDzudwY9uwOADfp0mCueYCe/4jI2sgSTH2HspsOzrEIIAFk7W6zSNFdaoTF1+3lgIC3ezdn6
-	NbT9V/o70IYs+NYi2/kTYJSiD3VMQ/+Tf5LDysgmV3kt6ndR3/jMD2DJkjuJuWAeiyKz2Vu5SWy
-	eIVprZIbRowCzQsDmghpxLc2myqSjTShRB2NCDK5ERPlCCvak30WaxQk2UMhPhi6kHbedVGl6LV
-	Yw3vTYXIjz0R+OA0swxWtpwBZLr696G2SAIZg8PV95mys0PzdWVjhmj3O7lJF4bLl5dK100oogK
-	AfNB6IDIyNmqcoQ6vcC7r6vbQ89qTNImW9uNZGQf+L70djWUGzMjNUvkYTIBpBAMXVmEg7quFm+
-	ypigEvW+83cEFjVjnF5VUinFqFUQ2mzH3MSdIB4yJT1LoqTiJx6/enwK9cCMXMUYdLZATyh8XXH
-	jmn1LfIpmnd
-X-Received: by 2002:a05:620a:7112:b0:8cd:87aa:e3ed with SMTP id af79cd13be357-8d4190971a1mr2109957885a.19.1775510529130;
-        Mon, 06 Apr 2026 14:22:09 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-71-191-243-150.washdc.fios.verizon.net. [71.191.243.150])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8d2a5f48acasm1175604885a.21.2026.04.06.14.22.07
+        bh=EGZao/IIzct9FspuaHKhJftGREYwsc0pd1AtS7x/cpc=;
+        b=gh/n4GUjz8N9p8Pdgq9ldM3/C1HQfk114FZBWUdI3fSwzXKwVPSIGZYaVx2HuISvV7
+         /vPl1/GuyS9JWcEhM3fNNwSqNEnH4n2+PGhtKS0u3ChE+lrhPkbtl2g+EjXikobcNL9N
+         uDbuYhf0VOKQwPgiklgEl+PDOHvlAA8nEB89pOWlEHoWmTo7SMgbOilgtzsQdHRoXO3W
+         sbiTNfBdwIHrjMGMZoxGTIrQP9/yheTr6BhAG10akc/JqdSqmUa3PzXu8h4gIIVaIFNl
+         E5eughSNqavq/MuNH5ie2GzSWBKcZb/KJqPe1wlRiNMJxsDw88C6ZS/EEkOTezCYhliN
+         S/kw==
+X-Forwarded-Encrypted: i=1; AJvYcCUhUCr2q2a/A7qbavNMtKFcUObUW09Xr8WH01bacTZ/IWP+Zij501spS46nuSPjV+BHWoPS1FswTigQYIFdkoo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywZ7fDeE9t6jWaUS0d7KOEHao24wZe6QOVwN58iby7VPB9aLZg
+	6p7Knq4BuS2Cc+p/jktfk/8Ru3u9QXewjuh42bODG8BdPWbfzAUojwEZ+0fWkAQ+vXI=
+X-Gm-Gg: AeBDietF13FXJscxvCLhKro4LqNx9uEc7L6W57v8JU/hntPTfAWQXVmHJS+bku7e/y7
+	7ORV546sw5htG6Ni8p3o044wSyw7U927vipy3ZwLWCopaIGV4eH5dWubK/cDp0Y2VXVJrJSjR6o
+	CCav8/20UKVPO61IYT0WgSZOmBQhKC9i0JX+PXgDugwdLH/+R6r8gaCg2Otl+6N2MU+xA35pOap
+	8VSA/mxY1CgoZLPHoqix9tFcAzk+5Uwiec6ySZhiFMDLqtESwMEq1p3xAGMsDnTSkD9SbctsNXD
+	djRgazya0vN6z0UNv/Iu+YjMwflxHGamtyGV62oOng9fKogdMikA+lOjMu306A7KMQvV/ziLuCY
+	K4tXwLFSlGVl3IUpdnwJb3IHuUxw6jvKVLGwZpAcEF1g/adnFxVde7dOpH5t4aKkpWQeel3IO7R
+	yaFpDW0g7yPb92nXUML3loTf/2M6YFQ9O+I/S2U85KcBrp4QDJbGg1bZdQE8LR7B+7PzUBLaMwt
+	Q7pG3pM
+X-Received: by 2002:a05:620a:294d:b0:8cf:bfcf:eb8f with SMTP id af79cd13be357-8d41bcd15d3mr1922226485a.65.1775513123076;
+        Mon, 06 Apr 2026 15:05:23 -0700 (PDT)
+Received: from ziepe.ca (mctnnbsa70w-159-2-73-22.dhcp-dynamic.fibreop.nb.bellaliant.net. [159.2.73.22])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8d2a5c5cb5csm1165614585a.15.2026.04.06.15.05.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 14:22:08 -0700 (PDT)
-Date: Mon, 6 Apr 2026 17:22:06 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Dan Williams <djbw@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, mhonap@nvidia.com,
+        Mon, 06 Apr 2026 15:05:22 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1w9s4P-0000000E4mE-3CKd;
+	Mon, 06 Apr 2026 19:05:21 -0300
+Date: Mon, 6 Apr 2026 19:05:21 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Gregory Price <gourry@gourry.net>
+Cc: Dan Williams <djbw@kernel.org>, mhonap@nvidia.com,
 	alwilliamson@nvidia.com, jonathan.cameron@huawei.com,
 	dave.jiang@intel.com, alejandro.lucero-palau@amd.com,
 	dave@stgolabs.net, alison.schofield@intel.com,
@@ -73,12 +77,13 @@ Cc: Jason Gunthorpe <jgg@ziepe.ca>, mhonap@nvidia.com,
 	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
 	kvm@vger.kernel.org
 Subject: Re: [PATCH v2 16/20] vfio/cxl: Register regions with VFIO layer
-Message-ID: <adQj_gxSzjA51Q6n@gourry-fedora-PF4VCD3F>
+Message-ID: <20260406220521.GG2551565@ziepe.ca>
 References: <20260401143917.108413-1-mhonap@nvidia.com>
  <20260401143917.108413-17-mhonap@nvidia.com>
  <69d0169115c06_1b0cc6100a5@dwillia2-mobl4.notmuch>
  <20260404185330.GD2551565@ziepe.ca>
  <69d1685538f45_556821002f@djbw-dev.notmuch>
+ <adQj_gxSzjA51Q6n@gourry-fedora-PF4VCD3F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,37 +92,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <69d1685538f45_556821002f@djbw-dev.notmuch>
+In-Reply-To: <adQj_gxSzjA51Q6n@gourry-fedora-PF4VCD3F>
 
-On Sat, Apr 04, 2026 at 12:36:53PM -0700, Dan Williams wrote:
-> Jason Gunthorpe wrote:
+On Mon, Apr 06, 2026 at 05:22:06PM -0400, Gregory Price wrote:
+> On Sat, Apr 04, 2026 at 12:36:53PM -0700, Dan Williams wrote:
+> > Jason Gunthorpe wrote:
+> > > 
+> > > The entire thing needs to be mmapable in a cache coherent way since
+> > > that is what the HW semantic is. If you try to do something else you
+> > > will break KVM support since it follows the VMA.
 > > 
-> > The entire thing needs to be mmapable in a cache coherent way since
-> > that is what the HW semantic is. If you try to do something else you
-> > will break KVM support since it follows the VMA.
+> > Then I assume it matters that memremap() sometimes silently falls back
+> > to the direct map. The "VFIO owns" expectation needs to guard against
+> > some helpful platform firmware mapping accelerator memory as System RAM.
+> > 
+> > At a minimum having VFIO fail to map in that case helps with the
+> > argument I have been making that "no, EFI_CONVENTIONAL_MEMORY type +
+> > EFI_SPECIFIC_PURPOSE flag" is not suitable for accelerators with private
+> > CXL memory. Those want to be enforcing "EFI_RESERVED".
 > 
-> Then I assume it matters that memremap() sometimes silently falls back
-> to the direct map. The "VFIO owns" expectation needs to guard against
-> some helpful platform firmware mapping accelerator memory as System RAM.
-> 
-> At a minimum having VFIO fail to map in that case helps with the
-> argument I have been making that "no, EFI_CONVENTIONAL_MEMORY type +
-> EFI_SPECIFIC_PURPOSE flag" is not suitable for accelerators with private
-> CXL memory. Those want to be enforcing "EFI_RESERVED".
+> Agree - in fact I would argue any potential user of private nodes should
+> have some kind of splat saying the memory should be marked reserved in
+> the first place, otherwise it's a firmware bug.
 
-Agree - in fact I would argue any potential user of private nodes should
-have some kind of splat saying the memory should be marked reserved in
-the first place, otherwise it's a firmware bug.
+I would expect this to happen via the request_resource mechanism, if
+MM is using the CXL range it should be locked in the resource tree and
+vfio should request it and then fail during the initial startup
+phases.
 
-I need to read up a little bit on this area, but i don't see the "needs
-to be mmap'able in a cache coherent way" to be an argument for one
-particular method or another (hotplug, private node, memremap, etc).
+> I need to read up a little bit on this area, but i don't see the "needs
+> to be mmap'able in a cache coherent way" to be an argument for one
+> particular method or another (hotplug, private node, memremap, etc).
 
-If this extension starts bleeding into special-casing a bunch more mm/
-stuff to be aware of and handle special memremap'd memory, that's when I
-would argue maybe we need to take a look at whether nodes apply.  But if
-this just wants to pass a whole chunk from driver to guest and otherwise
-the host is supposed to stay out of the way - memremap seems like an ok
-start / a reasonable existing upstream solution.
+It is speaking to what VFIO has to do. It is the exclusive owner of
+the physical range, it does not have struct pages, it must be cachable
+for VFIO and KVM to work - not alot of choices here. Turn the
+phys_addr_t's into large cachable special PTEs inside a VMA.
 
-~Gregory
+Jason
