@@ -1,56 +1,57 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85B532FA18;
-	Mon,  6 Apr 2026 09:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C9E322B8B;
+	Mon,  6 Apr 2026 09:21:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775467268; cv=none; b=Lodoz+UnDOz9SFf7HSk1VsYxY3S5oXSkXWpyQY0fvL0ihMNW2BJ0ZaLEVf8bzI5JW2N+Ff7AJy6cMEgKtZQJfG8hvOD940LnOMtSnahptemjCR17iYYpJWjlWpu32KkzOp2SOt6ueDMu6KuQFfHlufdUQl3cf0zqKJZAyBXsshg=
+	t=1775467270; cv=none; b=QnguAOJ6msthmaNXB1h/opW3hsB6nLFf4UWtQSXFtaDCIKkVOl5n3rv6N2sRd9Xr1TCi49FYiJJCkEhFQClcoats5ty3Pi7jaTgLRJ9t/G9uLcq9ch7FDFMGAovCNiuFmbX9aGjSbNggn0r2caTbQF+mbrorIxpodqKBdVx2D14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775467268; c=relaxed/simple;
-	bh=XRhsYWSSFZ7I7ixvJ2cZgnNp8lDLaNC2Jm9QYRPqB2w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aW5Mttyi59VsySiUP+7RHiSYJCmkbG1qB7huVxhfYAw3uOIAjPhMEJDFhNdwYVens6eyx4bFKn1GpqoywbOvJ8I9J7sENitAewOrqiErgHpOKsLra9L2wbphuosKMBODbxrQVVroX0bx9wzTZghrCR84jUvJpQSeNyz/LwJlj8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LDFARfW0; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1775467270; c=relaxed/simple;
+	bh=WH6nVrst69LAs4mX/Nfbp5F5CY8qHOzJK8wJK/PVJHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=s/pg6P0P6CRrXcq9BDEKzG9tXJoQMKZxOPbotsLDOtk3X018oGdMfhEnIpHxk8Hka6MfXe3zz+57XuiT3pL7WVi0WmoVYKFvx9YhAmhFA4MCOeNobob4YOp5OwGD+gY+Q3WNPVHQVOqQ1EddwwQiifaK7YBcgWlZeogPfwP60Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AePv7Mh6; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LDFARfW0"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 635HRL7A3181379;
-	Mon, 6 Apr 2026 09:19:48 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AePv7Mh6"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 635HrobP3217351;
+	Mon, 6 Apr 2026 09:19:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=OT+OQFCgRq+Kj1jonLnfSvCEwfsn
-	eE3cw0acLy20e6Y=; b=LDFARfW0396bSv3hZUqUyTZWS04rwq41y52Xi+92KxFF
-	zMc8SdwWZv4t3a+Lpi/gpkv9TEk+EcZxgD+/kvsncXz31Fo0bx+BdAvZDwt8bUqB
-	s9MLeLNYSaf+VfmTM4iZGk+lvAApWCozJhUho+gMqNlFMeGBgZYiwjXNAMX8PekB
-	/eVb5/X6rbjka4IfNHA/IElhwuzYzKgVUCES8jqtF4mscDSXbllZMSq/chqncAEY
-	F1x1KEtw7OLmp6iZmcXyCUJylhEHCTnkCSFl8FK1HFmMe/CZvGOZAx99ixSKYEcM
-	Xr5BZSLsTFCbMhp2iKfPHR7MyIuSNntVMwQquUrEPA==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4datap5vnk-1
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=Gw+rjcKVM5h6GXjQf
+	CYysJfzzPt4h5VbBFTgu6oDlxM=; b=AePv7Mh6wpi2Ed/SBNZJotX5rwyc0O+jF
+	SAXfk9LfzF/c2OGiHrJOejx2ejRWqXITtv5AEm0xyQAO28r+nZmEsr1wSN9NNZwM
+	8WByYFGgucrBIzac9VrEf78nNVcrR2jr+56RBFck+/9kIR0l+At2YXRCUORGoNEw
+	w/L3XztUrez4u/9R1Id0BBoE2x5/B78qRsoIgsQ+BnYv030v1fRXZEgk6qIpB5+0
+	gzvBNbAa/Hcowou+7NEM2uwRiv9L5mqhX+NLxCbQBg6eGX65kPP52vKE00vW6eqS
+	e7D98FLTJj1I43XFxrmlEKiVuiUdC0xEw0NSMHnUTk+eZdTDWvrGQ==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4datc2nwgu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Apr 2026 09:19:47 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6365ZcD3020501;
-	Mon, 6 Apr 2026 09:19:46 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dbdync2v3-1
+	Mon, 06 Apr 2026 09:19:50 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6364jCgR018517;
+	Mon, 6 Apr 2026 09:19:49 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dbcysv7at-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Apr 2026 09:19:46 +0000
+	Mon, 06 Apr 2026 09:19:49 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6369Jgdb35717392
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6369JkDX28246616
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 6 Apr 2026 09:19:42 GMT
+	Mon, 6 Apr 2026 09:19:46 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1790820043;
+	by IMSVA (Postfix) with ESMTP id 15E3220040;
+	Mon,  6 Apr 2026 09:19:46 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7A83A20043;
 	Mon,  6 Apr 2026 09:19:42 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A062620040;
-	Mon,  6 Apr 2026 09:19:38 +0000 (GMT)
 Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.bl1-in.ibm.com (unknown [9.123.3.209])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  6 Apr 2026 09:19:38 +0000 (GMT)
+	Mon,  6 Apr 2026 09:19:42 +0000 (GMT)
 From: Sayali Patil <sayalip@linux.ibm.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -63,185 +64,89 @@ Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
         linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
         Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
         Sayali Patil <sayalip@linux.ibm.com>
-Subject: [PATCH v4 00/15] selftests/mm: fix failures and robustness improvements
-Date: Mon,  6 Apr 2026 14:49:19 +0530
-Message-ID: <cover.1775466329.git.sayalip@linux.ibm.com>
+Subject: [PATCH v4 01/15] selftests/mm: restore default nr_hugepages value via EXIT trap in charge_reserved_hugetlb.sh
+Date: Mon,  6 Apr 2026 14:49:20 +0530
+Message-ID: <8beb895ae46c3e817e80cdd5386933cdcf8e233f.1775466329.git.sayalip@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <cover.1775466329.git.sayalip@linux.ibm.com>
+References: <cover.1775466329.git.sayalip@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=Bp+QAIX5 c=1 sm=1 tr=0 ts=69d37ab4 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=2xlL1Z9U7jiVjyWPKcYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=O8hF6Hzn-FEA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA2MDA5MCBTYWx0ZWRfX/jT3q5ilpa6R
- aEEHN/YCS8iqXs8PaeYs2AacTfE8kLrbWHvn2HVKMXYuXDsGNHC1S203Oqrhmv5yoBr8zFu1yjy
- uj0ydsdIXafr9J532erS6OTOhxGVibodUczxZ7bTV7mam/CoQd8QIWl3nRvlPeTbw7ORlQX0Bbd
- 2Kypj/SSXoa0NjpW9PnO5UmfPCiIzIkAfR3d2Enil/74TvTl09FGWbn0JHT4aNAQvyPCuPayV4Z
- k9DBOFpdfpvzBC+Wx4KEXPgxnJajqgXRLu+wNisH3k6JHsb656K45pQna8SN7OORFUfcZ24G2T1
- IBZrdtpBtytmrtc/cn7B+f5kswfHutwfks85DlEgndt7UR8+WpJtUPfq4oesYWE+XPrZf7GFyNb
- fdthDApML3C0gFmH9CDo7zCPHNADe8qRQKcGjbH1uFmF2qrMyuDFy+pE1cY+UjwAgHnsTvf+3un
- fYVe/H+/KFzyLbH/7/A==
-X-Proofpoint-GUID: nuLxCR4AYTgo-aewaKBiI37kGt8DfwD9
-X-Proofpoint-ORIG-GUID: rdqO_gI49MAxaHxdkg0qFKKrMoQcTweM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA2MDA5MCBTYWx0ZWRfXzyKLtulSDSth
+ IFqReIpcfgL8hR7NqxmS2WDI6atp0Tuwnpsep9+D7WP5qLtCinM6WdACbnC2x7ZZgR/4Z9mpqbP
+ upl/AOBOoEiCZyb33rW9p1as55zdcD6nUk0vuJsWgJ6U78oM0IULBQo1hPPUHawmgr2B0rUOn1h
+ QqqvTCNv3d+tRb77WvDuPh/AqVxnA8D6oPBsNd4+p/wFa/mtiWv9UvMVGqqbm+DABCRgT01TdjP
+ 9MBEN6AOsPnSRR+IHqw/1aXEGvOJSHKSbwAsK0hAkDVdzJ+4mvWIWk7nre7dHhoGRR/hL083x0n
+ 2s1jdLxeEHgRbQZ1LUn6zzYheeBIBY/tBnAPmp8DanxWJavbaDkq2klA/IFelFNhhqSPEXezsxS
+ s1xpsAKk0SBvswls3ZZTPIvXRUxqUw0ws+JjRw5SCxH0xbo940n0DYnAaW7pCy9MLvhwAGhpbK5
+ K3zpVns/DplhG1DRvgw==
+X-Proofpoint-GUID: nK63GTggKdNRTYW7Z81LZfRvqmynf4OA
+X-Proofpoint-ORIG-GUID: J-QzRBArbcHki7t0X32IBjJIHzxx8zwY
+X-Authority-Analysis: v=2.4 cv=HJvO14tv c=1 sm=1 tr=0 ts=69d37ab7 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8 a=C3DWCGp_6AllTJ2cH5YA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-06_02,2026-04-03_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 suspectscore=0 adultscore=0 impostorscore=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
+ malwarescore=0 spamscore=0 phishscore=0 priorityscore=1501 bulkscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604060090
 
-Hi all,
+cleanup() resets nr_hugepages to 0 on every invocation, while the test
+reconfigures it again in the next iteration. This leads to repeated
+allocation and freeing of large numbers of hugepages, especially when
+the original value is high.
 
-Powerpc systems with a 64K base page size exposed several issues while
-running mm selftests. Some tests assume specific hugetlb configurations,
-use incorrect interfaces, or fail instead of skipping when the required
-kernel features are not available.
+Additionally, with set -e, failures in earlier cleanup steps (e.g.,
+rmdir or umount returning EBUSY while background activity is still
+ongoing) can cause the script to exit before restoring the original
+value, leaving the system in a modified state.
 
-This series fixes these issues and improves test robustness.
+Use an EXIT trap to restore the original nr_hugepages once at
+script termination. This avoids unnecessary allocation churn and
+ensures the original value is reliably restored on all exit paths.
 
-Please review the patches and provide any feedback or suggestions for
-improvement.
-
-Thanks,
-Sayali
-
+Fixes: 7d695b1c3695b ("selftests/mm: save and restore nr_hugepages value")
+Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 ---
-v3->v4
+ tools/testing/selftests/mm/charge_reserved_hugetlb.sh | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-  - selftests/mm: restore default nr_hugepages value via EXIT
-    trap in charge_reserved_hugetlb.sh:
-    Updated to use an EXIT trap to restore the original nr_hugepages
-    once at script termination, ensuring reliable restoration on all
-    exit paths.
-
-  - selftest/mm: fix cgroup task placement and drop memory.current checks
-    in hugetlb_reparenting_test.sh:
-    Updated to use a deterministic synchronization method by migrating the
-    workload process within a wrapper subshell before calling exec() to 
-    ensure correct cgroup accounting.
-
-  - selftest/mm: align memory size to huge page size in hugepage-mremap
-    test:
-    Update test code directly to align memory allocations to the hugepage
-    size, rather than modifying run_vmtests.sh. This replaces the previous
-    commit “adjust hugepage-mremap test size for large huge pages” with
-    a cleaner, direct approach in the test itself.
-
-  - selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap:
-    Updated to remove MAP_POPULATE flag for the mmap call as per review
-    comment.
-
-  - selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported:
-    Updated as per review comment to initialize features to zero and exit
-    on all uffd_get_features() failures, avoiding spurious test errors.
-
-  - selftests/mm: move hwpoison setup into run_test() and silence
-    modprobe output for memory-failure category:
-    Declared LOADED_MOD as local variable and avoided a redundant 
-    skip message when the module is not found.
-    Updated logic to set exitcode to ksft_skip only when no failure has
-    been recorded.
-
-  - selftests/cgroup: extend test_hugetlb_memcg.c to support all huge
-    page sizes:
-    Updated to skip on memory constraints instead of returning
-    EXIT_FAILURE.
-    Updated the logic to fully account for the scenario when the
-    per-CPU stock is empty and a refill charges MEMCG_CHARGE_BATCH. 
-    Updated to avoid overflow on 32-bit systems for memory.max value.
-
-  - Included "selftests/mm: restore default nr_hugepages value via
-    EXIT trap in hugetlb_reparenting_test.sh"
-
-  - Included "selftests/mm: free dynamically allocated PMD-sized
-    buffers in split_huge_page_test"
-
-  - Included "selftests/mm: clarify alternate unmapping in compaction_test"
-
-  - Dropped "selftests/mm: fix double increment in linked list cleanup in
-    compaction_test":
-    The behaviour is intentional.
-
-v3: https://lore.kernel.org/all/cover.1774591179.git.sayalip@linux.ibm.com/
-
----
-v2->v3
-  - selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported:
-    Rename function to check_uffd_wp_feature_supported() as suggested in review.
-  - selftest/mm: fix cgroup task placement and drop memory.current checks
-    in hugetlb_reparenting_test.sh:
-    Drop memory.current validation from the hugetlb reparenting test.
-    Keep tolerance at 7MB (reverting earlier increase to 8MB in v1).
-  - Included "selftests/mm: allow PUD-level entries in compound testcase of hmm
-    tests" patch:
-    Extend the compound testcase checks to accept PUD-level mappings.
-  - Included "selftests/mm: replace hardcoded THP size with runtime PMD page size in
-    hmm tests" patch:
-    Use read_pmd_pagesize() instead of TWOMEG and cap maximum THPs in
-    benchmarks to avoid integer overflow.
-
-v2: https://lore.kernel.org/all/cover.1773305677.git.sayalip@linux.ibm.com/
-
----
-v1->v2
-  - For "selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap":
-    update FLAGS definition to MAP_HUGETLB | MAP_SHARED | MAP_POPULATE and
-    used it for mmap() calls as suggested during review.
-
-v1: https://lore.kernel.org/all/cover.1773134177.git.sayalip@linux.ibm.com/
----
-
-Sayali Patil (15):
-  selftests/mm: restore default nr_hugepages value via EXIT trap in
-    charge_reserved_hugetlb.sh
-  selftests/mm: fix hugetlb pathname construction in
-    charge_reserved_hugetlb.sh
-  selftests/mm: restore default nr_hugepages value via EXIT trap in
-    hugetlb_reparenting_test.sh
-  selftests/mm: fix hugetlb pathname construction in
-    hugetlb_reparenting_test.sh
-  selftests/mm: fix cgroup task placement and drop memory.current checks
-    in hugetlb_reparenting_test.sh
-  selftests/mm: size tmpfs according to PMD page size in
-    split_huge_page_test
-  selftests/mm: free dynamically allocated PMD-sized buffers in
-    split_huge_page_test
-  selftest/mm: align memory size to huge page size in hugepage-mremap
-    test
-  selftest/mm: register existing mapping with userfaultfd in
-    hugepage-mremap
-  selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap
-  selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported
-  selftests/mm: skip uffd-stress test when nr_pages_per_cpu is zero
-  selftests/mm: move hwpoison setup into run_test() and silence modprobe
-    output for memory-failure category
-  selftests/mm: clarify alternate unmapping in compaction_test
-  selftests/cgroup: extend test_hugetlb_memcg.c to support all huge page
-    sizes
-
- .../selftests/cgroup/test_hugetlb_memcg.c     | 90 ++++++++++++++-----
- .../selftests/mm/charge_reserved_hugetlb.sh   | 45 ++++++----
- tools/testing/selftests/mm/compaction_test.c  |  3 +
- tools/testing/selftests/mm/hugepage-mremap.c  | 42 ++++-----
- .../selftests/mm/hugetlb_reparenting_test.sh  | 59 ++++++------
- tools/testing/selftests/mm/run_vmtests.sh     | 52 +++++++----
- .../selftests/mm/split_huge_page_test.c       | 27 ++++--
- tools/testing/selftests/mm/uffd-stress.c      |  6 +-
- tools/testing/selftests/mm/uffd-wp-mremap.c   | 13 +++
- 9 files changed, 220 insertions(+), 117 deletions(-)
-
+diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+index 447769657634..ca33ec83ebf2 100755
+--- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
++++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+@@ -12,6 +12,7 @@ if [[ $(id -u) -ne 0 ]]; then
+ fi
+ 
+ nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
++trap 'echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages' EXIT
+ 
+ fault_limit_file=limit_in_bytes
+ reservation_limit_file=rsvd.limit_in_bytes
+@@ -65,7 +66,6 @@ function cleanup() {
+   if [[ -e $cgroup_path/hugetlb_cgroup_test2 ]]; then
+     rmdir $cgroup_path/hugetlb_cgroup_test2
+   fi
+-  echo 0 >/proc/sys/vm/nr_hugepages
+   echo CLEANUP DONE
+ }
+ 
+@@ -594,4 +594,3 @@ if [[ $do_umount ]]; then
+   rmdir $cgroup_path
+ fi
+ 
+-echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
 -- 
 2.52.0
 
