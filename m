@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C96381B0E;
-	Mon,  6 Apr 2026 14:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F8E381AE9;
+	Mon,  6 Apr 2026 14:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775485234; cv=none; b=VokAculH/Iyb3J6mGf/lFGI6626Gnwx6FkLqOCx0Q/sL1LHGmQVMeNIibCN/oUa1fy3BU34qdtQPJ4WJz5GixzN4bZehwtZAB3x0Cv3f5pvicyYlBuF+iMhauPswp3/qQO2wEEQwhvYTwSjgfII0MVlshbGa9+y5iCNAtr8KY54=
+	t=1775485240; cv=none; b=kzxSFDGRiCNF/mmaTmRNEvtv4m34D4s7C38xGOik6fluZcTKcxQlgLspmJ0F5M8CnWFG43uxuRIKxucDQXOQEEXpzDgw+EaMII5L2lFDXyx498WEIt5D2nAqb4FwBJ/B0efSK5EXLeD2BC9/o4w3ql7sdN83k1RCDG2xWPM+eHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775485234; c=relaxed/simple;
-	bh=t2OQ6d8PPidPjQSh+RBxS6XeDUdzwdvT/+uZ5YR7P1Y=;
+	s=arc-20240116; t=1775485240; c=relaxed/simple;
+	bh=1/ugYRnvvCSRn7Fw/zm14SmACzlAtT74uoyJWfVmAG8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yy0qcfhcUoeGkROMNASS5+5aQEzVvV+N9dCQO/8sKHLTp5s5Z1iESomUyCbB4FVtEibcKQojpf7I42siBkuQsIEonSWlM+fz4VgDlOYj5FXT0ePMwi9M6m8aVElqSgnveXirSR85fomj+0Akh33Am1m+Kty0Ld+TIAYRxh7noNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PerRaUmN; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=R262eNlkNAqxKgvD9NwRPCRXASS5kLtu+IPt6n1FihASdf2xjCWU6k53uZOoHh7pfSY3nKKIXe1Z6SyWQw1yX5XXqRYB1aFA2GAf4MANOyl7OCj0pqDC1kbQmdQfP+8sJLpslP8DnHWE9RsAgmAGE9FK7QpQONMAmj1Wff6Ji4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMrtrC0F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PerRaUmN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 111AEC4CEF7;
-	Mon,  6 Apr 2026 14:20:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMrtrC0F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFA8C4CEF7;
+	Mon,  6 Apr 2026 14:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775485234;
-	bh=t2OQ6d8PPidPjQSh+RBxS6XeDUdzwdvT/+uZ5YR7P1Y=;
+	s=k20201202; t=1775485240;
+	bh=1/ugYRnvvCSRn7Fw/zm14SmACzlAtT74uoyJWfVmAG8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PerRaUmNcenVs2kzy22EHE/xFyIZwEzUDa1Zc13pyy/WgJql0Paa5YP/Q1j5H6faf
-	 7p7L5ORCcBCSrk88imeHqzTuRlS2vApISz4T1mcUcFPniOhQZ5pncVHH+zQh1mdhah
-	 j2MAgPwRTkjMTpLtnKr/yAJmgu4KAghF8m7uEnXsFf/IMNhlK+F7g1flrle1HAdm//
-	 dAVvKFzuqni+kvgbbcXABmVRJY7aU0ygebUk55e4N8Zpx+8cFs03shLk/ct43++OhN
-	 9SilwDltho/6//gxDNOaWeTjLOvXXjXmcpCrVwlPfhvyN6RgHYREd7BGVKjBtY4WjD
-	 X+oW/pOU07o0w==
+	b=SMrtrC0Fb0vXUxWdcq2IeM9vlYHdik0CVDmSy+BNmVRULOd6Yits0G5VhY3e4fU+o
+	 gRFKKG+lufn0l583rAWj1+Br5n3N/rcFo3k+9BaajBuw+Qn/djN3OlVNkqe+381Eew
+	 EjPSXCG1l2TB9Tk8TL2Jvqenuku/XeYZ49HvN8KZpdIJ+XcdTn7Exy7KvSKaFCZFZv
+	 BktJ84OHoMyO/anyVfyIgRRLv6MSPil9iq3gBfHlNI+FEYzbrd8SMQAWLeO8J/fiZ9
+	 lagWs3GdjznjlJOgMmpmIjm0i+fHhyH5ZfcLyzjXgO7LXrKU1eC1NvmUaNA2qfUQv6
+	 lfwIqXgI9hxMQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -51,9 +51,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 29/53] selftests/mm: compaction_test: use HugeTLB helpers ...
-Date: Mon,  6 Apr 2026 17:17:11 +0300
-Message-ID: <20260406141735.2179309-30-rppt@kernel.org>
+Subject: [PATCH 30/53] selftests/mm: cow: add setup of HugeTLB pages
+Date: Mon,  6 Apr 2026 17:17:12 +0300
+Message-ID: <20260406141735.2179309-31-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260406141735.2179309-1-rppt@kernel.org>
 References: <20260406141735.2179309-1-rppt@kernel.org>
@@ -67,194 +67,46 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-... instead of open coded access of HugeTLB parameters via /proc.
+cow tests skips HugeTLB tests if there are no free huge pages prepared
+by a wrapper script.
+
+Add setup of HugeTLB pages to the test and make sure that the original
+settings are restored on the test exit.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/compaction_test.c | 113 +++----------------
- 1 file changed, 17 insertions(+), 96 deletions(-)
+ tools/testing/selftests/mm/cow.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
-index 30209c40b697..962a50c3d66f 100644
---- a/tools/testing/selftests/mm/compaction_test.c
-+++ b/tools/testing/selftests/mm/compaction_test.c
-@@ -17,6 +17,7 @@
- #include <string.h>
- 
- #include "kselftest.h"
-+#include "hugepage_settings.h"
- 
- #define MAP_SIZE_MB	100
- #define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
-@@ -82,75 +83,33 @@ int prereq(void)
- 	return -1;
- }
- 
--int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
--		     unsigned long initial_nr_hugepages)
-+int check_compaction(unsigned long mem_free, unsigned long hugepage_size)
- {
--	unsigned long nr_hugepages_ul;
--	int fd, ret = -1;
-+	unsigned long nr_hugepages;
- 	int compaction_index = 0;
--	char nr_hugepages[20] = {0};
--	char init_nr_hugepages[24] = {0};
--	char target_nr_hugepages[24] = {0};
--	int slen;
--
--	snprintf(init_nr_hugepages, sizeof(init_nr_hugepages),
--		 "%lu", initial_nr_hugepages);
-+	int ret = -1;
- 
- 	/* We want to test with 80% of available memory. Else, OOM killer comes
- 	   in to play */
- 	mem_free = mem_free * 0.8;
- 
--	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
--	if (fd < 0) {
--		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
--		ret = -1;
--		goto out;
--	}
--
- 	/*
- 	 * Request huge pages for about half of the free memory. The Kernel
- 	 * will allocate as much as it can, and we expect it will get at least 1/3
- 	 */
--	nr_hugepages_ul = mem_free / hugepage_size / 2;
--	snprintf(target_nr_hugepages, sizeof(target_nr_hugepages),
--		 "%lu", nr_hugepages_ul);
--
--	slen = strlen(target_nr_hugepages);
--	if (write(fd, target_nr_hugepages, slen) != slen) {
--		ksft_print_msg("Failed to write %lu to /proc/sys/vm/nr_hugepages: %s\n",
--			       nr_hugepages_ul, strerror(errno));
--		goto close_fd;
--	}
--
--	lseek(fd, 0, SEEK_SET);
--
--	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
--		ksft_print_msg("Failed to re-read from /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
--		goto close_fd;
--	}
-+	nr_hugepages = mem_free / hugepage_size / 2;
-+	hugetlb_set_nr_default_pages(nr_hugepages);
- 
- 	/* We should have been able to request at least 1/3 rd of the memory in
- 	   huge pages */
--	nr_hugepages_ul = strtoul(nr_hugepages, NULL, 10);
--	if (!nr_hugepages_ul) {
-+	nr_hugepages = hugetlb_nr_default_pages();
-+	if (!nr_hugepages) {
- 		ksft_print_msg("ERROR: No memory is available as huge pages\n");
- 		goto close_fd;
- 	}
--	compaction_index = mem_free/(nr_hugepages_ul * hugepage_size);
--
--	lseek(fd, 0, SEEK_SET);
--
--	if (write(fd, init_nr_hugepages, strlen(init_nr_hugepages))
--	    != strlen(init_nr_hugepages)) {
--		ksft_print_msg("Failed to write value to /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
--		goto close_fd;
--	}
-+	compaction_index = mem_free/(nr_hugepages * hugepage_size);
- 
--	ksft_print_msg("Number of huge pages allocated = %lu\n",
--		       nr_hugepages_ul);
-+	ksft_print_msg("Number of huge pages allocated = %lu\n", nr_hugepages);
- 
- 	if (compaction_index > 3) {
- 		ksft_print_msg("ERROR: Less than 1/%d of memory is available\n"
-@@ -161,48 +120,10 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
- 	ret = 0;
- 
-  close_fd:
--	close(fd);
-- out:
- 	ksft_test_result(ret == 0, "check_compaction\n");
- 	return ret;
- }
- 
--int set_zero_hugepages(unsigned long *initial_nr_hugepages)
--{
--	int fd, ret = -1;
--	char nr_hugepages[20] = {0};
--
--	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
--	if (fd < 0) {
--		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
--		goto out;
--	}
--	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
--		ksft_print_msg("Failed to read from /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
--		goto close_fd;
--	}
--
--	lseek(fd, 0, SEEK_SET);
--
--	/* Start with the initial condition of 0 huge pages */
--	if (write(fd, "0", sizeof(char)) != sizeof(char)) {
--		ksft_print_msg("Failed to write 0 to /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
--		goto close_fd;
--	}
--
--	*initial_nr_hugepages = strtoul(nr_hugepages, NULL, 10);
--	ret = 0;
--
-- close_fd:
--	close(fd);
--
-- out:
--	return ret;
--}
--
- int main(int argc, char **argv)
- {
- 	struct rlimit lim;
-@@ -212,18 +133,19 @@ int main(int argc, char **argv)
- 	unsigned long mem_free = 0;
- 	unsigned long hugepage_size = 0;
- 	long mem_fragmentable_MB = 0;
--	unsigned long initial_nr_hugepages;
+diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+index 4321f4208fe3..1df513bf362d 100644
+--- a/tools/testing/selftests/mm/cow.c
++++ b/tools/testing/selftests/mm/cow.c
+@@ -1881,21 +1881,21 @@ int main(int argc, char **argv)
  
  	ksft_print_header();
  
- 	if (prereq() || geteuid())
- 		ksft_exit_skip("Prerequisites unsatisfied\n");
- 
--	ksft_set_plan(1);
--
- 	/* Start the test without hugepages reducing mem_free */
--	if (set_zero_hugepages(&initial_nr_hugepages))
--		ksft_exit_fail();
-+	hugetlb_save_settings();
-+	hugetlb_set_nr_default_pages(0);
-+	if (hugetlb_nr_default_pages())
-+		ksft_exit_skip("Could not reset nr_hugepages\n");
++	hugepage_save_settings(true, true);
 +
-+	ksft_set_plan(1);
+ 	pagesize = getpagesize();
+ 	pmdsize = read_pmd_pagesize();
+ 	if (pmdsize) {
+ 		/* Only if THP is supported. */
+ 		thp_read_settings(&default_settings);
+ 		default_settings.hugepages[sz2ord(pmdsize, pagesize)].enabled = THP_INHERIT;
+-		thp_save_settings();
+ 		thp_push_settings(&default_settings);
  
- 	lim.rlim_cur = RLIM_INFINITY;
- 	lim.rlim_max = RLIM_INFINITY;
-@@ -268,8 +190,7 @@ int main(int argc, char **argv)
- 		entry = entry->next;
+ 		ksft_print_msg("[INFO] detected PMD size: %zu KiB\n",
+ 			       pmdsize / 1024);
+ 		nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
  	}
+-	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
+-						    ARRAY_SIZE(hugetlbsizes));
++	nr_hugetlbsizes = hugetlb_setup(2, hugetlbsizes, ARRAY_SIZE(hugetlbsizes));
+ 	has_huge_zeropage = detect_huge_zeropage();
  
--	if (check_compaction(mem_free, hugepage_size,
--			     initial_nr_hugepages) == 0)
-+	if (check_compaction(mem_free, hugepage_size) == 0)
- 		ksft_exit_pass();
- 
- 	ksft_exit_fail();
+ 	ksft_set_plan(ARRAY_SIZE(anon_test_cases) * tests_per_anon_test_case() +
 -- 
 2.53.0
 
