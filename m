@@ -1,57 +1,57 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04526313556;
-	Mon,  6 Apr 2026 09:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F373242CF;
+	Mon,  6 Apr 2026 09:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775467283; cv=none; b=jG39l1STbSffG8/Pqp9NFKfTCwHFInZaNdGy7aCFImvdSlUokLJXYN0Jg9gwnNLlQG8/I48he+XH+9C0rtVlJDyAut3kRwgS904JAEmLbtaiUcqIj1Z/zKziuTZSydtda9HiJTABmml6yD3/vfKKkdYLcHlTPY9iLIlVt8x9Uz8=
+	t=1775467525; cv=none; b=oWtMyISv0dN/JU9xO6DIZ72ZvCyEIkRjDOcLDwEewGEHcD0WFSz9xjf55bOJ95YgUbqFrxws6ghrmvFLR1gCRy5uimYqdHU0GqsQZZsrwXAdwP5K73wQYSYKXaFz2nm9W3KICx+fRQndQsX5j7fXH9LtOD6Py2FdV8r9beanBmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775467283; c=relaxed/simple;
-	bh=H4lQSgEuqbh/aU8eQfkByYVKk2DxkbwPRqXyaT6jI6M=;
+	s=arc-20240116; t=1775467525; c=relaxed/simple;
+	bh=m6gubrQVthH+EmARCnv/xbEwtzrd6sCMpMImhq+KEz4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oocRpfnfeKMDF9C66z4iS1D0Tq7wTh4Rf/XC0LrNVzb011KIIMM/HE/OmSLvOEnUuk3cZ3MgvIwvkSBkhpTJSDc8DiuZLcG5cZxDx0+BiWDaPuH3XEN+HXkvyCl81FoAXMTTHQarTGFzBSxng9UNinWAkZrgY/9G5qF5bNEdxGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DJrgnWAx; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=ZhF2OIav3w78ZEILGnOfxrXD8iC12xq6EFIeuGkaQMovagb+Ytm6j74Hvfrhk1sUNPfhZ1zwIL9C+iB3CGh2lKDE60m9VqeOxHHM9K73JPdobNwO8gfvSwFry6LQSESl17ijd3etjDCO55t86fHc1s/pB0jg7Y70zzIzw5jhOGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cM40Y6hg; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DJrgnWAx"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 635NHOWM3843862;
-	Mon, 6 Apr 2026 09:20:03 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cM40Y6hg"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 635NJB3Y3836137;
+	Mon, 6 Apr 2026 09:19:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=IzW3nDJIXN8nsOHEr
-	Rm2SdUBfyLuevkgaiMQu8YlHjo=; b=DJrgnWAxI0s+EN9MXFk/IFww26nA1vFN4
-	5n48QJ3MBLa/22Pzd/frmFvmQrG24BKIlIyuTxBI7fv5xL8ncwVqbpNwfZXHe/Mx
-	sAP6DLueZdG4zor8HYb+lpCQ5Zu8/SRMRCvHj1SrYkZsuJInpz9Oaas41qFR78BI
-	6ws6pvtZ9kYCGW75F3oldzDG09HnV+pRo9QzO0+t3qdlsJX6ZKK1FS+Ewid4bTgu
-	1lliWf4mXCBN+b5sbW7n0J5EU/y37ihy9LkCYw7CW5RQ+LPSbJmgk7gL2JUHs+uX
-	MqXIbuuSy5Qg2S7OgmnpyiRJWTgGJEkSoJZ7It5kcHypMwwjJVzpA==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dar2gdnxh-1
+	:mime-version:references:subject:to; s=pp1; bh=M4+alkDxk2QDPF16d
+	mwas9Ikm+JFGV/Ks8483HUpmmI=; b=cM40Y6hgSbyOdEX5FkSVGj4iL575l2al2
+	+3Yxf/fkmwOsRfO8V7gRuUgPbyZyaGuhSkO4aR32H+s4XDeUNyaqv2uuz/9zcGPM
+	cTwJGM4cKZeZA/iuY/G85rId296AoTk6WiKjgsLdSLP8ynuYihZsZ3OwmzxSKFQj
+	JSuQotx9PWh7HkuvzAL60VAq5sbLPAIXansE3ZQFD7mGJ3q6Gfiv16FFZzmVMj+/
+	mZd1E+g/YadSwEvofVV9yIBaAjUc83XG/MIQYej0Fke6fU4XyT/ullyE/VkqfAWe
+	Q3wfQWBaDCpne8bL7yDl95IOC9Zhe85xQwxLwYu0TLswjLZb09yiQ==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4datap5vp1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Apr 2026 09:20:02 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6365xCrs020514;
-	Mon, 6 Apr 2026 09:20:01 GMT
+	Mon, 06 Apr 2026 09:19:55 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63662whO022853;
+	Mon, 6 Apr 2026 09:19:54 GMT
 Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dbdync2vk-1
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dbefkc0v8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Apr 2026 09:20:01 +0000
+	Mon, 06 Apr 2026 09:19:54 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6369Jvev52494842
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6369JovV52494776
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 6 Apr 2026 09:19:58 GMT
+	Mon, 6 Apr 2026 09:19:50 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CFE4A20043;
-	Mon,  6 Apr 2026 09:19:57 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 1EA2E20043;
+	Mon,  6 Apr 2026 09:19:50 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8CDFA20040;
-	Mon,  6 Apr 2026 09:19:54 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 6DDDE20040;
+	Mon,  6 Apr 2026 09:19:46 +0000 (GMT)
 Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.bl1-in.ibm.com (unknown [9.123.3.209])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  6 Apr 2026 09:19:54 +0000 (GMT)
+	Mon,  6 Apr 2026 09:19:46 +0000 (GMT)
 From: Sayali Patil <sayalip@linux.ibm.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -64,9 +64,9 @@ Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
         linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
         Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
         Sayali Patil <sayalip@linux.ibm.com>
-Subject: [PATCH v4 04/15] selftests/mm: fix hugetlb pathname construction in hugetlb_reparenting_test.sh
-Date: Mon,  6 Apr 2026 14:49:23 +0530
-Message-ID: <b7f12130daaa2c1c721cf06ff999b6439fb22c2e.1775466329.git.sayalip@linux.ibm.com>
+Subject: [PATCH v4 02/15] selftests/mm: fix hugetlb pathname construction in charge_reserved_hugetlb.sh
+Date: Mon,  6 Apr 2026 14:49:21 +0530
+Message-ID: <67c963da1868fd91d2814dcd1b80d385ebf63c35.1775466329.git.sayalip@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1775466329.git.sayalip@linux.ibm.com>
 References: <cover.1775466329.git.sayalip@linux.ibm.com>
@@ -79,97 +79,162 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: laJStrGfrx-5hJqn0NaLVa4oNMtk1AUV
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA2MDA5MCBTYWx0ZWRfX/FdR5335PD2E
- vWUZJkT4KGTtLa+POhqWXvuXW0SIszX2yllb2+hrG1V53QXPbpVQVUdU3QbjghEZEhfgxZ+szN4
- mqKns4U3miZD5SB/ku3RR4iLgWmbNuKsACyKT87baMpiUpW+TdZI56Llot+bZI4yTxAOUZ5m02B
- 74/hZvf2SZwyzezpZiREsOO9ZoeXnqBPt1VPD0VIxDFrVLNC/IEFDOp3HEN0m+hozD12XkxNiFb
- mvD/tuUUeNo/onwp+7U9gvulLzPiUEO0TkTLH5CqXwZXm2E+RcenMP2jZz1MvRPZ49xvEV08s2s
- oZfq5vmkkE6CLgBWJI5wtZlhGwFsdveZ5Ic3tlhwR+YQPCZ9a4MUQfkVt8bEyNamG6INqKwNfo8
- P8+o9p42mBMHFhGAnVoFED+3f1gEGM6ROr/ixcHczJm9vS1GOcareXKXP2xpbMVkDjubGCboekU
- gkl4sL1DnCYOQ1E6w6g==
-X-Authority-Analysis: v=2.4 cv=b+u/I9Gx c=1 sm=1 tr=0 ts=69d37ac3 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+X-Authority-Analysis: v=2.4 cv=Bp+QAIX5 c=1 sm=1 tr=0 ts=69d37abc cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=Ikd4Dj_1AAAA:8 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=7yu59zDboRqKFyXxuvEA:9
-X-Proofpoint-ORIG-GUID: JDz4J-ei1bkd7_U0fa4EqpJcExAwF915
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=Ikd4Dj_1AAAA:8 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=TdliVB_93dTD34Rfq5YA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA2MDA5MCBTYWx0ZWRfXyIR0f9sXMiHR
+ 4volGAleBjScG14mEgUoX/SYMxdizzzclNpUobfSCV7Ql3LhXXGj7T2MqsPnGC+PspTDAOXYo5G
+ jfJ0Ewl5HLed8al79WODuTF3aqJVFSBXTRryiyhBYEYaejIKCTaivpy9bNLhXmG2ogW5dAKe8Mf
+ 1oEdpVl1rZ0wX7/A5F6ct3CIpj25IY01de9yV9vZIpGOpXVWbXGWTKk2Sg1yT+uJtwscll8Ege6
+ /8aL/0MmcJvKwYIbcKDM/bSrdXnZClUpkdY1vPGaxo+pwgzNxzhdtTxBB3qAmdu0GIPw4Jr2mVb
+ zNiVyx3VYV1JtMQpablqQWqDkI3WFnvaRNwJZVe2qYvRI5A5y/5HWynyK7LRjfvxwZZMHRYmJhD
+ I3tKxtW5T7iHCkKsc6G/PItq+23so4jRni4eUig/g3s5IIxCy8Vo/C+bpaP7gOmEt/VNH1yTnK/
+ k9xWAUO9tP1HQ9/DYBw==
+X-Proofpoint-GUID: 6uWWAE2Cts1bRfKlzPWidc2c4_HYNEm9
+X-Proofpoint-ORIG-GUID: 5uGU7oxt_xsx-GFfGTIr0VVr179USnLp
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-06_02,2026-04-03_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 phishscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 malwarescore=0 spamscore=0 priorityscore=1501 clxscore=1015
+ phishscore=0 malwarescore=0 suspectscore=0 adultscore=0 impostorscore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1015
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604060090
 
-The hugetlb_reparenting_test.sh script constructs hugetlb cgroup
-memory interface file names based on the configured huge page size. The
-script formats the size only in MB units, which causes mismatches on
-systems using larger huge pages where the kernel exposes normalized
-units (e.g. "1GB" instead of "1024MB").
+The charge_reserved_hugetlb.sh script assumes hugetlb cgroup memory
+interface file names use the "<size>MB" format
+(e.g. hugetlb.1024MB.current).
+This assumption breaks on systems with larger huge pages such as 1GB,
+where the kernel exposes normalized units:
+    hugetlb.1GB.current
+    hugetlb.1GB.max
+    hugetlb.1GB.rsvd.max
+    ...
 
-As a result, the test fails to locate the corresponding cgroup files
-when 1GB huge pages are configured.
+As a result, the script attempts to access files like
+hugetlb.1024MB.current, which do not exist when the kernel reports the
+size in GB.
 
-Update the script to detect the huge page size and select the
-appropriate unit (MB or GB) so that the constructed paths match the
-kernel's hugetlb controller naming.
+Normalize the huge page size and construct the pathname using the
+appropriate unit (MB or GB), matching the hugetlb controller naming.
 
-Also print an explicit "Fail" message when a test failure occurs to
-improve result visibility.
-
-Fixes: e487a5d513cb ("selftest/mm: make hugetlb_reparenting_test tolerant to async reparenting")
+Fixes: 209376ed2a84 ("selftests/vm: make charge_reserved_hugetlb.sh work with existing cgroup setting")
+Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
 Reviewed-by: Zi Yan <ziy@nvidia.com>
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 ---
- .../selftests/mm/hugetlb_reparenting_test.sh       | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ .../selftests/mm/charge_reserved_hugetlb.sh   | 42 +++++++++++++------
+ 1 file changed, 29 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-index 7ddb370e1572..00f3f3cd8909 100755
---- a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-+++ b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-@@ -48,6 +48,13 @@ function get_machine_hugepage_size() {
+diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+index ca33ec83ebf2..4aa7920b533e 100755
+--- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
++++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+@@ -89,6 +89,15 @@ function get_machine_hugepage_size() {
  }
  
  MB=$(get_machine_hugepage_size)
 +if (( MB >= 1024 )); then
-+  UNIT="GB"
-+  MB_DISPLAY=$((MB / 1024))
++        # For 1GB hugepages
++        UNIT="GB"
++        MB_DISPLAY=$((MB / 1024))
 +else
-+  UNIT="MB"
-+  MB_DISPLAY=$MB
++        # For 2MB hugepages
++        UNIT="MB"
++        MB_DISPLAY=$MB
 +fi
  
- function cleanup() {
-   echo cleanup
-@@ -88,6 +95,7 @@ function assert_with_retry() {
-     if [[ $elapsed -ge $timeout ]]; then
-       echo "actual = $((${actual%% *} / 1024 / 1024)) MB"
-       echo "expected = $((${expected%% *} / 1024 / 1024)) MB"
-+      echo FAIL
-       cleanup
-       exit 1
-     fi
-@@ -108,11 +116,13 @@ function assert_state() {
-   fi
+ function setup_cgroup() {
+   local name="$1"
+@@ -98,11 +107,12 @@ function setup_cgroup() {
+   mkdir $cgroup_path/$name
  
-   assert_with_retry "$CGROUP_ROOT/a/memory.$usage_file" "$expected_a"
--  assert_with_retry "$CGROUP_ROOT/a/hugetlb.${MB}MB.$usage_file" "$expected_a_hugetlb"
-+  assert_with_retry \
-+	  "$CGROUP_ROOT/a/hugetlb.${MB_DISPLAY}${UNIT}.$usage_file" "$expected_a_hugetlb"
+   echo writing cgroup limit: "$cgroup_limit"
+-  echo "$cgroup_limit" >$cgroup_path/$name/hugetlb.${MB}MB.$fault_limit_file
++  echo "$cgroup_limit" > \
++	  $cgroup_path/$name/hugetlb.${MB_DISPLAY}${UNIT}.$fault_limit_file
  
-   if [[ -n "$expected_b" && -n "$expected_b_hugetlb" ]]; then
-     assert_with_retry "$CGROUP_ROOT/a/b/memory.$usage_file" "$expected_b"
--    assert_with_retry "$CGROUP_ROOT/a/b/hugetlb.${MB}MB.$usage_file" "$expected_b_hugetlb"
-+    assert_with_retry \
-+	  "$CGROUP_ROOT/a/b/hugetlb.${MB_DISPLAY}${UNIT}.$usage_file" "$expected_b_hugetlb"
-   fi
+   echo writing reservation limit: "$reservation_limit"
+   echo "$reservation_limit" > \
+-    $cgroup_path/$name/hugetlb.${MB}MB.$reservation_limit_file
++    $cgroup_path/$name/hugetlb.${MB_DISPLAY}${UNIT}.$reservation_limit_file
+ 
+   if [ -e "$cgroup_path/$name/cpuset.cpus" ]; then
+     echo 0 >$cgroup_path/$name/cpuset.cpus
+@@ -137,7 +147,7 @@ function wait_for_file_value() {
+ 
+ function wait_for_hugetlb_memory_to_get_depleted() {
+   local cgroup="$1"
+-  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
++  local path="$cgroup_path/$cgroup/hugetlb.${MB_DISPLAY}${UNIT}.$reservation_usage_file"
+ 
+   wait_for_file_value "$path" "0"
  }
+@@ -145,7 +155,7 @@ function wait_for_hugetlb_memory_to_get_depleted() {
+ function wait_for_hugetlb_memory_to_get_reserved() {
+   local cgroup="$1"
+   local size="$2"
+-  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
++  local path="$cgroup_path/$cgroup/hugetlb.${MB_DISPLAY}${UNIT}.$reservation_usage_file"
  
+   wait_for_file_value "$path" "$size"
+ }
+@@ -153,7 +163,7 @@ function wait_for_hugetlb_memory_to_get_reserved() {
+ function wait_for_hugetlb_memory_to_get_written() {
+   local cgroup="$1"
+   local size="$2"
+-  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$fault_usage_file"
++  local path="$cgroup_path/$cgroup/hugetlb.${MB_DISPLAY}${UNIT}.$fault_usage_file"
+ 
+   wait_for_file_value "$path" "$size"
+ }
+@@ -175,8 +185,8 @@ function write_hugetlbfs_and_get_usage() {
+   hugetlb_difference=0
+   reserved_difference=0
+ 
+-  local hugetlb_usage=$cgroup_path/$cgroup/hugetlb.${MB}MB.$fault_usage_file
+-  local reserved_usage=$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file
++  local hugetlb_usage=$cgroup_path/$cgroup/hugetlb.${MB_DISPLAY}${UNIT}.$fault_usage_file
++  local reserved_usage=$cgroup_path/$cgroup/hugetlb.${MB_DISPLAY}${UNIT}.$reservation_usage_file
+ 
+   local hugetlb_before=$(cat $hugetlb_usage)
+   local reserved_before=$(cat $reserved_usage)
+@@ -307,8 +317,10 @@ function run_test() {
+ 
+   cleanup_hugetlb_memory "hugetlb_cgroup_test"
+ 
+-  local final_hugetlb=$(cat $cgroup_path/hugetlb_cgroup_test/hugetlb.${MB}MB.$fault_usage_file)
+-  local final_reservation=$(cat $cgroup_path/hugetlb_cgroup_test/hugetlb.${MB}MB.$reservation_usage_file)
++  local final_hugetlb=$(cat \
++	 $cgroup_path/hugetlb_cgroup_test/hugetlb.${MB_DISPLAY}${UNIT}.$fault_usage_file)
++  local final_reservation=$(cat \
++	  $cgroup_path/hugetlb_cgroup_test/hugetlb.${MB_DISPLAY}${UNIT}.$reservation_usage_file)
+ 
+   echo $hugetlb_difference
+   echo $reserved_difference
+@@ -364,10 +376,14 @@ function run_multiple_cgroup_test() {
+   reservation_failed1=$reservation_failed
+   oom_killed1=$oom_killed
+ 
+-  local cgroup1_hugetlb_usage=$cgroup_path/hugetlb_cgroup_test1/hugetlb.${MB}MB.$fault_usage_file
+-  local cgroup1_reservation_usage=$cgroup_path/hugetlb_cgroup_test1/hugetlb.${MB}MB.$reservation_usage_file
+-  local cgroup2_hugetlb_usage=$cgroup_path/hugetlb_cgroup_test2/hugetlb.${MB}MB.$fault_usage_file
+-  local cgroup2_reservation_usage=$cgroup_path/hugetlb_cgroup_test2/hugetlb.${MB}MB.$reservation_usage_file
++  local cgroup1_hugetlb_usage=\
++	  $cgroup_path/hugetlb_cgroup_test1/hugetlb.${MB_DISPLAY}${UNIT}.$fault_usage_file
++  local cgroup1_reservation_usage=\
++	  $cgroup_path/hugetlb_cgroup_test1/hugetlb.${MB_DISPLAY}${UNIT}.$reservation_usage_file
++  local cgroup2_hugetlb_usage=\
++	  $cgroup_path/hugetlb_cgroup_test2/hugetlb.${MB_DISPLAY}${UNIT}.$fault_usage_file
++  local cgroup2_reservation_usage=\
++	  $cgroup_path/hugetlb_cgroup_test2/hugetlb.${MB_DISPLAY}${UNIT}.$reservation_usage_file
+ 
+   local usage_before_second_write=$(cat $cgroup1_hugetlb_usage)
+   local reservation_usage_before_second_write=$(cat $cgroup1_reservation_usage)
 -- 
 2.52.0
 
