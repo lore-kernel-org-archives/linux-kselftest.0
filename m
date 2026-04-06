@@ -1,498 +1,185 @@
-Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDFC332601
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 03:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8024A02
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 03:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775444708; cv=none; b=d7/qxIgfG5ITc3Ulml6xS6zjV1KCPyCTG6sgIbrWMiMLEpIk2CTdYcp/MLivI85vHXVLy3hkJLsytNe1HWYDMYq5Y2kJfGu6ro2a5dUvbyGs2YladEFixOVf9lzYo5oImsZuLoLCx1tjIIF6InMp/I4QUJOJYg11ApIqd3YPciw=
+	t=1775445199; cv=none; b=LnHakDsG1TUrHGv8JebRvoJyhhQvW1R2SAkP4NJTPd8deYK1wzolErGgb505K0gUdSN6H5g9+UZAXf0kdRo0USi+IubncFHrQaISq1wFwaUKwSV+cWmpdyJc5cXpjPJKLEingaWU/eVLMUwLbGdrsJrtcnrpIBLUA+ulh6fAfe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775444708; c=relaxed/simple;
-	bh=q0Yz8udoUPHxbxecO84egcHUQy+H7PiHS+4O0pnwq/s=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TN9lDWCZa+onOAO+agGt6J2Vn+g/m/qAYum1N7kNxbnyjCY9c4xmb8ilCicgE/5+CoFsMQTZJbNLHQYsWbSWqu5Y8fcA5MEzmj0YP4fGXc7D6XstMJyykDLJ7xuQO6QwAJ/mjQfKXaYVeydQ2qjkD4XGfRy0OeevDX6ril5iORc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MDDQ47yy; arc=none smtp.client-ip=74.125.82.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
+	s=arc-20240116; t=1775445199; c=relaxed/simple;
+	bh=yQGImmrjwLYeGHdVX82wTBnt/uEq+A862pqBtuQLX+E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=B9vnnoZRrgBqBw4Rj2oSq1is2utrUq30n6xXiO3jhEIoeKAPmpTO75Abz/8zM60gvOfEI7ZUyMEB5UkIgg71cQncSZrkW9tuhz1MQEVzKO6qQ45Vpdo7b9IeZMI2UK5kvgr/KkFwrtHs5Elxh89GhCcqcZ4z9Z/8CM4buLf73aM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=CNdGFAji; arc=none smtp.client-ip=209.85.214.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MDDQ47yy"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-127337c8e52so16793054c88.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Apr 2026 20:05:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="CNdGFAji"
+Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-2ad21f437eeso17471185ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 05 Apr 2026 20:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775444705; x=1776049505; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gvzdOTjzZWe7D/OSDG4aALCF3gZbQJ2r6PdiKnSYruc=;
-        b=MDDQ47yy3Y7olIunZMtULStY7sYZ3BW1UU/s9cERvRt2aG6TAFZVmcy2WC2AMPFwYn
-         Kn5TalDPpTUDaq6gseYnDNBEqAJ9Hh/NRsfco4IfdWJai8mYENfs3g+21dKbZ2c206sv
-         a0mSuhWJyUK9vNzk85aiA7hqIZ4fDBUX+0HY/W4CeA2A4W+ysh6odeKQdKL/GHna6k4E
-         F7bFvpVRTlqPsRqWgkKKF3j8NhkWuxmyBwqyB48166rELQ87VjLdcdVTuIgFXBuE1XF2
-         wq+cqMI1v0dcqT6K8fb7JuU2TMkXVqW5oRDm/4t0d9JPC/IUt/pNh24f04mqE8Nb7fW5
-         nTwQ==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775445197; x=1776049997; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WikSyXf56QgGRlPo6LAXPYCmBwFl+zDorUSabvFaPsQ=;
+        b=CNdGFAjiwyrUvwB+aqH/zLS0WZQHfTuwaJZHQWqX3cMG1WQWWIlTZ6Z8Xue/HuUO/y
+         d/J09JaQjUpm3usDcTCS0Q4GQU5GzxU7fBbo8yxAMow7ykx2UgDlStCzaxNR9ZtgCdoW
+         mtVxqePweiSZ734IYp7b8VvCDMhfqTKgOxpzvEI6tkZFunc11xU1GX3LSakZeU9Qv+og
+         DelJRxldSSyq05LS1LgcOWRaRRndsZXcs6pHXCROck1OM/ahJvqkrJg8BGxF24dLn4jY
+         NOgm6Vh8DJSCE+zP6W2cDmSmtr/r31YWgNsAD2uqNujzqg2iG9Y4qamHiMQC57eBdeJj
+         Z5Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775444705; x=1776049505;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gvzdOTjzZWe7D/OSDG4aALCF3gZbQJ2r6PdiKnSYruc=;
-        b=RKKmHQBLBnEe4b9yZ8OiLMkL4U8DM6MqJwcjqB6mFEa7cZ43HC4glHUmfIR9xVtH6E
-         Jeb1tlAuuT8Yvmk/wDCKm4fYsePRGLXaGjKt/L/VuvnBEkO10HCXv0qwEACjlgRQfty4
-         I2XuHl8w6Zx2ZLdz5AkUIQFsw6s8UCkGn4vOx8HQQouWW0p7kSPS5XKeiZ7K9y56gZJ0
-         3KE+ESfsC1PmKVWzPxs+2E8sa40KwtDY4T8cpor4Bk0Jb28NCry1tXkzVXQVuVe3pKCR
-         UMMbUysCiLLXnprFcsnVEw1Mp6zLnJ8HvugHPdXWUB+UOYMeVPLBayWlZ/EXGVn9Fetd
-         FhnA==
-X-Forwarded-Encrypted: i=1; AJvYcCWTfKsToLv2wPVaMCbr8aNyJGRuK7RJfRTietKcFQLvjOrufwxiEbYhLGMqADf3fzY2FypDHpK8mDjzwPGWwBI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8fdXi/5s7hRKuGvezQCwTz9y0hOqrH8Kzlkig9i0Cy3Tb1Yhx
-	OlW5VIpO5d908QCFdim6NUC8vbE8Lq65jV5/xcYEq36edt7iHyYCf8H9HP0rHcAh8bXJ0Pjac6m
-	z0D3eSG5DUjQD2MRMLoEMAQ==
-X-Received: from dlbsi13.prod.google.com ([2002:a05:7022:b88d:b0:12a:bf30:d8b6])
- (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:6713:b0:128:ca6f:adf0 with SMTP id a92af1059eb24-12bfb74c93fmr5816754c88.17.1775444704665;
- Sun, 05 Apr 2026 20:05:04 -0700 (PDT)
-Date: Mon, 06 Apr 2026 03:03:46 +0000
-In-Reply-To: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
+        d=1e100.net; s=20251104; t=1775445197; x=1776049997;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WikSyXf56QgGRlPo6LAXPYCmBwFl+zDorUSabvFaPsQ=;
+        b=aiKroPeqW6q3GiYCfH73mbn26S43zeRQxHUAVrdbSrLwb4NmdClouRhmurNW+Ngm5D
+         v61gRJFUMzosGrl7uqbP4d9vJJe5dFDOaNHi6nTAnpjx3esnLLt+fxikQBtFqDgqMP4p
+         OT8YACtzuTVOJR8kRKpPfpS7NeWf52Y10BzxtGqMFmkFF9x3FpBuKjp4LrovnoSXNiiM
+         L2f3XJ+qYsrQTEh0X4c2oscVda5cPAXLfasafbEiawWf+R+rnFQfFY7tvjs/uHvuKBwf
+         /KT09hWfE1brLQjsyAOX2DYBIX281Qh31M80rhNkQ6ZUJwd0lOdf7yj8UUkONLO48vwi
+         /vew==
+X-Forwarded-Encrypted: i=1; AJvYcCV1DpRC0uAnF7xqKU0kOqrfJPSqHeeHNdhX94zFmS6u/DnpmonOfKERpkJpaurtbaKcU7FZ3Dwfl+6NV+3sdsM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI2e6eXjcveeH2oBf2A74NtGeR0luJKEqInG+q5BXeFA0fpC4x
+	SFf4WlPk76I2ekTTzk/b/f6QCBU285xgrG/aZkBQd3Tzo87LnKVTzKPSd01T6Uo4DGo=
+X-Gm-Gg: AeBDievxvBZY8xFr0v7lmCxK2MSZrIvR29seFS83vjgGu+NsxWHUlfQyVmLEUSc4ek0
+	VJYN4BJzRYfxXd1uWYQev6IZ4Lv7l/qWEFHirPBtHQnIxdXvWvTNS8AfwTl3pcDwMXyt/QIENPN
+	Sj1TvDntgBe2HEXubd89cXob7UTig+EEUzyt4Cv3NyQ1ZZPYPuvt0Qifet6Y5cR/zbTGcHr34vo
+	QTCdI2mJgmdPGLFzhllIsZe0q2rDxKyTJWRMXDwvlAuTgdLsXry4Jt6MJHTV4S40CON6ywu9jYL
+	A4+WHlRED0ukHByH9ZE1sqkLJGhwT408irj2lcnqngSaC9xnjLYRi1BySBxj8zZecMDs5O6ix+V
+	w4N1HFKzKyAaQxBJhLent82//ikMMVcgOE5BL4Zkz9kWsXBNnbHRay54qdDpwDNhmDo4QmeOJ4/
+	mCULWDb/g=
+X-Received: by 2002:a17:903:946:b0:2b2:5293:f415 with SMTP id d9443c01a7336-2b277d8ba21mr124434045ad.7.1775445196985;
+        Sun, 05 Apr 2026 20:13:16 -0700 (PDT)
+Received: from localhost ([2604:3d08:487d:cd00::5517])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749cbd85sm119417275ad.74.2026.04.05.20.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Apr 2026 20:13:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
-X-Developer-Key: i=marcharvey@google.com; a=ed25519; pk=OzOeciadbfF5Bug/4/hyEAwfrruSY4tn0Q0LocyYUL0=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775444686; l=13058;
- i=marcharvey@google.com; s=20260401; h=from:subject:message-id;
- bh=q0Yz8udoUPHxbxecO84egcHUQy+H7PiHS+4O0pnwq/s=; b=QjpY5inSePJ0udwdgjKyKvi20Fl6nk53RIefMk9OCxiB+IZFjDMVzh1BYvr2YtAl6H9+7Dsr1
- QLn7NCt2IMXChQKkgfBq7VW7sdU75dlqq6cuC5OMdf9VGChEs1jevr2
-X-Mailer: b4 0.14.3
-Message-ID: <20260406-teaming-driver-internal-v5-10-e8a3f348a1c5@google.com>
-Subject: [PATCH net-next v5 10/10] selftests: net: Add tests for team driver
- decoupled tx and rx control
-From: Marc Harvey <marcharvey@google.com>
-To: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Marc Harvey <marcharvey@google.com>
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 05 Apr 2026 23:13:15 -0400
+Message-Id: <DHLQSMYH2MV0.3ROVQ0ALRBIW6@etsalapatis.com>
+Cc: "Quan Sun" <2022090917019@std.uestc.edu.cn>, "Yinhao Hu"
+ <dddddd@hust.edu.cn>, "Kaiyan Mei" <M202472210@hust.edu.cn>, "Dongliang Mu"
+ <dzm91@hust.edu.cn>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "David S.
+ Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf v1 1/2] bpf: Fix SOCK_OPS_GET_SK same-register OOB
+ read in sock_ops
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260404141010.247536-1-jiayuan.chen@linux.dev>
+ <DHLMGWNKBI4K.3LM87NOU4XB3O@etsalapatis.com>
+ <DHLMKFBINRKW.BS0BEK9AMU86@etsalapatis.com>
+ <346597fc-1703-45d7-bcef-55f5d4a7579c@linux.dev>
+In-Reply-To: <346597fc-1703-45d7-bcef-55f5d4a7579c@linux.dev>
 
-Use ping and tcpdump to verify that independent rx and tx enablement
-of team driver member interfaces works as intended.
+On Sun Apr 5, 2026 at 10:58 PM EDT, Jiayuan Chen wrote:
+>
+> On 4/6/26 7:54 AM, Emil Tsalapatis wrote:
+>> On Sun Apr 5, 2026 at 7:49 PM EDT, Emil Tsalapatis wrote:
+>>> On Sat Apr 4, 2026 at 10:09 AM EDT, Jiayuan Chen wrote:
+>>>> When a BPF sock_ops program reads ctx->sk with dst_reg =3D=3D src_reg
+>>>> (e.g., r1 =3D *(u64 *)(r1 + offsetof(sk))), the SOCK_OPS_GET_SK() macr=
+o
+>>>> fails to zero the destination register in the is_fullsock =3D=3D 0 pat=
+h.
+>>>>
+>>>> The macro saves/restores a temporary register and checks is_fullsock.
+>>>> When is_fullsock =3D=3D 0 (e.g., TCP_NEW_SYN_RECV state with a request=
+_sock),
+>>>> it should set dst_reg =3D 0 (NULL) so the verifier's PTR_TO_SOCKET_OR_=
+NULL
+>>>> type is correct at runtime. Instead, dst_reg retains the original ctx
+>>>> pointer, which passes subsequent NULL checks and can be used as a bogu=
+s
+>>>> socket pointer, leading to stack-out-of-bounds access in helpers like
+>>>> bpf_skc_to_tcp6_sock().
+>>>>
+>>>> Fix by:
+>>>>   - Changing JMP_A(1) to JMP_A(2) in the fullsock path to skip the
+>>>>     added instruction.
+>>>>   - Adding BPF_MOV64_IMM(si->dst_reg, 0) after the temp register
+>>>>     restore in the !fullsock path, placed after the restore because
+>>>>     dst_reg =3D=3D src_reg means we need src_reg intact to read ctx->t=
+emp.
+>>>>
+>>>> Fixes: 84f44df664e9 ("bpf: sock_ops sk access may stomp registers when=
+ dst_reg =3D src_reg")
+>>>> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+>>>> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+>>>> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+>>>> Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
+>>>> Closes: https://lore.kernel.org/bpf/6fe1243e-149b-4d3b-99c7-fcc9e2f757=
+87@std.uestc.edu.cn/T/#u
+>>>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>>> This patch only seems to fix the problem when dst_reg =3D=3D src_reg.
+>>> Why is this not an issue when is_fullsock =3D=3D 0, but dst_reg !=3D sr=
+c_reg?
+>>> In that case the dst_reg is unmodified by the whole macro but is still
+>>> marked as PTR_TO_SOCKET_OR_NULL. Isn't that a problem? Can you add
+>>> a test case for is_fullsock =3D=3D 0 but dst_reg !=3D src_reg in patch =
+2?
+>> Sorry for the double post, but also check sashiko.dev:
+>> SOSK_OPTS_GET_FIELD seems to have the same issue as the
+>> SOCK_OPTS_GET_SK. Can you add the same fix to it?
+>>
+>
+> Thanks for the review!
+>
+> The AI reviewer's observation about SOCK_OPS_GET_FIELD() is correct =E2=
+=80=94
+> it has the same bug when dst_reg =3D=3D src_reg and is_locked_tcp_sock =
+=3D=3D 0.
+> I've folded that fix into patch 1 in v2.
+>
+> Regarding dst_reg !=3D src_reg: this case is actually safe. When
+> dst_reg !=3D src_reg, fullsock_reg is dst_reg itself, and the generated
+> sequence is:
+>
+> LDX_MEM=C2=A0 =C2=A0dst_reg =3D is_fullsock
+> JEQ=C2=A0 =C2=A0 =C2=A0 =C2=A0dst_reg =3D=3D 0, +jmp
+> LDX_MEM=C2=A0 =C2=A0dst_reg =3D sk
+>
 
-Signed-off-by: Marc Harvey <marcharvey@google.com>
----
-Changes in v5:
-- Minor typo fixes in both test files.
-- Link to v4: https://lore.kernel.org/netdev/20260403-teaming-driver-internal-v4-10-d3032f33ca25@google.com/
+Yes, I missed the dst is the is_fullsock_reg assignment. v1 looks
+correct then.
 
-Changes in v4:
-- None
+> The JEQ only branches when dst_reg =3D=3D 0, so dst_reg is naturally
+> zeroed on that path =E2=80=94 no extra MOV_IMM needed. The same-register =
+bug
+> exists precisely because dst_reg =3D=3D src_reg forces the macro to borro=
+w
+> a temporary register for the is_fullsock check, leaving dst_reg (the
+> ctx pointer) untouched.
+>
+> I will add a get_sk_diff_reg subtest in v2.
+>
+> The other suggestions (moving the detailed comment to the BPF program
+> file, avoiding vague "the fix" wording) are good points =E2=80=94 address=
+ed
+> in v2 as well.
 
-Changes in v3:
-- None
+With the changes, feel free to add to both patches:
 
-Changes in v2:
-- Fix shellcheck failures.
-- Link to v1: https://lore.kernel.org/all/20260331053353.2504254-8-marcharvey@google.com/
----
- tools/testing/selftests/drivers/net/team/Makefile  |   1 +
- .../drivers/net/team/decoupled_enablement.sh       | 249 +++++++++++++++++++++
- .../testing/selftests/drivers/net/team/options.sh  |  99 +++++++-
- 3 files changed, 348 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/testing/selftests/drivers/net/team/Makefile
-index dab922d7f83d..7c58cf82121e 100644
---- a/tools/testing/selftests/drivers/net/team/Makefile
-+++ b/tools/testing/selftests/drivers/net/team/Makefile
-@@ -2,6 +2,7 @@
- # Makefile for net selftests
- 
- TEST_PROGS := \
-+	decoupled_enablement.sh \
- 	dev_addr_lists.sh \
- 	non_ether_header_ops.sh \
- 	options.sh \
-diff --git a/tools/testing/selftests/drivers/net/team/decoupled_enablement.sh b/tools/testing/selftests/drivers/net/team/decoupled_enablement.sh
-new file mode 100755
-index 000000000000..0d3d9c98e9f5
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/team/decoupled_enablement.sh
-@@ -0,0 +1,249 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# These tests verify the decoupled RX and TX enablement of team driver member
-+# interfaces.
-+#
-+# Topology
-+#
-+#  +---------------------+  NS1
-+#  |      test_team1     |
-+#  |          |          |
-+#  |        eth0         |
-+#  |          |          |
-+#  |          |          |
-+#  +---------------------+
-+#             |
-+#  +---------------------+  NS2
-+#  |          |          |
-+#  |          |          |
-+#  |        eth0         |
-+#  |          |          |
-+#  |      test_team2     |
-+#  +---------------------+
-+
-+export ALL_TESTS="
-+	team_test_tx_enablement
-+	team_test_rx_enablement
-+"
-+
-+test_dir="$(dirname "$0")"
-+# shellcheck disable=SC1091
-+source "${test_dir}/../../../net/lib.sh"
-+# shellcheck disable=SC1091
-+source "${test_dir}/team_lib.sh"
-+
-+NS1=""
-+NS2=""
-+export NODAD="nodad"
-+PREFIX_LENGTH="64"
-+NS1_IP="fd00::1"
-+NS2_IP="fd00::2"
-+NS1_IP4="192.168.0.1"
-+NS2_IP4="192.168.0.2"
-+MEMBERS=("eth0")
-+PING_COUNT=5
-+PING_TIMEOUT_S=1
-+PING_INTERVAL=0.1
-+
-+while getopts "4" opt; do
-+	case $opt in
-+		4)
-+			echo "IPv4 mode selected."
-+			export NODAD=
-+			PREFIX_LENGTH="24"
-+			NS1_IP="${NS1_IP4}"
-+			NS2_IP="${NS2_IP4}"
-+			;;
-+		\?)
-+			echo "Invalid option: -$OPTARG" >&2
-+			exit 1
-+			;;
-+	esac
-+done
-+
-+# This has to be sourced after opts are gathered...
-+export REQUIRE_MZ=no
-+export NUM_NETIFS=0
-+# shellcheck disable=SC1091
-+source "${test_dir}/../../../net/forwarding/lib.sh"
-+
-+# Create the network namespaces, veth pair, and team devices in the specified
-+# mode.
-+# Globals:
-+#   RET - Used by test infra, set by `check_err` functions.
-+# Arguments:
-+#   mode - The team driver mode to use for the team devices.
-+environment_create()
-+{
-+	trap cleanup_all_ns EXIT
-+	setup_ns ns1 ns2
-+	NS1="${NS_LIST[0]}"
-+	NS2="${NS_LIST[1]}"
-+
-+	# Create the interfaces.
-+	ip -n "${NS1}" link add eth0 type veth peer name eth0 netns "${NS2}"
-+	ip -n "${NS1}" link add test_team1 type team
-+	ip -n "${NS2}" link add test_team2 type team
-+
-+	# Set up the receiving network namespace's team interface.
-+	setup_team "${NS2}" test_team2 roundrobin "${NS2_IP}" \
-+			"${PREFIX_LENGTH}" "${MEMBERS[@]}"
-+}
-+
-+# Set a particular option value for team or team port.
-+# Arguments:
-+#   namespace - The namespace name that has the team.
-+#   option_name - The option name to set.
-+#   option_value - The value to set the option to.
-+#   team_name - The name of team to set the option for.
-+#   member_name - The (optional) optional name of the member port.
-+set_option_value()
-+{
-+	local namespace="$1"
-+	local option_name="$2"
-+	local option_value="$3"
-+	local team_name="$4"
-+	local member_name="$5"
-+	local port_flag="--port=${member_name}"
-+
-+	ip netns exec "${namespace}" teamnl "${team_name}" setoption \
-+			"${option_name}" "${option_value}" "${port_flag}"
-+	return $?
-+}
-+
-+# Send some pings and return the ping command return value.
-+try_ping()
-+{
-+	ip netns exec "${NS1}" ping -i "${PING_INTERVAL}" -c "${PING_COUNT}" \
-+			"${NS2_IP}" -W "${PING_TIMEOUT_S}"
-+}
-+
-+# Checks tcpdump output from net/forwarding lib, and checks if there are any
-+# ICMP(4 or 6) packets.
-+# Arguments:
-+#   interface - The interface name to search for.
-+#   ip_address - The destination IP address (4 or 6) to search for.
-+did_interface_receive_icmp()
-+{
-+	local interface="$1"
-+	local ip_address="$2"
-+	local packet_count
-+
-+	packet_count=$(tcpdump_show "$interface" | grep -c \
-+			"> ${ip_address}: ICMP")
-+	echo "Packet count for ${interface} was ${packet_count}"
-+
-+	if [[ "$packet_count" -gt 0 ]]; then
-+		true
-+	else
-+		false
-+	fi
-+}
-+
-+# Test JUST tx enablement with a given mode.
-+# Globals:
-+#   RET - Used by test infra, set by `check_err` functions.
-+# Arguments:
-+#   mode - The mode to set the team interfaces to.
-+team_test_mode_tx_enablement()
-+{
-+	local mode="$1"
-+	export RET=0
-+
-+	# Set up the sender team with the correct mode.
-+	setup_team "${NS1}" test_team1 "${mode}" "${NS1_IP}" \
-+			"${PREFIX_LENGTH}" "${MEMBERS[@]}"
-+	check_err $? "Failed to set up sender team"
-+
-+	### Scenario 1: Member interface initially enabled.
-+	# Expect ping to pass
-+	try_ping
-+	check_err $? "Ping failed when TX enabled"
-+
-+	### Scenario 2: One tx-side interface disabled.
-+	# Expect ping to fail.
-+	set_option_value "${NS1}" tx_enabled false test_team1 eth0
-+	check_err $? "Failed to disable TX"
-+	tcpdump_start eth0 "${NS2}"
-+	try_ping
-+	check_fail $? "Ping succeeded when TX disabled"
-+	tcpdump_stop eth0
-+	# Expect no packets to be transmitted, since TX is disabled.
-+	did_interface_receive_icmp eth0 "${NS2_IP}"
-+	check_fail $? "eth0 IS transmitting when TX disabled"
-+	tcpdump_cleanup eth0
-+
-+	### Scenario 3: The interface has tx re-enabled.
-+	# Expect ping to pass.
-+	set_option_value "${NS1}" tx_enabled true test_team1 eth0
-+	check_err $? "Failed to reenable TX"
-+	try_ping
-+	check_err $? "Ping failed when TX reenabled"
-+
-+	log_test "TX failover of '${mode}' test"
-+}
-+
-+# Test JUST rx enablement with a given mode.
-+# Globals:
-+#   RET - Used by test infra, set by `check_err` functions.
-+# Arguments:
-+#   mode - The mode to set the team interfaces to.
-+team_test_mode_rx_enablement()
-+{
-+	local mode="$1"
-+	export RET=0
-+
-+	# Set up the sender team with the correct mode.
-+	setup_team "${NS1}" test_team1 "${mode}" "${NS1_IP}" \
-+			"${PREFIX_LENGTH}" "${MEMBERS[@]}"
-+	check_err $? "Failed to set up sender team"
-+
-+	### Scenario 1: Member interface initially enabled.
-+	# Expect ping to pass
-+	try_ping
-+	check_err $? "Ping failed when RX enabled"
-+
-+	### Scenario 2: One rx-side interface disabled.
-+	# Expect ping to fail.
-+	set_option_value "${NS1}" rx_enabled false test_team1 eth0
-+	check_err $? "Failed to disable RX"
-+	tcpdump_start eth0 "${NS2}"
-+	try_ping
-+	check_fail $? "Ping succeeded when RX disabled"
-+	tcpdump_stop eth0
-+	# Expect packets to be transmitted, since only RX is disabled.
-+	did_interface_receive_icmp eth0 "${NS2_IP}"
-+	check_err $? "eth0 not transmitting when RX disabled"
-+	tcpdump_cleanup eth0
-+
-+	### Scenario 3: The interface has rx re-enabled.
-+	# Expect ping to pass.
-+	set_option_value "${NS1}" rx_enabled true test_team1 eth0
-+	check_err $? "Failed to reenable RX"
-+	try_ping
-+	check_err $? "Ping failed when RX reenabled"
-+
-+	log_test "RX failover of '${mode}' test"
-+}
-+
-+team_test_tx_enablement()
-+{
-+	team_test_mode_tx_enablement broadcast
-+	team_test_mode_tx_enablement roundrobin
-+	team_test_mode_tx_enablement random
-+}
-+
-+team_test_rx_enablement()
-+{
-+	team_test_mode_rx_enablement broadcast
-+	team_test_mode_rx_enablement roundrobin
-+	team_test_mode_rx_enablement random
-+}
-+
-+require_command teamnl
-+require_command tcpdump
-+require_command ping
-+environment_create
-+tests_run
-+exit "${EXIT_STATUS}"
-diff --git a/tools/testing/selftests/drivers/net/team/options.sh b/tools/testing/selftests/drivers/net/team/options.sh
-index 44888f32b513..66c0cb896dad 100755
---- a/tools/testing/selftests/drivers/net/team/options.sh
-+++ b/tools/testing/selftests/drivers/net/team/options.sh
-@@ -11,10 +11,14 @@ if [[ $# -eq 0 ]]; then
-         exit $?
- fi
- 
--ALL_TESTS="
-+export ALL_TESTS="
-         team_test_options
-+        team_test_enabled_implicit_changes
-+        team_test_rx_enabled_implicit_changes
-+        team_test_tx_enabled_implicit_changes
- "
- 
-+# shellcheck disable=SC1091
- source "${test_dir}/../../../net/lib.sh"
- 
- TEAM_PORT="team0"
-@@ -176,12 +180,105 @@ team_test_options()
-         team_test_option mcast_rejoin_count 0 5
-         team_test_option mcast_rejoin_interval 0 5
-         team_test_option enabled true false "${MEMBER_PORT}"
-+        team_test_option rx_enabled true false "${MEMBER_PORT}"
-+        team_test_option tx_enabled true false "${MEMBER_PORT}"
-         team_test_option user_linkup true false "${MEMBER_PORT}"
-         team_test_option user_linkup_enabled true false "${MEMBER_PORT}"
-         team_test_option priority 10 20 "${MEMBER_PORT}"
-         team_test_option queue_id 0 1 "${MEMBER_PORT}"
- }
- 
-+team_test_enabled_implicit_changes()
-+{
-+        export RET=0
-+
-+        attach_port_if_specified "${MEMBER_PORT}"
-+        check_err $? "Couldn't attach ${MEMBER_PORT} to master"
-+
-+        # Set enabled to true.
-+        set_and_check_get enabled true "--port=${MEMBER_PORT}"
-+        check_err $? "Failed to set 'enabled' to true"
-+
-+        # Show that both rx enabled and tx enabled are true.
-+        get_and_check_value rx_enabled true "--port=${MEMBER_PORT}"
-+        check_err $? "'Rx_enabled' wasn't implicitly set to true"
-+        get_and_check_value tx_enabled true "--port=${MEMBER_PORT}"
-+        check_err $? "'Tx_enabled' wasn't implicitly set to true"
-+
-+        # Set enabled to false.
-+        set_and_check_get enabled false "--port=${MEMBER_PORT}"
-+        check_err $? "Failed to set 'enabled' to false"
-+
-+        # Show that both rx enabled and tx enabled are false.
-+        get_and_check_value rx_enabled false "--port=${MEMBER_PORT}"
-+        check_err $? "'Rx_enabled' wasn't implicitly set to false"
-+        get_and_check_value tx_enabled false "--port=${MEMBER_PORT}"
-+        check_err $? "'Tx_enabled' wasn't implicitly set to false"
-+
-+        log_test "'Enabled' implicit changes"
-+}
-+
-+team_test_rx_enabled_implicit_changes()
-+{
-+	export RET=0
-+
-+	attach_port_if_specified "${MEMBER_PORT}"
-+	check_err $? "Couldn't attach ${MEMBER_PORT} to master"
-+
-+	# Set enabled to true.
-+	set_and_check_get enabled true "--port=${MEMBER_PORT}"
-+	check_err $? "Failed to set 'enabled' to true"
-+
-+	# Set rx_enabled to false.
-+	set_and_check_get rx_enabled false "--port=${MEMBER_PORT}"
-+	check_err $? "Failed to set 'rx_enabled' to false"
-+
-+	# Show that enabled is false.
-+	get_and_check_value enabled false "--port=${MEMBER_PORT}"
-+	check_err $? "'enabled' wasn't implicitly set to false"
-+
-+	# Set rx_enabled to true.
-+	set_and_check_get rx_enabled true "--port=${MEMBER_PORT}"
-+	check_err $? "Failed to set 'rx_enabled' to true"
-+
-+	# Show that enabled is true.
-+	get_and_check_value enabled true "--port=${MEMBER_PORT}"
-+	check_err $? "'enabled' wasn't implicitly set to true"
-+
-+	log_test "'Rx_enabled' implicit changes"
-+}
-+
-+team_test_tx_enabled_implicit_changes()
-+{
-+	export RET=0
-+
-+	attach_port_if_specified "${MEMBER_PORT}"
-+	check_err $? "Couldn't attach ${MEMBER_PORT} to master"
-+
-+	# Set enabled to true.
-+	set_and_check_get enabled true "--port=${MEMBER_PORT}"
-+	check_err $? "Failed to set 'enabled' to true"
-+
-+	# Set tx_enabled to false.
-+	set_and_check_get tx_enabled false "--port=${MEMBER_PORT}"
-+	check_err $? "Failed to set 'tx_enabled' to false"
-+
-+	# Show that enabled is false.
-+	get_and_check_value enabled false "--port=${MEMBER_PORT}"
-+	check_err $? "'enabled' wasn't implicitly set to false"
-+
-+	# Set tx_enabled to true.
-+	set_and_check_get tx_enabled true "--port=${MEMBER_PORT}"
-+	check_err $? "Failed to set 'tx_enabled' to true"
-+
-+	# Show that enabled is true.
-+	get_and_check_value enabled true "--port=${MEMBER_PORT}"
-+	check_err $? "'enabled' wasn't implicitly set to true"
-+
-+	log_test "'Tx_enabled' implicit changes"
-+}
-+
-+
- require_command teamnl
- setup
- tests_run
-
--- 
-2.53.0.1185.g05d4b7b318-goog
-
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
