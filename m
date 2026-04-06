@@ -1,252 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD2E3806DA;
-	Mon,  6 Apr 2026 14:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1BD3815F7
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 14:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775485211; cv=none; b=frZ4UvCBMbgiCXbNTHEG0EGCiFECktfHuvXTlwXA2a3zXnX0J1XZ0nSYBjE9UxA48vJ2JXfrHunMNSwCPoCs7GqpTHggNfrusJEkBgEStyDTGUW53DZpmxz78Eo3tlRIHTDkL2mRT7FeoytEXQLIwC7D+s5CV4PqOLYA8GujSEQ=
+	t=1775485215; cv=none; b=Bqt34acBUgYxQR01gqilXaRnWA+GLP+ildK1E7KMmHPAaqp+MwznHGRi3PK3P70wt5IQSiFm6qmLvklnBklyYhSAEuI1LDRCnm7HNvQFKLJEXsBt2UndlG+lzHVy8MywO+bj4mnoVM80U2eJHJ/6UhJdjJMHvOHqjqIqy8k8hhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775485211; c=relaxed/simple;
-	bh=jAQxw9MbYkXsl544OFupWFjq2DLx0d+HujNgYQfq/0c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ppW697MojzpPzt4ukilLTuA+0D+iH27rGhFsPm93f8ODcgxlagweQkuJGRNC6x2C+qK5ddMaTLvI5Mf5MEhJparWxzIM3JfpdUh/X9h57Zzl818u/mbOAJBWN9pKWjhcGwqf8jdAtwQd+zvZp2N3GkhdFQkr/7x3kQGmK2vskMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f5NigmBK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775485215; c=relaxed/simple;
+	bh=aKSQ2ZVGkvao/eVywKfII0uZIlmGcGZLrY1/PzfFO3o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=se55gJfpuGhZBvvek3+kkJG9KSLlGdxx3Ovhec4ilw+q/+SU97bPRB90ZqjEWGjvR9xp2ClSxyCk3Ramjj9WyzAcEvKiyv0/JLqLynFbRMWYmCdPP2MrM2G7cyfhQUJh4TwnW8iOQT6YP7aUnRAK1aRn358QDDXzldEIt8cKhKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dpmC9JEM; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f5NigmBK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0098DC2BCAF;
-	Mon,  6 Apr 2026 14:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775485211;
-	bh=jAQxw9MbYkXsl544OFupWFjq2DLx0d+HujNgYQfq/0c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f5NigmBK8QIOfJAopcw9vRcnIMffZrXxyBZSo7UgnuIqg8qJ3EeqB6BEAmZnKcOaJ
-	 etrVP2Hz2l8un6VhkhrUzhz1de++sY4Qm7criGycPGBbU5QrFF5ebl8906dGI4013I
-	 fTdlKe/oUQpS7wLKLisddcmLAKu7KgOLpM8RQBBYhozdeBtejjuaYQeILoYCPfQMxP
-	 /cWYme2Mtc6xj8cNJWrisWM8IdfI3o26zSGyVzhYRa8qToK/mDp1rMBMP6+QLvYtS8
-	 npzHjmE6BVJI6X+x2khvabMNTmwk6CV8WNOIE53D4JIFY1J1VbaIa51lAXDQhQfseg
-	 QtKK/E1dPGCwA==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>,
-	Dev Jain <dev.jain@arm.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nico Pache <npache@redhat.com>,
-	Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 25/53] selftests/mm: hugepage_settings: rename get_free_hugepages()
-Date: Mon,  6 Apr 2026 17:17:07 +0300
-Message-ID: <20260406141735.2179309-26-rppt@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260406141735.2179309-1-rppt@kernel.org>
-References: <20260406141735.2179309-1-rppt@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dpmC9JEM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775485213;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xb3SmyTMflX7e14Y/snX6rv+cb99PfchcmElu22oqzU=;
+	b=dpmC9JEMBUB+XrIQJ3oKr7L6hxD1WclwqqJb1y6E3TLhxdb7GUA8l6Esjs8tfyijQRxiFW
+	raOK9ZkxMzD78XspGnO3oehQlrEoju8F13GlPBkR8IiO++TPKtPF8o8IKR3q7eH7fVM6w4
+	NMB8w7JU1t3ejh5OiAy6YP2dEBhqovU=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-510-dq3aW5wqMz2M4uZLE2PNig-1; Mon,
+ 06 Apr 2026 10:20:10 -0400
+X-MC-Unique: dq3aW5wqMz2M4uZLE2PNig-1
+X-Mimecast-MFC-AGG-ID: dq3aW5wqMz2M4uZLE2PNig_1775485208
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 98E9F1956050;
+	Mon,  6 Apr 2026 14:20:08 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.2])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3846E1800361;
+	Mon,  6 Apr 2026 14:20:01 +0000 (UTC)
+Date: Mon, 6 Apr 2026 22:19:54 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Uday Shankar <ushankar@purestorage.com>
+Cc: "zhang, the-essence-of-life" <zhangweize9@gmail.com>,
+	Caleb Sander Mateos <csander@purestorage.com>,
+	Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] selftests: ublk: test that teardown after
+ incomplete recovery completes
+Message-ID: <adPBCsV1OmNrGLUl@fedora>
+References: <20260405-cancel-v2-0-02d711e643c2@purestorage.com>
+ <20260405-cancel-v2-2-02d711e643c2@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260405-cancel-v2-2-02d711e643c2@purestorage.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Sun, Apr 05, 2026 at 10:25:31PM -0600, Uday Shankar wrote:
+> Before the fix, teardown of a ublk server that was attempting to recover
+> a device, but died when it had submitted a nonempty proper subset of the
+> fetch commands to any queue would loop forever. Add a test to verify
+> that, after the fix, teardown completes. This is done by:
+> 
+> - Adding a new argument to the fault_inject target that causes it die
+>   after fetching a nonempty proper subset of the IOs to a queue
+> - Using that argument in a new test while trying to recover an
+>   already-created device
+> - Attempting to delete the ublk device at the end of the test; this
+>   hangs forever if teardown from the fault-injected ublk server never
+>   completed.
+> 
+> It was manually verified that the test passes with the fix and hangs
+> without it.
+> 
+> Signed-off-by: Uday Shankar <ushankar@purestorage.com>
 
-... to hugetlb_free_default_hugepages() for consistency with
-hugetlb_nr_default_pages().
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- .../testing/selftests/mm/hugepage_settings.c  | 28 ++++++-------------
- .../testing/selftests/mm/hugepage_settings.h  | 12 +++++++-
- tools/testing/selftests/mm/hugetlb-madvise.c  |  4 +--
- tools/testing/selftests/mm/hugetlb_dio.c      |  6 ++--
- .../selftests/mm/hugetlb_fault_after_madv.c   |  2 +-
- .../selftests/mm/hugetlb_madv_vs_map.c        |  2 +-
- tools/testing/selftests/mm/uffd-stress.c      |  2 +-
- 7 files changed, 28 insertions(+), 28 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-index 5961229b9931..4ae7332b5e1b 100644
---- a/tools/testing/selftests/mm/hugepage_settings.c
-+++ b/tools/testing/selftests/mm/hugepage_settings.c
-@@ -446,25 +446,6 @@ unsigned long default_huge_page_size(void)
- 	return hps;
- }
- 
--unsigned long get_free_hugepages(void)
--{
--	unsigned long fhp = 0;
--	char *line = NULL;
--	size_t linelen = 0;
--	FILE *f = fopen("/proc/meminfo", "r");
--
--	if (!f)
--		return fhp;
--	while (getline(&line, &linelen, f) > 0) {
--		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
--			break;
--	}
--
--	free(line);
--	fclose(f);
--	return fhp;
--}
--
- static void hugetlb_sysfs_path(char *buf, size_t buflen,
- 			       unsigned long size, const char *attr)
- {
-@@ -489,3 +470,12 @@ void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
- 
- 	write_num(path, nr);
- }
-+
-+unsigned long hugetlb_free_pages(unsigned long size)
-+{
-+	char path[PATH_MAX];
-+
-+	hugetlb_sysfs_path(path, sizeof(path), size, "free_hugepages");
-+
-+	return read_num(path);
-+}
-diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
-index d6f41a45e8ee..57fbf2f57e13 100644
---- a/tools/testing/selftests/mm/hugepage_settings.h
-+++ b/tools/testing/selftests/mm/hugepage_settings.h
-@@ -92,10 +92,10 @@ bool thp_is_enabled(void);
- 
- int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
- unsigned long default_huge_page_size(void);
--unsigned long get_free_hugepages(void);
- 
- unsigned long hugetlb_nr_pages(unsigned long size);
- void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
-+unsigned long hugetlb_free_pages(unsigned long size);
- 
- static inline unsigned long hugetlb_nr_default_pages(void)
- {
-@@ -117,4 +117,14 @@ static inline void hugetlb_set_nr_default_pages(unsigned long nr)
- 	hugetlb_set_nr_pages(size, nr);
- }
- 
-+static inline unsigned long hugetlb_free_default_pages(void)
-+{
-+	unsigned long size = default_huge_page_size();
-+
-+	if (!size)
-+		return 0;
-+
-+	return hugetlb_free_pages(size);
-+}
-+
- #endif /* __THP_SETTINGS_H__ */
-diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-index 316384d919db..3c08eb6db6a2 100644
---- a/tools/testing/selftests/mm/hugetlb-madvise.c
-+++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-@@ -27,7 +27,7 @@
- 
- #define validate_free_pages(exp_free)					\
- 	do {								\
--		unsigned long fhp = get_free_hugepages();		\
-+		unsigned long fhp = hugetlb_free_default_pages();		\
- 		if (fhp != (exp_free))					\
- 			ksft_exit_fail_msg("Unexpected number of free "	\
- 				"huge pages %ld, expected %ld line %d\n", \
-@@ -68,7 +68,7 @@ int main(int argc, char **argv)
- 	if (!base_page_size)
- 		ksft_exit_fail_msg("Unable to determine base page size\n");
- 
--	free_hugepages = get_free_hugepages();
-+	free_hugepages = hugetlb_free_default_pages();
- 	if (free_hugepages < MIN_FREE_PAGES)
- 		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", free_hugepages, MIN_FREE_PAGES);
- 
-diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-index 81e3f7bc8e76..47019433ddaf 100644
---- a/tools/testing/selftests/mm/hugetlb_dio.c
-+++ b/tools/testing/selftests/mm/hugetlb_dio.c
-@@ -93,7 +93,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
- 		ksft_exit_fail_perror("lseek failed\n");
- 
- 	/* Get the free huge pages before allocation */
--	free_hpage_b = get_free_hugepages();
-+	free_hpage_b = hugetlb_free_default_pages();
- 	if (free_hpage_b == 0) {
- 		close(fd);
- 		ksft_exit_skip("No free hugepage, exiting!\n");
-@@ -121,7 +121,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
- 	munmap(orig_buffer, h_pagesize);
- 
- 	/* Get the free huge pages after unmap*/
--	free_hpage_a = get_free_hugepages();
-+	free_hpage_a = hugetlb_free_default_pages();
- 
- 	ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
- 	ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
-@@ -142,7 +142,7 @@ int main(void)
- 	ksft_print_header();
- 
- 	/* Check if huge pages are free */
--	if (!get_free_hugepages())
-+	if (!hugetlb_free_default_pages())
- 		ksft_exit_skip("No free hugepage, exiting\n");
- 
- 	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-index abc3904c5268..c718dd065d53 100644
---- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-+++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-@@ -78,7 +78,7 @@ int main(void)
- 	ksft_print_msg("[INFO] detected default hugetlb page size: %zu KiB\n",
- 		       huge_page_size / 1024);
- 
--	free_hugepages = get_free_hugepages();
-+	free_hugepages = hugetlb_free_default_pages();
- 	if (free_hugepages != 1) {
- 		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
- 			       free_hugepages);
-diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-index ac60b4f18784..dfbd71a7f709 100644
---- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-+++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-@@ -89,7 +89,7 @@ int main(void)
- 	ksft_print_header();
- 	ksft_set_plan(1);
- 
--	free_hugepages = get_free_hugepages();
-+	free_hugepages = hugetlb_free_default_pages();
- 
- 	if (free_hugepages != 1)
- 		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index e92a85463eb1..7e37cf3d27f6 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -480,7 +480,7 @@ int main(int argc, char **argv)
- 	 * for racy extra reservation of hugepages.
- 	 */
- 	if (gopts->test_type == TEST_HUGETLB &&
--	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
-+	   hugetlb_free_default_pages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
- 		ksft_exit_skip("Skipping userfaultfd... not enough hugepages\n");
- 
- 	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
--- 
-2.53.0
+Thanks,
+Ming
 
