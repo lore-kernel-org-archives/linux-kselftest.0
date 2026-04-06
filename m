@@ -1,127 +1,108 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B791390CB7
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 18:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44C6390227
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 18:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775498995; cv=none; b=LAlt3ID/GfB+/RfEFcd2kX8+/AqdWxATeDUPTJPa29fKcFs3pcTNBiJwJ1k+TA3Ny3XwQD5Oo3yevsvFWwP7UARyNdbo2QVV4A2tBLpIGxdCZoiIWfZNqTtNVAoXFOr5ZaEnRfUGc+Y4picNXo6EWEW0F6Vf6CivpmqsH6+0is8=
+	t=1775499189; cv=none; b=XYL8vZUpvIkcs0lHzXD+fZGR8Rpq7XN70Y8kk7TcdwpE9KgIF5kXFcRO+bU3j5wbxIIwXT5CUCyJEbPNWaRG0a6d/nefeHgVvw4DD5ezAoVANt8gogxnd4cZkKouWPzImFv1oCRjAfCkDyKj9ZqyjE8FspS02b6I4guN0UW6yBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775498995; c=relaxed/simple;
-	bh=lACdRiktp8MRpKGUYxGcgD19C0bqmXpZNFtvU5fyNw8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rtOIj7V4SEv2F7NCes0D3RSFsg0xSI05pxV8tXa5j84to0VAv/Yxbl4oRdgjV584AU9UZI+skcSyScVMReUQSsp8A3fOgKBr+1rfgtUYK8xGbHSFIuhiF7OO3rAbG61b4pEdisjgiJFO+iRGVFDhFV7JeYWLQbPA3tO3422xXT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HrKy4i01; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775499189; c=relaxed/simple;
+	bh=mh0P+CfIYcSWxvr+OZtwfPYCJZ8um2WFI0KNtWOXvuo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jekxMAO4UpwwPsoThhT1zQxP5jHmRRUBRXkLKT+f6lvlHH3QUotBcGkWb7toNmpHF+ZU7h+AfzuQ6rKv3Ud9KCWYPomeRnVBZ0x990AbIDtreRY7hlc8i4QAR9DAwRSz+49OkdHpTbharuZoy1rCSUY5SF+aXj/aPbWP8G1/dZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=CMEK/drn; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HrKy4i01"
-Message-ID: <1c5fd907-f610-48e4-89cc-4040aaef2674@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775498991;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=85/sv/Jd+nnLebgu7yOJ82/6JMUXxVcSgRKO3WW/KJM=;
-	b=HrKy4i01v27KUFcXt/1w2kf+yZsl5MXCFBmMdpuBla2c4B2kFG8UdHSH93UsEojRTPjWIJ
-	RVbUZS7qtBOUTvf1Fe92L2hJ6/CpkB4KYvevqVhozqjWCBottlm/LzMr5DomESqDJznrrj
-	NsvzlhYZFx9aBwmc2y/0M9aHDJw9o8k=
-Date: Mon, 6 Apr 2026 11:09:37 -0700
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="CMEK/drn"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b256a4c6b5so24938025ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 11:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1775499188; x=1776103988; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u8ZAtLts4Kkdxrcnk7BLwL8oQAvPTMmoXke4bourEg4=;
+        b=CMEK/drnYR1d11IAIF/yHrUt6cUbMGRmdufgSWaApHOxOskdIftUFMzmVaOJVYbhhh
+         7j8YzL/+pcqTauvsR7bxJQpluMxoiIJZIzcTQZpkdLew6AuHZ4QjQXnph2BtQF1z89sO
+         cTjYa/RomdQFnZzV85jeNmkxnPeYRUGl6NlMHBVF75HqBWdkrRR4D5vCKYNNCBWacm0u
+         2MyntP0ft7GIuuvBrNA3KnP8HnTKGUR74UtTb5JBXx+i/aW8ll18H552onb8UNzE7GAH
+         5v7o03H/Sdba2v+kzhWL4GyjLoPnn0V2hJx9iQL3aQSC4fxXKpI+466z7M+lJCX6tQQj
+         gj/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775499188; x=1776103988;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u8ZAtLts4Kkdxrcnk7BLwL8oQAvPTMmoXke4bourEg4=;
+        b=X9PDZOyb59JC9G4a6sjW2PbmnHzg6fChL3RUatBjQ5AwJcqxvKyJDjOWQsJ3WpNr0T
+         W0JIeY/pXqdoUWed0UJXPFKHXDnjGFYmCpUTXXIKqilPUABizqLwWZ3CagA4epWjUVWT
+         K9eVUuWUluLzCCKh0Xf27Qi+QuNJx5yHYdNrtW0H5+FeRRYbcX5moUbJ23fHKqWdDsH3
+         GQ3E/gGR+jMU4OdIbianqFlDmnjCIbcAcqmtJw58VzQ7yNz446ZfBxSUDzy1ep9LlFQg
+         E6oSZ/opzCurcgvSALEyGFHrn9+SDuMucqM7C4vZS/kgLdGN5mgkdHQq/hcnIAffLWvW
+         E2Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCVsP/9l/yICCIO63Kfm5uTALKUmhx49WJ4516nmb9Xtzq9gmbqI8A0yl93SmqzSYHqwZMZy8Ct3RoCodWH10OQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGkAHoHvZXemOB2zQUqnsV5YQtY5rIdtsChWuJfr7BTePA5+wv
+	GxyjLgIpYt/az0w0kLmBY84RgUHGlhsdTmrumBuZzbA3rCufhhUryVZ6aLjXN+VLpWg=
+X-Gm-Gg: AeBDiesD2zHwx/jWt47mtu0OqCBTNqouGNYOCdUEfRYyxHMR1CIe3rtraOE4KNCMWXW
+	oImBwaeKEtShEWtk26tiIxAUu93EXjmxGqJhtKIxqFOq7qH7C2y2C+Lx8rYg9x8Y3UQioW4oR+6
+	yR+LrrzYP+1naCBqymOCRgBjvbQLJYMT6DJT5R7fhcbGtwZTfbLIG1g0WGp1C5ZSu2Qjg9kgPKi
+	N0wUBRqd4JbogNBQFbPBaUw38xXfQON5FZvXYI66gaOh0cL27SNo7bflYenlcHVd6ppzXMf14nq
+	o+UhjHqLSSQkCtlr+n2DU6rE9xfspV8gTG+3Nu/lvjrmRPes93cPaV3grrdpTMJz3XE/0te/Izn
+	CV1V92RgXHV5/ynlMVZIa2ZEbNhBeS0JoVLX19X8GpbAc+3yGL1yhZwqoSb58/1Qcx1InqMpbGu
+	O7PjFgHp/MUGmuSfQ=
+X-Received: by 2002:a17:902:ef08:b0:2b0:a957:304 with SMTP id d9443c01a7336-2b28163b7d3mr154337925ad.6.1775499188033;
+        Mon, 06 Apr 2026 11:13:08 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:40::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27479d0fbsm191060195ad.35.2026.04.06.11.13.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 11:13:07 -0700 (PDT)
+Date: Mon, 6 Apr 2026 11:13:06 -0700
+From: Joe Damato <joe@dama.to>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	leitao@debian.org, shuah@kernel.org, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: drv-net: adjust to socat changes
+Message-ID: <adP3sstIvDb1CKKN@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+	andrew+netdev@lunn.ch, horms@kernel.org, leitao@debian.org,
+	shuah@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+	sdf@fomichev.me, linux-kselftest@vger.kernel.org
+References: <20260404230103.2719103-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 02/24] PCI: Add API to track PCI devices preserved
- across Live Update
-To: David Matlack <dmatlack@google.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
-Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Adithya Jayachandran <ajayachandra@nvidia.com>,
- Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
- Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal
- <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
- Askar Safin <safinaskar@gmail.com>, "Borislav Petkov (AMD)" <bp@alien8.de>,
- Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>,
- David Rientjes <rientjes@google.com>, Feng Tang
- <feng.tang@linux.alibaba.com>, Jacob Pan <jacob.pan@linux.microsoft.com>,
- Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
- Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
- kexec@lists.infradead.org, kvm@vger.kernel.org,
- Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>,
- Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>,
- =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
- Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Pranjal Shrivastava <praan@google.com>, Pratyush Yadav
- <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
- Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>,
- Yi Liu <yi.l.liu@intel.com>
-References: <20260323235817.1960573-1-dmatlack@google.com>
- <20260323235817.1960573-3-dmatlack@google.com>
- <e3fe7085-1297-47b8-bb17-a48196e8f37f@linux.dev>
- <CALzav=eyf4XRTi8MfE_GBNSm+tjmfX7=d0M8Aj5Hh0vJn7huew@mail.gmail.com>
- <c4138f66-edf2-4689-b5fe-16dc4839e9c3@linux.dev>
- <CALzav=ei_xSfM0MTdPFhGDjNwe3EQ0vHPiEk=vszFX-Xi_KjQw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <CALzav=ei_xSfM0MTdPFhGDjNwe3EQ0vHPiEk=vszFX-Xi_KjQw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260404230103.2719103-1-kuba@kernel.org>
 
+On Sat, Apr 04, 2026 at 04:01:03PM -0700, Jakub Kicinski wrote:
+> socat v1.8.1.0 now defaults to shut-null, it sends an extra
+> 0-length UDP packet when sender disconnects. This breaks
+> our tests which expect the exact packet sequence.
+> 
+> Add shut-none which was the old default where necessary.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: leitao@debian.org
+> CC: shuah@kernel.org
+> CC: hawk@kernel.org
+> CC: john.fastabend@gmail.com
+> CC: sdf@fomichev.me
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh | 6 +++---
+>  tools/testing/selftests/drivers/net/xdp.py                | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-On 4/6/26 9:06 AM, David Matlack wrote:
-> On Sun, Apr 5, 2026 at 9:56 AM Zhu Yanjun <yanjun.zhu@linux.dev> wrote:
->> 在 2026/4/3 14:58, David Matlack 写道:
->>> On Thu, Apr 2, 2026 at 2:29 PM Yanjun.Zhu <yanjun.zhu@linux.dev> wrote:
->>>> On 3/23/26 4:57 PM, David Matlack wrote:
->>>>> +config PCI_LIVEUPDATE
->>>>> +     bool "PCI Live Update Support (EXPERIMENTAL)"
->>>>> +     depends on PCI && LIVEUPDATE
->>>>> +     help
->>>>> +       Support for preserving PCI devices across a Live Update. This option
->>>>> +       should only be enabled by developers working on implementing this
->>>>> +       support. Once enough support as landed in the kernel, this option
->>>>> +       will no longer be marked EXPERIMENTAL.
->>>>> +
->>>>> +       If unsure, say N.
->>>> Currently, it only supports 'n' or 'y'. Is it possible to add 'm'
->>>> (modular support)?
->>>>
->>>> This would allow the feature to be built as a kernel module. For
->>>> development
->>>>
->>>> purposes, modularization means we only need to recompile a single module
->>>>
->>>> for testing, rather than rebuilding the entire kernel. Compiling a
->>>> module should
->>>>
->>>> be significantly faster than a full kernel build.
->>> I don't think it is possible for CONFIG_PCI_LIVEUPDATE to support 'm'.
->>> pci_setup_device() (which is under CONFIG_PCI) needs to call
->>> pci_liveupdate_setup_device(), and CONFIG_PCI cannot be built as a
->>> module. This call is necessary so the PCI core knows whether a device
->>> being enumerated was preserved across a previous Live Update.
->> After the following changes, the liveupdate.ko can be generated
->> successfully.
-> Sure but you've broken the feature. Now devices can be probed before
-> liveupdate.ko is loaded and the PCI core will have an incorrect view
-
- From this perspective, I think it makes sense.
-
-Zhu Yanjun
-
-> of which devices were preserved by the previous kernel.
+Reviewed-by: Joe Damato <joe@dama.to>
