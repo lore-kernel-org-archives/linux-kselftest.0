@@ -1,65 +1,65 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5805F21B192
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 20:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4873033E6
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 21:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775509020; cv=none; b=CBwhpL5u+MgzNGv0UGWus9Fm9TK8SeCm7yltKatQbcR/3g6nyTe/QllD1zP2KM7l90+tcnf0S4CyNngSSnzbIBf5poBZWGi6lXCJOal33rFMSpzKRtaqmQ1DUVFwI6eAvp7z00PazQxrI+Je8EDbRd1E09YgwNOPUaAdA3gqUbo=
+	t=1775510434; cv=none; b=dFyQFk/Ju3VpYKnofaGnX6iRQ45Uuvq4l0fj8yaeLWVe7F3imQ3FCGCEt/chV/rpjqrKcsOTj1ExkeJWAyheS3pV8gZlfqaPbx/M+gR0DpXsXMgzCTlDqszC9B3aGodNx/Jleag70lcD36I5BgXuzivI4LC+ohihdyX06lMhUiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775509020; c=relaxed/simple;
-	bh=z9ymFt/yV556ogk1/KubQwbpDGG7ebWj5Z0TkeYOemM=;
+	s=arc-20240116; t=1775510434; c=relaxed/simple;
+	bh=tOzS5yBZD6qH+T9+3SQjvBHwIz/KRctL1NoeMqapak4=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=uT5WOe3RKflFMW0vgSfzKP/FmtC/6Zw5/6moP610G+IcY5p1bJKNlAegHddLTGY8nw81xBjIqHQdiRx8kPiJBkFbLRvB6WgyeycLMNMBVAaErdZfSmvyJByYoPAsjP9EyH5QOWlJZWo47Dy9I+roO6MGqvSTR7XyGSNfyVQZQTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o6jHBOC0; arc=none smtp.client-ip=209.85.128.178
+	 Mime-Version:Content-Type; b=ERZjSQ+Xr/JWx95AxEFOh+uqBB64Qg7TFJwpQ/qapX2l3iJHytPm3NByKYg99ddlh6cbWEEtPYPCHcXjnSOCtIbsb64FxSFjwvlAjM5MQjejp1I+G1YA0zWVSKPOwtksRvYDybsecxDZETVmWKGAlsvzkIiXcwyBpFQwHzvHf1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uz5117rk; arc=none smtp.client-ip=74.125.224.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o6jHBOC0"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-79a46ebe2beso41133867b3.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 13:56:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uz5117rk"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-6501725d888so3346058d50.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 14:20:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775509018; x=1776113818; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775510432; x=1776115232; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IbeQ7RU4fPJs1XWunFP2puvppP11EJLLY6x9wM0vzAs=;
-        b=o6jHBOC0fjoX+xJ71qHYrnNLP60bB/b2cAuzOK0LiwgDY7zJtA91Ei8uJrwjIIwDy0
-         Pn9epCKoLMraOtBvX2nqUnJb1uEfpQd9j6Ny4IKQLvpPYuHGjRfjOMUL6k65cB8rQLb8
-         rLuvRtqHm306aLDziIPaMf/jrwnwLkR1UrRcTBGNq+rj1Zg/rVsNKj5m5oCMguRiZK/N
-         WpeCD9ScMX7qoRYhPmEDtQIW23iETpKSoR9IudnkSUeo0a8ySafMigAryVRG4H/SWM0d
-         mtJAJXR4REjaPuU+NtvHjfpKEwDYGSPD+Gd/fFq6tHRIL+bQPe8xyJ2nKFYZNC7Y7CiF
-         Iy6A==
+        bh=6bzs5SDxOWpPA9bqwDu45hXe3OO9/TGgNIA4jG1lKAk=;
+        b=Uz5117rkle5R9ddnVfLtcC5v9UYSGxftsYq7b6UQWhQ8XofihNXl8Ocb9pSEvSJbd2
+         t9wOYcwuHs0GYwzT60wt670kQj7x+t9+qTjAZxpDi/+fubVhrfCehFasGpPFOWjvXbwE
+         FPjIIOPe9pdUpK4iXeUzHt2kGLNP+yVNaALnuZrQTMFK/WkadwVSK2jRSMny+AgH1sQj
+         C7cjHi1X92L5+09hlKGGdswMGLSG5VWL5/DKRrO+iuK+Sqxv9Mnt4/t7EEM9zR8mTCv6
+         rpQoggm33Qy2skMgDFb0oUcxO6snlllglv8jpQp9F+ODeGmWYcjfyTyz+KrsluDMP4jY
+         KN1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775509018; x=1776113818;
+        d=1e100.net; s=20251104; t=1775510432; x=1776115232;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IbeQ7RU4fPJs1XWunFP2puvppP11EJLLY6x9wM0vzAs=;
-        b=lNqMjnz6QLTFKvgqXDJWmjeTBUc2J4B8UwF8S5kiK5YeKdiSCv8w6oQRpp+Dr0/Poy
-         LwnIXP3ds0RWxvgrPLrzD6+jUizeV7IjjjOmmwAeYe2RxqpcbSnCHKOZsEEGGk2FvSwI
-         LtJRhN2e3ogT39/M75fo5aS5fJ3IJf42ZctyIUzyhOjiyURDo1hBzAIGE3CPIcPcrsTU
-         hAqmPcTXnSef3BWjUiEprAp5dSLZ8+R/OVtLBSTtkuHL0OQF7wSwId9rsAbIymqSjlID
-         H1nUmPlNoJ3AwKVu+OHUhwL2z3iBaIP0fTIaXeTlmhaDpFfeBWw0kAxxkbN9+UjXXKGG
-         7MGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX+ofPu5o+s/4rIZv9SyUQgRT2IrfXOqzGFbHy9LfW2fK5lbJ0oeqyIaAsLTpqAOpMQojziIl85ao2R8Ls+oeA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoHt3DQZ1/9UzdOBRiF5C0L646JNO+JnUM0V9+op6tfZUDZWSU
-	USOcFADPAuXtx+V2giXtKCNTAmjwL736IsV34uVeX4zj777N6vcHu7Au
-X-Gm-Gg: AeBDiesOgAgkB5W+F+3IxrXV9OcVIbClAGEwsSP/H7Ifg3Ex4VYYSBmsgTV6J9E2iA4
-	nqdkX6LAsYb+zsq3+iHzke/DiuxyiKUCm+X9gB/WhFx/oB4pRoT+K4EOquFBOetEe+Yr2EzLN5+
-	mZmiyo7Yco4nC/yBmp1sFUbuEZ5yzD2yst/l6AN9aQCmnHbqE5CJX/Nkbt5IAcLVP1YOqzbErxk
-	LIJiCeVLEvDznfQMpU6r0jUQTemQXsI+/c2zlHJpJNxxRgEQtxGtgmeFWcJ79ttR9mQC3+FZL9G
-	AK6fFnj3/Aik/PdLAazeg2+QVyr6z7nGLflMg3BzvFuR33AKhkAkicSxi7/hNJZVE0AZG2kYGQt
-	KmjXNSAhWxJ2FOwzwbjOO9LMWkyXy8DDS6Nfj22mJGlVxSeMyJXZnC6hlLHgG/e45cyzjYL+rec
-	RDMujyFocPg6JgNlxQe4ls05BfUXiafd3DJV9/dDsXopJbYS0mm8LhrFFR4U2pShLehjXekCCFb
-	eiiKiPxT/GewHs=
-X-Received: by 2002:a05:690c:38a:b0:79a:7cff:7b81 with SMTP id 00721157ae682-7a4d556cdf1mr149463227b3.27.1775509018352;
-        Mon, 06 Apr 2026 13:56:58 -0700 (PDT)
+        bh=6bzs5SDxOWpPA9bqwDu45hXe3OO9/TGgNIA4jG1lKAk=;
+        b=VjYmiN0M0/T7xETfZWO3pZamkPVr58E7lHmtYlgJP65fQvgAJ7vfdMi/5iJBuMjwLp
+         +MNRUrxwvna3Ciekg5jo5efz++GLZiblASNWZLYaw8L4xAw0WQm1smIn4f7zZwbRS2Hv
+         feRLabklI79Kt6qwU7kzkyPs5Z9lOkDwlLn3eeGRKQMZVxDSpS3RhPajoYCliLvDBPN8
+         TJHLj12vUQmQ+g6t+YKxCHNbAtAc5yiNdhHu4chMrHfImI1VSvRMytspWz14dpT72hty
+         IReRdTj+SSg+r1kdPwRmoC4KyhFiemYQ/pJ1q0Qsq1ykAcNyXYDl+IYiVNSVRn2HPEg7
+         aJCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWlsQEXFnlZTpyNdqL9W53yIfJymgSiO3l0jsLV+o1AM5kfVIB8Ii5Rsyu7zDMbn5N1l88VOyf/5Ip4czfSMXM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAzstAU5MvaV0r8bz7cBSco12l7ShPo+QRD9npXPk+f4TDZB8H
+	LYaxh6LhIKhgHFPmrC+zmOaiK18agNbgljJsMSe9BMEsWbvDYGDOknlv
+X-Gm-Gg: AeBDiesGlRZvVrW2aqSxK4Jrv/uaWIu400xLp2Rgi6HEIoZNkCZkep/uyJq28sbX/PS
+	mqDVOolSlPBczcLN0j3xO1r9KlwNl0wi2/dhW1BxkJVghDBSUqBayZ5nFoLYC9vv8olPL7hjSnw
+	5vW1Y1qJJCh3rMk3g3tpA92auHp6wgzTnF68eHk0hSeko9lezFZiKJtJ8laplrpFMiwzKvsStpO
+	3PpQ1xg8X63GduuSSg+bmG9ZxOKg5gFPkqyY1bRfdtHEXN2guG9BPaH/++H0uDBQZv7ooD+bVCW
+	Sidd+BHadm2tTiumfpmr03nDj8fmED07nKkPnFVt1NK3ggDBQRewTAJmuxv1Gq9gf1ljEJTmJvf
+	tZRUsqS7EZZDFaLF9i5qaYGrDAGIyEh1PE9RxdepM/CQLpeO3mJKheO0+62XQi6dA0QeH9lFXzH
+	hliFMcOVM1WCJuNpQdbPeGjGBfLOYHUcu79wOGureS4LcnzwX+ExxU1h4elOL0ByK1FQw3fhkDC
+	Kbi
+X-Received: by 2002:a05:690e:d88:b0:64c:c616:c349 with SMTP id 956f58d0204a3-65048754a1cmr13246650d50.31.1775510432437;
+        Mon, 06 Apr 2026 14:20:32 -0700 (PDT)
 Received: from gmail.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7a36e42fec3sm58182407b3.4.2026.04.06.13.56.57
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a86d1b1sm6582433d50.9.2026.04.06.14.20.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 13:56:57 -0700 (PDT)
-Date: Mon, 06 Apr 2026 16:56:56 -0400
+        Mon, 06 Apr 2026 14:20:31 -0700 (PDT)
+Date: Mon, 06 Apr 2026 17:20:30 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Joe Damato <joe@dama.to>, 
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>
@@ -70,19 +70,17 @@ Cc: netdev@vger.kernel.org,
  Paolo Abeni <pabeni@redhat.com>, 
  Simon Horman <horms@kernel.org>, 
  Shuah Khan <shuah@kernel.org>, 
- dalias@libc.org, 
  andrew+netdev@lunn.ch, 
  linux-kernel@vger.kernel.org, 
  willemb@google.com, 
  linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.33be72b96419e@gmail.com>
-In-Reply-To: <adPm+n8Uw3O2S5bY@devvm20253.cco0.facebook.com>
+Message-ID: <willemdebruijn.kernel.3156bd9082476@gmail.com>
+In-Reply-To: <adPfTwbARPVFLys8@devvm20253.cco0.facebook.com>
 References: <20260403233240.178948-1-joe@dama.to>
- <20260403233240.178948-4-joe@dama.to>
- <willemdebruijn.kernel.400d24decd7d@gmail.com>
- <willemdebruijn.kernel.14a8e29bbdc9a@gmail.com>
- <adPm+n8Uw3O2S5bY@devvm20253.cco0.facebook.com>
-Subject: Re: [net-next v2 3/3] selftests/net: Test PACKET_AUXDATA
+ <20260403233240.178948-3-joe@dama.to>
+ <willemdebruijn.kernel.aa6e2a3e845d@gmail.com>
+ <adPfTwbARPVFLys8@devvm20253.cco0.facebook.com>
+Subject: Re: [net-next v2 2/3] selftests/net: Test PACKET_STATISTICS drops
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,76 +92,38 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Joe Damato wrote:
-> On Sat, Apr 04, 2026 at 11:30:09PM -0400, Willem de Bruijn wrote:
-> > Willem de Bruijn wrote:
-> > > Joe Damato wrote:
+> On Sat, Apr 04, 2026 at 11:08:15AM -0400, Willem de Bruijn wrote:
+> > Joe Damato wrote:
 > 
 > [...]
 > 
-> > > > -static void do_rx(int fd, int expected_len, char *expected)
-> > > > +static void check_aux_data(struct cmsghdr *cmsg, int expected_len)
-> > > >  {
-> > > > +	struct tpacket_auxdata *adata;
-> > > > +
-> > > > +	if (!cmsg)
-> > > > +		error(1, 0, "auxdata null");
-> > > > +
-> > > > +	if (cmsg->cmsg_level != SOL_PACKET)
-> > > > +		error(1, 0, "cmsg_level != SOL_PACKET");
-> > > > +
-> > > > +	if (cmsg->cmsg_type != PACKET_AUXDATA)
-> > > > +		error(1, 0, "cmsg_type != PACKET_AUXDATA");
-> > > > +
-> > > > +	adata = (struct tpacket_auxdata *)CMSG_DATA(cmsg);
-> > > 
-> > > Sashiko had another interesting observation that this access may be
-> > > unaligned, as cmsg_buf[1024] has 1-byte alignment.
-> > > 
-> > > That is not new in this patch. Indeed most tests in this dir just
-> > > deference msg_control as struct cmsghdr * and CMSG_DATA as whatever
-> > > domain specific type.
-> > > 
-> > > The man page also warns about this and suggests using memcpy to
-> > > access CMSG_DATA. Not sure why it does not warn about the other
-> > > cmsg_.. fields.
+> > > @@ -396,6 +424,11 @@ static void run_test(void)
+> > >  
+> > >  	total_len = do_tx();
+> > >  
+> > > +	if (cfg_drop) {
+> > > +		check_packet_stats(fds);
+> > > +		goto out;
+> > > +	}
 > > 
-> > The commit that introduced that has more context
-> > 
-> > https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/man/man3/cmsg.3?id=36d25246b4333513fefdbec7f78f29d193cf5d9a
-> > 
-> > It points out 32-bit platforms where cmsghdr is 12 bytes.
-> > 
-> > At least one example given, ptpd, uses a union to ensure alignment
-> > 
-> > 	union {
-> > 		struct cmsghdr cm;
-> > 		char	control[256];
-> > 	}     cmsg_un;
-> > 
-> > But at least one other example, ssmping, does not. So I think not even
-> > the 4B (on 32-bit archs) of cmsghdr fields can be depended on.
+> > Sashiko pointed out
 > 
-> I'm fine with adding an "__attribute__((aligned(8)))" to be safe, but FWIW, I
-> think the key point from the commit message linked above is:
->  
->   shows access to int payload via *(int *)CMSG_DATA(cmsg) (of course
->   int is safe because its alignment is <= header alignment, but this
->   is not mentioned).
+> In the future, please link to the AI report.
+> 
+> > that there may be a race here between rx
+> > processing in the softirq and check_packet_stats. Seems plausible.
+> 
+> Can you elaborate why this is true?
+> 
+> I could be wrong, but I scanned the code and __local_bh_enable_ip seems to run
+> softirq synchronously in this case, so I think the code is correct.
 
-But that conditional on having a union as showed to make sure that
-the structure has the struct cmsghdr alignment.
+You mean that after the return to user in sendmsg, the packets are
+guaranteed to have been queued to the sd->input_pkt_queue, the napi
+schedule was run by enqueue_to_backlog and napi was run on this
+cpu as a result of reenabling BH. At the end of dev_queue_xmit? I
+recall that there may be a common one on syscall return too, but the
+details elude me right now.
 
-A bare char[] won't have that.
-
-Anyway, in practice on the platforms we test this hasn't been an issue.
-Fine to copy the example from other tests, leaving out the alignment.
-
-I will follow-up with one patch to update all of them at once, once
-I'm certain that I did not overlook some other mechanism that
-implicitly does guarantee this alignment on all platforms.
- 
-> struct tpacket_auxdata only has u32 and u16, so 4 byte alignment seems fine
-> and I don't think the issue applies in this particular case. But, as I said
-> above, I am fine with adding the attribute to be defensive.
-
-
+Either way, makes sense. I had not fully appreciated that the 
+softirq schedule is this deterministic.
