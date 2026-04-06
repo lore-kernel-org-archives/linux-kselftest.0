@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01BA3803EB;
-	Mon,  6 Apr 2026 14:20:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C96381B0E;
+	Mon,  6 Apr 2026 14:20:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775485228; cv=none; b=ZiiXIm5fWR0A8AhOqaYlvdcsqxoRpZiq837YVmjKBbH8msBoWJ84kO2ZtiC4mKOq69L5/YCHm7Ssp6JLVNg5u5+mTpIlibmSUCYznb3EA3U/6wJmKh9YxQX3z4vqcrEFZ1SLNpD4pttSR6w2XKdHLoHWCJCUlpFYjYmvU4HEVDY=
+	t=1775485234; cv=none; b=VokAculH/Iyb3J6mGf/lFGI6626Gnwx6FkLqOCx0Q/sL1LHGmQVMeNIibCN/oUa1fy3BU34qdtQPJ4WJz5GixzN4bZehwtZAB3x0Cv3f5pvicyYlBuF+iMhauPswp3/qQO2wEEQwhvYTwSjgfII0MVlshbGa9+y5iCNAtr8KY54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775485228; c=relaxed/simple;
-	bh=tO4w/saWs4TngI1dGJjVb/BDaQv7f0xtr7dZaOtNvYY=;
+	s=arc-20240116; t=1775485234; c=relaxed/simple;
+	bh=t2OQ6d8PPidPjQSh+RBxS6XeDUdzwdvT/+uZ5YR7P1Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B11arhg1RjuDyHlMhNMxhkUuq7mWHvV5g063Thv650u/EJWZvtvaiVQcSPTaaiiyqKBVv+Vg5C8SIeTy6+Li64SMco1LQsx4XX/S96WchMbPXNWhE5Su7hhgSS2hjf9lPxZoO0ZJk/c3benBqMT3BOkYyLn5wM8beM2y5gnTx5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qPJrWVSY; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Yy0qcfhcUoeGkROMNASS5+5aQEzVvV+N9dCQO/8sKHLTp5s5Z1iESomUyCbB4FVtEibcKQojpf7I42siBkuQsIEonSWlM+fz4VgDlOYj5FXT0ePMwi9M6m8aVElqSgnveXirSR85fomj+0Akh33Am1m+Kty0Ld+TIAYRxh7noNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PerRaUmN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qPJrWVSY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A920C4CEF7;
-	Mon,  6 Apr 2026 14:20:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PerRaUmN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 111AEC4CEF7;
+	Mon,  6 Apr 2026 14:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775485228;
-	bh=tO4w/saWs4TngI1dGJjVb/BDaQv7f0xtr7dZaOtNvYY=;
+	s=k20201202; t=1775485234;
+	bh=t2OQ6d8PPidPjQSh+RBxS6XeDUdzwdvT/+uZ5YR7P1Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qPJrWVSYPEcYgqWceoyxpdlNMa2cxJaWbuvyhl+Wf32f9z5uavVsPdQxgPzIrwgHQ
-	 N8JmXTzhzNKBsrEB70pVaZMU8CYlUI7oDNSG73oQXwTHZBInQf8/zwChhEaIZnzdVS
-	 Xwe6wmCtsUfN0mgHw1NR/CtQoMf0Q4dXbCl9SlPDX/LA8UuFZUz6m7xmu323Ikl8dr
-	 0aNx9EcqzS47/Mpmpv03X7uHOccrv9ixIK7P8i2zRLkle+wyHtivXl0jNdkFuGxiEj
-	 423+e1VWKXe/FPU3eIjleclk73L9pctdblACnQynTaVw1SujZj6LkUGuoIJX/kFibi
-	 aZ2lyEbPLiRrw==
+	b=PerRaUmNcenVs2kzy22EHE/xFyIZwEzUDa1Zc13pyy/WgJql0Paa5YP/Q1j5H6faf
+	 7p7L5ORCcBCSrk88imeHqzTuRlS2vApISz4T1mcUcFPniOhQZ5pncVHH+zQh1mdhah
+	 j2MAgPwRTkjMTpLtnKr/yAJmgu4KAghF8m7uEnXsFf/IMNhlK+F7g1flrle1HAdm//
+	 dAVvKFzuqni+kvgbbcXABmVRJY7aU0ygebUk55e4N8Zpx+8cFs03shLk/ct43++OhN
+	 9SilwDltho/6//gxDNOaWeTjLOvXXjXmcpCrVwlPfhvyN6RgHYREd7BGVKjBtY4WjD
+	 X+oW/pOU07o0w==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -51,9 +51,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 28/53] selftests/mm: vm_util: add helpers to set and restore shm limits
-Date: Mon,  6 Apr 2026 17:17:10 +0300
-Message-ID: <20260406141735.2179309-29-rppt@kernel.org>
+Subject: [PATCH 29/53] selftests/mm: compaction_test: use HugeTLB helpers ...
+Date: Mon,  6 Apr 2026 17:17:11 +0300
+Message-ID: <20260406141735.2179309-30-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260406141735.2179309-1-rppt@kernel.org>
 References: <20260406141735.2179309-1-rppt@kernel.org>
@@ -67,73 +67,194 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-hugetlb-shm and thuge-gen tests require that limits defined by
-/proc/sys/kernel/{shmmax,shmall} should be higher than certain values.
-
-Add helpers that allow setting these limits and restoring their settings on
-a test exit.
-
-They will be used later in hugetlb-shm and thuge-gen.
+... instead of open coded access of HugeTLB parameters via /proc.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/vm_util.c | 28 ++++++++++++++++++++++++++++
- tools/testing/selftests/mm/vm_util.h |  9 +++++++++
- 2 files changed, 37 insertions(+)
+ tools/testing/selftests/mm/compaction_test.c | 113 +++----------------
+ 1 file changed, 17 insertions(+), 96 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 752566f75c0b..5a89c2d903be 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -761,3 +761,31 @@ void write_num(const char *path, unsigned long num)
- 	sprintf(buf, "%lu", num);
- 	write_file(path, buf, strlen(buf) + 1);
+diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+index 30209c40b697..962a50c3d66f 100644
+--- a/tools/testing/selftests/mm/compaction_test.c
++++ b/tools/testing/selftests/mm/compaction_test.c
+@@ -17,6 +17,7 @@
+ #include <string.h>
+ 
+ #include "kselftest.h"
++#include "hugepage_settings.h"
+ 
+ #define MAP_SIZE_MB	100
+ #define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
+@@ -82,75 +83,33 @@ int prereq(void)
+ 	return -1;
  }
+ 
+-int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
+-		     unsigned long initial_nr_hugepages)
++int check_compaction(unsigned long mem_free, unsigned long hugepage_size)
+ {
+-	unsigned long nr_hugepages_ul;
+-	int fd, ret = -1;
++	unsigned long nr_hugepages;
+ 	int compaction_index = 0;
+-	char nr_hugepages[20] = {0};
+-	char init_nr_hugepages[24] = {0};
+-	char target_nr_hugepages[24] = {0};
+-	int slen;
+-
+-	snprintf(init_nr_hugepages, sizeof(init_nr_hugepages),
+-		 "%lu", initial_nr_hugepages);
++	int ret = -1;
+ 
+ 	/* We want to test with 80% of available memory. Else, OOM killer comes
+ 	   in to play */
+ 	mem_free = mem_free * 0.8;
+ 
+-	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
+-	if (fd < 0) {
+-		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
+-		ret = -1;
+-		goto out;
+-	}
+-
+ 	/*
+ 	 * Request huge pages for about half of the free memory. The Kernel
+ 	 * will allocate as much as it can, and we expect it will get at least 1/3
+ 	 */
+-	nr_hugepages_ul = mem_free / hugepage_size / 2;
+-	snprintf(target_nr_hugepages, sizeof(target_nr_hugepages),
+-		 "%lu", nr_hugepages_ul);
+-
+-	slen = strlen(target_nr_hugepages);
+-	if (write(fd, target_nr_hugepages, slen) != slen) {
+-		ksft_print_msg("Failed to write %lu to /proc/sys/vm/nr_hugepages: %s\n",
+-			       nr_hugepages_ul, strerror(errno));
+-		goto close_fd;
+-	}
+-
+-	lseek(fd, 0, SEEK_SET);
+-
+-	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
+-		ksft_print_msg("Failed to re-read from /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
+-		goto close_fd;
+-	}
++	nr_hugepages = mem_free / hugepage_size / 2;
++	hugetlb_set_nr_default_pages(nr_hugepages);
+ 
+ 	/* We should have been able to request at least 1/3 rd of the memory in
+ 	   huge pages */
+-	nr_hugepages_ul = strtoul(nr_hugepages, NULL, 10);
+-	if (!nr_hugepages_ul) {
++	nr_hugepages = hugetlb_nr_default_pages();
++	if (!nr_hugepages) {
+ 		ksft_print_msg("ERROR: No memory is available as huge pages\n");
+ 		goto close_fd;
+ 	}
+-	compaction_index = mem_free/(nr_hugepages_ul * hugepage_size);
+-
+-	lseek(fd, 0, SEEK_SET);
+-
+-	if (write(fd, init_nr_hugepages, strlen(init_nr_hugepages))
+-	    != strlen(init_nr_hugepages)) {
+-		ksft_print_msg("Failed to write value to /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
+-		goto close_fd;
+-	}
++	compaction_index = mem_free/(nr_hugepages * hugepage_size);
+ 
+-	ksft_print_msg("Number of huge pages allocated = %lu\n",
+-		       nr_hugepages_ul);
++	ksft_print_msg("Number of huge pages allocated = %lu\n", nr_hugepages);
+ 
+ 	if (compaction_index > 3) {
+ 		ksft_print_msg("ERROR: Less than 1/%d of memory is available\n"
+@@ -161,48 +120,10 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
+ 	ret = 0;
+ 
+  close_fd:
+-	close(fd);
+- out:
+ 	ksft_test_result(ret == 0, "check_compaction\n");
+ 	return ret;
+ }
+ 
+-int set_zero_hugepages(unsigned long *initial_nr_hugepages)
+-{
+-	int fd, ret = -1;
+-	char nr_hugepages[20] = {0};
+-
+-	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
+-	if (fd < 0) {
+-		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
+-		goto out;
+-	}
+-	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
+-		ksft_print_msg("Failed to read from /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
+-		goto close_fd;
+-	}
+-
+-	lseek(fd, 0, SEEK_SET);
+-
+-	/* Start with the initial condition of 0 huge pages */
+-	if (write(fd, "0", sizeof(char)) != sizeof(char)) {
+-		ksft_print_msg("Failed to write 0 to /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
+-		goto close_fd;
+-	}
+-
+-	*initial_nr_hugepages = strtoul(nr_hugepages, NULL, 10);
+-	ret = 0;
+-
+- close_fd:
+-	close(fd);
+-
+- out:
+-	return ret;
+-}
+-
+ int main(int argc, char **argv)
+ {
+ 	struct rlimit lim;
+@@ -212,18 +133,19 @@ int main(int argc, char **argv)
+ 	unsigned long mem_free = 0;
+ 	unsigned long hugepage_size = 0;
+ 	long mem_fragmentable_MB = 0;
+-	unsigned long initial_nr_hugepages;
+ 
+ 	ksft_print_header();
+ 
+ 	if (prereq() || geteuid())
+ 		ksft_exit_skip("Prerequisites unsatisfied\n");
+ 
+-	ksft_set_plan(1);
+-
+ 	/* Start the test without hugepages reducing mem_free */
+-	if (set_zero_hugepages(&initial_nr_hugepages))
+-		ksft_exit_fail();
++	hugetlb_save_settings();
++	hugetlb_set_nr_default_pages(0);
++	if (hugetlb_nr_default_pages())
++		ksft_exit_skip("Could not reset nr_hugepages\n");
 +
-+static unsigned long shmall, shmmax;
-+
-+void __shm_limits_restore(void)
-+{
-+	if (shmmax)
-+		write_num("/proc/sys/kernel/shmmax", shmmax);
-+	if (shmall)
-+		write_num("/proc/sys/kernel/shmall", shmall);
-+}
-+
-+void shm_limits_prepare(unsigned long length)
-+{
-+	unsigned long nr = length / psize();
-+	unsigned long val;
-+
-+	val = read_num("/proc/sys/kernel/shmmax");
-+	if (val < length) {
-+		write_num("/proc/sys/kernel/shmmax", length);
-+		shmmax = val;
-+	}
-+
-+	val = read_num("/proc/sys/kernel/shmall");
-+	if (val < nr) {
-+		write_num("/proc/sys/kernel/shmall", nr);
-+		shmall = val;
-+	}
-+}
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 5fc9707f6b9a..ea8fc8fdf0eb 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -168,3 +168,12 @@ void write_file(const char *path, const char *buf, size_t buflen);
- int read_file(const char *path, char *buf, size_t buflen);
- unsigned long read_num(const char *path);
- void write_num(const char *path, unsigned long num);
-+
-+void shm_limits_prepare(unsigned long length);
-+void __shm_limits_restore(void);
-+
-+#define SHM_LIMITS_RESTORE()						\
-+static void __attribute__((destructor)) shm_limits_restore(void)	\
-+{									\
-+	__shm_limits_restore();						\
-+}
++	ksft_set_plan(1);
+ 
+ 	lim.rlim_cur = RLIM_INFINITY;
+ 	lim.rlim_max = RLIM_INFINITY;
+@@ -268,8 +190,7 @@ int main(int argc, char **argv)
+ 		entry = entry->next;
+ 	}
+ 
+-	if (check_compaction(mem_free, hugepage_size,
+-			     initial_nr_hugepages) == 0)
++	if (check_compaction(mem_free, hugepage_size) == 0)
+ 		ksft_exit_pass();
+ 
+ 	ksft_exit_fail();
 -- 
 2.53.0
 
