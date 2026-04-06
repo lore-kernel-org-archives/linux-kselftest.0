@@ -1,103 +1,108 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BBC230E0CC
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 23:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EB13A0E93
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 23:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775517599; cv=none; b=LUPs7fAw0R/phigcg0pSVq0juBOCMAa6K5OWX+jFznixZXzisS59aNSKOatzdI9iBoxhNR1MMchzsfT070a3JQiSlW/xxZOBMyJZH656Qm7+weZg2hdGN0uGZaCCGAVDaNXPzebhAFVFtMKnvyXCHi6VBCobF7bVaQL2rhS+nmU=
+	t=1775518058; cv=none; b=YUF6UxlBDp1vspnRTzHnjYEHgyHb5QZVa9bwbNJysquf1gVoDjfaGHQSFdobVghb0e8JW5WdNuWjPCgXaXr8rC2EqdQ0WMXIxvNM+SWGKjs8T79pD4tecfHeJ8JG2HrF6M1nuqI9hxmQAHi0lfTXqBQXda2hBQfVfrYXtru9QIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775517599; c=relaxed/simple;
-	bh=JSi5LjkR76txsPyakVLmmA8nchrLec+P9BgBPbcaXhU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pknSroKOfEli0fMiajvesYv/1ybWxr1JDA441q/qoX/LO+73M0agEFEpzaQlkpbPpwQbb96k2px43u7WMFTI1U74aMfWr3GNnOc5BpueEHDF/6DJR45oopiq0dQlx6b/ID4yYD228q3qAFa1Tzvr0wiZmGBMiRITiN6NSRVX2Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tQkRCLyg; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1775518058; c=relaxed/simple;
+	bh=FRR5sT0zQ8QWo/7kVJ3OR2zaSQRcCfEM05VHXvhpgd0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=JPuV/os7VugWW4XViat0MLMM32F3se4cg/aNRZzukyVQlrny1N0NWv0EA8Fk3ZH3nY3et3HK4EHLd5K0z3q/LMNLGMzrn9inY8psBsSc25RfAtjoqqH2Larihv9FNBJRbFetd0vsTL+9p7IUCAVuD4QhhxfyXuZeDOmVg8HOhzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=own6LkFV; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tQkRCLyg"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c7358a7a8d1so2981429a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 16:19:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="own6LkFV"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35d90c7ec5aso11284388a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 16:27:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775517598; x=1776122398; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8HzzZacCRYi94tMXMTYIuvOMhPahDnXa/u6r4ttErhk=;
-        b=tQkRCLygTCtWTb+9tw0dYYw74XmjIe2kXWwUHQd9+KRVy3vTBeUOqCmHp79OYDPZiJ
-         zgugG5bH2dcOKz4W55Cc4+/i73O/VcOx7wLrWa8ITWr8TKp3JwA6ZhXv+U7ehXIE+4yN
-         qDdAkiiFLLPgdBBg+c6c5c684RDb/BRLp/B9TOlKzWhpzS10H7cV3DWiDu5bu3pOtovg
-         EBSZT9qZgQVr9un9UkPtpjkihAbFPydQXxilwf491YbZYqGBhtVFL+QSIKfvQDjX7nby
-         aL+qQ/HPUs03/n9Qd25J0X6v1nLddloqLzOyU2CC+h7dpjZVaQK1VN3N1DXsTvFXs0Bq
-         RZkg==
+        d=google.com; s=20251104; t=1775518055; x=1776122855; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SJTcZf1UujVpWDgwH0mVsCXrQUf/rG8HnnvzMBPDQG0=;
+        b=own6LkFVesvJFlK7vi+GPOw5Ze5KKZm2S4UUv1RcZs7rS5qHute45kfpFDgMHWDGHK
+         KpnkcHt8hnhQqFu1zXnPCIn2WBkFoqOD3m3AH/houTs+RxFnNh5+pO0g+OuqjNaSPhzT
+         lsdHfuaEpvlpJU05Cq6AWJBeO0VeplTR63j2vG7OJUvsicwm3VR+jbI8E58DJadW4La6
+         gYcgiTIHX1XdW9IIBFyEHbKiEZhV3M1eOhlGUd7XczaGo5ZMyXzjqUeL7dow8Qz34VE4
+         cbKrr5l40tcfRtPPmecaTDVDbjHKAC34Ww4VaESMj/bKvLTUPmLHp1/6MrrMeaF42d3g
+         da1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775517598; x=1776122398;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8HzzZacCRYi94tMXMTYIuvOMhPahDnXa/u6r4ttErhk=;
-        b=gEEL274LSjulH3d/0oTbWbRC1Bs6/Uv9jBQ8P8siXNPLPYgOmOjZDktwvSjqxeky8E
-         I0mU/NuKDJgwepR5AibpTQYV37qndKlgn/KY4CK3CMKM8EVbYQk59tSrtR8Nu6OO1E2u
-         ccMKZWrg59seJnNkT2BWL053VlljVreXHstOd+DAfPepUL2eOuxNssV5AqO67CdO7p3w
-         a7i9OzBP350W97jBIt2JAACQqkpFzA89Is99URRNShupwUDpIWjxmDVXLL0R94AmfQIy
-         IBguf00wT7O69Nxg8Q9PnZjKWLupTWYtWnq6G6ORc4ynLW+mGB0XSxvAOfECpecIT0o4
-         IH1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXeKTraUN5tCHhbtda+nJSEixcQh9SIF6ZXbXQRXMwL4IA9tB6gD2CXt0JKKcTObzh8ojtBnWR+txS0gwkSeDA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdA7NkULT3dU8vP/nfGvTd+BHB6L9EN0wA09GWCyMsX8ivZqC0
-	oz8NCmit3ZsUk+R6cGX9aNQjN9Z2NRzKDRLyeQCjjyNhD9IQbVktcSfWQ7ECd1L2kg==
-X-Gm-Gg: AeBDietTzuVl6Czh51XoS/mIvpRbmP3VocV5ZRuVmg+jfHyx/+wq0R86D/aBvBxj0HV
-	lCKBZ3ZOy3POSxFkyijrmNvQKEByGHiV2zkfw1ViwHh853WhMnY46WCD1uNDS48m+eWcwwFIuLa
-	pMxXxP5lYWjG1Q1KQW8QgHOjiVzpV4h7yJHnmjeIY233QB9UXT+GKTu6llcRtZMY9woHadR3fb9
-	RkodewkhsvpdwM1s2kc3sXqqjs+beqHb7vFTqgmcEQNBSv+GaYbMSl0iB38srL8OOg22ZlASdvY
-	+r0TiGVOPZYmyj6UCmc1QGQUV8k5PSuLWt7yTcXi+/x1gxz9glDn2gR125cuWYr/e20AQlGcsff
-	7TdMDILVZAU2qABYtJyPEs0QA0Hqjvlt8TRNNlWtXn3DnO4J/vjUPBD87zdASgwY0K5wK5e68wS
-	1b4HNSlulvbALi2xlF++JPQM4PY6lzFgnUhFDdb2DcuyqLiQXqcUTZl5HlPUvRVw==
-X-Received: by 2002:a05:6a20:12d1:b0:39b:8ed1:eb4f with SMTP id adf61e73a8af0-39f2eec3ca8mr14985907637.24.1775517597360;
-        Mon, 06 Apr 2026 16:19:57 -0700 (PDT)
-Received: from google.com (239.23.105.34.bc.googleusercontent.com. [34.105.23.239])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76c65995a9sm12981866a12.27.2026.04.06.16.19.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 16:19:56 -0700 (PDT)
-Date: Mon, 6 Apr 2026 23:19:52 +0000
-From: David Matlack <dmatlack@google.com>
-To: Rubin Du <rubind@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 2/4] selftests/vfio: Add generic PCI command register
- helpers
-Message-ID: <adQ_mA6bJI03CagI@google.com>
-References: <20260403234444.350867-1-rubind@nvidia.com>
- <20260403234444.350867-3-rubind@nvidia.com>
+        d=1e100.net; s=20251104; t=1775518055; x=1776122855;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SJTcZf1UujVpWDgwH0mVsCXrQUf/rG8HnnvzMBPDQG0=;
+        b=sxRjqxOzw4dyE7O50GdZRAEJrrButnI6Rlt+KKkmwoOvgC8C1g6L8gPT1UDLRc59+h
+         mZKJfvAI3j/jhDYebHwFbgUA5P0JH7nzuIocwzTAvG4ESb1IfjAind1Ig5rqGeIk4XjS
+         xlRP2eE6Vz9VbCRVhE6+j0DS32tBVQq6/5DeOleRij4y6spymCiz6hlOYgFEmS1kRZh6
+         B/WndJNgmRtk/Kkm9VcglefPlhrCiRbCy2EKg8Ho66ABS/qi9m/UD0z2hniCZgegSpDS
+         apPq8HNtAtUWqrR9Oy5Q4y2Sc9+kT5NXuuwJ+uxJ4YP64/ZF2QrCvpXqtl0HX3TusEVF
+         sbsw==
+X-Forwarded-Encrypted: i=1; AJvYcCWnmxIr33SRvzevFmVklKIcFSzB5GO/imVCnOu+l9Gt7RhLWqY8hjBmor/BLwjCMwd/zaE+huzKUewhB3A/DCU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3S71MJxIc1TTbNZ1PNHdNyFcNrk3zSBmOxWzolpOY3F53taoF
+	9Y5xBekzAMgp0Ug9I97LS6yg+QmkzgA0Pck2Mfv+YIG4FpPz82smyUEhmIzck1Hdh5RHtM47vbR
+	diOK6mQ==
+X-Received: from pjre2.prod.google.com ([2002:a17:90a:b382:b0:35d:a63e:32e9])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1d49:b0:35d:9927:e023
+ with SMTP id 98e67ed59e1d1-35de67df8c1mr13530992a91.8.1775518055475; Mon, 06
+ Apr 2026 16:27:35 -0700 (PDT)
+Date: Mon, 6 Apr 2026 16:27:34 -0700
+In-Reply-To: <20260327234023.2659476-2-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260403234444.350867-3-rubind@nvidia.com>
+Mime-Version: 1.0
+References: <20260327234023.2659476-1-jmattson@google.com> <20260327234023.2659476-2-jmattson@google.com>
+Message-ID: <adRBZuqNlBozaDrK@google.com>
+Subject: Re: [PATCH v7 1/9] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yosry Ahmed <yosry@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On 2026-04-03 04:44 PM, Rubin Du wrote:
-
-> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> index 2858885a89bb..e5e290eed510 100644
-> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> @@ -65,6 +65,16 @@ void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
->  #define vfio_pci_config_writew(_d, _o, _v) vfio_pci_config_write(_d, _o, _v, u16)
->  #define vfio_pci_config_writel(_d, _o, _v) vfio_pci_config_write(_d, _o, _v, u32)
+On Fri, Mar 27, 2026, Jim Mattson wrote:
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index ff1e4b4dc998..74014110b550 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -616,6 +616,17 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
+>  	return svm->nested.ctl.misc_ctl & SVM_MISC_ENABLE_NP;
+>  }
 >  
-> +#define vfio_pci_cmd_set(_device, _bits) do {				\
-> +	u16 __cmd = vfio_pci_config_readw((_device), PCI_COMMAND);	\
-> +	vfio_pci_config_writew((_device), PCI_COMMAND, __cmd | (_bits));\
-> +} while (0)
+> +static inline bool l2_has_separate_pat(struct vcpu_svm *svm)
+
+Take @vcpu instead of @svm.  All of the callers have a "vcpu", but not all have
+a local "svm".  That will shorten the quirk check far enough to let it poke out.
+
+> +{
+> +	/*
+> +	 * If KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT is disabled while a vCPU
+> +	 * is running, the L2 IA32_PAT semantics for that vCPU are undefined.
+> +	 */
+> +	return nested_npt_enabled(svm) &&
+> +		!kvm_check_has_quirk(svm->vcpu.kvm,
+> +				     KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT);
+
+Align indentation.  With the @svm => @vcpu change, this becomes:
+
+	return nested_npt_enabled(to_svm(vcpu)) &&
+	       !kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT);
+
+> +}
 > +
-> +#define vfio_pci_cmd_clear(_device, _bits) do {				\
-> +	u16 __cmd = vfio_pci_config_readw((_device), PCI_COMMAND);	\
-> +	vfio_pci_config_writew((_device), PCI_COMMAND, __cmd & ~(_bits));\
-> +} while (0)
-
-Whoops, missed this in my previous email.
-
-These should be static inline instead of macros.
+>  static inline bool nested_vnmi_enabled(struct vcpu_svm *svm)
+>  {
+>  	return guest_cpu_cap_has(&svm->vcpu, X86_FEATURE_VNMI) &&
+> -- 
+> 2.53.0.1018.g2bb0e51243-goog
+> 
