@@ -1,64 +1,64 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55112388E72
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 16:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB1A382F32
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 16:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775492946; cv=none; b=RTGrOw9WSsBpbIFE3MeveLM68wgUSsfZTPfuYs3bZd4jK9O8Hix5CmBq4MoIctqSaJbv+1AYloHAaT4ZETJjnYpK7aX9tcyPonglxy50Dt6N7qsYy6Pmj5a/MYarsX3mo1LXAINv5NbYOihAKC3Pid+Oe54FpYLnqqdtp2dhQ9M=
+	t=1775493381; cv=none; b=cHmpUUdW0MPBOQVBJOt9z5d5CmWmuEGaQlSQPCCjgosd62cVh2f0X6vLeLzUhjTExGjmOA+ppaoUNXX3RqXZQ29XQWNxzrOtLO1s8Ozu3Wcaf9/juyH0pohmIIoysv/9Ixn53iCRm4TEcXBaX66nxrnXiJCBB/YY7pSW60se4ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775492946; c=relaxed/simple;
-	bh=iCvep39//9NLefQPV20ZhHbFZSdUVLuDQcuwC4G0bBY=;
+	s=arc-20240116; t=1775493381; c=relaxed/simple;
+	bh=rajS4uc0L0+t10VW0XFFtH22sRejpovKT5Dfo/1dm9M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mtzHH6VBaf3SAZQoWUfCRHcLEDdJSGxw5ZOjWmhDML8BhEdIvEqu0iYAGJaS1xH20Zd8GQpi1DbgkwKSKBSdLGo5Lmh/ot6quB4ewHultYpPnp+dkJTg4VXaarYxZcxpD4ISwjlg0vrvrO8ePqRHo2IwKQbPqBBQiXHW/sC0b3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=t8q1C19V; arc=none smtp.client-ip=209.85.210.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=ek+vCXFelni7VPCO2i7Dql0srGPbe7ovTA1hGZfi49LyJim8skhmQWhlVg33F3EYPn0uZoZDccbF1T76cmGtg8ZfsV9Al2TiIYiDsupkTDRXs6t/X6Qa5LNZd/q6kqtBsnzHw+Jad6UFSyYIPrpJKdjfhYUrNMwg6NLrTUEHylQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=GpUOx00f; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="t8q1C19V"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-82ce0a9b3f7so1722679b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 09:29:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="GpUOx00f"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3590042fa8eso2933296a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 09:36:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1775492945; x=1776097745; darn=vger.kernel.org;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1775493379; x=1776098179; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v/wAT1jsHY9cPPblI6OsQOt14GLFZSNrLQJUq5KK/xg=;
-        b=t8q1C19VqcPPn/WsCfArLYucAhGB+YreQwvmcIc9QE5z4K6V9WvaPRPjBmlee5X5ED
-         qPc0Bw0UoGdFSIlsASmAQ77GxffkSyfZzYnnu3/VP/W9qI7OegKaKr2NegTVNquEy/5R
-         zFgq8Hy8OFWGeIHm0SnVemKa7gB9ZPeP6rxzlgRKYHp8c65bppOD5uuBrRpSi945Vp2C
-         tMfzVwKdcpPUSVhwtu40j9+jX1FW/Kok9+VIKu+qU7TMqt6/U4c4vMuwPL5i2QW1Hqtm
-         1Fo1aOJKPNfhf6M/tp+pdgCrLT8lOl8a3I0mW9fM8WuJswAe8Aj/bkB3PE5rB/RuaFeu
-         6Xcw==
+        bh=oiCiCfseGuUt36OVkBJsO+mSwQagEkjvZ4GHrhi5KdU=;
+        b=GpUOx00fx1p7AGHO45fVjJK205Xl1LYFrUt8QOMEhCZAvJSQOQ0E90UqzCj3VtmOir
+         gce5XjKrKNLtHqwwFU+dKNE287nf40VUmmpcWHBYodh1vL4l55oeK8HSgIWuKTpNdErI
+         5C0+972tiUybAP308J1Yv3E4P6JSSg+qcYadz+aiks7tKMswnhG9doF9JhVI2dA+RVmK
+         Ll5RTqFEfZOITkm7disUBxoK/5O9C8DqDiBPYKG+XEUiONEreXsJf5rbRHRw3dp2GhCk
+         H+vdvvaxFHauFG3safGc0cV+ctXVuml6+9a6hawBdTQ5YehTMqWZlHX9+tJ0XdS40Frn
+         b8xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775492945; x=1776097745;
+        d=1e100.net; s=20251104; t=1775493379; x=1776098179;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v/wAT1jsHY9cPPblI6OsQOt14GLFZSNrLQJUq5KK/xg=;
-        b=guoZyYJc2cTBlInSV/kHPjl81r1CzQgJs4QeyuYi20rMferwr2YoLCRC0SruReaBkM
-         3JL7AwuL3eh5aCVd7tcnOa9UQWuRbPvsmsPu83pTl0l5AinQBMOifpyQAJ4r27IH4nhS
-         YdeQ1FbDLX9IAdL7Q+iQOJowPz/j3IOIzlDWTZvyOyzJdCWoezYfucC/2Y5e1ReLTb8V
-         kZxyR75+XPtSw6Lzqsy+OSRCnfIjOXLQBf8lMyyXbEpggJzhZN4H4cCWxK+m8SILMsTN
-         pHCBRa64r3nCdxD52qXMOPuAG9tD6THX39g37rJMaj3Ghz8r0hbBskx/C0XxHwhu2CNp
-         enmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXrZ7cjtsvrrcBTPS4dfyW/qxoFxvOR0cbWI+O3pQOPUNyg/UexHqB3NfD6Fe5UwXBisim+BgMcp+9Eg8Z/fXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweXDSxw3/2ydZaVrp0nOmHBWyPy4RWSelifK21QUn9/3Sp0fIy
-	wLM072f8uL9X58xN+a9ZsEcwbKWkmw44eeuNw7VZlWC98R7Z2+weUcS5Jam3Q1dejUE=
-X-Gm-Gg: AeBDievb0fpH7DzNny7PprG7Gu6b/f8t6kCypW1hfl92VAwdmS1Z0rODdnpUhwPblRV
-	L0d8nmlMQ6+qAQxtg7TFw0V5T9n9XSPjjJLGoVjYPtJZ47Lm2pbg0ZbTN7iTSABE+v+VII5bjSk
-	emvGlBzkobhzogwgapegeLoYZefJQhBtS2heA4gUzakdpyMqL0ME7txE58hVsz25AiTcgFa9rj8
-	pJaQlckr7w93yieqCgxEoJ88mfEKpbCQ7UAQdUmOHTAFOsExH0DPG47i27xnbMK59J3sWsYXFPm
-	dwwvrH1G8jZ1Kklc/+woP0BcKQkSEoISIqpVZZU2YzzcnjXuYeozjnUqmyXkYXmCJaKgIAQRMKk
-	OQCG/BSagxrbFHHAm0B/oNQTONUD/J+AV3M4qrVKI9I1uXMbe4IG1KAN7cSQ2r0a2mCgjcdGvDJ
-	6FfQZM
-X-Received: by 2002:a05:6a00:3e12:b0:82c:7876:a03e with SMTP id d2e1a72fcca58-82d0da8f384mr12417654b3a.17.1775492944661;
-        Mon, 06 Apr 2026 09:29:04 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:42::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82d1d6b221csm8590318b3a.56.2026.04.06.09.29.04
+        bh=oiCiCfseGuUt36OVkBJsO+mSwQagEkjvZ4GHrhi5KdU=;
+        b=iaCAgWyVvI5PpPticY3nmKprQYWrw0VXkgvGNlGijz6XVIwSSjs5xAkBQ2vmC3R6PC
+         P/gjL/mxXxg9MhYY/IID6GauPiqum2h7o18m6CyC3C6z4AR4rlhHNTU1SfggnNGrVNob
+         /MdEgMzSBp2fp3vakkRsDBVx8G8D9irfi1Mo+SZB2RJ2JYZfyAAA5uHrJ4HQFL/KDy9F
+         JHizXbjK4WTIVSx1nY+nYvyT4ROMA5lT7V8EhPCz0UXP7iEs2ASDPuPg0bTnQj7wozaf
+         8mb9PO+Yt8X3lGSbqFOYD3BR7TL9FnOKjgCOARr9ZLLYfzQBU94eUb9C8BzqR4AHQbXP
+         tiBA==
+X-Forwarded-Encrypted: i=1; AJvYcCVhMw7DvgBu4uKx9EihgxGeBdyn26GRSVgOGTcP3UHNQ8Fh5cbVKD5dLQcjSq6VVALEBhGq4zKYmIQ8WvJfVHk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcWxC/o1Ez3IvVvI4dtx6ojh9mMoM3h0boY7w3yYWeWkan3ffa
+	eaeSqW+jvDT+vnhse2FiBfo+NLuPOHYLFGu4qJjIeLMgMAxkDrdwfaGUS6pqwq86KZY=
+X-Gm-Gg: AeBDieuieULUZqQ6T3YYazd2MSLmb5FthGrodvsDXkp1lzVGoR33xvJyG3v860u1mk/
+	ytXK/IrUMUS+iBstI1spaUZCl1wWW1XXgH8XE7goqnRhLftSgGBikhOJFoMZA+9oDXKc2r5sPqv
+	u7QMoW1FU4V5NqDpDPAv0kZaCZLNElQzo3/Xzv/cM91VPLGHNr7IgT36KCaWOFxDQQ8hjwI0Kdt
+	ZHtNsUbPyZ/mKhtHY80HFQVDtw9V5iAKNbMT5jGA8dk7X098+FNVVjKlDGQfvIMnhnVQkjBOM9/
+	0+70n5LkUs48zFUWgK7DiMyvqn+cyhb4zbLIpC9hTAQ8UN6vob08ktJ3qlCp/+6Pv2YZB+pPVUU
+	TiK7ElLRHJZ7bzWEdIg5LyyYcWOVxgnHQalDUyWBeVqLeZR9Lb0OnLGm8yWb48a79QQ8rRfcK3d
+	/KxCr2
+X-Received: by 2002:a17:90b:1d08:b0:35d:a84d:e27e with SMTP id 98e67ed59e1d1-35de681380dmr12576218a91.6.1775493379463;
+        Mon, 06 Apr 2026 09:36:19 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:72::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35de6a5e62dsm3935913a91.13.2026.04.06.09.36.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 09:29:04 -0700 (PDT)
-Date: Mon, 6 Apr 2026 09:29:03 -0700
+        Mon, 06 Apr 2026 09:36:19 -0700 (PDT)
+Date: Mon, 6 Apr 2026 09:36:18 -0700
 From: Joe Damato <joe@dama.to>
 To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
@@ -67,8 +67,8 @@ Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
 	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
 	andrew+netdev@lunn.ch, linux-kernel@vger.kernel.org,
 	willemb@google.com, linux-kselftest@vger.kernel.org
-Subject: Re: [net-next v2 2/3] selftests/net: Test PACKET_STATISTICS drops
-Message-ID: <adPfTwbARPVFLys8@devvm20253.cco0.facebook.com>
+Subject: Re: [net-next v2 3/3] selftests/net: Test PACKET_AUXDATA
+Message-ID: <adPhAj5gZKzHTtyE@devvm20253.cco0.facebook.com>
 Mail-Followup-To: Joe Damato <joe@dama.to>,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
@@ -78,8 +78,8 @@ Mail-Followup-To: Joe Damato <joe@dama.to>,
 	andrew+netdev@lunn.ch, linux-kernel@vger.kernel.org,
 	willemb@google.com, linux-kselftest@vger.kernel.org
 References: <20260403233240.178948-1-joe@dama.to>
- <20260403233240.178948-3-joe@dama.to>
- <willemdebruijn.kernel.aa6e2a3e845d@gmail.com>
+ <20260403233240.178948-4-joe@dama.to>
+ <willemdebruijn.kernel.3ad8f36da2a1f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,30 +88,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <willemdebruijn.kernel.aa6e2a3e845d@gmail.com>
+In-Reply-To: <willemdebruijn.kernel.3ad8f36da2a1f@gmail.com>
 
-On Sat, Apr 04, 2026 at 11:08:15AM -0400, Willem de Bruijn wrote:
+On Sat, Apr 04, 2026 at 11:10:13AM -0400, Willem de Bruijn wrote:
 > Joe Damato wrote:
-
-[...]
-
-> > @@ -396,6 +424,11 @@ static void run_test(void)
-> >  
-> >  	total_len = do_tx();
-> >  
-> > +	if (cfg_drop) {
-> > +		check_packet_stats(fds);
-> > +		goto out;
-> > +	}
+> > Extend the packet socket selftest, adding a recvmsg path, to test
+> > PACKET_AUXDATA. Check basic attributes of tpacket_auxdata.
+> > 
+> > Signed-off-by: Joe Damato <joe@dama.to>
 > 
-> Sashiko pointed out
+> > @@ -322,8 +376,11 @@ static void parse_opts(int argc, char **argv)
+> >  {
+> >  	int c;
+> >  
+> > -	while ((c = getopt(argc, argv, "bcCdDgl:qt:vV")) != -1) {
+> > +	while ((c = getopt(argc, argv, "abcCdDgl:qt:vV")) != -1) {
+> >  		switch (c) {
+> > +		case 'a':
+> > +			cfg_aux_data = true;
+> > +			break;
+> 
+> These are intended as independent test cases: test_auxdata,
+> test_drops. By using flags the flags can be combined. Are all
+> combinations of flags expected to work? Else maybe we should instead
+> have a -T "test_name", or so, to keep them mutually exclusive and
+> easy to reason about.
+> 
+> Or just a test that two flags are not set at the same time.
 
-In the future, please link to the AI report.
-
-> that there may be a race here between rx
-> processing in the softirq and check_packet_stats. Seems plausible.
-
-Can you elaborate why this is true?
-
-I could be wrong, but I scanned the code and __local_bh_enable_ip seems to run
-softirq synchronously in this case, so I think the code is correct.
+Sure, I can add a two line at the bottom with the existing flags checks. I
+don't think adding a -T "test_name" is worth the effort, though.
