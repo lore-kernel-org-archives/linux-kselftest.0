@@ -1,237 +1,196 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F22B3126D0
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 07:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A056CE571
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 07:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775460144; cv=none; b=cCkmu6Q9AygNaprLAjMORNOjvbhFCvmXPwBP86VegacUgsJ0xo5CiLj6jVZyzzio2aDz3iFaFNP0Wlwp+PW2h5aNh5ws2/aoUDlfiqIawwdgfd/vDSdCTEsKhfFdh0qPRLu5R5jO9RnscIK/Rr3KwZn+s9Mf1mLByZqUIGhSpA8=
+	t=1775460435; cv=none; b=BuImpG1u3bvPenTjE9PmkLZIyMkfYlrv9GpQTzQV/xeIgVpOI8iAc2cuZi7MZKE+Xy92M/SPVnFPSXioRtGsXnLhTLZRbUuIdqYnr04e3cKAPLoJbu/pzJfcT9WPYRSI3iEtjBhYokKjjPl3vP5kJLkIYjEmuy7NuPB2z8scA9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775460144; c=relaxed/simple;
-	bh=eUX8Cph1zORth5ZRKpKw14JpU7wGmqp36up2RWDN9R4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CvrN/qu1S9X1UZr7OFEBFMGV8aD0+TBy52Zz61o7F3gRAjei8KJB5GDzBAgZh1/YUjRRboNJwaFdOm+SgcO81u8lw8G1aLSDVuaPnCqdJKxHUi7v7GkDp1NGGNIQAx/U9E/0o1/sa3YW0ujtRemjNg66HbP+Ekdpjk6/YNI1Sh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QrtFQWIQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=c5IRgAfQ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WEzZq1L5; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=sH2Eds67; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1775460435; c=relaxed/simple;
+	bh=5xf2bbceAjrL9Kn0yXbZUdc9u2qLSvuJAqr0yCPb/MY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bBnMZqIhjY+0B+7kx5lfEOdLagblGH1rx59k/iF42IlCIben0mwSFQPY1lsK1Fh9JkZkIDMagg0Jn0FIsC//dFsa6tJsa1o0CjtiRj9kFD7nhJE0TWcYPre1Ou1SpcOBAq0ZDDHlTI6AoCBywnCQTc+VIIxYKt7RjzMP/OLdy/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com; spf=pass smtp.mailfrom=shopee.com; dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b=fhl4ULzz; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shopee.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QrtFQWIQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="c5IRgAfQ";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WEzZq1L5";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="sH2Eds67"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E364D5BD28;
-	Mon,  6 Apr 2026 07:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1775460134; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lWRft+NUtARNTuNfYPDKwdyPYc5TUAjun2hyj4kISVc=;
-	b=QrtFQWIQxCrY0Tf5fPpLD+fIeWLCj8hpA+ESqps2yvAjRn6jkwO2Bt2A2T8VBFVvOHHWRA
-	8xH0eRJRLvgc+lMW3EoqiCxGSEJPvs/yYr5lwyPja5EMiLV0rDv/eJ1T1FoRCveyMCvDY9
-	8R6U+HT4jb33ulo4aIrOkW9M+PvBLcs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1775460134;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lWRft+NUtARNTuNfYPDKwdyPYc5TUAjun2hyj4kISVc=;
-	b=c5IRgAfQ/XO23vq4SXq2QUAaJ5eE1MdxL6S3lxUFaVP6VCWyrZyEObrQGFLLBx4QclqCDD
-	j1CDoXEf77TMzHCg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WEzZq1L5;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=sH2Eds67
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1775460133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lWRft+NUtARNTuNfYPDKwdyPYc5TUAjun2hyj4kISVc=;
-	b=WEzZq1L5vrYSV6kxKFc8w4ul0QEJv1/kVUYt3JNB7Xp1LXfAXLn3ASEPwqsNTCe68hRofq
-	mpe2FsKT13nKZL9LA2urZMp5ibAeJ/EgH1tXR3XORJgIQI/5aePRUOE1lZhHI4OQQklZ4g
-	PCNf0U+jgqLiZ+X+HeqZv0ejt2d/Y+k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1775460133;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lWRft+NUtARNTuNfYPDKwdyPYc5TUAjun2hyj4kISVc=;
-	b=sH2Eds67V5HDmraC7gW47vYnnCPQN2eGM35xxRKrQmysAFzSPPDpfULiAz0I0RpOLZ5G1x
-	pG3OStxrO+n6IPAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 869F24A0B0;
-	Mon,  6 Apr 2026 07:22:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 23AMHiVf02koWgAAD6G6ig
-	(envelope-from <hare@suse.de>); Mon, 06 Apr 2026 07:22:13 +0000
-Message-ID: <53aec093-5494-4b4b-a103-bc166381f236@suse.de>
-Date: Mon, 6 Apr 2026 09:22:13 +0200
+	dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b="fhl4ULzz"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-35c124d2613so2026322a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 00:27:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com; t=1775460434; x=1776065234; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/+l8xdJ81rnHVCDBCC4cOrkEDKbX4zpmL1qqNzt32Zg=;
+        b=fhl4ULzzM3JxbZouxPkKN/7rTjYPN3YEpC3ZB6OYTyX4Eb7eWdz0InUBJR2eUpHwBT
+         GM9n+s2IF8A8NQVlD4smGaMYzKRMZyryUeJCwH9cr5CXCNOTL/oJn/c2MLV5NJ8MsnH1
+         iGWWSCazM5+HYYH5YwgAqQt4dCjkwGCzGeYbQMoF7dlr5z2fJvhglH6j6TV1NdLvJBFo
+         lDoav5ssTuxyaOwadCG4QEu0zGH3Oqc/GNH96JjwPpBDcfKQKIAgOlVFn+FDSV0NbiPN
+         HL4dLsekBNrbAKSdbSxN9NCMwQQgP6JUAzECK7g6yZZfhpa0F9avoVHZrnmph4zfBLF3
+         BKdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775460434; x=1776065234;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/+l8xdJ81rnHVCDBCC4cOrkEDKbX4zpmL1qqNzt32Zg=;
+        b=gsT0Uh2VG5/rRbxO4/cmBRh4QyAU2LeYsmYrwAkxyF76wsVH1RIQRKj/lYS/tu4B3/
+         p4qyc5a2f71wxt23GNV+o8KKVE+Uuwq8lFCrrl2AkjJjrNY1113DMSI9GOJC1bzSS5M7
+         SyxVF12QSxd1JYikH721h/1u2nXbb5WimKLsoZouu+A6lhxZTUGvfIOagWtFx6RDNGSt
+         DKnEy1CNu1EfQuy0zgViZ7g+aQ02+kfLTCAEUU4H1k29pCERMPVStsTabjE0DD65Gqrg
+         dvRpKjtpZj9vM2H3ViIvyB3X8zl6jwHlN1sifbEmgBFQ6PZdH70q91Un3fOI9megTJDl
+         f00A==
+X-Forwarded-Encrypted: i=1; AJvYcCWiF265bX3pzAb1EyJ4rL+honWt4a61rJi5haI2351+/Q1FTp3FAO2Jd8j8BEFyeDNV2kbYEi3afFUA0mnApO8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYWCkh5ReFFNvGxH9XB53Jq61haLp2YOFL417MWkUypeBtX0QG
+	cbLcAbD0CZXhRYlG/IbVVAK7v1WDUEHzW2uYFpEdRp58grOUZO7kD9d8nxKvCMNah+s=
+X-Gm-Gg: AeBDieuf/c+tbkUAQ7T7SlMKW6TBTJ2yRmBdnfCZ/h0xMt1kn3rJGju7tIwnOsyyTIq
+	UTFqqX+4dpvXCvYF1H1NqW82kVn7+zz9oTKoNz2hyBLMGIECFLRJjYSnvNpsdPK0cevCs6RgvBN
+	PG6Cf2Uox5WrdlwKgH/BMGpdvah8z6gcWfTHAXKNeXNku10n73WQYLbSyzA28nWNohDBhNGDBy2
+	tsWS6juD0gp3f3gnobnDDf6WM8hx7pf7hsIvSm09Xug153NQKkgDHVoEFatpsj23E2ETgZJZJMN
+	czQE2V5gMHT8qZD/4XPj/Gbbw1Wzux0dvFCc1KF7YkltlU8wW8GAnr5gH2t4ZWn7oAGwm8hvwTg
+	rcSbm4shto1CqOLI7/i/v4Wgjk5/UcwV7OK16kmRga6u2WskOM4Bierw+C3NCh4UoYINtO2PI6z
+	796H3tH/bI/kCvPwhIXUqJ5NAbZr4bE/1wZ6/ABVP6xE8MOYy00g==
+X-Received: by 2002:a17:90b:384e:b0:35c:d01:d3dc with SMTP id 98e67ed59e1d1-35de68ec479mr10327576a91.18.1775460433873;
+        Mon, 06 Apr 2026 00:27:13 -0700 (PDT)
+Received: from bms-ytl-d1-app-10-251-178-27 ([147.136.157.0])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dd367bf24sm12920937a91.9.2026.04.06.00.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 00:27:13 -0700 (PDT)
+From: Leon Hwang <leon.huangfu@shopee.com>
+To: netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Leon Hwang <leon.huangfu@shopee.com>,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH net-next v2] selftests/drivers/net: Add an xdp test to xdp.py
+Date: Mon,  6 Apr 2026 15:26:54 +0800
+Message-ID: <20260406072655.368173-1-leon.huangfu@shopee.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] ublk: reset per-IO canceled flag on each fetch
-To: Uday Shankar <ushankar@purestorage.com>, Ming Lei <ming.lei@redhat.com>,
- "zhang, the-essence-of-life" <zhangweize9@gmail.com>,
- Caleb Sander Mateos <csander@purestorage.com>, Jens Axboe <axboe@kernel.dk>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260405-cancel-v2-0-02d711e643c2@purestorage.com>
- <20260405-cancel-v2-1-02d711e643c2@purestorage.com>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20260405-cancel-v2-1-02d711e643c2@purestorage.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-4.50 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.19)[-0.972];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[purestorage.com,redhat.com,gmail.com,kernel.dk,kernel.org];
-	MID_RHS_MATCH_FROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:mid,suse.de:dkim,suse.de:email];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -4.50
-X-Spam-Level: 
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: E364D5BD28
 
-On 4/6/26 06:25, Uday Shankar wrote:
-> If a ublk server starts recovering devices but dies before issuing fetch
-> commands for all IOs, cancellation of the fetch commands that were
-> successfully issued may never complete. This is because the per-IO
-> canceled flag can remain set even after the fetch for that IO has been
-> submitted - the per-IO canceled flags for all IOs in a queue are reset
-> together only once all IOs for that queue have been fetched. So if a
-> nonempty proper subset of the IOs for a queue are fetched when the ublk
-> server dies, the IOs in that subset will never successfully be canceled,
-> as their canceled flags remain set, and this prevents ublk_cancel_cmd
-> from actually calling io_uring_cmd_done on the commands, despite the
-> fact that they are outstanding.
-> 
-> Fix this by resetting the per-IO cancel flags immediately when each IO
-> is fetched instead of waiting for all IOs for the queue (which may never
-> happen).
-> 
-> Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-> Fixes: 728cbac5fe21 ("ublk: move device reset into ublk_ch_release()")
-> Reviewed-by: Ming Lei <ming.lei@redhat.com>
-> Reviewed-by: zhang, the-essence-of-life <zhangweize9@gmail.com>
-> ---
->   drivers/block/ublk_drv.c | 21 +++++++++++++--------
->   1 file changed, 13 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index 3ba7da94d31499590a06a8b307ed151919a027cb..92dabeb820344107c9fadfae94396082b933d84e 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -2916,22 +2916,26 @@ static void ublk_stop_dev(struct ublk_device *ub)
->   	ublk_cancel_dev(ub);
->   }
->   
-> +static void ublk_reset_io_flags(struct ublk_queue *ubq, struct ublk_io *io)
-> +{
-> +	/* UBLK_IO_FLAG_CANCELED can be cleared now */
-> +	spin_lock(&ubq->cancel_lock);
-> +	io->flags &= ~UBLK_IO_FLAG_CANCELED;
-> +	spin_unlock(&ubq->cancel_lock);
-> +}
-> +
-One wonders why we can't use 'set_bit' here, or, rather,
-convert 'flags' usage to set_bit().
-The spinlock feels a bit silly as it's now per-io, and one would think
-that we don't have concurrent accesses to the same io...
+In "bpf: Disallow freplace on XDP with mismatched xdp_has_frags values" [1],
+this XDP test is suggested to add to xdp.py.
 
->   /* reset per-queue io flags */
->   static void ublk_queue_reset_io_flags(struct ublk_queue *ubq)
->   {
-> -	int j;
-> -
-> -	/* UBLK_IO_FLAG_CANCELED can be cleared now */
->   	spin_lock(&ubq->cancel_lock);
-> -	for (j = 0; j < ubq->q_depth; j++)
-> -		ubq->ios[j].flags &= ~UBLK_IO_FLAG_CANCELED;
->   	ubq->canceling = false;
->   	spin_unlock(&ubq->cancel_lock);
->   	ubq->fail_io = false;
->   }
-Similar here; as we don't loop anymore, why do we need the spinlock?
-Isn't WRITE_ONCE() sufficient here?
+1. Verify the failure of updating frag-capable prog with non-frag-capable
+   prog, when the frag-capable prog attaches to mtu=9k driver.
 
->   
->   /* device can only be started after all IOs are ready */
-> -static void ublk_mark_io_ready(struct ublk_device *ub, u16 q_id)
-> +static void ublk_mark_io_ready(struct ublk_device *ub, u16 q_id,
-> +	struct ublk_io *io)
->   	__must_hold(&ub->mutex)
->   {
->   	struct ublk_queue *ubq = ublk_get_queue(ub, q_id);
-> @@ -2940,6 +2944,7 @@ static void ublk_mark_io_ready(struct ublk_device *ub, u16 q_id)
->   		ub->unprivileged_daemons = true;
->   
->   	ubq->nr_io_ready++;
-> +	ublk_reset_io_flags(ubq, io);
->   
->   	/* Check if this specific queue is now fully ready */
->   	if (ublk_queue_ready(ubq)) {
-> @@ -3202,7 +3207,7 @@ static int ublk_fetch(struct io_uring_cmd *cmd, struct ublk_device *ub,
->   	if (!ret)
->   		ret = ublk_config_io_buf(ub, io, cmd, buf_addr, NULL);
->   	if (!ret)
-> -		ublk_mark_io_ready(ub, q_id);
-> +		ublk_mark_io_ready(ub, q_id, io);
->   	mutex_unlock(&ub->mutex);
->   	return ret;
->   }
-> @@ -3610,7 +3615,7 @@ static int ublk_batch_prep_io(struct ublk_queue *ubq,
->   	ublk_io_unlock(io);
->   
->   	if (!ret)
-> -		ublk_mark_io_ready(data->ub, ubq->q_id);
-> +		ublk_mark_io_ready(data->ub, ubq->q_id, io);
->   
->   	return ret;
->   }
-> 
+The test has been verified against Mellanox CX6 and Intel 82599ES NICs.
 
-Cheers,
+With dropping other tests, here is the test log.
 
-Hannes
+ # ethtool -i eth0
+ driver: mlx5_core
+ version: 6.19.0-061900-generic
+
+ # NETIF=eth0 python3 xdp.py
+ TAP version 13
+ 1..1
+ ok 1 xdp.test_xdp_native_update_mb_to_sb
+ # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+ # ethtool -i eth0
+ driver: ixgbe
+ version: 6.19.0-061900-generic
+
+ # NETIF=eth0 python3 xdp.py
+ TAP version 13
+ 1..1
+ # CMD: ip  link set dev eth0 xdpdrv obj /path/to/tools/testing/selftests/net/lib/xdp_dummy.bpf.o sec xdp.frags
+ #   EXIT: 2
+ #   STDERR: RTNETLINK answers: Invalid argument
+ ok 1 xdp.test_xdp_native_update_mb_to_sb # SKIP device does not support multi-buffer XDP
+ # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+
+Links:
+[1] https://lore.kernel.org/bpf/20260326124205.1a3bb825@kernel.org/
+
+Cc: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: Leon Hwang <leon.huangfu@shopee.com>
+---
+v1 -> v2:
+- Update the category in subject from selftests/net to selftests/drivers/net.
+- Drop _exec_cmd helper.
+- Recover the original MTU using cfg.dev['mtu'] (per Kuba).
+- Drop the unnecessary shell=True arg (per Kuba).
+- Print error using ksft_pr (per Kuba).
+- Drop the sb_to_mb case (per Kuba).
+- Skip test when device supports sb XDP with mtu 9000 (per Kuba,Gemini/sashiko).
+v1: https://lore.kernel.org/netdev/20260401052746.314667-1-leon.huangfu@shopee.com/
+---
+ tools/testing/selftests/drivers/net/xdp.py | 28 +++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
+index d86446569f89..864ca4097b87 100755
+--- a/tools/testing/selftests/drivers/net/xdp.py
++++ b/tools/testing/selftests/drivers/net/xdp.py
+@@ -13,7 +13,7 @@ from enum import Enum
+ 
+ from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_ne, ksft_pr
+ from lib.py import KsftNamedVariant, ksft_variants
+-from lib.py import KsftFailEx, NetDrvEpEnv
++from lib.py import KsftFailEx, KsftSkipEx, NetDrvEpEnv
+ from lib.py import EthtoolFamily, NetdevFamily, NlError
+ from lib.py import bkg, cmd, rand_port, wait_port_listen
+ from lib.py import ip, defer
+@@ -693,6 +693,31 @@ def test_xdp_native_qstats(cfg, act):
+             ksft_ge(after['tx-packets'], before['tx-packets'])
+ 
+ 
++def test_xdp_native_update_mb_to_sb(cfg):
++    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
++    mtu = 9000
++
++    ip(f"link set dev {cfg.ifname} mtu {mtu}")
++    defer(ip, f"link set dev {cfg.ifname} mtu {cfg.dev['mtu']} xdpdrv off")
++
++    attach = cmd(f"ip link set dev {cfg.ifname} xdpdrv obj {obj} sec xdp", fail=False)
++    if attach.ret == 0:
++        raise KsftSkipEx(f"device supports single-buffer XDP with mtu {mtu}")
++
++    attach = cmd(f"ip link set dev {cfg.ifname} xdpdrv obj {obj} sec xdp.frags", fail=False)
++    if attach.ret != 0:
++        ksft_pr(attach)
++        raise KsftSkipEx("device does not support multi-buffer XDP")
++
++    # Verify updating mb -> mb program works.
++    cmd(f"ip -force link set dev {cfg.ifname} xdpdrv obj {obj} sec xdp.frags")
++
++    # Verify updating mb -> sb program does not work.
++    update = cmd(f"ip -force link set dev {cfg.ifname} xdpdrv obj {obj} sec xdp", fail=False)
++    if update.ret == 0:
++        raise KsftFailEx("device unexpectedly updates non-multi-buffer XDP")
++
++
+ def main():
+     """
+     Main function to execute the XDP tests.
+@@ -718,6 +743,7 @@ def main():
+                 test_xdp_native_adjst_head_grow_data,
+                 test_xdp_native_adjst_head_shrnk_data,
+                 test_xdp_native_qstats,
++                test_xdp_native_update_mb_to_sb,
+             ],
+             args=(cfg,))
+     ksft_exit()
 -- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+2.53.0
+
