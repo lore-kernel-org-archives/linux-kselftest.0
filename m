@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E335737FF7A;
-	Mon,  6 Apr 2026 14:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722883859CD;
+	Mon,  6 Apr 2026 14:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775485304; cv=none; b=aHlJLOa/bKGjGLyXG8csULJQ6LhVie9J02PsTgxhryeK+Jf3s3310phfxMcWH6c+n7y4JJWwvfDTv+KUiCeNlwFsix/MeOkLBcEJQL7H/8JNtwUFLcvN1t4nRhy2nyTagcRlqCHJAn9mCaFIDdZ8kqH3lHSA0v0ZKsexGoGU3l4=
+	t=1775485309; cv=none; b=KDcsJr7iXIcWMXg7SbsdxYaYmYunJ7FCY7xcQL5zmaRG/mUzwoEnVpWI2pzMztxRSDTpTANQWHq6Z+EVo/fv4JZMGBzhuhWXRSaTMjLmH9AFXo7d4Dy1y5G4haiA9BN+mAT653ghQcIEIJNcarnr4bTVNe+9M4daSl0MfH6Oe30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775485304; c=relaxed/simple;
-	bh=Ebag/OZwcEEdNBOTVBqp4Cs1aPruonU0XrgpI45ideI=;
+	s=arc-20240116; t=1775485309; c=relaxed/simple;
+	bh=XUYa2AHXODnUwL+2gtS49wymmJEGg8QhpNWWbUz0fDg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ULvprpoYfK8Tm5uNFSkdbVDw4JxE3K8j+zIAh4sRB1xrxpOR5t/M1ip610Us18QWJFIrY2ap2tjWt90Bq0X70RogyaagUPfQAOKFcP6Cv/+hEM/zJeS/imOghMTHfJIM7e3UTuFii3F4V+c8PY8KUJPgIUnSDIWM3ZWT4lWOUbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OJrwcWLh; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Blx70Bra15Gln0B6Jo2rczdPtsMRpKerX9zGnlXjp+CfRudPm5GFYC8EILMJjubA7DDa/xf366h3FLwgbHKRbl7LPALWy24nBRYkqxLM75dU5USJkfePBsb41KdpnoEkaI5vDHMsSbu8HHceeK3vjlilrnLLg6L85qL77f16T70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mCdMMrXM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OJrwcWLh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F74AC2BCB6;
-	Mon,  6 Apr 2026 14:21:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mCdMMrXM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A5FC4CEF7;
+	Mon,  6 Apr 2026 14:21:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775485303;
-	bh=Ebag/OZwcEEdNBOTVBqp4Cs1aPruonU0XrgpI45ideI=;
+	s=k20201202; t=1775485309;
+	bh=XUYa2AHXODnUwL+2gtS49wymmJEGg8QhpNWWbUz0fDg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OJrwcWLh6aojOINmg2AOvSNrDBrN+C9q+lorsQOCSJABN9LWXZ1WXP6HawdGEhnA8
-	 DkRbaAl0X3oOs2q4IDIBKkq5AdfV6J/aLTBgM+xXL5w0xWKtCcIVBBPEDXs1RfiUuH
-	 28NS4x3noVe6rcurS3wQIlJ+JMpeR2bsUsr4YUSkn3Ti0bJPMBek5Jd8UGhdBBfLSV
-	 b3ZDzjiMVtWQ+RtQR5/P3Y/4qbERfLl+88czbtDA9us2qqGklXHNvv4hecQQAyIJoG
-	 6Ubm9FVKJZbzZBzqnwUoCi4rDiBR62fxrSBvytmruY3OIBE9QE8hNYdsp/wIwOv11Q
-	 Onkf4mLTVHUzQ==
+	b=mCdMMrXMCaE63glUC3PQoRjNenlzBJV1SZ2AIQVxmR8JJiom0kW//1iJtNFKUfSbR
+	 WL9hfkjDzD1qJeWKlddwetkCAD0dw3ZmORaDZA8t6KPTitUQ3BLlJIAOsAv/smIcI6
+	 lchB/kbjP8e+9dkLeEmbcCAIfSE88BKFokS6mis0RfUaSZ49YcRpyTFAEbtrTKkurd
+	 88GWj3eoxU/kQSkipFkAC0qR1lEiM8QV8Mh/UPimQRatYTdnJk0c5sSbsyUiMOLEUL
+	 VaFy4JtAUPncOEQ5+Y/bMuE25B+6f9ca2M1eBVmmjDJU1u+EVzvqRuSNsrwgGgNy7Q
+	 3cwi415eJxxuA==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -51,9 +51,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 41/53] selftests/mm: hugetlb-soft-online: add setup of HugeTLB pages
-Date: Mon,  6 Apr 2026 17:17:23 +0300
-Message-ID: <20260406141735.2179309-42-rppt@kernel.org>
+Subject: [PATCH 42/53] selftests/mm: hugetlb-vmemmap: add setup of HugeTLB pages
+Date: Mon,  6 Apr 2026 17:17:24 +0300
+Message-ID: <20260406141735.2179309-43-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260406141735.2179309-1-rppt@kernel.org>
 References: <20260406141735.2179309-1-rppt@kernel.org>
@@ -67,109 +67,31 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-hugetlb-soft-online test uses open coded access to /proc to determine
-availability of huge pages and fails if there are no enough free huget
-pages..
+hugetlb-vmemmap test fails if there are no free huge pages prepared by a
+wrapper script.
 
-Replace open coded access to /proc with hugepage helpers and add setup
-of HugeTLB pages to the test and make sure that the original settings
-are restored on the test exit.
+Add setup of HugeTLB pages to the test and make sure that the original
+settings are restored on the test exit.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- .../selftests/mm/hugetlb-soft-offline.c       | 45 ++++---------------
- 1 file changed, 8 insertions(+), 37 deletions(-)
+ tools/testing/selftests/mm/hugetlb-vmemmap.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/hugetlb-soft-offline.c b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-index a8bc02688085..bc202e4ed2bd 100644
---- a/tools/testing/selftests/mm/hugetlb-soft-offline.c
-+++ b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-@@ -6,9 +6,7 @@
-  * - if enable_soft_offline = 1, a hugepage should be dissolved and
-  *   nr_hugepages/free_hugepages should be reduced by 1.
-  *
-- * Before running, make sure more than 2 hugepages of default_hugepagesz
-- * are allocated. For example, if /proc/meminfo/Hugepagesize is 2048kB:
-- *   echo 8 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-+ * The test allocates 8 default hugepages
-  */
- 
- #define _GNU_SOURCE
-@@ -25,6 +23,7 @@
- #include <sys/types.h>
- 
- #include "kselftest.h"
-+#include "hugepage_settings.h"
- 
- #ifndef MADV_SOFT_OFFLINE
- #define MADV_SOFT_OFFLINE 101
-@@ -100,32 +99,6 @@ static int set_enable_soft_offline(int value)
- 	return 0;
- }
- 
--static int read_nr_hugepages(unsigned long hugepage_size,
--			     unsigned long *nr_hugepages)
--{
--	char buffer[256] = {0};
--	char cmd[256] = {0};
--
--	sprintf(cmd, "cat /sys/kernel/mm/hugepages/hugepages-%ldkB/nr_hugepages",
--		hugepage_size);
--	FILE *cmdfile = popen(cmd, "r");
--
--	if (cmdfile == NULL) {
--		ksft_perror(EPREFIX "failed to popen nr_hugepages");
--		return -1;
--	}
--
--	if (!fgets(buffer, sizeof(buffer), cmdfile)) {
--		ksft_perror(EPREFIX "failed to read nr_hugepages");
--		pclose(cmdfile);
--		return -1;
--	}
--
--	*nr_hugepages = atoll(buffer);
--	pclose(cmdfile);
--	return 0;
--}
--
- static int create_hugetlbfs_file(struct statfs *file_stat)
- {
- 	int fd;
-@@ -177,20 +150,14 @@ static void test_soft_offline_common(int enable_soft_offline)
- 		ksft_exit_fail_msg("Failed to set enable_soft_offline\n");
- 	}
- 
--	if (read_nr_hugepages(hugepagesize_kb, &nr_hugepages_before) != 0) {
--		close(fd);
--		ksft_exit_fail_msg("Failed to read nr_hugepages\n");
--	}
-+	nr_hugepages_before = hugetlb_nr_default_pages();
- 
- 	ksft_print_msg("Before MADV_SOFT_OFFLINE nr_hugepages=%ld\n",
- 		       nr_hugepages_before);
- 
- 	ret = do_soft_offline(fd, 2 * file_stat.f_bsize, expect_errno);
- 
--	if (read_nr_hugepages(hugepagesize_kb, &nr_hugepages_after) != 0) {
--		close(fd);
--		ksft_exit_fail_msg("Failed to read nr_hugepages\n");
--	}
-+	nr_hugepages_after = hugetlb_nr_default_pages();
- 
- 	ksft_print_msg("After MADV_SOFT_OFFLINE nr_hugepages=%ld\n",
- 		nr_hugepages_after);
-@@ -219,6 +186,10 @@ static void test_soft_offline_common(int enable_soft_offline)
- int main(int argc, char **argv)
- {
+diff --git a/tools/testing/selftests/mm/hugetlb-vmemmap.c b/tools/testing/selftests/mm/hugetlb-vmemmap.c
+index af5786bebfd1..507df78a158d 100644
+--- a/tools/testing/selftests/mm/hugetlb-vmemmap.c
++++ b/tools/testing/selftests/mm/hugetlb-vmemmap.c
+@@ -97,6 +97,9 @@ int main(int argc, char **argv)
  	ksft_print_header();
-+
-+	if (!hugetlb_setup_default(8))
-+		ksft_exit_skip("not enough hugetlb pages\n");
-+
- 	ksft_set_plan(2);
+ 	ksft_set_plan(1);
  
- 	test_soft_offline_common(1);
++	if (!hugetlb_setup_default(1))
++		ksft_exit_skip("Not enough free huge pages\n");
++
+ 	pagesize  = psize();
+ 	maplength = default_huge_page_size();
+ 	if (!maplength)
 -- 
 2.53.0
 
