@@ -1,98 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B786538C42E;
-	Mon,  6 Apr 2026 17:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B791390CB7
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 18:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775494964; cv=none; b=ND8Kzl/hVkk6WTUKr82nmo7K5TCROUcDjoZpKaZ5DtTRCu22ZAub5YFt+ERvBM3ZEaEmjANAdeiK7NU7HjHDnRvw0GbCKvazUQEMbJf01C5iTvT3iR/f/A85+w+CHzKqb92PjrYyu5eQDU91w3dECeuqdF2XRBAsZ/CGY3sQmS8=
+	t=1775498995; cv=none; b=LAlt3ID/GfB+/RfEFcd2kX8+/AqdWxATeDUPTJPa29fKcFs3pcTNBiJwJ1k+TA3Ny3XwQD5Oo3yevsvFWwP7UARyNdbo2QVV4A2tBLpIGxdCZoiIWfZNqTtNVAoXFOr5ZaEnRfUGc+Y4picNXo6EWEW0F6Vf6CivpmqsH6+0is8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775494964; c=relaxed/simple;
-	bh=1OHRxbzs5ZLFp5EmvSXkhp4DU8ALMByenOOrQqA0Nak=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C7XFix1oLdOdPy+rVUpEGuPIYIiIoGH/Eh2JzM6+piDUOaAjnpQuNfFhT4A5KtSe9MqTp4W7Vx+CVO8cc6GzkGebuicUwYH40ZynThEnJsm2tZwZSt4IX23du9qAS+QekbyL3O7DmPQjVe1WClJTvns/ceEOR7vLa/V1DbjK3Xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRekFqRb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775498995; c=relaxed/simple;
+	bh=lACdRiktp8MRpKGUYxGcgD19C0bqmXpZNFtvU5fyNw8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rtOIj7V4SEv2F7NCes0D3RSFsg0xSI05pxV8tXa5j84to0VAv/Yxbl4oRdgjV584AU9UZI+skcSyScVMReUQSsp8A3fOgKBr+1rfgtUYK8xGbHSFIuhiF7OO3rAbG61b4pEdisjgiJFO+iRGVFDhFV7JeYWLQbPA3tO3422xXT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HrKy4i01; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRekFqRb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BBEC4CEF7;
-	Mon,  6 Apr 2026 17:02:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775494964;
-	bh=1OHRxbzs5ZLFp5EmvSXkhp4DU8ALMByenOOrQqA0Nak=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sRekFqRbPP6f7L+v4sJvXmNEf4oA2o5i5iBPaKOPHYUJiSOna11t65QKJpSbdkqQX
-	 QPoAnKM1ILbSaVIooKb+Q12e8gd1Of1/lILNYlkYtzBftWYp4GRvGw0cZ1J5hD0ILj
-	 wRP4ZRTW3fiQ55yll0GdPtwpTkzr/dsyoQNWP3lZ+JIwDbJ+t2edmQFfg+4N4Hyx/3
-	 u1JqOysGAANkjzYWwPQ07JjypMFuiHc+OV4jnvBAWuMjNbV83RwYwEgNFSfP5gtu5x
-	 gaP5nh4YT1vQTZZ8UwCZ0EtGUjLaAwDCxXCmpLuUabpJYXVVySl7m5PCX9G0wcW0+s
-	 H8SxkIYAt7XOg==
-Date: Mon, 6 Apr 2026 18:02:37 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
-	Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 16/53] selftests/mm: protection_keys: use kselftest
- framework
-Message-ID: <8c36ea8d-946e-4c1f-b8c4-f2def693b419@sirena.org.uk>
-References: <20260406141735.2179309-1-rppt@kernel.org>
- <20260406141735.2179309-17-rppt@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HrKy4i01"
+Message-ID: <1c5fd907-f610-48e4-89cc-4040aaef2674@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775498991;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=85/sv/Jd+nnLebgu7yOJ82/6JMUXxVcSgRKO3WW/KJM=;
+	b=HrKy4i01v27KUFcXt/1w2kf+yZsl5MXCFBmMdpuBla2c4B2kFG8UdHSH93UsEojRTPjWIJ
+	RVbUZS7qtBOUTvf1Fe92L2hJ6/CpkB4KYvevqVhozqjWCBottlm/LzMr5DomESqDJznrrj
+	NsvzlhYZFx9aBwmc2y/0M9aHDJw9o8k=
+Date: Mon, 6 Apr 2026 11:09:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="guarDYyngoZXCIIc"
-Content-Disposition: inline
-In-Reply-To: <20260406141735.2179309-17-rppt@kernel.org>
-X-Cookie: Does not include installation.
+Subject: Re: [PATCH v3 02/24] PCI: Add API to track PCI devices preserved
+ across Live Update
+To: David Matlack <dmatlack@google.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal
+ <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+ Askar Safin <safinaskar@gmail.com>, "Borislav Petkov (AMD)" <bp@alien8.de>,
+ Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>,
+ David Rientjes <rientjes@google.com>, Feng Tang
+ <feng.tang@linux.alibaba.com>, Jacob Pan <jacob.pan@linux.microsoft.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+ Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
+ kexec@lists.infradead.org, kvm@vger.kernel.org,
+ Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>,
+ Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>,
+ =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
+ Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ Pranjal Shrivastava <praan@google.com>, Pratyush Yadav
+ <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
+ Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>,
+ Yi Liu <yi.l.liu@intel.com>
+References: <20260323235817.1960573-1-dmatlack@google.com>
+ <20260323235817.1960573-3-dmatlack@google.com>
+ <e3fe7085-1297-47b8-bb17-a48196e8f37f@linux.dev>
+ <CALzav=eyf4XRTi8MfE_GBNSm+tjmfX7=d0M8Aj5Hh0vJn7huew@mail.gmail.com>
+ <c4138f66-edf2-4689-b5fe-16dc4839e9c3@linux.dev>
+ <CALzav=ei_xSfM0MTdPFhGDjNwe3EQ0vHPiEk=vszFX-Xi_KjQw@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <CALzav=ei_xSfM0MTdPFhGDjNwe3EQ0vHPiEk=vszFX-Xi_KjQw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
---guarDYyngoZXCIIc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 4/6/26 9:06 AM, David Matlack wrote:
+> On Sun, Apr 5, 2026 at 9:56 AM Zhu Yanjun <yanjun.zhu@linux.dev> wrote:
+>> 在 2026/4/3 14:58, David Matlack 写道:
+>>> On Thu, Apr 2, 2026 at 2:29 PM Yanjun.Zhu <yanjun.zhu@linux.dev> wrote:
+>>>> On 3/23/26 4:57 PM, David Matlack wrote:
+>>>>> +config PCI_LIVEUPDATE
+>>>>> +     bool "PCI Live Update Support (EXPERIMENTAL)"
+>>>>> +     depends on PCI && LIVEUPDATE
+>>>>> +     help
+>>>>> +       Support for preserving PCI devices across a Live Update. This option
+>>>>> +       should only be enabled by developers working on implementing this
+>>>>> +       support. Once enough support as landed in the kernel, this option
+>>>>> +       will no longer be marked EXPERIMENTAL.
+>>>>> +
+>>>>> +       If unsure, say N.
+>>>> Currently, it only supports 'n' or 'y'. Is it possible to add 'm'
+>>>> (modular support)?
+>>>>
+>>>> This would allow the feature to be built as a kernel module. For
+>>>> development
+>>>>
+>>>> purposes, modularization means we only need to recompile a single module
+>>>>
+>>>> for testing, rather than rebuilding the entire kernel. Compiling a
+>>>> module should
+>>>>
+>>>> be significantly faster than a full kernel build.
+>>> I don't think it is possible for CONFIG_PCI_LIVEUPDATE to support 'm'.
+>>> pci_setup_device() (which is under CONFIG_PCI) needs to call
+>>> pci_liveupdate_setup_device(), and CONFIG_PCI cannot be built as a
+>>> module. This call is necessary so the PCI core knows whether a device
+>>> being enumerated was preserved across a previous Live Update.
+>> After the following changes, the liveupdate.ko can be generated
+>> successfully.
+> Sure but you've broken the feature. Now devices can be probed before
+> liveupdate.ko is loaded and the PCI core will have an incorrect view
 
-On Mon, Apr 06, 2026 at 05:16:58PM +0300, Mike Rapoport wrote:
+ From this perspective, I think it makes sense.
 
-> Adjust dprintf0() printouts to use "#" in the beginning of the line for
-> TAP compatibility and add fflush(stdout) in the end of the test to
-> ensure all the ksft_print_*() messages are really output.
+Zhu Yanjun
 
-We should probably add those flushes to the kselftest helpers (eg, the
-one at the end of the program should be in ksft_finished()) if they're
-needed.  It ought to be redundant though, we do set stdout to be line
-buffered in ksft_print_header() which means that either ksft_finished()
-will print a line and flush or for abort_hooks() it's immediately before
-we call exit() which should do the right thing anyway.  If exit() isn't
-flushing I'd not be optimistic that fflush() is going to work.
-
---guarDYyngoZXCIIc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnT5ywACgkQJNaLcl1U
-h9D5Nwf+MMYxIQWa4F6gozvVcNV6+ePvHrr6/prRVcCkxODrFSS3spHDUaCWC7Bw
-Exj8uoNR58d84g9XdfXgrowyWDgwSr48/RbUNIlB0mn732lkugeTjpJCa8MFIMgG
-rMLTgZzFVkwIge43kxq1CWct1RZqwBDGBZ7MnBXnpzTwABu3vrROZ1Hh2sUiVx2f
-oAbDIr/1M6z5r8goejyhaTS9csE2I36eE/KdRxblWzBZYFXmXQFgLpMSbsnL2OcW
-Z0RQDsDPT44kt/UTG4gaF/k2+awJkDDRmk/3X6H5H/Ieqcyi7Jw5IHZAaw/RGDgw
-eaPqUDkSj/y4Rc6SQgbwELKCP7JXjA==
-=vqHQ
------END PGP SIGNATURE-----
-
---guarDYyngoZXCIIc--
+> of which devices were preserved by the previous kernel.
