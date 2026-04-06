@@ -1,72 +1,71 @@
 Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA15EEBA
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 03:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3953164B7
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 03:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775444690; cv=none; b=qXH+hNcCXDgMhreQ1ldBHsYQcI5PxfDeyRSaBrsNxtYMTbMF4FQK7ihhqsmABmMauYUjn2AW3C1/UfOQ8i6Sc4b1W1P2MdemWigJJeh18gyC2KtTTytsJemwkQNuYZRzx/yJv+Kt5RACNuXU5WkLp0P52HsLSzPqnzLykwEfhNg=
+	t=1775444691; cv=none; b=JNxoYvzn4leswCjyt3/f/XkAZqyGXfw7LFL7vWH6/RLRSRi0i0cHfBK3xVq+YP+AJxHdafxNKuD8438EPAJGLsrearTJ1Fo0oAQGf9niZpQcfJNaBSFz+1fvP9LHZoFlIQz9lUW7/hvTZ4k93A3OuzPR6tOlmW20oeeiEDDEThc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775444690; c=relaxed/simple;
-	bh=os2axCD7KWEJ2zFtPn/3cysdH77SPlIUyOJdroZkBH4=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ZXe1/hqFH21KgF5ykkFwA3quzcgovfPQQI6Pbr8Enyqw379K6zCw27J/axItN3dZDv3awjlhh5SbyhtCdE0VXohCT4N0B9X/qhikrIWObe1a8dBk+ctkuJlXtvXvGZOU/5prxeX54UgmTlkhZw21Z7J1uGzhZJfC6BuIhGdGD5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JOY9PGwL; arc=none smtp.client-ip=74.125.82.74
+	s=arc-20240116; t=1775444691; c=relaxed/simple;
+	bh=EGR2do1QkkfSK4R8lXhdlVvbF/4OvTtLuIBm/ueL2Ig=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=VoqizK4YbDSv+mQa3B4gnAN8LPXAOgSOkk6fbVEr3srNXMcbhzOBfP0pOH/pKFj1nOUIHuQFAkpld/Bfp8npOvVO/e+Aa13YJOkIaBDMsaohQka53900GlJQPmXIgZGQAmNsCqZpdeass4lF/haaMZzxWLj5hQyeeVPHqFv0sUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rangBls/; arc=none smtp.client-ip=74.125.82.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JOY9PGwL"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-12c01e42fe2so11276549c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Apr 2026 20:04:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rangBls/"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-12c06d061abso2231896c88.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 05 Apr 2026 20:04:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775444688; x=1776049488; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RKvbBGoqDQ/nccvfp7In4m/ADJBo3JF7iAojH/CusVY=;
-        b=JOY9PGwLh/QQ6c2K5vwhTgMaN/1l9rXOQ3dKPy0KZuzY6GWry/0Sg5X83pIeFQOvyQ
-         pWVTHpNc4XGg5CnNcb6V35NdQSYMZeT1iay5D9FpvXYndZoEnigBRDHWXKZnbJtyGvep
-         JndqCWrecLHkTEcd3u+Qnue0nPFtGsQ4eXFKJek+525GuMpUJWAsEoFlg17E7oCy0MPE
-         4GwqX+suqVY40CSZEPF0yu5JB4gDpY7jA9w6enWwljdCDtMbaNtWNN+s4WNkYE9jxQ8P
-         JIGERL+cgO5f4bm+sodAIHDs50ZpQPu6AZhKl8sO+GpdQGEUUjqULjGKPYH6/WibMU7P
-         pEQA==
+        d=google.com; s=20251104; t=1775444690; x=1776049490; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jVkIJQHKJwN6whJ0IODUma8G+uAZ5mIZh/A/X8+gNmk=;
+        b=rangBls/zkVxKudmcOheDWMG+oVAuDkWIsmD9zPiFtrrFTJ5TfT9ITIMfYUdU9Qk3H
+         2yem4So/7UfaVilMCMqllfrkKFAUJ5pYqGsqF3Hg44LIS8LtzIw2G6LbO4h0sRwj0kK8
+         XbyvfCVQ/9bvGQDBk6QgIrdCnJbcKkxl7yIho7sHs1T0MbVpZ+fBM+cJCUmxKJ9ZbGHD
+         QNWOQXHn9Sduu+daEBIyHSeKvb60PchfBEJXxnaTAm1U3S/4bDKO5yuReQOV6Xw26Wmd
+         JWJ3T4KqWH3T/NZhKv1ksWxKGkzu3QFtVbiAdsf/ISerTQGL/8m8TMWAmB1mMkPYKlwU
+         3kcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775444688; x=1776049488;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RKvbBGoqDQ/nccvfp7In4m/ADJBo3JF7iAojH/CusVY=;
-        b=CaCC5DiBRJ9YkQrFmzraYhcHY49JoW2MM7FTP8DTQMUenfaMTg/0WvV/V6nDYs982X
-         ICUpvqt7K8Iz8RiK/4+dCtaQZD/TFNaMDdoM+0bdICXBQsN0z5AbhjLUDjk6Y5nIuPI5
-         MwPQ6ueRJRZqhMaI3+IlfnVy/T5XvFMV7YFWJF4t++mZcXHbKgLxeQkWXC5NKjk0gT1M
-         dBSDbf61ki9I/4+ftMqqvCLJ/0fhU/j6icFQup0Jmc+MKz58rmutsmwdqsy5eKjKQ8bJ
-         M2sOMxS3fKpba6Tnpl6f8d3bEOctL7t6W4gSKwPjhA/m/cZYw3GC8ZNFqd8YEPZ34IRZ
-         YHbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbtF4bjhODzbdSM0dTsoxmJ1QJXTKQGLTRbEGFv8AKKyq4QwXAC3UAcRXVlKO+gTJSd0NawW8klchiwNewMDM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzca6hZEKWaoHCTrszG7LrSSXQf9jZQtJdYeFB9p+xzQx8krbhL
-	ajetWQ0VTwOBIqFbVpvOjW1FkISDH2ewmx22ODNwawBfKzScIQDFgzaaY86IjI4Y1NRED2Znd/4
-	kA/IHx62UOqEYAgiShF3m/A==
-X-Received: from dleb5-n1.prod.google.com ([2002:a05:701b:4245:10b0:128:d185:c6ff])
+        d=1e100.net; s=20251104; t=1775444690; x=1776049490;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jVkIJQHKJwN6whJ0IODUma8G+uAZ5mIZh/A/X8+gNmk=;
+        b=PleU9m0ztV/S3gAYXwvtZMjpS8wgJ6qDJP3IPnEny/+jESl/dxPYvYagGFXcJfHT3+
+         ixSimmOtHyd0z8WmgRKXLCy/eueBwvwRI/Y4RmYAa+JSl7x0WgtER5G35d8DcNQDChTS
+         qD8hXQaH+FKqGEiQ6NmZPxOsdGg04caDLzQt60sTtiH0FVmZxtxWvN/tt88mlNtbWXvc
+         JO/rEtswFLJ1FpyKE9xY5Zmxra0aH8T78Ff9ySbssb+djc5ub79CJLnm77IgSJXKJUlF
+         yvbaVtSHNDn1npvHnSYLmRZgVkz+5mGyryzl/KicoPktAxdejhmyk85236+9DFLUJzUx
+         BHHg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6KQ36p9G3tjwi6TkuT41N9TTehZe4IhGC5g85F6uVSJTMzRvlkE/1txiQcT2N4wPXC+JSDojjBKyg4MJ0dng=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxmXPdwbUnEDh++LOPHYqpEu4/vUqL+VTZblHm55JQeXzD2rVa
+	R32XHmnIPnP4RI4dr/46y1U6CLb2wPWnAqanqqNkZA1usd3zhuIPQMtnk21lQVZqmUiy4kcPHfh
+	okoSTyUgJCr55YkEBmuZOqA==
+X-Received: from dlaj19.prod.google.com ([2002:a05:701b:2813:b0:12c:71e:5ab3])
  (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:61f:b0:128:cedb:33ba with SMTP id a92af1059eb24-12bfb6f506amr5475335c88.10.1775444687791;
- Sun, 05 Apr 2026 20:04:47 -0700 (PDT)
-Date: Mon, 06 Apr 2026 03:03:36 +0000
+ 2002:a05:7022:41a3:b0:12b:f616:1a1a with SMTP id a92af1059eb24-12bfb6ed5d7mr4563924c88.5.1775444689562;
+ Sun, 05 Apr 2026 20:04:49 -0700 (PDT)
+Date: Mon, 06 Apr 2026 03:03:37 +0000
+In-Reply-To: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAIgi02kC/4XNwQrCMBAE0F+RnI2ku62tnvwP8dAmm7qgiaQhV
- Er/3dBTRYrHYZg3kxgoMA3ivJtEoMQDe5dDtd8JfW9dT5JNzgIUHFWpChmpfbLrpQmcKEh2kYJ
- rH7JBC1apujTHRuT1K5DlcZGvwlGUjsYobrm58xB9eC+XCZb+r55AKmkbpQs4FTXU3aX3vn/QQ fvngiZcQ7ANYYao0daQxq7S8AOVawi3oTJDBhWCRdQtVF/QPM8fGkdw+1sBAAA=
-X-Change-Id: 20260401-teaming-driver-internal-83f2f0074d68
+References: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
 X-Developer-Key: i=marcharvey@google.com; a=ed25519; pk=OzOeciadbfF5Bug/4/hyEAwfrruSY4tn0Q0LocyYUL0=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775444686; l=3844;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775444686; l=3743;
  i=marcharvey@google.com; s=20260401; h=from:subject:message-id;
- bh=os2axCD7KWEJ2zFtPn/3cysdH77SPlIUyOJdroZkBH4=; b=6qoJqycbWTs4TwEpZUEsidMSsle0xK00/QUiJRc7vpUPo0GazxeHHdwxIc0C/TS+IwgHrh9tJ
- CVOmgEjSDKyDKddy7eyOUcAcAGVKwC2ARFfGTjsGNCBlLoXiWlPTQ+1
+ bh=EGR2do1QkkfSK4R8lXhdlVvbF/4OvTtLuIBm/ueL2Ig=; b=kBZdP1vgRBEMKFD8Ql/D+QTthUFmGyt+s2uF3pIAJ5/2cWekyzpy+8SK+gReSRDnnnCkwHDBH
+ AOcmnLrGwKqAXa8n7ulyv93pMGz14j+kgAKiDVIIAxwCi9wQydtZHXE
 X-Mailer: b4 0.14.3
-Message-ID: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
-Subject: [PATCH net-next v5 00/10] Decouple receive and transmit enablement in
- team driver
+Message-ID: <20260406-teaming-driver-internal-v5-1-e8a3f348a1c5@google.com>
+Subject: [PATCH net-next v5 01/10] net: team: Annotate reads and writes for
+ mixed lock accessed values
 From: Marc Harvey <marcharvey@google.com>
 To: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -76,83 +75,111 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, Marc Harvey <marcharvey@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Allow independent control over receive and transmit enablement states
-for aggregated ports in the team driver.
+The team_port's "index" and the team's "en_port_count" are read in
+the hot transmit path, but are only written to when holding the rtnl
+lock.
 
-The motivation is that IEE 802.3ad LACP "independent control" can't
-be implemented for the team driver currently. This was added to the
-bonding driver in commit 240fd405528b ("bonding: Add independent
-control state machine").
-
-This series also has a few patches that add tests to show that the old
-coupled enablement still works and that the new decoupled enablement
-works as intended (4, 5, and 10).
-
-There are three patches with small fixes as well, with the goal of
-making the final decoupling patch clearer (1, 2, and 3).
+Use READ_ONCE() for all lockless reads of these values, and use
+WRITE_ONCE() for all writes.
 
 Signed-off-by: Marc Harvey <marcharvey@google.com>
 ---
 Changes in v5:
-- Change teamd activebackup selftest in patch 5 to try graceful teamd
-  teardown before using sigkill.
-- Make the teamd activebackup selftest in patch 5 delete leftover
-  teamd files during teardown.
-- Reorder function calls in team_port_enable function in patch 7,
-  since the enablement behavior shouldn't change.
-- Make selftests use tcpdump instead of checking rx counters.
-- Fix minor typos in patch 10.
-- Link to v4: https://lore.kernel.org/r/20260403-teaming-driver-internal-v4-0-d3032f33ca25@google.com
+- None
 
 Changes in v4:
-- Split the large v3 patch "net: team: Decouple rx and tx enablement
-  in the team driver" into 4 smaller patches.
-- Link to v3: https://lore.kernel.org/r/20260402-teaming-driver-internal-v3-0-e8cfdec3b5c2@google.com
+- None
 
 Changes in v3:
-- Patch 5: In test cleanup, kill teamd to fix timeout.
-- Link to v2: https://lore.kernel.org/r/20260401-teaming-driver-internal-v2-0-f80c1291727b@google.com
+- None
 
 Changes in v2:
-- Patch 4 and 5: Fix shellcheck errors and warnings, use iperf3
-  instead of netcat+pv, fix dependency checking.
-- Patch 7: Fix shellcheck errors and warnings, fix dependency
-  checking.
-- Link to v1: https://lore.kernel.org/all/20260331053353.2504254-1-marcharvey@google.com/
-
+- None
 ---
-Marc Harvey (10):
-      net: team: Annotate reads and writes for mixed lock accessed values
-      net: team: Remove unused team_mode_op, port_enabled
-      net: team: Rename port_disabled team mode op to port_tx_disabled
-      selftests: net: Add tests for failover of team-aggregated ports
-      selftests: net: Add test for enablement of ports with teamd
-      net: team: Rename enablement functions and struct members to tx
-      net: team: Track rx enablement separately from tx enablement
-      net: team: Add new rx_enabled team port option
-      net: team: Add new tx_enabled team port option
-      selftests: net: Add tests for team driver decoupled tx and rx control
+ drivers/net/team/team_core.c        | 11 ++++++-----
+ drivers/net/team/team_mode_random.c |  2 +-
+ include/linux/if_team.h             |  4 ++--
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
- drivers/net/team/team_core.c                       | 237 +++++++++++++++----
- drivers/net/team/team_mode_loadbalance.c           |   8 +-
- drivers/net/team/team_mode_random.c                |   4 +-
- drivers/net/team/team_mode_roundrobin.c            |   2 +-
- include/linux/if_team.h                            |  63 ++++--
- tools/testing/selftests/drivers/net/team/Makefile  |   4 +
- tools/testing/selftests/drivers/net/team/config    |   4 +
- .../drivers/net/team/decoupled_enablement.sh       | 249 ++++++++++++++++++++
- .../testing/selftests/drivers/net/team/options.sh  |  99 +++++++-
- .../testing/selftests/drivers/net/team/team_lib.sh | 172 ++++++++++++++
- .../drivers/net/team/teamd_activebackup.sh         | 251 +++++++++++++++++++++
- .../drivers/net/team/transmit_failover.sh          | 158 +++++++++++++
- tools/testing/selftests/net/forwarding/lib.sh      |   7 +-
- tools/testing/selftests/net/lib.sh                 |  13 ++
- 14 files changed, 1199 insertions(+), 72 deletions(-)
----
-base-commit: 3741f8fa004bf598cd5032b0ff240984332d6f05
-change-id: 20260401-teaming-driver-internal-83f2f0074d68
+diff --git a/drivers/net/team/team_core.c b/drivers/net/team/team_core.c
+index 566a5d102c23..becd066279a6 100644
+--- a/drivers/net/team/team_core.c
++++ b/drivers/net/team/team_core.c
+@@ -938,7 +938,8 @@ static void team_port_enable(struct team *team,
+ {
+ 	if (team_port_enabled(port))
+ 		return;
+-	port->index = team->en_port_count++;
++	WRITE_ONCE(port->index, team->en_port_count);
++	WRITE_ONCE(team->en_port_count, team->en_port_count + 1);
+ 	hlist_add_head_rcu(&port->hlist,
+ 			   team_port_index_hash(team, port->index));
+ 	team_adjust_ops(team);
+@@ -958,7 +959,7 @@ static void __reconstruct_port_hlist(struct team *team, int rm_index)
+ 	for (i = rm_index + 1; i < team->en_port_count; i++) {
+ 		port = team_get_port_by_index(team, i);
+ 		hlist_del_rcu(&port->hlist);
+-		port->index--;
++		WRITE_ONCE(port->index, port->index - 1);
+ 		hlist_add_head_rcu(&port->hlist,
+ 				   team_port_index_hash(team, port->index));
+ 	}
+@@ -973,8 +974,8 @@ static void team_port_disable(struct team *team,
+ 		team->ops.port_disabled(team, port);
+ 	hlist_del_rcu(&port->hlist);
+ 	__reconstruct_port_hlist(team, port->index);
+-	port->index = -1;
+-	team->en_port_count--;
++	WRITE_ONCE(port->index, -1);
++	WRITE_ONCE(team->en_port_count, team->en_port_count - 1);
+ 	team_queue_override_port_del(team, port);
+ 	team_adjust_ops(team);
+ 	team_lower_state_changed(port);
+@@ -1245,7 +1246,7 @@ static int team_port_add(struct team *team, struct net_device *port_dev,
+ 		netif_addr_unlock_bh(dev);
+ 	}
+ 
+-	port->index = -1;
++	WRITE_ONCE(port->index, -1);
+ 	list_add_tail_rcu(&port->list, &team->port_list);
+ 	team_port_enable(team, port);
+ 	netdev_compute_master_upper_features(dev, true);
+diff --git a/drivers/net/team/team_mode_random.c b/drivers/net/team/team_mode_random.c
+index 53d0ce34b8ce..169a7bc865b2 100644
+--- a/drivers/net/team/team_mode_random.c
++++ b/drivers/net/team/team_mode_random.c
+@@ -16,7 +16,7 @@ static bool rnd_transmit(struct team *team, struct sk_buff *skb)
+ 	struct team_port *port;
+ 	int port_index;
+ 
+-	port_index = get_random_u32_below(team->en_port_count);
++	port_index = get_random_u32_below(READ_ONCE(team->en_port_count));
+ 	port = team_get_port_by_index_rcu(team, port_index);
+ 	if (unlikely(!port))
+ 		goto drop;
+diff --git a/include/linux/if_team.h b/include/linux/if_team.h
+index ccb5327de26d..06f4d7400c1e 100644
+--- a/include/linux/if_team.h
++++ b/include/linux/if_team.h
+@@ -77,7 +77,7 @@ static inline struct team_port *team_port_get_rcu(const struct net_device *dev)
+ 
+ static inline bool team_port_enabled(struct team_port *port)
+ {
+-	return port->index != -1;
++	return READ_ONCE(port->index) != -1;
+ }
+ 
+ static inline bool team_port_txable(struct team_port *port)
+@@ -272,7 +272,7 @@ static inline struct team_port *team_get_port_by_index_rcu(struct team *team,
+ 	struct hlist_head *head = team_port_index_hash(team, port_index);
+ 
+ 	hlist_for_each_entry_rcu(port, head, hlist)
+-		if (port->index == port_index)
++		if (READ_ONCE(port->index) == port_index)
+ 			return port;
+ 	return NULL;
+ }
 
-Best regards,
 -- 
-Marc Harvey <marcharvey@google.com>
+2.53.0.1185.g05d4b7b318-goog
 
