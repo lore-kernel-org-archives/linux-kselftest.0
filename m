@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7C3383C8C;
-	Mon,  6 Apr 2026 14:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EBC4382379;
+	Mon,  6 Apr 2026 14:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775485344; cv=none; b=WSDvXnxHX1awV8BzaUOGVH1KMx9EN7K30NI0X/1DT9d5otbCfHz/2uDjG/VnUZxS4xnk3AB2/3XwyjNKE3dAkIFrqPNnXtCLrjEq6kEX1KQ/q0ZxG2jryuuMBIbflGY5VeR1M7YTdVrjIaQ1bJ13GzrozaslxRTKahvkKpAKwcs=
+	t=1775485350; cv=none; b=bJBit7SHGKupCbHR5zyaK6Ne2oIKyU/8Pu/hlQWUjygaXygp0YUl/m5bFxf0POq/gPFaJK+o8WC5tR/Nwk2gdzVlr9i4ArONrNiGjxzLR3CQ32VFoJw2Na5r9oeBc7KnvqhRneLYp4+CWZeOTotODt5Q0KuOCPjt/bVSxBBLGSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775485344; c=relaxed/simple;
-	bh=C8Qz87BGrLBhc4P4E9wehTmUZkE5iKzjerVbkLBntAU=;
+	s=arc-20240116; t=1775485350; c=relaxed/simple;
+	bh=HtpaUkBbB7ijuw6rctcgEdxPGwj4VxmBP6AvOyp0uHE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=moGA6URdYvtykctsCb5o7fUoJXsZY/YjtnarZ/i1+ObZMrMSOWh70h/23D2NIQuB6cTxi33qJtBzqBslfyIi6s9yxV7c2Bd9C8AtPo8PgYgPHgW1WhcPL2gEGqE08868qZ0u2A6l0tiakpRV1KnYT6VtdfwzDqfRq5sxQ3DsTB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+f2wWK1; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ggDM1fQDl7IZV2866sCZehzRGdxA3XMzU7YQZDeeAnkJqtIk9aBTzMMYPNGIMikIMdhfRM6alFwYhFX907xuez/zMK89C/zEwxu8fIcayEUFhyoQUfM7VzSVPt8lzH7v+o1dwcapALKuPmZ4pwvNMaY/KW7hK3+xa+X22jMBaXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TF6tEmT4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+f2wWK1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC790C4CEF7;
-	Mon,  6 Apr 2026 14:22:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TF6tEmT4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C65C4CEF7;
+	Mon,  6 Apr 2026 14:22:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775485344;
-	bh=C8Qz87BGrLBhc4P4E9wehTmUZkE5iKzjerVbkLBntAU=;
+	s=k20201202; t=1775485349;
+	bh=HtpaUkBbB7ijuw6rctcgEdxPGwj4VxmBP6AvOyp0uHE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R+f2wWK11uSqkm9w/gfOoe4ZmrpHmrkIcM1nMH2cBjS9dSHUYp+bLIQJ/Tbl8vS4q
-	 I5EwAxRWOxcIYqXLtvkMw5zFRiDiugCF9S5eFV7eqRGcMfuBBk4qTA4scRyNVDtZdV
-	 otJ46/4U20iAcoCWzjRkv97RyFLYbyqJkRglCuI2PUO9BckpRA4QBpFMUG40/670VB
-	 xWlvyefHf3tLItwxLBIz8oTgKU7jNhkwHB0GYNyxnC+ZCkIez7SI+KnHiclZBFrKMt
-	 +9Gd/J8NUtQeORxVoxKNj1yD5PKwV0d3JP7w8xDE3v9mRqUyu7gLb1t0IWDuzuQGHT
-	 jPMFiLjWpYReA==
+	b=TF6tEmT40RH2kGrtuZAt24+jBc0o5j7vcOmyMvGR9T0mxP6K0eLAhbyCN4X1nA6OS
+	 nEEoZvaemSaPAWM21Nkl3+WNZgmNvC1gwpBpv8490Wbh5cbb+e+bgvUKbnAR+VkhOl
+	 3ux38WwEk7d2SCxDEsK9QwK+UQ8Cm603XgTOr6IdWpAjkKNhLxt2R5Kz7B01lCwtrX
+	 UBtcM6Irm+1F7denqZNEghot7G3mjLTJ446YuOk0kYO44tCBZJ7ygblrUDFeDGbZcU
+	 9b2ShSGbfziy7ItIYBg93yF/2oSu8EfLkHbR2VmLrQ4AkgQpvGi6/A7aXHvwMpcyJL
+	 +y5ajsMM7FeMg==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -51,9 +51,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 48/53] selftests/mm: uffd-unit-tests: add setup of HugeTLB pages
-Date: Mon,  6 Apr 2026 17:17:30 +0300
-Message-ID: <20260406141735.2179309-49-rppt@kernel.org>
+Subject: [PATCH 49/53] selftests/mm: uffd-wp-mremap: add setup of HugeTLB pages
+Date: Mon,  6 Apr 2026 17:17:31 +0300
+Message-ID: <20260406141735.2179309-50-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260406141735.2179309-1-rppt@kernel.org>
 References: <20260406141735.2179309-1-rppt@kernel.org>
@@ -67,102 +67,39 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-uffd-unit-tests skips HugeTLB tests if there are no free huge pages
+uffd-wp-remap skips HugeTLB tests if there are no free huge pages
 prepared by a wrapper script.
 
 Add setup of HugeTLB pages to the test and make sure that the original
 settings are restored on the test exit.
 
-Replace exit() calls with _exit() to avoid restoring HugeTLB settings in
-the middle of test.
-
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/uffd-unit-tests.c | 31 +++++++++++++++++---
- 1 file changed, 27 insertions(+), 4 deletions(-)
+ tools/testing/selftests/mm/uffd-wp-mremap.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 1a33db281f8a..20e1829db91f 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -305,7 +305,7 @@ static int pagemap_test_fork(uffd_global_test_opts_t *gopts, bool with_event, bo
- 		if (test_pin)
- 			unpin_pages(&args);
- 		/* Succeed */
--		exit(0);
-+		_exit(0);
- 	}
- 	waitpid(child, &result, 0);
+diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
+index 9d67b11c2f28..f63fe02f404f 100644
+--- a/tools/testing/selftests/mm/uffd-wp-mremap.c
++++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
+@@ -336,14 +336,14 @@ int main(int argc, char **argv)
+ 	struct thp_settings settings;
+ 	int i, j, plan = 0;
  
-@@ -773,7 +773,7 @@ static void uffd_sigbus_test_common(uffd_global_test_opts_t *gopts, bool wp)
- 		err("fork");
- 
- 	if (!pid)
--		exit(faulting_process(gopts, 2, wp));
-+		_exit(faulting_process(gopts, 2, wp));
- 
- 	waitpid(pid, &err, 0);
- 	if (err)
-@@ -827,7 +827,7 @@ static void uffd_events_test_common(uffd_global_test_opts_t *gopts, bool wp)
- 		err("fork");
- 
- 	if (!pid)
--		exit(faulting_process(gopts, 0, wp));
-+		_exit(faulting_process(gopts, 0, wp));
- 
- 	waitpid(pid, &err, 0);
- 	if (err)
-@@ -1706,11 +1706,32 @@ static int uffd_count_tests(int n_tests, int n_mems, const char *test_filter)
- 	return count;
- }
- 
-+static unsigned long uffd_setup_hugetlb(void)
-+{
-+	unsigned long nr_hugepages, hp_size;
++	hugepage_save_settings(true, true);
 +
-+	hugetlb_save_settings();
-+	hp_size = default_huge_page_size();
-+
-+	if (!hp_size)
-+		return 0;
-+
-+	/* need twice UFFD_TEST_MEM_SIZE, one for src area and one for dst */
-+	nr_hugepages = 2 * MAX(UFFD_TEST_MEM_SIZE, hp_size * 2) / hp_size;
-+	hugetlb_set_nr_default_pages(nr_hugepages);
-+
-+	if (hugetlb_free_default_pages() < nr_hugepages)
-+		return 0;
-+
-+	return hp_size;
-+}
-+
- int main(int argc, char *argv[])
- {
- 	int n_tests = sizeof(uffd_tests) / sizeof(uffd_test_case_t);
- 	int n_mems = sizeof(mem_types) / sizeof(mem_type_t);
- 	const char *test_filter = NULL;
-+	unsigned long hugepage_size;
- 	bool list_only = false;
- 	uffd_test_case_t *test;
- 	mem_type_t *mem_type;
-@@ -1745,6 +1766,8 @@ int main(int argc, char *argv[])
- 		return KSFT_PASS;
- 	}
+ 	pagesize = getpagesize();
+ 	nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
+-	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
+-						    ARRAY_SIZE(hugetlbsizes));
++	nr_hugetlbsizes = hugetlb_setup(1, hugetlbsizes, ARRAY_SIZE(hugetlbsizes));
  
-+	hugepage_size = uffd_setup_hugetlb();
-+
- 	ksft_print_header();
- 	ksft_set_plan(uffd_count_tests(n_tests, n_mems, test_filter));
- 
-@@ -1771,7 +1794,7 @@ int main(int argc, char *argv[])
- 			uffd_test_case_ops = test->test_case_ops;
- 
- 			if (mem_type->mem_flag & (MEM_HUGETLB_PRIVATE | MEM_HUGETLB)) {
--				gopts.page_size = default_huge_page_size();
-+				gopts.page_size = hugepage_size;
- 				if (gopts.page_size == 0) {
- 					uffd_test_skip("huge page size is 0, feature missing?");
- 					continue;
+ 	/* If THP is supported, save THP settings and initially disable THP. */
+ 	if (nr_thpsizes) {
+-		thp_save_settings();
+ 		thp_read_settings(&settings);
+ 		for (i = 0; i < NR_ORDERS; i++) {
+ 			settings.hugepages[i].enabled = THP_NEVER;
 -- 
 2.53.0
 
