@@ -1,119 +1,100 @@
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EB435F163
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 22:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EDC30C608
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 23:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775513430; cv=none; b=QiD9jFNwah4J3E40iptcqMTOAvUB4WokIKWHyX19dieGoKukYVhOKUWmaRAJwkAKWAZhW5oGAhdk3tS4fVK39YPcNOk8yTHh2XhOQY1m3Wn2zAHqud2Otc0wAYV3upY9daugyTQgC13apMhepG2mULboFneGJ8XvguWqjA8lM9c=
+	t=1775516415; cv=none; b=G6kPSBkkrf53Xw5ckwu6w5v9xZU/eRIcM2x5c9oxkMg0lLnNwsNGOPI2BnXqWzn4xzcR/3lXFA7G0M5IKUgguTE6rSHNU1AYYzwHYk6f2A/7v8QTw7Vj5XwSXSMmwhr0/Rq7W30kpxOjeHSKZyFDZRg/6+YIQ5NWTJHp3tyV35E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775513430; c=relaxed/simple;
-	bh=jUJx2dHLtWVAhCD/NwIlBJWlN7aB3C76s4JEYE9cZNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L1W7wCvcGscELnQZ5lxJt5Zahm0fuU2TgbbGPdJu09rOGgoE0c7ciFJdMuafEyTZ43SVm4OdhLF7BzP3XfFS7vNWR3AwgEnV1zSjZFl1yK11c26IiEWo9T6ESYYk1wfbgq27j+7kxh2id7IlIZrzrabkvKrZ/CUGjkYau8qPMcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=Ow/9r4f1; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1775516415; c=relaxed/simple;
+	bh=SU7cd0cbc63KLc5D6MlfVPj7f1aX25jUYDpVEVQjE6M=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Rp/didipZa48OrpwJwb05vDWIGHfitKcprC6njtC1FMMoJqTRZ71HjFt0S9QqsSLCJNTv4dhPuOB+FxnuEwVfVST8h12/CNdE8ooyrldT1FvpJaZOC0oYJ/6kQ0ziqcvyOBYEM5PiDvENEBrXYRPvnP7PwBtiqONiScFEAOO2/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R0Uw3IiO; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="Ow/9r4f1"
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-50d876329bbso21299751cf.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 15:10:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R0Uw3IiO"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82c7ec40f92so5958243b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 16:00:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1775513428; x=1776118228; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jUJx2dHLtWVAhCD/NwIlBJWlN7aB3C76s4JEYE9cZNI=;
-        b=Ow/9r4f1wgV5ET9ewP1WS/ClATq8ocs2fqttQKEix70hzKQxvjNyvcrhWNN2zeLGdu
-         H0BjKhwg17KhhpL7XoVjoojKW5iGKOH3Tq9u/r4uzrNvz1KBkE/Wh9TaOFNZQTPuQSTT
-         fEscO83j5mgVedCoe3sVtHjXZy193lcLl1OXmkU8O9NomBOwVUonmm7nyeqRi3B41+vZ
-         D4QsfV1n6EJpsGwAysjkwnttiwMMh+cq4J7m0uA7E0VhwLOidbssyV7uekxdsocdqtgD
-         Myq8QFKgcgdBWpvyKJJBGRRvDShobEoDWkgbCbLYcQm4CMzhp59OGjGyf+Wz7LJNRABB
-         Mj/Q==
+        d=google.com; s=20251104; t=1775516414; x=1776121214; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LIGAhI9t8Vs7faC/bm2p2nXCXAiMZcEtLu5XGGyDRdQ=;
+        b=R0Uw3IiOqYb9Vti+fkCI3gmJzJdQbnUW+sc4pnMiUgamAD2BOpvJG56RCMcRGp6K9J
+         3gkUi3HaIb35pVbEfo1kQFmR9Ck8bc3eQ6mhjh/PC9shOE5sAn0ipbLtBkfQPMLvMy/t
+         tjGiRFIrblBlRoo4VcrB7XKZs3vLGJczQ8h9BDJZQsfY/ZbQtUXomibHy7RbCmSKSxM6
+         vgmBvBJzkJDEZO2JU4odumOYf+G+jH8EbRF8gCvqrExw7sjHAYyVNubB4wpWKAHXsfAO
+         v2Fs3IYORmnGA4/08ZHpJrCezHdpM8phpCzBnyU6NsmwgpC9VJbjHBUmxB/5llqYu9Ti
+         0qpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775513428; x=1776118228;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jUJx2dHLtWVAhCD/NwIlBJWlN7aB3C76s4JEYE9cZNI=;
-        b=bvzmgH3+LPbXjnF7BApuWpDfMeTWx/7w/W9cNxVAdtqLcwe7X+25QTM/IuU5GvA/Os
-         A5NHhEdtRrlDepxsB7Yyrv5/vBF6W/usUF4wTkT/X9MsyQA38iotsI9ZISS7tgYAu0s/
-         +DL5+6rVlsOW0zXtOn0/OQs6RVgES+VeuE9HAnloXzWn8ctQ6lMjdeySVUO6BxHpd45e
-         s3ppEuOE5RHo8CjOmWek3WuU7dvSzW09fn1cD6HFm/FdZNzQxs0rihmSIG9a0qz8Um72
-         8iTNu2HtjyKv05IdRdXgQ1ZfpgcPD3CPMsJj3CckY+oueHzT+tKVBFsnOrJBVB3udmyB
-         40Kg==
-X-Forwarded-Encrypted: i=1; AJvYcCUfkn3AP2uWkR6h0hFHNMXN5ft0yxjM5/j5hGAA/80diRMK8r7GE05HsFfjPv/e12op4vyPVA96aB0zbT13h7Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtCPlmEujtE5rPgREIDKW3OoaxBZYA2blciR8m+TO5BqtoHC3G
-	5G9gcCC4kYmXoolGDJPOUNKQdgaB8LfwCwZJt5Pc6cwjjfi6tM7TNTTfCARaekRH7zU=
-X-Gm-Gg: AeBDiev/jvUHD/B29t5dKzwL5ocLa45yw35kkMViBRASBhsmSjSEYvSxKqam1afqKBt
-	jqdwAwRwp6oAAYqF0UAt4ev/1uit2l5TOaVmgt8+3i6k4drp7a0R32qWt/JuitSIGTPPElud213
-	cGMY9Lkg9/7kBSV/ZgMs9DJdNaaMLvsLxDqoZoC3mENWHmWWDqBHrYQqi61XmDmuKC7btY4J9Ep
-	11U2IdNWAbtPso75bSIiZLESTqUvN6ouShDoAgafPMsULcqNiATXloPGB7xLsTX3th6/3ec1gwI
-	z2UdCN6HAMBfOqWBPI6M1vpCoQpvd6KKKwm1/6SiU4auZVyjsGjk7httRjhbSWenlW44TmtGVFc
-	KjgZseCEIng996eCw7Vk135BTVSLIiwHZoqiy3zsntQhl0eW34qZgxAmD9Xs5lCaVY/Sx8zim5u
-	XHrT/ztB4oQEJwt2nEcodpMByISOEnKfM+xVxj1h07steQpCEx1aQfO4z3geuGW8CurNN5ww==
-X-Received: by 2002:a05:622a:418b:b0:50d:89f0:9a00 with SMTP id d75a77b69052e-50d89f142e1mr93804951cf.42.1775513427598;
-        Mon, 06 Apr 2026 15:10:27 -0700 (PDT)
-Received: from ziepe.ca (mctnnbsa70w-159-2-73-22.dhcp-dynamic.fibreop.nb.bellaliant.net. [159.2.73.22])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50d4b93dd10sm122148721cf.7.2026.04.06.15.10.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 15:10:26 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1w9s9J-0000000E4pT-1Nq1;
-	Mon, 06 Apr 2026 19:10:25 -0300
-Date: Mon, 6 Apr 2026 19:10:25 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Dan Williams <djbw@kernel.org>
-Cc: mhonap@nvidia.com, alwilliamson@nvidia.com, jonathan.cameron@huawei.com,
-	dave.jiang@intel.com, alejandro.lucero-palau@amd.com,
-	dave@stgolabs.net, alison.schofield@intel.com,
-	vishal.l.verma@intel.com, ira.weiny@intel.com, dmatlack@google.com,
-	shuah@kernel.org, yishaih@nvidia.com, skolothumtho@nvidia.com,
-	kevin.tian@intel.com, ankita@nvidia.com, vsethi@nvidia.com,
-	cjia@nvidia.com, targupta@nvidia.com, zhiw@nvidia.com,
-	kjaju@nvidia.com, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	kvm@vger.kernel.org
-Subject: Re: [PATCH v2 16/20] vfio/cxl: Register regions with VFIO layer
-Message-ID: <20260406221025.GH2551565@ziepe.ca>
-References: <20260401143917.108413-1-mhonap@nvidia.com>
- <20260401143917.108413-17-mhonap@nvidia.com>
- <69d0169115c06_1b0cc6100a5@dwillia2-mobl4.notmuch>
- <20260404185330.GD2551565@ziepe.ca>
- <69d1685538f45_556821002f@djbw-dev.notmuch>
+        d=1e100.net; s=20251104; t=1775516414; x=1776121214;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LIGAhI9t8Vs7faC/bm2p2nXCXAiMZcEtLu5XGGyDRdQ=;
+        b=kd3KEU7SJdbA+nRUqymbdEzITGrUPQIvhWmqzWvd8wIAOxAyDw1rBYsZv1+3LaqBJz
+         eUKrtxVxf8NegopNisVVmUzN+/7rsvjzHW7MDLTyi8VoJbyHqqkDDNg8FZRWOc2IA41D
+         MJHpYCUD59ECVjVYC0sA58TJ+YyfO3mkc3XD84MJUwHMVEhWcZfop4LfS1vwhUn9cmIz
+         v6m11IW7iVKpRD/UHRWMSUsDhjewSXU4r0hctNW1P8URJ8cdY1brNCbR9yR+7v7AOtrz
+         94IfH3RxogD4vQ3FNNqrPfEFHIQs12Kg6/RzbrOjM5iK9VKbY3zFy0/pwAGJWrUGFafN
+         82Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCU/lbYu6AQJHHLv1BdCwISwur9c09kSl8PSFiaWvy4WCdj5iOmNXu2xp9iQS9LxNhzPZlQSh59P216O37wn6rE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBTJtA1S7oxmTU7/dLR33LuMqoINwsi8DuFTueshh7ctuMsTxH
+	nZPA5k8gJNo0VIz74JprvIzoAA4/O9xPOyL8NJXdxOdJgowE7lh6UF/+BR5KpMJjrI0KqmuYCKu
+	bxqi66Q==
+X-Received: from pfud22.prod.google.com ([2002:a05:6a00:10d6:b0:82c:6863:427a])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1ac9:b0:82c:e3f4:f5e9
+ with SMTP id d2e1a72fcca58-82d0da7d403mr13540678b3a.18.1775516413925; Mon, 06
+ Apr 2026 16:00:13 -0700 (PDT)
+Date: Mon, 6 Apr 2026 16:00:12 -0700
+In-Reply-To: <64d44f37-7d31-46be-b9ed-cc86969777dd@maciej.szmigiero.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69d1685538f45_556821002f@djbw-dev.notmuch>
+Mime-Version: 1.0
+References: <20260402102953.2984284-1-mayuresh.chitale@oss.qualcomm.com> <64d44f37-7d31-46be-b9ed-cc86969777dd@maciej.szmigiero.name>
+Message-ID: <adQ6_MyjhnpJYJ5H@google.com>
+Subject: Re: [PATCH] KVM: selftests: memslot_perf_test: make host wait timeout configurable
+From: Sean Christopherson <seanjc@google.com>
+To: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On Sat, Apr 04, 2026 at 12:36:53PM -0700, Dan Williams wrote:
+On Thu, Apr 02, 2026, Maciej S. Szmigiero wrote:
+> On 2.04.2026 12:29, Mayuresh Chitale wrote:
+> > When memslot_perf_test is run on qemu, sometimes the RW subtest fails
+> > due to sigalarm, indicating that the guest sync did not finish within
+> > the expected duration of 10 seconds. Since the current timeout value is
+> > itself a bump up from the original 2s, making the host timeout value
+> > configurable via a new command line parameter. Now the test can be
+> > invoked with '-a' argument to run the test with a suitable host timeout
+> > value.
+> > 
+> > Signed-off-by: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
+> > ---
+> 
+> Out of curiosity: which KVM-enabled setup takes more than 10 seconds
+> to run that RW test?
 
-> Then I assume it matters that memremap() sometimes silently falls back
-> to the direct map. The "VFIO owns" expectation needs to guard against
-> some helpful platform firmware mapping accelerator memory as System RAM.
+Hmm, I assume "run on qemu" means running in a VM that's fully emulated by QEMU?
+That would probably explain why it's so slow?
 
-I don't think how memremap works under the covers matters to vfio, it
-takes in a phys_addr_t an gives back a KVA that is cachable kernel
-memory.
-
-We just have to be mindful to not allow mismatched attributes on
-virtual aliases.
-
-> At a minimum having VFIO fail to map in that case helps with the
-> argument I have been making that "no, EFI_CONVENTIONAL_MEMORY type +
-> EFI_SPECIFIC_PURPOSE flag" is not suitable for accelerators with private
-> CXL memory. Those want to be enforcing "EFI_RESERVED".
-
-Certainly it should fail the request region if something else is using
-it, so if those EFI flags plug it into the mm and it is plugged when
-VFIO starts then it should stop.
-
-The direct map isn't really "plugged into the mm" but it does raise
-the mismatched attributed issue.
-
-Jason
+> Does it have like, multiple levels of nesting?
+> 
+> When I wrote that test I calibrated it on a mid-range x86 machine,
+> where one iteration took on the order of 0.01 s.
+> 
+> 10 s time limit per iteration is already three orders of magnitude
+> slower than that.
+> 
+> Otherwise, the patch looks sensible to me.
+> 
+> Thanks,
+> Maciej
+> 
