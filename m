@@ -1,127 +1,102 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF79384230
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 14:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775486289; cv=pass; b=hLrZ4TxW1X4tKg8hLb9NwXrLwcGPxuxl9FEY27VjfK6y+YplHBtEFaV4BFCgUVuj3L7yhAeFACz/p5TKfezwr2Oel9ziYsI0OGLEi/EAh2Gd8I0e50bRkFz73mNDzoJqJ6NvFmrXUzKKqIaLK5mrJjlNmkiTEDiXj3qf86clGNk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775486289; c=relaxed/simple;
-	bh=hIhNt0MJcuiCREyJL4elAnSUfXIEbP8C+cm2AS/TYZc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hok8C0cBMrC5Y2sFN4BgVnzCZ8dkkzjuN4S17vW0Oclku6EbWyySre+y39/J3uVzdsFLvehGTTT++fie1fWkW0Q9PWQIwIoEI6jyu9KW6yT5uKn7GozM7r6ig48lvS0rwJ4uFYuLO7+Z7/fQGGqYYjmBeeXP2zZZXgpQe4l6jW8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jgwhN/LO; arc=pass smtp.client-ip=74.125.82.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4A63845A4
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Apr 2026 14:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775486291; cv=none; b=D8w9pia6kjUUsBFynzWvtVgOm0ZPIJjTLxH+XuC1c9puMFJnOIIibpxWRsQpk+Tw7cwMI4o6B/vfzjG55vcFNgLdiZjZs7PgHhrVN+DYQNHR3DBLdXVgd/VGOSdKq9TLPyLucypUfDM+Bb1yfLyd7BSghnCe9NdPGCyEyAdTY5M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775486291; c=relaxed/simple;
+	bh=ak6yaVgu9S/ortrE5hccn6VS1loqVuMDJsK2L8LS5HA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=fpejYQsvXSsiXZK2aUsZUTRBltjOiqvWYHMKefnUD4cHmlMBoRARgWTavGOJ7Emy8Ab2LyoDehWdnBC7emBuaHJ0xys+uNwDodKqQCuRQyodUagw7pNfbGXArM84OvcUzFsS7IdfT9jFtyVYAraR15ZHuhcX1FI+hSUYxcrQ/ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=EqXWGxGr; arc=none smtp.client-ip=209.85.167.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jgwhN/LO"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2bd801b4078so411740eec.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 07:38:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775486284; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Pofi6WAyx611A6jFepYkwzMPB5lGYQjCgJIJHDOP3/n71TFVY2086OkCJreAXcPTzd
-         CMK1HM2kSYrGXidX7n4sXzgDNl28Tj+b++IZ2FDpVoT2hlfkhadWSxg3Ksf6Nos9uFmJ
-         TeWGXVyeHJF3anPOt3iaeBQOUA3c1lih6UPO/LamplhhH7lvEvzCnnuTsKhmweq3B+St
-         5qCe1wDf0CJOfHekFcLbWuh4Exk+odCZWPpQP1ddGtR1CAy8rvOyWiVK2agQtdFtGwrg
-         Od2E1OfATjBDFgXhi7tXuIFlP3lBoDLsizamPV316OuGbrlougXbQ30VSq5O35acT/XR
-         bPwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hIhNt0MJcuiCREyJL4elAnSUfXIEbP8C+cm2AS/TYZc=;
-        fh=0oqj9PlOCD8cnroAjDvQLGXanHwIhmJquC02Q21kJNg=;
-        b=fV3ECb9zldLTEVNbTIYCKTSgS+wsPhQaeSfz1ay5Vdp/oPJjiKqWQeyP6V/WbuUTsy
-         Ib+Qtw1VcVmZxjrYpJima5SdNeXOJ/BBvBSmIWO5Eo8QwkL9ptvRGlkKHrKPXtfbLFQX
-         rmWYHwGunXtt6IWR5eKmZcLZnevpgrVYwFVtbhUs276j54Q1lXPX1XP18VzDHIATb5Yw
-         H9O+gHQL05jeWCm+kOiiwdLcM8FfAJY2ETApc+6bl5uQMFVtGQIJzt+zDnPIqnxcTHyH
-         b6NcpB4RC8inSsa7VSxgERrs9hK4Fd8/RL+VqxGAiN0TSaP3+Cw/b9jFmqBHFQD+d2oK
-         G/oA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="EqXWGxGr"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4704fb0d5b8so1461370b6e.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 07:38:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775486284; x=1776091084; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1775486286; x=1776091086; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hIhNt0MJcuiCREyJL4elAnSUfXIEbP8C+cm2AS/TYZc=;
-        b=jgwhN/LOCRUuz5UtuAxbMF3jgJnFp6nKylfYyZFBTJc1ux/cteBqbZhrHUpd0SVrJ6
-         9hhlLqqaYpY1c0QaNN6MWPPAIwh5+uX2vnAa59YCd3Q2Ao03JARshIQClxScR2gU23q6
-         1Yi78Tqo3Y4/iAxKQ+p+X62sVoaB+OFZJCt2n+9UhA+AY6ZbTDd1LWJ9E3QbIJgzyByS
-         8zBdW1BmZbAb+cnapbsOd4q15lxIceJHUjgfEn/NiAWrxrT0gr1mHOyFTsaOq+RvDLti
-         a6G+lGC7X5xWVSu975ZjophQliZNveh4HFzgRC1AO8zyzB4RALb+QOAALbUrIIiMWMGm
-         AnnA==
+        bh=cP+jU4JmX0ZcbJGHqewlu5EjA8WbPEq41I3kRck4Q80=;
+        b=EqXWGxGrM5YUdTHEDoFu8WoasTue3p1bOzLqykXrJ7Cu8/uQYhteYnO6f0VbS0dA1w
+         x21YNy/VOvfc2A8r1qAg9e1zNja+oUvyph00NYSJ8UMiNu+87CutcAOR5Y/Z3tPnuOeL
+         xNKLDR6XvMiiSec7iUuxCV2Ab5x7CNTMXZif+VoBmXz/ygWiQQrCAes4mLAOItXWWmzf
+         EDRyfromdnLTY//2IRuviiTN3nSHJzZ5h7F7+k1mrvePmuCyon/FdifrgrvnHMcdgTgx
+         FvCvxsALF5iNm1f369NQsc2vigvOV3g2lEcLpI7b9KVw6JIolz5VgBYZFurJ1AteBRL+
+         KNUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775486284; x=1776091084;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1775486286; x=1776091086;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=hIhNt0MJcuiCREyJL4elAnSUfXIEbP8C+cm2AS/TYZc=;
-        b=h9dVa83bMFqjZxS+remCVzl+3ce4QHRou28nz0Ym+XtbOuvZqtMC0q0wYIXqv2ajI0
-         SrSd81EhV4HpHIjFBBRn2tDr1Ec/QCwFDv0f3WhWNTHzfBpBkdbahJmmSGADXZfjPlvK
-         ykRQ0DlPSpZxqXEFU9ImtGnWiVVl9pIJVHgiRgok1UrP4ZmACbNtic6+Higd4T6lAEDR
-         fkXBSEnzGp2bQmUxJJIRU1hBijaOPvYYSD1Wq6wPG0NOOoeLhArac7rtCl0nHUeK4Lwd
-         q0n5G9fg9ZTpEjRF2JB7pbAnziCO7hD/DzzSpjnre1NwX/WGv1kco6r8QnZ4LhQhkrlv
-         oM+A==
-X-Forwarded-Encrypted: i=1; AJvYcCWoYCOsM6blNQBLcl/HxnXCPDQlqT+oqRcxGQZ9pulWwBP78WA2/XuRXEu8RfptBh210eUB62XcNhIZv/5itDQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8vy0sfcLQG5hNkE4qt0m1AIrMMXaeF9wCaoOg10yGRhrl4JPp
-	5ny7drxeJ5XtpJ1yO7nqFgZCmqz2Ais7aAWQkXKa/ypBRzeu0RbjsbbxiAUqSLu4Y3eTpQ08ufA
-	6A8j+5x+b3dIMr5ixLPwTQF0MOKmJaf8=
-X-Gm-Gg: AeBDietweHQMEjvrNYrPu3xjmWH6Bb//SIYviy4Moklv7SV4US2NNBIlPPB6GfVAgoi
-	rz3jfQmxDd1YCJ7TJOjrb/mkCMzorJtYEa9d4ZMCdnPc1WMd3hVEKQNS39RY8d+8kKd4oRfG3s/
-	Fox1ByGT4iw+KVPCUvm0NRiXDRSQG2P52dLFxeQDKpwDae40VDvoNpvitQ1mq22EszGI1TkpZnh
-	K1ZvXW/UURlgOGpy2b5HrdAXTXAVBpFaIBxk4h3Dxz1LbGMiKe62frWavLqNeI89nqkzALvw3tS
-	wveu+tbdseDRWTiVxP15j2a9VtKfhduo3cDqJZ0p0S8omvyLbqEHEVezEKoZgdbpm5TW9HjWiVA
-	WFItTjSDWiEWwgt+LrbPoh+vXvYDjr8itCA==
-X-Received: by 2002:a05:693c:2c06:b0:2be:2912:ff65 with SMTP id
- 5a478bee46e88-2cbfbc7d828mr3020598eec.3.1775486284289; Mon, 06 Apr 2026
- 07:38:04 -0700 (PDT)
+        bh=cP+jU4JmX0ZcbJGHqewlu5EjA8WbPEq41I3kRck4Q80=;
+        b=lE9GIlxUD2aOyb5glSFXhuQ8Fb5a3Fe0UdmgjRxni3Mgv30o7/fRq8RieNXEluLBV1
+         ElLBOFKxbcqk9Bhc1gZ2KE+xzLQAdDTRRFX9U10xZ+EXzeq7qEcJxFeknf0At3CYST6L
+         S1cdsjRNXrwG9ni7j/+F1L2PE4XHkiH1iB+iWk10h/QensqDhNDldMxWsE2G9d0Fdh7f
+         mFlrT6arAPEGiYv+pGaaO8SbWj29dJltZsWAs5kfTXlOIsJlqmqinst6ze5D3sZJJwzf
+         7R93VKFfLKPwN3Jo6pRNeGG5Q5i/s+70Uy6xUlFDYmGPRqbFJkq3+P7hWVyWOpqE1pYA
+         Lhyg==
+X-Forwarded-Encrypted: i=1; AJvYcCXqwtMYTWKVnUkSDNu0zuAIfkb1jzXi2fDd9Ot7x12LQYhBehctW9CgXIUOB53mmnuMPeDVb2q1GJxfhkxzTo4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTRWv3R3br5UDciZrlv6vR2gseUb98h7+mFcfWEMgMIx6oJKPe
+	zpC7NMbHWYEh/A+1WTfcx9ByTqrxcA1ON5cZjmMf2N67y4MpzjlcnKRfKOmfQAQwh6o=
+X-Gm-Gg: AeBDieuDaz880jiH9MQj+UiKZHfAug69KAPgd96+q3Ik31AR+zYUqzeKAbb1dPLOkpi
+	pyMlRwwFM8OsU+7z9c7od+nFlMyekAjYLMOHmTtxyxeeH96xE5Vy0HzryMbClnKIaeSI5/hH+ya
+	3Sg1mMpdvjYS7/2hmH2HMZJZfwxecnq4evEuUCptkvozZF+5LrDvUMQ8qG6qq+p4/1+Ye8Yo9fw
+	1xtU6N3OvxFF/LW7nQjMhM1H0VTH/PgtGfsP7VinbjBB0O6cnQ+xbTl57GOCvYhI5MmegJnCO0U
+	4WIzY/QfhU9SP17K85mF5TCeyGfNsNRkdlzom1kZ5jWdf6YKoe2oGu13qKmJoPJFeIWC3eI0bhA
+	6Q5Y6LQriTpggRFeluq8FrQTEoxYxMY5GWE/IB2S2pK4PdRL+heafTkRCkoCr7qLZ1R3/gVTB9z
+	2QpHOjR9sk6BoSMfP0jMAmWc1TP7zBgtaAlH2DWq2sxdPFbkH2rNeSAJ2/PbYNeIsz8YHCBCEPz
+	FOn
+X-Received: by 2002:a05:6808:2203:b0:467:f1e5:a294 with SMTP id 5614622812f47-46f00b46690mr5674172b6e.4.1775486286255;
+        Mon, 06 Apr 2026 07:38:06 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-472813cdbe7sm2038256b6e.7.2026.04.06.07.38.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 07:38:05 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Ming Lei <ming.lei@redhat.com>, 
+ "zhang, the-essence-of-life" <zhangweize9@gmail.com>, 
+ Caleb Sander Mateos <csander@purestorage.com>, 
+ Shuah Khan <shuah@kernel.org>, Uday Shankar <ushankar@purestorage.com>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+In-Reply-To: <20260405-cancel-v2-0-02d711e643c2@purestorage.com>
+References: <20260405-cancel-v2-0-02d711e643c2@purestorage.com>
+Subject: Re: [PATCH v2 0/2] ublk: fix infinite loop in ublk server teardown
+Message-Id: <177548628476.84168.18270412241757304958.b4-ty@b4>
+Date: Mon, 06 Apr 2026 08:38:04 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260405235309.418950-1-ojeda@kernel.org> <20260405235309.418950-8-ojeda@kernel.org>
- <177548573697.95472.13544191227699996309.b4-review@b4>
-In-Reply-To: <177548573697.95472.13544191227699996309.b4-review@b4>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 6 Apr 2026 16:37:52 +0200
-X-Gm-Features: AQROBzAshONAZRL6Bf4qdEX94VdiVWUdtgExWPcnxvz_Z_wjuLZH7VazFmpsU7M
-Message-ID: <CANiq72ne_JYPodnROckyNto10ZF0PqadRxSrng5-mZyqVovxFg@mail.gmail.com>
-Subject: Re: [PATCH v2 07/33] rust: allow globally `clippy::incompatible_msrv`
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Courbot <acourbot@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
-	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Alexandre Ghiti <alex@ghiti.fr>, 
-	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.1
 
-On Mon, Apr 6, 2026 at 4:29=E2=80=AFPM Tamir Duberstein <tamird@kernel.org>=
- wrote:
->
-> Could you add a reference to the upstream bug report [0] here?
 
-Of course, thanks for the tags!
+On Sun, 05 Apr 2026 22:25:29 -0600, Uday Shankar wrote:
+> Fix an infinite loop in ublk server teardown which can arise when a ublk
+> server dies while recovering a device. Also add a test which
+> demonstrates the problem and verifies the fix.
 
-Cheers,
-Miguel
+Applied, thanks!
+
+[1/2] ublk: reset per-IO canceled flag on each fetch
+      commit: 0842186d2c4e67d2f8c8c2d1d779e8acffd41b5b
+[2/2] selftests: ublk: test that teardown after incomplete recovery completes
+      commit: 320f9b1c6a942a73c26be56742ee1da04f893a4f
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
