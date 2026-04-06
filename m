@@ -1,87 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF5D277029;
-	Mon,  6 Apr 2026 19:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F144391515;
+	Mon,  6 Apr 2026 19:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775503942; cv=none; b=MrrNCiz7wtJUi6SY1W7G1SCM6t6uOxsmrNAaJ1reew+4AtGE1eoBVTQl6ptlslGE4qKmnbZF6fmQP/3MRBXWuZ7jQQKbJJmIDaGY9dO+vvcpuTtlXiU7WCaOFNhkoYWqi8hg5oscI2s9dTeX3qYYf2XZLHnf5zhsL74mSn6itO8=
+	t=1775505095; cv=none; b=CJeXIPybBIBoZtaBB7UYQsaElaNqHACPCnIO05acueNb/SxYe1RAIKi1rKmTjye2AQ0hdfHj+fSo1AfiImhZlWZK3aKJ3gT2eYwrdH61JX3+G4/vkGi1iiCxXo0XJk3mZOrUYtjX6Tc4AHGHH0ERpJz+ZjhjCPSLzLM0nm0P0ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775503942; c=relaxed/simple;
-	bh=S1NtRgmwq+0XbhEiNinw7Ck9uZDk1ciSXDTvz8fK038=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=drd3fJqYVpy55Ff7h/3fwl97e76qa6xMRAIsHsiZ40yMuBh/WJ6u+ObxzDs9MiyYKuldVXelkXs0W5SwmPMA3P/xmpIfXXYzu42pJRqtf267SJHjCvoirP4K4VNigL0Pwxd1WiZDoAASS6acUSM1upO9xKXJ6L33P+elx6EdMuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZgXA6u/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775505095; c=relaxed/simple;
+	bh=GMwjYkUhm6drJVHlYbtmPfNPSlWMffmCjzdHMomgceA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=sKF5m3LtxtDpDlck6ggu9sAE6OPuYEg7wDif+cE71xndentOEd0OKcuppVzM9eUL+1j0QxOseM4SzojTSWICDi3M/xWd/2hPTdHml4M2uFQXo8bBgtqkGNipeWATMNJr/mC9roR7oJeScVKInGkg8X4DIoVaKri4oP8BonIpxl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=vWKRGODw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZgXA6u/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE19C4CEF7;
-	Mon,  6 Apr 2026 19:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775503942;
-	bh=S1NtRgmwq+0XbhEiNinw7Ck9uZDk1ciSXDTvz8fK038=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TZgXA6u/Rbx6lf/95MWpUXpuI2+lS6JsMpaLTOjqAAppxZXy9cxUfM3m4nZHoXgci
-	 MmRiIXUjP3/joOORsIt3iCmgJpoeOScCPNDPpXaaHRg/YA8YY5T/ZNDKPqY/mniQ9Y
-	 rJ3xnZ+Xwa45BAPEaZopp8jUaKPZLi30umCLkATvD3qs4G6rp1axN2uhx12d0TamBP
-	 7nLo0JLUYntAcFMSktSd9rhbyaJY1a18urvKHjqMJWPAqIr2fupe5TyEZDk3xovGul
-	 LKv3HhIajyijJO90T3efA6twfKyV0Si/65B5nkygmZsoVbdECwN5g5e+mmLQ4Lubiw
-	 5vdyu0tuILU0g==
-Date: Mon, 6 Apr 2026 12:32:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Li Wang <liwang@redhat.com>
-Cc: nsc@kernel.org, akpm@linux-foundation.org, david@kernel.org,
-	ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] selftests/mm: clean up build output and verbosity
-Message-ID: <20260406193216.GA1319599@ax162>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="vWKRGODw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ADBBC4CEF7;
+	Mon,  6 Apr 2026 19:51:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1775505094;
+	bh=GMwjYkUhm6drJVHlYbtmPfNPSlWMffmCjzdHMomgceA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=vWKRGODweREmOy5SZDLzFpguFGXXFlLktCpHdyvBoKeVvjP6hiSj4AA/TcNQnQbMd
+	 Q2KYUjztPIKF2q4yWnUcDbp9nC6nXARbFRsMcCoiAdqSerLKUJwFtAX7F9zBqEIS9K
+	 2bRU/gVmq5lkdhk4f/L9pkJ7lWrJnC2mn9GNmHyg=
+Date: Mon, 6 Apr 2026 12:51:33 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Li Wang <liwang@redhat.com>, nsc@kernel.org, david@kernel.org,
+ ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] selftests/mm: clean up build output and
+ verbosity
+Message-Id: <20260406125133.eeb8efed993ae1faa2a9ad73@linux-foundation.org>
+In-Reply-To: <20260406193216.GA1319599@ax162>
 References: <20260331094402.144131-1-liwang@redhat.com>
+	<20260406193216.GA1319599@ax162>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260331094402.144131-1-liwang@redhat.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 31, 2026 at 05:44:00PM +0800, Li Wang wrote:
-> Currently, the mm selftests build process can be quite noisy.
-> 
-> First, it leaks raw compiler errors during the liburing feature probe if
-> the headers are missing, which is confusing since the build system already
-> handles this gracefully with a clear warning.
-> 
-> Second, the specific 32-bit and 64-bit compilation targets ignore the
-> standard kbuild verbosity settings, always printing their full compiler
-> commands even during a default quiet build.
-> 
-> Notes:
->   Andrew mentioned he hopes this patch merge into kbuild tree, so I resend
->   to linux-kbuild@vger.kernel.org.
+On Mon, 6 Apr 2026 12:32:16 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
 
-Kbuild does not maintain anything in tools/, so this should go through
-either the mm tree or the kselftests tree.
+> > Second, the specific 32-bit and 64-bit compilation targets ignore the
+> > standard kbuild verbosity settings, always printing their full compiler
+> > commands even during a default quiet build.
+> > 
+> > Notes:
+> >   Andrew mentioned he hopes this patch merge into kbuild tree, so I resend
+> >   to linux-kbuild@vger.kernel.org.
+> 
+> Kbuild does not maintain anything in tools/, so this should go through
+> either the mm tree or the kselftests tree.
 
-> V2:
-> 
->  - Drop 2/4, 3/4 from v1 to v2, since Andrew wasn't able to confirm the
->    patch works for the rarely happening issue now, so I decided to just
->    hand on the process of the parallel issue.
-> 
->  - Refine the 4/4 patch only to hide compiler errors when missing liburing.
-> 
-> Li Wang (2):
->   selftests/mm: respect build verbosity settings for 32/64-bit targets
->   selftests/mm: suppress compiler error in liburing check
-> 
->  tools/testing/selftests/mm/Makefile        | 9 ++++++---
->  tools/testing/selftests/mm/check_config.sh | 2 +-
->  2 files changed, 7 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.53.0
-> 
+No probs.  Li, please send it along after -rc1?
