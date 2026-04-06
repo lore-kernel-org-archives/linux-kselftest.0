@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572C137F733;
-	Mon,  6 Apr 2026 14:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2938A311C1B;
+	Mon,  6 Apr 2026 14:17:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775485072; cv=none; b=BzdWus7VhqKm3x20jwhZiDtmPx+pnwXMx9TptjB//KmHnP2ZuTGqQaYaPGRW4wAe0V7wXG4rrqykcgNKrUzQ03WbeT5yWOxAu/kTm1n41gZrKvpea+S2Dl+jW2Id12nHjuiNTpnRAS71kNsasnOurK84H5dGci6+TScoAsY/iDc=
+	t=1775485078; cv=none; b=Dy1vy0UILY5htTIH2oe7uKjv2CSY/+UXNjvg31EQ84Zoxd1Jb2P+SgWCkwyHJY4hadIq5gjl9UDWi2WONvbrfwqsZIyfuyYSV0vq4cFw8vlSQuqPSiuwxNycrIzZOdP00djizss8suuLjDLHF+kBgPhhErujLP7z65RBRx50fBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775485072; c=relaxed/simple;
-	bh=6vj0uSM6vP/d0qVg1g+ptcF5MLY8M8muWRFmIKUP/YU=;
+	s=arc-20240116; t=1775485078; c=relaxed/simple;
+	bh=a4vQJGv5oSnYFOAuEaEUtLL2TvNcolXC7zAnBLawpZo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aGCxVeR9iTbxSfiQFb7Vx39TBKuFwp9gHn4iDCRDIsNPkvFoU4G3NS+hPStwtE1bUmuNxSNE8QJSVkacepejoCt0ItZFGnFGlVbxQmXko8AavZowXtZN5NqNBhbkZMyMtVuSJkUmxRmLm5WONZsOqQ2adTOydwBizJDOKXTGRN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CxpDm9aw; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=U3d94IiZAcZb+xXoekoaq88+mD8iEA2Ry1AnMBMkYtknJc2iyCoROlFfLLPtJEmwIbL+OzvD5n6L0vYJ9GFpHgUbtRbaJxyv6dS7OFXGpM9aLLgpF0pCmtSH1kJMtX7240W/p911BI3+yxB/+cLpOWGfHMTYOmg2mKJYgT3glmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fEpsZlte; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CxpDm9aw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8BE0C2BC9E;
-	Mon,  6 Apr 2026 14:17:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fEpsZlte"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70F26C4CEF7;
+	Mon,  6 Apr 2026 14:17:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775485072;
-	bh=6vj0uSM6vP/d0qVg1g+ptcF5MLY8M8muWRFmIKUP/YU=;
+	s=k20201202; t=1775485077;
+	bh=a4vQJGv5oSnYFOAuEaEUtLL2TvNcolXC7zAnBLawpZo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CxpDm9awfQNQqzRyBPfzjxy/ha7bCdXAq0vOwun5VdxQJzBlzmpeoyaq0d8iPWC2v
-	 A8FBYM17bB4CGMQqFL6THW1GvU5YntiIuJHQmOVUgBzRzHaJpVBjiPI9SUUE2SXSFx
-	 R7VjOfYze7UhL4nWmRzv4dcgjks71aAB9U8GG7CgeVlL6mqyc+b6Sq0HKRrl5b78RB
-	 3tSRWiZHksl3twyTwnhyWnj43PmGwE3BTrwsxOWke71W6DKDqISpb0POxkO+v9oehE
-	 vB0J6VmxpP8v2/qPh8MIlrcRwLlL1vfsQSolQyjmJVBiShNZZ+O+r+rgZD2AOyFUQw
-	 h1z1uYn4Y8ahA==
+	b=fEpsZltem1eqf2vgJDiHXUdg8MFqoj8Y/2ecLrFLGPhbPbGX5Ow5vo+HPlwwFJij6
+	 CpuMNgzQJuuZJujPtp7VOQwLZhTNyXOYCMvy6ua10Fmx2vJUf8pk808Y5CV1lgtX7w
+	 FvPPhk8IxfI+P5H+Enip053hbmb4PiBcQ4aGqOv95QQepXA9P+eaBE/QGkk/Jwg8s+
+	 zXehD+T8JwqNQ26TJTRNOZrxSCG6iOpPCSnEKViBiHXUsLLWJDte7+BNhUi5BmnFxY
+	 IH3nI0Je2ybhKam6EMDj5vedW+w8Qg0GduWk/9e1ayp38PL5wAwN5T4fekNfFIRpWS
+	 khM9ESJ7g02GQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -51,9 +51,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 01/53] selftests/mm: hugetlb-read-hwpoison: add SIGBUS handler
-Date: Mon,  6 Apr 2026 17:16:43 +0300
-Message-ID: <20260406141735.2179309-2-rppt@kernel.org>
+Subject: [PATCH 02/53] selftests/mm: khugepaged: enable collapse_single_pte_entry_compound for shmem
+Date: Mon,  6 Apr 2026 17:16:44 +0300
+Message-ID: <20260406141735.2179309-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260406141735.2179309-1-rppt@kernel.org>
 References: <20260406141735.2179309-1-rppt@kernel.org>
@@ -67,49 +67,66 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Access of poisoned memory causes SIGBUS, which terminates the
-hugetlb-read-hwpoison test prematurely.
+A comment in collapse_single_pte_entry_compound() says it can't run on
+shmem because "MADV_DONTNEED can't evict tmpfs pages".
+But MADV_REMOVE can!
 
-Add a dummy SIGBUS handler to allow the test to continue regardless of
-SIGBUS.
+Use MADV_REMOVE for tmpfs to evict pages and enable
+collapse_single_pte_entry_compound() test for shmem.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/hugetlb-read-hwpoison.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/mm/khugepaged.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-index 46230462ad48..6bbf15f78061 100644
---- a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-+++ b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-@@ -10,6 +10,7 @@
- #include <sys/statfs.h>
- #include <errno.h>
- #include <stdbool.h>
-+#include <signal.h>
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 3fe7ef04ac62..e6fb01ca44ed 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -783,20 +783,17 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
  
- #include "kselftest.h"
+ static void collapse_single_pte_entry_compound(struct collapse_context *c, struct mem_ops *ops)
+ {
++	int advise = MADV_DONTNEED;
+ 	void *p;
  
-@@ -261,6 +262,11 @@ static int create_hugetlbfs_file(struct statfs *file_stat)
- 	return -1;
+ 	p = alloc_hpage(ops);
+ 
+-	if (is_tmpfs(ops)) {
+-		/* MADV_DONTNEED won't evict tmpfs pages */
+-		printf("tmpfs...");
+-		skip("Skip");
+-		goto skip;
+-	}
++	if (is_tmpfs(ops))
++		advise = MADV_REMOVE;
+ 
+ 	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
+ 	printf("Split huge page leaving single PTE mapping compound page...");
+-	madvise(p + page_size, hpage_pmd_size - page_size, MADV_DONTNEED);
++	madvise(p + page_size, hpage_pmd_size - page_size, advise);
+ 	if (ops->check_huge(p, 0))
+ 		success("OK");
+ 	else
+@@ -805,7 +802,6 @@ static void collapse_single_pte_entry_compound(struct collapse_context *c, struc
+ 	c->collapse("Collapse PTE table with single PTE mapping compound page",
+ 		    p, 1, ops, true);
+ 	validate_memory(p, 0, page_size);
+-skip:
+ 	ops->cleanup_area(p, hpage_pmd_size);
  }
  
-+static void sigbus_handler(int sig)
-+{
-+	printf(PREFIX "received SIGBUS\n");
-+}
-+
- int main(void)
- {
- 	int fd;
-@@ -273,6 +279,7 @@ int main(void)
- 	};
- 	size_t i;
+@@ -1251,8 +1247,10 @@ int main(int argc, char **argv)
  
-+	signal(SIGBUS, sigbus_handler);
- 	for (i = 0; i < ARRAY_SIZE(wr_chunk_sizes); ++i) {
- 		printf("Write/read chunk size=0x%lx\n",
- 		       wr_chunk_sizes[i]);
+ 	TEST(collapse_single_pte_entry_compound, khugepaged_context, anon_ops);
+ 	TEST(collapse_single_pte_entry_compound, khugepaged_context, file_ops);
++	TEST(collapse_single_pte_entry_compound, khugepaged_context, shmem_ops);
+ 	TEST(collapse_single_pte_entry_compound, madvise_context, anon_ops);
+ 	TEST(collapse_single_pte_entry_compound, madvise_context, file_ops);
++	TEST(collapse_single_pte_entry_compound, madvise_context, shmem_ops);
+ 
+ 	TEST(collapse_full_of_compound, khugepaged_context, anon_ops);
+ 	TEST(collapse_full_of_compound, khugepaged_context, file_ops);
 -- 
 2.53.0
 
