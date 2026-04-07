@@ -1,260 +1,149 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0642233A716
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 18:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580AE2F83AE;
+	Tue,  7 Apr 2026 19:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775587255; cv=none; b=XNzO78SOxeb54JrHYzV0nPo0625m0OYlHsJu0pC58hjwtmqNMgDYRl2X6x96zQ2F1Sz+xq+IbjhpP38Lux67hrZcwKx9+bhtvdz4OgiV9vqcCD920UvEA8qtHF9yKTESTe5OTnukamDo6PblhPu0npcMtR3eIHHCZwAPN2+oT9A=
+	t=1775590792; cv=none; b=Kq35ssqnevxym/YnmNbDwgtza23ODIiXSRedjmLhry38rzbCnJxBFv7q62O3i2NmCKZambRNAo8M7YsRna73vygez3SuL2YauKa8h9IvYgB1eiHlBTat/cSZ/qPV9xJHJZXonE6i6j+gUVyPOKchkq8O5DIzRKZ3Vkpcv1pYSgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775587255; c=relaxed/simple;
-	bh=Vgoh9psjabACNffbt+5ZY22uG8xKmP766hYx26sSqj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GzSCDCWleLHe1PmdyCFCACi3ArHovY4X/so4vMEeVH02gR1D1q6sIiK4fVlJ+/L6/ZnmzMCKRwKzyRw97Wt0ce6F3EUrsFyIZFE5hs66I1quZKgFtJrltg3rrOKpw4ZyJ6YDJSkZmlzGwuz/QHU3iwDhUBlCwDLlZW2+ln4g3Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h0+xKwvt; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775590792; c=relaxed/simple;
+	bh=CGezKdEqDPdo1kPCwuUYGddzvOOGAGtk2UxFXojRw1c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GK4NevkHr9IKdA389JVEAVbXw8GwYKJkwWfw8eLzeYZxlRBMNc3tDAycuLef9VC/hzH7qGduMNf/uyzthW9b2g2CFdJpoXF3EywtI9p/VboVJUGWgT1G6n4ZDYYk5T44GJuhhWGz2+Fokr7FXieK+NR6WC0iBWgAK/EKDpv+ZNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AGI2ToMR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h0+xKwvt"
-Message-ID: <82148eb1-f270-48f1-8900-e0becc6384e8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775587250;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/pbB/7yM9qnWDUuBrZvpjAMidUIj7HvUtBOVsbYidjw=;
-	b=h0+xKwvtmES4t2E/F0q+G9TXlDuoTaDFh/rZeodnMPmb8RXBsVHH8kYLzDhV1NPWTdjP29
-	WyuA/8QwIb8Xp+cGHq57odMx6LDxhDsStTjof8Hg0zpFTUlUNoBkTXLTNnnR97OoVyk3GT
-	LlCJKOYwAKdYmx3n2sW7LhOjM/FdhWE=
-Date: Tue, 7 Apr 2026 11:40:42 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AGI2ToMR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7475BC116C6;
+	Tue,  7 Apr 2026 19:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775590792;
+	bh=CGezKdEqDPdo1kPCwuUYGddzvOOGAGtk2UxFXojRw1c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AGI2ToMRaUBAZVtejPVUq+e50ea/lP7efouoxy/kxmec44WkUdcbfxeDKvy+NBH1I
+	 lekyMnxmXkrJZAdHX/bmB0KrMI9UqXmhXX0qmMpjy1OD2MwCaAi/NEpcCnRciWPR0z
+	 0IgKByy8pEpqVSWX9WfKXZypizebnKZYmpngAkydT7MQb1VgAbohRz7fq668Q6dvOv
+	 4660d/sfvox9Dh9lgwP54A/lPT6vSgoFoxAFw5dZQ9BQAAq9Km8NNFG1j1WAnmmicb
+	 c4NpgbDr10Fi7rCCwJSS5OsYI8o9fCq0+bmyvf/XwaGmyXmBcai9/7Z4ZpfPUqkGKv
+	 /KEaSzJFvOboA==
+Date: Tue, 7 Apr 2026 21:35:26 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>,
+	Christian Brauner <christian@brauner.io>,
+	Carlos Llamas <cmllamas@google.com>,
+	Alice Ryhl <aliceryhl@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org,
+	moderated for non-subscribers <linux-arm-kernel@lists.infradead.org>,
+	Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org,
+	nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 32/33] rust: kbuild: support global per-version flags
+Message-ID: <adVcfpoZGH2Rf899@levanger>
+Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>,
+	Christian Brauner <christian@brauner.io>,
+	Carlos Llamas <cmllamas@google.com>,
+	Alice Ryhl <aliceryhl@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org,
+	moderated for non-subscribers <linux-arm-kernel@lists.infradead.org>,
+	Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org,
+	nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
+References: <20260405235309.418950-1-ojeda@kernel.org>
+ <20260405235309.418950-33-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
- table-driven approach in verifier
-To: Chengkaitao <pilgrimtao@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Chengkaitao <chengkaitao@kylinos.cn>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20260329140506.9595-1-pilgrimtao@gmail.com>
- <20260329140506.9595-2-pilgrimtao@gmail.com>
- <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
- <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com>
- <1fcda49a-caeb-42b9-9727-d1ab3d07d84b@linux.dev>
- <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260405235309.418950-33-ojeda@kernel.org>
 
-On 4/4/26 3:38 AM, Chengkaitao wrote:
-> On Sat, Apr 4, 2026 at 12:49 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->> On 4/3/26 10:41 AM, Chengkaitao wrote:
->>> On Tue, Mar 31, 2026 at 1:05 AM Alexei Starovoitov
->>> <alexei.starovoitov@gmail.com> wrote:
->>>>
->>>> On Sun, Mar 29, 2026 at 7:05 AM Chengkaitao <pilgrimtao@gmail.com> wrote:
->>>>>
->>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->>>>>
->>>>> [...]
->>>>> +
->>>>> +/* Kfunc family related to spin_lock. */
->>>>> +static const enum special_kfunc_type bpf_res_spin_lock_api_kfuncs[] = {
->>>>> +       KF_bpf_res_spin_lock,
->>>>> +       KF_bpf_res_spin_unlock,
->>>>> +       KF_bpf_res_spin_lock_irqsave,
->>>>> +       KF_bpf_res_spin_unlock_irqrestore,
->>>>> +};
->>>>
->>>> I think it's a step in the wrong direction.
->>>> I'd wait for Ihor's BTF_ID_NAMED cleanup.
->>>
->>> After reading Ihor's messages on the list, if I understand correctly,
->>> our two approaches seem to target different problems. What Ihor's
->>> work appears to achieve is the ability to remove the entire enum
->>> special_kfunc_type. My goal, on the other hand, is to replace many
->>> scattered func_id == special_kfunc_list[...] comparisons with a
->>> table-driven approach.
->>
->> Hi Kaitao,
->>
->> I appreciate your efforts, however after a quick pass over the changes
->> you propose (both here and in the new series) with respect to BTF_ID
->> macros and special_kfuncs_list, I don't understand what problem you're
->> trying to solve.
->>
->> The inherent complexity is in the fact that the verifier must know
->> when a particular BTF id identifies a specific kfunc, or whether it
->> belongs to some pre-defined set of ids. This is why
->> special_kfuncs_list and other BTF_ID_SET/LIST-s exist.
->>
->> And so there is no way around defining those ids and sets *somewhere*,
->> and so far BTF_ID_* macros did a fine job of that, all things
->> considered.
->>
->> AFAICT your changes simply move around the same definitions from
->> functions with if statements to constant arrays with a runtime search
->> on them (which is slower by the way). What is the benefit of that vs
->> the current implementation? We still have to maintain those arrays in
->> the same way we have to maintain the is_foo_kfunc helpers.
->>
->> Your newer proposal [1] takes the same idea to the next level, by
->> introducing an entire new BTF kind, new ELF sections and a bunch of
->> macros that are no less complicated than existing. And all of that
->> just moves the same arrays "upstream" to the .BTF_ids section. Again,
->> I fail to see any benefits to that complexity. Having differentiation
->> between LIST and SET, and having to mark START and END is not a
->> problem that needs solving IMO.
+On Mon, Apr 06, 2026 at 01:53:08AM +0200, Miguel Ojeda wrote:
+> Sometimes it is useful to gate global Rust flags per compiler version.
+> For instance, we may want to disable a lint that has false positives in
+> a single version [1].
 > 
-> Your analysis of the code implementation for the new proposal is correct.
-> Let me elaborate on the purpose behind my approach.
+> We already had helpers like `rustc-min-version` for that, which we use
+> elsewhere, but we cannot currently use them for `rust_common_flags`,
+> which contains the global flags for all Rust code (kernel and host),
+> because `rustc-min-version` depends on `CONFIG_RUSTC_VERSION`, which
+> does not exist when `rust_common_flags` is defined.
 > 
-> ****** Purpose 1 ******
+> Thus, to support that, introduce `rust_common_flags_per_version`,
+> defined after the `include/config/auto.conf` inclusion (where
+> `CONFIG_RUSTC_VERSION` becomes available), and append it to
+> `rust_common_flags`, `KBUILD_HOSTRUSTFLAGS` and `KBUILD_RUSTFLAGS`.
 > 
-> As described in this patch:
-> https://lore.kernel.org/bpf/20260303135219.33726-4-pilgrimtao@gmail.com/
+> In addition, move the expansion of `HOSTRUSTFLAGS` to the same place,
+> so that users can also override per-version flags [2].
 > 
-> If we want to add a new kfunc, bpf_list_add_impl, we would today have
-> to add "btf_id == special_kfunc_list[KF_bpf_list_back]" (or similar)
-> five times in verifier.c. ...
-
-Kaitao,
-
-I think the maintainability pain in the current verifier-side kfunc
-handling is clear, I don't think anyone would argue that it's not a
-problem. Your bpf_list_* work is a good demonstration of that. I agree
-it can be improved.
-
-That said, I don't think extending .BTF_ids and/or BTF is the right
-way to solve it.
-
-> ... Under the newer proposal, that is no longer
-> necessary: defining the kfunc and its verifier metadata in one place
-> is enough, for example:
-> 
-> __bpf_kfunc int bpf_list_add_impl(struct bpf_list_head *head,
->  struct bpf_list_node *new,
->  struct bpf_list_node *prev,
->  void *meta__ign, u64 off)
-> {
-> /* kfunc implementation */
-> .......
-> }
-> BPF_VERIF_KFUNC_DEF(bpf_list_add_impl, list_api, graph_node_api, ... )
-> 
-> If BPF_VERIF_KFUNC_DEF is extended further, BTF_ID(func, bpf_list_add_impl)
-> and BTF_ID_FLAGS(func, bpf_list_add_impl) might also become unnecessary,
-> so the snippet above could eventually be close to all the code required
-> to add a new kfunc.
-
-Defining a kfunc metadata in one place is a reasonable direction in
-principle, I agree.
-
-Where I disagree is the mechanism. The complexity does not disappear,
-it just moves into .BTF_ids, new macros and resolve_btfids. The
-primary consumer of this metadata is the verifier, and I think it is
-better to keep that metadata in verifier-local C definitions instead
-of encoding it into .BTF_ids. Adding more indirection to this will
-only hurt maintainability IMO.
-
-> 
-> ****** Purpose 2 ******
-> 
-> The kernel no longer needs enum special_kfunc_type to list every KF_bpf_*
-> entry. That information is folded into the .BTF_ids.##sfx section instead,
-> so kfunc authors do not have to touch or think about special_kfunc_type.
-
-This is not an argument for the .BTF_ids extension. Removing
-`special_kfunc_type` mirroring is useful, but that will be addressed
-directly by the targeted cleanup already under discussion.
-
-> 
-> ****** Purpose 3 ******
-> 
-> As described in this patch:
-> https://lore.kernel.org/bpf/20260303135219.33726-6-pilgrimtao@gmail.com/
-> 
-> In is_bpf_list_api_kfunc(u32 btf_id) there are on the order of eleven
-> "btf_id == special_kfunc_list[*]" comparisons. As more kfuncs are added,
-> every is_bpf_* helper will only grow longer and the verifier will get
-> more repetitive. With the new design, those is_bpf_* helpers can be
-> removed entirely, including the awkward scattered "btf_id == *" checks.
-
-The repetition is real. But removing is_bpf_*() helpers is not
-automatically a simplification if the same information is now encoded
-indirectly through section layout or local const arrays.
-
-The same metadata is being maintained somewhere else, with more
-indirection than before. The complexity just moved around, and was not
-reduced.
-
-The scattered "btf_id == *" will remain as long as it is necessary for
-the verifier to do certain checks or other work depending on the
-kfunc. Whether it's an array lookup, helper call or anything else in
-the condition, the condition must be there. Refactoring can't reduce
-this complexity, without changes in the verifier control flow.
-
-> 
-> ****** Purpose 4 ******
-> 
-> It pushes us to untangle messy verifier safety cases and make them modular,
-> so they can be expressed as parameters to BPF_VERIF_KFUNC_DEF
-
-Again, I agree with the premise that verifier safety checks could
-become more modular where possible. But I think we should first
-separate two questions:
-
-1. What kfunc properties should be declared centrally?
-2. Where that declaration should live?
-
-While I'd like to answer (1) with "all of them", I am not convinced
-the answer to (2) is .BTF_ids or BTF. A better C side declarative
-representation would give us most of the benefit here without making
-the BTF tooling more complex.
-
-Here is how I think we should move forward:
-
-  1. Your bpf_list_* work is orthogonal to BTF_ID refactoring, so it's
-  reasonable to first focus on landing it without changes to generic
-  kfunc handling.
-
-  2. I plan to send patches (soon) for resolve_btfids, and then for
-  BTF_ID macrology to eliminate the enum + array pattern. You are
-  welcome to join the discussion and review / test the patches.
-
-  3. After all of the above lands, we can come back to the general
-  BTF_ID / kfunc handling discussion. If you are interested in
-  developing this further, I suggest to re-think the approach and come
-  up with a "single kfunc metadata definition" that doesn't require
-  significant changes in .BTF_ids section layout.
-
-A slightly off-topic comment: the usage of `_impl` pattern for kfuncs
-should be considered deprecated. Any new kfuncs that work with
-verifier-supplied arguments should use KF_IMPLICIT_ARGS mechanism.  So
-the `bpf_list_add_impl` in your seires should only have one version:
-`bpf_list_add` marked with KF_IMPLICIT_ARGS flag.
-
-Thanks,
-Ihor
-
-
-> 
->> [...]
+> Link: https://lore.kernel.org/rust-for-linux/CANiq72mWdFU11GcCZRchzhy0Gi1QZShvZtyRkHV2O+WA2uTdVQ@mail.gmail.com/ [1]
+> Link: https://lore.kernel.org/rust-for-linux/CANiq72mTaA2tjhkLKf0-2hrrrt9rxWPgy6SfNSbponbGOegQvA@mail.gmail.com/ [2]
+> Link: https://patch.msgid.link/20260307170929.153892-1-ojeda@kernel.org
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  Makefile | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
 
+Acked-by: Nicolas Schier <nsc@kernel.org>
+
+-- 
+Nicolas
