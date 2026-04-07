@@ -1,66 +1,105 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1083CFF57;
-	Tue,  7 Apr 2026 16:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A3935B645
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 16:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775580390; cv=none; b=m0xnlBPQwNwBd0miGd1t6OUyQN/nfK1XPFk5PlsFfMeoOZ8zFt0BFkP4RI0Zq4gTSqeT606Twhb2+Bu7PtyGVychs9Uf73EJQlrr5jnjzN4DiO+z9YoiM+RKHIbZLcVhqjBZJATVADmQS2QyK6KBkNq1a1D5j2ZOzGRlz8xp3ww=
+	t=1775580597; cv=none; b=E6G0nD7NzcTyUupUp4rVDikmlSCnX8BzZ3sne9tr6956f/rwj7sTqQk5NJ1BOXXS5khnqfDrN9niswf8X9o5uFiMr8RPbY6NZmUYERqFyByoxMzuf+aDFnwrs+LzO4NyyUhMfNwBy33+4ahVSUoM1SWwMEVJ5aVCucVQNCW5Afo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775580390; c=relaxed/simple;
-	bh=m2F4YJfRhV+C0WDoXexHl07dTq2V7bN9iRXJr4UNAao=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=r6WRdzoVETnqJswGO70JL+/EoBWfyhWQ4ZUnx6pdC7ROtXhdC+9qbCmM7EVMoujF8gbUUBEuX/Bvh7VyGNLAsJMOIQN5A1JWgv9+JpJHG75mL/KoVLvzfv1fBlLi2HT1/Cq5HbP/QlrrG64B0pWORDxGIsYUyi/ZtIJymcGT73w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=BzX9zkXJ; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1775580597; c=relaxed/simple;
+	bh=vlaZpXscWUZ3B05OE1majSMSg9sMzDiqX6C22P6IGgM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dDlNDgZLdAFzqykX4j77p8b0D+aiakRviOSWdhtfj9OKWWxpqipE9bkbmSjzGsXoUzikjGI19xsDQ5ejdnsH5xZhpls09Ff1k2Au2w+YcpXPG+QR6VCpgatbu7TpAR1hcdDsCSfy+ujvTSlT4gd0fjREbjc24w2POdZptijKe+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T6RfnGXW; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="BzX9zkXJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:Content-Type:
-	MIME-Version; bh=m2F4YJfRhV+C0WDoXexHl07dTq2V7bN9iRXJr4UNAao=;
-	b=BzX9zkXJSM5ksM/G1lJuB5gZz1foaoPE6P6kRKOIl77eXJDwjsGfe5/iSNX3jz
-	tEdlSIpif4aTy50xfyeqRa2qKpdA525T9bSaMwtMYgfvbgREXl6TSozj0Tjsg/C8
-	7szDUwulhFZqwBLSLnyYmFlH0RwEl/1UqY6xuoYkPu2c4=
-Received: from 229.199.16.172.in-addr.arpa (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wC3CcDANNVpr+A5Dw--.19062S3;
-	Wed, 08 Apr 2026 00:45:57 +0800 (CST)
-From: Cao Ruichuang <create0818@163.com>
-To: rostedt@goodmis.org, mhiramat@kernel.org
-Cc: mathieu.desnoyers@efficios.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject:
- Re: [PATCH] selftests/ftrace: Check exact trace_marker_raw payload lengths
-Date: Wed, 08 Apr 2026 00:45:52 +0800
-Message-Id: <177558035266.28431.12958584562831940289@163.com>
-In-Reply-To: <20260407101245.78988-1-create0818@163.com>
-References: <20260407101245.78988-1-create0818@163.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6RfnGXW"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ad9516a653so26954915ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 09:49:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775580596; x=1776185396; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EUCVU3vJIe9dfiNXrQ/I9OAV/ScAJcuKICE2xaQxYn8=;
+        b=T6RfnGXW6NEC4RkguSTFVOdpeoAmAcGRW4MJ1Sgu+lgKUt5lbqy1jZ3TgulGyNLbNc
+         GSjLCG4jyWqtVkLUmVy0bj6XJRaMP8V1fYcEOHztIYWBrVEfx3ee/X/h8kvjb/Cz4RVH
+         7D1XKBqw5paEmD14ix0E3A5baabuhEsdOUT46GKDUOkqOnl0w12LVTIgrXb8nNPBsxeb
+         UMhaatyl9yzs3/aFZqFtn+KcHyhBr83lUQCBWwst/H/ee9BodQEsNBBF0aYeWFqfP6Fm
+         wNaPDpgNZGsGFChKUxi16lwhR0dE/jA9okyrRo3H07BkC+Ws+LX7R+gt7rkQcpVjADm0
+         hmbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775580596; x=1776185396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EUCVU3vJIe9dfiNXrQ/I9OAV/ScAJcuKICE2xaQxYn8=;
+        b=Q/9h5AqCv7deinw2DYBTVi+XEqnN6DiiXqVGAKEKLXdc7ilwyNoakLMLzNN0/Dsbsg
+         8Q92jVVerevTws1HBBKdwCvy85ZFiSrptZaWIXJxvHpCGihoEiuvCpsJcFjRUG7l5ynn
+         iXMryhsswOC0ZhAonCnJa2N7cqDAEE+geRzU4tROOFiPMnGH87snaNWDDYPcV6IxSoR1
+         mev4Wqk++y6Lvvuw2Hsry48E4mUbjS0p72x0ZCBLBX6ZhdamtR4AusZxbSv3k/uIhOAB
+         s1gXN14V+mODAEah3n2KNHz40sQbFbO03hTB0pD2nufZD6VMLBmMu2u9Q7w5glilFdgx
+         my3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVm/IjtxNGAOUWL79bXUNOuJiqoGZGCEd5n+tVG1n1hPWF63oYow4uutIewmGFCwv/A8cpcBVDYhHUKWhTdneo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuKk/eWR78MUcMbgmukKYRhnhOne5bl8OsTdOy6CTtaj9iza0+
+	Wc31yFo2i4eGjWyYw29yMSgSfFeTVI1l9f2BofCltKEJEZWpWt6okjl4
+X-Gm-Gg: AeBDieuK58euxldk3Dm0uepRiUHu7OPZRTcmFhvUvYPk3KRWUuGDN9XEAxtayzc/9SX
+	utVOANL1IlbcKg2vYqw04D/2+rPxz6T37CB0tNSJQOO3BDuDCk0fxfG4DKTPpiK/6Ve8vYhHUs4
+	xOyJpKXMzGva2GGsG4EZLzgzVJoXZ/yEec302abnTXxkGwQTLB0TFKHSPC1KijgXuBS6pLUjPrT
+	dI6jzt2Rj2Ay3xLCsGB63qJ0IMBJMTYLo3T8h/iUTX5/Wpfw1hFWPJ98ZVQ4FIWGchRAZ/1WMeB
+	sjhe5MyXc+n7QVRNvw6ckh579QT9dku/L3KfCoq2ZWR0w1R4TYtpTBsxVZdtI7ahKZ/RnnKW+Dj
+	JD+b9a9uAid2cDWHfaQCxpwhgV3YuelKpWKdYoI3ViIh0Mf8yz4GxD5LF8gNxMradCr9xY6A+Ob
+	NnSOrtPXdPPx0t2VHcGgaNCAvBdSEG
+X-Received: by 2002:a17:902:f70f:b0:2b0:61c2:8e7a with SMTP id d9443c01a7336-2b28178afb9mr197013165ad.25.1775580596074;
+        Tue, 07 Apr 2026 09:49:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:7ff:71::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27497af31sm173287125ad.52.2026.04.07.09.49.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 09:49:55 -0700 (PDT)
+From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Petr Machata <petrm@nvidia.com>,
+	David Wei <dw@davidwei.uk>,
+	Chris J Arges <carges@cloudflare.com>,
+	Carolina Jubran <cjubran@nvidia.com>,
+	Dimitri Daskalakis <daskald@meta.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 0/2] Add selftests for ntuple (NFC) rules
+Date: Tue,  7 Apr 2026 09:49:52 -0700
+Message-ID: <20260407164954.2977820-1-dimitri.daskalakis1@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:_____wC3CcDANNVpr+A5Dw--.19062S3
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUbJ5rDUUUU
-X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbC6AYOR2nVNMYrZAAA3m
+Content-Transfer-Encoding: 8bit
 
-A follow-up on this patch: I am pausing it in its current form.
+From: Dimitri Daskalakis <daskald@meta.com>
 
-The exact payload-length checks here were based on my earlier
-ring-buffer change, and Steven has rejected that direction because
-the ring buffer is meant to keep the allocated size, not the
-requested payload size.
+Thoroughly testing a device's NFC implementation can be tedious. The more
+features a device supports, the more combinations to validate.
 
-So this selftest should not move forward as-is. If there is a real
-fix, it needs to come from an event-specific change that explicitly
-stores the true payload length where needed. I will revisit it only
-from that direction.
+This series aims to ease that burden, validating the most common NFC rule
+combinations.
 
-Thanks,
-Cao Ruichuang
+Dimitri Daskalakis (2):
+  selftests: drv-net: Add ntuple (NFC) flow steering test
+  selftests: drv-net: ntuple: Add dst-ip, src-port, dst-port fields
+
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ .../selftests/drivers/net/hw/ntuple.py        | 162 ++++++++++++++++++
+ 2 files changed, 163 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/ntuple.py
+
+-- 
+2.52.0
 
