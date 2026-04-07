@@ -1,68 +1,67 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F6A3D1CBE
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 16:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A5735836E
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 17:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775580873; cv=none; b=qZQyWamdFf0nRveMVTzQqkuJeZIgdH6cKv4kdO6k22H0nzsf4/8g6K+4icDhXgUKqiRJyqn7b7ktD7MtQxb2noWZqsL0+BecoOW77l+BRwTUKoWWQ+CEaJbdCJSI7AhXhwTBYDq3t62Us6+RxQ30L5IQm6Rz5Hh3Z+tPA0kE4Dg=
+	t=1775581231; cv=none; b=GFYkILs/Sz6WAD4ggpp+VMtwpHfMWtUM/n7xM9xvkX1w+IlmQrzQbCA7ZNekafbHB8m7bfLV0sQj4pulYa4nticWbNDIPzFzwe0YCVzeQzZVawUFCGKhtHnTMip9tlvgHb8C7RBxChbcs6mjCYS6E9hMmiX5GOtavfvID3l2TCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775580873; c=relaxed/simple;
-	bh=kKNZqL6F8RmDQOYiNMBKcBJ96UMj7k7Q/A0Lt+EFUqI=;
+	s=arc-20240116; t=1775581231; c=relaxed/simple;
+	bh=JjSdknm0S3YYBOu9U1pjaX4G5IiGL313LgGv/lJR65I=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=O5PlTWcTZ02lczt/lRP4aGhgVRwlp95Gy1aCOFzlkeSAc2CcFx+7wIBr72yivnkJ7Soad8cQ12lg+3pYpZpvcWhB+XObObJudKD3Oq9iLUTj+0XXzlxf1iZa8AXmfYOm3t74ppbz6sdnwaOBV1MS0W2HxpUerynhi5k/YWqm0vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cu1tGU4E; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=Jd/zemXsAUvWu+0W+9OSVvcvI90mXnM5ZAaRHsbKJSpzOyZSerw64JN7q4p+FYIwEzuTAaSdzSpHgxBnteAcC0uysiqdgtEN3Mx6tJYVrt0oRA4azn58RJ+BU00tB5YpkfY6qDxFpObm+lazKQmzjd4b6eEhSfA1210EDBxgzWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tM/jPvHo; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cu1tGU4E"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35678f99c6eso3694963a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 09:54:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tM/jPvHo"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b0bf2b3879so138891625ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 10:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775580870; x=1776185670; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775581230; x=1776186030; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FxK8eLm+ve82UzYFQ5zdW5woECKhYE33nt75jf47tb4=;
-        b=cu1tGU4Ei9bmbDaX+6/BWORctJ2puqjuFu5h4ghR49yhPbn284VlJJluhvqlgIoUxL
-         kOe2eYP/0alb2ljjwzJqxj1Dmg3BrWHhRkioQuEkur6w4GfpnNsXYLey9SiImSBb0d8O
-         jVUUKaWPf7PX7tB0qwszq5DgMJPdspFhhzNkiOotj2hJFKYHzPq/L4VEF3HJ/ltGP8oA
-         oB2k5fvCsWNe4q+4XevSPmnBWwIluLIqEPO8Jzo83gSf87W/AnLJSPMTeaU7yg9RJljl
-         j+pVXCSk+pqfxr3qSCDYl0lAl2nwajyo8gkjA7oqvvdXoUbjbJEluzHGp0fYhgsblktJ
-         +axA==
+        bh=EzLNJzXI8gpsV/hueQ4RCy5wIqqrzS2Y7L8EbLV9C3I=;
+        b=tM/jPvHoKQRAtsQ0Axp7DSx5fQUUUmwntP1G5f/5WcyqCYEiQnbQkm+SrBTlr5T4Cn
+         iiqrEa8hY7Sntvv6EkbNPNhEkaBNRcGkU3chDMDlSzfLP10ZI3H4aCP1eGCBTUwBzYuz
+         puWRuEwg1E3gK59KB/U8611D8q1d1faU1G9vlFBwFgxHXE/qXOH7yI4Ti76lrW2Aaw2w
+         2ZRWwl5/MT2Rtrki/mSEGwreRgHDtxkN0IvOqsEC7eoXxN8+pJsK97P7BM7kRCqqBYhJ
+         AnMgu07V9T93u0t0OcYME6rdULgLehTgtGuwG4KuoEObWhVlIfm5ED6g36bVjUjNRKxC
+         aoyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775580870; x=1776185670;
+        d=1e100.net; s=20251104; t=1775581230; x=1776186030;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=FxK8eLm+ve82UzYFQ5zdW5woECKhYE33nt75jf47tb4=;
-        b=EdYMkyyXz5cZZoJQlHIfPnu+OOeUy7IB0eDO+r4ircz/X7qw+qnC8msEXav8fnlPAi
-         P8J0ZKeo/mghGnBCnzyjhl1JurqZfTRQSi344NgnvW1d6xYFaib8dWm1y/KyRe2ibBaU
-         XhaYDEBGukMGIEymtdXekL5unb9fFzVRnUMHuN3qPDHhrdb4UVTc2PFw56DgVNTUDuMM
-         QftnhrSPDlliZ0OcLMKFC+wDzMP+7326amfNyb0KE/zbjVME88V0RsO1uULHrEgzSVND
-         LnrVnln2AbZJaMTSZ+/BF41MFrkTPguJrKXOtMIditbLjF8TEKly8Xl2nMI4yiE3Ar83
-         sQtw==
-X-Forwarded-Encrypted: i=1; AJvYcCUxxUNCeeSH7xbXfAvA6gUXRsO8BG1cg81FQ3swbF0PFHHhc/INfvhFUnYFwE1kyqAbC9o6e/LDDjFOL9hFb10=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWVkVOHaxjWKLD7msTw9+cSASN+2F375vQj7GQ8LIiPZXdrEh+
-	oU/PvZX4UEoD0Krs/AD3gaojPijn+WR+Lwtkse7nE01yUkfvi9/gg571SOQyp3c16PZXJ6PCIXZ
-	atSiMCA==
-X-Received: from pjbgb12.prod.google.com ([2002:a17:90b:60c:b0:359:7aaf:b9c5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4b92:b0:35b:e4d8:e21d
- with SMTP id 98e67ed59e1d1-35de678f2c8mr16629462a91.2.1775580869789; Tue, 07
- Apr 2026 09:54:29 -0700 (PDT)
-Date: Tue, 7 Apr 2026 09:54:28 -0700
-In-Reply-To: <CALMp9eSysKOVGF_xakbT59tVsgER6oEYpJuK9=hQutjY=ZpM-A@mail.gmail.com>
+        bh=EzLNJzXI8gpsV/hueQ4RCy5wIqqrzS2Y7L8EbLV9C3I=;
+        b=IcjSeQO2S1T7uN4O6G8WG355eMfV5xxhVs3ti2aZVpkVPg7gISv8QG97YUB1IQiUYE
+         PURBWtDZwqSBT483kiatkXb/AMnW60MC0DchXhWU9aqAHK0LedAtgGsBM1PKPIXB+wt2
+         IY2ZgVBQZCIBT4evxN5flZWf5OqIe7/fKwr2HqhKSLqZ2lNWGfSZ9/1brIs58g+ka+cR
+         gIbGlHwnPtVYzKe6qnn3HHJk2x5RPFXZC3iEGslJG1hCMjP6BTB13+1bm7LLO/dVCyMY
+         pTowo9e9CjYZx1q1s9myJP4GlK6n++trhZY6Wh8wFJ74kWMNwXvBx2zTyHumcnu5KNT8
+         pbfg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzno08F3NiaZfxSLgDZlc1c7cv9xgA+6xlJk0Q8WihMR7Cv7xbMsqovfAmil2Q7QlRfrM9CJYhnxkqpx0bou0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzNra1ZdLe7nrNaTTcD0jyw2XTtyculbjrNs0uLhwLqdxppQlp
+	VIcVyhc35xIA2vX3ZNzOZBXVRlESqEKRaz4ZNnUbgQ4yFGFhP/lUsKHWiBpJE86jT0JMOXN17E/
+	vI+mDCw==
+X-Received: from plbkq14.prod.google.com ([2002:a17:903:284e:b0:2b0:4da9:9b30])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3586:b0:2b0:b325:748a
+ with SMTP id d9443c01a7336-2b281705e9fmr189157025ad.22.1775581229412; Tue, 07
+ Apr 2026 10:00:29 -0700 (PDT)
+Date: Tue, 7 Apr 2026 10:00:27 -0700
+In-Reply-To: <CALMp9eQR_ZivpcARLyvDK3w+frpwU8bj2Z+ZvA_fLdCtTq3Vhg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260327234023.2659476-1-jmattson@google.com> <20260327234023.2659476-9-jmattson@google.com>
- <adRGLPrmBpX-3DdX@google.com> <CALMp9eQsd0fRuDE_R57Mn6-N6jCtbmoPAh7Y7CBdMEZJaNSUGQ@mail.gmail.com>
- <adURPZJEDs50NPkB@google.com> <CALMp9eSysKOVGF_xakbT59tVsgER6oEYpJuK9=hQutjY=ZpM-A@mail.gmail.com>
-Message-ID: <adU2xHUvZJVHtNlV@google.com>
-Subject: Re: [PATCH v7 8/9] KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
+References: <20260327234023.2659476-1-jmattson@google.com> <20260327234023.2659476-2-jmattson@google.com>
+ <adRBZuqNlBozaDrK@google.com> <CALMp9eQR_ZivpcARLyvDK3w+frpwU8bj2Z+ZvA_fLdCtTq3Vhg@mail.gmail.com>
+Message-ID: <adU4Kwtus2C53U3E@google.com>
+Subject: Re: [PATCH v7 1/9] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
 From: Sean Christopherson <seanjc@google.com>
 To: Jim Mattson <jmattson@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -76,47 +75,65 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Tue, Apr 07, 2026, Jim Mattson wrote:
-> On Tue, Apr 7, 2026 at 7:14=E2=80=AFAM Sean Christopherson <seanjc@google=
+> On Mon, Apr 6, 2026 at 4:27=E2=80=AFPM Sean Christopherson <seanjc@google=
 .com> wrote:
-> > > >         use_separate_l2_pat =3D (ctl_cached.misc_ctl & SVM_MISC_ENA=
-BLE_NP);
-> > > >         if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_NESTED_SVM=
-_SHARED_PAT))
-> > > >                 use_separate_l2_pat =3D false;
-> > >
-> > > Wow. I really have no idea how to predict what you're going to want
-> > > the code to look like. How is this better than the original?!?
 > >
-> > It doesn't immediately wrap after the "=3D".  Similar to my view on wra=
-pping before
-> > function names[*], I find wrapping immediately after an assignment oper=
-ator to be
-> > unnecessarily difficult to read as it doesn't provide any context for s=
-ingle-line
-> > searches.
+> > On Fri, Mar 27, 2026, Jim Mattson wrote:
+> > > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> > > index ff1e4b4dc998..74014110b550 100644
+> > > --- a/arch/x86/kvm/svm/svm.h
+> > > +++ b/arch/x86/kvm/svm/svm.h
+> > > @@ -616,6 +616,17 @@ static inline bool nested_npt_enabled(struct vcp=
+u_svm *svm)
+> > >       return svm->nested.ctl.misc_ctl & SVM_MISC_ENABLE_NP;
+> > >  }
+> > >
+> > > +static inline bool l2_has_separate_pat(struct vcpu_svm *svm)
+> >
+> > Take @vcpu instead of @svm.  All of the callers have a "vcpu", but not =
+all have
+> > a local "svm".  That will shorten the quirk check far enough to let it =
+poke out.
 >=20
-> That's actually a good argument to *never* wrap a line. If a line is
-> broken at all, the interesting context might follow the line break.
+> What is the actual line length limit?
 
-Don't let perfect be the enemy of good. :-)
+There's a "medium-firm" limit at 80 and a "mostly-hard" limit at 100.  100 =
+isn't
+a true hard limit to allow for things like pre-formatted strings, and cases=
+ where
+the only way to stay under 100 chars would (arguably) yield less readable c=
+ode
+overall, e.g. msr-index.h deliberately has this
 
-> > I'm pretty darn consistent in my dislike for that style: I count 26 ins=
-tances in
-> > arch/x86/kvm that match "\s=3D\n", and only two of those carry my SoB o=
-r R-b.  I
-> > simply missed the wrap in kvm_vcpu_apicv_activated() that was added by =
-commit
-> > 896046474f8d ("KVM: x86: Introduce kvm_x86_call() to simplify static ca=
-lls of
-> > kvm_x86_ops"), and I'll give myself a pass for commit 8764ed55c970 ("KV=
-M: x86:
-> > Whitelist port 0x7e for pre-incrementing %rip") as that predates treati=
-ng
-> > checkpatch's 80 char limit as a soft limit.
+#define MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI		(1ULL << MSR_CORE_PER=
+F_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI_BIT)
+
+and not
+
+#define MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI \
+	(1ULL << MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI_BIT)
+
+> > > +{
+> > > +     /*
+> > > +      * If KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT is disabled while a v=
+CPU
+> > > +      * is running, the L2 IA32_PAT semantics for that vCPU are unde=
+fined.
+> > > +      */
+> > > +     return nested_npt_enabled(svm) &&
+> > > +             !kvm_check_has_quirk(svm->vcpu.kvm,
+> > > +                                  KVM_X86_QUIRK_NESTED_SVM_SHARED_PA=
+T);
+> >
+> > Align indentation.  With the @svm =3D> @vcpu change, this becomes:
+> >
+> >         return nested_npt_enabled(to_svm(vcpu)) &&
+> >                !kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_NESTED_SVM=
+_SHARED_PAT);
 >=20
-> Might I suggest that you should provide a tool=E2=80=94something like
-> checkpatch.pl=E2=80=94that flags style violations?
+> You wouldn't happen to know the Emacs configuration for the alignment
+> you like, would you? I asked Gemini, but it lied to me.
 
-Or maybe extend checkpatch with an optional "feature"?  Or subsystem-specif=
-ic
-rules?
+Heh, no.  Any time I unintentionally end up in Emacs, I have to do a search=
+ just
+to figure out how to save and exit :-)
