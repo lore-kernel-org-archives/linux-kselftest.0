@@ -1,97 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73A31EB5FD;
-	Tue,  7 Apr 2026 14:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290841EB5FD
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 14:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775572492; cv=none; b=jhzaPqQV0F0t/f3BcFoB7qGCf4L7+C5q1fvpeLmH8jA4QZC6M93JhqFDncdYvnhkkXZYRY3yiaeoclITumt+UM0wu/BOGD8EQs8RUER3Fxy3mZtRfEXaMD3nXs+fpWk9zJMN/jI+KWvMUGX/e2YQFA8xZdl90WVRXCBX+LD7fvw=
+	t=1775572553; cv=none; b=Ln+/yfgNgcQQqwWhGio1gr02EYK8x6K3MwdX/2b/kH9rV5HininH+UmF/9EgjZftfOs1ZXSDA+3kJjgl+VAfe4HwbI1DyNSh+1iYfsts0TPUAQPWYqHD0JlR004y46TmwCjWO1by5deT7LL/xeFF8mfOAVBBPdtctl7yucBbeUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775572492; c=relaxed/simple;
-	bh=RCmKhdjPi8Jskr47gc+moRDVhuEspqo0T/BYmwAP0vE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r/Va0MpfqvxrsoZftuxtRbc65yWkLWJjGlWAzvwqTjgnADSy3VCT8OFanRQ2CoJF5tBk6RCcPfHEjyKMRGaixm80Zvv+9bl6uMD5ceHPJMebzztloI24BzrFKpEtnNbg2nifcFyQqq0y972gVCcVX3t/h9f+xIjMzu8DrliHTwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l1bqf43h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775572553; c=relaxed/simple;
+	bh=IRHUYQTVSy7eKLfs9awYkPFAR9CSsmd4GW1ICvSISTA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=n6Wcdah71OWGwmG7mYq+v0d8VVhOxbfL4OKPxwdkyUSTtvkbdxZ3KlrR6ebg0I3+Sx951+AVR2usILRVF3JQ4Pz0CNCbyYxbs3w88rueYChXHAzeTev9+ck1L+9d5FC0i43wKqwDaOacZ3zDJZrM+2/OQO7xZZ0T8vQES4rU+eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FZnr6iVq; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l1bqf43h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251C4C116C6;
-	Tue,  7 Apr 2026 14:34:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775572492;
-	bh=RCmKhdjPi8Jskr47gc+moRDVhuEspqo0T/BYmwAP0vE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l1bqf43hK9lhDea23rRAGPHaGVpNN+dsaboOjP0v99SbjVKrncfAnmGzS5RwBtNWO
-	 Io1/sFyKC07KeA5jlKXxakwJhEUtbIzY/h7HN96mNVHmcSiGULsCMHulOfafFZRrsP
-	 7Kb9CaJOYQ9qj/qx0lp/bXygrfX+HnHrN+GryuJpK4DYIffadZUt9vXV7RbE0Ea+1i
-	 lehS/gPRNB/Nix/zpp+1iagwCoiNyEutG8xvaLDKrww7/dhjoGA2tY3JHPtyKkhtaX
-	 WTyJf3Zt+GylUYYpywmCXpUSwZj94sV9oeCfZjedHGcbjgF1BmYWdO0einjgDT+GzH
-	 bi9kGKRzjaJGg==
-Date: Tue, 7 Apr 2026 15:34:45 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
-	Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 19/53] selftests/mm: va_high_addr_switch: use kselftest
- framework
-Message-ID: <1857da58-925e-4e3d-b684-8a76eabc51f9@sirena.org.uk>
-References: <20260406141735.2179309-1-rppt@kernel.org>
- <20260406141735.2179309-20-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FZnr6iVq"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48374014a77so68770935e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 07:35:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775572550; x=1776177350; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fSLEuzftp/vn581F8/eCq5iwVi1oOcYy/GnZ6Clx8Vc=;
+        b=FZnr6iVqremJUDm9DldwVV6BJZpUWYMXnEfAaMKqYnjnrUjA2yw9kfjN/Hf3IPO1NW
+         FemOBBXpY4gjvTsZUDV/BaeT6cy34BoV24mJK21Z72c2VvMLfPqzpXYg2Pf/ckpELCxh
+         RwtDqkjrmcUNLrWxMyiqO+tEoSJcm67xKXkuAXfaAgn5BLnvzl1slJea8DKa7HVvBnvz
+         4CxQ7p6YRDNq6xJvVA3/xvkIYTChnCy6eey0HnuCTUUiPyH21/skT386IwTiTFcmxaaD
+         FX3uNsDgBzGo16gQEdSJGVtWrooycQXoIhTmj8/6sVfvSCC8cqRSlGrtUuYbMNREubz8
+         W1zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775572550; x=1776177350;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fSLEuzftp/vn581F8/eCq5iwVi1oOcYy/GnZ6Clx8Vc=;
+        b=XX03dlSVvsvilxIGbj+IVOGB08qrO3gliR73ZlcWYgikCL+c3K7mjloZX9rAopmTjN
+         5KODir3k9ZM2wdI/aypcmHzkldE01TZyDRQ3h5B2KvyjM4ow+1UtR5RjHEyL7lVnsiVO
+         JdZQ6otOuSfFCvd1+si6V4iY1TamvAidn7i1QDI63QeZn1FnjjZAG/3ijXImJUs1oJ1d
+         RUlNNzFozaRozREhgtGnQgqy9dwA2ov2PUm9NrGQEK9xOx3esM5UmtPAUBbsuvDYt4l7
+         JAm3yijW7JqJLMzk3tWz1fEWhYtW/X1+6RfZ4hAPLQjbHpbYENhV+cmBKzXpCk9v40vB
+         X/XQ==
+X-Gm-Message-State: AOJu0YxZrRYL1O5q00eXFyO+xykIloMwnvbhE6v9Iy2cmjROBZND0LrX
+	WBKsZwg0g8CWT0j6X0I6ai/m9uqHeIMsp6klD9AOUgGliQt6T7CFZmLikHv/BZ/YrRI=
+X-Gm-Gg: AeBDieuY3RdexOpmF2mAaH7yFBIW7ESmBun8dYi0WEjhTrUq76iwcmlnfBOkrmj54Rs
+	JbSsoVe9P2Gd1U0qXgIMWWkiQCmaTqKuFkX89igbnouszcHGk8a9y/SG2xzgxCQ/Mm0HnLkvL9P
+	zsMf5FTt84aQp4jxWPlpB242ds32GdjoN1DA0qKUPcDhELjgJWZhdGhoiWw+uQKMGq+PJmtWxc5
+	ljPCM2lrtqHpp6JyCLv8/ZWqJfbYoz4SMLpA5X1OQy7kaSmfsu0IPmQZgqW+T4+JLkULSwbXFUw
+	o+Tnq7BwG1pwoT3OVzSx+hRBICU7xVQM/8AXPdgv9hdJcuTLawF3cf3bbxYkOcFsjSM8SdfK2RX
+	QWAq7FXDoOeKCa3ghXCZg2R7qFiNFygH8V4zKoMqaUVzdI0GXzgjnXX+qmlhv4wShrIAokAUy39
+	Ct00EX3EefqJLu
+X-Received: by 2002:a05:600c:c049:b0:487:2439:6266 with SMTP id 5b1f17b1804b1-488998e3a68mr171943005e9.30.1775572550519;
+        Tue, 07 Apr 2026 07:35:50 -0700 (PDT)
+Received: from localhost ([2804:7f0:b767:120d:a4df:3777:2c55:2b95])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2cae7e3ec57sm18751150eec.1.2026.04.07.07.35.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 07:35:49 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Subject: [PATCH 0/3] selftests/namespaces: Fix test hangs and false
+ failures
+Date: Tue, 07 Apr 2026 11:35:44 -0300
+Message-Id: <20260407-selftests-namespaces_fixes-v1-0-59109909d88b@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="b2yQFTIeWGRWvWGc"
-Content-Disposition: inline
-In-Reply-To: <20260406141735.2179309-20-rppt@kernel.org>
-X-Cookie: Now, let's SEND OUT for QUICHE!!
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAEAW1WkC/yWMWw6CMBBFt0Lm28aCVaJbIca09RbGSCGdakwIe
+ 7fo57mPs5AgMYQu1UIJbxaeYoF6V5EfbOyh+F6YGt2ctNGtEjxDhmRR0Y6Q2XrILfAHoswhBNP
+ W7RlHT0UwJ/yK8u+uf5aXe8DnzbgtnBUol2z0wxZNiXuO+9FKRqJ1/QKYX1QhngAAAA==
+X-Change-ID: 20260407-selftests-namespaces_fixes-43ff47179e5c
+To: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Ricardo B. Marliere" <rbm@suse.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=openssh-sha256; t=1775572546; l=1521;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=IRHUYQTVSy7eKLfs9awYkPFAR9CSsmd4GW1ICvSISTA=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QMwfKFjSFI9+yoX2A1QL0+sICdA6JUuHgk7zaWVttpu+8YYyeWxdv4j0CP6pt0U8yq+5bDD2J7p
+ 1aDlvR2+c/gg=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
+This series addresses three reliability problems in the namespaces selftest
+suite that cause tests to hang or report incorrect results.
 
---b2yQFTIeWGRWvWGc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The first patch fixes a hang in nsid_test where the grandchild process is
+not reaped during fixture teardown, leaving it alive and holding the TAP
+pipe write-end open so the test runner blocks indefinitely waiting for EOF.
 
-On Mon, Apr 06, 2026 at 05:17:01PM +0300, Mike Rapoport wrote:
+The second and third patches fix two problems in listns_efault_test: a
+waitpid(-1) race that can cause the iterator child to be consumed during
+namespace cleanup (leading to an indefinite block on the subsequent targeted
+waitpid), and a false FAIL verdict on kernels that do not implement listns()
+(the EFAULT tests should SKIP in that case, consistent with every other
+listns test that already handles ENOSYS correctly).
 
->  		if (p == MAP_FAILED) {
-> -			printf("FAILED\n");
-> -			ret = KSFT_FAIL;
-> +			ksft_test_result_fail("%s: MAP_FAILED\n", t->msg);
+Assisted-by: Claude Sonnet 4.6
+Signed-off-by: Ricardo B. Marliere <rbm@suse.com>
+---
+Ricardo B. Marlière (3):
+      selftests/namespaces: Kill grandchild in nsid fixture teardown
+      selftests/namespaces: Fix waitpid race in listns_efault_test cleanup
+      selftests/namespaces: Skip efault tests when listns() is not available
 
-ksft_test_result_*() should use a consistent name for the test,
-otherwise tooling won't be able to correlate passes and fails from
-different runs (or different fails if the fails print different errors).
-The entire string supplied is taken as the test name.  Log the error
-separately.
+ .../selftests/namespaces/listns_efault_test.c      | 33 ++++++++++++++++++----
+ tools/testing/selftests/namespaces/nsid_test.c     | 14 ++++++++-
+ 2 files changed, 40 insertions(+), 7 deletions(-)
+---
+base-commit: bfe62a454542cfad3379f6ef5680b125f41e20f4
+change-id: 20260407-selftests-namespaces_fixes-43ff47179e5c
 
---b2yQFTIeWGRWvWGc
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnVFgQACgkQJNaLcl1U
-h9CLzgf/Z7enUVELGg09YPk+CGx5ueR+92ySPouJPQGYBbRto0TTfc2bvyL7Pe4q
-hslkud5LA/NyHwJBRJh8cmSxbuYQd6BPYuwCUXG6c/e3QgSmMXPKNSZjucha0mYr
-p9D9CNO7oNF3th34Tg+N3Kda7F3Q+xd/n9TXQBeRIo22zUn0ZGX4PXo/oKKjYnle
-R9xShmfN8z/eqpRf03Ek/tY1W2Q3idhqRrQgNniSOar2j4E+1eeREXNEGm4sv13s
-N1SSnSFJN+ADSEPJSYaRmxEbioktWuKkeEmzEupvyR/29LHsUNjQE+pL4Ljji0c5
-kLpJjGqqHqB9K73AzqzDeHMnNMBCWQ==
-=Q7yh
------END PGP SIGNATURE-----
-
---b2yQFTIeWGRWvWGc--
