@@ -1,159 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps-ovh.mhejs.net (vps-ovh.mhejs.net [145.239.82.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2830B39A078;
-	Tue,  7 Apr 2026 10:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D28F2F690F;
+	Tue,  7 Apr 2026 10:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=145.239.82.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775557362; cv=none; b=ftxy11srt5PR9IMOcPhUFgEvknMvvQHIORqS47EERvJ6JSX5KFFJHaxGQ22d+9VpEx4h3sNMzi/VAFC1vUzacpPoco+hhHWj6xxFUMa5RD7vcHJma2D9cKQJa24r6cY4BykgBqQC60DzKZujXiPzc2Rrt52M48gLezwpUpX7pGQ=
+	t=1775557454; cv=none; b=UUx9CdDrpQqs1Pf5n7qitjGU3CGENfvHhNe1oUzv60eAVqdP0t/tilkjmPg5vzxueEFgxvj2rcTLZMv8jIZZqqctFuKa9x6cZOqD2wyebxMCZdB7mi/u2IN8JJXNV2hOLkfki1sV846a73GxNhJSHUhQ6sqcO8bwBhD5m4wv7R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775557362; c=relaxed/simple;
-	bh=FZkXrU5Sd83jhvoTVMaDHnOI/PwYuAOxdZZgsx2RnDQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cZ9K91zkW5lkHiVnoSYQurwU6js+aCKaZQ6QPl4NC4xprKyXkoF7V8Kj0KvxUrsvggigwJqv38VKVE8J3WA5dIcB7HQ+jVNI6d4p1qz2TTqZaF+U4nsRR0Osz64AvfAwQnmUR/TmcqUg3wtd/vgQ8Qo16AEWsBhOIQkHbwPXHC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZHXzlVJd; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZHXzlVJd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A19C116C6;
-	Tue,  7 Apr 2026 10:22:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775557361;
-	bh=FZkXrU5Sd83jhvoTVMaDHnOI/PwYuAOxdZZgsx2RnDQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZHXzlVJdcn23biVy0NIGUnEkgIbhCKM79YUU7qVLdsa27iyW2F4YS/cqLPvQZMwnx
-	 wBUa9244UMoGK9QDESuLHCHGfivKDN5nFW8aZEzs5aKMjYodHJFTSaD4vIkJNVNFvx
-	 pLlTln2YYRfSIluTOI9UpSdIqFr72/k4dLuXK1bhEcEvteMzcd5bOlFDY2JBmUmiF4
-	 QH46TOAbDtuDwMDKhCHjkwLY7Wtz5p5st0Yx1jggpBGBSUs5DczSD/qjS+dNcVTlfJ
-	 1jDiTdUlSamOHQ6s6UXivis4w6CZYdzw7FvFtKFmf3Bq5uUd8IAu0gPwFcqiDXJk8q
-	 xgQwywDrKn3Rw==
-Date: Tue, 7 Apr 2026 11:22:35 +0100
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Sayali Patil <sayalip@linux.ibm.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Ritesh Harjani <ritesh.list@gmail.com>, Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, 
-	Oscar Salvador <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org, 
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: Re: [PATCH v3 08/13] selftests/mm: ensure destination is
- hugetlb-backed in hugepage-mremap
-Message-ID: <adTa3YItApOvQAlN@lucifer>
-References: <cover.1774591179.git.sayalip@linux.ibm.com>
- <3b6ffba238a4b59de891acf896fa25d7d3193228.1774591179.git.sayalip@linux.ibm.com>
- <ee15d52f-45df-415b-b0d9-3d267d147e5c@kernel.org>
- <b590a17c-13ed-45f4-9f51-ac662d00e7bf@lucifer.local>
- <066a146b-7dbb-408e-bbc0-542bdcdd6681@linux.ibm.com>
- <86889304-c450-491c-8c06-48ca9c973531@kernel.org>
- <0a1befae-1037-4bbe-b976-352ef4607d2a@lucifer.local>
- <f0905481-3ed3-49e6-a25d-4b58dca7493c@linux.ibm.com>
+	s=arc-20240116; t=1775557454; c=relaxed/simple;
+	bh=4U+mKB9Aj812GFU4fxDzvzR7obpLg0KvODUphRCOLTE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UFPM/molMif6fClQuy/gYOyFplyMgsNUNjGLHYr5+h1kJL0tO+JNbZeg9WRbaV+HPjluM7qQ9lgVDNv1ezuik0FSI0e/BEC5DdxzwNrfpufuainuPpvhW99YShdcgLVU24PrbnwwAPgU2ipxDGtpjG9yR8FJUeZzuqpFGsXEz50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name; spf=pass smtp.mailfrom=vps-ovh.mhejs.net; arc=none smtp.client-ip=145.239.82.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vps-ovh.mhejs.net
+Received: from MUA
+	by vps-ovh.mhejs.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.98.2)
+	(envelope-from <mhej@vps-ovh.mhejs.net>)
+	id 1wA3bF-0000000HJyn-11uz;
+	Tue, 07 Apr 2026 12:24:01 +0200
+Message-ID: <beb063b1-f589-4129-a228-669f71c16e9d@maciej.szmigiero.name>
+Date: Tue, 7 Apr 2026 12:23:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] KVM: selftests: memslot_perf_test: make host wait timeout
+ configurable
+To: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>,
+ Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>
+References: <20260402102953.2984284-1-mayuresh.chitale@oss.qualcomm.com>
+ <64d44f37-7d31-46be-b9ed-cc86969777dd@maciej.szmigiero.name>
+ <adQ6_MyjhnpJYJ5H@google.com>
+ <CAHuiULCkHojN1QEb7OSL0rozL_wYpw1Xts1pVcThFcDaQg3zqw@mail.gmail.com>
+Content-Language: en-US, pl-PL
+From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Autocrypt: addr=mail@maciej.szmigiero.name; keydata=
+ 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
+In-Reply-To: <CAHuiULCkHojN1QEb7OSL0rozL_wYpw1Xts1pVcThFcDaQg3zqw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f0905481-3ed3-49e6-a25d-4b58dca7493c@linux.ibm.com>
+Sender: mhej@vps-ovh.mhejs.net
 
-On Fri, Apr 03, 2026 at 11:11:25PM +0530, Sayali Patil wrote:
->
->
-> On 02/04/26 14:35, Lorenzo Stoakes (Oracle) wrote:
-> > On Thu, Apr 02, 2026 at 09:33:29AM +0200, David Hildenbrand (Arm) wrote:
-> > > On 4/1/26 22:39, Sayali Patil wrote:
-> > > >
-> > > >
-> > > > On 01/04/26 20:10, Lorenzo Stoakes (Oracle) wrote:
-> > > > > On Wed, Apr 01, 2026 at 04:21:55PM +0200, David Hildenbrand (Arm) wrote:
-> > > > >
-> > > > > OK so digging in:
-> > > > >
-> > > > > mremap -> ... -> vrm_set_new_addr() -> get_unmapped_area() -> ... (in
-> > > > > ppc arch
-> > > > > code) -> slice_get_unmapped_area():
-> > > > >
-> > > > > unsigned long slice_get_unmapped_area(unsigned long addr, unsigned
-> > > > > long len,
-> > > > >                        unsigned long flags, unsigned int psize,
-> > > > >                        int topdown)
-> > > > > {
-> > > > >      ...
-> > > > >      /* bunch of checks */
-> > > > >
-> > > > >      /* If we have MAP_FIXED and failed the above steps, then error out */
-> > > > >      if (fixed)
-> > > > >          return -EBUSY;
-> > > > >
-> > > > >      ...
-> > > > > }
-> > > > >
-> > > > > Is presumably where we hit the issue.
-> > > > >
-> > > > > >
-> > > > > > That is weird. An mremap(MREMAP_FIXED) is really just an munmap() +
-> > > > > > move.
-> > > > >
-> > > > > Yeah the weird bit I guess is that we _still_ invoke
-> > > > > get_unmapped_area() but
-> > > > > with MAP_FIXED set to indicate that we want the specific address, so it's
-> > > > > subject to the above checks.
-> > > > >
-> > > > > >
-> > > > > > Are we sure this is not some actual problem in the hugetlb
-> > > > > > implementation?
-> > > > >
-> > > > > It seems the 'slices' check sees if the _target address_ has an
-> > > > > equivalent page
-> > > > > size, presumably hugetlb-mandated, and fails if they're not
-> > > > > equivalent, so this
-> > > > > change is just accounting for that.
-> > > > >
-> > > > Yes, this change accounts for that by ensuring the destination is
-> > > > created with MAP_HUGETLB so it has the same page size as the source.
-> > >
-> > > Okay, weird, so it's the right thing to do to cover all odd arch behavior.
-> > >
-> > > > >
-> > > > > >
-> > > > > >
-> > > > > > But then the test suddenly requires more hugetlb pages, no? I don't see
-> > > > > > a good reason for the MAP_POPULATE, really. It will be discarded
-> > > > > > either way.
-> > > > >
-> > > > > Yeah I'm not sure about the MAP_POPULATE being all that important here.
-> > > > >
-> > > > As far as I understand, without MAP_POPULATE, memory accesses would
-> > > > trigger userfaults, and since the test is single-threaded and has no
-> > > > background handler for the uffd, it would deadlock. MAP_POPULATE ensures
-> > > > the test runs correctly by prefaulting all pages, but please let me know
-> > > > if I’m mistaken.
-> > >
-> > > So you are saying the test would deadlock if you are not adding
-> > > MAP_POPULATE? If so, please double check if that is actually the case.
-> > >
-> > > And if it's actually the case, please carefully document that in the
-> > > patch description, and probably as a comment above the MAP_POPULATE usage.
-> >
-> > Do keep in mind MAP_POPULATE is not _guaranteed_ to work :)
-> >
-> > For guaranteed populate you need madvise(..., MADV_POPULATE_[READ/WRITE]) or to
-> > directly fault in.
-> >
-> > >
-> > > --
-> > > Cheers,
-> > >
-> > > David
-> >
-> > Cheers, Lorenzo
-> >
-> Thanks David and Lorenzo for the input.
-> I tested without MAP_POPULATE and the test works fine without it.
-> I will remove it in the next version.
+On 7.04.2026 12:21, Mayuresh Chitale wrote:
+> On Tue, Apr 7, 2026 at 4:30 AM Sean Christopherson <seanjc@google.com> wrote:
+>>
+>> On Thu, Apr 02, 2026, Maciej S. Szmigiero wrote:
+>>> On 2.04.2026 12:29, Mayuresh Chitale wrote:
+>>>> When memslot_perf_test is run on qemu, sometimes the RW subtest fails
+>>>> due to sigalarm, indicating that the guest sync did not finish within
+>>>> the expected duration of 10 seconds. Since the current timeout value is
+>>>> itself a bump up from the original 2s, making the host timeout value
+>>>> configurable via a new command line parameter. Now the test can be
+>>>> invoked with '-a' argument to run the test with a suitable host timeout
+>>>> value.
+>>>>
+>>>> Signed-off-by: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
+>>>> ---
+>>>
+>>> Out of curiosity: which KVM-enabled setup takes more than 10 seconds
+>>> to run that RW test?
+>>
+>> Hmm, I assume "run on qemu" means running in a VM that's fully emulated by QEMU?
+>> That would probably explain why it's so slow?
+> 
+> Yes. thats correct. I can update the commit message to reflect that.
+>>
 
-Thanks!
+Thanks for info Mayuresh and Sean.
 
-Cheers, Lorenzo
+I thought QEMU has only rudimentary SVM emulation, but apparently it's enough for
+KVM selftests to run.
+
+Thanks,
+Maciej
+
