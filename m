@@ -1,35 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F1934D4EA;
-	Tue,  7 Apr 2026 02:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2447B34F26F;
+	Tue,  7 Apr 2026 02:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775528445; cv=none; b=WvxmqBdTAJvJt2+6gpzAwKuvz1UuBF2I33A/FQITfBVwTaQB2PrX+H4WJhrix9+ScW7qDa53mbi5Jo5dglpUJYeRfQn6ASGBBnCIsP6sZjkT4c261Fg0koLnvVzT6vNVCxpHLtr/1k/kq7BXoKbvZ9sLelB0KBgcXq38v1GYxMw=
+	t=1775528875; cv=none; b=H88HF4tq/QqSWAMQFxGhXDNRBCwNw+/x6oYr9UpUBRiyDClk2KECFo9yM7Wy/B3rikM4CaD4kmmn8RK287v9hac5Tm2v5jq7NKOpCKV7aQo6ED3uSt3elQNhOnxb7/hNsyJq0jRPae2FjxiRZiJLBTj8z0x9w3vBcJ03PUdjhnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775528445; c=relaxed/simple;
-	bh=alNwXDLkA8tDaP+3/itxFIwRAifX5uOLvOtmvlBVT6w=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=YBiH1FmKjclttYRNLj/apG0CyTeqjbTj1PmbXWEVYBC0lZWO2W2hyvh40gQBfqc9V2JQQZNveKdnXf9POmKzXUx4GSnuBKPjJiiYo4B6ZvBlD+Chz6UMzTuoQgBAPcmc7PO4gWVHgyw2qJMATz89UHlXwtjY6kCatWbMa1x2p8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cq6tYqz+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775528875; c=relaxed/simple;
+	bh=xr116ENgh6GConTk+CrKHjqqli2+OmQT78h7tAHpoFo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GVAJQAFinBGOi+w3EEr27xVrRVA/nNsTQPTS+CdSil9cG5HkVl3p1oGxXFztJjUoiWWAWGKBJbhDkqMfkdWGtVA6AaxN17d65OXOK+V4gUw5V0Du+wO//u5bdpXDfZPbVcO843kzh8c544v8j0LtMctNcgBhCugiaEQ4V0b0iLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pRlteTRF; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cq6tYqz+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77314C4CEF7;
-	Tue,  7 Apr 2026 02:20:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775528444;
-	bh=alNwXDLkA8tDaP+3/itxFIwRAifX5uOLvOtmvlBVT6w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Cq6tYqz+4BWZkTNLy0FdmHvBUqZi3+1Tu1fFU27exvjLopxNJ7lgX/3S2F/TSi7HU
-	 LWhzw730wHBmm9Pqp/T4HYFMtcT45blfiQN2LycLQsLuSx4Vn+HQ2xyCz1ynEU/OyX
-	 gMjvXKX7K8apJW4iVhFBQgWZCRjAEiETwcVb/URAZwlOviAFwnv4OIRuxo3QbVI2dI
-	 3ZJ0S+h/nGyYHVLLSv4dkOYt2sM12OztYK9v9e9aQpNz3KeSxnenmCtPzmqiWTYqVe
-	 O4reme+p4rpzJ3LdXu4LQJitRS4EU/J8mFdj7K4Vz1sbdEM33l9xp+lCsBQdD9v7T9
-	 VMCcxATt3QH5g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02C473809A28;
-	Tue,  7 Apr 2026 02:20:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pRlteTRF"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775528862;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/BTSRSfR0uEztwllvIBtGt3uj4LQXe+9g40tIFFHvFA=;
+	b=pRlteTRFCngwuqCfB/JPjTWBX+W/RnoxhfZoknK1Mz5RfmhefF+5ylpwY6KKZSsIYGwvV2
+	ZPFBxVFOoExV/l0+Kisefx27Vx26fjtBxsSp4Gjie32VCqGcq2m1+3DCPMXTggiMfKqBlA
+	E9WnvR1wIxK+1jb/NZvvrzMI4xL0XoU=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: werner@verivus.ai,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Sun Jian <sun.jian.kdev@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v3 0/2] bpf: Fix SOCK_OPS_GET_SK same-register OOB read in sock_ops and add selftest
+Date: Tue,  7 Apr 2026 10:26:26 +0800
+Message-ID: <20260407022720.162151-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,53 +60,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/5] mptcp: support MSG_EOR and small cleanups
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177552842280.3346653.6456875572655445146.git-patchwork-notify@kernel.org>
-Date: Tue, 07 Apr 2026 02:20:22 +0000
-References: 
- <20260403-net-next-mptcp-msg_eor-misc-v1-0-b0b33bea3fed@kernel.org>
-In-Reply-To: 
- <20260403-net-next-mptcp-msg_eor-misc-v1-0-b0b33bea3fed@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- netdev@vger.kernel.org, mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
- yangang@kylinos.cn, ncardwell@google.com, kuniyu@google.com,
- dsahern@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+When a BPF sock_ops program accesses ctx fields with dst_reg == src_reg,
+the SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() macros fail to zero the
+destination register in the !fullsock / !locked_tcp_sock path, leading to
+OOB read (GET_SK) and kernel pointer leak (GET_FIELD).
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Patch 1: Fix both macros by adding BPF_MOV64_IMM(si->dst_reg, 0) in the
+!fullsock landing pad.
+Patch 2: Add selftests covering same-register and different-register cases
+for both GET_SK and GET_FIELD.
 
-On Fri, 03 Apr 2026 13:29:26 +0200 you wrote:
-> This series contains various unrelated patches:
-> 
-> - Patches 1 & 2: support MSG_EOR instead of ignoring it.
-> 
-> - Patch 3: avoid duplicated code in TCP and MPTCP by using a new helper.
-> 
-> - Patch 4: remove duplicated condition.
-> 
-> [...]
+[1] https://lore.kernel.org/bpf/6fe1243e-149b-4d3b-99c7-fcc9e2f75787@std.uestc.edu.cn/T/#u
 
-Here is the summary with links:
-  - [net-next,1/5] mptcp: reduce 'overhead' from u16 to u8
-    https://git.kernel.org/netdev/net-next/c/00d46be3c319
-  - [net-next,2/5] mptcp: preserve MSG_EOR semantics in sendmsg path
-    https://git.kernel.org/netdev/net-next/c/7fb2f5f96499
-  - [net-next,3/5] tcp: add recv_should_stop helper
-    https://git.kernel.org/netdev/net-next/c/eb477fdd6803
-  - [net-next,4/5] mptcp: pm: in-kernel: remove mptcp_pm_has_addr_attr_id
-    (no matching commit)
-  - [net-next,5/5] selftests: mptcp: join: recreate signal endp with same ID
-    https://git.kernel.org/netdev/net-next/c/c4a5cb2f00f9
+Changes since v2:
+https://lore.kernel.org/bpf/20260406031330.187630-1-jiayuan.chen@linux.dev/
+- Addressed selftest review from Martin KaFai Lau: removed unused skel
+  parameter, renamed to test_ns_ for automatic netns, ASSERT_GE -> ASSERT_OK_FD
+- Add reviewed-by tags.
 
-You are awesome, thank you!
+Changes since v1:
+https://lore.kernel.org/bpf/20260404141010.247536-1-jiayuan.chen@linux.dev/
+- Fixed the same bug in SOCK_OPS_GET_FIELD() (pointed out by AI review)
+- Added SOCK_OPS_GET_FIELD same-register and GET_SK different-register
+  subtests
+
+Jiayuan Chen (2):
+  bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
+  selftests/bpf: Add tests for sock_ops ctx access with same src/dst
+    register
+
+ net/core/filter.c                             |   6 +-
+ .../bpf/prog_tests/sock_ops_get_sk.c          |  76 ++++++++++++
+ .../selftests/bpf/progs/sock_ops_get_sk.c     | 117 ++++++++++++++++++
+ 3 files changed, 197 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
+ create mode 100644 tools/testing/selftests/bpf/progs/sock_ops_get_sk.c
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
