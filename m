@@ -1,317 +1,153 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4A7358368
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 05:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775539368; cv=none; b=GZxJd5s+AtyK+V6O2ujJuEFXy7oPi8pB2D6/IfPA/dmK14YBu9kpIaB9HzJHIoXruPmafbAIjLhm6VwS/j58k4T7C9d7ZPBHbjPBlj3E53lVUVZ8SDPxqmAxkAUghxEEdCzfBsbHPocnjhsbMnDzxWPCb7AIrG7weEZfRfAfTeI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775539368; c=relaxed/simple;
-	bh=QztiqD9I++b/oNhpP9Y0Ds5Ll+LSUm2+YZlKLb+saAs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RZydn/RS2olnFyfVqfqWKeKzRHpxbPixddlMo3Cpwal5HZ7lA3LVr1Ot2YvjVKQoyM+6Nm4YCRzESfOdDNON6HG8jJ2SKSPVXw0yrUORHAKky7xtOL5D8uUzVPEVLycJ7ugTAm7W7zd0S6wNJC+p6hQ2ZT2OSieXqmgWPtyeWS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G4ajPxQE; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E0538C2D1
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 06:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775544816; cv=pass; b=m4h32AZNeL62r8Z/sYFmI1AU2rlZf3C98rNjxb3xp0lucdj+C/qh/YPVXGoKlZUrs6VMwi7LRquwa81yRzak5s7BwVfM4R05usFmWCQPyFIB8bjEyfmhFHdWeYIvGLInvtzH0QkWekC2i5wVCwM+mXiFk0BtIZdW0ZY0HYWzsws=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775544816; c=relaxed/simple;
+	bh=FWpfwl5EpG+FUBdNljoQk7IzodPiLTITpijDs9wnTzQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q5/VomOO6R1On6BT/54J8m1Qayd1/iXlYzSiaMXLLDQp2O7OpcnVMo0lL/UfWV6OlBmTF0IRtFrH5QJzDaPDgYgFlGn1dEa2Zp+8i2+b2vSm8OIJm/xEqEnzm6Vy/orap3st4dLARhHu/4US50FZW77kRmd395DZLmnDPDzsG4k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZUXv6ah2; arc=pass smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G4ajPxQE"
-Message-ID: <4820d99b-f2c4-4b24-b90f-87e6444284c4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775539364;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S/iXan8nV4kB8ZUCvJ2/9OpuNtxyrMdZk0L9YzN+q68=;
-	b=G4ajPxQEucOJG0NhhTyg6AghI90e/9TuxZcxe7YuZslQ6dgREI5mBLTwXJX1Bq8SNUobIJ
-	akZVcFogvNqt/t0AGSUyDY04M3MLgXgq3gDGz1DPH0htQPmJ9BIyKUHpNGhDjjGRx1Zlo2
-	hk8cK3TG5bzRObplU4zHJpgylCfGQNg=
-Date: Tue, 7 Apr 2026 13:22:22 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUXv6ah2"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b9c01854477so767994966b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 23:53:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775544814; cv=none;
+        d=google.com; s=arc-20240605;
+        b=cF+0hijs6pXg/NLaiqpV1JNHemMLlXPlmSwYZaIHIHRaHDdSdLRHxhIkofN9yNJ/N3
+         HS/uePl1hKJTdeca4YdnbMI/25GGQUqpVhkkCq4y53ezLRB6wrB/iPmkwIdzedv29BwE
+         N42/KyY5yNU1zD+PQhlSnEV6hrQx3O7o0WXlqxaQmSAD7hVo3O1zzvdkeBs6lUUghfDs
+         HvLjQrxOArFkpBgmq7o10o6o4IN5aN+/Mdg3m5AiCwYrO+MrH7Byz+/LEiZuC32eaDtV
+         V/WWK+R12GehKvTVFEMz/OxE9FLwg3q1/D5MfkujV58lnNVvhbPZWktzEbzL05sf33lS
+         oEyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3QGGQAplBq02BHVXyopNXftOCfxeBQ27SGZLzvlb5js=;
+        fh=mhIriqhgstd1HO1E2TwNCHt6tiR74r4r3iyExH97gdg=;
+        b=B4R5wfkBBqPAiU0GIUD4qNgrGynUr00XO3bzSWg8mZqBnLGJOLN/1QvXo8tgmNnKhf
+         hzIsEJc866neFnVSQT8uZsa+SJtE/N6IaNFv2QSowgOKvq5ZYM6K6kF5Y+nrGxBxNeUn
+         PXZh2J9HepDpEeb9jtdQeDMvqUMfBjlvCCXeAcA2jhnN5zMDLA25VNWg9dAD4uVFTEKl
+         HRR1agvsZcsbAsWxriwm6BD/GMRcUu0OQxEUsrs2CrOTo9GMeOV0nyk7HslA4dwbyz3/
+         o/qcRgiOtPw5pcQihA7N8mnxDCxP9XxySZ+iR7kWodcWMw2nCkycJ/GMlp+g8185yBRp
+         PDig==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775544814; x=1776149614; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3QGGQAplBq02BHVXyopNXftOCfxeBQ27SGZLzvlb5js=;
+        b=ZUXv6ah2qQBkZXMv+MA2dVfH/XDZVD0OjZckCL38OtM23za8PBlrP7Mq6fZHNi9nrl
+         srItEPrpBWiOHHvOMbhB/r9GMJwG7zt2HEPnONVFD7XjZUPMz5IHaPa7L1uXkPT2+m+4
+         1qxulKqdPEB1igC4Pxi0JaVDldAAtVXEAlhvZcP3KxNdpzdff+y82C/Mx2Zk1MQy8Ixs
+         bDeaXKCJKrNWGw6LiHwnlwY3G4wpn67YyoGH76KzdQcO5RWoEhMz1jkeYqJfgHX5mOgq
+         c/y9x54wg573WKFCCkc95+74q0VE7Y0h+jCeaXoo0Jmobn+I7CJXYvwmgG6pF6KD5Wna
+         KxwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775544814; x=1776149614;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3QGGQAplBq02BHVXyopNXftOCfxeBQ27SGZLzvlb5js=;
+        b=UOenAxfSvmF65ZKDOH0dYXriv8BM3WzMuOQ5E3ZKbF0/caBFUBWFZpV/MRLcELw7Yn
+         wrQH8FcT3352Xlbwra7LL9+fFuoaIhpMvxHeA1Xr/pih/Lto+L8aQ8UsIUm3e8TwqgvU
+         B5tOLsk3TSXlIpjtT3MWrNC18voe4Foi7O9d8xIdOr8PfzT/ZEaFVud6Uxz1IkMgFPQh
+         QuRY9y8EtgQ8uAhO58xhmpmN8OanU7DHSv+MySahENsTKvRqkboqijSaPOtpFBNQPRod
+         xGrefAaj6tW/mPX6metGJCby2p++fIiVpsB/mhuaZZ3LFjJr2SZrr1pI/pG2IpEuw3Pj
+         44/g==
+X-Forwarded-Encrypted: i=1; AJvYcCV4nwIRNTKhdeC99jBGQJS0boSwiS2m3id76MsWc+m9Q9dKm5tRuP3VpLTJkSvNugnLABzvG6Dw6jjoQQxxSEA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq0A85e/X2miSSwegvcImkRD4lcGMIWIZjF48ui1+vPSgtCcSo
+	4zR7sB3pyylH+Rz63ZDtaQfAG9f9yqCfSUXHI5aWHQt7lU+8HlAtT7nU3C+46/s6rNbPJ/MUst1
+	UAhBmoe1A7BUR2dmYI1YubJ7vG/G6jn4=
+X-Gm-Gg: AeBDievmiGrjc0NWAdiYNorShYDJmg1MpjQN9/wkCZhAlo53FkLNSkxCXV4PD7ckOeW
+	CLvqz/SspPnUJQE4mqfCsN0ydwxfYBWiFtoHp74igOgATARqRav/ou1bXREHl4uYVlRlpyXxMD4
+	IHkEXzNjHaySGy/jGwkL/rg3UMGDcv6ErgFy9R/5JLPbvlVPUKhQrLef6oNqwg8DNLZjIw/YsQU
+	S8PRxoEBbqNofHEstTCi0NNKX/ETH5vKhFzLlpkpWtA2qDY52PZrLq85etE+bYheq0lgnR+3CyR
+	v066yeN5z1amowxEuA==
+X-Received: by 2002:a17:906:f581:b0:b9b:1b9e:1e99 with SMTP id
+ a640c23a62f3a-b9c679580b6mr816033466b.34.1775544813579; Mon, 06 Apr 2026
+ 23:53:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v6 1/2] bpf: tcp: Reject non-TCP skb in
- bpf_sk_assign_tcp_reqsk()
-To: Martin KaFai Lau <martin.lau@linux.dev>,
- Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>
-Cc: bpf@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260403015851.148209-1-jiayuan.chen@linux.dev>
- <20260403015851.148209-2-jiayuan.chen@linux.dev>
- <20264619471.he8Q.martin.lau@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20264619471.he8Q.martin.lau@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260403150050.1235-1-royujjal@gmail.com> <20260403150050.1235-6-royujjal@gmail.com>
+ <20260406182504.52a03794@kernel.org>
+In-Reply-To: <20260406182504.52a03794@kernel.org>
+From: Ujjal Roy <royujjal@gmail.com>
+Date: Tue, 7 Apr 2026 12:23:20 +0530
+X-Gm-Features: AQROBzDobic8jv_imKaJPmW4xt1c4Ipd4HaOp8P0tUSTUyRBdcWdqg-PViFb7qc
+Message-ID: <CAE2MWknnJHgdxrC8mVPsCxe91WfA4aS6JZEGvhG4u3Mmq0D3EA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 5/5] selftests: net: bridge: add tests for MRC
+ and QQIC validation
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>, 
+	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>, 
+	bridge@lists.linux.dev, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 4/7/26 3:53 AM, Martin KaFai Lau wrote:
-> On Fri, Apr 03, 2026 at 09:58:27AM +0800, Jiayuan Chen wrote:
->> bpf_sk_assign_tcp_reqsk() only validates skb->protocol (L3) but does not
->> check the L4 protocol in the IP header. A BPF program can call this kfunc
->> on a UDP skb with a valid TCP listener socket, which will succeed and
->> attach a TCP reqsk to the UDP skb.
->>
->> When the UDP skb enters the UDP receive path, skb_steal_sock() returns
->> the TCP listener from the reqsk. The UDP code then passes this TCP socket
->> to udp_unicast_rcv_skb() -> __udp_enqueue_schedule_skb(), which casts
->> it to udp_sock and accesses UDP-specific fields at invalid offsets,
->> causing a null pointer dereference and kernel panic:
->>
->>    BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
->>    Read of size 4 at addr 0000000000000008 by task test_progs/537
->>
->>    CPU: 1 UID: 0 PID: 537 Comm: test_progs Not tainted 7.0.0-rc4+ #46 PREEMPT
->>    Call Trace:
->>     <IRQ>
->>     dump_stack_lvl (lib/dump_stack.c:123)
->>     print_report (mm/kasan/report.c:487)
->>     kasan_report (mm/kasan/report.c:597)
->>     __kasan_check_read (mm/kasan/shadow.c:32)
->>     __udp_enqueue_schedule_skb (net/ipv4/udp.c:1719)
->>     udp_queue_rcv_one_skb (net/ipv4/udp.c:2370 net/ipv4/udp.c:2500)
->>     udp_queue_rcv_skb (net/ipv4/udp.c:2532)
->>     udp_unicast_rcv_skb (net/ipv4/udp.c:2684)
->>     __udp4_lib_rcv (net/ipv4/udp.c:2742)
->>     udp_rcv (net/ipv4/udp.c:2937)
->>     ip_protocol_deliver_rcu (net/ipv4/ip_input.c:209)
->>     ip_local_deliver_finish (./include/linux/rcupdate.h:879 net/ipv4/ip_input.c:242)
->>     ip_local_deliver (net/ipv4/ip_input.c:265)
->>     __netif_receive_skb_one_core (net/core/dev.c:6164 (discriminator 4))
->>     __netif_receive_skb (net/core/dev.c:6280)
->>
->> Fix this by checking the IP header's protocol field in
->> bpf_sk_assign_tcp_reqsk() and rejecting non-TCP skbs with -EINVAL.
->>
->> Note that for IPv6, the nexthdr check does not walk extension headers.
->> This is uncommon for TCP SYN packets in practice, and keeping it simple
->> was agreed upon by Kuniyuki Iwashima.
-> sashiko has flagged a similar issue with larger scope.
-> Please take a look. Thanks.
+On Tue, Apr 7, 2026 at 6:55=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
+te:
 >
-> https://sashiko.dev/#/patchset/20260403015851.148209-1-jiayuan.chen%40linux.dev
+> On Fri,  3 Apr 2026 15:00:50 +0000 Ujjal Roy wrote:
+> > --- a/tools/testing/selftests/net/forwarding/.gitignore
+> > +++ b/tools/testing/selftests/net/forwarding/.gitignore
+> > @@ -1,3 +1,5 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  forwarding.config
+> >  ipmr
+> > +mc_encode
+> > +mc_decode
+>
+> please keep this file sorted
 
+I will keep all the codes under a single file and keep them sorted.
 
-Thanks a lot Martin, sashiko actually dug into a deeper issue here.
+>
+> > diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/te=
+sting/selftests/net/forwarding/Makefile
+> > index bbaf4d937dd8..a26da846632d 100644
+> > --- a/tools/testing/selftests/net/forwarding/Makefile
+> > +++ b/tools/testing/selftests/net/forwarding/Makefile
+> > @@ -1,5 +1,15 @@
+> >  # SPDX-License-Identifier: GPL-2.0+ OR MIT
+> >
+> > +top_srcdir =3D ../../../../..
+> > +
+> > +CFLAGS +=3D -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/includ=
+e $(KHDR_INCLUDES)
+> > +CFLAGS +=3D -I$(top_srcdir)/tools/include
+>
+> Could you please keep the format more aligned with the ksft
+> net/Makefile? Also is the -I$(top_srcdir)/tools/include
+> still necessary? KHDR_INCLUDES don't include $src/usr/include ??
+>
+> > +TEST_GEN_FILES :=3D \
+> > +     mc_encode \
+> > +     mc_decode \
+> > +# end of TEST_GEN_FILES
+>
+> Also needs to be sorted
+> --
+> pw-bot: cr
 
-Eric and Kuniyuki,
+I need bitops.h for fls() API, so I can see KHDR_INCLUDES is not
+needed but tools/include is needed. I don't see lib.mk is including
+the tools/include.
 
-I think the AI review has a point. Since BPF can modify skb fields, the
-following sequence still bypasses the protocol check in 
-bpf_sk_assign_tcp_reqsk():
-
-    // for a UDP skb
-    iph->protocol = TCP
-    bpf_sk_assign_tcp_reqsk()
-    iph->protocol = UDP
-
-On top of that, bpf_sk_assign() already has the same problem — it doesn't
-validate L4 protocol at all.
-
-So I think we should add a check matching skb against sk in 
-skb_steal_sock() instead of adding check in bpf helper.
-(Also, we probably need some MIB counters for this.)
-
-
-
-Below is my diff:
-
-//The core reason for passing protocol as a parameter rather than 
-reading it from
-//the skb is that IPv6 extension headers make it non-trivial to get the 
-actual nexthdr.
-//It's much simpler to just let the caller tell us what protocol it expects.
-
-diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-index c16de5b7963fd..c1032bb9ea864 100644
---- a/include/net/inet6_hashtables.h
-+++ b/include/net/inet6_hashtables.h
-@@ -104,12 +104,13 @@ static inline
-  struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, 
-int doff,
-                               const struct in6_addr *saddr, const 
-__be16 sport,
-                               const struct in6_addr *daddr, const 
-__be16 dport,
--                             bool *refcounted, inet6_ehashfn_t *ehashfn)
-+                             bool *refcounted, inet6_ehashfn_t *ehashfn,
-+                             int protocol)
-  {
-         struct sock *sk, *reuse_sk;
-         bool prefetched;
-
--       sk = skb_steal_sock(skb, refcounted, &prefetched);
-+       sk = skb_steal_sock(skb, refcounted, &prefetched, protocol);
-         if (!sk)
-                 return NULL;
-
-@@ -151,7 +152,7 @@ static inline struct sock *__inet6_lookup_skb(struct 
-sk_buff *skb, int doff,
-         struct sock *sk;
-
-         sk = inet6_steal_sock(net, skb, doff, &ip6h->saddr, sport, 
-&ip6h->daddr, dport,
--                             refcounted, inet6_ehashfn);
-+                             refcounted, inet6_ehashfn, IPPROTO_TCP);
-         if (IS_ERR(sk))
-                 return NULL;
-         if (sk)
-diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-index 5a979dcab5383..0ad73135ece7d 100644
---- a/include/net/inet_hashtables.h
-+++ b/include/net/inet_hashtables.h
-@@ -433,12 +433,13 @@ static inline
-  struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int 
-doff,
-                              const __be32 saddr, const __be16 sport,
-                              const __be32 daddr, const __be16 dport,
--                            bool *refcounted, inet_ehashfn_t *ehashfn)
-+                            bool *refcounted, inet_ehashfn_t *ehashfn,
-+                            int protocol)
-  {
-         struct sock *sk, *reuse_sk;
-         bool prefetched;
-
--       sk = skb_steal_sock(skb, refcounted, &prefetched);
-+       sk = skb_steal_sock(skb, refcounted, &prefetched, protocol);
-         if (!sk)
-                 return NULL;
-
-@@ -469,7 +470,7 @@ struct sock *inet_steal_sock(struct net *net, struct 
-sk_buff *skb, int doff,
-         return reuse_sk;
-  }
-
--static inline struct sock *__inet_lookup_skb(struct sk_buff *skb,
-+static inline struct sock *__tcp_lookup_skb(struct sk_buff *skb,
-                                              int doff,
-                                              const __be16 sport,
-                                              const __be16 dport,
-@@ -481,7 +482,7 @@ static inline struct sock *__inet_lookup_skb(struct 
-sk_buff *skb,
-         struct sock *sk;
-
-         sk = inet_steal_sock(net, skb, doff, iph->saddr, sport, 
-iph->daddr, dport,
--                            refcounted, inet_ehashfn);
-+                            refcounted, inet_ehashfn, IPPROTO_TCP);
-         if (IS_ERR(sk))
-                 return NULL;
-         if (sk)
-diff --git a/include/net/request_sock.h b/include/net/request_sock.h
-index 5a9c826a7092d..80bd209b2323b 100644
---- a/include/net/request_sock.h
-+++ b/include/net/request_sock.h
-@@ -91,7 +91,8 @@ static inline struct sock *req_to_sk(struct 
-request_sock *req)
-   * @prefetched: is set to true if the socket was assigned from bpf
-   */
-  static inline struct sock *skb_steal_sock(struct sk_buff *skb,
--                                         bool *refcounted, bool 
-*prefetched)
-+                                         bool *refcounted, bool 
-*prefetched,
-+                                         int protocol)
-  {
-         struct sock *sk = skb->sk;
-
-@@ -103,6 +104,24 @@ static inline struct sock *skb_steal_sock(struct 
-sk_buff *skb,
-
-         *prefetched = skb_sk_is_prefetched(skb);
-         if (*prefetched) {
-+               /* Validate that the stolen socket matches the expected L4
-+                * protocol.  BPF (bpf_sk_assign) can mistakenly or 
-maliciously
-+                * assign a socket of the wrong type.  If the protocols 
-don't
-+                * match, clean up the assignment and return NULL so the 
-caller
-+                * falls through to the normal hash table lookup.
-+                *
-+                * For full sockets, check sk_protocol directly.
-+                * For request sockets (only created by 
-bpf_sk_assign_tcp_reqsk),
-+                * sk_protocol is not in sock_common and cannot be accessed.
-+                * Request sockets are always TCP, so assume IPPROTO_TCP.
-+                */
-+               if ((sk_fullsock(sk) ? sk->sk_protocol : IPPROTO_TCP) != 
-protocol) {
-+                       skb_orphan(skb);
-+                       *prefetched = false;
-+                       *refcounted = false;
-+                       return NULL;
-+               }
-+
-  #if IS_ENABLED(CONFIG_SYN_COOKIES)
-                 if (sk->sk_state == TCP_NEW_SYN_RECV && 
-inet_reqsk(sk)->syncookie) {
-                         struct request_sock *req = inet_reqsk(sk);
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index c7b2463c2e254..442a9379aefe6 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2188,7 +2188,7 @@ int tcp_v4_rcv(struct sk_buff *skb)
-         th = (const struct tcphdr *)skb->data;
-         iph = ip_hdr(skb);
-  lookup:
--       sk = __inet_lookup_skb(skb, __tcp_hdrlen(th), th->source,
-+       sk = __tcp_lookup_skb(skb, __tcp_hdrlen(th), th->source,
-                                th->dest, sdif, &refcounted);
-         if (!sk)
-                 goto no_tcp_socket;
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index b60fad393e182..61f7fbf5ffd9c 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -2728,7 +2728,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct 
-udp_table *udptable,
-                 goto csum_error;
-
-         sk = inet_steal_sock(net, skb, sizeof(struct udphdr), saddr, 
-uh->source, daddr, uh->dest,
--                            &refcounted, udp_ehashfn);
-+                            &refcounted, udp_ehashfn, IPPROTO_UDP);
-         if (IS_ERR(sk))
-                 goto no_sk;
-
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 010b909275dd0..9c3c25c938ec8 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -1115,7 +1115,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct 
-udp_table *udptable,
-
-         /* Check if the socket is already available, e.g. due to early 
-demux */
-         sk = inet6_steal_sock(net, skb, sizeof(struct udphdr), saddr, 
-uh->source, daddr, uh->dest,
--                             &refcounted, udp6_ehashfn);
-+                             &refcounted, udp6_ehashfn, IPPROTO_UDP);
-         if (IS_ERR(sk))
-                 goto no_sk;
-
-
-
-
----
-This fix touches the net core path (skb_steal_sock / inet_steal_sock),
-so it probably makes more sense to review it on the net side rather than 
-the bpf side.
-
+@Nikolay Aleksandrov  Please review the updated test cases in this patch.
