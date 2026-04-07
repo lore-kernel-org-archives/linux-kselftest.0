@@ -1,95 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878FC3B8BD8
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 14:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189F13B8920
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 14:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775571199; cv=none; b=d3oeQWUlzVr5ayP8SLvCSDORTBLSPTy6vLEfTk6fUzMskEkcybbaR6iM6d9tBcv5EDbptRh1zEMQsRyYnN5LQ/B7LzMZb/2GFYvxyp7flBRPrGtUCUbRAUt1o9Km8h+XwIeZwuQXsFf8Lo1RPDhyPtg8VXZXESbTvXk01z8zL6Q=
+	t=1775571266; cv=none; b=stk4y52O2Su+Z2Dg8LoRAYFTaOwapeUC+wwFHF2IO7N+Sm3HGtf7p7clhVyjWnpCGMkexzuxfforbytMqB87NA2FP3To0MUeSr3jcIAxaJC4ZBomu7CthBgKVenhWG+p5qK+Kc5t7n8uq2G5AUE3BySt28Gos/524/Tx2VS3+cM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775571199; c=relaxed/simple;
-	bh=5mucqtRqZUC32Ucba3hcpr0TYw4Hx9sPWSW0EAmo2Qk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ClZ+njAdhrM2Mt9RfHhkwXN5C/ASOMrhNpNBtIamNOpQeWvpcsHhG+jlGhiY4Ctq8jxoMSEI2yGq4F4Axao8rcXKQc1XRPpuP1dOPv13dUlHj0j19ayfbhi6oOHUq/uBTdkkflmvnaOOjp+Jrwi1UHY3vIL42819KYNn2jBZHOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEucaIos; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775571266; c=relaxed/simple;
+	bh=x1X6Et09LdVmwK4AwqUKUpjcDLoVxP1vs1Syj2oayko=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ak6WDimGJ438rvhl+aVqeDIUPUk8d6YVQPL818u67kkQCfodrgb97n93+VqhfuoWc2C99ToypTsLHEwVcr3o835j9B2FF2ZU4dVIzGf2TA7eQzgfCX3gq8CUMhYDY4HZ+vEFOBv1Gjl+KZCzbIaXnaKfWJjJp8gAznJYLdHXuHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nFD+BeSG; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEucaIos"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580B7C116C6
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 14:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775571199;
-	bh=5mucqtRqZUC32Ucba3hcpr0TYw4Hx9sPWSW0EAmo2Qk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gEucaIosHM9b3uXIg9wCIDGrIN+QFR/6iPwXQnWdFH9HWtMNSWt3HnRH18WyUTQpJ
-	 s4umHD45tbjfhln8lAimbMNko8WzgfUQDHagpK5O5HB0bTIScDMv2ww+UgBRgkwiqd
-	 IRpFehScAdjq8204q/+sCn+ZIHPw+22qUrQNrb3JyH8+zCNdKy3liqkjAvk8WeRpM8
-	 gb9416wPR3BQbGzj3b+S3F3dUN9WQF1hw9T8EguZWupT+YQu8uF/mwY1YlJ7eF6Oj+
-	 00geFQ0nmAc07pftQft657gbDmcjFQDJjODzgg5FqLvePA1Fq11yxK9ldCXqXvijeM
-	 coQR79hDwKq/Q==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5a3cee3a271so3419027e87.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 07:13:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWp+bLwvsjx51n9ZCW8zvNQhuMeTli9OAg8jhKCnzbpoSBxkQvXcAOCgPflmvusKrtXVlTcB9Z6ujBK62QifgY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6SGA4TwxXb+3qm/iY3RbrIyfGHKoa4WKprOaG9IInpa5vrCKB
-	dr6z0wnbDq81IILhyWBQv9b1qgETQVDrtuo4OfXLy52VPWbwMzOnLmlj/CILZiYNv9XawrPMA35
-	YHT/KKFEPzbu1mWObkBKLOUKxWpGorxA=
-X-Received: by 2002:a05:6512:1385:b0:5a2:a8ab:ab5a with SMTP id
- 2adb3069b0e04-5a337584899mr6421611e87.30.1775571197439; Tue, 07 Apr 2026
- 07:13:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nFD+BeSG"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82ce1c395ccso7182221b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 07:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775571263; x=1776176063; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Oh0Qcy7NAcZjboyYi+P+h2qLdGnuUSHfUg4cTPCdmsU=;
+        b=nFD+BeSGicoCBbQCAhStO53LmgxVirn2DMVioSEswFtgCE7cmvjE+v21TcTRvlfERa
+         aR88hHbyjPXSEtt+FJ0RNTfXQfz68cBBDkXFz7jI3gFX/7ZDYlDMkuWd5rwJ1IYFOvHf
+         zIlyT3E/TaEPO31BQYsMauaLOYCU/i+/hj7CvlPIiimCmnYph+SF1h1Br5TjqYThinZ2
+         OO9gOvXRlswAgPcta83UPHIwxZD/b4Wp2VglbLv1EoD+fbYgIBl6ypRMPPsbpVVz++ac
+         ok5tgyKN4JBMkvxAIINvts8zAyR8X76a2+h/JLG9lWK37dBw4NlXBkU0pSu9gtKZApnZ
+         Md4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775571263; x=1776176063;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Oh0Qcy7NAcZjboyYi+P+h2qLdGnuUSHfUg4cTPCdmsU=;
+        b=EXwbVJhUDzGCb2Rvg+bEhYMvNw6p7KVzPrxcI3YnvufR1KOFCCfGnDn3DSWeN8xjCK
+         YITN2hn0L01HZhnmiMNuejnu4P+bULSB6DJ15C/NZ8yL16jeY7Kg1Jzbp/KY3pZHtR/O
+         kuEpNkuDSmIgRaWp75Vbq5vy/oKo2fHpK8frxo3ifeTeEULRkt5nOqW6UtJfGiKGYOu+
+         s8H81Vsa3w2UvKzMRiwyaLozhHGiX6y2UJJgSojIt3BlioprRTffwyUYq80QCk3x4vr/
+         jJto4sx79ATy+aae/fIHzP1wiz73C7vY4gpc1SzNKAnFD4U4ZQMK4c9dpBsLFCmcUFg2
+         0WmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXGUZQfX9+rHPAoRIjwZbylRnp9hvoC7IlKykpdstzNnPVdgOmQRJpIwWDAwH8xIazh4c9bqRhU/8aLBQB/uxU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqELdfiGC8sSzWywC9GqAIMXroownKtXHwGa7x8RfVNFvtXhG3
+	xdOLXnfxiaRv4dYgROAxpHIYjYJ4YWc5w+d4X1NXbUMJt4o4sAeCBS2NTL9TnHXrAFXJy0x94vo
+	8XK0CvA==
+X-Received: from pfaz1.prod.google.com ([2002:aa7:91c1:0:b0:829:894b:618b])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:21d6:b0:82c:d7e7:2f8a
+ with SMTP id d2e1a72fcca58-82d0db96cd4mr17107604b3a.39.1775571263189; Tue, 07
+ Apr 2026 07:14:23 -0700 (PDT)
+Date: Tue, 7 Apr 2026 07:14:21 -0700
+In-Reply-To: <CALMp9eQsd0fRuDE_R57Mn6-N6jCtbmoPAh7Y7CBdMEZJaNSUGQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260405235309.418950-1-ojeda@kernel.org> <20260405235309.418950-8-ojeda@kernel.org>
- <177548573697.95472.13544191227699996309.b4-review@b4> <CANiq72ne_JYPodnROckyNto10ZF0PqadRxSrng5-mZyqVovxFg@mail.gmail.com>
- <CAJ-ks9kbHz_KYAXx02vgW1dN2pfb5MFoaSoU1HbJbJg2O8EUaw@mail.gmail.com> <CANiq72mJTT7xFnhm-CeOZM_3ZwGdaQ8F2zUbONpPbqJ8g7DokQ@mail.gmail.com>
-In-Reply-To: <CANiq72mJTT7xFnhm-CeOZM_3ZwGdaQ8F2zUbONpPbqJ8g7DokQ@mail.gmail.com>
-From: Tamir Duberstein <tamird@kernel.org>
-Date: Tue, 7 Apr 2026 10:12:41 -0400
-X-Gmail-Original-Message-ID: <CAJ-ks9kqhQ7De+faY20PxGS3pYAyuRM6A6NVtNdNvdn_t9vwGA@mail.gmail.com>
-X-Gm-Features: AQROBzCOb76MPiztEakAab4vOA01AReuQXW6N_U0hZ8trRfXq-PYQWgznDgWpRA
-Message-ID: <CAJ-ks9kqhQ7De+faY20PxGS3pYAyuRM6A6NVtNdNvdn_t9vwGA@mail.gmail.com>
-Subject: Re: [PATCH v2 07/33] rust: allow globally `clippy::incompatible_msrv`
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Courbot <acourbot@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
-	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Alexandre Ghiti <alex@ghiti.fr>, 
-	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+References: <20260327234023.2659476-1-jmattson@google.com> <20260327234023.2659476-9-jmattson@google.com>
+ <adRGLPrmBpX-3DdX@google.com> <CALMp9eQsd0fRuDE_R57Mn6-N6jCtbmoPAh7Y7CBdMEZJaNSUGQ@mail.gmail.com>
+Message-ID: <adURPZJEDs50NPkB@google.com>
+Subject: Re: [PATCH v7 8/9] KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yosry Ahmed <yosry@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 7, 2026 at 4:37=E2=80=AFAM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Mon, Apr 6, 2026 at 5:31=E2=80=AFPM Tamir Duberstein <tamird@kernel.or=
-g> wrote:
+On Mon, Apr 06, 2026, Jim Mattson wrote:
+> On Mon, Apr 6, 2026 at 4:47=E2=80=AFPM Sean Christopherson <seanjc@google=
+.com> wrote:
 > >
-> > You're welcome! Actually it seems the lint was already improved
-> > upstream, starting with 1.90.0.
+> > On Fri, Mar 27, 2026, Jim Mattson wrote:
+> > > @@ -1918,6 +1921,7 @@ static int svm_set_nested_state(struct kvm_vcpu=
+ *vcpu,
+> > >       struct vmcb_save_area_cached save_cached;
+> > >       struct vmcb_ctrl_area_cached ctl_cached;
+> > >       unsigned long cr0;
+> > > +     bool use_separate_l2_pat;
 > >
-> > Link: https://github.com/rust-lang/rust-clippy/commit/c0dc3b61 [0]
->
-> Indeed, I had the PR linked in
-> https://github.com/Rust-for-Linux/linux/issues/349, and it is nicer,
-> but it would still fire in a case like this patch :(
+> > Land this above "cr0" to preserve the inverted fir tree.
+> >
+> > >       int ret;
+> > >
+> > >       BUILD_BUG_ON(sizeof(struct vmcb_control_area) + sizeof(struct v=
+mcb_save_area) >
+> > > @@ -1993,6 +1997,18 @@ static int svm_set_nested_state(struct kvm_vcp=
+u *vcpu,
+> > >           !nested_vmcb_check_save(vcpu, &save_cached, false))
+> > >               goto out_free;
+> > >
+> > > +     /*
+> > > +      * Validate gPAT when the shared PAT quirk is disabled (i.e. L2
+> > > +      * has its own gPAT). This is done separately from the
+> > > +      * vmcb_save_area_cached validation above, because gPAT is L2
+> > > +      * state, but the vmcb_save_area_cached is populated with L1 st=
+ate.
+> > > +      */
+> > > +     use_separate_l2_pat =3D
+> > > +             (ctl_cached.misc_ctl & SVM_MISC_ENABLE_NP) &&
+> > > +             !kvm_check_has_quirk(vcpu->kvm,
+> > > +                                  KVM_X86_QUIRK_NESTED_SVM_SHARED_PA=
+T);
+> >
+> > I vote for either:
+> >
+> >         use_separate_l2_pat =3D (ctl_cached.misc_ctl & SVM_MISC_ENABLE_=
+NP) &&
+> >                               !kvm_check_has_quirk(vcpu->kvm,
+> >                                                    KVM_X86_QUIRK_NESTED=
+_SVM_SHARED_PAT);
+> >
+> LOL! Aren't you the one who keeps complaining that my indentation
+> doesn't line up? Are you schizophrenic?
 
-Ah, that is possibly https://github.com/rust-lang/rust-clippy/issues/14827.
+Huh?  That is aligned.  Perhaps it's whitespace damaged by your MUA?
+
+> > or
+> >
+> >         use_separate_l2_pat =3D (ctl_cached.misc_ctl & SVM_MISC_ENABLE_=
+NP);
+> >         if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_NESTED_SVM_SHA=
+RED_PAT))
+> >                 use_separate_l2_pat =3D false;
+>=20
+> Wow. I really have no idea how to predict what you're going to want
+> the code to look like. How is this better than the original?!?
+
+It doesn't immediately wrap after the "=3D".  Similar to my view on wrappin=
+g before
+function names[*], I find wrapping immediately after an assignment operator=
+ to be
+unnecessarily difficult to read as it doesn't provide any context for singl=
+e-line
+searches.
+
+I'm pretty darn consistent in my dislike for that style: I count 26 instanc=
+es in
+arch/x86/kvm that match "\s=3D\n", and only two of those carry my SoB or R-=
+b.  I
+simply missed the wrap in kvm_vcpu_apicv_activated() that was added by comm=
+it=20
+896046474f8d ("KVM: x86: Introduce kvm_x86_call() to simplify static calls =
+of
+kvm_x86_ops"), and I'll give myself a pass for commit 8764ed55c970 ("KVM: x=
+86:
+Whitelist port 0x7e for pre-incrementing %rip") as that predates treating
+checkpatch's 80 char limit as a soft limit.
+
+[*] https://lore.kernel.org/all/CAHk-=3DwjoLAYG446ZNHfg=3DGhjSY6nFmuB_wA8fY=
+d5iLBNXjo9Bw@mail.gmail.com
+
