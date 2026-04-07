@@ -1,123 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE73E364051
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 02:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA90372ECF
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 02:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775529074; cv=none; b=j8+ovcPDK5SyW4VngF1KESmdBOLNB9EDA/5E5bUBi7+BbPmFUCs3FuBkWViU/i5EJF9JL20y+f5QmKIgyV0J3MssZFTbnb+HzMQ8nStnqi8Bg3SGdiQnV6W4DOp6Q+/19N0yo6c+1lNSlxhg/wW6L0sOjfC8xwklGgM1wDI3rF0=
+	t=1775529927; cv=none; b=HIuFbJnkuhWt0FELz0JhsPlUGowUDaB/A9aGEwCdsXIa9RVoyQWxOcOneiYmVd2d2q7Wkmaq4xdurbrUSpSXfnzbtlEyDkJO/pgITsFNJwqLT1FmNQXUznoDI/tor3Wg+VUEPsqN7mpetYlwxUd3U00XCJEzzI5U4oVW/DciS1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775529074; c=relaxed/simple;
-	bh=AS7Co8RyS/RWpa1/YRQO4aU8nxHDrQCiF5/Dyfytx/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uk2vsJbspmIhVF4FV6HJ8fJZF3n9fI9cDLrNyKnGhOJd23dZSVxi4z0nBT83klzu0EWz0dopObAoua0imDXG1828zpBlhIIFpWXr4WG+foBM8RBfVIa3smOPlO6mb5jY3M9kyELht+zbMGwNc754cOu0Oxl6Th5Gh/WDVG0Rcys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aZYGtkOq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZS1FUI2o; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1775529927; c=relaxed/simple;
+	bh=yQUOKSy6VfcfXDDIRY90Etg+nb+Y+n6W8ukWh0hXxsY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=To5lH/5iWiFkEdDZPf1twpJE1IYYneaUm/HDWp9eZa7JN3QYWhp8hCQHV85Zf/3MDK9fU43ekVGiiZ/GijeqMi631mtCVdXgbSjff7+EcuqOc3eYXTvFkn8k2VBoTjycCwYjW+38v5yeFMe4boJrTuYZ5mc69s16iQ/vWg99X9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HxZtCSYA; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aZYGtkOq";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZS1FUI2o"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HxZtCSYA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775529071;
+	s=mimecast20190719; t=1775529925;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+relXseHSDiLD/cBAI0rxB8yeQocHqRAcYJEZB5dGtk=;
-	b=aZYGtkOqx6MU2mPyIh8tcbZNM/Cnp2snKAi+6uosFgoFvBl+ccxbKJ/AvqS6RclkU30yMb
-	2MlD29dnNE6CSy++gkFqwW7mIii0hyk7p1DtTlgEnhG7ZYo2rn0SviLXxOd9ghZbnAoK2w
-	kS2Rhe6TftZus+moGZEE2nsZFETMcg0=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-541-Ay-MxbtsPv-5uEXO5IdvHQ-1; Mon, 06 Apr 2026 22:31:10 -0400
-X-MC-Unique: Ay-MxbtsPv-5uEXO5IdvHQ-1
-X-Mimecast-MFC-AGG-ID: Ay-MxbtsPv-5uEXO5IdvHQ_1775529069
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b62da7602a0so2603764a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 19:31:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1775529069; x=1776133869; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+relXseHSDiLD/cBAI0rxB8yeQocHqRAcYJEZB5dGtk=;
-        b=ZS1FUI2o3t4uj08yvHjHVvugjxTc9AuFVUP6a8diSr6Ptt8JoqWJsu+QoppKTPBRgW
-         6GbkwYx2OH+limmPvpEi9SDZDLA1mXtogWDeyhI7aLf65bbEXKyCSV8ViPq4lJ0TG/tW
-         EC+C/Pj/cB+KStF0M4iBIAY0MZzB3mhBJarDimjLYiboke9Aud3JnXNLedbz78e30xNr
-         dU/tjMRKp0U8Km8Hqi34rsfFvokH6WL4TiE0wqN8yNRFTIhJC9gWSFGuBXCtuShxYdAh
-         SqaMbbinRIHXE77zm4htoNdWXSJ0jNYcdC4X849hKySnSpn1gkENhpsuYcvk6QFFMU5T
-         AZXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775529069; x=1776133869;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+relXseHSDiLD/cBAI0rxB8yeQocHqRAcYJEZB5dGtk=;
-        b=mAxvZxs+lUuJACp7GukiY3AG6sJdERJL2hfug8NBbUX6SKus6rXzQ0O+y8PL+avMZ7
-         I0XXivQLKn0kkzoYLuc9fOQw1fcNpbeuQL78RhfygcBX+eF7t65+OdUq21q7Yr69c5yO
-         viR6V7YbES7lnmZ9UFyVSVLRq0IdX5XO5QVbxy+IoqAega20P5U85/mE2OFnb1xQorjI
-         j6Gyc2kIDASv6AJL9IOeMfjEdjIvmre9agdLqFRp7qNBYk8hWJcYIY4VVlQmEDPH+h/K
-         cfZWORV26hlhYQTA62pBHpOr4bnn5fZatQ0lLseaDO5e2me1ejHUxzIi347LsEJH9VOP
-         vwYg==
-X-Forwarded-Encrypted: i=1; AJvYcCWN2oTHhGPgU9a97/aSOovwgsciqk3tqqWl7m4+9QF3oHWpmB+l+6wn3+UTyU4kAEvdQwBfJ2e+qZWq62IY3Vw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yws5Cd3DqcnGPW2JNaSRmegY83FB/abjRUK8vCR5nVrrOgFDBEX
-	coCrb0Zri4wtbSZ9fNiYq2T+eHLVSWzc7XocTDxILimPXak24JzqGhYvzzWpl8m22BiPFvN6m09
-	8w6dR/7uSXPMFMUHaqjTVgZ481DKcRCiLSYdw/bh8kS4R71Saty4qo+fOuMVwHQO156yGcA==
-X-Gm-Gg: AeBDiev/+dBLZI2O7A9QIoUXiKL0YacPuZv4qvwgRixONGJ8CDWd/CSQpDEqZQD7GXi
-	paWC0cgShNiDYPtAISNFXF2+llarlUseiIgvF0Lq2WP4HBMPlUdNSDwm3b2moMv5hbO3+LLglb3
-	qj9seVnROwwL0P80KLZBsbTiELGZVWyp8z+3ueMQFeyYaB2EHzyc//26ZYwXDiLWluPEW3GFXMJ
-	0/u1qXWjAhVOPzPepFQYYrIzlQFdEEYjBLIgYFJodJFn+0CaITzwqFVGBZaylIzd5r9ouCvZSfC
-	ZnA55Ya9UiozVAAd07cuCs8HRr+XgCSQA282wAgthCWcAFFp0agdKz5cooaJieKtpRjkT/dbqhc
-	/dbj8RVSSonkK0bWU7g==
-X-Received: by 2002:a05:6a00:3e19:b0:82c:d6d3:31a1 with SMTP id d2e1a72fcca58-82d0db4f938mr14513061b3a.29.1775529069381;
-        Mon, 06 Apr 2026 19:31:09 -0700 (PDT)
-X-Received: by 2002:a05:6a00:3e19:b0:82c:d6d3:31a1 with SMTP id d2e1a72fcca58-82d0db4f938mr14513020b3a.29.1775529068879;
-        Mon, 06 Apr 2026 19:31:08 -0700 (PDT)
-Received: from redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9c72967sm15221583b3a.49.2026.04.06.19.31.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 19:31:08 -0700 (PDT)
-Date: Tue, 7 Apr 2026 10:31:05 +0800
-From: Li Wang <liwang@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, nsc@kernel.org, david@kernel.org,
-	ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] selftests/mm: clean up build output and verbosity
-Message-ID: <adRsadO77aF3WcWm@redhat.com>
-References: <20260331094402.144131-1-liwang@redhat.com>
- <20260406193216.GA1319599@ax162>
- <20260406125133.eeb8efed993ae1faa2a9ad73@linux-foundation.org>
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FDDFUAQFNb512S/LxyDIQRQ2l8wUPzRCjDTUtKlW1rE=;
+	b=HxZtCSYAODE1nW22eqXEMQv3+ejg1xFemmhNqB0FtPLBW3RxbLX4ZVfc3tf3Uj5LxZaqjj
+	egbIOVBPOCeGPdx8hehoUMEeP3TMo+tT82uRpRdgtPuq8UwL4RS9V4cLPRvsOmhHX0QbMX
+	pu3LjFULEWvgt4rY5PFDyT1AUCGPglU=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-500-yI-jBFHzNAyTZgkTk-uDZQ-1; Mon,
+ 06 Apr 2026 22:45:20 -0400
+X-MC-Unique: yI-jBFHzNAyTZgkTk-uDZQ-1
+X-Mimecast-MFC-AGG-ID: yI-jBFHzNAyTZgkTk-uDZQ_1775529918
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 99E801800359;
+	Tue,  7 Apr 2026 02:45:18 +0000 (UTC)
+Received: from xudu-thinkpadx1carbongen9.nay.com (unknown [10.72.116.131])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 95B6B300019F;
+	Tue,  7 Apr 2026 02:45:14 +0000 (UTC)
+From: Xu Du <xudu@redhat.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC net-next 0/4] selftests: drv-net: tso: add double tunneling GSO tests
+Date: Tue,  7 Apr 2026 10:45:07 +0800
+Message-ID: <cover.1775527362.git.xudu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260406125133.eeb8efed993ae1faa2a9ad73@linux-foundation.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Mon, Apr 06, 2026 at 12:51:33PM -0700, Andrew Morton wrote:
-> On Mon, 6 Apr 2026 12:32:16 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
-> 
-> > > Second, the specific 32-bit and 64-bit compilation targets ignore the
-> > > standard kbuild verbosity settings, always printing their full compiler
-> > > commands even during a default quiet build.
-> > > 
-> > > Notes:
-> > >   Andrew mentioned he hopes this patch merge into kbuild tree, so I resend
-> > >   to linux-kbuild@vger.kernel.org.
-> > 
-> > Kbuild does not maintain anything in tools/, so this should go through
-> > either the mm tree or the kselftests tree.
-> 
-> No probs.  Li, please send it along after -rc1?
+This series extends the TSO selftest (tso.py) to cover double-encapsulated
+tunnel scenarios, ensuring that hardware offload and the kernel GSO path 
+correctly handle packets with two layers of tunnel headers.
 
-Sure thing!
+Xu Du (4):
+  selftests: drv-net: tso: retry connect on EHOSTUNREACH
+  selftests: drv-net: tso: add helpers for double tunneling GSO
+  selftests: drv-net: tso: add Geneve double tunneling GSO test
+  selftests: drv-net: tso: expand double tunnel GSO test coverage
 
+ .../drivers/net/hw/lib/py/__init__.py         |   4 +-
+ tools/testing/selftests/drivers/net/hw/tso.py | 267 +++++++++++++++---
+ .../selftests/drivers/net/lib/py/__init__.py  |   4 +-
+ .../testing/selftests/net/lib/py/__init__.py  |   4 +-
+ tools/testing/selftests/net/lib/py/utils.py   |  19 +-
+ 5 files changed, 248 insertions(+), 50 deletions(-)
+
+
+base-commit: 2f60df9e61aa48bf40c36254bf2e839f09cffd98
 -- 
-Regards,
-Li Wang
+2.53.0
 
