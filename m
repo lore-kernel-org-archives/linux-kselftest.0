@@ -1,195 +1,288 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012052.outbound.protection.outlook.com [52.101.48.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9023368B1
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 14:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775573377; cv=none; b=YWdeQX6Djfhwz190tcKinRcM0N6bpvf6FP1pM1ILwAfTPIVFbvFo8YAh5Sd9etuFLNi4cNH5p5zb1eAy/6ThrHrI6a/PaSsfdY4Cs31338YxBMF30MEXEllr64GKwCLsCQ5R0xYGK7c3shV7aVODYGVodFNb4kHh2ERH/nMgHpc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775573377; c=relaxed/simple;
-	bh=XtIgdoH19ndIvGeCEmpFzfQqB5+kwXIGq8zRQkAd4/0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=taaHQLMw6S7jXWruiKNQICG3aUy52gNeqagDcAiXnZqRrw/CiNkS7GJbRch36igMdxx3zpjmV4Hgsg+PZ9QTyttETaFh3NKlg4NyPYUWqg6XJNSnP8e6hbQ+JRaOA0PvmnO1Jw5o4GN5lLD/uyxWW+Amb3OPj4ifuKFIgXcgFMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kmqyem/t; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Oe0UeI0/; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40B133ADB0;
+	Tue,  7 Apr 2026 14:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775573472; cv=fail; b=uwT7WS9gsYTNflmFPbIo2JgeupZb9qot1sx2Ylv3mm4K0bDNbk8hiDWxjLFIbahp3AttZUy7KhN1mO/MQB6GA0kdYD1V3iHosTcu0Z6n0Q0NcdII8DdU/uizXTAj9+3EXpU9o71Q+oM2BbmODt8aQC+US+KIGghs1hRRwGMlyco=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775573472; c=relaxed/simple;
+	bh=fQg2TH3ELl6JFGB3TwpXJF145TDSymXscifDGmw2E6Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qrvEwVceOe8kTVviyu4qP1DfR8pW9sWKQQ4dYPGltrDpT/Da6zz2Ut9kPywea+64mph4ZumLWMl21v6JJMK/5qcQUZP6Gi59ZrQ5ktmy1DhrSO6Gbdte10r8Lvj1cbs+mpDxMRsxx3fKsseVyklNjSJiAJGp5raEKhEz7WUSS68=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IThjdNN8; arc=fail smtp.client-ip=52.101.48.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kmqyem/t";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Oe0UeI0/"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 637D5QNu494121
-	for <linux-kselftest@vger.kernel.org>; Tue, 7 Apr 2026 14:49:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=jDMD46+vU9O7fXNFW5V6F3aRAp7klbVqL8u
-	xr/vs318=; b=kmqyem/tg6XzlqkH1Kgt31zT0rxtwScPdhlxLZc0EEZ9jyd1Vkx
-	lxzp2L9f0FkfhrBYXZE+XrKHNcLVez/WIMSqgmWWXgH510CZp3G9HMV8KMQXncPZ
-	bZGBKe6C5y8N6iCtHwO41wDkrrkbYkrwUkYSd8joz6o7m83u1qkgJRpoauvdylZU
-	4HBc8eZfLldUD1H3H0tZGNHShXHTCszH6p43TSQBDg/hIuleJIsby4k9w4UruCFa
-	dP67wIju7U+Ges3a+JoHXUuECEA+ruFJ7yEbqIMM2Mn/kk4JQAtLUmtNQuPJBB5R
-	/Id21XrNi7c0yOv3F2FzAsqLwIsjfgkwOTA==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dcmr8u601-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 14:49:32 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3594620fe97so12132392a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 07:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1775573371; x=1776178171; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jDMD46+vU9O7fXNFW5V6F3aRAp7klbVqL8uxr/vs318=;
-        b=Oe0UeI0/vvzYSrvbJ1ZWJz77EJcMRJBQYBL8oUGkKLtBUZQiG2ZfOV+YNbNg9mD1jz
-         pwCPX+YsCMsegFSohpGU9wta8MRQ0Lh//OaH36xma8Gd/coHDt3fijk2BiWJEpK4XOID
-         pR0DYLBEW7m/uuQ4WfKsPcduYrBJlYI1QANM5Cf96QfmDM8gnRLtf2OEdXhV4cIhPkhG
-         dfbJo7Z4mosPy7HhIJ7YcZwqL94tLmcWPw2R6gegloyg9b6Z1PyIAgAZsE9AwtUAfNNY
-         RKsluQJ0jza0sxVLGaW6p5IYW/XmY4nfd8EoLfYiOKWqmyZ9KHc05//k8sPZOvaRIlW2
-         8+DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775573371; x=1776178171;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jDMD46+vU9O7fXNFW5V6F3aRAp7klbVqL8uxr/vs318=;
-        b=tE6e+hGKdSshsQ1cSkTvx32FkP7YGV84H6NvmKZrCYXKF9zkC27DgaYUeWVCDyqnT0
-         UiIC8kO6qmoo2LwwAD0R93MRr2GFk8o5PhoFpbYxbMQ+CmIIihGtn42cIyTEHjvwIQqK
-         RYdIxTFPWyNISfM4uYcnMCCr6EXR0UwPb6kQgXYHqvGuYTf+m4oN9GGKwCM7j3c2Df0w
-         dkgpHIevRsQh09zp4U7gYWQe8gDuuSN3Qe46m8NCrRBr9iCwbI6k+Txtqxi8GufIw0dU
-         Wkla9ORFNMvRWcLwg3P675OTNDJExqg9jV8XHH7YRsL197HW5hJn13dgA+aIz2T20dxH
-         wtig==
-X-Forwarded-Encrypted: i=1; AJvYcCVJzag9aeBVjjiMy6J4M7Z1eL86JKitekAf6FwigSfIKeDCAXRWshdPo5/e+whzEa6ApzXw0Sk4IxKDyQetyFI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHqHiJs5g7JUTlfzZ5GCCb4t96saa5f84Op4haHjNkiofE5W3n
-	ah2F+GtliXTEVIG+tPuWTA4mfXy0jqSuHO1+oyDbHIibdQZfOBNfdNmSUL9cBGAw0qQLxGTynq4
-	Ol86kmYatIBws5AYjvjGHW6TTdmWQPqplSHpQNV11lrIHiYRnSeXUsAVyslulBRKmY2vFWfo=
-X-Gm-Gg: AeBDiesPXHIFpwk/0o7BSH4kO6sruo1zNpQiB5i+mETjkv/mxSOW6YyGRteupWY6N1V
-	AFvIDmsfCQZqTLZVPNe8arwDfwwBhny96tBZroFYX5ozn6qPMEq/CBOtKNKjvtQzFYIv9hOxEfL
-	PhQfzzqvXptTC4ms39je24iVZlLGtWblBmOsvlkOcOxsJyBfCY1yr5Ho6cYwXXof3eIZZECnhL8
-	WTz1dcFnR8+EbkwVPGG2DWfvhDj3oJc50OKk1FvCJUj22C927naArIBOO37W6fWXYOVHMWmYHxv
-	7k8nUAcVJgOLGMPfnaO/jfUpFMajkxOVuelQgfA/pptorQlzmI8kvvG7hFKHPJXcgs7iT5bzbEn
-	k7Zgl3uL/rHcZE4xdtcUANT709jLntvUCwj2s21tTSjF0YQexsmO2wZWgEgI=
-X-Received: by 2002:a05:6a20:7494:b0:398:8d38:c5ef with SMTP id adf61e73a8af0-39f2f05052cmr17137268637.34.1775573371318;
-        Tue, 07 Apr 2026 07:49:31 -0700 (PDT)
-X-Received: by 2002:a05:6a20:7494:b0:398:8d38:c5ef with SMTP id adf61e73a8af0-39f2f05052cmr17137237637.34.1775573370783;
-        Tue, 07 Apr 2026 07:49:30 -0700 (PDT)
-Received: from hu-mchitale-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-c76c65935cbsm16116998a12.26.2026.04.07.07.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 07:49:30 -0700 (PDT)
-From: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] KVM: selftests: memslot_perf_test: make host wait timeout configurable
-Date: Tue,  7 Apr 2026 20:19:12 +0530
-Message-ID: <20260407144914.2621843-1-mayuresh.chitale@oss.qualcomm.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IThjdNN8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hOkl/44cF6A1VMbRXMvsS3g9POTr3Dgcpf5JNmsOTrhZxYa1xBzNJ3srsYB8d6iR6TqhqbOgW+gviDU1Aun9R0LAaUJpZA7I94P1yqaVPLy2EoTLF5kkdXZPkK7mPynhTl2lUD8NIMUMrINBa/ZDEUieaD814bze34WFrjQHFB5/2g3EejYbxHfX9EjcbVj8moPpIO8poEtJLhkFCkUVU+JwSebfZrIhyGDabzjX/YIniygsMw062j+erGzgZ/w3LsdUiraHdIqqKAkwWpXevpIj8aiwPNLARFEceBDRlV2pkqFPMjZ6hvOerkOLXjTc34npiYRzEC3a2HdLmy1bHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F0Oieio6GrKJSwCt0O0ePM3iuRFR+oD/yvBYL85+i08=;
+ b=PhVeDKQwtku6HruQ+58a2EvsXc5OrjcFtQ2LZxMovx4LrxklXNd0usw9hV3Mpj1pYh9BXkqCURAOnAOn1I8jy3UZfCSwDngNMeyzIiht4KuLrOw2t1kIU//BMSj6OwjUlkqvqepCDgOluEn+QwuatUp3jbddTzZ0XAlZAtobzZHGqfzl8mI3IrSlgaSArOv83lyxeGkp9A5Bf37srF/OzCBfVf28/r1ZGlMv01p8Ilc6EjnCZswwE5bSgfKVMJxKJ9WaEWrKARiwg63ZWZrgvkFLWP4pIWFKs8X2OMpsx5XMzagtRGDsGyEPC8lG8Wbpqq4hNpUKUYMT68jbrvGG6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F0Oieio6GrKJSwCt0O0ePM3iuRFR+oD/yvBYL85+i08=;
+ b=IThjdNN81fRPok+Quuar+qRmNR0PvlYcP6gi/vGBqjV6Vtx0TynOxlj5UPsvlLy64TDZoL4svyRQLGbKT57CifiEC/J7TEKFltr0LuOhpjKclYRk+rrqslr8pl8w7ab0o5Z/EoyQD5PdcytuZo/qnbfAUkgy6xHxmckUd6asPbEAxRYGl1KedWlpA4UEL8I7oPp/Yd78s2Z1PwLD5n35w4y693ldxCPXGl4j1PclEPThozgEPDjfxw3mENjK6UozOEdaMTwe9O9oI9zdjrKGH4b3DNWmFZbhd2Xewi4tFBvutov3r82LfJ4hfjO2cf5xK9Gr5ivWPgsrRKngMbtDpg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ SA1PR12MB999254.namprd12.prod.outlook.com (2603:10b6:806:4dd::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.20; Tue, 7 Apr
+ 2026 14:51:04 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9769.014; Tue, 7 Apr 2026
+ 14:51:04 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Sayali Patil <sayalip@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>,
+ David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>,
+ Oscar Salvador <osalvador@suse.de>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
+ Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
+ Miaohe Lin <linmiaohe@huawei.com>,
+ Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: Re: [PATCH v4 13/15] selftests/mm: move hwpoison setup into
+ run_test() and silence modprobe output for memory-failure category
+Date: Tue, 07 Apr 2026 10:51:01 -0400
+X-Mailer: MailMate (2.0r6290)
+Message-ID: <8B26C697-4D0C-4E1E-A14E-D517CC9DA05A@nvidia.com>
+In-Reply-To: <8ef8640092004d143fe80e6fc32ea8d30a9080de.1775466330.git.sayalip@linux.ibm.com>
+References: <cover.1775466329.git.sayalip@linux.ibm.com>
+ <8ef8640092004d143fe80e6fc32ea8d30a9080de.1775466330.git.sayalip@linux.ibm.com>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: MN0P222CA0011.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:208:531::17) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: o_rk-w6GRCPcTKM2vKCWZLfhAD5yDkLn
-X-Proofpoint-ORIG-GUID: o_rk-w6GRCPcTKM2vKCWZLfhAD5yDkLn
-X-Authority-Analysis: v=2.4 cv=c9abhx9l c=1 sm=1 tr=0 ts=69d5197c cx=c_pps
- a=0uOsjrqzRL749jD1oC5vDA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22 a=EUspDBNiAAAA:8
- a=Q6LddUHKALiUaiREB9sA:9 a=mQ_c8vxmzFEMiUWkPHU9:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA3MDEzNSBTYWx0ZWRfXy3fAJBIWtyCN
- NftTIcyhRxOv+1mpTHBR0fqxGK//d42SNHql3n/Q6hjYdKO0LjL0IJjY7glILWfTGVW4WcWHeLM
- +3iuesJHRLxiepZ9+E1uaJGwe/ZeiN9LXstCf+Lk64Yj0L3xJROmmXQ/yATBcFCQs+QNslzlXuN
- lSxbWDZn2xpXADvFPwfuaLha1/fygjGkxnSMidYwxIl1AMBW1i4YH60UqyomA22rH5PHKmu6Rwv
- 5iY5HJvNOfEtUKxm3gkr6XrXeUa02GAfJTF2T3tJYEdRSsTBPYol4pgy8qMPDocOtg7rbguC/Ci
- 8NRgvFwMdE1Ui95q77kvyo80lC9/z050htZu+cxD+2cZVAxvyyU7earfMxb2K0uDpINXoNxv7dt
- vzgmNsONBRup4LCIPoC2pY9CTiXgOHzonjZH5sFl2BeQ44tVIoYBbonX6kh/UdExmS80tQJCBpC
- ZSF4GpQ9tVGTgVW8U0A==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-07_03,2026-04-07_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1015 adultscore=0 suspectscore=0 priorityscore=1501
- bulkscore=0 spamscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604070135
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SA1PR12MB999254:EE_
+X-MS-Office365-Filtering-Correlation-Id: fe54ac7a-01be-433e-c5a5-08de94b517cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	NrrnE3Iw7Lm2PperBg6ILWZ7fN0g05MpVQO+6nDemxBxu04wi7h2/gqCM11EgvP8CYFjjRS8RjjH5A2SFHEBPUvrECwPEloLTBrUi/qMKUe8/GLVZhPm5uEX6LgM8vTn1ScoM9dfAtwj43ShfxT+KrloGNuPSdFD4L+NF6tAZ1RJHbFUoSgQUh/4qg/cSWFj8hKhQoGLR4mv0q02a1rEYqGAMk913FApxt2Fe7dHwg1DC34TQwzlVFi0Bw9Z2fFiSFoTUbggUR7p8YIwPblP4AJlwMIJWrnop0VjhrX19hEohQUQ+xbhO7XazLCqMKdcnXXoKmYae292jIINsfRe5nrvANqvbxZ8ufMRMsh+BxhbsQuKbp4gEKpERTC17FtFGv8lCF25C5V889dR8oPWf++o3MpGt6+IUw4XYWOWxRjPlfSii5oG5Eopo5u5iDWL0/wkq6VsqFH3Q08kv/jH1GWOnSmtsmR6/cr/8IuWm7g8gqE4NW0lYPYBiIMRgQqq1PQRrqwjeGFgYe7b5cRet15YczNd8Q9244ThNvZsxqyUtRZeua/PMa3PX4lS5SY3Jtz1NFL3I0xlpwL1tq70Hrqs92UH01t4xkfNfNUHKHFsa7j0d8A0DpY/grSVgoDqGZr7g9gcnPaXsy48ovnZSoRTMq63jgqnxwMsfV0+pM3ULaocHMQ9FYX3PWJ9eP8XVk5nlikbwjBOemCInnU5z0dkaiRLez93/6/cSK1Klvs=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Ye6kOQD8x26xv7rXz0DQBOqDfE57gox8DPOTfmIOgHrZ97i95xehluhhEVyL?=
+ =?us-ascii?Q?uSKtNYqdYYPsok+/tIt097Nx/YpsUBTo0x3kuuJ200c988A3py48KoL2WhnA?=
+ =?us-ascii?Q?Eo45qX/WfVl5K1Al3IshxwT2N2jytveHNWQlQoRTpVWEG8JoOX57DJXQjoAT?=
+ =?us-ascii?Q?iFvhAEE6FhFVD86uRPOxFJmIGTbTYWxU5vtqzPF53ZBQyABfKrpTwJmtwPHV?=
+ =?us-ascii?Q?Z2lRMvBx2XU3Vexy+Yg/8XrnIPlgkdyyfT2m6jNhSn3j3UiDWbr1uN8gaINI?=
+ =?us-ascii?Q?ZdjdcYolVe5enAGq6oUWtDL4Di2j1loY0u9H9mxRuIEsnbemHsJ/jKA2MGMv?=
+ =?us-ascii?Q?Ddqo+IWHlENXKPicJurTC7BIkuIh018lX9Amy8ZQ5WBAvr8k8I+uO2/uifqv?=
+ =?us-ascii?Q?nA8wwyHHCTgMkHhrHKiY2TvHiyi0BIhtuDfpmQAXRdzNkOKjvyCB13/fMMqD?=
+ =?us-ascii?Q?RArRv67u3BMTzAKgNRrxfIfRuVtB0lTKAMryVOTf4QRIqGEWs4TW1tTzRWwV?=
+ =?us-ascii?Q?8v6oleArZkoN5ut/Wy9aXViZvthPueblXjfccviHD+EiKNnV7CbQj5/pSmoZ?=
+ =?us-ascii?Q?PrSr9w0SO8g5vN8rdceiYg+ph2wGmKiOZZ0Bn1yndN8F50KyFhXCF88LnqTO?=
+ =?us-ascii?Q?Kn68Ap6M0XGj0znBCPPDhlAGza4jouFix+dhMrpz25gfglalLcHC4iOnpuq+?=
+ =?us-ascii?Q?4SwCuFr/KHh17yt2h6wJGPKgW9MA2rO1WW8EnwREld6De/zejewiJsetDYzf?=
+ =?us-ascii?Q?08VDef4s6L9+OI6XxbUiE9o3GMNCS28J/2cDOljW89pEJ5lXlx/o/rsLhrDX?=
+ =?us-ascii?Q?vRMI4gDExXXMsMxevHl2Sucpi7hNqHZLgD4j306C5mJuvB6Akgrm0gV6CHGV?=
+ =?us-ascii?Q?MhFX8He/ns4bRr40GBQfFHHjQTOFQfEJLcHO+J1AitvD5jCgkqqh7JBSBJHR?=
+ =?us-ascii?Q?orHwYJb2oteC7EG7FjgVjbAQJMDPZ/0yXKnNiuGMiQSujyMaop3jYf2ttcTI?=
+ =?us-ascii?Q?w02/QNgPsUdsmHCHsOqYl0tgk73ikivT6/smuAyFIwak3LJMtWiphGCGsAq8?=
+ =?us-ascii?Q?tOq1Nh5090nCualLoRhU3bpj0UCJPSpsO2VXOs4+vxryVsGWooe920+yV7p0?=
+ =?us-ascii?Q?4krPNhefBypFb9oPD160OVYYuV59AJhgDZXU+cGvrOFldtYCK4b5gRS2uX7i?=
+ =?us-ascii?Q?acaq+FrFbNRaAjkWrO8Zy/4pVvOZRSlKwyRO5UIwr3dLQO0Kt9RSWHChyZAT?=
+ =?us-ascii?Q?lo5/WTcMSITF1OxnP2j6YkSfUTwnXiMCizwn6ruVz+SSUCHpuXiSlAm+qoWB?=
+ =?us-ascii?Q?QcDZP/v6dDBRNeDhXnz9FD9a2B6W6KQAgP5SkfW4fAwrrfznJALExioMsN1L?=
+ =?us-ascii?Q?Um0eu0qAmsfvGG2zG2cp9BNadj2vWDxIjeMH+15yynPTfM9CA/3B/8JVyn1/?=
+ =?us-ascii?Q?HMJrdh4Zsk6/ielAQtC3iPHksC77i3MvX5+3SzKhPPUqzhVvY1r3OAlkUYqc?=
+ =?us-ascii?Q?Ya3Vuz26qi3p6ifp9ygttt6nFcAxJQtBvFNYMZcmo7O8MHz5wVQNhEmRXkls?=
+ =?us-ascii?Q?MvccFxoQDL6PlJGvngn1/qWqnYi4NTW2056c62Io0cfgzUldJ+2x5yYAWG0z?=
+ =?us-ascii?Q?7ntOdvwRoFToVONZUaaTSaCMcrA+5MxRtIGAhRuJryrALwbVAsAKRLnUX9yj?=
+ =?us-ascii?Q?375xlbexS3pJ1Ro/id02aQ8h1mODpkwALMrkXojjQnIQq/13?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe54ac7a-01be-433e-c5a5-08de94b517cc
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2026 14:51:04.3466
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EkT0uLVr5lBGWCAf8pPwQXqxsrqFUoPZwxWPn7SLafITdBI37sMtsaoLL2FMaXeT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB999254
 
-When memslot_perf_test is run on the Qemu Risc-V Virt machine,
-sometimes the RW subtest fails due to sigalarm, indicating that the
-guest sync did not finish within the expected duration of 10 seconds.
-Since the current timeout value is itself a bump up from the original
-2s, making the host timeout value configurable via a new command line
-parameter. The test can be invoked with '-t' option to set a suitable
-timeout value for the host.
+On 6 Apr 2026, at 5:19, Sayali Patil wrote:
 
-Signed-off-by: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
----
+> run_vmtests.sh contains special handling to ensure the hwpoison_inject
+> module is available for the memory-failure tests. This logic was
+> implemented outside of run_test(), making the setup category-specific
+> but managed globally.
+>
+> Move the hwpoison_inject handling into run_test() and restrict it
+> to the memory-failure category so that:
+> 1. the module is checked and loaded only when memory-failure tests run,=
 
-Changes in v2:
-  - Change the timeout option flag from 'a' to 't'
-  - Specify the test platform (Qemu Risc-V Virt) in the commit message
+> 2. the test is skipped if the module or the debugfs interface
+> (/sys/kernel/debug/hwpoison/) is not available.
+> 3. the module is unloaded after the test if it was loaded by the script=
+=2E
+>
+> This localizes category-specific setup and makes the test flow
+> consistent with other per-category preparations.
+>
+> While updating this logic, fix the module availability check.
+> The script previously used:
+>
+> 	modprobe -R hwpoison_inject
+>
+> The -R option prints the resolved module name to stdout, causing every
+> run to print:
+>
+> 	hwpoison_inject
+>
+> in the test output, even when no action is required, introducing
+> unnecessary noise.
+>
+> Replace this with:
+>
+> 	modprobe -n hwpoison_inject
+>
+> which verifies that the module is loadable without producing output,
+> keeping the selftest logs clean and consistent.
+>
+> Also, ensure that skipped tests do not override a previously recorded
+> failure. A skipped test currently sets exitcode to ksft_skip even if a
+> prior test has failed, which can mask failures in the final exit status=
+=2E
+> Update the logic to only set exitcode to ksft_skip when no failure has
+> been recorded.
+>
+> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page t=
+est")
+> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+> ---
+>  tools/testing/selftests/mm/run_vmtests.sh | 52 ++++++++++++++---------=
 
- tools/testing/selftests/kvm/memslot_perf_test.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+>  1 file changed, 33 insertions(+), 19 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
+selftests/mm/run_vmtests.sh
+> index afdcfd0d7cef..17c9bd910c47 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -235,6 +235,7 @@ pretty_name() {
+>  run_test() {
+>  	if test_selected ${CATEGORY}; then
+>  		local skip=3D0
+> +		local LOADED_MOD=3D0
 
-diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
-index 5087d082c4b0..567474168c1c 100644
---- a/tools/testing/selftests/kvm/memslot_perf_test.c
-+++ b/tools/testing/selftests/kvm/memslot_perf_test.c
-@@ -111,6 +111,7 @@ struct sync_area {
-  */
- static_assert(ATOMIC_BOOL_LOCK_FREE == 2, "atomic bool is not lockless");
- 
-+static int wait_timeout = 10;
- static sem_t vcpu_ready;
- 
- static bool map_unmap_verify;
-@@ -418,7 +419,7 @@ static bool _guest_should_exit(void)
-  */
- static noinline void host_perform_sync(struct sync_area *sync)
- {
--	alarm(10);
-+	alarm(wait_timeout);
- 
- 	atomic_store_explicit(&sync->sync_flag, true, memory_order_release);
- 	while (atomic_load_explicit(&sync->sync_flag, memory_order_acquire))
-@@ -900,7 +901,7 @@ static void help(char *name, struct test_args *targs)
- {
- 	int ctr;
- 
--	pr_info("usage: %s [-h] [-v] [-d] [-s slots] [-f first_test] [-e last_test] [-l test_length] [-r run_count]\n",
-+	pr_info("usage: %s [-h] [-v] [-d] [-s slots] [-f first_test] [-e last_test] [-l test_length] [-r run_count] [-t wait_timeout]\n",
- 		name);
- 	pr_info(" -h: print this help screen.\n");
- 	pr_info(" -v: enable verbose mode (not for benchmarking).\n");
-@@ -916,6 +917,8 @@ static void help(char *name, struct test_args *targs)
- 		targs->seconds);
- 	pr_info(" -r: specify the number of runs per test (currently: %i)\n",
- 		targs->runs);
-+	pr_info(" -t: specify the number of seconds for host wait timeout (currently: %i)\n",
-+		wait_timeout);
- 
- 	pr_info("\nAvailable tests:\n");
- 	for (ctr = 0; ctr < NTESTS; ctr++)
-@@ -964,7 +967,7 @@ static bool parse_args(int argc, char *argv[],
- 	uint32_t max_mem_slots;
- 	int opt;
- 
--	while ((opt = getopt(argc, argv, "hvdqs:f:e:l:r:")) != -1) {
-+	while ((opt = getopt(argc, argv, "hvdqs:f:e:l:r:t:")) != -1) {
- 		switch (opt) {
- 		case 'h':
- 		default:
-@@ -1007,6 +1010,9 @@ static bool parse_args(int argc, char *argv[],
- 		case 'r':
- 			targs->runs = atoi_positive("Runs per test", optarg);
- 			break;
-+		case 't':
-+			wait_timeout = atoi_positive("Host wait timeout", optarg);
-+			break;
- 		}
- 	}
- 
--- 
-2.43.0
+Can you rename it to LOADED_MEMORY_FAILURE_MOD to clarify its use?
+Since now LOADED_MOD is visible for the entire run_test().
+>
+>  		# On memory constrainted systems some tests can fail to allocate hug=
+epages.
+>  		# perform some cleanup before the test for a higher success rate.
+> @@ -250,6 +251,28 @@ run_test() {
+>  			fi
+>  		fi
+>
+> +		# Ensure hwpoison_inject is available for memory-failure tests
+> +		if [ "${CATEGORY}" =3D "memory-failure" ]; then
+> +			# Try to load hwpoison_inject if not present.
+> +			HWPOISON_DIR=3D/sys/kernel/debug/hwpoison/
+> +			if [ ! -d "$HWPOISON_DIR" ]; then
+> +				if ! modprobe -n hwpoison_inject > /dev/null 2>&1; then
+> +					echo "Module hwpoison_inject not found, skipping..." \
+> +						| tap_prefix
+> +					skip=3D1
+> +				else
+> +					modprobe hwpoison_inject > /dev/null 2>&1
+> +					LOADED_MOD=3D1
+> +					if [ ! -d "$HWPOISON_DIR" ]; then
+> +						echo "hwpoison debugfs interface not present" \
+> +							| tap_prefix
+> +						skip=3D1
+> +					fi
+> +				fi
+> +			fi
+> +
+> +		fi
+> +
+>  		local test=3D$(pretty_name "$*")
+>  		local title=3D"running $*"
+>  		local sep=3D$(echo -n "$title" | tr "[:graph:][:space:]" -)
+> @@ -261,6 +284,12 @@ run_test() {
+>  		else
+>  			local ret=3D$ksft_skip
+>  		fi
+> +
+> +		# Unload hwpoison_inject if we loaded it
+> +		if [ -n "${LOADED_MOD}" ]; then
+> +			modprobe -r hwpoison_inject > /dev/null 2>&1
+> +		fi
+> +
+>  		count_total=3D$(( count_total + 1 ))
+>  		if [ $ret -eq 0 ]; then
+>  			count_pass=3D$(( count_pass + 1 ))
+> @@ -270,7 +299,9 @@ run_test() {
+>  			count_skip=3D$(( count_skip + 1 ))
+>  			echo "[SKIP]" | tap_prefix
+>  			echo "ok ${count_total} ${test} # SKIP" | tap_output
+> -			exitcode=3D$ksft_skip
+> +			if [ $exitcode -eq 0 ]; then
+> +				exitcode=3D$ksft_skip
+> +			fi
+>  		else
+>  			count_fail=3D$(( count_fail + 1 ))
+>  			echo "[FAIL]" | tap_prefix
+> @@ -529,24 +560,7 @@ CATEGORY=3D"page_frag" run_test ./test_page_frag.s=
+h nonaligned
+>
+>  CATEGORY=3D"rmap" run_test ./rmap
+>
+> -# Try to load hwpoison_inject if not present.
+> -HWPOISON_DIR=3D/sys/kernel/debug/hwpoison/
+> -if [ ! -d "$HWPOISON_DIR" ]; then
+> -	if ! modprobe -q -R hwpoison_inject; then
+> -		echo "Module hwpoison_inject not found, skipping..."
+> -	else
+> -		modprobe hwpoison_inject > /dev/null 2>&1
+> -		LOADED_MOD=3D1
+> -	fi
+> -fi
+> -
+> -if [ -d "$HWPOISON_DIR" ]; then
+> -	CATEGORY=3D"memory-failure" run_test ./memory-failure
+> -fi
+> -
+> -if [ -n "${LOADED_MOD}" ]; then
+> -	modprobe -r hwpoison_inject > /dev/null 2>&1
+> -fi
+> +CATEGORY=3D"memory-failure" run_test ./memory-failure
+>
+>  if [ "${HAVE_HUGEPAGES}" =3D 1 ]; then
+>  	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
+> -- =
 
+
+Otherwise, LGTM.
+
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+
+Best Regards,
+Yan, Zi
