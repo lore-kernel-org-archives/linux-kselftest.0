@@ -1,44 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E8D3921E7;
-	Tue,  7 Apr 2026 10:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977B73A9629
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 11:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775559362; cv=none; b=Lz9VIM4i2WDoaSUdHIxMhaRQ7ZhCbhWmhn8yqDf7rGiR28SwYwoKW7z/2GphToaujKeL82Of+if/dFbRF4xCvS4ItOaHxxy3yRQ8WaxfrppKAumdporkapLWnSU5hOz3Wg950JIyICDbfBHHbUgfvkjRlGBwsbyHSg708gXohCA=
+	t=1775562915; cv=none; b=qa4baTBiE2ixOtU1Ad0EdBrSjDb08y5AhkruJJn6hlps8fu4m6sNLysCQ9UhcDWC6jg+DXD2UdDRdQbAH8cqWtsSxMUMKYLxA5h/UP/D4wKF8ScAOwSaFuNRsne04pTDxa0JhWSjnmjQfDIMGf8KTti4etMpj2WmQ4/S1X4bxAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775559362; c=relaxed/simple;
-	bh=7eP72GPIaGqb2qB7drr1QkaZ5cY1w6u3s7kVHeENo8Y=;
+	s=arc-20240116; t=1775562915; c=relaxed/simple;
+	bh=2bt2Y+pPUyLZGB/JYZQHnTwvkzT2uXOXMCVVdOekqR8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZAkBdGPN573cp8EvCrpoC1mDLTNY8ZxWEqGTJ7Q5OtN3eMSuZ2ldxqtL7VMWGjbUnwgQfZk9BOMyiGg/6y+GbTOho2ipqcXRCKwDWPlFWi2A12wKDXRMLIuWMrfmhtqzkCyfWXOO3cqTl2MosnduGxtpIclKzPRd7oy71g/pIoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYYWJjGi; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=S4DdWncEiUrOHGRFvH+KewrjiEBxH+vsh99abplA1Jssdgh3PiBld3oN/s3HIzQ3VrqUp2ws10sVZf77vq9gsMOC630cWW+BqXHYCfL+MVHkdnn7q5Orgh3ncuzonhb0yS/kqmGkEFHMdPjdv4oCJUwtU0jG4OJP8oypa0dBj8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=0Z27UUxi; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYYWJjGi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A9EC19421;
-	Tue,  7 Apr 2026 10:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775559362;
-	bh=7eP72GPIaGqb2qB7drr1QkaZ5cY1w6u3s7kVHeENo8Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KYYWJjGiP1IhaBTL9bzl4SUN0sICrsu2ysruF90aeyyhhHe091gB5ZizvbYp3LnLL
-	 UjV4PdcbPG/Yr4eLiZktqgjNm24coo+DahqxifQ4t+Rb1l9hKzKNrur/thllz/1sX/
-	 EOmZrClBvNoKSNFXdklaXlH6RIEe7cSV0vMTAp9EG+wF9HEQCrOJC4tsOOS/uYbrmX
-	 3NlIrnlJPcRM0kRhEX0ouAl0e/Oqo7IwwhrOqWjP5D9h6j7CGNprtoeRlRRJ+igLI4
-	 UdS1Sg4V19ERBRCmUui27c8SbCKk/aQtkmAqDMXfP+OgL7zEbNbl+uzu10PNLlvLBd
-	 7KKk2s4p4MxhA==
-Date: Tue, 7 Apr 2026 11:55:55 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Chunyu Hu <chuhu@redhat.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, 
-	surenb@google.com, mhocko@suse.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com, 
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, 
-	lance.yang@linux.dev
-Subject: Re: [PATCH v8 4/6] selftests/mm/vm_util: robust write_file()
-Message-ID: <adTiRbjdoTjfWKeM@lucifer>
-References: <20260402014543.1671131-1-chuhu@redhat.com>
- <20260402014543.1671131-5-chuhu@redhat.com>
+	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="0Z27UUxi"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488b0046078so20098665e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 04:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1775562911; x=1776167711; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2bt2Y+pPUyLZGB/JYZQHnTwvkzT2uXOXMCVVdOekqR8=;
+        b=0Z27UUxieZMaGB7NAYJtTldWlYFBjfLLOZlpQMitmm3BV2JggAKSDzeEelpPAWwaxc
+         zmI+Z4UZ24O3xj2CbZ+Lua4fD2tUStRlLEiPqlm43R0tNGyoHdX68SAUnDNdgvecffYd
+         gg6pbq3BrfRMhvkUBejyH0NDhBPn2LxrZFvYGOl5/6GiXsMTtabJzOEwSqKpRwcZ97+q
+         3kTr+aCUIguZmb+kij+cgZsrHg0HCkqh9r3ywuHNNJjMTc5HKVUcomYtpV2ACyxeaXi6
+         2rT0S5h389See0YZaMZ5KlfknLCFaYIPjDoTofcPSlLVxf7El2q1J8ys/hSezDijZ+wf
+         ecPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775562911; x=1776167711;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2bt2Y+pPUyLZGB/JYZQHnTwvkzT2uXOXMCVVdOekqR8=;
+        b=Wuph8sPPdootTukPUaK+EAEsq7Nz7j01MlySU7aZ8pYvsKEiyd7HjQSSmPQBIGOR15
+         +ud13KqbhtUXFqVh5s7k+hoxEUUJAom2PHVweU0fhYOxEgZSrbVfYvgBt7YG+51Fg7Fc
+         BM1QhvWYWz0f4ItJlqZWLMFpMTEjscoERH7XCJNf8Cjtq9FWMXDT8NkG+Y0uE0EgZO+d
+         U36Epo3FEV/4k46tMhZ4eYcy/IvGLf3XVsnxsdo+FE7XODfL9lrpxvR7H4IdgPMs+36/
+         ubueX0PofuWV+8CVLHqmKNBIFTMUnSHTbDvzzLz2zhhZwnI1FllPaT0gPIGDx1UNb644
+         Qx2g==
+X-Forwarded-Encrypted: i=1; AJvYcCUNTGmuO+0y8aoZxZ350Tmn+9V9amCBTEapDaXQ3ghWDLCTm4xO9FVFS5zfeKH+2uLGq91RlQIbhbYbyCwlGsE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywC0nlFYEsJ85L/Eyuc2skSHzzxGxruemk3lR2pqrbDa79j+lZ
+	fRobugZ1IDH9G/rWkSU43GLkQ/kftvakPsGdvIausNeibFEHSgNoZpvydnYF/IyAXtg=
+X-Gm-Gg: AeBDieulDMX8XzLKQ79vLdZkVqX0sUm4NvtUROjb5IcX5FIm374TWXsNBO1j7elpYwD
+	3+VWrtxpvv7wiMYrIa+yAnw/EJIzMwJ3wkzpunjSKukhiRUFPrtfuDlgVNjc7xiXH1VHXNAffco
+	opcgBq2S9yiNB+o5mkFWvRSQdXP14GutCsZJSRN1YmrF9i4sfFwBRrH4VvMH/aTwRBD+AP7KWYK
+	IEzGA3VHeg9KRvSp/8IvroexcwQussUznJrs+C4XWn8K5ZbHXRhNbLXXZ4Tc7jPrQWMqIoFve5v
+	P6xZKna0mJvvYTHtGBw9+qVmNJuN/6FuGa4RI5BVLfk0sV71YWwEBIoZQGT65aguYCbb3WSkPpn
+	qB5FqUr/4wxxdjANr6CjTzhWswYl+zCCuhWLkQjrjorG+dSaiwyXj4npPgMXqAzUyF9VRFvzcUJ
+	vkHAeZE0lOr++O9saazdvZeMLz25jjCTc=
+X-Received: by 2002:a05:600c:c493:b0:486:fa35:aef2 with SMTP id 5b1f17b1804b1-488996da0e3mr222190755e9.4.1775562910849;
+        Tue, 07 Apr 2026 04:55:10 -0700 (PDT)
+Received: from FV6GYCPJ69 ([85.163.81.98])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488bfc31418sm73008705e9.3.2026.04.07.04.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 04:55:10 -0700 (PDT)
+Date: Tue, 7 Apr 2026 13:55:07 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Marc Harvey <marcharvey@google.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v5 00/10] Decouple receive and transmit
+ enablement in team driver
+Message-ID: <utlz3oebjyd4lqp5pd4qdbth2kywxo4hrlrnwcxsx3br76fwfg@vy3tx5f3lv32>
+References: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,77 +77,22 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260402014543.1671131-5-chuhu@redhat.com>
+In-Reply-To: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
 
-On Thu, Apr 02, 2026 at 09:45:41AM +0800, Chunyu Hu wrote:
-> Add three more checks for buflen and numwritten. The buflen should be at
-> least two, that means at least one char and the null-end. The error case
-> check is added by checking numwriten < 0 instead of numwritten < 1. And the
-> truncate case is checked. The test will exit if any of these conditions
-> aren't met.
+Mon, Apr 06, 2026 at 05:03:36AM +0200, marcharvey@google.com wrote:
+>Allow independent control over receive and transmit enablement states
+>for aggregated ports in the team driver.
 >
-> Additionally, add more print information when a write failure occurs or
-> a truncated write happens, providing clearer diagnostics.
+>The motivation is that IEE 802.3ad LACP "independent control" can't
+>be implemented for the team driver currently. This was added to the
+>bonding driver in commit 240fd405528b ("bonding: Add independent
+>control state machine").
 >
-> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+>This series also has a few patches that add tests to show that the old
+>coupled enablement still works and that the new decoupled enablement
+>works as intended (4, 5, and 10).
+>
+>There are three patches with small fixes as well, with the goal of
+>making the final decoupling patch clearer (1, 2, and 3).
 
-LGTM, so:
-
-Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
-
-> ---
-> Changes in v8:
->   - go back to ksft_exit_fail_msg in the two error exit path as no clean
->     ksft_exit_fail_perror that supports va_list
-> Changes in v7:
->   - add an empty line before the 'buflen < 1' line.  And change to
->    'buflen < 2 to limit the buflen at least to be 2, so at least one char
->     is allowed.
->   - handle the numwriten < 0 case, which is the error path.
->   - use ksft_exit_fail_perror in error exit path.
->   - use %.*s to print the buf when error happened
-> Changes in v6:
->   - save/restore errno before and after the close(), so the log could show
->     the correct error info on failure. Suggested by AI.
-> Chagnes in v5:
->   - new patch for making improve on write_file. Add more safety checks and
->     diagnostics info in log
-> ---
->  tools/testing/selftests/mm/vm_util.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index ad96d19d1b85..db94564f4431 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -767,15 +767,24 @@ int unpoison_memory(unsigned long pfn)
->
->  void write_file(const char *path, const char *buf, size_t buflen)
->  {
-> -	int fd;
-> +	int fd, saved_errno;
->  	ssize_t numwritten;
->
-> +	if (buflen < 2)
-> +		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
-> +
->  	fd = open(path, O_WRONLY);
->  	if (fd == -1)
->  		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
->
->  	numwritten = write(fd, buf, buflen - 1);
-> +	saved_errno = errno;
->  	close(fd);
-> -	if (numwritten < 1)
-> -		ksft_exit_fail_msg("Write failed\n");
-> +	errno = saved_errno;
-> +	if (numwritten < 0)
-> +		ksft_exit_fail_msg("%s write(%.*s) failed: %s\n", path, (int)(buflen - 1),
-> +				buf, strerror(errno));
-> +	if (numwritten != buflen - 1)
-> +		ksft_exit_fail_msg("%s write(%.*s) is truncated, expected %zu bytes, got %zd bytes\n",
-> +				path, (int)(buflen - 1), buf, buflen - 1, numwritten);
->  }
-> --
-> 2.53.0
->
+Looks fine to me now. Do you have libteam/teamd counterpart?
