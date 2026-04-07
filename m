@@ -1,298 +1,123 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C922B351C05
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 02:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE73E364051
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 02:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775528908; cv=none; b=gC7+V7hTEbuyj+IrZ9oSUjylx44CxMX1rsboPvEp6JAYEOfos6z0bZJ15fI5Ey1W6AWCGMwjVXEvQY4vmjll3guU74ixa6seqmv1xvrkXGIDMHuwYodPvTeRPJBSdfp4Pz7T2XvnwWwGSS1ieJhlaX9tLHpz+Cedl5Uwukb6s+g=
+	t=1775529074; cv=none; b=j8+ovcPDK5SyW4VngF1KESmdBOLNB9EDA/5E5bUBi7+BbPmFUCs3FuBkWViU/i5EJF9JL20y+f5QmKIgyV0J3MssZFTbnb+HzMQ8nStnqi8Bg3SGdiQnV6W4DOp6Q+/19N0yo6c+1lNSlxhg/wW6L0sOjfC8xwklGgM1wDI3rF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775528908; c=relaxed/simple;
-	bh=4DLr8fmQA7w/BSu3doLzsfLae70vyzknOfPGkamv3p8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WcoeIC3zlF+w+SliiUm1PU9GQtj5s6SVxoRr+jCEnfbeZpEqnSwwg4qJqnVDdHxZYiB2uv36FXFZ8shWg4tXOGgtj3iTBGCo2RxN8yzXrPUmOAFeqc5JWJlRGnXpp07zsQx14ofdJoiOeFiAdaj6u54Npz/KxJVNT/0DA1OsxPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EQTGaOyq; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775529074; c=relaxed/simple;
+	bh=AS7Co8RyS/RWpa1/YRQO4aU8nxHDrQCiF5/Dyfytx/o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uk2vsJbspmIhVF4FV6HJ8fJZF3n9fI9cDLrNyKnGhOJd23dZSVxi4z0nBT83klzu0EWz0dopObAoua0imDXG1828zpBlhIIFpWXr4WG+foBM8RBfVIa3smOPlO6mb5jY3M9kyELht+zbMGwNc754cOu0Oxl6Th5Gh/WDVG0Rcys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aZYGtkOq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZS1FUI2o; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EQTGaOyq"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775528903;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aZYGtkOq";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZS1FUI2o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775529071;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/UCL1UTPbeTkxlCFboHUyYHOG6gkIs2lk0DovDddN4g=;
-	b=EQTGaOyqBEf+7c42TUTyU/TlGKvJFkMSr2/PR6tYezKeaL4fN5BI4N82f2srRn1IVYCYz6
-	y+leKHq6BIiJUkeVNBmmvje0i23c4gXE0X8CjKroj6EsMfryxdol3hQHqDKapDXXMcXuEY
-	99rbNaopjQmikkq2+9p1Uq39EmAxz5s=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: werner@verivus.ai,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Sun Jian <sun.jian.kdev@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add tests for sock_ops ctx access with same src/dst register
-Date: Tue,  7 Apr 2026 10:26:28 +0800
-Message-ID: <20260407022720.162151-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260407022720.162151-1-jiayuan.chen@linux.dev>
-References: <20260407022720.162151-1-jiayuan.chen@linux.dev>
+	bh=+relXseHSDiLD/cBAI0rxB8yeQocHqRAcYJEZB5dGtk=;
+	b=aZYGtkOqx6MU2mPyIh8tcbZNM/Cnp2snKAi+6uosFgoFvBl+ccxbKJ/AvqS6RclkU30yMb
+	2MlD29dnNE6CSy++gkFqwW7mIii0hyk7p1DtTlgEnhG7ZYo2rn0SviLXxOd9ghZbnAoK2w
+	kS2Rhe6TftZus+moGZEE2nsZFETMcg0=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-541-Ay-MxbtsPv-5uEXO5IdvHQ-1; Mon, 06 Apr 2026 22:31:10 -0400
+X-MC-Unique: Ay-MxbtsPv-5uEXO5IdvHQ-1
+X-Mimecast-MFC-AGG-ID: Ay-MxbtsPv-5uEXO5IdvHQ_1775529069
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b62da7602a0so2603764a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2026 19:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1775529069; x=1776133869; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+relXseHSDiLD/cBAI0rxB8yeQocHqRAcYJEZB5dGtk=;
+        b=ZS1FUI2o3t4uj08yvHjHVvugjxTc9AuFVUP6a8diSr6Ptt8JoqWJsu+QoppKTPBRgW
+         6GbkwYx2OH+limmPvpEi9SDZDLA1mXtogWDeyhI7aLf65bbEXKyCSV8ViPq4lJ0TG/tW
+         EC+C/Pj/cB+KStF0M4iBIAY0MZzB3mhBJarDimjLYiboke9Aud3JnXNLedbz78e30xNr
+         dU/tjMRKp0U8Km8Hqi34rsfFvokH6WL4TiE0wqN8yNRFTIhJC9gWSFGuBXCtuShxYdAh
+         SqaMbbinRIHXE77zm4htoNdWXSJ0jNYcdC4X849hKySnSpn1gkENhpsuYcvk6QFFMU5T
+         AZXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775529069; x=1776133869;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+relXseHSDiLD/cBAI0rxB8yeQocHqRAcYJEZB5dGtk=;
+        b=mAxvZxs+lUuJACp7GukiY3AG6sJdERJL2hfug8NBbUX6SKus6rXzQ0O+y8PL+avMZ7
+         I0XXivQLKn0kkzoYLuc9fOQw1fcNpbeuQL78RhfygcBX+eF7t65+OdUq21q7Yr69c5yO
+         viR6V7YbES7lnmZ9UFyVSVLRq0IdX5XO5QVbxy+IoqAega20P5U85/mE2OFnb1xQorjI
+         j6Gyc2kIDASv6AJL9IOeMfjEdjIvmre9agdLqFRp7qNBYk8hWJcYIY4VVlQmEDPH+h/K
+         cfZWORV26hlhYQTA62pBHpOr4bnn5fZatQ0lLseaDO5e2me1ejHUxzIi347LsEJH9VOP
+         vwYg==
+X-Forwarded-Encrypted: i=1; AJvYcCWN2oTHhGPgU9a97/aSOovwgsciqk3tqqWl7m4+9QF3oHWpmB+l+6wn3+UTyU4kAEvdQwBfJ2e+qZWq62IY3Vw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yws5Cd3DqcnGPW2JNaSRmegY83FB/abjRUK8vCR5nVrrOgFDBEX
+	coCrb0Zri4wtbSZ9fNiYq2T+eHLVSWzc7XocTDxILimPXak24JzqGhYvzzWpl8m22BiPFvN6m09
+	8w6dR/7uSXPMFMUHaqjTVgZ481DKcRCiLSYdw/bh8kS4R71Saty4qo+fOuMVwHQO156yGcA==
+X-Gm-Gg: AeBDiev/+dBLZI2O7A9QIoUXiKL0YacPuZv4qvwgRixONGJ8CDWd/CSQpDEqZQD7GXi
+	paWC0cgShNiDYPtAISNFXF2+llarlUseiIgvF0Lq2WP4HBMPlUdNSDwm3b2moMv5hbO3+LLglb3
+	qj9seVnROwwL0P80KLZBsbTiELGZVWyp8z+3ueMQFeyYaB2EHzyc//26ZYwXDiLWluPEW3GFXMJ
+	0/u1qXWjAhVOPzPepFQYYrIzlQFdEEYjBLIgYFJodJFn+0CaITzwqFVGBZaylIzd5r9ouCvZSfC
+	ZnA55Ya9UiozVAAd07cuCs8HRr+XgCSQA282wAgthCWcAFFp0agdKz5cooaJieKtpRjkT/dbqhc
+	/dbj8RVSSonkK0bWU7g==
+X-Received: by 2002:a05:6a00:3e19:b0:82c:d6d3:31a1 with SMTP id d2e1a72fcca58-82d0db4f938mr14513061b3a.29.1775529069381;
+        Mon, 06 Apr 2026 19:31:09 -0700 (PDT)
+X-Received: by 2002:a05:6a00:3e19:b0:82c:d6d3:31a1 with SMTP id d2e1a72fcca58-82d0db4f938mr14513020b3a.29.1775529068879;
+        Mon, 06 Apr 2026 19:31:08 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9c72967sm15221583b3a.49.2026.04.06.19.31.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 19:31:08 -0700 (PDT)
+Date: Tue, 7 Apr 2026 10:31:05 +0800
+From: Li Wang <liwang@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, nsc@kernel.org, david@kernel.org,
+	ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	shuah@kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] selftests/mm: clean up build output and verbosity
+Message-ID: <adRsadO77aF3WcWm@redhat.com>
+References: <20260331094402.144131-1-liwang@redhat.com>
+ <20260406193216.GA1319599@ax162>
+ <20260406125133.eeb8efed993ae1faa2a9ad73@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260406125133.eeb8efed993ae1faa2a9ad73@linux-foundation.org>
 
-Add selftests to verify SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() correctly
-return NULL/zero when dst_reg == src_reg and is_fullsock == 0.
+On Mon, Apr 06, 2026 at 12:51:33PM -0700, Andrew Morton wrote:
+> On Mon, 6 Apr 2026 12:32:16 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > > Second, the specific 32-bit and 64-bit compilation targets ignore the
+> > > standard kbuild verbosity settings, always printing their full compiler
+> > > commands even during a default quiet build.
+> > > 
+> > > Notes:
+> > >   Andrew mentioned he hopes this patch merge into kbuild tree, so I resend
+> > >   to linux-kbuild@vger.kernel.org.
+> > 
+> > Kbuild does not maintain anything in tools/, so this should go through
+> > either the mm tree or the kselftests tree.
+> 
+> No probs.  Li, please send it along after -rc1?
 
-Three subtests are included:
- - get_sk: ctx->sk with same src/dst register (SOCK_OPS_GET_SK)
- - get_field: ctx->snd_cwnd with same src/dst register (SOCK_OPS_GET_FIELD)
- - get_sk_diff_reg: ctx->sk with different src/dst register (baseline)
+Sure thing!
 
-Each BPF program uses inline asm (__naked) to force specific register
-allocation, reads is_fullsock first, then loads the field using the same
-(or different) register. The test triggers TCP_NEW_SYN_RECV via a TCP
-handshake and checks that the result is NULL/zero when is_fullsock == 0.
-
-Reviewed-by: Sun Jian <sun.jian.kdev@gmail.com>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../bpf/prog_tests/sock_ops_get_sk.c          |  76 ++++++++++++
- .../selftests/bpf/progs/sock_ops_get_sk.c     | 117 ++++++++++++++++++
- 2 files changed, 193 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
- create mode 100644 tools/testing/selftests/bpf/progs/sock_ops_get_sk.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c b/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
-new file mode 100644
-index 0000000000000..343d92c4df30d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "cgroup_helpers.h"
-+#include "network_helpers.h"
-+#include "sock_ops_get_sk.skel.h"
-+
-+/* See progs/sock_ops_get_sk.c for the bug description. */
-+static void run_sock_ops_test(int cgroup_fd, int prog_fd)
-+{
-+	int server_fd, client_fd, err;
-+
-+	err = bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, 0);
-+	if (!ASSERT_OK(err, "prog_attach"))
-+		return;
-+
-+	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_OK_FD(server_fd, "start_server"))
-+		goto detach;
-+
-+	/* Trigger TCP handshake which causes TCP_NEW_SYN_RECV state where
-+	 * is_fullsock == 0 and is_locked_tcp_sock == 0.
-+	 */
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_OK_FD(client_fd, "connect_to_fd"))
-+		goto close_server;
-+
-+	close(client_fd);
-+
-+close_server:
-+	close(server_fd);
-+detach:
-+	bpf_prog_detach(cgroup_fd, BPF_CGROUP_SOCK_OPS);
-+}
-+
-+void test_ns_sock_ops_get_sk(void)
-+{
-+	struct sock_ops_get_sk *skel;
-+	int cgroup_fd;
-+
-+	cgroup_fd = test__join_cgroup("/sock_ops_get_sk");
-+	if (!ASSERT_OK_FD(cgroup_fd, "join_cgroup"))
-+		return;
-+
-+	skel = sock_ops_get_sk__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_load"))
-+		goto close_cgroup;
-+
-+	/* Test SOCK_OPS_GET_SK with same src/dst register */
-+	if (test__start_subtest("get_sk")) {
-+		run_sock_ops_test(cgroup_fd,
-+				  bpf_program__fd(skel->progs.sock_ops_get_sk_same_reg));
-+		ASSERT_EQ(skel->bss->null_seen, 1, "null_seen");
-+		ASSERT_EQ(skel->bss->bug_detected, 0, "bug_not_detected");
-+	}
-+
-+	/* Test SOCK_OPS_GET_FIELD with same src/dst register */
-+	if (test__start_subtest("get_field")) {
-+		run_sock_ops_test(cgroup_fd,
-+				  bpf_program__fd(skel->progs.sock_ops_get_field_same_reg));
-+		ASSERT_EQ(skel->bss->field_null_seen, 1, "field_null_seen");
-+		ASSERT_EQ(skel->bss->field_bug_detected, 0, "field_bug_not_detected");
-+	}
-+
-+	/* Test SOCK_OPS_GET_SK with different src/dst register */
-+	if (test__start_subtest("get_sk_diff_reg")) {
-+		run_sock_ops_test(cgroup_fd,
-+				  bpf_program__fd(skel->progs.sock_ops_get_sk_diff_reg));
-+		ASSERT_EQ(skel->bss->diff_reg_null_seen, 1, "diff_reg_null_seen");
-+		ASSERT_EQ(skel->bss->diff_reg_bug_detected, 0, "diff_reg_bug_not_detected");
-+	}
-+
-+	sock_ops_get_sk__destroy(skel);
-+close_cgroup:
-+	close(cgroup_fd);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/sock_ops_get_sk.c b/tools/testing/selftests/bpf/progs/sock_ops_get_sk.c
-new file mode 100644
-index 0000000000000..3a0689f8ce7ca
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sock_ops_get_sk.c
-@@ -0,0 +1,117 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+/*
-+ * Test the SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() macros in
-+ * sock_ops_convert_ctx_access() when dst_reg == src_reg.
-+ *
-+ * When dst_reg == src_reg, the macros borrow a temporary register to load
-+ * is_fullsock / is_locked_tcp_sock, because dst_reg holds the ctx pointer
-+ * and cannot be clobbered before ctx->sk / ctx->field is read. If
-+ * is_fullsock == 0 (e.g., TCP_NEW_SYN_RECV with a request_sock), the macro
-+ * must still zero dst_reg so the verifier's PTR_TO_SOCKET_OR_NULL /
-+ * SCALAR_VALUE type is correct at runtime. A missing clear leaves a stale
-+ * ctx pointer in dst_reg that passes NULL checks (GET_SK) or leaks a kernel
-+ * address as a scalar (GET_FIELD).
-+ *
-+ * When dst_reg != src_reg, dst_reg itself is used to load is_fullsock, so
-+ * the JEQ (dst_reg == 0) naturally leaves it zeroed on the !fullsock path.
-+ */
-+
-+int bug_detected;
-+int null_seen;
-+
-+SEC("sockops")
-+__naked void sock_ops_get_sk_same_reg(void)
-+{
-+	asm volatile (
-+		"r7 = *(u32 *)(r1 + %[is_fullsock_off]);"
-+		"r1 = *(u64 *)(r1 + %[sk_off]);"
-+		"if r7 != 0 goto 2f;"
-+		"if r1 == 0 goto 1f;"
-+		"r1 = %[bug_detected] ll;"
-+		"r2 = 1;"
-+		"*(u32 *)(r1 + 0) = r2;"
-+		"goto 2f;"
-+	"1:"
-+		"r1 = %[null_seen] ll;"
-+		"r2 = 1;"
-+		"*(u32 *)(r1 + 0) = r2;"
-+	"2:"
-+		"r0 = 1;"
-+		"exit;"
-+		:
-+		: __imm_const(is_fullsock_off, offsetof(struct bpf_sock_ops, is_fullsock)),
-+		  __imm_const(sk_off, offsetof(struct bpf_sock_ops, sk)),
-+		  __imm_addr(bug_detected),
-+		  __imm_addr(null_seen)
-+		: __clobber_all);
-+}
-+
-+/* SOCK_OPS_GET_FIELD: same-register, is_locked_tcp_sock == 0 path. */
-+int field_bug_detected;
-+int field_null_seen;
-+
-+SEC("sockops")
-+__naked void sock_ops_get_field_same_reg(void)
-+{
-+	asm volatile (
-+		"r7 = *(u32 *)(r1 + %[is_fullsock_off]);"
-+		"r1 = *(u32 *)(r1 + %[snd_cwnd_off]);"
-+		"if r7 != 0 goto 2f;"
-+		"if r1 == 0 goto 1f;"
-+		"r1 = %[field_bug_detected] ll;"
-+		"r2 = 1;"
-+		"*(u32 *)(r1 + 0) = r2;"
-+		"goto 2f;"
-+	"1:"
-+		"r1 = %[field_null_seen] ll;"
-+		"r2 = 1;"
-+		"*(u32 *)(r1 + 0) = r2;"
-+	"2:"
-+		"r0 = 1;"
-+		"exit;"
-+		:
-+		: __imm_const(is_fullsock_off, offsetof(struct bpf_sock_ops, is_fullsock)),
-+		  __imm_const(snd_cwnd_off, offsetof(struct bpf_sock_ops, snd_cwnd)),
-+		  __imm_addr(field_bug_detected),
-+		  __imm_addr(field_null_seen)
-+		: __clobber_all);
-+}
-+
-+/* SOCK_OPS_GET_SK: different-register, is_fullsock == 0 path. */
-+int diff_reg_bug_detected;
-+int diff_reg_null_seen;
-+
-+SEC("sockops")
-+__naked void sock_ops_get_sk_diff_reg(void)
-+{
-+	asm volatile (
-+		"r7 = r1;"
-+		"r6 = *(u32 *)(r7 + %[is_fullsock_off]);"
-+		"r2 = *(u64 *)(r7 + %[sk_off]);"
-+		"if r6 != 0 goto 2f;"
-+		"if r2 == 0 goto 1f;"
-+		"r1 = %[diff_reg_bug_detected] ll;"
-+		"r3 = 1;"
-+		"*(u32 *)(r1 + 0) = r3;"
-+		"goto 2f;"
-+	"1:"
-+		"r1 = %[diff_reg_null_seen] ll;"
-+		"r3 = 1;"
-+		"*(u32 *)(r1 + 0) = r3;"
-+	"2:"
-+		"r0 = 1;"
-+		"exit;"
-+		:
-+		: __imm_const(is_fullsock_off, offsetof(struct bpf_sock_ops, is_fullsock)),
-+		  __imm_const(sk_off, offsetof(struct bpf_sock_ops, sk)),
-+		  __imm_addr(diff_reg_bug_detected),
-+		  __imm_addr(diff_reg_null_seen)
-+		: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
 -- 
-2.43.0
+Regards,
+Li Wang
 
