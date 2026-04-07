@@ -1,147 +1,211 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76F43A75A5
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 10:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A9939B96A;
+	Tue,  7 Apr 2026 10:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775556519; cv=none; b=Xoz5919AVQx3Vnw2na8RQBA0SvzPhxFj/LgHmeuRDCnY/aU+liREoIhqL4+DAx2mdQ2kOaR9NN+pSWJsM7UYHT+Pp0Sch1uQxyhgtP7LAPHBHPYwHRN7s/jNTBoltLn5qgegREtPbls6OjTBS2CyG2+QDGqZwgL22D9zrhQ+4/Y=
+	t=1775556815; cv=none; b=XzS/f5Dly5R1dro3QUc6m7yu6Q91+dZ5sNKNDx9Sz8e17dlRK1Ch8rUheRaYRQymVuCPxEV4SmcPvk84cLapyUgSDGCN17o2kIYWXpXuBuKrFN/1buswRshc6KzzV1fgBGtrHRlTVK9GET2LrGGffZCVni01yYtascwBNdcPT5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775556519; c=relaxed/simple;
-	bh=R9vZ3elU3V/8wueZHLI+PW4ahWXh1+tFL5xZ/WFiw88=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m6XYu74DKfIYy1a3YRr3IjAfCaYt99mK6EJ87SAPjCgAJOwH9XbWf8oAF0s3/SgJmih9KBAKQHB0j5K86JMRseU5AhVpLQG463K3AaNnCpcrqaQrQ+aKccRX7q9KxFQMxHYmGZ7BdLYeVNyPgGkNuW01HoBsY8GL0c4OWJqpBQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aq3Ugf/L; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=M8jes2Ew; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775556815; c=relaxed/simple;
+	bh=8TB9mhnV+UDsCsa+YJUBkm3RCqmydCAOpwWNNY7zJos=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cRA3B9y16gcVcEaXKS3J9/8yp5kprHtBrxoX+AwkvtwbKgkxZEc9oqoR4tls4NXTWzy2oWvRillSMOJBhfw0ym4kBHURLrWBbSHVSd5ZOskgeiiOfZYg6HNkhOaEAR7f5ScQYzVNkMjBpsJgHbuBAk9aFrV8gO8eZmhdSvVMpEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mCyc29DT; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aq3Ugf/L";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="M8jes2Ew"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775556516;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oPcG9Tk4uGB6LgSxC9DcNHhtfMDfGqAMPkqOmu5DgYI=;
-	b=aq3Ugf/LxDshsl9xWJ1eY5oMtuCciGOZ5fTGPKkjLmUJGL53e5ukYgRiUxWl6WLSKCjAio
-	LxS0xiYVcZCfbdzIjLDeeqiLtq7aVjs54BC8nVDbs9mYx1gxJv3sWeoVElyPeLpc48f9JL
-	YyqpBLRIJOtM/TcKdo66Whe8ryZ6FPc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-383-oDNBTrxgNxa_YCe6Su3e0Q-1; Tue, 07 Apr 2026 06:08:35 -0400
-X-MC-Unique: oDNBTrxgNxa_YCe6Su3e0Q-1
-X-Mimecast-MFC-AGG-ID: oDNBTrxgNxa_YCe6Su3e0Q_1775556514
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-48895008a3eso23240685e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 03:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1775556514; x=1776161314; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oPcG9Tk4uGB6LgSxC9DcNHhtfMDfGqAMPkqOmu5DgYI=;
-        b=M8jes2EwdqliXQmR28jCAmpye8JSHnU94CDurVBZCR7cvRCZJGpUVyapC2DvX7pElK
-         ydlbDHOPn+eX3SCc2fp06QogmDAML5q0IPsNLgEZYroAwsR0kTKc4ve7dsyL8XFJNlit
-         5Z0FyeJ2fLX473lYmaMXc6K0K04hQ8CbKajqxowB9Z0QQIAShszM5/T/ZS6XmCPlyCJp
-         fMElS+iRfsw5pkl7bZZIpO418/aDoOJQgKjWvmRk9RO9vvK52iKyLfxuKwRbNtEuYx3a
-         DgsH2Q2GT2WkiHPCZsk/AuLrNzFMpf3YB6KwvShUuwGJm0PfM/OB3f9jv7I1vwvzbVXi
-         R+CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775556514; x=1776161314;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oPcG9Tk4uGB6LgSxC9DcNHhtfMDfGqAMPkqOmu5DgYI=;
-        b=rF4k2KySAjBfC7RDKWaeRzwcAkl0OijFsR6GoED/Et+9bQExRFUTq/nqOUluLK/rwQ
-         bTsX5NuGmxsWNhjvcY2ucs/1HrRq9c/IpKgNGF0OtV6aFNnwjgRPuKJub8WM/F4TrdpS
-         wE+oBrPLsjreMKludlvcbtVMao/wX1E1nBHjhssbpb8lmadDRgr0dtI3WJkFCCjoVDt5
-         z98E25g5ELVkG3JEaxwqJc1G8o62EBVuPf1/CQW3wsHVVu506CNuxTCl8svGjqj6uJIH
-         c9hF3SRqUf5SPKHu79RVCqHLoxWgZWtJHlNOXNHpPg/WOHyz5mY4mHcpK13xl8fI/Ouw
-         VnTw==
-X-Forwarded-Encrypted: i=1; AJvYcCVEWlUeLU96IkTD9vny/rNpeSyBqhbsm7MDlLXp1QIHnhUFLgZDPlagaRvdftiUqstyHyRgvFVVGeP6Jb0gVX8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKvMAnzg9G59YFV7wKwh4H0jbrR4wgh5bmW6wuaGF2l7/rp22Z
-	V6QxNGGYRhjXdxnk2qCitwZukmujaQrAuwcx2wg9w/DSMT7aI042XI98kiBhW+u0pYbmrfNvrul
-	mTAHuRz01HD/3rL6Vmo1dlJ78sGH43kZbdPkud+FMr5zx2VMsJahbaxkSSDkmz5Tufxb2yQ==
-X-Gm-Gg: AeBDiesqWyPYCuxQGYbtMzyzmEMGcx39kPgqGcGzroLdHLs0hA0Og/WIBIYCId/fiaM
-	v5CljlUQFJg64u6RBFMk0vqmHZWMFZ2+Evu8tPijJT6Lp8Wnu05f3eu2oXb7c9+c5z8zPPPZP91
-	AAyO9YjceJeO2PL6FOmC3wTIok/FY7nNho9PFarqpWjmiv4qOwNzrThG349JL836ftJnHkr2rR3
-	m2hcG495nXYX6rBW9HYAPFH3YXl6JzqG0rU5CnHoMOoG5TktHjI5IRl3cTf12CbGlSArDBLhK2o
-	aF602YGb2YWVi/7XGwYujJqLBKVT+3mEl4QCAHJrnlIZzLaQOsderExWfhbks45Ep0QCXUf3j8e
-	Hgrz9tuJx7NtzYUa9ywhv78gOMWIIm1qJknqPKOMCDjrAyjutf+LPB+6HEg==
-X-Received: by 2002:a05:600c:e40b:b0:485:3f30:6250 with SMTP id 5b1f17b1804b1-488997aafe8mr177853455e9.20.1775556513875;
-        Tue, 07 Apr 2026 03:08:33 -0700 (PDT)
-X-Received: by 2002:a05:600c:e40b:b0:485:3f30:6250 with SMTP id 5b1f17b1804b1-488997aafe8mr177853105e9.20.1775556513445;
-        Tue, 07 Apr 2026 03:08:33 -0700 (PDT)
-Received: from [192.168.88.32] ([212.105.153.231])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e952b0bsm531203475e9.12.2026.04.07.03.08.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Apr 2026 03:08:32 -0700 (PDT)
-Message-ID: <3ae4bb0b-6f4c-4477-9c67-f2122eedad8c@redhat.com>
-Date: Tue, 7 Apr 2026 12:08:30 +0200
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mCyc29DT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=jg
+	vPZT0q9a4EzsqYIeRi2BoE4Kq1WDUldFLiTe+/xqg=; b=mCyc29DTWA7y2KKig2
+	qB2AmBPEUbxsN3HEXlMFUkToiahTo1dkBwx2mQDQrERXJxN3YvlgIrfwJcRMmBX4
+	0rwkxxd4+LfeEQCXZlK5nqF6+bqO/59FvDHsLLY/lQ4khtDaKxVmLB8ybWpApceC
+	EfpKoibtN+u8WWDlSglO2qrv0=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wAXOySj2NRpl+1ZDg--.20426S2;
+	Tue, 07 Apr 2026 18:12:53 +0800 (CST)
+From: CaoRuichuang <create0818@163.com>
+To: rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Cao Ruichuang <create0818@163.com>
+Subject: [PATCH] selftests/ftrace: Check exact trace_marker_raw payload lengths
+Date: Tue,  7 Apr 2026 18:12:45 +0800
+Message-Id: <20260407101245.78988-1-create0818@163.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v8] selftests: net: add tests for PPP
-To: Qingfang Deng <qingfang.deng@linux.dev>, linux-ppp@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Felix Maurer <fmaurer@redhat.com>, Petr Machata <petrm@nvidia.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: Paul Mackerras <paulus@ozlabs.org>, Dianne Skoll <dianne@skoll.ca>,
- Jaco Kroon <jaco@uls.co.za>, James Carlson <carlsonj@workingcode.com>,
- Andrew Lunn <andrew@lunn.ch>
-References: <20260403034908.30017-1-qingfang.deng@linux.dev>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260403034908.30017-1-qingfang.deng@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAXOySj2NRpl+1ZDg--.20426S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuryDGr4UWw4xCrWDtry8Grg_yoWrAFyfpa
+	ySkFyktrWrJF4jqw1fCw12qryfJ3ZxJ342gFykK34YyryUJrn2q34xKFn0kry7ArZ8JryS
+	va1F9FW8GFs8Z37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR9Z2xUUUUU=
+X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbCvwbuKGnU2KbiEAAA3O
 
-On 4/3/26 5:48 AM, Qingfang Deng wrote:
-> diff --git a/tools/testing/selftests/net/ppp/pppoe.sh b/tools/testing/selftests/net/ppp/pppoe.sh
-> new file mode 100755
-> index 000000000000..f67b51df7490
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ppp/pppoe.sh
-> @@ -0,0 +1,65 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +source ppp_common.sh
-> +
-> +VETH_SERVER="veth-server"
-> +VETH_CLIENT="veth-client"
-> +PPPOE_LOG=$(mktemp /tmp/pppoe.XXXXXX)
-> +
-> +# shellcheck disable=SC2329
-> +cleanup() {
-> +	cleanup_all_ns
-> +	[ -n "$SOCAT_PID" ] && kill_process "$SOCAT_PID"
-> +	rm -f "$PPPOE_LOG"
-> +}
-> +
-> +trap cleanup EXIT
-> +
-> +require_command pppoe-server
-> +ppp_common_init
-> +modprobe -q pppoe
-> +
-> +# Try to locate pppoe.so plugin
-> +PPPOE_PLUGIN=$(find /usr/{lib,lib64,lib32}/pppd/ -name pppoe.so -type f -print -quit)
+From: Cao Ruichuang <create0818@163.com>
 
-Minor nit: here stderr could be redirected to /dev/null, since the
-command will likely emit at least an error message on most systems.
+trace_marker_raw.tc currently depends on awk strtonum() and
+assumes that the printed raw-data byte count is rounded up to four
+bytes.
 
-Could be a follow-up or added if/when you will expand the self-tests.
+That makes the test fail on systems that use mawk, and it no longer
+matches the raw_data trace output we want to validate after preserving
+true payload lengths for long records.
 
-/P
+Rewrite the test to capture a small sequence of raw marker writes and
+check the exact number of printed payload bytes in order. While doing
+that, use od for the endian probe, switch to a fixed raw marker id so
+the test only varies payload length, and disable pause-on-trace while
+streaming trace_pipe.
+
+Signed-off-by: Cao Ruichuang <create0818@163.com>
+---
+ .../ftrace/test.d/00basic/trace_marker_raw.tc | 93 ++++++++++++-------
+ 1 file changed, 59 insertions(+), 34 deletions(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+index a2c42e13f..3b37890f8 100644
+--- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
++++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+@@ -1,11 +1,11 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ # description: Basic tests on writing to trace_marker_raw
+-# requires: trace_marker_raw
++# requires: trace_marker_raw od:program
+ # flags: instance
+ 
+ is_little_endian() {
+-	if lscpu | grep -q 'Little Endian'; then
++	if [ "$(printf '\001\000\000\000' | od -An -tu4 | tr -d '[:space:]')" = "1" ]; then
+ 		echo 1;
+ 	else
+ 		echo 0;
+@@ -34,7 +34,7 @@ make_str() {
+ 
+ 	data=`printf -- 'X%.0s' $(seq $cnt)`
+ 
+-	printf "${val}${data}"
++	printf "%b%s" "${val}" "${data}"
+ }
+ 
+ write_buffer() {
+@@ -47,36 +47,68 @@ write_buffer() {
+ 
+ 
+ test_multiple_writes() {
++	out_file=$TMPDIR/trace_marker_raw.out
++	match_file=$TMPDIR/trace_marker_raw.lines
++	wait_iter=0
++	pause_on_trace=
++
++	if [ -f options/pause-on-trace ]; then
++		pause_on_trace=`cat options/pause-on-trace`
++		echo 0 > options/pause-on-trace
++	fi
++
++	: > trace
++	cat trace_pipe > $out_file &
++	reader_pid=$!
++	sleep 1
++
++	# Write sizes that cover both the short and long raw-data encodings
++	# without overflowing the trace buffer before we can verify them.
++	for i in `seq 1 12`; do
++		write_buffer 0x12345678 $i
++	done
+ 
+-	# Write a bunch of data where the id is the count of
+-	# data to write
+-	for i in `seq 1 10` `seq 101 110` `seq 1001 1010`; do
+-		write_buffer $i $i
++	while [ "`grep -c ' buf:' $out_file 2> /dev/null || true`" -lt 12 ]; do
++		wait_iter=$((wait_iter + 1))
++		if [ $wait_iter -ge 10 ]; then
++			kill $reader_pid 2> /dev/null || true
++			wait $reader_pid 2> /dev/null || true
++			if [ -n "$pause_on_trace" ]; then
++				echo $pause_on_trace > options/pause-on-trace
++			fi
++			return 1
++		fi
++		sleep 1
+ 	done
+ 
+ 	# add a little buffer
+ 	echo stop > trace_marker
++	sleep 1
++	kill $reader_pid 2> /dev/null || true
++	wait $reader_pid 2> /dev/null || true
++	if [ -n "$pause_on_trace" ]; then
++		echo $pause_on_trace > options/pause-on-trace
++	fi
+ 
+-	# Check to make sure the number of entries is the id (rounded up by 4)
+-	awk '/.*: # [0-9a-f]* / {
+-			print;
+-			cnt = -1;
+-			for (i = 0; i < NF; i++) {
+-				# The counter is after the "#" marker
+-				if ( $i == "#" ) {
+-					i++;
+-					cnt = strtonum("0x" $i);
+-					num = NF - (i + 1);
+-					# The number of items is always rounded up by 4
+-					cnt2 = int((cnt + 3) / 4) * 4;
+-					if (cnt2 != num) {
+-						exit 1;
+-					}
+-					break;
+-				}
+-			}
+-		}
+-	// { if (NR > 30) { exit 0; } } ' trace_pipe;
++	grep ' buf:' $out_file > $match_file || return 1
++	if [ "`wc -l < $match_file`" -ne 12 ]; then
++		cat $match_file
++		return 1
++	fi
++
++	# Check to make sure the number of byte values matches the id exactly.
++	for expected in `seq 1 12`; do
++		line=`sed -n "${expected}p" $match_file`
++		if [ -z "$line" ]; then
++			return 1
++		fi
++		rest=${line#* buf: }
++		set -- $rest
++		if [ "$#" -ne "$expected" ]; then
++			echo "$line"
++			return 1
++		fi
++	done
+ }
+ 
+ 
+@@ -107,13 +139,6 @@ test_buffer() {
+ 
+ ORIG=`cat buffer_size_kb`
+ 
+-# test_multiple_writes test needs at least 12KB buffer
+-NEW_SIZE=12
+-
+-if [ ${ORIG} -lt ${NEW_SIZE} ]; then
+-	echo ${NEW_SIZE} > buffer_size_kb
+-fi
+-
+ test_buffer
+ if ! test_multiple_writes; then
+ 	echo ${ORIG} > buffer_size_kb
+-- 
+2.39.5 (Apple Git-154)
 
