@@ -1,95 +1,94 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7CB3CF023
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 15:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E730A3624CB
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 16:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775576878; cv=pass; b=p65BLHKmA28GZZES1ngBqxpZti2+9luH8fgROGRjdH8fL9/SmPEGyxwJXiEOUuFGAoPlFiA2NrCawlaX5R6bXGp46W/P5LJLxHSfGRUS8d50Cwg+yZ+rL+5+7N/KrBRvC9Wp+aDRUWAs3CvDdwQ/aP41Wgxhk/JqCpeWEYT4huk=
+	t=1775579283; cv=pass; b=mnBRuun6ZVwg6eEwxmD6vJxWmMaSSYDMipYL7rtGes55u+2s7ygZ0mGJHxseVeUrH/aU4ikQOYSMtUq0liTHohOGIfNAYra8TpuuvaS00mBOYl6HpR9tZtdhmB2mVmStpl/+U4i8ce65F1ouHl3+xfx00t8b29LggrA2C0MmpWQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775576878; c=relaxed/simple;
-	bh=T2uG1PHZ2DZKJc4V1Fkt5QBNKproLnPf5esVaJ56cdU=;
+	s=arc-20240116; t=1775579283; c=relaxed/simple;
+	bh=mfSDevp9b8hpUHFiMKkR6R4RMAK3vtsH4zOSKGhaxkM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hk2AcFTtmmNwPXIQh9Z+rpfv6UR9ZJO+wbhadEKG2Elu19LmXyCiJ8zuVEPfaGekogrIXeRyV4PRXzrSOijeJnbF0NMs8ET6aNmBwJyEULiMDbiru4flTBZvG6b/KQfWWDBJ+cqrKbb7YI594CZHjdzfiZp5rgDuSMjeEecJ2Lg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GZEhTf10; arc=pass smtp.client-ip=209.85.208.45
+	 To:Cc:Content-Type; b=lYWCbJOV96/E2VegsfkfwepRCU5/JNZp86wP4rP4kJy+7aWSN3AdNz3Cu1maoSR4Wsy6aEq/2vPfnVvqMWD0FD7SR92cHgA2z38k4307vnqaPhJiZGktzAckpbw21wj71X5b7uQYodBgLLyfTbGNNN3zX/lU8+7DT1IphvmGvIo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A4Z06B+W; arc=pass smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GZEhTf10"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-66bb7118c96so40872a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 08:47:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775576862; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A4Z06B+W"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-66bb7118c96so41576a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 09:28:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775579280; cv=none;
         d=google.com; s=arc-20240605;
-        b=E8p2uQkOKzdn8Yg6kCgqZC47vXoAM/qMbbe0jmzm6H9FDrwttiLpgWl3MB7icf6IX4
-         mnHbq4uJA+viXeMOxDjngE9XFOzBlu0GlQTkKk4rvxMJzEMzcx/FJQ/x5lazHM6pVHcv
-         CUvszrR3wqv6Oh9vNtiAPGIotDfK0LJ3nzDBrNvbvdtmoeTwZJ4DRFzUVFzLpbFEWFuu
-         vN9VSEgGUfzU+0he57lQX+AlWtzHHW+iuOvcpulnpQeYvmrYXxov7gz6kOKKQFhWs1Mf
-         mRZ/8St5ntYiGCF90C+O/3CMp4YMrqn21of7qnVeujMf4f36BD8uRPuveN0jrY+4Kt9M
-         59RA==
+        b=YxKaaTG/l3r0JTeiNS4Qu4OWUUdttT0i0LuNqKAYrGYjGkttOCJ3gGg1FRYISYtJWE
+         WjwlcRnsL077Igtk8whCZL104aKcNVWwFyGnUYlCSb7mgw5yhU1LqyWk/8jRUDeicmLB
+         JeGfR6kGfDpEAJ1zy2tPsF1BT2exUYS0Vu1BKufdYpawAD7t9E8yYkxCk0K5I9QUXAOV
+         2uCrsIhvCpICH7B8E+Q4CG4f0F3wiMUfvVEsEd7hOrGdtN6FTPFj6mjZ4EYIchI5a/tC
+         c0A1MvHvfTeZ16CbZi/4qkYyKmgVTBwtD8olwTzVnw/0+hq++mfluEKw5q2TMExK9+9Y
+         4xXA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=OW0PL7Trk5Nbi8kfx4y+iqIlG6zAN+Q5XpqbwQzl6Ao=;
-        fh=Nxc7/25lSnnuqru5zbuHrpPpidsKczNhTOGajRfgSkk=;
-        b=MrYPvV1V7L0cmVKYmkN3DbJMVG6xhvzEDfPrKdbpt+ag3WqgcKUtvI9D5iA7AyTmXm
-         OjELtHkXLEBNWXxPNUfopxLY2QQICv1vsgCdRDrqwrrMxbGPMAGUniiTGW+zf8WjNJ6I
-         BVVLhGnMzH0KJx7Vx6+eilaw9ZzFa6rdDJ/x1sITeMFMzCsLXY+4KaQyY0LRzCMuvc8B
-         WbUTCJHuGqOMJ3P6hauuSLyZXftCWqdqAgWDjAJ1WCcpaisXQHKA92eRTuOqpoJYs16S
-         5NIJtOwxiyEkIzg4LHVwZc4c1dCxB0Mm4hQYUC2IO/SiQnIOQVbUDFZgRV6r86/Vh+oU
-         PfsA==;
+        bh=yKg8r1WBmg20sHVEHfmhLlIhIakG5vXzHNYYZRS5Q9E=;
+        fh=VIEDZD0zwQrOLwTP7MeUyL4HUXRxKZsLu5oxsEO632E=;
+        b=I5VaclbMmOSl6KNwEITLku5aBc3+MwBcbzZ1FrkmLx6GBkeSAqGhJth07f4yOM5nRt
+         EPoITT1EwZy0dq7KyUrw5D7d6bH3MqF1EwHnCYxob+9M5VI80tLAVrCG+RF1o44NQoWa
+         W+UTEnitbNB5di4k+xaHshazDQLhXTINuOsH099h11Ov9cs99wUXgUIuFsNWsckdoSPW
+         l8f53bttRnB5lWMd5lMtRKra1/SyFC1QwqoX34ohP3LVLNqPhRPgnpMzDgyL4wuL7RZo
+         mCo6zJqJiEHDVN2VFkKF3GMNgcTrEj8ZZHfxlIwEdLOqJspn7YetaEMCFZwjSEZxEX/Z
+         jtTg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775576862; x=1776181662; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775579280; x=1776184080; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OW0PL7Trk5Nbi8kfx4y+iqIlG6zAN+Q5XpqbwQzl6Ao=;
-        b=GZEhTf10cluMSMlPZxugEczYelJ8qkSlDVDCxhNasE8hHjXOUVNPL7lr5C9XgmpuIF
-         i/Ma+TUcfxVoOVZAKFwcpOm1EeL1oFIOCMAVbG9bQcTMNhiLOYcmvV/s8qUOzkcA7kE5
-         P6VTNiAQIqpr3Sz6hNDzJMe8dd0dhnTViQaBx4hlW3R72NOaYjIJvHnKCX8SbjJpTYIK
-         IxoOQlk2tAL+7Ohq74mMuXtjXKFq2zNRMMgaqmliF59TztI8mWEE/0lvNeUDAwrtehpU
-         XdyHuXghUlaAonzG9NpjlX9JPAHLp77O0fIglV7ZfBZfivJIE9NiWjWcZs63/cXKIMea
-         9LTg==
+        bh=yKg8r1WBmg20sHVEHfmhLlIhIakG5vXzHNYYZRS5Q9E=;
+        b=A4Z06B+WfljDsz3Y3MnqR5tH92eU8jRlUBHvvr/DQRI4JIPythmJxKvzbCpTaluEcO
+         Y0zvpsOIPeNywjQ7ouvyBYKeddXF9vi6gPZvtkav0N6uDf7hf2Q/31HrL2HnKuTdzvTJ
+         2O4dqmpJ+zSMjkzAe+a4v7yq2iYxmA5bHqHD/xqLbzu3sWybSOOxjSj/2GfCANSkbvsM
+         juv7p9h0l0uBR6A8BN+ViF31zH3LLVtnQaO5DkzvaO0jZAo5iOQ8h5TO1/IG9HBbyJ/q
+         118Uk0lpXbpAOsVmmCkhC17GRj+iwSOGQh5CES5bLuOfB/4EB5dOTN8YMoQV+TuCYBY9
+         nP8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775576862; x=1776181662;
+        d=1e100.net; s=20251104; t=1775579280; x=1776184080;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=OW0PL7Trk5Nbi8kfx4y+iqIlG6zAN+Q5XpqbwQzl6Ao=;
-        b=BfYVVyfQfamTvZV/CcnSWkRs70HWnWDylzyU7Evvsaiu6HQyKAGcmiAPOnwgRG91rj
-         8Syiq3smmF6H2T3iDAg1uoPlI84E4UH5k5gBPu9vxBU4L7INoemMuW2jFcAbgmb/Fcnf
-         582o2g4wumrUZ1GsWAv0LRtiNPNuPXPPMLx3EToVytTnkBKOB92qnQqQE4PlEnqpJLbE
-         2ZlUO51Jmx3BYwN6oYyKeZhQtltMo+fs50nmHARKKqkAUA40aBHQIA9bqtSr/Edlxz9p
-         QisjFKW0Z4fpGSAvhuar0SETELAxVCD9gOsE/pfnIlMVMHupbIxkID1sVa9+reu7Lo3/
-         o6RA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtcxYszGhAjvzxhGqi50zSn6LMO/92/97xqF0yh9c2VNG4XSeP8bL0Kg5bKuw7EIBnh6eRy6+0AUmPyI7mkvo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8j7Hr/kwokZiwG+/mQNuLdkZcEOUnFN6VgyVbVYSdPnkZrQae
-	nxUOkCL84KalMFOg6HPNxuwdWvDUpS8K4MH0f1JGJ/rDPH86/VvHKRVtE3bf9ZeEiNXTcoKJWtP
-	uHBpzYS4GBoxLdzjWIyhjDi1nj5MjkFJLVglQgZdt
-X-Gm-Gg: AeBDiet5rS2SskBsVUwYNHET/ez/HGViKk8g5yhEOWYTXJ9xxbCd1gkGL4gyr8x364q
-	sJ3v5Y/1EWzymu3ch4hjPD60/wZIEXrHIQoamsdgx+en13og2lUzB3Ki4Oob0qoT3i9FWH0so5v
-	yPPJz8W7I9lfViBPNRwWF50VZVPt0jmYlUivn9L/D/GgvxxraKvXpn4Obu3gocCPpd/fa1r6hAW
-	niddBokMOcEHDJkqoKiz64KD6vgMv5D+wqBnhtiIr+AV0BwhyjtTJG2xdLdYL4xuU6COZK4u40J
-	GwlNxik=
-X-Received: by 2002:aa7:d1c5:0:b0:66b:99df:42e2 with SMTP id
- 4fb4d7f45d1cf-66e4136b6admr159703a12.10.1775576861215; Tue, 07 Apr 2026
- 08:47:41 -0700 (PDT)
+        bh=yKg8r1WBmg20sHVEHfmhLlIhIakG5vXzHNYYZRS5Q9E=;
+        b=Qnl+u2x2L0yu10ek7QWdpQ00EGdnLyrvpb/BN031mTNrXMTd5IFUSNP72qvXF8dNP8
+         /lgAXJ9dscbGSTcdRbOFwONGWzBzm1djHTJh+Kup1nkIGpWRx+G7cP37+PI/H9TAPGbD
+         QOGuO+MA8zRVH2T41cLVbnzYnhrCYJvN0aYT8B3PerHRJrApAtGD6GDs9Pt6qQazA3l1
+         melTo+6GBWPnr8U2pZGhaFwATI3rUIAgiblmgvp6hp1WS/YzqP1v6MiuJsepG54/iN6T
+         K7G7ApZpqbbLXp2QAO8IaPMH3XJphpkQnpMzfyWd8neAYUs12XnlKgLT4WbZylWa/AnY
+         A8kA==
+X-Forwarded-Encrypted: i=1; AJvYcCX+vVz3yDtgGcN8CEByIoty2H7gkq3U0gj+LTo2ex0XWsZmY3sspPJj+10L1RM0xgNf0Aq0wiOeWT3MqxAQK9U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZVfuLNMKByxfoUIQZE5MS1HIE4XHBRxIO4ljsmzVQlbe0dcg6
+	K5BIakRc8z9YsW8WGcK5O2mDrrzkD53DSn2i+AMSXmiTBlzqqstsJJKGq1/XHni50UttQxx7Mcj
+	3gtzmBCsmUBrACcLQU9pJB23V/XOZOAqCe+06efGY
+X-Gm-Gg: AeBDieuREtcheNn7LrHM3h4CoO9G60bBl1KFYSe5c8Dr/B69rVOBuEPrgpDOZwbFyvS
+	ydxSHMUzJNgTPKWF7iz66SZgfmkMGxVC41JmhdsAqDKQ1R2S3EXhZ8zqMnxfODuDKrkhwmFAQXe
+	Ko3L4w0bxm0MlKFKn00FEUEZdmQTgn6qBYjL3uSMwBoH3gNj9epurUqI7RI6FB7V6rn1HGSBZV+
+	DL812JzW8Rlf3xySOCkcdSxoOSwph0by+6Y0Uulx+isuTN9G3UOYi/c47SSCptQeSzASg3Ani42
+	NRXehVMxIEE3FWR+/gItej9hVo2uve5PBo8=
+X-Received: by 2002:aa7:d14b:0:b0:66b:e078:5934 with SMTP id
+ 4fb4d7f45d1cf-66e4181ffcamr155534a12.12.1775579279867; Tue, 07 Apr 2026
+ 09:27:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260327234023.2659476-1-jmattson@google.com> <20260327234023.2659476-9-jmattson@google.com>
- <adRGLPrmBpX-3DdX@google.com> <CALMp9eQsd0fRuDE_R57Mn6-N6jCtbmoPAh7Y7CBdMEZJaNSUGQ@mail.gmail.com>
- <adURPZJEDs50NPkB@google.com>
-In-Reply-To: <adURPZJEDs50NPkB@google.com>
+References: <20260327234023.2659476-1-jmattson@google.com> <20260327234023.2659476-2-jmattson@google.com>
+ <adRBZuqNlBozaDrK@google.com>
+In-Reply-To: <adRBZuqNlBozaDrK@google.com>
 From: Jim Mattson <jmattson@google.com>
-Date: Tue, 7 Apr 2026 08:47:28 -0700
-X-Gm-Features: AQROBzB9-2Y6jBk2OjVBHpaQ7SDFWjJWA4zzLhVGVcrjOpWk0jyI179MFPhotc8
-Message-ID: <CALMp9eSysKOVGF_xakbT59tVsgER6oEYpJuK9=hQutjY=ZpM-A@mail.gmail.com>
-Subject: Re: [PATCH v7 8/9] KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
+Date: Tue, 7 Apr 2026 09:27:47 -0700
+X-Gm-Features: AQROBzDfpgRU66Y-o07i73DU_xVQhhMm8EOnCI-usfps8N1_AZv5hiiifJSUv6Y
+Message-ID: <CALMp9eQR_ZivpcARLyvDK3w+frpwU8bj2Z+ZvA_fLdCtTq3Vhg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/9] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
 To: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
 	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
@@ -101,95 +100,54 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 7, 2026 at 7:14=E2=80=AFAM Sean Christopherson <seanjc@google.c=
+On Mon, Apr 6, 2026 at 4:27=E2=80=AFPM Sean Christopherson <seanjc@google.c=
 om> wrote:
 >
-> On Mon, Apr 06, 2026, Jim Mattson wrote:
-> > On Mon, Apr 6, 2026 at 4:47=E2=80=AFPM Sean Christopherson <seanjc@goog=
-le.com> wrote:
-> > >
-> > > On Fri, Mar 27, 2026, Jim Mattson wrote:
-> > > > @@ -1918,6 +1921,7 @@ static int svm_set_nested_state(struct kvm_vc=
-pu *vcpu,
-> > > >       struct vmcb_save_area_cached save_cached;
-> > > >       struct vmcb_ctrl_area_cached ctl_cached;
-> > > >       unsigned long cr0;
-> > > > +     bool use_separate_l2_pat;
-> > >
-> > > Land this above "cr0" to preserve the inverted fir tree.
-> > >
-> > > >       int ret;
-> > > >
-> > > >       BUILD_BUG_ON(sizeof(struct vmcb_control_area) + sizeof(struct=
- vmcb_save_area) >
-> > > > @@ -1993,6 +1997,18 @@ static int svm_set_nested_state(struct kvm_v=
-cpu *vcpu,
-> > > >           !nested_vmcb_check_save(vcpu, &save_cached, false))
-> > > >               goto out_free;
-> > > >
-> > > > +     /*
-> > > > +      * Validate gPAT when the shared PAT quirk is disabled (i.e. =
-L2
-> > > > +      * has its own gPAT). This is done separately from the
-> > > > +      * vmcb_save_area_cached validation above, because gPAT is L2
-> > > > +      * state, but the vmcb_save_area_cached is populated with L1 =
-state.
-> > > > +      */
-> > > > +     use_separate_l2_pat =3D
-> > > > +             (ctl_cached.misc_ctl & SVM_MISC_ENABLE_NP) &&
-> > > > +             !kvm_check_has_quirk(vcpu->kvm,
-> > > > +                                  KVM_X86_QUIRK_NESTED_SVM_SHARED_=
-PAT);
-> > >
-> > > I vote for either:
-> > >
-> > >         use_separate_l2_pat =3D (ctl_cached.misc_ctl & SVM_MISC_ENABL=
-E_NP) &&
-> > >                               !kvm_check_has_quirk(vcpu->kvm,
-> > >                                                    KVM_X86_QUIRK_NEST=
-ED_SVM_SHARED_PAT);
-> > >
-> > LOL! Aren't you the one who keeps complaining that my indentation
-> > doesn't line up? Are you schizophrenic?
->
-> Huh?  That is aligned.  Perhaps it's whitespace damaged by your MUA?
-
-Indeed. It was.
-
-> > > or
-> > >
-> > >         use_separate_l2_pat =3D (ctl_cached.misc_ctl & SVM_MISC_ENABL=
-E_NP);
-> > >         if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_NESTED_SVM_S=
-HARED_PAT))
-> > >                 use_separate_l2_pat =3D false;
+> On Fri, Mar 27, 2026, Jim Mattson wrote:
+> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> > index ff1e4b4dc998..74014110b550 100644
+> > --- a/arch/x86/kvm/svm/svm.h
+> > +++ b/arch/x86/kvm/svm/svm.h
+> > @@ -616,6 +616,17 @@ static inline bool nested_npt_enabled(struct vcpu_=
+svm *svm)
+> >       return svm->nested.ctl.misc_ctl & SVM_MISC_ENABLE_NP;
+> >  }
 > >
-> > Wow. I really have no idea how to predict what you're going to want
-> > the code to look like. How is this better than the original?!?
+> > +static inline bool l2_has_separate_pat(struct vcpu_svm *svm)
 >
-> It doesn't immediately wrap after the "=3D".  Similar to my view on wrapp=
-ing before
-> function names[*], I find wrapping immediately after an assignment operat=
-or to be
-> unnecessarily difficult to read as it doesn't provide any context for sin=
-gle-line
-> searches.
+> Take @vcpu instead of @svm.  All of the callers have a "vcpu", but not al=
+l have
+> a local "svm".  That will shorten the quirk check far enough to let it po=
+ke out.
 
-That's actually a good argument to *never* wrap a line. If a line is
-broken at all, the interesting context might follow the line break.
+What is the actual line length limit?
 
-> I'm pretty darn consistent in my dislike for that style: I count 26 insta=
-nces in
-> arch/x86/kvm that match "\s=3D\n", and only two of those carry my SoB or =
-R-b.  I
-> simply missed the wrap in kvm_vcpu_apicv_activated() that was added by co=
-mmit
-> 896046474f8d ("KVM: x86: Introduce kvm_x86_call() to simplify static call=
-s of
-> kvm_x86_ops"), and I'll give myself a pass for commit 8764ed55c970 ("KVM:=
- x86:
-> Whitelist port 0x7e for pre-incrementing %rip") as that predates treating
-> checkpatch's 80 char limit as a soft limit.
+> > +{
+> > +     /*
+> > +      * If KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT is disabled while a vCP=
+U
+> > +      * is running, the L2 IA32_PAT semantics for that vCPU are undefi=
+ned.
+> > +      */
+> > +     return nested_npt_enabled(svm) &&
+> > +             !kvm_check_has_quirk(svm->vcpu.kvm,
+> > +                                  KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT)=
+;
+>
+> Align indentation.  With the @svm =3D> @vcpu change, this becomes:
+>
+>         return nested_npt_enabled(to_svm(vcpu)) &&
+>                !kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_NESTED_SVM_S=
+HARED_PAT);
 
-Might I suggest that you should provide a tool=E2=80=94something like
-checkpatch.pl=E2=80=94that flags style violations?
+You wouldn't happen to know the Emacs configuration for the alignment
+you like, would you? I asked Gemini, but it lied to me.
+
+> > +}
+> > +
+> >  static inline bool nested_vnmi_enabled(struct vcpu_svm *svm)
+> >  {
+> >       return guest_cpu_cap_has(&svm->vcpu, X86_FEATURE_VNMI) &&
+> > --
+> > 2.53.0.1018.g2bb0e51243-goog
+> >
