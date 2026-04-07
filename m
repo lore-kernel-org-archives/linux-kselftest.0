@@ -1,66 +1,66 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25260274B37
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 14:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6065126FA5B
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 14:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775572557; cv=none; b=RPS469N6CAa5ipKNFGmZnd9q6WRpkmBf+ncUZYnyuWIiAWwK9anlEl0yI7Ev/KxCXx0pFhjQmXGMJVbv3VXd7mnXguwv2ypVYRgPx2TmbNmwC8XOgEHhGO6ZLm0Tf7TPv77uPfNfeuWwzPRb/UipvEMXACfXcz5+uAzepxqXhdQ=
+	t=1775572561; cv=none; b=JQxCkaDA2Wgr73bP1gbO2lQdiDoZtXWYmtRgMzWDlG2A3P+J90xm+in4LIpfCfg7Km/fYM160ILlsP3a+HeYudYxbIBeuKJfdgxWcEk9xvYLplhptx+vqbLtk1mVd7NekPjKheyiac9x6F8JBlvWJLIz/uXb6FczF8fCa3iGZXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775572557; c=relaxed/simple;
-	bh=KDyps0kcTr7T9J7GuBB29GJhWFeBGQihHTwt+gW0qf4=;
+	s=arc-20240116; t=1775572561; c=relaxed/simple;
+	bh=ruJfw0yxki9i49bwWKgVXg9RYwXel0TmFTpZwK8U93A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uNCQOzZFlYqbLE3KG8shfibHDdH2Iz+frVHOO4MQaNOZ/G7yWV2mrCYgz2EIUYOAYedNuv2gqAU/UgeTHyB2fkTioSGQciyIEFAcFh9CPlCqHUE3LFcAeIIekkRgF/V3Ata4kmp5lHnav88HdYjMzEcGCM4oUviEIqbcJ9sOeps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AJjtFnCh; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:To:Cc; b=iLu8FB8xRQSSuVLUqw4YLWLUUk8s+1sdiclt5Tb7EtmnpoQyqjFUoZyWDAmM3z5zMmTca+OURrkaMG+S1vMeXEwVzmWQC59tTBE0Jlc1/LcSELc/rilNGXxqShGbohMLDFKDas2AmzBeTxB8JWgazBM09wM4GC3TCS7GA8Lg78A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=S8dkUqVx; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AJjtFnCh"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso42721535e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 07:35:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="S8dkUqVx"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso33227095e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 07:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775572554; x=1776177354; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1775572558; x=1776177358; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ukt5NWqBecP1NcuRSmjZ7NqX4Lbk2NtstpvbaJriLXk=;
-        b=AJjtFnCh76VL8VqUpXONXZ7BpUlGCl+wVkcSE+Aw/04K1VvFrREAvbfhKBlYCjDlfM
-         /XxcOPN9dDLhqEWbnMgEdNOa5pvojF8nXdzxmo71n0gM3cBBbSSiLgYEFCsbmZ8HcpVr
-         kxlJf4nkFAkyraaPf5EItXh3a0r1EMcHYxrY2EuzejcRaIGLTeR941DWu1chTnMo4q9X
-         cbpvQWlOwQSUw0qVyGONYKZcRYdk4PMakEwkJJ8T7gUmHcScluxwA2P7IqgvBO8qyPiE
-         m3xajjOXmP179VnyTQsUpw3AvIw7qhscueqHgCF9JSKXvZ7GFimU+vL0abyfAN1KYLrC
-         xe7A==
+        bh=LwQXi5Tu0OP3YXIfJ0yEywBxARJgRMYgFrQgcpLPUL0=;
+        b=S8dkUqVxysSSKE5iR8LdKcCzLZMdX3Vs42CqLgSJOubLtWtL1KfAFGZPsnLUJvbkh+
+         D19yaW39ts/TLCdclmNqCZucEh3OsMwQceoHfDiWuHPCsxGm6a+pYKXwQIBjlzBVaJs3
+         GAGrLyOnvCe+PFsITAbQpG3hqZMjZanhYiCKmgptw1teNP450zSrqGqE8exqG0cC0qdw
+         48X5TjlK8lGtpFBY+5T1Vq6TxlftnErDbUDPjYEnZZgx2Gg+lx1qtC5ey/VApvrhICZZ
+         s6+3Y7qheyVtD16W4/nqlYErGQq3DY3xjp42QfuoqYtq1WZ2B7laKwgw6HCI3kddM2h5
+         x0ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775572554; x=1776177354;
+        d=1e100.net; s=20251104; t=1775572558; x=1776177358;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Ukt5NWqBecP1NcuRSmjZ7NqX4Lbk2NtstpvbaJriLXk=;
-        b=skjBaF/tLzE5xlf1VSxXQH7GUYasbYAwYd85FclVEzpcVmJxMAsvtjLQcQmphXIsUK
-         wFdRAfr4qdobP/XDNGU0Mj3V5zTnINx8Y1RhCMnEItNTSc7u4No21K6lOTHzg2z5ZnR0
-         sq1AqXBPWpqsFkjhsqBIQ542ecOf3AYiUbp+2xxpkf8B3HmrC0Mc+7sJ1X4u2dd6CpEa
-         lIXCeA7T8I8/FDZC7BHotYUCgpfiNAnxmU8oFS0hoPPtO7Kw6dVp5jwWCaF6gYy8e316
-         f/UgrwhgvpO/p5RAGmaFpkx/etuVPgSSUezseGBVHTBtl5i39D799IFh90+4phOyFdy8
-         WzPQ==
-X-Gm-Message-State: AOJu0YwVkwYNEcrKaDFOQytC4eMycBJs1woB9cK2LC1s+rBHPIwR6Wnz
-	5scxkOXAfFKSfvUBteqC4BrvgGWlLZ6lRqDaLmDNlI5x+vggcYoHIg9S/UxNkUkQa/o=
-X-Gm-Gg: AeBDies98tYHwHgq2EiqGlMsMIFnafsGTtcpysM63PIECA3F6wPXMkIitbyHVeNTTVC
-	inuO2c4eBHdbmSUEZw2nlCFcBj+oLfYSZUFeLla4SSRqMOS7TDGX8vytp+be1kxA+BdnueK/Y5l
-	rLssplm2H+lwTy/Q188F5AWhZXbxQNZ+gTSTCmXnk6OMLHlj2DbRWAiyNFsBBxAmPBe3LisdtUL
-	z5VY/paBqa5gJj/Pv3xQPT1xUSLjpBREie0CyhcXwtOQO618MUGJAlxWnTE32Pe/DQ8bkceHBnY
-	1/omzxCuhEwpr/6GOnZsx4FBCELRfYqSNIXHyQ/B5/v/IYMaWGqjunixr5gMRRWFG0oieTy9c6R
-	SzRnOf4D4rTJsHR3u/U5sXe5gxO0wdajC3EsgCiXcF9shqmTONOJXtmWTdEN9VE7/5GW2f/zCTu
-	A7XQ3nvfNCdlP7
-X-Received: by 2002:a05:600c:a410:b0:488:b726:6daf with SMTP id 5b1f17b1804b1-488b7266fd9mr68006725e9.24.1775572554508;
-        Tue, 07 Apr 2026 07:35:54 -0700 (PDT)
+        bh=LwQXi5Tu0OP3YXIfJ0yEywBxARJgRMYgFrQgcpLPUL0=;
+        b=BZqgmPLULPH9eUd1yTsAI96TJNZpDLRb5Yipm8m8fvYrMy8N8f5XHo1MfuimqtQD14
+         w9ZumCkLQvlJxKcg4kzUIiQtbtYLjunYEbudwmFuHQaWquH66TLCl8Z6k4syeWV3ISEf
+         3RPjeecbd/MTjFO7172vhJhchFOKiT8SYTkXlbaNFOveXEqrc16xa4zR8onCuTmLKVk/
+         +Jc+FcSbLWYHC/LUJvzJQB0x8M85yXM85iazLO7OIkztSmFngb7Zx9+WGk7ob48bpNl+
+         P8MJTM0RFsdWyEdadJ6aRegThICnZzJOt48Vsm3P+gJkMW05oKKyY81ECq9zCz8ICNFz
+         kRLA==
+X-Gm-Message-State: AOJu0YwVRZgL2l2Gg35OZy3PABXNhLVGofP/sx8WRAq3t8jAba4t5CUp
+	7tehXmTmVwN/Kyo2qxMQFEnj2IKtxVsuJJuv4KTIPgqaRthqmaG6C2p0MGZc/jjRWtg=
+X-Gm-Gg: AeBDievevXRC1SpFjiiX0HLKdacl+YSvkfgQzlrj27ELN+ED+kdSHgyAdO6vSLGyxon
+	L4fMCW7mQlhRqQ8oHbb7QWqT/ntIR0YY9ejqwCZe7BX5O2u6ZwC+YoQ4gIWa0unJZ9kek6iOeBx
+	GOYaVt0RJGlxp2h4QvCE2TJDx8UNxAxb9DI8EABkFdjPhPIED/jYL4PYMH/8LXzJHP+UsM/Om7F
+	cvAcgig7hUN6gjKAiSrXLG9q5aXsInUEv7rIn4H7K3WrKmWJenXbPv8ZhE77AsmlEu2mCjpc12c
+	5UzPoDKRJlE3M/IqBIkmjL+gJSS+WBzmsc26FDFJH7XSOT+qg0UZ/7nl3cBh2XHfF8nnJt61nk9
+	1QgVirqgY13ZWEqpx9ZXL5XewzwwdvLzK9ii6oaV3FUK4PFGNKKQRHZ2Ecg7VHiKenvVlKghebu
+	20fkcVIhOZbqAg
+X-Received: by 2002:a05:600c:a404:b0:488:b749:8478 with SMTP id 5b1f17b1804b1-488b74988e4mr67381975e9.6.1775572557735;
+        Tue, 07 Apr 2026 07:35:57 -0700 (PDT)
 Received: from localhost ([2804:7f0:b767:120d:a4df:3777:2c55:2b95])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2cef60a435dsm8251268eec.10.2026.04.07.07.35.53
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca78df5ed3sm16357686eec.6.2026.04.07.07.35.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 07:35:53 -0700 (PDT)
+        Tue, 07 Apr 2026 07:35:56 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Tue, 07 Apr 2026 11:35:45 -0300
-Subject: [PATCH 1/3] selftests/namespaces: Kill grandchild in nsid fixture
- teardown
+Date: Tue, 07 Apr 2026 11:35:46 -0300
+Subject: [PATCH 2/3] selftests/namespaces: Fix waitpid race in
+ listns_efault_test cleanup
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,88 +69,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260407-selftests-namespaces_fixes-v1-1-59109909d88b@suse.com>
+Message-Id: <20260407-selftests-namespaces_fixes-v1-2-59109909d88b@suse.com>
 References: <20260407-selftests-namespaces_fixes-v1-0-59109909d88b@suse.com>
 In-Reply-To: <20260407-selftests-namespaces_fixes-v1-0-59109909d88b@suse.com>
 To: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  "Ricardo B. Marliere" <rbm@suse.com>
 X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openssh-sha256; t=1775572546; l=2577;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1775572546; l=3317;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=KDyps0kcTr7T9J7GuBB29GJhWFeBGQihHTwt+gW0qf4=;
+ bh=ruJfw0yxki9i49bwWKgVXg9RYwXel0TmFTpZwK8U93A=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QA/grReIxdB2qJIGWyTXSHgCmtk0IfhrJFKsYfdGxLDcCLR7+iNv7TU1f/gn14etaaNhjPhN5S6
- G/5DnxGgM4Qc=
+ QF0cRacwgjbTV7M69qSX6/IpJxZn3/A2k77vLqxIKuj/B9Azjr5TbQSFO0/nkgeniJ+RUWGmaEy
+ r+dMejsrdawo=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-The timens_separate and pidns_separate test cases fork a grandchild that
-calls pause().  FIXTURE_TEARDOWN only kills the direct child, which is the
-init process of the grandchild's namespace.  Once the child (init) exits,
-the grandchild is reparented to the host init but remains alive and
-continues to hold the inherited write end of the test runner's TAP pipe
-open.  tap_prefix never receives EOF and blocks indefinitely, hanging the
-entire test collection.
+The efault tests spawn two categories of child processes: namespace
+children (each in its own mount namespace, for concurrent destruction) and
+an iterator child that calls listns() in a tight loop.  The cleanup loop
+used waitpid(-1), which reaps any child in any order. If the iterator child
+exits early (e.g. because listns() returned ENOSYS) before all namespace
+children have been reaped, waitpid(-1) may consume it instead.  The
+subsequent targeted waitpid(iter_pid) would then block indefinitely.
 
-Record the grandchild PID in the fixture struct so that teardown can send
-SIGKILL and reap it before dealing with the child.  The grandchild must be
-reaped first because the child acts as its PID namespace init; killing the
-child first would kill the grandchild without giving us a chance to
-waitpid() it.
+Track the PIDs of the namespace children explicitly and use targeted
+waitpid() calls in the cleanup loop so the iterator child cannot be
+inadvertently reaped during namespace cleanup.
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- tools/testing/selftests/namespaces/nsid_test.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ tools/testing/selftests/namespaces/listns_efault_test.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/namespaces/nsid_test.c b/tools/testing/selftests/namespaces/nsid_test.c
-index b4a14c6693a5..46dc838cba82 100644
---- a/tools/testing/selftests/namespaces/nsid_test.c
-+++ b/tools/testing/selftests/namespaces/nsid_test.c
-@@ -25,14 +25,24 @@
- /* Fixture for tests that create child processes */
- FIXTURE(nsid) {
- 	pid_t child_pid;
-+	pid_t grandchild_pid;
- };
+diff --git a/tools/testing/selftests/namespaces/listns_efault_test.c b/tools/testing/selftests/namespaces/listns_efault_test.c
+index c7ed4023d7a8..ac3b208264f5 100644
+--- a/tools/testing/selftests/namespaces/listns_efault_test.c
++++ b/tools/testing/selftests/namespaces/listns_efault_test.c
+@@ -39,7 +39,7 @@ TEST(listns_partial_fault_with_ns_cleanup)
+ 	__u64 *ns_ids;
+ 	ssize_t ret;
+ 	long page_size;
+-	pid_t pid, iter_pid;
++	pid_t pid, iter_pid, ns_pids[5];
+ 	int pidfds[5];
+ 	int sv[5][2];
+ 	int iter_pidfd;
+@@ -115,6 +115,7 @@ TEST(listns_partial_fault_with_ns_cleanup)
  
- FIXTURE_SETUP(nsid) {
- 	self->child_pid = 0;
-+	self->grandchild_pid = 0;
- }
+ 		pid = create_child(&pidfds[i], CLONE_NEWNS);
+ 		ASSERT_NE(pid, -1);
++		ns_pids[i] = pid;
  
- FIXTURE_TEARDOWN(nsid) {
--	/* Clean up any child process that may still be running */
-+	/*
-+	 * Kill grandchild first: timens_separate and pidns_separate fork a
-+	 * grandchild that calls pause().  It is reparented to init on child
-+	 * exit and keeps the test runner's tap pipe open, hanging the runner.
-+	 */
-+	if (self->grandchild_pid > 0) {
-+		kill(self->grandchild_pid, SIGKILL);
-+		waitpid(self->grandchild_pid, NULL, 0);
-+	}
- 	if (self->child_pid > 0) {
- 		kill(self->child_pid, SIGKILL);
- 		waitpid(self->child_pid, NULL, 0);
-@@ -676,6 +686,7 @@ TEST_F(nsid, timens_separate)
+ 		if (pid == 0) {
+ 			close(sv[i][0]); /* Close parent end */
+@@ -165,7 +166,7 @@ TEST(listns_partial_fault_with_ns_cleanup)
  
- 	pid_t grandchild_pid;
- 	ASSERT_EQ(read(pipefd[0], &grandchild_pid, sizeof(grandchild_pid)), sizeof(grandchild_pid));
-+	self->grandchild_pid = grandchild_pid;
- 	close(pipefd[0]);
+ 	/* Wait for all mount namespace children to exit and cleanup */
+ 	for (i = 0; i < 5; i++) {
+-		waitpid(-1, NULL, 0);
++		waitpid(ns_pids[i], NULL, 0);
+ 		close(sv[i][0]);
+ 		close(pidfds[i]);
+ 	}
+@@ -251,7 +252,7 @@ TEST(listns_late_fault_with_ns_cleanup)
+ 	__u64 *ns_ids;
+ 	ssize_t ret;
+ 	long page_size;
+-	pid_t pid, iter_pid;
++	pid_t pid, iter_pid, ns_pids[10];
+ 	int pidfds[10];
+ 	int sv[10][2];
+ 	int iter_pidfd;
+@@ -321,6 +322,7 @@ TEST(listns_late_fault_with_ns_cleanup)
  
- 	/* Open grandchild's time namespace */
-@@ -797,6 +808,7 @@ TEST_F(nsid, pidns_separate)
+ 		pid = create_child(&pidfds[i], CLONE_NEWNS);
+ 		ASSERT_NE(pid, -1);
++		ns_pids[i] = pid;
  
- 	pid_t grandchild_pid;
- 	ASSERT_EQ(read(pipefd[0], &grandchild_pid, sizeof(grandchild_pid)), sizeof(grandchild_pid));
-+	self->grandchild_pid = grandchild_pid;
- 	close(pipefd[0]);
+ 		if (pid == 0) {
+ 			close(sv[i][0]); /* Close parent end */
+@@ -374,7 +376,7 @@ TEST(listns_late_fault_with_ns_cleanup)
  
- 	/* Open grandchild's PID namespace */
+ 	/* Wait for all children and cleanup */
+ 	for (i = 0; i < 10; i++) {
+-		waitpid(-1, NULL, 0);
++		waitpid(ns_pids[i], NULL, 0);
+ 		close(sv[i][0]);
+ 		close(pidfds[i]);
+ 	}
+@@ -403,7 +405,7 @@ TEST(listns_mnt_ns_cleanup_on_fault)
+ 	__u64 *ns_ids;
+ 	ssize_t ret;
+ 	long page_size;
+-	pid_t pid, iter_pid;
++	pid_t pid, iter_pid, ns_pids[8];
+ 	int pidfds[8];
+ 	int sv[8][2];
+ 	int iter_pidfd;
+@@ -463,6 +465,7 @@ TEST(listns_mnt_ns_cleanup_on_fault)
+ 
+ 		pid = create_child(&pidfds[i], CLONE_NEWNS);
+ 		ASSERT_NE(pid, -1);
++		ns_pids[i] = pid;
+ 
+ 		if (pid == 0) {
+ 			close(sv[i][0]); /* Close parent end */
+@@ -509,7 +512,7 @@ TEST(listns_mnt_ns_cleanup_on_fault)
+ 
+ 	/* Wait for children and cleanup */
+ 	for (i = 0; i < 8; i++) {
+-		waitpid(-1, NULL, 0);
++		waitpid(ns_pids[i], NULL, 0);
+ 		close(sv[i][0]);
+ 		close(pidfds[i]);
+ 	}
 
 -- 
 2.53.0
