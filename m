@@ -1,47 +1,46 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012052.outbound.protection.outlook.com [52.101.48.52])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010020.outbound.protection.outlook.com [40.93.198.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40B133ADB0;
-	Tue,  7 Apr 2026 14:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E1727AC4C;
+	Tue,  7 Apr 2026 14:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.20
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775573472; cv=fail; b=uwT7WS9gsYTNflmFPbIo2JgeupZb9qot1sx2Ylv3mm4K0bDNbk8hiDWxjLFIbahp3AttZUy7KhN1mO/MQB6GA0kdYD1V3iHosTcu0Z6n0Q0NcdII8DdU/uizXTAj9+3EXpU9o71Q+oM2BbmODt8aQC+US+KIGghs1hRRwGMlyco=
+	t=1775573829; cv=fail; b=sR4HfvYDAYe7bDhmV5Diwqs5LOsNH6RPE8aKnPJmlpy5/u1c+9ya6FFHv+qGChCyOyez4mTmTEZ2iftXKGYjmHpgaN+6WJbeDRPcUSMSPiBYKdjEhP9CfGJZJIU31Appn/0zRDTPbQ1DUki9ebBjQcS+r3OjA5eQ4iHcCmoYcBQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775573472; c=relaxed/simple;
-	bh=fQg2TH3ELl6JFGB3TwpXJF145TDSymXscifDGmw2E6Q=;
+	s=arc-20240116; t=1775573829; c=relaxed/simple;
+	bh=QcWgNYjB7cUpEUef5+sZIm9XiqGO8hVbwfvqo5fqao8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qrvEwVceOe8kTVviyu4qP1DfR8pW9sWKQQ4dYPGltrDpT/Da6zz2Ut9kPywea+64mph4ZumLWMl21v6JJMK/5qcQUZP6Gi59ZrQ5ktmy1DhrSO6Gbdte10r8Lvj1cbs+mpDxMRsxx3fKsseVyklNjSJiAJGp5raEKhEz7WUSS68=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IThjdNN8; arc=fail smtp.client-ip=52.101.48.52
+	 Content-Type:MIME-Version; b=jTQGwxNgna6XsdjVqgxvttTGzjGrO5ayvXRXxGiiEmcuFbg5FR2q2DArsZmZ0VgvhqwwrglRYQk3nGEkIwOtB6hgogqtaqDs9zoWhbmm0rim6LBajBzjrMBkg545/3agYuquApoMDSJ9wPEzhIlQUEAtJ2Ko55bjt6YUi5hvjPM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Mk8j/hWu; arc=fail smtp.client-ip=40.93.198.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IThjdNN8"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Mk8j/hWu"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hOkl/44cF6A1VMbRXMvsS3g9POTr3Dgcpf5JNmsOTrhZxYa1xBzNJ3srsYB8d6iR6TqhqbOgW+gviDU1Aun9R0LAaUJpZA7I94P1yqaVPLy2EoTLF5kkdXZPkK7mPynhTl2lUD8NIMUMrINBa/ZDEUieaD814bze34WFrjQHFB5/2g3EejYbxHfX9EjcbVj8moPpIO8poEtJLhkFCkUVU+JwSebfZrIhyGDabzjX/YIniygsMw062j+erGzgZ/w3LsdUiraHdIqqKAkwWpXevpIj8aiwPNLARFEceBDRlV2pkqFPMjZ6hvOerkOLXjTc34npiYRzEC3a2HdLmy1bHA==
+ b=AwQOqSHM6X/HpPUT2jAjrsh4SgYcadoNg1IUxcAPqaympAFonkYUXVZfc9Imal7JDZO2cETyA8yVsp+tAex0LlPVFvhHueVFe9Qa2rmJeMxWAWt73FYGhP1NwLB/S6RvxNwfVEYy+CgsrvxsjBisoyMFHUV9HLx08tGFsqQSV3XqfcRyRO3XQgbR8N0o1RDQ6yOp4fxVUGs7D6WyMzgdW9+igYYf6kO12NhuYfGpzZjGvRIEcI3BJy8hOB+X/sC+H+jJBeTZLyipvU69qLpNXKPGMJJloIgcrIV76jwZb7To2JD6RKeKtIEIMP8xMqiogVJ6GemEsWRbefurM/4CMQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F0Oieio6GrKJSwCt0O0ePM3iuRFR+oD/yvBYL85+i08=;
- b=PhVeDKQwtku6HruQ+58a2EvsXc5OrjcFtQ2LZxMovx4LrxklXNd0usw9hV3Mpj1pYh9BXkqCURAOnAOn1I8jy3UZfCSwDngNMeyzIiht4KuLrOw2t1kIU//BMSj6OwjUlkqvqepCDgOluEn+QwuatUp3jbddTzZ0XAlZAtobzZHGqfzl8mI3IrSlgaSArOv83lyxeGkp9A5Bf37srF/OzCBfVf28/r1ZGlMv01p8Ilc6EjnCZswwE5bSgfKVMJxKJ9WaEWrKARiwg63ZWZrgvkFLWP4pIWFKs8X2OMpsx5XMzagtRGDsGyEPC8lG8Wbpqq4hNpUKUYMT68jbrvGG6Q==
+ bh=aLggyNnb8GtZsSTTYRBJxz2keAwlT5MeVnYh0sGng4U=;
+ b=sg7/F8xVIjJX5xIloeoNu+QDrUrvAmV9NR+CJUt1k2diLMs1qXd+kgCJFmwCRH0ta5iDuieJIBPG/Q9ilV6AfoghomcCJlGH7IMFEkE2hUQ9ut8yyEH/cE9W37TwoyVX7sOAqQsY3YebbSLOKP/WytA9KrOChhyZWgdmxZ4ZvO2R53q/yLa4go/wFdve1N4a/xDnyIFzfrs0DUnpJdNeveQHQtUmUfMmOOSo2Nue3x4s6oyw2TzXjzEMfeXpDR0LLCLbkxTTHEY1zEpL2Mqrf3KDhTwKm7Zf62+lbb0oqMF4Fc21Zok2ui/W2naFnqNDXEnrFJcx002hchYAW6YTyw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F0Oieio6GrKJSwCt0O0ePM3iuRFR+oD/yvBYL85+i08=;
- b=IThjdNN81fRPok+Quuar+qRmNR0PvlYcP6gi/vGBqjV6Vtx0TynOxlj5UPsvlLy64TDZoL4svyRQLGbKT57CifiEC/J7TEKFltr0LuOhpjKclYRk+rrqslr8pl8w7ab0o5Z/EoyQD5PdcytuZo/qnbfAUkgy6xHxmckUd6asPbEAxRYGl1KedWlpA4UEL8I7oPp/Yd78s2Z1PwLD5n35w4y693ldxCPXGl4j1PclEPThozgEPDjfxw3mENjK6UozOEdaMTwe9O9oI9zdjrKGH4b3DNWmFZbhd2Xewi4tFBvutov3r82LfJ4hfjO2cf5xK9Gr5ivWPgsrRKngMbtDpg==
+ bh=aLggyNnb8GtZsSTTYRBJxz2keAwlT5MeVnYh0sGng4U=;
+ b=Mk8j/hWuZs4g5uWNdmQxfKeOtkPfaaWK9fUvfONTZ0NizugYtZd1vkuh65kPAv0+SY0EpwaEjU1/SlV4httoUNG2vkS6CQl+GqpfSaLscpV2IgP8VhfLyDeyxZqn/i0Qlx0h1dmxuqikGIA/H14n8nUE26FW0hKb8zX5ZNo2vzcGTlgSC7Nk0CZ/5c9br3dwl11R1KRNZdl0tW/22F4VFnOAn3MVVf3kzsMacg77qbC4+IYsfPXVb4aqr3nOwozr/JSMD0wlVMQRcoV2EmRmtjgQLMU3w0ovFN1pbPxtqOG1CAP20STl38+SBDMQwoNUwRu/Rrd4vLI2ZYsiyiQvtQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- SA1PR12MB999254.namprd12.prod.outlook.com (2603:10b6:806:4dd::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.20; Tue, 7 Apr
- 2026 14:51:04 +0000
+ DM6PR12MB4171.namprd12.prod.outlook.com (2603:10b6:5:21f::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.17; Tue, 7 Apr 2026 14:57:03 +0000
 Received: from DS7PR12MB9473.namprd12.prod.outlook.com
  ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
  ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9769.014; Tue, 7 Apr 2026
- 14:51:04 +0000
+ 14:57:03 +0000
 From: Zi Yan <ziy@nvidia.com>
 To: Sayali Patil <sayalip@linux.ibm.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
@@ -53,18 +52,18 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
  Miaohe Lin <linmiaohe@huawei.com>,
  Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: Re: [PATCH v4 13/15] selftests/mm: move hwpoison setup into
- run_test() and silence modprobe output for memory-failure category
-Date: Tue, 07 Apr 2026 10:51:01 -0400
+Subject: Re: [PATCH v4 08/15] selftest/mm: align memory size to huge page size
+ in hugepage-mremap test
+Date: Tue, 07 Apr 2026 10:57:00 -0400
 X-Mailer: MailMate (2.0r6290)
-Message-ID: <8B26C697-4D0C-4E1E-A14E-D517CC9DA05A@nvidia.com>
-In-Reply-To: <8ef8640092004d143fe80e6fc32ea8d30a9080de.1775466330.git.sayalip@linux.ibm.com>
+Message-ID: <15910BAF-8D1D-4EAA-85A6-2E4CD3700513@nvidia.com>
+In-Reply-To: <6aecfff81bd3e288e66af238f50f35eac0bd4ee7.1775466330.git.sayalip@linux.ibm.com>
 References: <cover.1775466329.git.sayalip@linux.ibm.com>
- <8ef8640092004d143fe80e6fc32ea8d30a9080de.1775466330.git.sayalip@linux.ibm.com>
+ <6aecfff81bd3e288e66af238f50f35eac0bd4ee7.1775466330.git.sayalip@linux.ibm.com>
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: MN0P222CA0011.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:208:531::17) To DS7PR12MB9473.namprd12.prod.outlook.com
+X-ClientProxiedBy: BL1PR13CA0247.namprd13.prod.outlook.com
+ (2603:10b6:208:2ba::12) To DS7PR12MB9473.namprd12.prod.outlook.com
  (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -73,214 +72,156 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SA1PR12MB999254:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe54ac7a-01be-433e-c5a5-08de94b517cc
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|DM6PR12MB4171:EE_
+X-MS-Office365-Filtering-Correlation-Id: e6f7263a-4baa-4a11-579c-08de94b5eda4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|56012099003|22082099003|18002099003;
+	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|22082099003|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	NrrnE3Iw7Lm2PperBg6ILWZ7fN0g05MpVQO+6nDemxBxu04wi7h2/gqCM11EgvP8CYFjjRS8RjjH5A2SFHEBPUvrECwPEloLTBrUi/qMKUe8/GLVZhPm5uEX6LgM8vTn1ScoM9dfAtwj43ShfxT+KrloGNuPSdFD4L+NF6tAZ1RJHbFUoSgQUh/4qg/cSWFj8hKhQoGLR4mv0q02a1rEYqGAMk913FApxt2Fe7dHwg1DC34TQwzlVFi0Bw9Z2fFiSFoTUbggUR7p8YIwPblP4AJlwMIJWrnop0VjhrX19hEohQUQ+xbhO7XazLCqMKdcnXXoKmYae292jIINsfRe5nrvANqvbxZ8ufMRMsh+BxhbsQuKbp4gEKpERTC17FtFGv8lCF25C5V889dR8oPWf++o3MpGt6+IUw4XYWOWxRjPlfSii5oG5Eopo5u5iDWL0/wkq6VsqFH3Q08kv/jH1GWOnSmtsmR6/cr/8IuWm7g8gqE4NW0lYPYBiIMRgQqq1PQRrqwjeGFgYe7b5cRet15YczNd8Q9244ThNvZsxqyUtRZeua/PMa3PX4lS5SY3Jtz1NFL3I0xlpwL1tq70Hrqs92UH01t4xkfNfNUHKHFsa7j0d8A0DpY/grSVgoDqGZr7g9gcnPaXsy48ovnZSoRTMq63jgqnxwMsfV0+pM3ULaocHMQ9FYX3PWJ9eP8XVk5nlikbwjBOemCInnU5z0dkaiRLez93/6/cSK1Klvs=
+	QWlWtgXcOJeA/jnYz6QkbwXqagt7gsKxI/hvIUXvl/Aswox06T1pRVDYvwNut/gZ+/0Oh1k7yiciJsutoWXifddnj0gC0krDy8pcB9kyQOkMwGQeoe86cYBeoEVTUgXOIiqHuwapHgv+908dhBfsLZM+M29gJpnPpF4jOsG0nmVVdpPaZEQUEI609C/fZdZ8856hfCmhFWY2ZYpbZcw5eYI+joMO6Q1qQTkF5+rN/0WGsEPAe7R7jBsmmKIjMlLrcUX3rMcgbDNJ6FzT8GXbfXEUI/5rd4tPNygT0iKFnbTLnggX7uFRxQ603TMkgK2sRcTRIw1QjVAtSDVmTwh8D+39h8v+cedxYVJrZ4i/hQd/2ErHDJVGyMMI1BwYI+L6WZdL4xyCGeNuSG7aCnhRtwgnVB1bedvbZ9INZoHXCyU4WgUpSJCRlJiJ7RAYMJWvGY3udiKyB1okipJgWpjyWWMfcv8kRZHe6sv412gyKLKt1AavcZ6XtRhADEsOhLWqThpici2BjXL48rlax1CGMrOuSVZ8N8vQJOGeKx5nnS895sfxAo82Q09+MrDaeANcJoFIpwfG3AvQiiEPbkbg085xKpEi6sPMPqNxKHDYstEMoih0By/wYbzXXgFy9KFD6fhNB/+E82G/LrY5kMCof4P4rJb6YHONSUrvAe7CX5+dccmF827elr1KQn/KUS7X442l/T37aq1eGQ/7qPY44T1AFUwErc5UlBerarqi2nU=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Ye6kOQD8x26xv7rXz0DQBOqDfE57gox8DPOTfmIOgHrZ97i95xehluhhEVyL?=
- =?us-ascii?Q?uSKtNYqdYYPsok+/tIt097Nx/YpsUBTo0x3kuuJ200c988A3py48KoL2WhnA?=
- =?us-ascii?Q?Eo45qX/WfVl5K1Al3IshxwT2N2jytveHNWQlQoRTpVWEG8JoOX57DJXQjoAT?=
- =?us-ascii?Q?iFvhAEE6FhFVD86uRPOxFJmIGTbTYWxU5vtqzPF53ZBQyABfKrpTwJmtwPHV?=
- =?us-ascii?Q?Z2lRMvBx2XU3Vexy+Yg/8XrnIPlgkdyyfT2m6jNhSn3j3UiDWbr1uN8gaINI?=
- =?us-ascii?Q?ZdjdcYolVe5enAGq6oUWtDL4Di2j1loY0u9H9mxRuIEsnbemHsJ/jKA2MGMv?=
- =?us-ascii?Q?Ddqo+IWHlENXKPicJurTC7BIkuIh018lX9Amy8ZQ5WBAvr8k8I+uO2/uifqv?=
- =?us-ascii?Q?nA8wwyHHCTgMkHhrHKiY2TvHiyi0BIhtuDfpmQAXRdzNkOKjvyCB13/fMMqD?=
- =?us-ascii?Q?RArRv67u3BMTzAKgNRrxfIfRuVtB0lTKAMryVOTf4QRIqGEWs4TW1tTzRWwV?=
- =?us-ascii?Q?8v6oleArZkoN5ut/Wy9aXViZvthPueblXjfccviHD+EiKNnV7CbQj5/pSmoZ?=
- =?us-ascii?Q?PrSr9w0SO8g5vN8rdceiYg+ph2wGmKiOZZ0Bn1yndN8F50KyFhXCF88LnqTO?=
- =?us-ascii?Q?Kn68Ap6M0XGj0znBCPPDhlAGza4jouFix+dhMrpz25gfglalLcHC4iOnpuq+?=
- =?us-ascii?Q?4SwCuFr/KHh17yt2h6wJGPKgW9MA2rO1WW8EnwREld6De/zejewiJsetDYzf?=
- =?us-ascii?Q?08VDef4s6L9+OI6XxbUiE9o3GMNCS28J/2cDOljW89pEJ5lXlx/o/rsLhrDX?=
- =?us-ascii?Q?vRMI4gDExXXMsMxevHl2Sucpi7hNqHZLgD4j306C5mJuvB6Akgrm0gV6CHGV?=
- =?us-ascii?Q?MhFX8He/ns4bRr40GBQfFHHjQTOFQfEJLcHO+J1AitvD5jCgkqqh7JBSBJHR?=
- =?us-ascii?Q?orHwYJb2oteC7EG7FjgVjbAQJMDPZ/0yXKnNiuGMiQSujyMaop3jYf2ttcTI?=
- =?us-ascii?Q?w02/QNgPsUdsmHCHsOqYl0tgk73ikivT6/smuAyFIwak3LJMtWiphGCGsAq8?=
- =?us-ascii?Q?tOq1Nh5090nCualLoRhU3bpj0UCJPSpsO2VXOs4+vxryVsGWooe920+yV7p0?=
- =?us-ascii?Q?4krPNhefBypFb9oPD160OVYYuV59AJhgDZXU+cGvrOFldtYCK4b5gRS2uX7i?=
- =?us-ascii?Q?acaq+FrFbNRaAjkWrO8Zy/4pVvOZRSlKwyRO5UIwr3dLQO0Kt9RSWHChyZAT?=
- =?us-ascii?Q?lo5/WTcMSITF1OxnP2j6YkSfUTwnXiMCizwn6ruVz+SSUCHpuXiSlAm+qoWB?=
- =?us-ascii?Q?QcDZP/v6dDBRNeDhXnz9FD9a2B6W6KQAgP5SkfW4fAwrrfznJALExioMsN1L?=
- =?us-ascii?Q?Um0eu0qAmsfvGG2zG2cp9BNadj2vWDxIjeMH+15yynPTfM9CA/3B/8JVyn1/?=
- =?us-ascii?Q?HMJrdh4Zsk6/ielAQtC3iPHksC77i3MvX5+3SzKhPPUqzhVvY1r3OAlkUYqc?=
- =?us-ascii?Q?Ya3Vuz26qi3p6ifp9ygttt6nFcAxJQtBvFNYMZcmo7O8MHz5wVQNhEmRXkls?=
- =?us-ascii?Q?MvccFxoQDL6PlJGvngn1/qWqnYi4NTW2056c62Io0cfgzUldJ+2x5yYAWG0z?=
- =?us-ascii?Q?7ntOdvwRoFToVONZUaaTSaCMcrA+5MxRtIGAhRuJryrALwbVAsAKRLnUX9yj?=
- =?us-ascii?Q?375xlbexS3pJ1Ro/id02aQ8h1mODpkwALMrkXojjQnIQq/13?=
+	=?us-ascii?Q?U4qn2wJKyY2v9tt0LIpuAMdXdTB/xWmkeR16rMSTPaib2Q3+DrTu6cKTP1FZ?=
+ =?us-ascii?Q?HrCjZEI6Uoi/knMKRLwfgo4xkf91Qnu/4ZGo66jmYTCWEmpZzpgJ+7fGbeyk?=
+ =?us-ascii?Q?H5oFIRfW6V7KDHc+l0pQ1LtZCLcp4IkyQc9bVv4TqQ4wqrKia4m6my7/XtaY?=
+ =?us-ascii?Q?n10NvBgTua30OiYZ5/ktfV0CGxu1rPiR4x7absuRHHqN7lMCHHCYmfp7Pmow?=
+ =?us-ascii?Q?boXeoe1YzbCyd8sX9ZCWcqAQPeD+13Qvlgz55v64yIOmcjoeFhQW7DT6C7C0?=
+ =?us-ascii?Q?f5PUsgSEXLen48nOjnnJz3CL1P5t8w1pfqaYV0ic+mFpMjB2tcTMwtxv1iVj?=
+ =?us-ascii?Q?MJfc5VdXEkYHLRa13T2IQ9/LnOX4yzo4LVjrHeZVVfSfWSopPeUCRK3lKCaL?=
+ =?us-ascii?Q?jBGiPCZRvbOjxl2pOyPiA9J3R9fdX5wIovwdvQbkmWO+bR1CUif1VlAc1JM3?=
+ =?us-ascii?Q?ABSmHdIx+TeLQXWHbJhJjYPXY20ZpkqLX0COjv625hau2giPdO80+W707iZW?=
+ =?us-ascii?Q?zhOrAz7w9WxtGcego6YehfXpLOVEVUv08PtO85NwvVvJgr7W+P49ByHbPrUr?=
+ =?us-ascii?Q?wjOI0sJSdwg2/tA6g7KcBJFepEA6Y6h0LV44G7Y03T7MawWCJJmAWkUTqF5i?=
+ =?us-ascii?Q?BQawTBYcPOBGa7X47zfBpzLUcGpzzds7piLUubv8zcGYJUZvQI41g4x3IJWu?=
+ =?us-ascii?Q?7K65YGAuM+E5jRlXxrAfK9yVbm8O6GLFjaICv0Zv4yIvODJJj012QbA+eZn4?=
+ =?us-ascii?Q?ym2Y8pvwlzqxpmKpbwTl2diZE3JzAcJ7DPYu2xyyoL/fjTi2ygShgqu5Keef?=
+ =?us-ascii?Q?Q+8Bq0M4eqI3luGDus9hIX+Azzn4fgxK1fiE8i6b1XFu2FUlInqEjEaVs5iH?=
+ =?us-ascii?Q?xSUQXvO9I/luZN3iGQZFUOlIA8FllemIDu6ADR4y7Kb4xQ3hnkCnF7tzZZB3?=
+ =?us-ascii?Q?eMjnU1WcOipf0S0mvE6KFWSTDfDdseM17NlVTk04I3Ck5raGij6NwRLXJtA5?=
+ =?us-ascii?Q?adrIND4EeExPNDxbqdHAvr8MIK3wugO8+2N0ed16y1CIn0p+6b3+n8HkcyVQ?=
+ =?us-ascii?Q?EYNX1uZQ1mGCg04RTHJT5dG36J9XZw53V6qYsFoBikCsXnNP86hX9pYm6XF/?=
+ =?us-ascii?Q?v0GFl5gYi/IGoz5GEDz84SWKvs8UeBpjJWdkdiSj/A8aWKyvEu34tHfMP0xX?=
+ =?us-ascii?Q?saRkuoC+75W6MhkdRU+IixnSRj3AAP1BZbL8+2kNhWZ0VExpqMfX+bwUpOeU?=
+ =?us-ascii?Q?Fey9ztCWUX8nDhR8Jw3PJvrQnFcwz5EaK8RJxAasUJW1IaFCCtIXxftyOvhm?=
+ =?us-ascii?Q?KaocgwIzvZceeM75wjeJsBPXHuZ7MJ9L4S0XrhKVRVRR9e8EuMcoU9PzucNg?=
+ =?us-ascii?Q?+wkxgNnxt0kTVv4hsytwj3Kv6bEQbxqKwgvP9JIBD52i0uQRK0US/IaiuOSl?=
+ =?us-ascii?Q?3s8iIMbOo5HCghFKfDHrvZI8pwZnlLxisfE6FQ7MCyquQDb9imF8wGqXLl5I?=
+ =?us-ascii?Q?k/zaKD3EzfTQ1voq1c3EAPgoDt70eDOlDkyjZYHJ5L91quHxaRnUIbxkF3BP?=
+ =?us-ascii?Q?Epgdc1fVWAOw/5nSMnVVTW4DI3S0KNHv/HG9CCVG1M3trOt3GsH7eqefD99W?=
+ =?us-ascii?Q?Sjgy0QY49t5FklBeqT1tYBugkVtOPPkJlGTwKr4ujoNO9eCvN7l7KFvOOj5C?=
+ =?us-ascii?Q?cbvWCdHA19iPFQwdjT7XMsIQQhzMXd9MOSke4g1TJnK+MtxB?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe54ac7a-01be-433e-c5a5-08de94b517cc
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6f7263a-4baa-4a11-579c-08de94b5eda4
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2026 14:51:04.3466
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2026 14:57:03.1223
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EkT0uLVr5lBGWCAf8pPwQXqxsrqFUoPZwxWPn7SLafITdBI37sMtsaoLL2FMaXeT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB999254
+X-MS-Exchange-CrossTenant-UserPrincipalName: G0II/X5BI3r1hh6hXGJ4s9ZeWeFomrjnT/RhDn8bbE+qRLT6CPN+raSFBwjsNfmL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4171
 
 On 6 Apr 2026, at 5:19, Sayali Patil wrote:
 
-> run_vmtests.sh contains special handling to ensure the hwpoison_inject
-> module is available for the memory-failure tests. This logic was
-> implemented outside of run_test(), making the setup category-specific
-> but managed globally.
+> The hugepage-mremap selftest uses a default mapping size of 10MB
+> when no argument is provided. This size is not guaranteed to be
+> aligned to the system hugepage size, which can cause munmap() to fail
+> and mremap() to succeed where a failure is expected.
 >
-> Move the hwpoison_inject handling into run_test() and restrict it
-> to the memory-failure category so that:
-> 1. the module is checked and loaded only when memory-failure tests run,=
-
-> 2. the test is skipped if the module or the debugfs interface
-> (/sys/kernel/debug/hwpoison/) is not available.
-> 3. the module is unloaded after the test if it was loaded by the script=
-=2E
+> Align the mapping length to the runtime hugepage size using
+> default_huge_page_size() to ensure the mapping is properly
+> aligned. Also handle the case where
+> default_huge_page_size() returns 0 by skipping the test.
 >
-> This localizes category-specific setup and makes the test flow
-> consistent with other per-category preparations.
+> Before patch:
+>   running ./hugepage-mremap
+>   ------------------------------
+>   TAP version 13
+>   1..1
+>   Map haddr: Returned address is 0x7eaa40000000
+>   Map daddr: Returned address is 0x7daa40000000
+>   Map vaddr: Returned address is 0x7faa40000000
+>   Address returned by mmap() =3D 0x7fffaa600000
+>   Mremap: Returned address is 0x7faa40000000
+>   First hex is 0
+>   First hex is 3020100
+>   Bail out! mremap: Expected failure, but call succeeded
+>   Planned tests !=3D run tests (1 !=3D 0)
+>   Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>   [FAIL]
+> not ok 1 hugepage-mremap # exit=3D1
 >
-> While updating this logic, fix the module availability check.
-> The script previously used:
+> After patch:
+>   running ./hugepage-mremap
+>   -------------------------
+>   TAP version 13
+>   1..1
+>   Map haddr: Returned address is 0x7eaa40000000
+>   Map daddr: Returned address is 0x7daa40000000
+>   Map vaddr: Returned address is 0x7faa40000000
+>   Address returned by mmap() =3D 0x7fff13000000
+>   Mremap: Returned address is 0x7faa40000000
+>   First hex is 0
+>   First hex is 3020100
+>   ok 1 Read same data
+>   Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>   [PASS]
+> ok 1 hugepage-mremap
 >
-> 	modprobe -R hwpoison_inject
->
-> The -R option prints the resolved module name to stdout, causing every
-> run to print:
->
-> 	hwpoison_inject
->
-> in the test output, even when no action is required, introducing
-> unnecessary noise.
->
-> Replace this with:
->
-> 	modprobe -n hwpoison_inject
->
-> which verifies that the module is loadable without producing output,
-> keeping the selftest logs clean and consistent.
->
-> Also, ensure that skipped tests do not override a previously recorded
-> failure. A skipped test currently sets exitcode to ksft_skip even if a
-> prior test has failed, which can mask failures in the final exit status=
-=2E
-> Update the logic to only set exitcode to ksft_skip when no failure has
-> been recorded.
->
-> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page t=
-est")
+> Fixes: f77a286de48c ("mm, hugepages: make memory size variable in hugep=
+age-mremap selftest")
 > Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 > ---
->  tools/testing/selftests/mm/run_vmtests.sh | 52 ++++++++++++++---------=
-
->  1 file changed, 33 insertions(+), 19 deletions(-)
+>  tools/testing/selftests/mm/hugepage-mremap.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 >
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
-selftests/mm/run_vmtests.sh
-> index afdcfd0d7cef..17c9bd910c47 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -235,6 +235,7 @@ pretty_name() {
->  run_test() {
->  	if test_selected ${CATEGORY}; then
->  		local skip=3D0
-> +		local LOADED_MOD=3D0
-
-Can you rename it to LOADED_MEMORY_FAILURE_MOD to clarify its use?
-Since now LOADED_MOD is visible for the entire run_test().
+> diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testi=
+ng/selftests/mm/hugepage-mremap.c
+> index b8f7d92e5a35..f66e4d806477 100644
+> --- a/tools/testing/selftests/mm/hugepage-mremap.c
+> +++ b/tools/testing/selftests/mm/hugepage-mremap.c
+> @@ -32,6 +32,7 @@
 >
->  		# On memory constrainted systems some tests can fail to allocate hug=
-epages.
->  		# perform some cleanup before the test for a higher success rate.
-> @@ -250,6 +251,28 @@ run_test() {
->  			fi
->  		fi
+>  #define PROTECTION (PROT_READ | PROT_WRITE | PROT_EXEC)
+>  #define FLAGS (MAP_SHARED | MAP_ANONYMOUS)
+> +#define ALIGN(x, a) (((x) + ((a) - 1)) & ~((a) - 1))
 >
-> +		# Ensure hwpoison_inject is available for memory-failure tests
-> +		if [ "${CATEGORY}" =3D "memory-failure" ]; then
-> +			# Try to load hwpoison_inject if not present.
-> +			HWPOISON_DIR=3D/sys/kernel/debug/hwpoison/
-> +			if [ ! -d "$HWPOISON_DIR" ]; then
-> +				if ! modprobe -n hwpoison_inject > /dev/null 2>&1; then
-> +					echo "Module hwpoison_inject not found, skipping..." \
-> +						| tap_prefix
-> +					skip=3D1
-> +				else
-> +					modprobe hwpoison_inject > /dev/null 2>&1
-> +					LOADED_MOD=3D1
-> +					if [ ! -d "$HWPOISON_DIR" ]; then
-> +						echo "hwpoison debugfs interface not present" \
-> +							| tap_prefix
-> +						skip=3D1
-> +					fi
-> +				fi
-> +			fi
+>  static void check_bytes(char *addr)
+>  {
+> @@ -110,6 +111,7 @@ int main(int argc, char *argv[])
+>  {
+>  	size_t length =3D 0;
+>  	int ret =3D 0, fd;
+> +	size_t hpage_size;
+>
+>  	ksft_print_header();
+>  	ksft_set_plan(1);
+> @@ -126,6 +128,14 @@ int main(int argc, char *argv[])
+>  		length =3D DEFAULT_LENGTH_MB;
+>
+>  	length =3D MB_TO_BYTES(length);
 > +
-> +		fi
+> +	hpage_size =3D default_huge_page_size();
+> +	if (!hpage_size)
+> +		ksft_exit_skip("Unable to determine huge page size\n");
 > +
->  		local test=3D$(pretty_name "$*")
->  		local title=3D"running $*"
->  		local sep=3D$(echo -n "$title" | tr "[:graph:][:space:]" -)
-> @@ -261,6 +284,12 @@ run_test() {
->  		else
->  			local ret=3D$ksft_skip
->  		fi
+> +	/* Ensure length is hugepage aligned */
+> +	length =3D ALIGN(length, hpage_size);
 > +
-> +		# Unload hwpoison_inject if we loaded it
-> +		if [ -n "${LOADED_MOD}" ]; then
-> +			modprobe -r hwpoison_inject > /dev/null 2>&1
-> +		fi
-> +
->  		count_total=3D$(( count_total + 1 ))
->  		if [ $ret -eq 0 ]; then
->  			count_pass=3D$(( count_pass + 1 ))
-> @@ -270,7 +299,9 @@ run_test() {
->  			count_skip=3D$(( count_skip + 1 ))
->  			echo "[SKIP]" | tap_prefix
->  			echo "ok ${count_total} ${test} # SKIP" | tap_output
-> -			exitcode=3D$ksft_skip
-> +			if [ $exitcode -eq 0 ]; then
-> +				exitcode=3D$ksft_skip
-> +			fi
->  		else
->  			count_fail=3D$(( count_fail + 1 ))
->  			echo "[FAIL]" | tap_prefix
-> @@ -529,24 +560,7 @@ CATEGORY=3D"page_frag" run_test ./test_page_frag.s=
-h nonaligned
->
->  CATEGORY=3D"rmap" run_test ./rmap
->
-> -# Try to load hwpoison_inject if not present.
-> -HWPOISON_DIR=3D/sys/kernel/debug/hwpoison/
-> -if [ ! -d "$HWPOISON_DIR" ]; then
-> -	if ! modprobe -q -R hwpoison_inject; then
-> -		echo "Module hwpoison_inject not found, skipping..."
-> -	else
-> -		modprobe hwpoison_inject > /dev/null 2>&1
-> -		LOADED_MOD=3D1
-> -	fi
-> -fi
-> -
-> -if [ -d "$HWPOISON_DIR" ]; then
-> -	CATEGORY=3D"memory-failure" run_test ./memory-failure
-> -fi
-> -
-> -if [ -n "${LOADED_MOD}" ]; then
-> -	modprobe -r hwpoison_inject > /dev/null 2>&1
-> -fi
-> +CATEGORY=3D"memory-failure" run_test ./memory-failure
->
->  if [ "${HAVE_HUGEPAGES}" =3D 1 ]; then
->  	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
+>  	fd =3D memfd_create(argv[0], MFD_HUGETLB);
+>  	if (fd < 0)
+>  		ksft_exit_fail_msg("Open failed: %s\n", strerror(errno));
 > -- =
 
+> 2.52.0
 
-Otherwise, LGTM.
+LGTM. BTW, it seems that multiple files, pkey-helpers.h, migration.c,
+uffed-unit-test.c, hmm-tests.c, have their own ALIGN or ALIGN_UP.
+They can be moved to vm_utils.h, later if someone wants to do a cleanup.
 
 Reviewed-by: Zi Yan <ziy@nvidia.com>
 
