@@ -1,154 +1,194 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27D3B37B01C
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 21:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775597821; cv=none; b=aJM+u0H202lfHjgpirdqOOdRbjzxWjIpCT8g+wCvFKq2ueKQAlREDz0XWK2ZsRnfYxu2Q74OcEbtrk7JarfDBP5U+FoSia65uJ4lkjvzEa9e8D7zZDRW244FwMXDzIjALswDSImI+yl+co5yon005oVJqblg26qKlr7CVg3iFBA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775597821; c=relaxed/simple;
-	bh=EpKTL3G7H2XFaseYYG+2w0nRlWysJEnHpsD48AKJrRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hc5efWaOwaESdU6rO/Mr4krjAZM1jq8WluX4ubPDu77SnyvS1rcWe/itwZqBF/WD9d4U7RuLHsaZGM2IFbtHfLdn290tdWan66bOj2Kur7p0N+mRLfOJMv/Eaew2jvkA2wFIEpJAG+q1KsTZZtAXU79HOSFSXa7N99ZcDm4aLSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P/inMpMo; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E10137C936
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 21:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775598673; cv=pass; b=juXYO0RGh1NdMiDcbyuvkgHDRVjtWvqYb4z6+zwYStm4Ha+qbdYpHG0wYQ7ZsFg19Zn9Ztjc3TqgsBSyO6ZILIMWskQmOycW35MDU6K2BO3HigLXg1Nj0WVcWHpo1gm/o5AWnWP/iue4w4SmTcDgqv152E+tnADjP2w9lWcZaaY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775598673; c=relaxed/simple;
+	bh=0jj/lwdErrCiTfj+2QvqNW2WVQwYN/lnIlZWQxS2RZ0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FFkWurr//4+1DzJ+b9w7wkvUajzcIPEX3Q9bIysrAkXu4+n2VT1ZDLGczEI43dve8bVZiSo3askdJw0IwUZ8Mqx3Hara5vhrEvS+6Mx4tGk0d5ezsguixi83CocSAFTUzkOXczPQWIPp7NiWIJAepDK0vXLQjEF4gN7oKUbAk1Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GYZdt2s8; arc=pass smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/inMpMo"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488ba840146so15504685e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 14:36:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GYZdt2s8"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-50d6b393d60so102851cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 14:51:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775598671; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Sq7br0RhabiineX/3tLnLV+xZTE4VHfzOk5Qc/hITA+R1T+W/g8daXd89qtFH8WCuX
+         BxCUiUqfGkfiHvrI8rlawSc3UmSwJQLxIDR9I6rMhDdoM8ax3k7d65+LvynBk+lkwuvQ
+         G80xm8RqPCj7YLUZ5JglhIwzISSZWaeUXUtjEnj97N1dM0h991f2i1/zcd8Ec3hXHl7p
+         h4inO2AemASUkyGqxGkgdzL5QYNhRA39NFvRTb1VbIYKm7useRFnqcCKiVrdt0d9aHJS
+         x6OZe+B5wGrjIPrNa/UltJFNAKts+zmXBHh4QknwLcXlbcNztQZiUVCOh8s74hy9lKW8
+         qtFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Gaxd0JUvuI19hIXHFFbq0Nmmwdg7JnIiT63vLMwEkLk=;
+        fh=KkhBTT5MM1CX2NYZsYpNGSsi6RPfkKnDoZAfgSoi7Gs=;
+        b=Fh9TMfOvpaD+0K1ECGNK8gNaK2S24dAlMrEgWnrnmN5kWhia7S0cmNdmddKlq+Xakn
+         /ISGafHzMXuQ4gCwWE7wgFYZHPGglEoR7ZECFZ8uZSZOeM+RtE3SNyg5X7ySfOiw+pq2
+         SOedHM4Eolozzy9jwlE1MdqMIq6AAxyc3EVBeWyA0rTvAKI28YgJgKoi5obLuKl9YGBV
+         h2t6m2HJb0Q/0jRr5zEvEh61dQo+zJnvzdnRKLf9oIrcwBMYxf0mQXDCLiqCPIbpdFT0
+         4tEosIXFFwscfZFqdCzWrgRhBdDF5O8WldWoZp9N4ESjp7oeWzBP52mwvbMQMtQgGfoy
+         SCOQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775597817; x=1776202617; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1775598671; x=1776203471; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hKcy50S1bW/vY4PpqHDf6kRxjpQRD4gf10Ur4mE7VLM=;
-        b=P/inMpMoKeSaO30YmvEjixJ+lZypQ8cU6k5RKFvDH+F7aTdbh36orDnjTKBV3+Ji6O
-         rrj/dTIlh/SNjRBUv2V6J82UD5X/kUKUfj9EwW3sH/quD1IJcms64tKKx5dhhM44KjRm
-         iEzB6uNfWpMEsxr88hX1DK7PVywxqxEEhwnsd02MttlQMQfvQ1qoQIvfvpPgO3p95ICm
-         LAfrCAHuvFTmaQbfpPIhxGCHjdCdWewWbOQtNjjwNOb/kLxOL9zT43BRtdq7x4R24xzt
-         3ww7x5YQvZAyTTv5Jed9mC3MyWU0yriyZjJyWPAF8UQbg9HmXVEFAWxbgnpt48fTLM0h
-         5RLw==
+        bh=Gaxd0JUvuI19hIXHFFbq0Nmmwdg7JnIiT63vLMwEkLk=;
+        b=GYZdt2s89mWfsScrFlLBod5RkZHYiE1ZiaNR+q3fxhLZr/u6xO9Z1GyctsomOc2mKj
+         zKkaCgYrv+hHEhSF63dwvqr0zYptOKzqQH1Cv45g5c50RXSYDOyKgRdc2mNrHshJEkkt
+         lUDNSLMBTyj4F/pPFm7i0InhXz+kL4TPULfItNCz5Mu6d9MvE6m8jktST/Ctk0itK4k2
+         vL9OLU1XPcaOb3O6MG4jtI7iNZMFPclvsOsko3TdZCDMUEjScwe9tHU6YKNOw62iD637
+         10Q9TxMcb9j5RsHYWQMtlYFhf0lTZvrHnX8q3WpdoHdovvCZPq+guqqh1QVW3ghhHN/4
+         xZOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775597817; x=1776202617;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1775598671; x=1776203471;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=hKcy50S1bW/vY4PpqHDf6kRxjpQRD4gf10Ur4mE7VLM=;
-        b=lk0tdE/eDIXXj4ldcWKo/e41VjPipfjUlSk3rwfApOV6ZH9KsO4Zo1fExep60jA06e
-         Fp1NsytX2zFgJ3g2hYAaryNJovS+puaQJpB3ioguiWbjnnsRqxvmJF0CM4BrUcE3riah
-         FGD1SKzEMfA9oa2zQZNpVkXS6EbGAbYbHOFweEKVv1Xq6UKx3IH3b64eEBZ/D6FYtJPV
-         PFkN1GmpLRbQoEQMmTy5tN8INi81IlrLGt8Ow4NMRFwGnSrOyLBfPXSj5Xesjg7g2muV
-         HfoIpspYQmdJnwYztvvBRF1BPyna1nhASQgqp+F4hjqBq1gJ2N6fQ/DDX3XqXtxInOdD
-         zcrw==
-X-Forwarded-Encrypted: i=1; AJvYcCUrPxpW+1RGpM0uboVev7ZdvyLqBM2COPaN0VdhAhIdWlgnjYNDR8bDoo8DNCrDRf5aNhbgPhfbXQ5o1R69kyU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC6gfLrwWnX3IGMlYoEipOcTy/sYWv82UcX0haZODTqgbCq3uo
-	lcIc5AbKDex75+/PI4tixPO7tQn6vBK9ZVW4hTLY/3whxNOqVJZWCyzA
-X-Gm-Gg: AeBDietX/huejhKwmrX5E3wLp6NDOkFrYR1Aa0KeHrJM50Ae/OfGSgcPEmaiI1YNIAu
-	emIkXHPvx7W9wteawau20NT04Li61zoO3HPwWfi40qQ4/A2yHYDzakcDwU6+iq5xV1sRskjTn+t
-	dY5dE6aWtg4Awsmcv24geUsn5X1bqlEeSjRtEKU9en6u/AGDHkuyVT5ldA7SiGQktDbBUIoT9BK
-	z6F1UmZhNkohZYtl+mzf58zJEGugBUDOuLpp7fW1vmvGbJbOgq1rtZW/tCXSVM6DHqezrJjPUPG
-	Ks/xsRI2viw8Y6z5YB6CNLPP4wDrA2DbWCpdfby5FPxU+QB7FiANw/BpTwtUwAf1+H8j0JiZz5U
-	tumuRWKe5MLnzX66bkLLgDQ2t+wpZWkA0yFUqrn8ccov4MynlihHLPg29NCP920knIHvMckIohB
-	DvQOBYQnqqR8fnNdlFDrl2GQ7mHmYKtdkuVgLGFR+SzSDDtYT7RStBHXDDDmKHxgaS
-X-Received: by 2002:a05:600c:3acb:b0:485:557d:9fe with SMTP id 5b1f17b1804b1-4889972b8c2mr222088045e9.12.1775597817192;
-        Tue, 07 Apr 2026 14:36:57 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e83682fsm611304445e9.7.2026.04.07.14.36.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 14:36:56 -0700 (PDT)
-Date: Tue, 7 Apr 2026 22:36:53 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: houwenlong.hwl@antgroup.com, dave.hansen@linux.intel.com,
- ryan.roberts@arm.com, nick.desaulniers+lkml@gmail.com, bp@alien8.de,
- will@kernel.org, maciej.wieczor-retman@intel.com, david@kernel.org,
- nathan@kernel.org, justinstitt@google.com, seanjc@google.com,
- perry.yuan@amd.com, oleg@redhat.com, tglx@kernel.org, hpa@zytor.com,
- james.morse@arm.com, mingo@redhat.com, akpm@linux-foundation.org,
- jgross@suse.com, peterz@infradead.org, morbo@google.com,
- ilpo.jarvinen@linux.intel.com, xin@zytor.com, shuah@kernel.org,
- x86@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 1/3] x86/process: Shorten the default LAM tag width
-Message-ID: <20260407223653.2d3d3c60@pumpkin>
-In-Reply-To: <bf872c3f7591dc7580679e35b343b08534be2d5a.1775581451.git.m.wieczorretman@pm.me>
-References: <cover.1775581451.git.m.wieczorretman@pm.me>
-	<bf872c3f7591dc7580679e35b343b08534be2d5a.1775581451.git.m.wieczorretman@pm.me>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        bh=Gaxd0JUvuI19hIXHFFbq0Nmmwdg7JnIiT63vLMwEkLk=;
+        b=NLvp4kXZzDp+rYvDXaJ0vIrSRVe7H41Eg7fPVdQbMtZ412WHNVhemItv+V/hE6YjTh
+         iM84Ij3c3FYfT+f6/2gCMX+lmeAsQH7t0wqYNYo+VIfkCPNPtELDUd38CbjAWmNif4tT
+         m3mKSsqPBhs6NkZ0wgjKKfBVvI2Xg2A0tRsBlhULWrxR4o0V0JiYxTYSFgtwlOch4uFm
+         S29N70PRDaYv4YEPiTGsM+ywiOJfdOUgzkSUJ39hITqi/4/sbs42mUZYbeliwHrt20mQ
+         rLNT8spvIekrhdY2pPK1zz7IH0vMFAB9/JuQyULIwfC7i2PMKtALOrgLiG+4To1/IKfd
+         grtg==
+X-Forwarded-Encrypted: i=1; AJvYcCX/twDzCjukJdaTC0F6mFWTa6mvQPsJa95O+xKEUSyYoNaOWnra1HJmGalrXmtgSHJbs7nmOn8vpzXfsbnMlNI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCH0+g/wJsV4agv7AjJzzYLLHg1u2aAgpQJV+lgoy9ebGiTkZg
+	Ljz+xyKB7l6uLNIIjzkISwLrnOzPhpbG+paXaln0vkhSnjOzD2AAB6bubekqHI0HMJCkeYyOtQe
+	SErbHgRNeqfYwl4knBxvxyauLXfJXXWi4QcFfGjEY
+X-Gm-Gg: AeBDievM8q3t+XkkyryceQEufN7qczKSGlqDiebXOGXLonC+kGadbrMTNcMEuRIAWoe
+	US6BMnA1NOAhicAQifpDnt0/G4cQ+Euly0FHWSGasTgS8djln2fAspeQAASThMjisMOxC6pkOHC
+	g0F5XEReV+eHUE8TN7XVZwHJ4Mc0K2xqD1tEPOS+2ptl/JmHFlGmg68U2AEMMH/XcR5avf9LhKY
+	kCfIIzPMcWQ684efm+vvxxoCnqxw8qpcDZ8HWVnzAmaxKxUslJyZiC5BPK0OHZ99ihcEBa078je
+	pSDzZ4TfoIsSueU5MLqqq7nOHlbLKR0IYPiDsw==
+X-Received: by 2002:a05:622a:cb:b0:509:1d4b:f86f with SMTP id
+ d75a77b69052e-50db3e1cb76mr314121cf.14.1775598670174; Tue, 07 Apr 2026
+ 14:51:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
+ <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com>
+ <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
+ <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com>
+ <CAEvNRgGm9icDK8sK5ZfqHEOEqSbvjwtihE4p9d3vpBq-NfVjmw@mail.gmail.com>
+ <CAEvNRgEtigp7+PVDkyu_DH947CUqDt312d+P+hWjjd2fHONiag@mail.gmail.com> <yvfwexsub7nrogh67hzcsupbrkzer6a7kbeao5tlq4elrzc2iz@xrwdjd7p32pp>
+In-Reply-To: <yvfwexsub7nrogh67hzcsupbrkzer6a7kbeao5tlq4elrzc2iz@xrwdjd7p32pp>
+From: Vishal Annapurve <vannapurve@google.com>
+Date: Tue, 7 Apr 2026 14:50:58 -0700
+X-Gm-Features: AQROBzC6YaFafHUDv2MGa2x0Vz0Tn9NeKXIPzVzTFxz7s_zDJ7AzU9trGlNgYrA
+Message-ID: <CAGtprH-kgRByFvvCYeWMXtsvpb6qpaWAo8k-3PEnioyPg-LEvA@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 10/44] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
+To: Michael Roth <michael.roth@amd.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, ira.weiny@intel.com, jmattson@google.com, 
+	jthoughton@google.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
+	Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 07 Apr 2026 17:45:20 +0000
-Maciej Wieczor-Retman <m.wieczorretman@pm.me> wrote:
+On Tue, Apr 7, 2026 at 2:09=E2=80=AFPM Michael Roth <michael.roth@amd.com> =
+wrote:
+>
+> > TLDR:
+> >
+> > + Think of populate ioctls not as KVM touching memory, but platform
+> >   handling population.
+> > + KVM code (kvm_gmem_populate) still doesn't touch memory contents
+> > + post_populate is platform-specific code that handles loading into
+> >   private destination memory just to support legacy non-in-place
+> >   conversion.
+> > + Don't complicate populate ioctls by doing conversion just to support
+> >   legacy use-cases where platform-specific code has to do copying on
+> >   the host.
+>
+> That's a good point: these are only considerations in the context of
+> actually copying from src->dst, but with in-place conversion the
+> primary/more-performant approach will be for userspace to initial
+> directly. I.e. if we enforced that, then gmem could right ascertain that
+> it isn't even writing to private pages via these hooks and any
+> manipulation of that memory is purely on the part of the trusted entity
+> handling initial encryption/etc.
+>
+> I understand that we decided to keep the option of allowing separate
+> src/dst even with in-place conversion, but it doesn't seem worthwhile if
+> that necessarily means we need to glue population+conversion together in
+> 1 clumsy interface that needs to handle partial return/error responses to
+> userspace (or potentially get stuck forever in the conversion path).
 
-> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> 
-> With the announcement of ChkTag, it's worth preparing a stable x86
-> linear address masking (lam) user interface. One important aspect of lam
-> is the tag width, and aligning it with other industry solutions can
-> provide a more popular, generalized interface that other technologies
-> could utilize.
-> 
-> ChkTag will use 4-bit tags and since that's the direction other memory
-> tagging implementations seem to be taking too (for example Arm's MTE)
-> it's reasonable to converge lam in linux to the same specification. Even
-> though x86's LAM supports 6-bit tags it is beneficial to shorten lam to
-> 4 bits as ChkTag will likely be the main user of the interface and such
-> connection should simplify things in the future.
-> 
-> Shrink the maximum acceptable tag width from 6 to 4.
-> 
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> ---
-> Changelog v4:
-> - Ditch the default wording in the patch message.
-> - Add the imperative last line as Dave suggested.
-> 
-> Changelog v3:
-> - Remove the variability of the lam width after the debugfs part was
->   removed from the patchset.
-> 
->  arch/x86/kernel/process_64.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> index 08e72f429870..1a0e96835bbc 100644
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -797,7 +797,7 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
->  
->  #ifdef CONFIG_ADDRESS_MASKING
->  
-> -#define LAM_U57_BITS 6
-> +#define LAM_DEFAULT_BITS	4
->  
->  static void enable_lam_func(void *__mm)
->  {
-> @@ -814,7 +814,7 @@ static void enable_lam_func(void *__mm)
->  static void mm_enable_lam(struct mm_struct *mm)
->  {
->  	mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
-> -	mm->context.untag_mask =  ~GENMASK(62, 57);
-> +	mm->context.untag_mask =  ~GENMASK(57 + LAM_DEFAULT_BITS - 1, 57);
+I think ARM needs userspace to specify separate source and destination
+memory ranges for initial population as ARM doesn't support in-place
+memory encryption. [1]
 
-I'm not sure that GENMASK() is really the best way to describe that value.
-It really is ((1ul << LAM_BITS) - 1) << 57 and even the 57 shouldn't be
-a magic constant.
+[1] https://lore.kernel.org/kvm/20260318155413.793430-25-steven.price@arm.c=
+om/
 
-I also wonder how userspace knows which bits to use. The other patches
-just seem to handle a count from userspace, but you aren't giving out
-the highest available bits.
+>
+> So I agree with Ackerley's proposal (which I guess is the same as what's
+> in this series).
+>
+> However, 1 other alternative would be to do what was suggested on the
+> call, but require userspace to subsequently handle the shared->private
+> conversion. I think that would be workable too.
 
-If this had been done for 48bit vaddr, you would really have wished that
-that bits 62-59 had been used not 51-48.
+IIUC, Converting memory ranges to private after it essentially is
+treated as private by the KVM CC backend will expose the
+implementation to the same risk of userspace being able to access
+private memory and compromise host safety which guest_memfd was
+invented to address.
 
-	David
-
+>
+> One other benefit to Ackerley's/current approach however is that it allow=
+s
+> us to potentially keep hugepages intact in the populate path, since
+> prep'ing/encrypting everything while it's in a shared state means gmem wi=
+ll
+> split the hugepage and all the firmware/RMP/etc. data structures will onl=
+y
+> be able to handle individual 4K pages. I still suspect doing things like
+> encoding the initial 2MB OVMF image as a single hugepage might yield
+> enough benefit to explore this (at some point). So there's some niceness
+> in knowing that Ackerley's approach would allow for that eventually and
+> not require a complete rethink on these same topics.
+>
+> Thanks,
+>
+> Mike
+>
+> >
+> > >>>
+> > >>> [...snip...]
+> > >>>
