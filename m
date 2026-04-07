@@ -1,175 +1,181 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013006.outbound.protection.outlook.com [40.107.159.6])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A163A6B90;
-	Tue,  7 Apr 2026 10:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B743A4F3F
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 10:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=205.220.168.131
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775557270; cv=fail; b=alZTFuZjkGXnuWFf2flJSYkg2vXhHQACWBteP9QYjYx2lv/1dnxFN6ryfRkEQYUuWrZ6OMNDI0ByFKb3vhOdHr26tOJTzItbEwnyo+PWS7gSjZyGdWKHrFFA5+zY8s4dMSaskJ/qzP0DTFcF4XxX3sqOjnaR7K/dbXET4UIMSBA=
+	t=1775557280; cv=pass; b=EMvgROHSFuc8v4NSfiEWf1y1SmLmwTKx619s2Z1L3iNUQRthgSUcItQCLeUvHgK7J59l3wmkuBCa7zETkUTINhED1rm0zaP6sLhIF6TqGsjJemB4DiPre+pkc66+e5oYb0LeHxWOjqRxoLYG3F4VnUTGTHccTXht0xOZRFTqKTA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775557270; c=relaxed/simple;
-	bh=WJFb4R/s8OMWYkwXn83pgAuVtlleJDNa/q8X6MJIWJQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=TSkmLZoi/67YSxyeLB6gMru5TQIu1Urh6pVxoJ0KcCchovcZWLfcCiXHniHFVuOquCkQOwYahXP8FGzbC80zQ9kt2+vEofCfTbh1QsrxzhlKKkZmvY3+d9rnkyTWDjFTlqcl1ztnFL+2fkhW5lFtPzlWsmNdEcBYm9E2iAcfHso=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=eaqJh+w5; arc=fail smtp.client-ip=40.107.159.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1775557280; c=relaxed/simple;
+	bh=I4b2KJgsDgGll33udp3PExX5zTeYtVJMIJBKEnalk04=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B5lPGumspHGvxnIClFHs1+FDMWR6Ms7UAvpUFXfTSEd/bg3GuQmfWyELOlr74+IJd5cIxVQPK0PuDGC9UfkAHNPQwTp78L3l+Dyd+F1wCqmKJqqm659IdZ6JVf5V4NiyrsotuXo9otTG3ZrNQ/Z1Bi8KqB7yFhZCPccBA4oMsQM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DjmGiyx9; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=jh8rW+tH; arc=pass smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="eaqJh+w5"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BaG/e3IJGStb0yJTnhnutQY/IhC58CQuvKHPQeLk9BL9Br2CfAE5aApRngInMr9PkrK+yEv60c1hTHMQ7oN02ger4neZm38gaoEHV0rvHfGfOCLON/GAdXaBQRUMmYj2SvEH/FQIB2LB3TtJnskNBdVk0wuAq7C+L0DtANKjBF/kWGhHYP2Sb3kNEoYUNR4OabZId82FlbXwcRn0MLot8WayKo8qjyWLZy/lbALq70TmDoWht77nEiQRgjFc7ohhZ6OS+NY/ubcEYj3nnNg18hww8EK/Fq4wHOxIqenjkHXyuTkVxTfHZtusoSJYGdYVsCKIfFTS6fRvvAhGv8VuGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uWflR5l7MirVWb+Hgemc8DnBA6ZsQNpf/B1eNiTNdVQ=;
- b=wl/D4kKNQ7BuSefXvQtiW8TwNd2jboWSaRxzHjn7FIkOqNQThm8B7eSZlJ0MxAbYjTRcE7DyUPcHmGOweUH3blw0oHYkSPukotF9mze4DjUtV0mzZyTyrcuxAbaEzTo5EUrx1APrHmqbEcB4IOIMg8aid1ICSuQx6GSNOIiBtcJAUHmGWPybidAVGzYVo+jzwfQr8gtiJ2VZYfgNh74d7hBCDsXvfIPp9wV60GWQmv7TP9e3Pehisp0dWI2K8XDV1EDchZz8zw7rD55W5aYyB8VPVb838RL641KGm/FcMyN5aA1mpKLGGXnS92HNnwV2pInBEKhdzM2448ha7Ug/cQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uWflR5l7MirVWb+Hgemc8DnBA6ZsQNpf/B1eNiTNdVQ=;
- b=eaqJh+w5J5v2luXt9SHGnE6M7vFW8dde/B0efhiNpjA7fr7mpyoAdjIPv0PQ6gtROYah5wDMsj+byAKG2VGvPrgcKJgXZhDwoH+lxxBNr58gRqCEEtOkzq5dXrgW+toWge2TY33ZKajPQXo/1cWYkmDH8Vxgx/HGhRvFbe7Ox/VVZiLc25c89V95P055KP0AW4RvHA+3AjKLeWHwWty9/pW7Z+9QgguRhRHG9RA12lO6qoIM/QmdjSvmJseD/ljldW/8ChXn6puXnV72SsKCSL0QFRq6iifkZ0hpLA0p06GYwxom15+8Z2PCXXYLRwpCynDf0vhjW4DcRdJkrzKwFw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI0PR04MB11503.eurprd04.prod.outlook.com
- (2603:10a6:800:2c7::16) by PAWPR04MB9741.eurprd04.prod.outlook.com
- (2603:10a6:102:37e::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Tue, 7 Apr
- 2026 10:21:04 +0000
-Received: from VI0PR04MB11503.eurprd04.prod.outlook.com
- ([fe80::cbe9:4c03:71b6:359f]) by VI0PR04MB11503.eurprd04.prod.outlook.com
- ([fe80::cbe9:4c03:71b6:359f%6]) with mapi id 15.20.9769.018; Tue, 7 Apr 2026
- 10:21:04 +0000
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	petrm@nvidia.com,
-	willemb@google.com,
-	linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next v2] selftests: forwarding: lib: rewrite processing of command line arguments
-Date: Tue,  7 Apr 2026 13:20:58 +0300
-Message-Id: <20260407102058.867279-1-ioana.ciornei@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR4P281CA0022.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:c9::17) To VI0PR04MB11503.eurprd04.prod.outlook.com
- (2603:10a6:800:2c7::16)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DjmGiyx9";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="jh8rW+tH"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63763WPj2328036
+	for <linux-kselftest@vger.kernel.org>; Tue, 7 Apr 2026 10:21:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	I4b2KJgsDgGll33udp3PExX5zTeYtVJMIJBKEnalk04=; b=DjmGiyx9DU9o8RuH
+	SvJoZyKsv5yR0UYhodzaMZHJBKVr9TOFdRU9XOPcH5POtrSYx86jVNXsu/slM/BQ
+	qHKU+T9CDseaVts8aXipHFq6/jmMYbo4VjiVpDYyTLrLWOR7l8ICvnmvCO7TOCpl
+	s5vDPTcYZRKo7wppsgNL2tNmJicsIWhxXz6kvocuFubcqjdA6tEDQ+BfQMUNZpJH
+	eeN3l8doZguTnobCMYqpulOKvqQkkF3juhZv47ENIjfKsnRo4hLrq1gp8ssdybv6
+	QAOgVZFPs8kTTc9lJwyV5g6KoQn8LSA5S+p0+Y7So1LZojdTx3+yzAl8fjH9uDtj
+	Dlx84A==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dcms4t8a1-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 10:21:18 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8950562d351so48639866d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 03:21:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775557278; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kKujCRF51Y8Oy8KP96SMqbS593jo0BuQRVfXS2Ku+1MgpiSCh31UZfcSb3sRTjT8UO
+         Umd9teOW5sFpMN34BpEOPKQEZ9Dy75EUoI1gGrgo1NiA37EYIH0tj1T/AARlnccU59CE
+         tsj7hgOCYz9estle6Vmps4Y95/v3HrRRv+lIBHfWWw3sd6VpjU3HR1XeIelnEF1YXo8n
+         A76jnoR1oqjW0Of0pzMK9RgdVstussYdOUf82QoCxt0StbXmMga5X1TK13QzPic87LAi
+         j3BsLJIJT02JiqHDOQXuaGMllgGuR9V3UR5R0xcUsLGdrj6daxij/d6v9GkdRLzsoom9
+         H4TQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=I4b2KJgsDgGll33udp3PExX5zTeYtVJMIJBKEnalk04=;
+        fh=xXf1GczVqRiR+btH/VLPenSF6GziVjivQ0fNgiGHUJI=;
+        b=dCG5cFY+/g/AHk4S/byCIEnURRPzLVbJke333rNWERiY/Mu2CLfSodYtDqSt3k5iHi
+         Hus39xKKOcTpFMJkMUJy6nkN+nF5PTCyWIYZe6MEKRZfy/FxgzebsB2rMqzo7hZa/Qko
+         lXuJrL+OFJOA31X+ggl8M3iFm4Mr10X3nPVUMxVtWMsTKiAGDID0mvcIgZwum1DtCj0U
+         nV2cQB6wImjO3tlrE/cV2/DqOsaTlwCbhwGeBvr7F8rxAVIYfqMAtv7vs88ezp9yxzpL
+         3KbFmtg3fzVz/ztLBIUTLtVYUyLjDZs272QJR2UVs2KDizh6MCAGibaYIQ1JZtBR/6Nu
+         //uw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1775557278; x=1776162078; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I4b2KJgsDgGll33udp3PExX5zTeYtVJMIJBKEnalk04=;
+        b=jh8rW+tHF95gmgu96s/EJ+3RfX4hLoPbCf3lSoKYoGIGrZeaY0L9+3hCxP9UPr85nj
+         DJZk8HaGORnfp0W9PTC48H7mf9pkjy2u+S3UuSkeepBH6E9SUC++pyI3dfb9Y/W4n5F9
+         7TeBZVdMr7HLbP+9AJC0yT1GfUJbmnuwcRgqT8lfpCz19L5xw/2wznNOrpB51P8hRcYD
+         ykAQuIx4KWJ2TfhgEzeiagK1FtM9Y/dm5jpKUYK1wuG9oGcTYKzSPL73BCqd0n3JXP34
+         mRYSkEVlWsG3osBw+gqHEqGhTG89S9nSQaAR4pWJ9MM6FyQzUB27dudGeOD8h4AoZtSL
+         KXWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775557278; x=1776162078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=I4b2KJgsDgGll33udp3PExX5zTeYtVJMIJBKEnalk04=;
+        b=aNjLEjdWSHTw7SJS1jNNC6sHnzNmGUG+Vxzm5Z36XSQ8i3v1UcsrVwMwU8/iqDjO4f
+         sn9hE/cPT3LeRH6AigxH9jwzEdoHyEyIZXZQqkdffduan+G48+vtd9goOSvC7Hrs5uiY
+         UsKk0V+EhJO6UVGDtL2buorzu85JLneRVJNx2lNpblXuLwDDQzssZAO/ccIg43KO7U3Q
+         37ZW9tkFBaYiOqxK2GwK4sIfPG5UOGqXES6mwtz8XuHGkMH4ZqMOv/dcq0/6lidJumtY
+         IenGsCMP1YHrPv8kIXn2CqzEf4Ca8OUFrXctTgIvhUGP1Qxz0c6Zun3/w9XlLuG2Ota9
+         TcMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAgtOG5h80ymd6zHmJy9VZfnklt3UEI30wdFtBuB4vLzVuoQmeeFo/IpNMAWRwdXRMmcoymf+VtT9M+EMe2Tg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhPNWyd/NRXkZcTZ8UpYJ1wNy7/N/TMPTisg72CJ3/KIrrpbmd
+	fB7yEkDQXIgPqJA0hnI2MGuTMbTxhQFNzEBIG67yRIt6/+SfdzZbEfljgE8kjHn+8XSHvHNoh29
+	pKqMDuhZjIqSXto8KeHfpwDJkYRahOaMWZm1WKNzYZl9VtC22ZvO8IdjN7Rvt7XE+Derh/K7lP7
+	M+vTMur2A6BAdvuFPjS8zbJWcz+2vdzt3eZXgTTAEqr7NnJA==
+X-Gm-Gg: AeBDiev/1rCKUx9KfDi2Hox5N09wlwE1L3gzgYXX8yDsgpbk+KJpn7mwzlGRG39UYtc
+	Z6FxLDtK0jxkZAVGSxRoLjuYvUoVg3EoIlEEpaegJuShG086DXQW5/h9SJ1X67cXls3wYLKYH/z
+	2R6W38Z05mkOsrYAT4Fxd7xurwrsC4cHGpRqenUXA/6qtN/12f1XUhbp6ULGqpgnIeFaNuBwga7
+	z9sPrw=
+X-Received: by 2002:a05:6214:2aae:b0:89a:14be:4593 with SMTP id 6a1803df08f44-8a703d214f8mr270574136d6.35.1775557277921;
+        Tue, 07 Apr 2026 03:21:17 -0700 (PDT)
+X-Received: by 2002:a05:6214:2aae:b0:89a:14be:4593 with SMTP id
+ 6a1803df08f44-8a703d214f8mr270572536d6.35.1775557276699; Tue, 07 Apr 2026
+ 03:21:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI0PR04MB11503:EE_|PAWPR04MB9741:EE_
-X-MS-Office365-Filtering-Correlation-Id: 946f89cf-143c-4f66-6bde-08de948f5ff8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|19092799006|366016|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	8EIBO8k6A2BevPNLm58UHiXc3brN8eORg9/oULJ27Dk9gXZwIjygMmQmaqqxH7teo1qn51rUEDMSFGfrt3U0+spAzPVw+M6loD9hxua3tzGyvZjkBSBdjtHs+W2kc20HQWaqygh0PgNtV4GwMbyofutp8X0+pay/Vou8pCkiXOafPXUygrovpXCEViAIxSgZ7zft49S/NNc82+mt4Opu2FxKK8F5lLmExcEjXU0GasCmwuWWPWQZkARkYXopT0Lut+0AyJbjoVqMRQSR9qsTBSgKWvveg/DvzDMvuJrD/fNvs7ZSFoXPknrd+sDzDpgbcbNCt8nt9q+1aDH773seU8B/MeP6ny/U23IiPktTwMj+U7gcA+E49C+xO7xs2yX+WphuevGVSVcjxcf7tcAJrx527A6f8m6l6G12CzhMZlIfjl5FKoVdryJaTBZo/ej93SCvj/ixZrv4ZbcAOOKO/kOTC92+mUFwj/HDaoJ5dVxJf7DmrBeq7lFFf9p76VLfHa+aD2k/uY1CWf2/o6bOJ3+RPSFB1WfNGO6i5/+/P1mGjg8ct4vdmTDRIXLSqFc7MvZ8mj+fZNLwHQ/wiPeMYTIBfY8i6YKlHDwIyqGgTOFM9sPbwqbFcb480Abf9REJcXWQOXJKbsShqf75VYd5VjxKOyGvhQEfmsqUVASyzo3cES4cSXhf+38L47vqf23Hk0IDijiSo3Gvtq2OLy5zrJEIp5NT5gziVqR7lS9dBok=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI0PR04MB11503.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(19092799006)(366016)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ZT4lqonh1hvluLjuG1NkJqboPmYZwYNImOyVVgrFxOEwK8bU4ei2C3DG2V87?=
- =?us-ascii?Q?s8uiKJ2aT+Pmp4tIWNwS2pSL4+uE2PgxQ6uxzHgybODbNlG6A3aEuSiiMYT+?=
- =?us-ascii?Q?LryCxJveN8WqQsSeO78QG1pWJWUYnePOT9pP+cbeNRXdNJfhP5H3+d48//Oh?=
- =?us-ascii?Q?l4PjHq41g84PD6xHzNouuRfODpL18ViLjrZEgZjuptQ9mscrASoEVdk32S+t?=
- =?us-ascii?Q?tFrt9p37eO4ZkaE7LcZsDITIokIsI4d5lkAarX2ofYlYDI8toqucWeu1SkjP?=
- =?us-ascii?Q?XKMQEcbQkFQ2+O+/z4WpFuyT/dpUImkN4npkiGdm5aoGXCGwS59BiyZ+KO2/?=
- =?us-ascii?Q?8rU+kjkd4dXFvgxLSEbAD+r96Jsc8NBk5hIEM4WfPz3fZktwrkzHvLns7f7s?=
- =?us-ascii?Q?Hl+VGzlFL4CUQlPljF/3iTbzp28HrzqaLXXQWoYpMZbbhBUD0EW4uu2hfkgN?=
- =?us-ascii?Q?z0QA9soEHRDGSUqrN6zUX0nVZrzU7zgipwTseAgAqkCrGoAok6+RtxczzVtm?=
- =?us-ascii?Q?DwpcnUC7ioxv1LGIEr/mmgOc945i2O83PDp+Kx1PcYDrMp+vLlksT8+NZkmq?=
- =?us-ascii?Q?zQVHyZFfPET3M8SLBnurQHigSj55dpOUaBC7PYSZ00P0BaIyTd8TMYzRxTD9?=
- =?us-ascii?Q?pyAVsg6vH2qDvxUpqvvIi9kX8LXiy1gik/3LKBFmK6anNQK6kF2/Nd5fnvwS?=
- =?us-ascii?Q?Z7K/GbVTl6KD3zvUdJagXz2QLHKyLNcw6rcIOif2xGNtbKNNXHcc1Ou3K1z7?=
- =?us-ascii?Q?pbkBcVhtdpbjxmcQUBXuPZBv6ZJo/wE0jDNhS4hsoXNUGCVbruOgd1lP4Ax0?=
- =?us-ascii?Q?+Y6bUOVEaEgEA+2CI/06Ox9HAjCNC8P7B+QIy3SU+I0jBGYHeB7iMAyUWVn7?=
- =?us-ascii?Q?hh9/aEvSJ5g0oi8sMCeop4fdZxhNi5TqBCegBoITgwfMh3fdor8pT3iZdBNF?=
- =?us-ascii?Q?jsjCxKRUH+gICzb98IRh2Shh8uGyC8yXlOvAPO1u2oiHlVmv66mjFZlNEXfU?=
- =?us-ascii?Q?yXHH8mvUpdSncGT/Cj/vrAU+GZ0/d2V1XhQs5bO6a1gQXrI522t+/OGKZn4f?=
- =?us-ascii?Q?pkabc4JyC3Bntl41ViTLls34luWMA2qIYTw8I2DeBjkuaQTkO/d3LvnxaIDq?=
- =?us-ascii?Q?huIVVgzrbLVrr+bJ3lcZcNNh8ig9wprSVQOzNlokHgobWgANqmCxcuTo4ZcY?=
- =?us-ascii?Q?M0dfpx4ihVqqAgMS3iYUo4uDmHFUHRmJZF1s20oDoy53cBdsPd6np3XG4HGq?=
- =?us-ascii?Q?iC2BaD7z8Ci3Yu1drEOzzC1P6LTBI+Xu1r8cjHDp1+3CJXPsYGqI62wQaM8M?=
- =?us-ascii?Q?yUbhpt/EgpIiSWKNc0HNWJ6XC+6yz05+WiDmaruen6Ukd8k6PtrZXirgzDZ+?=
- =?us-ascii?Q?PZA/O5dakx+TkWFnB4vrVTz4jjIgDwrc0vADqeNxeM03ak1rPYrki39joEwS?=
- =?us-ascii?Q?GX5Gop6j9Zx0et2Ib9VCbqUZOFLVZ2q1LBFEjfzvR3Opu0Qh7NXEZaxbiPMw?=
- =?us-ascii?Q?6MLDjfZBGsF+8krL+BSEsYeYHt0Sf2fCt9tzGFCBO3giAOtnvND1i0IevmDM?=
- =?us-ascii?Q?FsBM64usOy5d+Q8TQhrYRm1PigIRDTr8tDLiZ4ROapPC30rs50dLXav/KSoa?=
- =?us-ascii?Q?Ia+s+8LRm2ONikCxLGgN1Oaytd9iwzoJIvYfGG14AhOn5NKnPIVf3kFbCIiJ?=
- =?us-ascii?Q?F6zdp1LeXJFvii66x5s9ZKEbf1Annj1twDjOYhOSm0oigupN1FZJmFuHVTAq?=
- =?us-ascii?Q?xBlWoHzoKg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 946f89cf-143c-4f66-6bde-08de948f5ff8
-X-MS-Exchange-CrossTenant-AuthSource: VI0PR04MB11503.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2026 10:21:04.6753
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QOjqezki4nl1OAwDLVqfE8O5VrcylHlsBZ8lBKvv0wjOaTcvJKz0K9iUKvIWGw5hjrDFUpJGChosQ11ihRUU9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB9741
+References: <20260402102953.2984284-1-mayuresh.chitale@oss.qualcomm.com>
+ <64d44f37-7d31-46be-b9ed-cc86969777dd@maciej.szmigiero.name> <adQ6_MyjhnpJYJ5H@google.com>
+In-Reply-To: <adQ6_MyjhnpJYJ5H@google.com>
+From: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
+Date: Tue, 7 Apr 2026 15:51:04 +0530
+X-Gm-Features: AQROBzBc3NsMNpcx9CW-oR8ilWQ1jtDsR_uRyyJ9VQlCxouo5qJCi3l9Y34FMHg
+Message-ID: <CAHuiULCkHojN1QEb7OSL0rozL_wYpw1Xts1pVcThFcDaQg3zqw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: selftests: memslot_perf_test: make host wait timeout configurable
+To: Sean Christopherson <seanjc@google.com>
+Cc: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA3MDA5NiBTYWx0ZWRfX4NYCkT5a7Ilz
+ wlPSjhBVUXuRrWcR/R+Jwz/uyFI/el9eLDo1a481Hdnky2wlG4Cd4+gSJgcAg6uT21MA1RZw9fi
+ cwAWwEYATanoSu4WHn6ixrp8udgvh3Bd5HynFOYQwq1MHvF6xJ9e9bJoaVqEOwf/SDAilPVVuPF
+ TIgoO/2rrJ5CC67IOncxqJQnOOrQMHFWts45P/pFeNczP555CYl3VmqlEeV+3NFdq9thYME2d4I
+ 9dRzmUK8WuvoVSdSA/yFEcS+4NNtXxXb3gcYaz/ILE46CagQVIJyU+ZgF46SynMsHBZyoFDMmkZ
+ eW9rvpeZne3qYv7dggOsLGc0kEcl+F6wcW/HFadSpf9tBzJludIin7Kq7w9JUvdVnMFryHWn3aK
+ /Y2ROu996sAox0U2YeJ4+Mg18PtHMOiZIGayse0wNAKdn/T7wBW0HA4pWX2/EfzF5322hj8hkJ6
+ ddLm2U2y0lo5MdD+hSQ==
+X-Proofpoint-ORIG-GUID: YGLfbL-Ihh3UU4h-PV7A1CT1_zYsmPk5
+X-Authority-Analysis: v=2.4 cv=WNZPmHsR c=1 sm=1 tr=0 ts=69d4da9e cx=c_pps
+ a=UgVkIMxJMSkC9lv97toC5g==:117 a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=Um2Pa8k9VHT-vaBCBUpS:22 a=1XWaLZrsAAAA:8 a=EUspDBNiAAAA:8
+ a=bGZ-ABlMOwxLtTgv92gA:9 a=QEXdDO2ut3YA:10 a=1HOtulTD9v-eNWfpl4qZ:22
+X-Proofpoint-GUID: YGLfbL-Ihh3UU4h-PV7A1CT1_zYsmPk5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-07_02,2026-04-07_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 bulkscore=0 phishscore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 malwarescore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604070096
 
-The piece of code which processes the command line arguments and
-populates NETIFS based on them is really unobvious. Rewrite it so that
-the intention is clear and the code is easy to follow.
+On Tue, Apr 7, 2026 at 4:30=E2=80=AFAM Sean Christopherson <seanjc@google.c=
+om> wrote:
+>
+> On Thu, Apr 02, 2026, Maciej S. Szmigiero wrote:
+> > On 2.04.2026 12:29, Mayuresh Chitale wrote:
+> > > When memslot_perf_test is run on qemu, sometimes the RW subtest fails
+> > > due to sigalarm, indicating that the guest sync did not finish within
+> > > the expected duration of 10 seconds. Since the current timeout value =
+is
+> > > itself a bump up from the original 2s, making the host timeout value
+> > > configurable via a new command line parameter. Now the test can be
+> > > invoked with '-a' argument to run the test with a suitable host timeo=
+ut
+> > > value.
+> > >
+> > > Signed-off-by: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
+> > > ---
+> >
+> > Out of curiosity: which KVM-enabled setup takes more than 10 seconds
+> > to run that RW test?
+>
+> Hmm, I assume "run on qemu" means running in a VM that's fully emulated b=
+y QEMU?
+> That would probably explain why it's so slow?
 
-Suggested-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
----
-Changes in v2:
-- added back 'count=0'
-
- tools/testing/selftests/net/forwarding/lib.sh | 21 ++++++++++---------
- 1 file changed, 11 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index d8cc4c64148d..d2bdbff68075 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -467,17 +467,18 @@ if [ "${DRIVER_TEST_CONFORMANT}" = "yes" ]; then
- 	TARGETS[$remote_netif]="$REMOTE_TYPE:$REMOTE_ARGS"
- else
- 	count=0
-+	# Prime NETIFS from the command line, but retain if none given.
-+	if [[ $# -gt 0 ]]; then
-+		unset NETIFS
-+		declare -A NETIFS
- 
--	while [[ $# -gt 0 ]]; do
--		if [[ "$count" -eq "0" ]]; then
--			unset NETIFS
--			declare -A NETIFS
--		fi
--		count=$((count + 1))
--		NETIFS[p$count]="$1"
--		TARGETS[$1]="local:"
--		shift
--	done
-+		while [[ $# -gt 0 ]]; do
-+			count=$((count + 1))
-+			NETIFS[p$count]="$1"
-+			TARGETS[$1]="local:"
-+			shift
-+		done
-+	fi
- fi
- 
- ##############################################################################
--- 
-2.25.1
-
+Yes. thats correct. I can update the commit message to reflect that.
+>
+> > Does it have like, multiple levels of nesting?
+> >
+> > When I wrote that test I calibrated it on a mid-range x86 machine,
+> > where one iteration took on the order of 0.01 s.
+> >
+> > 10 s time limit per iteration is already three orders of magnitude
+> > slower than that.
+> >
+> > Otherwise, the patch looks sensible to me.
+> >
+> > Thanks,
+> > Maciej
+> >
