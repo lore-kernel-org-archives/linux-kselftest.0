@@ -1,139 +1,108 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-43101.protonmail.ch (mail-43101.protonmail.ch [185.70.43.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A5735836E
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 17:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92273AA4F2
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Apr 2026 17:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775581231; cv=none; b=GFYkILs/Sz6WAD4ggpp+VMtwpHfMWtUM/n7xM9xvkX1w+IlmQrzQbCA7ZNekafbHB8m7bfLV0sQj4pulYa4nticWbNDIPzFzwe0YCVzeQzZVawUFCGKhtHnTMip9tlvgHb8C7RBxChbcs6mjCYS6E9hMmiX5GOtavfvID3l2TCs=
+	t=1775583935; cv=none; b=bSBSKF6nGtK/O95kYfCVFE7D7kH0gf1MBoyTJTOY5SKjT+OHp5K0e9sKyl1o6pV386Rgy4fCYrvz0KBP3KfQn+6wyq5dtsrtuwYvEBTqfCqzSgEV2bdIInWq7/eHZkP4fNPNCj8Lonq332t5lxSZZONw9as0j3//ywyTgMhdywk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775581231; c=relaxed/simple;
-	bh=JjSdknm0S3YYBOu9U1pjaX4G5IiGL313LgGv/lJR65I=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Jd/zemXsAUvWu+0W+9OSVvcvI90mXnM5ZAaRHsbKJSpzOyZSerw64JN7q4p+FYIwEzuTAaSdzSpHgxBnteAcC0uysiqdgtEN3Mx6tJYVrt0oRA4azn58RJ+BU00tB5YpkfY6qDxFpObm+lazKQmzjd4b6eEhSfA1210EDBxgzWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tM/jPvHo; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1775583935; c=relaxed/simple;
+	bh=2aFp4KoN8743mT3bQxoTmNhOZBtqUkx/s92zq3Svr5Y=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=P2GVrCinPGy8V55bmPzL+fi0KL4lwzy5jbqU/iU6DjDFr8snk2S30ow1QN95695UMf5NzvdfgiSNaW8FeBrZY0U9M9TbernUHFsfvQ2nfn7Q1Mgg5MDsBsSjG4xj73IsivtabmK+ndKoJyD/YS/hLQKBrT78yBRaX72pcdHylLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=BH0u24Oh; arc=none smtp.client-ip=185.70.43.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tM/jPvHo"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b0bf2b3879so138891625ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 10:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775581230; x=1776186030; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EzLNJzXI8gpsV/hueQ4RCy5wIqqrzS2Y7L8EbLV9C3I=;
-        b=tM/jPvHoKQRAtsQ0Axp7DSx5fQUUUmwntP1G5f/5WcyqCYEiQnbQkm+SrBTlr5T4Cn
-         iiqrEa8hY7Sntvv6EkbNPNhEkaBNRcGkU3chDMDlSzfLP10ZI3H4aCP1eGCBTUwBzYuz
-         puWRuEwg1E3gK59KB/U8611D8q1d1faU1G9vlFBwFgxHXE/qXOH7yI4Ti76lrW2Aaw2w
-         2ZRWwl5/MT2Rtrki/mSEGwreRgHDtxkN0IvOqsEC7eoXxN8+pJsK97P7BM7kRCqqBYhJ
-         AnMgu07V9T93u0t0OcYME6rdULgLehTgtGuwG4KuoEObWhVlIfm5ED6g36bVjUjNRKxC
-         aoyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775581230; x=1776186030;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EzLNJzXI8gpsV/hueQ4RCy5wIqqrzS2Y7L8EbLV9C3I=;
-        b=IcjSeQO2S1T7uN4O6G8WG355eMfV5xxhVs3ti2aZVpkVPg7gISv8QG97YUB1IQiUYE
-         PURBWtDZwqSBT483kiatkXb/AMnW60MC0DchXhWU9aqAHK0LedAtgGsBM1PKPIXB+wt2
-         IY2ZgVBQZCIBT4evxN5flZWf5OqIe7/fKwr2HqhKSLqZ2lNWGfSZ9/1brIs58g+ka+cR
-         gIbGlHwnPtVYzKe6qnn3HHJk2x5RPFXZC3iEGslJG1hCMjP6BTB13+1bm7LLO/dVCyMY
-         pTowo9e9CjYZx1q1s9myJP4GlK6n++trhZY6Wh8wFJ74kWMNwXvBx2zTyHumcnu5KNT8
-         pbfg==
-X-Forwarded-Encrypted: i=1; AJvYcCXzno08F3NiaZfxSLgDZlc1c7cv9xgA+6xlJk0Q8WihMR7Cv7xbMsqovfAmil2Q7QlRfrM9CJYhnxkqpx0bou0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzNra1ZdLe7nrNaTTcD0jyw2XTtyculbjrNs0uLhwLqdxppQlp
-	VIcVyhc35xIA2vX3ZNzOZBXVRlESqEKRaz4ZNnUbgQ4yFGFhP/lUsKHWiBpJE86jT0JMOXN17E/
-	vI+mDCw==
-X-Received: from plbkq14.prod.google.com ([2002:a17:903:284e:b0:2b0:4da9:9b30])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3586:b0:2b0:b325:748a
- with SMTP id d9443c01a7336-2b281705e9fmr189157025ad.22.1775581229412; Tue, 07
- Apr 2026 10:00:29 -0700 (PDT)
-Date: Tue, 7 Apr 2026 10:00:27 -0700
-In-Reply-To: <CALMp9eQR_ZivpcARLyvDK3w+frpwU8bj2Z+ZvA_fLdCtTq3Vhg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="BH0u24Oh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1775583919; x=1775843119;
+	bh=xszVRi126LHAKU1hMfewjsGA++zvfLT/QY6bM+ivMq4=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=BH0u24OhiVmu4gv0nQpN3Iv6YcwJPSQNefQpovhaWIb9Gg/jNOJhSLlPY2cXZdfL6
+	 JeNXcqIhOmJw4Nl/EPg6+u2im0dccxUGVvRMEymKMoAzrx5jTXr97Mm1QpcPADwQsw
+	 VSb1x/fIe8o/MgJ+VuZzxCZ4WKz3xhi7x40ULknnXc00VwsPKfgGwhJ0CNvmI2CrN0
+	 S2Uq5Vmz1btAfBTi7OWUCxwqrPjI0ROn5oVmZH9uDFHWbuwHWGIDQoAf0T+5mTmhjS
+	 9RQhmvZdrvcmYnYsNxCcTKRarxSp2lQPnKAuvbAR7VCpVNFIrEBn1gDoNwOTQeydJS
+	 HqkhQAhGA4wpw==
+Date: Tue, 07 Apr 2026 17:45:12 +0000
+To: houwenlong.hwl@antgroup.com, dave.hansen@linux.intel.com, ryan.roberts@arm.com, nick.desaulniers+lkml@gmail.com, bp@alien8.de, will@kernel.org, maciej.wieczor-retman@intel.com, david@kernel.org, nathan@kernel.org, justinstitt@google.com, seanjc@google.com, perry.yuan@amd.com, oleg@redhat.com, tglx@kernel.org, hpa@zytor.com, james.morse@arm.com, mingo@redhat.com, akpm@linux-foundation.org, jgross@suse.com, peterz@infradead.org, morbo@google.com, ilpo.jarvinen@linux.intel.com, xin@zytor.com, shuah@kernel.org
+From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: x86@kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, m.wieczorretman@pm.me
+Subject: [PATCH v5 0/3] x86: Simplifying LAM
+Message-ID: <cover.1775581451.git.m.wieczorretman@pm.me>
+Feedback-ID: 164464600:user:proton
+X-Pm-Message-ID: 3be82768e7ebdb3c007e9dac95753b86a48ec022
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260327234023.2659476-1-jmattson@google.com> <20260327234023.2659476-2-jmattson@google.com>
- <adRBZuqNlBozaDrK@google.com> <CALMp9eQR_ZivpcARLyvDK3w+frpwU8bj2Z+ZvA_fLdCtTq3Vhg@mail.gmail.com>
-Message-ID: <adU4Kwtus2C53U3E@google.com>
-Subject: Re: [PATCH v7 1/9] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
-From: Sean Christopherson <seanjc@google.com>
-To: Jim Mattson <jmattson@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Yosry Ahmed <yosry@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 07, 2026, Jim Mattson wrote:
-> On Mon, Apr 6, 2026 at 4:27=E2=80=AFPM Sean Christopherson <seanjc@google=
-.com> wrote:
-> >
-> > On Fri, Mar 27, 2026, Jim Mattson wrote:
-> > > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> > > index ff1e4b4dc998..74014110b550 100644
-> > > --- a/arch/x86/kvm/svm/svm.h
-> > > +++ b/arch/x86/kvm/svm/svm.h
-> > > @@ -616,6 +616,17 @@ static inline bool nested_npt_enabled(struct vcp=
-u_svm *svm)
-> > >       return svm->nested.ctl.misc_ctl & SVM_MISC_ENABLE_NP;
-> > >  }
-> > >
-> > > +static inline bool l2_has_separate_pat(struct vcpu_svm *svm)
-> >
-> > Take @vcpu instead of @svm.  All of the callers have a "vcpu", but not =
-all have
-> > a local "svm".  That will shorten the quirk check far enough to let it =
-poke out.
->=20
-> What is the actual line length limit?
+After ChkTag [1] announcement, it's worth preparing a stable x86 linear
+address masking (lam) user interface. One important aspect of lam is the
+tag width, and aligning it with other industry solutions can provide a
+more popular, generalized interface that other technologies could
+utilize.
 
-There's a "medium-firm" limit at 80 and a "mostly-hard" limit at 100.  100 =
-isn't
-a true hard limit to allow for things like pre-formatted strings, and cases=
- where
-the only way to stay under 100 chars would (arguably) yield less readable c=
-ode
-overall, e.g. msr-index.h deliberately has this
+ChkTag will use 4-bit tags and since that's the direction other memory
+tagging implementations seem to be taking too (for example Arm's MTE)
+it's reasonable to converge lam in linux to the same specification. Even
+though x86's LAM supports 6-bit tags it is beneficial to shorten lam to
+4 bits as ChkTag will likely be the main user of the interface and such
+connection should simplify things in the future.
 
-#define MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI		(1ULL << MSR_CORE_PER=
-F_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI_BIT)
+If a usecase arises in the future, the 6-bit tags can be made available
+as a debug feature and possible to enable through debugfs.
 
-and not
+Changing the tag width has no effect on userspace programs. Due to LAM
+being disabled until LASS is fully supported in the kernel there are yet
+no userspace projects relying on a specific LAM tag width. One known
+exception is the clang compiler and its hwasan support. It is however
+not a problem since there are both no users of hwasan on x86 yet and
+upon closer inspection (when working on x86 KASAN software tag-based
+mode) I found it's not working correctly and needs to be patched.
 
-#define MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI \
-	(1ULL << MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI_BIT)
+The patchset also cleans up some comments referencing LAM_U48 which was
+not implemented in the kernel and the comments shouldn't imply it can be
+enabled.
 
-> > > +{
-> > > +     /*
-> > > +      * If KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT is disabled while a v=
-CPU
-> > > +      * is running, the L2 IA32_PAT semantics for that vCPU are unde=
-fined.
-> > > +      */
-> > > +     return nested_npt_enabled(svm) &&
-> > > +             !kvm_check_has_quirk(svm->vcpu.kvm,
-> > > +                                  KVM_X86_QUIRK_NESTED_SVM_SHARED_PA=
-T);
-> >
-> > Align indentation.  With the @svm =3D> @vcpu change, this becomes:
-> >
-> >         return nested_npt_enabled(to_svm(vcpu)) &&
-> >                !kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_NESTED_SVM=
-_SHARED_PAT);
->=20
-> You wouldn't happen to know the Emacs configuration for the alignment
-> you like, would you? I asked Gemini, but it lied to me.
+Patches are based on v7.0-rc7
 
-Heh, no.  Any time I unintentionally end up in Emacs, I have to do a search=
- just
-to figure out how to save and exit :-)
+Changelog v5:
+- Rebase onto v7.0-rc7.
+
+Changelog v4:
+- Remove the 'default' wording from the cover letter and patch messages.
+- Add a paragraph to the cover letter about userspace impact.
+
+Changelog v3:
+- Remove the debugfs part and update the rest of the code and patch
+  messages accordingly.
+
+Changelog v2:
+- Extend a char buffer in debugfs read callback to fit the format
+  string.
+
+[1] https://community.intel.com/t5/Blogs/Tech-Innovation/open-intel/ChkTag-=
+x86-Memory-Safety/post/1721490
+
+Maciej Wieczor-Retman (3):
+  x86/process: Shorten the default LAM tag width
+  x86/mm: Cleanup comments where LAM_U48 is mentioned
+  selftests/lam: Add test cases for different LAM tag widths
+
+ arch/x86/include/asm/mmu.h        |  2 +-
+ arch/x86/include/asm/tlbflush.h   |  2 +-
+ arch/x86/kernel/process_64.c      |  8 +--
+ tools/testing/selftests/x86/lam.c | 86 +++++++++++++++----------------
+ 4 files changed, 49 insertions(+), 49 deletions(-)
+
+--=20
+2.53.0
+
+
