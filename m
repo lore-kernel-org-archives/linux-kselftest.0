@@ -1,55 +1,55 @@
 Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FEB4317D;
-	Wed,  8 Apr 2026 18:01:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5CF737F8C2;
+	Wed,  8 Apr 2026 18:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775671266; cv=none; b=oqpdcvxfo1JP2AP6VkvUcFBlVBhasWX01S0/DVh3Xd60eBPpynXpODm1CODs7d+dqxky43SLeYobX8i7o2ImoA4bGlH5LC+5PQYelA9FDPUChy4VI0jvTos50AQwy82nJ38CBnuR4t3sqj5N+LpnrCL11qiEQohplZJR5lBgE0k=
+	t=1775671995; cv=none; b=jFNds57/AbE2vqL8R7L78L72gTWpjHnUI006OnKCwpRdKg/L7s5blc/0CHZrpWYmUsdWR6GDdpgy+YvETQQ76j8VDj3WeygJrLuOXeH+IF7LtxQF8wn8imoJQZvAoqqzbw71Qupv/JVCLJ6uTUr5KATzV0DCgL2FXOpr/YH4OVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775671266; c=relaxed/simple;
-	bh=QC5gkRPIAuhh0lxly35F9zV0BbUKfHHCyyHTCdeEfYE=;
+	s=arc-20240116; t=1775671995; c=relaxed/simple;
+	bh=EO9uR9gL4zxJdvZ7GrFE5nq6nH0pJjGS6mVLzWge/No=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iCqEGtmjBP4vFjmjE+qmZuSzeYFZXgsQl54CZEElm9KDyqqkhqnOtfcojPCjUjTC63yeDG8rKtotQtHNoBreCZ9ZNGUK6ck0ygS7xaBkffm2rDjaVq8e3lftgU2mOjTJz0FdZWfmqyeaIhjT6nY5Qic4CRO4hDuy0+vbpxUaM/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=Azy4N4mz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PvB9HLVB; arc=none smtp.client-ip=202.12.124.146
+	 Content-Type:Content-Disposition:In-Reply-To; b=BI0VotDETAPsvQ2+U6ExRBK0pcmufZci0AXQLRU8ExUzAF6SsTQWi7+a2cfw/BqRRQ43jD19kX3jererIc2So4DAVTgiuhVS8RulYwtFKahUIgbw5x6sLMOLWdhpXQvQBdF6WT8oYRi6C1yDl0gFrdmBF6YjBnBPsA8LNaMR5Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=jx5O8buR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IlJBgQ+g; arc=none smtp.client-ip=202.12.124.146
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="Azy4N4mz";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PvB9HLVB"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 1A94F1D00281;
-	Wed,  8 Apr 2026 14:01:02 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Wed, 08 Apr 2026 14:01:02 -0400
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="jx5O8buR";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IlJBgQ+g"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfout.stl.internal (Postfix) with ESMTP id 546EB1D001C0;
+	Wed,  8 Apr 2026 14:13:11 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Wed, 08 Apr 2026 14:13:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1775671261; x=
-	1775757661; bh=b8nHCVt3ibsu0+QXfjS3MVb3Q+x9ehwEWmyQgygbBs0=; b=A
-	zy4N4mzst171FX8vmaEfzbjEE5ipXaVBT7q32K1WSaCyY6TB7PP3MZI8HSnelozN
-	KzKw6EZH5W+4ZLiNf4QRDxLyfApPjzR8ltRKwMjZj0AQA+lfVS4OZih+FxZgd3o2
-	3mvz9vB7ya6DtOUCJAUgCysgQVzltW2cHLDW8IHKbrCOx0E0eN+tEo0vIEpgBdQ4
-	2nWcqT6+BOjxijtT0kXW0cT3BROxZ8no8Q+XR/5hhx9PiatcgyOgyO8SkPzsLSLw
-	Ayq35ZWGjB6w/eIL2OYefeLWPzgcWBEh7akqH7RLRpXvEBrpp1SzMHcOKWEQ+2J4
-	Vpqx1RdqvKKhRT0vpPkJw==
+	:reply-to:subject:subject:to:to; s=fm3; t=1775671991; x=
+	1775758391; bh=aORdmq9g0FRGST1ZNQjnQoqdkV9zAZInE4Lq25KYBuk=; b=j
+	x5O8buRNsZcBQOaLVqc2LV5s3W5EAhLYGpkJ339wZbe0m+9eqrmerR9Vjql6KO/9
+	YrXjQ8Y4NPUEmokKHLOEQMgMiY5NiFMO3Xdyz9HcFzmAWVYyfd+PzOYr981SNo6k
+	Kgy74pxHxB530mNv0FuEmglHdvxCpjIvgWrzamTGyoNumbaYYTyGy50esOSu3IIj
+	KUHC2EMX9piyupZ/gew+TMuZFS0d5UOKU85CdvybgX+9hvTCV4Hh/f7ODMjmVT/w
+	dk6n7koaXU9kDjrWenFl0FEyCIYRdf8F2Csc+xmbt2q+i2csmfeHg5U1x1U9KYKG
+	dGo3FUsvIPFl4tWwbuR3Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1775671261; x=1775757661; bh=b8nHCVt3ibsu0+QXfjS3MVb3Q+x9ehwEWmy
-	QgygbBs0=; b=PvB9HLVBkhcggCOQCtTstGsGm75ZoJ/smC4l6zWVBy1yHw3+gQQ
-	NNB+/Lr+UduVthP9jiOfYang0XKZCZuCfIcBHbXLKxpZEZ1KvLFv+Z8eLx0qVR0C
-	c+xhoXygg/qDSVmuyUA1WWHUQ94YLqnpL2PNP72A6rR27VXJKe1S7gW2RpUFcc4N
-	VBurwKS7wsXhn+LAUBiMGhTyb29QqmlZEp1oynEV5bhCUzvb4AH/ghVEeQPZEM6e
-	bB11am9qq/97OQtRs4CSiG0AMXkJbWO2ESwQ8CMtFKLk7vrHwUK5b4TjwcBgRgCh
-	q++mngXqBwg6S47jxH4dGaMMI1nPeIhLClQ==
-X-ME-Sender: <xms:3JfWaQTdclOEXjjqpiy7wHnTORAGAbB9UaUjZmX1DNK7yidNhAUJKA>
-    <xme:3JfWaX29E4vtDNOWhukXkFdlBhlJxumRyBpyBQQreaFXNUkJtcLfD6tl7obAuGjoZ
-    eOKJWbo6AksGguxILE1nHwwoYI6REKHLin6yN4j_mGNDo5pYEaFNNM>
-X-ME-Received: <xmr:3JfWaSxIjBacaHVdcMaixHWm8IBxrtNkmfeSOLhLBJYpsiotRQN5t9bghqR6>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvgedvgecutefuodetggdotefrod
+	1775671991; x=1775758391; bh=aORdmq9g0FRGST1ZNQjnQoqdkV9zAZInE4L
+	q25KYBuk=; b=IlJBgQ+gMlvgv/EPomRc3VzxsBepyypHnAzUm3D+qpAi5DAnwup
+	aO9gopZp3vT1nKyQTaANRmstjB5LH0KLfS/wT2wXuXFPh588Pf2VOF0ORZzHuYm+
+	7L2rL5WyNbW2WfRI+3nWeXEPAbfPkgy+Y6Q0xZR7hJef8F/kW83gpBG9izxSao11
+	HUrnze+klLch4BRUqLNpyzmZcKcsqL4rvRQcI448V5no5y0JKP5cdfDyTSbWXAAx
+	80qsHCmw540U+jtPp1QzmT1rD4Ym5AvJKDxBGfTrZ6phfNacBI5j1ZehiRmlWjw5
+	swKW4wpZUMsIgvpxbTcdHuV5zB+my3Ujq+Q==
+X-ME-Sender: <xms:tprWaX0tOK2GHw3ON0FZXy0p8dQEcq06a9JfSCnB-JLH41wsAppZ9w>
+    <xme:tprWaclLc_TRTzFlsVeuwiCB3D81DZJDwRi5I1MH7q5rR_lBkM5EppFYWolQIJ-Ki
+    iB1EQEQN5fp87tqKLv4LWF5u4HDyeETkqjA3-CkUKnloAWYPbwWAhM>
+X-ME-Received: <xmr:tprWaV7lY2-eWHVEFVvFWt6bAX-dFt-H9eVUPvLGO3cksPL7W13ihyTq3CPx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvgedviecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
     hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpefurggsrhhinhgr
@@ -64,15 +64,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvgedvgecutefuodetgg
     ghhlvgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpth
     htohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopehhohhrmhhssehk
     vghrnhgvlhdrohhrghdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgv
-X-ME-Proxy: <xmx:3JfWabwlEM3gFeMfhnHgppiagH5RW9cAWDllqFHTQTXG4SFY--K2Pw>
-    <xmx:3JfWaW_s3EDfhsRnHGrOStIgI9Wj4omLcMGiARoTbd-2IIUeD4a-Ag>
-    <xmx:3JfWad-yRxqu3SvwlDqazcsOcjNrx3eIIpK7VX703bo3I5q_zpQooQ>
-    <xmx:3JfWaW7KTxMVbfM8uA3DnSNZ0TRMFNr-I_W26Q4oTQ6cTHdomyADXA>
-    <xmx:3ZfWac6mpwsPxKlR77jBAefg8KpZ9QkimYSxT3JdwB3Tv3a8_z_IHYHX>
+X-ME-Proxy: <xmx:tprWaflo7THvUrkAxAG00RNGC_TzV5jl7LUGJAC-hCKvnNL2PGMoCw>
+    <xmx:tprWaQVL37srs6kkCfroQWpSgoZizI_VZymSGyh3sX8xRcKVhi9rCQ>
+    <xmx:tprWaYRi27eyLqxbNIJgrCYnypzE11z28qRs-Insm8mpFlETLmHsvA>
+    <xmx:tprWadDXEnQlWnqT3GZbyn7_JCNPgDut68gHF5LNxXI2ZHrZoXSCbg>
+    <xmx:t5rWaQXkJ3jss2oQGBEgELzXLCPARJwfS7I_MjiGYE1Wd6MDorAjjhIx>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Apr 2026 14:01:00 -0400 (EDT)
-Date: Wed, 8 Apr 2026 20:00:58 +0200
+ 8 Apr 2026 14:13:10 -0400 (EDT)
+Date: Wed, 8 Apr 2026 20:13:09 +0200
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: Cosmin Ratiu <cratiu@nvidia.com>
 Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -83,11 +83,10 @@ Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
 	Stanislav Fomichev <sdf@fomichev.me>, David Wei <dw@davidwei.uk>,
 	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
 	Dragos Tatulea <dtatulea@nvidia.com>
-Subject: Re: [PATCH net v8 1/4] selftests: Migrate nsim-only MACsec tests to
- Python
-Message-ID: <adaX2szD10INOMxp@krikkit>
+Subject: Re: [PATCH net v8 2/4] nsim: Add support for VLAN filters
+Message-ID: <adaata9aKxijN09c@krikkit>
 References: <20260408115240.1636047-1-cratiu@nvidia.com>
- <20260408115240.1636047-2-cratiu@nvidia.com>
+ <20260408115240.1636047-3-cratiu@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,29 +95,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260408115240.1636047-2-cratiu@nvidia.com>
+In-Reply-To: <20260408115240.1636047-3-cratiu@nvidia.com>
 
-2026-04-08, 14:52:37 +0300, Cosmin Ratiu wrote:
-> Move MACsec offload API and ethtool feature tests from
-> tools/testing/selftests/drivers/net/netdevsim/macsec-offload.sh to
-> tools/testing/selftests/drivers/net/macsec.py using the NetDrvEnv
-> framework so tests can run against both netdevsim (default) and real
-> hardware (NETIF=ethX). As some real hardware requires MACsec to use
-> encryption, add that to the tests.
+2026-04-08, 14:52:38 +0300, Cosmin Ratiu wrote:
+> Add support for storing the list of VLANs in nsim devices, together with
+> ops for adding/removing them and a debug file to show them.
 > 
-> Netdevsim-specific limit checks (max SecY, max RX SC) were moved into
-> separate test cases to avoid failures on real hardware.
+> This will be used in upcoming tests.
 > 
 > Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
 > ---
->  tools/testing/selftests/drivers/net/Makefile  |   1 +
->  tools/testing/selftests/drivers/net/config    |   1 +
->  tools/testing/selftests/drivers/net/macsec.py | 202 ++++++++++++++++++
->  .../selftests/drivers/net/netdevsim/Makefile  |   1 -
->  .../drivers/net/netdevsim/macsec-offload.sh   | 117 ----------
->  5 files changed, 204 insertions(+), 118 deletions(-)
->  create mode 100755 tools/testing/selftests/drivers/net/macsec.py
->  delete mode 100755 tools/testing/selftests/drivers/net/netdevsim/macsec-offload.sh
+>  drivers/net/netdevsim/netdev.c    | 65 ++++++++++++++++++++++++++++++-
+>  drivers/net/netdevsim/netdevsim.h |  8 ++++
+>  2 files changed, 71 insertions(+), 2 deletions(-)
 
 Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
 
