@@ -1,146 +1,211 @@
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203D23BB9FC
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 12:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461D53233ED
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 13:21:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775649956; cv=none; b=Hw/VR5adBI5IqIHsWl+ZDyQ9Z9fiY9m00/iDRJ4jy7Hx9Jr3jV47P9mRewT5anPiSTcxsaN6BCX7iSFJB0HfoHnb7zYvvErDSIujL159drYT993VpInDrId60SWmhcuWUNNTo/7hMuzZENM73CIpAdmiWZFDC+DdRt5SGPGMNcM=
+	t=1775654487; cv=none; b=iAldHttJcKrJMXfhacs35y454tfn/FAgFVtnj+JurauJWewi4HDSIfARwH8suGu4B86M/PpFQqokmy0qB1nU1LUQoLtJunuAFAzBVKJE+ZOSfMRpf/l4RQ1zpyC1im936LmFHIa0l2nrKRY39d+rN+pKdDD3OZU99Ok4ILZ5IX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775649956; c=relaxed/simple;
-	bh=8scfsOfxjJCA7PsheVSzcMVVAN4HZJ5wygd7fo905BM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=taQgaJg7DPwFuEYgksPkbEbZZT5YMCfhtw0jaJLbakVtQVlTUT90FmCSf3pOpoUustN56zj+awGrjhFQV9hUVQ+9dgMRT+bXMqr9mFZ590S8fK2IaMmsgFMC4tAlp+zjE8kvqL0P8rhiT0yfNNkaqfSmU8zHpaDhe4sZfP3Ubsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1775654487; c=relaxed/simple;
+	bh=VP3NcXff/+TYc44f6hOSBUWnA6Frgpc2AoF4mlLCtOc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lzkeKozBGpzs3cBJIQKDtUS2MM+SckPrjiA7rTd25/GpoVtg+E2P05911LvD9kDOrvPgPQY/fJZDGaBYqdHsKw6NAIZB9fiDwKWQodbYG3M0LUYY8Qd2JlFNJM7OtO7ScXvaS9FKyg33o8Y2vMo+6ocegJJqCKT/AzrUKAAOHf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=INaW3MxH; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-604f327bafcso2181738137.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2026 05:05:54 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="INaW3MxH"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488ba6366a7so28244515e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2026 06:21:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775654482; x=1776259282; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S6gNsg/Hs4yDzHq+ohAAgGwtWqgWEZ88+2YXJM2hzyc=;
+        b=INaW3MxHtubbhLwuVv726EV/4BXfOXM0kjPc7n1JgDGHj5b0Vses3mMSg3C+QTIBOF
+         RJGkHC4d6osqrbuZkEGvLEaMyqLn7e27/EF2N4UxuMm2D/CqQ041NJgP+1ErrBLCRnrq
+         9pjGpFKl9TboIf5DMZLaL/AJZHHzH0HwGGGwvRcE9rV6T2L2ZttyJx2TdN8z4es+fDI3
+         rK6L7AeSSzuTQnn7ez81gAeK/GhDZn1Y2eOf95Lt8hwBrcG4fjA5BFyN+eZMcWulbKFA
+         PX2GsOO5blnlr5QY5FgHKRYuge7wy0zpsbjGpM4c578nqSfE0SfmfQccN0CFATuYeHx8
+         ++nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775649954; x=1776254754;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CGRbYznGbDw7bAVfW0akDmACi6u2DoC61pG2AP+p98k=;
-        b=WFSWkxVUK8qU5eEz44XbwWVs+UarEA3m9PuaAMilICVfEdJdinfH3gsyW6psk7/Qwb
-         GctYaq3oZqnX18xUj9aSv8ZmaRbzQ8zw4k233bcsRPwZq0Il+b1hZ6yMtpp6ksP8xqCu
-         fsytL2DA9XrjB4sjz92lZlz13vGHkb5DQXscSPNsfBEfWnJeFFIBBmzMlsPMrULewdIm
-         XY6yyr93w8I3IuFnSVFiyQVLSYY0aBLVIreSt3OPdFDY+tmbFlsCoTHrL+7OXUfpQCjf
-         jQo+EnBTbzXzaW/g8N/7twPvjmECapamVRqUbU7bRh4mcKxDChy7cJ1noVM1xtH7v2n7
-         hlVg==
-X-Forwarded-Encrypted: i=1; AJvYcCV7LA1lwoeivDOrTIvR+DO8vxXXHDLHnnGxASQ1qvfmxS0IRPvVaXArGrzK0A5y8Z/9wb42QFe5Xyst6G9hZzw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCEO7uUlDgOG1fwovjXQFOjPoTz0aG/gjXBzWUQ9Azl6ybV0Ha
-	9z3b0MSECNUiL0TwJf5hxEK7NTHsCSdx0jNVyXQUo3X86991BdiHh51RT2J1n2jb
-X-Gm-Gg: AeBDietXOCpIjHDYq9ltoTPcwhEvvfrb5EvIqwRchgBH3YXMSntNNobnfIl+jfzZ/1+
-	UVm0Ei6Oa9rIvWz40dNMO+galmtW6OES6Oi4jpwqpxuaJBB4UUhGZgFaaBYFxE4LcMfJuvqCFZs
-	aW4r2B7hKP5VR1Q6p0GeaOEGp8auv5Ay5A7PLp88theVhwjMNgFyPMok45j05DZ6YWc35HebPmH
-	tQepzVgK9gmTL7JsBblOrD4OtGMpCtcWrsKQrY2HD9gn8Xs6xK1S2lPfNhga4gPVaqcCv5V8L+a
-	I3iStf3YDX82d8nwKVGxT5S3bER5NIAo0O5DmgY9KOrDyaa7RA3RgH/eCXYXJMSRXd7QOEDHFHL
-	UqFT2uASMKZaIIHgvlhYKHGzszqOzB0OqZOZQuS6GRC5f7Jzj3G2S1uJpt5OWUaumWWdCVz586r
-	I59ntr+tQSXBqx647CBl7z7QptmoS7ly9/yw04AQDTDHBcq1b6oA2zv0M6BuI0MsRZ
-X-Received: by 2002:a05:6102:f89:b0:602:a9f3:74d7 with SMTP id ada2fe7eead31-605a4dbe20cmr7534530137.13.1775649953944;
-        Wed, 08 Apr 2026 05:05:53 -0700 (PDT)
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-60582e1cc7dsm20121119137.2.2026.04.08.05.05.53
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Apr 2026 05:05:53 -0700 (PDT)
-Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-56eec951db1so1033345e0c.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2026 05:05:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW7M1oHr9AS5AE86BTRD9PJuByhnJ36AnzkrYVWx5lw1XjpodpoypAL91SL9UumSrohiE7mF2ktH6/q1DQaStc=@vger.kernel.org
-X-Received: by 2002:a05:6122:3784:b0:56d:92dd:a0ad with SMTP id
- 71dfb90a1353d-56daba970e8mr8020585e0c.15.1775649953503; Wed, 08 Apr 2026
- 05:05:53 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775654482; x=1776259282;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S6gNsg/Hs4yDzHq+ohAAgGwtWqgWEZ88+2YXJM2hzyc=;
+        b=eMKoPTbM3fPytYiqNK/MfOruzCVdO3HLQUr72D4X2cGEaGApqZkOdm8H5nqonNj1O0
+         9f0xK3v/5NvO/zc70uwrVGLXbzBIojn5U+bfO0j2dzg2Y9aF5FfSfXvv0AXfnM1mLMcQ
+         mvDYdSeaYSmIpZilfCutdVC708Zt+Qc2kGFbmEWOmMZ6Iy5WKNW1Uo49vN7eIW40EevY
+         dvypkW+2sXkQIy0iVNN2Ieo8tGBha/jifjskmQDcguSN9B7XBldfJT4Fg2xx/3SMf/jR
+         ov6yhEQE/ThY03167tJVdvw3+wZLuODQgxaW2Cm3NuNQVHZKF1/EwCk6AuAJCcncUwsV
+         BSyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUNy2mCZfJm41SyeJLAfw5dQGgQcORWkvRCEEkA2VELr1+6hkHT/O0rvqrngFdDJA109yBUlGFY/yAjSnxYA+M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl31D7D+xxG1CZny624UdkD9n2kC4g6L97DZmt3AsSTNEe25jM
+	5cKlm29nv0eUIUtnKJvqq3SxTp36mKKhWN9/hd4GbjU26gycKnhWEBN/
+X-Gm-Gg: AeBDiet4Lg3Tgp3xbyK+wsR56y6xZ2fKszJzeFLJkATaXnN4+As+fAZox9tViGdW4wV
+	0S3Uy1TJx9gX5v7O+SDORe+aKyu8KgQ9JyRjhSl4pboQGOhOdgD47jLCynBFrxd2A1oUxyaPFDX
+	1mM6ip9Mg22R/ztYsWXWwA20ybhGfCgA51Pd11hAVsrJFY+ox4Yx3Gj3/VgnBiu2WGfY+06AxUi
+	XUdKZ3WJPrxwcO9OnK6zhJ/Pef284AuRHqgeKyROG5KzqHuER4150VvFlJITD4cO0tzjW1cbjZ+
+	vmYjuA/Q9DyzGMw2lMNJEI70W7WaAtPziNUF+8bjgkO95H3CFwTSNS5KjxSMlljzcVzOZZ4J89B
+	IuK98Y7JIE1HiulvM5XIR8h0NtzpIy8YaHRvup7DFU7DZ9wu599JFc5M4m1orGBy3tzsaLPs2JR
+	UeZwQK3vSFPQfhdRE=
+X-Received: by 2002:a05:600c:3b23:b0:488:869c:edaf with SMTP id 5b1f17b1804b1-488996df052mr261117285e9.8.1775654481947;
+        Wed, 08 Apr 2026 06:21:21 -0700 (PDT)
+Received: from krava ([2a00:102a:5031:5a39:87ca:af14:10da:98b6])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488b6ff70bcsm363448385e9.14.2026.04.08.06.21.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2026 06:21:21 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 8 Apr 2026 15:21:14 +0200
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+	shuah@kernel.org, emil@etsalapatis.com, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: add missing fsession to the
+ verifier log
+Message-ID: <adZWStMinOeunjSH@krava>
+References: <20260408062109.386083-1-dongml2@chinatelecom.cn>
+ <20260408062109.386083-2-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260313150928.2637368-1-sashal@kernel.org> <20260314111822.63a2ba4a@kernel.org>
- <abZTg9ZwnE5J4qXa@laps>
-In-Reply-To: <abZTg9ZwnE5J4qXa@laps>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 8 Apr 2026 14:05:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU5Ga9WCzD8ji8kgOMmosS+uzf_8mp_OkhFdcAg2=3KAg@mail.gmail.com>
-X-Gm-Features: AQROBzA3VNDAkN7JQ2RBFKXcNeNTnnQqU_cNeGRDhYiY7nC0FR4lVKTSqS90qsM
-Message-ID: <CAMuHMdU5Ga9WCzD8ji8kgOMmosS+uzf_8mp_OkhFdcAg2=3KAg@mail.gmail.com>
-Subject: Re: [PATCH 0/9] Kernel API Specification Framework
-To: Sasha Levin <sashal@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, tools@kernel.org, 
-	x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Dmitry Vyukov <dvyukov@google.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>, Jake Edge <jake@lwn.net>, 
-	David Laight <david.laight.linux@gmail.com>, Askar Safin <safinaskar@zohomail.com>, 
-	Gabriele Paoloni <gpaoloni@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260408062109.386083-2-dongml2@chinatelecom.cn>
 
-Hi Sasha,
+On Wed, Apr 08, 2026 at 02:21:07PM +0800, Menglong Dong wrote:
+> The fsession attach type is missed in the verifier log in
+> check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id().
+> Update them to make the verifier log proper. Meanwhile, update the
+> corresponding selftests.
+> 
+> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> Acked-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+> v2:
+> - add a missing FSESSION in bpf_check_attach_target()
+> ---
+>  kernel/bpf/verifier.c                               | 10 +++++-----
+>  tools/testing/selftests/bpf/prog_tests/exceptions.c |  8 ++++----
+>  tools/testing/selftests/bpf/verifier/sleepable.c    |  2 +-
+>  3 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 594260c1f382..beb660b4c3ec 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11757,7 +11757,7 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
+>  
+>  	if (type == BPF_PROG_TYPE_TRACING) {
+>  		if (!bpf_prog_has_trampoline(env->prog)) {
+> -			verbose(env, "func %s#%d supported only for fentry/fexit/fmod_ret programs\n",
+> +			verbose(env, "func %s#%d supported only for fentry/fexit/fsession/fmod_ret programs\n",
+>  				func_id_name(func_id), func_id);
+>  			return -ENOTSUPP;
+>  		}
+> @@ -25561,7 +25561,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
+>  	if (!btf) {
+>  		bpf_log(log,
+> -			"FENTRY/FEXIT program can only be attached to another program annotated with BTF\n");
+> +			"FENTRY/FEXIT/FSESSION program can only be attached to another program annotated with BTF\n");
 
-On Sun, 15 Mar 2026 at 07:36, Sasha Levin <sashal@kernel.org> wrote:
-> On Sat, Mar 14, 2026 at 11:18:22AM -0700, Jakub Kicinski wrote:
-> >On Fri, 13 Mar 2026 11:09:10 -0400 Sasha Levin wrote:
-> >> This enables static analysis tools to verify userspace API usage at compile
-> >> time, test generation based on formal specifications, consistent error handling
-> >> validation, automated documentation generation, and formal verification of
-> >> kernel interfaces.
-> >
-> >Could you give some examples? We have machine readable descriptions for
-> >Netlink interfaces, we approached syzbot folks and they did not really
-> >seem to care for those.
->
-> Once the API is in a machine-readable format, we can write formatters to
-> output whatever downstream tools need. The kapi tool in the series
-> already ships with plain text, JSON, and RST formatters, and adding new
-> output formats is straightforward. We don't need to convince the
-> syzkaller folks to consume our specs, we can just output them in a
-> format that syzkaller already understands.
->
-> For example, I have a syzlang formatter that produces the following
-> from the sys_read spec in this series:
->
->    # --- read ---
->    # Read data from a file descriptor
->    #
->    # @context process, sleepable
->    #
->    # @capability CAP_DAC_OVERRIDE: Bypass discretionary access control on read permission
->    # @capability CAP_DAC_READ_SEARCH: Bypass read permission checks on regular files
->    #
->    # @error EPERM (-1): Returned by fanotify permission events...
->    # @error EINTR (-4): The call was interrupted by a signal before any data was read.
->    # @error EIO (-5): A low-level I/O error occurred.
->    # @error EBADF (-9): fd is not a valid file descriptor, or fd was not opened for reading.
->    # @error EAGAIN (-11): O_NONBLOCK set and read would block.
->    # @error EACCES (-13): LSM denied the read operation via security_file_permission().
->    # @error EFAULT (-14): buf points outside the accessible address space.
->    # @error EISDIR (-21): fd refers to a directory.
->    # @error EINVAL (-22): fd not suitable for reading, O_DIRECT misaligned, count negative...
->    # @error ENODATA (-61): Data not available in cache...
->    # @error EOVERFLOW (-75): File position plus count would exceed LLONG_MAX.
->    # @error EOPNOTSUPP (-95): Read not supported for this file type...
->    # @error ENOBUFS (-105): Buffer too small for complete notification...
+I wonder this should say 'Tracing program...' instead,
+we have other tracing types not covered in this error
 
-The actual E-values are positive, so I guess you want e.g. -EPERM?
+jirka
 
-Note that the actual errno values are architecture-specific.
-E.g. EOPNOTSUPP can be 45, 95, 122, or 223.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  		return -EINVAL;
+>  	}
+>  	t = btf_type_by_id(btf, btf_id);
+> @@ -25597,7 +25597,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  		if (aux->func && aux->func[subprog]->aux->exception_cb) {
+>  			bpf_log(log,
+>  				"%s programs cannot attach to exception callback\n",
+> -				prog_extension ? "Extension" : "FENTRY/FEXIT");
+> +				prog_extension ? "Extension" : "FENTRY/FEXIT/FSESSION");
+>  			return -EINVAL;
+>  		}
+>  		conservative = aux->func_info_aux[subprog].unreliable;
+> @@ -25686,7 +25686,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  	case BPF_TRACE_RAW_TP:
+>  		if (tgt_prog) {
+>  			bpf_log(log,
+> -				"Only FENTRY/FEXIT progs are attachable to another BPF prog\n");
+> +				"Only FENTRY/FEXIT/FSESSION progs are attachable to another BPF prog\n");
+>  			return -EINVAL;
+>  		}
+>  		if (!btf_type_is_typedef(t)) {
+> @@ -25952,7 +25952,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+>  	}
+>  
+>  	if (prog->sleepable && !can_be_sleepable(prog)) {
+> -		verbose(env, "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable\n");
+> +		verbose(env, "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable\n");
+>  		return -EINVAL;
+>  	}
+>  
+> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> index 84ab73e08b0e..94a62fcd4543 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> @@ -128,7 +128,7 @@ static void test_exceptions_success(void)
+>  				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+>  				       "exception_cb_mod"), "set_attach_target"))
+>  				goto done;
+> -		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> +		}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+>  
+>  	if (test__start_subtest("throwing fentry -> exception_cb"))
+>  		RUN_EXT(-EINVAL, true, ({
+> @@ -138,7 +138,7 @@ static void test_exceptions_success(void)
+>  				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+>  				       "exception_cb_mod"), "set_attach_target"))
+>  				goto done;
+> -		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> +		}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+>  
+>  	if (test__start_subtest("non-throwing fexit -> exception_cb"))
+>  		RUN_EXT(-EINVAL, true, ({
+> @@ -148,7 +148,7 @@ static void test_exceptions_success(void)
+>  				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+>  				       "exception_cb_mod"), "set_attach_target"))
+>  				goto done;
+> -		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> +		}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+>  
+>  	if (test__start_subtest("throwing fexit -> exception_cb"))
+>  		RUN_EXT(-EINVAL, true, ({
+> @@ -158,7 +158,7 @@ static void test_exceptions_success(void)
+>  				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+>  				       "exception_cb_mod"), "set_attach_target"))
+>  				goto done;
+> -		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> +		}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+>  
+>  	if (test__start_subtest("throwing extension (with custom cb) -> exception_cb"))
+>  		RUN_EXT(-EINVAL, true, ({
+> diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
+> index 1f0d2bdc673f..c2b7f5ebf168 100644
+> --- a/tools/testing/selftests/bpf/verifier/sleepable.c
+> +++ b/tools/testing/selftests/bpf/verifier/sleepable.c
+> @@ -85,7 +85,7 @@
+>  	.expected_attach_type = BPF_TRACE_RAW_TP,
+>  	.kfunc = "sched_switch",
+>  	.result = REJECT,
+> -	.errstr = "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
+> +	.errstr = "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
+>  	.flags = BPF_F_SLEEPABLE,
+>  	.runs = -1,
+>  },
+> -- 
+> 2.53.0
+> 
