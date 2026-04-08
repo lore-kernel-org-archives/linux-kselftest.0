@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843E438D6BA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E55638839C;
 	Wed,  8 Apr 2026 21:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775685042; cv=none; b=OnfSrmqIPV2CY5VyOeI2F9AWagJPWZZQialOILXZI6ZhOpFFi/IeqsWgt9KW0QaFKax6c4dpe2hJNVUcSmf2yMr1IeJkPjCx1tD2sXp4USPjoxzppQ6hQsgJm6l0GP44ABt2srWr42Kkc77mbW+d6izdJScfQPM/gdEMXiRlpGY=
+	t=1775685042; cv=none; b=THms7K8V+o+Zd4v8ptNzly+2KbJ7afj9ICqT/bZxFRwpJddABOXC+tPW++6VRz5JY1gtH+/TKcKdXJgQChNL036L8eYudHxArLFtp1PDRbOyayOV90XgtklGQfcIUvu6SdWzK79PDsOqC34ROFgo1KokY2LGeoivBjhZOa/k7BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775685042; c=relaxed/simple;
-	bh=e5aX09f01vYkyZoCut8vLCRQbxg7RF31Px93HMOteQc=;
+	bh=hRk7AedOBquVMuQbZKSP0j2rlUDei3LqUvzOUZS0iys=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jh8AjApSb25OnxpzWx0QwrwowoXe6PrTXcE9w3fYK85/NZ408v/sg9rQ9uGPAxXdgeWTgyGMkU0Z+pJF9li9LhrBe+dC3KBI+l9dCWaxgUInj3/+9VBz+ShDMQqCQzh3xomYf4R3Pkc6F7IONo3QPdxAkBIG9Bw7rFE9YjJsu5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZnJ+z0B; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=qtucKP/ZF7ZsRwCOhz6CNPT2wQ89rJviBvtT3daGrd6ghmoUuPQMlz2VqX76j96Dn5XcTxXlgFyxzWtTLLSJNDv42dpFkL/ZhQHeKfETc6MkLT70PDJIOaQwftkttnGJUo2ZI5FAncvTdQtqatpRvcp85+cEpDGR4+hyxel3AMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rFVDdCXu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZnJ+z0B"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 539B1C2BCB2;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rFVDdCXu"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 44C00C4AF0F;
 	Wed,  8 Apr 2026 21:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1775685042;
-	bh=e5aX09f01vYkyZoCut8vLCRQbxg7RF31Px93HMOteQc=;
+	bh=hRk7AedOBquVMuQbZKSP0j2rlUDei3LqUvzOUZS0iys=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=OZnJ+z0BPcUIcLX4c4LXFxxyPMnocjn9Wc67wMrzpZ/9NehTd0fKR3N+MNWwZVxdN
-	 EpU+wh3HciMViFJGDKx704nPQdEyWGi5cpC8yCDrgnEDuQpe1OnTYZz/x48jHfQz6r
-	 zFPEHvoGXcIXCvej1umO24IK05aBD2QsbPQr4M7ZlDztrVJXiCCe86JcWfj/LW9lC3
-	 p/4eXEPX1PeuaHjhvAKbo8kZB5RbwpXTcpeUVU9yv4j8Bp8wD6a3EvBcBqSZw7FK1M
-	 EpfV7Xk9ZnFcBRgVMAF0hXcf7QQ/5uj0SmnwtFKF1EUvHmBQ6TJf7b87gQXumd3GYv
-	 xHAh88sSCekfA==
+	b=rFVDdCXuI9c3J7oE9ptfIdRKZSbLmhurunKU/j45chFd74NU3ebN0+kebY1TOOT2o
+	 c4tvdeU7gEoEKBk27etB6YRZ230J38wQKV8h76Y2oykJYw1pyNPpsl7M2yk3veKrj6
+	 Ka73ZovCq+YjBTcXbpozno21jUasEuZSofzywoiN+ItPO0aNaFwtpS9Ue0+s5VHzru
+	 EDwQsZ/ayZwibzkoE12GAMTYliFK5+H+x1BOgn47lbsTvgvxxbM4AawzJUUjQPAHDY
+	 LfsYD6bzDqKDQSY8ftMrpQN0CWjjezL1O22lf9NvZRw43UsXrPEJGQFNzfbN6fwXAw
+	 DbrUKOxSZEQtQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4971A10FC453;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 398AF10FC44E;
 	Wed,  8 Apr 2026 21:50:42 +0000 (UTC)
 From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
-Date: Wed, 08 Apr 2026 23:50:06 +0200
-Subject: [PATCH net-next 5/7] selftests/net: packetdrill: add
- TCP_WINDOW_CLAMP test
+Date: Wed, 08 Apr 2026 23:50:05 +0200
+Subject: [PATCH net-next 4/7] selftests/net: packetdrill: add
+ tcp_rcv_wnd_snd_ack_no_scaling.pkt
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260408-tcp_rcv_exact_clamp_and_wnd-v1-5-76a6f212e153@gmail.com>
+Message-Id: <20260408-tcp_rcv_exact_clamp_and_wnd-v1-4-76a6f212e153@gmail.com>
 References: <20260408-tcp_rcv_exact_clamp_and_wnd-v1-0-76a6f212e153@gmail.com>
 In-Reply-To: <20260408-tcp_rcv_exact_clamp_and_wnd-v1-0-76a6f212e153@gmail.com>
 To: Eric Dumazet <edumazet@google.com>, 
@@ -52,11 +52,11 @@ To: Eric Dumazet <edumazet@google.com>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775685040; l=1779;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775685040; l=2164;
  i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
- bh=hTLTER1y0lqFNVxFYgmLQOhJrfwaiyL20oWEx5ESl0s=;
- b=3LrMJhspiTFgK4hTMJxNxNE0+Cy3LA+4CJRvHndFJSg8VcDt4Mo8qZUb+b2ZSwOQiH3LYup9X
- xj6E/4b/5RwDf4i4f4vfoGWlfSpcJ6oOPHWRKkPHTLLaFCWWRcoigDY
+ bh=3UD78GSmL8ZM19AY/0d9FZwB1822EnTOwXfy0idIPhY=;
+ b=63aS0f7Hf24M3Z/9aXF1uyxaeIDIWMqQkDKXmH8Hxy4rrkgc1FEZ7MtW3FgIkJvPfqK0z/qfd
+ u97GMpuJIHPDF0MiaLdaaSjz5tHe8Pgvs16YbUeZWernVMwjfqY+hly
 X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
  pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
 X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
@@ -66,27 +66,30 @@ Reply-To: gmbnomis@gmail.com
 
 From: Simon Baatz <gmbnomis@gmail.com>
 
-Add a packetdrill test to verify that the socket option
-TCP_WINDOW_CLAMP can be set to a large value on a listening socket,
-but is clamped on an established socket to the maximum representable
-advertised window.
+Verify that, when no TCP window scaling is used, each packet that
+substantially advances the right edge of the receive window is ACKed
+immediately.
+
+Multiple packets are used so that the scaling_ratio receive window
+adaptation can settle and does not by itself cause immediate ACKs,
+avoiding false positives.
 
 Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
 ---
- .../net/packetdrill/tcp_rcv_sockopt_wnd_clamp.pkt  | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ .../packetdrill/tcp_rcv_wnd_snd_ack_no_scaling.pkt | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_sockopt_wnd_clamp.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_sockopt_wnd_clamp.pkt
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_wnd_snd_ack_no_scaling.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_wnd_snd_ack_no_scaling.pkt
 new file mode 100644
-index 0000000000000..d7203f2893c3f
+index 0000000000000..41561b026da85
 --- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_sockopt_wnd_clamp.pkt
-@@ -0,0 +1,28 @@
++++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_wnd_snd_ack_no_scaling.pkt
+@@ -0,0 +1,37 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
-+// Verify that TCP_WINDOW_CLAMP can be set to a high value on a LISTEN socket, but,
-+// in an established connection, the value is clamped to the maximum representable
-+// advertised window.
++// Every packet must be ACKed immediately if the right edge of receive window
++// advances substantially. This test verifies that behavior when the connection
++// does not use window scaling.
 +--mss=1000
 +
 +`./defaults.sh`
@@ -95,8 +98,6 @@ index 0000000000000..d7203f2893c3f
 +    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
 +   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
 +   +0 setsockopt(3, SOL_SOCKET, SO_RCVBUF, [256000], 4) = 0
-+   +0 setsockopt(3, IPPROTO_TCP, 10, [255999], 4) = 0  // TCP_WINDOW_CLAMP == 10
-+   +0 getsockopt(3, IPPROTO_TCP, 10, [255999], [4]) = 0
 +   +0 bind(3, ..., ...) = 0
 +   +0 listen(3, 1) = 0
 +
@@ -106,10 +107,21 @@ index 0000000000000..d7203f2893c3f
 +
 +   +0 accept(3, ..., ...) = 4
 +
-+   +0 getsockopt(4, IPPROTO_TCP, 10, [65535], [4]) = 0
-+   +0 setsockopt(4, IPPROTO_TCP, 10, [255999], 4) = 0
-+   +0 getsockopt(4, IPPROTO_TCP, 10, [65535], [4]) = 0
-+   +0 getsockopt(3, IPPROTO_TCP, 10, [255999], [4]) = 0
++   +0 < P. 1:65001(65000) ack 1 win 32792
++   +0 > . 1:1(0) ack 65001 win 65535
++   +0 < P. 65001:130001(65000) ack 1 win 32792
++   +0 > . 1:1(0) ack 130001 win 65535
++   +0 < P. 130001:195001(65000) ack 1 win 32792
++   +0 > . 1:1(0) ack 195001 win 65535
++   +0 < P. 195001:260001(65000) ack 1 win 32792
++   +0 > . 1:1(0) ack 260001 win 65535
++   +0 < P. 260001:325001(65000) ack 1 win 32792
++   +0 > . 1:1(0) ack 325001 win 65535
++
++// reading all data does not open the window further -> no ACK
++   +0 read(4, ..., 325000) = 325000
++ +0.2 < P. 325001:390001(65000) ack 1 win 32792
++   +0 > . 1:1(0) ack 390001 win 65535
 
 -- 
 2.53.0
