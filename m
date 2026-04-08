@@ -1,507 +1,577 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B34A3B19D5
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 14:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DF735B632;
+	Wed,  8 Apr 2026 15:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775660139; cv=none; b=KuO3xCOTmVIRtj3Lv+0qj/LThYPk3v8qnje/vLF9pdr/A2VW27D2Ftwbf4PzX9wyKLA+AqbVBNv6Lyjfh6WSyyzuHZpFevr1PuculgXM0gIzPigqMm+r9Cnlv24mWw4Ju7hnH+eU3TG/GXZ0JnU1gCE2UtAhcb9ef+OEPlVkzg4=
+	t=1775661822; cv=none; b=oRsQGmZCaBSmzMy4JEjk4jj93t1PPKMYVh4CBgRuCDrRAaX06KzzBtKCIPBF/+yJrzCCh32lk3vOvmMZR7AFoED/ud/jCC4CFMqrDyCkIii8LvHFF/f6mprKrmXVx7ZQbHQSolKv5oW4B9eA3Q1Das6cjTN2psRnKozW1kAsvRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775660139; c=relaxed/simple;
-	bh=Y2+213sQ20evLCG0V7wuf3xrLthHuVt5lzhfxNy50SY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LlBZ9DiI3iuJltbWkLUHoRB7RIuy0qzG7EcSq+3ADJvmB0zq3MB4+x40n+0kzEiL4wA3a0GCKixnMDpNMXXkDjufyrg5gluS0VOtrQFjiahmlz8ralZfe3RdBBN+RQXwz8bZxUgc8zb4yMA1IupcZTQ2Hoc6Cd4TPyXVn1KGQSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p91QIlo2; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775661822; c=relaxed/simple;
+	bh=RI6VZ6IzjOyhE67VI/e+612rJ5QwLMIiMfqJKNxbziw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MdLi7+GEskqRHqsLF6LTbIIDnO2N/Lmq96oKGzfDCQlWu63kOp5oVKYgnSpqD4MleTZiY+ftQgKo8rUZ43AtNwLZote/3tJ/xXFKhXctEvD/l/KQzom8NeHiSrSpVMXIiaW3yH9XdWIIYWEx15SLe4ClpJFLV3/Fhl2zMJqUIeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EbFWLpGU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p91QIlo2"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488aa77a06eso57638825e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2026 07:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775660136; x=1776264936; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lTAJnt8Rzxnihpw2s0R85tzSbsKjYZRdJ/xdTQ6GUWU=;
-        b=p91QIlo2lK/6GzZZJyo+6v/rcgffeQPF45Gnsp+C+8oP5gNBvYk//bwzwYouBLGJ36
-         09nkEXBf+G6oGMLsvTYktWCcmi4z8jpunReHMyviHF+6gB28Mms9CtQP+Xmza0+3F7TE
-         qOIzEHnyHihaFpSNzGYaeDdWacbqijZszvUHVZiSsVAr8vxyw2X7mXi2jIqO4CtOJs4E
-         0GfW17zFfgvhkXnK8n90MFFXpQZlu+LdUHjjRWzNghw+3loompYXr5ejjsHNuX9hX3f/
-         JWwTtGvxKZ15b73p1VFU6aFmH/y46Cslm8BBO6WcP0EExNxapHq1XW8BSoyD9clS6NZz
-         PAzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775660136; x=1776264936;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTAJnt8Rzxnihpw2s0R85tzSbsKjYZRdJ/xdTQ6GUWU=;
-        b=AAjDCLisMXK2Cz9CVEaOGXZ9H4PPINNgMxmaoxt5ve9r7zYvKXM0soYwxAD+0Llvk/
-         UdzA8UxvGWjHM0a18CG0T0dqD7uppsrvC3NfPhdg2K8ZVzvN2pHBuMee6jsepPiCfa8h
-         3mA88oKzYEcCEhtfOhX+vRGtWSYn7/Fv84eWwV044SnEDUsAqXtBIeEpaSq2mruGo6TX
-         prjqce/BKxLodBGRRcvWVnOWqmman/jFjuodExdpo5qJvKvZm217WYFTSaABcZYVQLIn
-         zLU+u/mTQZm1fsuPGjEfj3D3+AI+f8g90SLDe8O0HqTE3eVJJ1QQC9XDJW2Xo6qqhm04
-         5i4A==
-X-Forwarded-Encrypted: i=1; AJvYcCXHqTGXUDEcM4P2PHeo1gKbLY0gdxF9HKVaol7RLJK3pzeilY5fa8TsYqgucZ3/Iv5+R+A8OYRbGJtk/pt8pkQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHhflhzAc+RYNhPWe8vrcaSdVOalGg/uUEiqj+j6d3YvQjd0xr
-	jH0hFLH+HuGdXembIJ0w/U1qV9PfdMvARJXNm+qZ6In7ftLhD9Lee1Vz
-X-Gm-Gg: AeBDiev3fbUn0vd1gJ1LG8R2Z2zzBQdISCDE7nEgtLmDbwcvCkB3lmPKTQKHUPxNhO9
-	3riYZfqOWIpEoBOZh9MDoKSdyRKBp4mmXyo7/T5G7re76Dy5aEuc6oyR6054zqrPdy0g5vNPJBJ
-	MqLNPz0j8QjfCNTWJI9Kzh/6eBtNipVCJxrCDBNqBZ8cx69e4ifXjeUevNhTAYElRSEJY/gK7LB
-	vKmyzawVuV43hThjBhaYSnJF/LD5cd89QmLnk1Dz1OYNo5+i9w+rtBQ3gaNlLWuCJsZnbGTHStu
-	Ndhg4OzUpuu3wBGxM6CEexkNjOvur4n9+rRGIMYk+wErNoY1Jdoj8buXHKZBlo4SfVb0FlseaFs
-	u8N0DnNf24NayMYeRk7O959FZoVmpOPNVHbK/J9JDVnuX5Xu4C8xbX4lG3F+JNAkB9ELynLXFiO
-	/iSM75gEjV5COUQK/nV6+/n1Gp
-X-Received: by 2002:a05:600c:3b19:b0:486:fab9:a578 with SMTP id 5b1f17b1804b1-4889976af3bmr294382785e9.11.1775660135451;
-        Wed, 08 Apr 2026 07:55:35 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:8308:b093:bb00::3006])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4f5294sm55762103f8f.35.2026.04.08.07.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 07:55:34 -0700 (PDT)
-Sender: Alban Crequy <muadda@gmail.com>
-From: Alban Crequy <alban.crequy@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Christian Brauner <brauner@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Alban Crequy <alban.crequy@gmail.com>,
-	Alban Crequy <albancrequy@microsoft.com>,
-	Peter Xu <peterx@redhat.com>,
-	Willy Tarreau <w@1wt.eu>,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org
-Subject: [PATCH v2 2/2] selftests/mm: add tests for process_vm_readv flags
-Date: Wed,  8 Apr 2026 16:54:36 +0200
-Message-ID: <20260408145436.843538-3-alban.crequy@gmail.com>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20260408145436.843538-1-alban.crequy@gmail.com>
-References: <20260408145436.843538-1-alban.crequy@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EbFWLpGU"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4AB3CC2BC9E;
+	Wed,  8 Apr 2026 15:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775661822;
+	bh=RI6VZ6IzjOyhE67VI/e+612rJ5QwLMIiMfqJKNxbziw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=EbFWLpGUmmPosdWTc9b6EqkJtd80IAIJGzEeGEyTL0EBSS/Q0nxLY4EgV6A41NwvQ
+	 HfHF0Qqi0CSmINkwtiDW2PVKVo+nku8Ilv8K2TBDp5cOa0JuR4PC6mA8C/+phlS3Oe
+	 JAy0I8mUsuvWN6stJGB0mhvWrYWMB+8pukKp8dr9m/OdTV6fO4K1ykJwoqVf+MQO8X
+	 4qD+UJu3JcKhDQMjNlNCACiFC6HKU1WH06qjhR0nxOStjYSABKJjiCrLfhGxS5FP9V
+	 r3oyMg8nB9aeIN0ohmDcktxw47noDldsxXQCD9gXiBCd38n5NiK95IPJdcyH99ZFVt
+	 CAkp0+wImkg4Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34F1E10F9956;
+	Wed,  8 Apr 2026 15:23:42 +0000 (UTC)
+From: Alberto Ruiz via B4 Relay <devnull+aruiz.redhat.com@kernel.org>
+Date: Wed, 08 Apr 2026 17:23:41 +0200
+Subject: [PATCH 2/2] selftests: add CUSE device-node leak regression test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260408-wip-cuse-leak-fix-v1-2-1c028d575e97@redhat.com>
+References: <20260408-wip-cuse-leak-fix-v1-0-1c028d575e97@redhat.com>
+In-Reply-To: <20260408-wip-cuse-leak-fix-v1-0-1c028d575e97@redhat.com>
+To: Miklos Szeredi <miklos@szeredi.hu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Alberto Ruiz <aruiz@redhat.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775661821; l=14239;
+ i=aruiz@redhat.com; s=20260408; h=from:subject:message-id;
+ bh=0ZY4XDFugXC4mOyITsG5+8zs1aPifzJy5hp1+ahuT3k=;
+ b=njiGMmLeYWD5RJ7m4cgaStLasPPgfuZ7aTDa76wPPTEXFv/sxUaHzLjW6McbGnqQnLG+w015b
+ 1Zw32N3WRyTBlNPK+nxo9TxifyHIix9YCeK72mpTt05qnsmwfGS/yM5
+X-Developer-Key: i=aruiz@redhat.com; a=ed25519;
+ pk=ZJyUFl31NDNjeRWoQa/6I6bV5lb8axrDvpj9uGd+NvU=
+X-Endpoint-Received: by B4 Relay for aruiz@redhat.com/20260408 with
+ auth_id=727
+X-Original-From: Alberto Ruiz <aruiz@redhat.com>
+Reply-To: aruiz@redhat.com
 
-From: Alban Crequy <albancrequy@microsoft.com>
+From: Alberto Ruiz <aruiz@redhat.com>
 
-Add selftests for the PROCESS_VM_PIDFD and PROCESS_VM_NOWAIT flags
-introduced in process_vm_readv/writev.
+Add a kselftest under filesystems/cuse that verifies the error path in
+cuse_process_init_reply() properly calls device_del() when cdev_alloc()
+fails after device_add() has succeeded.
 
-Tests cover:
-- basic read with no flags
-- invalid flags (EINVAL)
-- invalid address (EFAULT)
-- flag validation precedence over address validation
-- PROCESS_VM_PIDFD: read via pidfd
-- PROCESS_VM_NOWAIT: read from resident memory
-- PROCESS_VM_PIDFD | PROCESS_VM_NOWAIT combined
-- userfaultfd blocking read (no flags)
-- PROCESS_VM_NOWAIT with userfaultfd (non-blocking, returns EFAULT)
+The test has two subtests:
 
-Signed-off-by: Alban Crequy <albancrequy@microsoft.com>
+ 1. normal_cleanup: performs a complete CUSE_INIT handshake, verifies
+    the device node appears, closes the channel fd, and verifies the
+    node is removed.  Basic sanity check.
+
+ 2. leak_regression: forces cdev_alloc() to fail and verifies the /dev
+    node does not leak.  Uses the cuse_inject_cdev_failure module
+    parameter (preferred) or failslab with stack-trace filtering
+    (fallback).
+
+A CONFIG_FAULT_INJECTION-guarded module parameter is added to
+fs/fuse/cuse.c to allow the test to deterministically force
+cdev_alloc() failure.  This is more reliable than failslab alone, which
+depends on the stack unwinder producing matching addresses (known to
+fail under UML).
+
+Signed-off-by: Alberto Ruiz <aruiz@redhat.com>
 ---
-New in v2.
+ fs/fuse/cuse.c                                     |  13 +
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/filesystems/cuse/Makefile  |   7 +
+ tools/testing/selftests/filesystems/cuse/config    |   5 +
+ .../selftests/filesystems/cuse/cuse_leak_test.c    | 406 +++++++++++++++++++++
+ 5 files changed, 432 insertions(+)
 
- tools/testing/selftests/mm/Makefile           |   1 +
- tools/testing/selftests/mm/process_vm_readv.c | 368 ++++++++++++++++++
- 2 files changed, 369 insertions(+)
- create mode 100644 tools/testing/selftests/mm/process_vm_readv.c
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 7a5de4e9bf52..056d9d961f6b 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -105,6 +105,7 @@ TEST_GEN_FILES += droppable
- TEST_GEN_FILES += guard-regions
- TEST_GEN_FILES += merge
- TEST_GEN_FILES += rmap
-+TEST_GEN_FILES += process_vm_readv
+diff --git a/fs/fuse/cuse.c b/fs/fuse/cuse.c
+index df9d50a9c0fab269102ec0e4b2d459ca2a390c59..5212a2290581ad9ffbe4b9bdac3e6fbc6cf5484a 100644
+--- a/fs/fuse/cuse.c
++++ b/fs/fuse/cuse.c
+@@ -54,6 +54,13 @@
+ #include "fuse_i.h"
+ #include "fuse_dev_i.h"
  
- ifneq ($(ARCH),arm64)
- TEST_GEN_FILES += soft-dirty
-diff --git a/tools/testing/selftests/mm/process_vm_readv.c b/tools/testing/selftests/mm/process_vm_readv.c
++#ifdef CONFIG_FAULT_INJECTION
++static bool cuse_inject_cdev_failure;
++module_param(cuse_inject_cdev_failure, bool, 0644);
++MODULE_PARM_DESC(cuse_inject_cdev_failure,
++	"Force cdev_alloc() failure in CUSE init (test only)");
++#endif
++
+ #define CUSE_CONNTBL_LEN	64
+ 
+ struct cuse_conn {
+@@ -390,6 +397,12 @@ static void cuse_process_init_reply(struct fuse_mount *fm,
+ 	/* register cdev */
+ 	rc = -ENOMEM;
+ 	cdev = cdev_alloc();
++#ifdef CONFIG_FAULT_INJECTION
++	if (cuse_inject_cdev_failure && cdev) {
++		kobject_put(&cdev->kobj);
++		cdev = NULL;
++	}
++#endif
+ 	if (!cdev)
+ 		goto err_dev;
+ 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 450f13ba4cca98836bc8a2fe18a2eb43ce14b2d5..a54c0d13abe9f57af275737b051dcb3b339e2975 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -32,6 +32,7 @@ TARGETS += exec
+ TARGETS += fchmodat2
+ TARGETS += filesystems
+ TARGETS += filesystems/binderfs
++TARGETS += filesystems/cuse
+ TARGETS += filesystems/epoll
+ TARGETS += filesystems/fat
+ TARGETS += filesystems/overlayfs
+diff --git a/tools/testing/selftests/filesystems/cuse/Makefile b/tools/testing/selftests/filesystems/cuse/Makefile
 new file mode 100644
-index 000000000000..cc25471410b5
+index 0000000000000000000000000000000000000000..4f0823f6bf93e89043fe85c2224d324b8d144826
 --- /dev/null
-+++ b/tools/testing/selftests/mm/process_vm_readv.c
-@@ -0,0 +1,368 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/selftests/filesystems/cuse/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
++
++CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
++
++TEST_GEN_PROGS := cuse_leak_test
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/filesystems/cuse/config b/tools/testing/selftests/filesystems/cuse/config
+new file mode 100644
+index 0000000000000000000000000000000000000000..25d8c7c27496efd2918f85ed0314cbf111574413
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/cuse/config
+@@ -0,0 +1,5 @@
++CONFIG_CUSE=m
++CONFIG_FAULT_INJECTION=y
++CONFIG_FAULT_INJECTION_DEBUG_FS=y
++CONFIG_FAILSLAB=y
++CONFIG_FAULT_INJECTION_STACKTRACE_FILTER=y
+diff --git a/tools/testing/selftests/filesystems/cuse/cuse_leak_test.c b/tools/testing/selftests/filesystems/cuse/cuse_leak_test.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..a2d195da5896cb868dd1e6a9195abf4dd75a2f97
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/cuse/cuse_leak_test.c
+@@ -0,0 +1,406 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Regression test for CUSE device-node leak (missing device_del on
++ * error path).
++ *
++ * When cdev_alloc() fails after device_add() succeeds inside
++ * cuse_process_init_reply(), the error path must call device_del()
++ * before put_device().  Otherwise the /dev/<name> entry leaks and
++ * permanently poisons the device name.
++ *
++ * Test 1 (normal_cleanup):
++ *   Completes a CUSE_INIT handshake, verifies the device appears,
++ *   closes the channel fd, verifies the device is removed.
++ *
++ * Test 2 (leak_regression):
++ *   Forces cdev_alloc() to fail via the cuse_inject_cdev_failure
++ *   module parameter (preferred, requires CONFIG_FAULT_INJECTION in
++ *   the CUSE build) or via failslab with stack-trace filtering
++ *   (fallback).  Verifies the /dev node is NOT leaked after close.
++ */
++
 +#define _GNU_SOURCE
 +#include <errno.h>
 +#include <fcntl.h>
-+#include <poll.h>
-+#include <pthread.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdint.h>
++#include <linux/fuse.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <sys/syscall.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
 +#include <unistd.h>
-+#include <linux/userfaultfd.h>
 +
-+#include "kselftest_harness.h"
++#include "kselftest.h"
 +
-+#ifndef PROCESS_VM_PIDFD
-+#define PROCESS_VM_PIDFD	(1UL << 0)
-+#endif
++#define CUSE_DEV		"/dev/cuse"
++#define BUF_SIZE		(FUSE_MIN_READ_BUFFER + 4096)
 +
-+#ifndef PROCESS_VM_NOWAIT
-+#define PROCESS_VM_NOWAIT	(1UL << 1)
-+#endif
++#define INJECT_PARAM		"/sys/module/cuse/parameters/cuse_inject_cdev_failure"
 +
-+#ifndef __NR_pidfd_open
-+#define __NR_pidfd_open 434
-+#endif
++#define FAILSLAB		"/sys/kernel/debug/failslab"
++#define FAILSLAB_PROBABILITY	FAILSLAB "/probability"
++#define FAILSLAB_TIMES		FAILSLAB "/times"
++#define FAILSLAB_TASK_FILTER	FAILSLAB "/task-filter"
++#define FAILSLAB_STACK_DEPTH	FAILSLAB "/stacktrace-depth"
++#define FAILSLAB_REQUIRE_START	FAILSLAB "/require-start"
++#define FAILSLAB_REQUIRE_END	FAILSLAB "/require-end"
++#define MAKE_IT_FAIL		"/proc/self/make-it-fail"
 +
-+static int sys_pidfd_open(pid_t pid, unsigned int flags)
++static int write_file(const char *path, const char *val)
 +{
-+	return syscall(__NR_pidfd_open, pid, flags);
-+}
-+
-+static const uint8_t test_data[] = { 0x01, 0x02, 0x03, 0x04,
-+				     0x05, 0x06, 0x07, 0x08 };
-+#define POISON_BYTE 0xCC
-+
-+/*
-+ * Test: basic process_vm_readv with no flags
-+ */
-+TEST(read_basic)
-+{
-+	uint8_t buf[sizeof(test_data)];
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov = {
-+		.iov_base = (void *)test_data,
-+		.iov_len = sizeof(test_data)
-+	};
++	int fd, len;
 +	ssize_t n;
 +
-+	memset(buf, POISON_BYTE, sizeof(buf));
-+	n = process_vm_readv(getpid(), &local_iov, 1, &remote_iov, 1, 0);
-+	ASSERT_EQ(sizeof(test_data), n);
-+	ASSERT_EQ(0, memcmp(buf, test_data, sizeof(test_data)));
-+}
-+
-+/*
-+ * Test: invalid flags should return EINVAL
-+ */
-+TEST(read_invalid_flags)
-+{
-+	uint8_t buf[8] = { 0 };
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov = {
-+		.iov_base = (void *)test_data,
-+		.iov_len = sizeof(test_data)
-+	};
-+	ssize_t n;
-+
-+	n = process_vm_readv(getpid(), &local_iov, 1, &remote_iov, 1, 255);
-+	ASSERT_EQ(-1, n);
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/*
-+ * Test: invalid address should return EFAULT
-+ */
-+TEST(read_invalid_address)
-+{
-+	uint8_t buf[8] = { 0 };
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov = { .iov_base = NULL, .iov_len = 8 };
-+	ssize_t n;
-+
-+	n = process_vm_readv(getpid(), &local_iov, 1, &remote_iov, 1, 0);
-+	ASSERT_EQ(-1, n);
-+	ASSERT_EQ(EFAULT, errno);
-+}
-+
-+/*
-+ * Test: invalid address with invalid flags should return EINVAL
-+ * (flag check happens before address validation)
-+ */
-+TEST(read_invalid_address_invalid_flags)
-+{
-+	uint8_t buf[8] = { 0 };
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov = { .iov_base = NULL, .iov_len = 8 };
-+	ssize_t n;
-+
-+	n = process_vm_readv(getpid(), &local_iov, 1, &remote_iov, 1, 255);
-+	ASSERT_EQ(-1, n);
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/*
-+ * Test: invalid address with all valid flags should return EFAULT
-+ * (flags are valid so we get past the flag check to the address check)
-+ */
-+TEST(read_invalid_address_all_valid_flags)
-+{
-+	int pidfd;
-+	struct iovec local_iov = { .iov_base = NULL, .iov_len = 8 };
-+	struct iovec remote_iov = { .iov_base = NULL, .iov_len = 8 };
-+	ssize_t n;
-+
-+	pidfd = sys_pidfd_open(getpid(), 0);
-+	ASSERT_GE(pidfd, 0);
-+
-+	n = process_vm_readv(pidfd, &local_iov, 1, &remote_iov, 1,
-+			     PROCESS_VM_PIDFD | PROCESS_VM_NOWAIT);
-+	ASSERT_EQ(-1, n);
-+	ASSERT_EQ(EFAULT, errno);
-+
-+	close(pidfd);
-+}
-+
-+/*
-+ * Test: read with PIDFD flag
-+ */
-+TEST(read_pidfd)
-+{
-+	uint8_t buf[sizeof(test_data)];
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov = {
-+		.iov_base = (void *)test_data,
-+		.iov_len = sizeof(test_data)
-+	};
-+	ssize_t n;
-+	int pidfd;
-+
-+	memset(buf, POISON_BYTE, sizeof(buf));
-+	pidfd = sys_pidfd_open(getpid(), 0);
-+	ASSERT_GE(pidfd, 0);
-+
-+	n = process_vm_readv(pidfd, &local_iov, 1, &remote_iov, 1,
-+			     PROCESS_VM_PIDFD);
-+	ASSERT_EQ(sizeof(test_data), n);
-+	ASSERT_EQ(0, memcmp(buf, test_data, sizeof(test_data)));
-+
-+	close(pidfd);
-+}
-+
-+/*
-+ * Test: read with NOWAIT from resident memory (should succeed)
-+ */
-+TEST(read_nowait_resident)
-+{
-+	uint8_t buf[sizeof(test_data)];
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov = {
-+		.iov_base = (void *)test_data,
-+		.iov_len = sizeof(test_data)
-+	};
-+	ssize_t n;
-+
-+	memset(buf, POISON_BYTE, sizeof(buf));
-+	n = process_vm_readv(getpid(), &local_iov, 1, &remote_iov, 1,
-+			     PROCESS_VM_NOWAIT);
-+	ASSERT_EQ(sizeof(test_data), n);
-+	ASSERT_EQ(0, memcmp(buf, test_data, sizeof(test_data)));
-+}
-+
-+/*
-+ * Test: read with PIDFD + NOWAIT from resident memory
-+ */
-+TEST(read_pidfd_nowait_resident)
-+{
-+	uint8_t buf[sizeof(test_data)];
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov = {
-+		.iov_base = (void *)test_data,
-+		.iov_len = sizeof(test_data)
-+	};
-+	ssize_t n;
-+	int pidfd;
-+
-+	memset(buf, POISON_BYTE, sizeof(buf));
-+	pidfd = sys_pidfd_open(getpid(), 0);
-+	ASSERT_GE(pidfd, 0);
-+
-+	n = process_vm_readv(pidfd, &local_iov, 1, &remote_iov, 1,
-+			     PROCESS_VM_PIDFD | PROCESS_VM_NOWAIT);
-+	ASSERT_EQ(sizeof(test_data), n);
-+	ASSERT_EQ(0, memcmp(buf, test_data, sizeof(test_data)));
-+
-+	close(pidfd);
-+}
-+
-+/*
-+ * Userfaultfd helpers for NOWAIT tests
-+ */
-+static int setup_userfaultfd(void)
-+{
-+	struct uffdio_api api = { .api = UFFD_API };
-+	int uffd;
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-+	if (uffd < 0)
++	fd = open(path, O_WRONLY);
++	if (fd < 0)
 +		return -1;
-+
-+	if (ioctl(uffd, UFFDIO_API, &api)) {
-+		close(uffd);
-+		return -1;
-+	}
-+
-+	return uffd;
++	len = strlen(val);
++	n = write(fd, val, len);
++	close(fd);
++	return n == len ? 0 : -1;
 +}
 +
-+static void *register_uffd_region(int uffd, size_t size)
++static int write_file_ul(const char *path, unsigned long val)
 +{
-+	struct uffdio_register reg;
-+	void *mem;
++	char buf[32];
 +
-+	mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (mem == MAP_FAILED)
-+		return NULL;
-+
-+	reg.range.start = (unsigned long)mem;
-+	reg.range.len = size;
-+	reg.mode = UFFDIO_REGISTER_MODE_MISSING;
-+	if (ioctl(uffd, UFFDIO_REGISTER, &reg)) {
-+		munmap(mem, size);
-+		return NULL;
-+	}
-+
-+	return mem;
++	snprintf(buf, sizeof(buf), "%lu", val);
++	return write_file(path, buf);
 +}
 +
-+struct uffd_handler_args {
-+	int uffd;
-+	const void *content;
-+	size_t content_len;
++static int read_file_int(const char *path)
++{
++	char buf[32];
++	ssize_t n;
++	int fd;
++
++	fd = open(path, O_RDONLY);
++	if (fd < 0)
++		return -1;
++	n = read(fd, buf, sizeof(buf) - 1);
++	close(fd);
++	if (n <= 0)
++		return -1;
++	buf[n] = '\0';
++	return atoi(buf);
++}
++
++static unsigned long kallsym_lookup(const char *name)
++{
++	unsigned long addr = 0;
++	char line[256];
++	FILE *f;
++
++	f = fopen("/proc/kallsyms", "r");
++	if (!f)
++		return 0;
++	while (fgets(line, sizeof(line), f)) {
++		char sym[128];
++		unsigned long a;
++		char type;
++
++		if (sscanf(line, "%lx %c %127s", &a, &type, sym) == 3 &&
++		    strcmp(sym, name) == 0) {
++			addr = a;
++			break;
++		}
++	}
++	fclose(f);
++	return addr;
++}
++
++static void failslab_cleanup(void)
++{
++	write_file(MAKE_IT_FAIL, "0");
++	write_file(FAILSLAB_PROBABILITY, "0");
++	write_file(FAILSLAB_TIMES, "0");
++	write_file(FAILSLAB_TASK_FILTER, "0");
++	write_file(FAILSLAB_REQUIRE_START, "0");
++	write_file(FAILSLAB_REQUIRE_END, "0");
++}
++
++static int cuse_read_init(int fd, struct fuse_in_header *hdr_out)
++{
++	char buf[BUF_SIZE];
++	struct fuse_in_header *hdr;
++	ssize_t n;
++
++	n = read(fd, buf, sizeof(buf));
++	if (n < (ssize_t)(sizeof(*hdr) + sizeof(struct cuse_init_in)))
++		return -1;
++	hdr = (struct fuse_in_header *)buf;
++	if (hdr->opcode != CUSE_INIT)
++		return -1;
++	memcpy(hdr_out, hdr, sizeof(*hdr));
++	return 0;
++}
++
++static int cuse_send_init_reply(int fd, const struct fuse_in_header *hdr,
++				const char *devname)
++{
++	char reply[sizeof(struct fuse_out_header) +
++		   sizeof(struct cuse_init_out) + 64];
++	struct fuse_out_header *out_hdr;
++	struct cuse_init_out *init_out;
++	size_t info_len, reply_len;
++	char *info;
++	ssize_t n;
++
++	memset(reply, 0, sizeof(reply));
++	out_hdr = (struct fuse_out_header *)reply;
++	init_out = (struct cuse_init_out *)(reply + sizeof(*out_hdr));
++	info = reply + sizeof(*out_hdr) + sizeof(*init_out);
++
++	info_len = snprintf(info, 64, "DEVNAME=%s", devname) + 1;
++	reply_len = sizeof(*out_hdr) + sizeof(*init_out) + info_len;
++
++	out_hdr->len = reply_len;
++	out_hdr->unique = hdr->unique;
++	init_out->major = FUSE_KERNEL_VERSION;
++	init_out->minor = FUSE_KERNEL_MINOR_VERSION;
++	init_out->flags = CUSE_UNRESTRICTED_IOCTL;
++	init_out->max_read = BUF_SIZE;
++	init_out->max_write = 4096;
++
++	n = write(fd, reply, reply_len);
++	return n == (ssize_t)reply_len ? 0 : -1;
++}
++
++static int dev_exists(const char *devname)
++{
++	char path[128];
++
++	snprintf(path, sizeof(path), "/dev/%s", devname);
++	return access(path, F_OK) == 0;
++}
++
++/*
++ * Injection methods for forcing cdev_alloc() failure.
++ *
++ * METHOD_PARAM (preferred): cuse_inject_cdev_failure module parameter.
++ *   Available when CUSE is built with CONFIG_FAULT_INJECTION.  Directly
++ *   forces cdev_alloc() to "fail" inside cuse_process_init_reply().
++ *   Works on all architectures including UML.
++ *
++ * METHOD_FAILSLAB (fallback): failslab with stack-trace filtering.
++ *   Uses the kernel's generic slab fault injection to fail the kzalloc
++ *   inside cdev_alloc().  Requires CONFIG_FAILSLAB and
++ *   CONFIG_FAULT_INJECTION_STACKTRACE_FILTER.  Depends on the stack
++ *   unwinder producing matching addresses (may not work under UML).
++ */
++enum inject_method {
++	METHOD_NONE,
++	METHOD_PARAM,
++	METHOD_FAILSLAB,
 +};
 +
-+static void *uffd_handler_thread(void *arg)
++static enum inject_method inject_available(void)
 +{
-+	struct uffd_handler_args *ha = arg;
-+	struct uffd_msg msg;
-+	struct uffdio_copy copy;
-+	struct pollfd pfd = {
-+		.fd = ha->uffd,
-+		.events = POLLIN
-+	};
-+	void *page;
-+	long page_size = sysconf(_SC_PAGESIZE);
-+	int ret;
++	if (access(INJECT_PARAM, W_OK) == 0)
++		return METHOD_PARAM;
 +
-+	page = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (page == MAP_FAILED)
-+		return (void *)(long)-ENOMEM;
++	if (access(FAILSLAB_REQUIRE_START, F_OK) == 0 &&
++	    kallsym_lookup("cdev_alloc") != 0)
++		return METHOD_FAILSLAB;
 +
-+	memcpy(page, ha->content, ha->content_len);
++	return METHOD_NONE;
++}
 +
-+	ret = poll(&pfd, 1, 5000);
-+	if (ret <= 0)
-+		goto out;
++static int inject_arm(enum inject_method m)
++{
++	unsigned long addr;
 +
-+	if (read(ha->uffd, &msg, sizeof(msg)) != sizeof(msg))
-+		goto out;
++	switch (m) {
++	case METHOD_PARAM:
++		return write_file(INJECT_PARAM, "Y");
 +
-+	if (msg.event != UFFD_EVENT_PAGEFAULT)
-+		goto out;
++	case METHOD_FAILSLAB:
++		addr = kallsym_lookup("cdev_alloc");
++		if (!addr)
++			return -1;
++		write_file(FAILSLAB_TASK_FILTER, "1");
++		write_file(FAILSLAB_STACK_DEPTH, "16");
++		write_file_ul(FAILSLAB_REQUIRE_START, addr);
++		write_file_ul(FAILSLAB_REQUIRE_END, addr + 0x200);
++		write_file(FAILSLAB_TIMES, "1");
++		write_file(FAILSLAB_PROBABILITY, "100");
++		write_file(MAKE_IT_FAIL, "1");
++		return 0;
 +
-+	copy.dst = msg.arg.pagefault.address & ~(page_size - 1);
-+	copy.src = (unsigned long)page;
-+	copy.len = page_size;
-+	copy.mode = 0;
-+	ioctl(ha->uffd, UFFDIO_COPY, &copy);
++	default:
++		return -1;
++	}
++}
 +
-+out:
-+	munmap(page, page_size);
-+	return NULL;
++static void inject_disarm(enum inject_method m)
++{
++	switch (m) {
++	case METHOD_PARAM:
++		write_file(INJECT_PARAM, "N");
++		break;
++	case METHOD_FAILSLAB:
++		write_file(MAKE_IT_FAIL, "0");
++		failslab_cleanup();
++		break;
++	default:
++		break;
++	}
++}
++
++static int inject_fired(enum inject_method m)
++{
++	switch (m) {
++	case METHOD_PARAM:
++		return 1;
++	case METHOD_FAILSLAB:
++		return read_file_int(FAILSLAB_TIMES) <= 0;
++	default:
++		return 0;
++	}
++}
++
++static const char *inject_name(enum inject_method m)
++{
++	switch (m) {
++	case METHOD_PARAM:	return "module parameter";
++	case METHOD_FAILSLAB:	return "failslab";
++	default:		return "none";
++	}
 +}
 +
 +/*
-+ * Test: read from userfaultfd-registered memory (no flags, should block
-+ * until page fault is resolved by handler thread)
++ * Test 1: normal CUSE init and cleanup.
++ *
++ * Verify a successfully initialized CUSE device is properly removed
++ * when the channel fd is closed (basic sanity).
 + */
-+TEST(read_userfaultfd_blocking)
++static void test_normal_cleanup(void)
 +{
-+	int uffd;
-+	void *mem;
-+	long page_size = sysconf(_SC_PAGESIZE);
-+	uint8_t buf[sizeof(test_data)];
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov;
-+	struct uffd_handler_args ha;
-+	pthread_t handler;
-+	ssize_t n;
++	const char *name = "cuse_ksft_norm";
++	struct fuse_in_header hdr;
++	int fd;
 +
-+	memset(buf, POISON_BYTE, sizeof(buf));
++	fd = open(CUSE_DEV, O_RDWR | O_CLOEXEC);
++	if (fd < 0) {
++		ksft_test_result_skip("open %s: %s\n", CUSE_DEV,
++				      strerror(errno));
++		return;
++	}
 +
-+	uffd = setup_userfaultfd();
-+	ASSERT_GE(uffd, 0);
++	if (cuse_read_init(fd, &hdr)) {
++		close(fd);
++		ksft_test_result_fail("CUSE_INIT read failed\n");
++		return;
++	}
 +
-+	mem = register_uffd_region(uffd, page_size);
-+	ASSERT_NE(NULL, mem);
++	if (cuse_send_init_reply(fd, &hdr, name)) {
++		close(fd);
++		ksft_test_result_fail("CUSE_INIT reply write failed\n");
++		return;
++	}
 +
-+	ha.uffd = uffd;
-+	ha.content = test_data;
-+	ha.content_len = sizeof(test_data);
-+	ASSERT_EQ(0, pthread_create(&handler, NULL, uffd_handler_thread, &ha));
++	usleep(100000);
++	if (!dev_exists(name)) {
++		close(fd);
++		ksft_test_result_fail("/dev/%s not created after init\n", name);
++		return;
++	}
 +
-+	remote_iov.iov_base = mem;
-+	remote_iov.iov_len = sizeof(test_data);
-+	n = process_vm_readv(getpid(), &local_iov, 1, &remote_iov, 1, 0);
-+	ASSERT_EQ(sizeof(test_data), n);
-+	ASSERT_EQ(0, memcmp(buf, test_data, sizeof(test_data)));
++	close(fd);
++	usleep(100000);
 +
-+	pthread_join(handler, NULL);
-+	munmap(mem, page_size);
-+	close(uffd);
++	if (dev_exists(name)) {
++		ksft_test_result_fail("/dev/%s not removed after close\n",
++				      name);
++		return;
++	}
++
++	ksft_test_result_pass("normal init and cleanup\n");
 +}
 +
 +/*
-+ * Test: read with NOWAIT from userfaultfd-registered memory that has
-+ * not been faulted in yet. Should return EFAULT (not block).
++ * Test 2: regression test for device-node leak.
++ *
++ * Force cdev_alloc() to fail after device_add() has succeeded, then
++ * verify the /dev node is properly cleaned up by device_del().
 + */
-+TEST(read_nowait_userfaultfd)
++static void test_leak_on_cdev_alloc_failure(void)
 +{
-+	int uffd;
-+	void *mem;
-+	long page_size = sysconf(_SC_PAGESIZE);
-+	uint8_t buf[sizeof(test_data)] = { 0 };
-+	struct iovec local_iov = { .iov_base = buf, .iov_len = sizeof(buf) };
-+	struct iovec remote_iov;
-+	ssize_t n;
++	const char *name = "cuse_ksft_leak";
++	struct fuse_in_header hdr;
++	enum inject_method m;
++	int fd, fired;
 +
-+	uffd = setup_userfaultfd();
-+	ASSERT_GE(uffd, 0);
++	if (dev_exists(name)) {
++		ksft_test_result_skip("/dev/%s already exists (previous leak? reboot to clear)\n",
++				      name);
++		return;
++	}
 +
-+	mem = register_uffd_region(uffd, page_size);
-+	ASSERT_NE(NULL, mem);
++	m = inject_available();
++	if (m == METHOD_NONE) {
++		ksft_test_result_skip(
++			"no injection method available (need CONFIG_FAULT_INJECTION)\n");
++		return;
++	}
 +
-+	/* Ensure the page is not present */
-+	madvise(mem, page_size, MADV_DONTNEED);
++	fd = open(CUSE_DEV, O_RDWR | O_CLOEXEC);
++	if (fd < 0) {
++		ksft_test_result_skip("open %s: %s\n", CUSE_DEV,
++				      strerror(errno));
++		return;
++	}
 +
-+	remote_iov.iov_base = mem;
-+	remote_iov.iov_len = sizeof(test_data);
-+	n = process_vm_readv(getpid(), &local_iov, 1, &remote_iov, 1,
-+			     PROCESS_VM_NOWAIT);
-+	ASSERT_EQ(-1, n);
-+	ASSERT_EQ(EFAULT, errno);
++	if (cuse_read_init(fd, &hdr)) {
++		close(fd);
++		ksft_test_result_fail("CUSE_INIT read failed\n");
++		return;
++	}
 +
-+	munmap(mem, page_size);
-+	close(uffd);
++	if (inject_arm(m)) {
++		close(fd);
++		ksft_test_result_fail("failed to arm injection (%s)\n",
++				      inject_name(m));
++		return;
++	}
++
++	cuse_send_init_reply(fd, &hdr, name);
++
++	fired = inject_fired(m);
++	inject_disarm(m);
++
++	usleep(100000);
++	close(fd);
++	usleep(100000);
++
++	if (!fired) {
++		ksft_test_result_skip("injection did not trigger (%s)\n",
++				      inject_name(m));
++		return;
++	}
++
++	if (dev_exists(name)) {
++		ksft_test_result_fail(
++			"/dev/%s leaked: device_del() not called on cdev_alloc error path\n",
++			name);
++		return;
++	}
++
++	ksft_test_result_pass("device node cleaned up after cdev_alloc failure (via %s)\n",
++			      inject_name(m));
 +}
 +
-+TEST_HARNESS_MAIN
++int main(int argc, char **argv)
++{
++	ksft_print_header();
++	ksft_set_plan(2);
++
++	if (geteuid() != 0)
++		ksft_exit_skip("must be run as root\n");
++
++	if (access(CUSE_DEV, F_OK) != 0)
++		ksft_exit_skip(CUSE_DEV " not available (try: modprobe cuse)\n");
++
++	test_normal_cleanup();
++	test_leak_on_cdev_alloc_failure();
++
++	ksft_finished();
++}
+
 -- 
-2.45.0
+2.52.0
+
 
