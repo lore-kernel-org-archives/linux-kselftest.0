@@ -1,178 +1,121 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.186])
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8797535972
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 21:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B7725B2FA;
+	Wed,  8 Apr 2026 21:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775683004; cv=none; b=rcmpktBdAyC7Y8b2nFuwxy1IpXFi7Qjb3N9F/uaTBhWpgE0fa9YwS1QVeqJEArAwGrErzAJ6K/dAePfvxwfE/wRxqGRXpprPXqogB70HI/J8XVi7gNHTWl+VzYJn2Cj88X+EIqKrg/eU3yYHlt4MCn7jihVzHsam85eEKgQjhSQ=
+	t=1775683040; cv=none; b=I208U8sHm/M0eo3oxxNRCQ7zDb4EHdZtOdg9n+d+6duy/W7bxsuZoavbgxpkZOYb48aSs4Cmv9oaKxXwugvjXu+VC/PDtSJBZEBFrlblJYMKwI9RAzCKftPGDq082M8h9Deaqx8ogJBoPISUChZJXiTxdTccxmuVy1/YvekMuic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775683004; c=relaxed/simple;
-	bh=wogyNksPaz4ryp0RugIpi5UO26RMp310V+hNWhI5zDw=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=kaSznxqX6Bi97iL9k4/5jOVeTffwI+2WB8/u5pfH9VpLx++dEKbc+ahef20TfcYrWRs76Y6Ex6OnxYlf/ZviRx80PgBQmvAlp9WFG37s3nHWZ8c+Kwa/WgkSuN4wWMnqqw+GJ7y4DyyXi2tdEXnineIe58FyBw9gADS/7v4SzNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=IU6NxKRV; arc=none smtp.client-ip=195.121.94.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="IU6NxKRV"
-X-KPN-MessageId: 36c2f440-3390-11f1-89e1-00505699b430
-Received: from mta.kpnmail.nl (unknown [10.31.161.191])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 36c2f440-3390-11f1-89e1-00505699b430;
-	Wed, 08 Apr 2026 23:16:31 +0200 (CEST)
-Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.190])
-	by mta.kpnmail.nl (Halon) with ESMTP
-	id 36c13dab-3390-11f1-83d7-00505699891e;
-	Wed, 08 Apr 2026 23:16:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=content-type:mime-version:subject:message-id:to:from:date;
-	bh=yiPrrBk1tIJoqTIC6xlzWyTp2YZZ0OR8oJIwHHuUeV4=;
-	b=IU6NxKRVLiKHgUr5HAOAeij7th9cqSJbhU/hGDDdz1rsByPtIrjMWlGnR+dhTw6YQRWX20+uFCpou
-	 onq8syVKGSJ1nFF38H7vDQ6ZRixrXHaIwl2yaYaxGJV2YAqjj0lKMRYKpB5GvhZqn1tiFy6XMi7sAi
-	 H6jAzHIxUQEQRJ1jI82OI4BkSF6B5URuSjTocUtFp/csF42Kw6R0wZqIGXFGI5giTWjshcqm05L1kZ
-	 86oRlqGqI4av9AXPwTNjwIBpVbS6ZhxEemJ4Od0fSDJ2Y9cBdkOB6bXoUHY+z6ObdhqCMzfyakeqQR
-	 mRcj+JewdsOMQ5EcNtZd3WuQ9fofQGQ==
-X-KPN-MID: 33|+GG5gO2LqBpR/XfkFBFq91xWwLYuHDKzdgbiWTF3SXC5hG+82ZAwH64E4T7yHhL
- deoVCzukijLf7F9fx8LQv7CsroPhsKnEQSzeSAORvBVA=
-X-CMASSUN: 33|5AIjK4E1/s8sF2lsphUdfCPcWC69Qniw+3i6j11SDx1J+v1lOeP96UdzxcExwjI
- I5HrFNFOtuaJHjZygIbIqDA==
-X-KPN-VerifiedSender: Yes
-Received: from cpxoxapps-mh03 (cpxoxapps-mh03.personalcloud.so.kpn.org [10.128.135.209])
-	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
-	id 36b59fed-3390-11f1-b8d7-005056995d6c;
-	Wed, 08 Apr 2026 23:16:31 +0200 (CEST)
-Date: Wed, 8 Apr 2026 23:16:31 +0200 (CEST)
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>, Arnd Bergmann <arnd@arndb.de>,
-	Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Aleksa Sarai <cyphar@cyphar.com>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	cmirabil@redhat.com,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Message-ID: <1333067272.1649333.1775682991132@kpc.webmail.kpnmail.nl>
-In-Reply-To: <CAGudoHE-zSfiL2aVf41UHOtMsE53gCqLpVoy-NxoB8HeXtdgEA@mail.gmail.com>
-References: <20260331172011.3512876-1-jkoolstra@xs4all.nl>
- <20260331172011.3512876-2-jkoolstra@xs4all.nl>
- <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
- <1632825771.784338.1775039101736@kpc.webmail.kpnmail.nl>
- <CAGudoHE-zSfiL2aVf41UHOtMsE53gCqLpVoy-NxoB8HeXtdgEA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
+	s=arc-20240116; t=1775683040; c=relaxed/simple;
+	bh=kL4JIANbRkLCjsk/v05rCxdjsPuz7hyQ3m06eD+7240=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lWVNQw2sxlF5hlJ4PJVqPdaEiJDi0aIkNlxT22pXpXmQ06+nqaSvDzAZBwug8EirDOK48IPayYMrjZ+6o+4OKXJshj6rxeQ1QYDT5FNVk/DzN3trfJAPkz5W/wMaJxm60OIqkctroSRJehEzFPgW1IGDLsKt8kA5h4VSTKksJNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id 7E7C4C1473;
+	Wed,  8 Apr 2026 21:17:16 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id 7B27820010;
+	Wed,  8 Apr 2026 21:17:14 +0000 (UTC)
+Date: Wed, 8 Apr 2026 17:18:31 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Cao Ruichuang <create0818@163.com>
+Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/ftrace: Quote check_requires comparisons
+Message-ID: <20260408171831.69520c50@gandalf.local.home>
+In-Reply-To: <20260408043212.8063-1-create0818@163.com>
+References: <20260408043212.8063-1-create0818@163.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Priority: 3
-Importance: Normal
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: qggikak9uuwqsaubqgdnoumrbc8tkozr
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 7B27820010
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/GA0BHY3Qdn+SBbEeagXI+9QeaobFAzLs=
+X-HE-Tag: 1775683034-244701
+X-HE-Meta: U2FsdGVkX182U5ZUSLlNzQU9MUzBlRa9DQUhfZ0PvfdWkpyNZxJ5/9wZNno4//2tqUIaUyuZukqoJXHgANNou6Se1we0VyH4iFbjAj+ZuDhddyzRmKLIRRaXUEpMPQxUwvl3fsc7jrVDfZM22he5vBfY+RavZS8Lmp+XHMmaAW73Bl2tRw2XrE0bMpOrTMAaHYjf87s9+SPYgUFiszp9ycaYUrG+d5U/2g+GSmZrm3dbwW0imfINYPjC53U1t2Fv0U/ofTflL4KHjge5WM2rJJ/qtyzRtVCWunWFDbg71zKhPOtVhDZbAsq6GWE6ZHUE0kcQcgubbhr+38f0A3z0z2Q8GYI/rFZQTwidb5jbul2zSAxU4PsQ6o8ROabSQGa8seiIDa/hCJOGLjnIHmBhbA==
 
+On Wed,  8 Apr 2026 12:32:12 +0800
+Cao Ruichuang <create0818@163.com> wrote:
 
-> Op 07-04-2026 11:00 CEST schreef Mateusz Guzik <mjguzik@gmail.com>:
->=20
-> =20
-> On Wed, Apr 1, 2026 at 12:25=E2=80=AFPM Jori Koolstra <jkoolstra@xs4all.n=
-l> wrote:
-> >
-> >
-> > > Op 01-04-2026 06:19 CEST schreef Mateusz Guzik <mjguzik@gmail.com>:
-> > >
-> > >
-> > > On Tue, Mar 31, 2026 at 07:19:58PM +0200, Jori Koolstra wrote:
-> > > > @@ -5286,7 +5290,25 @@ int filename_mkdirat(int dfd, struct filenam=
-e *name, umode_t mode)
-> > > >             lookup_flags |=3D LOOKUP_REVAL;
-> > > >             goto retry;
-> > > >     }
-> > > > +
-> > > > +   if (!error && (flags & MKDIRAT_FD_NEED_FD)) {
-> > > > +           struct path new_path =3D { .mnt =3D path.mnt, .dentry =
-=3D dentry };
-> > > > +           error =3D FD_ADD(0, dentry_open(&new_path, O_DIRECTORY,=
- current_cred()));
-> > > > +   }
-> > > > +   end_creating_path(&path, dentry);
-> > > >     return error;
-> > >
-> > >
-> > > You can't do it like this. Should it turn out no fd can be allocated,
-> > > the entire thing is going to error out while keeping the newly create=
-d
-> > > directory behind. You need to allocate the fd first, then do the hard
-> > > work, and only then fd_install and or free the fd. The FD_ADD machine=
-ry
-> > > can probably still be used provided proper wrapping of the real new
-> > > mkdir.
-> >
-> > But isn't this exactly what happens in open(O_CREAT) too? Eventually we
-> > call
-> >                 error =3D dir_inode->i_op->create(idmap, dir_inode, den=
-try,
-> >                                                 mode, open_flag & O_EXC=
-L);
-> >
-> > and only then do we assign and install the fd. AFAIK there is no cleanu=
-p
-> > happening there either if the FD_ADD step fails. You will just have a
-> > regular file and no descriptor. But I would have to test this to be sur=
-e.
-> >
->=20
-> FD_ADD(how->flags, do_file_open(dfd, name, &op)) means fd itself will
-> be allocated upfront and only then file creation will happen and which
-> is what I'm saying is how it should be done. With your patch the
-> directory is created first and the possibly failing fd allocation
-> happens later.
+> check_requires() compares requirement strings that can contain shell
+> pattern characters such as '[' and ']'. Under /bin/sh, the unquoted
+> test expressions can emit 'unexpected operator' warnings while parsing
+> README-backed requirements.
+> 
+> Quote the relevant comparisons and path checks so the helper handles
+> those patterns without spurious shell warnings.
+> 
+> Validated by rerunning fprobe_syntax_errors.tc and confirming the
+> previous '/bin/sh: unexpected operator' lines disappear from the
+> detailed ftracetest log.
+> 
+> Signed-off-by: Cao Ruichuang <create0818@163.com>
 
-Err, you're right. I understand what you mean now. That does need to be fix=
-ed.
-I misremembered how FD_ADD works. I'll get back to this in the weekend.
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-> > > Trying to handle this in open() is a no-go. openat2 is rather
-> > > problematic.
-> >
-> > I don't think that is necessarily true. It turned out O_CREAT | O_DIREC=
-TORY
-> > was bugged for a very long time. Christian Brauner fixed it eventually,=
- and
-> > that combination now returns EINVAL. But I think there is nothing reall=
-y
-> > stopping us from implementing that combination in the expected way, apa=
-rt
-> > from whatever reasons there were for not allowing this in the first pla=
-ce,
-> > which I don't know about (maybe mixing semantics?)
-> >
->=20
-> I am not saying it's impossible. I am saying mkdir was always a
-> separate codepath and in order to change that you would need to add a
-> branchfest to open. I don't see any reason to go that route.
+Shuah,
 
-That's a fair point. But there's also upsides like Aleksa has mentioned.
-I'm not very opinionated on the matter, especially since I don't know why
-those paths were ever separated.
+Care to take this through your tree?
 
-Thanks,
-Jori.
+-- Steve
+
+> ---
+>  tools/testing/selftests/ftrace/test.d/functions | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+> index e8e718139..442aa28ff 100644
+> --- a/tools/testing/selftests/ftrace/test.d/functions
+> +++ b/tools/testing/selftests/ftrace/test.d/functions
+> @@ -145,13 +145,13 @@ check_requires() { # Check required files and tracers
+>  	p=${i%:program}
+>          r=${i%:README}
+>          t=${i%:tracer}
+> -	if [ $p != $i ]; then
+> -	    if ! which $p ; then
+> +	if [ "$p" != "$i" ]; then
+> +	    if ! which "$p" ; then
+>                  echo "Required program $p is not found."
+>                  exit_unresolved
+>  	    fi
+> -        elif [ $t != $i ]; then
+> -            if ! grep -wq $t available_tracers ; then
+> +        elif [ "$t" != "$i" ]; then
+> +            if ! grep -wq "$t" available_tracers ; then
+>                  echo "Required tracer $t is not configured."
+>                  exit_unsupported
+>              fi
+> @@ -162,11 +162,11 @@ check_requires() { # Check required files and tracers
+>  	    else
+>  		test=$TRACING_DIR
+>  	    fi
+> -            if ! grep -Fq "$r" $test/README ; then
+> +            if ! grep -Fq "$r" "$test"/README ; then
+>                  echo "Required feature pattern \"$r\" is not in README."
+>                  exit_unsupported
+>              fi
+> -        elif [ ! -e $i ]; then
+> +        elif [ ! -e "$i" ]; then
+>              echo "Required feature interface $i doesn't exist."
+>              exit_unsupported
+>          fi
+> @@ -223,4 +223,4 @@ get_mnt_options() {
+>  	local opts=$(mount | grep -m1 "$mnt_point" | sed -e 's/.*(\(.*\)).*/\1/')
+>  
+>  	echo "$opts"
+> -}
+> \ No newline at end of file
+> +}
+
