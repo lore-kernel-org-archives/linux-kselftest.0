@@ -1,123 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E8737C0F9;
-	Wed,  8 Apr 2026 15:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9734B3559F8;
+	Wed,  8 Apr 2026 15:33:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775661822; cv=none; b=RnJnwYklt8dAF4RwvLe6cRce/DdavgEDlRQDJOwylXnlrIsxCpbxnCC769nOfp7pKcLx/GdfXZb563/LisYaG9Onj0wsiBks6rSav9XySft7M+xyqhZkYRcVe7o4oG2dnWMUS+FUFnnWRL0dNxoTQdbLSE8QrXY+zqxU5xFx4rg=
+	t=1775662418; cv=none; b=k4i8xCZomGBtPESCqy9toD9sYU88D/6yMilikmXUp4J3k1uKNXK95dJ9hxueL0/gxKci/v+IrSlODMy/2cLE10wBL+UsPa70vTanRzNUlff9sJJTXIGT68l85M6hSKprRvZWFJ/28o0hPfKpqqj3Gapf0d+1OhOsCn/4FYEhoRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775661822; c=relaxed/simple;
-	bh=xy2wTzXh3oJ06N9hNsWTCm7gzKhOvMebokWJWOugQTM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=io3iXwYnw7+ICliNYlVq5tEp6G4f1ir+c7oKf68NsA5anWsZUaiWoXoqfqFWrS5E+DTOoxVsuy0iPyQMDVu+tuFKY4pQRgOaCdaM5TALOdQdY4OcEWscM8dFM9K0fVb0YRSfbSGpy9BbeLt0V32EYjWqDfnNiHu7IKrIZ2R3S40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UTOXOO49; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775662418; c=relaxed/simple;
+	bh=pBktVFYzsIAdZIy+AuRggPzGormErCwvYrjSX4sj3Ho=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nDbW7lpHwnedCKN+e3sstbu0syMhzceLGlzHevenZdfTZkpDSSvKAVBtbWI9cNhYsHElBlQ7OomrCe8lgOVq45TDmsQdITZN4OpyR3d7Yy58xEHiHitel/RFEX5n+bluklzouSxlYGlI8L2uR7yNBJ/sGumuvEBaLVmuDInlp0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MGMFyqw0; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UTOXOO49"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38B06C2BC87;
-	Wed,  8 Apr 2026 15:23:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775661822;
-	bh=xy2wTzXh3oJ06N9hNsWTCm7gzKhOvMebokWJWOugQTM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=UTOXOO49luheuly8E3TpkfDK9w3e3F95JIZ2I2R7besK2uRFjB+SPI4OPM7PgD+GI
-	 JYtG3dlYq5nsfiNa81jf8IUoydrdzZxvWduZlZZVXlCl0V6F3MzluMSoY46USUHwwZ
-	 ZkXU4CMzAYCXZJJUaZ4ZDkcYEVNCYjzUxl+kN3MIA9AoA4WElarHzac7S+n+5fLm8l
-	 SqPPCMI4scX3sQMqwubx8VxukKwhZ5bXqfGgPolZ/LQL8S/45DH2G4xxqEgodgxOGA
-	 g09HOurOd6TP2PGC6+29JoQ0EfJDDoCy+he7iVtOxXQaBKMA0831dt3NqSW39kx8K/
-	 99K+EA47dqikQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23B4210F994F;
-	Wed,  8 Apr 2026 15:23:42 +0000 (UTC)
-From: Alberto Ruiz via B4 Relay <devnull+aruiz.redhat.com@kernel.org>
-Date: Wed, 08 Apr 2026 17:23:40 +0200
-Subject: [PATCH 1/2] fuse: fix device node leak in
- cuse_process_init_reply()
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MGMFyqw0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=m3
+	v3zp6YOjlmkyjzFU98l0AI8rJygb4GlywSbbSCQ88=; b=MGMFyqw0Ipo9tPmvBc
+	0rNDAQbr6zLy9vdnYQ0KAtBpEreY2hu5cGFkGqxRtXbeYejY6BcxDHarmiiCDYB0
+	abBdcjT0I5tlBSZ1NBc0rLRsU5HsXOFMDRuwP0jFLCP2gnvVOHgy1TPIyXZkHDlD
+	zQMZ9zaxGuuquYNl9YN05pfGk=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wC3_rofddZpBIHhDg--.36317S2;
+	Wed, 08 Apr 2026 23:32:52 +0800 (CST)
+From: Cao Ruichuang <create0818@163.com>
+To: rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 1/2] tracing: Store trace_marker_raw payload length in events
+Date: Wed,  8 Apr 2026 23:32:40 +0800
+Message-Id: <20260408153241.15391-1-create0818@163.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260408-wip-cuse-leak-fix-v1-1-1c028d575e97@redhat.com>
-References: <20260408-wip-cuse-leak-fix-v1-0-1c028d575e97@redhat.com>
-In-Reply-To: <20260408-wip-cuse-leak-fix-v1-0-1c028d575e97@redhat.com>
-To: Miklos Szeredi <miklos@szeredi.hu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Alberto Ruiz <aruiz@redhat.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775661821; l=2016;
- i=aruiz@redhat.com; s=20260408; h=from:subject:message-id;
- bh=FFr25cv2qmdGgRJVSTfidJQebQx41SqD8R/u4bhxMxY=;
- b=6xlTlB+2IVAzx1rejwjK5k5wUp0x1dIltBb9ymPiEaWSaoXWs9X/D8pXbOqQqnTCaJ+eQCKCV
- C51YT2d1/04BUzCgSE2dOzMaZ2x4Hx1ZrByqauumjuSkgMK4rl8BeQO
-X-Developer-Key: i=aruiz@redhat.com; a=ed25519;
- pk=ZJyUFl31NDNjeRWoQa/6I6bV5lb8axrDvpj9uGd+NvU=
-X-Endpoint-Received: by B4 Relay for aruiz@redhat.com/20260408 with
- auth_id=727
-X-Original-From: Alberto Ruiz <aruiz@redhat.com>
-Reply-To: aruiz@redhat.com
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wC3_rofddZpBIHhDg--.36317S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXr43uryrJFWUtFWDXryxKrg_yoW5Aw4kpa
+	43tr9xGr4kJF4jqryI9an5ArWfZ34kJry3Ka95W34Fvr1ktr12qF9rXFyjv3yFqwn3K34f
+	KFyj9rWjkw47Zr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jOzVbUUUUU=
+X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbCwAR2r2nWdSQV0wAA31
 
-From: Alberto Ruiz <aruiz@redhat.com>
+trace_marker_raw currently records its bytes in TRACE_RAW_DATA events,
+but the event output path derives the byte count from the padded record
+size in the ring buffer. As a result, the printed raw-data payload is
+rounded up and small writes do not preserve their true length.
 
-If device_add() succeeds during CUSE initialization but a subsequent
-step (cdev_alloc() or cdev_add()) fails, the error path calls
-put_device() without first calling device_del().  This leaks the
-devtmpfs entry created by device_add(), leaving a stale /dev/<name>
-node that persists until reboot.
+Keep the true payload length in the TRACE_RAW_DATA event itself and use
+that field when printing the bytes. This leaves the ring buffer record
+size semantics unchanged while letting trace_marker_raw report the exact
+payload that was written.
 
-Since the cuse_conn is never linked into cuse_conntbl on the failure
-path, cuse_channel_release() sees cc->dev == NULL and skips
-device_unregister(), so no other code path cleans up the node.
-
-This has several consequences:
-
- - The device name is permanently poisoned: any subsequent attempt to
-   create a CUSE device with the same name hits the stale sysfs entry,
-   device_add() fails, and the new device is aborted.
-
- - The collision manifests as ENODEV returned to userspace with no
-   dmesg diagnostic, making it very difficult to debug.
-
- - The failure is self-perpetuating: once a name is leaked, all future
-   attempts with that name fail identically.
-
-Fix this by introducing an err_dev label that calls device_del() to
-undo device_add() before falling through to err_unlock.  The existing
-err_unlock path from a device_add() failure correctly skips device_del()
-since the device was never added.
-
-Signed-off-by: Alberto Ruiz <aruiz@redhat.com>
+Signed-off-by: Cao Ruichuang <create0818@163.com>
 ---
- fs/fuse/cuse.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/trace/trace.c         | 11 ++++++-----
+ kernel/trace/trace_entries.h |  1 +
+ kernel/trace/trace_output.c  |  4 ++--
+ 3 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/fs/fuse/cuse.c b/fs/fuse/cuse.c
-index dfcb98a654d83bb34460a6e8c9e4b196dfdfdfbe..df9d50a9c0fab269102ec0e4b2d459ca2a390c59 100644
---- a/fs/fuse/cuse.c
-+++ b/fs/fuse/cuse.c
-@@ -391,7 +391,7 @@ static void cuse_process_init_reply(struct fuse_mount *fm,
- 	rc = -ENOMEM;
- 	cdev = cdev_alloc();
- 	if (!cdev)
--		goto err_unlock;
-+		goto err_dev;
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index a626211ce..d9cb643b8 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -6906,11 +6906,13 @@ static ssize_t write_raw_marker_to_buffer(struct trace_array *tr,
+ 	struct ring_buffer_event *event;
+ 	struct trace_buffer *buffer;
+ 	struct raw_data_entry *entry;
++	size_t payload_len;
+ 	ssize_t written;
+ 	size_t size;
  
- 	cdev->owner = THIS_MODULE;
- 	cdev->ops = &cuse_frontend_fops;
-@@ -417,6 +417,8 @@ static void cuse_process_init_reply(struct fuse_mount *fm,
+ 	/* cnt includes both the entry->id and the data behind it. */
+-	size = struct_offset(entry, id) + cnt;
++	payload_len = cnt - sizeof(entry->id);
++	size = struct_offset(entry, buf) + payload_len;
  
- err_cdev:
- 	cdev_del(cdev);
-+err_dev:
-+	device_del(dev);
- err_unlock:
- 	mutex_unlock(&cuse_lock);
- 	put_device(dev);
-
+ 	buffer = tr->array_buffer.buffer;
+ 
+@@ -6924,10 +6926,9 @@ static ssize_t write_raw_marker_to_buffer(struct trace_array *tr,
+ 		return -EBADF;
+ 
+ 	entry = ring_buffer_event_data(event);
+-	unsafe_memcpy(&entry->id, buf, cnt,
+-		      "id and content already reserved on ring buffer"
+-		      "'buf' includes the 'id' and the data."
+-		      "'entry' was allocated with cnt from 'id'.");
++	memcpy(&entry->id, buf, sizeof(entry->id));
++	entry->len = payload_len;
++	memcpy(entry->buf, buf + sizeof(entry->id), payload_len);
+ 	written = cnt;
+ 
+ 	__buffer_unlock_commit(buffer, event);
+diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
+index 54417468f..5f867a144 100644
+--- a/kernel/trace/trace_entries.h
++++ b/kernel/trace/trace_entries.h
+@@ -288,6 +288,7 @@ FTRACE_ENTRY(raw_data, raw_data_entry,
+ 
+ 	F_STRUCT(
+ 		__field(	unsigned int,	id	)
++		__field(unsigned int, len)
+ 		__dynamic_array(	char,	buf	)
+ 	),
+ 
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 1996d7aba..4e1edfa05 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -1817,13 +1817,13 @@ static enum print_line_t trace_raw_data(struct trace_iterator *iter, int flags,
+ 					 struct trace_event *event)
+ {
+ 	struct raw_data_entry *field;
+-	int i;
++	unsigned int i;
+ 
+ 	trace_assign_type(field, iter->ent);
+ 
+ 	trace_seq_printf(&iter->seq, "# %x buf:", field->id);
+ 
+-	for (i = 0; i < iter->ent_size - offsetof(struct raw_data_entry, buf); i++)
++	for (i = 0; i < field->len; i++)
+ 		trace_seq_printf(&iter->seq, " %02x",
+ 				 (unsigned char)field->buf[i]);
+ 
 -- 
-2.52.0
-
+2.39.5 (Apple Git-154)
 
