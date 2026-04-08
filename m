@@ -1,253 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8381930C61B;
-	Wed,  8 Apr 2026 07:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5881A3A1E67;
+	Wed,  8 Apr 2026 08:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775634861; cv=none; b=euaC2Yqot96bRdT5Jxfg/bTbg8/JRzOV9bwQdhwcYD9u2zLFZ/QJy616Xzb0VlZTQbpulI+7EKGVNuBQfKsspH2OV5EIY/hWWALX8017IGW6e0gKhR/wOT7xlvZAsxumBhCwcC4s9/51Or9KmTCCNjf+374uV+3H29d8bsQyG7w=
+	t=1775636710; cv=none; b=FhQCQP6drdBWfiRjlUV2L7zmPUZfvES6vZO8UwLHK060IeLeSmS7T6p9fCsSP5bh8YvNq/5Yrimf6w/2NhImxdgjkIbJf1QMTV2hva+7BAs28oCkpNPnEoBu+X5AtZBxjclokYH8wsPHaf+YPu/mAS9A79w818AaOFQip0PssVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775634861; c=relaxed/simple;
-	bh=VBIGF5AN9ebmM6kyFi+XFeTVPotW9wSqJLoFDMY7mQQ=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Hq0wI12Z7vpLVfU5ZIZOAyO3s5mgOI88AeFgeOE0z86VN9aCvtqjpswhnfB69RBZinMUtRz6BN2xdj3qQN/eUbdcJvnxUSFuxYzNxnHhRk7BxAX9K/E5tWJ1gt7GiOIM3YKUlPvhIjCZ3oLSSGfeBTDdvYhp+1Ue/sKGt+Ghx9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YW+P323B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775636710; c=relaxed/simple;
+	bh=MYsVuliKoeskedgLGX+ydNaCxpDmYE4muspSAQYsSHM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IICZwnvo0wQYuv0B7rkT8MBGh5lnsGMxY9p+84idSjJKVaJMZ8MNPArltOmoAH4mb9xsga5p6TYDD4PdVElW7nQuEFm2/A6eiOGc99nC4+5X8bh/VCqiZ5sxscTFE56uncUU96WCeN8OptEQrcaaFCNSqsxAN3hCoVS04JdyF34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=jC7gDana; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ngr0rp/b; arc=none smtp.client-ip=202.12.124.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YW+P323B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F6FC19424;
-	Wed,  8 Apr 2026 07:54:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775634861;
-	bh=VBIGF5AN9ebmM6kyFi+XFeTVPotW9wSqJLoFDMY7mQQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YW+P323Bi1dBRcDBdB+yn4AdVRrM0FFHP9wyEb4ajhbSCpJXYBHtUm78uhrSp9BD0
-	 qaOWDYMr+Yvj7UxnWQ4bJEpk1jHF6fUWgLWaKAEY9U7PttUQLzEKNbYfFHEq5bhPvs
-	 wIrqzs295oD9fp/XP6jEiP2FkQhZCzxVuZIGcFIx+A5GSmFDn97dJQmLe79dFXq3M0
-	 6l7FsCeEAOToZpiSSS/IUqWIng8seUXLWMIlzhWcate0KmaKd1SuGv4LYq8MmjYYrN
-	 0cgA45yPkn8BsNSDjuqSiW3JQXmuqdEZY1UpJxG4l7QC2k5RvWa+tUBB+yreTcQB6Q
-	 ubpXegf08jb4w==
-Received: from 82-132-239-13.dab.02.net ([82.132.239.13] helo=lobster-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wANjr-00000009ohr-1WG1;
-	Wed, 08 Apr 2026 07:54:18 +0000
-Date: Wed, 08 Apr 2026 08:54:03 +0100
-Message-ID: <87wlyhc2g4.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Eric Auger <eric.auger@redhat.com>,
-	Kees Cook <kees@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] KVM: arm64: vgic: Allow userspace to set IIDR revision 1
-In-Reply-To: <20260407210949.2076251-3-dwmw2@infradead.org>
-References: <20260407210949.2076251-1-dwmw2@infradead.org>
-	<20260407210949.2076251-3-dwmw2@infradead.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="jC7gDana";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ngr0rp/b"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.stl.internal (Postfix) with ESMTP id E89E71D0003A;
+	Wed,  8 Apr 2026 04:25:05 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Wed, 08 Apr 2026 04:25:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1775636705; x=
+	1775723105; bh=bLVRMkiIK8Nf8+Lr2yPv9kdpziO/G9ty43AaymTwsF4=; b=j
+	C7gDanaiLbLtQjX/EE7XqSVybZEaeyF8dbFJDPR6mFDlhenqbT4K9wIIeKq4rS1l
+	ek8Qlyddc7oX1asNmxEDyRIJ8Lzz+xMK+NQ9ptnA5r97xLqNbIZOUUGToZtSclKi
+	bECp7XHcMHP+UX5kWgBEfr/0Zqt+X/cm6PJkR1MFPFeyHA/WjlTPZ7+1JIPpW5Ts
+	YyKvMnZBz3t2PoJR1kqejfsOD3OgUA2rpv1yjxDp0nq0TUqvGvptAIXlosw6XhWZ
+	j2R56YHtOI+6YZ6oMBrv5VqpDIDdZwGj1CueSvVmnYazzY3ePGsmA8Ry1W1Erl4/
+	nw5xwAj+isOJMMNqS1tpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1775636705; x=1775723105; bh=bLVRMkiIK8Nf8+Lr2yPv9kdpziO/G9ty43A
+	aymTwsF4=; b=ngr0rp/bYoNaDiyJSGMJW0YhlgkjL7nbYY2fVIekBbArY7oSJu6
+	eL9QoCosXNXimEZvzZ1OJ9FOJwq7kJR6lCneLgObxg5WOhnbHD5imkPkcSJkumzS
+	4C+uPVBnbiPMBW27WoaJ78VncQfVaV+aX4jFfiAWCiyjJOhhPs8sQPIAztG7t2bZ
+	ZA3+zkmXClE1sDxv/0KQH/jkrnyP6FcIWWog8JV2un4AS4EMxFfc3ocFi833u12U
+	EAduqke32bJVD3p3SvHXAJgPhkds1dMffdZ+4BgY6e7zoDpky3aq0Hk92gQDnHfU
+	eQhB5lDV9ymHokkjvHnyXRTsd4W1Y3vRmbw==
+X-ME-Sender: <xms:4BDWaUBoS-uOmRfjlRShhpVkll_8OFfnDOdanuNIzPSvDmXiH139aw>
+    <xme:4BDWaYEgc7zcFeRE7dwkEJrpvnjoA74IfLoycIELv5QGJfyS0Zf8bybPTpXpOYE4h
+    5GyLgSqVdm1Yb8zofLUHdbW4vYVFLZfNGA2Gr7EYvwuXOqvvHA4r9w>
+X-ME-Received: <xmr:4BDWaW1Tr8frlQmxrANLMpdEwx4jbuQEMEvDrTMxx43EIW_nf7wKsKhQHpif>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvfedtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpefurggsrhhinhgr
+    ucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrdhnvghtqeenucggtffrrg
+    htthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeegteehgeehieffgfeuvdeuffef
+    gfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepuddvpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopegtrhgrthhiuhesnhhvihguihgrrdgtohhmpd
+    hrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopegrnhgu
+    rhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvh
+    gvmhhlohhfthdrnhgvthdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehv
+    ghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepughtrghtuhhlvggrsehnvhhiug
+    hirgdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpthhtohepkhhusggrsehkvghrnh
+    gvlhdrohhrgh
+X-ME-Proxy: <xmx:4BDWaRNFFSRH7NskaXGn3J5HnsQeZFja3T-IFEp3yDY1gJ853l8dhQ>
+    <xmx:4BDWaeaIOmoBPNdmuNYbO8lua_hDawrl2e5WyU_rAT1UY4Y2JUZuaA>
+    <xmx:4BDWaXxsXczY_jJ1nsUgzwszbSHb0V3QRJzOO16M6e3naNyaGfvtYQ>
+    <xmx:4BDWaVO6fvqlEZyE3c4fabMwJMpG_3giBesmMiODzxnyUb2jxJxTlg>
+    <xmx:4RDWaTwuYFI4A2_i2tioIj7PPMUrMLCzuXgwiqJba6eKu-0WldLiTYoz>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Apr 2026 04:25:03 -0400 (EDT)
+Date: Wed, 8 Apr 2026 10:25:00 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: "pabeni@redhat.com" <pabeni@redhat.com>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Dragos Tatulea <dtatulea@nvidia.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"sdf@fomichev.me" <sdf@fomichev.me>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"horms@kernel.org" <horms@kernel.org>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net v6 4/4] macsec: Support VLAN-filtering lower devices
+Message-ID: <adYQ3OMfEEWFTd7X@krikkit>
+References: <20260330130130.989236-1-cratiu@nvidia.com>
+ <20260330130130.989236-5-cratiu@nvidia.com>
+ <ac6BsG4IhAajip1s@krikkit>
+ <e2eefeb7033caa859551834d3448a77b7af3c7d4.camel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 82.132.239.13
-X-SA-Exim-Rcpt-To: dwmw2@infradead.org, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, shuah@kernel.org, dwmw@amazon.co.uk, rananta@google.com, eric.auger@redhat.com, kees@kernel.org, arnd@arndb.de, nathan@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e2eefeb7033caa859551834d3448a77b7af3c7d4.camel@nvidia.com>
 
-On Tue, 07 Apr 2026 21:27:03 +0100,
-David Woodhouse <dwmw2@infradead.org> wrote:
+2026-04-07, 15:07:47 +0000, Cosmin Ratiu wrote:
+> On Thu, 2026-04-02 at 16:48 +0200, Sabrina Dubroca wrote:
+> > If this happens on a real device, the VLAN filters will be broken.
+> > I'm
+> > not sure what the right behavior would be:
+> > 
+> > 1. reject the request to enable offload
+> > 2. switch to promiscuous mode
 > 
-> From: David Woodhouse <dwmw@amazon.co.uk>
+> I implemented and tested option 1. In the unlikely scenario adding VLAN
+> filters prevents offloading
+
+How unlikely is it? Resource allocation, talking to HW, device limits,
+anything else that could fail?
+
+> , it's better for the driver to be explicit
+> and let the user turn on promisc mode themselves. Keeping track of
+> whether VLAN filters failed and promisc was used as a fallback adds
+> some extra complexity.
+
+If it's indeed (very) unlikely, sure. There's still a bit of a
+regression/change of behavior for users compared to before the
+IFF_UNICAST_FLT patch, but I think we can wait until someone
+complains, and then add the tracking if that happens.
+
+> What would be the point of IFF_UNICAST_FLT then?
+
+The point is that this would just be a fallback.
+
+> Please let me know if you agree with this approach, so I can send v8
+> with it.
+
+If you can confirm it's on the "very unlikely" side, yes, this
+approach sounds ok. Thanks.
+
+> > OTOH maybe we don't need to care, since __netdev_update_features also
+> > (kind of) ignores those errors:
+> > 
+[...]
 > 
-> Allow userspace to select GICD_IIDR revision 1, which restores the
-> original pre-d53c2c29ae0d ("KVM: arm/arm64: vgic: Allow configuration
-> of interrupt groups") behaviour where interrupt groups are not
-> guest-configurable.
+> Well, in this case we have the chance to do something nicer (even
+> proper error message back to the user via extack) for a small
 
-I'm a bit surprised by this.
+(That reminds me I have a branch of "macsec: add extack to X" patches
+I still need to polish and submit. I don't think I'll get to it before
+the merge window opens, I'll rebase on top of your changes.)
 
-Either your guest knows that the group registers are not writable and
-already deals with the buggy behaviour by not configuring the groups
-(or configuring them in a way that matches what the implementation
-does). Or it configures them differently and totally fails to handle
-the interrupts as they are delivered using the wrong exception type,
-if at all.
+> complexity cost. Perhaps the VLAN filter handling could be improved
+> separately.
 
-I'd expect that your guests fall in the former category and not the
-latter, as we'd be discussing a very different problem. And my vague
-recollection of this issue is that we had established that as long as
-the reset values were unchanged, there was no harm in letting things
-rip.
-
-So what is this *really* fixing?
-
-> 
-> When revision 1 is selected:
->  - GICv2: IGROUPR reads as zero (group 0), writes are ignored
->  - GICv3: IGROUPR reads as all-ones (group 1), writes are ignored
->  - v2_groups_user_writable is not set
-> 
-> This is implemented by checking the implementation revision in
-> vgic_mmio_read_group() and vgic_mmio_write_group() and returning
-> the fixed values when the revision is below 2.
-> 
-> Fixes: d53c2c29ae0d ("KVM: arm/arm64: vgic: Allow configuration of interrupt groups")
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> ---
->  arch/arm64/kvm/vgic/vgic-mmio-v2.c |  5 +++++
->  arch/arm64/kvm/vgic/vgic-mmio-v3.c |  4 ++++
->  arch/arm64/kvm/vgic/vgic-mmio.c    | 15 +++++++++++++++
->  include/kvm/arm_vgic.h             |  1 +
->  4 files changed, 25 insertions(+)
-> 
-> diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v2.c b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-> index 0643e333db35..14aa49f86f60 100644
-> --- a/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-> +++ b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-> @@ -20,6 +20,8 @@
->   * Revision 1: Report GICv2 interrupts as group 0 instead of group 1
->   * Revision 2: Interrupt groups are guest-configurable and signaled using
->   * 	       their configured groups.
-> + * Revision 3: GICv2 behaviour is unchanged from revision 2.
-> + * 	       (GICv3 gains GICR_CTLR.{IR,CES}; see vgic-mmio-v3.c)
-
-nit: I don't think we need cross-version documentation, so just drop
-the second line.
-
->   */
->  
->  static unsigned long vgic_mmio_read_v2_misc(struct kvm_vcpu *vcpu,
-> @@ -93,6 +95,9 @@ static int vgic_mmio_uaccess_write_v2_misc(struct kvm_vcpu *vcpu,
->  		 */
->  		reg = FIELD_GET(GICD_IIDR_REVISION_MASK, val);
->  		switch (reg) {
-> +		case KVM_VGIC_IMP_REV_1:
-> +			dist->implementation_rev = reg;
-> +			return 0;
->  		case KVM_VGIC_IMP_REV_2:
->  		case KVM_VGIC_IMP_REV_3:
->  			vcpu->kvm->arch.vgic.v2_groups_user_writable = true;
-
-nit: move the v1 handling down with a fallthrough in v2/v3 so that we
-don't duplicate the basic handling:
-
-diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v2.c b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-index 406845b3117cf..34f8b2b615fc5 100644
---- a/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-+++ b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-@@ -96,6 +96,8 @@ static int vgic_mmio_uaccess_write_v2_misc(struct kvm_vcpu *vcpu,
- 		case KVM_VGIC_IMP_REV_2:
- 		case KVM_VGIC_IMP_REV_3:
- 			vcpu->kvm->arch.vgic.v2_groups_user_writable = true;
-+			fallthrough;
-+		case KVM_VGIC_IMP_REV_1:
- 			dist->implementation_rev = reg;
- 			return 0;
- 		default:
-
-> diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v3.c b/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-> index 5913a20d8301..0130db71cfc9 100644
-> --- a/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-> +++ b/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-> @@ -74,8 +74,11 @@ bool vgic_supports_direct_sgis(struct kvm *kvm)
->  /*
->   * The Revision field in the IIDR have the following meanings:
->   *
-> + * Revision 1: Interrupt groups are not guest-configurable.
-> + * 	       IGROUPR reads as all-ones (group 1), writes ignored.
->   * Revision 2: Interrupt groups are guest-configurable and signaled using
->   * 	       their configured groups.
-> + * Revision 3: GICR_CTLR.{IR,CES} are advertised.
->   */
->  
->  static unsigned long vgic_mmio_read_v3_misc(struct kvm_vcpu *vcpu,
-> @@ -196,6 +199,7 @@ static int vgic_mmio_uaccess_write_v3_misc(struct kvm_vcpu *vcpu,
->  
->  		reg = FIELD_GET(GICD_IIDR_REVISION_MASK, val);
->  		switch (reg) {
-> +		case KVM_VGIC_IMP_REV_1:
->  		case KVM_VGIC_IMP_REV_2:
->  		case KVM_VGIC_IMP_REV_3:
->  			dist->implementation_rev = reg;
-> diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
-> index a573b1f0c6cb..9eb95f13b9b6 100644
-> --- a/arch/arm64/kvm/vgic/vgic-mmio.c
-> +++ b/arch/arm64/kvm/vgic/vgic-mmio.c
-> @@ -48,6 +48,17 @@ unsigned long vgic_mmio_read_group(struct kvm_vcpu *vcpu,
->  	u32 value = 0;
->  	int i;
->  
-> +	/*
-> +	 * Revision 1 and below: groups are not guest-configurable.
-> +	 * GICv2 reports all interrupts as group 0 (RAZ).
-> +	 * GICv3 reports all interrupts as group 1 (RAO).
-> +	 */
-> +	if (vgic_get_implementation_rev(vcpu) < KVM_VGIC_IMP_REV_2) {
-> +		if (vcpu->kvm->arch.vgic.vgic_model == KVM_DEV_TYPE_ARM_VGIC_V3)
-> +			return -1UL;
-
-Hmmm... This can only be a 32bit access, so returning non-zero bits in
-the top half is weird. It will be narrowed down before hitting the
-guest, but still. Anyway, see below.
-
-> +		return 0;
-> +	}
-> +
-
-Why is this needed at all? The group reset values are already the
-expected ones for v1, and as long as we prevent writes, the reported
-group configuration will be as expected.
-
->  	/* Loop over all IRQs affected by this read */
->  	for (i = 0; i < len * 8; i++) {
->  		struct vgic_irq *irq = vgic_get_vcpu_irq(vcpu, intid + i);
-> @@ -73,6 +84,10 @@ void vgic_mmio_write_group(struct kvm_vcpu *vcpu, gpa_t addr,
->  	int i;
->  	unsigned long flags;
->  
-> +	/* Revision 1 and below: groups are not guest-configurable. */
-> +	if (vgic_get_implementation_rev(vcpu) < KVM_VGIC_IMP_REV_2)
-> +		return;
-> +
->  	for (i = 0; i < len * 8; i++) {
->  		struct vgic_irq *irq = vgic_get_vcpu_irq(vcpu, intid + i);
->  
-> diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
-> index f2eafc65bbf4..90fb6cd3c91c 100644
-> --- a/include/kvm/arm_vgic.h
-> +++ b/include/kvm/arm_vgic.h
-> @@ -248,6 +248,7 @@ struct vgic_dist {
->  
->  	/* Implementation revision as reported in the GICD_IIDR */
->  	u32			implementation_rev;
-> +#define KVM_VGIC_IMP_REV_1	1 /* GICv2 interrupts as group 0 */
->  #define KVM_VGIC_IMP_REV_2	2 /* GICv2 restorable groups */
->  #define KVM_VGIC_IMP_REV_3	3 /* GICv3 GICR_CTLR.{IW,CES,RWP} */
->  #define KVM_VGIC_IMP_REV_LATEST	KVM_VGIC_IMP_REV_3
-
-Thanks,
-
-	M.
+I'm not sure if this would be an "improvement to VLAN filter handling"
+or a "(breaking) change of user-visible behavior". Probably
+improvement. Or maybe it's "unlikely enough" that nobody has ever
+cared.
 
 -- 
-Jazz isn't dead. It just smells funny.
+Sabrina
