@@ -1,64 +1,65 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34C921B9F5
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 03:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5558D126C03
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 03:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775620019; cv=none; b=GNpr/yvHyIJP+wjSSvTYVBKbg2I1z7m2J6T2rbT0JgVZRe3ufHbjVow0I3NZABd/al5sTV9pesfoe//BQkjLm1C2MkPJ6Y4NV5OBswWr10dEBFNAVXYR/+eUk1S/Pgi01FGozelM7OsQoIMG8F2nmSBCBUr7iIrpSxiRLle8mCU=
+	t=1775620027; cv=none; b=cFN9V/yC7TNYj1XhzqLA4Cv5pyRZ4XUL7tAuNoLA2t9kgNmQD/EtUytzOFB3VNCpY1jgujMXeOTzIbSttt8H+mcsA8fG2IZhDeHJ6GQ9fsReVs0ZSCQI7djVBFKFcQ8r+VoNMR8tTsoYyGuH52JNz1fw6IQDrBrVSEk7ORsCbWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775620019; c=relaxed/simple;
-	bh=XLWK3U7t3wtnUiVeSeL403GD/3ggJvFV0dCHkY3YMwo=;
+	s=arc-20240116; t=1775620027; c=relaxed/simple;
+	bh=qcV42KYEemU5riSTjc6YXQrEjjsTBdVPiuqNE8v7kl0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fjx8YGw12r/VAmo/uiEFrLGVd8ijBgp/tOwfeJLs4LECJYviAx+PNLnu8qCQ6tdO5oDnBh2TsbsFPgq9T8W3+x2llSJ9rMzw1/zXjzsSfTbpMaulpvwM2M4cnLKlAEYXe0VX7ntp6dX3av+Zklgrs+Jsn5nShud0eSjqUdHpnvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlImg9ZM; arc=none smtp.client-ip=209.85.128.170
+	 MIME-Version; b=YN00oFLESn7FKsC+7VFjkoBzFmbBC8UETv7BSWqHoLbzc6r19mLyZZ08bVClQNbEWP7vPvriBy3/3QoujwkC+lGhqGwLAfpAf8CFFEOjH6rV6BfD6c90FcaOLekGpvUBPD2SnIUzP+a9eElZzEvmMkpzrAQAFYR5hkbud3TxJwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SpkFwlzz; arc=none smtp.client-ip=209.85.128.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlImg9ZM"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-79be0de8610so56742107b3.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 20:46:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SpkFwlzz"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-7927261a3acso50577667b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 20:47:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775620018; x=1776224818; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775620025; x=1776224825; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gEYNDhDMiU1B6pQ6eoniUd0oA2vBhdScWVGs5ZrFJmE=;
-        b=IlImg9ZMzcIHtEWX/wo0mYRM8uDU2XMJZ8EDGrXzzqUqv3WoAN8SidnFqMpOEkCFPO
-         kbCPOpGTHN1EvpKxB6WtgcS15Uikw4alIYqtGwAMU0IqJom2qEfRL29aoYCKvtCKsx+c
-         blBvxHyB0DWnyEVmFtdBu7dmIAtp3zi6q7uLwoD29B1DJ/WCN94o8n6jV4qWCCRhmnf6
-         2+7SotRmxzvVwbfPlAbj6jHO7zTRKD3KWjLYNp8IecZaOOMFORgJxZwPgFgzqyKt6XL2
-         uFGm4HlLruAIxX1hQfdfOKjpG2AUwI6r6iA7a3UDlQauUU+ZS+2YSrc23uO9ZKpo10nz
-         1n/g==
+        bh=ZDq9GzdF3GTXYAI+d4YHY/mPxeR+u0QCqSkXrW51+Yo=;
+        b=SpkFwlzzQmYfscXIlDaIiVVkmkLrKaVlbQWodbevxZP2Hu0Tfgwg8ogiCeu5ka9VuY
+         EIH9XcEGTBOuB61dQkWHDx1rIYVUq0r+wgctui6HCoyvGR9m1AsoWxtcUqQ+BgGZRi3W
+         qA7VTsqOtSN2mhn0HD/ugwCF/vsVignSTwvZuQDgpuges/iYF7y2qeAfr+aVuANo1DfQ
+         l1+5AucCrldeS9Jq1XCmPcpDuM80jMYXrHBVc15pTYuS6M6CE3WRUzTp8XaAG18XgsIF
+         6OZGJlImYj4Ku6bv3JcKfogVgNj8c1oFsSDzTFUaIblMbtY0HNmS8jSIapuOrQ7Czxj/
+         dk7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775620018; x=1776224818;
+        d=1e100.net; s=20251104; t=1775620025; x=1776224825;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=gEYNDhDMiU1B6pQ6eoniUd0oA2vBhdScWVGs5ZrFJmE=;
-        b=PwzbqW9ol84N2u7lYKxsRxgvisVWUz8flS0l7mlobjLx6lIf/XBxVpy4Tw+uVxAdlN
-         MvV/dJJoLUlX0BJ7drrFWt5gbQTcoxawxUl3r7cGzlF6aduUWX4Bb+PGAf5g2Sv/qqE4
-         5lOFxF+TdTL2GJqGVQziIZV8D3Dj5poHWMDfC6jFJyZO/3vftFrsbsLCedDyNKTnRW74
-         sQFWQdKU41422HAFpTp9FvoTgCmumsbOqW/wEXfHdcWVYgezeZ8v+6e0rdINgWH8hLmV
-         q3SPj2cw1cvbO7eJI4fzF0997iP4qkUd6aQGeXmHej9hv0Iw5Zun6Bsmv+E+4qAWMZKw
-         rXMg==
-X-Forwarded-Encrypted: i=1; AJvYcCUewNK3EPlcXch7OzIxt3tGiRaN//fAWXWV36e6QhiRaAYtMTb3z+/tI1DrmUywwVlEjCP42do9fuMf0J0P0zY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxDxlWSkrqoc3ouORHgzju6rTqTD8AOzFqrkSFCIi9rCpT9TWh
-	sKyQfoKp1b6Ur7tIVsFHJWU3ihGDL8UcYtVXrn+6Q/3zhhcfIxyqInZw
-X-Gm-Gg: AeBDievF5egUFeTmMhUdS2J7Br5Hbsdcc3aH2QGQWioFEopGiC6jfE7LHOlyOarhOL0
-	tweqa05Rm7LjU5A1pgENqlVlI0LC1e1oW6rhushK+Mm66dyYCcxViavsJnOHOtA5Yf0+JeBeFZk
-	sIt5Nh70/P71807u9gAF9RIkGqxs2l2tIfLuxeoO0L6X7a/h2FIxXoHSgP9EM0aipkda3xUjAOe
-	tGTAKgjIR4eUPLE2Ckd3jBPS3vpwduTFIOCG9TMfXQQsyKRzP1ESAgPRf5MhwPctjOERFi3C2nR
-	RvJhRnR40WJIgVxr8ZkwjDoJihptMaoPdmiZiOMu0RIimAuQOoh9DgM4nUsyBrKExl9F0+YCy/1
-	yEQaqat0lGuo/Hhpc5tWIhR2RCqQ0OLUvk3nqAHhknSL1+zmVPe6UoLkjSPXYa1CBomwDFgKh16
-	aX+SSS2ii3sIKFowfiv39bss+B44j3phBHxPOkWeBtx7jawW1BL+/CPWhS1xLis9ieDSQoJOwfZ
-	eqVQjpjnm8pi5B/EpTwxochICkC2jHszs7rflKUM1C4G3ijpS2+itmqxNFj6NfHeFE=
-X-Received: by 2002:a05:690c:3482:b0:7ac:ff2:4603 with SMTP id 00721157ae682-7ac0ff272d5mr6996747b3.20.1775620017727;
-        Tue, 07 Apr 2026 20:46:57 -0700 (PDT)
+        bh=ZDq9GzdF3GTXYAI+d4YHY/mPxeR+u0QCqSkXrW51+Yo=;
+        b=qjQfksEM5dRe9RPlK3npxMS0I84WV1dgZIfqoGI0RrWqIgE6FhqcGnm6wDtnfDNHFr
+         QEehSKLe30u5pbDO8cVOFJBvFmxDqSwOfr7odYCdV/oaHc6jIMnpkXfEIKTDLlWMz6K2
+         ToEh0wU7NGbxfcCkTgmPNB830ZlxaO4ntDu3i6KYCfLlMJnPOePbuRqg/lM7fZwy1H0S
+         c1BrXXwr0DKfQCEppBHPKoehr4eTV1EE0GYi3buJ76N7A0swek9sU9c10DZ8eKHC3jMB
+         eocst4/lcSdEUDYYxgZuDoIz9nNK8TfB1vli6qjck16XCTtLmAluRDnhux4nFGh5tY+o
+         SxYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWK8Yf5xb36FEQctr68uMXYOKHbccTdSYOF8E7RksSY7sGAIb0tQyCPCBxDOOwJzmR0c2dI5DoezNqvY6EnQuc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyikMkoe8OAYaaNtXkGyWvK6UqSnsC3EnxPMjfhCbm6lTbSXbWD
+	ZWzgL7yKRJOT+BBxOn8iywnsxfEHAoY0lFHzzXltmGQ+CMEVkqqSpAT0
+X-Gm-Gg: AeBDieu7VAIIm1Wi6rQQYZLyZWnBv4fJjC9dHjAiR7Pyiepd/CKAxrHxW55ZpBJMLQ3
+	fK7AcvZ24fHPwXGr8lpvDSAmhfgVNm/4OX+AABtvbH+V4YoHOCuq6BdE+OYkbpXAiXzx/may3Cr
+	Kt59MrdeBjMJrAL79FiK6YbkQ+LYXe7I5EHvyPdpD3WgmDc3WYGtybD+rN8AH3TcC6YKhtWg0OP
+	mrrJMMSMQJCvsxBuNGjTZQSjLUFvmtKU56UzRDgSACb/WS0QHGeRDTXECRUDF8Mf1MGWLXFNspP
+	l/tMNv3fcp8arFdUwXLJZaTA89II5Q4PkiXbmDkDpT4q/tlw4WjkgAzrjTRoZQtZEuXgyYgNuF5
+	uDdy368plIwqdSRkcZt4QzqUg2M/mY8m9JMgEfpoCfatwHv4hb2+VAJSGExuXma9paeRf3F6/aL
+	+H5/quPOrHPIfzcg+peMAXBYLHL1/7zaWMGqnu3ML1TDDX0HnUGomHKKbQTkOB0iAGkOTPXqZmv
+	ftfDqXkrHQNUfl5Tane+Mf16ZPrv1GdY/GXms8wwTUsDRfr7RukwvQanY72qoT5rSUN/O0ZPkhJ
+	CQ==
+X-Received: by 2002:a05:690c:dc9:b0:79e:9cc1:ede7 with SMTP id 00721157ae682-7a4d62545a3mr195592387b3.10.1775620025220;
+        Tue, 07 Apr 2026 20:47:05 -0700 (PDT)
 Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7a370df155csm79129167b3.36.2026.04.07.20.46.49
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7a370df155csm79129167b3.36.2026.04.07.20.46.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 20:46:57 -0700 (PDT)
+        Tue, 07 Apr 2026 20:47:04 -0700 (PDT)
 From: Sun Jian <sun.jian.kdev@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -84,9 +85,9 @@ Cc: martin.lau@linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf v4 1/2] bpf: reject short IPv4/IPv6 inputs in bpf_prog_test_run_skb
-Date: Wed,  8 Apr 2026 11:46:22 +0800
-Message-ID: <20260408034623.180320-2-sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf v4 2/2] selftests/bpf: cover short IPv4/IPv6 inputs with adjust_room
+Date: Wed,  8 Apr 2026 11:46:23 +0800
+Message-ID: <20260408034623.180320-3-sun.jian.kdev@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260408034623.180320-1-sun.jian.kdev@gmail.com>
 References: <20260408034623.180320-1-sun.jian.kdev@gmail.com>
@@ -98,63 +99,136 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_prog_test_run_skb() calls eth_type_trans() first and then uses
-skb->protocol to initialize sk family and address fields for the test
-run.
+Add a selftest covering ETH_HLEN-sized IPv4/IPv6 EtherType inputs for
+bpf_prog_test_run_skb().
 
-For IPv4 and IPv6 packets, it may access ip_hdr(skb) or ipv6_hdr(skb)
-even when the provided test input only contains an Ethernet header.
+Reuse a single zero-initialized struct ethhdr eth_hlen and set
+eth_hlen.h_proto from the per-test h_proto field.
 
-Reject the input earlier if the Ethernet frame carries IPv4/IPv6
-EtherType but the L3 header is too short.
+Also add a dedicated tc_adjust_room program and route the short
+IPv4/IPv6 cases to it, so the selftest actually exercises the
+bpf_skb_adjust_room() path from the report.
 
-Fold the IPv4/IPv6 header length checks into the existing protocol
-switch and return -EINVAL before accessing the network headers.
-
-Fixes: fa5cb548ced6 ("bpf: Setup socket family and addresses in bpf_prog_test_run_skb")
-Reported-by: syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=619b9ef527f510a57cfc
 Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
- net/bpf/test_run.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ .../selftests/bpf/prog_tests/empty_skb.c      | 40 +++++++++++++++++--
+ tools/testing/selftests/bpf/progs/empty_skb.c |  7 ++++
+ 2 files changed, 44 insertions(+), 3 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 178c4738e63b..300e2bfc5a62 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1120,19 +1120,23 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+diff --git a/tools/testing/selftests/bpf/prog_tests/empty_skb.c b/tools/testing/selftests/bpf/prog_tests/empty_skb.c
+index 438583e1f2d1..c9fcb70cbafb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/empty_skb.c
++++ b/tools/testing/selftests/bpf/prog_tests/empty_skb.c
+@@ -10,8 +10,8 @@ void test_empty_skb(void)
+ 	struct empty_skb *bpf_obj = NULL;
+ 	struct nstoken *tok = NULL;
+ 	struct bpf_program *prog;
++	struct ethhdr eth_hlen;
+ 	char eth_hlen_pp[15];
+-	char eth_hlen[14];
+ 	int veth_ifindex;
+ 	int ipip_ifindex;
+ 	int err;
+@@ -25,7 +25,9 @@ void test_empty_skb(void)
+ 		int err;
+ 		int ret;
+ 		int lwt_egress_ret; /* expected retval at lwt/egress */
++		__be16 h_proto;
+ 		bool success_on_tc;
++		bool adjust_room;
+ 	} tests[] = {
+ 		/* Empty packets are always rejected. */
  
- 	switch (skb->protocol) {
- 	case htons(ETH_P_IP):
--		sk->sk_family = AF_INET;
--		if (sizeof(struct iphdr) <= skb_headlen(skb)) {
--			sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
--			sk->sk_daddr = ip_hdr(skb)->daddr;
-+		if (skb_headlen(skb) < sizeof(struct iphdr)) {
-+			ret = -EINVAL;
-+			goto out;
- 		}
-+		sk->sk_family = AF_INET;
-+		sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
-+		sk->sk_daddr = ip_hdr(skb)->daddr;
- 		break;
- #if IS_ENABLED(CONFIG_IPV6)
- 	case htons(ETH_P_IPV6):
--		sk->sk_family = AF_INET6;
--		if (sizeof(struct ipv6hdr) <= skb_headlen(skb)) {
--			sk->sk_v6_rcv_saddr = ipv6_hdr(skb)->saddr;
--			sk->sk_v6_daddr = ipv6_hdr(skb)->daddr;
-+		if (skb_headlen(skb) < sizeof(struct ipv6hdr)) {
-+			ret = -EINVAL;
-+			goto out;
- 		}
-+		sk->sk_family = AF_INET6;
-+		sk->sk_v6_rcv_saddr = ipv6_hdr(skb)->saddr;
-+		sk->sk_v6_daddr = ipv6_hdr(skb)->daddr;
- 		break;
- #endif
- 	default:
+@@ -46,6 +48,28 @@ void test_empty_skb(void)
+ 			.err = -EINVAL,
+ 		},
+ 
++		/* ETH_HLEN-sized packets with IPv4/IPv6 EtherType but
++		 * no L3 header are rejected.
++		 */
++		{
++			.msg = "veth short IPv4 ingress packet",
++			.data_in = &eth_hlen,
++			.data_size_in = sizeof(eth_hlen),
++			.ifindex = &veth_ifindex,
++			.err = -EINVAL,
++			.h_proto = htons(ETH_P_IP),
++			.adjust_room = true,
++		},
++		{
++			.msg = "veth short IPv6 ingress packet",
++			.data_in = &eth_hlen,
++			.data_size_in = sizeof(eth_hlen),
++			.ifindex = &veth_ifindex,
++			.err = -EINVAL,
++			.h_proto = htons(ETH_P_IPV6),
++			.adjust_room = true,
++		},
++
+ 		/* ETH_HLEN-sized packets:
+ 		 * - can not be redirected at LWT_XMIT
+ 		 * - can be redirected at TC to non-tunneling dest
+@@ -54,7 +78,7 @@ void test_empty_skb(void)
+ 		{
+ 			/* __bpf_redirect_common */
+ 			.msg = "veth ETH_HLEN packet ingress",
+-			.data_in = eth_hlen,
++			.data_in = &eth_hlen,
+ 			.data_size_in = sizeof(eth_hlen),
+ 			.ifindex = &veth_ifindex,
+ 			.ret = -ERANGE,
+@@ -68,7 +92,7 @@ void test_empty_skb(void)
+ 			 * tc: skb->len=14 <= skb_network_offset=14
+ 			 */
+ 			.msg = "ipip ETH_HLEN packet ingress",
+-			.data_in = eth_hlen,
++			.data_in = &eth_hlen,
+ 			.data_size_in = sizeof(eth_hlen),
+ 			.ifindex = &ipip_ifindex,
+ 			.ret = -ERANGE,
+@@ -108,17 +132,27 @@ void test_empty_skb(void)
+ 	SYS(out, "ip addr add 192.168.1.1/16 dev ipip0");
+ 	ipip_ifindex = if_nametoindex("ipip0");
+ 
++	memset(eth_hlen_pp, 0, sizeof(eth_hlen_pp));
++	memset(&eth_hlen, 0, sizeof(eth_hlen));
++
+ 	bpf_obj = empty_skb__open_and_load();
+ 	if (!ASSERT_OK_PTR(bpf_obj, "open skeleton"))
+ 		goto out;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (tests[i].data_in == &eth_hlen)
++			eth_hlen.h_proto = tests[i].h_proto;
++
+ 		bpf_object__for_each_program(prog, bpf_obj->obj) {
+ 			bool at_egress = strstr(bpf_program__name(prog), "egress") != NULL;
+ 			bool at_tc = !strncmp(bpf_program__section_name(prog), "tc", 2);
++			bool is_adjust_room = !strcmp(bpf_program__name(prog), "tc_adjust_room");
+ 			int expected_ret;
+ 			char buf[128];
+ 
++			if (tests[i].adjust_room != is_adjust_room)
++				continue;
++
+ 			expected_ret = at_egress && !at_tc ? tests[i].lwt_egress_ret : tests[i].ret;
+ 
+ 			tattr.data_in = tests[i].data_in;
+diff --git a/tools/testing/selftests/bpf/progs/empty_skb.c b/tools/testing/selftests/bpf/progs/empty_skb.c
+index 4b0cd6753251..44326f5cc8bb 100644
+--- a/tools/testing/selftests/bpf/progs/empty_skb.c
++++ b/tools/testing/selftests/bpf/progs/empty_skb.c
+@@ -35,3 +35,10 @@ int tc_redirect_egress(struct __sk_buff *skb)
+ 	ret = bpf_clone_redirect(skb, ifindex, 0);
+ 	return 0;
+ }
++
++SEC("tc")
++int tc_adjust_room(struct __sk_buff *skb)
++{
++	ret = bpf_skb_adjust_room(skb, 4, BPF_ADJ_ROOM_NET, 0);
++	return 0;
++}
 -- 
 2.43.0
 
