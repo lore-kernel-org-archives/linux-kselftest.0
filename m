@@ -1,201 +1,186 @@
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F548255F28;
-	Wed,  8 Apr 2026 11:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7CD264A65;
+	Wed,  8 Apr 2026 11:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775646100; cv=none; b=gHtRyaMSm0y1CSs08AOz8upjqVJvhf5J5dUKlYp4jdAkPcAR5MQpXgfMoRaEYqxbXzZ2NHNa2nwrfuA4xpF+vrp5CDX9OcEcnuhfBqccnihsYbX7qQXgITbI8HJicn1/4xAFyGlVZFV6ZDgUHaAZUN9u0IIX23Dj9co+85B/xFk=
+	t=1775646135; cv=none; b=bNm8BSMGBiOWUnvS57UGmfVCWNDFDMy3u+WPTYlL9WmXOhzgWZ544ko1gfBvd0T036ZSgd6uwjy6GyO4tIlh9tpEYlo8B7E1J7HSRZgRUnJcxMzUR2ndoVee/ngVijB7bf6yQFGb7BRV2E9EWqnQZ6IHbKvoa/Kkgb5dvjDRhJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775646100; c=relaxed/simple;
-	bh=rqLHZkSQieoV78ujo4NYYUtMJOxEbCrP/xCVBgUgngI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D59NQ0afA+jrBRx2wSdRPz9nRv9i3si2QkVM00hSd1FWgeQQE362QG4KS9kAkywejrdulzBF9rRrka1HVc7jEyyBzqMu9kvYMwAzNZEguWTwKH4j4YbsuArhDgctgUlNNrkg1o2E2LB+pioEz/5GM+PjfHlTTNnqYqfle/g+M34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=VAtsNXg3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SgWHGWbI; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1775646135; c=relaxed/simple;
+	bh=BcjAsJfFFdxOuFJG+yx8h9dEcchCwv67qshCeNpQzVY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HcVYniisuoRS9K/E72987FwyQpBA+2pzwMrgQu8ZPejBd+dr/hmbbz0atnle7whcuoAuYaf7nYGA3L8hz+w0lyEtt8SsVTR3cqIaNrJBdvjk1cW/Y6VcGKgITm5iF/AQ3dm7kusxK26Zq1qGePNI/4t2qA7cRzb/1b4KoG0xPH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=j0m/Wl5D; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="VAtsNXg3";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SgWHGWbI"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 97A2D7A0032;
-	Wed,  8 Apr 2026 07:01:35 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Wed, 08 Apr 2026 07:01:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
-	 t=1775646095; x=1775732495; bh=/qAIXmolX1JlHIhJFgODJurabtwByrCp
-	4xHUFf3leGQ=; b=VAtsNXg3txGInDFnHnzZbR+duJjPTP8xBCUxFy6UK5TwmzCW
-	QYtP8cfzwzJtEe6mZdHwxHb2JFyMZWdT1sP4RUp9SLN90zjmJwIGU4LEsY4j7Eo8
-	Fb0K1npbl3jA2wD/mvhEGzgKz0vpwmxqrPHSTifaxsT2xd1K+RPnLULOobOSaIlX
-	Ag2k5eD6RhH5w5zcmQT0gttOMD36+i2UF/P0PSdrR2wt3JU64fpG70W1tudeFmeU
-	5+0MptCiGES+JYOK90ks2/XZZXZiH2pSa4RQtJw/woktwt8pahbHCY57+M51qIRo
-	4nS8gLxK7k+32lWyyVk3alzhgSu9r34JfZFLow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1775646095; x=
-	1775732495; bh=/qAIXmolX1JlHIhJFgODJurabtwByrCp4xHUFf3leGQ=; b=S
-	gWHGWbIqd4HvGxrBHOzaFZHBz31AR8pRZozC0GChB22/UTuqFnlrOi5TDAEKzbzH
-	F7k7Z7FKO09lWV1FxwKuR4TXc5xVCC3KpxZjAnB/jWoy9fTRF70SYetSAGgZEHAb
-	X6erfBKc9tKaJeSwfdwTvan/7hkAUj33/wKiLfRef2ZqgIWAMc8rz5JAswUvuqpW
-	E+7xQTE7F47Mufx5Nx2t2yFxWwluZ7KF1ImmOFSAibzPcRLEcNd//oDiZIBuw6el
-	NCO1eJSySsErjlXg87p8pjtSxn6z/7lDJJAU4GAIaSVANwbLzqc6U2OWMc9eyE4D
-	AaBWp5j/zrCc5qmTx4T+w==
-X-ME-Sender: <xms:jjXWaab-CkdCd--7D28i_TpwLye3vTtsg6NVxk5J6CTPQzxGTBk_qQ>
-    <xme:jjXWae_NLQjG8zgTOD0E4AsX-51WzxgBMUsAITfhOerVpUa25AmnROOdoImIUTwFx
-    NWDP0o_vBoHlQD7Iew-Q9M5w2yqzA5hZ7ehG6js9mwym_ts_9akMYA>
-X-ME-Received: <xmr:jjXWaUP_YwNFDFjkyYhPx7npMBhye2IsXJQhXaMvHN32b753BihFoV4bDhyd>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvfeegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepgfdvgeeitefffedvgfdutdelgeeihfegueehteevveegveejudelfeff
-    ieehledvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopeduvddpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtoheptghrrghtihhusehnvhhiughirgdrtghomh
-    dprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpthht
-    ohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehlihhnuhigqd
-    hkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepught
-    rghtuhhlvggrsehnvhhiughirgdrtghomhdprhgtphhtthhopehsughfsehfohhmihgthh
-    gvvhdrmhgvpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    ohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvug
-    hhrghtrdgtohhm
-X-ME-Proxy: <xmx:jjXWaTGzrN8lTs3pbSRn8fAX2Ps0hWkj9VFY_T1LOWrJMhbravhDCw>
-    <xmx:jjXWaaxfS94YuZ4tf3oW_eppzE5FEH9Hl71KBldjFKIJuD9A3rCu7w>
-    <xmx:jjXWacrCBgsRk69TI9PnGaOeG5b3uom1vLS4tMLs8IoraOhGX5YQSg>
-    <xmx:jjXWaYmNCgBUF0jfHi1Rxe8geeq2z97J31JOdgfSlVA50iJGl1xqvg>
-    <xmx:jzXWadc5sJc-3j4UByQQo0f_mTp0xXWxe6pD1oR_hWovyGMAGl3S5PeH>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Apr 2026 07:01:33 -0400 (EDT)
-Date: Wed, 8 Apr 2026 13:01:32 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"horms@kernel.org" <horms@kernel.org>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH net v6 4/4] macsec: Support VLAN-filtering lower devices
-Message-ID: <adY1jEs-oYXPosY8@krikkit>
-References: <20260330130130.989236-1-cratiu@nvidia.com>
- <20260330130130.989236-5-cratiu@nvidia.com>
- <ac6BsG4IhAajip1s@krikkit>
- <e2eefeb7033caa859551834d3448a77b7af3c7d4.camel@nvidia.com>
- <adYQ3OMfEEWFTd7X@krikkit>
- <3aab1732c62fa8241ea91f2e26720ba47d646a3a.camel@nvidia.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="j0m/Wl5D"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0959832E3;
+	Wed,  8 Apr 2026 04:02:07 -0700 (PDT)
+Received: from [10.57.32.88] (unknown [10.57.32.88])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DE403F632;
+	Wed,  8 Apr 2026 04:02:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1775646132; bh=BcjAsJfFFdxOuFJG+yx8h9dEcchCwv67qshCeNpQzVY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=j0m/Wl5DLNS3bb0LPJygmxr64zm8k47jOHhnUdaH8o4hEg7UUONrE66mssRlJ7NT2
+	 6bzBCKlVrr+w2+XGl2eztRQqDLePKhvx7aHRms/5lUbXVIvqBABzatYJU+Jw6NrJnn
+	 B0h8Vu2G1rPcddUOVHZq+00sZ9LGtr5cxfhIEmOY=
+Message-ID: <9c8ddc37-a236-446b-a85a-261f370d644e@arm.com>
+Date: Wed, 8 Apr 2026 12:01:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v4 10/44] KVM: guest_memfd: Add support for
+ KVM_SET_MEMORY_ATTRIBUTES2
+To: Vishal Annapurve <vannapurve@google.com>,
+ Michael Roth <michael.roth@amd.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com,
+ andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, ira.weiny@intel.com,
+ jmattson@google.com, jthoughton@google.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
+ aneesh.kumar@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
+ Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>,
+ Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
+ <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com>
+ <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
+ <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com>
+ <CAEvNRgGm9icDK8sK5ZfqHEOEqSbvjwtihE4p9d3vpBq-NfVjmw@mail.gmail.com>
+ <CAEvNRgEtigp7+PVDkyu_DH947CUqDt312d+P+hWjjd2fHONiag@mail.gmail.com>
+ <yvfwexsub7nrogh67hzcsupbrkzer6a7kbeao5tlq4elrzc2iz@xrwdjd7p32pp>
+ <CAGtprH-kgRByFvvCYeWMXtsvpb6qpaWAo8k-3PEnioyPg-LEvA@mail.gmail.com>
+Content-Language: en-GB
+From: Steven Price <steven.price@arm.com>
+In-Reply-To: <CAGtprH-kgRByFvvCYeWMXtsvpb6qpaWAo8k-3PEnioyPg-LEvA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3aab1732c62fa8241ea91f2e26720ba47d646a3a.camel@nvidia.com>
 
-2026-04-08, 10:24:28 +0000, Cosmin Ratiu wrote:
-> On Wed, 2026-04-08 at 10:25 +0200, Sabrina Dubroca wrote:
-> > 2026-04-07, 15:07:47 +0000, Cosmin Ratiu wrote:
-> > > On Thu, 2026-04-02 at 16:48 +0200, Sabrina Dubroca wrote:
-> > > > If this happens on a real device, the VLAN filters will be
-> > > > broken.
-> > > > I'm
-> > > > not sure what the right behavior would be:
-> > > > 
-> > > > 1. reject the request to enable offload
-> > > > 2. switch to promiscuous mode
-> > > 
-> > > I implemented and tested option 1. In the unlikely scenario adding
-> > > VLAN
-> > > filters prevents offloading
-> > 
-> > How unlikely is it? Resource allocation, talking to HW, device
-> > limits,
-> > anything else that could fail?
-> > 
-> > > , it's better for the driver to be explicit
-> > > and let the user turn on promisc mode themselves. Keeping track of
-> > > whether VLAN filters failed and promisc was used as a fallback adds
-> > > some extra complexity.
-> > 
-> > If it's indeed (very) unlikely, sure. There's still a bit of a
-> > regression/change of behavior for users compared to before the
-> > IFF_UNICAST_FLT patch, but I think we can wait until someone
-> > complains, and then add the tracking if that happens.
-> > 
-> > > What would be the point of IFF_UNICAST_FLT then?
-> > 
-> > The point is that this would just be a fallback.
-> > 
-> > > Please let me know if you agree with this approach, so I can send
-> > > v8
-> > > with it.
-> > 
-> > If you can confirm it's on the "very unlikely" side, yes, this
-> > approach sounds ok. Thanks.
+On 07/04/2026 22:50, Vishal Annapurve wrote:
+> On Tue, Apr 7, 2026 at 2:09 PM Michael Roth <michael.roth@amd.com> wrote:
+>>
+>>> TLDR:
+>>>
+>>> + Think of populate ioctls not as KVM touching memory, but platform
+>>>   handling population.
+>>> + KVM code (kvm_gmem_populate) still doesn't touch memory contents
+>>> + post_populate is platform-specific code that handles loading into
+>>>   private destination memory just to support legacy non-in-place
+>>>   conversion.
+>>> + Don't complicate populate ioctls by doing conversion just to support
+>>>   legacy use-cases where platform-specific code has to do copying on
+>>>   the host.
+>>
+>> That's a good point: these are only considerations in the context of
+>> actually copying from src->dst, but with in-place conversion the
+>> primary/more-performant approach will be for userspace to initial
+>> directly. I.e. if we enforced that, then gmem could right ascertain that
+>> it isn't even writing to private pages via these hooks and any
+>> manipulation of that memory is purely on the part of the trusted entity
+>> handling initial encryption/etc.
+>>
+>> I understand that we decided to keep the option of allowing separate
+>> src/dst even with in-place conversion, but it doesn't seem worthwhile if
+>> that necessarily means we need to glue population+conversion together in
+>> 1 clumsy interface that needs to handle partial return/error responses to
+>> userspace (or potentially get stuck forever in the conversion path).
 > 
-> There are many, many drivers which implement .ndo_vlan_rx_add_vid, I
-> can't really browse them all and determine overall likelihood of
+> I think ARM needs userspace to specify separate source and destination
+> memory ranges for initial population as ARM doesn't support in-place
+> memory encryption. [1]
 
-Sorry, I wasn't requesting that much work, more of a "feeling" based
-on your understanding. Anyway for macsec offload we don't have to care
-about the vast majority of drivers.
+Indeed - CCA requires KVM to first "delegate" the page (effectively the
+shared->private conversion) which will destroy the contents. Then we can
+populate the data (but that obviously has to come from elsewhere).
 
-> failure. But presumably there are some memory allocations involved and
-> some FW communication to add the new filter.
+The closest CCA can do to an in-place conversion is for the kernel to
+copy the data to another temporary buffer and then the firmware can copy
+it back after the delegation. An early version of the CCA Linux patches
+did this (long before guest_memfd). However this is slower than it needs
+to be (two copies) and difficult to size the temporary buffer. Too small
+and you round-trip to the firmware more than you need to, too large and
+you waste memory. And, with increasing support for huge pages in
+guest_memfd and the CCA firmware (aka RMM), it's also challenging to
+preserve huge pages while doing this dance so I want to avoid it if
+possible.
 
-I guess if FW communication fails we're in trouble anyway [*], and memory
-allocation failure is an acceptable reason to reject offloading
-anyway.
-
-[*] rolling back the mdo_add_secy could be a problem if we had
-difficulties talking to the HW?
-
-> An AI prompt of "Explore implementations of .ndo_vlan_rx_add_vid in
-> drivers and classify potential failure sources and their likelihood of
-> failure." resulted in (edited for compactness):
-> """
-> Analyzed 24+ implementations across major drivers. Here's the
-> breakdown:  
-> Category   Likelihood Drivers                         Typical Error
-> HW/FW cmds Low        mlx4, nfp, hinic, qeth, vmxnet3 Device-specific
-> Mem alloc  Very Low   bnx2x, qede, virtio_net         -ENOMEM
-> Filter add Low-Medium mlx5, mlx4, ice, qede, ocelot   -ENOSPC, -EEXIST
-> Locking    Very Low   be2net, mlx4, nfp, hinic        -EBUSY
-> Res limit  Medium     qede (quota check)              Promisc fallback
+> [1] https://lore.kernel.org/kvm/20260318155413.793430-25-steven.price@arm.com/
 > 
-> Three Driver Archetypes  
+>>
+>> So I agree with Ackerley's proposal (which I guess is the same as what's
+>> in this series).
+>>
+>> However, 1 other alternative would be to do what was suggested on the
+>> call, but require userspace to subsequently handle the shared->private
+>> conversion. I think that would be workable too.
 > 
-> 1. Simple bitfield drivers (never fail): e1000, e1000e, ixgbe, igb —
-> just set a VFTA bit in hardware registers, always return 0.
-> 
-> 2. Complex offload drivers (can fail): mlx5 (flow steering rules), mlx4
-> (FW VLAN registration), ice (switch rules + promisc management), qede
-> (quota-aware with promisc fallback), nfp (mailbox commands), hinic (FW
-> commands with rollback).
-> 
-> 3. Delegation/passthrough drivers (inherit failures): bonding, team,
-> hsr, dsa, macvlan, ipvlan, macsec — propagate vlan_vid_add() to lower
-> devices with unwind-on-failure patterns.
-> """
-> 
-> So I guess we go with option 1 for now.
+> IIUC, Converting memory ranges to private after it essentially is
+> treated as private by the KVM CC backend will expose the
+> implementation to the same risk of userspace being able to access
+> private memory and compromise host safety which guest_memfd was
+> invented to address.
 
-ACK
+At least in the Arm CCA case the "exposure" of the private memory is
+only in terms of allowing population - and only before the guest has
+run. The host isn't able to access the memory in any direct way after
+the memory has been delegated. But the RMM provides this populate method
+to copy data into memory (in a measured/controlled manner).
 
--- 
-Sabrina
+From a CCA perspective the logical flow is to mark the memory as private
+and then call the platform-specific function to populate the memory. But
+obviously we can fit in a KVM API which is different.
+
+Note that CCA has a specific VM property called 'RIPAS' (Realm IPA
+State). This is the guest's view of whether memory exists at a
+particular physical address. My current series takes the view that all
+guest_memfd memory is private RAM and the guest will have to
+specifically request that it is converted to shared. I'm hoping this
+series might provide a way for the VMM to configure this (before the
+guest starts executing).
+
+Thanks,
+Steve
+
+>>
+>> One other benefit to Ackerley's/current approach however is that it allows
+>> us to potentially keep hugepages intact in the populate path, since
+>> prep'ing/encrypting everything while it's in a shared state means gmem will
+>> split the hugepage and all the firmware/RMP/etc. data structures will only
+>> be able to handle individual 4K pages. I still suspect doing things like
+>> encoding the initial 2MB OVMF image as a single hugepage might yield
+>> enough benefit to explore this (at some point). So there's some niceness
+>> in knowing that Ackerley's approach would allow for that eventually and
+>> not require a complete rethink on these same topics.
+>>
+>> Thanks,
+>>
+>> Mike
+>>
+>>>
+>>>>>>
+>>>>>> [...snip...]
+>>>>>>
+
