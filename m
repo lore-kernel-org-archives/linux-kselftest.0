@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B563035AC35;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC29535AC2B;
 	Wed,  8 Apr 2026 04:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775623597; cv=none; b=u+dYvvditIw8o8UKqLWiMzJzDWUwoxewvJ9PYB5kXfyguUS9wucNgajYqZqUzX1k0MZXiecPtEVOhXaCykU+p1eeCHWBqckPk5AyjdJEyunAzz9IcsxwpmEfrld+uzqMnN91k6PcHAD/9NrvVHnc3ZkKKlRbaBmXCfsnn1YnarY=
+	t=1775623597; cv=none; b=Hv4vy/qoBqtbaRJREe3x7F7oS6erMXgUwVuIzPjgKzSnuZvBmR5v226I9dYfqCuwnisyQ2vmprVZa6GY6e4kkBocKrpjkVJctgzYVkoHyKoT0x/+U6FfMmvo051TD3Cb8+eqJltVVFRCNt6+zfkADknCrpD3p4nDaXKTwvTMEhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775623597; c=relaxed/simple;
-	bh=WKSjkgsx5mMPbNpqlTOtDYTmkaZDZ/r6A2XwILlbu1g=;
+	bh=jD6rZIHBnAc3F0vl+05n+kzI241HhCjoZQe6JKFRv0k=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BDd/ODGPAxrk+iJXlP6zcDBpv3Df53NSHNJHBq67Q2AXuqcmPTBHshh/VoI4rykekxVdgwZLU5NYJXHPVFdRo7pHikLUfJAvcU8VhLtSRdJODlb6O1VErqAbiqJsjtl0XG+44ATo2+3jWVRn01MpfLJ420GGzd8MFu31Yag6RaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AdTWFeMa; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=c5uHRYw6mEA3yCdlPf/vW/ZEqU0Hu+nEY1LsERysnCkrKciKv/MoYosuZf96iIVf+yTsymstrhfM4ryuhCYzSKx7jDgOEF22hlkrcUx9aTnIFxyo8ZFkmjMghM6ikt71HYFdU2fM9SDA28psUAF/DRCL8ebfnrgDpqHbm3o90j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qPXla7AB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AdTWFeMa"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 899CEC2BCB6;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qPXla7AB"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E523C19424;
 	Wed,  8 Apr 2026 04:46:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1775623597;
-	bh=WKSjkgsx5mMPbNpqlTOtDYTmkaZDZ/r6A2XwILlbu1g=;
+	bh=jD6rZIHBnAc3F0vl+05n+kzI241HhCjoZQe6JKFRv0k=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=AdTWFeMaiJoFKFtsYJwPqqWdQIeVQLXSG4FUNi3GAhZKu6VvXLZxshjYum7f2PIbg
-	 Vav7xVk6Cnb2k9I8F6GBHNfHTtBxRwzzuj3LPI1/UejXqcOw1HodJgUQvAuRNsTByJ
-	 HJxRcqJCYCRsIeRqSR0T+9uRQazbyAUuwTbQ4ahFFjVDDpOm7HDlF2HuGr5oyalMnC
-	 lAENgFHbjh7UNP7/YeDHJnjNE0mncKrmCUGUDKp2XgfkHfE9nLhr7QH98zwBaMKUV+
-	 tWj1RNzKkYhRX+AmEi/uXdyW/42uz7qj+DOmftOMc1+UnwEw+hUn01NZfUa5/OUiX4
-	 wAtze9uMviKTA==
+	b=qPXla7AB2EtgSTJDuDTbb3N2x4I3R+WuXNUBuKc9fio1qRsnbJ/2hGSAdyt9QY8Yu
+	 4kebme7GxctLviD4bdTvRzeeJ9Hn0EuedyVqIff/yR06jk6lL48hZW8xA+lX2bo7B7
+	 38wF0/6P24n9Xd0DwFxjeBSlOAxxWDa+o7qQ3fTmRwCu3slDJguuap4AG8Nx6zBN2P
+	 JzdhsSKwxskh2g4kso8fB+7OBzsAmM1EDYNibwJpBafSB/1KUZ3MJ4MkIxxsPOgUQg
+	 E1jM9leU9y1HU1mm+P+MjYOFM/oe1u0vppkTzKdNjY4P1zj5YNUguKLxk/oCILebBV
+	 mySlu7XfRIWVw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79152FD5F75;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96728FD5F68;
 	Wed,  8 Apr 2026 04:46:37 +0000 (UTC)
 From: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>
-Date: Tue, 07 Apr 2026 21:46:00 -0700
-Subject: [PATCH 12/16] riscv: kvm: Add emulated test csr
+Date: Tue, 07 Apr 2026 21:46:01 -0700
+Subject: [PATCH 13/16] KVM: riscv: selftests: Add csr emulation test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260407-riscv_insn_table-v1-12-54b4736a1e77@gmail.com>
+Message-Id: <20260407-riscv_insn_table-v1-13-54b4736a1e77@gmail.com>
 References: <20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com>
 In-Reply-To: <20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com>
 To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
@@ -53,11 +53,11 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  Charlie Jenkins <thecharlesjenkins@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775623594; l=5057;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775623594; l=4489;
  i=thecharlesjenkins@gmail.com; s=2026030; h=from:subject:message-id;
- bh=VQg+AUDh82m4CKuXNzyUaNZj3tN1rr7u9UwtjA/PLWQ=;
- b=IxK/M+GZdcmuYVvUFn0ArMPQ+R4X1daV9Hr4PnCTImin79iBetPAbnAEEA1OEIMgDDaIizwRR
- 5Dc4RJzaRRQB+rh9z8oU3MyyyUe72p/HUlaGBNatdvZEnDRq12nZQWR
+ bh=v0o+U8CrXApIBAL0UNGWmAnw7rvZN7PoEjmLiOgCLHI=;
+ b=L9BrRpEMB+4Md2H09k6rx8pwpAEyxK+234nKTLHkVZk0ySxZHmX+h0Tj6VImR7JYn89yN3y3m
+ pD0YEkL2f1GB5LtQLLU4Pv2EYgMixIOTtyDhwdREFLPv5Va0VsHccYR
 X-Developer-Key: i=thecharlesjenkins@gmail.com; a=ed25519;
  pk=vpF2USrG+aB6CTbSt34rzJKsAVe/l+GAXo1IomCMETk=
 X-Endpoint-Received: by B4 Relay for thecharlesjenkins@gmail.com/2026030
@@ -67,159 +67,155 @@ Reply-To: thecharlesjenkins@gmail.com
 
 From: Charlie Jenkins <thecharlesjenkins@gmail.com>
 
-To test the riscv kvm implementation of emulated CSRs, add support to
-emulate the vsscratch csr when CONFIG_RISCV_KVM_TEST_CSR is set.
+Introduce a kvm test that uses the emulated test csr to validate that
+all emulated reads/writes to csrs function as expected.
 
 Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
 ---
- arch/riscv/Kconfig.debug                   |  1 +
- arch/riscv/include/asm/kvm_host.h          | 10 ++++++++++
- arch/riscv/include/asm/kvm_vcpu_test_csr.h | 15 +++++++++++++++
- arch/riscv/kvm/Kconfig.debug               | 16 ++++++++++++++++
- arch/riscv/kvm/Makefile                    |  1 +
- arch/riscv/kvm/vcpu_insn.c                 |  5 +++++
- arch/riscv/kvm/vcpu_test_csr.c             | 21 +++++++++++++++++++++
- 7 files changed, 69 insertions(+)
+ tools/testing/selftests/kvm/Makefile.kvm     |   1 +
+ tools/testing/selftests/kvm/riscv/csr_test.c | 123 +++++++++++++++++++++++++++
+ 2 files changed, 124 insertions(+)
 
-diff --git a/arch/riscv/Kconfig.debug b/arch/riscv/Kconfig.debug
-index eafe17ebf710..be202267da6d 100644
---- a/arch/riscv/Kconfig.debug
-+++ b/arch/riscv/Kconfig.debug
-@@ -1 +1,2 @@
- source "arch/riscv/kernel/tests/Kconfig.debug"
-+source "arch/riscv/kvm/Kconfig.debug"
-diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-index 24585304c02b..709a1c18ce22 100644
---- a/arch/riscv/include/asm/kvm_host.h
-+++ b/arch/riscv/include/asm/kvm_host.h
-@@ -183,6 +183,12 @@ struct kvm_vcpu_reset_state {
- 	unsigned long a1;
- };
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index d402fb339bc0..2eadab48186b 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -202,6 +202,7 @@ TEST_GEN_PROGS_s390 += s390/user_operexec
+ TEST_GEN_PROGS_s390 += rseq_test
  
-+#ifdef CONFIG_RISCV_KVM_TEST_CSR
-+struct kvm_test_csr {
-+	unsigned long val;
-+};
-+#endif
-+
- struct kvm_vcpu_arch {
- 	/* VCPU ran at least once */
- 	bool ran_atleast_once;
-@@ -278,6 +284,10 @@ struct kvm_vcpu_arch {
- 		gpa_t shmem;
- 		u64 last_steal;
- 	} sta;
-+
-+#ifdef CONFIG_RISCV_KVM_TEST_CSR
-+	struct kvm_test_csr test_csr;
-+#endif
- };
- 
- /*
-diff --git a/arch/riscv/include/asm/kvm_vcpu_test_csr.h b/arch/riscv/include/asm/kvm_vcpu_test_csr.h
+ TEST_GEN_PROGS_riscv = $(TEST_GEN_PROGS_COMMON)
++TEST_GEN_PROGS_riscv += riscv/csr_test
+ TEST_GEN_PROGS_riscv += riscv/sbi_pmu_test
+ TEST_GEN_PROGS_riscv += riscv/ebreak_test
+ TEST_GEN_PROGS_riscv += riscv/mmio_test
+diff --git a/tools/testing/selftests/kvm/riscv/csr_test.c b/tools/testing/selftests/kvm/riscv/csr_test.c
 new file mode 100644
-index 000000000000..a844fccaafc3
+index 000000000000..432d043fa1ac
 --- /dev/null
-+++ b/arch/riscv/include/asm/kvm_vcpu_test_csr.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
++++ b/tools/testing/selftests/kvm/riscv/csr_test.c
+@@ -0,0 +1,123 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * csr_test.c - Tests the csr functionality.
++ */
++#include "kvm_util.h"
++#include "ucall_common.h"
 +
-+#ifndef __KVM_VCPU_RISCV_TEST_CSR_H
-+#define __KVM_VCPU_RISCV_TEST_CSR_H
++#define CSR_TEST 0x240
++#define FP 0x00006000
 +
-+#include <asm/kvm_vcpu_insn.h>
++/*
++ * Use the fcsr as a U-mode accesible csr and compare against the custom 'test'
++ * hypervisor csr (currently using vsscratch)
++ */
++#define test_csr(write, initial, mode)								\
++static void test_##write(void)									\
++{												\
++	unsigned long hypervisor_result, reference_result, old_hypervisor;			\
++	unsigned long mask = 0x15;								\
++	asm volatile (										\
++		"csrs	sstatus, %[enable_fp]\n"						\
++		"csrw	fcsr, %[init]\n"							\
++		#write"	zero, fcsr, %[mask]\n"							\
++		"csrr	%[ref_res], fcsr\n"							\
++		: [ref_res] "=&r" (reference_result)						\
++		: [enable_fp] "r" (FP), [mask] #mode(mask), [init] "r" (initial)		\
++		: "memory"									\
++	);											\
++	asm volatile (										\
++		"csrw	%[test_csr], %[init]\n"							\
++		#write"	%[old], %[test_csr], %[mask]\n"						\
++		"csrr	%[hyp_res], %[test_csr]\n"						\
++		: [hyp_res] "=&r" (hypervisor_result), [old] "=&r" (old_hypervisor)		\
++		: [test_csr] "i"(CSR_TEST), [mask] #mode(mask), [init] "r" (initial)		\
++		: "memory"									\
++	);											\
++	/* Check that writing works */								\
++	GUEST_ASSERT_EQ(reference_result, hypervisor_result);					\
++	/* Check that reading works */								\
++	GUEST_ASSERT_EQ(old_hypervisor, initial);						\
++	GUEST_DONE();										\
++}
 +
-+#define KVM_RISCV_VCPU_TEST_CSR_FUNCS \
-+	{.base = CSR_VSSCRATCH,	.count = 1,	.func = kvm_riscv_vcpu_test_csr },
++test_csr(csrrw, 0x0, r)
++test_csr(csrrs, 0x0, r)
++test_csr(csrrc, 0x15, r)
++test_csr(csrrwi, 0x0, i)
++test_csr(csrrsi, 0x0, i)
++test_csr(csrrci, 0x15, i)
 +
-+int kvm_riscv_vcpu_test_csr(struct kvm_vcpu *vcpu, unsigned int csr_num,
-+			    unsigned long *val, unsigned long new_val,
-+			    unsigned long wr_mask);
-+
-+#endif /* !__KVM_VCPU_RISCV_TEST_CSR_H */
-diff --git a/arch/riscv/kvm/Kconfig.debug b/arch/riscv/kvm/Kconfig.debug
-new file mode 100644
-index 000000000000..dc76e02120a3
---- /dev/null
-+++ b/arch/riscv/kvm/Kconfig.debug
-@@ -0,0 +1,16 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menu "arch/riscv/kvm testing"
-+
-+config RISCV_KVM_TEST_CSR
-+        bool "Test KVM CSR emulation"
-+        depends on KVM
-+        default n
-+        help
-+            Enable this option to enable the emulation of a test hypervisor csr.
-+            The KVM test csr is the vsscratch register. Once this is enabled,
-+            reading/writing to the vsscratch register will trap into the host
-+            supervisor and reflect the change.
-+
-+            If unsure, say N.
-+
-+endmenu # "arch/riscv/kvm testing"
-diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
-index 3b8afb038b35..02fd27ff33eb 100644
---- a/arch/riscv/kvm/Makefile
-+++ b/arch/riscv/kvm/Makefile
-@@ -36,6 +36,7 @@ kvm-y += vcpu_sbi_sta.o
- kvm-y += vcpu_sbi_system.o
- kvm-$(CONFIG_RISCV_SBI_V01) += vcpu_sbi_v01.o
- kvm-y += vcpu_switch.o
-+kvm-$(CONFIG_RISCV_KVM_TEST_CSR) += vcpu_test_csr.o
- kvm-y += vcpu_timer.o
- kvm-y += vcpu_vector.o
- kvm-y += vm.o
-diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
-index 1d8741d02242..c5a70de4a579 100644
---- a/arch/riscv/kvm/vcpu_insn.c
-+++ b/arch/riscv/kvm/vcpu_insn.c
-@@ -10,6 +10,8 @@
- #include <asm/cpufeature.h>
- #include <asm/insn.h>
- 
-+#include <asm/kvm_vcpu_test_csr.h>
-+
- struct insn_func {
- 	unsigned long mask;
- 	unsigned long match;
-@@ -112,6 +114,9 @@ static int seed_csr_rmw(struct kvm_vcpu *vcpu, unsigned int csr_num,
- static const struct csr_func csr_funcs[] = {
- 	KVM_RISCV_VCPU_AIA_CSR_FUNCS
- 	KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS
-+#ifdef CONFIG_RISCV_KVM_TEST_CSR
-+	KVM_RISCV_VCPU_TEST_CSR_FUNCS
-+#endif
- 	{ .base = CSR_SEED, .count = 1, .func = seed_csr_rmw },
- };
- 
-diff --git a/arch/riscv/kvm/vcpu_test_csr.c b/arch/riscv/kvm/vcpu_test_csr.c
-new file mode 100644
-index 000000000000..b8aa503cdaba
---- /dev/null
-+++ b/arch/riscv/kvm/vcpu_test_csr.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/kvm_host.h>
-+#include <asm/kvm_vcpu_insn.h>
-+#include <asm/kvm_vcpu_test_csr.h>
-+
-+#define vcpu_to_test_csr(vcpu) (&(vcpu)->arch.test_csr)
-+
-+int kvm_riscv_vcpu_test_csr(struct kvm_vcpu *vcpu, unsigned int csr_num,
-+			    unsigned long *val, unsigned long new_val,
-+			    unsigned long wr_mask)
++static void run(void *guest_code, char *instruction)
 +{
-+	struct kvm_test_csr *test_csr = vcpu_to_test_csr(vcpu);
++	struct ucall uc;
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
 +
-+	*val = test_csr->val;
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
 +
-+	if (wr_mask)
-+		test_csr->val = (test_csr->val & ~wr_mask) | (new_val & wr_mask);
++	kvm_create_device(vm, KVM_DEV_TYPE_TEST);
 +
-+	return KVM_INSN_CONTINUE_NEXT_SEPC;
++	vcpu_run(vcpu);
++
++	TEST_ASSERT(get_ucall(vcpu, &uc) == UCALL_DONE,
++		    "CSR instruction '%s' failed: '%s'", instruction,
++		    uc.buffer);
++
++	kvm_vm_free(vm);
++}
++
++static void check_test_csr_guest(void)
++{
++	unsigned long scause, stvec;
++
++	asm volatile(
++		"la	%[stvec], 1f\n"
++		"csrw	stvec, %[stvec]\n"
++		"csrwi	%[test_csr], 0x0\n"
++		"1:\n"
++		"csrr	%[scause], scause\n"
++		: [scause] "=&r" (scause), [stvec] "=&r" (stvec)
++		: [test_csr] "i" (CSR_TEST)
++	);
++
++	/* An illegal instruction will be generated if CONFIG_RISCV_KVM_TEST_CSR is not enabled. */
++	if (scause == 2)
++		GUEST_FAIL("CONFIG_RISCV_KVM_TEST_CSR not enabled.\n");
++	GUEST_DONE();
++}
++
++static int check_test_csr(void)
++{
++	struct ucall uc;
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++	int success;
++
++	vm = vm_create_with_one_vcpu(&vcpu, check_test_csr_guest);
++	kvm_create_device(vm, KVM_DEV_TYPE_TEST);
++
++	vcpu_run(vcpu);
++
++	success = get_ucall(vcpu, &uc) == UCALL_DONE;
++
++	kvm_vm_free(vm);
++
++	return success;
++}
++
++int main(void)
++{
++	/* Skip if CONFIG_RISCV_KVM_TEST_CSR not enabled */
++	if (!check_test_csr())
++		exit(KSFT_SKIP);
++
++	run(test_csrrw, "csrrw");
++	run(test_csrrs, "csrrs");
++	run(test_csrrc, "csrrc");
++	run(test_csrrwi, "csrrwi");
++	run(test_csrrsi, "csrrsi");
++	run(test_csrrci, "csrrci");
++
++	return 0;
 +}
 
 -- 
