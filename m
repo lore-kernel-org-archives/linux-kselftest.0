@@ -1,251 +1,128 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFFF3A1E6A
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 23:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109EF2877F4;
+	Wed,  8 Apr 2026 23:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775689601; cv=none; b=kMCEePCsdgPALdD23NLvYP9p6igZiMAzXEug6x0cvI3h3s2FHVIDsX5Qlxl4YTlFLn/0dyiSrKH7RbrjLeGiqtwO/6Pb054FeSpBvaPp13jxC3U7adnbofv4uGmoCeJ6l1uNGDSBMptHz4TTccMdNUflr1wA8glEbtwL4N9PEvQ=
+	t=1775690879; cv=none; b=SQZtFfbXn8Rs6+xWx1JaTc2MM/OLiobovw3/T8IN2Q5AQOV+1kiNaSbHyUcM9Fi19wznNUPAIoqubnRvaaHqGB8nA+R4DxopmxVxPPN8x6kdlY9DjB5tLSxRfpi6TDnUR8S3bwxXJhwy2SG+gkoVGomxXQw4pN2Iw/TR/Gi6OrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775689601; c=relaxed/simple;
-	bh=eavrLBchN8fm9XIu1vqukYxkvy5howdAitN/UagQmIk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=La8FOiRimhbNXeYi3WJB5a8K2mqsQoRCAEh7waaDZPgBFMiQQNn1IopaqI9vON687OSsV8qYPIDD0kApIw/U/+j/3og9KO0LU/9H+4DzcjX7EfHIrL0QL13G8UbQV0ObUG4vA6Dl2M6i5ibQgUYEKAbgSWTiCYB/dsz3TAyZorM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=lxP6H9ib; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1775690879; c=relaxed/simple;
+	bh=cbR8XrY9+JQe/+AkET29zywNHu/7aXS6coqT/s6zM9M=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=g32AkxUoEX7GPv3jaJtgdIuqVO9aaMDMvINad/rGRBXCpE+/BldwtkO7NoB+EYEVH6MeIPnv0jZBYTlS2+4j+563A0CvBkf4Y1fZGz3fD/yYhoJtsx1aKlIONWNoQmWMutAHSI5Jc8MhOSokjC5mEFD4asHcPvOLTbfrIndr9Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=oPwacU0b; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=f12CY/bB; arc=none smtp.client-ip=160.80.4.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="lxP6H9ib"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c742723c863so174801a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2026 16:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1775689592; x=1776294392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RaI/8wTi1iXn0q/44Vh7ATr+prNCrN7zaPdtxJM69Ko=;
-        b=lxP6H9ib/yxziiVSV5eUcStMTXg6xPl7bTt/AwD1Ib5uGElTb3dfZ7gFwz68PtJjhR
-         K1BPBNN7ixBemH6aFegfukdaDLMPgb77P8qQM75sA7ZAKWhBUbq78/5BkiuyYZ0HXgRp
-         Nk92WEpuZ+bVZK9CnBS8NbOKKMMH9KU8b/882XhvJ8jW1IBy9PPArBKGqxG9/ZducAzh
-         M81eVMdEE7k1NqR8hTSiTk+sc4IKfm3RWUy4aR2MxJ4Lf9IbyqerEDJ560PZp9ZpvPdN
-         osL0VrnPWkkh4sWnknvP+zC1457GX+qbqqo7YY2RSEG5hgCTfOreo3pl+PlPSQM7VtMT
-         O9Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775689592; x=1776294392;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RaI/8wTi1iXn0q/44Vh7ATr+prNCrN7zaPdtxJM69Ko=;
-        b=fl535NDu8fN1DgJ6JY6YOCx/xoAmDQtdUO59ISA0skVihrJ8iGWqOHONdtkKxWoHP+
-         hbmXDvcxXcslVL6qCjYn+D+VCTVE6ggr0n10WnybYmJv+5uK8ftAEWM6I1nxxitHef3o
-         3QKZfliloYclwQApv8nN1MBU4zxpqEoPdUjBi84R+rd2EiolwMSrxdqXZiW+SQ/XoHkK
-         xM0p0MQYO6zNokXiUVREgHfrtahklhkMdle3vM/VIo3ENySMyxlYqk0WNVkBjRJu96CO
-         /JrkeV/Opxug5NLanlbzKEfQEMCkmSKCxJrCdFBFbTYawpnWY4SEXqZ6Ja3kZtlAdqwk
-         lzKg==
-X-Forwarded-Encrypted: i=1; AJvYcCUiDj6zAynlSKY5oy+TH1dTdSqclUFIlHVVJpxtcZ8PN/BBe6xZHv+k/AqqDSlyuPl/bBYhTepTmFX1AbIVHE8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybrW8xdbv+5jPlacX1+KyNl0X75xocKM99q5eTwQ6jz71K4lDz
-	XrjASSjrsz5mOw65SxaBB6OJOBzpOxMsu1bFkknEuWUeMVmkk3WYMMW/536lAnoo9Qk=
-X-Gm-Gg: AeBDiev0Bw+B/J3YU3PWB7HGWIDgBUlpcsOBI9wgJA2mCr2p6he/01Bh8FPgwRv3UOF
-	aZJ6aRKv4Qc3W0zHUh5RjP5CUSO8n7Ct05fB2DeFQ281AQShJitTSE7G8Iz6kPtFJXwLh/4sFwk
-	a8p0LzVq9DZpcvaHwhq7m99Vi0zJTImTzujLABT3OlcsQ2YoD51gdWsRO72gIBjndSU7wtyCdtk
-	ZrxZCkb2HP0IdqRadcqwT3kPAaoysQ2OsdtZKKgzBUt2elXEaGS+dXfvoxaQIKg8rOY7+KpzEuo
-	JQBK5MlGTuaYGOdQ7YoA75u5agDKLfYYC558sqaNt1WnJof54HSafQsQSUg8VLQp42mS0Sbw+ie
-	dyBRTIYepv9r3sVv9EoXjwWTHtlDAE+9U5ayQYRS/v1jjxhbiX1NrDPauI5afoINUIOqID2uG8K
-	BfWZ8=
-X-Received: by 2002:a05:6a20:94c8:b0:398:7998:8300 with SMTP id adf61e73a8af0-39f2f179df6mr22822579637.58.1775689592275;
-        Wed, 08 Apr 2026 16:06:32 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9c6ad8asm22239635b3a.40.2026.04.08.16.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 16:06:31 -0700 (PDT)
-From: Joe Damato <joe@dama.to>
-To: netdev@vger.kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: horms@kernel.org,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	linux-kernel@vger.kernel.org,
-	leon@kernel.org,
-	Joe Damato <joe@dama.to>,
-	linux-kselftest@vger.kernel.org
-Subject: [net-next v10 10/10] selftests: drv-net: Add USO test
-Date: Wed,  8 Apr 2026 16:05:59 -0700
-Message-ID: <20260408230607.2019402-11-joe@dama.to>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260408230607.2019402-1-joe@dama.to>
-References: <20260408230607.2019402-1-joe@dama.to>
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="oPwacU0b";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="f12CY/bB"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 638NRDiD027151;
+	Thu, 9 Apr 2026 01:27:18 +0200
+Received: from lubuntu-18.04 (unknown [160.80.103.126])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id E9D28120542;
+	Thu,  9 Apr 2026 01:27:08 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1775690830; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2Guc4tAMsLbLbcWb/j5eblk0rzSKs3Av6NGjOehKL8w=;
+	b=oPwacU0b+ApJos03RqXbEpoyCUgqTuulfQY2w7Mqp4uxIigAk74XIPEZ62S03EkTA6adl3
+	9+BI6ceJ97hAqKAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1775690830; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2Guc4tAMsLbLbcWb/j5eblk0rzSKs3Av6NGjOehKL8w=;
+	b=f12CY/bBg0RzDISkA3/6ygq0Epm1p7Be7cLAzq8ktOcFc1rnHvI8Mx3r8cB26EyY9CVwbk
+	v3ofywRYw5ZVjNtbB9tXRcrsm9U/He3VF10DUwqq0hm4bf2WbjRN5J9rpM6aWRZbXgkPOt
+	JmiR/XLgoLZX/DZBDIv0LWc7S26rbUVCqyPVixDilPu65nH2rAjWWyTgWCjVOOiPL0HVv4
+	pkplRexUJGMPjBbmdv0DHg4JaG4379rvnvr2U5HskpSndXNW0a9Z/gSEfXREoKVJ9HvJDK
+	ON8Nd5hMatOCOfmLu1Ia7vO2x73Lc29g+HVBT2UMPdd71sT06OYJVmlTcVFF1g==
+Date: Thu, 9 Apr 2026 01:27:08 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, horms@kernel.org, dsahern@kernel.org,
+        david.lebrun@uclouvain.be, stefano.salsano@uniroma2.it,
+        paolo.lungaroni@uniroma2.it, nicolas.dichtel@6wind.com,
+        justin.iurman@gmail.com, linux-kernel@vger.kernel.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH net v3 1/2] seg6: separate dst_cache for input and
+ output paths in seg6 lwtunnel
+Message-Id: <20260409012708.78040268c05e3285742157ae@uniroma2.it>
+In-Reply-To: <20260408032039.314762-1-kuba@kernel.org>
+References: <20260404004405.4057-2-andrea.mayer@uniroma2.it>
+	<20260408032039.314762-1-kuba@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-Add a simple test for USO. Tests both ipv4 and ipv6 with several full
-segments and a partial segment.
+On Tue,  7 Apr 2026 20:20:38 -0700
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Joe Damato <joe@dama.to>
----
- v10:
-   - Moved test from drivers/net/ to drivers/net/hw/ since it requires real
-     hardware. No functional changes.
+> This is an AI-generated review of your patch. The human sending this
+> email says "Seems orthogonal but also legit"
+> ---
+> seg6: separate dst_cache for input and output paths in seg6 lwtunnel
+> 
+> This commit splits the shared seg6 lwtunnel dst_cache into separate input
+> and output caches to prevent blind reuse across different routing contexts.
+> 
+> > diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
+> > index 3e1b9991131a2..d6a0f7df90807 100644
+> > --- a/net/ipv6/seg6_iptunnel.c
+> > +++ b/net/ipv6/seg6_iptunnel.c
+> 
+> [ ... ]
+> 
+> > @@ -504,7 +505,7 @@ static int seg6_input_core(struct net *net, struct sock *sk,
+> >  		/* cache only if we don't create a dst reference loop */
+> >  		if (!dst->error && lwtst != dst->lwtstate) {
+> >  			local_bh_disable();
+> > -			dst_cache_set_ip6(&slwt->cache, dst,
+> > +			dst_cache_set_ip6(&slwt->cache_input, dst,
+> >  					  &ipv6_hdr(skb)->saddr);
+> >  			local_bh_enable();
+> >  		}
+> 
+> This code appears to cache the dst entry resolved just prior by calling
+> ip6_route_input(skb).
+> 
+> Does ip6_route_input() assign a NOREF dst to the skb?
+> 
+> If so, this dst is protected only by RCU. If the underlying route is
+> concurrently deleted, its refcount can drop to zero. When
+> dst_cache_set_ip6() is called, it attempts to use dst_hold(dst).
+> 
+> If the refcount is already zero, dst_hold() will warn and skip incrementing
+> the refcount, but dst_cache_set_ip6() will still store the pointer.
+> 
+> Could this cause the cache to hold a dangling pointer, leading to a
+> use-after-free once the RCU grace period expires?
+> 
+> Should this path use skb_dst_force(skb) or dst_hold_safe(dst) to safely
+> upgrade the dst to a refcounted reference before it is cached?
+> -- 
+> pw-bot: cr
 
- v9:
-   - Use UDP-LISTEN instead of UDP-RECV in socat receiver (suggested by AI).
-   - Fixed stale docstring.
-   - Removed unused return value.
+Thanks Jakub.
 
- v7:
-   - Dropped Pavan's Reviewed-by as there were changes.
-   - Update to use ksft_variants with a generator and a parameterized test_uso
-     function.
-   - Save original USO state and restore it at the end of the test.
-   - Replace sleep with cfg.wait_hw_stats_settle
-   - Use a socat receiver and check tx stats locally instead of rx on the
-     remote.
+It does seem orthogonal to the dst_cache split and worth investigating.
+I'll take a look.
 
- v5:
-   - Added Pavan's Reviewed-by. No functional changes.
-
- v4:
-   - Fix python linter issues (unused imports, docstring, etc).
-
- rfcv2:
-   - new in rfcv2
-
- .../testing/selftests/drivers/net/hw/Makefile |   1 +
- tools/testing/selftests/drivers/net/hw/uso.py | 103 ++++++++++++++++++
- 2 files changed, 104 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/hw/uso.py
-
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index deeca3f8d080..5c348c8d72ae 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -43,6 +43,7 @@ TEST_PROGS = \
- 	rss_input_xfrm.py \
- 	toeplitz.py \
- 	tso.py \
-+	uso.py \
- 	xdp_metadata.py \
- 	xsk_reconfig.py \
- 	#
-diff --git a/tools/testing/selftests/drivers/net/hw/uso.py b/tools/testing/selftests/drivers/net/hw/uso.py
-new file mode 100755
-index 000000000000..6d61e56cab3c
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/uso.py
-@@ -0,0 +1,103 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""Test USO
-+
-+Sends large UDP datagrams with UDP_SEGMENT and verifies that the peer
-+receives the expected total payload and that the NIC transmitted at least
-+the expected number of segments.
-+"""
-+import random
-+import socket
-+import string
-+
-+from lib.py import ksft_run, ksft_exit, KsftSkipEx
-+from lib.py import ksft_eq, ksft_ge, ksft_variants, KsftNamedVariant
-+from lib.py import NetDrvEpEnv
-+from lib.py import bkg, defer, ethtool, ip, rand_port, wait_port_listen
-+
-+# python doesn't expose this constant, so we need to hardcode it to enable UDP
-+# segmentation for large payloads
-+UDP_SEGMENT = 103
-+
-+
-+def _send_uso(cfg, ipver, mss, total_payload, port):
-+    if ipver == "4":
-+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-+        dst = (cfg.remote_addr_v["4"], port)
-+    else:
-+        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-+        dst = (cfg.remote_addr_v["6"], port)
-+
-+    sock.setsockopt(socket.IPPROTO_UDP, UDP_SEGMENT, mss)
-+    payload = ''.join(random.choice(string.ascii_lowercase)
-+                      for _ in range(total_payload))
-+    sock.sendto(payload.encode(), dst)
-+    sock.close()
-+
-+
-+def _get_tx_packets(cfg):
-+    stats = ip(f"-s link show dev {cfg.ifname}", json=True)[0]
-+    return stats['stats64']['tx']['packets']
-+
-+
-+def _test_uso(cfg, ipver, mss, total_payload):
-+    cfg.require_ipver(ipver)
-+    cfg.require_cmd("socat", remote=True)
-+
-+    features = ethtool(f"-k {cfg.ifname}", json=True)
-+    uso_was_on = features[0]["tx-udp-segmentation"]["active"]
-+
-+    try:
-+        ethtool(f"-K {cfg.ifname} tx-udp-segmentation on")
-+    except Exception as exc:
-+        raise KsftSkipEx(
-+            "Device does not support tx-udp-segmentation") from exc
-+    if not uso_was_on:
-+        defer(ethtool, f"-K {cfg.ifname} tx-udp-segmentation off")
-+
-+    expected_segs = (total_payload + mss - 1) // mss
-+
-+    port = rand_port(stype=socket.SOCK_DGRAM)
-+    rx_cmd = f"socat -{ipver} -T 2 -u UDP-LISTEN:{port},reuseport STDOUT"
-+
-+    tx_before = _get_tx_packets(cfg)
-+
-+    with bkg(rx_cmd, host=cfg.remote, exit_wait=True) as rx:
-+        wait_port_listen(port, proto="udp", host=cfg.remote)
-+        _send_uso(cfg, ipver, mss, total_payload, port)
-+
-+    ksft_eq(len(rx.stdout), total_payload,
-+            comment=f"Received {len(rx.stdout)}B, expected {total_payload}B")
-+
-+    cfg.wait_hw_stats_settle()
-+
-+    tx_after = _get_tx_packets(cfg)
-+    tx_delta = tx_after - tx_before
-+
-+    ksft_ge(tx_delta, expected_segs,
-+            comment=f"Expected >= {expected_segs} tx packets, got {tx_delta}")
-+
-+
-+def _uso_variants():
-+    for ipver in ["4", "6"]:
-+        yield KsftNamedVariant(f"v{ipver}_partial", ipver, 1400, 1400 * 10 + 500)
-+        yield KsftNamedVariant(f"v{ipver}_exact", ipver, 1400, 1400 * 5)
-+
-+
-+@ksft_variants(_uso_variants())
-+def test_uso(cfg, ipver, mss, total_payload):
-+    """Send a USO datagram and verify the peer receives the expected segments."""
-+    _test_uso(cfg, ipver, mss, total_payload)
-+
-+
-+def main() -> None:
-+    """Run USO tests."""
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run([test_uso],
-+                 args=(cfg, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.52.0
-
+Andrea
