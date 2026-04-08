@@ -1,54 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F19E339878;
-	Wed,  8 Apr 2026 03:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D783451A6;
+	Wed,  8 Apr 2026 03:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775618442; cv=none; b=PNmPGRpdaRbn71dK2Suqgc8OdC6EpwyvvMVinT24XZbWdDKmMGHoApcT1rCpGpO4aEAbTmp2wEH/UZcS1EHM3V9vtD8B4cMieRgmx86Po2WjfYtjm+uZxtTGEPKLQMlHWaRbaj1cRL2P9LrGE0oUXB2FMm1t7X0MCKWR8idPz18=
+	t=1775619034; cv=none; b=bytijNJBgL9sjlFxfJIark3fIV2UPc3lrcns9fGItsL+8/975aKX3zrPh/tVyLVNhr5vQlIThakS7MClZaKVudgpuCSDzIABtVglvzUg6oaNKjUZPybWt1Pn00CEECvDmEIEULxJbCz0akM5J5DYZOCjoacHgvkWqDRIuSlu+Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775618442; c=relaxed/simple;
-	bh=5fYzSbBIZzanHUvf0syDINfh8n0Pv92cWbRWWT6sQlM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jf86RWQ+xP1FLKFgKJ4xaWFQGqatvmPxk+HlCOxlTqGQ9cbc66eUJCNasj1rvAYI50j/f9cF2Kl5FYTXP4wkOLq89YgAHALsh/O4C3a8NLFCoyS+qCV2/o6of3HPYJkHcSgVVDPg7dq+2N9EAh868nRumZRRcZpEUA1yGZZvauE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jf0yA7A/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775619034; c=relaxed/simple;
+	bh=EfbWhKyj39ugZgWeF5Iy4d02+QbPOZ5X1hUh+gRlYOM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Y3fSHsbdnURD7WEmyegZAEc2DIDJv5Yi6AcOnkUG4YWbF7ln+7Si8Rx3ok+qyyTSBZsltgm9B2WxliMIbUu7T5eCKlWcDH4PmbKYHQr/KxA/skyb7CgP+KbP4ADTtN/iUBLrToco/GqrUI/f/ZShBfI3UkykYgRwvyelnxap0r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JFNpSNYJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jf0yA7A/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB66C19424;
-	Wed,  8 Apr 2026 03:20:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JFNpSNYJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F13C19424;
+	Wed,  8 Apr 2026 03:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775618441;
-	bh=5fYzSbBIZzanHUvf0syDINfh8n0Pv92cWbRWWT6sQlM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jf0yA7A/hRCssN9FSok+C6KPjJXlVcbkdiuxpEQAonTrWPsN+dEmaS03gV1TOP/eW
-	 APRup4CR+fM7FMNi/x/SX01VVKn2bknK3S2+dUo1C48bkilBRRmY7zvty+O2IeiRnL
-	 QO6i2zmdtVAo/2J2ZuzijUC3mAcnC1rqjGY+N1b+5ihsRFZ4Ll0y0xjWq3yoB32OuH
-	 Sqj09br+OcbowVyW1oWQ7HtJc+kHVTREeHXsrg8aLddR6YUuNS70DUuzO5EHkqOJxb
-	 RKOizVOaQ3+qrUR6kzs22cuS/ICoM26JdCnPP+1458gb16GWaTK7ukbaWUThgqH/XM
-	 UdgAqcI07COfg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: andrea.mayer@uniroma2.it
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	david.lebrun@uclouvain.be,
-	stefano.salsano@uniroma2.it,
-	paolo.lungaroni@uniroma2.it,
-	nicolas.dichtel@6wind.com,
-	justin.iurman@gmail.com,
-	linux-kernel@vger.kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v3 1/2] seg6: separate dst_cache for input and output paths in seg6 lwtunnel
-Date: Tue,  7 Apr 2026 20:20:38 -0700
-Message-ID: <20260408032039.314762-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260404004405.4057-2-andrea.mayer@uniroma2.it>
-References: <20260404004405.4057-2-andrea.mayer@uniroma2.it>
+	s=k20201202; t=1775619033;
+	bh=EfbWhKyj39ugZgWeF5Iy4d02+QbPOZ5X1hUh+gRlYOM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=JFNpSNYJ2Hos2w1luuQSlFW4NOm/jpOHU7yR4Hko/YCzbpaICLS6tgk8xSIy0A4Yj
+	 1GI2Gn+Qizojx6NrrMkpjPLEc6VnoZJWGbFjZcOOzPWn64xHHYRKsnZv3lqtNEV1bi
+	 6FQfn3aDMPN+nk4LhueRu52j39aTjxDqkM7At3QB7+PHOMHX/z6nv2/pxjVEWCHNUD
+	 AibGxjY28rirMAVur1LQhrTAeRc+fKxhzcXSrQBDHsbY5Wk5Far+jhKoKwrA/++Jtq
+	 ks+xo9VOBsDxN+ajIbo5MjVyDGslPmtyltZXMOS3e/b2UUqbnWvrh/m6HnZWKXEQd0
+	 O2MnJWNpa+l2A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FDD83809A29;
+	Wed,  8 Apr 2026 03:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,48 +37,46 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] selftests: net: bridge_vlan_mcast: wait for h1 before
+ querier check
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177561901079.56280.10564875913231407708.git-patchwork-notify@kernel.org>
+Date: Wed, 08 Apr 2026 03:30:10 +0000
+References: 
+ <c830f130860fd2efae08bfb9e5b25fd028e58ce5.1775424423.git.daniel@makrotopia.org>
+In-Reply-To: 
+ <c830f130860fd2efae08bfb9e5b25fd028e58ce5.1775424423.git.daniel@makrotopia.org>
+To: Daniel Golle <daniel@makrotopia.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, razor@blackwall.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, john@phrozen.org,
+ alexander.sverdlin@siemens.com
 
-This is an AI-generated review of your patch. The human sending this
-email says "Seems orthogonal but also legit"
----
-seg6: separate dst_cache for input and output paths in seg6 lwtunnel
+Hello:
 
-This commit splits the shared seg6 lwtunnel dst_cache into separate input
-and output caches to prevent blind reuse across different routing contexts.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
-> index 3e1b9991131a2..d6a0f7df90807 100644
-> --- a/net/ipv6/seg6_iptunnel.c
-> +++ b/net/ipv6/seg6_iptunnel.c
+On Sun, 5 Apr 2026 22:29:19 +0100 you wrote:
+> The querier-interval test adds h1 (currently a slave of the VRF created
+> by simple_if_init) to a temporary bridge br1 acting as an outside IGMP
+> querier. The kernel VRF driver (drivers/net/vrf.c) calls cycle_netdev()
+> on every slave add and remove, toggling the interface admin-down then up.
+> Phylink takes the PHY down during the admin-down half of that cycle.
+> Since h1 and swp1 are cable-connected, swp1 also loses its link may need
+> several seconds to re-negotiate.
+> 
+> [...]
 
-[ ... ]
+Here is the summary with links:
+  - [net] selftests: net: bridge_vlan_mcast: wait for h1 before querier check
+    https://git.kernel.org/netdev/net/c/efaa71faf212
 
-> @@ -504,7 +505,7 @@ static int seg6_input_core(struct net *net, struct sock *sk,
->  		/* cache only if we don't create a dst reference loop */
->  		if (!dst->error && lwtst != dst->lwtstate) {
->  			local_bh_disable();
-> -			dst_cache_set_ip6(&slwt->cache, dst,
-> +			dst_cache_set_ip6(&slwt->cache_input, dst,
->  					  &ipv6_hdr(skb)->saddr);
->  			local_bh_enable();
->  		}
-
-This code appears to cache the dst entry resolved just prior by calling
-ip6_route_input(skb).
-
-Does ip6_route_input() assign a NOREF dst to the skb?
-
-If so, this dst is protected only by RCU. If the underlying route is
-concurrently deleted, its refcount can drop to zero. When
-dst_cache_set_ip6() is called, it attempts to use dst_hold(dst).
-
-If the refcount is already zero, dst_hold() will warn and skip incrementing
-the refcount, but dst_cache_set_ip6() will still store the pointer.
-
-Could this cause the cache to hold a dangling pointer, leading to a
-use-after-free once the RCU grace period expires?
-
-Should this path use skb_dst_force(skb) or dst_hold_safe(dst) to safely
-upgrade the dst to a refcounted reference before it is cached?
+You are awesome, thank you!
 -- 
-pw-bot: cr
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
