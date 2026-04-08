@@ -1,119 +1,119 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8266E29B79B
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 21:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775684108; cv=pass; b=rmy7xYKKLoWw5zf0R1DOHSKocyS43I4cx9jaJsdOtSZzNvNzQCfGnJgTlX8bunTF01OLkZ0CdgaKevOcWoV3zQEQZwKcs7kPx541aG+qjZAsEgsxaPlwlc02WiysPCtInWXj3L+s1+eORT51PgWQO2A8i67XxgwkmgJ2Ek0/gLE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775684108; c=relaxed/simple;
-	bh=HFq2LoxBVj4fckpeZUc4HGnlttc2e083r4DQV3Ut4DI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Shb3Ua1yhfXtPUfhIcFuT3eASZ0TdBn8RUpPokPm9G2jQGpkwr87ddwt05TAiGR0E8OyoP3aMA4x7sUSNMBLlVMDJ9TfuWgMv1lrywm1f8ULCzmkPvJRFBSDF9XwOHj7hvzZqg204g7aGV9uGv0AgHyT0/TtRGr3QI5d0SLs134=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lzFEWp8j; arc=pass smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94083378D9F
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 21:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.184
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775684653; cv=none; b=hz8tUBPAVnbDLo67LtkV86w+gOmn5mIYupVN/qPscsxim0oxRR2EhmHAdZmPO3qShXGUth2Bk+NzNWYCZ+nlKvbHov+Lk4qOg9RYpijiobygoXyrwBDqUd23f8l/9bYEy6xB/y+CoI+djaisBJWYkrOaP6kLBKhzQ/6EcIn+AO4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775684653; c=relaxed/simple;
+	bh=rd3HDVI0C6RgIhv3O3KHgLWxlh7P24wXk9l3FDC4sO8=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=aOw9bZr3OZlsOPaqDgDnQDriHhLKdNj0RKKt+CvtJ+gZ53/6QCpJsRnCfjnnitwH0CIZ7gZTjKLmlixDv24lKWq7KEJjb9D2yM+vkwqnkO8F5EStl1sgAeZ3guCxPyfru4YzlKLW9+lEolAJ6n8p1bYx6ep+u+gyAKikj7+ogeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=IDpvQV4B; arc=none smtp.client-ip=195.121.94.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lzFEWp8j"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-66ba6d3dab3so1777a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2026 14:35:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775684106; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NsjIj+QOfaA/jubF3czxggQ9hKZyuf/64ixwFAxX6icC+Y2NtpbV/Ah1CrpVu7SAN8
-         AWvwb1cTRaP0fOX3SnlTbFv+8zXPxSyOik6p7M8iTrmUpQRtgigrxvQ0Zh9MgMf/okBB
-         9wuDp8em8ymLB/cxSAJ7BjouifD0UFEcRb/3HvlhoYx7Cs9j1DMofc82zfakGGAog3ul
-         FWAquS+i+Gi5zjP1DkV8c5Ejje1SjimFO830vih6v4sh83zvEqzcm9qdNGtGpXurhXea
-         nu8+MwhegT6FRBb/ABq8gs57b9HNBW1yfMo0lF18xbX7zr9GJpdUKVL3DWb0VAQrRbjG
-         pgyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=HFq2LoxBVj4fckpeZUc4HGnlttc2e083r4DQV3Ut4DI=;
-        fh=lm1ht2+SxTZO3d1r0cbeweC0tdVrTdxioI0OsWEvGoI=;
-        b=QgjMZirTZfuqnupvOKQMnfiOWHYiIQJZvtjMgn19X6tvkJnQPRId+mAdiCoQg2oKTB
-         9jFhwt9myRljKRo/zmMo8GW1N/QxU4/ZDTkawD7VR6JSAZAbUs0jKZNkUIFN7ebf5o82
-         4vehWngwwcBZzZO+zS2K/fUpTliRv4SYoNLFOYJTXdPWoAYg8tXmsrmjo5WYmEu4Eamx
-         uQJOtNi+BbXf7Ld/MZHs/suydGu06SqtN/hOD8o18kaH+6fU/luDtxe6OuOojIVYx7Sg
-         lsNXnpL7eV1uRWXqIl86Ahi2Irf9VaX0+2NEd/ANSggrJPX+4fRe4+x/1wsyE7n9fJ5E
-         iL1g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="IDpvQV4B"
+X-KPN-MessageId: 0f640b08-3394-11f1-afda-005056994fde
+Received: from mta.kpnmail.nl (unknown [10.31.161.191])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 0f640b08-3394-11f1-afda-005056994fde;
+	Wed, 08 Apr 2026 23:44:03 +0200 (CEST)
+Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.190])
+	by mta.kpnmail.nl (Halon) with ESMTP
+	id 0f61c3dc-3394-11f1-83d7-00505699891e;
+	Wed, 08 Apr 2026 23:44:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775684106; x=1776288906; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HFq2LoxBVj4fckpeZUc4HGnlttc2e083r4DQV3Ut4DI=;
-        b=lzFEWp8jO1N++zFtfzyvee59gdgavzp7u/E73QKnHdJEhELkeAW4jAmAg1T+Zac7bn
-         3mc01W9T9TidyFKHnzVEe7G6A2+OPwNQ9fdEcSdzOjpNuK3XQ9fdJKNY9N8LBUHTRT7M
-         29BVzz0iBLkwM15m02I9ZlyuhCmuRWrLCG9a8knHBBBid1M12lxU71Bg65cKxgsYfGE/
-         IvOnRfr6a4MXY85vy/avl55Ulfu9Ufu3ulxXX+DqXAJWc5k2maPsgwFt6Z+h0c6ZfK9a
-         MLQU7ll0bNGLT9L6fKEjf7r12UMG/qzdYfK5KQ7K7s82FNa5puoH+9rinrojKUMP9O4y
-         Ls+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775684106; x=1776288906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HFq2LoxBVj4fckpeZUc4HGnlttc2e083r4DQV3Ut4DI=;
-        b=rCjaLKZdo+Udr9/yGMs3WMOr2Lt33iZWjqd8Olo0pz2mEgkFwmvGt23Odqs3FWCqir
-         Fvxbwu+RfOnTwLWNBavsskWhuapXOrHN6+TNEKTZ6twZGngJeJANxaU3J87QEH2H6DyY
-         UaNMdaWmBqu3/FkYHZCjh7cEpOF02O+6+UQoLSk5GjKg8/5zkrfhbMId19UPAupdw5Vm
-         6RGwxZc+6A2/5DiDCA8bA899SOMsIa9OIek0N1uBrooiP84BiXsFJgcGiB+ENkV8H9EH
-         93F4V2st7UU4TRGbyVglhZVMNskfGEZA7V3EpHuB/XDNLXcbkzEU1heBAMRStjoTTqTk
-         R58g==
-X-Forwarded-Encrypted: i=1; AJvYcCWCod2/mM5K64PkgiC2sOqw9w0XKc84cKTGw9bRQg/yF3CnQwJ0IskE1gGz9tapdjs/CAnPJDanxF0Rh0q+QfU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy41KK5Om/1uVKH2mu30/LyxTEA++Rqs8O2uPF/jf2f9PiSfaVl
-	eh4yPaeN+hyrBCe2qTEndDuGuRcQM9gdi+kELy/6+z1xrmIylRIARNSXav5CntbGFgj10FwWG4g
-	kskWk5OnGXcMHi9banGyZhzPRLDllP+D2oVKmGOukWrquoxnSkvjZ2mOiRdc=
-X-Gm-Gg: AeBDieuyYNXNkFCFREfEnDgw5T1Y/p9lImMvhofPOdmrwscLxYo4RCftC02Yqx1kXPX
-	HuetubtePWaVDUS+zuAxcTMqDG0gxDxxzWqCEwkShug+u7IpygGiCPWQU11XNj9FtXS5IE4XYIC
-	I6XBceIMAV6otl8xeAB+zgLJ55LH1ietlTCUnOcI0jylYimwAl3YFS+9Y3olEXNTZCd+ScA/hjQ
-	KfQKNQPlcr2En7fSL/o5em2V1Tyaanh3zPCWCeTTWGSRJWjAiI94NHDgr6grKt8hsHrAXV9+nb4
-	jeBqMKm/VZ2o77nI8bDKBHllYe6c4mjVXLS5K/zYo3R8sIAHcqS93a4obvF3ncsQ2H82
-X-Received: by 2002:aa7:da52:0:b0:66b:d36f:f83e with SMTP id
- 4fb4d7f45d1cf-67010c6751cmr14364a12.8.1775684105411; Wed, 08 Apr 2026
- 14:35:05 -0700 (PDT)
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:subject:message-id:to:from:date;
+	bh=L6yY1vRidVgRuaU+kukO84bm0idAZPOfAApm1LSPy7g=;
+	b=IDpvQV4BDedHJKedJjJ/SR3enahmAYGy15ARnCFU5gYZdUu80iUvDZc/smmis8aJqZqoSG6TlZYUD
+	 VC5ZY5xbAzgHIOrzfdUaJ41+AP5XcnExMaLOiHEZdu0r27vvQlI7gi+mklDzIoIWUuCSVZyF8vR3gs
+	 AUpQJiAnkR052QTpQZ4p729tm4j86TLhj624sPGMQshsR0FJ9TwKT1zA+E9MB3vb9aAqTB6UMifOtk
+	 mnBWlFoD8seC1hidd89h0NASHNB9QgBDhkMgUgyaSZG61VIYRG3KzasV9QdrUrYacbf/866pXiKnXn
+	 fnQKxs1XxtSUj/EHzYeN/ksU7NiQ+CA==
+X-KPN-MID: 33|/UAggWUo9xsQ/7Ro5rHTE9aGV79mwhCmNSNSiCW0tmi9xuDLVtzXghyTg1uCXnA
+ cF3fy5oGM+n31k+RLT2A4LtHOimUXCSdgUuUnODvH1NY=
+X-CMASSUN: 33|k4bWsyZRQIuoY3Wo5ZYj/E4TlOHekJIvZ+sitMXHs3GowORHNEvD/XZzum5Bi73
+ cLmCATHi3FhPdjggEZNvxiQ==
+X-KPN-VerifiedSender: Yes
+Received: from cpxoxapps-mh03 (cpxoxapps-mh03.personalcloud.so.kpn.org [10.128.135.209])
+	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
+	id 0f565b90-3394-11f1-b8d7-005056995d6c;
+	Wed, 08 Apr 2026 23:44:03 +0200 (CEST)
+Date: Wed, 8 Apr 2026 23:44:03 +0200 (CEST)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Aleksa Sarai <cyphar@cyphar.com>, Mateusz Guzik <mjguzik@gmail.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, cmirabil@redhat.com,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Message-ID: <52244194.1650546.1775684643065@kpc.webmail.kpnmail.nl>
+In-Reply-To: <2026-04-02-aged-convex-snowbird-foxes-Ym20JZ@cyphar.com>
+References: <20260331172011.3512876-1-jkoolstra@xs4all.nl>
+ <20260331172011.3512876-2-jkoolstra@xs4all.nl>
+ <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
+ <2026-04-02-aged-convex-snowbird-foxes-Ym20JZ@cyphar.com>
+Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com>
- <utlz3oebjyd4lqp5pd4qdbth2kywxo4hrlrnwcxsx3br76fwfg@vy3tx5f3lv32>
- <CANkEMgn80UM7+mymVm21Q8yszgVeh029tvO+kHqmLGmf-2MU5g@mail.gmail.com> <iuhx4kkkftjx52y5qo7w7p6rbxqakq2eu74r66xaepd2p2khjh@kdhljd2c2bpm>
-In-Reply-To: <iuhx4kkkftjx52y5qo7w7p6rbxqakq2eu74r66xaepd2p2khjh@kdhljd2c2bpm>
-From: Marc Harvey <marcharvey@google.com>
-Date: Wed, 8 Apr 2026 14:34:53 -0700
-X-Gm-Features: AQROBzBxW_aF-2JywzqnQs0o_tGwjHDgVWPLHOtNwUoj9mMSKYAB7APUMV3drE0
-Message-ID: <CANkEMgmEsYvx8OqCMc2BEdz_UuiJ7EE=hurV7whpN61nNGq8_Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 00/10] Decouple receive and transmit
- enablement in team driver
-To: Jiri Pirko <jiri@resnulli.us>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
 
-On Wed, Apr 8, 2026 at 2:00=E2=80=AFAM Jiri Pirko <jiri@resnulli.us> wrote:
-> Wed, Apr 08, 2026 at 02:12:35AM +0200, marcharvey@google.com wrote:
-> >On Tue, Apr 7, 2026 at 4:55=E2=80=AFAM Jiri Pirko <jiri@resnulli.us> wro=
-te:
-> >>
-> >> Looks fine to me now. Do you have libteam/teamd counterpart?
-> >
-> >I don't see a need for this to be used in any of the teamd runners.
->
-> Why do you need this then?
 
-Initially, we plan to use a non-teamd userspace component for teaming
-control due to several non-standard requirements, such as
-synchronization with unrelated software. It is probably worth
-converting the teamd lacp runner to independent control at some point,
-because according to the spec: "It is recommended that the independent
-control state diagram be implemented in preference to the coupled
-control state diagram."
+> Op 02-04-2026 04:52 CEST schreef Aleksa Sarai <cyphar@cyphar.com>:
+> 
+> Please do not use O_* flags! O_CLOEXEC takes up 3 flag bits on different
+> architectures which makes adding new flags a nightmare.
+> 
+> I think this should take AT_* flags and (like most newer syscalls)
+> O_CLOEXEC should be automatically set. Userspace can unset it with
+> fnctl(F_SETFD) in the relatively rare case where they don't want
+> O_CLOEXEC.
+
+And then do something like statx_lookup_flags() does to build the lookup
+flags from those AT flags? But there is also no AT_ROOT_CONTAINED (or whatever
+you would want to call the RESOLVE_IN_ROOT AT-equivalent) right now.
+
+> Alternatively, we could just bite the bullet and make
+> AT_NO_CLOEXEC a thing...
+
+What's the bullet to bite there?
+
+> 
+> But yes, new syscalls *absolutely* need to take some kind of flag
+> argument. I'd hoped we finally learned our lesson on that one...
+> 
+> -- 
+> Aleksa Sarai
+> https://www.cyphar.com/
+
+Thanks,
+Jori.
