@@ -1,135 +1,115 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B646B350D7F;
-	Wed,  8 Apr 2026 04:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF79634F48A;
+	Wed,  8 Apr 2026 04:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775622521; cv=none; b=Kv0twTPN3pnNUjXQKUd0i++BVm/9+Dmsfbb9UtxAj7WZyswGIdRmS3bKxO6p19l/LMp8+WR7wlDCQQmqx13CzteoQ8XUyJOH4mHWPUn6uhYoTOLjHs+14drbVhanCbBreXeX+mQyJDbajSkd8UBdnqlqmyetB6yiBvffto5va6I=
+	t=1775622766; cv=none; b=ECJftcLVH8bEoRGle7uCL96YAlipqY6PlhvXankt3MNb9lhubLjnwM66LXdtxtwyBVQqglW6dDGcFcdneXfIFKpQp1//SVNI2GLXLV6C86/Pd3F5cm7BigSogVsoqidG99neso1p5cxpHC3zD2YI18T18lmdx46uXTOnZXXoVgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775622521; c=relaxed/simple;
-	bh=Rei4L7Rl936ijYRniffy0bYWsqyp/CHFBK16WNEF6zk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BhgfZ+yNgVBAdccNi20FrGKNsufm8F7JfoS1E4PPaB1wm2ltjZOIuzoe9l++5EEfEdhYHbpCiw02p3D9Da88FHan5pqlJGt1T2AewnS8LzpQGf4D01N9DO4XuI7NuZCzbvfqROQ2AVNYWBW3JcHEM7jfX20f64M+62cjMx5hXgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=j4Xvrp+8; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1775622766; c=relaxed/simple;
+	bh=9MYLGKoExxzqbYH+tXIMtfX2X2p2rbS+DesZGGvbBL0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UlpmNy8SIdVwM+vW97+GQwa+Z/qPbXXMzTgLShBxSI7mbYoPiYl3+Zy2cR1wRjjYgg0Vandl0DDzdAChAWsuKwDh4FVjej2q0U7QIn9bVHuz+DcrKL9HswLO20m41RlrHBi0SGoRY3HoMgFzHSZm1xqcZakTcR+PqPR63494voQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ehZce+PB; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="j4Xvrp+8"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 637Dr4gx2594862;
-	Wed, 8 Apr 2026 04:28:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=sTYWaa
-	yrimRpPwSSgo7/sUPNPuhaZpD1b5+V5PqBLF4=; b=j4Xvrp+8/5vtpBPRdwj6zQ
-	QQ6GA4dIBgwUgKPg5vV5aeA0yibxVwar2+rySOTVcdcYxrKJQoGctGdh1KA775Qs
-	uoh3OfWDG8cgTO3GOhMKqO9052buk7ljHRYaqV/VIFVYqbyaRkMp15eW3fS7A5Uv
-	/4MxMAiC7bbRkCbDcMXwKAi9K0m2f6eqG+xSXw707E+TzienaYsfotRlceeLVjPh
-	wPF2AmYtg1NhqIe+Z+fmfRQjamtbKXYxjuBBy68WdUEX2TSXoKPRgk4LERsVuXwK
-	3+BWP6uvBD+30iagDRcHZZSyxFr09wYiSVMzbS4V3wftJzsCOYMJo7QqB9f+ZsoA
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dcn2e67tr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Apr 2026 04:28:26 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 637NYbG5013821;
-	Wed, 8 Apr 2026 04:28:25 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dcmf46050-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Apr 2026 04:28:25 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6384SKb431064518
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 8 Apr 2026 04:28:20 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AB9DC20043;
-	Wed,  8 Apr 2026 04:28:20 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5441420040;
-	Wed,  8 Apr 2026 04:28:18 +0000 (GMT)
-Received: from Linuxdev.bl1-in.ibm.com (unknown [9.123.3.0])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  8 Apr 2026 04:28:18 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: linuxppc-dev@lists.ozlabs.org, Amit Machhiwal <amachhiw@linux.ibm.com>
-Cc: Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <chleroy@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Greg Kurz <groug@kaod.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/powerpc: Suppress -Wmaybe-uninitialized with GCC 15
-Date: Wed,  8 Apr 2026 09:58:17 +0530
-Message-ID: <177562236422.1381144.4554144401168873566.b4-ty@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260313165426.43259-1-amachhiw@linux.ibm.com>
-References: <20260313165426.43259-1-amachhiw@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ehZce+PB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=p/
+	ZM/4kHelLiyLL8DHfGbrRahrKh1nTWWuGX6Oj+uks=; b=ehZce+PBzOZ32VQYdW
+	UZ30kFRybbshcCP7goWt1rTanwUHVhCr9cpYY+/CMubfRhk3gGW5/jG/jDwsmdkW
+	F+J52FtXHb0ZN3mHyjE6na8oJFNOuFLg1QZP17DVaVDKQ8YfFTxVlnP6Gdvz3lpG
+	ETAOw5V0k5RLJhjrl1NcStYhY=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wCn+sBS2tVpCHSdDw--.35311S2;
+	Wed, 08 Apr 2026 12:32:20 +0800 (CST)
+From: Cao Ruichuang <create0818@163.com>
+To: rostedt@goodmis.org,
+	mhiramat@kernel.org
+Cc: mathieu.desnoyers@efficios.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: Quote check_requires comparisons
+Date: Wed,  8 Apr 2026 12:32:12 +0800
+Message-Id: <20260408043212.8063-1-create0818@163.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: G-qH3MqtFyaihStNPY5YFbbVWzyxAClT
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDAzNiBTYWx0ZWRfX/BAOe+ncuKhk
- DugWvbEG0AMFDuxIE48S2IaYs1d6WNMyHuFZVxQcT+ox6MIK/9i+frIydzQFZWRXJjPQwQRA1st
- L7tkGrEuUjDA/qTVR3hlFa3y9D5GUqGZsNNRHnUIduUshxaTGQerEASguBvGK3KiLbDmk6dPFI1
- hXVb8wgbnXLYA1gBECw5diBdbfXetpGKVyRoLXpIR+DkuV6DvU6hRIsup02on1lm0Ff5NvzjE+V
- fg+xlLhKQwJaq7S8ffr5FI6Cv64LD6hHeiglFbSN62ZzaXrtwn1T1ezBBph/P+AK3+TQ4FnIx95
- cYbDOQE/mfAa+XMC7stC2cV3ySPI2LKSjTebVlYDZD9edIrbgJre73nd4bDvSxZfvccB2GUr4Hw
- hcEubB2rSK6U2Ui8XWm7zneGX6zSF1eS/RL1sFRP2e4n9dp111X6WTSdsvD+Z4ytxUjPalwzxW/
- eY+IXgVg6+Cc9J/nvJg==
-X-Authority-Analysis: v=2.4 cv=Cfw4Irrl c=1 sm=1 tr=0 ts=69d5d96a cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
- a=oeOQCyp_1XCr1dGvqAMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: ez6dFC_gI3skCz9XJG-SPahKkdPdSBmn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-08_02,2026-04-07_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 phishscore=0 clxscore=1011 adultscore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604080036
+X-CM-TRANSID:_____wCn+sBS2tVpCHSdDw--.35311S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF13GryftFW7CF17WFWruFg_yoW8ur4Up3
+	93WFyqk3s5KF43t34UCr1DuFWxKF4ku3yUtw1rJFWUXw15Zas2qw1SkF13KFZ7Z3s8X34S
+	9393ZF17KF4DZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UJR67UUUUU=
+X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbC6BSb1GnV2lTa4AAA37
 
-On Fri, 13 Mar 2026 22:24:26 +0530, Amit Machhiwal wrote:
-> GCC 15 reports the below false positive '-Wmaybe-uninitialized' warning
-> in vphn_unpack_associativity() when building the powerpc selftests.
-> 
->   # make -C tools/testing/selftests TARGETS="powerpc"
->   [...]
->     CC       test-vphn
->   In file included from test-vphn.c:3:
->   In function ‘vphn_unpack_associativity’,
->       inlined from ‘test_one’ at test-vphn.c:371:2,
->       inlined from ‘test_vphn’ at test-vphn.c:399:9:
->   test-vphn.c:10:33: error: ‘be_packed’ may be used uninitialized [-Werror=maybe-uninitialized]
->      10 | #define be16_to_cpup(x)         bswap_16(*x)
->         |                                 ^~~~~~~~
->   vphn.c:42:27: note: in expansion of macro ‘be16_to_cpup’
->      42 |                 u16 new = be16_to_cpup(field++);
->         |                           ^~~~~~~~~~~~
->   In file included from test-vphn.c:19:
->   vphn.c: In function ‘test_vphn’:
->   vphn.c:27:16: note: ‘be_packed’ declared here
->      27 |         __be64 be_packed[VPHN_REGISTER_COUNT];
->         |                ^~~~~~~~~
->   cc1: all warnings being treated as errors
-> 
-> [...]
+check_requires() compares requirement strings that can contain shell
+pattern characters such as '[' and ']'. Under /bin/sh, the unquoted
+test expressions can emit 'unexpected operator' warnings while parsing
+README-backed requirements.
 
-Applied to powerpc/next.
+Quote the relevant comparisons and path checks so the helper handles
+those patterns without spurious shell warnings.
 
-[1/1] selftests/powerpc: Suppress -Wmaybe-uninitialized with GCC 15
-      https://git.kernel.org/powerpc/c/6e65886fceb23605eff952d6b1975737b4c4b154
+Validated by rerunning fprobe_syntax_errors.tc and confirming the
+previous '/bin/sh: unexpected operator' lines disappear from the
+detailed ftracetest log.
 
-cheers
+Signed-off-by: Cao Ruichuang <create0818@163.com>
+---
+ tools/testing/selftests/ftrace/test.d/functions | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index e8e718139..442aa28ff 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -145,13 +145,13 @@ check_requires() { # Check required files and tracers
+ 	p=${i%:program}
+         r=${i%:README}
+         t=${i%:tracer}
+-	if [ $p != $i ]; then
+-	    if ! which $p ; then
++	if [ "$p" != "$i" ]; then
++	    if ! which "$p" ; then
+                 echo "Required program $p is not found."
+                 exit_unresolved
+ 	    fi
+-        elif [ $t != $i ]; then
+-            if ! grep -wq $t available_tracers ; then
++        elif [ "$t" != "$i" ]; then
++            if ! grep -wq "$t" available_tracers ; then
+                 echo "Required tracer $t is not configured."
+                 exit_unsupported
+             fi
+@@ -162,11 +162,11 @@ check_requires() { # Check required files and tracers
+ 	    else
+ 		test=$TRACING_DIR
+ 	    fi
+-            if ! grep -Fq "$r" $test/README ; then
++            if ! grep -Fq "$r" "$test"/README ; then
+                 echo "Required feature pattern \"$r\" is not in README."
+                 exit_unsupported
+             fi
+-        elif [ ! -e $i ]; then
++        elif [ ! -e "$i" ]; then
+             echo "Required feature interface $i doesn't exist."
+             exit_unsupported
+         fi
+@@ -223,4 +223,4 @@ get_mnt_options() {
+ 	local opts=$(mount | grep -m1 "$mnt_point" | sed -e 's/.*(\(.*\)).*/\1/')
+ 
+ 	echo "$opts"
+-}
+\ No newline at end of file
++}
+-- 
+2.39.5 (Apple Git-154)
+
