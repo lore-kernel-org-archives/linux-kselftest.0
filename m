@@ -1,206 +1,230 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012040.outbound.protection.outlook.com [40.93.195.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0623C9440;
-	Wed,  8 Apr 2026 15:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775662418; cv=none; b=Qq0A49TjfPhcm9mYo+DwT/UxHmsyAkw7pvD3ALLiWgKkqWWwSFhtXYl+21CuZ1DGoFhJMDcWjnMmzyxu9ItllHGhKzvEv/2J4BL00o3DPoNymcUbDFqyED01n/PCWu+8YO1VOtKgLuz9FblVBMFEsfsg4swZ3OrGeQXWoizm57g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775662418; c=relaxed/simple;
-	bh=HQwtVVjx7pAQNxVNLTdHqBAW5P9PDoSiACJN/K8atN4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nl8kBYcupZLtco/nrc/wLyXceaWP99B2ak4hbMxLLAPH9vZA+dkQcKQBiITuJ/olct2Sx0UgLmVrEyY7kg5fc1YD9gGaecJKCGLE6r4tzb3tynCpMIPAXgVlz7noOHDSWHPdysZEIXFBB/eE9kbkw+1WofyqTDu4pJI30GRtE1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=F3bpG/ou; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B01326942;
+	Wed,  8 Apr 2026 15:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775662872; cv=fail; b=F7aW9Ew44zaVgCP6rYZkrY4IgF1Cb23O3kbPm52lVNhpEYBHuatFHoC++FCK6YNhGIqk3+duS3fRRfixwpQ7VbQQym0ODA1K7Z169Iv8Wqzs/3aDm5OtxUvgNo+sw8MKrr9ylmuPCLxV1TVlIuiFbz2LibFg+ZiBKRw3IhKabMU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775662872; c=relaxed/simple;
+	bh=XR3fQST14EPXuAEA+3wUW5163K+OYJW97S2gFH6II94=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sHsyjaPBtsyjAOgDJKXgrc9LxV1c6tix2LvELoMG+VP41xPIlEw5Ash3VClFL8dEkOHnm+TVJ3WnYBAb/NJDl2WZWJlOM1angQk2lXQqToyobpJnt5RhzV06Cgcu+zYqRjJWp6qmTuL+0xjSxjKp2FzSVufPanzqLwmNRWKLF4w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uK9ED8VF; arc=fail smtp.client-ip=40.93.195.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="F3bpG/ou"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=XW
-	mUWW+OJ436vG5ieYdJVIGsZGcNZ+Bgh170BuUbu/0=; b=F3bpG/oulmjq2SBvis
-	bztMjqNn985KTLH+TXII+L9yODePDasvXblZ9G0Rd1VVZzWXV2uwE66ICU6LXQ3m
-	PJRXTP690FozJVhVBUEba7sOVHq/u5vcs29k76V6D9mPvHlKClpoDCjQrYIFLQ+D
-	zWgoRKPQ7HDL6aUwmdy2YoWL8=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wC3_rofddZpBIHhDg--.36317S3;
-	Wed, 08 Apr 2026 23:32:52 +0800 (CST)
-From: Cao Ruichuang <create0818@163.com>
-To: rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] selftests/ftrace: Check exact trace_marker_raw payload lengths
-Date: Wed,  8 Apr 2026 23:32:41 +0800
-Message-Id: <20260408153241.15391-2-create0818@163.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20260408153241.15391-1-create0818@163.com>
-References: <20260408153241.15391-1-create0818@163.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uK9ED8VF"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fuYjpxG7lLAnKtlClwowE6iGtNF4kRxZtRBp0cppjZ0G45+zAHJZ8ZFcYtu1ONHV0BiFOlYYYnbK9oCkiW472EAErEZjRX8MdEjKV24G97eZUqhXIDA9nuHm9Al5OroO/+iTt+8kgrU2ZOhlfwy4tQqJ9HTGwzWTIpSMtwTBlO9oOO48n2mPxiFNKi7Kdij8Xy4j9iSgugO1Mg2YqxvkIoIduqTteWwlJqxwmXInz4orNQA6gpmDyGY2a2vqcHJvltwjAVfYSGmR/rsWU1Ff62zsEibPt8UPS6q345BkG+JOYwvfWl+XCg22Qzz0uN73ySEbWehZ71KkgMSCdFX6iA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y+xvlBHBcH7IM2+ZDj18/N62x/I7T5X6uhPVMzuDREs=;
+ b=uZNYz1cn2gdtfvOEGYoorVG+TbZIXTXtgbiLHqXGdKQzv+xnGEfp3PM0q2VV4PZWPWJeS3QgNvYLV7iAQhnkSTbC0ySQ42yVTWTCQL82BR2bLRj7XgbyVlO/C3a073vLZlSCB0+xjCuAVB5wJw/3GxCHKhBmKW2OXb0QgzlDJ+gWJl7YtRbawgx65F4NJ3s1N8Ccl29UfgcwGeSArvxpQShp9XsbO5kC9bEFAvMJpNb6pTN1phevxDw3LBj4Hm3Xg3eu/IfYCs9sJUtxO8mi9PGu9GQ25kZR4CxIbXuuM+n+uwFwehh6Hhi+0NGwPAIlZ3nDejarNPRKIYdJByo8pQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y+xvlBHBcH7IM2+ZDj18/N62x/I7T5X6uhPVMzuDREs=;
+ b=uK9ED8VF09lwR3m0RQAyVjH2ajhslIwFuvFB0g2nhkIc02eyNT6tFO0rlAZBeZhuvfzSo1SlmfZreIRu2/FSKRO5F3bpAeQsO4dekx8SEjkJPL77uYbOfEndlbo3NEM2cJxPw4ePhJoIkRzXRdqpnceZyJaimX6T3dPaHZUau8S3AYvKRF1/QcRrzQKXoZFQ4sRG2izMToyv2gX+oeUro8dHZb6W3n/zpO2PyGidE5AvyegUi1SQ8FOKi5XZpb2ghLjj3lWjqB4GZX+41tvwZ6ZCQMvCq2IdK5G+QzsNABev0JHM52gxFdICSNXLQOh5rkJSAYkocRg0P74+yOwWsA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ DS5PPF4A654669B.namprd12.prod.outlook.com (2603:10b6:f:fc00::64b) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.41; Wed, 8 Apr
+ 2026 15:41:03 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9769.014; Wed, 8 Apr 2026
+ 15:41:03 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Sayali Patil <sayalip@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>,
+ David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>,
+ Oscar Salvador <osalvador@suse.de>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
+ Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
+ Miaohe Lin <linmiaohe@huawei.com>,
+ Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: Re: [PATCH v4 13/15] selftests/mm: move hwpoison setup into
+ run_test() and silence modprobe output for memory-failure category
+Date: Wed, 08 Apr 2026 11:40:59 -0400
+X-Mailer: MailMate (2.0r6290)
+Message-ID: <B686276F-89E5-4192-8973-3B787FC8AC86@nvidia.com>
+In-Reply-To: <5888f69f-c336-4151-a9ac-9b0b00f9c3bb@linux.ibm.com>
+References: <cover.1775466329.git.sayalip@linux.ibm.com>
+ <8ef8640092004d143fe80e6fc32ea8d30a9080de.1775466330.git.sayalip@linux.ibm.com>
+ <8B26C697-4D0C-4E1E-A14E-D517CC9DA05A@nvidia.com>
+ <5888f69f-c336-4151-a9ac-9b0b00f9c3bb@linux.ibm.com>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: BL1PR13CA0316.namprd13.prod.outlook.com
+ (2603:10b6:208:2c1::21) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wC3_rofddZpBIHhDg--.36317S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAw1UAr13Gr15ArW8Cr4Durg_yoWrWr48pa
-	ySkFyktrZ3XF4jqw1fur42qr13A3ZxJ342gFykK34YvryDJrn2q3yxtFn0kry7JrZ5XryS
-	va1F9FW0kF4UZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UtrchUUUUU=
-X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbCvwV2r2nWdSURUgAA3P
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|DS5PPF4A654669B:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2bffe843-2c4b-4cd5-112d-08de95853d0b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	FEVB6z1kfUqnNQ9YWMiDj/YPlyiUQypazDmlUxqs8rVBvgGP5Zp1vzmJaez4KUCge2hHyHuPAmtn6mbeQSYcXG9j25GhO+x9NnKcd43SXMsOSHQHEAUL4KEykGm0CNSgHsXNtOuW2hMMH6IkzjQlNWAkocMSFOMUDVERoSC0TY10wegZ50rI5b0gYg0DLhLLLnMQByM15BaZYJC+rN29oZW1hDnPtNrJG3P500h610QTH4J4UUOLXN8vF6wiHbpVn4lNEzNi9BWgenaNjSGfpB6sqR4/9Yz/cawPatArYphlzBKq9lrpy1t7wZw9PSXUM6ZUo+6FGswWkINI+/u+hrezN80XUUurs6U6qxIHCprTBP7TBOMy+yuE9fBsSkBrE7tOuVH9JocHOmPGu0DuHHJYNksKNN20OEkZaV1vfJu18IPmfXztfldAVZf0JN7mFD5tfNUVT2JWw5hTBw4U2rthD2Plxzbk7VU4Q3YqzAL6dDbHSbZQ8kCaSrIUsox2Srnjv1pf4Z/VU2Ljtmo5XxA5LCSw1liKI1vfsCwv8xUlaqH8fn/sDx1yPeo52oPPGAyoteJUTl9wUsQyOtu/ON0E5Y0s3npLs/ubUF3C95B0/iZsDWSvbDmepizLkgFxQaZu4MyZP0AI/+qkkmmA2j6vmeRcPeIOcGCg6ynhFSe8/T9DC0pp1MN6+awGhCKXzcH/bZd6rsWforBclbs7MfKOWGC8l5zAiC2w1uUxkkk=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?WDY3lvwlRZpvaNoJGrMBL5b9WUgsXHoViwBNkBTuDifeyoZCeRVw9xzII4u/?=
+ =?us-ascii?Q?taLdWyKwGn98DKr/6vdz4ArwbN37dlUAeAmqFWb5Xf40PWoVY1MULgpGjU33?=
+ =?us-ascii?Q?mDYRe/MraAsTtyz0Eaq9qKJ1hh+wwJ/BTGwY0f2lMqek2/2uN2Y2ugfXNLpQ?=
+ =?us-ascii?Q?dN7Z2e2rUnYVseUOqhXryoDulOeU7VS+5UAMLuswq7Tmw+hJT2Me84fXTxVZ?=
+ =?us-ascii?Q?imyKXrmVsdPM7+qhoKwUwt7G1jMPi87MVVNlGXpGxeWYfih7xbDqS03HsYIx?=
+ =?us-ascii?Q?GUUKrVVM3ydYJo5sE9etvIlmtYusdwnDMJbH8ie+A5ZDYSiiJFdl8zY3noOv?=
+ =?us-ascii?Q?YKkZkUZCTu4baBIjV9QtzvjdOTpsC12NJAPpNK7F6+teoKJrgjg+v4P7DFQe?=
+ =?us-ascii?Q?Xgvb+w7xZY+f0WDjXa4g/kRJ2BnFT1CksiiBSleE85CA46j/6N3BEmfUz+h7?=
+ =?us-ascii?Q?VVg60Ow2Q41UQQOSLHzY703fnnDOHqo2FYAaBO5vQjbZZTd0DFFCwC//lviJ?=
+ =?us-ascii?Q?wWHiCZFuxYCR0VDu0Pma3zSUSwGtQIaB4stf3ddxECr8gSqsg8qucw+WcjiL?=
+ =?us-ascii?Q?YopQaNRNSoW/yI55LoMvcVD3boNRKnH9W5oxcVhtm8v0BPlFzJi+Nb+67J3U?=
+ =?us-ascii?Q?f6viVJBE69WXQS33W2TzI/7SFGISqKofE+9czQYp/P+zsFcuPB8TGhnQDk+m?=
+ =?us-ascii?Q?v/aM20DRQKGyWXvwZqhfVBuBbrqrLj++NIfdEmmtX8dO4syivMcl28YmzRsW?=
+ =?us-ascii?Q?1tnGmoNxpUk59eN7eXboSWSm1qQZ8VPz4O3lWRrLEkWMBTToxLLDIVHkHYcX?=
+ =?us-ascii?Q?FbsWI5LjnIv6Gznxh8aVvOfsVIGV3/s4VISaHKKNUGr4xGYzUNxZ0lXSxD+3?=
+ =?us-ascii?Q?r8XLQhRRBMKlng4JjVO+77SBngTEVzFupNSVDZYvu+kV9LewwLNR3ID6Vuoz?=
+ =?us-ascii?Q?W6LH1OyUDbCesfpOyYcyRJe+snDi2uabbq3jWL2KnhFbVZXbNfJFBncpOFvf?=
+ =?us-ascii?Q?FaX/AFIBri+LQGz1zNfaGehVIrIxkP0zdHV3ZYW9FZ/0W8j91R810Yqvial9?=
+ =?us-ascii?Q?Q+GRxK67nNNRuH4bfvc6xYcyY/YSvPLxdMg21gSbJoczgcaDWejYJR+BkVl7?=
+ =?us-ascii?Q?njn83X0KYrPdwRHwQFB8WhU+ZjccWWjA7c0WYOHbRIOC4Vu6USWid5Uam2aJ?=
+ =?us-ascii?Q?G7REHNFbA8QjmPR6A6MvyL1CGOnpDGrVEFO3+G6rUETVoiIwDlkPLhmlRjmt?=
+ =?us-ascii?Q?51yxJfIMlxcU1ny99hYRdDESZieEodrQRgUNsTb5z/580cFmwOLH7KabCN2L?=
+ =?us-ascii?Q?nGIsZue3anatcqT5//kokY2wnfCmOMwPOLsuO47uw39EeSssPAgKKvVbhGHh?=
+ =?us-ascii?Q?iNoivUOacSFKN/QwRNYRkJ55q+kaZX1qcNGdh7Etr+2hsYTy5Xsb8bAYLeZS?=
+ =?us-ascii?Q?+Z1LP5wnPTfRKJK1NnrstjP/eGKWcX7z0YPV3dmIFtiMmd0jWnH9De1nFW/W?=
+ =?us-ascii?Q?TpS8Aw/4qknUfKku+gdlZklt2YN7hayOiNJwRrbwtdWthjJ9+L3JSwp9TtyC?=
+ =?us-ascii?Q?fto7ft+utrG71aGAtgRNrXrfELl4nH/LJbBHRtPUHSurqMEp4D9CPWkezxWH?=
+ =?us-ascii?Q?8vCS/HYhKRejnxYRq6pJO0hGnp3w4TUd4+Xw1EH/020IpUkz6aLdNIoT9x/y?=
+ =?us-ascii?Q?ObkRbRDp7dMYK5iBNcCD0CocCurVAxU3IMxjaqwkj8Fiaqv4?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bffe843-2c4b-4cd5-112d-08de95853d0b
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2026 15:41:02.2551
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6tNbXd0VfJAwmb+9O0ztR2qqmYD5am9JD10XcYGTAU/1Y1XUithNV9YQwtbTthF/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPF4A654669B
 
-trace_marker_raw.tc currently depends on awk strtonum() and assumes
-that the printed raw-data byte count is rounded up to four bytes.
+On 8 Apr 2026, at 4:36, Sayali Patil wrote:
 
-Now that TRACE_RAW_DATA records keep the true payload length in the
-event itself, update the testcase to validate the exact number of bytes
-printed for a short sequence of writes. While doing that, make the test
-portable to /bin/sh environments that use mawk by replacing strtonum()
-and the lscpu endian probe with od-based checks.
+> On 07/04/26 20:21, Zi Yan wrote:
+>> On 6 Apr 2026, at 5:19, Sayali Patil wrote:
+>>
+>>> run_vmtests.sh contains special handling to ensure the hwpoison_injec=
+t
+>>> module is available for the memory-failure tests. This logic was
+>>> implemented outside of run_test(), making the setup category-specific=
 
-Signed-off-by: Cao Ruichuang <create0818@163.com>
+>>> but managed globally.
+>>>
+>>> Move the hwpoison_inject handling into run_test() and restrict it
+>>> to the memory-failure category so that:
+>>> 1. the module is checked and loaded only when memory-failure tests ru=
+n,
+>>> 2. the test is skipped if the module or the debugfs interface
+>>> (/sys/kernel/debug/hwpoison/) is not available.
+>>> 3. the module is unloaded after the test if it was loaded by the scri=
+pt.
+>>>
+>>> This localizes category-specific setup and makes the test flow
+>>> consistent with other per-category preparations.
+>>>
+>>> While updating this logic, fix the module availability check.
+>>> The script previously used:
+>>>
+>>> 	modprobe -R hwpoison_inject
+>>>
+>>> The -R option prints the resolved module name to stdout, causing ever=
+y
+>>> run to print:
+>>>
+>>> 	hwpoison_inject
+>>>
+>>> in the test output, even when no action is required, introducing
+>>> unnecessary noise.
+>>>
+>>> Replace this with:
+>>>
+>>> 	modprobe -n hwpoison_inject
+>>>
+>>> which verifies that the module is loadable without producing output,
+>>> keeping the selftest logs clean and consistent.
+>>>
+>>> Also, ensure that skipped tests do not override a previously recorded=
+
+>>> failure. A skipped test currently sets exitcode to ksft_skip even if =
+a
+>>> prior test has failed, which can mask failures in the final exit stat=
+us.
+>>> Update the logic to only set exitcode to ksft_skip when no failure ha=
+s
+>>> been recorded.
+>>>
+>>> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page=
+ test")
+>>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+>>> ---
+>>>   tools/testing/selftests/mm/run_vmtests.sh | 52 ++++++++++++++------=
 ---
- .../ftrace/test.d/00basic/trace_marker_raw.tc | 93 ++++++++++++-------
- 1 file changed, 59 insertions(+), 34 deletions(-)
+>>>   1 file changed, 33 insertions(+), 19 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testin=
+g/selftests/mm/run_vmtests.sh
+>>> index afdcfd0d7cef..17c9bd910c47 100755
+>>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>>> @@ -235,6 +235,7 @@ pretty_name() {
+>>>   run_test() {
+>>>   	if test_selected ${CATEGORY}; then
+>>>   		local skip=3D0
+>>> +		local LOADED_MOD=3D0
+>>
+>> Can you rename it to LOADED_MEMORY_FAILURE_MOD to clarify its use?
+>> Since now LOADED_MOD is visible for the entire run_test().
+>
+> Thanks for the review!
+>
+> I kept it as LOADED_MOD and specified it as a local variable intentiona=
+lly. The idea was that, if any future tests are added that need to verify=
+ whether the module was loaded, they can reuse the same variable. For tha=
+t reason, I did not make it specific to the memory failure test.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-index a2c42e13f..3b37890f8 100644
---- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-@@ -1,11 +1,11 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- # description: Basic tests on writing to trace_marker_raw
--# requires: trace_marker_raw
-+# requires: trace_marker_raw od:program
- # flags: instance
- 
- is_little_endian() {
--	if lscpu | grep -q 'Little Endian'; then
-+	if [ "$(printf '\001\000\000\000' | od -An -tu4 | tr -d '[:space:]')" = "1" ]; then
- 		echo 1;
- 	else
- 		echo 0;
-@@ -34,7 +34,7 @@ make_str() {
- 
- 	data=`printf -- 'X%.0s' $(seq $cnt)`
- 
--	printf "${val}${data}"
-+	printf "%b%s" "${val}" "${data}"
- }
- 
- write_buffer() {
-@@ -47,36 +47,68 @@ write_buffer() {
- 
- 
- test_multiple_writes() {
-+	out_file=$TMPDIR/trace_marker_raw.out
-+	match_file=$TMPDIR/trace_marker_raw.lines
-+	wait_iter=0
-+	pause_on_trace=
-+
-+	if [ -f options/pause-on-trace ]; then
-+		pause_on_trace=`cat options/pause-on-trace`
-+		echo 0 > options/pause-on-trace
-+	fi
-+
-+	: > trace
-+	cat trace_pipe > $out_file &
-+	reader_pid=$!
-+	sleep 1
-+
-+	# Write sizes that cover both the short and long raw-data encodings
-+	# without overflowing the trace buffer before we can verify them.
-+	for i in `seq 1 12`; do
-+		write_buffer 0x12345678 $i
-+	done
- 
--	# Write a bunch of data where the id is the count of
--	# data to write
--	for i in `seq 1 10` `seq 101 110` `seq 1001 1010`; do
--		write_buffer $i $i
-+	while [ "`grep -c ' buf:' $out_file 2> /dev/null || true`" -lt 12 ]; do
-+		wait_iter=$((wait_iter + 1))
-+		if [ $wait_iter -ge 10 ]; then
-+			kill $reader_pid 2> /dev/null || true
-+			wait $reader_pid 2> /dev/null || true
-+			if [ -n "$pause_on_trace" ]; then
-+				echo $pause_on_trace > options/pause-on-trace
-+			fi
-+			return 1
-+		fi
-+		sleep 1
- 	done
- 
- 	# add a little buffer
- 	echo stop > trace_marker
-+	sleep 1
-+	kill $reader_pid 2> /dev/null || true
-+	wait $reader_pid 2> /dev/null || true
-+	if [ -n "$pause_on_trace" ]; then
-+		echo $pause_on_trace > options/pause-on-trace
-+	fi
- 
--	# Check to make sure the number of entries is the id (rounded up by 4)
--	awk '/.*: # [0-9a-f]* / {
--			print;
--			cnt = -1;
--			for (i = 0; i < NF; i++) {
--				# The counter is after the "#" marker
--				if ( $i == "#" ) {
--					i++;
--					cnt = strtonum("0x" $i);
--					num = NF - (i + 1);
--					# The number of items is always rounded up by 4
--					cnt2 = int((cnt + 3) / 4) * 4;
--					if (cnt2 != num) {
--						exit 1;
--					}
--					break;
--				}
--			}
--		}
--	// { if (NR > 30) { exit 0; } } ' trace_pipe;
-+	grep ' buf:' $out_file > $match_file || return 1
-+	if [ "`wc -l < $match_file`" -ne 12 ]; then
-+		cat $match_file
-+		return 1
-+	fi
-+
-+	# Check to make sure the number of byte values matches the id exactly.
-+	for expected in `seq 1 12`; do
-+		line=`sed -n "${expected}p" $match_file`
-+		if [ -z "$line" ]; then
-+			return 1
-+		fi
-+		rest=${line#* buf: }
-+		set -- $rest
-+		if [ "$#" -ne "$expected" ]; then
-+			echo "$line"
-+			return 1
-+		fi
-+	done
- }
- 
- 
-@@ -107,13 +139,6 @@ test_buffer() {
- 
- ORIG=`cat buffer_size_kb`
- 
--# test_multiple_writes test needs at least 12KB buffer
--NEW_SIZE=12
--
--if [ ${ORIG} -lt ${NEW_SIZE} ]; then
--	echo ${NEW_SIZE} > buffer_size_kb
--fi
--
- test_buffer
- if ! test_multiple_writes; then
- 	echo ${ORIG} > buffer_size_kb
--- 
-2.39.5 (Apple Git-154)
+You mean future tests that use hwpoison_inject module? Or any future test=
+s
+that load a module? For the former, you can use LOADED_HWPOISON_INJECT_MO=
+D;
+for the latter, I am not sure how a single LOADED_MOD would work for
+different modules and that probably would need new code for that case.
 
+My point is that since LOADED_MOD is now in the scope of run_test(), it i=
+s
+unclear which test uses it without reading the entire run_test(). Giving =
+a
+specific name improves readability.
+
+
+Best Regards,
+Yan, Zi
