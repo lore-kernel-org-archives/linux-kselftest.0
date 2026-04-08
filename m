@@ -1,55 +1,55 @@
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5CF737F8C2;
-	Wed,  8 Apr 2026 18:13:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949882494F0;
+	Wed,  8 Apr 2026 18:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775671995; cv=none; b=jFNds57/AbE2vqL8R7L78L72gTWpjHnUI006OnKCwpRdKg/L7s5blc/0CHZrpWYmUsdWR6GDdpgy+YvETQQ76j8VDj3WeygJrLuOXeH+IF7LtxQF8wn8imoJQZvAoqqzbw71Qupv/JVCLJ6uTUr5KATzV0DCgL2FXOpr/YH4OVs=
+	t=1775672769; cv=none; b=DlscdJvDUH6oyfU4pu9gJVqh4teHjIaaJK+wxiEJ+tSt/Xa/GYP+yxhKw+18t/j1908MDZQKibYbjRlkizmL04UAKSrtec6P1rIVxvqhlqfg4bI5VeElqVEzfr+xBDZLv6DEX/rtEhunEPHoxK88XFZqYpUiBc0cLNta9osGODk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775671995; c=relaxed/simple;
-	bh=EO9uR9gL4zxJdvZ7GrFE5nq6nH0pJjGS6mVLzWge/No=;
+	s=arc-20240116; t=1775672769; c=relaxed/simple;
+	bh=VJ83GD3SdOYdbO+KeShA6+18yEYBseFpAwF6rIZ/HoA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BI0VotDETAPsvQ2+U6ExRBK0pcmufZci0AXQLRU8ExUzAF6SsTQWi7+a2cfw/BqRRQ43jD19kX3jererIc2So4DAVTgiuhVS8RulYwtFKahUIgbw5x6sLMOLWdhpXQvQBdF6WT8oYRi6C1yDl0gFrdmBF6YjBnBPsA8LNaMR5Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=jx5O8buR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IlJBgQ+g; arc=none smtp.client-ip=202.12.124.146
+	 Content-Type:Content-Disposition:In-Reply-To; b=kTjk+QyDLYYbmWncBkHyjpPvsD4MvnFahXXgR0Vs+6uoglWOPymH1LdaRGFx84B0xGL7UzPzWzV1JCp+QdHsVdYdlJmExSbilhsIoXsDvDjRAZ5Q3bTEMKFmfhJC8/pKlvgwnnTy2uuwz04KkmmcqkK1YBFqr+ofbEIh/8X5IpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=RTR4RrhY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IFiGebzk; arc=none smtp.client-ip=202.12.124.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="jx5O8buR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IlJBgQ+g"
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfout.stl.internal (Postfix) with ESMTP id 546EB1D001C0;
-	Wed,  8 Apr 2026 14:13:11 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Wed, 08 Apr 2026 14:13:11 -0400
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="RTR4RrhY";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IFiGebzk"
+Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 4C9307A01F7;
+	Wed,  8 Apr 2026 14:26:06 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-07.internal (MEProxy); Wed, 08 Apr 2026 14:26:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1775671991; x=
-	1775758391; bh=aORdmq9g0FRGST1ZNQjnQoqdkV9zAZInE4Lq25KYBuk=; b=j
-	x5O8buRNsZcBQOaLVqc2LV5s3W5EAhLYGpkJ339wZbe0m+9eqrmerR9Vjql6KO/9
-	YrXjQ8Y4NPUEmokKHLOEQMgMiY5NiFMO3Xdyz9HcFzmAWVYyfd+PzOYr981SNo6k
-	Kgy74pxHxB530mNv0FuEmglHdvxCpjIvgWrzamTGyoNumbaYYTyGy50esOSu3IIj
-	KUHC2EMX9piyupZ/gew+TMuZFS0d5UOKU85CdvybgX+9hvTCV4Hh/f7ODMjmVT/w
-	dk6n7koaXU9kDjrWenFl0FEyCIYRdf8F2Csc+xmbt2q+i2csmfeHg5U1x1U9KYKG
-	dGo3FUsvIPFl4tWwbuR3Q==
+	:reply-to:subject:subject:to:to; s=fm3; t=1775672766; x=
+	1775759166; bh=3g1b2rdgcqZMi/s3RtSe/udpnK07L+SNtGZz3w2Agrg=; b=R
+	TR4RrhYUMPNUB+X+ZF2xh8ySvZ2+P/4j74sBgGr4YgJAt9t/2HE/yUzh7bTvmn2L
+	X3nt8Im0PTio5YAaL6QSKqqTeMWhftToJxVcl3SHTb0HBpb/UU9Dh8tHBbDSFeQB
+	JcKx9GhLyJ9gHq7+ji8pAnjYroFMUlqnAazNJWmNepHsMk1OJutc3YB0jpDoeyBi
+	P6PqoNAxp/8v890v5f4n6eDwkQyvyY6ZDQJrehCJ+Vri+3UuLb3nIKDHJ4P/CEE2
+	pENI6iBEGv3vteVlYCa8Jdm2z/YalDYirDBf5s2IrZg9HxPc6ekhYT6gfc7FATNH
+	4//+0tELQ9btVnu7VAx6g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1775671991; x=1775758391; bh=aORdmq9g0FRGST1ZNQjnQoqdkV9zAZInE4L
-	q25KYBuk=; b=IlJBgQ+gMlvgv/EPomRc3VzxsBepyypHnAzUm3D+qpAi5DAnwup
-	aO9gopZp3vT1nKyQTaANRmstjB5LH0KLfS/wT2wXuXFPh588Pf2VOF0ORZzHuYm+
-	7L2rL5WyNbW2WfRI+3nWeXEPAbfPkgy+Y6Q0xZR7hJef8F/kW83gpBG9izxSao11
-	HUrnze+klLch4BRUqLNpyzmZcKcsqL4rvRQcI448V5no5y0JKP5cdfDyTSbWXAAx
-	80qsHCmw540U+jtPp1QzmT1rD4Ym5AvJKDxBGfTrZ6phfNacBI5j1ZehiRmlWjw5
-	swKW4wpZUMsIgvpxbTcdHuV5zB+my3Ujq+Q==
-X-ME-Sender: <xms:tprWaX0tOK2GHw3ON0FZXy0p8dQEcq06a9JfSCnB-JLH41wsAppZ9w>
-    <xme:tprWaclLc_TRTzFlsVeuwiCB3D81DZJDwRi5I1MH7q5rR_lBkM5EppFYWolQIJ-Ki
-    iB1EQEQN5fp87tqKLv4LWF5u4HDyeETkqjA3-CkUKnloAWYPbwWAhM>
-X-ME-Received: <xmr:tprWaV7lY2-eWHVEFVvFWt6bAX-dFt-H9eVUPvLGO3cksPL7W13ihyTq3CPx>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvgedviecutefuodetggdotefrod
+	1775672766; x=1775759166; bh=3g1b2rdgcqZMi/s3RtSe/udpnK07L+SNtGZ
+	z3w2Agrg=; b=IFiGebzkhJLUG61ukeyqDlboYOxrcrHzwId0ulWox2+1407iaBH
+	Gi3uFGH2iVqYcbs5jGAume/54JNSRhjd4Qy862zWReM75ZGA7JUyI5n2Rn0b5g4F
+	XWcdwxlfzPbkejL7y+hmlFPrY+G8k/UTDI/K19jT1SS+Iik9DVPzrUrMp2vQksTK
+	qFcxCIy9lm5ThHMH0dKwyA99sCqkLgwCG0pErSwHSD01hGkxlwaYwpGQH/brtocv
+	uNRsPehFkNPdPn7rXzulQ2WtqpNyO95dbF6V+mBu186slwkm80QxbeHD1h3BoWUp
+	0s3PnY76PIc+7Qz4dzQ1Gw4a9qchOZs9LRA==
+X-ME-Sender: <xms:vZ3WaeAN5NpFJg-0lWShMfLno9IMrLWEjg_spr0vzcwz9v2fFM7twg>
+    <xme:vZ3WafDHfoc-1sGEWfSIqY7cQ3uOqKdVuBIwZ961JZsHra0GbDVLcAk9qs-mh3ZQT
+    IDD5R4W22oRTIb5OQHciJQ6haL4NRxKNjXBjcqtZPFkgAqamSpVJ3E>
+X-ME-Received: <xmr:vZ3WafnLxqLmoC5CJTBenz9MCii-r8bal79cfyasEvyH2TwXAy7Tcnp4Cuzi>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvgedvlecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
     hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpefurggsrhhinhgr
@@ -64,15 +64,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvgedviecutefuodetgg
     ghhlvgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpth
     htohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopehhohhrmhhssehk
     vghrnhgvlhdrohhrghdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgv
-X-ME-Proxy: <xmx:tprWaflo7THvUrkAxAG00RNGC_TzV5jl7LUGJAC-hCKvnNL2PGMoCw>
-    <xmx:tprWaQVL37srs6kkCfroQWpSgoZizI_VZymSGyh3sX8xRcKVhi9rCQ>
-    <xmx:tprWaYRi27eyLqxbNIJgrCYnypzE11z28qRs-Insm8mpFlETLmHsvA>
-    <xmx:tprWadDXEnQlWnqT3GZbyn7_JCNPgDut68gHF5LNxXI2ZHrZoXSCbg>
-    <xmx:t5rWaQXkJ3jss2oQGBEgELzXLCPARJwfS7I_MjiGYE1Wd6MDorAjjhIx>
+X-ME-Proxy: <xmx:vZ3WafjaHO8hjVxa3XDd0UZbNQct3An6nUK_lREHRs2HY8QU2lo4iw>
+    <xmx:vZ3WaZjukSJ7-ZXJZMfN5s5BlOm0mUJv5mj1AlxKET9AsFZD0AY8WA>
+    <xmx:vZ3WaRsaZTYkZq7eljLCYX-3MUi310WTQrLkhTudNTG5bflsqx_B-Q>
+    <xmx:vZ3WaRut20DOlFmOAQskSAE0jtcjCb1LIqD4zsLJEUHKyxOhGvQAyw>
+    <xmx:vp3WaXRIUcJFvn4EUo8-AbWUtxcAQW-t89JapUXQ1n8QfNRLfsYH8V3k>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Apr 2026 14:13:10 -0400 (EDT)
-Date: Wed, 8 Apr 2026 20:13:09 +0200
+ 8 Apr 2026 14:26:04 -0400 (EDT)
+Date: Wed, 8 Apr 2026 20:26:03 +0200
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: Cosmin Ratiu <cratiu@nvidia.com>
 Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -83,10 +83,11 @@ Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
 	Stanislav Fomichev <sdf@fomichev.me>, David Wei <dw@davidwei.uk>,
 	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
 	Dragos Tatulea <dtatulea@nvidia.com>
-Subject: Re: [PATCH net v8 2/4] nsim: Add support for VLAN filters
-Message-ID: <adaata9aKxijN09c@krikkit>
+Subject: Re: [PATCH net v8 3/4] selftests: Add MACsec VLAN propagation
+ traffic test
+Message-ID: <adadu3_TfrFtrJ87@krikkit>
 References: <20260408115240.1636047-1-cratiu@nvidia.com>
- <20260408115240.1636047-3-cratiu@nvidia.com>
+ <20260408115240.1636047-4-cratiu@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,19 +96,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260408115240.1636047-3-cratiu@nvidia.com>
+In-Reply-To: <20260408115240.1636047-4-cratiu@nvidia.com>
 
-2026-04-08, 14:52:38 +0300, Cosmin Ratiu wrote:
-> Add support for storing the list of VLANs in nsim devices, together with
-> ops for adding/removing them and a debug file to show them.
+2026-04-08, 14:52:39 +0300, Cosmin Ratiu wrote:
+> Add VLAN filter propagation tests through offloaded MACsec devices via
+> actual traffic.
 > 
-> This will be used in upcoming tests.
+> The tests create MACsec tunnels with matching SAs on both endpoints,
+> stack VLANs on top, and verify connectivity with ping. Covered:
+> - Offloaded MACsec with VLAN (filters propagate to HW)
+> - Software MACsec with VLAN (no HW filter propagation)
+> - Offload on/off toggle and verifying traffic still works
+> 
+> On netdevsim this makes use of the VLAN filter debugfs file to actually
+> validate that filters are applied/removed correctly.
+> On real hardware the traffic should validate actual VLAN filter
+> propagation.
 > 
 > Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
 > ---
->  drivers/net/netdevsim/netdev.c    | 65 ++++++++++++++++++++++++++++++-
->  drivers/net/netdevsim/netdevsim.h |  8 ++++
->  2 files changed, 71 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/drivers/net/config    |   1 +
+>  .../selftests/drivers/net/lib/py/env.py       |   9 ++
+>  tools/testing/selftests/drivers/net/macsec.py | 141 ++++++++++++++++++
+>  3 files changed, 151 insertions(+)
 
 Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
 
