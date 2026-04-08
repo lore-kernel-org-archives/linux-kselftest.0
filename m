@@ -1,123 +1,139 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91E376026
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 00:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775607171; cv=pass; b=Pydv+IdbyZILZZNEgM4Lw5jw/wqU7y9kHrRr7uCdtFW0q169eU0oRiJ09c4uwttOjjgGAA2JhbAMJUREDrIM8MeB632MS7QFOZpOIUEajtxM9L53vwL7bWys+JOMiA3RACpkaj7ahGzKM244xuEar0JrA9c3bi/owhvEqkePGTk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775607171; c=relaxed/simple;
-	bh=Hq5a+9Z7xklW4vTTDEilr89dxjbEY3dhoQCa8Qpb0FY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aUp5cx6IpOuZbidlKLxAGTbtAy1kZNNDvrJ8qVc0hhX045tAa9N184qRqX++x+c91V93Jt5fAhlI1VhrIAMQLVY0Xzy+sr3CTk+pQ+XSYvvTmqN+fAXiMFUBErwq1ey5CY6xCpgdfDsjs1g0WCnde3Dlrl5wv5DSYngPs2ArBYs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pdVGUQkX; arc=pass smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DE440DFC2
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 00:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775608086; cv=none; b=Ie0SnhKgAS7woRmNczYz/DI7HM+oHBBzvGhx/k3cTzAU3C7SH5QtNgTwwvnam7OyqasgImy/YrwuC4AzE5dbfNSoYbq5YYOzzYNQ1oxoFQFJlRv2ChnFfuAu5jfy4kk4k7cJsZ1ZEk5Eg7TcskENIEnCKoJKmnLGu1kNgN9Ck4k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775608086; c=relaxed/simple;
+	bh=e2+jsbOzfqYPkKlVYAm82qfqErfZxtXvTuGiht2gEDU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=F1UEn5WgVCD0TmJRFYIEJwKiUgZg9TmETFjkD5j/+JqgSJqIyzzyjHJAzWFRoitdY/+UNC8KJsD8Ms1yjadV99LMr/HQAkJadzaNWjR9Jv0C8VPI4tZM/LQLMBuRoclC1wQy//uhGfuykVOdMIq61iiA8/N8imdn+7t091sC4DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=EeapWI4I; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pdVGUQkX"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-66b0dc690bcso2795a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 17:12:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775607168; cv=none;
-        d=google.com; s=arc-20240605;
-        b=d6E+YSJ8GvCw9v7tFvE0EqUGczb5iqttv+7+lutZS0u8SrWMUX+vj7QrUpBY72HoQk
-         SVlBKtXzCWcAncPM6wMrEvaLWmHIp3pdyxuDwbxfwpsgaeCnGfDfn3p8zKPkBJMXIDTg
-         W+JvFL5LgWbWx+9hMTDwqAOhnweey7mbwwIWmUvJdFPCEPW68yszUh6sGPGh29puA58H
-         v9E1mItyh6WR1hDh2+reqpJVVPUE9Wrwk3179g9zxLAVUohWbvoVMyHjR9DDfHQypFFX
-         Zb+1RhNNd77hIAm1FVgTUcVwnueCNQArjrjYR46PQAp9BwQdqnjeF9WVhRVDzq0Y2AEA
-         6MdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Hq5a+9Z7xklW4vTTDEilr89dxjbEY3dhoQCa8Qpb0FY=;
-        fh=n28Zx5mvR36/KLGmnG/MPZ4kL7392grYAzABXvVaMvA=;
-        b=MTEvFveIsbZh7OIDB6O75viQokVlx04oElQogqdXjyqK7lhR4o3CC6YjTbpivYA+oQ
-         hxNBwzddWM+qGWgohdO5Vs/uzhRt5zeMWSc8unNPHtpOX8oGpHCZGkqjgIA0mjLDOaTn
-         VPmoabSoma2XSftvienUJWe5YNVRuPm9nQTPqDpc+uArstAnHavUHPD/2uhliBGNVWfT
-         TTr7n8Fy9qJoOplxKyY6GEneQ4/FB7NxEgoZ6+tgnt3zui6JQ++fzD8brs7f3ckLvyf+
-         wrBw1A1gU3c5MCQG7CBdwUliNVZNb8y7Tk+Nv6Bc9Ci81gdS44xNrz2/jBn3OaaW1o/6
-         psyg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775607168; x=1776211968; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hq5a+9Z7xklW4vTTDEilr89dxjbEY3dhoQCa8Qpb0FY=;
-        b=pdVGUQkXDMlo1yGRpdb/bvNUZbVs/vtDUnnO3ETpz8E+rUYIWI2g7CioMICQovsd2g
-         HH0OwNEY072akA9bXKXb70za363CrdRKi71XPQ5kMajEx8DJv/Y6V5AQfqBrAfBTPFlC
-         FhwUgcLzJAalDQJc+4x8gKINq47KiKOT6KHPU+0f4pRsK1nrGyTEjfJzgzI7YbIfoqkb
-         0iTpv/6YXi1qIItHFW6wKVn1QnMONLdtgYls+AlldbRqCCxJbsauK7QwmeP3+XkpPaUe
-         TkirifTxX0sc/8GXAPMxP8fB1rI76NgHzqwl2CggngyCDNyiolgZ6EnJCsMo0gxV/gq/
-         /EzA==
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="EeapWI4I"
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 637HPEYh2108709
+	for <linux-kselftest@vger.kernel.org>; Tue, 7 Apr 2026 17:28:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2025-q2; bh=9T9c1yN2SOjCcS/gjM
+	S9r4uUQmXJK8+FifOPqIimOI8=; b=EeapWI4I7AAmUeE64PZaoW3Cu4Hl/RxMmX
+	OyFmiu2pelFr59G7z1AcN/nxKsYIP7UCxs2phTEoyZRt00yMeFvqFxnyrNQ9bdvc
+	upHCpx0WzT3z7nJH4kX/Dsc8XGgzrk4/2bPF3/Kgqe+5UpPuj8gjP+ok9spKZnNk
+	CQTL+TNnqP+fm/QptLLa1KTHPCWkoNXCCZ+w9wCdLs5vgRVQXvq5xGfXxx4nzmEd
+	RaLfI17YatML5GGl6lpddVbnenNQLICXGuTJlHTJ6AqlNNUwQCZHxRp9qq8kTRy4
+	Jr6u//ue7cR+Ja/AbPYRlIQWEwq0ESdT9tWyOQT+JP2yuXa83Hgw==
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4dcmt2fxqh-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 17:28:04 -0700 (PDT)
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-7d7e9e02363so14567410a34.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 17:28:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775607168; x=1776211968;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Hq5a+9Z7xklW4vTTDEilr89dxjbEY3dhoQCa8Qpb0FY=;
-        b=kaeqYOxXyfM/HcWFJ2y5dUhaR6qQLs/2lL+LyI3ss+IML9wIJJ2TrnDOfOXHtGS6qB
-         2Kq6kKfxW2Y3aaiW7xyMcsGIbuvMW0vETuNITloxjacCFdH368dCLzUdWfH97ZGPlyjC
-         Zp2/PzJvHOayWCh71qLVBD/R/ujr+TovFickhdZF9rpHRz1qN5NQDc6ncIXIANXuf1Wm
-         eU6swjFovesqxBSO5RjVUHfVbzbfbU2nA7eDuol3jiyf0Jt3T6ONYm9MdehPVzch9V9f
-         G+YK2FnDRL1muUt6gl/HyZEsWH/m+r0NWHkRVVknURrbPidhcDAHaP0U9NU0AndEOTVa
-         0a0g==
-X-Forwarded-Encrypted: i=1; AJvYcCUHW6R9xUtCgxAmmiIoJaPI7pKYahrNl/XrgRwxwaEJafTowlX7gs9m2bOqTALDtXaODuf6gdD2ne6Nylbe6Ks=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA1ZLSq564UnbddK4r/mIyP90LaxXUq1Jf6nud13rNTAFIpjee
-	zpW6M/RKBCIUdIKK0ew5ukfRzfqDbsYrD11FE615h+Hxtvnh3ucquRuTIUJbihovKTFOTG6+M71
-	b6gW/amlYnmE4vN9GKCfpUojDBt6xJJncDUfVGKy9
-X-Gm-Gg: AeBDietRUpt/Sst7JHje+HYIrHUQ2grHmqJwkV+l1VFQUzo0xrVhAZoxYzW/LwBnodJ
-	9F0yanmna92KFJnSW9E1ItSQ3JcA0FhReJRzqtqrH7eyUbb1B4n2dVARdBtAfm+/EKD1ggWtkBN
-	w/IQBiLFewIjlwqLXVcbCavuzJ9nsmLy7Xu3Gc/FeKAPLDwWTDFd0QsrtHzBf91lPAuZtAaLSOm
-	p2FYZw0STVoxtvqPckvYCrjUC/a2CQxLVQ9/kkgXSZGke/oSjYJYoAzjgXlyzV5cQNNPSs2PYr2
-	NSYhr1M9s0urc/y1/NQgO1/5+ZaFxHI9aZx/RSEpavACZSSScw3NAH6ksp0N5OWk+w==
-X-Received: by 2002:a05:6402:400e:b0:66e:e3f9:ebb6 with SMTP id
- 4fb4d7f45d1cf-66f9eb0e641mr15274a12.4.1775607167874; Tue, 07 Apr 2026
- 17:12:47 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775608084; x=1776212884;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9T9c1yN2SOjCcS/gjMS9r4uUQmXJK8+FifOPqIimOI8=;
+        b=rXT7NqqxGsnzIrNcOjZxKty6eHxbpXeqXYjrGh1KbyOT7zL8hOYXrVl+ni5n0ZppCN
+         nlcr3uPRMtpKe7l74YcTKa2t327LbsK+SSG7u1iaWg/nvhwCmDpfqcdBlcq3Pr4ehUoc
+         uBKDKq32OtCWNwa1/Pd4LVKIzrAYwEgj9J/4vaJxSjBSWeDG3+B9r1BeVMw7MLFxfzsP
+         UQQ+Aijc+znrgjtnyvBCFmp+1CHkTvcBg3F88SY2m/wJZmahG4cAizmJAulanMfJuvix
+         za18oB+1gDQr2qgj4CarrpCcnFS7rHFRNPgioR/f6L2nQ7sgxJf4ExtwgfxchiTTQi5D
+         PTrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWyw/gTsPGQiffDWAnUw9UR7yjWlTWE4glAqffwDJVVMlrsbjp9AGkEzIs96DnxXS3uiB9/HIPBRvbvybl1KVk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzquxN7v4xj4r5GyIVjFhZ0SVocRHkqOQzuFnjz5EcQU+UextBo
+	eE+4DB7pdHxYfZwpC/UMsDHGwVWGuNCOX8t7T8sRE9xVTUFxFuy+8zbqct3juiroN1KmqNSJDYd
+	yn7L+kxCEnCQ2I7G6wpsHKMY7kNL9emgRDVkpPM32CV86ILgu0Xux4KOfq9fm3LpOYTM=
+X-Gm-Gg: AeBDies1UFHKSY8MYhbgejFEZZoKZrq2lN8ZhRStGzxv2tKd0IMdlDwLkFc8JqvKd6W
+	NvinDZOP8xpVM5SwIL9dp/ghyT98NdOCV5kmKGTov8/SUiPy8iGtxmN0ntyL/HLntUA2uNERqAU
+	j2w9yf3pJniuplrOSpwurrRRLe/StN0EHOPnk3DHoIycFlAIoyNrUNALDzO+GXj9Diz/lJPCF3r
+	/6Y5tEQ6M/usfz8MTy2LzNh3kJShdrTaYNHKQg0ix6hG2NL/NBC+cB1IwNBT1iqy6QgN9VGOjB2
+	2HXKb8tlmAdXVPlGnKM8IBiZSqghhHruzQl7pQgIZZJ2WsFsq5YxXGuJSnv8bOfYo6ua7uQLGvI
+	wEasEgH4WDw==
+X-Received: by 2002:a05:6830:2546:b0:7d7:fada:89ca with SMTP id 46e09a7af769-7dbb70cf2aemr12124479a34.15.1775608083929;
+        Tue, 07 Apr 2026 17:28:03 -0700 (PDT)
+X-Received: by 2002:a05:6830:2546:b0:7d7:fada:89ca with SMTP id 46e09a7af769-7dbb70cf2aemr12124458a34.15.1775608083533;
+        Tue, 07 Apr 2026 17:28:03 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:1::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dbb40b1507sm11892876a34.21.2026.04.07.17.28.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 17:28:03 -0700 (PDT)
+From: Neil Spring <ntspring@meta.com>
+To: netdev@vger.kernel.org
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+        davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
+        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 0/2] tcp: rehash onto different ECMP path on retransmit timeout
+Date: Tue,  7 Apr 2026 17:28:00 -0700
+Message-ID: <20260408002802.2448424-1-ntspring@meta.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com> <utlz3oebjyd4lqp5pd4qdbth2kywxo4hrlrnwcxsx3br76fwfg@vy3tx5f3lv32>
-In-Reply-To: <utlz3oebjyd4lqp5pd4qdbth2kywxo4hrlrnwcxsx3br76fwfg@vy3tx5f3lv32>
-From: Marc Harvey <marcharvey@google.com>
-Date: Tue, 7 Apr 2026 17:12:35 -0700
-X-Gm-Features: AQROBzCE4KyLZl3QQoeKiTuqJ5qKwgmhvNqAUTtOXd9q7AJJ_ruBCFl-97d0z_g
-Message-ID: <CANkEMgn80UM7+mymVm21Q8yszgVeh029tvO+kHqmLGmf-2MU5g@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 00/10] Decouple receive and transmit
- enablement in team driver
-To: Jiri Pirko <jiri@resnulli.us>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=LaQMLDfi c=1 sm=1 tr=0 ts=69d5a114 cx=c_pps
+ a=OI0sxtj7PyCX9F1bxD/puw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=A5OVakUREuEA:10 a=f7IdgyKtn90A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=tpM8CJlwf7uhpglF1g9U:22 a=hM0cxhbbTpHyH0yoP80A:9
+ a=QEXdDO2ut3YA:10 a=Z1Yy7GAxqfX1iEi80vsk:22
+X-Proofpoint-ORIG-GUID: p_sxhxlyEjalamoSb8GK7a8-ywdgjCwP
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDAwMiBTYWx0ZWRfX1kNhUhMdKyA/
+ cspCiPrDdrPGe/YWevD5y0T5B4KUYoDJGGu5x7qNdna/7c2iq0Tst1PJJVCLb7/ItGS1tJ2O2te
+ cs3s3xXEmOXNJmFiEsYzsclCP1WGr48gEUnMorwCUg0rT1va1U/LRq9LceZwD4EGN8dCq//KUOw
+ cNI2xH8bopI50l0/jpLCNyHSrDHoviWgPWAqRq84CS3u2GihHjqkvdMI9U9yT1U7NdlEOTobspk
+ wEZFVwhz+Eg/zWTBJCDgVg/WuX8DiZTdP1q0UglzBqnE8/MWQ4oOIvp811pDqMLFqIT2b5h9bXp
+ QSGn/DQnDjKKG95lrCJyqccM4vo/rJ0mT576QdshkUQ5PQOj0isRLc/wD/Qk0a/B8uZvLJ5tFFA
+ 1l7G/T7Go+h1xu9Saeedzxe4+l7LTG1g5azv9/VXCbq3i+/cG4ojOjmTSlok7BnqyKtALMT9AIx
+ YvsKr8+i409/gxfkC/g==
+X-Proofpoint-GUID: p_sxhxlyEjalamoSb8GK7a8-ywdgjCwP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-07_05,2026-04-07_05,2025-10-01_01
 
-On Tue, Apr 7, 2026 at 4:55=E2=80=AFAM Jiri Pirko <jiri@resnulli.us> wrote:
->
-> Mon, Apr 06, 2026 at 05:03:36AM +0200, marcharvey@google.com wrote:
-> >Allow independent control over receive and transmit enablement states
-> >for aggregated ports in the team driver.
-> >
-> >The motivation is that IEE 802.3ad LACP "independent control" can't
-> >be implemented for the team driver currently. This was added to the
-> >bonding driver in commit 240fd405528b ("bonding: Add independent
-> >control state machine").
-> >
-> >This series also has a few patches that add tests to show that the old
-> >coupled enablement still works and that the new decoupled enablement
-> >works as intended (4, 5, and 10).
-> >
-> >There are three patches with small fixes as well, with the goal of
-> >making the final decoupling patch clearer (1, 2, and 3).
->
-> Looks fine to me now. Do you have libteam/teamd counterpart?
+I configured an ECMP route across two local interfaces, expecting
+autoflowlabel to adapt when one of those interfaces is blocked in
+reaching the destination.  However, it did not.  This affected SYN,
+SYN/ACK, and established traffic.
 
-I don't see a need for this to be used in any of the teamd runners.
-Libteam should support this out of the box, since the options are
-identified over netlink by their string names. The options.sh test
-uses teamnl, which uses libteam, to set the new options.
+I was able to make this work as I expected it to by calling
+sk_dst_reset() at times when txhash was updated, and propagating
+sk_txhash into fl6->mp_hash so fib6_select_path() uses the socket's
+current hash for ECMP selection.
+
+I expected autoflowlabel to apply to local ECMP routes, and think
+it should, but am open to feedback if this isn't the right way to
+do it.
+
+Patch 1 has the kernel changes; patch 2 adds a selftest exercising
+SYN, SYN/ACK, and established connection rehash over a two-path
+ECMP topology.  The selftest retries a SYN 26 times, so has a tiny
+(~3e-8) probability of false failure if repeatedly unlucky with ECMP
+path selection.
+
+Neil Spring (2):
+  tcp: rehash onto different ECMP path on retransmit timeout
+  selftests: net: add ECMP rehash test
+
+ net/ipv4/tcp_input.c                       |   4 +-
+ net/ipv4/tcp_minisocks.c                   |   9 +
+ net/ipv4/tcp_plb.c                         |   1 +
+ net/ipv4/tcp_timer.c                       |   1 +
+ net/ipv6/inet6_connection_sock.c           |   8 +
+ tools/testing/selftests/net/Makefile       |   1 +
+ tools/testing/selftests/net/ecmp_rehash.sh | 354 +++++++++++++++++++++
+ 7 files changed, 377 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/net/ecmp_rehash.sh
+
+-- 
+2.52.0
+
