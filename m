@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70ABA37D116;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843E438D6BA;
 	Wed,  8 Apr 2026 21:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775685042; cv=none; b=TxSwLPXQn21dLy8LEBZB+h0jJXOkrAF8bYR87gaJIWtUOCzdK9Vgs61NfxWviQRWDDsBZj4BKa7Izw2mGbFKsKXT3nT7S0JPIbUQzfzloq1XHJjNz78xpzzmHSX5CKCZ6TNyS1Veecyh5cFbvoqLTOhhxWiID0TJUFCntPw4yWI=
+	t=1775685042; cv=none; b=OnfSrmqIPV2CY5VyOeI2F9AWagJPWZZQialOILXZI6ZhOpFFi/IeqsWgt9KW0QaFKax6c4dpe2hJNVUcSmf2yMr1IeJkPjCx1tD2sXp4USPjoxzppQ6hQsgJm6l0GP44ABt2srWr42Kkc77mbW+d6izdJScfQPM/gdEMXiRlpGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775685042; c=relaxed/simple;
-	bh=4pWzV1h3heWEGQcfHFsxq1YGy4rq8ktVBtFrlR54Y1E=;
+	bh=e5aX09f01vYkyZoCut8vLCRQbxg7RF31Px93HMOteQc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AtRVf6jd9E+dbS5+RYt6qpJAtjZVN38oURGDPcaVSFjyq4x63bVzZsrDEUHnnvbw6ZtFpu7nwkmRxNQNDw08r3GapRvkD4RIXJP13hvFxcf6U6v3MT+oPAmO8Da3WvnkA5mbVRUjaLr1PzGeZuPg/absR9xvpuASJKxqGC47zRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NFJf1IlG; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=jh8AjApSb25OnxpzWx0QwrwowoXe6PrTXcE9w3fYK85/NZ408v/sg9rQ9uGPAxXdgeWTgyGMkU0Z+pJF9li9LhrBe+dC3KBI+l9dCWaxgUInj3/+9VBz+ShDMQqCQzh3xomYf4R3Pkc6F7IONo3QPdxAkBIG9Bw7rFE9YjJsu5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZnJ+z0B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NFJf1IlG"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3DB7AC2BCB0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZnJ+z0B"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 539B1C2BCB2;
 	Wed,  8 Apr 2026 21:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1775685042;
-	bh=4pWzV1h3heWEGQcfHFsxq1YGy4rq8ktVBtFrlR54Y1E=;
+	bh=e5aX09f01vYkyZoCut8vLCRQbxg7RF31Px93HMOteQc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=NFJf1IlGdUoDKrvasjXaOY7dMRnm2t1Z8Q3CHvqcPY0fnRD03ZNUNR3Bi3vsf4Ed+
-	 Edt8IwMeF7vw1r2UgkjCfv9FnslKB8sZTTg/JkVgsL3/8zOUHBTFQSdXFTYcTkAznj
-	 tlrdZjOvMboMawcce+thoVWq7TjmXIlT3K9thq1mswQ6zpKfeKlEdUxcRqcUlKgX9W
-	 +YBahdqmxDaIueygIrzoD5By5JcQDLwoijYv8aX22T176M3f0BfeNcxEvgkXVKQFdB
-	 cnCwsaZlkXr/nsDCGXRI8CDhQbq7YDYyS5iw3pqjDEy4ixIrJBYBWgnCYkeqzwA4d+
-	 Y9MLqrD0dgUUQ==
+	b=OZnJ+z0BPcUIcLX4c4LXFxxyPMnocjn9Wc67wMrzpZ/9NehTd0fKR3N+MNWwZVxdN
+	 EpU+wh3HciMViFJGDKx704nPQdEyWGi5cpC8yCDrgnEDuQpe1OnTYZz/x48jHfQz6r
+	 zFPEHvoGXcIXCvej1umO24IK05aBD2QsbPQr4M7ZlDztrVJXiCCe86JcWfj/LW9lC3
+	 p/4eXEPX1PeuaHjhvAKbo8kZB5RbwpXTcpeUVU9yv4j8Bp8wD6a3EvBcBqSZw7FK1M
+	 EpfV7Xk9ZnFcBRgVMAF0hXcf7QQ/5uj0SmnwtFKF1EUvHmBQ6TJf7b87gQXumd3GYv
+	 xHAh88sSCekfA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AA7C10FC451;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4971A10FC453;
 	Wed,  8 Apr 2026 21:50:42 +0000 (UTC)
 From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
-Date: Wed, 08 Apr 2026 23:50:04 +0200
-Subject: [PATCH net-next 3/7] tcp: Ensure window_clamp is limited to
- representable window
+Date: Wed, 08 Apr 2026 23:50:06 +0200
+Subject: [PATCH net-next 5/7] selftests/net: packetdrill: add
+ TCP_WINDOW_CLAMP test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,8 +40,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260408-tcp_rcv_exact_clamp_and_wnd-v1-3-76a6f212e153@gmail.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260408-tcp_rcv_exact_clamp_and_wnd-v1-5-76a6f212e153@gmail.com>
 References: <20260408-tcp_rcv_exact_clamp_and_wnd-v1-0-76a6f212e153@gmail.com>
 In-Reply-To: <20260408-tcp_rcv_exact_clamp_and_wnd-v1-0-76a6f212e153@gmail.com>
 To: Eric Dumazet <edumazet@google.com>, 
@@ -52,11 +52,11 @@ To: Eric Dumazet <edumazet@google.com>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775685040; l=3305;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775685040; l=1779;
  i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
- bh=8RoSAA/YzN+3F5cJqgh/h47kr9+FGErmiW1Qt/v8bjw=;
- b=pkGclS7fY07/CNGhI7e+WKGswdZ1Rp+LPibce79xhOMdvLomiPLlqKMcMYZQrIsNdkUCCQA/r
- DnQh49vpQNxCkyMg1ZdjrqsFZh9In7cJ/db9yEOQWxmhTCJKYP8tEeN
+ bh=hTLTER1y0lqFNVxFYgmLQOhJrfwaiyL20oWEx5ESl0s=;
+ b=3LrMJhspiTFgK4hTMJxNxNE0+Cy3LA+4CJRvHndFJSg8VcDt4Mo8qZUb+b2ZSwOQiH3LYup9X
+ xj6E/4b/5RwDf4i4f4vfoGWlfSpcJ6oOPHWRKkPHTLLaFCWWRcoigDY
 X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
  pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
 X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
@@ -66,86 +66,50 @@ Reply-To: gmbnomis@gmail.com
 
 From: Simon Baatz <gmbnomis@gmail.com>
 
-On connection initiation, window_clamp is limited to the maximum value
-representable for the connection's window scale factor.
-
-However, window_clamp may be changed later when:
-- it needs to be adjusted due to scaling_ratio changes
-- the receive buffer grows due to autotuning
-- the TCP_WINDOW_CLAMP socket option is set
-
-In all cases, window_clamp must not end up higher than the maximum
-representable advertised window.
-
-Thus, if the TCP connection state indicates that we can rely on
-rx_opt.rcv_wscale, clamp the new window_clamp to the maximum window
-for that scaling factor (including the "no window scaling" case where
-rcv_wscale is zero).
-
-This has visible consequences for calculations based on rcv_wnd. For
-example, the logic in __tcp_ack_snd_check() uses the advance of the
-right edge of the receive window to determine when to send an
-immediate ACK. If rcv_wnd does not properly reflect the "on the wire"
-advertised window (i.e. it is much higher than the maximum value
-representable), this calculation will be wrong and ACKs may be delayed
-when they should be sent immediately.
-
-One concrete example is when the TCP receive buffer is much larger
-than 64KB, but no window scaling is used. If window_clamp (and thus
-rcv_wnd) are not limited to 65535, the "internal" window based on
-rcv_wnd can extend far beyond the 16‑bit window actually advertised on
-the wire.
-
-After receiving a data segment, the right edge of the "on the wire"
-window can be moved (as there is plenty of space in rcv_wnd) and an
-immediate ACK should be sent. But, it won't do so if the calculation
-based on rcv_wnd does not happen to change "internal" window right edge.
+Add a packetdrill test to verify that the socket option
+TCP_WINDOW_CLAMP can be set to a large value on a listening socket,
+but is clamped on an established socket to the maximum representable
+advertised window.
 
 Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
 ---
- net/ipv4/tcp.c       | 4 ++++
- net/ipv4/tcp_input.c | 6 ++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ .../net/packetdrill/tcp_rcv_sockopt_wnd_clamp.pkt  | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index e57eaffc007a0..bd03c99f793ae 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3802,6 +3802,10 @@ int tcp_set_window_clamp(struct sock *sk, int val)
- 	old_window_clamp = tp->window_clamp;
- 	new_window_clamp = max_t(int, SOCK_MIN_RCVBUF / 2, val);
- 
-+	if ((1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_CLOSE_WAIT |
-+			TCPF_FIN_WAIT1 | TCPF_FIN_WAIT2))
-+		new_window_clamp = min_t(u32, U16_MAX << tp->rx_opt.rcv_wscale, new_window_clamp);
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_sockopt_wnd_clamp.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_sockopt_wnd_clamp.pkt
+new file mode 100644
+index 0000000000000..d7203f2893c3f
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_sockopt_wnd_clamp.pkt
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// Verify that TCP_WINDOW_CLAMP can be set to a high value on a LISTEN socket, but,
++// in an established connection, the value is clamped to the maximum representable
++// advertised window.
++--mss=1000
 +
- 	if (new_window_clamp == old_window_clamp)
- 		return 0;
- 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 505884dcb7a2b..6e9123c98152f 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -914,6 +914,7 @@ void tcp_rcvbuf_grow(struct sock *sk, u32 newval)
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	u32 rcvwin, rcvbuf, cap, oldval;
- 	u32 rtt_threshold, rtt_us;
-+	u32 window_clamp;
- 	u64 grow;
- 
- 	oldval = tp->rcvq_space.space;
-@@ -949,8 +950,9 @@ void tcp_rcvbuf_grow(struct sock *sk, u32 newval)
- 	if (rcvbuf > sk->sk_rcvbuf) {
- 		WRITE_ONCE(sk->sk_rcvbuf, rcvbuf);
- 		/* Make the window clamp follow along.  */
--		WRITE_ONCE(tp->window_clamp,
--			   tcp_win_from_space(sk, rcvbuf));
-+		window_clamp = tcp_win_from_space(sk, rcvbuf);
-+		window_clamp = min_t(u32, U16_MAX << tp->rx_opt.rcv_wscale, window_clamp);
-+		WRITE_ONCE(tp->window_clamp, window_clamp);
- 	}
- }
- /*
++`./defaults.sh`
++
++// Initialize connection
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 setsockopt(3, SOL_SOCKET, SO_RCVBUF, [256000], 4) = 0
++   +0 setsockopt(3, IPPROTO_TCP, 10, [255999], 4) = 0  // TCP_WINDOW_CLAMP == 10
++   +0 getsockopt(3, IPPROTO_TCP, 10, [255999], [4]) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 32792
++   +0 > S. 0:0(0) ack 1 win 65535 <mss 1460>
++   +0 < . 1:1(0) ack 1 win 32792
++
++   +0 accept(3, ..., ...) = 4
++
++   +0 getsockopt(4, IPPROTO_TCP, 10, [65535], [4]) = 0
++   +0 setsockopt(4, IPPROTO_TCP, 10, [255999], 4) = 0
++   +0 getsockopt(4, IPPROTO_TCP, 10, [65535], [4]) = 0
++   +0 getsockopt(3, IPPROTO_TCP, 10, [255999], [4]) = 0
 
 -- 
 2.53.0
