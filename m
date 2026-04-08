@@ -1,54 +1,54 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17E336C9CD
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 02:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B3E36A004
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 02:52:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775616753; cv=none; b=miFJQ6LJe1NWvGB9ZZxE+hCNQ64L1t7hMWx6AT5ArxLTtjTJRibt5QmadvfvQMMErL/ihxqxvpOztNL+15cY3vlvve0Cq4b6vNJtDLNsllTvQjvE1ohKAn/nh65yliSLr5/qgmpfrf4wergj+7OCfZdv/DW61pPcVzHn7nak4gk=
+	t=1775616754; cv=none; b=h0PCMvqs9zMu9j1oS3x5GehfN8pr2Z0Z5vFZ1UeFFl05MLai5WMT/ZUIjXaV9Xrim6LocuI9Jl/AMU4exuCttdRU9YIfBCrEPejavFXGzEQEgesSKv8VV4DrsdjNix0IgKKPy9Lrru2Cnddv0tEM/bY+nmyoWqbEsmOqJv+IEpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775616753; c=relaxed/simple;
-	bh=Xc9JIcJ5tZ/hkJqVabouvK2yaEMKFNhceFeC8ZkDcNI=;
+	s=arc-20240116; t=1775616754; c=relaxed/simple;
+	bh=ABDDARZ3LBRa/K2R4lTmrc2M2fscQVtdq2vQFlp7tVs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=M+pOE1JvYRSOf2UvdrXrucWd8L/Cw76PZDTcpB3Roz2LeLZiwmHOfIXWBjkfYvwBDiYwb0xZBrvKRwyvB+o5FbIyArNEPLAFt2qqPxn1OFJD7Exh7RAXq/zhmwoYkhiQpUcfjiuy3xKN6A+KMm7k1nfnFdLn8SCFkHUyHU93nAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mn4+cd0x; arc=none smtp.client-ip=74.125.82.201
+	 To:Cc:Content-Type; b=i/qqNpuHR7AnkXKTyaSVoneEU1Kzi5ItRZkmmDv2+R56pYAtcDtQGCJbsjjzj9hSBAHNJ5OcM1absf1nieKSScvLm3kWYnJBsni38uEfqEcXY7+nFHWGJ/qo415Xrm0wsuMgOLHA7vZElLyJ6IQ1gFwf6JQKpK0G8vlL8HpDdQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RNGo464d; arc=none smtp.client-ip=74.125.82.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mn4+cd0x"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2bdc1b30ac8so34275040eec.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 19:52:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RNGo464d"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2d054421d19so11340175eec.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2026 19:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775616751; x=1776221551; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775616752; x=1776221552; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/2f0Yof1DLXmda+Ua8QZmvkVah9DOsLozAWk9vmUBRA=;
-        b=Mn4+cd0xpBy7ek4ATccBqepKgfmxBtiItjN22LRHilvyWWxidt7/meYupouRTlRJGa
-         7cuezWpoEhPrs8awJWz5DEQdjB3TZBphBLwDoQvGhKh4Df5fKK8Rs3BP38ju6w5fBtc+
-         Y+tji1yqz4a9ZZbyENhDLbcfC760f2GBdwimF7rL3+2opdNgJqpv3pOGP91E19U2GiGq
-         MJ9Kr9fGEbN4ioli20X4zu8nZMu0kZEDp35PBYl0qzF83nesMGRwzzazgHcx3ocL6QMS
-         wQtIEYGI3H5e/H2NcYh4GY+wLuHDdSwWbhdEKPD6tfHPWJBI8/9cN26twQPjYYfllTNW
-         ETSg==
+        bh=ItnT3gTeM/wZiruuzHdFs4ZevuvK/cu62n/SK5ptp+Q=;
+        b=RNGo464dwhE9MNdS9B8R5Fas3/YW0m6G6Pm2fQsC//Kf3jQX3gbuVzngG5uhuRP4v8
+         H11N0T/HdKUN6e8oB/kEj9B1rJwW75UOIbj2XCvzhfmzCQw/Y6izhcXLjibXyurD0FiJ
+         RGUw9Bd07YA/vuXQ+ku8y+It3iYchTJMlOes4Ia2cuPlHoBB+sIafemDTL4JqtJK4B9v
+         DMVxjWsbvixGvEzZsTwsOmhuPbPu7xKptbtTHQR8taEy4F+2GSMW7KHOdNCrZfirYYFR
+         4EScjjX0qeKtT5/BCBTJC89VpS1zcedoj4wcQ7/qTxT8efIvEnEEVIgPcXPlXLAucqLy
+         Speg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775616751; x=1776221551;
+        d=1e100.net; s=20251104; t=1775616752; x=1776221552;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/2f0Yof1DLXmda+Ua8QZmvkVah9DOsLozAWk9vmUBRA=;
-        b=iou0Oh0JiJd23wiku90E4aTgzTRI95l5GS3Hp5jH8Z1h5ZsmTGSUSXpBjmiWwKvFHS
-         vpLW243padTFMFieznu+e4GRAuvzbJmW8pHYkgUDOiQA203x3WMMamb1s2xJuQsI/fb1
-         ENAOzhVnQUDSa63AvMwRlUu2rPl46mMZaW2iSkwoyVPFxw/6z3Ec0B1Kkr6kQIIVd9Kg
-         C2VatHvJ2+iNIWJnWo1yIRijJ/rPY7JQtcqyq/Y3J1kcRKXOSrzILFtpzYrQr8qB9PY1
-         17iGAaKyQEzC0gNa1B7DJCYRvGaSQIwZF7RJa9koTd4S4QfAvVOQPC60BmmY3undgjCo
-         1d6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVy2MB4CruG5UC6hQQuCM1aDUeGaVVVd5BH38+e2kNTP+227eviAshvAc2Sp/1zzjk5GUqkvpmKCLjT4HDwhqQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfpkOjjkMDxX8xEfXNos8slJel3vJs84JblkAGV8Dmi/s+/iLu
-	kir6sjvU0V/7ZLw5bsNrGoOt6lwlxK7aq2IPWk6xMKmxt/bENw0iM0qUAV1Mji8yY2XrvJuqgoM
-	Ns+dMwgyZk+2EPQ63xh15Lw==
-X-Received: from dyaw3-n1.prod.google.com ([2002:a05:693c:4143:10b0:2c5:2b09:16ef])
+        bh=ItnT3gTeM/wZiruuzHdFs4ZevuvK/cu62n/SK5ptp+Q=;
+        b=sMnHh0ZSFp0maWK74j7NtfmNTZBXgMAhbyXxAI9BDyMR3bk9JsnYRoJKUXkLwIhtu8
+         bPIjPiABMcu+0or7jDnXv+vkBOxIC65+nJBBZpuvyIm56m6QYGB8zTUZ76tHBfDyP7LX
+         weuLqLHWDYPWF+Q/4HW03COYqfaUFIvjWHqTNQZYn+Qq1NIqv7R8AqqOyxv/2vbvKYHs
+         8trfAF7jlh37EVVBblUlVN4ikObIbDPv0TElQcWXuCOKTj5/U1sUFbYlunq+Pr7r8sLK
+         bl9CrF/xb1VEye6vVlFlTmQwAIfugMwbX4SmUHEEPv1Ut2PJeCtL8pNG1VW9rT4uyyDB
+         oxxA==
+X-Forwarded-Encrypted: i=1; AJvYcCWoosxirtKd2QVX8pvUHVOhH2CTZ25i5Y/a9Gxyk58mhFIQ7UtseWWK8i5idS8YLsELLpb4yfCQ5olqZeLSb8o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4Nn01mFZeTb3hHUwVpZCCr2AYBdh6P/2DbA9befhA2eFzk/2w
+	FIiXuOiPi16lqdiSVIktTJNGXEvef2QhqAZKnJxK+Hx3FOz9odrecEZGUuIHX/lhOqqmL6JA3AI
+	OTGVGYBonuC8hhhTyQxaGnQ==
+X-Received: from dybma11.prod.google.com ([2002:a05:7301:168b:b0:2cc:9049:2bf6])
  (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:dc88:b0:2c5:3b87:2fec with SMTP id 5a478bee46e88-2cbfca5c3c3mr9675586eec.31.1775616750606;
- Tue, 07 Apr 2026 19:52:30 -0700 (PDT)
-Date: Wed, 08 Apr 2026 02:52:20 +0000
+ 2002:a05:7301:3c9b:b0:2d3:d3f:2429 with SMTP id 5a478bee46e88-2d30d3f2ce0mr394310eec.0.1775616752127;
+ Tue, 07 Apr 2026 19:52:32 -0700 (PDT)
+Date: Wed, 08 Apr 2026 02:52:21 +0000
 In-Reply-To: <20260408-teaming-driver-internal-v6-0-e5bcdcf72504@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,14 +58,13 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260408-teaming-driver-internal-v6-0-e5bcdcf72504@google.com>
 X-Developer-Key: i=marcharvey@google.com; a=ed25519; pk=OzOeciadbfF5Bug/4/hyEAwfrruSY4tn0Q0LocyYUL0=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775616747; l=3679;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775616747; l=1423;
  i=marcharvey@google.com; s=20260401; h=from:subject:message-id;
- bh=Xc9JIcJ5tZ/hkJqVabouvK2yaEMKFNhceFeC8ZkDcNI=; b=2tGrfq8QKie9svHpoZm/C1pa+XSVE0HMxc1jYKrhz70twfNKSQhHWJRvLkTuv0kq3x5+Hgsi+
- kor24m5SRTIB1P9bELhgNUVWD/lPC+lQ5lKtsKq2LOIwElTCus7ofAl
+ bh=ABDDARZ3LBRa/K2R4lTmrc2M2fscQVtdq2vQFlp7tVs=; b=r8cB68lfooR/1QW4AS+aBeHw0DbnRNjdO87i6cEXF/Acqd5qIrPf4eNSGhRzdGV/Z/oo96MIo
+ yIGXIDlBRm6C+KwLRmMIBbs9OW0KXroMNL8Rxs6JMfMBHs1L3lun8yT
 X-Mailer: b4 0.14.3
-Message-ID: <20260408-teaming-driver-internal-v6-1-e5bcdcf72504@google.com>
-Subject: [PATCH net-next v6 01/10] net: team: Annotate reads and writes for
- mixed lock accessed values
+Message-ID: <20260408-teaming-driver-internal-v6-2-e5bcdcf72504@google.com>
+Subject: [PATCH net-next v6 02/10] net: team: Remove unused team_mode_op, port_enabled
 From: Marc Harvey <marcharvey@google.com>
 To: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -76,99 +75,40 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Jiri Pirko <jiri@resnulli.us>
 Content-Type: text/plain; charset="utf-8"
 
-The team_port's "index" and the team's "en_port_count" are read in
-the hot transmit path, but are only written to when holding the rtnl
-lock.
-
-Use READ_ONCE() for all lockless reads of these values, and use
-WRITE_ONCE() for all writes.
+This team_mode_op wasn't used by any of the team modes, so remove it.
 
 Reviewed-by: Jiri Pirko <jiri@nvidia.com>
 Signed-off-by: Marc Harvey <marcharvey@google.com>
 ---
- drivers/net/team/team_core.c        | 11 ++++++-----
- drivers/net/team/team_mode_random.c |  2 +-
- include/linux/if_team.h             |  4 ++--
- 3 files changed, 9 insertions(+), 8 deletions(-)
+ drivers/net/team/team_core.c | 2 --
+ include/linux/if_team.h      | 1 -
+ 2 files changed, 3 deletions(-)
 
 diff --git a/drivers/net/team/team_core.c b/drivers/net/team/team_core.c
-index 566a5d102c23..becd066279a6 100644
+index becd066279a6..e54bd21bd068 100644
 --- a/drivers/net/team/team_core.c
 +++ b/drivers/net/team/team_core.c
-@@ -938,7 +938,8 @@ static void team_port_enable(struct team *team,
- {
- 	if (team_port_enabled(port))
- 		return;
--	port->index = team->en_port_count++;
-+	WRITE_ONCE(port->index, team->en_port_count);
-+	WRITE_ONCE(team->en_port_count, team->en_port_count + 1);
- 	hlist_add_head_rcu(&port->hlist,
+@@ -944,8 +944,6 @@ static void team_port_enable(struct team *team,
  			   team_port_index_hash(team, port->index));
  	team_adjust_ops(team);
-@@ -958,7 +959,7 @@ static void __reconstruct_port_hlist(struct team *team, int rm_index)
- 	for (i = rm_index + 1; i < team->en_port_count; i++) {
- 		port = team_get_port_by_index(team, i);
- 		hlist_del_rcu(&port->hlist);
--		port->index--;
-+		WRITE_ONCE(port->index, port->index - 1);
- 		hlist_add_head_rcu(&port->hlist,
- 				   team_port_index_hash(team, port->index));
- 	}
-@@ -973,8 +974,8 @@ static void team_port_disable(struct team *team,
- 		team->ops.port_disabled(team, port);
- 	hlist_del_rcu(&port->hlist);
- 	__reconstruct_port_hlist(team, port->index);
--	port->index = -1;
--	team->en_port_count--;
-+	WRITE_ONCE(port->index, -1);
-+	WRITE_ONCE(team->en_port_count, team->en_port_count - 1);
- 	team_queue_override_port_del(team, port);
- 	team_adjust_ops(team);
+ 	team_queue_override_port_add(team, port);
+-	if (team->ops.port_enabled)
+-		team->ops.port_enabled(team, port);
+ 	team_notify_peers(team);
+ 	team_mcast_rejoin(team);
  	team_lower_state_changed(port);
-@@ -1245,7 +1246,7 @@ static int team_port_add(struct team *team, struct net_device *port_dev,
- 		netif_addr_unlock_bh(dev);
- 	}
- 
--	port->index = -1;
-+	WRITE_ONCE(port->index, -1);
- 	list_add_tail_rcu(&port->list, &team->port_list);
- 	team_port_enable(team, port);
- 	netdev_compute_master_upper_features(dev, true);
-diff --git a/drivers/net/team/team_mode_random.c b/drivers/net/team/team_mode_random.c
-index 53d0ce34b8ce..169a7bc865b2 100644
---- a/drivers/net/team/team_mode_random.c
-+++ b/drivers/net/team/team_mode_random.c
-@@ -16,7 +16,7 @@ static bool rnd_transmit(struct team *team, struct sk_buff *skb)
- 	struct team_port *port;
- 	int port_index;
- 
--	port_index = get_random_u32_below(team->en_port_count);
-+	port_index = get_random_u32_below(READ_ONCE(team->en_port_count));
- 	port = team_get_port_by_index_rcu(team, port_index);
- 	if (unlikely(!port))
- 		goto drop;
 diff --git a/include/linux/if_team.h b/include/linux/if_team.h
-index ccb5327de26d..06f4d7400c1e 100644
+index 06f4d7400c1e..a761f5282bcf 100644
 --- a/include/linux/if_team.h
 +++ b/include/linux/if_team.h
-@@ -77,7 +77,7 @@ static inline struct team_port *team_port_get_rcu(const struct net_device *dev)
+@@ -121,7 +121,6 @@ struct team_mode_ops {
+ 	int (*port_enter)(struct team *team, struct team_port *port);
+ 	void (*port_leave)(struct team *team, struct team_port *port);
+ 	void (*port_change_dev_addr)(struct team *team, struct team_port *port);
+-	void (*port_enabled)(struct team *team, struct team_port *port);
+ 	void (*port_disabled)(struct team *team, struct team_port *port);
+ };
  
- static inline bool team_port_enabled(struct team_port *port)
- {
--	return port->index != -1;
-+	return READ_ONCE(port->index) != -1;
- }
- 
- static inline bool team_port_txable(struct team_port *port)
-@@ -272,7 +272,7 @@ static inline struct team_port *team_get_port_by_index_rcu(struct team *team,
- 	struct hlist_head *head = team_port_index_hash(team, port_index);
- 
- 	hlist_for_each_entry_rcu(port, head, hlist)
--		if (port->index == port_index)
-+		if (READ_ONCE(port->index) == port_index)
- 			return port;
- 	return NULL;
- }
 
 -- 
 2.53.0.1213.gd9a14994de-goog
