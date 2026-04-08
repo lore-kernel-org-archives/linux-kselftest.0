@@ -1,117 +1,80 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6738F3DA7C9
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 19:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6539737C92A;
+	Wed,  8 Apr 2026 19:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775676148; cv=none; b=mq9rltX8w1mzUftAyexgltj1ativG9RbtvW3nYpylwTbMJof+UQCqNJE+feAnEaFPMivxU+fLhJy7ZMlzt3OoA6tv+CUYlaH7a/jO+Az8HQRENZjRu3lQSTm8Gia45TbRnS9gk1DnGJss0yXTxamClhLmirZFnWn+ljPP0aUXFQ=
+	t=1775677212; cv=none; b=TllSIK/fL1+KadNqS5RxMJaUaMN2RWCh8fbT9u4jwAxTBUc1zIK/9+SVZQ5O38uuAhykJABMzGM4+B9x3KXbuiy5KMLtOLDRpjwAdZZ5gidM27jO6M3knrrel/MlGEQuWmQNMWGnhSUiy1wYQQcfReaQ+rS+jlrhZa4fJ+TsMHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775676148; c=relaxed/simple;
-	bh=xeU+CpDbjuqTRy7NHM9S1q/5feA7r1UJohNuP6FPUFY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZQ2JX5MOT7PZXeOS6Zak4+ky0+WsPmkIsa4lc9JMDSp8Wr7xX2PeyyhLUTlN+xXlx7A4kqG0PTK+PhNsr7FDhqgNe7k1/xKPqJ45B0Inh8kyWfAE5waARe1xHCt2ErHIWWuIgiT+iwSyZhl3l90rnBF/Z45zMwSew2CNI26DLH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=j/N/2nXJ; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775677212; c=relaxed/simple;
+	bh=sinj7MfgSc4VJPyuu4cTK699IZREfP9g+K6XjvgtNZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=jP/vUydLvabRne6k4uBvuk3jke/VawaO5QUu40gZ7Ha0W1yOMF4oHNgSoGSNnL56Py5eevcC5gnrARUV2MF2wQXaKh36JKKBv393HutjmDGAxckGos7bwpQteGqTiDMVizCdVuyRgzG/WmZC0CqDfnYubJj94UcE2VCEKPlaFRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3W8LQAm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="j/N/2nXJ"
-Date: Wed, 8 Apr 2026 12:22:06 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775676135;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=r06+65cH0yTHLeV6B/4VEG9UgecJFocJ5Fv7CVecJZ8=;
-	b=j/N/2nXJ6G/XzxA/pZ7oHUMlkEaXecPiuV/MvK4oy24x+6smZSOqY/2JVzR45w8g6cpV/C
-	7WWB3gIXOZd4TOUeNgt724+fOogHzDpb2nVnNOZNEG4/+hblxfXW+bRP51bVkM+DgmhLlh
-	u7EH+taxjWUhaz0Ec7A0i5B1NssR0fw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, 
-	Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Eric Dumazet <edumazet@google.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v6 1/2] bpf: tcp: Reject non-TCP skb in
- bpf_sk_assign_tcp_reqsk()
-Message-ID: <202648182730.i4ki.martin.lau@linux.dev>
-References: <20260403015851.148209-1-jiayuan.chen@linux.dev>
- <20260403015851.148209-2-jiayuan.chen@linux.dev>
- <20264619471.he8Q.martin.lau@linux.dev>
- <4820d99b-f2c4-4b24-b90f-87e6444284c4@linux.dev>
- <CAAVpQUDz_rUFF1A8XDyE13fLTsgdP5k0XWGtdB1V3r=Z_mJW+g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3W8LQAm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29383C19421;
+	Wed,  8 Apr 2026 19:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775677211;
+	bh=sinj7MfgSc4VJPyuu4cTK699IZREfP9g+K6XjvgtNZM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=T3W8LQAmN79sv9lrgpeDuYERSNJeRL4PKLIyau0dN/eOe2sXejUAsw4/58NQm2tha
+	 sj9wunLVCWpifE9zP5xwuSJtKc6LGkU9uZK0fqJz2j/xL7HUgCefFpe1sKjDH1s1GB
+	 0sTD6YTtVde0Miv57N7yp3iurSnC/hqVil13zZalJ2pJTT4hinaGeDG8nLYv7suyGb
+	 jbljR2JPlD3rHTB559HaLXe3CmJtZTWvD4WyBNOSF+XyiwJetSxtZ8Is/8d0mCOkkA
+	 gZ/eGrk3NIGg/PZxwDYutUj7ogqzcPmPKRxW+t0QxxJL2vUYV5PyhaIyV6M1bS7XLd
+	 CfhOw2uO0xflQ==
+Date: Wed, 8 Apr 2026 14:40:09 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Cc: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Koichiro Den <den@valinux.co.jp>, Niklas Cassel <cassel@kernel.org>,
+	Christian Bruel <christian.bruel@foss.st.com>,
+	fabrice.gasnier@foss.st.com, linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Frank Li <Frank.Li@nxp.com>
+Subject: Re: [PATCH v4 0/3] Skip subrange map tests on DWC iATU allocation
+ failure
+Message-ID: <20260408194009.GA308328@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAVpQUDz_rUFF1A8XDyE13fLTsgdP5k0XWGtdB1V3r=Z_mJW+g@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <177557111043.286575.12032515827207230571.b4-ty@b4>
 
-On Tue, Apr 07, 2026 at 09:25:06PM -0700, Kuniyuki Iwashima wrote:
-> > > sashiko has flagged a similar issue with larger scope.
-> > > Please take a look. Thanks.
-> > >
-> > > https://sashiko.dev/#/patchset/20260403015851.148209-1-jiayuan.chen%40linux.dev
-> >
-> >
-> > Thanks a lot Martin, sashiko actually dug into a deeper issue here.
-> >
-> > Eric and Kuniyuki,
-> >
-> > I think the AI review has a point. Since BPF can modify skb fields, the
-> > following sequence still bypasses the protocol check in
-> > bpf_sk_assign_tcp_reqsk():
-> >
-> >     // for a UDP skb
-> >     iph->protocol = TCP
-> >     bpf_sk_assign_tcp_reqsk()
-> >     iph->protocol = UDP
-> >
-> > On top of that, bpf_sk_assign() already has the same problem — it doesn't
-> > validate L4 protocol at all.
+On Tue, Apr 07, 2026 at 07:41:50PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, 07 Apr 2026 14:04:07 +0200, Christian Bruel wrote:
+> > For platforms with a limited iATU inbound window entries, pci_epc_set_bar()
+> > might fail to allocate the ATU entries for subrange maps requiring more
+> > than 1 slot.
+> > For the dwc controller, this failure is reported with -ENOSPC in
+> > dw_pcie_ep_set_bar(). In this case, the epf test cannot be run and needs
+> > to be skipped.
+> > 
+> > [...]
 > 
-> Sigh... honestly it does not make sense to me to add changes
-> in the common fast path to protect someone with bpf capability
-> shooting oneself in the foot.
+> Applied, thanks!
 > 
-> On top of L4 validation in bpf_sk_assign() and bpf_sk_assign_tcp_reqsk(),
-> can't we mark such an skb immutable after the helpers and catch
-> subsequent writes to skb->data on the verifier ?
+> [1/3] PCI: endpoint: pci-epf-test: Handle -ENOSPC in subrange_setup
+>       commit: dfac277624c82b361dbb3e0fc57f577a270bebbb
+> [2/3] misc: pci_endpoint_test: Handle -ENOSPC in subrange mapping test case
+>       commit: a51c75fc48c2a0d2ead2d7e8c521de0423ec8dec
+> [3/3] selftests: pci_endpoint: Skip BAR subrange test on -ENOSPC
+>       commit: 2b729b7721bd4d0640b26790ea6c360c85a4af8c
 
-Clearing the skb->sk in a helper like bpf_skb_store_bytes or
-rejecting direct writes to skb->data could break existing
-bpf program.
+I squashed these together because they need to be understood together.
 
-I suspect adding a simple iph->protocol/ip6h->nexthdr check to
-the helper (e.g. bpf_sk_assign) could also break some
-tunneling use cases (e.g. ipip) also.
-
-> 
-> 
-> >
-> > So I think we should add a check matching skb against sk in
-> > skb_steal_sock() instead of adding check in bpf helper.
-
-Maybe limit the check to the '*prefetched' case in skb_steal_sock().
-
-FWIW, in the early days of bpf_sk_assign, a tc bpf program could only
-get hold of a tcp_sock. Later, bpf_map_lookup_elem(&sock_map) was
-allowed in tc, and then udp/unix sock support was also added to sock_map.
-
-There have been discussions on tc bpf programs being able to do
-bpf_map_lookup_elem(&sock_map) to get a unix_sock. AFAIK, this
-looked-up unix_sock can be used in bpf_sk_assign. It probably
-makes sense for bpf_sk_assign to reject all non-tcp/non-udp sk.
+I'm missing the details, but it seems unfortunate that the COMMAND_*,
+STATUS_*, and CAP_* definitions have to be duplicated and presumably
+kept in sync in drivers/misc/pci_endpoint_test.c and
+drivers/pci/endpoint/functions/pci-epf-test.c.
