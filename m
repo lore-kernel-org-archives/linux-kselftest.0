@@ -1,195 +1,230 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB453B3BF1;
-	Wed,  8 Apr 2026 10:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A801D3AE70A
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Apr 2026 10:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775644347; cv=none; b=JX+D2JnkslCjgM0quODBp6G8g3n7BD2zMHXgGUlPqZ7agL2A2efnGMlyqApww7fPydaoKQJXDGGU7VvJ5M1QdgTYdWgoZfWDQ6pIel631zOY2qNtrEY02l0cj8fdSjK3RkdLpRA+u48oXSsFfVJtmZEufyn8xar/2MC7F92J60g=
+	t=1775644815; cv=none; b=rV9kCZUZ5zs+0V0u9aHRCg18ux3Lt77695VRw4xuGU8GhWlOq3UNGzljqgGJVn6/kGaTzZvUuTZl1wYBafTAOAdaXTn84cgtcRhDnfU1TbtxGNkLFAkZJlMAxE528A7cfMD/7KpWtQETgLbrVUcUHxkZeqJ3RodDGK43OPwYvKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775644347; c=relaxed/simple;
-	bh=SlssCMlZZF2Rxe7dofj4swr855vemnsU/X3nnO3K+yI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=i5RNevHJRKyEUCmxCbJdJ6xNcENoygSqIwhl0kEdy2DD2rOIYeOtMmjj7aBnN4nPiAX9ORL5zTPjSiLlc55sGDnPXQfcbje2wvlo/4ffunR+eFkXIowISGSTTg22zs+WY3pP+17D8WguoBVFIjnSafV+wgoEPCqrIMbVzzqiI6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=rVwKY4l0; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	s=arc-20240116; t=1775644815; c=relaxed/simple;
+	bh=xIR7IoxC/PUo+yqsNYp92UtHscgl2+Cd6ol8dKn6Vo4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Hx5uwBmNRrPogheaHvt3+Azsx2FPdGb6Zy6XM219j1+jNUm0KiUobIE9I594dBbIchAGx1kNBGQV5D1wIG/SRJ9I+qustvVZ/XG2Uw7m3mLXvJRr6ynr4lE3kUpo+hgdxpg1rotsj5qV0CCULe6WSHTYdb8YynMJAzNgSo59WRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PkaIM7FS; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rVwKY4l0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=KDtV5JU4RP4CRivGHhjLXDZXsKjjLkSKvpUQWuy+0oU=; b=rVwKY4l0lfQeYVlhoRLPQCJiOd
-	r5r9w1Q6FVTGr9O9wNDzUk4arqqfd8NCr6DJh2jsC6HXOMpc+Me0bZhhubEJITdei2HM22fu07PmC
-	1g5JPBCyLuibh3oHuCke7kTuOW7avOcL2sBgxNbg0iiBySlGF+VUHFdQ4xJ3PqhyoS5q5VR4IU/Yd
-	+f4FnIkzW1Kr9HWyRIO9N1OR7OqczOIPIKkk4yCJAi85Pmi4tpOlvDv8cyPraFsZL+j8PVpCiNlml
-	4b6j+dMT9uQHT2MuSY0EMCXD5H86CDVmFL9je7M7JBAROwd/pGBLglJ6i4abibIiT94e/vRC0SFVj
-	3o/rUZ+A==;
-Received: from [172.31.31.148] (helo=u09cd745991455d.ant.amazon.com)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wAQCc-00000009qb7-2mZf;
-	Wed, 08 Apr 2026 10:32:06 +0000
-Message-ID: <fccca1277df7117ab0880666786e384e71be0bd0.camel@infradead.org>
-Subject: Re: [PATCH 2/3] KVM: arm64: vgic: Allow userspace to set IIDR
- revision 1
-From: David Woodhouse <dwmw2@infradead.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, Eric Auger
- <eric.auger@redhat.com>, Kees Cook <kees@kernel.org>, Arnd Bergmann
- <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
- linux-arm-kernel@lists.infradead.org,  kvmarm@lists.linux.dev,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PkaIM7FS"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775644801;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L63z0NHl2S2e/bp+oxmot6ob0zW1fhu5gW81yBi6usc=;
+	b=PkaIM7FS6fd7TN0fFWnlxl2GPZmeMGmKlnn8sx/HKRAEQW3Cz4qAp/OgyhPWlukFxz84+v
+	vxXKTBoR6WSiScWB58mcDTs8eyYZWDjS0MN76pI159y1yRrpC2t0+UlU8M5zeNtJ9GzZEa
+	+zgY79uAzxF0o8T9XR8FRrxQDgXiTN8=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Menglong Dong <menglong8.dong@gmail.com>,
+ Chengkaitao <pilgrimtao@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ emil@etsalapatis.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Wed, 08 Apr 2026 11:32:06 +0100
-In-Reply-To: <87wlyhc2g4.wl-maz@kernel.org>
-References: <20260407210949.2076251-1-dwmw2@infradead.org>
-	 <20260407210949.2076251-3-dwmw2@infradead.org>
-	 <87wlyhc2g4.wl-maz@kernel.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-9pOWiPyd2x1JEQCHt79X"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+Subject:
+ Re: [PATCH bpf-next 1/3] bpf: add missing fsession to the verifier log
+Date: Wed, 08 Apr 2026 18:39:47 +0800
+Message-ID: <2405060.ElGaqSPkdT@7940hx>
+In-Reply-To:
+ <CAAWJmAbhbD68JmFFwL5HLPMVaJyGi1w7hK6t84+DL-snQ+ASmQ@mail.gmail.com>
+References:
+ <20260408031416.266229-1-dongml2@chinatelecom.cn>
+ <20260408031416.266229-2-dongml2@chinatelecom.cn>
+ <CAAWJmAbhbD68JmFFwL5HLPMVaJyGi1w7hK6t84+DL-snQ+ASmQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
-
-
---=-9pOWiPyd2x1JEQCHt79X
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 2026-04-08 at 08:54 +0100, Marc Zyngier wrote:
+On 2026/4/8 17:52 Chengkaitao <pilgrimtao@gmail.com> write:
+> On Wed, Apr 8, 2026 at 11:16=E2=80=AFAM Menglong Dong <menglong8.dong@gma=
+il.com> wrote:
+> >
+> > The fsession attach type is missed in the verifier log in
+> > check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id(=
+).
+> > Update them to make the verifier log proper. Meanwhile, update the
+> > corresponding selftests.
+> >
+> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > ---
+> >  kernel/bpf/verifier.c                               | 8 ++++----
+> >  tools/testing/selftests/bpf/prog_tests/exceptions.c | 8 ++++----
+> >  tools/testing/selftests/bpf/verifier/sleepable.c    | 2 +-
+> >  3 files changed, 9 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 594260c1f382..707eaf262307 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
 >=20
-> > @@ -93,6 +95,9 @@ static int vgic_mmio_uaccess_write_v2_misc(struct
-> > kvm_vcpu *vcpu,
-> > =C2=A0=C2=A0		 */
-> > =C2=A0=C2=A0		reg =3D FIELD_GET(GICD_IIDR_REVISION_MASK, val);
-> > =C2=A0=C2=A0		switch (reg) {
-> > +		case KVM_VGIC_IMP_REV_1:
-> > +			dist->implementation_rev =3D reg;
-> > +			return 0;
-> > =C2=A0=C2=A0		case KVM_VGIC_IMP_REV_2:
-> > =C2=A0=C2=A0		case KVM_VGIC_IMP_REV_3:
-> > =C2=A0=C2=A0			vcpu->kvm-
-> > >arch.vgic.v2_groups_user_writable =3D true;
+> Some comments in bpf_check_attach_target still need to be added or update=
+d.
+
+Hi, Kaitao. Thanks for the reviewing.
+
+Right, the comments for fsession are not updated, as I'm not sure if
+it worth it. There are around a dozen of comments that we
+need to update.
+
+Thanks!
+Menglong Dong
+
 >=20
-> nit: move the v1 handling down with a fallthrough in v2/v3 so that we
-> don't duplicate the basic handling:
+> Reviewed-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+>=20
+> > @@ -11757,7 +11757,7 @@ static int check_get_func_ip(struct bpf_verifie=
+r_env *env)
+> >
+> >         if (type =3D=3D BPF_PROG_TYPE_TRACING) {
+> >                 if (!bpf_prog_has_trampoline(env->prog)) {
+> > -                       verbose(env, "func %s#%d supported only for fen=
+try/fexit/fmod_ret programs\n",
+> > +                       verbose(env, "func %s#%d supported only for fen=
+try/fexit/fsession/fmod_ret programs\n",
+> >                                 func_id_name(func_id), func_id);
+> >                         return -ENOTSUPP;
+> >                 }
+> > @@ -25561,7 +25561,7 @@ int bpf_check_attach_target(struct bpf_verifier=
+_log *log,
+> >         btf =3D tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
+> >         if (!btf) {
+> >                 bpf_log(log,
+> > -                       "FENTRY/FEXIT program can only be attached to a=
+nother program annotated with BTF\n");
+> > +                       "FENTRY/FEXIT/FSESSION program can only be atta=
+ched to another program annotated with BTF\n");
+> >                 return -EINVAL;
+> >         }
+> >         t =3D btf_type_by_id(btf, btf_id);
+> > @@ -25686,7 +25686,7 @@ int bpf_check_attach_target(struct bpf_verifier=
+_log *log,
+> >         case BPF_TRACE_RAW_TP:
+> >                 if (tgt_prog) {
+> >                         bpf_log(log,
+> > -                               "Only FENTRY/FEXIT progs are attachable=
+ to another BPF prog\n");
+> > +                               "Only FENTRY/FEXIT/FSESSION progs are a=
+ttachable to another BPF prog\n");
+> >                         return -EINVAL;
+> >                 }
+> >                 if (!btf_type_is_typedef(t)) {
+> > @@ -25952,7 +25952,7 @@ static int check_attach_btf_id(struct bpf_verif=
+ier_env *env)
+> >         }
+> >
+> >         if (prog->sleepable && !can_be_sleepable(prog)) {
+> > -               verbose(env, "Only fentry/fexit/fmod_ret, lsm, iter, up=
+robe, and struct_ops programs can be sleepable\n");
+> > +               verbose(env, "Only fentry/fexit/fsession/fmod_ret, lsm,=
+ iter, uprobe, and struct_ops programs can be sleepable\n");
+> >                 return -EINVAL;
+> >         }
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tool=
+s/testing/selftests/bpf/prog_tests/exceptions.c
+> > index 84ab73e08b0e..94a62fcd4543 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> > @@ -128,7 +128,7 @@ static void test_exceptions_success(void)
+> >                                        bpf_program__fd(skel->progs.exce=
+ption_ext_mod_cb_runtime),
+> >                                        "exception_cb_mod"), "set_attach=
+_target"))
+> >                                 goto done;
+> > -               }), "FENTRY/FEXIT programs cannot attach to exception c=
+allback", 0);
+> > +               }), "FENTRY/FEXIT/FSESSION programs cannot attach to ex=
+ception callback", 0);
+> >
+> >         if (test__start_subtest("throwing fentry -> exception_cb"))
+> >                 RUN_EXT(-EINVAL, true, ({
+> > @@ -138,7 +138,7 @@ static void test_exceptions_success(void)
+> >                                        bpf_program__fd(skel->progs.exce=
+ption_ext_mod_cb_runtime),
+> >                                        "exception_cb_mod"), "set_attach=
+_target"))
+> >                                 goto done;
+> > -               }), "FENTRY/FEXIT programs cannot attach to exception c=
+allback", 0);
+> > +               }), "FENTRY/FEXIT/FSESSION programs cannot attach to ex=
+ception callback", 0);
+> >
+> >         if (test__start_subtest("non-throwing fexit -> exception_cb"))
+> >                 RUN_EXT(-EINVAL, true, ({
+> > @@ -148,7 +148,7 @@ static void test_exceptions_success(void)
+> >                                        bpf_program__fd(skel->progs.exce=
+ption_ext_mod_cb_runtime),
+> >                                        "exception_cb_mod"), "set_attach=
+_target"))
+> >                                 goto done;
+> > -               }), "FENTRY/FEXIT programs cannot attach to exception c=
+allback", 0);
+> > +               }), "FENTRY/FEXIT/FSESSION programs cannot attach to ex=
+ception callback", 0);
+> >
+> >         if (test__start_subtest("throwing fexit -> exception_cb"))
+> >                 RUN_EXT(-EINVAL, true, ({
+> > @@ -158,7 +158,7 @@ static void test_exceptions_success(void)
+> >                                        bpf_program__fd(skel->progs.exce=
+ption_ext_mod_cb_runtime),
+> >                                        "exception_cb_mod"), "set_attach=
+_target"))
+> >                                 goto done;
+> > -               }), "FENTRY/FEXIT programs cannot attach to exception c=
+allback", 0);
+> > +               }), "FENTRY/FEXIT/FSESSION programs cannot attach to ex=
+ception callback", 0);
+> >
+> >         if (test__start_subtest("throwing extension (with custom cb) ->=
+ exception_cb"))
+> >                 RUN_EXT(-EINVAL, true, ({
+> > diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/t=
+esting/selftests/bpf/verifier/sleepable.c
+> > index 1f0d2bdc673f..c2b7f5ebf168 100644
+> > --- a/tools/testing/selftests/bpf/verifier/sleepable.c
+> > +++ b/tools/testing/selftests/bpf/verifier/sleepable.c
+> > @@ -85,7 +85,7 @@
+> >         .expected_attach_type =3D BPF_TRACE_RAW_TP,
+> >         .kfunc =3D "sched_switch",
+> >         .result =3D REJECT,
+> > -       .errstr =3D "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and=
+ struct_ops programs can be sleepable",
+> > +       .errstr =3D "Only fentry/fexit/fsession/fmod_ret, lsm, iter, up=
+robe, and struct_ops programs can be sleepable",
+> >         .flags =3D BPF_F_SLEEPABLE,
+> >         .runs =3D -1,
+> >  },
+> > --
+> > 2.53.0
+> >
+> >
+>=20
+>=20
+> --=20
+> Yours,
+> Chengkaitao
+>=20
 
-I think I actually want to rip out the v2_groups_user_writable flag
-completely.
-
-It was specifically added in order to allow the actual behaviour to be
-inconsistent with the value in the IIDR.
-
-But it doesn't actually stop the *guest* wrong writing; only userspace.
-
-I'll rip it out in a fourth patch when I resend the series (having
-addressed your other comments).
 
 
---=-9pOWiPyd2x1JEQCHt79X
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDQwODEwMzIw
-NlowLwYJKoZIhvcNAQkEMSIEIFs/SnJUdDjvCfR+QMQYrW+nqp/UCcRn2Uh5vD1OkN33MGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAV2JudUHY5N1l
-Q7Bo86IwzboORy70Pw5LulV32Wg3lAXRZFp6yg4KWFF8JLT/QWVbB/WQFCYFJGJgvudAIYbYB4ju
-UvI941OPxIQ9fVEpyC9QJlBR0nQ4qkNW7LnV2UHBSnGAyd2XZZ5dHtYWSR0pAAbg7OXOL5nc6iok
-NvxzWYFqQlEyHnEbKubZbzMC9PcArRRqvLsbu4lJ0JfTqxd7VovQGq+Vo9VlL3m+NLpmW/7yUXFv
-Q69WaDPgbytIk26123c15Rj8Z0s9CVKBfQJfDvOU/BsKYZuHbFj3dw7Cui3/7TwWVrNpa79EwSJm
-l71mko87YdJ+JAMbb+TjDRJqmYowOxW1oYhNSnfhTxKEGqN+F4z8uleFLaOU5IHUyuRpZPz8aGRu
-efXjc0nFBSni13wFF3ROpmDZ/jw7RMQAcgEbiWaBtxKekaWTGl6zaEBpOIHBi+ud0DdrOYolhVeV
-ifak2gDYIJx25uMkS1UzzAtgglteFc4xJzVow9VSiWJYPACMDfNeS+jjhi9Mo0dJV1MxnkOJ8X24
-s8+fJRydLiYipX7ZtJNwhcXEWQW5S7N2v4EWpUj99yuSwB9sd5v7xWCiZG9o25lk58vw7BJQCllZ
-aLfwyEPX8Zn/ocd0FNK9iJAZT4yUBzXqYov8m4jfkS6ywzMXv48QDZQ4JdCi/CQAAAAAAAA=
-
-
---=-9pOWiPyd2x1JEQCHt79X--
