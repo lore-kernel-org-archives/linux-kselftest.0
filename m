@@ -1,70 +1,72 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311BF34DCE0;
-	Wed,  8 Apr 2026 04:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B646B350D7F;
+	Wed,  8 Apr 2026 04:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775622520; cv=none; b=D95fmTc78GhZS+Q0rD7bJsQOceyca8ImxV/RdY43ZrXP4JvGoQCE1/WUBZYJ9aKa8wn2aZ4BDurwp3rJ80JZmODTTe5567HAks6iXnf5RoAFnNUPJlhoFCCDWp9tKbx0yNCEMFDl/aWZ0QgT47ypkzTPrCVCy8WSSLseina/Kf4=
+	t=1775622521; cv=none; b=Kv0twTPN3pnNUjXQKUd0i++BVm/9+Dmsfbb9UtxAj7WZyswGIdRmS3bKxO6p19l/LMp8+WR7wlDCQQmqx13CzteoQ8XUyJOH4mHWPUn6uhYoTOLjHs+14drbVhanCbBreXeX+mQyJDbajSkd8UBdnqlqmyetB6yiBvffto5va6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775622520; c=relaxed/simple;
-	bh=iyQopdPCNdHCZKJPXOUMoExKjslCMyuA+ZQssIf4Oyg=;
+	s=arc-20240116; t=1775622521; c=relaxed/simple;
+	bh=Rei4L7Rl936ijYRniffy0bYWsqyp/CHFBK16WNEF6zk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iBsDThwlckt9cgbKi5PSAURo8TNdLcNxgaNvuoU1eV2tuURYAWfwW1JLlk5SCLiBDZOjc52MkOHi/itOX02IBlNj9YiNfvVgRCV2YvO1O/EyUhTQqx//V+6fBxXf9nS2rC5Y2YDlh7ogu1cKuDkX475P7KBK/+fRV/wo2MKH7RU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=IK9JjESG; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version:Content-Type; b=BhgfZ+yNgVBAdccNi20FrGKNsufm8F7JfoS1E4PPaB1wm2ltjZOIuzoe9l++5EEfEdhYHbpCiw02p3D9Da88FHan5pqlJGt1T2AewnS8LzpQGf4D01N9DO4XuI7NuZCzbvfqROQ2AVNYWBW3JcHEM7jfX20f64M+62cjMx5hXgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=j4Xvrp+8; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="IK9JjESG"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6384419A2297727;
-	Wed, 8 Apr 2026 04:28:22 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="j4Xvrp+8"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 637Dr4gx2594862;
+	Wed, 8 Apr 2026 04:28:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=o8rHui
-	c0PhX8hjUGEtYE9ZcgUfT+BN1KSsR4UDkv5rk=; b=IK9JjESGiuUV6NWZrN79l0
-	dGubO1zgudhr+8yZS56GiVEi56EmQpcDSOgn78KZfEcOQLjweNWA1WXprC+xYFWk
-	lzNCkEAX6olItHh/4oZ831tdYFPnBfdEj4n4e5nNan6Tri6YHJcG5BcVlnH/mUHD
-	VuW338MQfY/pEgcfMfdRC/TE4Yn0kuOLgAKlp65dUanfjtxEmSQegZszYxGStI+p
-	bGCG3/ok2+QanGKpO9JWkUjdeYD4wS1+OxUv8jAWQHFlKaIK1EpADiHwFIhrgqSQ
-	SXLACHMro4SGvJu7TbLONAi7qD52zZ22h/W8NLmOY6wABQciRgIz53WwhGiNatXw
+	:message-id:mime-version:references:subject:to; s=pp1; bh=sTYWaa
+	yrimRpPwSSgo7/sUPNPuhaZpD1b5+V5PqBLF4=; b=j4Xvrp+8/5vtpBPRdwj6zQ
+	QQ6GA4dIBgwUgKPg5vV5aeA0yibxVwar2+rySOTVcdcYxrKJQoGctGdh1KA775Qs
+	uoh3OfWDG8cgTO3GOhMKqO9052buk7ljHRYaqV/VIFVYqbyaRkMp15eW3fS7A5Uv
+	/4MxMAiC7bbRkCbDcMXwKAi9K0m2f6eqG+xSXw707E+TzienaYsfotRlceeLVjPh
+	wPF2AmYtg1NhqIe+Z+fmfRQjamtbKXYxjuBBy68WdUEX2TSXoKPRgk4LERsVuXwK
+	3+BWP6uvBD+30iagDRcHZZSyxFr09wYiSVMzbS4V3wftJzsCOYMJo7QqB9f+ZsoA
 	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dcn2fwrre-1
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dcn2e67tr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Apr 2026 04:28:21 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6380MXsb026661;
-	Wed, 8 Apr 2026 04:28:21 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dcmg7wy0f-1
+	Wed, 08 Apr 2026 04:28:26 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 637NYbG5013821;
+	Wed, 8 Apr 2026 04:28:25 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dcmf46050-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Apr 2026 04:28:21 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6384SHZ745089264
+	Wed, 08 Apr 2026 04:28:25 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6384SKb431064518
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 8 Apr 2026 04:28:17 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2A66320043;
-	Wed,  8 Apr 2026 04:28:17 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E0E5B20040;
-	Wed,  8 Apr 2026 04:28:14 +0000 (GMT)
+	Wed, 8 Apr 2026 04:28:20 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AB9DC20043;
+	Wed,  8 Apr 2026 04:28:20 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5441420040;
+	Wed,  8 Apr 2026 04:28:18 +0000 (GMT)
 Received: from Linuxdev.bl1-in.ibm.com (unknown [9.123.3.0])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  8 Apr 2026 04:28:14 +0000 (GMT)
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  8 Apr 2026 04:28:18 +0000 (GMT)
 From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: linuxppc-dev@lists.ozlabs.org, adubey@linux.ibm.com
-Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: Re: [PATCH v7 1/2] powerpc64/bpf: Implement JIT support for private stack
-Date: Wed,  8 Apr 2026 09:58:13 +0530
-Message-ID: <177562236435.1381144.14761242301174081744.b4-ty@linux.ibm.com>
+To: linuxppc-dev@lists.ozlabs.org, Amit Machhiwal <amachhiw@linux.ibm.com>
+Cc: Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <chleroy@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Greg Kurz <groug@kaod.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/powerpc: Suppress -Wmaybe-uninitialized with GCC 15
+Date: Wed,  8 Apr 2026 09:58:17 +0530
+Message-ID: <177562236422.1381144.4554144401168873566.b4-ty@linux.ibm.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260401103215.104438-1-adubey@linux.ibm.com>
-References: <20260401103215.104438-1-adubey@linux.ibm.com>
+In-Reply-To: <20260313165426.43259-1-amachhiw@linux.ibm.com>
+References: <20260313165426.43259-1-amachhiw@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,47 +76,60 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=KeridwYD c=1 sm=1 tr=0 ts=69d5d965 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: G-qH3MqtFyaihStNPY5YFbbVWzyxAClT
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDAzNiBTYWx0ZWRfX/BAOe+ncuKhk
+ DugWvbEG0AMFDuxIE48S2IaYs1d6WNMyHuFZVxQcT+ox6MIK/9i+frIydzQFZWRXJjPQwQRA1st
+ L7tkGrEuUjDA/qTVR3hlFa3y9D5GUqGZsNNRHnUIduUshxaTGQerEASguBvGK3KiLbDmk6dPFI1
+ hXVb8wgbnXLYA1gBECw5diBdbfXetpGKVyRoLXpIR+DkuV6DvU6hRIsup02on1lm0Ff5NvzjE+V
+ fg+xlLhKQwJaq7S8ffr5FI6Cv64LD6hHeiglFbSN62ZzaXrtwn1T1ezBBph/P+AK3+TQ4FnIx95
+ cYbDOQE/mfAa+XMC7stC2cV3ySPI2LKSjTebVlYDZD9edIrbgJre73nd4bDvSxZfvccB2GUr4Hw
+ hcEubB2rSK6U2Ui8XWm7zneGX6zSF1eS/RL1sFRP2e4n9dp111X6WTSdsvD+Z4ytxUjPalwzxW/
+ eY+IXgVg6+Cc9J/nvJg==
+X-Authority-Analysis: v=2.4 cv=Cfw4Irrl c=1 sm=1 tr=0 ts=69d5d96a cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=c4pk_TAjE7_yaBmCtEEA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: FVHN14Ku_mOeP_4FgGT6mPb5d7fNqbnx
-X-Proofpoint-GUID: FVHN14Ku_mOeP_4FgGT6mPb5d7fNqbnx
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDAzNiBTYWx0ZWRfX78ucmViPT1i4
- zl7C/iYJnuR7fKbz2HmDnyObajcLWfbrVe8hoadygD6xGougKOMv0BcRs3mfsW1QXw8QlcE1ETm
- fGw417V/fzMsqRs6bfX8s0dQAtX+pDE6e7qH6THjwjHmJIzqWg9eX90qxN4muAVzNr3swPx1gR+
- LjVYzLE9Ywm3lHsFfO1Q9yOBWKzRluxBGIl0iX2kYfO86QASf0koEeO0NZH6SkcfKKScdbI3HbD
- pk6GYpXcbvH5Nz4mqE9dyIY6fx4h+Jez6Okb9YJKPyiosGQkBlBYb7J8mXBNYHJ4VbAdNT7HcDP
- xjJMyvcCFd4rrVtZj3PGVLBHP+4SGj+ltpb6pLBsuiuVxEeKf7UEJZ2tRtopS+WEZQT8FWdyuS1
- iSaV+oNx7xHdrQ07ql0dHA1LMj2cFcqSffRr9EnolwSCwYRg4EhrYwO1W+BxP5K5iPTJc2ongqT
- 2WyRrvLiAhWXlajcN0A==
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
+ a=oeOQCyp_1XCr1dGvqAMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: ez6dFC_gI3skCz9XJG-SPahKkdPdSBmn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-08_02,2026-04-07_05,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
- clxscore=1015 phishscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 clxscore=1011 adultscore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604080036
 
-On Wed, 01 Apr 2026 06:32:14 -0400, adubey@linux.ibm.com wrote:
-> Provision the private stack as a per-CPU allocation during
-> bpf_int_jit_compile(). Align the stack to 16 bytes and place guard
-> regions at both ends to detect runtime stack overflow and underflow.
+On Fri, 13 Mar 2026 22:24:26 +0530, Amit Machhiwal wrote:
+> GCC 15 reports the below false positive '-Wmaybe-uninitialized' warning
+> in vphn_unpack_associativity() when building the powerpc selftests.
 > 
-> Round the private stack size up to the nearest 16-byte boundary.
-> Make each guard region 16 bytes to preserve the required overall
-> 16-byte alignment. When private stack is set, skip bpf stack size
-> accounting in kernel stack.
+>   # make -C tools/testing/selftests TARGETS="powerpc"
+>   [...]
+>     CC       test-vphn
+>   In file included from test-vphn.c:3:
+>   In function ‘vphn_unpack_associativity’,
+>       inlined from ‘test_one’ at test-vphn.c:371:2,
+>       inlined from ‘test_vphn’ at test-vphn.c:399:9:
+>   test-vphn.c:10:33: error: ‘be_packed’ may be used uninitialized [-Werror=maybe-uninitialized]
+>      10 | #define be16_to_cpup(x)         bswap_16(*x)
+>         |                                 ^~~~~~~~
+>   vphn.c:42:27: note: in expansion of macro ‘be16_to_cpup’
+>      42 |                 u16 new = be16_to_cpup(field++);
+>         |                           ^~~~~~~~~~~~
+>   In file included from test-vphn.c:19:
+>   vphn.c: In function ‘test_vphn’:
+>   vphn.c:27:16: note: ‘be_packed’ declared here
+>      27 |         __be64 be_packed[VPHN_REGISTER_COUNT];
+>         |                ^~~~~~~~~
+>   cc1: all warnings being treated as errors
 > 
 > [...]
 
 Applied to powerpc/next.
 
-[1/2] powerpc64/bpf: Implement JIT support for private stack
-      https://git.kernel.org/powerpc/c/156d985123b6d6e5189cfd0286b93c12167ae798
-[2/2] selftests/bpf: Enable private stack tests for powerpc64
-      https://git.kernel.org/powerpc/c/e640bcd1bf83dbdaa967b20cd98a782d52ec89cf
+[1/1] selftests/powerpc: Suppress -Wmaybe-uninitialized with GCC 15
+      https://git.kernel.org/powerpc/c/6e65886fceb23605eff952d6b1975737b4c4b154
 
 cheers
