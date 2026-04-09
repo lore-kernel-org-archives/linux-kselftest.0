@@ -1,133 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558AA3B0AE9;
-	Thu,  9 Apr 2026 12:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B4A3C454E;
+	Thu,  9 Apr 2026 12:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775736762; cv=none; b=FeJ+eEqkCs3sHMzidmBnq52qX0NEXl2Wr1QMfW8tyshn+Cpm8gCv4y07KZTeC/UtTaVQzyIn/yi9qnSKR5/6a0Ejbg2xjry2vUXzK4BFvxQZyK7UT5WWjmWyWb2Dwg1C6tnWDvTpg/RDWgIlw6CU0EqJXS+0vtKdI4IbNv2UiqI=
+	t=1775737690; cv=none; b=CvKoF0u/O3Ob9WImNJpuPQwfA9oxnK5eSp4phkiPPY9zO2eYJNqewocwCu0qWSJsHeDw2wIwxSfGHL4dBS1UZ4YgZqi5CVJoeiapdR/gwgwzWRH11Gm3kEWuFKLHtB1a5rVL5Fw7MHggx73x+b2bcGNgPTEEkQR6UiJxFfb5raQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775736762; c=relaxed/simple;
-	bh=nVlf9SwrvS+dG5uiC/p58bO6GfSls1UYlsHSnGbsU2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SQneOM74y7vtZMieGRru8G9WkYX0bbAnxhZ4LJoAJOEKfvyrj+SPpW8Mii0kHndVNjrbLMJJ6zon/3hO+XRj+P0RS/tJaet7P3B4LmtFUSG/Bfav3zfM8x2OY0oShch97Vlr6EgYaeioSygg3l7SIJLAboDa9EEe6qVUsOIfZVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H41L8hJA; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H41L8hJA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFA1C2BC87;
-	Thu,  9 Apr 2026 12:12:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775736761;
-	bh=nVlf9SwrvS+dG5uiC/p58bO6GfSls1UYlsHSnGbsU2g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H41L8hJAWe19Yc2RdQYZ5iZor468SrA6cvNCotIbjI7yMdxWggTUBbyoRy1T8wqDL
-	 XStPLRT2sKH/aZ/Kz9HcRyJaVeSFj3qlkm0gK+KmdjNpVYqUm6xYOka8eSGcNWAihd
-	 5ua2pfEIet147phAEJeaAdCfPLVGqIvpoCEhcw581oWRDda0blLC2gA7PeWf4gkqEh
-	 AIOjnSRXYk03dKA3Hfc+CeEHZoXBNjM7NTUFWUpXx4nczz07cF7zzYcRZ2G+sk68Se
-	 2ZnCISch2av5+G3QKCqc0c4Zs4d3u4M17tyX5poLOaKjBUzHAyveyH3Bt8aVoVh6ic
-	 XcvW4Sc0qRcdA==
-Date: Thu, 9 Apr 2026 13:12:37 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7/8] arm64/cpufeature: Define hwcaps for 2025 dpISA
- features
-Message-ID: <4de93318-5b31-4bce-911e-275b6a70f2c6@sirena.org.uk>
-References: <20260302-arm64-dpisa-2025-v1-0-0855e7f41689@kernel.org>
- <20260302-arm64-dpisa-2025-v1-7-0855e7f41689@kernel.org>
- <adeOnmy60AUQzSvo@arm.com>
+	s=arc-20240116; t=1775737690; c=relaxed/simple;
+	bh=EjSozxrj+12LZ6FmGgkaCxCJVy6nYxsUeszd8Ocgt7U=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YtigCPIjxMVtH9+os1GPaAC0ASbXGZHrupboCHrTHK5ORQLv7n+3H7Gh+YWa2AQ+dWsHkmIqPIou46jaSClw1zZk4uxJFa1FTG7Cg94LCJhZpu4DYBl6lCtN3LXB+4x2wV9SX0ImE2EogN5WiR9OwOJDmCy9lW7VKGK4NguPq5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.235])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4frzcq3mgXz1HC3C;
+	Thu,  9 Apr 2026 20:23:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 6ED1840569;
+	Thu,  9 Apr 2026 20:28:00 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwDnH+1Bm9dphfUEAg--.11564S2;
+	Thu, 09 Apr 2026 13:27:59 +0100 (CET)
+Message-ID: <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Leon Romanovsky <leon@kernel.org>, KP Singh <kpsingh@kernel.org>, Matt
+ Bobrowski <mattbobrowski@google.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri
+ Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,  Jason Gunthorpe
+ <jgg@ziepe.ca>, Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham
+ <itayavr@nvidia.com>, Dave Jiang <dave.jiang@intel.com>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org, Chiara Meiohas
+ <cmeiohas@nvidia.com>, Maher Sanalla <msanalla@nvidia.com>,
+ paul@paul-moore.com,  linux-security-module@vger.kernel.org
+Date: Thu, 09 Apr 2026 14:27:43 +0200
+In-Reply-To: <20260409121230.GA720371@unreal>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+	 <20260409121230.GA720371@unreal>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XBCDYlAwEN9zYdRe"
-Content-Disposition: inline
-In-Reply-To: <adeOnmy60AUQzSvo@arm.com>
-X-Cookie: Hailing frequencies open, Captain.
+X-CM-TRANSID:LxC2BwDnH+1Bm9dphfUEAg--.11564S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw4xAF17ZFy8Ary5Wr4xCrg_yoW8XF13pF
+	Z5K3WftFWkJF4agF43Xr47uayYgan5JrW8JFnxt34Ut3sYyrn7Xw17Kr909FZrWFyfWw1F
+	yw42gFyDWF1kZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIF
+	4iUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgASBGnXEi8JxgAAsY
 
+On Thu, 2026-04-09 at 15:12 +0300, Leon Romanovsky wrote:
+> On Tue, Mar 31, 2026 at 08:56:32AM +0300, Leon Romanovsky wrote:
+> > From Chiara:
+> >=20
+> > This patch set introduces a new BPF LSM hook to validate firmware comma=
+nds
+> > triggered by userspace before they are submitted to the device. The hoo=
+k
+> > runs after the command buffer is constructed, right before it is sent
+> > to firmware.
+>=20
+> <...>
+>=20
+> > ---
+> > Chiara Meiohas (4):
+> >       bpf: add firmware command validation hook
+> >       selftests/bpf: add test cases for fw_validate_cmd hook
+> >       RDMA/mlx5: Externally validate FW commands supplied in DEVX inter=
+face
+> >       fwctl/mlx5: Externally validate FW commands supplied in fwctl
+>=20
+> Hi,
+>=20
+> Can we get Ack from BPF/LSM side?
 
---XBCDYlAwEN9zYdRe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
++ Paul, linux-security-module ML
 
-On Thu, Apr 09, 2026 at 12:33:50PM +0100, Catalin Marinas wrote:
-> On Mon, Mar 02, 2026 at 10:53:22PM +0000, Mark Brown wrote:
-> > @@ -3290,11 +3295,13 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
-> >  	HWCAP_CAP(ID_AA64ISAR1_EL1, I8MM, IMP, CAP_HWCAP, KERNEL_HWCAP_I8MM),
-> >  	HWCAP_CAP(ID_AA64ISAR1_EL1, LS64, LS64, CAP_HWCAP, KERNEL_HWCAP_LS64),
-> >  	HWCAP_CAP(ID_AA64ISAR2_EL1, LUT, IMP, CAP_HWCAP, KERNEL_HWCAP_LUT),
-> > +	HWCAP_CAP(ID_AA64ISAR2_EL1, LUT, LUT6, CAP_HWCAP, KERNEL_HWCAP_LUT6),
+Hi
 
-> IIUC that's a LUTI6 SVE instruction which would not be available if
-> SVE2p3 is not available (or SVE in general), though we have the
-> equivalent SME one with SME2p3 (and a separate HWCAP for it). We should
-> rename it to HWCAP_SVE_LUT6 and make it conditional on
-> has_sve_feature().
+probably you also want to get an Ack from the LSM maintainer (added in
+CC with the list). Most likely, he will also ask you to create the
+security_*() functions counterparts of the BPF hooks.
 
-OK, and hope that the SME feature always keeps in sync with this.
+Roberto
 
-> KVM will probably confuse guests here if SVE is disabled but the
-> ISAR2.LUT field is not capped (I haven't checked). The conditional
-> has_sve_feature() would solve this but it won't address the MRS
-> emulation. Arguably it's a KVM problem for exposing inconsistent
-> id regs: ISAR2.LUT==0b0010 is not permitted without SVE2p3 or SME2p3.
-> But the spec isn't greatly written either - why does a field about
-> AdvSIMD all of a sudden reports SVE instructions availability?
+> Thanks
+>=20
+> >=20
+> >  drivers/fwctl/mlx5/main.c                        | 12 +++++-
+> >  drivers/infiniband/hw/mlx5/devx.c                | 49 ++++++++++++++++=
+++------
+> >  include/linux/bpf_lsm.h                          | 41 ++++++++++++++++=
+++++
+> >  kernel/bpf/bpf_lsm.c                             | 11 ++++++
+> >  tools/testing/selftests/bpf/progs/verifier_lsm.c | 23 +++++++++++
+> >  5 files changed, 122 insertions(+), 14 deletions(-)
+> > ---
+> > base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
+> > change-id: 20260309-fw-lsm-hook-7c094f909ffc
+> >=20
+> > Best regards,
+> > -- =20
+> > Leon Romanovsky <leonro@nvidia.com>
+> >=20
 
-Yeah, it's just a generally interesting choice for the architecture.
-It'll also be fun if we get a new LUT feature that isn't SVE/SME
-specific.
-
-> On SME, unless I'm misreading the spec, the bits seem to have been
-> written by three different people in isolation:
-
-> - ID_AA64ZFR0_EL1.SVEver + ID_AA64PFR1_EL1.SME (and if these weren't
->   enough, we have ID_AA64SMFR0_EL1.SMEver) tells us that SME2p3 is
->   implemented. LUTI6 is mandated by SME2p3
-
-> - ID_AA64SMFR0_EL1.LUT6 means that the LUTI6 instruction is present but
->   this field can only be 0b1 with SME2p3
-
-> - ID_AA64ISAR2_EL1.LUT == 0b0010 means that LUTI6 instruction is present
->   (if SVE2p3 or SME2p3) and, again, that's the only value permitted by
->   SME2p3
-
-> So a lot of redundancy and we did end up reporting the fine-grained
-> details to the user already. The SMExpy versions seem to be cumulative
-> unless Arm decides to make some of the instructions optional (it still
-> doesn't explain why we have the same information in SMFR0 and ISAR2). I
-> guess that's where the fine-grained HWCAPs come in handy.
-
-There's a few things like this with the FP extension, I think mostly
-with SME - it's future proofing in case we want to allow more
-flexibility with when the individual features are available.
-
-> I wonder if the user would ever be able to parse these ID fields
-> correctly if using the MRS emulation. We'd need to sanity-check KVM as
-> well, not sure it proactively caps id fields.
-
-Yeah, there's some traps here.  Generally you're probably best using the
-most specific field for a given feature but there's still traps there.
-
---XBCDYlAwEN9zYdRe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnXl7QACgkQJNaLcl1U
-h9AB1wf/bAlVLqBnPfZafOm30ynwxrYVBj4L2GjvTuQQiXYP91h8ipxEIHrS0QN5
-1uN+XXj8RSKqhkRCPkLNGiWmsu7Af+Cvc900So85xXniywBZA7xqqN975rCCeZy4
-nS5N16VNgI0qp15b9KWM1VXSjCl9ninfYvh4XV7WimOuy7y/GoYljf5vFG2vertO
-FlUJLvtcke3OR67RrlEF9jBIfSsM2R1u45EDlSrt8ja3+HbUAlhYfic1zetw7vzE
-dOoHC9ZIfyNuyY18XVF+8tvYtYIBH2g1yOVv4kola+cFsrXPOhVCS6H0KjkC5HxA
-4q102DsZwOrLriumYtBRqV46AVzeZA==
-=ixAV
------END PGP SIGNATURE-----
-
---XBCDYlAwEN9zYdRe--
