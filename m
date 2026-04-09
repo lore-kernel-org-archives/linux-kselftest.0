@@ -1,64 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB2A3876AB;
-	Thu,  9 Apr 2026 12:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D493CAE6C;
+	Thu,  9 Apr 2026 12:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775738337; cv=none; b=u0Z0AUSzbyM5tVVP+C7aRnxDrWvVrPR2K88I7yEsBjxaw6YLkyQY4GKoNdPXy9yw2Vee9lzJtFm8i3CuPhexcCIDMO5Kil4uQyMAZ82+b52z2RN3Gn4N8U5ywxT7wydbh3+v2czeQ2A818PqAjCA8C57TpzzfY2qc1BP1FBPGNQ=
+	t=1775738532; cv=none; b=dTOhv/BGSlGzakxa3uhBw+PITyiGy6WWY1e5rU1Edz+VdoT5D9Nrfp216Sq/3ib2Oy2M+rouTAEhTrmrHuoGS6kPYJB2cFpXaAUbfQRdBrvx3voo43pYqOoGssvB8moApEitM64YTqxLdPFwQJ9t3uwKs3THPwcNj9gRsPO4DB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775738337; c=relaxed/simple;
-	bh=S1UzqxaXEc/yIE0ufFwghwwUVw6xvXwfGs8iCXCKSJw=;
+	s=arc-20240116; t=1775738532; c=relaxed/simple;
+	bh=xnDepoYTxvRiogO1ADsVRmIinVDcmworTrvUdlFnPNA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hzxEKM+AcChx8/W3wbPYVw3jCiTjC5GPin4ESNfGCZjNgytH3Djiw4F+xSoWgdw8HsNQRE5VQdQns35/1Vxb48mg3I81tWxzazsNVfdnw/ERn5jIRon08gC5w9y4GGmlEQ+uRYToaJYSnHCNACfEeWltqEUJ3026CQ/t0esTIsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t4fn9Q4X; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=GrSDMLkCOy0g8pdTsc6CdszdUBepPfuq/uUTOJ2+9OMy15DSvSdmLoxuYenr3wuWpGBWCoSvvzATcGjzp0RgzFf9Sgfy0N4ydoF/uCv1FnSouJHgAkfYG5o0TZ4x2Wy4ZJB1XKeY9GeAuicPt82pCrpfAnXJc6MDTEHL+eJjOVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Dh9Npjqv; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t4fn9Q4X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ADE4C19424;
-	Thu,  9 Apr 2026 12:38:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775738336;
-	bh=S1UzqxaXEc/yIE0ufFwghwwUVw6xvXwfGs8iCXCKSJw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=t4fn9Q4XJQe3p+oZ+kJtet9UBjhDHwzuk/79owhpBPBCfJmayqSA4WmNiOQrrKNAw
-	 LIDvKeWxhcy5QdHGIdxGNjS+NnUByasX+OJUdfsk0/0FGmDNVO3IkZATnwWOShPh1I
-	 gOltWksTcRi75T6wBungyq4UQSuDb0YFpAkKg5A9QhQ4IHrOteT0H1mvZW0FcUu8Z+
-	 YjjaYd1eEqwMt6neauUxdhD7OJzbfFO4xEBnVTz6OGYKq8HJ/IIRYUGOcRTR/litSJ
-	 +4foUNO3RJFXQvZjQSqpYecg/G0lJEFL6ZuMiUDjuIPS/1T5mi9sm9SwaN5SWuLBVU
-	 wl7xbxf7MjKyA==
-Date: Thu, 9 Apr 2026 14:38:50 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Alban Crequy <alban.crequy@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	Alban Crequy <albancrequy@microsoft.com>, Peter Xu <peterx@redhat.com>, Willy Tarreau <w@1wt.eu>, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v2 0/2] mm/process_vm_access: pidfd and nowait support
- for process_vm_readv/writev
-Message-ID: <20260409-behoben-gehen-baeb1486fb03@brauner>
-References: <20260408145436.843538-1-alban.crequy@gmail.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Dh9Npjqv"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=AAaBFGub3bRoCO4XKF0ZLRIwiuhjsNw+rpCrrQQmH6I=; b=Dh9Npjqv9Yv/woc+IxwtxY0hn7
+	IDikFYVB+CRonRL5TLVPkhcrn2bdz01XjMBsa7qvP0a0AGT1KDj/K0y/drj9lyWGuqjpa3CK6X5DT
+	M6ZZD1Zxvt6tajc/WcUsfDfjlWWC0XUAvVYpAjSIOnj1rIvFUbl1uPhGFyJr4aYcjW5DlhawQePrP
+	TyksT+8OLz6EHMcqn/Tj/G3bwkwdY5OhI0fVt7cnZT9NHxqAngt6zGVCgWt+R2hXIM2JB2i+I46UU
+	ipjwp3Z69QnMQwRbiVCkWuidjGf/Gw2tEh6yTXn3vmD+gGmOPTBaGYqqdP5cqYqA5qayTc0hp0/x3
+	rXHzVR/Q==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wAohv-009Cnv-2L;
+	Thu, 09 Apr 2026 12:42:04 +0000
+Date: Thu, 9 Apr 2026 05:41:59 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org, 
+	petrm@nvidia.com, willemb@google.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: net: py: add test case filtering and
+ listing
+Message-ID: <adedNCKW0WE_FqZK@gmail.com>
+References: <20260407151715.3800579-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260408145436.843538-1-alban.crequy@gmail.com>
+In-Reply-To: <20260407151715.3800579-1-kuba@kernel.org>
+X-Debian-User: leitao
 
-On Wed, Apr 08, 2026 at 04:54:34PM +0200, Alban Crequy wrote:
-> This adds two flags to process_vm_readv/writev:
-> 
-> - PROCESS_VM_PIDFD: refer to the remote process via PID file descriptor
->   instead of PID.
-> - PROCESS_VM_NOWAIT: do not block on IO if the memory access causes a
->   page fault.
-> 
-> v1: https://lore.kernel.org/lkml/20251118132348.2415603-1-alban.crequy@gmail.com/
+On Tue, Apr 07, 2026 at 08:17:15AM -0700, Jakub Kicinski wrote:
+> When developing new test cases and reproducing failures in
+> existing ones we currently have to run the entire test which
+> can take minutes to finish.
+>
+> Add command line options for test selection, modeled after
+> kselftest_harness.h:
+>
+>   -l       list tests (all or filtered)
 
-Looks good to me,
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+<snip>
+
+> +                print(f"Usage: {sys.argv[0]} [-h|-l] [-t|-T name]\n"
+> +                      f"\t-h       print help\n"
+> +                      f"\t-l       list all tests\n"
+
+I initially expected the help text to mention "(all or filtered)" based
+on the commit message, but since this option lists all tests
+unconditionally, the current wording is correct.
+
+Reviewed-by: Breno Leitao <leitao@debian.org>
