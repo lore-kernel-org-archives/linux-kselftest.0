@@ -1,147 +1,81 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38653D3339
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 13:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A99A2D5925;
+	Thu,  9 Apr 2026 13:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775740617; cv=none; b=jIXsuyX0WhB+GCVOg/JFvEcKBDSkRidb4F9iZDxZE+7sUF0FYqdcuazh5D+/pkpRES7UNT4xFfDa+lo33R9Wmreis8PtdOb/IlD81jh+Iyk7qxwQe4AXVTJWxpuSGMF7hI2FvVJvkNoIpBeCcCuV6nGH+Rdd06TrbOXPqWuOkzE=
+	t=1775741449; cv=none; b=QzrcsGQeNdkWdHEitvwyAnME66SzQd5wEi3gg62yAPJ33Zu5JDmpp5ZDKTo0ietxA2dV/uHKdeNERMSqtpOo1X6IxSAlPG/foIxFw+KIXI6m8WDoKXx65MkRX0UJCncL3jD7Q82ildC4Z4PqDbtuCicsI0BTlUrEDxDCfGH6caI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775740617; c=relaxed/simple;
-	bh=FJ/D4q23EFv6mDXNXcni7J38bIM5TIPQlv22/kkJCWc=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ROQycnpr8xw9A8o8blaWOwKMtpf5LGZuUpXcCvZO+lwB2M4/HDMnnUxf3yAZU+ZNK9pm2YTDsViODdr4sjg2QIpQTlrxoFAtL6STz079KY5pVbSYz2egi8DrR7cpZPpbqhZOnPmryg7pEhk3jUX4tFcNjwgzj+kX1PGpRgedsq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHHUYkLw; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775741449; c=relaxed/simple;
+	bh=2SHQ+Cc3lMU5E9iQ790kdmBxOagbw6Ul4E4i+zQyOVc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A4tcPzpw3d8H4qF+56ZYwOkJmgnyUgiluWFQQYI+O2U0x5/TYHPQrwV/PefORqLdPSd2tMr5XYDGXf3T83P18P/9qD7NH2ymsYn2N2ZhpL/QXI/HCIdPjCYlFgksQeMHv3StBgR3RlWxBEoQXbzbu7aF1evychpwMbeCVFbuKLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GVVAfj96; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHHUYkLw"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43d5e87a507so542753f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 06:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775740613; x=1776345413; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sEfIeWMKEQinR24XF9uKTH7B8WIhwrpXr7IybuBO0ac=;
-        b=aHHUYkLwVOd69YrQ76wrp6NCP/4uRzYaRgPUhfEZtpdDB8pkt8Y3P2yzG/iSy3h09z
-         l+celceRc4YhZM4QriRzvQyaTcl0RcolPX7lApz6YvZKu1K2kx+oev8PGQvA3UYFHR6r
-         v8Hxo5hq228XQgQ/57ujjgKL0HAU8Rnefz/8vnW2p8Cs2pijlrFq73hZh+L0nR/IKVBJ
-         JEFRZcspYD6cWWaYD2cSYj2pHnk83kbXrfaIQUPz5wK/BzH0FGwGOKdXqyO5mBK3jnAs
-         7zz+oo7BX3pj6b7fC0fFbnEKOCKwQ8xgN+vBPrrSvcFD8PRKv8jmwkzHZZg7C2c/L+pH
-         RRaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775740613; x=1776345413;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sEfIeWMKEQinR24XF9uKTH7B8WIhwrpXr7IybuBO0ac=;
-        b=fWjj7mtQEBEIP5hhrP3fYKDX+cT1TttRYMp0cLRFdXKEJ2WTKbIUtnIe7G5SAOqJPx
-         L27WA5rXNa31CQrGcEOpqvTv2MJ3KpEpPUoDP2fzuoxsMw90x0Su8Gd3cV2DfM5+hPPu
-         OeAKqBeefkTrNmZb45aIehbGzVHUvSXvqA55tn5TuiyXDKfBj37bB/6dkiJUizG3iHcH
-         TKi48rh2UnPEFhc1wdpkKpMr9scBi0ZXg+BftQll4WXDT7UwfFR4YLsokRp7YYXn7+jz
-         A1sxgTKqszGeoE2I8/KU4K0bz5pJ4Gw+5f+oyJc/kEw87hq2Xt5ROqii5+JjHFYpHKAB
-         sY6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXNKtJAFtUOFQCivs3ARrSPzTcvQzHBq4uX17ik8yCdb5JDbijhW9HRLKYNUcMh8gECFk46xKU4iepuH1XfvN4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP15hI+E3YTMt/wihHyxuGoXaXkVXIeUBS7ymkwSYj0EIP4+Wz
-	8h7fWR9YPR1LJ4u78kN97Oyo09tohTHBYKKzOvQqTTTJ+d/aB8X//QNVp+fJAO4B
-X-Gm-Gg: AeBDies2dx6Kc4oqFsxcNwBSOoDBfZYe3sgWay6WdzMT3X8FtBbxrsBER134e6xoFSV
-	WQDyxm438IUZB3mW5nrJB/jy5Hq0DKlJB9ycf+tkaekQeyjHMFuH0qT8E6DA+c0csvtg1TveEpt
-	MSZ3kOjhKx86Thqe40y0MqygGaOgjje89knZMAmhKn/+NpEG8HHizZ7rehvIC9wLI7yqu3MpYF3
-	Plj4vmmtEpuhVYV4zRyxeHoSGuIb+ePB25dN+Jz1Tv9gWkUNlctcf/QlY6FB1QeFQw7tdTokF00
-	0u0VvFfEIXlOwIRTKKFSWcDeOIQ0PMmz1aiVmo9TfDYzK9YVuaMUoXVoUWH7hwUtG7CJrmr7cKq
-	eUjqBKNM6NsGMpZL56xnvPmB5MWHE8s9zJeHSHXvfjxe4HaJrhwSrBxKVGwtRVaWwkhLNrBU9tQ
-	U5CPQ3IaH0qrf0KaM=
-X-Received: by 2002:a05:6000:1acf:b0:43d:20e9:b0e1 with SMTP id ffacd0b85a97d-43d29280e6dmr35116020f8f.7.1775740612569;
-        Thu, 09 Apr 2026 06:16:52 -0700 (PDT)
-Received: from krava ([2a00:102a:403a:e361:61e0:606e:5b16:ccaf])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4d282esm67310305f8f.18.2026.04.09.06.16.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2026 06:16:52 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 9 Apr 2026 15:16:46 +0200
-To: Menglong Dong <menglong.dong@linux.dev>
-Cc: Menglong Dong <menglong8.dong@gmail.com>,
-	Jiri Olsa <olsajiri@gmail.com>, ast@kernel.org,
-	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, shuah@kernel.org,
-	emil@etsalapatis.com, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: add missing fsession to the
- verifier log
-Message-ID: <ademvg2HQT3AZRh1@krava>
-References: <20260408062109.386083-1-dongml2@chinatelecom.cn>
- <20260408062109.386083-2-dongml2@chinatelecom.cn>
- <adZWStMinOeunjSH@krava>
- <5090408.31r3eYUQgx@7940hx>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GVVAfj96"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A107AC2BCB0;
+	Thu,  9 Apr 2026 13:30:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775741448;
+	bh=2SHQ+Cc3lMU5E9iQ790kdmBxOagbw6Ul4E4i+zQyOVc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GVVAfj96AJbAGuvg1rYPH17zMuc0uKbfIDO/AYywyeXtaRie5mPlj7DHpPvLLj/ly
+	 zCKcn5vON/w+ZGdMSKFrD6pJWY3wQ2PRfhCco5ff/hU5mFYGTRwdeVTKOE6XGqd+2X
+	 6WYwaD0NklvxxGO+oMtMrw/b6KQk694+ScBUnbjSYojuGJO6JtwXy7ugM7VdBF43HY
+	 fXWs1aNz5S/abor6MIj+DkqpPKmcgRBp0JjW2cp5DBp6rPqLoL9Ie80k/TL02Kf2lb
+	 4LMlxWhkH6ag6gEMRXmCe7Qc5n1+trmBRDJdCHi745+OsVeai5h0kOSfsaPykHWdFX
+	 gYFAXLbhjKDKw==
+From: Christian Brauner <brauner@kernel.org>
+To: Aleksa Sarai <aleksa@amutable.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 0/4] selftests: openat2: migrate to kselftest harness
+Date: Thu,  9 Apr 2026 15:30:32 +0200
+Message-ID: <20260409-sorgenfrei-bernstein-2f4f993c490f@brauner>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260401-openat2-selftests-kunit-v2-0-ad153a07da0c@amutable.com>
+References: <20260401-openat2-selftests-kunit-v2-0-ad153a07da0c@amutable.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5090408.31r3eYUQgx@7940hx>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1386; i=brauner@kernel.org; h=from:subject:message-id; bh=2SHQ+Cc3lMU5E9iQ790kdmBxOagbw6Ul4E4i+zQyOVc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWReX8Usplnb++7V7PxL/FM3XZ5RMM/p0pEtgpV18hu95 lokrdy0u6OUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAiujaMDG0bpu+7HrVbm7NF IdY9ZqcOK9vMRcKncn0uR07m/vfvzC9GhkX/Gh4VBMWX/hbM8jm15df+sFW111/y/WF7967oa+h bGy4A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 09, 2026 at 07:28:55PM +0800, Menglong Dong wrote:
-> On 2026/4/8 21:21 Jiri Olsa <olsajiri@gmail.com> write:
-> > On Wed, Apr 08, 2026 at 02:21:07PM +0800, Menglong Dong wrote:
-> > > The fsession attach type is missed in the verifier log in
-> > > check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id().
-> > > Update them to make the verifier log proper. Meanwhile, update the
-> > > corresponding selftests.
-> > > 
-> > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > > Acked-by: Leon Hwang <leon.hwang@linux.dev>
-> > > ---
-> > > v2:
-> > > - add a missing FSESSION in bpf_check_attach_target()
-> > > ---
-> > >  kernel/bpf/verifier.c                               | 10 +++++-----
-> > >  tools/testing/selftests/bpf/prog_tests/exceptions.c |  8 ++++----
-> > >  tools/testing/selftests/bpf/verifier/sleepable.c    |  2 +-
-> > >  3 files changed, 10 insertions(+), 10 deletions(-)
-> > > 
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 594260c1f382..beb660b4c3ec 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -11757,7 +11757,7 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
-> > >  
-> > >  	if (type == BPF_PROG_TYPE_TRACING) {
-> > >  		if (!bpf_prog_has_trampoline(env->prog)) {
-> > > -			verbose(env, "func %s#%d supported only for fentry/fexit/fmod_ret programs\n",
-> > > +			verbose(env, "func %s#%d supported only for fentry/fexit/fsession/fmod_ret programs\n",
-> > >  				func_id_name(func_id), func_id);
-> > >  			return -ENOTSUPP;
-> > >  		}
-> > > @@ -25561,7 +25561,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> > >  	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
-> > >  	if (!btf) {
-> > >  		bpf_log(log,
-> > > -			"FENTRY/FEXIT program can only be attached to another program annotated with BTF\n");
-> > > +			"FENTRY/FEXIT/FSESSION program can only be attached to another program annotated with BTF\n");
-> > 
-> > I wonder this should say 'Tracing program...' instead,
-> > we have other tracing types not covered in this error
-> > 
-> > jirka
-> > 
-> > >  		return -EINVAL;
-> > >  	}
-> > >  	t = btf_type_by_id(btf, btf_id);
-> > > @@ -25597,7 +25597,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> > >  		if (aux->func && aux->func[subprog]->aux->exception_cb) {
-> > >  			bpf_log(log,
-> > >  				"%s programs cannot attach to exception callback\n",
-> > > -				prog_extension ? "Extension" : "FENTRY/FEXIT");
-> > > +				prog_extension ? "Extension" : "FENTRY/FEXIT/FSESSION");
-> 
-> I guess that we'd better use "Tracing" instead of "FENTRY/FEXIT/FSESSION"
-> here too?
+On Wed, 01 Apr 2026 11:28:01 +1100, Aleksa Sarai wrote:
+> These tests were written in the early days of selftests' TAP support,
+> the more modern kselftest harness is much easier to follow and maintain.
+> The actual contents of the tests are unchanged by this change.
 
-ah right lgtm
+Applied to the vfs-7.2.misc branch of the vfs/vfs.git tree.
+Patches in the vfs-7.2.misc branch should appear in linux-next soon.
 
-jirka
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.2.misc
+
+[1/4] selftests: move openat2 tests to selftests/filesystems/
+      https://git.kernel.org/vfs/vfs/c/4ac6d5007161
+[2/4] selftests: openat2: move helpers to header
+      https://git.kernel.org/vfs/vfs/c/4bbc575d97eb
+[3/4] selftests: openat2: switch from custom ARRAY_LEN to ARRAY_SIZE
+      https://git.kernel.org/vfs/vfs/c/20321927da56
+[4/4] selftests: openat2: migrate to kselftest harness
+      https://git.kernel.org/vfs/vfs/c/1993b7daaf1f
