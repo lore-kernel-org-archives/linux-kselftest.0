@@ -1,64 +1,159 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8593C33BBA2;
-	Thu,  9 Apr 2026 13:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1523C276E;
+	Thu,  9 Apr 2026 13:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775741982; cv=none; b=T2b1aoJJ6p5nFqHum3vEEwzcLARiyCh5pXEFYgLxzN72hptkr6T+aoB/ZUyu5bdcTxOrGNYI598ItkwSUJP9soF0ahkLO4vOG1+E0cZOnhcRJq90p7nMGo8z0RbLqUu2CTatDUhPPR3V7BNjX/dJEu63L/fpprc+l4JZTKM/0oA=
+	t=1775742313; cv=none; b=o+5sUy6PUm5fTC5I5Kpv5rEuLWCWEDznK9RA69fw/UI0KoXLEU+SWKuyuZ7CqBhL1g0lcgsZlaQSFafYxt2wkW6Rg0I5fD6tX8b7GauwOrbCp8lX30qD2gI5sEoyuCoi84suZkJYSVwQKV9vQH9D2g0xlnLbL5ZDVYKD5I8QB7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775741982; c=relaxed/simple;
-	bh=DYLjldAdnScOnFQ3m1c1iYIMhoWkA1ikgUOXjvCtsAY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uc0zGzpRMxRR6s0hbm15owxTM1P3s4DXtW1dn9jc+7cuLFjo3CUNVKhMjqWr/5giAmyZOh4kbID/b36OynHS/7n/z/bJArttoZ4IIW5s7R9nDyB9pa2SwWzcBnzkOf8705NK0z9Xz3FqERHE8+XQmpFVlhvPL5zrPUdUWuviKMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3AeqFhz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775742313; c=relaxed/simple;
+	bh=eq8if797wFl6ufcGFq/diuqKdbrPEilao+Lf3/c2Jaw=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hr4QGXURHWiMYNnPTM9SVhOoZIXwzb23SmIMzFFaTUhsbmgmdU5WogOY4UWiozu4UvODpOSvmllsTSLIkKdvZiVuy834EmTbhFZQ1vfI66SVsFHtWm/etcXvSagBpKRUn1TGROShfphOwYC2cfgHRjm553FqdWdwele5IJIgjLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EbJEneOG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3AeqFhz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964CBC4CEF7;
-	Thu,  9 Apr 2026 13:39:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EbJEneOG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C6EFC4CEF7;
+	Thu,  9 Apr 2026 13:45:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775741982;
-	bh=DYLjldAdnScOnFQ3m1c1iYIMhoWkA1ikgUOXjvCtsAY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=S3AeqFhz39K5zU4799CepbX1Bw5lVKHZmsNzu83ePyMhGPQSy9FaiWVuhad2AAo0S
-	 We4cZVI8db31HcaGvoiw6gVUW1azPU+WpDWJld2kJW38HoN3oDWS5Ujgr9LZbG7cSt
-	 PpyU3pSL5X0+7YKZvkK28I/He2ej4pcLS8k+w5OtStkwrQNff2IjtNJ8rpbJdcIteA
-	 85I7ZexERvhNlKtIS/3+8EqmOEPo3s44qnPt/YCKFsylq2pjfQIwKsT37X8mWMqt6E
-	 p7HJbowjxX1vWXUOfBiINLuTIYhwDVsNI/+mB6vXo3P24ArL1I3CLFPAYVAZvzsfsa
-	 01M2lllB3YEZQ==
-Message-ID: <389aba68-10b9-4881-a5a8-551dc66f729d@kernel.org>
-Date: Thu, 9 Apr 2026 14:39:38 +0100
+	s=k20201202; t=1775742312;
+	bh=eq8if797wFl6ufcGFq/diuqKdbrPEilao+Lf3/c2Jaw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EbJEneOG7FTCc3lWUwOtZr9eysP74IJKxUgTvtOM0rsjRRUbCBE1ARNjGHIQ9/40h
+	 M4Y8T03KS8vyz2tlMsE1BrfuD3TN3/wPU1YQGOzOQPKvkIzpHre84BerUHsFDsYRUy
+	 PiDoiyBfflr2JF5f+Q1GEEKjJ4VZM6MNYJ3HxQOXf9ojT8vKXeXWWPjxJdDwZ2BIHI
+	 HN9ls3H14GV/0ricbKGpXcFkbB7LxS6IFuygZYuSUvABSw1wCYz6Y/VzJq/CERGn41
+	 pj1u+gmXGlaS+xqzcIoumcZ4p+1fR+iv1x+AKJtY8GmAl0vXK4nNUgXoe1yFrRrL4r
+	 JYAsgy3RZgCyQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wAph0-0000000AGYy-1SET;
+	Thu, 09 Apr 2026 13:45:10 +0000
+Date: Thu, 09 Apr 2026 14:45:09 +0100
+Message-ID: <86v7e02qoq.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "Woodhouse, David" <dwmw@amazon.co.uk>
+Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"shuah@kernel.org"
+	<shuah@kernel.org>,
+	"yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+	"joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com"
+	<catalin.marinas@arm.com>,
+	"nathan@kernel.org" <nathan@kernel.org>,
+	"pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>,
+	"arnd@arndb.de" <arnd@arndb.de>,
+	"kees@kernel.org"
+	<kees@kernel.org>,
+	"will@kernel.org" <will@kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"oupton@kernel.org"
+	<oupton@kernel.org>,
+	"rananta@google.com" <rananta@google.com>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+	"linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>,
+	"eric.auger@redhat.com"
+	<eric.auger@redhat.com>
+Subject: Re: [PATCH 2/3] KVM: arm64: vgic: Allow userspace to set IIDR revision 1
+In-Reply-To: <ffe9de5106d999365389c3ab17f357409dac1047.camel@amazon.co.uk>
+References: <20260407210949.2076251-1-dwmw2@infradead.org>
+	<20260407210949.2076251-3-dwmw2@infradead.org>
+	<87wlyhc2g4.wl-maz@kernel.org>
+	<ffe9de5106d999365389c3ab17f357409dac1047.camel@amazon.co.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 3/3] bpftool: add missing fsession to the
- usage and docs of bpftool
-To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
-Cc: daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
- emil@etsalapatis.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260408062109.386083-1-dongml2@chinatelecom.cn>
- <20260408062109.386083-4-dongml2@chinatelecom.cn>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260408062109.386083-4-dongml2@chinatelecom.cn>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: dwmw@amazon.co.uk, kvm@vger.kernel.org, shuah@kernel.org, yuzenghui@huawei.com, joey.gouly@arm.com, linux-kernel@vger.kernel.org, catalin.marinas@arm.com, nathan@kernel.org, pbonzini@redhat.com, kvmarm@lists.linux.dev, arnd@arndb.de, kees@kernel.org, will@kernel.org, suzuki.poulose@arm.com, oupton@kernel.org, rananta@google.com, linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, eric.auger@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 08/04/2026 07:21, Menglong Dong wrote:
-> Add the fsession attach type to the usage of bpftool in do_help().
-> Meanwhile, add it to the bash-completion and bpftool-prog.rst too.
-> 
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> Acked-by: Leon Hwang <leon.hwang@linux.dev>
+On Wed, 08 Apr 2026 09:39:15 +0100,
+"Woodhouse, David" <dwmw@amazon.co.uk> wrote:
+>=20
+> [1  <multipart/signed (en-US) (7bit)>]
+> [1.1  <text/plain; UTF-8 (quoted-printable)>]
+> On Wed, 2026-04-08 at 08:54 +0100, Marc Zyngier wrote:
+> > On Tue, 07 Apr 2026 21:27:03 +0100,
+> > David Woodhouse <dwmw2@infradead.org> wrote:
+> > >=20
+> > > From: David Woodhouse <dwmw@amazon.co.uk>
+> > >=20
+> > > Allow userspace to select GICD_IIDR revision 1, which restores the
+> > > original pre-d53c2c29ae0d ("KVM: arm/arm64: vgic: Allow configuration
+> > > of interrupt groups") behaviour where interrupt groups are not
+> > > guest-configurable.
+> >=20
+> > I'm a bit surprised by this.
+> >=20
+> > Either your guest knows that the group registers are not writable and
+> > already deals with the buggy behaviour by not configuring the groups
+> > (or configuring them in a way that matches what the implementation
+> > does). Or it configures them differently and totally fails to handle
+> > the interrupts as they are delivered using the wrong exception type,
+> > if at all.
+> >=20
+> > I'd expect that your guests fall in the former category and not the
+> > latter, as we'd be discussing a very different problem. And my vague
+> > recollection of this issue is that we had established that as long as
+> > the reset values were unchanged, there was no harm in letting things
+> > rip.
+>=20
+> What if the guest boots under a new host kernel and finds the group
+> registers are writable, and then is live migrated to an old host kernel
+> on which they are not?
 
+That's your problem. KVM/arm64 never supported downgrading.
 
-Thanks for this.
+Not to mention that there is no valid GIC implementation that has RO
+group registers. All you are doing is to inflict a hypervisor bug on
+unsuspecting guests, for no good reason.
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
+> What about hibernation, if the *boot* kernel in the guest configures
+> the groups, but then transfers control back to the resumed guest kernel
+> which had not?
+
+A guest that doesn't configures the groups cannot expect anything to
+work. You'd have the exact same problem on bare-metal.
+
+>=20
+> > So what is this *really* fixing?
+>=20
+> I look at that question the other way round.
+>=20
+> KVM has an established procedure for allowing userspace to control
+> guest-visible changes, using the IIDR. First the host kernel which
+> *supports* the change is rolled out, and only then does the VMM start
+> to enable it for new launches.
+>=20
+> Even if we can address the questions above, and even if we can convince
+> ourselves that those are the *only* questions to ask... why not follow
+> the normal, safe, procedure?=C2=A0Especially given that there is already =
+an
+> IIDR value which corresponds to it.
+>=20
+> We don't *have* to YOLO it... and I don't want to :)
+
+That's hardly an argument, is it?
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
