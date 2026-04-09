@@ -1,128 +1,177 @@
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109EF2877F4;
-	Wed,  8 Apr 2026 23:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDE729430;
+	Thu,  9 Apr 2026 00:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775690879; cv=none; b=SQZtFfbXn8Rs6+xWx1JaTc2MM/OLiobovw3/T8IN2Q5AQOV+1kiNaSbHyUcM9Fi19wznNUPAIoqubnRvaaHqGB8nA+R4DxopmxVxPPN8x6kdlY9DjB5tLSxRfpi6TDnUR8S3bwxXJhwy2SG+gkoVGomxXQw4pN2Iw/TR/Gi6OrE=
+	t=1775692845; cv=none; b=Vf5nCfWqJ+c7ia1qtN2ZW6anUcu3ExLVOGkoZS5TbY5ifEH3wuQB8rQGJO8NtIn9OqScM6ppLFEOCv5lwOMjVX9DIOmHOsJ5Oq3q2m0rMw+BIcmfojKQDSm4nOdF1Co2EUiHuT+fL0oIu5+ptLtA+8WAIHtS1OxvxHCuotoC6aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775690879; c=relaxed/simple;
-	bh=cbR8XrY9+JQe/+AkET29zywNHu/7aXS6coqT/s6zM9M=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=g32AkxUoEX7GPv3jaJtgdIuqVO9aaMDMvINad/rGRBXCpE+/BldwtkO7NoB+EYEVH6MeIPnv0jZBYTlS2+4j+563A0CvBkf4Y1fZGz3fD/yYhoJtsx1aKlIONWNoQmWMutAHSI5Jc8MhOSokjC5mEFD4asHcPvOLTbfrIndr9Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=oPwacU0b; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=f12CY/bB; arc=none smtp.client-ip=160.80.4.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+	s=arc-20240116; t=1775692845; c=relaxed/simple;
+	bh=qppp/68yL1FBDErK+oJASXFD51sGuVpQH4bDIkn6sd4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=smevstitVsCeoP16fd7gGX3jq/p35SX3h1pXfLbP8cM2Ij26qTlNtobaLO9MRh4JAoLyjxj0mfO6U3p1ynQFdyJxOZo0Hxje+/idLS0vsPseC1fVK5WkKePD70yurwa0LtYJK/9Ovh0SoQVXqKLMwLyCGLXctvVOwRbXOL06pDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n04EEiiR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="oPwacU0b";
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="f12CY/bB"
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 638NRDiD027151;
-	Thu, 9 Apr 2026 01:27:18 +0200
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id E9D28120542;
-	Thu,  9 Apr 2026 01:27:08 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1775690830; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2Guc4tAMsLbLbcWb/j5eblk0rzSKs3Av6NGjOehKL8w=;
-	b=oPwacU0b+ApJos03RqXbEpoyCUgqTuulfQY2w7Mqp4uxIigAk74XIPEZ62S03EkTA6adl3
-	9+BI6ceJ97hAqKAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1775690830; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2Guc4tAMsLbLbcWb/j5eblk0rzSKs3Av6NGjOehKL8w=;
-	b=f12CY/bBg0RzDISkA3/6ygq0Epm1p7Be7cLAzq8ktOcFc1rnHvI8Mx3r8cB26EyY9CVwbk
-	v3ofywRYw5ZVjNtbB9tXRcrsm9U/He3VF10DUwqq0hm4bf2WbjRN5J9rpM6aWRZbXgkPOt
-	JmiR/XLgoLZX/DZBDIv0LWc7S26rbUVCqyPVixDilPu65nH2rAjWWyTgWCjVOOiPL0HVv4
-	pkplRexUJGMPjBbmdv0DHg4JaG4379rvnvr2U5HskpSndXNW0a9Z/gSEfXREoKVJ9HvJDK
-	ON8Nd5hMatOCOfmLu1Ia7vO2x73Lc29g+HVBT2UMPdd71sT06OYJVmlTcVFF1g==
-Date: Thu, 9 Apr 2026 01:27:08 +0200
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, horms@kernel.org, dsahern@kernel.org,
-        david.lebrun@uclouvain.be, stefano.salsano@uniroma2.it,
-        paolo.lungaroni@uniroma2.it, nicolas.dichtel@6wind.com,
-        justin.iurman@gmail.com, linux-kernel@vger.kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH net v3 1/2] seg6: separate dst_cache for input and
- output paths in seg6 lwtunnel
-Message-Id: <20260409012708.78040268c05e3285742157ae@uniroma2.it>
-In-Reply-To: <20260408032039.314762-1-kuba@kernel.org>
-References: <20260404004405.4057-2-andrea.mayer@uniroma2.it>
-	<20260408032039.314762-1-kuba@kernel.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n04EEiiR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA1AC19421;
+	Thu,  9 Apr 2026 00:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775692844;
+	bh=qppp/68yL1FBDErK+oJASXFD51sGuVpQH4bDIkn6sd4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=n04EEiiRelmZ/SxG+FaURhv7uQcCIcGYP3/75s3NiC605Ngr69+aovYWbEwoH9NL1
+	 yv4Xr9QeT2jBYiIIqk79Yj0PnEAaxmenTnicD0vVUJ2E/G1o+Q4HBV9EDvj+xAe4mC
+	 LQRPF2G7satvRydNnV6IU0kpjz7z7my+VTNB/wVx8dt09yzYgiH+kH8S4o9koNhf1R
+	 sK6YGvl4jitOVXt+b8jQQkEIWVLf9RiD+LM6JfkTNkKzwDaZ+GIe53rlkRPlku+kcl
+	 2Fcy18YfoqTtqaHCs/Xj9Dn30F9fwUr1a8fhf9wszeQXe0h4dv/DoWtiqApmxw22Pb
+	 6q4tylb2cHW9A==
+From: SeongJae Park <sj@kernel.org>
+To: Bijan Tabatabai <bijan311@gmail.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [RFC PATCH v3 00/10] mm/damon: introduce DAMOS failed region quota charge ratio
+Date: Wed,  8 Apr 2026 17:00:34 -0700
+Message-ID: <20260409000035.93742-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260408165001.8473-1-bijan311@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue,  7 Apr 2026 20:20:38 -0700
-Jakub Kicinski <kuba@kernel.org> wrote:
+On Wed,  8 Apr 2026 11:48:27 -0500 Bijan Tabatabai <bijan311@gmail.com> wrote:
 
-> This is an AI-generated review of your patch. The human sending this
-> email says "Seems orthogonal but also legit"
-> ---
-> seg6: separate dst_cache for input and output paths in seg6 lwtunnel
+> On Mon,  6 Apr 2026 18:05:22 -0700 SeongJae Park <sj@kernel.org> wrote:
 > 
-> This commit splits the shared seg6 lwtunnel dst_cache into separate input
-> and output caches to prevent blind reuse across different routing contexts.
+> Hi SJ,
 > 
-> > diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
-> > index 3e1b9991131a2..d6a0f7df90807 100644
-> > --- a/net/ipv6/seg6_iptunnel.c
-> > +++ b/net/ipv6/seg6_iptunnel.c
+> > TL; DR: Let users set different DAMOS quota charge ratios for DAMOS
+> > action failed regions, for deterministic and consistent DAMOS action
+> > progress.
+> > 
+> > Common Reports: Unexpectedly Slow DAMOS
+> > =======================================
+> > 
+> > One common issue report that we get from DAMON users is that DAMOS
+> > action applying progress speed is sometimes much slower than expected.
+> > And one common root cause is that the DAMOS quota is exceeded by the
+> > action applying failed memory regions.
+> > 
+> > For example, a group of users tried to run DAMOS-based proactive memory
+> > reclamation (DAMON_RECLAIM) with 100 MiB per second DAMOS quota.  They
+> > ran it on a system having no active workload which means all memory of
+> > the system is cold.  The expectation was that the system will show 100
+> > MiB per second reclamation until (nearly) all memory is reclaimed. But
+> > what they found is that the speed is quite inconsistent and sometimes it
+> > becomes very slower than the expectation, sometimes even no reclamation
+> > at all for about tens of seconds.  The upper limit of the speed (100 MiB
+> > per second) was being kept as expected, though.
+> > 
+> > By monitoring the qt_exceeds (number of DAMOS quota exceed events) DAMOS
+> > stat, we found DAMOS quota is always exceeded when the speed is slow. By
+> > monitoring sz_tried and sz_applied (the total amount of DAMOS action
+> > tried memory and succeeded memory) DAMOS stats together, we found the
+> > reclamation attempts nearly always failed when the speed is slow.
+> > 
+> > DAMOS quota charges DAMOS action tried regions regardless of the
+> > successfulness of the try.  Hence in the example reported case, there
+> > was unreclaimable memory spread around the system memory.  Sometimes
+> > nearly 100 MiB of memory that DAMOS tried to reclaim in the given quota
+> > interval was reclaimable, and therefore showed nearly 100 MiB per second
+> > speed.  Sometimes nearly 99 MiB of memory that DAMOS was trying to
+> > reclaim in the given quota interval was unreclaimable, and therefore
+> > showing only about 1 MiB per second reclaim speed.
+> > 
+> > We explained it is an expected behavior of the feature rather than a
+> > bug, as DAMOS quota is there for only the upper-limit of the speed.  The
+> > users agreed and later reported a huge win from the adoption of
+> > DAMON_RECLAIM on their products.
 > 
-> [ ... ]
-> 
-> > @@ -504,7 +505,7 @@ static int seg6_input_core(struct net *net, struct sock *sk,
-> >  		/* cache only if we don't create a dst reference loop */
-> >  		if (!dst->error && lwtst != dst->lwtstate) {
-> >  			local_bh_disable();
-> > -			dst_cache_set_ip6(&slwt->cache, dst,
-> > +			dst_cache_set_ip6(&slwt->cache_input, dst,
-> >  					  &ipv6_hdr(skb)->saddr);
-> >  			local_bh_enable();
-> >  		}
-> 
-> This code appears to cache the dst entry resolved just prior by calling
-> ip6_route_input(skb).
-> 
-> Does ip6_route_input() assign a NOREF dst to the skb?
-> 
-> If so, this dst is protected only by RCU. If the underlying route is
-> concurrently deleted, its refcount can drop to zero. When
-> dst_cache_set_ip6() is called, it attempts to use dst_hold(dst).
-> 
-> If the refcount is already zero, dst_hold() will warn and skip incrementing
-> the refcount, but dst_cache_set_ip6() will still store the pointer.
-> 
-> Could this cause the cache to hold a dangling pointer, leading to a
-> use-after-free once the RCU grace period expires?
-> 
-> Should this path use skb_dst_force(skb) or dst_hold_safe(dst) to safely
-> upgrade the dst to a refcounted reference before it is cached?
-> -- 
-> pw-bot: cr
+> Thanks for this series. This is a problem I have come across and am looking
+> forward to seeing this land.
 
-Thanks Jakub.
+Thank you for acknowledging.  I'm hoping this to land on 7.2-rc1.
 
-It does seem orthogonal to the dst_cache split and worth investigating.
-I'll take a look.
+[...]
+> > DAMOS Action Failed Region Quota Charge Ratio
+> > =============================================
+> > 
+> > Let users set the charge ratio for the action-failed memory, for more
+> > optimal and deterministic use of DAMOS.  It allows users to specify the
+> > numerator and the denominator of the ratio for flexible setup.  For
+> > example, let's suppose the numerator and the denominator are set to 1
+> > and 4,096, respectively.  The ratio is 1 / 4,096.  A DAMOS scheme action
+> > is applied to 5 GiB memory.  For 1 GiB of the memory, the action is
+> > succeeded.  For the rest (4 GiB), the action is failed.  Then, only 1
+> > GiB and 1 MiB quota is charged.
+> > 
+> > The optimal charge ratio will depend on the use case and
+> > system/workload.  I'd recommend starting from setting the nominator as 1
+> > and the denominator as PAGE_SIZE and tune based on the results, because
+> > many DAMOS actions are applied at page level.
+> 
+> This makes sense, but the quota is also considered when setting the minimum
+> allowable score in damos_adjust_quota(), which, to my understanding, assumes
+> that all of the all of a region's data will by applied. If an action fails for
+> a significant amount of the memory, a lower score than what was calculated in
+> damos_adjust_quota() could be valid. If that's the case, the scheme would be
+> applied to fewer regions than strictly necessary.
 
-Andrea
+Good point, you are right.
+
+> 
+> As you mention above, this is not a correctness issue because the quota only
+> guarantees an upper limit on the amount of data the scheme is applied to.
+
+I agree.
+
+> Additionally, it may very well be true that what I listed above would not be
+> very noticeable in practice.
+
+I guess it is hopefully true, for following reason.
+
+The score for each region is calculated as a weigted sum of the access
+frequency and the age of the region.  To avoid DAMOS action is repeatedly
+applied to only a few regions, we reset age of regions after a DAMOS action is
+applied to the region, regardless of the action failure.  So, periodically the
+score of the regions having the action unapplicable region will get low, make
+no big impact to the minimum score threshold calculation.
+
+But real data could say something different.  I will be happy to be proven
+wrong my real data. :)
+
+> I just thought this was worth pointing out as
+> something to think about.
+
+Indeed.  Thank you for pointing out.  Nonetheless this is not a new issue that
+introduced by this patch series.  And the impact is not clear at the moment.  I
+will be happy to revisit this in parallel to this patch series.
+
+
+Thanks,
+SJ
+
+[...]
