@@ -1,166 +1,109 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59AA137F8AC
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 08:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04733AA4F2
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 09:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775724715; cv=none; b=l9DSBkeGFBFnTZN4syByFHSgKAYhjJs2mTSO+kRndXxGg1vAH3LPG8rWyh8f7x/ylRQFJXQRY6HETazOqnf8NK4OHg+B2MwFXI4cnZwQihr2Z1DdUapscMmmtI9i1XCBF/Dk5RjK8PpjdOjl5E+n6r38OpQDch8m8vd0muW9G6Y=
+	t=1775725881; cv=none; b=s4O+Cs3rff9vFbDBnoB0z0h+wB0c0gjV67HaxIxGQuhTPUo9CE7rQiaSpxnj1EAEXnt4XLnguCE5NrHkiMyFSLKAvA/wqkew2KY0XFaYXhecDLp3HWI7jbnMuVbnSBYwihl3a1e0gJxUOlogTQw8huPLV+T7Zi+PrHgPliQgNvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775724715; c=relaxed/simple;
-	bh=inmx+R9rV6e4qchz2coETZpaUi+iT/bHsLdKB7Z+Trw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NtVVIRDmkmh17fbYBgzlWQ3YsvxOEZc+jvAV8o/QZdR+7a4wGrbjsB6jFFr00DAdXyR8pQICOCGfLm9F8CFnF6vHN/0ZMgV11EBcTQGTa63YZEiaB03X73rWVwq5fPcluJbAEOWqrZAqVTre8xrHqJCteLBnVcajg5a3WEm9YMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1/6mHsbJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zKA35l6H; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1/6mHsbJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zKA35l6H; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1775725881; c=relaxed/simple;
+	bh=EwaLLf5jOk2+IkPFrBBMcFB3CuCjf2P4D7wJT+f52xA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q6lGfR1QymcNkF60F7wqtOVcUynmdZtGh2MIDprXMNsgoweITS+6b+VJYeKmNSktH6EA4ZgidGEp/KQSelRQazULz/kFeoOdYKZV7mAyEi9cS/OTBaeQwheRDB4PDj4MkXxW+iIM/gY4NCW0xCkKhts21R3QK2hQGQp8DjMuXtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=buwHRC5U; arc=none smtp.client-ip=209.85.214.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1/6mHsbJ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zKA35l6H";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1/6mHsbJ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zKA35l6H"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8A7BB4EE4B;
-	Thu,  9 Apr 2026 08:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1775724712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S3UzexDVgj3hY9DW/GeYeGvfNpeCar+zlMKW2FpGQGE=;
-	b=1/6mHsbJZhTkDFD+R641iqLHXBrz3ldYShDidr0cDdCyGKoyiyl4PtofD2WC+Y6FZl6xzG
-	rHX3DQKy16EHVdaLBNkD8+XyrOLfHdG/5BHrE5BtVSnOVt/g2z4quNErwzFc15LLGQKdVe
-	o8D6eosGdmB7kfRXYKk0FFHn6Ea9eRQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1775724712;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S3UzexDVgj3hY9DW/GeYeGvfNpeCar+zlMKW2FpGQGE=;
-	b=zKA35l6HIsWaGbm41z3H5VCAGv6L9t/7wXvibqa7azITS04o8+vkqkoa52a2miY9val6ei
-	/bp5fTSZh7xdIzBA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1775724712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S3UzexDVgj3hY9DW/GeYeGvfNpeCar+zlMKW2FpGQGE=;
-	b=1/6mHsbJZhTkDFD+R641iqLHXBrz3ldYShDidr0cDdCyGKoyiyl4PtofD2WC+Y6FZl6xzG
-	rHX3DQKy16EHVdaLBNkD8+XyrOLfHdG/5BHrE5BtVSnOVt/g2z4quNErwzFc15LLGQKdVe
-	o8D6eosGdmB7kfRXYKk0FFHn6Ea9eRQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1775724712;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S3UzexDVgj3hY9DW/GeYeGvfNpeCar+zlMKW2FpGQGE=;
-	b=zKA35l6HIsWaGbm41z3H5VCAGv6L9t/7wXvibqa7azITS04o8+vkqkoa52a2miY9val6ei
-	/bp5fTSZh7xdIzBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8D87B4A0B3;
-	Thu,  9 Apr 2026 08:51:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id T9PhHqdo12k4JwAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Thu, 09 Apr 2026 08:51:51 +0000
-Date: Thu, 9 Apr 2026 09:51:49 +0100
-From: Pedro Falcato <pfalcato@suse.de>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: anthony.yznaga@oracle.com, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, david@kernel.org, 
-	ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org, 
-	surenb@google.com, mhocko@suse.com, jannh@google.com, Jason@zx2c4.com, 
-	shuah@kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/mm: verify droppable mappings cannot be
- locked
-Message-ID: <urtokyyat4gw3zvfffdpz5yq6pvwrzjvc3cttpps2xiuucflzz@ujutvveagq2l>
-References: <20260402235933.10588-1-anthony.yznaga@oracle.com>
- <20260402235933.10588-3-anthony.yznaga@oracle.com>
- <20260403123120.82cb5becb19e1b572d474394@linux-foundation.org>
- <83b56ffb-6e2e-4c9b-b0cf-9f04b61ebe7f@oracle.com>
- <20260408140251.6158aa7a56f71128471f327e@linux-foundation.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="buwHRC5U"
+Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-2adbfab4501so3125185ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 02:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775725878; x=1776330678; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JOwXxXxMUC6OWtWELmNSlvZ5InMUhdFGYBRE1vTG+dk=;
+        b=buwHRC5UbXNhn4ekMRpjCIGPNbdlddIKbnOyA30j7feCZjUtJpAMo2Sz1hgiws+x3Y
+         A7lpA0pQvEi81e9sZusV9JJZ0PWEMtJelALEWDQXHModRewxPQDaob0GHxEX4M57EiD7
+         7mhzFxrnyR2qO3HBmM45Gfsh5XJjFI/MtqCa4q2HBTIkvJPSFg/bTPAZpwIe9Nh4VG46
+         mXdNe8w2ylw43QYP+NOz0iIRatTxSTDQ7LnOyC2hKtrYz2SthF7aNVjEcK+9Sg74PgGs
+         egpugyasmPlhIp1e0mBHzRj/pNje46SOSCZwrdSv15uiMF/WTmaJJVKeX6xgrQEncsKM
+         Hkxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775725878; x=1776330678;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JOwXxXxMUC6OWtWELmNSlvZ5InMUhdFGYBRE1vTG+dk=;
+        b=rIlXR8bjehcgecsW+u6i+Uz9Azo18nY89/D/HeG/A0dNp+VoFb2CU9DPjqhVNtoxSe
+         paENG/aJN55a2lYZ+n8EKYa42iLAp2Gwe5eHPZVaLnd9N7KN5yVXw3FEx44naWge0qdp
+         1mQpmYp2pMX31tJfNfnvGcwCl5zo5neE1Jit+jnzltuicF+cXPesgwHH8Ij6xxf5kgaB
+         vtB7zzIhydf1TcfZv30tmKCa5zEznRIw7fb26M+hd869C10jI01u30pu3YUixaM0rMjC
+         mz4Q893PxR1eIK2JnEsl4CJ8hZ4cliYUILSd+V0QR2pV8wK+eZWQlRds/pVMz6sVhuUd
+         gxYg==
+X-Forwarded-Encrypted: i=1; AJvYcCWyKJCbq/ISRByI+hyvjFrWJPakqR0QmoCAEhzNy7QMJzaNxKUidI8R9yWT3sm46iC2nGwSxElCq7MObNxqqI0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyhj3OCsI0gVwKbtmOAGLz/6ThBU6jvtF3iwinhlFO1AWKC3r78
+	c6PwGNBh1T80h/lr28G25V99ckUOvSJUNtXYEGMsE7e5XuR5TVHRWyDw
+X-Gm-Gg: AeBDietnhnfjak1U+SCDa8jdhSEcIMaf+M3Yk4Fpr+MikmctFQM43t6p7optOfT9KQa
+	FbwnjC7ACSTAVs8xpRiHVWZsuUMjs2sKawl0gNUq8xEx89TqCvrjwzqZIZZAba5yxkiWKMO2dVR
+	DghqAzhdZxoH9t77VxKykQh3mkLo/E4Ki56iIRzEeqAsgsYzBZ2QwJJGqh3/I1j5nS4IlxENVfS
+	CyY2v+uxuLBvtd/3ONUDlXrvJcKArBTZTUXsps4nLhhCv+dK+EsQH49N26/wtUy14x8p0WKiZvG
+	OAIz0aEOzEJ/nEiJ2BOAfYDVME1lpJdruMILYgWHKM+M9axufVCcjSsv5JJWrZBMbOTVv0P3g8Y
+	U56LX1hwfylZ/omOhjRf24ryQx7iX2LSCna850BBcYFIuuRxHHnSwbK2YDDyrwN2R9I6CrSv+RP
+	k9ShWUrVwSfKyOn2xO+EtLog==
+X-Received: by 2002:a17:903:38c7:b0:2b2:67ca:5fff with SMTP id d9443c01a7336-2b2c73c64f3mr29638575ad.28.1775725878037;
+        Thu, 09 Apr 2026 02:11:18 -0700 (PDT)
+Received: from laptop ([2406:5900:1154:b176:214:1c7e:a705:3905])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749a2e42sm213540125ad.56.2026.04.09.02.11.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Apr 2026 02:11:17 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	shuah@kernel.org,
+	Woojin Ji <random6.xyz@gmail.com>
+Subject: [PATCH] selftests/bpf: fix const qualifier in fexit_bpf2bpf test
+Date: Thu,  9 Apr 2026 18:11:01 +0900
+Message-ID: <20260409091101.364091-1-random6.xyz@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260408140251.6158aa7a56f71128471f327e@linux-foundation.org>
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MISSING_XM_UA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url]
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 08, 2026 at 02:02:51PM -0700, Andrew Morton wrote:
-> On Wed, 8 Apr 2026 13:35:42 -0700 anthony.yznaga@oracle.com wrote:
-> 
-> > 
-> > On 4/3/26 12:31 PM, Andrew Morton wrote:
-> > > On Thu,  2 Apr 2026 16:59:33 -0700 Anthony Yznaga <anthony.yznaga@oracle.com> wrote:
-> > >
-> > >> For configs that support MAP_DROPPABLE verify that a mapping created
-> > >> with MAP_DROPPABLE cannot be locked via mlock(), and that it will not
-> > >> be locked if it's created after mlockall(MCL_FUTURE).
-> > > There are a few queries from the AI reviewbot;
-> > > 	https://sashiko.dev/#/patchset/20260402235933.10588-1-anthony.yznaga@oracle.com
-> > 
-> > Interesting. Of the two issues, one is certainly legit. I need to add an 
-> > munlockall() on early return from test_mlockall_future_droppable().
-> 
-> Cool.
-> 
-> > For the other, the question posed was whether the tests should handle 
-> > possibly being run on an older kernel that doesn't implement 
-> > MAP_DROPPABLE. It seems to me to that a selftest should not be expected 
-> > to work (or even necessarily compile) on kernels older than when the 
-> > selftest was introduced, but I don't want to assume.
-> 
-> I don't know that there's any policy on that.  My attitude is that
-> selftests are not intended to be forward- or backward-compatible. 
-> That's why we ship them with the kernel source!
-> 
-> If we get a selftests fixup then I do like to backport that into
-> earlier kernels if appropriate, to keep those in good shape.  And that
+prog_name is an array of const char * strings, so strstr() returns a
+pointer into const data.
 
-/me puts on his gecko-shaped distro kernel hat
+Store the result in a const char * to avoid discarding the const
+qualifier.
 
-Yeah, adding selftests and selftests fixes to (upstream) stable is great.
-Particularly when it comes to bugfixes (or CVEs) they are quite handy to
-verify the fix is in place and works properly.
+With GCC 15 this triggers -Werror=discarded-qualifiers and breaks
+the build of tools/testing/selftests/bpf.
 
-> has the effect of reducing people's motivation to run a later kernel's
-> selftests on their current kernel.
-> 
+Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yeah. Some people do that but... to each, their own :) It should not be
-supported upstream.
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index f29fc789c14b..d8225da4c1af 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -111,7 +111,7 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
+ 		struct bpf_link_info link_info;
+ 		struct bpf_program *pos;
+ 		const char *pos_sec_name;
+-		char *tgt_name;
++		const char *tgt_name;
+ 		__s32 btf_id;
+ 
+ 		tgt_name = strstr(prog_name[i], "/");
 -- 
-Pedro
+2.53.0
+
