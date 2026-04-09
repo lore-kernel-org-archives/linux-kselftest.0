@@ -1,116 +1,79 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146702A1BF
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 01:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310BA366563;
+	Thu,  9 Apr 2026 02:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775699411; cv=none; b=hsxUdOtC3xmoE8byPKm8UVZLAQs9QAYDlp+LWxOyrxhBFwCwV1uyA4m0SZiCEv7HrzgFgYx4XkbXyX172GvyBmoppc1O9umlZILqTHt9QEg24WN7NC2MHEoPtt4uQL32/gZuw73vpUxzm5wXShIEj0ugqtfb+kTpvSJ6C+BXKmw=
+	t=1775702441; cv=none; b=nyPiENJl7Bt5rE0eW1XgyqcboRve1evdBUs5galSF5OPt+ZXPpZc3UOYa59JvT1xmC0XMNXLG1A28tskDEoBD655Xk8p2dxZajpbkKpH2ySUN+VNS4+No1aC9fri8No2065v6GMeCzpBgDQqbyQcH9V9Xyi1R351KwycJQyp/Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775699411; c=relaxed/simple;
-	bh=GhfndPD4+OKCpF/SdEHNOJ9ZS7SHzh1F9MEHZdeuVuA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XQuts5Kzpn3RjFKBAN1hc6FJgHlMoz9Mrk+BNcf+stORJ/8YAbywGrJTikdV4+Ud8jCK2A/1MEw5XWIwGa3YAdR02xvKbwmTSyNTZ85vs9Na5ArRMcfjRLQVIzNFlgIb8LD54nQJ0I31b+gePYQwvNsOxrSK9ZUpdZ5TEWEzuMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VY8M9GRs; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1775702441; c=relaxed/simple;
+	bh=9AS6lnn0pG0xFnIq6j4LI7C76y5no8P+4QUSujsOFdg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=MClD2M8TBZ26UKT9hVYiZa8p6p320svH/Diu3yhA/IrXavP0qef7WmBg2YpaQNjjF99XObs6j2RDrnd9sJkvRXvA0IZgc0jCcHBowKJlee/1HQUGImmwlC/wNu6HWr9bVc2NSWYUclfEvyAvdWomIjqwAX3jpbcCXtCOlDDX0q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QRxGSesu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VY8M9GRs"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c741b950511so192847a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2026 18:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775699409; x=1776304209; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IjzeQXG7bo5x2g7969Mw9H4IWYa/nql9R5zj42Bkizk=;
-        b=VY8M9GRs7Io5RZqFoYkZz+8toiH9N9GQswxQTsvSAF6gObNlV/5tyIghwj5rPMqHOO
-         4REWq4ojnx0X7HHIrSGqVdeEJMvyKHJlO5ZMvCisReqVWCTBOM0zyr1nBC4or3HB8ElF
-         Rs91UhvOIEPt9R3+DVRFbG/rxYTQqEc9qJUpuuICDwyd10C1J/wXSUozgG5/vujfFPHt
-         OkMba0Yk7P/opfo8RYv8pEwz+IpdHKLImS0XhU8P/FlTc7ESYwoSZzGALXKb6YEkL/+z
-         KwgFnOetIAetzY6n6eHOW2kL36LUGW9jdPhFGPdGinhvHquZ35PPUb3fFnLJk9q7mUsS
-         776Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775699409; x=1776304209;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IjzeQXG7bo5x2g7969Mw9H4IWYa/nql9R5zj42Bkizk=;
-        b=R+48NCUnzdq8Y3p3wkOTS+2pNNfKZsCiVVCRjKfeFzgkBSaQrUMHATermIs/E365WZ
-         URIZ9lXi89FB7qaktEMW0YUpHGyewRB0RFAnkfEQZmM0J+u33nid9QstbOZExxrGEuUd
-         rLaezb2RFHSDUCvYeFm2Ns8VTC4bxQ4EboxVw9YTPe5fOZ1pFgP0e/29CtfUhP3PU7fd
-         i3PVmZmrQ8b24xJRiLhb1P8v+YWHpiLUWwBy9zfKnl1E+owK3uJ+2ewPn+ZfHi9ibXOE
-         wrgi7g5cN1KB42U3EVlFR0D2LknPc7iAOzfxMXFLy3gpDU3JFdfIg9MHw3rz3YrUdVJJ
-         p+WQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXJ/UlHzznzyh+dMRrDhyVdtJ9NCfYHqxWt9KhBn/bg8DtIqbGYkRfobZovcL8/54rr87PqWLiIrEb1PhMQqoQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymTA2NoCYko9Rj/eEeYtm9+4buxYFGwo5M2pUl05JYAB0ro2Fc
-	YImYnWsV9XaBM6b8k98V60uqUhLqiU1cinARNYGSBG0vAmYrrrIRna8ts9vFuiK3oNNPN+UukK2
-	J8I5klg==
-X-Received: from pfop2.prod.google.com ([2002:a05:6a00:b42:b0:829:a228:6330])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3946:b0:398:8f38:441a
- with SMTP id adf61e73a8af0-39fc7ba75d7mr2248165637.0.1775699409147; Wed, 08
- Apr 2026 18:50:09 -0700 (PDT)
-Date: Thu,  9 Apr 2026 01:48:59 +0000
-In-Reply-To: <CANkEMgk16j2xzQ85JGQ4OWqeiwiVO5Gy-UfkN3omKkKizpLxiQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QRxGSesu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F7FC19421;
+	Thu,  9 Apr 2026 02:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775702440;
+	bh=9AS6lnn0pG0xFnIq6j4LI7C76y5no8P+4QUSujsOFdg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=QRxGSesugSMNVkrRxnSzxKRoqN8Tr5gjssePKysFNVhPOtl69qap39jcHt6IzQX3o
+	 PHI8eJYFo/QuJQH1+DGpQSt9CHLK6NgE6lkCg8Ut/eW6EPyOL6qOoevTbjXpiXgjjg
+	 fjew/DO4e+mVlRS+d73WohsChDJI+8EIE9VmmgoBMIjZpPxZWyd8ikPGbt8EhxNb9T
+	 9SczPPXmZYEj8BvbS+72sh8rCaONlQAa6MGxir2E40naaHScENej+ijAJv3owFi3Fc
+	 1/E0aWD4iD4MkaVMPaPG/MAlnrH91nwbUBnS0Dnp9VG8WqARyXYssWyeM3W0H89jgZ
+	 aoq94FwXxQRbg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FC543930793;
+	Thu,  9 Apr 2026 02:40:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <CANkEMgk16j2xzQ85JGQ4OWqeiwiVO5Gy-UfkN3omKkKizpLxiQ@mail.gmail.com>
-X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
-Message-ID: <20260409015007.3741559-1-kuniyu@google.com>
-Subject: Re: [PATCH net-next v6 00/10] Decouple receive and transmit
- enablement in team driver
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: marcharvey@google.com
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	horms@kernel.org, jiri@resnulli.us, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] selftests: forwarding: lib: rewrite
+ processing of
+ command line arguments
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177570241684.964658.11915982289473565445.git-patchwork-notify@kernel.org>
+Date: Thu, 09 Apr 2026 02:40:16 +0000
+References: <20260407102058.867279-1-ioana.ciornei@nxp.com>
+In-Reply-To: <20260407102058.867279-1-ioana.ciornei@nxp.com>
+To: Ioana Ciornei <ioana.ciornei@nxp.com>
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ linux-kernel@vger.kernel.org, petrm@nvidia.com, willemb@google.com,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, liuhangbin@gmail.com
 
-From: Marc Harvey <marcharvey@google.com>
-Date: Wed, 8 Apr 2026 17:10:05 -0700
-> On Wed, Apr 8, 2026 at 9:40=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> w=
-rote:
-> >
-> > It pains me to report on non-debug kernels:
->=20
-> I'm sorry to have pained you. Despite my best efforts to run with the
-> exact same environment and conditions as your CI, my teamd can be
-> killed with "teamd -k" but yours hangs (both are version 1.32 on
-> Fedora with the same kernel config).
+Hello:
 
-Considering the subsequent "kill" works on the dbg instance (thanks
-to 2400s timeout), I guess teamd is somehow stuck at SIGTERM handling
-removing team devices in teamd_port_remove_all().  (SIGTERM being masked
-sounds unlikely)
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-https://netdev-ctrl.bots.linux.dev/logs/vmksft/bonding-dbg/results/593802/4=
--teamd-activebackup-sh/stdout
-https://netdev-ctrl.bots.linux.dev/logs/vmksft/bonding-dbg/results/593802/4=
--teamd-activebackup-sh/stderr
----8<---
-[  759.819815][T21724] test_team1: Port device eth1 removed
-[  759.822323][T21724] test_team1: Port device eth0 removed
-[  790.615687][T21728] test_team2: Port device eth1 removed
-[  790.617445][T21728] test_team2: Port device eth0 removed
----8<---
+On Tue,  7 Apr 2026 13:20:58 +0300 you wrote:
+> The piece of code which processes the command line arguments and
+> populates NETIFS based on them is really unobvious. Rewrite it so that
+> the intention is clear and the code is easy to follow.
+> 
+> Suggested-by: Petr Machata <petrm@nvidia.com>
+> Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+> 
+> [...]
 
-Adding -N and letting "ip netns del" release the last netns refcnt
-and defer device destruction to cleanup_net() may help.
+Here is the summary with links:
+  - [net-next,v2] selftests: forwarding: lib: rewrite processing of command line arguments
+    https://git.kernel.org/netdev/net-next/c/fff75dba7992
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-> For v7, I=E2=80=99ll invoke "teamd -k"
-> using the timeout utility, or just increase the test timeout.
-
-+1 for the latter, maybe set timeout=3D300.
-
-daemon_pid_file_kill_wait(SIGTERM, 30) * 2 =3D 120s, but just in case.
-
-See these files for howto:
-
-  $ find tools/testing/selftests/net/ -name settings
