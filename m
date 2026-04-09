@@ -1,123 +1,110 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2580A26B777
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 19:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469C529BDBB
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 20:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775761813; cv=none; b=CtYkrlXliE7lFTF5pVo0DLJpmcNCBwyBcIkxPO0ZIYQbNQz9NXookSncUQ5NJEqarBg0ArXXDWjXsmypM+IlP2lYFqprCpu7EdaEhaHDEgtk1yXsp7qsNjEhHe5/0ryvQeLjiX3+jcAsT5Tdair5rj6Oi/ZirKhWzLnCElp6xCM=
+	t=1775766503; cv=none; b=rLslkFoM2Q5GuLANp0LQFgxpDBW9yhRvSwAOwXP/cvO2ZRDxdrOEw9NM5+FlAMaggQJkzYQxIPtNGAm25uzfPM54UDK7hacNrforqwSSy6bzVYbih8pg/zBrrRKhqt6tSvYhiZPZipSlkHsxlott4iuoMLLLmzflSpI7cZz11lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775761813; c=relaxed/simple;
-	bh=n14zN3KADu4543DLvdmzoPnsMLU7ZRDnLP/oBDxar2U=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Ykk2xet4/QtYBX31HR+vLiugD53LLa+RDhK/dz5kFc/CFpTkJLxb3LwpS53cRNR2z1p1T4Eqs3PJkRccsgBjjtX2q5vW5Y4vlMrA8txDDw7h3C1aCHi7dtyetZfI57RwQo1iGVBRNOqikZnQlFurYiuwE5aqT/aCSlGtT2+YXHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ncGZEAeX; arc=none smtp.client-ip=209.85.128.180
+	s=arc-20240116; t=1775766503; c=relaxed/simple;
+	bh=t17D4EbdduWXrTX7hugrjnsvI2RAttx70eAujI9t0fk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wot884FEIjMtpvNscpa1wM/mcTGQXhDM7iRRhVOsp2GfD75km21cgavQyaO9QImivmTkyWOFbhntcZ3OodEvmUjncnYTn2DCL7u+2gQ5RUSlwV7Mqkt1n9kUXRzPs2BBwbgL7cEyHx5huki+SbboV0We83fN9odUQ7SyvwCNAiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mmG/uT3v; arc=none smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ncGZEAeX"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7986e0553bdso13859017b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 12:10:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mmG/uT3v"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2b6b0500e06so1785107eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 13:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775761811; x=1776366611; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QprOZSDxTj82+CvyS6RGWMHqEGdQWY+21dIbE8xcXa0=;
-        b=ncGZEAeXVZPXa8rGX/kwTl/7GQlA/GjBlVcM7kf91AuVXj3iZHJb2gjgcDAKetH/WG
-         ZXsbBNqy3Q+N/AFN4J8STqpFBSAFxV8fwwDGYYaonDxaFNvjBlhcZpR2LM86xR0xenB1
-         WbHtH5AJcswbNYH11HhivHOkCxCoTcj6kd7jJqzBD7bSSWqGBs2y9T7R/3hSJkoZKOzV
-         4KxbbFhzWk+Kxoh9VwMIYgUborxDESSa57brx9i3csX10m3N4t0hmcemjoFq8oZmw48k
-         fpLqEkkgr2QVORl0dYHGO6dmfmY0dCJfEkYs53CSD3iRHKX9O+F1gV/OkCKN9agkuyGB
-         Rt3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775761811; x=1776366611;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+        d=gmail.com; s=20251104; t=1775766501; x=1776371301; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QprOZSDxTj82+CvyS6RGWMHqEGdQWY+21dIbE8xcXa0=;
-        b=rr1xScK08xtvSPIOfqHqYQ/xhbT9ZhwqMXTQq7t7XmtmQ7ocIPVIWOdVu7YxXzOZnP
-         qewtwQGK/KnwKs11jRV+XMGA4ZTLelbYUOyKYeCnMdp0KDskW+FrBBmM0URCQuEC3oxA
-         hfL7Lo9SLJqeElvQTSIuDkhVqINteP9uZqww3WdKupmo1l5Pf4yW7z9yk4PAt76y190n
-         usL7ruUNr0IazRTCkRGQhQmm2EJGOSB1+sG61wukHr3+VsXMDWNhfLDEJ8HmaDaMt3qx
-         8J0avNaE61Ae6ZkYQOCRD72RgyQOXYEfNy93+SF9SvZKEa0iOIJ3TbdlQWwzL1jDGGuP
-         7JRA==
-X-Forwarded-Encrypted: i=1; AJvYcCXbX4GoGN4foO3PxdXXqvF4V4SG0/1J2Z3KEUAYc3AJ3ABZ2oXi0MeGvIgWT8Z+T3KNjy3pZj7YQHIpwsn1IEc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlvNaCcEEc9DyEl8IA7GR+Y4W34yn4iHlAMzq39Dh+sxD2QJ4d
-	qqK6aGrDTbAP0Lhrq5EFgdrG4hv/TZdE4gmthrZsT+8A8yX8/HRxPV+V
-X-Gm-Gg: AeBDiet2fxteTVWphuUE/digiJIBRD/H1WdIqCq4Vmq1ItbusqzkX3RxXxm+C00vckR
-	zBUZRIqCXx3OXbIMtxv2Sgw1FQBoCT4SIZSAtDanYLpYbhFH90fHrC8JZKGsWGYY6N6A5scGBWA
-	y66lCaHJpz40On2UhAmkM3hI0DOxkucOBAgckHpceWmaJDNniBQcQ1CVf5uJc2pjLDS6Q9z2vPd
-	TpKWHz803tMPj54dispuMqId3J9E8OxRndtmYZTzwoS3jCjmZAUyLn+MVVnlu5mICM2fq5XyYCo
-	NAOpwjG5uPe+ee+gtub5tuEzTwiDBHYZFQo1YzXdG7PTX//hLuNGPktY0rpl3ZxyfEjoo80r7ox
-	4wE75RxS9NC/NbvRpH3mtdDDphjiT8fssppZPu5W+iv0Z+jaHhqYgCsDPseAVJAFBZYX4wZsYLI
-	h7DPdlwUJCrsrr3N/0mbJH117KNtIHy0D+fiMzqimY6qL8cqTpP3gApjZUaD+KpL57W1kq9BhIM
-	g7/
-X-Received: by 2002:a05:690c:1a:b0:79c:c51c:7f57 with SMTP id 00721157ae682-7af71479a21mr1697637b3.27.1775761811124;
-        Thu, 09 Apr 2026 12:10:11 -0700 (PDT)
-Received: from gmail.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7af3fa0618fsm2881137b3.37.2026.04.09.12.10.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2026 12:10:10 -0700 (PDT)
-Date: Thu, 09 Apr 2026 15:10:10 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- netdev@vger.kernel.org
-Cc: davem@davemloft.net, 
- kuba@kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- horms@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- shuah@kernel.org, 
- Willem de Bruijn <willemb@google.com>
-Message-ID: <willemdebruijn.kernel.b23e27d8b455@gmail.com>
-In-Reply-To: <20260409164238.661091-1-willemdebruijn.kernel@gmail.com>
-References: <20260409164238.661091-1-willemdebruijn.kernel@gmail.com>
-Subject: Re: [PATCH net-next v4] selftests/net: convert so_txtime to drv-net
+        bh=PZW4/FYr/TJOQAnQTjLdgFoQga/P4omv2yM1nIJFsTE=;
+        b=mmG/uT3v6j5FGFWbBU8YvBdA3CynvAuqIlkZ1yDC209ldYvYkzay5jwQuQaqdraGls
+         eBaaeX/yVrS+m9BlkxTrHTtInilMhq+fCVrHiqRlYl2nkk+ywKL8A6mW+QbbFz/gs9oz
+         p2r91brLrQbyKZTTrC7/F1hLchDXolBgeW9ic/kK/waKbak/7h+W9iRQQbdI8VPCS0SZ
+         KWuurkULIDIbun+3/AvqvHodVOtEYCI8+WbXsHmWx1hr7o7vrQ6KHEo8znvn2bCIDvVv
+         rzOMIgBhmmS/fwkwPYuAflk1qJ7K5WI22NhZ+mSbEtldsXWLiE9S4AYnZtaLg0Gkb4n7
+         x9dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775766501; x=1776371301;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PZW4/FYr/TJOQAnQTjLdgFoQga/P4omv2yM1nIJFsTE=;
+        b=pJy47xVNjWXFAifH/iEzvWmocJ/G26CI7sOY+pLmC2CUWiv+btTdqC0zNNadg/0wI+
+         lDKRVQd65Sa3zspve3VlhoiLhtvCOaa4ym1piIaWOg96oWQ4RrB2YO44GH1RVW6c8tdI
+         1DfJlZzZKGO76EseunHH9/i1SQj3F/4kPcA9iqWxOhm5ZWb0yKqMyEc6TY10oRwtIwLV
+         qZrvWjh1Qp8cZvBEDoa1Kvxoof8VnEqBL8xZ4dM9JN7zRj7ClAd6yRp8/Gxv5Yl9ksc5
+         TtY2RDjFxKQ9UqvL7kjMzPvf4Ry3VVAqEqXnDpoZonql++z5s5rtt5KWT3UQ53H7xA6V
+         s7OQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUpYt6/2UXg0vvnwfuqBfYlacxSXGWussINQozkhgyR6/W2Yg9JII0pLWLOkoLQ2ytM/uwOVfafkRb4HjqjPcs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/t37iRlDiONm0AL7grdflVq7OC6pPHZcwUTojlgPI2WwMncFY
+	EpRYPvr3dE64Szbyh8dYjboK8fF85jm3qthg2qXQhT9booN6hCepTMWJ
+X-Gm-Gg: AeBDieucxOzC+Yk8rhzEkQNiuglvfkvI8wajusZprYm21G2Kd4nntFTiXfOfom7b394
+	PzN2wK17NzItLFBnG+USKNq6glOuXLG5l8vqxbZb2OP6gYRA7Gka9cw1q35lK3SHoBJnwZDPy09
+	/034m47i7rKqpfQcQHsu2eE09nXXAXXAtWTzT1y4mhNQrWTXkegTDb4ha0uuO0YxeXa28Ef+y/a
+	Y056bYnnOAoyoNp8phcY7zF0hFaVFfQau6UGB05Y9hOa96E8ma8DecbhrnGzO+w542/cAQ+syN+
+	60iCCgDBsb7rqiCgFYY9/eFKNhZz7BaClxYzGKt5sYorI2RyOKRSiO7uRDo7g/EaP7FtYhVBrEh
+	ke1k76owBodlP8uvHEQk+wx3AmnD+FHcOeML6qyCGlcKIkndFdD8DTOjcCp0STxmh584fjx+gNq
+	sYOdMGyCg0WkRF4g41qxcQsVKJH4KLmz1FASKZFfmL+4MAglGWbpLfMyz/XaZAb8mXXM8dYnVoe
+	DGD4NWE+QU=
+X-Received: by 2002:a05:7301:1003:b0:2d3:dff7:13c0 with SMTP id 5a478bee46e88-2d5891766ebmr333903eec.14.1775766501331;
+        Thu, 09 Apr 2026 13:28:21 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1151:15:c24:4ad9:f660:1904? ([2620:10d:c090:500::50d6])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d55faa556esm1531480eec.8.2026.04.09.13.28.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Apr 2026 13:28:20 -0700 (PDT)
+Message-ID: <7de45664-d468-4f6a-9a0e-2bd56aaedb47@gmail.com>
+Date: Thu, 9 Apr 2026 13:28:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/2] selftests: drv-net: Add ntuple (NFC) flow
+ steering test
+To: Jakub Kicinski <kuba@kernel.org>, Michael Chan <michael.chan@broadcom.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Willem de Bruijn <willemb@google.com>, Petr Machata <petrm@nvidia.com>,
+ David Wei <dw@davidwei.uk>, Chris J Arges <carges@cloudflare.com>,
+ Carolina Jubran <cjubran@nvidia.com>, Dimitri Daskalakis <daskald@meta.com>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260407164954.2977820-1-dimitri.daskalakis1@gmail.com>
+ <20260407164954.2977820-2-dimitri.daskalakis1@gmail.com>
+ <20260409085055.0834111c@kernel.org>
+Content-Language: en-US
+From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+In-Reply-To: <20260409085055.0834111c@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Willem de Bruijn wrote:
-> From: Willem de Bruijn <willemb@google.com>
-> 
-> In preparation for extending to pacing hardware offload, convert the
-> so_txtime.sh test to a drv-net test that can be run against netdevsim
-> and real hardware.
-> 
-> Also update so_txtime.c to not exit on first failure, but run to
-> completion and report exit code there. This helps with debugging
-> unexpected results, especially when processing multiple packets,
-> as in the "reverse_order" testcase.
-> 
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
 
-> +def main() -> None:
-> +    """Boilerplate ksft main."""
-> +    with NetDrvEpEnv(__file__) as cfg:
-> +        # Record original root qdisc
-> +        cmd_obj = cmd((f"tc -j qdisc show dev {cfg.ifname} root"))
-> +        qdisc_root = json.loads(cmd_obj.stdout)[0].get("kind", None)
-> +
-> +        ksft_run([test_so_txtime_mono, test_so_txtime_etf], args=(cfg,))
-> +
-> +        # Restore original root qdisc. If mq, populate with default_qdisc nodes
-> +        if (qdisc_root):
 
-I evidently couldn't resist a touch up after running through pylint.
+On 4/9/26 8:50 AM, Jakub Kicinski wrote:
+> On Tue,  7 Apr 2026 09:49:53 -0700 Dimitri Daskalakis wrote:
+>> Add a test for ethtool NFC (ntuple) flow steering rules. The test
+>> creates an ntuple rule matching on various flow fields and verifies
+>> that traffic is steered to the correct queue.
+> Hi Michael, how accurate is the stats refresh timer in bnxt?
+> This test is seeing ~10% of flakiness on bnxt, fewer packets
+> got counted than we sent. Could be something else but I suspect
+> the stats just didn't get refreshed. We give it 25% margin right 
+> now.
+>
+> Dimitiri, this skips for some drivers because they don't auto-enable
+> ntuple filters. Looks like other selftests have the same check and also
+> skip in netdev CI. So probably a separate / follow up task but I think
+> we need to add code to enable the filters if they were disabled.
 
-Unnecessary parentheses. Only a warn. But I can resubmit irrespective
-of other concerns.
-
-Again, could add a tc helper (in a separate patch) to hide some of the
-open coded ugliness too.
-
-> +            cmd(f"tc qdisc replace dev {cfg.ifname} root {qdisc_root}")
-> +    ksft_exit()
+Sounds good, I will follow up with enabling ntuple filters across the
+selftests.
