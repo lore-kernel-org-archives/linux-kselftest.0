@@ -1,69 +1,498 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587833E1229;
-	Thu,  9 Apr 2026 15:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E9C3E1238
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 16:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775749859; cv=none; b=SFwMSjhMiZzNHPYtIo6oYtcf3MU/NtIFT2JhmZYWlBSSrAhJyKC3OqnzTRaNCQr8Vz3hrSUwB1BMk7rkXPlun7i+B8K3Tb9N8HzCUXezqRCkpTTIjuGG3RCxaOw+lwFhG3Cb4oi5MKv34MxjyUOWJGvgA5jnMPuh+CMcOtT0hZw=
+	t=1775752972; cv=none; b=XNCzy7c4apMnE7/O9avkDmNYmxNV7/5XYo+9pYf5yU4tVRgZo/jl/vMpG4LWvYeK7hhCOyE42zu9P2irT1ICB8GNplEgsxSFJzbZRrJbRHSAT4TADUzdgE6JsajhawJFgQLcCU6KIbUhb3n+5Euv8R7fDFYrvUMo23ZUJyblbU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775749859; c=relaxed/simple;
-	bh=P8/TwooUzepzV7tRpsVrGGoS6hHfaOLwSIzl/V7Hhgk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pR7HW8JDrqVbh5Wd4oQS6CxnKqGskfQrTBvomHgcfyCaPJo58X56lrMmBDmqVZh9v64yTVr178JHwomaDG8DAPFn2aB0RSUUemhbO3HsUTAxnyVWvt9le43ctrOaINkxQWnlMWuMpeMQsSWDSmnljAT0sm4S3EvA4G5D/mOEXs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMlFmv4h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775752972; c=relaxed/simple;
+	bh=Sgq4Y2LYlEbgMeNFUnSa/1pXco4jRIOwX0BgxrjG6PA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DM4RMvShbuCXB5INxR1ZygfMEUhmrJpyuazg/RYH66QqwsqqjulmuEC2N6CS5lLinZqWkl48q2hm51Qncwx54kWu9DnLDn1YnWVLSRitCQn23k3fy7erSPxafK2FUKMbu67gWS7NM7Kumd2ikAlq6lc2uVa554GQ1W2rb1DctaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rUii/3V2; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMlFmv4h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AAFEC4CEF7;
-	Thu,  9 Apr 2026 15:50:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775749858;
-	bh=P8/TwooUzepzV7tRpsVrGGoS6hHfaOLwSIzl/V7Hhgk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nMlFmv4hsj2LmhRBFVGPGfSA/euT81QmPB/WNtWGp1Hyem5Q+Lefg1cz68UkVqNav
-	 6SnQu/ueUp0oHlAuezbbTOKAL49KC0HIvhyDVraXHt+1nr23HXRPZ2+ygnRk0zos67
-	 u51rgNC7yJyKOHYbW94DY58rVkm8dFSzWUxH9uENVpf1ux5yMaE2ssM78/by9AJmbr
-	 djTYZTxWR8n8itADJNGI8OweVkBgFTfw16dxGCte2Y5HaSsSVit5FMejsZcb/zD1Q8
-	 tvBj2Gft3RxBW1O4hA8sELhMiQj1aEVT1dQORyon3AvCbKR0qyM+CAQZ7OV5h55t+P
-	 MAce+qw5Ix0NA==
-Date: Thu, 9 Apr 2026 08:50:55 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>, Michael Chan
- <michael.chan@broadcom.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Willem de Bruijn
- <willemb@google.com>, Petr Machata <petrm@nvidia.com>, David Wei
- <dw@davidwei.uk>, Chris J Arges <carges@cloudflare.com>, Carolina Jubran
- <cjubran@nvidia.com>, Dimitri Daskalakis <daskald@meta.com>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] selftests: drv-net: Add ntuple (NFC) flow
- steering test
-Message-ID: <20260409085055.0834111c@kernel.org>
-In-Reply-To: <20260407164954.2977820-2-dimitri.daskalakis1@gmail.com>
-References: <20260407164954.2977820-1-dimitri.daskalakis1@gmail.com>
-	<20260407164954.2977820-2-dimitri.daskalakis1@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rUii/3V2"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-79d991c7b6aso11761327b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 09:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775752969; x=1776357769; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AX80i7T1ua42j4E9t369tInGiMVK6HTH9mY/eVW5iS4=;
+        b=rUii/3V24kIy3XD9cLr2Z7DQRS2+/Jo5wPkmB4AKzil8nIanZWSqTJ9sWLsmFWSQVL
+         NbHO3RaJHjs3oGX4vgJlwzDiYwWSb48lE5oHgmhR8ljetk66wmN8DZEHFsD/2Xx9Be2N
+         1oIz+MW6mLM6zEZOTCZTUAT5IErI7NKbqQWgdE3j928m0iNYpfyo7Dnk6DcDSf2NjC6W
+         7rRpspkfK1Ls7lfHAqiwWQcuA5MXJxOmvVW1gMBG1iKW9z6BqGYXIaYxtfbM2cvFvSkw
+         6RkOSSjMFliCF4gu381UGOxXnFSNwHubyG7ZWlo8YsAehxCzcQxx+21ejH2lUfhUPK4u
+         rySg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775752969; x=1776357769;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AX80i7T1ua42j4E9t369tInGiMVK6HTH9mY/eVW5iS4=;
+        b=m71EPkfz7JR8QOcBPVviEqJjZeVFeCmx3wQqvjozvhStHWzUCafebCW2yNa+nyoe2p
+         +8FzeQqlm0KDdPJvxXvFP3lGQmvoU3RVdEKchd8QcshOCTQlJu2arjAJapJjyC05fopH
+         1qPrkYAoC1V7q/duiv6ExOS2dVJNZHiL2jZJGJStBKqC1cD4o6ylp45Dayc/wcIkIuEs
+         I+N5h42jJZl3d5tMHNvB4fV14IoyYxjN39LLBeam5pxj3onbncOZGmaRFSvYMLXGQaqi
+         OJcZ87rg4JnieaYuhX4sRhQr8ijwOEX1AiMrYTavtgylhD9lMMI/BfrRzxMzakMHzcCD
+         06bA==
+X-Forwarded-Encrypted: i=1; AJvYcCWFiQhhiB/S7i3VLexiXNBmeYeolwh6J9OdgOkw3JwZhLa5HZXrWAv+lupAJ2OQcVbTDf8Ucmf5NZqTjPQK77Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrwG8DaEk6xD4lpoazkRYxqdL4d2V3yIyfASEXfZcSwS2nuWSV
+	9LlPW9KjxQoYwOJkXBoOivkzrcs+opLIvpT6TpUa1wnD9ZXOds0CRYjB
+X-Gm-Gg: AeBDiesiRT3FkJ+IUtT23MhZEfsBXUfxc0zJMkfVHpsPLY19E4Wwf2sCBUB7RC0wgTv
+	BDGrl3fdd8HoTF4R2T8ZFuBKYM1daOd6A8LVtKyexz7ZxZ6e1oLfAambDGSwByjlJBvSsoG4NC2
+	0rAt8v2sOqbg9riyuADpLo2V8yQXyQNOgVES1ogVVKKjKIrHidW1vM9SecKlSZUkjoyNZuUkxbq
+	4qUqjK/0ODQK1mf3WZYOMnyCVSEg494h0G/PxdZ3LS0CoeIwaAGv5xjO9UKYiT2kESVX11nYDqD
+	PTRINmJAb+PqTUln9jzw8ZaYrEzLtJVrfZ1vS5SZOkfLbzdNGztRIyB8FuVCK8KlmpvGITAmHHB
+	0n3zm/ggD1RS596b2UrUVL26aGJaEypz2ETsRznSXFAffW9YOTqfL0YKrjBXnznVxfeKk48myO2
+	fYJFd4yCZ+rxW2c4OJkwdA8kbXHOTbgpvqjrQJzJgIoB74y2BAHb4GbSfZqJlOWcVyt5mf8sKTk
+	Do+r7kjhnuRfPPcnok0We32azM=
+X-Received: by 2002:a05:690c:698a:b0:79f:fcca:aefb with SMTP id 00721157ae682-7a4d2ff23cdmr259691937b3.12.1775752968756;
+        Thu, 09 Apr 2026 09:42:48 -0700 (PDT)
+Received: from willemb.c.googlers.com.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7af3cece87bsm1371907b3.11.2026.04.09.09.42.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Apr 2026 09:42:47 -0700 (PDT)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net-next v4] selftests/net: convert so_txtime to drv-net
+Date: Thu,  9 Apr 2026 12:40:26 -0400
+Message-ID: <20260409164238.661091-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue,  7 Apr 2026 09:49:53 -0700 Dimitri Daskalakis wrote:
-> Add a test for ethtool NFC (ntuple) flow steering rules. The test
-> creates an ntuple rule matching on various flow fields and verifies
-> that traffic is steered to the correct queue.
+From: Willem de Bruijn <willemb@google.com>
 
-Hi Michael, how accurate is the stats refresh timer in bnxt?
-This test is seeing ~10% of flakiness on bnxt, fewer packets
-got counted than we sent. Could be something else but I suspect
-the stats just didn't get refreshed. We give it 25% margin right 
-now.
+In preparation for extending to pacing hardware offload, convert the
+so_txtime.sh test to a drv-net test that can be run against netdevsim
+and real hardware.
 
-Dimitiri, this skips for some drivers because they don't auto-enable
-ntuple filters. Looks like other selftests have the same check and also
-skip in netdev CI. So probably a separate / follow up task but I think
-we need to add code to enable the filters if they were disabled.
+Also update so_txtime.c to not exit on first failure, but run to
+completion and report exit code there. This helps with debugging
+unexpected results, especially when processing multiple packets,
+as in the "reverse_order" testcase.
+
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+
+----
+
+v3 -> v4
+
+- restore original qdisc after test
+- drop unnecessary underscore in tap test names
+
+v3: https://lore.kernel.org/netdev/20260407191543.0593b5aa@kernel.org/
+
+v2 -> v3
+
+- Makefile: so_txtime from YNL_GEN_FILES to TEST_GEN_FILES (Sashiko, NIPA)
+
+v2: https://lore.kernel.org/netdev/20260405014458.1038165-1-willemdebruijn.kernel@gmail.com/
+
+v1 -> v2
+- move so_txtime.c for net/lib to drivers/net (Jakub)
+- fix drivers/net/config order (Jakub)
+- detect passing when failure is expected (Jakub, Sashiko)
+- pass pylint --disable=R (Jakub)
+- only call ksft_run once (Jakub)
+- do not sleep if waiting time is negative (Sashiko)
+- add \n when converting error() to fprintf() (Sashiko)
+- 4 space indentation, instead of 2 space
+- increase sync delay from 100 to 200ms, to fix rare vng flakes
+
+v1: https://lore.kernel.org/netdev/20260403175047.152646-1-willemdebruijn.kernel@gmail.com/
+---
+ .../testing/selftests/drivers/net/.gitignore  |   1 +
+ tools/testing/selftests/drivers/net/Makefile  |   2 +
+ tools/testing/selftests/drivers/net/config    |   2 +
+ .../selftests/{ => drivers}/net/so_txtime.c   |  24 +++-
+ .../selftests/drivers/net/so_txtime.py        |  97 +++++++++++++++
+ tools/testing/selftests/net/.gitignore        |   1 -
+ tools/testing/selftests/net/Makefile          |   2 -
+ tools/testing/selftests/net/so_txtime.sh      | 110 ------------------
+ 8 files changed, 121 insertions(+), 118 deletions(-)
+ rename tools/testing/selftests/{ => drivers}/net/so_txtime.c (96%)
+ create mode 100755 tools/testing/selftests/drivers/net/so_txtime.py
+ delete mode 100755 tools/testing/selftests/net/so_txtime.sh
+
+diff --git a/tools/testing/selftests/drivers/net/.gitignore b/tools/testing/selftests/drivers/net/.gitignore
+index 585ecb4d5dc4..e5314ce4bb2d 100644
+--- a/tools/testing/selftests/drivers/net/.gitignore
++++ b/tools/testing/selftests/drivers/net/.gitignore
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ napi_id_helper
+ psp_responder
++so_txtime
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index 7c7fa75b80c2..49a61b506f53 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -7,6 +7,7 @@ TEST_INCLUDES := $(wildcard lib/py/*.py) \
+ 
+ TEST_GEN_FILES := \
+ 	napi_id_helper \
++	so_txtime \
+ # end of TEST_GEN_FILES
+ 
+ TEST_PROGS := \
+@@ -20,6 +21,7 @@ TEST_PROGS := \
+ 	queues.py \
+ 	ring_reconfig.py \
+ 	shaper.py \
++	so_txtime.py \
+ 	stats.py \
+ 	xdp.py \
+ # end of TEST_PROGS
+diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
+index 77ccf83d87e0..2d39f263e03b 100644
+--- a/tools/testing/selftests/drivers/net/config
++++ b/tools/testing/selftests/drivers/net/config
+@@ -7,4 +7,6 @@ CONFIG_NETCONSOLE=m
+ CONFIG_NETCONSOLE_DYNAMIC=y
+ CONFIG_NETCONSOLE_EXTENDED_LOG=y
+ CONFIG_NETDEVSIM=m
++CONFIG_NET_SCH_ETF=m
++CONFIG_NET_SCH_FQ=m
+ CONFIG_XDP_SOCKETS=y
+diff --git a/tools/testing/selftests/net/so_txtime.c b/tools/testing/selftests/drivers/net/so_txtime.c
+similarity index 96%
+rename from tools/testing/selftests/net/so_txtime.c
+rename to tools/testing/selftests/drivers/net/so_txtime.c
+index b76df1efc2ef..7d144001ecf2 100644
+--- a/tools/testing/selftests/net/so_txtime.c
++++ b/tools/testing/selftests/drivers/net/so_txtime.c
+@@ -33,6 +33,8 @@
+ #include <unistd.h>
+ #include <poll.h>
+ 
++#include "kselftest.h"
++
+ static int	cfg_clockid	= CLOCK_TAI;
+ static uint16_t	cfg_port	= 8000;
+ static int	cfg_variance_us	= 4000;
+@@ -43,6 +45,8 @@ static bool	cfg_rx;
+ static uint64_t glob_tstart;
+ static uint64_t tdeliver_max;
+ 
++static int errors;
++
+ /* encode one timed transmission (of a 1B payload) */
+ struct timed_send {
+ 	char	data;
+@@ -131,13 +135,15 @@ static void do_recv_one(int fdr, struct timed_send *ts)
+ 	fprintf(stderr, "payload:%c delay:%lld expected:%lld (us)\n",
+ 			rbuf[0], (long long)tstop, (long long)texpect);
+ 
+-	if (rbuf[0] != ts->data)
+-		error(1, 0, "payload mismatch. expected %c", ts->data);
++	if (rbuf[0] != ts->data) {
++		fprintf(stderr, "payload mismatch. expected %c\n", ts->data);
++		errors++;
++	}
+ 
+ 	if (llabs(tstop - texpect) > cfg_variance_us) {
+ 		fprintf(stderr, "exceeds variance (%d us)\n", cfg_variance_us);
+ 		if (!getenv("KSFT_MACHINE_SLOW"))
+-			exit(1);
++			errors++;
+ 	}
+ }
+ 
+@@ -255,8 +261,11 @@ static void start_time_wait(void)
+ 		return;
+ 
+ 	now = gettime_ns(CLOCK_REALTIME);
+-	if (cfg_start_time_ns < now)
++	if (cfg_start_time_ns < now) {
++		fprintf(stderr, "FAIL: start time already passed\n");
++		errors++;
+ 		return;
++	}
+ 
+ 	err = usleep((cfg_start_time_ns - now) / 1000);
+ 	if (err)
+@@ -513,5 +522,10 @@ int main(int argc, char **argv)
+ 	else
+ 		do_test_tx((void *)&cfg_src_addr, cfg_alen);
+ 
+-	return 0;
++	if (errors) {
++		fprintf(stderr, "FAIL: %d errors\n", errors);
++		return KSFT_FAIL;
++	}
++
++	return KSFT_PASS;
+ }
+diff --git a/tools/testing/selftests/drivers/net/so_txtime.py b/tools/testing/selftests/drivers/net/so_txtime.py
+new file mode 100755
+index 000000000000..8738dd02ad0f
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/so_txtime.py
+@@ -0,0 +1,97 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""Regression tests for the SO_TXTIME interface.
++
++Test delivery time in FQ and ETF qdiscs.
++"""
++
++import json
++import time
++
++from lib.py import ksft_exit, ksft_run, ksft_variants
++from lib.py import KsftNamedVariant, KsftSkipEx
++from lib.py import NetDrvEpEnv, bkg, cmd
++
++
++def test_so_txtime(cfg, clockid, ipver, args_tx, args_rx, expect_fail):
++    """Main function. Run so_txtime as sender and receiver."""
++    bin_path = cfg.test_dir / "so_txtime"
++
++    tstart = time.time_ns() + 200_000_000
++
++    cmd_addr = f"-S {cfg.addr_v[ipver]} -D {cfg.remote_addr_v[ipver]}"
++    cmd_base = f"{bin_path} -{ipver} -c {clockid} -t {tstart} {cmd_addr}"
++    cmd_rx = f"{cmd_base} {args_rx} -r"
++    cmd_tx = f"{cmd_base} {args_tx}"
++
++    with bkg(cmd_rx, host=cfg.remote, fail=(not expect_fail), exit_wait=True):
++        cmd(cmd_tx)
++
++
++def _test_variants_mono():
++    for ipver in ["4", "6"]:
++        for testcase in [
++            ["no_delay", "a,-1", "a,-1"],
++            ["zero_delay", "a,0", "a,0"],
++            ["one_pkt", "a,10", "a,10"],
++            ["in_order", "a,10,b,20", "a,10,b,20"],
++            ["reverse_order", "a,20,b,10", "b,20,a,20"],
++        ]:
++            name = f"v{ipver}_{testcase[0]}"
++            yield KsftNamedVariant(name, ipver, testcase[1], testcase[2])
++
++
++@ksft_variants(_test_variants_mono())
++def test_so_txtime_mono(cfg, ipver, args_tx, args_rx):
++    """Run all variants of monotonic (fq) tests."""
++    cmd(f"tc qdisc replace dev {cfg.ifname} root fq")
++    test_so_txtime(cfg, "mono", ipver, args_tx, args_rx, False)
++
++
++def _test_variants_etf():
++    for ipver in ["4", "6"]:
++        for testcase in [
++            ["no_delay", "a,-1", "a,-1", True],
++            ["zero_delay", "a,0", "a,0", True],
++            ["one_pkt", "a,10", "a,10", False],
++            ["in_order", "a,10,b,20", "a,10,b,20", False],
++            ["reverse_order", "a,20,b,10", "b,10,a,20", False],
++        ]:
++            name = f"v{ipver}_{testcase[0]}"
++            yield KsftNamedVariant(
++                name, ipver, testcase[1], testcase[2], testcase[3]
++            )
++
++
++@ksft_variants(_test_variants_etf())
++def test_so_txtime_etf(cfg, ipver, args_tx, args_rx, expect_fail):
++    """Run all variants of etf tests."""
++    try:
++        # ETF does not support change, so remove and re-add it instead.
++        cmd_prefix = f"tc qdisc replace dev {cfg.ifname} root"
++        cmd(f"{cmd_prefix} pfifo_fast")
++        cmd(f"{cmd_prefix} etf clockid CLOCK_TAI delta 400000")
++    except Exception as e:
++        raise KsftSkipEx("tc does not support qdisc etf. skipping") from e
++
++    test_so_txtime(cfg, "tai", ipver, args_tx, args_rx, expect_fail)
++
++
++def main() -> None:
++    """Boilerplate ksft main."""
++    with NetDrvEpEnv(__file__) as cfg:
++        # Record original root qdisc
++        cmd_obj = cmd((f"tc -j qdisc show dev {cfg.ifname} root"))
++        qdisc_root = json.loads(cmd_obj.stdout)[0].get("kind", None)
++
++        ksft_run([test_so_txtime_mono, test_so_txtime_etf], args=(cfg,))
++
++        # Restore original root qdisc. If mq, populate with default_qdisc nodes
++        if (qdisc_root):
++            cmd(f"tc qdisc replace dev {cfg.ifname} root {qdisc_root}")
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 97ad4d551d44..02ad4c99a2b4 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -40,7 +40,6 @@ skf_net_off
+ socket
+ so_incoming_cpu
+ so_netns_cookie
+-so_txtime
+ so_rcv_listener
+ stress_reuseport_listen
+ tap
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 6bced3ed798b..b7f51e8f190f 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -81,7 +81,6 @@ TEST_PROGS := \
+ 	rxtimestamp.sh \
+ 	sctp_vrf.sh \
+ 	skf_net_off.sh \
+-	so_txtime.sh \
+ 	srv6_end_dt46_l3vpn_test.sh \
+ 	srv6_end_dt4_l3vpn_test.sh \
+ 	srv6_end_dt6_l3vpn_test.sh \
+@@ -154,7 +153,6 @@ TEST_GEN_FILES := \
+ 	skf_net_off \
+ 	so_netns_cookie \
+ 	so_rcv_listener \
+-	so_txtime \
+ 	socket \
+ 	stress_reuseport_listen \
+ 	tcp_fastopen_backup_key \
+diff --git a/tools/testing/selftests/net/so_txtime.sh b/tools/testing/selftests/net/so_txtime.sh
+deleted file mode 100755
+index 5e861ad32a42..000000000000
+--- a/tools/testing/selftests/net/so_txtime.sh
++++ /dev/null
+@@ -1,110 +0,0 @@
+-#!/bin/bash
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Regression tests for the SO_TXTIME interface
+-
+-set -e
+-
+-readonly ksft_skip=4
+-readonly DEV="veth0"
+-readonly BIN="./so_txtime"
+-
+-readonly RAND="$(mktemp -u XXXXXX)"
+-readonly NSPREFIX="ns-${RAND}"
+-readonly NS1="${NSPREFIX}1"
+-readonly NS2="${NSPREFIX}2"
+-
+-readonly SADDR4='192.168.1.1'
+-readonly DADDR4='192.168.1.2'
+-readonly SADDR6='fd::1'
+-readonly DADDR6='fd::2'
+-
+-cleanup() {
+-	ip netns del "${NS2}"
+-	ip netns del "${NS1}"
+-}
+-
+-trap cleanup EXIT
+-
+-# Create virtual ethernet pair between network namespaces
+-ip netns add "${NS1}"
+-ip netns add "${NS2}"
+-
+-ip link add "${DEV}" netns "${NS1}" type veth \
+-  peer name "${DEV}" netns "${NS2}"
+-
+-# Bring the devices up
+-ip -netns "${NS1}" link set "${DEV}" up
+-ip -netns "${NS2}" link set "${DEV}" up
+-
+-# Set fixed MAC addresses on the devices
+-ip -netns "${NS1}" link set dev "${DEV}" address 02:02:02:02:02:02
+-ip -netns "${NS2}" link set dev "${DEV}" address 06:06:06:06:06:06
+-
+-# Add fixed IP addresses to the devices
+-ip -netns "${NS1}" addr add 192.168.1.1/24 dev "${DEV}"
+-ip -netns "${NS2}" addr add 192.168.1.2/24 dev "${DEV}"
+-ip -netns "${NS1}" addr add       fd::1/64 dev "${DEV}" nodad
+-ip -netns "${NS2}" addr add       fd::2/64 dev "${DEV}" nodad
+-
+-run_test() {
+-	local readonly IP="$1"
+-	local readonly CLOCK="$2"
+-	local readonly TXARGS="$3"
+-	local readonly RXARGS="$4"
+-
+-	if [[ "${IP}" == "4" ]]; then
+-		local readonly SADDR="${SADDR4}"
+-		local readonly DADDR="${DADDR4}"
+-	elif [[ "${IP}" == "6" ]]; then
+-		local readonly SADDR="${SADDR6}"
+-		local readonly DADDR="${DADDR6}"
+-	else
+-		echo "Invalid IP version ${IP}"
+-		exit 1
+-	fi
+-
+-	local readonly START="$(date +%s%N --date="+ 0.1 seconds")"
+-
+-	ip netns exec "${NS2}" "${BIN}" -"${IP}" -c "${CLOCK}" -t "${START}" -S "${SADDR}" -D "${DADDR}" "${RXARGS}" -r &
+-	ip netns exec "${NS1}" "${BIN}" -"${IP}" -c "${CLOCK}" -t "${START}" -S "${SADDR}" -D "${DADDR}" "${TXARGS}"
+-	wait "$!"
+-}
+-
+-do_test() {
+-	run_test $@
+-	[ $? -ne 0 ] && ret=1
+-}
+-
+-do_fail_test() {
+-	run_test $@
+-	[ $? -eq 0 ] && ret=1
+-}
+-
+-ip netns exec "${NS1}" tc qdisc add dev "${DEV}" root fq
+-set +e
+-ret=0
+-do_test 4 mono a,-1 a,-1
+-do_test 6 mono a,0 a,0
+-do_test 6 mono a,10 a,10
+-do_test 4 mono a,10,b,20 a,10,b,20
+-do_test 6 mono a,20,b,10 b,20,a,20
+-
+-if ip netns exec "${NS1}" tc qdisc replace dev "${DEV}" root etf clockid CLOCK_TAI delta 400000; then
+-	do_fail_test 4 tai a,-1 a,-1
+-	do_fail_test 6 tai a,0 a,0
+-	do_test 6 tai a,10 a,10
+-	do_test 4 tai a,10,b,20 a,10,b,20
+-	do_test 6 tai a,20,b,10 b,10,a,20
+-else
+-	echo "tc ($(tc -V)) does not support qdisc etf. skipping"
+-	[ $ret -eq 0 ] && ret=$ksft_skip
+-fi
+-
+-if [ $ret -eq 0 ]; then
+-	echo OK. All tests passed
+-elif [[ $ret -ne $ksft_skip && -n "$KSFT_MACHINE_SLOW" ]]; then
+-	echo "Ignoring errors due to slow environment" 1>&2
+-	ret=0
+-fi
+-exit $ret
+-- 
+2.53.0.1213.gd9a14994de-goog
+
