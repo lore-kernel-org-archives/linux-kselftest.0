@@ -1,190 +1,100 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800F83C276B
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 11:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F313A4F2E;
+	Thu,  9 Apr 2026 12:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775735603; cv=none; b=tVMHThFO9AW/OfHICXIxH5zngqoK96u9fYrt1QIaGaj95gUsenDkZsuT5D4AGXwQVFbIx8u4Vz36AWcDH/X+w2qfWNZNZyDXgZEcaHKqRiWwfKrgXMvJ7/iDZMMeiuu7TtZA2UoGRXoImzG2QgmFqPuJoz/a5XQX/8aUhL/bo6Y=
+	t=1775736754; cv=none; b=cAnSFnhVqArNDxBihKc00epKwi/2JNjfV2MCQfyItndJ2fjXE2JqdgkMDwXZT7vwW9tIa+8jowKUPBk80c68RgAcs/Qp+K/MvpJ6mL/0CcI8aLrkJsR+ZeuTFtTOajAi7j74h09b46MObjUX0DbdMdcB6oTV70S4qMZPtOjQDM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775735603; c=relaxed/simple;
-	bh=wzTBF1EzB7+KMBjDU0jDqnZ3WCqA2gwJaJmjZat73Nk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LO4tzC9WNvJ7RzD2wxHXlarGHI8Iu0dA42ZpcmuQWx5n6JB5Nd8sz5kLKyhysyWA7s835M7g4CBNr8uoCqS5+eV9UzZF7IG1cfDt0vhCVCDvDh6m8wMXeyGGsEx9M0SHG9NGBHJKUj4v8C5Py92F0wNeGQVYh0Y5AUaKAaV5QKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ImXFJ26B; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775736754; c=relaxed/simple;
+	bh=EnP9JMAOTjkjqO/CLPh1AIVmglFqWKUmkpn2JEr1QOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pkmJiwomItdTwhcvvIHmeYcWcs6shj+p5Qq6PfUEgwkEsrqMHlvfBtVYaIHQ+xMclyWBClOC1BlTiqzk3teHht7gQbXOjIXXx2uNPGEj5Rx7IbbFMRfkrWHp7Ayiz9jW8pa9ku7ttm6PkMYYso6nHzr3My3lRfEo77BvQ7E8MI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFma3xVd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ImXFJ26B"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c76864f4e58so294663a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 04:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775735601; x=1776340401; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SR0E+cafF0XtqSHjIkqxPcUXF9aNBWr75PUx5G6N8/k=;
-        b=ImXFJ26BjdrUFg3+8ayJEx9lDyHlmtU5p6w6N5OOtV2HN+zn0rLPAS7Dc7cqSxFWTM
-         UHJAxx481zz+tOFOI+Z9OblJbX3pNclzGkBHGbTwUet2cnU/B/QC5sZ6jBcKhYMVRYkw
-         Ee2q+06zvsvQeOEeKwW6M05BwQ0H8epNWSQ0rU4IJUTysoNlPHdORIlbG2XENcEkv743
-         tN+CZ0G00GhNAYLwN83jOIcm0KB3jWyxzP/TGLsLZl/aXaErB4uKJpgUxCu8Vj0fVEHg
-         AXZ/RRrG3Rs47KqloRojpW0W2qN+SK/RyMZ9ULHKAU+C6Zaf2ihlRwXjQHGNLDhIL3QF
-         RmIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775735601; x=1776340401;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SR0E+cafF0XtqSHjIkqxPcUXF9aNBWr75PUx5G6N8/k=;
-        b=rQeoXT4p4szX+KCTVgkY+gp0zU5xVSVHGPktMuCoDUK6AcBA9E9bU03cGTxImJW9J7
-         A7JjCzpqOGSuzYz+ans/yPki5OgG7eLN5Huhug/k9xhrCLgvK+vhivTzcVz9+vI8shWN
-         YOtMr4VqE9PKSTpj/G6QHgomCBkU6Nrvx9DizffjJiKwqcSCUkGNUPYTj2leVEaHtR5a
-         /u4tdyAJYPcUso3nWzOBcx7Z/DVtBKqOLIoxjWefkE96BQ8qIoBGT1/2us8yCcbamvI2
-         wZjxcYYXruT84ScMjg747yieTzvRMz8Ii33aQFDJZJmxi0We7vglmYn+yRb5ueOKkY5X
-         sWCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWDD73kBOxAeWtPbIaB72wESW9fMWOCS0ITVtqR//enrfhdHuC7izFi+Hqs6W/Hif3CrxX6OPpNKoWL/Dl/E+I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznmGlprpxZcTJmC8TsP+pQYXveovu3tqtkbTg9x9bfeg9hMZ9k
-	yZxYh7b1lZRTSMbGDFICS8Z3nAf1bJQbh1gKHOl4Grew/fD1KszQRbUo
-X-Gm-Gg: AeBDiet2cTHMmdNe26CWdSgFQ/lzlz+N/hCfhj8/bKLjZNLxtwUiwDXxu/cXddeolMC
-	QOkB4odsdm1Zh4HRSHRQ3BaaV0F6jn0/aNRPHdnib8QgBm5NqmJW0ATOvV9Zjk8Y1mHmBLsC95p
-	fB9E8OSsAee658MXP9ztGFU/QNYkQszWDbxUNBHNxn3AqYQSbrKo64P3fP/98uGAt8CnkMaLjzS
-	uxVLFhs/bDXfHmMPhZKFh38Bs5bt6ZETpIdHF05r33CsYBOiEazqzlPQaOv8EF4VO9uticK4go/
-	WdtGxL5bpihGS+ThWcx/hAJsvo42iwZ2sU/gSh1jx8NCJ3ExZip1SdB/kIw3DKjy+lt0zZECp7p
-	hptf/v66G+Ujpc4NQPrff/hYKwnBJm7THqO7l04Sn3zJnUdk98zNZUqAEHmKF0nCzZ3BZevrN3c
-	N1HRtkulqcoSZZ9C/PRIT9PYy4i8z1jPa5RC07acuo970Tb9sBfdGXb9XNjRPWokKA
-X-Received: by 2002:a17:902:e78b:b0:2b2:4d36:7ba with SMTP id d9443c01a7336-2b2815b522dmr266926835ad.0.1775735600684;
-        Thu, 09 Apr 2026 04:53:20 -0700 (PDT)
-Received: from [192.168.161.51] (mbl-65-153-179.dsl.net.pk. [58.65.153.179])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749a3a0fsm309911735ad.59.2026.04.09.04.53.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Apr 2026 04:53:20 -0700 (PDT)
-Message-ID: <8262fe0c-cbec-4c85-b5ee-2f6cc20cf57a@gmail.com>
-Date: Thu, 9 Apr 2026 16:53:09 +0500
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFma3xVd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4996EC4CEF7;
+	Thu,  9 Apr 2026 12:12:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775736754;
+	bh=EnP9JMAOTjkjqO/CLPh1AIVmglFqWKUmkpn2JEr1QOE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lFma3xVdZvtUl3jO59TjO5InWxdJaYEsqtUWKkHXiJBJly9j5faYgWKfgUpeFUzP2
+	 ufiVXhryp/NTLLc9fzoczENqXNHLXGqHAWDZN+XBNCMvdtU5tT0XU6vbCetqHvojKY
+	 wqLEry7T1fpIVJUaCt8YtCRXDgsqcVVoO91ZPGJ+qaH4dX/jwCWQmynix4AJgLAniZ
+	 ZhB3DAFpaR1D78IkJx0KATK47z/3m3H/bFO0YfY/BWhC+bT14qwTMIjpn4NWguA6YD
+	 m7t48K0trDDydZZ3ahkTKRoGGvf7umvUUgfXv9seN/7Zgwo8lveS6gbr7doSit9Lff
+	 rzz546ONwZIAw==
+Date: Thu, 9 Apr 2026 15:12:30 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+	Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+Message-ID: <20260409121230.GA720371@unreal>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] KVM: selftests: Guard execinfo.h inclusion for non-glibc
- builds
-To: Sean Christopherson <seanjc@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Aqib Faruqui <aqibaf@amazon.com>,
- shuah@kernel.org, pbonzini@redhat.com
-References: <20260319000842.1213426-2-hisamshar@gmail.com>
- <091f264f-21f1-464d-913a-1500643728c7@linuxfoundation.org>
- <137f63af-a993-4b1c-a9e9-931718a47343@linuxfoundation.org>
- <f044f31d-740d-4cdb-834c-59de7691203d@gmail.com>
- <4334432d-982e-4450-9281-de739c25ebfd@linuxfoundation.org>
- <ac0lGVlg4cJSNCGl@google.com>
-Content-Language: en-US
-From: Hisam Mehboob <hisamshar@gmail.com>
-In-Reply-To: <ac0lGVlg4cJSNCGl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
 
-On 4/1/26 19:01, Sean Christopherson wrote:
-> On Tue, Mar 31, 2026, Shuah Khan wrote:
->> On 3/25/26 12:47, Hisam Mehboob wrote:
->>> On 3/25/26 23:03, Shuah Khan wrote:
->>>> On 3/24/26 12:02, Shuah Khan wrote:
->>>>> On 3/18/26 18:08, Hisam Mehboob wrote:
->>>>>> The backtrace() function and execinfo.h are GNU extensions available
->>>>>> in glibc but not in non-glibc C libraries such as musl. Building KVM
->>>>>> selftests with musl-gcc fails with:
->>>>>>
->>>>>>     lib/assert.c:9:10: fatal error: execinfo.h: No such file or directory
->>>>>>
->>>>>> Guard the inclusion of execinfo.h under #ifdef __GLIBC__, and wrap
->>>>>> all backtrace() usage under the same guard with a fallback message
->>>>>> for non-glibc builds indicating that stack traces are not available.
->>>>>>
->>>>>> Unlike the approach of adding a weak stub for backtrace(), this
->>>>>> explicitly handles the non-glibc case rather than silently providing
->>>>>> an empty implementation.
->>>>>>
->>>>>> Link: https://lore.kernel.org/kvm/20250829142556.72577-7- aqibaf@amazon.com/
->>>>>>
->>>>>> Suggested-by: Aqib Faruqui <aqibaf@amazon.com>
->>>>>> Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
->>>>>> ---
->>>>>>    tools/testing/selftests/kvm/lib/assert.c | 7 +++++++
->>>>>>    1 file changed, 7 insertions(+)
->>>>>>
->>>>>> diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/ testing/selftests/kvm/lib/assert.c
->>>>>> index b49690658c60..3442b80c37c1 100644
->>>>>> --- a/tools/testing/selftests/kvm/lib/assert.c
->>>>>> +++ b/tools/testing/selftests/kvm/lib/assert.c
->>>>>> @@ -6,7 +6,9 @@
->>>>>>     */
->>>>>>    #include "test_util.h"
->>>>>> +#ifdef __GLIBC__
->>>>>>    #include <execinfo.h>
->>>>>> +#endif
->>>>>> Is __GLIBC__ defined in musl-gcc? Looks like that is the case with the
->>>>> error?
->>>>
->>>> If __GLIBC__ isn't there you shouldn't see this error because the include
->>>> is in - this error doesn't make sense if __GLIBC__ isn't defined. What
->>>> am I missing?
->>>>
->>>
->>> To clarify the compiler error you mentioned: the error log in the commit
->>> message shows the failure that occurs before this patch is applied. Because
->>> musl-gcc doesn't define __GLIBC__, the original unconditional <execinfo.h>
->>> inclusion causes the build to fail. The #ifdef in my patch was intended to
->>> fix that exact failure.
->>>
->>>> +#ifdef __GLIBC__
->>>>    #include <execinfo.h>
->>>> +#endif
->>>>
->>>> Also check tools/testing/selftests/bpf/test_progs.c - I think backtrace()
->>>> stub needs be defined only for the !__GLIBC__ case
->>>>
->>>
->>> Looking at how bpf/test_progs.c handles it, I agree the weak stub approach
->>> is much cleaner. I will implement it so that it still prints an explicit
->>> warning message when a trace is unavailable.
+On Tue, Mar 31, 2026 at 08:56:32AM +0300, Leon Romanovsky wrote:
+> From Chiara:
 > 
-> I disagree.  _If_ we didn't need the __GLIBC__ #ifdef, then I would be in favor
-> of __weak, but since the #ifdeffery is needed, using an #ifdef and a __weak symbol
-> is double the ugliness.
-> 
-> IMO, the way to make this less ugly is to using a single #ifdef and a local stub.
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selftests/kvm/lib/assert.c
-> index b49690658c60..315175ca49f1 100644
-> --- a/tools/testing/selftests/kvm/lib/assert.c
-> +++ b/tools/testing/selftests/kvm/lib/assert.c
-> @@ -6,11 +6,13 @@
->    */
->   #include "test_util.h"
->   
-> -#include <execinfo.h>
->   #include <sys/syscall.h>
->   
->   #include "kselftest.h"
->   
-> +#ifdef __GLIBC__
-> +#include <execinfo.h>
-> +
->   /* Dumps the current stack trace to stderr. */
->   static void __attribute__((noinline)) test_dump_stack(void);
->   static void test_dump_stack(void)
-> @@ -57,6 +59,9 @@ static void test_dump_stack(void)
->          system(cmd);
->   #pragma GCC diagnostic pop
->   }
-> +#else
-> +static void test_dump_stack(void) {}
-> +#endif
->   
->   static pid_t _gettid(void)
->   {
+> This patch set introduces a new BPF LSM hook to validate firmware commands
+> triggered by userspace before they are submitted to the device. The hook
+> runs after the command buffer is constructed, right before it is sent
+> to firmware.
 
-Thanks for the suggestion. I will send a v2 implementing this approach.
+<...>
+
+> ---
+> Chiara Meiohas (4):
+>       bpf: add firmware command validation hook
+>       selftests/bpf: add test cases for fw_validate_cmd hook
+>       RDMA/mlx5: Externally validate FW commands supplied in DEVX interface
+>       fwctl/mlx5: Externally validate FW commands supplied in fwctl
+
+Hi,
+
+Can we get Ack from BPF/LSM side?
+
+Thanks
+
+> 
+>  drivers/fwctl/mlx5/main.c                        | 12 +++++-
+>  drivers/infiniband/hw/mlx5/devx.c                | 49 ++++++++++++++++++------
+>  include/linux/bpf_lsm.h                          | 41 ++++++++++++++++++++
+>  kernel/bpf/bpf_lsm.c                             | 11 ++++++
+>  tools/testing/selftests/bpf/progs/verifier_lsm.c | 23 +++++++++++
+>  5 files changed, 122 insertions(+), 14 deletions(-)
+> ---
+> base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
+> change-id: 20260309-fw-lsm-hook-7c094f909ffc
+> 
+> Best regards,
+> --  
+> Leon Romanovsky <leonro@nvidia.com>
+> 
