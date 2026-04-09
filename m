@@ -1,119 +1,112 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED51B362128
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 21:17:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD1037AA98
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 21:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775769481; cv=none; b=Pit5MAboalVo/LyStSlsk3v0anT+md/vGDA8zsg9c01ugVCfktyitKFr5M1zo4AB0kITsHqfdP5r9tETYhwsMDgQqr9l0zOPYk8tbjasy4MDdTW8IAV/3wEXLKVYAPdZMFyXupbeU404IWLFQKZpY4IurMyq8DC+SJEcHfy8BRE=
+	t=1775769850; cv=none; b=mspQf3YWjLMlTHaSYwsUIUnt8io8LIgvo7MRRfjZci8BMwmz4gP6lJvdAsMO9eBpjtFfwvHLYiTmI+zEveqCqKCguxNBCJw3yaYK/i4FmSebwd2h97mMlH1FUi09mn77LqQ183psg0mQVqNFHJd2iafKTlIa9FyLIE5hh1NO0eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775769481; c=relaxed/simple;
-	bh=kTGNLbn4hMgKaLX8TjQOM8N2QBw0VnJstnv2OfEAq4o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SWic3JVNrJnrHogd++sRmlzbvTjnavsF0ES33hzyR71I4ioww8L2eJO8osmOYGs63aFlrO+9yRfq1+YnGZy9E2gsefl+qcibgN2410quv7LecHJb9LpnwhgNZ3lCPzXai9UqsShuH1Rv+g8kM2uG1ErORVvt78NpCfRbKAhnQfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M7QKu54u; arc=none smtp.client-ip=209.85.216.74
+	s=arc-20240116; t=1775769850; c=relaxed/simple;
+	bh=rhKyWy3HDSVKJmPx51du1HwkVp4/UQTGLlrZn7O8BJE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=WXAXABPMkQ7nuUvPJ61lYjTOYabvqewKKlWAb3T8R19Adnk/Xfk4NwbMEQqa/ie7pPwhlEjrMuDZ0Z7g0Fhq0JrX3qGprt8zncUZ1b5JEdb6btCSidx9B5HRDmcutPKS4ZQ5eBC3JGL0WXBglaSe6vAOo7kpXiGOUvHq5pb2UHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UTBLvzuz; arc=none smtp.client-ip=74.125.82.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M7QKu54u"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-354c44bf176so1614245a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 14:17:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UTBLvzuz"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2bdc1b30ac8so5603740eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 14:24:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775769478; x=1776374278; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=463dllVAQ+CXXYb1cF+GtnlCvXOZXdOn20lYdKT+eLg=;
-        b=M7QKu54uxIYZnsPyUxowHmIoEdSF6/uxRX4ghURj98Kd+M+cdrsLtQqNxGcpaXbhks
-         Ehqls/oBTkC8x1Zg6npzwWGe9x9OY1xkn2Cc8ipFTr10SYMj7xKYe21fG6k1/R3okiBs
-         F4nDeV0JN2tdCYIrOqSHG7WbH2TTR/XzZ9OWpmMeh4gvyjlc3xSDIjrdgaKQtLvC6sbM
-         o66wRVzZHX1IhHLVhdiLqQpHYT1kTmL5CdnHNldew1Ezxc7zjFnbkMDIDtcJeAHIeZgM
-         x902TEuuh5bDu00LnlI7RkLPk5Wz8dS64j3R9EpqFgaYuJADpm/WHN8jY9WPBRtyXOQk
-         +VJg==
+        d=google.com; s=20251104; t=1775769848; x=1776374648; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oHIRI7SyBpcFi/wTF8KrrAf70SUxBJx1i0J9E5A6YsA=;
+        b=UTBLvzuz4+K04zKfQ8mTB0lIa2f5P/gm8a2N57CrKlbJGb6WPKgUb6JuZG3tvbC2ZV
+         O9rPowQQdKgI0U7SMMYgFD1116cUjSsoOYJUt0dC56zkdjpMg8EzvfglDPEmdAqtlr/P
+         HSkLvsjvOCxCatrONepNKc0iDJ0/bjV8ghI1xQN6+fG8zLeRjT1a4NwT5wtT/jj1Uv82
+         A2tjDf79UAeu6U0HTKZI/zvH6AJidmZzcdEt8HAxsFXKJnaQ2FSyZNTZPClOFVte+Bs1
+         MxMax9odD3obJqaUSuorQJTAWiI0b5WyJCP/vbw3h3eSMlBd95D+55FwYBkDvSXIQglI
+         VREw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775769478; x=1776374278;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=463dllVAQ+CXXYb1cF+GtnlCvXOZXdOn20lYdKT+eLg=;
-        b=AfIPBLjhXlyH88r6bTC2y7MrJmbIf7VUdmxXDB8hPgLtOohHtCqnr9hHU5EB0ARkFX
-         4WHBUcnDwTk8sAHex+KLSKJVwC+YReMp2xWCTdiGeFvELnvy2yLJOU5p+7emnkJbixYd
-         ABQlOfxps5itKtHLehQufQl6sDraTE0S4PMdp294HATtpaZBwiTRMYa9s/SQaei2TTES
-         zHzDcxlHQWw33+UVvSqjGz/HMzmu2TlHRsLzqd1Y96JwikRmzWK4Xc1M2TC477QHJsBm
-         nEUX1L/2o8m0t9Yss8quiZmvCK9abt3po+aBDiW/REZIgUInoYZVMNCB1de2gOOHLb9S
-         azmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV2ZSWTUBbgRX9blU7qL+C+jyQ6jfcA6CzwJnodzpgpgQe+YCeyyC03S7qvIj/MoYrdhQWaOLJ4BiJpFQopZ4U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4d94mz13O1Q6qy8pvB7q2HM2tiuVoQeDKEKtJu1BnTIHDfXmG
-	O9s2e0t26QN8YPwt4GXrIXTW+WWY2MvOuXWUOa8VkLa0GXl8eZd7PPG8YsvOxR7z/IMHU5StkCo
-	VRa7oeA==
-X-Received: from pjbgi21.prod.google.com ([2002:a17:90b:1115:b0:35d:a45d:bc03])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2d07:b0:35d:a3b4:2f0d
- with SMTP id 98e67ed59e1d1-35e4274e1damr551175a91.6.1775769478020; Thu, 09
- Apr 2026 14:17:58 -0700 (PDT)
-Date: Thu, 9 Apr 2026 14:17:56 -0700
-In-Reply-To: <20260324194034.1442133-5-tycho@kernel.org>
+        d=1e100.net; s=20251104; t=1775769848; x=1776374648;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oHIRI7SyBpcFi/wTF8KrrAf70SUxBJx1i0J9E5A6YsA=;
+        b=QN0lcD2E9L8wJAVMne3vUkPc3l2EE3XmMxM8Q8dwlZwdHMyNYuXe8zGRI3dKMQnjeD
+         4BOAhCMX1vAWwTsr2QBbu8s1VOtg1EL6fLol213wB+Ms47j1CDt13P5tSaKYrlaezgys
+         ROsVQgcSMbpj3b6t7YsjURXFIrd3NO1aRMuUIZ0DGie53B9dIP3/BtYJUd9Sl2CTJWhk
+         H1B09/cYToR93R+4X/avCf6YxyAGbyoiYvLjMZGFwotv6XA7h9QjucKZNH7d+FooNTwW
+         HGJWk9KadpJmnFxENGRBczqIn5VHNt9Zat4oIUJNeXs8gR7Nf2m2e12vnLup8dRi112y
+         9EIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZD3nJNIiyzxrMByPw5BV2uk0OcvR5zVVTncKCeABPMloOyAvui8lY9VZpxUBt3C3tInVYRPDSiPXqTq7+PMQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzfv2Hs59sJdDn9h/UVlWu7lZfungt/3MkXkUbPxRfcv4gYTvLX
+	vPn6D2qKVBgHkgqWOhfK5YgSM0uAryWvRcoj0fHc6Y+hID0ttoommTLFXB9aRgNPJ1c+8hrRIP0
+	xbX+8CxLOZe1Urk5YchFcvyijBximZj0rQA==
+X-Received: from dybme41.prod.google.com ([2002:a05:7301:18a9:b0:2c6:47d6:488e])
+ (user=aniketgattani job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7300:8c04:b0:2c7:3a7:c79b with SMTP id 5a478bee46e88-2d587e7d714mr482423eec.10.1775769848175;
+ Thu, 09 Apr 2026 14:24:08 -0700 (PDT)
+Date: Thu,  9 Apr 2026 21:22:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260324194034.1442133-1-tycho@kernel.org> <20260324194034.1442133-5-tycho@kernel.org>
-Message-ID: <adgXhPzjpq5aTS5z@google.com>
-Subject: Re: [PATCH v2 4/5] KVM: SEV: mask off firmware unsupported vm types
-From: Sean Christopherson <seanjc@google.com>
-To: Tycho Andersen <tycho@kernel.org>
-Cc: Ashish Kalra <ashish.kalra@amd.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, linux-crypto@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>, 
-	Alexey Kardashevskiy <aik@amd.com>, Nikunj A Dadhania <nikunj@amd.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+X-Mailer: git-send-email 2.54.0.rc0.605.g598a273b03-goog
+Message-ID: <20260409212223.2072418-1-aniketgattani@google.com>
+Subject: [PATCH 0/2] sched/membarrier: Use per-CPU mutexes for targeted commands
+From: Aniket Gattani <aniketgattani@google.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	"Paul E . McKenney" <paulmck@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Ben Segall <bsegall@google.com>, Josh Don <joshdon@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Aniket Gattani <aniketgattani@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 24, 2026, Tycho Andersen wrote:
-> From: "Tycho Andersen (AMD)" <tycho@kernel.org>
-> 
-> In some configurations not all VM types are supported by the firmware.
-> Reflect this information in the supported_vm_types that KVM exports.
-> 
-> Link: https://lore.kernel.org/all/aZyLIWtffvEnmtYh@google.com/
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Tycho Andersen (AMD) <tycho@kernel.org>
-> ---
->  arch/x86/kvm/svm/sev.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 37490803f2e8..0fe9515db1e7 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2976,7 +2976,8 @@ void __init sev_set_cpu_caps(void)
->  		supported_vm_types |= BIT(KVM_X86_SNP_VM);
->  	}
->  
-> -	kvm_caps.supported_vm_types |= supported_vm_types;
-> +	kvm_caps.supported_vm_types |= (supported_vm_types &
-> +					sev_firmware_supported_vm_types());
+This series mitigates a severe contention issue in the membarrier system
+call by replacing the global membarrier_ipi_mutex with per-CPU mutexes
+for targeted expedited commands.
 
-This is slightly flawed, in that sev_hardware_setup() still reports SEV-ES as
-fully enabled, whereas the other cases (ASID exhaustation) clear the VM type *and*
-report the feature as "unusable".
+Problem:
+Currently, MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ relies on a single
+global mutex to serialize IPIs. On large systems with heavy concurrent
+usage, this creates significant contention. The issue cascades into
+hard lockups when combined with CFS bandwidth throttling, during which
+target CPUs may have interrupts disabled for extended periods.
+If membarrier is waiting on such a CPU, it holds the global mutex,
+stalling all other membarrier callers system-wide.
 
-Addressing that is actually a great opportunity to dedup some code in the previous
-path.  I.e. if we first relocate the supported_vm_types updates to sev_hardware_setup(),
-then there's no need to copy+paste the ASID checks.  And then restricting VM types
-based on firmware support Just Works.
+Solution:
+Patch 1 introduces membarrier_cpu_mutexes to serialize expedited commands
+specifically when a target CPU is provided, isolating the lock contention
+to the targeted CPU. Broadcast commands continue to use the global mutex.
 
-E.g. to yield:
+Patch 2 introduces a dedicated kselftest reproducer
+(membarrier_rseq_stress) to permanently test this interaction. It
+aggressively hammers targeted membarrier commands within a deep,
+aggressively throttled cgroup hierarchy to prove the lockup scenario
+and validate the fix.
 
-[ 1813.863571] ccp 0000:24:00.1: SEV-SNP API:1.58 build:1
-[ 1813.876790] kvm_amd: SEV enabled (ASIDs 254 - 509)
-[ 1813.881595] kvm_amd: SEV-ES unusable (ASIDs 1 - 253)
-[ 1813.886574] kvm_amd: SEV-SNP enabled (ASIDs 1 - 253)
-[ 1813.891549] kvm_amd: Virtual VMLOAD VMSAVE supported
-[ 1813.896522] kvm_amd: Virtual GIF supported
+Results:
+As measured by the stress test introduced in Patch 2, testing on an
+AMD Turin machine with 384 CPUs (2 NUMA nodes, SMT=2) shows:
 
-I'll send a v3, I've got everything coded up (I wanted to make sure my idea
-actually worked before suggesting it :-) ).
+Throughput: ~200x increase in successful membarrier calls.
+
+Aniket Gattani (2):
+  sched/membarrier: Use per-CPU mutexes for targeted commands
+  selftests/membarrier: Add rseq stress test for CFS throttle
+    interactions
+
+ kernel/sched/membarrier.c                     |  48 +-
+ tools/testing/selftests/membarrier/Makefile   |   5 +-
+ .../membarrier/membarrier_rseq_stress.c       | 952 ++++++++++++++++++
+ 3 files changed, 989 insertions(+), 16 deletions(-)
+ create mode 100644
+ tools/testing/selftests/membarrier/membarrier_rseq_stress.c
+
+-- 
+2.54.0.rc0.605.g598a273b03-goog
+
