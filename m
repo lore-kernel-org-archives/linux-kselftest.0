@@ -1,119 +1,97 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D839175A81
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 11:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732783A9605;
+	Thu,  9 Apr 2026 11:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775734167; cv=none; b=HwzB2tWa28epAZ/OaWAu1t978UT5eCbysybmd/O9LTG4G4l7CtqDcynZOWB25VFgN6SleWup8B+T6144xKTq4M4E4HaQpkfurOnJc3ey8cqXGnVFJmo+/Vk3drAypoE465xt3PkIlHUgBceFLepi7a64N+WQaROQ5n7a9q5QZpo=
+	t=1775734436; cv=none; b=gDqjeW+o9TY9Y1z+rmO03ZZbu8mTUL+wA1iyq6k+0LHKFhytTDMZCjd0w/hkBDUPduomQxwFQjbyLeFkjN7tqMK+UIxFhs/tpJdfdArgpS6dxlsw/3/T/FTBxu3SznYHBkGadyCzCsCkR1UmNVEtyF1VJMhS4ZnBnGhx2An2Qec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775734167; c=relaxed/simple;
-	bh=+mAuVhclk7/79jHnw5cx20QkLJGt0qzs190F78JpAYo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uB4o0kDtd1J1QMyAEqnMtjdlwgOUjXVo0wxoXwlTftbWN6mohi1PsvVp1UgxuZr/sjRLlxfTSZafoyjJ+0LJBuRundsgyug8T+zPU/31AtWOWT9MTplZ0SB/BP+ofok0qy0duVp8l5aowSHf5CoEBxxVeG7neyJcDOWq2EgmU2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YKYSvdNP; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775734436; c=relaxed/simple;
+	bh=CNq6QdX054NW/AuTIE+mAJAxxpPam5NVbcXRjsHjS0k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QXp7usWPYqduCUwxWSy5/a/gf5fq0fdsKjLfIueXJPAGkTckeL/O/dJMLJsXylAnnT3+iTPIhk0CqNbuLp4H+gwFykhFLZ6nBCxLq3cBDAvXgGxvqnLwiNurqt8Uvaf3cjyCmFkRIZaz9MUihTVDuxTPv/eRUz4dh/ONeLQPXSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=I+t/jmSC; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YKYSvdNP"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775734153;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bX9UNH9nppVP6n/cB7hjsiwZXPi5JOvS+eugnkyUXao=;
-	b=YKYSvdNPwqF0I/tcBgCvVlJyENCg8xn8864YiPcXKQxp5KPJAAv/dto4GxeHfeK+nWzr61
-	aRs1EYDyPewSS5gGxgNjmiwjQf/jJf4vt5M6r7Z/sxmmGxeNzXEpxdzX5DAC2k4FBO0ckN
-	+yPn1uoLO0WWyMVVoB3+2yKk12Mf3Kk=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Menglong Dong <menglong8.dong@gmail.com>, Jiri Olsa <olsajiri@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, shuah@kernel.org,
- emil@etsalapatis.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject:
- Re: [PATCH bpf-next v2 1/3] bpf: add missing fsession to the verifier log
-Date: Thu, 09 Apr 2026 19:28:55 +0800
-Message-ID: <5090408.31r3eYUQgx@7940hx>
-In-Reply-To: <adZWStMinOeunjSH@krava>
-References:
- <20260408062109.386083-1-dongml2@chinatelecom.cn>
- <20260408062109.386083-2-dongml2@chinatelecom.cn> <adZWStMinOeunjSH@krava>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="I+t/jmSC"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09BA12E98;
+	Thu,  9 Apr 2026 04:33:49 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A625A3F632;
+	Thu,  9 Apr 2026 04:33:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1775734434; bh=CNq6QdX054NW/AuTIE+mAJAxxpPam5NVbcXRjsHjS0k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I+t/jmSCB3TqxIVZidBOnZrV18cGfF6qdqizNuLLbeUk2GDK4TrUZp/j0ztz5O/WH
+	 MAo1UtFIXfwzxMfa2Z9nZnUNQENHfhZnZFWLbVNrEo2nB5c0Arkz0zqtPQqOYNAvA9
+	 5Un/Ngqb/zfogituQtsdZWWlcj4KAOgv8ZgL399w=
+Date: Thu, 9 Apr 2026 12:33:50 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 7/8] arm64/cpufeature: Define hwcaps for 2025 dpISA
+ features
+Message-ID: <adeOnmy60AUQzSvo@arm.com>
+References: <20260302-arm64-dpisa-2025-v1-0-0855e7f41689@kernel.org>
+ <20260302-arm64-dpisa-2025-v1-7-0855e7f41689@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260302-arm64-dpisa-2025-v1-7-0855e7f41689@kernel.org>
 
-On 2026/4/8 21:21 Jiri Olsa <olsajiri@gmail.com> write:
-> On Wed, Apr 08, 2026 at 02:21:07PM +0800, Menglong Dong wrote:
-> > The fsession attach type is missed in the verifier log in
-> > check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id().
-> > Update them to make the verifier log proper. Meanwhile, update the
-> > corresponding selftests.
-> > 
-> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > Acked-by: Leon Hwang <leon.hwang@linux.dev>
-> > ---
-> > v2:
-> > - add a missing FSESSION in bpf_check_attach_target()
-> > ---
-> >  kernel/bpf/verifier.c                               | 10 +++++-----
-> >  tools/testing/selftests/bpf/prog_tests/exceptions.c |  8 ++++----
-> >  tools/testing/selftests/bpf/verifier/sleepable.c    |  2 +-
-> >  3 files changed, 10 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 594260c1f382..beb660b4c3ec 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -11757,7 +11757,7 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
-> >  
-> >  	if (type == BPF_PROG_TYPE_TRACING) {
-> >  		if (!bpf_prog_has_trampoline(env->prog)) {
-> > -			verbose(env, "func %s#%d supported only for fentry/fexit/fmod_ret programs\n",
-> > +			verbose(env, "func %s#%d supported only for fentry/fexit/fsession/fmod_ret programs\n",
-> >  				func_id_name(func_id), func_id);
-> >  			return -ENOTSUPP;
-> >  		}
-> > @@ -25561,7 +25561,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> >  	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
-> >  	if (!btf) {
-> >  		bpf_log(log,
-> > -			"FENTRY/FEXIT program can only be attached to another program annotated with BTF\n");
-> > +			"FENTRY/FEXIT/FSESSION program can only be attached to another program annotated with BTF\n");
-> 
-> I wonder this should say 'Tracing program...' instead,
-> we have other tracing types not covered in this error
-> 
-> jirka
-> 
-> >  		return -EINVAL;
-> >  	}
-> >  	t = btf_type_by_id(btf, btf_id);
-> > @@ -25597,7 +25597,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> >  		if (aux->func && aux->func[subprog]->aux->exception_cb) {
-> >  			bpf_log(log,
-> >  				"%s programs cannot attach to exception callback\n",
-> > -				prog_extension ? "Extension" : "FENTRY/FEXIT");
-> > +				prog_extension ? "Extension" : "FENTRY/FEXIT/FSESSION");
+On Mon, Mar 02, 2026 at 10:53:22PM +0000, Mark Brown wrote:
+> @@ -3290,11 +3295,13 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
+>  	HWCAP_CAP(ID_AA64ISAR1_EL1, I8MM, IMP, CAP_HWCAP, KERNEL_HWCAP_I8MM),
+>  	HWCAP_CAP(ID_AA64ISAR1_EL1, LS64, LS64, CAP_HWCAP, KERNEL_HWCAP_LS64),
+>  	HWCAP_CAP(ID_AA64ISAR2_EL1, LUT, IMP, CAP_HWCAP, KERNEL_HWCAP_LUT),
+> +	HWCAP_CAP(ID_AA64ISAR2_EL1, LUT, LUT6, CAP_HWCAP, KERNEL_HWCAP_LUT6),
 
-I guess that we'd better use "Tracing" instead of "FENTRY/FEXIT/FSESSION"
-here too?
+IIUC that's a LUTI6 SVE instruction which would not be available if
+SVE2p3 is not available (or SVE in general), though we have the
+equivalent SME one with SME2p3 (and a separate HWCAP for it). We should
+rename it to HWCAP_SVE_LUT6 and make it conditional on
+has_sve_feature().
 
-> >  			return -EINVAL;
-> >  		}
-[...]
-> 
-> 
+KVM will probably confuse guests here if SVE is disabled but the
+ISAR2.LUT field is not capped (I haven't checked). The conditional
+has_sve_feature() would solve this but it won't address the MRS
+emulation. Arguably it's a KVM problem for exposing inconsistent
+id regs: ISAR2.LUT==0b0010 is not permitted without SVE2p3 or SME2p3.
+But the spec isn't greatly written either - why does a field about
+AdvSIMD all of a sudden reports SVE instructions availability?
 
+On SME, unless I'm misreading the spec, the bits seem to have been
+written by three different people in isolation:
 
+- ID_AA64ZFR0_EL1.SVEver + ID_AA64PFR1_EL1.SME (and if these weren't
+  enough, we have ID_AA64SMFR0_EL1.SMEver) tells us that SME2p3 is
+  implemented. LUTI6 is mandated by SME2p3
 
+- ID_AA64SMFR0_EL1.LUT6 means that the LUTI6 instruction is present but
+  this field can only be 0b1 with SME2p3
 
+- ID_AA64ISAR2_EL1.LUT == 0b0010 means that LUTI6 instruction is present
+  (if SVE2p3 or SME2p3) and, again, that's the only value permitted by
+  SME2p3
+
+So a lot of redundancy and we did end up reporting the fine-grained
+details to the user already. The SMExpy versions seem to be cumulative
+unless Arm decides to make some of the instructions optional (it still
+doesn't explain why we have the same information in SMFR0 and ISAR2). I
+guess that's where the fine-grained HWCAPs come in handy.
+
+I wonder if the user would ever be able to parse these ID fields
+correctly if using the MRS emulation. We'd need to sanity-check KVM as
+well, not sure it proactively caps id fields.
+
+-- 
+Catalin
