@@ -1,49 +1,51 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432DF336EE1;
-	Thu,  9 Apr 2026 23:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A05D3A5428;
+	Thu,  9 Apr 2026 23:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775778572; cv=none; b=iDmsYOeUwT+GMoBZRBvzo+TzOvxW5RTmDadpcv8GSuOEDe+cHV40nsF5YLBMvSLfMSZ1sNu+sWZ0dD/wJoV95T/A65VD90VBE1mITGN4kDRsCbD7KewoMqtAwGdZZiMIa2im4g9Wtr4/4TtHW5kl9pg+KcxoPxVNDwwAau2BAUo=
+	t=1775778575; cv=none; b=QKMqLdM4b3D1CPy9wNOp9wX1AimkaAkahpH/XJIe4XNlXRO8RzE/V8au1YjNGye0J9TbWWHmDdo8eMgfhtkuMdgLhHN/O6YttECm2g5DfMX7m2cVM+5sRCpRCrC+UxIJWO2CNXeOvphC4+5PlKiY1rzSLnwxUZq9yC/bn7Y3QaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775778572; c=relaxed/simple;
-	bh=AMLyCNq9hGFHG7ml9oJxU0CUq6OOPkitEziYBenr9WE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R5+T9+2EnLVtx2DP2SRqq1qqSyEa9iIHdmFLQdT7Vy8kI9CJ2WmjBcG2vO42vd3b726PUnhpW8woJhPQZvCaJ7Mt7Wn3XiKz9CjTff6hbXUqCkVt36gspsv1XX4JnBlWJvuKRQlWetE6xJOwuuaEicguUu+yNQ3L1ifJND/lBvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=N5dPViyL; arc=none smtp.client-ip=205.220.165.32
+	s=arc-20240116; t=1775778575; c=relaxed/simple;
+	bh=JFLAoQi0iRytD3P4qz8Z9RJ2tcFkkeqHWRPHJooWHmE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rAtZ8bCggHM052ggd1imgZtaDUqQ6KItlK6Kr3Ga+NILiTqTGu/RnLdP35W9+VNOxLyBqbhvNGGq+bLBDxdHszPvm0L1PfQIus2tRIUZSG3Jhe6ATA+0PmZFHOOz/h7R20UPE3dDUgdpSp+pQ4FmxMX18XvVACqhVd5Er8sgEVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=T8FEv1Mw; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="N5dPViyL"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 639JtVp02413200;
-	Thu, 9 Apr 2026 23:49:20 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="T8FEv1Mw"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 639JtY2X3363830;
+	Thu, 9 Apr 2026 23:49:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=dvJ3TU1MWb94kQWr+8Y7dvIzPSH4o
-	tBEbOprU5cP+OY=; b=N5dPViyLNCc/Om5vpWL8pRDmogvqTx99LiGz/SL5akd1F
-	k0mTAyLphSYio4Jk32cfGrrTHaQpTnCbJeMiXrm4oaJKmvc48QV0Y/rnrsGDpJfQ
-	OBi6XCM2AXZII1g1ktfCwYyC+rPmQGz8qiEIJ56hJDEsZ8tm6DXbzoTVQwyrqIFy
-	gVN/N+aWMzK38NfuLRZWO3YWsHuW927CY+qzM7iVNAI1WgSgkZvmUoRFyKJU27HE
-	4i/n78KrQXhhj03PlrTIeu15njF6bP/h8nHc3LQb2exz5NzwEl0xv93FgbDqG5Ye
-	kSrEQ5IOviuGW6GYOTanI+O4mgSBIbc7gNTcyAB8Q==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=Q5zS4
+	AbyfSrBrAYYwwDhm0BhvxfeDN7C2ZhJWTF0Yb8=; b=T8FEv1Mw3WutcxNlPPYmx
+	JhSyZFsBqGJdNaLgmChg/zpK28kobSnCrq329Q8fInSXD77k4xuWgiAwRLtAuGoM
+	R9Bf/y1+GmV+gu3hNfOOpgFOVPu3JUJkomUb+YNnwhNFM6ZBRrP8pcymt0qZImQo
+	7Q8ICnZA+O/nj/kc89wCZHLidfuDRpFP7iF3GWsyj4AY4ogsgrBcKu5FdHg+3xV+
+	59G6Iz8sVpQyAJxXXN0MerPI722FwCxAAt7tzGbBbFYru9Se8kwQ24NaAHMlr2OI
+	nsmUUdopczp29efGV7KfSHN9siDCn7YHlLN/QBomdWV8IviCfwLJqYx9UgegfLri
+	Q==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dcmqa8tf1-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dcmqb0mc5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 09 Apr 2026 23:49:20 +0000 (GMT)
+	Thu, 09 Apr 2026 23:49:23 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 639LQ44u003643;
-	Thu, 9 Apr 2026 23:49:18 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 639MGcdg003534;
+	Thu, 9 Apr 2026 23:49:22 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dcn5ytfy1-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dcn5ytg0c-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 09 Apr 2026 23:49:18 +0000
+	Thu, 09 Apr 2026 23:49:22 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 639NnIZM019990;
-	Thu, 9 Apr 2026 23:49:18 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 639NnIZQ019990;
+	Thu, 9 Apr 2026 23:49:21 GMT
 Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4dcn5ytfx5-1;
-	Thu, 09 Apr 2026 23:49:18 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4dcn5ytfx5-3;
+	Thu, 09 Apr 2026 23:49:21 +0000
 From: Anthony Yznaga <anthony.yznaga@oracle.com>
 To: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -51,10 +53,12 @@ Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
         Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
         surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
         Jason@zx2c4.com, shuah@kernel.org
-Subject: [PATCH v3 0/2] fix MAP_DROPPABLE not supported errno
-Date: Thu,  9 Apr 2026 16:49:13 -0700
-Message-ID: <20260409234915.11723-1-anthony.yznaga@oracle.com>
+Subject: [PATCH v3 2/2] selftests/mm: verify droppable mappings cannot be locked
+Date: Thu,  9 Apr 2026 16:49:15 -0700
+Message-ID: <20260409234915.11723-3-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260409234915.11723-1-anthony.yznaga@oracle.com>
+References: <20260409234915.11723-1-anthony.yznaga@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,58 +70,192 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-09_05,2026-04-09_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 bulkscore=0
- mlxlogscore=871 phishscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 phishscore=0 adultscore=0 malwarescore=0 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2604010000
  definitions=main-2604090220
-X-Proofpoint-GUID: BO1gdfDQVUaQm9ZjoLs9PU2hrR8A6Inz
-X-Proofpoint-ORIG-GUID: BO1gdfDQVUaQm9ZjoLs9PU2hrR8A6Inz
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA5MDIyMCBTYWx0ZWRfX/GP63TpharoX
- 84G2Ys7Tmbhr6F6EU4LeNN8xW5rb20LICTmWWrmC+Zs+yuXHhEyArNAhZHOEhntB3zrEgVcH3Ql
- ByauAmnKX8XatJoQhGUunl8S5vWzC7VRii5t66UvKiNbtt7HTI6PJk3xDdOMX2xcWC6UcuRmCnF
- LoX6P0ss42QtdB/LI+AfKLVOC77xCU1BK8cZX7EpH3RfJU94zraKA+qJ2qC+iy8VuK8ILlCOfcL
- idSYyt9mqqjn6cV/vTGeigoly92J5bM/okpo4HTk4cINwifm4rKTU4eQLhYhmx9sQiBUddBVUqw
- PczgyhTvj0aC6Jz4ejJHpK0Q7tHEwKLj/ino7/Gh+OC5uzOb11xndKkSgotWkAWINPrgRUGpyQJ
- ntpkxmCnlDYDeTD2HKI1kdK4f+V7nRrrpGsfem+K0kHWknsezh+YjUDTzWloJ5xM99wmHcDX33X
- SLIxPcgBwd0E/7uPOG8FU+EDShvtbuEi9FfFcKU0=
-X-Authority-Analysis: v=2.4 cv=DLS/JSNb c=1 sm=1 tr=0 ts=69d83b00 b=1 cx=c_pps
+X-Proofpoint-ORIG-GUID: 40N8NH5Crb0U29iL8DnzmZhoaGwOkPDW
+X-Proofpoint-GUID: 40N8NH5Crb0U29iL8DnzmZhoaGwOkPDW
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA5MDIyMCBTYWx0ZWRfX50VGl0rnNXbZ
+ 1ftc33K+AymVbnhNtGYWP3ICw2pGO+V0Yoa4qjloVXzMyNZaafhmPFy1BH/mbKcawh4VD71RFaD
+ gqW1foFGyuQjch3Itc1noKvKOECj38N+bXvRZ0vpD/KZ7KgSIUPugpP7x1O4Qr2b7H9D0yN0oAf
+ xvmA8i/SbyxLVx+oOVuaSswdzkZBqMsp6a+9Yzv3HVrpaBjUZRGihF8ljxGGyezd5/mScbLHeEw
+ YZ0wb30QJDYYowRoNazVtGEuUvy171no5ROLC79NGbTct6GaaXOm7DAlKt6gMaNuxi5XBOrJaNl
+ YkpRbHMS3ziVclRPXvutf1M55fYwfKrbqlpizaoDedjC7WRHDapgsHDeVLomcxHbL9Hoadf/fBj
+ riFMz6nQM+tcLldhPQNlvo73+oVlPfslzpun2zhcM5fMlUxYz3LOf2j+GvArqAZfywXKZfprNei
+ VKuGHsVuYgPrW8cxTsKYqIeV2NBIjRzUKYRf+vpE=
+X-Authority-Analysis: v=2.4 cv=NZXWEWD4 c=1 sm=1 tr=0 ts=69d83b03 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
  a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=7Gl3-_t3PgB9XO-mQDs3:22 a=hZgukN1trT8sADp7EUgA:9 cc=ntf awl=host:12291
+ a=EIcjfB9IiI4px24ztqRk:22 a=yPCof4ZbAAAA:8 a=RvmZQwE64T_oa5h20bIA:9 cc=ntf
+ awl=host:12291
 
-Mark Brown reported seeing a regression in -next on 32 bit arm with the
-mlock selftests. Before exiting and marking the tests failed, the following
-message was logged after an attempt to create a MAP_DROPPABLE mapping:
+For configs that support MAP_DROPPABLE verify that a mapping created
+with MAP_DROPPABLE cannot be locked via mlock(), and that it will not
+be locked if it's created after mlockall(MCL_FUTURE).
 
-Bail out! mmap error: Unknown error 524
-
-It turns out error 524 is ENOTSUPP which is an error that userspace is not
-supposed to see, but it indicates in this instance that MAP_DROPPABLE is
-not supported.
-
-The first patch changes the errno returned to EOPNOTSUPP. The second patch
-is a second version of a prior patch to introduce selftests to verify
-locking behavior with droppable mappings with the additional change to skip
-the tests when MAP_DROPPABLE is not supported.
-
-v3:
-- Added acked-by's and reviewed-by's to patch 1
-- Addressed sashiko AI reviewbot questions:
-  - Call munlockall() if test_mlockall_future_droppable() returns early
-  - Skip the tests if they are compiled for an older kernel without
-    MAP_DROPPABLE.
-
-v2:
-- Remove unnecessary mlock() call from selftest (DavidH)
-- Change tests to not exit on failure (DavidH)
-
-Anthony Yznaga (2):
-  mm: fix mmap errno value when MAP_DROPPABLE is not supported
-  selftests/mm: verify droppable mappings cannot be locked
-
- mm/mmap.c                                 |   2 +-
+Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+---
  tools/testing/selftests/mm/mlock2-tests.c | 100 ++++++++++++++++++++--
- 2 files changed, 92 insertions(+), 10 deletions(-)
+ 1 file changed, 91 insertions(+), 9 deletions(-)
 
+diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
+index b474f2b20def..47da1a05c243 100644
+--- a/tools/testing/selftests/mm/mlock2-tests.c
++++ b/tools/testing/selftests/mm/mlock2-tests.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #define _GNU_SOURCE
+ #include <sys/mman.h>
++#include <linux/mman.h>
+ #include <stdint.h>
+ #include <unistd.h>
+ #include <string.h>
+@@ -163,14 +164,17 @@ static int lock_check(unsigned long addr)
+ 	return (vma_rss == vma_size);
+ }
+ 
+-static int unlock_lock_check(char *map)
++static int unlock_lock_check(char *map, bool mlock_supported)
+ {
+-	if (is_vmflag_set((unsigned long)map, LOCKED)) {
++	if (!is_vmflag_set((unsigned long)map, LOCKED))
++		return 0;
++
++	if (mlock_supported)
+ 		ksft_print_msg("VMA flag %s is present on page 1 after unlock\n", LOCKED);
+-		return 1;
+-	}
++	else
++		ksft_print_msg("VMA flag %s is present on an unsupported VMA\n", LOCKED);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ static void test_mlock_lock(void)
+@@ -196,7 +200,7 @@ static void test_mlock_lock(void)
+ 		ksft_exit_fail_msg("munlock(): %s\n", strerror(errno));
+ 	}
+ 
+-	ksft_test_result(!unlock_lock_check(map), "%s: Unlocked\n", __func__);
++	ksft_test_result(!unlock_lock_check(map, true), "%s: Unlocked\n", __func__);
+ 	munmap(map, 2 * page_size);
+ }
+ 
+@@ -296,7 +300,7 @@ static void test_munlockall0(void)
+ 		ksft_exit_fail_msg("munlockall(): %s\n", strerror(errno));
+ 	}
+ 
+-	ksft_test_result(!unlock_lock_check(map), "%s: No locked memory\n", __func__);
++	ksft_test_result(!unlock_lock_check(map, true), "%s: No locked memory\n", __func__);
+ 	munmap(map, 2 * page_size);
+ }
+ 
+@@ -336,9 +340,85 @@ static void test_munlockall1(void)
+ 		ksft_exit_fail_msg("munlockall() %s\n", strerror(errno));
+ 	}
+ 
+-	ksft_test_result(!unlock_lock_check(map), "%s: No locked memory\n", __func__);
++	ksft_test_result(!unlock_lock_check(map, true), "%s: No locked memory\n", __func__);
++	munmap(map, 2 * page_size);
++}
++
++#ifdef MAP_DROPPABLE
++/*
++ * Droppable memory should not be lockable.
++ */
++static void test_mlock_droppable(void)
++{
++	char *map;
++	unsigned long page_size = getpagesize();
++
++	/*
++	 * Ensure MCL_FUTURE is not set.
++	 */
++	if (munlockall()) {
++		ksft_test_result_fail("munlockall() %s\n", strerror(errno));
++		return;
++	}
++
++	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
++		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
++	if (map == MAP_FAILED) {
++		if (errno == EOPNOTSUPP)
++			ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
++		else
++			ksft_test_result_fail("mmap error: %s\n", strerror(errno));
++		return;
++	}
++
++	if (mlock2_(map, 2 * page_size, 0))
++		ksft_test_result_fail("mlock2(0): %s\n", strerror(errno));
++	else
++		ksft_test_result(!unlock_lock_check(map, false),
++				"%s: droppable memory not locked\n", __func__);
++
++	munmap(map, 2 * page_size);
++}
++
++static void test_mlockall_future_droppable(void)
++{
++	char *map;
++	unsigned long page_size = getpagesize();
++
++	if (mlockall(MCL_CURRENT | MCL_FUTURE)) {
++		ksft_test_result_fail("mlockall(MCL_CURRENT | MCL_FUTURE): %s\n", strerror(errno));
++		return;
++	}
++
++	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
++		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
++
++	if (map == MAP_FAILED) {
++		if (errno == EOPNOTSUPP)
++			ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
++		else
++			ksft_test_result_fail("mmap error: %s\n", strerror(errno));
++		munlockall();
++		return;
++	}
++
++	ksft_test_result(!unlock_lock_check(map, false), "%s: droppable memory not locked\n",
++			__func__);
++
++	munlockall();
+ 	munmap(map, 2 * page_size);
+ }
++#else
++static void test_mlock_droppable(void)
++{
++	ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
++}
++
++static void test_mlockall_future_droppable(void)
++{
++	ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
++}
++#endif /* MAP_DROPPABLE */
+ 
+ static void test_vma_management(bool call_mlock)
+ {
+@@ -442,7 +522,7 @@ int main(int argc, char **argv)
+ 
+ 	munmap(map, size);
+ 
+-	ksft_set_plan(13);
++	ksft_set_plan(15);
+ 
+ 	test_mlock_lock();
+ 	test_mlock_onfault();
+@@ -451,6 +531,8 @@ int main(int argc, char **argv)
+ 	test_lock_onfault_of_present();
+ 	test_vma_management(true);
+ 	test_mlockall();
++	test_mlock_droppable();
++	test_mlockall_future_droppable();
+ 
+ 	ksft_finished();
+ }
 -- 
 2.47.3
 
