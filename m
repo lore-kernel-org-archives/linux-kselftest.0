@@ -1,43 +1,60 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732783A9605;
-	Thu,  9 Apr 2026 11:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC16E27BF7C;
+	Thu,  9 Apr 2026 11:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775734436; cv=none; b=gDqjeW+o9TY9Y1z+rmO03ZZbu8mTUL+wA1iyq6k+0LHKFhytTDMZCjd0w/hkBDUPduomQxwFQjbyLeFkjN7tqMK+UIxFhs/tpJdfdArgpS6dxlsw/3/T/FTBxu3SznYHBkGadyCzCsCkR1UmNVEtyF1VJMhS4ZnBnGhx2An2Qec=
+	t=1775735420; cv=none; b=po1fdrb4Blx5BdoZh6kmYIATe4aiBaY+YoWVv5Nckc6Tpl/Za/OZWruudgyPjAmTe++8A67lAa4dZ6j/kHdWAW/Vpi3+MyNdGx/JZGMAspnCc89UzLit0mYYttfvUuAf+o28UZF5G7ykIfZTcnOsJHb1ID2HFg5Tub7uV3q5AL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775734436; c=relaxed/simple;
-	bh=CNq6QdX054NW/AuTIE+mAJAxxpPam5NVbcXRjsHjS0k=;
+	s=arc-20240116; t=1775735420; c=relaxed/simple;
+	bh=Mp6RwckuLl4IhCOSbAcDzWGzKF26msw1bEgZICRtzsA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QXp7usWPYqduCUwxWSy5/a/gf5fq0fdsKjLfIueXJPAGkTckeL/O/dJMLJsXylAnnT3+iTPIhk0CqNbuLp4H+gwFykhFLZ6nBCxLq3cBDAvXgGxvqnLwiNurqt8Uvaf3cjyCmFkRIZaz9MUihTVDuxTPv/eRUz4dh/ONeLQPXSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=I+t/jmSC; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hG1bzDk1NKYVzF0LeRnaaUCMU0O9E/zAq6KiivMi9AO/Kvsa52NUfzG6nhBj9cd5gCnnb95siJya3FeZzgK6Gj0rmltyJ07wiB3a68uNZMSa7cQJEgmnE57kC0h65tlR58gnSVqZnRgB+5VJDZAkQbLQVH5TOQKlRcS257ias4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RmYJuWe2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="I+t/jmSC"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09BA12E98;
-	Thu,  9 Apr 2026 04:33:49 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A625A3F632;
-	Thu,  9 Apr 2026 04:33:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1775734434; bh=CNq6QdX054NW/AuTIE+mAJAxxpPam5NVbcXRjsHjS0k=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RmYJuWe2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65794C4CEF7;
+	Thu,  9 Apr 2026 11:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775735420;
+	bh=Mp6RwckuLl4IhCOSbAcDzWGzKF26msw1bEgZICRtzsA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I+t/jmSCB3TqxIVZidBOnZrV18cGfF6qdqizNuLLbeUk2GDK4TrUZp/j0ztz5O/WH
-	 MAo1UtFIXfwzxMfa2Z9nZnUNQENHfhZnZFWLbVNrEo2nB5c0Arkz0zqtPQqOYNAvA9
-	 5Un/Ngqb/zfogituQtsdZWWlcj4KAOgv8ZgL399w=
-Date: Thu, 9 Apr 2026 12:33:50 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7/8] arm64/cpufeature: Define hwcaps for 2025 dpISA
- features
-Message-ID: <adeOnmy60AUQzSvo@arm.com>
-References: <20260302-arm64-dpisa-2025-v1-0-0855e7f41689@kernel.org>
- <20260302-arm64-dpisa-2025-v1-7-0855e7f41689@kernel.org>
+	b=RmYJuWe26QucjVeBfEJK64d0300yIFY4sVeYJz0y2S9j10vPr1gURgmRS8Ra6DVQn
+	 ERFOwCI2JbX/w68vXuPOqFaCiPoPYMyXFAZG/ihCG3Rll/8pXDACP+1pmL9vZIMXpl
+	 QorYsC/2W7S6sHU8M089LtYemTBnvmBmxrqS9fCP01V/uO3NQCZvIdxV7qCfvQB/Bt
+	 z5pkAPxv2by7LKYPskTxZu1Jso5dGDLuapoHcpTFbqadFQyKMVi2BeZ+ygdKRuN5q/
+	 G9vghTxT7RFWLEH9Z9q27/eLcfDgOphJtEeVheijmCwkTnV5IACKrEHWY9FjjayVYU
+	 gvPchPW2O1lcQ==
+Date: Thu, 9 Apr 2026 14:50:09 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andrea Arcangeli <aarcange@redhat.com>,
+	Andrei Vagin <avagin@google.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@kernel.org>,
+	Harry Yoo <harry.yoo@oracle.com>, Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 13/15] KVM: guest_memfd: implement userfaultfd
+ operations
+Message-ID: <adeScX-HVYeYufCm@kernel.org>
+References: <20260402041156.1377214-1-rppt@kernel.org>
+ <20260402041156.1377214-14-rppt@kernel.org>
+ <ac7oE_1j6gxf8OKT@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,52 +63,89 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260302-arm64-dpisa-2025-v1-7-0855e7f41689@kernel.org>
+In-Reply-To: <ac7oE_1j6gxf8OKT@google.com>
 
-On Mon, Mar 02, 2026 at 10:53:22PM +0000, Mark Brown wrote:
-> @@ -3290,11 +3295,13 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
->  	HWCAP_CAP(ID_AA64ISAR1_EL1, I8MM, IMP, CAP_HWCAP, KERNEL_HWCAP_I8MM),
->  	HWCAP_CAP(ID_AA64ISAR1_EL1, LS64, LS64, CAP_HWCAP, KERNEL_HWCAP_LS64),
->  	HWCAP_CAP(ID_AA64ISAR2_EL1, LUT, IMP, CAP_HWCAP, KERNEL_HWCAP_LUT),
-> +	HWCAP_CAP(ID_AA64ISAR2_EL1, LUT, LUT6, CAP_HWCAP, KERNEL_HWCAP_LUT6),
+Hi Sean,
 
-IIUC that's a LUTI6 SVE instruction which would not be available if
-SVE2p3 is not available (or SVE in general), though we have the
-equivalent SME one with SME2p3 (and a separate HWCAP for it). We should
-rename it to HWCAP_SVE_LUT6 and make it conditional on
-has_sve_feature().
+On Thu, Apr 02, 2026 at 03:05:07PM -0700, Sean Christopherson wrote:
+> On Thu, Apr 02, 2026, Mike Rapoport wrote:
+>
+> > +#ifdef CONFIG_USERFAULTFD
+> > +static bool kvm_gmem_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags)
+> > +{
+> > +	struct inode *inode = file_inode(vma->vm_file);
+> > +
+> > +	/*
+> > +	 * Only support userfaultfd for guest_memfd with INIT_SHARED flag.
+> > +	 * This ensures the memory can be mapped to userspace.
+> > +	 */
+> > +	if (!(GMEM_I(inode)->flags & GUEST_MEMFD_FLAG_INIT_SHARED))
+> > +		return false;
+> 
+> I'm not comfortable with this change.  It works for now, but it's going to be
+> wildly wrong when in-place conversion comes along.  While I agree with the "Let's
+> solve each problem in it's time :)"[*], the time for in-place conversion is now.
+> In-place conversion isn't landing this cycle or next, but it's been in development
+> for longer than UFFD support, and I'm not willing to punt solvable problems to
+> that series, because it's plenty fat as is.
 
-KVM will probably confuse guests here if SVE is disabled but the
-ISAR2.LUT field is not capped (I haven't checked). The conditional
-has_sve_feature() would solve this but it won't address the MRS
-emulation. Arguably it's a KVM problem for exposing inconsistent
-id regs: ISAR2.LUT==0b0010 is not permitted without SVE2p3 or SME2p3.
-But the spec isn't greatly written either - why does a field about
-AdvSIMD all of a sudden reports SVE instructions availability?
+I'm not against solving it as a part of uffd support, but since we are very
+close to the merge window, for now I asked Andrew to drop drop guest_memfd
+patches from the set and only move forward with the refactoring of uffd and
+shmem that has value on its own.
+ 
+> Happily, IIUC, this is an easy problem to solve, and will have a nice side effect
+> for the common UFFD code.
+> 
+> My objection to an early, global "can_userfault()" check is that it's guaranteed
+> to cause TOCTOU issues.  E.g. for VM_UFFD_MISSING and VM_UFFD_MINOR, the check on
+> whether or not a given address can be faulted in needs to happen in __do_userfault(),
+> not broadly when VM_UFFD_MINOR is added to a VMA.  Conceptually, that also better
+> aligns the code with the "normal" user fault path in kvm_gmem_fault_user_mapping().
+>
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index 6f33307c2780..8a2d0625ffa3 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -82,8 +82,8 @@ extern vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason);
+>  
+>  /* VMA userfaultfd operations */
+>  struct vm_uffd_ops {
+> -       /* Checks if a VMA can support userfaultfd */
+> -       bool (*can_userfault)(struct vm_area_struct *vma, vm_flags_t vm_flags);
+> +       /* What UFFD flags/modes are supported. */
+> +       const vm_flags_t supported_uffd_flags;
 
-On SME, unless I'm misreading the spec, the bits seem to have been
-written by three different people in isolation:
+VMA maintainers really didn't like a fields flag in vm_uffd_ops when it was
+proposed earlier, but an indirect call may work.
 
-- ID_AA64ZFR0_EL1.SVEver + ID_AA64PFR1_EL1.SME (and if these weren't
-  enough, we have ID_AA64SMFR0_EL1.SMEver) tells us that SME2p3 is
-  implemented. LUTI6 is mandated by SME2p3
+>         /*
+>          * Called to resolve UFFDIO_CONTINUE request.
+>          * Should return the folio found at pgoff in the VMA's pagecache if it
+> 
+> with usage like:
+> 
+> static const struct vm_uffd_ops shmem_uffd_ops = {
+> 	.supported_uffd_flags	= __VM_UFFD_FLAGS,
+> 	.get_folio_noalloc	= shmem_get_folio_noalloc,
+> 	.alloc_folio		= shmem_mfill_folio_alloc,
+> 	.filemap_add		= shmem_mfill_filemap_add,
+> 	.filemap_remove		= shmem_mfill_filemap_remove,
+> };
+> 
+> All in all, somelike like so (completely untested):
+> 
+> ---
+>  include/linux/userfaultfd_k.h |  4 +-
+>  mm/filemap.c                  |  1 +
+>  mm/hugetlb.c                  |  8 +---
+>  mm/shmem.c                    |  7 +--
+>  mm/userfaultfd.c              |  6 +--
+>  virt/kvm/guest_memfd.c        | 80 ++++++++++++++++++++++++++++++++++-
+>  6 files changed, 87 insertions(+), 19 deletions(-)
 
-- ID_AA64SMFR0_EL1.LUT6 means that the LUTI6 instruction is present but
-  this field can only be 0b1 with SME2p3
-
-- ID_AA64ISAR2_EL1.LUT == 0b0010 means that LUTI6 instruction is present
-  (if SVE2p3 or SME2p3) and, again, that's the only value permitted by
-  SME2p3
-
-So a lot of redundancy and we did end up reporting the fine-grained
-details to the user already. The SMExpy versions seem to be cumulative
-unless Arm decides to make some of the instructions optional (it still
-doesn't explain why we have the same information in SMFR0 and ISAR2). I
-guess that's where the fine-grained HWCAPs come in handy.
-
-I wonder if the user would ever be able to parse these ID fields
-correctly if using the MRS emulation. We'd need to sanity-check KVM as
-well, not sure it proactively caps id fields.
+Let's revisit after -rc1 :)
 
 -- 
-Catalin
+Sincerely yours,
+Mike.
