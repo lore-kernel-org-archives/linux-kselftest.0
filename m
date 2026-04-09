@@ -1,138 +1,96 @@
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DA2387570;
-	Thu,  9 Apr 2026 07:58:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81686386C3D;
+	Thu,  9 Apr 2026 08:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775721537; cv=none; b=O8PhCgLNqPW/1hGOGo8YiiYpnLQGw71A3g8vYwz1SYMhFyIQ8u52jn+ZSfe48l32YowaYeNIhJjj0p941ilaUscQL/ovbpt+WS6Ds+v3l5DsihRwUDDxauqGfPkXM86x9ZFT4rUXnnNrgvUdR5QgiLGm2PWZ/xFY5I1cUG2lnSQ=
+	t=1775721842; cv=none; b=efWTUAINMe19dmNgw54PkcmVo5yiqpr4iZyLdhfZJlfkqYti8wv3cXI8FSHtAkhNXzJ9pKUoTaO0VthLhj/Ub1wJkVTXaqaST/9i4vgrPHYX9U/24Fuma419iXiepAZn1GE07wp/Ab2rbPJPwC806WmqHZK13DFu2/kDzX2bMQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775721537; c=relaxed/simple;
-	bh=uGHjWOVWbXx3D0UdHIEoCnTuSer89svIFp1G0mY5U2E=;
+	s=arc-20240116; t=1775721842; c=relaxed/simple;
+	bh=G2ZJR48gQHdHGhWfbPFbOSyHC6zZ1l0MoaQGw2C7Oak=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cg62BKPjS6Y3b4hprC1jHIzXPb0PZ9AqH0kbScfPgYVaqygYOUvzpWLyfU3rlWx20lewQ5LjYI/FS4AGhYIYN7+qwxWkuD9YwD/OfI+jltushVzMgDuv9L8ZaIj1CvN7EivqWY6l6JJJkVsP0f5Aj5l1JSyiGY9IsYqu7LikaAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=Y/OCmmj8; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=kyLbNfYlMRUbCNcJ/g0q38+ntSycOAHB1iI43D9gNr3ojP8n6ZN1XM/AyuEP6egpqAzmYOyFmrjqshkIdftSUHnLFYFCpZ+70tc6s+T+iBb6LXhnKxduyQbha+ISRp1fL8MIEbeRAJ0G985RF78hOVKkgsqCOYH/ZDENOx2Q1uE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bgytiDwt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="Y/OCmmj8"
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4frsky0nnkz9tcN;
-	Thu,  9 Apr 2026 09:58:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1775721530;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uGHjWOVWbXx3D0UdHIEoCnTuSer89svIFp1G0mY5U2E=;
-	b=Y/OCmmj84uO6UTKKkqhY4xBDKhY2FimlOsu2fJKwXU3+ZJ6KZnWKQxDZFKgd3wxkkMeHzN
-	UfQqbNrjI4Be91At2EbABl8Z9D1gftb/6IuZCeYjiZ+RYY6waYUH88s09l4EIseIUjjU/a
-	HvChXSdUJHpf7cAZFAqCrkEVMLUs//edNyU01Njj6j8HJ6mLieZp184SACcq3Eb3yQJy2c
-	klt6wn+acJB4mnHRtRa87u/lmcLyGPvaSV7bTRGxya1hprDH0bib62wb6gNfwdKWiy3ysn
-	/vovZYnKWvldTm8rGxa5SuaTw38vHoHtPH0jvFHuilgu68IE6kVb7lODjqJwug==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::2 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-Date: Thu, 9 Apr 2026 17:58:31 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Jori Koolstra <jkoolstra@xs4all.nl>
-Cc: Mateusz Guzik <mjguzik@gmail.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "H. Peter Anvin" <hpa@zytor.com>, Jan Kara <jack@suse.cz>, 
-	Alexander Aring <alex.aring@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Andrey Albershteyn <aalbersh@redhat.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, Namhyung Kim <namhyung@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	cmirabil@redhat.com, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
-Message-ID: <2026-04-09-blank-hunky-inactivity-flowers-18Sd4K@cyphar.com>
-References: <20260331172011.3512876-1-jkoolstra@xs4all.nl>
- <20260331172011.3512876-2-jkoolstra@xs4all.nl>
- <pbobkjhtuli53o3z34ajyxztaosmztwlygxfxhhjq5ajt47inc@ngtoge3ucdm5>
- <2026-04-02-aged-convex-snowbird-foxes-Ym20JZ@cyphar.com>
- <52244194.1650546.1775684643065@kpc.webmail.kpnmail.nl>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bgytiDwt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B89C4CEF7;
+	Thu,  9 Apr 2026 08:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775721842;
+	bh=G2ZJR48gQHdHGhWfbPFbOSyHC6zZ1l0MoaQGw2C7Oak=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bgytiDwtrQUnhP+4RBfPsfweYkSoLJlcqMjWZgQvft1H8bo/ZuURAdBynkBlivQ79
+	 x23fW4+brpjAHzYdS8JKxxvv0UNwldnu40j4PiOCgg7joz4IGCDUQSZ+Jp3B6L+Wqh
+	 swYO/kw47QdR5k0RR9QaTT+DeUwWeGz6QxfurRhkHbROtUAA0b1Q5ZDJmVUlO3MPfh
+	 Sox2kWgoupLwfcZRwczznLzd6H2CIPCTtAM65+TXwhYDCuQYjHBI6KOZLzQE5A27Fe
+	 Vw8SYH/1cEdJHTB2xipw7YeZm5R+AXamw6HHzwPB7/bl3+ehguRguJbmfz5stHABCl
+	 HLvhFnIDAT/Tg==
+Date: Thu, 9 Apr 2026 09:03:56 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: anthony.yznaga@oracle.com
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, david@kernel.org, 
+	Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, 
+	shuah@kernel.org
+Subject: Re: [PATCH v2 2/2] selftests/mm: verify droppable mappings cannot be
+ locked
+Message-ID: <adddNM1yDJ6tWXsR@lucifer>
+References: <20260402235933.10588-1-anthony.yznaga@oracle.com>
+ <20260402235933.10588-3-anthony.yznaga@oracle.com>
+ <20260403123120.82cb5becb19e1b572d474394@linux-foundation.org>
+ <83b56ffb-6e2e-4c9b-b0cf-9f04b61ebe7f@oracle.com>
+ <20260408140251.6158aa7a56f71128471f327e@linux-foundation.org>
+ <ee802934-0be0-4c33-b3d6-38ef713e6bf4@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="k2hfwjyntbi772ln"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <52244194.1650546.1775684643065@kpc.webmail.kpnmail.nl>
-X-Rspamd-Queue-Id: 4frsky0nnkz9tcN
+In-Reply-To: <ee802934-0be0-4c33-b3d6-38ef713e6bf4@oracle.com>
 
+On Wed, Apr 08, 2026 at 03:26:14PM -0700, anthony.yznaga@oracle.com wrote:
+>
+> On 4/8/26 2:02 PM, Andrew Morton wrote:
+> > On Wed, 8 Apr 2026 13:35:42 -0700 anthony.yznaga@oracle.com wrote:
+> >
+> > > On 4/3/26 12:31 PM, Andrew Morton wrote:
+> > > > On Thu,  2 Apr 2026 16:59:33 -0700 Anthony Yznaga <anthony.yznaga@oracle.com> wrote:
+> > > >
+> > > > > For configs that support MAP_DROPPABLE verify that a mapping created
+> > > > > with MAP_DROPPABLE cannot be locked via mlock(), and that it will not
+> > > > > be locked if it's created after mlockall(MCL_FUTURE).
+> > > > There are a few queries from the AI reviewbot;
+> > > > 	https://sashiko.dev/#/patchset/20260402235933.10588-1-anthony.yznaga@oracle.com
+> > > Interesting. Of the two issues, one is certainly legit. I need to add an
+> > > munlockall() on early return from test_mlockall_future_droppable().
+> > Cool.
+> >
+> > > For the other, the question posed was whether the tests should handle
+> > > possibly being run on an older kernel that doesn't implement
+> > > MAP_DROPPABLE. It seems to me to that a selftest should not be expected
+> > > to work (or even necessarily compile) on kernels older than when the
+> > > selftest was introduced, but I don't want to assume.
+> > I don't know that there's any policy on that.  My attitude is that
+> > selftests are not intended to be forward- or backward-compatible.
+> > That's why we ship them with the kernel source!
+> >
+> > If we get a selftests fixup then I do like to backport that into
+> > earlier kernels if appropriate, to keep those in good shape.  And that
+> > has the effect of reducing people's motivation to run a later kernel's
+> > selftests on their current kernel.
+> >
+> That makes sense. It's trivial to skip the tests if MAP_DROPPABLE is not
+> defined so I'll do that.
+>
+>
 
---k2hfwjyntbi772ln
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC PATCH 1/2] vfs: syscalls: add mkdirat_fd()
-MIME-Version: 1.0
+Yeah in general, I think we best-effort try to keep them working for older
+kernels (but no guarantees IMO), so checking if something's implemented is
+cheap-and-easy.
 
-On 2026-04-08, Jori Koolstra <jkoolstra@xs4all.nl> wrote:
->=20
-> > Op 02-04-2026 04:52 CEST schreef Aleksa Sarai <cyphar@cyphar.com>:
-> >=20
-> > Please do not use O_* flags! O_CLOEXEC takes up 3 flag bits on different
-> > architectures which makes adding new flags a nightmare.
-> >=20
-> > I think this should take AT_* flags and (like most newer syscalls)
-> > O_CLOEXEC should be automatically set. Userspace can unset it with
-> > fnctl(F_SETFD) in the relatively rare case where they don't want
-> > O_CLOEXEC.
->=20
-> And then do something like statx_lookup_flags() does to build the lookup
-> flags from those AT flags?
-
-Yeah, that is the usual pattern for *at(2) syscalls.
-
-> But there is also no AT_ROOT_CONTAINED (or whatever you would want to
-> call the RESOLVE_IN_ROOT AT-equivalent) right now.
-
-This point about AT_* flags was a separate point to my hopes that we
-could get this into openat2(2). We don't have AT_* equivalents to
-RESOLVE_* flags because it would burn too many bits (at least 5,
-likely more when we add RESOLVE_NO_DOTDOT and other such extensions) and
-openat2(2) is actually sufficient for almost all operations in practice.
-
-> > Alternatively, we could just bite the bullet and make
-> > AT_NO_CLOEXEC a thing...
->=20
-> What's the bullet to bite there?
-
-It's not a big deal but it just burns another generic AT_* flag bit for
-something that userspace can do themselves with fnctl(2).
-
-Maybe having it will encourage future syscall authors to default to
-O_CLOEXEC, but we could end up with the slightly silly AT_SYMLINK_FOLLOW
-/ AT_SYMLINK_NOFOLLOW situation too. Documenting it in
-seemingly-rarely-read Documentation/process/adding-syscalls.rst might
-end up being equally (in)effective without burning a flag bit... :/
-
---=20
-Aleksa Sarai
-https://www.cyphar.com/
-
---k2hfwjyntbi772ln
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaddcJhsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG/mcgEA9HmAsJvMhlTmxWLJnRhT
-N6H+k7b6Nyum8hYopahQGrQA/3s9M0dm2wGkVJdmVn0sUDH5Xs6JMfuVRNz0n8hV
-Fk0N
-=uAhk
------END PGP SIGNATURE-----
-
---k2hfwjyntbi772ln--
+Cheers, Lorenzo
