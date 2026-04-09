@@ -1,80 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7B1376BE4;
-	Thu,  9 Apr 2026 02:51:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07D0213E89
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 02:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775703091; cv=none; b=h6cqcmzI45i0SNmfRix/YKD/luVRPGOmscawvxlcI0gdRlLGpE8KaRefYzdm5b7hptBbaEJAcLdikpsw0eyiUjlwmNefDA7wE19Aq+0wpOnJbD2t2w6Hknpz8HhQj2tJuRZo5UHzWVxYm3814Go5NtuukUfMnCFoSzMP/XYFR5s=
+	t=1775703582; cv=none; b=b4JWnifoY9MQ433na9U0gbt84qRNfRv5uACk3ZO9if0fmw4vYr7Nj7Q0qDG+5+m8VrtM5yOeIZfTqRNnLydjWTFTqnHoipY0xldnLcEFGqlyR9M1aGAJDZaOGWT92yl0WnSuAsH2rlX0hSeVGT4OcAnYWVy7Op5Mq8vMFNTvZgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775703091; c=relaxed/simple;
-	bh=PbBzdI3qVvg8NGCmO5KQ9RJ+udLRsXOc/boi6AFdsgQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=VvyAR6mD4nPzhQHYGltgCgV1CQFkUpg26MdYfQwnviuuf98xbd4Ts5dIUXbV1DhgknZV0OIykz6Zg2ubdtUg19nmkNj+n0IIA8Yh8XuZalfMdqcdXIyGtMJGsxzOXGGaIOdYvMBG59tWCWFG3CBMo5SdaTlcM8478XGONN4ppgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sc7KXseE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775703582; c=relaxed/simple;
+	bh=5mAyQvSaOL2LoLC2WNanmYBqAdqTpdMJR9Ynzl7Y5hQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=fIJybxX6QCHBEWSEI57QKNCtDrhHRpvSYex3g5UVzuFTv4C799rDM5PvbS72B6ao9GmmrR6qZB9VTLAusR4MiqSvrdMN/3HVaa93JJxXeE6RCiPHzSOztVrGmOdLkCf5f15qbneNezSYdWlqvbwzCbV40jVZCmjigrUT6Z7RkS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fr8YrZuU; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sc7KXseE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5023DC19421;
-	Thu,  9 Apr 2026 02:51:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775703091;
-	bh=PbBzdI3qVvg8NGCmO5KQ9RJ+udLRsXOc/boi6AFdsgQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Sc7KXseEdMPIjzjq+JbCSai8GUhdWZcEoY9D5tYoC2gpqwEcICLpKP/iX+43+lATC
-	 nXaUh7czRKwVb8racnt0PnI7UOPUdpo6JuyoAe6GuTH/tLsTbVJFt5h/x7O51kCoAN
-	 exNWYDlCY2+4lHDExN6Q9a3qk9895/kki7AOH1BPobUl4P7SFBmlqNK15Katn3se0r
-	 DZOmr2ImOwotZzBhgDIaymxJ+pHgAbmpoP8PpwQLSfdFkVYCgLdG2n3wBKjZZEyRSS
-	 Uyo/MR5tq9bI0/X/dHbH0DxFsuzmkhKVghZfXLAj+TRGzyA/sEem1HLMhNXH4Zjy5L
-	 Pd7Vrc3ZPLkPw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA0BA3930793;
-	Thu,  9 Apr 2026 02:51:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fr8YrZuU"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-12bf921cf49so8351535c88.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2026 19:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775703580; x=1776308380; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/nwzMb669N5Zt3JV1uvWhd8BvB9PhfW85QQnH/tgbSk=;
+        b=fr8YrZuUepOlz96upC2++CgvBbYv5Rr9grgeOjbCUnvnvbo5pHeFPZCj04nslXwinD
+         6T/SS70YjjoSZ3cgxBGA3vSB8h26AOGkyE2Dhy+XzVDyzsHsiMB0b525xeS9OwYoEbf/
+         vdEumkrYFLugnxrCgcfbe/sVtyUObs8cQ47flV27M62IYvxFq4WVnr0vFNBSEYn+oLAN
+         ps0Uym3Oso5jRlpbRwTSIkOrCB027MCWIKYR6LCNZsA7SjZEs3wFzGGajDjUgjk/xfJe
+         nC4BQzvfa2JEGVaPzOCkEEBf3HVnz1wSVTaEJmmeJEKKN4t3O7BXE4iqEbBq6tqDFe4P
+         LYww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775703580; x=1776308380;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/nwzMb669N5Zt3JV1uvWhd8BvB9PhfW85QQnH/tgbSk=;
+        b=EYQHb/mt15s+/f5ZA7i36p6PsEGuIc7/qe5SPJBrhoQCZmKA/IEGRjy9JgkFxm9mEf
+         JWiUmRVjxZ3wBal17mzrubaCQfp0dgmRMovHZFiTJaRpKgxYIwoN5zjnOT5cRE1RSyJo
+         VQ8Ni7Jx+XQzFEdtp3kjUb/atRfKtatGZnYIdgN/L+1tRs3qRAujQGTSLaXv8Ejhgp38
+         55u4FaWlNgQQCtQSJ/mWxQIYw2cC+yAovYK9nIZBNZMPV6H6fHe7P4rV6sGTYGDopThm
+         gTOZjwU751BpxdUil8dHDtL5c7HkUKDxJiYsS3j9e05F1P7PV/ajQjWbXrhcqH+wRm64
+         GsOg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+fVIMTWFTN5ct1W69Dx4RB2TgoRLlaLwII28YNmLvO27X+wU2VkesZ5XHWs4zsFraA56vnPm3A3uG15oLEGs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwM6u9FOxfCcbKfBpPPDKgmc++UzOhqr3S8lcxTd8SrKKg8t1Ra
+	Kb/ccEKFIsWZiNNaTAVOp9PJWdlq31yU3UDdNkUPL/oz4Z2BxgAk4aStVUsKgELNiOpXRCdHazC
+	FC2tC/xrXUDZVT+Q9kvl1Nw==
+X-Received: from dldz16-n2.prod.google.com ([2002:a05:701b:4190:20b0:12a:adb8:138b])
+ (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7022:229:b0:128:d23d:81aa with SMTP id a92af1059eb24-12c28c0814amr828945c88.27.1775703579637;
+ Wed, 08 Apr 2026 19:59:39 -0700 (PDT)
+Date: Thu, 09 Apr 2026 02:59:22 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] selftests/drivers/net: Add an xdp test to
- xdp.py
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177570306754.968772.17543482845016752024.git-patchwork-notify@kernel.org>
-Date: Thu, 09 Apr 2026 02:51:07 +0000
-References: <20260406072655.368173-1-leon.huangfu@shopee.com>
-In-Reply-To: <20260406072655.368173-1-leon.huangfu@shopee.com>
-To: Leon Hwang <leon.huangfu@shopee.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, leon.hwang@linux.dev
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAAoW12kC/4XOQW7DIBAF0KtErEuFZwDTrnqPKgsMg4OUQIQtK
+ 1Xku4eycmVZXX59zfvzZBOVSBP7PD1ZoSVOMaca+rcTcxebRuLR18xAgBZSdHwme4tp5L7EhQq
+ PaaaS7JUbDBCE6KXXhtXre6EQH03+Zolmnugxs3NtLnGac/lpkwu0/l99AS54MMJ18NH10A9fY
+ 87jld5dvjV0wS0ExxBWiIwLnhwOysEOklsIjyFZIY8CISA6C2oHqS2kjyHVPrIYUBrbuT2kt5A 5hvQvpAbnXehBCfkHWtf1BavMsxDtAQAA
+X-Change-Id: 20260401-teaming-driver-internal-83f2f0074d68
+X-Developer-Key: i=marcharvey@google.com; a=ed25519; pk=OzOeciadbfF5Bug/4/hyEAwfrruSY4tn0Q0LocyYUL0=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775703578; l=4446;
+ i=marcharvey@google.com; s=20260401; h=from:subject:message-id;
+ bh=5mAyQvSaOL2LoLC2WNanmYBqAdqTpdMJR9Ynzl7Y5hQ=; b=OSUai0KexYfCxKfJZltwYsz8w8Ul22IpzSFUb8ivMSrPUs2ytRo8djOvYT6RcVDaI+m7JlGpb
+ z2NHp6csL7GBik40h4wSccaDMDQqKOJff4BGst44oY984ygmJZbt3fH
+X-Mailer: b4 0.14.3
+Message-ID: <20260409-teaming-driver-internal-v7-0-f47e7589685d@google.com>
+Subject: [PATCH net-next v7 00/10] Decouple receive and transmit enablement in
+ team driver
+From: Marc Harvey <marcharvey@google.com>
+To: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Marc Harvey <marcharvey@google.com>, Jiri Pirko <jiri@resnulli.us>
+Content-Type: text/plain; charset="utf-8"
 
-Hello:
+Allow independent control over receive and transmit enablement states
+for aggregated ports in the team driver.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+The motivation is that IEE 802.3ad LACP "independent control" can't
+be implemented for the team driver currently. This was added to the
+bonding driver in commit 240fd405528b ("bonding: Add independent
+control state machine").
 
-On Mon,  6 Apr 2026 15:26:54 +0800 you wrote:
-> In "bpf: Disallow freplace on XDP with mismatched xdp_has_frags values" [1],
-> this XDP test is suggested to add to xdp.py.
-> 
-> 1. Verify the failure of updating frag-capable prog with non-frag-capable
->    prog, when the frag-capable prog attaches to mtu=9k driver.
-> 
-> The test has been verified against Mellanox CX6 and Intel 82599ES NICs.
-> 
-> [...]
+This series also has a few patches that add tests to show that the old
+coupled enablement still works and that the new decoupled enablement
+works as intended (4, 5, and 10).
 
-Here is the summary with links:
-  - [net-next,v2] selftests/drivers/net: Add an xdp test to xdp.py
-    https://git.kernel.org/netdev/net-next/c/5ae4ba98d725
+There are three patches with small fixes as well, with the goal of
+making the final decoupling patch clearer (1, 2, and 3).
 
-You are awesome, thank you!
+Signed-off-by: Marc Harvey <marcharvey@google.com>
+---
+Changes in v7:
+- Increase the timeout to 300 seconds for the team selftests, since
+  gracefully killing teamd can take 30 seconds to timeout.
+- Link to v6: https://lore.kernel.org/r/20260408-teaming-driver-internal-v6-0-e5bcdcf72504@google.com
+
+Changes in v6:
+- Make selftests use a TCP port with no associate service.
+- Make selftests pass -nn flag to tcpdump, which will make it not
+  convert port numbers to service names.
+- Link to v5: https://lore.kernel.org/r/20260406-teaming-driver-internal-v5-0-e8a3f348a1c5@google.com
+
+Changes in v5:
+- Change teamd activebackup selftest in patch 5 to try graceful teamd
+  teardown before using sigkill.
+- Make the teamd activebackup selftest in patch 5 delete leftover
+  teamd files during teardown.
+- Reorder function calls in team_port_enable function in patch 7,
+  since the enablement behavior shouldn't change.
+- Make selftests use tcpdump instead of checking rx counters.
+- Fix minor typos in patch 10.
+- Link to v4: https://lore.kernel.org/r/20260403-teaming-driver-internal-v4-0-d3032f33ca25@google.com
+
+Changes in v4:
+- Split the large v3 patch "net: team: Decouple rx and tx enablement
+  in the team driver" into 4 smaller patches.
+- Link to v3: https://lore.kernel.org/r/20260402-teaming-driver-internal-v3-0-e8cfdec3b5c2@google.com
+
+Changes in v3:
+- Patch 5: In test cleanup, kill teamd to fix timeout.
+- Link to v2: https://lore.kernel.org/r/20260401-teaming-driver-internal-v2-0-f80c1291727b@google.com
+
+Changes in v2:
+- Patch 4 and 5: Fix shellcheck errors and warnings, use iperf3
+  instead of netcat+pv, fix dependency checking.
+- Patch 7: Fix shellcheck errors and warnings, fix dependency
+  checking.
+- Link to v1: https://lore.kernel.org/all/20260331053353.2504254-1-marcharvey@google.com/
+
+---
+Marc Harvey (10):
+      net: team: Annotate reads and writes for mixed lock accessed values
+      net: team: Remove unused team_mode_op, port_enabled
+      net: team: Rename port_disabled team mode op to port_tx_disabled
+      selftests: net: Add tests for failover of team-aggregated ports
+      selftests: net: Add test for enablement of ports with teamd
+      net: team: Rename enablement functions and struct members to tx
+      net: team: Track rx enablement separately from tx enablement
+      net: team: Add new rx_enabled team port option
+      net: team: Add new tx_enabled team port option
+      selftests: net: Add tests for team driver decoupled tx and rx control
+
+ drivers/net/team/team_core.c                       | 237 ++++++++++++++++----
+ drivers/net/team/team_mode_loadbalance.c           |   8 +-
+ drivers/net/team/team_mode_random.c                |   4 +-
+ drivers/net/team/team_mode_roundrobin.c            |   2 +-
+ include/linux/if_team.h                            |  63 +++---
+ tools/testing/selftests/drivers/net/team/Makefile  |   4 +
+ tools/testing/selftests/drivers/net/team/config    |   4 +
+ .../drivers/net/team/decoupled_enablement.sh       | 249 +++++++++++++++++++++
+ .../testing/selftests/drivers/net/team/options.sh  |  99 +++++++-
+ tools/testing/selftests/drivers/net/team/settings  |   1 +
+ .../testing/selftests/drivers/net/team/team_lib.sh | 174 ++++++++++++++
+ .../drivers/net/team/teamd_activebackup.sh         | 246 ++++++++++++++++++++
+ .../drivers/net/team/transmit_failover.sh          | 158 +++++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh      |   9 +-
+ tools/testing/selftests/net/lib.sh                 |  13 ++
+ 15 files changed, 1198 insertions(+), 73 deletions(-)
+---
+base-commit: b3e69fc3196fc421e26196e7792f17b0463edc6f
+change-id: 20260401-teaming-driver-internal-83f2f0074d68
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Marc Harvey <marcharvey@google.com>
 
