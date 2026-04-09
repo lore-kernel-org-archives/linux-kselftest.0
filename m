@@ -1,178 +1,119 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8981F33F8C1
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 21:04:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775768677; cv=pass; b=CpyrEK//Rxi/pLn22xELnu1C9TDuihi8e19L7pjNu4fqRjiwFvMsJhm91jAp5olA4k6HukSvRRLq7JakU4DaLRwa9W4+g5BGAq1igjJP1UhX12bkSg5fSTX+wl71VRZFFQtiTzqEn6gsxfRB6gg8tJSoz3spblcGLEiX1tCA8mA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775768677; c=relaxed/simple;
-	bh=LSYLWSUH9Mj6i04sciDGLrl/1HBwlgwaKnT9iX/4E+w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NSiBHNXCD0RVvj56SkagNVYBuY6/l/coPGDAEmxLtMKLhSsCrgzokT4tTvwP2TnzIlkvXqU9Q1RIzIp4q3qmOk6nT22JtFPN3uezWchRHbWZsUtGlCI9bIPWNzlxDkN4wjxGp+X4CceLNvp3ZgV3x668w0h7oxa5pRfipYT4Dbw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=V7X4gGD7; arc=pass smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED51B362128
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Apr 2026 21:17:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775769481; cv=none; b=Pit5MAboalVo/LyStSlsk3v0anT+md/vGDA8zsg9c01ugVCfktyitKFr5M1zo4AB0kITsHqfdP5r9tETYhwsMDgQqr9l0zOPYk8tbjasy4MDdTW8IAV/3wEXLKVYAPdZMFyXupbeU404IWLFQKZpY4IurMyq8DC+SJEcHfy8BRE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775769481; c=relaxed/simple;
+	bh=kTGNLbn4hMgKaLX8TjQOM8N2QBw0VnJstnv2OfEAq4o=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=SWic3JVNrJnrHogd++sRmlzbvTjnavsF0ES33hzyR71I4ioww8L2eJO8osmOYGs63aFlrO+9yRfq1+YnGZy9E2gsefl+qcibgN2410quv7LecHJb9LpnwhgNZ3lCPzXai9UqsShuH1Rv+g8kM2uG1ErORVvt78NpCfRbKAhnQfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M7QKu54u; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="V7X4gGD7"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3567e2b4159so960501a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 14:04:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775768676; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fyZK7rKXuBDYFjBIILHMpM0mKrRKEH7UlAwS3KMnXx/MXWawgpISyXRv8oI5Rb4F6R
-         vvo9NOam3MxvW8nu2DHWVA26K92PjaV2BMC6S6C14Gh6sXSa8iop6rpwgxXf5/vduc95
-         K9MgfZnsJg+zrK/AUKBschPkomp5AWOxPwpUwnICCko8AACGVc6Q0TGm1mIIVUdu433B
-         K6NqCTElu3xpfJhfaK7EiEA93m92gRBcFD/uwGHsN20yn7kOrwrBlq2iOiPG7GbmhteY
-         e1Klv60Dd9FuC81R3T5OHOwYZ8FdLuz7OTiWsvWIPpf8EvNSSUsIxzW5pg8I+C7YPPCS
-         GfVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lhvOaKGuS0RvMrnclskhUETxNWQ62+P6zx5TM7DZbx4=;
-        fh=fTLXMJ/yzhb5r8es3Hiqg5yY3Db+0VzbwQVxGm+Gv3Q=;
-        b=I9qtg9StXZfIm+S7lV2p9W2rACj9+5eFRjlENBJVV4tvUhd6Yvf3v3PBXgt4oatRnU
-         3+SlQs8/JSaYDZripNfP+pB25M2ozc1oqJyBLBUgf2TphM5+Cu16RAkPMQcupMYLTHBN
-         rE0vK6U85B1lUEr1OWBqkZXAwlueHA1HPLFWP1pRliP0uLZ4qXXYoZiX9+7TGpw4W2m5
-         2u9LGmtwkn+tfnvbxUpoNNo8SiSnvM9CASTJaP9YxUWirYIgPrfT3Kj/uPT7+O3UT61o
-         66nzFBHQqoWNGKe/gBY66NQ+zhl4nEKrhCuoFVaPLWKMGukTyrKwdD4ncYWtt7CbV0B5
-         GkFQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M7QKu54u"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-354c44bf176so1614245a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 14:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1775768676; x=1776373476; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lhvOaKGuS0RvMrnclskhUETxNWQ62+P6zx5TM7DZbx4=;
-        b=V7X4gGD7whTgHgmCFzcNTUdyXfi7fLJB1XdLPs/rgZtnG23DKukhxcra1k+9HK+kiH
-         ri7KgWMKq39l6VaF2i6tNb100zITQlGLSeYtzjvUcHI5SYn1cK/E8QfmhdQ7EfnFJ+lB
-         vX9DC8x2yd8slQJq1bjwpxS4guKDRfIvpKdvqUDqDicmcBnkdRdYrCrwHxJ+cuQpdGxE
-         8yzFhMsdhSxDDvrkdFlP3BbKYpnYEYcw7rpw0h+3YH418tjaG+j1zUKXptBR/dhx7WLn
-         v+fpfCIndfDqxfRjeXWN5r3I9jqcGRkdZ+AffFaaPc4cuUAUjsvETOf7nueGb1mbaJ00
-         YxmQ==
+        d=google.com; s=20251104; t=1775769478; x=1776374278; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=463dllVAQ+CXXYb1cF+GtnlCvXOZXdOn20lYdKT+eLg=;
+        b=M7QKu54uxIYZnsPyUxowHmIoEdSF6/uxRX4ghURj98Kd+M+cdrsLtQqNxGcpaXbhks
+         Ehqls/oBTkC8x1Zg6npzwWGe9x9OY1xkn2Cc8ipFTr10SYMj7xKYe21fG6k1/R3okiBs
+         F4nDeV0JN2tdCYIrOqSHG7WbH2TTR/XzZ9OWpmMeh4gvyjlc3xSDIjrdgaKQtLvC6sbM
+         o66wRVzZHX1IhHLVhdiLqQpHYT1kTmL5CdnHNldew1Ezxc7zjFnbkMDIDtcJeAHIeZgM
+         x902TEuuh5bDu00LnlI7RkLPk5Wz8dS64j3R9EpqFgaYuJADpm/WHN8jY9WPBRtyXOQk
+         +VJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775768676; x=1776373476;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lhvOaKGuS0RvMrnclskhUETxNWQ62+P6zx5TM7DZbx4=;
-        b=qtaMumyMhJzRn0C/FDStVAwoI16dKL9Dr+NWC6I373XELm4Y1w6QMSyzacyX8rtIfE
-         SPpzFO6MSMOLKuk2RfY8uYI9eWFtS3/psbe/xn7PD7YJf9UVLbb8hDznJ0CpzRe0hK2L
-         Y0f71nxi33+p5UwJkGen/+KZehlSxMA9uNoCBbBDyNL280KuFpDCiSlfwy3pwQwFbDnC
-         hUOA3Ati5gHT0dbw5hXkqV2If6too/iJCMtiVwFJ9z7yL9NpXHGeWFHkkaZjNltkmHib
-         YoTrTjt3qSLeQNWnpE6vcZabfCTiGBh5XOx14ie4oi/E1/XLsvBVM3l3gHfR+Vfgpvek
-         KwGA==
-X-Forwarded-Encrypted: i=1; AJvYcCV22rH3DHe49MXizUdavyeuxbGPFTCpxLSR9ImiGwylyPxg/FQxjgBU9xZyx1qQZS1Cbzhjrs0Xgh1NY/siOC0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpJVJnmQqCskZyq2EGzjZW9xgnxF0ZGtjcpOPKvu3Q3ONnGoFG
-	1LmDw59EsUwf5iSvyJ10tEgevZ56x5lFagW4ErMnctpyOhWdFrDaYdA12WmP1WtPWqqiXGqIX1J
-	N75rnXj3E8DqYAnO57fGFj5PguQfRPcLy6ZsPNvKH
-X-Gm-Gg: AeBDieuMdZHKc1TZWboCYtdwKGpJs+12wsvR6E0gKVt9NKNdIBpZNObQ/dVjD6lz6Ix
-	WoK+jBx6DJq1OIvd0acXl0DPUUEz9+ZsAj7NLs4dRCLyd+SGt0QLtqkb0PcwbP8MS6YKcQCbgR7
-	IzVs835zEgA/CSSkw8vMVSyoaSqouZiwwGltYLpH8eOZ4ZP6zc+I5PdJeMdImlH2BoMcUfvEjY0
-	JAjACATLFo3UUNR/gGunO0u+dE8pai7tS2PFZANTzYRl62yzb9J/J3J/ynfXGbn/9JKQ6hOq6j+
-	46Ul6dA=
-X-Received: by 2002:a17:90b:35d0:b0:35c:cba:344f with SMTP id
- 98e67ed59e1d1-35e42814b32mr506029a91.13.1775768675871; Thu, 09 Apr 2026
- 14:04:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775769478; x=1776374278;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=463dllVAQ+CXXYb1cF+GtnlCvXOZXdOn20lYdKT+eLg=;
+        b=AfIPBLjhXlyH88r6bTC2y7MrJmbIf7VUdmxXDB8hPgLtOohHtCqnr9hHU5EB0ARkFX
+         4WHBUcnDwTk8sAHex+KLSKJVwC+YReMp2xWCTdiGeFvELnvy2yLJOU5p+7emnkJbixYd
+         ABQlOfxps5itKtHLehQufQl6sDraTE0S4PMdp294HATtpaZBwiTRMYa9s/SQaei2TTES
+         zHzDcxlHQWw33+UVvSqjGz/HMzmu2TlHRsLzqd1Y96JwikRmzWK4Xc1M2TC477QHJsBm
+         nEUX1L/2o8m0t9Yss8quiZmvCK9abt3po+aBDiW/REZIgUInoYZVMNCB1de2gOOHLb9S
+         azmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2ZSWTUBbgRX9blU7qL+C+jyQ6jfcA6CzwJnodzpgpgQe+YCeyyC03S7qvIj/MoYrdhQWaOLJ4BiJpFQopZ4U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4d94mz13O1Q6qy8pvB7q2HM2tiuVoQeDKEKtJu1BnTIHDfXmG
+	O9s2e0t26QN8YPwt4GXrIXTW+WWY2MvOuXWUOa8VkLa0GXl8eZd7PPG8YsvOxR7z/IMHU5StkCo
+	VRa7oeA==
+X-Received: from pjbgi21.prod.google.com ([2002:a17:90b:1115:b0:35d:a45d:bc03])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2d07:b0:35d:a3b4:2f0d
+ with SMTP id 98e67ed59e1d1-35e4274e1damr551175a91.6.1775769478020; Thu, 09
+ Apr 2026 14:17:58 -0700 (PDT)
+Date: Thu, 9 Apr 2026 14:17:56 -0700
+In-Reply-To: <20260324194034.1442133-5-tycho@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal> <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
-In-Reply-To: <20260409124553.GB720371@unreal>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 9 Apr 2026 17:04:24 -0400
-X-Gm-Features: AQROBzCv7hqSB6tSKvErzJZhlb90rNuzAgZmLqxEJrioN65F1TGjEcz2AUzp16g
-Message-ID: <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>, 
-	Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260324194034.1442133-1-tycho@kernel.org> <20260324194034.1442133-5-tycho@kernel.org>
+Message-ID: <adgXhPzjpq5aTS5z@google.com>
+Subject: Re: [PATCH v2 4/5] KVM: SEV: mask off firmware unsupported vm types
+From: Sean Christopherson <seanjc@google.com>
+To: Tycho Andersen <tycho@kernel.org>
+Cc: Ashish Kalra <ashish.kalra@amd.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, linux-crypto@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>, 
+	Alexey Kardashevskiy <aik@amd.com>, Nikunj A Dadhania <nikunj@amd.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Apr 9, 2026 at 8:45=E2=80=AFAM Leon Romanovsky <leon@kernel.org> wr=
-ote:
-> On Thu, Apr 09, 2026 at 02:27:43PM +0200, Roberto Sassu wrote:
-> > On Thu, 2026-04-09 at 15:12 +0300, Leon Romanovsky wrote:
-> > > On Tue, Mar 31, 2026 at 08:56:32AM +0300, Leon Romanovsky wrote:
-> > > > From Chiara:
-> > > >
-> > > > This patch set introduces a new BPF LSM hook to validate firmware c=
-ommands
-> > > > triggered by userspace before they are submitted to the device. The=
- hook
-> > > > runs after the command buffer is constructed, right before it is se=
-nt
-> > > > to firmware.
-> > >
-> > > <...>
-> > >
-> > > > ---
-> > > > Chiara Meiohas (4):
-> > > >       bpf: add firmware command validation hook
-> > > >       selftests/bpf: add test cases for fw_validate_cmd hook
-> > > >       RDMA/mlx5: Externally validate FW commands supplied in DEVX i=
-nterface
-> > > >       fwctl/mlx5: Externally validate FW commands supplied in fwctl
-> > >
-> > > Hi,
-> > >
-> > > Can we get Ack from BPF/LSM side?
-> >
-> > + Paul, linux-security-module ML
-> >
-> > Hi
-> >
-> > probably you also want to get an Ack from the LSM maintainer (added in
-> > CC with the list). Most likely, he will also ask you to create the
-> > security_*() functions counterparts of the BPF hooks.
->
-> We implemented this approach in v1:
-> https://patch.msgid.link/20260309-fw-lsm-hook-v1-0-4a6422e63725@nvidia.co=
-m
-> and were advised to pursue a different direction.
+On Tue, Mar 24, 2026, Tycho Andersen wrote:
+> From: "Tycho Andersen (AMD)" <tycho@kernel.org>
+> 
+> In some configurations not all VM types are supported by the firmware.
+> Reflect this information in the supported_vm_types that KVM exports.
+> 
+> Link: https://lore.kernel.org/all/aZyLIWtffvEnmtYh@google.com/
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Tycho Andersen (AMD) <tycho@kernel.org>
+> ---
+>  arch/x86/kvm/svm/sev.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 37490803f2e8..0fe9515db1e7 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2976,7 +2976,8 @@ void __init sev_set_cpu_caps(void)
+>  		supported_vm_types |= BIT(KVM_X86_SNP_VM);
+>  	}
+>  
+> -	kvm_caps.supported_vm_types |= supported_vm_types;
+> +	kvm_caps.supported_vm_types |= (supported_vm_types &
+> +					sev_firmware_supported_vm_types());
 
-I'm assuming you are referring to my comments?  If so, that isn't
-exactly what I said, I mentioned at least one other option besides
-going directly to BPF.  Ultimately, it is your choice to decide how
-you want to proceed, but to claim I advised you to avoid a LSM based
-solution isn't strictly correct.
+This is slightly flawed, in that sev_hardware_setup() still reports SEV-ES as
+fully enabled, whereas the other cases (ASID exhaustation) clear the VM type *and*
+report the feature as "unusable".
 
-Regardless, looking at your v2 patchset, it looks like you've taken an
-unusual approach of using some of the LSM mechanisms, e.g. LSM_HOOK(),
-but not actually exposing a LSM hook with proper callbacks.
-Unfortunately, that's not something we want to support.  If you want
-to pursue an LSM based solution, complete with a security_XXX() hook,
-use of LSM_HOOK() macros, etc. then that's fine, I'm happy to work
-with you on that.  However, if you've decided that your preferred
-option is to create a BPF hook you should avoid using things like
-LSM_HOOK() and locating your hook/code in bpf_lsm.c.
+Addressing that is actually a great opportunity to dedup some code in the previous
+path.  I.e. if we first relocate the supported_vm_types updates to sev_hardware_setup(),
+then there's no need to copy+paste the ASID checks.  And then restricting VM types
+based on firmware support Just Works.
 
-The good news is that there are plenty of other examples of BPF
-plugable code that you could use as an example, one such thing is the
-update_socket_protocol() BPF hook that was originally proposed as a
-LSM hook, but moved to a dedicated BPF hook as we generally want to
-avoid changing non-LSM kernel objects within the scope of the LSMs.
-While your proposed case is slightly different, I think the basic idea
-and mechanism should still be useful.
+E.g. to yield:
 
-https://lore.kernel.org/all/cover.1692147782.git.geliang.tang@suse.com
+[ 1813.863571] ccp 0000:24:00.1: SEV-SNP API:1.58 build:1
+[ 1813.876790] kvm_amd: SEV enabled (ASIDs 254 - 509)
+[ 1813.881595] kvm_amd: SEV-ES unusable (ASIDs 1 - 253)
+[ 1813.886574] kvm_amd: SEV-SNP enabled (ASIDs 1 - 253)
+[ 1813.891549] kvm_amd: Virtual VMLOAD VMSAVE supported
+[ 1813.896522] kvm_amd: Virtual GIF supported
 
---=20
-paul-moore.com
+I'll send a v3, I've got everything coded up (I wanted to make sure my idea
+actually worked before suggesting it :-) ).
