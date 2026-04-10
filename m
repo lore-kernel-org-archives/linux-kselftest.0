@@ -1,85 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3686343D7F;
-	Fri, 10 Apr 2026 23:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A521A239A
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 23:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775862646; cv=none; b=KoXny8MeP00xO8CevmjmB0cxug8pdccowH70X2VCMofGENwos/Z2WtRb8e7ofVsvtoi32HNTALqN7jLCzUFOf6+vPOiHAy0CriYYVL4xlQIinmZKP7A6PmJ43UgAUJwOm8M+s8g9jKfM4jq+0spJm9Ov+RmbYoIHwCJJsfPHg8c=
+	t=1775864647; cv=none; b=bcgW/s+C3rmu22/SOlOGKx7Mb4eJw0bn0F4rUF0VdpUAt4JTOnAwcF1MwIQeWz1MVfa56n7knDVXr5Wkkt03cKdOr1wcW8WT3JWWg78KFpvl1lPCvxoKZbKSFhJ0BJczizstXyXEyuHYFirfa/jExAk/Uxl2CyXnGacd+oyy3xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775862646; c=relaxed/simple;
-	bh=VLWH1xSQJbFjKnanR6LtfMMRcIn2EuvK7B8BqizJ75U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=QUxKqBIcyMqB0BMpMh5NN80JnjApTto54XuNc261lFQhRe4Jt6/YQcvRi0RXhn7FRBAOn8/6J0Gs1DbhF6zaBhzsCZ9/QwrACbYLk04yS83mvBYJraM0g2VAHsknJJWrD1aC4HeX/Q6HUZNaiBxeagS0azP7HAL8m9/vHx1hIY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eK3GPbIu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775864647; c=relaxed/simple;
+	bh=TuoX4UUn1svtSDoTUW94lOrrf/nbyVbwYZEk9/zCC0M=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=cYhzKq2LE/amKD+lhF5hNggjcbkFeMcURlhUQsraBsTpNCVA9ElRYk3Em6h4jEnFLG+lUgTHgdCN9U6d1zonBwCWq7FtMjriWF5V77kE7zLZeGNbTiYarIke4MoXGL9RD+SFR05Z8Sci5Yyas3xp60zr0LHv1aTrU9/m998bgbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Df80k5st; arc=none smtp.client-ip=74.125.82.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eK3GPbIu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF951C19421;
-	Fri, 10 Apr 2026 23:10:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775862646;
-	bh=VLWH1xSQJbFjKnanR6LtfMMRcIn2EuvK7B8BqizJ75U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=eK3GPbIuShJ2N0W/epLZDSYNJkdgwumRYc2q8O10NMGX6xkPgaJDVJgPE2gOiLI+p
-	 vRA5DdSIQ2E/0U5MssqxqREjlxL+L3k/1MYwznVPpe5i+1pUPT1PSJxZYxRZ8RBoyD
-	 zfAYL2xmZwsZa+BMvmMg2+vaqkgn8GhtzYclYs36/yRBlwFw437W2+cJy58m5MnHQC
-	 RGUHsSrcJFBBw+dT4d4u+jYtlzBfY8SYoHniUXrf879mJaUqBo2E4FTrkBp+GkeZ1o
-	 /7F+bPjQ/UNUiKSQFh2cSOCLzJXR6BhC4BB4rLdzuxUyL7tWEe4HfrdeqsOmtYEmtu
-	 502YmrbZgWVqw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FD633809A88;
-	Fri, 10 Apr 2026 23:10:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Df80k5st"
+Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-12c282d6d32so756052c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 16:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775864645; x=1776469445; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/+zEPOEcxwMCXl/WuAuJNYOgj5gkLpMjEn8JbUeS1Zw=;
+        b=Df80k5st15EPJ/dol5tsXUGQVNEEkeZw+9Kqj6A8F2SQegMPrVy6Qf1A1mTMruQ656
+         22xuPBNeI5oJZcT61Yw51m/aGTd4J6N0fjfPscqhonVYG3rwJWn4IXig51r+t3Osa29q
+         asQqTDB+hHRYd0icCnr9jYRbfLmoJ1XXlq90UFIuD3UyqRLFIFK6aykv071RTFAQQCP+
+         UMvTB5fdM3a9QfQzP0b/WEI3Roa8a7+b+/+rv28WFDDO7FdUsOVMbb5ANklM2GyJ4fnK
+         xEF4UpY6iNv9Ac+1brZoKd51IBc/444mBYgAqHC4Lfp6Ej9Cg7pcBrOstlwTlmpjz6MH
+         yDJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775864645; x=1776469445;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/+zEPOEcxwMCXl/WuAuJNYOgj5gkLpMjEn8JbUeS1Zw=;
+        b=oL277H7p589/XjfcgF1lyWg9GpbqGVN97TzL/7FyQQw6/0o8LfhIQw50KCsXNdfNKd
+         siQYJ4TvxN/zpuTv5RbnoBLTyFW1qWg3d007kqnjWGP/UltjO0AsONY1q7ue7BnFne/+
+         xxvcFwxh8m6F4N1rG0jaBS1OJ7mSvzDqPUQW6s4/PiArVhDqxyqKA6g7jfxVqig+sNWw
+         DUhLI1G+IeMuBW6xXjMf8/Xh+3d+0K9PUYSnR/4V/bhz2HQIfgFsN6h/TMQz6+s5WUof
+         9+jpOVJt+lSW+0WR32enCk/gxW8su5k1DYzpeHm9Ffl2LhfLq5TxoJahjrbkrMRiQnTF
+         ogYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfkEfjFc8zMHUSbzyuQWfWfLMV2ucAQcIpj73KuF4Opfgc/pbbxWRaIFmmEAnD6omB6p+qaho/WrQLJXEDfkg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxj0wXRyRC8Ruz8y8yb54v7Oa4GR8yRGa5+bbirVdFkhK94Xqq+
+	WsRexcSnGEGxaZ/nlwoE9SDmIk1E8uOM4r0ITUacTReZq+x5JNNvk1MWsMzNkRp+9382n7fi1rg
+	fpwXLR7AAWlsi2RWr8G/lgjsqTzjVirOHtA==
+X-Received: from dyke40.prod.google.com ([2002:a05:7300:4728:b0:2cb:5486:3ae3])
+ (user=aniketgattani job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7300:1495:b0:2d3:4252:b146 with SMTP id 5a478bee46e88-2d589aa4049mr3071765eec.21.1775864645309;
+ Fri, 10 Apr 2026 16:44:05 -0700 (PDT)
+Date: Fri, 10 Apr 2026 23:44:04 +0000
+In-Reply-To: <addfe6a5-f773-46e8-b0f8-1699034720eb@efficios.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 0/3] net: bridge: add stp_mode attribute for
- STP
- mode selection
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177586262079.2678602.7436891627860485314.git-patchwork-notify@kernel.org>
-Date: Fri, 10 Apr 2026 23:10:20 +0000
-References: <20260405205224.3163000-1-aroulin@nvidia.com>
-In-Reply-To: <20260405205224.3163000-1-aroulin@nvidia.com>
-To: Andy Roulin <aroulin@nvidia.com>
-Cc: netdev@vger.kernel.org, bridge@lists.linux.dev, razor@blackwall.org,
- idosch@nvidia.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- corbet@lwn.net, shuah@kernel.org, petrm@nvidia.com, donald.hunter@gmail.com,
- jonas.gorski@gmail.com, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Mime-Version: 1.0
+References: <addfe6a5-f773-46e8-b0f8-1699034720eb@efficios.com>
+X-Mailer: git-send-email 2.54.0.rc0.605.g598a273b03-goog
+Message-ID: <20260410234404.2984751-1-aniketgattani@google.com>
+Subject: Re: [PATCH 1/2] sched/membarrier: Use per-CPU mutexes for targeted commands
+From: Aniket Gattani <aniketgattani@google.com>
+To: mathieu.desnoyers@efficios.com
+Cc: aniketgattani@google.com, bsegall@google.com, joshdon@google.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	mingo@redhat.com, paulmck@kernel.org, peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun,  5 Apr 2026 13:52:21 -0700 you wrote:
-> The bridge-stp usermode helper is currently restricted to the initial
-> network namespace, preventing userspace STP daemons like mstpd from
-> operating on bridges in other namespaces. Since commit ff62198553e4
-> ("bridge: Only call /sbin/bridge-stp for the initial network
-> namespace"), bridges in non-init namespaces silently fall back to
-> kernel STP with no way to request userspace STP.
+On Fri, 10 Apr 2026 08:48:35 -0400, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> On 2026-04-09 17:22, Aniket Gattani wrote:
+> [...] >   static DEFINE_MUTEX(membarrier_ipi_mutex);
+> > -#define SERIALIZE_IPI() guard(mutex)(&membarrier_ipi_mutex)
+> > +static DEFINE_PER_CPU(struct mutex, membarrier_cpu_mutexes);
+> > + I'd prefer:
 > 
-> [...]
+> SERIALIZE_IPI() -> global
+> 
+> SERIALIZE_IPI_CPU(cpu) -> per-cpu mutex
+> 
+> Rather than the -1 trick.
+> 
+> Thanks,
+> 
+> Mathieu
 
-Here is the summary with links:
-  - [net-next,v4,1/3] net: bridge: add stp_mode attribute for STP mode selection
-    https://git.kernel.org/netdev/net-next/c/54fc83a17285
-  - [net-next,v4,2/3] docs: net: bridge: document stp_mode attribute
-    https://git.kernel.org/netdev/net-next/c/c4f2aab121cd
-  - [net-next,v4,3/3] selftests: net: add bridge STP mode selection test
-    https://git.kernel.org/netdev/net-next/c/20ae6d76e381
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks for the review.
+Agreed. I will fix this in v2 and will wait a couple of business days for anyone else to respond.
