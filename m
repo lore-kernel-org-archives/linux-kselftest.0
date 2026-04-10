@@ -1,102 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01F52BCF4C;
-	Fri, 10 Apr 2026 02:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775787802; cv=none; b=XoSHMtANImNeaeiThNt5oyfoRb3wN2dvS6VBA6j3DRXY0Op/7UZ85X2thybDcTc+6z3A4eRc2H5jzg6HgALUTHMxqUpJTTnz84qfgRa4bgSbkQPo8/1240SDr9jg9KMhnQ+jidULvRrGZC+zNCVJN49pFgGibJ7cBwY8rkrhtwk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775787802; c=relaxed/simple;
-	bh=YwNw2G4QEfrLK8XwvDWLLP6/jGzcHPp5ZDH4ieyn/uM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GsAsGEsgeZ8qub9REKzBLOhH6YI8ezCghBlLthHUQHSugvXF62Lz2mvWS2VXDpwPGcB6e8KgmAqGXgROhThEpKt0vCSNaWDZPW5QLHo9TSq7nBOb9Kk/e8FjFjA+ErnEZCC0WlPi5G3Vq+djs0DubxS8OfE3DRFnryS41eHW+Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g1lnH9As; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F0C2E3B15
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 02:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775789643; cv=pass; b=a2djivyUmVJaEwEionTf4MZs8C2BAQAL6axFLBcKCqg8DeuNOKV8qSxxgiuSZ+txKG/Frt5uaY7fqOC6YPBuo01cTmorF0cwXXy2uxacUdKNvWuqQ55VM7TgJ/zgi+070vt5Zk2GDk/kPL1xkl5i0FCbx5AtXQztBMJrM873kaQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775789643; c=relaxed/simple;
+	bh=+U8n9VxXQerj0YbIEJbEzjVe9qw9ti7gbbPDnGl5yrQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ecTdLEqyXeU3vT/C7PG1og6Fu9DWQn1sPneGW1ZYybHybFWYb0XkXR76EFaqc7KbOd1inUBjkvXm692AuVvXgBwZnhxrAPToOho1As9kfQzp5b66ikDrlGYfJxuqiA7gHlzvTXX1iHtycillWShDrsWdWgN5nh55ppA3E6sti3k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VlqAAExB; arc=pass smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1lnH9As"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA733C4CEF7;
-	Fri, 10 Apr 2026 02:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775787802;
-	bh=YwNw2G4QEfrLK8XwvDWLLP6/jGzcHPp5ZDH4ieyn/uM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=g1lnH9AswsGS7fwu5XH5eBh0GQWNQyG+Yz0PFZkOvjp+YoR8iJp/E2CHVjHlb3JP/
-	 WTh1ptirI1bgsRQ5LINki1kxSBJCfcIA74lMc0u5Crgv/oj0tGl+Udont2szv9li08
-	 jVrkMAAb+05FC7s5z1WGC3pbY2ehmW1vQtiqEyR9Sbf5uSnA2trGbINffcGl9VRkS2
-	 E5BbeRQRKFeicH9UkEwiPxXrcbN5Hp3AD4WQXxe1T2j5a6lAz2mzUpXz7ay8tcjhyS
-	 UPa6W1iElrWK0l79WjvdxkGMcZPhlf5cT7XbCBGag9A3HIT25YW1Q1u1jYF7aNUic4
-	 4Sq84QNVvFSEw==
-Date: Thu, 9 Apr 2026 19:23:20 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xu Du <xudu@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC net-next 2/4] selftests: drv-net: tso: add helpers for
- double tunneling GSO
-Message-ID: <20260409192320.1b0a90be@kernel.org>
-In-Reply-To: <CAA92Kxmka9=GEvNwxOy7pSEuudqsaF3WGJttyQpYEkTyyYhgLg@mail.gmail.com>
-References: <cover.1775527362.git.xudu@redhat.com>
-	<b65f95793e03c1cb3ed3af4e1b2bee89fcf7e648.1775527362.git.xudu@redhat.com>
-	<20260407080844.35368eaa@kernel.org>
-	<CAA92KxmXOpH=CUqEdVV2948XhU1oFh8PBYLUt=ktSsK3sOh40g@mail.gmail.com>
-	<20260408172741.39e65ab3@kernel.org>
-	<CAA92Kxmka9=GEvNwxOy7pSEuudqsaF3WGJttyQpYEkTyyYhgLg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VlqAAExB"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-82f0fc82c76so50543b3a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 19:54:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775789642; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kRU3re9J2zgY4Su+3hsImf51P4DrzqDCH7Yuog4bUYggbIC9kRpakUfhM1HQBzdXZL
+         kbbYkjiEgObv3eFV0qVFXkQeraVggGsaTUq529x/A2SE78HvnHBTNwq/syoB7EdavB2K
+         HPnN6P3lFAY7zGI7B9zoXATQLaVdjc5m+E8SKH1ANwDE4jNrzXW+BabqqYqw1LczIKW7
+         C9O0mEyu32HpdbJmOxWQks9gdZ4ARfNPq+HJplTZHT90j7/K5anRZax98g3qHPG/+tuW
+         h4lmVkSSpVZIZoko7hSrh7zCFt0kqv/l4AlO2P14fEBp4XLqPH8kB7NG8/Bn/680yy0v
+         BqhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5SJS/n4iIi0naoS3i40eqv9YxxpAjXCExGdo+g7IVjU=;
+        fh=HIfsU+ax4xjkouCIMx9A+aJhWeSeh/teApV0KG/V4bs=;
+        b=SHmF5A4lfDbBcnX82mNC637bxvxdpWByHVD9cTwSpFVsK1UwxSqerySdoPwauJ9t66
+         RMsLpjNg+ZsBPXvzAtfGh8DZlw/6BHHHVNZnW8JFdTllj63+sPGT0SNTK6MjfdKFwvv7
+         RiTk6l8KpKTnNhipttsiapRQ3RToCTtqEERM8HsM8gw94LFmCZdNN52SZcNY9E2pnhcm
+         XS2fE7jusoTTrl4dDCogQfE8gibHzc3kY1lfLmPRirUF3SECi0PXrTTkrTfvDG3dvIwI
+         zL96NWliS/JyTjCZEmR/5w3kWIm/wdgWOc7c+vCRTnNNbagwriNqZ0RY/sAIZZATe0tI
+         8IVQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775789642; x=1776394442; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5SJS/n4iIi0naoS3i40eqv9YxxpAjXCExGdo+g7IVjU=;
+        b=VlqAAExBBL/FeM/5U0iEfNLpcfOD7w2rLKdd7SQfw4doii9etKrVp3veGCktK5hMdZ
+         hJXELi9JHAPuA01ET+s505c58trHk7cnyZUh5en/e81JNUb8jgWJdzDfs9nzCyGWbRkw
+         SOJz6pTaYGXObLh76K8UW88fdwxxHXJGMFcXJ02JGC1OrBMfnYOHUwNVyGgjuSU3k9J1
+         CccQIOlp3V67aZp0Gw3P83zCvF/B7VSsWd8MXKAeiAN17N9ZEuH6dS2xnB0AI6DSr5hf
+         9DkShi0fgUvZlnzXnHEEi/IgCVu/fjur6dN7cJ9J0Q/8Cf8DcyQNgAfWBarPu2TPpypb
+         gmoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775789642; x=1776394442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5SJS/n4iIi0naoS3i40eqv9YxxpAjXCExGdo+g7IVjU=;
+        b=OKNYjkdzpOP+xjYB0FxCoKAY3u1uMFtfGrL9Lt0rtlHBuCXuFFmxTPm9U6SXSLkk1R
+         osrzRezUkAilCrAtB0cyJpqKIy4CXPgJw9KH+x8Q016v5PiwWwMhFaN0DwHx9lemgl/A
+         OJNNVHd67vw8VG3Y02z/Hehs4+dcqf25+xXTlEPiwEvc7Wi9k0bE1Al81NgBbxg5EOX7
+         uR6IxX0tBvMlQM5N6T+ePEab3WdmdaVNHbix6R9sUAd5ssMT9xozcO/ew4k0E6VBSLrs
+         ZScZW3IAvFSqZPcUDNYOwg5v45vOntybg5opg6HtZC1MpNkPjPwF0dIJi2kfhjkQqFYI
+         /03g==
+X-Forwarded-Encrypted: i=1; AJvYcCUiFOMOv2nojefTVzZk1K3MAjawbVwHD0pMG1E70x/QfRPtN8U+o16MdengSYRZethvkoh79EE96iXvjUOtHKw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRpo+pPccdpkElPlDbJ5UUG1nykd1FH/cMjGwS71QmDeOWg/Ds
+	bEfacwQw0e0zVvuxek78iFdcb3qV/EE/xdvPXxqFttKJliKlFiPYkqdZJApUxJMI8mqndQyDv7L
+	EmfOwucteFNUFyj6h+wKaSPmpdRwReOY=
+X-Gm-Gg: AeBDietbHPLqOgbpDrKFUg+EhRHKOYAydUenKwNymp4MqtMb0OmQZvmT2Yz9TxyPhVg
+	2EJ5C+J2dydNm+Jr5gE5D8odt19nI2dghS+SIv+5b7X6pegam4dafQ8HX40IhCKezOOanYIslKm
+	yVgjeRDVGQqybco2R/DgcRz4+z8ZdirPx6YzmRBZXpkmlhB92lpN562Q40iz+Nnql5pLc81vuCk
+	duA4Sed0QsSWM/MxGDiWAIaRHpTrfDrnPFOyUHOS9HKfJm54+OeDKgrOzRlCarE5I1yv75MYFwy
+	CNJM7lGh5qRtgLG2
+X-Received: by 2002:a05:6a00:3e2a:b0:82c:e4b4:b04f with SMTP id
+ d2e1a72fcca58-82f0c278753mr1652567b3a.47.1775789641934; Thu, 09 Apr 2026
+ 19:54:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260329140506.9595-1-pilgrimtao@gmail.com> <20260329140506.9595-2-pilgrimtao@gmail.com>
+ <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
+ <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com>
+ <1fcda49a-caeb-42b9-9727-d1ab3d07d84b@linux.dev> <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
+ <82148eb1-f270-48f1-8900-e0becc6384e8@linux.dev>
+In-Reply-To: <82148eb1-f270-48f1-8900-e0becc6384e8@linux.dev>
+From: Chengkaitao <pilgrimtao@gmail.com>
+Date: Fri, 10 Apr 2026 10:53:50 +0800
+X-Gm-Features: AQROBzAk4S_eu-LaCn6--bJXN3mHeRr3qnSGVSwJC9tEDVFcDAV1pKx9RIzY8lg
+Message-ID: <CAAWJmAZQHmgKXgr0xN5sHWUGyu43xLyg4eG7yBrMDi7YALrKsw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	leon.hwang@linux.dev, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, memxor@gmail.com
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 9 Apr 2026 15:35:21 +0800 Xu Du wrote:
-> > > I want to test the gro-hint parameter functionality of the GENEVE tunnel,
-> > > so I intend to use YNL for the testing. I am conducting the test between
-> > > two machines using SSH type. I want to add the gro-hint parameter on
-> > > both the local and remote nodes; however, I am unable to invoke class
-> > > RtnlFamily on the remote node via SSH.  
+On Wed, Apr 8, 2026 at 2:41=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux.d=
+ev> wrote:
+>
+> On 4/4/26 3:38 AM, Chengkaitao wrote:
+> > On Sat, Apr 4, 2026 at 12:49=E2=80=AFPM Ihor Solodrai <ihor.solodrai@li=
+nux.dev> wrote:
+> >> On 4/3/26 10:41 AM, Chengkaitao wrote:
+> >>> On Tue, Mar 31, 2026 at 1:05=E2=80=AFAM Alexei Starovoitov
+> >>> <alexei.starovoitov@gmail.com> wrote:
+> >>>>
+> >>>> On Sun, Mar 29, 2026 at 7:05=E2=80=AFAM Chengkaitao <pilgrimtao@gmai=
+l.com> wrote:
+> >>>>>
+> >>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> >>>>>
+> >>>>> [...]
+> >>>>> +
+> >>>>> +/* Kfunc family related to spin_lock. */
+> >>>>> +static const enum special_kfunc_type bpf_res_spin_lock_api_kfuncs[=
+] =3D {
+> >>>>> +       KF_bpf_res_spin_lock,
+> >>>>> +       KF_bpf_res_spin_unlock,
+> >>>>> +       KF_bpf_res_spin_lock_irqsave,
+> >>>>> +       KF_bpf_res_spin_unlock_irqrestore,
+> >>>>> +};
 > >
-> > Oh. But that's not really what you're doing:
+> > ****** Purpose 4 ******
 > >
-> > +def ynlcli(family, args, json=None, ns=None, host=None):
-> > +    if (KSFT_DIR / "kselftest-list.txt").exists():
-> > +        cli = KSFT_DIR / "net/lib/ynl/pyynl/cli.py"
-> > +        spec = KSFT_DIR / f"net/lib/specs/{family}.yaml"
-> > +    else:
-> > +        cli = KSRC / "tools/net/ynl/pyynl/cli.py"
-> > +        spec = KSRC / f"Documentation/netlink/specs/{family}.yaml"
-> > +    if not cli.exists():
-> > +        raise FileNotFoundError(f"cli not found at {cli}")
-> > +    args = f"--spec {spec} --no-schema {args}"
-> > +    return tool(cli.as_posix(), args, json=json, ns=ns, host=host, shell=True)
-> >
-> > You're not deploying anything to the remote system.
-> > Are you assuming that the remote system magically has the same
-> > filesystem layout?
-> >
-> > You can use the ynl CLI but it has to be whatever version is on
-> > the remote system. Just call ynl --family rt-link, don't dig
-> > around for the spec paths etc.
-> >  
-> 
-> In fact, I have tested this from two different locations. The first is in
-> tools/testing/selftests/drivers/net/hw/ using python3 tso.py,
-> which utilizes the specs located in Documentation/netlink/specs/.
-> The second follows the testing methodology described in the
-> README.rst of tools/testing/selftests/drivers/net/, which uses the specs
-> in net/lib/specs/. Based on this, I include that different processes utilize
-> different spec locations.
-> I also referred to the implementation in net/lib/py/ynl.py, which employs
-> a similar handling logic. Both using the source code repository and
-> installing the package can meet the requirements for remote testing.
+> > It pushes us to untangle messy verifier safety cases and make them modu=
+lar,
+> > so they can be expressed as parameters to BPF_VERIF_KFUNC_DEF
+>
+> Again, I agree with the premise that verifier safety checks could
+> become more modular where possible. But I think we should first
+> separate two questions:
+>
+> 1. What kfunc properties should be declared centrally?
+> 2. Where that declaration should live?
+>
+> While I'd like to answer (1) with "all of them", I am not convinced
+> the answer to (2) is .BTF_ids or BTF. A better C side declarative
+> representation would give us most of the benefit here without making
+> the BTF tooling more complex.
+>
+> Here is how I think we should move forward:
+>
+>   1. Your bpf_list_* work is orthogonal to BTF_ID refactoring, so it's
+>   reasonable to first focus on landing it without changes to generic
+>   kfunc handling.
 
-On the local system you have Python bindings.
-On the remote system you can't assume KSFT_DIR or KSRC exist.
+There is no consensus on whether the patch below should exist at all.
+[PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using table-driven ...
 
-You can use ynl CLI on the remote system, like we use ip, tc etc.
-But then just use --family rt-link, don't try to find the filesystem
-path to the spec.
+Should we drop it entirely, or limit its scope to the is_bpf_* helpers
+that contain a large number of btf_id =3D=3D special_kfunc_list[*]-style
+checks=E2=80=94for example by reverting to v8 or an earlier revision?
+https://lore.kernel.org/all/20260316112843.78657-2-pilgrimtao@gmail.com/
 
-Is this clear now? Am I misunderstanding your misunderstanding?
+cc: Alexei Starovoitov, Emil Tsalapatis, Leon Hwang, Mykyta Yatsenko,
+      Kumar Kartikeya Dwivedi
+
+>   2. I plan to send patches (soon) for resolve_btfids, and then for
+>   BTF_ID macrology to eliminate the enum + array pattern. You are
+>   welcome to join the discussion and review / test the patches.
+>
+>   3. After all of the above lands, we can come back to the general
+>   BTF_ID / kfunc handling discussion. If you are interested in
+>   developing this further, I suggest to re-think the approach and come
+>   up with a "single kfunc metadata definition" that doesn't require
+>   significant changes in .BTF_ids section layout.
+>
+> A slightly off-topic comment: the usage of `_impl` pattern for kfuncs
+> should be considered deprecated. Any new kfuncs that work with
+> verifier-supplied arguments should use KF_IMPLICIT_ARGS mechanism.  So
+> the `bpf_list_add_impl` in your seires should only have one version:
+> `bpf_list_add` marked with KF_IMPLICIT_ARGS flag.
+
+--=20
+Yours,
+Chengkaitao
