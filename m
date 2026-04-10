@@ -1,236 +1,130 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212CA3D47B5;
-	Fri, 10 Apr 2026 14:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049A43CCFA0;
+	Fri, 10 Apr 2026 15:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775831470; cv=none; b=KfpDn0PVxyEDghpD+iaN04QDIpWGm2UdyHmmhIdx0IaJ7KbfsbGhBnLIxxTKqurQJu5+JLqcxn93c+LSjKRFwW7ajtmzMisQJgLQpwrZLTCKr6PaV1wXK4rFDgsuBr7kmiBh2Qt0veq/zp0UCI1iBgmHCIp3GjqJIVekXjdouVg=
+	t=1775833589; cv=none; b=MhV9BILZPG+B3Fr/8LxgpQqVt9muJ7IpEhakJdNOaijz0v63jEXSUnmZVRXVZD4zm0JXUjJBA78Df2HkTNc8FHhof/B8KHY9CEv531+AvzXopBfrAIwl8tPTR0+SRKDZH9W1Jyi6Q9H9jCoo5FppG+cTp3f5u1dc+3ElSSAAj98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775831470; c=relaxed/simple;
-	bh=N7h9PpNKNEk1zD5KGurgT0NJofTaFLHSOsD2O/huOxo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=e0gc8bLKySfi5WYpZ6VIJG1Rgz+biwzovBIKsJ3sUB/pj0XZ/65WK63lYbOEN+riLkiCMOAuy9UH6Abr4Hf73QRxjhnZx6DO2omSud6JoTQYWa10tHSqU4LYZh4nKZ8usiWi6pThT3HCz5ohlXRaQ0iukQy0hHlxWNf9KSI+zu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cYIpxXHW; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1775833589; c=relaxed/simple;
+	bh=LpyUHvU1hTCEQ3cZoqru+GKoLGkoUTmKSCfIUnf+UMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GrqxJ2n5scf1J21XNVFQMhhA5ODg8zTG6LVlHAPEDRHtnR+vg1fz3fdF5ESt/VXMGkwWY+zcpHcXPMMSQC1EvDgBPuTPWEiCUkK65SqhuGpyRYpcRYD7FKb1EaL9AA+bkxFEAnmwDjVIVL5T5PAHSvvUEc1rE6W+083mw8yT4qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=anarazel.de; spf=pass smtp.mailfrom=anarazel.de; dkim=pass (2048-bit key) header.d=anarazel.de header.i=@anarazel.de header.b=bePCmxT/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KYDpbxLf; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=anarazel.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=anarazel.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cYIpxXHW"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9CE31D13;
-	Fri, 10 Apr 2026 07:30:59 -0700 (PDT)
-Received: from a080796.blr.arm.com (a080796.arm.com [10.164.21.51])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C42803F632;
-	Fri, 10 Apr 2026 07:31:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1775831465; bh=N7h9PpNKNEk1zD5KGurgT0NJofTaFLHSOsD2O/huOxo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=cYIpxXHWrJW6xKuArS4N1OZ/LEImvK89tdsZClbHVaW4dipiqOXEsYEIsFk/A1Q1U
-	 mb5hEeK3cq4OF3c8VcR4nLwXb1qkBTSbgMbRNF/lSXXKXys4Gvpu5NdmdtqAGNCYX4
-	 FYgsiLSpDZiPSiU0E8+2izUTZdnGLtqzuUcVUv6Y=
-From: Dev Jain <dev.jain@arm.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org
-Cc: ljs@kernel.org,
-	Liam.Howlett@oracle.com,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ryan.roberts@arm.com,
-	anshuman.khandual@arm.com,
-	Dev Jain <dev.jain@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH] selftests/mm: Simplify byte pattern checking in mremap_test
-Date: Fri, 10 Apr 2026 20:00:31 +0530
-Message-Id: <20260410143031.148173-1-dev.jain@arm.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=anarazel.de header.i=@anarazel.de header.b="bePCmxT/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KYDpbxLf"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 2472E1400016;
+	Fri, 10 Apr 2026 11:06:26 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Fri, 10 Apr 2026 11:06:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1775833586; x=1775919986; bh=akpLVJx0Uz
+	SKDAGrU14pFNxh9AN2Pzvbw74VPbTkYmA=; b=bePCmxT/N/H1MhH+hoi/0R1h64
+	bi/HFepnAJ8DY7KUS7nx6tbqAanucsJpWG51m4ZZMonKrO7fjQUhF6CMhQ9ArmNG
+	Vf561iWQQ2nyMS1SupWgkyDE8FCzMUp+5Y6rcO/okkeLkOSjJs9M02w8n7Orp4i9
+	5umoa+CdKQ/m0LQ/LDmlxwDh+tgdtJwfxItAaXqcOs8q2KAPpELM8QybsCo0Wr9T
+	OSZB/7DE/m7+B9fukaPVuBrwxsQrjtbyvR8j6qJ9JBsqH2kBEu3PZptPTlK9EgJY
+	AfmYUTytxmW0u6I5ujGqBi0MDy05Xs7hv5GhVnKHF8iK3gKAsks1m/QfJEHQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1775833586; x=1775919986; bh=akpLVJx0UzSKDAGrU14pFNxh9AN2Pzvbw74
+	VPbTkYmA=; b=KYDpbxLfgZUnUnR8sD8FmPQqZQWBYKGiZyQ4Nuu3gDm7yVKa1l5
+	oU9BaLd4aACROIPfKsoPZL31Q7VAbLxy+LhDEhd7POtcetSdH6GWJ3jnbFice32S
+	xAsnSd8gvdarUEugjLJiUEor55xB8ubl9V0eNmfKNOfgtHHTMo5sXg6lhIJtZEuI
+	IjJEsSYvwuBUM6YGjYJWdKjERJ5zOzH1J/q5sjmA03KZh7bRqyC++jJ7F2zkTDcM
+	Kf3g05ClJB5dtqLdRE2PJFId3tvjbhH/++ZVGZC602b3FrHZvi1fPEpSdGFi7cAj
+	/Wlo3NXTh7Fn73CPcjEbXd6mQuhgrWEL1LA==
+X-ME-Sender: <xms:8BHZaRZWE8uB9sk4nw4WSr0cLxO_Gpq4yxFWU6nwLNmLb-XpgwWTpA>
+    <xme:8BHZaSDvJsNv1Mp_JMHCOdkHdw4tHgAgG0vRZ0uf-UkPzxHFiMVhDgnTKmBW_ECsL
+    Epjwd4LUSvc9v4KYMVvij31eZ28wQsFzmWPvJxuoqCcFdnWix48>
+X-ME-Received: <xmr:8BHZaXb4T3CkRMSfjd0GOsjZ7KfNW_jYC-iXml0IwW0jt9tTwN7lqNMM_nvRBU2bIJ0FZQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddvleejfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdfstddttddvnecuhfhrohhmpeetnhgurhgvshcu
+    hfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtffrrghtth
+    gvrhhnpeeliedukefgveejhfetfeetudfgfefffefhgeduvdevheeuvedtffffkedtgeet
+    heenucffohhmrghinheplhifnhdrnhgvthenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvshesrghnrghrrgiivghlrdguvgdpnhgs
+    pghrtghpthhtohepvdekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeguvghvrd
+    hjrghinhesrghrmhdrtghomhdprhgtphhtthhopehrhigrnhdrrhhosggvrhhtshesrghr
+    mhdrtghomhdprhgtphhtthhopegtlhhmsehfsgdrtghomhdprhgtphhtthhopehsohhngh
+    hlihhusghrrghvihhnghesfhgsrdgtohhmpdhrtghpthhtohepshhurhgvnhgssehgohho
+    ghhlvgdrtghomhdprhgtphhtthhopeifihhllhihsehinhhfrhgruggvrggurdhorhhgpd
+    hrtghpthhtohepsggrohhhuhgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegsrhgr
+    uhhnvghrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvihgusehkvghrnhgvlh
+    drohhrgh
+X-ME-Proxy: <xmx:8BHZaWiuFnrmiJcbgqjYx5Jwx6KiLsnEF2RDyhYx8REuoUmPxSunwg>
+    <xmx:8BHZaXwQEE8sskDChz9Knu-eb79O2kNvt1AK3OTXxRsWkQWdVO8TCA>
+    <xmx:8BHZaR6s62boMLuTfm4hSrccj3m6eYSoy_LU0-Cuscuw2Wx51E2nEA>
+    <xmx:8BHZaQ3rvJguxSGxERwmQDm6d80va9z6fdjrC4qbBdoUnkIzBgiYag>
+    <xmx:8hHZaaSV_t6dZlVVenZsQ2wO0diHoh5qQ_aF_h6mYSl5lDZXgxgfQfur>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 10 Apr 2026 11:06:24 -0400 (EDT)
+Date: Fri, 10 Apr 2026 11:06:23 -0400
+From: Andres Freund <andres@anarazel.de>
+To: Zi Yan <ziy@nvidia.com>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 05/10] mm/huge_memory: remove READ_ONLY_THP_FOR_FS
+ from file_thp_enabled()
+Message-ID: <s2dr4cedsmqby6e3ijauv5p55vrde7c4ldyk5gxdw5iku66rbc@x3nipjpgqjh2>
+References: <20260327014255.2058916-1-ziy@nvidia.com>
+ <20260327014255.2058916-6-ziy@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260327014255.2058916-6-ziy@nvidia.com>
 
-The original version of mremap_test (7df666253f26: "kselftests: vm: add
-mremap tests") validated remapped contents byte-by-byte and printed a
-mismatch index in case the bytes streams are not equal. That made
-validation expensive in both cases: for "no mismatch" (the common case when
-mremap is not buggy), it still walked all bytes in C; for "mismatch", it
-broke out of the loop after printing the mismatch index.
+Hi,
 
-Later, my commit 7033c6cc9620 ("selftests/mm: mremap_test: optimize
-execution time from minutes to seconds using chunkwise memcmp") tried to
-optimize both cases by using chunk-wise memcmp() and only scanning bytes
-within a range which has been determined by memcmp as mismatching.
+On 2026-03-26 21:42:50 -0400, Zi Yan wrote:
+> Replace it with a check on the max folio order of the file's address space
+> mapping, making sure PMD_ORDER is supported.
 
-But get_sqrt() in that commit is buggy: `high = mid - 1` is applied
-unconditionally. This makes the speed of checking the mismatch index
-suboptimal.
+Question from a user space developer (who learned of this via LWN [1]):
 
-The mismatch index does not provide useful debugging value here: if
-validation fails, we know mremap behavior is wrong, and the specific byte
-offset does not make root-causing easier.
+Right now MADV_COlLAPSE on file mappings appears to only only work with
+CONFIG_READ_ONLY_THP_FOR_FS.
 
-So instead of fixing get_sqrt(), bite the bullet, drop mismatch index
-scanning and just compare the two byte streams with memcmp().
+That's pretty sad, because I see quite consistent gains (~15%) from doing
+madvise(MADV_COLLAPSE) on e.g. postgres' .text - but because
+CONFIG_READ_ONLY_THP_FOR_FS is not enabled default (or at least not commonly,
+I think?) in distro kernels, it never quite seemed worth the fiddliness.
 
-Reported-by: Sarthak Sharma <sarthak.sharma@arm.com>
-Signed-off-by: Dev Jain <dev.jain@arm.com>
----
-Sorry for sending two patchsets the same day - the problem was made known
-to me today, and I couldn't help myself but fix it immediately, imagine
-my embarrassment when I found out that I made a typo in the binary search
-code which I had been writing consistently throughout college :)
 
-Applies on mm-unstable.
+Do I understand correctly that by replacing the check here (and the
+predecessor commits), madvise(MADV_COLLAPSE) on file mappings might actually
+start working in more situations on typical distro kernels?
 
- tools/testing/selftests/mm/mremap_test.c | 109 +++--------------------
- 1 file changed, 10 insertions(+), 99 deletions(-)
+Greetings,
 
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 308576437228c..131d9d6db8679 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -76,27 +76,6 @@ enum {
- 	.expect_failure = should_fail				\
- }
- 
--/* compute square root using binary search */
--static unsigned long get_sqrt(unsigned long val)
--{
--	unsigned long low = 1;
--
--	/* assuming rand_size is less than 1TB */
--	unsigned long high = (1UL << 20);
--
--	while (low <= high) {
--		unsigned long mid = low + (high - low) / 2;
--		unsigned long temp = mid * mid;
--
--		if (temp == val)
--			return mid;
--		if (temp < val)
--			low = mid + 1;
--		high = mid - 1;
--	}
--	return low;
--}
--
- /*
-  * Returns false if the requested remap region overlaps with an
-  * existing mapping (e.g text, stack) else returns true.
-@@ -995,11 +974,9 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 			      char *rand_addr)
- {
- 	void *addr, *tmp_addr, *src_addr, *dest_addr, *dest_preamble_addr = NULL;
--	unsigned long long t, d;
- 	struct timespec t_start = {0, 0}, t_end = {0, 0};
- 	long long  start_ns, end_ns, align_mask, ret, offset;
- 	unsigned long long threshold;
--	unsigned long num_chunks;
- 
- 	if (threshold_mb == VALIDATION_NO_THRESHOLD)
- 		threshold = c.region_size;
-@@ -1068,87 +1045,21 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		goto clean_up_dest_preamble;
- 	}
- 
--	/*
--	 * Verify byte pattern after remapping. Employ an algorithm with a
--	 * square root time complexity in threshold: divide the range into
--	 * chunks, if memcmp() returns non-zero, only then perform an
--	 * iteration in that chunk to find the mismatch index.
--	 */
--	num_chunks = get_sqrt(threshold);
--	for (unsigned long i = 0; i < num_chunks; ++i) {
--		size_t chunk_size = threshold / num_chunks;
--		unsigned long shift = i * chunk_size;
--
--		if (!memcmp(dest_addr + shift, rand_addr + shift, chunk_size))
--			continue;
--
--		/* brute force iteration only over mismatch segment */
--		for (t = shift; t < shift + chunk_size; ++t) {
--			if (((char *) dest_addr)[t] != rand_addr[t]) {
--				ksft_print_msg("Data after remap doesn't match at offset %llu\n",
--						t);
--				ksft_print_msg("Expected: %#x\t Got: %#x\n", rand_addr[t] & 0xff,
--						((char *) dest_addr)[t] & 0xff);
--				ret = -1;
--				goto clean_up_dest;
--			}
--		}
--	}
--
--	/*
--	 * if threshold is not divisible by num_chunks, then check the
--	 * last chunk
--	 */
--	for (t = num_chunks * (threshold / num_chunks); t < threshold; ++t) {
--		if (((char *) dest_addr)[t] != rand_addr[t]) {
--			ksft_print_msg("Data after remap doesn't match at offset %llu\n",
--					t);
--			ksft_print_msg("Expected: %#x\t Got: %#x\n", rand_addr[t] & 0xff,
--					((char *) dest_addr)[t] & 0xff);
--			ret = -1;
--			goto clean_up_dest;
--		}
-+	/* Verify byte pattern after remapping */
-+	if (memcmp(dest_addr, rand_addr, threshold)) {
-+		ksft_print_msg("Data after remap doesn't match\n");
-+		ret = -1;
-+		goto clean_up_dest;
- 	}
- 
- 	/* Verify the dest preamble byte pattern after remapping */
--	if (!c.dest_preamble_size)
--		goto no_preamble;
--
--	num_chunks = get_sqrt(c.dest_preamble_size);
--
--	for (unsigned long i = 0; i < num_chunks; ++i) {
--		size_t chunk_size = c.dest_preamble_size / num_chunks;
--		unsigned long shift = i * chunk_size;
--
--		if (!memcmp(dest_preamble_addr + shift, rand_addr + shift,
--			    chunk_size))
--			continue;
--
--		/* brute force iteration only over mismatched segment */
--		for (d = shift; d < shift + chunk_size; ++d) {
--			if (((char *) dest_preamble_addr)[d] != rand_addr[d]) {
--				ksft_print_msg("Preamble data after remap doesn't match at offset %llu\n",
--						d);
--				ksft_print_msg("Expected: %#x\t Got: %#x\n", rand_addr[d] & 0xff,
--						((char *) dest_preamble_addr)[d] & 0xff);
--				ret = -1;
--				goto clean_up_dest;
--			}
--		}
--	}
--
--	for (d = num_chunks * (c.dest_preamble_size / num_chunks); d < c.dest_preamble_size; ++d) {
--		if (((char *) dest_preamble_addr)[d] != rand_addr[d]) {
--			ksft_print_msg("Preamble data after remap doesn't match at offset %llu\n",
--					d);
--			ksft_print_msg("Expected: %#x\t Got: %#x\n", rand_addr[d] & 0xff,
--					((char *) dest_preamble_addr)[d] & 0xff);
--			ret = -1;
--			goto clean_up_dest;
--		}
-+	if (c.dest_preamble_size &&
-+	    memcmp(dest_preamble_addr, rand_addr, c.dest_preamble_size)) {
-+		ksft_print_msg("Preamble data after remap doesn't match\n");
-+		ret = -1;
-+		goto clean_up_dest;
- 	}
- 
--no_preamble:
- 	start_ns = t_start.tv_sec * NS_PER_SEC + t_start.tv_nsec;
- 	end_ns = t_end.tv_sec * NS_PER_SEC + t_end.tv_nsec;
- 	ret = end_ns - start_ns;
--- 
-2.34.1
+Andres
+
+[1]  https://lwn.net/SubscriberLink/1066582/b92de1d7595a01e4/
