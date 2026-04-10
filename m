@@ -1,35 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8495132B99E;
-	Fri, 10 Apr 2026 03:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C576238C23;
+	Fri, 10 Apr 2026 03:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775792452; cv=none; b=c0NnWU/BA8L3GVRhxPo07oy3aSjosj1GSxaB8wB2QS9wF3OK1ZGhvh/aS6n/KANF/XfhpAxUeav2DskW3zk3WKe+E2C+QDxp9RPkGv0jsByJVbI3CthePeKfPctNPV3gSaAA3hEbnIbsJJIjPwqnbNSOVJeRQocazGyB+yqUdSc=
+	t=1775793202; cv=none; b=BeIP1ez0qGp08YJ7kLUyn5HLQXCWkMHlU1/p3f79S2juk7+1/f9HhDM7cwnOVsB4nOE/VdaFVNpPB4ilBcj8PyMoFuVEcngs1g+EcvWzF0c9lRk3FcWOouCQmC+8STA/tns6YuoCHl+ycUal4P2+zaMNgbrb4w039KvJlkmMAGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775792452; c=relaxed/simple;
-	bh=my7kSuC/Perf7BC/m4JKHMgLdU6sYLcXFcsnbMGvBOI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=miQMu+kMB/neSBnHic+CYFcMqwCv8/Vli9tQo8np0sfmS1VF267brBYeKO0WIb5aKn1eRkMspsBEXSizK1atsnH9b7mW97FxznLuMx2zW1bRMru/xQymoyrLbdeWzOUsYXXkobgi7hVz1ZpmMTb6pMIBlN4+SzqjB5DttLLMifU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1jGZZqQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775793202; c=relaxed/simple;
+	bh=B3Hr7MThBpO8RqdOYClkmVKDi21UlYk4buIXNfjCDEQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=g9+7We08mW0ZHyzyWTZR1bz0nZrRjM60trKYzoiDi+hPc5Fh8zm4iQu2KiD5f6PTksNc7QvtDNXf2jpq+wc4JCBkpEOQSWKlzDx4G+zZRq47wJSigFCKH8WIK7YuNT7ADcvVG3udanW/PVjC/Tvt0R041xjepCGGkXjC1Xhn6OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=FqGbFMAg; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1jGZZqQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F7DC2BC9E;
-	Fri, 10 Apr 2026 03:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775792452;
-	bh=my7kSuC/Perf7BC/m4JKHMgLdU6sYLcXFcsnbMGvBOI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=F1jGZZqQNBuMhh7D/PrTZDFvlSrWGcsbQ+hrtZGnko6GW3gVwbD5HhthQwXj3GwRG
-	 TVY+/UZWUxBa0quw4iZuQ3s9hcQkPf6ggVIWq5ZcOM020E3BSkoQMexU0aPQrH3Ec4
-	 phDTJSH+mB5NkWyFhbZZ7njDKixjeDPlyZH2QqPlS7ZupEwpWvhHoS0r9TWCE1WycZ
-	 x3DIiEgcLswaGs7i0Nj8VUHueQUjGpj7Xw+TMKybnTIHDZE+pOZC0pnP4a6+vHhSKF
-	 LQXjHan5kWTI9xckH3pTU3yacMdngNnX1Nqdoj0A1rL/XZsubOB4uF2m9iROVRaNZE
-	 VWpJd48KoWHBw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CCB33809A22;
-	Fri, 10 Apr 2026 03:40:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="FqGbFMAg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Bq
+	ZHRt7/maD5XNq017TDZ2Tr69V/Pp021rgrxlLU/8w=; b=FqGbFMAg8Pk+kuU2O/
+	Is4bo1plK18rymqRzDoIW77PDSchzClUHKy9lshxQk7SUz6Np4cIT0xHGV/Yrhsm
+	dcsN22YB/wW7LPSAB962rTT9T5Q4FIAXxfHDSaZ8QJyV6D/k7GO2uGKOVOSKKqEq
+	eoAyxYKeEpYbGcN3cBBt3udHM=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wAnPvUMdNhpyMguEQ--.28809S2;
+	Fri, 10 Apr 2026 11:52:46 +0800 (CST)
+From: Cao Ruichuang <create0818@163.com>
+To: stefano.garzarella@gmail.com
+Cc: sgarzare@redhat.com,
+	shuah@kernel.org,
+	virtualization@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	horms@kernel.org,
+	Cao Ruichuang <create0818@163.com>
+Subject: [PATCH v2] selftests: vsock: avoid races creating Unix socket paths
+Date: Fri, 10 Apr 2026 11:52:37 +0800
+Message-Id: <20260410035237.59644-1-create0818@163.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20260405195733.86043-1-create0818@163.com>
+References: <20260405195733.86043-1-create0818@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,41 +48,91 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: net: py: explicitly forbid multiple
- ksft_run() calls
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177579242707.1854480.11270474673185223414.git-patchwork-notify@kernel.org>
-Date: Fri, 10 Apr 2026 03:40:27 +0000
-References: <20260408221952.819822-1-kuba@kernel.org>
-In-Reply-To: <20260408221952.819822-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- petrm@nvidia.com, willemb@google.com, linux-kselftest@vger.kernel.org
+X-CM-TRANSID:_____wAnPvUMdNhpyMguEQ--.28809S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZw1UXr1DWFy7Xry3tw4UXFb_yoW5GFWrpF
+	yFqrWktr1S9F1avF17Cw1UGFyFgFs8JF47X39xZr1jvF47Krn7Zrs7tFn8X3Z3WFs3XFWr
+	Ca9YgFs5ZF18K37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pREeHhUUUUU=
+X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbC5w6w6WnYdA4ZigAA3o
 
-Hello:
+Signed-off-by: Cao Ruichuang <create0818@163.com>
+---
+v2:
+- retitle the patch to describe the race being fixed
+- replace rm -rf with explicit rm and rmdir cleanup
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+ tools/testing/selftests/vsock/vmtest.sh | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-On Wed,  8 Apr 2026 15:19:52 -0700 you wrote:
-> People (do people still write code or is it all AI?) seem to not
-> get that ksft_run() can only be called once. If we call it
-> multiple times KTAP parsers will likely cut off after the first
-> batch has finished.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next] selftests: net: py: explicitly forbid multiple ksft_run() calls
-    https://git.kernel.org/netdev/net-next/c/3d2c3d2eea9a
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
+index 86e338886b3..c345fa539d3 100755
+--- a/tools/testing/selftests/vsock/vmtest.sh
++++ b/tools/testing/selftests/vsock/vmtest.sh
+@@ -718,6 +718,7 @@ test_ns_diff_global_host_connect_to_global_vm_ok() {
+ 	local pids pid pidfile
+ 	local ns0 ns1 port
+ 	declare -a pids
++	local unixdir
+ 	local unixfile
+ 	ns0="global0"
+ 	ns1="global1"
+@@ -736,7 +737,8 @@ test_ns_diff_global_host_connect_to_global_vm_ok() {
+ 	oops_before=$(vm_dmesg_oops_count "${ns0}")
+ 	warn_before=$(vm_dmesg_warn_count "${ns0}")
+ 
+-	unixfile=$(mktemp -u /tmp/XXXX.sock)
++	unixdir=$(mktemp -d /tmp/vsock_vmtest_XXXXXX)
++	unixfile="${unixdir}/sock"
+ 	ip netns exec "${ns1}" \
+ 		socat TCP-LISTEN:"${TEST_HOST_PORT}",fork \
+ 			UNIX-CONNECT:"${unixfile}" &
+@@ -758,6 +760,8 @@ test_ns_diff_global_host_connect_to_global_vm_ok() {
+ 
+ 	terminate_pids "${pids[@]}"
+ 	terminate_pidfiles "${pidfile}"
++	rm "${unixfile}"
++	rmdir "${unixdir}"
+ 
+ 	if [[ "${rc}" -ne 0 ]] || [[ "${dmesg_rc}" -ne 0 ]]; then
+ 		return "${KSFT_FAIL}"
+@@ -814,6 +818,7 @@ test_ns_diff_global_vm_connect_to_global_host_ok() {
+ 	local ns0="global0"
+ 	local ns1="global1"
+ 	local port=12345
++	local unixdir
+ 	local unixfile
+ 	local dmesg_rc
+ 	local pidfile
+@@ -826,7 +831,8 @@ test_ns_diff_global_vm_connect_to_global_host_ok() {
+ 
+ 	log_host "Setup socat bridge from ns ${ns0} to ns ${ns1} over port ${port}"
+ 
+-	unixfile=$(mktemp -u /tmp/XXXX.sock)
++	unixdir=$(mktemp -d /tmp/vsock_vmtest_XXXXXX)
++	unixfile="${unixdir}/sock"
+ 
+ 	ip netns exec "${ns0}" \
+ 		socat TCP-LISTEN:"${port}" UNIX-CONNECT:"${unixfile}" &
+@@ -845,7 +851,8 @@ test_ns_diff_global_vm_connect_to_global_host_ok() {
+ 	if ! vm_start "${pidfile}" "${ns0}"; then
+ 		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
+ 		terminate_pids "${pids[@]}"
+-		rm -f "${unixfile}"
++		rm "${unixfile}"
++		rmdir "${unixdir}"
+ 		return "${KSFT_FAIL}"
+ 	fi
+ 
+@@ -862,7 +869,8 @@ test_ns_diff_global_vm_connect_to_global_host_ok() {
+ 
+ 	terminate_pidfiles "${pidfile}"
+ 	terminate_pids "${pids[@]}"
+-	rm -f "${unixfile}"
++	rm "${unixfile}"
++	rmdir "${unixdir}"
+ 
+ 	if [[ "${rc}" -ne 0 ]] || [[ "${dmesg_rc}" -ne 0 ]]; then
+ 		return "${KSFT_FAIL}"
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.5 (Apple Git-154)
 
