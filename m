@@ -1,142 +1,338 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365C03E2765
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 18:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52141862;
+	Fri, 10 Apr 2026 19:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775844434; cv=pass; b=D+R4Nzxs5HUDMRLZutBAubZIEoOEq6Y2rkQsr7SZNYWZRWALqMXKbgzEoLrOTAUxypHho02AOv4BSX5T1V9218CGKkDWOJ65Cu1ou4S9oI8YOnVzM5TKEf55pdmhXnJlexxxSquzMJi/dTgtYaziBp8KOhcR3gHYjNT5ao2rPQ4=
+	t=1775848017; cv=fail; b=Q+fyLuiGwbLmaQRd4BNXllvdVHhkTJqzenO3WuSTbuYnmLHKWcJE8Zn8RZ9oGSUFPycnAJeSOvhcskj+B3Os99LlXtRyIh04pRNdwH3IrV7RVaPIX0Hjm0lpPGdqrq9E8ddIUkwEpqHtN0IgA94r2jym0jhMdCko91vC2y9vQWI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775844434; c=relaxed/simple;
-	bh=m0SqRtjpc8fweCPgbIsrD2d0z6GAWlzdIRiS41O4cxg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DFR6r7v3cc+0Qw5SRqrW+bAz8JC8eb/Lk7eHCobaeeiQ64XkuPkjRlhfnK6WvhwIj2+9m4G8Sbm/TBUrtkA1BB6+apIKgwjQiLEdHDEAQ5DxIz+cF25iVl2uEjVjf8NAhi7rVF+/Uud952pjlBTHEa0Xrx4uP+1+MzZGbNO5GGM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQfCHLOo; arc=pass smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775848017; c=relaxed/simple;
+	bh=pdp1QAyGqPcUbZLBWsG3yo/hk3dvrxXc05iG+vR7K+c=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=hVSO6qJkuqykl2expl7vEH8GSo5GXPrC6qPgaUYY0Uqa6oCr1KnYVtwi1xS/Df3eZuuKDCI0GbQU65SaAVvy3YPqeF/8jv6faCLIH4a76Q6N3HPa7DK1Uv+dhd3O5L/Zjnygeqse4aZeG1R4hIuEKDlPvxjp3pgcuXAIunVDqjU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HKN50yRH; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Xjqu2E1k; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQfCHLOo"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b9bfcbaa81eso387487166b.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 11:07:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775844431; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BgiuTtCSpJ4ty38qy9XBRAb9gDpKc0PRrUvNzmTUUNVeO3yN45PKiu8YTWnb3xhT1F
-         oyhbtIq14LC6NxPs5lZqpj30SewvGrTSPFLv3kX6iamOj2yjsID7Rbw7vTtE5fzKUQp7
-         cwgwUHEa05xv2NSN9qg84KrV8FZvWgdghAFfZJk6bZDyX/y8hJGhVXqHXiJCk9vzXRRU
-         os9oDZm06iVHxpIG5yhbiKPcbnUTKUY2hJFA8H36OhvV4DKfTaun2XjC8G99MH3tQbO7
-         /iyZXH6+fdkoTNZR3uD0Ia8VSxsVZQEK6wXAWvWr/p3hUBJHw1crofYUvY+xfNzYhTV8
-         SOMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=mGufM7na8wMpN8zx+blIkzaxv+HrthUqBNiPXsfFPcU=;
-        fh=m3TV/qzWH+Ro4BigLQuIAE8c7xq0HtucYqN5mKyFwdg=;
-        b=aNd4KGSYeZChwQnCwGOcr1S0/XpxxbM9iC+FOIlOlX7pBq43OKyjKGFPiI15xz6QLL
-         rIL0og3tm6FZ33HcIwv+esuvOXqc++0b0QuN1J3g2jnKL2+PVkRHu/rwr/B+4FCFkFFO
-         cJ+W458ke2SoG/Smw+6eQS6hFCQgb3JsuutsngOg2vvMc1xhy8JHLk16r4YK06KjT4BP
-         BexWACGpZxlT7xqUw/foP+s/MZmV6Ae/rHgwCBR5xZm1Q/UecUHOJxMezknFy+JMGDKZ
-         V9AmGXasgE9QuPyyuxg+wOnaIRAwIDonK7UtPv2EOOxt8JFj7noF7YQ7+WmTosv+j0hm
-         Coag==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HKN50yRH";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Xjqu2E1k"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63AI7MfB3132727;
+	Fri, 10 Apr 2026 19:06:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=YtYGjexyzaI7cKvWsJBmjcD5Hw1VmexaB+P9bj05xkk=; b=
+	HKN50yRHD+TobYXnaErL89c9/xAdpr6DMpUod5edwvL0Cbd1lk7HUbMeO5k4Uw+C
+	lJqzwlxVFA8/g0mwYPFBZGj2uBZFA484bU/7ag5TzQRls4AiFmK2am0zCHl4m+oQ
+	bGbDf5ABzfSew8FPWXGPnmZx+r70zI2ElA9yF15f1uxRuUKQuuVDCe+PSgZQ2m8D
+	4zb62ryObHTlvAqtbToCCs0KQtZJU4a5etBFSY2sTR12yIVFSDx4+ssq85bWH8zE
+	LHpYQQ27ucNm9/Q9mylCv+sNcha+QZMs+Gfmb2E9VCEQRBQoEYICFGfdYvWl9Ole
+	c02LSHdaMyAI5a5kB42Lag==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dcmqbtec5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 10 Apr 2026 19:06:42 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 63AHdFxG011634;
+	Fri, 10 Apr 2026 19:06:41 GMT
+Received: from dm5pr21cu001.outbound.protection.outlook.com (mail-centralusazon11011064.outbound.protection.outlook.com [52.101.62.64])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4dcmnum2wj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 10 Apr 2026 19:06:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LUg0EBRUZuJYDi2aA6bDgkL9wLZ2QgoBLApX82NE8ecAmr/G29qERJZnnKD06sqAwEJzy0RfTH3Mk7kgiUJoSzQkCmEElgSPjK1ElKMmvj35c1y+tqILm7TVS6t+AP/ovE6aHI1W/ohXRc8eUpFqdrYE243UyKkIQ5IvQW4LOcBHqmt5KZYJWtQaLgQn58FMKr2HdwQcenMtNpUVObU/r4u2IYWkaFngnpTxzfgD8VdLeBXkJ3fbE7xng/u2HSiQzfnplclzx2usi1CNfbGjmHgRJaU5+7Q9199ORabKAlK8wm/v0vP+yTyQMZGI5GpnfOHzXnSgM2QQqCk+W8UTlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YtYGjexyzaI7cKvWsJBmjcD5Hw1VmexaB+P9bj05xkk=;
+ b=GXdD8mH2aFsOalOsip20oY0GNZB84hqdkbhdrkgMEEzTzQfumLSWUdlt/h6iiyYeXar5N6Ii+xvWrRp0pRAmQGFNeOPg4imOI2h3fltMAOD8pM3hXL73OSi6XTl7e8d/1Gxyr2N4+8a+3Eqr5ZCvWfOgSTA1UtssyFln2v279RobWvg1QyWeHPQOTaByUVOdmULRof7RVfI6Oq5+D55ud5DhR+M9QeBdQQ8UraI1q+f3LESizFe2IscTNdZ9uF7futCRbOVyh1gi7L14/SeM5+DYgqLvBfj3Z9WZNggE/MJXc86OiEwh7sPs9dZEeFxuA8zoZZoMxD6x/aHH8Ov1Xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775844431; x=1776449231; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mGufM7na8wMpN8zx+blIkzaxv+HrthUqBNiPXsfFPcU=;
-        b=MQfCHLOo+qYEVvGmLEQmTa5Ni3SM5nsNXEX0fpNlC1dVrMvE9BEDj1b+6eYfLMx4CS
-         rZZuSg+ayDrdOXtIUGmhCzWY5wsjWVdPjBrzXRo1oUniFnOL9+rwWWC1ab0/ljBGCdOj
-         ytYxAYMLnRTKptcWh8YVOKldvNQokwbRfyGDcwF0bb9/sVp7YxJBl3uV6uni8Ms+iB+D
-         rRuEXhG06pO0VtZgURzb/P+5DA+exXexKxWLJrDhMZa/R6t7XuIU9UztZEWIXh74NFpb
-         GqCPc6PtwFFD7hqHuoudnKtL9zt3dSHZhQl9j287LFwDNHWAypuYb78jzgV2DSsd5Ekr
-         +xSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775844431; x=1776449231;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mGufM7na8wMpN8zx+blIkzaxv+HrthUqBNiPXsfFPcU=;
-        b=NX4FCFr2GkNHx65J6lZyaFqR/SS+AZXFd3hp/b8rFXnyEDP1eDc6qcWFdfyAXj0qP2
-         hj2DFpgO4jCjTZ+wWx4O+HLWtF0bRU2KGB/yBUZ4PA19YsCRLJo/sKDuWmezYaU0SyD7
-         /qRaC1BzWe/a+EHBxdPlqhPiBmSF/QFvWIRpnl8j5SndMGj4xySRQCc6N1RiqBWk5/jv
-         Ti5V3XiUbW1bdsTjC/LC3iwCGrtncQLuUdtylDaexbOsDXyuXE5hmPcTKx2RY1SwKkLH
-         joI1iA6AsHvCObbwShP6b4/MmQP3ahU8ndBLto4UQ/I8EHkieSYGujVm6+5Kxm3vw4cm
-         BjOA==
-X-Forwarded-Encrypted: i=1; AJvYcCVvsYrSi32ExVsYLsoM1CcugW+asqy/T726/2QN+DAo5gBefnnUXUqmsp9njQB10+Y+9bcxgy4tOqyTaTSHX2c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFZiAxl8r5KCOJr5XzTupI6d+E1Hg16gF2W6hGTQGnzQ8RnME7
-	vVbif9dz/WPIwC51WMA/LJH0unshaOWNTUGKBib1mHHQ+ZuUqB8l2Wc7t2bJp7GXIcQiTHwX5VE
-	tWNkS3q08xXDqLx3y8tSooHLjPfMKsvQ=
-X-Gm-Gg: AeBDieuBZiuUfqzUsjBZwEo8pNISN4Ivx+o0n24q7P5LQi6gcYd+SJisQcjDlGjAD1F
-	uXX9LzY/+5+IRS6PVVa83Gi3HKy8mf5TCs2iNteEFCW1hEHbjaU7gsys0TCcm404zmgLLCAHIjL
-	AKtA1iB/fUqzBVdVimYGZZ8qUR3fLj0ThaLIZpkWetRgcA0RLc2WRlr98Rj4hg8EKkCe9Fg9+ql
-	L64UcXlD/JSFbpFsg+cjpaj4V6uiadv39zdPxAi2lRcmsL4SJE0rAPK/8PIr57RDQ/JpBeCVsKa
-	Fkq7dGo=
-X-Received: by 2002:a17:907:a1a0:b0:b9c:55e8:fba1 with SMTP id
- a640c23a62f3a-b9d72980914mr205690366b.26.1775844431242; Fri, 10 Apr 2026
- 11:07:11 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YtYGjexyzaI7cKvWsJBmjcD5Hw1VmexaB+P9bj05xkk=;
+ b=Xjqu2E1kcgqPr5sKudCNd1qeZi6hxP/A4LxAX9U1gs6kyu1aqTvuC7zrNtAPqK3tUsZNGeGpTTPNve8fdxWviwn8o9JSY0l5O8AHNIMResSM3o1yxEK7a5ybcXCFDGHcoPRNkLX0AmQyO8IUYZylrbQd2EMLzXHATdW4E9GnGzg=
+Received: from MW6PR10MB7660.namprd10.prod.outlook.com (2603:10b6:303:24b::12)
+ by DS3PR10MB997749.namprd10.prod.outlook.com (2603:10b6:8:345::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.44; Fri, 10 Apr
+ 2026 19:06:38 +0000
+Received: from MW6PR10MB7660.namprd10.prod.outlook.com
+ ([fe80::c2dc:a34f:6987:1230]) by MW6PR10MB7660.namprd10.prod.outlook.com
+ ([fe80::c2dc:a34f:6987:1230%6]) with mapi id 15.20.9769.018; Fri, 10 Apr 2026
+ 19:06:38 +0000
+Message-ID: <38fd3d86-f080-4b3a-a931-8ddae1a420ae@oracle.com>
+Date: Fri, 10 Apr 2026 12:06:34 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] selftests/mm: verify droppable mappings cannot be
+ locked
+To: "David Hildenbrand (Arm)" <david@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, ljs@kernel.org, Liam.Howlett@oracle.com,
+        vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+        jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, shuah@kernel.org
+References: <20260409234915.11723-1-anthony.yznaga@oracle.com>
+ <20260409234915.11723-3-anthony.yznaga@oracle.com>
+ <7a318c3c-7ccb-4f95-a416-19d09f42c97f@kernel.org>
+Content-Language: en-US
+From: anthony.yznaga@oracle.com
+In-Reply-To: <7a318c3c-7ccb-4f95-a416-19d09f42c97f@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR04CA0007.namprd04.prod.outlook.com
+ (2603:10b6:5:334::12) To MW6PR10MB7660.namprd10.prod.outlook.com
+ (2603:10b6:303:24b::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260403150050.1235-1-royujjal@gmail.com> <20260403150050.1235-5-royujjal@gmail.com>
- <20260407134502.GD849209@shredder>
-In-Reply-To: <20260407134502.GD849209@shredder>
-From: Ujjal Roy <royujjal@gmail.com>
-Date: Fri, 10 Apr 2026 23:36:59 +0530
-X-Gm-Features: AQROBzA5y--UIRYT_Yu32kHeVQkZCbum9kUmK0fpAAGLhqzgcbax6qOFdWZqhBQ
-Message-ID: <CAE2MWknjWczxM3WrKkQ0eHV7PdNxMQ62GnTAp6tCPToumZnE=Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 4/5] ipv6: mld: encode multicast exponential fields
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>, 
-	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW6PR10MB7660:EE_|DS3PR10MB997749:EE_
+X-MS-Office365-Filtering-Correlation-Id: 23f98dad-0cfc-45ea-dd20-08de97344aac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	eHMWA8mTrfC5u8wF1VWNhUwXYlHhn5hxsWCs1e00It74GowVZqm/tJG0Mw1hLShWI4d+gWnwMZ9hqaY0826Zirv/v+Em0VqHNcWFUTUVHPjRWp+u5drrMlKbQmOTPPwJo2HKqXcoO2qD3HSzFpMoXJAGrNelctny9nuXC9dyRtdDZAIY6BRWlE0xK2mZU67kamslZuqux/A7PQUbeXTnpF3bn1ANRPg6iPLPgQVA6hldShIYmgOVIWPPstutaSF2n59FATNEqwNqzRWrkkG9/OfCzKFrmeYsm9XwJY9n7Ba+qvSf4vKhyyZLU09b0+22nZ3/dHBHrqdBMx/tvQ06NWihijUvPBeQ8GMwSGVN2YZ834NS/cqnLYQBWfmS4Cj3xQkLobnzlUWe65+UNWH7kQt8tp+poozQR0nFeQGdSFT4tL/QD76NeVwddbAP0WGqbFLIUHWY0uVGNeYr8zKnhVtMFAb6Q8Ocifh4zQ3jUnFtXjX0MfCP/FDG9PeoC4Jk/4zlts4HcZLGvg0kHmUQnmW+dY0MRYQKfCjqmwVR2gPVSgndrDu/19KsNPa+QGiyPu7aOnwFekgEVw+jioqfi7dPTbyAsK1FdslJmQJjQwgnsw/k6R2g4t/6f21JAyzkLtGSWyL1Mfzjr+aMg+vtOsK4YSfuq0Aid21i/yhkAvxBHyc+hvdv+XbO1iuC56YecO6BX5mwlQIhUvHXoL3qBQlWX48E/bkwl3VTxlGoN4k=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR10MB7660.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?c2hyNUI5YzNLbW1ZTENqZ3g5ek5NVUNLQW1IZUNjSkRENnJ3Yi8vanhKN2tu?=
+ =?utf-8?B?SE5vMDk2Sk5aQXJQVW9HN3FhVXFvVjVkZytiOFpkWE5WYXVUNmF6WTUxWVg4?=
+ =?utf-8?B?czF2ODBuOUhlOUZLdjZPZVlOWGRtMTNkNGJ5RkJuY3QzMGV6MHkzUGcyaml6?=
+ =?utf-8?B?UkYycmJ4LzNDMTJ5WFJTT0NEYXhRei9YbGhrRzd2dXZNcXFzbGsxaDJXNFdO?=
+ =?utf-8?B?RGwvY3lNWm5na0drVDBTSWdDTVFTU0xEZW1KTEpKOEhWbEF5R2QySU9pcUJS?=
+ =?utf-8?B?V3FreUwvaTFUdUY2ZXNGbzZpcW5EMkRDeURuTmdRWDJ6bTZnSVcvaTBNVXgv?=
+ =?utf-8?B?NUFWYmViaUFvaVI2R2dVTHFWVWFJUExOWS8xZXBFUmV5dnEwY0tOR0VMb2d6?=
+ =?utf-8?B?ZitZejNFNDV4Z1BXMk4vbUg4UDAvMnhUWUlpNm5OTHFjemNsbmZWRzR0amp5?=
+ =?utf-8?B?dE0zVTdyWEZmK2J5UlY0ZWdHS3Eva0NQazhmN0toWWJDTnltQ3BqbGYvcUkx?=
+ =?utf-8?B?VEdlemZZMmd4RXRpN1pqcWpQU0FlYk1iaW9LeXlFY3dmY0RURTU1ZjF0RXcz?=
+ =?utf-8?B?bjFWMnRJS0dDRlE4M3NBRDdaaVl3SkZIK3pTeVZVNGJiSlYrYjFnVElSeCtj?=
+ =?utf-8?B?b2lNOU1Sck5zU3A0d0s3RmJpYndVK2pEN292WmNHSzVucHJkUVVQdnVSa2Qy?=
+ =?utf-8?B?dDFMdVJDeDdHYlJqWnZ3VUNxSFhpS1F5QTA2WVJ6YmV0WnpweVJCNmkxWHlQ?=
+ =?utf-8?B?Y3l5WFlQVkRkem4vY2s3MmtIcVdac09ob0lPNTlCMU9sbjdIUjlza0hZa3F2?=
+ =?utf-8?B?MEpobkZxTzNCZ0lpbk9laHNwVitTaHFGNGQwUkR3bzkrc2V5QndjNzFuUFM4?=
+ =?utf-8?B?QmhGeHB1WmIvNDVXaGlnQUc4SWFNTmdERE5JU3U3SkJtRTdnQ3FIRWZwTHJ6?=
+ =?utf-8?B?WmZUMERjMWRaK21VZ21OMWRTcTJzSGNYTkMxOXRvbGlORDR3emFqWnFDcGYv?=
+ =?utf-8?B?SFVMNEZiOGszNmh1VW4xbjl0cnozRG1RZzRVWnFuVkVyYTNYQTB2TFFLWVNz?=
+ =?utf-8?B?MmRNTy9Gek4rSTQ5MUFNQnZ4TkQyeStJLzd2dkxaWWUzbW5sa20zalBrMWVM?=
+ =?utf-8?B?ZVNOVWppN0tIOThJWGUyenFXS240VVNDTEVpUmI0dXpka3h5dm5kRFI3ZFd5?=
+ =?utf-8?B?dXZKclJHMURxRk5JVGVKanV2ckJoZGE0SGNxOVd5WFFaRVplZ25qYjB6cXhw?=
+ =?utf-8?B?OFNKVnNmc3N5WGdqTXdlSXFCTkpUaCtUaTRVd3ovSGdvaUo2ZnRzZUZ4eVVk?=
+ =?utf-8?B?SFE3NTM2YURTNGdaYzNFcU9HWU5lQ01tQ3dqUElLYWpHVG9TQWZRY2YxVUpr?=
+ =?utf-8?B?REhDTVVuV3d6a0tUbWZ0WlVJQit2V2k3WmdXbWxsaDhxNVdHRTBvWVFGa3BQ?=
+ =?utf-8?B?Qjlnb0NvbTJtL2lLdU5aYXZKVmZ1SVpScmF5QjdqaVFaU1VZVjYzbkpiemxL?=
+ =?utf-8?B?WDhYUVpETGpZZEdHS2pIVGdkNlk3WGlYNkRKS1JSVStISml3ZWZwNVhZZHc3?=
+ =?utf-8?B?LzRlVGJMajJhSFV2WkEzZitRYnVFbkVlOXJUSVQ3bk9tSWpZWHl1Z05XOW9T?=
+ =?utf-8?B?TXUzazBWS2h1bkNuQWpBeFdHM1lUOE1HK3g0bzZhcHV3ZHdiUWxyd2FteGV6?=
+ =?utf-8?B?MGRhUGRNaDBHY3gvY0prK1VVcURhRGpPY1VZWXN3MmZmZVNxaTZ3cnJBN2hn?=
+ =?utf-8?B?SFl3UWxneVFuNTJmTEdMZlp5L2JCM3VyaHdDR0JNdWEwNzZMeEVVVDRwcnBP?=
+ =?utf-8?B?ZDV4SEMvOXdlUXl1Zk5RcEdJWWo2bXRrSlMrbGlZSmhnN2RkekZIYklyZXFR?=
+ =?utf-8?B?Q0FaR3pocktMbHhBbjFXVlNYdVdSS0hlYlpOWjNjbUNENk5sYUtxcGdOam1r?=
+ =?utf-8?B?V2FwRWVKWldST3VJU2l0RS9RRjIydEpwN1ZsQjU3LzBvdHV6ZW9TWVk5Ny8z?=
+ =?utf-8?B?dzlpRFdDRS9MWEhhLzZCS0htWU5ibnkvUlc5VjJWZG5oZ0Mwc3hldEdBZWlV?=
+ =?utf-8?B?RzVnbU9CT2ZrNDVzVTZsWnFEUHVYdGlJSFlKQmVNZG43cDVMcTRSVVVER0Nh?=
+ =?utf-8?B?N0I0RWkvRGxaVHViaGNOL2ZJZFJNZHNIdXVSMUtuNVVmNHNkTmNkSHdKSXll?=
+ =?utf-8?B?QmMrOW1nellVT2lKSVdYZURxejlaa0RZMVlLdjZ2SXJDd0FHS0R1K2tweGlj?=
+ =?utf-8?B?U3l1eS9xT0lDUStTdStRRjBzaW1sZDhzUHAvOVdiTHFoMG0wUkZRQ1JWSWZR?=
+ =?utf-8?B?aERGTnpyUEQxZnlrY2lIVks4RGRoNm9MancwbG1UTGRvZnNUTkZ3VDlRenl3?=
+ =?utf-8?Q?B3KVyIIhNTRs1LWY=3D?=
+X-Exchange-RoutingPolicyChecked:
+	ios+11XA5gOKg+cCGQaRnrLg1MSoI9R5PJqh5dAdVkjp6SWW0OgWnZXx0Ss2PquDLsdqtbtJmh0CEkNhSvT30f18Y+bhPwrtl6360vxa/6GA6ajertTiRDF8OGwsfdKeMis+SgrDcYM/7+2gsujJaPF2Z00OnXntOTbW+0h8e3fqGmJTHcsIYxPSGJ8sl4HkO2jZYBuvWEQHKG8hhjE/0TF83YF6guMJXbh1FWXQqe5rLPWXe48hPnlgvabbmAsyGuezE1YiVi10M9mo6WP5RDRMfE9wGRA8P4+aD4aGCa30a6Et5iMQN+54GuIeXbs9c1EYdX5otkOPS9SwJ15tOQ==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	buznOzrtnuLWgjzd1hIkq34J6X1y8kDYKh3jEo+fCS3AARFd7bGa3QBJ5XtK+y7LZslqtok2nv3i9BmjixqysxKj3LCV8LKJqSXFAbvTE1avXdD+MK13zQHmZR6/DB3lg4qXSKmTBAoFef2MYpnsLOoWs4Qj9wXPjX60GkD4IKyn0BuR8XxBwxAVew8KHD2nXRn+60C4scDU5yc1B1349qbB/VnZzjii133VDvtouJ3Ck2nfcDZxdoLFbWcvzDx2zc2kxWd4B74kW+4vBxw8hCn0ZBch0J+4wlCc0dDUUsZbspfLmS625yZ2TYVORebzYBnyvbUdQCJAV3AZwqHmiCoDEDWfQh5/1OeXQPe/a+HrZLQ73ZicO9T/P8XIcrrKgxfIlnmgn/HF8CoT4GLsoHJnEl051p62kKq/f5uoy+7WmtpPJ5DA0TRcYHd2k3Amd/kyPPq8FztZsxfsL8Rdf0p34iTAAQbkXgSa5WxMc8Uah0HBfjPrrkdqZLqO1y8OSQBxljT++bu2lZBD53F6sKHsoHEaECXQSGyxTjy/TkQAyQ2+nG1dnUliZMuYc0XIsGfgZY85To0OLgCM/tM4S6eoIEyRSuyfFp150Px1d1Q=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23f98dad-0cfc-45ea-dd20-08de97344aac
+X-MS-Exchange-CrossTenant-AuthSource: MW6PR10MB7660.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2026 19:06:38.2222
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QPoLtwMzBauKyit0zuFYFBh8V9UrBnqU/hJj/tam0KrMEK9Xh15M5g4g+axFL6tbK4lxSBhwmnJBIjYdhGaoRaTK4d2oeF1xsjbfIxURYXI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS3PR10MB997749
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-10_05,2026-04-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2604010000
+ definitions=main-2604100179
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEwMDE3OSBTYWx0ZWRfXylIX6is7rpoa
+ OZYiO60vfTQ7jDn+aFPvv0jMoAF+tEcfDetXpoNUX+fI3Axizyjs7S54mUqzeouc8akYw9XIl8J
+ Hwd6kA1c/XDke0BBcrxO8LbfjO+1PRvxO8bpjEgEYnVwQ9nPXbxp8WL1148KL3w/hKNz4drU9S9
+ rW/RUf9UNoKNw9GsyfasH3dL2eaK7IpC4uHHvflRKDEsMgZnAVKgIndrfNQOG8iKs309umlGUtW
+ JerabUm6azFp/t3yfVbUJsmyZ6gD1Qd0v+cMPwJulE3wwlOI+Jnzz37z+sdtTIcLGdiGfB6dj/U
+ WBYapEHAw77gEdBoL6mnABE4kyRwV/s26LnWs8Q6DKG9k953H+mO4fysb4A2ScZ4ULs4i0E5XUy
+ m+4J+D7KIozmnqVjaCsd1RVgW5p5xs4HH0a8cstx8DvXrRh77NSnrG8n/7b6KV0aVA4pv/kU34M
+ ab3ccsM1Yl71h+UilNg==
+X-Proofpoint-ORIG-GUID: 3KR87sNrWxiJULrZNyPWr1K5hp96Yteo
+X-Proofpoint-GUID: 3KR87sNrWxiJULrZNyPWr1K5hp96Yteo
+X-Authority-Analysis: v=2.4 cv=KO1qylFo c=1 sm=1 tr=0 ts=69d94a42 cx=c_pps
+ a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=A5OVakUREuEA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=yPCof4ZbAAAA:8
+ a=VwQbUJbxAAAA:8 a=SSzsZHljZMg-G_jlsqkA:9 a=QEXdDO2ut3YA:10
 
-On Tue, Apr 7, 2026 at 7:15=E2=80=AFPM Ido Schimmel <idosch@nvidia.com> wro=
-te:
->
-> On Fri, Apr 03, 2026 at 03:00:49PM +0000, Ujjal Roy wrote:
-> > In MLD, QQIC and MRC fields are not correctly encoded when
-> > generating query packets. Since the receiver of the query
-> > interprets these fields using the MLDv2 floating-point
-> > decoding logic, any value that exceeds the linear threshold
-> > is incorrectly parsed as an exponential value, leading to
-> > an incorrect interval calculation.
-> >
-> > Encode and assign the corresponding protocol fields during
-> > query generation. Introduce the logic to dynamically
-> > calculate the exponent and mantissa using bit-scan (fls).
-> > This ensures QQIC (8-bit) and MRC (16-bit) fields are
-> > properly encoded when transmitting query packets with
-> > intervals that exceed their respective linear thresholds
-> > (128 for QQI; 32768 for MRD).
-> >
-> > RFC3810: If QQIC >=3D 128, the QQIC field represents a
-> > floating-point value as follows:
-> >      0 1 2 3 4 5 6 7
-> >     +-+-+-+-+-+-+-+-+
-> >     |1| exp | mant  |
-> >     +-+-+-+-+-+-+-+-+
-> >
-> > RFC3810: If Maximum Response Code >=3D 32768, the Maximum
-> > Response Code field represents a floating-point value as
-> > follows:
-> >      0 1 2 3 4 5 6 7 8 9 A B C D E F
-> >     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-> >     |1| exp |          mant         |
-> >     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-> >
-> > Signed-off-by: Ujjal Roy <royujjal@gmail.com>
->
-> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
-Do you mean to include "Reviewed-by:" tag into this commit message or
-the entire patchset? I will modify and send v4 once I get the reply.
+On 4/10/26 12:57 AM, David Hildenbrand (Arm) wrote:
+> On 4/10/26 01:49, Anthony Yznaga wrote:
+>> For configs that support MAP_DROPPABLE verify that a mapping created
+>> with MAP_DROPPABLE cannot be locked via mlock(), and that it will not
+>> be locked if it's created after mlockall(MCL_FUTURE).
+>>
+>> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+>> ---
+>
+> [...]
+>
+>> +
+>> +#ifdef MAP_DROPPABLE
+>> +/*
+>> + * Droppable memory should not be lockable.
+>> + */
+> Single-line comment.
+
+Okay.
+
+
+>
+>> +static void test_mlock_droppable(void)
+>> +{
+>> +	char *map;
+>> +	unsigned long page_size = getpagesize();
+> We could store that in a static global and query it once during main().
+> Feel free to keep it as is.
+>
+>> +
+>> +	/*
+>> +	 * Ensure MCL_FUTURE is not set.
+>> +	 */
+> Dito.
+>
+>> +	if (munlockall()) {
+>> +		ksft_test_result_fail("munlockall() %s\n", strerror(errno));
+>> +		return;
+>> +	}
+>> +
+>> +	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
+>> +		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
+>> +	if (map == MAP_FAILED) {
+>> +		if (errno == EOPNOTSUPP)
+>> +			ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
+>> +		else
+>> +			ksft_test_result_fail("mmap error: %s\n", strerror(errno));
+>> +		return;
+>> +	}
+>> +
+>> +	if (mlock2_(map, 2 * page_size, 0))
+> Weird, is "mlock2_" actually correct? (not "mlock2") ?
+
+It's correct though mlock2 would also work since it's been in glibc for 
+several years now. I just matched the existing tests. mlock2_ is a 
+simple wrapper around syscall in tools/testing/selftests/mm/mlock2.h, 
+and it was introduced when the mlock2 syscall was introduced. A trailing 
+rather than a preceding underscore is...unfortunate.
+
+
+>
+>> +		ksft_test_result_fail("mlock2(0): %s\n", strerror(errno));
+>> +	else
+>> +		ksft_test_result(!unlock_lock_check(map, false),
+>> +				"%s: droppable memory not locked\n", __func__);
+>> +
+>> +	munmap(map, 2 * page_size);
+>> +}
+>> +
+>> +static void test_mlockall_future_droppable(void)
+>> +{
+>> +	char *map;
+>> +	unsigned long page_size = getpagesize();
+>> +
+>> +	if (mlockall(MCL_CURRENT | MCL_FUTURE)) {
+>> +		ksft_test_result_fail("mlockall(MCL_CURRENT | MCL_FUTURE): %s\n", strerror(errno));
+>> +		return;
+>> +	}
+>> +
+>> +	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
+>> +		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
+>> +
+>> +	if (map == MAP_FAILED) {
+>> +		if (errno == EOPNOTSUPP)
+>> +			ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
+>> +		else
+>> +			ksft_test_result_fail("mmap error: %s\n", strerror(errno));
+>> +		munlockall();
+>> +		return;
+>> +	}
+>> +
+>> +	ksft_test_result(!unlock_lock_check(map, false), "%s: droppable memory not locked\n",
+>> +			__func__);
+>> +
+>> +	munlockall();
+>>   	munmap(map, 2 * page_size);
+>>   }
+>> +#else
+>> +static void test_mlock_droppable(void)
+>> +{
+>> +	ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
+>> +}
+>> +
+>> +static void test_mlockall_future_droppable(void)
+>> +{
+>> +	ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n", __func__);
+>> +}
+>> +#endif /* MAP_DROPPABLE */
+>>   
+> Why not a above a
+>
+> #ifndef MAP_DROPPABLE
+> #define MAP_DROPPABLE	0x08
+> #endif
+>
+> instead?
+
+The intent was to skip the tests if compiled with headers where 
+MAP_DROPPABLE isn't defined rather than force the value and get EINVAL 
+because the kernel doesn't know about it. This way EINVAL can be flagged 
+as a test failure and not skipped since it would likely indicate a test 
+or kernel bug.
+
+
+>
+>>   static void test_vma_management(bool call_mlock)
+>>   {
+>> @@ -442,7 +522,7 @@ int main(int argc, char **argv)
+>>   
+>>   	munmap(map, size);
+>>   
+>> -	ksft_set_plan(13);
+>> +	ksft_set_plan(15);
+>>   
+>>   	test_mlock_lock();
+>>   	test_mlock_onfault();
+>> @@ -451,6 +531,8 @@ int main(int argc, char **argv)
+>>   	test_lock_onfault_of_present();
+>>   	test_vma_management(true);
+>>   	test_mlockall();
+>> +	test_mlock_droppable();
+>> +	test_mlockall_future_droppable();
+>>   
+>>   	ksft_finished();
+>>   }
+> Feel free to add
+>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>
