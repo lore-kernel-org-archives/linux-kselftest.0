@@ -1,139 +1,80 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47C43DBD65
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 22:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775859767; cv=pass; b=Q8e6f+IoXvHFj6GllB6/Ds3WzerL5YTpJGgbu0miz2EzncLPc5JTiUymxwo4mrmkBUZOJhxzkBe0aQmGI13h8/NveUVakeJmeuUBXEzjVYnKE9xTLKXd69VUPGsUa6V/8mOiQn8J1497nZGuUGhzOPbf+/+WTCF8ere7VsbCHv8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775859767; c=relaxed/simple;
-	bh=5sV0fyoVLne5Qen+WKeWpPoq7Y7uIPbrOFrfTyCf4W0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VrPNJuS1efiR64aKqN1Gni+5y9zKPjy0Lg5/a7RNBM1LJ6QUaHJR1RPAhLm/nisUarH25qshuNk1DV2l/rhBC9xluY/h9QnpFqpriLS4SNnrKHjZkWJIgSegP7XHXXUT1RV2dvqJYDQ9CW7LDJx1hExmC7C56xxlrG/tux0CNmI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WDZlEuRK; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4713E0C69;
+	Fri, 10 Apr 2026 22:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775860861; cv=none; b=UGgBQnblCOQfsVHycXarL5F4D+smHrCZl+gn31L5cu7H18ywTl6DaE6IF8hZXPnV/ecDcV0kJn++8wXK4JvcUUvpZu7dXjLI/kDsXNSETZxlKKypQlmfjU/Dn/n70ggp4xIWXOH+0QGJp5Qn9ybfoa7Rm3uHvnSVb7KiJ5SkQ6E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775860861; c=relaxed/simple;
+	bh=aIGzIaRL80ycn6DIDQoQBN+qIuaLMvNA3XN2zlYbL44=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=XPy4ATSbLvwV5cDiMv0ebfIo9Ku698Cll2EFhtNPfKgs2SDb2Qg0VW0LYDnaQe5d4ehf9y73kf8qjG5mVMKskFWaY1GokJTsv1a3jcZvLC+7tebN9de/b6siNaLMkYDqp/N6T0H07wRTdnhX+wC2QROV0Qutsgbx+cpYvrAnM7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFL4VLPp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WDZlEuRK"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-67070d9ba4dso14737a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 15:22:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775859764; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PVoLr2/AFTeGmTFSqGzU2aJX0pLcX5QFj3RHwQ8WzXmHVA7eWQsqonXZGeM4d0z5uX
-         q+vHo6BhXqVggeV2Ab7pY8CII9Wfa6pe3JC0KGCVMbN79yEQqP/Jc/YNaCqh55L9zTUb
-         0farJaOpzvGc0CpHVqEaA2G0aQgujvRGEIZs8FVoB/bkzH0IMkftPsCZhG0TJm/sPolm
-         02NVNbpUHVK0imAFeLAQmoatWGYLPcjuSw1yBUfWnVYCrww3aENF7Jr9Rfmo7kUoLis3
-         kyEt0tBNe5YsV4bPrWPu3lcRNl63o9g6gOcPn7kL5wEXulceraIcYfo0xI8pOpRuI7ih
-         5nUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=dWxTs0UhFEVADlU47jI4rZxNB6bESY/XZWZ4wgzYH7A=;
-        fh=G3SKfE2B/zvqLlqCJ2IfBiS7aLCP9StplmsUlBqgZ84=;
-        b=FcPdRK/oD9fw7jDj9miIORClOLSrdhaoW2oA22WUgcxAZ/+GfTW2+Zz9xV10PVtmJ5
-         phlIBI/Nr7vKHcQt9Oc2Zqk6mcSnoGQfhTMSje5sq+8EmtKGCUAfDMiaXw2H5n8LTfSc
-         PIolXk/SN2aX1PvDm0fGUK2SOa7g2oCX+LMvPni19fyG3BNA3pVGHviZxoiP06lIVWC8
-         yJiRmrDuEnAW295zb0R/aWYncL0j7bf2+dIvLCdGF2rkSWyY6P7IpPnT2HoZ1sd1ai0q
-         UzEZg+rzYca1Sn3rO1iAbH36FO7ZdzXVn7tv/YrHPlfTHw4KN2cR4oTk0DgNTkoJxjFA
-         or8g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775859764; x=1776464564; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dWxTs0UhFEVADlU47jI4rZxNB6bESY/XZWZ4wgzYH7A=;
-        b=WDZlEuRKCHWZtApJFqjbxrC5o1Z6gtEfmcKS9bWKmoEZ6s8QBl2PNoWLMQA6o0ExVj
-         aM0pZBMb8eaVbyIQmnAeVs8ba6fEqbgQe+Tj4C18+bIQnKGiY+OpyzZFkB/v78jJzjgh
-         Wy285Ia7JTM3qHHUdyNNWneBnlssoB4EwtyK3b0VWHOv5qej4yFfZUVEB412iyxT/WkB
-         k4EAGwbFpbpCxISURPAchBBgkLfu2+7Kp6qSbGld5Lv/ZJitzbsF/HzqyIcHyk+/magO
-         GRHvWWS8D5mxeXdED6I00iIf6oqmWfaWmdki++2NFAzWTHXSquyG4aFsIHPLHBKFnCv+
-         UH0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775859764; x=1776464564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dWxTs0UhFEVADlU47jI4rZxNB6bESY/XZWZ4wgzYH7A=;
-        b=kvgsWJBEuKOnIhd/6h7OFUdSw0raBB+/h0zeuiy1WZhru21Zbe6/a5Unr/RgP24aBr
-         /WNwgqoyh6oB2+znxo0Yi/MScV5xygZj1rrTKBCnoF7vgwcpBh5lnEWHSAvim2LC4mMX
-         je4REz5zWLiqIwIlNaXaMVNR4yWOKPt8dOFs29tG5WREqpKRxI8i6ockU2w9/iMpfnmW
-         3jJYUxEBuqURZCYzD0H2zsl18TDornHaGF2PuUZDt3bGMj+UPysgx93O+8RBHFTW33sc
-         iy5FFBXi3bFpe3iU71PbzqXVXruzTtQMMLlckPnCS1321QnVTr1/yuKGyXyYuiyN+Vyx
-         Iw9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUUrR2GGPshoSJfI7KRsrbId7FYcgACRzAQwfuheKE3aWcf7U0/pQuJDfo0FOE9ipHsKLyWjUt88cpDACVOxDY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRdoizhfp6CE6eNTbg1yKuCNXTzm3DbBs9YF+GKipXVT0DEjd2
-	hE8XhSxvpf5Gk5AAHHYV+sVVNPSBT6ykjxtvsjMkQKSgwiwq/h6b2NjJviT94c4IZ09lIsGkmdG
-	j3kVuWL25jccHFYze6V3N6IJEgVZpNlna61+T1Otn
-X-Gm-Gg: AeBDietPRyJn8HBUCo2HncPrkWjOZpFDoJGROrvMdT7di+x79QjvJoXUI99UjtbC3rN
-	tusKYevF0TsbKlFCTA4gkkyk9eD8DUv/Wk0hWPMp1RZMKxGi26G0Bi8rJM7o+YIo81RuofXE7XA
-	w3hm6c3nGlgeHqQX/FYiYMFFS+ZLSjsEd2gGQRVP9Uc3iz08iKeKdB7WrCPBTqXDICNk/1dLZU5
-	SrtxsVT6tmVpbTjDEsGmIifZEH59QDMnVoe9WTxWyEhsQZzKa7mKOGxcnBTEjMN2GhdOCGIbdvz
-	YbRPAAnKLkargJOjRQKSdT7mYDI5
-X-Received: by 2002:a05:6402:26cc:b0:664:eadc:7262 with SMTP id
- 4fb4d7f45d1cf-6701e2ad1e6mr149856a12.13.1775859763640; Fri, 10 Apr 2026
- 15:22:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFL4VLPp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD9BC19421;
+	Fri, 10 Apr 2026 22:41:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775860861;
+	bh=aIGzIaRL80ycn6DIDQoQBN+qIuaLMvNA3XN2zlYbL44=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=XFL4VLPpr5fbzpjWGXENqia1JwgF+o6VIJ+xsjlcxyDgdUSQp+HbpmTMO8r3Glpv2
+	 3Rt1yihcqnbiedAWv2EvyvEtIoEFjU/JH0WYHkL0MM7+UkLbGLW4yW9OQORIGKu+fB
+	 25U+gP5ERboYXRPe/g2HBp5mBOM7Xk8mlUPtz1HOG3rFhkhgKPFPY5fhi5yT9wjT+h
+	 Twl0nyKSzB9Hh1R43OE8LMvpimpQ+AeUWtBYFCYsPQEfH0f+mqUiSER8AZKCjqxMR2
+	 +7wYmMclnzBBVbMWOUd2FsSTNAJP1rLhhK2Dzmcd/m1D52f73/koHcDSFfNmBbtEvp
+	 cmJMIh0kDYNZw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D673809A88;
+	Fri, 10 Apr 2026 22:40:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402223108.650572-1-jmattson@google.com> <20260402223108.650572-2-jmattson@google.com>
- <adl30JQXxxQGmHvj@google.com>
-In-Reply-To: <adl30JQXxxQGmHvj@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Fri, 10 Apr 2026 15:22:29 -0700
-X-Gm-Features: AQROBzBPJqBkmwQWBKn_x66e1ny7Ah7maxTYcpMJflkeizG3bpZTClRBQ8ejwG4
-Message-ID: <CALMp9eRgF7+99P+-jjROastwJyfHEQE60pa=guFvC0KsDoHeEg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] KVM: x86: Rename supports_cpuid_fault to supports_intel_cpuid_fault
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Clayton Pence <ctpence@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/2] Add selftests for ntuple (NFC) rules
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177586083553.2670415.5524532409783816468.git-patchwork-notify@kernel.org>
+Date: Fri, 10 Apr 2026 22:40:35 +0000
+References: <20260407164954.2977820-1-dimitri.daskalakis1@gmail.com>
+In-Reply-To: <20260407164954.2977820-1-dimitri.daskalakis1@gmail.com>
+To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+Cc: davem@davemloft.net, andrew+netdev@lunn.ch, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, willemb@google.com,
+ petrm@nvidia.com, dw@davidwei.uk, carges@cloudflare.com, cjubran@nvidia.com,
+ daskald@meta.com, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-On Fri, Apr 10, 2026 at 3:21=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Thu, Apr 02, 2026, Jim Mattson wrote:
-> > The function, supports_cpuid_fault(), tests for guest support of Intel'=
-s
-> > CPUID faulting feature. Rename the function to supports_intel_cpuid_fau=
-lt()
-> > for clarity.
-> >
-> > Signed-off-by: Jim Mattson <jmattson@google.com>
-> > ---
-> >  arch/x86/kvm/cpuid.h | 2 +-
-> >  arch/x86/kvm/x86.c   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-> > index 039b8e6f40ba..51cbe67c992a 100644
-> > --- a/arch/x86/kvm/cpuid.h
-> > +++ b/arch/x86/kvm/cpuid.h
-> > @@ -181,7 +181,7 @@ static inline int guest_cpuid_stepping(struct kvm_v=
-cpu *vcpu)
-> >       return x86_stepping(best->eax);
-> >  }
-> >
-> > -static inline bool supports_cpuid_fault(struct kvm_vcpu *vcpu)
-> > +static inline bool supports_intel_cpuid_fault(struct kvm_vcpu *vcpu)
->
-> *sigh*
->
-> I was going to suggest supports_misc_enables_cpuid_fault(), since KVM emu=
-lates
-> the MSR for all CPU vendors, but the enable is in MISC_FEATURE_ENABLES, n=
-ot
-> IA32_MISC_ENABLES.
->
-> What if we just drop the helper?  There's only one user.  I.e.
+Hello:
 
-My thoughts exactly. :)
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue,  7 Apr 2026 09:49:52 -0700 you wrote:
+> From: Dimitri Daskalakis <daskald@meta.com>
+> 
+> Thoroughly testing a device's NFC implementation can be tedious. The more
+> features a device supports, the more combinations to validate.
+> 
+> This series aims to ease that burden, validating the most common NFC rule
+> combinations.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/2] selftests: drv-net: Add ntuple (NFC) flow steering test
+    https://git.kernel.org/netdev/net-next/c/18589df9344c
+  - [net-next,2/2] selftests: drv-net: ntuple: Add dst-ip, src-port, dst-port fields
+    https://git.kernel.org/netdev/net-next/c/a66374a3eb02
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
