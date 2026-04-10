@@ -1,220 +1,157 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021083.outbound.protection.outlook.com [40.107.192.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6E139B955;
-	Fri, 10 Apr 2026 11:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775821095; cv=none; b=HV+tpEPJmHJsa9Q9DuKWIDu/gUFUN7a2QBvOuV63IFxYVHnVftG3jEYEVY9y/oW5AJNRWKTmgOQRzgx4s7H+uT6XwZYMtrMswBg580e3oTheW57WDxNVBAHnOXvrShNcBpnWhL8shrjWhBH1mPHBsjxwPXZhevUot56uGLffDcQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775821095; c=relaxed/simple;
-	bh=AWCGHMr8nQo9XENHPYNO3gNdIfX/Y9wTKaLGJfZGXgs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tLrOLoogdxbATHnD+Ne1Uj2VJqfFFarbUZc7jRPjqNY/oewJ+RmCPXl+gTUZhB79Vt2p2nxwpYImPUmw6eWVhb4o1wK7knDhiLfW91cUuc8+rGjujySy5xzJ/hpDtSmF9Mt7P10UayhcKdskf3iHdwTQvnofG4xFZjzhNcECXB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h3upXIVR; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3AE201278;
+	Fri, 10 Apr 2026 12:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.192.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775825325; cv=fail; b=lNKZEF1OAgkcNB+I+PVKzjP7akRvQveuT09tcYVVKrLTMDhfPcej4bVJ4UINjv4OYWboTF0PQKXdGuhEUeATgzpOpUAFJdDyAL4ewanrgkRV0b+Lbn21oYkaxILcmwcOPI/l5TzZApFfnZhgKTsThSr9ULfkjavaVJ+dahQb2Fs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775825325; c=relaxed/simple;
+	bh=hyczELkHkG0qoQOn1c3XZ3wEqa0nS+8b5x5lqwPmCmk=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=BwPLd/7xUFM7KNxYCEFaLy7aEur4yOLSDiupL0KZlq83cnG6u3b4ZkC2G03a0yAzljCwCSMtH6jyANSLJF5qteLD1ivFzy3yVoEWemJR0WlLzOjcobcuKcokSSFrbxpns8r4kpDjBCpCwHWN9ZQrSORaJO4TIKun01B26q0IRB0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=I+3Y+6pY; arc=fail smtp.client-ip=40.107.192.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h3upXIVR"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775821091;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=n/513DDDdwX8CA3k/+2+q38x0A9p30a5TG1TXyuVxZA=;
-	b=h3upXIVR0yXYtg37kOcCTUjp7VlaQxt2bPnQAREYQ/L2pxjxqMZ0apYAb+5ebN16FL79WG
-	Myd6CBIGgyX5BnPqQE0AdFuqMlIdlwPnfsrlNLbvHf9n2Y/sTSMqvjs03H9DIk7YchjSj2
-	gR2kUmgAMDT7gp0/Qoo/Vnd37vZDusc=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jussi Maki <joamaki@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v6 2/2] selftests/bpf: add test for xdp_master_redirect with bond not up
-Date: Fri, 10 Apr 2026 19:37:23 +0800
-Message-ID: <20260410113726.368111-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260410113726.368111-1-jiayuan.chen@linux.dev>
-References: <20260410113726.368111-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="I+3Y+6pY"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YIMvubH7vTwovebPuPkTxzL4W3h4MV4D5a1WatP53Lu+I3f3RsTmhUBB+/zzlcZIObt9huJ2t96LrR4Idq5KmgsMEKiHiOD+vAzaD+iPiWE3ALR88fm/7MoqCBxoXv4SGwLf4MXXOJPf5lI/KXz13F8dstMvZPq76+ao39hnhkJoDLpGERmyRn4Kju2GRBYz14uG6QXcOysdWjg3MYVeImN8oDeCRWrsThFB+ZpyxOSk6FnveFz+2n11H3XFj+9rBkvi2U2LrfwUzqCTFhxQmQtnwqjxPHlej/IYUfrS9x37LGObb2YYV64ZOwrVcn5f+SBhwOiqvNcU44yIFsuymw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=l05lheSnn4Jms/PyuDkq3jZ+ycXVhaeesM4LaUQAkhA=;
+ b=R6EOXDU/VKAQ6VLTE4rbNTObi3VqpGnZ4cknJDVCyLzODiW5kkQnOR7DP0gJoPNld8UDbFMwUXYzRNtanzjJfyfda4wa9JfscBvnVJtdq08WeuxvAt98LePj0UMYDZ0kNL1kSzmuqXWRHzeyQ73u+FJ3YplUNa/FSghP+ooJxkEbIPGuF5ZXPBIDo7HgsLIIE8a3pvmluVOgQE4yZ9VGS2S9DBDSCEQWY/gYTGda5DFNv9dcgNHjM5bSiUxHMqHDxJVWqVxyry9FZ1dN9HiGzY/cjClj0ioN99EGMPBTMlvoL7nl9qzsUXrgyE6rkk8gjoktwMTQDS9VJh/+UeDY9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l05lheSnn4Jms/PyuDkq3jZ+ycXVhaeesM4LaUQAkhA=;
+ b=I+3Y+6pYE1qO4SjIccUwL19uyr6fEj3iDStAt3Iji3ih94aFb5onNu7Ak4tTq0J5WRQEStlPY8IpS4HqHRByVC62ZmJ3M2QmUFKrs02eVNpLPiVZ1zrAUWcA8SiC1ZDxCmpeSF79a3Y+ZnPQXcNT+pcHwjnf8eHr3p26TzvkFIiF9eFiTxUQK2Q9dqBYEVqJDHeB50Jrm2xzIe+1NIlZoJ6xSRWkI+IQwZDSLaYUHyF+gmeCU6v9lz8TZ/b49oW7Ve02R1DbzxDzbb2OxX4G2VPgv7/LCe4DsX1RkTuJFgsfMjtTQebnvfHvclt141sP6hQsutZ0DdzFVApYA7iDbQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT4PR01MB9896.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e2::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.42; Fri, 10 Apr
+ 2026 12:48:37 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1%3]) with mapi id 15.20.9769.017; Fri, 10 Apr 2026
+ 12:48:36 +0000
+Message-ID: <addfe6a5-f773-46e8-b0f8-1699034720eb@efficios.com>
+Date: Fri, 10 Apr 2026 08:48:35 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] sched/membarrier: Use per-CPU mutexes for targeted
+ commands
+To: Aniket Gattani <aniketgattani@google.com>,
+ "Paul E . McKenney" <paulmck@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Ben Segall <bsegall@google.com>, Josh Don <joshdon@google.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260409212223.2072418-1-aniketgattani@google.com>
+ <20260409212223.2072418-2-aniketgattani@google.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <20260409212223.2072418-2-aniketgattani@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0160.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:e::33) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT4PR01MB9896:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a306bcd-e6b4-47e0-635e-08de96ff7b6a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	5Tli/tESWn0nu3jfmQi/vhD09kV9Q+Xzt2DykO304ILnyUMXe462MrugT2YCkFMai/sp1dGA7Wc7ZY+Z+NPDKKygOj6esvHmY651hclW3yRD5GIa67muLPzi1yVKw8EkctM63274S5uNbvvz/hUgZJS1rGzU+UmApnWkmee53vTIocycjjxcFz3K6903jmGPJoXcfbZ44b8XaO8EnktgB3TM+DIAUqYejcSCkBz3IKA2VIrutYHz5/bHfuDsqjx2E6WqS8cnrXnyTCq39SXwuhlGm9dfhIpTeewhZukTQOWr2FZ2hDncCjyzildZ1wrk5exEKLZ2Cn5PV6Uhg+umqmg5SUuDD/K3BdUVYCedgJ+BsqYYuf2MYoYDO4bEFe/uL9QqAsePSmjYtjwBeEBrBsfuIWAdjhoMxKr78/CQ6GtzpaFJMXN8IYxow9t6X7VMA7FIiASXWsZJlZ2G8N5S8HKCtDXZ088Lr5e7rdSAZGabhGfIoIZ0fk2utraRaJFegeEcISiwWtGzttYY+8QZg2ej9BAdikxYPla44v1BNn3AMl8FDHoRRUICdfVzcpQS1rBOQ2DEt0R0poYltuZfwqmhtPfCQxZ8XkSK67vGRPA+6PtFPO4HZaZQZFkmv6IODPuZ0KfSt/LhX/iCnbuOVUXaLjF/nzj70vRsqMzm5mG5xTfqCHkvjzjESnqegTDx
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?REhxb1VBMEhlWjFKdHltTzZ0T1VXZld4NHlWV3pobFhPZDdzTWpYb2xqbFRv?=
+ =?utf-8?B?dlhkNzBSamFVbnFmV3oyOVIrNHQ0SWdyZUo3aFdGanlQYVNJVnFJNWI5MzdG?=
+ =?utf-8?B?ZUM5VGNLZmRnZlhmNkFwN3l1Wjg3RjlDeFROcXpqeE92bUEybHNnbEJnN1pC?=
+ =?utf-8?B?ckpGTWVzb1Uwem0wblQxWUcvVXJ6OXpRamx4ejR1TEpwM1JleDlEamljRVJq?=
+ =?utf-8?B?VTV1cjQxOENheE0wMGVrOEU3N2NrbzRocnBGUG44SnVEclNZL0IvcHJHZlFa?=
+ =?utf-8?B?OGVCbzBwRi9zTUNlbktJZTBwbDJDUzBUbXdwRWlvMXJZbjFOYlJHL1VrcWxY?=
+ =?utf-8?B?ZU1IMzhhQ3VvNGp2MXVFUkp5WGY0YWUzNmdVaVlyeGJlTUoycXE5QVE0L255?=
+ =?utf-8?B?SjViR1p4eENHdmYrYWpBUGdZU2VCMmw1SnFUN0R2Z3BYb29udjZXL2xCRU9x?=
+ =?utf-8?B?RXo2QkdxUjBTWkJ5VHVSZnEzcTYweThhN01BWmd4bmFaL2lKalpzMFgvdGlx?=
+ =?utf-8?B?bDVjNFNvaWxzRGk5SVFWZzlaRlNGOWNEWTFyVlpLS2luYU1RaWxPM2JLUlNs?=
+ =?utf-8?B?RXJyUEg4SmpPam1ZTlhETjVQUW5OYXZ0OExMdHExQlgwa1RzOUxvOHl0dzVo?=
+ =?utf-8?B?VlZURUFjRS9EL1pZYWxhNEovUTY4aEJXWExiV1NoUS95MGQyYStveUl1cjZw?=
+ =?utf-8?B?blFDZHNsRTZOQk5HWnovRkhGVVJTY3V3WjZqbk16a1lSb01TeGRvQ1lCL3FG?=
+ =?utf-8?B?VEhYVWFnbEN0SVU0b1dpc3RUdDJ1ZnN5elptQlNZUlB5YnY4N28wYXpaZkFh?=
+ =?utf-8?B?T1N6MG1WWHZFTEJDaEQzSmpVUHdGa3pNS3h3U1lTRFArckczM0J0LzAvcmVa?=
+ =?utf-8?B?ZmZJZ0FSQ1FLc21ZUFZvWlQzcjV3Y000R2UyQTI4Z1ZuZTdhMGlGTEtXd1R5?=
+ =?utf-8?B?WnFyRGoyVGtkRm5ibG5Gd0F0NEp5Q0pEa0hEQ0NSdmxIN1k1c2VtZ3ZFcGNP?=
+ =?utf-8?B?b0tvV2pqY2h2WngvWEdUdCsvRGx3dUFiVUMwcWNLRVlVMmFxRGFFRGFTZHdR?=
+ =?utf-8?B?d3VkZWlUeU9RbFkvVmFRbWovZ1g2UEdtVFdyaXNIekxvK2Eyb2x4RC9uejcx?=
+ =?utf-8?B?b3Q0UklXQjYyb3hvVXRBMmhpeExHVjF2V1ExQ2pnL1RkS1lLSndCNTkxNFho?=
+ =?utf-8?B?cVBWdXRrUnFrVFdqMVBGUlIra3ZvUkR0citGcVJSNDM2OTZnMXREQTZkTi9S?=
+ =?utf-8?B?YlhtbUxETGszc3A2bS9IN3J2K0R1b081RVZXMXg1ZjVWM2hTZWJXbTF6SjAy?=
+ =?utf-8?B?SXpuZE9ZSGErOWJseFBSQWZXWGFYLy8weWVQNHZZZVVLVzk1aGFuc1dXc3ZW?=
+ =?utf-8?B?L25salZwa1ExRWRma1dzVlNvSTArcVk5ODJ4RDR3QUFobXJPbS91aG02NlpV?=
+ =?utf-8?B?MlBXb0NKYzAyYXNESlIvMjhqcFAvRnFUb2VUT1czUjg1dFJ1OENSb1ZSRGll?=
+ =?utf-8?B?V0lDcHV0S3crQjNSd200VjhudW1wVng1R3RBWFZKNFNCSUlpNDVvUUtFWlFq?=
+ =?utf-8?B?THFtMy9LZUZVU09MbEFicFNkMWtkUEdva2FGMDY3ejFZZlkxdWlTN3BhZEpZ?=
+ =?utf-8?B?QmkwOVZiVk05SFh2Q3EwS1pIaUtlTU0zRFFjeXNWbUxoM1F6Uk1iSDljTjZq?=
+ =?utf-8?B?V2tkZUVpbUR0bUwzSmpZSmM0UmFteGtQNjBZMTVFU2daUWNubjZwdkk2Q1dN?=
+ =?utf-8?B?bCtma05haTFDejdnekxVQ01lYkFQWFlRRDkvSTRjZ3ozK1RObGQyWDkyMXd4?=
+ =?utf-8?B?cTE1R0RCQjZ4bDkzTHpFQ3BnMTYycGJ6bWFiaGcvUUlMV2NmczFpeU9qaE1t?=
+ =?utf-8?B?UmdGemdYUlVLUFVoQ0VrQStlQXZaRks1RG9OZ2hta29LNDFLUStQdnRYWTZB?=
+ =?utf-8?B?Ti9Zd1lqQTJQOWxPbHJhTnhlV0xBdU9iOVg1bzkwNWJvUGFBNmc2MUd2aEpD?=
+ =?utf-8?B?bndMbGcyTUMxSXd1WUVHTTdqdUg1RDNCK3o4SXNHMGZTNUxOdzBud2NRVFN4?=
+ =?utf-8?B?NVlBVktHTWt5SDl1eHV1LzhTanpETE42c25SeG9FNGpPYTNrYWxVZjB2akVO?=
+ =?utf-8?B?QnUvSXZSdVl5ZzAxdkNXSG1Ucjh5WDlLb2ZQK2IvYTYwZHpCMEp3a3BEcmtC?=
+ =?utf-8?B?d0VxVVBSeFBkV3RtQlI2alFGZFJWaGVVRGdqQWIwVW5UYWxQU3hSMEVUSjZN?=
+ =?utf-8?B?eXRjRnM5c2pCcWUrTnRONExtWEFzV01qK2w1Z2R3SkxWWW16MmVzZ0lnbUIw?=
+ =?utf-8?B?NklUU2hTNTdiaEJWUUhSL1BPZytidXExS1BieC9aK3pqNEN1c1UwbmZrdHVj?=
+ =?utf-8?Q?hziycknnsn8nn2uo=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a306bcd-e6b4-47e0-635e-08de96ff7b6a
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2026 12:48:36.7224
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gzAemkk+kf4fQwKnyyRMjn8jLOCUEyxE1EP8mZQpcNpPjvB3WA5sr1KSZYac/hJsmt9qYP5S1xvE7JtSNltB+PSMr3a/MBNYGmmOu9GTKGU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT4PR01MB9896
 
-Add a selftest that reproduces the null-ptr-deref in
-bond_rr_gen_slave_id() when XDP redirect targets a bond device in
-round-robin mode that was never brought up. The test verifies the fix
-by ensuring no crash occurs.
+On 2026-04-09 17:22, Aniket Gattani wrote:
+[...]
+>   static DEFINE_MUTEX(membarrier_ipi_mutex);
+> -#define SERIALIZE_IPI() guard(mutex)(&membarrier_ipi_mutex)
+> +static DEFINE_PER_CPU(struct mutex, membarrier_cpu_mutexes);
+> +
+I'd prefer:
 
-Test setup:
-- bond0: active-backup mode, UP, with native XDP (enables
-  bpf_master_redirect_enabled_key globally)
-- bond1: round-robin mode, never UP
-- veth1: slave of bond1, with generic XDP (XDP_TX)
-- BPF_PROG_TEST_RUN with live frames triggers the redirect path
+SERIALIZE_IPI() -> global
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/xdp_bonding.c    | 101 +++++++++++++++++-
- 1 file changed, 99 insertions(+), 2 deletions(-)
+SERIALIZE_IPI_CPU(cpu) -> per-cpu mutex
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index e8ea26464349..0d4ec1e5b401 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -191,13 +191,18 @@ static int bonding_setup(struct skeletons *skeletons, int mode, int xmit_policy,
- 	return -1;
- }
- 
--static void bonding_cleanup(struct skeletons *skeletons)
-+static void link_cleanup(struct skeletons *skeletons)
- {
--	restore_root_netns();
- 	while (skeletons->nlinks) {
- 		skeletons->nlinks--;
- 		bpf_link__destroy(skeletons->links[skeletons->nlinks]);
- 	}
-+}
-+
-+static void bonding_cleanup(struct skeletons *skeletons)
-+{
-+	restore_root_netns();
-+	link_cleanup(skeletons);
- 	ASSERT_OK(system("ip link delete bond1"), "delete bond1");
- 	ASSERT_OK(system("ip link delete veth1_1"), "delete veth1_1");
- 	ASSERT_OK(system("ip link delete veth1_2"), "delete veth1_2");
-@@ -493,6 +498,95 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
- 	system("ip link del bond_nest2");
- }
- 
-+/*
-+ * Test that XDP redirect via xdp_master_redirect() does not crash when
-+ * the bond master device is not up. When bond is in round-robin mode but
-+ * never opened, rr_tx_counter is NULL.
-+ */
-+static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
-+{
-+	struct nstoken *nstoken = NULL;
-+	int xdp_pass_fd, xdp_tx_fd;
-+	int veth1_ifindex;
-+	int err;
-+	char pkt[ETH_HLEN + 1];
-+	struct xdp_md ctx_in = {};
-+
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &pkt,
-+			    .data_size_in = sizeof(pkt),
-+			    .ctx_in = &ctx_in,
-+			    .ctx_size_in = sizeof(ctx_in),
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+			    .batch_size = 1,
-+		);
-+
-+	/* We can't use bonding_setup() because bond will be active */
-+	SYS(out, "ip netns add ns_rr_no_up");
-+	nstoken = open_netns("ns_rr_no_up");
-+	if (!ASSERT_OK_PTR(nstoken, "open ns_rr_no_up"))
-+		goto out;
-+
-+	/* bond0: active-backup, UP with slave veth0.
-+	 * Attaching native XDP to bond0 enables bpf_master_redirect_enabled_key
-+	 * globally.
-+	 */
-+	SYS(out, "ip link add bond0 type bond mode active-backup");
-+	SYS(out, "ip link add veth0 type veth peer name veth0p");
-+	SYS(out, "ip link set veth0 master bond0");
-+	SYS(out, "ip link set bond0 up");
-+	SYS(out, "ip link set veth0p up");
-+
-+	/* bond1: round-robin, never UP -> rr_tx_counter stays NULL */
-+	SYS(out, "ip link add bond1 type bond mode balance-rr");
-+	SYS(out, "ip link add veth1 type veth peer name veth1p");
-+	SYS(out, "ip link set veth1 master bond1");
-+
-+	veth1_ifindex = if_nametoindex("veth1");
-+	if (!ASSERT_GT(veth1_ifindex, 0, "veth1_ifindex"))
-+		goto out;
-+
-+	/* Attach native XDP to bond0 -> enables global redirect key */
-+	if (xdp_attach(skeletons, skeletons->xdp_tx->progs.xdp_tx, "bond0"))
-+		goto out;
-+
-+	/* Attach generic XDP (XDP_TX) to veth1.
-+	 * When packets arrive at veth1 via netif_receive_skb, do_xdp_generic()
-+	 * runs this program. XDP_TX + bond slave triggers xdp_master_redirect().
-+	 */
-+	xdp_tx_fd = bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx);
-+	if (!ASSERT_GE(xdp_tx_fd, 0, "xdp_tx prog_fd"))
-+		goto out;
-+
-+	err = bpf_xdp_attach(veth1_ifindex, xdp_tx_fd,
-+			     XDP_FLAGS_SKB_MODE, NULL);
-+	if (!ASSERT_OK(err, "attach generic XDP to veth1"))
-+		goto out;
-+
-+	/* Run BPF_PROG_TEST_RUN with XDP_PASS live frames on veth1.
-+	 * XDP_PASS frames become SKBs with skb->dev = veth1, entering
-+	 * netif_receive_skb -> do_xdp_generic -> xdp_master_redirect.
-+	 * Without the fix, bond_rr_gen_slave_id() dereferences NULL
-+	 * rr_tx_counter and crashes.
-+	 */
-+	xdp_pass_fd = bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
-+	if (!ASSERT_GE(xdp_pass_fd, 0, "xdp_pass prog_fd"))
-+		goto out;
-+
-+	memset(pkt, 0, sizeof(pkt));
-+	ctx_in.data_end = sizeof(pkt);
-+	ctx_in.ingress_ifindex = veth1_ifindex;
-+
-+	err = bpf_prog_test_run_opts(xdp_pass_fd, &opts);
-+	ASSERT_OK(err, "xdp_pass test_run should not crash");
-+
-+out:
-+	link_cleanup(skeletons);
-+	close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del ns_rr_no_up");
-+}
-+
- static void test_xdp_bonding_features(struct skeletons *skeletons)
- {
- 	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
-@@ -738,6 +832,9 @@ void serial_test_xdp_bonding(void)
- 	if (test__start_subtest("xdp_bonding_redirect_multi"))
- 		test_xdp_bonding_redirect_multi(&skeletons);
- 
-+	if (test__start_subtest("xdp_bonding_redirect_no_up"))
-+		test_xdp_bonding_redirect_no_up(&skeletons);
-+
- out:
- 	xdp_dummy__destroy(skeletons.xdp_dummy);
- 	xdp_tx__destroy(skeletons.xdp_tx);
+Rather than the -1 trick.
+
+Thanks,
+
+Mathieu
+
 -- 
-2.43.0
-
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
