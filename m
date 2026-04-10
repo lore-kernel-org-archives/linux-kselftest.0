@@ -1,95 +1,95 @@
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613072DAFBB
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 06:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065D93009D6
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 06:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775802150; cv=pass; b=dBFDvKNN3xCK+mgpoPw93pbJiKREgNMCfVKMH4BCjG18wVZ59dQ1F9LBXmLfpjB1+y+Xs7nxOjrsENPUe0x8n35jRnXLnFBejJEuULyXweZsl7zOHG56QldNjEGP/2J6zzyTVwByympgTkF8qQVSF+esW56gGI4LVKC3ss8UMUM=
+	t=1775802711; cv=pass; b=LrvtSrHCjLOc5OZ8PND/qdnNDBufmt2FH7ErkobelBoYSpx+p5A9qp+LdQ0IA48F4aSc9ID0NC7Nz5TLzLU8tUMnZ80DVsArgOnqZDW7lpyjpjVhw+7EVRS4zg73DeOPvZAgFyoVpFiC5u8XoW2NY4qB9ONrCfK93C8ydNLf3sY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775802150; c=relaxed/simple;
-	bh=85uhO6a3UX0RUPOdgER5qc6B6LT1jAnA2i1DKn1wxlw=;
+	s=arc-20240116; t=1775802711; c=relaxed/simple;
+	bh=QNv3RhMQ22/HNGeiFea3mpb5rv6rCJ9wjpXVgU/MM3U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o6PaEg0LFp/RfKAirYBP1Q1gLGxs5eGPCn8Uk7azxYwGw4b7/KfTOcNTkHSWTvy38HN1tbpaW/bOuJAvUEDffF68c2HWjDdONgJiTIZFoESnAXQ/tb1DaCRZkphqqZDmMbM7RySoBw7NJffLnGoRxC8WoAyf0ZUXj3btWYnMAmI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lGgz1XqN; arc=pass smtp.client-ip=74.125.82.50
+	 To:Cc:Content-Type; b=kSYLh01K2wC7t31Ti0lgeKczzQfWRTKVLG63EsdDxI/y4ByAFoo8kJxCjxN+ZgvqWGy/LJUAVBZFJDnRrk/8FXXXiFjalYNw4bdXakZnmVH8ohGzTGkqk+pfFnCMBG41iEBb5vou1TGQ4YhxAsM5s6qVAKb6/ns4huAmxAr6zUk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wtaspdkx; arc=pass smtp.client-ip=74.125.82.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lGgz1XqN"
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-126ea4b77adso9762657c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 23:22:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775802149; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wtaspdkx"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-12c19d23b19so1679301c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 23:31:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775802709; cv=none;
         d=google.com; s=arc-20240605;
-        b=G5nHjKZQJa8hbwne7uMwZplEGhkincSx7fKj+8dADh/eho10svZ9fVZeQAmZBomukm
-         gqZ9Xf1UYzIHvWA8XxeFrIgET/W5zlf+RGV9qCO/4zeEfMAhczAUe2yvJDKB0D+vlaez
-         wZeoeG0s82GOTiFZszS0H5pevHyydAANuPwj89WMahiEjUxZZiX/nPXJXnGK3S8QdTR/
-         Yct6BQ679TIUXUxwb/AjDco0ZxxOh4UWLk2+Ln5LMMrFGeQ6LZMEODtgqb5HH+BGb3Ip
-         R40hrzW5riCDCwFMmzg0sivKigo5n6oEBt/paTCeoCtZwHSchZDqn9l+rv5ptg9uG8nd
-         s3qQ==
+        b=iS1PTaeL+WAzsP0gCa66MFIzF521L/Wc4MHkzSFVTBZw3VXfUx0GOYZFi26Ar/W3/s
+         bVsnbk2ypfMPTuxoSzuywmaf8ImK3Q/s+ojGt7FhU/ZA+7u9YoPpqAWFORIy8BihjdCg
+         GScd5psAo5x0mH1cHjn+UxXgxyu5E2I225bnGqSczYCJPBtgiKhmorRGbwibbLcTejvu
+         wEgEcp7R4odqOuGuHNFZ8W6ydMSKeNus5UJx9dxI3D0SuFd7msuUVk6ahSeyZFLKCItn
+         OvxxnlifDGr7TmZDWhb3DfO2Qupuc4NtE1YcoYLmwYtgc1LQWnqBBX6pM11zAH6sfoma
+         GcZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=85uhO6a3UX0RUPOdgER5qc6B6LT1jAnA2i1DKn1wxlw=;
-        fh=mcfxYYHT3rxyDVtNji4NRGg+SjyXhsQvvX0xQibCGxg=;
-        b=VrdjUyEbDCvA1uZmlN+zM+a11vXQTKofC3+qCOGh+V+DEfQDgNoajfusDQswnk1GLh
-         nTfJtzk00IIHglv951RGmBD7IuBr0ubVoyM6NLWsmZGTkY5/kLX1cVteFjUS89g0fN+a
-         PK2GS7UK+62DGgVQB0JGb8yvbEuSzDAN4sp9F4b82PFK4rZNteMSiH0Q6PZoGaP5F+9i
-         XayCriN4I0vRFVdkUR/S76glk2q37kz5y2ncuk8OBTj6sN2S4arheEaB2MVNcHwsUUdM
-         hX1NGpB5af2gntDQO3NtmfBTAJuiA9e8BKRsVgn9vRiK4yNKvicytTO5VyJxQyzch/Ee
-         IZzA==;
+        bh=QNv3RhMQ22/HNGeiFea3mpb5rv6rCJ9wjpXVgU/MM3U=;
+        fh=2QoTQ/Wt+FG6YvrluO6bF1xR7o7Cvu43EhJTCWAtRlo=;
+        b=fCjQNTEnPhDzdoDNaRu4fkaOUbPfy93TKPTgLQHpCeUVS89XZyb1H0BUdeIVLGJP1R
+         okuF4V2uxfSX2eSFZ2kQ44cB/IzNAo+1NfOvSirsHu98C8AxnGojREl4Fizid9GfmEjZ
+         6JB/4u3zBvbkJnT+E2n/I1SzIo/3zhug9ajwCjQ2Nmx5t3v62+8Aamt6vst9M42B2rMQ
+         UIUIWSdMd2C8mn+13OlvlTMk3peYCeN/A49R/4IlOeKun6S3BvmjSsqG1CQE1/n0NZTL
+         rSlYRDe+B/tjvkYFNbv5YKrPE/FbskPtbrssG4sFnz76wOZmr2IDdlR3TaoO/FQCT+Xx
+         ZTng==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775802149; x=1776406949; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775802709; x=1776407509; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=85uhO6a3UX0RUPOdgER5qc6B6LT1jAnA2i1DKn1wxlw=;
-        b=lGgz1XqNorVvsA2+0doar2mPnIRP6qR+5XQXBUOaZzEr7NIzlUSi/JLB7NtzRs3arn
-         FUS5PTxq7/WKmVtNhLqksm1dev1aY7iawcusGJhD+cbS58NX5lb/Dby/Hbksth7JBC4j
-         7UPBAtTKVyDbu2aSN/p5cYULQSehyjSl/YPWgEK1clsOcpjz4HEeTfB2GKJvQ3PTSS1J
-         eymcLYu2sBXCsCOs9BFg3LwdDCgAqvGvjWt+3gYvtSMwhxI4TnDZ1WOtUZe7GQXgUm5t
-         0qGWMfbfiKhNo3IkSse5kIXdSPzgYjwueQDw3gw/VatJ47cbNShLZXek0lZRqUEBPgB1
-         0b/w==
+        bh=QNv3RhMQ22/HNGeiFea3mpb5rv6rCJ9wjpXVgU/MM3U=;
+        b=Wtaspdkx9/vcBf79AFYMLvjDEB2yDlsDRwG49SpclNsrxpl4Ygcus4Y/SiVueLVcF3
+         M82n8BdxhBvZah3jdkyvofzIoH4sboXAh/H6AWHIryo7hKb/dCooueBu5tV2PRzvTWQf
+         yQFZVJAbCWOcTZcYrVAzEgnuPv1fKr425rM+E2cIH+7lykZtXgCeKZJeebDKuOwHyqHh
+         +KryBrV2Xv7qI/gRlpHgcv8O1coQCaPuxxzEutOXjiL0Rvdxxbbia5a08W+DbV3i0FBx
+         wo73MJ90sNH5zJTJGK0YAWoNRh2g19mCDX+N+yR3ojl/DxhM+z3jO+PzrLo3MZeHjKm2
+         2eTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775802149; x=1776406949;
+        d=1e100.net; s=20251104; t=1775802709; x=1776407509;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=85uhO6a3UX0RUPOdgER5qc6B6LT1jAnA2i1DKn1wxlw=;
-        b=UeLdK0271Itn/K6sSp35v84lVW9to3sTEFlT/Ms3vKKMQp/P92o+hS/OeV7O7QdDrb
-         NpX5S040qu8XcmvJJ2XGDXZzHqTkHBi/O4VS/1VMeflEMvEuUHR71sc4H+g34McOz1gg
-         G61WPR/mTJC5ZnkXB001g1/d4T/7MipmFJYNgJflJdq2ked64Wzh4+u6j/AhCYqw8v0m
-         GeYIldqzvR/XXIkbKymqUQKgZmcgC3U4YeCDmLP7Mtspeaj/O0mh4iRS3SpWVUkT7TtD
-         lB3uxjITxOwaL3o8hsPjc6YgMGYLZRCKlkqJL05GmNXYGelKVTDEOEDYzO1AWUTiXLc+
-         guIg==
-X-Forwarded-Encrypted: i=1; AJvYcCXRagzUGLcpE56zTYOqVBCPnKBU2ydeG8K9NYe0BgcFm+f3ZExunH5rFw0fsgMYjtTWD/oKExYQEALVHcDZA+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFhTGeRaunJpgdG5Bpa02g+v2VzRR6rcGcV1ZuO5fxb2rW2FqR
-	Gl9O6ngErOdrN42NEJQONit5G7FL5OF6FekPNsb68V9elvq2pSlqlRH6dMrV0BpQ2IRIlTgDFYo
-	rMNlUvGjCa5r14P4UUoYnrNlSSHJOGa/Cy8LIoJ+7
-X-Gm-Gg: AeBDieuUzIFPb6EamC0tTJgy+yyYA7mDMANXb0TgLbZdVmGmoytr/FVI64Alitye7UK
-	Cp7A/k7iG0klqZ50DpoabT/edjOOWWggq/F02uqcT3QJXjnPMKjkz/I9mrAI12z8Uq8Q39nZrT4
-	xLwXNBmS0nEGRNg8mvwDgcbl/XtIxg7sShvZehrx5p5FSr/yrEG1pN2j3VHnjdWhICiCpW/BXyg
-	Yy4Dhtt+4THz5etIyNqsupBoCTOm1xRC0S2PTZwCnQK7C3hft9SIjr0DQ7rn881wkrEERuQRseb
-	BdcSl8M/plvT9tP4vJMexQ2N2MbCd18LEw5Z3GjcUz7sDHwYLEnK1vl8ZU3T3G0Nb3ZInpXZaYf
-	PhCsM5qc=
-X-Received: by 2002:a05:7022:2210:b0:119:e56c:18ab with SMTP id
- a92af1059eb24-12c34ede9a4mr1042759c88.19.1775802147879; Thu, 09 Apr 2026
- 23:22:27 -0700 (PDT)
+        bh=QNv3RhMQ22/HNGeiFea3mpb5rv6rCJ9wjpXVgU/MM3U=;
+        b=q9U6Nmiw/DIfgH/mf7gyDx9uStmNBCWTdwtkARm9si3Agy5+9DnOD/117/d5Go/605
+         f7eBY49+WPqyAOv7fQdc4Z8mSig/v9jMhFVklIdhmcTyBECtenIbWrON/Mzh2JHNzklY
+         n9+m5LiPlMQGyCMTbfMzHMjO8FUyiVE1KFLCNC8iWXCKOMYq3n6HDykSOl6+idEN4kam
+         KjJehpCZuza/OZCF1w87ihYm0ZTU+aks4f5nsvFsIgAO9PUSg2f/cTKzD8A5rfRzJ4Of
+         6B3lMTzmhAw1LiIYA3kLjht240f8WgR9/ncpZtqvF4nfY0u6cJdQisKHWqT5/ciKiTcV
+         QXCw==
+X-Forwarded-Encrypted: i=1; AJvYcCVKqgxzvdOSglwj8uYbEG4oU5mwj38YDuKyLpTfe2sNTjT6ZurnKL6kO3mR8xOO+20Ty1GLGnGY9NGi9gMELwQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqbHfZoxJemsHdYdU4Jwr17YYqyyIgE5X/tNnJc4XmwknZMJ3B
+	LBKHyhlie32YeiwcsmbxTku2zRIokihxMVdjtbrm4V3kNMSodt407Lr76EAWUULmxuSwrenhsK5
+	1Uthp6osopWYqbAyT0R4/JF+DIFT/TXpChPIVcfBS0ua6LvljSP0NmEwG
+X-Gm-Gg: AeBDiet8vDT0ZPYEkqvMY9Mt61+w5K4QElQqW/bbwZ2LiiAyoCCD7NXXqK7lRQuFyil
+	ZvnhLU5oHhLEsN8uFceYeTvlmO/S8rolJjGdOGNeiig5R60yyX+CuFz/YOeluSSVXH/5N/G0+QO
+	g/HCeFZ017UO8lcy/jEaLZjnd2RkRIHolgUpyLSacBDAFRd2WDmj3H+wzIOPKx+WdArscS1sAbw
+	tiTqa/5KtlHtLz+Zg9XtiGkk0zC1E82AX1CnTF0HrNR0XP8R7z///wyB3qkWbEHRy7ncsTtDey2
+	R/sL3aNjSJGfgmAXt4yD2pIG5vhBHEHrbLWqHGiKhvml4bbIeZxLpi/2uWdCWa0FBC6fgbbuFOE
+	2nUbxSrM=
+X-Received: by 2002:a05:7022:62a7:b0:128:d577:dc21 with SMTP id
+ a92af1059eb24-12c34e712b3mr1131056c88.13.1775802708539; Thu, 09 Apr 2026
+ 23:31:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260409-teaming-driver-internal-v7-0-f47e7589685d@google.com> <20260409-teaming-driver-internal-v7-6-f47e7589685d@google.com>
-In-Reply-To: <20260409-teaming-driver-internal-v7-6-f47e7589685d@google.com>
+References: <20260409-teaming-driver-internal-v7-0-f47e7589685d@google.com> <20260409-teaming-driver-internal-v7-7-f47e7589685d@google.com>
+In-Reply-To: <20260409-teaming-driver-internal-v7-7-f47e7589685d@google.com>
 From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Thu, 9 Apr 2026 23:22:16 -0700
-X-Gm-Features: AQROBzDYbL64JYoKRFKy3IJSAfw3hVgsqBRz8HK8WdsFdVBHjeQyIk_Aq7IUKjE
-Message-ID: <CAAVpQUCd9jFcuRc2iW-A6od6rO=iSvOsoyDFKfVyV6CdKAxP8g@mail.gmail.com>
-Subject: Re: [PATCH net-next v7 06/10] net: team: Rename enablement functions
- and struct members to tx
+Date: Thu, 9 Apr 2026 23:31:37 -0700
+X-Gm-Features: AQROBzA8Q1_wQjFZKHsKZk5TChTM4zsOPcW8aryfLwg8I_KCeqgeADVGzy2JxF8
+Message-ID: <CAAVpQUArYHi6tDXhdrDUnLxBGBZibKnqbOvRr0mJvrdfu8MwYQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 07/10] net: team: Track rx enablement
+ separately from tx enablement
 To: Marc Harvey <marcharvey@google.com>
 Cc: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -102,12 +102,14 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Apr 8, 2026 at 7:59=E2=80=AFPM Marc Harvey <marcharvey@google.com> =
 wrote:
 >
-> Add no functional changes, but rename enablement functions, variables
-> etc. that are used in teaming driver transmit decisions.
+> Separate the rx and tx enablement/disablement into different
+> functions so that it is easier to interact with them independently
+> later.
 >
-> Since rx and tx enablement are still coupled, some of the variables
-> renamed in this patch are still used for the rx path, but that will
-> change in a follow-up patch.
+> Although this patch changes receive and transmit paths, the actual
+> behavior of the teaming driver should remain unchanged, since there
+> is no option introduced yet to change rx or tx enablement
+> independently. Those options will be added in follow-up patches.
 >
 > Reviewed-by: Jiri Pirko <jiri@nvidia.com>
 > Signed-off-by: Marc Harvey <marcharvey@google.com>
