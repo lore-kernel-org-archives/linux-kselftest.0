@@ -1,269 +1,267 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DF83CA4A3
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 13:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40DA3CC9FE;
+	Fri, 10 Apr 2026 14:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775829446; cv=none; b=bh3OWOEZGmC7839kNtF89kE53oq1ZRswvYqoRDbj7z0aId9Z2khhqKRbU+/ioDNLJw7iXlNVXt1Qtihu56jhSKBL5arNeuvESbjNYZy1G8qHs8vlgFegXVzJsa6zjTt/Z1E+pb1A0hr2qZ6oKg0DJ0a2Q3suSjg8jcIxgAzk/94=
+	t=1775830845; cv=none; b=QcjtmcGYxAoA1HfdOIkuhZfWEdQdxgG59JzKP5cfA6s8ufkBMDr7UQAvE55DnvNE/5fKoIFSvbkEpZ11PM2durqHAHR4Wej7/FZWLkkuscDafWR2DCxRY/KmK6PnXb5qNKAXgtJvrdHnVSnRohDSeAXJzu4PIBZ6fjIaVvHMRa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775829446; c=relaxed/simple;
-	bh=6DM538UFb0Hz6iV1GjcwnX3W49JjywTVV5TAPCOwQE8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=JKaE1O4WCA7DmiRoHDlyczulUBOlVgbL6WS5MeO85OHZg0iyBfZprBNQIwMexFmfMpp29xJnfGEKyLgkZTFzjqgtgFwB2VrWD7SHsXjUAon9FNnwZj3UsiucpMq4MAYknbXKtnX8OeKJVNLQsQbxVk0rbM+iGKFrtgGIQH5o5zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BhVl+1cE; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1775830845; c=relaxed/simple;
+	bh=JJWpVrHZSIlukvM587fa/e1ss1M9d88mHEJo7BWA4Tk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QGNR91bztWEZtwMKTmLkJr4jfs5jtUzmv2jT+nd/ccIXRmHc2daRoReDdKaGPgSCGeGReQV8b6G+qDNonT1e1xuug0xk5j/nkG6XdDoBNulgP1g9hLmA7qc2Q77QwSc4hDOtcZAoUwIFi7o0VqB0lGsRjiWfV4ruPTB3x0fGcvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gOfuPOTg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BhVl+1cE"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so26694325e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 06:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775829442; x=1776434242; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vVhDJ31DUrblyIAf15oUrnf9PdWowrxgBH4zol030WU=;
-        b=BhVl+1cEdPlstxZC93YRsRf8LGt/3aBMv4dRmS6mGEP0wFGIbPBjgeKeAuaInMBj2R
-         ahAFRir/31GPyZ5cX4pTxiID2eSXu8YG3Lhd2PyP6kORmFOvEfT6irjKkot/GPIrO98/
-         jbDnLGpsnyRQK1zt6NyyrrlatW4EpUcBBVpJYxgQ4t1v8/Uv6RjG+EJ3qmytPvN11LZD
-         lYQTjNVRvOnRdUo1L3lYBSz/ikxOtHqR2RScpi4kP/4q3SO7AgeSdR6Ug3ZjE2L7W5qp
-         qmuDlZ4/Nq7bx3sysFQIOr4dfnKE2yAy9JDSBjjJYOgVYcYbvgWC5aROxzYoqH8s6BA+
-         Uxsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775829442; x=1776434242;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vVhDJ31DUrblyIAf15oUrnf9PdWowrxgBH4zol030WU=;
-        b=ng8KCS/Q3y/Grp6LUSytwD1xdxTJQ13UjbY4i+i5hBRppLlKr8ShI/hVSGXOtp8kKN
-         hVBPIfvwEUH2p9uxtffb/okIGXERnIsNWS9JG8QKlR0+DS/2PE6SNZ+XDNmENg6a7qsL
-         vvgwt5FYQVe7rhwQgD9gI5y1UrKLnYHeWl/eiPkHRQ5GcYPWhcmZIN1nAMCz7PgdCJiW
-         FQaeoQ4FSYgSKawuPXEPjWzEOP889B/b9guyip2+mg20m6EWMjmk5fSe2kl7sDJcl4ZM
-         Mf6tyBZj//tQDpbIOCmQiV8S/GTz5ZFh9dNNypqmO6GKY88lNMFoDpE2+CoTeMWikxF7
-         NDrA==
-X-Forwarded-Encrypted: i=1; AJvYcCVA91bAXrC1UGBavEgR1XSGGecwGznbR+v1djqW6sBiTmI73eeEjU8qm4O/uPKYA4GkGsZLh6jKHeUW9c3+NOs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVJzg1jMsUILjtOThLguw+60s2QyqjWEBMaafET7ABjvEpwCY5
-	wR8G571ja4zrEdQO1Lif6jpA63AXoLYC+ToHPll3ktvJQ6iG5LuKisLL3rLdcPzeP3E=
-X-Gm-Gg: AeBDieveNVstmKY707CA2IxpN84GYWt3vMci1IM+YfKexXVwlK8fvkbyFK4iANdeNGH
-	BGp7iTdwI138HQSjeigtDw+rLkQbkJScqj54sUQoGAY+feqltZBT5wGhhjmKL/ZSi8Pj9iYjovr
-	HYlWdYE475pScvm05saZDQIDh5/wxMWay+JesGJOYcYW/uI7hlVqHg6nSpB/HjVO6B+mBmYvGZX
-	DKVft4UI39sovhooNx+I3A5KTzI1IEanLITINeJ3boSUrSYKKwtCzQ70F93k/UZ0Tb//kIX6wRo
-	A3OFvwTBhJ2pTSvJqDwYA/Tr/BfZ77MSQFDzqY9b/CxMl7X/LKD6flpyDhWLfZHYxI40m6aD1zZ
-	8QVyZwujHTYxhUVj/RSvu4Ou+TXmb0pAptfwd71Jdi2X8rS0hcY//RXvMtkV9NREV2Mex5q2O1D
-	PrpL0XlH9Lpg==
-X-Received: by 2002:a05:600c:871a:b0:488:a2ac:a34a with SMTP id 5b1f17b1804b1-488d67f4299mr43425365e9.10.1775829442178;
-        Fri, 10 Apr 2026 06:57:22 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:285:ece1:da61:637f:91ff])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-954bf0c1b8fsm1691232241.6.2026.04.10.06.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2026 06:57:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gOfuPOTg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD9AC19421;
+	Fri, 10 Apr 2026 14:20:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775830844;
+	bh=JJWpVrHZSIlukvM587fa/e1ss1M9d88mHEJo7BWA4Tk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gOfuPOTgsOhuPg1WH3NqUiGgPlN8sS9ByLozVoiJe6CilHiXEcQ4D0n3nyA8g6fxP
+	 lEx6Gq1FbxdrpxOYA0zwNiYjyboYSj+rajC1tBA8Pp/3C/fe3jqEtOVLyx2kVoqgeX
+	 IP6FxfW9Ps7ViweVsWDw2DIqxhUZAtoZDLq5WmgwEb2Wu72xRZTufIGlF7IKlD+Rnk
+	 V178EBVdc3R+35sAolJexwWppQ6nl1xD7e/UrPCDYg/4zAOE9pQCUjTl1gxgsztvWb
+	 f0jGNz/J8ygavVl5yzgJtUk+g0CDlNh4IgLPmN7QJwjqs9+czJ5HBHrVTSbNJIjsNp
+	 y6Ilectl1u/lw==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v5 00/11] mm/damon: introduce DAMOS failed region quota charge ratio
+Date: Fri, 10 Apr 2026 07:20:21 -0700
+Message-ID: <20260410142034.83798-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 10 Apr 2026 10:57:17 -0300
-Message-Id: <DHPIZX3045PN.2QCSGKPP43W3I@suse.com>
-Subject: Re: [PATCH v4 00/10] selftests/bpf: Tolerate partial builds across
- kernel configs
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-To: "Alan Maguire" <alan.maguire@oracle.com>,
- =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
- Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
- <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-X-Mailer: aerc 0.21.0-120-g22b95d38161f
-References: <20260406-selftests-bpf_misconfig-v4-0-9914f50efdf7@suse.com>
- <00e95867-edbc-4e74-8696-16a8f61223b7@oracle.com>
-In-Reply-To: <00e95867-edbc-4e74-8696-16a8f61223b7@oracle.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Alan,
+TL; DR: Let users set different DAMOS quota charge ratios for DAMOS
+action failed regions, for deterministic and consistent DAMOS action
+progress.
 
-On Fri Apr 10, 2026 at 7:06 AM -03, Alan Maguire wrote:
-> On 06/04/2026 19:22, Ricardo B. Marli=C3=A8re wrote:
->> Currently the BPF selftests can only be built by using the minimum kerne=
-l
->> configuration defined in tools/testing/selftests/bpf/config*. This poses=
- a
->> problem in distribution kernels that may have some of the flags disabled=
- or
->> set as module. For example, we have been running the tests regularly in
->> openSUSE Tumbleweed [1] [2] but to work around this fact we created a
->> special package [3] that build the tests against an auxiliary vmlinux wi=
-th
->> the BPF Kconfig. We keep a list of known issues that may happen due to,
->> amongst other things, configuration mismatches [4] [5].
->>=20
->> The maintenance of this package is far from ideal, especially for
->> enterprise kernels. The goal of this series is to enable the common usec=
-ase
->> of running the following in any system:
->>=20
->> ```sh
->> make -C tools/testing/selftests install \
->>         SKIP_TARGETS=3D \
->>         TARGETS=3Dbpf \
->>         O=3D/lib/modules/$(uname -r)/build
->> ```
->>=20
->> As an example, the following script targeting a minimal config can be us=
-ed
->> for testing:
->>=20
->> ```sh
->> make defconfig
->> scripts/config --file .config \
->>                --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
->>                --enable DEBUG_INFO_BTF \
->>                --enable BPF_SYSCALL \
->>                --enable BPF_JIT
->> make olddefconfig
->> make -j$(nproc)
->> make -j$(nproc) -C tools/testing/selftests SKIP_TARGETS=3D TARGETS=3Dbpf=
- install
->> ```
->>=20
->> This produces a test_progs binary with 579 subtests, against the total o=
-f
->> 708. Many of them will still fail or be skipped at runtime due to lack o=
-f
->> symbols, but at least there will be a clear way of building the tests.
->>
->
-> hi Ricardo, I've been looking at this series and one concern I had was if
-> tolerating failures to build with incomplete config would create problems
-> in detecting failures when the config is complete, i.e. in BPF CI. So for
-> example if say a BPF skeleton didn't compile when it really should due to=
-=20
-> an introduced bug, we wouldn't want to drive on in all cases.
+Common Reports: Unexpectedly Slow DAMOS
+=======================================
 
-Agreed.
+One common issue report that we get from DAMON users is that DAMOS
+action applying progress speed is sometimes much slower than expected.
+And one common root cause is that the DAMOS quota is exceeded by the
+action applying failed memory regions.
 
->
-> However, from what I can see, CI held up well with these changes in place=
- [1].
->
-> That said it might be nice to preserve a "strict" mode which fails when
-> we hit compilation issues etc, failing as we do today; I couldn't find an=
-y existing=20
-> general kselftest concept that fits with that but it would be valuable I =
-think
-> if possible. Perhaps we could default to non-strict mode when a make -C i=
-s initiated
-> or something like that, and continue to operate strictly when building di=
-rectly
-> in tools/testing/selftests/bpf?
->
-> I ran the changes through the usual workflow I use - build bpf selftests =
-at
-> tools/testing/selftests/bpf level and run ./test_progs ; no regressions w=
-ere
-> observed, so feel free to add for the series
->
-> Tested-by: Alan Maguire <alan.maguire@oracle.com>
+For example, a group of users tried to run DAMOS-based proactive memory
+reclamation (DAMON_RECLAIM) with 100 MiB per second DAMOS quota.  They
+ran it on a system having no active workload which means all memory of
+the system is cold.  The expectation was that the system will show 100
+MiB per second reclamation until (nearly) all memory is reclaimed. But
+what they found is that the speed is quite inconsistent and sometimes it
+becomes very slower than the expectation, sometimes even no reclamation
+at all for about tens of seconds.  The upper limit of the speed (100 MiB
+per second) was being kept as expected, though.
 
-Thanks for testing!
+By monitoring the qt_exceeds (number of DAMOS quota exceed events) DAMOS
+stat, we found DAMOS quota is always exceeded when the speed is slow. By
+monitoring sz_tried and sz_applied (the total amount of DAMOS action
+tried memory and succeeded memory) DAMOS stats together, we found the
+reclamation attempts nearly always failed when the speed is slow.
 
->
-> There are some comments on sashiko.dev [2] that would be worth looking th=
-rough
-> too, in particular the concern about O=3D and M=3D mentioned for patch 1.
+DAMOS quota charges DAMOS action tried regions regardless of the
+successfulness of the try.  Hence in the example reported case, there
+was unreclaimable memory spread around the system memory.  Sometimes
+nearly 100 MiB of memory that DAMOS tried to reclaim in the given quota
+interval was reclaimable, and therefore showed nearly 100 MiB per second
+speed.  Sometimes nearly 99 MiB of memory that DAMOS was trying to
+reclaim in the given quota interval was unreclaimable, and therefore
+showing only about 1 MiB per second reclaim speed.
 
-I will send v5 with those addressed and possibly a strict-mode switch.
+We explained it is an expected behavior of the feature rather than a
+bug, as DAMOS quota is there for only the upper-limit of the speed.  The
+users agreed and later reported a huge win from the adoption of
+DAMON_RECLAIM on their products.
 
->
-> [1] https://github.com/kernel-patches/bpf/actions/runs/24168181680
-> [2] https://sashiko.dev/#/patchset/20260406-selftests-bpf_misconfig-v4-0-=
-9914f50efdf7%40suse.com
->  > [1]: https://openqa.opensuse.org/tests/5811715
->> [2]: https://openqa.opensuse.org/tests/5811730
->> [3]: https://src.opensuse.org/rmarliere/kselftests
->> [4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_is=
-sues.yaml
->> [5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=3Drun_ks=
-elftests-config_mismatches.txt
->>=20
->> Assisted-by: {codex,claude}
->> Signed-off-by: Ricardo B. Marli=C3=A8re <rbm@suse.com>
->> ---
->> Changes in v4:
->> - Drop the test_kmods kselftest module flow patch: lib.mk gen_mods_dir
->>   invokes $(MAKE) -C $(TEST_GEN_MODS_DIR) without forwarding
->>   RESOLVE_BTFIDS, breaking ASAN and GCC BPF CI builds (Makefile.modfinal
->>   cannot find resolve_btfids in the kbuild output tree)
->> - Link to v3:
->>   https://patch.msgid.link/20260406-selftests-bpf_misconfig-v3-0-587a111=
-4263c@suse.com
->>=20
->> Changes in v3:
->> - Split test_kmods patch into two: fix KDIR handling (O=3D passthrough,
->>   EXTRA_CFLAGS/EXTRA_LDFLAGS clearing) and wire into lib.mk via
->>   TEST_GEN_MODS_DIR
->> - Pass O=3D through to the kernel module build so artifacts land in the
->>   output tree, not the source tree
->> - Clear EXTRA_CFLAGS and EXTRA_LDFLAGS when invoking the kernel build to
->>   prevent host flags (e.g. -static) leaking into module compilation
->> - Replace the bespoke test_kmods pattern rule with lib.mk module
->>   infrastructure (TEST_GEN_MODS_DIR); lib.mk now drives build and clean
->>   lifecycle
->> - Make the .ko copy step resilient: emit SKIP instead of failing when a
->>   module is absent
->> - Expand the uprobe weak stub comment in bpf_cookie.c to explain why
->>   noinline is required
->> - Link to v2:
->>   https://patch.msgid.link/20260403-selftests-bpf_misconfig-v2-0-f067003=
-80a9d@suse.com
->>=20
->> Changes in v2:
->> - Skip test_kmods build/clean when KDIR directory does not exist
->> - Use `Module.symvers` instead of `.config` for in-tree detection
->> - Fix skeleton order-only prereqs commit message
->> - Guard BTFIDS step when .test.o is absent
->> - Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
->> - Link to v1:
->>   https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0=
-af76f@suse.com
->>=20
->> ---
->> Ricardo B. Marli=C3=A8re (10):
->>       selftests/bpf: Fix test_kmods KDIR to honor O=3D and distro kernel=
-s
->>       selftests/bpf: Tolerate BPF and skeleton generation failures
->>       selftests/bpf: Avoid rebuilds when running emit_tests
->>       selftests/bpf: Make skeleton headers order-only prerequisites of .=
-test.d
->>       selftests/bpf: Tolerate test file compilation failures
->>       selftests/bpf: Allow test_progs to link with a partial object set
->>       selftests/bpf: Tolerate benchmark build failures
->>       selftests/bpf: Provide weak definitions for cross-test functions
->>       selftests/bpf: Skip tests whose objects were not built
->>       selftests/bpf: Tolerate missing files during install
->>=20
->>  tools/testing/selftests/bpf/Makefile               | 113 ++++++++++++++=
--------
->>  .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  24 ++++-
->>  tools/testing/selftests/bpf/prog_tests/iters.c     |  10 +-
->>  tools/testing/selftests/bpf/test_kmods/Makefile    |  15 ++-
->>  tools/testing/selftests/bpf/test_progs.c           |   7 +-
->>  5 files changed, 120 insertions(+), 49 deletions(-)
->> ---
->> base-commit: a1aa9ef47c299c5bbc30594d3c2f0589edf908e6
->> change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
->>=20
->> Best regards,
->> -- =20
->> Ricardo B. Marli=C3=A8re <rbm@suse.com>
->>=20
->>=20
+It is Not a Bug but a Feature; But...
+=====================================
 
+So nothing is broken.  DAMOS quota is working as intended, as the upper
+limit of the speed.  It also provides its behavior observability via
+DAMOS stat.  In the real world production environment that runs long
+term active workloads and matters stability, the speed sometimes being
+slow is not a real problem.
+
+But, the non-deterministic behavior is sometimes annoying, especially in
+lab environments.  Even in a realistic production environment, when
+there is a huge amount of DAMOS action unapplicable memory, the speed
+could be problematically slow.  Let's suppose a virtual machines
+provider that setup 99% of the host memory as hugetlb pages that cannot
+be reclaimed, to give it to virtual machines.  Also, when aim-oriented
+DAMOS auto-tuning is applied, this could also make the internal feedback
+loop confused.
+
+The intention of the current behavior was that trying DAMOS action to
+regions would anyway impose some overhead, and therefore somehow be
+charged.  But in the real world, the overhead for failed action is much
+lighter than successful action.  Charging those at the same ratio may be
+unfair, or at least suboptimum in some environments.
+
+DAMOS Action Failed Region Quota Charge Ratio
+=============================================
+
+Let users set the charge ratio for the action-failed memory, for more
+optimal and deterministic use of DAMOS.  It allows users to specify the
+numerator and the denominator of the ratio for flexible setup.  For
+example, let's suppose the numerator and the denominator are set to 1
+and 4,096, respectively.  The ratio is 1 / 4,096.  A DAMOS scheme action
+is applied to 5 GiB memory.  For 1 GiB of the memory, the action is
+succeeded.  For the rest (4 GiB), the action is failed.  Then, only 1
+GiB and 1 MiB quota is charged.
+
+The optimal charge ratio will depend on the use case and
+system/workload.  I'd recommend starting from setting the nominator as 1
+and the denominator as PAGE_SIZE and tune based on the results, because
+many DAMOS actions are applied at page level.
+
+Tests
+=====
+
+I tested this feature in the steps below.
+
+1. Allocate 50% of system memory and mlock() it using a test program.
+2. Fill up the page cache to exhaust nearly all free memory.
+3. Start DAMON-based proactive reclamation with 100 MiB/second DAMOS
+   hard-quota.  Auto-tune the DAMOS soft-quota under the hard-quota for
+   achieving 40% free memory of the system with 'temporal' tuner.
+
+For step 1, I run a simple C program that is written by Gemini.  It is
+quite straightforward, so I'm not sharing the code here.
+
+For step 2, I use dd command like below:
+
+   dd if=/dev/zero of=foo bs=1M count=$50_percent_of_system_memory
+
+For step 3, I use the latest version of DAMON user-space tool (damo)
+like below.
+
+    sudo damo start --damos_action pageout \
+            ` # Do the pageout only up to 100 MiB per second ` \
+            --damos_quota_space 100M --damos_quota_interval 1s \
+            ` # Auto-tune the quota below the hard quota aiming` \
+            ` # 40% free memory of the node 0 ` \
+            ` # (entire node of the test system)` \
+            --damos_quota_goal node_mem_free_bp 40% 0 \
+            ` # use temporal tuner, which is easy to understnd ` \
+            --damos_quota_goal_tuner temporal
+
+As expected, the progress of the reclamation is not consistent, because
+the quota is exceeded for the failed reclamation of the unreclaimable
+memory.
+
+I do this again, but with the failed region charge ratio feature.  For
+this, the above 'damo' command is used, after appending command line
+option for setup of the charge ratio like below.  Note that the option
+was added to 'damo' after v3.1.9.
+
+    sudo ./damo start --damos_action pageout \
+            [...]
+            ` # quota-charge only 1/4096 for pageout-failed regions ` \
+            --damos_quota_fail_charge_ratio 1 4096
+
+The progress of the reclamation was nearly 100 MiB per second until the
+goal was achieved, meeting the expectation.
+
+Patches Sequence
+================
+
+First two patches make preparational changes.  Patch 1 updates fully
+charged quota check to handle <min_region_sz remaining quota, which will
+be able to exist after this series is applied.  Patch 2 merges regions
+that split out for quota as soon as possible, since the split can happen
+much more frequently under a corner case that this series will make
+available.
+
+Patch 3 implements the feature and exposes it via DAMON core API.  Patch
+4 implements DAMON sysfs ABI for the feature.  Three following patches
+(5-7) document the feature and ABI on design, usage, and ABI documents,
+respectively.  Four patches for testing of the new feature follow.
+Patch 8 implements a kunit test for the feature.  Patches 9 and 10
+extend DAMON selftest helpers for DAMON sysfs control and internal state
+dumping for adding a new selftest for the feature.  Patch 11 extends
+existing DAMON sysfs interface selftest to test the new feature using
+the extended helper scripts.
+
+Changelog
+=========
+
+Changes from RFC v4
+(https://lore.kernel.org/20260409142148.60652-1-sj@kernel.org)
+- Fix quota-sliced region merge-back issues.
+  - Use damon_for_each_region() instead of damon_for_each_region_safe().
+  - Avoid merging back of sliced but scheme unapplied regions, to keep
+    the monitoring information.
+Changes from RFC v3
+(https://lore.kernel.org/20260407010536.83603-1-sj@kernel.org)
+- Make damos_quota_is_full() safe from overflow and easier to read.
+- Avoid quota-based region split making too many new regions.
+Changes from RFC v2
+(https://lore.kernel.org/20260405151232.102690-1-sj@kernel.org)
+- Handle <min_region_sz remaining quota.
+- Document zero denum behavior.
+- Fix typos: s/selftets/selftests/
+Changes from RFC v1
+(https://lore.kernel.org/20260404163943.89278-1-sj@kernel.org)
+- Avoid overflows in charge amount calculation.
+- Fix/wordsmith documentation for grammar, typo, and wrong examples.
+- Improve unit test for more consistent comparison source use.
+
+SeongJae Park (11):
+  mm/damon/core: handle <min_region_sz remaining quota as empty
+  mm/damon/core: merge quota-sliced regions back
+  mm/damon/core: introduce failed region quota charge ratio
+  mm/damon/sysfs-schemes: implement fail_charge_{num,denom} files
+  Docs/mm/damon/design: document fail_charge_{num,denom}
+  Docs/admin-guide/mm/damon/usage: document fail_charge_{num,denom}
+    files
+  Docs/ABI/damon: document fail_charge_{num,denom}
+  mm/damon/tests/core-kunit: test fail_charge_{num,denom} committing
+  selftests/damon/_damon_sysfs: support failed region quota charge ratio
+  selftests/damon/drgn_dump_damon_status: support failed region quota
+    charge ratio
+  selftests/damon/sysfs.py: test failed region quota charge ratio
+
+ .../ABI/testing/sysfs-kernel-mm-damon         | 12 +++
+ Documentation/admin-guide/mm/damon/usage.rst  | 18 +++-
+ Documentation/mm/damon/design.rst             | 22 +++++
+ include/linux/damon.h                         |  9 ++
+ mm/damon/core.c                               | 83 ++++++++++++++++---
+ mm/damon/sysfs-schemes.c                      | 54 ++++++++++++
+ mm/damon/tests/core-kunit.h                   |  6 ++
+ tools/testing/selftests/damon/_damon_sysfs.py | 21 ++++-
+ .../selftests/damon/drgn_dump_damon_status.py |  2 +
+ tools/testing/selftests/damon/sysfs.py        |  6 ++
+ 10 files changed, 216 insertions(+), 17 deletions(-)
+
+
+base-commit: fe17d40616ec462138186edb32f3105b0c064674
+-- 
+2.47.3
