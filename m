@@ -1,174 +1,118 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA0B29AAEA;
-	Fri, 10 Apr 2026 06:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775801526; cv=none; b=adV/rm9IkCzvD/A6mMIXVDQDSlns0OoejkaXTGeVd+o/o+KwVxYreIYByma3Vtc6f294lkN2vnOSTqvNupPs+ysPvpjr3kRFyS6uI4r0QB2D874I8JSXkwQRLE8ap2CJefPkPXX7FV1leJf86Fv7g63blTcrOWaFzMfAe5rmZFI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775801526; c=relaxed/simple;
-	bh=rivNMzxXrs9lHPPIuhozjHmdmlyJEjRXgGypuqw7qR8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lxDDXOUe7KvJ6D3eKSg7w5wsbHBeo4WTbxaAE6MsWUG0juB4vRh5zFmuhdJan5GTXWy45MoR61nMYBmG2DVeuncZf600zjDRrPw8//d5ZPmNfSGliZ9Q8lT9SJwSYJwzM2/hsyzKAQWkuJvCMQpctxL7aodr5+N7cwrxoscAXdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KzbwIPjw; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0AE03164B4
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 06:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775801949; cv=pass; b=EkdLwfzGqna78gKOYHtudlgFyE1nIe54RQOoWF5PDIPfh0eeGK45/Xt5Br98cJRy8twrrYjbmh52NA4u9HFByI5WiX+LO7aWUIYWmHYS8xqxtpZTOzEDZkKqlnSNpXGkE1bJoujj838VVkdMc5kbGQHW/SAqzYd7UqLnnsPB1Yk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775801949; c=relaxed/simple;
+	bh=4Dr6sYNZceBCVgxbM6yHz0k1xaiduPlyLu0a0CKYOSQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WZqrqk/OSCgd9TYX5L4rNGzcdJG4uMojVN08qzzhsTr6N78VNnOIFNHs2lV+khCHkejoBMNqkao5bn3yLXKC9ZTnoIQJ8VLHQiBPeDloPFkC5G9Lfxd4xKoHtBUvuJBb1aQuc//aHL8EVxafYkYVi7Yu2ng9+rqS06UVJ35NBB8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iHMIr2hT; arc=pass smtp.client-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KzbwIPjw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=If
-	FPalp3WHxpMdpiLbcJeroljTSghFPD7+9njMmArlo=; b=KzbwIPjwzVCrm+m2f6
-	6ncm8Ks52+w8avLBzTq3uyAusVp9Prr4OGmIb68nnebu5198ZFcnmzXc5ZlrV0tK
-	1nL0z2CzxPgywRgcLovV0/lF36nzF/PyP+6dh4spTXVbIjEggU6NsMwSIz259HNl
-	XSvIAF47oeZg+kWs7DDtDUUDg=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgDn739elNhpd0HuZg--.6807S4;
-	Fri, 10 Apr 2026 14:10:41 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	mattbobrowski@google.com,
-	jiayuan.chen@linux.dev
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: Add selftests for verifying return values of fmod_ret.
-Date: Fri, 10 Apr 2026 14:10:37 +0800
-Message-Id: <20260410061037.149532-3-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260410061037.149532-1-yangfeng59949@163.com>
-References: <20260410061037.149532-1-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iHMIr2hT"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2b6b0500e06so2545782eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2026 23:19:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775801946; cv=none;
+        d=google.com; s=arc-20240605;
+        b=goXULhu7GrtzMfnWI2CSQHJExWXiVpOhUFblN8U/BiMjcTY53eCsGDfIkyhnwq4kKQ
+         hXPnpAwa5VCTGJ82TCfNdwMtOVFlYDCOLZHlrMKszeGGb/xoH3snfuXkiks78Gzd8mv+
+         Y83Ac4o9mn+V0lWvQxHQuc+qJcvl5VpMELkFx429lP/8YmFlvnAzFYzACE0Ng/JZbR2q
+         EP1sXvKKtAslllqqsaL1G1mStZkALtRzyc7WTWF5RaiCBAizKsf5HKUCm3N6qGLInM+N
+         n6q/kNYWzh+Ynxko3PhBu8zf0yRTIBlKlMdPhYQwOourgC3u/BjoAV45ml1+dyFbYpFZ
+         Ve5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4Dr6sYNZceBCVgxbM6yHz0k1xaiduPlyLu0a0CKYOSQ=;
+        fh=fvc9uTKSTCya465Ar/xAzwYNBe+LUbghCGCYm+u4Rr4=;
+        b=WmtXFa1dbxgQ2nuRY/v3jZmxslEPBngRj+rhAh8XISQ+feTR1wmas4+Z9mGPrvwpo+
+         XJ3KNM8RVoGFGhDs20uRlLQYJfchm0jhIqCXKPS2turoDXsGFaofMWwSfpmzhZT3Evzj
+         iY6Or2b0dWfQTy2If3cgbBaCAQFByePko3b/v/0nhZbYnSXf3t7yMDqQClM+R0wbzd6U
+         K94NyoDLW2s+dVqSQzWWGKcSrDgVsKq0YDvBkl6fqiFAsKaIoHxeBkm1qXlHn6RwkeGZ
+         xxUoax8ZDnllZ8IGpQibE6ax5nHAYMY1a+uSWSkXBtzJer3wCA4Sp7ECzcpfYfsjtAZh
+         lVXg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775801946; x=1776406746; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Dr6sYNZceBCVgxbM6yHz0k1xaiduPlyLu0a0CKYOSQ=;
+        b=iHMIr2hTtNs8uP2DmAsVJFlensObWX/EWmlE20wp7Y6TOF/GKjZg1VMmpGR6YAKtR0
+         aKEFOdZ/l5Fw5dTYQo3JZGfVPITjCwtmKMdKVrWz5g67lWnNR4nZXilRF1PsPSuk+8Lw
+         0P95hk44l8SjUtyvixN1SsSufn8MicszCzI0F/6yw4HtLm52Z/tPplQEbNJX3YKaWcYW
+         kNTUzAoCyGgDEKIkbSFZc+bEug9AJ5yuByv8gIkueJS8TNWA9igRV2FYH/aREBZrDSHX
+         Nic6dg59o0oiHHWYX/rAVj/7BxclIH5acgQp1z+62QIKSYoEC4p8R2Q7DmTZywsm/U0b
+         bjCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775801946; x=1776406746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4Dr6sYNZceBCVgxbM6yHz0k1xaiduPlyLu0a0CKYOSQ=;
+        b=N7OZ4rZLbH2oZvAH77HWOCkwTuopCiZDn7/MUttITNRBCdYqgM1pMpvE+rML3ZTEVa
+         EcHP4byq0+LjyeyeFr9F0N/hqGU5FAAzoxkxj8ww2bJu3hXpKkvdqZ//iyiSLKshnc/p
+         pMCdYB6+f/fpvxCtH8JHbSGA0ofDrUgxEe2jvYwnbOjMIbWRI5dvtuVJoR8OIar2xuPp
+         DTzU6ueHHkcYuUJ9x75/v9u0uZUAGF0/1md0dNydUZX/NcRmCCv5JUBiABkxcqhXgCOy
+         V8Se5Zp8NYyV+TcIbCv1zHlfZ4nXyvqEwGlO5L1yq9y44oqNF8Nbw6hgRX3EhfF7bqpM
+         NrbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJpCfrwS1Fc5FcAJ03UFEHs6Bn01ys4j5Efy5ixuRwPgDTOEPZBjqb4XZBOrqbg+dAqXo3JfMnp4bIXxV2DFM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7T7gigV5XQYdG1CWi0BZ3wHm3Gl3YVl/fLYQCElt54K0d+QRv
+	wiOdloXKGBcXUdanLL5gIyBLW60TFJ8hxpR4B/cfbNvs1kqDIvq+/VatN0vaZeS5ZEkkB2Z/nBy
+	MeWrzDLPMqgMoorVIypzPKpbHXP471aug+y3PxAuH
+X-Gm-Gg: AeBDievzdshyREPnJ3bGrDvO68blijQUlgxKUf9XcSwpw4ZLWe9snuMBboIqZGDxWqW
+	TgOpEXE1wAjcRdh7C0BN+2XUqDl1cz826siGcWrjBpA1nzAqOStBGIywMxahPVWHr9youGEmoZ3
+	7yww7CSaOodW0O9h9/Nv3rV3ZGX3T0NS5UH//KLvatm8o2AdSSYsaBZtf1hkD29bKJ7FzZoDWea
+	n2VaBzQHhnlb+ksCh0Ka2cowcyIybDlSKGq4UNUgagSgQrUKwKd7anW4c06XWmEuQEKHaubcPwE
+	mkd18Jmd8Hcvuv0lrDiynjpy/R2MccHGlwPzqWJtj0ui+Grm8H0TvptInk6pm6RmJUuoOuCBdDn
+	1SIBZt1I=
+X-Received: by 2002:a05:7022:6982:b0:12a:7181:2f1a with SMTP id
+ a92af1059eb24-12c34e6913amr1222598c88.5.1775801945276; Thu, 09 Apr 2026
+ 23:19:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgDn739elNhpd0HuZg--.6807S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF13AFy8uFy5tw4kZryfCrg_yoWrWF47pF
-	4kur9ruF1vywnxGFn7uF43AFyfX3Z7Zw45ZFWIvwnrZF18Jr1DJr4kGa45Xw1rGFZ8Cw4Y
-	yrsxtws3C3WUCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jopB-UUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8gHNRmnYlGF3rgAA3l
+References: <20260409-teaming-driver-internal-v7-0-f47e7589685d@google.com> <20260409-teaming-driver-internal-v7-5-f47e7589685d@google.com>
+In-Reply-To: <20260409-teaming-driver-internal-v7-5-f47e7589685d@google.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Thu, 9 Apr 2026 23:18:53 -0700
+X-Gm-Features: AQROBzBRPpJZPgQjpBAv368-aREu6smb9ZCYu5m57L8QwgeDzwSfvGQkv9qZv94
+Message-ID: <CAAVpQUBvXC9TfmZOSNc-+aBBQVxJMw9q48Hchgumrp5FK2g8+g@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 05/10] selftests: net: Add test for enablement
+ of ports with teamd
+To: Marc Harvey <marcharvey@google.com>
+Cc: Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On Wed, Apr 8, 2026 at 7:59=E2=80=AFPM Marc Harvey <marcharvey@google.com> =
+wrote:
+>
+> There are no tests that verify enablement and disablement of team driver
+> ports with teamd. This should work even with changes to the enablement
+> option, so it is important to test.
+>
+> This test sets up an active-backup network configuration across two
+> network namespaces, and tries to send traffic while changing which
+> link is the active one.
+>
+> Also increase the team test timeout to 300 seconds, because gracefully
+> killing teamd can take 30 seconds for each instance.
+>
+> Signed-off-by: Marc Harvey <marcharvey@google.com>
 
-Add selftests for verifying return values of fmod_ret.
-test_progs -t verifier_fmod_ret_return
-569/1   verifier_fmod_ret_return/fmod_task_alloc_1:OK
-569/2   verifier_fmod_ret_return/fmod_task_alloc_2:OK
-569/3   verifier_fmod_ret_return/fmod_ret_sys_open_1:OK
-569/4   verifier_fmod_ret_return/fmod_ret_sys_open_2:OK
-569/5   verifier_fmod_ret_return/fmod_ret_sys_open_3:OK
-569/6   verifier_fmod_ret_return/fmod_page_pool_alloc_netmems_1:OK
-569/7   verifier_fmod_ret_return/fmod_page_pool_alloc_netmems_2:OK
-569     verifier_fmod_ret_return:OK
-Summary: 1/7 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_fmod_ret_return.c      | 60 +++++++++++++++++++
- 2 files changed, 62 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 169cf7fbf40f..6e67f69d88fa 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -37,6 +37,7 @@
- #include "verifier_div0.skel.h"
- #include "verifier_div_mod_bounds.skel.h"
- #include "verifier_div_overflow.skel.h"
-+#include "verifier_fmod_ret_return.skel.h"
- #include "verifier_global_subprogs.skel.h"
- #include "verifier_global_ptr_args.skel.h"
- #include "verifier_gotol.skel.h"
-@@ -184,6 +185,7 @@ void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_direct_st
- void test_verifier_div0(void)                 { RUN(verifier_div0); }
- void test_verifier_div_mod_bounds(void)       { RUN(verifier_div_mod_bounds); }
- void test_verifier_div_overflow(void)         { RUN(verifier_div_overflow); }
-+void test_verifier_fmod_ret_return(void)      { RUN(verifier_fmod_ret_return); }
- void test_verifier_global_subprogs(void)      { RUN(verifier_global_subprogs); }
- void test_verifier_global_ptr_args(void)      { RUN(verifier_global_ptr_args); }
- void test_verifier_gotol(void)                { RUN(verifier_gotol); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c b/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-new file mode 100644
-index 000000000000..11d303b01c80
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+SEC("fmod_ret/security_task_alloc")
-+__success
-+int BPF_PROG(fmod_task_alloc_1)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/security_task_alloc")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [-4095, 0]")
-+int BPF_PROG(fmod_task_alloc_2)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=0 smax=0 should have been in [-4095, -1]")
-+int BPF_PROG(fmod_ret_sys_open_1)
-+{
-+	return 0;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [-4095, -1]")
-+int BPF_PROG(fmod_ret_sys_open_2)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__success
-+int BPF_PROG(fmod_ret_sys_open_3)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/page_pool_alloc_netmems")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [0, 0]")
-+int BPF_PROG(fmod_page_pool_alloc_netmems_1)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/page_pool_alloc_netmems")
-+__success
-+int BPF_PROG(fmod_page_pool_alloc_netmems_2)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
