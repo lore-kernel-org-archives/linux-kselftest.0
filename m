@@ -1,117 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624D235C183;
-	Fri, 10 Apr 2026 07:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E0323947BF
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 07:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775804426; cv=none; b=cg6NStrqrZyLe5/n/syvzmUoHThOKUHCGC2hIL4r6U7HZzEzHUAbF5x1+2DGkzjyGPrKFCLDoRuz8FOTJqYLwpGdcBsaNCdud6XQiX8WOmExhIT9jS8bqXkeCjFcsR9UVFIWnaCirA6qlA9Zj5ExnuaDfIdVn7X1PfehcMPOy4s=
+	t=1775805709; cv=none; b=IjH2VyPXnWicG6Nxcwq3DcmkME0L8bgUKsa0tj7FmfMddw4SOpfJ06qv3YeZ62MFurqL2p7hl82I42cFsUKgJPlYN7H1y8ICfi7uruT17/DMmXNQfhAU6s/FvJ1HlCWBqKBb/0FTi94jQxtymHxc7+EXZVz422ODoIPlG/2FPiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775804426; c=relaxed/simple;
-	bh=FYOED05A4FXTMvwtmbTUN4lSeCMdZLyjXVtRNchrCS4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=MWfH8BA64KX8/glDeO/EoBNKOAOlkTpjI96JEKYSntFKsBaaunFOqxzgKuXNNfMKeDdyovcGmmKmn6qfxngta0oY4nxORVY557mj57h8Ej19UkZCEr559njEdksk0PUEf48Y2ZhVx/pJaWq5lsWxPnSRc/f5YmiVatuXDb6ID3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VyzCwBUH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775805709; c=relaxed/simple;
+	bh=VftBf24PBfWIrHxnwDr0dFfIXqIx/etTeJIBb2TakN8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mDEXRxq0GX3/WnF2Z+Xao8hUdcPiqlJh0sZ2iwZO2XYAQk2yCnjqFmQaNHoYKhW5aHFXL3WuM8O0pbqeHtHSPI9WqICpx8/aA5X2J3mWBJz9ZtLPReDcGpW15xVX0Bu17WuPol1aHjy9jwb4FR39mKlodoJnpYpkBZb9Yr50hWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H6rQ4XTb; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VyzCwBUH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E39C19421;
-	Fri, 10 Apr 2026 07:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775804426;
-	bh=FYOED05A4FXTMvwtmbTUN4lSeCMdZLyjXVtRNchrCS4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=VyzCwBUHZcB2xXJzaUT7G23ULE8qfTLNikzouzE6oe5IQYiy61MvTo/LhNVPreMCW
-	 prbVCljZZM7sVQe+Gz6pbpowQsCzsXXA/6fnBm0KzQQ4KNiaCznmmPEoHHQc27w3/n
-	 zpo99n8p07dk5BMYENEihJYqs0qBHAsgOn13jwxho2ahd7FnQZGYnEA7EoAf2eGB7n
-	 WCaHJocImbjKlEJWnvGS98XUsazui3+kbyVtSyAl3giKTvhoPJ0a5wM3RTp+7ZRWv8
-	 50glDeGwjxdjvLkz85o2wrdutW/zPrSdr/PPbZf3HMBG2kqdeSsYYRimr03Yg1AmIk
-	 iEydLmWYpkqLw==
-Content-Type: multipart/mixed; boundary="===============2539386933282708395=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H6rQ4XTb"
+Message-ID: <4e8460e6-94f6-4741-8f6c-4526684e3e72@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775805696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=soK4u9YPNKIB2aySBIAtKAE6J1ghvqjCGkOqIr/83O8=;
+	b=H6rQ4XTb6pSzuAzd1bWguAhgbg+7AafAwsosWB1bHWZ4OfN7xJ5VEMDOu9VqmoEMzAWlbA
+	/bJXuxJYdxowvnyuB8XHiukRJdGUoMSgYEWCOJhQ5vDsKY1SGZDXJfhr3xCLyvoi1q6KfJ
+	RutaSJfhFQ7DUv4He9jL2qFTBTJ/n3s=
+Date: Fri, 10 Apr 2026 15:21:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <60e1c3bebe4eefa53d73bdfa1f016af7abedb294634614119aab1380b9d46eaa@mail.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in
+ kernel_clone() via BPF fmod_ret on security_task_alloc
+Content-Language: en-US
+To: Feng Yang <yangfeng59949@163.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+ mattbobrowski@google.com, jiayuan.chen@linux.dev
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260410061037.149532-1-yangfeng59949@163.com>
+ <20260410061037.149532-2-yangfeng59949@163.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
 In-Reply-To: <20260410061037.149532-2-yangfeng59949@163.com>
-References: <20260410061037.149532-2-yangfeng59949@163.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
-From: bot+bpf-ci@kernel.org
-To: yangfeng59949@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,mattbobrowski@google.com,jiayuan.chen@linux.dev
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 10 Apr 2026 07:00:25 +0000 (UTC)
-
---===============2539386933282708395==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 9c1135d373e2..37975e9a291c 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+On 10/4/26 14:10, Feng Yang wrote:
+> From: Feng Yang <yangfeng@kylinos.cn>
+> 
 
-[ ... ]
-
-> +/* hooks return 0 or 1 */
-> +BTF_SET_START(bool_security_hooks)
-> +BTF_ID(func, security_xfrm_state_pol_flow_match)
-> +BTF_ID(func, security_audit_rule_known)
-> +BTF_ID(func, security_inode_xattr_skipcap)
-> +BTF_SET_END(bool_security_hooks)
-
-There are two issues with this BTF set.
-
-First, security_inode_xattr_skipcap does not exist as a kernel function.
-The LSM hook inode_xattr_skipcap is only invoked via call_int_hook()
-inside security_inode_setxattr() and security_inode_removexattr().
-There is no standalone security_inode_xattr_skipcap() wrapper. The
-equivalent entry in bool_lsm_hooks in kernel/bpf/bpf_lsm.c correctly
-references bpf_lsm_inode_xattr_skipcap instead.
-
-Second, the v1 of this patch had #ifdef guards matching those in
-bool_lsm_hooks:
-
-    #ifdef CONFIG_SECURITY_NETWORK_XFRM
-    BTF_ID(func, security_xfrm_state_pol_flow_match)
-    #endif
-    #ifdef CONFIG_AUDIT
-    BTF_ID(func, security_audit_rule_known)
-    #endif
-
-These guards were dropped in v2. security_xfrm_state_pol_flow_match
-is defined under CONFIG_SECURITY_NETWORK_XFRM in security/security.c,
-and security_audit_rule_known is defined under CONFIG_AUDIT. Without
-the guards, BTF_IDs will be unresolvable when those configs are
-disabled.
+[...]
 
 > +
-> +/* Similar to bpf_lsm_get_retval_range,
-> + * ensure that the return values of fmod_ret are valid.
-> + */
+> +static int check_attach_sleepable(u32 btf_id, unsigned long addr, const char *func_name)
+> +{
+> +	/* fentry/fexit/fmod_ret progs can be sleepable if they are
+> +	 * attached to ALLOW_ERROR_INJECTION and are not in denylist.
+> +	 */
+> +	if (!check_non_sleepable_error_inject(btf_id) &&
+> +	    within_error_injection_list(addr))
+> +		return 0;
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int check_attach_modify_return(unsigned long addr, const char *func_name)
+> +{
+> +	if (within_error_injection_list(addr) ||
+> +	    !strncmp(SECURITY_PREFIX, func_name, sizeof(SECURITY_PREFIX) - 1))
+> +		return 0;
+> +
+> +	return -EINVAL;
+> +}
 
-This isn't a bug, but the BPF subsystem uses the kernel multi-line
-comment style where the opening /* goes on its own line:
+Why did you move them here? Seems that you didn't use them.
 
-    /*
-     * Similar to bpf_lsm_get_retval_range,
-     * ensure that the return values of fmod_ret are valid.
-     */
+> +
+> +static int modify_return_get_retval_range(const struct bpf_prog *prog,
+> +					  struct bpf_retval_range *retval_range)
 
-[ ... ]
+NIT: code format issue here.
 
-This commit appears to be a major bug fix addressing a kernel NULL
-pointer dereference but is missing a Fixes: tag. The bug was
-introduced when fmod_ret was first allowed on security_* functions
-without return value validation:
+Thanks,
+Leon
 
-    Fixes: 6ba43b761c41 ("bpf: Attachment verification for BPF_MODIFY_RETURN")
+> +{
+[...]
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24229694699
---===============2539386933282708395==--
