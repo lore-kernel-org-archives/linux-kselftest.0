@@ -1,202 +1,142 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD0B3D9DAA;
-	Fri, 10 Apr 2026 16:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775838492; cv=none; b=NLDFEwfIKHqeR9V1Akv8j6Kzi96+zoLP1WmE34G0huuChnukUp6csa3ro329yc04EnIpLsFeLnUBbsFqWeMdKC0Cxi7IsEdpyxoRTrLw5oHcfJBHddtLJ5Q8SOEdyRSBYzXxkBn5CeDY+KVUan6hDF04lTb1YmxbuRJTQ0X5C8g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775838492; c=relaxed/simple;
-	bh=0BxY+Sw0YozqmGULypSYTOf58lyVZZRNDj4glC4NcoY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=USKd35ddf/m2RVcXjJsE8UN7QtpKQ9AR4NCmvLYfONmZ/++xU5UtqiIau7n39UvdoUDvnKzIso00K/vgXjZmQvYCV7bL8Zl+sw3J8OnnpDrt/9hOMZmT/nRzuCcYv/jLbfws3HEfJM8dEf9o5BbmBBRgsFi8W7wSqPd0ezAQHTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=bVCxTGf5; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365C03E2765
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 18:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775844434; cv=pass; b=D+R4Nzxs5HUDMRLZutBAubZIEoOEq6Y2rkQsr7SZNYWZRWALqMXKbgzEoLrOTAUxypHho02AOv4BSX5T1V9218CGKkDWOJ65Cu1ou4S9oI8YOnVzM5TKEf55pdmhXnJlexxxSquzMJi/dTgtYaziBp8KOhcR3gHYjNT5ao2rPQ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775844434; c=relaxed/simple;
+	bh=m0SqRtjpc8fweCPgbIsrD2d0z6GAWlzdIRiS41O4cxg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DFR6r7v3cc+0Qw5SRqrW+bAz8JC8eb/Lk7eHCobaeeiQ64XkuPkjRlhfnK6WvhwIj2+9m4G8Sbm/TBUrtkA1BB6+apIKgwjQiLEdHDEAQ5DxIz+cF25iVl2uEjVjf8NAhi7rVF+/Uud952pjlBTHEa0Xrx4uP+1+MzZGbNO5GGM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQfCHLOo; arc=pass smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="bVCxTGf5"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=RXurTOWH4CFrJUg4tvINl7cUUFVNq2C4h3woo2AFtBo=; b=bVCxTGf5t6gYX60/RTl8bzPc5N
-	IlcQeKmrS24N6FdL9XGtzNBldXH8HDK5QodHfqm8l/qByWhiDJOp/touXdbFKb/YW2esUYT8BNbjd
-	+A+exII5dQCQD0i0i0wyfSwYPv8n0mlLU3FE49GpeiaTd0y7cyMiQNv6Nkn1IgzRDauB/dxX2LZ7w
-	ACFC43rgINnBArJ8tL0ZqJASmMkxq6h8TXLofAcvv/SCQ/PH0n1DdHZkuBSLxJUM+w7FVlkSZ0cFu
-	aL0azpdHcZG5AzA+64BB0TqD2u9r1GrbntXF6K7VWjJnX1DeBz0/JHe7Q3kVAQqs0PqcSoX2Ay8XE
-	MxiFqIjw==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wBEiG-000HnV-0p;
-	Fri, 10 Apr 2026 18:28:08 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wBEiE-000FfL-22;
-	Fri, 10 Apr 2026 18:28:06 +0200
-Message-ID: <f8782293-1ec5-474d-b288-e2546016869b@iogearbox.net>
-Date: Fri, 10 Apr 2026 18:28:06 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQfCHLOo"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b9bfcbaa81eso387487166b.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2026 11:07:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775844431; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BgiuTtCSpJ4ty38qy9XBRAb9gDpKc0PRrUvNzmTUUNVeO3yN45PKiu8YTWnb3xhT1F
+         oyhbtIq14LC6NxPs5lZqpj30SewvGrTSPFLv3kX6iamOj2yjsID7Rbw7vTtE5fzKUQp7
+         cwgwUHEa05xv2NSN9qg84KrV8FZvWgdghAFfZJk6bZDyX/y8hJGhVXqHXiJCk9vzXRRU
+         os9oDZm06iVHxpIG5yhbiKPcbnUTKUY2hJFA8H36OhvV4DKfTaun2XjC8G99MH3tQbO7
+         /iyZXH6+fdkoTNZR3uD0Ia8VSxsVZQEK6wXAWvWr/p3hUBJHw1crofYUvY+xfNzYhTV8
+         SOMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=mGufM7na8wMpN8zx+blIkzaxv+HrthUqBNiPXsfFPcU=;
+        fh=m3TV/qzWH+Ro4BigLQuIAE8c7xq0HtucYqN5mKyFwdg=;
+        b=aNd4KGSYeZChwQnCwGOcr1S0/XpxxbM9iC+FOIlOlX7pBq43OKyjKGFPiI15xz6QLL
+         rIL0og3tm6FZ33HcIwv+esuvOXqc++0b0QuN1J3g2jnKL2+PVkRHu/rwr/B+4FCFkFFO
+         cJ+W458ke2SoG/Smw+6eQS6hFCQgb3JsuutsngOg2vvMc1xhy8JHLk16r4YK06KjT4BP
+         BexWACGpZxlT7xqUw/foP+s/MZmV6Ae/rHgwCBR5xZm1Q/UecUHOJxMezknFy+JMGDKZ
+         V9AmGXasgE9QuPyyuxg+wOnaIRAwIDonK7UtPv2EOOxt8JFj7noF7YQ7+WmTosv+j0hm
+         Coag==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775844431; x=1776449231; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mGufM7na8wMpN8zx+blIkzaxv+HrthUqBNiPXsfFPcU=;
+        b=MQfCHLOo+qYEVvGmLEQmTa5Ni3SM5nsNXEX0fpNlC1dVrMvE9BEDj1b+6eYfLMx4CS
+         rZZuSg+ayDrdOXtIUGmhCzWY5wsjWVdPjBrzXRo1oUniFnOL9+rwWWC1ab0/ljBGCdOj
+         ytYxAYMLnRTKptcWh8YVOKldvNQokwbRfyGDcwF0bb9/sVp7YxJBl3uV6uni8Ms+iB+D
+         rRuEXhG06pO0VtZgURzb/P+5DA+exXexKxWLJrDhMZa/R6t7XuIU9UztZEWIXh74NFpb
+         GqCPc6PtwFFD7hqHuoudnKtL9zt3dSHZhQl9j287LFwDNHWAypuYb78jzgV2DSsd5Ekr
+         +xSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775844431; x=1776449231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mGufM7na8wMpN8zx+blIkzaxv+HrthUqBNiPXsfFPcU=;
+        b=NX4FCFr2GkNHx65J6lZyaFqR/SS+AZXFd3hp/b8rFXnyEDP1eDc6qcWFdfyAXj0qP2
+         hj2DFpgO4jCjTZ+wWx4O+HLWtF0bRU2KGB/yBUZ4PA19YsCRLJo/sKDuWmezYaU0SyD7
+         /qRaC1BzWe/a+EHBxdPlqhPiBmSF/QFvWIRpnl8j5SndMGj4xySRQCc6N1RiqBWk5/jv
+         Ti5V3XiUbW1bdsTjC/LC3iwCGrtncQLuUdtylDaexbOsDXyuXE5hmPcTKx2RY1SwKkLH
+         joI1iA6AsHvCObbwShP6b4/MmQP3ahU8ndBLto4UQ/I8EHkieSYGujVm6+5Kxm3vw4cm
+         BjOA==
+X-Forwarded-Encrypted: i=1; AJvYcCVvsYrSi32ExVsYLsoM1CcugW+asqy/T726/2QN+DAo5gBefnnUXUqmsp9njQB10+Y+9bcxgy4tOqyTaTSHX2c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFZiAxl8r5KCOJr5XzTupI6d+E1Hg16gF2W6hGTQGnzQ8RnME7
+	vVbif9dz/WPIwC51WMA/LJH0unshaOWNTUGKBib1mHHQ+ZuUqB8l2Wc7t2bJp7GXIcQiTHwX5VE
+	tWNkS3q08xXDqLx3y8tSooHLjPfMKsvQ=
+X-Gm-Gg: AeBDieuBZiuUfqzUsjBZwEo8pNISN4Ivx+o0n24q7P5LQi6gcYd+SJisQcjDlGjAD1F
+	uXX9LzY/+5+IRS6PVVa83Gi3HKy8mf5TCs2iNteEFCW1hEHbjaU7gsys0TCcm404zmgLLCAHIjL
+	AKtA1iB/fUqzBVdVimYGZZ8qUR3fLj0ThaLIZpkWetRgcA0RLc2WRlr98Rj4hg8EKkCe9Fg9+ql
+	L64UcXlD/JSFbpFsg+cjpaj4V6uiadv39zdPxAi2lRcmsL4SJE0rAPK/8PIr57RDQ/JpBeCVsKa
+	Fkq7dGo=
+X-Received: by 2002:a17:907:a1a0:b0:b9c:55e8:fba1 with SMTP id
+ a640c23a62f3a-b9d72980914mr205690366b.26.1775844431242; Fri, 10 Apr 2026
+ 11:07:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v6 2/2] selftests/bpf: add test for
- xdp_master_redirect with bond not up
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Jussi Maki <joamaki@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Nikolay Aleksandrov <razor@blackwall.org>
-References: <20260410113726.368111-1-jiayuan.chen@linux.dev>
- <20260410113726.368111-3-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260410113726.368111-3-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27967/Fri Apr 10 08:24:45 2026)
+References: <20260403150050.1235-1-royujjal@gmail.com> <20260403150050.1235-5-royujjal@gmail.com>
+ <20260407134502.GD849209@shredder>
+In-Reply-To: <20260407134502.GD849209@shredder>
+From: Ujjal Roy <royujjal@gmail.com>
+Date: Fri, 10 Apr 2026 23:36:59 +0530
+X-Gm-Features: AQROBzA5y--UIRYT_Yu32kHeVQkZCbum9kUmK0fpAAGLhqzgcbax6qOFdWZqhBQ
+Message-ID: <CAE2MWknjWczxM3WrKkQ0eHV7PdNxMQ62GnTAp6tCPToumZnE=Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 4/5] ipv6: mld: encode multicast exponential fields
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>, 
+	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/10/26 1:37 PM, Jiayuan Chen wrote:
-> Add a selftest that reproduces the null-ptr-deref in
-> bond_rr_gen_slave_id() when XDP redirect targets a bond device in
-> round-robin mode that was never brought up. The test verifies the fix
-> by ensuring no crash occurs.
-> 
-> Test setup:
-> - bond0: active-backup mode, UP, with native XDP (enables
->    bpf_master_redirect_enabled_key globally)
-> - bond1: round-robin mode, never UP
-> - veth1: slave of bond1, with generic XDP (XDP_TX)
-> - BPF_PROG_TEST_RUN with live frames triggers the redirect path
-> 
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+On Tue, Apr 7, 2026 at 7:15=E2=80=AFPM Ido Schimmel <idosch@nvidia.com> wro=
+te:
+>
+> On Fri, Apr 03, 2026 at 03:00:49PM +0000, Ujjal Roy wrote:
+> > In MLD, QQIC and MRC fields are not correctly encoded when
+> > generating query packets. Since the receiver of the query
+> > interprets these fields using the MLDv2 floating-point
+> > decoding logic, any value that exceeds the linear threshold
+> > is incorrectly parsed as an exponential value, leading to
+> > an incorrect interval calculation.
+> >
+> > Encode and assign the corresponding protocol fields during
+> > query generation. Introduce the logic to dynamically
+> > calculate the exponent and mantissa using bit-scan (fls).
+> > This ensures QQIC (8-bit) and MRC (16-bit) fields are
+> > properly encoded when transmitting query packets with
+> > intervals that exceed their respective linear thresholds
+> > (128 for QQI; 32768 for MRD).
+> >
+> > RFC3810: If QQIC >=3D 128, the QQIC field represents a
+> > floating-point value as follows:
+> >      0 1 2 3 4 5 6 7
+> >     +-+-+-+-+-+-+-+-+
+> >     |1| exp | mant  |
+> >     +-+-+-+-+-+-+-+-+
+> >
+> > RFC3810: If Maximum Response Code >=3D 32768, the Maximum
+> > Response Code field represents a floating-point value as
+> > follows:
+> >      0 1 2 3 4 5 6 7 8 9 A B C D E F
+> >     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+> >     |1| exp |          mant         |
+> >     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+> >
+> > Signed-off-by: Ujjal Roy <royujjal@gmail.com>
+>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
-I checked locally that this XDP test passes fine and triggers a NULL
-pointer deref without the fix.
-
-[...]
-> +	/* Attach generic XDP (XDP_TX) to veth1.
-> +	 * When packets arrive at veth1 via netif_receive_skb, do_xdp_generic()
-> +	 * runs this program. XDP_TX + bond slave triggers xdp_master_redirect().
-> +	 */
-> +	xdp_tx_fd = bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx);
-> +	if (!ASSERT_GE(xdp_tx_fd, 0, "xdp_tx prog_fd"))
-> +		goto out;
-
-nit: no need for the ASSERT_GE given the skeleton loaded, see also the various
-other tests gathering bpf_program__fd().
-
-> +	err = bpf_xdp_attach(veth1_ifindex, xdp_tx_fd,
-> +			     XDP_FLAGS_SKB_MODE, NULL);
-> +	if (!ASSERT_OK(err, "attach generic XDP to veth1"))
-> +		goto out;
-> +
-> +	/* Run BPF_PROG_TEST_RUN with XDP_PASS live frames on veth1.
-> +	 * XDP_PASS frames become SKBs with skb->dev = veth1, entering
-> +	 * netif_receive_skb -> do_xdp_generic -> xdp_master_redirect.
-> +	 * Without the fix, bond_rr_gen_slave_id() dereferences NULL
-> +	 * rr_tx_counter and crashes.
-> +	 */
-> +	xdp_pass_fd = bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
-> +	if (!ASSERT_GE(xdp_pass_fd, 0, "xdp_pass prog_fd"))
-> +		goto out;
-
-ditto, can be simplified a bit into:
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index 0d4ec1e5b401..c42488e445c2 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -506,7 +506,7 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
-  static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
-  {
-  	struct nstoken *nstoken = NULL;
--	int xdp_pass_fd, xdp_tx_fd;
-+	int xdp_pass_fd;
-  	int veth1_ifindex;
-  	int err;
-  	char pkt[ETH_HLEN + 1];
-@@ -555,11 +555,8 @@ static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
-  	 * When packets arrive at veth1 via netif_receive_skb, do_xdp_generic()
-  	 * runs this program. XDP_TX + bond slave triggers xdp_master_redirect().
-  	 */
--	xdp_tx_fd = bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx);
--	if (!ASSERT_GE(xdp_tx_fd, 0, "xdp_tx prog_fd"))
--		goto out;
--
--	err = bpf_xdp_attach(veth1_ifindex, xdp_tx_fd,
-+	err = bpf_xdp_attach(veth1_ifindex,
-+			     bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx),
-  			     XDP_FLAGS_SKB_MODE, NULL);
-  	if (!ASSERT_OK(err, "attach generic XDP to veth1"))
-  		goto out;
-@@ -571,8 +568,6 @@ static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
-  	 * rr_tx_counter and crashes.
-  	 */
-  	xdp_pass_fd = bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
--	if (!ASSERT_GE(xdp_pass_fd, 0, "xdp_pass prog_fd"))
--		goto out;
-  
-  	memset(pkt, 0, sizeof(pkt));
-  	ctx_in.data_end = sizeof(pkt);
-
+Do you mean to include "Reviewed-by:" tag into this commit message or
+the entire patchset? I will modify and send v4 once I get the reply.
