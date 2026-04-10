@@ -1,85 +1,117 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F9133B6FB;
-	Fri, 10 Apr 2026 06:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624D235C183;
+	Fri, 10 Apr 2026 07:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775803691; cv=none; b=Gd+37k8nVGHmVhpzKufKWNeMPhRW0pZf9F0FIBmz9UdwXu1MjjGVogXMt8jX6SAWfyBjxGCyCPbXBUorGaDVjfjl1FddpcZuDHHeWzjEgQbmdRDj6viJNZngKACDBpeOsrsMTgK9c44ErqmOwpg1QPa39CwomeJZ8Vs88dO6cyo=
+	t=1775804426; cv=none; b=cg6NStrqrZyLe5/n/syvzmUoHThOKUHCGC2hIL4r6U7HZzEzHUAbF5x1+2DGkzjyGPrKFCLDoRuz8FOTJqYLwpGdcBsaNCdud6XQiX8WOmExhIT9jS8bqXkeCjFcsR9UVFIWnaCirA6qlA9Zj5ExnuaDfIdVn7X1PfehcMPOy4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775803691; c=relaxed/simple;
-	bh=1h2YqNJo0GavyU4mracICOaQN+/Vkfdqcp7RITRrETs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LxtwiNjEXqIyKY5rIDYdKE2WTS1uHikJXlnh6QTPzFv8vvS1ncVxbqKtXy1PesE/mgf2NONSedfKv4lcNS0VmXoZikvTA9B2cOFTWf9OK8sTSJ7/XIEbQINKCspAMC9+jgCKECfRSeahzl0kuq6AhayoFKqBioaQPyRa2cG5Dgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 34b93e1c34a911f1aa26b74ffac11d73-20260410
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:60f23653-d9c4-49f3-bfa5-c9260a8e803f,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:20
-X-CID-META: VersionHash:e7bac3a,CLOUDID:d4b50ce756fe4d1c8db6dcc7ba6ba837,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|123|850|898,TC:nil,Content:0|15|50,E
-	DM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:
-	0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 34b93e1c34a911f1aa26b74ffac11d73-20260410
-X-User: fangqiurong@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <fangqiurong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 126916995; Fri, 10 Apr 2026 14:47:56 +0800
-From: fangqiurong@kylinos.cn
-To: tj@kernel.org,
-	void@manifault.com
-Cc: arighi@nvidia.com,
-	changwoo@igalia.com,
-	shuah@kernel.org,
-	christian.loehle@arm.com,
-	newton@meta.com,
-	sched-ext@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	fangqiurong <fangqiurong@kylinos.cn>
-Subject: [PATCH] selftests/sched_ext: Fix wrong DSQ ID in peek_dsq error message
-Date: Fri, 10 Apr 2026 14:47:53 +0800
-Message-Id: <20260410064753.469802-1-fangqiurong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1775804426; c=relaxed/simple;
+	bh=FYOED05A4FXTMvwtmbTUN4lSeCMdZLyjXVtRNchrCS4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MWfH8BA64KX8/glDeO/EoBNKOAOlkTpjI96JEKYSntFKsBaaunFOqxzgKuXNNfMKeDdyovcGmmKmn6qfxngta0oY4nxORVY557mj57h8Ej19UkZCEr559njEdksk0PUEf48Y2ZhVx/pJaWq5lsWxPnSRc/f5YmiVatuXDb6ID3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VyzCwBUH; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VyzCwBUH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E39C19421;
+	Fri, 10 Apr 2026 07:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775804426;
+	bh=FYOED05A4FXTMvwtmbTUN4lSeCMdZLyjXVtRNchrCS4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=VyzCwBUHZcB2xXJzaUT7G23ULE8qfTLNikzouzE6oe5IQYiy61MvTo/LhNVPreMCW
+	 prbVCljZZM7sVQe+Gz6pbpowQsCzsXXA/6fnBm0KzQQ4KNiaCznmmPEoHHQc27w3/n
+	 zpo99n8p07dk5BMYENEihJYqs0qBHAsgOn13jwxho2ahd7FnQZGYnEA7EoAf2eGB7n
+	 WCaHJocImbjKlEJWnvGS98XUsazui3+kbyVtSyAl3giKTvhoPJ0a5wM3RTp+7ZRWv8
+	 50glDeGwjxdjvLkz85o2wrdutW/zPrSdr/PPbZf3HMBG2kqdeSsYYRimr03Yg1AmIk
+	 iEydLmWYpkqLw==
+Content-Type: multipart/mixed; boundary="===============2539386933282708395=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <60e1c3bebe4eefa53d73bdfa1f016af7abedb294634614119aab1380b9d46eaa@mail.kernel.org>
+In-Reply-To: <20260410061037.149532-2-yangfeng59949@163.com>
+References: <20260410061037.149532-2-yangfeng59949@163.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
+From: bot+bpf-ci@kernel.org
+To: yangfeng59949@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,mattbobrowski@google.com,jiayuan.chen@linux.dev
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 10 Apr 2026 07:00:25 +0000 (UTC)
 
-From: fangqiurong <fangqiurong@kylinos.cn>
+--===============2539386933282708395==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The error path after scx_bpf_create_dsq(real_dsq_id, ...) was reporting
-test_dsq_id instead of real_dsq_id in the error message, which would
-mislead debugging.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 9c1135d373e2..37975e9a291c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-Signed-off-by: fangqiurong <fangqiurong@kylinos.cn>
+[ ... ]
+
+> +/* hooks return 0 or 1 */
+> +BTF_SET_START(bool_security_hooks)
+> +BTF_ID(func, security_xfrm_state_pol_flow_match)
+> +BTF_ID(func, security_audit_rule_known)
+> +BTF_ID(func, security_inode_xattr_skipcap)
+> +BTF_SET_END(bool_security_hooks)
+
+There are two issues with this BTF set.
+
+First, security_inode_xattr_skipcap does not exist as a kernel function.
+The LSM hook inode_xattr_skipcap is only invoked via call_int_hook()
+inside security_inode_setxattr() and security_inode_removexattr().
+There is no standalone security_inode_xattr_skipcap() wrapper. The
+equivalent entry in bool_lsm_hooks in kernel/bpf/bpf_lsm.c correctly
+references bpf_lsm_inode_xattr_skipcap instead.
+
+Second, the v1 of this patch had #ifdef guards matching those in
+bool_lsm_hooks:
+
+    #ifdef CONFIG_SECURITY_NETWORK_XFRM
+    BTF_ID(func, security_xfrm_state_pol_flow_match)
+    #endif
+    #ifdef CONFIG_AUDIT
+    BTF_ID(func, security_audit_rule_known)
+    #endif
+
+These guards were dropped in v2. security_xfrm_state_pol_flow_match
+is defined under CONFIG_SECURITY_NETWORK_XFRM in security/security.c,
+and security_audit_rule_known is defined under CONFIG_AUDIT. Without
+the guards, BTF_IDs will be unresolvable when those configs are
+disabled.
+
+> +
+> +/* Similar to bpf_lsm_get_retval_range,
+> + * ensure that the return values of fmod_ret are valid.
+> + */
+
+This isn't a bug, but the BPF subsystem uses the kernel multi-line
+comment style where the opening /* goes on its own line:
+
+    /*
+     * Similar to bpf_lsm_get_retval_range,
+     * ensure that the return values of fmod_ret are valid.
+     */
+
+[ ... ]
+
+This commit appears to be a major bug fix addressing a kernel NULL
+pointer dereference but is missing a Fixes: tag. The bug was
+introduced when fmod_ret was first allowed on security_* functions
+without return value validation:
+
+    Fixes: 6ba43b761c41 ("bpf: Attachment verification for BPF_MODIFY_RETURN")
+
+
 ---
- tools/testing/selftests/sched_ext/peek_dsq.bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/sched_ext/peek_dsq.bpf.c b/tools/testing/selftests/sched_ext/peek_dsq.bpf.c
-index 96e3a336a8a6..7f23fb17b1e0 100644
---- a/tools/testing/selftests/sched_ext/peek_dsq.bpf.c
-+++ b/tools/testing/selftests/sched_ext/peek_dsq.bpf.c
-@@ -197,7 +197,7 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(peek_dsq_init)
- 	}
- 	err = scx_bpf_create_dsq(real_dsq_id, -1);
- 	if (err) {
--		scx_bpf_error("Failed to create DSQ %d: %d", test_dsq_id, err);
-+		scx_bpf_error("Failed to create DSQ %d: %d", real_dsq_id, err);
- 		return err;
- 	}
- 
--- 
-2.25.1
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24229694699
+--===============2539386933282708395==--
