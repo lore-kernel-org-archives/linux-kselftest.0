@@ -1,173 +1,271 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8699A2D2488;
-	Sat, 11 Apr 2026 16:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BA43B52FE;
+	Sat, 11 Apr 2026 16:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775925445; cv=none; b=dG7JaedbUKg9DDqQbu2JL58DIqdmjuKeaC5dPMgxi91naMGZK85RkNl42c2JPrxUMwvDm/nzMK9bmeoWdExJfoIdVRlUkgZlglqRcZa7S6llldaGXRIPF8ROt1ph71iBeGPAk3OSYHEKGJt4CuZB9gHzmByjBuOONIub1aQda1M=
+	t=1775926167; cv=none; b=CMEah/9hbuduFaV7K88R4oe8uRje1/ynSoRNmVcoWi9hTwoNWOWbX1QTV/Dkv72ehxEAst6GnUIo+Tpnlrb0Xx1B8SpFhyVlCZap77ygGeQFQQCnvGMxRUJpftSALfmfoCwPANJwy3v4Yb7cvBi8DrpONBWPHJ58Ck3qSIzSGsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775925445; c=relaxed/simple;
-	bh=X6KfuU1xGAMoYDth3ML5cPjtN20UZbGau8wgaqzEGH4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=TZtJ2xdwo8rX68ugEeBJ30zX5arxNZKuVfDf98sxauSGP7BEK6A83hPwdTavwGLQNWga94Aot5cZoXcSj6c3urqAw5EW6ftiSQ5eISnqArfj5lW9DRMWHHVD2dQ4VKNyUIeYiqMBoDrXwtbKgmK3fLfjSuhgKhPcmsjKYfIeLd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=gzz5Cm8J; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1775926167; c=relaxed/simple;
+	bh=5MMsoFqD5g80oWL3EPeVaK1D9tYLBe4mG41HfqJTM+U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nq2Ij/4Vlxqqq5Jnp3TWbnO0G34azFydi23w7rtjpigeDKFjjD0DgQcPo0nNNzlVr6RxAPUQKua3wrC6CEo78Tj6/Y/My+OETBjyazUaMqJoXvOHLbS75rsJHhDlFcNbDuQBK1DojamCxnT7G+vgdprXDQIMozjiPZ7KvdpdxiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bUeTEcqQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="gzz5Cm8J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=imhm8Gy5iuzPJ6w
-	NyZl4KRJwqw5GT9O+YMrp7L7s8ig=; b=gzz5Cm8JqyFFf7Lgfkn83C2pErHkNCn
-	0uHkOgVL4sQ8EqCuuPhzV09f8YcBge9FqEhY9jCywkTOmnBpzJu0kKLLTkWR1rYT
-	Y3jxgkBKfoSmKFaN6dtdVKtg5lHXRte7QkiLb0tpBRINM+ka/zwFPnBgz9pEXsNX
-	XeN0RviRMyjo=
-Received: from yang-Virtual-Machine.mshome.net (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAn3n9ueNppX_iUEg--.31671S4;
-	Sun, 12 Apr 2026 00:36:02 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	mattbobrowski@google.com,
-	jiayuan.chen@linux.dev,
-	leon.hwang@linux.dev,
-	menglong.dong@linux.dev
-Cc: bpf@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bUeTEcqQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF304C4CEF7;
+	Sat, 11 Apr 2026 16:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775926166;
+	bh=5MMsoFqD5g80oWL3EPeVaK1D9tYLBe4mG41HfqJTM+U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bUeTEcqQYhjB/nccQee8TVX4gcAyZD+4AgpjxOItInkkJ63mVsYIT8RwzL8YDJ4Zb
+	 KPGSm/QNyqdCcsFcY3Q5420WhNMfamzeLmxKJMgCtcEFLnAQb7knPIyAGb4u7vrw0x
+	 Ce0wRgjl45RHasQq7YBsRvvto2y8A1dkrkpB3A/Np8t22iNs6M5cu0cJmQ6uOvxpIY
+	 lzvpCmaMC6bbkx5JKFTMOtsMcyOK3mEIzt0GJoHq6ua+U7Z0rMujTpqnypOuO7NfVm
+	 MCJIcGeUkBbEUA68QMqH2p+E+5GtIuZECXj3mS6DYo26GciAvkX82ZaXNlHFDIq1fF
+	 OGcNxR/+qAtKA==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Feng Yang <yangfeng@kylinos.cn>
-Subject: [PATCH v3 bpf-next 2/2] selftests/bpf: Add selftests for verifying return values of fmod_ret.
-Date: Sun, 12 Apr 2026 00:35:56 +0800
-Message-Id: <20260411163556.8567-3-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20260411163556.8567-1-yangfeng59949@163.com>
-References: <20260411163556.8567-1-yangfeng59949@163.com>
-X-CM-TRANSID:_____wAn3n9ueNppX_iUEg--.31671S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF13AFy8uFy5tw4kZryfCrg_yoWrXFy5pF
-	4v9r9ruF4vyw13GFn7uF43AFyfXanrZa1UZFWIvwn3ZF18Jw1DJr4kGa45Xw1rGFZ8Cw4Y
-	yrsxXws3C3WUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jhManUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RJLw2naeHLu1wAA3r
+	linux-mm@kvack.org
+Subject: [RFC PATCH v5.1 00/11] mm/damon: introduce DAMOS failed region quota charge ratio
+Date: Sat, 11 Apr 2026 09:48:53 -0700
+Message-ID: <20260411164908.77189-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-From: Feng Yang <yangfeng@kylinos.cn>
+TL; DR: Let users set different DAMOS quota charge ratios for DAMOS
+action failed regions, for deterministic and consistent DAMOS action
+progress.
 
-Add selftests for verifying return values of fmod_ret.
-test_progs -t verifier_fmod_ret_return
-569/1   verifier_fmod_ret_return/fmod_task_alloc_1:OK
-569/2   verifier_fmod_ret_return/fmod_task_alloc_2:OK
-569/3   verifier_fmod_ret_return/fmod_ret_sys_open_1:OK
-569/4   verifier_fmod_ret_return/fmod_ret_sys_open_2:OK
-569/5   verifier_fmod_ret_return/fmod_ret_sys_open_3:OK
-569/6   verifier_fmod_ret_return/fmod_page_pool_alloc_netmems_1:OK
-569/7   verifier_fmod_ret_return/fmod_page_pool_alloc_netmems_2:OK
-569     verifier_fmod_ret_return:OK
-Summary: 1/7 PASSED, 0 SKIPPED, 0 FAILED
+Common Reports: Unexpectedly Slow DAMOS
+=======================================
 
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_fmod_ret_return.c      | 59 +++++++++++++++++++
- 2 files changed, 61 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
+One common issue report that we get from DAMON users is that DAMOS
+action applying progress speed is sometimes much slower than expected.
+And one common root cause is that the DAMOS quota is exceeded by the
+action applying failed memory regions.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index a96b25ebff23..5a8d14e3980e 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -37,6 +37,7 @@
- #include "verifier_div0.skel.h"
- #include "verifier_div_mod_bounds.skel.h"
- #include "verifier_div_overflow.skel.h"
-+#include "verifier_fmod_ret_return.skel.h"
- #include "verifier_global_subprogs.skel.h"
- #include "verifier_global_ptr_args.skel.h"
- #include "verifier_gotol.skel.h"
-@@ -185,6 +186,7 @@ void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_direct_st
- void test_verifier_div0(void)                 { RUN(verifier_div0); }
- void test_verifier_div_mod_bounds(void)       { RUN(verifier_div_mod_bounds); }
- void test_verifier_div_overflow(void)         { RUN(verifier_div_overflow); }
-+void test_verifier_fmod_ret_return(void)      { RUN(verifier_fmod_ret_return); }
- void test_verifier_global_subprogs(void)      { RUN(verifier_global_subprogs); }
- void test_verifier_global_ptr_args(void)      { RUN(verifier_global_ptr_args); }
- void test_verifier_gotol(void)                { RUN(verifier_gotol); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c b/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-new file mode 100644
-index 000000000000..2c7daeaf0b69
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+SEC("fmod_ret/security_task_alloc")
-+__success
-+int BPF_PROG(fmod_task_alloc_1)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/security_task_alloc")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [-4095, 0]")
-+int BPF_PROG(fmod_task_alloc_2)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__success
-+int BPF_PROG(fmod_ret_sys_open_1)
-+{
-+	return 0;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [-4095, 0]")
-+int BPF_PROG(fmod_ret_sys_open_2)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__success
-+int BPF_PROG(fmod_ret_sys_open_3)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/page_pool_alloc_netmems")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [0, 0]")
-+int BPF_PROG(fmod_page_pool_alloc_netmems_1)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/page_pool_alloc_netmems")
-+__success
-+int BPF_PROG(fmod_page_pool_alloc_netmems_2)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+For example, a group of users tried to run DAMOS-based proactive memory
+reclamation (DAMON_RECLAIM) with 100 MiB per second DAMOS quota.  They
+ran it on a system having no active workload which means all memory of
+the system is cold.  The expectation was that the system will show 100
+MiB per second reclamation until (nearly) all memory is reclaimed. But
+what they found is that the speed is quite inconsistent and sometimes it
+becomes very slower than the expectation, sometimes even no reclamation
+at all for about tens of seconds.  The upper limit of the speed (100 MiB
+per second) was being kept as expected, though.
+
+By monitoring the qt_exceeds (number of DAMOS quota exceed events) DAMOS
+stat, we found DAMOS quota is always exceeded when the speed is slow. By
+monitoring sz_tried and sz_applied (the total amount of DAMOS action
+tried memory and succeeded memory) DAMOS stats together, we found the
+reclamation attempts nearly always failed when the speed is slow.
+
+DAMOS quota charges DAMOS action tried regions regardless of the
+successfulness of the try.  Hence in the example reported case, there
+was unreclaimable memory spread around the system memory.  Sometimes
+nearly 100 MiB of memory that DAMOS tried to reclaim in the given quota
+interval was reclaimable, and therefore showed nearly 100 MiB per second
+speed.  Sometimes nearly 99 MiB of memory that DAMOS was trying to
+reclaim in the given quota interval was unreclaimable, and therefore
+showing only about 1 MiB per second reclaim speed.
+
+We explained it is an expected behavior of the feature rather than a
+bug, as DAMOS quota is there for only the upper-limit of the speed.  The
+users agreed and later reported a huge win from the adoption of
+DAMON_RECLAIM on their products.
+
+It is Not a Bug but a Feature; But...
+=====================================
+
+So nothing is broken.  DAMOS quota is working as intended, as the upper
+limit of the speed.  It also provides its behavior observability via
+DAMOS stat.  In the real world production environment that runs long
+term active workloads and matters stability, the speed sometimes being
+slow is not a real problem.
+
+But, the non-deterministic behavior is sometimes annoying, especially in
+lab environments.  Even in a realistic production environment, when
+there is a huge amount of DAMOS action unapplicable memory, the speed
+could be problematically slow.  Let's suppose a virtual machines
+provider that setup 99% of the host memory as hugetlb pages that cannot
+be reclaimed, to give it to virtual machines.  Also, when aim-oriented
+DAMOS auto-tuning is applied, this could also make the internal feedback
+loop confused.
+
+The intention of the current behavior was that trying DAMOS action to
+regions would anyway impose some overhead, and therefore somehow be
+charged.  But in the real world, the overhead for failed action is much
+lighter than successful action.  Charging those at the same ratio may be
+unfair, or at least suboptimum in some environments.
+
+DAMOS Action Failed Region Quota Charge Ratio
+=============================================
+
+Let users set the charge ratio for the action-failed memory, for more
+optimal and deterministic use of DAMOS.  It allows users to specify the
+numerator and the denominator of the ratio for flexible setup.  For
+example, let's suppose the numerator and the denominator are set to 1
+and 4,096, respectively.  The ratio is 1 / 4,096.  A DAMOS scheme action
+is applied to 5 GiB memory.  For 1 GiB of the memory, the action is
+succeeded.  For the rest (4 GiB), the action is failed.  Then, only 1
+GiB and 1 MiB quota is charged.
+
+The optimal charge ratio will depend on the use case and
+system/workload.  I'd recommend starting from setting the nominator as 1
+and the denominator as PAGE_SIZE and tune based on the results, because
+many DAMOS actions are applied at page level.
+
+Tests
+=====
+
+I tested this feature in the steps below.
+
+1. Allocate 50% of system memory and mlock() it using a test program.
+2. Fill up the page cache to exhaust nearly all free memory.
+3. Start DAMON-based proactive reclamation with 100 MiB/second DAMOS
+   hard-quota.  Auto-tune the DAMOS soft-quota under the hard-quota for
+   achieving 40% free memory of the system with 'temporal' tuner.
+
+For step 1, I run a simple C program that is written by Gemini.  It is
+quite straightforward, so I'm not sharing the code here.
+
+For step 2, I use dd command like below:
+
+   dd if=/dev/zero of=foo bs=1M count=$50_percent_of_system_memory
+
+For step 3, I use the latest version of DAMON user-space tool (damo)
+like below.
+
+    sudo damo start --damos_action pageout \
+            ` # Do the pageout only up to 100 MiB per second ` \
+            --damos_quota_space 100M --damos_quota_interval 1s \
+            ` # Auto-tune the quota below the hard quota aiming` \
+            ` # 40% free memory of the node 0 ` \
+            ` # (entire node of the test system)` \
+            --damos_quota_goal node_mem_free_bp 40% 0 \
+            ` # use temporal tuner, which is easy to understnd ` \
+            --damos_quota_goal_tuner temporal
+
+As expected, the progress of the reclamation is not consistent, because
+the quota is exceeded for the failed reclamation of the unreclaimable
+memory.
+
+I do this again, but with the failed region charge ratio feature.  For
+this, the above 'damo' command is used, after appending command line
+option for setup of the charge ratio like below.  Note that the option
+was added to 'damo' after v3.1.9.
+
+    sudo ./damo start --damos_action pageout \
+            [...]
+            ` # quota-charge only 1/4096 for pageout-failed regions ` \
+            --damos_quota_fail_charge_ratio 1 4096
+
+The progress of the reclamation was nearly 100 MiB per second until the
+goal was achieved, meeting the expectation.
+
+Patches Sequence
+================
+
+The first two patches make preparational changes.  Patch 1 updates fully
+charged quota check to handle <min_region_sz remaining quota, which will
+be able to exist after this series is applied.  Patch 2 merges regions
+after applying schemes is done as long as it is ok to do, since regions
+split operations for quota could happen much more frequently under a
+corner case that this series will make available.
+
+Patch 3 implements the feature and exposes it via DAMON core API.  Patch
+4 implements DAMON sysfs ABI for the feature.  Three following patches
+(5-7) document the feature and ABI on design, usage, and ABI documents,
+respectively.  Four patches for testing of the new feature follow.
+Patch 8 implements a kunit test for the feature.  Patches 9 and 10
+extend DAMON selftest helpers for DAMON sysfs control and internal state
+dumping for adding a new selftest for the feature.  Patch 11 extends
+existing DAMON sysfs interface selftest to test the new feature using
+the extended helper scripts.
+
+Changelog
+=========
+
+Changes from RFC v5
+(https://lore.kernel.org/20260410142034.83798-1-sj@kernel.org)
+- Merge back: merge whatever if it doesn't lose monitoring infomration
+  and not violating min_nr_regions.
+Changes from RFC v4
+(https://lore.kernel.org/20260409142148.60652-1-sj@kernel.org)
+- Fix quota-sliced region merge-back issues.
+  - Use damon_for_each_region() instead of damon_for_each_region_safe().
+  - Avoid merging back of sliced but scheme unapplied regions, to keep
+    the monitoring information.
+Changes from RFC v3
+(https://lore.kernel.org/20260407010536.83603-1-sj@kernel.org)
+- Make damos_quota_is_full() safe from overflow and easier to read.
+- Avoid quota-based region split making too many new regions.
+Changes from RFC v2
+(https://lore.kernel.org/20260405151232.102690-1-sj@kernel.org)
+- Handle <min_region_sz remaining quota.
+- Document zero denum behavior.
+- Fix typos: s/selftets/selftests/
+Changes from RFC v1
+(https://lore.kernel.org/20260404163943.89278-1-sj@kernel.org)
+- Avoid overflows in charge amount calculation.
+- Fix/wordsmith documentation for grammar, typo, and wrong examples.
+- Improve unit test for more consistent comparison source use.
+
+SeongJae Park (11):
+  mm/damon/core: handle <min_region_sz remaining quota as empty
+  mm/damon/core: merge regions after applying DAMOS schemes
+  mm/damon/core: introduce failed region quota charge ratio
+  mm/damon/sysfs-schemes: implement fail_charge_{num,denom} files
+  Docs/mm/damon/design: document fail_charge_{num,denom}
+  Docs/admin-guide/mm/damon/usage: document fail_charge_{num,denom}
+    files
+  Docs/ABI/damon: document fail_charge_{num,denom}
+  mm/damon/tests/core-kunit: test fail_charge_{num,denom} committing
+  selftests/damon/_damon_sysfs: support failed region quota charge ratio
+  selftests/damon/drgn_dump_damon_status: support failed region quota
+    charge ratio
+  selftests/damon/sysfs.py: test failed region quota charge ratio
+
+ .../ABI/testing/sysfs-kernel-mm-damon         | 12 +++
+ Documentation/admin-guide/mm/damon/usage.rst  | 18 ++++-
+ Documentation/mm/damon/design.rst             | 22 +++++
+ include/linux/damon.h                         |  9 +++
+ mm/damon/core.c                               | 80 ++++++++++++++++---
+ mm/damon/sysfs-schemes.c                      | 54 +++++++++++++
+ mm/damon/tests/core-kunit.h                   |  6 ++
+ tools/testing/selftests/damon/_damon_sysfs.py | 21 ++++-
+ .../selftests/damon/drgn_dump_damon_status.py |  2 +
+ tools/testing/selftests/damon/sysfs.py        |  6 ++
+ 10 files changed, 213 insertions(+), 17 deletions(-)
+
+
+base-commit: 45df8a80cb5d9b548f8586bf6dee79b6c77c3703
 -- 
-2.43.0
-
+2.47.3
