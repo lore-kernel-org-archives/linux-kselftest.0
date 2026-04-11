@@ -1,70 +1,167 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C501D5CE0;
-	Sat, 11 Apr 2026 00:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2ED186284
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Apr 2026 00:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775867639; cv=none; b=JcNi2dqAriCbr351z2TccJ5yzOZJXa/8/C2njrACYA1lJBcUEyZlqiBIJQUDgN3By3Nc1R60/yIrw9v3Y+xB1QcphhNJ56PngsgadF5tWk3oII3qzUmw/1Q6Z3TClXTGiwFIqe8CTpeD6MzlvJz4+15MPWbsd89i6Gj7Cts4j6Q=
+	t=1775868734; cv=none; b=poKlCmcSgB5sOgtFpHGalVUq2NeNXYs9XAZ8hWohLMXn8PwcRx5Yk0SZhPULVPUAVrD+MUd+PwMLhTzwIkP7XA2dU3ltHdshUK5dH5VsFAZDaOmINFJnxxyGn3uDmdxOsj6vV5fts18AJSLoAGuOQpqZDxTRVcnLurvK64eOzQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775867639; c=relaxed/simple;
-	bh=hZmYgx6N35U1PNa5aPxvldJ8w84iPx4xEepXwqPiJyc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-Id:
-	 Content-Type:MIME-Version; b=DsDb8++sBA1m+TEdRiz0MnregLVRo9x0BX20m9JGFz00+aIhA/2hxZpO0HO6pYHROgwHw9MBJwxDc/R+n2p2iumWa5gW2z6b3pDcqZsRZK2VA+WHhOJYQYSkZ/8MMnGh7UMf2FMQx2PzzMom/Ow2D+RybCFCxGgFJGKgQCDqwSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ccFpTkYf; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1775868734; c=relaxed/simple;
+	bh=G4RWmcYL+5NqK+i/tAB+tgwa0aa5TIvET8w5CtHz1io=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UzGKpA2pH7UhPTUChaUL67q+lEInIyI2VljGysZbiSJOtncWoWxHYG7k0m5guWl80ypdoR+RbRxMiCGQakWTGfy+3liAZeJ+X1Q4m6I79KkMO8DkVzVzanF1oH4lK4xiqgpkiUnjmWOWYkPLSKZ17lXhRjJ1Bl/ynQpeoy1LHcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GTXt9UX0; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ccFpTkYf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:Content-Type:
-	MIME-Version; bh=aCJgJEXOOYWHgY+vNytWHl/rzVHq7HwxBHOyVe82DmA=;
-	b=ccFpTkYf+NNEQqqas0+ovyu7moloK5CuGGhRQHcI5Pe7SmjZSFJHxpUKv3CPcq
-	GIhvygyWa8hE1qVKt2BWo3IDL29h7s5udpi6UcQ8/VNvm76fzJ4xYqQB8hW8Uf5N
-	IQ35PSh/9HZUexhR1JNVIJ3jRPjOZqcD9Vuv7hSE6CIXw=
-Received: from 229.199.16.172.in-addr.arpa (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wBnU9vVltlpBLjTEQ--.50831S2;
-	Sat, 11 Apr 2026 08:33:30 +0800 (CST)
-From: Cao Ruichuang <create0818@163.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
- Bobby Eshleman <bobby.eshleman@bytedance.com>, virtualization@lists.linux.dev,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH v3] selftests: vsock: avoid races creating Unix socket paths
-In-Reply-To: <20260410134733.1c10a183@kernel.org>
-References: <177581562073.13887.468247298173578281@163.com>
- <20260410134733.1c10a183@kernel.org>
-Date: Sat, 11 Apr 2026 08:33:25 +0800
-Message-Id: <177586760504.23328.14397180554353198920@163.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GTXt9UX0"
+Message-ID: <dc734e36-e2e4-4932-aa6d-c9bb72eed64f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775868720;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AKXM337EXHBBU2sSAwCoGOaqesVN/KfvuTy8OnCKCBA=;
+	b=GTXt9UX076jfl2qV7Nrgw8KQ++HremIy+lcBr4eGdIP+sBxKbgkzJxi4TssacbLj9tFhiu
+	JR2phR0qsi2bhcj9vkxpkvZqfN4kSRmtGT6cJwiRQoWn6ArneltaY2MjSfmepR7VkCwir+
+	A3yWrtDoCvgRnNuYAthj5jg7aeMZFfw=
+Date: Sat, 11 Apr 2026 08:51:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:_____wBnU9vVltlpBLjTEQ--.50831S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUUPfHDUUUU
-X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbC5xqs5WnZltqNFwAA3S
+Subject: Re: [PATCH net v6 2/2] selftests/bpf: add test for
+ xdp_master_redirect with bond not up
+To: Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Jussi Maki <joamaki@gmail.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Nikolay Aleksandrov <razor@blackwall.org>
+References: <20260410113726.368111-1-jiayuan.chen@linux.dev>
+ <20260410113726.368111-3-jiayuan.chen@linux.dev>
+ <f8782293-1ec5-474d-b288-e2546016869b@iogearbox.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <f8782293-1ec5-474d-b288-e2546016869b@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Jakub,
 
-Thanks for the correction.
+On 4/11/26 12:28 AM, Daniel Borkmann wrote:
+> On 4/10/26 1:37 PM, Jiayuan Chen wrote:
+>> Add a selftest that reproduces the null-ptr-deref in
+>> bond_rr_gen_slave_id() when XDP redirect targets a bond device in
+>> round-robin mode that was never brought up. The test verifies the fix
+>> by ensuring no crash occurs.
+>>
+>> Test setup:
+>> - bond0: active-backup mode, UP, with native XDP (enables
+>>    bpf_master_redirect_enabled_key globally)
+>> - bond1: round-robin mode, never UP
+>> - veth1: slave of bond1, with generic XDP (XDP_TX)
+>> - BPF_PROG_TEST_RUN with live frames triggers the redirect path
+>>
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>
+> I checked locally that this XDP test passes fine and triggers a NULL
+> pointer deref without the fix.
+>
+> [...]
+>> +    /* Attach generic XDP (XDP_TX) to veth1.
+>> +     * When packets arrive at veth1 via netif_receive_skb, 
+>> do_xdp_generic()
+>> +     * runs this program. XDP_TX + bond slave triggers 
+>> xdp_master_redirect().
+>> +     */
+>> +    xdp_tx_fd = bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx);
+>> +    if (!ASSERT_GE(xdp_tx_fd, 0, "xdp_tx prog_fd"))
+>> +        goto out;
+>
+> nit: no need for the ASSERT_GE given the skeleton loaded, see also the 
+> various
+> other tests gathering bpf_program__fd().
+>
+>> +    err = bpf_xdp_attach(veth1_ifindex, xdp_tx_fd,
+>> +                 XDP_FLAGS_SKB_MODE, NULL);
+>> +    if (!ASSERT_OK(err, "attach generic XDP to veth1"))
+>> +        goto out;
+>> +
+>> +    /* Run BPF_PROG_TEST_RUN with XDP_PASS live frames on veth1.
+>> +     * XDP_PASS frames become SKBs with skb->dev = veth1, entering
+>> +     * netif_receive_skb -> do_xdp_generic -> xdp_master_redirect.
+>> +     * Without the fix, bond_rr_gen_slave_id() dereferences NULL
+>> +     * rr_tx_counter and crashes.
+>> +     */
+>> +    xdp_pass_fd = 
+>> bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
+>> +    if (!ASSERT_GE(xdp_pass_fd, 0, "xdp_pass prog_fd"))
+>> +        goto out;
+>
+> ditto, can be simplified a bit into:
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c 
+> b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+> index 0d4ec1e5b401..c42488e445c2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+> @@ -506,7 +506,7 @@ static void test_xdp_bonding_nested(struct 
+> skeletons *skeletons)
+>  static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
+>  {
+>      struct nstoken *nstoken = NULL;
+> -    int xdp_pass_fd, xdp_tx_fd;
+> +    int xdp_pass_fd;
+>      int veth1_ifindex;
+>      int err;
+>      char pkt[ETH_HLEN + 1];
+> @@ -555,11 +555,8 @@ static void 
+> test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
+>       * When packets arrive at veth1 via netif_receive_skb, 
+> do_xdp_generic()
+>       * runs this program. XDP_TX + bond slave triggers 
+> xdp_master_redirect().
+>       */
+> -    xdp_tx_fd = bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx);
+> -    if (!ASSERT_GE(xdp_tx_fd, 0, "xdp_tx prog_fd"))
+> -        goto out;
+> -
+> -    err = bpf_xdp_attach(veth1_ifindex, xdp_tx_fd,
+> +    err = bpf_xdp_attach(veth1_ifindex,
+> + bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx),
+>                   XDP_FLAGS_SKB_MODE, NULL);
+>      if (!ASSERT_OK(err, "attach generic XDP to veth1"))
+>          goto out;
+> @@ -571,8 +568,6 @@ static void test_xdp_bonding_redirect_no_up(struct 
+> skeletons *skeletons)
+>       * rr_tx_counter and crashes.
+>       */
+>      xdp_pass_fd = 
+> bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
+> -    if (!ASSERT_GE(xdp_pass_fd, 0, "xdp_pass prog_fd"))
+> -        goto out;
+>
+>      memset(pkt, 0, sizeof(pkt));
+>      ctx_in.data_end = sizeof(pkt);
+>
+Hi daniel
 
-No, I do not have a concrete failure reproducer for this one.  My change
-was based on the mktemp -u TOCTOU window in the selftest setup rather than
-on a demonstrated flaky failure.
+Thanks for the review and for verifying the crash reproduces without the 
+fix.
 
-Given that, I agree this is not strong enough to keep reposting on the
-netdev side.  I will stop here unless I can come back with a real repro.
+I've applied your suggestion.
 
-I will also follow the netdev posting rules you mentioned for future
-updates.
-
-Thanks,
-Cao Ruichuang
 
