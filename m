@@ -1,215 +1,193 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243752ED17B
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 Apr 2026 00:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CED18050
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Apr 2026 01:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775869004; cv=none; b=J0QC2OsX2N7A/j/dqTAjmO8KPr1Neuqp1zdz2s8WHcRdjthIRlQEmKilXdatuNSO0v58FHA76dBIL6cDVfeMJoD2+0JiV+fGYWlwdziQV1R4KCu2f/EpQM/e03Z3tGRbT6LMVYZ/4KAc5OtoV+ovlXrs9F8vLo47Mvvq2v9B3/A=
+	t=1775871163; cv=none; b=YMpfht4DwwZsZLC10H2DIDE+N6ickmXLzy9P5muxx7E4rMA8LuNDVKoUxlZD88fD3oKtvFjDv2TPu1dc/KowbEcYQ9nVEb9GdmTrS2X/ASr2OQ0NRDbHIVi5eWMXVORjmaGhjsec0wcHLHdHR07NSIkS8xzGs/BUfEpyf4PLzAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775869004; c=relaxed/simple;
-	bh=8ZDBuOgAb7Yvy7Ji95FRE4DmOX5JC37cgc6+cXW5FlM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V1ls8HXd7k9IrbEBXFBmMzAz4aA9RSXNhZKqCtm2tKwudajgcP1MZ4r1fyNZCCGL2Gh0ykwcT4+MHDV3vNPh7VJsdtYrTydSYWyln7kTKraLp4nJNoc4OOCw3QbVut+WH+o9CdZOEzXcjpk+08APRk2BuhG+T6UzWnYDvbxrd5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SLlS/w6K; arc=none smtp.client-ip=95.215.58.177
+	s=arc-20240116; t=1775871163; c=relaxed/simple;
+	bh=wJBoOnYjhw+pUBicokDxqfaJkrZTKbpeqNHlpSLQoA0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LrAoozHnOITEFdwTmtQSQs8uIfk2ZAFsJPgX5mvXUAdqADv9vglyE/E6ovZCSbq+Lu33jRyy8fv1vqCU6H7pYqZaJ5Zc71HbNJ2ozpKCl7rUmL2sblvZm4mPH9q989n2Klqpt6wPrmOaUcCV9+LwOT9hHOmJgPg+kU2m7/yvtUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XzHgE1xl; arc=none smtp.client-ip=95.215.58.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SLlS/w6K"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XzHgE1xl"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775869000;
+	t=1775871158;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Sx2uZHVybOUbrra5A6/iF1JmF9ERFv4l98CtdtdXV1o=;
-	b=SLlS/w6KFwsRI1cIOniljNpNJlPge2DH5rYaLk4d5HhgqaajX/8K9+VpSqAb62+8H+0nt+
-	A44bixnTVomMffcyeJDZFe7YtVmBuA5UvPdBge7mOqOv7wn7sbI0VT+qCyWW5c3oAwmp6v
-	TVIhJt7JkR1OVWk1+vZC1q1JV6OoY78=
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=E79Q5CkAVpFseZarzsSAQtNJelU2PgVkwbeuT/mWF94=;
+	b=XzHgE1xl12TudtuCmASy/U7V6lglBs/QQk2o74v1gvkitxUrlSbtnqnPlOXR5QDrwcsH1+
+	U0OuPzkBk1aXr4e1YD8Vy9+AXvYMzvcBkspJrkDMY7FmtrVdfUQ9EFtX91uyhoXDNRhLsg
+	+kgk9/cRslRssLpldtLrgW3dWNlIBWA=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: netdev@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Jussi Maki <joamaki@gmail.com>,
-	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v7 2/2] selftests/bpf: add test for xdp_master_redirect with bond not up
-Date: Sat, 11 Apr 2026 08:55:20 +0800
-Message-ID: <20260411005524.201200-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260411005524.201200-1-jiayuan.chen@linux.dev>
-References: <20260411005524.201200-1-jiayuan.chen@linux.dev>
+Subject: [PATCH net-next v2 1/2] net: add missing syncookie statistics for BPF custom syncookies
+Date: Sat, 11 Apr 2026 09:32:04 +0800
+Message-ID: <20260411013211.225834-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add a selftest that reproduces the null-ptr-deref in
-bond_rr_gen_slave_id() when XDP redirect targets a bond device in
-round-robin mode that was never brought up. The test verifies the fix
-by ensuring no crash occurs.
+1. Replace IS_ENABLED(CONFIG_BPF) with CONFIG_BPF_SYSCALL for
+   cookie_bpf_ok() and cookie_bpf_check(). CONFIG_BPF is selected by
+   CONFIG_NET unconditionally, so IS_ENABLED(CONFIG_BPF) is always
+   true and provides no real guard. CONFIG_BPF_SYSCALL is the correct
+   config for BPF program functionality.
 
-Test setup:
-- bond0: active-backup mode, UP, with native XDP (enables
-  bpf_master_redirect_enabled_key globally)
-- bond1: round-robin mode, never UP
-- veth1: slave of bond1, with generic XDP (XDP_TX)
-- BPF_PROG_TEST_RUN with live frames triggers the redirect path
+2. Remove the CONFIG_BPF_SYSCALL guard around struct bpf_tcp_req_attrs.
+   This struct is referenced by bpf_sk_assign_tcp_reqsk() in
+   net/core/filter.c which is compiled unconditionally, so wrapping
+   the definition in a config guard could cause build failures when
+   CONFIG_BPF_SYSCALL=n.
+
+3. Fix mismatched declaration of cookie_bpf_check() between the
+   CONFIG_BPF_SYSCALL and stub paths: the real definition takes
+   'struct net *net' but the declaration in the header did not.
+   Add the net parameter to the declaration and all call sites.
+
+4. Add missing LINUX_MIB_SYNCOOKIESRECV and LINUX_MIB_SYNCOOKIESFAILED
+   statistics in cookie_bpf_check(), so that BPF custom syncookie
+   validation is accounted for in SNMP counters just like the
+   non-BPF path.
+
+Compile-tested with CONFIG_BPF_SYSCALL=y and CONFIG_BPF_SYSCALL
+not set.
 
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- .../selftests/bpf/prog_tests/xdp_bonding.c    | 96 ++++++++++++++++++-
- 1 file changed, 94 insertions(+), 2 deletions(-)
+No functional bug here — CONFIG_BPF is always enabled under
+CONFIG_NET, so the existing code compiles and works correctly.
+This is a cleanup and improvement, no backport needed.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index e8ea26464349..c42488e445c2 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -191,13 +191,18 @@ static int bonding_setup(struct skeletons *skeletons, int mode, int xmit_policy,
- 	return -1;
+Added a selftest, suggested by Kuniyuki Iwashima.
+---
+ include/net/tcp.h     |  7 +++----
+ net/ipv4/syncookies.c | 10 +++++++---
+ net/ipv6/syncookies.c |  2 +-
+ 3 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 6156d1d068e1..570a8836c2ba 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -598,7 +598,6 @@ struct request_sock *cookie_tcp_reqsk_alloc(const struct request_sock_ops *ops,
+ 					    struct tcp_options_received *tcp_opt,
+ 					    int mss, u32 tsoff);
+ 
+-#if IS_ENABLED(CONFIG_BPF)
+ struct bpf_tcp_req_attrs {
+ 	u32 rcv_tsval;
+ 	u32 rcv_tsecr;
+@@ -612,7 +611,6 @@ struct bpf_tcp_req_attrs {
+ 	u8 usec_ts_ok;
+ 	u8 reserved[3];
+ };
+-#endif
+ 
+ #ifdef CONFIG_SYN_COOKIES
+ 
+@@ -715,13 +713,14 @@ static inline bool cookie_ecn_ok(const struct net *net, const struct dst_entry *
+ 		dst_feature(dst, RTAX_FEATURE_ECN);
  }
  
--static void bonding_cleanup(struct skeletons *skeletons)
-+static void link_cleanup(struct skeletons *skeletons)
+-#if IS_ENABLED(CONFIG_BPF)
++#ifdef CONFIG_BPF_SYSCALL
+ static inline bool cookie_bpf_ok(struct sk_buff *skb)
  {
--	restore_root_netns();
- 	while (skeletons->nlinks) {
- 		skeletons->nlinks--;
- 		bpf_link__destroy(skeletons->links[skeletons->nlinks]);
+ 	return skb->sk;
+ }
+ 
+-struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *skb);
++struct request_sock *cookie_bpf_check(struct net *net, struct sock *sk,
++				      struct sk_buff *skb);
+ #else
+ static inline bool cookie_bpf_ok(struct sk_buff *skb)
+ {
+diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+index f1474598d2c8..d685631438cb 100644
+--- a/net/ipv4/syncookies.c
++++ b/net/ipv4/syncookies.c
+@@ -295,8 +295,9 @@ static int cookie_tcp_reqsk_init(struct sock *sk, struct sk_buff *skb,
+ 	return 0;
+ }
+ 
+-#if IS_ENABLED(CONFIG_BPF)
+-struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *skb)
++#ifdef CONFIG_BPF_SYSCALL
++struct request_sock *cookie_bpf_check(struct net *net, struct sock *sk,
++				      struct sk_buff *skb)
+ {
+ 	struct request_sock *req = inet_reqsk(skb->sk);
+ 
+@@ -306,6 +307,9 @@ struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *skb)
+ 	if (cookie_tcp_reqsk_init(sk, skb, req)) {
+ 		reqsk_free(req);
+ 		req = NULL;
++		__NET_INC_STATS(net, LINUX_MIB_SYNCOOKIESFAILED);
++	} else {
++		__NET_INC_STATS(net, LINUX_MIB_SYNCOOKIESRECV);
  	}
-+}
-+
-+static void bonding_cleanup(struct skeletons *skeletons)
-+{
-+	restore_root_netns();
-+	link_cleanup(skeletons);
- 	ASSERT_OK(system("ip link delete bond1"), "delete bond1");
- 	ASSERT_OK(system("ip link delete veth1_1"), "delete veth1_1");
- 	ASSERT_OK(system("ip link delete veth1_2"), "delete veth1_2");
-@@ -493,6 +498,90 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
- 	system("ip link del bond_nest2");
- }
  
-+/*
-+ * Test that XDP redirect via xdp_master_redirect() does not crash when
-+ * the bond master device is not up. When bond is in round-robin mode but
-+ * never opened, rr_tx_counter is NULL.
-+ */
-+static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
-+{
-+	struct nstoken *nstoken = NULL;
-+	int xdp_pass_fd;
-+	int veth1_ifindex;
-+	int err;
-+	char pkt[ETH_HLEN + 1];
-+	struct xdp_md ctx_in = {};
-+
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &pkt,
-+			    .data_size_in = sizeof(pkt),
-+			    .ctx_in = &ctx_in,
-+			    .ctx_size_in = sizeof(ctx_in),
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+			    .batch_size = 1,
-+		);
-+
-+	/* We can't use bonding_setup() because bond will be active */
-+	SYS(out, "ip netns add ns_rr_no_up");
-+	nstoken = open_netns("ns_rr_no_up");
-+	if (!ASSERT_OK_PTR(nstoken, "open ns_rr_no_up"))
-+		goto out;
-+
-+	/* bond0: active-backup, UP with slave veth0.
-+	 * Attaching native XDP to bond0 enables bpf_master_redirect_enabled_key
-+	 * globally.
-+	 */
-+	SYS(out, "ip link add bond0 type bond mode active-backup");
-+	SYS(out, "ip link add veth0 type veth peer name veth0p");
-+	SYS(out, "ip link set veth0 master bond0");
-+	SYS(out, "ip link set bond0 up");
-+	SYS(out, "ip link set veth0p up");
-+
-+	/* bond1: round-robin, never UP -> rr_tx_counter stays NULL */
-+	SYS(out, "ip link add bond1 type bond mode balance-rr");
-+	SYS(out, "ip link add veth1 type veth peer name veth1p");
-+	SYS(out, "ip link set veth1 master bond1");
-+
-+	veth1_ifindex = if_nametoindex("veth1");
-+	if (!ASSERT_GT(veth1_ifindex, 0, "veth1_ifindex"))
-+		goto out;
-+
-+	/* Attach native XDP to bond0 -> enables global redirect key */
-+	if (xdp_attach(skeletons, skeletons->xdp_tx->progs.xdp_tx, "bond0"))
-+		goto out;
-+
-+	/* Attach generic XDP (XDP_TX) to veth1.
-+	 * When packets arrive at veth1 via netif_receive_skb, do_xdp_generic()
-+	 * runs this program. XDP_TX + bond slave triggers xdp_master_redirect().
-+	 */
-+	err = bpf_xdp_attach(veth1_ifindex,
-+			     bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx),
-+			     XDP_FLAGS_SKB_MODE, NULL);
-+	if (!ASSERT_OK(err, "attach generic XDP to veth1"))
-+		goto out;
-+
-+	/* Run BPF_PROG_TEST_RUN with XDP_PASS live frames on veth1.
-+	 * XDP_PASS frames become SKBs with skb->dev = veth1, entering
-+	 * netif_receive_skb -> do_xdp_generic -> xdp_master_redirect.
-+	 * Without the fix, bond_rr_gen_slave_id() dereferences NULL
-+	 * rr_tx_counter and crashes.
-+	 */
-+	xdp_pass_fd = bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
-+
-+	memset(pkt, 0, sizeof(pkt));
-+	ctx_in.data_end = sizeof(pkt);
-+	ctx_in.ingress_ifindex = veth1_ifindex;
-+
-+	err = bpf_prog_test_run_opts(xdp_pass_fd, &opts);
-+	ASSERT_OK(err, "xdp_pass test_run should not crash");
-+
-+out:
-+	link_cleanup(skeletons);
-+	close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del ns_rr_no_up");
-+}
-+
- static void test_xdp_bonding_features(struct skeletons *skeletons)
- {
- 	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
-@@ -738,6 +827,9 @@ void serial_test_xdp_bonding(void)
- 	if (test__start_subtest("xdp_bonding_redirect_multi"))
- 		test_xdp_bonding_redirect_multi(&skeletons);
+ 	return req;
+@@ -419,7 +423,7 @@ struct sock *cookie_v4_check(struct sock *sk, struct sk_buff *skb)
+ 		goto out;
  
-+	if (test__start_subtest("xdp_bonding_redirect_no_up"))
-+		test_xdp_bonding_redirect_no_up(&skeletons);
-+
- out:
- 	xdp_dummy__destroy(skeletons.xdp_dummy);
- 	xdp_tx__destroy(skeletons.xdp_tx);
+ 	if (cookie_bpf_ok(skb)) {
+-		req = cookie_bpf_check(sk, skb);
++		req = cookie_bpf_check(net, sk, skb);
+ 	} else {
+ 		req = cookie_tcp_check(net, sk, skb);
+ 		if (IS_ERR(req))
+diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
+index 4f6f0d751d6c..111d7a41d957 100644
+--- a/net/ipv6/syncookies.c
++++ b/net/ipv6/syncookies.c
+@@ -190,7 +190,7 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
+ 		goto out;
+ 
+ 	if (cookie_bpf_ok(skb)) {
+-		req = cookie_bpf_check(sk, skb);
++		req = cookie_bpf_check(net, sk, skb);
+ 	} else {
+ 		req = cookie_tcp_check(net, sk, skb);
+ 		if (IS_ERR(req))
 -- 
 2.43.0
 
