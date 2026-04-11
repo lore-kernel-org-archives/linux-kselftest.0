@@ -1,181 +1,146 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8B91DD0D4
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 Apr 2026 01:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E102FE05C;
+	Sat, 11 Apr 2026 10:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775871172; cv=none; b=szwL88WRPIg+vp44D2Z3j1CIg3S2Njn/kDN+IKd2Fm8egAbE11vDS/KSUU66wH4BZMwE8OG/0mnfGPAC5uis0Hiin+EL89VXhJmoHQzcGppIMDX1u/OAxZAEqYDFWITqXaSnj8ceCrFLA8Ay7xlWSDWVf3yoh6v9GleO4VTTrps=
+	t=1775902917; cv=none; b=A1TT1hFKmWO/ve/fSCbToFc39B8F2i4hUjhEUhwVXlnofBupKavI50Q1QK2er259gcSjuoUskxbVo9AcDoJ0E1TWD7yiEq/kwm2sXAO+OfjUTAAC4u57xeKmGJLPFh/7eSfQSVU096ulHLVJ9rIVhw7sl2Uw0CTXk2P2CjnyeoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775871172; c=relaxed/simple;
-	bh=VO6BMkxq96+MVVztCDUAdoUouKK0RTwbTwrWVTmDayQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QR4hyuYS+BgWqk6oICV8axSptn6JCQwOPV7BhX5Mk8uA49SkF15BRTCeWc+Tmhc5TSdY2u62otFHaEKgIn4LZSmrUElNuLaaKFs4bk7GkvoBUKkW4UMtoW2/ros6fW7rbpSCdTM26HjzRjtKCTz1iHw8XKEIGT7OfW3w/AaVMrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sPvrQ48E; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775902917; c=relaxed/simple;
+	bh=iJr5toA1/CsmmyI6M1AbODpx/FMJj4ZMpGVZAMCOEe4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EUNiuPjKWPe/viHj84+NHrw/asztVtBddpFXhHgk4fo2BeBKc79zY3rxVijuajY1hgghSNMBvxpjTmAwwwRmg3TOaqDa0yTGUswL6JlUTWkMw8DlwbbWNWzXVzV66SWk9F3/LmCSPPLUzVecyxPMwyWu9JknTd7XjEqQEg7HPes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=eBwZ9bmS reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sPvrQ48E"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775871169;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qoJCAFaTxUEnMvDnlo8IAOnt4jK6ofxDJqaroElqR/U=;
-	b=sPvrQ48EhC0ZhnKra1/msHQQJN8Wu7PXFcsjVNhruGof3v1V+ShwNzVOvODxToSg8zGQc8
-	BEH8rdmGWV3uA0/wlCZMd2YuyWhWdJsToiZlrTEbtB10R53lqkWwtV8IabHGessLuYDvAg
-	jNqu+zyBT7rOoNafQBt3YamfD7lI9RY=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Eric Dumazet <edumazet@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 2/2] selftests/bpf: verify syncookie statistics in tcp_custom_syncookie
-Date: Sat, 11 Apr 2026 09:32:05 +0800
-Message-ID: <20260411013211.225834-2-jiayuan.chen@linux.dev>
-In-Reply-To: <20260411013211.225834-1-jiayuan.chen@linux.dev>
-References: <20260411013211.225834-1-jiayuan.chen@linux.dev>
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="eBwZ9bmS"
+Received: from h205.csg.ci.i.u-tokyo.ac.jp (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 63BAKqRn021769
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Sat, 11 Apr 2026 19:20:54 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=y+sZrQAT5sl0rgEx/XygAhgEwYefEMRbED57gjaRUBQ=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-Id:To:Subject:Date;
+        s=rs20250326; t=1775902854; v=1;
+        b=eBwZ9bmSEJ3hssZAy5qEznlB8PZOsrIghCYflCCIVJeFSkgGZhCI41obXXYM5/jN
+         9BkfkJPjYdoB2c5U2tO8HXiTcirs6bdmLTs07SMw/gWa2CKNAJALQDzOkOvGf5s+
+         hLdKwsfSjiLJ1okOaNnfEK/DsGe6ZokKoGhbq19CP4QFZ8jQHT7gxr7b1ngFCYCe
+         HyForcf6D1f8EtbvTPDX8csAeClgtjPn7OgNQFzG3Ok5So8QAdQ8gP5wO25JmTXz
+         eD56K1fp5cBBcbo9/h95qiMN/Pl6a8h7JNGTYdEvRo77pmYwF/blNjx+15y1Vu4e
+         Tsl+6ytd04/ye4TRlmPpAQ==
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Date: Sat, 11 Apr 2026 19:20:32 +0900
+Subject: [PATCH v5 2/4] KVM: arm64: PMU: Protect the list of PMUs with RCU
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260411-hybrid-v5-2-b043b4d9f49e@rsg.ci.i.u-tokyo.ac.jp>
+References: <20260411-hybrid-v5-0-b043b4d9f49e@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20260411-hybrid-v5-0-b043b4d9f49e@rsg.ci.i.u-tokyo.ac.jp>
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+X-Mailer: b4 0.15-dev-5ab4c
 
-Add read_tcpext_snmp() helper to network_helpers which reads a
-TcpExt SNMP counter via nstat, and use it in the tcp_custom_syncookie
-test to verify that LINUX_MIB_SYNCOOKIESRECV is incremented and
-LINUX_MIB_SYNCOOKIESFAILED stays unchanged across a successful
-BPF custom syncookie validation.
+Convert the list of PMUs to a RCU-protected list that has primitives to
+avoid read-side contention.
 
-The delta is captured between start_server() and accept(), which
-covers the full SYN/ACK/cookie-check path for one connection.
-
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 22 +++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  1 +
- .../bpf/prog_tests/tcp_custom_syncookie.c     | 20 +++++++++++++++++
- 3 files changed, 43 insertions(+)
+ arch/arm64/kvm/pmu-emul.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index b82f572641b7..3388dd5112b6 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -621,6 +621,28 @@ int get_socket_local_port(int sock_fd)
- 	return -1;
+diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+index 59ec96e09321..ef5140bbfe28 100644
+--- a/arch/arm64/kvm/pmu-emul.c
++++ b/arch/arm64/kvm/pmu-emul.c
+@@ -7,9 +7,9 @@
+ #include <linux/cpu.h>
+ #include <linux/kvm.h>
+ #include <linux/kvm_host.h>
+-#include <linux/list.h>
+ #include <linux/perf_event.h>
+ #include <linux/perf/arm_pmu.h>
++#include <linux/rculist.h>
+ #include <linux/uaccess.h>
+ #include <asm/kvm_emulate.h>
+ #include <kvm/arm_pmu.h>
+@@ -26,7 +26,6 @@ static bool kvm_pmu_counter_is_enabled(struct kvm_pmc *pmc);
+ 
+ bool kvm_supports_guest_pmuv3(void)
+ {
+-	guard(mutex)(&arm_pmus_lock);
+ 	return !list_empty(&arm_pmus);
  }
  
-+int read_tcpext_snmp(const char *name, unsigned long *val)
-+{
-+	char cmd[128], buf[128];
-+	int ret = 0;
-+	FILE *f;
-+
-+	snprintf(cmd, sizeof(cmd),
-+		 "nstat -az TcpExt%s | awk '/TcpExt/ {print $2}'", name);
-+	f = popen(cmd, "r");
-+	if (!f)
-+		return -errno;
-+
-+	if (!fgets(buf, sizeof(buf), f)) {
-+		ret = ferror(f) ? -errno : -ENODATA;
-+		goto out;
-+	}
-+	*val = strtoul(buf, NULL, 10);
-+out:
-+	pclose(f);
-+	return ret;
-+}
-+
- int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)
- {
- 	struct ifreq ifr = {0};
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 79a010c88e11..c53cd781df6e 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -84,6 +84,7 @@ int make_sockaddr(int family, const char *addr_str, __u16 port,
- 		  struct sockaddr_storage *addr, socklen_t *len);
- char *ping_command(int family);
- int get_socket_local_port(int sock_fd);
-+int read_tcpext_snmp(const char *name, unsigned long *val);
- int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param);
- int set_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param);
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-index eaf441dc7e79..6adfb4b892f8 100644
---- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-@@ -91,12 +91,21 @@ static void transfer_message(int sender, int receiver)
- 
- static void create_connection(struct test_tcp_custom_syncookie_case *test_case)
- {
-+	unsigned long recv_before, recv_after;
-+	unsigned long failed_before, failed_after;
- 	int server, client, child;
- 
- 	server = start_server(test_case->family, test_case->type, test_case->addr, 0, 0);
- 	if (!ASSERT_NEQ(server, -1, "start_server"))
+@@ -808,7 +807,7 @@ void kvm_host_pmu_init(struct arm_pmu *pmu)
  		return;
  
-+	if (!ASSERT_OK(read_tcpext_snmp("SyncookiesRecv", &recv_before),
-+		       "read SyncookiesRecv before"))
-+		goto close_server;
-+	if (!ASSERT_OK(read_tcpext_snmp("SyncookiesFailed", &failed_before),
-+		       "read SyncookiesFailed before"))
-+		goto close_server;
-+
- 	client = connect_to_fd(server, 0);
- 	if (!ASSERT_NEQ(client, -1, "connect_to_fd"))
- 		goto close_server;
-@@ -105,9 +114,20 @@ static void create_connection(struct test_tcp_custom_syncookie_case *test_case)
- 	if (!ASSERT_NEQ(child, -1, "accept"))
- 		goto close_client;
+ 	entry->arm_pmu = pmu;
+-	list_add_tail(&entry->entry, &arm_pmus);
++	list_add_tail_rcu(&entry->entry, &arm_pmus);
+ }
  
-+	if (!ASSERT_OK(read_tcpext_snmp("SyncookiesRecv", &recv_after),
-+		       "read SyncookiesRecv after"))
-+		goto close_child;
-+	if (!ASSERT_OK(read_tcpext_snmp("SyncookiesFailed", &failed_after),
-+		       "read SyncookiesFailed after"))
-+		goto close_child;
-+
-+	ASSERT_EQ(recv_after - recv_before, 1, "SyncookiesRecv delta");
-+	ASSERT_EQ(failed_after - failed_before, 0, "SyncookiesFailed delta");
-+
- 	transfer_message(client, child);
- 	transfer_message(child, client);
+ static struct arm_pmu *kvm_pmu_probe_armpmu(void)
+@@ -817,7 +816,7 @@ static struct arm_pmu *kvm_pmu_probe_armpmu(void)
+ 	struct arm_pmu *pmu;
+ 	int cpu;
  
-+close_child:
- 	close(child);
- close_client:
- 	close(client);
+-	guard(mutex)(&arm_pmus_lock);
++	guard(rcu)();
+ 
+ 	/*
+ 	 * It is safe to use a stale cpu to iterate the list of PMUs so long as
+@@ -837,7 +836,7 @@ static struct arm_pmu *kvm_pmu_probe_armpmu(void)
+ 	 * carried here.
+ 	 */
+ 	cpu = raw_smp_processor_id();
+-	list_for_each_entry(entry, &arm_pmus, entry) {
++	list_for_each_entry_rcu(entry, &arm_pmus, entry) {
+ 		pmu = entry->arm_pmu;
+ 
+ 		if (cpumask_test_cpu(cpu, &pmu->supported_cpus))
+@@ -1088,9 +1087,9 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+ 	int ret = -ENXIO;
+ 
+ 	lockdep_assert_held(&kvm->arch.config_lock);
+-	mutex_lock(&arm_pmus_lock);
++	guard(rcu)();
+ 
+-	list_for_each_entry(entry, &arm_pmus, entry) {
++	list_for_each_entry_rcu(entry, &arm_pmus, entry) {
+ 		arm_pmu = entry->arm_pmu;
+ 		if (arm_pmu->pmu.type == pmu_id) {
+ 			if (kvm_vm_has_ran_once(kvm) ||
+@@ -1106,7 +1105,6 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+ 		}
+ 	}
+ 
+-	mutex_unlock(&arm_pmus_lock);
+ 	return ret;
+ }
+ 
+
 -- 
-2.43.0
+2.53.0
 
