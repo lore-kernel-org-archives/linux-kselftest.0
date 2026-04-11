@@ -1,151 +1,132 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5ED33B6DB;
-	Sat, 11 Apr 2026 10:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F352E1E98FF
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Apr 2026 12:49:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775903197; cv=none; b=rhlEPGgXqpbpB/QHfXRQjTpAbHIy5+V9zUtzWykPjsqp6Qfn6LHRq2a7Yx/jkWMlc3Ieek4Cp7PQRTRLUzxfpp6YwaLEIY4eCAu7M7WG4ewuHzD6xWXfrHR4WVH/ATudcJ2sqnHlcmZE0XcZtahkjxkZblgjamIlFq/Iy21OjT8=
+	t=1775911781; cv=none; b=Gq7qmB2oWCAKB88YO8JrGOAD2t3P9D/k5bkJW/+EU69/vQCVqWMH+ElNHlAM68I3ikEu/SI2dULedxqo5I4FFS/ETAheHK9ah7Ks5YZyO82m8eLRUd+jIaOpPVtARnKuoX9uKLQqJdVv0LJhy3GvGkzVK+jsvtUYHxiPFeAVrH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775903197; c=relaxed/simple;
-	bh=YzhVc9Xj6RUQ96zQ8gZZ1wl3Wvk3OUuyYYRE1ztdNCQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=C8DfDY76LCVYSZ0590rDJAxhr9NNb6Cqr0RZeddHFWadDNaIUefi1y7Q4rDyoVXs/Qbch8cvxeGDhMD8L6niIpHo/sxroteriC21K6Iyo+RCtA6WUgH2dpcYFQ3/fbssgGATxAlY7fJHXfGN8bqHnzjoNWa0dQ4PHS6cvTAqSCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=ty/jo9vb reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1775911781; c=relaxed/simple;
+	bh=Bmgif21JILxtKROQRrvBMcxSwdIEucVmx9w+2fEqPrs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UmnmUxpyHsoxPwgBzsMpiueezXXPUfgYSpX57WWKRAnitKtZEVmggI6qWj+nEGo+soPHzq+Fk1rGwDRDq0NXnj3qZvrjnoQTOT+Mj+qwKg0iNC79FIKqF02qXxKQ3YPFbO0/6YaCppD2WyXigGxTWieWajI9IMOn0ESCcBvEi2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GgR3QN9v; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="ty/jo9vb"
-Received: from h205.csg.ci.i.u-tokyo.ac.jp (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 63BAKqRl021769
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Sat, 11 Apr 2026 19:20:54 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=oyjFfLOVr4/tAinbTSgmI+kMMDNqw+dYn58LCXlZnV4=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-Id:To:Subject:Date;
-        s=rs20250326; t=1775902854; v=1;
-        b=ty/jo9vbXApetQXw8+YlWhkBNzXcBxBdxesTaFhYeoUO0PbR+z/rky1YMxteHQTt
-         vshKPTx/sTCPSoiX2pMhgFwwWxu1m6lxhhfMVFxaYwvB4S8vGFkYA9quLuxsU8dN
-         /C8QkS6rHtxErl/lZQXbX7xwnt1apFNbOVmBbm+WuoXoFl6IPMZ1yOzszbIMeCQY
-         gc/RUxvAknkyaTlSsDiVPmVyyzyEdE1FTOupqi2+wpOhYAd+nzD1zlCQ4D/J9ehi
-         AKbpMYdOw7MRN6y0DSp8w82mFcpcekIEBRn3qVAuHtpmI8pBY2k2fQ3IyGnVGGll
-         J9D0xhZcZ3uV2ANx7ipDeQ==
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Subject: [PATCH v5 0/4] KVM: arm64: PMU: Use multiple host PMUs
-Date: Sat, 11 Apr 2026 19:20:30 +0900
-Message-Id: <20260411-hybrid-v5-0-b043b4d9f49e@rsg.ci.i.u-tokyo.ac.jp>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GgR3QN9v"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488c2690057so27948365e9.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 11 Apr 2026 05:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775911777; x=1776516577; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OY+pUT3bAKsfuyssDABe7DVX4rqXH9Z4jNHxto2UUNc=;
+        b=GgR3QN9vPbErrAH5zrJ75nWsmZRez/SC7JYJsX1tQrhG2WhPz4FEZDyJEVsZgF+wQn
+         OYxwhUYTN1mDadGztLmGpNOR7Vu2jheneI+IgwkEMUMx4FuWEm6Bn9uOXTX3jjK+5tJN
+         bZie7XiKMtt9MLleLpRweBPFlt7REeHMmaY7o5EZ7u1ueuCJpgM6caw1SO8ZUj1rvC+L
+         kUUfkib8CJdgeHDtJRTpnvj8VjVo3GAZrLjGeLT/+/+huM8aRVUxcInkr6AgyJpzyLen
+         9wCwFsgflGytgYgxSNQ25GrgZSsPBZ/zKz+1sYgF6xxQxOQSQ8lxTh3NaZ2w1EmjcG3U
+         E7/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775911777; x=1776516577;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OY+pUT3bAKsfuyssDABe7DVX4rqXH9Z4jNHxto2UUNc=;
+        b=O1mJdMs+44tc72SEPedDAhYKxLgV+Txjv5ZBFpdLn9SuLkm5l/DXyDpcFLlcOAJvt+
+         aRQB71Wcb8RdlszvKeJQsP2Oobk8FRH01/YC8/BCoklssCrVxbT8QfppRV/47POMURCP
+         WvEjJHaWepVtZSLlv6F1kgmtbuVTNmVf3RcjfnoLGdzBqGglDVDFD8FB+72kERovSQrd
+         yk0sHTqBanDkgXf9w2fmWIncWxCkQ34Dh9ijky92BA5QpOI/vWATJimVS5YnbscMwps1
+         2rz2w14k7is7HfUAUp5P2SsfstE49CXr+CXMA3/VsToqQbqojIuIVFDA7ivXOxEeUu47
+         iw+g==
+X-Gm-Message-State: AOJu0YwvJLfbBEr4Cw/wfa+hvia1o5KVuiN4hAPazjnvZwVPCpAYvE34
+	U/cHLyzqJwDWeTDk7i05WBQVqCUftAVRH83o2J++KblDT6X1uxEN3wZRDxrqsU6BMQg=
+X-Gm-Gg: AeBDievBZ50IwbOmlu1ljStlYztKlWub+o0yF5lOlMKyE5XaSuQ/NxB0F7RfL38s9nc
+	Ho6pidXWda6FA/Ovqm1NkOzdzSTUi2fWnSIhmS5h4eneAtjHlRTLBOIMtCp/EEAjM/mz1XjIjT6
+	uKokNM+FrLAOYFGTEzUx6bQnUQpY8lglTyCr1yaUAfDevaJZlR46yUtTRm9v+O/vOS0HsEJ4KgK
+	Y/ZMYN14MKpgnl3mkfMRG41casQPp6N48OTQ/PMQWXx9ua4KBZUDSDDCcSRwerUeXsmlLlc+r+M
+	ZlVqWnpUeYRnxjzytdaHJ09zWF7+TNa/HPjoC0XrTaIg2n8k6ueOadt6HnkPK4qOC/+K/zH0b/d
+	ehfQQ/Zkg0N5AELTRgv9+f9+SYgxxiglGHV19odktHazvi3vMG6WARyiWcnBLp9XgQWtOhTPAuA
+	/k6LCCBvArwxj/cuw5aKpL2pjbh+Jz/aRVJyL4Gr8i0iU8tfOD20uxS4az+g==
+X-Received: by 2002:a05:600d:1:b0:488:8bdd:cfcc with SMTP id 5b1f17b1804b1-488d6772785mr78952175e9.0.1775911777328;
+        Sat, 11 Apr 2026 05:49:37 -0700 (PDT)
+Received: from ?IPV6:2804:7f0:b765:285:ce28:aaff:fe86:149c? ([2804:7f0:b765:285:ce28:aaff:fe86:149c])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-954bf112822sm3314511241.7.2026.04.11.05.49.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Apr 2026 05:49:35 -0700 (PDT)
+Message-ID: <227fd478-581e-462b-9579-afc5028abced@suse.com>
+Date: Sat, 11 Apr 2026 09:49:31 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33QTW6DMBAF4KtEXtdo/IvJKveoujDjIbhVIDUEB
- UXcvS4oZNUunzXzzZMfbKAUaWDHw4MlmuIQ+y4H83Zg2PruTDyGnJkEaUBKzdu5TjFwEME0jS4
- pBMny8DVRE+8r9P6x5UTft+yN2yOr/UAc+8sljsdD5St0SAoAg3KmQnRlrcFRY4zEYKsSUfq6Z
- L9WG4exT/PacRIrttZRonrWmQQXXAfhgxdAJZhT8HMX70U+uBqTfO05sPue5MDBWuEJlW8cntJ
- wLjAWsbjxsf+a+8Jj8XndDPU0bP4KsxsqG9qSa0hKcA7+NfTLUKLcDZ2NOlhZY9DOav2nsSzLD
- 03leFO1AQAA
-X-Change-ID: 20250224-hybrid-01d5ff47edd2
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-X-Mailer: b4 0.15-dev-5ab4c
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/6] kbuild: remove kselftest output in mrproper
+To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org
+References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
+ <20260320-selftests-fixes-v1-6-79144f76be01@suse.com>
+ <0db1075e-4273-4504-9c3e-1a9f35d37998@linuxfoundation.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+In-Reply-To: <0db1075e-4273-4504-9c3e-1a9f35d37998@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On a heterogeneous arm64 system, KVM's PMU emulation is based on the
-features of a single host PMU instance. When a vCPU is migrated to a
-pCPU with an incompatible PMU, counters such as PMCCNTR_EL0 stop
-incrementing.
+On 4/10/26 4:19 PM, Shuah Khan wrote:
+> On 3/20/26 12:29, Ricardo B. Marlière wrote:
+>> Selftests built with O= store generated files by default under
+>> $(objtree)/kselftest. Those files are not removed by mrproper today, so
+>> stale generated artifacts can survive across builds and be reused
+>> unexpectedly.
+>>
+>> Add kselftest to MRPROPER_FILES, so that the default kselftest output
+>> directory as part of mrproper target.
+>
+> Does this change remove kselftest build objects in-tree builds?
+> It didn't for me - also there is kselftest directory under
+> tools/selftests that has several scripts.
+>
+> Can you test this for in-tree builds - I would like this work
+> for both.
+>
+> I dropped this from my next for now. This can go through kbuild
+> tree.
 
-Although this behavior is permitted by the architecture, Windows does
-not handle it gracefully and may crash with a division-by-zero error.
+OK! But please also drop 
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=33880424308df3c2e39fa88ea74f051205ebb7b4
 
-The current workaround requires VMMs to pin vCPUs to a set of pCPUs
-that share a compatible PMU. This is difficult to implement correctly in
-QEMU/libvirt, where pinning occurs after vCPU initialization, and it
-also restricts the guest to a subset of available pCPUs.
+Thanks!
 
-This patch introduces the KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
-attribute. If set, PMUv3 will be emulated without programmable event
-counters. KVM will be able to run VCPUs on any physical CPUs with a
-compatible hardware PMU.
-
-This allows Windows guests to run reliably on heterogeneous systems
-without crashing, even without vCPU pinning, and enables VMMs to
-schedule vCPUs across all available pCPUs, making full use of the host
-hardware.
-
-A QEMU patch that demonstrates the usage of the new attribute is
-available at:
-https://lore.kernel.org/qemu-devel/20260225-kvm-v2-1-b8d743db0f73@rsg.ci.i.u-tokyo.ac.jp/
-("[PATCH RFC v2] target/arm/kvm: Choose PMU backend")
-
-Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
----
-Changes in v5:
-- Rebased.
-- Fixed the order to clear KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY in
-  kvm_arm_pmu_v3_set_pmu().
-- Fixed the setting of KVM_ARM_VCPU_PMU_V3_IRQ in
-  test_fixed_counters_only().
-- Changed to WARN_ON_ONCE() when kvm_pmu_probe_armpmu() returns NULL in
-  kvm_pmu_create_perf_event(), which is no longer supposed to happen.
-- Link to v4: https://lore.kernel.org/r/20260317-hybrid-v4-0-bd62bcd48644@rsg.ci.i.u-tokyo.ac.jp
-
-Changes in v4:
-- Extracted kvm_pmu_enabled_counter_mask() into a separate patch.
-- Added patch "KVM: arm64: PMU: Protect the list of PMUs with RCU".
-- Merged KVM_REQ_CREATE_PMU into KVM_REQ_RELOAD_PMU.
-- Added a check to avoid unnecessary KVM_REQ_RELOAD_PMU requests.
-- Dropped the change to avoid setting kvm_arm_set_default_pmu() when
-  KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY is not set.
-- Link to v3: https://lore.kernel.org/r/20260225-hybrid-v3-0-46e8fe220880@rsg.ci.i.u-tokyo.ac.jp
-
-Changes in v3:
-- Renamed the attribute to KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY.
-- Changed to request the creation of perf counters when loading vCPU.
-- Link to v2: https://lore.kernel.org/r/20250806-hybrid-v2-0-0661aec3af8c@rsg.ci.i.u-tokyo.ac.jp
-
-Changes in v2:
-- Added the KVM_ARM_VCPU_PMU_V3_COMPOSITION attribute to opt in the
-  feature.
-- Added code to handle overflow.
-- Link to v1: https://lore.kernel.org/r/20250319-hybrid-v1-1-4d1ada10e705@daynix.com
-
----
-Akihiko Odaki (4):
-      KVM: arm64: PMU: Add kvm_pmu_enabled_counter_mask()
-      KVM: arm64: PMU: Protect the list of PMUs with RCU
-      KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
-      KVM: arm64: selftests: Test PMU_V3_FIXED_COUNTERS_ONLY
-
- Documentation/virt/kvm/devices/vcpu.rst            |  29 ++++
- arch/arm64/include/asm/kvm_host.h                  |   2 +
- arch/arm64/include/uapi/asm/kvm.h                  |   1 +
- arch/arm64/kvm/arm.c                               |   1 +
- arch/arm64/kvm/pmu-emul.c                          | 188 ++++++++++++++-------
- include/kvm/arm_pmu.h                              |   2 +
- .../selftests/kvm/arm64/vpmu_counter_access.c      | 148 +++++++++++++---
- 7 files changed, 288 insertions(+), 83 deletions(-)
----
-base-commit: 9a9c8ce300cd3859cc87b408ef552cd697cc2ab7
-change-id: 20250224-hybrid-01d5ff47edd2
-
-Best regards,
---  
-Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-
+>
+>>
+>> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+>> ---
+>>   Makefile | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index c9b7bee102e8..91e6ec790a0f 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -1662,6 +1662,7 @@ MRPROPER_FILES += include/config 
+>> include/generated          \
+>>             debian snap tar-install PKGBUILD pacman \
+>>             .config .config.old .version \
+>>             Module.symvers \
+>> +          kselftest \
+>>             certs/signing_key.pem \
+>>             certs/x509.genkey \
+>>             vmlinux-gdb.py \
+>>
+>
+> thanks,
+> -- Shuah
