@@ -1,63 +1,63 @@
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
+Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2833D347508
-	for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 06:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81420346E5D
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 06:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775973846; cv=none; b=aBqRlAp01paJbtsxMI5SfcOuepKuiboJe2vat23FRqQ+qgy0iIMgAkT1tR7ptgKpUyrv7eGHh9vPj/6dLfRn9yognbLqEKBAdm0+pBj+su1giGAmANAO8xCbuhZUiJgcjsd2aM6mZ4VX+OjZM798niTByo+TUrn5hNr5IjJa7wM=
+	t=1775973851; cv=none; b=JVs1rB+wtFGic2tsZ9JcwoP9WaEnlCMgkefnf9S9Jq8k5JNN1TrZfjY4Lm5EMIwJQTB1XISsAo3DGD1fpp45RWLNVf8gFcW275QrdV7QxszKEj/WB30z8lO5BSU1E0kmd7nDB10OEf2ZvjrY/UVJ4IKdJah2VHHEu0BL2hn9MlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775973846; c=relaxed/simple;
-	bh=tH97OV+P0DlPe6LxB5CgjEjvpu/auSFpJ5iJ63eCf6E=;
+	s=arc-20240116; t=1775973851; c=relaxed/simple;
+	bh=RleSJLoVaTjmfnRxdJcEIkGnEJrHRqhSfW+mLBZVtvs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DOnKf/g9evX9NFtuqueYxVmAyF0zCg5VCYGvyvTyOyeggmjEiVVYSUBxTa+tS1LAUqnH8eftmt/Vd9m6QFh1m5a/H/TY0t511QdMiWGnOxU3tqBepCftp7yryhoviPjzIFjLlq5GHVnNsR6Qr1PUYsGMoNIQ5k/euQvdWDc0wu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dQA5EHdJ; arc=none smtp.client-ip=209.85.215.196
+	 MIME-Version; b=POf1vucVzDMbzuZ0KV3FAcHLc0N2NBABcC8Ko1AGXwST4hGyKfcFmqD6QADltkZof3Ow5hT+TmT6Ua7fQQFBSfm/hc8bGEk7eHz1huBWGggjEoFEIz4cp/Il0IZkeyTdV2j0fx6v4fHyO8QOOuUISCnZW0chP6YZfWk0NNaiYdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BPukNvwJ; arc=none smtp.client-ip=209.85.210.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dQA5EHdJ"
-Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-c736261ee8dso1259645a12.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Apr 2026 23:04:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BPukNvwJ"
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-82748257f5fso1811977b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 11 Apr 2026 23:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775973843; x=1776578643; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775973850; x=1776578650; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LFbAgBrmlqnGRPpGIwv5xn3IZvtUwanJPAMvMFafaIA=;
-        b=dQA5EHdJzKce4LlD2AF4qe+U/IRwLoexGwlia43aE+mTBnoi5PIpU2lKRh/wTFfjCC
-         V3VlMPxsJhzBfaFdkC9pDQ2/MdKr74kQz+8U3jjkExM5TjvMMmZ7RymdacW64lnb1mk7
-         /vYBs4hb4q2s/6GsrH4gGkjJF7Ky831je0e2A5vErFzRdYpSaCSxmHN5oXan+IW2tDa8
-         tKkaLBmpW7OMelSBvrBJgSalcMjQmMSkPrwrsDG1t5JWODdH45X050RkPSKiJXel+TDr
-         ze/eCvQ4x8CUODCRUbs9GKZln3rpxco55cERlcDjLeRL4MqQ/45wvM/KOFd7yn0ntyPH
-         ufug==
+        bh=6a0dQ9uzvfDCLsmODly0L83y+okdi18YeC6c2nIa4uw=;
+        b=BPukNvwJuEL3GTLXi5dRtQ1TJNfrn1MALcJtCQ5yrlTVB7HMqSYBRtDnr8Eu+s+PWT
+         5soOk7CDyCQiQIJpt9+l18jUo+CutdPVsPlgWi5iIrfYUNFcS6np4C2OnJqHiAPkRh1p
+         6qeVg9K4fEXDdbSxpbg+lW5236cAbkA5vJxOdTciygPXmemz4F/qV1kEb+tQ7b6PMw85
+         mgMKJlURvoYh42kZ88otZFGcXnAogChErl9jrXy9vgGxa6cEDdryesq7dSBlE0EhNo04
+         7uvNOvpU8cKywtZrMl9HcTs/dEks38iG5RSluBk1JpNV2PUQa2REIOK18FudVPYjxBow
+         RqKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775973843; x=1776578643;
+        d=1e100.net; s=20251104; t=1775973850; x=1776578650;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=LFbAgBrmlqnGRPpGIwv5xn3IZvtUwanJPAMvMFafaIA=;
-        b=ENcoQbnBDTUZyf9ztg4uPX5KmCR3cINUxfhC80hQZLLd9hVzgLR8CH3iMC18cF7M7M
-         pTsxEkPqIEWdIHCelg9claJZAJRB5nUMOIKhX/kxzKA418ah9n2waQ5PWQ2dy5O6b+4A
-         8eMJCcdsR6R5W+xANgDn1kVkoCoiQ7496ennemZVF99AACEeF7WRu2UGV/25SPErAW6C
-         cche4ate9VgHAAzQShZKFYnTcO0VkHltTfwWihPvE6XQh5HtWpr3h/154HjbTGmrtRO+
-         JgTYZnYfMm4mejqlmwEEP8ZJuAWta79WIDlSbyJaWHTogseUVjU3ZRWAtmvNOQ8HgDgZ
-         ziHw==
-X-Forwarded-Encrypted: i=1; AJvYcCVfYzFgj1KFUsujSAMArMnvC1dhHMCv+yL0SjY1aSW8OjPC53VTuzqWkptLOTo/VzcyXePPn2d5C4NnlpnJ8sA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDJISUIwzxZ4Mx5UrbXHtWrTVH5ioGhk2PeRnoIxJy+ofOgirZ
-	2DcHT89bgfQyIfySLxlg5cBD91MfRhXGd2tRXza8hUpD+ZrL7ha9Px59
-X-Gm-Gg: AeBDievMlKf91zbSNVhFag0u8NV/6kebYSrJdiLWKU8faarrA1cnGfwBuHEsAKm4zli
-	GbOYa8hWDbX1N8zQXoLFnjTkc+gdcafuOpePTljuH2p538ema/0zX/68Zx08OfEBkRNmGEwwy2E
-	e1Ityw7p3hrthLT4ECxPGB+W0ZSA/Pd0OBg7QOZkG+uKVZQ4l8aRSENF3VamirizRu/lW3cUR5+
-	Uo+ob29O/tg7ogOy3V4r0rqTtjn6n7HDl7QzhraM5wbtqcgLCrfmEGCzpKToEho+N3lZcplonE5
-	1wT1yYwiKDaV7AYXF6C6AsAPA5cGQ9vZ/yU9rrapgZvAklV2nvm48pzF4DfbhvvVGt5lPqUqDV6
-	fFugib5ZEMRoEqWp2q2FMkeTy5EAmLupF/OWTQgU8rJOzxqTuiXLt5G4J+l55AcIZXpyRjN5A2P
-	9+ZkQK5dKSMTIFmPgxj3yx
-X-Received: by 2002:a05:6a00:302a:b0:82c:daa4:ce29 with SMTP id d2e1a72fcca58-82f0c2d93admr9215246b3a.47.1775973843395;
-        Sat, 11 Apr 2026 23:04:03 -0700 (PDT)
+        bh=6a0dQ9uzvfDCLsmODly0L83y+okdi18YeC6c2nIa4uw=;
+        b=SInXOWcA2Fxx4JHVWWxPA+hRgoMLy1J6ByXqg9Jn4M6vUwofMFdhO/+AaZQvh1Wr4e
+         KwEYM6parPyQP23VWQLxAz+GqT9mLAS1AkE6Zp6sfbNR+hbwEXP1xTcClwM9WQLKrgeE
+         o27udSmBHYzgsc/Evd/6AGMzyl9V0+V6hzzJjTOhMeo5093AhDllf/gXFEOC/97O8cZs
+         7nHb9F9diWA/DxMQdUDQHkw8OKcLsjviipLjKyedpf8QMbbzg0WUsbDWaE18xIkElEyS
+         fIBfckYE9d9798q4yH0al2GI1iKNRHEllRWnpfKSz3vHNofs/EEueeGH/4AP1EHGDtIU
+         HU7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUitne4TUchNknrqfRepy2Ey3xfyIiJanGlUQIVi6LB217xhZy0LyNx7Ke2Ezez9IcmDpQn6qHMvIE8Q8a8IS4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzsir83W3JJacrGFqZQ6UxpB72wMvuuJlE+0K2E0LJZ1CWuARcl
+	d5vzMPJ0SbFY3CRS+zfmHNqSdkX9I7y/dgEYVIVwk/fgWYeoVNw49tEL
+X-Gm-Gg: AeBDieukwpqQhS+j4+rvmu6JNWZkgJBvC6MS90ctAXk7EaN2oSjUmzYWoWbjPQML/ct
+	bSygAl8s/KSBWTFKr2+niJOtrMI110k7kWuqCptgQh+WYx6zbpADMBEj2EnXVK/erjtQ83vroUs
+	NAYbq/IrdM0JwrmrGrg69TPyBav3xRjbCHDofnyelRVA3nChAv2qKT8SvLAB8aN6mWlYpv93RaS
+	e5Lwht+cI1v+33WMH4zjBxmY5+kz3ivWhpQAbqSdD24Sh7q6OAlqVj9NQVsZEL1THTifkbvRQdT
+	4jZcGijP1geQcxUGnknHk4h5IdzoDDknjHIhqD9A6gV1GKfERa8X/qeRST7H93QEj28g6h8/leu
+	2eUzFC8W9y0XAHQlEv2D+j3iAE4X8fWSKN3Amp2AzT6IRD8jx/cQXwdnJ9ASHRaJBYvMsawwUmR
+	V7kPsmU9FAXXgCxbR9ZjLv
+X-Received: by 2002:a05:6a00:c83:b0:81c:5bca:8104 with SMTP id d2e1a72fcca58-82f0d36ad0cmr8491297b3a.24.1775973849870;
+        Sat, 11 Apr 2026 23:04:09 -0700 (PDT)
 Received: from 7950hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c4b251esm7072645b3a.37.2026.04.11.23.03.57
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c4b251esm7072645b3a.37.2026.04.11.23.04.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2026 23:04:03 -0700 (PDT)
+        Sat, 11 Apr 2026 23:04:09 -0700 (PDT)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: ast@kernel.org
@@ -76,9 +76,9 @@ Cc: daniel@iogearbox.net,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/3] bpf: add missing fsession to the verifier log
-Date: Sun, 12 Apr 2026 14:03:44 +0800
-Message-ID: <20260412060346.142007-2-dongml2@chinatelecom.cn>
+Subject: [PATCH bpf-next v3 2/3] docs/bpf: add missing fsession attach type to docs
+Date: Sun, 12 Apr 2026 14:03:45 +0800
+Message-ID: <20260412060346.142007-3-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260412060346.142007-1-dongml2@chinatelecom.cn>
 References: <20260412060346.142007-1-dongml2@chinatelecom.cn>
@@ -90,127 +90,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The fsession attach type is missed in the verifier log in
-check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id().
-Update them to make the verifier log proper. Meanwhile, update the
-corresponding selftests.
+Add the fsession attach type to program_types.rst and drgn.rst.
 
 Acked-by: Leon Hwang <leon.hwang@linux.dev>
 Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
-v3:
-- replace "FENTRY/FEXIT/FSESSION" with "Tracing"
+ Documentation/bpf/drgn.rst                 | 4 ++--
+ Documentation/bpf/libbpf/program_types.rst | 4 ++++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-v2:
-- add a missing FSESSION in bpf_check_attach_target()
----
- kernel/bpf/verifier.c                               | 10 +++++-----
- tools/testing/selftests/bpf/prog_tests/exceptions.c |  8 ++++----
- tools/testing/selftests/bpf/verifier/sleepable.c    |  2 +-
- 3 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 84699a428077..ac89ad992f27 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11690,7 +11690,7 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
+diff --git a/Documentation/bpf/drgn.rst b/Documentation/bpf/drgn.rst
+index 41f223c3161e..cabf702eb75a 100644
+--- a/Documentation/bpf/drgn.rst
++++ b/Documentation/bpf/drgn.rst
+@@ -26,8 +26,8 @@ about these objects, including id, type and name.
  
- 	if (type == BPF_PROG_TYPE_TRACING) {
- 		if (!bpf_prog_has_trampoline(env->prog)) {
--			verbose(env, "func %s#%d supported only for fentry/fexit/fmod_ret programs\n",
-+			verbose(env, "func %s#%d supported only for fentry/fexit/fsession/fmod_ret programs\n",
- 				func_id_name(func_id), func_id);
- 			return -ENOTSUPP;
- 		}
-@@ -25494,7 +25494,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
- 	if (!btf) {
- 		bpf_log(log,
--			"FENTRY/FEXIT program can only be attached to another program annotated with BTF\n");
-+			"Tracing program can only be attached to another program annotated with BTF\n");
- 		return -EINVAL;
- 	}
- 	t = btf_type_by_id(btf, btf_id);
-@@ -25530,7 +25530,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 		if (aux->func && aux->func[subprog]->aux->exception_cb) {
- 			bpf_log(log,
- 				"%s programs cannot attach to exception callback\n",
--				prog_extension ? "Extension" : "FENTRY/FEXIT");
-+				prog_extension ? "Extension" : "Tracing");
- 			return -EINVAL;
- 		}
- 		conservative = aux->func_info_aux[subprog].unreliable;
-@@ -25619,7 +25619,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 	case BPF_TRACE_RAW_TP:
- 		if (tgt_prog) {
- 			bpf_log(log,
--				"Only FENTRY/FEXIT progs are attachable to another BPF prog\n");
-+				"Only FENTRY/FEXIT/FSESSION progs are attachable to another BPF prog\n");
- 			return -EINVAL;
- 		}
- 		if (!btf_type_is_typedef(t)) {
-@@ -25885,7 +25885,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 	}
+ The main use-case `bpf_inspect.py`_ covers is to show BPF programs of types
+ ``BPF_PROG_TYPE_EXT`` and ``BPF_PROG_TYPE_TRACING`` attached to other BPF
+-programs via ``freplace``/``fentry``/``fexit`` mechanisms, since there is no
+-user-space API to get this information.
++programs via ``freplace``/``fentry``/``fexit``/``fsession`` mechanisms, since
++there is no user-space API to get this information.
  
- 	if (prog->sleepable && !can_be_sleepable(prog)) {
--		verbose(env, "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable\n");
-+		verbose(env, "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable\n");
- 		return -EINVAL;
- 	}
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index 84ab73e08b0e..e8cbaf2a3e82 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -128,7 +128,7 @@ static void test_exceptions_success(void)
- 				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
- 				       "exception_cb_mod"), "set_attach_target"))
- 				goto done;
--		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
-+		}), "Tracing programs cannot attach to exception callback", 0);
- 
- 	if (test__start_subtest("throwing fentry -> exception_cb"))
- 		RUN_EXT(-EINVAL, true, ({
-@@ -138,7 +138,7 @@ static void test_exceptions_success(void)
- 				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
- 				       "exception_cb_mod"), "set_attach_target"))
- 				goto done;
--		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
-+		}), "Tracing programs cannot attach to exception callback", 0);
- 
- 	if (test__start_subtest("non-throwing fexit -> exception_cb"))
- 		RUN_EXT(-EINVAL, true, ({
-@@ -148,7 +148,7 @@ static void test_exceptions_success(void)
- 				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
- 				       "exception_cb_mod"), "set_attach_target"))
- 				goto done;
--		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
-+		}), "Tracing programs cannot attach to exception callback", 0);
- 
- 	if (test__start_subtest("throwing fexit -> exception_cb"))
- 		RUN_EXT(-EINVAL, true, ({
-@@ -158,7 +158,7 @@ static void test_exceptions_success(void)
- 				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
- 				       "exception_cb_mod"), "set_attach_target"))
- 				goto done;
--		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
-+		}), "Tracing programs cannot attach to exception callback", 0);
- 
- 	if (test__start_subtest("throwing extension (with custom cb) -> exception_cb"))
- 		RUN_EXT(-EINVAL, true, ({
-diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
-index 1f0d2bdc673f..c2b7f5ebf168 100644
---- a/tools/testing/selftests/bpf/verifier/sleepable.c
-+++ b/tools/testing/selftests/bpf/verifier/sleepable.c
-@@ -85,7 +85,7 @@
- 	.expected_attach_type = BPF_TRACE_RAW_TP,
- 	.kfunc = "sched_switch",
- 	.result = REJECT,
--	.errstr = "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
-+	.errstr = "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
- 	.flags = BPF_F_SLEEPABLE,
- 	.runs = -1,
- },
+ Getting started
+ ===============
+diff --git a/Documentation/bpf/libbpf/program_types.rst b/Documentation/bpf/libbpf/program_types.rst
+index 3b837522834b..3a07ce3b7f79 100644
+--- a/Documentation/bpf/libbpf/program_types.rst
++++ b/Documentation/bpf/libbpf/program_types.rst
+@@ -207,6 +207,10 @@ described in more detail in the footnotes.
+ +                                           +                                        +----------------------------------+-----------+
+ |                                           |                                        | ``fexit.s+`` [#fentry]_          | Yes       |
+ +                                           +----------------------------------------+----------------------------------+-----------+
++|                                           | ``BPF_TRACE_FSESSION``                 | ``fsession+`` [#fentry]_         |           |
+++                                           +                                        +----------------------------------+-----------+
++|                                           |                                        | ``fsession.s+`` [#fentry]_       | Yes       |
+++                                           +----------------------------------------+----------------------------------+-----------+
+ |                                           | ``BPF_TRACE_ITER``                     | ``iter+`` [#iter]_               |           |
+ +                                           +                                        +----------------------------------+-----------+
+ |                                           |                                        | ``iter.s+`` [#iter]_             | Yes       |
 -- 
 2.53.0
 
