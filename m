@@ -1,118 +1,101 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D768C1F;
-	Sun, 12 Apr 2026 02:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B3B40DFB5
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 03:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775961702; cv=none; b=jsJ3r985dALd7NdGiyHT3qJmy+WI35CmTDaKpMwCCKVkYSogirwh6dnqhUi5d53VUy3Z6b+zXJWb8K9xh1Xn2ZuQ8P1nTCEeKfNt8ng0GAML2Jw3jMFQcZ0Rm5bqlhYA+Mx9/OxZk+405N29BsviuV/VMHh2pfbkwqTHEbhMwrE=
+	t=1775965210; cv=none; b=lMgwkKIOE+m/IXObZ/CWMkqhPOrv5eg2J25K85ZJ3CZIqkbidJ/yi2zrsSaODsYFs+J9j+WItHhW9X1VMUwVHeFFvHkG9KZ4z9erPoqJGxKnPgal6cFN8k0dk1KVkJikVumUbfozbrp9fj40LRUZfmQb0277KYdqyUs2x5cRj0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775961702; c=relaxed/simple;
-	bh=rh86J0V7XCtQzeMNiZmNje45Qp/78y6N4ay3bpsyyOI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=RKGBxhpDQDrn5GmulbMUQSPfmRPsTMzPhQbjhW9R+QKBc/oRViXGNwoM03DIuD7ZapePpiPtm+wx+krUHBjH0qj8uSsBpzWhliHLxwCdGMaY7/GvtxWl4rmr7ZRqUMqAKqgeJ/ImqbPKMv4DUiLtCBpqYujrtDHJAhydn4WZjQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=fPpTrnqF; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1775965210; c=relaxed/simple;
+	bh=QTpRIWJBZbo5W+sP8qwmW5sjTJWB3isGCeUcOk8dHTM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=L0LGStNtYeCHaj7wqeq6ClYSfEP6aBQeLqUyIID9rSm+wSxwrO1Xx5c/WGyeF2d+tqmzA2emDR3vWC7MUWxBYARXC7xwa1dg5cgTO4Q26QR6PqJkvPQpY3pz87g6tF06eqDpA/M8wC58cwnPcykj9fAMokkLqYYN6M6k9R5xwyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U1SDXgw6; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fPpTrnqF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=tbFatfZEmDtU6vo
-	TvQ/yWWYClcE0wTDaBkcferPe03Q=; b=fPpTrnqF8eYA9920bS050EYY7dH3cHw
-	uNO/zEDz+NVbKBlK96UB5h8/zPbTSaHmXsC6Hk6a5hewSNEtXU84UHTmy985omdL
-	7DFDl/LqgZtOEZMEjXvz8McMYIxL+DXc8KkodYViLsy2VG2lAuHyKqOESyE0Qbl1
-	QFbcPoyhmAQA=
-Received: from yang-Virtual-Machine.mshome.net (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgCncbARBttp5ByXAg--.57S2;
-	Sun, 12 Apr 2026 10:40:25 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: alexei.starovoitov@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	jiayuan.chen@linux.dev,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	mattbobrowski@google.com,
-	memxor@gmail.com,
-	menglong.dong@linux.dev,
-	song@kernel.org,
-	yangfeng59949@163.com,
-	yangfeng@kylinos.cn,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH v3 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
-Date: Sun, 12 Apr 2026 10:40:17 +0800
-Message-Id: <20260412024017.6671-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAADnVQ+PE9t0XPM=k=mqpRd=efJ0KYFGbaadwfL5e9iS-pWWVQ@mail.gmail.com>
-References: <CAADnVQ+PE9t0XPM=k=mqpRd=efJ0KYFGbaadwfL5e9iS-pWWVQ@mail.gmail.com>
-X-CM-TRANSID:PigvCgCncbARBttp5ByXAg--.57S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tFWUWF1xXr1xtr4fKw13CFg_yoW8XFyfpF
-	43GFyjyr18AFWqvrWxta17uFWSv390gFWfXrZ8Kr9ruF9IvFs8J3W8Gryj9rW3CryDCry0
-	qw42vw4fA3WDZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUY2NZUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC0BnYUWnbBhlRdQAA3J
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U1SDXgw6"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775965206;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iAG0ABuE1sEGRvpt1epm3J9hCMO3p++8dKsbmS4IJFM=;
+	b=U1SDXgw6DbvODJVvvWWjlWOCVvjN4LyH/538gr2L9aiGDihVp+tZvXfNg5C8gI2IK6L+HM
+	qxtc491nDfKr7h7d/P2vOaCIt73JXT8yFm+rk25A5KEh1T5mVL/xAOD0CKYmOrFLqriLgJ
+	K8s31QgpH+bhX7cG8PAY3Rqzb/203o8=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Feng Yang <yangfeng59949@163.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, john.fastabend@gmail.com,
+ kpsingh@kernel.org, mattbobrowski@google.com, jiayuan.chen@linux.dev,
+ leon.hwang@linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Feng Yang <yangfeng@kylinos.cn>
+Subject:
+ Re: [PATCH v3 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in
+ kernel_clone() via BPF fmod_ret on security_task_alloc
+Date: Sun, 12 Apr 2026 11:39:53 +0800
+Message-ID: <4726660.LvFx2qVVIh@7950hx>
+In-Reply-To: <20260411163556.8567-2-yangfeng59949@163.com>
+References:
+ <20260411163556.8567-1-yangfeng59949@163.com>
+ <20260411163556.8567-2-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, 12 Apr 2026 00:35:55 +0800 Alexei Starovoitov wrote:
+On 2026/4/12 00:35, Feng Yang wrote:
+> From: Feng Yang <yangfeng@kylinos.cn>
+> 
+[...]
+>  
+>  static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
+>  {
+> @@ -18416,8 +18522,13 @@ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_
+>  			*range = retval_range(0, 0);
+>  			break;
+>  		case BPF_TRACE_RAW_TP:
+> -		case BPF_MODIFY_RETURN:
+>  			return false;
+> +		case BPF_MODIFY_RETURN:
+> +			if (!bpf_security_get_retval_range(env->prog, range))
+> +				break;
+> +			if (modify_return_get_retval_range(env->prog, range))
+> +				return false;
+> +			break;
 
-> > +/* The system call return value is allowed to be an arbitrary value. */
-> > +static int modify_return_get_retval_range(const struct bpf_prog *prog,
-> > +                                         struct bpf_retval_range *range)
-> > +{
-> > +       return -EINVAL;
-> > +}
-> > +
-> > +#endif /* CONFIG_FUNCTION_ERROR_INJECTION */
+return false by default, as what we did in the previous logic?
 
-> I recall people already explained that this is no go.
-> We cannot break all fmod_ret because error injection is disabled.
-
-When error injection is disabled, the returned -EINVAL will result in a false return.
-This shouldn't change the previous logic.
-
- 		case BPF_TRACE_RAW_TP:
--		case BPF_MODIFY_RETURN:
- 			return false;
 +		case BPF_MODIFY_RETURN:
 +			if (!bpf_security_get_retval_range(env->prog, range))
 +				break;
-+			if (modify_return_get_retval_range(env->prog, range))
-+				return false;
-+			break;
++			if (!modify_return_get_retval_range(env->prog, range))
++				break;
++			return false;
 
-> Also see sashiko reports.
->
+>  		case BPF_TRACE_ITER:
+>  		default:
+>  			break;
+> @@ -25460,7 +25571,6 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
+>  	return bpf_prog_ctx_arg_info_init(prog, st_ops_desc->arg_info[member_idx].info,
+>  					  st_ops_desc->arg_info[member_idx].cnt);
+>  }
+> -#define SECURITY_PREFIX "security_"
+>  
+>  #ifdef CONFIG_FUNCTION_ERROR_INJECTION
+>  
+> 
 
-Okay.
-Thansks.
 
-> let's copy paste bpf_lsm_get_retval_range() for no good reason?!
 
-So should we modify this part according to Jiayuan Chen's logic?
-
-Jiayuan's previous reply:
-Also, I think a whitelist approach would be better here.
-The known danger is specifically those security hooks whose return 
-values get fed into ERR_PTR() by callers, such as:
-- security_task_alloc
-- security_inode_readlink
-- security_task_movememory
-- security_inode_follow_link
-- security_fs_context_submount
-- security_dentry_create_files_as
-- security_perf_event_alloc
-- security_inode_get_acl
-
-> please don't send such poor quality patches.
 
