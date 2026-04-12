@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F7E233704;
-	Sun, 12 Apr 2026 19:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062343A1DB;
+	Sun, 12 Apr 2026 19:50:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776022836; cv=none; b=egbbKbAIxpEq0OgNdzdorHO7GhSOQZ0cQe4zMGpPUYzCaGqsxtZV1ifFOqKk2yVCV8+Bk+7hWnFnXWijkrHJViTOjLp/r2z9F+bpXtgsl9Blscg61u8N7uGi0YgS9OWEIEknlVjmwW9/i1bcTOh8ZW+GNI4aQ8pA1rQ1vfNYQic=
+	t=1776023448; cv=none; b=YjHubDwNfsM+H12Yqvzyh+lVmLRnMA3MAkAR8c3qNyhijNYt3mjyk9bcKp2b2IHxYrfkLanoY9J0KZQ+4pg1JJRLOqSQHS5yGrDoZdfED7Au4NGAKO3vJh0szYQWz0TA/4+mCKrO/MCQCT+tagIR/aqR/fuxk7QPhbNrM8mu1kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776022836; c=relaxed/simple;
-	bh=gh/bkYM96nJxGpANVa0EtYLT8J1Z8DIzURo/ioCEITg=;
+	s=arc-20240116; t=1776023448; c=relaxed/simple;
+	bh=Ylq6ngyfQKMcKqfpdBa56P/0g12905cE/VPjTJtZ9Dk=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WmkMGdYihE8aoUc/tIL0u9nLuMML2JeTQdrMTYU1f3j8hPQarfd4AG/CDV5Gctx0+HtShHFZqsrjsJTLh4EbFCtGWsSdOhPk+nzoKVWIDorm72cgsTQjg7c3kkexaOBwPfhxyOJ7aKbxUH2NNhQK9SuxfjH0vIYpZiikGIGpmrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PzZUERMr; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=S8rCUQykXgRnUZ9SAG5INFhLJx7tTJIg51pUFHC0y/W1P/X7RiJ1u+7zVV5+Zmq9em1kY8PtGdUJKOBu90N5qmMKtvIx3Ot0R2C/DBh7xlPpJkyfx/IsX61wxM7VegyrEnnvmfnqlyoXBlOyCyooR7ef6KEa55XIdP+Sh13GOT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TK8+kyxh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PzZUERMr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3CCFC19424;
-	Sun, 12 Apr 2026 19:40:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TK8+kyxh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8371C19424;
+	Sun, 12 Apr 2026 19:50:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776022835;
-	bh=gh/bkYM96nJxGpANVa0EtYLT8J1Z8DIzURo/ioCEITg=;
+	s=k20201202; t=1776023447;
+	bh=Ylq6ngyfQKMcKqfpdBa56P/0g12905cE/VPjTJtZ9Dk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=PzZUERMrDrfQrSqQv71usR6Ksv2CqP7uQfCFSNFsvJan2AFbkjOwzGS1fwMW8AJK9
-	 O+QzrB5PyI7IlRPkKjv6na8bQapJI/7V1eYzusP3u5F9U2w2wAondzE8YKE52BpX8f
-	 WH570wRKyFuoJrL55b9S+6OZlSaujar6MEB+EKZ99BzZv4OByxir+ek1Bh5ddCUl0A
-	 XpFHYiWJbPvTWso9iabLVgD1+OQU0QdbbRZPEw1nhVYc6PHe1abQsp1BK/qMifrVqL
-	 YEbf84xl7qYZRwm9MACPjeXB/C/Em0cI8IWbKMlhPSo1jKXW+qFwRiNZh5d3Yxna2c
-	 MhLqgL8GX4Zug==
+	b=TK8+kyxhkjC5jHGdjeOgDe8YjHmARelUhkLyuq2UH007ALRGfSudt1b5vpPQPvbOF
+	 +RpEaMhCUbKXJOK6YbCHpKGoRHiSNJgQ3wQ7Fsz147XFK2fJn07wP0++jEojKlsbse
+	 KJaMWN4pyOWUQIYr3jzkCiw5sWz/REB0wjvmM4oQD20XgfLnwmd8kwo7UObvGKW/Qf
+	 TlmwCVAc54LT+kCSnIW2tCzq05jQaj8ck277bTAWMsXcbLlF61p3fNId9x/eHrkD8Y
+	 DBTDvCx/72eY5bZ1o+hxOB0Ai2YhmRmPulvtGLeJWotMX+3CVGRr8xuA7wMs5cw1aZ
+	 I5l3i3k8pknpg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FCF13809A8C;
-	Sun, 12 Apr 2026 19:40:09 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FD383809A8C;
+	Sun, 12 Apr 2026 19:50:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -37,48 +37,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v3 0/2] bpf: Fix SOCK_OPS_GET_SK same-register OOB
- read in
- sock_ops and add selftest
+Subject: Re: [PATCH bpf-next v3 0/3] bpf: add the missing fsession
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177602280805.3388150.11022027756710396188.git-patchwork-notify@kernel.org>
-Date: Sun, 12 Apr 2026 19:40:08 +0000
-References: <20260407022720.162151-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260407022720.162151-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, werner@verivus.ai, martin.lau@linux.dev,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, sun.jian.kdev@gmail.com,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+ <177602342004.3390867.8771869478459170311.git-patchwork-notify@kernel.org>
+Date: Sun, 12 Apr 2026 19:50:20 +0000
+References: <20260412060346.142007-1-dongml2@chinatelecom.cn>
+In-Reply-To: <20260412060346.142007-1-dongml2@chinatelecom.cn>
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ emil@etsalapatis.com, leon.hwang@linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue,  7 Apr 2026 10:26:26 +0800 you wrote:
-> When a BPF sock_ops program accesses ctx fields with dst_reg == src_reg,
-> the SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() macros fail to zero the
-> destination register in the !fullsock / !locked_tcp_sock path, leading to
-> OOB read (GET_SK) and kernel pointer leak (GET_FIELD).
+On Sun, 12 Apr 2026 14:03:43 +0800 you wrote:
+> Add the missing fsession attach type to the BPF docs, verifier log and
+> bpftool.
 > 
-> Patch 1: Fix both macros by adding BPF_MOV64_IMM(si->dst_reg, 0) in the
-> !fullsock landing pad.
-> Patch 2: Add selftests covering same-register and different-register cases
-> for both GET_SK and GET_FIELD.
+> Changes since v2:
+> - replace "FENTRY/FEXIT/FSESSION" with "Tracing" in the 1st patch
+> - v2: https://lore.kernel.org/all/20260408062109.386083-1-dongml2@chinatelecom.cn/
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,v3,1/2] bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
-    https://git.kernel.org/netdev/net/c/10f86a2a5c91
-  - [bpf,v3,2/2] selftests/bpf: Add tests for sock_ops ctx access with same src/dst register
-    https://git.kernel.org/netdev/net/c/04013c3ca022
+  - [bpf-next,v3,1/3] bpf: add missing fsession to the verifier log
+    https://git.kernel.org/bpf/bpf-next/c/9fd19e3ed775
+  - [bpf-next,v3,2/3] docs/bpf: add missing fsession attach type to docs
+    https://git.kernel.org/bpf/bpf-next/c/46d9f15a55fb
+  - [bpf-next,v3,3/3] bpftool: add missing fsession to the usage and docs of bpftool
+    https://git.kernel.org/bpf/bpf-next/c/f0e16ac71618
 
 You are awesome, thank you!
 -- 
