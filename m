@@ -1,45 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344F53D994;
-	Sun, 12 Apr 2026 18:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F7E233704;
+	Sun, 12 Apr 2026 19:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776017658; cv=none; b=s4GQcBVZ135p59T12OWESEK59MmYYoG2vtnxihpdRXRMeYnuF1e7eaNgL2S06IuVsl3C5L683BI4+u183T970QRQFvt+kuQSYiKd670WH0YlG9nCbT+uhExRNCEHYiZQ5TrZOayUxaKbnaJ37pbwdCHmxV0Q+R8LVzGFUPA64o8=
+	t=1776022836; cv=none; b=egbbKbAIxpEq0OgNdzdorHO7GhSOQZ0cQe4zMGpPUYzCaGqsxtZV1ifFOqKk2yVCV8+Bk+7hWnFnXWijkrHJViTOjLp/r2z9F+bpXtgsl9Blscg61u8N7uGi0YgS9OWEIEknlVjmwW9/i1bcTOh8ZW+GNI4aQ8pA1rQ1vfNYQic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776017658; c=relaxed/simple;
-	bh=ScWjFfjjpM9jn/WjFwtS9xJ95budLw+WQgu9N2i0yr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ftkbv5GOzfdYdeLlgdZUykbcldMGoDJA5pCxtCy7tITtphvnUGbD0DeKakWPvoiAHI3jfjQ9lYBNaFKcZ5ieov4cp0r+P7wLgDIzoY5LYfyulDUJkys2hprsbuzLb6wvX+sP8nvOMGN60ucpXTmKtpzO/iOPT2zNrYPBFSi74wI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAskbK8U; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776022836; c=relaxed/simple;
+	bh=gh/bkYM96nJxGpANVa0EtYLT8J1Z8DIzURo/ioCEITg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=WmkMGdYihE8aoUc/tIL0u9nLuMML2JeTQdrMTYU1f3j8hPQarfd4AG/CDV5Gctx0+HtShHFZqsrjsJTLh4EbFCtGWsSdOhPk+nzoKVWIDorm72cgsTQjg7c3kkexaOBwPfhxyOJ7aKbxUH2NNhQK9SuxfjH0vIYpZiikGIGpmrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PzZUERMr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAskbK8U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A148EC19424;
-	Sun, 12 Apr 2026 18:14:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PzZUERMr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3CCFC19424;
+	Sun, 12 Apr 2026 19:40:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776017657;
-	bh=ScWjFfjjpM9jn/WjFwtS9xJ95budLw+WQgu9N2i0yr4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PAskbK8U63j7K2gYgh7JPEvRyPtpkqPh3JB5rKqMB8MZPYFL8RinP/tRLYZXW16uN
-	 V0FbIjCqRcoPGj1KzTUTYV7UlWk1+t2ckM/jWKfsB9G42Ch6zxcC+qvQ/9ezf2Tj8e
-	 1/Dp559TCBynLYestO13T/2x+IK3xuYguT2bPuMz6/a/HkSczEiGEhDaKoXT6H2OGl
-	 YrOphXq6Zx2vdI9p+YUAin65/pPDdhCz45nLhMfJnzEP44rmn3GhQ++uM9UFAO/UH4
-	 5mhfq0oLiGQht+RUCnwUr/E07RMhlJ1zHeu5ZTwusynQVITzDXcmloyHDzqlWxbbOR
-	 1B/4ZhI6mKw5Q==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: (sashiko status) [RFC PATCH v5.2 00/11] mm/damon: introduce DAMOS failed region quota charge ratio
-Date: Sun, 12 Apr 2026 11:14:14 -0700
-Message-ID: <20260412181414.84422-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260412161957.82835-1-sj@kernel.org>
-References: 
+	s=k20201202; t=1776022835;
+	bh=gh/bkYM96nJxGpANVa0EtYLT8J1Z8DIzURo/ioCEITg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=PzZUERMrDrfQrSqQv71usR6Ksv2CqP7uQfCFSNFsvJan2AFbkjOwzGS1fwMW8AJK9
+	 O+QzrB5PyI7IlRPkKjv6na8bQapJI/7V1eYzusP3u5F9U2w2wAondzE8YKE52BpX8f
+	 WH570wRKyFuoJrL55b9S+6OZlSaujar6MEB+EKZ99BzZv4OByxir+ek1Bh5ddCUl0A
+	 XpFHYiWJbPvTWso9iabLVgD1+OQU0QdbbRZPEw1nhVYc6PHe1abQsp1BK/qMifrVqL
+	 YEbf84xl7qYZRwm9MACPjeXB/C/Em0cI8IWbKMlhPSo1jKXW+qFwRiNZh5d3Yxna2c
+	 MhLqgL8GX4Zug==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FCF13809A8C;
+	Sun, 12 Apr 2026 19:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,63 +37,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v3 0/2] bpf: Fix SOCK_OPS_GET_SK same-register OOB
+ read in
+ sock_ops and add selftest
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177602280805.3388150.11022027756710396188.git-patchwork-notify@kernel.org>
+Date: Sun, 12 Apr 2026 19:40:08 +0000
+References: <20260407022720.162151-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260407022720.162151-1-jiayuan.chen@linux.dev>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, werner@verivus.ai, martin.lau@linux.dev,
+ daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
+ ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, sun.jian.kdev@gmail.com,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-TL; DR: Seems Sashiko is finally convinced.  I will drop RFC tag from the next
-spin.
+Hello:
 
-Forwarding sashiko.dev review status for this thread, with my short comments
-for issues-may-found reviews.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-# review url: https://sashiko.dev/#/patchset/20260412161957.82835-1-sj@kernel.org
+On Tue,  7 Apr 2026 10:26:26 +0800 you wrote:
+> When a BPF sock_ops program accesses ctx fields with dst_reg == src_reg,
+> the SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() macros fail to zero the
+> destination register in the !fullsock / !locked_tcp_sock path, leading to
+> OOB read (GET_SK) and kernel pointer leak (GET_FIELD).
+> 
+> Patch 1: Fix both macros by adding BPF_MOV64_IMM(si->dst_reg, 0) in the
+> !fullsock landing pad.
+> Patch 2: Add selftests covering same-register and different-register cases
+> for both GET_SK and GET_FIELD.
+> 
+> [...]
 
-- [RFC PATCH v5.2 01/11] mm/damon/core: handle <min_region_sz remaining quota as empty
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH v5.2 02/11] mm/damon/core: merge regions after applying DAMOS schemes
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH v5.2 03/11] mm/damon/core: introduce failed region quota charge ratio
-  - status: Reviewed
-  - review: ISSUES MAY FOUND
+Here is the summary with links:
+  - [bpf,v3,1/2] bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
+    https://git.kernel.org/netdev/net/c/10f86a2a5c91
+  - [bpf,v3,2/2] selftests/bpf: Add tests for sock_ops ctx access with same src/dst register
+    https://git.kernel.org/netdev/net/c/04013c3ca022
 
-Sashiko is asking a same question that I already decided to ignore.
-
-- [RFC PATCH v5.2 04/11] mm/damon/sysfs-schemes: implement fail_charge_{num,denom} files
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH v5.2 05/11] Docs/mm/damon/design: document fail_charge_{num,denom}
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH v5.2 06/11] Docs/admin-guide/mm/damon/usage: document fail_charge_{num,denom} files
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH v5.2 07/11] Docs/ABI/damon: document fail_charge_{num,denom}
-  - status: Reviewed
-  - review: ISSUES MAY FOUND
-
-For this review, Sashiko seems just hallucinated.
-
-- [RFC PATCH v5.2 08/11] mm/damon/tests/core-kunit: test fail_charge_{num,denom} committing
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH v5.2 09/11] selftests/damon/_damon_sysfs: support failed region quota charge ratio
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH v5.2 10/11] selftests/damon/drgn_dump_damon_status: support failed region quota charge ratio
-  - status: Reviewed
-  - review: No issues found.
-- [RFC PATCH v5.2 11/11] selftests/damon/sysfs.py: test failed region quota charge ratio
-  - status: Reviewed
-  - review: No issues found.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Thanks,
-SJ
-
-# hkml [1] generated a draft of this mail.  It can be regenerated
-# using below command:
-#
-#     hkml patch sashiko_dev --thread_status --for_forwarding \
-#             20260412161957.82835-1-sj@kernel.org
-#
-# [1] https://github.com/sjp38/hackermail
