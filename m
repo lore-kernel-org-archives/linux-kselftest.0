@@ -1,157 +1,218 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888B930BBAE;
-	Sun, 12 Apr 2026 09:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E99D365A1B
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 11:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775984412; cv=none; b=Bwww+7JDoWNpHAFC2//YA9B6Y7ANoSaM64hyFedrV1C3Cvxwz6vD7zEi3rCoixkuJSfJaxvPOX+7sL8fDCRHWhIb1n+mYP459uwiJj2IdZXLO4mNaeZml5jyzE9EwU/6d8nckv6MFw6rRpE1Q6vmPZxlBOvqEIzBipOYxXz7R3Q=
+	t=1775992264; cv=none; b=jWxPkl533TBMR7RWQscBNTHnp/O16wRRXrIw3lFBWhh25o2QOYlnGC1FNqt4Zm+q0Y6tWBEPew1AQma119UkoKBFgcsapQeuvZ810KBAdmR1O2oswQsgB0K4SwpIHolCieE1DQvcGETRj8jIie9fewhrNVgojRX3Xln3iZHcxI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775984412; c=relaxed/simple;
-	bh=XLSXOqKfHWfTPS6C6Vq2UT2HUb3l8dn3SksR7uKAF1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ICGLxQm+6CxD1uTOrCow4rBaGpOMxagPDEN3Gh/R8F6Vhi4+4MJAlOfTc9FeOQ+2+Qb2nAmUoH4nEYntIee/n+7kB9o5IYoatygZ6s0504nxsuVyVml7Wyr9gkmO+kc33kj1baTarB8f5xG65cpIcpsxfliNTPlwbxAs64OVTDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jp8RS9Py; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775992264; c=relaxed/simple;
+	bh=DN1YYPSHImU/U5TMNDB5Ec47OLtn6flhiZP9gVoHmi8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sN3No484sfiVfvRoxP447+LnVzV78eoEFMQLZfomJf6h7RtlNbSM7zSjmApsXBh5vMKqH2Ot5EzavBhwTX+6IH6M4ac2rp6dNxJAbmsED7j/aLKy0lGDSQN9P99Wk8uHhhs6oqpYqVkWB0rJOKPj9ezTi58TqvWFBDf1umG9IvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWQjcj8V; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jp8RS9Py"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B8EAC19424;
-	Sun, 12 Apr 2026 09:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775984412;
-	bh=XLSXOqKfHWfTPS6C6Vq2UT2HUb3l8dn3SksR7uKAF1I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jp8RS9PyXTYJFvkzzLsKbqdk9YThojx4/3xYFhM36XYBeKqzD1VS87sgR3Ep4G+wj
-	 nIDIotasekxgRR2+0LR1ZnRFKfv6A7hEbes2g4J5SoihEugtVrNR7XvlNzaLHEZS2r
-	 cHZihj147Ov2kMt/c0JJRi/9bPg/TdDk4SdHu+WdXL0qjA0ahVxxKxP7Kc3PwKLHmk
-	 b2Opz8lmLzC4ig2Rs95Ar//4WLPrxMnbu3drosCYDokJ6cVPTWVa/Z4SoW7kMZaHjC
-	 UkqezaVoZsCnLgyhyOrwMVesW6JK6+EAfZsldb0dCG8a1n/N7VSqtXivIBgWjVJo2f
-	 1WwiEbGVseE+Q==
-Date: Sun, 12 Apr 2026 12:00:06 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260412090006.GA21470@unreal>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWQjcj8V"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c76b0cda2aeso1432805a12.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 04:11:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775992261; x=1776597061; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=akueeEYc2Me3zisgTMBqzXUfPeZV9sXVNUmdWR6Vztk=;
+        b=jWQjcj8VVeylOlGBTrPtSkigwqQ7U+0srmsoFsPkuBP8KUVgxPOaA94CCXlr3qQ9Q0
+         3yFAu/HHQZcBF5LuZNqRZ3EykrW8R8rhA6u7IlB4GnEKAUWl2syz4qYsfu7IDSenDqwA
+         YhoJgu1aph2Hvnc0QGExzn6fnehjgxfXYmT1+yukvKrW9k8ISMihgZ5+e049+iLFB8YG
+         gmXdpfZxaD9f5qDy9o7nJxYcWBQJeulqKIwDyQsyAh06bMfsdlMZCRgPIjjb8fW9GhV6
+         3OS4mywTGOx0w9blvXdGRFgzALE35TPxTHQ703uMOlJHzCyhPzQVVjgVoDWHrLgGaJ+9
+         0cIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775992261; x=1776597061;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=akueeEYc2Me3zisgTMBqzXUfPeZV9sXVNUmdWR6Vztk=;
+        b=dTagDdHC8qP94WlViLf5N25GNXBXBiAc6J1whZU/JceR439ZNzzfd9Q3n1mnQfXLlw
+         064wLpvFrrSqM0q6Bpotuel+sAyY3SZHcDZVIQrgEnCyGGeWdViAmKjnTs/qOQ+a1eeU
+         FPREo0MoTh8wqC/JkZqNCh4hOBAegH3Ry5WyxYx+NGzHf0rTe/KD/4F5njfRsELRhhDe
+         mMjDJ7wXe2DHhQwCIgMb5tHac2dsYKgHuBySQlIa8YPeEdywYug+xz5nVlg3ViAuEMhJ
+         RCwDNbx+tPv7PgcGHLlaDzD8fereJCqxKIgG63OBosFMi84EjMekzF0wK6BN9nTpoXj9
+         Blfw==
+X-Forwarded-Encrypted: i=1; AJvYcCUs7L/q01ubnzwYtnGjCFwakDJUojfabUkgxs+mSZq4/y2W9zkfXLL0571mjtvLCLQjVqlCHs4/QxuRn4PadjY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFlVANJ/B1ZiDC8UiC9918Tpu0hr5DQlzIkSHo/X0lveE2hSq1
+	Cgaf+CP7/bkOcCK3y1L0AIwn9b+lQYcCN4qw8Z9Kbz+l3M6Nke3+TUpr
+X-Gm-Gg: AeBDiet8QAA06ndl2V/u872lasYyEM5O3ig+g8jWuP1MRRKA4kK0hs7LBadzSNPbcIv
+	4e77joIOVKSqSwrHsGaUHv062ATh5Cq/+BQiNCIVIBlmYrhagheOdZPx1FJQ4wxM4AnrHViORtV
+	g1htlcqDKM3PbdKhRhwaRCxYQOqGSuVUIxNKoEUiBUG1fbgqOFIzD4oCVx0l39SKQPmxYA4LerG
+	1HeTYtPfgRX2S5UkoXtOzaYdYZKz111+2U0cDakC80yzYkl7RzahRQxhZoQjlZXSjseUn0tHhJQ
+	V6hKUvyZ2c4ZEH8g7xrdqcYukBnI3B2WJ3Fua3D0EEr6upeGVnqkkofWifvjaPlqEU4QV9yG/kd
+	MWlBeYBqj/U6KvMg2AT/sENmZVdZWq3B7lN34aLfVDxveBOQkqOz/Yzr4KS/UbBvA7C6xw+Chn7
+	GPIGgDyOtdlWYHBQOi0qh0wiWHM6qU07RQs+vwgt2V
+X-Received: by 2002:a05:6a21:338f:b0:398:787c:d2e4 with SMTP id adf61e73a8af0-39fe3d0e8e0mr10815770637.17.1775992261411;
+        Sun, 12 Apr 2026 04:11:01 -0700 (PDT)
+Received: from DESKTOP-82PPU4A.localdomain ([202.8.116.169])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7934c9ef38sm2522981a12.12.2026.04.12.04.10.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Apr 2026 04:11:00 -0700 (PDT)
+From: Ujjal Roy <royujjal@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>,
+	Yong Wang <yongwang@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>
+Cc: Ujjal Roy <ujjal@alumnux.com>,
+	bridge@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v4 0/5] net: bridge: mcast: support exponential field encoding
+Date: Sun, 12 Apr 2026 11:10:42 +0000
+Message-ID: <20260412111047.1326-1-royujjal@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
 
-On Thu, Apr 09, 2026 at 05:04:24PM -0400, Paul Moore wrote:
-> On Thu, Apr 9, 2026 at 8:45 AM Leon Romanovsky <leon@kernel.org> wrote:
-> > On Thu, Apr 09, 2026 at 02:27:43PM +0200, Roberto Sassu wrote:
-> > > On Thu, 2026-04-09 at 15:12 +0300, Leon Romanovsky wrote:
-> > > > On Tue, Mar 31, 2026 at 08:56:32AM +0300, Leon Romanovsky wrote:
-> > > > > From Chiara:
-> > > > >
-> > > > > This patch set introduces a new BPF LSM hook to validate firmware commands
-> > > > > triggered by userspace before they are submitted to the device. The hook
-> > > > > runs after the command buffer is constructed, right before it is sent
-> > > > > to firmware.
-> > > >
-> > > > <...>
-> > > >
-> > > > > ---
-> > > > > Chiara Meiohas (4):
-> > > > >       bpf: add firmware command validation hook
-> > > > >       selftests/bpf: add test cases for fw_validate_cmd hook
-> > > > >       RDMA/mlx5: Externally validate FW commands supplied in DEVX interface
-> > > > >       fwctl/mlx5: Externally validate FW commands supplied in fwctl
-> > > >
-> > > > Hi,
-> > > >
-> > > > Can we get Ack from BPF/LSM side?
-> > >
-> > > + Paul, linux-security-module ML
-> > >
-> > > Hi
-> > >
-> > > probably you also want to get an Ack from the LSM maintainer (added in
-> > > CC with the list). Most likely, he will also ask you to create the
-> > > security_*() functions counterparts of the BPF hooks.
-> >
-> > We implemented this approach in v1:
-> > https://patch.msgid.link/20260309-fw-lsm-hook-v1-0-4a6422e63725@nvidia.com
-> > and were advised to pursue a different direction.
-> 
-> I'm assuming you are referring to my comments? If so, that isn't exactly what I said,
-> I mentioned at least one other option besides
-> going directly to BPF.  Ultimately, it is your choice to decide how
-> you want to proceed, but to claim I advised you to avoid a LSM based
-> solution isn't strictly correct.
+Description:
+This series addresses a mismatch in how multicast query
+intervals and response codes are handled across IPv4 (IGMPv3)
+and IPv6 (MLDv2). While decoding logic currently exists,
+the corresponding encoding logic is missing during query
+packet generation. This leads to incorrect intervals being
+transmitted when values exceed their linear thresholds.
 
-Yes, this matches how we understood your comments:  
-https://lore.kernel.org/all/20260311081955.GS12611@unreal/
+The patches introduce a unified floating-point encoding
+approach based on RFC3376 and RFC3810, ensuring that large
+intervals are correctly represented in QQIC and MRC fields
+using the exponent-mantissa format.
 
-In the end, the goal is to build something practical and avoid adding
-unnecessary complexity that brings no real benefit to users.
+Key Changes:
+* ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation
+  Removes legacy macros in favor of a cleaner, unified
+  calculation for retrieving intervals from encoded fields,
+  improving code maintainability.
 
-> 
-> Regardless, looking at your v2 patchset, it looks like you've taken an
-> unusual approach of using some of the LSM mechanisms, e.g. LSM_HOOK(),
-> but not actually exposing a LSM hook with proper callbacks.
-> Unfortunately, that's not something we want to support.  If you want
-> to pursue an LSM based solution, complete with a security_XXX() hook,
-> use of LSM_HOOK() macros, etc. then that's fine, I'm happy to work
-> with you on that.
+* ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()
+  Standardizes MLDv2 terminology by renaming mldv2_mrc()
+  to mldv2_mrd() (Maximum Response Delay) and introducing
+  a new API mldv2_qqi for QQI calculation, improving code
+  readability.
 
-The issue is that the sentence below was the reason we did not merge v1 with v2:
-https://github.com/LinuxSecurityModule/kernel/blob/main/README.md#new-lsm-hooks
-"pass through implementations, such as the BPF LSM, are not eligible for
-LSM hook reference implementations."
+* ipv4: igmp: encode multicast exponential fields
+  Introduces the logic to dynamically calculate the exponent
+  and mantissa using bit-scan (fls). This ensures QQIC and
+  MRC fields (8-bit) are properly encoded when transmitting
+  query packets with intervals that exceed their respective
+  linear threshold value of 128 (for QQI/MRT).
+
+* ipv6: mld: encode multicast exponential fields
+  Applies similar encoding logic for MLDv2. This ensures
+  QQIC (8-bit) and MRC (16-bit) fields are properly encoded
+  when transmitting query packets with intervals that exceed
+  their respective linear thresholds (128 for QQI; 32768
+  for MRD).
+
+* selftests: net: bridge: add MRC and QQIC field encoding tests
+  Updates bridge selftests to validate both linear and non-linear
+  (exponential) encoding for MRC and QQIC fields, ensuring
+  protocol compliance across IGMPv3 and MLDv2.
+
+Impact:
+These changes ensure that multicast queriers and listeners
+stay synchronized on timing intervals, preventing protocol
+timeouts or premature group membership expiration caused
+by incorrectly formatted packet headers.
+
+Test results:
+Giving results only from vlmc_query_intvl_test and vlmc_query_response_intvl_test
+of the script bridge_vlan_mcast.sh.
+Without patchset, here is the result.
+    - TEST: Vlan multicast snooping enable                                [ OK ]
+    - TEST: Vlan mcast_query_interval global option default value         [ OK ]
+    - INFO: Vlan 10 mcast_query_interval (QQIC) test cases:
+    - TEST: Number of tagged IGMPv2 general query                         [ OK ]
+    - TEST: IGMPv3 QQIC linear value 60                                   [ OK ]
+    - TEST: MLDv2 QQIC linear value 60                                    [ OK ]
+    - TEST: IGMPv3 QQIC non linear value 160                              [FAIL]
+    -         Wrong QQIC in generated IGMPv3 general queries
+    - TEST: MLDv2 QQIC non linear value 160                               [FAIL]
+    -         Wrong QQIC in generated MLDv2 general queries
+    - TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
+    - INFO: Vlan 10 mcast_query_response_interval (MRC) test cases:
+    - TEST: IGMPv3 MRC linear value 60                                    [ OK ]
+    - TEST: IGMPv3 MRC non linear value 160                               [FAIL]
+    -         Wrong MRC in generated IGMPv3 general queries
+    - TEST: MLDv2 MRC linear value 30000                                  [ OK ]
+    - TEST: MLDv2 MRC non linear value 60000                              [FAIL]
+    -         Wrong MRC in generated MLDv2 general queries
+With these patchset, here is the result.
+    * TEST: Vlan multicast snooping enable                                [ OK ]
+    * TEST: Vlan mcast_query_interval global option default value         [ OK ]
+    * INFO: Vlan 10 mcast_query_interval (QQIC) test cases:
+    * TEST: Number of tagged IGMPv2 general query                         [ OK ]
+    * TEST: IGMPv3 QQIC linear value 60                                   [ OK ]
+    * TEST: MLDv2 QQIC linear value 60                                    [ OK ]
+    * TEST: IGMPv3 QQIC non linear value 160                              [ OK ]
+    * TEST: MLDv2 QQIC non linear value 160                               [ OK ]
+    * TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
+    * INFO: Vlan 10 mcast_query_response_interval (MRC) test cases:
+    * TEST: IGMPv3 MRC linear value 60                                    [ OK ]
+    * TEST: IGMPv3 MRC non linear value 160                               [ OK ]
+    * TEST: MLDv2 MRC linear value 30000                                  [ OK ]
+    * TEST: MLDv2 MRC non linear value 60000                              [ OK ]
+
+v4:
+- Removed binary application and related codes for selftests
+- Decided hard coded match based on extra arguments for selftests
+- Ran shellcheck on modified selftests code and fixed
+- Updated comments on patch[1,2,3,4] as per review
+- Added 'Reviewed-by:' as requested on patch4
+
+v3:
+- Updated the series title for better clarity; old one is here
+  https://lore.kernel.org/all/20260326150742.50289-1-royujjal@gmail.com/
+- Added key changes section for new selftests patch
+- Updated netdev style comments and addressed review comments
+- Fixed MLDv2 MRC conversion logic during query generation
+- Mentioned intervals in units wherever applicable
+- Dropped type casting and fixed indentations
+
+v2:
+- Retargeted the series to net-next as suggested
+- Fixed a compilation warning in the MLD rename change
+- Kept reverse xmas tree order in IGMP exponential encoding change
+- Added bridge selftests to validate IGMPv3 Query MRC and QQIC handling
+
+Ujjal Roy (5):
+  ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation
+  ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()
+  ipv4: igmp: encode multicast exponential fields
+  ipv6: mld: encode multicast exponential fields
+  selftests: net: bridge: add MRC and QQIC field encoding tests
+
+ include/linux/igmp.h                          | 167 +++++++++++++++-
+ include/net/mld.h                             | 183 +++++++++++++++++-
+ net/bridge/br_multicast.c                     |  22 +--
+ net/ipv4/igmp.c                               |   6 +-
+ net/ipv6/mcast.c                              |  19 +-
+ .../net/forwarding/bridge_vlan_mcast.sh       | 150 +++++++++++++-
+ 6 files changed, 491 insertions(+), 56 deletions(-)
 
 
-> However, if you've decided that your preferred
-> option is to create a BPF hook you should avoid using things like
-> LSM_HOOK() and locating your hook/code in bpf_lsm.c.
+base-commit: 3f3a2aefbc661b837c8e344f944982d61c2ae037
+-- 
+2.43.0
 
-We are not limited to LSM solution, the goal is to intercept commands
-which are submitted to the FW and "security" bucket sounded right to us.
-
-> 
-> The good news is that there are plenty of other examples of BPF
-> plugable code that you could use as an example, one such thing is the
-> update_socket_protocol() BPF hook that was originally proposed as a
-> LSM hook, but moved to a dedicated BPF hook as we generally want to
-> avoid changing non-LSM kernel objects within the scope of the LSMs.
-> While your proposed case is slightly different, I think the basic idea
-> and mechanism should still be useful.
-> 
-> https://lore.kernel.org/all/cover.1692147782.git.geliang.tang@suse.com
-
-Thanks
-
-> 
-> -- 
-> paul-moore.com
-> 
