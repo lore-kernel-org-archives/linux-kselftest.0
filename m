@@ -1,216 +1,189 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584C237E2F4
-	for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 21:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA665309EEC
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 22:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776028192; cv=pass; b=LVBooFPRPk0PCn0PmwhPAKodXEw+JAoXI87ch99frlSf0DcK6ALTvLgJUe4CRBzHX64s2vtoZyIFfhFjznO6Xc70MUe1DW793zZ6UpTOL9y3Rafs43TsEysnA+i8azrcdGULYv6gWxNxFVdvw5HcElq95hLYNTJfUtI7hC6VQV0=
+	t=1776034152; cv=pass; b=A1N0occDy59aaHphAO9KyMPJeyvUF8Wi+ifTPB50f7RBNgJEY0x/ehHT8YwRHoHhMQD92OIpK0cbWPUmc9AWl8nhRrAQVd/FQwXsF/neJ1A9qTqVbqT5GUrqFmaqfHkzC9cTE7QLNvZHhxz7tXIZdTn+Evn0i30s4n3Ih1WmPCo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776028192; c=relaxed/simple;
-	bh=oEQ85Gl3lH6+Cv9RN6chqPqZuCmnNGFRnwc1Zh/B7zI=;
+	s=arc-20240116; t=1776034152; c=relaxed/simple;
+	bh=O5OVsiCKYjUkVc/4Ce0JG9hbx01UZGanAjUUxH4B9a0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nTue7q8UA04qI2rCsH39kCkgxU413JuEMigjfv6SFtEaJN3QQzLNYRd3kMizKJAAWMFOt+hETfMohyu6lAjxOelPmE4f5jMPaThNuJ1DerhTQD+pV8KN1w0haHVCMlln4KRS6RK/iS1J8fVkoD7w0uWN5qFTv4j5HTy0ykN1OSU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BIFDD6UO; arc=pass smtp.client-ip=209.85.221.52
+	 To:Cc:Content-Type; b=DsWbO0eu0eA6goe6Ul8aO/7TnGnG29qK4wy00lpRWLviZJWcugqIsuRTaLEobotNjV9bAisynyxqPMxYxIXtD7s2sj4h61YEP2/YKBiDmNhjEr/Vi4PTSRpRU5Z91TmUuAlLrEKWEpTxz10ExfB6DM8omUUl0ExnB8Ag2eb2VyI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JzGPmV6G; arc=pass smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BIFDD6UO"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43cf906b007so2290316f8f.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 14:09:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776028189; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JzGPmV6G"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4887f49ec5aso46332415e9.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 15:49:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776034149; cv=none;
         d=google.com; s=arc-20240605;
-        b=NFMn2k3qwPpRjVlSMGsgcaNgO2mB4irdjx3cgXOnoTj9vVQDW3mXcqe1Hgm3TWLPt+
-         M3u1VITilkNQKwzww6qS+mEkPiw7jdKiRbDlzdhiCIVb63kz97Y21bd/ebyWKyGC5kGT
-         xM6CDhdov5loGsIF0k/0LSNRUmu+eBWbM6RpQ7QJSmwiX7swt9FtCJmcM1X6Xo4OkbAD
-         9rtR0wrv2S/mphBhSaXsSao6XrpwpWUa399imLCjHHtWl74tDDFr2l8C9aLMZZIMkPJl
-         4Qtc8NJd4gyLjNl9OsEM7H81SHwlFQyvxHZhZqNfMB5DzXTrDvJn2WDkO1BhIqUxrVfy
-         +oeg==
+        b=MTS5AglYSCwnTz8t8H4byI7keaf6Y6SqJGlOLL/UsJmEf7rq4e5zLxo3p+/bqlLwyv
+         UfJQQ9o130H8xzQowfpR5HBAfbt78+NVem4mlMcfNrgQDj5Iy6TPCIeSUw4qJmGBNUm3
+         lEpZoFKnX8yGfBIM6GT0SzODFBRophTPTQVWSKVRTlasBbC5Eu5m4jJGQixOVg7umtL0
+         QsNBalB0GCDU+dKaIoP1vMC4Bd8R28c6voP/GXFbwrFpj2JvA62iblqMshhwgiE3TDLj
+         BJ2Zw6f1k6UWKCvttY/bCX2dhmFGRvs7u3ymLElyw0Kf7oJbg30HbDpbURl6ruQBNBJ2
+         P2mA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=bfWPCmksGjAz4lAKfxlGJt2rkOmogat4M8a0nj0icMw=;
-        fh=2QpLS9dJF3hubDwNlHCoGzvcGFDNxHCSI8GhAb4oQks=;
-        b=XJK8o8LWw/25rU1vvb0bOwqezMqHpZigZEirq2egiZbI1TBQWo6Rdufgr+ERkUpkpI
-         /O8pP1TFnJ9tmsO1c3ktFDz7AF9JY10UGAGuOfLmN0ixUh/ocTY0+b5WfGqzb0irLH9j
-         9Poqjer/qOKHb8qla2YJxNG9k3rOquKvYOZpNi+Fkx62smbd+xp0Gf6lSQEbSK8THcd7
-         GXURyNew8qgGDzqvQZ2DahoDvLS7ohEMEORDE+G6xIV6QgBe/rIO9XfL/pbhw9HVqNIe
-         oFSTzQJD36N0RSpHn+pnnk6jOtgedKjC/+P4wC5Sf/WMb6J3M8AbIcxBI/EG0yE1/fiH
-         hXiA==;
+        bh=O5OVsiCKYjUkVc/4Ce0JG9hbx01UZGanAjUUxH4B9a0=;
+        fh=e2o2wWaIDG86mVM0ynOBWz9mpRzcoOrDLyQYpgaL2cs=;
+        b=PAGYtNPgut627Z7aL2s5B0EBSwzL7iStJ5nrN+YUHpVNFBln5KORAidK5FU/fGkjtE
+         vVOfNQLvWWIe+LTwNvaUeqxsjCrYFJASxUnss9Y51YLTpQV3xG+0VLNKOdxy/SzWCaZ9
+         lQ2SkrsoGDSeSlzM43xNf234R2kgDbl27UInJgti586yKnVaPtO4H86vh32/jabvR5FX
+         l7+rvnb4uNsqe4b9rtZEC3DPeARCM1IUyUyos/dDJhl+qrX/y8rdr44OzRB+d7Ep8IeO
+         4qGD4O6zKs5ozNSPFoNPSA0cZ+9hrfhikBs9eQKZyi5C3sc/FUhhn+daq/FvvVI328kI
+         46hg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776028189; x=1776632989; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776034149; x=1776638949; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bfWPCmksGjAz4lAKfxlGJt2rkOmogat4M8a0nj0icMw=;
-        b=BIFDD6UOOORvczVKKH5w0UP1uzRIHSUYXNxwrx7jzh4l/HMZGvAHdUf5x1p5wT5x2v
-         fXfa2sCMYgeriU8nF39ZTHzJsvJyTQHXQBTmNqTFnz6mo9Teed967aMbtz+yQcTehzFO
-         OrHT3HMZVVe6akZSB1ccbN6DKyIVAjVqYpF7LzkshiXSbPhkP3I1vyhggGWGsh5xaIl/
-         IsbNRAZ+yfroZDi+2yLiPNcQO20HrKhdwv+6lsPXgeRpAtPRs6+2qa1voqP4r/dcDOcJ
-         IpU4lKBHy3fnk4B2+l/e34kPwC2t6bpEQzyxg0cYJjwqPDsPhaUPULO537NRYcncT0+h
-         wZ8w==
+        bh=O5OVsiCKYjUkVc/4Ce0JG9hbx01UZGanAjUUxH4B9a0=;
+        b=JzGPmV6G7blQOWDYd28cCLXXkn5AbGxMqcXp+JvqQ0zefugE7AKxmcExlbXyk1sH8H
+         vJfCJJSC/vEayTpdcQUTtCWo56S+myiARavQHrZWO8NgvWaJI5HMcQ9t0hT8pxl8EHSk
+         UAjidL2TxSPvgbRm7esxfiEhLwZjiamnf6B+kMV/PBj8vlsCEO/xoFCGYyk8Y32t1TY3
+         r1zbLfXqDWCnYHEOqMAk1nLXR3WGkKWuUzGwPaGAPl72Sh8ERDGFzUHF9zqo7bs9SfX4
+         qtfkftcoRxHbNX1kik2Emwn04lmgaslaB5dNOZkWDe0JEwlOSETphhvbaEH4QCYBk+Zr
+         +rBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776028189; x=1776632989;
+        d=1e100.net; s=20251104; t=1776034149; x=1776638949;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=bfWPCmksGjAz4lAKfxlGJt2rkOmogat4M8a0nj0icMw=;
-        b=KHslI4UQ/QziSh0KSiHXt+E1QZ9bb5FujDycVf+y8BbY8kC1/Pmg+V1+Hyf6GHYOBY
-         pxnnTrR8TK9acVV6IIEt+OMG9svDo4h87my214Tw3lrN3z1RDFAz14Iiw+BXuMoh9ipe
-         bYv5FmD3d8G0knBCd/I1qiPxjJMG92I8iOVvXdDPqMD3JVmvTnBCangMvF3QjYVXYwdu
-         2hfEoK1avLKSNI0h0CQss3y7MM+Xwo0RpgzDGCDcy5mpzCcHwel8FSPh9e6mUgUTW2zo
-         WEoDy3+sSnIxJxu++S4enQGv38Adqsv27pi/SzrQaEzbEmmc4Q+3iahXyKxTvC6crFRO
-         B8QA==
-X-Forwarded-Encrypted: i=1; AFNElJ8ULV+zBlz+2bt/D6RuZUYldK/JIrOpek1gd4ijB3WqcHADenNEARfiSdGgL3hWZuhJzN6rYC2gjPy05TkxA5U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR8+OhiY733TGZzk3nzJfz6KLqz8KCFG2xwveAR+8V5eS42RBb
-	k9A9jWf1IlW7hGBCwhVWYpNoBHYYXHjH7h/zWHZ9eqmzchDmJgPeEfNLGeb8PRyBVwGiNvS2oHA
-	qzykdcG4nv7RmkWtDBEFuI6/W/eTRIaM=
-X-Gm-Gg: AeBDies1Z0wj2pbk38/MdBGTq9i7LUlj8I9q0fvX9tV234SYFkzygIUjwqcYA7q73sj
-	k6s8DV2tRByGkFrE4YmSz+On+CCslaRnxePUqnJxNqN/tHUW7SKoofT7id+0915LnRBHKQDEFpM
-	QVycnu3JWg2yRPdf35mJJ3Jzjd1kwubywIwgeSIRt9bqyr4qvfh/8J2hnpfpf8rejZ/hZYoxWq/
-	glBv7PDsvQASx+9KjfiQA2QhmNI0BSZ59YPCnVpsKwLu1PqgKHq7b98V7Sd4FVxzTmhZcCaIiVT
-	XKJ7cGq6pMzVNXHfIhpJgr2gSCJ3SxrOgqdlfRwjZoFvBra2oeA3B29cFp3N1fXboQlQH/Qkhtn
-	QTh5B0Nj1HV6m79eg35vP2evbVw==
-X-Received: by 2002:a5d:6087:0:b0:43d:708f:a63e with SMTP id
- ffacd0b85a97d-43d708fa6f6mr3675840f8f.10.1776028188629; Sun, 12 Apr 2026
- 14:09:48 -0700 (PDT)
+        bh=O5OVsiCKYjUkVc/4Ce0JG9hbx01UZGanAjUUxH4B9a0=;
+        b=SMst4Rwdx6AHIaieGKWxez5JaBw/nnD5MViZlGTUu2BLd0LDJAU4qq8XI4tDTl/UJy
+         GFGGt3Ai/WH8iyqsY1rK/gHBTVBUaLQgS/WHCB5adhoo+V41LPYA9MLmh99gNcGukx+o
+         3d5yTY7njWeyHRLKJ7FRbkcx6wOOplIzzTbk0y4jeK/IF8mqTiqObTzhgL3r97fL2TP9
+         gHwaxwRke7z+OJO4XqJbgbwzGoDryi9qb2ozZl3ok/6M3bWu6kigwoKNYAGfs2iWH3S/
+         qEb26JjKW3SOhc2loxSUHx6NnzV1iVNiGjiU3I2HTGbNLGaRfXSsZc6Q7YrOcaNtRJb8
+         AVMA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfF9FTVJ0ECf+49v97ujaQOGFXx9SkUyR16gOiscCmPMg8TAu4jt2XKoAauY4a5zmVgfW7JBWih85jHkOc/Zg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3+bRz6w1RGWs3ZfrvF5E3uRVKhOQLZdOei67Wt6GlnY1dCKOH
+	2Lae2eCnJk+f41CpwDzLkUSGQIyCQCw0cOrwJYPRgSnXwDSfg7XUNXGKmDhbFz1mAk5K3SZ1M4m
+	h4M82TahU+XSBoyXPwzNATsw1KLgQEfg=
+X-Gm-Gg: AeBDies2Cw2c+fTK2H+lxApQCaawPsTNyOVb5I3VfzjjiFx82e4P8nYFWyOvTlbHEfu
+	YMD/b/Euz0DI2Ryh1V0iBI2MxifayCytkaf6+OFUV7Cn0PcEoCLCBiUgM1iDaHemnEeQvLA+4Gq
+	4TtvPY9pH1ynn6oCC4Knwg5YXpc/2qKD0USV2oAj1at2WaS3/uEkah/HkPkBB301BmCUNHWXrCE
+	fISV5o76bM42wt/aVDJZQB7KiUmgeyWIA6gsrP/eKcw3G3etyo1TtmR9zpqQeEmirj+u4FsVw+b
+	h30aIRADIkUVcJ74CUIHZBkwoF7AQA3EkP+uV9H4LtGd5kA/kD2vD4fjM3tcCXVW8FlHTcxLd9e
+	+rMUdoDa7DigtO9HMhAEUjaWNog==
+X-Received: by 2002:a05:600c:6990:b0:488:a2ac:a34c with SMTP id
+ 5b1f17b1804b1-488d67f5bf5mr154924175e9.12.1776034149238; Sun, 12 Apr 2026
+ 15:49:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260406-selftests-bpf_misconfig-v4-0-9914f50efdf7@suse.com>
- <00e95867-edbc-4e74-8696-16a8f61223b7@oracle.com> <DHPIZX3045PN.2QCSGKPP43W3I@suse.com>
-In-Reply-To: <DHPIZX3045PN.2QCSGKPP43W3I@suse.com>
+References: <20260331153413.2469218-1-wusamuel@google.com> <2026040136-ocelot-simply-8981@gregkh>
+ <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com>
+ <2026040236-kiln-carat-bb6d@gregkh> <CAG2Kctpr7vBm_=Xz4H5FHYAfFxg=bDt35j6B4EprfUGio=Ftew@mail.gmail.com>
+ <2026040357-undefined-gave-c98e@gregkh> <CAG2KctqOLeYm_NFUjGdXQcBo1KhSZpXFQxQdM-DQBV4Mn0ahTw@mail.gmail.com>
+In-Reply-To: <CAG2KctqOLeYm_NFUjGdXQcBo1KhSZpXFQxQdM-DQBV4Mn0ahTw@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 12 Apr 2026 14:09:36 -0700
-X-Gm-Features: AQROBzDEoHs8AN70ZQU6rFFqi96tGMTpydxF-q75n3f12Cuk-TEdUaK2x-jPrm8
-Message-ID: <CAADnVQL1uXfPr1WuM1B8YeJHC8y+roE+b0OT1F5saM=_aeOjBQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/10] selftests/bpf: Tolerate partial builds across
- kernel configs
-To: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+Date: Sun, 12 Apr 2026 15:48:58 -0700
+X-Gm-Features: AQROBzBmpL408c1tkfYuNTafpAd5aZMliRFfez61VTABAQ1oaYAiYAqJdTmdInY
+Message-ID: <CAADnVQLELWyv0kuv8wK3FJVFdJPbp-tD8d3p2pgCiVrcw_cVNA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
+	Shuah Khan <shuah@kernel.org>, Android Kernel Team <kernel-team@android.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Linux Power Management <linux-pm@vger.kernel.org>, driver-core@lists.linux.dev, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 10, 2026 at 6:57=E2=80=AFAM Ricardo B. Marli=C3=A8re <rbm@suse.=
-com> wrote:
+On Fri, Apr 3, 2026 at 9:28=E2=80=AFAM Samuel Wu <wusamuel@google.com> wrot=
+e:
 >
-> Hi Alan,
->
-> On Fri Apr 10, 2026 at 7:06 AM -03, Alan Maguire wrote:
-> > On 06/04/2026 19:22, Ricardo B. Marli=C3=A8re wrote:
-> >> Currently the BPF selftests can only be built by using the minimum ker=
-nel
-> >> configuration defined in tools/testing/selftests/bpf/config*. This pos=
-es a
-> >> problem in distribution kernels that may have some of the flags disabl=
-ed or
-> >> set as module. For example, we have been running the tests regularly i=
-n
-> >> openSUSE Tumbleweed [1] [2] but to work around this fact we created a
-> >> special package [3] that build the tests against an auxiliary vmlinux =
-with
-> >> the BPF Kconfig. We keep a list of known issues that may happen due to=
-,
-> >> amongst other things, configuration mismatches [4] [5].
-> >>
-> >> The maintenance of this package is far from ideal, especially for
-> >> enterprise kernels. The goal of this series is to enable the common us=
-ecase
-> >> of running the following in any system:
-> >>
-> >> ```sh
-> >> make -C tools/testing/selftests install \
-> >>         SKIP_TARGETS=3D \
-> >>         TARGETS=3Dbpf \
-> >>         O=3D/lib/modules/$(uname -r)/build
-> >> ```
-> >>
-> >> As an example, the following script targeting a minimal config can be =
-used
-> >> for testing:
-> >>
-> >> ```sh
-> >> make defconfig
-> >> scripts/config --file .config \
-> >>                --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
-> >>                --enable DEBUG_INFO_BTF \
-> >>                --enable BPF_SYSCALL \
-> >>                --enable BPF_JIT
-> >> make olddefconfig
-> >> make -j$(nproc)
-> >> make -j$(nproc) -C tools/testing/selftests SKIP_TARGETS=3D TARGETS=3Db=
-pf install
-> >> ```
-> >>
-> >> This produces a test_progs binary with 579 subtests, against the total=
- of
-> >> 708. Many of them will still fail or be skipped at runtime due to lack=
- of
-> >> symbols, but at least there will be a clear way of building the tests.
-> >>
+> On Fri, Apr 3, 2026 at 3:04=E2=80=AFAM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
 > >
-> > hi Ricardo, I've been looking at this series and one concern I had was =
-if
-> > tolerating failures to build with incomplete config would create proble=
-ms
-> > in detecting failures when the config is complete, i.e. in BPF CI. So f=
-or
-> > example if say a BPF skeleton didn't compile when it really should due =
-to
-> > an introduced bug, we wouldn't want to drive on in all cases.
+> > On Thu, Apr 02, 2026 at 12:37:12PM -0700, Samuel Wu wrote:
+> > > On Wed, Apr 1, 2026 at 9:06=E2=80=AFPM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Wed, Apr 01, 2026 at 12:07:12PM -0700, Samuel Wu wrote:
+> > > > > On Wed, Apr 1, 2026 at 2:15=E2=80=AFAM Greg Kroah-Hartman
+> > > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
 >
-> Agreed.
+> [ ... ]
 >
+> > > The data is fundamental for debugging and improving power at scale.
+> > > The original discussion and patch [1] provide more context of the
+> > > intent. To summarize the history, debugfs was unstable and insecure,
+> > > leading to the current sysfs implementation. However, sysfs has the
+> > > constraint of one attribute per node, requiring 10 sysfs accesses per
+> > > wakeup source.
 > >
-> > However, from what I can see, CI held up well with these changes in pla=
-ce [1].
+> > Ok, as the sysfs api doesn't work your use case anymore, why do we need
+> > to keep it around at all?
 > >
-> > That said it might be nice to preserve a "strict" mode which fails when
-> > we hit compilation issues etc, failing as we do today; I couldn't find =
-any existing
-> > general kselftest concept that fits with that but it would be valuable =
-I think
-> > if possible. Perhaps we could default to non-strict mode when a make -C=
- is initiated
-> > or something like that, and continue to operate strictly when building =
-directly
-> > in tools/testing/selftests/bpf?
+> > > That said, I completely agree that reading 1500+ sysfs files at once
+> > > is unreasonable. Perhaps the sysfs approach was manageable at the tim=
+e
+> > > of [1], but moving forward we need a more scalable solution. This is
+> > > the main motivator and makes BPF the sane approach, as it improves
+> > > traversal in nearly every aspect (e.g. cycles, memory, simplicity,
+> > > scalability).
 > >
-> > I ran the changes through the usual workflow I use - build bpf selftest=
-s at
-> > tools/testing/selftests/bpf level and run ./test_progs ; no regressions=
- were
-> > observed, so feel free to add for the series
-> >
-> > Tested-by: Alan Maguire <alan.maguire@oracle.com>
+> > I'm all for making this more scalable and work for your systems now, bu=
+t
+> > consider if you could drop the sysfs api entirely, would you want this
+> > to be a different type of api entirely instead of having to plug throug=
+h
+> > these using ebpf?
 >
-> Thanks for testing!
+> Almost all use cases want all this data at once, so AFAICT BPF offers
+> the best performance for that. But of course, open to discussion if
+> there is an alternative API that matches BPF's performance for this
+> use case.
 >
-> >
-> > There are some comments on sashiko.dev [2] that would be worth looking =
-through
-> > too, in particular the concern about O=3D and M=3D mentioned for patch =
-1.
+> I'm not opposed to dropping the sysfs approach, and I attempted to do
+> so in the v1 patch [1]. I'm not sure who else currently uses those
+> sysfs nodes, but a config flag should remove friction and could be a
+> stepping stone toward deprecation/removal.
 >
-> I will send v5 with those addressed and possibly a strict-mode switch.
+> [1]: https://lore.kernel.org/all/20260320160055.4114055-3-wusamuel@google=
+.com/
 
-and strict should be the default.
+The patches make sense to me.
 
-Even sashiko doesn't like this "ignore all errors" mode:
+Patch 2 adds a bpf selftest and corresponding:
++CONFIG_DIBS_LO=3Dy
++CONFIG_PM_WAKELOCKS=3Dy
 
-https://sashiko.dev/#/patchset/20260406-selftests-bpf_misconfig-v4-0-9914f5=
-0efdf7%40suse.com
+and almost green in BPF CI.
+
+Except s390 that fails with:
+
+Error: #682/1 wakeup_source/iterate_and_verify_times
+Error: #682/1 wakeup_source/iterate_and_verify_times
+libbpf: extern (func ksym) 'bpf_wakeup_sources_get_head': not found in
+kernel or module BTFs
+libbpf: failed to load BPF skeleton 'test_wakeup_source': -EINVAL
+test_wakeup_source:FAIL:skel_open_and_load unexpected error: -22
+
+We can still land it into bpf-next for this merge window.
+
+Greg,
+any objection ?
+
+If not, Samuel, could you resend and address s390 issue?
+I'm guessing wakeup sources just don't exist there.
