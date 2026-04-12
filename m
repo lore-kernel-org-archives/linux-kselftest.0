@@ -1,45 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B7C317160;
-	Sun, 12 Apr 2026 16:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E5E280335;
+	Sun, 12 Apr 2026 16:20:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776010806; cv=none; b=FAyiay3ksB75/Ny2akYJG8B5grvrmDkRuE/Fnj33gaPHvsHirZtss6biclmD6TyAw81+0Cbz7oAwok/+xglpcVkLDqyQOGoEbeloT/jaQHF+jNpj44RihKw6yGkyNvnnwyzU9d3UwbRkg0zTRqlTMWzP73NULA8MSoQ2SljlR8A=
+	t=1776010845; cv=none; b=G5VUkad9lhu0brB1rMfC0Cw2O2sgXReSwFabtoGRlBQfHfPIxLl6AU0B1SNOj5vIqeJZowCjTjzFGEffQwpoTNMe+eYTNerwSsO2KVyhFJm3c8YLi4k4+gDgC+5vygz61QAUKjiNwn/YTD+CIexk63tITKGExtUUfHg24WnFtxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776010806; c=relaxed/simple;
-	bh=t5zJdXrSXfUqeg8E0cFC/+8XELPbXvEetq+3G/tXFao=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XypoSWFsRmZ7pslV+XZRxLe3B5t5qTLBBSnzgSmi7UEuCkWSSh7uD3bToJ1ljZijrLndxpv+bcgHUB5NJHsILwVR9ICLyFh1gj+tRJ1piaj8ypGsHmUc1GnQHB7r/+parilHnctbi16YIoIDZOP56aNb+MzrH1V2yQ9D7z3ugpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TgIR1Wnq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776010845; c=relaxed/simple;
+	bh=dmj2QFeNzW6frqay/EXItyE/Wuq/M33Uab4cXMf8Qa8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=i+uzm/NYBJJDTI6UkWRSBmiNtqBeYXAsCjIcHCEV3d/EiN3TkNg89LWmAPqONebtzIOyJIGeEV3xDsYHdaN+z6HOhZTHBzJevHGCfqKHRdfLKYzPGyEDY/BJ3uahemgZp3R/eztt7Get5MeBKWuFBUCSyfXEINdMlGWo6rWo3mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gol7K9LO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TgIR1Wnq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4177AC19425;
-	Sun, 12 Apr 2026 16:20:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gol7K9LO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3EA3C19424;
+	Sun, 12 Apr 2026 16:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776010806;
-	bh=t5zJdXrSXfUqeg8E0cFC/+8XELPbXvEetq+3G/tXFao=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TgIR1WnqGlS/2JgAAt4SyAiI6Mz6Y24ftLG/3lSrscUXV/UXc4lXwh0b3GVFWZx0d
-	 PV6spn2SBCkf8mWpGADK9YnpY5LQLfvjx1gt0qD2qyirArEICcyWADdmKGqyX3phFX
-	 bWQldELArzcWTUlyUpJayPkdy7p/0aNzNYP+KonViexTh0ZtwfQ+W52mshdEzf2o6j
-	 JD6GlmQ72pJhXaST5RvDdqee0Virrk4YUmsxnqXBcGfN/sggfuKfwx0oxRqDm3sFmh
-	 G8koSn6IO8GNVq956ZzMpPMglmZr55ZoJHdGBcXEh7KwiV7drYA+N3pGi13AF0XjMk
-	 vrCnbIgJ0E0ig==
-From: SeongJae Park <sj@kernel.org>
-To: 
-Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH v5.2 11/11] selftests/damon/sysfs.py: test failed region quota charge ratio
-Date: Sun, 12 Apr 2026 09:19:54 -0700
-Message-ID: <20260412161957.82835-12-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260412161957.82835-1-sj@kernel.org>
-References: <20260412161957.82835-1-sj@kernel.org>
+	s=k20201202; t=1776010845;
+	bh=dmj2QFeNzW6frqay/EXItyE/Wuq/M33Uab4cXMf8Qa8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=gol7K9LOBpleWhLwD35xzpOGO5/k1/ROW+6ROyJlpX4bZgugN7knMs2KT3GP4DaZW
+	 bqjEexscJY+AWCO8ydWp1o0zsyaChaFY4S38Ri9Cdi6ozap2JKy39O3oKR9j11LPbs
+	 ad7Jq6SF0ZFfYQ5/Xl4QwnFFYPfKGj14qv+lYiyu9hg7NjFdQu2r1wsZk4L8owbwdN
+	 KZ2xTa5J5aoNDqFCvReoOBDvq/5cvD6u6tO/heJdmIQQFubErvXRYxNgvgJV1qyEY1
+	 WBALKwPFQD6zIDkc0oSUrD/hbkMO3UjWReUGCPca94WEdL7CW7VPkGc+uroz/0z0Vx
+	 WM9kc175GEuJA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9DE63809A8B;
+	Sun, 12 Apr 2026 16:20:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,38 +37,43 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] selftests: net: py: add test case filtering
+ and
+ listing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177601081755.3330556.16796690983862607138.git-patchwork-notify@kernel.org>
+Date: Sun, 12 Apr 2026 16:20:17 +0000
+References: <20260410013921.1710295-1-kuba@kernel.org>
+In-Reply-To: <20260410013921.1710295-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ willemb@google.com, gal@nvidia.com, leitao@debian.org, shuah@kernel.org,
+ petrm@nvidia.com, linux-kselftest@vger.kernel.org
 
-Extend sysfs.py DAMON selftest to setup DAMOS action failed region quota
-charge ratio and assert the setup is made into DAMON internal state.
+Hello:
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.py | 6 ++++++
- 1 file changed, 6 insertions(+)
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index 387286dc449d5..cd4d82c852113 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -73,6 +73,10 @@ def assert_quota_committed(quota, dump):
-             }
-     assert_true(dump['goal_tuner'] == tuner_val[quota.goal_tuner],
-                 'goal_tuner', dump)
-+    assert_true(dump['fail_charge_num'] == quota.fail_charge_num,
-+                'fail_charge_num', dump)
-+    assert_true(dump['fail_charge_denom'] == quota.fail_charge_denom,
-+                'fail_charge_denom', dump)
-     assert_true(dump['weight_sz'] == quota.weight_sz_permil, 'weight_sz', dump)
-     assert_true(dump['weight_nr_accesses'] == quota.weight_nr_accesses_permil,
-                 'weight_nr_accesses', dump)
-@@ -278,6 +282,8 @@ def main():
-                         nid=1)],
-                     goal_tuner='temporal',
-                     reset_interval_ms=1500,
-+                    fail_charge_num=1,
-+                    fail_charge_denom=4096,
-                     weight_sz_permil=20,
-                     weight_nr_accesses_permil=200,
-                     weight_age_permil=1000),
+On Thu,  9 Apr 2026 18:39:21 -0700 you wrote:
+> When developing new test cases and reproducing failures in
+> existing ones we currently have to run the entire test which
+> can take minutes to finish.
+> 
+> Add command line options for test selection, modeled after
+> kselftest_harness.h:
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2] selftests: net: py: add test case filtering and listing
+    https://git.kernel.org/netdev/net-next/c/e46ff213f7a5
+
+You are awesome, thank you!
 -- 
-2.47.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
