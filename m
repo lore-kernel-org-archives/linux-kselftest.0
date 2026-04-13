@@ -1,61 +1,33 @@
-Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3611A3166
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 19:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D27390231;
+	Mon, 13 Apr 2026 19:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776107353; cv=none; b=CISOo0Q5dYGWYh7u+yQP4vdWMoj+WFxH0rq2O7tGbPISd0dQaw+FkRzarUl3V9woe0N46cHzhdU2twiIaNH99wygR97Elfs1Q5h5hCD4Trb0UOB07L3b3aOvUhK2m3YtRuWXtjq9IbH34bAMCVUwYHzT4PwDSg++zdEvZI6BRs8=
+	t=1776107905; cv=none; b=S+sXKkQG5YWKnPZ27AxcB76lJu4+sZJxN4+Tgkfl0bwqNmIQyh34FERVNeApZe084AnnbGEY7QYq0g1wi+UizahLMj6MPLXXyJigQoOqRidz3PQEb6UQ6VdvrqSJjYmvYmBxFHXitgW8P0WSn+QVSY7vxNZJTseuF+Cwzoij0Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776107353; c=relaxed/simple;
-	bh=4lCjZBrL20Y1MEon1+tdGW8CkaiyHj2NmsrGq6qstrQ=;
+	s=arc-20240116; t=1776107905; c=relaxed/simple;
+	bh=cDopfrHKIY5CWvgWtMsDFhixhLYI1yjKSO6ar8V8IMk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JjogJyCEKbU8+dmEWr71ymrH53ZL+GnDe4b0UyHC23JUe68c6sv9dV40iVcF7IhKeWxoy0dZcDDM+6iYo7pg8SeqBUH9d53KEZuYQ83l8sl7qBobkfahGbrcipdPk5P56PYCnhbBdYTVZQL1d4+GPCsl2amH9g/MyGkvwIk6B84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=pHdjIZqN; arc=none smtp.client-ip=66.163.187.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	 In-Reply-To:Content-Type; b=UH0kimzizRSCZ4UEVAVXOpvhkasXmOiUzbXHUglOrRN/C/VI6VCnVYstI4wILZuMEqioeC7cq4tlGOu86X89l4LioAA3kZ6naPkSj6yayCuxp9xPgNcwm7mpGpgFZYk29pcpbakg6L1HpYwZI22zPs3OtniIIMwS1d7JEIZR3Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y51oSv5F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="pHdjIZqN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776107350; bh=4lCjZBrL20Y1MEon1+tdGW8CkaiyHj2NmsrGq6qstrQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=pHdjIZqNnW+dbZRvMjbm9zdetYmS1602MegnsXCul9FLDxAHEwD4XaqlX5PCEe1FaE1ts97gQ6A+G/RLY6HOZ4Cgs5wZHYXCJTrEmtcpA1n6s4HAX+JTKMRLlSbxCrH8Q69e1N3A+AGZ3osGw0Iihn4am7QkNBfAKpXvP/fDMV4K33hDB36tXLjHeAROAuLfqeYSWVBd3EEYHTeG4Th8PU59EDAoPE8O5pgPPhUOb2Kt/k0YAFTJsFWhaWBeivvUMowSBTcAhBzi+GUXlcIVJRI99PwOwhYxBM8p/EMqjxmwhX0tTHznTLjLLnVVgFW/q7qb2qW0oVG0jtDRPKfKug==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776107350; bh=E15Dqj+ts7GhtVutkKE3G/CPgTeb/uCXfpQaID6ENp6=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=p6Yiym3hwvN/SEDLXNnRddJqUjRWMd3rjo748ag5qutHzqJF56y6gRROrGXHhShv9M1s27EaUQWxS/sMePrL/aAnxx5jiC4CrSyi+l/GkAzMkFVMKNzWKG34IsuIkJHMizOZmX4uiOHMCF/pCKS1yDf43WTRJDAIBgyzDklqoisqyjaPOJ7VrZkFq5Qek4agupQCMqFWJcAuf0HgBiKGaCD9d7F+DJ4pVhCCzFe5UNPLyxYppzf0oZZhQfiOpRarHqedNIhlwN+Gfih2p/vwEu+GZDAGZSgXDgteT7bdpebAMn6aayTE3i6yLk0z9zuK36MYfB8oNACZMeh2yV8vpA==
-X-YMail-OSG: S.53nWMVM1n5YHcAVgmX51Tz.J7cK4w9XPc2eYfDt2DURaDD6t9wsnArxUjuU4_
- LWb38xC2bJ6eswZi03x3Dm4YVaZE6iWLESzVcFigTThTEzs1ALY2wy7uzmwKkCD.LU3SsM6DSkqv
- LGS38bio0Wc2z4jiVLEGo_X1U92JBlsOAz9FUVm6tohsBe_FL3GlohL77kKVBPEwQ1dI2B9Q0z6l
- s2kYaVC.jLxjQ_.8QvZq.wOPLUmzB0e.BN4OhZxR6u_EJysRb4B9TNhR_rQZnxFq9SWaRuazzL6Z
- fR2IBhfAIB9qdnquQ9acNg4x3ktrMFof8lsJRkL7hJKjaL0QNtvmdDKNpJ2i2dHF_ePBfIO89iXJ
- qjhB6dYw4VDrBBZeSnr77opZzI068pyvAPBseOkA49KskHY2CX7ihE31SWD4aHRer03VlzTzQ_Cz
- mQegpNzmMIawBGG8A_dniUaikUBPH5svvWtjWEoTfOn5b0jnyCW9Q1qDYsi_7ejuXeaTg4iJhoRQ
- FFxUoOLRsKMpGF1sgXtMnnx9a7lpxWpKpf4s9PPDXrzY0X4e3Rv0_NC.l0MXBK2SLVsYTaTvqppP
- yUPkBZ5XEWcFSQDiTawQkriQVrx6iNh_8IAckzISMxnIrbLgW.H.bAgr6PAcbvXq0rD5wt8XYf2j
- 4mrqbdRfhlBeR8AjIKMeKddFPvSrCPUivEgFht6sRzNL.4_MYaXlFp3y70aElBtH.vv4CJRG_MlJ
- 0j5quoVIBaWENVEPjRROw1omd4pK8DB7UprFSsxKa7WSe.Yz9ILvl16H.GE6NKhSl1T10JVpxAP4
- uQzMCiZtTNHhBwBS.bO1E5HMKvV08qTe6KHhWQR9QNEY6WmipHp3I0Zhn4vlY8IOjz6s4CLEDfj1
- hbSss.gTZWXl5g2GwmR5OEYzYw1dkjVz7g3hIQ9xxS0yYWsLTFwB4cGH77fHXKi.TuOc48muQVLk
- Pl.UQ0CFLXlT5P7wbQIIldamdsp5wv1gfpYa4h9GsAUg37IpO6.1t1_awti3UigKfvGcLs.Gm65f
- s9JnGS08GRH_0azPL4YkHMrBdKVQQ1w70T_Ay5dC28fu9Y38YwMGoGRCrDYNY9GnmJ2vZN2C0rer
- fRSmYZrrosRMGvJ_d0RpUj0n8KVoNRjHn6u_Yy051YJtG_9FW9sy_xbjTV3BBV4j39hSJLXi7R1N
- 5il75zqILZLFxO6Tx102wKnBdaT1k7H3Bs31jDxv3BFw10yBX0lEgyBVsJ1KOKlap9_2AsqFNdOw
- esyjPh7Uhs5a5uljW6hj78wdQ53QV967JrExR3xEIjdXocSkCMhAUnryebvECIX5j60WOowZVh8J
- tXXHyfcyI5XHZUtqezq7aeTa52LUx6zmgWT3jfIetaOcnDI9BMXRPIAb.Q8T39NvcVI4AvFEEMfo
- D7x8841_S1WgOfv88E73zDab0ZLh.gvPI44ECNKrLQRO5MSpuU1_FyYLSZ9_ODrynNvgJT7YvOF1
- ghP9mu3iaOocaKvwtkpxHrOIAb2zERr97F87t6t1IHoh4p4zfcSsLmxv8iAXoRwsnhCdsoWGCQxm
- XQQBgZf5eGqcoambDihRYGKcSgzMW6oeWLFP7kgFI8jYYKoKeMHZM3GxqJTBN.5i_UD_XKALNc_L
- 55aMnUgTAlhRAv2lgHkw16DzYB3vYzfp7.rGjjpXwMwWOXHArGZNU3MnoiRhNqNDUMTLyNL5WFX7
- VVjIyi99WXAawV16wDhpfXV_EmQlDikiEtGNu2MLz_OCjn9piBOaMz6mxTHEPVo6Fj3TpVYCg_hQ
- au909sTaUzjSWJoEF3z758ksIa.SM8ZDWqpTDuRrm3.w8iESXpW9fLk6fcjJp1IyPWKWBrbvJbZ8
- bNO67LqjOCcRxBbEPeLvxSFOX05bdJ4xn9exrlA_44LYJK9Y9lYxK8MOhWZ6H9Y.V6sy.1.vRHlo
- 6wcpwZHLH_q5WUpFW7s233cMNfVFAZ7qfUcVqY3OVbNTik3hVATdi93ZSUIAOhPcJ1cFdNWs0KVv
- 5U5ErA4NfUROcYZPx5F.rKr4cYA4vfS9qYepFeRdpZw650Isg8naBbsqrwAEb6E6_E7V1vJM5Neq
- CUw7L4Q3oJ5Uk8y3CgkBIiWgAs1xualGovyQShI7yoY_BE_2wUQET7bWR87ZwHVrT7ljX25iM0lu
- fPR0oPie0Fd.nPkAzKJ7vPb2ox6q.U86MgKaq7PWwJYbNiP7FceTSEaJ_sQbDwEgtO7.xpQw2zWf
- zLkiTTd_mzFCg8kuPjVXdKrCHt03RGw51eV1hcOLaKlHsvnosqNrKuYzxjNSV1KSSsTw-
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: ff501cc8-7b35-4a47-996a-fa0874e3405d
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Mon, 13 Apr 2026 19:09:10 +0000
-Received: by hermes--production-gq1-6dfcf9f8b-x2pwf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c2976e02367141b17038844605468df3;
-          Mon, 13 Apr 2026 19:09:05 +0000 (UTC)
-Message-ID: <7700699d-f6c4-4d60-89da-e0977d086a5b@schaufler-ca.com>
-Date: Mon, 13 Apr 2026 12:09:02 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y51oSv5F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E51C2BCAF;
+	Mon, 13 Apr 2026 19:18:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776107904;
+	bh=cDopfrHKIY5CWvgWtMsDFhixhLYI1yjKSO6ar8V8IMk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Y51oSv5Fn7/3bMuNcw5NT9B7MhAPp346CPj5F1js+nM9h9lbdObXV/AlLREPX3ZZa
+	 x3SVN6+cIYe1wuEIY1o+CFKY44d9u/2/qfgsfEDE8BM0VHZRnae3DdLqV6azMsbGox
+	 3GHMMz1nZW6mCQhQylwiNWZVSrjaDTx8s/wrDbWUoAHtYHYTshaDFxHQD9vMH3ct9W
+	 3E+Awc/K0L+Br8emV94yXJopfPXn7RdF8wmJaxpBbPYdKeJF1Rpsph8oX7nb+0Y4Bv
+	 xRtZE6TJ79pVP7u7ACNQ+2xHFY6yaW/MPzybwyKRELPR62hLrEVr4kg4w4DLhqCSoS
+	 NF8Kh2ThS9X3Q==
+Message-ID: <4d38d333-d446-40a3-b6f4-c4890bfd24cf@kernel.org>
+Date: Mon, 13 Apr 2026 21:18:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,63 +35,103 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Jason Gunthorpe <jgg@ziepe.ca>, Paul Moore <paul@paul-moore.com>
-Cc: Leon Romanovsky <leon@kernel.org>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
- <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
- Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <bd7d139f-b5d6-42e1-be2c-4f71feed63cf@schaufler-ca.com>
+Subject: Re: [PATCH RFC v2 2/7] mm: memory_failure: Allow truncate_error_folio
+ to return MF_DELAYED
+To: Miaohe Lin <linmiaohe@huawei.com>, Lisa Wang <wyihan@google.com>
+Cc: rientjes@google.com, seanjc@google.com, ackerleytng@google.com,
+ vannapurve@google.com, michael.roth@amd.com, jiaqiyan@google.com,
+ tabba@google.com, dave.hansen@linux.intel.com,
+ Naoya Horiguchi <nao.horiguchi@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Hugh Dickins <hughd@google.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
+ <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-2-92c596402a7a@google.com>
+ <2f177e0f-2eb0-48d0-b48c-7a0a340caf5d@huawei.com>
+ <adA_1zXLUBqmSHFl@google.com>
+ <5c5dfa85-baab-5c0f-6f6d-b71abbe10ed8@huawei.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <bd7d139f-b5d6-42e1-be2c-4f71feed63cf@schaufler-ca.com>
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <5c5dfa85-baab-5c0f-6f6d-b71abbe10ed8@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 4/13/2026 10:36 AM, Casey Schaufler wrote:
-> On 4/13/2026 9:42 AM, Jason Gunthorpe wrote:
->> On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
->>>> We are not limited to LSM solution, the goal is to intercept commands
->>>> which are submitted to the FW and "security" bucket sounded right to us.
->>> Yes, it does sound "security relevant", but without a well defined
->>> interface/format it is going to be difficult to write a generic LSM to
->>> have any level of granularity beyond a basic "load firmware"
->>> permission.
->> I think to step back a bit, what this is trying to achieve is very
->> similar to the iptables fwmark/secmark scheme.
->>
->> secmark allows the user to specify programmable rules via iptables
->> which results in each packet being tagged with a SELinux context and
->> then the userspace policy can consume that and make security decision
->> based on that.
-> If you want to pursue something like this DO NOT USE A u32 TO REPRESENT
-> THE SECURITY CONTEXT! Use a struct lsm_context pointer. The limitations
-> imposed by a "secid" don't show up in SELinux, which introduced them, but
-> they sure do in Smack, and they really gum up the works for general LSM
-> stacking.
+On 4/7/26 05:55, Miaohe Lin wrote:
+> On 2026/4/4 6:31, Lisa Wang wrote:
+>> [...snip...]
+>>>
+>>> Will it be better to add a pr_info here to provide some information for users?
+>>>
+>>> Thanks.
+>>> .
+>> I think we don't need to add pr_info here; truncate_error_folio() always
+>> leads to action_result, which already logs the recovery status.
+> 
+> No strong opinion but I want to make code style more consistent with sth. like below:
+> 
 
+Yeah, would be cleaner.
 
-Whoops. I meant a struct lsm_prop pointer. It must be Monday morning.
+> if (err == MF_DELAYED)
+> 	pr_info xxx
+> else if (err != 0)
+> 	pr_info("%#lx: Failed to punch page: %d\n", pfn, err);
+> else if (!filemap_release_folio(folio, GFP_NOIO))
+> 	pr_info("%#lx: failed to release buffers\n", pfn);
 
+Maybe we can even make the failed here a "Failed" ;)
+
+-- 
+Cheers,
+
+David
