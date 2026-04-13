@@ -1,181 +1,172 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010012.outbound.protection.outlook.com [52.101.46.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6663B3E4C7F;
-	Mon, 13 Apr 2026 19:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776108077; cv=fail; b=CU7KEVjLIOWSo4HDFJ+Fyfg2s+lYXG+tp8AUkzIM06jlFI84cExPFK5uu0yawLiicByZ9Nn0PykpCG6eoI1/qcL28F2fDoktkHSjNufAd8zHdAy3z81a98EUVLJT2HiqPui7/Q62QBVylN0U0b3etAQFzfZW2eawYIfxUnjuxdU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776108077; c=relaxed/simple;
-	bh=lSPfCbD2yvDjg0xeuJm643jvV0dHdThI8TgrcSoET94=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LUc5HrQ03Bjmdj426PWluWH3RJ7LeYe7XXFcYtYW5Dc0IJl8xg589u3IQJmfipnn7R3xXQBPHnhf3P39NrTxi2xv28y0Ulg2AXt8E0cDN69I9y3f8atPgNy0JYCLExQ/SUgeDCnWZNA0y2YNJtp29ZQTWpKEyFIOme5JgdSDu+s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jqPCqaGN; arc=fail smtp.client-ip=52.101.46.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20810245008
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 19:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776108369; cv=none; b=aOyIDDtJek2P4WpYcRJ1H3lK75Wae0JRh7iNAeURT9F8+sNQp8YTV9UMiPj04zk8WiHg4NzRiS4nKjThfOlO473NIeNr5CnD4WEkbLJc1lzbRvowcOdiAvDmkNZEaj2MXeC7XtZGmkQ03+Y6mbdBtbGbz/IiJ7oclqNEHbrTPOc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776108369; c=relaxed/simple;
+	bh=JhhiDtpgCIbIcPcjurEF+BYrFwWWHfvbfmV0YHXq4o0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BLJjiHo6FWrZLmYmCTZQi7PVr7L7rTcLzw6MCrnPgByEgHQfVNb26qp3PEcQ7TtuqZ9KhQeyf82frnAloINDYGBjNwjEwE44FyLkoqFWawgLX143a1O3nFKtUO8JcMVl/tdTJFxCzHmiAuLi8xAWqHqyvrktCUEjEIhx4PglugI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YobZ4JGt; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jqPCqaGN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kqXeHDOpVXCTk6vHNVdWzcMOEHmnzKvGvIvTKPs4RAVFW2UCb/B8ACx4tOfqzc1OEMgAMTVRPgqVB2wRSbjGJBh789/3xxWEIV26JWT1pkZjJg1f3ubMHB8LyKPjD463T3vRspKqSjORFaJUzUrHF7haP32GuyJe6X2bRjCKt0Pn/QOq8EWfwy9GqozTC6p/W/tGBmZwrzjCzOcVUKwkER8G+6rwalqjGBp3wYP7TDTRHrbt9GYuLpO4ClMBAo1t5pJmNEvKyw4pqcv2FHUsuUfNZ8+4UfolnPeMv0eei7r1L76wuNuBpIdmzus5K9bFynC7jcodzpM33ZRGulFI1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BoBCnPTeqfrm1QRjZz+gi0AjIAZR252PiL2hmCWGEaY=;
- b=oVsL5l0PmwormmoM877WeMY/BYaZi5uPteMKYxYqBdss8vAxU0ZQn+1J0UeigPOyCMBwkvIr9AARf5PHvkAwtWMfB3Nbrexx9ehJJxvb1y1Q7BzsUCPbbdoqniLAQaMaUrMrrq7of+xoy3FDmvTHt7gM/t+w76CppgaD89+Gh/j+sOlVhxjfgRPpOS0iN1N8dmu9pigL5CFQNZjQCwKP5e8fWYlauIQwqNixL5Cf5kjwgNXZuT9PO6ah+/n9WkfreLCqeCjxG4tp+dWzEavgaW1LSchA1MO9z1ktr6CuPq6Ocy7WLWQXEz5keTW07hXW8z+IhdikmXdtOZwczC0Dxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BoBCnPTeqfrm1QRjZz+gi0AjIAZR252PiL2hmCWGEaY=;
- b=jqPCqaGN8j2rL+NVGPNsWL+SQDZiwK5P1pXUptn0gKCkASwzLigD8M/Llh882rw9oXfJPO28oUHh1k+l8w+6VzdKRWoXwPuKaTXMZMIv+r6El5vebAykXwdL3XWu/siD5lwJrkNLFTD2AUBzaXfupSw46LPLH2xLZFp9fieFcfq+eFNA8/6HGj8laRHBoBT3WoSxulDh5JaKVH7PRWfAUr+7nkXvl2pPRgQXiivLiabc0CrKhNnd1Xs62nuIjjF1l0htxE/sI5+3oYCelZZxHlptqkKh85M375k4b+l3gMNONogwATkc6cui/RHQJ4Nk+TzeBOIPJtV/TmTvICf51g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- DS0PR12MB8444.namprd12.prod.outlook.com (2603:10b6:8:128::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9818.20; Mon, 13 Apr 2026 19:20:56 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9769.046; Mon, 13 Apr 2026
- 19:20:56 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Song Liu <songliubraving@fb.com>
-Cc: Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 7.2 v2 12/12] selftests/mm: remove READ_ONLY_THP_FOR_FS from comments in guard-regions
-Date: Mon, 13 Apr 2026 15:20:30 -0400
-Message-ID: <20260413192030.3275825-13-ziy@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260413192030.3275825-1-ziy@nvidia.com>
-References: <20260413192030.3275825-1-ziy@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0291.namprd13.prod.outlook.com
- (2603:10b6:208:2bc::26) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YobZ4JGt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776108367;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4BWr/5AY8ZAqufMs3TADs0Xu7j+z3NdjM/f4VibM9b8=;
+	b=YobZ4JGtn/c9NKH38eU4+GVGqRlWANCu2rwOqjyyyzN06sHrTtkiirWcsaDiSLc6bnvyfZ
+	EZ+NBCmT0K7WNphMQEipX4lmurWeZSjvG+usOcUgqyqb18nNI4nYDkVL+99i5iARG8MHIw
+	BQxcuuVwztUgDpDDxuq0/o0+4XyULfQ=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-220-Uxe0wUrkPlijpBHtUceyPQ-1; Mon,
+ 13 Apr 2026 15:26:02 -0400
+X-MC-Unique: Uxe0wUrkPlijpBHtUceyPQ-1
+X-Mimecast-MFC-AGG-ID: Uxe0wUrkPlijpBHtUceyPQ_1776108358
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 546391800372;
+	Mon, 13 Apr 2026 19:25:57 +0000 (UTC)
+Received: from [10.22.65.13] (unknown [10.22.65.13])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 53FA31800357;
+	Mon, 13 Apr 2026 19:25:47 +0000 (UTC)
+Message-ID: <fd77bca8-bee8-4997-a11a-932a1693edf7@redhat.com>
+Date: Mon, 13 Apr 2026 15:25:46 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|DS0PR12MB8444:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e95e092-29a8-4c2b-35ab-08de9991c989
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	Zscl4/LgEGzPrCZJSbRaWK2vHOPlV5WBNISOc1NOmKOfS+8EEdUAkOcZgvnY8yCxzlYf8IH8URUFixBzyGQMNUn0KtGqJwfw+k4jHdQqQUd1nsBtgWB8SwhtVRMyURTvEs49IObnHLl6I8vCtGSbf6bV1L0f6QG4XQdNpN/H6J1XKWkw+nHvtc8R6Z4m88yQr+FU0x83LV4oLOigFBxSvg8SvPJAqxjyyuK0XtrCFTrHow+O9+UluVWCoKto3bDLHxBrqxSK4t9nfxygvm+lxKsTe5rfNFfIsllGZvLEk4lyQLO+DLFfrVWVX+DVLICDLrPZK0Bi1oDuURb5FN2fjqnyFhCmHU3s1mmnOiknL9fL1JLSP9Mky3InIK6ZmVN2hJSkbl/XkWx613ima9sn7mB/CX6D+sAuNm0JSd+jtiuiZWlcFlrurK96VM1gs7kUNkeWMAuZY4+j/A/9FuFympvcxrphuByGonQn4THkB+yI3RWzJtUFDGvuiCYbi4xa7XhZ8WUfAiZwQ6ZTBrl55K9HDDU2rUJy8jA/yi3OagE0Mow3RSc3nlfCeHXFlCOu+TjjLqrgsxXO90D8Oh5F6OkGyNYusEKbaz4R/beKlulnCuzfNISzWDgOqoTXOOWB4KLDXORrkMcJImOGBH0olSUGwRRlA18woG6piwE6mhesRL27x2PvcQ9jN88DCEAPrAPqRhqP+p+OPvfIeyTSJje9JV+wogVJ69i29r1BCjw=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?g8qvfWn1QpNvII8JjI3UtZGPWwYKhrAFlMqV+uEhwKX1rWgqpv0paf9WFiIt?=
- =?us-ascii?Q?pKA6zd0WaDoVLuetp5f1OXd7dOtCa7AqsCAVdCxPvpNg46CNj+xW9VfcjADv?=
- =?us-ascii?Q?FaS5FQVwWCrO8Qf5FMpfC9a3bbFqDWC4MSNzF0g2v5FnMuNl9xscx/8m+pjb?=
- =?us-ascii?Q?uNkk24AD152310eZuyUOju6HSJP8lPAp0PUgaTHJVq7e+KudKQCjjMriCrwm?=
- =?us-ascii?Q?/9b85NjOlubq0yD4EikXKEkgYoMlVQJV2vwR929L6nIbOnKjtJFGL9Mnz6b8?=
- =?us-ascii?Q?boq0ikZ/yMLwdi+KIbNFRxcBtUpLoalhHh4WYI9crEJyWK0wgjRM/j16bbln?=
- =?us-ascii?Q?0XLpKtyYmG/uKIrDkH25LljJN2dwlpWHtGb+dlE5BDrR9cZcn2duE8HZPeEz?=
- =?us-ascii?Q?f4xk8lVRhBIzXC6y3tdMO80Ene54WOjfJ/akwLfgnPdvIJibBP7aP/jxOHmj?=
- =?us-ascii?Q?kar+UP6E8jVKK79QKYOuXZTIOD8V4fGXWa9I14cKIFBLTBD8fghRfUuxc1tc?=
- =?us-ascii?Q?si6G+3j7e/cuToukcqJTcwQ68hqBlv6iUwvk4OdawvUEtnEl3Wow3VM2dzXy?=
- =?us-ascii?Q?TdNpht69nBYiUm7DGqszFFbjGAZF0IyV+Ja5KfhMrMBUnsJAFyfa2OpS7hdK?=
- =?us-ascii?Q?aPdhDoJBczV6OtGRzjoJ5/EgTM7T9iaOCCFMZo1Me5BDGe7tjEeppGYQ2f87?=
- =?us-ascii?Q?Ag5r1AzBkE0dvHl7RbE6WR/kSzEs60uOWZ8a6pDRKyNoF/kxFo2uadPFr9Ya?=
- =?us-ascii?Q?Wkk4ox0klqck3/eFpNcW9U1YlR0Rop8sHg+2h3zliUekDZqJoDb5hIv3OG/s?=
- =?us-ascii?Q?RIgLhOB7aPfLePEnZoK0txNGwO9I/vRP/R/wxkA8vMc2f1zyjfRAdE1TqHld?=
- =?us-ascii?Q?hoMv+T1n/cExE7VQMLKiPPXDqwalCytVWeLFmZ2qMDn8e79oKxNomtt9HToi?=
- =?us-ascii?Q?2/pYMZrEtZMdG94mwVzuTyfhm+DmhB4oEgM2E7GU35KxKt/Q3dPHoHbQvKYA?=
- =?us-ascii?Q?aKC7S6wwGXNCp+iNiPUHiHFwfJs1qp1uq5kWY4G5df7LkQG3To0wFTIJ27Pn?=
- =?us-ascii?Q?9Cv3nj2yhn+gIqfJFnUiN9llDiAtodawfyE0yen5YRjE2QNC6HeE8q2jmufU?=
- =?us-ascii?Q?8bw9QPtFxlF1Z+P9pc90nAeyUG9pYBAEoCmB3zBNCbxqcnQ9x9urjxVgBsAu?=
- =?us-ascii?Q?Urr+rSzyi9c0rDn45i2Ntyx+beu7UTtQQTSmafL6iCJBmE/2APwojrr0PhY7?=
- =?us-ascii?Q?AYVD5Y5ZB5B1Gpw8LTqjFk76GfopTEPlUSs8e3yHcF9OQJLhZ05Tb6NHENiK?=
- =?us-ascii?Q?yQSQQrhPT/KUgF8AYK1PNpwDdm6X8Nko4NTBFhorX4AV7nGoHuWrlt1MYvVC?=
- =?us-ascii?Q?z5VQDn+twQy+x54Nm32OwHtHtpD1e5Q4JdW0Oy1ob6wEXU3Nia6cPRtzTGgr?=
- =?us-ascii?Q?cC0yvwqXad//dia5uDTVFLzs38idhYMMthLQtCR50nO1NWkYTF/KLgFXLbZn?=
- =?us-ascii?Q?H4GwJm4NVf/qITN78INTYtJ3HD/7LMR+Qr4aeEigQp93ru+/ztcMpZ3YXOjT?=
- =?us-ascii?Q?Tvjdrc7cYbm4C0hxCPDreFir23+yyRnYzJkHEBOaEr+QGsFmTPpnTJZjtR4G?=
- =?us-ascii?Q?f6CAzZVgl57bmE3QcXiMcs6T+gawf2tN4QhKYeoygH+9F8mnzXk6rDFUqN0D?=
- =?us-ascii?Q?0m9sQDxYv9VfOrgsPZ6n07sNZuOzCpXONUhpC1j68k3xOzqN?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e95e092-29a8-4c2b-35ab-08de9991c989
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2026 19:20:56.5524
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2GR5eSQMyQ5i2AQ39DFUYEYI/S3i31Zji1txd+Yvp8hrWGRNTGL5EcJpi6tp8Iw+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8444
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/12] sched/isolation: Separate housekeeping types in
+ enum hk_type
+To: Qiliang Yuan <realwujing@gmail.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+ Chen Ridong <chenridong@huaweicloud.com>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260413-wujing-dhm-v2-0-06df21caba5d@gmail.com>
+ <20260413-wujing-dhm-v2-1-06df21caba5d@gmail.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20260413-wujing-dhm-v2-1-06df21caba5d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Any file system with large folio support and the supported orders include
-PMD_ORDER can be used.
+On 4/13/26 3:43 AM, Qiliang Yuan wrote:
+> Most kernel noise types (TICK, TIMER, RCU, etc.) are currently aliased
+> to a single HK_TYPE_KERNEL_NOISE enum value. This prevents fine-grained
+> runtime isolation control as all masks are forced to be identical.
+>
+> Un-alias service-specific housekeeping types in enum hk_type. This
+> separation provides the necessary granularity for DHM subsystems to
+> subscribe to and maintain independent affinity masks.
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- tools/testing/selftests/mm/guard-regions.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Usually, if we want to run a latency sensitive workload like DPDK, we 
+try to minimize all sorts of kernel noises or interference as much as 
+possible. Do you have a good use case where it is advantageous to remove 
+some types of kernel noises from a given set of CPUs but not the others?
 
-diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-index 48e8b1539be3..13e77e48b6ef 100644
---- a/tools/testing/selftests/mm/guard-regions.c
-+++ b/tools/testing/selftests/mm/guard-regions.c
-@@ -2205,7 +2205,7 @@ TEST_F(guard_regions, collapse)
- 
- 	/*
- 	 * We must close and re-open local-file backed as read-only for
--	 * CONFIG_READ_ONLY_THP_FOR_FS to work.
-+	 * MADV_COLLAPSE to work.
- 	 */
- 	if (variant->backing == LOCAL_FILE_BACKED) {
- 		ASSERT_EQ(close(self->fd), 0);
-@@ -2237,9 +2237,10 @@ TEST_F(guard_regions, collapse)
- 	/*
- 	 * Now collapse the entire region. This should fail in all cases.
- 	 *
--	 * The madvise() call will also fail if CONFIG_READ_ONLY_THP_FOR_FS is
--	 * not set for the local file case, but we can't differentiate whether
--	 * this occurred or if the collapse was rightly rejected.
-+	 * The madvise() call will also fail if the file system does not support
-+	 * large folio or the supported orders do not include PMD_ORDER for the
-+	 * local file case, but we can't differentiate whether this occurred or
-+	 * if the collapse was rightly rejected.
- 	 */
- 	EXPECT_NE(madvise(ptr, size, MADV_COLLAPSE), 0);
- 
--- 
-2.43.0
+Cheers,
+Longman
+
+> Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
+> ---
+>   include/linux/sched/isolation.h | 20 ++++++++------------
+>   kernel/sched/isolation.c        | 10 +++++++++-
+>   2 files changed, 17 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
+> index dc3975ff1b2e1..b9a041247565c 100644
+> --- a/include/linux/sched/isolation.h
+> +++ b/include/linux/sched/isolation.h
+> @@ -17,21 +17,17 @@ enum hk_type {
+>   	/* Inverse of boot-time isolcpus=managed_irq argument */
+>   	HK_TYPE_MANAGED_IRQ,
+>   	/* Inverse of boot-time nohz_full= or isolcpus=nohz arguments */
+> -	HK_TYPE_KERNEL_NOISE,
+> +	HK_TYPE_TICK,
+> +	HK_TYPE_TIMER,
+> +	HK_TYPE_RCU,
+> +	HK_TYPE_MISC,
+> +	HK_TYPE_WQ,
+> +	HK_TYPE_KTHREAD,
+>   	HK_TYPE_MAX,
+> -
+> -	/*
+> -	 * The following housekeeping types are only set by the nohz_full
+> -	 * boot commandline option. So they can share the same value.
+> -	 */
+> -	HK_TYPE_TICK    = HK_TYPE_KERNEL_NOISE,
+> -	HK_TYPE_TIMER   = HK_TYPE_KERNEL_NOISE,
+> -	HK_TYPE_RCU     = HK_TYPE_KERNEL_NOISE,
+> -	HK_TYPE_MISC    = HK_TYPE_KERNEL_NOISE,
+> -	HK_TYPE_WQ      = HK_TYPE_KERNEL_NOISE,
+> -	HK_TYPE_KTHREAD = HK_TYPE_KERNEL_NOISE
+>   };
+>   
+> +#define HK_TYPE_KERNEL_NOISE HK_TYPE_TICK
+> +
+>   #ifdef CONFIG_CPU_ISOLATION
+>   DECLARE_STATIC_KEY_FALSE(housekeeping_overridden);
+>   extern int housekeeping_any_cpu(enum hk_type type);
+> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+> index ef152d401fe20..e05ed5118e651 100644
+> --- a/kernel/sched/isolation.c
+> +++ b/kernel/sched/isolation.c
+> @@ -15,9 +15,17 @@ enum hk_flags {
+>   	HK_FLAG_DOMAIN_BOOT	= BIT(HK_TYPE_DOMAIN_BOOT),
+>   	HK_FLAG_DOMAIN		= BIT(HK_TYPE_DOMAIN),
+>   	HK_FLAG_MANAGED_IRQ	= BIT(HK_TYPE_MANAGED_IRQ),
+> -	HK_FLAG_KERNEL_NOISE	= BIT(HK_TYPE_KERNEL_NOISE),
+> +	HK_FLAG_TICK		= BIT(HK_TYPE_TICK),
+> +	HK_FLAG_TIMER		= BIT(HK_TYPE_TIMER),
+> +	HK_FLAG_RCU		= BIT(HK_TYPE_RCU),
+> +	HK_FLAG_MISC		= BIT(HK_TYPE_MISC),
+> +	HK_FLAG_WQ		= BIT(HK_TYPE_WQ),
+> +	HK_FLAG_KTHREAD		= BIT(HK_TYPE_KTHREAD),
+>   };
+>   
+> +#define HK_FLAG_KERNEL_NOISE (HK_FLAG_TICK | HK_FLAG_TIMER | HK_FLAG_RCU | \
+> +			      HK_FLAG_MISC | HK_FLAG_WQ | HK_FLAG_KTHREAD)
+> +
+>   DEFINE_STATIC_KEY_FALSE(housekeeping_overridden);
+>   EXPORT_SYMBOL_GPL(housekeeping_overridden);
+>   
+>
 
