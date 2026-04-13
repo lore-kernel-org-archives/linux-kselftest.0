@@ -1,80 +1,215 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2677539446F;
-	Mon, 13 Apr 2026 20:38:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776112717; cv=none; b=Chq6Cc26xSqh3m1ynA4UBpgNUGFnJbbtmHrEh6mpHGOb/X/i9RfjCyiDHByyd6+xClOUPdvd3YzzePOMOOas35b+3LV1O7grs7EETyMooa7hPs7dvyhBnWGrstjkbt/cihg/4aXvouxxdOeLtuGcTQuyBcdplW7hE7N9rfNfd38=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776112717; c=relaxed/simple;
-	bh=shqzzww8efu125Fz4bPAww698eDKVAA5AF6kD5vHNcQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RTDvHeHBmGIe9kpKeDfIaLL88DJCpMZFgMtQE9fpiWM56ViGKWmIJYwOVOZ/xA9LgDbcIL14KLkYV4uVqWSCd86p7K1ipnCUZU5Wkh6J+Do3Ofl0JlJKcOfOzlKOFwM1x520K7alFF4rgLZpUM70zutHnqokzUGxmJqbhB+W4X8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HyRxFVuz; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A25394464
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 20:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776112773; cv=pass; b=E+hRWa1LQlUoFTE1RLev4xqJnF4QS0Ij43xBxDCdxlSGbWK8zg8/gOtnFW1N5G5hoFJpYvSBU+BKEDEay1XDZhJDHwXezvK9Z68j3C+5sRnGaMljw1jNAhPGk+N25P5803rCTRs8fTqEEzSMRXTUg7DlDeCeHcGdL8EoPjJjQ3A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776112773; c=relaxed/simple;
+	bh=PEZjoZa12UUj5SyO1b3BkdxKCeo86DiqtO9Y9tXDXgk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BAL5++W04BTrTHhwSe69U3mNZ1uB34PhZvS+snY5V3bTESAASKRlscdse6YwMJuLD85VgLVjyUa0Q12H4u4ukCQQRNu+7AaTDVppv1HLL6GCoi55BHDKtf5VDxpaEihqtSwe+tm13c6OiQUGUKfmpv4p7IN0rrDJUS3h8gLuS5I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AYuEVTNO; arc=pass smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HyRxFVuz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=shqzzww8efu125Fz4bPAww698eDKVAA5AF6kD5vHNcQ=; b=HyRxFVuzIo3nZP4w5dJrvfv/Xf
-	/LF1ktymMWmns85j1OtJrOMy89vy0HpDVZZxfy1GpTV2GGdDOamZdspK0+5xNxMvcYue+HHyStGHq
-	MH6C2w/rL96USv1cxaU00MIr687cwhZUnpEzUItaEgiSFuRadLw/+M/lhovP6UXF8n0ZGoZYHlVH6
-	7cdFfgm8esi9lqVJ5rnJez7z4XIRlbbOXIb3xaAUSd5zLXLWFccn0VigkdVVZk2ni/UrQvo2OvYuu
-	r3jd9HbUgUyftndyw3ADlm87pijqqL2NkALTAQOThIZ54PODyexR3ZHxgU9ivIRAZ0J3/vcsnI5uB
-	1Oeu2vVw==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wCO3B-0000000EUaQ-0JvL;
-	Mon, 13 Apr 2026 20:38:29 +0000
-Date: Mon, 13 Apr 2026 21:38:28 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7.2 v2 07/12] fs: remove nr_thps from struct address_space
-Message-ID: <ad1URJ0B0SOUX7Sj@casper.infradead.org>
-References: <20260413192030.3275825-1-ziy@nvidia.com>
- <20260413192030.3275825-8-ziy@nvidia.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AYuEVTNO"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b9c3a9fe80fso633231466b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 13:39:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776112770; cv=none;
+        d=google.com; s=arc-20240605;
+        b=grI5AaEot9xm1v+2MH3511c3+DFCkuiIMPM11Uz6oH4kL3eioNO0WX9qDkwmgOTb4y
+         5QpwW0JD7zio9HhOYUxOvVEmUpyo7tXz1qM5f1Zfes7Ev48wQ5rIN3XEcFe1nMjgPVsy
+         xTBWbEGEmcdCWSPNjGtqmt9WPopMg5dJ+7uIZc1jaY24coM/T6wLia9zJoRUVa3B1Na6
+         jkroZL8xtVM3HzM+veAOuoDKSDC/eiHQtTSQbHkF8czvUp6AYLs7QeOIcvUnDyB8AJlT
+         UWgTMllzB9LDQaVJZ1ixpN0Ejaf47sjp++IPqx52ThgZWJDJT+6ja7623iT4NCsxOXvI
+         cmtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TH4m/idJ4M3FjDEc3vL3oLYbFEZ5XJk9GPdaO6YXJ0Q=;
+        fh=gLVhOcND9LwMhm2F6O93BzOoL+MKEQ+EnMd972XIzD8=;
+        b=csEtfUu2sosUBGJdiL+VqK+4/IldtSC+7vNGSkpfEZYgodZ9jwGmgTgsLjsGgO55gG
+         CzBoSSfh/pesaC5LLk+78LqTr0xmxA6A/rh+vBwRcZzm+gKpi9vHgJ3D/DVuvFsw5Vdb
+         s/ZR2rYLdu0JgH8XLfgkFvrrzuGGnKqAuuzow7T+4f7p1SZhAodRC+Z9AwQCLonjMuoL
+         vTv5Pc/GpOCEgNxc78ZrdlzbTuc1sAsd+MbI9nuoLXF5s99E+P3kc9wVdENVD5bygKio
+         TcP4OPIDZhIzYESTPcHrwaEGMuGzacQrQzhIbPkKvCoVRMzMk04JNzAE35vj8w5GLBQY
+         T3aQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1776112770; x=1776717570; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TH4m/idJ4M3FjDEc3vL3oLYbFEZ5XJk9GPdaO6YXJ0Q=;
+        b=AYuEVTNOxkfjOnhiGgaWyFJXPBfPMBLT9Lbr2ZambnIGebfZFxb1S+VYVHJZUb/Kh0
+         MLKk8m+sF1yTVJGmr2X9Vv4SsVD2/hElrbcXczRepLMuW3ghoBiy0q/nf57gPc0nHZ7k
+         uCEoVkp+J7F/+4NVvOGzQ/tE2wCh0TElZOKe6ITjBjM+/3yrwkHSUc4fmkeBqBNlLIbE
+         D/bnmUcH04UeUHrVfROCdRfywUBszRrqoer40a0XPBn9pOqe8+wgFir5e8DsP5pcXyEB
+         Er3Da7YxYWTg6plfcWkzSwh+qdKihMHeM5Un5pkkF/jbHWFqwsOMmeq+mX1EnM580vZb
+         avgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776112770; x=1776717570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TH4m/idJ4M3FjDEc3vL3oLYbFEZ5XJk9GPdaO6YXJ0Q=;
+        b=YaHWZwx/HunODFpmj9GZtd6oFHK2MuiviB6rkyx6hGvNLnkNbfuZpnNv6fivJEfMP/
+         5IvMBkHmhCPLUmjYVqFDDJN2ovV/+jeWMxrOFhR8phRW1reX520L8G/e5oDRCnvKtNeY
+         NAu8E86lRRjk1LGhNfufq1S4Dn4FUSlAvSI6LTC2gec6cF2vXs9J3TxA3S8La1FFHvul
+         oHQnNN08B3SqM1U1mt7Kg7Ru/5M8Sljq8wMrlidnLze5S95MIDRU8DPDnQrFqfMWx2Ns
+         lCip89qzroAflyzKqFBPfwFW2Je8FCJN7LILwnpG0VvDr8bc90vBSmySsnIN7+XXSf5r
+         UhqQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/K1Z/pk/pgmz2l0ARTJWXb9SuAW5k7/Ar3T2wtpd/iEUDjTZMwvomRwxWn8C7oVWoHmSvIXUXrAEjd1sYs9KY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9fOn+WvRMRRkpx1VIuFmU8XqHf1xBla+5hYrQwOFmpGFZGUZ1
+	8dE2mzNy4dBYbp2XvSPUkpfIlICd8A/58+LBfg2wwyqHJWd0p+ka3tOvqIlI9Zzk2smb+NrUERp
+	QugyYdlF/+0TfHolrhUwOCgmNmJWLQn+qjf949/Wu
+X-Gm-Gg: AeBDieuKKcYp4ET7l19kfU9yZtm2AuiYk2TDDUNhre/6VyQ8QCCXsSJvEoegHCUOPQ2
+	sLIWvamAVFrp9P8mFvyjnretMKDUMPuhChWND73EEVMKHSiscTzKIhvD+7vycoQy0KLe4/Lk9tH
+	0welrg8Y94D+/S3A6PUDKzciYK4/dIopADNhhhI+RjJnOhMwswoI9wlCKnpb8CLRW8mcrMGC+NX
+	wPtkQXHDmvvoRkTSp0MNUru7+j+koDqL1MpYQO7NHbiacpbVCXu93QGzfQQoZYb3bLu33UGHwug
+	NAr9KaFzEK7kuEp2l0t/qQvuxh3qc44lDbsujMhukwzXtOoi1MpWq3IiyQ+vcR4=
+X-Received: by 2002:a17:907:74d:b0:b9c:bc70:e928 with SMTP id
+ a640c23a62f3a-b9d726577e3mr820713966b.25.1776112769834; Mon, 13 Apr 2026
+ 13:39:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260413192030.3275825-8-ziy@nvidia.com>
+References: <20260331153413.2469218-1-wusamuel@google.com> <2026040136-ocelot-simply-8981@gregkh>
+ <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com>
+ <2026040236-kiln-carat-bb6d@gregkh> <CAG2Kctpr7vBm_=Xz4H5FHYAfFxg=bDt35j6B4EprfUGio=Ftew@mail.gmail.com>
+ <2026040357-undefined-gave-c98e@gregkh> <CAG2KctqOLeYm_NFUjGdXQcBo1KhSZpXFQxQdM-DQBV4Mn0ahTw@mail.gmail.com>
+ <CAADnVQLELWyv0kuv8wK3FJVFdJPbp-tD8d3p2pgCiVrcw_cVNA@mail.gmail.com> <2026041315-oval-rut-cb8d@gregkh>
+In-Reply-To: <2026041315-oval-rut-cb8d@gregkh>
+From: Samuel Wu <wusamuel@google.com>
+Date: Mon, 13 Apr 2026 13:39:18 -0700
+X-Gm-Features: AQROBzB9ayPqL4YBuz2jmsJ-T4uaqkCVLTD0LdsQ1h-gNQThCOSm7u-eqI2Gpsg
+Message-ID: <CAG2KctpNTvkDEOnJAnsnXOfqEkzrVQSUF5S2=-NVoXiO-Tfk2g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Android Kernel Team <kernel-team@android.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Linux Power Management <linux-pm@vger.kernel.org>, driver-core@lists.linux.dev, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 13, 2026 at 03:20:25PM -0400, Zi Yan wrote:
-> filemap_nr_thps*() are removed, the related field, address_space->nr_thps,
-> is no longer needed. Remove it.
+On Sun, Apr 12, 2026 at 9:48=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Apr 12, 2026 at 03:48:58PM -0700, Alexei Starovoitov wrote:
+> > On Fri, Apr 3, 2026 at 9:28=E2=80=AFAM Samuel Wu <wusamuel@google.com> =
+wrote:
+> > >
+> > > On Fri, Apr 3, 2026 at 3:04=E2=80=AFAM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Thu, Apr 02, 2026 at 12:37:12PM -0700, Samuel Wu wrote:
+> > > > > On Wed, Apr 1, 2026 at 9:06=E2=80=AFPM Greg Kroah-Hartman
+> > > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Wed, Apr 01, 2026 at 12:07:12PM -0700, Samuel Wu wrote:
+> > > > > > > On Wed, Apr 1, 2026 at 2:15=E2=80=AFAM Greg Kroah-Hartman
+> > > > > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
+> > >
+> > > [ ... ]
+> > >
+> > > > > The data is fundamental for debugging and improving power at scal=
+e.
+> > > > > The original discussion and patch [1] provide more context of the
+> > > > > intent. To summarize the history, debugfs was unstable and insecu=
+re,
+> > > > > leading to the current sysfs implementation. However, sysfs has t=
+he
+> > > > > constraint of one attribute per node, requiring 10 sysfs accesses=
+ per
+> > > > > wakeup source.
+> > > >
+> > > > Ok, as the sysfs api doesn't work your use case anymore, why do we =
+need
+> > > > to keep it around at all?
+> > > >
+> > > > > That said, I completely agree that reading 1500+ sysfs files at o=
+nce
+> > > > > is unreasonable. Perhaps the sysfs approach was manageable at the=
+ time
+> > > > > of [1], but moving forward we need a more scalable solution. This=
+ is
+> > > > > the main motivator and makes BPF the sane approach, as it improve=
+s
+> > > > > traversal in nearly every aspect (e.g. cycles, memory, simplicity=
+,
+> > > > > scalability).
+> > > >
+> > > > I'm all for making this more scalable and work for your systems now=
+, but
+> > > > consider if you could drop the sysfs api entirely, would you want t=
+his
+> > > > to be a different type of api entirely instead of having to plug th=
+rough
+> > > > these using ebpf?
+> > >
+> > > Almost all use cases want all this data at once, so AFAICT BPF offers
+> > > the best performance for that. But of course, open to discussion if
+> > > there is an alternative API that matches BPF's performance for this
+> > > use case.
+> > >
+> > > I'm not opposed to dropping the sysfs approach, and I attempted to do
+> > > so in the v1 patch [1]. I'm not sure who else currently uses those
+> > > sysfs nodes, but a config flag should remove friction and could be a
+> > > stepping stone toward deprecation/removal.
+> > >
+> > > [1]: https://lore.kernel.org/all/20260320160055.4114055-3-wusamuel@go=
+ogle.com/
+> >
+> > The patches make sense to me.
+> >
+> > Patch 2 adds a bpf selftest and corresponding:
+> > +CONFIG_DIBS_LO=3Dy
+> > +CONFIG_PM_WAKELOCKS=3Dy
+> >
+> > and almost green in BPF CI.
+> >
+> > Except s390 that fails with:
+> >
+> > Error: #682/1 wakeup_source/iterate_and_verify_times
+> > Error: #682/1 wakeup_source/iterate_and_verify_times
+> > libbpf: extern (func ksym) 'bpf_wakeup_sources_get_head': not found in
+> > kernel or module BTFs
+> > libbpf: failed to load BPF skeleton 'test_wakeup_source': -EINVAL
+> > test_wakeup_source:FAIL:skel_open_and_load unexpected error: -22
+> >
+> > We can still land it into bpf-next for this merge window.
+> >
+> > Greg,
+> > any objection ?
+>
+> Yes, it is too late for 7.1-rc1, sorry, there will have not been any
+> time in linux-next to add it.  Let's revisit it after -rc1 is out, and
+> again, I feel that "walk all sysfs devices in bpf" is not the correct
+> solution for a system-wide snapshot interface you want to have,
+> especially as the one you previously added you feel is now obsolete.
 
-... this shrinks struct address_space by 8 bytes on 64-bit systems
-which may increase the number of inodes we can cache.
+Sounds good, when the merge window closes, I'll send out v4 with the
+s390 errors and remaining comments fixed.
 
-> Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Reviewed-by: Lance Yang <lance.yang@linux.dev>
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Regarding surfacing a system-wide snapshot of wakeup sources to
+userspace, can you elaborate on the solution you're envisioning? My
+understanding is that "walk all sysfs devices in bpf" is a canonical
+BPF use case, especially in this scenario, where we see improvements
+in every core metric.
