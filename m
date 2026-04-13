@@ -1,113 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F903ACA7B;
-	Mon, 13 Apr 2026 08:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28343AEF2E;
+	Mon, 13 Apr 2026 09:10:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776070111; cv=none; b=jec5x5Zq5r3oHfAXTDiJHsH68ZObqMi6V8FPKx0yDA5YG63/R7Qpn+1tOxV5pantCJytlOWS+VlHMT+eADmqJGr+YWN2AnIjJhSapIr/nAVeGfe42zFmB9tOmV/oItzIN6dr/wjjR49zbOafaHsiW6V829NtDcXzyzbijDRtuBs=
+	t=1776071451; cv=none; b=Nt3ay5cZdZ4mHaucxcf1vYMMYsgCxWqhgcl0YKiZOhF3l2h7Js0Cp+5pV+E6ycf3NKV/oae5GBAjTE4a4sC8/VsVbugTzvBrlbjKrtca2+uxSMwlJGirFSdSoF5PrsuxLDKWbD8PnkyT40mg7MevOh6AyrTAUwYRIazwc1g8Y+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776070111; c=relaxed/simple;
-	bh=9XyG+RgV1b+tsr/ZaBdHnBUF1N+3A8a1jOkoY61XNVg=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=UyXajx4JIJdYA/g80rMjmp1AkPMhrp/d8hu3cUJGX/eU0z/AWPpnczivA0YSqE0g1ey8QUsw4FWKV74NaOO7IaHbAbr4HeoGE47O2hi4wd2+OlTp+KvDKUv2235/hfehzpf2eJ6Mkyx3qoX5tjHVEF3XiaJwCbDG7ast1G4GHG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hkN9vi0C; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776071451; c=relaxed/simple;
+	bh=vLctE0L8gyL4gYx2UojMwYE/cL0iFzPN6wJKGthmZZ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pL5/xDAkiB5+XiJTjxHI+w28+q1oagPGDQSME1rox1jmOLke0uFQy7COvB8YD9JI1DL/HZfaB2gFgcjVfKiPIrr7hBbv/ZDURBbb1cduLRNRZkgxmZZp8ByDm97EvtxEHCe7axcDoPo3Jkde+dvWew/7vkvuSt6TL2BQjUtmCT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JPAQYOSP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hkN9vi0C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CEE4C116C6;
-	Mon, 13 Apr 2026 08:48:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JPAQYOSP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D80E6C116C6;
+	Mon, 13 Apr 2026 09:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776070111;
-	bh=9XyG+RgV1b+tsr/ZaBdHnBUF1N+3A8a1jOkoY61XNVg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=hkN9vi0CIE/F1Mewkm69Ft6sLpxx5f286jA5295VUF6qqxxKg5g1xF58Sg238kuUN
-	 EUnpcTxqjEJ4MprB5+Kc1YyMInwpGTTCbvWT3Hj8OzufmrFfmth6fKMsVlHsDDfxp+
-	 AoAlezP/gDhkz+1cdbA7d8OkozyiPFnXJ83kZACDeEYw05NnU0GwmMdW4mwcP0CPnt
-	 10XzWsu7tjVriryBG45TUwgWc1F4WxTz/9ZmhUzlWQFZwMcZM6Ij3aCMXJwsKOZcca
-	 hZCko72I1w2Cir1lPOXjRARevoUN4YHNFU+afWyqwgB+eWU7K4Ge+iFaEqygKnUd9W
-	 d5voSUtrbkFsA==
-Date: Mon, 13 Apr 2026 17:48:27 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Cao Ruichuang <create0818@163.com>
-Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/ftrace: Account for fprobe attachment at
- creation
-Message-Id: <20260413174827.25a02a9dc83248eff3f6737c@kernel.org>
-In-Reply-To: <20260410043243.65800-1-create0818@163.com>
-References: <20260407115751.96184-1-create0818@163.com>
-	<20260409172955.98e2d20a7f7736a1a9834816@kernel.org>
-	<20260410043243.65800-1-create0818@163.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1776071451;
+	bh=vLctE0L8gyL4gYx2UojMwYE/cL0iFzPN6wJKGthmZZ0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JPAQYOSP+82Mrgd3K9LX+JOgRGR+5JCTGIcm/aWhEaYJv0jtVi+RcP/FTnbHyT7EP
+	 rD1UGTsjwOk5dpx9xu86UAGLCciY6IwSKJPP7IJvzyIp9rlOS7Q0TSAy1rwDQYR9iv
+	 4tURTBnXBfuUOt2u0Wo9tMjI9NW8yybRToaIK/WEtBu36JG/w1oFn3pvFyksXcLKcf
+	 D4dVLqGlr02b58+Wt8cOtNTYUqqUHziJBQF32lq2s9uw+LgtNW2velkwt65hHTMv1Y
+	 P6rJwXEhFodMpqLfRStEU7CwE+zRnvTuf/bbAmGJ5xr1tR3vz9Nl2JYz/iuA8AglOi
+	 N8VgDPMCz8bew==
+Message-ID: <7feed614-f59f-4c03-b745-2306450a899d@kernel.org>
+Date: Mon, 13 Apr 2026 11:10:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests: mm: skip charge_reserved_hugetlb without
+ killall
+To: Cao Ruichuang <create0818@163.com>, rppt@kernel.org
+Cc: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260406053126.217196-1-create0818@163.com>
+ <20260410044139.67480-1-create0818@163.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260410044139.67480-1-create0818@163.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Fri, 10 Apr 2026 12:32:43 +0800
-Cao Ruichuang <create0818@163.com> wrote:
+On 4/10/26 06:41, Cao Ruichuang wrote:
+> charge_reserved_hugetlb.sh tears down background writers with
+> killall from psmisc. Minimal Ubuntu images do not always provide
+> that tool, so the selftest fails in cleanup for an environment reason
+> rather than for the hugetlb behavior it is trying to cover.
+> 
+> Skip the test when killall is unavailable, similar to the existing
+> root check, so these environments report the dependency clearly
+> instead of failing the test.
+> 
+> Signed-off-by: Cao Ruichuang <create0818@163.com>
+> ---
 
-> Hi Masami,
-> 
-> I reran this in clean QEMU on two kernels and got different results.
-> 
-> 1. Ubuntu distro kernel:
->    Linux 6.8.0-100-generic #100-Ubuntu SMP PREEMPT_DYNAMIC
->    Tue Jan 13 16:40:06 UTC 2026
-> 
->    baseline count=2
->    after_create123 count=4
->    after_enable1/2/3 count=4
-> 
->    baseline enabled_functions:
->      __hid_bpf_tail_call ...
-> 
->    after_create123 enabled_functions:
->      kernel_clone (2) R ->arch_ftrace_ops_list_func+0x0/0x280
->      kmem_cache_free (1) R tramp: ... ->fprobe_handler+0x0/0x40
->      __hid_bpf_tail_call ...
-> 
-> 2. Current source-tree kernel built from the clean snapshot of my patch
->    branch:
->    Linux 7.0.0-rc6 #2 SMP PREEMPT_DYNAMIC Fri Apr 10 12:19:39 CST 2026
-> 
->    baseline count=0
->    after_create123 count=0
->    after_enable1 count=1
->    after_enable2 count=1
->    after_enable3 count=2
-> 
->    after_create123 enabled_functions:
->      <empty>
-> 
->    after_enable3 enabled_functions:
->      kernel_clone (2) ->arch_ftrace_ops_list_func+0x0/0x200
->      kmem_cache_free (1) tramp: ... ->fprobe_ftrace_entry+0x0/0x220
-> 
-> So the behavior I reported earlier reproduces on that Ubuntu 6.8 kernel,
-> but not on the current source-tree kernel. I think my earlier conclusion
-> was too broad.
-
-Thanks for reporting the difference of behaviors.
-
-> 
-> I will stop pushing this testcase change for now unless I can narrow down
-> which kernel change caused the difference.
-
-OK.
-
-Thanks!
-
-> 
-> Thanks,
-> Cao Ruichuang
-> 
-
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Cheers,
+
+David
