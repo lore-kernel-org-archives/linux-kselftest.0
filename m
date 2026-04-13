@@ -1,159 +1,200 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012061.outbound.protection.outlook.com [52.101.48.61])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8200037FF62;
-	Mon, 13 Apr 2026 18:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776103471; cv=fail; b=d8RjU++Xp2hFFkyfw5wtNc64aPGxcpL2iX9YRCr0aRo27awTQEbk2xXyN3U1Q59aVoE0RNbCXCRvU/svAnMclJrWwJ6YgWZ0UDoWwCMDnEtowqjSymNnOsR8JcyTJmBN5329HXBvdp04xI3m+g+NS99oFhdOi3jKYIIbb+Mypck=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776103471; c=relaxed/simple;
-	bh=X+/g8nUBlBVmDNLhwovWAUHZGA8jjunukV6P8aDnnPo=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BPmsWwU0l0gTHoiH026Lvq60/zCUY3gIXVAgwqJKHZS3U8udXrSAxD5H5R/7FseNFnkJ/BinMKwiV+xl9ieYeUIbiOTy82IMjDQXT9VpZIHNyNEVFuBKX2GnRX+QXBKk3PZz+aiXqHw8P3iVHtIUCakinA8PozeLhLfgJPfIk7A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZVvR7yvd; arc=fail smtp.client-ip=52.101.48.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6618136308A;
+	Mon, 13 Apr 2026 18:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776104946; cv=none; b=Myu/noP/P1I2Fd3z725iGyGtUhisOGeFjVGJikFwq3JtgLTYHhLT05Vl9TZI7xQV3yir8wkhGtdTbiH6Q7L7vkK8X+FbvpA5U47sHidNQJwwPAvkB0MiiipbJieqKGXdG2VYWAv+cqZ6CY0bU/gBzNvSUpjkJXplVpQ/PZ4T414=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776104946; c=relaxed/simple;
+	bh=dzxaOJEmwlpem1g5yololK0LR/q75gbrWoy8EoVNT7w=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cAWKELqx+ttguAQ/29BjZKyKh7rXtczUx267RRs1mrP8aMyKPnp8Ycw3VI7iX1hJxU4SdrBD8TJacn7p3r4T7yIU2J+xtgfcPmWZk1v/pPaCatJHMbklyYEBExKPDlHo1d/uj+kqhaldqA1F0BHDG6iVLsbFuXBPEEtJPedaMZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A6txoxr1; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZVvR7yvd"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IdKN8+CXk+J8hXHJMc2cwkwWtgIBHLlk5OIJeDkkyfG8juy2N74OA3SkQDm+pac92Tmr0sqNct9fFGqvm9PxeX+ntCjl3FYe6ioJ5WF+6xhApTtE/eJ06GOMnEkMVb+9kEgnI7+6L7ai8Z86m1PfSbjCzYWKVsgPeTDu1NeLRSxbiPo71ho7gj+kLtgiJMRPkEoNnzLQDy0rqUrSy6Kt0exP4x9niv5stjU9okkPjdNSF2QnK0Wkkv7XNDpeiXUR2QHP7Df2y+0S3olQfX4HdKuD/9EGq5OTcT0JypEpHvB6n11sxnaJgh/CPsW1CHOvpg1iYOEL9ymvIKhBy7glng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U5Ok2TxckFK/Tkq+ed3FlmftCQqnodFt2+e4pQKjNDI=;
- b=ZjhYkF/F1prk/sHniurE7MYGsYR9XFV+Tbz3gUZ0FYgnNC2wob1whAjGu4faAFkiO1eql2Q7IWO0R8llM9kQAvrGs+daf9YVFS3iNOLs4RoZhj4C607ikXInI6dJFthJZ3ILq+MeG1BCMRY2mSsFJj1+v3LTTbezeaihJ5U8pGD/dLIcQEmHa95bnRev9dhUBALQBzi0cErEJP22kE2VBp1mzfnYc0rxweKOBMWOgRu/0ELTeEnCD9i0O+26VGv8srsTSz6t6pWYOFpuA7ncdrOctHDd0rVUqklJ7ScVM4TuK3mCz+tMUoCnqJWUMKEmIbgiYHCC00n0Uasw7M+Q4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U5Ok2TxckFK/Tkq+ed3FlmftCQqnodFt2+e4pQKjNDI=;
- b=ZVvR7yvduqu5ETpzJlYIzRlX+1CUFzIfXj+ub0NENBtkhHnVv2k6x/lU7fe+Lia3FcjnPwzdH81z+Xa5ZE93dNbhscRj5xA27mCxXPPE3r4Qb3B2zrVjRQP1J80o7gS3s+3B60iEa6I1ZCFqkykhUuF16Kohkl6JZYVh6diLeB9HO4uh2jC/dy1lv/S7OH7IrZymK/LtOI5LvVGSydrboXg+CGfvAkauikOBRhI6/jLZidS2akiGph1pdVCwYiEIoo4RQUMwJKWweNLRMDYXFtf7ZmRjE5Nh8TRED8BfWvu88Rscs6wnevLG5oPjCCOxXFZmWBXYQlBs8vVzH40eEQ==
-Received: from BN9PR03CA0295.namprd03.prod.outlook.com (2603:10b6:408:f5::30)
- by DM4PR12MB5818.namprd12.prod.outlook.com (2603:10b6:8:62::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9791.33; Mon, 13 Apr
- 2026 18:04:26 +0000
-Received: from BN2PEPF00004FBE.namprd04.prod.outlook.com
- (2603:10b6:408:f5:cafe::f4) by BN9PR03CA0295.outlook.office365.com
- (2603:10b6:408:f5::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.48 via Frontend Transport; Mon,
- 13 Apr 2026 18:04:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN2PEPF00004FBE.mail.protection.outlook.com (10.167.243.184) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.17 via Frontend Transport; Mon, 13 Apr 2026 18:04:26 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 13 Apr
- 2026 11:04:03 -0700
-Received: from nvidia.com (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 13 Apr
- 2026 11:04:02 -0700
-Date: Mon, 13 Apr 2026 12:04:00 -0600
-From: Alex Williamson <alex.williamson@nvidia.com>
-To: David Matlack <dmatlack@google.com>
-CC: <alex@shazbot.org>, <shuah@kernel.org>, Rubin Du <rubind@nvidia.com>,
-	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v13 4/4] vfio: selftests: Add NVIDIA Falcon driver for
- DMA testing
-Message-ID: <20260413120400.534fb287@nvidia.com>
-In-Reply-To: <adl3j0piontmOQZS@google.com>
-References: <20260408225459.3088623-1-alex.williamson@nvidia.com>
-	<20260408225459.3088623-5-alex.williamson@nvidia.com>
-	<adl3j0piontmOQZS@google.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="A6txoxr1"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 64B3C1A31EE;
+	Mon, 13 Apr 2026 18:28:57 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 24AAB5FFB9;
+	Mon, 13 Apr 2026 18:28:57 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 57AC3104504B7;
+	Mon, 13 Apr 2026 20:28:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776104935; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=8wwTbqAk1/v1m7wW2LqSmKK5iRKdfUxdCX7mcszWNIw=;
+	b=A6txoxr1XcmG6tEbbCTyhur5lWgPF7QbN2kOqQ54tYUX88h9fiDrus4Hjzv6K1aTBvZ2CO
+	bjdVtAPCZTUuxgjc6RPvbXX0F56K9Ade5XwS7muo/TOF1Tvpmck0wAWs4AVubunqSm+Ndd
+	6f01OPXyrIg/4lsYV6IK/RMy3MjbBTauAl1B50TjTV2IxPVcJuSQrO4S+u7TZwMR/mU033
+	FVILOV9EtBmoXp1r76CWS2aoAmzpBnQyc2Izig6DLjirZ630fRVBYFhCLMDQGNkhc32w4F
+	Q3k01keahidyZQVCTHur9l743MSGM6UBhfKfPB0DM8ZaeCot7DW4hlmohhjJyw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH RFC bpf-next 0/8] bpf: add support for KASAN checks in
+ JITed programs
+Date: Mon, 13 Apr 2026 20:28:40 +0200
+Message-Id: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF00004FBE:EE_|DM4PR12MB5818:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43ceb5b4-9b73-4445-9253-08de998719df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700016|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	nKd1QE4TgYaOzPp7TuEKGJZAT5vcycb+Gc4A7GOYwZ+IfLSCgrXWdVE51wgzOI9hDXRIe8B1IDeykTASvabTcWw3r0EXfNnkLPvmSegxm6HowsGN55Qjf/tbBfk162H6hGnlXEOrIq0CZn1YiEPkuTL/6xRz/mIxrBPcxgRZMjyONzey1cqr9ksTKpBQMtZeS3DqtamZJvEKpn1Yb7da3sNV5GJI7533HSWL1RgcMOIHwrlsYhOK9ChaavucBCMm7caVrUGePsxssoSGgcBBfs/BmlLl6eRSx8ttxz4DJltcGxC9JVSwcPb6S7h4c3gnLEXdZrhlRKdNoiIgcUXM3YyBGL+n7bCmdjw1jPjQ1FjVpcFn6DnKalkdYdNd/beDxtQ0O2M+fRI4RCkwEhtlOU28y59ONsEEpMnYShQxDO0lQBkGda6xJigPMSHMA5uOaaOKf40l7R7cESbTMpVM2VrrNEa/mDm4YXgzre38W7p+/6nBfDxmNp0eO5qwGeHTnf4dT2Fi/Ybj8nDXpaG0xaNv7NhrEN9KOWZcLF9JrUAi7YI/BEzeUzoS7CrmMlNuxH1NpGbaDCgpG1E3dTen2q40+5FTvF/M4wJ9aVjwoa9eL9KdScEhnoCRL7GybDRBVDgDByi4ns4nhkBxBOLWR7zScNQyA2qN1cyVJgln0Uv2QH/dFrgX+9LJFxKx8lV/3m3XOvs5EE80dEgpHdxxPE56qkLyV82/gECCnQjd9FcHwY5+SuR1CkeTN9rmS2uz1R0+MgMLGKzXNUO56roqtQ==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700016)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	20nSlBeaNwAI/nKkQpL0A4gwn8+Kt/Z424inv+lZnrbRkUEuiVO67QQ+oCWRaX0u78TTs2XEOFQDDcifavOtUduMoL//E+7a9IbyR59cLa1hpvMNfrurmQZ4lS+EtSA/4Ky5ohSCQy0A/KX5qLSUYG5rGyX+kYsky1/+3vzAC2Hu1Fv3k3FSI1EFQchIx5cDv1wk6sFn6tdVfHyR0kFUqV5mjJySJFvYqllzlPi0aWBY2TIxiNGbocvq/EssQ9Nj0stCakc9HW/EiNfbBcxqmwNKZ+f6TwBizM5UN30jqoGN2SosZLT/sk7aDyq27eg8mEfNDXjqUcwlrdf2yGAVfYJg9krIzC6I4a5Bj8jkUwvjmzmJEle3kAxesI7ej9eSqvDkKHG+pAThW2BYmT8AMKAiQ08deO3zeXTduwsdpixmRYBCdZA2rWw5WsYHweFF
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2026 18:04:26.5100
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43ceb5b4-9b73-4445-9253-08de998719df
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF00004FBE.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5818
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDQyMz3ezE4sQ83bTkFDOLNDOT5BTzJCWg2oKi1LTMCrA50UpBbs4gsaS
+ CNN281IoSpdjaWgCGQM1aaAAAAA==
+X-Change-ID: 20260126-kasan-fcd68f64cd7b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+ Alexander Potapenko <glider@google.com>, 
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com, 
+ linux-mm@kvack.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.1
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, 10 Apr 2026 22:19:59 +0000
-David Matlack <dmatlack@google.com> wrote:
-> On 2026-04-08 04:54 PM, Alex Williamson wrote:
-> > From: Rubin Du <rubind@nvidia.com>
-> > +static int fsp_init(struct vfio_pci_device *device)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = gpu_poll_register(device, "fsp_boot_complete",
-> > +				NV_FSP_BOOT_COMPLETE_OFFSET,
-> > +				NV_FSP_BOOT_COMPLETE_MASK, 0xffffffff, 5000);  
-> 
-> Sashiko is wondering if the mask should be something other than
-> 0xffffffff:
-> 
->   https://sashiko.dev/#/patchset/20260408225459.3088623-1-alex.williamson%40nvidia.com?part=4
+Hello,
+this series aims to bring basic support for KASAN checks to BPF JITed
+programs. This follows the first RFC posted in [1].
 
-I consulted the gpu-admin-tools and it performs the same test.  I think
-the hangup here is that we're labeling the expected value field with a
-macro named _MASK, when the mask is actually provided in the next
-field.  I'll rename this to _SUCCESS for consistency with the reference
-implementation.
+KASAN allows to spot memory management mistakes by reserving a fraction
+of memory as "shadow memory" that will map to the rest of the memory and
+allow its monitoring. Each memory-accessing instruction is then
+instrumented at build time to call some ASAN check function, that will
+analyze the corresponding bits in shadow memory, and if it detects the
+access as invalid, trigger a detailed report. The goal of this series is
+to replicate this mechanism for BPF programs when they are being JITed
+into native instructions: that's then the (runtime) JIT compiler who is
+in charge of inserting calls to the corresponding kasan checks, when a
+program is being loaded into the kernel. This task involves:
+- identifying at program load time the instructions performing memory
+  accesses
+- identifying those accesses properties (size ? read or write ?) to
+  define the relevant kasan check function to call
+- just before the identified instructions:
+  - perform the basic context saving (ie: saving registers)
+  - inserting a call to the relevant kasan check function 
+  - restore context
+- whenever the instrumented program executes, if it performs an invalid
+  access, it triggers a kasan report identical to those instrumented on
+  kernel side at build time.
 
-> [...]
-> > +	if (!falcon->no_outside_reset) {
-> > +		ret = falcon_reset(device);
-> > +		if (ret)
-> > +			return ret;
-> > +	}  
-> 
-> falcon_enable() is called right before nv_falcon_dma_init(). Calling
-> falcon_reset() here will do falcon_disable() and then falcon_enable()
-> again. So it seems unnecessary?
+As discussed in [1], this series is based on some choices and
+assumptions:
+- it focuses on x86_64 for now, and so only on KASAN_GENERIC
+- not all memory accessing BPF instructions are being instrumented:
+  - it focuses on STX/LDX instructions
+  - it discards instructions accessing BPF program stack (already
+    monitored by page guards)
+  - it discards possibly faulting instructions, like BPF_PROBE_MEM or
+    BPF_PROBE_ATOMIC insns
 
-Yes, I think that initial falcon_enable() is unnecessary, and it's a
-bit subtle, but a no_outside_reset device doesn't do anything for
-enable or disable.  I think the solution is to pull that test to the
-top of the enable function, at which point we can more clearly call
-falcon_reset() unconditionally here and remove the earlier
-falcon_enable() call.
+The series is marked and sent as RFC:
+- to allow collecting feedback early and make sure that it goes into the
+  right direction
+- because it depends on Xu's work to pass data between the verifier and
+  JIT compilers. This work is not merged yet, see [2]. I have been
+  tracking the various revisions he sent on the ML and based my local
+  branch on his work
+- because tests brought by this series currently can't run on BPF CI:
+  they expect kasan multishot to be enabled, otherwise the first test
+  will make all other kasan-related tests fail.
+- because some cases like atomic loads/stores are not instrumented yet
+  (and are still making me scratch my head)
+- because it will hopefully provide a good basis to discuss the topic at
+  LSFMMBPF (see [3])
 
-I've incorporated all your other comments, aside from the optional
-refactoring, thanks!  Testing to make sure the above change doesn't
-regress on any devices will take some time, so I'll expect this to miss
-the merge window and hopefully get queued for 7.2.  Thanks,
+Despite this series not being ready for integration yet, anyone
+interested in running it locally can perform the following steps to run
+the JITed KASAN instrumentation selftests:
+- rebasing locally this series on [2]
+- building and running the corresponding kernel with kasan_multi_shot
+  enabled
+- running `test_progs -a kasan`
 
-Alex
+And should get a variety of KASAN tests executed for BPF programs:
+
+  #162/1   kasan/bpf_kasan_uaf_read_1:OK
+  #162/2   kasan/bpf_kasan_uaf_read_2:OK
+  #162/3   kasan/bpf_kasan_uaf_read_4:OK
+  #162/4   kasan/bpf_kasan_uaf_read_8:OK
+  #162/5   kasan/bpf_kasan_uaf_write_1:OK
+  #162/6   kasan/bpf_kasan_uaf_write_2:OK
+  #162/7   kasan/bpf_kasan_uaf_write_4:OK
+  #162/8   kasan/bpf_kasan_uaf_write_8:OK
+  #162/9   kasan/bpf_kasan_oob_read_1:OK
+  #162/10  kasan/bpf_kasan_oob_read_2:OK
+  #162/11  kasan/bpf_kasan_oob_read_4:OK
+  #162/12  kasan/bpf_kasan_oob_read_8:OK
+  #162/13  kasan/bpf_kasan_oob_write_1:OK
+  #162/14  kasan/bpf_kasan_oob_write_2:OK
+  #162/15  kasan/bpf_kasan_oob_write_4:OK
+  #162/16  kasan/bpf_kasan_oob_write_8:OK
+  #162     kasan:OK
+  Summary: 1/16 PASSED, 0 SKIPPED, 0 FAILED
+
+[1] https://lore.kernel.org/bpf/DG7UG112AVBC.JKYISDTAM30T@bootlin.com/
+[2] https://lore.kernel.org/bpf/cover.1776062885.git.xukuohai@hotmail.com/
+[3] https://lore.kernel.org/bpf/DGGNCXX79H8O.2P6K8L1QW1M8K@bootlin.com/
+
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Alexis Lothoré (eBPF Foundation) (8):
+      kasan: expose generic kasan helpers
+      bpf: mark instructions accessing program stack
+      bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
+      bpf, x86: add helper to emit kasan checks in x86 JITed programs
+      bpf, x86: emit KASAN checks into x86 JITed programs
+      selftests/bpf: do not run verifier JIT tests when BPF_JIT_KASAN is enabled
+      bpf, x86: enable KASAN for JITed programs on x86
+      selftests/bpf: add tests to validate KASAN on JIT programs
+
+ arch/x86/Kconfig                                   |   1 +
+ arch/x86/net/bpf_jit_comp.c                        | 106 +++++++++++++
+ include/linux/bpf.h                                |   2 +
+ include/linux/bpf_verifier.h                       |   2 +
+ include/linux/kasan.h                              |  13 ++
+ kernel/bpf/Kconfig                                 |   9 ++
+ kernel/bpf/core.c                                  |  10 ++
+ kernel/bpf/verifier.c                              |   7 +
+ mm/kasan/kasan.h                                   |  10 --
+ tools/testing/selftests/bpf/prog_tests/kasan.c     | 165 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan.c          | 146 ++++++++++++++++++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  79 ++++++++++
+ tools/testing/selftests/bpf/test_loader.c          |   5 +
+ tools/testing/selftests/bpf/unpriv_helpers.c       |   5 +
+ tools/testing/selftests/bpf/unpriv_helpers.h       |   1 +
+ 15 files changed, 551 insertions(+), 10 deletions(-)
+---
+base-commit: 7990a071b32887a1a883952e8cf60134b6d6fea0
+change-id: 20260126-kasan-fcd68f64cd7b
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
