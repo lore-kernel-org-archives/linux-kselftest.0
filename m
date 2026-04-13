@@ -1,66 +1,67 @@
 Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9B734A783
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 17:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC68B34B66F
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 17:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776101184; cv=none; b=uxZnbYx7qgT3AAi+qLXMHAsLLWj3B2pOSSrHYxchnwSbQH/rppOXWNCCfoC2BjqTBCxd2mCLYaVx/NC0ZfuThU7+m5pgItDg85kwOuCWHBsOuC/UWUaSRi1R4GYAjQG5IqyTolZZwhjh1HlTW/kOOG1lEPoC4OOjuFTMKiPP+30=
+	t=1776101189; cv=none; b=I6WSaOjlxN4PyDynbv+ej5/vXkthV2KfkEQjWYwPny2U/Yx1lfgbiqqeVuiewiNcwZrfpZh1mcG/DrBasIbWuF47LO94rXbb/ssAVZ+2FuvOfmo5MAWSfvcU7Go3H4x0HhYdXDgvaNu989vO5yPs4Xw4xvyne6JCUw6ZenvWdqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776101184; c=relaxed/simple;
-	bh=tlNFGMK5G8ttgy6AVZeZhapjuaMcl29X2npFsloWIt4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IV+yd/EYJNdhsIKPVnhNjYokT3lccAhBoAMvrZnRFKFOkn0edWD1JcLJCVXzAuFKCU0XRIOYd7l6or5tbtt73ahug5SVkSOSVIZQN+TOZ4JitNAjecFg8Md4rlx3Ds/5In4Q0yOK2RS3S3eTmXtszRao/lfYBnzrc6qbCFTnf4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MONPj0tT; arc=none smtp.client-ip=209.85.128.46
+	s=arc-20240116; t=1776101189; c=relaxed/simple;
+	bh=rr2RR+x0HeR1UdbTO0pKuZtUObXU97RoB+HEOcwaOdM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=bzLdS92oRZdnTNlhAWkjHZNLfAQtU0bQZVqoYwYYF0L+xV+2jpe/nc5kmZKwpyCVxWcL3KDsaV9c/IY5unE2lQqXaX4ZBgYX8SYCT4DCkbYhQWQuWYUJW2pTBlKeN7TB6gSts8q7iOultGyxC83u+dPvIcEO2i1pY5J1gNuvx2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LlkZM9pY; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MONPj0tT"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso44856525e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 10:26:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LlkZM9pY"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488ba6366a7so58609245e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 10:26:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776101180; x=1776705980; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xfIAEo902tc41YQ+6N7jIsCT6MaMx+Ubc93DD0U02wg=;
-        b=MONPj0tTvGFstiEhgBKKPgKbSYUVrgUDkSz1+ownoyaDM37rje++d0kY4wg9EEd19z
-         butp9EoWOmIH5K0cV2NGHW6R0JV7RSSv9vgbO7M80mQ7nYZwb28GkmNn4UbczvoKaYPK
-         CRc/JCG0MlCqw9urJQdma4hTdqfCBKdwVBnVAxd1YGeYOw4uIrSAlsM//Iu9RfrTpXYr
-         he59+VxrZDhz8nfxORV8DF5nW45QtreVHyEWdZgWKpsC+t9TlnzrhkmovX5eMXoqtyBi
-         5NoRvzj3cu+cvtmkWdli14fRy4/T65egfvJtoTETLMuShGPeh2zIn8ePHasqcfyQi81x
-         9ezg==
+        d=suse.com; s=google; t=1776101184; x=1776705984; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lT7L7ZV1IaRLBgX9aPy3VkyvToZXmMkItn9sA5MqUEw=;
+        b=LlkZM9pYr+/bdBE623ije+y31ICCNO8C9PTd7pA3vxFTVtQe4Z5ZAYyXq4oR7FItnV
+         HmsNbJ8QwaMDm3WBHg8vtHhz4WJ/76yRxYbnEK+w8fBJiFgl9F+eNR68zJwc0idZjGk1
+         +F8LE9bpBPRZDS2gCszttXhlvZ9dhjk3IAMruSbqFWK/jKpEEJsKcdpvAHYpNB5PSrIm
+         +4gJ/62XIOHftQZ5kEX79UAaRg4CthBGuRVtXEZO1wdwHBUlciVg3M16AwdqiFkr/6U/
+         AhusHH1awTu0YxfaXwdjuLIecpNp70at/j+qrF5fOsVD7j7+YWHNUPBSilJWleJJAyeD
+         vPmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776101180; x=1776705980;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xfIAEo902tc41YQ+6N7jIsCT6MaMx+Ubc93DD0U02wg=;
-        b=Sxrjwmv+O0oPeQHGyXofBNNrZq1LOUR38nWTcmgyBCr1ZOWlQzl+iEx7w8xIZYqbJi
-         QTdBXA+8ZZDCx9kts44mMJ6l0GfL9Ov3+zAtL2pK5XAu3uu6d3OstY9v2EX/I0iTMk/L
-         a5K1ollJt+e0e9rLjf9bJwFdpmEq2q6uaW3ktsLUmpuGG2bFx+XU00/LD32k9SoXG9k9
-         vJupCSIZ7Vme04I43Q92ej1fNdy7gzIV7MObyxwNfL0WInHq7Crk3QiJJZpR5u2PFI/U
-         dkAa5A0m8cWGBQ5NsVBCcBw9Oh07TRCJoGtMpuNw14RFcIss+XvHdp/WNaHdS3West1b
-         9Sgw==
-X-Forwarded-Encrypted: i=1; AFNElJ+bzbcISllPsyuSfxBPbsfcjIvPEYgcq8xmjdSTWuSXj9wvWo35M/XvvQ9RJtR1zJ71v23ieaoGoKnSAfw4iqs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVCpR5aqTAdVsy5S1sMkjSk1vgbH3yEDEYkYfdk1xxvehRjuic
-	UlHk5ULZDvOn3qKAdljWOZ4nS54KJoMQzafNMh1saRa7LqzVzyhqRNL6pSGNjUBcFPQ=
-X-Gm-Gg: AeBDievnKfvfuIXMvxEXwxMWt8dLa67mlLnlX/tUkdL6c5GbDXvkCnQa/MIF7IL5Qe+
-	SPjX8e7p+4QpPOObPnMwRduwUuozg4RQJC6U1SS2/1DTPb6q4tgdM+NzvIYOMEFZBer/yO53x5a
-	51FXpXHJjiC6emwLzegmLAE/ybK4lyUrolswdWpYqKGqpflkArHFzsK6OlsUEYqZNS1oaRURLFc
-	vPMiOCybzEw1SxcLqyLbih2zq4JLqYnlnCvPu38n/P1yNrZLk8aIML3fEGBMnxNa9b3yxPJ/dcv
-	9BEE2AKl9ji15x017A+vvft4OQnEh9AR7453VFghsIZXEx4euLWjp2i43wgJhdwobCooPt1FMVL
-	tRCeUUtaiqOmKqIRfWSuXvu/rH22aaO0REz1ZDEgIMN2i9KIsTVSe5OVaRimdW23KZ4rfuHD0yb
-	lTg327nzkt29eNbQ7ORPqsyiZhAQU+30ozGw==
-X-Received: by 2002:a05:600c:5306:b0:487:59c:2bb8 with SMTP id 5b1f17b1804b1-488d68c3385mr197391985e9.27.1776101180364;
-        Mon, 13 Apr 2026 10:26:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776101184; x=1776705984;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lT7L7ZV1IaRLBgX9aPy3VkyvToZXmMkItn9sA5MqUEw=;
+        b=OkVhoDQsTTTtALEf4qHaptIywKorB4bUVe5+4p14Eb3G2zRyAdz1lvQZvu+0SCWe8j
+         RfwZ/JpsJ+eZDfeftWV11u/4wTDK0Bla2cgWzt7npHsuC0R6Qv9ZHm9NtfeDT1+qgJSD
+         B/bh8GjUCOQVs0WbTUbkacOlZH7xso1qtohpkBtIV2FkM157oRp10GFum4KrugfTssMD
+         WUI0fVdrJgPt6kYOuLPmCTj/+o3EsulRVq8qMV0Mtlmxz7lpZGVrKPbBOiEWLpXhtVQh
+         d47h5xH6K5sHgNSMu0neFCfIMr9emEEc4xo9kr5+kDMbPXN3r6rASqcl/yL2TSLZAhbK
+         Ugkw==
+X-Forwarded-Encrypted: i=1; AFNElJ/6bzvAHtw6oTZfQaFj+Nr0HPA3CRzS6LV+iKIXiE4vP41Y2ozrN+q8hJms2yYK9LC+M834FJWokyyJq5mVtUc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQinkgnMSCkEkjFw4BZf3fhJSiACxa42oGIwJDjRm4+COu+ARB
+	yosM4NrMXJnTLguSVgmWZ/TFCzGhpslnYCWZ2RyRGZLmmkEO+D2mE8ZVRGwC9NGhIWU=
+X-Gm-Gg: AeBDieumal1Z55QktwCDx+Q+cMab5L5OhhQtGjvPl7nN9Q4LBWUHO/D9VrVMS1pETno
+	rwq53V4SlizdJtua+mUk/GRvOTYQmIg4tTlZfb+uBBBTjmmEIFJtDh7idTta32nOus13NQfVefM
+	eyoqGkhqPhodUspKSbz6CayRgS6KQZjYkxhCAdLibto2eCwaQQU6pUrJ2kPdaQPlhLon6l5rl+y
+	JGPHCxOQZlHmDflMl+qjlFDsehyJxO5QAAbRW/EcS0xasPJDnkKbpyTZwu53U2c09PTO1doI7vG
+	11lXfTmIZM+ptgQUI1BkqAR/NnNNWq7TJtdnUAkdom2sE1GaUn6lsxVms4mgtSlzieXsK+KBYMO
+	DcDr8XKX28SwlWFL+fOtoPhE/vHatMyqXt5SSW1Q4dye8neAY6jzXLE/e8rE0yMIZ+eri60M7cw
+	mNxMyoOZf6wxYViCNr8jFaVYE=
+X-Received: by 2002:a05:600c:1c0a:b0:485:4388:3492 with SMTP id 5b1f17b1804b1-488d67f4e67mr195662795e9.11.1776101183656;
+        Mon, 13 Apr 2026 10:26:23 -0700 (PDT)
 Received: from [127.0.0.1] ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d5734a94sm298657835e9.0.2026.04.13.10.26.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d5734a94sm298657835e9.0.2026.04.13.10.26.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 10:26:20 -0700 (PDT)
+        Mon, 13 Apr 2026 10:26:23 -0700 (PDT)
 From: Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be executed
- on 4.12 kernels
-Date: Mon, 13 Apr 2026 14:26:11 -0300
-Message-Id: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
+Date: Mon, 13 Apr 2026 14:26:12 -0300
+Subject: [PATCH v2 1/6] selftests: livepatch: Check for
+ ARCH_HAS_SYSCALL_WRAPPER config
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,74 +70,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADMn3WkC/22Nyw6CMBBFf4XM2jF9BBBX/IdhAWWQGqSkU4iG8
- O8WdOny5D7OCkzeEsM1WcHTYtm6MYI6JWD6erwT2jYyKKEyoUWBw4SBODC6ocXOvoixK9K0bsy
- FjMohDidPRxB3t+rLPDcPMmF/2hu95eD8+7Aucu/9BFL/EywSBeayNlnbNVqluuSZ6WzcE6pt2
- z598ED7xQAAAA==
-X-Change-ID: 20260309-lp-tests-old-fixes-f955abc8ec27
+Message-Id: <20260413-lp-tests-old-fixes-v2-1-367c7cb5006f@suse.com>
+References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
+In-Reply-To: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
 To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
  Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
  Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776101176; l=2546;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776101176; l=1832;
  i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
- bh=tlNFGMK5G8ttgy6AVZeZhapjuaMcl29X2npFsloWIt4=;
- b=dgMIwWOoPPxnVBD33RIsUE57uohRERIxr3/vmU7Ina+6wliM2wP5bwsHPuHZgMb/PzJitEex/
- K8M+fOMmz3NCu/I5zzbXUWuIA+SP+l1vUhvf+Kq98mnnRZeekTdzI9U
+ bh=rr2RR+x0HeR1UdbTO0pKuZtUObXU97RoB+HEOcwaOdM=;
+ b=hdn6jheR3lzQFjoGWchyhG3rl3D/g59+JC33wwwmYVHOSJ0XZJRcKHAbOHyDsKVA2+0/KLpbe
+ 0knQ66N73cYBunFNbaXFS/yCdrGwWgPCQHTsU+OG46Oo+otluUbxuTK
 X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
  pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
 
-A new version of the patchset, with fewer patches now. Please take a look!
+Older kernels that lack CONFIG_ARCH_HAS_SYSCALL_WRAPPER config don't
+have any prefixes for their syscalls. The same applies to current
+powerpc and loongarch, covering all currently supported architectures
+that support livepatch.
 
-Original cover-letter:
-These patches don't really change how the patches are run, just skip
-some tests on kernels that don't support a feature (like kprobe and
-livepatched living together) or when a livepatch sysfs attribute is
-missing.
-
-The last patch slightly adjusts check_result function to skip dmesg
-messages on SLE kernels when a livepatch is removed.
-
-These patches are based on printk/for-next branch.
-
-Please review! Thanks!
+The other supported architectures have specific prefixes, so error out
+when a new architecture adds livepatch support with wrappes but didn't
+update the test to include it.
 
 Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 ---
-Changes in v2:
-- Patch descriptions were changed to remove "test-X", since it was polluting the commit subjects (Miroslav Benes)
-- Patch 8 was dropped since it was checking for a message from an out-of-tree patch. (Petr Mladek)
-- Patch 3 was dropped as should be treated as expected failure for older kernels. (Petr Mladek)
-- Patch 2 was changed to use y/n instead of 1/0, since it's more natural to use it.
-- Patch 1 was changed to handle ppc and loongson, and error out if dealing with a different architecture that sets
-  CONFIG_ARCH_HAS_SYSCALL_WRAPPER and haven't changed the test to include the proper wrapper prefix.
-- Patch 4 was changed to invert the return of the bash function to return 1 in failure, like
-  a normal bash function (Joe Lawrence)
-- Patches 5, 6 an 7 were changed to not split the tests, but to only run the tests
-  when the attribute were present (Miroslav Benes)
-- Link to v1: https://patch.msgid.link/20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com
+ .../selftests/livepatch/test_modules/test_klp_syscall.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
----
-Marcos Paulo de Souza (6):
-      selftests: livepatch: Check for ARCH_HAS_SYSCALL_WRAPPER config
-      selftests: livepatch: Replace true/false module parameter by y/n
-      selftests: livepatch: Introduce does_sysfs_exists function
-      selftests: livepatch: Check if patched sysfs attribute exists
-      selftests: livepatch: Check if replace sysfs attribute exists
-      selftests: livepatch: Check if stack_order sysfs attribute exists
+diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+index dd802783ea84..b5527a288a7c 100644
+--- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
++++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+@@ -12,15 +12,26 @@
+ #include <linux/slab.h>
+ #include <linux/livepatch.h>
+ 
+-#if defined(__x86_64__)
++/*
++ * Before CONFIG_ARCH_HAS_SYSCALL_WRAPPER was introduced there were no
++ * prefixes for system calls.
++ * Both ppc and loongarch does not set prefixes for their system calls either.
++ */
++#if !defined(CONFIG_ARCH_HAS_SYSCALL_WRAPPER) ||  defined(__powerpc__) || \
++	defined(__loongarch__)
++#define FN_PREFIX
++#elif defined(__x86_64__)
+ #define FN_PREFIX __x64_
+ #elif defined(__s390x__)
+ #define FN_PREFIX __s390x_
+ #elif defined(__aarch64__)
+ #define FN_PREFIX __arm64_
+-#else
+-/* powerpc does not select ARCH_HAS_SYSCALL_WRAPPER */
++#elif defined(__powerpc__)
++#define FN_PREFIX
++#elif defined(__loongarch__)
+ #define FN_PREFIX
++#else
++#error "Missing syscall wrapper for the given architecture."
+ #endif
+ 
+ /* Protects klp_pids */
 
- tools/testing/selftests/livepatch/functions.sh     |  10 ++
- tools/testing/selftests/livepatch/test-kprobe.sh   |   8 +-
- tools/testing/selftests/livepatch/test-sysfs.sh    | 120 ++++++++++++---------
- .../livepatch/test_modules/test_klp_syscall.c      |  17 ++-
- 4 files changed, 99 insertions(+), 56 deletions(-)
----
-base-commit: 712c0756828becbfc629ff8d8b82deff5d1115e4
-change-id: 20260309-lp-tests-old-fixes-f955abc8ec27
-
-Best regards,
---  
-Marcos Paulo de Souza <mpdesouza@suse.com>
+-- 
+2.52.0
 
