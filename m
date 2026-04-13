@@ -1,325 +1,212 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34483A4502
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 08:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776068351; cv=none; b=g9PjIAPXW9Db8trWgcIJ/K0bs/GRTG/u2aCXgMPPZwkLqF23E9FyYzW43YcCHyTN0G8uS1YFCp/qE5YqCCKtUCJKAaJmYgh7qh1oX+edBDvixHXaZQkhImp9yv4zswY2XS8EyeF5WSy+uPurAau8j3S+r8YxRNDGYCAS+5tKvKA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776068351; c=relaxed/simple;
-	bh=NZZyQ7/ENQVmDOV79kj5/D2r72BBk6hME7T+9KXPT8k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=odfNrBdzdRIjKD2o370Z/rxMJqBxdZSEu6qK8ezvolcoEWJIvW/2PVXKQsy4hYHNlxQrraUJvPWgJWbb4CN/x80hPsxqTGeDgnNkbn8/nvLvVhxUsJip8sRzZ61Dr7//ktlyPoKmRtCSH0g+0by28Am3KhFwCEUAxAB3sByxcwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=N/78aSf7 reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032493AC0F9
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 08:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776069998; cv=pass; b=FtIY3+FAGqKWE2VQ7T0dItXpvvTtJuV8NLFZxgGBo/ugOYTGN+lSCS7oejgwzdpXmZ7bqhbS+Q1kgP3llyxUMxGG3EY7mrupFNlO4l2w5a9XZ3AS6SIcd/A7uOsyehKhH7oEug5ewOP7GxoVq8RSYttfaJrzgQoAWasb5MLElbI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776069998; c=relaxed/simple;
+	bh=51K1dSOwx77FUDK5PTj+zi2/Idf/3F0Kn/F+IWkeRRM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U5e7u0qUTqMauoqdwOgXaJuJ3ItIvTSCHvp0JcSoS9mhVzr0fIgYIm3VtZZKrg8mFDGzC9HPUx5Aw3KKkvBTmm0FsCnTQOpU72sg/Y2fpWTfC2o8inagRC+BfmTPhBwuP27NLAO9gOmZqdNTjneo36N+09gaLA3wOgT4b1w+sDY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OlifcbZO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ic7fnvAq; arc=pass smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="N/78aSf7"
-Received: from [133.11.54.205] (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 63D8J8cC090058
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 13 Apr 2026 17:19:08 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=YIdYpFbPqSqa+u+cU5dz39tKUt9/tNGlnr2A4nJKPQc=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1776068348; v=1;
-        b=N/78aSf7BKLE/mhBIYGN+F/5dKx6SwzbvqrDHIasYyVw/aKVfhhmFa0CfwiWT9Vq
-         5C7XQrFOXxEUuS9Fl6Q8apVejmFUaBu5cFFWM2omcvnQpaOAvCa8nsHh1sglVrQO
-         FA6whf71D/7H5pECjdIdm8onyW0668ZqGcflfz1mXGxqeY0C6YQDbQCDb1B1ycj1
-         ds6/XeJfSOHn3GcnpzFsp3iFc6UPezdvPp0byfSxOcZWxfafupy8qgwv5yjLtcA5
-         DsisRNRwyv7RsLZ4KUIcOmy1+xWsnR++aS+M+R6skoaujXWXwlP2coNfL8UKQBsb
-         r7m3rQXqqlkwk3qM47PXhw==
-Message-ID: <0ea0ac1a-12dd-4b62-956f-fb6ee64cc8da@rsg.ci.i.u-tokyo.ac.jp>
-Date: Mon, 13 Apr 2026 17:19:07 +0900
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OlifcbZO";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ic7fnvAq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776069996;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o0213UnEMOod9W6HJe+rSGORixl1p8NPdPniRuWrrH0=;
+	b=OlifcbZO55P92m2QNBhlREE7cdhfVlEyap8L8UH5wJmax9qb7i9wfqDSUg3qWAjHl//4st
+	TDrP2cnN5ubzeh7JsqkjNyon7soBpe0J3d82YptTU14jGasnJnQX5cfwAKIi5xuC2kJ8MM
+	WQxInbVsxYSNhgMHcBasGFBXWTkl8wc=
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com
+ [74.125.82.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-75-CdhpzapkPruBZL4sLQ27mw-1; Mon, 13 Apr 2026 04:46:34 -0400
+X-MC-Unique: CdhpzapkPruBZL4sLQ27mw-1
+X-Mimecast-MFC-AGG-ID: CdhpzapkPruBZL4sLQ27mw_1776069994
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-2bdf75bc88fso5873601eec.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 01:46:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776069993; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ORQfF3rTAF0syOM9qVpQyc2wIf8eekc+nGbfEp+ZPrDK0aXRjMB5LxhCkHS6TgZEq3
+         nWvVxYmfwh8Dz7TmPG1iC/wmSA6r69fIghYXvl+yImBxdfMQsXM/qmb70YelNrBC469U
+         RkixRS59ZfJxsrHlgSEtWyUCUOiJRIctxmHLF33Ho/dkTB3+cVaKYd1p8Zk+OJYBGP/y
+         1DKohhapLvntp0s3LIP+qz0QdgaQy4IVYm0hUKBmgbhTN64O/H5JA7tGSSyCDsNxNmuP
+         EcIUcmO/69JhisfrynY+M5ulmWpaf6aiyTTvTGPxm3YtpKm/AI6V8IoD1ECVx99ZBTfa
+         c2VA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=o0213UnEMOod9W6HJe+rSGORixl1p8NPdPniRuWrrH0=;
+        fh=VqrrCpkTKfi07L/n2pd1MZ0H2pSG8GYVoNm7E3Ed46w=;
+        b=hDp6Zsn7YiFLkdw+i+8aKSk2P2HgYUSzkf0RnJiCqom6KJy1teGmjMgfEmAOi631AW
+         KkwfnrbsInDGlrq1cKWyI/+aHYyu+Tytpz3Xb8xEJ745nxZp8+fYSbYoUfooz0LPbsV7
+         EdeOS6DJTZYfVDJImzJL7bORWLMsGeOWRqwdVZhxG+xJz342u5HIlRbVHegd2XSdNZzZ
+         RHMAT2wROQgIh2iSjvMEbpn8jd7mQoOzhy2dNGs/fntJqe3IGMb/gfHgmg7Jt99xMce3
+         LNZA6twZXZnjfHnsmrZCze2ekjGR9RerWdwCIcFsDSi/LW+VVng5KhISYRaNR2I/8uDk
+         WLjQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1776069993; x=1776674793; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o0213UnEMOod9W6HJe+rSGORixl1p8NPdPniRuWrrH0=;
+        b=ic7fnvAqxwC8JgJpSOH+2y0gTHukPpqikAlhxckE1oE7ccy5rjEcNbHcDcBn/QZ0/j
+         u3PljoHYsXNPtswTAdn7mQiCSCgGNC7EF39NnOpbkMerJxYQH4p3iR1PWU5K6/y2sNus
+         tNEJgwzDTZY6EtWACtRoytgfGEwvI+Fxz9PHD5364qdBkhv5o8XxsGEkaGY1qGAg29IW
+         0CDuoe7ptAeBrkzrPkWUsZ2BTtoV5/d1gDvEZ3CX8jEPJBcTnOeaR4CCRcQQkNCTdWno
+         5zewRTJUnZegp/htVFW7zOuuHGgAr3+sVlT/RW5KpVfMiIFBnVdCEf3u0ipREhAbg88U
+         FAjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776069993; x=1776674793;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=o0213UnEMOod9W6HJe+rSGORixl1p8NPdPniRuWrrH0=;
+        b=lRnU9g+SEsqP+8k62PlLM1Wg/iIADrb6WZ7Q77SDITcLpTzXBfeJkJ9Oyc3f/wAe3K
+         ghPnSssFFW/oYneuZzDEc7M8u2eLPGOHRBnK3dlOTgBtvzUM4b5YakCIOkTRZgL+eMlU
+         3x+mQ1Pd8LFk19Cs3dwHL+5Nsdpi1Gz4PoPpT6kikIVj3ohAbHt/g8cVZNGpb0RAk3uA
+         NDwl593gSBtYWD+bDNjYyawqjhiOQPeQ7PKJOM9lUxGamAV723YktsTQ8hW8ya3tQ6tW
+         O6ApR/k+BX33oCHxLKynamjLcGOzAzSraeSioDLn2gJWe+qqX8MIbaKOBBpo9QECn5QW
+         GwOw==
+X-Forwarded-Encrypted: i=1; AFNElJ+k1RCzPoTMnzYbR5iikwnPUOMtDaztu0GpwWoYGrpGhLNSXdCWvx1/PlCAN8f7lC/ySfKyvqcdHTQX5Q5Oi5Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8cPpzMYofV8dKg846FJP/acUumWzZ3I5Zk5Kbyj3DfYaQANSd
+	7oTAaQKQAu/FupyS9O5Ip0PFL3pNQMRrC7II2Ygdu9C8dg4U+WR5G32pQ8vql4oBx+MATmGPdfC
+	C7hC51/zHfl/TXWm/R/2DA20B7eWU9kzIgsi7TGt3HtitPoDJ0zyVPrBOxwcXw9vcTSg0YfaPG0
+	BAiEIJlZE9+2gJ22N9UMr5mbjrxCw2Rwpey/nxFaUQxw4N
+X-Gm-Gg: AeBDiev7QjAHSTV0fdZAgSgr5LTnDqzxNpkyRR/qIXhykz6eAu7rERraGTKLADSxh9N
+	7GT63XYTG95Q0xFSHYvB+MBnkpcX+yHpvVG3VhF1m0plhxv/EE6XosdGHbuIqQLmLzvs1n5gmyD
+	Mc0eTe74Ad/6NwRsre4ZUq9KxTXN+U5KIZu8eEETF1YQFbRL/0EBfVS8jrMJQIbnAqhYjnAES3T
+	6jZFQ==
+X-Received: by 2002:a05:7301:fa0e:b0:2c4:b8d6:45d3 with SMTP id 5a478bee46e88-2d5877991cdmr6669852eec.10.1776069993409;
+        Mon, 13 Apr 2026 01:46:33 -0700 (PDT)
+X-Received: by 2002:a05:7301:fa0e:b0:2c4:b8d6:45d3 with SMTP id
+ 5a478bee46e88-2d5877991cdmr6669840eec.10.1776069992889; Mon, 13 Apr 2026
+ 01:46:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/4] KVM: arm64: selftests: Test
- PMU_V3_FIXED_COUNTERS_ONLY
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas
- <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260413-hybrid-v6-0-e79d760f7f1b@rsg.ci.i.u-tokyo.ac.jp>
- <20260413-hybrid-v6-4-e79d760f7f1b@rsg.ci.i.u-tokyo.ac.jp>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <20260413-hybrid-v6-4-e79d760f7f1b@rsg.ci.i.u-tokyo.ac.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260402063714.55124-1-liwang@redhat.com> <20260402063714.55124-7-liwang@redhat.com>
+ <CAKEwX=M150Hw0Ncs69SCWRr7J+vK5F0biotkz=MSFvFG3rgjow@mail.gmail.com>
+In-Reply-To: <CAKEwX=M150Hw0Ncs69SCWRr7J+vK5F0biotkz=MSFvFG3rgjow@mail.gmail.com>
+From: Li Wang <liwang@redhat.com>
+Date: Mon, 13 Apr 2026 16:46:19 +0800
+X-Gm-Features: AQROBzATy_Du7HEcqoEpfm3ecefJ913kdNeZVB-cXtC9R6JcAITrAGqsNlgA3uk
+Message-ID: <CAEemH2e76jseObPh5oj7H7KB9kJeucWeb5zSy_f74YMy-HcShA@mail.gmail.com>
+Subject: Re: [PATCH v6 6/8] selftest/cgroup: fix zswap test_no_invasive_cgroup_shrink
+ on large pagesize system
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: akpm@linux-foundation.org, rppt@kernel.org, david@kernel.org, 
+	hannes@cmpxchg.org, yosry@kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com, 
+	mhocko@suse.com, shuah@kernel.org, chengming.zhou@linux.dev, 
+	longman@redhat.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	Michal Hocko <mhocko@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Yosry Ahmed <yosryahmed@google.com>, liwang <wangli.ahau@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/04/13 17:07, Akihiko Odaki wrote:
-> Assert the following:
-> - KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY is unset at initialization.
-> - KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY can be set.
-> - Setting KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY for the first time
->    after setting an event filter results in EBUSY.
-> - KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY can be set again even if an
->    event filter has already been set.
-> - Setting KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY after running a VCPU
->    results in EBUSY.
-> - The existing test cases pass with
->    KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY set.
-> 
-> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-> ---
->   .../selftests/kvm/arm64/vpmu_counter_access.c      | 147 +++++++++++++++++----
->   1 file changed, 123 insertions(+), 24 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> index ae36325c022f..6e2bf3ad63b2 100644
-> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> @@ -403,12 +403,7 @@ static void create_vpmu_vm(void *guest_code)
->   {
->   	struct kvm_vcpu_init init;
->   	uint8_t pmuver, ec;
-> -	uint64_t dfr0, irq = 23;
-> -	struct kvm_device_attr irq_attr = {
-> -		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
-> -		.attr = KVM_ARM_VCPU_PMU_V3_IRQ,
-> -		.addr = (uint64_t)&irq,
-> -	};
-> +	uint64_t dfr0;
->   
->   	/* The test creates the vpmu_vm multiple times. Ensure a clean state */
->   	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
-> @@ -434,8 +429,6 @@ static void create_vpmu_vm(void *guest_code)
->   	TEST_ASSERT(pmuver != ID_AA64DFR0_EL1_PMUVer_IMP_DEF &&
->   		    pmuver >= ID_AA64DFR0_EL1_PMUVer_IMP,
->   		    "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
-> -
-> -	vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
->   }
->   
->   static void destroy_vpmu_vm(void)
-> @@ -461,15 +454,25 @@ static void run_vcpu(struct kvm_vcpu *vcpu, uint64_t pmcr_n)
->   	}
->   }
->   
-> -static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters, bool expect_fail)
-> +static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters,
-> +						 bool fixed_counters_only,
-> +						 bool expect_fail)
->   {
->   	struct kvm_vcpu *vcpu;
->   	unsigned int prev;
->   	int ret;
-> +	uint64_t irq = 23;
->   
->   	create_vpmu_vm(guest_code);
->   	vcpu = vpmu_vm.vcpu;
->   
-> +	if (fixed_counters_only)
-> +		vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +
-> +	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +			     KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-> +
->   	prev = get_pmcr_n(vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0)));
->   
->   	ret = __vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> @@ -489,15 +492,15 @@ static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters, bool
->    * Create a guest with one vCPU, set the PMCR_EL0.N for the vCPU to @pmcr_n,
->    * and run the test.
->    */
-> -static void run_access_test(uint64_t pmcr_n)
-> +static void run_access_test(uint64_t pmcr_n, bool fixed_counters_only)
->   {
->   	uint64_t sp;
->   	struct kvm_vcpu *vcpu;
->   	struct kvm_vcpu_init init;
->   
-> -	pr_debug("Test with pmcr_n %lu\n", pmcr_n);
-> +	pr_debug("Test with pmcr_n %lu, fixed_counters_only %d\n", pmcr_n, fixed_counters_only);
->   
-> -	test_create_vpmu_vm_with_nr_counters(pmcr_n, false);
-> +	test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, false);
->   	vcpu = vpmu_vm.vcpu;
->   
->   	/* Save the initial sp to restore them later to run the guest again */
-> @@ -531,14 +534,14 @@ static struct pmreg_sets validity_check_reg_sets[] = {
->    * Create a VM, and check if KVM handles the userspace accesses of
->    * the PMU register sets in @validity_check_reg_sets[] correctly.
->    */
-> -static void run_pmregs_validity_test(uint64_t pmcr_n)
-> +static void run_pmregs_validity_test(uint64_t pmcr_n, bool fixed_counters_only)
->   {
->   	int i;
->   	struct kvm_vcpu *vcpu;
->   	uint64_t set_reg_id, clr_reg_id, reg_val;
->   	uint64_t valid_counters_mask, max_counters_mask;
->   
-> -	test_create_vpmu_vm_with_nr_counters(pmcr_n, false);
-> +	test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, false);
->   	vcpu = vpmu_vm.vcpu;
->   
->   	valid_counters_mask = get_counters_mask(pmcr_n);
-> @@ -588,11 +591,11 @@ static void run_pmregs_validity_test(uint64_t pmcr_n)
->    * the vCPU to @pmcr_n, which is larger than the host value.
->    * The attempt should fail as @pmcr_n is too big to set for the vCPU.
->    */
-> -static void run_error_test(uint64_t pmcr_n)
-> +static void run_error_test(uint64_t pmcr_n, bool fixed_counters_only)
->   {
->   	pr_debug("Error test with pmcr_n %lu (larger than the host)\n", pmcr_n);
->   
-> -	test_create_vpmu_vm_with_nr_counters(pmcr_n, true);
-> +	test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, true);
->   	destroy_vpmu_vm();
->   }
->   
-> @@ -622,22 +625,118 @@ static bool kvm_supports_nr_counters_attr(void)
->   	return supported;
->   }
->   
-> +static void test_config(uint64_t pmcr_n, bool fixed_counters_only)
-> +{
-> +	uint64_t i;
-> +
-> +	for (i = 0; i <= pmcr_n; i++) {
-> +		run_access_test(i, fixed_counters_only);
-> +		run_pmregs_validity_test(i, fixed_counters_only);
-> +	}
-> +
-> +	for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
-> +		run_error_test(i, fixed_counters_only);
-> +}
-> +
-> +static void test_fixed_counters_only(uint64_t pmcr_n)
-> +{
-> +	struct kvm_pmu_event_filter filter = { .nevents = 0 };
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *running_vcpu;
-> +	struct kvm_vcpu *stopped_vcpu;
-> +	struct kvm_vcpu_init init;
-> +	int ret;
-> +	uint64_t irq = 23;
-> +
-> +	create_vpmu_vm(guest_code);
-> +	ret = __vcpu_has_device_attr(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY);
-> +	if (ret) {
-> +		TEST_ASSERT(ret == -1 && errno == ENXIO,
-> +			    KVM_IOCTL_ERROR(KVM_HAS_DEVICE_ATTR, ret));
-> +		destroy_vpmu_vm();
-> +		return;
-> +	}
-> +
-> +	/* Assert that FIXED_COUNTERS_ONLY is unset at initialization. */
-> +	ret = __vcpu_device_attr_get(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +	TEST_ASSERT(ret == -1 && errno == ENXIO,
-> +		    KVM_IOCTL_ERROR(KVM_GET_DEVICE_ATTR, ret));
-> +
-> +	/* Assert that setting FIXED_COUNTERS_ONLY succeeds. */
-> +	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +			     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +
-> +	/* Assert that getting FIXED_COUNTERS_ONLY succeeds. */
-> +	vcpu_device_attr_get(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +			     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +
-> +	/*
-> +	 * Assert that setting FIXED_COUNTERS_ONLY again succeeds even if an
-> +	 * event filter has already been set.
-> +	 */
-> +	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +			     KVM_ARM_VCPU_PMU_V3_FILTER, &filter);
-> +
-> +	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +			     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +
-> +	destroy_vpmu_vm();
-> +
-> +	create_vpmu_vm(guest_code);
-> +
-> +	/*
-> +	 * Assert that setting FIXED_COUNTERS_ONLY results in EBUSY if an event
-> +	 * filter has already been set while FIXED_COUNTERS_ONLY has not.
-> +	 */
-> +	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +			     KVM_ARM_VCPU_PMU_V3_FILTER, &filter);
-> +
-> +	ret = __vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +	TEST_ASSERT(ret == -1 && errno == EBUSY,
-> +		    KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-> +
-> +	destroy_vpmu_vm();
-> +
-> +	/*
-> +	 * Assert that setting FIXED_COUNTERS_ONLY after running a VCPU results
-> +	 * in EBUSY.
-> +	 */
-> +	vm = vm_create(2);
-> +	vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
-> +	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
-> +	running_vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-> +	stopped_vcpu = aarch64_vcpu_add(vm, 1, &init, guest_code);
-> +	kvm_arch_vm_finalize_vcpus(vm);
-> +	vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +			     KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-> +	vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +			     KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-> +	run_vcpu(running_vcpu, pmcr_n);
+On Mon, Apr 13, 2026 at 8:29=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrote=
+:
+>
+> On Wed, Apr 1, 2026 at 11:38=E2=80=AFPM Li Wang <liwang@redhat.com> wrote=
+:
+> >
+> > test_no_invasive_cgroup_shrink sets up two cgroups: wb_group, which is
+> > expected to trigger zswap writeback, and a control group (renamed to
+> > zw_group), which should only have pages sitting in zswap without any
+> > writeback.
+> >
+> > There are two problems with the current test:
+> >
+> > 1) The data patterns are reversed. wb_group uses allocate_bytes(), whic=
+h
+> >    writes only a single byte per page =E2=80=94 trivially compressible,
+> >    especially by zstd =E2=80=94 so compressed pages fit within zswap.ma=
+x and
+> >    writeback is never triggered. Meanwhile, the control group uses
+> >    getrandom() to produce hard-to-compress data, but it is the group
+> >    that does *not* need writeback.
+> >
+> > 2) The test uses fixed sizes (10K zswap.max, 10MB allocation) that are
+> >    too small on systems with large PAGE_SIZE (e.g. 64K), failing to
+> >    build enough memory pressure to trigger writeback reliably.
+> >
+> > Fix both issues by:
+> >   - Swapping the data patterns: fill wb_group pages with partially
+> >     random data (getrandom for page_size/4 bytes) to resist compression
+> >     and trigger writeback, and fill zw_group pages with simple repeated
+> >     data to stay compressed in zswap.
+> >   - Making all size parameters PAGE_SIZE-aware: set allocation size to
+> >     PAGE_SIZE * 1024, memory.zswap.max to PAGE_SIZE, and memory.max to
+> >     allocation_size / 2 for both cgroups.
+> >   - Allocating memory inline instead of via cg_run() so the pages
+> >     remain resident throughout the test.
+> >
+> > =3D=3D=3D Error Log =3D=3D=3D
+> >  # getconf PAGESIZE
+> >  65536
+> >
+> >  # ./test_zswap
+> >  TAP version 13
+> >  ...
+> >  ok 5 test_zswap_writeback_disabled
+> >  ok 6 # SKIP test_no_kmem_bypass
+> >  not ok 7 test_no_invasive_cgroup_shrink
+>
+> I assume the test passed after fix? ;)
 
-Sorry, I sent a series before testing by mistake. This hangs the test 
-and I'll send a fix later. Anything else is fine and ready for review.
+That's right! This patchset is targeted to thoroughly fix various bugs.
+I rerun it too many times on various arches. All works well :).
 
+> > Signed-off-by: Li Wang <liwang@redhat.com>
+> > Cc: Johannes Weiner <hannes@cmpxchg.org>
+> > Cc: Michal Hocko <mhocko@kernel.org>
+> > Cc: Michal Koutn=C3=BD <mkoutny@suse.com>
+> > Cc: Muchun Song <muchun.song@linux.dev>
+> > Cc: Nhat Pham <nphamcs@gmail.com>
+> > Cc: Tejun Heo <tj@kernel.org>
+> > Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> > Cc: Shakeel Butt <shakeel.butt@linux.dev>
+> > Cc: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >
+> > Notes:
+> >     v5:
+> >         - Swap data patterns: use getrandom() for wb_group and simple
+> >           memset for zw_group to fix the reversed allocation logic.
+> >         - Rename control_group to zw_group for clarity.
+> >         - Allocate memory inline instead of via cg_run() so pages remai=
+n
+> >           resident throughout the test.
+> >
+> >  tools/testing/selftests/cgroup/test_zswap.c | 70 ++++++++++++++-------
+> >  1 file changed, 49 insertions(+), 21 deletions(-)
+>
+> LGTM. Thanks for fixing the tests :)
+>
+> Acked-by: Nhat Pham <nphamcs@gmail.com>
+
+Thanks a lot!
+
+
+--=20
 Regards,
-Akihiko Odaki
-
-> +
-> +	ret = __vcpu_device_attr_set(stopped_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +	TEST_ASSERT(ret == -1 && errno == EBUSY,
-> +		    KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-> +
-> +	kvm_vm_free(vm);
-> +
-> +	test_config(0, true);
-> +}
-> +
->   int main(void)
->   {
-> -	uint64_t i, pmcr_n;
-> +	uint64_t pmcr_n;
->   
->   	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
->   	TEST_REQUIRE(kvm_supports_vgic_v3());
->   	TEST_REQUIRE(kvm_supports_nr_counters_attr());
->   
->   	pmcr_n = get_pmcr_n_limit();
-> -	for (i = 0; i <= pmcr_n; i++) {
-> -		run_access_test(i);
-> -		run_pmregs_validity_test(i);
-> -	}
-> -
-> -	for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
-> -		run_error_test(i);
-> +	test_config(pmcr_n, false);
-> +	test_fixed_counters_only(pmcr_n);
->   
->   	return 0;
->   }
-> 
+Li Wang
 
