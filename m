@@ -1,247 +1,316 @@
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84B2339A8;
-	Mon, 13 Apr 2026 21:32:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776115964; cv=none; b=qv1Z3hoViUHTx2f6dj5bp1M7BUrJkr4uWyL8FtnubP6XaCqmcUBdnNpWXSJN+WJCpkq+h83+H7NZrd0OPwmtDSNEGg8y9zFpOoOoZFgRML5Z1JYUbGYoU0LVhgdImaAgIe8ruXsIhSIQLm/cJuSxGKe55YajuApzRFQpXlYfO7w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776115964; c=relaxed/simple;
-	bh=oXK3POGvspD97Z4RufOYHwBANWgOlSFIYW71OCn/5gY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BfonOS6eQwUIOBBJNmcLELFp3Ks2x0nQcjISW+8kQPJKQdFB97iY6OUTIXssnc7qWxvUYDZwTNVezTRRMJE5YEu0YLEdSDQQxYvrUQsOzz51kJdnvFyhKCR0XPQ4NEQI678vPS5ectmqB1I0ds+m6jBRqRE6DY4vquenY1Y2ouU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=KcTl8UXW; arc=none smtp.client-ip=207.54.90.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF4634A797;
+	Mon, 13 Apr 2026 21:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776117284; cv=fail; b=KSHjZQ0hF8eQaYBTajjWlacZdDPaSZwT7hfifVR1ZKFQKORsSjKO1LoH1jSjM2deRw4Gh/3RFQxzE8vogyvm9CCdyBtjy+1haWoVVp3KV5eEgp2G888ahnQQjqVkTv7+HXj0Xs6CnOTvFMFlyU1IySsplGh8FHuaX2C10s/s/5w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776117284; c=relaxed/simple;
+	bh=Tf1QVRIe4cAjPhZxn99XlnXPv6HmXSOCmta3rJ6iA94=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=hbfdFCCc+7MTbJ71z8IA9yZfFlqKGyYb1bpgzm8qqtC3YgRe3f52wCUPZbRv0a87GcmuRMmj0EFYaUvuOCBAlZgif7k3qC7OQGogbStF4A6BVajHiJeyThE+qxlYNHzOo3uC5m5I4GuLe2XW0Q9Nu5B0ijxD+jEJz7JT9/YPn0Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=awvFEU5I; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=GgxINzyH; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="KcTl8UXW"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1776115964; x=1807651964;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oXK3POGvspD97Z4RufOYHwBANWgOlSFIYW71OCn/5gY=;
-  b=KcTl8UXWiHBLMKRmCWvDKP+hGrZET97ZfTYiOv1/kjW9Z6EzgTnU5dG9
-   PPD+FvWRH7SxUeFU4f0aX3le/ULnf7nQ/Q9DuaJfj778CCPEsvxYn3TmG
-   A0BoV3a4hNvnfi+4LoLcMlyCAdqNsg9hEE3teAwPADnv5CeyCjreyKAPb
-   6f0aWrV7xvzQMxWEzajc6wcsi51qeY5Q4pUULrss7HiLVfYR7HuNOL03Y
-   hC5zK1/yxDbInJT6gWUOGH4FSz3G8J06ovSPqyBQhmxyaQbNAZB1KVP2C
-   85Yy2uFBWBGlWJ1AkNBlaPtveqbMWOaGeVmW/GAIkqvgVKjW+qzVOUbbh
-   w==;
-X-CSE-ConnectionGUID: beEj62bVQ2m3SpsHnRSmzg==
-X-CSE-MsgGUID: 33lN8RueTWWjb15wRfUtaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="236745313"
-X-IronPort-AV: E=Sophos;i="6.23,178,1770562800"; 
-   d="scan'208";a="236745313"
-Received: from gmgwuk01.global.fujitsu.com ([172.187.114.235])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 06:31:33 +0900
-Received: from az2uksmgm1.o.css.fujitsu.com (unknown [10.151.22.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by gmgwuk01.global.fujitsu.com (Postfix) with ESMTPS id 7677F1002BA1;
-	Mon, 13 Apr 2026 21:31:32 +0000 (UTC)
-Received: from az2uksmom3.o.css.fujitsu.com (az2uksmom3.o.css.fujitsu.com [10.151.22.205])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2uksmgm1.o.css.fujitsu.com (Postfix) with ESMTPS id 2E4AD86124A;
-	Mon, 13 Apr 2026 21:31:32 +0000 (UTC)
-Received: from sm-arm-grace07 (sm-x86-stp01.soft.fujitsu.com [10.124.178.20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2uksmom3.o.css.fujitsu.com (Postfix) with ESMTPS id 52CBE1000361;
-	Mon, 13 Apr 2026 21:31:26 +0000 (UTC)
-Date: Tue, 14 Apr 2026 06:31:22 +0900
-From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-To: Wei-Lin Chang <weilin.chang@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v2 3/4] KVM: arm64: sefltests: Add basic NV selftest
-Message-ID: <ad1gqsqqOXyYmJoG@sm-arm-grace07>
-References: <20260412142216.3806482-1-weilin.chang@arm.com>
- <20260412142216.3806482-4-weilin.chang@arm.com>
- <adwofV7yf71OdMFk@sm-arm-grace07>
- <ddr6exocupk6mzshjwvu6sqt57aeqiyxqss3rpgcxxyh54cw4g@rxvm5zh3ybrw>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="awvFEU5I";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="GgxINzyH"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLDrbG625888;
+	Mon, 13 Apr 2026 21:54:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=yU2dLyjjt2/5VfLNEmQyCXXYAeGwJnjI9UnoHQI94Js=; b=
+	awvFEU5IvcUkiJlmfZd6de+6C08sE+eKH0VndEq6rPdbz4DFNstmf1a43JZeMMMJ
+	FNV7VExAfRgKSz8w1FAKIcGTsQ6pQuojwKTbcO7R04+XTubDFt70qI6j2lz+mJse
+	0pnXMGEyvS09g+TygzBvh937KKksoX7yHnulF5ZJYTpSa8Xxppf2SiaLQLHh+YPw
+	9mjoB8NJsAwz9FaPo5gLcDz1iXiGUTeSfOt4mV8cniGdGedel+6VmZjBFR3qZuEb
+	TuehjM7Ungb+xlcQR/Nfy6RaUpRWGe3wubLNaloC7UT+/Dyq/9hSL13f2JA7uny2
+	MEJbMLxKr5VIiRsANA8dyw==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dh87h03uq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 13 Apr 2026 21:54:29 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63DLsONX006754;
+	Mon, 13 Apr 2026 21:54:28 GMT
+Received: from ph0pr06cu001.outbound.protection.outlook.com (mail-westus3azon11011068.outbound.protection.outlook.com [40.107.208.68])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dh7nkm49g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 13 Apr 2026 21:54:28 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XG57MXupQij8/QSkNjxsxkCN602oKAe5luLLG5f/TjVfBYt21vPJv4BGksrF+BFYz7+oApxcFzC24gu1fcgUcKIyyR2GyWpjuhyVwhTTMMw0oCaS4pIdiaVxFJB27nCUroVQb3RMEXiCxolErc3e/GvR8s2XC5gt793fCCPE9IF+ZGO3E5xQJl+lFKs2zDqAUY+a8FuYBLY+0fFX08FG7VvgTbt2hZkBcAHjnTk5F49FRNQUPS2rddGJVQ9FX80BcNE8HdguiPE1ikx8JhNLurD35+Qq29MYIPsTZtvbzwrbnUUemM5YygNrnryWBg79+GmW3kiOyrkeDjs/LMi35A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yU2dLyjjt2/5VfLNEmQyCXXYAeGwJnjI9UnoHQI94Js=;
+ b=ezqYdNzNx8t48uC5CL4mtTR6p8aZh5EJ+/aGZltRHwLyZJaXOy4fpGcHmqNJ7OanwifJ8EqVSWxn4o/jcNFYhUUjMjaQK1WH73v7y23CSfwFkJtIT/Z3UZDREBqBstho3EBCDkuAHhZmYb6acXlCnEYa9oQq8Ijio71uwhwiVbGy4r6quk6MS8cKW8GyuqsIbyxp2WvL1Wod9aKjrvSPEjxNuMBYk/Z5y0dmjwbbnPSdh4kFJABQ5uzQ0HHbPqQCgRKbjU02B+yhO/OHHn63TTueU8MejZlfBZSrP/VljLrCQHhNoCbL2AfOlhrfpTqLFBCv6CdJFQsuKPYsEobobA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yU2dLyjjt2/5VfLNEmQyCXXYAeGwJnjI9UnoHQI94Js=;
+ b=GgxINzyHgnVq/RgXgceZb2wGLsv4bcDYKkutw71FytJiXlNxUKg8YefQ5b+wqzNJqklblle+bP5y8BGJScrgdyYsz5Kd7z/Et1lw45Vfb83FKF+5pkeifJm6xQGPGBiSZLaCM0Cenp5RQHaprrel06jda8gP2SBL9VxELTJjNIs=
+Received: from MW6PR10MB7660.namprd10.prod.outlook.com (2603:10b6:303:24b::12)
+ by LV3PR10MB7793.namprd10.prod.outlook.com (2603:10b6:408:1b8::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.48; Mon, 13 Apr
+ 2026 21:54:13 +0000
+Received: from MW6PR10MB7660.namprd10.prod.outlook.com
+ ([fe80::c2dc:a34f:6987:1230]) by MW6PR10MB7660.namprd10.prod.outlook.com
+ ([fe80::c2dc:a34f:6987:1230%6]) with mapi id 15.20.9769.046; Mon, 13 Apr 2026
+ 21:54:12 +0000
+Message-ID: <ae78cbdd-e9b3-4586-b492-89ecffae30fc@oracle.com>
+Date: Mon, 13 Apr 2026 14:54:10 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] selftests/mm: verify droppable mappings cannot be
+ locked
+To: "David Hildenbrand (Arm)" <david@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, ljs@kernel.org, Liam.Howlett@oracle.com,
+        vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+        jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, shuah@kernel.org
+References: <20260409234915.11723-1-anthony.yznaga@oracle.com>
+ <20260409234915.11723-3-anthony.yznaga@oracle.com>
+ <7a318c3c-7ccb-4f95-a416-19d09f42c97f@kernel.org>
+ <38fd3d86-f080-4b3a-a931-8ddae1a420ae@oracle.com>
+ <b579517c-e739-4db5-ab0b-4db3d579807c@kernel.org>
+Content-Language: en-US
+From: anthony.yznaga@oracle.com
+In-Reply-To: <b579517c-e739-4db5-ab0b-4db3d579807c@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR11CA0097.namprd11.prod.outlook.com
+ (2603:10b6:a03:f4::38) To MW6PR10MB7660.namprd10.prod.outlook.com
+ (2603:10b6:303:24b::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ddr6exocupk6mzshjwvu6sqt57aeqiyxqss3rpgcxxyh54cw4g@rxvm5zh3ybrw>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW6PR10MB7660:EE_|LV3PR10MB7793:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9c130780-1a46-4c7a-a3f8-08de99a732d8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	IAitnoGNRn4ciJwJpSYzqTOXEgGHJHYUbDn7iyVwaRnThhngPO2T/d9wxvK2Goee9kI9aKQlQ6qgjeVQSSc44l1Bg0HDYkqnJ0MMtG+Z/aQvIKAbXJF3t2Qmtw+0zIBjQuSffOMDD5wZrr0W0GanfyT/mdBaCsAO15NVYBKDj50B7VbJ3UZOy9k6cE2LqwtCotVUeO9E/yveIXRGPxVkRy2hN24Wq491zJi2QxQoi/voOTAaW0Ekud52ZcRWlbeZYNx3ChwfmtXBLbmjTTs0gBPxBX3TV6aZAuIrygXvZrrTQfoR/CVOLJB4CnExLAdB3IX5ruP1h59Wu2geIbYZ/tjxuEzatPcZsiTxJyl/9WNrJhT6r6QQoUMQBl0L5rtWjDBCGfNqZjnME/luEt4H4c6DTGDFRH/dEjA1Kdh5uYnW+KqCJ4eNWRf+PWHt8u2LgW0qormYVWrMg8CJ5qGM6YhLGTFivC0fzRdCxS12R5AmeyfEKsva02uTt8jePSx+Fk8tRk4/gGXqajVy/mG9BoS5A+vGqtTApk1Ecc8glWnsjAwq/n5zZ8dkiCbaqMkHZeMx6q16pMHDS0ET3G4zxxG0qHiO4XVHHDHrtWwOz/C+V5fsyM4m6s263Ene6QmApM31JZzeXUvXCgjoZuwQuxcoU0wxbZFYWNBPQsRFpVhby8gfLuKwWW9P1ZWAenVOW10o70j4a0x6IU6n8d5UyI53nyWNdrIPQCBNvLbN/J0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR10MB7660.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NjFSMm13V1hxVE1mYlFTVy9BSHBrR3Bhb2pnRmRURDRXaTFXSHQ0Y0dHdUVO?=
+ =?utf-8?B?SjJibC9iK0JXUTBNV3hBQkY0ekZFeGtJZ1hCWjR2WExMRzJnNFUyKytoZnA3?=
+ =?utf-8?B?eXYvZFY4OEdkL0FCUFVXdjlrcndFVzhLRngydkVrVWNhSnBRWmphbjN0NTRV?=
+ =?utf-8?B?VUFqUWY3R2h2T3U0emZNOFZZSW5GM0xqVW9rTEJGMktIdUNJZHBvRSt2R21k?=
+ =?utf-8?B?TzFMQVozcExJdmFXZEkrUVlOcm5KQjg3Y0x3YUdFTFAxSjJJbXBRS1RqeVV0?=
+ =?utf-8?B?TVlzMjJDWEdIK056RU1XMW96OTlRcURaNW4xOTRTQjVtMk9Jd2RvQVRKeVpI?=
+ =?utf-8?B?bmxORkJGSHFUY1duWlR6OW5Hc0E1bUtRd28za3Q1N0kzNGZYOWNIQnhDMmdr?=
+ =?utf-8?B?UjREb2RqUDhWN2lxNURNUytUNnpBcHlMUUdVWVU2VlkyOGhkNGlENWVsM21O?=
+ =?utf-8?B?OERsbmpSekhTcTB2ZlpWZTJzZ0grcEdXU3pCd0xoeGVzcnRRSGZFdlB1WTBm?=
+ =?utf-8?B?V3ljUWZ1RjFMbTVnWGJJMXFWaVRCczhHWU41WmUzZFBzd0Q1VVJnUlZJSXBW?=
+ =?utf-8?B?UTF0b2ZGMWxaSVhzem5tZHNKQUIybzhPSTlwNVRZQ2JjMlg4a1F4NWExVzEx?=
+ =?utf-8?B?bXJEdmhZQTVTRWJMNlYrWE5DcUIvR1NMV1NLWXVNZ1grMFZTOERWUmtvdlU1?=
+ =?utf-8?B?KytZMU1BL0FVWDJHZ24vTzhTTy9maWxaeUpvRGh5THNRaURXZ1hqaEh3RzFj?=
+ =?utf-8?B?dDQydFI4R3lNUTZIbmVPMFJIcVFxdHQ2SmNXSEFMLzd2QW5vSUpNSFRTekhQ?=
+ =?utf-8?B?eDBMME5STG1JbnVZbGpDY3ZVZmNQOXJ2VHJzbHhzNFNLQkJXeW0xa3JzbDZ2?=
+ =?utf-8?B?ZVI2Um1MZVBRQXFRWlZ5UnoveG1FUklaMXJkdzVvZmtuNUMzRlZ4ZmJhRVNI?=
+ =?utf-8?B?LzdFVDFHV1phdmlBL3BtUFc1cmp2QjI5TTREMldyZis5b0U5RXZXQnNwK2Vk?=
+ =?utf-8?B?bWgreVNkUHVRQkZHUElsdHgxd2p2cnNGUzRrZWI0ZWk3STJhY2xnS0kwbmhh?=
+ =?utf-8?B?NlgrclIxZVRVYzU5U2pQdHhKZ0pYb1FHMDFSU3ZBdUhYR2sxTlVlYnZET3JI?=
+ =?utf-8?B?VzNrUmY0OUFzNlEzY2VOckZLQzhBQm1jQ1hTNXBFNWFPM0ZlT3RxaHY5Tkxl?=
+ =?utf-8?B?Sy9rZnRPaUtVZ2dRR1RuR0lmSDBEUXg4eW94WXJTSWtTVnJ3amZhbDFVRkVj?=
+ =?utf-8?B?bTdmcC9DM1JvNS9Bcit5bU96Y3ZQeWlFUVdhOW5tWkxPa05DalVUSm4rOVpD?=
+ =?utf-8?B?SzRGNlVNREo3eEo4c3VOZlhUTFlPeDJiYWpNYmJuNG1RMkJSQnM3bGV2amh6?=
+ =?utf-8?B?SjZXMC9CRjRwRVBHQ1B6eFpIb05nSTk0OVN4YmVyZklwL1o1T2ViZFJjYmpx?=
+ =?utf-8?B?cFRrRW1MQlpxOU5WSDdFSksraUhlS0N6d2NadExBeFhML25wRnd0SnRuOVF1?=
+ =?utf-8?B?R01QN05KTk9JUTliY1ZmZ1hDMWQreDlJdUQ5QVNqTDlMM0N4ZGJwMWRmOStn?=
+ =?utf-8?B?NG9xQS9sNU9qL21oek4rd3pZTXVzZ09wV3FvM3VKTDVCZTVCcCtUVEpNZEZC?=
+ =?utf-8?B?UVM3Z3FUOEtod2dHSm1oTXBkejVobHREK0FTamluKzNsZDVIM2VQMHN3d2Y3?=
+ =?utf-8?B?SkhZMW1Zd3BlTnlxVnp2Z1VZZnhyS1JWTVNLVFVVZTFjbFBtS3NVbXlLWGJw?=
+ =?utf-8?B?d09hbGVtTSs2UlA3Zk1ITVl5Vy9wMmRILzI3Rzh6UU4xRjh5WFdEeU9PVm95?=
+ =?utf-8?B?OXBOWjlueXllbHRxcnFESWJpM3JaUzJPUlRJak5ydTBNVDAvVkEwYzhtTlBk?=
+ =?utf-8?B?QzgzUUZDdmgvVnZwM2JoWlFUNDIybmxKdm1DY0FXQ2tPdDNoVktsdHZVZTRT?=
+ =?utf-8?B?M054V200SzVZNnVPaVlwR0tyQURmdWNFRExVQ2Y2eGU5Y2tmYzMxWUNXNWZn?=
+ =?utf-8?B?US9kK3VtUlltWW56aVAxTFFPQmxFYnZoVkp1cTd0YURuK004dWY5aXVUUTNN?=
+ =?utf-8?B?ZkY1R1IzS01BWW0zZ2NiZUd6VnRKUldGR2NNRE13UERIZC9YdHA5QTZ5TUlz?=
+ =?utf-8?B?Y2ZQOGUyQTZ5Z3dpaTVFeHkxdnQrek55OGIwaFNnNDlnRzY3NTBEaCttMVFm?=
+ =?utf-8?B?S3J5NklPRWdnVEVHRHAzdWFVNFdXTFBCK3YwbFQvMHkybSt0dlNaWnpmNzE0?=
+ =?utf-8?B?bnpQMmljdDJMNmkxTUlPdVNETnNsTGhIZWlGUlRRa0VHWXV5dTRMNUFzRGtT?=
+ =?utf-8?B?ZEt3QXdSVzBNQklaL1c0VDVTa3d1ZWJyMHErL3I0U1dRQkZVeFdXUnc2QTNh?=
+ =?utf-8?Q?cDnDC5RLT8g41Ykc=3D?=
+X-Exchange-RoutingPolicyChecked:
+	ujUjaRnhOUuA25tyTU4mFBxFsAubgl23evvIeJJq0JuMYdVTQQDWppfsTZhhebn4tyx/za3FUZmTuhs6uXJUDNVAKBOS1IrWTkU2Oi5GWncDpJymDPaoC03EfbUMk0Y+67swGcWNIjTYEbbaR795KA1Gf5YXSQRjdvM8lJIE+ZtUnAeA02Ek9+hFC37/L1z5plhZu0REIjmuTiPSC/SsjVLndMONVDLayr3mJYGeXRnC7+e0aTSUcFwZNQavGpYLUPIeLhNDh4LntKMH2HUgGZc0Mi3lFCPBPY3Y18xcSXTuNn7LjpiYPvOSDbqMy0x3lGcrxwmTkV65+3CZ/LAFXQ==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	SKBfH8XjgScyXRH+GaPPSJB6Kb5xlvdcc874ZRh7rjT7aRFrbj5rjjmT6Usjo0yIIGBVu2fY/K0L0U+ldFZvO+piB4NnA2vI306kiCOe9RncLo0rbaLQLVWBD3j1jljriRzMe8Dhqga96VgcijWvUvEyezdbILFZyKmyK08iK/N1ZR65n8ASgIBvY0LF0V5Q3VMMBFIkFVhhJ7kGGtPCVgrqXM4V4evEpYeqOxBSK0M8W1wGWFJTDJMuxkBynIiYD1epWhQLkA04p+rVt/fARLJPKQH7SbTWp/D+FO3IJjYejq68sQ3W4M/3h9fH8IMNDxVRUBzCO7+OKah1T8QkhY1dRvdsZ410FWhGVqnB1iULQ1japDIDDaM85/PzvovycCkKoPsmNqz28Sj0Se0VHdCgfGPZniTMmEuLwzaOJl/BpeueFeCh4THuj+RtCNYu7bk+e83x6RG5D3IhAYdyhW0SZbWUMetaB054LhsODXEuCxnG7jBeB4mrGF7pzcz2PxszzySHHsFhJAyUYm9uwq1Z99ZuaeQDBFLKq3y0otKvKxnOL5VZj/GBChtwDsUlo7QuVhAVcfhZHlm4yh0gNOCb8jF0deAc34SomzoQOEE=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c130780-1a46-4c7a-a3f8-08de99a732d8
+X-MS-Exchange-CrossTenant-AuthSource: MW6PR10MB7660.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2026 21:54:12.8659
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gGvkcqx/ulu92du0E750V6eRwclU48R5gepqeKc/4JiX30kSQr0hNpLwEPW4ML/70JcowdMK45vHaM+ojQ4N5DpMkhVbp1gmOjfZN54thJ0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR10MB7793
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-13_03,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=977 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2604070000
+ definitions=main-2604130215
+X-Authority-Analysis: v=2.4 cv=eJUjSnp1 c=1 sm=1 tr=0 ts=69dd6615 b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=A5OVakUREuEA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22 a=VwQbUJbxAAAA:8
+ a=wCZePbCpYZAVLJ1YhCQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 cc=ntf
+ awl=host:13825
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEzMDIxNSBTYWx0ZWRfX+tA7N0I7/p5S
+ lPpiq1YMkwO4blcKFFDmHX2AGFE2vZulDEYHRNH9//zYdylQGqBmJdfx9pzLsqx+3TseExKEKYJ
+ zRu5q/N7ukyIw6JiXG7zjRI+t/7MX7YdLqFMViO0b1hDvv68tu694U0h/vR1/c8cfSuErsf5UBm
+ N/xZgXdDLFuejHyZthbe9rxh3zZVyIQUVtRpH8CQQz2L8/g7oAAyXTuslAVvDrT4a8xJzoHKGrp
+ JDObTeNduoYNCMiTon7MdEAyAnrcreQm9qQfh9N7EP3tyJHXaglNjGsg07/82mViqGOGuV67sTi
+ nPhZThxjeQkfq6kxnZ79zSOdxSrCW2nwhYkOH7TXFhDAQjjVp/K93f+6LnOrIq+FpN6SJyM7W5M
+ EpRZJoO/xtQJXQBTbG2oOYls+oEYJnRmYlcJxW/VOEWiSC8sBd9hSlt+lo/Zb5PlyOqsm1g6OOs
+ +mSa7LVc2lxTWvlTiFjs1Ukon3KgatUg6acsCMFY=
+X-Proofpoint-ORIG-GUID: 4oj6wwiLJxeZa8V4gjMsn6X544C-jlh_
+X-Proofpoint-GUID: 4oj6wwiLJxeZa8V4gjMsn6X544C-jlh_
 
-On Mon, Apr 13, 2026 at 10:18:42AM +0100, Wei-Lin Chang wrote:
-> Hi Itaru,
-> 
-> On Mon, Apr 13, 2026 at 08:19:25AM +0900, Itaru Kitayama wrote:
-> > On Sun, Apr 12, 2026 at 03:22:15PM +0100, Wei-Lin Chang wrote:
-> > > This selftest simply starts an L1, which starts its own guest (L2). L2
-> > > runs without stage-1 and 2 translations, it calls an HVC to jump back
-> > > to L1.
-> > 
-> > How do you disable both the nested guest (L2)'s MMU and stage 2
-> > translations?
-> 
-> Guest stage-2 is disabled by not setting HCR_EL2.VM in prepare_hyp(),
-> and stage-1 is disabled by not writing to SCTLR_EL12 in init_vcpu(),
-> effectively using the default value set by L0. However since SCTLR_EL1
-> has many architecturally UNKNOWN bits (including SCTLR_EL1.M), it should
-> be better to write a value before running L2 I suppose...
 
-Thanks. What do you think of using copy_el2_to_el1() macro in at.c, so we
-can prepare in guest_code() to manipulate the SCTLR_EL12 System register 
-with the sensible programmed values?
+On 4/13/26 12:46 PM, David Hildenbrand (Arm) wrote:
+>>>> +    if (munlockall()) {
+>>>> +        ksft_test_result_fail("munlockall() %s\n", strerror(errno));
+>>>> +        return;
+>>>> +    }
+>>>> +
+>>>> +    map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
+>>>> +           MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
+>>>> +    if (map == MAP_FAILED) {
+>>>> +        if (errno == EOPNOTSUPP)
+>>>> +            ksft_test_result_skip("%s: MAP_DROPPABLE not
+>>>> supported\n", __func__);
+>>>> +        else
+>>>> +            ksft_test_result_fail("mmap error: %s\n", strerror(errno));
+>>>> +        return;
+>>>> +    }
+>>>> +
+>>>> +    if (mlock2_(map, 2 * page_size, 0))
+>>> Weird, is "mlock2_" actually correct? (not "mlock2") ?
+>> It's correct though mlock2 would also work since it's been in glibc for
+>> several years now. I just matched the existing tests. mlock2_ is a
+>> simple wrapper around syscall in tools/testing/selftests/mm/mlock2.h,
+>> and it was introduced when the mlock2 syscall was introduced. A trailing
+>> rather than a preceding underscore is...unfortunate.
+> Interesting ... and confusing :)
+>
+>>
+>>>> +        ksft_test_result_fail("mlock2(0): %s\n", strerror(errno));
+>>>> +    else
+>>>> +        ksft_test_result(!unlock_lock_check(map, false),
+>>>> +                "%s: droppable memory not locked\n", __func__);
+>>>> +
+>>>> +    munmap(map, 2 * page_size);
+>>>> +}
+>>>> +
+>>>> +static void test_mlockall_future_droppable(void)
+>>>> +{
+>>>> +    char *map;
+>>>> +    unsigned long page_size = getpagesize();
+>>>> +
+>>>> +    if (mlockall(MCL_CURRENT | MCL_FUTURE)) {
+>>>> +        ksft_test_result_fail("mlockall(MCL_CURRENT | MCL_FUTURE):
+>>>> %s\n", strerror(errno));
+>>>> +        return;
+>>>> +    }
+>>>> +
+>>>> +    map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
+>>>> +           MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
+>>>> +
+>>>> +    if (map == MAP_FAILED) {
+>>>> +        if (errno == EOPNOTSUPP)
+>>>> +            ksft_test_result_skip("%s: MAP_DROPPABLE not
+>>>> supported\n", __func__);
+>>>> +        else
+>>>> +            ksft_test_result_fail("mmap error: %s\n", strerror(errno));
+>>>> +        munlockall();
+>>>> +        return;
+>>>> +    }
+>>>> +
+>>>> +    ksft_test_result(!unlock_lock_check(map, false), "%s: droppable
+>>>> memory not locked\n",
+>>>> +            __func__);
+>>>> +
+>>>> +    munlockall();
+>>>>        munmap(map, 2 * page_size);
+>>>>    }
+>>>> +#else
+>>>> +static void test_mlock_droppable(void)
+>>>> +{
+>>>> +    ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n",
+>>>> __func__);
+>>>> +}
+>>>> +
+>>>> +static void test_mlockall_future_droppable(void)
+>>>> +{
+>>>> +    ksft_test_result_skip("%s: MAP_DROPPABLE not supported\n",
+>>>> __func__);
+>>>> +}
+>>>> +#endif /* MAP_DROPPABLE */
+>>>>    
+>>> Why not a above a
+>>>
+>>> #ifndef MAP_DROPPABLE
+>>> #define MAP_DROPPABLE    0x08
+>>> #endif
+>>>
+>>> instead?
+>> The intent was to skip the tests if compiled with headers where
+>> MAP_DROPPABLE isn't defined rather than force the value and get EINVAL
+>> because the kernel doesn't know about it. This way EINVAL can be flagged
+>> as a test failure and not skipped since it would likely indicate a test
+>> or kernel bug.
+> Note that the kernel headers you are compiling against don't imply
+> anything about the kernel that is actually running! So the argument
+> regarding EINVAL doesn't really hold.
 
-Itaru.
+Yes, I see that now.
 
-> 
-> Thanks,
-> Wei-Lin Chang
-> 
-> > 
-> > Itaru.
-> > 
-> > > 
-> > > Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
-> > > ---
-> > >  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
-> > >  .../selftests/kvm/arm64/hello_nested.c        | 103 ++++++++++++++++++
-> > >  2 files changed, 104 insertions(+)
-> > >  create mode 100644 tools/testing/selftests/kvm/arm64/hello_nested.c
-> > > 
-> > > diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> > > index 3dc3e39f7025..e8c108e0c487 100644
-> > > --- a/tools/testing/selftests/kvm/Makefile.kvm
-> > > +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> > > @@ -168,6 +168,7 @@ TEST_GEN_PROGS_arm64 += arm64/arch_timer_edge_cases
-> > >  TEST_GEN_PROGS_arm64 += arm64/at
-> > >  TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
-> > >  TEST_GEN_PROGS_arm64 += arm64/hello_el2
-> > > +TEST_GEN_PROGS_arm64 += arm64/hello_nested
-> > >  TEST_GEN_PROGS_arm64 += arm64/host_sve
-> > >  TEST_GEN_PROGS_arm64 += arm64/hypercalls
-> > >  TEST_GEN_PROGS_arm64 += arm64/external_aborts
-> > > diff --git a/tools/testing/selftests/kvm/arm64/hello_nested.c b/tools/testing/selftests/kvm/arm64/hello_nested.c
-> > > new file mode 100644
-> > > index 000000000000..97387e4697b3
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/kvm/arm64/hello_nested.c
-> > > @@ -0,0 +1,103 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * hello_nested - Go from vEL2 to EL1 then back
-> > > + */
-> > > +
-> > > +#include "nested.h"
-> > > +#include "processor.h"
-> > > +#include "test_util.h"
-> > > +#include "ucall.h"
-> > > +
-> > > +#define XLATE2GPA	(0xABCD)
-> > > +#define L2STACKSZ	(0x100)
-> > > +
-> > > +/*
-> > > + * TPIDR_EL2 is used to store vcpu id, so save and restore it.
-> > > + */
-> > > +static vm_paddr_t ucall_translate_to_gpa(void *gva)
-> > > +{
-> > > +	vm_paddr_t gpa;
-> > > +	u64 vcpu_id = read_sysreg(tpidr_el2);
-> > > +
-> > > +	GUEST_SYNC2(XLATE2GPA, gva);
-> > > +
-> > > +	/* get the result from userspace */
-> > > +	gpa = read_sysreg(tpidr_el2);
-> > > +
-> > > +	write_sysreg(vcpu_id, tpidr_el2);
-> > > +
-> > > +	return gpa;
-> > > +}
-> > > +
-> > > +static void l2_guest_code(void)
-> > > +{
-> > > +	do_hvc();
-> > > +}
-> > > +
-> > > +static void guest_code(void)
-> > > +{
-> > > +	struct vcpu vcpu;
-> > > +	struct hyp_data hyp_data;
-> > > +	int ret;
-> > > +	vm_paddr_t l2_pc, l2_stack_top;
-> > > +	/* force 16-byte alignment for the stack pointer */
-> > > +	u8 l2_stack[L2STACKSZ] __attribute__((aligned(16)));
-> > > +
-> > > +	GUEST_ASSERT_EQ(get_current_el(), 2);
-> > > +	GUEST_PRINTF("vEL2 entry\n");
-> > > +
-> > > +	l2_pc = ucall_translate_to_gpa(l2_guest_code);
-> > > +	l2_stack_top = ucall_translate_to_gpa(&l2_stack[L2STACKSZ]);
-> > > +
-> > > +	init_vcpu(&vcpu, l2_pc, l2_stack_top);
-> > > +	prepare_hyp();
-> > > +
-> > > +	ret = run_l2(&vcpu, &hyp_data);
-> > > +	GUEST_ASSERT_EQ(ret, ARM_EXCEPTION_TRAP);
-> > > +	GUEST_DONE();
-> > > +}
-> > > +
-> > > +int main(void)
-> > > +{
-> > > +	struct kvm_vcpu_init init;
-> > > +	struct kvm_vcpu *vcpu;
-> > > +	struct kvm_vm *vm;
-> > > +	struct ucall uc;
-> > > +	vm_paddr_t gpa;
-> > > +
-> > > +	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
-> > > +	vm = vm_create(1);
-> > > +
-> > > +	kvm_get_default_vcpu_target(vm, &init);
-> > > +	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
-> > > +	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-> > > +	kvm_arch_vm_finalize_vcpus(vm);
-> > > +
-> > > +	while (true) {
-> > > +		vcpu_run(vcpu);
-> > > +
-> > > +		switch (get_ucall(vcpu, &uc)) {
-> > > +		case UCALL_SYNC:
-> > > +			if (uc.args[0] == XLATE2GPA) {
-> > > +				gpa = addr_gva2gpa(vm, (vm_vaddr_t)uc.args[1]);
-> > > +				vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), gpa);
-> > > +			}
-> > > +			break;
-> > > +		case UCALL_PRINTF:
-> > > +			pr_info("%s", uc.buffer);
-> > > +			break;
-> > > +		case UCALL_DONE:
-> > > +			pr_info("DONE!\n");
-> > > +			goto end;
-> > > +		case UCALL_ABORT:
-> > > +			REPORT_GUEST_ASSERT(uc);
-> > > +			fallthrough;
-> > > +		default:
-> > > +			TEST_FAIL("Unhandled ucall: %ld\n", uc.cmd);
-> > > +		}
-> > > +	}
-> > > +
-> > > +end:
-> > > +	kvm_vm_free(vm);
-> > > +	return 0;
-> > > +}
-> > > -- 
-> > > 2.43.0
-> > > 
+
+>
+> But note that we, in general, try to compile against the in-tree headers.
+>
+> See
+>
+> commit 75d60eb30daafb966db0e45f38e4cdeb5e5ed79c
+> Author: Lorenzo Stoakes <ljs@kernel.org>
+> Date:   Mon Oct 28 14:13:30 2024 +0000
+>
+>      tools: testing: update tools UAPI header for mman-common.h
+>
+>      Import the new MADV_GUARD_INSTALL/REMOVE madvise flags.
+>
+> And looking into it, I already see MAP_DROPPABLE there as well, so is
+> any special handling here even needed?
+>
+I'd say no special handling is needed. If this test is compiled on with 
+a kernel that has MAP_DROPPABLE but run on an older kernel without 
+MAP_DROPPABLE, should it fail? Or should it interpret the EINVAL as a 
+sufficient reason to assume MAP_DROPPABLE is not supported and to skip 
+the result? My current thinking is it should fail because the EINVAL 
+could have another cause.
+
+
