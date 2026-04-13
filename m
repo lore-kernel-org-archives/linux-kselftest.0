@@ -1,91 +1,214 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B945390CAC;
-	Mon, 13 Apr 2026 22:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776119357; cv=none; b=l3Kk/gvbKOYseUl6STqPDx+oZ8niNPA3nxRksyI5DRb2yTv6Try2/s+xSYK6CNT27f9PAjygKopwdnDO0Dlojq6dhQ0pezMCjrZP8XCtwqjRPQMDzDlX58LIltVmfO+UMPIwBBlM6+t0WNeejAVWH9k76BB7ndahTKxy3k0Lqho=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776119357; c=relaxed/simple;
-	bh=EpPryzj2H6swIOptKBgz2vNXyU4jbKi7icnmCJDVN44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VWBR9nWGvxHUQA+qPPBraW/sOexRxir8G4CdwvsjWmCShb0EKQ3oPEzulc9T2Am+prVshMznn4wjabYBlJCuJBLDgO1O2f9782+Zw1YalqvF7v/i2SwdEaPNk2seyA+Ou9fp29NLZaQf4cbGm1GNqGfzGXynN1APLZI8Bv6CV2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZmWg/RE7; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59257399007
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 22:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776119780; cv=pass; b=gQB2jwE1oxavxYtBf+tGx1RGQJwgNAsY00bYoAdPCch5BRX7EqyRrRrWLTn4Z3zB6ipQrSGVIQbZrVh3e08lzek3ybABv9lFf5Go2W2D4SZCUwIPxlbMPBxcr0Yk0MY5dm9ZJU9S2aqgL9TLDi1Oi2sADEfeav/m45lTSyxeRfU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776119780; c=relaxed/simple;
+	bh=d8vMZ6K308Us1/0IQb4+4Tj0D+uy5+oDNEDVfIfLGOs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LxQlXcUOt7H4iwpOIraoY052J+L9hyBI4J1qtc6mVHorBvn0/UZqChQrI4vuUs1PhwmLhwbWfUxsWxTZVNDmJI6LY13aFLXCcj3pZiej0gBOiYNp+4Uh8QGbwr63ubFsqBYXHXGtBRc1x/HxPigtrLt/Gamrbp4k1b3JQ28WCAg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fMAgNRYl; arc=pass smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZmWg/RE7"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=NTwBXrFpNi4Fseaq8Sky7pLzRp0mlA1ksSlPEqI0JKk=; b=ZmWg/RE7pdRpXKI55S8cbSa8gw
-	Wjv5sTE0WbQzhn8CDWWUinuH2sjpRwR/arldGQVvp9Ra7GtijGUvaSE3/iP/y4vXKYlxAfLog97NV
-	LbRjs5e/P3yEPbFYnAC+qP4JFhZves3bYyPL+lSIlhsI6Z/fEIUPloZDi6gsheeUIfbr/snXATm9m
-	2D1Ykc9DMdIJE9vnCflifaF7szT4YN+e2+8cwyWUsWvGylUHJTs3Gvn7SUY7kQuMOBsISsJ+KID92
-	sxg648RqlrvaJKmdhjNXNXUaNVNc4TyMjhrvxYBO2uKgWDH6LjtI8A9dkQXWsdLJ7N+NdYnV0ltXA
-	7nIexsqA==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wCPm8-0000000Ecwc-0D5J;
-	Mon, 13 Apr 2026 22:29:00 +0000
-Date: Mon, 13 Apr 2026 23:28:59 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7.2 v2 12/12] selftests/mm: remove READ_ONLY_THP_FOR_FS
- from comments in guard-regions
-Message-ID: <ad1uK11f_J8sFN0e@casper.infradead.org>
-References: <20260413192030.3275825-1-ziy@nvidia.com>
- <20260413192030.3275825-13-ziy@nvidia.com>
- <ad1WTCR5Kld-tiL8@casper.infradead.org>
- <E3268570-18E4-40AF-92E5-931A8ED1C9B5@nvidia.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fMAgNRYl"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c76bde70ec9so1960266a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 15:36:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776119779; cv=none;
+        d=google.com; s=arc-20240605;
+        b=E5lsCBfu1O9p28hzTzS5ERuU467p8OCzNu7ZZXo6ZG4wwFLsWr5FJzr3YnH4DNn1QS
+         wi4B4xjHKLdNGImhRAZoSmeWRb59GlDZTkXoKag3pdK/Q33go/W70EA0/1SPGOzb2+Ea
+         NkoOxtJIzfYWMAtnHbUot+Toufs445Ozql/RXYwzSt5AertrWgeKKFJNqd7MhinJYoGJ
+         3j8wjDpsY2JHbpKBem2RNI+vnso5b33WAH2zS+bh0CykFMGNf+53EYx91KW3KbezvzDY
+         2fVAZTmRLaAgTqZC/ExMen/Ky4NRtCks740RX+iz5d/fLLgwQpjwmTdkSmYec9juunUo
+         hjPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qtbV5B7Lu+P+UBXu1v1nm/SRzL7N0UD8vGEwc1vtats=;
+        fh=6SqnY300o3z+c4pKuaRA7sqGyXtW2vfd0AS02j6V09s=;
+        b=DKytNQx/Jo68aEOxUa5Es38fgBnn8xfMqyBgWqA0SlLrssrFDP3wQROtof+RJ+NFNW
+         fZdCHJNUwWYHaMm5//xFZ5TC/qxC7qqom2viWBReaBvKFsSFLNj+bCHNYWnOYIRFmHp/
+         FuyqwKJbn78Y2wqtAjT+h0rxNedQBkxeV4ZbuhkBYWknOA2QWSWt7n3HeLsE5tUgpWYd
+         8wSQQ9MALOx1FsS1YHII1Ub3Oxrt/xXlBWhN4hHeBnTh4/OLbQzXHaDmltlBBWzEsegE
+         q5Xn/o3wl2vl1iodPyLEWiLPZ/mjObXqszftuY0joyws9nbbhu/E6Cl6Pbzu5fbLJ+W/
+         5llQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1776119779; x=1776724579; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qtbV5B7Lu+P+UBXu1v1nm/SRzL7N0UD8vGEwc1vtats=;
+        b=fMAgNRYlp3Yrd3ZdH5HEQb3NH4f4EXq3nlut5HRXSXQO+wxCFm16+ZTpfIzd/ND/hG
+         d6jqlG6TywVJE0MAq90nxLLT/I0VUvHBZFUtk+uwuu3Do4zyHSjzm5mYBF8n3lzUPnvC
+         uEZC3oxsj7QxhtbOcItEtAwhnoVya8NkYw0SXVOCc7TwFchKBstK1snppvmjeiYpG4Vr
+         X0lI+/tohvyJsyVZFgQD++itBDqZkc/cQDyhLJr+/lez79gcEEi95trc86S32Oy5oME+
+         UwZl34OmlOXrUhFsa1ezN6+ofaEdnZ+Lu+t1C1eQV6yM4iGHsJOpfJ96+KsN8nF7eZol
+         hL1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776119779; x=1776724579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qtbV5B7Lu+P+UBXu1v1nm/SRzL7N0UD8vGEwc1vtats=;
+        b=P++p2oEi7tEkrWmgOqGwTcGuBqIFQkff6HUb8evtO7MAWAn5kWiR9THrGbvlkDUZQg
+         /38eA1/451iyW6etsJhAJCZEQMTvDc5LjqjahbqshcILsgIXo2MRixXRmNK6OkpNfkzh
+         6HH2kaoA4BHR32ItB4evTvOq2dMWozjpifz2W3g482nDdXzBjAmqvSoCqmhBvO2fi7NW
+         iyxsQV9egMNKKw0fEgOCmX4FWjrW2f1cwB/5quAo8j4wPIV7K2vfMDFCmVtmjCBmGLXj
+         agsxFpomJ1l/PI7azJOV4ocoJKH1zo+40ADe2rUtb6TZjfmBNuvO9zcm949YYGozWYtp
+         v7ng==
+X-Forwarded-Encrypted: i=1; AFNElJ8+ZnQm0nusLy0LmXKL28N9abSO+Job7g9aC1RMY0LsuzxTMdWTzAWA+cxj0Sr/SxQkcL28GLaauFfTEx0Th4E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwT1bmstGKaP45FxCxsTX54jeYLIf5Ak1uIfvoPQqS4AtbNE8qv
+	CuV10KPs30Tq1YaDQp0mOxeEEg1Qubx0M7/K34gyLEre28e0wvUFXzTqcjrKizph54FgnJ1dyv0
+	Cxu+vf4Te91CYIpXQzrgYGpQ62wnDMiMaAUeLKVlg
+X-Gm-Gg: AeBDiesk9jMnYdqrEi9to9ixqfM1APDFx643rIo9eOrxRi/8MatoS8oL8J01VFEcN+r
+	aOAl0oKFpGtstsWfpxSCKRCE1t16nzIL1Sl8ou2RarDs8D650wLlgByCcCOUam5d0xT1cP5U0Ij
+	9IheJ490WdPOkOhSEl+lWnQ0yeJi0VNt0ym0GJXjd4A7dx+hmt692e9tEyANiwshh5+sP025WWL
+	eDkBSge+lHHNKDDmBnKE3CWZ5PEt6z85jckodpIDt7gmWhH8DfaAuv7dC2/eugtNqb4fvCKu1st
+	m9Yjetk=
+X-Received: by 2002:a05:6a20:7486:b0:398:9bf9:7d6a with SMTP id
+ adf61e73a8af0-39fe3f51d5cmr16064116637.38.1776119778634; Mon, 13 Apr 2026
+ 15:36:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E3268570-18E4-40AF-92E5-931A8ED1C9B5@nvidia.com>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal> <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal> <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal> <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca>
+In-Reply-To: <20260413164220.GP3694781@ziepe.ca>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 13 Apr 2026 18:36:06 -0400
+X-Gm-Features: AQROBzCpXDxX7fahVQKtrKxvxE3JbcFeRuTT_Qi2M1jo4CF48jegNZMVkpYlsoc
+Message-ID: <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Leon Romanovsky <leon@kernel.org>, Roberto Sassu <roberto.sassu@huaweicloud.com>, 
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Itay Avraham <itayavr@nvidia.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>, 
+	Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 13, 2026 at 04:51:28PM -0400, Zi Yan wrote:
-> On 13 Apr 2026, at 16:47, Matthew Wilcox wrote:
-> 
-> > On Mon, Apr 13, 2026 at 03:20:30PM -0400, Zi Yan wrote:
-> >> +++ b/tools/testing/selftests/mm/guard-regions.c
-> >> @@ -2205,7 +2205,7 @@ TEST_F(guard_regions, collapse)
-> >>
-> >>  	/*
-> >>  	 * We must close and re-open local-file backed as read-only for
-> >> -	 * CONFIG_READ_ONLY_THP_FOR_FS to work.
-> >> +	 * MADV_COLLAPSE to work.
+On Mon, Apr 13, 2026 at 12:42=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca> wro=
+te:
+> On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
+> > > We are not limited to LSM solution, the goal is to intercept commands
+> > > which are submitted to the FW and "security" bucket sounded right to =
+us.
 > >
-> > Is this true?  Does MADV_COLLAPSE refuse to work on writable files?
-> > Should we delete some code here as well as fix the comment?  ;-)
-> 
-> file_thp_enabled() used by __thp_vma_allowable_orders() refuses
-> writable files with inode_is_open_for_write(). That should prevent
-> MADV_COLLAPSE from working on writable files.
+> > Yes, it does sound "security relevant", but without a well defined
+> > interface/format it is going to be difficult to write a generic LSM to
+> > have any level of granularity beyond a basic "load firmware"
+> > permission.
+>
+> I think to step back a bit, what this is trying to achieve is very
+> similar to the iptables fwmark/secmark scheme.
 
-That sounds like more code that was added for RO_THP and should be
-deleted?  See commit e6be37b2e7bd
+Points for thinking outside the box a bit, but from what I've seen
+thus far, it differs from secmark in a few important areas.  The
+secmark concept relies on the admin to configure the network stack to
+apply secmark labels to network traffic as it flows through the
+system, the LSM then applies security policy to these packets based on
+their label.  The firmware LSM hooks, at least as I currently
+understand them, rely on the LSM hook callback to parse the firmware
+op/request and apply a security policy to the request.
+
+We've already talked about the first issue, parsing the request, and
+my suggestion was to make the LSM hook call from within the firmware
+(the firmware must have some way to call into the kernel/driver code,
+no?) so that only the firmware would need to parse the request.  If we
+wanted to adopt a secmark-esque approach, one could develop a second
+parsing mechanism that would be responsible for assigning a LSM label
+to the request, and then pass the firmware request to the LSM, but I
+do worry a bit about the added complexity associated with keeping the
+parser sync'd with the driver/fw.
+
+However, even if we solve the parsing problem, I worry we have
+another, closely related issue, of having to categorize all of the
+past, present, and future firmware requests into a set of LSM specific
+actions.  The past and present requests are just a matter of code,
+that isn't too worrying, but what do we do about unknown future
+requests?  Beyond simply encoding the request into a operation
+token/enum/int, what additional information beyond the action type
+would a LSM need to know to apply a security policy?  Would it be
+reasonable to blindly allow or reject unknown requests?  If so, what
+would break?
+
+> ... Once classified we want this to work with more than SELinux
+> only, we have a particular interest in the eBPF LSM.
+
+One of the design requirements for the LSM framework is that it
+provides an abstraction layer between the kernel and the underlying
+security mechanisms implemented by the various LSMs.  Some operations
+will always fall outside the scope of individual LSMs due to their
+nature, but as a general rule we try to ensure that LSM hooks are
+useful across multiple LSMs.
+
+> Following the fwmark example, if there was some programmable in-kernel
+> function to convert the cmd into a SELinux label would we be able to
+> enable SELinux following the SECMARK design?
+
+As Casey already mentioned, any sort of classifier would need to be
+able to support multiple LSMs.  The only example that comes to mind at
+the moment is the NetLabel mechanism which translates between
+on-the-wire CIPSO and CALIPSO labels and multiple LSMs (Smack and
+SELinux currently).
+
+> Would there be an objection if that in-kernel function was using a
+> system-wide eBPF uploaded with some fwctl uAPI?
+
+We'd obviously need to see patches, but there is precedent in
+separating labeling from enforcement.  We've discussed SecMark and
+NetLabel in the networking space, but technically, the VFS/filesystem
+xattr implementations could also be considered as a labeling mechanism
+outside of the LSM.
+
+> Finally, would there be an objection to enabling the same function in
+> eBPF by feeding it the entire command and have it classify and make a
+> security decision in a single eBPF program?
+
+Keeping in mind that from an LSM perspective we need to support
+multiple implementations, both in terms of language mechanics (eBPF,
+Rust, C) and security philosophies (Smack, SELinux, AppArmor, etc.),
+so it would be very unlikely that we would want a specific shortcut or
+mechanism that would only work for one language or philosophy.
+
+> Is there some other way to enable eBPF?
+
+If one develops a workable LSM hook then I see no reason why one
+couldn't write a BPF LSM to use that hook; that's what we do today.
+
+> I see eBPF doesn't interwork with SECMARK today so there isn't a ready ex=
+ample?
+
+I'm not aware of anyone ever doing to work to try/enable secmark with
+BPF, but I see no reason why someone couldn't work on that.  Just make
+sure to take into account Casey's comments about multiple LSM support;
+any new LSM interfaces will need to support multiple simultaneous LSMs
+(the original secmark work predated that).
+
+However, it seems like direct reuse of secmark isn't what is needed,
+or even wanted, you were just using that as an example of separating
+labeling from enforcement, yes?
+
+--=20
+paul-moore.com
