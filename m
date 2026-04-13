@@ -1,224 +1,126 @@
-Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569B931328E;
-	Sun, 12 Apr 2026 23:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.223
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776036046; cv=none; b=UFA4LugBwTT4oLQc71gff3uiOkK5MOAsiy7jVUJ4dQOzdODMdRwRPLxKLyauEv6mCX1O7yS9kvfsfD4zNVWXTq3lX3CoVcywbXmkIoHhy0Jzjp3Z62JB3f9AsW83ga7xSdh8koGYp5+RXEdZAo57j09fSHWPzzE44NmjbwCQOJc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776036046; c=relaxed/simple;
-	bh=dSiGV4THsNldWCR0gdH7gTTx/gc3SmssWzHxsLk2kPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sDVslk3Qpx8pl4c557phBxMiKK66d7AR717b7KhC2TP48H2CedhYkHMjNV84F7Y9jZPisQ7G5XzYa2OGIb1pOJziQ5n6geHhOy1atvWWT/kHKIPzhrC1HLaA/KyvDMT7pspL1B3AQw5yF1FzqF32PU0nlMRjF1Vak/RG5hVsrgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=W3tmXrm/; arc=none smtp.client-ip=139.138.36.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5032E2F872
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 00:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776038503; cv=pass; b=rreQgw7Vy+HJ2CU823SpGJbGsUh3mziH9Gd78Ez3XFWSWn+6VEG/Y8H7G9YT39PIg1X9nrYmuBXu2JPgh+/BSluNKBrfwTfjKa7Mn7SdcOVOiWqhkZRiZN5AAn+JHdxt/UfcPeeilSwbiimkBrLLTciqrbrXSp7DTwMq54/fpGY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776038503; c=relaxed/simple;
+	bh=UykPg2QZhJz+Q7K/cGqnVHVYfJlnDh9z5GuGGnOlWpw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s/B4GoaVa7l7TWE+flNxTDQ56cRgSihod/RmAf7vfHxW4cTXQ3LBsCx/mxVkVyRNlnQxa40RlDUpwjtjw00oN044j4adnjCK/tWavOk2xHsAfnbpAqFjYhULuwYlZ/N0dWghmkvoAZwgpn9+n3h71Jk8Dvf72GkTEATcOjzb/2Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jneIyFi/; arc=pass smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="W3tmXrm/"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1776036044; x=1807572044;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dSiGV4THsNldWCR0gdH7gTTx/gc3SmssWzHxsLk2kPg=;
-  b=W3tmXrm/Dm6ESHHk+xgkw3ins+ETPwvCmVNNMoHbdBnbptbZX9LHP3BV
-   GWftS0qrpwEn6HOReHZZt6AH9pu9RUUOnf+edSt1QHJKQ/pd3k50SJeQl
-   dSU/BRzozGzloxfxY0r0+zMf4ZrHmztBW8liqF6ipwVP/EtpRAXZm/ovH
-   MSvdvkKkXbmwTmWM6/KgBjwd9LEbcmreGLx7432TJ03H+H1t23LArnddg
-   N2B5ccd8tsLpu7NFW7WMkjIb1kyKvHrUWtYRWMRmtVw7R+dKWT1KG3OWt
-   PM1Qe1iKkifgbAT5p7WhHd86SDCyv22WWIWCZjoj7BuG7E6x3x7NwrDBy
-   A==;
-X-CSE-ConnectionGUID: xYH0NgNxQIuIHytp2X679Q==
-X-CSE-MsgGUID: dyc/bT8SSVi24OtxJ2lr1A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11757"; a="225363596"
-X-IronPort-AV: E=Sophos;i="6.23,176,1770562800"; 
-   d="scan'208";a="225363596"
-Received: from gmgwnl01.global.fujitsu.com (HELO mgmgwnl01.global.fujitsu.com) ([52.143.17.124])
-  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2026 08:19:34 +0900
-Received: from az2nlsmgm3.fujitsu.com (unknown [10.150.26.205])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mgmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id 867E05C15;
-	Sun, 12 Apr 2026 23:19:34 +0000 (UTC)
-Received: from az2uksmom4.o.css.fujitsu.com (az2uksmom4.o.css.fujitsu.com [10.151.22.204])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2nlsmgm3.fujitsu.com (Postfix) with ESMTPS id 2AEA91803216;
-	Sun, 12 Apr 2026 23:19:34 +0000 (UTC)
-Received: from sm-arm-grace07 (sm-x86-stp01.soft.fujitsu.com [10.124.178.20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2uksmom4.o.css.fujitsu.com (Postfix) with ESMTPS id 88C53404698;
-	Sun, 12 Apr 2026 23:19:28 +0000 (UTC)
-Date: Mon, 13 Apr 2026 08:19:25 +0900
-From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-To: Wei-Lin Chang <weilin.chang@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v2 3/4] KVM: arm64: sefltests: Add basic NV selftest
-Message-ID: <adwofV7yf71OdMFk@sm-arm-grace07>
-References: <20260412142216.3806482-1-weilin.chang@arm.com>
- <20260412142216.3806482-4-weilin.chang@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jneIyFi/"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488a041eae5so27083685e9.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2026 17:01:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776038500; cv=none;
+        d=google.com; s=arc-20240605;
+        b=O4BUoK5jVIszEjXskHn/CJ3QY2Qfh/3jrgVX+eRmJFRE/0ztTpsMPsdUJ4FHKDROCC
+         jMUKOGtD45MvSPNtbW35KJN2/GfTEyNqSAIc1TmMwq4M0H4PDmtOf1NLRm4TUnlyKp4J
+         R3MSo77akr8oU2iJ0mYx/CmlPslfmmf6lMuc8bTLpY2k3MvEs1LltaGX0Q93vTyYvp92
+         2CiTOOq/DFONWNN5BAEc2D/JZXe0de/L4oZXpnS5g1HowNbT/OHK9ebm849av5+ypu+l
+         SG/mJ5DMggJzN8h9WQoUamlmwr5+fkzVrmwunhB+uRTVboMI73G7E2PruUl1zepQAPrY
+         UAqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=q1z381Ofo0rx3mIfahNjA70c0ZuNgM+q7a4xb/dSsI0=;
+        fh=FuRt0mQ+xL0eyqbzCVvr8pLkSl14sp9VOY/N5ZoNaKg=;
+        b=gHcpeZwILqgNLlVNqEn2F3cOpyYV0gRGrV6of6KBQNjtQXxRPfxqJ/7cADerhgdV7X
+         74TE8k+4Caps9aRCvqA9X39h0EtzHcbTOQYeh26WMOaSHwh4RsBFh8H0VMDhOmPkD9mO
+         xYS1XjnvdVE3YzVw9cM+UerdN20QqN0vZAWqzJKq2TNHcPMZLuMqEGObsFElqysvefMA
+         FvF9EqzoaF4PvALULNGjUujek0PAYpzxF83flP4S7jdL8nQZaUfptjbkF1gwxpfHMTU1
+         T1bU6ysNkn1/kp3Lfou4V2CKzTLDUOM95s1hc/EtAWLeRQgM7+BBeVXotOT/qFnLPmdC
+         5SOA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776038500; x=1776643300; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q1z381Ofo0rx3mIfahNjA70c0ZuNgM+q7a4xb/dSsI0=;
+        b=jneIyFi/oPpwB6B4XiVbgXgMumz4+PEZPLcmFMfouDPIDbM1pYjmQgECOydnhQ20of
+         cQSFKERxsjlaqzJzsgZ2UjjLzB3LffzDYYvLW1s98ZmJcutG5oH68ojOF1Ru60LSZoDB
+         gnPLKLlEs6zLcTf+MBpfUIy1it3p1zx4VsnMKUc501jDjrGYwXBD3H5msXgK4tJeGel2
+         d9RANVkS+RpMLyLPasr0f+iMJqXQuxsGYMJ7vz1GWxCOh5E3qvUBs47RyPulsrfvVCaN
+         1Vz+QdI5Cbx2+rDVWQ1+KJU01BlgZPrJ+i42inzZGWXvladkGLR7dfq6N0SIUuDXIW83
+         0dVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776038500; x=1776643300;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=q1z381Ofo0rx3mIfahNjA70c0ZuNgM+q7a4xb/dSsI0=;
+        b=ql7URAxYxyIpnujIuGH+d9mkh2LKkaREgOw+gWmV/+FV8QKFOdHg5CVbJ37Cpk1AiC
+         I3FzC1IKp8lAvM2Z1BZBO6l6/IVtAb17WkukOSJETy3XQ/lJSOH+lr2VXCar65B/pfqq
+         PPfa7Ag4pnleqft5dkJOxyzNXXLU+yYS614pCNp57NUK6A3Ri6xSayHVc/2VsfYRSkvo
+         RKcZBTuxt3W9z8AW+h37aZMwfed7XMriSRi9YEY37my0liAmrCCgQlNOX8H8sSV/fY++
+         KMprqcpIMhz+WjoHHfdSz2RjaT2iCMfPWs9TPMW25z0OOjGYqOxXRiUrxeUPZ+bGkN9W
+         Ytaw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6ewUneIm9GfWeV+flmYaHPdktFehBQ3/AYfLgZ2DQaLMLeF4jURHnOiKG+lTGOP6YbV7YCnMRaW4qbR0nzJk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5ixfpVpm2obTd/pEx9KACkmOA+E2Ef3/Eu/qOo64cwgUxd2G1
+	9XIycCUiX3MHZznCPn/jDWtLqGJXamU0OlcBSiJzR9FtCQTamw+zC+RvsdXMYXf41V/Gw4i13HK
+	tqge35qF8X7HyKJLHF0moWzjR6AfZDdHyIbM6T2c=
+X-Gm-Gg: AeBDievj8hL/+Qx1uP0iH1jSA986hAAzi/1gIU6rlqJXfC9C9pMxAwvDIw2F1U+dYIT
+	3+kqD7g3uOQ5cQ+9AKLOBg3HlGbw8W7GHodZZtVKuWBvSegr184O4JzMzG2/xIyiatiiI85OEj7
+	PTO0dHrj/SEb7+RQmAU+6I+me3ZAS7T3f08xOdlLMztcR5+/2xS49JAQRF/CxprDVGzxEFMVYYn
+	/mHR8cYmIuFTgdNBz+qiwFoEqceHRoqTZcMdIzYKgrk1siQ6kuWWzfd10pxu0h7epVktcsvK0ZU
+	2shBxk3KhvE+APIDDH8o6k05GwG43BU7ZM62DQ==
+X-Received: by 2002:a05:600c:c10d:b0:488:ae4e:51a5 with SMTP id
+ 5b1f17b1804b1-488d683d633mr103247135e9.15.1776038499521; Sun, 12 Apr 2026
+ 17:01:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260412142216.3806482-4-weilin.chang@arm.com>
+References: <20260402063714.55124-1-liwang@redhat.com> <20260402063714.55124-9-liwang@redhat.com>
+In-Reply-To: <20260402063714.55124-9-liwang@redhat.com>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Sun, 12 Apr 2026 17:01:28 -0700
+X-Gm-Features: AQROBzCwnFa6eS6aq3Z0ozwi2axh34qQ3NZxuV-fWDi5MSnDHDQiTKyxtwF61fw
+Message-ID: <CAKEwX=PWiCcyX03YrZ6GOXK4MEOhos6TrTNMm=047xApqDJhXg@mail.gmail.com>
+Subject: Re: [PATCH v6 8/8] selftests/cgroup: test_zswap: wait for
+ asynchronous writeback
+To: Li Wang <liwang@redhat.com>
+Cc: akpm@linux-foundation.org, rppt@kernel.org, david@kernel.org, 
+	hannes@cmpxchg.org, yosry@kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com, 
+	mhocko@suse.com, shuah@kernel.org, chengming.zhou@linux.dev, 
+	longman@redhat.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	Michal Hocko <mhocko@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 12, 2026 at 03:22:15PM +0100, Wei-Lin Chang wrote:
-> This selftest simply starts an L1, which starts its own guest (L2). L2
-> runs without stage-1 and 2 translations, it calls an HVC to jump back
-> to L1.
+On Wed, Apr 1, 2026 at 11:38=E2=80=AFPM Li Wang <liwang@redhat.com> wrote:
+>
+> zswap writeback is asynchronous, but test_zswap.c checks writeback
+> counters immediately after reclaim/trigger paths. On some platforms
+> (e.g. ppc64le), this can race with background writeback and cause
+> spurious failures even when behavior is correct.
+>
+> Add wait_for_writeback() to poll get_cg_wb_count() with a bounded
+> timeout, and use it in:
+>
+>   test_zswap_writeback_one() when writeback is expected
+>   test_no_invasive_cgroup_shrink() for the wb_group check
+>
+> This keeps the original before/after assertion style while making the
+> tests robust against writeback completion latency.
+>
+> No test behavior change, selftest stability improvement only.
+>
+> Signed-off-by: Li Wang <liwang@redhat.com>
 
-How do you disable both the nested guest (L2)'s MMU and stage 2
-translations?
-
-Itaru.
-
-> 
-> Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
-> ---
->  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
->  .../selftests/kvm/arm64/hello_nested.c        | 103 ++++++++++++++++++
->  2 files changed, 104 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/arm64/hello_nested.c
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index 3dc3e39f7025..e8c108e0c487 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -168,6 +168,7 @@ TEST_GEN_PROGS_arm64 += arm64/arch_timer_edge_cases
->  TEST_GEN_PROGS_arm64 += arm64/at
->  TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
->  TEST_GEN_PROGS_arm64 += arm64/hello_el2
-> +TEST_GEN_PROGS_arm64 += arm64/hello_nested
->  TEST_GEN_PROGS_arm64 += arm64/host_sve
->  TEST_GEN_PROGS_arm64 += arm64/hypercalls
->  TEST_GEN_PROGS_arm64 += arm64/external_aborts
-> diff --git a/tools/testing/selftests/kvm/arm64/hello_nested.c b/tools/testing/selftests/kvm/arm64/hello_nested.c
-> new file mode 100644
-> index 000000000000..97387e4697b3
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/arm64/hello_nested.c
-> @@ -0,0 +1,103 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * hello_nested - Go from vEL2 to EL1 then back
-> + */
-> +
-> +#include "nested.h"
-> +#include "processor.h"
-> +#include "test_util.h"
-> +#include "ucall.h"
-> +
-> +#define XLATE2GPA	(0xABCD)
-> +#define L2STACKSZ	(0x100)
-> +
-> +/*
-> + * TPIDR_EL2 is used to store vcpu id, so save and restore it.
-> + */
-> +static vm_paddr_t ucall_translate_to_gpa(void *gva)
-> +{
-> +	vm_paddr_t gpa;
-> +	u64 vcpu_id = read_sysreg(tpidr_el2);
-> +
-> +	GUEST_SYNC2(XLATE2GPA, gva);
-> +
-> +	/* get the result from userspace */
-> +	gpa = read_sysreg(tpidr_el2);
-> +
-> +	write_sysreg(vcpu_id, tpidr_el2);
-> +
-> +	return gpa;
-> +}
-> +
-> +static void l2_guest_code(void)
-> +{
-> +	do_hvc();
-> +}
-> +
-> +static void guest_code(void)
-> +{
-> +	struct vcpu vcpu;
-> +	struct hyp_data hyp_data;
-> +	int ret;
-> +	vm_paddr_t l2_pc, l2_stack_top;
-> +	/* force 16-byte alignment for the stack pointer */
-> +	u8 l2_stack[L2STACKSZ] __attribute__((aligned(16)));
-> +
-> +	GUEST_ASSERT_EQ(get_current_el(), 2);
-> +	GUEST_PRINTF("vEL2 entry\n");
-> +
-> +	l2_pc = ucall_translate_to_gpa(l2_guest_code);
-> +	l2_stack_top = ucall_translate_to_gpa(&l2_stack[L2STACKSZ]);
-> +
-> +	init_vcpu(&vcpu, l2_pc, l2_stack_top);
-> +	prepare_hyp();
-> +
-> +	ret = run_l2(&vcpu, &hyp_data);
-> +	GUEST_ASSERT_EQ(ret, ARM_EXCEPTION_TRAP);
-> +	GUEST_DONE();
-> +}
-> +
-> +int main(void)
-> +{
-> +	struct kvm_vcpu_init init;
-> +	struct kvm_vcpu *vcpu;
-> +	struct kvm_vm *vm;
-> +	struct ucall uc;
-> +	vm_paddr_t gpa;
-> +
-> +	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
-> +	vm = vm_create(1);
-> +
-> +	kvm_get_default_vcpu_target(vm, &init);
-> +	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
-> +	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-> +	kvm_arch_vm_finalize_vcpus(vm);
-> +
-> +	while (true) {
-> +		vcpu_run(vcpu);
-> +
-> +		switch (get_ucall(vcpu, &uc)) {
-> +		case UCALL_SYNC:
-> +			if (uc.args[0] == XLATE2GPA) {
-> +				gpa = addr_gva2gpa(vm, (vm_vaddr_t)uc.args[1]);
-> +				vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), gpa);
-> +			}
-> +			break;
-> +		case UCALL_PRINTF:
-> +			pr_info("%s", uc.buffer);
-> +			break;
-> +		case UCALL_DONE:
-> +			pr_info("DONE!\n");
-> +			goto end;
-> +		case UCALL_ABORT:
-> +			REPORT_GUEST_ASSERT(uc);
-> +			fallthrough;
-> +		default:
-> +			TEST_FAIL("Unhandled ucall: %ld\n", uc.cmd);
-> +		}
-> +	}
-> +
-> +end:
-> +	kvm_vm_free(vm);
-> +	return 0;
-> +}
-> -- 
-> 2.43.0
-> 
+LGTM.
+Acked-by: Nhat Pham <nphamcs@gmail.com>
