@@ -1,67 +1,67 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDE5397E7E
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 07:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2620397689
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 07:44:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776066289; cv=none; b=uUmbvur/GcL6F9uHgcyPL0pfREFCxXWE7tsp/Kwknatmhr5RnPxApPzJhzbZBFtOKgrKJiKj1wDoQd6kI1Db+j4DOisMgAIHq5lTIBbvUHzPQMCw3cM7Hbb4jp8fqopRCAciFEsUldZgponDhs/xwBI4HsqtanoZueNtLdq/W/U=
+	t=1776066301; cv=none; b=P/ILYBWzTOq61XsePESCG98Ne5pgZYqeGEQXjBmaYXbDyfsa4HfyrVV1vwcgeUdv85C6MP2uILofDYlSw+LUhiiAaU/f1+xDLv7dUBknU42ErRDoyOMCTlLsYa6+AcvlNvW4aupSlXQNJUbffu3j83KZItAFqFPtYW+2uQv/I60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776066289; c=relaxed/simple;
-	bh=kiArkSt0flIs7bU/fXEY7xT5bOeGaqUbcFrMu1wIeUY=;
+	s=arc-20240116; t=1776066301; c=relaxed/simple;
+	bh=eaKGgV2EnLtxmq33JJLj/dYzBmiozYO1bQPRfgQi93o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AMV08oGYhiMPIhmrfzq0vpP/2YdsTJEvlnav3JBe8BmZWqweRePn+pwCAZr5oLehSemZDpfqY24BYXV4cWyimz7ViQyn1ACDY5VFkcTHflM2HrVIhemjo5wKRcuee5GWOp6tAfGYl13vXrE8T03WdrP+Prx69QPAxV2boi7NCss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lgnwjA3T; arc=none smtp.client-ip=74.125.82.51
+	 In-Reply-To:To:Cc; b=bSgenZJVNWc/VXtvV4CnSlhcydruAtseeO2iqfPZDQQG63gFe2mS0UzqKIkAvpysirjzHEkIENwJZuVwzmWcomHhWVnM4Se2f1Q0J9YQb/I88MYwncRl+7j72KrwkuAIsUSut8upaksR3K8twJlzfYyYBWpzEb8e0COLxsHIi5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aumniG8d; arc=none smtp.client-ip=74.125.82.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lgnwjA3T"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-12c42a23c8eso1497795c88.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 00:44:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aumniG8d"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-12c15414820so2798709c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 00:44:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776066286; x=1776671086; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776066299; x=1776671099; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CyDvJikQxepnDoa9At7D55yqji9L3lHPWXvHJrxbFWg=;
-        b=lgnwjA3TLeboVOt7tdBB7T2Z/AXluc+LVd2DZ6NLe5wr4foxO2TQapCKhLZt0YH0be
-         T+ZYkABD3ysqa/LweE+RXd+eUEgTor2n+X+gUFM+/QYv0oTmkTyr14bD7IgSrMrrzdjW
-         mpoHKgALSgQzPqfJHANCccwE7vS7+QQEeSUOgKsdEbJLbJ+OweLbJXW9Sk0kfce2E1ib
-         MWWIbPqmgg5dNvtsLb2ZgdlRdxYo8I3nSRY4T3J2fc7C3VEMCfbHprhE6kTzVflo/wL9
-         BbqOm+Z/pBstDD60zpS6YewnhcTDPCbPAO/Jre1woxVaEkYPy849EpuqasTS7OfaPNeM
-         ejVw==
+        bh=3n2Y5xzqBT13fCT8NafM8IZJKMHdw2LLWT217qys08w=;
+        b=aumniG8dlLVXg4rH0KFGoI/yqlxJ2pTZsIJyhFG/2/0ZYbHVpzdvawnZLMKqgJPS7V
+         odyDq73wFRieT9I7d5MGNwUE0XMGnx5XTW5UN8kQ/px2v+CjIfKZ8SmEr7TbQrWIhdoi
+         yjkEwS9UxhQxtr918L0qTINsLWtPNAY3ywmZvDTFLVwXM7iKxFZCIhbdg2zfe3T56Lvu
+         //L2v93Ai5TDGIyh0Zfq5cDiUPv1UfA6fEvQ6s19w4hVRmyNWEgp0JkQqYmcRM91gXFp
+         r3f+ayi7BGBrWoWZbPF8Zbc9hPj65KfLwqrBhoC1RW9Dm4oIh3Pf/y5YeJORwFyFnuLl
+         PmJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776066286; x=1776671086;
+        d=1e100.net; s=20251104; t=1776066299; x=1776671099;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=CyDvJikQxepnDoa9At7D55yqji9L3lHPWXvHJrxbFWg=;
-        b=HqeRmOKO83QpIYgfaVLtXPsmvT/vG7GoGJSnAgUG9QTqM0R0HM9IojJ9hFcL/L/mNZ
-         /y4vLM/k6+vODYZOq8Vx+c9CmSHjsaqBSFeh3EZB4FKQg/qyLcFAgM34yWFlfQvzq+hx
-         yuE3icOE2K+HqDJZRzJDLADIwAUXnj6uLFB/wReqR+Lwg4MYNIyCOrdkzqcekQ5q4BDR
-         8G5tZkvHVdxcD/Mg/P8ovPZGauwzfhY4pnCOkGbKOl2JNkM/UUkGNxNIAcTPqsc0VL68
-         UlyzlOF2k0eHJn8wELGKugE0TCLzsPGm5pXDowc4vTp/12iJ6uHH8h/gGOR5wFSlVvj1
-         QcsA==
-X-Forwarded-Encrypted: i=1; AFNElJ87bUH1usRvWZ/kJS9S+W440OVjzX10lFrM7LMts4mBp7Zo75v+4B3aNjJPv3Q+SCLmbvUdkvwG2ObcQd1ZzZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgxAh3wEIwz9z5wN0oHr6JAHelIBG4jJKCr+E7QBkVEJIny8sw
-	urS2YzSDi6KLeNdMUVsts2CRM86Tcc0Pa+y9u+jgaCbYUlwADZonwGU/
-X-Gm-Gg: AeBDievsYYonv8WsAZN/aug0A78BpZuJy+b/WVG6k2ROmPD/SVeuaF/v4a4blqrOGY9
-	4BYa1dXpMw3HbftlaJkrkZAWYPA0bi4YpBo3Rey6XtrZ1kqsnQBaZj+g0Z/3RWkP1k4L8vecn/q
-	eAGRs5zwpKYWkK2piD0xav+edvMH7YLprzhl00JzdZfBDIZXoyB7yKxZ5uTHT4XEMkX4/w7Bx2R
-	NWWZ5Mo/NONlDbkM3QCsPQxCgrKkaJ33vaaIJy3JjeOEARye0A6wlVAgBmVjPtrOMfEKMdChVdk
-	5Cw740uuZcO0jwNAytE//P0/0jNyMGgJ+5uFTz8xjnEanzcr6zmDavk9iqZqnQu+PECWQHrid3h
-	pd7649QV9E7y4ZrHhqt/2V925K5yVGGNuwOH1OPuWIRP3/FFnWNgiem793MRS92aK5c2HsTaFJ+
-	XC5gubHGDivy4z4u5q
-X-Received: by 2002:a05:7022:61a2:b0:128:d51a:5157 with SMTP id a92af1059eb24-12c34f1449emr6389794c88.33.1776066286323;
-        Mon, 13 Apr 2026 00:44:46 -0700 (PDT)
+        bh=3n2Y5xzqBT13fCT8NafM8IZJKMHdw2LLWT217qys08w=;
+        b=SdJe4eEO6uJssOu0RQIXrdhWxMUHqvCSLnFj/Mwk36FelNllYPrrcIIhHaLdp1c9p5
+         Y+Da5HhnV3xCBFq3QIs6r6VaGL5HAY5bmc+CyJyneJrHkQsmrQeHO5pxwiOnSPDQ9lOi
+         glRm4ce6j6M4wzHrh3ftLPET8vBSIVEfh4IIJZf2aXUGwNRErwbv/88rgj/myk8hJiim
+         fcVNNT4Kau53dpTPjq+FuPeonYUxObL7iDzQ2ZQo7puOcYAYl2rBci+rOneLdCemn0PS
+         wWVuV50abgY8vu0abZHSMfPW6kcrJvV9/XyQL2hKyS367/+JeY4ATMMCGxRHhKpXHrHC
+         zIKA==
+X-Forwarded-Encrypted: i=1; AFNElJ/B4KKgK2uTqeLQDk7nODsm6OpBieouwNFhIJHJUJq9oEnRBpYuVixBbKJzSac6XP3VlP31cqTZh/n9PngNAuE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAUo/0LgeZdfaAcjZFiM8yfv6Zcdr2FY9WiMjCsBtTXKypV9hn
+	xtepnRC7/mE//fYTKNt1220femYsMhCJVgfZ8PUeDonh81wqb48+jOuJ
+X-Gm-Gg: AeBDievYDFVlmWP68LHurLpLOCOa8LWpPRIgySr/0V+FI1kq3OSzfctDS2qU5CcISwX
+	fwl8KGOw68MCQVqS7GoqW0NZDUEyUIqqLxJYuArJs+EB0HQ+egoJvaExHeUToHbSrEI6mV+CwGR
+	j4CtP+k8IoeLltsJ2WtizWuEUKtegh5h8soUBWm/7IUF7Us7995w57GxVsWpZCfKOTUPdX7gqM8
+	/LGFFGJTiWPPXRSn+P9CINUV/dI6B/r0v83cGpX/og6P382U64LupneyrpB9gA072XRnUq6i1v3
+	ABnJXEX0EFrYKdwVaCUl9KVDIpOb84qi07N+DJ9vyAihIKEg42le3BTlmOlGxAzKGSKEtMUTdyQ
+	YyKjsXYA+We3rArRRmonyJ/vCb6wE2/6BDanxZYW/NiGZdsrNpG3XKLajiomdJaR/fdQDQrG3lV
+	g2QNYdrZGBKFAodiip
+X-Received: by 2002:a05:7022:e1d:b0:119:e569:f874 with SMTP id a92af1059eb24-12c35300841mr5317906c88.17.1776066298973;
+        Mon, 13 Apr 2026 00:44:58 -0700 (PDT)
 Received: from wujing. ([74.48.213.230])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c347fa2c9sm12884610c88.15.2026.04.13.00.44.36
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c347fa2c9sm12884610c88.15.2026.04.13.00.44.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 00:44:46 -0700 (PDT)
+        Mon, 13 Apr 2026 00:44:58 -0700 (PDT)
 From: Qiliang Yuan <realwujing@gmail.com>
-Date: Mon, 13 Apr 2026 15:43:14 +0800
-Subject: [PATCH v2 08/12] workqueue, mm: Support dynamic housekeeping mask
- updates
+Date: Mon, 13 Apr 2026 15:43:15 +0800
+Subject: [PATCH v2 09/12] cgroup/cpuset: Introduce CPUSet-driven dynamic
+ housekeeping (DHM)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260413-wujing-dhm-v2-8-06df21caba5d@gmail.com>
+Message-Id: <20260413-wujing-dhm-v2-9-06df21caba5d@gmail.com>
 References: <20260413-wujing-dhm-v2-0-06df21caba5d@gmail.com>
 In-Reply-To: <20260413-wujing-dhm-v2-0-06df21caba5d@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -102,142 +102,192 @@ Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <realwujing@gmail.com>
 X-Mailer: b4 0.13.0
 
-Unbound workqueues and kcompactd threads determine their default CPU
-affinity from housekeeping masks (HK_TYPE_WQ, HK_TYPE_DOMAIN, and
-HK_TYPE_KTHREAD) at boot. Currently, these boundaries are static and
-are not updated if housekeeping is reconfigured at runtime.
+Currently, subsystem housekeeping masks are generally static and can
+only be configured via boot-time parameters (e.g., isolcpus, nohz_full).
+This inflexible approach forces a system reboot whenever an orchestrator
+needs to change workload isolation boundaries.
 
-Implement housekeeping notifiers for both workqueue and mm compaction.
+This patch introduces CPUSet-driven Dynamic Housekeeping Management (DHM)
+by exposing the `cpuset.housekeeping.cpus` control file on the root cgroup.
+Writing a new cpumask to this file dynamically updates the housekeeping
+masks of all registered subsystems (scheduler, RCU, timers, tick, workqueues,
+and managed IRQs) simultaneously, without restarting the node.
 
-This ensures that unbound workqueue tasks and background compaction
-threads honor dynamic isolation boundaries configured via sysfs or
-cpuset at runtime.
+At the cpuset and isolation core level, this change implements:
+1. `housekeeping_update_all_types(const struct cpumask *new_mask)` API inside
+   `isolation.c` to safely allocate, update, and replace all enabled hk_type masks.
+2. The `cpuset.housekeeping.cpus` attribute in `dfl_files` for the root cpuset.
+3. Hooking the write operation to iterate over enabled housekeeping types
+   and invoke `housekeeping_update_notify()` (the DHM notifier chain) to
+   push these configuration changes live into individual kernel subsystems.
 
 Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
 ---
- kernel/workqueue.c | 42 ++++++++++++++++++++++++++++++++++++++++++
- mm/compaction.c    | 27 +++++++++++++++++++++++++++
- 2 files changed, 69 insertions(+)
+ include/linux/sched/isolation.h | 12 ++++++++++++
+ kernel/cgroup/cpuset-internal.h |  1 +
+ kernel/cgroup/cpuset.c          | 36 ++++++++++++++++++++++++++++++++++++
+ kernel/sched/isolation.c        | 38 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 87 insertions(+)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index eda756556341a..354e788004b48 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -8008,6 +8008,47 @@ static void __init wq_cpu_intensive_thresh_init(void)
- 	wq_cpu_intensive_thresh_us = thresh;
- }
+diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
+index aea1dbc4d7486..299167f627895 100644
+--- a/include/linux/sched/isolation.h
++++ b/include/linux/sched/isolation.h
+@@ -48,6 +48,8 @@ extern void __init housekeeping_init(void);
  
-+static int wq_housekeeping_reconfigure(struct notifier_block *nb,
-+				     unsigned long action, void *data)
-+{
-+	if (action == HK_UPDATE_MASK) {
-+		struct housekeeping_update *upd = data;
-+		unsigned int type = upd->type;
-+
-+		if (type == HK_TYPE_WQ || type == HK_TYPE_DOMAIN) {
-+			cpumask_var_t cpumask;
-+
-+			if (!alloc_cpumask_var(&cpumask, GFP_KERNEL)) {
-+				pr_warn("workqueue: failed to allocate cpumask for housekeeping update\n");
-+				return NOTIFY_BAD;
-+			}
-+
-+			cpumask_copy(cpumask, cpu_possible_mask);
-+			if (!cpumask_empty(housekeeping_cpumask(HK_TYPE_WQ)))
-+				cpumask_and(cpumask, cpumask, housekeeping_cpumask(HK_TYPE_WQ));
-+			if (!cpumask_empty(housekeeping_cpumask(HK_TYPE_DOMAIN)))
-+				cpumask_and(cpumask, cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
-+
-+			workqueue_set_unbound_cpumask(cpumask);
-+
-+			if (type == HK_TYPE_DOMAIN) {
-+				apply_wqattrs_lock();
-+				cpumask_andnot(wq_isolated_cpumask, cpu_possible_mask,
-+						housekeeping_cpumask(HK_TYPE_DOMAIN));
-+				apply_wqattrs_unlock();
-+			}
-+
-+			free_cpumask_var(cpumask);
-+		}
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block wq_housekeeping_nb = {
-+	.notifier_call = wq_housekeeping_reconfigure,
-+};
-+
- /**
-  * workqueue_init - bring workqueue subsystem fully online
-  *
-@@ -8068,6 +8109,7 @@ void __init workqueue_init(void)
+ extern int housekeeping_register_notifier(struct notifier_block *nb);
+ extern int housekeeping_unregister_notifier(struct notifier_block *nb);
++extern int housekeeping_update_notify(enum hk_type type, const struct cpumask *new_mask);
++extern int housekeeping_update_all_types(const struct cpumask *new_mask);
  
- 	wq_online = true;
- 	wq_watchdog_init();
-+	housekeeping_register_notifier(&wq_housekeeping_nb);
- }
+ #else
  
- /*
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 1e8f8eca318c6..574ee3c6dc942 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -24,6 +24,7 @@
- #include <linux/page_owner.h>
- #include <linux/psi.h>
- #include <linux/cpuset.h>
-+#include <linux/sched/isolation.h>
- #include "internal.h"
- 
- #ifdef CONFIG_COMPACTION
-@@ -3246,6 +3247,7 @@ void __meminit kcompactd_run(int nid)
- 		pr_err("Failed to start kcompactd on node %d\n", nid);
- 		pgdat->kcompactd = NULL;
- 	} else {
-+		housekeeping_affine(pgdat->kcompactd, HK_TYPE_KTHREAD);
- 		wake_up_process(pgdat->kcompactd);
- 	}
- }
-@@ -3320,6 +3322,30 @@ static const struct ctl_table vm_compaction[] = {
- 	},
- };
- 
-+static int kcompactd_housekeeping_reconfigure(struct notifier_block *nb,
-+					      unsigned long action, void *data)
-+{
-+	struct housekeeping_update *upd = data;
-+	unsigned int type = upd->type;
-+
-+	if (action == HK_UPDATE_MASK && type == HK_TYPE_KTHREAD) {
-+		int nid;
-+
-+		for_each_node_state(nid, N_MEMORY) {
-+			pg_data_t *pgdat = NODE_DATA(nid);
-+
-+			if (pgdat->kcompactd)
-+				housekeeping_affine(pgdat->kcompactd, HK_TYPE_KTHREAD);
-+		}
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block kcompactd_housekeeping_nb = {
-+	.notifier_call = kcompactd_housekeeping_reconfigure,
-+};
-+
- static int __init kcompactd_init(void)
+@@ -86,6 +88,16 @@ static inline int housekeeping_unregister_notifier(struct notifier_block *nb)
  {
- 	int nid;
-@@ -3327,6 +3353,7 @@ static int __init kcompactd_init(void)
- 	for_each_node_state(nid, N_MEMORY)
- 		kcompactd_run(nid);
- 	register_sysctl_init("vm", vm_compaction);
-+	housekeeping_register_notifier(&kcompactd_housekeeping_nb);
  	return 0;
  }
- subsys_initcall(kcompactd_init)
++
++static inline int housekeeping_update_notify(enum hk_type type, const struct cpumask *new_mask)
++{
++	return 0;
++}
++
++static inline int housekeeping_update_all_types(const struct cpumask *new_mask)
++{
++	return 0;
++}
+ #endif /* CONFIG_CPU_ISOLATION */
+ 
+ static inline bool housekeeping_cpu(int cpu, enum hk_type type)
+diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+index fd7d19842ded7..3ab437f54ecdf 100644
+--- a/kernel/cgroup/cpuset-internal.h
++++ b/kernel/cgroup/cpuset-internal.h
+@@ -60,6 +60,7 @@ typedef enum {
+ 	FILE_EXCLUSIVE_CPULIST,
+ 	FILE_EFFECTIVE_XCPULIST,
+ 	FILE_ISOLATED_CPULIST,
++	FILE_HOUSEKEEPING_CPULIST,
+ 	FILE_CPU_EXCLUSIVE,
+ 	FILE_MEM_EXCLUSIVE,
+ 	FILE_MEM_HARDWALL,
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 1335e437098e8..5df19dc9bfa89 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -3201,6 +3201,30 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+ 	mutex_unlock(&cpuset_mutex);
+ }
+ 
++/*
++ * DHM interface: root cpuset allows updating global housekeeping cpumask.
++ */
++static ssize_t cpuset_write_housekeeping_cpus(struct kernfs_open_file *of,
++					      char *buf, size_t nbytes, loff_t off)
++{
++	cpumask_var_t new_mask;
++	int retval;
++
++	if (!alloc_cpumask_var(&new_mask, GFP_KERNEL))
++		return -ENOMEM;
++
++	buf = strstrip(buf);
++	retval = cpulist_parse(buf, new_mask);
++	if (retval)
++		goto out_free;
++
++	retval = housekeeping_update_all_types(new_mask);
++
++out_free:
++	free_cpumask_var(new_mask);
++	return retval ?: nbytes;
++}
++
+ /*
+  * Common handling for a write to a "cpus" or "mems" file.
+  */
+@@ -3290,6 +3314,9 @@ int cpuset_common_seq_show(struct seq_file *sf, void *v)
+ 	case FILE_ISOLATED_CPULIST:
+ 		seq_printf(sf, "%*pbl\n", cpumask_pr_args(isolated_cpus));
+ 		break;
++	case FILE_HOUSEKEEPING_CPULIST:
++		seq_printf(sf, "%*pbl\n", cpumask_pr_args(housekeeping_cpumask(HK_TYPE_DOMAIN)));
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -3428,6 +3455,15 @@ static struct cftype dfl_files[] = {
+ 		.flags = CFTYPE_ONLY_ON_ROOT,
+ 	},
+ 
++	{
++		.name = "housekeeping.cpus",
++		.seq_show = cpuset_common_seq_show,
++		.write = cpuset_write_housekeeping_cpus,
++		.max_write_len = (100U + 6 * NR_CPUS),
++		.private = FILE_HOUSEKEEPING_CPULIST,
++		.flags = CFTYPE_ONLY_ON_ROOT,
++	},
++
+ 	{ }	/* terminate */
+ };
+ 
+diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+index 0462b41807161..a92b0bb41de3a 100644
+--- a/kernel/sched/isolation.c
++++ b/kernel/sched/isolation.c
+@@ -27,6 +27,7 @@ enum hk_flags {
+ #define HK_FLAG_KERNEL_NOISE (HK_FLAG_TICK | HK_FLAG_TIMER | HK_FLAG_RCU | \
+ 			      HK_FLAG_MISC | HK_FLAG_WQ | HK_FLAG_KTHREAD)
+ 
++static DEFINE_MUTEX(housekeeping_mutex);
+ static BLOCKING_NOTIFIER_HEAD(housekeeping_notifier_list);
+ 
+ DEFINE_STATIC_KEY_FALSE(housekeeping_overridden);
+@@ -196,6 +197,43 @@ int housekeeping_update_notify(enum hk_type type, const struct cpumask *new_mask
+ }
+ EXPORT_SYMBOL_GPL(housekeeping_update_notify);
+ 
++int housekeeping_update_all_types(const struct cpumask *new_mask)
++{
++	enum hk_type type;
++	struct cpumask *old_masks[HK_TYPE_MAX] = { NULL };
++
++	if (cpumask_empty(new_mask) || !cpumask_intersects(new_mask, cpu_online_mask))
++		return -EINVAL;
++
++	if (!housekeeping.flags)
++		static_branch_enable(&housekeeping_overridden);
++
++	mutex_lock(&housekeeping_mutex);
++	for_each_set_bit(type, &housekeeping.flags, HK_TYPE_MAX) {
++		struct cpumask *nmask = kmalloc(cpumask_size(), GFP_KERNEL);
++
++		if (!nmask) {
++			mutex_unlock(&housekeeping_mutex);
++			return -ENOMEM;
++		}
++
++		cpumask_copy(nmask, new_mask);
++		old_masks[type] = housekeeping_cpumask_dereference(type);
++		rcu_assign_pointer(housekeeping.cpumasks[type], nmask);
++	}
++	mutex_unlock(&housekeeping_mutex);
++
++	synchronize_rcu();
++
++	for_each_set_bit(type, &housekeeping.flags, HK_TYPE_MAX) {
++		housekeeping_update_notify(type, new_mask);
++		kfree(old_masks[type]);
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(housekeeping_update_all_types);
++
+ void __init housekeeping_init(void)
+ {
+ 	enum hk_type type;
 
 -- 
 2.43.0
