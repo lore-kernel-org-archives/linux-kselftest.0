@@ -1,113 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28343AEF2E;
-	Mon, 13 Apr 2026 09:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5361D37C92D;
+	Mon, 13 Apr 2026 09:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776071451; cv=none; b=Nt3ay5cZdZ4mHaucxcf1vYMMYsgCxWqhgcl0YKiZOhF3l2h7Js0Cp+5pV+E6ycf3NKV/oae5GBAjTE4a4sC8/VsVbugTzvBrlbjKrtca2+uxSMwlJGirFSdSoF5PrsuxLDKWbD8PnkyT40mg7MevOh6AyrTAUwYRIazwc1g8Y+Y=
+	t=1776071940; cv=none; b=a0NYRBTuSSfGUm6AEZP/MUuIg+VBf9BNNdM+LlZhu7jmIAyeXK+vcvgXkTn7f6FQYW3c/kVRUyoRWkiGNfndlq48RjZUhPcUB1g0yHD0+30XhN0lcsONGfucWUjptO6aJ4tt54BfzjJ/+IY3lJhC9N5Wv/YoFgowJ9CRqKN5Quw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776071451; c=relaxed/simple;
-	bh=vLctE0L8gyL4gYx2UojMwYE/cL0iFzPN6wJKGthmZZ0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pL5/xDAkiB5+XiJTjxHI+w28+q1oagPGDQSME1rox1jmOLke0uFQy7COvB8YD9JI1DL/HZfaB2gFgcjVfKiPIrr7hBbv/ZDURBbb1cduLRNRZkgxmZZp8ByDm97EvtxEHCe7axcDoPo3Jkde+dvWew/7vkvuSt6TL2BQjUtmCT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JPAQYOSP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776071940; c=relaxed/simple;
+	bh=g0ESrCViHyCxKf3iu65baEykiub0+SeZDWwUl391xKM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sek56Xgr3lyzvV7VIwyU0e9Eago9urz9IKli4JZACx8lP9nA/jE18fyc/pXmZgzl0PRdrSwyVdWW6vu8Uv74PhEaJNAgMaPYfFikIxkXWGHeP3XCArb6/IkORyfvBtqedWvxhtosITAk5pTTX3ONgrZXwmm0RlELQW4tXFU1Ivo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OFSjKH6+; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JPAQYOSP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D80E6C116C6;
-	Mon, 13 Apr 2026 09:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776071451;
-	bh=vLctE0L8gyL4gYx2UojMwYE/cL0iFzPN6wJKGthmZZ0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JPAQYOSP+82Mrgd3K9LX+JOgRGR+5JCTGIcm/aWhEaYJv0jtVi+RcP/FTnbHyT7EP
-	 rD1UGTsjwOk5dpx9xu86UAGLCciY6IwSKJPP7IJvzyIp9rlOS7Q0TSAy1rwDQYR9iv
-	 4tURTBnXBfuUOt2u0Wo9tMjI9NW8yybRToaIK/WEtBu36JG/w1oFn3pvFyksXcLKcf
-	 D4dVLqGlr02b58+Wt8cOtNTYUqqUHziJBQF32lq2s9uw+LgtNW2velkwt65hHTMv1Y
-	 P6rJwXEhFodMpqLfRStEU7CwE+zRnvTuf/bbAmGJ5xr1tR3vz9Nl2JYz/iuA8AglOi
-	 N8VgDPMCz8bew==
-Message-ID: <7feed614-f59f-4c03-b745-2306450a899d@kernel.org>
-Date: Mon, 13 Apr 2026 11:10:47 +0200
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OFSjKH6+"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22AC132E0;
+	Mon, 13 Apr 2026 02:18:52 -0700 (PDT)
+Received: from thinkpad-e142931.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 984D53F93E;
+	Mon, 13 Apr 2026 02:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1776071937; bh=g0ESrCViHyCxKf3iu65baEykiub0+SeZDWwUl391xKM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OFSjKH6+MOZGPpPhNp2SfF7rSHgMFE3bKQUfqbKUL42XZwtXTwqeq2Id2dfuQDLJF
+	 0JUw61Nds3kLespdZfnvipzqo5o3idh1vCJxMgVxw0gKxLHmCUWdLgRkLbsix0Hwoc
+	 zSyBawg5/azVBHRjL5M/dy2fbzFpp0yiQEOuyUpU=
+Date: Mon, 13 Apr 2026 10:18:42 +0100
+From: Wei-Lin Chang <weilin.chang@arm.com>
+To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 3/4] KVM: arm64: sefltests: Add basic NV selftest
+Message-ID: <ddr6exocupk6mzshjwvu6sqt57aeqiyxqss3rpgcxxyh54cw4g@rxvm5zh3ybrw>
+References: <20260412142216.3806482-1-weilin.chang@arm.com>
+ <20260412142216.3806482-4-weilin.chang@arm.com>
+ <adwofV7yf71OdMFk@sm-arm-grace07>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: mm: skip charge_reserved_hugetlb without
- killall
-To: Cao Ruichuang <create0818@163.com>, rppt@kernel.org
-Cc: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260406053126.217196-1-create0818@163.com>
- <20260410044139.67480-1-create0818@163.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260410044139.67480-1-create0818@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adwofV7yf71OdMFk@sm-arm-grace07>
 
-On 4/10/26 06:41, Cao Ruichuang wrote:
-> charge_reserved_hugetlb.sh tears down background writers with
-> killall from psmisc. Minimal Ubuntu images do not always provide
-> that tool, so the selftest fails in cleanup for an environment reason
-> rather than for the hugetlb behavior it is trying to cover.
+Hi Itaru,
+
+On Mon, Apr 13, 2026 at 08:19:25AM +0900, Itaru Kitayama wrote:
+> On Sun, Apr 12, 2026 at 03:22:15PM +0100, Wei-Lin Chang wrote:
+> > This selftest simply starts an L1, which starts its own guest (L2). L2
+> > runs without stage-1 and 2 translations, it calls an HVC to jump back
+> > to L1.
 > 
-> Skip the test when killall is unavailable, similar to the existing
-> root check, so these environments report the dependency clearly
-> instead of failing the test.
+> How do you disable both the nested guest (L2)'s MMU and stage 2
+> translations?
+
+Guest stage-2 is disabled by not setting HCR_EL2.VM in prepare_hyp(),
+and stage-1 is disabled by not writing to SCTLR_EL12 in init_vcpu(),
+effectively using the default value set by L0. However since SCTLR_EL1
+has many architecturally UNKNOWN bits (including SCTLR_EL1.M), it should
+be better to write a value before running L2 I suppose...
+
+Thanks,
+Wei-Lin Chang
+
 > 
-> Signed-off-by: Cao Ruichuang <create0818@163.com>
-> ---
-
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
-
--- 
-Cheers,
-
-David
+> Itaru.
+> 
+> > 
+> > Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
+> > ---
+> >  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+> >  .../selftests/kvm/arm64/hello_nested.c        | 103 ++++++++++++++++++
+> >  2 files changed, 104 insertions(+)
+> >  create mode 100644 tools/testing/selftests/kvm/arm64/hello_nested.c
+> > 
+> > diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> > index 3dc3e39f7025..e8c108e0c487 100644
+> > --- a/tools/testing/selftests/kvm/Makefile.kvm
+> > +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> > @@ -168,6 +168,7 @@ TEST_GEN_PROGS_arm64 += arm64/arch_timer_edge_cases
+> >  TEST_GEN_PROGS_arm64 += arm64/at
+> >  TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
+> >  TEST_GEN_PROGS_arm64 += arm64/hello_el2
+> > +TEST_GEN_PROGS_arm64 += arm64/hello_nested
+> >  TEST_GEN_PROGS_arm64 += arm64/host_sve
+> >  TEST_GEN_PROGS_arm64 += arm64/hypercalls
+> >  TEST_GEN_PROGS_arm64 += arm64/external_aborts
+> > diff --git a/tools/testing/selftests/kvm/arm64/hello_nested.c b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > new file mode 100644
+> > index 000000000000..97387e4697b3
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > @@ -0,0 +1,103 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * hello_nested - Go from vEL2 to EL1 then back
+> > + */
+> > +
+> > +#include "nested.h"
+> > +#include "processor.h"
+> > +#include "test_util.h"
+> > +#include "ucall.h"
+> > +
+> > +#define XLATE2GPA	(0xABCD)
+> > +#define L2STACKSZ	(0x100)
+> > +
+> > +/*
+> > + * TPIDR_EL2 is used to store vcpu id, so save and restore it.
+> > + */
+> > +static vm_paddr_t ucall_translate_to_gpa(void *gva)
+> > +{
+> > +	vm_paddr_t gpa;
+> > +	u64 vcpu_id = read_sysreg(tpidr_el2);
+> > +
+> > +	GUEST_SYNC2(XLATE2GPA, gva);
+> > +
+> > +	/* get the result from userspace */
+> > +	gpa = read_sysreg(tpidr_el2);
+> > +
+> > +	write_sysreg(vcpu_id, tpidr_el2);
+> > +
+> > +	return gpa;
+> > +}
+> > +
+> > +static void l2_guest_code(void)
+> > +{
+> > +	do_hvc();
+> > +}
+> > +
+> > +static void guest_code(void)
+> > +{
+> > +	struct vcpu vcpu;
+> > +	struct hyp_data hyp_data;
+> > +	int ret;
+> > +	vm_paddr_t l2_pc, l2_stack_top;
+> > +	/* force 16-byte alignment for the stack pointer */
+> > +	u8 l2_stack[L2STACKSZ] __attribute__((aligned(16)));
+> > +
+> > +	GUEST_ASSERT_EQ(get_current_el(), 2);
+> > +	GUEST_PRINTF("vEL2 entry\n");
+> > +
+> > +	l2_pc = ucall_translate_to_gpa(l2_guest_code);
+> > +	l2_stack_top = ucall_translate_to_gpa(&l2_stack[L2STACKSZ]);
+> > +
+> > +	init_vcpu(&vcpu, l2_pc, l2_stack_top);
+> > +	prepare_hyp();
+> > +
+> > +	ret = run_l2(&vcpu, &hyp_data);
+> > +	GUEST_ASSERT_EQ(ret, ARM_EXCEPTION_TRAP);
+> > +	GUEST_DONE();
+> > +}
+> > +
+> > +int main(void)
+> > +{
+> > +	struct kvm_vcpu_init init;
+> > +	struct kvm_vcpu *vcpu;
+> > +	struct kvm_vm *vm;
+> > +	struct ucall uc;
+> > +	vm_paddr_t gpa;
+> > +
+> > +	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
+> > +	vm = vm_create(1);
+> > +
+> > +	kvm_get_default_vcpu_target(vm, &init);
+> > +	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
+> > +	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
+> > +	kvm_arch_vm_finalize_vcpus(vm);
+> > +
+> > +	while (true) {
+> > +		vcpu_run(vcpu);
+> > +
+> > +		switch (get_ucall(vcpu, &uc)) {
+> > +		case UCALL_SYNC:
+> > +			if (uc.args[0] == XLATE2GPA) {
+> > +				gpa = addr_gva2gpa(vm, (vm_vaddr_t)uc.args[1]);
+> > +				vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), gpa);
+> > +			}
+> > +			break;
+> > +		case UCALL_PRINTF:
+> > +			pr_info("%s", uc.buffer);
+> > +			break;
+> > +		case UCALL_DONE:
+> > +			pr_info("DONE!\n");
+> > +			goto end;
+> > +		case UCALL_ABORT:
+> > +			REPORT_GUEST_ASSERT(uc);
+> > +			fallthrough;
+> > +		default:
+> > +			TEST_FAIL("Unhandled ucall: %ld\n", uc.cmd);
+> > +		}
+> > +	}
+> > +
+> > +end:
+> > +	kvm_vm_free(vm);
+> > +	return 0;
+> > +}
+> > -- 
+> > 2.43.0
+> > 
