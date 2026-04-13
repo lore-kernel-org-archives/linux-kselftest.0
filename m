@@ -1,163 +1,93 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04AF3CF049
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 14:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079CD3E0222;
+	Mon, 13 Apr 2026 14:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776089001; cv=none; b=naSm2Hg4AuZw6j7eY4ylV7qvw/92MRsDn+DVtXgw14BTXxU5Xb0lHvKsyQmypPymoRmpmrWv22opEFiOT393yiLDC5yD1J1SiLptmUtopC51VEicbl3wnHE6rU+RZJ89w4yGgaaa+TDshfIiaNfh97dLu9ypKA37ek4NNd4llWY=
+	t=1776091600; cv=none; b=oI3Fx3CgnnAipF5XTt7BupM/9EyrP0SpbOF/JUHDCucq79RO2mf0dG4/ywQDOoFK5alMUbVyliEpkUUgdnJmq5Li9hB+6MD9vRACiynF/uYkPa16oF9rmZy5LzeqAApNywuoxJ1PerLlXdqEjuNd3WJipTruwqDj0dMPG19C48U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776089001; c=relaxed/simple;
-	bh=2+zaBpZoxOc4dQ+OqY3EpkdDanuzl/Hoc59VwYsZX5g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bi/tN1hqzPNXuZRdi3pKEu1ZxametIuyBjxiCC7ire9HB3eVzf2viQmf8dVo5+QtPlDzmDeN1usW7xT35Wf/uQsIStcEZ7piy6e4sMaWCI3iycFfJ8Bpk/6rwyEEPV2DDaA43QWXKPJID9qjpcrpMuvN6r/QyBrFvlTuMYslbDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=C6mDGvFc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1VBLQIwS; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=C6mDGvFc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1VBLQIwS; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1776091600; c=relaxed/simple;
+	bh=bhACCNWwYGbbsioUZ9lwrnNsFznu/fKcqluHk8miblo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AUSH1vLUhznlBS0iReXz2dTqBFjdOXPiw8tLmrJg1XEH0cow18umecsy5ImyO0P9B8jN84dnXl3DykDdYbZfplrCKs2ZJ1XCYHx9dUYsp8hbYLnAUiWR62bcBskHiyONg5+7fhoqpf+FHv2cetVXHVtwQWo8gNT8kpyLEr8wLRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQycd2Y3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="C6mDGvFc";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1VBLQIwS";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="C6mDGvFc";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1VBLQIwS"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 717485BCE2;
-	Mon, 13 Apr 2026 14:03:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1776088997; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=FxrXL8N9v9YPiVpGZ39J+cg0zny+iReTqznI7rQsQHk=;
-	b=C6mDGvFcTScsbHFHxDPlQREIzpr9QNjHHepg4llQ+vpDPYwc9A2RlLTYLIepnV3NjzdBL9
-	meBq3EVmsbR7/eoqrR8S4BvhOoGJCye6Vzx7m9/b0tTQ6dLDZhEwzqsQIt2MxQI9hBbKwe
-	z7a6x1gcUxqjb0CiHN7P18iwdPfQ/Y8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1776088997;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=FxrXL8N9v9YPiVpGZ39J+cg0zny+iReTqznI7rQsQHk=;
-	b=1VBLQIwSfNd0S+PDdAqEk/NMn7gK/Tc4DJUwUIdkcNEooNguQ/d/olMEJUIpa9kXw3u1yd
-	PXkMMgDFwxRImIDg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1776088997; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=FxrXL8N9v9YPiVpGZ39J+cg0zny+iReTqznI7rQsQHk=;
-	b=C6mDGvFcTScsbHFHxDPlQREIzpr9QNjHHepg4llQ+vpDPYwc9A2RlLTYLIepnV3NjzdBL9
-	meBq3EVmsbR7/eoqrR8S4BvhOoGJCye6Vzx7m9/b0tTQ6dLDZhEwzqsQIt2MxQI9hBbKwe
-	z7a6x1gcUxqjb0CiHN7P18iwdPfQ/Y8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1776088997;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=FxrXL8N9v9YPiVpGZ39J+cg0zny+iReTqznI7rQsQHk=;
-	b=1VBLQIwSfNd0S+PDdAqEk/NMn7gK/Tc4DJUwUIdkcNEooNguQ/d/olMEJUIpa9kXw3u1yd
-	PXkMMgDFwxRImIDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2D20C4AF08;
-	Mon, 13 Apr 2026 14:03:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VjD7B6X33GmCZgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Mon, 13 Apr 2026 14:03:17 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: linux-kselftest@vger.kernel.org
-Cc: shuah@kernel.org,
-	Fernando Fernandez Mancera <fmancera@suse.de>
-Subject: [PATCH] selftests/run_kselftest.sh: fix infinite loop on missing argument
-Date: Mon, 13 Apr 2026 16:03:07 +0200
-Message-ID: <20260413140307.4178-1-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQycd2Y3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E351C2BCAF;
+	Mon, 13 Apr 2026 14:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776091599;
+	bh=bhACCNWwYGbbsioUZ9lwrnNsFznu/fKcqluHk8miblo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IQycd2Y3MOzE++hOSt40w85Jk5ozySGjdZeYUcuPg2afcoGAftYeQ3QsqHKr7jZi+
+	 V6l/EOLDK/DIUXhTtAGniEckjBQUOASnfRHTCuoKHJ0V9LsfzWNhGly5ax+yfM6St4
+	 7EY/Xz8XOd5ABoNq+GY5/1U0RpvA3ELODwj0Wj+b94O27e2yFRHaOVFnfEP0KCHaYn
+	 zpUiehOGzBHFUXvkHKcIDluzDJMUtnMyCc2+mQZOTcOkvGSPn/L5EqiFZ0Bd4R1cfq
+	 QwMhhAbuF5hhwrID9wfWs8YvCk1pKkTHGL3TwI1C5LZ71bYY82iUjC0n4YG3WV+W8u
+	 X/5wDSDkJv5Yg==
+Message-ID: <88046eb3-603c-4296-9a9f-616a6f37c610@kernel.org>
+Date: Mon, 13 Apr 2026 08:46:38 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spam-Level: 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v1 1/2] nexthop: fix IPv6 route referencing IPv4
+ nexthop
+Content-Language: en-US
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260413114522.147784-1-jiayuan.chen@linux.dev>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20260413114522.147784-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Currently, passing an option that requires an argument as the final
-parameter without providing the actual argument causes the script to
-enter an infinite loop.
+On 4/13/26 5:45 AM, Jiayuan Chen wrote:
+> syzbot reported a panic [1] [2].
+> 
+> When an IPv6 nexthop is replaced with an IPv4 nexthop, the has_v4 flag
+> of all groups containing this nexthop is not updated. This is because
+> nh_group_v4_update is only called when replacing AF_INET to AF_INET6,
+> but the reverse direction (AF_INET6 to AF_INET) is missed.
+> 
+> This allows a stale has_v4=false to bypass fib6_check_nexthop, causing
+> IPv6 routes to be attached to groups that effectively contain only AF_INET
+> members. Subsequent route lookups then call nexthop_fib6_nh() which
+> returns NULL for the AF_INET member, leading to a NULL pointer
+> dereference.
+> 
+> Fix by calling nh_group_v4_update whenever the family changes, not just
+> AF_INET to AF_INET6.
+> 
+> Reproducer:
+> 	# AF_INET6 blackhole
+> 	ip -6 nexthop add id 1 blackhole
+> 	# group with has_v4=false
+> 	ip nexthop add id 100 group 1
+> 	# replace with AF_INET (no -6), has_v4 stays false
+> 	ip nexthop replace id 1 blackhole
+> 	# pass stale has_v4 check
+> 	ip -6 route add 2001:db8::/64 nhid 100
+> 	# panic
+> 	ping -6 2001:db8::1
+> 
+> [1] https://syzkaller.appspot.com/bug?id=e17283eb2f8dcf3dd9b47fe6f67a95f71faadad0
+> [2] https://syzkaller.appspot.com/bug?id=8699b6ae54c9f35837d925686208402949e12ef3
+> Fixes: 7bf4796dd099 ("nexthops: add support for replace")
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>  net/ipv4/nexthop.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-Handle this by adding a proper check for the number of positional
-parameters.
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
----
-Note: I hit this while automating some testing, I wasted a couple of
-hours of CPU cycles + energy
----
- tools/testing/selftests/run_kselftest.sh | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-index 84d45254675c..2755c6aa367b 100755
---- a/tools/testing/selftests/run_kselftest.sh
-+++ b/tools/testing/selftests/run_kselftest.sh
-@@ -58,12 +58,24 @@ while true; do
- 			per_test_logging=1
- 			shift ;;
- 		-t | --test)
-+			if [ $# -lt 2 ]; then
-+				echo "Error: option '$1' requires an argument" >&2
-+				usage 1
-+			fi
- 			TESTS="$TESTS $2"
- 			shift 2 ;;
- 		-S | --skip)
-+			if [ $# -lt 2 ]; then
-+				echo "Error: option '$1' requires an argument" >&2
-+				usage 1
-+			fi
- 			SKIP="$SKIP $2"
- 			shift 2 ;;
- 		-c | --collection)
-+			if [ $# -lt 2 ]; then
-+				echo "Error: option '$1' requires an argument" >&2
-+				usage 1
-+			fi
- 			COLLECTIONS="$COLLECTIONS $2"
- 			shift 2 ;;
- 		-l | --list)
-@@ -79,6 +91,10 @@ while true; do
- 			RUN_IN_NETNS=1
- 			shift ;;
- 		-o | --override-timeout)
-+			if [ $# -lt 2 ]; then
-+				echo "Error: option '$1' requires an argument" >&2
-+				usage 1
-+			fi
- 			kselftest_override_timeout="$2"
- 			shift 2 ;;
- 		-h | --help)
--- 
-2.53.0
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
