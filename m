@@ -1,149 +1,229 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70FB2D3EC7;
-	Mon, 13 Apr 2026 04:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40D7394793
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 07:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776055680; cv=none; b=Hkz+mkVtWscjfZUXfXeEaZIeg6yIa/hT24bY0jI1gZAUyFH86brcYtEYK+GidOWR+GKEjYsYfhudR8+Gg58HaSwR+7kAYNLILiSc0/XXyyciJ1aB29AvU4g9qP5ijbXXFzNnn8Ik30OhkwZj+2faofNpk/72bCR0RaL0D1v69+0=
+	t=1776066209; cv=none; b=FMT/nXBYlw0n58Pjz5KoRLPJ5145VZrDL0pOQs+pgVk8IVHLujPoVcCMXVbAuBelaN4+/3OQGzqWDbFFQw2D6YqGmFT8tCNNpUvZwkHrD9sARGa1EwCi+iVLUfDLemXLtw6OVf1qXYrLeFRBbWoB2RTN8TWxW09ngleJ0HI+Lis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776055680; c=relaxed/simple;
-	bh=v/MxTEgt0hfDRYM2J4O78Ddvv5cWzOkaEyqDEpxmr2w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pX9okdWSvUza96cI+ui4X/zsxQH99Mib3kYAIsAITKNn861l+xltjVP5McpbyDeZdRvU4tVWP1NoG3osB1JVyxFjdbfVDSD2Ug7MXqXsEva4+BhdRweTcukaPzMmDqgBt62PcgY154tVtIp6b4pOkafbaos+9EvEBH9JL0vAlQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e2VgYpjK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776066209; c=relaxed/simple;
+	bh=M5UhHgIw8MLkGuym5witH6XqQ7eGPHPU7XznpRaYlqQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GdB5ZKwp7JUDNgqlHnTngr/kbq6/fAXAvccVJHqcZ7Sbn2TArV7Mk81pzzm0BriyGiybiv/EuFoYKO6w1FnaeOd2RZYOpoAZikQ0JISyp60F1UuvgR6JIEJGEESbIJvMoB1QqXLnF5A3SVFrRW8Vihe5v+xMaQPHIY+GTslOaGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GQZF7gAD; arc=none smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e2VgYpjK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA9FBC116C6;
-	Mon, 13 Apr 2026 04:47:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1776055679;
-	bh=v/MxTEgt0hfDRYM2J4O78Ddvv5cWzOkaEyqDEpxmr2w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e2VgYpjKczj7Pun2KG9GFlVkVKtOK9XPyLldoNp8qiHxoU3wsAIZGRnxtetuNi8FQ
-	 98+G+b9+L4tNGlAAvX4YyPbNmD39LuqJSwhQ1oCkBMvl3xW0kpLg9g7ZHLbBRzA+hn
-	 JAlqkYc2BGvmGeMPFkbM70KOsJIe0GLLTVXI64PQ=
-Date: Mon, 13 Apr 2026 06:47:29 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Samuel Wu <wusamuel@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Android Kernel Team <kernel-team@android.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	driver-core@lists.linux.dev, bpf <bpf@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
-Message-ID: <2026041315-oval-rut-cb8d@gregkh>
-References: <20260331153413.2469218-1-wusamuel@google.com>
- <2026040136-ocelot-simply-8981@gregkh>
- <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com>
- <2026040236-kiln-carat-bb6d@gregkh>
- <CAG2Kctpr7vBm_=Xz4H5FHYAfFxg=bDt35j6B4EprfUGio=Ftew@mail.gmail.com>
- <2026040357-undefined-gave-c98e@gregkh>
- <CAG2KctqOLeYm_NFUjGdXQcBo1KhSZpXFQxQdM-DQBV4Mn0ahTw@mail.gmail.com>
- <CAADnVQLELWyv0kuv8wK3FJVFdJPbp-tD8d3p2pgCiVrcw_cVNA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GQZF7gAD"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-12c1a170a50so3666672c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 00:43:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776066204; x=1776671004; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fnm3rAs1EW1zXW14+7Lf/lvhAiqaue6tqPNOeQwzzLE=;
+        b=GQZF7gADbgn9/hvhy+AYZdiCmjHHF4EqLsAsDYNAHa2y+Z7mnqEm/vZWEnOEtJ1CcQ
+         yNhLr+JH2PhsNVuoOiRdxOFK1WYkrFx501v55adf0cfiSp9/WmwqP3jV8FhBpYt/7VLl
+         o9EpEy1giuDsusMwzN1d/LfMxPOjvftL+Co/DjkLlt01aLVJlKgHxWh1Ve63x059L2ZI
+         VDSMDr6F23TdDDf04pnNfQ0NZX5X8SHB2G5h/SPXQB7APtyJX2200Yc5h3BoXz5/1mZL
+         OWv4XpecevyFDFekMsfyZLZCT8RQIfBN8wOU7St4RMGDDZango3VJoXWGsRb5ma0E5+N
+         rlZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776066204; x=1776671004;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fnm3rAs1EW1zXW14+7Lf/lvhAiqaue6tqPNOeQwzzLE=;
+        b=ddFx0Ykfy7roBZIEXiV1bgl/gW+gDJz9VgGtucYy7k29nA7cChSjF7RM5TGGdLamNn
+         D61yxDkOFGesq4n6a+lIFrEPIhYTWfVIYwhhlPG/F58DMhvW4wCpGlFkf3JOFmTztMd7
+         P+n+7E99izRgRR/Mipdpv1yd/0/fRyo+8p79kpf9oZwjSAY47tXuLCOg2q9wsjW3zokT
+         E6GVEb7CiU+UY+nEXXdcIYqTFkYE66VKijfKPHdMIzl5qAPalP+QTfiaVzRC51ahvFrp
+         nCXhikVQIj6Niprs6XDVZL5A8vdeUrjzF+AF/cGlq14H6CfedqC7tlJ9r9cKwqHLHnsk
+         LTmg==
+X-Forwarded-Encrypted: i=1; AFNElJ+jgAaM/G+zkr661301t+2XuolyCUBIBq9q5/32jZPX9RkKtGsXtp2AB0/w/pKMR7Iums2X0MI6ckyXb3KoJGc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzhpb3GgrybZ4B1h/Y5C3p0RUGhPO4cK5Qt6ZB20aUjlZ1misd/
+	4SUh1NdgH4iD0kXNfsneKF3lzT7auo4H6yTzK+sYyKmEFA6yV6H6dXNB
+X-Gm-Gg: AeBDievA2pYr0RoKNZW7lF0EZiZ/SMc3eYibd8ABJkgDaksK+EneDrhg3UOwekm1FDk
+	iiYgHvbFcUbgjFyyFulCetOkl2tAKF+WDUxLpM8lPliV6vIj2aA+eR8EVpXwny9wYnJUbRgCNme
+	UbjAQ7jP+LOmGq6gUI4VlSCmrSYDILZ/RMakOOge4O0I/9UOpBHziHx3DzON3FG0XaL1RzXZkh8
+	di8oBb5fL94xmDI+hNweO5POjPNTZS8LtB9YOiQl3auuYfTbUJ33cefEczx5QpHPVtCvqliqm2H
+	m77gRPoOHt0IHdTnXq5BigtzfujPahc7vhRNT4MMfSYS4P0+fLNnu6BMfZRTXqIMZ3uUS037fjt
+	AG9zcfrDyZwn2Hs8zqdKZRPHLwVISh/LNXBvHH0To114wnQFtwrveBQyZ/6P4mZ4ICXgf+EYuIe
+	YVYF4VeQnXPRYAx+wQ
+X-Received: by 2002:a05:7022:ec1:b0:128:ca83:5aa1 with SMTP id a92af1059eb24-12c34ea25e4mr7053217c88.16.1776066204042;
+        Mon, 13 Apr 2026 00:43:24 -0700 (PDT)
+Received: from wujing. ([74.48.213.230])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c347fa2c9sm12884610c88.15.2026.04.13.00.43.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 00:43:23 -0700 (PDT)
+From: Qiliang Yuan <realwujing@gmail.com>
+Subject: [PATCH v2 00/12] Dynamic Housekeeping Management (DHM) via CPUSets
+Date: Mon, 13 Apr 2026 15:43:06 +0800
+Message-Id: <20260413-wujing-dhm-v2-0-06df21caba5d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLELWyv0kuv8wK3FJVFdJPbp-tD8d3p2pgCiVrcw_cVNA@mail.gmail.com>
+X-B4-Tracking: v=1; b=H4sIAIqe3GkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHQUlJIzE
+ vPSU3UzU4B8JSMDIzMDEwML3fLSrMy8dN2UjFxdizQT41SjFBPL5BQLJaCGgqLUtMwKsGHRsbW
+ 1AC3kgphcAAAA
+To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ "Paul E. McKenney" <paulmck@kernel.org>, 
+ Frederic Weisbecker <frederic@kernel.org>, 
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+ Joel Fernandes <joelagnelf@nvidia.com>, 
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>, 
+ Uladzislau Rezki <urezki@gmail.com>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+ Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+ Tejun Heo <tj@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+ Vlastimil Babka <vbabka@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>, 
+ Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
+ Waiman Long <longman@redhat.com>, Chen Ridong <chenridong@huaweicloud.com>, 
+ =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org, 
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Qiliang Yuan <realwujing@gmail.com>
+X-Mailer: b4 0.13.0
 
-On Sun, Apr 12, 2026 at 03:48:58PM -0700, Alexei Starovoitov wrote:
-> On Fri, Apr 3, 2026 at 9:28 AM Samuel Wu <wusamuel@google.com> wrote:
-> >
-> > On Fri, Apr 3, 2026 at 3:04 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Apr 02, 2026 at 12:37:12PM -0700, Samuel Wu wrote:
-> > > > On Wed, Apr 1, 2026 at 9:06 PM Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > > > >
-> > > > > On Wed, Apr 01, 2026 at 12:07:12PM -0700, Samuel Wu wrote:
-> > > > > > On Wed, Apr 1, 2026 at 2:15 AM Greg Kroah-Hartman
-> > > > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > > >
-> > > > > > > On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
-> >
-> > [ ... ]
-> >
-> > > > The data is fundamental for debugging and improving power at scale.
-> > > > The original discussion and patch [1] provide more context of the
-> > > > intent. To summarize the history, debugfs was unstable and insecure,
-> > > > leading to the current sysfs implementation. However, sysfs has the
-> > > > constraint of one attribute per node, requiring 10 sysfs accesses per
-> > > > wakeup source.
-> > >
-> > > Ok, as the sysfs api doesn't work your use case anymore, why do we need
-> > > to keep it around at all?
-> > >
-> > > > That said, I completely agree that reading 1500+ sysfs files at once
-> > > > is unreasonable. Perhaps the sysfs approach was manageable at the time
-> > > > of [1], but moving forward we need a more scalable solution. This is
-> > > > the main motivator and makes BPF the sane approach, as it improves
-> > > > traversal in nearly every aspect (e.g. cycles, memory, simplicity,
-> > > > scalability).
-> > >
-> > > I'm all for making this more scalable and work for your systems now, but
-> > > consider if you could drop the sysfs api entirely, would you want this
-> > > to be a different type of api entirely instead of having to plug through
-> > > these using ebpf?
-> >
-> > Almost all use cases want all this data at once, so AFAICT BPF offers
-> > the best performance for that. But of course, open to discussion if
-> > there is an alternative API that matches BPF's performance for this
-> > use case.
-> >
-> > I'm not opposed to dropping the sysfs approach, and I attempted to do
-> > so in the v1 patch [1]. I'm not sure who else currently uses those
-> > sysfs nodes, but a config flag should remove friction and could be a
-> > stepping stone toward deprecation/removal.
-> >
-> > [1]: https://lore.kernel.org/all/20260320160055.4114055-3-wusamuel@google.com/
-> 
-> The patches make sense to me.
-> 
-> Patch 2 adds a bpf selftest and corresponding:
-> +CONFIG_DIBS_LO=y
-> +CONFIG_PM_WAKELOCKS=y
-> 
-> and almost green in BPF CI.
-> 
-> Except s390 that fails with:
-> 
-> Error: #682/1 wakeup_source/iterate_and_verify_times
-> Error: #682/1 wakeup_source/iterate_and_verify_times
-> libbpf: extern (func ksym) 'bpf_wakeup_sources_get_head': not found in
-> kernel or module BTFs
-> libbpf: failed to load BPF skeleton 'test_wakeup_source': -EINVAL
-> test_wakeup_source:FAIL:skel_open_and_load unexpected error: -22
-> 
-> We can still land it into bpf-next for this merge window.
-> 
-> Greg,
-> any objection ?
+This series introduces Dynamic Housekeeping Management (DHM) to the
+Linux kernel.
 
-Yes, it is too late for 7.1-rc1, sorry, there will have not been any
-time in linux-next to add it.  Let's revisit it after -rc1 is out, and
-again, I feel that "walk all sysfs devices in bpf" is not the correct
-solution for a system-wide snapshot interface you want to have,
-especially as the one you previously added you feel is now obsolete.
+Previously known as the DHEI (Dynamic Housekeeping Environment Interface)
+patchset (RFC and v1), this series has been fundamentally refactored in
+response to upstream feedback. The custom sysfs interface has been entirely
+dropped. Instead, DHM is now natively integrated into the cgroup v2
+cpuset controller.
 
-thanks,
+By exposing `cpuset.housekeeping.cpus` on the root cgroup, system
+administrators and workload orchestrators (like Kubernetes) can
+dynamically update the kernel's global housekeeping masks at runtime,
+without requiring a node reboot.
 
-greg k-h
+This version provides dynamic reconfiguration support for the following
+subsystems:
+- RCU (NOCB offloading)
+- Tick/NOHZ (Full dynticks)
+- Global Workqueues and Timers
+- Managed Interrupts (genirq)
+- Hardlockup Detectors (Watchdog)
+- Scheduler Domains (Isolation)
+- Memory Management (vmstat/lru_add_drain)
+- Kthreads and Softirqs (Affinity)
+
+Many thanks to the maintainers for the valuable guidance that led to this
+significantly improved and upstream-aligned architecture.
+
+To: Ingo Molnar <mingo@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
+To: Juri Lelli <juri.lelli@redhat.com>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Ben Segall <bsegall@google.com>
+To: Mel Gorman <mgorman@suse.de>
+To: Valentin Schneider <vschneid@redhat.com>
+To: Paul E. McKenney <paulmck@kernel.org>
+To: Frederic Weisbecker <frederic@kernel.org>
+To: Neeraj Upadhyay <neeraj.upadhyay@kernel.org>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+To: Josh Triplett <josh@joshtriplett.org>
+To: Boqun Feng <boqun@kernel.org>
+To: Uladzislau Rezki <urezki@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Lai Jiangshan <jiangshanlai@gmail.com>
+To: Zqiang <qiang.zhang@linux.dev>
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>
+To: Ingo Molnar <mingo@kernel.org>
+To: Thomas Gleixner <tglx@kernel.org>
+To: Tejun Heo <tj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+To: Vlastimil Babka <vbabka@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+To: Michal Hocko <mhocko@suse.com>
+To: Brendan Jackman <jackmanb@google.com>
+To: Johannes Weiner <hannes@cmpxchg.org>
+To: Zi Yan <ziy@nvidia.com>
+To: Waiman Long <longman@redhat.com>
+To: Chen Ridong <chenridong@huaweicloud.com>
+To: Michal Koutný <mkoutny@suse.com>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: rcu@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: cgroups@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+Changes in v2:
+- Rebranded series from DHEI to DHM (Dynamic Housekeeping Management).
+- Entirely dropped custom sysfs interface.
+- Integrated housekeeping control into cgroup v2 cpuset controller
+  at the root level.
+- Added SMT-aware pipeline logic (cpuset.housekeeping.smt_aware) to
+  prevent splitting SMT siblings.
+- Added comprehensive documentation and cgroup functional selftests for
+  the DHM APIs.
+- Refactored the internal mask transition logic to use RCU-safe
+  handover.
+- Separated patch series into 4 logical phases for review.
+
+v1 Link: https://lore.kernel.org/all/20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com
+
+Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
+---
+Qiliang Yuan (12):
+      sched/isolation: Separate housekeeping types in enum hk_type
+      sched/isolation: Introduce housekeeping notifier infrastructure
+      rcu: Support runtime NOCB initialization and dynamic offloading
+      tick/nohz: Transition to dynamic full dynticks state management
+      genirq: Support dynamic migration for managed interrupts
+      watchdog: Allow runtime toggle of lockup detector affinity
+      sched/core: Dynamically update scheduler domain housekeeping mask
+      workqueue, mm: Support dynamic housekeeping mask updates
+      cgroup/cpuset: Introduce CPUSet-driven dynamic housekeeping (DHM)
+      cgroup/cpuset: Implement SMT-aware grouping and safety guards
+      Documentation: cgroup-v2: Document dynamic housekeeping (DHM)
+      selftests: cgroup: Add functional tests for dynamic housekeeping
+
+ Documentation/admin-guide/cgroup-v2.rst      |  24 +++++
+ include/linux/sched/isolation.h              |  51 ++++++++---
+ kernel/cgroup/cpuset-internal.h              |   2 +
+ kernel/cgroup/cpuset.c                       |  73 +++++++++++++++
+ kernel/irq/manage.c                          |  49 ++++++++++
+ kernel/rcu/rcu.h                             |   4 +
+ kernel/rcu/tree.c                            |  75 ++++++++++++++++
+ kernel/rcu/tree.h                            |   2 +-
+ kernel/rcu/tree_nocb.h                       |  31 ++++---
+ kernel/sched/core.c                          |  23 +++++
+ kernel/sched/isolation.c                     |  74 ++++++++++++++-
+ kernel/time/tick-sched.c                     | 130 +++++++++++++++++++++------
+ kernel/watchdog.c                            |  26 ++++++
+ kernel/workqueue.c                           |  42 +++++++++
+ mm/compaction.c                              |  27 ++++++
+ tools/testing/selftests/cgroup/test_cpuset.c |  36 ++++++++
+ 16 files changed, 620 insertions(+), 49 deletions(-)
+---
+base-commit: bfe62a454542cfad3379f6ef5680b125f41e20f4
+change-id: 20260408-wujing-dhm-8f43e2d49cd8
+
+Best regards,
+-- 
+Qiliang Yuan <realwujing@gmail.com>
+
