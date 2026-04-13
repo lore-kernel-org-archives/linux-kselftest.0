@@ -1,74 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6E53BF688;
-	Mon, 13 Apr 2026 14:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E1E125A9;
+	Mon, 13 Apr 2026 15:53:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776091667; cv=none; b=UJ6kRvKDP5vHIiSb654ixgsk6nczQ8ugnYnpw9mnY63q/davZhvLKL1MRU1pldTNdBYk3ChRvlmdTDA9iVCJROvuSOVRAtUYF871cEa5chuRKh5speZ6/JBMhOn7N2xunouYXqC6KQA6IVDqToLQzpP+P6sodQmPuXWk4Uh4oT4=
+	t=1776095616; cv=none; b=dix1E8+no/Yv00CqE+12xxhLy1Tc1LMm5q1dPd7v84eHhircEjMyUxdwhW+EzRiSFPx1hrGjNqQiKAkim3+TbF2Iw6aQDKMt5m7i5jsXJQ/bOcP5HGYe6i0J3Xqf7Eo3/FjbkE+3sZUF3Fr3Pv8sVNbKKeoxpYqRspcssPR6ZFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776091667; c=relaxed/simple;
-	bh=J2ozv3jkSoH0KVJITX1EXK8AaUpbGFdIJW3lFO3MPnw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H3GK3FabJ4KsxLBOaEbw+EjDVSrzBOR7QHiWokwjyAFeMOm0F3imreq7w3b5UF/VXqRyp12LNlw8WPvhq94oBmkm+OLfa0hULryYfUP6mIRbY9Dr7nwQrkbJv7kZ+Er5lNadHR9YG2GqFSFoW8ocitaj2oKuBW0SC3OX4mO/+70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QYeLeuxj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776095616; c=relaxed/simple;
+	bh=9M6tnLgIr+sMqBYY17RTZRwcr2YkcNi64g6q6UG2hdk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B4QeJ3Fse7ZUlZRvHFYiAwiWiR1QZ4Ao3tyZC+Hd81uZ54QiiLIFxjpn4XgFR3UfkgBq4E+tbBA4IAC6+eRIoi5AxlwJ7mFfmthYaFDSne6AqLUvFpPxy4c3zhYNbCgR8d7EDbyjJf1UDFBfoYaG9Skx/IqugIE4rGlM2885FAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ia0sDvZ4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QYeLeuxj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0710C2BCB0;
-	Mon, 13 Apr 2026 14:47:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ia0sDvZ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00D0C2BCAF;
+	Mon, 13 Apr 2026 15:53:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776091667;
-	bh=J2ozv3jkSoH0KVJITX1EXK8AaUpbGFdIJW3lFO3MPnw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QYeLeuxj4sdE5rneKSY+h8jJxE6/GYgLTim20Xp2oD6j2pXfknIgFeQzkNEf+qEQh
-	 o8qlx0WGBJ1bSib0hJCXGK9ZrLInLHyiABmSVMWUlRXKML1pNrG9vFrzsCTfkM2xHt
-	 QuyqfttUfigjRx8Vqo7R/Nx/llLMkcAx6gIjoovJ/1yo1dA7G0uu2MS70G++mmuWZV
-	 29OSpZCWPN1ecL8/1z7FxbfxA+EDJJJVUHqgLpqQ/BF1apipoXiGYpjESpLKhKimvV
-	 2ONgsoy/0aUJr72dktZZFADVeXpZ4bmHN3zI9aTPFaHppn8/rsC/6kVjZ7hM+KoXOw
-	 j/trz+CJHgnBg==
-Message-ID: <abaaa506-2e87-4aa1-9072-b1675a4bd21f@kernel.org>
-Date: Mon, 13 Apr 2026 08:47:46 -0600
+	s=k20201202; t=1776095616;
+	bh=9M6tnLgIr+sMqBYY17RTZRwcr2YkcNi64g6q6UG2hdk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ia0sDvZ4lmIa/fXnarKKku6xXJW3V+56XzaeZOpO6F3X8Ow8pD6wXa3N/3VWNOAaj
+	 ybUrRO4+LWB/5UiKpAQ4KCdCijHpeH92xtAcIsSXadz4Mjdwsy6+q6BRwZwIRZuukC
+	 rOlAtExAFewHXIQ9FAu0e5DUTneN75JJM7i5S3d00aZi3kXvvwQSnxf9KvBEmlcmTd
+	 JIWQwF74SQOLwTJArhFb2WflOc5KaoUtx84BBU2DXw4Z8AmFmuiOPXOMlpp13767Th
+	 4qOLCEHoEV9tnM0NFO2zR/uV3LdtOOzTFqT322eQxO1KOeIgxzYadv6TGqsVCZvUwF
+	 OMb79RWzbXHAQ==
+Date: Mon, 13 Apr 2026 18:53:32 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+Message-ID: <20260413155332.GL21470@unreal>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal>
+ <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal>
+ <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal>
+ <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v1 2/2] selftests: fib_nexthops: test stale has_v4 on
- nexthop replace
-Content-Language: en-US
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260413114522.147784-1-jiayuan.chen@linux.dev>
- <20260413114522.147784-2-jiayuan.chen@linux.dev>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20260413114522.147784-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
 
-On 4/13/26 5:45 AM, Jiayuan Chen wrote:
-> Add test cases that exercise the scenario where an IPv6 nexthop is
-> replaced with an IPv4 nexthop while being part of a group. The group's
-> has_v4 flag must be updated so that subsequent IPv6 route additions are
-> properly rejected.
+On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
+> On Sun, Apr 12, 2026 at 5:00 AM Leon Romanovsky <leon@kernel.org> wrote:
+> > On Thu, Apr 09, 2026 at 05:04:24PM -0400, Paul Moore wrote:
+> > > On Thu, Apr 9, 2026 at 8:45 AM Leon Romanovsky <leon@kernel.org> wrote:
+> > > > On Thu, Apr 09, 2026 at 02:27:43PM +0200, Roberto Sassu wrote:
+> > > > > On Thu, 2026-04-09 at 15:12 +0300, Leon Romanovsky wrote:
+> > > > > > On Tue, Mar 31, 2026 at 08:56:32AM +0300, Leon Romanovsky wrote:
 > 
-> Two cases are covered:
->   1. Gateway nexthop replaced across families with an existing IPv6
->      route on the group (rejected by fib6_check_nh_list).
->   2. Blackhole nexthop replaced across families with no existing IPv6
->      route on the group (fib6_check_nh_list returns early) — this is
->      the path that triggers a NULL ptr deref without the kernel fix.
+> ...
 > 
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  tools/testing/selftests/net/fib_nexthops.sh | 22 +++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+> > > > We implemented this approach in v1:
+> > > > https://patch.msgid.link/20260309-fw-lsm-hook-v1-0-4a6422e63725@nvidia.com
+> > > > and were advised to pursue a different direction.
+> > >
+> > > I'm assuming you are referring to my comments? If so, that isn't exactly what I said,
+> > > I mentioned at least one other option besides
+> > > going directly to BPF.  Ultimately, it is your choice to decide how
+> > > you want to proceed, but to claim I advised you to avoid a LSM based
+> > > solution isn't strictly correct.
+> >
+> > Yes, this matches how we understood your comments:
+> > https://lore.kernel.org/all/20260311081955.GS12611@unreal/
+> >
+> > In the end, the goal is to build something practical and avoid adding
+> > unnecessary complexity that brings no real benefit to users.
+> >
+> > > Regardless, looking at your v2 patchset, it looks like you've taken an
+> > > unusual approach of using some of the LSM mechanisms, e.g. LSM_HOOK(),
+> > > but not actually exposing a LSM hook with proper callbacks.
+> > > Unfortunately, that's not something we want to support.  If you want
+> > > to pursue an LSM based solution, complete with a security_XXX() hook,
+> > > use of LSM_HOOK() macros, etc. then that's fine, I'm happy to work
+> > > with you on that.
+> >
+> > The issue is that the sentence below was the reason we did not merge v1 with v2:
+> > https://github.com/LinuxSecurityModule/kernel/blob/main/README.md#new-lsm-hooks
+> > "pass through implementations, such as the BPF LSM, are not eligible for
+> > LSM hook reference implementations."
 > 
+> I can expand on that in a minute, but I'd like to return to your use
+> of the LSM_HOOK() macro and locating the hook within the BPF LSM as
+> that is the most concerning issue from my perspective.  One should
+> only use the LSM_HOOK() macro and locate code within bpf_lsm.c if that
+> code is part of the BPF LSM, utilizing an LSM hook.  Since this
+> patchset doesn't use an LSM hook or any part of the LSM framework, the
+> implementation choices seem odd and are not something we want to
+> support.  As mentioned in my prior reply, you could do something very
+> similar though the use of a normal BPF hook similar to what was done
+> with the update_socket_protocol() BPF hook.
+> 
+> There are multiple reasons why out-of-tree and pass through LSMs are
+> not considered eligible for reference implementations of LSM hooks.  I
+> think is most relevant to this patchset is that an out-of-tree hook
+> implementation doesn't necessarily require a stable interface, and
+> without a stable interface it is impossible to make a generic API at
+> the LSM framework layer.  As you mentioned previously, each vendor and
+> each firmware version brings the possibility of a new
+> format/interface, and while that may not be a problem for out-of-tree
+> code which is left to the user/admin to manage, it makes upstream
+> development difficult.  I did mention at least one approach that might
+> be a possibility to enable upstream, in-tree support of this, but you
+> seem to prefer a BPF approach that doesn't require a well defined
+> format.
+> 
+> > > However, if you've decided that your preferred
+> > > option is to create a BPF hook you should avoid using things like
+> > > LSM_HOOK() and locating your hook/code in bpf_lsm.c.
+> >
+> > We are not limited to LSM solution, the goal is to intercept commands
+> > which are submitted to the FW and "security" bucket sounded right to us.
+> 
+> Yes, it does sound "security relevant", but without a well defined
+> interface/format it is going to be difficult to write a generic LSM to
+> have any level of granularity beyond a basic "load firmware"
+> permission.
+> 
+> > > The good news is that there are plenty of other examples of BPF
+> > > plugable code that you could use as an example, one such thing is the
+> > > update_socket_protocol() BPF hook that was originally proposed as a
+> > > LSM hook, but moved to a dedicated BPF hook as we generally want to
+> > > avoid changing non-LSM kernel objects within the scope of the LSMs.
+> > > While your proposed case is slightly different, I think the basic idea
+> > > and mechanism should still be useful.
+> > >
+> > > https://lore.kernel.org/all/cover.1692147782.git.geliang.tang@suse.com
+> >
+> > Thanks
+> 
+> Good luck on whatever you choose, and while I'm guessing it is
+> unlikely, if you do decide to pursue a LSM based solution please let
+> us know and we can work with you to try and find ways to make it work.
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+Thanks a lot. We should know which direction we'll take in a week or two,
+once Chiara wraps up her internal commitments and returns to this series.
 
+I appreciate your help.
+
+Thanks
+
+> 
+> -- 
+> paul-moore.com
+> 
