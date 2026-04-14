@@ -1,57 +1,57 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085A83A6416;
-	Tue, 14 Apr 2026 08:23:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC813ACA65;
+	Tue, 14 Apr 2026 08:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776155025; cv=none; b=Yd5xGA9QesirPt+TgkO7z/rljz/Zt9gBeZv57CfS3G8JSWRqKpIG657NQ52hx9Th/SzXtNtSS/bDScqOcZEBy8gHdpF7kEVyekuZA1zCKQnWhfjvoRo6q0I/FQVwgqgEOIuvN7/lqFBgBAuJf5xEWNA8UTNZ0PG4NGu3mLiSJ+s=
+	t=1776155028; cv=none; b=kwxhKaK3lH5/fRg5YQCN9Qp3mkQTDnWeeoEhYYlYnC05O1ZSfFZBAsEkdxYWew1HmrRZdG8CzM/ZX3wy7bNHuW9a1xmb3C12FR8f0PjbSP7zBfDyJz+dTlGEutslqFni1Zan3NkxtQudMqMtmX7eIyD5eD6T8NX+kDSBil/uevQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776155025; c=relaxed/simple;
-	bh=hFW5u/GVDAmyeKRCDYDTF3OMxGCu5CjcIbXGIWFMql0=;
+	s=arc-20240116; t=1776155028; c=relaxed/simple;
+	bh=By+tRUXDGAmNYAxoiodYvHKMYwQfJLI1MDYXk9H9pWE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AlHsG6b4tIOonFNDhbIcs7CO3BIxysAU0DsaipiXCy00S1Vs1nhACLCNzKuCBE9f4n3i/q5FAiQpYsZgj+JrSuFZHbOT1iLpqYXoCTSOyN/KPKnyfMAKLlNHVo20Pmct9xSWcdLHFvchq69dkJ66iNSYi6ldWsaHjHrfUh+o8Lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eI2dEIL5; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=Ng8XHVNpmEFgim8+FOipqU/wdlL8N7hHrMTPBl6duigniOhCDBfvYMPaX0VSdQF3Zz8J9/apRoPRcP1hCeGEfAqmAjBFKKeyxwNxi0dq1qqAciBGUwsyJAJgRNu2ZbEmQog6VDalCDdWx2TmlFlCt2nG2jRUfLPuECnhlWkLPw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Vkd/bYnE; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eI2dEIL5"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLIXM62130702;
-	Tue, 14 Apr 2026 08:23:27 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Vkd/bYnE"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLJ8NK1834698;
+	Tue, 14 Apr 2026 08:23:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=NcC4IMd/M46lcIebN
-	KowLxjbupegKYGulhXVqQiEBho=; b=eI2dEIL56Wy0EC3zsp4KgYqkPMzm/hhqh
-	dh1JUPS1qesA0y3PzsyIrvImn+sqqke6CxDvDHz6b747KPIVoRE9SNl5hpd2vf8p
-	+dhrxJOC843Pbv2Uad4ve6ZwEMxYm8O4ZRbSOs4Wu2QSYHu7DCE1JveuWxPsMV/t
-	1G9PUBM6Tu3I6yxs27oh7ONTMKr5dYrs9+uqUUx5LXdj4uzEO10SWdJ62OVm8G0M
-	ElD2KII2cPBnYqAuDtTShF5YgwC3yaBOCqClIh7UifNUlkQYJXd2oFlyrRKXiNjM
-	eVNzW/uD3FO78nP79xf3kCQYY/N4fq9ZWrbpWJdgnjksxxgNiDxUA==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89n9spy-1
+	:mime-version:references:subject:to; s=pp1; bh=iCumWvX/ac3jXvh4F
+	1ZXlL3cuNPYnkwd3hOEkAJPAF4=; b=Vkd/bYnEdECk+Adr7PcmWYAGy5r5K1pf0
+	IsbG2Mi9CoUgzMAmfoeWt6Xz2hhtYf18tyvbvM+hDrEQemhaq9QfiuO9AQXjxVdb
+	gaD2tYNUc3SJj7coddjO+ldhZhgOvcuBhfs+ZQBYoZohDh+my2M5O9R0FlwTOzuh
+	n6hs/q7dHbp2iirLqThnKtGhgsi22CYeacXSDBGAIaH5ghjb6F5nxS+UukQhVZjx
+	chdgK8F2UUqjVyNuvA1EJrf7qeydakva1SGVZZqAMFyRN2YVYVZh+owriVmd85jV
+	ccAYLZtMtmZYhF4vvcvuGzu1DGt8so4qq8CM4JoJKNOCmSZpBHgMQ==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89r9sfj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 08:23:26 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63E3gDLB015149;
-	Tue, 14 Apr 2026 08:23:25 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dg0msgru7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 08:23:25 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63E8NMqA42008954
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Apr 2026 08:23:22 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3944920040;
 	Tue, 14 Apr 2026 08:23:22 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63E4suMx004179;
+	Tue, 14 Apr 2026 08:23:21 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg24k8ht3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Apr 2026 08:23:21 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63E8NHfM15794638
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Apr 2026 08:23:17 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 088EA2004E;
-	Tue, 14 Apr 2026 08:23:18 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 98CD920043;
+	Tue, 14 Apr 2026 08:23:17 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9A5E62004D;
+	Tue, 14 Apr 2026 08:23:13 +0000 (GMT)
 Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.ibm.com.com (unknown [9.39.26.223])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 Apr 2026 08:23:17 +0000 (GMT)
+	Tue, 14 Apr 2026 08:23:13 +0000 (GMT)
 From: Sayali Patil <sayalip@linux.ibm.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -64,9 +64,9 @@ Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
         linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
         Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
         Sayali Patil <sayalip@linux.ibm.com>
-Subject: [PATCH v5 14/14] selftests/mm: clarify alternate unmapping in compaction_test
-Date: Tue, 14 Apr 2026 13:52:08 +0530
-Message-ID: <15427e424f95147b856474b77d9389b657ef0f7e.1776150071.git.sayalip@linux.ibm.com>
+Subject: [PATCH v5 13/14] selftests/mm: move hwpoison setup into run_test() and silence modprobe output for memory-failure category
+Date: Tue, 14 Apr 2026 13:52:07 +0530
+Message-ID: <ec5a0e5e98c4fe55b8571c408ca891bd02208cc3.1776150071.git.sayalip@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1776150071.git.sayalip@linux.ibm.com>
 References: <cover.1776150071.git.sayalip@linux.ibm.com>
@@ -79,54 +79,170 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: T0_jg1t3gdnF1lk-h5NiGazBt5I7iygi
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDA3NyBTYWx0ZWRfX/8eiTCjkRVf/
- CDlXSF/ZHW+dMyylwuR+1pik44Rvj7wgiWN0W9/KY/FvEYaY62qX+UHtqi2i/prza03XH/cFMJS
- zG3yFDSp1XGkda7T+Kuj+Wf3XkAFmYoAE1BunLWfV9uQdKlQEshWJ75fny8wqf4cvgKDGdw1vQ3
- KxvsjAYscOgrqodOvthZrG/MJfCoeVKpY34K01TrNxd2yMTb179LjECHU0CbmNyTP8zCwgqNY1f
- IApwLrAG10h2VS5hJZ97ai0Tor8T78cLnpTv+fqYoVFKVglfIVGx5Wcx8f6MzxLjVhZwNfVNHE+
- 7ZPblCsZGIyaVy5XgIzdT27tXZE9rGnnOdwaycUm8WWcGaSC+moSDvUIGla5jkBPQwh1Lt3DdtZ
- NQOEI4FAMfYVnXhj+zgmJlC4VHlNdeW6RmHdXxZUNm0t2U6tIqtVQPxikusPav0a7R4B20aCA+J
- EUsF0s/TIEi8vppBesA==
-X-Proofpoint-ORIG-GUID: CaUNY_Bht_4C5dirHMU1MvsaTvVE0hDM
-X-Authority-Analysis: v=2.4 cv=FY4HAp+6 c=1 sm=1 tr=0 ts=69ddf97f cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDA3NyBTYWx0ZWRfX5ABL9MhlKMiS
+ IZ8T3OISac/cfvyB7e0yO7isf51Eji0Pu0DIsl3b+KrS3nT6D+r2G9StCY/2arzCcQMoKZ1X90N
+ GqVORKHJVmoZ+RkDkavyeOmm19NxAGoT08P23f922NDqwlUv3ytMha4Bu6t8lzZKvGLeNDjMm/V
+ gWaexN5sz3ccXbSEP7RFh4o2Md/WbhvvOCVtYxB81ywgIUB9jXInJvxkaLMmRK9ezEZxAVcKGuH
+ uz2Bhh381vCrpq3Iofc3Zyx4uCkx7EMpiPWhrULiTYJIFroJnPWa9LdQjv43dOSI2xP9pS24HXx
+ Z4fPGAIXbXUNtlUxk+U7jdU8sFXTNMWH84YqdzvUSzZxF9TUuJzg8Hsl5wb/0sdpiTeuA7Ink+l
+ EN8RmuTHodJJq5qb+h5/bVpSl5d2j/hdc74EI1h9eV+xqkA/FcBrhj/SPFaJ2o4DVRSneFNY0kr
+ XRXDzUvv4m4M/pJQCGQ==
+X-Proofpoint-ORIG-GUID: uFrQIKN5WM9lAcwSJUA3irW3UnP4U4wF
+X-Proofpoint-GUID: 8w_gV9ei4Z6ZlLW6S7AyAzvbHThjrPju
+X-Authority-Analysis: v=2.4 cv=fYidDUQF c=1 sm=1 tr=0 ts=69ddf97b cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8 a=THlBPJCoSQ4NST9nLWYA:9
+ a=U7nrCbtTmkRpXpFmAIza:22 a=Ikd4Dj_1AAAA:8 a=VnNF1IyMAAAA:8
+ a=w_JUWIshtjp1QPcyv1YA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-14_02,2026-04-13_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 bulkscore=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 malwarescore=0 phishscore=0
+ adultscore=0 impostorscore=0 clxscore=1015 malwarescore=0 phishscore=0
+ bulkscore=0 priorityscore=1501 spamscore=0 suspectscore=0 lowpriorityscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604140077
 
-Add a comment explaining that every other entry in the list is
-unmapped to intentionally create fragmentation with
-locked pages before invoking check_compaction().
+run_vmtests.sh contains special handling to ensure the hwpoison_inject
+module is available for the memory-failure tests. This logic was
+implemented outside of run_test(), making the setup category-specific
+but managed globally.
 
-Fixes: bd67d5c15cc1 ("Test compaction of mlocked memory")
+Move the hwpoison_inject handling into run_test() and restrict it
+to the memory-failure category so that:
+1. the module is checked and loaded only when memory-failure tests run,
+2. the test is skipped if the module or the debugfs interface
+(/sys/kernel/debug/hwpoison/) is not available.
+3. the module is unloaded after the test if it was loaded by the script.
+
+This localizes category-specific setup and makes the test flow
+consistent with other per-category preparations.
+
+While updating this logic, fix the module availability check.
+The script previously used:
+
+	modprobe -R hwpoison_inject
+
+The -R option prints the resolved module name to stdout, causing every
+run to print:
+
+	hwpoison_inject
+
+in the test output, even when no action is required, introducing
+unnecessary noise.
+
+Replace this with:
+
+	modprobe -n hwpoison_inject
+
+which verifies that the module is loadable without producing output,
+keeping the selftest logs clean and consistent.
+
+Also, ensure that skipped tests do not override a previously recorded
+failure. A skipped test currently sets exitcode to ksft_skip even if a
+prior test has failed, which can mask failures in the final exit status.
+Update the logic to only set exitcode to ksft_skip when no failure has
+been recorded.
+
+Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
+Reviewed-by: Zi Yan <ziy@nvidia.com>
 Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 ---
- tools/testing/selftests/mm/compaction_test.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/mm/run_vmtests.sh | 52 ++++++++++++++---------
+ 1 file changed, 33 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
-index 30209c40b697..e1610e2fbdf6 100644
---- a/tools/testing/selftests/mm/compaction_test.c
-+++ b/tools/testing/selftests/mm/compaction_test.c
-@@ -261,6 +261,9 @@ int main(int argc, char **argv)
- 		mem_fragmentable_MB -= MAP_SIZE_MB;
- 	}
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index afdcfd0d7cef..62dcfbb9887b 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -235,6 +235,7 @@ pretty_name() {
+ run_test() {
+ 	if test_selected ${CATEGORY}; then
+ 		local skip=0
++		local LOADED_HWPOISON_INJECT_MOD=0
  
-+	/* Unmap every other entry in the list to create fragmentation with
-+	 * locked pages before invoking check_compaction().
-+	 */
- 	for (entry = list; entry != NULL; entry = entry->next) {
- 		munmap(entry->map, MAP_SIZE);
- 		if (!entry->next)
+ 		# On memory constrainted systems some tests can fail to allocate hugepages.
+ 		# perform some cleanup before the test for a higher success rate.
+@@ -250,6 +251,28 @@ run_test() {
+ 			fi
+ 		fi
+ 
++		# Ensure hwpoison_inject is available for memory-failure tests
++		if [ "${CATEGORY}" = "memory-failure" ]; then
++			# Try to load hwpoison_inject if not present.
++			HWPOISON_DIR=/sys/kernel/debug/hwpoison/
++			if [ ! -d "$HWPOISON_DIR" ]; then
++				if ! modprobe -n hwpoison_inject > /dev/null 2>&1; then
++					echo "Module hwpoison_inject not found, skipping..." \
++						| tap_prefix
++					skip=1
++				else
++					modprobe hwpoison_inject > /dev/null 2>&1
++					LOADED_HWPOISON_INJECT_MOD=1
++					if [ ! -d "$HWPOISON_DIR" ]; then
++						echo "hwpoison debugfs interface not present" \
++							| tap_prefix
++						skip=1
++					fi
++				fi
++			fi
++
++		fi
++
+ 		local test=$(pretty_name "$*")
+ 		local title="running $*"
+ 		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+@@ -261,6 +284,12 @@ run_test() {
+ 		else
+ 			local ret=$ksft_skip
+ 		fi
++
++		# Unload hwpoison_inject if we loaded it
++		if [ -n "${LOADED_HWPOISON_INJECT_MOD}" ]; then
++			modprobe -r hwpoison_inject > /dev/null 2>&1
++		fi
++
+ 		count_total=$(( count_total + 1 ))
+ 		if [ $ret -eq 0 ]; then
+ 			count_pass=$(( count_pass + 1 ))
+@@ -270,7 +299,9 @@ run_test() {
+ 			count_skip=$(( count_skip + 1 ))
+ 			echo "[SKIP]" | tap_prefix
+ 			echo "ok ${count_total} ${test} # SKIP" | tap_output
+-			exitcode=$ksft_skip
++			if [ $exitcode -eq 0 ]; then
++				exitcode=$ksft_skip
++			fi
+ 		else
+ 			count_fail=$(( count_fail + 1 ))
+ 			echo "[FAIL]" | tap_prefix
+@@ -529,24 +560,7 @@ CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
+ 
+ CATEGORY="rmap" run_test ./rmap
+ 
+-# Try to load hwpoison_inject if not present.
+-HWPOISON_DIR=/sys/kernel/debug/hwpoison/
+-if [ ! -d "$HWPOISON_DIR" ]; then
+-	if ! modprobe -q -R hwpoison_inject; then
+-		echo "Module hwpoison_inject not found, skipping..."
+-	else
+-		modprobe hwpoison_inject > /dev/null 2>&1
+-		LOADED_MOD=1
+-	fi
+-fi
+-
+-if [ -d "$HWPOISON_DIR" ]; then
+-	CATEGORY="memory-failure" run_test ./memory-failure
+-fi
+-
+-if [ -n "${LOADED_MOD}" ]; then
+-	modprobe -r hwpoison_inject > /dev/null 2>&1
+-fi
++CATEGORY="memory-failure" run_test ./memory-failure
+ 
+ if [ "${HAVE_HUGEPAGES}" = 1 ]; then
+ 	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
 -- 
 2.52.0
 
