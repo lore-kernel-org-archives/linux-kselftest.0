@@ -1,184 +1,159 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21063ECBDC;
-	Tue, 14 Apr 2026 14:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776176662; cv=none; b=Pn6SM+rhlhmLrWqGFwKAyNYtfOBt+leyZkWbfx4kzP5Y4UgAlwHWaNyV5KgNoArfAjZS3yzqzJiTF11GJYqBKsvmNXo7ilkm2peKcaKaCmAbLXVkTdzPccOoTd+vX1mvIqWY9K4lIoq0ZDw4QFTL/DSvzgkBfc1YQBveKHBduFk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776176662; c=relaxed/simple;
-	bh=JOrKkTDm1XzgTTaELyjAW2UoqQARrYaRgnDxMrWX3CU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=N0llUwFA6B9AzDj4X4WR4e9b8ZqqIWJnF0/fe7m1RBsgu6uSn7GG7JlhgbIlfr5RVxJANruwHhAsqxG31VmI3fOjAvm6isJKDJtNsaFDvoYOQIHdAY/QMebxHMK85DgXoxEZKEY1MNIGmjB2CHZOJID33rEo4El2TFLO+pWZP2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Fm6WRvaC; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2A93E5564
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 14:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776177379; cv=pass; b=S5W5aSh8+zsSIseN9Ke1Nuap3QQZThnIBCdqqGLdiu9rzbXPSZQ3Fjk/Ci2NE22L4bMXPrhQdm1RYzseDRv3kN5Oz7OSDtTCXjg+BkytQVY6wkUQj12EZg0QsOhGWuYx25FwPXkEkXham6W33QaPWL6E0hDGj9Jeo8hK1OvU2Tw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776177379; c=relaxed/simple;
+	bh=AnsEV6VHaHqEew+Xa56Ltrfs2MD3YtoIUeXjaty5EkY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JqnYYBYlyMNySY92pFf1JJ2T9HRVjVjL5bp3ZIcRgrwPaCevgcPzRuv76NHDxhcKTBmxyyiSl9FzhmLhr3P/wDdTnF29OrtLsidKLpMGqtcyEJ/JjCLuCQuvENSTavCfsA5tgnJI3o1mI24X3YgXFnP7nvkWoeRX/zJCD+XZ9Tk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PUlTTsC3; arc=pass smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Fm6WRvaC"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63EDdDLY1843301;
-	Tue, 14 Apr 2026 14:24:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=ZNJzfHIy1flRiox+Cj0xOPKmjQyx
-	791M6XLeQQKnW8Q=; b=Fm6WRvaC8aUGGI2q3l20RW2RyWuxTDY3Dxyci8Zec4/A
-	rDyjUAzOcnHX0eWDo83vlRIsqFBZbGn0xKPWjsIdzXHn7uXzS+ZceNqcVSX23l3M
-	YKFTqYE911/Wd+/XRPMqqYxsAoDp7UzjynKNQ+QaLGia+IVHh7nuR8jxCCtZJcfl
-	qffqaPDf4u9qRb7n/HPzH56zZclF306VOlob95+GSbbJbE/xIH88jaFmsWqfBnPt
-	geXEncCKOybadwoP79OalyvdR9a9qJ3PKQTIxgMvKgIHCA0lcHu9PHFtjb72ivEu
-	O0Pzs+R+/ypetC/4xeAg9NsyjdH293jT8Bl0kbZbag==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89mk503-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 14:24:03 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63EE114X003557;
-	Tue, 14 Apr 2026 14:24:02 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg1mn9tbh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 14:24:02 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63EENwjB61800822
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Apr 2026 14:23:58 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A162020040;
-	Tue, 14 Apr 2026 14:23:58 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7954B20043;
-	Tue, 14 Apr 2026 14:23:58 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 Apr 2026 14:23:58 +0000 (GMT)
-From: Mikhail Zaslonko <zaslonko@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org
-Cc: zaslonko@linux.ibm.com, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, bpf@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Thorsten Blum <thorsten.blum@linux.dev>
-Subject: [PATCH] tools/headers: Sync stddef.h  with include/uapi to fix BPF
-Date: Tue, 14 Apr 2026 16:23:56 +0200
-Message-ID: <20260414142358.3090333-1-zaslonko@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PUlTTsC3"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso69290905e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 07:36:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776177377; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fnDwioIR0vqcgMpuLACz8BL1hVI2O/Y5zzNfJruTlBxC8Niufs9O93++FI7AjxyeiP
+         Zr68/ZzF8VFMh38LWUtpEN503r0KsVdw6VHKaH5nHdvka/r66Sw/l7FCi77AWMRtiWqw
+         AO2V+GfeR1b09kstQBA4FaUtckEkXScPfYma2ItGJPTf0ef6SUyZU+8Nguy19qE6mq1d
+         zh5f3aHRVScRI6DBKrLFNw2SakS/kH91t3QfEkzaE0o4EsYdtPPulLeY3bYyXRIKWXVT
+         g2kNEiyKcgmzXeeg0UqBwZAL8XQNCTWVK0M3eMHAEl39x8SXh3PJ1lk9d44S0inUg+Zq
+         9SxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=AnsEV6VHaHqEew+Xa56Ltrfs2MD3YtoIUeXjaty5EkY=;
+        fh=gSJPlutw28lozMJoX33TGEui3TxvXm3kYZPX6bLYtY4=;
+        b=dSWI5tJwfCJoIBAKMZv8U/infkYQsW3Pmr9SFZ8GobvbHXIKpENvSGlMtsq5/XqskY
+         VBE6Tpok7mi5Nwy4rPkqiLjzl2G6dTzaGzYOUqra44a18cW82/I35In25TEqtXZatJIz
+         twad9Yxw7yolzmJC1CZxp+fxU7+zOO6knvlcCSvPUanKapMP46li3rsWXRCXqhDYNqJD
+         GCt5sWpmXvAs5hrLGMYx1rTVXhtWvHUtL5mjBqaJldSv0ZtOK2X9U/cB48C6sA77l5r8
+         xoR/6vi0hrSXEFdR3QuxYCygyK61yEK/0irGEm7GMJuR8B0oqYB+JuWFh9CKEcUb1eqj
+         od0g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776177377; x=1776782177; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AnsEV6VHaHqEew+Xa56Ltrfs2MD3YtoIUeXjaty5EkY=;
+        b=PUlTTsC3aVAA+ZyekIkeHjny6kIG/LHQHmycQcAXH+odg5/6txPL3MKJH3GJyCQkHB
+         0VHbMgZt+XaHaCWA8ttAcZZRvO9ODJnXuOO+uOmKq04OuxGu3oOF05P46AdjIMAgq75p
+         1g2iSwJfqj1jIgnuoynfpGVWG9myXYm/pK7dBPifH9KZ0tNoF/wBaemcMV1l1xlz8J3/
+         ZWuFPRlIE6qzOnT4UWRA/IGRTHcr8Y3+4IdOq2AILgI1Oof/ygFLMrlBqux+n4oEboCa
+         Je1BfpUWrlRD9q+IG7jTww/eAr705R3WQH9YwLOz0cBjR8AkMQxl/K7pKJ6lWajvDIts
+         hEmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776177377; x=1776782177;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AnsEV6VHaHqEew+Xa56Ltrfs2MD3YtoIUeXjaty5EkY=;
+        b=IS/Ks/yAzw8EnqkYU6uZ9tdFGNV4rVcLHRiP5sX0Ft+JPOT8whtoo9P86tz41oXjBK
+         oNPnkPq5l2KRc3TY7+fIOM/4g1nUQmONFojAkpo1g0euC/0tuUKgCKo9nubtPmgD793J
+         63qNp6Bx5Q7WtPmdZhx4W19/RZxntuQPEOd2ZdV8AERNDjleMHTvhdOMeLQHuFbG5Ojh
+         Sx3JtvG0pOjBsGcdpzxcgj0WMMf7GsIhq95eJ3brmzVklJbQCb/jwu4bxstF1XtwSj6d
+         1Fb61zNvK46Yy84X7c16UG4f8udS6qpcjfj+qqkxz9M+bnIZL/hjaNK4+jV/bkW1CojZ
+         SIWA==
+X-Forwarded-Encrypted: i=1; AFNElJ++madtixHraplsi2SGgOAaW9YgZeb9qWJWrfIYjMLhVKqKPTEUdgBUIW5j79i+22jkJgSJBHmX+2TDakHs5Ag=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5jAgK68kbvE7QTfgKZh72uOkXyg7N59R6h3Ebyg+T5rOvLUiJ
+	2Po6SEP2178QgLK87tcbtdd0is9yP5TlbB8wGCswtgua4n8rdByv4J4Fb8grCb7BfLSt7YrdeBk
+	pBxKBbGntD5NofxOIJ6Gcs0vDPD9LLPU=
+X-Gm-Gg: AeBDieuCXx10zovVImtMThNhygWYetB/pGsVESV0iqZm8s5Xa3P+RGB0Qlqx6HKSrjd
+	/HdxR4ncqwMAby5MQV2fvmDcgId/9maMyQ0xftKf7LGbWhWw1R8QyMLdcm7JrNRdzqn8jyDvCoL
+	MKgoiabW5BP651ErXsn8LK/XozqHs13kC5xlkhz9TfTe8eqXD9pI/6drNmpupjTXpOFBu/0ID3u
+	9kJKucong9tlkaugCUDvZq7TKxoNxeQok5PxXsY0ATJ8W0MP65ueJtAenxdBcYisaQ/6F+wyp++
+	gsxUBbbTjdKUJzE8TLHSz3b+aHEjR2Are5l/y1kCZE3e5fGmwyLu4o6Fs6AxIu3/d0l9H1tta93
+	hJz1ilZHdLdnj1Artg9BbwQ0HAA==
+X-Received: by 2002:a05:6000:1a86:b0:43d:6e0:9458 with SMTP id
+ ffacd0b85a97d-43d642c08b5mr27685966f8f.39.1776177376758; Tue, 14 Apr 2026
+ 07:36:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDEzNCBTYWx0ZWRfX4d6rM9YEPyT/
- 8fays1TFveSaphs0NhwqI5xBSSzBPhpmuXXpxiAQR5xYS6bBn3C1Opb60s/Wrm2v+m2C2aeT0gv
- AL4Jfijjf3+khhOYangQgBKNmdbqFNXVpXEZSjcbr7uB523+D/6K2JLRnNwH37464JX43RuRXTE
- YbUWO4whaJi/qHwf4aUrBRaO22dmN2MSQDkYzOCfShlYdZKUM45ytAKidw4gyd9VR2ZiYiRwasB
- pMqIUQe3osVujZihViouSAsN/jHBY5/OqcrKjvaI+Pf+DgVT92v86iKfWmVFY/68jDvi0oSTwry
- 3QICaJAJh63t16pNqNeBfVFH2/tGBDPPqk+sgQ8psNwERclA6ZMXMc8f6FE8PSwv8msezEMTHN6
- JPUtWjkf2ZcNrNq/Ui+Mq/1poZKk4xll1qc91Pboq6T2J0WKPhnlzIujE+KjPXeQ0Mh84GVas8r
- d2xaLcpS+eYPNKOf2yg==
-X-Authority-Analysis: v=2.4 cv=eJ4jSnp1 c=1 sm=1 tr=0 ts=69de4e03 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
- a=ol3PeIhsCAbECCkJWCcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 9xiH3teEbnQ8nvCux1aTUCRKLj1x8TUm
-X-Proofpoint-ORIG-GUID: 9xiH3teEbnQ8nvCux1aTUCRKLj1x8TUm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-14_03,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
- clxscore=1011 bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604070000
- definitions=main-2604140134
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com> <20260413-kasan-v1-1-1a5831230821@bootlin.com>
+ <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com> <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
+In-Reply-To: <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 14 Apr 2026 07:36:05 -0700
+X-Gm-Features: AQROBzD11iC8gAKSEnmD0t_Id88yG4ZENQr7azgzst5W9dho6pOaDHcgJ_Mytlo
+Message-ID: <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, ebpf@linuxfoundation.org, 
+	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Xu Kuohai <xukuohai@huawei.com>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	kasan-dev <kasan-dev@googlegroups.com>, linux-mm <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tools/include/uapi/linux/stddef.h is a copy of include/uapi/linux/stddef.h
-used by the tools build. But it occurred to be an older snapshot, what
-causes the BPF selftests build failures in manual selftests builds:
-  In file included from test_tag.c:18:
-  /usr/include/linux/if_alg.h:45:22: error: expected ‘:’, ‘,’, ‘;’, ‘}’ or ‘__attribute__’ before ‘__counted_by’
-     45 |         __u8    iv[] __counted_by(ivlen);
-        |                      ^~~~~~~~~~~~
+On Tue, Apr 14, 2026 at 6:13=E2=80=AFAM Alexis Lothor=C3=A9
+<alexis.lothore@bootlin.com> wrote:
+>
+> Hi Andrey, thanks for the prompt review !
+>
+> On Tue Apr 14, 2026 at 12:19 AM CEST, Andrey Konovalov wrote:
+> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Found=
+ation)
+> > <alexis.lothore@bootlin.com> wrote:
+> >>
+>
+> [...]
+>
+> >> +#ifdef CONFIG_KASAN_GENERIC
+> >> +void __asan_load1(void *p);
+> >> +void __asan_store1(void *p);
+> >> +void __asan_load2(void *p);
+> >> +void __asan_store2(void *p);
+> >> +void __asan_load4(void *p);
+> >> +void __asan_store4(void *p);
+> >> +void __asan_load8(void *p);
+> >> +void __asan_store8(void *p);
+> >> +void __asan_load16(void *p);
+> >> +void __asan_store16(void *p);
+> >> +#endif /* CONFIG_KASAN_GENERIC */
+> >
+> > This looks ugly, let's not do this unless it's really required.
+> >
+> > You can just use kasan_check_read/write() instead - these are public
+> > wrappers around the same shadow memory checking functions. And they
+> > also work with the SW_TAGS mode, in case the BPF would want to use
+> > that mode at some point. (For HW_TAGS, we only have kasan_check_byte()
+> > that checks a single byte, but it can be extended in the future if
+> > required to be used by BPF.)
+>
+> ACK, I'll try to use those kasan_check_read and kasan_check_write rather
+> than __asan_{load,store}X.
 
-Commit dacbfc167808 ("crypto: af_alg - Annotate struct af_alg_iv
-with __counted_by") added __counted_by() to a uapi header
-(include/uapi/linux/if_alg.h), but tools/include/uapi/linux/stddef.h
-was not updated.
-
-Sync tools/include/uapi/linux/stddef.h with include/uapi/linux/stddef.h
-to fix selftests/bpf build.
-
-Fixes: dacbfc167808 ("crypto: af_alg - Annotate struct af_alg_iv with __counted_by")
-Signed-off-by: Mikhail Zaslonko <zaslonko@linux.ibm.com>
----
- tools/include/uapi/linux/stddef.h | 39 +++++++++++++++++++++++++++----
- 1 file changed, 35 insertions(+), 4 deletions(-)
-
-diff --git a/tools/include/uapi/linux/stddef.h b/tools/include/uapi/linux/stddef.h
-index c53cde425406..111b097ec00b 100644
---- a/tools/include/uapi/linux/stddef.h
-+++ b/tools/include/uapi/linux/stddef.h
-@@ -1,11 +1,13 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _LINUX_STDDEF_H
--#define _LINUX_STDDEF_H
--
-+#ifndef _UAPI_LINUX_STDDEF_H
-+#define _UAPI_LINUX_STDDEF_H
- 
-+#ifdef __KERNEL__
-+#include <linux/compiler_types.h>
-+#endif
- 
- #ifndef __always_inline
--#define __always_inline __inline__
-+#define __always_inline inline
- #endif
- 
- /* Not all C++ standards support type declarations inside an anonymous union */
-@@ -36,6 +38,11 @@
- 		struct __struct_group_tag(TAG) { MEMBERS } ATTRS NAME; \
- 	} ATTRS
- 
-+#ifdef __cplusplus
-+/* sizeof(struct{}) is 1 in C++, not 0, can't use C version of the macro. */
-+#define __DECLARE_FLEX_ARRAY(T, member)	\
-+	T member[0]
-+#else
- /**
-  * __DECLARE_FLEX_ARRAY() - Declare a flexible array usable in a union
-  *
-@@ -52,3 +59,27 @@
- 		TYPE NAME[]; \
- 	}
- #endif
-+
-+#ifndef __counted_by
-+#define __counted_by(m)
-+#endif
-+
-+#ifndef __counted_by_le
-+#define __counted_by_le(m)
-+#endif
-+
-+#ifndef __counted_by_be
-+#define __counted_by_be(m)
-+#endif
-+
-+#ifndef __counted_by_ptr
-+#define __counted_by_ptr(m)
-+#endif
-+
-+#ifdef __KERNEL__
-+#define __kernel_nonstring	__nonstring
-+#else
-+#define __kernel_nonstring
-+#endif
-+
-+#endif /* _UAPI_LINUX_STDDEF_H */
--- 
-2.53.0
-
+No. The performance penalty will be too high.
+hw_tags won't work without corresponding JIT work.
+I see no point sacrificing performance for aesthetics.
+__asan_load/storeX is what compilers emit.
+In that sense JIT is a compiler it should emit exactly the same.
