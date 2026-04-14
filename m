@@ -1,157 +1,238 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5400D3E51F4
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 14:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B162C3E6DF9;
+	Tue, 14 Apr 2026 14:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776176418; cv=none; b=CpVdXIl11K3oGV3cbwchz1yjByTDrhuWnsULw5YkyFx2ctgUUQ7iS1jZ7vCN0Z0KQm4i3hzbUgmzULdlCEmCi34+cugouyfKb7AyjYAdoZ+05N6t4j8zIOdmg1nStP2Au3gRz1uaeqRA0Fw/JdFNH5IyqMIZCqwL/0tslnAokXQ=
+	t=1776176638; cv=none; b=c2a7skFvBlIZ8LqIlheNYUwfbI437PpHDUwn1R23/2rfFFzEM6WxW9OAHvTLBETEV1RaTaETHrbZXHDSN6k45QRhchMzVLLj1JsLNstYQc9a0kIT17lMtiAV/7xIbfU/5pkltju5Xg7/3odfsBc/VJevi/JcrYZTcwHxGUwNoRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776176418; c=relaxed/simple;
-	bh=L8h8ncj1xlogJQEUDHS5GItbXkq0sblifQ1BGwMeHJ0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=YN7pKKSZ7v4oBAjwbEa8IZ/77KqYkMDJ5DXOVaHnVF2DIKazYsEJUc/M12KvnRYZ42E7W/M59BqlPXcqTp1jAmgiYOvEtnP1F6JBwU+S9Wl2R3kRkcvfSpMB5fSUlrDCTRO+arWfs6kr5XPZtVerH/AzR1ly660q/1dUtqfTMuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=G2hnTda/; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1776176638; c=relaxed/simple;
+	bh=/fCVxa0eMyMWklv2E9q9GFJdXVtpfKD77F6QKI/nFIQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BKHy16D+ko886590W/VnagkV4CfK7Seo/XfkHRRyNpKr1/kkXFUn7rSzR1gTOvWu/BCHtt7I3e7RPLzEUzyDVddB0qLDaqX/45hNqOTIVrCwFjIEtnxAWv9JZU4CEFoHV+TtSEuDNQIBD524xNvQ0Ji17kdGyGtZjJp6yGlk7WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CUMgG7US; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="G2hnTda/"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wCecR-00Fegh-Fp; Tue, 14 Apr 2026 16:19:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=/SY+gHDpWMFn5J7DtwXLF7yg5El1T/4gAkeMvZeGiow=; b=G2hnTda/hO4AAjCnS4C+cObxam
-	ho6HXvp70qD8xJI3VHQG1xAdJPHyGpZ6Ftz6XYY7ktORAHE81YX5Fo+EDuwDVveOaQ7FJ18ehP+vA
-	BiMiQ2aMfMvl5urmxOSfamjoocJbsC2izLS8Qz0j/SHn/LlzfVmUchTNA5m8EoXnhyQT4Zz+PLoMU
-	JWfP00I98A0Fi0EoEsBel3xso8sU9J0d1M0iqChqwBmOcA3LovrLZ3ap0L85+OCpIquVvXW4valVk
-	CCf9XRkppSTqsH9WnqpVp6ig7qMvOYL5cY+cilhP+waOvCrOn5gn9MxvYwDhggi4g0Cym6pOShBEE
-	8vcpPHMw==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wCecR-000126-3k; Tue, 14 Apr 2026 16:19:59 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1wCec9-00DiJt-Oi; Tue, 14 Apr 2026 16:19:41 +0200
-Message-ID: <fa2456d0-51fe-4569-9940-085404cda70f@rbox.co>
-Date: Tue, 14 Apr 2026 16:19:39 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CUMgG7US"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088A2C2BCB6;
+	Tue, 14 Apr 2026 14:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776176638;
+	bh=/fCVxa0eMyMWklv2E9q9GFJdXVtpfKD77F6QKI/nFIQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CUMgG7USGrHWNOhxeLwWd/mwPJHpMj3QUt4q9oHTRQdLna0K9mfo2uXiVDMQ4hKpc
+	 uqrM/kI+CMLi/YxeXP3Uj623dK4aKke80UIjoAkHX6M43RqZ9INfja18DHQc7R/S2+
+	 pW4MsWKJLn0WAhQd7L7Bnq2qe9L/yhS012c69IM4E8TCzpKVthZEBVCnW8ufu9TC95
+	 4DEGxxDjc8+U+4jNcXTmaTYPTexLDZ2jImIEi8IukiOLl4yyK7zsCk9aJdFfpN8eBS
+	 VYO4GHxm5TEZYZGz0+e6qMSjf4rzl5yQgj3E4hw6+5bIWpkdYJqXbqzw6K8qRMJ6CJ
+	 2qGv8yv3OQZ6A==
+Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 28BECF4006B;
+	Tue, 14 Apr 2026 10:23:57 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Tue, 14 Apr 2026 10:23:57 -0400
+X-ME-Sender: <xms:_U3eaQCvx35FDPWnL6sBweeurEOIpI1LijIehBqkLQ-bQHEONKlxzA>
+    <xme:_U3eaT_VLmjwZOt1WWXNz-43IGClnMVgKQG_vmW9Zpt3C0HbfQIow8sRSqkzPvv-R
+    D_TrBXUamNa9V1MsdCGIbUQMkUdXgaIPtCBTAxjlvnrjaXezzIrkyw>
+X-ME-Received: <xmr:_U3eae-dUcx-b5B52N4dZw92O_l69d7jJWMEWbFPEPP9sCzpLlTml1QK-rznEA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdegudefkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepfdfmihhrhihlucfu
+    hhhuthhsvghmrghuucdlofgvthgrmddfuceokhgrsheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedvleevheejjeevveetgfejvdfhtdfftefhhfettefgkeejfefg
+    keduhfdthfehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehkihhrihhllhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudei
+    udduiedvieehhedqvdekgeeggeejvdekqdhkrghspeepkhgvrhhnvghlrdhorhhgsehshh
+    huthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhopeduledpmhhouggvpehsmhhtphho
+    uhhtpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrgh
+    dprhgtphhtthhopehpvghtvghrgiesrhgvughhrghtrdgtohhmpdhrtghpthhtohepuggr
+    vhhiugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhjsheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtoheprhhpphhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsuhhr
+    vghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvhgsrggskhgrsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehlihgrmhdrhhhofihlvghtthesohhrrggtlhgvrdgtohhm
+    pdhrtghpthhtohepiihihiesnhhvihguihgrrdgtohhm
+X-ME-Proxy: <xmx:_U3eaT3tV0clRDLau64h_TF2174YK72e9bO6MIuYmNiAAB_3GGKYmw>
+    <xmx:_U3eaW-oonZ89wLF8NBRjooF_IQKHfLzthUEv49mYfz9vXflpFxGFw>
+    <xmx:_U3eace5NWItR9K6l05oht3kgIeUcBoOkY2SSpv5ilJbt-QDeiPC9Q>
+    <xmx:_U3eaaEyQMfeSO-25SexlC6pwViL_nRKottkT37wtZNO6LAucKdryw>
+    <xmx:_U3eaZAbUtd7_zzDnzhJQDQYpwcvp63VCCSURN19-3KzfM-2D_ehBgmi>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 14 Apr 2026 10:23:56 -0400 (EDT)
+From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Xu <peterx@redhat.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Zi Yan <ziy@nvidia.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kvm@vger.kernel.org,
+	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Subject: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM guest memory
+Date: Tue, 14 Apr 2026 15:23:34 +0100
+Message-ID: <20260414142354.1465950-1-kas@kernel.org>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jiayuan Chen <mrpre@163.com>, John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
- <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
- <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
- <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
- <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
- <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
- <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
- <ae86a1e5-769c-44d8-ad7e-ad724800e9e4@linux.dev>
- <08c824b0-cfbb-40ca-b976-9fbd41e5e855@rbox.co>
- <ac2z6IqYyIxSZFPS@devbig1721.ftw5.facebook.com>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <ac2z6IqYyIxSZFPS@devbig1721.ftw5.facebook.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/2/26 03:34, Martin KaFai Lau wrote:
-> On Wed, 01 Apr 2026 00:43:58 +0200, Michal Luczaj wrote:
->> On 3/31/26 02:20, Martin KaFai Lau wrote:
->>> On 3/30/26 4:03 PM, Michal Luczaj wrote:
->>>> On 3/26/26 07:26, Martin KaFai Lau wrote:
->>>>> On 3/15/26 4:58 PM, Michal Luczaj wrote:
->>>>>>> Beside, from looking at the may_update_sockmap(), I don't know if it is
->>>>>>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
->>>>>>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
->>>>>>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
->>>>>>> when the bpf_map_update_elem(sockmap) support was added iirc.
->>>>>>
->>>>>> What about a situation when unix_sk is stored in a sockmap, then tc prog
->>>>>> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
->>>>>> useful, but seems doable.
->>>>>
->>>>> [ Sorry for the late reply ]
->>>>>
->>>>> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible
->>>>> from tc :(
->>>>>
->>>>> Then unix_state_lock() in its current form cannot be safely acquired in
->>>>> sock_map_update_elem(). It is currently a spin_lock() instead of
->>>>> spin_lock_bh().
->>>>
->>>> Is there a specific deadlock you have in your mind?
->>>
->>> e.g. unix_stream_connect() is taking unix_state_lock(). Can a tc's 
->>> ingress bpf prog call unix_state_lock()?
->>
->> Ah, right, that's the problem, thanks for explaining.
->>
->> But, as I've asked in the parallel thread, do we really need to take the
->> unix_state_lock() in sock_map_update_elem()? Taking it in
->> sock_map_update_elem_sys() fixes the null-ptr-deref and does not lead to a
->> deadlock. Taking unix_state_lock() in sock_map_update_elem() seems
->> unnecessary. Well, at least under the assumption progs can only access
->> unix_sk via the sockmap lookup.
-> 
-> right, sock_map_update_elem_sys() should be safe to take
-> unix_state_lock().
-> 
-> If it is fixed by testing unix_peer(), is the TCPF_ESTABLISHED test
-> in sock_map_sk_state_allowed() still useful and needed?
+This series adds userfaultfd support for tracking the working set of
+VM guest memory, enabling VMMs to identify cold pages and evict them
+to tiered or remote storage.
 
-I don't think it's necessary. Although removing it may slightly mask the
-fact that we're interested in TCP_ESTABLISHED sockets (we watch the sock's
-life cycle and invoke sock_map_close() as it transitions to TCP_CLOSE).
-Removing this check will also mean listening socks will be rejected not
-early in sock_map_sk_state_allowed(), but deeper in
-unix_stream_bpf_update_proto() (and with a different error code?).
+== Problem ==
 
-> Also,
-> please explain in detail in the commit message why testing for NULL
-> without unix_state_lock() is enough.
+VMMs managing guest memory need to:
+1. Track which pages are actively used (working set detection)
+2. Safely evict cold pages to slower storage
+3. Fetch pages back on demand when accessed again
 
-OK, will do.
+For shmem-backed guest memory, working set tracking partially works
+today: MADV_DONTNEED zaps PTEs while pages stay in page cache, and
+re-access auto-resolves from cache. But safe eviction still requires
+synchronous fault interception to prevent data loss races.
 
-> For example, for the BPF iterator on
-> sock_map, my understanding is that unix_release_sock() can still happen
-> while the BPF iterator is iterating over a unix_sock. I guess a future
-> unix_state_lock() in the iterator's seq_show() should be useful.
+For anonymous guest memory (needed for KSM cross-VM deduplication),
+there is no mechanism at all — clearing a PTE loses the page.
 
-That's right. That's also why, I think, Kuniyuki was asking for
-"lock_sock() + unix_state_lock() + SOCK_DEAD check" in a parallel thread.
+== Solution ==
 
-> It will also be useful to mention what was discovered about TC + lookup
-> + update_elem(&sock_map, ...) and why it is not safe to take
-> unix_state_lock() in that path. Thanks.
+The series introduces a unified userfaultfd interface that works
+across both anonymous and shmem-backed memory:
 
-The softirq vs. process context? Sure, I'll mention that.
+UFFD_FEATURE_MINOR_ANON: extends MODE_MINOR registration to anonymous
+private memory. Uses the PROT_NONE hinting mechanism (same as NUMA
+balancing) to make pages inaccessible without freeing them.
 
-Took a while (sorry), but here's v4:
-https://lore.kernel.org/netdev/20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co/
+UFFD_FEATURE_MINOR_ASYNC: auto-resolves minor faults without handler
+involvement. The kernel restores PTE permissions immediately and the
+faulting thread continues. Works for anonymous, shmem, and hugetlbfs.
+
+UFFDIO_DEACTIVATE: marks pages as deactivated. For anonymous memory,
+sets PROT_NONE on PTEs (pages stay resident). For shmem/hugetlbfs,
+zaps PTEs (pages stay in page cache).
+
+UFFDIO_SET_MODE: toggles MINOR_ASYNC at runtime, synchronized via
+mmap_write_lock. Enables the VMM workflow: async mode for lightweight
+detection, sync mode for race-free eviction.
+
+PAGE_IS_UFFD_DEACTIVATED: PAGEMAP_SCAN category flag for efficient
+batch detection of cold (still-deactivated) anonymous pages.
+
+== VMM Workflow ==
+
+    UFFDIO_DEACTIVATE(all)            -- async, no vCPU stalls
+    sleep(interval)
+    PAGEMAP_SCAN                      -- find cold pages
+    UFFDIO_SET_MODE(sync)             -- block faults for eviction
+    pwrite + MADV_DONTNEED cold pages -- safe, faults block
+    UFFDIO_SET_MODE(async)            -- resume tracking
+
+The same workflow applies to shmem, with a different PAGEMAP_SCAN mask
+(!PAGE_IS_PRESENT instead of PAGE_IS_UFFD_DEACTIVATED).
+
+== NUMA Balancing ==
+
+NUMA balancing scanning is skipped on anonymous VM_UFFD_MINOR VMAs to
+avoid protnone conflicts. NUMA locality stats are fed from the uffd
+fault path via task_numa_fault() so the scheduler retains placement
+data. Shmem VMAs are unaffected (UFFDIO_DEACTIVATE zaps PTEs there,
+no protnone involved).
+
+== Testing ==
+
+The series includes 6 new selftests covering async/sync modes,
+PAGEMAP_SCAN cold detection, GUP through protnone, UFFDIO_SET_MODE
+toggling, and cleanup on close. All 73 uffd unit tests pass
+(including hugetlb) across defconfig, allnoconfig, allmodconfig,
+and randomized configs.
+
+Kiryl Shutsemau (Meta) (12):
+  userfaultfd: define UAPI constants for anonymous minor faults
+  userfaultfd: add UFFD_FEATURE_MINOR_ANON registration support
+  userfaultfd: implement UFFDIO_DEACTIVATE ioctl
+  userfaultfd: UFFDIO_CONTINUE for anonymous memory
+  mm: intercept protnone faults on VM_UFFD_MINOR anonymous VMAs
+  userfaultfd: auto-resolve shmem and hugetlbfs minor faults in async
+    mode
+  sched/numa: skip scanning anonymous VM_UFFD_MINOR VMAs
+  userfaultfd: enable UFFD_FEATURE_MINOR_ANON
+  mm/pagemap: add PAGE_IS_UFFD_DEACTIVATED to PAGEMAP_SCAN
+  userfaultfd: add UFFDIO_SET_MODE for runtime sync/async toggle
+  selftests/mm: add userfaultfd anonymous minor fault tests
+  Documentation/userfaultfd: document working set tracking
+
+ Documentation/admin-guide/mm/userfaultfd.rst | 141 ++++-
+ fs/proc/task_mmu.c                           |  11 +-
+ fs/userfaultfd.c                             | 184 +++++-
+ include/linux/huge_mm.h                      |   6 +
+ include/linux/mm.h                           |   2 +
+ include/linux/sched/numa_balancing.h         |   1 +
+ include/linux/userfaultfd_k.h                |  21 +-
+ include/trace/events/sched.h                 |   3 +-
+ include/uapi/linux/fs.h                      |   1 +
+ include/uapi/linux/userfaultfd.h             |  40 +-
+ kernel/sched/fair.c                          |  13 +
+ mm/huge_memory.c                             |  33 +-
+ mm/hugetlb.c                                 |   3 +-
+ mm/memory.c                                  |  51 +-
+ mm/mprotect.c                                |   9 +-
+ mm/shmem.c                                   |   3 +-
+ mm/userfaultfd.c                             | 164 +++++-
+ tools/testing/selftests/mm/uffd-unit-tests.c | 458 +++++++++++++++
+ 18 files changed, 1096 insertions(+), 48 deletions(-)
+
+Kiryl Shutsemau (Meta) (12):
+  userfaultfd: define UAPI constants for anonymous minor faults
+  userfaultfd: add UFFD_FEATURE_MINOR_ANON registration support
+  userfaultfd: implement UFFDIO_DEACTIVATE ioctl
+  userfaultfd: UFFDIO_CONTINUE for anonymous memory
+  mm: intercept protnone faults on VM_UFFD_MINOR anonymous VMAs
+  userfaultfd: auto-resolve shmem and hugetlbfs minor faults in async
+    mode
+  sched/numa: skip scanning anonymous VM_UFFD_MINOR VMAs
+  userfaultfd: enable UFFD_FEATURE_MINOR_ANON
+  mm/pagemap: add PAGE_IS_UFFD_DEACTIVATED to PAGEMAP_SCAN
+  userfaultfd: add UFFDIO_SET_MODE for runtime sync/async toggle
+  selftests/mm: add userfaultfd anonymous minor fault tests
+  Documentation/userfaultfd: document working set tracking
+
+ Documentation/admin-guide/mm/userfaultfd.rst | 141 +++++-
+ fs/proc/task_mmu.c                           |  11 +-
+ fs/userfaultfd.c                             | 184 +++++++-
+ include/linux/huge_mm.h                      |   6 +
+ include/linux/mm.h                           |   2 +
+ include/linux/sched/numa_balancing.h         |   1 +
+ include/linux/userfaultfd_k.h                |  21 +-
+ include/trace/events/sched.h                 |   3 +-
+ include/uapi/linux/fs.h                      |   1 +
+ include/uapi/linux/userfaultfd.h             |  40 +-
+ kernel/sched/fair.c                          |  13 +
+ mm/huge_memory.c                             |  33 +-
+ mm/hugetlb.c                                 |   3 +-
+ mm/memory.c                                  |  51 ++-
+ mm/mprotect.c                                |   9 +-
+ mm/shmem.c                                   |   3 +-
+ mm/userfaultfd.c                             | 164 ++++++-
+ tools/testing/selftests/mm/uffd-unit-tests.c | 458 +++++++++++++++++++
+ 18 files changed, 1096 insertions(+), 48 deletions(-)
+
+-- 
+2.51.2
 
