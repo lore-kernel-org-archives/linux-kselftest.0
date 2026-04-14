@@ -1,132 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F79439A040;
-	Tue, 14 Apr 2026 11:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85AA3CB2DF
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 11:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776164970; cv=none; b=LiCPmPNLJAQ7el1bOtBF2tCZaRBZxOCh12J+OBHISX6dKgvXbmECQxYTVaWKBMgeZOMX0T6riB2BDrnB8YaRRZh6BBZD0eiP4hgQDQg4RAWmqYG93HDK54yah/bNBx0UlTeFj7mzRouakEHAHmgp871lXVshqbQeVFmFWfSD23w=
+	t=1776165844; cv=none; b=YVGww/+G9UkaLv+9+58fj6hPJgRWQdGfOiFbBWM1CBAYHn3rCJ1KtXBB0EMEZafT4knK/nUcF0L8ui7Ev/2RLqqq0zmmvT/W4h12w2+vBammmc+xbXOqUB0+gRTkZ49W5wwUBcrG4TZ3BFRogMe/baYFPKvNnt9tzS0/dyvOpto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776164970; c=relaxed/simple;
-	bh=Igrdgqjd1mSlqPVTKCYHYfCc2YqtKV+qD/MgEpVL3fs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=poylTB8bBRJWP1ywhrtzPX4ZlNhjWtvE666wlxHLGqcDBSRCoac2/z9kkBSjdleFGRnxEUXtYQMoTuj4Hj6GfYia/xt7bdWH1mdTP41cPOSEHSTQxbYwm57LLlECQcm85PK7G+Y7nd7nFayl/VK6r1/BgRjnv0BKPtFO/IrMweQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZLMAdoI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776165844; c=relaxed/simple;
+	bh=0vM8Wm0yvMs1PHZRliZhxIPfiXZ2NOCQ06VtNDnSSis=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ZHuOLPq6XNJIIAMrNWdqJP7S2X2QIy7sWAXpjmvHmPMnoBlyKnbvOVI3l8zueEsG7n6+RH4Ib9MSgrxRMZGTQ29PaAVM4Rh5Q6TrVZLgaaNuUBuTkmeINgHMR4Kl287Z9PXu4egtcsc0+y12xV4AbLFClEfEqR16/U9Ko7uglF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N61uzNTv; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZLMAdoI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47A7C19425;
-	Tue, 14 Apr 2026 11:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776164969;
-	bh=Igrdgqjd1mSlqPVTKCYHYfCc2YqtKV+qD/MgEpVL3fs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hZLMAdoIcuwxCt4ZaPjDyUxjQGYQ6QzclOsD+DMOX9kSSwpSYyK9cABZl+5inW9+3
-	 hEv1hvV052o4UTpCwnYEIRgLg4uUm7P02gACkmu/zrBAt+T4tozNkraNTjJz0GOg+Y
-	 kMwt28gdnlWVu+KthcNd2V6NN3O9fCCTzd2km/5w2GDKYiRnhow8uuCi17RS0e1KHU
-	 Iu3USVaYspHKQ1g6QRgcwicIsHNWtAflwe3m7Th80vs1SdvSYaLohm09z/AQmgl41/
-	 oXtEEy0N6QXAZPL6xEd1CFw6BrtGTHUQyodT3hU813wXm2/JHnEe8KhAL2TCHIf7Su
-	 /y9IpduDCZpyg==
-Message-ID: <c696705c-4c0a-4e3c-996c-358d2f0b7074@kernel.org>
-Date: Tue, 14 Apr 2026 13:09:20 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N61uzNTv"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776165830;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nD3+pYkuUta613cN19y/PkEcTwKQ+sxBqJw2XDXKABc=;
+	b=N61uzNTvbqRwJAPfiGs2bl1u9zlbXJ5Q9XC7AEX2fSmGy/yIm0C7aQM+fcz1qOGAs13T7H
+	TjC/zsy6kPDbYtxxTH2YhBMGMbadzmTz3uifuW01J51dCRIpWmyYrXPJCQfc8YjC2NEwaS
+	COkYCs+LVBgN/fJwE2Gqiv2MP2QGDf0=
+From: KaFai Wan <kafai.wan@linux.dev>
+To: edumazet@google.com,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	kafai.wan@linux.dev,
+	sdf@fomichev.me,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf: tcp: Reject TCP_NODELAY from BPF hdr opt callbacks
+Date: Tue, 14 Apr 2026 19:23:08 +0800
+Message-ID: <20260414112310.1285783-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7.2 v2 12/12] selftests/mm: remove READ_ONLY_THP_FOR_FS
- from comments in guard-regions
-To: Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>
-Cc: Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
- David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260413192030.3275825-1-ziy@nvidia.com>
- <20260413192030.3275825-13-ziy@nvidia.com>
- <ad1WTCR5Kld-tiL8@casper.infradead.org>
- <E3268570-18E4-40AF-92E5-931A8ED1C9B5@nvidia.com>
- <ad1uK11f_J8sFN0e@casper.infradead.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <ad1uK11f_J8sFN0e@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 4/14/26 00:28, Matthew Wilcox wrote:
-> On Mon, Apr 13, 2026 at 04:51:28PM -0400, Zi Yan wrote:
->> On 13 Apr 2026, at 16:47, Matthew Wilcox wrote:
->>
->>>
->>> Is this true?  Does MADV_COLLAPSE refuse to work on writable files?
->>> Should we delete some code here as well as fix the comment?  ;-)
->>
->> file_thp_enabled() used by __thp_vma_allowable_orders() refuses
->> writable files with inode_is_open_for_write(). That should prevent
->> MADV_COLLAPSE from working on writable files.
-> 
-> That sounds like more code that was added for RO_THP and should be
-> deleted?  See commit e6be37b2e7bd
+This small patchset is about avoid infinite recursion in bpf_skops_hdr_opt_len() 
+via TCP_NODELAY setsockopt.
 
-Sounds like something to implement on top of this patch set?
+---
+KaFai Wan (2):
+  bpf: tcp: Reject TCP_NODELAY from BPF hdr opt callbacks
+  selftests/bpf: Cover TCP_NODELAY in hdr opt callback
 
-But with the added dirty checks in patch #2, maybe it's trivial to do it
-in this patchset already.
+ net/ipv4/tcp.c                                |  5 ++-
+ .../bpf/prog_tests/tcp_hdr_options.c          | 34 +++++++++++++++++++
+ .../bpf/progs/test_misc_tcp_hdr_options.c     | 18 ++++++++++
+ 3 files changed, 56 insertions(+), 1 deletion(-)
 
 -- 
-Cheers,
+2.43.0
 
-David
