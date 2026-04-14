@@ -1,160 +1,234 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F72A358D3D;
-	Tue, 14 Apr 2026 10:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02586399344;
+	Tue, 14 Apr 2026 10:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776160923; cv=none; b=cmmKUbFYAp7qbd211iS7RFFq8SrWLJBwJlEcfIK0n39squmf3TBoOz+VncE3bxgELyC3HVpUwJf9+Yw6mOwveVmKIe4P1ROXg3/Of6HVm3abbHZf4aG2OEjOJLuqsHbfAMI3bdbeKcq+IIsOihWPRyufba9kGqJZuy5A35xGayM=
+	t=1776161825; cv=none; b=OXMJM3zS3lNcVIDzLWzrA6lRA09TI/+gLViVvFosTGQcrx51QzY328cld773TdLeXP0dJO/eb5ITKlYG5pFmT/GLbFz5IEhboLrdsFs01ugWcosrejvdJIPzQHCNz2I72CGYWb/mShWGNHB1cOtokQJhJI9Qcz7nyzBPVeMtc80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776160923; c=relaxed/simple;
-	bh=hEMZcMIZS6WzhX6ssC5Ou6uax693W51NviYWtwo2rRA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u61aRHblzF4EwnuZ0rk3g83GkiLsbrB2qCRnTWeXw7/XTV6LScrz2mpQbI+xdmW1wH1jr4UY48c97rDf36sRCl3kZhjGWoCKSmpEJLRA9RCE7nLKnTlWVj2ZxaFdZ8kl+Q0RtM3cem9KlDlyt95S+RUy09ax+9X0MBKyQrHI8r8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cTkwm5Ak; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776161825; c=relaxed/simple;
+	bh=oRWO6Lo2WmEtu7qNFiuBDthh+Y1C1/KwDqss8kDou9o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=reQa4/gTLIP9qggWod+q5sAuTIAt9rAMPyKwmqY5El0LDpeJnSFm7rxKZsWC1KQS9FWwHs9lgYWlwmyyIqoZuPtIiwmDAYpkjn2OzQTSpUqbxnfM2QQNujS/4QqM4/FzXVZFuIAfrgy+dU9HaYZmly9opCPZAVDSBoTsfI67UBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=pP0EKI30; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cTkwm5Ak"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B43BC19425;
-	Tue, 14 Apr 2026 10:01:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776160923;
-	bh=hEMZcMIZS6WzhX6ssC5Ou6uax693W51NviYWtwo2rRA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cTkwm5AkJiR1Kcxa/iRawXT6asz/JNVsLox7hbLmD9WpHY7NrEJd0Np2KuvxhcZDz
-	 sMaAP+k4X0urnbfFoLZQpcaU4aNgNC0XwfdcCQD+ESiBBIxU+ZvoszTRtcjUI65D8S
-	 yrFLpaZnwOKgbWmUofGYDgDBEW2J63ChT28SH9ICE6sUVeQgJ/y3qlXLYHwUIYsiAQ
-	 E7TWJseSLHDOHWVwq7qHeySCAlKpIVrSmgG4vBwSHFoD8R6Q67XHPHvoUmZVbL7UCb
-	 +kcIQBbMgItyBP0yzr0beiuX9rKIeGi7QmP4ON+0eabVuxDAiL0MuLwp5JsV/gvthf
-	 nGppsJGfgIE0w==
-Message-ID: <f1cfb1c4-9b7b-40db-9105-570936b61203@kernel.org>
-Date: Tue, 14 Apr 2026 12:01:56 +0200
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="pP0EKI30"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92BBF4ECD;
+	Tue, 14 Apr 2026 03:16:55 -0700 (PDT)
+Received: from thinkpad-e142931.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D79593F641;
+	Tue, 14 Apr 2026 03:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1776161821; bh=oRWO6Lo2WmEtu7qNFiuBDthh+Y1C1/KwDqss8kDou9o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pP0EKI30IOaOKAhgEdOfCZqlzEWecgcx61lIFuNyhPz4kVX+QTa6Ke2pOo/xlGO77
+	 lISB8906WejbDkHf64sBQVS4TV8VFOT7JsqjCcd4SERWReBsrY5ZlX0648tnI4BVya
+	 zvkxh8jtmW4z2ZxbF+qkZijD0wSd12JIdH4GDGiQ=
+Date: Tue, 14 Apr 2026 11:16:47 +0100
+From: Wei-Lin Chang <weilin.chang@arm.com>
+To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 3/4] KVM: arm64: sefltests: Add basic NV selftest
+Message-ID: <xsdf2k2u4g6n7nmxcgwhiraqodwtteuxqqtnj2dx5sxgu74a7j@yjijkyohkq4i>
+References: <20260412142216.3806482-1-weilin.chang@arm.com>
+ <20260412142216.3806482-4-weilin.chang@arm.com>
+ <adwofV7yf71OdMFk@sm-arm-grace07>
+ <ddr6exocupk6mzshjwvu6sqt57aeqiyxqss3rpgcxxyh54cw4g@rxvm5zh3ybrw>
+ <ad1gqsqqOXyYmJoG@sm-arm-grace07>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] selftests/mm: verify droppable mappings cannot be
- locked
-To: anthony.yznaga@oracle.com, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: akpm@linux-foundation.org, ljs@kernel.org, Liam.Howlett@oracle.com,
- vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, shuah@kernel.org
-References: <20260409234915.11723-1-anthony.yznaga@oracle.com>
- <20260409234915.11723-3-anthony.yznaga@oracle.com>
- <7a318c3c-7ccb-4f95-a416-19d09f42c97f@kernel.org>
- <38fd3d86-f080-4b3a-a931-8ddae1a420ae@oracle.com>
- <b579517c-e739-4db5-ab0b-4db3d579807c@kernel.org>
- <ae78cbdd-e9b3-4586-b492-89ecffae30fc@oracle.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <ae78cbdd-e9b3-4586-b492-89ecffae30fc@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ad1gqsqqOXyYmJoG@sm-arm-grace07>
 
-On 4/13/26 23:54, anthony.yznaga@oracle.com wrote:
+On Tue, Apr 14, 2026 at 06:31:22AM +0900, Itaru Kitayama wrote:
+> On Mon, Apr 13, 2026 at 10:18:42AM +0100, Wei-Lin Chang wrote:
+> > Hi Itaru,
+> > 
+> > On Mon, Apr 13, 2026 at 08:19:25AM +0900, Itaru Kitayama wrote:
+> > > On Sun, Apr 12, 2026 at 03:22:15PM +0100, Wei-Lin Chang wrote:
+> > > > This selftest simply starts an L1, which starts its own guest (L2). L2
+> > > > runs without stage-1 and 2 translations, it calls an HVC to jump back
+> > > > to L1.
+> > > 
+> > > How do you disable both the nested guest (L2)'s MMU and stage 2
+> > > translations?
+> > 
+> > Guest stage-2 is disabled by not setting HCR_EL2.VM in prepare_hyp(),
+> > and stage-1 is disabled by not writing to SCTLR_EL12 in init_vcpu(),
+> > effectively using the default value set by L0. However since SCTLR_EL1
+> > has many architecturally UNKNOWN bits (including SCTLR_EL1.M), it should
+> > be better to write a value before running L2 I suppose...
 > 
-> On 4/13/26 12:46 PM, David Hildenbrand (Arm) wrote:
->>> It's correct though mlock2 would also work since it's been in glibc for
->>> several years now. I just matched the existing tests. mlock2_ is a
->>> simple wrapper around syscall in tools/testing/selftests/mm/mlock2.h,
->>> and it was introduced when the mlock2 syscall was introduced. A trailing
->>> rather than a preceding underscore is...unfortunate.
->> Interesting ... and confusing :)
->>
->>>
->>> The intent was to skip the tests if compiled with headers where
->>> MAP_DROPPABLE isn't defined rather than force the value and get EINVAL
->>> because the kernel doesn't know about it. This way EINVAL can be flagged
->>> as a test failure and not skipped since it would likely indicate a test
->>> or kernel bug.
->> Note that the kernel headers you are compiling against don't imply
->> anything about the kernel that is actually running! So the argument
->> regarding EINVAL doesn't really hold.
+> Thanks. What do you think of using copy_el2_to_el1() macro in at.c, so we
+> can prepare in guest_code() to manipulate the SCTLR_EL12 System register 
+> with the sensible programmed values?
+
+Yes, using copy_el2_to_el1() can give us an L2 stage-1 that is identical
+to the L1's stage-1. But what I was considering was if guest stage-2 is
+enabled (which we plan to implement), then those stage-1 page tables
+will have to be mapped for L2, and its base address translated to L2IPA.
+It's doable but seems like extra complexity when stage-1 is not so
+interesting for KVM (except for AT?), it lets the guest do whatever it
+likes and let the hardware do the translation.
+
+Let me know if you have reasons to want stage-1 for L2, there could be
+something I should consider but did not.
+
+Thanks,
+Wei-Lin Chang
+
 > 
-> Yes, I see that now.
+> Itaru.
 > 
-> 
->>
->> But note that we, in general, try to compile against the in-tree headers.
->>
->> See
->>
->> commit 75d60eb30daafb966db0e45f38e4cdeb5e5ed79c
->> Author: Lorenzo Stoakes <ljs@kernel.org>
->> Date:   Mon Oct 28 14:13:30 2024 +0000
->>
->>      tools: testing: update tools UAPI header for mman-common.h
->>
->>      Import the new MADV_GUARD_INSTALL/REMOVE madvise flags.
->>
->> And looking into it, I already see MAP_DROPPABLE there as well, so is
->> any special handling here even needed?
->>
-> I'd say no special handling is needed.
-
-Right, so the #ifdef is not required at all.
-
-> If this test is compiled on with
-> a kernel that has MAP_DROPPABLE but run on an older kernel without
-> MAP_DROPPABLE, should it fail? Or should it interpret the EINVAL as a
-> sufficient reason to assume MAP_DROPPABLE is not supported and to skip
-> the result? My current thinking is it should fail because the EINVAL
-> could have another cause.
-Ah, you want to sense for MAP_DROPPABLE support in older kernels.
-
-I guess treating -EINVAL as "not supported on old kernel" is good enough.
-
-Looking at tools/testing/selftests/mm/droppable.c, we seem to not
-perform any such checks ... unfortunately.
-
--- 
-Cheers,
-
-David
+> > 
+> > Thanks,
+> > Wei-Lin Chang
+> > 
+> > > 
+> > > Itaru.
+> > > 
+> > > > 
+> > > > Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
+> > > > ---
+> > > >  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+> > > >  .../selftests/kvm/arm64/hello_nested.c        | 103 ++++++++++++++++++
+> > > >  2 files changed, 104 insertions(+)
+> > > >  create mode 100644 tools/testing/selftests/kvm/arm64/hello_nested.c
+> > > > 
+> > > > diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> > > > index 3dc3e39f7025..e8c108e0c487 100644
+> > > > --- a/tools/testing/selftests/kvm/Makefile.kvm
+> > > > +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> > > > @@ -168,6 +168,7 @@ TEST_GEN_PROGS_arm64 += arm64/arch_timer_edge_cases
+> > > >  TEST_GEN_PROGS_arm64 += arm64/at
+> > > >  TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
+> > > >  TEST_GEN_PROGS_arm64 += arm64/hello_el2
+> > > > +TEST_GEN_PROGS_arm64 += arm64/hello_nested
+> > > >  TEST_GEN_PROGS_arm64 += arm64/host_sve
+> > > >  TEST_GEN_PROGS_arm64 += arm64/hypercalls
+> > > >  TEST_GEN_PROGS_arm64 += arm64/external_aborts
+> > > > diff --git a/tools/testing/selftests/kvm/arm64/hello_nested.c b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > > > new file mode 100644
+> > > > index 000000000000..97387e4697b3
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > > > @@ -0,0 +1,103 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > > +/*
+> > > > + * hello_nested - Go from vEL2 to EL1 then back
+> > > > + */
+> > > > +
+> > > > +#include "nested.h"
+> > > > +#include "processor.h"
+> > > > +#include "test_util.h"
+> > > > +#include "ucall.h"
+> > > > +
+> > > > +#define XLATE2GPA	(0xABCD)
+> > > > +#define L2STACKSZ	(0x100)
+> > > > +
+> > > > +/*
+> > > > + * TPIDR_EL2 is used to store vcpu id, so save and restore it.
+> > > > + */
+> > > > +static vm_paddr_t ucall_translate_to_gpa(void *gva)
+> > > > +{
+> > > > +	vm_paddr_t gpa;
+> > > > +	u64 vcpu_id = read_sysreg(tpidr_el2);
+> > > > +
+> > > > +	GUEST_SYNC2(XLATE2GPA, gva);
+> > > > +
+> > > > +	/* get the result from userspace */
+> > > > +	gpa = read_sysreg(tpidr_el2);
+> > > > +
+> > > > +	write_sysreg(vcpu_id, tpidr_el2);
+> > > > +
+> > > > +	return gpa;
+> > > > +}
+> > > > +
+> > > > +static void l2_guest_code(void)
+> > > > +{
+> > > > +	do_hvc();
+> > > > +}
+> > > > +
+> > > > +static void guest_code(void)
+> > > > +{
+> > > > +	struct vcpu vcpu;
+> > > > +	struct hyp_data hyp_data;
+> > > > +	int ret;
+> > > > +	vm_paddr_t l2_pc, l2_stack_top;
+> > > > +	/* force 16-byte alignment for the stack pointer */
+> > > > +	u8 l2_stack[L2STACKSZ] __attribute__((aligned(16)));
+> > > > +
+> > > > +	GUEST_ASSERT_EQ(get_current_el(), 2);
+> > > > +	GUEST_PRINTF("vEL2 entry\n");
+> > > > +
+> > > > +	l2_pc = ucall_translate_to_gpa(l2_guest_code);
+> > > > +	l2_stack_top = ucall_translate_to_gpa(&l2_stack[L2STACKSZ]);
+> > > > +
+> > > > +	init_vcpu(&vcpu, l2_pc, l2_stack_top);
+> > > > +	prepare_hyp();
+> > > > +
+> > > > +	ret = run_l2(&vcpu, &hyp_data);
+> > > > +	GUEST_ASSERT_EQ(ret, ARM_EXCEPTION_TRAP);
+> > > > +	GUEST_DONE();
+> > > > +}
+> > > > +
+> > > > +int main(void)
+> > > > +{
+> > > > +	struct kvm_vcpu_init init;
+> > > > +	struct kvm_vcpu *vcpu;
+> > > > +	struct kvm_vm *vm;
+> > > > +	struct ucall uc;
+> > > > +	vm_paddr_t gpa;
+> > > > +
+> > > > +	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
+> > > > +	vm = vm_create(1);
+> > > > +
+> > > > +	kvm_get_default_vcpu_target(vm, &init);
+> > > > +	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
+> > > > +	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
+> > > > +	kvm_arch_vm_finalize_vcpus(vm);
+> > > > +
+> > > > +	while (true) {
+> > > > +		vcpu_run(vcpu);
+> > > > +
+> > > > +		switch (get_ucall(vcpu, &uc)) {
+> > > > +		case UCALL_SYNC:
+> > > > +			if (uc.args[0] == XLATE2GPA) {
+> > > > +				gpa = addr_gva2gpa(vm, (vm_vaddr_t)uc.args[1]);
+> > > > +				vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), gpa);
+> > > > +			}
+> > > > +			break;
+> > > > +		case UCALL_PRINTF:
+> > > > +			pr_info("%s", uc.buffer);
+> > > > +			break;
+> > > > +		case UCALL_DONE:
+> > > > +			pr_info("DONE!\n");
+> > > > +			goto end;
+> > > > +		case UCALL_ABORT:
+> > > > +			REPORT_GUEST_ASSERT(uc);
+> > > > +			fallthrough;
+> > > > +		default:
+> > > > +			TEST_FAIL("Unhandled ucall: %ld\n", uc.cmd);
+> > > > +		}
+> > > > +	}
+> > > > +
+> > > > +end:
+> > > > +	kvm_vm_free(vm);
+> > > > +	return 0;
+> > > > +}
+> > > > -- 
+> > > > 2.43.0
+> > > > 
