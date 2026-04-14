@@ -1,195 +1,132 @@
-Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CD8271464
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 22:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68713346B4
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 23:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776206544; cv=none; b=ISj5oww8ZxilWIsegDFfyOzfKNnAnmLHS8We2cijnaNUPb+MooIgwRbkkqJEz4RVWOquyStQI+X5ioEgMtZ/GvJYjJ1tuTs/WGpSegEHB2Gq+20yjCYfpcKVNDax0uBp1l+B/DW3FO79I/XzXcz9IyHSXvNpTg+HGU8d4jKg5X4=
+	t=1776207758; cv=none; b=CLY1/91hU+FVF5TnX/6NcvgQEzZrdgmHoHWtvtd3MveXta7kFSQOrv3iRmvzvhpc6SUUffz/b82eKEkOL/bX1CoYZdHZazLBTMRx4416unkT9E5jys8R+5AblyiN/BTeH6hvm6jX9IjnhyS1vCJfqNgtaXIpZgJ7xdSVdOEjS1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776206544; c=relaxed/simple;
-	bh=4FmZF7558vFRvVZRQjylfqMIhy+jgbKLmWnuJG9P98w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JCsF59eR4SVQouXkJo0wfIKZbOHnl3DyWEnnZxgWG299hUkUOJlnGeGQ31EZkeeKgbVEEr2DflC7nsCiCBQxz3zUPyoh1O/Y/mNgw68UUl1p+TXLTPANutawt0JO6csBmQ4FZbyHitdQmsYGaS2igudqW19Klo4qHvTgFTNy1xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=AwDHSFhi; arc=none smtp.client-ip=66.163.187.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	s=arc-20240116; t=1776207758; c=relaxed/simple;
+	bh=yIHnxxQ55FAQ5ev7rSPpWImHD239J4P9vUUfERsxhN0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EBlEnKIaUejnnPeKRm8PNGO8Fi7kcDg2OlzlndxLX15qASvV5NOyLnDMAOCs3BU87Kk3bNXlRHKjlll6MFCJ/NiN9f9aedbdYLxKJ6gqplo8QAvab8mjuNwMaETH1zVxa7ZO/T2wkNJUPefbBOeG4oWcsAJ2RqiyOTwn1Hki9hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V+eE4PA6; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="AwDHSFhi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776206542; bh=6oz1GzunoF5mXCMRgI3YarO93ZRvasdAdnsKt8OmNi0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=AwDHSFhiPFoexCT7OfrlfbfHsFRbZb50/7+Fo4T4USMgQaXia9boGJ8iRv41JT2QavaCti/YMXRXZFBiAF1Na0FHPnKtBAB0EgtcY4AKD+rAwDKlOts8KnQ/BX0I66K96ZYFx0bWF7Cwa+iJobJd6Fy9mArqtgKNMkMfZeKj8wX2jpecJ8mNxjeVCmhOFbXuY5+qdZlkIOCSMGPOAYtHHC1gFiC//tMuoK6vrm90JvCJphvaQ8hjEtvaB9u2XGmnWAMc/lzfvgilnTefVNJTHPwDAbo09Os2bDX31Ig9kx/DKYzI+jETJoZO2SX55Wx+e21cRNO9fLjHe4ZBSM6uMA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776206542; bh=aAzO9OHFag6YklDPkTrYT26uxyYAUnbydqtnBRq9ZtS=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=YUyE4zQd/OuKaoxjbRg+EoEX5rQBQzOCRTNirVIQHLovLiRZSKY9l/VRMVCQ7RrZeLyqrBfHalaD5OqGkxmn9U2wUO3xsClzvfOae/1v8bB4qgz/LGd9q5IwKVSY0lhrDyLGRmgT39zEe+4kvyjEbI6YUj+pHUG5yR8gE1LRB82IBmBRbkixvlEUVV1tr/u/E3yr8hpF5U3i6rz3mSKyIzV+OWKeWIHoLZ60q3wlnwwvvmR8ocRMNXXFl7OHP+vt/LLlOhedjk1Mv8lwb7uw8erb5baa+qeQ+gbQBL8lmMax7Uwme8r1ZsSTdFyqOm9b32JUd5mZtSiNFICjtgD5ow==
-X-YMail-OSG: Pw8u1nAVM1lr.IMD.UymBkbwkG5bUAGnZzwLrOsQVnqUbNMjhJJZ.dzHBWeAztH
- EorXABIkcZzDNn3tjiSwdKamup_Hqj6iuTQ45kZ4xrf4BfK9vAhRQ0k1M0xqPg0Mc7ce77vinKFy
- RF2IsfLVaKn81eDQyx6FeQrNgsPAvLTbtpLoIUCxFUdQasKRiUXr1CURSIEVYliBM7vb5cWYpQmm
- D35ickUbtQIG5EAplq36gUQv1JS8H8tOzAeRzfu_nMy6R9J1og23bPv0o3YDeYazNhrDkwl4scTC
- crESgeOQlEdU2YXcu5sPRv29Iw9XZa4Nn_xNfcC11qpjahPvajIjmirS0FkCDO.RWTfkzcC3pfBe
- JufDKqINiGp5b81jV4l10GM.qq4BMD7MljdQUZO17KUvCAQTQx6yrd98e8a9TWlyj2k0zniKGWsO
- xJaq0tCes79FHUQga6ArpS_xm44UQvs48.aIhggAUO9xnBFfiBvaMP21rYnXUVHqxswpLEVknvNo
- KEZFVTOyovQNKriUJT83Ot72UYE5sg.5lj.X2el.d4As6Whs2pn2K0P5Sx8PthqtImeyhyFEHh9K
- vgafZKTJEPMSpD2W.yO8KaPhBQopJKPUpfwU0A1qvLcGBtrAucLCWTbR2pqkyc43u_fn2q269G8i
- qg6nDNEtEHHttW3PY06puvQYJfHYFs0dj1t4OzVPtzoqELSH6hkUQym5E7v1T4Jdw6UBKV0UsgPg
- cbxrusBcArsbcovZQqwgfj4Uv7BMLm1sJTFlw.TKMuNTSjfYZ0Aplu8tfa3_.KHrvB1Tlf_o588u
- W5Ms8C18Mqfr0viswsMiuf6._ly.zEnzxYKv8jVn9GYjzob3carltyTKSHMyZbxnJV3UkWj7vPAp
- U8abVjTdHc3P2z110oClxXM5fvtzzWrzA4XBHp2fQmetJGxKgGhk8cehrS1ZO7BhV7qNAZxeMQ2j
- Cat0OELEMBBF3nq7Z7HNcjop7E7LmCbkh7Am5Bv1bUFH6LItzYHmcacHdJwu8Cdj_lGSn_IerMLT
- aSa0FcKykWNIJMQZZ5uJtKOCKtbc5FlGXWcXeAVnynhvwznfXzU2GuxPr7lZpHzFjV6l5dDBEH1O
- MAI_WSP8iV4bqhIbWXsjsixCLVQJ_WP5cEE9bTDpMWsqIPKsA3xm0ZDyH6on2qp3Cq87yS6Vkvl8
- buN602EHoZevNXNOG_P7lVXKNYlhCqr0GF5OsYvVdH1d7BFllhQJEVOxL1F.q6EaBZf.vd5xOVfF
- qhWKgzAUkxScUYYTYiqEq_jv1sIPfOTu_hwbP_wVZIVDOgqifHsFbui_eiAf6_5XH_kJdrqhv2M.
- XLNelWT3c2nOj1u4AHnaAG3zB4mT5szdff3geDdrbHdZl3CdwVfhQCTXcNgoxwG4_u8RJxiCir2G
- au5ey.VTOZ02gTnY6Wsh2vm5x_H6r9dwjoZjxQpLICILOFgifrkbt55bm6x6pStX4ktv3MW35q28
- M43LGy4B2oYh.j5pCAQFPq6JVfqn1SrjfwjwvBQQnSOOFx8iSd.0gaMV9eyovmZtx0XlPOgjMks.
- hSYUzNQpAvCYDCCgKXLhcW2Kv9AaBwvex6HyO63a_CHYR6zWw4SLAodDD6ZeJwZ4j2QIViJqsJfV
- A_UrYvU83XyFieX6.VvJ_n5fRWvUqyElPIr3stRmlN6KVdKYBRxrCHK.v8mYVc_YFxt4ZaNyI3.n
- Gw9annSAOXqFvC42t_TDu1BFNqA18fqhym6Cf1cIw3T5Eonj70e8xYjnGA29BS8CTGqB7QcH0Jj.
- vT6lbRPCMgmHeRhd7R39MslRx7b0yDUQ3caLLwbec2ELTi0xRd.cgoxmj7NiBmByO3yCEUUy0kas
- 8lXjbXOXsbTx9YoXl9OMEMkOTFGAVrZBNGVCkv2wOa5O2wXAnJLqIXuSc35vhAWdOmjnDO_oCRk0
- fa766p2gdynnA8mL2udWEc2mQi4Np4h4DNRtkwo8r8If0Z8AUkM2y281bSfJQMqIigQAtYcHNZ5h
- SC63Af1AwL9Roy7ElSYVEP9eR1Q5.TzNTSDzcYWP4AdLxIcJq7koSvTKo2GvA8C8zzjh71ZgDuy7
- VRt_MCNvxkC9kbdR.lw8mZXlvdKs3zgBtS3ouksPY5qZXhgweaa9aYVsZ83bfurYHU3luGQ_qc1h
- N0eBKnhndu3T.KP_OM_TNIoeiAnK5PMAPjd6qomTfi2i6ufaEehIqmeko5w6jRkB2OGWm4WngJJl
- LGxt.cYnLE5dB0wI0f2adeQVqj2_R9J7ufg6Q4Ov9ATJpYz.qb8PKOmAlSg--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 09705605-3580-4447-9167-3f29f3bf0677
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 14 Apr 2026 22:42:22 +0000
-Received: by hermes--production-gq1-6dfcf9f8b-xb5j9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 946f65a48635aaf9d12068908cc9ccab;
-          Tue, 14 Apr 2026 22:42:18 +0000 (UTC)
-Message-ID: <a5fe292b-77c8-4190-8989-1d32cadb5689@schaufler-ca.com>
-Date: Tue, 14 Apr 2026 15:42:15 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V+eE4PA6"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b2e8b95bdbso278295ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 16:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1776207756; x=1776812556; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hYhIIDY1BBnC9l/Uqt+TOwqFCFA2hfXSopa3Cxt9ADI=;
+        b=V+eE4PA6vhgdpXm2kvI1s2vhqs1bRyy6Al7EmiMt0DyHQtMHp0MpfvaSlEGUEMAYut
+         ZxPdYgwxO+S4FSEjO4zcIe/C2RmCUIPtv/ULaFNi9qbQ+c0bKcNTc8OnawBIHJEY3DDh
+         d4L5ojfOuuEftI8nTbl1hD68HehHHwSgqTuT4+KKQgE8Fzvf960/NU27FjEoZHjc5Lwz
+         d6mSKXjcWoZA6yBi5cCiiFvZQLJx/4l67Yy23Jn7eCUy5O/ZpM1HrnbfMUsA8qeUiqBn
+         15239XgoTBfRTuOJwiWbb5kfhY2BJUdd0UNWg3AT9Zi3K0PC2PCqH06cUpDUoDGie3pP
+         CS/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776207756; x=1776812556;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hYhIIDY1BBnC9l/Uqt+TOwqFCFA2hfXSopa3Cxt9ADI=;
+        b=KKSJMeT0xvFRRmncu/oyvLWLoTZ3TBxlCMOhpR8zPajH0i68Ty/tg3kikIbOtVvP53
+         T4vni6NurhmOUfGH0MGJp07XUmZ2g/xf/RWyr4BkieuY+Ud5eP1rRuCWP6lm5Zfqd3Wi
+         jUJiDCoeZo2i1jZjqFj+V6Cmgz61sbTBiITkK6Lnb1qg5qFL8mWtqcs1SP741IWGCIyZ
+         SQJSCDXJgNVDKsrDXR10j4IKaa7Ahc0jNh4WVipYP/0Rdx0McUOow9OVKUiUe6CFiePC
+         9nsSl697wz3XBMfeB/YkoGgg0UkcDcVSppcmAhQZzk0RJ+CQR30ZGSO69iicBH/xDycl
+         HTTQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+c2T3sYT372oCLUvODIpitFz0xE6BCeHt1exafivGOCspewCnf7CYviFVkQAsofS58nhsSnIBd/UoiNl7ILz0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEIGadr/8ifprpXce7TGRHo7FejJvbyggOpqDN1fhO23tGlphk
+	ZpLBxJyJ4tHHAOvVBP0s3dCOBVSDQs3FR46LxdhXBPu6MBn4j9YC5DpuiSmBoE8lVA==
+X-Gm-Gg: AeBDietu6CroXWz8Z/cvhq3LFbnj3XXNZERh3mDcacexmXF9RbB12KITPZ3leRJCtJh
+	OXzXoK+zPpNAqPGStU9rqJVFj82UDVtIcLS64wYEZIkUswJ0fCeRrBXhphuXEk+Woz03TWHyQH6
+	elqP31ASufN3J/Y2fc/eoM7+xrQltWZKK9zAM578uVcH6TNbg09WJ6eyXPHZBNsaKxUlrDhSkK6
+	cIvUBmfxD1O+3DylWhYLIQ1hGqiZyhTlOawBsO1kh+U5bxh/gMY7aIgDTDav+4Eg8t1Tt/St4J2
+	52eUO/7Hgz7JRZ0HklcoC08Wv8bmyR+JLKUVt6HxYzRXbbeRXN/5iDIdhzgxzRKgfhMtxOfBpLE
+	VTCKc/iPryJZsLCXk5HQrr0odaSz3ByOHzMLLKJ/foA2++nDSm9MoFjlv2Ycuc4zXn0UWpwx3V6
+	oLHrE1cX0EZP/lBoaN+ylfWXAuCPhpett9uo27f1e7VRAru7dmbQg6z7Dwxq5qsWsNq/6fWCyiJ
+	1i42VLIGBAncQ==
+X-Received: by 2002:a17:902:d50d:b0:2a9:5ef5:399b with SMTP id d9443c01a7336-2b476bcdeb8mr642005ad.19.1776207755684;
+        Tue, 14 Apr 2026 16:02:35 -0700 (PDT)
+Received: from google.com (115.112.199.104.bc.googleusercontent.com. [104.199.112.115])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f673e38ccsm64574b3a.33.2026.04.14.16.02.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2026 16:02:34 -0700 (PDT)
+Date: Tue, 14 Apr 2026 23:02:31 +0000
+From: Lisa Wang <wyihan@google.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, rientjes@google.com,
+	seanjc@google.com, ackerleytng@google.com, vannapurve@google.com,
+	michael.roth@amd.com, jiaqiyan@google.com, tabba@google.com,
+	dave.hansen@linux.intel.com,
+	Naoya Horiguchi <nao.horiguchi@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Hugh Dickins <hughd@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v2 2/7] mm: memory_failure: Allow
+ truncate_error_folio to return MF_DELAYED
+Message-ID: <ad7Hh_kz2aIOeZFI@google.com>
+References: <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-0-92c596402a7a@google.com>
+ <20260319-memory-failure-mf-delayed-fix-rfc-v2-v2-2-92c596402a7a@google.com>
+ <2f177e0f-2eb0-48d0-b48c-7a0a340caf5d@huawei.com>
+ <adA_1zXLUBqmSHFl@google.com>
+ <5c5dfa85-baab-5c0f-6f6d-b71abbe10ed8@huawei.com>
+ <4d38d333-d446-40a3-b6f4-c4890bfd24cf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Paul Moore <paul@paul-moore.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
- <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
- Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
- <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com>
- <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
- <CAHC9VhRoaECt03Rs-ZyoGhW2_qZkA_1weTYYjiXc41Yf5U8A_g@mail.gmail.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhRoaECt03Rs-ZyoGhW2_qZkA_1weTYYjiXc41Yf5U8A_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d38d333-d446-40a3-b6f4-c4890bfd24cf@kernel.org>
 
-On 4/14/2026 1:44 PM, Paul Moore wrote:
-> On Tue, Apr 14, 2026 at 4:10 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> On 4/14/2026 12:09 PM, Paul Moore wrote:
->>> On Tue, Apr 14, 2026 at 1:05 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> ..
->
->>> For those of you who are interested in a more detailed explanation,
->>> here ya go ...
->>>
->>> NetLabel passes security attributes between itself and various LSMs
->>> through the netlbl_lsm_secattr struct.  The netlbl_lsm_secattr struct
->>> is an abstraction not only for the underlying labeling protocols, e.g.
->>> CIPSO and CALIPSO, but also for the LSMs.  Multiple LSMs call into
->>> NetLabel for the same inbound packet using netlbl_skbuff_getattr() and
->>> then translate the attributes into their own label representation.
->>>
->>> Outbound traffic is a bit more complicated as it involves changing the
->>> state of either a sock, via netlbl_sock_setattr(), or a packet, via
->>> netlbl_skbuff_setattr(), but in both cases we are once again dealing
->>> with netlbl_lsm_secattr struct, not a LSM specific label.  Since the
->>> underlying labeling protocol is configured within the NetLabel
->>> subsystem and outside the individual LSMs, there is no worry about
->>> different LSMs requesting different protocol configurations (that is a
->>> separate system/network management issue). The only concern is that
->>> the on-the-wire representation is the same for each LSM that is using
->>> NetLabel based labeling.  While some additional work would be
->>> required, it shouldn't be that hard to add NetLabel/protocol code to
->>> ensure the protocol specific labels are the same, and reject/drop the
->>> packet if not.
->> Indeed, we've discussed this, and I had at one point implemented it.
->> The problem is that for any meaningful access control policies you will
->> never get the two LSMs to agree on a unified network representation.
-> That is also not correct.  In the early days when SELinux was first
-> being used to displace the old CMW/MLS UNIXes NetLabel/CIPSO was used
-> to interoperate between the systems and it did so quite well despite
-> the SELinux TE/MLS policy being quite different than the CMW MLS
-> policies.  Yes, there were aspects of the SELinux policy that made
-> this easier - it had a MLS component after all - but they were still
-> *very* different policies.
+On Mon, Apr 13, 2026 at 09:18:13PM +0200, David Hildenbrand (Arm) wrote:
+> On 4/7/26 05:55, Miaohe Lin wrote:
+> > On 2026/4/4 6:31, Lisa Wang wrote:
+> >> [...snip...]
+> >>>
+> >>> Will it be better to add a pr_info here to provide some information for users?
+> >>>
+> >>> Thanks.
+> >>> .
+> >> I think we don't need to add pr_info here; truncate_error_folio() always
+> >> leads to action_result, which already logs the recovery status.
+> > 
+> > No strong opinion but I want to make code style more consistent with sth. like below:
+> > 
+> 
+> Yeah, would be cleaner.
+> 
+> > if (err == MF_DELAYED)
+> > 	pr_info xxx
+> > else if (err != 0)
+> > 	pr_info("%#lx: Failed to punch page: %d\n", pfn, err);
+> > else if (!filemap_release_folio(folio, GFP_NOIO))
+> > 	pr_info("%#lx: failed to release buffers\n", pfn);
+> 
+> Maybe we can even make the failed here a "Failed" ;)
 
-CMW MLS and SELinux MLS can be mapped. They have the same components.
-Comparing a full SELinux context and a Smack label is another beast.
+Noted. Will update in V4.
 
->> SELinux transmits the MLS component of the security context. Smack passes
->> the text of its context.
-> Arguably the NetLabel/CIPSO interoperability challenge between SELinux
-> and Smack is due more to differences in how Smack encodes its security
-> labels into MLS attributes than from any inherent interop limitation.
-
-Yes. That is correct. The big issue I see is that SELinux does not represent
-the entire context in the CIPSO header. Thus, you're up against many SELinux
-contexts having the same wire representation, where Smack will have a unique
-on wire for each context. You'll have many-to-one mapping issues.
-
-> In fact, I thought the "cipso2" Smack interface was intended to
-> resolve this by allowing admins to control how a Smack/CIPSO
-> translation so that Smack could interop with MLS systems, is that not
-> the case?
-
-Indeed. A CMW MLS policy is way simpler than an SELinux policy.
-
->
->> Unless the Smack label is completely in step with
->> the MLS component of the SELinux context there is no hope of a common
->> network representation. If a *very talented* sysadmin could create such a
->> policy, you would have to wonder why, because Smack would be duplicating
->> the SELinux MLS policy.
-> Interoperability wouldn't be a problem if everyone the "right" systems :D
-
-Where would the fun in that be? ;)
-
->
->>> Use of the NetLabel translation cache, e.g. netlbl_cache_add(), would
->>> require some additional work to convert over to a lsm_prop instead of
->>> a u32/secid, but if you look at the caching code that should be
->>> trivial.  It might be as simple as adding a lsm_prop to the
->>> netlbl_lsm_secattr::attr struct since the cache stores a full secattr
->>> and not just a u32/secid.
->> Indeed. But with no viable users it seems like a lower priority task.
-> You need to be very careful about those "viable users" claims ...
-
-Today there are no users. There are other problems (e.g. mount options)
-that have yet to be addressed.
-
->> And to be clear, I have no problem with netlabel as written. Multiple tag
->> support isn't simple (we did it for Trusted IRIX) and the limited space
->> available for IP options make it tricky.
-> That's an entirely different problem from the LSM and protocol
-> abstractions, but yeah.
->
+Lisa
+> -- 
+> Cheers,
+> 
+> David
