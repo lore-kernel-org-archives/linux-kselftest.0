@@ -1,163 +1,145 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010031.outbound.protection.outlook.com [52.101.46.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD97311C27;
-	Tue, 14 Apr 2026 17:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.31
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776189203; cv=fail; b=SWjxr1/1xCsYcpXn8qdhkoyLvAMTcTUOBOHHtsONcnn+Ql9kaRHjzrs+pFu4gMJXnchr7qCjsnrV38bB6o4zJqHYHsVUuniEQYmJSh2ke72Uqa4/U8W33XqZczWb3Bi4ol9nwdgQJ2qOLQ3ZRcjJ/CNuMBYpKOKc2q6J9z6SGlg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776189203; c=relaxed/simple;
-	bh=KDF+H/I1BhqzAEUjTpQ9cgeGzI6PlIuoyveIwQCWmtA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bn8JXm+BFTLBVSjRC9Yo+pMs7DuR+Bk55Ri585dv6I3NohQSMdfEFzRunkH3VK9493YJhGSGg5L9zLtnJ5J7pbzGPKhDRuRU8m5rdE3UTiE8gPvJGqD45Wi3hXcYLAT4+g++C3/aDMVJaXQFrh1kX/+Yb68LkMCLam4/ZSrgs4Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HS5ey90B; arc=fail smtp.client-ip=52.101.46.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A4E310645
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 18:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776190079; cv=none; b=Gta7zbgBXFcOjZnitFIDsNhw1Iw18S5lG8vZnH5UKYxLLvkHMFX1VcwMGK3sAEYXobwsQ1xhvpTGlMsYMo/aBTu4cyHC6CNpqaWoDA+KPmVFTr31y3melU9OC7Gjc7p4r4me0Jd/iwr3lyk9rafsK+NSy3mTSRchLVDRDcLnlIw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776190079; c=relaxed/simple;
+	bh=HTjhb+sVf7p1WQJwLx9AKzwTwsQ8f1NUTKutpCod60M=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NEaEFGPurrXBqWVWoP9j34VZjzMcTBJw2mvc83SGMruqZ9uGlkf6uWWCCFlcR76wwDtg/Ye/7ctSIncPpNt787IRV7eT6XvimuPOm9zKZiUcqOXhtS1twPtvi3K+MMYx5HUzd+0sOTzpXsBg7griYmh0RzrotKPqE9mYoMKZKp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CJcv8tsX; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HS5ey90B"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=k6W3OeOYX0i89PEXHrkC5OGSeuIq7JdTiIS1SPX04odR/RgbUOyubCdSCslTQf3/0/8vjCY5V3U2XPX8KeVq5q+aceki3bbxJHfK/WyMk+/gIPvHmGoso6CLUi6q7NXifJM0fGVK5RCwxYQcHpjYv2D+V3zXInAuadTY9kKUjGiAoDP10S4B+EhU+dyeZcI2ToPGp7FSDrSxq47rhingVO5hIAuJtjjBwJKnc6Lmz6bxTaJlTU+4IShU93ORCpPZEz9yKa62FU+SVWmqjs2xaRZT7HdzmCK0H33YEsA8bz5kH2zE7HWdiwsqWi8YGD1A+5tF9Aiwp/XTq52HnCCiJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wws4hm5z8JbtRgyTXyebV7dzTK9hEzJ9b98/ENvqhCg=;
- b=aZQ4LdAodQmJzWlCt9y1MQuAqxe37v2ehGWCjlTgdmnrUQM6vfSUpDhbMXXPVL61n0a60bZyDqab4kLpc0fnBF8FN0to876IlfeGg5fqbsqOzZTl8tN+DtKLaNuF4uDafJ2Ax5Ze7W4Y9gEmZl1LlkuHt0xVMBfzuZY5IZsEFXglzmDbnck+63dm3hgO0MSL1sE1vrtrtbL9VuxsdsXEyspe+E7EwfKsufUs8XatBqetnCjVKam5A8cRKxxrH12Y6Sr4VdFGwtXAblGmSSWTa3reqLHasQJ4VzmPnI/SyM9hiiyjEMYDlRtztwW4mQGSZSesSqoTs7qWe55Q/QKrrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wws4hm5z8JbtRgyTXyebV7dzTK9hEzJ9b98/ENvqhCg=;
- b=HS5ey90BNFIr7d/A6beJ/FJsj2RTENrJhXVWGI66tUyenJcCKrRHfCdK9eWpi7eaOiIiu7KAyZuHWYtlby2VWLDSJCrV5vrI7REukWgFCA8YLcXXsG1UebNsa6YeUg0xJg9iU9aHHWKzRlCVEjOSFRLWbFsmuIGxuArSYiLngHjaXOG9g0xcbU44hzwyj+o+N0Atsn9uynh4OoqGZyIYie/2j04NtPndvnQ63V6BKaXESU6aYxv2lKpWEAoYnqNNiCkB5N8I2Aki3y0UzZ0n4dp8ERqTr/UkEDFt65vXIYI3+v6OIKa5dRkGuNpQfHwvR/UQxa/Am9jOCfGjsyqguQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- SN7PR12MB7130.namprd12.prod.outlook.com (2603:10b6:806:2a2::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.49; Tue, 14 Apr
- 2026 17:53:18 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9769.046; Tue, 14 Apr 2026
- 17:53:18 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
- Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
- David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7.2 v2 12/12] selftests/mm: remove READ_ONLY_THP_FOR_FS
- from comments in guard-regions
-Date: Tue, 14 Apr 2026 13:53:15 -0400
-X-Mailer: MailMate (2.0r6290)
-Message-ID: <6E635E1F-29BA-49E0-8B6D-0DB7FED4DBF9@nvidia.com>
-In-Reply-To: <ad57-5Nqd5cci8HQ@casper.infradead.org>
-References: <20260413192030.3275825-1-ziy@nvidia.com>
- <20260413192030.3275825-13-ziy@nvidia.com>
- <ad1WTCR5Kld-tiL8@casper.infradead.org>
- <E3268570-18E4-40AF-92E5-931A8ED1C9B5@nvidia.com>
- <ad1uK11f_J8sFN0e@casper.infradead.org>
- <c696705c-4c0a-4e3c-996c-358d2f0b7074@kernel.org>
- <1EBEBA57-E519-4004-899A-CBF21A77ED53@nvidia.com>
- <ad57-5Nqd5cci8HQ@casper.infradead.org>
-Content-Type: text/plain
-X-ClientProxiedBy: IA1P220CA0022.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:464::11) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CJcv8tsX"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35da1c703d1so6762026a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 11:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1776190076; x=1776794876; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=khThBJkPhi1xf1CIxaRjVLJbrDnS0/dRBtMlj3Iqt7o=;
+        b=CJcv8tsXdYtfsJ8139NpKeDqjbSXwsSk6TYsa0NVpvWW6CukIuGDgA17Nbm9pZHEbJ
+         BieivVnIcj2/CUn3iQwBJ1N6CwIr89qNsSDmBzab82m/IVc+erWyRR4Bu3w97TbvCglA
+         YwtXcTQsFiiGCy5bBZv3MfbGfztCsFetBRvsFx+J3gdhB3V0b9oIUezinf1c2a9Xr489
+         uOq+hI6kSF02IlLzOMU5DPhh2SLE9hrkTRAPVSKOiBqzcCx/JzGBnXDk/ka07h7OjpJL
+         0n23vn7zzi42NyBiWlS0uFKXGEHFrlL9PNIvEzh3EOO0yPpWf8Z2Mpy1/NrlRAVgrDJW
+         50Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776190076; x=1776794876;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=khThBJkPhi1xf1CIxaRjVLJbrDnS0/dRBtMlj3Iqt7o=;
+        b=gDFfIm9pj5YChqrftIJNrZfwHKZggRbLwmF96SyErAc8y/1Ayr2eYwEW+JvjWP9aui
+         CMBkWnRRabbVcH07EB2DRhKAlJ1keWeosge74n+XkjIh572L9PS3are1MjsoolS9Ttn2
+         KrTvfl3ZU7dzQpI9G9cqOuO1IXdjqQBED+mDIFKeMJQ9QbA9brcCHt4wXnF5HRXGn+7O
+         QHYNyodGPC2+Ljs6B/DarLQJxVOGSpmORtMWMi9wkrvnwe2Jvktlud9JZ8V+B/xyiKfC
+         waLvPpCRedi1i5VxOXQEtYmRmVTpXdy133JeYiV90kRyDRWGiPV5bFRFqYIPC6X31JgF
+         yJKg==
+X-Forwarded-Encrypted: i=1; AFNElJ8HQTwdsr4AtJHagS6FlCQKIcF2om+N1iSBQKqoxI46QFHp8UB87lIasn0DcsC8hLxRcAqHY5GCHav5euV3388=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVQ0U1xJO3/6l7+ZbkSDOs8ksy1JQaVuBe9sJ3Jb2RZ3SFmzXC
+	/fdFgh7af8JbifiBFczRYMlAUtPWGt9Di+1D6BCvtaEtgMvpxXdCuZfgQZsuM0+a8P5W4uG+TBC
+	EBe2fAL/IKcFPB0LtX+u5KEJ5GA==
+X-Received: from pjbgj20.prod.google.com ([2002:a17:90b:1094:b0:35d:9018:737])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:2686:b0:35e:5b19:234d with SMTP id 98e67ed59e1d1-35e5b192575mr9144017a91.7.1776190075498;
+ Tue, 14 Apr 2026 11:07:55 -0700 (PDT)
+Date: Tue, 14 Apr 2026 11:07:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SN7PR12MB7130:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f9ac1ec-478b-4688-0a4a-08de9a4eb5ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	8YbplMmegajzWH1GodMaKAsdVyfAkf5sok4NCG/0dFvKpFf7Ob0oy6Tc4IaoETjyfyKCz9NZkMHSt4RmTFPCNAiha/Jxt/kOATn+mJls/lfBOtygvzXbslrBndCqk0ZKKAxlQi2knMCZpDB9i10XFo0z74H/RKJw96FC6zuPJDKgjw3bJlMDLchwL8JjnX0Jf8IvFy5DHo/EyJClQha9b24EGtuNqchbSNKTmEKkDyXu1UBZyqgMoAzWu2DTOy2oI2I2CqoEWNFrxk8Wx+CCDTh17bCP6sBFwIvKb8aAOJ5KxDit8FCQ/uZrnqHgBKwYkMCmJbTglcVhIDje1Xog5KWYIpTvYJA7zamjYYTyGVNWIXAXeTBD3SlYULPjLayh5IS+9kNEv4f2gDOLiNwEBL2oqp2w6tpp7UsDMiHRMBl0CmY+Qhh32SuGgLsfqFX247jBfynL3SohNKFGF47ukjfA/dZcKOjVnRJfn83hUd8qGTLY8C1dh1iTNAxLwj4Rk5GAo3+owqK7to6i9FxePvR5vKXgN9IK6AR08Cptd8FZiu3Iqf6ywwxVofSNL+0dw9T3vZVmre+98nwO7Ue6L/9g1Q7aEeNwYyTNbdlhZlEbj+l596VOp17vf/1qp1CWEFS3hsmc/sA8DayxZV6Vt4QeXSJQm7ozlZGJybXOjz4oioqw+Zdc06O+0RQyFtTdGgAA7A/cwG7Ewfn7++O9eFwUn9CSQNW3v4xKHI5Sz6s=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Q0b4yiuOW5l2vA5nQcShiqdRht6woMh6isVlc2iychwq1uyJJXvwMf4a7HDM?=
- =?us-ascii?Q?7ClaLeY7Jxk9OYbIl5X3i73bstR/3/yewqIEnjznfzilTwIotCIqSbnytQLn?=
- =?us-ascii?Q?JFmiI73Szy8/gTHLEqRKpENdicgCPvcQmBXaTHcmnJY+OiOHUVQplB/IJxad?=
- =?us-ascii?Q?+CR1trvij5qyhSR3vtGDFw+ZJkgCtWqGoDbSjbr16RfC5ZGPTNWZEdZHeWXz?=
- =?us-ascii?Q?Fr9AUkkT9GAycnzV/evWWpQiKdUrk69eAxKVkJChEFv/ztPInL0Fyj8UxpW3?=
- =?us-ascii?Q?/6ywGQijrzgAUiQPjECy3JOn7Aa/1/VNKXKj8Kz/S6JfED8XPhIqNQBaqDZg?=
- =?us-ascii?Q?dnTdEg944nKTNSduK7pIauUAScBeVsvp7W0qzyQVQ7MP5Cyrkj2rO7qwJudZ?=
- =?us-ascii?Q?R0mSWbyw5cZp/eedElQvm/EaI40xa2PNvN2ABxSi9xWAFTMxP1wwlYzDz5bZ?=
- =?us-ascii?Q?mPIHPbhBUxSouEK1W8Mi/Dd8sPNDq7Q9crvUZQF1XF1ayCEsHc+N9vUxtTP2?=
- =?us-ascii?Q?MOVjTTg0oeCOauVKn0boR1UF68+TYCOxrPq2V3kcKpprX5/MdNaH1NNIy5m4?=
- =?us-ascii?Q?WL4ZjsODTc8AQhVWnSuRo2am/d0dj/0ZspbEsQTOSi3k7Y6K+wyMFkFkOZhI?=
- =?us-ascii?Q?l5Wm0axNVbBB3PX+cCWlelHaMXn8LQ9E9deEOwkfwT9uW8zHFktRRUUrms3d?=
- =?us-ascii?Q?cD80H3J8TTRiEb1pO1pGcOyZIyr9XY+UmAqeFh4L2zEVsKempEyqjG7JW7fd?=
- =?us-ascii?Q?JZTcTPM3XjXGd0saRSwdSmsWgMcvaqhwhe5eP2dvDl7J/XV8/LWHl6n5fBtl?=
- =?us-ascii?Q?LhiBp/WvMfXXW2VzLNp9gSGiEOfSobq/naycmiD9ZbTCaKXwJC8BVxa+LuKV?=
- =?us-ascii?Q?Xy+tHuDfXn9Dyp40pUl6PNQqKJLCNw2EzsYS7LeJWH14BWMBWIpZgqSTmOa2?=
- =?us-ascii?Q?62rBfk9/gRihU6Aw3PRDUJSoUCC793Uk+LO2kZU2+KhK3Ni6NgsiL3PyX6pk?=
- =?us-ascii?Q?rbmutmh/EV4evTpF0GD3oeStAlbsNXrzrrrUW23bDAbz/p2j18kvQtlZIcqC?=
- =?us-ascii?Q?y0Ph14/XXw0h1uJYFrHOrbfUgOlVdodhAA+FbOxSKRQEZvizsWDd7jOI6l2B?=
- =?us-ascii?Q?lIYPlGSqz4hgJa/wnPUkaHUkzOV47aKqh87D/UXFVRyQOVt4yU6MsulVn417?=
- =?us-ascii?Q?RxTDH49nnpkRnTKAtLdOZWws1YJlvI4DxSKyogw04t9/m+3+atAVBhSpMemQ?=
- =?us-ascii?Q?PZd4YVCLSZkDFcJBVqXB2eWfmK+9fbMlojsmim/n/oIx22s9llWI8DShmwNI?=
- =?us-ascii?Q?yvtcr+3yapbksyH39LclUVQuuGDfsEzINPfNmgMH54K4vXSthE8JrYtlxH7q?=
- =?us-ascii?Q?ek4EkNJx4sQOKOnNgQLEFXJtOpeq2iE/Q4cGLGYNyTBxnkAbbzdyIb/9jSNb?=
- =?us-ascii?Q?YzR8ypDprV0uN92muHgGL4ISzfyHvXkzQX3bqz7qOrCxg6UQu2tVceWB7gVz?=
- =?us-ascii?Q?xG9jm1GFP1uWCYWcMXx6s6GNhSL3PIhb/ceJk3GO0fRBIF9a2YSYXG8/UNij?=
- =?us-ascii?Q?TKqbX0o1TsUG8xx1mAA0iUDmnkSDnvOTmLYcqcYFgtZppL+jM83jxRWgMUxz?=
- =?us-ascii?Q?g5KU+TVw7+y4wxr6146klmQc0NUrMccXh+bAqRLRe5ctToFDp1IoR+MusmCC?=
- =?us-ascii?Q?jScwNFis70mOTlCf+1cnVGSHzTFfGnSVt7eQrN4tExnMyn1g6E3HOo1JSicX?=
- =?us-ascii?Q?/8ERZFqJIA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f9ac1ec-478b-4688-0a4a-08de9a4eb5ea
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2026 17:53:18.4275
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rlkUUGw8WPPHHTeCmjc5KQR66993ablEBLMp0i9oaTHgmK9CfHHxVHrvjRJoUJqm
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7130
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHOC3mkC/x2MQQrCMBAAv1L27EJSo4JXwQd4lR427aYNpGnJL
+ lIo/bvR4wzM7CBcIgvcmx0Kf6LEJVewpwb6ifLIGIfK0Jr2apx1KJyCsiiOafGUcGalgZTw5m0 wjpy5hDPUfC0c4vZfv+H1fEBXpSdh9IVyP/2uM4lygeP4AoqJ8VeIAAAA
+X-Change-Id: 20260414-selftest-global-metadata-7b1f04a405f3
+X-Developer-Key: i=ackerleytng@google.com; a=ed25519; pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776190073; l=3162;
+ i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
+ bh=HTjhb+sVf7p1WQJwLx9AKzwTwsQ8f1NUTKutpCod60M=; b=24cCm+kgO4kLJABeH9NYnAfq2j/dxpLlthjoXrzxEqz8m11r819Gzh2Y07Agg2FF4AqVp2bMJ
+ 0sK35KlNGTACngnr0CKfoJ5reclepmXGqrB4Vy5kTS+e7JYZr6WG4T+
+X-Mailer: b4 0.14.3
+Message-ID: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
+Subject: [PATCH RFC 0/4] selftests: harness: Provide global metadata pointer
+ to allow clean teardown from selftest libraries
+From: Ackerley Tng <ackerleytng@google.com>
+To: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+	Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, thomas.weissschuh@linutronix.de, linux@weissschuh.net
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kvm@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On 14 Apr 2026, at 13:40, Matthew Wilcox wrote:
+Hi,
 
-> On Tue, Apr 14, 2026 at 12:45:18PM -0400, Zi Yan wrote:
->> On 14 Apr 2026, at 7:09, David Hildenbrand (Arm) wrote:
->>> On 4/14/26 00:28, Matthew Wilcox wrote:
->>>> That sounds like more code that was added for RO_THP and should be
->>>> deleted?  See commit e6be37b2e7bd
->>>
->>> Sounds like something to implement on top of this patch set?
->>>
->>> But with the added dirty checks in patch #2, maybe it's trivial to do it
->>> in this patchset already.
->>
->> Can you two elaborate? The code from commit e6be37b2e7bd is moved around
->> and replaced by functions like __thp_vma_allowable_orders().
->
-> What I was trying to say is that this restriction was added because
-> of ROTHP.  Since we're getting rid of ROTHP, we can remove this
-> restriction.  No matter where the code has now migrated to.
+The common kselftest harness provides nice features such as tracking the
+number of tests, common pass/fail printouts, and setup/teardown functions.
 
-Got it. Thanks. Will clean this up.
+KVM would like to benefit from the common functionality provided in the
+general kselftest harness, but KVM selftests are dependent on a selftest
+library.
 
-Best Regards,
-Yan, Zi
+This selftest library provides common code for setting up virtual machines,
+and is designed with assertions within the setup flows to reduce KVM
+selftest developer burden of making common assertions.
+
+The common kselftest library assertions (ASSERT_EQ and EXPECT_EQ) are
+dependent on access to the _metadata parameter. Any function using the
+assertion macros must be parametrized by _metadata.
+
+The KVM selftest library has many nested function calls and it would be
+impractical to pass _metadata through all those layers of function calls.
+
+Without _metadata, the KVM selftest library can still reimplement its own
+assertion macro (TEST_ASSERT), but it cannot perform teardown on assertion
+failure.
+
+Sean suggested using setjmp and longjmp [1] to back to the top level
+TEST_F(). I looked at [1] and found myself wishing to use TEST_F() the from
+kselftest harness directly. Also, setjmp/longjmp felt like it was
+introducing state that could be messed up easily. I also found recent work
+that removed setjmp/longjmp from kselftest harness [2].
+
+The kselftests harness is running tests sequentially anyway, and the
+function pointers in _metadata wouldn't be changing all that often in most
+selftests.
+
+Would maintainers be open to having the kselftest harness expose a pointer
+to the metadata globally?
+
+Another option would be to expose the current teardown function pointer
+globally instead of the pointer to the entire metadata struct.
+
+kselftest harness macros ASSERT_EQ might also benefit from using the global
+pointer instead, which would open the functions up to calls from nested
+functions without needing to parametrize those functions with _metadata.
+
+[1] https://lore.kernel.org/all/ZjUwqEXPA5QVItyX@google.com/
+[2] https://lore.kernel.org/all/20250610141252-1ee7ae72-dbad-4a80-931c-5b4b14fb07ce@linutronix.de/
+
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
+Ackerley Tng (4):
+      selftests: harness: Move metadata structs to separate header file
+      selftests: harness: Set global current_test_metadata for each test run
+      KVM: selftests: Do teardown from kselftest harness if kselftest_harness is used
+      HACK: Show that the teardown function is called from KVM selftests
+
+ tools/testing/selftests/kselftest_harness.h        | 51 +++------------------
+ .../testing/selftests/kselftest_harness_structs.h  | 53 ++++++++++++++++++++++
+ tools/testing/selftests/kvm/Makefile.kvm           |  1 +
+ .../selftests/kvm/kvm_test_harness_selftest.c      | 34 ++++++++++++++
+ tools/testing/selftests/kvm/lib/assert.c           | 16 +++++++
+ 5 files changed, 110 insertions(+), 45 deletions(-)
+---
+base-commit: 5d0d3623303775d750e122a2542d1a26c8573d38
+change-id: 20260414-selftest-global-metadata-7b1f04a405f3
+
+Best regards,
+--
+Ackerley Tng <ackerleytng@google.com>
+
