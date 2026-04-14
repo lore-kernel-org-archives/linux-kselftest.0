@@ -1,129 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DBA39657D;
-	Tue, 14 Apr 2026 11:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9154B3C3BF3;
+	Tue, 14 Apr 2026 11:06:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776164629; cv=none; b=SMLwUzsNIaCq+EoZT/1bB2E1NE5hmyfhOcci49D1BzPQamwhy/Ci9MYMwfbR8h4C6601s++4vJVhjomJROVd3QlCw53emE3YtWZFe1VGQCXcwMTvt5uJfFuUqE1OdTGMt+oUAvHGwG/fVbLGr1fZ1AENmNIpSbC5BdkzVYeR3lg=
+	t=1776164792; cv=none; b=QBYXS1zY4uw3e41Xbb1mIUva8MSsyHCCQL2zccoWWTOHt52pSdp/kO+50jMonzLLyoVi+qSCzN7k/LC8waJnR1WOYGuag6OHIVARfkkbeejn00+NqRF4yk1WCsAr4jG4yAoF8eEtLK9h9sNnCTwa0bIgMt000RYYE7oSh0msH30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776164629; c=relaxed/simple;
-	bh=SrWPhnGntZWEhwfx7DzHlkqjUcIXkV1FnkHFmTuU8zc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lP2dW4HbkRRV1jbMW9F1yqQpkqJ1zo+yCCoom4zSudKuYUWTQI/e9rpC5DAyVuMoRlYkBepc+IZt15nrv11OJgv1ga1OqAA/41O00Acp1elreNfW4Iahd5pcSCIvgF8VaPStUWRmecK5P8yWXWvqlC8sVC62XWGQff2T03o2aiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5Y/8fD8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776164792; c=relaxed/simple;
+	bh=byfPGoxk08LxeCR5IypvjYRIhJrfAVsxsgWvci09i9o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TLLTJT+76G5OXk+h3JmFs8wa40q8lsqnilG0yyMZcJjH6pZMA9eKYXOaNnLkEtiYGZZlpjc01wqqAvMrcj0vnPDXnyYUCs4J6h27wgKeoePE28V1B4R21PJ0lf0PwwJnfuzRlugX2ZL4GLVS/SczlBWD/Z3TqsvOqbrUY5qJ/Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=iNH3A08B; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5Y/8fD8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB2CC19425;
-	Tue, 14 Apr 2026 11:03:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776164629;
-	bh=SrWPhnGntZWEhwfx7DzHlkqjUcIXkV1FnkHFmTuU8zc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G5Y/8fD8Y3ySpBce9Z9booc3YvxmpqO/2krLoBKNrMw8NezaR0DalOybg3Fub+6Rg
-	 yf5qTn7uuQYd7kQVmq9OD1vnheXF/UV9wYDl1BeKjpdZN18nM/dPz/Kml6AHNRwQsH
-	 keO3WJV6TtEghMhlv2r/lar6jqRWUYn4shDs9CG5I8oRWFYBgRTBw9IMaCFbSWjMS2
-	 Ddv4lr3Q3Q0OBSiEolfYw/m6FWEY7MRykTgHOKR/dB/hUJtNVJ3THauISF1GHPFpUx
-	 CXRAmoL4GrGQCFpsofvy6Px4HN37VscAX7eeiUog0y/oGcbjyiG6RW3y8c/EGHCgwb
-	 bucy8JBds9K3Q==
-Message-ID: <5a3aab32-e96a-4cf7-86f1-7991d924bcdf@kernel.org>
-Date: Tue, 14 Apr 2026 13:03:39 +0200
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="iNH3A08B"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=I9
+	2jEmAumgZ6rFCY267aGWR2wa0hUFuBr3FV+HxJgc8=; b=iNH3A08BSSQ5of74kH
+	JO0tw6AZiH+i7rBX39iLvoVEap6FpzIQI/8+tMXa21QVs1pAilZ84h5J3RbEjZqM
+	f3wdQdq6KzNuSPoKg6SK8/VvgGRgERNc210pktlgiIn9xdYXiPoPsI7s8ZdKXJvb
+	Zdrn55msPR5wL8AfgDP06bqsc=
+Received: from ubuntu24-z.. (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wBnrLh2H95pqLbvEg--.46126S2;
+	Tue, 14 Apr 2026 19:05:28 +0800 (CST)
+From: ranxiaokai627@163.com
+To: hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	muchun.song@linux.dev,
+	tj@kernel.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	kuba@kernel.org,
+	hughd@google.com,
+	akpm@linux-foundation.org
+Cc: cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ran.xiaokai@zte.com.cn,
+	ranxiaokai627@163.com
+Subject: [PATCH 0/2] kselftests: cgroup: fix test_kmem false failures
+Date: Tue, 14 Apr 2026 11:05:22 +0000
+Message-ID: <20260414110524.2414-1-ranxiaokai627@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7.2 v2 08/12] mm/huge_memory: remove folio split check for
- READ_ONLY_THP_FOR_FS
-To: Zi Yan <ziy@nvidia.com>, Matthew Wilcox <willy@infradead.org>
-Cc: Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
- David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260413192030.3275825-1-ziy@nvidia.com>
- <20260413192030.3275825-9-ziy@nvidia.com>
- <ad1U_Z1b7hKlgnun@casper.infradead.org>
- <D29AD8D7-CEE9-415E-9218-87F07F3F9EBA@nvidia.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <D29AD8D7-CEE9-415E-9218-87F07F3F9EBA@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBnrLh2H95pqLbvEg--.46126S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtw47WF4ftFW7AFW3CrW3Wrg_yoWDuwcEva
+	y2yrZ7t395AayqkFZrtrn8XrWS93y7JF4aqF1qqF17JFyUJr4UJFn7Xr1UZ3WxWa13GFya
+	vF9YvFyftr1IyjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRAa9aDUUUUU==
+X-CM-SenderInfo: xudq5x5drntxqwsxqiywtou0bp/xtbC7Rj3RGneH3iPtwAA3u
 
-On 4/13/26 22:46, Zi Yan wrote:
-> On 13 Apr 2026, at 16:41, Matthew Wilcox wrote:
-> 
->> On Mon, Apr 13, 2026 at 03:20:26PM -0400, Zi Yan wrote:
->>> +	/* order-1 is not supported for anonymous THP. */
->>
->> It's also not supported for file folios, right?  Or do we just skip
->> adding order-1 file folios to the deferred split list?  Either way,
-> 
-> order <= 1 folios are not added to deferred split list. See
-> deferred_split_folio().
-> 
-> IIUC, we have order-1 file folios but not order-1 anon folios.
+From: Ran Xiaokai <ran.xiaokai@zte.com.cn>
 
-And only anon folios are ever added to the deferred split list.
+This patchset fixes two issues in testing/selftests/cgroup/test_kmem.c
+that cause false test failures under certain system configurations.
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Patch 1/2 updates the MAX_VMSTAT_ERROR tolerance to account for the
+multi-memcg percpu charge cache introduced by commit f735eebe55f8
+("memcg: multi-memcg percpu charge cache") with NR_MEMCG_STOCK
+(currently 7) slots per CPU, the worst-case discrepancy between
+memory.current and memory.stat.percpu has increased.
+
+Patch 2/2 fixes the test_percpu_basic test to account for slab memory
+overhead. On systems with few CPUs (<= 4), slab consumption exceeds
+percpu usage, causing the test to fail even when the percpu accounting
+is working correctly.
+
+Ran Xiaokai (2):
+  kselftests: cgroup: update kmem test tolerance for multi-memcg stock
+  kselftests: cgroup: account for slab memory in test_percpu_basic
+
+ tools/testing/selftests/cgroup/test_kmem.c | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
 
 -- 
-Cheers,
+2.25.1
 
-David
+
