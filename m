@@ -1,54 +1,54 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F9331E855
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 18:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EF7321F5F
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 18:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776190083; cv=none; b=DWuE4kzL73Em0DlPnnKRCtp7LLlZuDG0Yc46+AjWpjTlJ/raJSlFIwc6vfzoIHHCb76baw3fTvoP0G1dDAe7yDcrK/C4SB+lShb3Y6REy9Mlcvam0SdTZUzxXNsuwk78rjn8azY6xHzsior/gDseRbQKaGMZf5clxn6Ul44mAL8=
+	t=1776190084; cv=none; b=khzxiJFo3wHAZqo/v56NyK2u+7nsx2FPrRPdTzbJSCLf1Z7/84dMjErJRZC2y6vHAHOoNBGJYoA8p2mWlN2ZZI0hB1m8fwsXp6iXPFrxJJo+16G/sOLc+pa1Im8XzTMd60bhkPjMGqv0SaX0WDd4KdYZZ0ddKS/2sYpUIp9Ye2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776190083; c=relaxed/simple;
-	bh=3eOaP1PjqwIMhC9h/73po0HRLNeVuCigZDPpl5LivDs=;
+	s=arc-20240116; t=1776190084; c=relaxed/simple;
+	bh=cCHZn38WYTfp/PfpDh6xqMgiUCYfrrR68b4aQ76CpZI=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=oTB15x4rseVcxna38Jvpv8hB/d+c29rfpft3+n1GbkAbkNRdBUwp6VyUoZPOv1ZUgNa7d9aYDjX1tmbu1s6/9neglg0/3yXjHagW8oh7ABmEKGosQf/ejWr+2v2MEMNz34DJc9epEQ2j7lxINBMZO9qDDl9jAI65yW43Sjy54zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pvW9ZfkH; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=n3V+Er+qn/yCdCxZEeqkyJd23txxfDMMDe4N1tt9n6AEGIvixOHOqLPskGePdBTvvEmgPmYbVHQTNlEXuAtoFb/PYoNuyGN8n+LvAP0aXiBCmC2k37etBsbRnelYdpHwuAScHytsAfGZxYQYZd7AvhlSk6H/v4Dxj4ae4cAXQOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F0rjWN5D; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pvW9ZfkH"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-354c44bf176so5521564a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 11:08:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F0rjWN5D"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35dacc40f92so6098911a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 11:08:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776190081; x=1776794881; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1776190083; x=1776794883; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xRzVsTq7xtAKE6uuc9zkrMY4DjEcTQtxRmj4+xciBiE=;
-        b=pvW9ZfkHzjQod1r8mbEYINaokPs+tD0x9mWNrUApygLP3VbttvwygHf0oqnZhhiJTF
-         62q+NBfCoIi19Fdc7mX9ag5I3cr75Redya1R0MBgLKjHB6PbeWmT2SMFFHzFs/g0OmLZ
-         /EXJkRIxkzQI9h7hU16H/UkOA2HNOTcHrhcvtlx9zRXaLisDUzQtfHu5ZTPQdly98FOd
-         jSA0yUsUANpyrY3A0QqqLgyiRk5dSXly/yA19CTVLJ1wf7xvV2vlNvNEX5Ndcc3wyMyT
-         AzxwWNIR0+ZOzSyb3veJAGOkpIEV3CkgIKL3cDbDN9N/Av8tkroEfDbS0xH/7S1dYL3A
-         A/wQ==
+        bh=o70ztLmmao+vAPqOCIv6vc9Rx7/bbrrSC8znt4hxDkc=;
+        b=F0rjWN5DEpfi5t/0KqqIphWLFwvJJ2Kh3dXZ9fOSXj85yRftB8bWvg8ikYsuQKCNjz
+         AMK0JNXEThWPI+a/rV7CDazIZnepjwZRxPPW8EdTJhPoRIaluyA7oAahwQuKk4rw/M5W
+         DQpuH2NWhUq+3iQ3sC5O3RrBKiUz5UQaTow2PuXdMZ5yAl0RJ/Vv6g9//vDI2T1Ze77J
+         uLtf/ZCJBHJhcvE/AsN6VDpt9JuRXB4pdU3mG3pA70PPgOuUCpOlg4hWgU/bA5AP81Gk
+         nBV7TW6vFJ/FeqIVKPeuseHuTtjjowW+GtSoKRJOXP4bKQitwJ/6E3yVSTJnvjU8jHeO
+         jtUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776190081; x=1776794881;
+        d=1e100.net; s=20251104; t=1776190083; x=1776794883;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xRzVsTq7xtAKE6uuc9zkrMY4DjEcTQtxRmj4+xciBiE=;
-        b=MmOtk76Jpe5lLFZurjHjNCa74TO5suPEh0s2H4T8/cK2M6+2zBwCGgHfalezv+f6wS
-         n4rT64LxFPf8g+nEx9hs2QSqX7eIsuwQ1Qc1Y/gRE9W+qjKaBPjT8HKNdKGFx2FOM8lH
-         wXHE/umNPvBSvSRHoh+CMXNweixkjBF5hBMRVZTEPXu5BHF/lhl6B5nGes5X7rPNB3OP
-         4j/BS4GLO9GfZwka5zoiYof7nfY2FGyCaew8AN+3jup3aMTw2lxVNd60vSnjmB0bZb8W
-         dnkTMJixIxuRKdtzwmdXWSXigCUIPxQiSB+H6H5iErq2ApGU/7NnvwjnLtXTg1gtKuEY
-         Gh2w==
-X-Forwarded-Encrypted: i=1; AFNElJ814AkVBS/ry5e2w9WI4zKnJPnADV/3bJohKnqaB1Nhel8iqpqPlvAj0u7FpKNyX8phpidJ1CN8hJ7F6zLhV90=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMpmrKetqTa/GfH8l08oVFJHq1jWj3YpcNkEJ1n2+ZmS9nYnvB
-	FJ83bP+6g3gxYEpDXBUkpaiJHFJw1t1PaTtkYq1QIMQufP9rClyLiCDNhqFOitFIECRhPSKe1Eb
-	/JxWCxf6yYkWmpdsBiPbcZw/wbQ==
-X-Received: from pjbme4.prod.google.com ([2002:a17:90b:17c4:b0:35d:9eb5:1fe])
+        bh=o70ztLmmao+vAPqOCIv6vc9Rx7/bbrrSC8znt4hxDkc=;
+        b=ZFQXp4OISbkoCanCZlO+TCtuuck+ddv/De1K2ctDOW3kMkxQ741rOt0gpT5OegoZUb
+         hosdVvQHmdt4HhpTzTnq+chtuDy102c2YT2PIqWHpB16BWkBeglwQu5o5AbTNFFJE2qK
+         4jg+1c5LV6b4PH1QoUkV2G2X9nUpSLhRMl6poJn+jap7aCAFohZOWrktE+i95Ppwfs3J
+         NOHiJqMVxl+mSjQ/IQv7sAaewk9NiounTBt8e7BHe6HdiRKLL1XcVY46ZlN6xqNKTAZr
+         WPM5FPNJHv/md6RLB0gT13aZjnaVNOBoMvRZgKCseuU2Ayx2xgh4Kw9j4/TYugnAPyF5
+         PipA==
+X-Forwarded-Encrypted: i=1; AFNElJ+fP5p+jQLzLZx8ot+zmB4w7PbeLsXTbifJLoyeTGqDFCo+uI8P/sSepc/QQhUUwP4QMPS/0XaUH5qsMEVypm8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/VXRy4SvFqmDZ/5zHuzzsG3ohdPl39LYlHndc19i2wPelGLYw
+	OKD+5fgmf4o73hcxKnrE5tt7r9AWw90n+8YupDXJVocCa4o8Ck3bDB1dCLbfCe4kBS9uIree1Ii
+	IOhDwFjmWFv8KVHpYzjjB4craIw==
+X-Received: from pjbpc11.prod.google.com ([2002:a17:90b:3b8b:b0:35f:bc0b:9e68])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:4c10:b0:35f:bb33:d72c with SMTP id 98e67ed59e1d1-35fbb33da86mr7504039a91.4.1776190080795;
- Tue, 14 Apr 2026 11:08:00 -0700 (PDT)
-Date: Tue, 14 Apr 2026 11:07:50 -0700
+ 2002:a17:90b:4a41:b0:35f:bf4b:c396 with SMTP id 98e67ed59e1d1-35fbf4bc5afmr5869715a91.1.1776190082419;
+ Tue, 14 Apr 2026 11:08:02 -0700 (PDT)
+Date: Tue, 14 Apr 2026 11:07:51 -0700
 In-Reply-To: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,14 +58,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519; pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776190073; l=1745;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776190073; l=2614;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=3eOaP1PjqwIMhC9h/73po0HRLNeVuCigZDPpl5LivDs=; b=7AFWyQ0DVP8h1/H+jFzj0I9KP+8m36LoteufdUTQT1V3Bt1TjzwWMjtAG3ddTNHhhqSOQAXCI
- xAoJNSVc15ZCct8aMwX/ex+6ZAs+81QmZuhps/YOEOAFMsC3uP9Fz3G
+ bh=cCHZn38WYTfp/PfpDh6xqMgiUCYfrrR68b4aQ76CpZI=; b=sSACYS9gSD/hjegQqS7FunUv1uUKDq73UvxPXisnBycuA3wBRv2EP5SYXkK8+6nVYNmc3wtqs
+ 9STcGZMFigcBSlsymzSgW9FjARexZWfRpJl5Dsc2zKMPcQMypdK7twp
 X-Mailer: b4 0.14.3
-Message-ID: <20260414-selftest-global-metadata-v1-3-fd223922bc57@google.com>
-Subject: [PATCH RFC 3/4] KVM: selftests: Do teardown from kselftest harness if
- kselftest_harness is used
+Message-ID: <20260414-selftest-global-metadata-v1-4-fd223922bc57@google.com>
+Subject: [PATCH RFC 4/4] HACK: Show that the teardown function is called from
+ KVM selftests
 From: Ackerley Tng <ackerleytng@google.com>
 To: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
 	Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -74,58 +74,90 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	kvm@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-If kselftest_harness is used, when an KVM selftest assertion fails, make
-sure to perform teardown (like kselftest_harness) before exiting.
+Running the selftest tools/testing/selftests/kvm/kvm_test_harness_selftest
+gets me this:
 
-Provide a weak struct definition and default the pointer's value to NULL so
-KVM selftests that don't use kselftest_harness will still work as before.
+$ tools/testing/selftests/kvm/kvm_test_harness_selftest
+Random seed: 0x6b8b4567
+TAP version 13
+1..2
+setup
+teardown
+ok 1 my_fixture.my_test_pass
+setup
+==== Test Assertion Failure ====
+  kvm_test_harness_selftest.c:28: false
+  pid=73044 tid=73044 errno=0 - Success
+     1  0x0000000000402c04: my_fixture_my_test_assert at kvm_test_harness_selftest.c:28
+     2   (inlined by) wrapper_my_fixture_my_test_assert at kvm_test_harness_selftest.c:26
+     3  0x0000000000403497: __run_test at kselftest_harness.h:1185
+     4  0x0000000000402340: test_harness_run at kselftest_harness.h:1256
+     5   (inlined by) main at kvm_test_harness_selftest.c:33
+     6  0x000000000041ef10: __libc_start_call_main at libc-start.o:?
+     7  0x000000000042108c: __libc_start_main_impl at ??:?
+     8  0x00000000004026e0: _start at ??:?
+  foobar
+teardown
+not ok 2 my_fixture.my_test_assert
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/kvm/lib/assert.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ tools/testing/selftests/kvm/Makefile.kvm           |  1 +
+ .../selftests/kvm/kvm_test_harness_selftest.c      | 34 ++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selftests/kvm/lib/assert.c
-index b49690658c606..06970611317fd 100644
---- a/tools/testing/selftests/kvm/lib/assert.c
-+++ b/tools/testing/selftests/kvm/lib/assert.c
-@@ -9,6 +9,7 @@
- #include <execinfo.h>
- #include <sys/syscall.h>
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 6471fa214a9f9..d32045f7d9396 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -64,6 +64,7 @@ TEST_GEN_PROGS_COMMON += kvm_binary_stats_test
+ TEST_GEN_PROGS_COMMON += kvm_create_max_vcpus
+ TEST_GEN_PROGS_COMMON += kvm_page_table_test
+ TEST_GEN_PROGS_COMMON += set_memory_region_test
++TEST_GEN_PROGS_COMMON += kvm_test_harness_selftest
  
-+#include "kselftest_harness_structs.h"
- #include "kselftest.h"
- 
- /* Dumps the current stack trace to stderr. */
-@@ -63,6 +64,8 @@ static pid_t _gettid(void)
- 	return syscall(SYS_gettid);
- }
- 
-+struct __test_metadata *current_test_metadata __attribute__((weak)) = NULL;
+ # Compiled test targets
+ TEST_GEN_PROGS_x86 = $(TEST_GEN_PROGS_COMMON)
+diff --git a/tools/testing/selftests/kvm/kvm_test_harness_selftest.c b/tools/testing/selftests/kvm/kvm_test_harness_selftest.c
+new file mode 100644
+index 0000000000000..36ce14226fdb7
+--- /dev/null
++++ b/tools/testing/selftests/kvm/kvm_test_harness_selftest.c
+@@ -0,0 +1,34 @@
++#include <stdio.h>
 +
- void __attribute__((noinline))
- test_assert(bool exp, const char *exp_str,
- 	const char *file, unsigned int line, const char *fmt, ...)
-@@ -89,6 +92,19 @@ test_assert(bool exp, const char *exp_str,
- 			print_skip("Access denied - Exiting");
- 			exit(KSFT_SKIP);
- 		}
++#include "kselftest_harness.h"
++#include "test_util.h"
 +
-+		/*
-+		 * When used with kselftest_harness, do teardown like
-+		 * __bail() does. KVM only has TEST_ASSERT (no EXPECT
-+		 * equivalent) and will definitely exit.
-+		 */
-+		if (current_test_metadata) {
-+			struct __test_metadata *t = current_test_metadata;
++FIXTURE(my_fixture)
++{
 +
-+			if (t->teardown_fn)
-+				t->teardown_fn(false, t, t->self, t->variant);
-+		}
++};
 +
- 		exit(254);
- 	}
- 
++FIXTURE_SETUP(my_fixture)
++{
++	pr_info("setup\n");
++}
++
++FIXTURE_TEARDOWN(my_fixture)
++{
++	pr_info("teardown\n");
++}
++
++TEST_F(my_fixture, my_test_pass)
++{
++	TEST_ASSERT(true, "foobar");
++}
++
++TEST_F(my_fixture, my_test_assert)
++{
++	TEST_ASSERT(false, "foobar");
++}
++
++int main(int argc, char **argv)
++{
++	return test_harness_run(argc, argv);
++}
 
 -- 
 2.54.0.rc0.605.g598a273b03-goog
