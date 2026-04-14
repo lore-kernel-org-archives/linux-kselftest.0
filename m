@@ -1,175 +1,122 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E038390C95
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 12:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5E13E5ED1;
+	Tue, 14 Apr 2026 13:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776168787; cv=none; b=WyxGlJZBMYyDsIiZped3Og+KTbXR8c3ZIX4QSDLP2zvqU24O50CW11sXK7NAgX14oqiX5h2AV7btj2zgNzi753VjgJ1oP69KAdjyHuIyRYMN8G3T7ENLkbkid6FwH9ea3qVtbMRcqZdfVed2n8FgQWm9YrHnPN8M0knE1qrFjUo=
+	t=1776172385; cv=none; b=kkXRgZD7pNSPnfRbRsWkO7Hm2tCYzuldfqre3W0HESc8DkcrSGcFiWl6OATJ2ZO9zULRnfuVPG05f19eq3MLB67w26NO+V8kQWUjHipsmHTZDnCSsbzoT72pJXt/lvpdbG9tEqVCb9Krw9SnsJw9DFB/F+KQmppqYaJI2x/9qZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776168787; c=relaxed/simple;
-	bh=+QnCQVCjojEcuevSC8g0MJA/h24xDP0xiW/QNvX/aco=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZQWygwdRLI677opVrYvIIHmnALEQqpEsLcKlXfkyFGZioDb8azWsh0R2Iepw9qpdbMFVuUvg0Xr0Gd55Wh4zyybZxbTKrv2od+1Zs4as5RVue2CRZI6+7UfeAevrgnrXhaeVXOTkMp7xaN0us5Aq/lcqGXPDJizybT4qKxYXpko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fxl4I8ZH; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1776172385; c=relaxed/simple;
+	bh=ljtr9WPSUnaAjZD/FtGwji3II/sbFJuzXTsBaHKsQSU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=og6u0pqNO3pm/LfgF0jip1mEHdmoHeD0x3SmwerLr/d5yS1Dk7eUIwS6OMt8mrEK4tr3ePxdOZeb0tMlH/xBmyofrfrvKq7cEF6Rre5cUrfpG3bYlovVPBASaIuXqnjKkyogwNdVVJeRPHvzPhQLKuBDxIA0aijKpqOA5/qVmNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lhDeNvog; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fxl4I8ZH"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488971db0fdso54618415e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 05:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776168785; x=1776773585; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+QnCQVCjojEcuevSC8g0MJA/h24xDP0xiW/QNvX/aco=;
-        b=fxl4I8ZHiJKWOX/0KlNsMjhxexf+MCO11K7GYjL94X6qgWenvd1KPnp2wxIGGW3ASk
-         +3YZmm9S/Le8SrJs7f4USqFGN5wygMj8ZQ66ByZZcUCmq46MmMAl54w8SKxdQU7cWwG7
-         5wfxFEU9SP3idSHXctmJ4apkGy4UDAGHLblfQn1Qqw5dHTWiru+el1GNTXbXxSYDIQCC
-         LGKnRuzCpWaZ4C14CCDxSs8E/9tE+lowrE+2lu3Ho81Z4qUPsK5CZ7AXsea6DvHhRj6s
-         c8MnYGhxnkBtdT3rIIFRVSdawvb40jZhqPukhwhoCncDtwwb1fJiYtUYLHV1HgCcZh1a
-         P3dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776168785; x=1776773585;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+QnCQVCjojEcuevSC8g0MJA/h24xDP0xiW/QNvX/aco=;
-        b=QBNQox9m4hvbUOkRPPj3KUjtShaHOmoNDIbAqiJMTMGu09+jxigDv/O+cbtibIQF+Y
-         WInD+PlWCWkKJWF1e4u6U7riUEmtUK1ZwLmRog5TZWAOx6AzNbmwwiyPkUIqlaWW1zP/
-         2y5wRCMY8EZA64SyCw892JTRm+MG6Ab9PxtHAVbm5IbhDRhetpdszyeVki/ed8O9w0Rb
-         jcRzwgeIaBgaQBBRldVDNE9egDxiR3HTDtQYz3wB07OdDQRD+V/EXhZeMpvUhzKjkgCj
-         y0dxE/dOrC/k38M8V/upWkRyHluihB7V3vHXXJZ1sS2s1QAEii7kyMS6j5Qm4RzFYh4U
-         iR5Q==
-X-Forwarded-Encrypted: i=1; AFNElJ8YV4VvQ2gCia3TccwnxBHMm3OIN2rJA4iup0KhokGt8k7CM57FII3m2/rFuOQK26yXusyRzJHA3lo85pDgIAM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9hc/0Cg4LNk3Hm1oUCxG7Wl1NKrbh/qkkabggsQBRvZkstaFA
-	Re9hIf2klkTEYFlgiClLjLRnMsj7xSAeoah2cpZsxdj+41v8XjIQ9MO+emea8hped3Q=
-X-Gm-Gg: AeBDievw+RSA2uDsw6YgwEnzyAJMVjKxYvTKwJpKHaupt2UAyejOGpqMAxu8IymKCD1
-	nfsu4QYDg/9aVfR5YsqaZBSp12ljNM4p4F5nNen8yo6WfRS+nfEvDU0Q3SRCju7F9PEZ+ocbhdX
-	aD47dOBeiNRJBTOsoBTZsy3RYAzoZGoHVhYBvyr2G2E9PCqCzDtz+GszlBv58V4WmnFzHTeLlff
-	emepFB1+j6NEvNdWigrJ5fRk7Rg4BCeWREyDsu9DjyhE6+gkstpTo4qusxc/NoNzWlBG4gkJe0P
-	7tbPchmYzr1a31OH8J5lNMyW31Rmx++FNbmSuPHcdWmtklcKZe3yzBvEx6FeA8lTi/r62S7r1up
-	r78oB1HvhodEcgsGp/21xBg3wfC1WH4rOye/NgOfCy36Q5IbuOGNocrYXWBRI3GC9HKJW23xLCF
-	+MZDyGGkf0yMftH1gIEdCjk68vDF/KsxIy8/L93ildrggJSmdS2Ur3+OpqqgXJ2lEmqFOjj11hj
-	ztTfA==
-X-Received: by 2002:a05:600d:8449:b0:486:fdba:f5db with SMTP id 5b1f17b1804b1-488d664f29emr192886925e9.0.1776168784711;
-        Tue, 14 Apr 2026 05:13:04 -0700 (PDT)
-Received: from ?IPv6:2804:1bc4:224:7800:585c:db3a:fcb:e21f? ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d67b4a46sm269592205e9.4.2026.04.14.05.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2026 05:13:04 -0700 (PDT)
-Message-ID: <6ab30eed1165bcd68395e32d8ab61d7437a8ccf6.camel@suse.com>
-Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be
- executed on 4.12 kernels
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes
-	 <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Joe Lawrence
-	 <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Tue, 14 Apr 2026 09:12:58 -0300
-In-Reply-To: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
-References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
-Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
- keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
- Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
- gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
- GO8seNG8sYiP6JfRjl7Hyqca6YsE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.0 (by Flathub.org) 
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lhDeNvog"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 932294E429EC;
+	Tue, 14 Apr 2026 13:13:01 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 46E3160410;
+	Tue, 14 Apr 2026 13:13:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 569A6104500A2;
+	Tue, 14 Apr 2026 15:12:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776172379; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=ljtr9WPSUnaAjZD/FtGwji3II/sbFJuzXTsBaHKsQSU=;
+	b=lhDeNvog7+cXfwfKejAzO+yVIre7KeKOh4nxhyYR84tw7Qhs4CDNLFYshF/sNo/ddcHeul
+	OAXDnRRPYFfdKmNFr6FNXLWBgkwR5bSerHfi1jG3QAuxmeyq9DKVn4ADpvD+k/LktKcxCV
+	Qo+C51KQYvBPk2tQWgzerrUX38wX8fl9mns5nowg6aBHUe0QUCDETlFcTsN3Vd+g6AhDW1
+	t0+PPdVn0VXoKLO/NdWsu8xr8pa5SfFsPWlNHjagwF2HUg4Jwz/bTTtoEDbu5jNS5UXcqe
+	/1a7m2ycQR5Rypiiam1nxF1Kid65dAD8mzMdsDqIpVAnb6rsDVnu+pzT2qXnlw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 14 Apr 2026 15:12:47 +0200
+Message-Id: <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, "David Ahern" <dsahern@kernel.org>, "Thomas
+ Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, "Borislav
+ Petkov" <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+ "Alexandre Torgue" <alexandre.torgue@foss.st.com>, "Andrey Ryabinin"
+ <ryabinin.a.a@gmail.com>, "Alexander Potapenko" <glider@google.com>,
+ "Dmitry Vyukov" <dvyukov@google.com>, "Vincenzo Frascino"
+ <vincenzo.frascino@arm.com>, "Andrew Morton" <akpm@linux-foundation.org>,
+ <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>,
+ <linux-arm-kernel@lists.infradead.org>, <kasan-dev@googlegroups.com>,
+ <linux-mm@kvack.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Andrey Konovalov" <andreyknvl@gmail.com>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-1-1a5831230821@bootlin.com>
+ <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
+In-Reply-To: <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, 2026-04-13 at 14:26 -0300, Marcos Paulo de Souza wrote:
-> A new version of the patchset, with fewer patches now. Please take a
-> look!
->=20
-> Original cover-letter:
-> These patches don't really change how the patches are run, just skip
-> some tests on kernels that don't support a feature (like kprobe and
-> livepatched living together) or when a livepatch sysfs attribute is
-> missing.
->=20
-> The last patch slightly adjusts check_result function to skip dmesg
-> messages on SLE kernels when a livepatch is removed.
->=20
-> These patches are based on printk/for-next branch.
->=20
-> Please review! Thanks!
->=20
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+Hi Andrey, thanks for the prompt review !
 
+On Tue Apr 14, 2026 at 12:19 AM CEST, Andrey Konovalov wrote:
+> On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foundat=
+ion)
+> <alexis.lothore@bootlin.com> wrote:
+>>
 
-I saw some checks made by sashiko, and besides they not being so
-horrible, I believe that I should fix me an send a v3 to address them.
-But still, feel free to take a look :)
+[...]
 
-https://sashiko.dev/#/patchset/20260413-lp-tests-old-fixes-v2-0-367c7cb5006=
-f%40suse.com
+>> +#ifdef CONFIG_KASAN_GENERIC
+>> +void __asan_load1(void *p);
+>> +void __asan_store1(void *p);
+>> +void __asan_load2(void *p);
+>> +void __asan_store2(void *p);
+>> +void __asan_load4(void *p);
+>> +void __asan_store4(void *p);
+>> +void __asan_load8(void *p);
+>> +void __asan_store8(void *p);
+>> +void __asan_load16(void *p);
+>> +void __asan_store16(void *p);
+>> +#endif /* CONFIG_KASAN_GENERIC */
+>
+> This looks ugly, let's not do this unless it's really required.
+>
+> You can just use kasan_check_read/write() instead - these are public
+> wrappers around the same shadow memory checking functions. And they
+> also work with the SW_TAGS mode, in case the BPF would want to use
+> that mode at some point. (For HW_TAGS, we only have kasan_check_byte()
+> that checks a single byte, but it can be extended in the future if
+> required to be used by BPF.)
 
-> ---
-> Changes in v2:
-> - Patch descriptions were changed to remove "test-X", since it was
-> polluting the commit subjects (Miroslav Benes)
-> - Patch 8 was dropped since it was checking for a message from an
-> out-of-tree patch. (Petr Mladek)
-> - Patch 3 was dropped as should be treated as expected failure for
-> older kernels. (Petr Mladek)
-> - Patch 2 was changed to use y/n instead of 1/0, since it's more
-> natural to use it.
-> - Patch 1 was changed to handle ppc and loongson, and error out if
-> dealing with a different architecture that sets
-> =C2=A0 CONFIG_ARCH_HAS_SYSCALL_WRAPPER and haven't changed the test to
-> include the proper wrapper prefix.
-> - Patch 4 was changed to invert the return of the bash function to
-> return 1 in failure, like
-> =C2=A0 a normal bash function (Joe Lawrence)
-> - Patches 5, 6 an 7 were changed to not split the tests, but to only
-> run the tests
-> =C2=A0 when the attribute were present (Miroslav Benes)
-> - Link to v1:
-> https://patch.msgid.link/20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@su=
-se.com
->=20
-> ---
-> Marcos Paulo de Souza (6):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Check for ARCH_HAS_S=
-YSCALL_WRAPPER config
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Replace true/false m=
-odule parameter by
-> y/n
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Introduce does_sysfs=
-_exists function
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Check if patched sys=
-fs attribute exists
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Check if replace sys=
-fs attribute exists
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Check if stack_order=
- sysfs attribute
-> exists
->=20
-> =C2=A0tools/testing/selftests/livepatch/functions.sh=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 10 ++
-> =C2=A0tools/testing/selftests/livepatch/test-kprobe.sh=C2=A0=C2=A0 |=C2=
-=A0=C2=A0 8 +-
-> =C2=A0tools/testing/selftests/livepatch/test-sysfs.sh=C2=A0=C2=A0=C2=A0 |=
- 120
-> ++++++++++++---------
-> =C2=A0.../livepatch/test_modules/test_klp_syscall.c=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 17 ++-
-> =C2=A04 files changed, 99 insertions(+), 56 deletions(-)
-> ---
-> base-commit: 712c0756828becbfc629ff8d8b82deff5d1115e4
-> change-id: 20260309-lp-tests-old-fixes-f955abc8ec27
->=20
-> Best regards,
-> --=C2=A0=20
-> Marcos Paulo de Souza <mpdesouza@suse.com>
+ACK, I'll try to use those kasan_check_read and kasan_check_write rather
+than __asan_{load,store}X.
+
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
