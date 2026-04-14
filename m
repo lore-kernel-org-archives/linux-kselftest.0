@@ -1,224 +1,274 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3082A387566;
-	Tue, 14 Apr 2026 21:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFFB18AFE;
+	Tue, 14 Apr 2026 22:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.139.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776203876; cv=none; b=RaICNizARuxFP47dUF+harhm2gm8/kmDVvLZff0ttvJCCkjDXBfxVxQCwswRaTyvU1GxKCT5/3K/MDGn/lL5/XrGIMDrkmbSY53mRvanqTtlkT0XcVsZrZUwq+riURnv1kfLucJLsk6/m+u+i1js+SBC9ynW/YJ6klLHAnur/KM=
+	t=1776204400; cv=none; b=Va/vRwrrgCeN4RYDITeJqEoEvICthLFhpaIESAfu2C9JTUcyE4R/vU2yCyE0n0Lm+0+qE+ubGAt4/3RAlMtPuxqSXBOlrEMwJDb9FEOOU9gKNKtofMTrWvmZsSvzFWkhn1gAAhJBrFF7ycZeGi9A1XgbiGQg2jxXGGvxUevLyf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776203876; c=relaxed/simple;
-	bh=ZUNzTicQgDcyFP5w0RI4Nrc7tmhjfuPP2YRMHTfeXHw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=biQcYW6tYqJyKb5h0CSersXPTWthx+ZHfc6Qj+l7a4/9nY8+3p2M89t14c0th0uTDONXINd2OiKkdUXLe/oLjimbuKJsUfuAEJi+MlyL+k3goryBNRLuvZ1fMaCO3bmA/3d1FJ2oHr+GONLaPyMNx34Q355Vh05f7bn8FTnhB08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bpO0O54J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776204400; c=relaxed/simple;
+	bh=HxWGAfBXvCwu/JrM4wgJOC5/Am3iL5DWNbwqy3PHKCE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RG4tl03dhlaD8/7ExAW24nYQ33OEFIm3mQMxxKRakuBg//pTQibFrwyJkt8mG3HFRhLEyurkH+7B3GPWSJbTS+TeDtauX7HmN0137jSQ4+qktq0KaCcWMX7KxDqC5WclU+nA6QzfbFGHURukUCUhDYp8lobIuBJIDPh7YHASk8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=U4/3SeAA; arc=none smtp.client-ip=68.232.139.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bpO0O54J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA95EC19425;
-	Tue, 14 Apr 2026 21:57:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776203875;
-	bh=ZUNzTicQgDcyFP5w0RI4Nrc7tmhjfuPP2YRMHTfeXHw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=bpO0O54J2tayfMK4LNj+PnNzYYE4jpf3X6/mDcNY+6rk5Iu3nuFLpco5R5ZzI0cqE
-	 1FS2FTQ1hTF/HrWbhVai0pCIBDQh9x//cPwtiInWdpQwVH/0QW0vOVeXgnwFA27D+d
-	 dWjnEJxD2jYfv0nRE7nM+UtQRYf+vR7EtCW2+fmlAGhtdC4+c+wLWqn3Skmb+M7S01
-	 6qa3LyUdW91baafo8JAYu2iOSg2Dwsf0At3W/2Te4M3Jz+C6o7zoKelMpO3E8Hhy4O
-	 vR5+74ONopnl8+XXC7oUb31d3nocIMR2Otp5hCvt3O/crKmRHOK2/WshfIcZ+gApy1
-	 AkdHVnGu+8dDw==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Qiliang Yuan <realwujing@gmail.com>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
- Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Valentin
- Schneider <vschneid@redhat.com>, "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
- Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang@linux.dev>, Anna-Maria Behnsen
- <anna-maria@linutronix.de>, Ingo Molnar <mingo@kernel.org>, Tejun Heo
- <tj@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Vlastimil
- Babka <vbabka@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
- Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>, Johannes
- Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, Waiman Long
- <longman@redhat.com>, Chen Ridong <chenridong@huaweicloud.com>, Michal
- =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Qiliang Yuan <realwujing@gmail.com>
-Subject: Re: [PATCH v2 04/12] tick/nohz: Transition to dynamic full dynticks
- state management
-In-Reply-To: <20260413-wujing-dhm-v2-4-06df21caba5d@gmail.com>
-References: <20260413-wujing-dhm-v2-0-06df21caba5d@gmail.com>
- <20260413-wujing-dhm-v2-4-06df21caba5d@gmail.com>
-Date: Tue, 14 Apr 2026 23:57:52 +0200
-Message-ID: <87tstddx27.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="U4/3SeAA"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1776204397; x=1807740397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HxWGAfBXvCwu/JrM4wgJOC5/Am3iL5DWNbwqy3PHKCE=;
+  b=U4/3SeAA4sTqXZk9tCYNQvDLEMCruUHuHp+NN5KTZdQtgYj+fdz328db
+   qNxgb6sTsHswI6lGveZCJbfxK5s+upxpy4BvHQR/dCK7Ce+Fjc0VIdFy+
+   ldp/7Bj6j7hVl0nYfG27DNZFLZT7M6T+imhBgilm+zAMxyAQUpT0m9+3r
+   VDwGPt3g3vEw/c0XuOCe0cC7yWB6WjFgKUF2+Pbib0VM0ed++3oES9SB4
+   5QukbF1E4hR3fjn7qebtgHv2mjEt+MouHlSJbwIT1mUByOChZkbboyUZd
+   ycH/hrswRtFxCZDC/9g4RFbWCSTslx2voP9DKBM7mmL6c+yJCNaH1AVqT
+   Q==;
+X-CSE-ConnectionGUID: pBqeu3HwS8yeP8dYQhF7UA==
+X-CSE-MsgGUID: ovzmEEGPTRqcodNteykeDA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="237662186"
+X-IronPort-AV: E=Sophos;i="6.23,179,1770562800"; 
+   d="scan'208";a="237662186"
+Received: from gmgwnl01.global.fujitsu.com ([52.143.17.124])
+  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2026 07:05:26 +0900
+Received: from az2nlsmgm4.fujitsu.com (unknown [10.150.26.204])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by gmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id 2D3A642A325;
+	Tue, 14 Apr 2026 22:05:27 +0000 (UTC)
+Received: from az2uksmom4.o.css.fujitsu.com (az2uksmom4.o.css.fujitsu.com [10.151.22.204])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2nlsmgm4.fujitsu.com (Postfix) with ESMTPS id CF151100152B;
+	Tue, 14 Apr 2026 22:05:26 +0000 (UTC)
+Received: from sm-arm-grace07 (sm-x86-stp01.soft.fujitsu.com [10.124.178.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2uksmom4.o.css.fujitsu.com (Postfix) with ESMTPS id 407924045EE;
+	Tue, 14 Apr 2026 22:05:21 +0000 (UTC)
+Date: Wed, 15 Apr 2026 07:05:17 +0900
+From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+To: Wei-Lin Chang <weilin.chang@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 3/4] KVM: arm64: sefltests: Add basic NV selftest
+Message-ID: <ad66HasXI2AkEjgK@sm-arm-grace07>
+References: <20260412142216.3806482-1-weilin.chang@arm.com>
+ <20260412142216.3806482-4-weilin.chang@arm.com>
+ <adwofV7yf71OdMFk@sm-arm-grace07>
+ <ddr6exocupk6mzshjwvu6sqt57aeqiyxqss3rpgcxxyh54cw4g@rxvm5zh3ybrw>
+ <ad1gqsqqOXyYmJoG@sm-arm-grace07>
+ <xsdf2k2u4g6n7nmxcgwhiraqodwtteuxqqtnj2dx5sxgu74a7j@yjijkyohkq4i>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xsdf2k2u4g6n7nmxcgwhiraqodwtteuxqqtnj2dx5sxgu74a7j@yjijkyohkq4i>
 
-On Mon, Apr 13 2026 at 15:43, Qiliang Yuan wrote:
+On Tue, Apr 14, 2026 at 11:16:47AM +0100, Wei-Lin Chang wrote:
+> On Tue, Apr 14, 2026 at 06:31:22AM +0900, Itaru Kitayama wrote:
+> > On Mon, Apr 13, 2026 at 10:18:42AM +0100, Wei-Lin Chang wrote:
+> > > Hi Itaru,
+> > > 
+> > > On Mon, Apr 13, 2026 at 08:19:25AM +0900, Itaru Kitayama wrote:
+> > > > On Sun, Apr 12, 2026 at 03:22:15PM +0100, Wei-Lin Chang wrote:
+> > > > > This selftest simply starts an L1, which starts its own guest (L2). L2
+> > > > > runs without stage-1 and 2 translations, it calls an HVC to jump back
+> > > > > to L1.
+> > > > 
+> > > > How do you disable both the nested guest (L2)'s MMU and stage 2
+> > > > translations?
+> > > 
+> > > Guest stage-2 is disabled by not setting HCR_EL2.VM in prepare_hyp(),
+> > > and stage-1 is disabled by not writing to SCTLR_EL12 in init_vcpu(),
+> > > effectively using the default value set by L0. However since SCTLR_EL1
+> > > has many architecturally UNKNOWN bits (including SCTLR_EL1.M), it should
+> > > be better to write a value before running L2 I suppose...
+> > 
+> > Thanks. What do you think of using copy_el2_to_el1() macro in at.c, so we
+> > can prepare in guest_code() to manipulate the SCTLR_EL12 System register 
+> > with the sensible programmed values?
+> 
+> Yes, using copy_el2_to_el1() can give us an L2 stage-1 that is identical
+> to the L1's stage-1. But what I was considering was if guest stage-2 is
+> enabled (which we plan to implement), then those stage-1 page tables
+> will have to be mapped for L2, and its base address translated to L2IPA.
+> It's doable but seems like extra complexity when stage-1 is not so
+> interesting for KVM (except for AT?), it lets the guest do whatever it
+> likes and let the hardware do the translation.
+> 
+> Let me know if you have reasons to want stage-1 for L2, there could be
+> something I should consider but did not.
 
-> Context:
-> Full dynticks (NOHZ_FULL) is typically a static configuration determined
-> at boot time. DHEI extends this to support runtime activation.
-
-I have no idea what DHEI is. Provide proper information and not magic
-acronyms.
-
-> Problem:
-> Switching to NOHZ_FULL at runtime requires careful synchronization
-> of context tracking and housekeeping states. Re-invoking setup logic
-> multiple times could lead to inconsistencies or warnings, and RCU
-> dependency checks often prevented tick suppression in Zero-Conf setups.
-
-And that careful synchronization is best achieved with an opaque
-notifier callchain which relies on build time ordering. Impressive.
-
-> Solution:
-> - Replace the static tick_nohz_full_enabled() checks with a dynamic
->   tick_nohz_full_running state variable.
-
-That variable existed before and you are telling the what and not why
-this is required and how that is correct vs. the other checks in
-tick_nohz_full_enabled(). Also what's static about that function aside
-of being marked static inline?
-
-> - Refactor tick_nohz_full_setup to be safe for runtime invocation,
->   adding guards against re-initialization and ensuring IRQ work
->   interrupt support.
-
-Refactoring has to be done in a preparatory patch and not 
-
-> - Implement boot-time pre-activation of context tracking (shadow
->   init) for all possible CPUs to avoid instruction flow issues during
->   dynamic transitions.
-
-Again lot's of hand waving without a proper explanation.
-
-> - Hook into housekeeping_notifier_list to update NO_HZ states dynamically.
-
-See above.
-
-> This provides the core state machine for reliable, on-demand tick
-> suppression and high-performance isolation.
-
-I can find a lot of hacks, but definitely not the slightest notion of a
-state machine. Don't throw random buzzwords into a changelog if there is
-no evidence for their existance.
-
-> +static int tick_nohz_housekeeping_reconfigure(struct notifier_block *nb,
-> +					     unsigned long action, void *data)
-> +{
-> +	struct housekeeping_update *upd = data;
-> +	int cpu;
-> +
-> +	if (action == HK_UPDATE_MASK && upd->type == HK_TYPE_TICK) {
-> +		cpumask_var_t non_housekeeping_mask;
-> +
-> +		if (!alloc_cpumask_var(&non_housekeeping_mask, GFP_KERNEL))
-> +			return NOTIFY_BAD;
-> +
-> +		cpumask_andnot(non_housekeeping_mask, cpu_possible_mask, upd->new_mask);
-> +
-> +		if (!tick_nohz_full_mask) {
-> +			if (!zalloc_cpumask_var(&tick_nohz_full_mask, GFP_KERNEL)) {
-> +				free_cpumask_var(non_housekeeping_mask);
-> +				return NOTIFY_BAD;
-> +			}
-> +		}
-> +
-> +		/* Kick all CPUs to re-evaluate tick dependency before change */
-> +		for_each_online_cpu(cpu)
-> +			tick_nohz_full_kick_cpu(cpu);
-
-That solves what?
-
-> +		cpumask_copy(tick_nohz_full_mask, non_housekeeping_mask);
-
-What's the exact point of this non_housekeeping_mask?
-
-Why can't you simply do:
-
-		cpumask_andnot(tick_nohz_full_mask, cpu_possible_mask, upd->new_mask);
-
-That'd be too simple and comprehensible, right?
-
-> +		tick_nohz_full_running = !cpumask_empty(tick_nohz_full_mask);
-> +
-> +		/*
-> +		 * If nohz_full is running, the timer duty must be on a housekeeper.
-> +		 * If the current timer CPU is not a housekeeper, or no duty is assigned,
-> +		 * pick the first housekeeper and assign it.
-> +		 */
-> +		if (tick_nohz_full_running) {
-> +			int timer_cpu = READ_ONCE(tick_do_timer_cpu);
-
-New line between declaration and code.
-
-> +			if (timer_cpu == TICK_DO_TIMER_NONE ||
-> +			    !cpumask_test_cpu(timer_cpu, upd->new_mask)) {
-
-No line break required. You have 100 characters
-
-> +				int next_timer = cpumask_first(upd->new_mask);
-
-next_timer? Please pick variable names which are comprehensible and self
-explaining. Also why can't you re-use timer_cpu, which would be actually useful?
-
-
-> +				if (next_timer < nr_cpu_ids)
-
-How can upd->new_mask be empty? That'd be a bug, no?
-
-> +					WRITE_ONCE(tick_do_timer_cpu, next_timer);
-> +			}
-> +		}
-> +
-> +		/* Kick all CPUs again to apply new nohz full state */
-> +		for_each_online_cpu(cpu)
-> +			tick_nohz_full_kick_cpu(cpu);
-
-This whole thing lacks an explanation why it is even remotely correct.
-
-> void __init tick_nohz_init(void)
-...
-> +	if (!tick_nohz_full_mask) {
-> +		if (!slab_is_available())
-> +			alloc_bootmem_cpumask_var(&tick_nohz_full_mask);
-> +		else
-> +			zalloc_cpumask_var(&tick_nohz_full_mask, GFP_KERNEL);
->  	}
-
-I've seen the same code sequence before. Copy & paste is simpler than
-providing helper functions.....
-  
-> -	if (IS_ENABLED(CONFIG_PM_SLEEP_SMP) &&
-> -			!IS_ENABLED(CONFIG_PM_SLEEP_SMP_NONZERO_CPU)) {
-> -		cpu = smp_processor_id();
-> +	housekeeping_register_notifier(&tick_nohz_housekeeping_nb);
->  
-> -		if (cpumask_test_cpu(cpu, tick_nohz_full_mask)) {
-> -			pr_warn("NO_HZ: Clearing %d from nohz_full range "
-> -				"for timekeeping\n", cpu);
-> -			cpumask_clear_cpu(cpu, tick_nohz_full_mask);
-> +	if (tick_nohz_full_running) {
-
-This indentation and the resulting goto mess can be completely avoided
-if you actually refactor the code and not just claim to do so.
-
-Again, this does too many things at once and then explains them badly,
-which makes it unreviewable.
+By keeping nested guest's MMU enabled, we can exercise the shadow stage
+2 on the host. But I am fine with you starting nested guest's IPA and I
+hope Marc and Oliver approve this seris and merge upstream.
 
 Thanks,
+Itaru.
 
-        tglx
+> 
+> Thanks,
+> Wei-Lin Chang
+> 
+> > 
+> > Itaru.
+> > 
+> > > 
+> > > Thanks,
+> > > Wei-Lin Chang
+> > > 
+> > > > 
+> > > > Itaru.
+> > > > 
+> > > > > 
+> > > > > Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
+> > > > > ---
+> > > > >  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+> > > > >  .../selftests/kvm/arm64/hello_nested.c        | 103 ++++++++++++++++++
+> > > > >  2 files changed, 104 insertions(+)
+> > > > >  create mode 100644 tools/testing/selftests/kvm/arm64/hello_nested.c
+> > > > > 
+> > > > > diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> > > > > index 3dc3e39f7025..e8c108e0c487 100644
+> > > > > --- a/tools/testing/selftests/kvm/Makefile.kvm
+> > > > > +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> > > > > @@ -168,6 +168,7 @@ TEST_GEN_PROGS_arm64 += arm64/arch_timer_edge_cases
+> > > > >  TEST_GEN_PROGS_arm64 += arm64/at
+> > > > >  TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
+> > > > >  TEST_GEN_PROGS_arm64 += arm64/hello_el2
+> > > > > +TEST_GEN_PROGS_arm64 += arm64/hello_nested
+> > > > >  TEST_GEN_PROGS_arm64 += arm64/host_sve
+> > > > >  TEST_GEN_PROGS_arm64 += arm64/hypercalls
+> > > > >  TEST_GEN_PROGS_arm64 += arm64/external_aborts
+> > > > > diff --git a/tools/testing/selftests/kvm/arm64/hello_nested.c b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..97387e4697b3
+> > > > > --- /dev/null
+> > > > > +++ b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > > > > @@ -0,0 +1,103 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > > > +/*
+> > > > > + * hello_nested - Go from vEL2 to EL1 then back
+> > > > > + */
+> > > > > +
+> > > > > +#include "nested.h"
+> > > > > +#include "processor.h"
+> > > > > +#include "test_util.h"
+> > > > > +#include "ucall.h"
+> > > > > +
+> > > > > +#define XLATE2GPA	(0xABCD)
+> > > > > +#define L2STACKSZ	(0x100)
+> > > > > +
+> > > > > +/*
+> > > > > + * TPIDR_EL2 is used to store vcpu id, so save and restore it.
+> > > > > + */
+> > > > > +static vm_paddr_t ucall_translate_to_gpa(void *gva)
+> > > > > +{
+> > > > > +	vm_paddr_t gpa;
+> > > > > +	u64 vcpu_id = read_sysreg(tpidr_el2);
+> > > > > +
+> > > > > +	GUEST_SYNC2(XLATE2GPA, gva);
+> > > > > +
+> > > > > +	/* get the result from userspace */
+> > > > > +	gpa = read_sysreg(tpidr_el2);
+> > > > > +
+> > > > > +	write_sysreg(vcpu_id, tpidr_el2);
+> > > > > +
+> > > > > +	return gpa;
+> > > > > +}
+> > > > > +
+> > > > > +static void l2_guest_code(void)
+> > > > > +{
+> > > > > +	do_hvc();
+> > > > > +}
+> > > > > +
+> > > > > +static void guest_code(void)
+> > > > > +{
+> > > > > +	struct vcpu vcpu;
+> > > > > +	struct hyp_data hyp_data;
+> > > > > +	int ret;
+> > > > > +	vm_paddr_t l2_pc, l2_stack_top;
+> > > > > +	/* force 16-byte alignment for the stack pointer */
+> > > > > +	u8 l2_stack[L2STACKSZ] __attribute__((aligned(16)));
+> > > > > +
+> > > > > +	GUEST_ASSERT_EQ(get_current_el(), 2);
+> > > > > +	GUEST_PRINTF("vEL2 entry\n");
+> > > > > +
+> > > > > +	l2_pc = ucall_translate_to_gpa(l2_guest_code);
+> > > > > +	l2_stack_top = ucall_translate_to_gpa(&l2_stack[L2STACKSZ]);
+> > > > > +
+> > > > > +	init_vcpu(&vcpu, l2_pc, l2_stack_top);
+> > > > > +	prepare_hyp();
+> > > > > +
+> > > > > +	ret = run_l2(&vcpu, &hyp_data);
+> > > > > +	GUEST_ASSERT_EQ(ret, ARM_EXCEPTION_TRAP);
+> > > > > +	GUEST_DONE();
+> > > > > +}
+> > > > > +
+> > > > > +int main(void)
+> > > > > +{
+> > > > > +	struct kvm_vcpu_init init;
+> > > > > +	struct kvm_vcpu *vcpu;
+> > > > > +	struct kvm_vm *vm;
+> > > > > +	struct ucall uc;
+> > > > > +	vm_paddr_t gpa;
+> > > > > +
+> > > > > +	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
+> > > > > +	vm = vm_create(1);
+> > > > > +
+> > > > > +	kvm_get_default_vcpu_target(vm, &init);
+> > > > > +	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
+> > > > > +	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
+> > > > > +	kvm_arch_vm_finalize_vcpus(vm);
+> > > > > +
+> > > > > +	while (true) {
+> > > > > +		vcpu_run(vcpu);
+> > > > > +
+> > > > > +		switch (get_ucall(vcpu, &uc)) {
+> > > > > +		case UCALL_SYNC:
+> > > > > +			if (uc.args[0] == XLATE2GPA) {
+> > > > > +				gpa = addr_gva2gpa(vm, (vm_vaddr_t)uc.args[1]);
+> > > > > +				vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), gpa);
+> > > > > +			}
+> > > > > +			break;
+> > > > > +		case UCALL_PRINTF:
+> > > > > +			pr_info("%s", uc.buffer);
+> > > > > +			break;
+> > > > > +		case UCALL_DONE:
+> > > > > +			pr_info("DONE!\n");
+> > > > > +			goto end;
+> > > > > +		case UCALL_ABORT:
+> > > > > +			REPORT_GUEST_ASSERT(uc);
+> > > > > +			fallthrough;
+> > > > > +		default:
+> > > > > +			TEST_FAIL("Unhandled ucall: %ld\n", uc.cmd);
+> > > > > +		}
+> > > > > +	}
+> > > > > +
+> > > > > +end:
+> > > > > +	kvm_vm_free(vm);
+> > > > > +	return 0;
+> > > > > +}
+> > > > > -- 
+> > > > > 2.43.0
+> > > > > 
