@@ -1,114 +1,162 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB581B4224
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 14:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776178654; cv=none; b=sm5cHRR2EE6vRAMmiaeLU6/jQrC9dQ08d3vO39Egecx7qMekqtu3wCjP05Ae8x4Bj/B8SE9oPu++/+e9ac47Hd8dJSq7sd3zW6GiGNDVjaID61S8jThHZx4m8nwgbgCUYmSBUq16PaWbpGraAGHzQ4xhRy/FNDChPTLoWv95yYU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776178654; c=relaxed/simple;
-	bh=nT2Tj4WN5nVASsWR0Rf23HRLAUy4aZ6TkvIacAn1giY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Z+iFywNXdISmmdSBpX4KaASROR6t2oxUDHGT0ggbIqvwfHva502ve7370eLSrpOO5eK5se+ge0knNc96NWXFezYPr3z0tf5sm7/oKHXhIRAVL0OU9wqG+2oZVj41Nkld8l//m+pDfS8F2OJm+vZ7lU+gPUKXIbsz8SFVqCVtG2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=TmWXK9Mc; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09593E6DDB
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 15:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776179424; cv=pass; b=OAL3E34NziZK9Ju508uW0owWBDQ5Kbeszv3U02vJXObYwhlMCdT8iGh6OUeSq7MX7Ymy6QtBL7z3gZIjQVLh1QHtJaVl3v3lnQF0ejZwMe1jfRycDgDnrvBzZB+pG1iNU0c9Wn43lFXpm/Q6X3pT1CUwwcjIN2sKLpPijKKjqng=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776179424; c=relaxed/simple;
+	bh=A7c7tKPqaKq3NgFiv2DNK8q/BvKoh1wbxDHgCCrA1+c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AVuDQ7CD1lUaLOClnp4ERb2rHTgVcM/EpNvBuJJrFnOkzGgfue7p/lsR4rxW2n2ikxHJjmbbUZlCfB9pZ8kpQeJsGfNVPAtovtcqjYmiBTBEbBlRr2+v3mkRkiiX8WonncpqFWPEeZhZvns0dcqRzoMIsYCrTc10wiSiMy/rMq4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eUKFA+2A; arc=pass smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="TmWXK9Mc"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wCeWO-00FB5n-GH; Tue, 14 Apr 2026 16:13:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=BieWsBuZObwE52NomKb0T7XPKPlqeO+dDW3yQZ5Qiqo=; b=TmWXK9McvraL/uU6NzggGfFs+p
-	9DSFlGdxaC8b5SZUsjm6lDdacAi2SO3Tq2fIo0/POPCMlvr+4EtaJIiXl9TwmXaN/bUdUjK2uyxbQ
-	SlXHukDi710aZ0rHaZDWNH+b9RzU6h15dvrtxdHPEaFIRB1H35GhaHecqkdDVXG5VAkMyp4LeNzD1
-	8NfsfIhwVvjSSPEP4AieQcL6zHcA+T6nKb6TE0vpWNcvI9AKalWfNmUt3EpfBeUwABxoVbtuQRZSC
-	LHfJSZHOFs/NE7y8fj3sDPF2g+oL6ZuTfh+C7qWt94UNQBgPttDNpzxQ78tuVB67TQBl5EGJD0QBY
-	4GaOezLQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wCeWO-0000Vs-0e; Tue, 14 Apr 2026 16:13:44 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1wCeWA-00DhbX-2Q; Tue, 14 Apr 2026 16:13:30 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Date: Tue, 14 Apr 2026 16:13:15 +0200
-Subject: [PATCH bpf v4 1/5] bpf, sockmap: Annotate af_unix sock::sk_state
- data-races
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eUKFA+2A"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43d7a5e77b1so1360521f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 08:10:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776179421; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KtY4AHqjNQhlTExNVlZ+m1SmjCILy+jGP/SW5t8MQwREEJnsEv4YjxqcEUN+ewcsz0
+         9MtybFCslbaPAwGhNw1u6AEH7PVsOiOGV6VOO0adMbq6tF5bye40fIaCxHT6lvhWX3HH
+         mRMf11AIw+YTx474v4tmUyBzItllmREaGk25wquO6MZrE4OXRO0oXr2MXwN0n6S5pzWb
+         hc14gZ5c+oZq8tGduGb0R2XL897so4ZePM2nzkWiW6vm4Xa7ZAijpKcUmqPlwhTeZ+Ga
+         FcHjFxuHzgK/kZIZyNstmatnQjpcgrDcccmTpPG7gGgrelIdbjTk1hC9XLXensEiwAU1
+         e5Cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=A7c7tKPqaKq3NgFiv2DNK8q/BvKoh1wbxDHgCCrA1+c=;
+        fh=pnVPd8/jj41V1y8tyWgZr6HzTWI1w7Cx9QJN8ch1GnM=;
+        b=AYErkuUpcz2Ym8WT92bPOj1xo7s7L5JdA2FRAA7OZ+hh2ELmsWFvWYXk0+63UeBCGO
+         jzeD80mkSzCfJEM2cHJrV8xKOGEl86ayHwE+chAcsTlUvh4y4TchDjyFYhK0WMFFnt77
+         oca9me8db/uEZDDJPBS/xLP2IvC6gWRPBhQS0XpTsKyxdHBtkoZY403XZ6WMS/eie8I2
+         isoKYC1Zax0NWTMvPDckULD/n96Y9naEG/W0yFbP4Hawoa8N7tx+5faFDJk4q0AOIO1C
+         9HkeAl8MUcRUx5S74v3fq2roWyIRhF+HOCZaHBWKD+aPdqU2u6oZRFZA7G2g+u9gwkxw
+         8xzA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776179421; x=1776784221; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A7c7tKPqaKq3NgFiv2DNK8q/BvKoh1wbxDHgCCrA1+c=;
+        b=eUKFA+2AoQREtn0iyQraI6Pd872uELauer8EVJrgJNhwKAL5DDkqWPhcB/7eDyozrx
+         qbp9AJD0LHtNW1OtDScOl8AJVcbQOTNhU6w3VpD4FhCfMk0lNNP/jQ+LJwQ0drfIq1wI
+         0oNyhdBZv/fo7rrKJ1W5X9KGjMvlW7rSLEGpsjo/XfKYyglsnire53d/4PbfQJEqNXDL
+         3lOmas2U6pCwaTfM++sGZBaeyn5QXX/V/ErK0tawok/bWwzgOHtquIHAdxnsqGJhX+u4
+         ocUpxh0rqMDOtK4blQIOE61GbogTPRhfyYmworZTWngPik83hC1PFpMdJF4kTzTTk8wX
+         ZgGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776179421; x=1776784221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=A7c7tKPqaKq3NgFiv2DNK8q/BvKoh1wbxDHgCCrA1+c=;
+        b=czzv8sftEp5lT92JlduoNrBHszUQ4KIZnETXCY5MSgTixUWal/c9YH7i17LPXOs96x
+         phTtfZ37SMW8WNM+dXJL/sE7TmfVQmhIHHGQ3UBjz1lstQ6UIFnjgCOpsb6Mv2NAH3to
+         266MxGKQMjur9LKvgHXtZMkecplXgeyKdgfHi7KWJr26jixr3jKW3lsAIlYZ+/KEF+gV
+         i7xNxtBUr2ADQPww/5crzwkTcFFeRV2JBx0N91M1g8Mm0V3GK3fDnBTStUj29DE7L7Ul
+         eG3GprQVuyM4Mqmf8gH77BL6Fq0wmX6lq2oShLn02KVobq0jBbvOPoqWNO0tKzjWhV7D
+         svdA==
+X-Forwarded-Encrypted: i=1; AFNElJ//gndlCCDzLzmzGYNVOAXx0ah0o3SfKS0rPkNymiAA9Z55OKVKdHE0TO2kwGdSEZLPuLHfanzM0NJ7ztFN7fw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGl2YkQ9aJmwhUthhzJnAEy8fgkWgCPJyLphSBYZ+V3PeDj1ss
+	KsE0ixGFPbPhxO60lGkAsy8gEFqpDONWAX8IkzxwiIRiLJp49UVfKGgfg9GD2xf4mZCjVka2A3O
+	5/Ze+t08cC7Pq3RCvdE/gwVg99rwkCLA=
+X-Gm-Gg: AeBDietmoTLtY6o34p1RIIl5toRTTZbS3v1kaM2Q3Sk2aoDKpK3fkzQRuZvnI/93UuM
+	0wOOXzgd0a3tQipQaOGEcOJfM7+OOktnybz9YybgTwkKuSXPINRJ4fRW/nvS7dxllje2SjOksHy
+	KBBJsDayekkDMR0/V5k5VQnBGlvIWSjhBzwFilUprzcIeLkjgAvPqu14yyoMuGl2wgtsw5G/T2t
+	ln3TOz3r+iGUWSAfP1gvSSYX1NMBy/w5fB1DQ7e6VvzZMBEIAkVUWnQs+MEgpHlXJNvUbVLDr+t
+	fNzm3W079m83XztIDBUEaKNnFULgmOD59ZZJtJY8
+X-Received: by 2002:a05:6000:4110:b0:43e:a8cc:89b7 with SMTP id
+ ffacd0b85a97d-43ea8cc8c24mr1517128f8f.3.1776179420992; Tue, 14 Apr 2026
+ 08:10:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260414-unix-proto-update-null-ptr-deref-v4-1-2af6fe97918e@rbox.co>
-References: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
-In-Reply-To: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemb@google.com>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Cong Wang <cong.wang@bytedance.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Michal Luczaj <mhal@rbox.co>, Jiayuan Chen <jiayuan.chen@linux.dev>
-X-Mailer: b4 0.15.2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com> <20260413-kasan-v1-1-1a5831230821@bootlin.com>
+ <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
+ <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com> <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
+In-Reply-To: <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Tue, 14 Apr 2026 17:10:08 +0200
+X-Gm-Features: AQROBzAtXSFwPeCMpZ2dGca-DBLsSXREgEyBZSQFf7Waht1WxQ2QIbb8WTtAIYs
+Message-ID: <CA+fCnZd31GzdpEqR8VhfK4JtUKyyRMgbBoAbeGACJgm7WvB6Vw@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, ebpf@linuxfoundation.org, 
+	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Xu Kuohai <xukuohai@huawei.com>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	kasan-dev <kasan-dev@googlegroups.com>, linux-mm <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-sock_map_sk_state_allowed() and sock_map_redirect_allowed() read af_unix
-socket sk_state locklessly.
+On Tue, Apr 14, 2026 at 4:36=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> > ACK, I'll try to use those kasan_check_read and kasan_check_write rathe=
+r
+> > than __asan_{load,store}X.
+>
+> No. The performance penalty will be too high.
 
-Use READ_ONCE(). Note that for sock_map_redirect_allowed() change affects
-not only af_unix, but all non-TCP sockets (UDP, af_vsock).
+With using __asan_load/storeX(), it will be one function call to get
+to check_region_inline(): __asan_load/storeX->check_region_inline.
 
-Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- net/core/sock_map.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+With kasan_check_read/write(), right now, it would be two function
+calls: __kasan_check_read->kasan_check_range->check_region_inline.
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index b0e96337a269..02a68be3002a 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -530,7 +530,7 @@ static bool sock_map_redirect_allowed(const struct sock *sk)
- 	if (sk_is_tcp(sk))
- 		return sk->sk_state != TCP_LISTEN;
- 	else
--		return sk->sk_state == TCP_ESTABLISHED;
-+		return READ_ONCE(sk->sk_state) == TCP_ESTABLISHED;
- }
- 
- static bool sock_map_sk_is_suitable(const struct sock *sk)
-@@ -543,7 +543,7 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
- 	if (sk_is_tcp(sk))
- 		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
- 	if (sk_is_stream_unix(sk))
--		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
-+		return (1 << READ_ONCE(sk->sk_state)) & TCPF_ESTABLISHED;
- 	if (sk_is_vsock(sk) &&
- 	    (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET))
- 		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
+I doubt an extra function call would make a difference in terms of
+performance: the shadow checking itself is also expensive.
 
--- 
-2.53.0
+But if the second call is a concern, we can move kasan_check_range()
+and lower-level functions into mm/kasan/generic.h and include it into
+shadow.c, and then it will be just one function call.
 
+To improve performance further, the JIT compiler could emit inlined
+shadow checking instructions, same as the C compiler does with
+KASAN_INLINE=3Dy.
+
+> hw_tags won't work without corresponding JIT work.
+
+You probably meant SW_TAGS here.
+
+HW_TAGS will likely just work without any JIT changes (even the
+kasan_check_byte() thing I mentioned should not be required), assuming
+JIT'ed BPF code just accesses kernel-returned pointers as is.
+
+> I see no point sacrificing performance for aesthetics.
+
+With the change I suggested above, there would be no performance
+difference. And the code stays cleaner.
+
+> __asan_load/storeX is what compilers emit.
+
+For Generic mode. For SW_TAGS, the function names are different.
+Keeping this detail within the KASAN code is cleaner.
+
+
+> In that sense JIT is a compiler it should emit exactly the same.
