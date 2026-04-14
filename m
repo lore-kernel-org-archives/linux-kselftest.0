@@ -1,271 +1,246 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA052E7185
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 23:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776122364; cv=none; b=YZF7PVwSBIehwL8WAwk9e5yHdcXe4VOuoVl/O0wFVka/Ady7okRW4h6rn45JHCsod+dOZpidwW43YyyNeTxSaHksXZ520/QjUtl2tPH4ty97a7pDich51+TmW7Wk5TITsK675MmDojU83xleSoJj8OCuqgGOBoXn2nY7tDgFRfs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776122364; c=relaxed/simple;
-	bh=Lwd5+U+8gXFkcaDQSx+GXWF9g5z2SGRxQlDu4DBaHGI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gMUkn76sqoO4hNOmhI9iNXuKrUbsHO0TKhxREvpE5SaAKVx3gL1q4pQrE7tzJCIMLEaASI+622BtXd/76LQtfpM96ulzwRsWodR22QsMWOXubp5+bVupmpkZEsz0q+UeXl997WsGgMz/rlIBKN2xRiG3w54ecQDh35whR2heVHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=S762ETML; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813D113B5B3;
+	Tue, 14 Apr 2026 00:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776127420; cv=fail; b=CTLrm3zVvvWehdIfh5iCJ3InUac04ugZBRG3duzGJ4eQR6LIeFfHgq5mwFvwJhART10fOcx8slSbgjWhybRQtH7xiJR4Eo69Th7W4/PVH3FxWMLdSXOFh3gxAzG6RaWK5df7LB94bZ2kGkjwkYjfM3NZvCmiZ+JpgqfYrG8HGAI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776127420; c=relaxed/simple;
+	bh=LLvBcLrUtMTAVCnDecjKZzf8d4odfCcdqBZ0ynjzL6Y=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=GcDK1SmcCXS57RQa85lt7ONuMPcdZkt/xsLlcinCmUvNX8GI7Q3xKXQ1uP8jWOGVEB0cqnhwshL1BIcezpTeHh1UB9J5ahWQ8PJDiQ+cMdcXwu+Pq0/sRsKiLdMV8Xir3XfZ5CVMc4c09UPAZRLh7u0+QpMs3xaOFLdiPv4DoYs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mo2cXwOm; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=I6D1b1XP; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="S762ETML"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-50b2b289925so41661031cf.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 16:19:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mo2cXwOm";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="I6D1b1XP"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLA27s778579;
+	Tue, 14 Apr 2026 00:43:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=QMuFEPdpz/t3lAQDu53Jksk8WJWawLRdLkGfOZnSAWE=; b=
+	mo2cXwOmGHAtzjmvHXH1XEIMg3A5v7Euy6uiBIpL0v8TUF/t9zyG9q0wCxlBqzdF
+	exbNB9OVYCsRx0WOtFhewwWMwmzxk6OabnRC0qnJuAZm1nPnfsIXuYBVE+HAVXRb
+	D0pY3n+XDv8IoQIdh9jcXNbAKZ6Akaq2ppYlleVjTivjYK7lfO/sj7JtlnbDiQ1J
+	pPq7mnDm+rIlYDf0WDc0bhD7KHdLauUoqmy2zMebEpuEJFs/qKj9C4f5SKgWgLSQ
+	FjqZ/YbTVkKBmLpvCrEGVkF6daOLU58cEkDr8M2xZB8jLMVMIwjFaFePjQOA7+kN
+	zgfl0bd4VeaM/Skk/OnsBw==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dh85qg98b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Apr 2026 00:43:23 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63E0YLjk003596;
+	Tue, 14 Apr 2026 00:43:22 GMT
+Received: from dm5pr21cu001.outbound.protection.outlook.com (mail-centralusazon11011002.outbound.protection.outlook.com [52.101.62.2])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4dh7nje069-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Apr 2026 00:43:22 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ykuNnIQNZZEue9FMFCb2ozwg4eFKlV90M9XrAjowniEyOwm77njHolmAAlvIOK3HZjx4xUBzJI5uobKd+4sGBddDXgCNn2CUJhIW5fJ1InVAvTuOKlauHtOq2uSXsI5fFBfqFx1D43yAbNEqxveV4LXbVr7tMbtwRws1bVm6bVw56QaMZlJXW75806186leLrrRSSBOFdu6V7cjEVYb9LEu213MvlaUADfrZwWpFcJ24vXzNVtz6OsEmE46QPcFyGi3aj/1EMOFKGWiD6dTRMPE/LVgmORJcKYrz/tsBTa9RXBKDKIDGfL2/QjipBDY6lWpOTrxxe1nVX17KfvDr3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QMuFEPdpz/t3lAQDu53Jksk8WJWawLRdLkGfOZnSAWE=;
+ b=RrOld3fikw6keJIiF9PurRAwBtFQTCN/5ene35BpPvTlyPTLhkd4/bxdgzagzAHFUa/L5sowgsAYYx5I5NWUsEbE6sUXRtQlyENx3UcaEeMS56HF/DnFDXbsca510QyR74G62WS5cfdgbZjDWG7JDD4Wwx86NrdM+iY2SgYpUbLT1/GJECdN+Q0HdzCpL3MoG5aU6UZ6I2QkSdBOAKNyreGMhWNaZuUtnkTOsLRnofaLnFOrHe6xE+t4l2tQuy31eQuRIK/XrjIajTCsp/sCRNZfs6995Y9s+InvdNbxdH3wIx33/Ei7u4zYWv+1bVFBm6V/CvoSvUDdud8CxmaIHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1776122362; x=1776727162; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FQkfHlRKdQNLxeoIhr6739G0yAYwiCkG/RlpNK55h4g=;
-        b=S762ETMLMmpoc0XbcLZOe7rAzHqBVfjLoYzbqXfCi3FUHkcA7omBLazrecLPfYIxn4
-         LFT9WUi/PmuLqcYduIYfpp16MJZ92Wesmlu47V2+yJbQ4nVlWdydS5leYi7FiMFxln+n
-         elGFKQY4Vp5xXrBNujVLvyFC1Vc3++sbrEJAKxNyA3DRjEz1rn1G76P8she/V1CU9DoS
-         ntCuxtPOqyiugIk6k9WZ8yIvASCZKgRjCWiQyv0bVgkwxaqUrdR0E5yKMwmTQHQGNw5O
-         CVkFRfWZ9ncfwkhlS3H3TQ7y5GZ0EUVeXExF7NH7YtMDVB724/IguKSIW2mGiK+84hiV
-         T++g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776122362; x=1776727162;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FQkfHlRKdQNLxeoIhr6739G0yAYwiCkG/RlpNK55h4g=;
-        b=qbFf2Elj8m6CuyZlblyChg5fi32P8NdYdFmd+CX2Z/XsVckBJqOdaCkR/uBIr3PkZf
-         6xqWEn6nRLiENpr84YkLPueui/JfpzeRaXBdW4W+fR2QJmwmqUmJuhNCISzxE9wzNaju
-         E4MT6nfZF5MBVhbFwWOe33ylaaJ4L7v9m/Rozdy+xOTqsZqjhCBbAhhLpj20cPiJAEmY
-         99QXsCw/zTVyB+w5us6PR9y0N6pRLuPoogJBFzMshToowuagAVIYRUfDVid0SGvhUgzq
-         LPqmAEoNkT0EoneyivK4o5x4vyEqkfiMC4ZpCWVAs4QkA/p3qh8CWeT4ZE20FGXF4ZgG
-         c9fQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+ABJDfI3bc4e0Dm1rQKr6LDAMd5CptUItNFCvgtOC0sWEeCchdEKgYPzw5jg30hYsg1QqZ9gPBc8HvyR9nTYQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8L5mZOLziZjI3sJoep9q9Ipee9/r4i62WPTHTKRqKhsspengq
-	BTuFqBad237RrhuIjNsWmpA6xJIFczf/FLZpPCe+LNo3H1lI0JggFp4+J/zWRXdHRwY=
-X-Gm-Gg: AeBDieuDaVLOZe0lNCGoP+PuuIelzf9mWuNI8uf9NlVi69zgjnbK7vlt6VetxZ6yILr
-	uScSl2JC8j4fgy2T7K5OqOYeulzRTWrWgYzWTs1UDPknd50mxxrr/7xPNVRD/eptICehSHZchnZ
-	e7kMDNY2yF1jCTnsJTbZzr9dAB/wtmuW74VvFaciLqNktbkxFCMuxpIuwAC3yv/BH4N+/9ilB+8
-	SeuP/7uKMAnFGZ/9AecSouCP/YAnjZd9wZjaBDRwVhpoN1RiL6Z+x/9Qjavozl3mkIX/hrFahJ+
-	Yb0GIohu9JV5lW4Sl//B5ssJQ2Ws2pkJBsXzwMA0euYCf8aTcfUNjxRcihqDdGWUcOBbW8Z8IvQ
-	E2rFLBYr7Pq6AYyvNZayHdh2u1Cr+8FQErL2t/nzyGundytAiZMkVdHGzUui3NRt552PzubDElo
-	WxqlGcJ6b8FXwGRyekDcnNevu3g+MQzx0ohtTbscSw+TKfEiB8QREunqoBS1ptnO30qR/zUvgdh
-	qhIfw==
-X-Received: by 2002:a05:622a:3c8:b0:50b:30d5:c6fb with SMTP id d75a77b69052e-50dd5c0ef5cmr239237521cf.63.1776122362169;
-        Mon, 13 Apr 2026 16:19:22 -0700 (PDT)
-Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50de6bc04e0sm68655491cf.19.2026.04.13.16.19.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 16:19:21 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1wCQYq-00000007IUJ-1zsW;
-	Mon, 13 Apr 2026 20:19:20 -0300
-Date: Mon, 13 Apr 2026 20:19:20 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Leon Romanovsky <leon@kernel.org>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260413231920.GS3694781@ziepe.ca>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QMuFEPdpz/t3lAQDu53Jksk8WJWawLRdLkGfOZnSAWE=;
+ b=I6D1b1XPmo3LhL8IU3jFUsK109dmojseYNe9E/YNN9HRUwEe5cRMKl6VSm3kUxkwh79bPkZbPvyNaG6TNfpYZeS8UvCcjCbjQ/5XbEgXhOOjkq0GtfSAePTgUVcrUqUrNn+ldoljCjFqAV2l2XBT+foYPq0ejbbdQaZF+l7X9X0=
+Received: from MW6PR10MB7660.namprd10.prod.outlook.com (2603:10b6:303:24b::12)
+ by MW4PR10MB6581.namprd10.prod.outlook.com (2603:10b6:303:22a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.48; Tue, 14 Apr
+ 2026 00:43:18 +0000
+Received: from MW6PR10MB7660.namprd10.prod.outlook.com
+ ([fe80::c2dc:a34f:6987:1230]) by MW6PR10MB7660.namprd10.prod.outlook.com
+ ([fe80::c2dc:a34f:6987:1230%6]) with mapi id 15.20.9769.046; Tue, 14 Apr 2026
+ 00:43:16 +0000
+Message-ID: <43370425-00b0-4853-bc82-63064eae2b8e@oracle.com>
+Date: Mon, 13 Apr 2026 17:43:11 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm: fix mmap errno value when MAP_DROPPABLE is not
+ supported
+From: anthony.yznaga@oracle.com
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, ljs@kernel.org,
+        Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
+        surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
+        Jason@zx2c4.com, shuah@kernel.org
+References: <20260402003417.438037-1-anthony.yznaga@oracle.com>
+ <20260402003417.438037-2-anthony.yznaga@oracle.com>
+ <20260401174440.0f85ea303f0a027b50d99e5d@linux-foundation.org>
+ <ca14b239-26db-479f-ba58-11e15f2379eb@kernel.org>
+ <2f59c4e3-303f-4e13-a0a5-e1b5e5c1a37f@oracle.com>
+Content-Language: en-US
+In-Reply-To: <2f59c4e3-303f-4e13-a0a5-e1b5e5c1a37f@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR03CA0441.namprd03.prod.outlook.com
+ (2603:10b6:610:10e::34) To MW6PR10MB7660.namprd10.prod.outlook.com
+ (2603:10b6:303:24b::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW6PR10MB7660:EE_|MW4PR10MB6581:EE_
+X-MS-Office365-Filtering-Correlation-Id: 878a842b-ede5-4217-3e8c-08de99bed090
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	8h6zm0TBBpAzoxaezHoJh4/LaCf0UKtzIR2jJXHrPQJHFpcvdZnVSjqA/XLub4X3iYzO9kGnvP3qHahE1Otdmhx10a/QsRW6heWfKyJMU10G6+P67gXiSKoT1/dOEfoHQgY9lKeCzRbCnQ37bD5Yg3p6TYbdx6y5NVG9ILW2WZdJH969DVGv0JJJt7H5nlzfI4Pzoc4wEFIsHcRg5uQ4ggvgVyZIRu9Trj1bTeUsgEWEpsCBGnYVSaMUsEewcBabaqcb3fDAflQaOEp/WicjShNd49lhGTYDF0h7t3xhqr0+XQbWo7RjqOXBnydWkO6/KwuQ9nk1Iyh7wRZz8cPA7Dzp0D8A3twjhUQP8MvCMkev2/r1VhFkVU1U3/zvq62BimwPfsP4OaQRJZXw9mUqnnwJ8fjtf8Mx/7Di4/5C2cDHzKU2c12p0UXXZz8pxw4Ift0qDdzkoXf1MFSfnd7OfZA/uubAIAmyIxMgBc/aZi+cxsUkQiJ9BweXqEZ3zUYi5FIZRACizvsrsRD3JDzj3hy1rzkgCxJHSHqt9OXjHemhLDisMPgSJ+XezoUwrZx5UOoTg8vRVCLF6JWUfM0hTJcCJ1UeoQYHC9PffhDm4dM2c/4ALCSutilLZ9TUVp8cSPsYflleWQzwnBXj80TMIWLYPR2kRZCVDZwQq/6+hWFnvcsyw9ZFA4oeWxILiEX4MkbV26pglkq0XydreJpL1IndxdQ+lotkQQBRfFFMZ9I=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR10MB7660.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MXBzK1ZUaUdPWjl6N0VyWmZRU3BkMU9JUVZqc2FkWFhXdVYyWDQ4VFB6WUgy?=
+ =?utf-8?B?MnlEVHlGdUdrdk1HQmlDUHI2aDByVDJzWkhpbXJlckJkTDI2ZmxFdUdDU2pM?=
+ =?utf-8?B?S0pLc1dYWU9WZzZ6WG5tZW40UmpFbHQ3WDN4eXVwL0k0cFNvQzluWG9ZNUlV?=
+ =?utf-8?B?Zm9NYnpIaWhvRnk1RHJZQi9GTFp2dzFIc0QvanBjalhGUVpFUFYwMzlub1pH?=
+ =?utf-8?B?WlFkMWVpd0Q0SE9iRnliQlJvS3cyZGk2QnBNMWpKZ0M0RlJUV3JnQmoyNGZs?=
+ =?utf-8?B?TkpMenJBNXFDR0RRV2ZWaGpiTThFTFlsVnZoclNOeXl4RHZDM3B0OUw1MTBs?=
+ =?utf-8?B?VnBJZTZZSkZYeGppTFpsWjlSZVNMNHNma3VQdGIvVTFpUGE0U1o1bTdsZ3NO?=
+ =?utf-8?B?WkI2MnBvQlJNY2FjUHhvMzdiLzdKL29uR3JIUVVpUk9mM2YwU21SMVBaaVdC?=
+ =?utf-8?B?NFF4eVpmTkJBemFBWGpyUk9OS2gzRnFlTUVYc2lsdERTdmRRVVFENWorODBp?=
+ =?utf-8?B?MEcrbUtVREQxVUZFWXViMzdZK3UwTUk5RytUNUZEamhReHh6NGpYZld0ZHRM?=
+ =?utf-8?B?TlZheC9DQTJVYk1LMzBvVnBLWmlqOVNFTG41dFhYR3JpNmFBcTYzcjZUSW90?=
+ =?utf-8?B?SS90VGFGbGdDU2J1MVBMeDFDNWU1cFRMYWRYbHFPeHV5K29FRzhLVU93Umha?=
+ =?utf-8?B?RlNUQzZWUHNGSlRLT050STIzMnhMMXRFZzFDdlhKbUZWUWdyYmE2SklrYUtD?=
+ =?utf-8?B?dFJWUDJNZVQzajBBQ1M1dkZqV2FYazU4amIxU0RxRUN6UmNyandwaXZ5ajNt?=
+ =?utf-8?B?U3Z1QTQweE1nVmJiL2Y3MUIwK29sbDZBU2NQalRBUHNHR0Z3RG9pdGJOK2hS?=
+ =?utf-8?B?QmJwcEh4OElZUFhLcDdhYkNFN1ZSQUZmcStNK096czh3TlNwNVhDdldILysw?=
+ =?utf-8?B?ak5sQ3dkdkFMRXl6blhRVC9MWWMrcFN1VU1USU5MaFNaUnE1MHVQR3I3OWZ4?=
+ =?utf-8?B?Q1pHVFRzZ0FYajI4TTViSGpJNEZjQTI2RjNCdG1wRVg3MjdsckZKUVVXa3U4?=
+ =?utf-8?B?QVl1ZjQ1TnFBN2VxU3gzOFZaUkVvYUFFME4vWGJNZUhzNHZmL2FJUldwTVIr?=
+ =?utf-8?B?bTgrUHBtcEFMZDlXQ2ppZHhMM2p5d2lqWkRzdzBGRXY2eHdaZUNqdDNYcnZY?=
+ =?utf-8?B?ZURPZjhPanJieEFMUXBiOGdJQmZPT2RheGkwODRwL2tTREZqQnpvSlMzNzFx?=
+ =?utf-8?B?TWhKZVpZaWU1UFBjU3UxSWUxOXh2WThBTzZUTGRPNUV2MEtKTFF4d20yNGg0?=
+ =?utf-8?B?RWtHRGIxbnJNS0IyZEU4VGlSS1MvS2p1M29INEIrTXJvaFExU1phL1J5Q21I?=
+ =?utf-8?B?bllES1FaU1J2RGIxUHY1N2pBb2F3OS9TWE9lNEF3bEdkbTVWQVhXSUtRQkcr?=
+ =?utf-8?B?anV0V2pnYndaVzFWcE9vTERqaUVUdUdza0RDZlk3d0RvMUx2ZEJVVEhMY24x?=
+ =?utf-8?B?RnFwZE9XSXV4SnhtS3lTTDFyTWhtMnJkU2xKdG5mKzJ4d0c5MEJVT2o4UzZP?=
+ =?utf-8?B?bk8zRVJTcWVidG9UaUNWaGtxa3NDSTJ2M2ZJeWkyY3hxQktLMFdRcmsxbkN2?=
+ =?utf-8?B?YWtNUjlRTTR2Z0pTNlhXaXc4VlV5Ky9hWXM2elE2QTRZYTRRRk1KMVFlQXBy?=
+ =?utf-8?B?bnBCTi9URkpib2lBSjVCNEg3THl0U3NrWjJmN0toNXU3QUZWUWE0NDJNd0VW?=
+ =?utf-8?B?bFgvazJFV2srcGpMUmpTd1BwcFZxRUYxUHZqbVgzWmZUMzNITXZQd0ZyVE4v?=
+ =?utf-8?B?N1Q4bStkdjNaK3ViSkZMcTNFNTQwcS9oUlBQTXM5cHdQcUVoek14djNHUm0r?=
+ =?utf-8?B?djlPcEgzN0p3bFNkSHlGMDNhV0MvV1cydjdxMWJ4eXk1RWx3RHI2aFRaaVVa?=
+ =?utf-8?B?VTFIK01mMjdJT3QxZFEraHNBL3FHcU5oTTNnbHFkWGZTdTF6QXdIcW85THB4?=
+ =?utf-8?B?N3p6VlJJdE1lbmVLQjZXNmEvSjZHYmZnY1MvYmdobjJJRm1vTzhIV3ZNVEpx?=
+ =?utf-8?B?UzF2RGR2dWpDbk81cTdDaC95U3ZmRGJvOHZ6TVBNMzd3K3N1ZGpuUHJBUjho?=
+ =?utf-8?B?aXhNajZpdmFtZGUyUXZ0dUIxeFhkblVnRE5GTE16SnhhL1RtVTV5S3p6Uk9D?=
+ =?utf-8?B?VmFTbWtNdDVIS2ZkT1kxN2VEY0ZQdTBHemlXc25BRXkxdjZueUxaTTRWci8z?=
+ =?utf-8?B?bjhTa2N5V0Zyc1V6WUkwY3l6NEpYZlVjU2RUWXAxLzIxdUxpM1REYW8yYzQy?=
+ =?utf-8?B?WGxSQ09ONFhjK2dIWENIZG9MeGkwT0NaZFVnMkFaN0pqREJHcnNFcjYwR0Ir?=
+ =?utf-8?Q?HaCI0Ga3MnRluJLA=3D?=
+X-Exchange-RoutingPolicyChecked:
+	NSBIS7/t0Ax4bc0lA0t1HEIO2EmlnM0hlg4/cXIhU5ZzbSfScdn1vybD4LaxFv487wwk3xFKIHZslVACJbzGp8jxWqrvVwQs2BLCPG0O6qWdAY0qjS/vLc7cesob+c1ykg2Vth8fjIZT6Sx+wU8yDy9tSYUQ+Ep6LFFbqK4bbnQK2PuGjXCN+OAMS0kvSCMAS9gSQ7FDJNmeHq5DiW22LQn5lb7oCwEm9epJZLQ6gr/ugCkF3uRLXnrtpl5L66CGt3BnWKJ7nIzhU3HQ00T2H5fE2rEjKtfHm4BTbL7+8W3PHZG7H03+KhRevn/UDFKIKkrR8NxoM0Jue3fuSSMHdQ==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	cJC63vp7bJ6P2XOsVWI3clnDcx1AOHErBe9jGOKwALa63mtr+rz2dvCviUAhUnZf2WWsMeElcvB3R9nujmrp+RrlzpOjxBfFi/p91UqRCf1phx5tIgWlShRnL41wwX1qjYkzS9kAUCPySO72XhVn4RgswKQkgjGgKVUKCm7NqsODz0MQwwC5eGLXQjrY8U5aiznn9kEeymryZr2mpC6TUDNCgcUqiLYr9HywNzHBEXiGXEzcRhWSs07MBfo+/H+r3Hh8UIdR6WdWknL8GRYbx9tZXBPqgyAmGuR3ztxSSrk3tvz0eu81E5G41bLE9KR/HN/h5g4K1dnsg5kOh/vzlWFEPID2XGvIdObSmxF8EJxdhqicFfKIkDtzKFskncaqPA69MV6C2FmXOdHc+5P3+m0ksbzCt/TGr+PQSF4yObbfHGRhxkC6pn/8Z2kgJNjOQ3Q857kZyeRszExnHKzO6H12PMNpfiJUNPf/eAElacnd8g2EaONV9cE8exIOxeLGgJtWufoAl4Z4pdm3B1gd1IfPWyts0eW8opPl0KFHvZ+e8vqRWOwmE9BcaRIA0LjLiL6HsuclLmQmkMqCEKr1j9MB2Zfla43OWnQ3nLlr4/o=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 878a842b-ede5-4217-3e8c-08de99bed090
+X-MS-Exchange-CrossTenant-AuthSource: MW6PR10MB7660.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2026 00:43:16.1441
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5P4bWGODnAT4xxeXjlIxgfAD0j09z4LSMTPJuiCnV7hVIR+0XErRoL69kD++sLA8ZxiwrzAl2LyK6BIqlq3lvHo4tZK4EUQuArQ9VzFAY/M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6581
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-13_03,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2604070000 definitions=main-2604140003
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDAwMyBTYWx0ZWRfX12cg94teNKvT
+ g1g/vsNrPPwyfhJRxfNDLPzM8JU+n0NHwvkUPNQD9YdK7zDsNZiJ4CpPcJ+gWBccSQRfe9MAc92
+ ww5aqNoJaCX03mPYKeYPCHFvhm220dAo2HFcL9kOq9jsD3RnyH+smdk7qNw60UqQyWMk4ZM2Arf
+ vpN/k2/NsxqBZR9eRG5NEzUfgpv3TMfwhrourKWqr4iwM80j0x13Av9eGJniT7ZK+A5ymGyhuOq
+ tNYYluyFrIZoas/Tfo8TL5U8389+0wtKxgGlp0COOI+hZ3WggTAqosiiHNo3jrIXZR0ZVzgPbGw
+ sblgZYFOie7/DH1RyWS2j0BuoiCHREaUU4R8tOgV9xhYhpEssWDlpPQt2s7dFfA+dkP73pNIZoz
+ 37x53ZchuJHqTn7MF6eF6V1IsnFzVhSdkWGE1DZsa5KUBw2Jhf8iScwH2KDOK0hV3qXx20aI4KG
+ 0JgEmhAj0UdMlpYNYQw==
+X-Authority-Analysis: v=2.4 cv=Lo6iDHdc c=1 sm=1 tr=0 ts=69dd8dab cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=A5OVakUREuEA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=x0eKOSpe3m1H3M0S9YoZ:22 a=yPCof4ZbAAAA:8
+ a=VwQbUJbxAAAA:8 a=1rGnPOzLuFrcfCgf098A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: Ea53KvOTKi5cCesd9Q9iSQh3hm4sNqCl
+X-Proofpoint-ORIG-GUID: Ea53KvOTKi5cCesd9Q9iSQh3hm4sNqCl
 
-On Mon, Apr 13, 2026 at 06:36:06PM -0400, Paul Moore wrote:
-> On Mon, Apr 13, 2026 at 12:42 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
-> > > > We are not limited to LSM solution, the goal is to intercept commands
-> > > > which are submitted to the FW and "security" bucket sounded right to us.
-> > >
-> > > Yes, it does sound "security relevant", but without a well defined
-> > > interface/format it is going to be difficult to write a generic LSM to
-> > > have any level of granularity beyond a basic "load firmware"
-> > > permission.
-> >
-> > I think to step back a bit, what this is trying to achieve is very
-> > similar to the iptables fwmark/secmark scheme.
-> 
-> Points for thinking outside the box a bit, but from what I've seen
-> thus far, it differs from secmark in a few important areas.  The
-> secmark concept relies on the admin to configure the network stack to
-> apply secmark labels to network traffic as it flows through the
-> system, the LSM then applies security policy to these packets based on
-> their label.  The firmware LSM hooks, at least as I currently
-> understand them, rely on the LSM hook callback to parse the firmware
-> op/request and apply a security policy to the request.
 
-That was what was proposed because the idea was to combine the
-parse/clasification/decision steps into one eBPF program, but I think
-it can be split up too.
+On 4/2/26 4:13 PM, anthony.yznaga@oracle.com wrote:
+>
+> On 4/2/26 12:17 AM, David Hildenbrand (Arm) wrote:
+>> On 4/2/26 02:44, Andrew Morton wrote:
+>>> On Wed,  1 Apr 2026 17:34:16 -0700 Anthony Yznaga 
+>>> <anthony.yznaga@oracle.com> wrote:
+>>>
+>>>> On configs where MAP_DROPPABLE is not supported (currently any 32-bit
+>>>> config except for PPC32), mmap fails with errno set to ENOTSUPP.
+>>>> However, ENOTSUPP is not a standard error value that userspace knows
+>>>> about. The acceptable userspace-visible errno to use is EOPNOTSUPP.
+>>>> checkpatch.pl has a warning to this affect.
+>>> Sounds very reasonable.
+>>>
+>>> EOPNOTSUPP is clearly a networking thing so what on earth is it doing
+>>> coming out of mmap code?  Our poor operator is now looking at a 
+>>> networking
+>>> error code and wondering what this supposedly non-networking
+>>> application is up to.
+>>>
+>>> But just that's a pet peeve - I lost that one decades ago.
+>>>
+>>>> Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always 
+>>>> lazily freeable mappings")
+>>> Nearly two years ago so I think I'll add this to mm-unstable for
+>>> 7.1-rc1 and shall let it trickle back a little more slowly than might a
+>>> 7.0-rcX hotfix.
+>>>
+>>>
+>>
+>> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>>
+>>
+>> But
+>>
+>> ~/git/linux/mm$ git grep ENOTSUPP
+>> hugetlb_vmemmap.c:                      ret = -ENOTSUPP;
+>> mmap.c:                         return -ENOTSUPP;
+>>
+>>
+>> Should we fix up the other one as well?
+>>
+> I'm looking into this. It's returned for the case where vmemmap 
+> mappings cannot be split/freed because they are self-hosted due to 
+> memory hotplug. Many callers end up ignoring the error, but there may 
+> be a way for it to be propagated to userspace as the errno for a 
+> failed write to a sysfs file. 
 
-> We've already talked about the first issue, parsing the request, and
-> my suggestion was to make the LSM hook call from within the firmware
-> (the firmware must have some way to call into the kernel/driver code,
-> no?)
+To follow up on this, the ENOTSUPP returned by vmemmap_pmd_entry is not 
+propagated to user space.  It is used internally to ensure 
+HPG_vmemmap_optimized is cleared for a hugetlb folio when HVO cannot be 
+applied due to the vmemmap memory being self-hosted.
 
-No, that's not workable on so many levels. It is sort of anaologous to
-asking the NIC to call the LSM to apply the secmark while sending the
-packet.
-
-The proper flow has the kernel evaluate the packet/command *before* it
-delivers it to HW, not after.
-
-> so that only the firmware would need to parse the request.  If we
-> wanted to adopt a secmark-esque approach, one could develop a second
-> parsing mechanism that would be responsible for assigning a LSM label
-> to the request, and then pass the firmware request to the LSM, but I
-> do worry a bit about the added complexity associated with keeping the
-> parser sync'd with the driver/fw.
-
-In practice it would be like iptables, the parser would be entirely
-programmed by userspace and there is nothing to keep in sync.
-
-> However, even if we solve the parsing problem, I worry we have
-> another, closely related issue, of having to categorize all of the
-> past, present, and future firmware requests into a set of LSM specific
-> actions.  
-
-Why? secmark doesn't have this issue? The classifer would return the
-same kind of information as secmark, some user provided label that is
-delivered to the LSM policy side.
-
-When I talk about a classifier I mean a user programmable classifer
-like iptables. secmark obviously doesn't raise future looking
-questions (like what if there is httpv3?) nor should this.
-
-> The past and present requests are just a matter of code,
-> that isn't too worrying, but what do we do about unknown future
-> requests?  Beyond simply encoding the request into a operation
-> token/enum/int, what additional information beyond the action type
-> would a LSM need to know to apply a security policy?  Would it be
-> reasonable to blindly allow or reject unknown requests?  If so, what
-> would break?
-
-I am proposing something like SECMARK.
-
-Eg from Google:
-
-iptables -t mangle -A INPUT -p tcp --dport 80 -j SECMARK --selctx system_u:object_r:httpd_packet_t:s0
-
-Which is 'match a packet to see that byte offset XX is 0080 and if so
-tag it with the thing this string describes'
-
-So I'm imagining the same kind of flexability. User provides the
-matching and whatever those strings are. The classifer step is fully
-flexible. No worry about future stuff.
-
-I'm guessing when Casey talks about struct lsm_prop it is related to
-the system_u string?
-
-> > ... Once classified we want this to work with more than SELinux
-> > only, we have a particular interest in the eBPF LSM.
-> 
-> One of the design requirements for the LSM framework is that it
-> provides an abstraction layer between the kernel and the underlying
-> security mechanisms implemented by the various LSMs.  Some operations
-> will always fall outside the scope of individual LSMs due to their
-> nature, but as a general rule we try to ensure that LSM hooks are
-> useful across multiple LSMs.
-
-I don't know much about SECMARK but Google is telling me it doesn't
-work with anything but SELinux LSM? We'd just like to avoid this
-pitful and I guess that is why Casey brings up lsm_prop?
-
-> > Following the fwmark example, if there was some programmable in-kernel
-> > function to convert the cmd into a SELinux label would we be able to
-> > enable SELinux following the SECMARK design?
-> 
-> As Casey already mentioned, any sort of classifier would need to be
-> able to support multiple LSMs.  The only example that comes to mind at
-> the moment is the NetLabel mechanism which translates between
-> on-the-wire CIPSO and CALIPSO labels and multiple LSMs (Smack and
-> SELinux currently).
-
-Ok, I think they can look into that, it is a good lead
-
-> > Would there be an objection if that in-kernel function was using a
-> > system-wide eBPF uploaded with some fwctl uAPI?
-> 
-> We'd obviously need to see patches, but there is precedent in
-> separating labeling from enforcement.  We've discussed SecMark and
-> NetLabel in the networking space, but technically, the VFS/filesystem
-> xattr implementations could also be considered as a labeling mechanism
-> outside of the LSM.
-
-Makes sense
-
-> > Finally, would there be an objection to enabling the same function in
-> > eBPF by feeding it the entire command and have it classify and make a
-> > security decision in a single eBPF program?
-> 
-> Keeping in mind that from an LSM perspective we need to support
-> multiple implementations, both in terms of language mechanics (eBPF,
-> Rust, C) and security philosophies (Smack, SELinux, AppArmor, etc.),
-> so it would be very unlikely that we would want a specific shortcut or
-> mechanism that would only work for one language or philosophy.
-
-Okay, it is good to understand the sensitivities
-
-> > Is there some other way to enable eBPF?
-> 
-> If one develops a workable LSM hook then I see no reason why one
-> couldn't write a BPF LSM to use that hook; that's what we do today.
-
-I was thinking that too
-
-> However, it seems like direct reuse of secmark isn't what is needed,
-> or even wanted, you were just using that as an example of separating
-> labeling from enforcement, yes?
-
-Yes, and looking for a coding example to guide implementing it, and to
-recast this discussion to something more concrete. It is very helpful
-to think of this a lot like deep packet inspection and
-classification.
-
-That the packets are delivered to FW and execute commands is not
-actually that important. IP packets are also delivered to remote CPUs
-and execute commands there too <shrug>
-
-At the end of the day the task is the same - deep packet inspection,
-classification. labeling, policy decision, enforcement.
-
-Thanks,
-Jason
