@@ -1,198 +1,175 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0238A245008;
-	Tue, 14 Apr 2026 12:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E038390C95
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 12:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776168020; cv=none; b=iDNuiZtSLrsGe7IqIqSsfLlOG9hCcim1cWU/ykewpLZ3tGAvAXQwGdexOTkW3HkFUKTTmcO4uuCoxeOk5iICHftHYBxlO1R4axoN5L1g9IHfssOhCNMk6QHeZ/WXeZMOUSrfoXzX98Xq8HAR3dAZKLk3JC5w6+YBKMk9xG44a6Q=
+	t=1776168787; cv=none; b=WyxGlJZBMYyDsIiZped3Og+KTbXR8c3ZIX4QSDLP2zvqU24O50CW11sXK7NAgX14oqiX5h2AV7btj2zgNzi753VjgJ1oP69KAdjyHuIyRYMN8G3T7ENLkbkid6FwH9ea3qVtbMRcqZdfVed2n8FgQWm9YrHnPN8M0knE1qrFjUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776168020; c=relaxed/simple;
-	bh=n0FuSTRAL+hNCZiTzx44xxGhs7sDE7lq5mpQ894KpuE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g5FUcNXxi1scg8Xk9mWSTntr+L6gnH6XQ21RbA8gZsuBqVPW4cbk5BgsD3C7/p9H13ngafqvlkRrWZbuq60MwnDgV4HPnjtBxIcjkkx7dGc87+rA/6xBfui2MsffoUVrPuzBroi1vtKb/aSzk5iLlhqhu4owFrgvpN2BvFVpENA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=EVmT2dzH; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1776168787; c=relaxed/simple;
+	bh=+QnCQVCjojEcuevSC8g0MJA/h24xDP0xiW/QNvX/aco=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZQWygwdRLI677opVrYvIIHmnALEQqpEsLcKlXfkyFGZioDb8azWsh0R2Iepw9qpdbMFVuUvg0Xr0Gd55Wh4zyybZxbTKrv2od+1Zs4as5RVue2CRZI6+7UfeAevrgnrXhaeVXOTkMp7xaN0us5Aq/lcqGXPDJizybT4qKxYXpko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fxl4I8ZH; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="EVmT2dzH"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AAF404ECA;
-	Tue, 14 Apr 2026 05:00:12 -0700 (PDT)
-Received: from [10.164.148.48] (MacBook-Pro.blr.arm.com [10.164.148.48])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 205E33F7B4;
-	Tue, 14 Apr 2026 05:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1776168018; bh=n0FuSTRAL+hNCZiTzx44xxGhs7sDE7lq5mpQ894KpuE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EVmT2dzHsZucBiO1iVU5bKVRILDszlR629YATDHni3fQxwJeEmAEvzfmQQXjQuwXP
-	 sVIr2+TDC8q/LHEjqJymV5mAr63YnSq3HLVqkPj7LjL7qDcgxsd5wfVOndGGOlOqKF
-	 IrYdvk4t80VVypImjb3+Uwy20gJ/UeZ63u5dIC2g=
-Message-ID: <f69cfdac-2718-4a1e-b00c-3c751716799a@arm.com>
-Date: Tue, 14 Apr 2026 17:30:09 +0530
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fxl4I8ZH"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488971db0fdso54618415e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 05:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776168785; x=1776773585; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+QnCQVCjojEcuevSC8g0MJA/h24xDP0xiW/QNvX/aco=;
+        b=fxl4I8ZHiJKWOX/0KlNsMjhxexf+MCO11K7GYjL94X6qgWenvd1KPnp2wxIGGW3ASk
+         +3YZmm9S/Le8SrJs7f4USqFGN5wygMj8ZQ66ByZZcUCmq46MmMAl54w8SKxdQU7cWwG7
+         5wfxFEU9SP3idSHXctmJ4apkGy4UDAGHLblfQn1Qqw5dHTWiru+el1GNTXbXxSYDIQCC
+         LGKnRuzCpWaZ4C14CCDxSs8E/9tE+lowrE+2lu3Ho81Z4qUPsK5CZ7AXsea6DvHhRj6s
+         c8MnYGhxnkBtdT3rIIFRVSdawvb40jZhqPukhwhoCncDtwwb1fJiYtUYLHV1HgCcZh1a
+         P3dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776168785; x=1776773585;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+QnCQVCjojEcuevSC8g0MJA/h24xDP0xiW/QNvX/aco=;
+        b=QBNQox9m4hvbUOkRPPj3KUjtShaHOmoNDIbAqiJMTMGu09+jxigDv/O+cbtibIQF+Y
+         WInD+PlWCWkKJWF1e4u6U7riUEmtUK1ZwLmRog5TZWAOx6AzNbmwwiyPkUIqlaWW1zP/
+         2y5wRCMY8EZA64SyCw892JTRm+MG6Ab9PxtHAVbm5IbhDRhetpdszyeVki/ed8O9w0Rb
+         jcRzwgeIaBgaQBBRldVDNE9egDxiR3HTDtQYz3wB07OdDQRD+V/EXhZeMpvUhzKjkgCj
+         y0dxE/dOrC/k38M8V/upWkRyHluihB7V3vHXXJZ1sS2s1QAEii7kyMS6j5Qm4RzFYh4U
+         iR5Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8YV4VvQ2gCia3TccwnxBHMm3OIN2rJA4iup0KhokGt8k7CM57FII3m2/rFuOQK26yXusyRzJHA3lo85pDgIAM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9hc/0Cg4LNk3Hm1oUCxG7Wl1NKrbh/qkkabggsQBRvZkstaFA
+	Re9hIf2klkTEYFlgiClLjLRnMsj7xSAeoah2cpZsxdj+41v8XjIQ9MO+emea8hped3Q=
+X-Gm-Gg: AeBDievw+RSA2uDsw6YgwEnzyAJMVjKxYvTKwJpKHaupt2UAyejOGpqMAxu8IymKCD1
+	nfsu4QYDg/9aVfR5YsqaZBSp12ljNM4p4F5nNen8yo6WfRS+nfEvDU0Q3SRCju7F9PEZ+ocbhdX
+	aD47dOBeiNRJBTOsoBTZsy3RYAzoZGoHVhYBvyr2G2E9PCqCzDtz+GszlBv58V4WmnFzHTeLlff
+	emepFB1+j6NEvNdWigrJ5fRk7Rg4BCeWREyDsu9DjyhE6+gkstpTo4qusxc/NoNzWlBG4gkJe0P
+	7tbPchmYzr1a31OH8J5lNMyW31Rmx++FNbmSuPHcdWmtklcKZe3yzBvEx6FeA8lTi/r62S7r1up
+	r78oB1HvhodEcgsGp/21xBg3wfC1WH4rOye/NgOfCy36Q5IbuOGNocrYXWBRI3GC9HKJW23xLCF
+	+MZDyGGkf0yMftH1gIEdCjk68vDF/KsxIy8/L93ildrggJSmdS2Ur3+OpqqgXJ2lEmqFOjj11hj
+	ztTfA==
+X-Received: by 2002:a05:600d:8449:b0:486:fdba:f5db with SMTP id 5b1f17b1804b1-488d664f29emr192886925e9.0.1776168784711;
+        Tue, 14 Apr 2026 05:13:04 -0700 (PDT)
+Received: from ?IPv6:2804:1bc4:224:7800:585c:db3a:fcb:e21f? ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d67b4a46sm269592205e9.4.2026.04.14.05.13.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2026 05:13:04 -0700 (PDT)
+Message-ID: <6ab30eed1165bcd68395e32d8ab61d7437a8ccf6.camel@suse.com>
+Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be
+ executed on 4.12 kernels
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes
+	 <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Joe Lawrence
+	 <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 14 Apr 2026 09:12:58 -0300
+In-Reply-To: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
+References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
+Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
+ keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
+ Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
+ gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
+ GO8seNG8sYiP6JfRjl7Hyqca6YsE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.0 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Simplify byte pattern checking in
- mremap_test
-To: David Laight <david.laight.linux@gmail.com>,
- "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, ljs@kernel.org,
- Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- ryan.roberts@arm.com, anshuman.khandual@arm.com,
- Sarthak Sharma <sarthak.sharma@arm.com>
-References: <20260410143031.148173-1-dev.jain@arm.com>
- <5297e0da-d8ec-49df-9b32-0d9f907588d6@kernel.org>
- <8b5544eb-5ec0-4c85-a2da-7a454fa606dc@arm.com>
- <134c372e-5c9e-493d-b954-d9954546beaf@kernel.org>
- <20260414104712.2b634741@pumpkin>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20260414104712.2b634741@pumpkin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+
+On Mon, 2026-04-13 at 14:26 -0300, Marcos Paulo de Souza wrote:
+> A new version of the patchset, with fewer patches now. Please take a
+> look!
+>=20
+> Original cover-letter:
+> These patches don't really change how the patches are run, just skip
+> some tests on kernels that don't support a feature (like kprobe and
+> livepatched living together) or when a livepatch sysfs attribute is
+> missing.
+>=20
+> The last patch slightly adjusts check_result function to skip dmesg
+> messages on SLE kernels when a livepatch is removed.
+>=20
+> These patches are based on printk/for-next branch.
+>=20
+> Please review! Thanks!
+>=20
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 
 
+I saw some checks made by sashiko, and besides they not being so
+horrible, I believe that I should fix me an send a v3 to address them.
+But still, feel free to take a look :)
 
-On 14/04/26 3:17 pm, David Laight wrote:
-> On Tue, 14 Apr 2026 10:01:57 +0200
-> "David Hildenbrand (Arm)" <david@kernel.org> wrote:
-> 
->> On 4/14/26 07:09, Dev Jain wrote:
->>>
->>>
->>> On 14/04/26 12:57 am, David Hildenbrand (Arm) wrote:  
->>>> On 4/10/26 16:30, Dev Jain wrote:  
->>>>> The original version of mremap_test (7df666253f26: "kselftests: vm: add
->>>>> mremap tests") validated remapped contents byte-by-byte and printed a
->>>>> mismatch index in case the bytes streams are not equal. That made
->>>>> validation expensive in both cases: for "no mismatch" (the common case when
->>>>> mremap is not buggy), it still walked all bytes in C; for "mismatch", it
->>>>> broke out of the loop after printing the mismatch index.
->>>>>
->>>>> Later, my commit 7033c6cc9620 ("selftests/mm: mremap_test: optimize
->>>>> execution time from minutes to seconds using chunkwise memcmp") tried to
->>>>> optimize both cases by using chunk-wise memcmp() and only scanning bytes
->>>>> within a range which has been determined by memcmp as mismatching.
->>>>>
->>>>> But get_sqrt() in that commit is buggy: `high = mid - 1` is applied
->>>>> unconditionally. This makes the speed of checking the mismatch index
->>>>> suboptimal.  
->>>>
->>>> So is that the only problem with 7033c6cc9620: the speed?  
->>>
->>> Yes.
->>>
->>> I'll explain the algorithm in 7033c6cc9620.
->>>
->>> The problem statement is: given two buffers of equal length n, find the
->>> first mismatch index.
->>>
->>> Algorithm: Divide the buffers into sqrt(n) chunks. Do a memcmp() over
->>> each chunk. If all of them succeed, the buffers are equal, giving the
->>> result in O(sqrt(n)) * t, where t = time taken by memcmp().
->>>
->>> Otherwise, worst case is that we find the mismatch in the last chunk.
->>> Now brute-force iterate this chunk to find the mismatch. Since chunk
->>> size is sqrt(n), complexity is again
->>> sqrt(n) * t + sqrt(n) = O(sqrt(n)) * t.
->>>
->>> So if get_sqrt() computes a wrong square root, we lose this time
->>> complexity.  
->>
->> Ah, thanks for clarifying.
->>
->>>
->>> Maybe there is an optimal value of x = #number of chunks of the buffer,
->>> which may not be sqrt(n).
->>>
->>> But given the information we have, a CS course on algorithms will
->>> say this is one of the optimal ways to do it.
->>>   
->>>>  
->>>>>
->>>>> The mismatch index does not provide useful debugging value here: if
->>>>> validation fails, we know mremap behavior is wrong, and the specific byte
->>>>> offset does not make root-causing easier.  
->>>>
->>>> Fully agreed.
->>>>  
->>>>>
->>>>> So instead of fixing get_sqrt(), bite the bullet, drop mismatch index
->>>>> scanning and just compare the two byte streams with memcmp().  
->>>>
->>>> How does this affect the execution time of the test?  
->>>
->>> I just checked with ./mremap_test -t 0, the variance is very high on my
->>> system.
->>>
->>> In the common case of the test passing:
->>>
->>> before patch, there are multiple sub-length calls to memcmp.
->>> after patch, there is a single full-length call to memcmp.
->>>
->>> So the time should reduce but may not be very distinguishable.  
->>
->> Okay, so doesn't matter. I agree that we should simplify all that.
->>
->> The exact index is irrelevant. Whoever wants to debug the test failure
->> could modify the test to find that out. It's one of the tests we don't
->> really expect to fail (often).
->>
->>>   
->>>>  
->>>>>
->>>>> Reported-by: Sarthak Sharma <sarthak.sharma@arm.com>
->>>>> Signed-off-by: Dev Jain <dev.jain@arm.com>  
->>>>
->>>> Fixes: 7033c6cc9620 ("selftests/mm: mremap_test: optimize execution time
->>>> from minutes to seconds using chunkwise memcmp")
->>>>
->>>> ?  
->>>
->>> Not needed. 7033c6cc9620 does not create any incorrectness in the checking
->>> of mismatch index.  
->>
->> Yes, agreed.
->>
->>
->> I would suggest to rewrite/simplify/clarify the patch description, not
->> talking about "buggy" etc, focusing on the simplification.
->>
->> "
->> The original version of mremap_test (7df666253f26: "kselftests: vm: add
->> mremap tests") validated remapped contents byte-by-byte and printed a
->> mismatch index in case the bytes streams didn't match. That was rather
->> inefficient, especially also if the test passed.
->>
->> Later, commit 7033c6cc9620 ("selftests/mm: mremap_test: optimize
->> execution time from minutes to seconds using chunkwise memcmp") used
->> memcmp() on bigger chunks, to fallback to byte-wise scanning to detect
->> the problematic index only if it discovered a problem.
->>
->> However, the implementation is overly complicated (e.g., get_sqrt() is
->> currently not optimal) and we don't really have to report the exact
->> index: whoever debugs the failing test can figure that out.
->>
->> Let's simplify by just comparing both byte streams with memcmp() and not
->> detecting the exact failed index.
->> "
-> 
-> ISTM that if you get a failure it doesn't really matter how long a
-> second scan takes.
-> So a simple byte loop that reports the offset and data of the first
-> error and counts the number of errors is more than enough.
+https://sashiko.dev/#/patchset/20260413-lp-tests-old-fixes-v2-0-367c7cb5006=
+f%40suse.com
 
-You are right in saying that it won't matter how long the second scan
-takes, but it also doesn't matter what is the mismatch offset : ) so
-let us remove some code while we can!
-
-> 
-> 	David
-> 
-> 
-
+> ---
+> Changes in v2:
+> - Patch descriptions were changed to remove "test-X", since it was
+> polluting the commit subjects (Miroslav Benes)
+> - Patch 8 was dropped since it was checking for a message from an
+> out-of-tree patch. (Petr Mladek)
+> - Patch 3 was dropped as should be treated as expected failure for
+> older kernels. (Petr Mladek)
+> - Patch 2 was changed to use y/n instead of 1/0, since it's more
+> natural to use it.
+> - Patch 1 was changed to handle ppc and loongson, and error out if
+> dealing with a different architecture that sets
+> =C2=A0 CONFIG_ARCH_HAS_SYSCALL_WRAPPER and haven't changed the test to
+> include the proper wrapper prefix.
+> - Patch 4 was changed to invert the return of the bash function to
+> return 1 in failure, like
+> =C2=A0 a normal bash function (Joe Lawrence)
+> - Patches 5, 6 an 7 were changed to not split the tests, but to only
+> run the tests
+> =C2=A0 when the attribute were present (Miroslav Benes)
+> - Link to v1:
+> https://patch.msgid.link/20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@su=
+se.com
+>=20
+> ---
+> Marcos Paulo de Souza (6):
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Check for ARCH_HAS_S=
+YSCALL_WRAPPER config
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Replace true/false m=
+odule parameter by
+> y/n
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Introduce does_sysfs=
+_exists function
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Check if patched sys=
+fs attribute exists
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Check if replace sys=
+fs attribute exists
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Check if stack_order=
+ sysfs attribute
+> exists
+>=20
+> =C2=A0tools/testing/selftests/livepatch/functions.sh=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0 10 ++
+> =C2=A0tools/testing/selftests/livepatch/test-kprobe.sh=C2=A0=C2=A0 |=C2=
+=A0=C2=A0 8 +-
+> =C2=A0tools/testing/selftests/livepatch/test-sysfs.sh=C2=A0=C2=A0=C2=A0 |=
+ 120
+> ++++++++++++---------
+> =C2=A0.../livepatch/test_modules/test_klp_syscall.c=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 |=C2=A0 17 ++-
+> =C2=A04 files changed, 99 insertions(+), 56 deletions(-)
+> ---
+> base-commit: 712c0756828becbfc629ff8d8b82deff5d1115e4
+> change-id: 20260309-lp-tests-old-fixes-f955abc8ec27
+>=20
+> Best regards,
+> --=C2=A0=20
+> Marcos Paulo de Souza <mpdesouza@suse.com>
