@@ -1,137 +1,257 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AED12E22B5;
-	Tue, 14 Apr 2026 08:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD923A0E8A;
+	Tue, 14 Apr 2026 08:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776154504; cv=none; b=e7A/meGx94OUzNqLxvx3+iABZyhjyYKxz+0CV5BXwuL2rF0wkVqaC6aoCO7mHujuV2Olm5ugaiswbWQ8xqekA+qNP/P++tbCxBRS2LvFe1sYRLp6tZZKXWROOpcutvUa9k/peoQ/HsN37MZ3NZpQahVpeK40TcabtJ8kUTpcytI=
+	t=1776154971; cv=none; b=F2ZNZX7qFHB+TPCvdSF8hFMKLHI+7yAHWVtxn19//O42Avd6t8Y6rrN7RDLFH49JhiRE/fckUTZ3nfymsrdxq48tWrtDMhZQGlxw7RGSU59kbR7dHJLnkPBPzhRVxKkhNqoLMdXfkdnyjMDdAU3ui6Z0T/t7Ln2vQKAkSnwGwr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776154504; c=relaxed/simple;
-	bh=i+61MYwPhyBU9c2P6PAHwEwjeACa/kQ2i7soG6qp95o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dO/YDFYSLaOm57N+MSrizbW2KedB7X0o/S/0joiJgxfyRat9r0EytKydaABPXno2xhBGSoHDKiFy5vYR2jA3RRONG1gyr1uhaTJxAcro267JR0A8pSp2o/3ovInOpTVnvGZhsItlZDPb4YFHG1Y+Oq2AeHvw2K8oLG82QoUlyS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMCkt5Vj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776154971; c=relaxed/simple;
+	bh=8RGHgKugwW03ORR/bLa3l36Pi5TOiKVPUV8NGd91Fl8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nxd+yAUfke8Lpb0G23I4cG5z1PEIGf2u4yUizp8Krzi5P4Vu3R1s3tG5UepwPPaYxbvGeirjD67Z+5ehWXkdmrCtxs0IH/FFwZr4GdOV71v8rva2KSZ5g8hxrnZtNNtRZp24RAzL4bepUvcgnSpcA0H3wEcJJUArnCxMIGT1Pz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=NbfhKnaV; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMCkt5Vj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD84C19425;
-	Tue, 14 Apr 2026 08:15:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776154504;
-	bh=i+61MYwPhyBU9c2P6PAHwEwjeACa/kQ2i7soG6qp95o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OMCkt5VjSw6kunvIIqZ5OYLfnoIvIQ8TBCG06q1EoPeLYvh7fia6rjTK7MCT1AYhO
-	 mwz/6KJOe98IMgnm3lpvLQ5tKWZKZ2QGtjhl5F/IMgm/rKKyvjYsFwubauGFtR+/p9
-	 GsHxJQuE3R4+sq7g47rBbDOpxpHIL9ZPoGYKjaheuLzvY/6xHLh7z/MoxMCgo9zvhi
-	 +CmhxEARIuy5IbMpPW1d5e7FJN+faRgWl8LAy5RBqoKYEeCYWwZnfvLBJrNSEc4eU6
-	 gLh48F3XacTq72Ikk6Nwfe6GSMfMNQTXlOYflZUshbcfStdNlNYa9CyEqDC7tJjWQr
-	 b1FrDQTMndxiQ==
-Message-ID: <e6cceead-04d1-401a-84f1-e5f2310e53e0@kernel.org>
-Date: Tue, 14 Apr 2026 10:14:57 +0200
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NbfhKnaV"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLJABm2131790;
+	Tue, 14 Apr 2026 08:22:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=KBXRqsCIn8h/3rzrFZKuuM++OVd7
+	xx4Hu7KIt2JCVmo=; b=NbfhKnaVvZ8DPq+7glV1TGqUGcrmSe6PeptJ4vHZJ5BH
+	WThISMBV5EWUmkFSnyuTrA2D+F9xyvlV6JFwriuig+R21xLp8BzLHH4aXf9YIwo/
+	0kUr4MDXTu1Fos3LgFn7zlXgMFcCfzP6APyi674qitz10+98K/iw2zqzkdQtvFgd
+	NT7uYmfFSp1nRNh+Bd2rEfdG1GVjVlZq2HxNCq4kBA/ZPZYHkcNzokoiUDLJK0lu
+	4xWsugGVLjgIfxU4KTkZrJLmg/WJkEPTx4Dz2BReY3Q68WU4g1E+VoEjvlGoqNxo
+	P5kqE3/q5fiziTwoiLqDmpL6IlyBs6BVHruPHSijfg==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89n9skm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Apr 2026 08:22:24 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63E4suMp004179;
+	Tue, 14 Apr 2026 08:22:23 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg24k8hq7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Apr 2026 08:22:23 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63E8MJXe42271026
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Apr 2026 08:22:19 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8A66F2004B;
+	Tue, 14 Apr 2026 08:22:19 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 87DD520043;
+	Tue, 14 Apr 2026 08:22:15 +0000 (GMT)
+Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.ibm.com.com (unknown [9.39.26.223])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 14 Apr 2026 08:22:15 +0000 (GMT)
+From: Sayali Patil <sayalip@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+        Sayali Patil <sayalip@linux.ibm.com>
+Subject: [PATCH v5 00/14] selftests/mm: fix failures and robustness improvements
+Date: Tue, 14 Apr 2026 13:51:54 +0530
+Message-ID: <cover.1776150071.git.sayalip@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] mm: fix mmap errno value when MAP_DROPPABLE is not
- supported
-To: anthony.yznaga@oracle.com, Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com,
- vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, shuah@kernel.org
-References: <20260402003417.438037-1-anthony.yznaga@oracle.com>
- <20260402003417.438037-2-anthony.yznaga@oracle.com>
- <20260401174440.0f85ea303f0a027b50d99e5d@linux-foundation.org>
- <ca14b239-26db-479f-ba58-11e15f2379eb@kernel.org>
- <2f59c4e3-303f-4e13-a0a5-e1b5e5c1a37f@oracle.com>
- <43370425-00b0-4853-bc82-63064eae2b8e@oracle.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <43370425-00b0-4853-bc82-63064eae2b8e@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-GUID: zWoXD6XUmjoLTnR7xU2iec6uZxOh_aQG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDA3NyBTYWx0ZWRfX+sic54XNyzNF
+ mC+4+oiB5KkZOdTG95yoWHAWLR4WUE5UcESOYmkZb7QCKzXvDdvCO95TVsu9KtXUm9stM6qCuHe
+ NNOkQjahKd+jL2MjgkkAdLYdfc8uzOrg/vNKrEIKut1V86xDWZ8PgYSX7weH8bMJTazQI+LA6h6
+ BeyPQlMJZ1ELbxIdCQb4Z9OvZEh9hy0Am9MLYrrAGhECP6nbp3Pmpz9BaKygfcQfm9HWZCLyWM7
+ j/OgFe5TMGHnakdkbfbz909Ku4KVxrJN2oWJPcRJMUfP60pii3zxliyXfsGSzq3vlvEZBrfStfK
+ TwyWmcuwOjsdryMCv1l257kFGCzwJbkzsGq4ZeKQrYXP8l0O5ADONkT2o4BUosMSILnvzSsdvCI
+ MIBPNFIVxmiQL5ohZAxGdbsu7ZseauEXpQcB9pmBJFFN48w55ukAYa7YRVz4lmHliu6xgo1frCo
+ 9kIL2L7RU7B6/kUAvrg==
+X-Proofpoint-ORIG-GUID: tXqzASruBBomLQ_hhi1ZKef3W-ljOAFj
+X-Authority-Analysis: v=2.4 cv=FY4HAp+6 c=1 sm=1 tr=0 ts=69ddf941 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=2xlL1Z9U7jiVjyWPKcYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=O8hF6Hzn-FEA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-14_02,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 bulkscore=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 malwarescore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604140077
 
-On 4/14/26 02:43, anthony.yznaga@oracle.com wrote:
-> 
-> On 4/2/26 4:13 PM, anthony.yznaga@oracle.com wrote:
->>
->> On 4/2/26 12:17 AM, David Hildenbrand (Arm) wrote:
->>>
->>> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->>>
->>>
->>> But
->>>
->>> ~/git/linux/mm$ git grep ENOTSUPP
->>> hugetlb_vmemmap.c:                      ret = -ENOTSUPP;
->>> mmap.c:                         return -ENOTSUPP;
->>>
->>>
->>> Should we fix up the other one as well?
->>>
->> I'm looking into this. It's returned for the case where vmemmap
->> mappings cannot be split/freed because they are self-hosted due to
->> memory hotplug. Many callers end up ignoring the error, but there may
->> be a way for it to be propagated to userspace as the errno for a
->> failed write to a sysfs file. 
-> 
-> To follow up on this, the ENOTSUPP returned by vmemmap_pmd_entry is not
-> propagated to user space.  It is used internally to ensure
-> HPG_vmemmap_optimized is cleared for a hugetlb folio when HVO cannot be
-> applied due to the vmemmap memory being self-hosted.
+Hi all,
 
-Thanks for checking, it indeed propagates a bit but never seems to leave
-the file. It would probably still be better to just clean that one up as
-well.
+Powerpc systems with a 64K base page size exposed several issues while
+running mm selftests. Some tests assume specific hugetlb configurations,
+use incorrect interfaces, or fail instead of skipping when the required
+kernel features are not available.
+
+This series fixes these issues and improves test robustness.
+
+Please review the patches and provide any feedback or suggestions for
+improvement.
+
+Thanks,
+Sayali
+
+---
+v4->v5
+  - For "selftests/mm: move hwpoison setup into run_test() and silence modprobe
+    output for memory-failure category":
+    Renamed LOADED_MOD to LOADED_HWPOISON_INJECT_MOD as per review comment.
+  - Dropped "selftests/cgroup: extend test_hugetlb_memcg.c to support all huge
+    page sizes":
+    Due to intermittent failures observed on some systems.
+  - Added Tested-by from Venkat for all patches.
+  - Added Reviewed-by from Zi yan for patches 7,8 and 13.
+  - Added Acked-by from Zi yan for patches 1 and 3.
+
+v4: https://lore.kernel.org/all/cover.1775466329.git.sayalip@linux.ibm.com/
+---
+v3->v4
+
+  - selftests/mm: restore default nr_hugepages value via EXIT
+    trap in charge_reserved_hugetlb.sh:
+    Updated to use an EXIT trap to restore the original nr_hugepages
+    once at script termination, ensuring reliable restoration on all
+    exit paths.
+
+  - selftest/mm: fix cgroup task placement and drop memory.current checks
+    in hugetlb_reparenting_test.sh:
+    Updated to use a deterministic synchronization method by migrating the
+    workload process within a wrapper subshell before calling exec() to 
+    ensure correct cgroup accounting.
+
+  - selftest/mm: align memory size to huge page size in hugepage-mremap
+    test:
+    Update test code directly to align memory allocations to the hugepage
+    size, rather than modifying run_vmtests.sh. This replaces the previous
+    commit “adjust hugepage-mremap test size for large huge pages” with
+    a cleaner, direct approach in the test itself.
+
+  - selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap:
+    Updated to remove MAP_POPULATE flag for the mmap call as per review
+    comment.
+
+  - selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported:
+    Updated as per review comment to initialize features to zero and exit
+    on all uffd_get_features() failures, avoiding spurious test errors.
+
+  - selftests/mm: move hwpoison setup into run_test() and silence
+    modprobe output for memory-failure category:
+    Declared LOADED_MOD as local variable and avoided a redundant 
+    skip message when the module is not found.
+    Updated logic to set exitcode to ksft_skip only when no failure has
+    been recorded.
+
+  - selftests/cgroup: extend test_hugetlb_memcg.c to support all huge
+    page sizes:
+    Updated to skip on memory constraints instead of returning
+    EXIT_FAILURE.
+    Updated the logic to fully account for the scenario when the
+    per-CPU stock is empty and a refill charges MEMCG_CHARGE_BATCH. 
+    Updated to avoid overflow on 32-bit systems for memory.max value.
+
+  - Included "selftests/mm: restore default nr_hugepages value via
+    EXIT trap in hugetlb_reparenting_test.sh"
+
+  - Included "selftests/mm: free dynamically allocated PMD-sized
+    buffers in split_huge_page_test"
+
+  - Included "selftests/mm: clarify alternate unmapping in compaction_test"
+
+  - Dropped "selftests/mm: fix double increment in linked list cleanup in
+    compaction_test":
+    The behaviour is intentional.
+
+v3: https://lore.kernel.org/all/cover.1774591179.git.sayalip@linux.ibm.com/
+
+---
+v2->v3
+  - selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported:
+    Rename function to check_uffd_wp_feature_supported() as suggested in review.
+  - selftest/mm: fix cgroup task placement and drop memory.current checks
+    in hugetlb_reparenting_test.sh:
+    Drop memory.current validation from the hugetlb reparenting test.
+    Keep tolerance at 7MB (reverting earlier increase to 8MB in v1).
+  - Included "selftests/mm: allow PUD-level entries in compound testcase of hmm
+    tests" patch:
+    Extend the compound testcase checks to accept PUD-level mappings.
+  - Included "selftests/mm: replace hardcoded THP size with runtime PMD page size in
+    hmm tests" patch:
+    Use read_pmd_pagesize() instead of TWOMEG and cap maximum THPs in
+    benchmarks to avoid integer overflow.
+
+v2: https://lore.kernel.org/all/cover.1773305677.git.sayalip@linux.ibm.com/
+
+---
+v1->v2
+  - For "selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap":
+    update FLAGS definition to MAP_HUGETLB | MAP_SHARED | MAP_POPULATE and
+    used it for mmap() calls as suggested during review.
+
+v1: https://lore.kernel.org/all/cover.1773134177.git.sayalip@linux.ibm.com/
+---
+
+Sayali Patil (14):
+  selftests/mm: restore default nr_hugepages value via EXIT trap in
+    charge_reserved_hugetlb.sh
+  selftests/mm: fix hugetlb pathname construction in
+    charge_reserved_hugetlb.sh
+  selftests/mm: restore default nr_hugepages value via EXIT trap in
+    hugetlb_reparenting_test.sh
+  selftests/mm: fix hugetlb pathname construction in
+    hugetlb_reparenting_test.sh
+  selftests/mm: fix cgroup task placement and drop memory.current checks
+    in hugetlb_reparenting_test.sh
+  selftests/mm: size tmpfs according to PMD page size in
+    split_huge_page_test
+  selftests/mm: free dynamically allocated PMD-sized buffers in
+    split_huge_page_test
+  selftest/mm: align memory size to huge page size in hugepage-mremap
+    test
+  selftest/mm: register existing mapping with userfaultfd in
+    hugepage-mremap
+  selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap
+  selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported
+  selftests/mm: skip uffd-stress test when nr_pages_per_cpu is zero
+  selftests/mm: move hwpoison setup into run_test() and silence modprobe
+    output for memory-failure category
+  selftests/mm: clarify alternate unmapping in compaction_test
+
+ .../selftests/mm/charge_reserved_hugetlb.sh   | 45 +++++++++-----
+ tools/testing/selftests/mm/compaction_test.c  |  3 +
+ tools/testing/selftests/mm/hugepage-mremap.c  | 42 ++++++-------
+ .../selftests/mm/hugetlb_reparenting_test.sh  | 59 ++++++++++---------
+ tools/testing/selftests/mm/run_vmtests.sh     | 52 ++++++++++------
+ .../selftests/mm/split_huge_page_test.c       | 27 ++++++---
+ tools/testing/selftests/mm/uffd-stress.c      |  6 +-
+ tools/testing/selftests/mm/uffd-wp-mremap.c   | 13 ++++
+ 8 files changed, 152 insertions(+), 95 deletions(-)
 
 -- 
-Cheers,
+2.52.0
 
-David
