@@ -1,249 +1,422 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909D723D7DF
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 05:50:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776145849; cv=pass; b=uD2JOkeNTOcMjAqhi1dEUI45rVf/ABn2+/LYV+JRxQAfsJ1oJIfSGCl1UUPqwT7XzRVPqXeoytHhmSQa5huVd2OmAYXUFPtnloGzmmN6vYZ9ZUw2pxmsNQXAVg3Yf3ZsLqER5QjL3BLKhWDN7QPb15S2fhsxQNI6KE8RFi/dfko=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776145849; c=relaxed/simple;
-	bh=b4MyJjck3xfnzqA3Mpwj4CRB14hfvnO16wBz1wVugbU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eH0c5LHoVxGMTn1mcMI51jKto8lh7KkKg7xk0k+uT2soajIJ3KvWhomayXnPJJc7EE9BmZ9OM13tTwuN7HN7T+yOPx4B4QkqrwDkYf6UccNFBrQtdqlgza+sdEvPWuUG2+P+VvdOF5+sWJVYY0LqdHxphxvLH8rq2AeF5oRjeMk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dTPhZVYs; arc=pass smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAF229A9C3;
+	Tue, 14 Apr 2026 06:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776146586; cv=none; b=asZgS4A1tPxCLg2+tQSqemA0pgZ/2rckvDK6TbYqfohs8QKxPUXFWpA058nw4JW/mGy2+Mi06oIUnphcpYL/WfLqdKZ3eV7T2Fz20VQCOMDNkrJ803XsG/4kIYunlerj66zVlzPQf2gzOvBi2nmswUnh9AElm9a3zcPl4zV8El0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776146586; c=relaxed/simple;
+	bh=9kBK5bvmhraAO2O8hvpHppFrk/UHDYXNqJgd4mRP1wY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kx005EY6UwU3ALC6Bygp51JBmZDTMSt0e+SfZT5ubbrpLL+n3lhT9PCF0Q4QZhUY/gvdiiS8RJeEUBY6oON82HJdQ6u1nhvg2mJLIL34H+62f11QoEy1XIIYgrkp4soDfYlpqGjuPhyeuBNz25R6aDaL6dX19bvclg5xvEpZxDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BfyKOZ2+; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dTPhZVYs"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-12c55e3858cso1393609c88.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2026 22:50:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776145847; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DWEebO0J7ouE73Om5xaGVnR7lY7Ozrg6eF+eZeZFpvJreMA++T7QpUjFosZDlzlmgf
-         EVqiWS803ueLIbzh9IFftxh8hEDqDxq4agL7mJhLbe9b+Xt7/4rBxn8J4qS4SdCHRHTZ
-         r1aVQdioX4sqL7MK2j23hwvhLyE6tSzD6DxmcxeaCvnaq21toi1SNCZagDiyVzpHoAvV
-         xfsnxPCGwM9Y1IV2BBUgRWd5wqLsjo1y9FEgnJOWPUHkTkv51byxK57B5yMwQv1nifD9
-         xUsE+k0P9sB7Cpcoy+cDDRIUFGpKQzJgdpvtIl6H5nBBJO2Sy5NgH1uPFPACK9Bm1lY8
-         4DqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=N8xC/w8t49636DlDIJyIeZJFwbUar3vdMzMLV+P2FdY=;
-        fh=511mEEuwTpWl7SI2h2He7HpFrFIL2STVck0GvpNQixk=;
-        b=dGvVeQoo88jyeAbDLTPQW/CPIc74PWJWGIPbtq0qpv8kaDP/dKdWQ3zLezj8TiZtv4
-         mFvGsvfJvlCheq8YERMJSIVjaIFKS+0kU8FhWbeUGmut6T7Ly02cGDC4N4QD4NUDtHC+
-         KI7CQoTBkuYqV+BC47oAKm22Ckzf0De50T30DzK62HZuzNBDgwVCoywcjCgZg3F/oYyn
-         k/DlnhnXYwDYAUkvFkT9i+qTpES5a9DqGoPB7UZJv5iFIQ2Pttluq5Uc9m5yV9d75hD/
-         h2QS1wO4SR2JG81VX9wMr//eXgbFW/rWxeXaj9J+BpLCxHmcgaL56kDniT13BsZ/Fg6S
-         7n7g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776145847; x=1776750647; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N8xC/w8t49636DlDIJyIeZJFwbUar3vdMzMLV+P2FdY=;
-        b=dTPhZVYss+yPe/7Qym9Fuxtiel/72rKV5iKEhnNLB7MmjcXdf0jcytvVZUt8PjFNmV
-         aZx2Jim0FLyTvcOZ0ecH5OzXjvxWPUFzm65P+KJw+4Dy9KczVv7yulTWGyUP3HCw1Dfb
-         /xAM+fVcwzU28L3KzNrfWxUH1H9+Nm49MnVApqA7PfTqhIrmYHSiztYa+4WlBkPUaeej
-         wHQugfZlywTb2Nh/NeM4CN7wMKXnHutlIB0oOJ+m/sMVaKn/U0R0nDXkwjTCT84U+I1C
-         KKCoCXmaGnCHR5zELvBSEvK9EFuby/9a0gSOdzcgGD94Q1v6T1Ieq/RJEJ2OV7aJrjcy
-         6wmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776145847; x=1776750647;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=N8xC/w8t49636DlDIJyIeZJFwbUar3vdMzMLV+P2FdY=;
-        b=XaxopqfreHklV5FKY3D/f1oT5Jap4q5EQQZo99efBW3UyCKQlod54xyUcUZDmBubA2
-         CZRAzyO6qkvz6T4b326xrhRomiihNkYJ/DJJBcFSZa1K9HlT0nfOw0K/34XGMpTXP1Y5
-         lwgn+N7fpjkoEpw0jK2DgUuTqrZcTO3npBsGpX02HUitgQ+5cr8rhVdN8lI19vLVHFd9
-         vWF5RX1Mh7JP7jpvBcsjJ2vw3PcrCka+GQxfyz11xd6hqf3MIdj21w81zlz9BF7S7QA4
-         NOHTVPZWiBR+Z5lc9lC/9SeGd7OcvR8+LINCZTlSiezlsQepNEaLyNhe25Xu97Vl9DZd
-         CVZw==
-X-Forwarded-Encrypted: i=1; AFNElJ+BcvoO05d11132w/Vrxeibazp57x3fZOxUyFVzhO6MrsPHL/NcYRa/t/Uz4Sfoygn400BnNg8K/Mq5nUlGzZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHBLoq92CZKwejxSnz3I1JpFFNBW32PgGohZeaNxyZlf4g0Y9u
-	ffonhgytew9s1UmxCdayq6bmvshMKMGrQ1zdDXnvy9rPYFlaqTdAeSwyfcYrGkuH1hsN0q1urDM
-	IiI6DVVQ3vNfPR35SRumy4Om5xXebJ8kUnbt295h5
-X-Gm-Gg: AeBDietVoiyzcNJ6E6quF5KgosaqjJVKKASJXYQpgeBl9otoc7rVvO+/IqeeNGCscaJ
-	9ExmTXDgVjLviEFBp6yc9gTkyjexFarT2TQs2Seum2t8NI/mmbie4ThEKrPLRdB40UJRCezUSgz
-	2uQJW7OPvQkSSUMJM8lcSaWPjfqm6sMMz/fcwOO4rlXeK1uaMNIJ8r7FnJVo61Lyv/+iG3giKb8
-	Nkq5ICFD0/VmeNBHmaYcdpI0Tz3Sp+jQqOSkrx/WKhMpxnoIb5ZFEWzwqteh+vNe9av4ic67YCv
-	oFQykM0A+Z8cd6pmJzLrHM3KfIj8d7AyInJy78Wp9jWrNnGfES+nX0G1cULKdw8bnSyWmY5srlT
-	hcTcVrPoEAp7+JymtWY25NnuXez76RB624ZvkYZZ8+d0YfyGTxadcJSEp7gqmopgTxAsOvDfD/Q
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BfyKOZ2+"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63E3T2ge2557108;
+	Tue, 14 Apr 2026 06:02:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=nWDQMx
+	g7F3RGRGEN5/7/geP+dn+5ST349ef+WqrrB0c=; b=BfyKOZ2+6dejLi0lHUz9/6
+	1A7x7bikkroIXc4husKpyEsFgFdEcshAnlI6ENZsBdbjpK5ySW5YwJBoZglGpI2h
+	1Q+mC/ZsSUdfyCYMVqGgmaboX94umqJ0/S9CLmwpG7MG1HHC294eqk0/0TzYEnJw
+	GgtBIuU3AX6ZKSJs9gtf2sc0DClKkr56XPPSN9U5DyxwOWDItKwaIq07ZPYg9ns8
+	89UxPebMmBpJysd+2Y0TTQRdoOyePeYhuUIWjvGxkL9Uepc0ovY0geCnYqs8Cpeo
+	Qoy6JIPQayjJqpqo9RRH31FfTnW0PaSohBnEEuJ4+k0k2pfMh5ObJxcoUWkcT1rw
 	==
-X-Received: by 2002:a05:7022:698a:b0:12a:68cc:3efb with SMTP id
- a92af1059eb24-12c34ebade5mr10496341c88.16.1776145845960; Mon, 13 Apr 2026
- 22:50:45 -0700 (PDT)
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89mha94-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Apr 2026 06:02:39 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63E4brfj003568;
+	Tue, 14 Apr 2026 06:02:38 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg1mn86x4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Apr 2026 06:02:38 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63E62aFl24642294
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Apr 2026 06:02:37 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D896F58063;
+	Tue, 14 Apr 2026 06:02:36 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D1AE558043;
+	Tue, 14 Apr 2026 06:02:28 +0000 (GMT)
+Received: from [9.124.216.98] (unknown [9.124.216.98])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 14 Apr 2026 06:02:28 +0000 (GMT)
+Message-ID: <5a3d2ed2-b440-498c-bc1e-bbf81ed37b04@linux.ibm.com>
+Date: Tue, 14 Apr 2026 11:32:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260411013211.225834-1-jiayuan.chen@linux.dev> <20260411013211.225834-2-jiayuan.chen@linux.dev>
-In-Reply-To: <20260411013211.225834-2-jiayuan.chen@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 13 Apr 2026 22:50:34 -0700
-X-Gm-Features: AQROBzDT2dbg9kp2qWFhZweYdMBKd3sH2bKQwiV-CoaMbLvgWGw0Wl0--ydKlAE
-Message-ID: <CAAVpQUCCZVogDUUTfr3k-JxV52kpVvdYzqFC68-J3n6_ugd4Uw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 2/2] selftests/bpf: verify syncookie
- statistics in tcp_custom_syncookie
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	David Ahern <dsahern@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 11/53] selftests/mm: hugetlb-read-hwpoison: use kselftest
+ framework
+To: Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton
+ <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
+        Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20260406141735.2179309-1-rppt@kernel.org>
+ <20260406141735.2179309-12-rppt@kernel.org>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <20260406141735.2179309-12-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDA1MiBTYWx0ZWRfX1f8NuTjeoRY0
+ by24hVBqeyu/MNpPTtIPrzWIWiYDkPbWSMgJZIQ7ZU2MtrVaafvMXrUdZwGz9VP/aIZ1FbPQybF
+ KXxq14aih8RJoeUViJPONgAfaItYAVhsUbd7oreS0GSvYjutoYHH5wgHFXwQ4ocCgc83FglEp0j
+ UU713qfMv4fUREJkLWFz/WaFPyYZDSup4kUKSK8eoaVyVw8cS78PrupP49EgAIRxCbokkNF0oNR
+ /mByGkwREzuNmHyLFtRJ3SdzK6UY/Ng8lkRWGeBM0xy28z9HVOxBjQgw0SyFt3dajbeHbocjCLC
+ K447lCg+VuUmPnBwe7na3Wvq98q0k7cfV4IbGohlfIYgGwd5WDLtz43mRIwCIFfpQlvHEqWU0WM
+ gIWoWW3LNCNNJ38DWxOGB6gtn3iskCqkiyTrZyW9gq/6c/MqG2m8W+l8nv0jl/gazABXKMNUb+T
+ DzQ89/PECbbQkF8qebA==
+X-Authority-Analysis: v=2.4 cv=eJ4jSnp1 c=1 sm=1 tr=0 ts=69ddd87f cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=AftCF1cJF-XkbiQbcJwA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: soB7GcEIEV8tgeYxKcoYSVFpksCHrW-Q
+X-Proofpoint-ORIG-GUID: BAJwZIy_SWzZ99KDy5Y7Q6zJztwKKp3x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-14_01,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ clxscore=1015 bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604070000
+ definitions=main-2604140052
 
-On Fri, Apr 10, 2026 at 6:32=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.de=
-v> wrote:
+
+On 4/6/26 7:46 PM, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 >
-> Add read_tcpext_snmp() helper to network_helpers which reads a
-> TcpExt SNMP counter via nstat, and use it in the tcp_custom_syncookie
-> test to verify that LINUX_MIB_SYNCOOKIESRECV is incremented and
-> LINUX_MIB_SYNCOOKIESFAILED stays unchanged across a successful
-> BPF custom syncookie validation.
+> Convert hugetlb-read-hwpoison test to use kselftest framework for
+> reporting and tracking successful and failing runs.
 >
-> The delta is captured between start_server() and accept(), which
-> covers the full SYN/ACK/cookie-check path for one connection.
->
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
->  tools/testing/selftests/bpf/network_helpers.c | 22 +++++++++++++++++++
->  tools/testing/selftests/bpf/network_helpers.h |  1 +
->  .../bpf/prog_tests/tcp_custom_syncookie.c     | 20 +++++++++++++++++
-
-As you touch bpf selftest helper files, please rebase on bpf-next
-to avoid possible conflicts and tag bpf-next in the Subject.
-
-Change itself looks good.
-
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-
-one nit below.
-
-
->  3 files changed, 43 insertions(+)
+>   .../selftests/mm/hugetlb-read-hwpoison.c      | 118 +++++++++---------
+>   1 file changed, 57 insertions(+), 61 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testin=
-g/selftests/bpf/network_helpers.c
-> index b82f572641b7..3388dd5112b6 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -621,6 +621,28 @@ int get_socket_local_port(int sock_fd)
->         return -1;
->  }
->
-> +int read_tcpext_snmp(const char *name, unsigned long *val)
-> +{
-> +       char cmd[128], buf[128];
-> +       int ret =3D 0;
-> +       FILE *f;
+> diff --git a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+> index 6bbf15f78061..01cd5465e0f8 100644
+> --- a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+> +++ b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+> @@ -13,9 +13,7 @@
+>   #include <signal.h>
+>   
+>   #include "kselftest.h"
+> -
+> -#define PREFIX " ... "
+> -#define ERROR_PREFIX " !!! "
+> +#include "vm_util.h"
+>   
+>   #define MAX_WRITE_READ_CHUNK_SIZE (getpagesize() * 16)
+>   #define MAX(a, b) (((a) > (b)) ? (a) : (b))
+> @@ -26,17 +24,22 @@ enum test_status {
+>   	TEST_SKIPPED = 2,
+>   };
+>   
+> -static char *status_to_str(enum test_status status)
+> +static void report_status(enum test_status status, const char *test_name,
+> +			  size_t chunk_size)
+>   {
+>   	switch (status) {
+>   	case TEST_PASSED:
+> -		return "TEST_PASSED";
+> +		ksft_test_result_pass("%s chunk_size=0x%lx\n",
+> +				      test_name, chunk_size);
+> +		break;
+>   	case TEST_FAILED:
+> -		return "TEST_FAILED";
+> +		ksft_test_result_fail("%s chunk_size=0x%lx\n",
+> +				      test_name, chunk_size);
+> +		break;
+>   	case TEST_SKIPPED:
+> -		return "TEST_SKIPPED";
+> -	default:
+> -		return "TEST_???";
+> +		ksft_test_result_skip("%s chunk_size=0x%lx\n",
+> +				      test_name, chunk_size);
+> +		break;
+>   	}
+>   }
+>   
+> @@ -59,8 +62,8 @@ static bool verify_chunk(char *buf, size_t len, char val)
+>   
+>   	for (i = 0; i < len; ++i) {
+>   		if (buf[i] != val) {
+> -			printf(PREFIX ERROR_PREFIX "check fail: buf[%lu] = %u != %u\n",
+> -				i, buf[i], val);
+> +			ksft_print_msg("check fail: buf[%lu] = %u != %u\n",
+> +				       i, buf[i], val);
+>   			return false;
+>   		}
+>   	}
+> @@ -76,21 +79,21 @@ static bool seek_read_hugepage_filemap(int fd, size_t len, size_t wr_chunk_size,
+>   	ssize_t total_ret_count = 0;
+>   	char val = offset / wr_chunk_size + offset % wr_chunk_size;
+>   
+> -	printf(PREFIX PREFIX "init val=%u with offset=0x%lx\n", val, offset);
+> -	printf(PREFIX PREFIX "expect to read 0x%lx bytes of data in total\n",
+> -	       expected);
+> +	ksft_print_msg("init val=%u with offset=0x%lx\n", val, offset);
+> +	ksft_print_msg("expect to read 0x%lx bytes of data in total\n",
+> +		       expected);
+>   	if (lseek(fd, offset, SEEK_SET) < 0) {
+> -		perror(PREFIX ERROR_PREFIX "seek failed");
+> +		ksft_perror("seek failed");
+>   		return false;
+>   	}
+>   
+>   	while (offset + total_ret_count < len) {
+>   		ret_count = read(fd, buf, wr_chunk_size);
+>   		if (ret_count == 0) {
+> -			printf(PREFIX PREFIX "read reach end of the file\n");
+> +			ksft_print_msg("read reach end of the file\n");
+>   			break;
+>   		} else if (ret_count < 0) {
+> -			perror(PREFIX ERROR_PREFIX "read failed");
+> +			ksft_perror("read failed");
+>   			break;
+>   		}
+>   		++val;
+> @@ -99,8 +102,8 @@ static bool seek_read_hugepage_filemap(int fd, size_t len, size_t wr_chunk_size,
+>   
+>   		total_ret_count += ret_count;
+>   	}
+> -	printf(PREFIX PREFIX "actually read 0x%lx bytes of data in total\n",
+> -	       total_ret_count);
+> +	ksft_print_msg("actually read 0x%lx bytes of data in total\n",
+> +		       total_ret_count);
+>   
+>   	return total_ret_count == expected;
+>   }
+> @@ -113,15 +116,15 @@ static bool read_hugepage_filemap(int fd, size_t len,
+>   	ssize_t total_ret_count = 0;
+>   	char val = 0;
+>   
+> -	printf(PREFIX PREFIX "expect to read 0x%lx bytes of data in total\n",
+> -	       expected);
+> +	ksft_print_msg("expect to read 0x%lx bytes of data in total\n",
+> +		       expected);
+>   	while (total_ret_count < len) {
+>   		ret_count = read(fd, buf, wr_chunk_size);
+>   		if (ret_count == 0) {
+> -			printf(PREFIX PREFIX "read reach end of the file\n");
+> +			ksft_print_msg("read reach end of the file\n");
+>   			break;
+>   		} else if (ret_count < 0) {
+> -			perror(PREFIX ERROR_PREFIX "read failed");
+> +			ksft_perror("read failed");
+>   			break;
+>   		}
+>   		++val;
+> @@ -130,8 +133,8 @@ static bool read_hugepage_filemap(int fd, size_t len,
+>   
+>   		total_ret_count += ret_count;
+>   	}
+> -	printf(PREFIX PREFIX "actually read 0x%lx bytes of data in total\n",
+> -	       total_ret_count);
+> +	ksft_print_msg("actually read 0x%lx bytes of data in total\n",
+> +		       total_ret_count);
+>   
+>   	return total_ret_count == expected;
+>   }
+> @@ -143,14 +146,14 @@ test_hugetlb_read(int fd, size_t len, size_t wr_chunk_size)
+>   	char *filemap = NULL;
+>   
+>   	if (ftruncate(fd, len) < 0) {
+> -		perror(PREFIX ERROR_PREFIX "ftruncate failed");
+> +		ksft_perror("ftruncate failed");
+>   		return status;
+>   	}
+>   
+>   	filemap = mmap(NULL, len, PROT_READ | PROT_WRITE,
+>   		       MAP_SHARED | MAP_POPULATE, fd, 0);
+>   	if (filemap == MAP_FAILED) {
+> -		perror(PREFIX ERROR_PREFIX "mmap for primary mapping failed");
+> +		ksft_perror("mmap for primary mapping failed");
+>   		goto done;
+>   	}
+>   
+> @@ -163,7 +166,7 @@ test_hugetlb_read(int fd, size_t len, size_t wr_chunk_size)
+>   	munmap(filemap, len);
+>   done:
+>   	if (ftruncate(fd, 0) < 0) {
+> -		perror(PREFIX ERROR_PREFIX "ftruncate back to 0 failed");
+> +		ksft_perror("ftruncate back to 0 failed");
+>   		status = TEST_FAILED;
+>   	}
+>   
+> @@ -180,14 +183,14 @@ test_hugetlb_read_hwpoison(int fd, size_t len, size_t wr_chunk_size,
+>   	const unsigned long pagesize = getpagesize();
+>   
+>   	if (ftruncate(fd, len) < 0) {
+> -		perror(PREFIX ERROR_PREFIX "ftruncate failed");
+> +		ksft_perror("ftruncate failed");
+>   		return status;
+>   	}
+>   
+>   	filemap = mmap(NULL, len, PROT_READ | PROT_WRITE,
+>   		       MAP_SHARED | MAP_POPULATE, fd, 0);
+>   	if (filemap == MAP_FAILED) {
+> -		perror(PREFIX ERROR_PREFIX "mmap for primary mapping failed");
+> +		ksft_perror("mmap for primary mapping failed");
+>   		goto done;
+>   	}
+>   
+> @@ -202,7 +205,7 @@ test_hugetlb_read_hwpoison(int fd, size_t len, size_t wr_chunk_size,
+>   	 */
+>   	hwp_addr = filemap + len / 2 + pagesize;
+>   	if (madvise(hwp_addr, pagesize, MADV_HWPOISON) < 0) {
+> -		perror(PREFIX ERROR_PREFIX "MADV_HWPOISON failed");
+> +		ksft_perror("MADV_HWPOISON failed");
+>   		goto unmap;
+>   	}
+>   
+> @@ -229,7 +232,7 @@ test_hugetlb_read_hwpoison(int fd, size_t len, size_t wr_chunk_size,
+>   	munmap(filemap, len);
+>   done:
+>   	if (ftruncate(fd, 0) < 0) {
+> -		perror(PREFIX ERROR_PREFIX "ftruncate back to 0 failed");
+> +		ksft_perror("ftruncate back to 0 failed");
+>   		status = TEST_FAILED;
+>   	}
+>   
+> @@ -242,17 +245,17 @@ static int create_hugetlbfs_file(struct statfs *file_stat)
+>   
+>   	fd = memfd_create("hugetlb_tmp", MFD_HUGETLB);
+>   	if (fd < 0) {
+> -		perror(PREFIX ERROR_PREFIX "could not open hugetlbfs file");
+> +		ksft_perror("could not open hugetlbfs file");
+>   		return -1;
+>   	}
+>   
+>   	memset(file_stat, 0, sizeof(*file_stat));
+>   	if (fstatfs(fd, file_stat)) {
+> -		perror(PREFIX ERROR_PREFIX "fstatfs failed");
+> +		ksft_perror("fstatfs failed");
+>   		goto close;
+>   	}
+>   	if (file_stat->f_type != HUGETLBFS_MAGIC) {
+> -		printf(PREFIX ERROR_PREFIX "not hugetlbfs file\n");
+> +		ksft_print_msg("not hugetlbfs file\n");
+>   		goto close;
+>   	}
+>   
+> @@ -264,7 +267,7 @@ static int create_hugetlbfs_file(struct statfs *file_stat)
+>   
+>   static void sigbus_handler(int sig)
+>   {
+> -	printf(PREFIX "received SIGBUS\n");
+> +	ksft_print_msg("received SIGBUS\n");
+>   }
+>   
+>   int main(void)
+> @@ -279,51 +282,44 @@ int main(void)
+>   	};
+>   	size_t i;
+>   
+> +	ksft_print_header();
+> +	ksft_set_plan(ARRAY_SIZE(wr_chunk_sizes) * 3);
 > +
-> +       snprintf(cmd, sizeof(cmd),
-> +                "nstat -az TcpExt%s | awk '/TcpExt/ {print $2}'", name);
-> +       f =3D popen(cmd, "r");
-> +       if (!f)
-> +               return -errno;
+>   	signal(SIGBUS, sigbus_handler);
+>   	for (i = 0; i < ARRAY_SIZE(wr_chunk_sizes); ++i) {
+> -		printf("Write/read chunk size=0x%lx\n",
+> -		       wr_chunk_sizes[i]);
+> +		ksft_print_msg("Write/read chunk size=0x%lx\n",
+> +			       wr_chunk_sizes[i]);
+>   
+>   		fd = create_hugetlbfs_file(&file_stat);
+>   		if (fd < 0)
+> -			goto create_failure;
+> -		printf(PREFIX "HugeTLB read regression test...\n");
+> +			ksft_exit_fail_msg("Failed to create hugetlbfs file\n");
 > +
-> +       if (!fgets(buf, sizeof(buf), f)) {
-> +               ret =3D ferror(f) ? -errno : -ENODATA;
-> +               goto out;
-> +       }
-> +       *val =3D strtoul(buf, NULL, 10);
-> +out:
-> +       pclose(f);
-> +       return ret;
-> +}
+>   		status = test_hugetlb_read(fd, file_stat.f_bsize,
+>   					   wr_chunk_sizes[i]);
+> -		printf(PREFIX "HugeTLB read regression test...%s\n",
+> -		       status_to_str(status));
+>   		close(fd);
+> -		if (status == TEST_FAILED)
+> -			return -1;
+> +		report_status(status, "HugeTLB read regression",
+> +			      wr_chunk_sizes[i]);
+>   
+>   		fd = create_hugetlbfs_file(&file_stat);
+>   		if (fd < 0)
+> -			goto create_failure;
+> -		printf(PREFIX "HugeTLB read HWPOISON test...\n");
+> +			ksft_exit_fail_msg("Failed to create hugetlbfs file\n");
 > +
->  int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)
->  {
->         struct ifreq ifr =3D {0};
-> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testin=
-g/selftests/bpf/network_helpers.h
-> index 79a010c88e11..c53cd781df6e 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.h
-> +++ b/tools/testing/selftests/bpf/network_helpers.h
-> @@ -84,6 +84,7 @@ int make_sockaddr(int family, const char *addr_str, __u=
-16 port,
->                   struct sockaddr_storage *addr, socklen_t *len);
->  char *ping_command(int family);
->  int get_socket_local_port(int sock_fd);
-> +int read_tcpext_snmp(const char *name, unsigned long *val);
->  int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)=
-;
->  int set_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)=
-;
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.=
-c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-> index eaf441dc7e79..6adfb4b892f8 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-> @@ -91,12 +91,21 @@ static void transfer_message(int sender, int receiver=
-)
->
->  static void create_connection(struct test_tcp_custom_syncookie_case *tes=
-t_case)
->  {
-> +       unsigned long recv_before, recv_after;
-> +       unsigned long failed_before, failed_after;
+>   		status = test_hugetlb_read_hwpoison(fd, file_stat.f_bsize,
+>   						    wr_chunk_sizes[i], false);
+> -		printf(PREFIX "HugeTLB read HWPOISON test...%s\n",
+> -		       status_to_str(status));
+>   		close(fd);
+> -		if (status == TEST_FAILED)
+> -			return -1;
+> +		report_status(status, "HugeTLB read HWPOISON",
+> +			      wr_chunk_sizes[i]);
+>   
+>   		fd = create_hugetlbfs_file(&file_stat);
+>   		if (fd < 0)
+> -			goto create_failure;
+> -		printf(PREFIX "HugeTLB seek then read HWPOISON test...\n");
+> +			ksft_exit_fail_msg("Failed to create hugetlbfs file\n");
+> +
+>   		status = test_hugetlb_read_hwpoison(fd, file_stat.f_bsize,
+>   						    wr_chunk_sizes[i], true);
+> -		printf(PREFIX "HugeTLB seek then read HWPOISON test...%s\n",
+> -		       status_to_str(status));
+>   		close(fd);
+> -		if (status == TEST_FAILED)
+> -			return -1;
+> +		report_status(status, "HugeTLB seek then read HWPOISON",
+> +			      wr_chunk_sizes[i]);
+>   	}
+>   
+> -	return 0;
+> -
+> -create_failure:
+> -	printf(ERROR_PREFIX "Abort test: failed to create hugetlbfs file\n");
+> -	return -1;
+> +	ksft_finished();
+>   }
 
-While at it, please keep reverse xmas tree order
 
+LGTM
 
->         int server, client, child;
->
->         server =3D start_server(test_case->family, test_case->type, test_=
-case->addr, 0, 0);
->         if (!ASSERT_NEQ(server, -1, "start_server"))
->                 return;
->
-> +       if (!ASSERT_OK(read_tcpext_snmp("SyncookiesRecv", &recv_before),
-> +                      "read SyncookiesRecv before"))
-> +               goto close_server;
-> +       if (!ASSERT_OK(read_tcpext_snmp("SyncookiesFailed", &failed_befor=
-e),
-> +                      "read SyncookiesFailed before"))
-> +               goto close_server;
-> +
->         client =3D connect_to_fd(server, 0);
->         if (!ASSERT_NEQ(client, -1, "connect_to_fd"))
->                 goto close_server;
-> @@ -105,9 +114,20 @@ static void create_connection(struct test_tcp_custom=
-_syncookie_case *test_case)
->         if (!ASSERT_NEQ(child, -1, "accept"))
->                 goto close_client;
->
-> +       if (!ASSERT_OK(read_tcpext_snmp("SyncookiesRecv", &recv_after),
-> +                      "read SyncookiesRecv after"))
-> +               goto close_child;
-> +       if (!ASSERT_OK(read_tcpext_snmp("SyncookiesFailed", &failed_after=
-),
-> +                      "read SyncookiesFailed after"))
-> +               goto close_child;
-> +
-> +       ASSERT_EQ(recv_after - recv_before, 1, "SyncookiesRecv delta");
-> +       ASSERT_EQ(failed_after - failed_before, 0, "SyncookiesFailed delt=
-a");
-> +
->         transfer_message(client, child);
->         transfer_message(child, client);
->
-> +close_child:
->         close(child);
->  close_client:
->         close(client);
-> --
-> 2.43.0
->
+Reviewed by: Donet Tom <donettom@linux.ibm.com>
+
+-Donet
+
