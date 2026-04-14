@@ -1,265 +1,441 @@
-Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2253E95BB
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 17:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.152
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776186920; cv=none; b=Ia9SLKqdPc8Wk+lLTt/CAYj6HNI+OxMzRgIZDZiKZMAS8Qvh7vR66VvnexFWqbFwtOOMSJMb4Usgdyuo7ZkGL6mjSStRy/pPpX89zkRII9JgVVNwE6dG/rDzMApd9Wv5XkJ0zhXUX3jBHq1vg3axklnbW8kl+xH6MTYnyHCpoG8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776186920; c=relaxed/simple;
-	bh=1R8ck4miS/ptVkXJyvQbxFUMSaydM6XzvJ8O7WgZWIw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NjePKzEsJOMUz0DYY/cmLIlvOr5ekE2KPt+92tkkisVas76otxsM01Hp5D7woI8Lo2Gyiq/1YckT8A1Kl0c5JiYFHilAxC6HK0jKwlqV5bZxJhdDtnt/DNbrLNdIMGIjU8U8tsX6hx0Hrf3pSwstfEj8Y7rlCX9K65uxZ5uiUH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=TipardAT; arc=none smtp.client-ip=66.163.187.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3DE3F0742
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 17:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776188047; cv=pass; b=r/oCf1EHsNMk0k42tdzj+8KB2MRsAqe8QfbSc0WAg1wCJEUzks62tohe3CwLmZ9OoMU082rHpSgXrSNlyYHzq2SrcK7G5JKkcSyUTbbGbPI70R9hoCM8LWTfpVFK9EbznUstVJNIpKhKFvy/Y/vT8SyqxgTDS5jpr4T2bGZFKgg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776188047; c=relaxed/simple;
+	bh=aqzzp+0vLBh3YuoQvULxfP8uzdG3c/fQ3+lDAhEwwZE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jiLwYAZiH7gx62C+q+U1VuEZq/OLgU9hZLNOgvPN7lUoUzwSwwG1r2O/PHM6VX2mGRByhkdxTkx/I5RwEfIAox0y6SsFUc3jlUoPkGmafHv6+yQATdTnsd3PEo6BAKIdGFkxCEf/ibtIt7h9180CRdZoqKEAQDNx3TlFMYjqH6o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aPP+I9bM; arc=pass smtp.client-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="TipardAT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776186917; bh=kj1sfOzHMYPt1j5hcLFkJwgzxKgQtthmIu4jaY8YNj4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=TipardATZRTCdxmmfYhjnfauCeb80pOs5HUDDWaYaAfnHRBUSZp3yVBmw345LU7raYdigh4kdzuxE8FOF6bYxS/uzYDPC7FJqTWrdUxyKCNe90gCaanQuvhRz25WVlo+MIiC3AGxL0kyIDRE/Qu1Z9UdZA1lFrjqH2ik9Ot4jfA1kcyhaJip3o2gEzr6jRnxIGHL8WXoxVD8Si1b6qMzIHbmkmmB8msY8H1mO4dZPd9v6iHboFwYQoB40Wi/9O+xcexIfa8spp5scHP+pc0BplYsVV1q0rrPi1CYCv6VLLWtiIneIY6KHRfQyTrb75wuuOdRuPIrNRI7eht35MynLQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776186917; bh=rVWxmh+GWmndjXNk3h1lXkHFrm0/A8ZLdc5PZyeaWlp=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=X+WE/ZpLYl0QcflITVSy42XumoFvvQpX00iRRaePhWQW8WpaWxg5ES/L0nxxANZHWfDgebRFkOUOKE7Me8Z2wVCjy2pS7YYnQyYx9R2X8inw3CceGixUDjx8v+c9miHnfRCsSfS7An57zlLJN9WFXVjerPsaSh1PPQ053lupWwewqLy8R0CEpNhxpqmXmZkDJf+hs5TdSQJLWOERjKZN0G8r3OM3wbXhM7Qw6nX3ZCYjQa0RmA2NcfzLPArWlSTYKnziYz/yQzKrGTRcMYu7YhSlDnsniIjB6Ex7d2GdFcXWiXncWISo4PS7DnTWVLb76rg1iGBpX1t5DaElrZcXpw==
-X-YMail-OSG: GFhkpDoVM1miKjVoM.uwrYUwzunfusklP7VPzKJwE7O06Em3K18yBDscxfjeovn
- 7nJneKeH9noG7rZ_Tu2u5LFlGrjAU6bq1UPsnK3rTMJGBzIWPFPUVhLcDX.01cN1v4HN9qHkWLJh
- eYuduXAtuCxuhizj9.aik8s0xm2ipm_LHCz5nxKWINblTD9hfY1KoGFK5T8n7jkoJBZyTGNFLU7l
- MSGhp8zga3c7AiPYhlx0QYiRDE_3FnE9xjE4GWChym9yDJD4JeVKjNCRCU81SHEaIqwfgUU7bFmN
- 4JYe1pEfCPZZKI_EnLxNcCX31QQQ8gZaeQQbdgjCRDEflGbdXRqIF3XRPTxnX.A1E9ppOdvZQ6Rj
- _uTwypRhpNCzR.yWu.OpX9_YOApqbkVL1yT.ZkzVcnE_ulS_dT7CqPg46erp360ppoEM58bw7R8u
- gAMHHhROjPN8fBSuUFEq9ozBrrT5ADyMvMaZqbCrhYJebGs1vIpCnqPfqCKY6hCZT3YMKqqIw_RK
- 9Mf3NXp2ue1UUu9BOYJ1gt85MkPbA1wbLZYBlSrjVij9PHaWfSEWZ6CfUs.bC8dvSQyclLWb85.2
- dhQDm8MslR5EOjmzDv4MlLaCByfBgWdaH26dJjftyoPVd_DP_jbLdYnox6eE5W5S7_XSFbpBKj68
- LVbeZKY3QP0O1htLsUZHzaDTpy93gjwNls801GYQQGZGv5ct1Lng4O.dnmqd3O_iNs_54zDYck2C
- F5g_LQUZuTGILTTiNJfWWcdFAl.dguR7Y_u74MjqO6kTF8PhrxlPFm8zwRlr3UeTY9sBBxlyZnzi
- grjYit19CPDqMscCvXvyEmq5.p.Q5TTqqdhXYXQ4uGMG9BwQam4jP5wken_F4kMZsPZdx_N4XxNi
- bvwXyG9dLNc6BfUxWmViN8ijKPkteIsxi961WDFBsAZaE5qL95aMwL3ssKzKVGIyV2pbH7FanoVB
- 1ASRzntLh9DEFWs1NKj9VSY4fCZ9BUbRPBg22tXubyUzL4HdQgvqt7Vt0gRjX1AjCmaHHmFmC9jt
- HFAp6iViR4iU6mPXGWxmvNcf06KtL0Zd8VTyENX18xd1z24XrP5DW6Jxm6wdKxFKNKhlnBGT86XJ
- uiwr0yU_Goy2Ij7SVwVNoua0KJCw_kG47C9VrXFPt7zwvfA8UNivLUQz.i8n965bTYBVEvmdlYl5
- U7IISiSGwcrTaqcXj8qVhoM1PvBEJZAasAbax0TyHebOugNe9m4dvqCxxBo8ZtM_t.O2mvZ0kYjt
- UXNhp2KzoGZoA6pKZ_v1GL8NKgADXkjXLWqMlH9jgAm1QiFVqnGIXvY0I52pw1r_qHvfzvpDgQXf
- n1ayfeYTa7.2d1.VuJ_.NL2_rgiRvNLxPfy4a0pHbe30yYI2qPsRbxxSqQhPE8r6svR02CfCEtQw
- PVmySonj.rAzSzrWQLC6Ko0ci0tLQ79bIa.KY1oufgCc1TxxYaumpT9dnUJKePyrELMpsTA6XDLr
- EC.1SPEn2jfXm3XrXg3GwherzMjRzxtvUrfp45fPHBvzWUO0FiLrMzTswwwiDwSAB454DGKD7YIk
- 3evDvx6yrIIFhWxuLw4kvbZKRZp2QLy_kVDRueJj2AmM4t4SFIfFoQIKWaKKUcZmuRPFtD8ALf3Q
- PSzs68Oq7th9Tp8Nanc4jWwLn5_ssQe7HYGBpikpkADb.2vf_PAGIIH8fVuvv4hW51PpK13g_zpI
- UZLTo3Fnlb522fsB_gQzhTwSVPFqzA2W5zzHNgp2hbvitLQDR8z4hMQs13j0LdB4.Z4tLyP5UEw6
- 3BAv9iVpe4FWk3TasqKzqHHJYsNInkbyQleW0raWsz.b9q8gYqOSYWq.OeFYr6JEyi.Uqx6Zlonn
- gE7FGshmgeKRxsvWVLzWv1pSqEc2lpVQRfKVTXZL9aNUX65.b4nGiIjIZNCcmkf0AJ5cVjE1c8qC
- 7K.1uh5_IvUjy1jIttZI2XX6mm2foNVd2WpXj_3p3IW40V0WwLJ03_XvpsHf6f.q.ES2UthI2EG4
- iddwBfxxy9yTi2Zc.nFCTAvsAH2JRNifweCLeYtEEw5XQPZYe_epLhpxpdh_hu.92jOYOqAIxLiQ
- wFqHkyjoc1lHo_.d0LR1wbriOjl8MMRkZgR2lIhcbp_kTYyJvIHb5ROtHi8LQ3wchvHgkAormXQG
- iyX9GbH9wdyJRZ8P2pUhMFikVgIFb4wA7IRbHwSUYQsoNAnI8q0Oz6oJyl1Hh5lkEtIkuPdLZRSX
- ZEb.bUvPlcHIcCXy_tk5kTmuTiHYYR7zwQIFujMLOdr_LoexoHU5wDYhdk_Ln
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 30480471-503a-4ddb-98f5-de4e115036aa
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 14 Apr 2026 17:15:17 +0000
-Received: by hermes--production-gq1-6dfcf9f8b-xb5j9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2513f61ee43f0821ef423277142ceb5b;
-          Tue, 14 Apr 2026 17:05:04 +0000 (UTC)
-Message-ID: <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
-Date: Tue, 14 Apr 2026 10:05:02 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aPP+I9bM"
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-56f72d27e7eso1245191e0c.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 10:34:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776188044; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QLdKDuDeHJA1bYfvTcGe2Z/c4y52aqRvZd2guNtjTOzruGdGqV29KX4PZXr4JH5wWm
+         qf6pHlvKe0xskfdCC4QlzG/jFLtoa82bPp4SIFq0sdiD7+hF4hec9KCV9jydSMWDp8jr
+         9NrQD9mOsxaxNRUXCu5rRGZLLhimTGzrQOQ9fI9lkIe+LGB0plgnPpQjHBQHHVfR7VBn
+         GJEMvyZ3RHZIDqWRnfF9jc0suoc1MbEW+8AprhQNf7TEOnux6EfGBA86xvPQ1wPsdv8N
+         wPbRNWARaFixsnDms2HwEXb7S8jQ/K7LFL5bxsrIQLNXcDWDr9Gamw0ILMW5CbioAx+I
+         aNvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=wipA6JR7QuvB/7F2g+7cyOg5TyFlmr55ecUXy0B0Xes=;
+        fh=aa3rCaLlYMMe8Lz9iNWbsm35SGUPOpkqt9xYIYLhd3s=;
+        b=UIFDxBO22OWuhKZPI3TrBaD5Uy+6E5F1v4kE9s/9RjHh05iv3l/hzqQGs6LIgJba3n
+         ZfVanxcnNRqOUwbD/HicaueNaKfCUNsBfoiMJZ80OBDajG16dtjMEYW+HZF/Nn2tD94v
+         hPisNf5+m1xmfEeRQJ+jdYDzeZnNYwXux4a1LQXHLMp67YnRPcbsGkGNRqTaeS86a/aK
+         Wju4kd0XUYZQPpARicxtOUufifK8r5xa95U61MRgR+KedkUSKRM7l6g3QNsg9/xfepEJ
+         UA8gX1YTPXSmVgOBOsc0S/RWPCjj6Nx5jVmeS6D6ieL5rjH49pbAtuKFapbd/aY/I2EG
+         susQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776188044; x=1776792844; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wipA6JR7QuvB/7F2g+7cyOg5TyFlmr55ecUXy0B0Xes=;
+        b=aPP+I9bMUvf0Tn6zr0KhzJkBdhB4Q4uNxchBSVO2YFiNTZC0H/0SYHPhn7U+xXBt9Z
+         8UlD9+qBUWs1qPfKKWV5I3Md1FWYlE7s0j2pXfBpS1JEeQ3TrsUSEAUZOGm24P3uQUkK
+         apDGKCc9N+NzMozyDoPGAgwwSEhZXaMsao8uiF61Yn3+BRbWV2R3AhY77dEOjLf+bOgh
+         /l3M4URi4z/mXDS9c+02mitMm5z5DIFlnJ92k2LCcWNOwiGSNllSjwtXOtPHG54DZ2bG
+         8CPrwxaTEUCZKWibMIrNJJ59xQfKC39EDZfZSai6d//r6B5zCr0UroKnD7ucxvLTtOfc
+         uswA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776188044; x=1776792844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wipA6JR7QuvB/7F2g+7cyOg5TyFlmr55ecUXy0B0Xes=;
+        b=BOvbxtEMD0TJdtP5bwyNOiv+W/m6OSs7CffisUE5OpGTYnppjHpZYftAIbsnA462TM
+         WhBkKjzWFlr65o4lcAY0YW4UvvQHN4+jHCTnxDYBVHWiEm+hme63Zm1Memm1yni+O2aC
+         QwUhIXAHnDbv5H1F1QXMj0RrfqwTGmAPfjvlKnWS2d4u8sTBLazCgYabuY9SI80eTLL6
+         LwZROpEzRTinOvt4nYCCypxAg8z2FDq41tU6wlwUmItJjiL0NPVIegyHkBv1UYWnBOqg
+         KFbmiVAZYEmNEZ5puhkyF1wH6nJAXL3CDDds/MmPFwb1I9/iZfQ0ZJ7Ic9YKAFWq2GW4
+         G4Eg==
+X-Forwarded-Encrypted: i=1; AFNElJ+evvZa40DiP2gU7JAJnMCxikXzAsT5jxFrtQm/ndqAuSzy6wW6MWVzFtCyYvDhaDBqGPZTf2fcyeEqlcdiBg4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv07C1u/5VBksHLvIoNEgJ9+0KXbOCCoJa67LtZ9ax2N/MUoKo
+	+aaDWWAJRA+g+6MhQgGisuYSgVoN5h1Am7GGvSgJKzlDjvx2N1xDXd20D/WNFn9W1Dyg4eCzphb
+	IQ3z3s9xDIcLrS7JjkfCuwE64HPtPhO0=
+X-Gm-Gg: AeBDieu7BoWkEAJj9Bqejgc/o59+fOvkAdAopljoUjyYcikUSA/qE1Dzc4vMGJgxODZ
+	G93fm8utx08qA9gk9PW1vVqBHl9MmcKLiKFmSXrJErONoswwM0l4MpnXDQlHn9DeZVX/ktTsqov
+	Op9UF7jylXSqwc6Op+kRyefWImRr5cNstMNObu2rK79OGFQihrOvIptJrTk5anNnuPn+EDcWvaJ
+	TvJrRBW02xuO1GEKPxJ8XKvrPHHoltH0rStS8ZUonUeAgPC04gFgmGsUUO4wpWc6D0NgJ76vUCg
+	xmBCwAfG79s5+H6juE3UV6Jt6JvuEk46EWoqoOa34g==
+X-Received: by 2002:a05:6102:c8f:b0:5fd:eacf:27df with SMTP id
+ ada2fe7eead31-60a0aae09b1mr6274707137.10.1776188043491; Tue, 14 Apr 2026
+ 10:34:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Jason Gunthorpe <jgg@ziepe.ca>, Paul Moore <paul@paul-moore.com>
-Cc: Leon Romanovsky <leon@kernel.org>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
- <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
- Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20260413231920.GS3694781@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+References: <20260328172314.45807-1-dorjoychy111@gmail.com>
+ <20260328172314.45807-2-dorjoychy111@gmail.com> <e526fbdb450a593b575355c1c9ae21f286427275.camel@kernel.org>
+ <CAFfO_h75dF2s83VNtUaNuRmto1NVVcxo7kN6eAtNtN3ME8mPiQ@mail.gmail.com>
+ <4385168f2147efb8131d5fe4209e88d2d15a60bf.camel@kernel.org>
+ <CAFfO_h4dhsXji=+FjO9EikX0_oUUDkWe8tC1F7u4WqhNAjRB=g@mail.gmail.com>
+ <ce36e877adf7a639bc4e61090d148c06fed63bf7.camel@kernel.org> <CAFfO_h5FOTv-VMbh2Dmwkp04BFxQu192gsvFLohDFXAWPccRNA@mail.gmail.com>
+In-Reply-To: <CAFfO_h5FOTv-VMbh2Dmwkp04BFxQu192gsvFLohDFXAWPccRNA@mail.gmail.com>
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Date: Tue, 14 Apr 2026 23:33:52 +0600
+X-Gm-Features: AQROBzAPq6lrkXdB5aGpvZdh9ex-ri9hhZLo6oK5cSe7bhKl-nNcQlGucluVdVQ
+Message-ID: <CAFfO_h5hZ00XAOY1Gen+HGLDNSWGz2PH_H-0YspOkuaRT1ULsA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] openat2: new OPENAT2_REGULAR flag support
+To: linux-fsdevel@vger.kernel.org, brauner@kernel.org
+Cc: Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/13/2026 4:19 PM, Jason Gunthorpe wrote:
-> On Mon, Apr 13, 2026 at 06:36:06PM -0400, Paul Moore wrote:
->> On Mon, Apr 13, 2026 at 12:42 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->>> On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
->>>>> We are not limited to LSM solution, the goal is to intercept commands
->>>>> which are submitted to the FW and "security" bucket sounded right to us.
->>>> Yes, it does sound "security relevant", but without a well defined
->>>> interface/format it is going to be difficult to write a generic LSM to
->>>> have any level of granularity beyond a basic "load firmware"
->>>> permission.
->>> I think to step back a bit, what this is trying to achieve is very
->>> similar to the iptables fwmark/secmark scheme.
->> Points for thinking outside the box a bit, but from what I've seen
->> thus far, it differs from secmark in a few important areas.  The
->> secmark concept relies on the admin to configure the network stack to
->> apply secmark labels to network traffic as it flows through the
->> system, the LSM then applies security policy to these packets based on
->> their label.  The firmware LSM hooks, at least as I currently
->> understand them, rely on the LSM hook callback to parse the firmware
->> op/request and apply a security policy to the request.
-> That was what was proposed because the idea was to combine the
-> parse/clasification/decision steps into one eBPF program, but I think
-> it can be split up too.
+On Mon, Apr 6, 2026 at 9:30=E2=80=AFPM Dorjoy Chowdhury <dorjoychy111@gmail=
+.com> wrote:
 >
->> We've already talked about the first issue, parsing the request, and
->> my suggestion was to make the LSM hook call from within the firmware
->> (the firmware must have some way to call into the kernel/driver code,
->> no?)
-> No, that's not workable on so many levels. It is sort of anaologous to
-> asking the NIC to call the LSM to apply the secmark while sending the
-> packet.
+> On Mon, Apr 6, 2026 at 5:27=E2=80=AFAM Jeff Layton <jlayton@kernel.org> w=
+rote:
+> >
+> > On Sat, 2026-04-04 at 21:17 +0600, Dorjoy Chowdhury wrote:
+> > > On Thu, Apr 2, 2026 at 1:02=E2=80=AFAM Jeff Layton <jlayton@kernel.or=
+g> wrote:
+> > > >
+> > > > On Mon, 2026-03-30 at 21:07 +0600, Dorjoy Chowdhury wrote:
+> > > > > On Mon, Mar 30, 2026 at 5:49=E2=80=AFPM Jeff Layton <jlayton@kern=
+el.org> wrote:
+> > > > > >
+> > > > > > On Sat, 2026-03-28 at 23:22 +0600, Dorjoy Chowdhury wrote:
+> > > > > > > This flag indicates the path should be opened if it's a regul=
+ar file.
+> > > > > > > This is useful to write secure programs that want to avoid be=
+ing
+> > > > > > > tricked into opening device nodes with special semantics whil=
+e thinking
+> > > > > > > they operate on regular files. This is a requested feature fr=
+om the
+> > > > > > > uapi-group[1].
+> > > > > > >
+> > > > > > > A corresponding error code EFTYPE has been introduced. For ex=
+ample, if
+> > > > > > > openat2 is called on path /dev/null with OPENAT2_REGULAR in t=
+he flag
+> > > > > > > param, it will return -EFTYPE. EFTYPE is already used in BSD =
+systems
+> > > > > > > like FreeBSD, macOS.
+> > > > > > >
+> > > > > > > When used in combination with O_CREAT, either the regular fil=
+e is
+> > > > > > > created, or if the path already exists, it is opened if it's =
+a regular
+> > > > > > > file. Otherwise, -EFTYPE is returned.
+> > > > > > >
+> > > > > > > When OPENAT2_REGULAR is combined with O_DIRECTORY, -EINVAL is=
+ returned
+> > > > > > > as it doesn't make sense to open a path that is both a direct=
+ory and a
+> > > > > > > regular file.
+> > > > > > >
+> > > > > > > [1]: https://uapi-group.org/kernel-features/#ability-to-only-=
+open-regular-files
+> > > > > > >
+> > > > > > > Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+> > > > > > > ---
+> > > > > > >  arch/alpha/include/uapi/asm/errno.h        |  2 ++
+> > > > > > >  arch/alpha/include/uapi/asm/fcntl.h        |  1 +
+> > > > > > >  arch/mips/include/uapi/asm/errno.h         |  2 ++
+> > > > > > >  arch/parisc/include/uapi/asm/errno.h       |  2 ++
+> > > > > > >  arch/parisc/include/uapi/asm/fcntl.h       |  1 +
+> > > > > > >  arch/sparc/include/uapi/asm/errno.h        |  2 ++
+> > > > > > >  arch/sparc/include/uapi/asm/fcntl.h        |  1 +
+> > > > > > >  fs/ceph/file.c                             |  4 ++++
+> > > > > > >  fs/fcntl.c                                 |  4 ++--
+> > > > > > >  fs/gfs2/inode.c                            |  6 ++++++
+> > > > > > >  fs/namei.c                                 |  4 ++++
+> > > > > > >  fs/nfs/dir.c                               |  4 ++++
+> > > > > > >  fs/open.c                                  |  8 +++++---
+> > > > > > >  fs/smb/client/dir.c                        | 14 ++++++++++++=
++-
+> > > > > > >  include/linux/fcntl.h                      |  2 ++
+> > > > > > >  include/uapi/asm-generic/errno.h           |  2 ++
+> > > > > > >  include/uapi/asm-generic/fcntl.h           |  4 ++++
+> > > > > > >  tools/arch/alpha/include/uapi/asm/errno.h  |  2 ++
+> > > > > > >  tools/arch/mips/include/uapi/asm/errno.h   |  2 ++
+> > > > > > >  tools/arch/parisc/include/uapi/asm/errno.h |  2 ++
+> > > > > > >  tools/arch/sparc/include/uapi/asm/errno.h  |  2 ++
+> > > > > > >  tools/include/uapi/asm-generic/errno.h     |  2 ++
+> > > > > > >  22 files changed, 67 insertions(+), 6 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/arch/alpha/include/uapi/asm/errno.h b/arch/alpha=
+/include/uapi/asm/errno.h
+> > > > > > > index 6791f6508632..1a99f38813c7 100644
+> > > > > > > --- a/arch/alpha/include/uapi/asm/errno.h
+> > > > > > > +++ b/arch/alpha/include/uapi/asm/errno.h
+> > > > > > > @@ -127,4 +127,6 @@
+> > > > > > >
+> > > > > > >  #define EHWPOISON    139     /* Memory page has hardware err=
+or */
+> > > > > > >
+> > > > > > > +#define EFTYPE               140     /* Wrong file type for =
+the intended operation */
+> > > > > > > +
+> > > > > > >  #endif
+> > > > > > > diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha=
+/include/uapi/asm/fcntl.h
+> > > > > > > index 50bdc8e8a271..fe488bf7c18e 100644
+> > > > > > > --- a/arch/alpha/include/uapi/asm/fcntl.h
+> > > > > > > +++ b/arch/alpha/include/uapi/asm/fcntl.h
+> > > > > > > @@ -34,6 +34,7 @@
+> > > > > > >
+> > > > > > >  #define O_PATH               040000000
+> > > > > > >  #define __O_TMPFILE  0100000000
+> > > > > > > +#define OPENAT2_REGULAR      0200000000
+> > > > > > >
+> > > > > > >  #define F_GETLK              7
+> > > > > > >  #define F_SETLK              8
+> > > > > > > diff --git a/arch/mips/include/uapi/asm/errno.h b/arch/mips/i=
+nclude/uapi/asm/errno.h
+> > > > > > > index c01ed91b1ef4..1835a50b69ce 100644
+> > > > > > > --- a/arch/mips/include/uapi/asm/errno.h
+> > > > > > > +++ b/arch/mips/include/uapi/asm/errno.h
+> > > > > > > @@ -126,6 +126,8 @@
+> > > > > > >
+> > > > > > >  #define EHWPOISON    168     /* Memory page has hardware err=
+or */
+> > > > > > >
+> > > > > > > +#define EFTYPE               169     /* Wrong file type for =
+the intended operation */
+> > > > > > > +
+> > > > > > >  #define EDQUOT               1133    /* Quota exceeded */
+> > > > > > >
+> > > > > > >
+> > > > > > > diff --git a/arch/parisc/include/uapi/asm/errno.h b/arch/pari=
+sc/include/uapi/asm/errno.h
+> > > > > > > index 8cbc07c1903e..93194fbb0a80 100644
+> > > > > > > --- a/arch/parisc/include/uapi/asm/errno.h
+> > > > > > > +++ b/arch/parisc/include/uapi/asm/errno.h
+> > > > > > > @@ -124,4 +124,6 @@
+> > > > > > >
+> > > > > > >  #define EHWPOISON    257     /* Memory page has hardware err=
+or */
+> > > > > > >
+> > > > > > > +#define EFTYPE               258     /* Wrong file type for =
+the intended operation */
+> > > > > > > +
+> > > > > > >  #endif
+> > > > > > > diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/pari=
+sc/include/uapi/asm/fcntl.h
+> > > > > > > index 03dee816cb13..d46812f2f0f4 100644
+> > > > > > > --- a/arch/parisc/include/uapi/asm/fcntl.h
+> > > > > > > +++ b/arch/parisc/include/uapi/asm/fcntl.h
+> > > > > > > @@ -19,6 +19,7 @@
+> > > > > > >
+> > > > > > >  #define O_PATH               020000000
+> > > > > > >  #define __O_TMPFILE  040000000
+> > > > > > > +#define OPENAT2_REGULAR      0100000000
+> > > > > > >
+> > > > > > >  #define F_GETLK64    8
+> > > > > > >  #define F_SETLK64    9
+> > > > > > > diff --git a/arch/sparc/include/uapi/asm/errno.h b/arch/sparc=
+/include/uapi/asm/errno.h
+> > > > > > > index 4a41e7835fd5..71940ec9130b 100644
+> > > > > > > --- a/arch/sparc/include/uapi/asm/errno.h
+> > > > > > > +++ b/arch/sparc/include/uapi/asm/errno.h
+> > > > > > > @@ -117,4 +117,6 @@
+> > > > > > >
+> > > > > > >  #define EHWPOISON    135     /* Memory page has hardware err=
+or */
+> > > > > > >
+> > > > > > > +#define EFTYPE               136     /* Wrong file type for =
+the intended operation */
+> > > > > > > +
+> > > > > > >  #endif
+> > > > > > > diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc=
+/include/uapi/asm/fcntl.h
+> > > > > > > index 67dae75e5274..bb6e9fa94bc9 100644
+> > > > > > > --- a/arch/sparc/include/uapi/asm/fcntl.h
+> > > > > > > +++ b/arch/sparc/include/uapi/asm/fcntl.h
+> > > > > > > @@ -37,6 +37,7 @@
+> > > > > > >
+> > > > > > >  #define O_PATH               0x1000000
+> > > > > > >  #define __O_TMPFILE  0x2000000
+> > > > > > > +#define OPENAT2_REGULAR      0x4000000
+> > > > > > >
+> > > > > > >  #define F_GETOWN     5       /*  for sockets. */
+> > > > > > >  #define F_SETOWN     6       /*  for sockets. */
+> > > > > > > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> > > > > > > index 66bbf6d517a9..6d8d4c7765e6 100644
+> > > > > > > --- a/fs/ceph/file.c
+> > > > > > > +++ b/fs/ceph/file.c
+> > > > > > > @@ -977,6 +977,10 @@ int ceph_atomic_open(struct inode *dir, =
+struct dentry *dentry,
+> > > > > > >                       ceph_init_inode_acls(newino, &as_ctx);
+> > > > > > >                       file->f_mode |=3D FMODE_CREATED;
+> > > > > > >               }
+> > > > > > > +             if ((flags & OPENAT2_REGULAR) && !d_is_reg(dent=
+ry)) {
+> > > > > > > +                     err =3D -EFTYPE;
+> > > > > > > +                     goto out_req;
+> > > > > > > +             }
+> > > > > >
+> > > > > > ^^^
+> > > > > > This doesn't look quite right. Here's a larger chunk of the cod=
+e:
+> > > > > >
+> > > > > > -------------------------8<--------------------------
+> > > > > >         if (d_in_lookup(dentry)) {
+> > > > > >                 dn =3D ceph_finish_lookup(req, dentry, err);
+> > > > > >                 if (IS_ERR(dn))
+> > > > > >                         err =3D PTR_ERR(dn);
+> > > > > >         } else {
+> > > > > >                 /* we were given a hashed negative dentry */
+> > > > > >                 dn =3D NULL;
+> > > > > >         }
+> > > > > >         if (err)
+> > > > > >                 goto out_req;
+> > > > > >         if (dn || d_really_is_negative(dentry) || d_is_symlink(=
+dentry)) {
+> > > > > >                 /* make vfs retry on splice, ENOENT, or symlink=
+ */
+> > > > > >                 doutc(cl, "finish_no_open on dn %p\n", dn);
+> > > > > >                 err =3D finish_no_open(file, dn);
+> > > > > >         } else {
+> > > > > >                 if (IS_ENCRYPTED(dir) &&
+> > > > > >                     !fscrypt_has_permitted_context(dir, d_inode=
+(dentry))) {
+> > > > > >                         pr_warn_client(cl,
+> > > > > >                                 "Inconsistent encryption contex=
+t (parent %llx:%llx child %llx:%llx)\n",
+> > > > > >                                 ceph_vinop(dir), ceph_vinop(d_i=
+node(dentry)));
+> > > > > >                         goto out_req;
+> > > > > >                 }
+> > > > > >
+> > > > > >                 doutc(cl, "finish_open on dn %p\n", dn);
+> > > > > >                 if (req->r_op =3D=3D CEPH_MDS_OP_CREATE && req-=
+>r_reply_info.has_create_ino) {
+> > > > > >                         struct inode *newino =3D d_inode(dentry=
+);
+> > > > > >
+> > > > > >                         cache_file_layout(dir, newino);
+> > > > > >                         ceph_init_inode_acls(newino, &as_ctx);
+> > > > > >                         file->f_mode |=3D FMODE_CREATED;
+> > > > > >                 }
+> > > > > >                 err =3D finish_open(file, dentry, ceph_open);
+> > > > > >         }
+> > > > > > -------------------------8<--------------------------
+> > > > > >
+> > > > > > It looks like this won't handle it correctly if the pathwalk te=
+rminates
+> > > > > > on a symlink (re: d_is_symlink() case). You should either set u=
+p a test
+> > > > > > ceph cluster on your own, or reach out to the ceph community an=
+d ask
+> > > > > > them to test this.
+> > > > > >
+> > > > >
+> > > > > Thanks for reviewing. The d_is_symlink() case seems to be calling
+> > > > > finish_no_open so shouldn't this be okay?
+> > > > >
+> > > >
+> > > > My mistake -- you're correct. I keep forgetting that finish_no_open=
+()
+> > > > will handle this case regardless of what else happens.
+> > > >
+> > > > > > >               err =3D finish_open(file, dentry, ceph_open);
+> > > > > > >       }
+> > > > > > >  out_req:
+> > > > > > > diff --git a/fs/fcntl.c b/fs/fcntl.c
+> > > > > > > index beab8080badf..240bb511557a 100644
+> > > > > > > --- a/fs/fcntl.c
+> > > > > > > +++ b/fs/fcntl.c
+> > > > > > > @@ -1169,9 +1169,9 @@ static int __init fcntl_init(void)
+> > > > > > >        * Exceptions: O_NONBLOCK is a two bit define on parisc=
+; O_NDELAY
+> > > > > > >        * is defined as O_NONBLOCK on some platforms and not o=
+n others.
+> > > > > > >        */
+> > > > > > > -     BUILD_BUG_ON(20 - 1 /* for O_RDONLY being 0 */ !=3D
+> > > > > > > +     BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=3D
+> > > > > > >               HWEIGHT32(
+> > > > > > > -                     (VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_ND=
+ELAY)) |
+> > > > > > > +                     (VALID_OPENAT2_FLAGS & ~(O_NONBLOCK | O=
+_NDELAY)) |
+> > > > > > >                       __FMODE_EXEC));
+> > > > > > >
+> > > > > > >       fasync_cache =3D kmem_cache_create("fasync_cache",
+> > > > > > > diff --git a/fs/gfs2/inode.c b/fs/gfs2/inode.c
+> > > > > > > index 8344040ecaf7..4604e2e8a9cc 100644
+> > > > > > > --- a/fs/gfs2/inode.c
+> > > > > > > +++ b/fs/gfs2/inode.c
+> > > > > > > @@ -738,6 +738,12 @@ static int gfs2_create_inode(struct inod=
+e *dir, struct dentry *dentry,
+> > > > > > >       inode =3D gfs2_dir_search(dir, &dentry->d_name, !S_ISRE=
+G(mode) || excl);
+> > > > > > >       error =3D PTR_ERR(inode);
+> > > > > > >       if (!IS_ERR(inode)) {
+> > > > > > > +             if (file && (file->f_flags & OPENAT2_REGULAR) &=
+& !S_ISREG(inode->i_mode)) {
+> > > > > >
+> > > > > > Isn't OPENAT2_REGULAR getting masked off in ->f_flags now?
+> > > > > >
+> > > > > Yes, I thought the masking off was happening after this codepath =
+got
+> > > > > executed. Maybe it's better anyway to pass another flags param to=
+ this
+> > > > > function and forward the flags from the gfs2_atomic_open function=
+ and
+> > > > > in other call sites pass 0 ? What do you think?
+> > > > >
+> > > >
+> > > > Also my mistake. That happens in do_dentry_open() which happens in
+> > > > finish_open(), so you should be OK here.
+> > > >
+> > > > Reviewed-by: Jeff Layton <jlayton@kernel.org>
+> > >
+> > > Thanks for patiently reviewing this! I am planning on sending patches
+> > > for man-pages and looking into some xfs-tests for this. But I am not
+> > > sure if this patch series will get more reviews from others or if it
+> > > will be picked up in the vfs branch?
+> > >
+> >
+> > This is a change to rather core VFS infrastructure so yes, you should
+> > expect some more review. Assuming no major issues are found, then yes,
+> > this should eventually get picked up by the VFS maintainers.
+> >
+> > Cheers,
+> > --
+> > Jeff Layton <jlayton@kernel.org>
 >
-> The proper flow has the kernel evaluate the packet/command *before* it
-> delivers it to HW, not after.
+> Ping....
+> This patch series got a "Reviewed-by" from Jeff Layton but it probably
+> requires more reviews from other maintainers/reviewers as well. So
+> requesting for review on this patch series. Thanks!
 >
->> so that only the firmware would need to parse the request.  If we
->> wanted to adopt a secmark-esque approach, one could develop a second
->> parsing mechanism that would be responsible for assigning a LSM label
->> to the request, and then pass the firmware request to the LSM, but I
->> do worry a bit about the added complexity associated with keeping the
->> parser sync'd with the driver/fw.
-> In practice it would be like iptables, the parser would be entirely
-> programmed by userspace and there is nothing to keep in sync.
->
->> However, even if we solve the parsing problem, I worry we have
->> another, closely related issue, of having to categorize all of the
->> past, present, and future firmware requests into a set of LSM specific
->> actions.  
-> Why? secmark doesn't have this issue? The classifer would return the
-> same kind of information as secmark, some user provided label that is
-> delivered to the LSM policy side.
->
-> When I talk about a classifier I mean a user programmable classifer
-> like iptables. secmark obviously doesn't raise future looking
-> questions (like what if there is httpv3?) nor should this.
 
-Secmark has already failed. As I mentioned before, you can't fit the
-label information from more than one LSM in a u32. There's going to have
-to be some performance degrading hash-magic invoked to make that happen,
-and when I've looked into what it would take I was very unhappy.
+Ping...
+Requesting for review on this patch series please.
 
->> The past and present requests are just a matter of code,
->> that isn't too worrying, but what do we do about unknown future
->> requests?  Beyond simply encoding the request into a operation
->> token/enum/int, what additional information beyond the action type
->> would a LSM need to know to apply a security policy?  Would it be
->> reasonable to blindly allow or reject unknown requests?  If so, what
->> would break?
-> I am proposing something like SECMARK.
->
-> Eg from Google:
->
-> iptables -t mangle -A INPUT -p tcp --dport 80 -j SECMARK --selctx system_u:object_r:httpd_packet_t:s0
->
-> Which is 'match a packet to see that byte offset XX is 0080 and if so
-> tag it with the thing this string describes'
->
-> So I'm imagining the same kind of flexability. User provides the
-> matching and whatever those strings are. The classifer step is fully
-> flexible. No worry about future stuff.
->
-> I'm guessing when Casey talks about struct lsm_prop it is related to
-> the system_u string?
-
-Yeah, that would be it. Lets say your system supports SELinux and AppArmor.
-You'll need to be able to specify an SELinux context, an AppArmor context,
-or both. Iptables can't do that because of the limitations of a secmark.
-
->>> ... Once classified we want this to work with more than SELinux
->>> only, we have a particular interest in the eBPF LSM.
->> One of the design requirements for the LSM framework is that it
->> provides an abstraction layer between the kernel and the underlying
->> security mechanisms implemented by the various LSMs.  Some operations
->> will always fall outside the scope of individual LSMs due to their
->> nature, but as a general rule we try to ensure that LSM hooks are
->> useful across multiple LSMs.
-> I don't know much about SECMARK but Google is telling me it doesn't
-> work with anything but SELinux LSM? We'd just like to avoid this
-> pitful and I guess that is why Casey brings up lsm_prop?
-
-Google is wrong. (Imagine that!) Smack uses secmarks. It's one of the
-reasons you can't use SELinux and Smack at the same time. There is code
-in iptables that implies it only works for SELinux, but it isn't true.
-That's why you want an lsm_prop instead of a secid. The limitation of a
-secmark is imposed by the IP stack implementation. It would be very
-frustrating if you introduced yet another scheme with that limitation.
-
->>> Following the fwmark example, if there was some programmable in-kernel
->>> function to convert the cmd into a SELinux label would we be able to
->>> enable SELinux following the SECMARK design?
->> As Casey already mentioned, any sort of classifier would need to be
->> able to support multiple LSMs.  The only example that comes to mind at
->> the moment is the NetLabel mechanism which translates between
->> on-the-wire CIPSO and CALIPSO labels and multiple LSMs (Smack and
->> SELinux currently).
-> Ok, I think they can look into that, it is a good lead
-
-Netlabel has a similar issue to secmarks with its use of secids, and
-currently supports only a single CIPSO tag in the IP header, making
-multiple concurrent LSM support impossible. If you're defining a new
-mechanism you can avoid this limitation.
-
->>> Would there be an objection if that in-kernel function was using a
->>> system-wide eBPF uploaded with some fwctl uAPI?
->> We'd obviously need to see patches, but there is precedent in
->> separating labeling from enforcement.  We've discussed SecMark and
->> NetLabel in the networking space, but technically, the VFS/filesystem
->> xattr implementations could also be considered as a labeling mechanism
->> outside of the LSM.
-> Makes sense
->
->>> Finally, would there be an objection to enabling the same function in
->>> eBPF by feeding it the entire command and have it classify and make a
->>> security decision in a single eBPF program?
->> Keeping in mind that from an LSM perspective we need to support
->> multiple implementations, both in terms of language mechanics (eBPF,
->> Rust, C) and security philosophies (Smack, SELinux, AppArmor, etc.),
->> so it would be very unlikely that we would want a specific shortcut or
->> mechanism that would only work for one language or philosophy.
-> Okay, it is good to understand the sensitivities
->
->>> Is there some other way to enable eBPF?
->> If one develops a workable LSM hook then I see no reason why one
->> couldn't write a BPF LSM to use that hook; that's what we do today.
-> I was thinking that too
->
->> However, it seems like direct reuse of secmark isn't what is needed,
->> or even wanted, you were just using that as an example of separating
->> labeling from enforcement, yes?
-> Yes, and looking for a coding example to guide implementing it, and to
-> recast this discussion to something more concrete. It is very helpful
-> to think of this a lot like deep packet inspection and
-> classification.
->
-> That the packets are delivered to FW and execute commands is not
-> actually that important. IP packets are also delivered to remote CPUs
-> and execute commands there too <shrug>
->
-> At the end of the day the task is the same - deep packet inspection,
-> classification. labeling, policy decision, enforcement.
->
-> Thanks,
-> Jason
->
+Regards,
+Dorjoy
