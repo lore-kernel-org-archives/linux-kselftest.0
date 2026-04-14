@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF4D318B9D;
-	Tue, 14 Apr 2026 09:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F72A358D3D;
+	Tue, 14 Apr 2026 10:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776160393; cv=none; b=FsRVD47WfD6Mk3fjxUycEUnFkDfa+wu/gPuJ/HLTa/6BFOKYoeMdg8KvkKYNAePr9/2wNWVIUx2eTZsR4LVTGhm4yQ1ipk4/ZttP72P82xe/PeDUKPaIkcKr0eXA7Z9T9vB4CM7mVQk7Zs11FRAg4HpV0yLo+Tlo3QMsWjHF2Es=
+	t=1776160923; cv=none; b=cmmKUbFYAp7qbd211iS7RFFq8SrWLJBwJlEcfIK0n39squmf3TBoOz+VncE3bxgELyC3HVpUwJf9+Yw6mOwveVmKIe4P1ROXg3/Of6HVm3abbHZf4aG2OEjOJLuqsHbfAMI3bdbeKcq+IIsOihWPRyufba9kGqJZuy5A35xGayM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776160393; c=relaxed/simple;
-	bh=6XvkeH7K6YpHjPzJU8T0S8ZEsUF/REJjGBBC4+bnBk0=;
+	s=arc-20240116; t=1776160923; c=relaxed/simple;
+	bh=hEMZcMIZS6WzhX6ssC5Ou6uax693W51NviYWtwo2rRA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sq6PZFRLLBw+HTCdWNyIrBW672mz2IWfn73wQPS804inXMlstV/xdjIq1NIcn4jpPG4yaIrpkD7OYzb8v4ynbp0b94KMdPVa3sh1HSMddXsf8+QRKRf1gkstjlFtGAX8neSUScpMi5GZVDY605YkG6TIYxRr/JmFhhuC9mSpD/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S/HbgSJC; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=u61aRHblzF4EwnuZ0rk3g83GkiLsbrB2qCRnTWeXw7/XTV6LScrz2mpQbI+xdmW1wH1jr4UY48c97rDf36sRCl3kZhjGWoCKSmpEJLRA9RCE7nLKnTlWVj2ZxaFdZ8kl+Q0RtM3cem9KlDlyt95S+RUy09ax+9X0MBKyQrHI8r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cTkwm5Ak; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S/HbgSJC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF65FC19425;
-	Tue, 14 Apr 2026 09:53:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cTkwm5Ak"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B43BC19425;
+	Tue, 14 Apr 2026 10:01:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776160393;
-	bh=6XvkeH7K6YpHjPzJU8T0S8ZEsUF/REJjGBBC4+bnBk0=;
+	s=k20201202; t=1776160923;
+	bh=hEMZcMIZS6WzhX6ssC5Ou6uax693W51NviYWtwo2rRA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=S/HbgSJC1xisLbIYZkprBmKPEYPOE0dxloBxvt31ueSU+JPdxbtWoSJHPtVgj83GT
-	 tK5sgFOB7Clofff1zo9lHBhTRO38sShtitPzt5GnFWpASA2qVrgXgrFXzOEfI6nnvf
-	 pMfnrw6koYXVRqNyff0/vnmwfq+4Q6lNvpAMZhvOiFSH+Qihyf8/Pn+TK8pQ+pbnuN
-	 lWAzRO4MX6p7UibBs6HKuXxet3KSDXMkWnVj3t70SdvPue/1lztATxNJ9jxHmI5p4G
-	 9RfNAeN1Ht1V9OG+03MjybKC3Hw09EddWTx+SdCl6fj1xKq3nZLuAHVhUNANeIBbXh
-	 G6eWOj87sujhA==
-Message-ID: <c44d5afc-2936-486c-9806-01c942a73f70@kernel.org>
-Date: Tue, 14 Apr 2026 11:53:06 +0200
+	b=cTkwm5AkJiR1Kcxa/iRawXT6asz/JNVsLox7hbLmD9WpHY7NrEJd0Np2KuvxhcZDz
+	 sMaAP+k4X0urnbfFoLZQpcaU4aNgNC0XwfdcCQD+ESiBBIxU+ZvoszTRtcjUI65D8S
+	 yrFLpaZnwOKgbWmUofGYDgDBEW2J63ChT28SH9ICE6sUVeQgJ/y3qlXLYHwUIYsiAQ
+	 E7TWJseSLHDOHWVwq7qHeySCAlKpIVrSmgG4vBwSHFoD8R6Q67XHPHvoUmZVbL7UCb
+	 +kcIQBbMgItyBP0yzr0beiuX9rKIeGi7QmP4ON+0eabVuxDAiL0MuLwp5JsV/gvthf
+	 nGppsJGfgIE0w==
+Message-ID: <f1cfb1c4-9b7b-40db-9105-570936b61203@kernel.org>
+Date: Tue, 14 Apr 2026 12:01:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,20 +35,19 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Simplify byte pattern checking in
- mremap_test
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Dev Jain <dev.jain@arm.com>, akpm@linux-foundation.org, shuah@kernel.org,
- ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- ryan.roberts@arm.com, anshuman.khandual@arm.com,
- Sarthak Sharma <sarthak.sharma@arm.com>
-References: <20260410143031.148173-1-dev.jain@arm.com>
- <5297e0da-d8ec-49df-9b32-0d9f907588d6@kernel.org>
- <8b5544eb-5ec0-4c85-a2da-7a454fa606dc@arm.com>
- <134c372e-5c9e-493d-b954-d9954546beaf@kernel.org>
- <20260414104712.2b634741@pumpkin>
+Subject: Re: [PATCH v3 2/2] selftests/mm: verify droppable mappings cannot be
+ locked
+To: anthony.yznaga@oracle.com, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, ljs@kernel.org, Liam.Howlett@oracle.com,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, shuah@kernel.org
+References: <20260409234915.11723-1-anthony.yznaga@oracle.com>
+ <20260409234915.11723-3-anthony.yznaga@oracle.com>
+ <7a318c3c-7ccb-4f95-a416-19d09f42c97f@kernel.org>
+ <38fd3d86-f080-4b3a-a931-8ddae1a420ae@oracle.com>
+ <b579517c-e739-4db5-ab0b-4db3d579807c@kernel.org>
+ <ae78cbdd-e9b3-4586-b492-89ecffae30fc@oracle.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -95,101 +94,65 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260414104712.2b634741@pumpkin>
+In-Reply-To: <ae78cbdd-e9b3-4586-b492-89ecffae30fc@oracle.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/14/26 11:47, David Laight wrote:
-> On Tue, 14 Apr 2026 10:01:57 +0200
-> "David Hildenbrand (Arm)" <david@kernel.org> wrote:
+On 4/13/26 23:54, anthony.yznaga@oracle.com wrote:
 > 
->> On 4/14/26 07:09, Dev Jain wrote:
->>>
->>>
->>>
->>> Yes.
->>>
->>> I'll explain the algorithm in 7033c6cc9620.
->>>
->>> The problem statement is: given two buffers of equal length n, find the
->>> first mismatch index.
->>>
->>> Algorithm: Divide the buffers into sqrt(n) chunks. Do a memcmp() over
->>> each chunk. If all of them succeed, the buffers are equal, giving the
->>> result in O(sqrt(n)) * t, where t = time taken by memcmp().
->>>
->>> Otherwise, worst case is that we find the mismatch in the last chunk.
->>> Now brute-force iterate this chunk to find the mismatch. Since chunk
->>> size is sqrt(n), complexity is again
->>> sqrt(n) * t + sqrt(n) = O(sqrt(n)) * t.
->>>
->>> So if get_sqrt() computes a wrong square root, we lose this time
->>> complexity.  
->>
->> Ah, thanks for clarifying.
+> On 4/13/26 12:46 PM, David Hildenbrand (Arm) wrote:
+>>> It's correct though mlock2 would also work since it's been in glibc for
+>>> several years now. I just matched the existing tests. mlock2_ is a
+>>> simple wrapper around syscall in tools/testing/selftests/mm/mlock2.h,
+>>> and it was introduced when the mlock2 syscall was introduced. A trailing
+>>> rather than a preceding underscore is...unfortunate.
+>> Interesting ... and confusing :)
 >>
 >>>
->>> Maybe there is an optimal value of x = #number of chunks of the buffer,
->>> which may not be sqrt(n).
->>>
->>> But given the information we have, a CS course on algorithms will
->>> say this is one of the optimal ways to do it.
->>>   
->>>
->>> I just checked with ./mremap_test -t 0, the variance is very high on my
->>> system.
->>>
->>> In the common case of the test passing:
->>>
->>> before patch, there are multiple sub-length calls to memcmp.
->>> after patch, there is a single full-length call to memcmp.
->>>
->>> So the time should reduce but may not be very distinguishable.  
->>
->> Okay, so doesn't matter. I agree that we should simplify all that.
->>
->> The exact index is irrelevant. Whoever wants to debug the test failure
->> could modify the test to find that out. It's one of the tests we don't
->> really expect to fail (often).
->>
->>>   
->>>
->>> Not needed. 7033c6cc9620 does not create any incorrectness in the checking
->>> of mismatch index.  
->>
->> Yes, agreed.
->>
->>
->> I would suggest to rewrite/simplify/clarify the patch description, not
->> talking about "buggy" etc, focusing on the simplification.
->>
->> "
->> The original version of mremap_test (7df666253f26: "kselftests: vm: add
->> mremap tests") validated remapped contents byte-by-byte and printed a
->> mismatch index in case the bytes streams didn't match. That was rather
->> inefficient, especially also if the test passed.
->>
->> Later, commit 7033c6cc9620 ("selftests/mm: mremap_test: optimize
->> execution time from minutes to seconds using chunkwise memcmp") used
->> memcmp() on bigger chunks, to fallback to byte-wise scanning to detect
->> the problematic index only if it discovered a problem.
->>
->> However, the implementation is overly complicated (e.g., get_sqrt() is
->> currently not optimal) and we don't really have to report the exact
->> index: whoever debugs the failing test can figure that out.
->>
->> Let's simplify by just comparing both byte streams with memcmp() and not
->> detecting the exact failed index.
->> "
+>>> The intent was to skip the tests if compiled with headers where
+>>> MAP_DROPPABLE isn't defined rather than force the value and get EINVAL
+>>> because the kernel doesn't know about it. This way EINVAL can be flagged
+>>> as a test failure and not skipped since it would likely indicate a test
+>>> or kernel bug.
+>> Note that the kernel headers you are compiling against don't imply
+>> anything about the kernel that is actually running! So the argument
+>> regarding EINVAL doesn't really hold.
 > 
-> ISTM that if you get a failure it doesn't really matter how long a
-> second scan takes.
-> So a simple byte loop that reports the offset and data of the first
-> error and counts the number of errors is more than enough.
+> Yes, I see that now.
+> 
+> 
+>>
+>> But note that we, in general, try to compile against the in-tree headers.
+>>
+>> See
+>>
+>> commit 75d60eb30daafb966db0e45f38e4cdeb5e5ed79c
+>> Author: Lorenzo Stoakes <ljs@kernel.org>
+>> Date:   Mon Oct 28 14:13:30 2024 +0000
+>>
+>>      tools: testing: update tools UAPI header for mman-common.h
+>>
+>>      Import the new MADV_GUARD_INSTALL/REMOVE madvise flags.
+>>
+>> And looking into it, I already see MAP_DROPPABLE there as well, so is
+>> any special handling here even needed?
+>>
+> I'd say no special handling is needed.
 
-That could also be done. But if the stars align and the test actually
-fails, I am not even sure if the exact index is really helpful. So I'd
-just drop that index reporting entirely.
+Right, so the #ifdef is not required at all.
+
+> If this test is compiled on with
+> a kernel that has MAP_DROPPABLE but run on an older kernel without
+> MAP_DROPPABLE, should it fail? Or should it interpret the EINVAL as a
+> sufficient reason to assume MAP_DROPPABLE is not supported and to skip
+> the result? My current thinking is it should fail because the EINVAL
+> could have another cause.
+Ah, you want to sense for MAP_DROPPABLE support in older kernels.
+
+I guess treating -EINVAL as "not supported on old kernel" is good enough.
+
+Looking at tools/testing/selftests/mm/droppable.c, we seem to not
+perform any such checks ... unfortunately.
 
 -- 
 Cheers,
