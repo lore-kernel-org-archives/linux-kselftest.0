@@ -1,110 +1,148 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93E62F83B5
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 13:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A973E867F;
+	Tue, 14 Apr 2026 14:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776175043; cv=none; b=n4NUvkw2ijhqPzJVJ2h6CkwCuCECE1RoScg2OH5jshseo5dY3yY8NEQQ+YT+W5vS7cZKm4RBurdFjGvFuttGC48ovi+w7HGM3HoywoQg95Hk+VFVd4h3XpMLVDXTAFLPUEEUFPiBUvhkda/cx2sE95riJhRb8LF4evt5ntzUvng=
+	t=1776176042; cv=none; b=uP+2FtWlae8HhC+IEiPJC5CTni1qQOiApAHjN77lk9HHmyuxixG0XxiEPKrg9iORpo2PS1zaY4YzTDKbycGvkvmQxV7GKjo0iHlwNOrSwlsHRbyeCqgUFh+ZI5Zu34vHqYyqFbTIQuSJEIKjOc/taXR1C0cz2JndNXtnrwUiaY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776175043; c=relaxed/simple;
-	bh=WdrZQIlF6dqAmWcBYZjdasD1nN4EJsN+jX8ww4GW1rk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=W3vCihn/bW2uHiUTpZIt7ilddi2p/D8Tgxg9e1Z57XEN+Fw7/ydHbHy5vVme5vrlRmztMVBx/UPoxyfJGH3xX1kHJyZZcFZaxDMNd1j3GX9ImEmrFH2BStfPzgmUfsUQu89yQYr9bj7oGr2Ph55h1GwqBcgdOYnHY6Ri6m972rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gs7/E/on; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776176042; c=relaxed/simple;
+	bh=xj9pUya5DRk6xrlAWUYqxjpSpcrRTIPYrDQmWtkDJAQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PIBLth/kW+gnwWCUop7H8LcNEbLzV6LZDfFz1lkNifs8eRXatwcaBMXb9MMiOV7aURB9hYgSRdHFC2OhqWDbFxHnPxYu3nCs/TcTvHe0OFzX/xIkYRXjTjmlvtPcrtLvlycMxRlYroR9nQhqReumAJtUNKTP6OC2Y5igX0Jr43c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=nmoNkIKw; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gs7/E/on"
-Message-ID: <a70e73a95a02a3747925afdfde26591a0cc6bae3.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776175029;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nq/O3jFcXuGXkm/xRXy/eNIPKG9sl6o8TkqLD7aFLzo=;
-	b=Gs7/E/onVm21TQ0DizrQJ9kIkWd1JeeOPsROBicpQwN78nToieX1UfoM6JJaew1mL7dmdH
-	JczeM3DTeg0OSOqm/FYoJc1a7CDid6vFFWuKgcu9uce5DQ+yQrafRRzC8tvgY9S7Ormbod
-	n6rNEp+SoOpLs139FL/7tEGykOS8k6Y=
-Subject: Re: [PATCH bpf-next 1/2] bpf: tcp: Reject TCP_NODELAY from BPF hdr
- opt callbacks
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: edumazet@google.com, ncardwell@google.com, kuniyu@google.com, 
- davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
- pabeni@redhat.com,  horms@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org,  martin.lau@linux.dev, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org,  yonghong.song@linux.dev,
- jolsa@kernel.org, shuah@kernel.org, sdf@fomichev.me, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: Quan Sun <2022090917019@std.uestc.edu.cn>, Yinhao Hu
- <dddddd@hust.edu.cn>,  Kaiyan Mei <M202472210@hust.edu.cn>
-Date: Tue, 14 Apr 2026 21:56:53 +0800
-In-Reply-To: <20260414112310.1285783-2-kafai.wan@linux.dev>
-References: <20260414112310.1285783-1-kafai.wan@linux.dev>
-	 <20260414112310.1285783-2-kafai.wan@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="nmoNkIKw"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wCeWO-00Fdqd-IH; Tue, 14 Apr 2026 16:13:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From; bh=wg8YTxZZZ0aBAF60rNfWCIPwUzWH/QpbjE2Qtc07f+o=
+	; b=nmoNkIKwz3/gXR/2holNt66mgELdYed0PSHFweG8/saAL49GSWtrtUnhrkWh89jQnRLWsM3MC
+	O7AjRbNurCpf2r1TUxmKq2SrIY8RLs+jzivI3B8/5pyo0Acl+knN6bcacN0cp738l4A7WpjD2REjg
+	TetLCN6mkLvJHKOfH8ET8sIcI2R99kZMt33ow2aNPeLDzRmuJ6WPTqWArCR6KTK6KB8abwRj0Vd6D
+	tMRSREEZoVUKEV7BKwUID+pLMQ+y+EkHOPcmHJMeiJtOPzsaJe6e8U4N9L9L22ABr42eFMGikxdz8
+	j/8VGe5EDn4A7WELbIsU3llSRqgeCN+x7cFyYg==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wCeWJ-0000UL-5R; Tue, 14 Apr 2026 16:13:39 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1wCeW8-00DhbX-KI; Tue, 14 Apr 2026 16:13:28 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH bpf v4 0/5] bpf, sockmap: Fix af_unix null-ptr-deref in
+ proto update
+Date: Tue, 14 Apr 2026 16:13:14 +0200
+Message-Id: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43NTQrCMBAF4KtI1o5MJtpYV95DXDTJRAPShPSHS
+ undDd0UXHX53jDfm0XHOXAnbodZZB5DF2Jbwvl4EPbdtC+G4EoWhFShpBqGNkyQcuwjDMk1PUM
+ 7fD6Q+gyOM3uoGtJKGWuMv4rCpFKGaZ14CJO8eJbyHbo+5u86O8r1tH9hlCCBpWvY6PLh3T2bO
+ J1sXOmRNo5Q7+AIEGqPtVQKWds/Tm2cwmoHpwpHHq0+S7QXUhu3LMsPStw6v3EBAAA=
+X-Change-ID: 20260129-unix-proto-update-null-ptr-deref-6a2733bcbbf8
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
+ =?utf-8?q?=E9=92=B1=E4=B8=80=E9=93=AD?= <yimingqian591@gmail.com>
+X-Mailer: b4 0.15.2
 
-On Tue, 2026-04-14 at 19:23 +0800, KaFai Wan wrote:
+Updating sockmap/sockhash using a unix sock races unix_stream_connect():
+when sock_map_sk_state_allowed() passes (sk_state == TCP_ESTABLISHED),
+unix_peer(sk) in unix_stream_bpf_update_proto() may still return NULL.
 
-AI is right and I'm late for the issue. Please ignore this. Sorry for the n=
-oise.
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+Changes in v4:
+- Circle back to v1 approach
+- More details in commit messages [Martin]
+- Make unix iter take the state lock [Kaniyuki]
+- Link to v3: https://lore.kernel.org/r/20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co
 
-> A BPF_SOCK_OPS program can enable
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
-> bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB.
->=20
-> That reaches __tcp_sock_set_nodelay(), which may call
-> tcp_push_pending_frames(). The transmit path then computes TCP
-> options again, re-enters bpf_skops_hdr_opt_len(), and invokes the
-> same BPF callback recursively. This can loop until the kernel
-> stack overflows.
->=20
-> TCP_NODELAY is not safe from the header option callback context.
-> Reject it with -EOPNOTSUPP when TCP header option callbacks are
-> enabled on the socket, so the callback cannot recurse back into
-> tcp_push_pending_frames() through do_tcp_setsockopt().
->=20
-> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@=
-std.uestc.edu.cn/
-> Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
-> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> ---
-> =C2=A0net/ipv4/tcp.c | 5 ++++-
-> =C2=A01 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 202a4e57a218..7ac4c98be19d 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -4004,7 +4004,10 @@ int do_tcp_setsockopt(struct sock *sk, int level, =
-int optname,
-> =C2=A0
-> =C2=A0	switch (optname) {
-> =C2=A0	case TCP_NODELAY:
-> -		__tcp_sock_set_nodelay(sk, val);
-> +		if (val && BPF_SOCK_OPS_TEST_FLAG(tp, BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FL=
-AG))
-> +			err =3D -EOPNOTSUPP;
-> +		else
-> +			__tcp_sock_set_nodelay(sk, val);
-> =C2=A0		break;
-> =C2=A0
-> =C2=A0	case TCP_THIN_LINEAR_TIMEOUTS:
+Changes in v3:
+- Drop sparse annotations [Martin]
+- Keep lock_sock() along the unix_state_lock() [Kaniyuki]
+- Unify BPF iter af_unix locking [Kaniyuki, Martin]
+- Link to v2: https://lore.kernel.org/r/20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co
 
---=20
-Thanks,
-KaFai
+Changes in v2:
+- Instead of probing for unix peer, make sockmap take the right lock [Martin]
+- Annotate data races [Kaniyuki, Martin]
+- Extend bpf unix iter selftest to attempt a deadlock
+- Link to v1: https://lore.kernel.org/r/20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co
+
+To: John Fastabend <john.fastabend@gmail.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+To: Eric Dumazet <edumazet@google.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Willem de Bruijn <willemb@google.com>
+To: "David S. Miller" <davem@davemloft.net>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Simon Horman <horms@kernel.org>
+To: Yonghong Song <yhs@fb.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: KP Singh <kpsingh@kernel.org>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Hao Luo <haoluo@google.com>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+To: Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+---
+Michal Luczaj (5):
+      bpf, sockmap: Annotate af_unix sock::sk_state data-races
+      bpf, sockmap: Fix af_unix iter deadlock
+      selftests/bpf: Extend bpf_iter_unix to attempt deadlocking
+      bpf, sockmap: Fix af_unix null-ptr-deref in proto update
+      bpf, sockmap: Take state lock for af_unix iter
+
+ net/core/sock_map.c                               |  4 ++--
+ net/unix/af_unix.c                                |  9 +++++----
+ net/unix/unix_bpf.c                               |  3 +++
+ tools/testing/selftests/bpf/progs/bpf_iter_unix.c | 10 ++++++++++
+ 4 files changed, 20 insertions(+), 6 deletions(-)
+---
+base-commit: 0f00132132937ca01a99feaf8985109a9087c9ff
+change-id: 20260129-unix-proto-update-null-ptr-deref-6a2733bcbbf8
+
+Best regards,
+--  
+Michal Luczaj <mhal@rbox.co>
+
