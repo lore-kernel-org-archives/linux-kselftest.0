@@ -1,217 +1,234 @@
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF873325726
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 20:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776196970; cv=none; b=XMSk1xe3OypxehLVN928NeqkmOMtEMtNdSGlefvM0RmYP2jNKpZ8hB8lM7OmT0KysWz+AUBAlO2JjPIQfhv6jnJ2aKvaKJpl7u0a3hnvWd35NSc8gHJezBLqYQdG9SOffDAv6LLghMOet10seu6z+i2cNJDnmte967JFz6MYtOI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776196970; c=relaxed/simple;
-	bh=cstkvhMPl2LYBSE9IY4nT+D67SitefrLtAq5Ft+KA1U=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uEKRYgalVDnVZQyT6PSmVjGk3u4wRosZyFHorMwVceKcZsMsfdoua9mXWFFhMn+wpmnUJtscKIC7aB8k15XrLp/ql9J59U9K6CFAH6/EhvZQHoa7NjaKb/JpbwBGl+xUOy1Hirmh3LgB160IiAUpxdKgzuCRE1Ajj/sxeknF+rI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Q2gKzhvG; arc=none smtp.client-ip=209.85.217.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E0431F9A4
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 20:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776198492; cv=pass; b=n56UwmwhOX94jWYiLGHu8h5TcSAkg6oglOOMaQHfRS+b//2VMlQtQOF+5xeRHa385ytGAsMzJs2bjJrAl751qWFk0VGwwn4/JkIwivrEc3YILwyGVothetpQfZk2RS4JnLn3wm/NSzbhFCWWVNJ+IceVU94XOQgWkk46yHrqvsw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776198492; c=relaxed/simple;
+	bh=SZNreY6ilaQZcfu+hbcMb9jeeliOvd2TnQQxoDEAWuI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p8AInvKPGq0Wp8gGRutjz7JiPwToSIPjys7xwyJFCukcbyohKpJOzBvxZUWYuI1+nKqZ5IqY5vEI+iymwZtj4lAMjCQpVCWspjfRrXw/6skrVI9xo5PvvZT3zfW1wFv4gfexCaFMPqRB+53tOJgOADLQmmFmvuT1G33OJle3BQY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=AxWq4HDJ; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Q2gKzhvG"
-Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-605def5b7f8so3701940137.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 13:02:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="AxWq4HDJ"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a7a9b8ed69so46104365ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 13:28:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776198490; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QtmBhuK+/xLhQcRJQxzCJGfI7xOg4N6cO65+xNC8QveZiweEpAza5iLL5R/QDhOf+F
+         WOcq+cBQW5RNtmJUfTR1V2ERLiqU2VlXTfdG+TjylWKB2lA6QonmmwCFiKOsLwyBOuFz
+         /cwoTZxiagsPmbAZlBQd0RWC/d2JEVbBQFySj7QD4MZUu/09hzvk9ekT7Owm0ePiMeaN
+         XjLZHsE7rvITFS/ZaMmgZT0ok4erdhRSFcKWWPuEkNzajdkMEmfFFx9dLR70rFc0bv3b
+         b4IhM2zx5/bbeqHKc6/CVuNc5AwtbVwOM5gM9Xg3FmTu0mb7Bj682r/I+7gwP+3yAl25
+         wgrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4+V4wukdzxX/SIEN/WV7x1rli0RNhXIqb9fJKBWExgk=;
+        fh=8TjdHuRfOzIi3Y9PrsJYLC4pb89h1s4HH29fna4IuSo=;
+        b=GPeNl45fZU1HXUAyH9LmIHTfulYlE0kiAWXmPsEPEHsyXJQK4qTIlu6oFsPLuWcD3c
+         /mQ5Ekn7xAIaXjtW9itDOoQpir8NogLB2Cd36aURvgiCJbUNrvwZXSzvCPUCpc3WUIYe
+         5mhAppqXtu6z98Gu7NgYjmnQrVhLPjhTLqU3BeDOzTh4IFZZqigqZxs8HTFy/Uriu8/7
+         8Atb4fhXHKw3wid4hkcKw+LDRLpk9hMWgyK9m50K+KJlb+mWjy5MIzWWL8xpg91CsFpN
+         HET8ZIJVggvUBGitTSU/zPx7UnDz+KmWHYls28OL/NrStAM7c8jAva/T1QeJv384GGIu
+         Y6pg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1776196967; x=1776801767; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9TjUnXkwrio/0RMOWx8bIqnkUDx9TXK82cA2FHqDPhg=;
-        b=Q2gKzhvG5B3LFMabTHeYlN88iVIUqKuirWTYg0Oagbwhe6CUgsws8UZWdfWRIxWZuj
-         /GZIcLMVWFrt6KRJEjEBeyzzomDtyU0ZDBadrp6jShtdhkBeLtOfr5mJ8oPz8+GYdCao
-         NwnDN6gUJBPy6jf/gsL9tEcU9VU2pcZ6AjvxYZtK8CmXVnKv0fChYoEJ4Yi4iqH28JI4
-         N+mTw7CuyLg/4DDKp5DWmXD++tJV9y2anPvaRLlqmNXrwPHoXwGneC2xXBVXwQ8FKtlY
-         BL4bwHyGqr+SGhPVQC3oEJMBtBbf4S+e5JbkkAGK+pMiiSI484Ate1EvrO9qBEYHXWzQ
-         Xqzw==
+        d=paul-moore.com; s=google; t=1776198490; x=1776803290; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4+V4wukdzxX/SIEN/WV7x1rli0RNhXIqb9fJKBWExgk=;
+        b=AxWq4HDJRMYWRZNqKN510OSiQh3m40hpYrIwI+wHHNJ3C7YXKCZw8JSd3V0SOAZUyw
+         eJpEL0t+vRKgNARUCvdwmYLx7r6jhVIbeR0fnZgsfNcZ4HBFJ61yF7nE7xnvzipQD1TU
+         AVO1hPICbmRqoxcSi1gfmCLa+nE9gk+AL58pH4AGtU6FmA5cSXoBA+RVhZWoueDa3VkH
+         ih95DyyKUXB3VIL1bXcz4EI4VLowZ9E+bqM7Blvi+knHFapkeW0BEAgsEgIeVHFKgXBt
+         cwy7vUqbOKYZIA+LCmHRO6nBs3PIl0R+hEuqqFhc4fRrYmhTkdEXpywZ1zx3YCFJ+cHf
+         K+dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776196967; x=1776801767;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9TjUnXkwrio/0RMOWx8bIqnkUDx9TXK82cA2FHqDPhg=;
-        b=ZpYdoCvnOCl1rurfa6/wY0eEF74zZYDKd/fgvmv3kK+nDYgAhsXVwvgDdIp5babokx
-         oWaPckcMeDQKsNDw1aQ132Te/SrFECxypVHQBKzyFk9R9UUeQVdTygbPSFy9a4G7IaWc
-         RwRkOlstRswIvB4Jcsdfk4ohHSaj/lTMsL0UPA2ukOUhY1hP/yNvXrrigFSr7F8Pl5GC
-         IBJEHBcp7DOWFBDB1mVODgt1l24Xs2ibJFu2Z6BO09MC1Ri3pN064eFXwHqmxdA3m4BF
-         XDx3e29h0JPmLki1VOV0tdmzX+xKcrpxC8zyDtyvhMF6bXlw4wj/EkNRcROUknoXe1LU
-         zqkQ==
-X-Gm-Message-State: AOJu0YyaYrOZJQpNoReNwkiu334d9fvXCKyyePgHpDHlUhZvVdcC7OXx
-	biVU2sbjLJD1yJhbDK7u6Xr51XrVpf9FtObCiaY++0okfAd+mlw0jFVhFaFmy3Had+qJ/cf6K1C
-	SaIwO
-X-Gm-Gg: AeBDiesYLLcT+AVFUEBhsgXQ3vk4elS4eSSRMuLlr1gIJYNEShCrXVrp+D+KHmblOST
-	YtGq7MYiN+GRi+1WUhIyTut/BPcGfFKg2ofmjT3yXEz255IN2iwTE/TE6zN8t/UsKPn8Hwseqpi
-	RdROyu9UwtpwbdGCxRBMTZFj4xIWU0OB+gdfr/r96/Si1r/XJZ/OcijKZYj5P/mAuv89yHpTfo6
-	zLIhgHmW9VxEnTWuxfre/w1OfFIzzIDjzMQPR2HF/gwACIUI/FdNfWH9NYiaWul/pInMt92dsJ9
-	UO5N3AwtKPx3IC5oimi6+hPvf9nN0RdhKRvoQiJLN4BPIzYQOMdQ511lZ5f7ZlG1aCrCv4RgcP/
-	DvdJGojo1nHyTbNTlrBWwXiuRQ0iG63WIS3N6MkpFLn8k8tKS5wh8CQd3oZmkIGUAExA86VK+UI
-	cYP551AJu9iheMtYZzdS92J5Wyf/wEpLFApy5QyzZdgJJ7SPTEQMzLpWZBFLms2KBv47O7fOmLR
-	oyf
-X-Received: by 2002:a05:6102:2c16:b0:607:95f4:53b5 with SMTP id ada2fe7eead31-609fecbd99dmr8981083137.4.1776196967110;
-        Tue, 14 Apr 2026 13:02:47 -0700 (PDT)
-Received: from plex.localdomain ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ac84a180a2sm132213656d6.15.2026.04.14.13.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2026 13:02:46 -0700 (PDT)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: linux-kselftest@vger.kernel.org,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	akpm@linux-foundation.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	pasha.tatashin@soleen.com,
-	dmatlack@google.com,
-	kexec@lists.infradead.org,
-	pratyush@kernel.org,
-	skhawaja@google.com,
-	graf@amazon.com
-Subject: [PATCH 5/5] selftests/liveupdate: Add stress-files kexec test
-Date: Tue, 14 Apr 2026 20:02:37 +0000
-Message-ID: <20260414200237.444170-6-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260414200237.444170-1-pasha.tatashin@soleen.com>
-References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
+        d=1e100.net; s=20251104; t=1776198490; x=1776803290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4+V4wukdzxX/SIEN/WV7x1rli0RNhXIqb9fJKBWExgk=;
+        b=F/9FyTNDA2TynEwSR8ALDeOxPboFMGtUSJ+qJx5wi2gAxSxiU+YWVk8HBb8MEqtv5u
+         pyGNHYaqI7ZS1FmzQqkrVRH618Lu54PuiNYz2oFuijjTnBv4hgOOJW6rnav0eWiQfm+4
+         K+1+zQXeiygpT5kPKypqyD6jolz7Z8P8zOiMPwHoUuYvk51VR5Io03MNQc+warjEmJ/s
+         L9IjsUuU0IBJ0T/5ugcAf6AdOWUFKrAjl42rS/bCEjgpPcNvgmvLw+KX56ZqnF78rAIL
+         EpdW3lPqZnkVJYbVhqqcBvWwTReNs5ooglBqsoI10XeJ8+XObuhvSZluwQN56TwDZ4k1
+         jrWQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+YmosdEJoU88oMzScx8nkGRw0cxNwF87ar2xJZSZJoQGzDld8uYIrl7QfkvHu5HO5H/Rhx5ToMseRy5xV9LC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw53rmMpLDIV+M4Y19IvPg067HYfLiDZn/DG9V7tjF1viQa9QuC
+	hw0iNk+wjIVtKPcvG611XqEZnU7y13muis983m/CCj+lLMtktY6C2A5RGMpXq4r+Ez3CnDPWuXC
+	cg8uGKfNtxxIB1LQNRcSh0Rsnrnd2vssXoi65SS5j
+X-Gm-Gg: AeBDiesKDdfCSUL4O4r321xSckB3zBgbbRZSqqpGick3gIjLpUYf57A633/XKELvShD
+	r3/77AYXGxkDNjqKAQtyQh5BaUXPlTFKscooNDFi7zz9uimLLCHvPd4gK2SMYvG9LoLOK02k+hT
+	pcMqlGI1ZPHud08LvZWIKWX6gqFcTGB7s+Irgno9rfgIRAhe40f8Rcau/mCN+RcHh7iOAzNvrpe
+	rUM58OcwymszX1bqk2HVcqeBcyvz1feLY4EgRJOWqE2czVI+y1i12/XjIKcwTveJ9AuCuHjoY3U
+	Va4EVrc=
+X-Received: by 2002:a17:902:9a8e:b0:2b0:ac1e:9720 with SMTP id
+ d9443c01a7336-2b2d5a459b2mr142509675ad.23.1776198489857; Tue, 14 Apr 2026
+ 13:28:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal> <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal> <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal> <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca> <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca>
+In-Reply-To: <20260413231920.GS3694781@ziepe.ca>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 14 Apr 2026 16:27:58 -0400
+X-Gm-Features: AQROBzDV1U7-Lr_78p5lvbSYJBsit-JnR3MD284PiQF66a4KQgj72Qdddd-aJXA
+Message-ID: <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Leon Romanovsky <leon@kernel.org>, Roberto Sassu <roberto.sassu@huaweicloud.com>, 
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Itay Avraham <itayavr@nvidia.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>, 
+	Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a new luo_stress_files kexec test that verifies preserving and
-retrieving 500 files across a kexec reboot.
+On Mon, Apr 13, 2026 at 7:19=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca> wrot=
+e:
+> On Mon, Apr 13, 2026 at 06:36:06PM -0400, Paul Moore wrote:
+> > On Mon, Apr 13, 2026 at 12:42=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca>=
+ wrote:
+> > > On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
+> > > > > We are not limited to LSM solution, the goal is to intercept comm=
+ands
+> > > > > which are submitted to the FW and "security" bucket sounded right=
+ to us.
+> > > >
+> > > > Yes, it does sound "security relevant", but without a well defined
+> > > > interface/format it is going to be difficult to write a generic LSM=
+ to
+> > > > have any level of granularity beyond a basic "load firmware"
+> > > > permission.
+> > >
+> > > I think to step back a bit, what this is trying to achieve is very
+> > > similar to the iptables fwmark/secmark scheme.
+> >
+> > Points for thinking outside the box a bit, but from what I've seen
+> > thus far, it differs from secmark in a few important areas.  The
+> > secmark concept relies on the admin to configure the network stack to
+> > apply secmark labels to network traffic as it flows through the
+> > system, the LSM then applies security policy to these packets based on
+> > their label.  The firmware LSM hooks, at least as I currently
+> > understand them, rely on the LSM hook callback to parse the firmware
+> > op/request and apply a security policy to the request.
+>
+> That was what was proposed because the idea was to combine the
+> parse/clasification/decision steps into one eBPF program, but I think
+> it can be split up too.
+>
+> > We've already talked about the first issue, parsing the request, and
+> > my suggestion was to make the LSM hook call from within the firmware
+> > (the firmware must have some way to call into the kernel/driver code,
+> > no?)
+>
+> No, that's not workable on so many levels. It is sort of anaologous to
+> asking the NIC to call the LSM to apply the secmark while sending the
+> packet.
 
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- tools/testing/selftests/liveupdate/Makefile   |  1 +
- .../selftests/liveupdate/luo_stress_files.c   | 98 +++++++++++++++++++
- 2 files changed, 99 insertions(+)
- create mode 100644 tools/testing/selftests/liveupdate/luo_stress_files.c
+From the LSM's perspective it really doesn't matter who calls the LSM
+hook as long as the caller can be trusted to handle the access control
+verdict properly.
 
-diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
-index ed7534468386..30689d22cb02 100644
---- a/tools/testing/selftests/liveupdate/Makefile
-+++ b/tools/testing/selftests/liveupdate/Makefile
-@@ -7,6 +7,7 @@ TEST_GEN_PROGS += liveupdate
- TEST_GEN_PROGS_EXTENDED += luo_kexec_simple
- TEST_GEN_PROGS_EXTENDED += luo_multi_session
- TEST_GEN_PROGS_EXTENDED += luo_stress_sessions
-+TEST_GEN_PROGS_EXTENDED += luo_stress_files
- 
- TEST_FILES += do_kexec.sh
- 
-diff --git a/tools/testing/selftests/liveupdate/luo_stress_files.c b/tools/testing/selftests/liveupdate/luo_stress_files.c
-new file mode 100644
-index 000000000000..6217122b92f4
---- /dev/null
-+++ b/tools/testing/selftests/liveupdate/luo_stress_files.c
-@@ -0,0 +1,98 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Pasha Tatashin <pasha.tatashin@soleen.com>
-+ *
-+ * Validate that LUO can handle a large number of files per session across
-+ * a kexec reboot.
-+ */
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include "luo_test_utils.h"
-+
-+#define NUM_FILES 500
-+#define STATE_SESSION_NAME "kexec_many_files_state"
-+#define STATE_MEMFD_TOKEN 9999
-+#define TEST_SESSION_NAME "many_files_session"
-+
-+/* Stage 1: Executed before the kexec reboot. */
-+static void run_stage_1(int luo_fd)
-+{
-+	int session_fd;
-+	int i;
-+
-+	ksft_print_msg("[STAGE 1] Increasing ulimit for open files...\n");
-+	luo_ensure_nofile_limit(NUM_FILES + 10);
-+
-+	ksft_print_msg("[STAGE 1] Creating state file for next stage (2)...\n");
-+	create_state_file(luo_fd, STATE_SESSION_NAME, STATE_MEMFD_TOKEN, 2);
-+
-+	ksft_print_msg("[STAGE 1] Creating test session '%s'...\n", TEST_SESSION_NAME);
-+	session_fd = luo_create_session(luo_fd, TEST_SESSION_NAME);
-+	if (session_fd < 0)
-+		fail_exit("luo_create_session");
-+
-+	ksft_print_msg("[STAGE 1] Preserving %d files...\n", NUM_FILES);
-+	for (i = 0; i < NUM_FILES; i++) {
-+		char data[64];
-+
-+		snprintf(data, sizeof(data), "file-data-%d", i);
-+		if (create_and_preserve_memfd(session_fd, i, data) < 0)
-+			fail_exit("create_and_preserve_memfd for index %d", i);
-+	}
-+
-+	ksft_print_msg("[STAGE 1] Successfully preserved %d files.\n", NUM_FILES);
-+
-+	close(luo_fd);
-+	daemonize_and_wait();
-+}
-+
-+/* Stage 2: Executed after the kexec reboot. */
-+static void run_stage_2(int luo_fd, int state_session_fd)
-+{
-+	int session_fd;
-+	int i, stage;
-+
-+	ksft_print_msg("[STAGE 2] Starting post-kexec verification...\n");
-+
-+	restore_and_read_stage(state_session_fd, STATE_MEMFD_TOKEN, &stage);
-+	if (stage != 2) {
-+		fail_exit("Expected stage 2, but state file contains %d",
-+			  stage);
-+	}
-+
-+	ksft_print_msg("[STAGE 2] Retrieving test session '%s'...\n", TEST_SESSION_NAME);
-+	session_fd = luo_retrieve_session(luo_fd, TEST_SESSION_NAME);
-+	if (session_fd < 0)
-+		fail_exit("luo_retrieve_session");
-+
-+	ksft_print_msg("[STAGE 2] Verifying %d files...\n", NUM_FILES);
-+	for (i = 0; i < NUM_FILES; i++) {
-+		char data[64];
-+
-+		snprintf(data, sizeof(data), "file-data-%d", i);
-+		if (restore_and_verify_memfd(session_fd, i, data) < 0)
-+			fail_exit("restore_and_verify_memfd for index %d", i);
-+	}
-+
-+	ksft_print_msg("[STAGE 2] Finishing test session...\n");
-+	if (luo_session_finish(session_fd) < 0)
-+		fail_exit("luo_session_finish for test session");
-+	close(session_fd);
-+
-+	ksft_print_msg("[STAGE 2] Finalizing state session...\n");
-+	if (luo_session_finish(state_session_fd) < 0)
-+		fail_exit("luo_session_finish for state session");
-+	close(state_session_fd);
-+
-+	ksft_print_msg("\n--- MANY-FILES KEXEC TEST PASSED (%d files) ---\n",
-+		       NUM_FILES);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	return luo_test(argc, argv, STATE_SESSION_NAME,
-+			run_stage_1, run_stage_2);
-+}
--- 
-2.43.0
+> The proper flow has the kernel evaluate the packet/command *before* it
+> delivers it to HW, not after.
 
+From what I can see that's an artificial constraint since we've
+already chosen to trust the device.  After all, if we don't trust the
+device, why are we talking to it?
+
+> > so that only the firmware would need to parse the request.  If we
+> > wanted to adopt a secmark-esque approach, one could develop a second
+> > parsing mechanism that would be responsible for assigning a LSM label
+> > to the request, and then pass the firmware request to the LSM, but I
+> > do worry a bit about the added complexity associated with keeping the
+> > parser sync'd with the driver/fw.
+>
+> In practice it would be like iptables, the parser would be entirely
+> programmed by userspace and there is nothing to keep in sync.
+
+You've mentioned a few times now that the firmware/request will vary
+across not only devices, but firmware revisions too, this implies
+there will need to be some effort to keep whatever parser you develop
+(BPF, userspace config, etc.) in sync with the parser built into the
+firmware.  Or am I misunderstanding something?
+
+> > However, even if we solve the parsing problem, I worry we have
+> > another, closely related issue, of having to categorize all of the
+> > past, present, and future firmware requests into a set of LSM specific
+> > actions.
+>
+> Why? secmark doesn't have this issue? The classifer would return the
+> same kind of information as secmark, some user provided label that is
+> delivered to the LSM policy side.
+
+I think there is a misunderstanding in either how secmark works or how
+the LSMs use secmark labels when enforcing their security policy.
+
+The secmark label is set on a packet to represent the network
+properties of a packet.  While the rules governing how a packet's
+secmark is set and the semantic meaning of that secmark label is going
+to be LSM and solution specific, secmark labels represent the
+properties of a packet and not the operation, e.g.
+send/receive/forward/etc., being requested at a given access control
+point.  The access control point itself represents the requested
+operation.  This is possible because the number of networking
+operations on a given packet is well defined and fairly limited; at a
+high level the packet is either being sent from the node, received by
+the node, or is passing through the node.
+
+As I understand the firmware controls being proposed here, encoded
+within the firmware request blob is the operation being requested.
+While we've discussed possible solutions on how to parse the request
+blob to determine the operation, we haven't really discussed how to
+represent the requested operation to the LSMs.  I'm assuming there
+isn't a well defined set of operations, and like the request format
+itself, the set of valid operations will vary from device and firmware
+revision.  I hope you can understand both how this differs from
+secmark and that it is a challenge that really hasn't been addressed
+in the proposals we've discussed.
+
+At a very high level the access control decision for firmware/device
+requests depends on whether the LSM wants to allow process A to do B
+to device C.  The identity/credentials associated with process A are
+easy to understand, we have plenty of examples both inside and outside
+of the LSM on how to do that.  The device identity/attributes
+associated with device C can be a bit trickier, but once again we have
+plenty of examples to draw from, and we can even fall back to a
+generic "kernel" id/attribute if the LSM chooses not to distinguish
+entities below the userspace/kernel boundary.  I think the hardest
+issue with the firmware request hooks is going to be determining what
+operation is being requested, the "B", portion of access request
+tuple.  If we can create a well defined set of operations and leave it
+to the parser to characterize the operation we've potentially got a
+solution, but if the operation is truly going to be arbitrary then we
+have a real problem.  How do you craft a meaningful access control
+policy when you don't understand what is being requested?
+
+--=20
+paul-moore.com
