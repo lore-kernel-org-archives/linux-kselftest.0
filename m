@@ -1,109 +1,146 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAF33D75CF;
-	Tue, 14 Apr 2026 11:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828E03D75CF;
+	Tue, 14 Apr 2026 11:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776164840; cv=none; b=Sr1JDa8rNo8/aiQ5qbN/PnEGnM4i3g3K9lEg9sO1i7lT9+tZVNlKkXI+hCuwzp4Ht4wOcLMjBwYDQuBqjCtI4M190dLxaVwAIco5cBtQOivNUXGHcnUu2uJznimlz5YiyWSnIaWVTMc+Lp03S76WpKlK0fR4W2e+KwEIF22aFtc=
+	t=1776164856; cv=none; b=MwvppIiJMPSFirxGouV33+0ta2ZNqr/1iQMDqwRVsJAxGMVzAsYluFmP5taU/W+6NYxvtTxlV3NejyRyDgeyksnhC6KkUIk0kHZ9cCUQqOtbja8ZwoCUhMpFoJoaS/fVovyOlrmAJpbsa6kIJOMemzviBM60Xb+u9HpY4AtEeoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776164840; c=relaxed/simple;
-	bh=Y8eeT+7o2AEJ8S44YbJfEHq4tO6opDMaCRGbOasJ/nU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XbH5/+MO0FkZTjvjtwV4WtFVJWcyAEwM34Mp4+zsrbdVSQz7LhcBzqwfUkA0TiPZ4vws095MwWHSmyZIvtc0QUAq0Ju8QN1fTaUvG3OMy/GhGUHfRMWuHKcv+FhSIZ8k7IqOmoQX4CDwG5C1bOMyEgovJ1etDsq/xM6hlv6tQao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VW8Jbnkt; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1776164856; c=relaxed/simple;
+	bh=h6mc8jie8MzEoUPQ7I5cFnzZRgkEfbbKtBuB4QW0hdo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gBof5dtvIQ9pB1H/MrOXGYf1jH7FAUQQoQ+Yh/VXL10ijyjbi/QARlcgNC7ND3WDCw+/o1JZMTsEl+k6CxoRU4cSRQLYO88gLCDtyI2cqFJFLvO17K/LSReqywD8yf/PKF912c2EYdykNJFtKdI0mMJcs5s7fMm4FMAejREe+BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ATMBctj0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VW8Jbnkt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Sg
-	2tnVpaCRON/cP+7gSdWa+iWUUmwfSiFQT93SEuIFU=; b=VW8JbnktrCN31hXN/m
-	ZRxuZMCswnlDTlAW8P2XreK8Dw/m569blPObWwb51TYYrfmmSxRl1yIQuM2bPZ3a
-	qqDK4QWbFCDvGELskajRHbhSeKOh9AYb6rzAfbJawxfA1WU83m7WFJlqVPhID6It
-	8OB3JNh436NC2mM/ZpMDjAbUo=
-Received: from ubuntu24-z.. (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wBnrLh2H95pqLbvEg--.46126S4;
-	Tue, 14 Apr 2026 19:05:32 +0800 (CST)
-From: ranxiaokai627@163.com
-To: hannes@cmpxchg.org,
-	mhocko@kernel.org,
-	roman.gushchin@linux.dev,
-	shakeel.butt@linux.dev,
-	muchun.song@linux.dev,
-	tj@kernel.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	kuba@kernel.org,
-	hughd@google.com,
-	akpm@linux-foundation.org
-Cc: cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ran.xiaokai@zte.com.cn,
-	ranxiaokai627@163.com
-Subject: [PATCH 2/2] kselftests: cgroup: account for slab memory in test_percpu_basic
-Date: Tue, 14 Apr 2026 11:05:24 +0000
-Message-ID: <20260414110524.2414-3-ranxiaokai627@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260414110524.2414-1-ranxiaokai627@163.com>
-References: <20260414110524.2414-1-ranxiaokai627@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ATMBctj0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75810C19425;
+	Tue, 14 Apr 2026 11:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776164856;
+	bh=h6mc8jie8MzEoUPQ7I5cFnzZRgkEfbbKtBuB4QW0hdo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ATMBctj0z8nZzAlbXRzoxXf7mJ5bwP9C0BW2ZMnXcMCbybkluttXeTKiqejmyihIV
+	 VVRH3SfyueBNDK5NXhwU+fJKip4wxKsbqWHJrCKoi25JO1dg8/Cay6iiQmFokpPh3L
+	 T7wRiyoozKMcD5mTvV5q92GrJrQUVxmlkT/EaLJT62UDGHhG5wngwYDyHeoSIntN+V
+	 CEhcGCA0LEgjQFyIORw5/fekzZnL+LyLVPGCD+mm/dC1p4xPzeAhW+bj1Dq7MgPK0z
+	 u+LEmIZb6HnEfVdMeMTyUBQ8HrTYmeyOnZTdKLojLeBscrNlDrQlpuiF9wSCAKrpbZ
+	 ixqVEyj5ZKsVQ==
+Message-ID: <342ea75b-4b96-4f80-9e48-9c9a019081ea@kernel.org>
+Date: Tue, 14 Apr 2026 13:07:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBnrLh2H95pqLbvEg--.46126S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw4fGr17GF45WrWfCF18Grg_yoW8WF1xpF
-	ykG34qya10gFnxCa10kr4kXrWrW3s5Za18Gw1DAw1xAwsxtr9rtr1SyFWUJr97CFZ2vr1Y
-	v34ag3sxu3WUA3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR8OzxUUUUU=
-X-CM-SenderInfo: xudq5x5drntxqwsxqiywtou0bp/xtbCxhz4RWneH3yBlgAA3k
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7.2 v2 12/12] selftests/mm: remove READ_ONLY_THP_FOR_FS
+ from comments in guard-regions
+To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>
+Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260413192030.3275825-1-ziy@nvidia.com>
+ <20260413192030.3275825-13-ziy@nvidia.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260413192030.3275825-13-ziy@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+On 4/13/26 21:20, Zi Yan wrote:
+> Any file system with large folio support and the supported orders include
+> PMD_ORDER can be used.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  tools/testing/selftests/mm/guard-regions.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> index 48e8b1539be3..13e77e48b6ef 100644
+> --- a/tools/testing/selftests/mm/guard-regions.c
+> +++ b/tools/testing/selftests/mm/guard-regions.c
+> @@ -2205,7 +2205,7 @@ TEST_F(guard_regions, collapse)
+>  
+>  	/*
+>  	 * We must close and re-open local-file backed as read-only for
+> -	 * CONFIG_READ_ONLY_THP_FOR_FS to work.
+> +	 * MADV_COLLAPSE to work.
+>  	 */
+>  	if (variant->backing == LOCAL_FILE_BACKED) {
+>  		ASSERT_EQ(close(self->fd), 0);
+> @@ -2237,9 +2237,10 @@ TEST_F(guard_regions, collapse)
+>  	/*
+>  	 * Now collapse the entire region. This should fail in all cases.
+>  	 *
+> -	 * The madvise() call will also fail if CONFIG_READ_ONLY_THP_FOR_FS is
+> -	 * not set for the local file case, but we can't differentiate whether
+> -	 * this occurred or if the collapse was rightly rejected.
+> +	 * The madvise() call will also fail if the file system does not support
+> +	 * large folio or the supported orders do not include PMD_ORDER for the
 
-The test verifies memory.current approximates memory.stat.percpu within
-a tolerance. However, memory.current includes slab overhead. On systems
-with few CPUs(<= 4), slab consumption exceeds percpu usage. While percpu
-usage grows linearly and dominates as CPU count increases, the
-significant slab portion on such few CPU systems causes the difference
-to exceed MAX_VMSTAT_ERROR, leading to false test failures.
+"folios"
 
-Fix this by including slab memory in the calculation.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
-Signed-off-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
----
- tools/testing/selftests/cgroup/test_kmem.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 15b8bb424cb5..263aedb0727a 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -360,7 +360,7 @@ static int test_percpu_basic(const char *root)
- {
- 	int ret = KSFT_FAIL;
- 	char *parent, *child;
--	long current, percpu;
-+	long current, percpu, slab;
- 	int i;
- 
- 	parent = cg_name(root, "percpu_basic_test");
-@@ -386,8 +386,9 @@ static int test_percpu_basic(const char *root)
- 
- 	current = cg_read_long(parent, "memory.current");
- 	percpu = cg_read_key_long(parent, "memory.stat", "percpu ");
-+	slab = cg_read_key_long(parent, "memory.stat", "slab ");
- 
--	if (current > 0 && percpu > 0 && labs(current - percpu) <
-+	if (current > 0 && percpu > 0 && labs(current - percpu - slab) <
- 	    MAX_VMSTAT_ERROR)
- 		ret = KSFT_PASS;
- 	else
 -- 
-2.25.1
+Cheers,
 
-
+David
