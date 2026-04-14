@@ -1,57 +1,57 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D923A4502;
-	Tue, 14 Apr 2026 08:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5BD3A1A5C;
+	Tue, 14 Apr 2026 08:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776154991; cv=none; b=pmm29V1j6sIOW3kfCZSHRpBO5RpTA53CqfAhLDJ4TB5B4mwtZb/8SoQf4Kts8FfcQ894DQ4pSH+k/XJn+tib8HQlPloy/b8nrEha2jUJ6/zQvwHx6eJVcW9TtSB5vFiLIXbbLOWgXe8j+vMS8TPW6Wi5uexfU48JtPkz+zgfNIk=
+	t=1776154997; cv=none; b=tLpcNSCKkbYwh4o8pzTlFwMyhAn/xxqFVPkiBZH0HZnPC8OAoV8Zlm+xyS9PZRlzDxzQzbfBFWLajFChDRKfaD/d2GjVL3NvxNQX+4HTG7KU4JKQgez81V6U4lCvlFsGVZvN0NjGvnP5lhA4ORxuHBmlaoI/q45rIIsXtV5FvTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776154991; c=relaxed/simple;
-	bh=uUi/J1we+H0piAtaE+3Z6iSoRDwltKZFbNyM9YADviM=;
+	s=arc-20240116; t=1776154997; c=relaxed/simple;
+	bh=YO4LyiPBKnY9BSmqNqtBuDbPcq4/z2+V7bi55JvYTe0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WH6+hiPWm5ENIs09Hhh+lSpIW/rjxKvECZ6qBYUDj0MZmgvH8Pl8Q30Y9InC0UFXlNS0k6kYGqaBHp6FIowi1k75EdOfIV6bkMcKSe1+r731yP9DFthSezqVhYCxFxT5QgicTnFcyuihf63xN/U6iwjh9MQzen8tA2CbcnY4rpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nkWBfs3w; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=a6gMGYVi4koxncxh4pHt3q08OHR4JidVB52qlnAq9elI4JHshbk9N6BK7+kCmIs+EMA/T58yJLUsYMAxncd/aMg0YtLXNkS2nJqTqRk6MPjbqv1DzHsmVXImXW+3o0M2GdvCi0YWbR1oTyKiPyojpl+pJqeoCqjKR5xVnpWKY/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DNzZ5UGp; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nkWBfs3w"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLIwMd2131218;
-	Tue, 14 Apr 2026 08:22:52 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DNzZ5UGp"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLID1i1842724;
+	Tue, 14 Apr 2026 08:22:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=KF0duKJ7kidshxIeQ
-	Zb5EcnjWw7TF8XQDpz9/tTREjA=; b=nkWBfs3wMfP9p/r/uKp5TmtLAVh3GKhw6
-	8MlTa62g0LQrkqtQB6mNCJhwmMrlShfxN3e51bMyBjOGMsUWlC/z4XFIXnD6zrWs
-	D7kvIGq2R04ZTtIl5B1hQ2be0aAI2s8NhbeSqxcl1fr2Dmo2YnnUTuodLz0yLgHg
-	cDT/36oQEmZwgvannka2VazIG0kGJFusbFEvmiNSfkhJ/nSiTSIUi1373ExrVygS
-	klRh9YH9FmhssviXKajKVsWcOzTGQPuLJl92b57X2QwjQt1ZEE+oevp6T3Pc2xzf
-	uJJvlIPhYmdMla3ZYNDdP9BAaID8EdW5qxWjMhzUvULStb4lkUh8Q==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89n9smw-1
+	:mime-version:references:subject:to; s=pp1; bh=Phedwlb38O3RD9+mh
+	V2vbvGYTlYASXZH6PBWCPj8Yfw=; b=DNzZ5UGpwlnEvK7cQhWyM4AWihwb+RMf7
+	MhFrbiLCPAQPtgkcpcPgnNSCoYXzQfKLPYWE9nMLzvev57sPuphikr7Vci8K2s0F
+	c8huxwTo/wwjQ38deo1IS316rBUxttDAq6dUl+uwxSbwfeiVEObndkWcy4Au+4sm
+	hMHGeedFnKox7eC5djvH0mQXJEH1XtQUG5+6kARvQ8Md9Mz9DPgJ9ciSMJ8x4VLM
+	rZNxMW8sYi3TdkZB8zZWk2obQ3k/aSsTE4Lr7BF5Yhe+8z6tiVSDQZgsuvzNbysQ
+	cdmMiSlPEHN7eIIHvbj4cSuuQy/JoFO2zTdo3ViZRrdeAj+fCWczw==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89mhs7g-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 08:22:51 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63E5BYA8004188;
-	Tue, 14 Apr 2026 08:22:50 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg24k8hr4-1
+	Tue, 14 Apr 2026 08:22:55 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63E605Fa025862;
+	Tue, 14 Apr 2026 08:22:54 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dg2ujgebj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 08:22:50 +0000
+	Tue, 14 Apr 2026 08:22:54 +0000
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63E8Mk4928836270
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63E8MoIl60031470
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Apr 2026 08:22:46 GMT
+	Tue, 14 Apr 2026 08:22:51 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7012C20040;
-	Tue, 14 Apr 2026 08:22:46 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id DB74A2004E;
+	Tue, 14 Apr 2026 08:22:50 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 79E3520043;
-	Tue, 14 Apr 2026 08:22:42 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 018C120040;
+	Tue, 14 Apr 2026 08:22:47 +0000 (GMT)
 Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.ibm.com.com (unknown [9.39.26.223])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 Apr 2026 08:22:42 +0000 (GMT)
+	Tue, 14 Apr 2026 08:22:46 +0000 (GMT)
 From: Sayali Patil <sayalip@linux.ibm.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -64,9 +64,9 @@ Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
         linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
         Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
         Sayali Patil <sayalip@linux.ibm.com>
-Subject: [PATCH v5 06/14] selftests/mm: size tmpfs according to PMD page size in split_huge_page_test
-Date: Tue, 14 Apr 2026 13:52:00 +0530
-Message-ID: <ac04b3ee7d733798b4d79c840f4ce4e94118680c.1776150071.git.sayalip@linux.ibm.com>
+Subject: [PATCH v5 07/14] selftests/mm: free dynamically allocated PMD-sized buffers in split_huge_page_test
+Date: Tue, 14 Apr 2026 13:52:01 +0530
+Message-ID: <a61c264c824d140a948db64b2e1036bc4229d163.1776150071.git.sayalip@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1776150071.git.sayalip@linux.ibm.com>
 References: <cover.1776150071.git.sayalip@linux.ibm.com>
@@ -79,124 +79,114 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: sdLlBxLRWW2dQEnIHW_peSXjD8a3crlA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDA3NyBTYWx0ZWRfX2DLbFH1MWf55
- uykUb+YnbD1eCfjAiGm8I8gIgfBbC+8m7lMnIme1JuO07SgmzrqsllBhnfwmc0tq9JYtXO8XP+E
- fYH3PBvHJyoI5sHUdX1p1WBchYc08w0CLucKaXHTrlHgR9Y5zRUSct4+RC1P8ZVn4BBSFg6diN6
- nvC/zCAf5b+guEaTf0iQkCutNqpTh1toAxwYA+8rbdciAJbhXb9++8Ln1Y0E1Ivt8vxwsiErgT1
- ftabRL3Xnqae3tW0gaa4RRkZ5NtpJ5a5hABIBXrZ2g5S7dQc7BUnG1DrgoT17Ebfce10MutaqjP
- 6N0oH40Ko+PzxYkWiXzssCGC3hZPuMcTsaH84dVOI60G3eE76rWf9bZQOz8PaoAOSRsiqNPS82V
- iHo/HC8oUxR51Gg0V3sUCS2zxppPV6KiX/plefYG8hsz8Merz1pCXk8FAj7ZKLaSUXdcxX/T8On
- mkotUhMSAZd9FppbhwA==
-X-Proofpoint-ORIG-GUID: dC3DXqNFqgJNAEehbZaZ6BSS4YwKpAhw
-X-Authority-Analysis: v=2.4 cv=FY4HAp+6 c=1 sm=1 tr=0 ts=69ddf95c cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDA3NyBTYWx0ZWRfX0crGEdu5NWbh
+ RJa13p2vWtI+NcjxgmPHkfcFx7sfji/vXONeoeuRwC9aW4t3cQ/9gt1csFgHgGEFdfNZvi/Zakc
+ 0e9VrEGhgNAP0F5b4v6QYvu0ffgxITJ4M3KRnEt0NePrQd25YlAYBlPMPde7nloy1K1A+SMfVaT
+ Dbr+fucliK79x2HyznLm56qcCBiY9Ai6lxFkvwPnBpaijPlu7qee2I4cleqMRfJPTtWg7kQXWzN
+ X6uPD2HUx4o7NhAxrUqqN1HknNqhQy4Ld5rBdXOYbzI+BCN2IrE8/MD2J2ieSiUWiHiHks3Rp1v
+ adki0XiyRW1O8x3Z+N2fN83RuUKL0K0ahX0878P2O37BzXPN9YLefC+srS+EMNPKPwpvowfvj4a
+ s6cu8+XhnjOJK3UhnxGjVg7nMHvY/VRbBlPEjbU2cUmYML7XBtK/P0nxqg/zTkn9nJ35G+ujMC5
+ YronDHRsnTPHX66bYkA==
+X-Authority-Analysis: v=2.4 cv=eJ4jSnp1 c=1 sm=1 tr=0 ts=69ddf960 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
  a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=iQ6ETzBq9ecOQQE5vZCe:22 a=Ikd4Dj_1AAAA:8 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=2DqBuDyFdJ_AORcY0zkA:9
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=Ikd4Dj_1AAAA:8 a=VnNF1IyMAAAA:8
+ a=9VAv6nXQuNVwvrTyzFEA:9
+X-Proofpoint-GUID: uLLRrIhLVCvz_qBdsS8EjkG5nGnn5xa_
+X-Proofpoint-ORIG-GUID: C9KpqaKSN0SMC5vCZuFxHlQht529vbW5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-14_02,2026-04-13_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 bulkscore=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 malwarescore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604140077
+ malwarescore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ clxscore=1015 bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604070000
+ definitions=main-2604140077
 
-The split_file_backed_thp() test mounts a tmpfs with a fixed size of
-"4m". This works on systems with smaller PMD page sizes,
-but fails on configurations where the PMD huge page size is
-larger (e.g. 16MB).
+Dynamically allocated buffers of PMD size for file-backed
+THP operations (file_buf1 and file_buf2) were not freed on
+the success path and some failure paths. Since the
+function is called repeatedly in a loop for each split order,
+this can cause significant memory leaks.
 
-On such systems, the fixed 4MB tmpfs is insufficient to allocate even
-a single PMD-sized THP, causing the test to fail.
+On architectures with large PMD sizes, repeated leaks
+could exhaust system memory and trigger the OOM killer
+during test execution.
 
-Fix this by sizing the tmpfs dynamically based on the runtime
-pmd_pagesize, allocating space for two PMD-sized pages.
+Ensure all allocated buffers are freed to maintain
+stable repeated test runs.
 
-Before patch:
-  running ./split_huge_page_test /tmp/xfs_dir_YTrI5E
-  --------------------------------------------------
-  TAP version 13
-  1..55
-  ok 1 Split zero filled huge pages successful
-  ok 2 Split huge pages to order 0 successful
-  ok 3 Split huge pages to order 2 successful
-  ok 4 Split huge pages to order 3 successful
-  ok 5 Split huge pages to order 4 successful
-  ok 6 Split huge pages to order 5 successful
-  ok 7 Split huge pages to order 6 successful
-  ok 8 Split huge pages to order 7 successful
-  ok 9 Split PTE-mapped huge pages successful
-   Please enable pr_debug in split_huge_pages_in_file() for more info.
-   Failed to write data to testing file: Success (0)
-  Bail out! Error occurred
-   Planned tests != run tests (55 != 9)
-   Totals: pass:9 fail:0 xfail:0 xpass:0 skip:0 error:0
- [FAIL]
-
-After patch:
-  running ./split_huge_page_test /tmp/xfs_dir_bMvj6o
-  --------------------------------------------------
-  TAP version 13
-  1..55
-  ok 1 Split zero filled huge pages successful
-  ok 2 Split huge pages to order 0 successful
-  ok 3 Split huge pages to order 2 successful
-  ok 4 Split huge pages to order 3 successful
-  ok 5 Split huge pages to order 4 successful
-  ok 6 Split huge pages to order 5 successful
-  ok 7 Split huge pages to order 6 successful
-  ok 8 Split huge pages to order 7 successful
-  ok 9 Split PTE-mapped huge pages successful
-   Please enable pr_debug in split_huge_pages_in_file() for more info.
-   Please check dmesg for more information
-  ok 10 File-backed THP split to order 0 test done
-   Please enable pr_debug in split_huge_pages_in_file() for more info.
-   Please check dmesg for more information
-  ok 11 File-backed THP split to order 1 test done
-   Please enable pr_debug in split_huge_pages_in_file() for more info.
-   Please check dmesg for more information
-  ok 12 File-backed THP split to order 2 test done
-...
-  ok 55 Split PMD-mapped pagecache folio to order 7 at
-    in-folio offset 128 passed
-   Totals: pass:55 fail:0 xfail:0 xpass:0 skip:0 error:0
-   [PASS]
-ok 1 split_huge_page_test /tmp/xfs_dir_bMvj6o
-
-Fixes: fbe37501b252 ("mm: huge_memory: debugfs for file-backed THP split")
+Fixes: 035a112e5fd5 ("selftests/mm: make file-backed THP split work by writing PMD size data")
 Reviewed-by: Zi Yan <ziy@nvidia.com>
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 ---
- tools/testing/selftests/mm/split_huge_page_test.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../selftests/mm/split_huge_page_test.c       | 22 ++++++++++++++-----
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index e0167111bdd1..57e8a1c9647a 100644
+index 57e8a1c9647a..98319cfaf9a8 100644
 --- a/tools/testing/selftests/mm/split_huge_page_test.c
 +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -484,6 +484,8 @@ static void split_file_backed_thp(int order)
- 	char tmpfs_template[] = "/tmp/thp_split_XXXXXX";
- 	const char *tmpfs_loc = mkdtemp(tmpfs_template);
- 	char testfile[INPUT_MAX];
-+	unsigned long size = 2 * pmd_pagesize;
-+	char opts[64];
+@@ -487,12 +487,15 @@ static void split_file_backed_thp(int order)
+ 	unsigned long size = 2 * pmd_pagesize;
+ 	char opts[64];
  	ssize_t num_written, num_read;
- 	char *file_buf1, *file_buf2;
+-	char *file_buf1, *file_buf2;
++	char *file_buf1 = NULL, *file_buf2 = NULL;
  	uint64_t pgoff_start = 0, pgoff_end = 1024;
-@@ -503,7 +505,8 @@ static void split_file_backed_thp(int order)
- 		file_buf1[i] = (char)i;
- 	memset(file_buf2, 0, pmd_pagesize);
+ 	int i;
  
--	status = mount("tmpfs", tmpfs_loc, "tmpfs", 0, "huge=always,size=4m");
-+	snprintf(opts, sizeof(opts), "huge=always,size=%lu", size);
-+	status = mount("tmpfs", tmpfs_loc, "tmpfs", 0, opts);
+ 	ksft_print_msg("Please enable pr_debug in split_huge_pages_in_file() for more info.\n");
  
++	if (!tmpfs_loc)
++		ksft_exit_fail_msg("mkdtemp failed\n");
++
+ 	file_buf1 = (char *)malloc(pmd_pagesize);
+ 	file_buf2 = (char *)malloc(pmd_pagesize);
+ 
+@@ -508,8 +511,10 @@ static void split_file_backed_thp(int order)
+ 	snprintf(opts, sizeof(opts), "huge=always,size=%lu", size);
+ 	status = mount("tmpfs", tmpfs_loc, "tmpfs", 0, opts);
+ 
+-	if (status)
+-		ksft_exit_fail_msg("Unable to create a tmpfs for testing\n");
++	if (status) {
++		ksft_print_msg("Unable to create a tmpfs for testing\n");
++		goto out;
++	}
+ 
+ 	status = snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
+ 	if (status >= INPUT_MAX) {
+@@ -561,10 +566,13 @@ static void split_file_backed_thp(int order)
+ 
+ 	status = umount(tmpfs_loc);
+ 	if (status) {
+-		rmdir(tmpfs_loc);
+-		ksft_exit_fail_msg("Unable to umount %s\n", tmpfs_loc);
++		ksft_print_msg("Unable to umount %s\n", tmpfs_loc);
++		goto out;
+ 	}
+ 
++	free(file_buf1);
++	free(file_buf2);
++
+ 	status = rmdir(tmpfs_loc);
  	if (status)
- 		ksft_exit_fail_msg("Unable to create a tmpfs for testing\n");
+ 		ksft_exit_fail_msg("cannot remove tmp dir: %s\n", strerror(errno));
+@@ -577,8 +585,10 @@ static void split_file_backed_thp(int order)
+ 	close(fd);
+ cleanup:
+ 	umount(tmpfs_loc);
+-	rmdir(tmpfs_loc);
+ out:
++	free(file_buf1);
++	free(file_buf2);
++	rmdir(tmpfs_loc);
+ 	ksft_exit_fail_msg("Error occurred\n");
+ }
+ 
 -- 
 2.52.0
 
