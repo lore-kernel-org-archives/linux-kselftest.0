@@ -1,169 +1,134 @@
-Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B15288C3D
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 20:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D42345CAA;
+	Tue, 14 Apr 2026 20:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776198620; cv=none; b=cBX+V+KM7ymBBJFJC7haFWORE+7Os1AlvLw6aXOws9hUN+7tvACQGthAFgeSZteYSBKTFyxZrPcCWjb6k6vj20FZs8i3Qwh0udKFMrLjVZxy+pztPIvHq2W6AgyNmO9VmWifDasd3Q2N3vNYTipgQGRafrp2kaJNxSb/4dDszk0=
+	t=1776199474; cv=none; b=ayDAx+TeySqL4xuq7THVVppCSRTLWIxZ+P1SRrTDUjDc2JrCJfk6uF2r2jGfxA4OJ7sxA+SAqo44LJPrsNy3TZ/O94htwCZEXVr3JuSw3sAABVFUL6UZXE3j4NwcEqtr+4dPyQ/eH68E9X+3+smEX8PsU+2m5EsXme5hWaQR7qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776198620; c=relaxed/simple;
-	bh=6RA72LREKomIWQz20rOHPiKnlvWsEq+7Qsyttzg4eCo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HOoaY34DqtLb90G41gVbO1OEZGjTPXZnvgU2zKR+vQdGGa6ua02rUy43Eo4vE09isJe84Jvw5Jvys0WVCLvEyY7apT2Zt5NEFVuZoGvkQGWMHDFHHN3EavTs+JxiQgbQF37tM3PuBP6csILLou/3VDrZuu/syrRdDaoPoqPrzwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=lIMssqgV; arc=none smtp.client-ip=66.163.187.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	s=arc-20240116; t=1776199474; c=relaxed/simple;
+	bh=L8bWJr7FXUdlTXBxL69DdsJ20JowQnELYHkBWQ0j71o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
+	 References:In-Reply-To; b=ZmWG5uszWwbTG1lnUg84uX4Yyr6i3SRSfCm0DY7HTbbb+xRkzOXfHhK2lR32+a4IYrui09SFtr/Z53ZGkYJeRX3qn2kLM/ZB+SVPOkCaoiqbf/a26b8XML4fev8wzAAbAeL7C0UbtMdP74D8cLQTdDHIkAiL/Ubk25KgeAUU+eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tp0oFwTf; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="lIMssqgV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776198618; bh=Gi1Te5MKu3lSkf9CJ6/ejqyTfTqko6UyGFbJ/Gs5eMI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=lIMssqgVWW1q5uiIvDcuDvjII8hajoD+zPsaL2mUef5adztNh0Lc9e3n4u+w4k3PsmKXBCfxgH87lMmWd2dKRWckB4dqEtQyOSFbkboEBWv+6zW9eFMfgOJpkuA4fzMC8EY348vAU/k2Kuc9ctBmaoy2jotREz51zGBPBEPYhFpA1qimPkSXL2+vXc7JV/DwEF3xgOjE3DhCSrORtMotcOO6MdnuMqWXJGA5xF8daZ2SbDmuShP+QvrLXFTfgHDwVOkLtn9eSEHbCCjNXK4Q0uwVgYs0l6YDnA0RQ902XBDiLCzCML093LiTyHIk2Y6CH00CC7gA647TEOOXwIcjfg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776198618; bh=yOhOwXYETOE3g10EaibuGCBs0C03ywAzXq5qVy8Oufj=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=MlV2MSxbUJ+OfvbBnIkxZhwMupxdBAjtq0q+pJ2NkC2ltP8UPklZairkOv2Nijn2m9EYn/LxKBM/RuQOtchdEVp8j23XMMtJjVRSEMVlZoQTDe+eWbVWQSwtCcF43rOOt8USV+RIRVy+cUCe+GIZnmJ2iSELj0uRUg016hPAhdmfj1W4yXXnbeFxKLjP7clYlurnp38R2TvPA60RxGhSRJgvMaVZ/Yo7qSpBKwg65JiK9FXIOaHhamHs7KO6jLmRU31d62Dx/JQ3GrfoL3C8mS5ZjhVRyEtqOu3oe6Hhr2s69fE61Ulrtdz2xx9+vfy6rlyj5sF86WPGoDVGknp94Q==
-X-YMail-OSG: iay6JtoVM1k0h6r_zLyTJrXRIr3aSR906hOswAKIVf64Slcl8gPMUSKv3byLnYf
- s_EsKWeto798l7yb.Gn.PSrflgfdUwonQAURtzPVhvA7Fl0o3QQNLiZfItH6GEaWrn8xbPB48UxE
- JvLUl1qmj.VDD27okP15BemWdGIXJUx_0kotjlCkgd9QUlSa1.dBHkRGNkWuie2.otqvAmh3gcN3
- iw5i9OGoiI1H3l5jU3az.AncPfZd6qXvVRKkwxqGq65_420NzVqHL1atK5krVJbeWFuUTYq5wLMY
- fOdT.lUEhAYQY.tngCRGae4YpvaObv8j1_n7cH5oqZYs2P_.XmKMYZCCiCNC1dflQBrtt87RIXBF
- WEBja3aHB1W6cvjUlpkkFQYSm1Zn1JGRQd3rqFyJgNRtsVL6VXcQtpxe41n2GeDUWDZV22JMEL2O
- g7ycpx_ROUKuh0sAYHpoW.q_A2n.zLTVNNVKr3JI3MdMDHz8bcAAl6CA.JW1kPxAf50vEIDPHdoe
- Gl9iIzmwYR.otZORerLkLGQOsPp1E_Ite6bRgucNB2Tu3Uu2dA1zINBkuzHBWbSMhFaNjFywciyq
- TWmY6BwwakA6_kiavl8EM4am6J.Sz8XMmoOTm1Ffzr.u.AFEq5xuHDf80mPxcISQJyJY9Cyswj8Z
- .REdQHoRybUfb4CjtWMJJXNL2Lodizrsf.c7VJMeJj6k9V4ahOPOB6Sw2MDWjqdZdldRmPa.gP0q
- vdSE1wYIxWYT1Sgv3WhibVlDnUALAmf5DTa39F1CCvrnFTs0DoOQPLmP2wBphWlmMdmih49wJpJB
- 95fNiQyCNymtA4Cp.g2.guwEgsO9nH5nTH013tHljLl8t_JuS2wpXWv8dHYS5xRBjX7yKuvvKrAb
- EVmewx6N7Hxei87gZNDUNqC1qz9SfAEYktEJsfMQHL6yXww348XaDF3RtsqivJ4TdEI_Fq9CpHZW
- H9.Xx1Am9mjOsEdCq9LUPYMHx3uauPogOL5sUASOQcfPWRvwAlBmlqblgAQBpfukJ2dRW85xeHId
- 5.blW3UTxPYnNfS_9bxK3yPgKDc_jDV3AVyZhZoRamgrMaz._Kj3dBNFF6RsBmwL2IPkv5vmv0D2
- E3fYhZ8vdOLFfaMiAgtu7exqzWBXyxo6xDF2xiSf_h1lBgRzH0_6ZDNpeHkT7L2P.z_zx4E3EASJ
- zwJ9rMY2qgXmno3vN.tkLsfu08qWSYiG91ak4L7ZctKGdXaHpnZNcDyq70BTAQNT7TtMMO63.TGx
- e5Srk8d61YzOKBL3F0Nz5uGpgtLlYu3GRT0rQlYskiY52OgbNimCOHC8tkXsABqrq5tItOjzbTyJ
- rxMD6px5aQsFmBrWFuMtE5i_GweFmv3UArqAq522E.D98Q_cy7hgSu779ep2Gp6t8VD9VXL3HaUF
- ruuxnr7voim323k8z4b1ql0uQFcfnIAPd3dsAA4rnd1mJQ7_bw1crsE5Gsa7UNkqzwT8R_39R0HB
- XBssnbTb_GKkNJPS_jVrmx00zB2Y6YkeVrpdUYTp29ZVF3JTEeFhRkhJ..YQM1BCWWQg.VLz2QKM
- gqO1nmg3Z3WQlSam8wNtgBPIUaGpz4YFNc4LQezYv._XuCDvB2jIdjSIA5AXpQO7aUjCKBWSoYj_
- 5eSvyxmm66rqUmy4hXF1VleTovFhE9yHypTTefgV4GMJ3ytpXrDWh9NGitPfyMBwXNIDR6seAam_
- f0SLK5ZmLZp.ldOMdL1DVQ2DaSbB7e6dk0Etvuo8JQ_vGSwNVL65Wq0lXZy8U3eGFErxgtxU4vUS
- YDamSSndVvg7xKTjrPK7eeCh_3uT1JC0wAfketpYsbZF49gM1T59nw3nikmnW2f_Pv8AUEwTGo29
- civCtQR4V8imc_Rr1_noR_XC9ZgOvV4qW8lUfdnJEB7YKp69_xAASmFvKnM2OCaKUe2MJHQQ7nNx
- svqUqyjFepnK6ntadO53LtRnueVc29X4ALS86lTMnlnV7tpXO17pT2.nFivHGOeiuGSUuGqI3pwR
- fXEezigAXlkIYRm1iK.PtKQWhmChZxjxdkCiIJ2KTmPCJ88EMp2hCBL6no6J583Pje1.YEElN5_W
- uCqt0a3sLoAGYNxRrfdoMrXwyFeDFotFHpp4EEq4xYX6S6x9kz2HXB6U0tiZwm5Rgnn7p6l5DxCx
- _r6XjnoGDBBlP7XqYN8Jh08chKthKFHpt_lNMxbW8L3dlycRPacEG6ps14eTur.Vk1TMVZ_NOz8r
- h9qdlP9dBZtbck_ZwzKVSVLCDs.Mh9hnKnBltA23fPbL6hJVwE1AwbQ--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 5645cfa9-c473-4367-838c-8ef631aabbef
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 14 Apr 2026 20:30:18 +0000
-Received: by hermes--production-gq1-6dfcf9f8b-7ggwq (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ed718aee344bcab0b89868fa26b773d6;
-          Tue, 14 Apr 2026 20:10:01 +0000 (UTC)
-Message-ID: <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
-Date: Tue, 14 Apr 2026 13:09:58 -0700
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tp0oFwTf"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 36C6FC5AAB7;
+	Tue, 14 Apr 2026 20:45:05 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id CCCED60410;
+	Tue, 14 Apr 2026 20:44:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4D13710450F98;
+	Tue, 14 Apr 2026 22:44:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776199466; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=L8bWJr7FXUdlTXBxL69DdsJ20JowQnELYHkBWQ0j71o=;
+	b=tp0oFwTf5VHzsnEQcoI6YFXubpXr48s6UWlXK4aDR8EDMSSF+/OjNf6hUwJE2BAbHAdgPz
+	v2f4A8tTxVtK7dqJZfFAdjP+hWDl0Fam9eGGy91tNDrdqr1jGCVU5mlUKQsx7dKkw5Fj/o
+	8xB9Inm9XOYYzG+OqKhmNW03MF+ALRZMBSynxDWIF5QBxopuN97KxRbIxhOyfKSB9o6wkS
+	91454gD3J6J7wN/TaEOT0JgO64Dp+ztksnjtLIOwoMGIkVJ9RQPJZYo6iGmJA9iAtEHlyl
+	YSu689PmkWekOvBlF+bpB2iuXK1nNSBHe1tFVeClAIGo4vy+Vjuo6lCfP898kw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Paul Moore <paul@paul-moore.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
- <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
- Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
- <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Date: Tue, 14 Apr 2026 22:44:13 +0200
+Message-Id: <DHT65O6DS001.14GNQMXFJZHTN@bootlin.com>
+Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
+ Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
+ "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
+ <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
+ <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
+ Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
+ FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
+ <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-1-1a5831230821@bootlin.com>
+ <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
+ <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
+ <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
+ <DHT3JV7GTOBL.29205LGGNEDSH@bootlin.com>
+ <CAADnVQ+c9h_wuNwj8pjx885oNErGY7bxxCwKi+DiJ0XKSpyYfg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+c9h_wuNwj8pjx885oNErGY7bxxCwKi+DiJ0XKSpyYfg@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 4/14/2026 12:09 PM, Paul Moore wrote:
-> On Tue, Apr 14, 2026 at 1:05 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> Netlabel has a similar issue to secmarks with its use of secids, and
->> currently supports only a single CIPSO tag in the IP header, making
->> multiple concurrent LSM support impossible.
-> That's not correct.
+On Tue Apr 14, 2026 at 9:16 PM CEST, Alexei Starovoitov wrote:
+> On Tue, Apr 14, 2026 at 11:41=E2=80=AFAM Alexis Lothor=C3=A9
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> On Tue Apr 14, 2026 at 4:36 PM CEST, Alexei Starovoitov wrote:
+>> > On Tue, Apr 14, 2026 at 6:13=E2=80=AFAM Alexis Lothor=C3=A9
+>> > <alexis.lothore@bootlin.com> wrote:
+>> >>
+>> >> Hi Andrey, thanks for the prompt review !
 
-OK, you're right. However ...
+[...]
 
+>> > No. The performance penalty will be too high.
+>>
+>> Since we are mentioning it, I did not consider yet any performance
+>> comparision/benchmarking (and I am not really familiar with usual bpf
+>> performance validation practices for new bpf features). Is there any
+>> existing test I should take a look at for this ? Maybe some specific
+>> benches in tools/testing/selftests/bpf/bench ?
 >
-> We've talked about this multiple times Casey.  The short version is
-> that while NetLabel doesn't support multiple simultaneous LSMs at the
-> moment (mostly due to an issue with outbound traffic), this is not due
-> to some inherent limitation, it is due to the fact that it wasn't
-> needed when NetLabel was created, and no one has done the (relatively
-> minor) work to add support since then.
+> So far everything in bpf/bench/ measures bpf infra like
+> maps, kprobes, tracepoints, etc.
+> We don't have benchmarks for bpf programs.
+> So we don't know how well JITs are generating code
+> and how much inlining done by the verifier, JITs actually helps.
 >
-> For those of you who are interested in a more detailed explanation,
-> here ya go ...
+> Puranjay is working on creating a SPECint like set of benchmarks.
 >
-> NetLabel passes security attributes between itself and various LSMs
-> through the netlbl_lsm_secattr struct.  The netlbl_lsm_secattr struct
-> is an abstraction not only for the underlying labeling protocols, e.g.
-> CIPSO and CALIPSO, but also for the LSMs.  Multiple LSMs call into
-> NetLabel for the same inbound packet using netlbl_skbuff_getattr() and
-> then translate the attributes into their own label representation.
+> For this kasan work we should make the best decisions from
+> performance point of view, like not wasting unnecessary call
+> and not saving unnecessary registers. btw in the other patch
+> I think you can skip saving of r10 and r11.
+
+Noted, I'll do some checks and tests without those two.
+
+> But we cannot quantify yet that avoiding extra call gives us N%.
 >
-> Outbound traffic is a bit more complicated as it involves changing the
-> state of either a sock, via netlbl_sock_setattr(), or a packet, via
-> netlbl_skbuff_setattr(), but in both cases we are once again dealing
-> with netlbl_lsm_secattr struct, not a LSM specific label.  Since the
-> underlying labeling protocol is configured within the NetLabel
-> subsystem and outside the individual LSMs, there is no worry about
-> different LSMs requesting different protocol configurations (that is a
-> separate system/network management issue). The only concern is that
-> the on-the-wire representation is the same for each LSM that is using
-> NetLabel based labeling.  While some additional work would be
-> required, it shouldn't be that hard to add NetLabel/protocol code to
-> ensure the protocol specific labels are the same, and reject/drop the
-> packet if not.
+> You can micro-benchmark, of course, but gotta be careful
+> interpreting the results. It might be too easy to get into
+> thinking that JIT must inline __asan_load() for the sake of performance.
 
-Indeed, we've discussed this, and I had at one point implemented it.
-The problem is that for any meaningful access control policies you will
-never get the two LSMs to agree on a unified network representation.
-SELinux transmits the MLS component of the security context. Smack passes
-the text of its context. Unless the Smack label is completely in step with
-the MLS component of the SELinux context there is no hope of a common
-network representation. If a *very talented* sysadmin could create such a
-policy, you would have to wonder why, because Smack would be duplicating
-the SELinux MLS policy.
+Ok, interesting, thanks for those details
 
-So there's really no value in pursuing that approach.
+Alexis
 
-> Use of the NetLabel translation cache, e.g. netlbl_cache_add(), would
-> require some additional work to convert over to a lsm_prop instead of
-> a u32/secid, but if you look at the caching code that should be
-> trivial.  It might be as simple as adding a lsm_prop to the
-> netlbl_lsm_secattr::attr struct since the cache stores a full secattr
-> and not just a u32/secid.
-
-Indeed. But with no viable users it seems like a lower priority task.
-
-And to be clear, I have no problem with netlabel as written. Multiple tag
-support isn't simple (we did it for Trusted IRIX) and the limited space
-available for IP options make it tricky.
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
