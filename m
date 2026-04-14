@@ -1,54 +1,54 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F4B31AAB8
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 18:07:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F9331E855
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 18:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776190081; cv=none; b=oXMIDs0uLVCB715dclSIA88Xmc8tiwaKhdp1rwValE/5fvE/rGNC1iqdEK9wWEzHH/4WEW/hMpliQpt9PJP/+N3gcZPr0fP51ZeTvhimYuoLEWKoZyp9ZWZzMLYLLzK35kIBcsPdKBlnklCFF2jh55LcTrPYhO5RKeMOqtftSg4=
+	t=1776190083; cv=none; b=DWuE4kzL73Em0DlPnnKRCtp7LLlZuDG0Yc46+AjWpjTlJ/raJSlFIwc6vfzoIHHCb76baw3fTvoP0G1dDAe7yDcrK/C4SB+lShb3Y6REy9Mlcvam0SdTZUzxXNsuwk78rjn8azY6xHzsior/gDseRbQKaGMZf5clxn6Ul44mAL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776190081; c=relaxed/simple;
-	bh=ALJBMYWS1x2rKXT/63YRmr7XiBihTr+8ZXwVGpCSyyI=;
+	s=arc-20240116; t=1776190083; c=relaxed/simple;
+	bh=3eOaP1PjqwIMhC9h/73po0HRLNeVuCigZDPpl5LivDs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XhqQnTi2Lwa4cBs9wc9i66wtSOsUXwfedZmNO7q6qsFreg2PDx8GMCGH3w8k3QT3QVMrZz43V4mIzqR0Ud2Ceqe/uUL1gbMsjqNgSDHhiagrmBtAs4xxKDrGh4iuG19AhJH2eUV7SdLiZn22GG7dPoIy2g2yIOjU5Pt5TRrSViQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wE96A4aB; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=oTB15x4rseVcxna38Jvpv8hB/d+c29rfpft3+n1GbkAbkNRdBUwp6VyUoZPOv1ZUgNa7d9aYDjX1tmbu1s6/9neglg0/3yXjHagW8oh7ABmEKGosQf/ejWr+2v2MEMNz34DJc9epEQ2j7lxINBMZO9qDDl9jAI65yW43Sjy54zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pvW9ZfkH; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wE96A4aB"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35da99b90f6so7440645a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 11:07:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pvW9ZfkH"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-354c44bf176so5521564a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 11:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776190079; x=1776794879; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1776190081; x=1776794881; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1L9bOnm0LoR07RId6eCuMgAP1rY2SX02HCtv6g1t/NE=;
-        b=wE96A4aBVTKN6bkmX5d2KKt8+3Uc3/uX853cDp5N6UcpPqXJwyNtvg+wiZ3Vz4utNB
-         kOhIqmDYut+qrUwOKA02Jixhm7QZvaHnmeRoyOFWm9tzX+I3PUrkdiO35xETr7MsO7k/
-         tK3PQPEyV6zCZOxl7MG7598U4Sqlwm3sJXwROdup4uDgucehY3iFt+7Mf3rL8Ka94zG8
-         7GncMgft239dAgROstempjHDLFPbgGUFU0FISaxxQ+XTB1JEsOiak6TEffsAa2Uq2EDP
-         qJs9ejtirSdv7ZWRtCQiDrseJ3biEMHIiMYT64BEu7md6mND8s7cJMPIxgDgfVQTSmGM
-         UHZw==
+        bh=xRzVsTq7xtAKE6uuc9zkrMY4DjEcTQtxRmj4+xciBiE=;
+        b=pvW9ZfkHzjQod1r8mbEYINaokPs+tD0x9mWNrUApygLP3VbttvwygHf0oqnZhhiJTF
+         62q+NBfCoIi19Fdc7mX9ag5I3cr75Redya1R0MBgLKjHB6PbeWmT2SMFFHzFs/g0OmLZ
+         /EXJkRIxkzQI9h7hU16H/UkOA2HNOTcHrhcvtlx9zRXaLisDUzQtfHu5ZTPQdly98FOd
+         jSA0yUsUANpyrY3A0QqqLgyiRk5dSXly/yA19CTVLJ1wf7xvV2vlNvNEX5Ndcc3wyMyT
+         AzxwWNIR0+ZOzSyb3veJAGOkpIEV3CkgIKL3cDbDN9N/Av8tkroEfDbS0xH/7S1dYL3A
+         A/wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776190079; x=1776794879;
+        d=1e100.net; s=20251104; t=1776190081; x=1776794881;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1L9bOnm0LoR07RId6eCuMgAP1rY2SX02HCtv6g1t/NE=;
-        b=TP6IGUw5ACdwZvuhv2BjjriBfvNeWZAB0wJ3vAoDXg7bOoneHuQ7FPSJoqFJ2MvHm4
-         9dyEJ6YMmHgv4D0N8aGc5ILSPWk9BXGeUuauBvHHIuDkk7WzwmmS0o4Xy6d6SlvRs8yl
-         IeFqrYHT9opUrnpV+JUoM78/HCRU2Ez74Spni/7JB9rLHGyYgCg97tz4V35K9epw+kvk
-         om8Tcs6T0UygnEwwOmdCIFpzBdJmhi81p38p/YSsIG2ib1YuwJvAx++e5wVmk4a1h7mE
-         Fc7IuOaf0baIivwM1qqmphRLfTHYpY59toY5Sv7uXj5KGBSYvRX1qlWtZnckfkxt8dB1
-         f7lA==
-X-Forwarded-Encrypted: i=1; AFNElJ9hHx0uExurDVzRZZHy4q3KdNz7uWcUQK6yykIpKInyBvHMTz8HaTHvhaMGhqFYXl7BnsOgKRYplOO613pGaxU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyrt/m+ReQXhENopAvs3Vbb9/oV570e0UsqXN+J2xtZ9ZoB8t5H
-	BmeSMt/LAU7YvPGDy0i8XVblFBJu4DbkEAiJmiauCJ7XZ/JFPvsdq8YWeDBHpAsdxRAdPlIHOR+
-	I4OyU5MxDToV3lEVO5nvkrF8htQ==
-X-Received: from plii9.prod.google.com ([2002:a17:902:eb49:b0:2b2:6ee9:466c])
+        bh=xRzVsTq7xtAKE6uuc9zkrMY4DjEcTQtxRmj4+xciBiE=;
+        b=MmOtk76Jpe5lLFZurjHjNCa74TO5suPEh0s2H4T8/cK2M6+2zBwCGgHfalezv+f6wS
+         n4rT64LxFPf8g+nEx9hs2QSqX7eIsuwQ1Qc1Y/gRE9W+qjKaBPjT8HKNdKGFx2FOM8lH
+         wXHE/umNPvBSvSRHoh+CMXNweixkjBF5hBMRVZTEPXu5BHF/lhl6B5nGes5X7rPNB3OP
+         4j/BS4GLO9GfZwka5zoiYof7nfY2FGyCaew8AN+3jup3aMTw2lxVNd60vSnjmB0bZb8W
+         dnkTMJixIxuRKdtzwmdXWSXigCUIPxQiSB+H6H5iErq2ApGU/7NnvwjnLtXTg1gtKuEY
+         Gh2w==
+X-Forwarded-Encrypted: i=1; AFNElJ814AkVBS/ry5e2w9WI4zKnJPnADV/3bJohKnqaB1Nhel8iqpqPlvAj0u7FpKNyX8phpidJ1CN8hJ7F6zLhV90=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMpmrKetqTa/GfH8l08oVFJHq1jWj3YpcNkEJ1n2+ZmS9nYnvB
+	FJ83bP+6g3gxYEpDXBUkpaiJHFJw1t1PaTtkYq1QIMQufP9rClyLiCDNhqFOitFIECRhPSKe1Eb
+	/JxWCxf6yYkWmpdsBiPbcZw/wbQ==
+X-Received: from pjbme4.prod.google.com ([2002:a17:90b:17c4:b0:35d:9eb5:1fe])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:4c50:b0:35d:8ea1:62df with SMTP id 98e67ed59e1d1-35e42838d40mr19277911a91.21.1776190079138;
- Tue, 14 Apr 2026 11:07:59 -0700 (PDT)
-Date: Tue, 14 Apr 2026 11:07:49 -0700
+ 2002:a17:90b:4c10:b0:35f:bb33:d72c with SMTP id 98e67ed59e1d1-35fbb33da86mr7504039a91.4.1776190080795;
+ Tue, 14 Apr 2026 11:08:00 -0700 (PDT)
+Date: Tue, 14 Apr 2026 11:07:50 -0700
 In-Reply-To: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,14 +58,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519; pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776190073; l=1498;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776190073; l=1745;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=ALJBMYWS1x2rKXT/63YRmr7XiBihTr+8ZXwVGpCSyyI=; b=FfRgVZaFM+g1a1sLY5U/nQrRiYSCOF6Jgw9QEH9uV4HeDMf/FykQ40BD262ioNmWKZ8QPOhlc
- 3eqTBu+6HU+DSHB5OQwHKzlRQk88mwEmVErdbYW9Oy05e+xqIg9CXzz
+ bh=3eOaP1PjqwIMhC9h/73po0HRLNeVuCigZDPpl5LivDs=; b=7AFWyQ0DVP8h1/H+jFzj0I9KP+8m36LoteufdUTQT1V3Bt1TjzwWMjtAG3ddTNHhhqSOQAXCI
+ xAoJNSVc15ZCct8aMwX/ex+6ZAs+81QmZuhps/YOEOAFMsC3uP9Fz3G
 X-Mailer: b4 0.14.3
-Message-ID: <20260414-selftest-global-metadata-v1-2-fd223922bc57@google.com>
-Subject: [PATCH RFC 2/4] selftests: harness: Set global current_test_metadata
- for each test run
+Message-ID: <20260414-selftest-global-metadata-v1-3-fd223922bc57@google.com>
+Subject: [PATCH RFC 3/4] KVM: selftests: Do teardown from kselftest harness if
+ kselftest_harness is used
 From: Ackerley Tng <ackerleytng@google.com>
 To: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
 	Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -74,44 +74,58 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	kvm@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Set global current_test_metadata for each test run so other test frameworks
-can choose to access fields for the current test.
+If kselftest_harness is used, when an KVM selftest assertion fails, make
+sure to perform teardown (like kselftest_harness) before exiting.
 
-This avoids having to pass _metadata down through functions so that
-code defined other functions can still use fields in _metadata.
-
-Test functions t->fn() are executed in series, so during the runtime of the
-test function, the function can count on current_test_metadata accurately
-being the metadata for the running test.
+Provide a weak struct definition and default the pointer's value to NULL so
+KVM selftests that don't use kselftest_harness will still work as before.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/kselftest_harness.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/kvm/lib/assert.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 68cde1556ac41..85d9b4527fca6 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -1151,6 +1151,8 @@ static bool test_enabled(int argc, char **argv,
- 	return !has_positive;
+diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selftests/kvm/lib/assert.c
+index b49690658c606..06970611317fd 100644
+--- a/tools/testing/selftests/kvm/lib/assert.c
++++ b/tools/testing/selftests/kvm/lib/assert.c
+@@ -9,6 +9,7 @@
+ #include <execinfo.h>
+ #include <sys/syscall.h>
+ 
++#include "kselftest_harness_structs.h"
+ #include "kselftest.h"
+ 
+ /* Dumps the current stack trace to stderr. */
+@@ -63,6 +64,8 @@ static pid_t _gettid(void)
+ 	return syscall(SYS_gettid);
  }
  
-+struct __test_metadata *current_test_metadata;
++struct __test_metadata *current_test_metadata __attribute__((weak)) = NULL;
 +
- static void __run_test(struct __fixture_metadata *f,
- 		       struct __fixture_variant_metadata *variant,
- 		       struct __test_metadata *t)
-@@ -1182,7 +1184,9 @@ static void __run_test(struct __fixture_metadata *f,
- 		t->exit_code = KSFT_FAIL;
- 	} else if (child == 0) {
- 		setpgrp();
-+		current_test_metadata = t;
- 		t->fn(t, variant);
-+		current_test_metadata = NULL;
- 		_exit(t->exit_code);
- 	} else {
- 		t->pid = child;
+ void __attribute__((noinline))
+ test_assert(bool exp, const char *exp_str,
+ 	const char *file, unsigned int line, const char *fmt, ...)
+@@ -89,6 +92,19 @@ test_assert(bool exp, const char *exp_str,
+ 			print_skip("Access denied - Exiting");
+ 			exit(KSFT_SKIP);
+ 		}
++
++		/*
++		 * When used with kselftest_harness, do teardown like
++		 * __bail() does. KVM only has TEST_ASSERT (no EXPECT
++		 * equivalent) and will definitely exit.
++		 */
++		if (current_test_metadata) {
++			struct __test_metadata *t = current_test_metadata;
++
++			if (t->teardown_fn)
++				t->teardown_fn(false, t, t->self, t->variant);
++		}
++
+ 		exit(254);
+ 	}
+ 
 
 -- 
 2.54.0.rc0.605.g598a273b03-goog
