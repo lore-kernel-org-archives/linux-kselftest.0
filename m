@@ -1,114 +1,110 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECB73D75A6
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 16:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F13A3E317C
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 17:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776271190; cv=none; b=Q5589REU4/0SgkWR+MJJ3HbDDrZ2rXp24okYW38Ursotz7eImSXmJVkPhmHRsDZ2a5LXeK4YqFK7AWOfxrnqb7WcfnSV3Tmwk6JnN5gMsSrmx2SS1VSTihll/m1UMMtpsJ4ArN41nNWULfhg6GXH1bziCSAyEzaybYt6v4D4HDA=
+	t=1776274323; cv=none; b=nQgPn0K9M2/7SubYMzMzt6SVFNM6C0Qatyz7vSFdkfbiZ7drw8hV5B/c0Zxp0TyZQOjq0d5UzWwuwEOqfrIR72c5w+A/L3Jme6JyFSziHSfn82oaXpWVCwZF5Uo8gLzBjuNp7lp5obPRbOyOhhL1x1TlER6EhfhBCI3ocR49Kl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776271190; c=relaxed/simple;
-	bh=f0Xhz36jloHzjGryaVb2w/X3cuD5tHkh/y9qkWJJBQE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cSmB/cQBkgnB4Stb/59hmozZo6oTPUpxZjDpRM2sBGAOwL7q8+tAIQYoNxIHfQMoFwUf9beJsp219SbtBXELg7VHTIwzYI89CyaV6dwEuw2/zc/cV4s4fOkfF5VcA5nw3kWv4iZgJkkahy5LcL9VusJ2AdMaVzKuOgg8qrP6xlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qlt7PXFv; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1776274323; c=relaxed/simple;
+	bh=1I1KmVFUZ5qSJm4NxYrqYBOrSRz2EsAkrxr7eQWclx4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F0CC2PJOm79j9ERaTB4It83wsNEQ+Tx2eF2MumtwR7YKQHyG7mvw6JV50/0Gv8aZVRnTgwj3FQol7tUVB5xOu3JhRCXaJObzSC56memQZC777g1/bPSS9eNC8xWxtNvz2eVm7aQqLBkuZalWF5r9DDJey39SpVSY9hgJsDI55aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hDOnBqER; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qlt7PXFv"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7d9e22176a7so3704262a34.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 09:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1776271188; x=1776875988; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sI6SnmW4yH3OEitrbAs93gP+SdSOTHdc6LjUpuJ7Fnw=;
-        b=Qlt7PXFvw9FcmqNI0M5j4MkprnKnAPHjJApGeSzTW0tNwq/vfYPKbp8ZnLlVByAAvC
-         daH85kVHmxKMfv3h9Azk4Fxx0zH+vsiV1PLXC2iEhmgRq3rc19rl3tir1eh4G/I0Nnl1
-         STPjHmMadICWnenFos2h9RPv4bM4L4oG9+f/8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776271188; x=1776875988;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sI6SnmW4yH3OEitrbAs93gP+SdSOTHdc6LjUpuJ7Fnw=;
-        b=c6IiOd4GrY9VXrr67ZmRfPJXsvmeyR6Mqzwy4v+jiWr6RcR6d2S1cUlBVVCHi0U1UC
-         FknA16rR3LknZ6l3kPF46uxEn2jXe6inzjnAQGMIpPrwgdstXn7xmTiQ+Erj5YuWFpdn
-         GvHzEqQLcGboztyM9dLix6l4TRiH0coLW7ID9nnw5mIp7fsWYIO37QRqDSsQ7y1/Wzlo
-         SKYCYx3arOAlXs9saMiiu7kVOXQDIz0IHhlUYx5rcmlJ4AB6oV5NSXc+JUYlO2zNLDLN
-         o3PtdqUSZiDmomzxAiBx2u/Ze+w4zAkRk1CWHT68dLkWShDOhY7Z+neqbxvuuLHB5Tgl
-         yjvQ==
-X-Forwarded-Encrypted: i=1; AFNElJ86TJgFGbZ39mJfTHPMvemge8PyNUv08wdvIQcoXL/tZ/S2d3KSuMvB3930qfVQvD1npRYzdXWo5Bz/vFqzmWQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1UeVNZtxtSKhtK7EHxf3Q56UdrlAZNIiL06aw0JbgVVwckPWg
-	tvDyJyL5riF0HMMP0ZiH1AuAHjEBfiPZjRNregdf6AgcGyeyDd68NA2Tzd7XLm7h/EQ=
-X-Gm-Gg: AeBDieuSFnr20xKIbypL6bIhAvJYzhMOXyendol+Hp0dljcRpNysbqnZ+RxgNH4wbpJ
-	a2gg5eCLbNTje955uZ9zmZm09Wma4dn/s5lR2sur2wzYpP5+pbo+qhsakuDFI2nVrisbXH7c+1U
-	hWiFRXjMfDYYZIiIi4PefDlOX+A/ox+M+OST1kVj7Y36iEtsnJ3+xiAiihtebNf8r4qthhQ8eXN
-	SmI/Nrg21wr7flajCJqWmkhiLi518ZkLkDtPnkOdHrm5uPUmfU4YJEEmSKn8MK7dtk+8AT66z2j
-	iQ5DyCD4WV8JXIetqJ/RZ/xZ20J6ra78PBr2W+GbnsoJKFguW36DuWQOaJZRh/t5jEkZY8bbOS/
-	7bgRHUJ3YO5iK4xLr/5Ryktq7Ewt1pnqoFJ/P2hhWY0LvEBCCSRxI4P0HfhZiN6C1SQG82ivhca
-	Cq2EAymFjHD7CVnvLobZ/NxSUaII+rMxc=
-X-Received: by 2002:a05:6830:61c1:b0:7d7:4a7d:fd40 with SMTP id 46e09a7af769-7dc27f23b8cmr12850964a34.22.1776271188347;
-        Wed, 15 Apr 2026 09:39:48 -0700 (PDT)
-Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc76b2dd7dsm1541449a34.17.2026.04.15.09.39.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Apr 2026 09:39:47 -0700 (PDT)
-Message-ID: <b35bc514-5def-4e0c-9260-79bb2ae9da94@linuxfoundation.org>
-Date: Wed, 15 Apr 2026 10:39:46 -0600
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hDOnBqER"
+Date: Wed, 15 Apr 2026 10:31:42 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776274315;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1E9SNK8votdUUiELWyxRQ1UqK27dc1Rr/hhOeHUwdoA=;
+	b=hDOnBqERvoCMz08Ir2a3RtH+hTMsuZ4BHDTcoUHor1IZRAhPilXWIUhAICj9zqewdfmNRc
+	CxDxjRzmrJWSzPAUsBdiRx4ADUm0M9s1W+KRe9Opybqq+1xWD0G5y9tVAifm2xnEKIMSdT
+	DqIHDxj21hZEfv2aLmnCLD0AfpZB6Xg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: KaFai Wan <kafai.wan@linux.dev>
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com, 
+	davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, shuah@kernel.org, sdf@fomichev.me, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Quan Sun <2022090917019@std.uestc.edu.cn>, Yinhao Hu <dddddd@hust.edu.cn>, 
+	Kaiyan Mei <M202472210@hust.edu.cn>
+Subject: Re: [PATCH bpf-next 1/2] bpf: tcp: Reject TCP_NODELAY from BPF hdr
+ opt callbacks
+Message-ID: <2026415171036.QLi9.martin.lau@linux.dev>
+References: <20260414112310.1285783-1-kafai.wan@linux.dev>
+ <20260414112310.1285783-2-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
-To: Mark Brown <broonie@kernel.org>
-Cc: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
- torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, Aishwarya.TCV@arm.com,
- ben.copeland@linaro.org, kernelci@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
- <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
- <ad-ZdjzQZXNgkpwv@sirena.co.uk>
- <3cdf8e79-7c59-4831-9b38-e9c2cef97fe1@linuxfoundation.org>
- <ad-8BIkw_ijCLqcF@sirena.co.uk>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ad-8BIkw_ijCLqcF@sirena.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260414112310.1285783-2-kafai.wan@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-On 4/15/26 10:25, Mark Brown wrote:
-> On Wed, Apr 15, 2026 at 09:40:37AM -0600, Shuah Khan wrote:
->> On 4/15/26 07:58, Mark Brown wrote:
+On Tue, Apr 14, 2026 at 07:23:09PM +0800, KaFai Wan wrote:
+> A BPF_SOCK_OPS program can enable
+> BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
+> bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB.
 > 
->>> This wasn't showing up in my -next build tests since I set FORCE_TARGETS
->>> and explicitly choose a restricted set of kselftests which actually
->>> build with my system and configuration.  It was less obvious than it
->>> should have been with the other systems since they did not expect there
->>> to be a complete failure to generate a kselftest tarball and variously
->>> masked the error or reported it in a manner that looked like an
->>> infrastructure issue.
+> That reaches __tcp_sock_set_nodelay(), which may call
+> tcp_push_pending_frames(). The transmit path then computes TCP
+> options again, re-enters bpf_skops_hdr_opt_len(), and invokes the
+> same BPF callback recursively. This can loop until the kernel
+> stack overflows.
 > 
->> I didn't see it when I did test on linux-next and my repo. I did install
->> to catch problems.
+> TCP_NODELAY is not safe from the header option callback context.
+> Reject it with -EOPNOTSUPP when TCP header option callbacks are
+> enabled on the socket, so the callback cannot recurse back into
+> tcp_push_pending_frames() through do_tcp_setsockopt().
 > 
->> Sorry for not catching this. We can drop this patch.
+> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@std.uestc.edu.cn/
+> Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
+> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+> ---
+>  net/ipv4/tcp.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> Yeah, it's easy to miss if you're set up to build everything.
-> 
->> Mark, would you like to a revert for this?
-> 
-> Yes, I'll massage the text from my report into a changelog send
-> something - it'll probably be tomorrow now.
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 202a4e57a218..7ac4c98be19d 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -4004,7 +4004,10 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
+>  
+>  	switch (optname) {
+>  	case TCP_NODELAY:
+> -		__tcp_sock_set_nodelay(sk, val);
+> +		if (val && BPF_SOCK_OPS_TEST_FLAG(tp, BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG))
 
-Thank you Mark
+It will break the syscall setsockopt and also break the existing bpf prog
+that calls bpf_setsockopt(TCP_NODELAY) in CB other than the
+BPF_SOCK_OPS_HDR_OPT_LEN_CB/BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
 
--- Shuah
+Lets brainstorm other options suggested on the list that have smaller
+blast radius.
+
+pw-bot: cr
+
+> +			err = -EOPNOTSUPP;
+> +		else
+> +			__tcp_sock_set_nodelay(sk, val);
+>  		break;
+>  
+>  	case TCP_THIN_LINEAR_TIMEOUTS:
+> -- 
+> 2.43.0
+> 
