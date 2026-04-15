@@ -1,130 +1,136 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D960D31E857
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 12:01:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5A9263F34
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 12:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776254469; cv=none; b=rFV9w7EQ/Lql4K0swe9/HSJidiKle8L50soNVrWHu5YS4kvKQQd+Uy1nGKXvjQJ27/drAJuIBSSoRhrzQPIngQQ/+yPM2nF5vpqK0cLXRuZ5sClpUQTCDqRE6qMuHM+o6FGGa4g8Qq/ve8TSPgKTb8gRLD8jVJSrnrXkbgsepDY=
+	t=1776254622; cv=none; b=SowyUxKzAQM1ZYeuk9AUE7NzxTWGsg21MxCl/hmwftE1I9GWMIdE/OU1pZ3BxWKHa2TzLFNlXrGTrqHm1/QzoeZo2Fp9aHcXpy1vkZeZGtmEDuYz/n/d9q8po26Jr9YfrjeT5McYS0DgXo1vheNxL0KGL5/cIftl5cHJc5/rTNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776254469; c=relaxed/simple;
-	bh=xgiWfqlfVoW6Zct2Lcg7QhAziiHLNMkpAynFW7SzHNM=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=oc9gRY5swwfeXw4oKqJ3NnIyFcJf3WA6KMsJ8lTd1UGldm2JLyEksA+XIMHtlZAyji2MkrVze70I7tNS5sVGbwmupjCsHdbIdd8jKVRP9hBMeyA2q222Y7Vc9MCfxrdiH5tZcYZQydOwBH4GJ01K5NIp9cfji+WGCee9U8NwyXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=W9VjdPKV; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4oO2hk5a; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=W9VjdPKV; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4oO2hk5a; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1776254622; c=relaxed/simple;
+	bh=3U6UHJgt835GYv40BhwoYNP4PwkYd8x9aLaj/9Mma14=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oqE/cku0I0KQyB/q0vc1DwGDkvBjOCuOTZYI6g//ezlzeRGQlIaN5azDc8viieH9Mr4pdze9r3sw3AYDx0I4MzJA2+odXF5+chzBW1XaxcW6iStDNzRqhMzEIkYMpSNqIXh+UhuOqIoEo2WkSaTtXbs06/W/IPMfzh5gVVTh4S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=K3tGrjLb; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="W9VjdPKV";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4oO2hk5a";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="W9VjdPKV";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4oO2hk5a"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 23E2D6A7E2;
-	Wed, 15 Apr 2026 12:01:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1776254465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9wn17j2lK5IY0VmUpHhYcvC1wsTA3Kz/lTmapaTTmHc=;
-	b=W9VjdPKVUTOMLhijX6fhezlFXPKaORW+jo63CdZo5slrfR5PMDCRDYePiIF+8apUE6R71T
-	rQHCMsPooxbPo0vuW+/1FWzvJrIAJpKgjiH65V+JfyMUyAzxMgUZMf6z36trUMPes8vkS2
-	EG6rshk7Sf77jhdjA/BlS+Sv50aDWlQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1776254465;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9wn17j2lK5IY0VmUpHhYcvC1wsTA3Kz/lTmapaTTmHc=;
-	b=4oO2hk5aU7gbjU27xxWkj6j9aO+SqRyTxODRSJxh9g+iC6Vga+q4mgNJZixNSNJVXgk5xc
-	fOORunMtdGRIxaDw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1776254465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9wn17j2lK5IY0VmUpHhYcvC1wsTA3Kz/lTmapaTTmHc=;
-	b=W9VjdPKVUTOMLhijX6fhezlFXPKaORW+jo63CdZo5slrfR5PMDCRDYePiIF+8apUE6R71T
-	rQHCMsPooxbPo0vuW+/1FWzvJrIAJpKgjiH65V+JfyMUyAzxMgUZMf6z36trUMPes8vkS2
-	EG6rshk7Sf77jhdjA/BlS+Sv50aDWlQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1776254465;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9wn17j2lK5IY0VmUpHhYcvC1wsTA3Kz/lTmapaTTmHc=;
-	b=4oO2hk5aU7gbjU27xxWkj6j9aO+SqRyTxODRSJxh9g+iC6Vga+q4mgNJZixNSNJVXgk5xc
-	fOORunMtdGRIxaDw==
-Date: Wed, 15 Apr 2026 14:01:05 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
-    Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org, 
-    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be executed
- on 4.12 kernels
-In-Reply-To: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
-Message-ID: <alpine.LSU.2.21.2604151357350.1967@pobox.suse.cz>
-References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="K3tGrjLb"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43d7650202fso2632521f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 05:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776254619; x=1776859419; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MY7KppkO24AIxEJgw2x9OFRmnNC7DRzHfNEKohz8ESc=;
+        b=K3tGrjLbd6yDHpJ0f/H2z7zGvYNrKp8VcNp62WUe2KHkJxXopaqAUC4N6clumbRBos
+         7VAXcmcRFHTn1wDnwKhhUCD+Nd6V8xAeIuYEeoOMibYgvCXeg9a+fExmOWLuB3cdxVkZ
+         BSdxvTkHHxoPAxfmkCxE1xnndEwVhmP15rf0I1qlTdGcQR5NuBV9/gi+LI97NRGnSQMB
+         R6+UemVi50sL+thMMLIhN8hWOVwgepgr3ol5NG9nqPCR8qoUoT29OMqSqtzwpkBF1YvJ
+         yhPBWQXuKs7GkvLuFJrp3eyfdeRQ/IC10ImEt1cQQd0XhT3TNJaAmbrr4Uoq72+E6W4K
+         RSFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776254619; x=1776859419;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MY7KppkO24AIxEJgw2x9OFRmnNC7DRzHfNEKohz8ESc=;
+        b=W2hBo9lL8vajt3qhBmAqgJYnKU+rGox8pxuyKwt9kg2C0L/Ewq4QUx20KHf2SUc7cW
+         bm503isWNXmko/hAPm6CkBcUs+JWjSxjH6zyNSGSRdsyRzId4njSUey3ZEDgWwi0AyTU
+         3Cuu+n4RxqdRa/IyUzJDqm4QJpSEK5NllJha0q50ZRaUcBPNDb4BD8iqARgddGFNpsmJ
+         hPt/fezer2fSKdR5V3xl+hXFQNIH1MPh6mBTt4Z3YYmFlnvbEiamU55ktopt9fovi1hF
+         u1FlATU0i4Xy3zSPCRVsZwfZRyQgM2tqoLXkeSDeyGKb+1ARpnY+aWIi4XYIYDWJEcsn
+         4B7A==
+X-Forwarded-Encrypted: i=1; AFNElJ+ORIcPej9thC6+38hlhHG/CP16hO8S8KYllXMxGgSc9bZyk+pu8n0wBZR8mEef1xGpgHvoRQtnslQgDhudTM8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjmCQeFvieYPscJBVZzAe2wCTjuKJ2GiDqzDoANZUytxoWVUyd
+	khS8NYRNAykUAAAES+EYjuLdbANcmeQtR5rPwtuNoUjGSuc5ToZ/B7bsmaj7cV6ZXf4=
+X-Gm-Gg: AeBDietMGKU4ZvrflaH+hWDN3fYTM4Y2dzzh/Oz2BNaVd1KO8tKrh+tu5HE0349d5qE
+	8+MOOnIjGkctpFmuRwYEJdxG4hlmeOIxp6LHhwLlA4NAGwtlPTYR287YWFq3NHvgacmeiouYsFU
+	qDxvekWggxZfTu6boagU8bdPlO9n6OMh+/ZjXL/XFDCzQJCaqs8OzT0ttAXTI0433cCbEoy+GZ5
+	+RntYyygvCKrKo2Eg3WHyuSPL+zL4ojzpTMC9BbtYDNR/UOgcLKc79NpDLhzJ8Ih18Eut5lHrc/
+	/mQdLci9/264jh4ID6NpY6wntrXSJ0kkx5OG4ex9tlGozSKXZqBJ3QGZpCzHZ9jOKcDli0v/vkC
+	+edlIjj0SC5LW4ziZjkwwPp/KJ48FgvDBTj2gKCkh+ynRRziZ5nfmR6OVtwF5984ewEtEcX09WA
+	qcNG3lpRd6ex0FsAFP3g4UGP9cXbpci1fhlkkf2yz5tUZnN8nZCNw/wSqsVg==
+X-Received: by 2002:a05:600c:46d0:b0:485:40c6:f507 with SMTP id 5b1f17b1804b1-488d689dbfcmr301107095e9.30.1776254618851;
+        Wed, 15 Apr 2026 05:03:38 -0700 (PDT)
+Received: from localhost (27-51-0-223.adsl.fetnet.net. [27.51.0.223])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b4780f035csm19983145ad.15.2026.04.15.05.03.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2026 05:03:37 -0700 (PDT)
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: bpf@vger.kernel.org
+Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Fix timer_start_deadlock failure due to hrtimer change
+Date: Wed, 15 Apr 2026 20:03:28 +0800
+Message-ID: <20260415120329.129192-1-shung-hsi.yu@suse.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-4.24 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.14)[-0.717];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
-X-Spam-Flag: NO
-X-Spam-Score: -4.24
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
 
-On Mon, 13 Apr 2026, Marcos Paulo de Souza wrote:
+Since commit f2e388a019e4 ("hrtimer: Reduce trace noise in hrtimer_start()"),
+hrtimer_cancel tracepoint is no longer called when a hrtimer is re-armed. So
+instead of a hrtimer_cancel followed by hrtimer_start tracepoint events, there
+is now only a since hrtimer_start tracepoint event with the new was_armed field
+set to 1, to indicated that the hrtimer was previously armed.
 
-> A new version of the patchset, with fewer patches now. Please take a look!
-> 
-> Original cover-letter:
-> These patches don't really change how the patches are run, just skip
-> some tests on kernels that don't support a feature (like kprobe and
-> livepatched living together) or when a livepatch sysfs attribute is
-> missing.
-> 
-> The last patch slightly adjusts check_result function to skip dmesg
-> messages on SLE kernels when a livepatch is removed.
-> 
-> These patches are based on printk/for-next branch.
-> 
-> Please review! Thanks!
-> 
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+Update timer_start_deadlock accordingly so it traces hrtimer_start tracepoint
+instead, with was_armed used as guard.
 
-Besides my comment for 1/6 and what Sashiko discovered, it looks good to 
-me.
+Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+---
+Currently only fails on Linus' tree since hrtimer changes haven't made
+its way into bpf-next yet.
+---
+ tools/testing/selftests/bpf/progs/timer_start_deadlock.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-However, please also take a look at brand new 
-test_modules/test_klp_mod_target.c. It does not build on old kernels since 
-they lack proc_create_single(). I think it should be covered in this patch 
-set too.
+diff --git a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+index 019518ee18cd..afabd15bdac4 100644
+--- a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
++++ b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+@@ -27,13 +27,13 @@ static int timer_cb(void *map, int *key, struct elem *value)
+ 	return 0;
+ }
+ 
+-SEC("tp_btf/hrtimer_cancel")
+-int BPF_PROG(tp_hrtimer_cancel, struct hrtimer *hrtimer)
++SEC("tp_btf/hrtimer_start")
++int BPF_PROG(tp_hrtimer_start, struct hrtimer *hrtimer, enum hrtimer_mode mode, bool was_armed)
+ {
+ 	struct bpf_timer *timer;
+ 	int key = 0;
+ 
+-	if (!in_timer_start)
++	if (!in_timer_start || !was_armed)
+ 		return 0;
+ 
+ 	tp_called = 1;
+@@ -60,7 +60,7 @@ int start_timer(void *ctx)
+ 
+ 	/*
+ 	 * call hrtimer_start() twice, so that 2nd call does
+-	 * remove_hrtimer() and trace_hrtimer_cancel() tracepoint.
++	 * trace_hrtimer_start(was_armed=1) tracepoint.
+ 	 */
+ 	in_timer_start = 1;
+ 	bpf_timer_start(timer, 1000000000, 0);
+-- 
+2.53.0
 
-Regards
-Miroslav
