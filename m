@@ -1,91 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FD7332913;
-	Wed, 15 Apr 2026 06:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257CD2C11DF;
+	Wed, 15 Apr 2026 06:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776232840; cv=none; b=rBbcR0KuZAPgs08wRCUph69gZ0rNZgZ7tBFTGN3IptpL5Yg9lfrcWADjMOXzAPIb4WlP2+dQnQq62vPkNebX7jHIYwHpQrrcukpcXqyfsLlqDjC9N2rYdfW2VaEasERSlHkyxLtwDAV47VeHqL75Ffhe3lxGqqnI0i7ox4rS5rA=
+	t=1776233367; cv=none; b=Y4v58c+UBXeJcSjJcySIk+K+idpAseiaFpM/PDq5ZT19fUHyB5374sizGOzjRcKaPbCCq2V3UYqbKkq3aR9XwN+FtphFmYjWzntjeraq3KrXzV3ABrXf4C9UPZ+rd1g6s2G+2ux54OavrhEu/y9T1+ttbuDhyptbUTXPjZH7lkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776232840; c=relaxed/simple;
-	bh=YpO2tJR55GH2ObkpqG7bQmAtIKqR5Kp4eMXaU9peBC4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X7QSBnAw2vumCVdT/gC9CiDcMWQ13NHfBdTZKtIU4TofF7fGNswUAlrrm53HxN767ACcm62dwuRc6gn3OUMPT/LDFEptUsvjWo/mxJkjdVhjQYNd4nXdz+TLvgXe66qJ3w+lMln+6oKf6ZCFmOM99qzoH/pcArvQeva0jmx5KKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PG+gdCpn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776233367; c=relaxed/simple;
+	bh=+9A6xNRJnb25icKZPPc6CntcWptZjxHF25hiKgnXWVM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=szaoYfNaghjPjK6/rrqPyyiibIenUsjUAGkwHI6l8u8LmAdm6egg95rtBApf/+Wvsf++mMFWV813g2pZMTTyc2jIjv9pLwrfQ1jotVlSnnAZlyh0rsptS8uOtaPEa2WxkTyAhTg2ZbcVGFq7BIeBDXj7VIQ1n+2dxzL3b+rp6Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=HilZ6w55; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PG+gdCpn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7675AC2BCB0;
-	Wed, 15 Apr 2026 06:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776232840;
-	bh=YpO2tJR55GH2ObkpqG7bQmAtIKqR5Kp4eMXaU9peBC4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PG+gdCpnhZU2mWNHnWjDbccaSYpzW5DWa7oI/L1CZa12jlDWtuuhVgVMvXBSieI5W
-	 1mTKkTaPWJLD/7YPLme69oHfx+SqSdka5UJJLQ1JSEj8G/fwR1vKDIL4j9tCnJeXEk
-	 SY2pobBl6jNteh8KlrO6WT//yIZHk6KAXt2Hjp0Di+VZncSOHveFrxLquCp41i6EWA
-	 RiByggS2Z38tgRf1kBnidx8U6FCVMAdQB7BsauFIhoL+0oihLsQ1YPfGeZkVU1PHNM
-	 TOZxYTnx2E6Ox33hogCr348RU1StshzU5rhoFZrFbiLu1YjSVNVJeZVHHWutt2BZy8
-	 ipURrYufRW9Lg==
-Date: Wed, 15 Apr 2026 09:00:31 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Dev Jain <dev.jain@arm.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
-	ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org,
-	surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ryan.roberts@arm.com, anshuman.khandual@arm.com,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: Re: [PATCH v2] selftests/mm: Simplify byte pattern checking in
- mremap_test
-Message-ID: <ad8pf_wawwRYDW1l@kernel.org>
-References: <20260415044509.579428-1-dev.jain@arm.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="HilZ6w55"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1776233362; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=dyJinyTSq4T8BSAk1UnNAy+5mkfCDxihn06xcyJlkGg=;
+	b=HilZ6w55QxL2Biei6bZE0JtqGYeELuVQIlC9WQbpZ0ox0Dg89pWxS7NyDwxN7JIMoZmFYDn0e0hBIAdwzeFHzgza0ZmZQd0ai95lqCqbUZisPE137jn1ZRaI7yGlAzqCmD+qg+hzDVG1Zx3lEg6iaytUXwOl7mhsruB5+hWg6eg=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X13bA.g_1776233358;
+Received: from 30.74.144.121(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X13bA.g_1776233358 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 15 Apr 2026 14:09:19 +0800
+Message-ID: <1024290c-a00a-45db-990e-50bcf7c817ff@linux.alibaba.com>
+Date: Wed, 15 Apr 2026 14:09:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260415044509.579428-1-dev.jain@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7.2 v2 01/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
+ check
+To: Zi Yan <ziy@nvidia.com>, Matthew Wilcox <willy@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260413192030.3275825-1-ziy@nvidia.com>
+ <20260413192030.3275825-2-ziy@nvidia.com>
+ <ad1P-bfr_Vp6VdKf@casper.infradead.org>
+ <CD565023-4FA6-44C4-8E40-8B06CB09B59F@nvidia.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <CD565023-4FA6-44C4-8E40-8B06CB09B59F@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 15, 2026 at 10:15:09AM +0530, Dev Jain wrote:
-> The original version of mremap_test (7df666253f26: "kselftests: vm: add
-> mremap tests") validated remapped contents byte-by-byte and printed a
-> mismatch index in case the bytes streams didn't match. That was rather
-> inefficient, especially also if the test passed.
-> 
-> Later, commit 7033c6cc9620 ("selftests/mm: mremap_test: optimize
-> execution time from minutes to seconds using chunkwise memcmp") used
-> memcmp() on bigger chunks, to fallback to byte-wise scanning to detect
-> the problematic index only if it discovered a problem.
-> 
-> However, the implementation is overly complicated (e.g., get_sqrt() is
-> currently not optimal) and we don't really have to report the exact
-> index: whoever debugs the failing test can figure that out.
-> 
-> Let's simplify by just comparing both byte streams with memcmp() and not
-> detecting the exact failed index.
-> 
-> Reported-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> Signed-off-by: Dev Jain <dev.jain@arm.com>
-> ---
-> Applies on mm-unstable.
-> 
-> v1->v2:
->  - Simplify patch description
-> 
-> v1:
->  - https://lore.kernel.org/all/20260410143031.148173-1-dev.jain@arm.com/
-> 
->  tools/testing/selftests/mm/mremap_test.c | 109 +++--------------------
->  1 file changed, 10 insertions(+), 99 deletions(-)
 
-I like it :)
 
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+On 4/14/26 4:34 AM, Zi Yan wrote:
+> On 13 Apr 2026, at 16:20, Matthew Wilcox wrote:
+> 
+>> On Mon, Apr 13, 2026 at 03:20:19PM -0400, Zi Yan wrote:
+>>> collapse_file() requires FSes supporting large folio with at least
+>>> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that.
+>>> MADV_COLLAPSE ignores shmem huge config, so exclude the check for shmem.
+>>>
+>>> While at it, replace VM_BUG_ON with VM_WARN_ON_ONCE.
+>>
+>> Why?  These are bugs.  I don't think we gain anything from continuing.
+> 
+> The goal is to catch these issues during development. VM_BUG_ON crashes
+> the system and that is too much for such issues in collapse_file().
+> 
+>>
+>>> +	/*
+>>> +	 * skip files without PMD-order folio support
+>>> +	 * do not check shmem, since MADV_COLLAPSE ignores shmem huge config
+>>> +	 */
+>>> +	if (!shmem_file(file) && mapping_max_folio_order(mapping) < PMD_ORDER)
+>>> +		return SCAN_FAIL;
+>>
+>> I wonder if it should.  If the commit message to 5a90c155defa is
+>> to be believed,
+>>
+>>      Since 'deny' is for emergencies and 'force' is for testing, performance
+>>      issues should not be a problem in real production environments, so don't
+>>      call mapping_set_large_folios() in __shmem_get_inode() when large folio is
+>>      disabled with mount huge=never option (default policy).
+>>
+>> so maybe MADV_COLLAPSE should honour huge=never?
+>> Documentation/filesystems/tmpfs.rst implies that we do!
+>>
+>> huge=never       Do not allocate huge pages.  This is the default.
+>> huge=always      Attempt to allocate huge page every time a new page is needed.
+>> huge=within_size Only allocate huge page if it will be fully within i_size.
+>>                   Also respect madvise(2) hints.
+>> huge=advise      Only allocate huge page if requested with madvise(2).
+>>
+>> so what's the difference between huge=never and huge=madvise?
+> 
+> I think madvise means MADV_HUGEPAGE for the region, not MADV_COLLAPSE.
 
--- 
-Sincerely yours,
-Mike.
+Right.
+
+> In v1, I did the check for shmem, but that regressed MADV_COLLAPSE, which
+> always can collapse THPs on shmem. I know it sounds unreasonable, but
+> that ship has sailed.
+
+Previously, I tried to make MADV_COLLAPSE also honour the THP 
+configuration of shmem/tmpfs[1], but Hugh strongly objected and 
+explained the original intent of MADV_COLLAPSE[2]. I’ll quote Hugh’s 
+comments:
+
+"
+Seldom has a feature been so thorougly documented as MADV_COLLAPSE,
+in its 6.1 commits and in the "man 2 madvise" page: which are
+explicit about MADV_COLLAPSE providing a way to get THPs where the
+sysfs setting governing automatic behaviour does not insert them.
+
+We would all prefer a less messy world of THP tunables.  I certainly
+find plenty to dislike there too; and wish that a less assertive name
+than "never" had been chosen originally for the default off position.
+
+But please don't break the accepted and documented behaviour of
+MADV_COLLAPSE now.
+
+If you want to exclude all possibility of THPs, then please use the
+prctl(PR_SET_THP_DISABLE); or shmem_enabled=deny (I think it was me
+who insisted that be respected by MADV_COLLAPSE back then).
+"
+
+Afterwards, we reached an agreement to keep the current logic, and 
+Lorenzo helped update the docs, see commit a27848a03504 (“docs: update 
+THP documentation to clarify sysfs ‘never’ setting”).
+
+[1] 
+https://lore.kernel.org/all/cover.1750815384.git.baolin.wang@linux.alibaba.com/
+[2] 
+https://lore.kernel.org/all/75c02dbf-4189-958d-515e-fa80bb2187fc@google.com/
