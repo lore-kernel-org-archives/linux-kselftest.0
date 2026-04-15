@@ -1,119 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A0E3BD237;
-	Wed, 15 Apr 2026 13:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCE323182D
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 14:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776261500; cv=none; b=YgNGShk6lszoL5I+v8A4zcw8/Mou0EHuJjv6uQJgoQ3kzYnIus4pLea7jSjmQy+3zcWdwkCbSDkNa3kZ3TTcfusqDbiVQfN0ewpAUNrOSd5zA392FS7GE1Qq2uz4z0M395/awfRdACiguXP9IThBZEt3GAzJzdZwMEMvIdwy6Sg=
+	t=1776263605; cv=none; b=WUpRvLWya310ri4xrGMK0nIjnQm8lrMuIJiORFyLAVU0ik7Zv3R6DcY+IHwA5vFMJsw2PjqoM2prDAXJgFXdR3CGd1Yp2KouRGVo+svBdVn+nPhpJ3KJXyj1WoSMxHmTBMbhz0lNsEP98QeSeQhPMQs6oG/t+kXzBBUhN6R24Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776261500; c=relaxed/simple;
-	bh=UXY9ERp6NRhi1/tb6upj2ujVl6Aw9w6faxCGb2DC5DM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lSuGivBqdI6wfZ08WiDrfPVj56E3WCHQJpaLk6vJs0JxAbxWi8HZcCr6Eb9sxYw7sgdxyx8xbE4soYMQfGfI4djRKvMO+W2Ci+T/WlWzofoJjOGuyHsHJALlYvpC5uGd1Q8aIlP6i6J1BzJBGL6l95v+sHyzgA1CgUwULSwA7VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kV6vjY/R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776263605; c=relaxed/simple;
+	bh=ncYLpANUEqjiK+lrWZ+15aJWUEhTp3NC51cBqmau3wc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PwLeFOA4XCUSv4OSgYD9yWpuxEz51vbx0fOvT9tIjVH50FIysySsb8hizUaYkqGdlWTqDXjFLmKQlcX+jrBgB9zWC2FALdhJzbBkhMkdymjgRh8jXxEfcF2iogdZXv773ymnCl4Bd8ZC4gy8/Zmbv83y61aj6rXyUSPWSeXIaqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkUOcPpZ; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kV6vjY/R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6439C19424;
-	Wed, 15 Apr 2026 13:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776261500;
-	bh=UXY9ERp6NRhi1/tb6upj2ujVl6Aw9w6faxCGb2DC5DM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kV6vjY/Rjtcp7Rgh0FDsCp80JHgxM2T7/iq85pBGnQ2ugeZolQvgq7tfRjslM/YlW
-	 hA4029zQAVdv/fhX3SxCMk6JNEx++XFjwR2qY2YnmxN4rK6YXxWAi6fwMfOeori3Y2
-	 7zzE4b2gSn6Cx6583qEUCImxE/ihMwOqCvvWycvWuXq26ZGSbkIJ7YdSqYH2gSHOBf
-	 683xWEMKuv2ALD+bh8GKdkDW3vqgHsPSX0TIxJ6Wik8bSYESxq3v3viFx5Ar8HmP0w
-	 9Ha4VrBCzlchqd5Xg38J7hiViyOmCN9MSFl50oOwu7N8eI9sFaCRrJCkeiUS5osRrU
-	 ingdbAX7kRkxw==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id B889D1AC57F4; Wed, 15 Apr 2026 14:58:14 +0100 (BST)
-Date: Wed, 15 Apr 2026 14:58:14 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>,
-	torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, Aishwarya.TCV@arm.com,
-	ben.copeland@linaro.org, kernelci@lists.linux.dev
-Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
-Message-ID: <ad-ZdjzQZXNgkpwv@sirena.co.uk>
-References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
- <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkUOcPpZ"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488ba6366a7so83910055e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 07:33:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776263603; x=1776868403; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KYdaXOUNBM5BakQBjjVuu9J4b98oS6k7ObySiqMkXg8=;
+        b=bkUOcPpZJRTq908zunf9NMiuVMjbRRbdcPeSPqh4p+iDOo1NXpfqtYZbiZFh2r7eMw
+         sIPNN/evRsbLkZMLG95IYzhj7/m7P1jG6e7N2LN1Bs+prH65oKWmpNzJ32B26MNbAHiY
+         3XNfp8Fxw7OuWqHPr/3o5y49NDC0tQFHm9sPmXghAobwNaeMGV8w5HDcfbxKazh/pV6b
+         u9KeZ1u8UqWSzqGVWt85sGT0+zwuz9mR8txUN7Q5JBDE91EKe7kiccI4s5jWgikVEGvj
+         CtXYwuvhTNxppqCxQNsOqfNXYj35NmJzvcH733DC9XyngWr0TjQTVxObjyeRf6gPbJhf
+         RE0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776263603; x=1776868403;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KYdaXOUNBM5BakQBjjVuu9J4b98oS6k7ObySiqMkXg8=;
+        b=p37hskrx/QtbXIey+NOmyjJgSE6xmNE5qFpolW1JnkgMWi8ujuU3597Lubk9HS92Jg
+         PJHRMpjqizdZo2yR7CGlB1Lgrg+uFwCQuBWjQ4BFVjTLoD6VsXbDdmn1OGpmGvI1Ekdi
+         lJjG6EGAAGoMffxDZAcXRZFfCnA6Ifnx7zCpOETf3OiHyh4OLcgXQgp+WsB3KeBY17Zj
+         rGffr3b3fMOyYGeNSoc9+od2Ih0hKYTKokYWYt9d5bYWw5zzsyAby1IXCez75SyxGo3+
+         2vXN6iBmIDgA1mipc0s6/a8geBsIDNXFkxXrblUsy4lbH2uuual9kKJaL7paR/BRuK9N
+         YFIg==
+X-Forwarded-Encrypted: i=1; AFNElJ8ZyqEMKUz4biOU4u3SPRdp8WgKBUeEj8u7lVFcthC/IVuxIlj06bd6h7Y6IwSaEmeBj7FCQmGBHbVlzzXwvTA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywh5gsN/EAsdpe6pLOG6cC3Uo0UskXQIdV0bgDfqJ7RoyFqiUtH
+	FTT4mWMu5LProER+cDgd798O6JMyCwUgG4uNiKAO/G8mVgXnfnsHaQLA
+X-Gm-Gg: AeBDiesbARkkeHd+hutNfyrWS3Iuhj126oqXoYM59oGn/CJvbcw8iioFGFYgcOC9OMF
+	QY2Vzv3JpuYFdP6jDOZUIliYg2t2Md7c7dJuqD2PEsfyLVdfiKcx+P/FHxj86NsF6I7e6b9zaHf
+	sgsQEWI5sXlltVW7e79GXFJ23zzjZiFe0wY6sD3kVa3UW133b1itXB2JJUEyqAHP0FARPUfBJQI
+	JWwP0v6mbc4/4HUv5b2Mg3oSMI5vSVklX93F5xQfmqoVIMnplPGI3AmJdzCDPVZUYY3fBGDMB93
+	hVwUEtC7O/St1PDoKp5jZavm38sl4Uv1G2X0yptsFoQBWwHSAUC/z5u/6XuLoexJN0qjjYMjcmX
+	NxwecJ4ka8c2iSA2IK14ZzJwIEiGAyMc4Eol9PcIoIKbdUI94Qcar2ao06/7e6li1fPQJLLX5fN
+	oztGF0yX6f21Lr3CEIR9xKnnQ+TaRPJs20rRgZEy8yhm8ZUPWptr+wJ0t/+9op
+X-Received: by 2002:a05:600c:c08e:b0:488:9619:9bf4 with SMTP id 5b1f17b1804b1-488d686093bmr210608955e9.20.1776263602600;
+        Wed, 15 Apr 2026 07:33:22 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:cbe8:6434:118f:886d? ([2620:10d:c092:500::5:3ecd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488ee042f3dsm118049065e9.12.2026.04.15.07.33.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2026 07:33:21 -0700 (PDT)
+Message-ID: <3afdf4fa-7e4e-4e56-8aaa-c8a04085432d@gmail.com>
+Date: Wed, 15 Apr 2026 15:33:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="R0pF+WDKtWvscPso"
-Content-Disposition: inline
-In-Reply-To: <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
-X-Cookie: Allow 6 to 8 weeks for delivery.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix timer_start_deadlock failure
+ due to hrtimer change
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260415120329.129192-1-shung-hsi.yu@suse.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260415120329.129192-1-shung-hsi.yu@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 4/15/26 1:03 PM, Shung-Hsi Yu wrote:
+> Since commit f2e388a019e4 ("hrtimer: Reduce trace noise in hrtimer_start()"),
+> hrtimer_cancel tracepoint is no longer called when a hrtimer is re-armed. So
+> instead of a hrtimer_cancel followed by hrtimer_start tracepoint events, there
+> is now only a since hrtimer_start tracepoint event with the new was_armed field
+> set to 1, to indicated that the hrtimer was previously armed.
+> 
+> Update timer_start_deadlock accordingly so it traces hrtimer_start tracepoint
+> instead, with was_armed used as guard.
+> 
+> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> ---
+> Currently only fails on Linus' tree since hrtimer changes haven't made
+> its way into bpf-next yet.
+> ---
 
---R0pF+WDKtWvscPso
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch fixes the failing test.
 
-On Fri, Mar 20, 2026 at 03:29:20PM -0300, Ricardo B. Marli=E8re wrote:
-> Track failures explicitly in the top-level selftests all/install loops.
->=20
-> The current code multiplies `ret` by each sub-make exit status. For
-> example, with `TARGETS=3Dnet`, the implicit `net/lib` dependency runs aft=
-er
-> `net`, so a failed `net` build can be followed by a successful `net/lib`
-> build and reset the final result to success.
->=20
-> Set `ret` to 1 on any non-zero sub-make exit code and keep it sticky, so
-> the top-level make returns failure when any selected selftest target
-> fails.
+Tested-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-This patch, which is now in mainline as 7e47389142b8, is breaking a
-bunch of CI systems - at least KernelCI, our Arm internal CI and my
-personal stuff.  It causes the equivalent of FORCE_TARGETS behaviour in
-the top level Makefile, the prior behaviour where the exit status of the
-top level Makefile ignores failures from individual directories is
-desirable since by default we try to build almost all the selftests but
-between quality issues and build time dependencies it's very common for
-at least one of them to fail.  With this commit unless the user has
-configured a more restricted set of selftests it would be surprising if
-we manage to get a successful build and install.
+The logic is also looks correct, tracepoint used to run on timer_cancel, 
+which was called due to the second timer_start, now it's running on 
+timer_start with was_armed=true, so the logic is kept the same.
 
-As well as being a poor default due to the very high likelyhood of build
-failures this also has the undesirable effect of causing a build failure
-in one selftest to cause the whole install target to fail, meaning that
-the build failure is escallated to a complete lost of coverge for all
-selftests in common CI usage.
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-This wasn't showing up in my -next build tests since I set FORCE_TARGETS
-and explicitly choose a restricted set of kselftests which actually
-build with my system and configuration.  It was less obvious than it
-should have been with the other systems since they did not expect there
-to be a complete failure to generate a kselftest tarball and variously
-masked the error or reported it in a manner that looked like an
-infrastructure issue.
+>   tools/testing/selftests/bpf/progs/timer_start_deadlock.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+> index 019518ee18cd..afabd15bdac4 100644
+> --- a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+> +++ b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+> @@ -27,13 +27,13 @@ static int timer_cb(void *map, int *key, struct elem *value)
+>   	return 0;
+>   }
+>   
+> -SEC("tp_btf/hrtimer_cancel")
+> -int BPF_PROG(tp_hrtimer_cancel, struct hrtimer *hrtimer)
+> +SEC("tp_btf/hrtimer_start")
+> +int BPF_PROG(tp_hrtimer_start, struct hrtimer *hrtimer, enum hrtimer_mode mode, bool was_armed)
+>   {
+>   	struct bpf_timer *timer;
+>   	int key = 0;
+>   
+> -	if (!in_timer_start)
+> +	if (!in_timer_start || !was_armed)
+>   		return 0;
+>   
+>   	tp_called = 1;
+> @@ -60,7 +60,7 @@ int start_timer(void *ctx)
+>   
+>   	/*
+>   	 * call hrtimer_start() twice, so that 2nd call does
+> -	 * remove_hrtimer() and trace_hrtimer_cancel() tracepoint.
+> +	 * trace_hrtimer_start(was_armed=1) tracepoint.
+>   	 */
+>   	in_timer_start = 1;
+>   	bpf_timer_start(timer, 1000000000, 0);
 
-It would be really nice to get to the point where we can reasonably do
-this but we're simply not there at the current time.  At the moment if
-people want to see build failures reported at the top level that really
-needs to be opt in, we have FORCE_TARGETS for that.
-
---R0pF+WDKtWvscPso
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnfmXEACgkQJNaLcl1U
-h9Bz6wf8C/yq5aL8RQNgyvkNdVsgvLfYNWtlturQ3ejxHG1pNVBCpEWrnrHE8XOs
-owgKYvOIg5tPgnMFGqWZ9WJnJIUtYA/ngJYoXJQQS8UYVHsaYTu6tkidAvt5KDAR
-lTunKj1KeQJX1jH9JouJin3eIF6BU0FcHmEfRYchbUq2vme2Co3v+qGspCJcZLpa
-beLwZ2vx8wmlpw5Xr+iTx/QSAPUox3jIGCs5VqAMKk+QrAZK3TSyeLf/BBhqasP5
-a2gb4rXrz38NqZUBa8ID4oq8/91EDnqjL3BfmqX6+ljvUcMEBd0Y2b+V7v1pHx0q
-IFqr1TZuBStd+waVFDn1Jp2rxhA7Kg==
-=lRPp
------END PGP SIGNATURE-----
-
---R0pF+WDKtWvscPso--
