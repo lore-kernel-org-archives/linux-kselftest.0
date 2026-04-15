@@ -1,63 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B962BD587;
-	Wed, 15 Apr 2026 00:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBAB308F3B
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 02:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776214731; cv=none; b=uSMAlBSTztOjt1ylGnLBUZP04s++mBU6ALLFL6gtG1X1AauwFRhv0FqVBeOwj4rLDHaOhj3/stttocJbm9TdddBcwiXCgJeLMjlbaihJCisLAMyrFcC7SiA2XrZmOS43Q2ylH7/7W09d/vVdljoF/NeniWrTxt3mzd1c1Kc7aLc=
+	t=1776219761; cv=none; b=Brjw1/XMF8eP+AkrR0B7TnBfAmUPl2KQMuJqW2zFEKWKMHgIhutxZ1IdskZyXNEktOPTA6BY1l1OidGerxSSGJczgE9cHeQROy9RMFZ6t6TmN6pjd/dF7vlWZ+H0K6FW3HQ1yZ/E8SOV02fD5Lxjn+8bGqbhRO8KUQ0dwb07JCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776214731; c=relaxed/simple;
-	bh=tBeimkel2oqUw1fWhpVesevl+bRR9p62lc/L6o3My6A=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=XlWITE85nhoei5fMcxBFHtija+Nz55Ju9bmunbZvbbiMMYd7SRAfUfVVkZQHH3Bgi+Kisn5RVxi/9en9zuPM+5MtQwI/r+nA4R+sM5KooAvdQHmHB8zqTNv3/7RGal0zB/tizoszlx0RnuZlpVCVoDYCWXRPkoKTEB8RUwu2x3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UrBfxv3G; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776219761; c=relaxed/simple;
+	bh=ZnAgyefV7j+HdWbSCjRgUnb9/TLI4F5WnQl6jhsgORs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uxnSNpe+FEjbIwk3Mm37gLbOeM7u7yfoCN4GR5ObNezkjtQCDIMiEvSuL6+6W/gIgq79M+WbTqet/XdJ5jVyap14kCbAlQl7fni09ASev778nUZyM1nnaKIsofCV5NOSjVcMoAH0hhGisV2QMwm9fnLE+bHz0dfwD/AD0aoB5bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EaYSXFOx; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UrBfxv3G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8409C19425;
-	Wed, 15 Apr 2026 00:58:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776214730;
-	bh=tBeimkel2oqUw1fWhpVesevl+bRR9p62lc/L6o3My6A=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=UrBfxv3GGUGxGHv71t//Ql8gQwnyfTSyiX2YendNX+Ht3Y097KEpmyWUyj/2WMImL
-	 Y34DFNg9s1kCbcnUoRXCq9aFc05bDiusJ4LYZs7KUYe7oOOnIfZFgQK37nKdzTB1e8
-	 /MEmhtDo3kug8SpyCMF0x+OMQyQSjfpHHZQo4Vf/ZhRQ0ptw1Nf+yTSkVyc2Vfy/tB
-	 4YwlPPnT2KcPH6Y/LsLaz7ZZPbGClud1LQ5VCbyaqy6Vc4CnVkpu5Ft+o7kaCRxkAg
-	 vCcukv18U2h64CimAcjbbrrcWE/Gp9kuyjRMjg7+lz7U2FCmRR5MYIxG7GV1vcTIRJ
-	 Hx4ARFI7rGbXA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FCB53809A29;
-	Wed, 15 Apr 2026 00:58:22 +0000 (UTC)
-Subject: Re: [GIT PULL] kselftest next update for Linux 7.1-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <e0756bd3-4997-4c1c-be38-2c8551795e50@linuxfoundation.org>
-References: <e0756bd3-4997-4c1c-be38-2c8551795e50@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <e0756bd3-4997-4c1c-be38-2c8551795e50@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-next-7.1-rc1
-X-PR-Tracked-Commit-Id: f8e0a5a174d7d3bc3547c15bc1647c35427f5c34
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e997ac58ad0b47141c62c79cde8356fe5633287a
-Message-Id: <177621470078.1543667.18408822197567867431.pr-tracker-bot@kernel.org>
-Date: Wed, 15 Apr 2026 00:58:20 +0000
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EaYSXFOx"
+Message-ID: <a6e657bb-4022-4ec6-b634-0e70285d0d6a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776219746;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=07Gfmo26p9pCjh0thm2aRrhY2n676z8s90wlwpR7FPY=;
+	b=EaYSXFOxCL205YA7CSKMd++RZoIHr5LukZc0e4S1OIuc+mO7Xxsp/zJu/Cqh3WirkjH/os
+	Gt21pp+e1VJQr32QcI7cLhYIkERIMTRKENQ5NMgbxd+Hb79Ir4BSY1AUnUcTklfivPa5Zl
+	aFnpur4yr+VgNMbCQqGpjBAaPyNn75c=
+Date: Wed, 15 Apr 2026 10:22:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH net-next v2 2/2] selftests/bpf: verify syncookie
+ statistics in tcp_custom_syncookie
+To: Martin KaFai Lau <martin.lau@linux.dev>, Paolo Abeni <pabeni@redhat.com>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>, Eric Dumazet
+ <edumazet@google.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ netdev@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260411013211.225834-1-jiayuan.chen@linux.dev>
+ <20260411013211.225834-2-jiayuan.chen@linux.dev>
+ <CAAVpQUCCZVogDUUTfr3k-JxV52kpVvdYzqFC68-J3n6_ugd4Uw@mail.gmail.com>
+ <6b22a595-cd65-42ec-b332-c835273bc174@redhat.com>
+ <04cafd50-7af5-4835-b0df-67393d9f5a51@redhat.com>
+ <2026414195145.Ur8-.martin.lau@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <2026414195145.Ur8-.martin.lau@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The pull request you sent on Mon, 13 Apr 2026 16:41:17 -0600:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-next-7.1-rc1
+On 4/15/26 4:02 AM, Martin KaFai Lau wrote:
+> On Tue, Apr 14, 2026 at 11:17:39AM +0200, Paolo Abeni wrote:
+>> On 4/14/26 11:08 AM, Paolo Abeni wrote:
+>>> On 4/14/26 7:50 AM, Kuniyuki Iwashima wrote:
+>>>> On Fri, Apr 10, 2026 at 6:32 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+>>>>> Add read_tcpext_snmp() helper to network_helpers which reads a
+>>>>> TcpExt SNMP counter via nstat, and use it in the tcp_custom_syncookie
+>>>>> test to verify that LINUX_MIB_SYNCOOKIESRECV is incremented and
+>>>>> LINUX_MIB_SYNCOOKIESFAILED stays unchanged across a successful
+>>>>> BPF custom syncookie validation.
+>>>>>
+>>>>> The delta is captured between start_server() and accept(), which
+>>>>> covers the full SYN/ACK/cookie-check path for one connection.
+>>>>>
+>>>>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>>>>> ---
+>>>>>   tools/testing/selftests/bpf/network_helpers.c | 22 +++++++++++++++++++
+>>>>>   tools/testing/selftests/bpf/network_helpers.h |  1 +
+>>>>>   .../bpf/prog_tests/tcp_custom_syncookie.c     | 20 +++++++++++++++++
+>>>> As you touch bpf selftest helper files, please rebase on bpf-next
+>>>> to avoid possible conflicts and tag bpf-next in the Subject.
+>>> To hopefully  minimize the conflicts handling I'm going to apply patch
+>>> 1/2 to net-next. Please resubmit patch 2/2 to bpf-next after the
+>>> relevant net core reach there.
+>> Uhmm... the original feature went through the bpf tree, so I guess both
+>> patches could/should via bpf-next. Hopefully conflict into the tcp code
+>> should be minimal.
+> I think it is best to land both patches together. It seems the 7.1 pull-request
+> is out. We can take it to bpf-next/net after the merge window and then follow
+> by a pull-request for the net-next tree as usual.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e997ac58ad0b47141c62c79cde8356fe5633287a
 
-Thank you!
+Thanks, Martin. I will rebase and send it, targeting bpf-next, after the 
+merge window ends.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
