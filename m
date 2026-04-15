@@ -1,287 +1,250 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012035.outbound.protection.outlook.com [40.93.195.35])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010052.outbound.protection.outlook.com [52.101.85.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3482E2FDC38;
-	Wed, 15 Apr 2026 18:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CE523183F;
+	Wed, 15 Apr 2026 18:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776276103; cv=fail; b=MYgKgtAr2QzCWgQbHG2a0m1Hn5jSD8KdekToAtN4xujArj/6Ef4So52HojIPOLyGa+OTJTAboKqkAK1cMLaNWDG1ODGNoENptU5sMj+NOB4uEooeSaDTLnBsCpyQmizu/+ASpUKgIWoKpuIvHv9BjLkyt5EqIKlfzfeWq3oI4bg=
+	t=1776277521; cv=fail; b=srzqe/8uVFBpHwDhVIpIOHshjbR8d+lBjIMHVEhfcsbVAtus3aC70BDmcyNp/LXBV6Mkl71V+OrYoJeHfn1qjqznhpJY1mR+bNYIAENOsRxczFfEPeKBuWgGNyMPEjCRwwi/CVVsthVVF+SfDNrksDn/tC5n5y8E4NLFPVr6jEM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776276103; c=relaxed/simple;
-	bh=SnjB/RRBzR1ton5UsxaPVc8iQWOgj1zmaUMX/ZSr044=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FNRnCgMPAOmHotj2b09xXpQTLLlBQJpVoxqfsSz76qWS1NA5SbxE1Q/H4PD2y025MlEDJpxQK+D+BwCK2xvefGLHmc7rkIVlMKOcnEzBtMkJX1jhMFPQfm0ZjpZqAztIQmcVLs3QRwmmf21oT8+dAmgV1050R5LWaAhkIw/2Akw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=C09ETDyq; arc=fail smtp.client-ip=40.93.195.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1776277521; c=relaxed/simple;
+	bh=i7+IsrvZZrjbhKzEN1IW/xVTFT640T1u49k9fnXwPEs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NIA8sZCIVCsbd6BOKTs5t0AfW5Cbf9js5vGjc2sK1lUBaKTXUhPPZf0mYJGP58CKNuWHxpmf37XNeRf6AjwrXGvzxQxgCdRviINO5hgB95b7/s3VOm4tJTB1YBXTWDIm3k+fs+BIaAvgqBZ6nNBWEMgebugeAnwBwc6asiWCtVU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dfCQJIdg; arc=fail smtp.client-ip=52.101.85.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="C09ETDyq"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dfCQJIdg"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=phlGZtDluSL/JIMJ5MEFB3VMVqbLDHtl95WlyMBb9imzY2LwPDJP65gNU3jNZrTKYr4IysGS4gLszAYeG7Io+pgEHg8RoC9prRiFYYBNumIbj6f2xSM7bjr7Myp22uZvk7F4d3AlgMLmu4otXRIk1mv1iwOEcmsh6UoxSYzu7r1SfYeNgTHyTfvgv+5lv89c/yECPYuV8zkRQeRmcGQ/i9epWLEwcyN+o8NUHc029EaSZAVXijoTLgWezccZCW+xQSdtc9Iyl3n4KpMHYTo+vmSywj098SeioA5XLFEtsmFg4UTw3Rtaiq2a0bLb5fqM5gQn/nnFBREwxqS5zffGRA==
+ b=Gf7yIrYYPesDLtsBMcEZuW2BpWBEEIiZt/NqgevNcbIHsRVkkl4voxuqQ0pETI3bAjsQ6IwDR+epzJlZPxuWxk99Zd3WPP5/VjFV6Rw+fZpsvlSPZIh6xLTYNDeO/1J4ZiIsMVh1ZIK4ZtJnYkVJDTTtwJfx45pIxJGiiebs3qQpzFlyBpPGtk2ScbFq31ifFp5gPw9cF36Ukj8h1j+OxZqsfKMUjpGUKpGrwuQnXJE/4BbIhlfbRwcOo/8G6RqPqSOwohL2NXcPKkLMFZOcYo7sW7qs87eGLVv3yWZMuztAKNZoOXK1s7zWs8MJsnfKaikjL+mvopDrKFzhkifu2Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EIVoJFKLsd+GmKLJIP56L/AqueFYsBTzI89ga0HARPQ=;
- b=GC18814QhMb4OS842OmWk7BEBXHvZAp5UpYKbmhjB8rmNgw8CHUcm7btKdIJGaSLPId1ITq/9n6VO0b+TNLELrX41EujdOIvANmFIWgwD2DtVAKhUkmWnhH4uAJ1BThbX9/vueXMLcOMj68BFMDFzXx/Zu0Sb04EnBnCWZ80F9NLZ+Lhq42OfXr/yfZAhIt97PDjaulpiDYBf0zW6R3IL+gdd60oyS0XgMHn1gc3qmL0qw8+vjMSwOTQiB9sk+LKhnNQu422cJjoaqxTuX6iJVZiSTqbxvdyQpmzI0i9twu6U0EzD/EkE0oLh2PIIA/HPUiTMqPfxbCW8RCbdkt2cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=P4rCORCZUrDIswGomzzXoi80PnU6YWQ8UcX2vVfV7Pk=;
+ b=E79syLiBH3ekD7XdqwxzeWQUnWRs8sSf9fTdz/9VVYY9LAadIPk2/wyYSc42TdPjIeJkXrpHiUsZQQYOS3s8upfI6BP2mqRINzL4lYtMwIIox0Ajumwd4zRFbj5iIKBNsG40w2NrncZJbq3e0mPCFHqlqq7GjMWIw+LvIZhqPktblYHGkPPIVsOZZE15zsHw1aWwyFQGsKpKZN8iMJHDf1FExzu7GUNPNklwZQ9jiBjV8U+afLoPo1YPSP/OGLogUYtwJMN7OTjs3obI8agmUmmaPKITyoSWXfw4aWMU+1oVQYq/mF+hLjSaQkox2IO5/b7YNEN6YDfEypsMgdynAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EIVoJFKLsd+GmKLJIP56L/AqueFYsBTzI89ga0HARPQ=;
- b=C09ETDyqccLuowvEocgnCvMyxXwxOoDVugv9L4tCw2is803IMnaomhLlCSDgL6BZl0X5XukfX5EebprUtLk9u0BeTrLiHacPzIVPTPtjRtMhuploJmPeie28kB0pN74dWMefjviQ2VOPIO/baw5O9JCvMiSim8U5ZBTrmjbryZ5ANztmJKghAxmHa3dRgMiTK4gZdPIptQ/Tam9r3XdlBVCPMVTkE05rYLIxovnC3K7V0+4wY4Pa0d+AgA7Vq7vUtclFsnuv6DYmJ0vnkAYInUiMdNGB8YR+4186tvpJR1qGQMa/B8V2bJg/SFl8N+i3UA7HtdACMvTkhvuyjFdzWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL4PR12MB9478.namprd12.prod.outlook.com (2603:10b6:208:58e::9)
- by IA0PR12MB8086.namprd12.prod.outlook.com (2603:10b6:208:403::7) with
+ bh=P4rCORCZUrDIswGomzzXoi80PnU6YWQ8UcX2vVfV7Pk=;
+ b=dfCQJIdggMjH+Pknf0wE6p5ZPeq0itMmdGUzE58rCGVBBXjHQ/oAOGFpow+Vo0H0StnPuskXEf/uBMfz+FvXVMJnRWynfPjBRP31avPpzAvW9HeStW5sEi2I6t37fpwNpmcsjNJ+vB8x5UWlGeKHF1BMNRU7lSd2j7KC8tBKQSA=
+Received: from MN2PR14CA0006.namprd14.prod.outlook.com (2603:10b6:208:23e::11)
+ by MN2PR12MB4256.namprd12.prod.outlook.com (2603:10b6:208:1d2::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9818.20; Wed, 15 Apr
- 2026 18:01:30 +0000
-Received: from BL4PR12MB9478.namprd12.prod.outlook.com
- ([fe80::4d08:451e:a51e:33a1]) by BL4PR12MB9478.namprd12.prod.outlook.com
- ([fe80::4d08:451e:a51e:33a1%6]) with mapi id 15.20.9818.017; Wed, 15 Apr 2026
- 18:01:30 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>,
- "David Hildenbrand (Arm)" <david@kernel.org>,
- Matthew Wilcox <willy@infradead.org>
-Cc: Nico Pache <npache@redhat.com>, Song Liu <songliubraving@fb.com>,
- Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7.2 v2 05/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
- check in hugepage_pmd_enabled()
-Date: Wed, 15 Apr 2026 14:01:27 -0400
-X-Mailer: MailMate (2.0r6290)
-Message-ID: <68F85F77-8EFE-449D-B643-AEEB38CB50B2@nvidia.com>
-In-Reply-To: <38697379-cbba-4c64-ae65-6774b01021d9@linux.alibaba.com>
-References: <20260413192030.3275825-1-ziy@nvidia.com>
- <20260413192030.3275825-6-ziy@nvidia.com>
- <ad1TMjF1L3usYIC5@casper.infradead.org>
- <05F00072-7E06-47C9-BC26-FE3736F557FC@nvidia.com>
- <a4d477a8-71d8-4219-9cb3-153f2c01e184@kernel.org>
- <84B8F641-A3DF-4219-AA57-6BA48E9B4998@nvidia.com>
- <998c02b6-2612-42c1-8099-d65ae275d1a2@kernel.org>
- <7468C68E-FB09-4714-94A3-4BED63453295@nvidia.com>
- <b7aa5515-6908-4ec6-91e9-eb79d5ef70b4@linux.alibaba.com>
- <afe0dfb9-feeb-4243-bc4b-305e5e33b581@kernel.org>
- <38697379-cbba-4c64-ae65-6774b01021d9@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: MN2PR11CA0010.namprd11.prod.outlook.com
- (2603:10b6:208:23b::15) To BL4PR12MB9478.namprd12.prod.outlook.com
- (2603:10b6:208:58e::9)
+ 2026 18:25:14 +0000
+Received: from MN1PEPF0000ECDB.namprd02.prod.outlook.com
+ (2603:10b6:208:23e:cafe::e6) by MN2PR14CA0006.outlook.office365.com
+ (2603:10b6:208:23e::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.48 via Frontend Transport; Wed,
+ 15 Apr 2026 18:25:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ MN1PEPF0000ECDB.mail.protection.outlook.com (10.167.242.139) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.17 via Frontend Transport; Wed, 15 Apr 2026 18:25:14 +0000
+Received: from localhost (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 15 Apr
+ 2026 13:25:13 -0500
+Date: Wed, 15 Apr 2026 13:20:41 -0500
+From: Michael Roth <michael.roth@amd.com>
+To: Ackerley Tng <ackerleytng@google.com>
+CC: <aik@amd.com>, <andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>,
+	<brauner@kernel.org>, <chao.p.peng@linux.intel.com>, <david@kernel.org>,
+	<ira.weiny@intel.com>, <jmattson@google.com>, <jroedel@suse.de>,
+	<jthoughton@google.com>, <oupton@kernel.org>, <pankaj.gupta@amd.com>,
+	<qperret@google.com>, <rick.p.edgecombe@intel.com>, <rientjes@google.com>,
+	<shivankg@amd.com>, <steven.price@arm.com>, <tabba@google.com>,
+	<willy@infradead.org>, <wyihan@google.com>, <yan.y.zhao@intel.com>,
+	<forkloop@google.com>, <pratyush@kernel.org>, <suzuki.poulose@arm.com>,
+	<aneesh.kumar@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, "Sean
+ Christopherson" <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+	<hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+	<mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song
+	<baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie
+	<yuanchu@google.com>, Wei Xu <weixugc@google.com>, Jason Gunthorpe
+	<jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>
+Subject: Re: [PATCH RFC v4 10/44] KVM: guest_memfd: Add support for
+ KVM_SET_MEMORY_ATTRIBUTES2
+Message-ID: <3blpenhpvysb2ig7efegedx4v3flppl5ftnz6vhpqlatfk3ycn@vmmhs7mvjieg>
+References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
+ <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com>
+ <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
+ <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com>
+ <eiiecl7jvywvqb4drq7cchmcabcrdka25wxr77uavxqineeedm@rfcnhdz6xoxf>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <eiiecl7jvywvqb4drq7cchmcabcrdka25wxr77uavxqineeedm@rfcnhdz6xoxf>
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL4PR12MB9478:EE_|IA0PR12MB8086:EE_
-X-MS-Office365-Filtering-Correlation-Id: 18723a24-bfe6-4f0e-93ca-08de9b190541
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECDB:EE_|MN2PR12MB4256:EE_
+X-MS-Office365-Filtering-Correlation-Id: 06494f9a-b0a2-4bbd-0640-08de9b1c5634
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|366016|376014|56012099003|22082099003|18002099003;
+	BCL:0;ARA:13230040|1800799024|376014|7416014|36860700016|82310400026|13003099007|22082099003|56012099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	BD1AbVlp8wmr5t+IgWB/fmoVCHKrdjjODuXoJ8wxphgJihZvXHT5ZHw6dfEwqUgUgJtyoSvgI6qWsbM4qZhaREc5yRPSLrDYgGVbwbiYtn9syPnn7VIvUFZygdBNt2nmuIFKyVSsL1W/hdgxjBaqktuh93Vr/RmRynxCo7rjX9lmDzAW+aWe1GfpsjON1dMxuKakTCeNNACB5xMWQhlw9/M4hGW9lztDbpfkUXeWBusDmKl9YzSSdb9jpYPc/sI+sFEzu+RtwcUplg2xAUUUBaVWMcGexZ3gf3510sdDhnVc8YAbGf3MrOUobe1eGn808EQivS+GMdNNFhHqJiAkwoReKPALQSt3F3boBSOMEN3xR42x6SHXozXxKt/y6WSh6tCFt6SGWBGyBTpgitFGu3lkMA1SVadiVBTgmgXnDeO4s9iiKbcfpRqyMlIfYIi4YUb5mNw5CZ4gwjb6IjC40dmGeufPkoA5uq/AfQi6LdcH2InUUWKzL+CORAsriXkGVTRfDRc8NF4a+LuD5kGvWrBJ7UTh2Vq4L3MhHHoRgLtMrvM/ghiqngO90wLmzHOu9wf6edVqhz3M8P0WfSaSChFT632HgFTHPCb8Axk3ZeOjT4mizVrNEKfCBLJ5NSPZey+s18DVU9adjBAWAIFMt4cuq3KbFtWFDg9wKqEqd1aaJ4+OMF4cmYafk4Od3l/0C4XcmYR+skmlqILswABnc5E5SilWqaY/ZajNN8tPCu8=
+	eMuIns9H4BpWzkuuji+ygO2xBt5NvIY+L9FLNDpbUZii2en+dlg+l/yUB7m925t5/uxKfeelc6gee4aYPYe35JspOp2KJz5YtrMjO3wfIh5QmFB6uz6r8TcgfxeldUCaTKikjNBAGcu/VfLDMCbaHLgTKeuoGkFyOpe3vbn4lg2/V+tNN6gV9g3R3Z3jURUy7lAgmJTPJluWjEtyzthREk5leHIp+ddAOdfaj/FDUw8bGhH82+zGwwZoQWDpJIZeo4Y7NZrY4eko/JOykVh3JGEHbKouACsMIbGZSxv//+E17FE6vcqgm50F/XQThWW2pBeInfHSDu30tyMAi4hsEUGvmO3bW3IP9uAskeet1gV2SF/EmNh4K2PskQy5amJIV48z2NL5w+xTj78yAGTYG/TGdhZjRgtQfuqYdNJ2QeUDIdl+wv4xOBDO6M1xH+sGSeW9SNoVmuBlvP3NO25XIwcP025016jPoHdX0IFMxzj0XtmxRxhcbBY04mCEqp0Ue8urSULxxWZfHpxlMifi+DXtfErWkeXthIgURNQ1gv1YDuiumWc9l4HA3VOGMcZidiZ6b2y3bbhq3T6xJ5vlTrgUTVMZSZBCvsXhIdfLq3Dw6ftcXQXz7Z4T0rC+yVX7jr/lq0l8PiuUA+ZT6jBmRnxQk/cNo6nkODnpzRqsEW0q0OvLES5C/2HbtYNxdb4Y5nZvtQJXAcmMym3IQ8GeYL+VlEiQyuei9bE/fB1B9QgrWHcN6hJIjEbT4AK1TFPFZgXYj7FAo7j33LVvVjCKfqG2pkyU/MHDHdhzKGZiusA=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR12MB9478.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700016)(82310400026)(13003099007)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MURVa1IySFg0WWR2ckoybDROVWpPc21ieUVMdVlKVVNjUkMwRmVMTFVvS0hv?=
- =?utf-8?B?c20wbFgwSitqQjZaRnBrY0c3RmJoeWZ3ZmtoeUlsaVBNc1F5b0dXL1dPdGh5?=
- =?utf-8?B?Nk5ReW9rY2UzV2dML2g2ZFJtUnpqU2NJRC83VWdjUGJiOGJRMzdHUFU1RTAx?=
- =?utf-8?B?dGpCYjg3QVlwQzYzMkxjTC9PMGs4dU1yWVVqRW9mUTBLU2FOSDR2d2ZkbEZI?=
- =?utf-8?B?cTBxUXlINUZWMEVIZjh2UURoS29Fbm5NVUdFbzUvNEkrVVhWQWVPR2lsclZ2?=
- =?utf-8?B?UHpaU0FGNFcvbDl1TkIvclpWNGVXTXNMM0JCdXgvME42dncvdFExVmdIUWRO?=
- =?utf-8?B?WWF3UGRvRjBhWVg2YWw3SkZQbFhGV0ZGQVVLY29ja2d6TjU0cldDYnRWWEEz?=
- =?utf-8?B?bGRxTWxoSFNQOG5pNlAwZHFFRSsydThWY2VQTWk2clp4TXU2Y3NXakdkUmRr?=
- =?utf-8?B?cXdLcUlFaWFsd2M4b3g4bjRLSEhhejdRRFhtMWFUQ1FlSVozMktEWmJLcHhZ?=
- =?utf-8?B?YnFwWkNNVi85N09EWHlUdUVyNTdqa0lCVWNWSWMrbHJFV2M3MU1rVmlBK09j?=
- =?utf-8?B?a3NpaHh6STdabWtIYTIzK3M4Z1JMVkdQVmdBMzUrVmU2T0YrMDJTUDdFOWhi?=
- =?utf-8?B?K1psMkxMbUJvODkwdDNEc2krdWRxMlJQZGEzNDFyY0FOdTFIQ2kvU3lKdnkv?=
- =?utf-8?B?SDh0ZElERGE3VVlCL3dSelJkMkJyc3BKR2J0VkpNMnZKa01FOVJnVitYbGdi?=
- =?utf-8?B?ZFZ5M3NPOStQRkNxL1dISHJMbWdDWWpGQnVqc3V0d01keTRISEVnUXJIVDVa?=
- =?utf-8?B?SWUwUlNRUXYzM1FsZDVMMTc0bHVydDg1YmtoQldwY0JaRlc5d3J5NGQ3RWJU?=
- =?utf-8?B?aHAvOFZuNm1NTk8rUlJHdEYrWVdRM2x1SndDbE50Y28ySG5DYy9rQW5PVlNx?=
- =?utf-8?B?U3BFM3JYVEdVNklma3pHMzExNlpxQXRkYXdUTndDVkRwOWhSN2Mvbkk4U1Rh?=
- =?utf-8?B?SjlidDBhc21taFg4YjhjV04zV1d6NFAyM2xwZ04wMm5JYlRXajBzL1JVUkFP?=
- =?utf-8?B?enFLWlJOYUVQNXRyWE1PUUlRVkNROTF4R2UvRjVZbW1GSEhXMjBmSEVyOW9I?=
- =?utf-8?B?bmhJZ0xpWlN5cUtYR094clhhcDFqdXBpZVZodXRkNitkMGZHOUY1UUdVY2pI?=
- =?utf-8?B?ZU9FWm1TaW9lQ0ZJakN4SmdNckJ0L1NEV0owWnZnRFkxWnFTZk1zWFJoL3Jq?=
- =?utf-8?B?VVFpL3M2Yi9SVEZFWTU5SEJxZnJ2Mjd0bXl6RVNzN3h2K1dRWlZnY0FNK0ZJ?=
- =?utf-8?B?cElza09INlY5ZnhSRU0zY3E4Q3QzWDhJM1hFanV1M3EyWXdYa1FYRi9TOG5Q?=
- =?utf-8?B?a012cHBGU0FBdFZUbWpvREdSblFqZk80eDk1Y3BvYUhVK09mdTlPR3pQUTdD?=
- =?utf-8?B?d1RqMGJ6blZSZDAyWW1UREJDa0VXcWlSMVFPZDRWS21VbldhVVFXMnJUd2JR?=
- =?utf-8?B?SkZpNVA5WXpwWlBGSW5HMzZFdUM2c3hGbFlSOUJZb0o0KzZKeUdEWGo3L2VR?=
- =?utf-8?B?R01oTE1EZWxpN3JlR3QvakJqSXNvNkwyYWgxNUg3MXRZb0xLQXoycmJDT2Vh?=
- =?utf-8?B?Q2VTSUpNZHBBc2g0aDNidmY0RDVXblNjb2l1aThtSzhFQmJqamllZVIvSW00?=
- =?utf-8?B?akNEQTdtWnZWSUwzeUJkTlpGTkpNVWVoekpzbWd0MkFhd1BQM0pra1VIbWNY?=
- =?utf-8?B?ekJ0eVZ1bTFCc1R6Q0J2ZGI5V2JiRnVGVFdRNUl6clZxclhLVEZlOEp0WkVX?=
- =?utf-8?B?Qk51Y3hmb2JmQkFMd29GdHNQZDg0T0d2TEY3YjhmWUpFOW8xN2ZzZkl3YUlB?=
- =?utf-8?B?ZTUrc01LQW9yWlNXZEFJQnN1MFZHNWk4aHRzazhjSjFBZFBHU3oweGtia1p4?=
- =?utf-8?B?eTRKNVhJcENCZjRnOXo0d0MvVEwwMWJmU1pFOFlWV0hvZ2N1V1dNbEZxWEhG?=
- =?utf-8?B?RTAzQlBlMUJIRmNERitDa3FTUm1rZGhFT2IvNDl6aExPcjNkLzdCM3JhWGtL?=
- =?utf-8?B?SUlLOFkxbWwxdE1TMFRZK0REeWpEaTBFSVNrbmtHdDFWdnl1RWRKQmtsdU1V?=
- =?utf-8?B?bEp1TVcxUGY0RDJEQ2MzMG9uWmJwMkhPQ1YvbnJoTHVXWlJva2NOVUZFRTdT?=
- =?utf-8?B?a2ZHd1QxQXpNcjZGT3NESzY4dG1WWGEwRmp3bU9qNm5ibEwzbDdNL3VTZ2Ri?=
- =?utf-8?B?Ry9PMm02VVBrRXNvQ1h5V25nUFhFSXlrdEJLRzFrSDJKYmFvanBaNkJSWFBZ?=
- =?utf-8?B?TEZ0cnovY2RVZDQvSFJvQ3ZMSlFvZEl3SWZqdVhjc2o4ZUIzNnk1Zz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18723a24-bfe6-4f0e-93ca-08de9b190541
-X-MS-Exchange-CrossTenant-AuthSource: BL4PR12MB9478.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2026 18:01:29.9616
+	5vkyB7KZa7YBGZNkyCjrpfpvq57bQRtgSz5GHOYNmxkOtZBBKsTkm+LHQOpillmTZi5AL0UDfzuU6LrkOGJ7a+ZVvVdM2fT3WUCEOGn5j41mTgrqiQZUydjQ6J2ZxZV4Q64WXxf/5fp9eNFeQVmduSz6z0olD0ySkaIAAVWRkPdK/Tja8hb0so/gYBkfFCA1cd1eJpz1H7g59LBEt7OzjfdxPJdcZAitL+/9QVUWGdHSkqxLjRNvvLxbtqQUVrLoMPuD1m5MEJxACLz8oXbWkmgybcf9OP2Z6eOyOVkn0d/TIjJD+FF7S74xRrlVfAD7jZLu/rZsfMvypPPiC1SRbIs/7SQt5Nbrt5EdcGVaje+3mlrLH/DIpudSceffXYWB5kXJlpa82eSRNX5EnzA/7i1XlJXu4JHYVS98J1XlP/O5RNyujIdXsgeU6iMb+dGQ
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2026 18:25:14.0299
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P6R7F+uh8MXQc3U73iwxz5LxatoLegmVL/pMj2dO3RRLKN1f4dR0r9OloS9LW9Cq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8086
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06494f9a-b0a2-4bbd-0640-08de9b1c5634
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF0000ECDB.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4256
 
-On 15 Apr 2026, at 5:21, Baolin Wang wrote:
+On Tue, Apr 14, 2026 at 06:37:00PM -0500, Michael Roth wrote:
+> On Wed, Apr 01, 2026 at 03:38:12PM -0700, Ackerley Tng wrote:
+> > Michael Roth <michael.roth@amd.com> writes:
+> > 
+> > >
+> > > [...snip...]
+> > >
+> > >>  static unsigned long kvm_get_vm_memory_attributes(struct kvm *kvm, gfn_t gfn)
+> > >>  {
+> > >> @@ -2635,6 +2625,8 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> > >>  		return -EINVAL;
+> > >>  	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> > >>  		return -EINVAL;
+> > >> +	if (attrs->error_offset)
+> > >> +		return -EINVAL;
+> > >>  	for (i = 0; i < ARRAY_SIZE(attrs->reserved); i++) {
+> > >>  		if (attrs->reserved[i])
+> > >>  			return -EINVAL;
+> > >> @@ -4983,6 +4975,11 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+> > >>  		return 1;
+> > >>  	case KVM_CAP_GUEST_MEMFD_FLAGS:
+> > >>  		return kvm_gmem_get_supported_flags(kvm);
+> > >> +	case KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES:
+> > >> +		if (vm_memory_attributes)
+> > >> +			return 0;
+> > >> +
+> > >> +		return kvm_supported_mem_attributes(kvm);
+> > >
+> > > Based on the discussion from the PUCK call this morning,
+> > 
+> > Thanks for copying the discussion here, I'll start attending PUCK to
+> > catch those discussions too :)
+> > 
+> > > it sounds like it
+> > > would be a good idea to limit kvm_supported_mem_attributes() to only
+> > > reporting KVM_MEMORY_ATTRIBUTE_PRIVATE if the underlying CoCo
+> > > implementation has all the necessary enablement to support in-place
+> > > conversion via guest_memfd. In the case of SNP, there is a
+> > > documentation/parameter check in snp_launch_update() that needs to be
+> > > relaxed in order for userspace to be able to pass in a NULL 'src'
+> > > parameter (since, for in-place conversion, it would be initialized in place
+> > > as shared memory prior to the call, since by the time kvm_gmem_poulate()
+> > > it will have been set to private and therefore cannot be faulted in via
+> > > GUP (and if it could, we'd be unecessarily copying the src back on top
+> > > of itself since src/dst are the same).
+> > 
+> > Could this be a separate thing? If I'm understanding you correctly, it's
+> > not strictly a requirement for snp_launch_update() to first support a
+> > NULL 'src' parameter before this series lands.
+> 
+> I think we are already sync'd up on this during PUCK, but for the benefit
+> of others: Sean pointed out that if we don't then we'll need to add yet
+> another capability so userspace can determine when it can actually do
+> in-place conversion for SNP.
 
-> On 4/15/26 4:00 PM, David Hildenbrand (Arm) wrote:
->> On 4/15/26 08:36, Baolin Wang wrote:
->>>
->>>
->>> On 4/15/26 2:25 AM, Zi Yan wrote:
->>>> On 14 Apr 2026, at 14:14, David Hildenbrand (Arm) wrote:
->>>>
->>>>>
->>>>> Yeah, it would be better if we could avoid it. But the dependency on =
-the
->>>>> global toggle as it is today is a bit weird.
->>>>>
->>>>>
->>>>> I don't think there is other interaction with FS and the global toggl=
-e
->>>>> besides this and the one you are adjusting, right?
->>>>>
->>>
->>> I'm afraid not. Please also consider the per-size mTHP interfaces. It's
->>> possible that hugepage_global_enabled() returns false, but
->>> hugepages-2048kB/enabled is set to "always", which would still allow
->>> khugepaged to collapse folios.
->
-> My comments are in reply to Zi=E2=80=99s comment:
->
-> "I think hugepage_global_enabled() should be enough to decide whether khu=
-gepaged should run or not. "
->
-> I=E2=80=99m concerned that only relying on hugepage_global_enabled() to d=
-ecide whether khugepaged should run would cause a regression for anonymous =
-and shmem memory collapse, as it ignores per-size mTHP configuration.
->
->> The question is really which semantics we want.
->>
->> Right now, there is no way to disable khugepaged for anon pages, to just
->> get them during page faults.
->
-> Right.
->
->> And we are now talking about the same problem for FS: to only get them
->> during page faults (like we did so far without CONFIG_READ_ONLY_THP_FOR_=
-FS).
->
-> OK. I=E2=80=99m fine with using hugepage_global_enabled() to determine wh=
-ether khugepaged scans file folios.
->
-> My concern is that for anonymous memory and shmem, the per-size mTHP sett=
-ings should be considered.
+(in-place conversion for SNP during pre-launch/populate phase, I meant)
 
-OK, I misunderstood the meaning of hugepage_global_enabled(), since per-siz=
-e
-mTHP settings could also enable khugepaged if PMD_SIZE is set.
+> 
+> Right now, this series effectively advertises in place conversion at the
+> point where KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES reports
+> 'KVM_MEMORY_ATTRIBUTE_PRIVATE', so I slightly reworked the series to
+> include the snp_launch_update() change prior to that point in time in
+> the series. Thanks to prereqs and changes/requirements you've already
+> pulled in, it's just one additional patch now:
+> 
+>  KVM: SEV: Make 'uaddr' parameter optional for KVM_SEV_SNP_LAUNCH_UPDATE 
+> 
+> I also did some minor updates (prefixed with a "[squash]" tag) to advertise
+> the KVM_SET_MEMORY_ATTRIBUTES2_PRESERVED flag so it can be used by
 
-I will take willy=E2=80=99s original suggestion and make khugepaged on if t=
-he global
-setting is enabled. The below is the new version of this patch. I moved ano=
-n
-pmd huge page code to a separate anon_hpage_pmd_enabled() like
-shmem_hpage_pmd_enabled() and cleaned up the comment. Let me know your thou=
-ghts.
+Though I'm not sure how we deal with it if SNP/TDX at some point become
+capable of using the PRESERVED flag *after* populate... but maybe that's
+too unlikely to worry about? If we wanted to address it though, we could
+have both PRESERVED and PRESERVED_BEFORE_LAUNCH so they can be
+enumerated separately from the start.
 
-Thanks.
+> userspace for SNP/TDX in the kvm_gmem_populate() path as agreed upon
+> during PUCK.
+> 
+> The branch is here, with the patches moved to where I think they
+> should remain (or be squashed in for the [squash] ones):
+> 
+>   https://github.com/AMDESE/linux/commits/guest_memfd-inplace-conversion-v4-snp2/
+> 
+> I've also updated the QEMU patches to use the agreed-upon API flow and
+> pushed them here:
+> 
+>   https://github.com/AMDESE/qemu/commits/snp-inplace-for-v4-wip2/
+> 
+> To start an SNP guest with in-place conversion:
+> 
+>   qemu-system-x86 \
+>   -machine q35,confidential-guest-support=sev0,memory-backend=ram1 \
+>   -object sev-snp-guest,id=sev0,...,convert-in-place=true \
+>   -object memory-backend-memfd,id=ram1,size=16G,share=true,reserve=false
 
-From 92b92f2b2ab41c70b41dd304ce648786ee6a1603 Mon Sep 17 00:00:00 2001
-From: Zi Yan <ziy@nvidia.com>
-Date: Wed, 15 Apr 2026 13:52:50 -0400
-Subject: [PATCH] mm/khugepaged: remove READ_ONLY_THP_FOR_FS check in
- hugepage_pmd_enabled()
+Sorry, that should've been:
 
-Remove READ_ONLY_THP_FOR_FS and khugepaged for file-backed pmd-sized
-hugepages are enabled by the global transparent hugepage control.
-khugepaged can still be enabled by per-size control for anon and shmem when
-the global control is off.
+  -object memory-backend-guest-memfd,id=ram1,size=16G,share=true,reserve=false
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- mm/khugepaged.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
+> 
+> To start an normal non-CoCo guest backed by guest_memfd with shared memory:
+> 
+>   qemu-system-x86 \
+>   -machine q35,confidential-guest-support=sev0,memory-backend=ram1 \
+>   -object memory-backend-memfd,id=ram1,size=16G,share=true,reserve=false
 
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index b8452dbdb043..586d27ce896e 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -406,18 +406,8 @@ static inline int collapse_test_exit_or_disable(struct=
- mm_struct *mm)
- 		mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm);
- }
+and:
 
--static bool hugepage_pmd_enabled(void)
-+static inline bool anon_hpage_pmd_enabled()
- {
--	/*
--	 * We cover the anon, shmem and the file-backed case here; file-backed
--	 * hugepages, when configured in, are determined by the global control.
--	 * Anon pmd-sized hugepages are determined by the pmd-size control.
--	 * Shmem pmd-sized hugepages are also determined by its pmd-size control,
--	 * except when the global shmem_huge is set to SHMEM_HUGE_DENY.
--	 */
--	if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
--	    hugepage_global_enabled())
--		return true;
- 	if (test_bit(PMD_ORDER, &huge_anon_orders_always))
- 		return true;
- 	if (test_bit(PMD_ORDER, &huge_anon_orders_madvise))
-@@ -425,6 +415,20 @@ static bool hugepage_pmd_enabled(void)
- 	if (test_bit(PMD_ORDER, &huge_anon_orders_inherit) &&
- 	    hugepage_global_enabled())
- 		return true;
-+	return false;
-+}
-+
-+static bool hugepage_pmd_enabled(void)
-+{
-+	/*
-+	 * Anon, shmem and file-backed pmd-sized hugepages are all determined by
-+	 * the global control. If the global control is off, anon and shmem
-+	 * pmd-sized hugepages are also determined by its per-size control.
-+	 */
-+	if (hugepage_global_enabled())
-+		return true;
-+	if (anon_hpage_pmd_enabled())
-+		return true;
- 	if (IS_ENABLED(CONFIG_SHMEM) && shmem_hpage_pmd_enabled())
- 		return true;
- 	return false;
---=20
-2.43.0
+  -object memory-backend-guest-memfd,id=ram1,size=16G,share=true,reserve=false
 
+(and both require kvm.vm_memory_attributes=0)
 
+-Mike
 
-Best Regards,
-Yan, Zi
+> 
+> Thanks,
+> 
+> Mike
