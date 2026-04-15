@@ -1,224 +1,565 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011026.outbound.protection.outlook.com [52.101.62.26])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5F43CB2EC;
-	Tue, 14 Apr 2026 23:38:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.26
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776209916; cv=fail; b=pfniDKtq9g3nhiuqO9OVfes7mzYSjDU9sO3Mz9c0rpaFp7+XZjrTZfI94CktZLU1vNqQDO7lcSgScKdvp0kLfzgl94B+tw6jjBIr+2ZGy2QbpvNVghoIVPKmU7Q/upImvkuPBIJGF1R3MCeIM70xyAXNg5bugcoWaOJCIVxIEIk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776209916; c=relaxed/simple;
-	bh=QH6ybq6nzZXAWB+3VcquMDMn8xF6d+0Z/XziO+1q1Uk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jPuneH9b1S3ORn3A4qjvfuKsRPf3Np9dD4EHRXenbSv+qJPjT2D+5VaPGVZaHeQco2bNN09J9Poj2yZz3NTWYHqwHN3VWGcvkkWcN0LpYtaZlrClGLQU+uTXIPjHX3f/fPp9wc9Sl1gKhLpRSeEnNpSC0HeLlWBFC27+kcp7Y3o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=kxl0BsN0; arc=fail smtp.client-ip=52.101.62.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4320140DFC9
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 00:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776211562; cv=none; b=GebReI9pMwBRogBb66RSiSPzMtTxmB70t5ouD6JudE+EZsfOvv+g9D+/a6E+vf9NChgdbqObKgAJlpMEhFQi4xM5QCxjZU7ZQ0q1lN/wsg9CEmlvJ0TPeSsMG0M7ZrsrHqv23PuITstwaMpNKU4n5HI958s+LGTFJ6R4sUu1R10=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776211562; c=relaxed/simple;
+	bh=cDz61WLPkL0JN1SUwebiwriqEWXToFXXOBoqYjrLL9E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=itr26xVlVi741ptqIlZGfe1a3Ou1ZdGNR5lQr7GoVeEstuzawfcLpgFF71LdX5d0COL0KYeje1qlnk8+mdV28UCNqscdaM/USNex8zRscsq9DQx/zboz41gm6exYsEsXAPKl0mq9w3UKZ1MotuENWxlW4JxIhOkhQgfUHC/9TtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Aq4Ie8hF; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="kxl0BsN0"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AfY+AS2Q2Nue+D6Li89mh5eRfH2MpTj6BtFgwoaSzfY5TE8f1xwQ1/7PlVQJqJy7az54ZdC/bCCLTh5j2IykGn+BtuL2XmlHrZ81wFW/3SVMHsfsXieSQZ9KFJxt61Ay1FyfMf+vsYBN2MbzgoHiASIZiCasWDDhuquKtNp1k+ivz7iSKh0UjOsENgUWjmGMYno8uNYbTyJ3N1sjeHsZ+Wfi2ahNXjfNPXYsRykSDlxThW0vx2G3hb9yu/1b+bauVeSSMKWI3kElZfqV58kpHqMmu718I5U/2wEnlfZKn88bchUrsoF1VgOP5oEtMkqd4CW/iiOHmEEvi8zEWwIVZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uQZV6DXglvF+U23BzePtiGc0FKpBMuAPNbSOWy2UM74=;
- b=a+9RiFdmrImikg+XJDUsyLTZc2EHf8cGdaKO0EzGxm/RDNdQFuE9+8gyW23UVsD7c58F0KddAVI2m2whuY8NBbWbElwVS3s3Unj35x4iEhuPaYC0iu/hf9p0nesTzwihld6Sh0BGXy9Dj6DE7cgREMzun80gWwMNuzJlsUG3vC1k/MGKEd0QgaOFVQaehHy5/HwWjNzdUodp3BtXGvhlTteyVe8vEZaPl4y/+4oiKNz7CJPW0R7HjhUVTNfBzQZ1JqAp7UCk19d4dQpUWAHXp5AftKpN6K5QuvIyvysKjyNkmg3Px9/zPzjtKUHII2hmSyr/9omM4New05oXg2uw+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uQZV6DXglvF+U23BzePtiGc0FKpBMuAPNbSOWy2UM74=;
- b=kxl0BsN0LPYzov225g2HuHphtIZ8OjkpPBwOKtGOWXurxRKgfTNE7qgm58iaipglQiEMMi0wedwHOpBn6lJTf6X0hAYBR1md7goZOuKjclGrWMrV3040qYe/rI8o91JIF1QSuiPgaLgGMfEovFauoLfVzQeXwcSOxW7LBpNU2lk=
-Received: from PH7P221CA0076.NAMP221.PROD.OUTLOOK.COM (2603:10b6:510:328::32)
- by DS7PR12MB6167.namprd12.prod.outlook.com (2603:10b6:8:98::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.48; Tue, 14 Apr
- 2026 23:38:27 +0000
-Received: from CY4PEPF0000EDD3.namprd03.prod.outlook.com
- (2603:10b6:510:328:cafe::31) by PH7P221CA0076.outlook.office365.com
- (2603:10b6:510:328::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.49 via Frontend Transport; Tue,
- 14 Apr 2026 23:38:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- CY4PEPF0000EDD3.mail.protection.outlook.com (10.167.241.199) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.17 via Frontend Transport; Tue, 14 Apr 2026 23:38:27 +0000
-Received: from localhost (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 14 Apr
- 2026 18:37:25 -0500
-Date: Tue, 14 Apr 2026 18:37:00 -0500
-From: Michael Roth <michael.roth@amd.com>
-To: Ackerley Tng <ackerleytng@google.com>
-CC: <aik@amd.com>, <andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>,
-	<brauner@kernel.org>, <chao.p.peng@linux.intel.com>, <david@kernel.org>,
-	<ira.weiny@intel.com>, <jmattson@google.com>, <jroedel@suse.de>,
-	<jthoughton@google.com>, <oupton@kernel.org>, <pankaj.gupta@amd.com>,
-	<qperret@google.com>, <rick.p.edgecombe@intel.com>, <rientjes@google.com>,
-	<shivankg@amd.com>, <steven.price@arm.com>, <tabba@google.com>,
-	<willy@infradead.org>, <wyihan@google.com>, <yan.y.zhao@intel.com>,
-	<forkloop@google.com>, <pratyush@kernel.org>, <suzuki.poulose@arm.com>,
-	<aneesh.kumar@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, "Sean
- Christopherson" <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, "Ingo
- Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
-	<hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
-	<mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song
-	<baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie
-	<yuanchu@google.com>, Wei Xu <weixugc@google.com>, Jason Gunthorpe
-	<jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-mm@kvack.org>
-Subject: Re: [PATCH RFC v4 10/44] KVM: guest_memfd: Add support for
- KVM_SET_MEMORY_ATTRIBUTES2
-Message-ID: <eiiecl7jvywvqb4drq7cchmcabcrdka25wxr77uavxqineeedm@rfcnhdz6xoxf>
-References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
- <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com>
- <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
- <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Aq4Ie8hF"
+Message-ID: <4bd21077-8711-4ae7-a695-8bc88ce652d1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776211556;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IOd9q1sGqtuwL8YJ3MZCe93Mf1n4dHgmCiYepxx9yoA=;
+	b=Aq4Ie8hFUmtE4wBZqOm2sIK+PurhEoU3c+sovMYKiPNqs7cYVDhD8agWhBfDQzYXMAxaZT
+	qYN53DOkKslqBi1/PSk4ayLs/v/mxvHULIeYUvRVn1ynKOmwTCk1PBgJVPFjqseRr4WQfw
+	if9OtyNjyzMTIqAFAzw8VVRYfk9+7f8=
+Date: Tue, 14 Apr 2026 17:05:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com>
-X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
- (10.181.42.216)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD3:EE_|DS7PR12MB6167:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd1c4a6f-9fa0-4503-5b46-08de9a7eed4d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700016|18002099003|56012099003|22082099003|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	PbBhOMyNNmD5llc6UmW++rxqCagqLoVd9lhHyyhsLCKCLED7oe0NmHrqzbyBxrTnuRyHGfiYFx40k06a3WL0CRr/zBQ36Ea5g2CsC/fe+nV+Qz7rzGEk7uBOR57akzzy1kGCwZryK6077qi83U1Wfpjhp/M1kStIh5tu+5OLLkTyuIrC7C2rbieDtViFbJ580SzFAvT9VfJxecxpZFEQo5alDYJARb3D//kfhIF0IeeRc2ezyxgbF8hC9VrxIW7J3fiPcbcZIXpWypdyqqk26reEQEJW8+Sk4w6DgCQ3X6D8Y8EJzclwu/OlDnfDH8QWwGAz4tbZrgdtUZ5zcrcYtfpANb+wskKzH7iBGqQFqpKF3gwLo8yenFMJaZcCRVcUn5AnfV9QIYQUdKXoEuS2KrwgFo7EP5y7zjL8eMrnaUbLWxlPwb6TUgpMV/HNWFbnFkjvrZchRJ4PPSeQ/CiQCO8fYEaH6V0yGzA8H/3jaJaDg9XK3UJujd6t0lncrYWBuh7UHFm5EWzWom0S2ob7DtDrS+E6a28eUz6v1//aO9WYAzGqOCws/w9aTrzZkPOb0jUtJrzHbP6ULeB8SNQhr7IgBH1uve2AlqhyoGMvBGRviz1x/IxXdQj/NOJUvYZIksyBkKJv7NhVZV/ZiSRb20KQMpmah8yt/DYhvR3dlUl68/NW+m89JhAUJY1J1qmgX9RLKFpPiJFoN6jEuK3rwaM8tgKZSDkyKCch1CD5cGVNMgl6Xvub6K5F2NI7nlQn39TjQrDsPJRNf+6Qzd1NHEZugMg0GWqoD59wLivnHrA=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700016)(18002099003)(56012099003)(22082099003)(13003099007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	d9hGQy/bRYA2R7+0jF4qfJY6DLe7JA3LpOTCg/lzsMSZK9U3EBnTLnbkFB/hQGMFYtdTobJNHRSas9Q151SGzyZ1x+Eu8rss7hXk3M/OjWAGQzEVMvp0EXpBbnWOaxm2x9/RDzsEulBKh06befZZz7p98qGjiw87KtQ2dtxLbvEGFXuKIaJ8fKDTEzi8j0AkJ75Mv05GdSOnYHVHF6rxcFcNGEFr1sGa3+1dgolIolt4qWFqLx+RW4HKxLh+NOn39B2Ht2tkQaKRKQaBuameb3XDptCIQHePoqVcPv2OIun5b0Goh0QhCKDpWUJmhymMRv120YAEAjZGeo262ap+AtPT8UpO0fbPn51qxB8E6Qh8GbyBoo94rlCS9nLZ3ZSiCOnMGtKfWUVaZlw75I1hQ9PzA2FFOvGiz7J4lIXDXLTs4SGMRjq0hpz6dHFi4d/G
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2026 23:38:27.0133
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd1c4a6f-9fa0-4503-5b46-08de9a7eed4d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EDD3.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6167
+Subject: Re: [PATCH 1/5] liveupdate: Remove limit on the number of sessions
+To: Pasha Tatashin <pasha.tatashin@soleen.com>,
+ linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org,
+ akpm@linux-foundation.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ dmatlack@google.com, kexec@lists.infradead.org, pratyush@kernel.org,
+ skhawaja@google.com, graf@amazon.com, Zhu Yanjun <yanjun.zhu@linux.dev>
+References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
+ <20260414200237.444170-2-pasha.tatashin@soleen.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "yanjun.zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <20260414200237.444170-2-pasha.tatashin@soleen.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Apr 01, 2026 at 03:38:12PM -0700, Ackerley Tng wrote:
-> Michael Roth <michael.roth@amd.com> writes:
+On 4/14/26 1:02 PM, Pasha Tatashin wrote:
+> Currently, the number of LUO sessions is limited by a fixed number of
+> pre-allocated pages for serialization (16 pages, allowing for ~819
+> sessions).
 > 
-> >
-> > [...snip...]
-> >
-> >>  static unsigned long kvm_get_vm_memory_attributes(struct kvm *kvm, gfn_t gfn)
-> >>  {
-> >> @@ -2635,6 +2625,8 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
-> >>  		return -EINVAL;
-> >>  	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
-> >>  		return -EINVAL;
-> >> +	if (attrs->error_offset)
-> >> +		return -EINVAL;
-> >>  	for (i = 0; i < ARRAY_SIZE(attrs->reserved); i++) {
-> >>  		if (attrs->reserved[i])
-> >>  			return -EINVAL;
-> >> @@ -4983,6 +4975,11 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
-> >>  		return 1;
-> >>  	case KVM_CAP_GUEST_MEMFD_FLAGS:
-> >>  		return kvm_gmem_get_supported_flags(kvm);
-> >> +	case KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES:
-> >> +		if (vm_memory_attributes)
-> >> +			return 0;
-> >> +
-> >> +		return kvm_supported_mem_attributes(kvm);
-> >
-> > Based on the discussion from the PUCK call this morning,
+> This limitation is problematic if LUO is used to support things such as
+> systemd file descriptor store, and would be used not just as VM memory
+> but to save other states on the machine.
 > 
-> Thanks for copying the discussion here, I'll start attending PUCK to
-> catch those discussions too :)
+> Remove this limit by transitioning to a linked-block approach for
+> session metadata serialization. Instead of a single contiguous block,
+> session metadata is now stored in a chain of 16-page blocks. Each block
+> starts with a header containing the physical address of the next block
+> and the number of session entries in the current block.
 > 
-> > it sounds like it
-> > would be a good idea to limit kvm_supported_mem_attributes() to only
-> > reporting KVM_MEMORY_ATTRIBUTE_PRIVATE if the underlying CoCo
-> > implementation has all the necessary enablement to support in-place
-> > conversion via guest_memfd. In the case of SNP, there is a
-> > documentation/parameter check in snp_launch_update() that needs to be
-> > relaxed in order for userspace to be able to pass in a NULL 'src'
-> > parameter (since, for in-place conversion, it would be initialized in place
-> > as shared memory prior to the call, since by the time kvm_gmem_poulate()
-> > it will have been set to private and therefore cannot be faulted in via
-> > GUP (and if it could, we'd be unecessarily copying the src back on top
-> > of itself since src/dst are the same).
+> - Bump session ABI version to v3.
+> - Update struct luo_session_header_ser to include a 'next' pointer.
+> - Implement dynamic block allocation in luo_session_insert().
+> - Update setup, serialization, and deserialization logic to traverse
+>    the block chain.
+> - Remove LUO_SESSION_MAX limit.
 > 
-> Could this be a separate thing? If I'm understanding you correctly, it's
-> not strictly a requirement for snp_launch_update() to first support a
-> NULL 'src' parameter before this series lands.
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>   include/linux/kho/abi/luo.h      |  19 +--
+>   kernel/liveupdate/luo_internal.h |  12 +-
+>   kernel/liveupdate/luo_session.c  | 237 +++++++++++++++++++++++--------
+>   3 files changed, 197 insertions(+), 71 deletions(-)
+> 
+> diff --git a/include/linux/kho/abi/luo.h b/include/linux/kho/abi/luo.h
+> index 46750a0ddf88..f5732958545e 100644
+> --- a/include/linux/kho/abi/luo.h
+> +++ b/include/linux/kho/abi/luo.h
+> @@ -57,9 +57,10 @@
+>    *   - compatible: "luo-session-v1"
+>    *     Identifies the session ABI version.
+>    *   - luo-session-header: u64
+> - *     The physical address of a `struct luo_session_header_ser`. This structure
+> - *     is the header for a contiguous block of memory containing an array of
+> - *     `struct luo_session_ser`, one for each preserved session.
+> + *     The physical address of the first `struct luo_session_header_ser`.
+> + *     This structure is the header for a block of memory containing an array
+> + *     of `struct luo_session_ser` entries. Multiple blocks are linked via
+> + *     the `next` field in the header.
+>    *
+>    * File-Lifecycle-Bound Node (luo-flb):
+>    *   This node describes all preserved global objects whose lifecycle is bound
+> @@ -77,9 +78,9 @@
+>    *   `__packed` structures. These structures contain the actual preserved state.
+>    *
+>    *   - struct luo_session_header_ser:
+> - *     Header for the session array. Contains the total page count of the
+> - *     preserved memory block and the number of `struct luo_session_ser`
+> - *     entries that follow.
+> + *     Header for the session data block. Contains the physical address of the
+> + *     next session data block and the number of `struct luo_session_ser`
+> + *     entries that follow this header in the current block.
+>    *
+>    *   - struct luo_session_ser:
+>    *     Metadata for a single session, including its name and a physical pointer
+> @@ -153,21 +154,23 @@ struct luo_file_set_ser {
+>    *                          luo_session_header_ser
+>    */
+>   #define LUO_FDT_SESSION_NODE_NAME	"luo-session"
+> -#define LUO_FDT_SESSION_COMPATIBLE	"luo-session-v2"
+> +#define LUO_FDT_SESSION_COMPATIBLE	"luo-session-v3"
+>   #define LUO_FDT_SESSION_HEADER		"luo-session-header"
+>   
+>   /**
+>    * struct luo_session_header_ser - Header for the serialized session data block.
+> + * @next:  Physical address of the next struct luo_session_header_ser.
+>    * @count: The number of `struct luo_session_ser` entries that immediately
+>    *         follow this header in the memory block.
+>    *
+> - * This structure is located at the beginning of a contiguous block of
+> + * This structure is located at the beginning of a block of
+>    * physical memory preserved across the kexec. It provides the necessary
+>    * metadata to interpret the array of session entries that follow.
+>    *
+>    * If this structure is modified, `LUO_FDT_SESSION_COMPATIBLE` must be updated.
+>    */
+>   struct luo_session_header_ser {
+> +	u64 next;
+>   	u64 count;
+>   } __packed;
+>   
+> diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+> index 875844d7a41d..a73f42069301 100644
+> --- a/kernel/liveupdate/luo_internal.h
+> +++ b/kernel/liveupdate/luo_internal.h
+> @@ -11,6 +11,16 @@
+>   #include <linux/liveupdate.h>
+>   #include <linux/uaccess.h>
+>   
+> +/*
+> + * Safeguard limit for the number of serialization blocks. This is used to
+> + * prevent infinite loops and excessive memory allocation in case of memory
+> + * corruption in the preserved state.
+> + *
+> + * This limit allows for ~8.1 million sessions and ~1.2 million files per
+> + * session, which is more than enough for all realistic use cases.
+> + */
+> +#define LUO_MAX_BLOCKS 10000
+> +
+>   struct luo_ucmd {
+>   	void __user *ubuffer;
+>   	u32 user_size;
+> @@ -59,7 +69,6 @@ struct luo_file_set {
+>    * struct luo_session - Represents an active or incoming Live Update session.
+>    * @name:       A unique name for this session, used for identification and
+>    *              retrieval.
+> - * @ser:        Pointer to the serialized data for this session.
+>    * @list:       A list_head member used to link this session into a global list
+>    *              of either outgoing (to be preserved) or incoming (restored from
+>    *              previous kernel) sessions.
+> @@ -70,7 +79,6 @@ struct luo_file_set {
+>    */
+>   struct luo_session {
+>   	char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+> -	struct luo_session_ser *ser;
+>   	struct list_head list;
+>   	bool retrieved;
+>   	struct luo_file_set file_set;
+> diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+> index 92b1af791889..007ca34eba79 100644
+> --- a/kernel/liveupdate/luo_session.c
+> +++ b/kernel/liveupdate/luo_session.c
+> @@ -69,30 +69,39 @@
+>   #include <uapi/linux/liveupdate.h>
+>   #include "luo_internal.h"
+>   
+> -/* 16 4K pages, give space for 744 sessions */
+> +/* 16 4K pages, give space for 819 sessions per block */
+>   #define LUO_SESSION_PGCNT	16ul
+> -#define LUO_SESSION_MAX		(((LUO_SESSION_PGCNT << PAGE_SHIFT) -	\
+> +#define LUO_SESSION_BLOCK_MAX		(((LUO_SESSION_PGCNT << PAGE_SHIFT) -	\
+>   		sizeof(struct luo_session_header_ser)) /		\
+>   		sizeof(struct luo_session_ser))
+>   
+> +/**
+> + * struct luo_session_block - Internal representation of a session serialization block.
+> + * @list: List head for linking blocks in memory.
+> + * @ser:  Pointer to the serialized header in preserved memory.
+> + */
+> +struct luo_session_block {
+> +	struct list_head list;
+> +	struct luo_session_header_ser *ser;
+> +};
+> +
+>   /**
+>    * struct luo_session_header - Header struct for managing LUO sessions.
+>    * @count:      The number of sessions currently tracked in the @list.
+> + * @nblocks:    The number of allocated serialization blocks.
+>    * @list:       The head of the linked list of `struct luo_session` instances.
+>    * @rwsem:      A read-write semaphore providing synchronized access to the
+>    *              session list and other fields in this structure.
+> - * @header_ser: The header data of serialization array.
+> - * @ser:        The serialized session data (an array of
+> - *              `struct luo_session_ser`).
+> + * @blocks:     The list of serialization blocks (struct luo_session_block).
+>    * @active:     Set to true when first initialized. If previous kernel did not
+>    *              send session data, active stays false for incoming.
+>    */
+>   struct luo_session_header {
+>   	long count;
+> +	long nblocks;
+>   	struct list_head list;
+>   	struct rw_semaphore rwsem;
+> -	struct luo_session_header_ser *header_ser;
+> -	struct luo_session_ser *ser;
+> +	struct list_head blocks;
+>   	bool active;
+>   };
+>   
+> @@ -110,10 +119,12 @@ static struct luo_session_global luo_session_global = {
+>   	.incoming = {
+>   		.list = LIST_HEAD_INIT(luo_session_global.incoming.list),
+>   		.rwsem = __RWSEM_INITIALIZER(luo_session_global.incoming.rwsem),
+> +		.blocks = LIST_HEAD_INIT(luo_session_global.incoming.blocks),
+>   	},
+>   	.outgoing = {
+>   		.list = LIST_HEAD_INIT(luo_session_global.outgoing.list),
+>   		.rwsem = __RWSEM_INITIALIZER(luo_session_global.outgoing.rwsem),
+> +		.blocks = LIST_HEAD_INIT(luo_session_global.outgoing.blocks),
+>   	},
+>   };
+>   
+> @@ -140,6 +151,70 @@ static void luo_session_free(struct luo_session *session)
+>   	kfree(session);
+>   }
+>   
+> +static int luo_session_add_block(struct luo_session_header *sh,
+> +				 struct luo_session_header_ser *ser)
+> +{
+> +	struct luo_session_block *block;
+> +
+> +	if (sh->nblocks >= LUO_MAX_BLOCKS)
+> +		return -ENOSPC;
+> +
+> +	block = kzalloc_obj(*block);
+> +	if (!block)
+> +		return -ENOMEM;
+> +
+> +	block->ser = ser;
+> +	list_add_tail(&block->list, &sh->blocks);
+> +	sh->nblocks++;
+> +
+> +	return 0;
+> +}
+> +
+> +static int luo_session_create_ser_block(struct luo_session_header *sh)
+> +{
+> +	struct luo_session_block *last = NULL;
+> +	struct luo_session_header_ser *ser;
+> +	int err;
+> +
+> +	ser = kho_alloc_preserve(LUO_SESSION_PGCNT << PAGE_SHIFT);
+> +	if (IS_ERR(ser))
+> +		return PTR_ERR(ser);
+> +
+> +	if (!list_empty(&sh->blocks))
+> +		last = list_last_entry(&sh->blocks, struct luo_session_block, list);
+> +
+> +	err = luo_session_add_block(sh, ser);
+> +	if (err)
+> +		goto err_unpreserve;
+> +
+> +	if (last)
+> +		last->ser->next = virt_to_phys(ser);
+> +
+> +	return 0;
+> +
+> +err_unpreserve:
+> +	kho_unpreserve_free(ser);
+> +	return err;
+> +}
+> +
+> +static void luo_session_destroy_ser_blocks(struct luo_session_header *sh,
+> +					   bool unpreserve)
+> +{
+> +	struct luo_session_block *block, *tmp;
+> +
+> +	list_for_each_entry_safe(block, tmp, &sh->blocks, list) {
+> +		if (block->ser) {
+> +			if (unpreserve)
+> +				kho_unpreserve_free(block->ser);
+> +			else
+> +				kho_restore_free(block->ser);
+> +		}
+> +		list_del(&block->list);
+> +		kfree(block);
+> +		sh->nblocks--;
+> +	}
+> +}
+> +
+>   static int luo_session_insert(struct luo_session_header *sh,
+>   			      struct luo_session *session)
+>   {
+> @@ -147,15 +222,6 @@ static int luo_session_insert(struct luo_session_header *sh,
+>   
+>   	guard(rwsem_write)(&sh->rwsem);
+>   
+> -	/*
+> -	 * For outgoing we should make sure there is room in serialization array
+> -	 * for new session.
+> -	 */
+> -	if (sh == &luo_session_global.outgoing) {
+> -		if (sh->count == LUO_SESSION_MAX)
+> -			return -ENOMEM;
+> -	}
+> -
+>   	/*
+>   	 * For small number of sessions this loop won't hurt performance
+>   	 * but if we ever start using a lot of sessions, this might
+> @@ -166,6 +232,20 @@ static int luo_session_insert(struct luo_session_header *sh,
+>   		if (!strncmp(it->name, session->name, sizeof(it->name)))
+>   			return -EEXIST;
+>   	}
+> +
+> +	/*
+> +	 * For outgoing we should make sure there is room in serialization array
+> +	 * for new session. If not, allocate a new block.
+> +	 */
+> +	if (sh == &luo_session_global.outgoing) {
+> +		if (sh->count == sh->nblocks * LUO_SESSION_BLOCK_MAX) {
 
-I think we are already sync'd up on this during PUCK, but for the benefit
-of others: Sean pointed out that if we don't then we'll need to add yet
-another capability so userspace can determine when it can actually do
-in-place conversion for SNP.
+I am not sure if "LUO_SESSION_BLOCK_MAX 10000" has special meaning or not.
 
-Right now, this series effectively advertises in place conversion at the
-point where KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES reports
-'KVM_MEMORY_ATTRIBUTE_PRIVATE', so I slightly reworked the series to
-include the snp_launch_update() change prior to that point in time in
-the series. Thanks to prereqs and changes/requirements you've already
-pulled in, it's just one additional patch now:
+If not, we can use the following:
 
- KVM: SEV: Make 'uaddr' parameter optional for KVM_SEV_SNP_LAUNCH_UPDATE 
+#define LUO_SESSION_BLOCK_SHIFT 13
+#define LUO_SESSION_BLOCK_MAX   (1UL << LUO_SESSION_BLOCK_SHIFT) // 8192
+#define LUO_SESSION_BLOCK_MASK  (LUO_SESSION_BLOCK_MAX - 1)      // 0x1FFF
 
-I also did some minor updates (prefixed with a "[squash]" tag) to advertise
-the KVM_SET_MEMORY_ATTRIBUTES2_PRESERVED flag so it can be used by
-userspace for SNP/TDX in the kvm_gmem_populate() path as agreed upon
-during PUCK.
+if (!(sh->count & LUO_SESSION_BLOCK_MASK) && sh->count > 0) {
+...
+}
 
-The branch is here, with the patches moved to where I think they
-should remain (or be squashed in for the [squash] ones):
+Zhu Yanjun
 
-  https://github.com/AMDESE/linux/commits/guest_memfd-inplace-conversion-v4-snp2/
+> +			int err = luo_session_create_ser_block(sh);
+> +
+> +			if (err)
+> +				return err;
+> +		}
+> +	}
+> +
+>   	list_add_tail(&session->list, &sh->list);
+>   	sh->count++;
+>   
+> @@ -444,9 +524,12 @@ int __init luo_session_setup_outgoing(void *fdt_out)
+>   	u64 header_ser_pa;
+>   	int err;
+>   
+> -	header_ser = kho_alloc_preserve(LUO_SESSION_PGCNT << PAGE_SHIFT);
+> -	if (IS_ERR(header_ser))
+> -		return PTR_ERR(header_ser);
+> +	err = luo_session_create_ser_block(&luo_session_global.outgoing);
+> +	if (err)
+> +		return err;
+> +
+> +	header_ser = list_first_entry(&luo_session_global.outgoing.blocks,
+> +				      struct luo_session_block, list)->ser;
+>   	header_ser_pa = virt_to_phys(header_ser);
+>   
+>   	err = fdt_begin_node(fdt_out, LUO_FDT_SESSION_NODE_NAME);
+> @@ -459,19 +542,18 @@ int __init luo_session_setup_outgoing(void *fdt_out)
+>   	if (err)
+>   		goto err_unpreserve;
+>   
+> -	luo_session_global.outgoing.header_ser = header_ser;
+> -	luo_session_global.outgoing.ser = (void *)(header_ser + 1);
+>   	luo_session_global.outgoing.active = true;
+>   
+>   	return 0;
+>   
+>   err_unpreserve:
+> -	kho_unpreserve_free(header_ser);
+> +	luo_session_destroy_ser_blocks(&luo_session_global.outgoing, true);
+>   	return err;
+>   }
+>   
+>   int __init luo_session_setup_incoming(void *fdt_in)
+>   {
+> +	struct luo_session_header *sh = &luo_session_global.incoming;
+>   	struct luo_session_header_ser *header_ser;
+>   	int err, header_size, offset;
+>   	u64 header_ser_pa;
+> @@ -501,11 +583,14 @@ int __init luo_session_setup_incoming(void *fdt_in)
+>   	}
+>   
+>   	header_ser_pa = get_unaligned((u64 *)ptr);
+> -	header_ser = phys_to_virt(header_ser_pa);
+> -
+> -	luo_session_global.incoming.header_ser = header_ser;
+> -	luo_session_global.incoming.ser = (void *)(header_ser + 1);
+> -	luo_session_global.incoming.active = true;
+> +	while (header_ser_pa) {
+> +		header_ser = phys_to_virt(header_ser_pa);
+> +		err = luo_session_add_block(sh, header_ser);
+> +		if (err)
+> +			return err;
+> +		header_ser_pa = header_ser->next;
+> +	}
+> +	sh->active = true;
+>   
+>   	return 0;
+>   }
+> @@ -513,6 +598,7 @@ int __init luo_session_setup_incoming(void *fdt_in)
+>   int luo_session_deserialize(void)
+>   {
+>   	struct luo_session_header *sh = &luo_session_global.incoming;
+> +	struct luo_session_block *block;
+>   	static bool is_deserialized;
+>   	static int err;
+>   
+> @@ -539,40 +625,49 @@ int luo_session_deserialize(void)
+>   	 * userspace to detect the failure and trigger a reboot, which will
+>   	 * reliably reset devices and reclaim memory.
+>   	 */
+> -	for (int i = 0; i < sh->header_ser->count; i++) {
+> -		struct luo_session *session;
+> -
+> -		session = luo_session_alloc(sh->ser[i].name);
+> -		if (IS_ERR(session)) {
+> -			pr_warn("Failed to allocate session [%.*s] during deserialization %pe\n",
+> -				(int)sizeof(sh->ser[i].name),
+> -				sh->ser[i].name, session);
+> -			err = PTR_ERR(session);
+> -			return err;
+> -		}
+> +	list_for_each_entry(block, &sh->blocks, list) {
+> +		struct luo_session_ser *ser = (void *)(block->ser + 1);
+>   
+> -		err = luo_session_insert(sh, session);
+> -		if (err) {
+> -			pr_warn("Failed to insert session [%s] %pe\n",
+> -				session->name, ERR_PTR(err));
+> -			luo_session_free(session);
+> +		if (block->ser->count > LUO_SESSION_BLOCK_MAX) {
+> +			pr_warn("Session block contains too many entries: %llu\n",
+> +				block->ser->count);
+> +			err = -EINVAL;
+>   			return err;
+>   		}
+>   
+> -		scoped_guard(mutex, &session->mutex) {
+> -			err = luo_file_deserialize(&session->file_set,
+> -						   &sh->ser[i].file_set_ser);
+> -		}
+> -		if (err) {
+> -			pr_warn("Failed to deserialize files for session [%s] %pe\n",
+> -				session->name, ERR_PTR(err));
+> -			return err;
+> +		for (int i = 0; i < block->ser->count; i++) {
+> +			struct luo_session *session;
+> +
+> +			session = luo_session_alloc(ser[i].name);
+> +			if (IS_ERR(session)) {
+> +				pr_warn("Failed to allocate session [%.*s] during deserialization %pe\n",
+> +					(int)sizeof(ser[i].name),
+> +					ser[i].name, session);
+> +				err = PTR_ERR(session);
+> +				return err;
+> +			}
+> +
+> +			err = luo_session_insert(sh, session);
+> +			if (err) {
+> +				pr_warn("Failed to insert session [%s] %pe\n",
+> +					session->name, ERR_PTR(err));
+> +				luo_session_free(session);
+> +				return err;
+> +			}
+> +
+> +			scoped_guard(mutex, &session->mutex) {
+> +				err = luo_file_deserialize(&session->file_set,
+> +							   &ser[i].file_set_ser);
+> +			}
+> +			if (err) {
+> +				pr_warn("Failed to deserialize files for session [%s] %pe\n",
+> +					session->name, ERR_PTR(err));
+> +				return err;
+> +			}
+>   		}
+>   	}
+>   
+> -	kho_restore_free(sh->header_ser);
+> -	sh->header_ser = NULL;
+> -	sh->ser = NULL;
+> +	luo_session_destroy_ser_blocks(sh, false);
+>   
+>   	return 0;
+>   }
+> @@ -580,31 +675,51 @@ int luo_session_deserialize(void)
+>   int luo_session_serialize(void)
+>   {
+>   	struct luo_session_header *sh = &luo_session_global.outgoing;
+> +	struct luo_session_block *block;
+>   	struct luo_session *session;
+> +	struct luo_session_ser *ser;
+>   	int i = 0;
+>   	int err;
+>   
+>   	guard(rwsem_write)(&sh->rwsem);
+> +
+> +	if (list_empty(&sh->blocks))
+> +		return 0;
+> +
+> +	block = list_first_entry(&sh->blocks, struct luo_session_block, list);
+> +	ser = (void *)(block->ser + 1);
+> +
+>   	list_for_each_entry(session, &sh->list, list) {
+> -		err = luo_session_freeze_one(session, &sh->ser[i]);
+> +		if (i == LUO_SESSION_BLOCK_MAX) {
+> +			block->ser->count = i;
+> +			block = list_next_entry(block, list);
+> +			ser = (void *)(block->ser + 1);
+> +			i = 0;
+> +		}
+> +
+> +		err = luo_session_freeze_one(session, &ser[i]);
+>   		if (err)
+>   			goto err_undo;
+>   
+> -		strscpy(sh->ser[i].name, session->name,
+> -			sizeof(sh->ser[i].name));
+> +		strscpy(ser[i].name, session->name,
+> +			sizeof(ser[i].name));
+>   		i++;
+>   	}
+> -	sh->header_ser->count = sh->count;
+> +	block->ser->count = i;
+>   
+>   	return 0;
+>   
+>   err_undo:
+>   	list_for_each_entry_continue_reverse(session, &sh->list, list) {
+>   		i--;
+> -		luo_session_unfreeze_one(session, &sh->ser[i]);
+> -		memset(sh->ser[i].name, 0, sizeof(sh->ser[i].name));
+> +		if (i < 0) {
+> +			block = list_prev_entry(block, list);
+> +			ser = (void *)(block->ser + 1);
+> +			i = LUO_SESSION_BLOCK_MAX - 1;
+> +		}
+> +		luo_session_unfreeze_one(session, &ser[i]);
+> +		memset(ser[i].name, 0, sizeof(ser[i].name));
+>   	}
+>   
+>   	return err;
+>   }
+> -
 
-I've also updated the QEMU patches to use the agreed-upon API flow and
-pushed them here:
-
-  https://github.com/AMDESE/qemu/commits/snp-inplace-for-v4-wip2/
-
-To start an SNP guest with in-place conversion:
-
-  qemu-system-x86 \
-  -machine q35,confidential-guest-support=sev0,memory-backend=ram1 \
-  -object sev-snp-guest,id=sev0,...,convert-in-place=true \
-  -object memory-backend-memfd,id=ram1,size=16G,share=true,reserve=false
-
-To start an normal non-CoCo guest backed by guest_memfd with shared memory:
-
-  qemu-system-x86 \
-  -machine q35,confidential-guest-support=sev0,memory-backend=ram1 \
-  -object memory-backend-memfd,id=ram1,size=16G,share=true,reserve=false
-
-Thanks,
-
-Mike
